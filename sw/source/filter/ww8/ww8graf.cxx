@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-16 09:27:08 $
+ *  last change: $Author: cmc $ $Date: 2001-08-28 15:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2024,7 +2024,7 @@ SdrObject* SwWW8ImplReader::CreateContactObject( SwFlyFrmFmt* pFlyFmt )
 
 
 void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
-    WW8_FSPA *pFSPA, SfxItemSet &rFlySet )
+    WW8_FSPA *pFSPA, SfxItemSet &rFlySet, BOOL bOrgObjectWasReplace )
 {
     if( pRecord )
     {
@@ -2117,7 +2117,7 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
         //this is going to be in the headerfooter and
         //cannot be replaced by a fly then anchor it
         //to the current page.
-        if ((bIsHeader || bIsFooter) && (!pRecord->bReplaceByFly))
+        if ((bIsHeader || bIsFooter) && !bOrgObjectWasReplace && !pRecord->bReplaceByFly)
             eAnchor=FLY_PAGE;
 
         SwFmtAnchor aAnchor( eAnchor );
@@ -2346,7 +2346,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 #if 0
                 }
 #endif
-                ProcessEscherAlign( pRecord, pF, aFlySet );
+                ProcessEscherAlign( pRecord, pF, aFlySet, bOrgObjectWasReplace );
 
                 aFlySet.Put(SwFmtFrmSize( ATT_VAR_SIZE, nWidthTw, nHeightTw));
 
@@ -2508,7 +2508,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 SwRelationOrient eRel;
                 ProcessEscherAlign( pRecord, eAnchor, eHori, eVert, eRel );
 */
-                ProcessEscherAlign( pRecord, pF, aFlySet );
+                ProcessEscherAlign( pRecord, pF, aFlySet, bOrgObjectWasReplace );
 /*
 
 
@@ -2963,11 +2963,14 @@ void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.31 2001-08-16 09:27:08 fme Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.32 2001-08-28 15:24:29 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.31  2001/08/16 09:27:08  fme
+      Fix #90760#: Removed VCL defines
+
       Revision 1.30  2001/08/03 15:39:16  cmc
       #90098# Drawing objects in headers must be anchored to page as a hackaround for lack of true drawing in header support
 

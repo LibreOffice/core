@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-28 10:23:48 $
+ *  last change: $Author: cmc $ $Date: 2001-08-28 15:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -931,7 +931,7 @@ friend class WW8FormulaControl;
     void ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp );
     SdrObject* CreateContactObject( SwFlyFrmFmt* pFlyFmt );
     void ProcessEscherAlign( SvxMSDffImportRec* pRecord, WW8_FSPA *pFSPA,
-        SfxItemSet &rFlySet );
+        SfxItemSet &rFlySet, BOOL bOrgObjectWasReplace );
     SwFrmFmt* Read_GrafLayer( long nGrafAnchorCp );
     void EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,SwFrmFmt *pFrmFmt);
     void GrafikCtor();
@@ -1154,11 +1154,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.30 2001-08-28 10:23:48 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.31 2001-08-28 15:24:29 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.30  2001/08/28 10:23:48  cmc
+      #91214# Illustration index has less pattern possibilities than toc
+
       Revision 1.29  2001/07/17 13:28:26  cmc
       #89808# ##1192## Retain blank pages before explicit section breaks
 

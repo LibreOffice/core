@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-18 12:28:06 $
+ *  last change: $Author: cmc $ $Date: 2001-08-28 15:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -945,7 +945,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                         aAttrSet.Put(aAnchor);
                     }
                     else
-                        ProcessEscherAlign(pRecord,0,aAttrSet);
+                        ProcessEscherAlign(pRecord,0,aAttrSet,TRUE);
 
                     Rectangle aInnerDist(   pRecord->nDxTextLeft,
                         pRecord->nDyTextTop, pRecord->nDxTextRight,
@@ -1194,11 +1194,14 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.9 2001-05-18 12:28:06 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.10 2001-08-28 15:24:29 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/05/18 12:28:06  jp
+      Bug #83396#: load also OLE-Object without any representation in the object
+
       Revision 1.8  2001/05/08 14:02:43  cmc
       ##845## Don't use fallback stream to find escher graphics when stored directly after PICF header
 

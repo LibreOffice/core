@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-10 09:31:26 $
+ *  last change: $Author: cmc $ $Date: 2001-08-28 15:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,16 @@ class SwCharFmt;
 #endif
 
 class WW8RStyle;
+
+class WW8DupProperties
+{
+public:
+    WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStk);
+    void Insert(const SwPosition &rPos);
+private:
+    SwWW8FltControlStack* pCtrlStck;
+    SfxItemSet aChrSet,aParSet;
+};
 
 struct WW8FlyPara
 {                       // WinWord-Attribute
@@ -292,11 +302,14 @@ inline WW8LvlType GetNumType( BYTE nWwLevelNo )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.hxx,v 1.5 2001-07-10 09:31:26 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.hxx,v 1.6 2001-08-28 15:24:29 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/07/10 09:31:26  cmc
+      #89439# calculate style's even-byte offset relative to style start, not absolute
+
       Revision 1.4  2001/06/06 12:46:32  cmc
       #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
 

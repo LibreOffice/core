@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-23 12:50:09 $
+ *  last change: $Author: cmc $ $Date: 2001-08-28 15:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,9 +316,14 @@ const BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
 
     This sort of mindbending inconsistency is surely why frames are deprecated
     in word 97 onwards and hidden away from the user
+
+
+    #i1532#
+    If we are already a table in a frame then we must grab the para properties to
+    see if we are still in that frame.
     */
 
-    if( bInTable && rbNowStyleApo && (!(pTableDesc && pTableDesc->GetAktCol())))
+    if( !bApo && bInTable && rbNowStyleApo && (!(pTableDesc && pTableDesc->GetAktCol())))
     {
         pSprm37       = 0;
         pSprm29       = 0;
@@ -1818,8 +1823,12 @@ void WW8TabDesc::CreateSwTable()
     // ggfs. Zusatz-Zellen einfuegen u.dgl.
     AdjustNewBand( pIo );
 
+    WW8DupProperties aDup(pIo->rDoc,pIo->pCtrlStck);
+    pIo->pCtrlStck->SetAttr( *pIo->pPaM->GetPoint(), 0, FALSE );
+
     // jetzt den PaM korrekt setzen und ggfs. erste Mergegruppe vorbereiten...
     SetPamInCell( nAktCol, TRUE );
+    aDup.Insert(*pIo->pPaM->GetPoint());
 
     pIo->bWasTabRowEnd = FALSE;
 }
@@ -1960,9 +1969,15 @@ void WW8TabDesc::MergeCells()
 
 void WW8TabDesc::FinishSwTable()
 {
+    WW8DupProperties aDup(pIo->rDoc,pIo->pCtrlStck);
+    pIo->pCtrlStck->SetAttr( *pIo->pPaM->GetPoint(), 0, FALSE );
+
     *pIo->pPaM->GetPoint() = *pTmpPos;
     delete( pTmpPos );
     pTmpPos = 0;
+
+    aDup.Insert(*pIo->pPaM->GetPoint());
+
     pIo->bWasTabRowEnd = FALSE;
     if( pIo->rDoc.GetRootFrm() )
     {
@@ -2224,11 +2239,14 @@ BOOL WW8TabDesc::SetPamInCell( short nWwCol, BOOL bPam )
 
     USHORT nCol = pActBand->nTransCell[nWwCol];
 
+    if ((USHORT)nAktRow >= pTabLines->Count())
+    {
+        ASSERT( 0, "Actual row bigger than expected." );
+        return FALSE;
+    }
+
     pTabLine = (*pTabLines)[nAktRow];
     pTabBoxes = &pTabLine->GetTabBoxes();
-
-    if ((USHORT)nAktRow >= pTabLines->Count())
-        return FALSE;
 
     if ( nCol >= pTabBoxes->Count() )
         return FALSE;
@@ -2249,7 +2267,6 @@ BOOL WW8TabDesc::SetPamInCell( short nWwCol, BOOL bPam )
         {
             pIo->pPaM->GetPoint()->nNode = pTabBox->GetSttIdx() + 1;
             pIo->pPaM->GetPoint()->nContent.Assign( pIo->pPaM->GetCntntNode(), 0 );
-
             // Zur Sicherheit schon jetzt setzen, da bei den Zellen, die
             // zum Randausgleich eingefuegt werden, sonst der Style
             // nicht gesetzt wird.
@@ -3397,11 +3414,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.22 2001-08-23 12:50:09 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.23 2001-08-28 15:24:29 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.22  2001/08/23 12:50:09  cmc
+      #91211# Workarounds for ridiculous word zero width merged virtual table cells
+
       Revision 1.21  2001/08/08 11:05:29  cmc
       #90420# support for extended word 6 unicode documents
 

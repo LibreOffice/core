@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-30 09:18:10 $
+ *  last change: $Author: cmc $ $Date: 2001-08-28 15:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
 #include <svtools/svstdarr.hxx>
+#endif
+#ifndef _SFXITEMITER_HXX //autogen
+#include <svtools/itemiter.hxx>
 #endif
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
@@ -2681,6 +2684,54 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
     rReader.SetFlyBordersShadow( *this, rPic.rgbrc, 0 );
 }
 
+WW8DupProperties::WW8DupProperties(SwDoc &rDoc,
+    SwWW8FltControlStack *pStk) :
+    aChrSet(rDoc.GetAttrPool(), RES_CHRATR_BEGIN, RES_CHRATR_END - 1 ),
+    aParSet(rDoc.GetAttrPool(), RES_PARATR_BEGIN, RES_PARATR_END - 1 ),
+    pCtrlStck(pStk)
+{
+    //Close any open character properties and duplicate them inside the
+    //first table cell
+    USHORT nCnt = pCtrlStck->Count();
+    for (USHORT i=0; i < nCnt; i++)
+    {
+        const SwFltStackEntry* pEntry = (*pCtrlStck)[ i ];
+        if(pEntry->bLocked)
+        {
+            if (pEntry->pAttr->Which() > RES_CHRATR_BEGIN &&
+                pEntry->pAttr->Which() < RES_CHRATR_END)
+            {
+                aChrSet.Put( *pEntry->pAttr );
+
+            }
+            else if (pEntry->pAttr->Which() > RES_PARATR_BEGIN &&
+                pEntry->pAttr->Which() < RES_PARATR_END)
+            {
+                aParSet.Put( *pEntry->pAttr );
+            }
+        }
+    }
+}
+
+void WW8DupProperties::Insert(const SwPosition &rPos)
+{
+    const SfxItemSet *pSet=&aChrSet;
+    for(int i=0;i<2;i++)
+    {
+        if (i==1)
+            pSet = &aParSet;
+
+        if( pSet->Count() )
+        {
+            SfxItemIter aIter( *pSet );
+            const SfxPoolItem* pItem = aIter.GetCurItem();
+            do
+            {
+                pCtrlStck->NewAttr(rPos, *pItem);
+            }while( !aIter.IsAtEnd() && 0 != ( pItem = aIter.NextItem() ) );
+        }
+    }
+}
 
 BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29, BOOL bNowStyleApo )
 {
@@ -2734,15 +2785,19 @@ BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29, BOOL bNowStyleApo )
                                 // Alle Attribute schliessen, da sonst
                                 // Attribute entstehen koennen, die
                                 // in Flys reinragen
+
+        WW8DupProperties aDup(rDoc,pCtrlStck);
+
         pCtrlStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
         pEndStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
-
 
                                 // Setze Pam in den FlyFrame
         const SwFmtCntnt& rCntnt = pSFlyPara->pFlyFmt->GetCntnt();
         ASSERT( rCntnt.GetCntntIdx(), "Kein Inhalt vorbereitet." );
         pPaM->GetPoint()->nNode = rCntnt.GetCntntIdx()->GetIndex() + 1;
         pPaM->GetPoint()->nContent.Assign( pPaM->GetCntntNode(), 0 );
+
+        aDup.Insert(*pPaM->GetPoint());
 
         // 1) ReadText() wird nicht wie beim W4W-Reader rekursiv aufgerufen,
         //    da die Laenge des Apo zu diesen Zeitpunkt noch nicht feststeht,
@@ -2798,7 +2853,9 @@ void SwWW8ImplReader::StopApo()
                                 // Alle Attribute schliessen, da sonst
                                 // Attribute entstehen koennen, die
                                 // aus Flys rausragen
+        WW8DupProperties aDup(rDoc,pCtrlStck);
         pCtrlStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
+
         pEndStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
 
         /*
@@ -2809,6 +2866,37 @@ void SwWW8ImplReader::StopApo()
         const SfxPoolItem *pItem = GetFmtAttr(RES_BACKGROUND);
         if (pItem)
             pSFlyPara->pFlyFmt->SetAttr(*pItem);
+
+        /*
+        #i1291
+        If this fly frame consists entirely of one table inside a frame
+        followed by an empty paragraph then we want to delete the empty
+        paragraph so as to get the frame to autoshrink to the size of the
+        table to emulate words behaviour closer.
+        */
+        const SwNodeIndex* pNodeIndex = pSFlyPara->pFlyFmt->GetCntnt().
+            GetCntntIdx();
+        if( pNodeIndex )
+        {
+            SwNodeIndex aIdx( *pNodeIndex, 1 ),
+            aEnd( *pNodeIndex->GetNode().EndOfSectionNode() );
+
+            if (aIdx < aEnd)
+            {
+                if(aIdx.GetNode().IsTableNode())
+                {
+                    aIdx = *aIdx.GetNode().EndOfSectionNode();
+                    aIdx++;
+                    if ( (aIdx < aEnd) && aIdx.GetNode().IsTxtNode() )
+                    {
+                        SwTxtNode *pNd = aIdx.GetNode().GetTxtNode();
+                        aIdx++;
+                        if (aIdx == aEnd && pNd && !pNd->GetTxt().Len())
+                            rDoc.DelFullPara( *pPaM );
+                    }
+                }
+            }
+        }
 
 // Ist die Fly-Breite durch eine innenliegende Grafik vergroessert worden
 // ( bei automatischer Breite des Flys ), dann muss die Breite des SW-Flys
@@ -2837,6 +2925,9 @@ void SwWW8ImplReader::StopApo()
         }
 
         *pPaM->GetPoint() = *pSFlyPara->pMainTextPos;
+
+        aDup.Insert(*pPaM->GetPoint());
+
         DELETEZ( pSFlyPara->pMainTextPos );
 
 // Damit die Frames bei Einfuegen in existierendes Doc erzeugt werden,
@@ -5125,12 +5216,15 @@ short SwWW8ImplReader::ImportSprm( const BYTE* pPos, short nSprmsLen, USHORT nId
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.33 2001-07-30 09:18:10 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.34 2001-08-28 15:24:29 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.33  2001/07/30 09:18:10  cmc
+      #i1353# Import Vertical Cell Alignment
+
       Revision 1.32  2001/07/17 13:28:26  cmc
       #89808# ##1192## Retain blank pages before explicit section breaks
 
