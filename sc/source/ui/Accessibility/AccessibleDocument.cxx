@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:42:28 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 13:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1835,7 +1835,7 @@ void SAL_CALL
 }
 
 void SAL_CALL
-    ScAccessibleDocument::selectAllAccessible(  )
+    ScAccessibleDocument::selectAllAccessibleChildren(  )
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
