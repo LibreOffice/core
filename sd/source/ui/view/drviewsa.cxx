@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:46:46 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:25:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,16 @@
 
 #ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
+#endif
+
+#ifndef _SVX_DIALOGS_HRC
+#include <svx/dialogs.hrc>
+#endif
+#ifndef _SVX_EXTRUSION_BAR_HXX
+#include <svx/extrusionbar.hxx>
+#endif
+#ifndef _SVX_FONTWORK_BAR_HXX
+#include <svx/fontworkbar.hxx>
 #endif
 
 #pragma hdrstop
@@ -498,8 +508,17 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         RID_DRAW_GRAF_TOOLBOX,
         ::std::auto_ptr<SfxShell>(new GraphicObjectBar(this, pDrView)));
 
+    rObjectBarManager.RegisterObjectBar (
+        RID_SVX_EXTRUSION_BAR,
+        ::std::auto_ptr<SfxShell>(new svx::ExtrusionBar( pViewShell )));
+
+    rObjectBarManager.RegisterObjectBar (
+        RID_SVX_FONTWORK_BAR,
+        ::std::auto_ptr<SfxShell>(new svx::FontworkBar( pViewShell )));
+
     // Activate the relevant object bars.
     rObjectBarManager.PushObjectBar (RID_FORMLAYER_TOOLBOX);
+    rObjectBarManager.PushObjectBar (RID_SVX_EXTRUSION_BAR);
     rObjectBarManager.PushObjectBar (RID_DRAW_OBJ_TOOLBOX);
 
     Size aPageSize = GetDoc()->GetSdPage(0, ePageKind)->GetSize();
