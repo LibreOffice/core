@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cclass_unicode_parser.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2002-08-05 16:39:54 $
+ *  last change: $Author: bustamam $ $Date: 2002-08-14 18:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,7 +728,7 @@ UPT_FLAG_TYPE cclass_Unicode::getFlagsExtended( sal_Unicode c )
         break;
         case UnicodeType::SPACE_SEPARATOR :
             return ((nTypes & KParseTokens::IGNORE_LEADING_WS) ?
-                TOKEN_CHAR_DONTCARE : (bStart ? TOKEN_CHAR_WORD : TOKEN_WORD ));
+                TOKEN_CHAR_DONTCARE : (bStart ? TOKEN_CHAR_WORD : (TOKEN_CHAR_DONTCARE | TOKEN_WORD_SEP | TOKEN_VALUE_SEP) ));
         break;
     }
 
