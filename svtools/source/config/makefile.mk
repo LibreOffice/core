@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: kz $ $Date: 2001-05-11 10:56:26 $
+#   last change: $Author: os $ $Date: 2001-05-18 13:12:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,8 @@ SLOFILES = \
     $(SLO)$/saveopt.obj					\
     $(SLO)$/undoopt.obj             	\
     $(SLO)$/helpopt.obj             	\
-    $(SLO)$/useroptions.obj				\
+    $(SLO)$/javaoptions.obj                 \
+    $(SLO)$/useroptions.obj             \
     $(SLO)$/moduleoptions.obj			\
     $(SLO)$/securityoptions.obj			\
     $(SLO)$/localisationoptions.obj		\
