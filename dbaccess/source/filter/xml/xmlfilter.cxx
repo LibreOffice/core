@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:41:50 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,6 +725,8 @@ const SvXMLTokenMap& ODBFilter::GetColumnElemTokenMap() const
             { XML_NAMESPACE_DB, XML_STYLE_NAME,     XML_TOK_COLUMN_STYLE_NAME   },
             { XML_NAMESPACE_DB, XML_HELP_MESSAGE,   XML_TOK_COLUMN_HELP_MESSAGE },
             { XML_NAMESPACE_DB, XML_VISIBILITY,     XML_TOK_COLUMN_VISIBILITY   },
+            { XML_NAMESPACE_DB, XML_DEFAULT_VALUE,  XML_TOK_COLUMN_DEFAULT_VALUE},
+            { XML_NAMESPACE_DB, XML_TYPE_NAME,      XML_TOK_COLUMN_TYPE_NAME    },
             XML_TOKEN_MAP_END
         };
         m_pColumnElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
