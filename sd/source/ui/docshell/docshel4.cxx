@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:11:28 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,6 @@
 #endif
 #ifndef _CTRLTOOL_HXX //autogen
 #include <svtools/ctrltool.hxx>
-#endif
-#ifndef _SFXSTBMGR_HXX //autogen
-#include <sfx2/stbmgr.hxx>
 #endif
 #ifndef _SFX_ECODE_HXX //autogen
 #include <svtools/sfxecode.hxx>
