@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-06 17:37:38 $
+ *  last change: $Author: cl $ $Date: 2001-03-08 14:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,12 @@
 #endif
 #ifndef _SVX_XLNEDIT_HXX
 #include "xlnedit.hxx"
+#endif
+#ifndef _SVDOGRP_HXX
+#include "svdogrp.hxx"
+#endif
+#ifndef _E3D_SCENE3D_HXX
+#include "scene3d.hxx"
 #endif
 #include "svdmodel.hxx"
 #include "globl3d.hxx"
@@ -571,6 +577,8 @@ uno::Any SAL_CALL SvxShape::queryAggregation( const uno::Type & rType ) throw(un
         aAny <<= Reference<XUnoTunnel>(this);
     else if( rType == ::getCppuType((const Reference< drawing::XGluePointsSupplier >*)0))
         aAny <<= Reference<drawing::XGluePointsSupplier>(this);
+    else if( rType == ::getCppuType((const Reference< container::XChild >*)0))
+        aAny <<= Reference<container::XChild >(this);
     else if( rType == ::getCppuType((const Reference< container::XNamed >*)0))
         aAny <<= Reference<container::XNamed>(this);
     else
@@ -641,7 +649,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::getTypes()
         const uno::Sequence< uno::Type > aBaseTypes( SvxUnoText::getStaticTypes() );
         const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
         const sal_Int32 nBaseTypes = aBaseTypes.getLength();
-        const sal_Int32 nOwnTypes = 7;      // !DANGER! Keep this updated!
+        const sal_Int32 nOwnTypes = 8;      // !DANGER! Keep this updated!
 
         maTypeSequence.realloc( nBaseTypes  + nOwnTypes );
         uno::Type* pTypes = maTypeSequence.getArray();
@@ -651,6 +659,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::getTypes()
         *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
         *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
         *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
+        *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
         *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
         *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
 
@@ -2424,7 +2433,43 @@ uno::Reference< container::XIndexContainer > SAL_CALL SvxShape::getGluePoints()
     return xGluePoints;
 }
 
-/***********************************************************************
+// XChild
+uno::Reference< uno::XInterface > SAL_CALL SvxShape::getParent(  )
+    throw(uno::RuntimeException)
+{
+
+    if( pObj && pObj->GetObjList() )
+    {
+        SdrObjList* pObjList = pObj->GetObjList();
+
+        switch( pObjList->GetListKind() )
+        {
+        case SDROBJLIST_GROUPOBJ:
+            if( pObjList->GetOwnerObj()->ISA( SdrObjGroup ) )
+                return PTR_CAST( SdrObjGroup, pObjList->GetOwnerObj())->getUnoShape();
+            else if( pObjList->GetOwnerObj()->ISA( E3dScene ) )
+                return PTR_CAST( E3dScene, pObjList->GetOwnerObj())->getUnoShape();
+            break;
+        case SDROBJLIST_DRAWPAGE:
+        case SDROBJLIST_MASTERPAGE:
+            return PTR_CAST( SdrPage, pObjList )->getUnoPage();
+        }
+
+
+        DBG_ERROR( "SvxShape::getParent(  ): unexpected SdrObjListKind" );
+    }
+
+    uno::Reference< uno::XInterface > xParent;
+    return xParent;
+}
+
+void SAL_CALL SvxShape::setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent )
+    throw(lang::NoSupportException, uno::RuntimeException)
+{
+    throw lang::NoSupportException();
+}
+
+/************6***********************************************************
 * class SvxShapeRect                                                   *
 ***********************************************************************/
 SvxShapeRect::SvxShapeRect( SdrObject* pObj ) throw()
