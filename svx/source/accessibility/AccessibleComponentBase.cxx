@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleComponentBase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: af $ $Date: 2002-03-18 10:13:19 $
+ *  last change: $Author: af $ $Date: 2002-04-11 12:39:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,17 +109,20 @@ sal_Bool SAL_CALL AccessibleComponentBase::contains (
         const ::com::sun::star::awt::Point& aPoint)
         throw (::com::sun::star::uno::RuntimeException)
 {
-    return sal_False;
+    awt::Rectangle aBounds (getBounds());
+    return (aPoint.X >= aBounds.X)
+        && (aPoint.X <= aBounds.X+aBounds.Width)
+        && (aPoint.Y >= aBounds.Y)
+        && (aPoint.Y <= aBounds.Y+aBounds.Height);
 }
 
 
 
 
-::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
+uno::Reference<XAccessible > SAL_CALL
     AccessibleComponentBase::getAccessibleAt (
-        const ::com::sun::star::awt::Point& aPoint)
-    throw (::com::sun::star::uno::RuntimeException)
+        const awt::Point& aPoint)
+    throw (uno::RuntimeException)
 {
     return uno::Reference<XAccessible>();
 }
@@ -127,11 +130,10 @@ sal_Bool SAL_CALL AccessibleComponentBase::contains (
 
 
 
-::com::sun::star::awt::Rectangle SAL_CALL AccessibleComponentBase::getBounds (void)
-        throw (::com::sun::star::uno::RuntimeException)
+awt::Rectangle SAL_CALL AccessibleComponentBase::getBounds (void)
+    throw (uno::RuntimeException)
 {
-    awt::Rectangle aBBox;
-    return aBBox;
+    return awt::Rectangle();
 }
 
 
@@ -150,8 +152,7 @@ awt::Point SAL_CALL AccessibleComponentBase::getLocation (void)
 awt::Point SAL_CALL AccessibleComponentBase::getLocationOnScreen (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    awt::Point aLocation;
-    return aLocation;
+    return awt::Point();
 }
 
 
@@ -227,8 +228,7 @@ void SAL_CALL AccessibleComponentBase::grabFocus (void)
 ::com::sun::star::uno::Any SAL_CALL AccessibleComponentBase::getAccessibleKeyBinding (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    uno::Any aKeyBinding;
-    return aKeyBinding;
+    return uno::Any();
 }
 
 
