@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 15:08:25 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,7 +552,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "¦Û­q";
         TEXT[ arabic ] = "ãõÚÑøóİ ãä ŞÈá ÇáãÓÊÎÏã";
         TEXT[ greek ] = "Ïñéóìİíï áğü ÷ñŞóôç";
-        TEXT[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ »öÀÎ";
+        TEXT[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ";
         TEXT[ turkish ] = "Kullanıcı tanımlı";
         TEXT[ language_user1 ] = " ";
     };
@@ -1161,7 +1161,7 @@ String STR_AUTH_TYPE_INCOLLECTION
     Text[ polish ] = "Wyci¹g z ksi¹¿ki z tytu³em";
     Text[ portuguese_brazilian ] = "Book extract with title";
     Text[ japanese ] = "À²ÄÙ•t‚«‚Ì´–{";
-    Text[ korean ] = "Á¦¸ñÀÌ ÀÖ´Â Ã¥¹ßÃé";
+    Text[ korean ] = "Ã¥ ¹ßÃé (Á¦¸ñ Æ÷ÇÔ)";
     Text[ chinese_simplified ] = "×¢Ã÷±êÌâµÄÊé¼®ÕªÂ¼ÎÄ";
     Text[ chinese_traditional ] = "ª`©ú¼ĞÃDªº®ÑÄy¤Ş¥Î¤å";
     Text[ arabic ] = "ãŞÊÈÓÇÊ ãä ßÊÇÈ ĞÇÊ ÚäæÇä";
@@ -1305,7 +1305,7 @@ String STR_AUTH_TYPE_PHDTHESIS
     Text[ polish ] = "Praca doktorska";
     Text[ portuguese_brazilian ] = "PhD thesis";
     Text[ japanese ] = "”m˜_•¶";
-    Text[ korean ] = "¹Ú»ç ÇĞÀ§ ³í¹®";
+    Text[ korean ] = "¹Ú»çÇĞÀ§ ³í¹®";
     Text[ chinese_simplified ] = "²©Ê¿ÂÛÎÄ";
     Text[ chinese_traditional ] = "³Õ¤h½×¤å";
     Text[ arabic ] = "ÑÓÇáÉ ÏßÊæÑÇå";
@@ -1401,7 +1401,7 @@ String STR_AUTH_TYPE_EMAIL
     Text[ polish ] = "e-mail";
     Text[ portuguese_brazilian ] = "eMail";
     Text[ japanese ] = "EÒ°Ù";
-    Text[ korean ] = "ÀüÀÚ¿ìÆí";
+    Text[ korean ] = "e-mail";
     Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş";
     Text[ chinese_traditional ] = "¹q¤l¶l¥ó";
     Text[ arabic ] = "ÈÑíÏ ÅáßÊÑæäí";
