@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextSearch.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:17 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 15:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,57 +82,67 @@ enum SearchAlgorithms {
 
 constants SearchFlags
 {
-// Flags for all search methods
+    /// Flag for all search methods
     const long  ALL_IGNORE_CASE     = 0x00000001;
 
-// Flags for normal (Boyer-Moore) search
+    /// Flag for normal (Boyer-Moore) search
     const long  NORM_WORD_ONLY      = 0x00000010;
 
-// Flags for "regular expression" search
-    const long  REG_EXTENDED        = 0x00000100; // EXTENDED regular expressons
-    const long  REG_NOSUB       = 0x00000200; // No replace means ie avoid sub regular expresions return true/false to match
-    const long  REG_NEWLINE     = 0x00000400; // Special new  line treatment
-// A NEWLINE character in string will not be matched by  a period outside  bracket expression or by any form of a non matching list
-// A circumflex (^) in pattern when used to specify expression anhoring will match the zero
-//   length string immediately after a newline in string, regardless of the setting of REG_NOTBOL
-// A dollar-sign ($) in pattern when used to specify expression anchoring, will match zero-length
-//   string immediatlely before a new line in string regardless of the setting of REG_NOTEOL
+    /// Flag for "regular expression" search / interpret as extended regular expression
+    const long  REG_EXTENDED        = 0x00000100;
+    /// Flag for "regular expression" search / No replace means ie avoid sub regular expresions return true/false to match
+    const long  REG_NOSUB       = 0x00000200;
+
+    /// Flag for "regular expression" search / Special new  line treatment
+    const long  REG_NEWLINE     = 0x00000400;
+
+    /** A NEWLINE character in string will not be matched by  a period outside  bracket expression or by any form of a non matching list.
+        A circumflex (^) in pattern when used to specify expression anhoring will match the zero
+        length string immediately after a newline in string, regardless of the setting of REG_NOTBOL
+        A dollar-sign ($) in pattern when used to specify expression anchoring, will match zero-length
+        string immediatlely before a new line in string regardless of the setting of REG_NOTEOL
+    */
     const long  REG_NOT_BEGINOFLINE = 0x00000800;
-// The first character in the string is not the beginning of the line therefore ^  will not
-//   match with first character of the string
+
+    /** The first character in the string is not the beginning of the line therefore ^  will not
+        match with first character of the string
+    */
     const long  REG_NOT_ENDOFLINE   = 0x00001000;
 
 
-// Flags for "Weight Levenshtein-Distance" search
+    /// Flags for "Weight Levenshtein-Distance" search
     const long  LEV_RELAXED     = 0x00010000;
 };
 
 
 struct SearchOptions  {
     //-------------------------------------------------------------------------
-    /** Options for the XTextSearch interface.
-        algorithmType   - search type, can be: ABSOLUTE, REGEXP, APPROXIMATE
-        searchFlag      - some flags - can be mixed
-        searchString    - the search text
-        replaceString   - the replace text (is for optional replacing - SearchOption is only the data container for it)
-
-        Locale      - this is the language for case insensitive search
-
-                  and some values for the "Weight Levenshtein-Distance" search
-        changedChars    - so many characters can be different between the found and search word
-        deletedChars    - so many characters can be missed in the found word
-        insertedChars   - so many characters can be additional in the found word
-    */
-
+    /// search type, can be: ABSOLUTE, REGEXP, APPROXIMATE
     SearchAlgorithms    algorithmType;
-    long            searchFlag;
-    string          searchString;
-    string          replaceString;
-    ::com::sun::star::lang::Locale  Locale;
-    long            changedChars, deletedChars, insertedChars;
 
-// missed and currently not used
-//  ::com::sun::star::lang::XCascadeTransliterator  transliterator;
+    /** some flags - can be mixed
+
+        @see SearchFlags
+    */
+    long            searchFlag;
+
+    /// the search text
+    string          searchString;
+
+    /// the replace text (is for optional replacing - SearchOption is only the data container for it)
+    string          replaceString;
+
+    /// this is the language for case insensitive search
+    ::com::sun::star::lang::Locale  Locale;
+
+    /// this many characters can be different between the found and search word in a "Weight Levenshtein-Distance"
+    long            changedChars;
+
+    /// this many characters can be missed in the found word in a "Weight Levenshtein-Distance"
+    long            deletedChars;
+
+    /// this many characters can be additional in the found word in a "Weight Levenshtein-Distance"
+    long            insertedChars;
 };
 
 
