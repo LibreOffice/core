@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-11-27 08:56:19 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ class SwTbxInsertCtrl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SwTbxInsertCtrl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind );
+    SwTbxInsertCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SwTbxInsertCtrl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;
@@ -127,6 +127,7 @@ public:
                                               SfxItemState eState,
                                               const SfxPoolItem* pState );
 
+    virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException);
 };
 
 //----------------------------------------------------------------------------
@@ -143,7 +144,7 @@ class SwTbxAutoTextCtrl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SwTbxAutoTextCtrl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind );
+    SwTbxAutoTextCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SwTbxAutoTextCtrl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;
@@ -189,7 +190,7 @@ class SwScrollNaviPopup : public SfxPopupWindow
         virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
     public:
-        SwScrollNaviPopup( USHORT nId, SfxBindings & );
+        SwScrollNaviPopup( USHORT nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
         ~SwScrollNaviPopup();
 
     static String           GetQuickHelpText(BOOL bNext);
@@ -207,12 +208,20 @@ class SwNaviImageButton : public ImageButton
         Image               aImage;
         Image               aImageH;
         String              sQuickText;
+        SfxPopupWindow*     pPopupWindow;
+        SfxPopupWindow*     pFloatingWindow;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 
     protected:
+        DECL_LINK( PopupModeEndHdl, void * );
+        DECL_LINK( ClosePopupWindow, SfxPopupWindow * );
+
         virtual void    Click();
         virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+        void            SetPopupWindow( SfxPopupWindow* pWindow );
+
     public:
-        SwNaviImageButton(Window* pParent);
+        SwNaviImageButton(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
 };
 
 //----------------------------------------------------------------------------
@@ -237,7 +246,7 @@ class SwPreviewZoomControl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SwPreviewZoomControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind );
+    SwPreviewZoomControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SwPreviewZoomControl();
 
     virtual void            StateChanged( USHORT nSID,
