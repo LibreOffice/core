@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optHeaderTabListbox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:40:24 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,19 +69,11 @@ namespace svx
 {
     // class OptHeaderTabListBox ---------------------------------------------
 
-    class OptHeaderTabListBox : public SvTabListBox
+    class OptHeaderTabListBox : public SvHeaderTabListBox
     {
-    private:
-        BOOL        m_bFirstPaint;
-        HeaderBar*  m_pHeaderBar;
-
-        DECL_LINK( TabBoxScrollHdl_Impl, SvTabListBox* );
-
     public:
         OptHeaderTabListBox( Window* pParent, WinBits nBits );
 
-        virtual void    Paint( const Rectangle& rRect );
-        void            InitHeaderBar( HeaderBar* _pHeaderBar );
         virtual void    InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image& );
     };
 } // svx

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optHeaderTabListbox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:40:14 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,32 +99,11 @@ void OptLBoxString_Impl::Paint( const Point& rPos, SvLBox& rDev, USHORT, SvLBoxE
 
 OptHeaderTabListBox::OptHeaderTabListBox( Window* pParent, WinBits nWinStyle ) :
 
-    SvTabListBox( pParent, nWinStyle ),
-
-    m_bFirstPaint( TRUE ),
-    m_pHeaderBar( NULL )
+    SvHeaderTabListBox( pParent, nWinStyle )
 {
 }
 
 // -----------------------------------------------------------------------
-
-void OptHeaderTabListBox::Paint( const Rectangle& rRect )
-{
-    if ( m_bFirstPaint )
-    {
-        m_bFirstPaint = FALSE;
-        RepaintScrollBars();
-    }
-
-    SvTabListBox::Paint( rRect );
-}
-
-void OptHeaderTabListBox::InitHeaderBar( HeaderBar* _pHeaderBar )
-{
-    m_pHeaderBar = _pHeaderBar;
-    SetScrolledHdl( LINK( this, OptHeaderTabListBox, TabBoxScrollHdl_Impl ) );
-}
-
 void OptHeaderTabListBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt,
                                      const Image& rImg1, const Image& rImg2 )
 {
@@ -138,12 +117,6 @@ void OptHeaderTabListBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt,
         OptLBoxString_Impl* pStr = new OptLBoxString_Impl( pEntry, 0, pCol->GetText() );
         pEntry->ReplaceItem( pStr, nCol );
     }
-}
-
-IMPL_LINK( OptHeaderTabListBox, TabBoxScrollHdl_Impl, SvTabListBox*, pList )
-{
-    m_pHeaderBar->SetOffset( -GetXOffset() );
-    return 0;
 }
 
 } // namespace svx
