@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:17:35 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,35 +548,113 @@ static const XclImpBuiltInFormat pBuiltInFormats[] =
     {   10,     NF_PERCENT_DEC2                 },  // 0.00%
     {   11,     NF_SCIENTIFIC_000E00            },  // 0.00E+00
     {   12,     NF_FRACTION_1                   },  // # ?/?
-    {   13,     NF_FRACTION_2                   },  // # ??/??
-    {   14,     NF_DATE_SYS_DDMMYY              },  // DD.MM.YY
-    {   15,     NF_DATE_SYS_DMMMYY              },  // DD. MMM YY
-    {   16,     NF_DATE_SYS_DDMMM               },  // DD. MMM
-    {   17,     NF_DATE_SYS_MMYY                },  // MMM YY
-    {   18,     NF_TIME_HHMMAMPM                },  // h:mm AM/PM
-    {   19,     NF_TIME_HHMMSSAMPM              },  // h:mm:ss AM/PM
-    {   20,     NF_TIME_HHMM                    },  // hh:mm
-    {   21,     NF_TIME_HHMMSS                  },  // hh:mm:ss
-    {   22,     NF_DATETIME_SYSTEM_SHORT_HHMM   },  // DD.MM.YYYY hh:mm
+
+    // 14...22 date and time formats
+    {   14,     NF_DATE_SYS_DDMMYYYY            },
+    {   15,     NF_NUMBER_STANDARD,             "D-MMM-YY",                 LANGUAGE_ENGLISH_US },
+    {   15,     NF_NUMBER_STANDARD,             "DD. MMM YY",               LANGUAGE_GERMAN },
+    {   15,     NF_DATE_SYS_DMMMYY              },
+    {   16,     NF_NUMBER_STANDARD,             "DD-MMM",                   LANGUAGE_ENGLISH_US },
+    {   16,     NF_NUMBER_STANDARD,             "DD. MMM",                  LANGUAGE_GERMAN },
+    {   16,     NF_DATE_SYS_DDMMM               },
+    {   17,     NF_NUMBER_STANDARD,             "MMM-YY",                   LANGUAGE_ENGLISH_US },
+    {   17,     NF_NUMBER_STANDARD,             "MMM YY",                   LANGUAGE_GERMAN },
+    {   17,     NF_DATE_SYS_MMYY                },
+    {   18,     NF_NUMBER_STANDARD,             "h:mm AM/PM",               LANGUAGE_ENGLISH_US },
+    {   18,     NF_NUMBER_STANDARD,             "h:mm AM/PM",               LANGUAGE_GERMAN },
+    {   18,     NF_TIME_HHMMAMPM                },
+    {   19,     NF_NUMBER_STANDARD,             "h:mm:ss AM/PM",            LANGUAGE_ENGLISH_US },
+    {   19,     NF_NUMBER_STANDARD,             "h:mm:ss AM/PM",            LANGUAGE_GERMAN },
+    {   19,     NF_TIME_HHMMSSAMPM              },
+    {   20,     NF_NUMBER_STANDARD,             "h:mm",                     LANGUAGE_ENGLISH_US },
+    {   20,     NF_TIME_HHMM                    },
+    {   21,     NF_NUMBER_STANDARD,             "h:mm:ss",                  LANGUAGE_ENGLISH_US },
+    {   21,     NF_TIME_HHMMSS                  },
+    {   22,     NF_NUMBER_STANDARD,             "M/D/YYYY h:mm",            LANGUAGE_ENGLISH_US },
+    {   22,     NF_NUMBER_STANDARD,             "DD.MM.YYYY hh:mm",         LANGUAGE_GERMAN },
+    {   22,     NF_NUMBER_STANDARD,             "[$-0404]YYYY/M/D hh:mm",   LANGUAGE_CHINESE_TRADITIONAL },
+    {   22,     NF_DATETIME_SYSTEM_SHORT_HHMM   },
+
     // 23...36 international formats
-    {   30,     NF_NUMBER_STANDARD,             "[$-0411]D/M/YY",           LANGUAGE_JAPANESE },    // ???
-    {   31,     NF_NUMBER_STANDARD,             "[$-0411]YYYY年M月D日",  LANGUAGE_JAPANESE },
-    {   33,     NF_NUMBER_STANDARD,             "[$-0411]hh時mm分ss秒",  LANGUAGE_JAPANESE },
+    {   27,     NF_DATE_SYS_DDMMYYYY            },  // default
+    {   28,     NF_DATE_SYS_DDMMYYYY            },  // default
+    {   29,     NF_DATE_SYS_DDMMYYYY            },  // default
+
+    {   30,     NF_NUMBER_STANDARD,             "[$-0411]M/D/YY",           LANGUAGE_JAPANESE },
+    {   30,     NF_NUMBER_STANDARD,             "[$-0412]M-D-YY",           LANGUAGE_KOREAN },
+    {   30,     NF_NUMBER_STANDARD,             "[$-0404]M/D/YY",           LANGUAGE_CHINESE_TRADITIONAL },
+    {   30,     NF_NUMBER_STANDARD,             "[$-0804]M/D/YY",           LANGUAGE_CHINESE_SIMPLIFIED },
+    {   30,     NF_DATE_SYS_DDMMYYYY            },  // default
+
+    {   31,     NF_NUMBER_STANDARD,             "[$-0411]YYYY年M月D日",   LANGUAGE_JAPANESE },
+    {   31,     NF_NUMBER_STANDARD,             "[$-0412]YYYY년 M월 D일", LANGUAGE_KOREAN },
+    {   31,     NF_NUMBER_STANDARD,             "[$-0404]YYYY年M月D日",   LANGUAGE_CHINESE_TRADITIONAL },
+    {   31,     NF_NUMBER_STANDARD,             "[$-0804]YYYY年M月D日",   LANGUAGE_CHINESE_SIMPLIFIED },
+    {   31,     NF_DATE_SYS_DDMMYYYY            },  // default
+
+    {   32,     NF_NUMBER_STANDARD,             "[$-0411]HH時MM分",       LANGUAGE_JAPANESE },
+    {   32,     NF_NUMBER_STANDARD,             "[$-0412]H시 MM분",       LANGUAGE_KOREAN },
+    {   32,     NF_NUMBER_STANDARD,             "[$-0404]HH時MM分",       LANGUAGE_CHINESE_TRADITIONAL },
+    {   32,     NF_NUMBER_STANDARD,             "[$-0804]HH时MM分" ,      LANGUAGE_CHINESE_SIMPLIFIED },
+    {   32,     NF_TIME_HHMMSS                  },  // default
+
+    {   33,     NF_NUMBER_STANDARD,             "[$-0411]HH時MM分SS秒",  LANGUAGE_JAPANESE  },
+    {   33,     NF_NUMBER_STANDARD,             "[$-0412]H시 MM분 SS초", LANGUAGE_KOREAN  },
+    {   33,     NF_NUMBER_STANDARD,             "[$-0404]HH時MM分SS秒",  LANGUAGE_CHINESE_TRADITIONAL  },
+    {   33,     NF_NUMBER_STANDARD,             "[$-0804]HH时MM分SS秒",  LANGUAGE_CHINESE_SIMPLIFIED  },
+    {   33,     NF_TIME_HHMMSS                  },  // default
+
+    {   34,     NF_TIME_HHMMSS                  },  // default
+    {   35,     NF_TIME_HHMMSS                  },  // default
+    {   36,     NF_DATE_SYS_DDMMYYYY            },  // default
+
     // ---
     {   37,     NF_NUMBER_STANDARD,             "#,##0 _$;-#,##0 _$",               },
     {   38,     NF_NUMBER_STANDARD,             "#,##0 _$;[RED]-#,##0 _$"           },
     {   39,     NF_NUMBER_STANDARD,             "#,##0.00 _$;-#,##0.00 _$"          },
     {   40,     NF_NUMBER_STANDARD,             "#,##0.00 _$;[RED]-#,##0.00 _$"     },
+
     // 41...44 contained in file
-    {   45,     NF_NUMBER_STANDARD,             "mm:ss"                             },
-    {   46,     NF_TIME_HH_MMSS                 },  // [h]:mm:ss
-    {   47,     NF_TIME_MMSS00                  },  // mm:ss,0
-    {   48,     NF_NUMBER_STANDARD,             "##0.0E+0"                          },
+    {   45,     NF_NUMBER_STANDARD,             "mm:ss"                     },
+    {   46,     NF_NUMBER_STANDARD,             "[h]:mm:ss",                LANGUAGE_ENGLISH_US },
+    {   46,     NF_NUMBER_STANDARD,             "[h]:mm:ss",                LANGUAGE_GERMAN },
+    {   46,     NF_TIME_HH_MMSS                 },  // default
+    {   47,     NF_NUMBER_STANDARD,             "mm:ss.0",                  LANGUAGE_ENGLISH_US },
+    {   47,     NF_NUMBER_STANDARD,             "mm:ss.0",                  LANGUAGE_GERMAN },
+    {   47,     NF_TIME_MMSS00                  },  // default
+    {   48,     NF_NUMBER_STANDARD,             "##0.0E+0"                  },
     {   49,     NF_TEXT                         },  // @
+
     // 50...??? international formats
-    {   56,     NF_NUMBER_STANDARD,             "[$-0411]M月D日",         LANGUAGE_JAPANESE },
-    {   57,     NF_NUMBER_STANDARD,             "[$-030411]GE.M.D",         LANGUAGE_JAPANESE },
-    {   58,     NF_NUMBER_STANDARD,             "[$-030411]GGGE年M月D日",LANGUAGE_JAPANESE }
+    {   50,     NF_DATE_SYS_DDMMYYYY            },  // default
+    {   51,     NF_DATE_SYS_DDMMYYYY            },  // default
+    {   52,     NF_DATE_SYS_DDMMYYYY            },  // default
+    {   53,     NF_DATE_SYS_DDMMYYYY            },  // default
+    {   54,     NF_DATE_SYS_DDMMYYYY            },  // default
+
+    {   55,     NF_NUMBER_STANDARD,             "[$-0411]YYYY年M月",      LANGUAGE_JAPANESE },
+    {   55,     NF_NUMBER_STANDARD,             "[$-0412]YYYY-M-D",         LANGUAGE_KOREAN },
+    {   55,     NF_NUMBER_STANDARD,             "[$-0404]AM/PM HH時MM分", LANGUAGE_CHINESE_TRADITIONAL },
+    {   55,     NF_NUMBER_STANDARD,             "[$-0804]AM/PM HH时MM分", LANGUAGE_CHINESE_SIMPLIFIED },
+    {   55,     NF_DATE_SYS_DDMMYYYY            },  // default
+
+    {   56,     NF_NUMBER_STANDARD,             "[$-0411]M月D日",                 LANGUAGE_JAPANESE },
+    // unable to locate Korean
+    {   56,     NF_NUMBER_STANDARD,             "[$-0404]AM/PM HH時MM分SS秒",    LANGUAGE_CHINESE_TRADITIONAL  },
+    {   56,     NF_NUMBER_STANDARD,             "[$-0804]AM/PM HH时MM分SS秒",    LANGUAGE_CHINESE_SIMPLIFIED },
+    {   56,     NF_DATE_SYS_DDMMYYYY            },  // default
+
+    {   57,     NF_NUMBER_STANDARD,             "[$-030411]GE.M.D",             LANGUAGE_JAPANESE },
+    {   57,     NF_NUMBER_STANDARD,             "[$-0412]YYYY年 M月 D日",    LANGUAGE_KOREAN },
+    {   57,     NF_NUMBER_STANDARD,             "[$-0404]YYYY/M/D",             LANGUAGE_CHINESE_TRADITIONAL },
+    {   57,     NF_NUMBER_STANDARD,             "[$-0804]YYYY年M日",          LANGUAGE_CHINESE_SIMPLIFIED },
+    {   57,     NF_DATE_SYS_DDMMYYYY            },  // default
+
+    {   58,     NF_NUMBER_STANDARD,             "[$-030411]GGGE年M月D日",    LANGUAGE_JAPANESE },
+    {   58,     NF_NUMBER_STANDARD,             "[$-0412]M-D",                  LANGUAGE_KOREAN },
+    {   58,     NF_NUMBER_STANDARD,             "[$-0404]YYYY年M月D日",      LANGUAGE_CHINESE_TRADITIONAL },
+    {   58,     NF_NUMBER_STANDARD,             "[$-0804]M月D日",             LANGUAGE_CHINESE_SIMPLIFIED } ,
+    {   58,     NF_DATE_SYS_DDMMYYYY            }  // default
 };
 
 
@@ -665,18 +743,24 @@ void XclImpNumFmtBuffer::InsertBuiltinFormats()
     xub_StrLen nCheckPos;
     sal_Int16 nType = NUMBERFORMAT_DEFINED;
     sal_uInt32 nKey;
+    sal_uInt32 nSaveIndex = NUMBERFORMAT_ENTRY_NOT_FOUND;
 
     for( const XclImpBuiltInFormat* pCurr = pBuiltInFormats; pCurr != pEnd; ++pCurr )
     {
-        if( pCurr->mpFormat )
+        if((pCurr->eLanguage == LANGUAGE_SYSTEM || pCurr->eLanguage == GetSysLanguage()) &&
+            nSaveIndex != pCurr->mnIndex)
         {
-            aFormat = String( pCurr->mpFormat, RTL_TEXTENCODING_UTF8 );
-            GetFormatter().PutandConvertEntry( aFormat, nCheckPos, nType, nKey,
-                LANGUAGE_ENGLISH_US, pCurr->eLanguage );
+            if( pCurr->mpFormat )
+            {
+                aFormat = String( pCurr->mpFormat, RTL_TEXTENCODING_UTF8 );
+                GetFormatter().PutandConvertEntry( aFormat, nCheckPos,
+                    nType, nKey, LANGUAGE_ENGLISH_US, pCurr->eLanguage );
+            }
+            else
+                nKey = GetFormatter().GetFormatIndex( pCurr->meOffset, pCurr->eLanguage );
+            InsertKey( pCurr->mnIndex, nKey );
+            nSaveIndex = pCurr->mnIndex;
         }
-        else
-            nKey = GetFormatter().GetFormatIndex( pCurr->meOffset, pCurr->eLanguage );
-        InsertKey( pCurr->mnIndex, nKey );
     }
 }
 
