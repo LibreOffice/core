@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:09:31 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text [ french ] = "Assigner" ;
                 Text [ dutch ] = "Toewijzen" ;
                 Text [ swedish ] = "Tilldela" ;
-                Text [ danish ] = "Tildel" ;
+                Text [ danish ] = "Anvend" ;
                 Text [ portuguese ] = "Aplicar" ;
                 Text [ portuguese_brazilian ] = "Aplicar" ;
                 Text[ chinese_simplified ] = "指定";
@@ -116,6 +116,8 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ hebrew ] = "‮יישום‬";
                 Text[ hindi ] = "लागू करो";
                 Text[ slovak ] = "Použiť";
+                Text[ hungarian ] = "Alkalmaz";
+                Text[ slovenian ] = "Uporabi";
             };
             ToolBoxItem
             {
@@ -129,7 +131,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text [ spanish ] = "Abrir..." ;
                 Text [ french ] = "Ouvrir..." ;
                 Text [ swedish ] = "�ppna..." ;
-                Text [ danish ] = "�bn" ;
+                Text [ danish ] = "�bn..." ;
                 Text [ portuguese ] = "Abrir..." ;
                 Text [ portuguese_brazilian ] = "Abrir ..." ;
                 Text[ chinese_simplified ] = "打开...";
@@ -149,6 +151,8 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ hebrew ] = "‮פתיחה...‬";
                 Text[ hindi ] = "खोलो...";
                 Text[ slovak ] = "Otvoriť...";
+                Text[ hungarian ] = "Megnyitás...";
+                Text[ slovenian ] = "Odpri...";
             };
             ToolBoxItem
             {
@@ -183,6 +187,8 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ hebrew ] = "‮שמירה‬";
                 Text[ hindi ] = "संचित करो...";
                 Text[ slovak ] = "Uložiť...";
+                Text[ hungarian ] = "Mentés...";
+                Text[ slovenian ] = "Shrani...";
             };
             ToolBoxItem
             {
@@ -222,6 +228,8 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ hebrew ] = "‮בחירה‬";
                 Text[ hindi ] = "चुनो";
                 Text[ slovak ] = "Vybrať";
+                Text[ hungarian ] = "Kiválasztás";
+                Text[ slovenian ] = "Izberi";
             };
             ToolBoxItem
             {
@@ -257,6 +265,8 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ hebrew ] = "‮מרובע‬";
                 Text[ hindi ] = "आयत";
                 Text[ slovak ] = "Obdĺžnik";
+                Text[ hungarian ] = "Téglalap";
+                Text[ slovenian ] = "Pravokotnik";
             };
             ToolBoxItem
             {
@@ -292,6 +302,8 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ hebrew ] = "‮מעגל‬";
                 Text[ hindi ] = "दीर्घवृत्त";
                 Text[ slovak ] = "Elipsa";
+                Text[ hungarian ] = "Ellipszis";
+                Text[ slovenian ] = "Elipsa";
             };
             ToolBoxItem
             {
@@ -327,6 +339,8 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ hebrew ] = "‮פוליגונים‬";
                 Text[ hindi ] = "बहुभुज क्षेत्र";
                 Text[ slovak ] = "Mnohouholník";
+                Text[ hungarian ] = "Sokszög";
+                Text[ slovenian ] = "Mnogokotnik";
             };
             ToolBoxItem
             {
@@ -362,6 +376,8 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ hebrew ] = "Freihandpolygon";
                 Text[ hindi ] = "स्वतंत्र बहुभुज क्षेत्र";
                 Text[ slovak ] = "Ľubovoľná forma";
+                Text[ hungarian ] = "Szabad formájú sokszög";
+                Text[ slovenian ] = "Prostoročni mnogokotnik";
             };
             ToolBoxItem
             {
@@ -400,6 +416,8 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ hebrew ] = "‮עריכת נקודות‬";
                 Text[ hindi ] = "बिन्दुओं का संपादन";
                 Text[ slovak ] = "Upraviť body";
+                Text[ hungarian ] = "Pontok szerkesztése";
+                Text[ slovenian ] = "Uredi točke";
             };
             ToolBoxItem
             {
@@ -436,6 +454,8 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ hebrew ] = "‮הזזת נקודות‬";
                 Text[ hindi ] = "बिन्दुओं का स्थान परिवर्तन करो";
                 Text[ slovak ] = "Presunúť body";
+                Text[ hungarian ] = "Pontok áthelyezése";
+                Text[ slovenian ] = "Premakni točke";
             };
             ToolBoxItem
             {
@@ -474,6 +494,8 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ hebrew ] = "‮הוספת נקודות‬";
                 Text[ hindi ] = "बिन्दुओं को जोड़ो";
                 Text[ slovak ] = "Vložiť body";
+                Text[ hungarian ] = "Pontok beszúrása";
+                Text[ slovenian ] = "Vstavi točke";
             };
             ToolBoxItem
             {
@@ -510,6 +532,8 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ hebrew ] = "‮מחיקת נקודות‬";
                 Text[ hindi ] = "बिन्दुओं को मिटाओ";
                 Text[ slovak ] = "Odstrániť body";
+                Text[ hungarian ] = "Pontok törlése";
+                Text[ slovenian ] = "Izbriši točke";
             };
             ToolBoxItem
             {
@@ -548,6 +572,8 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ hebrew ] = "‮ביטול פעולה‬";
                 Text[ hindi ] = "अनावृत्ति ";
                 Text[ slovak ] = "Späť ";
+                Text[ hungarian ] = "Visszavonás";
+                Text[ slovenian ] = "Razveljavi";
             };
             ToolBoxItem
             {
@@ -559,7 +585,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text [ portuguese ] = "Restaurar  " ;
                 Text [ portuguese_brazilian ] = "Refazer" ;
                 Text [ swedish ] = "�terst�ll   " ;
-                Text [ danish ] = "Gendan " ;
+                Text [ danish ] = "Gendan" ;
                 Text [ italian ] = "Ripristina  " ;
                 Text [ spanish ] = "Restaurar  " ;
                 Text [ french ] = "Restaurer " ;
@@ -581,6 +607,8 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ hebrew ] = "‮שחזור פעולה‬";
                 Text[ hindi ] = "फिर से करो";
                 Text[ slovak ] = "Znova";
+                Text[ hungarian ] = "Újra";
+                Text[ slovenian ] = "Uveljavi";
             };
             ToolBoxItem
             {
@@ -618,6 +646,8 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ hebrew ] = "Aktiv";
                 Text[ hindi ] = "क्रियाशील";
                 Text[ slovak ] = "Aktívny";
+                Text[ hungarian ] = "Aktív";
+                Text[ slovenian ] = "Aktivno";
             };
             ToolBoxItem
             {
@@ -651,6 +681,8 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ hebrew ] = "‮הפעלת מאקרו...‬";
                 Text[ hindi ] = "मॉक्रो...";
                 Text[ slovak ] = "Makro...";
+                Text[ hungarian ] = "Makró...";
+                Text[ slovenian ] = "Makro...";
             };
             ToolBoxItem
             {
@@ -684,6 +716,8 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ hebrew ] = "‮מאפינים...‬";
                 Text[ hindi ] = "विशेषतायें...";
                 Text[ slovak ] = "Vlastnosti...";
+                Text[ hungarian ] = "Tulajdonságok...";
+                Text[ slovenian ] = "Lastnosti...";
             };
         };
         Text[ english_us ] = "Image Map Editor";
@@ -734,6 +768,8 @@ ModelessDialog RID_SVXDLG_IMAP
         Text[ hebrew ] = "Adresse:";
         Text[ hindi ] = "पता:";
         Text[ slovak ] = "Adresa:";
+        Text[ hungarian ] = "Cím:";
+        Text[ slovenian ] = "Naslov:";
     };
     ComboBox CBB_URL
     {
@@ -756,7 +792,7 @@ ModelessDialog RID_SVXDLG_IMAP
         Text [ french ] = "Texte :" ;
         Text [ dutch ] = "Tekst:" ;
         Text [ swedish ] = "Text:" ;
-        Text [ danish ] = "T~ekst:" ;
+        Text [ danish ] = "Tekst:" ;
         Text [ portuguese_brazilian ] = "Texto:" ;
         Text [ portuguese ] = "Texto:" ;
         Text[ chinese_simplified ] = "文字：";
@@ -776,6 +812,8 @@ ModelessDialog RID_SVXDLG_IMAP
         Text[ hebrew ] = "‮טקסט:‬";
         Text[ hindi ] = "टेक्स्ट्:";
         Text[ slovak ] = "Text:";
+        Text[ hungarian ] = "Szöveg:";
+        Text[ slovenian ] = "Besedilo:";
     };
     Edit EDT_TEXT
     {
@@ -854,6 +892,8 @@ ModelessDialog RID_SVXDLG_IMAP
             TBI_PROPERTY ; \
         };                 \
         IdCount = { 17 ; };
+    Text[ hungarian ] = "Interaktívkép-szerkesztő";
+    Text[ slovenian ] = "Urejevalnik ImageMap";
 
     ImageList IL_IMAPDLG
     {
@@ -912,6 +952,8 @@ Menu RID_SVXMN_IMAP
             Text[ hebrew ] = "‮תאור...‬";
             Text[ hindi ] = "विवरण...";
             Text[ slovak ] = "Popis...";
+            Text[ hungarian ] = "Leírás...";
+            Text[ slovenian ] = "Opis...";
         };
         MenuItem
         {
@@ -920,7 +962,7 @@ Menu RID_SVXMN_IMAP
             Text [ ENGLISH ] = "Ma~cro..." ;
             Text [ english_us ] = "~Macro..." ;
             Text [ swedish ] = "Ma~kro..." ;
-            Text [ danish ] = "Makro..." ;
+            Text [ danish ] = "~Makro..." ;
             Text [ italian ] = "Macro..." ;
             Text [ spanish ] = "Ma~cro..." ;
             Text [ french ] = "Ma~cro..." ;
@@ -944,6 +986,8 @@ Menu RID_SVXMN_IMAP
             Text[ hebrew ] = "‮הפעלת מאקרו...‬";
             Text[ hindi ] = "~मॉक्रो...";
             Text[ slovak ] = "~Makro...";
+            Text[ hungarian ] = "~Makró...";
+            Text[ slovenian ] = "~Makro...";
         };
         MenuItem
         {
@@ -976,6 +1020,8 @@ Menu RID_SVXMN_IMAP
             Text[ hebrew ] = "~Aktiv";
             Text[ hindi ] = "क्रियाशील";
             Text[ slovak ] = "Aktívny";
+            Text[ hungarian ] = "Aktív";
+            Text[ slovenian ] = "Aktivno";
         };
         MenuItem
         {
@@ -991,7 +1037,7 @@ Menu RID_SVXMN_IMAP
             Text [ portuguese_brazilian ] = "Organizar" ;
             Text [ portuguese ] = "~Disposi��o" ;
             Text [ finnish ] = "J�rjest�" ;
-            Text [ danish ] = "Placering" ;
+            Text [ danish ] = "Arranger" ;
             Text [ french ] = "~Disposition" ;
             Text [ swedish ] = "~Placering" ;
             Text [ dutch ] = "~Positie" ;
@@ -1011,7 +1057,7 @@ Menu RID_SVXMN_IMAP
                         Text [ portuguese_brazilian ] = "Trazer para a Frente" ;
                         Text [ portuguese ] = "P~rimeiro plano" ;
                         Text [ finnish ] = "Tuo eteen" ;
-                        Text [ danish ] = "~Placer forrest" ;
+                        Text [ danish ] = "Placer forrest" ;
                         Text [ french ] = "Tout � l'~avant" ;
                         Text [ swedish ] = "L�ngst ~fram" ;
                         Text [ dutch ] = "~Vooraan" ;
@@ -1033,6 +1079,8 @@ Menu RID_SVXMN_IMAP
                         Text[ hebrew ] = "Ganz nach ~vorn";
                         Text[ hindi ] = "सामने लाओ";
                         Text[ slovak ] = "Preniesť do popredia";
+                        Text[ hungarian ] = "Előrehozás";
+                        Text[ slovenian ] = "Postavi v ospredje";
                     };
                     MenuItem
                     {
@@ -1044,7 +1092,7 @@ Menu RID_SVXMN_IMAP
                         Text [ portuguese_brazilian ] = "A~van�ar" ;
                         Text [ portuguese ] = "~Mais para a frente" ;
                         Text [ finnish ] = "Siirr� ~eteenp�in" ;
-                        Text [ danish ] = "F~lyt fremad" ;
+                        Text [ danish ] = "~Flyt fremad" ;
                         Text [ french ] = "V~ers l'avant" ;
                         Text [ swedish ] = "L�ngre fra~m" ;
                         Text [ dutch ] = "Naar v~oren" ;
@@ -1066,6 +1114,8 @@ Menu RID_SVXMN_IMAP
                         Text[ hebrew ] = "W~eiter nach vorn";
                         Text[ hindi ] = "~आगे लाओ";
                         Text[ slovak ] = "Preniesť ~bližšie";
+                        Text[ hungarian ] = "~Előrébb hozás";
+                        Text[ slovenian ] = "Postavi ~naprej";
                     };
                     MenuItem
                     {
@@ -1099,6 +1149,8 @@ Menu RID_SVXMN_IMAP
                         Text[ hebrew ] = "Weiter ~nach hinten";
                         Text[ hindi ] = "पि~छली ओर भेजो";
                         Text[ slovak ] = "P~reniesť ďalej";
+                        Text[ hungarian ] = "~Háttérbe küldés";
+                        Text[ slovenian ] = "Pošlji na~zaj";
                     };
                     MenuItem
                     {
@@ -1132,6 +1184,8 @@ Menu RID_SVXMN_IMAP
                         Text[ hebrew ] = "Ganz nach ~hinten";
                         Text[ hindi ] = "पीछे ~भेजो";
                         Text[ slovak ] = "Odo~slať na pozadie";
+                        Text[ hungarian ] = "~Hátraküldés";
+                        Text[ slovenian ] = "~Pošlji v ozadje";
                     };
                 };
             };
@@ -1151,6 +1205,8 @@ Menu RID_SVXMN_IMAP
             Text[ hebrew ] = "‮סידור‬";
             Text[ hindi ] = "क्रम में रखो";
             Text[ slovak ] = "Usporiadať";
+            Text[ hungarian ] = "Elrendezés";
+            Text[ slovenian ] = "Razporedi";
         };
         MenuItem
         {
@@ -1168,7 +1224,7 @@ Menu RID_SVXMN_IMAP
             Text [ portuguese_brazilian ] = "Selecionar ~Tudo" ;
             Text [ portuguese ] = "Seleccionar t~udo" ;
             Text [ finnish ] = "~Valitse kaikki" ;
-            Text [ danish ] = "Marker alt" ;
+            Text [ danish ] = "Marker ~alt" ;
             Text [ french ] = "Tout s~�lectionner" ;
             Text [ swedish ] = "~V�lj ut allt" ;
             Text [ dutch ] = "Alles ~selecteren" ;
@@ -1190,6 +1246,8 @@ Menu RID_SVXMN_IMAP
             Text[ hebrew ] = "‮בחירה כוללת‬";
             Text[ hindi ] = "~सब चुनो";
             Text[ slovak ] = "Vybrať ~všetko";
+            Text[ hungarian ] = "M~indent kijelöl";
+            Text[ slovenian ] = "Izberi ~vse";
         };
         MenuItem
         {
@@ -1226,6 +1284,8 @@ Menu RID_SVXMN_IMAP
             Text[ hebrew ] = "‮מחיקה‬";
             Text[ hindi ] = "~मिटाओ";
             Text[ slovak ] = "~Zmazať";
+            Text[ hungarian ] = "~Törlés";
+            Text[ slovenian ] = "~Izbriši";
         };
     };
 };
@@ -1258,7 +1318,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text [ french ] = "Texte (facultatif)" ;
         Text [ dutch ] = "~Alternatieve tekst" ;
         Text [ swedish ] = "~Alternativtext" ;
-        Text [ danish ] = "~Alternativtekst" ;
+        Text [ danish ] = "Alternativ~tekst" ;
         Text [ portuguese_brazilian ] = "~Texto alternativo" ;
         Text [ portuguese ] = "Te~xto facultativo" ;
         Text[ chinese_simplified ] = "替代文字(~T)";
@@ -1278,6 +1338,8 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ hebrew ] = "~Alternativtext";
         Text[ hindi ] = "विकल्प ~टेक्स्ट्";
         Text[ slovak ] = "Alternatívny ~text";
+        Text[ hungarian ] = "A~lternatív szöveg";
+        Text[ slovenian ] = "Alternativno ~besedilo";
     };
     Edit EDT_URLDESCRIPTION
     {
@@ -1319,6 +1381,8 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ hebrew ] = "~URL";
         Text[ hindi ] = "~URL";
         Text[ slovak ] = "~URL";
+        Text[ hungarian ] = "~URL";
+        Text[ slovenian ] = "~URL";
     };
     Edit EDT_URL
     {
@@ -1373,6 +1437,8 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ hebrew ] = "Hyperlink";
         Text[ hindi ] = "हाइपरलिंक";
         Text[ slovak ] = "Hypertextový odkaz";
+        Text[ hungarian ] = "Hiperhivatkozás";
+        Text[ slovenian ] = "Hiperpovezava";
     };
     FixedText FT_TARGET
     {
@@ -1383,7 +1449,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text [ english_us ] = "F~rame" ;
         Text [ portuguese_brazilian ] = "F~rame" ;
         Text [ swedish ] = "~Ram" ;
-        Text [ danish ] = "~Frame" ;
+        Text [ danish ] = "~Ramme" ;
         Text [ italian ] = "Frame" ;
         Text [ spanish ] = "~Marco" ;
         Text [ french ] = "Cadre" ;
@@ -1406,6 +1472,8 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ hebrew ] = "‮מסגרת‬";
         Text[ hindi ] = "~फ़्रेम";
         Text[ slovak ] = "~Rámec";
+        Text[ hungarian ] = "~Keret";
+        Text[ slovenian ] = "O~kvir";
     };
     ComboBox CBB_TARGETS
     {
@@ -1449,6 +1517,8 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ hebrew ] = "~Name";
         Text[ hindi ] = "~नाम";
         Text[ slovak ] = "~Názov";
+        Text[ hungarian ] = "~Név";
+        Text[ slovenian ] = "~Ime";
     };
     Edit EDT_NAME
     {
@@ -1477,6 +1547,8 @@ ModalDialog RID_SVXDLG_IMAPURL
     Text[ hebrew ] = "‮תאור‬";
     Text[ hindi ] = "विवरण";
     Text[ slovak ] = "Popis";
+    Text[ hungarian ] = "Leírás";
+    Text[ slovenian ] = "Opis";
 };
 /******************************************************************************/
 String STR_IMAPDLG_SAVE
@@ -1512,6 +1584,8 @@ String STR_IMAPDLG_SAVE
     Text[ hebrew ] = "Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden?";
     Text[ hindi ] = "चित्र नक्शा को परिवर्तन किया है ।\nआप परिवर्तनों को संचित करना चाहते है?";
     Text[ slovak ] = "Táto obrázková mapa bola zmenená.\nPrajete si uložiť zmeny?";
+    Text[ hungarian ] = "Az interaktív kép megváltozott.\nMenti a változást?";
+    Text[ slovenian ] = "Slika s povezavami je bila spremenjena.\nAli želite shraniti spremembe?";
 };
 String STR_IMAPDLG_MODIFY
 {
@@ -1521,7 +1595,7 @@ String STR_IMAPDLG_MODIFY
     Text [ English ] = "The ImageMap has been modified.\nDo you want to take your changes?" ;
     Text [ english_us ] = "The ImageMap has been modified.\nDo you want to save the changes?" ;
     Text [ swedish ] = "Image map har �ndrats.\nSkall �ndringarna �vertas?" ;
-    Text [ danish ] = "ImageMap er blevet �ndret.\nSkal �ndringerne overtages?" ;
+    Text [ danish ] = "ImageMap er blevet �ndret.\nVil du gemme �ndringerne?" ;
     Text [ italian ] = "La ImageMap � stata cambiata.\nAccettare le modifiche?" ;
     Text [ spanish ] = "El mapa de im�genes se ha modificado.\n�Desea guardar las modificaciones?" ;
     Text [ french ] = "L'Image Map a �t� modifi�e.\nAppliquer les modifications ?" ;
@@ -1545,8 +1619,13 @@ String STR_IMAPDLG_MODIFY
     Text[ hebrew ] = "Die ImageMap wurde geändert.\nSollen die Änderungen übernommen werden?";
     Text[ hindi ] = "चित्र नक्शा को परिवर्तन किया है ।\nआप परिवर्तनों को संचित करना चाहते है?";
     Text[ slovak ] = "Táto obrázková mapa bola zmenená.\nPrajete si uložiť zmeny?";
+    Text[ hungarian ] = "Az interaktív kép megváltozott.\nMenti a változást?";
+    Text[ slovenian ] = "Slika s povezavami je bila spremenjena.\nAli želite shraniti spremembe?";
 };
 /******************************************************************************/
+
+
+
 
 
 
