@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:47:57 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -898,7 +898,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_CUT:
         {
-            if ( pDrView->IsPresObjSelected(FALSE, TRUE) )
+            if ( pDrView->IsPresObjSelected(FALSE, TRUE, FALSE, TRUE) )
             {
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
             }
@@ -913,7 +913,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_COPY:
         {
-            if ( pDrView->IsPresObjSelected(FALSE, TRUE) )
+            if ( pDrView->IsPresObjSelected(FALSE, TRUE, FALSE, TRUE) )
             {
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
             }
@@ -991,7 +991,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                     pOLV->PostKeyEvent(aKEvt);
                 }
             }
-            else if ( pDrView->IsPresObjSelected(FALSE, TRUE) )
+            else if ( pDrView->IsPresObjSelected(FALSE, TRUE, FALSE, TRUE) )
             {
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
             }
