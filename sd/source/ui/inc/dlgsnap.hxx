@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsnap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:49:42 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,14 +85,14 @@
 #ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
 #endif
+#include "sdenumdef.hxx" //CHINA001
 /************************************************************************/
 
 class SfxItemSet;
 class ::sd::View;
-
-#define RET_SNAP_DELETE 111
-
-enum SnapKind { SK_HORIZONTAL, SK_VERTICAL, SK_POINT };
+//move to sdenumdef.hxx
+//CHINA001 #define RET_SNAP_DELETE 111
+//CHINA001 enum SnapKind { SK_HORIZONTAL, SK_VERTICAL, SK_POINT };
 
 
 /*************************************************************************
