@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 14:12:33 $
+ *  last change: $Author: oj $ $Date: 2001-04-05 07:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,8 +266,6 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     //  ,m_pParseTree(NULL)
     ,m_nFetchDirection(FetchDirection::FORWARD)
     ,m_nFetchSize(1)
-    ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
-    ,m_nResultSetType(ResultSetType::SCROLL_INSENSITIVE)
     ,m_nCommandType(CommandType::COMMAND)
     ,m_nMaxFieldSize(0)
     ,m_nTransactionIsolation(0)
@@ -292,6 +290,8 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     ,m_pTables(NULL)
     ,m_bOwnConnection(sal_False)
 {
+    m_nResultSetType = ResultSetType::SCROLL_INSENSITIVE;
+    m_nResultSetConcurrency = ResultSetConcurrency::UPDATABLE;
     m_pMySelf = this;
     m_aActiveConnection <<= m_xActiveConnection;
 
@@ -351,6 +351,9 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
         case PROPERTY_ID_ISMODIFIED:
             m_bModified = cppu::any2bool(rValue);
             break;
+        case PROPERTY_ID_FETCHDIRECTION:
+            if( m_nResultSetType == ResultSetType::FORWARD_ONLY)
+                throw Exception(); // else run through
         default:
             OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle,rValue);
     }
@@ -757,7 +760,7 @@ void SAL_CALL ORowSet::updateNull( sal_Int32 columnIndex ) throw(SQLException, R
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd())
+    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -775,7 +778,7 @@ void SAL_CALL ORowSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd())
+    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -795,7 +798,7 @@ void SAL_CALL ORowSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(SQL
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd())
+    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -813,7 +816,7 @@ void SAL_CALL ORowSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw(S
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd())
+    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -832,7 +835,7 @@ void SAL_CALL ORowSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(SQL
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd())
+    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -850,7 +853,7 @@ void SAL_CALL ORowSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(SQ
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd())
+    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -868,7 +871,7 @@ void SAL_CALL ORowSet::updateFloat( sal_Int32 columnIndex, float x ) throw(SQLEx
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd())
+    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -886,7 +889,7 @@ void SAL_CALL ORowSet::updateDouble( sal_Int32 columnIndex, double x ) throw(SQL
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd())
+    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -904,7 +907,7 @@ void SAL_CALL ORowSet::updateString( sal_Int32 columnIndex, const ::rtl::OUStrin
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd())
+    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -923,7 +926,7 @@ void SAL_CALL ORowSet::updateBytes( sal_Int32 columnIndex, const Sequence< sal_I
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd())
+    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -941,7 +944,7 @@ void SAL_CALL ORowSet::updateDate( sal_Int32 columnIndex, const ::com::sun::star
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd())
+    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -959,7 +962,7 @@ void SAL_CALL ORowSet::updateTime( sal_Int32 columnIndex, const ::com::sun::star
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd())
+    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -977,7 +980,7 @@ void SAL_CALL ORowSet::updateTimestamp( sal_Int32 columnIndex, const ::com::sun:
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd())
+    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -995,7 +998,7 @@ void SAL_CALL ORowSet::updateBinaryStream( sal_Int32 columnIndex, const Referenc
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || !x.is())
+    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || !x.is() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -1013,7 +1016,7 @@ void SAL_CALL ORowSet::updateCharacterStream( sal_Int32 columnIndex, const Refer
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || !x.is())
+    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || !x.is() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -1031,7 +1034,7 @@ void SAL_CALL ORowSet::updateObject( sal_Int32 columnIndex, const Any& x ) throw
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd())
+    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -1049,7 +1052,7 @@ void SAL_CALL ORowSet::updateNumericObject( sal_Int32 columnIndex, const Any& x,
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd())
+    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -1076,7 +1079,11 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
 {
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
-    if(!m_pCache)
+    // insertRow is not allowd when
+    // standing not on the insert row nor
+    // when the row isn't modified
+    // or the concurency is read only
+    if(!m_pCache || !m_bNew || !m_bModified || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -1131,7 +1138,8 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
 {
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
-    if(!m_pCache)
+    // not allowed when standing on insert row
+    if(!m_pCache || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY || m_bNew)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -1166,9 +1174,15 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache)
-        throw FunctionSequenceException(*this);
     ::osl::MutexGuard aGuard( m_rMutex );
+    // deleteRow is not allowed when:
+    // stands before the first row
+    // after the last row
+    // stands on the insert row
+    // the concurrency is read only
+    if(!m_pCache || m_bBeforeFirst || m_bAfterLast || m_bNew || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
+        throw FunctionSequenceException(*this);
+
 
     // this call position the cache indirect
     notifyClonesRowDelete(m_aBookmark);
@@ -1198,7 +1212,13 @@ void SAL_CALL ORowSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache)
+    if(m_bBeforeFirst || m_bAfterLast)
+        return; // nothing to do so return
+
+    // cancelRowUpdates is not allowed when:
+    // standing on the insert row
+    // the concurrency is read only
+    if(!m_pCache || m_bNew || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -1303,7 +1323,7 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache)
+    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -1331,7 +1351,7 @@ void SAL_CALL ORowSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache)
+    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -2046,7 +2066,7 @@ Sequence< sal_Int32 > SAL_CALL ORowSet::deleteRows( const Sequence< Any >& rows 
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache)
+    if(!m_pCache || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -2698,8 +2718,6 @@ ORowSetClone::ORowSetClone(ORowSet& rParent,::osl::Mutex& _rMutex)
              ,ORowSetBase(OComponentHelper::rBHelper,_rMutex)
              ,m_nFetchDirection(rParent.m_nFetchDirection)
              ,m_nFetchSize(rParent.m_nFetchSize)
-             ,m_nResultSetConcurrency(ResultSetConcurrency::READ_ONLY)
-             ,m_nResultSetType(rParent.m_nResultSetType)
              ,m_bDeleted(rParent.m_bDeleted)
              ,m_bRowObsolete(rParent.m_bRowObsolete)
              ,m_bIsBookmarable(sal_True)
@@ -2707,6 +2725,8 @@ ORowSetClone::ORowSetClone(ORowSet& rParent,::osl::Mutex& _rMutex)
 {
     DBG_CTOR(ORowSetClone, NULL);
 
+    m_nResultSetType        = rParent.m_nResultSetType;
+    m_nResultSetConcurrency = ResultSetConcurrency::READ_ONLY;
     m_pMySelf               = this;
     m_bClone                = sal_True;
     m_bBeforeFirst          = rParent.m_bBeforeFirst;

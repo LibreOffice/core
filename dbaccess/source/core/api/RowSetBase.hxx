@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 14:12:33 $
+ *  last change: $Author: oj $ $Date: 2001-04-05 07:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,8 @@ namespace dbaccess
         sal_Int32                               m_nRowCount;        // contains the current count of rows which have been fetched
         sal_Int32                               m_nLastColumnIndex; // the last column ask for, used for wasNull()
         sal_Int32                               m_nPosition;        // is set only when a row was deleted
+        sal_Int32                               m_nResultSetType;   // fetch property
+        sal_Int32                               m_nResultSetConcurrency;
         sal_Bool                                m_bClone;           // I'm clone or not
         sal_Bool                                m_bRowCountFinal;
         sal_Bool                                m_bIgnoreResult ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-27 06:42:16 $
+ *  last change: $Author: oj $ $Date: 2001-04-05 07:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_COMPAREBOOKMARK_HPP_
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_RESULTSETCONCURRENCY_HPP_
+#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
@@ -489,7 +492,7 @@ Any SAL_CALL ORowSetBase::getBookmark(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     OSL_ENSURE(bookmark.hasValue(),"ORowSetBase::moveToBookmark bookmark has no value!");
-    if(!bookmark.hasValue())
+    if(!bookmark.hasValue() || m_nResultSetType == ResultSetType::FORWARD_ONLY)
         throw FunctionSequenceException(*m_pMySelf);
     if (m_rBHelper.bDisposed)
         throw DisposedException();
@@ -532,7 +535,7 @@ sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_
     if (m_rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache)
+    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
         throw FunctionSequenceException(*m_pMySelf);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -700,7 +703,7 @@ sal_Bool SAL_CALL ORowSetBase::isBeforeFirst(  ) throw(SQLException, RuntimeExce
     if (m_rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache)
+    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
         throw FunctionSequenceException(*m_pMySelf);
 //  if(m_aBookmark.hasValue())
 //      m_pCache->moveToBookmark(m_aBookmark);
@@ -712,7 +715,7 @@ sal_Bool SAL_CALL ORowSetBase::isAfterLast(  ) throw(SQLException, RuntimeExcept
 {
     if (m_rBHelper.bDisposed)
         throw DisposedException();
-    if(!m_pCache)
+    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
         throw FunctionSequenceException(*m_pMySelf);
 
     return m_bAfterLast;
@@ -728,7 +731,7 @@ sal_Bool SAL_CALL ORowSetBase::isFirst(  ) throw(SQLException, RuntimeException)
     if (m_rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache)
+    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
         throw FunctionSequenceException(*m_pMySelf);
 
     if(m_bBeforeFirst || m_bAfterLast) // so we can't be on the first
@@ -747,7 +750,7 @@ sal_Bool SAL_CALL ORowSetBase::isLast(  ) throw(SQLException, RuntimeException)
     if (m_rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache)
+    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
         throw FunctionSequenceException(*m_pMySelf);
 
     if(m_bBeforeFirst || m_bAfterLast) // so we can't be on the last
@@ -764,7 +767,7 @@ void SAL_CALL ORowSetBase::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
     if (m_rBHelper.bDisposed)
         throw DisposedException();
-    if(!m_pCache)
+    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
         throw FunctionSequenceException(*m_pMySelf);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -792,7 +795,7 @@ void SAL_CALL ORowSetBase::afterLast(  ) throw(SQLException, RuntimeException)
     if (m_rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache)
+    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
         throw FunctionSequenceException(*m_pMySelf);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -817,7 +820,7 @@ sal_Bool SAL_CALL ORowSetBase::first(  ) throw(SQLException, RuntimeException)
 {
     if (m_rBHelper.bDisposed)
         throw DisposedException();
-    if(!m_pCache)
+    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
         throw FunctionSequenceException(*m_pMySelf);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -868,7 +871,7 @@ sal_Bool SAL_CALL ORowSetBase::last(  ) throw(SQLException, RuntimeException)
 {
     if (m_rBHelper.bDisposed)
         throw DisposedException();
-    if(!m_pCache)
+    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
         throw FunctionSequenceException(*m_pMySelf);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -944,7 +947,7 @@ sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, Run
     if (m_rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache)
+    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
         throw FunctionSequenceException(*m_pMySelf);
 
     if((m_bAfterLast && row > 1))
@@ -1000,7 +1003,7 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
     if(!rows)
         return sal_True; // in this case do nothing
 
-    if(!m_pCache)
+    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
         throw FunctionSequenceException(*m_pMySelf);
 
     if((m_bAfterLast && rows > 1) || (m_bBeforeFirst && rows < 0))
@@ -1053,7 +1056,7 @@ sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException
     if (m_rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache)
+    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
         throw FunctionSequenceException(*m_pMySelf);
 
     if(m_bBeforeFirst)
@@ -1108,7 +1111,7 @@ void SAL_CALL ORowSetBase::refreshRow(  ) throw(SQLException, RuntimeException)
     if (m_rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache)
+    if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
         throw FunctionSequenceException(*m_pMySelf);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -1122,7 +1125,7 @@ sal_Bool SAL_CALL ORowSetBase::rowUpdated(  ) throw(SQLException, RuntimeExcepti
     if (m_rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache)
+    if(!m_pCache || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*m_pMySelf);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -1134,7 +1137,7 @@ sal_Bool SAL_CALL ORowSetBase::rowInserted(  ) throw(SQLException, RuntimeExcept
     if (m_rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache)
+    if(!m_pCache || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*m_pMySelf);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -1146,7 +1149,7 @@ sal_Bool SAL_CALL ORowSetBase::rowDeleted(  ) throw(SQLException, RuntimeExcepti
     if (m_rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache)
+    if(!m_pCache || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throw FunctionSequenceException(*m_pMySelf);
 
     ::osl::MutexGuard aGuard( m_rMutex );

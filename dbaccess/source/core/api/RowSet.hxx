@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:22:32 $
+ *  last change: $Author: oj $ $Date: 2001-04-05 07:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,8 +167,6 @@ namespace dbaccess
         sal_Int32                   m_nFetchSize;
         sal_Int32                   m_nMaxFieldSize;
         sal_Int32                   m_nMaxRows;
-        sal_Int32                   m_nResultSetConcurrency;
-        sal_Int32                   m_nResultSetType;
         sal_Int32                   m_nQueryTimeOut;
         sal_Int32                   m_nCommandType;
         sal_Int32                   m_nTransactionIsolation;
@@ -392,8 +390,6 @@ namespace dbaccess
         ORowSet*                    m_pParent;
         sal_Int32                   m_nFetchDirection;
         sal_Int32                   m_nFetchSize;
-        sal_Int32                   m_nResultSetConcurrency;
-        sal_Int32                   m_nResultSetType;
         sal_Bool                    m_bIsBookmarable;
         sal_Bool                    m_bFirst : 1;
         sal_Bool                    m_bLast : 1;
@@ -458,6 +454,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.17  2001/02/23 15:22:32  oj
+    import export changes
+
     Revision 1.16  2001/01/26 15:00:05  oj
     dispose connection when it's our
 

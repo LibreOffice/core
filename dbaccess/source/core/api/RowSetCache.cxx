@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-02 11:14:53 $
+ *  last change: $Author: oj $ $Date: 2001-04-05 07:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
 
                     OColumnNamePos aColumnNames(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers() ? true : false);
                     ::dbaccess::getColumnPositions(xSelColumns,xColumns,aUpdateTableName,aColumnNames);
-                    bAllKeysFound = (sal_Int32)aColumnNames.size() == xColumns->getElementNames().getLength();
+                    bAllKeysFound = sal_Int32(aColumnNames.size()) == xColumns->getElementNames().getLength();
                 }
             }
         }
@@ -1616,11 +1616,12 @@ void SAL_CALL ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow ) th
 
     moveToBookmark((*(*_rUpdateRow))[0].makeAny());
     m_pCacheSet->updateRow(*_rUpdateRow,*m_aMatrixIter,m_aUpdateTable);
+    *m_aMatrixIter = *_rUpdateRow;
     //  moveToBookmark((*(*m_aInsertRow))[0].makeAny());
 //  if(m_pCacheSet->rowUpdated())
 //      *m_aMatrixIter = m_aInsertRow;
     m_bModified = sal_False;
-    refreshRow(  );
+    //  refreshRow(  );
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::deleteRow(  ) throw(SQLException, RuntimeException)
@@ -1657,8 +1658,19 @@ void SAL_CALL ORowSetCache::cancelRowUpdates(  ) throw(SQLException, RuntimeExce
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
     m_bNew      = m_bInserted = m_bModified = sal_False;
-    m_pCacheSet->absolute(m_nPosition);
-    m_pCacheSet->fillValueRow(*m_aMatrixIter,m_nPosition);
+    if(!m_nPosition)
+    {
+        OSL_ENSURE(0,"cancelRowUpdates:Invalid positions pos == 0");
+        throw ::dbtools::FunctionSequenceException(NULL);
+    }
+
+    if(m_pCacheSet->absolute(m_nPosition))
+        m_pCacheSet->fillValueRow(*m_aMatrixIter,m_nPosition);
+    else
+    {
+        OSL_ENSURE(0,"cancelRowUpdates couldn't position right with absolute");
+        throw ::dbtools::FunctionSequenceException(NULL);
+    }
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::moveToInsertRow(  ) throw(SQLException, RuntimeException)
@@ -1790,6 +1802,9 @@ void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRo
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.27  2001/04/02 11:14:53  oj
+    changes for character stream
+
     Revision 1.26  2001/03/15 08:19:18  fs
     cppuhelper/extract -> comphelper/extract
 
