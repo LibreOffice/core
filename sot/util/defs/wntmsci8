@@ -1454,3 +1454,11 @@ _TI3?AVNotConnectedException@io@star@sun@com@@
 ?GetProperty@SotStorage@@QAEEABVString@@0AAVAny@uno@star@sun@com@@@Z
 ?GetXInputStream@SotStorageStream@@QBE?AV?$Reference@VXInputStream@io@star@sun@com@@@uno@star@sun@com@@XZ
 ?OpenEncryptedSotStream@SotStorage@@QAEPAVSotStorageStream@@ABVString@@ABVByteString@@GF@Z
+?DbgError@@YAXPBD0G@Z
+?DbgGetData@@YAPAUDbgData@@XZ
+?DbgIsAssert@@YAKXZ
+?DbgIsErrorOut@@YAKXZ
+?DbgIsWarningOut@@YAKXZ
+?DbgWarning@@YAXPBD0G@Z
+??_C@_0BP@EGLBGAIM@?$CD?$CD?$CD?5illegal?5index?5of?5sequence?$CB?$AA@
+??_C@_0DF@HCMHNEML@o?3?2SRX644?2wntmsci8?2inc?2com?1sun?1s@
