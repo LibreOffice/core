@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-06 12:46:51 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 14:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ hidspecial HID_PROP_DATASOURCE              { HelpID = HID_PROP_DATASOURCE; };
 hidspecial HID_PROP_CURSORSOURCE            { HelpID = HID_PROP_CURSORSOURCE; };
 hidspecial HID_PROP_CURSORSOURCETYPE        { HelpID = HID_PROP_CURSORSOURCETYPE; };
 hidspecial HID_PROP_ESCAPE_PROCESSING       { HelpID = HID_PROP_ESCAPE_PROCESSING; };
+hidspecial HID_PROP_IMAGE_ALIGN             { HelpID = HID_PROP_IMAGE_ALIGN; };
 hidspecial HID_PROP_CURSORTYPE              { HelpID = HID_PROP_CURSORTYPE; };
 hidspecial HID_PROP_READONLY                { HelpID = HID_PROP_READONLY; };
 hidspecial HID_PROP_DATAENTRY               { HelpID = HID_PROP_DATAENTRY; };

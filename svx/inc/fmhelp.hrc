@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmhelp.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-07 16:17:00 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 14:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,8 @@
 #define HID_PROP_CONTROLLABEL                   (HID_FORMS_START +  111)
 #define HID_PROP_CURRSYM_POSITION               (HID_FORMS_START +  112)
 #define HID_PROP_ESCAPE_PROCESSING              (HID_FORMS_START +  113)
+#define HID_PROP_IMAGE_ALIGN                    (HID_FORMS_START +  114)
+
 
 //Unique Id's fuer Dialoge im Property-Editor
 #define UID_PROP_DLG                            (HID_FORMS_START +  180)
