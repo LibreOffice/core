@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicalDifferenceCheck.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2004-12-10 16:57:12 $
+ *  last change: $Date: 2005-02-24 17:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@ import convwatch.GraphicalTestArguments;
 import convwatch.OfficePrint;
 import convwatch.ConvWatch;
 import convwatch.ConvWatchCancelException;
+import convwatch.FileHelper;
 import java.io.File;
 
 import helper.URLHelper;
@@ -76,6 +77,20 @@ import com.sun.star.uno.UnoRuntime;
 
 public class GraphicalDifferenceCheck
 {
+    private static void showVersion()
+        {
+            // DEBUG only
+            if (FileHelper.isDebugEnabled())
+            {
+                System.out.println();
+                System.out.println("+##############################+");
+                System.out.println("##### THIS IS CONVWATCH    #####");
+                System.out.println("##### Debug Version 1.0013 #####");
+                System.out.println("+##############################+");
+                System.out.println();
+            }
+        }
+
     /**
      * Creates references form documents used by the graphical difference check
      *
@@ -90,6 +105,7 @@ public class GraphicalDifferenceCheck
         {
 //!
 //            System.out.println("createReferences() InputPath: " + _sInputPath + " refpath: " + _sReferencePath);
+            showVersion();
             File aInputPath = new File(_sInputPath);
 
 //            System.out.println("Inputpath in file: " + aInputPath.getAbsolutePath());
@@ -139,6 +155,7 @@ public class GraphicalDifferenceCheck
      */
     public static boolean createOneReferenceFile(String _sInputFile, String _sReferencePath, GraphicalTestArguments _aGTA) throws ConvWatchException
         {
+            showVersion();
             return OfficePrint.buildReference(_aGTA, _sReferencePath, _sInputFile);
         }
 
@@ -191,6 +208,8 @@ public class GraphicalDifferenceCheck
      */
     public static boolean check(String _sInputPath, String _sOutputPath, String _sReferencePath, String _sDiffPath, GraphicalTestArguments _aGTA ) throws ConvWatchException
         {
+            showVersion();
+
             boolean bOk = true;
 
             File aInputPath = new File(_sInputPath);
@@ -256,6 +275,8 @@ public class GraphicalDifferenceCheck
      */
     public static boolean checkOneFile(String _sInputFile, String _sOutputPath, String _sReferencePath, String _sDiffPath, GraphicalTestArguments _aGTA ) throws ConvWatchException
         {
+            showVersion();
+
             boolean bOk = false;
             if (_sDiffPath != null)
             {
@@ -286,6 +307,8 @@ public class GraphicalDifferenceCheck
      */
     public static boolean checkOneFile(XComponent xComponent, String _sOutputPath, String _resultDocName, String _sReferencePath, GraphicalTestArguments _aGTA ) throws ConvWatchException
         {
+            showVersion();
+
             // one file
             String sInputFile;
             sInputFile = createInputFile(xComponent, _sOutputPath, _resultDocName);
