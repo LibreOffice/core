@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:08:11 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ ModalDialog DLG_RENAME_XNAMED
         Text[ turkish ] = "Yeni ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nuevo nombre";
+        Text[ finnish ] = "Uusi nimi";
     };
     Edit ED_NEW_NAME
     {
@@ -131,6 +132,7 @@ ModalDialog DLG_RENAME_XNAMED
         Text[ turkish ] = "Adý deðiþtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cambiar nombre";
+        Text[ finnish ] = "Muuta nimi";
     };
     OKButton PB_OK
     {
@@ -174,6 +176,7 @@ ModalDialog DLG_RENAME_XNAMED
     Text[ turkish ] = "Nesneyi yeniden adlandýr: ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cambiar nombre de objeto: ";
+    Text[ finnish ] = "Nimeä objekti uudelleen: ";
 };
 String STR_SERVICE_UNAVAILABLE
 {
@@ -199,6 +202,7 @@ String STR_SERVICE_UNAVAILABLE
     Text[ turkish ] = "Aþaðýdaki hizmet kullanýlamýyor: ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El siguiente servicio no está disponible: ";
+    Text[ finnish ] = "Seuraava palvelu ei ole käytettävissä: ";
 };
 Resource RES_FRMEX_MENU
 {
@@ -332,9 +336,15 @@ Resource RES_FRMEX_MENU
     };
     ItemList [ catalan ] =
     {
-            < "~Escala" ;   ST_MENU_DOWN; > ;
-        < "Hacia ~arriba" ;     ST_MENU_DOWN; > ;
+            < "~Escala" ;       ST_MENU_ZOOM; > ;
+        < "Hacia ~arriba" ;     ST_MENU_UP;     > ;
         < "Hacia a~bajo" ;  ST_MENU_DOWN; > ;
+    };
+    ItemList [ finnish ] =
+    {
+            < "~Zoomaa" ;   ST_MENU_DOWN; > ;
+        < "~Ylös" ;     ST_MENU_DOWN; > ;
+        < "A~las" ;     ST_MENU_DOWN; > ;
     };
     };
 };
