@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2001-05-29 10:52:55 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 19:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ PORTUGUESE ] = "~Resolução" ;
         Text[ chinese_simplified ] = "·Ö±æÂÊ(~R)";
         Text[ russian ] = "Ğàçğåøåíèå";
-        Text[ polish ] = "Rozdzielczo?æ";
+        Text[ polish ] = "Rozdzielczoœæ";
         Text[ japanese ] = "‰ğ‘œ“x(~R)";
         Text[ chinese_traditional ] = "¸ÑªR«×(~R)";
         Text[ arabic ] = "ÇáÇÓÊÈÇäÉ";
@@ -726,7 +726,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ PORTUGUESE ] = "A~largar arestas" ;
         Text[ chinese_simplified ] = "½Ï³¤µÄÍ¼ĞÎ±ß";
         Text[ russian ] = "~Ïî ñàìîìó äëèííîìó êàíòó";
-        Text[ polish ] = "Przed³u¿ona d³ugo?æ krawêdzi";
+        Text[ polish ] = "Przed³u¿ona d³ugoœæ krawêdzi";
         Text[ japanese ] = "Šp‚©‚ç‰„‚Î‚·’·‚³(~E)";
         Text[ chinese_traditional ] = "¸ûªøªº¹Ï§ÎÃä";
         Text[ arabic ] = "ÒíÇÏÉ Øæá ÇáÍæÇİ";
