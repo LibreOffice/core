@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2002-01-03 10:48:38 $
+ *  last change: $Author: fs $ $Date: 2002-03-04 17:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -839,6 +839,8 @@ void FormattedField::Up()
         // das setValue handelt Bereichsueberschreitungen (min/max) automatisch
     SetModifyFlag();
     Modify();
+
+    SpinField::Up();
 }
 
 //------------------------------------------------------------------------------
@@ -848,6 +850,8 @@ void FormattedField::Down()
     SetValue(GetValue() - m_dSpinSize);
     SetModifyFlag();
     Modify();
+
+    SpinField::Down();
 }
 
 //------------------------------------------------------------------------------
@@ -860,6 +864,8 @@ void FormattedField::First()
         SetModifyFlag();
         Modify();
     }
+
+    SpinField::First();
 }
 
 //------------------------------------------------------------------------------
@@ -872,6 +878,8 @@ void FormattedField::Last()
         SetModifyFlag();
         Modify();
     }
+
+    SpinField::Last();
 }
 
 //==============================================================================
