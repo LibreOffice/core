@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-13 16:02:34 $
+ *  last change: $Author: ssa $ $Date: 2002-09-16 08:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3173,7 +3173,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             if( IsRTLEnabled() )
             {
                 // --- RTL --- check if parent is in different coordinates
-                if( mpParent && mpParent->ImplHasMirroredGraphics() && !mpParent->IsRTLEnabled() )
+                if( mpParent && !mpParent->mbFrame && mpParent->ImplHasMirroredGraphics() && !mpParent->IsRTLEnabled() )
                 {
                     // --- RTL --- (re-mirror at parent window)
                     nX = mpParent->mnOutWidth - mnOutWidth - 1 - nX;
