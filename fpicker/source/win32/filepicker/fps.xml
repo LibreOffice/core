@@ -16,6 +16,7 @@
         <type>  com.sun.star.ui.dialogs.XExecutableDialog           </type>
         <type>  com.sun.star.ui.dialogs.XFilePicker                 </type>
         <type>  com.sun.star.ui.dialogs.XFilterManager              </type>
+        <type>  com.sun.star.ui.dialogs.XFilterGroupManager         </type>
         <type>  com.sun.star.ui.dialogs.XFilePickerListener         </type>
         <type>  com.sun.star.ui.dialogs.ExecutableDialogException   </type>
         <type>  com.sun.star.ui.dialogs.XFilePickerNotifier         </type>
