@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:33:50 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
             ,m_aModifyListeners(m_aMutex)
             ,m_aCloseListener(m_aMutex)
             ,m_aDocEventListeners(m_aMutex)
-
+            ,m_bCommitMasterStorage(sal_True)
 {
     DBG_CTOR(ODatabaseDocument,NULL);
     // adjust our readonly flag
@@ -291,8 +291,6 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _sUR
         m_pImpl->m_sName = m_pImpl->m_sFileURL;
 
     m_pImpl->getStorage();
-
-    Reference<XDataSource> xDs = m_pImpl->getDataSource();
 
     try
     {
@@ -487,7 +485,8 @@ void SAL_CALL ODatabaseDocument::store(  ) throw (IOException, RuntimeException)
     notifyEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnSaveDone")));
 }
 // -----------------------------------------------------------------------------
-void ODatabaseDocument::store(const ::rtl::OUString& sURL, const Sequence< PropertyValue >& lArguments )
+void ODatabaseDocument::store(const ::rtl::OUString& sURL
+                             ,const Sequence< PropertyValue >& lArguments)
 {
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
     if ( m_pImpl->m_bDocumentReadOnly )
@@ -495,7 +494,7 @@ void ODatabaseDocument::store(const ::rtl::OUString& sURL, const Sequence< Prope
 
     m_pImpl->commitStorages();
 
-    writeStorage(sURL,lArguments);
+    writeStorage(sURL,lArguments,m_pImpl->getStorage());
 
     try
     {
@@ -506,7 +505,7 @@ void ODatabaseDocument::store(const ::rtl::OUString& sURL, const Sequence< Prope
     catch(Exception)
     {
     }
-    m_pImpl->m_bModified = sal_False;
+    setModified(sal_False);
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::storeAsURL( const ::rtl::OUString& sURL, const Sequence< PropertyValue >& lArguments ) throw (IOException, RuntimeException)
@@ -535,7 +534,7 @@ void SAL_CALL ODatabaseDocument::storeAsURL( const ::rtl::OUString& sURL, const 
             if ( !xStorage.is() )
                 throw IOException();
 
-            if ( m_pImpl->m_sConnectURL.compareToAscii("sdbc:embedded:",14) == 0 )
+            if ( m_pImpl->isEmbeddedDatabase() )
                 m_pImpl->clearConnections();
             m_pImpl->commitEmbeddedStorage();
 
@@ -598,9 +597,22 @@ void SAL_CALL ODatabaseDocument::storeToURL( const ::rtl::OUString& sURL, const 
             if ( !xStorage.is() )
                 throw IOException();
 
-            if ( ! m_pImpl->m_bDocumentReadOnly )
-                store(sURL,lArguments);
+            m_bCommitMasterStorage = sal_False;
+            m_pImpl->commitEmbeddedStorage();
+            m_bCommitMasterStorage = sal_True;
             xMyStorage->copyToStorage( xStorage );
+            writeStorage(sURL,lArguments,xStorage);
+            try
+            {
+                Reference<XTransactedObject> xTransact(xStorage,UNO_QUERY);
+                if ( xTransact.is() )
+                    xTransact->commit();
+            }
+            catch(Exception)
+            {
+                OSL_ENSURE(0,"Exception Caught: Could not store database!");
+                throw IOException();
+            }
         }
         else
             throw IOException();
@@ -770,12 +782,13 @@ sal_Bool ODatabaseDocument::WriteThroughComponent(
     const sal_Char* pServiceName,
     const Sequence<Any> & rArguments,
     const Sequence<PropertyValue> & rMediaDesc,
-    sal_Bool bPlainStream )
+    sal_Bool bPlainStream
+    ,const Reference<XStorage>& _xStorageToSaveTo)
 {
     OSL_ENSURE( NULL != pStreamName, "Need stream name!" );
     OSL_ENSURE( NULL != pServiceName, "Need service name!" );
 
-    Reference<XStorage> xMyStorage = m_pImpl->getStorage();
+    Reference<XStorage> xMyStorage = _xStorageToSaveTo;
     // open stream
     ::rtl::OUString sStreamName = ::rtl::OUString::createFromAscii( pStreamName );
     Reference<XStream> xStream = xMyStorage->openStreamElement( sStreamName,ElementModes::READWRITE | ElementModes::TRUNCATE );
@@ -835,7 +848,7 @@ sal_Bool ODatabaseDocument::WriteThroughComponent(
     const Reference<XComponent> & xComponent,
     const sal_Char* pServiceName,
     const Sequence<Any> & rArguments,
-    const Sequence<PropertyValue> & rMediaDesc )
+    const Sequence<PropertyValue> & rMediaDesc)
 {
     OSL_ENSURE( xOutputStream.is(), "I really need an output stream!" );
     OSL_ENSURE( xComponent.is(), "Need component!" );
@@ -877,7 +890,9 @@ sal_Bool ODatabaseDocument::WriteThroughComponent(
     return xFilter->filter( rMediaDesc );
 }
 // -----------------------------------------------------------------------------
-void ODatabaseDocument::writeStorage(const ::rtl::OUString& _sURL, const Sequence< PropertyValue >& lArguments )
+void ODatabaseDocument::writeStorage(const ::rtl::OUString& _sURL
+                                    ,const Sequence< PropertyValue >& lArguments
+                                    ,const Reference<XStorage>& _xStorageToSaveTo)
 {
     // create XStatusIndicator
     Reference<XStatusIndicator> xStatusIndicator;
@@ -932,7 +947,7 @@ void ODatabaseDocument::writeStorage(const ::rtl::OUString& _sURL, const Sequenc
     sal_Bool bWarn = sal_False, bErr = sal_False;
     String sWarnFile, sErrFile;
 
-    Reference<XPropertySet> xProp(m_pImpl->getStorage(),UNO_QUERY);
+    Reference<XPropertySet> xProp(_xStorageToSaveTo,UNO_QUERY);
     if ( xProp.is() )
     {
         static const ::rtl::OUString sPropName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
@@ -947,7 +962,7 @@ void ODatabaseDocument::writeStorage(const ::rtl::OUString& _sURL, const Sequenc
         if( !WriteThroughComponent(
             xCom, "settings.xml",
             "com.sun.star.comp.sdb.XMLSettingsExporter",
-            aEmptyArgs, aProps, sal_True ) )
+            aEmptyArgs, aProps, sal_True,_xStorageToSaveTo ) )
         {
             if( !bWarn )
             {
@@ -963,7 +978,7 @@ void ODatabaseDocument::writeStorage(const ::rtl::OUString& _sURL, const Sequenc
         if( !WriteThroughComponent(
                 xCom, "content.xml",
                 "com.sun.star.comp.sdb.DBExportFilter",
-                aFilterArgs, aProps, sal_True ) )
+                aFilterArgs, aProps, sal_True,_xStorageToSaveTo ) )
         {
             bErr = sal_True;
             sErrFile = String( RTL_CONSTASCII_STRINGPARAM("content.xml"),
@@ -1271,7 +1286,7 @@ void SAL_CALL ODatabaseDocument::preCommit( const ::com::sun::star::lang::EventO
 //------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::commited( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException)
 {
-    if ( m_pImpl.is() )
+    if ( m_pImpl.is() && m_bCommitMasterStorage )
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         TStorages::iterator aFind = m_pImpl->m_aStorages.find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("database")));
