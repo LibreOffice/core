@@ -2,9 +2,9 @@
  *
  *  $RCSfile: climaker_share.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:04:59 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 14:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 
 #using <mscorlib.dll>
+#using <cli_basetypes.dll>
+
 #include <vcclr.h>
 
 #include "osl/diagnose.h"
@@ -68,6 +70,9 @@
 #include "com/sun/star/reflection/XEnumTypeDescription.hpp"
 #include "com/sun/star/reflection/XInterfaceTypeDescription2.hpp"
 #include "com/sun/star/reflection/XCompoundTypeDescription.hpp"
+#include "com/sun/star/reflection/XServiceTypeDescription2.hpp"
+#include "com/sun/star/reflection/XSingletonTypeDescription2.hpp"
+#include "com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
@@ -94,6 +99,12 @@ inline ::rtl::OUString String_to_ustring( ::System::String * str )
     return ::rtl::OUString( chars, str->get_Length() );
 }
 
+/* If the argument type is a typedef for an interface then the interface
+   type description is returned, otherwise an exeption is thrown.
+*/
+css::uno::Reference< css::reflection::XInterfaceTypeDescription2 >
+resolveInterfaceTypedef(const css::uno::Reference<css::reflection::XTypeDescription>& type);
+
 const ::System::Reflection::MethodAttributes c_ctor_method_attr =
 (::System::Reflection::MethodAttributes)
     (::System::Reflection::MethodAttributes::Public |
@@ -115,17 +126,32 @@ __gc class TypeEmitter : public ::System::IDisposable
     ::System::Type * get_type_Exception();
     ::System::Type * m_type_RuntimeException;
     ::System::Type * get_type_RuntimeException();
-    ::System::Reflection::ConstructorInfo * m_ctor_uno_MethodAttribute;
-    ::System::Reflection::ConstructorInfo * m_default_ctor_uno_MethodAttribute;
-    ::System::Reflection::ConstructorInfo * get_ctor_uno_MethodAttribute();
-    ::System::Type * m_type_Any;
-    ::System::Reflection::FieldInfo * m_field_Any_VOID;
-    void emit_Any_boxed_ctor(
-        ::System::Reflection::Emit::TypeBuilder * type_builder,
-        ::System::Reflection::Emit::FieldBuilder * field_Type,
-        ::System::Reflection::Emit::FieldBuilder * field_Value,
-        ::System::Type * integral_type );
-    ::System::Type * get_type_Any();
+
+    ::System::Reflection::Emit::CustomAttributeBuilder* get_service_exception_attribute(
+        const css::uno::Reference<css::reflection::XServiceConstructorDescription> & ctorDesc);
+    ::System::Reflection::Emit::CustomAttributeBuilder* get_iface_method_exception_attribute(
+        const css::uno::Reference< css::reflection::XInterfaceMethodTypeDescription >& xMethod );
+    ::System::Reflection::Emit::CustomAttributeBuilder* get_exception_attribute(
+        const css::uno::Sequence<css::uno::Reference<
+        css::reflection::XCompoundTypeDescription > >& seq_exceptionsTd );
+/* Creates ::System::Type object for UNO exceptions. The UNO exceptions are
+       obtained by
+       com::sun::star::reflection::XServiceConstructorDescription::getExceptions
+       In a first step the respective CLI types are created. Then it is examined
+       if a Type represents a super class of another class. If so the Type of the
+       derived class is discarded. For example there are a uno RuntimeException and
+       a DeploymentException which inherits RuntimeException. Then only the cli Type
+       of the RuntimeException is returned.
+       The purpose of this function is to provide exceptions for which catch blocks
+       are generated in the service constructor code.
+
+       It is always an instance of an ArrayList returned, even if the sequence argument
+       does not contain elements.
+    */
+    ::System::Collections::ArrayList * get_service_ctor_method_exceptions_reduced(
+        const css::uno::Sequence<
+        css::uno::Reference<css::reflection::XCompoundTypeDescription> > & seqExceptionsTd);
+
 
     __gc class iface_entry
     {
@@ -144,6 +170,28 @@ __gc class TypeEmitter : public ::System::IDisposable
         ::System::Reflection::ConstructorInfo * m_default_ctor;
         ::System::Reflection::ConstructorInfo * m_ctor;
     };
+
+    __gc class service_entry
+    {
+    public:
+        ::System::Reflection::Emit::TypeBuilder * m_type_builder;
+        css::reflection::XServiceTypeDescription2 * m_xType;
+    };
+    ::System::Collections::Hashtable * m_incomplete_services;
+    ::System::Type * complete_service_type(service_entry * entry);
+
+    __gc class singleton_entry
+    {
+    public:
+        ::System::Reflection::Emit::TypeBuilder * m_type_builder;
+        css::reflection::XSingletonTypeDescription2 * m_xType;
+    };
+
+
+    ::System::Collections::Hashtable * m_incomplete_singletons;
+    ::System::Type * complete_singleton_type(singleton_entry * entry);
+
+
     ::System::Collections::Hashtable * m_generated_structs;
 
     ::System::Type * get_type(
@@ -163,6 +211,18 @@ __gc class TypeEmitter : public ::System::IDisposable
     ::System::Type * get_type(
         css::uno::Reference<
         css::reflection::XInterfaceTypeDescription2 > const & xType );
+    ::System::Type * get_type(
+        css::uno::Reference<
+        css::reflection::XSingletonTypeDescription2 > const & xType );
+
+    /*
+      May return NULL if the service description is an obsolete. See
+      description of
+      com.sun.star.reflection.XServiceTypeDescription2.isSingleInterfaceBased
+     */
+    ::System::Type * get_type(
+        css::uno::Reference<
+        css::reflection::XServiceTypeDescription2 > const & xType );
 public:
     TypeEmitter(
         ::System::Reflection::Emit::ModuleBuilder * module_builder,
