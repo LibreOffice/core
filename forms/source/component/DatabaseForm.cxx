@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:33:25 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2434,7 +2434,7 @@ void SAL_CALL ODatabaseForm::setParent(const InterfaceRef& Parent) throw ( ::com
     {
         m_bInContext = sal_False;
         m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION ,Any());
-        m_xAggregateSet->setPropertyValue( PROPERTY_DATASOURCE ,Any());
+        m_xAggregateSet->setPropertyValue( PROPERTY_DATASOURCE, makeAny( ::rtl::OUString() ) );
     }
     // clear the guard before notify
     aGuard.clear();
@@ -2808,12 +2808,6 @@ sal_Bool ODatabaseForm::implEnsureConnection()
             // if our aggregate already has a connection, nothing needs to be done about it
             return sal_True;
 
-        Reference< XConnection >  xConnection;
-        if ( m_xAggregateSet.is() )
-        {
-
-        }
-
         m_bSharingConnection = sal_False;
 
         // if we're a sub form, we try to re-use the connection of our parent
@@ -2836,17 +2830,16 @@ sal_Bool ODatabaseForm::implEnsureConnection()
             }
         }
 
-        if ( !xConnection .is() )
+        if (m_xAggregateSet.is())
         {
             // do we have a connection in the hierarchy than take that connection
             // this overwrites all the other connnections
-            if ( m_xAggregateSet.is() )
-                xConnection = calcConnection(
-                    Reference<XRowSet> (m_xAggregate, UNO_QUERY),
-                    m_xServiceFactory
-                );      // will set a calculated connection implicitly
+            Reference< XConnection >  xConnection = calcConnection(
+                Reference<XRowSet> (m_xAggregate, UNO_QUERY),
+                m_xServiceFactory
+            );      // will set a calculated connection implicitly
+            return xConnection.is();
         }
-        return xConnection.is();
     }
     catch(SQLException& eDB)
     {
@@ -3841,7 +3834,7 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
     _rxOutStream->writeBoolean(m_bAllowDelete);
 
     // html form stuff
-    ::rtl::OUString sTmp = INetURLObject::decode(INetURLObject::AbsToRel( m_aTargetURL ), '%', INetURLObject::DECODE_UNAMBIGUOUS);
+    ::rtl::OUString sTmp = INetURLObject::decode( m_aTargetURL, '%', INetURLObject::DECODE_UNAMBIGUOUS);
     _rxOutStream << sTmp;
     _rxOutStream->writeShort( (sal_Int16)m_eSubmitMethod );
     _rxOutStream->writeShort( (sal_Int16)m_eSubmitEncoding );
@@ -3951,7 +3944,7 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
     // html stuff
     ::rtl::OUString sTmp;
     _rxInStream >> sTmp;
-    m_aTargetURL = INetURLObject::decode(INetURLObject::RelToAbs( sTmp ), '%', INetURLObject::DECODE_UNAMBIGUOUS);
+    m_aTargetURL = INetURLObject::decode( sTmp, '%', INetURLObject::DECODE_UNAMBIGUOUS);
     m_eSubmitMethod     = (FormSubmitMethod)_rxInStream->readShort();
     m_eSubmitEncoding       = (FormSubmitEncoding)_rxInStream->readShort();
     _rxInStream >> m_aTargetFrame;
