@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:32 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,8 @@ protected:
                             m_aWMWorkAreas;
     bool                    m_bTransientBehaviour;
     bool                    m_bEnableAlwaysOnTopWorks;
+    int                     m_nWinGravity;
+    int                     m_nInitWinGravity;
 
     WMAdaptor( SalDisplay * )
 ;
@@ -288,11 +290,9 @@ public:
     virtual bool supportsICCCMPos () const;
 
     int getPositionWinGravity () const
-    {
-        if (m_aWMName.EqualsAscii ("Dtwm"))
-            return CenterGravity;
-        return StaticGravity;
-    }
+    { return m_nWinGravity; }
+    int getInitWinGravity() const
+    { return m_nInitWinGravity; }
 
     /*
      *  expected behaviour is that the WM will not allow transient
