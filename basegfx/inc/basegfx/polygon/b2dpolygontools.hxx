@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:33:59 $
+ *  last change: $Author: aw $ $Date: 2004-02-03 18:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 
 #ifndef _BGFX_VECTOR_B2DVECTOR_HXX
 #include <basegfx/vector/b2dvector.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #endif
 
 #include <vector>
@@ -194,7 +198,20 @@ namespace basegfx
             const B2DVector& rEdgeDelta,
             double* pCut = 0L);
 
+        // Apply Line Dashing. This cuts the Polygon into line pieces
+        // which are inserted as single polygons into the result.
+        ::basegfx::B2DPolyPolygon applyLineDashing(const ::basegfx::B2DPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen);
 
+        // test if point is inside epsilon-range around an edge defined
+        // by the two given points. Can be used for HitTesting. The epsilon-range
+        // is defined to be the rectangle centered to the given edge, using height
+        // 2 x fDistance, and the circle around both points with radius fDistance.
+        bool isInEpsilonRange(const B2DPoint& rEdgeStart, const B2DPoint& rEdgeEnd, const B2DPoint& rTestPosition, double fDistance);
+
+        // test if point is inside epsilon-range around the given Polygon. Can be used
+        // for HitTesting. The epsilon-range is defined to be the tube around the polygon
+        // with distance fDistance and rounded edges (start and end point).
+        bool isInEpsilonRange(const B2DPolygon& rCandidate, const B2DPoint& rTestPosition, double fDistance);
 
         /* Still missing:
         void transform(const Matrix4D& rTfMatrix);

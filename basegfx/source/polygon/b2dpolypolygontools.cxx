@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:34:33 $
+ *  last change: $Author: aw $ $Date: 2004-02-03 18:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#endif
+
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 
 #ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
@@ -243,6 +247,24 @@ namespace basegfx
             }
 
             return aRetval;
+        }
+
+        bool isInEpsilonRange(const B2DPolyPolygon& rCandidate, const B2DPoint& rTestPosition, double fDistance)
+        {
+            OSL_ENSURE(!rCandidate.areControlPointsUsed(), "isInEpsilonRange: ATM works not for curves (!)");
+            const sal_uInt32 nPolygonCount(rCandidate.count());
+
+            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+            {
+                B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
+
+                if(isInEpsilonRange(aCandidate, rTestPosition, fDistance))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     } // end of namespace tools
 } // end of namespace basegfx

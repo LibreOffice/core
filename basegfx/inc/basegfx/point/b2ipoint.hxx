@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2ipoint.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-15 19:55:01 $
+ *  last change: $Author: aw $ $Date: 2004-02-03 18:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ namespace basegfx
         /** constructor with tuple to allow copy-constructing
             from B2ITuple-based classes
         */
-        explicit B2IPoint(const ::basegfx::B2ITuple& rTuple)
+        B2IPoint(const ::basegfx::B2ITuple& rTuple)
         :   B2ITuple(rTuple)
         {}
 

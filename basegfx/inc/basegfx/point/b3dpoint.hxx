@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpoint.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:33:57 $
+ *  last change: $Author: aw $ $Date: 2004-02-03 18:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ namespace basegfx
         /** constructor with tuple to allow copy-constructing
             from B3DTuple-based classes
         */
-        explicit B3DPoint(const ::basegfx::B3DTuple& rTuple)
+        B3DPoint(const ::basegfx::B3DTuple& rTuple)
         :   B3DTuple(rTuple)
         {}
 

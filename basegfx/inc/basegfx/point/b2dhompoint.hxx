@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dhompoint.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:33:54 $
+ *  last change: $Author: aw $ $Date: 2004-02-03 18:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ namespace basegfx
             The 2D point which will be copied. The homogenous part
             is initialized to 1.0.
         */
-        explicit B2DHomPoint(const B2DPoint& rVec)
+        B2DHomPoint(const B2DPoint& rVec)
         :   maTuple(rVec),
             mfW(1.0)
         {}

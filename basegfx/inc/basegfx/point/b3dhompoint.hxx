@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dhompoint.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:33:56 $
+ *  last change: $Author: aw $ $Date: 2004-02-03 18:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ namespace basegfx
             The 3D point which will be copied. The homogenous part
             is initialized to 1.0.
         */
-        explicit B3DHomPoint(const B3DPoint& rVec)
+        B3DHomPoint(const B3DPoint& rVec)
         :   maTuple(rVec),
             mfW(1.0)
         {}

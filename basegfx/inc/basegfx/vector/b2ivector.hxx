@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2ivector.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-15 20:02:10 $
+ *  last change: $Author: aw $ $Date: 2004-02-03 18:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ namespace basegfx
         /** constructor with tuple to allow copy-constructing
             from B2ITuple-based classes
         */
-        explicit B2IVector(const ::basegfx::B2ITuple& rTuple)
+        B2IVector(const ::basegfx::B2ITuple& rTuple)
         :   B2ITuple(rTuple)
         {}
 

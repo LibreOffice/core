@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpoint.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2004-01-16 14:29:59 $
+ *  last change: $Author: aw $ $Date: 2004-02-03 18:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ namespace basegfx
         /** constructor with tuple to allow copy-constructing
             from B2DTuple-based classes
         */
-        explicit B2DPoint(const ::basegfx::B2DTuple& rTuple)
+        B2DPoint(const ::basegfx::B2DTuple& rTuple)
         :   B2DTuple(rTuple)
         {}
 

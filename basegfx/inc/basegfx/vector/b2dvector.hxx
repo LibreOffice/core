@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:34:13 $
+ *  last change: $Author: aw $ $Date: 2004-02-03 18:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ namespace basegfx
         /** constructor with tuple to allow copy-constructing
             from B2DTuple-based classes
         */
-        explicit B2DVector(const ::basegfx::B2DTuple& rTuple)
+        B2DVector(const ::basegfx::B2DTuple& rTuple)
         :   B2DTuple(rTuple)
         {}
 

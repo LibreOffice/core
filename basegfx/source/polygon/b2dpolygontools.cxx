@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:34:32 $
+ *  last change: $Author: aw $ $Date: 2004-02-03 18:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,12 @@
  *
  ************************************************************************/
 
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
-
 #ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
+
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
@@ -1081,9 +1081,120 @@ namespace basegfx
 
             return aRetval;
         }
+
+        // test if point is inside epsilon-range around an edge defined
+        // by the two given points. Can be used for HitTesting. The epsilon-range
+        // is defined to be the rectangle centered to the given edge, using height
+        // 2 x fDistance, and the circle around both points with radius fDistance.
+        bool isInEpsilonRange(const B2DPoint& rEdgeStart, const B2DPoint& rEdgeEnd, const B2DPoint& rTestPosition, double fDistance)
+        {
+            // build edge vector
+            const B2DVector aEdge(rEdgeEnd - rEdgeStart);
+            bool bDeltaXIsZero(fTools::equalZero(aEdge.getX()));
+            bool bDeltaYIsZero(fTools::equalZero(aEdge.getY()));
+            bool bDoDistanceTestStart(false);
+            bool bDoDistanceTestEnd(false);
+
+            if(bDeltaXIsZero && bDeltaYIsZero)
+            {
+                // no edge, just a point. Do one of the distance tests.
+                bDoDistanceTestStart = true;
+            }
+            else
+            {
+                // edge has a length. Create perpendicular vector.
+                const B2DVector aPerpend(getPerpendicular(aEdge));
+                double fCut(
+                    (aPerpend.getY() * (rTestPosition.getX() - rEdgeStart.getX())
+                    + aPerpend.getX() * (rEdgeStart.getY() - rTestPosition.getY())) /
+                    (aEdge.getX() * aEdge.getX() + aEdge.getY() * aEdge.getY()));
+
+                const double fZero(0.0);
+                const double fOne(1.0);
+
+                if(fTools::less(fCut, fZero))
+                {
+                    // left of rEdgeStart
+                    bDoDistanceTestStart = true;
+                }
+                else if(fTools::more(fCut, fOne))
+                {
+                    // right of rEdgeEnd
+                    bDoDistanceTestEnd = true;
+                }
+                else
+                {
+                    // inside line [0.0 .. 1.0]
+                    const B2DPoint aCutPoint(interpolate(rEdgeStart, rEdgeEnd, fCut));
+                    const double fDeltaX(rTestPosition.getX() - aCutPoint.getX());
+                    const double fDeltaY(rTestPosition.getY() - aCutPoint.getY());
+                    const double fDistanceSquare(fDeltaX * fDeltaX + fDeltaY * fDeltaY);
+
+                    if(fDistanceSquare <= fDistance * fDistance)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return sal_False;
+                    }
+                }
+            }
+
+            if(bDoDistanceTestStart)
+            {
+                const double fDeltaX(rTestPosition.getX() - rEdgeStart.getX());
+                const double fDeltaY(rTestPosition.getY() - rEdgeStart.getY());
+                const double fDistanceSquare(fDeltaX * fDeltaX + fDeltaY * fDeltaY);
+
+                if(fDistanceSquare <= fDistance * fDistance)
+                {
+                    return true;
+                }
+            }
+            else if(bDoDistanceTestEnd)
+            {
+                const double fDeltaX(rTestPosition.getX() - rEdgeEnd.getX());
+                const double fDeltaY(rTestPosition.getY() - rEdgeEnd.getY());
+                const double fDistanceSquare(fDeltaX * fDeltaX + fDeltaY * fDeltaY);
+
+                if(fDistanceSquare <= fDistance * fDistance)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        // test if point is inside epsilon-range around the given Polygon. Can be used
+        // for HitTesting. The epsilon-range is defined to be the tube around the polygon
+        // with distance fDistance and rounded edges (start and end point).
+        bool isInEpsilonRange(const B2DPolygon& rCandidate, const B2DPoint& rTestPosition, double fDistance)
+        {
+            OSL_ENSURE(!rCandidate.areControlPointsUsed(), "isInEpsilonRange: ATM works not for curves (!)");
+
+            if(rCandidate.count())
+            {
+                const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? rCandidate.count() : rCandidate.count() - 1L);
+
+                for(sal_uInt32 a(0L); a < nEdgeCount; a++)
+                {
+                    B2DPoint aStart(rCandidate.getB2DPoint(a));
+                    const sal_uInt32 nNextIndex(getIndexOfSuccessor(a, rCandidate));
+                    B2DPoint aEnd(rCandidate.getB2DPoint(nNextIndex));
+
+                    if(isInEpsilonRange(aStart, aEnd, rTestPosition, fDistance))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
     } // end of namespace tools
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
-
 // eof
