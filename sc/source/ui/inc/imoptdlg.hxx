@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2002-07-29 15:13:05 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:03:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ private:
     USHORT GetCodeFromCombo( const ComboBox& rEd ) const;
 
     DECL_LINK( FixedWidthHdl, CheckBox* );
+    DECL_LINK( DoubleClickHdl, ListBox* );
 };
 
 //------------------------------------------------------------------------
