@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontentry.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-27 13:37:56 $
+ *  last change: $Author: pl $ $Date: 2001-06-27 16:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,7 @@ FontNameDlg::FontNameDlg( Window *pParent ) :
         m_aImportButton( this, PaResId( RID_FNTNM_BTN_IMPORT ) ),
         m_aRenameString( PaResId( RID_FNTNM_STR_RENAME ) ),
         m_aRenameTTCString( PaResId( RID_FNTNM_STR_TTCRENAME ) ),
+        m_aNoRenameString( PaResId( RID_FNTNM_STR_NOTRENAMABLE ) ),
         m_rFontManager( PrintFontManager::get() )
 {
     FreeResource();
@@ -415,6 +416,14 @@ IMPL_LINK( FontNameDlg, ClickBtnHdl, Button*, pButton )
         for( i = 0; i < m_aFontBox.GetSelectEntryCount(); i++ )
         {
             fontID aFont = (fontID)m_aFontBox.GetEntryData( m_aFontBox.GetSelectEntryPos( i ) );
+            if( ! m_rFontManager.checkChangeFontPropertiesPossible( aFont ) )
+            {
+                String aErrorText( m_aNoRenameString );
+                aErrorText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ), m_aFontBox.GetSelectEntry( i ) );
+                ErrorBox aBox( this, WB_OK | WB_DEF_OK, aErrorText );
+                aBox.Execute();
+                continue;
+            }
             ::std::list< fontID > aDuplicates;
             m_rFontManager.getFileDuplicates( aFont, aDuplicates );
             aDuplicates.push_front( aFont );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontentry.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-27 13:37:56 $
+ *  last change: $Author: pl $ $Date: 2001-06-27 16:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,8 @@ namespace padmin {
 
         String                      m_aRenameString;
         String                      m_aRenameTTCString;
+        String                      m_aNoRenameString;
+
         ::psp::PrintFontManager&    m_rFontManager;
 
         // maps fontID to XLFD

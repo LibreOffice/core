@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-27 13:37:56 $
+ *  last change: $Author: pl $ $Date: 2001-06-27 16:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1349,6 +1349,11 @@ ModalDialog RID_FONTNAMEDIALOG
     {
         Text = "~Neuer Name für %s (%d1 von %d2)";
         Text [ English ] = "~New name for %s (%d1 of %d2)";
+    };
+    String RID_FNTNM_STR_NOTRENAMABLE
+    {
+        Text = "Die Schrift %s kann aufgrund mangelnder Schreibrechte nicht umbenannt werden.";
+        Text [ English ] = "The font %s cannot be renamed due to missing write permission.";
     };
     Text[ english_us ] = "Fonts";
     Text[ portuguese ] = "Tipos de letra";

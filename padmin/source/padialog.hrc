@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-26 19:27:24 $
+ *  last change: $Author: pl $ $Date: 2001-06-27 16:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@
 #define RID_FNTNM_BTN_RENAME                6
 #define RID_FNTNM_STR_RENAME                7
 #define RID_FNTNM_STR_TTCRENAME         8
+#define RID_FNTNM_STR_NOTRENAMABLE          9
 
 #define RID_TXT_REFETCH            1031
 
