@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-26 18:13:46 $
+ *  last change: $Author: sj $ $Date: 2002-12-04 12:27:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,10 +433,15 @@ Size WinMtfOutput::ImplMap( const Size& rSz )
     {
         double fX = rSz.Width() * maXForm.eM11;
         double fY = rSz.Width() * maXForm.eM12;
-        double fWidth = sqrt( fX * fX + fY + fY );
+        double fWidth = sqrt( fX * fX + fY * fY );
+        if ( rSz.Width() < 0 )
+            fWidth *= -1;
+
         fX = rSz.Height() * maXForm.eM21;
         fY = rSz.Height() * maXForm.eM22;
         double fHeight = sqrt( fX * fX + fY * fY );
+        if ( rSz.Height() < 0 )
+            fHeight *= -1;
 
         if ( mnGfxMode == GM_COMPATIBLE )
         {
