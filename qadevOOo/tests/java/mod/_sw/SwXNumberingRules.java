@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXNumberingRules.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2004-01-05 20:10:57 $
+ *  last change:$Date: 2004-08-11 15:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,8 @@ public class SwXNumberingRules extends TestCase {
             e.printStackTrace(log);
         }
 
+        Object instance1 = null;
+
         try {
             oObj = (XInterface) AnyConverter.toObject(
                     new Type(XInterface.class),NumStyleI.getByIndex(0));
@@ -185,6 +187,8 @@ public class SwXNumberingRules extends TestCase {
                 UnoRuntime.queryInterface(XPropertySet.class, oObj);
             oObj = (XInterface) AnyConverter.toObject(
                 new Type(XInterface.class),props.getPropertyValue("NumberingRules"));
+            XIndexAccess nRules = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, props.getPropertyValue("NumberingRules"));
+            instance1 = nRules.getByIndex(0);
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
             log.println("Error, exception occured...");
             e.printStackTrace(log);
@@ -200,6 +204,8 @@ public class SwXNumberingRules extends TestCase {
         }
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
+
+        tEnv.addObjRelation("INSTANCE1", instance1);
         return tEnv;
     }
 
