@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-09 12:34:18 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 09:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         const ::rtl::OUString* pEnd = pBegin + nLength;
         for(;pBegin != pEnd;++pBegin)
         {
-            if(*pBegin == aTable || *pBegin == ::rtl::OUString::createFromAscii("%"))
+            if(*pBegin == aTable)
             {
                 bTableFound = sal_True;
                 break;

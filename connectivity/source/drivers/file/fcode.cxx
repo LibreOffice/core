@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 08:48:24 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 09:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ void OOperandRow::bindValue(OValueRow _pRow)
 Any OOperandRow::getValue() const
 {
     OSL_ENSHURE(m_pRow.isValid() && m_nRowPos < m_pRow->size(),"Invalid RowPos is >= vector.size()");
-    return (*m_pRow)[m_nRowPos];
+    return (*m_pRow)[m_nRowPos].makeAny();
 }
 //------------------------------------------------------------------
 OOperandAttr::OOperandAttr(sal_uInt16 _nPos,const Reference< XFastPropertySet>& _xColumn)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:47:28 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 09:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,9 +164,9 @@ OResultSet::~OResultSet()
 void OResultSet::construct()
 {
     registerProperty(PROPERTY_FETCHSIZE,            PROPERTY_ID_FETCHSIZE,          0,&m_nFetchSize,        ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(PROPERTY_RESULTSETTYPE,        PROPERTY_ID_RESULTSETTYPE,              PropertyAttribute::READONLY,&m_nResultSetType,       ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(PROPERTY_RESULTSETTYPE,        PROPERTY_ID_RESULTSETTYPE,      PropertyAttribute::READONLY,&m_nResultSetType,       ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
     registerProperty(PROPERTY_FETCHDIRECTION,       PROPERTY_ID_FETCHDIRECTION,     0,&m_nFetchDirection,   ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(PROPERTY_RESULTSETCONCURRENCY, PROPERTY_ID_RESULTSETCONCURRENCY,       PropertyAttribute::READONLY,&m_nResultSetConcurrency,                ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(PROPERTY_RESULTSETCONCURRENCY, PROPERTY_ID_RESULTSETCONCURRENCY,PropertyAttribute::READONLY,&m_nResultSetConcurrency,                ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
 }
 // -------------------------------------------------------------------------
 void OResultSet::disposing(void)
@@ -186,11 +186,16 @@ void OResultSet::disposing(void)
     DELETEZ(m_pEvaluationKeySet);
     DELETEZ(m_pSortIndex);
 
-    m_aRow->clear();
-    m_aEvaluateRow->clear();
-    m_aInsertRow->clear();
-    m_aAssignValues->clear();
-    m_xParamColumns->clear();
+    if(m_aRow.isValid())
+        m_aRow->clear();
+    if(m_aRow.isValid())
+        m_aEvaluateRow->clear();
+    if(m_aRow.isValid())
+        m_aInsertRow->clear();
+    if(m_aRow.isValid())
+        m_aAssignValues->clear();
+    if(m_aRow.isValid())
+        m_xParamColumns->clear();
     m_aBookmarkToPos.clear();
 }
 // -------------------------------------------------------------------------
@@ -272,7 +277,7 @@ sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLExceptio
 
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
-    return (*m_aRow)[columnIndex].getInt32();
+    return (*m_aRow)[columnIndex];
 }
 // -------------------------------------------------------------------------
 
@@ -283,7 +288,8 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
-    return Sequence< sal_Int8 >();
+    m_bWasNull = (*m_aRow)[columnIndex].isNull();
+    return (*m_aRow)[columnIndex];
 }
 // -------------------------------------------------------------------------
 
@@ -296,7 +302,7 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
 
-    return DateConversion::toDate((*m_aRow)[columnIndex]);
+    return (*m_aRow)[columnIndex];
 }
 // -------------------------------------------------------------------------
 
@@ -320,7 +326,7 @@ float SAL_CALL OResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException,
 
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
-    return (*m_aRow)[columnIndex].getDouble();
+    return (*m_aRow)[columnIndex];
 }
 // -------------------------------------------------------------------------
 
@@ -434,7 +440,7 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
 
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
-    return (*m_aRow)[columnIndex].getInt32();
+    return (*m_aRow)[columnIndex];
 }
 // -------------------------------------------------------------------------
 
@@ -460,7 +466,7 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
-    return DateConversion::toTime((*m_aRow)[columnIndex]);
+    return (*m_aRow)[columnIndex];
 }
 // -------------------------------------------------------------------------
 
@@ -472,7 +478,7 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
-    return DateConversion::toDateTime((*m_aRow)[columnIndex]);
+    return (*m_aRow)[columnIndex];
 }
 // -------------------------------------------------------------------------
 
@@ -482,14 +488,14 @@ sal_Bool SAL_CALL OResultSet::isAfterLast(  ) throw(SQLException, RuntimeExcepti
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    return sal_False;
+    return m_bEOF;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::isFirst(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OResultSet_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
     return m_nRowPos == 1;
 }
@@ -1518,8 +1524,8 @@ OFILEKeyValue* OResultSet::GetOrderbyKeyValue(OValueRow _rRow)
     {
         if (nOrderbyColumnNumber[i] == SQL_COLUMN_NOTFOUND) break;
 
-        OFileValue xKey = (*_rRow)[nOrderbyColumnNumber[i]];
-        switch (xKey.getType())
+        ORowSetValue xKey = (*_rRow)[nOrderbyColumnNumber[i]];
+        switch (xKey.getTypeKind())
         {
             case ::com::sun::star::sdbc::DataType::VARCHAR:
             case ::com::sun::star::sdbc::DataType::CHAR:
@@ -1820,10 +1826,11 @@ BOOL OResultSet::OpenImpl()
             aRowIter->setBound(aCase(connectivity::getString(xProp->getFastPropertyValue(PROPERTY_ID_NAME)),connectivity::getString((*aIter)->getFastPropertyValue(PROPERTY_ID_REALNAME))));
             sal_Int32 nType;
             xProp->getFastPropertyValue(PROPERTY_ID_TYPE) >>= nType;
-            aRowIter->setType(nType);
+            aRowIter->setTypeKind(nType);
         }
         catch(...)
         {
+            OSL_ENSHURE(0,"OResultSet::OpenImpl() Exeception catched!");
         }
     }
 
@@ -1911,7 +1918,7 @@ BOOL OResultSet::OpenImpl()
                     eKeyType[i] = SQL_ORDERBYKEY_NONE;
                 else
                 {
-                    switch (aRowIter->getType())
+                    switch (aRowIter->getTypeKind())
                     {
                     case DataType::CHAR:
                         case DataType::VARCHAR:

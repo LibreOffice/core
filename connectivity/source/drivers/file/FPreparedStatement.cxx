@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-09 12:34:19 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 09:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,7 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
     if(parameterIndex >= m_aRow->size())
-        m_aRow->push_back(OFileValue());
+        m_aRow->push_back(ORowSetValue());
     else
         (*m_aRow)[parameterIndex].setNull();
 }
@@ -515,7 +515,7 @@ void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_I
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
     if(parameterIndex >= m_aRow->size())
-        m_aRow->push_back(OFileValue());
+        m_aRow->push_back(ORowSetValue());
     else
         (*m_aRow)[parameterIndex].setNull();
 }
