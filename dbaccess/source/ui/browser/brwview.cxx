@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-06 13:59:21 $
+ *  last change: $Author: oj $ $Date: 2002-02-11 12:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef _SBA_BWRCTRLR_HXX
 #include "brwctrlr.hxx"
 #endif
+#ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
+#include <com/sun/star/awt/XControlContainer.hpp>
+#endif
 
 
 using namespace dbaui;
@@ -102,13 +105,38 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
+
+namespace
+{
+    sal_Bool isGrabVclControlFocusAllowed(const UnoDataBrowserView* _pView)
+    {
+        sal_Bool bGrabFocus = sal_False;
+        SbaGridControl* pVclControl = _pView->getVclControl();
+        Reference< ::com::sun::star::awt::XControl > xGrid = _pView->getGridControl();
+        if (pVclControl && xGrid.is())
+        {
+            bGrabFocus = sal_True;
+            if(!pVclControl->HasChildPathFocus())
+            {
+                Reference<XChild> xChild(xGrid->getModel(),UNO_QUERY);
+                Reference<XLoadable> xLoad;
+                if(xChild.is())
+                    xLoad = Reference<XLoadable>(xChild->getParent(),UNO_QUERY);
+                bGrabFocus = xLoad.is() && xLoad->isLoaded();
+            }
+        }
+        return bGrabFocus;
+    }
+}
 //==================================================================
 //= UnoDataBrowserView
 //==================================================================
 
 // -------------------------------------------------------------------------
-UnoDataBrowserView::UnoDataBrowserView(Window* pParent, const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rFactory)
-    :ODataView(pParent,_rFactory)
+UnoDataBrowserView::UnoDataBrowserView( Window* pParent,
+                                        IController* _pController,
+                                        const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rFactory)
+    :ODataView(pParent,_pController,_rFactory)
     ,m_pVclControl(NULL)
     ,m_pSplitter(NULL)
     ,m_pTreeView(NULL)
@@ -316,24 +344,20 @@ sal_uInt16 UnoDataBrowserView::ViewColumnCount() const
 void UnoDataBrowserView::GetFocus()
 {
     Window::GetFocus();
-    if (m_pVclControl && m_xGrid.is())
+    if( m_pTreeView )
+        m_pTreeView->GrabFocus();
+    else if (m_pVclControl && m_xGrid.is())
     {
-        sal_Bool bGrabFocus = sal_True;
+        sal_Bool bGrabFocus = sal_False;
         if(!m_pVclControl->HasChildPathFocus())
         {
-            Reference<XChild> xChild(m_xGrid->getModel(),UNO_QUERY);
-            Reference<XLoadable> xLoad;
-            if(xChild.is())
-                xLoad = Reference<XLoadable>(xChild->getParent(),UNO_QUERY);
-            bGrabFocus = !(xLoad.is() && xLoad->isLoaded());
-            if(!bGrabFocus)
+            bGrabFocus = isGrabVclControlFocusAllowed(this);
+            if( bGrabFocus )
                 m_pVclControl->GrabFocus();
         }
-        if(bGrabFocus && m_pTreeView)
+        if(!bGrabFocus && m_pTreeView)
             m_pTreeView->GrabFocus();
     }
-    else if(m_pTreeView)
-        m_pTreeView->GrabFocus();
 }
 // -------------------------------------------------------------------------
 long UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
@@ -343,14 +367,39 @@ long UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pKeyEvt = rNEvt.GetKeyEvent();
         const KeyCode& rKeyCode = pKeyEvt->GetKeyCode();
-        if(rKeyCode  == KeyCode(KEY_E,TRUE,TRUE,FALSE))
+
+        Window* pLeft  = m_pTreeView;
+        Window* pRight = getToolBox();
+
+        sal_Bool bGrabAllowed = isGrabVclControlFocusAllowed(this);
+        if( rKeyCode == KeyCode(KEY_E,TRUE,TRUE,FALSE) )
         {
-            if(m_pTreeView && m_pVclControl->HasChildPathFocus())
-                m_pTreeView->GrabFocus();
-            else
+            if ( pLeft && m_pVclControl && pLeft->HasChildPathFocus() && bGrabAllowed )
                 m_pVclControl->GrabFocus();
+            else if ( m_pVclControl && m_pVclControl->HasChildPathFocus() )
+                pLeft->GrabFocus();
             nDone = 1L;
         }
+        else if (       !rKeyCode.IsMod1()
+                    &&  !rKeyCode.IsMod2()
+                    &&  rKeyCode.GetCode() == KEY_F6)
+        {
+            nDone = 1L;
+
+            if ( rKeyCode.IsShift() )
+            {
+                pLeft  = getToolBox();
+                pRight = m_pTreeView;
+            }
+
+            if ( pLeft && m_pVclControl && pLeft->HasChildPathFocus() && bGrabAllowed )
+                m_pVclControl->GrabFocus();
+            else if ( m_pVclControl && pRight && m_pVclControl->HasChildPathFocus() )
+                pRight->GrabFocus();
+            else
+                nDone = 0L;
+        }
+
     }
     return nDone ? nDone : Window::PreNotify(rNEvt);
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-29 12:23:58 $
+ *  last change: $Author: oj $ $Date: 2002-02-11 12:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,7 +685,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
 
     // ---------------
     // create the view
-    m_pView = new UnoDataBrowserView(pParent,m_xMultiServiceFacatory);
+    m_pView = new UnoDataBrowserView(pParent,this,m_xMultiServiceFacatory);
     if (!getBrowserView())
         return sal_False;
 
