@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
         }
     }
     if( XML_NAMESPACE_STYLE == nPrefix &&
-        IsXMLToken(rLocalName, XML_PROPERTIES) )
+        IsXMLToken(rLocalName, XML_PAGE_LAYOUT_PROPERTIES) )
     {
         UniReference < SvXMLImportPropertyMapper > xImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );
@@ -200,6 +200,7 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
             PageContextType aType = Page;
             pContext = new PagePropertySetContext( GetImport(), nPrefix,
                                                     rLocalName, xAttrList,
+                                                    XML_TYPE_PROP_PAGE_LAYOUT,
                                                     GetProperties(),
                                                     xImpPrMap, 0, nEndIndex, aType);
         }
