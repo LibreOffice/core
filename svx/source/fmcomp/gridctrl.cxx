@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *  last change: $Author: oj $ $Date: 2000-09-22 09:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,8 +619,8 @@ void DbGridControl::NavigationBar::InvalidateAll(sal_uInt32 nCurrentPos, sal_Boo
         // Wann muﬂ alles invalidiert werden
         if (bAll || m_nCurrentPos <= 0 ||
             nCurrentPos <= 0 ||
-            m_nCurrentPos >= (pParent->GetRowCount() - 2) ||
-            nCurrentPos >= (pParent->GetRowCount() - 2))
+            m_nCurrentPos >= (pParent->GetRowCount() - ((pParent->GetOptions() & DbGridControl::OPT_INSERT) ? 2 : 1)) ||
+            nCurrentPos >= (pParent->GetRowCount() - ((pParent->GetOptions() & DbGridControl::OPT_INSERT) ? 2 : 1)))
         {
             m_nCurrentPos = nCurrentPos;
             int i = 0;
@@ -2428,23 +2428,35 @@ void DbGridControl::MoveToNext()
 
     if (m_nTotalCount > 0)
     {
+        // move the data cursor to the right position
         long nNewRow = min(GetRowCount() - 1, GetCurRow() + 1);
         if (GetCurRow() != nNewRow)
             MoveToPosition(nNewRow);
     }
     else
     {
+        sal_Bool bOk;
         try
         {
-            // Versuchen auf die naechste Zeile zu Positionieren
-            if (m_pSeekCursor->next())
+            // try to move to next row
+            // when not possible our paint cursor is already on the last row
+            // then we must be sure that the data cursor is on the position
+            // we call ourself again
+            if (bOk = m_pSeekCursor->next())
             {
                 m_nSeekPos = m_pSeekCursor->getRow() - 1;
                 MoveToPosition(GetCurRow() + 1);
             }
         }
-        catch(...)
+        catch(::com::sun::star::sdbc::SQLException &e)
         {
+        }
+
+        if(!bOk)
+        {
+            AdjustRows();
+            if (m_nTotalCount > 0) // only to avoid infinte recursion
+                MoveToNext();
         }
     }
 }
