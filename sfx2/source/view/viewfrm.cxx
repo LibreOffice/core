@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-23 11:16:40 $
+ *  last change: $Author: mav $ $Date: 2002-09-03 14:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -815,6 +815,12 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             //SfxFrameItem aFrameItem( SID_DOCFRAME, GetFrame() );
                             GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, aSet );
                         }
+                    }
+                    else
+                    {
+                        // an error handling should be done here
+                        if ( !pSilentItem || !pSilentItem->GetValue() )
+                            ErrorHandler::HandleError( xLoader->GetError() );
                     }
                 }
                 else
