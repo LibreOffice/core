@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoApp.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-29 09:40:25 $
+ *  last change: $Author: kr $ $Date: 2000-10-19 15:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ public class UnoApp {
             _component = component;
         }
 
-        public Object getInstance( /*IN*/String sInstanceName ) throws com.sun.star.container.NoSuchElementException, com.sun.star.uno.RuntimeException {
+        public Object getInstance(String sInstanceName) throws com.sun.star.container.NoSuchElementException, com.sun.star.uno.RuntimeException {
             Object object = null;
 
             if(sInstanceName.equals(_name))
@@ -191,7 +191,7 @@ public class UnoApp {
     }
 
     /**
-     * Exports the given object via the given url while the using
+     * Exports the given object via the given url while using
      * the <code>xMultiServiceFactory</code>.
      * <p>
      * @param xMultiServiceFactory   the service manager to use
@@ -221,20 +221,49 @@ public class UnoApp {
 
         rootOid = dcp.trim().trim();
 
-        // get an acceptor
-        XAcceptor xAcceptor = (XAcceptor)UnoRuntime.queryInterface(XAcceptor.class,
-                                                                   xMultiServiceFactory.createInstance("com.sun.star.connection.Acceptor"));
+        class AcceptThread extends Thread {
+            XMultiServiceFactory _xMultiServiceFactory;
+            String _conDcp;
+            String _protDcp;
+            String _rootOid;
+            Object _object;
 
-        System.err.println("waiting for connect...");
-        XConnection xConnection = xAcceptor.accept(conDcp);
+            AcceptThread(XMultiServiceFactory xMultiServiceFactory, String conDcp, String protDcp, String rootOid, Object object) {
+                _xMultiServiceFactory = xMultiServiceFactory;
+                _conDcp = conDcp;
+                _protDcp = protDcp;
+                _rootOid = rootOid;
+                _object = object;
+            }
 
+            public void run() {
+                try {
+                    // get an acceptor
+                    XAcceptor xAcceptor = (XAcceptor)UnoRuntime.queryInterface(XAcceptor.class,
+                                                                               _xMultiServiceFactory.createInstance("com.sun.star.connection.Acceptor"));
 
-        // get a bridgefactory
-        XBridgeFactory xBridgeFactory = (XBridgeFactory)UnoRuntime.queryInterface(XBridgeFactory.class,
-                                                                                  xMultiServiceFactory.createInstance("com.sun.star.bridge.BridgeFactory"));
+                    // get a bridgefactory
+                    XBridgeFactory xBridgeFactory = (XBridgeFactory)UnoRuntime.queryInterface(XBridgeFactory.class,
+                                                                                              _xMultiServiceFactory.createInstance("com.sun.star.bridge.BridgeFactory"));
 
-        // create the bridge
-        XBridge xBridge = xBridgeFactory.createBridge(conDcp + ";" + protDcp, protDcp, xConnection, new InstanceProvider(rootOid, object));
+                    do {
+                        System.err.println("waiting for connect...");
+                        XConnection xConnection = xAcceptor.accept(_conDcp);
+                        if(xConnection == null)
+                            break;
+
+                        // create the bridge
+                        XBridge xBridge = xBridgeFactory.createBridge(_conDcp + ";" + _protDcp, _protDcp, xConnection, new InstanceProvider(_rootOid, _object));
+                    }
+                    while(false);
+                }
+                catch(com.sun.star.uno.Exception exception) {
+                    System.err.println(getClass().getName() + " exeception occurred - " + exception);
+                }
+            }
+        }
+
+        new AcceptThread(xMultiServiceFactory, conDcp, protDcp, rootOid, object).start();
     }
 
 
@@ -340,7 +369,7 @@ public class UnoApp {
          * @param xMultiServiceFactory  the service manager to use
          * @param args                  the args for the object instantiation
          */
-        Object create(Object context, XMultiServiceFactory xMultiServiceFactory, Object args[]) throws Exception {
+        Object create(UnoApp unoApp) throws Exception {
             throw new Exception("not implemented");
         }
     }
@@ -350,10 +379,11 @@ public class UnoApp {
      * the named service.
      */
     static class Service_Option extends Option {
-        static final String __key = "-s";
+        static final String __key  = "-s";
+        static final String __help = "the service to instantiate";
 
         Service_Option() {
-            super(__key, "the service to be instantiated");
+            super(__key, __help);
         }
 
         void set(UnoApp unoApp, String args[], int index[]) throws Exception {
@@ -363,14 +393,14 @@ public class UnoApp {
             unoApp._creator = this;
         }
 
-        Object create(Object context, XMultiServiceFactory xMultiServiceFactory, Object args[]) throws Exception {
+        Object create(UnoApp unoApp) throws Exception {
             Object object = null;
 
-            if(args != null && args.length != 0)
-                object = xMultiServiceFactory.createInstanceWithArguments((String)context, args);
+            if(unoApp._args != null && unoApp._args.length != 0)
+                object = unoApp._xMultiServiceFactory.createInstanceWithArguments((String)unoApp._context, unoApp._args);
 
             else
-                object = xMultiServiceFactory.createInstance((String)context);
+                object = unoApp._xMultiServiceFactory.createInstance((String)unoApp._context);
 
             return object;
         }
@@ -381,10 +411,11 @@ public class UnoApp {
      * servicemanager.
      */
     static class Registry_Option extends Option {
-        static final String __key = "-r";
+        static final String __key  = "-r";
+        static final String __help = "create a XMultiServiceFactory out of the registry registry file";
 
         Registry_Option() {
-            super(__key, "the registry to use");
+            super(__key, __help);
         }
 
         void set(UnoApp unoApp, String args[], int index[]) throws Exception {
@@ -394,8 +425,8 @@ public class UnoApp {
             System.err.println("got RegistryServiceFactory:" + unoApp._context);
         }
 
-        Object create(Object context, XMultiServiceFactory xMultiServiceFactory, Object args[]) throws Exception {
-            return context;
+        Object create(UnoApp unoApp) throws Exception {
+            return unoApp._context;
         }
 
     }
@@ -405,10 +436,11 @@ public class UnoApp {
      * of the described object.
      */
     static class Import_Option extends Option {
-        static final String __key = "-u";
+        static final String __key  = "-u";
+        static final String __help = "import an object via the given url";
 
         Import_Option() {
-            super(__key, "import object from this url");
+            super(__key, __help);
         }
 
         void set(UnoApp unoApp, String args[], int index[]) throws Exception {
@@ -417,12 +449,13 @@ public class UnoApp {
             unoApp._creator = this;
         }
 
-        Object create(Object context, XMultiServiceFactory xMultiServiceFactory, Object args[]) throws Exception {
-            XMultiServiceFactory smgr = createSimpleServiceManager();
+        Object create(UnoApp unoApp) throws Exception {
+            unoApp._uno_url = null;
 
-            XUnoUrlResolver urlResolver = (XUnoUrlResolver)UnoRuntime.queryInterface(XUnoUrlResolver.class, smgr.createInstance("com.sun.star.bridge.UnoUrlResolver"));
+            XUnoUrlResolver urlResolver = (XUnoUrlResolver)UnoRuntime.queryInterface(XUnoUrlResolver.class,
+                                                                                     unoApp._xMultiServiceFactory.createInstance("com.sun.star.bridge.UnoUrlResolver"));
 
-            return urlResolver.resolve((String)context);
+            return urlResolver.resolve((String)unoApp._context);
         }
     }
 
@@ -431,10 +464,11 @@ public class UnoApp {
      * for the given component.
      */
     static class Component_Option extends Option {
-        static final String __key = "-c";
+        static final String __key  = "-c";
+        static final String __help = "creates a XMultiServiceFactory out of the given component (via url or as classname)";
 
         Component_Option() {
-            super(__key, "add the a component");
+            super(__key, __help);
         }
 
         void set(UnoApp unoApp, String args[], int index[]) throws Exception {
@@ -444,13 +478,13 @@ public class UnoApp {
             unoApp._creator = this;
         }
 
-        Object create(Object context, XMultiServiceFactory xMultiServiceFactory, Object args[]) throws Exception {
-            String componentName = (String)context;
+        Object create(UnoApp unoApp) throws Exception {
+            String componentName = (String)unoApp._context;
 
             XImplementationLoader loader = (XImplementationLoader)UnoRuntime.queryInterface(XImplementationLoader.class,
-                                                                                            xMultiServiceFactory.createInstance("com.sun.star.loader.Java"));
+                                                                                            unoApp._xMultiServiceFactory.createInstance("com.sun.star.loader.Java"));
 
-            Object serviceManager = xMultiServiceFactory.createInstance("com.sun.star.lang.ServiceManager");
+            Object serviceManager = unoApp._xMultiServiceFactory.createInstance("com.sun.star.lang.ServiceManager");
             XSet serviceManager_xSet = (XSet)UnoRuntime.queryInterface(XSet.class, serviceManager);
 
             XRegistryKey xRegistryKey = new RegistryKey("ROOT");
@@ -481,7 +515,8 @@ public class UnoApp {
      * or as <code>XMultiServiceFactory</code> and inserts them into the given service manager.
      */
     static class ServiceManager_Option extends Option {
-        static final String __key = "-smgr";
+        static final String __key  = "-smgr";
+        static final String __help = "\"object[,object]*\" merges the given factorys into the result object factory";
 
         class MySingleServiceFactory implements XSingleServiceFactory, XServiceInfo {
             XMultiServiceFactory _xMultiServiceFactory;
@@ -514,7 +549,7 @@ public class UnoApp {
         }
 
         ServiceManager_Option() {
-            super(__key, "\"[comp name]*\" the service manager to use");
+            super(__key, __help);
         }
 
         void set(UnoApp unoApp, String args[], int index[]) throws Exception {
@@ -533,10 +568,8 @@ public class UnoApp {
             }
             comps.addElement(arg);
 
-            XMultiServiceFactory xMultiServiceFactory = unoApp._xMultiServiceFactory;
-
             // now use the XSet interface at the ServiceManager to add the factory of the loader
-              XSet xSet = (XSet) UnoRuntime.queryInterface(XSet.class, xMultiServiceFactory);
+              XSet xSet = (XSet) UnoRuntime.queryInterface(XSet.class, unoApp._xMultiServiceFactory);
 
             for(int i = 0; i < comps.size(); ++ i) {
                 Object object = new UnoApp((String)comps.elementAt(i)).getObject();
@@ -544,31 +577,34 @@ public class UnoApp {
                 XSingleServiceFactory xSingleServiceFactory = (XSingleServiceFactory)UnoRuntime.queryInterface(XSingleServiceFactory.class,
                                                                                                                object);
                 if(xSingleServiceFactory == null) {
-                    XMultiServiceFactory blaxMultiServiceFactory = (XMultiServiceFactory)UnoRuntime.queryInterface(XMultiServiceFactory.class,
+                    XMultiServiceFactory xMultiServiceFactory = (XMultiServiceFactory)UnoRuntime.queryInterface(XMultiServiceFactory.class,
                                                                                                                    object);
 
-                    String services[] = blaxMultiServiceFactory.getAvailableServiceNames();
+                    if(xMultiServiceFactory != null) {
+                        String services[] = xMultiServiceFactory.getAvailableServiceNames();
 
-                    for(int j = 0; j < services.length; ++ j)
-                        xSet.insert(new MySingleServiceFactory(blaxMultiServiceFactory, services[j]));
+                        for(int j = 0; j < services.length; ++ j)
+                            xSet.insert(new MySingleServiceFactory(xMultiServiceFactory, services[j]));
+                    }
+                    else
+                        System.err.println("warning! -- " + object + " is neither XSingleServiceFactory nor XMultiServiceFactory");
                 }
                 else
                     xSet.insert(xSingleServiceFactory);
             }
-
-            unoApp._xMultiServiceFactory = xMultiServiceFactory;
         }
     }
 
     /**
-     * The Args option put the given objects into arg array,
+     * The Args option puts the given objects into arg array,
      * which is used when instantiating the result object.
      */
     static class Args_Option extends Option {
-        static final String __key = "--";
+        static final String __key  = "--";
+        static final String __help = "objects given to this option are passed via XInitialization to the result object";
 
         Args_Option() {
-            super(__key, "the args for XInitialization");
+            super(__key, __help);
         }
 
         void set(UnoApp unoApp, String args[], int index[]) throws Exception {
@@ -586,10 +622,11 @@ public class UnoApp {
      * The help option prints a help message.
      */
     static class Help_Option extends Option {
-        static final String __key = "-h";
+        static final String __key  = "-h";
+        static final String __help = "gives this help";
 
         Help_Option() {
-            super(__key, "this help");
+            super(__key, __help);
         }
 
         void set(UnoApp unoApp, String args[], int index[]) {
@@ -621,20 +658,25 @@ public class UnoApp {
      * The is the main method, which is called from java.
      */
     static public void main(String args[]) throws Exception {
+        if(args.length == 0)
+            args = new String[]{"-h"};
+
         // We have to do this, cause the jdb under solaris does not allow to pass
         // arguments with included spaces.
         String arg = mergeString(args);
 
         UnoApp unoApp = new UnoApp(arg);
-//          UnoApp unoApp = new UnoApp(args);
+
+        Object object = unoApp.getObject();
 
         if(unoApp._uno_url != null) // see, if we have to export the object
-            export(unoApp._xMultiServiceFactory, unoApp._uno_url, unoApp.getObject());
+            export(unoApp._xMultiServiceFactory, unoApp._uno_url, object);
         else
-            System.err.println("result: " + unoApp.getObject());
+            System.err.println("result: " + object);
     }
 
 
+    /* The membders of an UnoApp */
     Option _creator = null; // the creator gets set by option which provide objects
     Object _context = null; // the context for object creation
     Object _args[]  = null; // the args for object creation
@@ -709,7 +751,7 @@ public class UnoApp {
             object = _context;
 
         else
-            object = _creator.create(_context, _xMultiServiceFactory, _args);
+            object = _creator.create(this);
 
         return object;
     }
