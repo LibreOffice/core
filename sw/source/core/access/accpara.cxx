@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-01 13:26:42 $
+ *  last change: $Author: dvo $ $Date: 2002-03-01 16:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,9 +192,8 @@ SwAccessibleParagraph::~SwAccessibleParagraph()
 void SwAccessibleParagraph::UpdatePortionData()
     throw( RuntimeException )
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );     // check for living frame
-
     // obtain the text frame
+    DBG_ASSERT( GetFrm() != NULL, "The text frame has vanished!" );
     DBG_ASSERT( GetFrm()->IsTxtFrm(), "The text frame has mutated!" );
     const SwTxtFrm* pFrm = static_cast<const SwTxtFrm*>( GetFrm() );
 
@@ -233,40 +232,6 @@ void SwAccessibleParagraph::GetWordBoundary(
     const OUString& rText,
     sal_Int32 nPos )
 {
-//     DBG_ASSERT( pBreakIt != NULL, "We always need a break." );
-//     DBG_ASSERT( pBreakIt->xBreak.is(), "No break-iterator." );
-
-//     sal_Int32 nStart = 0;
-//     sal_Int32 nEnd = 0;
-//     const USHORT nWordType = WordType::DICTIONARY_WORD;
-
-//     // instead of using xBreak->getWordBoundary, go right with the
-//     // cursor, and then go back left. This behaviour is more
-//     // consistent with GetSentenceBoundary.
-
-//     if( pBreakIt->xBreak.is() )
-//     {
-//         const SwTxtNode* pNode = GetTxtNode();
-
-//         // TODO: replace with model position
-//         USHORT nModelPos = 0;
-
-//         nEnd = pBreakIt->xBreak->nextWord(
-//             rText, nPos, pBreakIt->GetLocale( pNode->GetLang( nModelPos ) ),
-//             nWordType ).startPos;
-//         if( (nEnd < 0) && (nEnd > rText.getLength()) )
-//             nEnd = rText.getLength();
-
-//         nStart = pBreakIt->xBreak->previousWord(
-//             rText, nEnd-1, pBreakIt->GetLocale( pNode->GetLang( nModelPos ) ),
-//             nWordType ).startPos;
-//         if( (nStart < 0) && (nStart > rText.getLength()) )
-//             nStart = nEnd;
-//     }
-
-//     rBound.startPos = nStart;
-//     rBound.endPos = nEnd;
-
     GetPortionData().GetWordBoundary( rBound, nPos, GetTxtNode() );
 }
 
@@ -275,34 +240,6 @@ void SwAccessibleParagraph::GetSentenceBoundary(
     const OUString& rText,
     sal_Int32 nPos )
 {
-//     DBG_ASSERT( pBreakIt != NULL, "I need a break." );
-//     DBG_ASSERT( pBreakIt->xBreak.is(), "No break-iterator." );
-
-//     sal_Int32 nStart = 0;
-//     sal_Int32 nEnd = 0;
-
-//     // TODO: replace with model position
-//     USHORT nModelPos = 0;
-//     const SwTxtNode* pNode = GetTxtNode();
-
-//     if( pBreakIt->xBreak.is() )
-//     {
-//         // goto end + beginning of sentence; check result values
-
-//         nEnd = pBreakIt->xBreak->endOfSentence(
-//             rText, nPos, pBreakIt->GetLocale( pNode->GetLang( nModelPos ) ) );
-//         if( (nEnd < 0) && (nEnd > rText.getLength()) )
-//             nEnd = rText.getLength();
-
-//         nStart = pBreakIt->xBreak->beginOfSentence(
-//             rText, nEnd, pBreakIt->GetLocale( pNode->GetLang( nModelPos ) ) );
-//         if( (nStart < 0) && (nStart > rText.getLength()) )
-//             nStart = nEnd;
-//     }
-
-//     rBound.startPos = nStart;
-//     rBound.endPos = nEnd;
-
     GetPortionData().GetSentenceBoundary( rBound, nPos, GetTxtNode() );
 }
 
@@ -502,6 +439,9 @@ Any SwAccessibleParagraph::queryInterface( const Type& rType )
 sal_Int32 SwAccessibleParagraph::getCaretPosition()
     throw (RuntimeException)
 {
+    CHECK_FOR_DEFUNC( XAccessibleContext );
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
     sal_Int32 nRet = -1;
 
     // get the selection's point, and test whether it's in our node
@@ -536,6 +476,7 @@ sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     CHECK_FOR_DEFUNC( XAccessibleContext );
+    vos::OGuard aGuard(Application::GetSolarMutex());
 
     OUString sText( GetString() );
 
@@ -597,7 +538,8 @@ com::sun::star::awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
 sal_Int32 SwAccessibleParagraph::getCharacterCount()
     throw (RuntimeException)
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );     // check for live frame
+    CHECK_FOR_DEFUNC( XAccessibleContext );
+    vos::OGuard aGuard(Application::GetSolarMutex());
 
     return GetString().getLength();
 }
@@ -645,14 +587,48 @@ sal_Int32 SwAccessibleParagraph::getSelectionEnd()
 sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    // HACK: dummy implementation
-    return sal_False;
+    CHECK_FOR_DEFUNC( XAccessibleContext );
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    // parameter checking
+    sal_Int32 nLength = GetString().getLength();
+    if ( (nStartIndex <= 0) ||
+         (nStartIndex > nLength) ||
+         (nEndIndex <= 0) ||
+         (nEndIndex > nLength) )
+    {
+        throw IndexOutOfBoundsException();
+    }
+
+    sal_Bool bRet = sal_False;
+
+    // get cursor shell
+    SwCrsrShell* pCrsrShell = GetCrsrShell();
+    if( pCrsrShell != NULL )
+    {
+        // create pam for selection
+        SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
+        SwIndex aIndex( pNode, GetPortionData().GetModelPosition(nStartIndex));
+        SwPosition aStartPos( *pNode, aIndex );
+        SwPaM aPaM( aStartPos );
+        aPaM.SetMark();
+        aPaM.GetPoint()->nContent =
+            GetPortionData().GetModelPosition(nEndIndex);
+
+        // set PaM at cursor shell
+        pCrsrShell->KillPams();
+        pCrsrShell->SetSelection( aPaM );
+        bRet = sal_True;
+    }
+
+    return bRet;
 }
 
 OUString SwAccessibleParagraph::getText()
     throw (RuntimeException)
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );     // check for live frame
+    CHECK_FOR_DEFUNC( XAccessibleContext );
+    vos::OGuard aGuard(Application::GetSolarMutex());
 
     return GetString();
 }
@@ -661,7 +637,8 @@ OUString SwAccessibleParagraph::getTextRange(
     sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );     // check for live frame
+    CHECK_FOR_DEFUNC( XAccessibleContext );
+    vos::OGuard aGuard(Application::GetSolarMutex());
 
     OUString sText( GetString() );
 
@@ -679,7 +656,8 @@ OUString SwAccessibleParagraph::getTextAtIndex(
     sal_Int32 nIndex, sal_Int16 nTextType )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );     // check for live frame
+    CHECK_FOR_DEFUNC( XAccessibleContext );
+    vos::OGuard aGuard(Application::GetSolarMutex());
 
     const OUString rText = GetString();
 
@@ -696,7 +674,8 @@ OUString SwAccessibleParagraph::getTextBeforeIndex(
     sal_Int32 nIndex, sal_Int16 nTextType )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );     // check for live frame
+    CHECK_FOR_DEFUNC( XAccessibleContext );
+    vos::OGuard aGuard(Application::GetSolarMutex());
 
     const OUString rText = GetString();
 
@@ -714,7 +693,8 @@ OUString SwAccessibleParagraph::getTextBehindIndex(
     sal_Int32 nIndex, sal_Int16 nTextType )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );     // check for live frame
+    CHECK_FOR_DEFUNC( XAccessibleContext );
+    vos::OGuard aGuard(Application::GetSolarMutex());
 
     const OUString rText = GetString();
 
@@ -819,7 +799,10 @@ sal_Bool SwAccessibleParagraph::setText( const OUString& sText )
 
 
 
-SwPaM* SwAccessibleParagraph::GetCrsr()
+
+
+
+SwCrsrShell* SwAccessibleParagraph::GetCrsrShell()
 {
     // first, get the view shell
     DBG_ASSERT( GetMap() != NULL, "no map?" );
@@ -827,14 +810,25 @@ SwPaM* SwAccessibleParagraph::GetCrsr()
     DBG_ASSERT( pViewShell != NULL,
                 "No view shell? Then what are you looking at?" );
 
-    SwPaM* pCrsr = NULL;
+    SwCrsrShell* pCrsrShell = NULL;
 
-    // get the cursor shell; if we don't have any, we don't have a
-    // selection either
+    // see if our view shell is a cursor shell
     if( pViewShell->ISA( SwCrsrShell ) )
     {
-        SwCrsrShell* pCrsrShell = static_cast<SwCrsrShell*>( pViewShell );
+        pCrsrShell = static_cast<SwCrsrShell*>( pViewShell );
+    }
 
+    return pCrsrShell;
+}
+
+SwPaM* SwAccessibleParagraph::GetCrsr()
+{
+    // get the cursor shell; if we don't have any, we don't have a
+    // cursor/selection either
+    SwPaM* pCrsr = NULL;
+    SwCrsrShell* pCrsrShell = SwAccessibleParagraph::GetCrsrShell();
+    if( pCrsrShell != NULL )
+    {
         // get the selection, and test whether it affects our text node
         pCrsr = pCrsrShell->GetCrsr( FALSE /* ??? */ );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-01 13:26:42 $
+ *  last change: $Author: dvo $ $Date: 2002-03-01 16:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 class SwTxtFrm;
 class SwTxtNode;
 class SwPaM;
+class SwCrsrShell;
 class SwAccessiblePortionData;
 namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
@@ -108,7 +109,8 @@ class SwAccessibleParagraph : public    SwAccessibleContext,
     /// determine whether the current selection. Fill the values with
     /// -1 if there is no selection in the this paragraph
     sal_Bool GetSelection(sal_Int32& nStart, sal_Int32& nEnd);
-    SwPaM* GetCrsr(); /// helper method for GetSelection and getCaretPosition
+    SwPaM* GetCrsr();          /// helper for GetSelection and getCaretPosition
+    SwCrsrShell* GetCrsrShell();    /// helper for GetCrsr and setSelection
 
 public:
 
