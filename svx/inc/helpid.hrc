@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:37:21 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -764,10 +764,6 @@
 #define HID_POPUP_FONTWORK_ALIGN                    (HID_SVX_EXT0_START + 158)
 #define HID_POPUP_FONTWORK_CHARSPACE                (HID_SVX_EXT0_START + 159)
 
-#define HID_HANGULDLG_SUGGESTIONS                   (HID_SVX_EXT0_START + 160)
-#define HID_HANGULDLG_SUGGESTIONS_GRID              (HID_SVX_EXT0_START + 161)
-#define HID_HANGULDLG_SUGGESTIONS_LIST              (HID_SVX_EXT0_START + 162)
-
 #define HID_SVXTBX_TEXT_CONTROL_ATTRIBUTES          (HID_SVX_EXT0_START + 160)
 
 #define HID_SVX_TABDLG_DOCRECOVERY                  (HID_SVX_EXT0_START + 161)
@@ -779,6 +775,23 @@
 #define HID_SVX_TP_ERR_REP_SEND                     (HID_SVX_EXT0_START + 167)
 #define HID_SVX_MDLG_ERR_REP_OPTIONS                (HID_SVX_EXT0_START + 168)
 #define HID_SVX_MDLG_ERR_REP_PREVIEW                (HID_SVX_EXT0_START + 169)
+
+#define HID_HANGULDLG_SUGGESTIONS                   (HID_SVX_EXT0_START + 170)
+#define HID_HANGULDLG_SUGGESTIONS_GRID              (HID_SVX_EXT0_START + 171)
+#define HID_HANGULDLG_SUGGESTIONS_LIST              (HID_SVX_EXT0_START + 172)
+
+#define HID_SVX_MODIFY_TOOLBAR_ITEM                 (HID_SVX_EXT0_START + 173)
+#define HID_SVX_SAVE_IN                             (HID_SVX_EXT0_START + 174)
+#define HID_SVX_CONFIG_MENU_ORGANIZER               (HID_SVX_EXT0_START + 175)
+#define HID_SVX_CONFIG_ICON_SELECTOR                (HID_SVX_EXT0_START + 176)
+#define HID_SVX_CONFIG_NAME_SUBMENU                 (HID_SVX_EXT0_START + 177)
+#define HID_SVX_CONFIG_RENAME_MENU                  (HID_SVX_EXT0_START + 178)
+#define HID_SVX_CONFIG_RENAME_MENU_ITEM             (HID_SVX_EXT0_START + 179)
+#define HID_SVX_CONFIG_RENAME_TOOLBAR               (HID_SVX_EXT0_START + 180)
+#define HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM          (HID_SVX_EXT0_START + 181)
+#define HID_SVX_NEW_TOOLBAR                         (HID_SVX_EXT0_START + 182)
+#define HID_SVX_MODIFY_TOOLBAR                      (HID_SVX_EXT0_START + 183)
+#define HID_SVX_NEW_TOOLBAR_ITEM                    (HID_SVX_EXT0_START + 184)
 
 // please adjust ACT_SVX_HID_END2 below if you add entries here!
 
@@ -793,8 +806,7 @@
 #endif
 
 // overrun check 2
-
-#define ACT_SVX_HID_END2        HID_SVX_MDLG_ERR_REP_PREVIEW
+#define ACT_SVX_HID_END2        HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM
 
 #if ACT_SVX_HID2_END > HID_SVX_EXT0_END
 #error resource overrun in #line, #file
