@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porexp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: ama $ $Date: 2000-10-19 13:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,6 @@ sal_Bool SwExpandPortion::Format( SwTxtFormatInfo &rInf )
     {
         // nicht Init(), weil wir Hoehe und Ascent brauchen
         Width(0);
-        SetLen(0);
         return sal_False;
     }
     return SwTxtPortion::Format( rInf );
