@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:49:47 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:21:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,10 +522,12 @@ throw (::com::sun::star::uno::RuntimeException)
 
              m_bInplaceMenuSet = sal_True;
             m_xInplaceMenuBar = Reference< XComponent >( (OWeakObject *)m_pInplaceMenuBar, UNO_QUERY );
-        }
 
-        aWriteLock.unlock();
-        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+            aWriteLock.unlock();
+            /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+            implts_updateMenuBarClose();
+        }
     }
 }
 
