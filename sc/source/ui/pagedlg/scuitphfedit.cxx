@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scuitphfedit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:05:13 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:26:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <svtools/useroptions.hxx>
+#define _SVSTDARR_USHORTS
+#include <svtools/svstdarr.hxx>
 
 //CHINA001 #include "tphfedit.hxx"
 #include "editutil.hxx"
@@ -100,7 +103,7 @@
 #endif
 
 #include "scuitphfedit.hxx" //CHINA001
-
+#include <memory> // header file for auto_ptr
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -131,7 +134,8 @@ static ScEditWindow* pActiveEdWnd = NULL;
 ScHFEditPage::ScHFEditPage( Window*             pParent,
                             USHORT              nResId,
                             const SfxItemSet&   rCoreAttrs,
-                            USHORT              nWhichId )
+                            USHORT              nWhichId,
+                            bool bHeader  )
 
     :   SfxTabPage      ( pParent, ScResId( nResId ), rCoreAttrs ),
 
@@ -141,6 +145,9 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
         aFtLeft         ( this, ScResId( FT_LEFT ) ),
         aFtCenter       ( this, ScResId( FT_CENTER ) ),
         aFtRight        ( this, ScResId( FT_RIGHT ) ),
+        maFtDefinedHF       ( this, ScResId( FT_HF_DEFINED ) ),
+        maLbDefined     ( this, ScResId( LB_DEFINED ) ),
+        maFtCustomHF        ( this, ScResId( FT_HF_CUSTOM ) ),
         aFlInfo         ( this, ScResId( FL_INFO ) ),
         aFtInfo         ( this, ScResId( FT_INFO ) ),
         aBtnText        ( this, ScResId( BTN_TEXT ) ),
@@ -158,8 +165,10 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
 
     ScPatternAttr   aPatAttr( rCoreAttrs.GetPool() );
 
+
     aBtnFile.SetPopupMenu(&aPopUpFile);
 
+    maLbDefined.SetSelectHdl( LINK( this, ScHFEditPage, ListHdl_Impl ) );
     aBtnFile.SetMenuHdl( LINK( this, ScHFEditPage, MenuHdl ) );
     aBtnText    .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
     aBtnPage    .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
@@ -177,6 +186,11 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
     aBtnDate    .SetModeImage( Image( ScResId( IMG_DATE_H  ) ), BMP_COLOR_HIGHCONTRAST );
     aBtnTime    .SetModeImage( Image( ScResId( IMG_TIME_H  ) ), BMP_COLOR_HIGHCONTRAST );
 
+    if(!bHeader)
+    {
+        maFtDefinedHF.SetText(ScGlobal::GetRscString( STR_FOOTER ));
+        maFtCustomHF.SetText(ScGlobal::GetRscString( STR_HF_CUSTOM_FOOTER ));
+    }
     aWndLeft.   SetFont( aPatAttr );
     aWndCenter. SetFont( aPatAttr );
     aWndRight.  SetFont( aPatAttr );
@@ -184,6 +198,8 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
     FillCmdArr();
 
     aWndLeft.GrabFocus();
+
+    InitPreDefinedList();
 
     FreeResource();
 }
@@ -221,6 +237,7 @@ void __EXPORT ScHFEditPage::Reset( const SfxItemSet& rCoreSet )
             aWndCenter  .SetText( *pCenter );
             aWndRight   .SetText( *pRight );
         }
+        SetSelectDefinedList();
     }
 }
 
@@ -272,9 +289,603 @@ void ScHFEditPage::FillCmdArr()
 
 #undef SET_CMD
 
+void ScHFEditPage::InitPreDefinedList()
+{
+    SvtUserOptions aUserOpt;
+
+    Color* pTxtColour = NULL;
+    Color* pFldColour = NULL;
+
+    // Get the all field values at the outset.
+    String aPageFieldValue(aWndLeft.GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxPageField()), 0,0, pTxtColour, pFldColour));
+    String aSheetFieldValue(aWndLeft.GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxTableField()), 0,0, pTxtColour, pFldColour));
+    String aFileFieldValue(aWndLeft.GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxFileField()), 0,0, pTxtColour, pFldColour));
+    String aExtFileFieldValue(aWndLeft.GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxExtFileField()), 0,0, pTxtColour, pFldColour));
+    String aDateFieldValue(aWndLeft.GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxDateField()), 0,0, pTxtColour, pFldColour));
+
+    maLbDefined.Clear();
+
+    maLbDefined.InsertEntry( ScGlobal::GetRscString( STR_HF_NONE_IN_BRACKETS ));
+
+    String aPageEntry(ScGlobal::GetRscString( STR_PAGE ) );
+    aPageEntry += ' ';
+    aPageEntry += aPageFieldValue;
+    maLbDefined.InsertEntry(aPageEntry);
+
+    String aPageOfEntry(aPageEntry);
+    aPageOfEntry += ' ';
+    aPageOfEntry += ScGlobal::GetRscString( STR_HF_OF_QUESTION );
+    maLbDefined.InsertEntry( aPageOfEntry);
+
+    maLbDefined.InsertEntry(aSheetFieldValue);
+
+    String aConfidentialEntry(aUserOpt.GetCompany());
+    aConfidentialEntry += ' ';
+    aConfidentialEntry += ScGlobal::GetRscString( STR_HF_CONFIDENTIAL );
+    aConfidentialEntry.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+    aConfidentialEntry += aDateFieldValue;
+    aConfidentialEntry.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+    aConfidentialEntry += aPageEntry;
+    maLbDefined.InsertEntry( aConfidentialEntry);
+
+    String aFileNamePageEntry(aFileFieldValue);
+    aFileNamePageEntry.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+    aFileNamePageEntry += aPageEntry;
+    maLbDefined.InsertEntry( aFileNamePageEntry);
+
+    maLbDefined.InsertEntry( aExtFileFieldValue);
+
+    String aPageSheetNameEntry(aPageEntry);
+    aPageSheetNameEntry.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+    aPageSheetNameEntry += aSheetFieldValue;
+    maLbDefined.InsertEntry( aPageSheetNameEntry);
+
+    String aPageFileNameEntry(aPageEntry);
+    aPageFileNameEntry.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+    aPageFileNameEntry += aFileFieldValue;
+    maLbDefined.InsertEntry( aPageFileNameEntry);
+
+    String aPagePathNameEntry(aPageEntry);
+    aPagePathNameEntry.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+    aPagePathNameEntry += aExtFileFieldValue;
+    maLbDefined.InsertEntry( aPagePathNameEntry);
+
+    String aUserNameEntry(aUserOpt.GetFirstName());
+    aUserNameEntry += ' ';
+    aUserNameEntry += aUserOpt.GetLastName();
+    aUserNameEntry.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+    aUserNameEntry += aPageEntry;
+    aUserNameEntry.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+    aUserNameEntry += aDateFieldValue;
+    maLbDefined.InsertEntry( aUserNameEntry);
+
+    String aCreatedByEntry(ScGlobal::GetRscString( STR_HF_CREATED_BY ) );
+    aCreatedByEntry += ' ';
+    aCreatedByEntry += aUserOpt.GetFirstName();
+    aCreatedByEntry += ' ';
+    aCreatedByEntry += aUserOpt.GetLastName();
+    aCreatedByEntry.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+    aCreatedByEntry += aDateFieldValue;
+    aCreatedByEntry.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+    aCreatedByEntry += aPageEntry;
+    maLbDefined.InsertEntry( aCreatedByEntry);
+}
+
+void ScHFEditPage::InsertToDefinedList()
+{
+    USHORT nCount =  maLbDefined.GetEntryCount();
+    if(nCount == eEntryCount)
+    {
+        String aCustomizedEntry(ScGlobal::GetRscString( STR_HF_CUSTOMIZED ) );
+        maLbDefined.InsertEntry( aCustomizedEntry);
+        maLbDefined.SelectEntryPos(eEntryCount);
+    }
+}
+
+void ScHFEditPage::RemoveFromDefinedList()
+{
+    USHORT nCount =  maLbDefined.GetEntryCount();
+    if(nCount > eEntryCount )
+        maLbDefined.RemoveEntry( nCount-1);
+}
+
+// determine if the header/footer exists in our predefined list and set select to it.
+void ScHFEditPage::SetSelectDefinedList()
+{
+    SvtUserOptions aUserOpt;
+
+    // default to customized
+    ScHFEntryId eSelectEntry = eEntryCount;
+
+    ::std::auto_ptr< EditTextObject > pLeftObj;
+    ::std::auto_ptr< EditTextObject > pCenterObj;
+    ::std::auto_ptr< EditTextObject > pRightObj;
+
+    XubString aLeftEntry;
+    XubString aCenterEntry;
+    XubString aRightEntry;
+
+    pLeftObj.reset(aWndLeft.GetEditEngine()->CreateTextObject());
+    pCenterObj.reset(aWndCenter.GetEditEngine()->CreateTextObject());
+    pRightObj.reset(aWndRight.GetEditEngine()->CreateTextObject());
+
+    bool bFound = false;
+
+    USHORT i;
+    USHORT nCount =  maLbDefined.GetEntryCount();
+    for(i = 0; i < nCount && !bFound; i++)
+    {
+        switch(static_cast<ScHFEntryId>(i))
+        {
+            case eNoneEntry:
+            {
+                aLeftEntry = pLeftObj->GetText(0);
+                aCenterEntry = pCenterObj->GetText(0);
+                aRightEntry = pRightObj->GetText(0);
+                if(aLeftEntry == EMPTY_STRING && aCenterEntry == EMPTY_STRING
+                    && aRightEntry == EMPTY_STRING)
+                {
+                    eSelectEntry = eNoneEntry;
+                    bFound = true;
+                }
+            }
+            break;
+
+            case ePageEntry:
+            {
+                aLeftEntry = pLeftObj->GetText(0);
+                aRightEntry = pRightObj->GetText(0);
+                if(aLeftEntry == EMPTY_STRING && aRightEntry == EMPTY_STRING)
+                {
+                    if(IsPageEntry(aWndCenter.GetEditEngine(), pCenterObj.get()))
+                    {
+                        eSelectEntry = ePageEntry;
+                        bFound = true;
+                    }
+                }
+            }
+            break;
+
+
+            //TODO
+            case ePagesEntry:
+            {
+            }
+            break;
+
+            case eSheetEntry:
+            {
+                aLeftEntry = pLeftObj->GetText(0);
+                aRightEntry = pRightObj->GetText(0);
+                if(aLeftEntry == EMPTY_STRING && aRightEntry == EMPTY_STRING)
+                {
+                    if(pCenterObj->IsFieldObject())
+                    {
+                        const SvxFieldItem* pFieldItem = pCenterObj->GetField();
+                        if(pFieldItem)
+                        {
+                            const SvxFieldData* pField = pFieldItem->GetField();
+                            if(pField && pField->ISA(SvxTableField))
+                            {
+                                eSelectEntry = eSheetEntry;
+                                bFound = true;
+                            }
+                        }
+                    }
+                }
+            }
+            break;
+
+            case eConfidentialEntry:
+            {
+                if(IsDateEntry(pCenterObj.get()) && IsPageEntry(aWndRight.GetEditEngine(), pRightObj.get()))
+                {
+                    String aConfidentialEntry(aUserOpt.GetCompany());
+                    aConfidentialEntry += ' ';
+                    aConfidentialEntry += ScGlobal::GetRscString( STR_HF_CONFIDENTIAL );
+                    if(aConfidentialEntry == aWndLeft.GetEditEngine()->GetText(0))
+                    {
+                        eSelectEntry = eConfidentialEntry;
+                        bFound = true;
+                    }
+                }
+            }
+            break;
+
+            //TODO
+            case eFileNamePageEntry:
+            {
+            }
+            break;
+
+            case eExtFileNameEntry:
+            {
+                aLeftEntry = pLeftObj->GetText(0);
+                aRightEntry = pRightObj->GetText(0);
+                if(IsExtFileNameEntry(pCenterObj.get()) && aLeftEntry == EMPTY_STRING
+                    && aRightEntry == EMPTY_STRING)
+                {
+                    eSelectEntry = eExtFileNameEntry;
+                    bFound = true;
+                }
+            }
+            break;
+
+            //TODO
+            case ePageSheetEntry:
+            {
+            }
+            break;
+
+            //TODO
+            case ePageFileNameEntry:
+            {
+            }
+            break;
+
+            case ePageExtFileNameEntry:
+            {
+                aLeftEntry = pLeftObj->GetText(0);
+                if(IsPageEntry(aWndCenter.GetEditEngine(), pCenterObj.get()) &&
+                    IsExtFileNameEntry(pRightObj.get()) && aLeftEntry == EMPTY_STRING)
+                {
+                    eSelectEntry = ePageExtFileNameEntry;
+                    bFound = true;
+                }
+            }
+            break;
+
+            case eUserNameEntry:
+            {
+                if(IsDateEntry(pRightObj.get()) && IsPageEntry(aWndCenter.GetEditEngine(), pCenterObj.get()))
+                {
+                    String aUserNameEntry(aUserOpt.GetFirstName());
+                    aUserNameEntry += ' ';
+                    aUserNameEntry += aUserOpt.GetLastName();
+                    if(aUserNameEntry == aWndLeft.GetEditEngine()->GetText(0))
+                    {
+                        eSelectEntry = eUserNameEntry;
+                        bFound = true;
+                    }
+                }
+            }
+            break;
+
+            case eCreatedByEntry:
+            {
+                if(IsDateEntry(pCenterObj.get()) && IsPageEntry(aWndRight.GetEditEngine(), pRightObj.get()))
+                {
+                    String aCreatedByEntry(ScGlobal::GetRscString( STR_HF_CREATED_BY ) );
+                    aCreatedByEntry += ' ';
+                    aCreatedByEntry += aUserOpt.GetFirstName();
+                    aCreatedByEntry += ' ';
+                    aCreatedByEntry += aUserOpt.GetLastName();
+                    if(aCreatedByEntry == aWndLeft.GetEditEngine()->GetText(0))
+                    {
+                        eSelectEntry = eCreatedByEntry;
+                        bFound = true;
+                    }
+                }
+            }
+            break;
+        }
+    }
+
+    if(eSelectEntry == eEntryCount)
+        InsertToDefinedList();
+
+    maLbDefined.SelectEntryPos(eSelectEntry);
+}
+
+bool ScHFEditPage::IsPageEntry(EditEngine*pEngine, EditTextObject* pTextObj)
+{
+    if(!pEngine && !pTextObj)
+        return false;
+
+    bool bReturn = false;
+
+    if(!pTextObj->IsFieldObject())
+    {
+        SvUShorts aPosList;
+        pEngine->GetPortions(0,aPosList);
+        if(aPosList.Count() == 2)
+        {
+            String aPageEntry(ScGlobal::GetRscString( STR_PAGE ) );
+            aPageEntry += ' ';
+            ESelection aSel(0,0,0,0);
+            aSel.nEndPos = aPageEntry.Len();
+            if(aPageEntry == pEngine->GetText(aSel))
+            {
+                aSel.nStartPos = aSel.nEndPos;
+                aSel.nEndPos++;
+                ::std::auto_ptr< EditTextObject > pPageObj;
+                pPageObj.reset(pEngine->CreateTextObject(aSel));
+                if(pPageObj.get() && pPageObj->IsFieldObject() )
+                {
+                    const SvxFieldItem* pFieldItem = pPageObj->GetField();
+                    if(pFieldItem)
+                    {
+                        const SvxFieldData* pField = pFieldItem->GetField();
+                        if(pField && pField->ISA(SvxPageField))
+                            bReturn = true;
+                    }
+                }
+            }
+        }
+    }
+    return bReturn;
+}
+
+bool ScHFEditPage::IsDateEntry(EditTextObject* pTextObj)
+{
+    if(!pTextObj)
+        return false;
+
+    bool bReturn = false;
+    if(pTextObj->IsFieldObject())
+    {
+        const SvxFieldItem* pFieldItem = pTextObj->GetField();
+        if(pFieldItem)
+        {
+            const SvxFieldData* pField = pFieldItem->GetField();
+            if(pField && pField->ISA(SvxDateField))
+                bReturn = true;
+        }
+    }
+    return bReturn;
+}
+
+bool ScHFEditPage::IsExtFileNameEntry(EditTextObject* pTextObj)
+{
+    if(!pTextObj)
+        return false;
+    bool bReturn = false;
+    if(pTextObj->IsFieldObject())
+    {
+        const SvxFieldItem* pFieldItem = pTextObj->GetField();
+        if(pFieldItem)
+    {
+            const SvxFieldData* pField = pFieldItem->GetField();
+            if(pField && pField->ISA(SvxExtFileField))
+                bReturn = true;
+        }
+    }
+    return bReturn;
+}
+
+void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
+{
+    SvtUserOptions aUserOpt;
+    ::std::auto_ptr< EditTextObject > pTextObj;
+
+    switch(eSel)
+    {
+        case eNoneEntry:
+            ClearTextAreas();
+            if(!bTravelling)
+                aWndLeft.GrabFocus();
+        break;
+
+        case ePageEntry:
+        {
+            ClearTextAreas();
+            String aPageEntry(ScGlobal::GetRscString( STR_PAGE ) );
+            aPageEntry += ' ';
+            aWndCenter.GetEditEngine()->SetText(aPageEntry);
+            aWndCenter.InsertField( SvxFieldItem(SvxPageField()) );
+            if(!bTravelling)
+                aWndCenter.GrabFocus();
+        }
+        break;
+
+        case ePagesEntry:
+        {
+            ClearTextAreas();
+            ESelection aSel(0,0,0,0);
+            String aPageEntry(ScGlobal::GetRscString( STR_PAGE ) );
+            aPageEntry += ' ';
+            aWndCenter.GetEditEngine()->SetText(aPageEntry);
+            aSel.nEndPos = aPageEntry.Len();
+            aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField()), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            ++aSel.nEndPos;
+            String aPageOfEntry = ' ';
+            aPageOfEntry += ScGlobal::GetRscString( STR_HF_OF );
+            aPageOfEntry += ' ';
+            aWndCenter.GetEditEngine()->QuickInsertText(aPageOfEntry,ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            aSel.nEndPos += aPageOfEntry.Len();
+            aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPagesField()), ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            pTextObj.reset(aWndCenter.GetEditEngine()->CreateTextObject());
+            aWndCenter.SetText(*pTextObj);
+            XubString aEntry(pTextObj.get()->GetText(0));
+            if(!bTravelling)
+                aWndCenter.GrabFocus();
+        }
+        break;
+
+        case eSheetEntry:
+            ClearTextAreas();
+            aWndCenter.InsertField( SvxFieldItem(SvxTableField()) );
+            if(!bTravelling)
+                aWndCenter.GrabFocus();
+        break;
+
+        case eConfidentialEntry:
+        {
+            ClearTextAreas();
+            String aConfidentialEntry(aUserOpt.GetCompany());
+            aConfidentialEntry += ' ';
+            aConfidentialEntry += ScGlobal::GetRscString( STR_HF_CONFIDENTIAL );
+            aWndLeft.GetEditEngine()->SetText(aConfidentialEntry);
+            aWndCenter.InsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR)) );
+            String aPageEntry(ScGlobal::GetRscString( STR_PAGE ) );
+            aPageEntry += ' ';
+            aWndRight.GetEditEngine()->SetText(aPageEntry);
+            aWndRight.InsertField( SvxFieldItem(SvxPageField()) );
+            if(!bTravelling)
+                aWndRight.GrabFocus();
+        }
+        break;
+
+        case eFileNamePageEntry:
+        {
+            ClearTextAreas();
+            ESelection aSel(0,0,0,0);
+            aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem( SvxFileField() ), aSel );
+            ++aSel.nEndPos;
+            String aPageEntry(RTL_CONSTASCII_STRINGPARAM(", "));
+            aPageEntry += ScGlobal::GetRscString( STR_PAGE ) ;
+            aPageEntry += ' ';
+            aWndCenter.GetEditEngine()->QuickInsertText(aPageEntry, ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            aSel.nStartPos = aSel.nEndPos;
+            aSel.nEndPos += aPageEntry.Len();
+            aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField()), ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            pTextObj.reset(aWndCenter.GetEditEngine()->CreateTextObject());
+            aWndCenter.SetText(*pTextObj);
+            XubString aEntry2(pTextObj.get()->GetText(0));
+            if(!bTravelling)
+                aWndCenter.GrabFocus();
+        }
+        break;
+
+        case eExtFileNameEntry:
+            ClearTextAreas();
+            aWndCenter.InsertField( SvxFieldItem( SvxExtFileField(
+                EMPTY_STRING, SVXFILETYPE_VAR, SVXFILEFORMAT_FULLPATH ) ) );
+            if(!bTravelling)
+                aWndCenter.GrabFocus();
+        break;
+
+        case ePageSheetEntry:
+        {
+            ClearTextAreas();
+            ESelection aSel(0,0,0,0);
+            String aPageEntry(ScGlobal::GetRscString( STR_PAGE ) );
+            aPageEntry += ' ';
+            aWndCenter.GetEditEngine()->SetText(aPageEntry);
+            aSel.nEndPos = aPageEntry.Len();
+            aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField()), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            ++aSel.nEndPos;
+            String aCommaSpace(RTL_CONSTASCII_STRINGPARAM(", "));
+            aWndCenter.GetEditEngine()->QuickInsertText(aCommaSpace,ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            aSel.nEndPos += aCommaSpace.Len();
+            aWndCenter.GetEditEngine()->QuickInsertField( SvxFieldItem(SvxTableField()), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            pTextObj.reset(aWndCenter.GetEditEngine()->CreateTextObject());
+            aWndCenter.SetText(*pTextObj);
+            if(!bTravelling)
+                aWndCenter.GrabFocus();
+        }
+        break;
+
+        case ePageFileNameEntry:
+        {
+            ClearTextAreas();
+            ESelection aSel(0,0,0,0);
+            String aPageEntry(ScGlobal::GetRscString( STR_PAGE ) );
+            aPageEntry += ' ';
+            aWndCenter.GetEditEngine()->SetText(aPageEntry);
+            aSel.nEndPos = aPageEntry.Len();
+            aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField()), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            ++aSel.nEndPos;
+            String aCommaSpace(RTL_CONSTASCII_STRINGPARAM(", "));
+            aWndCenter.GetEditEngine()->QuickInsertText(aCommaSpace,ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            aSel.nEndPos += aCommaSpace.Len();
+            aWndCenter.GetEditEngine()->QuickInsertField( SvxFieldItem(SvxFileField()), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            pTextObj.reset(aWndCenter.GetEditEngine()->CreateTextObject());
+            aWndCenter.SetText(*pTextObj);
+            if(!bTravelling)
+                aWndCenter.GrabFocus();
+        }
+        break;
+
+        case ePageExtFileNameEntry:
+        {
+            ClearTextAreas();
+            String aPageEntry(ScGlobal::GetRscString( STR_PAGE ) );
+            aPageEntry += ' ';
+            aWndCenter.GetEditEngine()->SetText(aPageEntry);
+            aWndCenter.InsertField( SvxFieldItem(SvxPageField()) );
+            aWndRight.InsertField( SvxFieldItem( SvxExtFileField(
+                EMPTY_STRING, SVXFILETYPE_VAR, SVXFILEFORMAT_FULLPATH ) ) );
+            if(!bTravelling)
+                aWndRight.GrabFocus();
+        }
+        break;
+
+        case eUserNameEntry:
+        {
+            ClearTextAreas();
+            String aUserNameEntry(aUserOpt.GetFirstName());
+            aUserNameEntry += ' ';
+            aUserNameEntry += aUserOpt.GetLastName();
+            aWndLeft.GetEditEngine()->SetText(aUserNameEntry);
+            String aPageEntry(ScGlobal::GetRscString( STR_PAGE ) );
+            aPageEntry += ' ';
+            aWndCenter.GetEditEngine()->SetText(aPageEntry);
+            aWndCenter.InsertField( SvxFieldItem(SvxPageField()) );
+            aWndRight.InsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR)) );
+            if(!bTravelling)
+                aWndRight.GrabFocus();
+        }
+        break;
+
+        case eCreatedByEntry:
+        {
+            ClearTextAreas();
+            String aCreatedByEntry(ScGlobal::GetRscString( STR_HF_CREATED_BY ) );
+            aCreatedByEntry += ' ';
+            aCreatedByEntry += aUserOpt.GetFirstName();
+            aCreatedByEntry += ' ';
+            aCreatedByEntry += aUserOpt.GetLastName();
+            aWndLeft.GetEditEngine()->SetText(aCreatedByEntry);
+            aWndCenter.InsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR)) );
+            String aPageEntry(ScGlobal::GetRscString( STR_PAGE ) );
+            aPageEntry += ' ';
+            aWndRight.GetEditEngine()->SetText(aPageEntry);
+            aWndRight.InsertField( SvxFieldItem(SvxPageField()) );
+            if(!bTravelling)
+                aWndRight.GrabFocus();
+        }
+        break;
+
+        default :
+            break;
+    }
+}
+
+void ScHFEditPage::ClearTextAreas()
+{
+    aWndLeft.GetEditEngine()->SetText(EMPTY_STRING);
+    aWndLeft.Invalidate();
+    aWndCenter.GetEditEngine()->SetText(EMPTY_STRING);
+    aWndCenter.Invalidate();
+    aWndRight.GetEditEngine()->SetText(EMPTY_STRING);
+    aWndRight.Invalidate();
+}
+
 //-----------------------------------------------------------------------
 // Handler:
 //-----------------------------------------------------------------------
+
+IMPL_LINK( ScHFEditPage, ListHdl_Impl, ListBox*, pList )
+{
+    if ( pList && pList == &maLbDefined )
+    {
+        ScHFEntryId eSel = static_cast<ScHFEntryId>(maLbDefined.GetSelectEntryPos());
+        if(!maLbDefined.IsTravelSelect())
+        {
+            ProcessDefinedListSel(eSel);
+
+            // check if we need to remove the customized entry.
+            if(eSel < eEntryCount)
+                RemoveFromDefinedList();
+        }
+        else
+        {
+            ProcessDefinedListSel(eSel, true);
+        }
+    }
+    return 0;
+}
 
 IMPL_LINK( ScHFEditPage, ClickHdl, ImageButton*, pBtn )
 {
@@ -303,6 +914,7 @@ IMPL_LINK( ScHFEditPage, ClickHdl, ImageButton*, pBtn )
         else if ( pBtn == &aBtnTable )
             pActiveEdWnd->InsertField( SvxFieldItem(SvxTableField()) );
     }
+    InsertToDefinedList();
     pActiveEdWnd->GrabFocus();
 
     return 0;
@@ -340,7 +952,7 @@ IMPL_LINK( ScHFEditPage, MenuHdl, ScExtIButton*, pBtn )
 
 ScRightHeaderEditPage::ScRightHeaderEditPage( Window* pParent, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pParent, RID_SCPAGE_HFED_HR, rCoreSet,
-                    rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_HEADERRIGHT) )
+                    rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_HEADERRIGHT ), true )
     {}
 
 // -----------------------------------------------------------------------
@@ -360,7 +972,7 @@ SfxTabPage* __EXPORT ScRightHeaderEditPage::Create( Window* pParent, const SfxIt
 
 ScLeftHeaderEditPage::ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pParent, RID_SCPAGE_HFED_HL, rCoreSet,
-                    rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_HEADERLEFT) )
+                    rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_HEADERLEFT ), true )
     {}
 
 // -----------------------------------------------------------------------
@@ -379,7 +991,7 @@ SfxTabPage* __EXPORT ScLeftHeaderEditPage::Create( Window* pParent, const SfxIte
 
 ScRightFooterEditPage::ScRightFooterEditPage( Window* pParent, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pParent, RID_SCPAGE_HFED_FR, rCoreSet,
-                    rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_FOOTERRIGHT) )
+                    rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_FOOTERRIGHT ), false )
     {}
 
 // -----------------------------------------------------------------------
@@ -398,7 +1010,7 @@ SfxTabPage* __EXPORT ScRightFooterEditPage::Create( Window* pParent, const SfxIt
 
 ScLeftFooterEditPage::ScLeftFooterEditPage( Window* pParent, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pParent, RID_SCPAGE_HFED_FL, rCoreSet,
-                    rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_FOOTERLEFT) )
+                    rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_FOOTERLEFT ), false )
     {}
 
 // -----------------------------------------------------------------------
