@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undodat.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-03-12 16:49:49 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,7 +471,8 @@ public:
                     TYPEINFO();
                     ScUndoDataPilot( ScDocShell* pNewDocShell,
                             ScDocument* pOldDoc, ScDocument* pNewDoc,
-                            const ScDPObject* pOldObj, const ScDPObject* pNewObj );
+                            const ScDPObject* pOldObj, const ScDPObject* pNewObj,
+                            BOOL bMove );
     virtual         ~ScUndoDataPilot();
 
     virtual void    Undo();
@@ -486,6 +487,7 @@ private:
     ScDocument*     pNewUndoDoc;
     ScDPObject*     pOldDPObject;
     ScDPObject*     pNewDPObject;
+    BOOL            bAllowMove;
 };
 
 
