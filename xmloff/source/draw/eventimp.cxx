@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:54:34 $
+ *  last change: $Author: rt $ $Date: 2004-06-01 13:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,6 +400,8 @@ void SdXMLEventContext::EndElement()
         case ClickAction_VERB:
         case ClickAction_BOOKMARK:
         case ClickAction_DOCUMENT:
+            nPropertyCount += 1;
+            break;
         case ClickAction_MACRO:
             if ( msLanguage.compareToAscii("starbasic", 9) == COMPARE_EQUAL )
                 nPropertyCount += 1;
