@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-05 10:33:57 $
+ *  last change: $Author: mba $ $Date: 2002-01-17 09:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
         SvFactory::IncAliveCount();
 
     pImp->pEventHdl = new UniqueIndex( 1, 4, 4 );
-    InitializeDisplayName_Impl();
+    //InitializeDisplayName_Impl();
 
 #ifdef DBG_UTIL
     // Der SimplerErrorHandler dient Debugzwecken. In der Product werden
