@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-05 16:37:16 $
+ *  last change: $Author: kso $ $Date: 2000-12-06 09:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,7 +472,7 @@ sal_Bool HierarchyEntry::setData(
     }
     catch ( IllegalArgumentException& )
     {
-        // escapeString, replaceByName, insertByName
+        // replaceByName, insertByName
 
         VOS_ENSURE( sal_False,
                 "HierarchyEntry::setData - caught IllegalArgumentException!" );
@@ -518,13 +518,6 @@ sal_Bool HierarchyEntry::move( const OUString& rNewURL )
 
     if ( aNewPath == m_aPath )
         return sal_True;
-
-    if ( aNewPath.compareTo( m_aPath, aNewPath.lastIndexOf( '/' ) + 1 ) != 0 )
-    {
-        VOS_ENSURE( sal_False,
-                    "HierarchyEntry::move - Only rename implemented!" );
-        return sal_False;
-    }
 
 #if 0
        // In the "near future"... ( not yet implemented in config db )
