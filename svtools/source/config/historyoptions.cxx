@@ -2,9 +2,9 @@
  *
  *  $RCSfile: historyoptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-11-01 14:53:02 $
+ *  last change: $Author: as $ $Date: 2000-11-02 07:22:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,21 +110,21 @@ using namespace ::com::sun::star::beans ;
 #define DEFAULT_PICKLISTSIZE                    0
 #define DEFAULT_HISTORYSIZE                     0
 
+#define PATHDELIMITER                           OUString(RTL_CONSTASCII_USTRINGPARAM("/"                        ))
 #define PROPERTYNAME_PICKLISTSIZE               OUString(RTL_CONSTASCII_USTRINGPARAM("PickListSize"             ))
 #define PROPERTYNAME_HISTORYSIZE                OUString(RTL_CONSTASCII_USTRINGPARAM("Size"                     ))
 #define PROPERTYNAME_PICKLIST                   OUString(RTL_CONSTASCII_USTRINGPARAM("PickList/"                ))
 #define PROPERTYNAME_HISTORY                    OUString(RTL_CONSTASCII_USTRINGPARAM("List/"                    ))
-#define PROPERTYNAME_HISTORYITEM_URL            OUString(RTL_CONSTASCII_USTRINGPARAM("/URL"                     ))
-#define PROPERTYNAME_HISTORYITEM_FILTER         OUString(RTL_CONSTASCII_USTRINGPARAM("/Filter"                  ))
-#define PROPERTYNAME_HISTORYITEM_TITLE          OUString(RTL_CONSTASCII_USTRINGPARAM("/Title"                   ))
-#define PROPERTYNAME_HISTORYITEM_PASSWORD       OUString(RTL_CONSTASCII_USTRINGPARAM("/Password"                ))
+#define PROPERTYNAME_HISTORYITEM_URL            PROPERTYNAME_URL+PATHDELIMITER
+#define PROPERTYNAME_HISTORYITEM_FILTER         PROPERTYNAME_FILTER+PATHDELIMITER
+#define PROPERTYNAME_HISTORYITEM_TITLE          PROPERTYNAME_TITLE+PATHDELIMITER
+#define PROPERTYNAME_HISTORYITEM_PASSWORD       PROPERTYNAME_PASSWORD+PATHDELIMITER
 #define OFFSET_URL                              0
 #define OFFSET_FILTER                           1
 #define OFFSET_TITLE                            2
 #define OFFSET_PASSWORD                         3
 #define PROPERTYHANDLE_PICKLISTSIZE             0
 #define PROPERTYHANDLE_HISTORYSIZE              PROPERTYHANDLE_PICKLISTSIZE+1   //!!!
-#define PATHDELIMITER                           OUString(RTL_CONSTASCII_USTRINGPARAM("/"))
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
@@ -658,14 +658,14 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::impl_GetSequenceFr
     // Copy items from given to return list.
     for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
     {
-        seqProperties[OFFSET_URL        ].Name  =   PROPERTYNAME_HISTORYITEM_URL        ;
-        seqProperties[OFFSET_FILTER     ].Name  =   PROPERTYNAME_HISTORYITEM_FILTER     ;
-        seqProperties[OFFSET_TITLE      ].Name  =   PROPERTYNAME_HISTORYITEM_TITLE      ;
-        seqProperties[OFFSET_PASSWORD   ].Name  =   PROPERTYNAME_HISTORYITEM_PASSWORD   ;
-        seqProperties[OFFSET_URL        ].Value <<= aList[nItem].sURL                   ;
-        seqProperties[OFFSET_FILTER     ].Value <<= aList[nItem].sFilter                ;
-        seqProperties[OFFSET_TITLE      ].Value <<= aList[nItem].sTitle                 ;
-        seqProperties[OFFSET_PASSWORD   ].Value <<= aList[nItem].sPassword              ;
+        seqProperties[OFFSET_URL        ].Name  =   PROPERTYNAME_URL        ;
+        seqProperties[OFFSET_FILTER     ].Name  =   PROPERTYNAME_FILTER     ;
+        seqProperties[OFFSET_TITLE      ].Name  =   PROPERTYNAME_TITLE      ;
+        seqProperties[OFFSET_PASSWORD   ].Name  =   PROPERTYNAME_PASSWORD   ;
+        seqProperties[OFFSET_URL        ].Value <<= aList[nItem].sURL       ;
+        seqProperties[OFFSET_FILTER     ].Value <<= aList[nItem].sFilter    ;
+        seqProperties[OFFSET_TITLE      ].Value <<= aList[nItem].sTitle     ;
+        seqProperties[OFFSET_PASSWORD   ].Value <<= aList[nItem].sPassword  ;
         seqResult[nItem] = seqProperties;
     }
     return seqResult;
