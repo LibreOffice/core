@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 14:03:43 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,9 +365,24 @@ void SwRTFParser::Continue( int nToken )
 
         if (IsNewDoc())
         {
-            pDoc->SetParaSpaceMax(true, true);
-            pDoc->SetTabCompat(true);
+            //
+            // COMPATIBILITY FLAGS START
+            //
+
+            pDoc->SetParaSpaceMax( true, true );
+            pDoc->SetTabCompat( true );
             pDoc->_SetUseVirtualDevice(com::sun::star::document::PrinterIndependentLayout::HIGH_RESOLUTION);
+            pDoc->SetAddFlyOffsets( true );
+            pDoc->SetAddExtLeading( true );
+            pDoc->SetOldNumbering( false );
+            pDoc->SetUseFormerLineSpacing( false );
+            pDoc->SetAddParaSpacingToTableCells( true );
+            pDoc->SetUseFormerObjectPositioning( false );
+            pDoc->SetUseFormerTextWrapping( false );
+
+            //
+            // COMPATIBILITY FLAGS END
+            //
         }
 
         // einen temporaeren Index anlegen, auf Pos 0 so wird er nicht bewegt!
