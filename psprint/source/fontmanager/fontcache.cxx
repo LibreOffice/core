@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcache.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 08:20:46 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include <psprint/fontcache.hxx>
 
 #ifndef _OSL_THREAD_H
@@ -73,10 +73,14 @@
 #include <tools/stream.hxx>
 #endif
 
-#include <stdlib.h>
 #include <unistd.h>
 #include <sys/stat.h>
 
+#if OSL_DEBUG_LEVEL >1
+#include <cstdio>
+#endif
+
+#define FONTCACHEFILE "/user/psprint/pspfontcache"
 
 using namespace std;
 using namespace rtl;
@@ -93,16 +97,12 @@ using namespace utl;
 
 FontCache::FontCache()
 {
-    String aPrinterPath( getPrinterPath() );
-    String aPath;
-    xub_StrLen nIndex = 0;
-    rtl_TextEncoding aEnconding = osl_getThreadTextEncoding();
-
     m_bDoFlush = false;
-    while( nIndex != STRING_NOTFOUND )
+    m_aCacheFile = getOfficePath( UserPath );
+    if( m_aCacheFile.Len() )
     {
-        aPath = aPrinterPath.GetToken( 0, ':', nIndex );
-        read( ByteString( aPath, aEnconding ) );
+        m_aCacheFile.AppendAscii( FONTCACHEFILE );
+        read();
     }
 }
 
@@ -137,31 +137,18 @@ void FontCache::clearCache()
 
 void FontCache::flush()
 {
-    if( ! m_bDoFlush )
+    if( ! m_bDoFlush || ! m_aCacheFile.Len() )
         return;
 
-    OUString aPrinterPath( getPrinterPath() );
-    String aPath;
-    bool bHavePath = false;
-    sal_Int32 nIndex = 0;
     SvFileStream aStream;
-    while( nIndex >= 0 )
+    aStream.Open( m_aCacheFile, STREAM_WRITE | STREAM_TRUNC );
+    if( ! (aStream.IsOpen() && aStream.IsWritable()) )
     {
-        aPath = aPrinterPath.getToken( 0, ':', nIndex );
-        if( aPath.Len() ) // #i15112# never even attempt to write into root
-        {
-            aPath.AppendAscii( "/pspfontcache" );
-            aStream.Open( aPath, STREAM_WRITE | STREAM_TRUNC );
-            if( aStream.IsOpen() && aStream.IsWritable() )
-            {
-                bHavePath = true;
-                break;
-            }
-        }
-    }
-
-    if( ! bHavePath )
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "FontCache::flush: opening cache file %s failed\n", ByteString( m_aCacheFile, osl_getThreadTextEncoding() ).GetBuffer() );
+#endif
         return;
+    }
 
     aStream.SetLineDelimiter( LINEEND_LF );
 
@@ -285,16 +272,20 @@ void FontCache::flush()
  * FontCache::read
  */
 
-void FontCache::read( const OString& rPath )
+void FontCache::read()
 {
-    String aFilePath = String( ByteString( rPath ), osl_getThreadTextEncoding() );
-    aFilePath.AppendAscii( "/pspfontcache" );
     PrintFontManager& rManager( PrintFontManager::get() );
     MultiAtomProvider* pAtoms = rManager.m_pAtoms;
 
-    SvFileStream aStream( aFilePath, STREAM_READ );
+    SvFileStream aStream( m_aCacheFile, STREAM_READ );
     if( ! aStream.IsOpen() )
+    {
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "FontCache::read: opening cache file %s failed\n", ByteString( m_aCacheFile, osl_getThreadTextEncoding() ).GetBuffer() );
+#endif
         return;
+    }
+
 
     ByteString aLine;
     int nDir = 0;
@@ -370,6 +361,8 @@ void FontCache::read( const OString& rPath )
             (*pDir)[ aFile ].m_nTimestamp = nTime;
             for( int n = 0; n < nFonts; n++ )
             {
+                aStream.ReadLine( aLine );
+
                 PrintFontManager::PrintFont* pFont = NULL;
                 switch( eType )
                 {
@@ -383,7 +376,6 @@ void FontCache::read( const OString& rPath )
                         pFont = new PrintFontManager::BuiltinFont();
                         break;
                 }
-                aStream.ReadLine( aLine );
                 nIndex = 0;
 
                 pFont->m_nFamilyName = pAtoms->getAtom( ATOM_FAMILYNAME,
@@ -453,7 +445,41 @@ void FontCache::read( const OString& rPath )
                         static_cast<PrintFontManager::BuiltinFont*>(pFont)->m_aMetricFile = aFile;
                         break;
                 }
-                (*pDir)[ aFile ].m_aEntry.push_back( pFont );
+
+                /*
+                 *  #i20287# duplicate lines could exist because of
+                 *  fontcache code prior to OOo 1.1.1, ignore them
+                 */
+                bool bDuplicate = false;
+                FontCacheEntry& rEntry = (*pDir)[aFile].m_aEntry;
+                for( FontCacheEntry::const_iterator entry = rEntry.begin();
+                     entry != rEntry.end() && ! bDuplicate; ++entry )
+                {
+                    const PrintFontManager::PrintFont* pOld = *entry;
+                    if( pOld->m_eType               == pFont->m_eType               &&
+                        pOld->m_nFamilyName         == pFont->m_nFamilyName         &&
+                        pOld->m_nPSName             == pFont->m_nPSName             &&
+                        pOld->m_eItalic             == pFont->m_eItalic             &&
+                        pOld->m_eWidth              == pFont->m_eWidth              &&
+                        pOld->m_ePitch              == pFont->m_ePitch              &&
+                        pOld->m_aEncoding           == pFont->m_aEncoding           &&
+                        pOld->m_bFontEncodingOnly   == pFont->m_bFontEncodingOnly   &&
+                        pOld->m_nAscend             == pFont->m_nAscend             &&
+                        pOld->m_nDescend            == pFont->m_nDescend
+                        )
+                        bDuplicate = m_bDoFlush = true;
+                }
+
+                if( bDuplicate )
+                {
+#if OSL_DEBUG_LEVEL > 1
+                    fprintf( stderr, "removing duplicate font %s\n", aFile.getStr() );
+#endif
+                    delete pFont;
+                    continue;
+                }
+
+                rEntry.push_back( pFont );
             }
         }
     } while( ! aStream.IsEof() );
