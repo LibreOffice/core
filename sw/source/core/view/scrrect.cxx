@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrrect.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:29 $
+ *  last change: $Author: ama $ $Date: 2001-03-01 11:15:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -859,7 +859,10 @@ void SwScrollAreas::InsertCol( const SwScrollColumn &rCol,
     SwScrollArea *pTmp = new SwScrollArea( rCol, pStripes );
     USHORT nIdx;
     if( Seek_Entry( pTmp, &nIdx ) )
+    {
         GetObject( nIdx )->SmartInsert( pStripes );
+        delete pTmp;
+    }
     else
         Insert( pTmp );
 }
@@ -899,6 +902,9 @@ void SwScrollArea::SmartInsert( SwStripes* pStripes )
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/19 00:08:29  hr
+      initial import
+
       Revision 1.10  2000/09/18 16:04:37  willem.vandorp
       OpenOffice header added.
 
