@@ -2,9 +2,9 @@
  *
  *  $RCSfile: erscerr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:24:53 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 15:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,16 +264,18 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
             StdLstOut( "-i  Include directives for the Preprocessor.\n" );
             StdLstOut( "-presponse     Use response file for Preprocessor.\n" );
             StdLstOut( "-lg<language>  Use a different language.\n" );
-            StdLstOut( "-pp<filename>  Use a different Preprocessor.\n" );
-            StdLstOut( "-rc<filename>  Use a different system resource compiler.\n" );
-            StdLstOut( "-fs<filename>  Name of the .res file.\n" );
-            StdLstOut( "-lip<path>     additional search path for system dependant files\n" );
-            StdLstOut( "-fp<filename>  Renaming of the .srs file.\n" );
-            StdLstOut( "-fl<filename>  Listing file.\n" );
-            StdLstOut( "-fh<filename>  Header file.\n" );
-            StdLstOut( "-fc<filename>  Code file.\n" );
-            StdLstOut( "-ft<filename>  Touch a file when done in rsc2 (for dependencies)\n" );
-            StdLstOut( "-oil<dir>      Output directory for image list files\n" );
+            StdLstOut( "-pp=<filename> Use a different Preprocessor.\n" );
+            StdLstOut( "No longer existent: -rc<filename>  Use a different system resource compiler.\n" );
+            StdLstOut( "-fs=<filename> Name of the .res file.\n" );
+            StdLstOut( "-lip=<path>    additional search path for system dependant files\n" );
+            StdLstOut( "-fp=<filename> Renaming of the .srs file.\n" );
+            StdLstOut( "-fl=<filename> Listing file.\n" );
+            StdLstOut( "-fh=<filename> Header file.\n" );
+            StdLstOut( "-fc=<filename> Code file.\n" );
+            StdLstOut( "-ft=<filename> Touch a file when done in rsc2 (for dependencies)\n" );
+            StdLstOut( "-fr=<filename> Ressource constructor .cxx-file.\n" );
+            StdLstOut( "-fx=<filename> Name of .src-file.\n" );
+            StdLstOut( "-oil=<dir>     Output directory for image list files\n" );
             StdLstOut( "-r<ENV>=<path> replace <path> by <ENV> in image list files\n" );
             StdLstOut( "-CHARSET_...  Convert to this character set.\n" );
             StdLstOut( "-BIGENDIAN    Format of number values.\n" );
