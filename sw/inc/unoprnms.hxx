@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: os $ $Date: 2001-05-07 11:52:47 $
+ *  last change: $Author: mtg $ $Date: 2001-05-11 12:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,23 +693,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_RELIEF;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_HIDDEN;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_CONDITION_TRUE;
 
-extern const SwPropNameLen __FAR_DATA UNO_NAME_LINK_UPDATE_MODE;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_FIELD_AUTO_UPDATE;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_CHART_AUTO_UPDATE;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_ADD_PARA_TABLE_SPACING;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_ADD_PARA_TABLE_SPACING_AT_START;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_PRINTER_NAME;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_KERN_ASIAN_PUNCTUATION;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_CHARACTER_COMPRESSION_TYPE;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_TWO_DIGIT_YEAR;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_AUTOMATIC_CONTROL_FOCUS;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_APPLY_FORM_DESIGN_MODE;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_APPLY_USER_DATA;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_SAVE_GLOBAL_DOCUMENT_LINKS;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_CURRENT_DATABASE_DATA_SOURCE;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_CURRENT_DATABASE_COMMAND;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_CURRENT_DATABASE_COMMAND_TYPE;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_PRINTER_SETUP;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_TWO_DIGIT_YEAR        ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PROTECTION_KEY        ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_PROTECTION_KEY;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_AUTOMATIC_DISTANCE;
