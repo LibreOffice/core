@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmfmt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: od $ $Date: 2002-08-28 12:02:47 $
+ *  last change: $Author: od $ $Date: 2002-10-11 11:37:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ public:
 
         OD 22.08.2002 - overloading virtual method and its default implementation,
         because format of fly frame provides transparent backgrounds.
-        Method determines, if background of fly frame has to be drawn transparent.
+        Method determines, if background of fly frame is transparent.
 
         @author OD
 
@@ -193,6 +193,19 @@ public:
         or a existing background graphic is transparent.
     */
     virtual const sal_Bool IsBackgroundTransparent() const;
+
+    /** SwFlyFrmFmt::IsBackgroundBrushInherited - for #103898#
+
+        OD 08.10.2002 - method to determine, if the brush for drawing the
+        background is "inherited" from its parent/grandparent.
+        This is the case, if no background graphic is set and the background
+        color is "no fill"/"auto fill"
+
+        @author OD
+
+        @return true, if background brush is "inherited" from parent/grandparent
+    */
+    const sal_Bool IsBackgroundBrushInherited() const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwFlyFrmFmt)
 };
