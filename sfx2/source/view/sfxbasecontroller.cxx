@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-14 16:51:06 $
+ *  last change: $Author: mba $ $Date: 2002-01-14 13:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@
 #define UNOQUERY                                ::com::sun::star::uno::UNO_QUERY
 #define MAPPING                                 ::com::sun::star::uno::Mapping
 #define XSTATUSINDICATORSUPPLIER                ::com::sun::star::task::XStatusIndicatorSupplier
+#define XCOMPONENT                              ::com::sun::star::lang::XComponent
 #define XINTERFACE                              ::com::sun::star::uno::XInterface
 
 #define TIMEOUT_START_RESCHEDULE    10L /* 10th s */
@@ -414,6 +415,7 @@ ANY SAL_CALL SfxBaseController::queryInterface( const UNOTYPE& rType ) throw( RU
     // Ask for my own supported interfaces ...
     ANY aReturn( ::cppu::queryInterface(    rType                                       ,
                                                static_cast< XTYPEPROVIDER*      > ( this )  ,
+                                            static_cast< XCOMPONENT*       > ( this )  ,
                                                static_cast< XCONTROLLER*        > ( this )  ,
                                             static_cast< XSTATUSINDICATORSUPPLIER* > ( this )  ,
                                             static_cast< XDISPATCHINFORMATIONPROVIDER* > ( this ) ,
