@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReplaceDescriptor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com {  module sun {  module star {  module util {
 
 /** describes what and how to replace strings.
  */
-service ReplaceDescriptor
+published service ReplaceDescriptor
 {
     service com::sun::star::util::SearchDescriptor;
 
