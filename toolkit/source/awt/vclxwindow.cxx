@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:46:46 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2048,15 +2048,29 @@ sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  ) throw (::com::sun::star::uno::Ru
 void SAL_CALL VCLXWindow::setOutputSize( const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
-    if( GetWindow() )
-        GetWindow()->SetOutputSizePixel( VCLSize( aSize ) );
+    Window *pWindow;
+    if( (pWindow = GetWindow()) != NULL )
+    {
+        DockingWindow *pDockingWindow = dynamic_cast< DockingWindow* >(pWindow);
+        if( pDockingWindow )
+            pDockingWindow->SetOutputSizePixel( VCLSize( aSize ) );
+        else
+            pWindow->SetOutputSizePixel( VCLSize( aSize ) );
+    }
 }
 
 ::com::sun::star::awt::Size SAL_CALL VCLXWindow::getOutputSize(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
-    if( GetWindow() )
-        return AWTSize( GetWindow()->GetOutputSizePixel() );
+    Window *pWindow;
+    if( (pWindow = GetWindow()) != NULL )
+    {
+        DockingWindow *pDockingWindow = dynamic_cast< DockingWindow* >(pWindow);
+        if( pDockingWindow )
+            return AWTSize( pDockingWindow->GetOutputSizePixel() );
+        else
+            return AWTSize( pWindow->GetOutputSizePixel() );
+    }
     else
         return ::com::sun::star::awt::Size();
 }
