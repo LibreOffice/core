@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2002-10-02 11:41:20 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 11:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,73 +620,73 @@ static inline void codeSnippet( long * code, sal_uInt32 vtable_pos, bool simple_
 {
     if (! simple_ret_type)
         vtable_pos |= 0x80000000;
-    OSL_ASSERT( sizeof (long) == 4 );
+    // OSL_ASSERT( sizeof (long) == 4 );
 
-     /* generate this code */
+    /* generate this code */
+    // # so first save gpr 3 to gpr 10 (aligned to 4)
+    //  9061f800    stw r3,-2048(r1)
+    //  9081f804    stw r4,-2044(r1)
+    //  90a1f808    stw r5,-2040(r1)
+    //  90c1f80c    stw r6,-2036(r1)
+    //  90e1f810    stw r7,-2032(r1)
+    //  9101f814    stw r8,-2028(r1)
+    //  9121f818    stw r9,-2024(r1)
+    //  9141f81c    stw r10,-2020(r1)
 
-     // # so first save gpr 3 to gpr 10 (aligned to 4)
-     //  stw   r3, -512(r1)
-     //  stw   r4, -508(r1)
-     //  stw   r5, -504(r1)
-     //  stw   r6, -500(r1)
-     //  stw   r7, -496(r1)
-     //  stw   r8, -492(r1)
-     //  stw   r9, -488(r1)
-     //  stw   r10,-484(r1)
 
-     // # next save fpr 1 to fpr 8 (aligned to 8)
-     //  stfd  f1, -480(r1)
-     //  stfd  f2, -472(r1)
-     //  stfd  f3, -464(r1)
-     //  stfd  f4, -456(r1)
-     //  stfd  f5, -448(r1)
-     //  stfd  f6, -440(r1)
-     //  stfd  f7, -432(r1)
-     //  stfd  f8, -424(r1)
+    // # next save fpr 1 to fpr 8 (aligned to 8)
+    //  d821f820    stfd    f1,-2016(r1)
+    //  d841f828    stfd    f2,-2008(r1)
+    //  d861f830    stfd    f3,-2000(r1)
+    //  d881f838    stfd    f4,-1992(r1)
+    //  d8a1f840    stfd    f5,-1984(r1)
+    //  d8c1f848    stfd    f6,-1976(r1)
+    //  d8e1f850    stfd    f7,-1968(r1)
+    //  d901f858    stfd    f8,-1960(r1)
 
-     // # now here is where cpp_vtable_call must go
-     // lis r3,0xdead
-     // ori r3,r3,0xbeef
-     // mtctr r3
+    // # now here is where cpp_vtable_call must go
+    //  3c600000    lis r3,-8531
+    //  60630000    ori r3,r3,48879
+    //  7c6903a6    mtctr   r3
 
-     // # now load up the the table entry number
-     // lis r3, 0xdead
-     // ori r3,r3,0xbeef
+    // # now load up the the table entry number
+    //  3c600000    lis r3,-8531
+    //  60630000    ori r3,r3,48879
 
-     // #now load up the pointer to the saved gpr registers
-     // addi r4,r1,-512
+    // #now load up the pointer to the saved gpr registers
+    //  3881f800    addi    r4,r1,-2048
 
-     // #now load up the pointer to the saved fpr registers
-     // addi r5,r1,-480
+    // #now load up the pointer to the saved fpr registers
+    //  38a1f820    addi    r5,r1,-2016
 
-     // #now load up the pointer to the overflow call stack
-     // addi r6,r1,8 # frame pointer plus 8
+    // #now load up the pointer to the overflow call stack
+    //  38c10008    addi    r6,r1,8
+    //  4e800420    bctr
 
-     // bctr
 
-      * code++ = 0x9061fe00;
-      * code++ = 0x9081fe04;
-      * code++ = 0x90a1fe08;
-      * code++ = 0x90c1fe0c;
-      * code++ = 0x90e1fe10;
-      * code++ = 0x9101fe14;
-      * code++ = 0x9121fe18;
-      * code++ = 0x9141fe1c;
-      * code++ = 0xd821fe20;
-      * code++ = 0xd841fe28;
-      * code++ = 0xd861fe30;
-      * code++ = 0xd881fe38;
-      * code++ = 0xd8a1fe40;
-      * code++ = 0xd8c1fe48;
-      * code++ = 0xd8e1fe50;
-      * code++ = 0xd901fe58;
+      * code++ = 0x9061f800;
+      * code++ = 0x9081f804;
+      * code++ = 0x90a1f808;
+      * code++ = 0x90c1f80c;
+      * code++ = 0x90e1f810;
+      * code++ = 0x9101f814;
+      * code++ = 0x9121f818;
+      * code++ = 0x9141f81c;
+      * code++ = 0xd821f820;
+      * code++ = 0xd841f828;
+      * code++ = 0xd861f830;
+      * code++ = 0xd881f838;
+      * code++ = 0xd8a1f840;
+      * code++ = 0xd8c1f848;
+      * code++ = 0xd8e1f850;
+      * code++ = 0xd901f858;
       * code++ = 0x3c600000 | (((unsigned long)cpp_vtable_call) >> 16);
       * code++ = 0x60630000 | (((unsigned long)cpp_vtable_call) & 0x0000FFFF);
       * code++ = 0x7c6903a6;
       * code++ = 0x3c600000 | (vtable_pos >> 16);
       * code++ = 0x60630000 | (vtable_pos & 0x0000FFFF);
-      * code++ = 0x3881fe00;
-      * code++ = 0x38a1fe20;
+      * code++ = 0x3881f800;
+      * code++ = 0x38a1f820;
       * code++ = 0x38c10008;
       * code++ = 0x4e800420;
 
