@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-06 07:39:37 $
+ *  last change: $Author: mba $ $Date: 2001-12-19 17:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,28 +666,7 @@ BasicManager* SfxApplication::GetBasicManager()
         // globale Variablen
         StarBASIC *pBas = pImp->pBasicMgr->GetLib(0);
         sal_Bool bBasicWasModified = pBas->IsModified();
-/*
-        MakeVariable( pBas, pAppObj, "ActiveModule", SID_ACTIVEMODULE|0x20000  );
-        MakeVariable( pBas, pAppObj, "ActiveDocument", SID_ACTIVEDOCUMENT|0x20000 );
-        MakeVariable( pBas, pAppObj, "ActiveWindow", SID_ACTIVEWINDOW|0x20000 );
-        MakeVariable( pBas, pAppObj, "ActiveTask", SID_ACTIVETASK|0x20000 );
-        MakeVariable( pBas, pAppObj, "Application", SID_APPLICATION );
-        MakeVariable( pBas, pAppObj, "Selection", SID_SELECTION|0x20000 );
-        MakeVariable( pBas, pAppObj, "Documents", SID_DOCUMENTS|0x40000 );
-        MakeVariable( pBas, pAppObj, "Windows", SID_WINDOWS|0x40000 );
-        MakeVariable( pBas, pAppObj, "StarWriter", SID_STARWRITER|0x20000 );
-        MakeVariable( pBas, pAppObj, "StarDraw", SID_STARDRAW|0x20000 );
-        MakeVariable( pBas, pAppObj, "StarCalc", SID_STARCALC|0x20000 );
-        MakeVariable( pBas, pAppObj, "LanguageId", SID_LANGUAGEID, SbxUSHORT );
-        MakeVariable( pBas, pAppObj, "CountryId", SID_COUNTRYID, SbxUSHORT );
-        // MI: wenn der drin ist, findet BASIC die Datenbank-Wizard Makros
-        // nicht mehr - warum auch immer
-        MakeVariable( pBas, pAppObj, "ThisDocument", SID_THISDOCUMENT|0x20000 );
-        MakeVariable( pBas, pAppObj, "ThisWindow", SID_THISWINDOW|0x20000 );
-        MakeVariable( pBas, pAppObj, "ThisComponent", 0x20000  );
-        MakeVariable( pBas, pAppObj, "SubstPathVars", SID_SUBSTPATHVARS,SbxSTRING, SbxCLASS_METHOD );
-*/
-        // ::com::sun::star::frame::Desktop
+
         Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
         Any aDesktop;
         Reference< XDesktop > xDesktop( xSMgr->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
@@ -734,6 +713,7 @@ BasicManager* SfxApplication::GetBasicManager()
             aAny <<= xInterface;
         }
 
+        SFX_APP()->Get_Impl()->pThisDocument = pDoc;
         xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aAny );
         xUnoObj->SetFlag( SBX_DONTSTORE );
         pBas->Insert( xUnoObj );
@@ -745,6 +725,7 @@ BasicManager* SfxApplication::GetBasicManager()
         if ( !bBasicWasModified )
             pBas->SetModified( sal_False );
     }
+
     return pImp->pBasicMgr;
 }
 
