@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unload.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-06-11 15:57:04 $
+ *  last change: $Author: jl $ $Date: 2002-02-07 10:17:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,8 +205,21 @@ typedef hash_map<oslModule,
         hashModule, equalModule>
         ModuleMap;
 typedef ModuleMap::iterator Mod_IT;
-ModuleMap g_moduleMap;
 
+static ModuleMap& getModuleMap()
+{
+    static ModuleMap* pMap= NULL;
+    if( ! pMap)
+    {
+        MutexGuard guard( getUnloadingMutex() );
+        if( !pMap)
+        {
+            static ModuleMap aModuleMap;
+            pMap= &aModuleMap;
+        }
+    }
+    return *pMap;
+}
 
 extern "C" sal_Bool rtl_moduleCount_canUnload( rtl_StandardModuleCount * that, TimeValue * libUnused)
 {
@@ -227,11 +240,12 @@ extern "C" sal_Bool rtl_moduleCount_canUnload( rtl_StandardModuleCount * that, T
 extern "C" sal_Bool SAL_CALL rtl_registerModuleForUnloading( oslModule module)
 {
     MutexGuard guard( getUnloadingMutex());
+    ModuleMap& moduleMap= getModuleMap();
     sal_Bool ret= sal_True;
     // If the module has been registered before, then find it and increment
     // its reference cout
-    Mod_IT it= g_moduleMap.find( module);
-    if( it != g_moduleMap.end())
+    Mod_IT it= moduleMap.find( module);
+    if( it != moduleMap.end())
     {
         //module already registered, increment ref count
         it->second.first++;
@@ -245,7 +259,7 @@ extern "C" sal_Bool SAL_CALL rtl_registerModuleForUnloading( oslModule module)
         if( pFunc)
         {
             //register module for the first time, set ref count to 1
-            g_moduleMap[module]= make_pair((sal_uInt32)1, pFunc);
+            moduleMap[module]= make_pair((sal_uInt32)1, pFunc);
         }
         else
             ret= sal_False;
@@ -256,15 +270,16 @@ extern "C" sal_Bool SAL_CALL rtl_registerModuleForUnloading( oslModule module)
 extern "C" void SAL_CALL rtl_unregisterModuleForUnloading( oslModule module)
 {
     MutexGuard guard( getUnloadingMutex());
-    Mod_IT it= g_moduleMap.find( module);
-    if( it != g_moduleMap.end() )
+    ModuleMap& moduleMap= getModuleMap();
+    Mod_IT it= moduleMap.find( module);
+    if( it != moduleMap.end() )
     {
         // The module is registered, decrement ref count.
         it->second.first --;
 
         // If the refcount == 0 then remove the module from the map
         if( it->second.first == 0)
-            g_moduleMap.erase( it);
+            moduleMap.erase( it);
     }
 
 }
@@ -272,15 +287,16 @@ extern "C" void SAL_CALL rtl_unregisterModuleForUnloading( oslModule module)
 extern "C" void SAL_CALL rtl_unloadUnusedModules( TimeValue* libUnused)
 {
     MutexGuard guard( getUnloadingMutex());
+    ModuleMap& moduleMap= getModuleMap();
     list<oslModule> unloadedModulesList;
-    Mod_IT it_e= g_moduleMap.end();
+    Mod_IT it_e= moduleMap.end();
 
     // notify all listeners
     rtl_notifyUnloadingListeners();
     // prepare default TimeValue if argumetn is NULL
     TimeValue nullTime={0,0};
     TimeValue* pLibUnused= libUnused? libUnused : &nullTime;
-    for( Mod_IT it= g_moduleMap.begin(); it != it_e; it++)
+    for( Mod_IT it= moduleMap.begin(); it != it_e; it++)
     {
         //can the module be unloaded?
         component_canUnloadFunc func= it->second.second;
@@ -304,7 +320,7 @@ extern "C" void SAL_CALL rtl_unloadUnusedModules( TimeValue* libUnused)
     for( list<oslModule>::iterator un_it= unloadedModulesList.begin();
             un_it != unloadedModulesList.end(); un_it++)
     {
-        g_moduleMap.erase( *un_it);
+        moduleMap.erase( *un_it);
     }
 }
 
@@ -333,7 +349,21 @@ typedef hash_map<sal_Int32,
         hashListener, equalListener>
         ListenerMap;
 typedef ListenerMap::iterator Lis_IT;
-ListenerMap g_listenerMap;
+
+static ListenerMap& getListenerMap()
+{
+    static ListenerMap* pListeners= NULL;
+    if( ! pListeners)
+    {
+        MutexGuard guard( getUnloadingMutex() );
+        if( !pListeners)
+        {
+            static ListenerMap aListenerMap;
+            pListeners= &aListenerMap;
+        }
+    }
+    return *pListeners;
+}
 
 
 // This queue contains cookies which have been passed out by rtl_addUnloadingListener and
@@ -341,26 +371,40 @@ ListenerMap g_listenerMap;
 // is called then a cookie has to be returned. First we look into the set if there is one
 // availabe. Otherwise a new cookie will be provided.
 // not a new value is returned.
-static queue<sal_Int32> g_regainedCookies;
+static queue<sal_Int32>& getCookieQueue()
+{
+    static queue<sal_Int32>* pCookies= NULL;
+    if( ! pCookies)
+    {
+        MutexGuard guard( getUnloadingMutex() );
+        if( !pCookies)
+        {
+            static queue<sal_Int32> aCookieQueue;
+            pCookies= &aCookieQueue;
+        }
+    }
+    return *pCookies;
+}
 
 static sal_Int32 getCookie()
 {
     static sal_Int32 cookieValue= 1;
 
     sal_Int32 retval;
-    if( g_regainedCookies.empty() )
+    queue<sal_Int32>& regainedCookies= getCookieQueue();
+    if( regainedCookies.empty() )
         retval= cookieValue++;
     else
     {
-        retval= g_regainedCookies.front();
-        g_regainedCookies.pop();
+        retval= regainedCookies.front();
+        regainedCookies.pop();
     }
     return retval;
 }
 
 static inline void recycleCookie( sal_Int32 i)
 {
-    g_regainedCookies.push( i);
+    getCookieQueue().push( i);
 }
 
 
@@ -371,7 +415,8 @@ sal_Int32 SAL_CALL rtl_addUnloadingListener( rtl_unloadingListenerFunc callback,
 {
     MutexGuard guard( getUnloadingMutex());
     sal_Int32 cookie= getCookie();
-    g_listenerMap[ cookie]= make_pair( callback, _this);
+    ListenerMap& listenerMap= getListenerMap();
+    listenerMap[ cookie]= make_pair( callback, _this);
     return cookie;
 }
 
@@ -380,7 +425,8 @@ extern "C"
 void SAL_CALL rtl_removeUnloadingListener( sal_Int32 cookie )
 {
     MutexGuard guard( getUnloadingMutex());
-    size_t removedElements= g_listenerMap.erase( cookie);
+    ListenerMap& listenerMap= getListenerMap();
+    size_t removedElements= listenerMap.erase( cookie);
     if( removedElements )
         recycleCookie( cookie);
 }
@@ -388,7 +434,8 @@ void SAL_CALL rtl_removeUnloadingListener( sal_Int32 cookie )
 
 static void rtl_notifyUnloadingListeners()
 {
-    for( Lis_IT it= g_listenerMap.begin(); it != g_listenerMap.end(); it++)
+    ListenerMap& listenerMap= getListenerMap();
+    for( Lis_IT it= listenerMap.begin(); it != listenerMap.end(); it++)
     {
         rtl_unloadingListenerFunc callbackFunc= it->second.first;
         callbackFunc( it->second.second);
