@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-15 18:26:11 $
+ *  last change: $Author: sj $ $Date: 2001-01-30 16:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1307,7 +1307,8 @@ void WinMtfMetaOutput::ResolveBitmapActions( List& rSaveList )
                         BSaveStruct* pSave2 = (BSaveStruct*)rSaveList.GetObject( i + 1 );
                         if ( ( nWinRop == SRCPAINT ) && ( pSave2->nWinRop == SRCAND ) )
                         {
-                            if ( pSave->aBmp.IsEqual( pSave2->aBmp ) )
+                            if ( ( pSave->aBmp.GetPrefSize() == pSave2->aBmp.GetPrefSize() ) &&
+                                    ( pSave->aBmp.GetPrefMapMode() == pSave2->aBmp.GetPrefMapMode() ) )
                             {
                                 Bitmap aMask( pSave->aBmp ); aMask.Invert();
                                 BitmapEx aBmpEx( pSave2->aBmp, aMask );
@@ -1348,7 +1349,6 @@ void WinMtfMetaOutput::ResolveBitmapActions( List& rSaveList )
                         case 0x8 :
                         {
                             Bitmap  aMask( aBitmap );
-                            aMask.Invert();
                             BitmapEx aBmpEx( aBitmap, aMask );
                             mpGDIMetaFile->AddAction( new MetaBmpExScaleAction( aPos, aSize, aBmpEx ) );
                             if ( nOperation == 0x7 )
