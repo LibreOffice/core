@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: ama $ $Date: 2002-07-08 08:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ class SwLayAction
     void ChkFlyAnchor( SwFlyFrm *, const SwPageFrm * );
 
     void FormatFlyLayout( const SwPageFrm * );
-    BOOL FormatFlyCntnt( const SwPageFrm * );
+    BOOL FormatFlyCntnt( const SwPageFrm *, sal_Bool bDontShrink );
     BOOL _FormatFlyCntnt( const SwFlyFrm * );
     BOOL __FormatFlyCntnt( const SwCntntFrm * );
     void FormatFlyInCnt( SwFlyInCntFrm * );

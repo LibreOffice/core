@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-03 12:36:42 $
+ *  last change: $Author: ama $ $Date: 2002-07-08 08:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,14 +333,10 @@ void SwLayAction::PaintCntnt( const SwCntntFrm *pCnt,
                               const SwPageFrm *pPage,
                               const SwRect &rOldRect, long nOldBottom )
 {
-#ifdef VERTICAL_LAYOUT
     SWRECTFN( pCnt )
     long nOldHeight = (rOldRect.*fnRect->fnGetHeight)();
     long nNewHeight = (pCnt->Frm().*fnRect->fnGetHeight)();
     const BOOL bHeightDiff = nOldHeight != nNewHeight;
-#else
-    const BOOL bHeightDiff  = rOldRect.Height() != pCnt->Frm().Height();
-#endif
     if ( pCnt->IsCompletePaint() || !pCnt->IsTxtFrm() )
     {
         SwRect aPaint( pCnt->PaintArea() );
@@ -354,16 +350,9 @@ void SwLayAction::PaintCntnt( const SwCntntFrm *pCnt,
         if( bHeightDiff )
         {
             SwRect aDrawRect( pCnt->UnionFrm( TRUE ) );
-#ifdef VERTICAL_LAYOUT
             if( nOldHeight > nNewHeight )
                 nOldBottom = (pCnt->*fnRect->fnGetPrtBottom)();
             (aDrawRect.*fnRect->fnSetTop)( nOldBottom );
-#else
-            if( rOldRect.Height() < pCnt->Frm().Height() )
-                aDrawRect.Top( nOldBottom );
-            else
-                aDrawRect.Top( pCnt->Frm().Top() + pCnt->Prt().Bottom() + 1 );
-#endif
             _PaintCntnt( pCnt, pPage, aDrawRect );
         }
         _PaintCntnt( pCnt, pPage, ((SwTxtFrm*)pCnt)->Paint() );
@@ -379,11 +368,7 @@ void SwLayAction::PaintCntnt( const SwCntntFrm *pCnt,
                 pTmp = pSct;
         }
         SwRect aRect( pTmp->GetUpper()->PaintArea() );
-#ifdef VERTICAL_LAYOUT
         (aRect.*fnRect->fnSetTop)( (pTmp->*fnRect->fnGetPrtBottom)() );
-#else
-        aRect.Top( pTmp->Frm().Top() + pTmp->Prt().Bottom() + 1 );
-#endif
         if ( !_PaintCntnt( pCnt, pPage, aRect ) )
             pCnt->ResetRetouche();
     }
@@ -472,28 +457,22 @@ void SwLayAction::_AddScrollRect( const SwCntntFrm *pCntnt,
 {
     FASTBOOL bScroll = TRUE;
     SwRect aPaintRect( pCntnt->PaintArea() );
-#ifdef VERTICAL_LAYOUT
     SWRECTFN( pCntnt )
-#endif
 
     //Wenn altes oder neues Rechteck mit einem Fly ueberlappen, in dem der
     //Cntnt nicht selbst steht, so ist nichts mit Scrollen.
     if ( pPage->GetSortedObjs() )
     {
         SwRect aRect( aPaintRect );
-#ifdef VERTICAL_LAYOUT
         if( bVert )
             aPaintRect.Pos().X() += nOfst;
         else
-#endif
         aPaintRect.Pos().Y() -= nOfst;
         if ( ::lcl_IsOverObj( pCntnt, pPage, aPaintRect, aRect, 0 ) )
             bScroll = FALSE;
-#ifdef VERTICAL_LAYOUT
         if( bVert )
             aPaintRect.Pos().X() -= nOfst;
         else
-#endif
         aPaintRect.Pos().Y() += nOfst;
     }
     if ( bScroll && pPage->GetFmt()->GetBackground().GetGraphicPos() != GPOS_NONE )
@@ -507,11 +486,7 @@ void SwLayAction::_AddScrollRect( const SwCntntFrm *pCntnt,
         if ( pCntnt->IsRetouche() && !pCntnt->GetNext() )
         {
             SwRect aRect( pCntnt->GetUpper()->PaintArea() );
-#ifdef VERTICAL_LAYOUT
             (aRect.*fnRect->fnSetTop)( (pCntnt->*fnRect->fnGetPrtBottom)() );
-#else
-            aRect.Top( pCntnt->Frm().Top() + pCntnt->Prt().Bottom() + 1 );
-#endif
             if ( !pImp->GetShell()->AddPaintRect( aRect ) )
                 pCntnt->ResetRetouche();
         }
@@ -519,11 +494,9 @@ void SwLayAction::_AddScrollRect( const SwCntntFrm *pCntnt,
     }
     else if( aPaintRect.HasArea() )
     {
-#ifdef VERTICAL_LAYOUT
         if( bVert )
             aPaintRect.Pos().X() += nOfst;
         else
-#endif
         aPaintRect.Pos().Y() -= nOfst;
         PaintCntnt( pCntnt, pPage, aPaintRect, nOldBottom );
     }
@@ -836,6 +809,7 @@ void SwLayAction::InternalAction()
             while ( !IsInput() && !IsNextCycle() &&
                     ((IS_FLYS && IS_INVAFLY) || pPage->IsInvalid()) )
             {
+                USHORT nLoop = 0; // Loop control
                 while ( !IsInput() && IS_INVAFLY && IS_FLYS )
                 {
                     XCHECKPAGE;
@@ -848,11 +822,14 @@ void SwLayAction::InternalAction()
                     if ( pPage->IsInvalidFlyCntnt() && IS_FLYS )
                     {
                         pPage->ValidateFlyCntnt();
-                        if ( !FormatFlyCntnt( pPage ) )
+                        // More than 20 calls of this function are enough,
+                        // then we disallow the shrinking of fly frames.
+                        if ( !FormatFlyCntnt( pPage, nLoop > 20 ) )
                         {   XCHECKPAGE;
                             pPage->InvalidateFlyCntnt();
                         }
                     }
+                    ++nLoop; // Loop count
                 }
                 if ( !IS_FLYS )
                 {
@@ -1774,12 +1751,10 @@ void MA_FASTCALL lcl_AddScrollRectTab( SwTabFrm *pTab, SwLayoutFrm *pRow,
     //Frm nicht selbst steht, so ist nichts mit Scrollen.
     const SwPageFrm *pPage = pTab->FindPageFrm();
     SwRect aRect( rRect );
-#ifdef VERTICAL_LAYOUT
     SWRECTFN( pTab )
     if( bVert )
         aRect.Pos().X() -= nOfst;
     else
-#endif
     aRect.Pos().Y() += nOfst;
     if ( pPage->GetSortedObjs() )
     {
@@ -2149,9 +2124,7 @@ void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
     //wird sind hier evtl. nur angekommen, weil der Cntnt DrawObjekte haelt.
     const BOOL bDrawObjsOnly = pCntnt->IsValid() && !pCntnt->IsCompletePaint() &&
                          !pCntnt->IsRetouche();
-#ifdef VERTICAL_LAYOUT
     SWRECTFN( pCntnt )
-#endif
     if ( !bDrawObjsOnly && IsPaint() )
     {
         const BOOL bPosOnly = !pCntnt->GetValidPosFlag() &&
@@ -2162,23 +2135,14 @@ void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
                                 !((SwTxtFrm*)pCntnt)->HasAnimation() );
         const SwFrm *pOldUp = pCntnt->GetUpper();
         const SwRect aOldRect( pCntnt->UnionFrm() );
-#ifdef VERTICAL_LAYOUT
         const long nOldBottom = (pCntnt->*fnRect->fnGetPrtBottom)();
-#else
-        const long nOldBottom = pCntnt->Frm().Top() + pCntnt->Prt().Bottom();
-#endif
         pCntnt->OptCalc();
         if( IsAgain() )
             return;
-#ifdef VERTICAL_LAYOUT
         if( (*fnRect->fnYDiff)( (pCntnt->Frm().*fnRect->fnGetBottom)(),
                                 (aOldRect.*fnRect->fnGetBottom)() ) < 0 )
-#else
-        if ( pCntnt->Frm().Bottom() < aOldRect.Bottom() )
-#endif
             pCntnt->SetRetouche();
         const SwRect aNewRect( pCntnt->UnionFrm() );
-#ifdef VERTICAL_LAYOUT
         if ( bPosOnly && (aNewRect.*fnRect->fnGetTop)() !=
              (aOldRect.*fnRect->fnGetTop)() &&
              !pCntnt->IsInTab() && !pCntnt->IsInSct() &&
@@ -2191,30 +2155,14 @@ void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
                             (pCntnt->Frm().*fnRect->fnGetTop)(),
                             (aOldRect.*fnRect->fnGetTop)() ), nOldBottom );
         }
-#else
-        if ( bPosOnly && aNewRect.Top() != aOldRect.Top() &&
-             !pCntnt->IsInTab() && !pCntnt->IsInSct() &&
-             ( !pCntnt->GetPrev() || !pCntnt->GetPrev()->IsTabFrm() ) &&
-             pOldUp == pCntnt->GetUpper() &&
-             aNewRect.Left() == aOldRect.Left() &&
-             aNewRect.SSize() == aOldRect.SSize() )
-        {
-            _AddScrollRect( pCntnt, pPage, pCntnt->Frm().Top() - aOldRect.Top(),
-                            nOldBottom);
-        }
-#endif
         else
             PaintCntnt( pCntnt, pCntnt->FindPageFrm(), aOldRect, nOldBottom);
     }
     else
     {
         if ( IsPaint() && pCntnt->IsTxtFrm() && ((SwTxtFrm*)pCntnt)->HasRepaint() )
-#ifdef VERTICAL_LAYOUT
             PaintCntnt( pCntnt, pPage, pCntnt->Frm(),
                         (pCntnt->Frm().*fnRect->fnGetBottom)() );
-#else
-            PaintCntnt( pCntnt, pPage, pCntnt->Frm(), pCntnt->Frm().Bottom());
-#endif
         pCntnt->OptCalc();
     }
 
@@ -2248,7 +2196,7 @@ void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
 |*  Letzte Aenderung    MA 16. Sep. 93
 |*
 |*************************************************************************/
-BOOL SwLayAction::FormatFlyCntnt( const SwPageFrm *pPage )
+BOOL SwLayAction::FormatFlyCntnt( const SwPageFrm *pPage, sal_Bool bDontShrink )
 {
     for ( USHORT i = 0; pPage->GetSortedObjs() &&
                         i < pPage->GetSortedObjs()->Count(); ++i )
@@ -2258,9 +2206,18 @@ BOOL SwLayAction::FormatFlyCntnt( const SwPageFrm *pPage )
         SdrObject *pO = (*pPage->GetSortedObjs())[i];
         if ( pO->IsWriterFlyFrame() )
         {
-            const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+            SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+            sal_Bool bOldShrink = pFly->IsNoShrink();
+            if( bDontShrink )
+                pFly->SetNoShrink( sal_True );
             if ( !_FormatFlyCntnt( pFly ) )
+            {
+                if( bDontShrink )
+                    pFly->SetNoShrink( bOldShrink );
                 return FALSE;
+            }
+            if( bDontShrink )
+                pFly->SetNoShrink( bOldShrink );
         }
     }
     return TRUE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyfrm.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-19 14:32:56 $
+ *  last change: $Author: ama $ $Date: 2002-07-08 08:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ protected:
     BOOL bAtCnt         :1; // FLY_AT_CNTNT, am Absatz verankert
     BOOL bLayout        :1; // FLY_PAGE, FLY_AT_FLY, an Seite oder Rahmen
     BOOL bAutoPosition  :1; // FLY_AUTO_CNTNT, im Text verankerter Rahmen
+    BOOL bNoShrink      :1; // temporary forbud of shrinking to avoid loops
 
     friend class SwNoTxtFrm; // Darf NotifyBackground rufen
     virtual void NotifyBackground( SwPageFrm *pPage,
@@ -219,6 +220,8 @@ public:
     BOOL IsNotifyBack() const { return bNotifyBack; }
     void SetNotifyBack()      { bNotifyBack = TRUE; }
     void ResetNotifyBack()    { bNotifyBack = FALSE; }
+    BOOL IsNoShrink()   const { return bNoShrink; }
+    void SetNoShrink( BOOL bNew ) { bNoShrink = bNew; }
 
     BOOL IsClipped()        const   { return bHeightClipped || bWidthClipped; }
     BOOL IsHeightClipped()  const   { return bHeightClipped; }
