@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2002-09-10 13:07:36 $
+ *  last change: $Author: os $ $Date: 2002-09-16 07:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,10 +295,18 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case SID_ATTR_CHAR_SCALEWIDTH:   nEEWhich = EE_CHAR_FONTWIDTH; break;
         case SID_ATTR_CHAR_AUTOKERN  :   nEEWhich = EE_CHAR_PAIRKERNING; break;
         case SID_ATTR_CHAR_ESCAPEMENT:   nEEWhich = EE_CHAR_ESCAPEMENT; break;
-        case SID_ATTR_PARA_ADJUST_LEFT:  nEEWhich = EE_PARA_JUST; break;
-        case SID_ATTR_PARA_ADJUST_CENTER: nEEWhich = SVX_ADJUST_CENTER, EE_PARA_JUST; break;
-        case SID_ATTR_PARA_ADJUST_RIGHT: nEEWhich = SVX_ADJUST_RIGHT;break;
-        case SID_ATTR_PARA_ADJUST_BLOCK: nEEWhich = EE_PARA_JUST; break;
+        case SID_ATTR_PARA_ADJUST_LEFT:
+            aNewAttr.Put(SvxAdjustItem(SVX_ADJUST_LEFT, EE_PARA_JUST));
+        break;
+        case SID_ATTR_PARA_ADJUST_CENTER:
+            aNewAttr.Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST));
+        break;
+        case SID_ATTR_PARA_ADJUST_RIGHT:
+            aNewAttr.Put(SvxAdjustItem(SVX_ADJUST_RIGHT, EE_PARA_JUST));
+        break;
+        case SID_ATTR_PARA_ADJUST_BLOCK:
+            aNewAttr.Put(SvxAdjustItem(SVX_ADJUST_BLOCK, EE_PARA_JUST));
+        break;
 
         case SID_ATTR_PARA_LINESPACE_10:
         {
