@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:02:43 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,6 +472,7 @@ void SwView::SelectShell()
                 pSfxShell = rDispatcher.GetShell( i );
                 if  (  pSfxShell->ISA( SwBaseShell )
                     || pSfxShell->ISA( SwDrawTextShell )
+                    || pSfxShell->ISA( svx::ExtrusionBar )
                     )
                 {
                     rDispatcher.Pop( *pSfxShell, SFX_SHELL_POP_DELETE );
