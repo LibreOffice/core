@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paratr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:36:59 $
+ *  last change: $Author: os $ $Date: 2000-11-29 17:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,8 @@ inline const SvxScriptSpaceItem& SwAttrSet::GetScriptSpace(BOOL bInP) const
     {   return (const SvxScriptSpaceItem&)Get(RES_PARATR_SCRIPTSPACE,bInP); }
 inline const SvxHangingPunctuationItem &SwAttrSet::GetHangingPunctuation(BOOL bInP) const
     {   return (const SvxHangingPunctuationItem&)Get(RES_PARATR_HANGINGPUNCTUATION,bInP); }
+inline const SvxForbiddenRuleItem &SwAttrSet::GetForbiddenRule(BOOL bInP) const
+    {   return (const SvxForbiddenRuleItem&)Get(RES_PARATR_FORBIDDEN_RULES, bInP); }
 
 /******************************************************************************
  *  Implementierung der Paragraph-Attribut Methoden vom SwFmt
@@ -298,6 +300,7 @@ inline const SvxScriptSpaceItem& SwFmt::GetScriptSpace(BOOL bInP) const
     {   return aSet.GetScriptSpace(bInP) ; }
 inline const SvxHangingPunctuationItem &SwFmt::GetHangingPunctuation(BOOL bInP) const
     {   return aSet.GetHangingPunctuation(bInP) ; }
-
+inline const SvxForbiddenRuleItem &SwFmt::GetForbiddenRule(BOOL bInP) const
+    {   return (const SvxForbiddenRuleItem&)aSet.Get(RES_PARATR_FORBIDDEN_RULES, bInP); }
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:36:59 $
+ *  last change: $Author: os $ $Date: 2000-11-29 17:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,7 @@ public:
     inline const SwFmtDrop              &GetDrop( BOOL = TRUE ) const;
     inline const SvxScriptSpaceItem     &GetScriptSpace(BOOL = TRUE) const;
     inline const SvxHangingPunctuationItem &GetHangingPunctuation(BOOL = TRUE) const;
+    inline const SvxForbiddenRuleItem   &GetForbiddenRule(BOOL = TRUE) const;
 
     // TabellenBox-Attribute    - impl. steht im cellatr.hxx
     inline const SwTblBoxNumFormat      &GetTblBoxNumFmt( BOOL = TRUE ) const;

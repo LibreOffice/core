@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rcid.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: os $ $Date: 2000-11-29 17:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 #define RC_VIEW                     (RC_BASE + 600)
 #define RC_CHRDLG                   (RC_BASE + 700)
 #define RC_RIBBAR                   (RC_BASE + 720)
-#define RC_GLOBALS                  (RC_BASE + 820)
+#define RC_GLOBALS                  (RC_BASE + 800)
 #define RC_FMTUI                    (RC_BASE + 920)
 #define RC_FRMDLG                   (RC_BASE + 1000)
 #define RC_FLDDLG                   (RC_BASE + 1100)
@@ -157,11 +157,11 @@
 
 //
 #define RC_RIBBAR_BEGIN             RC_RIBBAR
-#define RC_RIBBAR_END               (RC_RIBBAR_BEGIN + 99)
+#define RC_RIBBAR_END               (RC_RIBBAR_BEGIN + 79)
 
 // globale Ressourcen
 #define RC_GLOBALS_BEGIN            RC_GLOBALS
-#define RC_GLOBALS_END              (RC_GLOBALS_BEGIN + 99)
+#define RC_GLOBALS_END              (RC_GLOBALS_BEGIN + 119)
 
 // Format-Vorlagen
 #define RC_FMTUI_BEGIN              RC_FMTUI

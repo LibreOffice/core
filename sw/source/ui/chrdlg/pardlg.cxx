@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pardlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *  last change: $Author: os $ $Date: 2000-11-29 17:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,11 @@ SwParaDlg::SwParaDlg(Window *pParent,
     else
         RemoveTabPage(TP_PARA_EXT);
 
+    if (!bHtmlMode)
+        AddTabPage(TP_PARA_ASIAN,  SvxAsianTabPage::Create,SvxAsianTabPage::GetRanges);
+    else
+        RemoveTabPage(TP_PARA_ASIAN);
+
     USHORT nWhich(rCoreSet.GetPool()->GetWhich(SID_ATTR_LRSPACE));
     BOOL bLRValid = SFX_ITEM_AVAILABLE <= rCoreSet.GetItemState(nWhich);
     if(bHtmlMode || !bLRValid)
@@ -264,6 +269,9 @@ void __EXPORT SwParaDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:32  hr
+    initial import
+
     Revision 1.195  2000/09/18 16:05:14  willem.vandorp
     OpenOffice header added.
 

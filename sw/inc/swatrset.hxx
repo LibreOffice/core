@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swatrset.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:36:59 $
+ *  last change: $Author: os $ $Date: 2000-11-29 17:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ class SvxHyphenZoneItem;
 class SwFmtDrop;
 class SvxScriptSpaceItem;
 class SvxHangingPunctuationItem;
+class SvxForbiddenRuleItem;
 
 // TabellenBox-Attribute
 class SwTblBoxNumFormat;
@@ -337,6 +338,7 @@ public:
     inline const SwFmtDrop              &GetDrop( BOOL = TRUE ) const;
     inline const SvxScriptSpaceItem     &GetScriptSpace(BOOL = TRUE) const;
     inline const SvxHangingPunctuationItem &GetHangingPunctuation(BOOL = TRUE) const;
+    inline const SvxForbiddenRuleItem   &GetForbiddenRule(BOOL = TRUE) const;
 
     // TabellenBox-Attribute    - impl. steht im cellatr.hxx
     inline const SwTblBoxNumFormat      &GetTblBoxNumFmt( BOOL = TRUE ) const;
@@ -350,6 +352,9 @@ public:
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/11/20 09:36:59  jp
+      new para attributes - expand para range
+
       Revision 1.4  2000/11/16 21:29:02  jp
       SwFmt2Lines moved to SVX and renamed
 

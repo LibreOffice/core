@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 11:35:14 $
+ *  last change: $Author: os $ $Date: 2000-11-29 17:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,6 +617,11 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_ON;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_Z_ORDER;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CONTENT_SECTION;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_SECTION;
+
+extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_HANGING_PUNCTUATION;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_CHARACTER_DISTANCE;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_FORBIDDEN_RULES;
+
 #endif
 
 

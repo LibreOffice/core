@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:40:18 $
+ *  last change: $Author: os $ $Date: 2000-11-29 17:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,6 @@ TabDialog DLG_PARA
                 Text[ turkish ] = "Girinti ve aralýklar";
                 Text[ language_user1 ] = " ";
             };
-#if SUPD>352
             PageItem
             {
                 Identifier = TP_PARA_ALIGN ;
@@ -143,7 +142,6 @@ TabDialog DLG_PARA
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
             };
-#endif
             PageItem
             {
                 Identifier = TP_PARA_EXT ;
@@ -172,6 +170,12 @@ TabDialog DLG_PARA
                 Text[ greek ] = "ÑïÞ êåéìÝíïõ";
                 Text[ korean ] = "ÅØ½ºÆ® Èå¸§";
                 Text[ turkish ] = "Metin akýþý";
+            };
+            PageItem
+            {
+                Identifier = TP_PARA_ASIAN;
+                Text = "Asiatische Typographie" ;
+                Text [ ENGLISH ] = "Asian typography" ;
             };
             PageItem
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-24 20:51:59 $
+ *  last change: $Author: os $ $Date: 2000-11-29 17:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,9 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
-
+#ifndef _SVX_FORBIDDENRULEITEM_HXX
+#include <svx/forbiddenruleitem.hxx>
+#endif
 #ifndef _FMTHBSH_HXX //autogen
 #include <fmthbsh.hxx>
 #endif
@@ -500,7 +502,7 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEM_POOLABLE },   // RES_PARATR_SCRIPTSPACE
     { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEM_POOLABLE },// RES_PARATR_HANGINGPUNCTUATION
 
-    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY1
+    { SID_ATTR_PARA_FORBIDDEN_RULES, SFX_ITEM_POOLABLE },// RES_PARATR_FORBIDDEN_RULES
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY2
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY3
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY4
@@ -752,8 +754,9 @@ void _InitCore()
     aAttrTab[ RES_PARATR_HANGINGPUNCTUATION - POOLATTR_BEGIN ] =
                                                 new SvxHangingPunctuationItem;
 
+    aAttrTab[ RES_PARATR_FORBIDDEN_RULES - POOLATTR_BEGIN ] =
+                                                new SvxForbiddenRuleItem( RES_PARATR_FORBIDDEN_RULES );
 // ParaAttr - Dummies
-    aAttrTab[ RES_PARATR_DUMMY1 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY1 );
     aAttrTab[ RES_PARATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY2 );
     aAttrTab[ RES_PARATR_DUMMY3 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY3 );
     aAttrTab[ RES_PARATR_DUMMY4 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY4 );
