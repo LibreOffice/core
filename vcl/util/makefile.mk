@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hdu $ $Date: 2001-06-19 15:57:26 $
+#   last change: $Author: th $ $Date: 2001-06-21 20:59:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,115 +68,116 @@ VERSION=$(UPD)
 
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :	settings.mk
-.INCLUDE :	makefile.pmk
+.INCLUDE :  settings.mk
+.INCLUDE :  makefile.pmk
 
 
 # --- Allgemein ----------------------------------------------------------
 
-HXXDEPNLST= $(INC)$/accel.hxx		\
-            $(INC)$/animate.hxx 	\
-            $(INC)$/apptypes.hxx	\
-            $(INC)$/bitmap.hxx		\
-            $(INC)$/bitmapex.hxx	\
-            $(INC)$/bmpacc.hxx		\
-            $(INC)$/btndlg.hxx		\
-            $(INC)$/button.hxx		\
-            $(INC)$/ctrl.hxx		\
-            $(INC)$/color.hxx		\
-            $(INC)$/config.hxx		\
-            $(INC)$/cursor.hxx		\
-            $(INC)$/clip.hxx		\
-            $(INC)$/cmdevt.hxx		\
-            $(INC)$/drag.hxx		\
-            $(INC)$/decoview.hxx	\
-            $(INC)$/dialog.hxx		\
-            $(INC)$/dockwin.hxx 	\
-            $(INC)$/edit.hxx		\
-            $(INC)$/event.hxx		\
-            $(INC)$/exchange.hxx	\
-            $(INC)$/field.hxx		\
-            $(INC)$/fixed.hxx		\
-            $(INC)$/floatwin.hxx	\
-            $(INC)$/font.hxx		\
-            $(INC)$/floatwin.hxx	\
-            $(INC)$/graph.hxx		\
-            $(INC)$/group.hxx		\
-            $(INC)$/help.hxx		\
-            $(INC)$/jobset.hxx		\
-            $(INC)$/keycodes.hxx	\
-            $(INC)$/keycod.hxx		\
-            $(INC)$/image.hxx		\
-            $(INC)$/line.hxx		\
-            $(INC)$/lstbox.h		\
-            $(INC)$/lstbox.hxx		\
-            $(INC)$/mapmod.hxx		\
-            $(INC)$/metaact.hxx 	\
-            $(INC)$/menu.hxx		\
-            $(INC)$/menubtn.hxx 	\
-            $(INC)$/metric.hxx		\
-            $(INC)$/morebtn.hxx 	\
-            $(INC)$/msgbox.hxx		\
-            $(INC)$/octree.hxx		\
-            $(INC)$/outdev.hxx		\
-            $(INC)$/outdev3d.hxx	\
-            $(INC)$/pointr.hxx		\
-            $(INC)$/poly.hxx		\
-            $(INC)$/ptrstyle.hxx	\
-            $(INC)$/prntypes.hxx	\
-            $(INC)$/print.hxx		\
-            $(INC)$/prndlg.hxx		\
-            $(INC)$/region.hxx		\
-            $(INC)$/rc.hxx			\
-            $(INC)$/resid.hxx		\
-            $(INC)$/resary.hxx		\
-            $(INC)$/salbtype.hxx	\
-            $(INC)$/scrbar.hxx		\
-            $(INC)$/slider.hxx		\
-            $(INC)$/seleng.hxx		\
-            $(INC)$/settings.hxx	\
-            $(INC)$/sound.hxx		\
-            $(INC)$/sndstyle.hxx	\
-            $(INC)$/split.hxx		\
-            $(INC)$/splitwin.hxx	\
-            $(INC)$/spin.hxx		\
-            $(INC)$/spinfld.hxx 	\
-            $(INC)$/status.hxx		\
-            $(INC)$/stdtext.hxx 	\
-            $(INC)$/sv.h			\
-            $(INC)$/svapp.hxx		\
-            $(INC)$/syschild.hxx	\
-            $(INC)$/sysdata.hxx 	\
-            $(INC)$/system.hxx		\
-            $(INC)$/syswin.hxx		\
-            $(INC)$/tabctrl.hxx 	\
-            $(INC)$/tabdlg.hxx		\
-            $(INC)$/tabpage.hxx 	\
-            $(INC)$/toolbox.hxx 	\
-            $(INC)$/timer.hxx		\
-            $(INC)$/virdev.hxx		\
-            $(INC)$/wall.hxx		\
-            $(INC)$/waitobj.hxx 	\
-            $(INC)$/wintypes.hxx	\
-            $(INC)$/window.hxx		\
+HXXDEPNLST= $(INC)$/accel.hxx       \
+            $(INC)$/animate.hxx     \
+            $(INC)$/apptypes.hxx    \
+            $(INC)$/bitmap.hxx      \
+            $(INC)$/bitmapex.hxx    \
+            $(INC)$/bmpacc.hxx      \
+            $(INC)$/btndlg.hxx      \
+            $(INC)$/button.hxx      \
+            $(INC)$/ctrl.hxx        \
+            $(INC)$/color.hxx       \
+            $(INC)$/config.hxx      \
+            $(INC)$/cursor.hxx      \
+            $(INC)$/clip.hxx        \
+            $(INC)$/cmdevt.hxx      \
+            $(INC)$/drag.hxx        \
+            $(INC)$/decoview.hxx    \
+            $(INC)$/dialog.hxx      \
+            $(INC)$/dockwin.hxx     \
+            $(INC)$/edit.hxx        \
+            $(INC)$/event.hxx       \
+            $(INC)$/exchange.hxx    \
+            $(INC)$/field.hxx       \
+            $(INC)$/fixed.hxx       \
+            $(INC)$/floatwin.hxx    \
+            $(INC)$/font.hxx        \
+            $(INC)$/fontcvt.hxx     \
+            $(INC)$/floatwin.hxx    \
+            $(INC)$/graph.hxx       \
+            $(INC)$/group.hxx       \
+            $(INC)$/help.hxx        \
+            $(INC)$/jobset.hxx      \
+            $(INC)$/keycodes.hxx    \
+            $(INC)$/keycod.hxx      \
+            $(INC)$/image.hxx       \
+            $(INC)$/line.hxx        \
+            $(INC)$/lstbox.h        \
+            $(INC)$/lstbox.hxx      \
+            $(INC)$/mapmod.hxx      \
+            $(INC)$/metaact.hxx     \
+            $(INC)$/menu.hxx        \
+            $(INC)$/menubtn.hxx     \
+            $(INC)$/metric.hxx      \
+            $(INC)$/morebtn.hxx     \
+            $(INC)$/msgbox.hxx      \
+            $(INC)$/octree.hxx      \
+            $(INC)$/outdev.hxx      \
+            $(INC)$/outdev3d.hxx    \
+            $(INC)$/pointr.hxx      \
+            $(INC)$/poly.hxx        \
+            $(INC)$/ptrstyle.hxx    \
+            $(INC)$/prntypes.hxx    \
+            $(INC)$/print.hxx       \
+            $(INC)$/prndlg.hxx      \
+            $(INC)$/region.hxx      \
+            $(INC)$/rc.hxx          \
+            $(INC)$/resid.hxx       \
+            $(INC)$/resary.hxx      \
+            $(INC)$/salbtype.hxx    \
+            $(INC)$/scrbar.hxx      \
+            $(INC)$/slider.hxx      \
+            $(INC)$/seleng.hxx      \
+            $(INC)$/settings.hxx    \
+            $(INC)$/sound.hxx       \
+            $(INC)$/sndstyle.hxx    \
+            $(INC)$/split.hxx       \
+            $(INC)$/splitwin.hxx    \
+            $(INC)$/spin.hxx        \
+            $(INC)$/spinfld.hxx     \
+            $(INC)$/status.hxx      \
+            $(INC)$/stdtext.hxx     \
+            $(INC)$/sv.h            \
+            $(INC)$/svapp.hxx       \
+            $(INC)$/syschild.hxx    \
+            $(INC)$/sysdata.hxx     \
+            $(INC)$/system.hxx      \
+            $(INC)$/syswin.hxx      \
+            $(INC)$/tabctrl.hxx     \
+            $(INC)$/tabdlg.hxx      \
+            $(INC)$/tabpage.hxx     \
+            $(INC)$/toolbox.hxx     \
+            $(INC)$/timer.hxx       \
+            $(INC)$/virdev.hxx      \
+            $(INC)$/wall.hxx        \
+            $(INC)$/waitobj.hxx     \
+            $(INC)$/wintypes.hxx    \
+            $(INC)$/window.hxx      \
             $(INC)$/wrkwin.hxx
 
 .IF "$(linkinc)" != ""
-SHL11FILE=	$(MISC)$/app.slo
-SHL12FILE=	$(MISC)$/gdi.slo
-SHL13FILE=	$(MISC)$/win.slo
-SHL14FILE=	$(MISC)$/ctrl.slo
+SHL11FILE=  $(MISC)$/app.slo
+SHL12FILE=  $(MISC)$/gdi.slo
+SHL13FILE=  $(MISC)$/win.slo
+SHL14FILE=  $(MISC)$/ctrl.slo
 #SHL15FILE=  $(MISC)$/ex.slo
-SHL16FILE=	$(MISC)$/salapp.slo
-SHL17FILE=	$(MISC)$/salwin.slo
-SHL18FILE=	$(MISC)$/salgdi.slo
+SHL16FILE=  $(MISC)$/salapp.slo
+SHL17FILE=  $(MISC)$/salwin.slo
+SHL18FILE=  $(MISC)$/salgdi.slo
 .ENDIF
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
-LIB1FILES=	$(SLB)$/app.lib 	\
-            $(SLB)$/gdi.lib 	\
-            $(SLB)$/win.lib 	\
-            $(SLB)$/ctrl.lib	\
+LIB1FILES=  $(SLB)$/app.lib     \
+            $(SLB)$/gdi.lib     \
+            $(SLB)$/win.lib     \
+            $(SLB)$/ctrl.lib    \
             $(SLB)$/helper.lib
 
 .IF "$(TF_SVDATA)"==""
@@ -188,12 +189,12 @@ LIB1FILES+= $(SLB)$/ex.lib
 .IF "$(COM)"=="GCC"
 LIB1OBJFILES=$(SLO)$/salmain.obj
 .ENDIF
-.ELSE			# "$(remote)" != ""
+.ELSE           # "$(remote)" != ""
 LIB1FILES+= \
-            $(SLB)$/salwin.lib	\
-            $(SLB)$/salgdi.lib	\
+            $(SLB)$/salwin.lib  \
+            $(SLB)$/salgdi.lib  \
             $(SLB)$/salapp.lib
-.ENDIF			# "$(remote)" != ""
+.ENDIF          # "$(remote)" != ""
 
 .IF "$(GUI)" == "UNX"
 .IF "$(PSPRINT)" != ""
@@ -202,60 +203,60 @@ LIB1FILES+= \
 .ENDIF
 
 .IF "$(USE_BUILTIN_RASTERIZER)"!=""
-    LIB1FILES +=	$(SLB)$/glyphs.lib
-    SHL1STDLIBS+=	$(FREETYPELIBST)
+    LIB1FILES +=    $(SLB)$/glyphs.lib
+    SHL1STDLIBS+=   $(FREETYPELIBST)
 .ENDIF
 
 SHL1TARGET= vcl$(VERSION)$(DLLPOSTFIX)
 SHL1IMPLIB= ivcl
 SHL1STDLIBS+=\
-            $(TOOLSLIB) 		\
-            $(SOTLIB)			\
-            $(VOSLIB)			\
-            $(SALLIB)			\
-            $(CPPUHELPERLIB)	\
-            $(UCBHELPERLIB)		\
-            $(CPPULIB)			\
-            $(UNOTOOLSLIB)		\
-            $(COMPHELPERLIB)	\
-            $(GPC3RDLIB)		
+            $(TOOLSLIB)         \
+            $(SOTLIB)           \
+            $(VOSLIB)           \
+            $(SALLIB)           \
+            $(CPPUHELPERLIB)    \
+            $(UCBHELPERLIB)     \
+            $(CPPULIB)          \
+            $(UNOTOOLSLIB)      \
+            $(COMPHELPERLIB)    \
+            $(GPC3RDLIB)
 
 .IF "$(remote)" != ""
-SHL1STDLIBS+=	$(UNOLIB)
+SHL1STDLIBS+=   $(UNOLIB)
 .ENDIF
 
 .IF "$(GUI)"!="MAC"
-SHL1DEPN=	$(L)$/itools.lib $(L)$/sot.lib
+SHL1DEPN=   $(L)$/itools.lib $(L)$/sot.lib
 .ENDIF
 
-SHL1LIBS=	$(LIB1TARGET)
+SHL1LIBS=   $(LIB1TARGET)
 .IF "$(GUI)"!="UNX"
-SHL1OBJS=	$(SLO)$/salshl.obj
+SHL1OBJS=   $(SLO)$/salshl.obj
 .ENDIF
 
 .IF "$(GUI)" != "MAC"
 .IF "$(GUI)" != "UNX"
-SHL1RES=	$(RES)$/salsrc.res
+SHL1RES=    $(RES)$/salsrc.res
 .ENDIF
 .ENDIF
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
-DEF1NAME	=$(SHL1TARGET)
-DEF1DEPN	=	$(MISC)$/$(SHL1TARGET).flt \
+DEF1NAME    =$(SHL1TARGET)
+DEF1DEPN    =   $(MISC)$/$(SHL1TARGET).flt \
                 $(HXXDEPNLST) \
                 $(LIB1TARGET)
-DEF1DES		=VCL
-DEFLIB1NAME	=vcl
+DEF1DES     =VCL
+DEFLIB1NAME =vcl
 
 # --- W32 ----------------------------------------------------------------
 
 .IF "$(GUI)" == "WNT"
 
-SHL1STDLIBS += gdi32.lib		\
-               winspool.lib 	\
-               ole32.lib		\
-               shell32.lib		\
-               advapi32.lib 	\
+SHL1STDLIBS += gdi32.lib        \
+               winspool.lib     \
+               ole32.lib        \
+               shell32.lib      \
+               advapi32.lib     \
                imm32.lib
 
 .IF "$(GUI)$(COM)$(CPU)" == "WNTMSCI"
@@ -274,20 +275,20 @@ LINKFLAGSSHL += /ENTRY:LibMain@12
 .IF "$(USE_XPRINT)" == "TRUE"
 SHL1STDLIBS += -lXp -lXm -lXt -lX11
 .ELSE
-.IF "$(PSPRINT)"!="" 
+.IF "$(PSPRINT)"!=""
 SHL1STDLIBS += -lXm -lXt -lX11
 .ELSE
 SHL1STDLIBS += -lxp$(UPD)$(DLLPOSTFIX) -lXm -lXt -lX11
 .ENDIF
-.ENDIF			# "$(USE_XPRINT)" == "TRUE"
+.ENDIF          # "$(USE_XPRINT)" == "TRUE"
 
 # MacOSX
-.ELSE			# "$(OS)"=="SOLARIS"
+.ELSE           # "$(OS)"=="SOLARIS"
 .IF "$(OS)"=="MACOSX"
 SHL1STDLIBS += -framework Cocoa
 
 # Others
-.ELSE			# "$(OS)"=="MACOSX"
+.ELSE           # "$(OS)"=="MACOSX"
 
 .IF "$(USE_XPRINT)" == "TRUE"
 SHL1STDLIBS += -lXp -lXaw -lXt -lX11
@@ -297,19 +298,19 @@ SHL1STDLIBS += -lXaw -lXt -lX11
 .ELSE
 SHL1STDLIBS += -lxp$(UPD)$(DLLPOSTFIX) -lXaw -lXt -lX11
 .ENDIF
-.ENDIF			# "$(USE_XPRINT)" == "TRUE"
-.ENDIF			# "$(OS)"=="MACOSX"
-.ENDIF			# "$(OS)"=="SOLARIS"
+.ENDIF          # "$(USE_XPRINT)" == "TRUE"
+.ENDIF          # "$(OS)"=="MACOSX"
+.ENDIF          # "$(OS)"=="SOLARIS"
 
 .IF "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS"
 SHL1STDLIBS += -laudio
-.ENDIF			# "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS"
+.ENDIF          # "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS"
 
-.ENDIF			# "$(GUI)"=="UNX"
+.ENDIF          # "$(GUI)"=="UNX"
 
 # --- Allgemein ----------------------------------------------------------
 
-.INCLUDE :	target.mk
+.INCLUDE :  target.mk
 
 # --- Targets ------------------------------------------------------------
 
