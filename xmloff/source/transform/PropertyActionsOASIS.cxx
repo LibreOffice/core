@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOASIS.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 16:43:14 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,13 @@ XMLTransformerActionInit aGraphicPropertyOASISAttrActionTable[] =
         XML_FAMILY_TYPE_HATCH, 0 },
     { XML_NAMESPACE_DRAW, XML_FILL_IMAGE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
         XML_FAMILY_TYPE_FILL_IMAGE, 0 },
+
+    // Font work properties
+    { XML_NAMESPACE_DRAW, XML_FONTWORK_DISTANCE, XML_ATACTION_IN2INCH, NO_PARAMS },
+    { XML_NAMESPACE_DRAW, XML_FONTWORK_START, XML_ATACTION_IN2INCH, NO_PARAMS },
+    { XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW_OFFSET_X, XML_ATACTION_IN2INCH, NO_PARAMS },
+    { XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW_OFFSET_Y, XML_ATACTION_IN2INCH, NO_PARAMS },
+
     { XML_NAMESPACE_DRAW, XML_AUTO_GROW_WIDTH, XML_ATACTION_RENAME,
         XMLTransformerActionInit::QNameParam( XML_NAMESPACE_DRAW,
                                                  XML_AUTO_GROW_HEIGHT   ), 0 },
@@ -215,8 +222,7 @@ XMLTransformerActionInit aDrawingPagePropertyOASISAttrActionTable[] =
     // style-graphic-fill-properties-attlist
     { XML_NAMESPACE_DRAW, XML_FILL_GRADIENT_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
         NO_PARAMS  },
-    { XML_NAMESPACE_DRAW, XML_FILL_HATCH_NAME, XML_ATACTION_DECODE_STYLE_NAME, NO_PARAMS }, /* generated entry */
-    { XML_NAMESPACE_DRAW, XML_FILL_HATCH_SOLID, XML_ATACTION_DECODE_STYLE_NAME, NO_PARAMS }, /* generated entry */
+    { XML_NAMESPACE_DRAW, XML_FILL_HATCH_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF, NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_FILL_IMAGE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
         NO_PARAMS  },
     { XML_NAMESPACE_DRAW, XML_FILL_IMAGE_WIDTH, XML_ATACTION_IN2INCH, NO_PARAMS }, /* generated entry */
@@ -378,6 +384,8 @@ XMLTransformerActionInit aTextPropertyOASISAttrActionTable[] =
 
 XMLTransformerActionInit aParagraphPropertyOASISAttrActionTable[] =
 {
+    { XML_NAMESPACE_FO, XML_TEXT_ALIGN, XML_OPTACTION_CONTROL_TEXT_ALIGN,
+        NO_PARAMS },
     { XML_NAMESPACE_FO, XML_LINE_HEIGHT, XML_ATACTION_IN2INCH,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_LINE_HEIGHT_AT_LEAST, XML_ATACTION_IN2INCH,
@@ -513,6 +521,8 @@ XMLTransformerActionInit aTableCellPropertyOASISAttrActionTable[] =
                                                  XML_DIRECTION), 0 },
     { XML_NAMESPACE_STYLE, XML_SHADOW, XML_ATACTION_INS2INCHS,
           NO_PARAMS },
+    { XML_NAMESPACE_STYLE, XML_REPEAT_CONTENT, XML_ATACTION_REMOVE,
+        NO_PARAMS }, /* new entry*/
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
