@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
+ *  last change: $Author: pl $ $Date: 2001-11-05 09:21:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,7 +541,7 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
 
     if( ! bIgnoreXErrors_ )
     {
-#if defined DEBUG || defined DBG_UTIL
+#if defined DEBUG || defined DBG_UTIL || defined BUILD_SOSL
         XGetErrorText( pDisplay, pEvent->error_code, msg, sizeof( msg ) );
         fprintf( stderr, "X-Error: %s\n", msg );
         if( pEvent->request_code > capacityof( XRequest ) )

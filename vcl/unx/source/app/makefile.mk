@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: pl $ $Date: 2001-08-24 10:22:29 $
+#   last change: $Author: pl $ $Date: 2001-11-05 09:21:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,10 @@ dummy:
     @echo "Nothing to build for Mac OS X"
 
 .ELSE		# "$(OS)"=="MACOSX"
+
+.IF "$(BUILD_SOSL)"!=""
+CDEFS+=-DBUILD_SOSL
+.ENDIF
 
 .IF "$(remote)"==""
 OBJFILES=\
