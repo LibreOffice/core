@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.70 $
+#   $Revision: 1.71 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-17 14:10:47 $
+#   last change: $Author: rt $ $Date: 2004-05-03 13:24:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-LIBSMKREV!:="$$Revision: 1.70 $$"
+LIBSMKREV!:="$$Revision: 1.71 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -221,6 +221,21 @@ SSOOPTLIB=-lssoopt$(OFFICEUPD)$(DLLPOSTFIX)
 JVMACCESSLIB = -ljvmaccess$(COMID)
 CPPUNITLIB = -lcppunit$(DLLPOSTFIX)
 
+# #110743#
+# For BinFilters, some libs were added.
+#
+
+BFSFXLIB=-lbf_sfx
+BFSVXLIB=-lbf_svx$(OFFICEUPD)$(DLLPOSTFIX)
+BFSCHLIB=-lbf_ysch
+BFSMLIB=-lbf_ysm
+BFSCLIB=-lbf_sclib
+BFSDLIB=-lbf_sdlib
+BFSWLIB=-lbf_swlib
+BFOFALIB=-lbf_ofa$(OFFICEUPD)$(DLLPOSTFIX)
+LEGACYSMGRLIB=-llegacy_binfilters$(OFFICEUPD)$(DLLPOSTFIX)
+BFXMLOFFLIB=-lbf_xo$(OFFICEUPD)$(DLLPOSTFIX)
+
 #
 # USED_%NAME%_LIBS
 # Variablen, in denen in gueltiger Reihenfolge ALLE Libraries,
@@ -377,6 +392,21 @@ SYSSHELLLIB=sysshell.lib
 SSOOPTLIB=issoopt$(OFFICEUPD)$(DLLPOSTFIX).lib
 JVMACCESSLIB = $(LIBPRE) ijvmaccess.lib
 CPPUNITLIB = cppunit.lib
+
+# #110743#
+# For BinFilters, some libs were added.
+#
+
+BFSVXLIB=$(LIBPRE) bf_svx.lib
+BFSFXLIB=$(LIBPRE) bf_sfx.lib
+BFSCHLIB=$(LIBPRE) bf_ysch.lib
+BFSMLIB=$(LIBPRE) bf_ysm.lib
+BFSCLIB=$(LIBPRE) bf_sclib.lib
+BFSDLIB=$(LIBPRE) bf_sdlib.lib
+BFSWLIB=$(LIBPRE) bf_swlib.lib
+BFOFALIB=$(LIBPRE) bf_ofa.lib
+BFXMLOFFLIB=$(LIBPRE) ibf_xo.lib
+LEGACYSMGRLIB=$(LIBPRE) ilegacy_binfilters.lib
 
 .ENDIF              # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 
