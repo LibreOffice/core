@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:34:41 $
+ *  last change: $Author: kz $ $Date: 2004-12-08 17:36:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1269,7 +1269,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         }
         else if( nDefaultOutlineLevel == -1 )
         {
-            SetOutlineStyle( nOutlineLevel, rStyleName );
+            SetOutlineStyle( nOutlineLevel, sStyleName );
         }
         // else: nothing to do!
     }
