@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addruno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:52:51 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
             {MAP_CHAR_LEN(SC_UNONAME_UIREPR),   0,  &getCppuType((rtl::OUString*)0),    0, 0 },
             {0,0,0,0}
         };
-        static uno::Reference<beans::XPropertySetInfo> aRef = new SfxItemPropertySetInfo( aPropertyMap );
+        static uno::Reference<beans::XPropertySetInfo> aRef(new SfxItemPropertySetInfo( aPropertyMap ));
         return aRef;
     }
     else
@@ -168,7 +168,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
             {MAP_CHAR_LEN(SC_UNONAME_UIREPR),   0,  &getCppuType((rtl::OUString*)0),    0, 0 },
             {0,0,0,0}
         };
-        static uno::Reference<beans::XPropertySetInfo> aRef = new SfxItemPropertySetInfo( aPropertyMap );
+        static uno::Reference<beans::XPropertySetInfo> aRef(new SfxItemPropertySetInfo( aPropertyMap ));
         return aRef;
     }
 }
@@ -182,7 +182,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const rtl::OUString& aPr
         throw uno::RuntimeException();
 
     sal_Bool bSuccess = sal_False;
-    String aNameStr = aPropertyName;
+    String aNameStr(aPropertyName);
     if ( aNameStr.EqualsAscii( SC_UNONAME_ADDRESS ) )
     {
         //  read the cell/range address from API struct
@@ -231,7 +231,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const rtl::OUString& aPr
         rtl::OUString sRepresentation;
         if (aValue >>= sRepresentation)
         {
-            String aUIString = sRepresentation;
+            String aUIString(sRepresentation);
 
             //  cell or range: strip a single "." at the start
             if ( aUIString.GetChar(0) == (sal_Unicode) '.' )
@@ -267,7 +267,7 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const rtl::OUString&
     ScDocument* pDoc = pDocShell->GetDocument();
     uno::Any aRet;
 
-    String aNameStr = aPropertyName;
+    String aNameStr(aPropertyName);
     if ( aNameStr.EqualsAscii( SC_UNONAME_ADDRESS ) )
     {
         if ( bIsRange )
