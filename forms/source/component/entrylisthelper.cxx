@@ -2,9 +2,9 @@
  *
  *  $RCSfile: entrylisthelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:56:10 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,14 @@ namespace frm
     //---------------------------------------------------------------------
     OEntryListHelper::OEntryListHelper( ::osl::Mutex& _rMutex )
         :m_rMutex( _rMutex )
+    {
+    }
+
+    //---------------------------------------------------------------------
+    OEntryListHelper::OEntryListHelper( const OEntryListHelper& _rSource, ::osl::Mutex& _rMutex )
+        :m_rMutex( _rMutex )
+        ,m_xListSource ( _rSource.m_xListSource  )
+        ,m_aStringItems( _rSource.m_aStringItems )
     {
     }
 

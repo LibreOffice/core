@@ -2,9 +2,9 @@
  *
  *  $RCSfile: entrylisthelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:56:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ namespace frm
 
     protected:
         OEntryListHelper( ::osl::Mutex& _rMutex );
+        OEntryListHelper( const OEntryListHelper& _rSource, ::osl::Mutex& _rMutex );
         ~OEntryListHelper( );
 
         /// returns the current string item list
