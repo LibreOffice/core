@@ -1,0 +1,234 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XExtendedToolkit.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:41:59 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_awt_XExtendedToolkit_idl__
+#define __com_sun_star_awt_XExtendedToolkit_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XTopWindow_idl__
+#include <com/sun/star/awt/XTopWindow.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XTopWindowListener_idl__
+#include <com/sun/star/awt/XTopWindowListener.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XKeyHandler_idl__
+#include <com/sun/star/awt/XKeyHandler.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XFocusListener_idl__
+#include <com/sun/star/awt/XFocusListener.idl>
+#endif
+
+
+module com {  module sun {  module star {  module awt {
+
+/** The <type>XExtendedToolkit</type> is an extension of the <type
+    scope="::com::sun::star::awt">XToolkit</type> interface.  It basically
+    provides access to three event broadcasters which are used for instance
+    in the context of accessibility.  It is, however, not restricted to
+    accessibility.
+
+    <p>The first event broadcaster lets you keep track of the open top-level
+    windows (frames).  To get the set of currently open top-level window use
+    the <member>XExtendedToolkit::getTopWindowCount</member> and
+    <member>XExtendedToolkit::getTopWindow</member> methods.</p>
+
+    <p>The second event broadcaster informs its listeners of key events.
+    Its listeners can, unlike with most other broadcasters/listeners,
+    consume events, so that other listeners will not be called for consumed
+    events.</p>
+
+    <p>The last event broadcaster sends events on focus changes of all
+    elements that can have the input focus.</p>
+*/
+interface XExtendedToolkit : ::com::sun::star::uno::XInterface
+{
+    /** This function returns the number of currently existing top-level
+        windows.
+        @return
+            Returns the number of top-level windows.  This includes all
+            top-level windows, regardless of whether they are iconized,
+            visible, or active.
+    */
+    long getTopWindowCount ();
+
+    /** Return a reference to the specified top-level window.  Note that the
+        number of top-level windows may change between a call to
+        <member>getTopWindowCount()</member> and successive calls to this
+        function.
+        @param nIndex
+            The index should be in the intervall from 0 up to but not
+            including the number of top-level windows as returned by
+            <member>getTopWindowCount()</member>.
+        @return
+            The returned value is a valid reference to a top-level window.
+        @throws IndexOutOfBoundsException
+           when the specified index is outside the valid range.
+    */
+    ::com::sun::star::awt::XTopWindow getTopWindow ([in] long nIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Return the currently active top-level window, i.e. which has
+        currently the input focus.
+        @return
+            The returned reference may be empty when no top-level window is
+            active.
+    */
+    ::com::sun::star::awt::XTopWindow getActiveTopWindow ();
+
+    /** Add a new listener that is called on <type
+        scope="::com::sun::star::awt">TopWindowEvent</type>s.  After having
+        obtained the current list of exisiting top-level windows you can
+        keep this list up-to-date by listening to opened or closed top-level
+        windows.  Wait for activations or deactivations of top-level windows
+        to keep track of the currently active frame.
+        @param xListener
+            If this is a valid reference it is inserted into the list of
+            listeners.  It is the task of the caller to not register the
+            same listener twice (otherwise that listener will be called
+            twice.)
+    */
+    [oneway] void addTopWindowListener (
+        [in] ::com::sun::star::awt::XTopWindowListener xListener);
+
+    /** Remove the specified listener from the list of listeners.
+        @param xListener
+            If the reference is empty then nothing will be changed.  If the
+            listener has been registered twice (or more) then all refrences
+            will be removed.
+    */
+    [oneway] void removeTopWindowListener (
+        [in] ::com::sun::star::awt::XTopWindowListener xListener);
+
+    /** Add a new listener that is called on <type
+        scope="::com::sun::star::awt">KeyEvent</type>s.  Every listener is
+        given the opportunity to consume the event, i.e. prevent the not yet
+        called listeners from being called.
+        @param xHandler
+            If this is a valid reference it is inserted into the list of
+            handlers.  It is the task of the caller to not register the
+            same handler twice (otherwise that listener will be called
+            twice.)
+    */
+    [oneway] void addKeyHandler (
+        [in] ::com::sun::star::awt::XKeyHandler xHandler);
+
+
+    /** Remove the specified listener from the list of listeners.
+        @param xHandler
+            If the reference is empty then nothing will be changed.  If the
+            handler has been registered twice (or more) then all refrences
+            will be removed.
+    */
+    [oneway] void removeKeyHandler (
+        [in] ::com::sun::star::awt::XKeyHandler xHandler);
+
+    /** Add a new listener that is called on <type
+        scope="::com::sun::star::awt">FocusEvent</type>s.  Use this focus
+        broadcaster to keep track of the object that currently has the input
+        focus.
+        @param xListener
+            If this is a valid reference it is inserted into the list of
+            listeners.  It is the task of the caller to not register the
+            same listener twice (otherwise that listener will be called
+            twice.)
+    */
+    [oneway] void addFocusListener (
+        [in] ::com::sun::star::awt::XFocusListener xListener);
+
+    /** Remove the specified listener from the list of listeners.
+        @param xListener
+            If the reference is empty then nothing will be changed.  If the
+            listener has been registered twice (or more) then all refrences
+            will be removed.
+    */
+    [oneway] void removeFocusListener (
+        [in] ::com::sun::star::awt::XFocusListener xListener);
+
+    /** Broadcasts the a focusGained on all registered focus listeners
+        @param source
+            The object that has gained the input focus. It should implement
+            <type scope="com::sun::star::accessibility">XAccessible</type>.
+    */
+    [oneway] void fireFocusGained (
+        [in] ::com::sun::star::uno::XInterface source);
+
+    /** Broadcasts the a focusGained on all registered focus listeners
+        @param source
+            The object that has lost the input focus. It should implement
+            <type scope="com::sun::star::accessibility">XAccessible</type>.
+    */
+    [oneway] void fireFocusLost (
+        [in] ::com::sun::star::uno::XInterface source);
+};
+
+}; }; }; };
+
+#endif
