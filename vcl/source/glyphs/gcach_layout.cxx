@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.12 $
- *  last change: $Author: hdu $ $Date: 2002-08-01 13:31:46 $
+ *  $Revision: 1.13 $
+ *  last change: $Author: hdu $ $Date: 2002-08-22 16:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,6 +325,8 @@ void IcuFontFromServerFont::mapCharsToGlyphs( const LEUnicode pChars[],
     le_int32 nOffset, le_int32 nCount, le_bool bReverse,
     const LECharMapper* pMapper, LEGlyphID pGlyphs[] ) const
 {
+    if( !bReverse )
+        pMapper = NULL;
     for( int i = 0; i < nCount; ++i )
         pGlyphs[i] = mapCharToGlyph( pChars[nOffset+i], pMapper );
 
@@ -339,10 +341,13 @@ void IcuFontFromServerFont::mapCharsToGlyphs( const LEUnicode pChars[],
 
 // -----------------------------------------------------------------------
 
-LEGlyphID IcuFontFromServerFont::mapCharToGlyph( LEUnicode32 ch,
-    const LECharMapper* /*TODO: mapper*/ ) const
+LEGlyphID IcuFontFromServerFont::mapCharToGlyph( LEUnicode32 c1,
+    const LECharMapper* pMapper ) const
 {
-    LEGlyphID nGlyphIndex = mpServerFont->GetRawGlyphIndex( ch );
+    LEUnicode32 c2 = c1;
+    if( pMapper )
+        c2 = pMapper->mapChar( c1 );
+    LEGlyphID nGlyphIndex = mpServerFont->GetRawGlyphIndex( c2 );
     return nGlyphIndex;
 }
 
