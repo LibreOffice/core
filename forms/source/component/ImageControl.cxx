@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:43:03 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,7 +423,7 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) 
             break;
     }
     // Nach dem Lesen die Defaultwerte anzeigen
-    if (m_aControlSource.getLength())
+    if ( getControlSource().getLength() )
     {   // (not if we don't have a control source - the "State" property acts like it is persistent, then
         ::osl::MutexGuard aGuard(m_aMutex); // resetNoBroadcast expects this mutex guarding
         resetNoBroadcast();
