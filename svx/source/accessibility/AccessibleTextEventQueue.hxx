@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextEventQueue.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-24 07:39:24 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 
 #include <memory>
 #include <list>
+#include <algorithm>
 
 #ifndef _SOLAR_H
 #include <tools/solar.h>
