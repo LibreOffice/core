@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-12 12:00:15 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,8 @@
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
-#ifndef _DBAUI_FILENOTATION_HXX_
-#include "filenotation.hxx"
+#ifndef SVTOOLS_FILENOTATION_HXX_
+#include <svtools/filenotation.hxx>
 #endif
 
 
@@ -106,6 +106,7 @@ namespace dbaui
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
+using namespace ::svt;
 
 const ByteString aGroupIdent("dBase III");
 
