@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: khong $ $Date: 2002-11-07 17:41:46 $
+ *  last change: $Author: khong $ $Date: 2002-11-19 20:36:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,13 +138,14 @@ private:
 };
 
 //  ----------------------------------------------------
-//  class Calendar_hanja_yoil
+//  class Calendar_hanja
 //  ----------------------------------------------------
-class Calendar_hanja_yoil : public Calendar_gregorian
+class Calendar_hanja : public Calendar_gregorian
 {
 public:
     // Constructors
-    Calendar_hanja_yoil();
+    Calendar_hanja();
+    virtual void SAL_CALL loadCalendar(const rtl::OUString& uniqueID, const com::sun::star::lang::Locale& rLocale) throw(com::sun::star::uno::RuntimeException);
     virtual rtl::OUString SAL_CALL getDisplayName(sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType) throw(com::sun::star::uno::RuntimeException);
 };
 

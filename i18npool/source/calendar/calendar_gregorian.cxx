@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: khong $ $Date: 2002-11-15 21:29:10 $
+ *  last change: $Author: khong $ $Date: 2002-11-19 20:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,13 +106,13 @@ Calendar_gregorian::~Calendar_gregorian()
     delete body;
 }
 
-Calendar_hanja_yoil::Calendar_hanja_yoil()
+Calendar_hanja::Calendar_hanja()
 {
-    cCalendar = "com.sun.star.i18n.Calendar_hanja_yoil";
+    cCalendar = "com.sun.star.i18n.Calendar_hanja";
 }
 
 OUString SAL_CALL
-Calendar_hanja_yoil::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16 nameType ) throw(RuntimeException)
+Calendar_hanja::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16 nameType ) throw(RuntimeException)
 {
     if ( displayIndex == CalendarDisplayIndex::AM_PM ) {
         // Am/Pm string for Korean Hanja calendar will refer to Japanese locale
@@ -124,6 +124,14 @@ Calendar_hanja_yoil::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_
     }
     else
         return Calendar_gregorian::getDisplayName( displayIndex, idx, nameType );
+}
+
+void SAL_CALL
+Calendar_hanja::loadCalendar( const OUString& uniqueID, const com::sun::star::lang::Locale& rLocale ) throw(RuntimeException)
+{
+    // Since this class could be called by service name 'hanja_yoil', we have to
+    // rename uniqueID to get right calendar defined in locale data.
+    Calendar_gregorian::loadCalendar(OUString::createFromAscii("hanja"), rLocale);
 }
 
 static Era gengou_eraArray[] = {

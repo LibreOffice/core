@@ -118,16 +118,16 @@
 <FormatCode>YYYY/M/D</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey9" default="false" type="medium" usage="DATE" formatindex="26">
-<FormatCode>[~hanja_yoil]YYYY/M/D NNNN</FormatCode>
+<FormatCode>[~hanja]YYYY/M/D NNNN</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey10" default="false" type="medium" usage="DATE" formatindex="27">
 <FormatCode>YY"년" M"월" D"일" NNNN</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey11" default="false" type="medium" usage="DATE" formatindex="28">
-<FormatCode>[~hanja_yoil]YY"年" M"月" D"日" NNNN</FormatCode>
+<FormatCode>[~hanja]YY"年" M"月" D"日" NNNN</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey12" default="false" type="medium" usage="DATE" formatindex="29">
-<FormatCode>[~hanja_yoil]YYYY"年" M"月" D"日" NNNN </FormatCode>
+<FormatCode>[~hanja]YYYY"年" M"月" D"日" NNNN </FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey13" default="false" type="medium" usage="DATE" formatindex="30">
 <FormatCode>YY-M-D NNNN</FormatCode>
@@ -290,10 +290,10 @@
 <FormatCode>YYYY. M. D. NNNN</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey40" default="false" type="medium" usage="DATE" formatindex="80">
-<FormatCode>[~hanja_yoil]YYYY. M. D. (NN)</FormatCode>
+<FormatCode>[~hanja]YYYY. M. D. (NN)</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey41" default="false" type="medium" usage="DATE" formatindex="81">
-<FormatCode>[~hanja_yoil]YYYY. M. D. NNNN</FormatCode>
+<FormatCode>[~hanja]YYYY. M. D. NNNN</FormatCode>
 </FormatElement>
 <FormatElement msgid="DataFormatskey42" default="false" type="medium" usage="DATE" formatindex="82">
 <FormatCode>YY. M. D.</FormatCode>
@@ -305,10 +305,10 @@
 <FormatCode>YY. M. D. NNNN</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey45" default="false" type="medium" usage="DATE" formatindex="85">
-<FormatCode>[~hanja_yoil]YY. M. D. (NN)</FormatCode>
+<FormatCode>[~hanja]YY. M. D. (NN)</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey46" default="false" type="medium" usage="DATE" formatindex="86">
-<FormatCode>[~hanja_yoil]YY. M. D. NNNN</FormatCode>
+<FormatCode>[~hanja]YY. M. D. NNNN</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey47" default="false" type="medium" usage="DATE" formatindex="87">
 <FormatCode>YY"년" M"월" D"일" (NN)</FormatCode>
@@ -317,10 +317,10 @@
 <FormatCode>YYYY"년" M"월" D"일" (NN)</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey49" default="false" type="medium" usage="DATE" formatindex="89">
-<FormatCode>[~hanja_yoil]YYYY"年" M"月" D"日" (NN)</FormatCode>
+<FormatCode>[~hanja]YYYY"年" M"月" D"日" (NN)</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey50" default="false" type="medium" usage="DATE" formatindex="90">
-<FormatCode>[~hanja_yoil]YY"年" M"月" D"日" (NN)</FormatCode>
+<FormatCode>[~hanja]YY"年" M"月" D"日" (NN)</FormatCode>
 </FormatElement>
 </LC_FORMAT>
 
@@ -453,7 +453,7 @@
 <StartDayOfWeek><DayID>sun</DayID></StartDayOfWeek>
 <MinimalDaysInFirstWeek>7</MinimalDaysInFirstWeek>
 </Calendar>
-<Calendar unoid="hanja_yoil" default="false">
+<Calendar unoid="hanja" default="false">
 <DaysOfWeek ref="ja_JP_gengou"/>
 <MonthsOfYear>
 <Month>
