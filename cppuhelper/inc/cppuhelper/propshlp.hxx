@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propshlp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 12:50:44 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,6 @@
 #define _CPPUHELPER_PROPSHLP_HXX
 
 #include <rtl/alloc.h>
-
-#include <hash_map>
 
 #include <cppuhelper/interfacecontainer.hxx>
 
