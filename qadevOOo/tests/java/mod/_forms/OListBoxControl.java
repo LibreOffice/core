@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OListBoxControl.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 12:44:39 $
+ *  last change:$Date: 2003-09-08 11:50:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,21 +61,8 @@
 
 package mod._forms;
 
-import com.sun.star.awt.XControlModel;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.awt.XDevice;
-import com.sun.star.awt.XGraphics;
-import com.sun.star.awt.XListBox;
-import com.sun.star.awt.XToolkit;
-import com.sun.star.awt.XWindow;
-import com.sun.star.awt.XWindowPeer;
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.view.XControlAccess;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -84,12 +71,28 @@ import util.FormTools;
 import util.SOfficeFactory;
 import util.WriterTools;
 
+import com.sun.star.awt.XControlModel;
+import com.sun.star.awt.XDevice;
+import com.sun.star.awt.XGraphics;
+import com.sun.star.awt.XListBox;
+import com.sun.star.awt.XToolkit;
+import com.sun.star.awt.XWindow;
+import com.sun.star.awt.XWindowPeer;
+import com.sun.star.drawing.XControlShape;
+import com.sun.star.drawing.XShape;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
+import com.sun.star.view.XControlAccess;
+
 public class OListBoxControl extends TestCase {
 
     XTextDocument xTextDoc;
 
     protected void initialize ( TestParameters Param, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( ((XMultiServiceFactory) Param.getMSF()) );
 
         try {
             log.println( "creating a textdocument" );
@@ -101,9 +104,18 @@ public class OListBoxControl extends TestCase {
         }
     }
 
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xTextDoc " );
-        xTextDoc.dispose();
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xTextDoc ");
+
+        try {
+            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                        XCloseable.class, xTextDoc);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("couldn't close document");
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("couldn't close document");
+        }
     }
 
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
