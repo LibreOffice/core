@@ -59,6 +59,7 @@
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.lib.uno.helper.WeakBase;
 
 // OOo AWT
@@ -82,14 +83,17 @@ import com.sun.star.uno.Type;
 public class CanvasGraphicDevice
     extends com.sun.star.lib.uno.helper.ComponentBase
     implements com.sun.star.lang.XServiceInfo,
+               com.sun.star.beans.XPropertySet,
                drafts.com.sun.star.rendering.XGraphicDevice
 {
-    private java.awt.GraphicsConfiguration graphicsConfig;
+    private java.awt.Graphics2D             graphics;
+    private java.awt.GraphicsConfiguration  graphicsConfig;
 
     //----------------------------------------------------------------------------------
 
-    public CanvasGraphicDevice( java.awt.Graphics2D graphics )
+    public CanvasGraphicDevice( java.awt.Graphics2D _graphics )
     {
+        graphics = _graphics;
         graphicsConfig = graphics.getDeviceConfiguration();
     }
 
@@ -144,7 +148,7 @@ public class CanvasGraphicDevice
         CanvasUtils.printLog( "createCompatibleBitmap called with size (" + size.Width + ", " + size.Height + ")" );
         return new CanvasBitmap( graphicsConfig.createCompatibleImage( size.Width,
                                                                        size.Height,
-                                                                        Transparency.TRANSLUCENT ) );
+                                                                       Transparency.OPAQUE ) );
     }
 
     public synchronized drafts.com.sun.star.rendering.XVolatileBitmap createVolatileBitmap( IntegerSize2D size )
@@ -153,6 +157,80 @@ public class CanvasGraphicDevice
         //return new CanvasBitmap( graphicsConfig.createCompatibleVolatileImage( size.Width, size.Height ) );
         return null;
     }
+
+    public synchronized drafts.com.sun.star.rendering.XBitmap createCompatibleAlphaBitmap( IntegerSize2D size )
+    {
+        CanvasUtils.printLog( "createCompatibleBitmap called with size (" + size.Width + ", " + size.Height + ")" );
+        return new CanvasBitmap( graphicsConfig.createCompatibleImage( size.Width,
+                                                                       size.Height,
+                                                                        Transparency.TRANSLUCENT ) );
+    }
+
+    public synchronized drafts.com.sun.star.rendering.XVolatileBitmap createVolatileAlphaBitmap( IntegerSize2D size )
+    {
+        CanvasUtils.printLog( "createVolatileBitmap called with size (" + size.Width + ", " + size.Height + ")" );
+        //return new CanvasBitmap( graphicsConfig.createCompatibleVolatileImage( size.Width, size.Height ) );
+        return null;
+    }
+
+    public synchronized drafts.com.sun.star.rendering.XParametricPolyPolygon2DFactory getParametricPolyPolygonFactory()
+    {
+        // TODO
+        return null;
+    }
+
+    public synchronized com.sun.star.beans.XPropertySetInfo getPropertySetInfo()
+    {
+        // This is a stealth property set
+        return null;
+    }
+
+    public synchronized void setPropertyValue( String aPropertyName, java.lang.Object aValue ) throws com.sun.star.beans.PropertyVetoException
+    {
+        // all our properties are read-only
+        throw new com.sun.star.beans.PropertyVetoException();
+    }
+
+    public synchronized java.lang.Object getPropertyValue( String PropertyName ) throws com.sun.star.beans.UnknownPropertyException
+    {
+        if( PropertyName == "DeviceHandle" )
+            return graphics;
+
+        throw new com.sun.star.beans.UnknownPropertyException();
+    }
+
+    public synchronized void addPropertyChangeListener( String aPropertyName, com.sun.star.beans.XPropertyChangeListener xListener ) throws com.sun.star.beans.UnknownPropertyException
+    {
+        if( aPropertyName == "DeviceHandle" )
+            return;
+
+        throw new com.sun.star.beans.UnknownPropertyException();
+    }
+
+    public synchronized void removePropertyChangeListener( String aPropertyName, com.sun.star.beans.XPropertyChangeListener aListener ) throws com.sun.star.beans.UnknownPropertyException
+    {
+        if( aPropertyName == "DeviceHandle" )
+            return;
+
+        throw new com.sun.star.beans.UnknownPropertyException();
+    }
+
+    public synchronized void addVetoableChangeListener( String PropertyName, com.sun.star.beans.XVetoableChangeListener aListener ) throws com.sun.star.beans.UnknownPropertyException
+    {
+        if( PropertyName == "DeviceHandle" )
+            return;
+
+        throw new com.sun.star.beans.UnknownPropertyException();
+    }
+
+    public synchronized void removeVetoableChangeListener( String PropertyName, com.sun.star.beans.XVetoableChangeListener aListener ) throws com.sun.star.beans.UnknownPropertyException
+    {
+        if( PropertyName == "DeviceHandle" )
+            return;
+
+        throw new com.sun.star.beans.UnknownPropertyException();
+    }
+
 
     public synchronized boolean hasFullScreenMode()
     {
