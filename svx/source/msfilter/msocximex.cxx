@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2000-10-12 15:05:29 $
+ *  last change: $Author: cmc $ $Date: 2000-10-17 15:21:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,13 +488,13 @@ sal_Bool OCX_CommandButton::Export(SvStorageRef &rObj,
     {
     SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
-    DBG_ASSERT(!(xStor.Is() && (SVSTREAM_OK == xStor->GetError)),"damn");
+    DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
     SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
-    DBG_ASSERT(!(xStor3.Is() && (SVSTREAM_OK == xStor3->GetError)),"damn");
+    DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
 
     static sal_uInt8 __READONLY_DATA aOCXNAME[] = {
@@ -507,7 +507,7 @@ sal_Bool OCX_CommandButton::Export(SvStorageRef &rObj,
     {
     SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
-    DBG_ASSERT(!(xStor2.Is() && (SVSTREAM_OK == xStor2->GetError)),"damn");
+    DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
     {
@@ -569,7 +569,7 @@ sal_Bool OCX_CommandButton::Export(SvStorageRef &rObj,
     *xContents << sal_uInt8(0x00);
     *xContents << sal_uInt8(0x00);
 
-    DBG_ASSERT(!(xContents.Is() && (SVSTREAM_OK == xContents->GetError)),"damn");
+    DBG_ASSERT((xContents.Is() && (SVSTREAM_OK==xContents->GetError())),"damn");
     }
     return bRet;
 }
@@ -602,13 +602,13 @@ sal_Bool OCX_ImageButton::Export(SvStorageRef &rObj,
     {
     SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
-    DBG_ASSERT(!(xStor.Is() && (SVSTREAM_OK == xStor->GetError)),"damn");
+    DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
     SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
-    DBG_ASSERT(!(xStor3.Is() && (SVSTREAM_OK == xStor3->GetError)),"damn");
+    DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
 
     static sal_uInt8 __READONLY_DATA aOCXNAME[] = {
@@ -621,7 +621,7 @@ sal_Bool OCX_ImageButton::Export(SvStorageRef &rObj,
     {
     SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
-    DBG_ASSERT(!(xStor2.Is() && (SVSTREAM_OK == xStor2->GetError)),"damn");
+    DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
     {
@@ -663,7 +663,7 @@ sal_Bool OCX_ImageButton::Export(SvStorageRef &rObj,
     *xContents << sal_uInt8(0x00);
     *xContents << sal_uInt8(0x00);
 
-    DBG_ASSERT(!(xContents.Is() && (SVSTREAM_OK == xContents->GetError)),"damn");
+    DBG_ASSERT((xContents.Is() && (SVSTREAM_OK==xContents->GetError())),"damn");
     }
     return bRet;
 }
@@ -750,13 +750,13 @@ sal_Bool OCX_OptionButton::Export(SvStorageRef &rObj,
     {
     SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
-    DBG_ASSERT(!(xStor.Is() && (SVSTREAM_OK == xStor->GetError)),"damn");
+    DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
     SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
-    DBG_ASSERT(!(xStor3.Is() && (SVSTREAM_OK == xStor3->GetError)),"damn");
+    DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
 
     static sal_uInt8 __READONLY_DATA aOCXNAME[] = {
@@ -769,7 +769,7 @@ sal_Bool OCX_OptionButton::Export(SvStorageRef &rObj,
     {
     SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
-    DBG_ASSERT(!(xStor2.Is() && (SVSTREAM_OK == xStor2->GetError)),"damn");
+    DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
     {
@@ -858,7 +858,7 @@ sal_Bool OCX_OptionButton::Export(SvStorageRef &rObj,
     *xContents << pBlockFlags[6];
     *xContents << pBlockFlags[7];
 
-    DBG_ASSERT(!(xContents.Is() && (SVSTREAM_OK == xContents->GetError)),"damn");
+    DBG_ASSERT((xContents.Is() && (SVSTREAM_OK==xContents->GetError())),"damn");
     }
     return bRet;
 }
@@ -994,13 +994,13 @@ sal_Bool OCX_TextBox::Export(SvStorageRef &rObj,
     {
     SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
-    DBG_ASSERT(!(xStor.Is() && (SVSTREAM_OK == xStor->GetError)),"damn");
+    DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
     SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
-    DBG_ASSERT(!(xStor3.Is() && (SVSTREAM_OK == xStor3->GetError)),"damn");
+    DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
 
     static sal_uInt8 __READONLY_DATA aOCXNAME[] = {
@@ -1012,7 +1012,7 @@ sal_Bool OCX_TextBox::Export(SvStorageRef &rObj,
     {
     SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
-    DBG_ASSERT(!(xStor2.Is() && (SVSTREAM_OK == xStor2->GetError)),"damn");
+    DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
     {
@@ -1140,7 +1140,7 @@ sal_Bool OCX_TextBox::Export(SvStorageRef &rObj,
     *xContents << pBlockFlags[6];
     *xContents << pBlockFlags[7];
 
-    DBG_ASSERT(!(xContents.Is() && (SVSTREAM_OK == xContents->GetError)),"damn");
+    DBG_ASSERT((xContents.Is() && (SVSTREAM_OK == xContents->GetError())),"damn");
     }
     return bRet;
 }
@@ -1172,13 +1172,13 @@ sal_Bool OCX_FieldControl::Export(SvStorageRef &rObj,
     {
     SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
-    DBG_ASSERT(!(xStor.Is() && (SVSTREAM_OK == xStor->GetError)),"damn");
+    DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
     SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
-    DBG_ASSERT(!(xStor3.Is() && (SVSTREAM_OK == xStor3->GetError)),"damn");
+    DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
 
     static sal_uInt8 __READONLY_DATA aOCXNAME[] = {
@@ -1190,7 +1190,7 @@ sal_Bool OCX_FieldControl::Export(SvStorageRef &rObj,
     {
     SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
-    DBG_ASSERT(!(xStor2.Is() && (SVSTREAM_OK == xStor2->GetError)),"damn");
+    DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
     {
@@ -1291,7 +1291,7 @@ sal_Bool OCX_FieldControl::Export(SvStorageRef &rObj,
     *xContents << pBlockFlags[6];
     *xContents << pBlockFlags[7];
 
-    DBG_ASSERT(!(xContents.Is() && (SVSTREAM_OK == xContents->GetError)),"damn");
+    DBG_ASSERT((xContents.Is() && (SVSTREAM_OK==xContents->GetError())),"damn");
     }
     return bRet;
 }
@@ -1497,13 +1497,13 @@ sal_Bool OCX_ComboBox::Export(SvStorageRef &rObj,
     {
     SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
-    DBG_ASSERT(!(xStor.Is() && (SVSTREAM_OK == xStor->GetError)),"damn");
+    DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
     SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
-    DBG_ASSERT(!(xStor3.Is() && (SVSTREAM_OK == xStor3->GetError)),"damn");
+    DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
 
     static sal_uInt8 __READONLY_DATA aOCXNAME[] = {
@@ -1515,7 +1515,7 @@ sal_Bool OCX_ComboBox::Export(SvStorageRef &rObj,
     {
     SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
-    DBG_ASSERT(!(xStor2.Is() && (SVSTREAM_OK == xStor2->GetError)),"damn");
+    DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
     {
@@ -1632,7 +1632,7 @@ sal_Bool OCX_ComboBox::Export(SvStorageRef &rObj,
     *xContents << pBlockFlags[6];
     *xContents << pBlockFlags[7];
 
-    DBG_ASSERT(!(xContents.Is() && (SVSTREAM_OK == xContents->GetError)),"damn");
+    DBG_ASSERT((xContents.Is() && (SVSTREAM_OK==xContents->GetError())),"damn");
     }
     return bRet;
 }
@@ -1723,13 +1723,13 @@ sal_Bool OCX_ListBox::Export(SvStorageRef &rObj,
     {
     SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
-    DBG_ASSERT(!(xStor.Is() && (SVSTREAM_OK == xStor->GetError)),"damn");
+    DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
     SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
-    DBG_ASSERT(!(xStor3.Is() && (SVSTREAM_OK == xStor3->GetError)),"damn");
+    DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
 
     static sal_uInt8 __READONLY_DATA aOCXNAME[] = {
@@ -1741,7 +1741,7 @@ sal_Bool OCX_ListBox::Export(SvStorageRef &rObj,
     {
     SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
-    DBG_ASSERT(!(xStor2.Is() && (SVSTREAM_OK == xStor2->GetError)),"damn");
+    DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
     {
@@ -1849,7 +1849,7 @@ sal_Bool OCX_ListBox::Export(SvStorageRef &rObj,
     *xContents << pBlockFlags[6];
     *xContents << pBlockFlags[7];
 
-    DBG_ASSERT(!(xContents.Is() && (SVSTREAM_OK == xContents->GetError)),"damn");
+    DBG_ASSERT((xContents.Is() && (SVSTREAM_OK==xContents->GetError())),"damn");
     }
     return bRet;
 }
@@ -2291,13 +2291,13 @@ sal_Bool OCX_Label::Export(SvStorageRef &rObj,
     {
     SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
-    DBG_ASSERT(!(xStor.Is() && (SVSTREAM_OK == xStor->GetError)),"damn");
+    DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
     SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
-    DBG_ASSERT(!(xStor3.Is() && (SVSTREAM_OK == xStor3->GetError)),"damn");
+    DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
 
     static sal_uInt8 __READONLY_DATA aOCXNAME[] = {
@@ -2308,7 +2308,7 @@ sal_Bool OCX_Label::Export(SvStorageRef &rObj,
     {
     SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
-    DBG_ASSERT(!(xStor2.Is() && (SVSTREAM_OK == xStor2->GetError)),"damn");
+    DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
     {
@@ -2402,7 +2402,7 @@ sal_Bool OCX_Label::Export(SvStorageRef &rObj,
     *xContents << pBlockFlags[2];
     *xContents << pBlockFlags[3];
 
-    DBG_ASSERT(!(xContents.Is() && (SVSTREAM_OK == xContents->GetError)),"damn");
+    DBG_ASSERT((xContents.Is() && (SVSTREAM_OK==xContents->GetError())),"damn");
     }
     return bRet;
 }
@@ -2697,13 +2697,13 @@ sal_Bool OCX_CheckBox::Export(SvStorageRef &rObj,
     {
     SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
-    DBG_ASSERT(!(xStor.Is() && (SVSTREAM_OK == xStor->GetError)),"damn");
+    DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
     SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
-    DBG_ASSERT(!(xStor3.Is() && (SVSTREAM_OK == xStor3->GetError)),"damn");
+    DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
 
     static sal_uInt8 __READONLY_DATA aOCXNAME[] = {
@@ -2714,7 +2714,7 @@ sal_Bool OCX_CheckBox::Export(SvStorageRef &rObj,
     {
     SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
-    DBG_ASSERT(!(xStor2.Is() && (SVSTREAM_OK == xStor2->GetError)),"damn");
+    DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
     {
@@ -2819,7 +2819,7 @@ sal_Bool OCX_CheckBox::Export(SvStorageRef &rObj,
     *xContents << pBlockFlags[6];
     *xContents << pBlockFlags[7];
 
-    DBG_ASSERT(!(xContents.Is() && (SVSTREAM_OK == xContents->GetError)),"damn");
+    DBG_ASSERT((xContents.Is() && (SVSTREAM_OK==xContents->GetError())),"damn");
     }
     return bRet;
 }
@@ -3000,13 +3000,13 @@ sal_Bool OCX_Image::Export(SvStorageRef &rObj,
     {
     SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
-    DBG_ASSERT(!(xStor.Is() && (SVSTREAM_OK == xStor->GetError)),"damn");
+    DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
     SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
-    DBG_ASSERT(!(xStor3.Is() && (SVSTREAM_OK == xStor3->GetError)),"damn");
+    DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
 
     static sal_uInt8 __READONLY_DATA aOCXNAME[] = {
@@ -3017,7 +3017,7 @@ sal_Bool OCX_Image::Export(SvStorageRef &rObj,
     {
     SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
-    DBG_ASSERT(!(xStor2.Is() && (SVSTREAM_OK == xStor2->GetError)),"damn");
+    DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
     {
@@ -3083,8 +3083,7 @@ sal_Bool OCX_Image::Export(SvStorageRef &rObj,
     *xContents << pBlockFlags[1];
     *xContents << pBlockFlags[2];
     *xContents << pBlockFlags[3];
-    DBG_ASSERT(!(xContents.Is() &&
-        (SVSTREAM_OK == xContents->GetError)),"damn");
+    DBG_ASSERT((xContents.Is() && (SVSTREAM_OK==xContents->GetError())),"damn");
     }
     return bRet;
 }
