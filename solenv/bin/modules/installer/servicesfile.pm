@@ -2,9 +2,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2004-07-02 15:27:53 $
+#   last change: $Author: rt $ $Date: 2004-07-06 14:59:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -416,7 +416,12 @@ sub include_regcomp_into_ld_library_path
     $ld_library_path =~ s/\/\s*$//;     # removing ending slashes
     $ld_library_path =~ s/\/bin\./\/lib\./;
     $ld_library_path =~ s/\/bin\s*$/\/lib/; # when packing from flat
-    $ENV{'LD_LIBRARY_PATH'} = $ld_library_path;
+
+    my $oldldlibrarypathstring = "";
+    if ( $ENV{'LD_LIBRARY_PATH'} ) { $oldldlibrarypathstring = $ENV{'LD_LIBRARY_PATH'}; }
+    else { $oldldlibrarypathstring = "\."; }
+    my $new_ld_library_path = $ld_library_path . $installer::globals::pathseparator . $oldldlibrarypathstring;
+    $ENV{'LD_LIBRARY_PATH'} = $new_ld_library_path;
 
     my $infoline = "Setting LD_LIBRARY_PATH to $ENV{'LD_LIBRARY_PATH'}\n";
     push( @installer::globals::logfileinfo, $infoline);
@@ -552,6 +557,9 @@ sub prepare_regcomp_rdb
     my $regcompfilename = "regcomp.rdb";
     my $regcomprdb = $servicesdir . $installer::globals::separator . $regcompfilename;
 
+    # If there is an older version of this file, it has to be removed
+    if ( -f $regcomprdb ) { unlink($regcomprdb); }
+
     installer::systemactions::copy_one_file($$udkapirdbref, $regcomprdb);
 
     # now the libraries in @installer::globals::regcompregisterlibs can be registered in the "regcomp.rdb"
@@ -599,6 +607,7 @@ sub create_services_rdb
     installer::logger::include_header_into_logfile("Creating $servicesname:");
 
     my $servicesdir = installer::systemactions::create_directories($servicesname, $languagestringref);
+    push(@installer::globals::removedirs, $servicesdir);
 
     my $servicesfile = $servicesdir . $installer::globals::separator . $servicesname;
 
@@ -613,7 +622,6 @@ sub create_services_rdb
         # Creating the services.rdb in directory "inprogress"
         my $origservicesdir = $servicesdir;
         $servicesdir = installer::systemactions::make_numbered_dir("inprogress", $servicesdir);
-        my $current_install_number = installer::converter::get_number_from_directory($servicesdir);
         $servicesfile = $servicesdir . $installer::globals::separator . $servicesname;
 
         # determining the location of the file regcomp
@@ -664,6 +672,7 @@ sub create_services_rdb
         if ( $error_during_registration )
         {
             $servicesdir = installer::systemactions::rename_string_in_directory($servicesdir, "inprogress", "with_error");
+            push(@installer::globals::removedirs, $servicesdir);
         }
         else
         {
