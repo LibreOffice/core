@@ -2,9 +2,9 @@
  *
  *  $RCSfile: merge.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:26 $
+ *  last change: $Author: nf $ $Date: 2000-12-01 08:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ void MergeDataFile::WriteErrorLog( const ByteString &rFileName )
                     sLine += pData->sTyp; sLine += "\t";
                     sLine += pData->sGID; sLine += "\t";
                     sLine += pData->sLID; sLine += "\t";
-                    sLine += Export::LangId[ nLangIndex ]; sLine += "\t";
+                    sLine += ByteString::CreateFromInt64( Export::LangId[ nLangIndex ] ); sLine += "\t";
                     sLine += pEntrys->sText[ nLangIndex ]; sLine += "\t\t";
                     sLine += pEntrys->sQuickHelpText[ nLangIndex ]; sLine += "\t";
                     sLine += pEntrys->sTitle[ nLangIndex ];
