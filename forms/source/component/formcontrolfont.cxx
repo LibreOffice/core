@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontrolfont.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:08:13 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 09:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,8 +198,11 @@ namespace frm
     //---------------------------------------------------------------------
     FontControlModel::FontControlModel( const FontControlModel* _pOriginal )
     {
+        m_aFont = _pOriginal->m_aFont;
         m_nFontRelief = _pOriginal->m_nFontRelief;
         m_nFontEmphasis = _pOriginal->m_nFontEmphasis;
+        m_aTextLineColor = _pOriginal->m_aTextLineColor;
+        m_aTextColor = _pOriginal->m_aTextColor;
         m_bToolkitCompatibleDefaults = _pOriginal->m_bToolkitCompatibleDefaults;
     }
 
