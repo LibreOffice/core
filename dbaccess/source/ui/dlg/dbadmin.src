@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:24:37 $
+ *  last change: $Author: kz $ $Date: 2001-09-27 20:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,21 +337,21 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text = "Adabas D Statistik" ;
         Text [english] = "Adabas D statistic" ;
         Text [ english_us ] = "Adabas D Statistics";
-        Text [ portuguese ] = "Adabas D - Estatística";
-        Text [ russian ] = "Ñòàòèñòèêè Adabas D";
+        Text [ portuguese ] = "Estatística Adabas D";
+        Text [ russian ] = "Ñòàòèñòèêà Adabas D";
         Text [ greek ] = "ÓôáôéóôéêŞ ôïõ Adabas D";
         Text [ dutch ] = "Adabas D Statistiek";
-        Text [ french ] = "Adabas D - Statistique";
+        Text [ french ] = "Statistique Adabas D";
         Text [ spanish ] = "Estadística Adabas D";
         Text [ italian ] = "Statistica Adabas D";
         Text [ danish ] = "Adabas D";
         Text [ swedish ] = "Statistik Adabas D";
         Text [ polish ] = "Adabas D - Statystyka";
         Text [ portuguese_brazilian ] = "Adabas D";
-        Text [ japanese ] = "Adabas D Statistic";
+        Text [ japanese ] = "Adabas D çµ±è¨ˆ";
         Text [ korean ] = "Adabas D í†µê³„";
-        Text [ chinese_simplified ] = "Adabas D Statistic";
-        Text [ chinese_traditional ] = "Adabas D Statistic";
+        Text [ chinese_simplified ] = "Adabas D ç»Ÿè®¡æ•°æ®";
+        Text [ chinese_traditional ] = "Adabas D çµ±è¨ˆè³‡æ–™";
         Text [ arabic ] = "ÅÍÕÇÆíÇÊ Adabas D";
         Text [ turkish ] = "Adabas D";
         Text[ finnish ] = "Adabas D Statistic";
@@ -645,11 +645,11 @@ TabPage PAGE_GENERAL
         Text = "D~atenquellen-URL" ;
         Text [ english ] = "~Data source URL" ;
         Text [ english_us ] = "~Data source URL" ;
-        Text [ portuguese ] = "~Fonte de dados URL:";
+        Text [ portuguese ] = "~Fonte de dados URL";
         Text [ russian ] = "~Èñõîäíûå äàííûå URL";
         Text [ greek ] = "URL ôçò ğñïİëåõóçò äåäïìİíùí:";
         Text [ dutch ] = "~Gegevensbron URL";
-        Text [ french ] = "URL de la ~source de données" ;
+        Text [ french ] = "URL de la source de données" ;
         Text [ spanish ] = "~Fuente de datos URL:";
         Text [ italian ] = "~Fonte di dati URL";
         Text [ danish ] = "Datakilde URL:";
@@ -3311,11 +3311,11 @@ String STR_HINT_READONLY_CONNECTION
     Text = "(Verbindung ist nur-lesend)";
     Text [ english ] = "(connection is read-only)";
     Text [ english_us ] = "(Connection is read-only)";
-    Text[ portuguese ] = "(connection is read-only)";
-    Text[ russian ] = "(connection is read-only)";
+    Text[ portuguese ] = "(ligação só leitura)";
+    Text[ russian ] = "(ñîåäèíåíèå òîëüêî äëÿ ÷òåíèÿ)";
     Text[ greek ] = "(connection is read-only)";
     Text[ dutch ] = "(verbinding is alleen-lezen)";
-    Text[ french ] = "(connection is read-only)";
+    Text[ french ] = "(Connexion en lecture seule)";
     Text[ spanish ] = "(La conexión es de sólo lectura)";
     Text[ finnish ] = "(connection is read-only)";
     Text[ italian ] = "(il collegamento è di sola lettura)";
@@ -3323,10 +3323,10 @@ String STR_HINT_READONLY_CONNECTION
     Text[ swedish ] = "(koppling är bara för läsning)";
     Text[ polish ] = "(po³¹czenie jest tylko do odczytu)";
     Text[ portuguese_brazilian ] = "(connection is read-only)";
-    Text[ japanese ] = "(connection is read-only)";
+    Text[ japanese ] = "(æ¥ç¶šã¯èª­ã¿å–ã‚Šå°‚ç”¨)";
     Text[ korean ] = "(connection is read-only)";
-    Text[ chinese_simplified ] = "(connection is read-only)";
-    Text[ chinese_traditional ] = "(connection is read-only)";
+    Text[ chinese_simplified ] = "(è¿æ¥æ–¹å¼æ˜¯åªè¯»çš„)";
+    Text[ chinese_traditional ] = "(é€£ç·šæ–¹å¼æ˜¯å”¯è®€çš„)";
     Text[ turkish ] = "(connection is read-only)";
     Text[ arabic ] = "(connection is read-only)";
     Text[ catalan ] = "(connection is read-only)";
@@ -3337,22 +3337,22 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
     Text = "(nicht unterstützt von dieser Verbindung)";
     Text [ english ] = "(not supported by this connection)";
     Text [ english_us ] = "(Not supported by this connection)";
-    Text[ portuguese ] = "(not supported by this connection)";
-    Text[ russian ] = "(not supported by this connection)";
+    Text[ portuguese ] = "(sem suporte nesta ligação)";
+    Text[ russian ] = "(äàííûì ñîåäèíåíèåì íå ïîääåğæèâàåòñÿ)";
     Text[ greek ] = "(not supported by this connection)";
     Text[ dutch ] = "(niet ondersteund door deze verbinding)";
-    Text[ french ] = "(not supported by this connection)";
+    Text[ french ] = "(Non supporté par cette connexion)";
     Text[ spanish ] = "(no apoyado por esta conexión)";
     Text[ finnish ] = "(not supported by this connection)";
     Text[ italian ] = "(non supportato dal presente collegamento)";
     Text[ danish ] = "(not supported by this connection)";
-    Text[ swedish ] = "(not supported by this connection)";
+    Text[ swedish ] = "(understöds inte av den här förbindelsen)";
     Text[ polish ] = "(nie jest obs³ugiwane przez dane po³¹czenie)";
     Text[ portuguese_brazilian ] = "(not supported by this connection)";
-    Text[ japanese ] = "(not supported by this connection)";
+    Text[ japanese ] = "(ã“ã®æ¥ç¶šã§æ”¯æ´ã•ã‚Œã¾ã›ã‚“)";
     Text[ korean ] = "(not supported by this connection)";
-    Text[ chinese_simplified ] = "(not supported by this connection)";
-    Text[ chinese_traditional ] = "(not supported by this connection)";
+    Text[ chinese_simplified ] = "(ä¸å—æ­¤è¿æ¥æ”¯æŒ)";
+    Text[ chinese_traditional ] = "(ä¸å—é€™å€‹é€£ç·šçš„æ”¯æ´)";
     Text[ turkish ] = "(not supported by this connection)";
     Text[ arabic ] = "(not supported by this connection)";
     Text[ catalan ] = "(not supported by this connection)";
@@ -3361,6 +3361,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.72  2001/09/25 13:24:37  oj
+ *  #91719# implementing the XRename handling
+ *
  *  Revision 1.71  2001/09/06 20:22:00  kz
  *  Merge SRC640: 06.09.01 - 22:22:04 (NoBranch)
  *
@@ -3372,6 +3375,7 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
  *
  *  Revision 1.0 20.09.00 10:58:47  fs
  ************************************************************************/
+
 
 
 
