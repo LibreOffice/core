@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-14 13:00:26 $
+ *  last change: $Author: as $ $Date: 2001-05-30 10:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -829,10 +829,8 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
                                     }
                                 }
                                 break;
-        #ifdef ENABLE_ASSERTIONS
-        default:    LOG_ERROR( "Frame::findFrame()", "Unexpected result of TargetFinder::classify() detected!" )
+        default:    LOG_WARNING( "Frame::findFrame()", "Unexpected result of TargetFinder::classify() detected!" )
                     break;
-        #endif
     }
     LOG_RESULT_FINDFRAME( "Frame", sMyName, xSearchedFrame )
     // Return result of operation.
@@ -1764,8 +1762,8 @@ sal_Bool SAL_CALL Frame::convertFastPropertyValue(          css::uno::Any&      
     {
         case PROPERTYHANDLE_TITLE   :   bReturn = impl_tryToChangeProperty( implts_getTitleFromWindow(), aValue, aOldValue, aConvertedValue );
                                         break;
-        #ifdef ENABLE_ASSERTIONS
-        default :   LOG_ERROR( "Frame::convertFastPropertyValue()", "Invalid handle detected!" )
+        #ifdef ENABLE_WARNINGS
+        default :   LOG_WARNING( "Frame::convertFastPropertyValue()", "Invalid handle detected!" )
                     break;
         #endif
     }
@@ -1806,8 +1804,8 @@ void SAL_CALL Frame::setFastPropertyValue_NoBroadcast(          sal_Int32       
                                             implts_setTitleOnWindow( sTitle );
                                         }
                                         break;
-        #ifdef ENABLE_ASSERTIONS
-        default :   LOG_ERROR( "Frame::setFastPropertyValue_NoBroadcast()", "Invalid handle detected!" )
+        #ifdef ENABLE_WARNINGS
+        default :   LOG_WARNING( "Frame::setFastPropertyValue_NoBroadcast()", "Invalid handle detected!" )
                     break;
         #endif
     }
@@ -1839,8 +1837,8 @@ void SAL_CALL Frame::getFastPropertyValue(  css::uno::Any&  aValue  ,
     {
         case PROPERTYHANDLE_TITLE   :   aValue <<= implts_getTitleFromWindow();
                                         break;
-        #ifdef ENABLE_ASSERTIONS
-        default :   LOG_ERROR( "Frame::getFastPropertyValue()", "Invalid handle detected!" )
+        #ifdef ENABLE_WARNINGS
+        default :   LOG_WARNING( "Frame::getFastPropertyValue()", "Invalid handle detected!" )
                     break;
         #endif
     }
