@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.82 $
+#   $Revision: 1.83 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-02 13:17:41 $
+#   last change: $Author: rt $ $Date: 2004-08-13 12:53:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -341,7 +341,7 @@ ALLTAR : $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/commandimagelist.ilst
 $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/commandimagelist.ilst .PHONY :
     +-$(RM) $@ $@.$(INPATH)
 .IF "$(use_shell)"!="4nt"
-    $(FIND) $(SOLARSRC)/res/commandimagelist -name "*.png" | sed s#$(SOLARSRC)#%GLOBAL%# > $@.$(INPATH)
+    $(FIND) $(SOLARSRC)/res/commandimagelist -name "*.png" | sed "s#$(SOLARSRC)#%GLOBAL%#" > $@.$(INPATH)
 .ELSE			# "$(use_shell)"!="4nt"
     $(FIND) $(SOLARSRC)/res/commandimagelist -name "*.png" | sed "s/$(SOLARSRC:s/\/\\/)/%%GLOBAL%%/" > $@.$(INPATH)
 .ENDIF			# "$(use_shell)"!="4nt"
