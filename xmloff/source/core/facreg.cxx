@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-25 11:45:08 $
+ *  last change: $Author: cl $ $Date: 2001-09-28 14:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,11 @@ extern uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_getSupportedServiceNam
 extern OUString SAL_CALL SdDrawXMLExport_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
+// drawing layer export
+extern uno::Sequence< OUString > SAL_CALL DrawingLayerXMLExport_getSupportedServiceNames() throw();
+extern OUString SAL_CALL DrawingLayerXMLExport_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL DrawingLayerXMLExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
 // draw export.style
 extern uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_Style_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SdDrawXMLExport_Style_getImplementationName() throw();
@@ -315,6 +320,9 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             // draw
             writeInfo( pKey, SdDrawXMLImport_getImplementationName(), SdDrawXMLImport_getSupportedServiceNames() );
             writeInfo( pKey, SdDrawXMLExport_getImplementationName(), SdDrawXMLExport_getSupportedServiceNames() );
+
+            // drawing layer
+            writeInfo( pKey, DrawingLayerXMLExport_getImplementationName(), DrawingLayerXMLExport_getSupportedServiceNames() );
 
             // draw.styles
             writeInfo( pKey, SdDrawXMLImport_Style_getImplementationName(), SdDrawXMLImport_Style_getSupportedServiceNames() );
@@ -486,6 +494,13 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
                 SdDrawXMLExport_getImplementationName(),
                 SdDrawXMLExport_createInstance,
                 SdDrawXMLExport_getSupportedServiceNames() );
+        }
+        else if( DrawingLayerXMLExport_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                DrawingLayerXMLExport_getImplementationName(),
+                DrawingLayerXMLExport_createInstance,
+                DrawingLayerXMLExport_getSupportedServiceNames() );
         }
         else if( SdDrawXMLExport_Style_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
         {
