@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-24 12:18:33 $
+ *  last change: $Author: mav $ $Date: 2002-10-25 09:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1300,42 +1300,74 @@ void SfxMedium::Transfer_Impl()
         // source is the temp file written so far
         INetURLObject aSource( pImp->pTempFile->GetURL() );
 
+        // a special case, an interaction handler should be used for
+        // authentication in case it is available
+        Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
+           Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler;
 
-    Reference< XOutputStream > aDestStream;
-    Reference< XSimpleFileAccess > aSimpleAccess;
-    ::ucb::Content aOriginalContent;
+        SFX_ITEMSET_ARG( GetItemSet(), pxInteractionItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, sal_False );
+        if( pxInteractionItem && ( pxInteractionItem->GetValue() >>= xInteractionHandler )
+         && xInteractionHandler.is() )
+            xComEnv = new ::ucb::CommandEnvironment( xInteractionHandler,
+                                                      Reference< ::com::sun::star::ucb::XProgressHandler >() );
+
+        Reference< XOutputStream > aDestStream;
+        Reference< XSimpleFileAccess > aSimpleAccess;
+        ::ucb::Content aOriginalContent;
         if ( ::utl::LocalFileHelper::IsLocalFile( aDest.GetMainURL( INetURLObject::NO_DECODE ) )
-        && ::ucb::Content::create( aDest.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aOriginalContent ) )
-    {
-        Close();
-        ::ucb::Content aTempCont;
-        if( ::ucb::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aTempCont ) )
+                && ::ucb::Content::create( aDest.GetMainURL( INetURLObject::NO_DECODE ), xComEnv, aOriginalContent ) )
         {
-            try
+            Close();
+            ::ucb::Content aTempCont;
+            if( ::ucb::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aTempCont ) )
             {
-                Reference< XInputStream > aTempInput = aTempCont.openStream();
-                SFX_ITEMSET_ARG( GetItemSet(), pOverWrite, SfxBoolItem, SID_OVERWRITE, sal_False );
-                SFX_ITEMSET_ARG( GetItemSet(), pRename, SfxBoolItem, SID_RENAME, sal_False );
-                sal_Bool bRename = pRename ? pRename->GetValue() : FALSE;
-                sal_Bool bOverWrite = pOverWrite ? pOverWrite->GetValue() : !bRename;
-                aOriginalContent.writeStream( aTempInput, bOverWrite );
-                bSuccess = sal_True;
-            }
-            catch( Exception& )
-            {}
-
-                if ( bSuccess )
+                try
                 {
-                        pImp->pTempFile->EnableKillingFile( sal_True );
-                        delete pImp->pTempFile;
-                        pImp->pTempFile = NULL;
-
-                        // without a TempFile the physical and logical name should be the same
-                        ::utl::LocalFileHelper::ConvertURLToPhysicalName( aLogicName, aName );
-                         return;
+                    Reference< XInputStream > aTempInput = aTempCont.openStream();
+                       SFX_ITEMSET_ARG( GetItemSet(), pOverWrite, SfxBoolItem, SID_OVERWRITE, sal_False );
+                       SFX_ITEMSET_ARG( GetItemSet(), pRename, SfxBoolItem, SID_RENAME, sal_False );
+                    sal_Bool bRename = pRename ? pRename->GetValue() : FALSE;
+                    sal_Bool bOverWrite = pOverWrite ? pOverWrite->GetValue() : !bRename;
+                    aOriginalContent.writeStream( aTempInput, bOverWrite );
+                    bSuccess = sal_True;
                 }
+                catch ( ::com::sun::star::ucb::CommandAbortedException& )
+                {
+                    eError = ERRCODE_ABORT;
+                }
+                catch ( ::com::sun::star::ucb::CommandFailedException& )
+                {
+                    eError = ERRCODE_ABORT;
+                }
+                catch ( ::com::sun::star::ucb::InteractiveIOException& r )
+                {
+                    if ( r.Code == IOErrorCode_ACCESS_DENIED )
+                        eError = ERRCODE_IO_ACCESSDENIED;
+                    else if ( r.Code == IOErrorCode_NOT_EXISTING )
+                        eError = ERRCODE_IO_NOTEXISTS;
+                    else if ( r.Code == IOErrorCode_CANT_READ )
+                        eError = ERRCODE_IO_CANTREAD;
+                    else
+                        eError = ERRCODE_IO_GENERAL;
+                }
+                catch ( ::com::sun::star::uno::Exception& e )
+                {
+                    eError = ERRCODE_IO_GENERAL;
+                }
+
+                   if ( bSuccess )
+                   {
+                    pImp->pTempFile->EnableKillingFile( sal_True );
+                       delete pImp->pTempFile;
+                       pImp->pTempFile = NULL;
+
+                       // without a TempFile the physical and logical name should be the same
+                       ::utl::LocalFileHelper::ConvertURLToPhysicalName( aLogicName, aName );
+                   }
+
+                return;
+            }
         }
-    }
 
         if ( aDest.removeSegment() )
         {
@@ -1348,18 +1380,7 @@ void SfxMedium::Transfer_Impl()
             if ( !aFileName.Len() )
                 aFileName = GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
 
-            // a special case, an interaction handler should be used for
-            // authentication in case it is available
-            Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnvForLogin;
-            Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler;
-
-            SFX_ITEMSET_ARG( GetItemSet(), pxInteractionItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, sal_False );
-            if( pxInteractionItem && ( pxInteractionItem->GetValue() >>= xInteractionHandler )
-             && xInteractionHandler.is() )
-                xComEnvForLogin = new ::ucb::CommandEnvironment( xInteractionHandler,
-                                                          Reference< ::com::sun::star::ucb::XProgressHandler >() );
-
-            if ( ::ucb::Content::create( aDest.GetMainURL( INetURLObject::NO_DECODE ), xComEnvForLogin, aTransferContent ) )
+            if ( ::ucb::Content::create( aDest.GetMainURL( INetURLObject::NO_DECODE ), xComEnv, aTransferContent ) )
             {
                 // free resources, otherwise the transfer may fail
                 Close();
