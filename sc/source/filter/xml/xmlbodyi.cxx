@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:31:00 $
+ *  last change: $Author: svesik $ $Date: 2004-04-20 13:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pChangeTrackingImportHelper(NULL),
     bProtected(sal_False),
+    bHadCalculationSettings(sal_False),
     sPassword()
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -197,6 +198,7 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
     break;
     case XML_TOK_BODY_CALCULATION_SETTINGS :
         pContext = new ScXMLCalculationSettingsContext( GetScImport(), nPrefix, rLocalName, xAttrList );
+        bHadCalculationSettings = sal_True;
         break;
     case XML_TOK_BODY_CONTENT_VALIDATIONS :
         pContext = new ScXMLContentValidationsContext( GetScImport(), nPrefix, rLocalName, xAttrList );
@@ -252,6 +254,12 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLBodyContext::EndElement()
 {
+    if (!bHadCalculationSettings)
+    {
+        // #111055#; set calculation settings defaults if there is no calculation settings element
+        SvXMLImportContext *pContext = new ScXMLCalculationSettingsContext( GetScImport(), XML_NAMESPACE_TABLE, GetXMLToken(XML_CALCULATION_SETTINGS), NULL );
+        pContext->EndElement();
+    }
     GetScImport().LockSolarMutex();
     ScMyImpDetectiveOpArray*    pDetOpArray = GetScImport().GetDetectiveOpArray();
     ScDocument*                 pDoc        = GetScImport().GetDocument();
