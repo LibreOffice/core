@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: cp $ $Date: 2002-05-22 12:33:59 $
+ *  last change: $Author: pl $ $Date: 2002-05-24 15:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1170,7 +1170,6 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT n
         return;
 
     // relative positioning in SalFrameData::SetPosSize
-
     Rectangle aPosSize( Point( maGeometry.nX, maGeometry.nY ), Size( maGeometry.nWidth, maGeometry.nHeight ) );
     aPosSize.Justify();
 
@@ -2579,6 +2578,9 @@ long SalFrameData::HandleFocusEvent( XFocusChangeEvent *pEvent )
          ( ( nStyle_ & SAL_FRAME_STYLE_CHILD ) && pEvent->window == GetShellWindow() )
          )
     {
+        if( hPresentationWindow != None && hPresentationWindow != GetShellWindow() )
+            return 0;
+
         if( FocusIn == pEvent->type )
         {
 #ifndef _USE_PRINT_EXTENSION_
