@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_vari2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:28:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:42:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <ary/idl/ip_ce.hxx>
 #include <ary_i/codeinf2.hxx>
 #include <s2_luidl/pe_type2.hxx>
+#include <s2_luidl/tk_keyw.hxx>
 #include <s2_luidl/tk_ident.hxx>
 #include <s2_luidl/tk_punct.hxx>
 
@@ -142,6 +143,27 @@ void
 PE_Variable::Process_Punctuation( const TokPunctuation & i_rToken )
 {
     if (eState == expect_finish)
+    {
+        SetResult( not_done, pop_success );
+        eState = e_none;
+    }
+    else if (eState == expect_name)
+    {
+        SetResult( not_done, pop_success );
+        eState = e_none;
+    }
+    else
+        csv_assert(false);
+}
+
+void
+PE_Variable::Process_BuiltInType( const TokBuiltInType & i_rToken )
+{
+    if (eState == expect_type)
+    {
+        SetResult( not_done, push_sure, pPE_Type.Ptr() );
+    }
+    else if (eState == expect_name AND i_rToken.Id() == TokBuiltInType::bty_ellipse)
     {
         SetResult( not_done, pop_success );
         eState = e_none;
