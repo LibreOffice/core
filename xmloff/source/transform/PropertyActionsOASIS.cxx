@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOASIS.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:17:28 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,12 @@ XMLTransformerActionInit aGraphicPropertyOASISAttrActionTable[] =
         XML_FAMILY_TYPE_HATCH, 0 },
     { XML_NAMESPACE_DRAW, XML_FILL_IMAGE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
         XML_FAMILY_TYPE_FILL_IMAGE, 0 },
+    { XML_NAMESPACE_DRAW, XML_AUTO_GROW_WIDTH, XML_ATACTION_RENAME,
+        XMLTransformerActionInit::QNameParam( XML_NAMESPACE_DRAW,
+                                                 XML_AUTO_GROW_HEIGHT   ), 0 },
+    { XML_NAMESPACE_DRAW, XML_AUTO_GROW_HEIGHT, XML_ATACTION_RENAME,
+        XMLTransformerActionInit::QNameParam( XML_NAMESPACE_DRAW,
+                                                 XML_AUTO_GROW_WIDTH    ), 0 },
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
