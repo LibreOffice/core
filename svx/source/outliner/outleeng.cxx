@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outleeng.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-24 13:18:18 $
+ *  last change: $Author: aw $ $Date: 2002-08-01 14:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,8 @@ XubString OutlinerEditEng::GetUndoComment( USHORT nUndoId ) const
 #endif
 }
 
-void OutlinerEditEng::DrawingText( const Point& rStartPos, const XubString& rText, USHORT nTextStart, USHORT nTextLen, const long* pDXArray, const SvxFont& rFont, USHORT nPara, USHORT nIndex )
+// #101498#
+void OutlinerEditEng::DrawingText( const Point& rStartPos, const XubString& rText, USHORT nTextStart, USHORT nTextLen, const long* pDXArray, const SvxFont& rFont, USHORT nPara, USHORT nIndex, BYTE nRightToLeft)
 {
     if ( nIndex == 0 )
     {
@@ -182,7 +183,8 @@ void OutlinerEditEng::DrawingText( const Point& rStartPos, const XubString& rTex
         pOwner->PaintBullet( nPara, aCorrectedPos, Point(), 0, GetRefDevice() );
     }
 
-    pOwner->DrawingText(rStartPos,rText,nTextStart,nTextLen,pDXArray,rFont,nPara,nIndex );
+    // #101498#
+    pOwner->DrawingText(rStartPos,rText,nTextStart,nTextLen,pDXArray,rFont,nPara,nIndex,nRightToLeft);
 }
 
 void OutlinerEditEng::FieldClicked( const SvxFieldItem& rField, USHORT nPara, USHORT nPos )
