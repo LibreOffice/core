@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-07 14:09:00 $
+ *  last change: $Author: fs $ $Date: 2001-05-08 16:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2137,7 +2137,7 @@ void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEven
             if (isSelected(pDSLoop))
             {   // a table or query belonging to the deleted data source is currently beeing displayed.
                 OSL_ENSURE(m_pTreeView->getListBox()->GetRootLevelParent(m_pCurrentlyDisplayed) == pDSLoop, "SbaTableQueryBrowser::elementRemoved: inconsistence (1)!");
-                unloadForm();
+                unloadForm(sal_True, sal_False); // don't flush
             }
             else
                 OSL_ENSURE(
