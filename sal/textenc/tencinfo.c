@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-20 15:44:55 $
+ *  last change: $Author: cp $ $Date: 2000-12-06 11:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,6 +542,11 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
         { NULL, RTL_TEXTENCODING_GB_2312 }
     };
 
+    static ImplStrCharsetDef aUnixCharsetGBKTab[] =
+    {
+        { NULL, RTL_TEXTENCODING_GBK }
+    };
+
     static ImplStrCharsetDef aUnixCharsetBIG5Tab[] =
     {
         { NULL, RTL_TEXTENCODING_BIG5 }
@@ -576,6 +581,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
         { "jisx0201", aUnixCharsetJISX0201Tab },
         { "jisx0212", aUnixCharsetJISX0212Tab },
         { "gb2312", aUnixCharsetGBTab },
+        { "gbk", aUnixCharsetGBKTab },
         { "big5", aUnixCharsetBIG5Tab },
         { "iso10646", aUnixCharsetISO10646Tab },
         { "unicode", aUnixCharsetUNICODETab },
