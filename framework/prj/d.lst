@@ -9,7 +9,7 @@ mkdir: %_DEST%\inc%_EXT%\framework
 ..\dtd\menubar.dtd %_DEST%\bin%_EXT%\menubar.dtd
 ..\dtd\toolbar.dtd %_DEST%\bin%_EXT%\toolbar.dtd
 ..\dtd\statusbar.dtd %_DEST%\bin%_EXT%\statusbar.dtd
-..\dtd\event.dtd %_DEST\bin%_EXT\event.dtd
+..\dtd\event.dtd %_DEST%\bin%_EXT%\event.dtd
 
 ..\%__SRC%\lib\ifwe.lib %_DEST%\lib%_EXT%\ifwe.lib
 ..\inc\helper\imageproducer.hxx %_DEST%\inc%_EXT%\framework\imageproducer.hxx
