@@ -2,9 +2,9 @@
  *
  *  $RCSfile: romenu.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-05-15 10:25:04 $
+ *  last change: $Author: jp $ $Date: 2001-05-22 16:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,7 +463,7 @@ void SwReadOnlyPopup::Execute( Window* pWin, const Point &rPixPos )
     {
         STAR_REFERENCE( datatransfer::XTransferable ) xRef( pClipCntnr );
         if( pClipCntnr->HasAnyData() )
-            pClipCntnr->CopyToClipboard();
+            pClipCntnr->CopyToClipboard( pWin );
     }
 }
                                              //nicht const, weil GetLink() noch
