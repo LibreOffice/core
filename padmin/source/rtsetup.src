@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2002-01-09 21:14:18 $
+ *  last change: $Author: kz $ $Date: 2002-01-14 21:14:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1039,7 +1039,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ russian ] = "~������� ����� ����� �� ������";
         Text[ greek ] = "~fax number will be removed from output";
         Text[ dutch ] = "~Faxnummer wordt niet weergegeven";
-        Text[ french ] = "Le num�ro de ~fax ne sera pas indiqu�.";
+        Text[ french ] = "Le num�ro de fax ne sera pas indiqu�.";
         Text[ spanish ] = "El n�mero de fa~x se eliminar� de la salida";
         Text[ finnish ] = "~Faksinumerot poistetaan tulosteesta";
         Text[ italian ] = "~Numero di fax eliminato dalla copia";
@@ -1308,7 +1308,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ polish ] = "Wyr�wnanie lewego marginesu";
         Text[ portuguese_brazilian ] = "~Left margin adjustment :";
         Text[ japanese ] = "左余白(~L)";
-        Text[ korean ] = "왼쪽 여백 조정(~L)";
+        Text[ korean ] = "왼쪽 여백";
         Text[ chinese_simplified ] = "左边距(~L)";
         Text[ chinese_traditional ] = "左邊距(~L)";
         Text[ turkish ] = "~Left margin adjustment :";
@@ -1345,7 +1345,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ polish ] = "Wyr�wnanie g�rnego marginesu";
         Text[ portuguese_brazilian ] = "~Top margin adjustment :";
         Text[ japanese ] = "上余白(~T)";
-        Text[ korean ] = "위 여백 조정(~T):";
+        Text[ korean ] = "위쪽 여백:";
         Text[ chinese_simplified ] = "上边距(~T)";
         Text[ chinese_traditional ] = "上邊距(~T)";
         Text[ turkish ] = "~Top margin adjustment :";
@@ -1382,7 +1382,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ polish ] = "Wyr�wnanie prawego marginesu";
         Text[ portuguese_brazilian ] = "~Right margin adjustment :";
         Text[ japanese ] = "右余白(~R)";
-        Text[ korean ] = "오른쪽 여백 조정(~R):";
+        Text[ korean ] = "오른쪽 여백:";
         Text[ chinese_simplified ] = "右边距(~R)";
         Text[ chinese_traditional ] = "右邊距(~R)";
         Text[ turkish ] = "~Right margin adjustment :";
@@ -1419,7 +1419,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ polish ] = "Wyr�wnanie dolnego marginesu";
         Text[ portuguese_brazilian ] = "~Bottom margin adjustment :";
         Text[ japanese ] = "下余白(~B)";
-        Text[ korean ] = "아래 여백 조정 (~B):";
+        Text[ korean ] = "아래쪽 여백:";
         Text[ chinese_simplified ] = "下边距(~B)";
         Text[ chinese_traditional ] = "下邊距(~B)";
         Text[ turkish ] = "~Bottom margin adjustment :";
@@ -1524,6 +1524,7 @@ String RID_TXT_QUERYFAXNUMBER
     Text[ finnish ] = "~Kirjoita faksinumero.";
     Text[ catalan ] = "Indiqueu el n�mero de fax";
 };
+
 
 
 
