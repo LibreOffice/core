@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-30 10:41:52 $
+ *  last change: $Author: fs $ $Date: 2001-08-10 09:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,7 @@ public:
     SvxIconChoiceCtrlEntry*     GetEntry( ULONG nPos ) const;
     ULONG               GetEntryListPos( SvxIconChoiceCtrlEntry* ) const;
     void                SetCursor( SvxIconChoiceCtrlEntry* pEntry );
+    SvxIconChoiceCtrlEntry*     GetCursor( ) const;
 
     // Neu-Berechnung gecachter View-Daten und Invalidierung im Fenster
     void                InvalidateEntry( SvxIconChoiceCtrlEntry* );
