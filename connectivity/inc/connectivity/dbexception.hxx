@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexception.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:36:49 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,9 +113,15 @@ public:
     SQLExceptionInfo(const ::com::sun::star::sdbc::SQLException& _rError);
     SQLExceptionInfo(const ::com::sun::star::sdbc::SQLWarning& _rError);
     SQLExceptionInfo(const ::com::sun::star::sdb::SQLContext& _rError);
-        // these ctors don't make much sense anymore ... Smart-UNO had some kind of self-made rtti for exceptions,
-        // so we needed only the first ctor to correctly determine the exception type, but now with UNO3
-        // you have to catch _all_ kinds of exceptions derived from  SQLException and use the appropriate ctor ...
+
+    /** convenience constructor
+
+    If your error processing relies on SQLExceptions, and SQLExceptionInfos, you still may
+    need to display an error which consists of a simple message string only.
+    In those cases, you can use this constructor, which behaves as if you would have used
+    an SQLException containing exactly the given error message.
+    */
+    SQLExceptionInfo( const ::rtl::OUString& _rSimpleErrorMessage );
 
     SQLExceptionInfo(const SQLExceptionInfo& _rCopySource);
 
