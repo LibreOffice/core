@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudispatcher.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:21:02 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,8 @@ DEFINE_XTYPEPROVIDER_4  (   MenuDispatcher     ,
 void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        aURL            ,
                                             const   Sequence< PropertyValue >&  seqProperties   ) throw( RuntimeException )
 {
+    // PL: according to CD this is dead code
+    #if 0
     const char RESOURCE_URL[] = "private:resource/";
     const char ACCEL_PARAM[]  = "?accel=";
 
@@ -443,6 +445,7 @@ void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        a
             aGuard.unlock();
         }
     }
+    #endif
 }
 
 //*****************************************************************************************************************
