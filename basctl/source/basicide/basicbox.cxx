@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicbox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:48:52 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 16:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ void BasicLibBox::InsertEntries( SfxObjectShell* pShell, LibraryLocation eLocati
         String aLibName = pLibNames[ i ];
         if ( eLocation == BasicIDE::GetLibraryLocation( pShell, aLibName ) )
         {
-            String aName( BasicIDE::GetTitle( pShell, eLocation, SFX_TITLE_FILENAME ) );
+            String aName( BasicIDE::GetTitle( pShell, eLocation, SFX_TITLE_CAPTION ) );
             String aEntryText( CreateMgrAndLibStr( aName, aLibName ) );
             USHORT nPos = InsertEntry( aEntryText, LISTBOX_APPEND );
             SetEntryData( nPos, new BasicLibEntry( pShell, eLocation, aLibName ) );
