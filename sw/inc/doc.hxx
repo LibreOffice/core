@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-30 12:58:00 $
+ *  last change: $Author: jp $ $Date: 2001-04-23 14:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,6 +299,7 @@ class SwDoc
     Timer       aOLEModifiedTimer;      // Timer for update modified OLE-Objecs
     SwDBData    aDBData;                // database descriptor
     ::com::sun::star::uno::Sequence <sal_Int8 > aSectionPasswd;
+    ::com::sun::star::uno::Sequence <sal_Int8 > aRedlinePasswd;
     String      sTOIAutoMarkURL;        // ::com::sun::star::util::URL of table of index AutoMark file
     SvStringsDtor aPatternNms;          // Array fuer die Namen der Dokument-Vorlagen
 
@@ -1687,6 +1688,12 @@ public:
     sal_uInt16 InsertRedlineAuthor( const String& );
     // Kommentar am Redline an der Position setzen
     sal_Bool SetRedlineComment( const SwPaM& rPam, const String& rS );
+
+        // Passwords for Redline ask/set
+    const ::com::sun::star::uno::Sequence <sal_Int8>&
+            GetRedlinePasswd() const            { return aRedlinePasswd; }
+    void SetRedlinePasswd(
+            const ::com::sun::star::uno::Sequence <sal_Int8>& rNew );
 
     //  vergleiche zwei Dokument miteinander
     long CompareDoc( const SwDoc& rDoc );
