@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-29 16:25:55 $
+ *  last change: $Author: os $ $Date: 2002-04-23 14:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,6 +476,9 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             else if ( pWrtShell->HasSelection() || IsDrawMode() )
             {
                 LeaveDrawCreate();
+                Point aPt(LONG_MIN, LONG_MIN);
+                //go out of the frame
+                pWrtShell->SelectObj(aPt, SW_LEAVE_FRAME);
                 pWrtShell->EnterStdMode();
                 AttrChangedNotify(pWrtShell); // ggf Shellwechsel...
             }

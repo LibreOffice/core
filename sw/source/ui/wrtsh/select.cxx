@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2002-04-09 14:21:41 $
+ *  last change: $Author: os $ $Date: 2002-04-23 14:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,9 +358,9 @@ long SwWrtShell::SetCrsrKillSel(const Point *pPt, BOOL bTextOnly )
 
 void SwWrtShell::UnSelectFrm()
 {
-        // Rahmenselektion aufheben mit garantiert ungueltiger Position
+    // Rahmenselektion aufheben mit garantiert ungueltiger Position
     Point aPt(LONG_MIN, LONG_MIN);
-    SelectObj(aPt,SW_LEAVE_FRAME);
+    SelectObj(aPt, 0);
     SwTransferable::ClearSelection( *this );
 }
 
