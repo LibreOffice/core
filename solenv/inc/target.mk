@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-12 16:17:43 $
+#   last change: $Author: hjs $ $Date: 2001-02-19 14:36:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2079,7 +2079,7 @@ TARGETDEPS+=$(EXCEPTIONSNOOPTTARGET)
 .ENDIF
 
 .IF "$(NOOPT_FLAG)"==""
-TARGETDEP+=$(NOOPTTARGET)
+TARGETDEPS+=$(NOOPTTARGET)
 .ENDIF
 
 .IF "$(EXCEPTIONS_FLAG)"==""
