@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:20:54 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 #include "configinit.hxx"
 #include "javainteractionhandler.hxx"
 #include "lockfile.hxx"
-#include "oempreload.hxx"
 #include "testtool.hxx"
 #include "checkinstall.hxx"
 #include "cmdlinehelp.hxx"
@@ -163,6 +162,12 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XJOB_HPP_
+#include <com/sun/star/task/XJob.hpp>
 #endif
 
 #include <com/sun/star/java/XJavaVM.hpp>
@@ -285,6 +290,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::view;
+using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::system;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::container;
@@ -1400,7 +1406,6 @@ void Desktop::Main()
     sal_Bool bTerminateRequested = sal_False;
 
     // Preload function depends on an initialized sfx application!
-    bTerminateRequested = OEMPreloadProcess();
     SetSplashScreenProgress(75);
 
     sal_Bool bUseSystemFileDialog;
@@ -1615,6 +1620,17 @@ IMPL_LINK( Desktop, AsyncInitFirstRun, void*, NOTINTERESTEDIN )
 }
 
 // ========================================================================
+
+IMPL_STATIC_LINK( Desktop, AsyncTerminate, void*, NOTINTERESTEDIN )
+{
+    Reference<XMultiServiceFactory> rFactory = ::comphelper::getProcessServiceFactory();
+    Reference< XDesktop > xDesktop( rFactory->createInstance(
+        OUString::createFromAscii("com.sun.star.frame.Desktop")),
+        UNO_QUERY );
+    xDesktop.is() && xDesktop->terminate();
+    return 0L;
+}
+
 IMPL_LINK( Desktop, OpenClients_Impl, void*, pvoid )
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::OpenClients_Impl" );
@@ -1648,6 +1664,23 @@ void Desktop::EnableOleAutomation()
 #endif
 }
 
+sal_Bool Desktop::CheckOEM()
+{
+    Reference<XMultiServiceFactory> rFactory = ::comphelper::getProcessServiceFactory();
+    Reference<XJob> rOemJob(rFactory->createInstance(
+        OUString::createFromAscii("com.sun.star.office.OEMPreloadJob")),
+        UNO_QUERY );
+    Sequence<NamedValue> args;
+    sal_Bool bResult = sal_False;
+    if (rOemJob.is()) {
+        Any aResult = rOemJob->execute(args);
+        aResult >>= bResult;
+        return bResult;
+    } else {
+        return sal_True;
+    }
+}
+
 void Desktop::OpenClients()
 {
     // check if a document has been recovered - if there is one of if a document was loaded by cmdline, no default document
@@ -1657,6 +1690,14 @@ void Desktop::OpenClients()
 
     CommandLineArgs* pArgs = GetCommandLineArgs();
     SvtInternalOptions  aInternalOptions;
+
+    Reference<XMultiServiceFactory> rFactory = ::comphelper::getProcessServiceFactory();
+
+    // if we need to display the OEM dialog, we need to do it here
+    if (!pArgs->IsQuickstart() && !Desktop::CheckOEM())
+    {
+        Application::PostUserEvent( STATIC_LINK( 0, Desktop, AsyncTerminate ) );
+    }
 
     if ( !pArgs->IsServer() && !pArgs->IsNoRestore() && !aInternalOptions.IsRecoveryListEmpty() )
     {
