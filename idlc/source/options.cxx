@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:48:08 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,9 +279,10 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                     ret = initOptions(rargc, rargv, bCmdFile);
 
-                    for (long i=0; i < rargc; i++)
+                    long ii = 0;
+                    for (ii=0; ii < rargc; ii++)
                     {
-                        free(rargv[i]);
+                        free(rargv[ii]);
                     }
                 }
             } else
@@ -345,7 +346,7 @@ const OString& Options::getProgramName() const
 
 sal_uInt16 Options::getNumberOfOptions() const
 {
-    return m_options.size();
+    return (sal_uInt16)(m_options.size());
 }
 
 sal_Bool Options::isValid(const OString& option)
