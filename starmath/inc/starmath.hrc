@@ -2,9 +2,9 @@
  *
  *  $RCSfile: starmath.hrc,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-16 09:44:52 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:21:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -761,6 +761,8 @@
 #define HID_SMA_LRDBRACKETX         (HID_SMA2_START + 48)
 #define HID_SMA_SLRDBRACKETX        (HID_SMA2_START + 49)
 
+#define HID_SMA_CONTROL_SYMBOLSET_VIEW  (HID_SMA2_START + 50)
+#define HID_SMA_CONTROL_FONTCHAR_VIEW   (HID_SMA2_START + 51)
 
 #define BMP_ARROW_RIGHT     1
 
