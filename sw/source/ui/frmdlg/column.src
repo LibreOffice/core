@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:57:05 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:04:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ TabPage TP_COLUMN
         Text[ spanish ] = "~Columnas";
         Text[ finnish ] = "Palstat";
         Text[ italian ] = "~Colonne";
-        Text[ danish ] = "~Kolonner";
+        Text[ danish ] = "Kolonner";
         Text[ swedish ] = "~Kolumner";
         Text[ polish ] = "Kolumny";
         Text[ portuguese_brazilian ] = "Colunas";
@@ -116,6 +116,8 @@ TabPage TP_COLUMN
         Text[ hebrew ] = "‮טורים‬";
         Text[ hindi ] = "स्तंभें";
         Text[ slovak ] = "Stĺpce";
+        Text[ hungarian ] = "Hasábok";
+        Text[ slovenian ] = "Stolpci";
     };
     NumericField ED_NUMBER
     {
@@ -171,6 +173,8 @@ TabPage TP_COLUMN
         Text[ hebrew ] = "~Inhalt über alle Spalten gleichmäßig verteilen";
         Text[ hindi ] = "सब स्तंभों में विषयों को समान रीति से वितरण करो";
         Text[ slovak ] = "Rovnomerne rozdeľ obsah medzi všetky stĺpce";
+        Text[ hungarian ] = "A tartalom hasábok közötti ~egyenlő elosztása";
+        Text[ slovenian ] = "Enakomerno porazdeli vsebino ~v vse stolpce";
     };
     FixedLine FL_COLUMNS
     {
@@ -188,7 +192,7 @@ TabPage TP_COLUMN
         Text[ spanish ] = "Columnas";
         Text[ finnish ] = "Asetukset";
         Text[ italian ] = "Preimpostazioni";
-        Text[ danish ] = "Forudindstillinger";
+        Text[ danish ] = "Indstillinger";
         Text[ swedish ] = "F�rinst�llningar";
         Text[ polish ] = "Ustawienia";
         Text[ portuguese_brazilian ] = "Defini��es";
@@ -204,6 +208,8 @@ TabPage TP_COLUMN
         Text[ hebrew ] = "‮הגדרות‬";
         Text[ hindi ] = "निर्धारण";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Nastavitve";
     };
     FixedText FT_COLUMN
     {
@@ -237,6 +243,8 @@ TabPage TP_COLUMN
         Text[ hebrew ] = "Spalte";
         Text[ hindi ] = "स्तंभ";
         Text[ slovak ] = "Stĺpec";
+        Text[ hungarian ] = "Hasáb";
+        Text[ slovenian ] = "Stolpec";
     };
     Window WN_BSP
     {
@@ -315,6 +323,8 @@ TabPage TP_COLUMN
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "चौड़ाई";
         Text[ slovak ] = "Šírka";
+        Text[ hungarian ] = "Szélesség";
+        Text[ slovenian ] = "Širina";
     };
     MetricField ED_1
     {
@@ -405,6 +415,8 @@ TabPage TP_COLUMN
         Text[ hebrew ] = "‮ריווח‬";
         Text[ hindi ] = "अंतर देना";
         Text[ slovak ] = "Vzdialenosť";
+        Text[ hungarian ] = "Térköz";
+        Text[ slovenian ] = "Razmik";
     };
     MetricField ED_DIST1
     {
@@ -478,6 +490,8 @@ TabPage TP_COLUMN
         Text[ hebrew ] = "A~utomatische Breite";
         Text[ hindi ] = "स्वचालित ~ढंग से चौड़ाई";
         Text[ slovak ] = "~Automatická šírka";
+        Text[ hungarian ] = "A~utomatikus szélességállítás";
+        Text[ slovenian ] = "Samodejno prilagodi ~širino";
     };
     FixedLine FL_LAYOUT
     {
@@ -511,6 +525,8 @@ TabPage TP_COLUMN
         Text[ hebrew ] = "Breite und Abstand";
         Text[ hindi ] = "चौड़ाई और अंतर देना";
         Text[ slovak ] = "Šírka a vzdialenosti";
+        Text[ hungarian ] = "Szélesség és térköz";
+        Text[ slovenian ] = "Širina in razmik";
     };
 
     FixedText FT_STYLE
@@ -524,7 +540,7 @@ TabPage TP_COLUMN
         Text [ portuguese_brazilian ] = "~Linha" ;
         Text [ portuguese ] = "~Estilo" ;
         Text [ finnish ] = "~Viiva" ;
-        Text [ danish ] = "T~ype" ;
+        Text [ danish ] = "~Linje" ;
         Text [ french ] = "Type" ;
         Text [ swedish ] = "~Typ" ;
         Text [ dutch ] = "~Type" ;
@@ -549,6 +565,8 @@ TabPage TP_COLUMN
         Text[ hebrew ] = "A~rt";
         Text[ hindi ] = "~रेखा";
         Text[ slovak ] = "Čia~ra";
+        Text[ hungarian ] = "~Vonaltípus";
+        Text[ slovenian ] = "~Vrstica";
     };
     ListBox LB_STYLE
     {
@@ -680,6 +698,14 @@ TabPage TP_COLUMN
     {
          < "Žiadne" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Nincs" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Brez" ; Default ; > ;
+    };
     };
     FixedText FT_HEIGHT
     {
@@ -692,7 +718,7 @@ TabPage TP_COLUMN
         Text [ portuguese_brazilian ] = "Al~tura" ;
         Text [ portuguese ] = "Altu~ra" ;
         Text [ finnish ] = "Korkeus" ;
-        Text [ danish ] = "H�~jde" ;
+        Text [ danish ] = "H~�jde" ;
         Text [ french ] = "Hauteur" ;
         Text [ swedish ] = "H�~jd" ;
         Text [ dutch ] = "Hoo~gte" ;
@@ -717,6 +743,8 @@ TabPage TP_COLUMN
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "~ऊँचाई";
         Text[ slovak ] = "~Výška";
+        Text[ hungarian ] = "~Magasság";
+        Text[ slovenian ] = "Vi~šina";
     };
     MetricField ED_HEIGHT
     {
@@ -746,7 +774,7 @@ TabPage TP_COLUMN
         Text [ english_us ] = "~Position" ;
         Text [ portuguese_brazilian ] = "~Posi��o" ;
         Text [ swedish ] = "~Position" ;
-        Text [ danish ] = "Placering" ;
+        Text [ danish ] = "~Placering" ;
         Text [ italian ] = "Posizione" ;
         Text [ spanish ] = "~Posici�n" ;
         Text [ french ] = "Position" ;
@@ -770,6 +798,8 @@ TabPage TP_COLUMN
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "~स्थान";
         Text[ slovak ] = "U~miestnenie";
+        Text[ hungarian ] = "~Pozíció";
+        Text[ slovenian ] = "~Položaj";
     };
     ListBox LB_POSITION
     {
@@ -821,9 +851,9 @@ TabPage TP_COLUMN
         };
         StringList [ danish ] =
         {
-            < "Foroven" ; Default ; > ;
+            < "Top" ; Default ; > ;
             < "Centreret" ; Default ; > ;
-            < "Forneden" ; Default ; > ;
+            < "Bund" ; Default ; > ;
         };
         StringList [ french ] =
         {
@@ -963,6 +993,18 @@ TabPage TP_COLUMN
         < "Na stred" ; Default ; > ;
         < "Dole" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Felülre" ; Default ; > ;
+        < "Középre igazított" ; Default ; > ;
+        < "Alulra" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Zgoraj" ; Default ; > ;
+        < "Na sredini" ; Default ; > ;
+        < "Spodaj" ; Default ; > ;
+    };
     };
     FixedLine FL_LINETYPE
     {
@@ -999,6 +1041,8 @@ TabPage TP_COLUMN
         Text[ hebrew ] = "Trennlinie";
         Text[ hindi ] = "अलगानेवाला रेखा";
         Text[ slovak ] = "Oddeľovacia čiara";
+        Text[ hungarian ] = "Elválasztó vonal";
+        Text[ slovenian ] = "Ločilna črta";
     };
     FixedLine  FL_VERT
     {
@@ -1039,6 +1083,8 @@ TabPage TP_COLUMN
         Text[ hebrew ] = "‮מאפינים‬";
         Text[ hindi ] = "Properties";
         Text[ slovak ] = "Vlastnosti";
+        Text[ hungarian ] = "Tulajdonságok";
+        Text[ slovenian ] = "Lastnosti";
     };
     FixedText   FT_TEXTDIRECTION
     {
@@ -1050,7 +1096,7 @@ TabPage TP_COLUMN
         Text[ english_us ] = "Text ~direction";
         Text[ portuguese ] = "Text ~direction";
         Text[ russian ] = "����������� ������";
-        Text[ greek ] = "Text ~direction";
+        Text[ greek ] = "���������� ~��������";
         Text[ dutch ] = "~Tekstverloop";
         Text[ french ] = "Orientation du texte";
         Text[ spanish ] = "~Direcci�n de escritura";
@@ -1072,6 +1118,8 @@ TabPage TP_COLUMN
         Text[ thai ] = "Text ~direction";
         Text[ hindi ] = "Text ~direction";
         Text[ slovak ] = "S~mer textu";
+        Text[ hungarian ] = "Szöveg~irány";
+        Text[ slovenian ] = "~Smer besedila";
     };
     ListBox     LB_TEXTDIRECTION
     {
@@ -1160,9 +1208,9 @@ TabPage TP_COLUMN
     };
     StringList [ greek ] =
     {
-         < "Left-to-right" ; 0; > ;
-        < "Right-to-left" ; 1; > ;
-        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
+         < "��������-����-�����" ; 0; > ;
+        < "�����-����-��������" ; 1; > ;
+        < "����� ��������� ������������ ������������" ; 4; > ;
     };
     StringList [ dutch ] =
     {
@@ -1184,9 +1232,9 @@ TabPage TP_COLUMN
     };
     StringList [ danish ] =
     {
-         < "Left-to-right" ; 0; > ;
-        < "Right-to-left" ; 1; > ;
-        < "Use superordinate object settings" ; 4; > ;
+         < "Venstre mod h�jre" ; 0; > ;
+        < "H�jre mod venstre" ; 1; > ;
+        < "Brug indstillinger fra det overordnede objekt" ; 4; > ;
     };
     StringList [ arabic ] =
     {
@@ -1248,6 +1296,18 @@ TabPage TP_COLUMN
         < "Sprava-do-ľava" ; 1; > ;
         < "Použiť nastavenia nadriadeného objektu" ; 4; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Balról jobbra" ; 0; > ;
+        < "Jobbról balra" ; 1; > ;
+        < "Szülőobjektum beállításainak használata" ; 4; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Od leve proti desni" ; 0; > ;
+        < "Od desne proti levi" ; 1; > ;
+        < "Uporabi predmetne nastavitve smeri besedila" ; 4; > ;
+    };
     };
     Text[ chinese_simplified ] = "栏";
     Text[ russian ] = "�������";
@@ -1267,6 +1327,8 @@ TabPage TP_COLUMN
     Text[ hebrew ] = "‮טורים‬";
     Text[ hindi ] = "स्तंभें";
     Text[ slovak ] = "Stĺpce";
+    Text[ hungarian ] = "Hasábok";
+    Text[ slovenian ] = "Stolpci";
 };
 
 ModalDialog DLG_COLUMN
@@ -1329,6 +1391,8 @@ ModalDialog DLG_COLUMN
         Text[ hebrew ] = "~Anwenden auf";
         Text[ hindi ] = "में ~लागू करो";
         Text[ slovak ] = "~Použiť na";
+        Text[ hungarian ] = "~Alkalmazás:";
+        Text[ slovenian ] = "~Uporabi za";
     };
     ListBox LB_APPLY_TO
     {
@@ -1435,8 +1499,8 @@ ModalDialog DLG_COLUMN
         StringList [ danish ] =
         {
             < "Markering" ;             LISTBOX_SELECTION; > ;
-            < "Aktuelt omr�de" ;    LISTBOX_SECTION     ; > ;
-            < "Markeret omr�de" ;  LISTBOX_SECTIONS ; > ;
+            < "Aktuel sektion" ;    LISTBOX_SECTION     ; > ;
+            < "Markeret sektion" ;  LISTBOX_SECTIONS    ; > ;
             < "Ramme" ;                 LISTBOX_FRAME       ; > ;
             < "Sidetypografi: " ;       LISTBOX_PAGE        ; > ;
         };
@@ -1560,6 +1624,22 @@ ModalDialog DLG_COLUMN
         < "Rámček" ;                  LISTBOX_FRAME       ; > ;
         < "Štýl stránky:" ;          LISTBOX_PAGE        ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Kijelölés" ;              LISTBOX_SELECTION; > ;
+        < "Aktuális szakasz" ;     LISTBOX_SECTION     ; > ;
+        < "Kijelölt szakasz" ;  LISTBOX_SECTIONS   ; > ;
+        < "Keret" ;                 LISTBOX_FRAME       ; > ;
+        < "Oldalstílus:" ;         LISTBOX_PAGE        ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Izbor" ;            LISTBOX_SELECTION; > ;
+        < "Trenutni odsek" ;    LISTBOX_SECTION     ; > ;
+        < "Izbrana področja" ;  LISTBOX_SECTIONS   ; > ;
+        < "Okvir" ;                 LISTBOX_FRAME       ; > ;
+        < "Slog strani: " ;         LISTBOX_PAGE        ; > ;
+    };
     };
     Text[ english_us ] = "Columns";
     Text[ portuguese ] = "Colunas";
@@ -1587,7 +1667,16 @@ ModalDialog DLG_COLUMN
     Text[ hebrew ] = "‮טורים‬";
     Text[ hindi ] = "स्तंभें";
     Text[ slovak ] = "Stĺpce";
+    Text[ hungarian ] = "Hasábok";
+    Text[ slovenian ] = "Stolpci";
 };
+
+
+
+
+
+
+
 
 
 
