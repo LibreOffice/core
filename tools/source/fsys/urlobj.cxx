@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-16 09:09:50 $
+ *  last change: $Author: sb $ $Date: 2000-11-21 13:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,8 +163,8 @@ namespace unnamed_tools_urlobj {} using namespace unnamed_tools_urlobj;
 
 
    ; private
-   vnd-sun-star-help-url = "VND.SUN.STAR.HELP://" reg_name ["/" *DIGIT] ["?" *uric]
-   reg_name = 1*(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "@" / "_" / "~")
+   vnd-sun-star-help-url = "VND.SUN.STAR.HELP://" name ["/" *DIGIT] ["?" *uric]
+   name = *(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "@" / "_" / "~")
 
 
    ; private
@@ -813,6 +813,32 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
         switch (m_eScheme)
         {
             case INET_PROT_VND_SUN_STAR_HELP:
+            {
+                if (pEnd - pPos < 2 || *pPos++ != '/' || *pPos++ != '/')
+                {
+                    setInvalid();
+                    return false;
+                }
+                UniString aSynAuthority;
+                while (pPos < pEnd
+                       && *pPos != '/' && *pPos != '?'
+                       && *pPos != nFragmentDelimiter)
+                {
+                    EscapeType eEscapeType;
+                    sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
+                                                 cEscapePrefix, eMechanism,
+                                                 eCharset, eEscapeType);
+                    appendUCS4(aSynAuthority, nUTF32, eEscapeType, bOctets,
+                               PART_AUTHORITY, cEscapePrefix, eCharset,
+                               false);
+                }
+                m_aHost.set(aSynAbsURIRef,
+                            aSynAuthority,
+                            aSynAbsURIRef.Len());
+                    // misusing m_aHost to store the authority
+                break;
+            }
+
             case INET_PROT_VND_SUN_STAR_PKG:
             {
                 if (pEnd - pPos < 2 || *pPos++ != '/' || *pPos++ != '/')
