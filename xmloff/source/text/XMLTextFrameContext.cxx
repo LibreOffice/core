@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-09 15:59:46 $
+ *  last change: $Author: mib $ $Date: 2001-03-13 08:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -784,7 +784,7 @@ XMLTextFrameContext::XMLTextFrameContext(
 
     // page number (must be set after the frame is inserted, because it
     // will be overwritten then inserting the frame.
-    if( TextContentAnchorType_AT_PAGE == eAnchorType )
+    if( TextContentAnchorType_AT_PAGE == eAnchorType && nPage > 0 )
     {
         aAny <<= nPage;
         xPropSet->setPropertyValue( sAnchorPageNo, aAny );
