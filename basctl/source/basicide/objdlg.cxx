@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 14:05:54 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,34 +103,6 @@ ObjectTreeListBox::~ObjectTreeListBox()
 
 void ObjectTreeListBox::Command( const CommandEvent& rCEvt )
 {
-    /*
-    if ( rCEvt.GetCommand() == COMMAND_STARTDRAG )
-    {
-        String aText;
-
-        BYTE nType = GetSelectedType();
-        if ( ( nType == OBJTYPE_METHOD ) || ( nType == OBJTYPE_METHODINOBJ ) ||
-              ( nType == OBJTYPE_PROPERTY ) || ( nType == OBJTYPE_SUBOBJ ) )
-        {
-            String aLib, aModOrObj, aSubOrPropOrSObj, aPropOrSubInSObj;
-            GetSelectedSbx( aLib, aModOrObj, aSubOrPropOrSObj, aPropOrSubInSObj );
-            aText = aModOrObj;
-            aText += String( RTL_CONSTASCII_USTRINGPARAM( "." ) );
-            aText += aSubOrPropOrSObj;
-            if ( aPropOrSubInSObj.Len() )
-            {
-                aText += '.';
-                aText += aPropOrSubInSObj;
-            }
-
-            DragServer::Clear();
-            DragServer::CopyString( aText );
-            // Region?
-            ExecuteDrag( Pointer( POINTER_COPYDATA ), Pointer( POINTER_COPYDATA ), DRAG_COPYABLE );
-            DragServer::Clear();
-        }
-    }
-    */
 }
 
 void ObjectTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
@@ -139,15 +111,17 @@ void ObjectTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
 
     if ( rMEvt.IsLeft() && ( rMEvt.GetClicks() == 2 ) )
     {
-        SbxItem aSbxItem = GetSbxItem( GetCurEntry() );
+        BasicEntryDescriptor aDesc( GetEntryDescriptor( GetCurEntry() ) );
 
-        if ( aSbxItem.GetType() == BASICIDE_TYPE_METHOD )
+        if ( aDesc.GetType() == OBJ_TYPE_METHOD )
         {
             BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
             SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
             SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
             if( pDispatcher )
             {
+                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetShell(), aDesc.GetLibName(), aDesc.GetName(),
+                                  aDesc.GetMethodName(), ConvertType( aDesc.GetType() ) );
                 pDispatcher->Execute( SID_BASICIDE_SHOWSBX,
                                         SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
             }
@@ -158,29 +132,24 @@ void ObjectTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
 
 
 ObjectCatalog::ObjectCatalog( Window * pParent )
-    : FloatingWindow( pParent, IDEResId( RID_BASICIDE_OBJCAT ) ),
-        aMacroTreeList( this, IDEResId( RID_TLB_MACROS ) ),
-//      aShowButton( this, IDEResId( RID_PB_SHOW ) ),
-//      aOptionButton( this, IDEResId( RID_PB_OPTIONS ) ),
-//      aLittleHelp( this, IDEResId( RID_PB_LITTLEHELP ) ),
-      aToolBox(this, IDEResId(RID_TB_TOOLBOX), IDEResId(RID_IMGLST_TB_HC)),
-        aMacroDescr( this, IDEResId( RID_FT_MACRODESCR ) )
+    :FloatingWindow( pParent, IDEResId( RID_BASICIDE_OBJCAT ) )
+    ,aMacroTreeList( this, IDEResId( RID_TLB_MACROS ) )
+    ,aToolBox(this, IDEResId(RID_TB_TOOLBOX), IDEResId(RID_IMGLST_TB_HC))
+    ,aMacroDescr( this, IDEResId( RID_FT_MACRODESCR ) )
 {
     FreeResource();
-
-//  aShowButton.SetClickHdl( LINK( this, ObjectCatalog, ButtonHdl ) );
-//  aOptionButton.SetClickHdl( LINK( this, ObjectCatalog, ButtonHdl ) );
-//  aLittleHelp.SetClickHdl( LINK( this, ObjectCatalog, ButtonHdl ) );
 
     aToolBox.SetOutStyle( TOOLBOX_STYLE_FLAT );
     aToolBox.SetSizePixel( aToolBox.CalcWindowSizePixel() );
     aToolBox.SetSelectHdl( LINK( this, ObjectCatalog, ToolBoxHdl ) );
 
-    aMacroTreeList.SetWindowBits( WB_HASLINES );
+    aMacroTreeList.SetWindowBits( WB_HASLINES | WB_HASLINESATROOT |
+                                  WB_HASBUTTONS | WB_HASBUTTONSATROOT |
+                                  WB_HSCROLL );
+
     aMacroTreeList.SetSelectHdl( LINK( this, ObjectCatalog, TreeListHighlightHdl ) );
 
-    aMacroTreeList.ScanAllBasics();
-    aMacroTreeList.ExpandAllTrees();
+    aMacroTreeList.ScanAllEntries();
     CheckButtons();
 
     Point aPos = IDE_DLL()->GetExtraData()->GetObjectCatalogPos();
@@ -253,14 +222,6 @@ void __EXPORT ObjectCatalog::Resize()
     // Die Buttons oben bleiben immer unveraendert stehen...
 }
 
-
-void ObjectCatalog::ScanBasic( BasicManager* pBasMgr,  const String& rName  )
-{
-    aMacroTreeList.ScanBasic( pBasMgr, rName );
-}
-
-
-
 IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
 {
     USHORT nCurItem = pToolBox->GetCurItemId();
@@ -282,16 +243,18 @@ IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
             }
             SvLBoxEntry* pCurEntry = aMacroTreeList.GetCurEntry();
             DBG_ASSERT( pCurEntry, "Entry?!" );
-            SbxItem aSbxItem = aMacroTreeList.GetSbxItem( pCurEntry );
+            BasicEntryDescriptor aDesc( aMacroTreeList.GetEntryDescriptor( pCurEntry ) );
             BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
             pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
             pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-            if ( aSbxItem.GetType() == BASICIDE_TYPE_MODULE ||
-                 aSbxItem.GetType() == BASICIDE_TYPE_DIALOG ||
-                 aSbxItem.GetType() == BASICIDE_TYPE_METHOD )
+            if ( aDesc.GetType() == OBJ_TYPE_MODULE ||
+                 aDesc.GetType() == OBJ_TYPE_DIALOG ||
+                 aDesc.GetType() == OBJ_TYPE_METHOD )
             {
                 if( pDispatcher )
                 {
+                    SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetShell(), aDesc.GetLibName(), aDesc.GetName(),
+                                      aDesc.GetMethodName(), aMacroTreeList.ConvertType( aDesc.GetType() ) );
                     pDispatcher->Execute( SID_BASICIDE_SHOWSBX,
                                           SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
                 }
@@ -301,41 +264,6 @@ IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
                 ErrorBox( this, WB_OK, String( IDEResId( RID_STR_OBJNOTFOUND ) ) ).Execute();
                 aMacroTreeList.GetModel()->Remove( pCurEntry );
                 CheckButtons();
-            }
-        }
-        break;
-        case TBITEM_PROPS:
-        {
-            SbxVariable* pVar = aMacroTreeList.FindVariable( aMacroTreeList.GetCurEntry() );
-            DBG_ASSERT( pVar, "Variable nicht gefunden!" );
-            if ( pVar )
-            {
-                MacroOptionsDialog* pDlg = new MacroOptionsDialog( this, pVar );
-                pDlg->Execute();
-                delete pDlg;
-                UpdateFields();
-            }
-        }
-        break;
-        case TBITEM_HELP:
-        {
-            SvLBoxEntry* pCurEntry = aMacroTreeList.GetCurEntry();
-            if ( pCurEntry )
-            {
-                BasicEntry* pInfo = (BasicEntry*)pCurEntry->GetUserData();
-                DBG_ASSERT( pInfo, "Keine Info?" );
-                SbxVariable* pVar = aMacroTreeList.FindVariable( pCurEntry );
-                DBG_ASSERT( pVar, "Variable nicht gefunden!" );
-                if ( pVar )
-                {
-                    SbxInfoRef xInfo = pVar->GetInfo();
-                    if ( xInfo.Is() )
-                    {
-                        ByteString aHelpFile( xInfo->GetHelpFile(), RTL_TEXTENCODING_UTF8 );
-                        USHORT nHelpId = (USHORT)xInfo->GetHelpId();
-                        //SfxHelp::ShowHelp( nHelpId, TRUE, aHelpFile.GetBuffer() );
-                    }
-                }
             }
         }
         break;
@@ -349,32 +277,11 @@ IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
 void ObjectCatalog::CheckButtons()
 {
     SvLBoxEntry* pCurEntry = aMacroTreeList.GetCurEntry();
-
-    BYTE nType = pCurEntry ? ((BasicEntry*)pCurEntry->GetUserData())->GetType() : 0;
-    if ( ( nType == OBJTYPE_OBJECT ) || ( nType == OBJTYPE_MODULE ) ||
-         ( nType == OBJTYPE_METHOD ) || ( nType == OBJTYPE_LIB ) )
-    {
-        //aToolBox.EnableItem( TBITEM_PROPS, TRUE );
-        aToolBox.EnableItem( TBITEM_PROPS, FALSE );
-    }
-    else
-        aToolBox.EnableItem( TBITEM_PROPS, FALSE );
-
-    if ( ( nType == OBJTYPE_OBJECT ) || ( nType == OBJTYPE_MODULE ) )
-    {
+    BasicEntryType eType = pCurEntry ? ((BasicEntry*)pCurEntry->GetUserData())->GetType() : OBJ_TYPE_UNKNOWN;
+    if ( eType == OBJ_TYPE_DIALOG || eType == OBJ_TYPE_MODULE || eType == OBJ_TYPE_METHOD )
         aToolBox.EnableItem( TBITEM_SHOW, TRUE );
-    }
-    else if ( ( nType == OBJTYPE_METHOD ) || ( nType == OBJTYPE_METHODINOBJ ) )
-    {
-        if ( nType == OBJTYPE_METHOD )
-            aToolBox.EnableItem( TBITEM_SHOW, TRUE );
-        else
-            aToolBox.EnableItem( TBITEM_SHOW, FALSE );
-    }
     else
-    {
         aToolBox.EnableItem( TBITEM_SHOW, FALSE );
-    }
 }
 
 
@@ -388,20 +295,6 @@ IMPL_LINK_INLINE_START( ObjectCatalog, TreeListHighlightHdl, SvTreeListBox *, pB
 IMPL_LINK_INLINE_END( ObjectCatalog, TreeListHighlightHdl, SvTreeListBox *, pBox )
 
 
-/*
-BYTE ObjectCatalog::GetSelectedType()
-{
-    return aMacroTreeList.GetSelectedType();
-}
-
-BasicManager* ObjectCatalog::GetSelectedSbx( String& rLib, String& rModOrObj, String& rSubOrProp )
-{
-    return aMacroTreeList.GetSelectedSbx( rLib, rModOrObj, rSubOrProp );
-}
-
-*/
-
-
 void ObjectCatalog::UpdateFields()
 {
     SvLBoxEntry* pCurEntry = aMacroTreeList.GetCurEntry();
@@ -409,19 +302,12 @@ void ObjectCatalog::UpdateFields()
     {
         CheckButtons();
         aMacroDescr.SetText( String() );
-//      aMacroTreeList.SetHelpText( String() );
-        aToolBox.EnableItem( TBITEM_HELP, FALSE );
         SbxVariable* pVar = aMacroTreeList.FindVariable( pCurEntry );
         if ( pVar )
         {
             SbxInfoRef xInfo = pVar->GetInfo();
             if ( xInfo.Is() )
-            {
                 aMacroDescr.SetText( xInfo->GetComment() );
-//              aMacroTreeList.SetHelpText( xInfo->GetComment() );
-                if ( xInfo->GetHelpFile().Len() )
-                    aToolBox.EnableItem( TBITEM_HELP, TRUE );
-            }
         }
     }
 }
@@ -430,6 +316,11 @@ void ObjectCatalog::UpdateFields()
 void ObjectCatalog::UpdateEntries()
 {
     aMacroTreeList.UpdateEntries();
+}
+
+void ObjectCatalog::SetCurrentEntry( BasicEntryDescriptor& rDesc )
+{
+    aMacroTreeList.SetCurrentEntry( rDesc );
 }
 
 ObjectCatalogToolBox_Impl::ObjectCatalogToolBox_Impl(
