@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 20:53:13 $
+ *  last change: $Author: vg $ $Date: 2001-06-05 22:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,10 +728,10 @@ TabPage TP_OPTIONS_MISC
         Text [ finnish ] = "Mittayksikkö" ;
         Text [ danish ] = "Måleenhed" ;
         Text [ french ] = "Unité de mesure" ;
-        Text [ swedish ] = "Måttenhet" ;
+        Text [ swedish ] = "~Måttenhet" ;
         Text [ dutch ] = "Maateenheid" ;
         Text [ spanish ] = "Unidad de medida" ;
-        Text [ english_us ] = "Meas. units" ;
+        Text [ english_us ] = "~Meas. unit" ;
         Text[ chinese_simplified ] = "¼ÆÁ¿µ¥Î»";
         Text[ russian ] = "Åäèíèöà èçìåğåíèÿ";
         Text[ polish ] = "Jednostka miary";
@@ -757,8 +757,8 @@ TabPage TP_OPTIONS_MISC
         Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "~Tabulatorabstand" ;
         Text [ ENGLISH ] = "Tab distance" ;
-        Text [ english_us ] = "Tab stops" ;
-        Text [ swedish ] = "Tabulatoravstånd" ;
+        Text [ english_us ] = "Ta~b stops" ;
+        Text [ swedish ] = "~Tabulatoravstånd" ;
         Text [ danish ] = "Tabulatorafstand" ;
         Text [ italian ] = "Posizione tabulazioni" ;
         Text [ spanish ] = "Distancia entre tabuladores" ;
@@ -895,7 +895,7 @@ TabPage TP_OPTIONS_MISC
         Text[ spanish ] = "Su~mar espacios de párrafo en documento actual";
         Text[ italian ] = "Aggiungi tutti gli spazi tra ~paragrafi nel documento attuale";
         Text[ danish ] = "Add ~distances between paragraphs";
-        Text[ swedish ] = "Addera alla stycke~avstånd i det aktuella dokumentet";
+        Text[ swedish ] = "A~ddera alla styckeavstånd i det aktuella dokumentet";
         Text[ polish ] = "Dodaj w bie¿¹cym dokumencie wszystkie odstêpy miêdzy akapitami";
         Text[ portuguese_brazilian ] = "Add ~distances between paragraphs";
         Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚Å‚·‚×‚Ä‚Ì’i—‚ÌŠÔŠu‚ğ‰ÁZ‚·‚é";
@@ -977,7 +977,7 @@ TabPage TP_OPTIONS_MISC
         Size = MAP_APPFONT ( 56 , 8 ) ;
         Text = "Zeichn~ungsmaßstab" ;
         Text [ ENGLISH ] = "Drawing scale" ;
-        Text[ english_us ] = "Drawing scale";
+        Text[ english_us ] = "~Drawing scale";
         Text[ portuguese ] = "Escala de desenho";
         Text[ russian ] = "Ìàñøòàá ğèñóíêà";
         Text[ greek ] = "Drawing scale";
@@ -986,7 +986,7 @@ TabPage TP_OPTIONS_MISC
         Text[ spanish ] = "Escala de dibujo";
         Text[ italian ] = "Drawing scale";
         Text[ danish ] = "Drawing scale";
-        Text[ swedish ] = "Teckningsskala";
+        Text[ swedish ] = "Te~ckningsskala";
         Text[ polish ] = "Skala rysunku";
         Text[ portuguese_brazilian ] = "Drawing scale";
         Text[ japanese ] = "}Œ`•`‰æ‚Ì”{—¦";
@@ -1013,12 +1013,12 @@ TabPage TP_OPTIONS_MISC
         Size = MAP_APPFONT ( 49 , 8 ) ;
         Text = "Seiten~breite" ;
         Text [ ENGLISH ] = "Page width" ;
-        Text [ english_us ] = "Page width" ;
+        Text [ english_us ] = "Page ~width" ;
         Text [ italian ] = "Larghezza pagina" ;
         Text [ spanish ] = "Ancho de página" ;
         Text [ french ] = "Largeur de page" ;
         Text [ dutch ] = "Paginabreedte" ;
-        Text [ swedish ] = "Sidbredd" ;
+        Text [ swedish ] = "Sid~bredd" ;
         Text [ danish ] = "Sidebredde" ;
         Text [ portuguese ] = "Largura de página" ;
         Text [ portuguese_brazilian ] = "Seitenbreite" ;
@@ -1067,11 +1067,11 @@ TabPage TP_OPTIONS_MISC
         Text = "Se~itenhöhe" ;
         Text [ ENGLISH ] = "Page height" ;
         Text [ dutch ] = "Paginahoogte" ;
-        Text [ english_us ] = "Page height" ;
+        Text [ english_us ] = "Page ~height" ;
         Text [ italian ] = "Altezza pagina" ;
         Text [ spanish ] = "Altura de página" ;
         Text [ french ] = "Hauteur de page" ;
-        Text [ swedish ] = "Sidhöjd" ;
+        Text [ swedish ] = "S~idhöjd" ;
         Text [ danish ] = "Sidehøjde" ;
         Text [ portuguese ] = "Altura da página" ;
         Text [ portuguese_brazilian ] = "Seitenh?e" ;
