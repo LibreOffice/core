@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtualdbtools.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 10:02:36 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,15 +267,13 @@ namespace connectivity
                                         ,const ::rtl::OUString& _sProperty,
                                         sal_Bool _bDefault = sal_False) const = 0;
 
-            /** retrieves the connection which is associated with the context where the
-                given component lives in
-
-                In other (and more understandable) words: For a form component, which lives
-                in a (e.g. text) document which is part of a database, the connection
-                belonging to this database is returned
+            /** determines whether the given component is part of a document which is an embedded database
+                document (such as a form)
             */
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-                getComponentContextConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent ) = 0;
+            virtual bool isEmbeddedInDatabase(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent,
+                ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxActualConnection
+            ) = 0;
         };
 
         //================================================================
