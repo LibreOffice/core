@@ -2,9 +2,9 @@
 *
 *  $RCSfile: registryitem_ooo.scp,v $
 *
-*  $Revision: 1.1 $
+*  $Revision: 1.2 $
 *
-*  last change: $Author: is $ $Date: 2004-02-05 18:10:12 $
+*  last change: $Author: rt $ $Date: 2004-05-03 07:35:36 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -522,5 +522,12 @@ RegistryItem gid_Regitem__Vor
     Subkey = ".vor";
     ModuleID = gid_Module_Root;
     Value = "soffice.StarOfficeTemplate.5";
+End
+
+RegistryItem gid_Regitem_Software_Openofficeorg_Uno_Installpath
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\OpenOffice.org\UNO\InstallPath";
+    ModuleID = gid_Module_Root;
+    Value  = "<progpath>\program";
 End
 
