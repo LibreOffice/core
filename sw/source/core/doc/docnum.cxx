@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-16 08:15:38 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1772,7 +1772,7 @@ BOOL SwDoc::NumUpDown( const SwPaM& rPam, BOOL bDown )
         promotable resp. demotable.
 
         */
-        for (int nTmp = nStt; nTmp <= nEnd; ++nTmp)
+        for (ULONG nTmp = nStt; nTmp <= nEnd; ++nTmp)
         {
             SwTxtNode* pTNd = GetNodes()[ nTmp ]->GetTxtNode();
             if( pTNd)
@@ -1805,7 +1805,7 @@ BOOL SwDoc::NumUpDown( const SwPaM& rPam, BOOL bDown )
 
             String sNumRule;
 
-            for( int nTmp = nStt; nTmp <= nEnd; ++nTmp )
+            for(ULONG nTmp = nStt; nTmp <= nEnd; ++nTmp )
             {
                 SwTxtNode* pTNd = GetNodes()[ nTmp ]->GetTxtNode();
                 if( pTNd)
@@ -2084,7 +2084,7 @@ SetRedlineMode( eOld );
         SplitRedline( SwPaM( aIdx ));
     }
 
-    ULONG nRedlSttNd, nRedlEndNd;
+    ULONG nRedlSttNd(0), nRedlEndNd(0);
     if( pOwnRedl )
     {
         const SwPosition *pRStt = pOwnRedl->Start(), *pREnd = pOwnRedl->End();
@@ -2211,12 +2211,8 @@ BOOL SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, BOOL bDel )
 SwNumRule* SwDoc::GetCurrNumRule( const SwPosition& rPos ) const
 {
     SwNumRule* pRet = 0;
-    const SfxPoolItem* pItem;
-    SwTxtNode* pTNd = rPos.nNode.GetNode().GetTxtNode();
-
-    if( pTNd )
+    if (SwTxtNode* pTNd = rPos.nNode.GetNode().GetTxtNode())
         pRet = pTNd->GetNumRule();
-
     return pRet;
 }
 
@@ -2301,7 +2297,7 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, BOOL bAutoNum ) const
         aName = SW_RESSTR( STR_NUMRULE_DEFNAME );
     }
 
-    USHORT nNum, nTmp, nFlagSize = ( pNumRuleTbl->Count() / 8 ) +2;
+    USHORT nNum(0), nTmp, nFlagSize = ( pNumRuleTbl->Count() / 8 ) +2;
     BYTE* pSetFlags = new BYTE[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
 
@@ -2860,24 +2856,8 @@ void SwDoc::UpdateNumRuleOld( SwNumRule & rRule, ULONG nUpdPos )
             }
 
 //FEATURE::CONDCOLL
-            BOOL bCheck = TRUE;
             if( RES_CONDTXTFMTCOLL == pStt->GetFmtColl()->Which() )
-            {
-//              SwFmtColl* pChgColl = pStt->GetCondFmtColl();
                 pStt->ChkCondColl();
-/*
-//JP 19.11.97:
-// setzen der bedingten Vorlage aendert nichts an den Einzuegen, die bleiben
-// als harte vorhanden
-                if( pStt->GetCondFmtColl() )
-                {
-                    // es gab eine Aenderung -> harte Einzuege entfernen
-                    if( pChgColl != pStt->GetCondFmtColl() )
-                        pStt->ResetAttr( RES_LR_SPACE );
-                    bCheck = FALSE;
-                }
-*/
-            }
             else if( !pOutlNd && NO_NUMBERING !=
                     ((SwTxtFmtColl*)pStt->GetFmtColl())->GetOutlineLevel() )
                 pOutlNd = pStt;
@@ -2887,7 +2867,7 @@ void SwDoc::UpdateNumRuleOld( SwNumRule & rRule, ULONG nUpdPos )
 #ifndef NUM_RELSPACE
             // hat sich eine Level - Aenderung ergeben, so setze jetzt die
             // gueltigen Einzuege
-            if( bCheck && ( nLevel != nNdOldLvl || pStt->IsSetNumLSpace())
+            if (( nLevel != nNdOldLvl || pStt->IsSetNumLSpace())
                 && GetRealLevel( nLevel ) < MAXLEVEL )
             {
                 SvxLRSpaceItem aLR( ((SvxLRSpaceItem&)pStt->SwCntntNode::GetAttr(
@@ -2982,17 +2962,11 @@ BOOL SwDoc::IsFirstOfNumRule(SwPosition & rPos)
 // #i23726#
 void SwDoc::IndentNumRule(SwPosition & rPos, short nAmount)
 {
-    BOOL bResult = FALSE;
-    SwTxtNode * pTxtNode = rPos.nNode.GetNode().GetTxtNode();
-
-    if (pTxtNode)
+    if (SwTxtNode * pTxtNode = rPos.nNode.GetNode().GetTxtNode())
     {
-        SwNumRule * pNumRule = pTxtNode->GetNumRule();
-
-        if (pNumRule)
+        if (SwNumRule * pNumRule = pTxtNode->GetNumRule())
         {
             pNumRule->Indent(nAmount);
-
             UpdateNumRule();
         }
     }
