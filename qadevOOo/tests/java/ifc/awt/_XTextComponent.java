@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTextComponent.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-25 11:06:38 $
+ *  last change:$Date: 2003-09-08 10:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,14 @@
 
 package ifc.awt;
 
+import lib.MultiMethodTest;
+import util.ValueComparer;
+
 import com.sun.star.awt.Selection;
 import com.sun.star.awt.TextEvent;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.awt.XTextListener;
 import com.sun.star.lang.EventObject;
-import lib.MultiMethodTest;
-import util.ValueComparer;
 
 /**
 * Testing <code>com.sun.star.awt.XTextComponent</code>
@@ -132,7 +133,7 @@ public class _XTextComponent extends MultiMethodTest {
         oObj.addTextListener(listener);
         oObj.setText("Listen");
         try {
-            Thread.currentThread().sleep(500);
+            Thread.sleep(500);
         } catch(java.lang.InterruptedException e) {
             e.printStackTrace(log);
         }
