@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdll.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:13:08 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:46:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,8 @@
 #include <cfgid.h>
 #endif
 
+#include <svtools/moduleoptions.hxx>
+
 /*************************************************************************
 |*
 |* Init
@@ -111,35 +113,33 @@ void SwDLL::Init()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDLL" );
 
-    // called directly after loading the DLL
-    // do whatever you want, you may use Sw-DLL too
-
     // the SdModule must be created
-    SwModuleDummy** ppShlPtr = (SwModuleDummy**) GetAppData(SHL_WRITER);
+    SwModule** ppShlPtr = (SwModule**) GetAppData(SHL_WRITER);
+    if ( *ppShlPtr )
+        return;
 
-    SvFactory* pDocFact     = (SvFactory*)(*ppShlPtr)->pSwDocShellFactory;
-    SvFactory* pWDocFact    = (SvFactory*)(*ppShlPtr)->pSwWebDocShellFactory;
-    SvFactory* pGlobDocFact = (SvFactory*)(*ppShlPtr)->pSwGlobalDocShellFactory;
-    delete (*ppShlPtr);
-    SwModule* pModule = new SwModule( pWDocFact, pDocFact, pGlobDocFact );
-    (*ppShlPtr) = pModule;
-    (*ppShlPtr)->pSwDocShellFactory         = pDocFact    ;
-    (*ppShlPtr)->pSwWebDocShellFactory      = pWDocFact   ;
-    (*ppShlPtr)->pSwGlobalDocShellFactory   = pGlobDocFact;
-
-    if ( pDocFact )
+    SvtModuleOptions aOpt;
+    SfxObjectFactory* pDocFact = 0;
+    SfxObjectFactory* pGlobDocFact = 0;
+    if ( aOpt.IsWriter() )
     {
-        SwDocShell::Factory().RegisterPluginMenuBar( SW_RES(CFG_SW_MENU_PORTAL));
-        SwDocShell::Factory().RegisterMenuBar(SW_RES(CFG_SW_MENU));
-        SwDocShell::Factory().RegisterAccel(SW_RES(CFG_SW_ACCEL));
-        SwGlobalDocShell::Factory().RegisterMenuBar(SW_RES(CFG_SWGLOBAL_MENU));
-        SwGlobalDocShell::Factory().RegisterAccel(SW_RES(CFG_SW_ACCEL));
-        SwGlobalDocShell::Factory().RegisterPluginMenuBar( SW_RES(CFG_SWGLOBAL_MENU_PORTAL));
+        pDocFact = &SwDocShell::Factory();
+        pGlobDocFact = &SwGlobalDocShell::Factory();
     }
 
-    SwWebDocShell::Factory().RegisterPluginMenuBar( SW_RES(CFG_SWWEB_MENU_PORTAL));
-    SwWebDocShell::Factory().RegisterMenuBar(SW_RES(CFG_SWWEB_MENU));
-    SwWebDocShell::Factory().RegisterAccel(SW_RES(CFG_SWWEB_ACCEL));
+    SfxObjectFactory* pWDocFact = &SwWebDocShell::Factory();
+
+    SwModule* pModule = new SwModule( pWDocFact, pDocFact, pGlobDocFact );
+    (*ppShlPtr) = pModule;
+
+    if ( aOpt.IsWriter() )
+    {
+        SwDocShell::RegisterFactory(    SDT_SW_DOCFACTPRIO      );
+        SwGlobalDocShell::RegisterFactory(SDT_SW_DOCFACTPRIO + 2);
+    }
+
+    // WebWriter alway needed because it is used for the help viewer
+    SwWebDocShell::RegisterFactory( SDT_SW_DOCFACTPRIO + 1  );
 
     SdrObjFactory::InsertMakeObjectHdl( LINK( &aSwObjectFactory, SwObjectFactory, MakeObject ) );
 
@@ -185,7 +185,7 @@ void SwDLL::Exit()
     // Objekt-Factory austragen
     SdrObjFactory::RemoveMakeObjectHdl(LINK(&aSwObjectFactory, SwObjectFactory, MakeObject ));
    // the SwModule must be destroyed
-    SwModuleDummy** ppShlPtr = (SwModuleDummy**) GetAppData(SHL_WRITER);
+    SwModule** ppShlPtr = (SwModule**) GetAppData(SHL_WRITER);
     delete (*ppShlPtr);
     (*ppShlPtr) = NULL;
 }
