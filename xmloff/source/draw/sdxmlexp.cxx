@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:00:32 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 14:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -777,7 +777,7 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
 
     _GetNamespaceMap().Add(
         GetXMLToken(XML_NP_SMIL),
-        GetXMLToken(XML_N_SMIL),
+        GetXMLToken(XML_N_SMIL_COMPAT),
         XML_NAMESPACE_SMIL);
 
     _GetNamespaceMap().Add(
