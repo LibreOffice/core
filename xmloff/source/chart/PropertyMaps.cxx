@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:02 $
+ *  last change: $Author: bm $ $Date: 2001-10-30 14:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #ifndef _XMLERRORINDICATORPROPERTYHDL_HXX_
 #include "XMLErrorIndicatorPropertyHdl.hxx"
 #endif
+#ifndef _XMLTEXTORIENTATIONHDL_HXX_
+#include "XMLTextOrientationHdl.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_CHART_CHARTAXISMARKS_HPP_
 #include <com/sun/star/chart/ChartAxisMarks.hpp>
@@ -189,7 +192,10 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
                 pHdl = new XMLEnumPropertyHdl( aXMLChartDataRowSourceTypeEnumMap,
                                                ::getCppuType((const chart::ChartDataRowSource*)0) );
                 break;
-    }
+            case XML_SCH_TYPE_TEXT_ORIENTATION:
+                pHdl = new XMLTextOrientationHdl();
+                break;
+        }
         if( pHdl )
             PutHdlCache( nType, pHdl );
     }

@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.24 2001-07-24 11:23:13 cl Exp $
+	$Id: chart.mod,v 1.25 2001-10-30 14:53:54 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -91,7 +91,9 @@
 		  chart:symbol %integer; "-1"
 		  chart:vertical %boolean; "false"
 		  chart:lines-used %nonNegativeInteger; "0"
-		  chart:connect-bars %boolean; "false">
+		  chart:connect-bars %boolean; "false"
+		  chart:spline-order %nonNegativeInteger; "2"
+		  chart:spline-resolution %nonNegativeInteger; "20">
 
 <!-- Main/Sub Title -->
 <!-- the cell-address attribute is currently not supported for titles -->
@@ -186,7 +188,8 @@
 		  chart:overlap %integer; #IMPLIED
 		  text:line-break %boolean; "true"
 		  chart:display-label %boolean; "true"
-		  chart:label-arrangement (side-by-side|stagger-even|stagger-odd) "side-by-side" 
+		  chart:label-arrangement (side-by-side|stagger-even|stagger-odd) "side-by-side"
+		  chart:text-overlap %boolean; "false"
 		  chart:visible %boolean; "true" 
 		  chart:link-data-style-to-source %boolean; "true" >
 
@@ -246,7 +249,9 @@
 
 <!-- general text properties -->
 
-<!ATTLIST style:properties text:rotation-angle %integer; "0" >
+<!ATTLIST style:properties 
+		  text:rotation-angle %integer; "0" 
+		  fo:direction (ltr|ttb) #IMPLIED >
 
 <!-- symbol properties -->
 

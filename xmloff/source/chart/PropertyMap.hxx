@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: bm $ $Date: 2001-08-28 12:17:21 $
+ *  last change: $Author: bm $ $Date: 2001-10-30 14:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@
 #define XML_SCH_TYPE_ERROR_INDICATOR_UPPER  ( XML_SCH_TYPES_START + 4 )
 #define XML_SCH_TYPE_ERROR_INDICATOR_LOWER  ( XML_SCH_TYPES_START + 5 )
 #define XML_SCH_TYPE_DATAROWSOURCE          ( XML_SCH_TYPES_START + 6 )
+#define XML_SCH_TYPE_TEXT_ORIENTATION       ( XML_SCH_TYPES_START + 7 )
 
 // context ids
 #define XML_SCH_CONTEXT_USER_SYMBOL                 ( XML_SCH_CTF_START + 0 )
@@ -213,6 +214,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
 
     // text properties for titles
     MAP_SPECIAL( "TextRotation", TEXT, XML_ROTATION_ANGLE, XML_TYPE_NUMBER, TEXT_ROTATION ),    // convert 1/100th degrees to degrees
+    MAP_ENTRY( "StackedText", FO, XML_DIRECTION, XML_SCH_TYPE_TEXT_ORIENTATION ),
 
     // for compatability to pre 6.0beta documents
     MAP_SPECIAL( "SymbolBitmapURL", CHART, XML_SYMBOL_IMAGE_NAME, XML_TYPE_STRING, SYMBOL_IMAGE_NAME ),
