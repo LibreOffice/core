@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-11-07 10:38:49 $
+ *  last change: $Author: os $ $Date: 2002-11-29 17:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,46 +692,7 @@ struct RulerArrow
     USHORT  nStyle;
 };
 
-// -----------------
-// - ImplRulerData -
-// -----------------
-
-class ImplRulerData
-{
-    friend              class Ruler;
-
-private:
-    RulerLine*          pLines;
-    RulerArrow*         pArrows;
-    RulerBorder*        pBorders;
-    RulerIndent*        pIndents;
-    RulerTab*           pTabs;
-    long                nNullVirOff;
-    long                nRulVirOff;
-    long                nRulWidth;
-    long                nPageOff;
-    long                nPageWidth;
-    long                nNullOff;
-    long                nMargin1;
-    long                nMargin2;
-    USHORT              nLines;
-    USHORT              nArrows;
-    USHORT              nBorders;
-    USHORT              nIndents;
-    USHORT              nTabs;
-    USHORT              nMargin1Style;
-    USHORT              nMargin2Style;
-    BOOL                bAutoPageWidth;
-    BOOL                bTextRTL;
-
-#ifdef _SV_RULER_CXX
-public:
-                        ImplRulerData();
-                        ~ImplRulerData();
-    ImplRulerData&      operator=( const ImplRulerData& rData );
-#endif
-};
-
+class ImplRulerData;
 // ---------
 // - Ruler -
 // ---------
@@ -753,9 +714,9 @@ private:
     long                mnStartDragPos;
     long                mnDragPos;
     ULONG               mnUpdateEvtId;
+    ImplRulerData*      mpSaveData;
     ImplRulerData*      mpData;
-    ImplRulerData       maData;
-    ImplRulerData       maDragData;
+    ImplRulerData*      mpDragData;
     Rectangle           maExtraRect;
     WinBits             mnWinStyle;
     USHORT              mnUnitIndex;
@@ -842,8 +803,8 @@ public:
     long                GetWinOffset() const { return mnWinOff; }
     long                GetWinWidth() const { return mnWinWidth; }
     void                SetPagePos( long nOff = 0, long nWidth = 0 );
-    long                GetPageOffset() const { return mpData->nPageOff; }
-    long                GetPageWidth() const { return mpData->nPageWidth; }
+    long                GetPageOffset() const;
+    long                GetPageWidth() const;
     void                SetBorderPos( long nOff = 0 );
     long                GetBorderOffset() const { return mnBorderOff; }
     Rectangle           GetExtraRect() const { return maExtraRect; }
@@ -884,35 +845,35 @@ public:
                                  USHORT* pAryPos = NULL ) const;
 
     void                SetNullOffset( long nPos );
-    long                GetNullOffset() const { return mpData->nNullOff; }
+    long                GetNullOffset() const;
     void                SetMargin1() { SetMargin1( 0, RULER_STYLE_INVISIBLE ); }
     void                SetMargin1( long nPos, USHORT nMarginStyle = RULER_MARGIN_SIZEABLE );
-    long                GetMargin1() const { return mpData->nMargin1; }
-    USHORT              GetMargin1Style() const { return mpData->nMargin1Style; }
+    long                GetMargin1() const;
+    USHORT              GetMargin1Style() const;
     void                SetMargin2() { SetMargin2( 0, RULER_STYLE_INVISIBLE ); }
     void                SetMargin2( long nPos, USHORT nMarginStyle = RULER_MARGIN_SIZEABLE );
-    long                GetMargin2() const { return mpData->nMargin2; }
-    USHORT              GetMargin2Style() const { return mpData->nMargin2Style; }
+    long                GetMargin2() const;
+    USHORT              GetMargin2Style() const;
 
     void                SetLines( USHORT n = 0, const RulerLine* pLineAry = NULL );
-    USHORT              GetLineCount() const { return mpData->nLines; }
-    const RulerLine*    GetLines() const { return mpData->pLines; }
+    USHORT              GetLineCount() const;
+    const RulerLine*    GetLines() const;
 
     void                SetArrows( USHORT n = 0, const RulerArrow* pArrowAry = NULL );
-    USHORT              GetArrowCount() const { return mpData->nArrows; }
-    const RulerArrow*   GetArrows() const { return mpData->pArrows; }
+    USHORT              GetArrowCount() const;
+    const RulerArrow*   GetArrows() const;
 
     void                SetBorders( USHORT n = 0, const RulerBorder* pBrdAry = NULL );
-    USHORT              GetBorderCount() const { return mpData->nBorders; }
-    const RulerBorder*  GetBorders() const { return mpData->pBorders; }
+    USHORT              GetBorderCount() const;
+    const RulerBorder*  GetBorders() const;
 
     void                SetIndents( USHORT n = 0, const RulerIndent* pIndentAry = NULL );
-    USHORT              GetIndentCount() const { return mpData->nIndents; }
-    const RulerIndent*  GetIndents() const { return mpData->pIndents; }
+    USHORT              GetIndentCount() const;
+    const RulerIndent*  GetIndents() const;
 
     void                SetTabs( USHORT n = 0, const RulerTab* pTabAry = NULL );
-    USHORT              GetTabCount() const { return mpData->nTabs; }
-    const RulerTab*     GetTabs() const { return mpData->pTabs; }
+    USHORT              GetTabCount() const;
+    const RulerTab*     GetTabs() const;
 
     static void         DrawTab( OutputDevice* pDevice,
                                  const Point& rPos, USHORT nStyle );

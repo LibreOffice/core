@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-11-07 10:40:08 $
+ *  last change: $Author: os $ $Date: 2002-11-29 17:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,46 @@
 #define RULER_UNIT_POINT    7
 #define RULER_UNIT_PICA     8
 #define RULER_UNIT_COUNT    9
+
+// -----------------
+// - ImplRulerData -
+// -----------------
+class ImplRulerData
+{
+    friend              class Ruler;
+
+private:
+    RulerLine*          pLines;
+    RulerArrow*         pArrows;
+    RulerBorder*        pBorders;
+    RulerIndent*        pIndents;
+    RulerTab*           pTabs;
+    long                nNullVirOff;
+    long                nRulVirOff;
+    long                nRulWidth;
+    long                nPageOff;
+    long                nPageWidth;
+    long                nNullOff;
+    long                nMargin1;
+    long                nMargin2;
+    USHORT              nLines;
+    USHORT              nArrows;
+    USHORT              nBorders;
+    USHORT              nIndents;
+    USHORT              nTabs;
+    USHORT              nMargin1Style;
+    USHORT              nMargin2Style;
+    BOOL                bAutoPageWidth;
+    BOOL                bTextRTL;
+
+#ifdef _SV_RULER_CXX
+public:
+                        ImplRulerData();
+                        ~ImplRulerData();
+    ImplRulerData&      operator=( const ImplRulerData& rData );
+#endif
+};
+
 
 struct ImplRulerUnitData
 {
@@ -290,7 +330,7 @@ void Ruler::ImplInit( WinBits nWinBits )
     mbAutoWinWidth  = TRUE;                 // EditWinBreite == RulerBreite
     mbActive        = TRUE;                 // Ist Lineal aktiv
     mnUpdateFlags   = 0;                    // Was soll im Update-Handler upgedatet werden
-    mpData          = &maData;              // Wir zeigen auf die normalen Daten
+    mpData          = mpSaveData;           // Wir zeigen auf die normalen Daten
     meExtraType     = RULER_EXTRA_DONTKNOW; // Was im ExtraFeld dargestellt wird
     meDragType      = RULER_TYPE_DONTKNOW;  // Gibt an, was gedragt wird
 
@@ -329,7 +369,10 @@ void Ruler::ImplInit( WinBits nWinBits )
 Ruler::Ruler( Window* pParent, WinBits nWinStyle ) :
     Window( pParent, nWinStyle & WB_3DLOOK ),
     maVirDev( *this ),
-    maMapMode( MAP_100TH_MM )
+    maMapMode( MAP_100TH_MM ),
+    mpSaveData(new ImplRulerData),
+    mpDragData(new ImplRulerData),
+    mpData(0)
 {
     ImplInit( nWinStyle );
 }
@@ -340,6 +383,8 @@ Ruler::~Ruler()
 {
     if ( mnUpdateEvtId )
         Application::RemoveUserEvent( mnUpdateEvtId );
+    delete mpSaveData;
+    delete mpDragData;
 }
 
 // -----------------------------------------------------------------------
@@ -1439,6 +1484,14 @@ void Ruler::ImplInitExtraField( BOOL bUpdate )
         maExtraRect.Right()  = RULER_OFF+mnVirHeight-1;
         maExtraRect.Bottom() = RULER_OFF+mnVirHeight-1;
         mnVirOff = maExtraRect.Right()+1;
+        if(mpData->bTextRTL)
+        {
+            Size aWinSize = GetOutputSizePixel();
+            if(mnWinStyle & WB_HORZ)
+                maExtraRect.Move(aWinSize.Width() - maExtraRect.GetWidth() - maExtraRect.Left(), 0);
+            else
+                maExtraRect.Move(0, aWinSize.Height() - maExtraRect.GetHeight() - maExtraRect.Top());
+        }
     }
     else
     {
@@ -1466,17 +1519,24 @@ void Ruler::ImplDraw()
         // Lineal ueber das VirtualDevice ausgeben
         Point   aOffPos;
         Size    aVirDevSize = maVirDev.GetOutputSizePixel();
+        Size    aVirDevSize2 = maVirDev.GetOutputSizePixel();
         if ( mnWinStyle & WB_HORZ )
         {
-            aOffPos.X() = mnVirOff;
+            if(!mpData->bTextRTL)
+                aOffPos.X() = mnVirOff;
+//  else
+//      aVirDevSize.Width() -= mnVirOff;
             aOffPos.Y() = RULER_OFF;
         }
         else
         {
             aOffPos.X() = RULER_OFF;
-            aOffPos.Y() = mnVirOff;
+            if(!mpData->bTextRTL)
+                aOffPos.Y() = mnVirOff;
+//  else
+//      aVirDevSize.Height() -= mnVirOff;
         }
-        DrawOutDev( aOffPos, aVirDevSize, Point(), aVirDevSize, maVirDev );
+        DrawOutDev( aOffPos, aVirDevSize, Point(), aVirDevSize2, maVirDev );
 
         // Positionslinien neu malen
         ImplInvertLines( TRUE );
@@ -1550,9 +1610,16 @@ void Ruler::ImplDrawExtra( BOOL bPaint )
         Point aDraw(aCenter);
         ImplCenterTabPos( aDraw, nTabStyle );
         WinBits nWinBits = GetStyle();
-        if(( 0 == (nWinBits&WB_HORZ) ) && (0 != (nWinBits&WB_RIGHT_ALIGNED)))
+        if(0 == (nWinBits&WB_HORZ) )
         {
-            aDraw.Y() = 2 * aCenter.Y() - aDraw.Y();
+            if(0 != (nWinBits&WB_RIGHT_ALIGNED))
+                aDraw.Y() = 2 * aCenter.Y() - aDraw.Y();
+            if(mpData->bTextRTL)
+            {
+                long nTemp = aDraw.X();
+                aDraw.X() = aDraw.Y();
+                aDraw.Y() = nTemp;
+            }
         }
         ImplDrawTab( this, aDraw, nTabStyle );
     }
@@ -1961,8 +2028,8 @@ BOOL Ruler::ImplStartDrag( ImplRulerHitTest* pHitTest, USHORT nModifier )
     mnDragAryPos    = pHitTest->nAryPos;
     mnDragSize      = pHitTest->mnDragSize;
     mnDragModifier  = nModifier;
-    maDragData      = maData;
-    mpData          = &maDragData;
+    *mpDragData     = *mpSaveData;
+    mpData          = mpDragData;
 
     // Handler rufen
     if ( StartDrag() )
@@ -1983,7 +2050,7 @@ BOOL Ruler::ImplStartDrag( ImplRulerHitTest* pHitTest, USHORT nModifier )
         mnDragAryPos    = 0;
         mnDragSize      = 0;
         mnDragModifier  = 0;
-        mpData          = &maData;
+        mpData          = mpSaveData;
     }
 
     return FALSE;
@@ -2033,8 +2100,8 @@ void Ruler::ImplDrag( const Point& rPos )
             // Daten wiederherstellen
             mbDragCanceled = TRUE;
             ImplRulerData aTempData;
-            aTempData = maDragData;
-            maDragData = maData;
+            aTempData = *mpDragData;
+            *mpDragData = *mpSaveData;
             mbCalc = TRUE;
             mbFormat = TRUE;
 
@@ -2052,7 +2119,7 @@ void Ruler::ImplDrag( const Point& rPos )
             ImplDraw();
 
             // Daten wieder wie vor dem Cancel herstellen
-            maDragData = aTempData;
+            *mpDragData = aTempData;
         }
     }
     else
@@ -2082,10 +2149,10 @@ void Ruler::ImplEndDrag()
 {
     // Werte uebernehmen
     if ( mbDragCanceled )
-        maDragData = maData;
+        *mpDragData = *mpSaveData;
     else
-        maData = maDragData;
-    mpData = &maData;
+        *mpSaveData = *mpDragData;
+    mpData = mpSaveData;
     mbDrag = FALSE;
 
     // Handler rufen
@@ -2368,11 +2435,12 @@ void Ruler::Resize()
 
     // Wenn sich die Hoehe bzw. Breite aendert, dann muessen besimmte Werte
     // neu berechnet werden
+    //extra field should always be updated
+    ImplInitExtraField( mpData->bTextRTL );
     if ( nNewHeight )
     {
         mbCalc = TRUE;
         mnVirHeight = nNewHeight - mnBorderWidth - (RULER_OFF*2);
-        ImplInitExtraField( FALSE );
     }
     else
     {
@@ -3125,7 +3193,27 @@ void Ruler::DrawTab( OutputDevice* pDevice, const Point& rPos, USHORT nStyle )
  * --------------------------------------------------*/
 void Ruler::SetTextRTL(BOOL bRTL)
 {
-    mpData->bTextRTL = bRTL;
-    if ( IsReallyVisible() && IsUpdateMode() )
-        ImplDrawExtra( FALSE );
+    if(mpData->bTextRTL != bRTL)
+    {
+        mpData->bTextRTL = bRTL;
+        if ( IsReallyVisible() && IsUpdateMode() )
+            ImplInitExtraField( TRUE );
+    }
+
 }
+long Ruler::GetPageOffset() const { return mpData->nPageOff; }
+long                Ruler::GetPageWidth() const { return mpData->nPageWidth; }
+long                Ruler::GetNullOffset() const { return mpData->nNullOff; }
+long                Ruler::GetMargin1() const { return mpData->nMargin1; }
+USHORT              Ruler::GetMargin1Style() const { return mpData->nMargin1Style; }
+long                Ruler::GetMargin2() const { return mpData->nMargin2; }
+USHORT              Ruler::GetMargin2Style() const { return mpData->nMargin2Style; }
+USHORT              Ruler::GetLineCount() const { return mpData->nLines; }
+const RulerLine*    Ruler::GetLines() const { return mpData->pLines; }
+USHORT              Ruler::GetArrowCount() const { return mpData->nArrows; }
+const RulerArrow*   Ruler::GetArrows() const { return mpData->pArrows; }
+USHORT              Ruler::GetBorderCount() const { return mpData->nBorders; }
+const RulerBorder*  Ruler::GetBorders() const { return mpData->pBorders; }
+USHORT              Ruler::GetIndentCount() const { return mpData->nIndents; }
+const RulerIndent*  Ruler::GetIndents() const { return mpData->pIndents; }
+
