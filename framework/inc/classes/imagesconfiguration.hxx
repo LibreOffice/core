@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagesconfiguration.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-09 08:01:21 $
+ *  last change: $Author: mba $ $Date: 2001-11-27 09:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,12 @@
 namespace framework
 {
 
+enum ImageMaskMode
+{
+    ImageMaskMode_Color,
+    ImageMaskMode_Bitmap
+};
+
 struct ImageItemDescriptor
 {
     ImageItemDescriptor() : nIndex( -1 ) {}
@@ -100,11 +106,14 @@ SV_DECL_PTRARR_DEL( ExternalImageItemListDescriptor, ExternalImageItemDescriptor
 
 struct ImageListItemDescriptor
 {
-    ImageListItemDescriptor() : pImageItemList( 0 ) {}
+    ImageListItemDescriptor() : pImageItemList( 0 )
+                                , nMaskMode( ImageMaskMode_Color ) {}
     ~ImageListItemDescriptor() { delete pImageItemList; }
 
     String                      aURL;           // a URL to a bitmap with several images inside
     Color                       aMaskColor;     // a color used as transparent
+    String                      aMaskURL;       // a URL to an optional bitmap used as a mask
+    ImageMaskMode               nMaskMode;      // a enum to describe the current mask mode
     ImageItemListDescriptor*    pImageItemList; // an array of ImageItemDescriptors that describes every image
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagesdocumenthandler.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-09 07:49:26 $
+ *  last change: $Author: mba $ $Date: 2001-11-27 09:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,8 @@ class OReadImagesDocumentHandler : public ::com::sun::star::xml::sax::XDocumentH
             IMG_ATTRIBUTE_MASKCOLOR,
             IMG_ATTRIBUTE_COMMAND,
             IMG_ATTRIBUTE_BITMAPINDEX,
+            IMG_ATTRIBUTE_MASKURL,
+            IMG_ATTRIBUTE_MASKMODE,
             IMG_XML_ENTRY_COUNT
         };
 
@@ -204,6 +206,8 @@ class OReadImagesDocumentHandler : public ::com::sun::star::xml::sax::XDocumentH
         sal_Bool                                                                    m_bExternalImagesStartFound;
         sal_Bool                                                                    m_bExternalImagesEndFound;
         sal_Bool                                                                    m_bExternalImageStartFound;
+        sal_Int32                                                                   m_nHashMaskModeBitmap;
+        sal_Int32                                                                   m_nHashMaskModeColor;
         ImageHashMap                                                                m_aImageMap;
         ImageListsDescriptor&                                                       m_aImageList;
         ImageListItemDescriptor*                                                    m_pImages;
