@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-11-23 19:17:50 $
+ *  last change: $Author: ab $ $Date: 2001-11-26 14:26:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #include "iosys.hxx"
 #include "image.hxx"
 
+#include "segmentc.hxx"
+#pragma SW_SEGMENT_CLASS( SBRUNTIME, SBRUNTIME_CODE )
+
 // Laden einer numerischen Konstanten (+ID)
 
 void SbiRuntime::StepLOADNC( USHORT nOp1 )
@@ -89,8 +92,7 @@ void SbiRuntime::StepLOADNC( USHORT nOp1 )
         aStr += '.';
         aStr += aStr2;
     }
-    double n = SolarMath::StringToDouble( aStr.GetBuffer(), '.', ',', nErrno );
-    //ALT: double n = atof( pImg->GetString( nOp1 ) );
+    double n = SolarMath::StringToDouble( aStr.GetBuffer(), ',', '.', nErrno );
 
     p->PutDouble( n );
     PushVar( p );
