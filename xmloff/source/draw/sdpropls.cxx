@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-01 19:19:53 $
+ *  last change: $Author: cl $ $Date: 2000-12-04 08:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,6 @@
 
 #pragma hdrstop
 
-#ifndef _COM_SUN_STAR_UCB_XANYCOMPAREFACTORY_HPP_
-#include <com/sun/star/ucb/XAnyCompareFactory.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXREPLACE_HPP_
-#include <com/sun/star/container/XIndexReplace.hpp>
-#endif
-
 #ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
 #endif
@@ -105,10 +97,6 @@
 #include <NamedBoolPropertyHdl.hxx>
 #endif
 
-#ifndef _XMLOFF_PROPERTYHANDLER_NUMRULE_HXX
-#include "numithdl.hxx"
-#endif
-
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include <xmlkywd.hxx>
 #endif
@@ -119,10 +107,6 @@
 
 #ifndef _PROPIMP0_HXX
 #include "propimp0.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -150,6 +134,19 @@ using namespace ::com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 // entry list for graphic properties
+
+#define CTF_CHARHEIGHT               1
+#define CTF_CHARHEIGHT_REL           2
+#define CTF_PARALEFTMARGIN           3
+#define CTF_PARALEFTMARGIN_REL       4
+#define CTF_PARARIGHTMARGIN          5
+#define CTF_PARARIGHTMARGIN_REL      6
+#define CTF_PARAFIRSTLINE            7
+#define CTF_PARAFIRSTLINE_REL        8
+#define CTF_PARATOPMARGIN            9
+#define CTF_PARATOPMARGIN_REL       10
+#define CTF_PARABOTTOMMARGIN        11
+#define CTF_PARABOTTOMMARGIN_REL    12
 
 const XMLPropertyMapEntry aXMLSDProperties[] =
 {
@@ -203,50 +200,63 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "EdgeNode2VertDist",  XML_NAMESPACE_DRAW, sXML_end_line_spacing_vertical,     XML_TYPE_MEASURE, 0 },
 
     // measure attributes
-    { "MeasureLineDistance",        XML_NAMESPACE_DRAW, sXML_line_distance,         XML_TYPE_MEASURE, 0 },
-    { "MeasureHelpLineOverhang",    XML_NAMESPACE_DRAW, sXML_guide_overhang,        XML_TYPE_MEASURE, 0 },
-    { "MeasureHelpLineDistance",    XML_NAMESPACE_DRAW, sXML_guide_distance,        XML_TYPE_MEASURE, 0 },
-    { "MeasureHelpLine1Length",     XML_NAMESPACE_DRAW, sXML_start_guide,           XML_TYPE_MEASURE, 0 },
-    { "MeasureHelpLine2Length",     XML_NAMESPACE_DRAW, sXML_end_guide,             XML_TYPE_MEASURE, 0 },
-//  { "MeasureUnit",                XML_NAMESPACE_DRAW, sXML_unit,                  XML_TYPE_MEASURE_UNIT|MID_FLAG_MULTI_PROPERTY, 0 },
-//  { "MeasureShowUnit",            XML_NAMESPACE_DRAW, sXML_unit,                  XML_TYPE_MEASURE_UNIT|MID_FLAG_MULTI_PROPERTY, 0 },
-//  { "MeasureBelowReferenceEdge",  XML_NAMESPACE_DRAW, sXML_placing,               XML_TYPE_MEASURE_PLACING, 0 },
-    { "MeasureTextRotate90",        XML_NAMESPACE_DRAW, sXML_parallel,              XML_TYPE_BOOL, 0 },
+    { "MeasureLineDistance",        XML_NAMESPACE_DRAW, sXML_line_distance,             XML_TYPE_MEASURE, 0 },
+    { "MeasureHelpLineOverhang",    XML_NAMESPACE_DRAW, sXML_guide_overhang,            XML_TYPE_MEASURE, 0 },
+    { "MeasureHelpLineDistance",    XML_NAMESPACE_DRAW, sXML_guide_distance,            XML_TYPE_MEASURE, 0 },
+    { "MeasureHelpLine1Length",     XML_NAMESPACE_DRAW, sXML_start_guide,               XML_TYPE_MEASURE, 0 },
+    { "MeasureHelpLine2Length",     XML_NAMESPACE_DRAW, sXML_end_guide,                 XML_TYPE_MEASURE, 0 },
+//  { "MeasureUnit",                XML_NAMESPACE_DRAW, sXML_unit,                      XML_TYPE_MEASURE_UNIT|MID_FLAG_MULTI_PROPERTY, 0 },
+//  { "MeasureShowUnit",            XML_NAMESPACE_DRAW, sXML_unit,                      XML_TYPE_MEASURE_UNIT|MID_FLAG_MULTI_PROPERTY, 0 },
+//  { "MeasureBelowReferenceEdge",  XML_NAMESPACE_DRAW, sXML_placing,                   XML_TYPE_MEASURE_PLACING, 0 },
+    { "MeasureTextRotate90",        XML_NAMESPACE_DRAW, sXML_parallel,                  XML_TYPE_BOOL, 0 },
 
 
     // text attributes
-    { "CharColor",              XML_NAMESPACE_FO,       sXML_color,                 XML_TYPE_COLOR, 0 },
-    { "CharCrossedOut",         XML_NAMESPACE_STYLE,    sXML_text_crossing_out,     XML_SD_TYPE_TEXT_CROSSEDOUT,    0},
-    { "CharEscapement",         XML_NAMESPACE_STYLE,    sXML_text_position,         XML_TYPE_TEXT_ESCAPEMENT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 },
-    { "CharEscapementHeight",   XML_NAMESPACE_STYLE,    sXML_text_position,         XML_TYPE_TEXT_ESCAPEMENT_HEIGHT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 },
-    { "CharFontName",           XML_NAMESPACE_FO,       sXML_font_family,           XML_TYPE_TEXT_FONTFAMILYNAME, 0 },
-    { "CharFontStyleName",      XML_NAMESPACE_STYLE,    sXML_font_style_name,       XML_TYPE_STRING, 0 },
-    { "CharFontFamily",         XML_NAMESPACE_STYLE,    sXML_font_family_generic,   XML_TYPE_TEXT_FONTFAMILY, 0 },
-    { "CharFontPitch",          XML_NAMESPACE_STYLE,    sXML_font_pitch,            XML_TYPE_TEXT_FONTPITCH, 0 },
-    { "CharFontCharSet",        XML_NAMESPACE_STYLE,    sXML_font_charset,          XML_TYPE_TEXT_FONTENCODING, 0 },
-    { "CharHeight",             XML_NAMESPACE_FO,       sXML_font_size,             XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT },
-// ??   { "CharPropFontHeight", XML_NAMESPACE_FO,       sXML_font_size,             XML_TYPE_CHAR_HEIGHT_PROP|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_REL },
+    { "CharColor",      XML_NAMESPACE_FO,       sXML_color,                 XML_TYPE_COLOR, 0 },
+    { "CharCrossedOut", XML_NAMESPACE_STYLE,    sXML_text_crossing_out,     XML_SD_TYPE_TEXT_CROSSEDOUT,    0},
+    { "CharEscapement",      XML_NAMESPACE_STYLE, sXML_text_position,   XML_TYPE_TEXT_ESCAPEMENT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "CharEscapementHeight", XML_NAMESPACE_STYLE, sXML_text_position,  XML_TYPE_TEXT_ESCAPEMENT_HEIGHT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "CharFontName",   XML_NAMESPACE_FO,       sXML_font_family,       XML_TYPE_TEXT_FONTFAMILYNAME, 0 },
+    { "CharFontStyleName",XML_NAMESPACE_STYLE,  sXML_font_style_name,   XML_TYPE_STRING, 0 },
+    { "CharFontFamily", XML_NAMESPACE_STYLE,    sXML_font_family_generic,XML_TYPE_TEXT_FONTFAMILY, 0 },
+    { "CharFontPitch",  XML_NAMESPACE_STYLE,    sXML_font_pitch,            XML_TYPE_TEXT_FONTPITCH, 0 },
+    { "CharFontCharSet",    XML_NAMESPACE_STYLE,    sXML_font_charset,      XML_TYPE_TEXT_FONTENCODING, 0 },
+    { "CharHeight",       XML_NAMESPACE_FO, sXML_font_size,         XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT },
+// ??   { "CharPropFontHeight",XML_NAMESPACE_FO,    sXML_font_size,         XML_TYPE_CHAR_HEIGHT_PROP|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_REL },
 // ??   { "CharKerning",        XML_NAMESPACE_FO,       sXML_letter_spacing,        XML_TYPE_TEXT_KERNING, 0 },
-    { "CharLocale",             XML_NAMESPACE_FO,       sXML_language,              XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 },
-    { "CharLocale",             XML_NAMESPACE_FO,       sXML_country,               XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 },
-    { "CharPosture",            XML_NAMESPACE_FO,       sXML_font_style,            XML_TYPE_TEXT_POSTURE, 0 },
-    { "CharShadowed",           XML_NAMESPACE_FO,       sXML_text_shadow,           XML_TYPE_TEXT_SHADOWED, 0 },
-    { "CharUnderline",          XML_NAMESPACE_STYLE,    sXML_text_underline,        XML_TYPE_TEXT_UNDERLINE, 0 },
-    { "CharWeight",             XML_NAMESPACE_FO,       sXML_font_weight,           XML_TYPE_TEXT_WEIGHT, 0 },
+    { "CharLocale",     XML_NAMESPACE_FO,       sXML_language,          XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 },
+    { "CharLocale",     XML_NAMESPACE_FO,       sXML_country,           XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 },
+    { "CharPosture",        XML_NAMESPACE_FO,       sXML_font_style,            XML_TYPE_TEXT_POSTURE, 0 },
+    { "CharShadowed",   XML_NAMESPACE_FO,       sXML_text_shadow,       XML_TYPE_TEXT_SHADOWED, 0 },
+    { "CharUnderline",  XML_NAMESPACE_STYLE,    sXML_text_underline,        XML_TYPE_TEXT_UNDERLINE, 0 },
+    { "CharWeight",     XML_NAMESPACE_FO,       sXML_font_weight,       XML_TYPE_TEXT_WEIGHT, 0 },
+// ??   { "WordMode",       XML_NAMESPACE_STYLE,    sXML_decorate_words_only,XML_TYPE_BOOL, 0 },
+// ??   { "CharAutoKerning",    XML_NAMESPACE_STYLE,    sXML_letter_kerning,        XML_TYPE_BOOL, 0 },
     { "ParaLineSpacing",        XML_NAMESPACE_FO,       sXML_line_height,           XML_TYPE_LINE_SPACE_FIXED, 0 },
     { "ParaLineSpacing",        XML_NAMESPACE_STYLE,    sXML_line_height_at_least,  XML_TYPE_LINE_SPACE_MINIMUM, 0 },
     { "ParaLineSpacing",        XML_NAMESPACE_STYLE,    sXML_line_spacing,          XML_TYPE_LINE_SPACE_DISTANCE, 0 },
-    { "ParaAdjust",             XML_NAMESPACE_FO,       sXML_text_align,            XML_TYPE_TEXT_ADJUST, 0 },
-    { "ParaLastLineAdjust",     XML_NAMESPACE_STYLE,    sXML_text_align_last,       XML_TYPE_TEXT_ADJUSTLAST, 0 },
-    { "ParaIsHyphenation",      XML_NAMESPACE_FO,       sXML_hyphenate,             XML_TYPE_BOOL, 0 },
-    { "ParaLeftMargin",         XML_NAMESPACE_FO,       sXML_margin_left,           XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARALEFTMARGIN },
-    { "ParaRightMargin",        XML_NAMESPACE_FO,       sXML_margin_right,          XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARARIGHTMARGIN },
-    { "ParaFirstLineIndent",    XML_NAMESPACE_FO,       sXML_text_indent,           XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARAFIRSTLINE },
-    { "ParaLastLineAdjust",     XML_NAMESPACE_FO,       sXML_text_align_last,       XML_TYPE_TEXT_ADJUSTLAST, 0 },
-    { "ParaTopMargin",          XML_NAMESPACE_FO,       sXML_margin_top,            XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARATOPMARGIN },
-    { "ParaBottomMargin",       XML_NAMESPACE_FO,       sXML_margin_bottom,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARABOTTOMMARGIN },
-    { "NumberingRules",         XML_NAMESPACE_TEXT,     sXML_list_style,            XML_SD_TYPE_NUMBULLET|MID_FLAG_ELEMENT_ITEM, CTF_NUMBERINGRULES },
-    { "NumberingRules",         XML_NAMESPACE_TEXT,     sXML_list_style_name,       XML_TYPE_STRING, CTF_NUMBERINGRULES_NAME },
+    { "ParaAdjust",         XML_NAMESPACE_FO,       sXML_text_align,            XML_TYPE_TEXT_ADJUST, 0 },
+    { "ParaLastLineAdjust", XML_NAMESPACE_STYLE,    sXML_text_align_last,   XML_TYPE_TEXT_ADJUSTLAST, 0 },
+// ??   { "ParaExpandSingleWord",XML_NAMESPACE_STYLE,   sXML_justify_single_word,XML_TYPE_BOOL, 0 },
+    { "ParaIsHyphenation",  XML_NAMESPACE_FO,       sXML_hyphenate,         XML_TYPE_BOOL, 0 },
+// ??   { "ParaHyphenationMaxLeadingChars", XML_NAMESPACE_FO, sXML_hyphenation_remain_char_count, XML_TYPE_NUMBER, 0 },
+// ??   { "ParaHyphenationMaxTrailingChars",XML_NAMESPACE_FO, sXML_hyphenation_push_char_count, XML_TYPE_NUMBER, 0 },
+// ??   { "ParaHyphenationMaxHyphens",  XML_NAMESPACE_FO, sXML_hyphenation_ladder_count, XML_TYPE_NUMBER_NONE, 0 },
+    { "ParaLeftMargin",         XML_NAMESPACE_FO,   sXML_margin_left,       XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARALEFTMARGIN },
+// ??   { "ParaLeftMarginRelative", XML_NAMESPACE_FO,   sXML_margin_left,       XML_TYPE_PERCENT, CTF_PARALEFTMARGIN_REL },
+    { "ParaRightMargin",            XML_NAMESPACE_FO,   sXML_margin_right,      XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARARIGHTMARGIN },
+// ??   { "ParaRightMarginRelative",    XML_NAMESPACE_FO,   sXML_margin_right,      XML_TYPE_PERCENT, CTF_PARARIGHTMARGIN_REL },
+// ??   { "ParaFirstLineIndent",        XML_NAMESPACE_FO,   sXML_text_indent,       XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARAFIRSTLINE },
+// ??   { "ParaFirstLineIndentRelative",    XML_NAMESPACE_FO,   sXML_text_indent,   XML_TYPE_PERCENT, CTF_PARAFIRSTLINE_REL },
+    { "ParaLastLineAdjust", XML_NAMESPACE_FO, sXML_text_align_last,     XML_TYPE_TEXT_ADJUSTLAST, 0 },
+
+    { "ParaTopMargin",          XML_NAMESPACE_FO,   sXML_margin_top,            XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARATOPMARGIN },
+// ??   { "ParaTopMarginRelative",  XML_NAMESPACE_FO,   sXML_margin_top,            XML_TYPE_PERCENT, CTF_PARATOPMARGIN_REL },
+    { "ParaBottomMargin",       XML_NAMESPACE_FO,   sXML_margin_bottom,     XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARABOTTOMMARGIN },
+// ??   { "ParaBottomMarginRelative",XML_NAMESPACE_FO,  sXML_margin_bottom,     XML_TYPE_PERCENT, CTF_PARABOTTOMMARGIN_REL },
+    { "ParaIsCharacterDistance", XML_NAMESPACE_STYLE, sXML_text_autospace, XML_TYPE_TEXT_AUTOSPACE, 0 },
+    { "ParaIsHangingPunctuation", XML_NAMESPACE_STYLE, sXML_punctuation_wrap, XML_TYPE_TEXT_PUNCTUATION_WRAP, 0 },
+    { "ParaIsForbiddenRules", XML_NAMESPACE_STYLE, sXML_line_break, XML_TYPE_TEXT_LINE_BREAK, 0 },
 
     // 3D geometry attributes
     { "D3DHorizontalSegments",          XML_NAMESPACE_DR3D, sXML_horizontal_segments,   XML_TYPE_NUMBER, 0 },
@@ -461,11 +471,6 @@ SvXMLEnumMapEntry  aXML_TexMode_EnumMap[] =
 
 //////////////////////////////////////////////////////////////////////////////
 
-XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > xModel )
-: mxModel( xModel )
-{
-}
-
 XMLSdPropHdlFactory::~XMLSdPropHdlFactory()
 {
 }
@@ -594,15 +599,6 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLEnumPropertyHdl( aXML_TexMode_EnumMap, ::getCppuType((const drawing::TextureMode*)0) );
                 break;
             }
-            case XML_SD_TYPE_NUMBULLET:
-            {
-                uno::Reference<ucb::XAnyCompareFactory> xCompareFac( mxModel, uno::UNO_QUERY );
-                uno::Reference<ucb::XAnyCompare> xCompare;
-                if( xCompareFac.is() )
-                    xCompare = xCompareFac->createAnyCompareByName( OUString( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) ) );
-
-                pHdl = new XMLNumRulePropHdl( xCompare );
-            }
         }
 
         if(pHdl)
@@ -614,93 +610,4 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
 
 //////////////////////////////////////////////////////////////////////////////
 
-XMLShapePropertySetMapper::XMLShapePropertySetMapper(const UniReference< XMLPropertyHandlerFactory >& rFactoryRef)
-: XMLPropertySetMapper( aXMLSDProperties, rFactoryRef )
-{
-}
 
-XMLShapePropertySetMapper::~XMLShapePropertySetMapper()
-{
-}
-
-// ----------------------------------------
-
-XMLShapeExportPropertyMapper::XMLShapeExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, XMLTextListAutoStylePool *pListAutoPool, SvXMLExport& rExport ) :
-        SvXMLExportPropertyMapper( rMapper ),
-        mpListAutoPool( pListAutoPool ),
-        mrExport( rExport ),
-        maNumRuleExp( rExport ),
-        msCDATA( rtl::OUString::createFromAscii( sXML_CDATA )),
-        msTrue( rtl::OUString::createFromAscii( sXML_true )),
-        msFalse( rtl::OUString::createFromAscii( sXML_false )),
-        mbIsInAutoStyles( sal_False )
-{
-}
-
-XMLShapeExportPropertyMapper::~XMLShapeExportPropertyMapper()
-{
-}
-
-void XMLShapeExportPropertyMapper::ContextFilter(
-    std::vector< XMLPropertyState >& rProperties,
-    uno::Reference< beans::XPropertySet > rPropSet ) const
-{
-    // filter properties
-    for( std::vector< XMLPropertyState >::iterator property = rProperties.begin();
-         property != rProperties.end();
-         property++ )
-    {
-        // find properties with context
-        // to prevent writing this property set mnIndex member to -1
-        switch( getPropertySetMapper()->GetEntryContextId( property->mnIndex ))
-        {
-            case CTF_NUMBERINGRULES:
-                {
-                    if( mbIsInAutoStyles )
-                        property->mnIndex = -1;
-                }
-                break;
-            case CTF_NUMBERINGRULES_NAME:
-                {
-                    if( mbIsInAutoStyles )
-                    {
-                        uno::Reference< container::XIndexReplace > xNumRule;
-                        if( property->maValue >>= xNumRule )
-                        {
-                            const OUString sName = ((XMLTextListAutoStylePool*)&mrExport.GetTextParagraphExport()->GetListAutoStylePool())->Add( xNumRule );
-                            property->maValue <<= sName;
-                        }
-                    }
-                    else
-                    {
-                        property->mnIndex = -1;
-                    }
-                }
-                break;
-        }
-    }
-}
-
-void XMLShapeExportPropertyMapper::handleElementItem(
-    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-    const XMLPropertyState& rProperty, const SvXMLUnitConverter& rUnitConverter,
-    const SvXMLNamespaceMap& rNamespaceMap, sal_uInt16 nFlags,
-    const ::std::vector< XMLPropertyState > *pProperties,
-    sal_uInt32 nIdx) const
-{
-    switch( getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex ) )
-    {
-        case CTF_NUMBERINGRULES:
-            {
-                // only export list-styles as elements in styles section
-                if( !mbIsInAutoStyles )
-                {
-                    OUString sName;
-                    uno::Reference< container::XIndexReplace > xNumRule;
-                    if( rProperty.maValue >>= xNumRule )
-                        ((XMLShapeExportPropertyMapper*)this)->maNumRuleExp.exportNumberingRule( sName, xNumRule );
-                }
-            }
-            break;
-    }
-}
