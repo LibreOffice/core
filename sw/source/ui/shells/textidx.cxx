@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textidx.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:12:17 $
+ *  last change: $Author: os $ $Date: 2001-11-30 14:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             }
             if( nRet == RET_OK)
             {
-                SwIndexMarkModalDlg* pDlg = new SwIndexMarkModalDlg(pMDI, GetShell());
+                SwIndexMarkModalDlg* pDlg = new SwIndexMarkModalDlg(pMDI, GetShell(), aMgr.GetCurTOXMark());
                 pDlg->Execute();
                 delete pDlg;
             }

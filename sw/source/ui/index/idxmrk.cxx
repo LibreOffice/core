@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-11-26 17:02:53 $
+ *  last change: $Author: os $ $Date: 2001-11-30 14:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -923,11 +923,20 @@ SwIndexMarkDlg::~SwIndexMarkDlg()
 /* -----------------07.09.99 08:41-------------------
 
  --------------------------------------------------*/
-void    SwIndexMarkDlg::ReInitDlg(SwWrtShell& rWrtShell)
+void    SwIndexMarkDlg::ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark)
 {
     pSh = &rWrtShell;
     delete pTOXMgr;
     pTOXMgr = new SwTOXMgr(pSh);
+    if(pCurTOXMark)
+    {
+        for(USHORT i = 0; i < pTOXMgr->GetTOXMarkCount(); i++)
+            if(pTOXMgr->GetTOXMark(i) == pCurTOXMark)
+            {
+                pTOXMgr->SetCurTOXMark(i);
+                break;
+            }
+    }
     InitControls();
 }
 /* -----------------06.10.99 10:00-------------------
@@ -953,12 +962,12 @@ void    SwIndexMarkFloatDlg::Activate()
 /* -----------------06.10.99 10:35-------------------
 
  --------------------------------------------------*/
-SwIndexMarkModalDlg::SwIndexMarkModalDlg(Window *pParent, SwWrtShell& rSh) :
+SwIndexMarkModalDlg::SwIndexMarkModalDlg(Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark) :
     SvxStandardDialog(pParent, SW_RES(DLG_EDIT_IDXMARK)),
     aDlg(this, sal_False, ResId(WIN_DLG))
 {
     FreeResource();
-    aDlg.ReInitDlg(rSh);
+    aDlg.ReInitDlg(rSh, pCurTOXMark);
 }
 /* -----------------06.10.99 10:46-------------------
 

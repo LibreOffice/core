@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-29 13:39:32 $
+ *  last change: $Author: os $ $Date: 2001-11-30 14:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@
 #endif
 class SwWrtShell;
 class SwTOXMgr;
-
+class SwTOXMark;
 /*--------------------------------------------------------------------
      Beschreibung:  Markierung fuer Verzeichniseintrag einfuegen
  --------------------------------------------------------------------*/
@@ -188,7 +188,7 @@ public:
 
     ~SwIndexMarkDlg();
 
-    void    ReInitDlg(SwWrtShell& rWrtShell);
+    void    ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark = 0);
     sal_Bool    IsTOXType(const String& rName)
                 {return LISTBOX_ENTRY_NOTFOUND != aTypeDCB.GetEntryPos(rName);}
 };
@@ -214,7 +214,7 @@ class SwIndexMarkModalDlg : public SvxStandardDialog
 {
     SwIndexMarkDlg      aDlg;
 public:
-    SwIndexMarkModalDlg(Window *pParent, SwWrtShell& rSh);
+    SwIndexMarkModalDlg(Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark);
 
     SwIndexMarkDlg&     GetDlg() {return aDlg;}
     virtual void        Apply();
