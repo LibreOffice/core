@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:15:37 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,7 @@ void SwFrm::CheckDirChange()
                                 if ( pContact && pContact->GetAnchor() == this )
                                 {
                                     // change anchor position
-                                    pObj->SetAnchorPos( GetAnchorPos() );
+                                    pObj->SetAnchorPos( GetFrmAnchorPos( ::HasWrap( pObj ) ) );
                                     // check if the new position
                                     // would not exceed the margins of the page
                                     CaptureDrawObj( *pObj, Frm() );
@@ -386,7 +386,7 @@ void SwFrm::CheckDirChange()
                 else
                 {
                     // change anchor position
-                    pObj->SetAnchorPos( GetAnchorPos() );
+                    pObj->SetAnchorPos( GetFrmAnchorPos( ::HasWrap( pObj ) ) );
                     SwPageFrm* pPage = FindPageFrm();
                     if ( pPage )
                     {
@@ -405,11 +405,22 @@ void SwFrm::CheckDirChange()
  * returns the position for anchors based on frame direction
  * --------------------------------------------------*/
 
-Point SwFrm::GetAnchorPos() const
+Point SwFrm::GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
 {
     Point aAnchor = Frm().Pos();
     if ( IsVertical() || IsRightToLeft() )
         aAnchor.X() += Frm().Width();
+
+    if ( IsTxtFrm() )
+    {
+        SwTwips nBaseOfstForFly =
+            ((SwTxtFrm*)this)->GetBaseOfstForFly( bIgnoreFlysAnchoredAtThisFrame );
+        if ( IsVertical() )
+            aAnchor.Y() += nBaseOfstForFly;
+        else
+            aAnchor.X() += nBaseOfstForFly;
+    }
+
     return aAnchor;
 }
 
