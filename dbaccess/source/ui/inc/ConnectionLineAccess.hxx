@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLineAccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:20:40 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 11:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,22 +64,23 @@
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLERELATIONSET_HPP_
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
-#ifndef DBACCESS_ACCESSIBLEBASE_HXX
-#include "AccessibleBase.hxx"
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
+#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #endif
 
 namespace dbaui
 {
-    typedef ::cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleRelationSet
+    typedef ::cppu::ImplHelper2< ::com::sun::star::accessibility::XAccessibleRelationSet,
+                                 ::com::sun::star::accessibility::XAccessible
                                             > OConnectionLineAccess_BASE;
     class OTableConnection;
     /** the class OConnectionLineAccess represents the accessible object for the connection between two table windows
         like they are used in the QueryDesign and the RelationDesign
     */
-    class OConnectionLineAccess     :   public OAccessibleBase
+    class OConnectionLineAccess     :   public VCLXAccessibleComponent
                                     ,   public OConnectionLineAccess_BASE
     {
         const OTableConnection*             m_pLine; // the window which I should give accessibility to
@@ -99,11 +100,11 @@ namespace dbaui
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL acquire(  ) throw ()
         { // here inline is allowed because we do not use this class outside this dll
-            OAccessibleBase::acquire(  );
+            VCLXAccessibleComponent::acquire(  );
         }
         virtual void SAL_CALL release(  ) throw ()
         { // here inline is allowed because we do not use this class outside this dll
-            OAccessibleBase::release(  );
+            VCLXAccessibleComponent::release(  );
         }
 
         // XTypeProvider
@@ -113,6 +114,9 @@ namespace dbaui
         static ::rtl::OUString getImplementationName_Static(void) throw( com::sun::star::uno::RuntimeException );
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException);
+
+        // XAccessible
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XAccessibleContext
         virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
