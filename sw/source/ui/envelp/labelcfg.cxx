@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labelcfg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-09-21 14:20:11 $
+ *  last change: $Author: iha $ $Date: 2002-08-09 08:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,13 +339,13 @@ void SwLabelConfig::SaveLabel(  const rtl::OUString& rManufacturer,
             sFoundNode += OUString::valueOf(nIndex++);
         }
     }
-    OUString sPrefix(rManufacturer);
+    OUString sPrefix(wrapConfigurationElementName(rManufacturer));
     sPrefix += C2U("/");
     sPrefix += sFoundNode;
     sPrefix += C2U("/");
     Sequence<OUString> aPropNames = lcl_CreatePropertyNames(sPrefix);
     Sequence<PropertyValue> aPropValues = lcl_CreateProperties(aPropNames, rRec);
-    SetSetProperties(rManufacturer, aPropValues);
+    SetSetProperties(wrapConfigurationElementName(rManufacturer), aPropValues);
 
 }
 
