@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-26 17:40:48 $
+#   last change: $Author: kz $ $Date: 2004-10-04 20:46:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,7 @@ CFLAGS+=-Od
 
 SRS1NAME=appl
 SRC1FILES =  \
-        app.src image.src newhelp.src
+        app.src image.src newhelp.src dde.src
 
 SRS2NAME=sfx
 SRC2FILES =  \
@@ -116,7 +116,6 @@ SLOFILES =  \
     $(SLO)$/sfxdll.obj \
     $(SLO)$/module.obj \
     $(SLO)$/appsys.obj \
-    $(SLO)$/loadenv.obj \
     $(SLO)$/dlgcont.obj \
     $(SLO)$/namecont.obj \
     $(SLO)$/scriptcont.obj \
@@ -128,7 +127,11 @@ SLOFILES =  \
     $(SLO)$/helpdispatch.obj \
     $(SLO)$/imestatuswindow.obj \
     $(SLO)$/accelinfo.obj\
-    $(SLO)$/xpackcreator.obj
+    $(SLO)$/xpackcreator.obj\
+    $(SLO)$/linksrc.obj\
+    $(SLO)$/linkmgr2.obj\
+    $(SLO)$/lnkbase2.obj\
+    $(SLO)$/impldde.obj
 
 EXCEPTIONSFILES=\
     $(SLO)$/imagemgr.obj		\
