@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 06:11:58 $
+ *  last change: $Author: nn $ $Date: 2001-06-14 15:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1680,6 +1680,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
         delete pNewTable;
         return;
     }
+    pNewTable->construct();
 
     // copy the data
     copyData(pNewTable);
@@ -1775,6 +1776,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
     {
         return;
     }
+    pNewTable->construct();
     // copy the data
     copyData(pNewTable);
     // drop the old table
@@ -1826,6 +1828,7 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
     {
         return;
     }
+    pNewTable->construct();
     // copy the data
     copyData(pNewTable);
     // drop the old table
@@ -1874,7 +1877,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable)
     sal_Int32 nCurPos;
     for(sal_uInt32 nRowPos = 0; nRowPos < m_aHeader.db_anz;++nRowPos)
     {
-        if(bOk = seekRow(FILE_BOOKMARK,nRowPos,nCurPos))
+        if(bOk = seekRow(FILE_BOOKMARK,nRowPos+1,nCurPos))
         {
             if(bOk = fetchRow(aRow,m_aColumns.getBody(),sal_True,sal_True))
             {
