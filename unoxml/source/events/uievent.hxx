@@ -35,8 +35,6 @@ public:
                      const Reference< XAbstractView >& viewArg,
                      sal_Int32 detailArg) throw(RuntimeException);
 
-    virtual ~CUIEvent();
-
     // delegate to CEvent, since we are inheriting from CEvent and XEvent
     virtual OUString SAL_CALL getType() throw (RuntimeException);
     virtual Reference< XEventTarget > SAL_CALL getTarget() throw (RuntimeException);
