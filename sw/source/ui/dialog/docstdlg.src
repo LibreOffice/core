@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 23:08:01 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 22:55:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,12 +413,13 @@ TabPage TP_DOC_STAT
         Text[ chinese_traditional ] = "§ó·s(~U)";
         Text[ arabic ] = "ÊÍÏíË";
         Text[ greek ] = "~ÅíçìÝñùóç";
-        Text[ korean ] = "¾÷µ¥ÀÌÆ®(~U)";
+        Text[ korean ] = "¾÷µ¥ÀÌÆ®(U)";
         Text[ turkish ] = "~Güncelle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Actualizar";
         Text[ finnish ] = "~Päivitä";
     };
 };
+
 
 
