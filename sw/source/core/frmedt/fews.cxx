@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:45:03 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,6 +361,20 @@ long SwFEShell::GetHeadFootFrmRect( SwRect &rToFill ) const
     return nRet;
 }
 #endif
+
+/*************************************************************************
+|*
+|*  SwFEShell::IsDirectlyInSection()
+|*
+|*  Hack for OS:
+|*
+*************************************************************************/
+
+bool SwFEShell::IsDirectlyInSection() const
+{
+    SwFrm* pFrm = GetCurrFrm( FALSE );
+    return pFrm && pFrm->GetUpper() && pFrm->GetUpper()->IsSctFrm();
+}
 
 /*************************************************************************
 |*
