@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XExtendedToolkit.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:06:56 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,8 +145,8 @@ interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     */
     ::com::sun::star::awt::XTopWindow getActiveTopWindow ();
 
-    /** Add a new listener that is called on <type
-        scope="::com::sun::star::awt">TopWindowEvent</type>s.  After having
+    /** Add a new listener that is called for events that involve <type
+        scope="::com::sun::star::awt">XTopWindow</type>s.  After having
         obtained the current list of exisiting top-level windows you can
         keep this list up-to-date by listening to opened or closed top-level
         windows.  Wait for activations or deactivations of top-level windows
