@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-19 16:33:27 $
+ *  last change: $Author: cl $ $Date: 2001-05-11 07:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,6 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
         return;
 
     Reference< XPropertySet> xLayer;
-    const OUString strIsLocked( RTL_CONSTASCII_USTRINGPARAM( "IsLocked" ) );
-    const OUString strIsPrintable( RTL_CONSTASCII_USTRINGPARAM( "IsPrintable" ) );
-    const OUString strIsVisible( RTL_CONSTASCII_USTRINGPARAM( "IsVisible" ) );
     const OUString strName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) );
 
     OUStringBuffer sTmp;
@@ -140,21 +137,6 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
             if( xLayer->getPropertyValue( strName ) >>= aName )
             {
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_name, aName );
-            }
-
-            if( xLayer->getPropertyValue( strIsLocked ) >>= bBool )
-            {
-                rExport.AddAttributeASCII( XML_NAMESPACE_DRAW, sXML_locked, bBool ? sXML_true : sXML_false );
-            }
-
-            if( xLayer->getPropertyValue( strIsPrintable ) >>= bBool )
-            {
-                rExport.AddAttributeASCII( XML_NAMESPACE_DRAW, sXML_printable, bBool ? sXML_true : sXML_false );
-            }
-
-            if( xLayer->getPropertyValue( strIsVisible ) >>= bBool )
-            {
-                rExport.AddAttributeASCII( XML_NAMESPACE_DRAW, sXML_visible, bBool ? sXML_true : sXML_false );
             }
 
             SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, sXML_layer, sal_True, sal_True );

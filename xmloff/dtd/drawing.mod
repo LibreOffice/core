@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.47 2001-05-09 12:30:34 mib Exp $
+	$Id: drawing.mod,v 1.48 2001-05-11 07:36:26 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -725,9 +725,6 @@
 
 <!ELEMENT draw:layer EMPTY>
 <!ATTLIST draw:layer draw:name %layerName; #REQUIRED>
-<!ATTLIST draw:layer draw:locked %boolean; #IMPLIED>
-<!ATTLIST draw:layer draw:printable %boolean; #IMPLIED>
-<!ATTLIST draw:layer draw:visible %boolean; #IMPLIED>
 
 <!-- events -->
 <!ELEMENT presentation:event (presentation:sound)?>

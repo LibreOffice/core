@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-04 11:18:03 $
+ *  last change: $Author: cl $ $Date: 2001-05-11 07:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,15 +133,9 @@ SvXMLImportContext * SdXMLLayerSetContext::CreateChildContext( USHORT nPrefix, c
 {
     if( mxLayerManager.is() )
     {
-        const OUString strIsLocked( RTL_CONSTASCII_USTRINGPARAM( "IsLocked" ) );
-        const OUString strIsPrintable( RTL_CONSTASCII_USTRINGPARAM( "IsPrintable" ) );
-        const OUString strIsVisible( RTL_CONSTASCII_USTRINGPARAM( "IsVisible" ) );
         const OUString strName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) );
 
         OUString aName;
-        sal_Bool bIsLocked = sal_False;
-        sal_Bool bIsPrintable = sal_False;
-        sal_Bool bIsVisible = sal_False;
 
         const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -154,18 +148,6 @@ SvXMLImportContext * SdXMLLayerSetContext::CreateChildContext( USHORT nPrefix, c
                 if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_name ) ) )
                 {
                     aName = sValue;
-                }
-                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_locked ) ) )
-                {
-                    bIsLocked = sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) );
-                }
-                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_printable ) ) )
-                {
-                    bIsPrintable = sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) );
-                }
-                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_visible ) ) )
-                {
-                    bIsVisible = sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) );
                 }
             }
         }
@@ -193,13 +175,6 @@ SvXMLImportContext * SdXMLLayerSetContext::CreateChildContext( USHORT nPrefix, c
                     aAny <<= aName;
                     xLayer->setPropertyValue( strName, aAny );
                 }
-            }
-
-            if( xLayer.is() )
-            {
-                xLayer->setPropertyValue( strIsLocked, Any( &bIsLocked, ::getCppuBooleanType() ) );
-                xLayer->setPropertyValue( strIsPrintable, Any( &bIsPrintable, ::getCppuBooleanType() ) );
-                xLayer->setPropertyValue( strIsVisible, Any( &bIsVisible, ::getCppuBooleanType() ) );
             }
         }
     }
