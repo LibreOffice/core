@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-26 15:46:39 $
+ *  last change: $Author: sj $ $Date: 2002-11-28 10:02:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,6 +580,7 @@
 		</group>
 		<group oor:name="GraphicSize">
 			<info>
+				<deprecated>Use LogicalGraphicSize instead of this.</deprecated>
 				<author>SJ</author>
 				<desc xml:lang="en-US">Specifies the size of a graphic. [UNIT=1/100 mm].</desc>
 			</info>
@@ -604,6 +605,48 @@
 			<prop oor:name="Height" oor:type="xs:int">
 				<info>
 					<desc xml:lang="en-US">Specifies the height of graphic. [UNIT=1/100 mm].</desc>
+				</info>
+				<constraints>
+					<minInclusive oor:value="100">
+						<info>
+							<desc xml:lang="en-US">Represents the lowest value that can be entered in the dialog.</desc>
+						</info>
+					</minInclusive>
+					<maxInclusive oor:value="99999">
+						<info>
+							<desc xml:lang="en-US">Represents the highest value that can be entered in the dialog.</desc>
+						</info>
+					</maxInclusive>
+				</constraints>
+				<value>10000</value>
+			</prop>
+		</group>
+		<group oor:name="LogicalGraphicSize">
+			<info>
+				<author>SJ</author>
+				<desc xml:lang="en-US">Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
+			</info>
+			<prop oor:name="LogicalWidth" oor:type="xs:int">
+				<info>
+					<desc xml:lang="en-US">Specifies the logical width of a graphic. [UNIT=1/100 mm].</desc>
+				</info>
+				<constraints>
+					<minInclusive oor:value="100">
+						<info>
+							<desc xml:lang="en-US">Represents the lowest value that can be entered in the dialog.</desc>
+						</info>
+					</minInclusive>
+					<maxInclusive oor:value="99999">
+						<info>
+							<desc xml:lang="en-US">Represents the highest value that can be entered in the dialog.</desc>
+						</info>
+					</maxInclusive>
+				</constraints>
+				<value>10000</value>
+			</prop>
+			<prop oor:name="LogicalHeight" oor:type="xs:int">
+				<info>
+					<desc xml:lang="en-US">Specifies the logical height of graphic. [UNIT=1/100 mm].</desc>
 				</info>
 				<constraints>
 					<minInclusive oor:value="100">
@@ -3550,7 +3593,7 @@
 							</info>
 							<value>true</value>
 						</prop>
-						<node-ref oor:name="Size" oor:node-type="GraphicSize">
+						<node-ref oor:name="Size" oor:node-type="LogicalGraphicSize">
 							<!-- OldLocation: fltopt.ini -->
 							<!-- UIHints: File  Export  Filetype  BMP-MS Windows - [dialog] BMP Options -->
 						</node-ref>
@@ -3803,7 +3846,7 @@
 							</constraints>
 							<value>0</value>
 						</prop>
-						<node-ref oor:name="Size" oor:node-type="GraphicSize">
+						<node-ref oor:name="Size" oor:node-type="LogicalGraphicSize">
 							<!-- OldLocation: fltopt.ini -->
 							<!-- UIHints: File  Export  Filetype  MET-MS Windows - [dialog] MET Options -->
 						</node-ref>
@@ -3833,7 +3876,7 @@
 							</constraints>
 							<value>0</value>
 						</prop>
-						<node-ref oor:name="Size" oor:node-type="GraphicSize">
+						<node-ref oor:name="Size" oor:node-type="LogicalGraphicSize">
 							<!-- OldLocation: fltopt.ini -->
 							<!-- UIHints: File  Export  Filetype  PCT-MS Windows - [dialog] PCT Options -->
 						</node-ref>
@@ -3941,7 +3984,7 @@
 							</constraints>
 							<value>0</value>
 						</prop>
-						<node-ref oor:name="Size" oor:node-type="GraphicSize">
+						<node-ref oor:name="Size" oor:node-type="LogicalGraphicSize">
 							<!-- OldLocation: fltopt.ini -->
 							<!-- UIHints: File  Export  Filetype  SVM  - StarView Metafile - [dialog] SVM Options -->
 						</node-ref>
@@ -3971,7 +4014,7 @@
 							</constraints>
 							<value>0</value>
 						</prop>
-						<node-ref oor:name="Size" oor:node-type="GraphicSize">
+						<node-ref oor:name="Size" oor:node-type="LogicalGraphicSize">
 							<!-- OldLocation: fltopt.ini -->
 							<!-- UIHints: File  Export  Filetype  WMF - MS Windows Metafile - [dialog] WMF Options -->
 						</node-ref>
@@ -4001,7 +4044,7 @@
 							</constraints>
 							<value>0</value>
 						</prop>
-						<node-ref oor:name="Size" oor:node-type="GraphicSize">
+						<node-ref oor:name="Size" oor:node-type="LogicalGraphicSize">
 							<!-- OldLocation: fltopt.ini -->
 							<!-- UIHints: File  Export  Filetype  EMF - Enhanced Metafile - [dialog] EMF Options -->
 						</node-ref>
