@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphfedit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-29 20:50:29 $
+ *  last change: $Author: nn $ $Date: 2000-12-01 19:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ protected:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    MouseButtonUp( const MouseEvent& rMEvt );
     virtual void    KeyInput( const KeyEvent& rKEvt );
+    virtual void    Command( const CommandEvent& rCEvt );
     virtual void    GetFocus();
 
 private:

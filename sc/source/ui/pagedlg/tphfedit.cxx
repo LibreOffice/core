@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphfedit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-29 20:51:26 $
+ *  last change: $Author: nn $ $Date: 2000-12-01 19:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,6 +591,13 @@ void __EXPORT ScEditWindow::KeyInput( const KeyEvent& rKEvt )
     {
         Control::KeyInput( rKEvt );
     }
+}
+
+// -----------------------------------------------------------------------
+
+void ScEditWindow::Command( const CommandEvent& rCEvt )
+{
+    pEdView->Command( rCEvt );
 }
 
 // -----------------------------------------------------------------------
