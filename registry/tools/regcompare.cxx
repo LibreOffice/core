@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regcompare.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-30 14:37:38 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 10:47:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1777,7 +1777,8 @@ static sal_uInt32 compareKeys(RegistryKey& key1, RegistryKey& key2)
             continue;
         }
 
-        keyName = keyName.getToken(keyName.getTokenCount('/')-1, '/');
+        sal_Int32 nPos = keyName.lastIndexOf( '/' );
+        keyName = keyName.copy( nPos != -1 ? nPos+1 : 0 );
         if ( key1.openKey(keyName, subKey1) )
         {
             if ( options.forceOutput() )

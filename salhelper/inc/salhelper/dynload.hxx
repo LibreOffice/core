@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dynload.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-28 11:02:29 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 10:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #endif
 
 #ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _OSL_MODULE_H_
