@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:13:41 $
+ *  last change: $Author: rt $ $Date: 2001-03-21 21:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,24 +81,24 @@ String SCSTR_APPLICATION
 {
     Text = "%PRODUCTNAME Calc 6.0" ;
     Text [ ENGLISH ] = "%PRODUCTNAME Calc 6.0" ;
-    Text[ english_us ] = "StarCalc  5.0";
+    Text[ english_us ] = "%PRODUCTNAME Calc 6.0";
     Text[ portuguese ] = "StarCalc 5.0";
-    Text[ russian ] = "StarCalc 5.0";
-    Text[ greek ] = "StarCalc 5.0";
-    Text[ dutch ] = "StarCalc 5.0";
-    Text[ french ] = "StarCalc 5.0";
-    Text[ spanish ] = "StarCalc 5.0";
-    Text[ italian ] = "StarCalc 5.0";
+    Text[ russian ] = "%PRODUCTNAME Calc 6.0";
+    Text[ greek ] = "%PRODUCTNAME Calc 6.0";
+    Text[ dutch ] = "%PRODUCTNAME Calc 6.0";
+    Text[ french ] = "%PRODUCTNAME Calc 6.0";
+    Text[ spanish ] = "%PRODUCTNAME Calc 6.0";
+    Text[ italian ] = "%PRODUCTNAME Calc 6.0";
     Text[ danish ] = "StarCalc 5.0";
-    Text[ swedish ] = "StarCalc 5.0";
+    Text[ swedish ] = "%PRODUCTNAME Calc 6.0";
     Text[ polish ] = "%PRODUCTNAME Calc 6.0";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME Calc 4.0";
-    Text[ japanese ] = "StarCalc 5.0";
+    Text[ japanese ] = "%PRODUCTNAME Calc 6.0";
     Text[ korean ] = "StarCalc 5.0";
-    Text[ chinese_simplified ] = "StarCalc 5.0";
-    Text[ chinese_traditional ] = "StarCalc 5.0";
+    Text[ chinese_simplified ] = "%PRODUCTNAME Calc 6.0";
+    Text[ chinese_traditional ] = "%PRODUCTNAME Calc 6.0";
     Text[ turkish ] = "StarCalc 5.0";
-    Text[ arabic ] = "StarCalc 5.0";
+    Text[ arabic ] = "%PRODUCTNAME Calc 6.0";
 };
 String SCSTR_50_APPLICATION
 {
@@ -182,24 +182,24 @@ String SCSTR_LONG_SCDOC_NAME
 {
     Text = "%PRODUCTNAME 6.0 Tabelle" ;
     Text [ ENGLISH ] = "%PRODUCTNAME 6.0 Spreadsheet" ;
-    Text[ english_us ] = "%PRODUCTNAME 5.0 Spreadsheet";
+    Text[ english_us ] = "%PRODUCTNAME 6.0 Spreadsheet";
     Text[ portuguese ] = "%PRODUCTNAME 5.0 Folha de cαlculo";
-    Text[ russian ] = "Λθρς β %PRODUCTNAME 5.0";
-    Text[ greek ] = "%PRODUCTNAME 5.0 - Πίνακας";
-    Text[ dutch ] = "%PRODUCTNAME 5.0 werkblad";
-    Text[ french ] = "%PRODUCTNAME 5.0 Classeur";
-    Text[ spanish ] = "%PRODUCTNAME 5.0 Hoja de cαlculo";
-    Text[ italian ] = "Foglio di calcolo %PRODUCTNAME 5.0";
+    Text[ russian ] = "Λθρς β %PRODUCTNAME 6.0";
+    Text[ greek ] = "%PRODUCTNAME 6.0 Πίνακας";
+    Text[ dutch ] = "%PRODUCTNAME 6.0 werkblad";
+    Text[ french ] = "%PRODUCTNAME 6.0 Classeur";
+    Text[ spanish ] = "%PRODUCTNAME 6.0 Hoja de cαlculo";
+    Text[ italian ] = "Tabella %PRODUCTNAME 6.0";
     Text[ danish ] = "%PRODUCTNAME Calc 5.0 regneark";
-    Text[ swedish ] = "%PRODUCTNAME 5.0 tabell";
+    Text[ swedish ] = "%PRODUCTNAME 6.0 tabell";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Arkusz kalkulacyjny";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Tabelle";
-    Text[ japanese ] = "%PRODUCTNAME 5.0 •\\vZ";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 •\\vZ";
     Text[ korean ] = "%PRODUCTNAME 5.0 ½ΊΗΑ·Ήµε½ΓΖ®";
-    Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 Ή¤Χχ±ν";
-    Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 ¤u§@ªν";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Ή¤Χχ±ν";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 ¤u§@ªν";
     Text[ turkish ] = "%PRODUCTNAME 5.0 tablosu";
-    Text[ arabic ] = "ΜΟζα %PRODUCTNAME 5.0";
+    Text[ arabic ] = "ΜΟζα %PRODUCTNAME 6.0";
 };
 String SCSTR_50_LONG_DOCNAME
 {
@@ -209,7 +209,7 @@ String SCSTR_50_LONG_DOCNAME
     Text [ english_us ] = "%PRODUCTNAME 5.0 Spreadsheet" ;
     Text [ swedish ] = "%PRODUCTNAME 5.0 tabell" ;
     Text [ danish ] = "%PRODUCTNAME Calc 5.0 regneark" ;
-    Text [ italian ] = "Foglio di calcolo %PRODUCTNAME 5.0" ;
+    Text [ italian ] = "Tabella %PRODUCTNAME 5.0" ;
     Text [ spanish ] = "%PRODUCTNAME 5.0 Hoja de cαlculo" ;
     Text [ french ] = "%PRODUCTNAME 5.0 Classeur" ;
     Text [ portuguese ] = "%PRODUCTNAME 5.0 Folha de cαlculo" ;
@@ -2624,22 +2624,22 @@ String SCSTR_CHARSET_USER
 {
     Text = "System" ;
     Text [ ENGLISH ] = "System" ;
-    Text [ english_us ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
-    Text [ italian ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema" ;
-    Text [ spanish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema" ;
-    Text [ french ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Systeme" ;
-    Text [ dutch ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
-    Text [ swedish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
+    Text [ english_us ] = "System" ;
+    Text [ italian ] = "Sistema" ;
+    Text [ spanish ] = "Sistema" ;
+    Text [ french ] = "Systθme" ;
+    Text [ dutch ] = "Systeem" ;
+    Text [ swedish ] = "System" ;
     Text [ danish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
     Text [ portuguese ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema" ;
     Text [ portuguese_brazilian ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
-    Text[ chinese_simplified ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);ΟµΝ³";
-    Text[ russian ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Ρθρςεμΰ";
-    Text[ polish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
-    Text[ japanese ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Ό½ΓΡ";
-    Text[ chinese_traditional ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);¨t²Ξ";
-    Text[ arabic ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);δΩΗγ";
-    Text[ greek ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Σύστημα";
+    Text[ chinese_simplified ] = "ΟµΝ³";
+    Text[ russian ] = "Ρθρςεμΰ";
+    Text[ polish ] = "System";
+    Text[ japanese ] = "Ό½ΓΡ";
+    Text[ chinese_traditional ] = "¨t²Ξ";
+    Text[ arabic ] = "δΩΗγ";
+    Text[ greek ] = "Σύστημα";
     Text[ korean ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);½Γ½ΊΕΫ";
     Text[ turkish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistem";
     Text[ language_user1 ] = " ";
@@ -2719,7 +2719,7 @@ String SCSTR_FORMULA_AUTOCORRECTION
     Text[ chinese_simplified ] = "%PRODUCTNAME Calc ·ΆΟΦΚδΘλµΔΉ«Κ½Ί¬ΣΠÒ»Έφ΄νΞσ΅£\nΔϊ½ΣΚάΟΒΓζ½¨ÒιµΔΠήΈΔΒπ£Ώ\n\n";
     Text[ russian ] = "%PRODUCTNAME Calc νΰψελ ξψθακσ β ββεδεννξι τξπμσλε.\nΒϋ υξςθςε οπθνÿςό θροπΰβλενθε, οπεδλξζεννξε βνθησ?\n\n";
     Text[ polish ] = "%PRODUCTNAME Calc znalaz³ b³Ήd we wprowadzonej formule.\nCzy akceptujesz podanΉ na dole korektκ?\n\n";
-    Text[ japanese ] = "%PRODUCTNAME Calc ‚ª“ό—Ν‚µ‚½”®‚Ι΄Χ°‚πo‚µ‚Δ‚Ά‚ά‚·B\n‚ΜC³σ•β‚π“K—p‚µ‚ά‚·‚©B\n\n";
+    Text[ japanese ] = "%PRODUCTNAME Calc ‚Ν“ό—Ν‚³‚κ‚½”®“ΰ‚Ι΄Χ°‚π”­©‚µ‚ά‚µ‚½B\n‚ΜC³σ•β‚π“K—p‚µ‚ά‚·‚©B\n\n";
     Text[ chinese_traditional ] = "%PRODUCTNAME Calc µo²{Ώι¤JªΊ¤½¦΅§t¦³¤@­ΣΏω»~΅C\n±z±µ¨ό¤U­±ªΊ­Χ§ο«ΨΔ³΅H\n\n";
     Text[ arabic ] = "%PRODUCTNAME Calc ζΜΟ ΞΨΓ έν ΗαΥνΫΙ ΗαΚν ήγΚ ΘΕΟΞΗαεΗ.\nεα ΚΡνΟ ήΘζα ΗαΚΥΝνΝ ΗαγρήΚΡΝ ΓΟδΗεΏ\n\n";
     Text[ greek ] = "Το %PRODUCTNAME Calc εντόπισε ένα σφάλμα στον τύπο που εισάγατε.\nΘέλετε να γίνει η αποδοχή της προτεινόμενης διόρθωσης που αναφέρεται παρακάτω;\n\n";
