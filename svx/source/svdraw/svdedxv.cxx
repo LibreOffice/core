@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:50:34 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -931,7 +931,11 @@ SdrEndTextEditKind SdrObjEditView::EndTextEdit(BOOL bDontDeleteReally)
         RefreshAllIAOManagers();
         if (eRet==SDRENDTEXTEDIT_UNCHANGED) {
             ShowMarkHdl(NULL); // Handles kommen ansonsten via Broadcast
-        } else aMark.SetNameDirty();
+        }
+        else
+        {
+            GetMarkedObjectListWriteAccess().SetNameDirty();
+        }
 #ifndef SVX_LIGHT
         if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
 #endif
@@ -1341,11 +1345,11 @@ USHORT SdrObjEditView::GetScriptType() const
     }
     else
     {
-        sal_uInt32 nMarkCount( aMark.GetMarkCount() );
+        sal_uInt32 nMarkCount( GetMarkedObjectCount() );
 
         for( sal_uInt32 i = 0; i < nMarkCount; i++ )
         {
-            OutlinerParaObject* pParaObj = aMark.GetMark( i )->GetObj()->GetOutlinerParaObject();
+            OutlinerParaObject* pParaObj = GetMarkedObjectByIndex( i )->GetOutlinerParaObject();
 
             if( pParaObj )
             {
@@ -1385,7 +1389,7 @@ BOOL SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr) c
             rTargetSet.Put( SvxScriptTypeItem( pTextEditOutlinerView->GetSelectedScriptType() ), FALSE );
         }
 
-        if(aMark.GetMarkCount()==1 && aMark.GetMark(0)->GetObj()==pTextEditObj)
+        if(GetMarkedObjectCount()==1 && GetMarkedObjectByIndex(0)==pTextEditObj)
         {
             MergeNotPersistAttrFromMarked(rTargetSet, bOnlyHardAttr);
         }
@@ -1481,7 +1485,7 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
             //pTextEditObj->SetItemSetAndBroadcast(aSet, bReplaceAll);
             pTextEditObj->SetMergedItemSetAndBroadcast(aSet, bReplaceAll);
 
-            if (aMark.GetMarkCount()==1 && aMark.GetMark(0)->GetObj()==pTextEditObj) {
+            if (GetMarkedObjectCount()==1 && GetMarkedObjectByIndex(0)==pTextEditObj) {
                 SetNotPersistAttrToMarked(aSet,bReplaceAll);
             }
             FlushComeBackTimer();
