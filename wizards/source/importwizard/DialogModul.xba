@@ -104,9 +104,9 @@ Dim Index as Integer
 			SetupXMLConfiguration()
 		End If
 		&apos; TemplateCheckBox-Captions
-		GetApplResourceArray(1008 + iApplSection, ApplCount, sTemplateCheckBox())
+		GetApplResourceArray(1009 + iApplSection, ApplCount, sTemplateCheckBox())
 		&apos; DocumentCheckbox- Captions
-		GetApplResourceArray(1012 + iApplSection, ApplCount, sDocumentCheckBox())
+		GetApplResourceArray(1009 + iApplSection + ApplCount, ApplCount, sDocumentCheckBox())
 
 		AssignCheckboxObjects()
 

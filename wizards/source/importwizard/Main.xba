@@ -37,7 +37,7 @@ Sub Main()
 	FillStep_Welcome()
 	RepaintHeaderPreview()
 	SetStates()
-        ImportDialogArea.Execute()
+        ImportDialogArea.SetVisible(True) &apos;Execute()
 	ImportDialog.cbGoOn.DefaultButton = True
 	Exit Sub
 RTError:
@@ -71,7 +71,6 @@ Dim iCurStep as Integer
 					CurOffice = CurOffice + 1
 					TakeOverPathSettings()
 					FillStep_InputPaths(CurOffice, False)
-					RepaintHeaderPreview()
 				Else
 					FillStep_Summary()
 				End If
@@ -87,6 +86,7 @@ Dim iCurStep as Integer
 		Case 4
 	End Select
 	ImportDialog.cbGoOn.DefaultButton = True
+	RepaintHeaderPreview()	
 	Exit Sub
 RTError:
 	Msgbox sRTErrorDesc, 16, sRTErrorHeader
@@ -112,7 +112,6 @@ Dim iCurStep as Integer
 				If CurOffice &gt; 0 Then
 					CurOffice = CurOffice - 1
 					FillStep_InputPaths(CurOffice, False)
-					RepaintHeaderPreview()
 				Else
 					FillStep_Welcome()
 					bDoKeepApplValues = True
@@ -120,6 +119,7 @@ Dim iCurStep as Integer
 			End If
 	End Select
 	ImportDialog.cbGoOn.DefaultButton = True
+	RepaintHeaderPreview()	
 	Exit Sub
 RTError:
 	Msgbox sRTErrorDesc, 16, sRTErrorHeader

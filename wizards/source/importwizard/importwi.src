@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-16 00:06:59 $
+ *  last change: $Author: bc $ $Date: 2001-06-27 14:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,16 +112,16 @@
 #define sProgressFound 1093
 #define sProgressPage5 1094
 #define sReady 1100
-#define sXMLTemplateCheckbox_1_    2008
-#define sXMLTemplateCheckbox_2_    2009
-#define sXMLTemplateCheckbox_3_    2010
-#define sXMLTemplateCheckbox_4_    2011
-#define sXMLDocumentCheckbox_1_    2012
-#define sXMLDocumentCheckbox_2_    2013
-#define sXMLDocumentCheckbox_3_    2014
-#define sXMLDocumentCheckbox_4_    2015
-#define sXMLHelperApplications_1    2016
-#define sXMLHelperApplications_2    2017
+#define sXMLTemplateCheckbox_1_    2009
+#define sXMLTemplateCheckbox_2_    2010
+#define sXMLTemplateCheckbox_3_    2011
+#define sXMLTemplateCheckbox_4_    2012
+#define sXMLDocumentCheckbox_1_    2013
+#define sXMLDocumentCheckbox_2_    2014
+#define sXMLDocumentCheckbox_3_    2015
+#define sXMLDocumentCheckbox_4_    2016
+#define sXMLHelperApplications_1    2017
+#define sXMLHelperApplications_2    2018
 
 #define sSourceDocuments         2030
 #define sTargetDocuments         2031

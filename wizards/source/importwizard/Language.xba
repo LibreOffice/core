@@ -60,10 +60,10 @@ Sub LoadLanguage()
 		GetApplResourceArray(1012, 3, sMSDocumentCheckBox())
 
 		&apos; DocumentCheckbox- Captions
-		GetApplResourceArray(2012, 5, sSODocumentCheckBox())
+		GetApplResourceArray(2013, 5, sSODocumentCheckBox())
 
 		&apos;StarOffice Applicationnames
-		GetApplResourceArray(2016,2, sSOHelperDocuments())		
+		GetApplResourceArray(2017,2, sSOHelperDocuments())		
 
 		sContainerName(0) = GetResText(1030)
 

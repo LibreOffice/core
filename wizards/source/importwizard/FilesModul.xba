@@ -175,7 +175,7 @@ Dim MaxFileIndex as Integer
 					End Select
 				End If
 				If bDoSave Then
-					InsertDocNamesToLogDocument(i+1, sFullName, TargetFile
+					InsertDocNamesToLogDocument(i+1, sFullName, TargetFile)
 					On Local Error Resume Next
 &apos; Note:	 Files are automatically stored in Default format
 &apos;					FileProperties(0).Name = &quot;FilterName&quot;
