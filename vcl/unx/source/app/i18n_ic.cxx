@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:33:22 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,14 +392,14 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
             XFree( mpPreeditAttributes );
         if ( maClientData.aText.pUnicodeBuffer != NULL )
             free ( maClientData.aText.pUnicodeBuffer );
-        if ( maClientData.aText.pUnicodeBuffer != NULL );
-        free ( maClientData.aText.pUnicodeBuffer );
+        if ( maClientData.aText.pCharStyle != NULL )
+            free ( maClientData.aText.pCharStyle );
 
         mpAttributes                      = NULL;
         mpStatusAttributes                = NULL;
         mpPreeditAttributes               = NULL;
         maClientData.aText.pUnicodeBuffer = NULL;
-        maClientData.aText.pUnicodeBuffer = NULL;
+        maClientData.aText.pCharStyle     = NULL;
     }
 
     if ( maContext != NULL && mbMultiLingual )
