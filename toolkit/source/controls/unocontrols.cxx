@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:11:33 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
+#include <com/sun/star/util/Date.hpp>
 #endif
 
 
@@ -2498,6 +2501,8 @@ UnoControlDateFieldModel::UnoControlDateFieldModel()
     ImplRegisterProperty( BASEPROPERTY_SPIN );
     ImplRegisterProperty( BASEPROPERTY_STRICTFORMAT );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
+    ImplRegisterProperty( BASEPROPERTY_ENFORCE_FORMAT );
+    ImplRegisterProperty( BASEPROPERTY_TEXT );
 }
 
 ::rtl::OUString UnoControlDateFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -2580,13 +2585,41 @@ void UnoDateFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rx
 
 void UnoDateFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::RuntimeException)
 {
+    uno::Reference< awt::XVclWindowPeer > xPeer( getPeer(), uno::UNO_QUERY );
+
+    // also change the text property (#i25106#)
+    if ( xPeer.is() )
+    {
+        ::rtl::OUString sTextPropertyName = GetPropertyName( BASEPROPERTY_TEXT );
+        ImplSetPropertyValue( sTextPropertyName, xPeer->getProperty( sTextPropertyName ), sal_False );
+    }
+
+    // re-calc the Date property
     uno::Reference < awt::XDateField > xField( getPeer(), uno::UNO_QUERY );
     uno::Any aValue;
-    if ( !xField->isEmpty() )
+    if ( xField->isEmpty() )
+    {
+        // the field says it's empty
+        sal_Bool bEnforceFormat = sal_True;
+        if ( xPeer.is() )
+            xPeer->getProperty( GetPropertyName( BASEPROPERTY_ENFORCE_FORMAT ) ) >>= bEnforceFormat;
+        if ( !bEnforceFormat )
+        {
+            // and it also says that it is currently accepting invalid inputs, without
+            // forcing it to a valid date
+            uno::Reference< awt::XTextComponent > xText( xPeer, uno::UNO_QUERY );
+            if ( xText.is() && xText->getText().getLength() )
+                // and in real, the text of the peer is *not* empty
+                // -> simulate an invalid date, which is different from "no date"
+                aValue <<= util::Date( 0, 0, 0 );
+        }
+    }
+    else
         aValue <<= xField->getDate();
 
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATE ), aValue, sal_False );
 
+    // multiplex the event
     if ( GetTextListeners().getLength() )
         GetTextListeners().textChanged( e );
 }
@@ -2727,6 +2760,8 @@ UnoControlTimeFieldModel::UnoControlTimeFieldModel()
     ImplRegisterProperty( BASEPROPERTY_TIME );
     ImplRegisterProperty( BASEPROPERTY_TIMEMAX );
     ImplRegisterProperty( BASEPROPERTY_TIMEMIN );
+    ImplRegisterProperty( BASEPROPERTY_ENFORCE_FORMAT );
+    ImplRegisterProperty( BASEPROPERTY_TEXT );
 }
 
 ::rtl::OUString UnoControlTimeFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -2805,12 +2840,19 @@ void UnoTimeFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rx
 
 void UnoTimeFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::RuntimeException)
 {
+    // also change the text property (#i25106#)
+    uno::Reference< awt::XVclWindowPeer > xPeer( getPeer(), uno::UNO_QUERY );
+    ::rtl::OUString sTextPropertyName = GetPropertyName( BASEPROPERTY_TEXT );
+    ImplSetPropertyValue( sTextPropertyName, xPeer->getProperty( sTextPropertyName ), sal_False );
+
+    // re-calc the Time property
     uno::Reference < awt::XTimeField >  xField( getPeer(), uno::UNO_QUERY );
     uno::Any aValue;
     if ( !xField->isEmpty() )
         aValue <<= xField->getTime();
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIME ), aValue, sal_False );
 
+    // multiplex the event
     if ( GetTextListeners().getLength() )
         GetTextListeners().textChanged( e );
 }
@@ -2938,6 +2980,7 @@ UnoControlNumericFieldModel::UnoControlNumericFieldModel()
     ImplRegisterProperty( BASEPROPERTY_VALUEMIN_DOUBLE );
     ImplRegisterProperty( BASEPROPERTY_VALUESTEP_DOUBLE );
     ImplRegisterProperty( BASEPROPERTY_VALUE_DOUBLE );
+    ImplRegisterProperty( BASEPROPERTY_ENFORCE_FORMAT );
 }
 
 ::rtl::OUString UnoControlNumericFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -3155,6 +3198,7 @@ UnoControlCurrencyFieldModel::UnoControlCurrencyFieldModel()
     ImplRegisterProperty( BASEPROPERTY_VALUEMIN_DOUBLE );
     ImplRegisterProperty( BASEPROPERTY_VALUESTEP_DOUBLE );
     ImplRegisterProperty( BASEPROPERTY_VALUE_DOUBLE );
+    ImplRegisterProperty( BASEPROPERTY_ENFORCE_FORMAT );
 }
 
 ::rtl::OUString UnoControlCurrencyFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
