@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-09 11:38:45 $
+ *  last change: $Author: sj $ $Date: 2002-11-07 16:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1940,11 +1940,8 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
             }
             if ( rTextObj.HasExtendedBullets() )
             {
-                if ( i > 63 )
-                    i = 63;
-
-                nPropertyFlags |= i << 10 ;
-                nCharAttr  |= i << 10;
+                nPropertyFlags |= ( i & 0x3f ) << 10 ;
+                nCharAttr  |= ( i & 0x3f ) << 10;
             }
             if ( ( pPortion->meFontName == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
                 ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Font, pPortion->mnFont ) ) )
