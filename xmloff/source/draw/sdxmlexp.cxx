@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-26 10:52:45 $
+ *  last change: $Author: cl $ $Date: 2001-05-02 10:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1698,14 +1698,12 @@ void SdXMLExport::exportPresentationSettings()
 
             sal_Int32 nPause;
             xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Pause" ) ) ) >>= nPause;
-            if( nPause )
-            {
-                util::DateTime aTime( 0, (sal_uInt16)nPause, 0, 0, 0, 0, 0 );
 
-                OUStringBuffer aOut;
-                SvXMLUnitConverter::convertTime( aOut, aTime );
-                AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_pause, aOut.makeStringAndClear() );
-            }
+            util::DateTime aTime( 0, (sal_uInt16)nPause, 0, 0, 0, 0, 0 );
+
+            OUStringBuffer aOut;
+            SvXMLUnitConverter::convertTime( aOut, aTime );
+            AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_pause, aOut.makeStringAndClear() );
         }
 
         xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowAnimations" ) ) ) >>= bTemp;
