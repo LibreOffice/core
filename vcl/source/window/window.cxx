@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.181 $
+ *  $Revision: 1.182 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:21:01 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3778,7 +3778,7 @@ void Window::ImplGrabFocus( USHORT nFlags )
     }
 
 
-    if ( pSVData->maWinData.mpFocusWin != this || ( bAsyncFocusWaiting && !bHasFocus && !bMustNotGrabFocus ) )
+    if ( ( pSVData->maWinData.mpFocusWin != this && ! mbInDtor ) || ( bAsyncFocusWaiting && !bHasFocus && !bMustNotGrabFocus ) )
     {
         // EndExtTextInput if it is not the same window
         if ( pSVData->maWinData.mpExtTextInputWin &&
@@ -4293,9 +4293,9 @@ Window::~Window()
             }
             else if ( ImplIsOverlapWindow() )
                 pParent = mpOverlapWindow;
-            if ( pParent && pParent->IsEnabled() && pParent->IsInputEnabled() )
+            if ( pParent && pParent->IsEnabled() && pParent->IsInputEnabled() && pParent->IsReallyVisible() )
                 pParent->GrabFocus();
-            else
+            else if( mpFrameWindow->IsReallyVisible() )
                 mpFrameWindow->GrabFocus();
             // Falls der Focus wieder auf uns gesetzt wurde, dann wird er
             // auf nichts gesetzt
@@ -4641,6 +4641,9 @@ void Window::ImplNotifyKeyMouseEventListeners( NotifyEvent& rNEvt )
     // this allows for procesing those events internally first and pass it to
     // the toolkit later
 
+    ImplDelData aDelData;
+    ImplAddDel( &aDelData );
+
     if( rNEvt.GetType() == EVENT_MOUSEMOVE )
     {
         if ( mbCompoundControl || ( rNEvt.GetWindow() == this ) )
@@ -4690,6 +4693,10 @@ void Window::ImplNotifyKeyMouseEventListeners( NotifyEvent& rNEvt )
         if ( mbCompoundControl || ( rNEvt.GetWindow() == this ) )
             ImplCallEventListeners( VCLEVENT_WINDOW_KEYUP, (void*)rNEvt.GetKeyEvent() );
     }
+
+    if ( aDelData.IsDelete() )
+        return;
+    ImplRemoveDel( &aDelData );
 
     // #106721# check if we're part of a compound control and notify
     Window *pParent = ImplGetParent();
