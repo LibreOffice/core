@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dl $ $Date: 2001-07-05 09:09:03 $
+ *  last change: $Author: dl $ $Date: 2001-07-09 10:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,9 +531,9 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
         rNotesSet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
         rNotesSet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
         rNotesSet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL ) );
-        rNotesSet.Put( SvxFontHeightItem( 846, 100, EE_CHAR_FONTHEIGHT ) );    // 24 pt
-        rNotesSet.Put( SvxFontHeightItem( 846, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 24 pt
-        rNotesSet.Put( SvxFontHeightItem( 846, 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 24 pt
+        rNotesSet.Put( SvxFontHeightItem( 705, 100, EE_CHAR_FONTHEIGHT ) );     // 20 pt
+        rNotesSet.Put( SvxFontHeightItem( 705, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 20 pt
+        rNotesSet.Put( SvxFontHeightItem( 705, 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 20 pt
         rNotesSet.Put( SvxUnderlineItem(UNDERLINE_NONE) );
         rNotesSet.Put( SvxCrossedOutItem(STRIKEOUT_NONE) );
         rNotesSet.Put( SvxShadowedItem(FALSE) );
