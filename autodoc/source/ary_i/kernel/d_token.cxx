@@ -2,9 +2,9 @@
  *
  *  $RCSfile: d_token.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:19 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,13 @@ DT_ParameterAtTag::DisplayAt( DocumentationDisplay & o_rDisplay ) const
 {
     o_rDisplay.Display_ParameterAtTag( *this );
 }
+
+void
+DT_SinceAtTag::DisplayAt( DocumentationDisplay & o_rDisplay ) const
+{
+    o_rDisplay.Display_SinceAtTag( *this );
+}
+
 
 
 }   // namespace dsapi
