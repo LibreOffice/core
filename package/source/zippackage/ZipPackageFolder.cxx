@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-15 13:04:04 $
+ *  last change: $Author: mtg $ $Date: 2001-05-15 15:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
     const OUString sIterationCountProperty ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
     const OUString sSizeProperty ( RTL_CONSTASCII_USTRINGPARAM ( "Size" ) );
 
-    sal_Bool bHaveEncryptionKey = rEncryptionKey.getLength() == 16 ? sal_True : sal_False;
+    sal_Bool bHaveEncryptionKey = rEncryptionKey.getLength() ? sal_True : sal_False;
 
     // Get a random number generator and seed it with current timestamp
     TimeValue aTime;
@@ -393,7 +393,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 pStream->setIterationCount ( nIterationCount );
                 pStream->setKey ( aKey );
 
-                aPropSet.realloc(6); // 6th component is size, below
+                aPropSet.realloc(6); // 6th property is size, below
                 aPropSet[2].Name = sInitialisationVectorProperty;
                 aPropSet[2].Value <<= aVector;
                 aPropSet[3].Name = sSaltProperty;
