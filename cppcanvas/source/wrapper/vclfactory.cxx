@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclfactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:14 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,13 +85,13 @@
 
 #include <cppcanvas/vclfactory.hxx>
 
-#include "implbitmapcanvas.hxx"
-#include "implspritecanvas.hxx"
-#include "implpolypolygon.hxx"
-#include "implbitmap.hxx"
-#include "implrenderer.hxx"
-#include "impltext.hxx"
-#include "implsprite.hxx"
+#include <implbitmapcanvas.hxx>
+#include <implspritecanvas.hxx>
+#include <implpolypolygon.hxx>
+#include <implbitmap.hxx>
+#include <implrenderer.hxx>
+#include <impltext.hxx>
+#include <implsprite.hxx>
 
 
 using namespace ::drafts::com::sun::star;
@@ -132,6 +132,12 @@ namespace cppcanvas
                     uno::UNO_QUERY) ) );
     }
 
+    BitmapCanvasSharedPtr VCLFactory::createCanvas( const uno::Reference< rendering::XBitmapCanvas >& xCanvas )
+    {
+        return BitmapCanvasSharedPtr(
+            new internal::ImplBitmapCanvas( xCanvas ) );
+    }
+
     SpriteCanvasSharedPtr VCLFactory::createSpriteCanvas( const ::Window& rVCLWindow ) const
     {
         return SpriteCanvasSharedPtr(
@@ -141,7 +147,13 @@ namespace cppcanvas
                     uno::UNO_QUERY) ) );
     }
 
-    SpriteCanvasSharedPtr VCLFactory::createFullscreenSpriteCanvas( const ::Window&     rVCLWindow,
+    SpriteCanvasSharedPtr VCLFactory::createSpriteCanvas( const uno::Reference< rendering::XSpriteCanvas >& xCanvas ) const
+    {
+        return SpriteCanvasSharedPtr(
+            new internal::ImplSpriteCanvas( xCanvas ) );
+    }
+
+    SpriteCanvasSharedPtr VCLFactory::createFullscreenSpriteCanvas( const ::Window& rVCLWindow,
                                                                     const Size&     rFullscreenSize ) const
     {
         return SpriteCanvasSharedPtr(
@@ -152,7 +164,7 @@ namespace cppcanvas
     }
 
     PolyPolygonSharedPtr VCLFactory::createPolyPolygon( const CanvasSharedPtr&  rCanvas,
-                                                        const ::Polygon&            rPoly ) const
+                                                        const ::Polygon&        rPoly ) const
     {
         OSL_ENSURE( rCanvas.get() != NULL &&
                     rCanvas->getUNOCanvas().is(),
@@ -213,6 +225,26 @@ namespace cppcanvas
                                           ::vcl::unotools::integerSize2DFromSize(rSize) ) ) );
     }
 
+    BitmapSharedPtr VCLFactory::createAlphaBitmap( const CanvasSharedPtr&   rCanvas,
+                                                   const ::Size&            rSize ) const
+    {
+        OSL_ENSURE( rCanvas.get() != NULL &&
+                    rCanvas->getUNOCanvas().is(),
+                    "VCLFactory::createBitmap(): Invalid canvas" );
+
+        if( rCanvas.get() == NULL )
+            return BitmapSharedPtr();
+
+        uno::Reference< rendering::XCanvas > xCanvas( rCanvas->getUNOCanvas() );
+        if( !xCanvas.is() )
+            return BitmapSharedPtr();
+
+        return BitmapSharedPtr(
+            new internal::ImplBitmap( rCanvas,
+                                      xCanvas->getDevice()->createCompatibleAlphaBitmap(
+                                          ::vcl::unotools::integerSize2DFromSize(rSize) ) ) );
+    }
+
     BitmapSharedPtr VCLFactory::createBitmap( const CanvasSharedPtr&    rCanvas,
                                               const ::Bitmap&           rBitmap ) const
     {
@@ -253,7 +285,9 @@ namespace cppcanvas
                                                               rBmpEx) ) );
     }
 
-    RendererSharedPtr VCLFactory::createRenderer( const CanvasSharedPtr& rCanvas, const ::Graphic& rGraphic ) const
+    RendererSharedPtr VCLFactory::createRenderer( const CanvasSharedPtr&        rCanvas,
+                                                  const ::Graphic&              rGraphic,
+                                                  const Renderer::Parameters&   rParms ) const
     {
         OSL_ENSURE( rCanvas.get() != NULL &&
                     rCanvas->getUNOCanvas().is(),
@@ -268,16 +302,21 @@ namespace cppcanvas
 
         if( rGraphic.GetType() == GRAPHIC_GDIMETAFILE )
             return RendererSharedPtr( new internal::ImplRenderer( rCanvas,
-                                                                  rGraphic.GetGDIMetaFile() ) );
+                                                                  rGraphic.GetGDIMetaFile(),
+                                                                  rParms ) );
         else
             return RendererSharedPtr( new internal::ImplRenderer( rCanvas,
-                                                                  rGraphic.GetBitmapEx()) );
+                                                                  rGraphic.GetBitmapEx(),
+                                                                  rParms ) );
     }
 
-    RendererSharedPtr VCLFactory::createRenderer( const CanvasSharedPtr& rCanvas, const ::GDIMetaFile& rMtf ) const
+    RendererSharedPtr VCLFactory::createRenderer( const CanvasSharedPtr&        rCanvas,
+                                                  const ::GDIMetaFile&          rMtf,
+                                                  const Renderer::Parameters&   rParms ) const
     {
         return RendererSharedPtr( new internal::ImplRenderer( rCanvas,
-                                                              rMtf ) );
+                                                              rMtf,
+                                                              rParms ) );
     }
 
     SpriteSharedPtr VCLFactory::createAnimatedSprite( const SpriteCanvasSharedPtr& rCanvas, const ::Animation& rAnim ) const
@@ -298,6 +337,10 @@ namespace cppcanvas
             return SpriteSharedPtr();
 
         if( rAnim.IsEmpty() )
+            return SpriteSharedPtr();
+
+        internal::ImplSpriteCanvas* pSpriteCanvas = dynamic_cast< internal::ImplSpriteCanvas* >( rCanvas.get() );
+        if( !pSpriteCanvas )
             return SpriteSharedPtr();
 
         const USHORT nBitmaps( rAnim.Count() );
@@ -354,9 +397,8 @@ namespace cppcanvas
                 aBmpEx);
         }
 
-        return SpriteSharedPtr( new internal::ImplSprite( xSpriteCanvas,
-                                                          xSpriteCanvas->createSpriteFromBitmaps( aBitmapSequence,
-                                                                                                  rendering::InterpolationMode::NEAREST_NEIGHBOR ) ) );
+        return pSpriteCanvas->createSpriteFromBitmaps( aBitmapSequence,
+                                                       rendering::InterpolationMode::NEAREST_NEIGHBOR );
     }
 
     TextSharedPtr VCLFactory::createText( const CanvasSharedPtr& rCanvas, const ::rtl::OUString& rText ) const
