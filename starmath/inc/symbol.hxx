@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-16 11:56:45 $
+ *  last change: $Author: tl $ $Date: 2001-06-22 12:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 String GetExportSymbolName( const String &rUiSymbolName );
 String GetUiSymbolName( const String &rExportSymbolName );
 
+String GetExportSymbolSetName( const String &rUiSymbolSetName );
+String GetUiSymbolSetName( const String &rExportSymbolSetName );
+
 ////////////////////////////////////////////////////////////////////////////////
 
 class SmSym
@@ -132,9 +135,9 @@ public:
     sal_Unicode     GetCharacter() const { return Character; }
     const String&   GetName() const { return Name; }
 
-    Font&           GetFace() { return Face; }
-    sal_Unicode&    GetCharacter() { return Character; }
-    String&         GetName() { return Name; }
+    void            SetFace( const Font& rFont )        { Face = rFont; }
+    void            SetCharacter( sal_Unicode cChar )   { Character = cChar; }
+    void            SetName( const String &rTxt )       { Name = rTxt; }
 
     BOOL            IsPredefined() const    { return bPredefined; }
     const String &  GetSetName() const      { return aSetName; }
@@ -162,10 +165,10 @@ class SmSymSet
     SmSymSetManager     *pSymSetManager;
 
 public:
-                SmSymSet();
-                SmSymSet(const SmSymSet& rSymbolSet);
-                SmSymSet(const String& rName);
-                ~SmSymSet();
+    SmSymSet();
+    SmSymSet(const SmSymSet& rSymbolSet);
+    SmSymSet(const String& rName);
+    ~SmSymSet();
 
     SmSymSet&   operator = (const SmSymSet& rSymbolSet);
 
@@ -181,8 +184,6 @@ public:
 
     USHORT      AddSymbol(SmSym* pSymbol);
     void        DeleteSymbol(USHORT SymbolNo);
-    void        RenameSymbol(USHORT SymbolNo, String& rName);
-    void        ReplaceSymbol(USHORT SymbolNo, SmSym& rSymbol);
     SmSym *     RemoveSymbol(USHORT SymbolNo);
     USHORT      GetSymbolPos(const String& rName);
 };

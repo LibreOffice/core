@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-17 13:43:01 $
+ *  last change: $Author: tl $ $Date: 2001-06-22 12:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,19 +128,26 @@ class SmMathConfigResource : public Resource
 {
     ResStringArray      aUiSymbolNamesAry;
     ResStringArray      aExportSymbolNamesAry;
+    ResStringArray      aUiSymbolSetNamesAry;
+    ResStringArray      aExportSymbolSetNamesAry;
 
 public:
     SmMathConfigResource();
 
     ResStringArray& GetUiSymbolNamesArray()     { return aUiSymbolNamesAry; }
     ResStringArray& GetExportSymbolNamesArray() { return aExportSymbolNamesAry; }
+
+    ResStringArray& GetUiSymbolSetNamesArray()     { return aUiSymbolSetNamesAry; }
+    ResStringArray& GetExportSymbolSetNamesArray() { return aExportSymbolSetNamesAry; }
 };
 
 
 SmMathConfigResource::SmMathConfigResource() :
-    Resource( SmResId(RID_LOCALIZED_SYMBOL_NAMES) ),
+    Resource( SmResId(RID_LOCALIZED_NAMES) ),
     aUiSymbolNamesAry       ( ResId(RID_UI_SYMBOL_NAMES) ),
-    aExportSymbolNamesAry   ( ResId(RID_EXPORT_SYMBOL_NAMES) )
+    aExportSymbolNamesAry   ( ResId(RID_EXPORT_SYMBOL_NAMES) ),
+    aUiSymbolSetNamesAry    ( ResId(RID_UI_SYMBOLSET_NAMES) ),
+    aExportSymbolSetNamesAry( ResId(RID_EXPORT_SYMBOLSET_NAMES) )
 {
     FreeResource();
 }
@@ -181,6 +188,49 @@ String GetUiSymbolName( const String &rExportSymbolName )
     for (USHORT i = 0;  i < nCount;  ++i)
     {
         if (rExportSymbolName == rExportNames.GetString(i))
+        {
+            aRes = rUiNames.GetString(i);
+            break;
+        }
+    }
+
+    return aRes;
+}
+
+String GetExportSymbolSetName( const String &rUiSymbolSetName )
+{
+    String aRes;
+
+    SmMathConfigResource aCfgRes;
+    ResStringArray &rUiNames = aCfgRes.GetUiSymbolSetNamesArray();
+    ResStringArray &rExportNames = aCfgRes.GetExportSymbolSetNamesArray();
+    USHORT nCount = rUiNames.Count();
+
+    for (USHORT i = 0;  i < nCount;  ++i)
+    {
+        if (rUiSymbolSetName == rUiNames.GetString(i))
+        {
+            aRes = rExportNames.GetString(i);
+            break;
+        }
+    }
+
+    return aRes;
+}
+
+
+String GetUiSymbolSetName( const String &rExportSymbolSetName )
+{
+    String aRes;
+
+    SmMathConfigResource aCfgRes;
+    ResStringArray &rUiNames = aCfgRes.GetUiSymbolSetNamesArray();
+    ResStringArray &rExportNames = aCfgRes.GetExportSymbolSetNamesArray();
+    USHORT nCount = rExportNames.Count();
+
+    for (USHORT i = 0;  i < nCount;  ++i)
+    {
+        if (rExportSymbolSetName == rExportNames.GetString(i))
         {
             aRes = rUiNames.GetString(i);
             break;
@@ -375,27 +425,6 @@ SmSym * SmSymSet::RemoveSymbol(USHORT SymbolNo)
         pSymSetManager->SetModified(TRUE);
 
     return pSym;
-}
-
-
-void SmSymSet::RenameSymbol(USHORT SymbolNo, String& rName)
-{
-    DBG_ASSERT(SymbolList.GetObject(SymbolNo), "Symbol nicht vorhanden");
-
-    SymbolList.GetObject(SymbolNo)->SetSymbolName(rName);
-
-    if (pSymSetManager)
-        pSymSetManager->SetModified(TRUE);
-}
-
-void SmSymSet::ReplaceSymbol(USHORT SymbolNo, SmSym& rSymbol)
-{
-    DBG_ASSERT(SymbolList.GetObject(SymbolNo), "Symbol nicht vorhanden");
-
-    *SymbolList.GetObject(SymbolNo) = rSymbol;
-
-    if (pSymSetManager)
-        pSymSetManager->SetModified(TRUE);
 }
 
 USHORT SmSymSet::GetSymbolPos(const String& rName)

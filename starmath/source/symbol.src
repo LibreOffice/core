@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-07 10:11:29 $
+ *  last change: $Author: tl $ $Date: 2001-06-22 12:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,10 @@
 
 /////////////////////////////////////////////////////////////////
 
-Resource RID_LOCALIZED_SYMBOLSET_NAMES
+
+/////////////////////////////////////////////////////////////////
+
+Resource RID_LOCALIZED_NAMES
 {
     StringArray RID_EXPORT_SYMBOLSET_NAMES
     {
@@ -87,12 +90,7 @@ Resource RID_LOCALIZED_SYMBOLSET_NAMES
             < "Special" ; > ;
         };
     };
-};
 
-/////////////////////////////////////////////////////////////////
-
-Resource RID_LOCALIZED_SYMBOL_NAMES
-{
     StringArray RID_EXPORT_SYMBOL_NAMES
     {
         ItemList =

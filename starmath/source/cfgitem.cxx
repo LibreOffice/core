@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-17 13:42:03 $
+ *  last change: $Author: tl $ $Date: 2001-06-22 12:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,16 +501,22 @@ SmSym SmMathConfig::ReadSymbol( SmMathConfigItem &rCfg,
 
         if (bOK)
         {
-            String aUiName;
+            String aUiName( rSymbolName );
+            String aUiSetName( aSet );
             if (bPredefined)
             {
-                aUiName = GetUiSymbolName( rSymbolName );
-                DBG_ASSERT( aUiName.Len(), "localized symbol-name not found" );
+                String aTmp;
+                aTmp = GetUiSymbolName( rSymbolName );
+                DBG_ASSERT( aTmp.Len(), "localized symbol-name not found" );
+                if (aTmp.Len())
+                    aUiName = aTmp;
+                aTmp = GetUiSymbolSetName( aSet );
+                DBG_ASSERT( aTmp.Len(), "localized symbolset-name not found" );
+                if (aTmp.Len())
+                    aUiSetName = aTmp;
             }
-            if (!bPredefined  ||  0 == aUiName.Len())
-                aUiName = rSymbolName;
 
-            aRes = SmSym( aUiName, aFont, cChar, aSet, bPredefined );
+            aRes = SmSym( aUiName, aFont, cChar, aUiSetName, bPredefined );
             if (aUiName != String(rSymbolName))
                 aRes.SetExportName( rSymbolName );
         }
@@ -608,7 +614,10 @@ void SmMathConfig::ReplaceSymbols( const SmSym *pNewSymbols[], USHORT nCount )
         // Set
         pVal->Name  = aNodeNameDelim;
         pVal->Name += *pName++;
-        pVal->Value <<= OUString( rSymbol.GetSetName() );
+        OUString aTmp( rSymbol.GetSetName() );
+        if (rSymbol.IsPredefined())
+            aTmp = GetExportSymbolSetName( aTmp );
+        pVal->Value <<= aTmp;
         pVal++;
         // Predefined
         pVal->Name  = aNodeNameDelim;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-15 06:42:09 $
+ *  last change: $Author: tl $ $Date: 2001-06-22 12:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1910,14 +1910,14 @@ IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, pButton )
     DBG_ASSERT(pSym, "Sm : NULL pointer");
 
     // Änderungen durchführen;
-    pSym->GetName() = aSymbols.GetText();
-    pSym->GetFace() = aCharsetDisplay.GetFont();
-    pSym->GetCharacter() = aCharsetDisplay.GetSelectChar();
+    pSym->SetName( aSymbols.GetText() );
+    pSym->SetFace( aCharsetDisplay.GetFont() );
+    pSym->SetCharacter( aCharsetDisplay.GetSelectChar() );
 
     // das SymbolSet wechseln wenn nötig
     if (pOldSymSet != pNewSymSet)
     {
-        pOldSymSet->RemoveSymbol(nSymbol);
+        pOldSymSet->DeleteSymbol(nSymbol);
         pNewSymSet->AddSymbol(pSym);
     }
 
