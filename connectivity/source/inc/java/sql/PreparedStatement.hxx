@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreparedStatement.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:24:03 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:18:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ namespace connectivity
         // der Destruktor um den Object-Counter zu aktualisieren
         static void saveClassRef( jclass pClass );
 
-        virtual void createStatement();
+        virtual void createStatement(JNIEnv* _pEnv);
         virtual ~java_sql_PreparedStatement();
     public:
         DECLARE_SERVICE_INFO();
