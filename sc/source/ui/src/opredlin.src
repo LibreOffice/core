@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opredlin.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:48:14 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ turkish ] = "~Deðiþiklikler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modificaciones";
+        Text[ finnish ] = "Muu~tokset";
     };
     FixedText FT_REMOVE
     {
@@ -121,6 +122,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ turkish ] = "~Silinenler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminaciones";
+        Text[ finnish ] = "~Poistot";
     };
     FixedText FT_INSERT
     {
@@ -148,6 +150,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ turkish ] = "~Eklemeler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Inserciones";
+        Text[ finnish ] = "~Lisäykset";
     };
     FixedText FT_MOVE
     {
@@ -175,6 +178,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ turkish ] = "~Taþýnan giriþler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Desplazamientos";
+        Text[ finnish ] = "~Siirretyt merkinnät";
     };
     FixedLine GB_COLORCHGS
     {
@@ -202,6 +206,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ turkish ] = "Deðiþiklikleri gösteren renkler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Colores para las modificaciones";
+        Text[ finnish ] = "Farbgebung für Änderungen";
     };
     ListBox CLB_CONTENT
     {
@@ -255,5 +260,6 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ turkish ] = "Yazana göre";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Según autor";
+        Text[ finnish ] = "Laatija";
     };
 };
