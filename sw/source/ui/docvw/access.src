@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-03 00:10:27 $
+ *  last change: $Author: kz $ $Date: 2002-05-16 14:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ String STR_ACCESS_DOC_NAME
 {
     Text = "Dokument-Ansicht" ;
     Text [ English ] = "Document View";
-    Text[ english_us ] = "Document View";
+    Text[ english_us ] = "Document view";
     Text[ portuguese ] = "Document View";
     Text[ russian ] = "Document View";
     Text[ greek ] = "Document View";
@@ -91,7 +91,7 @@ String STR_ACCESS_DOC_DESC
 {
     Text = "Dokument-Ansicht" ;
     Text [ English ] = "Document View";
-    Text[ english_us ] = "Document View";
+    Text[ english_us ] = "Document view";
     Text[ portuguese ] = "Document View";
     Text[ russian ] = "Document View";
     Text[ greek ] = "Document View";
@@ -143,7 +143,7 @@ String STR_ACCESS_PARAGRAPH_DESC
 {
     Text = "Absatz: $(ARG1) " ;
     Text [ english ] = "Paragraph: $(ARG1)" ;
-    Text[ english_us ] = "Paragraph: $(ARG1)";
+    Text[ english_us ] = "Paragraph: $(ARG1) ";
     Text[ portuguese ] = "Paragraph: $(ARG1)";
     Text[ russian ] = "Paragraph: $(ARG1)";
     Text[ greek ] = "Paragraph: $(ARG1)";
@@ -455,7 +455,7 @@ String STR_ACCESS_REPLACEMENT_POSTIT
 {
     Text = "[Post-It: $(ARG1)]" ;
     Text [ english ] = "[Annotation: $(ARG1)]" ;
-    Text[ english_us ] = "[Annotation]";
+    Text[ english_us ] = "[Note]";
     Text[ portuguese ] = "[Annotation]";
     Text[ russian ] = "[Annotation]";
     Text[ greek ] = "[Annotation]";
