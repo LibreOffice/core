@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-09 14:56:40 $
+ *  last change: $Author: dr $ $Date: 2002-04-10 12:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -996,6 +996,12 @@ void ImportExcel8::Codename( BOOL bWorkbookGlobals )
 
 void ImportExcel8::Dval()
 {
+    aIn.Ignore( 10 );
+    // drop down list object
+    sal_uInt32 nObjId;
+    aIn >> nObjId;
+    if( nObjId <= 0xFFFFFFFF )
+        maIgnoreObjList.Append( nObjId );
 }
 
 
@@ -1428,7 +1434,7 @@ void ImportExcel8::PostDocLoad( void )
             ULONG                       nShapeId;
             SvxMSDffImportData*         pMSDffImportData;
             UINT32                      n;
-            BOOL                        bRangeTest;
+            BOOL                        bIgnoreObj;
 
             UINT32                      nOLEImpFlags = 0;
             OfaFilterOptions*           pFltOpts = OFF_APP()->GetFilterOptions();
@@ -1460,14 +1466,22 @@ void ImportExcel8::PostDocLoad( void )
                     if( pObj->GetSdrObj() )
                     {
                         pAnch = aObjManager.GetAnchorData( p->nFilePos );
-                        bRangeTest = FALSE;
+                        bIgnoreObj = FALSE;
+
+                        // *** find all objects to ignore ***
                         if( pAnch )
                         {
-                            bRangeTest = aPivotTabList.IsInPivotRange( pAnch->nCol, pAnch->nRow, pAnch->nTab );
+                            // pivot table dropdowns
+                            bIgnoreObj |= aPivotTabList.IsInPivotRange( pAnch->nCol, pAnch->nRow, pAnch->nTab );
+                            // auto filter drop downs
                             if( pAutoFilterBuffer )
-                                bRangeTest |= pAutoFilterBuffer->HasDropDown( pAnch->nCol, pAnch->nRow, pAnch->nTab );
+                                bIgnoreObj |= pAutoFilterBuffer->HasDropDown( pAnch->nCol, pAnch->nRow, pAnch->nTab );
                         }
-                        if( bRangeTest )
+                        // other objects
+                        if( !bIgnoreObj )
+                            bIgnoreObj = maIgnoreObjList.Contains( pObj->GetId() );
+
+                        if( bIgnoreObj )
                             pObj->SetSdrObj( NULL );      // delete SdrObject
                         else
                         {

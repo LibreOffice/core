@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-09 14:56:03 $
+ *  last change: $Author: dr $ $Date: 2002-04-10 12:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,7 @@ class ImportExcel8 : public ImportExcel
 
         XclImpObjectManager     aObjManager;
         BOOL                    bObjSection;
+        ScfUInt32List           maIgnoreObjList;
 
         ExcScenarioList         aScenList;
 
