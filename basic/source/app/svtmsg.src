@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: gh $ $Date: 2002-06-26 13:06:15 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 15:15:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,22 +76,27 @@
 String S_GPF_ABORT
 {
     Text = "Program aborted with GPF";
+    Text[ dutch ] = "Programma geannuleerd met GPF";
 };
 String S_APP_SHUTDOWN
 {
     Text = "Application has been shut down";
+    Text[ dutch ] = "Toepassing is beëindigd";
 };
 String S_SID_EXECUTE_FAILED_NO_DISPATCHER
 {
     Text = "Slot ID cannot be executed. No ActiveDispatcher";
+    Text[ dutch ] = "Kan sleuf-ID niet uitvoeren: geen ActiveDispatcher";
 };
 String S_SID_EXECUTE_FAILED
 {
     Text = "Slot ID could not be execute";
+    Text[ dutch ] = "Kan sleuf-ID niet uitvoeren";
 };
 String S_UNO_PROPERTY_NITIALIZE_FAILED
 {
     Text = "UnoSlot: Properties could not be initialized";
+    Text[ dutch ] = "UnoSlot: kan Properties niet initialiseren";
 };
 String S_RESETAPPLICATION_FAILED_COMPLEX
 {
@@ -116,6 +121,7 @@ String S_NO_POPUP
 String S_NO_SUBMENU
 {
     Text = "Submenu does not exist";
+    Text[ dutch ] = "Submenu niet beschikbaar ";
 };
 String S_CONTROLTYPE_NOT_SUPPORTED
 {
@@ -128,6 +134,7 @@ String S_SELECTION_BY_ATTRIBUTE_ONLY_DIRECTORIES
 String S_NO_MORE_FILES
 {
     Text = "No more files";
+    Text[ dutch ] = "Geen andere bestanden";
 };
 String S_UNKNOWN_METHOD
 {
@@ -140,6 +147,7 @@ String S_INVALID_PARAMETERS
 String S_POINTER_OUTSIDE_APPWIN
 {
     Text = "Pointer not inside application window at '($Arg1)'";
+    Text[ dutch ] = "Pointer niet in Toepassingenvenster bij '($Arg1)'";
 };
 String S_UNKNOWN_COMMAND
 {
@@ -148,10 +156,12 @@ String S_UNKNOWN_COMMAND
 String S_WIN_NOT_FOUND
 {
     Text = "($Arg1) could not be found";
+    Text[ dutch ] = "($Arg1) niet gevonden";
 };
 String S_WIN_INVISIBLE
 {
     Text = "($Arg1) is not visible";
+    Text[ dutch ] = "($Arg1) is onzichtbaar.";
 };
 String S_WIN_DISABLED
 {
@@ -176,10 +186,12 @@ String S_ERROR_SAVING_IMAGE
 String S_INVALID_POSITION
 {
     Text = "Invalid positon at ($Arg1)";
+    Text[ dutch ] = "Ongeldige positie opgegeven bij ($Arg1)";
 };
 String S_SPLITWIN_NOT_FOUND
 {
     Text = "SplitWindow not found at ($Arg1)";
+    Text[ dutch ] = "Kan SplitWindow niet vinden bij ($Arg1)";
 };
 String S_INTERNAL_ERROR
 {
@@ -188,6 +200,7 @@ String S_INTERNAL_ERROR
 String S_NO_STATUSBAR
 {
     Text = "No status bar at ($Arg1)";
+    Text[ dutch ] = "Geen StatusBar beschikbaar bij ($Arg1)";
 };
 String S_ITEMS_INVISIBLE
 {
@@ -224,119 +237,157 @@ String S_METHOD_FAILED
 String S_HELPID_ON_TOOLBOX_NOT_FOUND
 {
     Text = "HelpID in ToolBox not found at ($Arg1)";
+    Text[ dutch ] = "Help-ID op ToolBox niet gevonden bij ($Arg1)";
 };
 String S_BUTTON_DISABLED_ON_TOOLBOX
 {
     Text = "The button is disabled in ToolBox at ($Arg1)";
+    Text[ dutch ] = "Knop buiten werking in ToolBox bij ($Arg1)";
 };
 String S_BUTTON_HIDDEN_ON_TOOLBOX
 {
     Text = "The button is hidden in ToolBox at ($Arg1)";
+    Text[ dutch ] = "Knop verborgen in Toolbox bij ($Arg1)";
 };
 String S_CANNOT_MAKE_BUTTON_VISIBLE_IN_TOOLBOX
 {
     Text = "Button cannot be made visible in ToolBox at ($Arg1)";
+    Text[ dutch ] = "Knop kan niet zichtbaar worden gemaakt in Toolbox bij ($Arg1)";
 };
 String S_TEAROFF_FAILED
 {
     Text = "TearOff failed in ToolBox at ($Arg1)";
+    Text[ dutch ] = "TearOff mislukt in ToolBox bij ($Arg1)";
 };
 
 // Has to stay in for old res files
 String S_NO_SELECTED_ENTRY_DEPRECATED
 {
     Text = "No entry is selected in TreeListBox at ($Arg1)";
+    Text[ dutch ] = "Geen item geselecteerd in TreeListBox bij ($Arg1)";
+    Text[ danish ] = "Der er ikke markeret noget element i TreeListBox ved ($Arg1)";
 };
 String S_NO_SELECTED_ENTRY
 {
     Text = "Es ist kein Eintrag Selektiert in ($Arg2) bei ($Arg1)";
+    Text[ dutch ] = "Geen item geselecteerd in ($Arg2) bij ($Arg1)";
+    Text[ danish ] = "Der er ikke markeret noget element i ($Arg2) ved ($Arg1)";
 };
 String S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED
 {
     Text = "Select/Deselect with string not implemented at ($Arg1)";
+    Text[ dutch ] = "Select/Deselect met String niet geïmplementeerd bij ($Arg1)";
 };
 String S_ALLOWED_ONLY_IN_FLOATING_MODE
 {
     Text = "Method only allowed in floating mode at ($Arg1)";
+    Text[ dutch ] = "Methode alleen toegestaan in Froatingmodus bij ($Arg1)";
 };
 String S_ALLOWED_ONLY_IN_DOCKING_MODE
 {
     Text = "Method only allowed in docking mode at ($Arg1)";
+    Text[ dutch ] = "Methode alleen toegestaan in Dockingmodus bij ($Arg1)";
 };
 String S_SIZE_NOT_CHANGEABLE
 {
     Text = "Size cannot be altered at ($Arg1)";
+    Text[ dutch ] = "Grootte kan niet worden gewijzigd bij ($Arg1)";
 };
 String S_NO_OK_BUTTON
 {
     Text = "There is no OK button at ($Arg1)";
+    Text[ dutch ] = "Geen OK-knop beschikbaar bij ($Arg1)";
 };
 String S_NO_CANCEL_BUTTON
 {
     Text = "There is no Cancel button at ($Arg1)";
+    Text[ dutch ] = "Geen Annuleren-knop beschikbaar bij ($Arg1)";
 };
 String S_NO_YES_BUTTON
 {
     Text = "There is no Yes button at ($Arg1)";
+    Text[ dutch ] = "Geen Ja-knop beschikbaar bij ($Arg1)";
 };
 String S_NO_NO_BUTTON
 {
     Text = "There is no No button at ($Arg1)";
+    Text[ dutch ] = "Geen Nee-knop beschikbaar bij ($Arg1)";
 };
 String S_NO_RETRY_BUTTON
 {
     Text = "There is no Repeat button at ($Arg1)";
+    Text[ dutch ] = "Geen Herhalen-knop beschikbaar bij ($Arg1)";
 };
 String S_NO_HELP_BUTTON
 {
     Text = "There is no Help button at ($Arg1)";
+    Text[ dutch ] = "Geen Help-knop beschikbaar bij ($Arg1)";
 };
 String S_NO_DEFAULT_BUTTON
 {
     Text = "There is no Default button defined at ($Arg1)";
+    Text[ dutch ] = "Geen Default-knop beschikbaar bij ($Arg1)";
 };
 String S_BUTTON_ID_NOT_THERE
 {
     Text = "There is no button with ID ($Arg1) at ($Arg2)";
+    Text[ dutch ] = "Geen knop met ID ($Arg1) beschikbaar bij ($Arg2)";
 };
 String S_BUTTONID_REQUIRED
 {
     Text = "A button ID needs to be given at ($Arg1)";
+    Text[ dutch ] = "Er moet een knop-ID worden vermeld bij ($Arg1)";
 };
 String S_UNKNOWN_TYPE
 {
     Text = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
+    Text[ danish ] = "Ukendt objekttype ($Arg1) fra UId eller metode '($Arg2)' understøttes ikke";
 };
 String S_UNPACKING_STORAGE_FAILED
 {
     Text = "Unpacking storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ danish ] = "Udpakning af storage \"($Arg1)\" i \"($Arg2)\" mislykkedes";
 };
 String S_NO_LIST_BOX_BUTTON
 {
     Text = "ListBoxButton does not exist in ($Arg1)";
+    Text[ dutch ] = "Geen ListBoxButton beschikbaar bij ($Arg1)";
+    Text[ danish ] = "ListBoxButton findes ikke ved ($Arg1)";
 };
 String S_UNO_URL_EXECUTE_FAILED_NO_DISPATCHER
 {
     Text = "UNO URL \"($Arg1)\" could not be executed: No dispatcher was found.";
+    Text[ dutch ] = "Kan Url \"($Arg1)\" niet uitvoeren: geen dispatcher gevonden";
+    Text[ danish ] = "Kunne ikke udføre UNO Url \"($Arg1)\": Der blev ikke fundet nogen jobfordeler";
 };
 String S_UNO_URL_EXECUTE_FAILED_NO_FRAME
 {
     Text = "UNO URL \"($Arg1)\" could not be executed: No ActiveFrame on desktop.";
+    Text[ dutch ] = "Kan UNO Url \"($Arg1)\" niet uitvoeren: geen ActiveFrame aan desktop";
+    Text[ danish ] = "Kunne ikke udføre UNO Url \"($Arg1)\": Ingen ActiveFrame på Desktop";
 };
 String S_NO_MENU
 {
     Text = "There is no menu at ($Arg1)";
+    Text[ dutch ] = "Geen Help-knop beschikbaar bij ($Arg1)";
+    Text[ danish ] = "Der er ikke nogen menu ved ($Arg1)";
 };
 String S_UNO_URL_EXECUTE_FAILED_DISABLED
 {
     Text = "UNO URL \"($Arg1)\" could not be run: Disabled";
+    Text[ dutch ] = "Kan UNO Url \"($Arg1)\" niet uitvoeren: disabled.";
+    Text[ danish ] = "\"Kunne ikke udføre UNO Url \"\"($Arg1)\"\": Deaktiveret\"";
 };
 String S_NO_SCROLLBAR
 {
     Text = "No scroll bar at ($Arg1)";
+    Text[ dutch ] = "Geen beeldschuifbalk beschikbaar bij ($Arg1)";
+    Text[ danish ] = "Der er ikke noget rullepanel ved ($Arg1)";
 };
 String S_NO_SAX_PARSER
 {
     Text = "No SAX Parser when using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ dutch ] = "Geen SAX-parser voor ($Arg1). Eerst initialiseren met 'SAXReadFile'.";
+    Text[ danish ] = "Ingen SAX-parser ved ($Arg1). Initialiser først med 'SAXReadFile'.";
 };
 
