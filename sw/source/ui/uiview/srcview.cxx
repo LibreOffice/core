@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-01-11 09:43:53 $
+ *  last change: $Author: jp $ $Date: 2002-01-15 09:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -886,6 +886,8 @@ USHORT SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
     case SVX_SEARCHCMD_REPLACE_ALL: bAll = TRUE;
     case SVX_SEARCHCMD_REPLACE:
         nFound = pTextView->Replace( aSearchOpt, bAll, bForward );
+        break;
+
     default:
         nFound = 0;
     }
