@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 15:07:55 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,9 @@
 #include "globstr.hrc"
 #endif
 
+#ifndef SC_XLCONTENT_HXX
+#include "xlcontent.hxx"
+#endif
 #ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
 #endif
@@ -202,15 +205,15 @@ void XclImpPalette::OnChangeBiff()
     SetDefaultColors( GetBiff() );
 }
 
-ColorData XclImpPalette::GetColorData( sal_uInt16 nXclIndex, ColorData nDefault ) const
+ColorData XclImpPalette::GetColorData( sal_uInt16 nXclIndex ) const
 {
-    if( nXclIndex >= GetIndexOffset() )
+    if( nXclIndex >= EXC_COLOR_USEROFFSET )
     {
-        sal_uInt32 nIx = nXclIndex - GetIndexOffset();
+        sal_uInt32 nIx = nXclIndex - EXC_COLOR_USEROFFSET;
         if( nIx < maColorTable.size() )
             return maColorTable[ nIx ];
     }
-    return GetDefColorData( nXclIndex, nDefault );
+    return GetDefColorData( nXclIndex );
 }
 
 void XclImpPalette::ReadPalette( XclImpStream& rStrm )
@@ -232,27 +235,13 @@ void XclImpPalette::ReadPalette( XclImpStream& rStrm )
 
 // FONT record - font information =============================================
 
-inline XclImpStream& operator>>( XclImpStream& rStrm, XclUnderline& reUnderl )
-{
-    reUnderl = static_cast< XclUnderline >( rStrm.ReaduInt8() );
-    return rStrm;
-}
-
-inline XclImpStream& operator>>( XclImpStream& rStrm, XclEscapement& reEscapem )
-{
-    reEscapem = static_cast< XclEscapement >( rStrm.ReaduInt16() );
-    return rStrm;
-};
-
-
-// ----------------------------------------------------------------------------
-
 XclImpFont::XclImpFont( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
     mbAscii( true ),
     mbCjk( false ),
     mbCtl( false )
 {
+    SetAllUsedFlags( false );
 }
 
 XclImpFont::XclImpFont( const XclImpRoot& rRoot, const XclFontData& rFontData ) :
@@ -277,6 +266,13 @@ XclImpFont::XclImpFont( const XclImpRoot& rRoot, const XclFontData& rFontData ) 
         maData.maStyle.Erase();
     }
     GuessScriptType();
+    SetAllUsedFlags( true );
+}
+
+void XclImpFont::SetAllUsedFlags( bool bUsed )
+{
+    mbFontNameUsed = mbHeightUsed = mbColorUsed = mbWeightUsed = mbEscapemUsed =
+        mbUnderlUsed = mbItalicUsed = mbStrikeUsed = mbOutlineUsed = mbShadowUsed = bUsed;
 }
 
 void XclImpFont::ReadFont( XclImpStream& rStrm )
@@ -307,6 +303,39 @@ void XclImpFont::ReadFont( XclImpStream& rStrm )
             return;
     }
     GuessScriptType();
+    SetAllUsedFlags( true );
+}
+
+void XclImpFont::ReadCFFontBlock( XclImpStream& rStrm )
+{
+    DBG_ASSERT_BIFF( GetBiff() == xlBiff8 );
+    if( GetBiff() != xlBiff8 )
+        return;
+
+    sal_uInt32 nHeight, nStyle, nColor, nFontFlags1, nFontFlags2, nFontFlags3;
+    sal_uInt16 nWeight, nEscapem;
+    sal_uInt8 nUnderl;
+
+    rStrm.Ignore( 64 );
+    rStrm >> nHeight >> nStyle >> nWeight >> nEscapem >> nUnderl;
+    rStrm.Ignore( 3 );
+    rStrm >> nColor;
+    rStrm.Ignore( 4 );
+    rStrm >> nFontFlags1 >> nFontFlags2 >> nFontFlags3;
+    rStrm.Ignore( 18 );
+
+    if( (mbHeightUsed = (nHeight <= 0x7FFF)) == true )
+        maData.mnHeight = static_cast< sal_uInt16 >( nHeight );
+    if( (mbWeightUsed = !::get_flag( nFontFlags1, EXC_CF_FONT_STYLE ) && (nWeight < 0x7FFF)) == true )
+        maData.mnWeight = static_cast< sal_uInt16 >( nWeight );
+    if( (mbItalicUsed = !::get_flag( nFontFlags1, EXC_CF_FONT_STYLE )) == true )
+        maData.mbItalic = ::get_flag( nStyle, EXC_CF_FONT_STYLE );
+    if( (mbUnderlUsed = !::get_flag( nFontFlags3, EXC_CF_FONT_UNDERL ) && (nUnderl <= 0x7FFF)) == true )
+        maData.mnUnderline = nUnderl;
+    if( (mbColorUsed = (nColor <= 0x7FFF)) == true )
+        maData.mnColor = static_cast< sal_uInt16 >( nColor );
+    if( (mbStrikeUsed = !::get_flag( nFontFlags1, EXC_CF_FONT_STRIKEOUT )) == true )
+        maData.mbStrikeout = ::get_flag( nStyle, EXC_CF_FONT_STRIKEOUT );
 }
 
 void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontWhichIDMode eMode, bool bSkipPoolDefs ) const
@@ -320,54 +349,73 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontWhichIDMode eMode, 
     lcl_xistyle_PutItem( rItemSet, item, (bEE ? (ee_which) : (sc_which)), bSkipPoolDefs )
 
 // Font item - #91658# set only for valid script types
-    CharSet eFontCharSet = maData.GetScCharSet();
-    CharSet eTempCharSet = (bEE && (eFontCharSet == GetCharSet())) ?
-        ScfTools::GetSystemCharSet() : eFontCharSet;
+    if( mbFontNameUsed )
+    {
+        CharSet eFontCharSet = maData.GetScCharSet();
+        CharSet eTempCharSet = (bEE && (eFontCharSet == GetCharSet())) ?
+            ScfTools::GetSystemCharSet() : eFontCharSet;
 
-    SvxFontItem aFontItem( maData.GetScFamily( GetCharSet() ), maData.maName, EMPTY_STRING, PITCH_DONTKNOW, eTempCharSet );
-    if( mbAscii )
-        PUTITEM( aFontItem, ATTR_FONT,      EE_CHAR_FONTINFO );
-    if( mbCjk )
-        PUTITEM( aFontItem, ATTR_CJK_FONT,  EE_CHAR_FONTINFO_CJK );
-    if( mbCtl )
-        PUTITEM( aFontItem, ATTR_CTL_FONT,  EE_CHAR_FONTINFO_CTL );
+        SvxFontItem aFontItem( maData.GetScFamily( GetCharSet() ), maData.maName, EMPTY_STRING, PITCH_DONTKNOW, eTempCharSet );
+        if( mbAscii )
+            PUTITEM( aFontItem, ATTR_FONT,      EE_CHAR_FONTINFO );
+        if( mbCjk )
+            PUTITEM( aFontItem, ATTR_CJK_FONT,  EE_CHAR_FONTINFO_CJK );
+        if( mbCtl )
+            PUTITEM( aFontItem, ATTR_CTL_FONT,  EE_CHAR_FONTINFO_CTL );
+    }
 
 // Font height (for all script types)
-    sal_Int32 nHeight = maData.mnHeight;
-    if( eMode == xlFontEEIDs )  // do not convert header/footer height
-        nHeight = (nHeight * 127 + 36) / EXC_POINTS_PER_INCH;   // #98527# 1 in == 72 pt
+    if( mbHeightUsed )
+    {
+        sal_Int32 nHeight = maData.mnHeight;
+        if( eMode == xlFontEEIDs )  // do not convert header/footer height
+            nHeight = (nHeight * 127 + 36) / EXC_POINTS_PER_INCH;   // #98527# 1 in == 72 pt
 
-    SvxFontHeightItem aHeightItem( nHeight );
-    PUTITEM( aHeightItem,   ATTR_FONT_HEIGHT,       EE_CHAR_FONTHEIGHT );
-    PUTITEM( aHeightItem,   ATTR_CJK_FONT_HEIGHT,   EE_CHAR_FONTHEIGHT_CJK );
-    PUTITEM( aHeightItem,   ATTR_CTL_FONT_HEIGHT,   EE_CHAR_FONTHEIGHT_CTL );
+        SvxFontHeightItem aHeightItem( nHeight );
+        PUTITEM( aHeightItem,   ATTR_FONT_HEIGHT,       EE_CHAR_FONTHEIGHT );
+        PUTITEM( aHeightItem,   ATTR_CJK_FONT_HEIGHT,   EE_CHAR_FONTHEIGHT_CJK );
+        PUTITEM( aHeightItem,   ATTR_CTL_FONT_HEIGHT,   EE_CHAR_FONTHEIGHT_CTL );
+    }
 
 // Font color - pass AUTO_COL to item
-    PUTITEM( SvxColorItem( GetPalette().GetColor( maData.mnColor ) ), ATTR_FONT_COLOR, EE_CHAR_COLOR );
+    if( mbColorUsed )
+        PUTITEM( SvxColorItem( GetPalette().GetColor( maData.mnColor ) ), ATTR_FONT_COLOR, EE_CHAR_COLOR );
 
 // Font weight (for all script types)
-    SvxWeightItem aWeightItem( maData.GetScWeight() );
-    PUTITEM( aWeightItem,   ATTR_FONT_WEIGHT,       EE_CHAR_WEIGHT );
-    PUTITEM( aWeightItem,   ATTR_CJK_FONT_WEIGHT,   EE_CHAR_WEIGHT_CJK );
-    PUTITEM( aWeightItem,   ATTR_CTL_FONT_WEIGHT,   EE_CHAR_WEIGHT_CTL );
+    if( mbWeightUsed )
+    {
+        SvxWeightItem aWeightItem( maData.GetScWeight() );
+        PUTITEM( aWeightItem,   ATTR_FONT_WEIGHT,       EE_CHAR_WEIGHT );
+        PUTITEM( aWeightItem,   ATTR_CJK_FONT_WEIGHT,   EE_CHAR_WEIGHT_CJK );
+        PUTITEM( aWeightItem,   ATTR_CTL_FONT_WEIGHT,   EE_CHAR_WEIGHT_CTL );
+    }
 
 // Font underline
-    SvxUnderlineItem aUnderlItem( maData.GetScUnderline() );
-    PUTITEM( aUnderlItem,   ATTR_FONT_UNDERLINE,    EE_CHAR_UNDERLINE );
+    if( mbUnderlUsed )
+    {
+        SvxUnderlineItem aUnderlItem( maData.GetScUnderline() );
+        PUTITEM( aUnderlItem,   ATTR_FONT_UNDERLINE,    EE_CHAR_UNDERLINE );
+    }
 
 // Font posture (for all script types)
-    SvxPostureItem aPostItem( maData.GetScPosture() );
-    PUTITEM( aPostItem, ATTR_FONT_POSTURE,      EE_CHAR_ITALIC );
-    PUTITEM( aPostItem, ATTR_CJK_FONT_POSTURE,  EE_CHAR_ITALIC_CJK );
-    PUTITEM( aPostItem, ATTR_CTL_FONT_POSTURE,  EE_CHAR_ITALIC_CTL );
+    if( mbItalicUsed )
+    {
+        SvxPostureItem aPostItem( maData.GetScPosture() );
+        PUTITEM( aPostItem, ATTR_FONT_POSTURE,      EE_CHAR_ITALIC );
+        PUTITEM( aPostItem, ATTR_CJK_FONT_POSTURE,  EE_CHAR_ITALIC_CJK );
+        PUTITEM( aPostItem, ATTR_CTL_FONT_POSTURE,  EE_CHAR_ITALIC_CTL );
+    }
 
 // Boolean attributes crossed out, contoured, shadowed
-    PUTITEM( SvxCrossedOutItem( maData.GetScStrikeout() ), ATTR_FONT_CROSSEDOUT, EE_CHAR_STRIKEOUT );
-    PUTITEM( SvxContourItem( maData.mbOutline ), ATTR_FONT_CONTOUR, EE_CHAR_OUTLINE );
-    PUTITEM( SvxShadowedItem( maData.mbShadow ), ATTR_FONT_SHADOWED, EE_CHAR_SHADOW );
+    if( mbStrikeUsed )
+        PUTITEM( SvxCrossedOutItem( maData.GetScStrikeout() ), ATTR_FONT_CROSSEDOUT, EE_CHAR_STRIKEOUT );
+    if( mbOutlineUsed )
+        PUTITEM( SvxContourItem( maData.mbOutline ), ATTR_FONT_CONTOUR, EE_CHAR_OUTLINE );
+    if( mbShadowUsed )
+        PUTITEM( SvxShadowedItem( maData.mbShadow ), ATTR_FONT_SHADOWED, EE_CHAR_SHADOW );
 
 // Super-/subscript: only on edit engine objects
-    if( bEE )
+    if( mbEscapemUsed && bEE )
         rItemSet.Put( SvxEscapementItem( maData.GetScEscapement(), EE_CHAR_ESCAPEMENT ) );
 
 #undef PUTITEM
@@ -378,8 +426,8 @@ void XclImpFont::ReadFontData2( XclImpStream& rStrm )
     sal_uInt16 nFlags;
     rStrm >> maData.mnHeight >> nFlags;
 
-    maData.meUnderline  = ::get_flagvalue( nFlags, EXC_FONTATTR_UNDERLINE, xlUnderlSingle, xlUnderlNone );
     maData.mnWeight     = ::get_flagvalue( nFlags, EXC_FONTATTR_BOLD, EXC_FONTWGHT_BOLD, EXC_FONTWGHT_NORMAL );
+    maData.mnUnderline  = ::get_flagvalue( nFlags, EXC_FONTATTR_UNDERLINE, EXC_FONTUNDERL_SINGLE, EXC_FONTUNDERL_NONE );
     maData.mbItalic     = ::get_flag( nFlags, EXC_FONTATTR_ITALIC );
     maData.mbStrikeout  = ::get_flag( nFlags, EXC_FONTATTR_STRIKEOUT );
     maData.mbOutline    = ::get_flag( nFlags, EXC_FONTATTR_OUTLINE );
@@ -391,7 +439,7 @@ void XclImpFont::ReadFontData5( XclImpStream& rStrm )
     sal_uInt16 nFlags;
 
     rStrm   >> maData.mnHeight >> nFlags >> maData.mnColor >> maData.mnWeight
-            >> maData.meEscapem >> maData.meUnderline >> maData.mnFamily >> maData.mnCharSet;
+            >> maData.mnEscapem >> maData.mnUnderline >> maData.mnFamily >> maData.mnCharSet;
     rStrm.Ignore( 1 );
 
     maData.mbItalic     = ::get_flag( nFlags, EXC_FONTATTR_ITALIC );
@@ -435,25 +483,6 @@ void XclImpFont::GuessScriptType()
             mbAscii = aCharMap.HasChar( 'A' ) || (!mbCjk && !mbCtl);
         }
     }
-}
-
-FontWeight XclImpFont::GetScFontWeight( sal_uInt16 nXclWeight )
-{
-    FontWeight eScWeight;
-
-    if( !nXclWeight )               eScWeight = WEIGHT_DONTKNOW;
-    else if( nXclWeight < 150 )     eScWeight = WEIGHT_THIN;
-    else if( nXclWeight < 250 )     eScWeight = WEIGHT_ULTRALIGHT;
-    else if( nXclWeight < 325 )     eScWeight = WEIGHT_LIGHT;
-    else if( nXclWeight < 375 )     eScWeight = WEIGHT_SEMILIGHT;
-    else if( nXclWeight < 450 )     eScWeight = WEIGHT_NORMAL;
-    else if( nXclWeight < 550 )     eScWeight = WEIGHT_MEDIUM;
-    else if( nXclWeight < 650 )     eScWeight = WEIGHT_SEMIBOLD;
-    else if( nXclWeight < 750 )     eScWeight = WEIGHT_BOLD;
-    else if( nXclWeight < 850 )     eScWeight = WEIGHT_ULTRABOLD;
-    else                            eScWeight = WEIGHT_BLACK;
-
-    return eScWeight;
 }
 
 
@@ -803,6 +832,16 @@ void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFo
 
 // ----------------------------------------------------------------------------
 
+XclImpCellBorder::XclImpCellBorder()
+{
+    SetAllUsedFlags( false );
+}
+
+void XclImpCellBorder::SetAllUsedFlags( bool bUsed )
+{
+    mbLeftUsed = mbRightUsed = mbTopUsed = mbBottomUsed = bUsed;
+}
+
 void XclImpCellBorder::FillFromXF2( sal_uInt8 nFlags )
 {
     mnLeftLine   = ::get_flagvalue( nFlags, EXC_XF2_LEFTLINE,   EXC_LINE_THIN, EXC_LINE_NONE );
@@ -810,6 +849,7 @@ void XclImpCellBorder::FillFromXF2( sal_uInt8 nFlags )
     mnTopLine    = ::get_flagvalue( nFlags, EXC_XF2_TOPLINE,    EXC_LINE_THIN, EXC_LINE_NONE );
     mnBottomLine = ::get_flagvalue( nFlags, EXC_XF2_BOTTOMLINE, EXC_LINE_THIN, EXC_LINE_NONE );
     mnLeftColor = mnRightColor = mnTopColor = mnBottomColor = EXC_COLOR_BIFF2_BLACK;
+    SetAllUsedFlags( true );
 }
 
 void XclImpCellBorder::FillFromXF3( sal_uInt32 nBorder )
@@ -822,6 +862,7 @@ void XclImpCellBorder::FillFromXF3( sal_uInt32 nBorder )
     ::extract_value( mnLeftColor,   nBorder, 11, 5 );
     ::extract_value( mnBottomColor, nBorder, 19, 5 );
     ::extract_value( mnRightColor,  nBorder, 27, 5 );
+    SetAllUsedFlags( true );
 }
 
 void XclImpCellBorder::FillFromXF5( sal_uInt32 nBorder, sal_uInt32 nArea )
@@ -834,6 +875,7 @@ void XclImpCellBorder::FillFromXF5( sal_uInt32 nBorder, sal_uInt32 nArea )
     ::extract_value( mnLeftColor,   nBorder, 16, 7 );
     ::extract_value( mnBottomColor, nArea,   25, 7 );
     ::extract_value( mnRightColor,  nBorder, 23, 7 );
+    SetAllUsedFlags( true );
 }
 
 void XclImpCellBorder::FillFromXF8( sal_uInt32 nBorder1, sal_uInt32 nBorder2 )
@@ -846,22 +888,27 @@ void XclImpCellBorder::FillFromXF8( sal_uInt32 nBorder1, sal_uInt32 nBorder2 )
     ::extract_value( mnRightColor,  nBorder1, 23, 7 );
     ::extract_value( mnTopColor,    nBorder2,  0, 7 );
     ::extract_value( mnBottomColor, nBorder2,  7, 7 );
+    SetAllUsedFlags( true );
 }
 
-void XclImpCellBorder::FillFromCF8( sal_uInt16 nLine, sal_uInt32 nColor )
+void XclImpCellBorder::FillFromCF8( sal_uInt16 nLineStyle, sal_uInt32 nLineColor, sal_uInt32 nFlags )
 {
-    ::extract_value( mnLeftLine,    nLine,   0, 4 );
-    ::extract_value( mnRightLine,   nLine,   4, 4 );
-    ::extract_value( mnTopLine,     nLine,   8, 4 );
-    ::extract_value( mnBottomLine,  nLine,  12, 4 );
-    ::extract_value( mnLeftColor,   nColor,  0, 7 );
-    ::extract_value( mnRightColor,  nColor,  7, 7 );
-    ::extract_value( mnTopColor,    nColor, 16, 7 );
-    ::extract_value( mnBottomColor, nColor, 23, 7 );
+    ::extract_value( mnLeftLine,    nLineStyle,  0, 4 );
+    ::extract_value( mnRightLine,   nLineStyle,  4, 4 );
+    ::extract_value( mnTopLine,     nLineStyle,  8, 4 );
+    ::extract_value( mnBottomLine,  nLineStyle, 12, 4 );
+    ::extract_value( mnLeftColor,   nLineColor,  0, 7 );
+    ::extract_value( mnRightColor,  nLineColor,  7, 7 );
+    ::extract_value( mnTopColor,    nLineColor, 16, 7 );
+    ::extract_value( mnBottomColor, nLineColor, 23, 7 );
+    mbLeftUsed   = !::get_flag( nFlags, EXC_CF_BORDER_LEFT );
+    mbRightUsed  = !::get_flag( nFlags, EXC_CF_BORDER_RIGHT );
+    mbTopUsed    = !::get_flag( nFlags, EXC_CF_BORDER_TOP );
+    mbBottomUsed = !::get_flag( nFlags, EXC_CF_BORDER_BOTTOM );
 }
 
-/** Creates a new SvxBorderLine struct from the passed line style, or 0, if style is "no line". */
-SvxBorderLine* lcl_xistyle_CreateBorderLine( const XclImpPalette& rPalette, sal_uInt8 nXclLine, sal_uInt16 nXclColor )
+/** Converts the passed line style to a SvxBorderLine, or returns false, if style is "no line". */
+bool lcl_xistyle_ConvertBorderLine( SvxBorderLine& rLine, const XclImpPalette& rPalette, sal_uInt8 nXclLine, sal_uInt16 nXclColor )
 {
     static const sal_uInt16 ppnLineParam[][ 3 ] =
     {
@@ -883,44 +930,54 @@ SvxBorderLine* lcl_xistyle_CreateBorderLine( const XclImpPalette& rPalette, sal_
     };
 
     if( nXclLine == EXC_LINE_NONE )
-        return NULL;
+        return false;
     if( nXclLine >= STATIC_TABLE_SIZE( ppnLineParam ) )
         nXclLine = EXC_LINE_THIN;
 
-    SvxBorderLine* pLine = new SvxBorderLine;
-    // TODO: really use COL_BLACK for automatic color?
-    pLine->SetColor( rPalette.GetColor( nXclColor, COL_BLACK ) );
-    pLine->SetOutWidth( ppnLineParam[ nXclLine ][ 0 ] );
-    pLine->SetInWidth(  ppnLineParam[ nXclLine ][ 1 ] );
-    pLine->SetDistance( ppnLineParam[ nXclLine ][ 2 ] );
-    return pLine;
+    rLine.SetColor( rPalette.GetColor( nXclColor ) );
+    rLine.SetOutWidth( ppnLineParam[ nXclLine ][ 0 ] );
+    rLine.SetInWidth(  ppnLineParam[ nXclLine ][ 1 ] );
+    rLine.SetDistance( ppnLineParam[ nXclLine ][ 2 ] );
+    return true;
 }
 
 void XclImpCellBorder::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette& rPalette, bool bSkipPoolDefs ) const
 {
-    SvxBoxItem aBoxItem;
-
-    ::std::auto_ptr< SvxBorderLine > pLine;
-    pLine.reset( lcl_xistyle_CreateBorderLine( rPalette, mnLeftLine, mnLeftColor ) );
-    aBoxItem.SetLine( pLine.get(), BOX_LINE_LEFT );
-    pLine.reset( lcl_xistyle_CreateBorderLine( rPalette, mnRightLine, mnRightColor ) );
-    aBoxItem.SetLine( pLine.get(), BOX_LINE_RIGHT );
-    pLine.reset( lcl_xistyle_CreateBorderLine( rPalette, mnTopLine, mnTopColor ) );
-    aBoxItem.SetLine( pLine.get(), BOX_LINE_TOP );
-    pLine.reset( lcl_xistyle_CreateBorderLine( rPalette, mnBottomLine, mnBottomColor ) );
-    aBoxItem.SetLine( pLine.get(), BOX_LINE_BOTTOM );
-
-    lcl_xistyle_PutItem( rItemSet, aBoxItem, bSkipPoolDefs );
+    if( mbLeftUsed || mbRightUsed || mbTopUsed || mbBottomUsed )
+    {
+        SvxBoxItem aBoxItem;
+        SvxBorderLine aLine;
+        if( mbLeftUsed && lcl_xistyle_ConvertBorderLine( aLine, rPalette, mnLeftLine, mnLeftColor ) )
+            aBoxItem.SetLine( &aLine, BOX_LINE_LEFT );
+        if( mbRightUsed && lcl_xistyle_ConvertBorderLine( aLine, rPalette, mnRightLine, mnRightColor ) )
+            aBoxItem.SetLine( &aLine, BOX_LINE_RIGHT );
+        if( mbTopUsed && lcl_xistyle_ConvertBorderLine( aLine, rPalette, mnTopLine, mnTopColor ) )
+            aBoxItem.SetLine( &aLine, BOX_LINE_TOP );
+        if( mbBottomUsed && lcl_xistyle_ConvertBorderLine( aLine, rPalette, mnBottomLine, mnBottomColor ) )
+            aBoxItem.SetLine( &aLine, BOX_LINE_BOTTOM );
+        lcl_xistyle_PutItem( rItemSet, aBoxItem, bSkipPoolDefs );
+    }
 }
 
 
 // ----------------------------------------------------------------------------
+
+XclImpCellArea::XclImpCellArea()
+{
+    SetAllUsedFlags( false );
+}
+
+void XclImpCellArea::SetAllUsedFlags( bool bUsed )
+{
+    mbForeUsed = mbBackUsed = mbPattUsed = bUsed;
+}
 
 void XclImpCellArea::FillFromXF2( sal_uInt8 nFlags )
 {
     mnPattern = ::get_flagvalue( nFlags, EXC_XF2_BACKGROUND, EXC_PATT_12_5_PERC, EXC_PATT_NONE );
     mnForeColor = EXC_COLOR_BIFF2_BLACK;
     mnBackColor = EXC_COLOR_BIFF2_WHITE;
+    SetAllUsedFlags( true );
 }
 
 void XclImpCellArea::FillFromXF3( sal_uInt16 nArea )
@@ -928,6 +985,7 @@ void XclImpCellArea::FillFromXF3( sal_uInt16 nArea )
     ::extract_value( mnPattern,   nArea,  0, 6 );
     ::extract_value( mnForeColor, nArea,  6, 5 );
     ::extract_value( mnBackColor, nArea, 11, 5 );
+    SetAllUsedFlags( true );
 }
 
 void XclImpCellArea::FillFromXF5( sal_uInt32 nArea )
@@ -935,6 +993,7 @@ void XclImpCellArea::FillFromXF5( sal_uInt32 nArea )
     ::extract_value( mnPattern,   nArea, 16, 6 );
     ::extract_value( mnForeColor, nArea,  0, 7 );
     ::extract_value( mnBackColor, nArea,  7, 7 );
+    SetAllUsedFlags( true );
 }
 
 void XclImpCellArea::FillFromXF8( sal_uInt32 nBorder2, sal_uInt16 nArea )
@@ -942,22 +1001,27 @@ void XclImpCellArea::FillFromXF8( sal_uInt32 nBorder2, sal_uInt16 nArea )
     ::extract_value( mnPattern,   nBorder2, 26, 6 );
     ::extract_value( mnForeColor, nArea,     0, 7 );
     ::extract_value( mnBackColor, nArea,     7, 7 );
+    SetAllUsedFlags( true );
 }
 
-void XclImpCellArea::FillFromCF8( sal_uInt16 nPattern, sal_uInt16 nColor )
+void XclImpCellArea::FillFromCF8( sal_uInt16 nPattern, sal_uInt16 nColor, sal_uInt32 nFlags )
 {
     ::extract_value( mnForeColor, nColor,    0, 7 );
     ::extract_value( mnBackColor, nColor,    7, 7 );
     ::extract_value( mnPattern,   nPattern, 10, 6 );
-    if( mnForeColor == EXC_XF_NOCOLOR )
-        mnForeColor = EXC_XF_AUTOCOLOR;
-    if( mnBackColor == EXC_XF_NOCOLOR )
-        mnBackColor = EXC_XF_AUTOCOLOR;
-    if( !IsTransparent() && ((mnPattern == EXC_PATT_NONE) || (mnPattern == EXC_PATT_SOLID)) )
+    mbForeUsed = !::get_flag( nFlags, EXC_CF_AREA_FGCOLOR );
+    mbBackUsed = !::get_flag( nFlags, EXC_CF_AREA_BGCOLOR );
+    mbPattUsed = !::get_flag( nFlags, EXC_CF_AREA_PATTERN );
+
+    if( mbBackUsed && (!mbPattUsed || (mnPattern == EXC_PATT_SOLID)) )
     {
-        // special handling for these patterns in conditional formats
+        mnForeColor = mnBackColor;
         mnPattern = EXC_PATT_SOLID;
-        ::std::swap( mnForeColor, mnBackColor );
+        mbForeUsed = mbPattUsed = true;
+    }
+    else if( !mbBackUsed && mbPattUsed && (mnPattern == EXC_PATT_SOLID) )
+    {
+        mbPattUsed = false;
     }
 }
 
@@ -972,23 +1036,26 @@ void XclImpCellArea::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette& r
         0x5000, 0x7000, 0x7800                  // 16 - 18
     };
 
-    SvxBrushItem aBrushItem;
-
-    // #108935# do not use IsTransparent() - old Calc filter writes tranparency with different color indexes
-    if( mnPattern == EXC_PATT_NONE )
-        aBrushItem.SetColor( Color( COL_TRANSPARENT ) );
-    else
+    if( mbPattUsed )    // colors may be both unused in cond. formats
     {
-        // TODO: use the application background color as default?
-        ColorData nForeDefault = (mnPattern != EXC_PATT_SOLID) ? COL_BLACK : COL_WHITE;
-        Color aFore( rPalette.GetColor( mnForeColor, nForeDefault ) );
-        Color aBack( rPalette.GetColor( mnBackColor, COL_WHITE ) );
-        if( mnPattern < STATIC_TABLE_SIZE( pnRatioTable ) )
-            aFore = ScfTools::GetMixedColor( aFore, aBack, pnRatioTable[ mnPattern ] );
-        aBrushItem.SetColor( aFore );
-    }
+        SvxBrushItem aBrushItem;
 
-    lcl_xistyle_PutItem( rItemSet, aBrushItem, bSkipPoolDefs );
+        // #108935# do not use IsTransparent() - old Calc filter writes tranparency with different color indexes
+        if( mnPattern == EXC_PATT_NONE )
+        {
+            aBrushItem.SetColor( Color( COL_TRANSPARENT ) );
+        }
+        else
+        {
+            Color aFore( rPalette.GetColor( mbForeUsed ? mnForeColor : EXC_COLOR_WINDOWTEXT ) );
+            Color aBack( rPalette.GetColor( mbBackUsed ? mnBackColor : EXC_COLOR_WINDOWBACK ) );
+            if( mnPattern < STATIC_TABLE_SIZE( pnRatioTable ) )
+                aFore = ScfTools::GetMixedColor( aFore, aBack, pnRatioTable[ mnPattern ] );
+            aBrushItem.SetColor( aFore );
+        }
+
+        lcl_xistyle_PutItem( rItemSet, aBrushItem, bSkipPoolDefs );
+    }
 }
 
 
