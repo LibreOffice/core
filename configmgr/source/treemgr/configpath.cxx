@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpath.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-27 11:59:29 $
+ *  last change: $Author: jb $ $Date: 2002-08-13 13:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,9 @@ Name validateNodeName(OUString const& sName)
 
 Name validateElementName(OUString const& sName)
 {
+    if (sName.getLength() == 0)
+        throw InvalidName(sName, "is not a valid name for a configuration item (empty names are not permitted)");
+
     return Name( sName, Path::PackageOnly() );
 }
 //-----------------------------------------------------------------------------
