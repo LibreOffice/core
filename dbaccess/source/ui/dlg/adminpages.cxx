@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-24 12:11:15 $
+ *  last change: $Author: fs $ $Date: 2000-10-30 13:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
 #ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
 #endif
@@ -1059,6 +1062,11 @@ OAdabasDetailsPage::OAdabasDetailsPage( Window* pParent, const SfxItemSet& _rCor
     m_pCharset->SetPosPixel(Point(aPos.X(), aPos.Y() - aMovesize.Height()));
 
     FreeResource();
+
+    // don't use the ODBC help ids
+    m_pUserName->SetHelpId(HID_DSADMIN_USER_ADABAS);
+    m_pPasswordRequired->SetHelpId(HID_DSADMIN_PWDREC_ADABAS);
+    m_pCharset->SetHelpId(HID_DSADMIN_CHARSET_ADABAS);
 }
 
 // -----------------------------------------------------------------------
@@ -1757,6 +1765,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2000/10/24 12:11:15  fs
+ *  functionality added: browsing for system data sources (ODBC/Adabas/dbase/text)
+ *
  *  Revision 1.7  2000/10/20 09:53:17  fs
  *  handling for the SuppresVersionColumns property of a data source
  *
