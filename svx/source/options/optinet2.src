@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:51:39 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ english_us ] = "HT~TP proxy" ;
         Text [ italian ] = "Pro~xy Http" ;
         Text [ spanish ] = "Proxy Http" ;
-        Text [ french ] = "~Proxy Http" ;
+        Text [ french ] = "Proxy Http" ;
         Text [ dutch ] = "Http Pro~xy" ;
         Text [ swedish ] = "Http-prox~y" ;
         Text [ danish ] = "Http proxy" ;
@@ -351,7 +351,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ danish ] = "Port" ;
         Text [ italian ] = "~Porta" ;
         Text [ spanish ] = "~Puerto" ;
-        Text [ french ] = "~Port" ;
+        Text [ french ] = "Port" ;
         Text [ dutch ] = "~Poort" ;
         Text [ portuguese ] = "~Porta" ;
         Text[ chinese_simplified ] = "Á´ØÂè£(~P)";
@@ -519,7 +519,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ english_us ] = "~No proxy for:" ;
         Text [ italian ] = "~Senza Proxy per" ;
         Text [ spanish ] = "~Sin Proxy para" ;
-        Text [ french ] = "~Aucun Proxy pour :" ;
+        Text [ french ] = "Aucun Proxy pour :" ;
         Text [ swedish ] = "~Ingen proxy fˆr" ;
         Text [ danish ] = "Ingen proxy for" ;
         Text [ portuguese_brazilian ] = "Kein Proxy f~?:" ;
@@ -608,7 +608,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ english_us ] = "~Automatic" ;
         Text [ italian ] = "Automatico" ;
         Text [ spanish ] = "~Autom·tico" ;
-        Text [ french ] = "~Automatique" ;
+        Text [ french ] = "Automatique" ;
         Text [ dutch ] = "~Automatisch" ;
         Text [ swedish ] = "~Automatiskt" ;
         Text [ danish ] = "Automatisk" ;
@@ -801,7 +801,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ danish ] = "Navn" ;
         Text [ italian ] = "~Nome" ;
         Text [ spanish ] = "~Nombre" ;
-        Text [ french ] = "~Nom" ;
+        Text [ french ] = "Nom" ;
         Text [ dutch ] = "~Naam" ;
         Text [ portuguese ] = "~Nome" ;
         Text[ chinese_simplified ] = "ÂêçÁß∞(~N)";
@@ -946,7 +946,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ english_us ] = "~Prefix" ;
         Text [ italian ] = "Prefisso" ;
         Text [ spanish ] = "~Prefijo" ;
-        Text [ french ] = "~PrÈfixe" ;
+        Text [ french ] = "PrÈfixe" ;
         Text [ swedish ] = "~Prefix" ;
         Text [ danish ] = "PrÊfiks" ;
         Text [ portuguese_brazilian ] = "~Pr?fix" ;
@@ -1048,7 +1048,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ english_us ] = "~Case match" ;
         Text [ italian ] = "Stile carattere" ;
         Text [ spanish ] = "Es~tilo" ;
-        Text [ french ] = "Style ~d'Ècriture" ;
+        Text [ french ] = "Style d'Ècriture" ;
         Text [ swedish ] = "~Skrivstil" ;
         Text [ danish ] = "Skrivestil" ;
         Text [ portuguese ] = "~Estilo de escrita" ;
@@ -1223,7 +1223,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ russian ] = "—ÓÁ‰‡Ú¸";
         Text[ greek ] = "ƒÁÏÈÔıÒ„ﬂ·";
         Text[ dutch ] = "N~ieuw";
-        Text[ french ] = "~Nouveau";
+        Text[ french ] = "Nouveau";
         Text[ spanish ] = "Nuevo";
         Text[ italian ] = "Nuovo";
         Text[ danish ] = "Ny";
@@ -1276,7 +1276,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ english_us ] = "~Modify" ;
         Text [ italian ] = "Modfica" ;
         Text [ spanish ] = "~Modificar" ;
-        Text [ french ] = "~Modifier" ;
+        Text [ french ] = "Modifier" ;
         Text [ dutch ] = "Wij~zigen" ;
         Text [ swedish ] = "~ƒndra" ;
         Text [ danish ] = "Modificer" ;
@@ -1304,7 +1304,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ english_us ] = "~Delete" ;
         Text [ italian ] = "Elimina" ;
         Text [ spanish ] = "~Eliminar" ;
-        Text [ french ] = "~Supprimer" ;
+        Text [ french ] = "Supprimer" ;
         Text [ dutch ] = "~Wissen" ;
         Text [ swedish ] = "~Radera" ;
         Text [ danish ] = "Slet" ;
@@ -1696,7 +1696,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ danish ] = "Slet" ;
         Text [ italian ] = "~Elimina" ;
         Text [ spanish ] = "~Eliminar" ;
-        Text [ french ] = "~Supprimer" ;
+        Text [ french ] = "Supprimer" ;
         Text [ dutch ] = "~Wissen" ;
         Text [ portuguese ] = "E~liminar" ;
         Text[ chinese_simplified ] = "Âà†Èô§(~D)";
