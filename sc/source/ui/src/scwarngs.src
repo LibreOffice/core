@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scwarngs.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:23:32 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ Resource RID_WRNHDLSC
         Text [ swedish ] = "Det maximala antalet rader överskreds. Övertaliga rader importerades inte!" ;
         Text [ danish ] = "Det maksimale antal rækker blev overskredet. De overtallige rækker blev ikke importeret!" ;
         Text [ portuguese ] = "O número máximo de linhas foi ultrapassado. As linhas em excesso não foram importadas!" ;
-        Text [ portuguese_brazilian ] = "Die Maximalanzahl von Zeilen wurde überschritten. überzählige Zeilen wurden nicht mitimportiert!" ;
+        Text [ portuguese_brazilian ] = "Die Maximalanzahl von Zeilen wurde ?erschritten. ?erz?hlige Zeilen wurden nicht mitimportiert!" ;
         Text[ chinese_simplified ] = "ÒÑ¾­³¬¹ıĞĞµÄ×î´óÊıÄ¿£¬³¬¹ıµÄĞĞÃ»ÓĞ±»ÊäÈë£¡";
         Text[ russian ] = "Ìàêñèìàëüíîå ÷èñëî ñòğîê ïğåâûøåíî. Ñòğîêè, ïğåâûøàşùèå çàäàííîå ÷èñëî, èìïîğòèğîâàíû íå áóäóò!";
         Text[ polish ] = "Maksymalna liczba wierszy zosta³a przekroczona. Pozosta³e wiersze nie bêd¹ importowane!";
