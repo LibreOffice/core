@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:06:29 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2972,7 +2972,7 @@ void CalendarField::StateChanged( StateChangedType nStateChange )
     {
         WinBits nAllAlignmentBits = ( WB_LEFT | WB_CENTER | WB_RIGHT | WB_TOP | WB_VCENTER | WB_BOTTOM );
         WinBits nMyAlignment = GetStyle() & nAllAlignmentBits;
-        GetSubEdit()->SetStyle( ( GetSubEdit()->GetStyle() & ~nAllAlignmentBits ) | nAllAlignmentBits );
+        GetSubEdit()->SetStyle( ( GetSubEdit()->GetStyle() & ~nAllAlignmentBits ) | nMyAlignment );
     }
 }
 
