@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-13 16:22:08 $
+ *  last change: $Author: mba $ $Date: 2001-10-02 07:35:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,8 @@
 #ifndef __FRAMEWORK_GENERAL_H_
 #include <general.h>
 #endif
+
+#include <services/documentlist.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -504,6 +506,8 @@ sal_Bool SAL_CALL Desktop::terminate() throw( css::uno::RuntimeException )
         ( bPipeVeto           == sal_False )
       )
     {
+        ModifiedDocumentsWindow::Remove();
+
         // Step over all child tasks and ask they "WOULD YOU DIE?"
         css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lTasks = m_aChildTaskContainer.getAllElements();
         sal_Int32                                                       nCount = lTasks.getLength()                    ;
