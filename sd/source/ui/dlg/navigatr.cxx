@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-09 12:44:28 $
+ *  last change: $Author: thb $ $Date: 2002-04-29 15:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,6 @@ SdNavigatorWin::SdNavigatorWin( Window* pParent,
     // TreeListBox
     aTlbObjects.SetDoubleClickHdl( LINK( this, SdNavigatorWin, ClickObjectHdl ) );
     aTlbObjects.SetSelectionMode( SINGLE_SELECTION );
-    aTlbObjects.SetGetFocusHdl( LINK( this, SdNavigatorWin, GetFocusObjectsHdl ) );
 
     // DragTypeListBox
     aLbDocs.SetSelectHdl( LINK( this, SdNavigatorWin, SelectDocumentHdl ) );
@@ -246,22 +245,6 @@ NavigatorDragType SdNavigatorWin::GetNavigatorDragType()
         eDT = NAVIGATOR_DRAGTYPE_NONE;
     }
     return( eDT );
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( SdNavigatorWin, GetFocusObjectsHdl, void *, p )
-{
-    SfxViewShell* pCurSh = SfxViewShell::Current();
-
-    if ( pCurSh )
-    {
-        Window* pShellWnd = pCurSh->GetWindow();
-        if ( pShellWnd )
-            pShellWnd->GrabFocus();
-    }
-
-    return 0;
 }
 
 // -----------------------------------------------------------------------
@@ -395,6 +378,18 @@ IMPL_LINK( SdNavigatorWin, ClickObjectHdl, void *, p )
                 SfxStringItem aItem( SID_NAVIGATOR_OBJECT, aStr );
                 pBindings->GetDispatcher()->Execute(
                     SID_NAVIGATOR_OBJECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L );
+
+                // #98821# moved here from SetGetFocusHdl. Reset the
+                // focus only if something has been selected in the
+                // document.
+                SfxViewShell* pCurSh = SfxViewShell::Current();
+
+                if ( pCurSh )
+                {
+                    Window* pShellWnd = pCurSh->GetWindow();
+                    if ( pShellWnd )
+                        pShellWnd->GrabFocus();
+                }
             }
         }
     }
