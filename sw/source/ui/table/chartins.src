@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:55:13 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ chinese_simplified ] = "»зєы—°÷–µƒµ•‘™Єс√ї”– эЊЁ£ђƒ«√і«лƒъ—°‘с«ш”т°£\n\nƒъњ…“‘“≤—°÷–Ѕ–±кћвЇЌ––±кћв£ђ»зіЋ’в–©„ Ѕѕ“≤їб±їѕ‘ Њ‘ЏЌЉ±нƒЏ°£";
         Text[ russian ] = "≈сли отмеченные €чейки не содержат желаемых данных, выделите сейчас эту область.\n\n¬ключите также €чейки с пометками столбцов или строк, если вы хотите их представить на вашем рисунке.";
         Text[ polish ] = "JeЬli zaznaczone komуrki nie zawierajє potrzebnych danych, zaznacz teraz ten obszar ponownie.\n\nZaznacz rуwnieњ komуrki z etykietami wierszy lub kolumn , jeЬli majє one zostaж przedstawione w twojej grafice.";
-        Text[ japanese ] = "ХKЧvВ»√ё∞јВ™К№В№ВкВƒВҐВйЊўВ™В№ВЊСIСрВ≥ВкВƒВҐВ»ВҐПкНЗВЌБAН°ВїВћФЌИЌВрСIСрВµВƒЙЇВ≥ВҐБB\n\nЄё„ћВ…НАЦЏЦЉВрХ\\О¶ВЈВйВљВяВ…ВЌБAНsВ∆ЧсВћНАЦЏЧУВрК№ВяВљЊўФЌИЌВрУьЧЌВµВƒЙЇВ≥ВҐБB";
+        Text[ japanese ] = "ХKЧvВ»√ё∞јВ™К№В№ВкВƒВҐВйЊўВ™В№ВЊСIСрВ≥ВкВƒВҐВ»ВҐПкНЗВЌБAН°ВїВћФЌИЌВрСIСрВµВƒВ≠ВЊВ≥ВҐБB\n\nЄё„ћВ…НАЦЏЦЉВрХ\\О¶ВЈВйВљВяВ…ВЌБAНsВ∆ЧсВћНАЦЏЧУВрК№ВяВљЊўФЌИЌВрУьЧЌВµВƒВ≠ВЊВ≥ВҐБB";
         Text[ chinese_traditional ] = "¶p™Gњп®ъ™Їјx¶sЃж®S¶≥ЄкЃ∆°MіNљ–±zњпЊ№∞ѕ∞м°C\n\n±z•i•Hњп§§¶CЉ–√D©M¶жЉ–√D°A≥oЉЋ°Aєѕ™н§]Ј|≈г•№•X≥o®«ЄкЃ∆°C";
         Text[ arabic ] = "≈–« я«д  «бќб«н« «бгЌѕѕ… б«  Ќ жн Џбм «б»н«д«  «бгЎбж»…° ёг » Ќѕнѕ «бдЎ«ё\n\n»г« Ён –бя «бќб«н«° «б н  Ќ жн Џбм Џд«жнд ’ЁжЁ √ж √Џгѕ…° ж–бя ≈–« яд   —нѕ ўеж—е« Ён —”г я.";
         Text[ dutch ] = "Als de gemarkeerde cellen niet de gewenste gegevens bevatten markeert u nu het bereik.\n\nMarkeer eveneens de cellen met de kolom- resp. rijlabels als u deze in uw afbeelding wilt weergeven.";
