@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinbutton.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:43:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    Any OSpinButtonModel::translateExternalValueToControlValue( )
+    Any OSpinButtonModel::translateExternalValueToControlValue( ) const
     {
         return translateExternalDoubleToControlIntValue( getExternalValueBinding(), m_xAggregateSet,
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SpinValueMin" ) ),
@@ -308,7 +308,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    Any OSpinButtonModel::translateControlValueToExternalValue( )
+    Any OSpinButtonModel::translateControlValueToExternalValue( ) const
     {
         // by definition, the base class simply obtains the property value
         return translateControlIntToExternalDoubleValue( OBoundControlModel::translateControlValueToExternalValue() );
