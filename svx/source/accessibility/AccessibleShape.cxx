@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: af $ $Date: 2002-04-16 08:50:58 $
+ *  last change: $Author: af $ $Date: 2002-04-18 16:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ namespace accessibility {
 
 AccessibleShape::AccessibleShape (const uno::Reference<drawing::XShape>& rxShape,
     const uno::Reference<XAccessible>& rxParent,
-    AccessibleShapeTreeInfo& rShapeTreeInfo,
+    const AccessibleShapeTreeInfo& rShapeTreeInfo,
     long nIndex)
     : AccessibleContextBase (rxParent,AccessibleRole::SHAPE),
       mpChildrenManager(NULL),
@@ -141,6 +141,8 @@ AccessibleShape::~AccessibleShape (void)
 {
     if (mpChildrenManager != NULL)
         delete mpChildrenManager;
+    if (mpText != NULL)
+        delete mpText;
     OSL_TRACE ("~AccessibleShape");
 
     // Unregistering from the various broadcasters should be unnecessary
@@ -259,6 +261,49 @@ uno::Reference<XAccessible> SAL_CALL
 
 //=====  XAccessibleComponent  ================================================
 
+/** The implementation below is at the moment straightforward.  It iterates
+    over all children (and thereby instances all children which have not
+    been already instatiated) until a child covering the specifed point is
+    found.
+    This leaves room for improvement.  For instance, first iterate only over
+    the already instantiated children and only if no match is found
+    instantiate the remaining ones.
+*/
+uno::Reference<XAccessible > SAL_CALL
+    AccessibleShape::getAccessibleAt (
+        const awt::Point& aPoint)
+    throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+
+    sal_Int32 nChildCount = getAccessibleChildCount ();
+    for (sal_Int32 i=0; i<nChildCount; ++i)
+    {
+        Reference<XAccessible> xChild (getAccessibleChild (i));
+        if (xChild.is())
+        {
+            Reference<XAccessibleComponent> xChildComponent (
+                xChild->getAccessibleContext(), uno::UNO_QUERY);
+            if (xChildComponent.is())
+            {
+                awt::Rectangle aBBox (xChildComponent->getBounds());
+                if ( (aPoint.X >= aBBox.X)
+                    && (aPoint.Y >= aBBox.Y)
+                    && (aPoint.X < aBBox.X+aBBox.Width)
+                    && (aPoint.Y < aBBox.Y+aBBox.Height) )
+                    return xChild;
+            }
+        }
+    }
+
+    // Have not found a child under the given point.  Returning empty
+    // reference to indicate this.
+    return uno::Reference<XAccessible>();
+}
+
+
+
+
 awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -359,17 +404,6 @@ awt::Point SAL_CALL AccessibleShape::getLocationOnScreen (void)
     CheckDisposedState ();
     awt::Rectangle aBoundingBox (getBounds());
     return awt::Point (aBoundingBox.X, aBoundingBox.Y);
-    /*
-    ::Point aPixelPoint;
-    if (mxShape.is())
-    {
-        awt::Point aLogicalPoint (mxShape->getPosition());
-        if (mrShapeTreeInfo.GetViewForwarder() != NULL)
-            aPixelPoint = mrShapeTreeInfo.GetViewForwarder()->LogicToPixel (
-                ::Point (aLogicalPoint.X, aLogicalPoint.Y));
-    }
-    return awt::Point (aPixelPoint.X(), aPixelPoint.Y());
-    */
 }
 
 
@@ -562,19 +596,19 @@ void SAL_CALL
 {
     try
     {
-    CheckDisposedState ();
-    OSL_TRACE ("AccessibleShape::disposing");
+        CheckDisposedState ();
+        OSL_TRACE ("AccessibleShape::disposing");
 
-    if (aEvent.Source == mxShape)
-    {
-        uno::Reference<beans::XPropertySet> xShapeProperties (mxShape, uno::UNO_QUERY);
-        SetState (AccessibleStateType::DEFUNC);
-        mxShape = NULL;
-    }
+        if (aEvent.Source == mxShape)
+        {
+            uno::Reference<beans::XPropertySet> xShapeProperties (mxShape, uno::UNO_QUERY);
+            SetState (AccessibleStateType::DEFUNC);
+            mxShape = NULL;
+        }
     }
     catch (uno::RuntimeException e)
     {
-        OSL_TRACE ("caught exception");
+        OSL_TRACE ("caught exception while disposing");
     }
 }
 
@@ -584,7 +618,7 @@ void SAL_CALL
 //=====  XComponent  ==========================================================
 
 void AccessibleShape::dispose (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (uno::RuntimeException)
 {
     CheckDisposedState ();
     OSL_TRACE ("AccessibleShape::dispose");
@@ -597,7 +631,7 @@ void AccessibleShape::dispose (void)
     // Cleanup.
     mxShape = NULL;
 
-    // Call base classes.
+        // Call base classes.
     AccessibleContextBase::dispose ();
 }
 
@@ -640,9 +674,6 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
             break;
         case DRAWING_ELLIPSE:
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("EllipseShape"));
-            break;
-        case DRAWING_CONTROL:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ConrolShape"));
             break;
         case DRAWING_CONNECTOR:
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ConnectorShape"));
