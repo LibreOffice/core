@@ -53,7 +53,7 @@ public class Test10 implements StorageTest {
             // open a new substorage
             XStorage xTempSubStorage = m_aTestHelper.openSubStorage( xTempStorage,
                                                                         "SubStorage1",
-                                                                        ElementModes.ELEMENT_WRITE );
+                                                                        ElementModes.WRITE );
             if ( xTempSubStorage == null )
             {
                 m_aTestHelper.Error( "Can't create substorage!" );
@@ -70,13 +70,13 @@ public class Test10 implements StorageTest {
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempStorage,
                                                             "MediaType3",
                                                             true,
-                                                            ElementModes.ELEMENT_WRITE ) )
+                                                            ElementModes.WRITE ) )
                 return false;
 
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempSubStorage,
                                                             "MediaType4",
                                                             false,
-                                                            ElementModes.ELEMENT_WRITE ) )
+                                                            ElementModes.WRITE ) )
                 return false;
 
             // ==============================
@@ -84,7 +84,7 @@ public class Test10 implements StorageTest {
             // ==============================
 
             // the new storage still was not commited so the clone must be empty
-            XStorage xClonedSubStorage = m_aTestHelper.cloneSubStorage( xTempStorage, "SubStorage1" );
+            XStorage xClonedSubStorage = m_aTestHelper.cloneSubStorage( m_xStorageFactory, xTempStorage, "SubStorage1" );
 
             if ( xClonedSubStorage == null )
             {
@@ -99,7 +99,7 @@ public class Test10 implements StorageTest {
                 return false;
             }
 
-            if ( !m_aTestHelper.checkStorageProperties( xClonedSubStorage, "", true, ElementModes.ELEMENT_READ ) )
+            if ( !m_aTestHelper.checkStorageProperties( xClonedSubStorage, "", true, ElementModes.WRITE ) )
                 return false;
 
             if ( xClonedNameAccess.hasElements() )
@@ -130,17 +130,69 @@ public class Test10 implements StorageTest {
             if ( !m_aTestHelper.commitStorage( xTempSubStorage ) )
                 return false;
 
-            xClonedSubStorage = m_aTestHelper.cloneSubStorage( xTempStorage, "SubStorage1" );
+            xClonedSubStorage = m_aTestHelper.cloneSubStorage( m_xStorageFactory, xTempStorage, "SubStorage1" );
             if ( xClonedSubStorage == null )
             {
                 m_aTestHelper.Error( "The result of clone is empty!" );
                 return false;
             }
 
-            if ( !m_aTestHelper.checkStorageProperties( xClonedSubStorage, "MediaType4", true, ElementModes.ELEMENT_READ ) )
+            if ( !m_aTestHelper.checkStorageProperties( xClonedSubStorage, "MediaType4", true, ElementModes.WRITE ) )
                 return false;
 
             if ( !m_aTestHelper.checkStream( xClonedSubStorage, "SubStream2", "MediaType2", pBytes2 ) )
+                return false;
+
+            XStorage xCloneOfRoot = m_aTestHelper.cloneStorage( m_xStorageFactory, xTempStorage );
+            if ( xCloneOfRoot == null )
+            {
+                m_aTestHelper.Error( "The result of root clone is empty!" );
+                return false;
+            }
+
+            XNameAccess xCloneOfRootNA = (XNameAccess) UnoRuntime.queryInterface( XNameAccess.class, xCloneOfRoot );
+            if ( xCloneOfRootNA == null )
+            {
+                m_aTestHelper.Error( "XNameAccess is not implemented by the root clone!" );
+                return false;
+            }
+
+            if ( xCloneOfRootNA.hasElements() )
+            {
+                m_aTestHelper.Error( "The root storage still was not commited so it's clone must be empty!" );
+                return false;
+            }
+
+            if ( !m_aTestHelper.disposeStorage( xCloneOfRoot ) )
+                return false;
+
+            xCloneOfRoot = null;
+
+            // ==============================
+            // commit root storage and check cloning
+            // ==============================
+
+            if ( !m_aTestHelper.commitStorage( xTempStorage ) )
+                return false;
+
+            xCloneOfRoot = m_aTestHelper.cloneStorage( m_xStorageFactory, xTempStorage );
+            if ( xCloneOfRoot == null )
+            {
+                m_aTestHelper.Error( "The result of root clone is empty!" );
+                return false;
+            }
+
+            XStorage xSubStorageOfClone = xCloneOfRoot.openStorageElement( "SubStorage1", ElementModes.READ );
+            if ( xSubStorageOfClone == null )
+            {
+                m_aTestHelper.Error( "The result of root clone is wrong!" );
+                return false;
+            }
+
+            if ( !m_aTestHelper.checkStorageProperties( xSubStorageOfClone, "MediaType4", false, ElementModes.READ ) )
+                return false;
+
+            if ( !m_aTestHelper.checkStream( xSubStorageOfClone, "SubStream2", "MediaType2", pBytes2 ) )
                 return false;
 
             return true;

@@ -44,41 +44,41 @@ public class Test11 implements StorageTest {
                 return false;
             }
 
-            byte pPass1[] = { 11, 11, 11, 11, 11 };
+            String sPass1 = "111111111";
             byte pBytes1[] = { 1, 1, 1, 1, 1 };
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
-            if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempStorage, "SubStream1", "MediaType1", true, pBytes1, pPass1 ) )
+            if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempStorage, "SubStream1", "MediaType1", true, pBytes1, sPass1 ) )
                 return false;
 
             // open a new substorage
             XStorage xTempSubStorage = m_aTestHelper.openSubStorage( xTempStorage,
                                                                         "SubStorage1",
-                                                                        ElementModes.ELEMENT_WRITE );
+                                                                        ElementModes.WRITE );
             if ( xTempSubStorage == null )
             {
                 m_aTestHelper.Error( "Can't create substorage!" );
                 return false;
             }
 
-            byte pPass2[] = { 22, 22, 22, 22, 22 };
+            String sPass2 = "2222222222";
             byte pBytes2[] = { 2, 2, 2, 2, 2 };
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
-            if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempSubStorage, "SubStream2", "MediaType2", true, pBytes2, pPass2 ) )
+            if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempSubStorage, "SubStream2", "MediaType2", true, pBytes2, sPass2 ) )
                 return false;
 
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempStorage,
                                                             "MediaType3",
                                                             true,
-                                                            ElementModes.ELEMENT_WRITE ) )
+                                                            ElementModes.WRITE ) )
                 return false;
 
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempSubStorage,
                                                             "MediaType4",
                                                             false,
-                                                            ElementModes.ELEMENT_WRITE ) )
+                                                            ElementModes.WRITE ) )
                 return false;
 
             // ==============================
@@ -86,7 +86,7 @@ public class Test11 implements StorageTest {
             // ==============================
 
             // the new storage still was not commited so the clone must be empty
-            XStorage xClonedSubStorage = m_aTestHelper.cloneSubStorage( xTempStorage, "SubStorage1" );
+            XStorage xClonedSubStorage = m_aTestHelper.cloneSubStorage( m_xStorageFactory, xTempStorage, "SubStorage1" );
 
             if ( xClonedSubStorage == null )
             {
@@ -101,7 +101,7 @@ public class Test11 implements StorageTest {
                 return false;
             }
 
-            if ( !m_aTestHelper.checkStorageProperties( xClonedSubStorage, "", true, ElementModes.ELEMENT_READ ) )
+            if ( !m_aTestHelper.checkStorageProperties( xClonedSubStorage, "", true, ElementModes.WRITE ) )
                 return false;
 
             if ( xClonedNameAccess.hasElements() )
@@ -118,7 +118,7 @@ public class Test11 implements StorageTest {
 
             // the new stream was opened, written and closed, that means flashed
             // so the clone must contain all the information
-            XStream xClonedSubStream = m_aTestHelper.cloneEncrSubStream( xTempStorage, "SubStream1", pPass1 );
+            XStream xClonedSubStream = m_aTestHelper.cloneEncrSubStream( xTempStorage, "SubStream1", sPass1 );
             if ( !m_aTestHelper.InternalCheckStream( xClonedSubStream, "SubStream1", "MediaType1", pBytes1 ) )
                 return false;
 
@@ -132,17 +132,50 @@ public class Test11 implements StorageTest {
             if ( !m_aTestHelper.commitStorage( xTempSubStorage ) )
                 return false;
 
-            xClonedSubStorage = m_aTestHelper.cloneSubStorage( xTempStorage, "SubStorage1" );
+            xClonedSubStorage = m_aTestHelper.cloneSubStorage( m_xStorageFactory, xTempStorage, "SubStorage1" );
             if ( xClonedSubStorage == null )
             {
                 m_aTestHelper.Error( "The result of clone is empty!" );
                 return false;
             }
 
-            if ( !m_aTestHelper.checkStorageProperties( xClonedSubStorage, "MediaType4", true, ElementModes.ELEMENT_READ ) )
+            if ( !m_aTestHelper.checkStorageProperties( xClonedSubStorage, "MediaType4", true, ElementModes.WRITE ) )
                 return false;
 
-            if ( !m_aTestHelper.checkEncrStream( xClonedSubStorage, "SubStream2", "MediaType2", pBytes2, pPass2 ) )
+            if ( !m_aTestHelper.checkEncrStream( xClonedSubStorage, "SubStream2", "MediaType2", pBytes2, sPass2 ) )
+                return false;
+
+            // ==============================
+            // commit the root storage and check cloning
+            // ==============================
+
+            if ( !m_aTestHelper.commitStorage( xTempStorage ) )
+                return false;
+
+            XStorage xCloneOfRoot = m_aTestHelper.cloneStorage( m_xStorageFactory, xTempStorage );
+            if ( xCloneOfRoot == null )
+            {
+                m_aTestHelper.Error( "The result of root clone is empty!" );
+                return false;
+            }
+
+            if ( !m_aTestHelper.checkStorageProperties( xCloneOfRoot, "MediaType3", true, ElementModes.WRITE ) )
+                return false;
+
+            if ( !m_aTestHelper.checkEncrStream( xCloneOfRoot, "SubStream1", "MediaType1", pBytes1, sPass1 ) )
+                return false;
+
+            XStorage xSubStorageOfClone = xCloneOfRoot.openStorageElement( "SubStorage1", ElementModes.READ );
+            if ( xSubStorageOfClone == null )
+            {
+                m_aTestHelper.Error( "The result of root clone is wrong!" );
+                return false;
+            }
+
+            if ( !m_aTestHelper.checkStorageProperties( xSubStorageOfClone, "MediaType4", false, ElementModes.READ ) )
+                return false;
+
+            if ( !m_aTestHelper.checkEncrStream( xSubStorageOfClone, "SubStream2", "MediaType2", pBytes2, sPass2 ) )
                 return false;
 
             return true;
