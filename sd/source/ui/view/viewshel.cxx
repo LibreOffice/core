@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:36:02 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 10:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,9 +432,6 @@ void ViewShell::Init (void)
 {
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=NULL);
-
-    if (mpImpl->mbIsMainViewShell)
-        GetViewShellBase().UpdateController(GetController());
 
     mpImpl->mbIsInitialized = true;
 }
