@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colex.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-02-13 10:19:16 $
+ *  last change: $Author: os $ $Date: 2002-02-27 13:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,59 +279,69 @@ void SwColExample::DrawPage( const Point& rOrg,
             nR = GetLeft();
         }
 
-        SetFillColor( Color( COL_LIGHTGRAY ) );
-        Rectangle aRect;
-        aRect.Right() = rOrg.X() + GetSize().Width() - nR;
-        aRect.Left()  = rOrg.X() + nL;
-        aRect.Top()   = rOrg.Y() + GetTop()
-                        + GetHdHeight() + GetHdDist();
-        aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom()
-                        - GetFtHeight() - GetFtDist();
-        DrawRect(aRect);
-
-        SetFillColor( GetColor() );
         USHORT nColumnCount = pColMgr->GetCount();
-        for(USHORT i = 0; i < nColumnCount; i++)
+        if(nColumnCount)
         {
-            aRect.Right() = aRect.Left() + pColMgr->GetColWidth( i );
+            SetFillColor( Color( COL_LIGHTGRAY ) );
+            Rectangle aRect;
+            aRect.Right() = rOrg.X() + GetSize().Width() - nR;
+            aRect.Left()  = rOrg.X() + nL;
+            aRect.Top()   = rOrg.Y() + GetTop()
+                            + GetHdHeight() + GetHdDist();
+            aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom()
+                            - GetFtHeight() - GetFtDist();
             DrawRect(aRect);
-            if(i < nColumnCount - 1)
-                aRect.Left() = aRect.Right() + pColMgr->GetGutterWidth(i);
-        }
-        if(pColMgr->HasLine())
-        {
-//          SetPen( Pen ( PEN_SOLID ) );
-            Point aUp( rOrg.X() + nL, rOrg.Y() + GetTop() );
-            Point aDown( rOrg.X() + nL, rOrg.Y() + GetSize().Height()
-                        - GetBottom() - GetFtHeight() - GetFtDist() );
 
-            if( pColMgr->GetLineHeightPercent() != 100 )
+            if(GetColor() == Color(COL_TRANSPARENT))
             {
-                long nLength = aDown.Y() - aUp.Y();
-                nLength -= nLength * pColMgr->GetLineHeightPercent() / 100;
-                switch(pColMgr->GetAdjust())
-                {
-                    case COLADJ_BOTTOM: aUp.Y() += nLength; break;
-                    case COLADJ_TOP: aDown.Y() -= nLength; break;
-                    case COLADJ_CENTER:
-                          aUp.Y() += nLength / 2;
-                          aDown.Y() -= nLength / 2;
-                    break;
-                }
+                const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+                const Color& rFieldColor = rStyleSettings.GetFieldColor();
+                SetFillColor( rFieldColor );
             }
-
-            int nDist;
-            for( i = 0; i < nColumnCount -  1; i++)
+            else
+                SetFillColor( GetColor() );
+            for(USHORT i = 0; i < nColumnCount; i++)
             {
-                int nGutter = pColMgr->GetGutterWidth(i);
-                nDist = pColMgr->GetColWidth( i ) + nGutter;
-                nDist -= (i == 0) ?
-                    nGutter/2 :
-                        0;
-                aUp.X() += nDist;
-                aDown.X() += nDist;
-                DrawLine( aUp, aDown );
+                aRect.Right() = aRect.Left() + pColMgr->GetColWidth( i );
+                DrawRect(aRect);
+                if(i < nColumnCount - 1)
+                    aRect.Left() = aRect.Right() + pColMgr->GetGutterWidth(i);
+            }
+            if(pColMgr->HasLine())
+            {
+    //          SetPen( Pen ( PEN_SOLID ) );
+                Point aUp( rOrg.X() + nL, rOrg.Y() + GetTop() );
+                Point aDown( rOrg.X() + nL, rOrg.Y() + GetSize().Height()
+                            - GetBottom() - GetFtHeight() - GetFtDist() );
 
+                if( pColMgr->GetLineHeightPercent() != 100 )
+                {
+                    long nLength = aDown.Y() - aUp.Y();
+                    nLength -= nLength * pColMgr->GetLineHeightPercent() / 100;
+                    switch(pColMgr->GetAdjust())
+                    {
+                        case COLADJ_BOTTOM: aUp.Y() += nLength; break;
+                        case COLADJ_TOP: aDown.Y() -= nLength; break;
+                        case COLADJ_CENTER:
+                            aUp.Y() += nLength / 2;
+                            aDown.Y() -= nLength / 2;
+                        break;
+                    }
+                }
+
+                int nDist;
+                for( i = 0; i < nColumnCount -  1; i++)
+                {
+                    int nGutter = pColMgr->GetGutterWidth(i);
+                    nDist = pColMgr->GetColWidth( i ) + nGutter;
+                    nDist -= (i == 0) ?
+                        nGutter/2 :
+                            0;
+                    aUp.X() += nDist;
+                    aDown.X() += nDist;
+                    DrawLine( aUp, aDown );
+
+                }
             }
         }
     }
@@ -374,21 +384,35 @@ SwColumnOnlyExample::SwColumnOnlyExample( Window* pParent, const ResId& rResId) 
 
 void SwColumnOnlyExample::Paint( const Rectangle& rRect )
 {
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const Color& rFieldColor = rStyleSettings.GetFieldColor();
+    const Color& rDlgColor = rStyleSettings.GetDialogColor();
+    const Color& rFieldTextColor = rStyleSettings.GetFieldTextColor();
+    Color aGrayColor(COL_LIGHTGRAY);
+    if(rFieldColor == aGrayColor)
+        aGrayColor.Invert();
+
     Size aLogSize(PixelToLogic(GetOutputSizePixel()));
+    Rectangle aCompleteRect(Point(0,0), aLogSize);
+    SetLineColor(rDlgColor);
+    SetFillColor(rDlgColor);
+    DrawRect(aCompleteRect);
+
+    SetLineColor( rFieldTextColor );
     Point aTL(  (aLogSize.Width() - aFrmSize.Width()) / 2,
                 (aLogSize.Height() - aFrmSize.Height()) / 2);
     Rectangle aRect(aTL, aFrmSize);
 
-    //draw a shado rectangle
-    SetFillColor( Color( COL_GRAY ) );
+    //draw a shadow rectangle
+    SetFillColor( Color(COL_GRAY) );
     Rectangle aShadowRect(aRect);
     aShadowRect.Move(aTL.Y(), aTL.Y());
     DrawRect(aShadowRect);
 
-    SetFillColor( Color( COL_WHITE ) );
+    SetFillColor( rFieldColor );
     DrawRect(aRect);
 
-    SetFillColor(Color( COL_LIGHTGRAY ) );
+    SetFillColor( aGrayColor );
 
     //Spaltentrenner?
     long nLength = aLogSize.Height() - 2 * aTL.Y();
@@ -420,7 +444,7 @@ void SwColumnOnlyExample::Paint( const Rectangle& rRect )
     if( nColCount )
     {
         DrawRect(aRect);
-        SetFillColor( Color( COL_WHITE ) );
+        SetFillColor( rFieldColor );
         Rectangle aFrmRect(aTL, aFrmSize);
         long nSum = aTL.X();
         for(USHORT i = 0; i < nColCount; i++)
