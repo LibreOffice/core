@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_transferable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-07 17:59:21 $
+ *  last change: $Author: pl $ $Date: 2001-02-21 16:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,15 @@ Any SAL_CALL X11Transferable::getTransferData( const DataFlavor& rFlavor )
     }
     if( rFlavor.MimeType.equalsIgnoreCase( OUString::createFromAscii( "text/plain;charset=utf-16" ) ) )
     {
-        OUString aString( (sal_Unicode*)aData.getConstArray(), aData.getLength()/sizeof( sal_Unicode ) );
+        int nLen = aData.getLength()/2;
+        if( ((sal_Unicode*)aData.getConstArray())[nLen-1] == 0 )
+            nLen--;
+        OUString aString( (sal_Unicode*)aData.getConstArray(), nLen );
+#ifdef DEBUG
+    fprintf( stderr, "X11Transferable::getTransferData( \"%s\" )\n -> \"%s\"\n",
+             OUStringToOString( rFlavor.MimeType, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
+             OUStringToOString( aString, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+#endif
         aRet <<= aString;
     }
     else
