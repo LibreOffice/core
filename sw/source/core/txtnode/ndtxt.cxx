@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 11:47:24 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2519,7 +2519,9 @@ BOOL SwTxtNode::HasNumber() const
         {
             SwNumFmt aFmt(pRule->Get(pNum->GetRealLevel()));
 
-            bResult = aFmt.IsEnumeration();
+            // #i40041#
+            bResult = aFmt.IsEnumeration() &&
+                SVX_NUM_NUMBER_NONE != aFmt.GetNumberingType();
         }
     }
 
