@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mh $ $Date: 2002-08-13 15:07:09 $
+ *  last change: $Author: dbo $ $Date: 2002-08-19 13:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,7 +689,7 @@ static void writeLine( void * stream, const OUString & rLine, const sal_Char * p
 //##################################################################################################
 extern "C" void SAL_CALL uno_dumpEnvironment(
     void * stream, uno_Environment * pEnv, const sal_Char * pFilter )
-    SAL_THROW( () )
+    SAL_THROW_EXTERN_C()
 {
     OSL_ENSURE( pEnv, "### null ptr!" );
     OUStringBuffer buf;
@@ -751,7 +751,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
 //##################################################################################################
 extern "C" void SAL_CALL uno_dumpEnvironmentByName(
     void * stream, rtl_uString * pEnvTypeName, const sal_Char * pFilter )
-    SAL_THROW( () )
+    SAL_THROW_EXTERN_C()
 {
     uno_Environment * pEnv = 0;
     uno_getEnvironment( &pEnv, pEnvTypeName, 0 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mh $ $Date: 2002-08-13 15:09:09 $
+ *  last change: $Author: dbo $ $Date: 2002-08-19 13:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,6 +532,9 @@ static Mapping getMediateMapping(
 
     return Mapping();
 }
+}
+
+using namespace ::cppu;
 
 extern "C"
 {
@@ -706,4 +709,3 @@ void SAL_CALL uno_revokeMappingCallback(
 }
 } // extern "C"
 
-}
