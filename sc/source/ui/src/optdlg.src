@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-09 23:18:33 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1046,7 +1046,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ greek ] = "Ãñáììİò";
         Text[ dutch ] = "Visual aids";
         Text[ french ] = "Lignes";
-        Text[ spanish ] = "Visual aids";
+        Text[ spanish ] = "Líneas";
         Text[ italian ] = "Linee";
         Text[ danish ] = "Visual aids";
         Text[ swedish ] = "Linjer";
@@ -1161,7 +1161,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ greek ] = "Âïçèçô~éêİò ãñáììİò êáôÜ ôç ìåôáêßíçóç";
         Text[ dutch ] = "H~ulplijnen tijdens de beweging";
         Text[ french ] = "~Repères lors du déplacement";
-        Text[ spanish ] = "Guides while moving";
+        Text[ spanish ] = "G~uías durante el movimiento";
         Text[ italian ] = "Linee griglia durante il movimento";
         Text[ danish ] = "Guides while moving";
         Text[ swedish ] = "Hjälpl~injer under rörelsen";
@@ -1698,7 +1698,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ french ] = "~Onglets de classeur" ;
         Text [ swedish ] = "Tabell~flik" ;
         Text [ dutch ] = "~Werkbladenregister" ;
-        Text [ spanish ] = "Registro de ~hojas" ;
+        Text [ spanish ] = "Etiqueta de ~hoja" ;
         Text [ english_us ] = "Sheet ~tabs" ;
         Text[ chinese_simplified ] = "¹¤×÷±í·ÖÒ³";
         Text[ russian ] = "ßğëû÷êè ëèñòîâ";
@@ -1767,7 +1767,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ greek ] = "~ÌåôñéêÜ";
         Text[ dutch ] = "~Metrieken";
         Text[ french ] = "~Métriques";
-        Text[ spanish ] = "Metrics";
+        Text[ spanish ] = "~Métricas";
         Text[ italian ] = "Metrici";
         Text[ danish ] = "Metrics";
         Text[ swedish ] = "~Metriker";
@@ -1792,7 +1792,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ greek ] = "ÌïíÜäá ìİôñçóçò";
         Text[ dutch ] = "Measurement unit";
         Text[ french ] = "Unité de mesure";
-        Text[ spanish ] = "Measurement unit";
+        Text[ spanish ] = "Unidad de medida";
         Text[ italian ] = "Unità di misura";
         Text[ danish ] = "Measurement unit";
         Text[ swedish ] = "Måttenhet";
@@ -2104,7 +2104,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ greek ] = "Óôçëïèİôçò";
         Text[ dutch ] = "Tabstop";
         Text[ french ] = "Tabulation";
-        Text[ spanish ] = "Tab stops";
+        Text[ spanish ] = "Tabulador";
         Text[ italian ] = "Tabulazione";
         Text[ danish ] = "Tab stops";
         Text[ swedish ] = "Tabulator";
@@ -2278,7 +2278,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ greek ] = "Ñõèìßóåéò åéóáãùãŞò";
         Text[ dutch ] = "Invoerinstellingen";
         Text[ french ] = "Paramètres de saisie";
-        Text[ spanish ] = "Input settings";
+        Text[ spanish ] = "Configuración de entradas";
         Text[ italian ] = "Impostazioni di immissione";
         Text[ danish ] = "Input settings";
         Text[ swedish ] = "Inmatningsinställningar";
@@ -2376,9 +2376,9 @@ TabPage RID_SCPAGE_LAYOUT
         stringlist [ spanish ] =
         {
             < "abajo" ; Default ; > ;
-            < "Derecha" ; Default ; > ;
+            < "derecha" ; Default ; > ;
             < "arriba" ; Default ; > ;
-            < "la izquierda" ; Default ; > ;
+            < "izquierda" ; Default ; > ;
         };
         stringlist [ french ] =
         {
