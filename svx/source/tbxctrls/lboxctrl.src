@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:39:49 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,10 +106,10 @@ String RID_SVXSTR_NUM_UNDO_ACTIONS
     Text[ swedish ] = "Ångra $(ARG1) åtgärd(er)";
     Text[ polish ] = "Cofnij $(ARG1) akcjê(e)";
     Text[ portuguese_brazilian ] = "Undo $(ARG1) action";
-    Text[ japanese ] = "$(ARG1) ±¸¼®İ‚ğŒ³‚É–ß‚·";
-    Text[ korean ] = "$(ARG1) ÀÛ¾÷ ½ÇÇà Ãë¼Ò";
-    Text[ chinese_simplified ] = "³·ÏûÃüÁî $(ARG1) ²Ù×÷";
-    Text[ chinese_traditional ] = "´_­ì $(ARG1) «ü¥O";
+    Text[ japanese ] = "$(ARG1) ï½±ï½¸ï½¼ï½®ï¾ã‚’å…ƒã«æˆ»ã™";
+    Text[ korean ] = "$(ARG1) ì‘ì—… ì‹¤í–‰ ì·¨ì†Œ";
+    Text[ chinese_simplified ] = "æ’¤æ¶ˆå‘½ä»¤ $(ARG1) æ“ä½œ";
+    Text[ chinese_traditional ] = "å¾©åŸ $(ARG1) æŒ‡ä»¤";
     Text[ turkish ] = "Undo $(ARG1) action";
     Text[ arabic ] = "Undo $(ARG1) action";
     Text[ catalan ] = "Undo $(ARG1) action";
@@ -132,14 +132,15 @@ String RID_SVXSTR_NUM_REDO_ACTIONS
     Text[ swedish ] = "Återställ $(ARG1) åtgärd(er)";
     Text[ polish ] = "Odtwórz $(ARG1) akcjê(e)";
     Text[ portuguese_brazilian ] = "Redo $(ARG1) action";
-    Text[ japanese ] = "$(ARG1) ±¸¼®İ‚Ì‚â‚è’¼‚µ";
-    Text[ korean ] = "$(ARG1) ÀÛ¾÷ »èÁ¦ Ãë¼Ò";
-    Text[ chinese_simplified ] = "»Ö¸´³·ÏûÃüÁî $(ARG1) ²Ù×÷";
-    Text[ chinese_traditional ] = "«ì´_ºM®ø $(ARG1) «ü¥O";
+    Text[ japanese ] = "$(ARG1) ï½±ï½¸ï½¼ï½®ï¾ã®ã‚„ã‚Šç›´ã—";
+    Text[ korean ] = "$(ARG1) ì‘ì—… ì‚­ì œ ì·¨ì†Œ";
+    Text[ chinese_simplified ] = "æ¢å¤æ’¤æ¶ˆå‘½ä»¤ $(ARG1) æ“ä½œ";
+    Text[ chinese_traditional ] = "æ¢å¾©æ’¤æ¶ˆ $(ARG1) æŒ‡ä»¤";
     Text[ turkish ] = "Redo $(ARG1) action";
     Text[ arabic ] = "Redo $(ARG1) action";
     Text[ catalan ] = "Redo $(ARG1) action";
 };
+
 
 
 
