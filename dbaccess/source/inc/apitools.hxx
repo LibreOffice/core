@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitools.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:19:22 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 12:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,13 +309,13 @@ protected:
 
 //--------------------------------------------------------------------------
 #define IMPLEMENT_TYPEPROVIDER2( classname, baseclass1, baseclass2 )    \
-    IMPLEMENT_IMPLEMENTATION_ID( )  \
-    IMPLEMENT_GETTYPES2( )
+    IMPLEMENT_IMPLEMENTATION_ID( classname) \
+    IMPLEMENT_GETTYPES2( classname, baseclass1, baseclass2)
 
 //--------------------------------------------------------------------------
 #define IMPLEMENT_TYPEPROVIDER3( classname, baseclass1, baseclass2, baseclass3 )    \
-    IMPLEMENT_IMPLEMENTATION_ID( )  \
-    IMPLEMENT_GETTYPES3( )
+    IMPLEMENT_IMPLEMENTATION_ID(classname ) \
+    IMPLEMENT_GETTYPES3(classname, baseclass1, baseclass2, baseclass3)
 
 //==================================================================================
 //= helper for declaring/implementing classes based on the OPropertyContainer and an OPropertyArrayUsageHelper
