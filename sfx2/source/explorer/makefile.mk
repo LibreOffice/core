@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:52:33 $
+#   last change: $Author: dv $ $Date: 2001-04-27 11:04:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ SLOFILES = \
         $(SLO)$/infodlgs.obj	\
         $(SLO)$/iodlg.obj		\
         $(SLO)$/iodlgimp.obj	\
+        $(SLO)$/iodlgimpl.obj	\
         $(SLO)$/sfxdir.obj		\
         $(SLO)$/fileview.obj
 
