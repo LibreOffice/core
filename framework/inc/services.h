@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2001-08-16 12:42:09 $
+ *  last change: $Author: cd $ $Date: 2001-11-13 13:33:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ namespace framework{
 #define SERVICENAME_APPDISPATCHPROVIDER                     DECLARE_ASCII("com.sun.star.comp.sfx2.AppDispatchProvider"          )
 #define SERVICENAME_UCBCONTENTBROKER                        DECLARE_ASCII("com.sun.star.ucb.UniversalContentBroker"             )
 #define SERVICENAME_STATUSINDICATOR                         DECLARE_ASCII("com.sun.star.task.XStatusIndicator"                  )
+#define SERVICENAME_UIINTERACTIONHANDLER                    DECLARE_ASCII("com.sun.star.task.InteractionHandler"                )
 
 //_________________________________________________________________________________________________________________
 //  used implementationnames by framework
