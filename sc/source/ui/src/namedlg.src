@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:43:49 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   namedlg.src  $
  //   $Author: hr $
- //     $Date: 2003-06-13 13:43:49 $
- // $Revision: 1.26 $
+ //     $Date: 2003-07-03 17:21:17 $
+ // $Revision: 1.27 $
  //  $Logfile:   T:/sc/source/ui/src/namedlg.srv  $
  //---------------------------------------------------------------------------
 
@@ -137,7 +137,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ japanese ] = "è¿½åŠ (~A)";
         Text[ chinese_traditional ] = "æ–°å¢(~A)";
         Text[ arabic ] = "ÅÖÇİÉ";
-        Text[ greek ] = "ĞñïóèŞêç";
+        Text[ greek ] = "Ğ~ñïóèŞêç";
         Text[ korean ] = "ì¶”ê°€(~A)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
@@ -370,7 +370,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ greek ] = "Ğåñéï÷Ş åêôığùóçò";
         Text[ korean ] = "ì¸ì‡„ ë²”ìœ„(~P)";
         Text[ turkish ] = "Yazdırma a~ralığı";
-        Text[ language_user1 ] = "RB: zu finden in: Format - Druckbereich - Bearbeiten... - -";
+        Text[ language_user1 ] = "; RB: zu finden in: Format - Druckbereich - Bearbeiten... - -";
         Text[ catalan ] = "Àrea d'im~pressió";
         Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡à¸à¸²à¸£~à¸à¸´à¸¡à¸à¹Œ";
         Text[ czech ] = "Tisk oblasti";
@@ -599,6 +599,7 @@ ModelessDialog RID_SCDLG_NAMES
     Text[ hindi ] = "à¤¨à¤¾à¤®à¥‹à¤‚ à¤•à¥‹ à¤ªà¤°à¤¿à¤­à¤¾à¤·à¤¾ à¤¦à¥‹";
     Text[ slovak ] = "DefinovaÅ¥ nÃ¡zvy";
 };
+
 
 
 
