@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 16:44:27 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 07:57:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -749,6 +749,11 @@ String RID_STR_FILEEXISTS
     Text[ slovak ] = "SÃºbor 'XX' uÅ¾ existuje";
     Text[ hungarian ] = "MÃ¡r lÃ©tezÅ‘ fÃ¡jl: 'XX'";
     Text[ slovenian ] = "Datoteka 'XX' Å¾e obstaja";
+};
+String RID_STR_CANNOTRUNMACRO
+{
+    Text = "Aus Sicherheitsgründen ist dieses Makro nicht ausführbar.\n\nFür weitere Informationen überprüfen Sie die Sicherheitseinstellungen." ;
+    Text [ english_us ] = "For security reasons, you cannot run this macro.\n\nFor more information, check the security settings." ;
 };
 String RID_STR_COMPILEERROR
 {
