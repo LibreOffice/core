@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-22 17:42:31 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #include <salbmp.hxx>
 #endif
 
+#ifndef _VCL_DLLAPI_H
+#include "dllapi.h"
+#endif
+
 struct  BitmapBuffer;
 class   BitmapPalette;
 class   SalGraphics;
@@ -85,7 +89,7 @@ class   ImplSalBitmapCache;
 // - SalBitmap -
 // -------------
 
-class X11SalBitmap : public SalBitmap
+class VCL_DLLPUBLIC X11SalBitmap : public SalBitmap
 {
 private:
 
@@ -117,7 +121,7 @@ private:
 
 public:
 
-    bool            ImplCreateFromDrawable(
+    SAL_DLLPRIVATE bool    ImplCreateFromDrawable(
 #ifdef _USE_PRINT_EXTENSION_
                                             SalDisplay* pDisplay,
 #endif
@@ -126,15 +130,15 @@ public:
                                             long nX, long nY,
                                             long nWidth, long nHeight );
 
-    XImage*         ImplCreateXImage(
+    SAL_DLLPRIVATE XImage* ImplCreateXImage(
                                             SalDisplay* pSalDisp, long nDepth,
                                               const SalTwoRect& rTwoRect ) const;
 #ifdef _USE_PRINT_EXTENSION_
-    void            ImplDraw( SalDisplay *pDisplay, Drawable aDrawable, long nDrawableDepth,
-                              const SalTwoRect& rTwoRect, const GC& rGC, bool bDstIsWindow ) const;
+    SAL_DLLPRIVATE void    ImplDraw( SalDisplay *pDisplay, Drawable aDrawable, long nDrawableDepth,
+                                     const SalTwoRect& rTwoRect, const GC& rGC, bool bDstIsWindow ) const;
 #else
-    void            ImplDraw( Drawable aDrawable, long nDrawableDepth,
-                              const SalTwoRect& rTwoRect, const GC& rGC, bool bDstIsWindow ) const;
+    SAL_DLLPRIVATE void    ImplDraw( Drawable aDrawable, long nDrawableDepth,
+                                     const SalTwoRect& rTwoRect, const GC& rGC, bool bDstIsWindow ) const;
 #endif
 
 public:
