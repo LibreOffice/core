@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.104 $
+#   $Revision: 1.105 $
 #
-#   last change: $Author: vg $ $Date: 2004-04-05 11:32:40 $
+#   last change: $Author: rt $ $Date: 2004-04-08 15:52:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.104 $ ';
+    $id_str = ' $Revision: 1.105 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1714,7 +1714,8 @@ sub read_ssolar_vars {
         $setsolar = 'r:\\etools\\setsolar.pl';
         $tmp_file = $ENV{TEMP} . "\\solar.env.$$.tmp";
     } else {
-        $setsolar = '/develop6/update/dev/etools/setsolar.pl';
+        $setsolar = '/so/env/etools/setsolar.pl';
+        $setsolar = '/net/jumbo.germany/cvs/buildenv/etools/setsolar.pl' if ! -e $setsolar;
         $tmp_file = $ENV{HOME} . "/.solar.env.$$.tmp";
     };
     my $pro = "";
