@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-21 21:23:04 $
+ *  last change: $Author: kz $ $Date: 2002-01-16 21:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3117,7 +3117,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ french ] = "Symbole précédent";
         Text[ spanish ] = "~Símbolo anterior";
         Text[ finnish ] = "~Vanha symboli";
-        Text[ italian ] = "Simbolo precedente:";
+        Text[ italian ] = "~Simbolo preced.:";
         Text[ danish ] = "Oprindeligt symbol:";
         Text[ swedish ] = "~Gammal symbol";
         Text[ polish ] = "Stary symbol";
@@ -9622,7 +9622,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ portuguese ] = "Seta para a esquerda";
                 TEXT[ danish ] = "pil mod venstre";
                 TEXT[ french ] = "Flèche vers la gauche";
-                TEXT[ swedish ] = "pil till vänster";
+                TEXT[ swedish ] = "Pil åt vänster";
                 TEXT[ dutch ] = "Pijl naar links";
                 TEXT[ spanish ] = "Flecha hacia la izquierda";
                 TEXT[ english_us ] = "Left Arrow";
@@ -9650,7 +9650,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ portuguese ] = "Seta para a direita";
                 TEXT[ danish ] = "pil mod højre";
                 TEXT[ french ] = "Flèche vers la droite";
-                TEXT[ swedish ] = "pil till höger";
+                TEXT[ swedish ] = "Pil åt höger";
                 TEXT[ dutch ] = "Pijl naar rechts";
                 TEXT[ spanish ] = "Flecha hacia la derecha";
                 TEXT[ english_us ] = "Right Arrow";
