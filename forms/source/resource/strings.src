@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:59:08 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,7 +564,9 @@ String RID_STR_CLEAR_GRAPHICS
 
 String RID_STR_INVALIDSTREAM
 {
-    Text = "Die übergebene Stream-Komponente ist ungültig.";
+    Text = "Der übergebene Stream ist ungültig.";
+    Text [ english ] = "The given stream is invalid.";
+    Text [ english_us ] = "The given stream is invalid.";
 };
 
 String RID_STR_SYNTAXERROR
@@ -610,6 +612,13 @@ String RID_STR_INCOMPATIBLE_TYPES
     Text [ english_us ] = "The value types supported by the binding cannot be used for exchanging data with this control.";
 };
 
+String RID_STR_LABEL_RECORD
+{
+    Text = "Datensatz";
+    Text [ english ] = "Record";
+    Text [ english_us ] = "Record";
+};
+
 String RID_STR_INVALID_VALIDATOR
 {
     Text [ language_user1 ] = "This is a technical error message, which will never be visible at the user interface, "
@@ -618,4 +627,11 @@ String RID_STR_INVALID_VALIDATOR
     Text = "Das Kontrollfeld hat eine Bindung an einen externen Wert, welche gleichzeitig als Validator fungiert. Diese Bindung muß gelöst werden, bevor ein neuer Validator eingesetzt werden kann.";
     Text [ english ] = "The control is connected to an external value binding, which at the same time acts as validator. You need to revoke the value binding, before you can set a new validator.";
     Text [ english_us ] = "The control is connected to an external value binding, which at the same time acts as validator. You need to revoke the value binding, before you can set a new validator.";
+};
+
+String RID_STR_LABEL_OF
+{
+    Text = "von";
+    Text [ english ] = "of";
+    Text [ english_us ] = "of";
 };
