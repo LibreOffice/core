@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 12:11:04 $
+ *  last change: $Author: os $ $Date: 2002-05-07 11:31:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -878,9 +878,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     {
         SwDoc& rDoc = *((SwDocShell*)pDocSh)->GetDoc();
 
-        if( bOldShellWasSrcView
-                ? !pWebDShell->GetDoc()->GetRootFrm()
-                : ( pWebDShell && !bOldShellWasPagePreView ))
+        if( !bOldShellWasSrcView && pWebDShell && !bOldShellWasPagePreView )
             rDoc.SetBrowseMode( sal_True );
 
         //Fuer den BrowseMode wollen wir keinen Factor uebernehmen.

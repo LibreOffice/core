@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: os $ $Date: 2002-04-22 10:51:48 $
+ *  last change: $Author: os $ $Date: 2002-05-07 11:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1609,7 +1609,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
                     "Loschen des Basics hat nicht geklappt" );
         }
     }
-
+    sal_Bool bWasBrowseMode = pDoc->IsBrowseMode();
     RemoveLink();
     //jetzt muss auch das UNO-Model ueber das neue Doc informiert werden #51535#
     uno::Reference<text::XTextDocument> xDoc(GetBaseModel(), uno::UNO_QUERY);
@@ -1617,6 +1617,8 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     ((SwXTextDocument*)pxDoc)->InitNewDoc();
 
     AddLink();
+    //has to be set to have the right setting before the view is created
+    pDoc->SetBrowseMode(bWasBrowseMode);
     pSrcView->SetPool(&GetPool());
 
     String sBaseURL = INetURLObject::GetBaseURL();
@@ -1636,8 +1638,19 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     SfxMedium aMed( rStreamName, STREAM_READ, FALSE );
     SwReader aReader( aMed, rMedname, pDoc );
     aReader.Read( *ReadHTML );
+    //has to be set twice - the reader always sets to browse mode
+    pDoc->SetBrowseMode(bWasBrowseMode);
 
     INetURLObject::SetBaseURL(sBaseURL);
+    const SwView* pView = GetView();
+    //in print layout the first page(s) may have been formatted as a mix of browse
+    //and print layout
+    if(!bWasBrowseMode && pView)
+    {
+        SwWrtShell& rWrtSh = pView->GetWrtShell();
+        if( rWrtSh.GetLayout())
+            rWrtSh.CheckBrowseView( TRUE );
+    }
 
 
     // MIB 23.6.97: Die HTTP-Header-Attribute wieder in die DokInfo
