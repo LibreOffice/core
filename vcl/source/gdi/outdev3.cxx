@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: th $ $Date: 2001-06-22 13:44:02 $
+ *  last change: $Author: th $ $Date: 2001-06-22 15:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -938,7 +938,7 @@ static char const aImplSubsZapfChancery[] = "zapfchancery;monotypecorsiva;corsiv
 static char const aImplSubsImprintShadow[] = "imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar";
 static char const aImplSubsOutline[] = "monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar";
 static char const aImplSubsShadow[] = "imprintmtshadow;imprintshadow;imprint;chevara;;gallia;algerian";
-static char const aImplSubsFalstaff[] = "falstaff;latinwide;impact";
+static char const aImplSubsFalstaff[] = "falstaff;widelatin;latinwide;impact";
 
 
 static char const aImplMSSubsArial[] = "Arial;Helvetica;Sans";
@@ -1108,6 +1108,7 @@ static ImplFontNameAttr const aImplFontNameList[] =
 {   "webdings",             aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "webdings2",            aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "webdings3",            aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "widelatin",            aImplSubsFalstaff, aImplSubsBroadway, NULL, NULL, WEIGHT_BLACK, WIDTH_ULTRA_EXPANDED, IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
 {   "wingdings",            aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "wingdings2",           aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "wingdings3",           aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
@@ -6463,9 +6464,6 @@ String OutputDevice::GetEllipsisString( const String& rOrigStr, long nMaxWidth,
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     String aStr = rOrigStr;
-    if( mpFontEntry->mpConversion )
-        ImplRecodeString( mpFontEntry->mpConversion, aStr, 0, STRING_LEN );
-
     xub_StrLen nIndex = GetTextBreak( aStr, nMaxWidth );
 
     if ( nIndex != STRING_LEN )
@@ -6978,9 +6976,6 @@ BOOL OutputDevice::GetGlyphBoundRect( xub_Unicode cChar, Rectangle& rRect, BOOL 
     DBG_TRACE( "OutputDevice::GetGlyphBoundRect()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    if( mpFontEntry->mpConversion )
-        cChar = ImplRecodeChar( mpFontEntry->mpConversion, cChar );
-
     BOOL bRet = FALSE;
 
     // #83068#
@@ -6998,7 +6993,6 @@ BOOL OutputDevice::GetGlyphBoundRect( xub_Unicode cChar, Rectangle& rRect, BOOL 
     }
 
 #ifndef REMOTE_APPSERVER
-
     if ( mpGraphics || ImplGetGraphics() )
     {
         Font    aOldFont( GetFont() );
@@ -7049,6 +7043,9 @@ BOOL OutputDevice::GetGlyphBoundRect( xub_Unicode cChar, Rectangle& rRect, BOOL 
         if ( mbInitFont )
             ImplInitFont();
 
+        if( mpFontEntry->mpConversion )
+            cChar = ImplRecodeChar( mpFontEntry->mpConversion, cChar );
+
         if ( mpGraphics->GetGlyphBoundRect( cChar, &nLeft, &nTop, &nWidth, &nHeight ) )
         {
             if ( bOptimize )
@@ -7078,6 +7075,9 @@ BOOL OutputDevice::GetGlyphBoundRect( xub_Unicode cChar, Rectangle& rRect, BOOL 
     if ( mbInitFont )
         ImplInitFont();
 
+    if( mpFontEntry->mpConversion )
+        cChar = ImplRecodeChar( mpFontEntry->mpConversion, cChar );
+
     bRet = mpGraphics->GetGlyphBoundRect( cChar, rRect, bOptimize );
 
     if ( bRet )
@@ -7088,7 +7088,6 @@ BOOL OutputDevice::GetGlyphBoundRect( xub_Unicode cChar, Rectangle& rRect, BOOL 
                                  ImplDevicePixelToLogicHeight( rRect.GetHeight() ) ) );
     }
 #endif
-
     if ( !bRet && (OUTDEV_PRINTER != meOutDevType) )
     {
         if ( bOptimize )
@@ -7212,9 +7211,6 @@ BOOL OutputDevice::GetGlyphOutline( xub_Unicode cChar, PolyPolygon& rPolyPoly, B
     DBG_TRACE( "OutputDevice::GetGlyphOutline()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    if( mpFontEntry->mpConversion )
-        cChar = ImplRecodeChar( mpFontEntry->mpConversion, cChar );
-
     BOOL bRet = FALSE;
 
 #ifndef REMOTE_APPSERVER
@@ -7273,6 +7269,9 @@ BOOL OutputDevice::GetGlyphOutline( xub_Unicode cChar, PolyPolygon& rPolyPoly, B
         if ( mbInitFont )
             ImplInitFont();
 
+        if( mpFontEntry->mpConversion )
+            cChar = ImplRecodeChar( mpFontEntry->mpConversion, cChar );
+
         nPolyCount = mpGraphics->GetGlyphOutline( cChar, &pPolySizes, &pPoints, &pFlags );
         if ( nPolyCount && pPolySizes && pPoints && pFlags )
         {
@@ -7329,6 +7328,9 @@ BOOL OutputDevice::GetGlyphOutline( xub_Unicode cChar, PolyPolygon& rPolyPoly, B
         ImplNewFont();
     if ( mbInitFont )
         ImplInitFont();
+
+    if( mpFontEntry->mpConversion )
+        cChar = ImplRecodeChar( mpFontEntry->mpConversion, cChar );
 
     bRet = mpGraphics->GetGlyphOutline( cChar, rPolyPoly, bOptimize );
 
