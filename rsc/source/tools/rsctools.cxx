@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsctools.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:42:30 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 14:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,13 @@
 #include <rsctools.hxx>
 #endif
 
+#include <osl/file.h>
+
 #if defined (WIN) || defined (MAC)
 #define ONLY_NEW
 #endif
+
+using namespace rtl;
 
 /****************** C o d e **********************************************/
 /*************************************************************************
@@ -161,13 +165,10 @@ int rsc_stricmp( const char *string1, const char *string2 ){
 *************************************************************************/
 ByteString GetTmpFileName()
 {
-#ifdef FREEBSD
-    return ByteString( tmpnam( NULL ) );
-#elif MACOSX
-    return ByteString( macxp_tempnam( NULL, NULL ) );
-#else
-    return ByteString( tempnam( (const char *) P_tmpdir, NULL ) );
-#endif
+    OUString aTmpURL, aTmpFile;
+    osl_createTempFile( NULL, NULL, &aTmpURL.pData );
+    osl_getSystemPathFromFileURL( aTmpURL.pData, &aTmpFile.pData );
+    return OUStringToOString( aTmpFile, RTL_TEXTENCODING_MS_1252 );
 }
 
 /********************************************************************/
@@ -180,7 +181,7 @@ ByteString GetTmpFileName()
 /********************************************************************/
 BOOL Append( FILE * fDest, ByteString aTmpFile )
 {
-#define MAX_BUF 1000
+#define MAX_BUF 4096
     char    szBuf[ MAX_BUF ];
     short   nItems;
     FILE    *fSource;
