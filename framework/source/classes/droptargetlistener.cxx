@@ -2,9 +2,9 @@
  *
  *  $RCSfile: droptargetlistener.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-06 13:27:28 $
+ *  last change: $Author: mba $ $Date: 2001-09-13 12:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,8 @@
 #ifndef _FILELIST_HXX
 #include <sot/filelist.hxx>
 #endif
+
+#include <osl/file.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -272,6 +274,12 @@ void DropTargetListener::impl_OpenFile( const String& rFilePath )
     String aFileURL;
     if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFilePath, aFileURL ) )
         aFileURL = rFilePath;
+
+    ::osl::FileStatus aStatus( FileStatusMask_FileURL );
+    ::osl::DirectoryItem aItem;
+    if( ::osl::FileBase::E_None == ::osl::DirectoryItem::get( aFileURL, aItem ) &&
+        ::osl::FileBase::E_None == aItem.getFileStatus( aStatus ) )
+            aFileURL = aStatus.getFileURL();
 
     // open file
     css::uno::Reference< css::frame::XFrame > xTargetFrame( m_xTargetFrame.get(), css::uno::UNO_QUERY );
