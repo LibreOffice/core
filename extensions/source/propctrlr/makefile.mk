@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 08:30:05 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:56:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -148,27 +148,6 @@ UNOTYPES=\
     com.sun.star.awt.XMenuListener				\
 
 
-CXXFILES=			controlfontdialog.cxx	\
-                    fontdialog.cxx	\
-                    pcrservices.cxx	\
-                    browserline.cxx	\
-                    selectlabeldialog.cxx	\
-                    formcontroller.cxx	\
-                    formmetadata.cxx	\
-                    formbrowsertools.cxx	\
-                    standardcontrol.cxx	\
-                    usercontrol.cxx	\
-                    commoncontrol.cxx	\
-                    browserpage.cxx	\
-                    browserlistbox.cxx	\
-                    propertyeditor.cxx	\
-                    formstrings.cxx	\
-                    pcrstrings.cxx	\
-                    browserview.cxx	\
-                    propcontroller.cxx	\
-                    pcrcommon.cxx	\
-                    modulepcr.cxx
-
 SLOFILES=			$(SLO)$/controlfontdialog.obj	\
                     $(SLO)$/fontdialog.obj	\
                     $(SLO)$/pcrservices.obj	\
@@ -204,26 +183,19 @@ SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1VERSIONMAP= $(TARGET).map
 
 SHL1STDLIBS= \
-        $(CPPULIB) 	 \
-        $(CPPUHELPERLIB) 	 \
-        $(COMPHELPERLIB) 	 \
-        $(VOSLIB) 	 \
-        $(TOOLSLIB)  \
-        $(SO2LIB)	\
-        $(VCLLIB)    \
-        $(TKLIB)	\
-        $(SVTOOLLIB)\
-        $(SVLLIB)	\
-        $(OSLLIB)	 \
-        $(SALLIB)	\
-        $(UNOTOOLSLIB)	\
-        $(SOTLIB)	\
-        $(UCBHELPERLIB)	\
+        $(OFALIB)	\
         $(SVXLIB)	\
         $(SFXLIB)	\
+        $(SVTOOLLIB)\
+        $(TKLIB)	\
+        $(VCLLIB)	\
+        $(SVLLIB)	\
+        $(TOOLSLIB) \
         $(DBTOOLSLIB)	\
-        $(OFALIB)
-
+        $(COMPHELPERLIB) 	 \
+        $(CPPUHELPERLIB) 	 \
+        $(CPPULIB) 	\
+        $(SALLIB)
 
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1IMPLIB=		i$(TARGET)
@@ -231,24 +203,7 @@ SHL1DEPN=		$(SHL1LIBS)
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=		$(SHL1TARGET)
-#DEF1DEPN=		$(MISC)$/$(SHL1TARGET).flt
-#DEFLIB1NAME=	$(TARGET)
-DEF1EXPORTFILE=	exports.dxp
-
-
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
-
-#$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-#	@echo ------------------------------
-#	@echo Making: $@
-#   @echo _Impl		>$@
-#	@echo _real		>>$@
-#	@echo _TI1		>>$@
-#	@echo _TI2		>>$@
-#	@echo WEP		>>$@
-#	@echo LIBMAIN	>>$@
-#	@echo LibMain	>>$@
-
