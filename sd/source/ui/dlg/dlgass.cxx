@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: af $ $Date: 2001-05-17 13:42:11 $
+ *  last change: $Author: af $ $Date: 2001-06-19 12:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,7 +738,7 @@ void    TemplateScanDoneCallback    (void * pObject)
 void    AssistentDlgImpl::ScanDocmenu   (void)
 {
     uno::Sequence<uno::Sequence<beans::PropertyValue> > aHistory =
-        SvtHistoryOptions().GetList (eHISTORY);
+        SvtHistoryOptions().GetList (ePICKLIST);
 
     sal_uInt32 nCount = aHistory.getLength();
     for (sal_uInt32 nItem=0; nItem<nCount; ++nItem)
@@ -768,7 +768,7 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
             aURL.SetSmartURL (sURL);
             aURL.SetPass (sPassword);
             m_aOpenFilesList.push_back (new String (aURL.GetMainURL()));
-            m_pPage1OpenLB->InsertEntry (aURL.GetName());
+            m_pPage1OpenLB->InsertEntry (sTitle);
         }
     }
 }
