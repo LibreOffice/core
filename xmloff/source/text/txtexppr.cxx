@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-31 11:21:56 $
+ *  last change: $Author: cl $ $Date: 2001-06-07 08:52:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,12 +297,12 @@ void XMLTextExportPropertySetMapper::ContextFontFilter(
         pFontNameState->mnIndex = -1;
     }
 
-    if( 0 == sFamilyName.getLength() )
+    if( pFontFamilyNameState && (0 == sFamilyName.getLength()) )
     {
         pFontFamilyNameState->mnIndex = -1;
     }
 
-    if( 0 == sStyleName.getLength() )
+    if( pFontStyleNameState && (0 == sStyleName.getLength()) )
     {
         pFontStyleNameState->mnIndex = -1;
     }
