@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2001-01-19 20:48:33 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ TabDialog DLG_TEMPLATE_1
                 Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
                 Text[ greek ] = "Åöİ ÷áñáêôŞñùí";
                 Text[ korean ] = "±Û²Ã È¿°ú";
-                Text[ turkish ] = "Yazıtipi seçenekleri";
+                Text[ turkish ] = "Yazıtipi efekti";
                 Text[ language_user1 ] = " ";
             };
             PageItem
@@ -231,7 +231,7 @@ TabDialog DLG_TEMPLATE_1
     Text[ chinese_traditional ] = "¦r«¬¼Ë¦¡";
     Text[ arabic ] = "äãØ ÇáÃÍÑİ";
     Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
-    Text[ korean ] = "ÅØ½ºÆ® À¯Çü";
+    Text[ korean ] = "¹®ÀÚ À¯Çü";
     Text[ turkish ] = "Karakter biçimi";
     Text[ language_user1 ] = " ";
 };
@@ -360,7 +360,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
                 Text[ japanese ] = "˜a•¶ˆóü‚Ì‘ÌÙ";
-                Text[ korean ] = "¾Æ½Ã¾Æ ÀÎ¼âÃ¼";
+                Text[ korean ] = "¾Æ½Ã¾Æ  Å¸ÀÌÆ÷±×·¡ÇÇ";
                 Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö";
                 Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
                 Text[ turkish ] = "Asian typography";
@@ -419,7 +419,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
                 Text[ greek ] = "Åöİ ãñáììáôïóåéñÜò";
                 Text[ korean ] = "±Û²Ã È¿°ú";
-                Text[ turkish ] = "Yazıtipi seçenekleri";
+                Text[ turkish ] = "Yazı tipi efektleri";
                 Text[ language_user1 ] = " ";
             };
             PageItem
@@ -493,7 +493,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ chinese_traditional ] = "½s¸¹";
                 Text[ arabic ] = "ÇáÊÑŞíã";
                 Text[ greek ] = "Áñßèìçóç";
-                Text[ korean ] = "¹øÈ£ ¸Å±â±â";
+                Text[ korean ] = "¹øÈ£¸Å±â±â";
                 Text[ turkish ] = "Numaralama";
                 Text[ language_user1 ] = " ";
             };
@@ -605,7 +605,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ chinese_traditional ] = "Ãä®Ø";
                 Text[ arabic ] = "ÇáÍÏæÏ";
                 Text[ greek ] = "Ğåñßãñáììá";
-                Text[ korean ] = "¿Ü°û¼±";
+                Text[ korean ] = "Å×µÎ¸®";
                 Text[ turkish ] = "Kenarlık";
                 Text[ language_user1 ] = " ";
             };
@@ -824,7 +824,7 @@ TabDialog DLG_TEMPLATE_4
     Text[ chinese_traditional ] = "­¶­±¼Ë¦¡";
     Text[ arabic ] = "äãØ ÕİÍÉ";
     Text[ greek ] = "Ğñüôõğï óåëßäáò";
-    Text[ korean ] = "ÆäÀÌÁö À¯Çü";
+    Text[ korean ] = "ÂÊ À¯Çü";
     Text[ turkish ] = "Sayfa biçimi";
     Text[ language_user1 ] = " ";
 };
@@ -850,7 +850,7 @@ String STR_PAGE_STD
     Text[ chinese_traditional ] = "­¶";
     Text[ arabic ] = "ÕİÍÉ";
     Text[ greek ] = "Óåëßäá";
-    Text[ korean ] = "ÆäÀÌÁö";
+    Text[ korean ] = "ÂÊ";
     Text[ turkish ] = "Sayfa";
     Text[ language_user1 ] = " ";
 };
@@ -1033,7 +1033,7 @@ TabDialog DLG_TEMPLATE_3
                 Text[ chinese_traditional ] = "Ãş«¬";
                 Text[ arabic ] = "ÇáäæÚ";
                 Text[ greek ] = "Ôığïò";
-                Text[ korean ] = "ÇüÅÂ";
+                Text[ korean ] = "À¯Çü";
                 Text[ turkish ] = "Tip";
                 Text[ language_user1 ] = " ";
             };
@@ -1088,7 +1088,7 @@ TabDialog DLG_TEMPLATE_3
                 Text[ chinese_traditional ] = "´«¦æ";
                 Text[ arabic ] = "ÇáÊİÇİ";
                 Text[ greek ] = "Áíáäßğëùóç";
-                Text[ korean ] = "¼øÈ¯";
+                Text[ korean ] = "¹®ÀÚ¿­¡¡¹èÄ¡";
                 Text[ turkish ] = "Metin dağılımı";
                 Text[ language_user1 ] = " ";
             };
@@ -1254,7 +1254,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ chinese_traditional ] = "¶µ¥Ø½s¸¹";
                 Text[ arabic ] = "ÚáÇãÇÊ ÊÚÏÇÏ";
                 Text[ greek ] = "Êïõêßäåò";
-                Text[ korean ] = "±Û¸Ó¸® ±âÈ£";
+                Text[ korean ] = "±Û¸Ó¸®±âÈ£";
                 Text[ turkish ] = "Madde işareti";
                 Text[ language_user1 ] = " ";
             };
@@ -1304,7 +1304,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ chinese_traditional ] = "¤jºõ";
                 Text[ arabic ] = "ÊŞÓíã";
                 Text[ greek ] = "ÄéÜñèñùóç";
-                Text[ korean ] = "°³¿ä";
+                Text[ korean ] = "´Ù´Ü°è";
                 Text[ turkish ] = "Anahat";
                 Text[ language_user1 ] = " ";
             };
@@ -1326,7 +1326,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ russian ] = "Ğèñóíêè";
                 Text[ polish ] = "Grafiki";
                 Text[ japanese ] = "}";
-                Text[ chinese_traditional ] = "¹Ï¤ù";
+                Text[ chinese_traditional ] = "¹Ï§Î";
                 Text[ arabic ] = "ÕæÑ";
                 Text[ greek ] = "ÃñáöéêÜ";
                 Text[ korean ] = "±×·¡ÇÈ";
@@ -1401,7 +1401,7 @@ TabDialog DLG_TEMPLATE_5
     Text[ chinese_traditional ] = "½s¸¹¼Ë¦¡";
     Text[ arabic ] = "äãØ ÊÑŞíã";
     Text[ greek ] = "Ğñüôõğï áñßèìçóçò";
-    Text[ korean ] = "¹øÈ£ ¸Å±â±â";
+    Text[ korean ] = "¹øÈ£¸Å±â±â¡¡À¯Çü";
     Text[ turkish ] = "Numaralama biçimi";
     Text[ language_user1 ] = " ";
 };
