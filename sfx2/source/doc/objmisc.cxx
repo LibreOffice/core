@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-09 17:11:30 $
+ *  last change: $Author: mav $ $Date: 2002-03-26 16:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,21 +450,6 @@ void SfxObjectShell::SetMacroMode_Impl( sal_Bool bModal )
         pImp->bRunningMacro = bModal;
         Broadcast( SfxSimpleHint( SFX_HINT_MODECHANGED ) );
     }
-}
-
-//-------------------------------------------------------------------------
-
-sal_Bool SfxObjectShell::IsInAPICall() const
-
-/*  [Beschreibung]
-
-    Diese Methode liefert sal_True, falls z.B. ein zur Zeit durchzufuehrendes
-    ConvertFrom (oder andere Callbacks) von der API gerufen werden. Dann
-    duefen keine Dialoge gestartet werden.
-*/
-
-{
-    return pImp->bSilent;
 }
 
 //-------------------------------------------------------------------------

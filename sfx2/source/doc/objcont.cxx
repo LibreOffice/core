@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-21 13:35:49 $
+ *  last change: $Author: mav $ $Date: 2002-03-26 16:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,52 +491,44 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
 
 void SfxObjectShell::UpdateDocInfoForSave()
 {
-    SfxDocumentInfo &rDocInfo = GetDocInfo();
-    rDocInfo.SetTemplateConfig( HasTemplateConfig() );
-
-    if ( IsModified() )
+    if( !pImp->bDoNotTouchDocInfo )
     {
-        // Keine Unterschiede mehr zwischen Save, SaveAs
-        String aUserName = SvtUserOptions().GetFullName();
-        if ( !rDocInfo.IsUseUserData() )
+        SfxDocumentInfo &rDocInfo = GetDocInfo();
+        rDocInfo.SetTemplateConfig( HasTemplateConfig() );
+
+        if ( IsModified() )
         {
-            SfxStamp aCreated = rDocInfo.GetCreated();
-            if ( aUserName == aCreated.GetName() )
+            // Keine Unterschiede mehr zwischen Save, SaveAs
+            String aUserName = SvtUserOptions().GetFullName();
+            if ( !rDocInfo.IsUseUserData() )
             {
-                aCreated.SetName( String() );
-                rDocInfo.SetCreated( aCreated );
+                SfxStamp aCreated = rDocInfo.GetCreated();
+                if ( aUserName == aCreated.GetName() )
+                {
+                    aCreated.SetName( String() );
+                    rDocInfo.SetCreated( aCreated );
+                }
+
+                SfxStamp aPrinted = rDocInfo.GetPrinted();
+                if ( aUserName == aPrinted.GetName() )
+                {
+                    aPrinted.SetName( String() );
+                    rDocInfo.SetPrinted( aPrinted );
+                }
+
+                aUserName.Erase();
             }
 
-            SfxStamp aPrinted = rDocInfo.GetPrinted();
-            if ( aUserName == aPrinted.GetName() )
-            {
-                aPrinted.SetName( String() );
-                rDocInfo.SetPrinted( aPrinted );
-            }
-
-            aUserName.Erase();
+            rDocInfo.SetChanged( aUserName );
+            if ( !HasName() || pImp->bIsSaving )
+                UpdateTime_Impl( rDocInfo );
         }
 
-        rDocInfo.SetChanged( aUserName );
-        if ( !HasName() || pImp->bIsSaving )
-            UpdateTime_Impl( rDocInfo );
+        if ( !pImp->bIsSaving )
+            rDocInfo.SetPasswd( pImp->bPasswd );
+
+        Broadcast( SfxDocumentInfoHint( &rDocInfo ) );
     }
-
-    if ( !pImp->bIsSaving )
-    {
-        // Flag fuer Passwort merken
-        rDocInfo.SetPasswd( pImp->bPasswd );
-
-        // ggf. DocInfo Dialog
-        if (  !pImp->bSilent && eCreateMode == SFX_CREATE_MODE_STANDARD && 0 == ( pImp->eFlags & SFXOBJECTSHELL_NODOCINFO ) )
-        {
-            SvtSaveOptions aOptions;
-            if ( aOptions.IsDocInfoSave() )
-                DocInfoDlg_Impl( rDocInfo );
-        }
-    }
-
-    Broadcast( SfxDocumentInfoHint( &rDocInfo ) );
 }
 
 // -----------------------------------------------------------------------

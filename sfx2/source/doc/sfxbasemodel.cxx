@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-28 10:46:55 $
+ *  last change: $Author: mav $ $Date: 2002-03-26 16:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1490,10 +1490,16 @@ void SfxBaseModel::impl_store(          SfxObjectShell*             pObjectShell
                                 const   SEQUENCE< PROPERTYVALUE >&  seqArguments    ,
                                         sal_Bool                    bSaveTo         )
 {
-    SfxRequest aReq( SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, pObjectShell->GetPool() );
-    aReq.AppendItem( SfxStringItem( SID_FILE_NAME, String(sURL) ) );
+    if( !sURL.getLength() )
+        throw ILLEGALARGUMENTEXCEPTION();
+
+    OUSTRING aFilterName;
+    //sal_Bool aSaveAsTemplate = sal_False;
+
+    SfxItemSet *aParams = new SfxAllItemSet( SFX_APP()->GetPool() );
+    aParams->Put( SfxStringItem( SID_FILE_NAME, String(sURL) ) );
     if ( bSaveTo )
-        aReq.AppendItem( SfxBoolItem( SID_SAVETO, sal_True ) );
+        aParams->Put( SfxBoolItem( SID_SAVETO, sal_True ) );
 
     // Parameter auswerten
     for ( int n = 0; n < seqArguments.getLength(); ++n )
@@ -1506,7 +1512,10 @@ void SfxBaseModel::impl_store(          SfxObjectShell*             pObjectShell
         {
             OUSTRING sTemp;
             if ( ( rProp.Value >>= sTemp ) == sal_True )
-                aReq.AppendItem( SfxStringItem( SID_FILTER_NAME, String( sTemp ) ) );
+            {
+                aParams->Put( SfxStringItem( SID_FILTER_NAME, String( sTemp ) ) );
+                aFilterName = sTemp;
+            }
             else if ( rProp.Value.getValueType() != ::getCppuVoidType() )
                 throw ILLEGALARGUMENTEXCEPTION();
         }
@@ -1516,7 +1525,7 @@ void SfxBaseModel::impl_store(          SfxObjectShell*             pObjectShell
         {
             OUSTRING sTemp;
             if ( ( rProp.Value >>= sTemp ) == sal_True )
-                aReq.AppendItem( SfxStringItem( SID_FILE_FILTEROPTIONS, String( sTemp ) ) );
+                aParams->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, String( sTemp ) ) );
             else if ( rProp.Value.getValueType() != ::getCppuVoidType() )
                 throw ILLEGALARGUMENTEXCEPTION();
         }
@@ -1526,7 +1535,7 @@ void SfxBaseModel::impl_store(          SfxObjectShell*             pObjectShell
         {
             OUSTRING sTemp ;
             if ( ( rProp.Value >>= sTemp ) == sal_True )
-                aReq.AppendItem( SfxStringItem( SID_VERSION, String( sTemp ) ) );
+                aParams->Put( SfxStringItem( SID_VERSION, String( sTemp ) ) );
             else if ( rProp.Value.getValueType() != ::getCppuVoidType() )
                 throw ILLEGALARGUMENTEXCEPTION();
         }
@@ -1536,7 +1545,7 @@ void SfxBaseModel::impl_store(          SfxObjectShell*             pObjectShell
         {
             OUSTRING sTemp ;
             if ( ( rProp.Value >>= sTemp ) == sal_True )
-                aReq.AppendItem( SfxStringItem( SID_DOCINFO_AUTHOR, String( sTemp ) ) );
+                aParams->Put( SfxStringItem( SID_DOCINFO_AUTHOR, String( sTemp ) ) );
             else if ( rProp.Value.getValueType() != ::getCppuVoidType() )
                 throw ILLEGALARGUMENTEXCEPTION();
         }
@@ -1546,7 +1555,7 @@ void SfxBaseModel::impl_store(          SfxObjectShell*             pObjectShell
         {
             OUSTRING sTemp ;
             if ( ( rProp.Value >>= sTemp ) == sal_True )
-                aReq.AppendItem( SfxStringItem( SID_PASSWORD, String( sTemp ) ) );
+                aParams->Put( SfxStringItem( SID_PASSWORD, String( sTemp ) ) );
             else if ( rProp.Value.getValueType() != ::getCppuVoidType() )
                 throw ILLEGALARGUMENTEXCEPTION();
         }
@@ -1556,18 +1565,19 @@ void SfxBaseModel::impl_store(          SfxObjectShell*             pObjectShell
         {
             sal_Bool bTemp ;
             if ( ( rProp.Value >>= bTemp ) == sal_True )
-                aReq.AppendItem( SfxBoolItem( SID_OVERWRITE, bTemp ) );
+                aParams->Put( SfxBoolItem( SID_OVERWRITE, bTemp ) );
             else if ( rProp.Value.getValueType() != ::getCppuVoidType() )
                 throw ILLEGALARGUMENTEXCEPTION();
         }
-
+        /*
         // TemplateRegion-Property?
         else if ( rProp.Name.compareToAscii( "TemplateRegion" ) == 0 )
         {
+            aSaveAsTemplate = sal_True;
             aReq.SetSlot( SID_DOCTEMPLATE );
             OUSTRING sTemp ;
             if ( ( rProp.Value >>= sTemp ) == sal_True )
-                aReq.AppendItem( SfxStringItem( SID_TEMPLATE_REGIONNAME, String( sTemp ) ) );
+                aParams->Put( SfxStringItem( SID_TEMPLATE_REGIONNAME, String( sTemp ) ) );
             else if ( rProp.Value.getValueType() != ::getCppuVoidType() )
                 throw ILLEGALARGUMENTEXCEPTION();
         }
@@ -1575,20 +1585,20 @@ void SfxBaseModel::impl_store(          SfxObjectShell*             pObjectShell
         // Template-Property?
         else if ( rProp.Name.compareToAscii( "TemplateName" ) == 0 )
         {
-            aReq.SetSlot( SID_DOCTEMPLATE );
+            aSaveAsTemplate = sal_True;
             OUSTRING sTemp ;
             if ( ( rProp.Value >>= sTemp ) == sal_True )
-                aReq.AppendItem( SfxStringItem( SID_TEMPLATE_NAME, String( sTemp ) ) );
+                aParams->Put( SfxStringItem( SID_TEMPLATE_NAME, String( sTemp ) ) );
             else if ( rProp.Value.getValueType() != ::getCppuVoidType() )
                 throw ILLEGALARGUMENTEXCEPTION();
         }
-
+        */
         // Unpacked-Property?
         else if ( rProp.Name.compareToAscii( "Unpacked" ) == 0 )
         {
             sal_Bool bTemp ;
             if ( ( rProp.Value >>= bTemp ) == sal_True )
-                aReq.AppendItem( SfxBoolItem( SID_PACK, !bTemp ) );
+                aParams->Put( SfxBoolItem( SID_PACK, !bTemp ) );
             else if ( rProp.Value.getValueType() != ::getCppuVoidType() )
                 throw ILLEGALARGUMENTEXCEPTION();
         }
@@ -1600,9 +1610,19 @@ void SfxBaseModel::impl_store(          SfxObjectShell*             pObjectShell
         }
     }
 
-    const SfxBoolItem *pRet = (const SfxBoolItem*) pObjectShell->ExecuteSlot( aReq );
-    if ( !pRet || !pRet->GetValue() )
-        throw SfxIOException_Impl( ERRCODE_IO_CANTWRITE );
+    if( !aFilterName.getLength() )
+        throw ILLEGALARGUMENTEXCEPTION();
+
+
+    sal_Bool aRet = pObjectShell->APISaveAs_Impl( sURL, aFilterName, aParams );
+
+    sal_uInt32 nErrCode = pObjectShell->GetError() ? pObjectShell->GetError() : ERRCODE_IO_CANTWRITE;
+    pObjectShell->ResetError();
+
+    if ( !aRet )
+    {
+        throw SfxIOException_Impl( nErrCode );
+    }
 }
 
 #if SUPD>614

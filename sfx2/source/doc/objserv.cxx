@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-17 11:10:21 $
+ *  last change: $Author: mav $ $Date: 2002-03-26 16:25:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,18 @@
  ************************************************************************/
 #include <so3/svstor.hxx>
 
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#endif
+
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#endif
+/*
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#endif
+*/
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
@@ -97,6 +109,7 @@
 #include <svtools/pathoptions.hxx>
 #include <svtools/useroptions.hxx>
 #include <svtools/asynclink.hxx>
+#include <svtools/saveopt.hxx>
 
 #pragma hdrstop
 
@@ -121,6 +134,34 @@
 #include "versdlg.hxx"
 #include "doc.hrc"
 #include "docfac.hxx"
+#include "fcontnr.hxx"
+#include "filedlghelper.hxx"
+#include "sfxhelp.hxx"
+
+#ifndef _SFX_HELPID_HRC
+#include "helpid.hrc"
+#endif
+
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ui::dialogs;
+
+//====================================================================
+
+class SfxSaveAsContext_Impl
+{
+    String&     _rNewNameVar;
+    String      _aNewName;
+
+public:
+                SfxSaveAsContext_Impl( String &rNewNameVar,
+                                       const String &rNewName )
+                :   _rNewNameVar( rNewNameVar ),
+                    _aNewName( rNewName )
+                { rNewNameVar = rNewName; }
+                ~SfxSaveAsContext_Impl()
+                { _rNewNameVar.Erase(); }
+};
 
 //====================================================================
 
@@ -178,6 +219,311 @@ void SfxObjectShell::PrintState_Impl(SfxItemSet &rSet)
 }
 
 //--------------------------------------------------------------------
+
+sal_Bool SfxObjectShell::APISaveAs_Impl
+(
+    const String& aFileName,
+    const String& aFilterName,
+    SfxItemSet*   aParams
+)
+{
+    BOOL bOk = sal_False;
+
+    {DBG_CHKTHIS(SfxObjectShell, 0);}
+
+    pImp->bSetStandardName=FALSE;
+    if ( GetMedium() )
+    {
+        // API-Call => suppress dialogs
+        //SfxBoolResetter aSilentReset( pImp->bSilent );
+        //pImp->bSilent = TRUE;
+
+        {
+            SfxObjectShellRef xLock( this ); // ???
+
+            // The saving of DocumentInfo is duplicated - not good
+            // check if a "SaveTo" is wanted, no "SaveAs"
+            SFX_ITEMSET_ARG( aParams, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
+            sal_Bool bCopyTo = GetCreateMode() == SFX_CREATE_MODE_EMBEDDED || pSaveToItem && pSaveToItem->GetValue();
+
+            // because saving a document modified its DocumentInfo, the current DocumentInfo must be saved on "SaveTo", because
+            // it must be restored after saving
+            SfxDocumentInfo aSavedInfo;
+            if ( bCopyTo )
+                aSavedInfo = GetDocInfo();
+
+            bOk = CommonSaveAs_Impl( aFileName, aFilterName, aParams );
+
+            if ( bCopyTo )
+            {
+                // restore DocumentInfo if only a copy was created
+                SfxDocumentInfo &rDocInfo = GetDocInfo();
+                rDocInfo = aSavedInfo;
+            }
+        }
+
+        // Picklisten-Eintrag verhindern
+        GetMedium()->SetUpdatePickList( FALSE );
+    }
+
+    return bOk;
+}
+
+//-------------------------------------------------------------------------
+
+sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
+{
+    INetURLObject aURL;
+    sal_uInt16 nActFilt = 0;
+    const SfxFilter* pFilt;
+    for( pFilt = GetFactory().GetFilter( 0 );
+         pFilt && ( !pFilt->CanExport() || pFilt->IsInternal() );
+         pFilt = GetFactory().GetFilter( ++nActFilt ) );
+
+    DBG_ASSERT( pFilt, "Kein Filter zum Speichern" );
+
+    String aFilterName;
+    if( pFilt )
+        aFilterName = pFilt->GetFilterName();
+
+    SfxItemSet *pParams = new SfxAllItemSet( SFX_APP()->GetPool() );
+    SFX_REQUEST_ARG( (*pRequest), pFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False );
+    if ( pRequest->GetArgs() )
+        pParams->Put( *pRequest->GetArgs() );
+
+    BOOL bDialogUsed = sal_False;
+    if ( !pFileNameItem )
+    {
+        bDialogUsed = sal_True;
+        if(! bUrl )
+        {
+            // check if we have a filter which allows for filter options
+            sal_Bool bAllowOptions = sal_False;
+            {
+                SfxFilterMatcher* pMatcher = new SfxFilterMatcher( GetFactory().GetFilterContainer() );
+                SfxFilterMatcherIter aIter( pMatcher, SFX_FILTER_EXPORT, SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG );
+
+                for ( const SfxFilter* pFilter = aIter.First(); pFilter && !bAllowOptions; pFilter = aIter.Next() )
+                {
+                    if ( 0 != ( pFilter->GetFilterFlags() & SFX_FILTER_USESOPTIONS ) )
+                        bAllowOptions = sal_True;
+                }
+                DELETEZ( pMatcher );
+            }
+
+            // get the filename by dialog ...
+            // create the file dialog
+            sfx2::FileDialogHelper aFileDlg( bAllowOptions ? FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS : FILESAVE_AUTOEXTENSION_PASSWORD,
+                                             0L, GetFactory() );
+
+            if ( HasName() )
+            {
+                String aLastName = QueryTitle( SFX_TITLE_QUERY_SAVE_NAME_PROPOSAL );
+                const SfxFilter* pMedFilter = GetMedium()->GetFilter();
+                if( pImp->bSetStandardName && !IsTemplate() || !pMedFilter ||
+                    !pMedFilter->CanExport() /*!!!||
+                    pMedFilter->GetVersion() != SOFFICE_FILEFORMAT_CURRENT*/ )
+                {
+                    if( aLastName.Len() )
+                    {
+                        String aPath( aLastName );
+                        bool bWasAbsolute = sal_False;
+                        INetURLObject aObj( SvtPathOptions().GetWorkPath() );
+                        aObj.setFinalSlash();
+                        aObj = INetURLObject( aObj.RelToAbs( aPath, bWasAbsolute ) );
+                        aObj.SetExtension( pFilt->GetDefaultExtension().Copy(2) );
+                        aFileDlg.SetDisplayDirectory( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                    }
+
+                    aFileDlg.SetCurrentFilter( pFilt->GetFilterName() );
+                }
+                else
+                {
+                    if( aLastName.Len() )
+                        aFileDlg.SetDisplayDirectory( aLastName );
+                    aFileDlg.SetCurrentFilter( pMedFilter->GetFilterName() );
+                }
+            }
+            else
+            {
+                aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
+            }
+
+            if ( aFileDlg.Execute( pParams, aFilterName ) != ERRCODE_NONE )
+            {
+                SetError(ERRCODE_IO_ABORT);
+                return sal_False;
+            }
+
+            // get the path from the dialog
+            aURL.SetURL( aFileDlg.GetPath() );
+
+            // gibt es schon ein Doc mit dem Namen?
+            if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+            {
+                SfxObjectShell* pDoc = 0;
+                for ( SfxObjectShell* pTmp = SfxObjectShell::GetFirst();
+                      pTmp && !pDoc;
+                      pTmp = SfxObjectShell::GetNext(*pTmp) )
+                {
+                    if( ( pTmp != this ) && pTmp->GetMedium() )
+                    {
+                        INetURLObject aCompare( pTmp->GetMedium()->GetName() );
+                        if ( aCompare == aURL )
+                            pDoc = pTmp;
+                    }
+                }
+                if ( pDoc )
+                {
+                    // dann Fehlermeldeung: "schon offen"
+                    SetError(ERRCODE_SFX_ALREADYOPEN);
+                    return sal_False;
+                }
+            }
+
+            // --**-- pParams->Put( *pDlg->GetItemSet() );
+            Reference< XFilePickerControlAccess > xExtFileDlg( aFileDlg.GetFilePicker(), UNO_QUERY );
+            if ( xExtFileDlg.is() )
+            {
+                try
+                {
+                    sal_Bool bSelectFilter = sal_False;
+                    if ( bAllowOptions )
+                    {
+                        Any aValue = xExtFileDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, 0 );
+                        aValue >>= bSelectFilter;
+                    }
+                    pParams->Put( SfxBoolItem( SID_USE_FILTEROPTIONS, bSelectFilter ) );
+                }
+                catch( IllegalArgumentException ){}
+            }
+        }
+        else
+        {
+            SfxUrlDialog aDlg( 0 );
+            if( aDlg.Execute() == RET_OK )
+                aURL.SetURL( aDlg.GetUrl() );
+            else
+            {
+                SetError(ERRCODE_IO_ABORT);
+                return sal_False;
+            }
+        }
+
+        // Request mit Dateiname und Filter vervollst"andigen
+        pRequest->AppendItem(SfxStringItem( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE )) );
+        pRequest->AppendItem(SfxStringItem( SID_FILTER_NAME, aFilterName));
+        const SfxPoolItem* pItem=0;
+        pRequest->GetArgs()->GetItemState( SID_FILE_NAME, sal_False, &pItem );
+        pFileNameItem = PTR_CAST( SfxStringItem, pItem );
+    }
+
+    // neuen Namen an der Object-Shell merken
+    SfxSaveAsContext_Impl aSaveAsCtx( pImp->aNewName, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+
+    // now we can get the filename from the SfxRequest
+    DBG_ASSERT( pRequest->GetArgs() != 0, "fehlerhafte Parameter");
+    SFX_REQUEST_ARG( (*pRequest), pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
+    FASTBOOL bSaveTo = pSaveToItem ? pSaveToItem->GetValue() : sal_False;
+
+    if ( !pFileNameItem && bSaveTo )
+    {
+        bDialogUsed = sal_True;
+
+        // get the filename by dialog ...
+        // create the file dialog
+        sfx2::FileDialogHelper aFileDlg( FILESAVE_AUTOEXTENSION_PASSWORD,
+                                         0L, GetFactory() );
+
+        if ( aFileDlg.Execute( pParams, aFilterName ) != ERRCODE_NONE )
+        {
+            SetError(ERRCODE_IO_ABORT);
+            return sal_False;
+        }
+
+        // get the path from the dialog
+        aURL.SetURL( aFileDlg.GetPath() );
+    }
+    else if ( pFileNameItem )
+    {
+        aURL.SetURL(((const SfxStringItem *)pFileNameItem)->GetValue() );
+        DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL!" );
+
+        const SfxPoolItem* pFilterNameItem=0;
+        const SfxItemState eState = pRequest->GetArgs()->GetItemState(SID_FILTER_NAME, sal_True, &pFilterNameItem);
+        if ( SFX_ITEM_SET == eState )
+        {
+            DBG_ASSERT(pFilterNameItem->IsA( TYPE(SfxStringItem) ), "Fehler Parameter");
+            aFilterName = ((const SfxStringItem *)pFilterNameItem)->GetValue();
+        }
+    }
+    else
+    {
+        SetError( ERRCODE_IO_INVALIDPARAMETER );
+        return sal_False;
+    }
+
+    // check if a "SaveTo" is wanted, no "SaveAs"
+    sal_Bool bCopyTo = GetCreateMode() == SFX_CREATE_MODE_EMBEDDED || bSaveTo;
+
+    // because saving a document modified its DocumentInfo, the current DocumentInfo must be saved on "SaveTo", because
+    // it must be restored after saving
+    SfxDocumentInfo aSavedInfo;
+    if ( bCopyTo )
+        aSavedInfo = GetDocInfo();
+
+    // if it is defenitly SaveAs then update doc info
+    SfxBoolResetter aDocInfoReset( pImp->bDoNotTouchDocInfo );
+    SfxMedium *pActMed = GetMedium();
+    const INetURLObject aActName(pActMed->GetName());
+    if ( aURL != aActName )
+    {
+        pImp->bIsSaving = sal_False; // here it's already clear
+        UpdateDocInfoForSave();
+        // ggf. DocInfo Dialog
+        if (  eCreateMode == SFX_CREATE_MODE_STANDARD && 0 == ( pImp->eFlags & SFXOBJECTSHELL_NODOCINFO ) )
+        {
+            SvtSaveOptions aOptions;
+            if ( aOptions.IsDocInfoSave() )
+            {
+                DocInfoDlg_Impl( GetDocInfo() );
+                pImp->bDoNotTouchDocInfo = sal_True;
+            }
+        }
+    }
+
+    sal_Bool bOk = CommonSaveAs_Impl( aURL, aFilterName, pParams );
+
+    if ( bCopyTo )
+    {
+        // restore DocumentInfo if only a copy was created
+        SfxDocumentInfo &rDocInfo = GetDocInfo();
+        rDocInfo = aSavedInfo;
+    }
+
+    if( bOk )
+    {
+        const SfxFilter* pFilter = GetMedium()->GetFilter();
+        if  (   bDialogUsed && pFilter
+            &&  pFilter->IsOwnFormat()
+            &&  pFilter->UsesStorage()
+            &&  pFilter->GetVersion() >= SOFFICE_FILEFORMAT_60
+            )
+        {
+            SfxViewFrame* pDocViewFrame = SfxViewFrame::GetFirst( this );
+            SfxFrame* pDocFrame = pDocViewFrame ? pDocViewFrame->GetFrame() : NULL;
+            if ( pDocFrame )
+                SfxHelp::OpenHelpAgent( pDocFrame, HID_DID_SAVE_PACKED_XML );
+        }
+
+        return sal_True;
+    }
+    else
+        return sal_False;
+}
+
+//--------------------------------------------------------------------
+
 void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 {
     {DBG_CHKTHIS(SfxObjectShell, 0);}
@@ -186,6 +532,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
     USHORT nId = rReq.GetSlot();
     if ( !GetMedium() && nId != SID_CLOSEDOC )
         return;
+
 
     if( nId == SID_SAVEDOC || nId  == SID_UPDATEDOC )
     {
@@ -209,18 +556,20 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
     }
 
     // API-Call => suppress dialogs
-    SfxBoolResetter aSilentReset( pImp->bSilent );
-    if ( rReq.IsAPI() )
-        pImp->bSilent = TRUE;
+    //SfxBoolResetter aSilentReset( pImp->bSilent );
+    //if ( rReq.IsAPI() )
+        //pImp->bSilent = TRUE;
 
     const SfxFilter *pCurFilter = GetMedium()->GetFilter();
     const SfxFilter *pDefFilter = GetFactory().GetFilter(0);
+
     if ( nId == SID_SAVEDOC &&
          pCurFilter && !pCurFilter->CanExport() &&
          pDefFilter && pDefFilter->IsInternal() )
         nId = SID_SAVEASDOC;
 
     // interaktiv speichern via (nicht-Default) Filter?
+
     if ( !rReq.IsAPI() && GetMedium()->GetFilter() && HasName() &&
          (nId == SID_SAVEDOC || nId == SID_UPDATEDOC) )
     {
@@ -307,6 +656,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
     // Speichern eines namenslosen oder readonly Dokumentes
     BOOL bMediumRO = IsReadOnlyMedium();
+
     if ( ( nId == SID_SAVEDOC || nId == SID_UPDATEDOC ) &&
          ( !HasName() || bMediumRO ) )
     {
@@ -342,6 +692,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
     switch(nId)
     {
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
         case SID_VERSION:
         {
             SfxViewFrame* pFrame = GetFrame();
@@ -456,13 +807,14 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
         case SID_SAVEASURL:
         case SID_SAVEASDOC:
         {
             //!! detaillierte Auswertung eines Fehlercodes
             SfxObjectShellRef xLock( this );
             SfxErrorContext aEc(ERRCTX_SFX_SAVEASDOC,GetTitle());
-            SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_SAVEASDOC,this));
+            //SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_SAVEASDOC,this));
 
             // Bei Calls "uber StarOne OverWrite-Status checken
             SFX_REQUEST_ARG( rReq, pOverwriteItem, SfxBoolItem, SID_OVERWRITE, FALSE );
@@ -475,8 +827,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     SetError( ERRCODE_IO_INVALIDPARAMETER );
             }
 
-            BOOL bWasReadonly = IsReadOnly();
-            BOOL bOk = SaveAs_Impl(nId == SID_SAVEASURL,  &rReq);
+            BOOL bOk = GUISaveAs_Impl(nId == SID_SAVEASURL,  &rReq);
             ULONG lErr=GetErrorCode();
             if ( !lErr && !bOk )
                 lErr=ERRCODE_IO_GENERAL;
@@ -493,40 +844,13 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             ResetError();
             rReq.SetReturnValue( SfxBoolItem(0, bOk) );
-            if ( bOk )
-            {
-                // Daten am Medium updaten
-                SfxItemSet *pSet = GetMedium()->GetItemSet();
-                pSet->ClearItem( SID_POSTDATA );
-                pSet->ClearItem( SID_TEMPLATE );
-                pSet->ClearItem( SID_DOC_READONLY );
-                pSet->ClearItem( SID_CONTENTTYPE );
-                pSet->ClearItem( SID_CHARSET );
-                pSet->ClearItem( SID_FILTER_NAME );
-                pSet->ClearItem( SID_OPTIONS );
-                pSet->ClearItem( SID_FILE_FILTEROPTIONS );
-                pSet->ClearItem( SID_VERSION );
-                SFX_REQUEST_ARG( rReq, pFilterItem, SfxStringItem, SID_FILTER_NAME, FALSE );
-                if ( pFilterItem )
-                    pSet->Put( *pFilterItem );
-                SFX_REQUEST_ARG( rReq, pOptionsItem, SfxStringItem, SID_OPTIONS, FALSE );
-                if ( pOptionsItem )
-                    pSet->Put( *pOptionsItem );
-                SFX_REQUEST_ARG( rReq, pFilterOptItem, SfxStringItem, SID_FILE_FILTEROPTIONS, FALSE );
-                if ( pFilterOptItem )
-                    pSet->Put( *pFilterOptItem );
-
-                SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_SAVEASDOCDONE,this));
-
-                if ( bWasReadonly )
-                    Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
-            }
 
             Invalidate();
             break;
         }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
         case SID_CLOSEDOC:
         {
             if ( !rReq.IsAPI() )
