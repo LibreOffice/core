@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolhelp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-31 16:40:36 $
+ *  last change: $Author: nn $ $Date: 2001-04-24 18:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ ScPoolHelper::ScPoolHelper( ScDocument* pSourceDoc )
     pEditPool = EditEngine::CreatePool();
     pEditPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
     pEditPool->FreezeIdRanges();
+    pEditPool->SetFileFormatVersion( SOFFICE_FILEFORMAT_50 );   // used in ScGlobal::EETextObjEqual
 
     pEnginePool = EditEngine::CreatePool();
     pEnginePool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
