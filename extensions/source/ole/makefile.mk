@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-02 09:45:59 $
+#   last change: $Author: rt $ $Date: 2004-08-20 12:34:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -144,10 +144,7 @@ UNOTYPES= \
 
 
 
-.IF "$(GUI)"=="WNT"
-
-
-
+.IF "$(GUI)"=="WNT" && "$(NETTOOLKIT)"==""
 
 SLOFILES= \
             $(SLO)$/servreg.obj		\
