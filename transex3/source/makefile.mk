@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: nf $ $Date: 2001-06-07 13:33:31 $
+#   last change: $Author: hjs $ $Date: 2001-06-20 15:16:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,9 +69,7 @@ NO_DEFAULT_STL=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  static.mk
 
 CDEFS+= -DYY_NEVER_INTERACTIVE=1
@@ -150,19 +148,13 @@ APP9STDLIBS+=$(BTSTRPLIB) $(STATIC_LIBS)
 
 DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS) $(APP9OBJS)
 
-.IF "$(depend)" == ""
-ALL : 	$(MISC)$/src_yy.c 	\
-        $(MISC)$/xml_yy.c	\
-        $(MISC)$/cfg_yy.c	\
-        ALLTAR
-.ELSE
-ALL : 	\
-        ALLTAR
-.ENDIF
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+ALLTAR : 	$(MISC)$/src_yy.c 	\
+            $(MISC)$/xml_yy.c	\
+            $(MISC)$/cfg_yy.c
 
 $(MISC)$/src_yy.c : srclex.l
     +flex -l -8 -o$(MISC)$/src_yy.c srclex.l

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2000-12-21 13:26:32 $
+#   last change: $Author: hjs $ $Date: 2001-06-20 15:14:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,8 +75,6 @@ USE_LDUMP2=TRUE
 .INCLUDE :	sv.mk
 
 # --- Allgemein ----------------------------------------------------
-
-.IF "$(depend)" == ""
 
 # --- TOOLS.HXX ---
 HXX1FILES=	$(INC)$/debug.hxx		\
@@ -250,11 +248,11 @@ DEF1DEPN = \
 
 DEFLIB1NAME =tools
 
-ALL:		$(LIB1TARGET)			\
-            ALLTAR					\
-            $(INCCOM)$/dll.hxx
-
 # --- Targets ------------------------------------------------------
+
+.INCLUDE :		target.mk
+
+ALLTAR:	$(INCCOM)$/dll.hxx
 
 # --- TOOLS.FLT ---
 $(MISC)$/$(SHL1TARGET).flt:  makefile.mk
@@ -280,18 +278,6 @@ $(MISC)$/$(SHL1TARGET).flt:  makefile.mk
 .IF "$(COM)"=="BLC"
     @echo WEP>>$@
 .ENDIF
-.ENDIF							# "$(depend)" == ""
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :		target.mk
-
-# --- TOOLS.LIB ---
-$(LB)$/$(TARGET).lib : $(LB)$/itools.lib
-    @echo ------------------------------
-    @echo Making: $@
-    @+$(COPY) $(LB)$/itools.lib $@
-
 
 # --- DLL.HXX ---
 
