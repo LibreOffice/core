@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: fs $ $Date: 2001-09-14 09:46:40 $
+#   last change: $Author: mi $ $Date: 2002-09-02 11:22:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,8 @@ IDLFILES=\
     NotRemoveableException.idl\
     Property.idl\
     PropertyAttribute.idl\
+    PropertySet.idl\
+    PropertySetInfo.idl\
     PropertyBag.idl\
     PropertyChangeEvent.idl\
     PropertyConcept.idl\
