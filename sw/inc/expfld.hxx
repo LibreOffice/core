@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-07-20 12:49:47 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,8 +166,8 @@ public:
 
     virtual USHORT              GetSubType() const;
     virtual void                SetSubType(USHORT nType);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
 
     static USHORT       GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc);
 };
@@ -238,8 +238,8 @@ public:
     const SwNode* GetOutlineChgNd() const   { return pOutlChgNd; }
     void SetOutlineChgNd( const SwNode* p ) { pOutlChgNd = p; }
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
 };
 
 inline void SwSetExpFieldType::SetType( USHORT nTyp )
@@ -305,8 +305,8 @@ public:
     // Die Formel
     virtual String              GetPar2()   const;
     virtual void                SetPar2(const String& rStr);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
 };
 
 inline const String& SwSetExpField::GetExpStr() const
@@ -380,8 +380,8 @@ public:
 
     virtual USHORT          GetSubType() const;
     virtual void            SetSubType(USHORT nSub);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
 };
 
 /*--------------------------------------------------------------------
@@ -458,12 +458,11 @@ public:
     void                CalcField( SwTblCalcPara& rCalcPara );
 
     virtual String      GetCntnt(BOOL bName = FALSE) const;
-
     // Die Formel
     virtual String      GetPar2()   const;
     virtual void        SetPar2(const String& rStr);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
 };
 
 

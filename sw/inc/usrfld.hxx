@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrfld.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,8 @@ public:
     BOOL                    IsDeleted() const       { return bDeleted; }
     void                    SetDeleted( BOOL b )    { bDeleted = b; }
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
 };
 
 inline BOOL SwUserFieldType::IsValid() const
@@ -159,8 +159,8 @@ public:
     // Inhalt
     virtual String          GetPar2() const;
     virtual void            SetPar2(const String& rStr);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
 };
 
 #endif // _USRFLD_HXX

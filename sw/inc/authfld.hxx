@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-06-06 10:41:23 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,8 @@ public:
     virtual SwFieldType* Copy()    const;
     virtual void        Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
 
     inline SwDoc*   GetDoc() const                      { return m_pDoc; }
     inline void     SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
@@ -223,8 +223,8 @@ public:
     virtual void        SetPar1(const String& rStr);
     virtual SwFieldType* ChgTyp( SwFieldType* );
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
 
     long                GetHandle() const       { return nHandle; }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:13:10 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,8 @@ public:
     const String&   GetColumnName() const {return sColumn;}
     const SwDBData& GetDBData() const {return aDBData;}
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
 };
 
 /*--------------------------------------------------------------------
@@ -156,8 +156,8 @@ public:
 
     // DBName
     inline const SwDBData&  GetDBData() const { return ((SwDBFieldType*)GetTyp())->GetDBData(); }
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
 };
 
 inline  void SwDBField::SetExpansion(const String& rStr)
@@ -194,8 +194,8 @@ public:
 
     // Name oder Inhalt
     virtual String          GetCntnt(BOOL bName = FALSE) const;
-    virtual BOOL            QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
-    virtual BOOL            PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
+    virtual BOOL            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
+    virtual BOOL            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
 };
 
 
@@ -235,8 +235,8 @@ public:
     // Condition
     virtual const String&   GetPar1() const;
     virtual void            SetPar1(const String& rStr);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
 };
 
 inline BOOL SwDBNextSetField::IsCondValid() const
@@ -289,8 +289,8 @@ public:
     virtual void            SetPar2(const String& rStr);
 
     // Die Datensatznummer steht in nFormat !!
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
 };
 
 inline BOOL SwDBNumSetField::IsCondValid() const
@@ -324,8 +324,8 @@ public:
 
     virtual String   Expand() const;
     virtual SwField* Copy() const;
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
 };
 
 /*--------------------------------------------------------------------
@@ -357,8 +357,8 @@ public:
 
     inline long     GetSetNumber() const;
     inline void     SetSetNumber(long nNum);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
 };
 
 inline long SwDBSetNumberField::GetSetNumber() const
