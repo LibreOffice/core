@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astunionbranch.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:23:01 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 class AstUnionBranch : public AstMember
 {
 public:
-    AstUnionBranch(AstUnionLabel* pLabel, AstType* pType, const ::rtl::OString& name, AstScope* pScope);
+    AstUnionBranch(AstUnionLabel* pLabel, AstType const * pType, const ::rtl::OString& name, AstScope* pScope);
     virtual ~AstUnionBranch();
 
     AstUnionLabel* getLabel()
