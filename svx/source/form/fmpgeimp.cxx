@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:17:22 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,7 +379,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::SetDefaults(const Re
     Reference< XPropertySet >  xSet;
 
     // Wenn Datenbank und CursorSource gesetzt sind, dann wird
-    // die ::com::sun::star::form anhand dieser Kriterien gesucht, ansonsten nur aktuelle
+    // die Form anhand dieser Kriterien gesucht, ansonsten nur aktuelle
     // und die StandardForm
     if (rDatabase.is() && rCursorSource.getLength())
     {
