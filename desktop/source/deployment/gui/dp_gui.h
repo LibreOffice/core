@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:04:55 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 10:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,18 @@ struct DialogImpl :
     static ResId getResId( USHORT id );
     static String getResourceString( USHORT id );
 
+    struct SelectionBoxControl : public Control
+    {
+        SelectionBoxControl( DialogImpl * dialog )
+            : Control( dialog, WB_BORDER | WB_TABSTOP ),
+              m_dialog(dialog)
+            {}
+        long Notify( NotifyEvent & rEvt );
+
+    private:
+        DialogImpl * m_dialog;
+    };
+
     struct TreeListBoxImpl : public SvHeaderTabListBox
     {
         typedef ::std::list<
@@ -124,7 +136,7 @@ struct DialogImpl :
             css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
         DialogImpl * m_dialog;
-        SvLBoxEntry * m_currentEntry;
+        SvLBoxEntry * m_currentSelectedEntry;
         bool m_hiContrastMode;
         Timer m_timer;
 
@@ -156,12 +168,13 @@ struct DialogImpl :
         virtual ~TreeListBoxImpl();
         TreeListBoxImpl( Window * pParent, DialogImpl * dialog );
 
-        bool isFirstLevelChild( SvLBoxEntry * entry );
-        ::rtl::OUString getContext( SvLBoxEntry * entry );
+        SvLBoxEntry * getCurrentSingleSelectedEntry() const;
+        bool isFirstLevelChild( SvLBoxEntry * entry ) const;
+        ::rtl::OUString getContext( SvLBoxEntry * entry ) const;
         css::uno::Reference<css::deployment::XPackage> getPackage(
-            SvLBoxEntry * entry );
+            SvLBoxEntry * entry ) const;
         css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> >
-        getSelectedPackages( bool onlyFirstLevel = false );
+        getSelectedPackages( bool onlyFirstLevel = false ) const;
     };
 
     class SyncPushButton : public PushButton
@@ -234,7 +247,7 @@ struct DialogImpl :
 
     // controls:
     ::std::auto_ptr<FixedText> m_ftPackages;
-    ::std::auto_ptr<Control> m_selectionBox;
+    ::std::auto_ptr<SelectionBoxControl> m_selectionBox;
     ::std::auto_ptr<HeaderBar> m_headerBar;
     ::std::auto_ptr<TreeListBoxImpl> m_treelb;
 
