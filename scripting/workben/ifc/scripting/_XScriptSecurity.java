@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScriptSecurity.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-26 13:29:48 $
+ *  last change:$Date: 2003-02-26 17:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-package ifc.script.framework;
+package ifc.script.framework.security;
 
 import java.util.HashMap;
 import java.util.Iterator;
