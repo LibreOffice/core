@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testlistener.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-27 17:14:27 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ namespace DOM { namespace events
         m_capture = bCapture;
 
         m_target->addEventListener(m_type, Reference< XEventListener >(this), m_capture);
-        
+
 
     }
 
@@ -163,7 +163,7 @@ namespace DOM { namespace events
     {
         FILE* f = fopen("C:\\listener.out", "a");
         fprintf(f, "CTestListener::handleEvent in %s\n", U2S(m_name));
-        fprintf(f, "    type: %s\n\n", OUStringToOString(evt->getType(), RTL_TEXTENCODING_ASCII_US).getStr());        
+        fprintf(f, "    type: %s\n\n", OUStringToOString(evt->getType(), RTL_TEXTENCODING_ASCII_US).getStr());
         fclose(f);
 
     }
