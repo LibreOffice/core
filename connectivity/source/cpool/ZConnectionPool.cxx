@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionPool.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 09:13:25 $
+ *  last change: $Author: fs $ $Date: 2001-05-25 10:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,16 @@
 #ifndef CONNECTIVITY_POOLEDCONNECTION_HXX
 #include "ZPooledConnection.hxx"
 #endif
+#ifndef _CONNECTIVITY_CPOOL_ZDRIVERWRAPPER_HXX_
+#include "ZDriverWrapper.hxx"
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::reflection;
 using namespace ::osl;
 using namespace connectivity;
 
@@ -109,8 +113,18 @@ OConnectionPool::OConnectionPool(const Reference< XMultiServiceFactory >&   _rxF
 {
     // bootstrap all objects supporting the .sdb.Driver service
     m_xManager = Reference< XDriverManager >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdbc.DriverManager") ), UNO_QUERY);
+    m_xDriverAccess = Reference< XDriverAccess >(m_xManager, UNO_QUERY);
+
+    OSL_ENSURE(m_xDriverAccess.is(), "OConnectionPool::OConnectionPool: have no (or an invalid) driver manager!");
+
     m_xTimer = new OPoolTimer(this,::vos::TTimeValue(10,0));
     m_xTimer->start();
+
+    m_xProxyFactory = Reference< XProxyFactory >(
+        m_xServiceFactory->createInstance(
+            ::rtl::OUString::createFromAscii("com.sun.star.reflection.ProxyFactory")),
+        UNO_QUERY);
+    OSL_ENSURE(m_xProxyFactory.is(), "OConnectionPool::OConnectionPool: could not create a proxy factory!");
 }
 // -----------------------------------------------------------------------------
 OConnectionPool::~OConnectionPool()
@@ -234,7 +248,45 @@ Sequence< ::rtl::OUString > SAL_CALL OConnectionPool::getSupportedServiceNames_S
 //--------------------------------------------------------------------------
 Reference< XDriver > SAL_CALL OConnectionPool::getDriverByURL( const ::rtl::OUString& _rURL ) throw(RuntimeException)
 {
-    return Reference< XDriverAccess>(m_xManager,UNO_QUERY)->getDriverByURL(_rURL);
+    Reference< XDriver > xDriver;
+    if (m_xDriverAccess.is())
+    {
+        xDriver = m_xDriverAccess->getDriverByURL(_rURL);
+
+        Reference< XDriver > xExistentProxy;
+        // look if we already have a proxy for this driver
+        for (   ConstMapDriver2DriverRefIterator aLookup = m_aDriverProxies.begin();
+                aLookup != m_aDriverProxies.end();
+                ++aLookup
+            )
+        {
+            // hold the proxy alive as long as we're in this loop round
+            xExistentProxy = aLookup->second;
+
+            if (xExistentProxy.is() && (aLookup->first.get() == xDriver.get()))
+                // already created a proxy for this
+                break;
+        }
+        if (xExistentProxy.is())
+        {
+            xDriver = xExistentProxy;
+        }
+        else
+        {   // create a new proxy for the driver
+            // this allows us to control the connections created by it
+            if (m_xProxyFactory.is())
+            {
+                Reference< XAggregation > xDriverProxy = m_xProxyFactory->createProxy(xDriver.get());
+                OSL_ENSURE(xDriverProxy.is(), "OConnectionPool::getDriverByURL: invalid proxy returned by the proxy factory!");
+
+                xDriver = new ODriverWrapper(xDriverProxy, this);
+            }
+            else
+                OSL_ENSURE(sal_False, "OConnectionPool::getDriverByURL: could not instantiate a proxy factory!");
+        }
+    }
+
+    return xDriver;
 }
 
 //--------------------------------------------------------------------------

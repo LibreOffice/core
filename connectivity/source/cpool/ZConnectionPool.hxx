@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionPool.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-26 09:12:37 $
+ *  last change: $Author: fs $ $Date: 2001-05-25 10:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,12 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_REFLECTION_XPROXYFACTORY_HPP_
+#include <com/sun/star/reflection/XProxyFactory.hpp>
+#endif
+#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include <cppuhelper/weakref.hxx>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
 #endif
@@ -123,6 +129,9 @@ namespace connectivity
     };
 
     //==========================================================================
+    typedef ::comphelper::OInterfaceCompare< ::com::sun::star::sdbc::XDriver >  ODriverCompare;
+
+    //==========================================================================
     //= OConnectionPool - the one-instance service for PooledConnections
     //= manages the active connections and the connections in the pool
     //==========================================================================
@@ -135,7 +144,7 @@ namespace connectivity
     // typedef for the interanl structure
     typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPooledConnection> > TPooledConnections;
 
-     DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Any,PropertyMap);
+    DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Any,PropertyMap);
      // contains the currently pooled connections
     typedef struct
     {
@@ -166,6 +175,16 @@ namespace connectivity
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriverManager >          m_xManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriverAccess >           m_xDriverAccess;
+        ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >     m_xProxyFactory;
+
+        DECLARE_STL_MAP(
+                ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >,
+                ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDriver >,
+                ODriverCompare,
+                MapDriver2DriverRef );
+
+        MapDriver2DriverRef     m_aDriverProxies;
 
     private:
         OConnectionPool(
