@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ServiceManager.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-14 11:54:57 $
+ *  last change: $Author: sb $ $Date: 2002-10-30 15:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 
 package com.sun.star.comp.servicemanager;
 
-import com.sun.star.uno.IQueryInterface;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
@@ -103,7 +102,7 @@ import java.lang.reflect.InvocationTargetException;
  * calls to the implementing objects and are used instead of casts
  * and identity comparisons.
  * <p>
- * @version     $Revision: 1.5 $ $ $Date: 2001-06-14 11:54:57 $
+ * @version     $Revision: 1.6 $ $ $Date: 2002-10-30 15:28:39 $
  * @author      Markus Herzog
  * @see         com.sun.star.lang.XMultiServiceFactory
  * @see         com.sun.star.container.XSet
@@ -792,7 +791,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * implementation of the @see com.sun.star.container.XEnumeration interface.
      * It is a inner wrapper for a java.util.Enumeration object.
      * <p>
-     * @version     $Revision: 1.5 $ $ $Date: 2001-06-14 11:54:57 $
+     * @version     $Revision: 1.6 $ $ $Date: 2002-10-30 15:28:39 $
      * @author      Markus Herzog
      * @see         com.sun.star.lang.XSingleServiceFactory
      * @see         com.sun.star.lang.XServiceInfo
@@ -865,7 +864,7 @@ public class ServiceManager implements XMultiServiceFactory,
  * com.sun.star.lang.XSingleServiceFactory and the com.sun.star.lang.XServiceInfo
  * interfaces.
  * <p>
- * @version     $Revision: 1.5 $ $ $Date: 2001-06-14 11:54:57 $
+ * @version     $Revision: 1.6 $ $ $Date: 2002-10-30 15:28:39 $
  * @author      Markus Herzog
  * @see         com.sun.star.lang.XSingleServiceFactory
  * @see         com.sun.star.lang.XServiceInfo

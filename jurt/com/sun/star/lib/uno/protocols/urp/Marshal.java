@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Marshal.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sb $ $Date: 2001-12-20 08:54:37 $
+ *  last change: $Author: sb $ $Date: 2002-10-30 15:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@ import java.lang.reflect.Modifier;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.Enum;
 import com.sun.star.uno.IBridge;
-import com.sun.star.uno.IQueryInterface;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.Union;

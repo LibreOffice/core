@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sb $ $Date: 2002-09-17 14:58:52 $
+ *  last change: $Author: sb $ $Date: 2002-10-30 15:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,6 @@ import com.sun.star.uno.IEnvironment;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.Type;
-import com.sun.star.uno.IQueryInterface;
 
 /**
  * This class implements a remote bridge. Therefor
@@ -132,7 +131,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.26 $ $ $Date: 2002-09-17 14:58:52 $
+ * @version     $Revision: 1.27 $ $ $Date: 2002-10-30 15:29:36 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0

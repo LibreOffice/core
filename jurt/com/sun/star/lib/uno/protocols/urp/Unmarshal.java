@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Unmarshal.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-17 12:46:28 $
+ *  last change: $Author: sb $ $Date: 2002-10-30 15:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@ import com.sun.star.bridge.XInstanceProvider;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.Enum;
 import com.sun.star.uno.IBridge;
-import com.sun.star.uno.IQueryInterface;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.Union;
