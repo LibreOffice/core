@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pubdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-17 08:39:19 $
+ *  last change: $Author: sj $ $Date: 2001-05-31 13:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ private:
     Edit*           pPage2_CGI;
     FixedText*      pPage2_Index_txt;
     Edit*           pPage2_Index;
-
+    FixedLine*      pPage2_Vert;
     FixedLine*      pPage2_Titel_Kiosk;
     RadioButton*    pPage2_ChgDefault;
     RadioButton*    pPage2_ChgAuto;
