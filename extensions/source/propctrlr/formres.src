@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:48:37 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:28:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ ModalDialog RID_DLG_SELECTLABELCONTROL
         Text[ english_us ] = "These are control fields that can be used as label fields for the $control_class$ $control_name$.";
         Text[ portuguese ] = "Estes sγo todos os campos de controlo que podem ser atribuνdos a $control_class$ $control_name$ como campos de rσtulos.";
         Text[ russian ] = "έλεμενςϋ σοπΰβλενθÿ, κξςξπϋε μξγσς αϋςό βϋαπΰνϋ δλÿ $control_class$ $control_name$ β κΰχερςβε νΰδοθρει.";
-        Text[ greek ] = "Αυτά είναι όλα τα πεδία ελέγχου τα οποία μπορούν να χρησιμοποιηθούν ως πεδίο επιγραφής για το $control_class$ $control_name$.";
+        Text[ greek ] = "Αυτά είναι όλα τα πεδία ελέγχου τα οποία μπορούν να χρησιμοποιηθούν ως πεδίο επισήμανσης για το $control_class$ $control_name$.";
         Text[ dutch ] = "Dit zijn controlevelden die als titelveld kunnen worden toegewezen aan $control_class$ $control_name$.";
         Text[ french ] = "Voici tous les champs de contrτle qui peuvent κtre assignιs comme champ d'ιtiquette ΰ $control_class$ $control_name$.";
         Text[ spanish ] = "Estos son todos los campos de control que pueden asignarse al $control_class$ $control_name$ como campo de etiqueta.";
@@ -156,7 +156,7 @@ ModalDialog RID_DLG_SELECTLABELCONTROL
         Text[ english_us ] = "~No assignment";
         Text[ portuguese ] = "~nenhuma atribuiηγo";
         Text[ russian ] = "~Νε νΰηνΰχΰςό";
-        Text[ greek ] = "χωρίς αντιστοίχιση";
+        Text[ greek ] = "χωρίς ανάθεση";
         Text[ dutch ] = "~geen toewijzing";
         Text[ french ] = "~Aucune assignation";
         Text[ spanish ] = "~sin asignaciσn";
@@ -200,7 +200,7 @@ ModalDialog RID_DLG_SELECTLABELCONTROL
     Text[ english_us ] = "Label Field Selection";
     Text[ portuguese ] = "Selecηγo de campo de rσtulo";
     Text[ russian ] = "Βϋαξπ νΰδοθρθ";
-    Text[ greek ] = "Επιλογή πεδίου επιγραφής";
+    Text[ greek ] = "Επιλογή πεδίου επισήμανσης";
     Text[ dutch ] = "Selectie titelveld";
     Text[ french ] = "Sιlection de champ d'ιtiquette";
     Text[ spanish ] = "Selecciσn campo de etiqueta";
@@ -350,7 +350,7 @@ String RID_STR_PROPTITLE_FIXEDTEXT
     Text[ polish ] = "Pole etykiety";
     Text[ japanese ] = "γƒ©γƒ™γƒ«γƒ•γ‚£γƒΌγƒ«γƒ‰";
     Text[ chinese_traditional ] = "ζ¨™η±¤ζ¬„δ½";
-    Text[ greek ] = "Πεδίο επιγραφής";
+    Text[ greek ] = "Πεδίο επισήμανσης";
     Text[ korean ] = "λ μ΄λΈ” ν•„λ“";
     Text[ arabic ] = "Νήα ΪδζδΙ";
     Text[ turkish ] = "Alan Etiketi";
@@ -677,7 +677,7 @@ String RID_STR_PROPTITLE_DATEFIELD
     Text [ ENGLISH ] = "DateField" ;
     Text [ portuguese ] = "Campo para data" ;
     Text [ english_us ] = "Date Field" ;
-    Text [ portuguese_brazilian ] = "Campo para Data" ;
+    Text [ portuguese_brazilian ] = "Campo de data" ;
     Text [ swedish ] = "Datumfδlt" ;
     Text [ danish ] = "Datofelt" ;
     Text [ italian ] = "Campo data" ;
@@ -708,7 +708,7 @@ String RID_STR_PROPTITLE_TIMEFIELD
     Text [ ENGLISH ] = "TimeField" ;
     Text [ portuguese ] = "Campo para hora" ;
     Text [ english_us ] = "Time Field" ;
-    Text [ portuguese_brazilian ] = "Campo para Hora" ;
+    Text [ portuguese_brazilian ] = "Campo de hora" ;
     Text [ swedish ] = "Tidsfδlt" ;
     Text [ danish ] = "Klokkeslζtsfelt" ;
     Text [ italian ] = "Campo orario" ;
@@ -770,7 +770,7 @@ String RID_STR_PROPTITLE_CURRENCYFIELD
     Text [ ENGLISH ] = "CurrencyField" ;
     Text [ portuguese ] = "Campo para moeda" ;
     Text [ english_us ] = "Currency Field" ;
-    Text [ portuguese_brazilian ] = "Campo para Moeda" ;
+    Text [ portuguese_brazilian ] = "Campo monetαrio" ;
     Text [ swedish ] = "Valutafδlt" ;
     Text [ danish ] = "Valutafelt" ;
     Text [ italian ] = "Campo di valuta" ;
@@ -968,7 +968,7 @@ String RID_STR_ENABLED
     Text[ polish ] = "W³Ήczony";
     Text[ japanese ] = "γ‚Άγ‚―γƒ†γ‚£γƒ–γ«γ™γ‚‹";
     Text[ chinese_traditional ] = "δ½Ώη”¨δΈ­";
-    Text[ greek ] = "Ενεργοποιημένο";
+    Text[ greek ] = "Ενεργοποιημένη";
     Text[ korean ] = "ν™μ„±ν™”";
     Text[ arabic ] = "δΤΨ";
     Text[ turkish ] = "Etkin";
@@ -1464,7 +1464,7 @@ String RID_STR_EMPTY_IS_NULL
     Text[ polish ] = "Pusty ciΉg znakσw jest ZEREM";
     Text[ japanese ] = "η©Ίη™½γ®ζ–‡ε­—ε—γ―γ‚Όγƒ­γ¨γΏγªγ™";
     Text[ chinese_traditional ] = "η©Ίζ Όε­—ε…ƒζ― NULL";
-    Text[ greek ] = "Κενή ακολουθία χαρακτήρων είναι NULL (ΜΗΔΕΝ)";
+    Text[ greek ] = "Κενή ακολουθία χαρακτήρων είναι NULL (μηδενικών χαρακτήρων)";
     Text[ korean ] = "λΉ„μ–΄ μλ” λ¬Έμμ—΄μ€ NULLμ„";
     Text[ arabic ] = "ΣαΣαΙ ΗαΓΝΡέ ΗαέΗΡΫΙ ΚΪΚΘΡ NULL";
     Text[ turkish ] = "NULL olan verileri sil";
@@ -1608,7 +1608,7 @@ String RID_STR_LABELCONTROL
     Text[ english_us ] = "Label Field";
     Text[ portuguese ] = "Campo de rσtulo";
     Text[ russian ] = "Νΰδοθρό";
-    Text[ greek ] = "Πεδίο επιγραφής";
+    Text[ greek ] = "Πεδίο επισήμανσης";
     Text[ dutch ] = "Titelveld";
     Text[ french ] = "Champ d'ιtiquette";
     Text[ spanish ] = "Campo de etiqueta";
@@ -1854,7 +1854,7 @@ String RID_STR_MULTILINE
     Text [ English ] = "Multiline" ;
     Text [ portuguese ] = "Vαrias linhas" ;
     Text [ english_us ] = "Multiline input" ;
-    Text [ portuguese_brazilian ] = "Entrada de multilinhas" ;
+    Text [ portuguese_brazilian ] = "Entrada de multi-linhas" ;
     Text [ swedish ] = "Flerradig" ;
     Text [ danish ] = "Flerlinjede" ;
     Text [ italian ] = "Digitazione a piω righe" ;
@@ -1866,7 +1866,7 @@ String RID_STR_MULTILINE
     Text[ polish ] = "Wielowierszowy";
     Text[ japanese ] = "θ¤‡ζ•°θ΅";
     Text[ chinese_traditional ] = "ε¤θ΅";
-    Text[ greek ] = "Περισσότερες γραμμές";
+    Text[ greek ] = "Εισαγωγή σε πολλές γραμμές";
     Text[ korean ] = "μ—¬λ¬ μ¤„ μ…λ ¥";
     Text[ arabic ] = "γΚΪΟΟ ΗαΓΣΨΡ";
     Text[ turkish ] = "Ηok satύrlύ girdi";
@@ -1885,7 +1885,7 @@ String RID_STR_MULTISELECTION
     Text [ English ] = "Multiselection" ;
     Text [ portuguese ] = "Multi-selecηγo" ;
     Text [ english_us ] = "Multiselection" ;
-    Text [ portuguese_brazilian ] = "Multi seleηγo" ;
+    Text [ portuguese_brazilian ] = "Multi-seleηγo" ;
     Text [ swedish ] = "Multimarkering" ;
     Text [ danish ] = "Multimarkering" ;
     Text [ italian ] = "Selezione multipla" ;
@@ -2237,7 +2237,7 @@ String RID_STR_DROPDOWN
     Text[ polish ] = "Rozwijane";
     Text[ japanese ] = "γƒ‰γƒ­γƒƒγƒ—γƒ€γ‚¦γƒ³";
     Text[ chinese_traditional ] = "ε―ζ“΄ε±•";
-    Text[ greek ] = "Δυνατότητα ανοίγματος";
+    Text[ greek ] = "Αναπτυσσόμενο";
     Text[ korean ] = "λ“λ΅­λ‹¤μ΄";
     Text[ arabic ] = "γδΣΟα";
     Text[ turkish ] = "AώaπύListele";
@@ -2287,7 +2287,7 @@ String RID_STR_LISTSOURCE
     Text [ English ] = "Listsource" ;
     Text [ portuguese ] = "Contιudo da lista" ;
     Text [ english_us ] = "List content" ;
-    Text [ portuguese_brazilian ] = "Contιudo da lista" ;
+    Text [ portuguese_brazilian ] = "Conteϊdo da lista" ;
     Text [ swedish ] = "Listinnehεll" ;
     Text [ danish ] = "Listeindhold" ;
     Text [ italian ] = "Contenuto elenco" ;
@@ -2625,7 +2625,7 @@ String RID_STR_VALUEMIN
     Text [ English ] = "Value min." ;
     Text [ portuguese ] = "Valor min." ;
     Text [ english_us ] = "Value min." ;
-    Text [ portuguese_brazilian ] = "Valor min." ;
+    Text [ portuguese_brazilian ] = "Valor mνn." ;
     Text [ swedish ] = "Minimivδrde" ;
     Text [ danish ] = "Min. vζrdi" ;
     Text [ italian ] = "Valore min." ;
@@ -2749,7 +2749,7 @@ String RID_STR_DATEMIN
     Text [ English ] = "Date min." ;
     Text [ portuguese ] = "Data min." ;
     Text [ english_us ] = "Date min." ;
-    Text [ portuguese_brazilian ] = "Data min." ;
+    Text [ portuguese_brazilian ] = "Data mνn." ;
     Text [ swedish ] = "Minimidatum" ;
     Text [ danish ] = "Min. dato" ;
     Text [ italian ] = "Data min." ;
@@ -2842,7 +2842,7 @@ String RID_STR_TIMEMIN
     Text [ English ] = "Time min." ;
     Text [ portuguese ] = "min. de horas" ;
     Text [ english_us ] = "Time min." ;
-    Text [ portuguese_brazilian ] = "Min. de horas" ;
+    Text [ portuguese_brazilian ] = "Mνn. de horas" ;
     Text [ swedish ] = "Minimitid" ;
     Text [ danish ] = "Min. klokkeslζt" ;
     Text [ italian ] = "Tempo min." ;
@@ -2936,7 +2936,7 @@ String RID_STR_CURRSYM_POSITION
     Text[ english_us ] = "Prefix symbol";
     Text[ portuguese ] = "Colocar sνmbolo antes";
     Text[ russian ] = "Ρθμβξλ οεπεδ φθτπΰμθ";
-    Text[ greek ] = "Τοποθέτηση συμβόλου μπροστά";
+    Text[ greek ] = "Σύμβολο προθέματος";
     Text[ dutch ] = "Valutateken vooraan";
     Text[ french ] = "Placer le symbole avant le nombre";
     Text[ spanish ] = "Situar sνmbolo delante";
@@ -3040,7 +3040,7 @@ String RID_STR_CLASSID
     Text[ polish ] = "Identyfikator klasy";
     Text[ japanese ] = "γ‚―γƒ©γ‚Ήγ‚¤γƒ³γƒ‡γƒƒγ‚―γ‚Ή";
     Text[ chinese_traditional ] = "η¨‹εΌι΅η΄ΆεΌ•";
-    Text[ greek ] = "Ευρετήριο κλάσης";
+    Text[ greek ] = "Αναγνωριστικό κατηγορίας";
     Text[ korean ] = "ν΄λμ¤ ID";
     Text[ arabic ] = "έεΡΣ ΗαΨΘήΗΚ";
     Text[ turkish ] = "Sύnύf Numarasύ";
@@ -3647,7 +3647,7 @@ String RID_STR_ENUM_SIDE_ALIGN
     Text [ english_us ] = "Left;Top;Right;Bottom" ;
     Text[ portuguese ] = "Esquerda;Topo;Direita;Base";
     Text[ russian ] = "Ρλεβΰ;Ρβεπυσ;Ροπΰβΰ;Ρνθησ";
-    Text[ greek ] = "Left;Top;Right;Bottom";
+    Text[ greek ] = "Αριστερά;Πάνω;Δεξιά;Κάτω";
     Text[ dutch ] = "Links;Boven;Rechts;Beneden";
     Text[ french ] = "ΐ gauche;En haut;ΐ droite;En bas";
     Text[ spanish ] = "Izquierda;Arriba;Derecha;Abajo";
@@ -3676,7 +3676,7 @@ String RID_STR_ENUM_BUTTONTYPE
     Text [ English ] = "Push;Submit;Reset;Url" ;
     Text [ portuguese ] = "Push;Submit;Reset;Url" ;
     Text [ english_us ] = "Push;Submit;Reset;Url" ;
-    Text [ portuguese_brazilian ] = "Push;Submit;Reset;Url" ;
+    Text [ portuguese_brazilian ] = "Pressionar;Submeter;Restaurar;URL" ;
     Text [ swedish ] = "Push;Submit;Reset;Url" ;
     Text [ danish ] = "Push;Send;Nulstil;Url" ;
     Text [ italian ] = "Push;Submit;Reset;Url" ;
@@ -3738,7 +3738,7 @@ String RID_STR_ENUM_SUBMIT_ENCODING
     Text [ English ] = "URL;Multipart;Text" ;
     Text [ portuguese ] = "URL;Multipart;Texto" ;
     Text [ english_us ] = "URL;Multipart;Text" ;
-    Text [ portuguese_brazilian ] = "URL;Multiparte;Texto" ;
+    Text [ portuguese_brazilian ] = "URL;Multi-parte;Texto" ;
     Text [ swedish ] = "URL;Multipart;Text" ;
     Text [ danish ] = "URL;Flere dele;Tekst" ;
     Text [ italian ] = "URL;Multipart;Testo" ;
@@ -3781,7 +3781,7 @@ String RID_STR_DATEFORMAT_LIST
     Text[ polish ] = "Standardowy (krσtki);Standardowy (krσtki RR);Standardowy (krσtki RRRR);Standardowy (krσtki);DD.MM.RR;MM.DD.RR;RR.MM.DD;DD.MM.RRRR;MM.DD.RRRR;RRRR.MM.DD;RR-MM-DD (DIN5008);RRRR-MM-DD (DIN5008)";
     Text[ japanese ] = "ζ¨™ζΊ–(η­γ„ε½ΆεΌ);ζ¨™ζΊ–(η­γ„ε½ΆεΌ YY);ζ¨™ζΊ–(η­γ„ε½ΆεΌ YYYY);ζ¨™ζΊ–(ι•·γ„ε½ΆεΌοΌ‰;DD.MM.YY;MM.DD.YY;YY.MM.DD;DD.MM.YYYY;MM.DD.YYYY;YYYY.MM.DD;YY-MM-DD (DIN5008);YYYY-MM-DD (DIN5008)";
     Text[ chinese_traditional ] = "ζ¨™ζΊ–(ηΈ®ε―«);ζ¨™ζΊ–(ηΈ®ε―« JJ);ζ¨™ζΊ–(ηΈ®ε―« JJJJ);ζ¨™ζΊ–(ε®ζ•΄);TT.MM.JJ;MM.TT.JJ;JJ.MM.TT;TT.MM.JJJJ;MM.TT.JJJJ;JJJJ.MM.TT;JJ-MM-TT (DIN5008);JJJJ-MM-TT (DIN5008)";
-    Text[ greek ] = "Προεπιλογή (σύντομο);Προεπιλογή (σύντομο YY);Προεπιλογή (σύντομο YYYY);Προεπιλογή (μακρύ);DD.MM.YY;MM.DD.YY;YY.MM.DD;DD.MM.YYYY;MM.DD.YYYY;YYYY.MM.DD;YY-MM-DD (DIN5008);YYYY-MM-DD (DIN5008) ";
+    Text[ greek ] = "Τυπική (σύντομη);Τυπική (σύντομη ΕΕ);Τυπική (σύντομη ΕΕΕΕ);Τυπική (πλήρης);ΗΗ/ΜΜ/ΕΕ;ΜΜ/ΗΗ/ΕΕ;ΕΕ/ΜΜ/ΗΗ;ΗΗ/ΜΜ/ΕΕΕΕ;ΜΜ/ΗΗ/ΕΕΕΕ;ΕΕΕΕ/ΜΜ/ΗΗ;ΕΕ-ΜΜ-ΗΗ;ΕΕΕΕ-ΜΜ-ΗΗ";
     Text[ korean ] = "ν‘μ¤€(μ§§κ²);ν‘μ¤€(μ§§κ²YY);ν‘μ¤€(μ§§κ²YYYY);ν‘μ¤€(κΈΈκ²);DD.MM.YY;MM.DD.YY;YY.MM.DD;DD.MM.YYYY;MM.DD.YYYY;YYYY.MM.DD;YY-MM-DD (DIN5008);YYYY-MM-DD (DIN5008)";
     Text[ arabic ] = "ήνΗΣν (ήΥνΡ)ΊήνΗΣν (ήΥνΡ YY)ΊήνΗΣν (ήΥνΡ YYY)ΊήνΗΣν (Ψζνα)ΊDD.MM.YYΊMM.DD.YYΊYY.MM.DDΊDD.MM.YYYYΊMM.DD.YYYYΊYYYY.MM.DDΊYY-MM-DD (DIN5008)ΊYYYY-MM-DD (DIN5008)";
     Text[ turkish ] = "Standart(kύsa); Standart(kύsa YY); Standart (kύsa YYYY); Standart(uzun);GG/AA/YY;AA/GG/YY;YY/AA/GG;GG/AA/YYYY;AA/GG/YYYY;YYYY/AA/GG;YY-AA-GG;YYYY-AA-GG";
@@ -4053,7 +4053,7 @@ String RID_STR_EVT_APPROVEROWCHANGE
     Text [ english_us ] = "Before record action" ;
     Text[ portuguese ] = "Antes de modificar registo de dados";
     Text[ russian ] = "Οεπεδ ρξυπΰνενθεμ";
-    Text[ greek ] = "Πριν την αλλαγή της εγγραφής";
+    Text[ greek ] = "Πριν την ενέργεια εγγραφής";
     Text[ dutch ] = "Voor het bewerken van de record";
     Text[ french ] = "Avant l'opιration d'enregistrement";
     Text[ spanish ] = "Antes de la acciσn en el registro de datos";
@@ -4083,7 +4083,7 @@ String RID_STR_EVT_ROWCHANGE
     Text [ english_us ] = "After record action" ;
     Text[ portuguese ] = "Depois de modificar registo de dados";
     Text[ russian ] = "Οξρλε ρξυπΰνενθÿ";
-    Text[ greek ] = "Μετά την αλλαγή της εγγραφής";
+    Text[ greek ] = "Μετά την ενέργεια εγγραφής";
     Text[ dutch ] = "Na het bewerken van de record";
     Text[ french ] = "Aprθs l'opιration d'enregistrement";
     Text[ spanish ] = "Despuιs de la acciσn en el registro de datos";
@@ -4217,7 +4217,7 @@ String RID_STR_EVT_FOCUSLOST
     Text[ polish ] = "Po utracie ogniska";
     Text[ japanese ] = "γƒ•γ‚©γƒΌγ‚«γ‚Ήγ‚’ε¤±γ£γζ™‚";
     Text[ chinese_traditional ] = "ε¨ει›Άη›®ζ¨™ζ™‚";
-    Text[ greek ] = "Στην περίπτωση απώλειας εστίας";
+    Text[ greek ] = "Στην περίπτωση απώλειας εστίασης";
     Text[ korean ] = "μ΄μ μ„ μƒμ—μ„ λ•";
     Text[ arabic ] = "έήΟΗδ ΗαΚΡίνÒ";
     Text[ turkish ] = "Odaklanma kaybedilirken";
@@ -4236,7 +4236,7 @@ String RID_STR_EVT_ITEMSTATECHANGED
     Text [ English ] = "Item state changed" ;
     Text [ portuguese ] = "Estado modificado" ;
     Text [ english_us ] = "Item status changed" ;
-    Text [ portuguese_brazilian ] = "O status do item foi alterado" ;
+    Text [ portuguese_brazilian ] = "O status do νtem foi alterado" ;
     Text [ swedish ] = "Status δndrad" ;
     Text [ danish ] = "Status ζndret" ;
     Text [ italian ] = "Stato modificato" ;
@@ -4361,7 +4361,7 @@ String RID_STR_EVT_RELOADING
     Text [ english_us ] = "Before reloading" ;
     Text[ portuguese ] = "Antes de recarregar";
     Text[ russian ] = "Οεπεδ οξβςξπνξι ηΰγπσηκξι";
-    Text[ greek ] = "Before reloading";
+    Text[ greek ] = "Πριν από την επαναφόρτωση";
     Text[ dutch ] = "Alvorens opnieuw te laden";
     Text[ french ] = "Avant le rechargement";
     Text[ spanish ] = "Antes de recargar";
@@ -4926,7 +4926,7 @@ String RID_STR_EVENTS
     Text[ polish ] = "Wydarzenia";
     Text[ japanese ] = "γ‚¤γƒ™γƒ³γƒ";
     Text[ chinese_traditional ] = "δΊ‹δ»¶";
-    Text[ greek ] = "Γεγονότα";
+    Text[ greek ] = "Συμβάντα";
     Text[ korean ] = "μ΄λ²¤νΈ";
     Text[ arabic ] = "ΗαΓΝΟΗΛ";
     Text[ turkish ] = "Olaylar";
@@ -4984,7 +4984,7 @@ String RID_STR_POSITIONX
     Text[ danish ] = "X-position";
     Text[ swedish ] = "PositionX";
     Text[ polish ] = "PozycjaX";
-    Text[ portuguese_brazilian ] = "PosiηγoX";
+    Text[ portuguese_brazilian ] = "Posiηγo X";
     Text[ japanese ] = "δ½η½® X";
     Text[ korean ] = "μ„μΉX";
     Text[ chinese_simplified ] = "δ½η½®X";
@@ -5014,7 +5014,7 @@ String RID_STR_POSITIONY
     Text[ danish ] = "Y-position";
     Text[ swedish ] = "PositionY";
     Text[ polish ] = "PozycjaY";
-    Text[ portuguese_brazilian ] = "PosiηγoY";
+    Text[ portuguese_brazilian ] = "Posiηγo Y";
     Text[ japanese ] = "δ½η½® Y";
     Text[ korean ] = "μ„μΉY";
     Text[ chinese_simplified ] = "δ½η½®Y";
@@ -5066,7 +5066,7 @@ String RID_STR_STEP
     Text[ english_us ] = "Page (step)";
     Text[ portuguese ] = "Pαgina (step)";
     Text[ russian ] = "Ρςπΰνθφΰ (ψΰγ)";
-    Text[ greek ] = "Βήμα";
+    Text[ greek ] = "Σελίδα (βήμα)";
     Text[ dutch ] = "Pagina (Stap)";
     Text[ french ] = "Page (Step)";
     Text[ spanish ] = "Pαgina (Step)";
@@ -5172,7 +5172,7 @@ TabDialog RID_TABDLG_FONTDIALOG
                 Text [ arabic ] = "ΚΓΛνΡΗΚ ΗαΞΨζΨ";
                 Text [ dutch ] = "Schrifteffect";
                 Text [ chinese_simplified ] = "ε­—δ½“ζ•ζ";
-                Text [ greek ] = "Εφέ χαρακτήρων";
+                Text [ greek ] = "Εφέ γραμματοσειράς";
                 Text [ korean ] = "κΈ€κΌ΄ ν¨κ³Ό";
                 Text [ turkish ] = "Yazύ Tipi Efektleri";
                 Text[ catalan ] = "Efectes de lletra";
@@ -5207,7 +5207,7 @@ String RID_STR_PROGRESSVALUE
     Text[ english_us ] = "Progress value";
     Text[ portuguese ] = "Valor de progressγo";
     Text[ russian ] = "Ρξρςξÿνθε βϋοξλνενθÿ";
-    Text[ greek ] = "Progress value";
+    Text[ greek ] = "Τιμή προόδου";
     Text[ dutch ] = "Voortgangswaarde";
     Text[ french ] = "Valeur de progression";
     Text[ spanish ] = "Valor de progresiσn";
@@ -5237,7 +5237,7 @@ String RID_STR_PROGRESSVALUE_MIN
     Text[ english_us ] = "Progress value min.";
     Text[ portuguese ] = "Valor de progressγo mνn.";
     Text[ russian ] = "Μθν. ηνΰχενθε ρξρςξÿνθÿ βϋοξλνενθÿ";
-    Text[ greek ] = "Progress value min.";
+    Text[ greek ] = "Ελάχιστη τιμή προόδου";
     Text[ dutch ] = "Min. voortgangswaarde";
     Text[ french ] = "Valeur de progression min.";
     Text[ spanish ] = "Valor de progresiσn mνn. ";
@@ -5267,7 +5267,7 @@ String RID_STR_PROGRESSVALUE_MAX
     Text[ english_us ] = "Progress value max.";
     Text[ portuguese ] = "Valor de progressγo mαx.";
     Text[ russian ] = "Μΰκρ. ηνΰχενθε ρξρςξÿνθÿ βϋοξλνενθÿ";
-    Text[ greek ] = "Progress value max.";
+    Text[ greek ] = "Μέγιστη τιμή προόδου";
     Text[ dutch ] = "Max. voortgangswaarde";
     Text[ french ] = "Valeur de progression max.";
     Text[ spanish ] = "Valor de progresiσn mαx.";
@@ -5297,7 +5297,7 @@ String RID_STR_SCROLLVALUE
     Text[ english_us ] = "Scroll value";
     Text[ portuguese ] = "Valor de deslocamento";
     Text[ russian ] = "Ηνΰχενθε οπξκπσςκθ";
-    Text[ greek ] = "Scroll value";
+    Text[ greek ] = "Τιμή κύλισης";
     Text[ dutch ] = "Scrollwaarde";
     Text[ french ] = "Valeur de dιfilement";
     Text[ spanish ] = "Valor";
@@ -5327,7 +5327,7 @@ String RID_STR_SCROLLVALUE_MAX
     Text[ english_us ] = "Scroll value max.";
     Text[ portuguese ] = "Valor de deslocamento mαx.";
     Text[ russian ] = "Μΰκρ. ηνΰχενθε οπξκπσςκθ";
-    Text[ greek ] = "Scroll value max.";
+    Text[ greek ] = "Μέγιστη τιμή κύλισης";
     Text[ dutch ] = "Max. scrollwaarde";
     Text[ french ] = "Valeur de dιfilement max.";
     Text[ spanish ] = "Valor mαximo";
@@ -5335,7 +5335,7 @@ String RID_STR_SCROLLVALUE_MAX
     Text[ danish ] = "Maks. rullevζrdi";
     Text[ swedish ] = "Max. rullningsvδrde";
     Text[ polish ] = "Maks. wartoζ przewijania";
-    Text[ portuguese_brazilian ] = "Valor de rolagem max.";
+    Text[ portuguese_brazilian ] = "Valor de rolagem mαx.";
     Text[ japanese ] = "ζ€ε¤§γ‚Ήγ‚―γƒ­γƒΌγƒ«ε€¤";
     Text[ korean ] = "μµλ€ μ¤ν¬λ΅¤ κ°’";
     Text[ chinese_simplified ] = "ζ€ε¤§η„ζ»ε¨ζ•°ε€Ό";
@@ -5357,7 +5357,7 @@ String RID_STR_LINEINCREMENT
     Text[ english_us ] = "Line increment";
     Text[ portuguese ] = "Incrementar linha";
     Text[ russian ] = "Ψΰγ λθνθθ";
-    Text[ greek ] = "Line increment";
+    Text[ greek ] = "Βήμα γραμμής";
     Text[ dutch ] = "Toename lijn";
     Text[ french ] = "Incrιment de ligne";
     Text[ spanish ] = "Incremento de lνnea";
@@ -5387,7 +5387,7 @@ String RID_STR_BLOCKINCREMENT
     Text[ english_us ] = "Block increment";
     Text[ portuguese ] = "Incrementar bloco";
     Text[ russian ] = "Ψΰγ αλξκΰ";
-    Text[ greek ] = "Block increment";
+    Text[ greek ] = "Βήμα τμήματος";
     Text[ dutch ] = "Toename blok";
     Text[ french ] = "Incrιment de bloc";
     Text[ spanish ] = "Incremento de bloque";
@@ -5417,7 +5417,7 @@ String RID_STR_VISIBLESIZE
     Text[ english_us ] = "Visible size";
     Text[ portuguese ] = "Tamanho visνvel";
     Text[ russian ] = "Βθδθμϋι πΰημεπ";
-    Text[ greek ] = "Visible size";
+    Text[ greek ] = "Ορατό μέγεθος";
     Text[ dutch ] = "Zichtbare grootte";
     Text[ french ] = "Taille visible";
     Text[ spanish ] = "Tamaρo visible";
@@ -5477,7 +5477,7 @@ String RID_STR_ENUM_ORIENTATION
     Text[ english_us ] = "Horizontal;Vertical";
     Text[ portuguese ] = "Horizontal;Vertical";
     Text[ russian ] = "Γξπθηξνςΰλόνΰÿ;Βεπςθκΰλόνΰÿ";
-    Text[ greek ] = "Horizontal;Vertical";
+    Text[ greek ] = "Οριζόντια;Κατακόρυφα";
     Text[ dutch ] = "Horizontaal;Verticaal";
     Text[ french ] = "Horizontal;Vertical";
     Text[ spanish ] = "Horizontal;Vertical";
@@ -5504,11 +5504,11 @@ String RID_STR_EVT_ADJUSTMENTVALUECHANGED
 {
     Text = "Beim Justieren" ;
     Text [ ENGLISH ] = "On adjust" ;
-    Text[ language_user1 ] = "EM10.10.01Laut Frank Sch. dies beschreibt, dass ein Event ausgelφst wird wδhrend mit der Scrollbar justiert wird.";
+    Text[ language_user1 ] = "; EM10.10.01Laut Frank Sch. dies beschreibt, dass ein Event ausgelφst wird wδhrend mit der Scrollbar justiert wird.";
     Text[ english_us ] = "While adjusting";
     Text[ portuguese ] = "On adjust";
     Text[ russian ] = "Οπθ βϋπΰβνθβΰνθθ";
-    Text[ greek ] = "On adjust";
+    Text[ greek ] = "Κατά την προσαρμογή";
     Text[ dutch ] = "Bij het justeren";
     Text[ french ] = "ΐ l'ajustement";
     Text[ spanish ] = "Al ajustar";
@@ -5568,7 +5568,7 @@ String RID_STR_STATE
     Text[ english_us ] = "State";
     Text[ portuguese ] = "Estado";
     Text[ russian ] = "Ξαλΰρςό";
-    Text[ greek ] = "Κατάσταση";
+    Text[ greek ] = "Νομός";
     Text[ dutch ] = "Status";
     Text[ french ] = "Statut";
     Text[ spanish ] = "Estado";
@@ -5628,7 +5628,7 @@ String RID_STR_SCALEIMAGE
     Text[ english_us ] = "Scale";
     Text[ portuguese ] = "Scaling";
     Text[ russian ] = "Μΰρψςΰα";
-    Text[ greek ] = "Scaling";
+    Text[ greek ] = "Κλίμακα";
     Text[ dutch ] = "Op schaal brengen";
     Text[ french ] = "Ιchelle";
     Text[ spanish ] = "Escala";
@@ -5658,7 +5658,7 @@ String RID_STR_PUSHBUTTONTYPE
     Text[ english_us ] = "Button type";
     Text[ portuguese ] = "Tipo de botγo";
     Text[ russian ] = "Òθο κνξοκθ";
-    Text[ greek ] = "Τύπος πεδίου επιλογής";
+    Text[ greek ] = "Τύπος κουμπιού";
     Text[ dutch ] = "Soort knop";
     Text[ french ] = "Type de bouton";
     Text[ spanish ] = "Tipo de botσn";
@@ -5688,7 +5688,7 @@ String RID_STR_ENUM_PUSHBUTTONTYPE
     Text[ english_us ] = "Default;OK;Cancel;Help";
     Text[ portuguese ] = "Standard;OK;Cancel;Help";
     Text[ russian ] = "Οξ σμξλχΰνθώ;Δΰ;Ξςμενθςό;Ροπΰβκΰ";
-    Text[ greek ] = "Standard;OK;Cancel;Help";
+    Text[ greek ] = "Προεπιλογή;OK;Άκυρο;Βοήθεια";
     Text[ dutch ] = "Standaard;OK;Annuleren;Help";
     Text[ french ] = "Standard;OK;Annuler;Aide";
     Text[ spanish ] = "Predeterminado;Aceptar;Cancelar;Ayuda";
@@ -5718,7 +5718,7 @@ String RID_STR_UNABLETOCONNECT
     Text [ english_us ] = "The connection to the data source \"$name$\" could not be established.";
     Text[ portuguese ] = "The connection to the data source \"$name$\" could not be established.";
     Text[ russian ] = "Νεβξημξζνξ σρςΰνξβθςό ρξεδθνενθε ρ θρςξχνθκξμ δΰννϋυ \"$name$\".";
-    Text[ greek ] = "The connection to the data source \"$name$\" could not be established.";
+    Text[ greek ] = "Δεν ήταν δυνατή η δημιουργία σύνδεσης στην προέλευση δεδομένων\"$name$\".";
     Text[ dutch ] = "De verbinding met gegevensbron '$name$' kan niet tot stand worden gebracht.";
     Text[ french ] = "Impossible d'ιtablir la connexion ΰ la source de donnιes \"$name$\" !";
     Text[ spanish ] = "No se pudo establecer la conexiσn a la fuente de datos \"$name$\" ";
@@ -5775,6 +5775,13 @@ String RID_STR_TEXT
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.50.8.1  2003/07/03 14:40:48  ihi
+ *  rc-2 merge all languages
+ *
+ *  Revision 1.50  2003/06/13 12:48:37  hr
+ *  INTEGRATION: CWS rcmerge (1.49.26); FILE MERGED
+ *  2003/06/12 11:10:05 gh 1.49.26.1: final Merge RC
+ *
  *  Revision 1.49.26.1  2003/06/12 11:10:05  gh
  *  final Merge RC
  *
@@ -5951,6 +5958,7 @@ String RID_STR_TEXT
  *
  *  Revision 1.0 08.01.01 14:53:11  fs
  ************************************************************************/
+
 
 
 
