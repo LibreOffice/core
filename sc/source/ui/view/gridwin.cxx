@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-08 10:29:49 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #include "scitems.hxx"
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
+#include <memory> //auto_ptr
 #include <svx/adjitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/dbexch.hrc>
@@ -94,6 +95,9 @@
 #include <svx/editstat.hxx>
 #include <svx/flditem.hxx>
 #include <svx/svdetc.hxx>
+#ifndef _EDITOBJ_HXX
+#include <svx/editobj.hxx>
+#endif
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/stritem.hxx>
@@ -4453,8 +4457,11 @@ BOOL ScGridWindow::GetEditUrlOrError( BOOL bSpellErr, const Point& rPos,
             else
                 --nPosX;                                // weitersuchen
         }
-        else if ( pCell->GetCellType() == CELLTYPE_EDIT )
-            bFound = TRUE;
+                else if ( pCell->GetCellType() == CELLTYPE_EDIT)
+                    bFound = TRUE;
+                else if (pCell->GetCellType() == CELLTYPE_FORMULA &&
+                  static_cast<ScFormulaCell*>(pCell)->IsHyperLinkCell())
+                    bFound = TRUE;
         else
             return FALSE;                               // andere Zelle
     }
@@ -4494,7 +4501,7 @@ BOOL ScGridWindow::GetEditUrlOrError( BOOL bSpellErr, const Point& rPos,
     {
         case SVX_HOR_JUSTIFY_LEFT:
         case SVX_HOR_JUSTIFY_REPEAT:            // nicht implementiert
-        case SVX_HOR_JUSTIFY_STANDARD:          // immer Text
+        case SVX_HOR_JUSTIFY_STANDARD:          // always Text if an EditCell type
                 eSvxAdjust = SVX_ADJUST_LEFT;
                 break;
         case SVX_HOR_JUSTIFY_RIGHT:
@@ -4517,18 +4524,37 @@ BOOL ScGridWindow::GetEditUrlOrError( BOOL bSpellErr, const Point& rPos,
     long nThisColLogic = aLogicEdit.Right() - aLogicEdit.Left() + 1;
 
     Size aPaperSize = Size( 1000000, 1000000 );
+    if(pCell->GetCellType() == CELLTYPE_FORMULA)
+    {
+        long nSizeX  = 0;
+        long nSizeY  = 0;
+        pViewData->GetMergeSizePixel( nPosX, nPosY, nSizeX, nSizeY );
+        aPaperSize = Size(nSizeX, nSizeY );
+        aPaperSize = PixelToLogic(aPaperSize);
+    }
+
     if (bBreak)
         aPaperSize.Width() = nThisColLogic;
     aEngine.SetPaperSize( aPaperSize );
 
+    ::std::auto_ptr< EditTextObject > pTextObj;
     const EditTextObject* pData;
-    ((ScEditCell*)pCell)->GetData(pData);
-    if (pData)
-        aEngine.SetText(*pData);
+    if(pCell->GetCellType() == CELLTYPE_EDIT)
+    {
+        ((ScEditCell*)pCell)->GetData(pData);
+        if (pData)
+            aEngine.SetText(*pData);
+    }
+    else  // HyperLink Formula cell
+    {
+        pTextObj.reset((static_cast<ScFormulaCell*>(pCell))->CreateURLObject());
+        if (pTextObj.get())
+            aEngine.SetText(*pTextObj);
+    }
 
     long nStartX = aLogicEdit.Left();
 
-    long nTextWidth = aEngine.CalcTextWidth();
+        long nTextWidth = aEngine.CalcTextWidth();
     long nTextHeight = aEngine.GetTextHeight();
     if ( nTextWidth < nThisColLogic )
     {
@@ -4541,7 +4567,19 @@ BOOL ScGridWindow::GetEditUrlOrError( BOOL bSpellErr, const Point& rPos,
     aLogicEdit.Left() = nStartX;
     if (!bBreak)
         aLogicEdit.Right() = nStartX + nTextWidth;
+
+    // There is one glitch when dealing with a hyperlink cell and
+    // the cell content is NUMERIC. This defaults to right aligned and
+    // we need to adjust accordingly.
+    if(pCell->GetCellType() == CELLTYPE_FORMULA &&
+        static_cast<ScFormulaCell*>(pCell)->IsValue() &&
+        eHorJust == SVX_HOR_JUSTIFY_STANDARD)
+    {
+        aLogicEdit.Right() = aLogicEdit.Left() + nThisColLogic - 1;
+        aLogicEdit.Left() =  aLogicEdit.Right() - nTextWidth;
+    }
     aLogicEdit.Bottom() = aLogicEdit.Top() + nTextHeight;
+
 
     Point aLogicClick = PixelToLogic(rPos,aEditMode);
     if ( aLogicEdit.IsInside(aLogicClick) )
