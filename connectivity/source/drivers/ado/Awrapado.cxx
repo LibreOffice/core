@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapado.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:42:44 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 07:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,9 @@
  ************************************************************************/
 #ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
 #include "ado/Awrapado.hxx"
+#endif
+#ifndef _CONNECTIVITY_ADO_AWRAPADOX_HXX_
+#include "ado/Awrapadox.hxx"
 #endif
 
 using namespace connectivity::ado;
@@ -891,4 +894,430 @@ CompareEnum WpADORecordset::CompareBookmarks(const OLEVariant& left,const OLEVar
  sal_Bool WpADOParameter::PutValue(const OLEVariant& aVariant)
 {
     return (SUCCEEDED(pInterface->put_Value(aVariant)));
+}
+
+ ::rtl::OUString WpADOColumn::get_Name() const
+{
+    OLEString aBSTR;
+    pInterface->get_Name(&aBSTR);
+    return aBSTR;
+}
+::rtl::OUString WpADOColumn::get_RelatedColumn() const
+{
+    OLEString aBSTR;
+    pInterface->get_RelatedColumn(&aBSTR);
+    return aBSTR;
+}
+
+void WpADOColumn::put_Name(const ::rtl::OUString& _rName)
+{
+    OLEString bstr(_rName);
+    sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+}
+void WpADOColumn::put_RelatedColumn(const ::rtl::OUString& _rName)
+{
+    OLEString bstr(_rName);
+    sal_Bool bErg = SUCCEEDED(pInterface->put_RelatedColumn(bstr));
+}
+
+DataTypeEnum WpADOColumn::get_Type() const
+{
+    DataTypeEnum eNum = adVarChar;
+    pInterface->get_Type(&eNum);
+    return eNum;
+}
+
+void WpADOColumn::put_Type(const DataTypeEnum& _eNum)
+{
+    pInterface->put_Type(_eNum);
+}
+
+sal_Int32 WpADOColumn::get_Precision() const
+{
+    sal_Int32 nPrec=0;
+    pInterface->get_Precision(&nPrec);
+    return nPrec;
+}
+
+void WpADOColumn::put_Precision(sal_Int32 _nPre)
+{
+    pInterface->put_Precision(_nPre);
+}
+
+sal_Int32 WpADOColumn::get_NumericScale() const
+{
+    sal_uInt8 nPrec=0;
+    pInterface->get_NumericScale(&nPrec);
+    return nPrec;
+}
+
+void WpADOColumn::put_NumericScale(sal_Int8 _nScale)
+{
+    pInterface->put_NumericScale(_nScale);
+}
+
+SortOrderEnum WpADOColumn::get_SortOrder() const
+{
+    SortOrderEnum nPrec=adSortAscending;
+    pInterface->get_SortOrder(&nPrec);
+    return nPrec;
+}
+
+void WpADOColumn::put_SortOrder(SortOrderEnum _nScale)
+{
+    pInterface->put_SortOrder(_nScale);
+}
+
+ColumnAttributesEnum WpADOColumn::get_Attributes() const
+{
+    ColumnAttributesEnum eNum=adColNullable;
+    pInterface->get_Attributes(&eNum);
+    return eNum;
+}
+
+void WpADOColumn::put_Attributes(const ColumnAttributesEnum& _eNum)
+{
+    pInterface->put_Attributes(_eNum);
+}
+
+ADOProperties* WpADOColumn::get_Properties() const
+{
+    ADOProperties* pProps = NULL;
+    pInterface->get_Properties(&pProps);
+    return pProps;
+}
+
+::rtl::OUString WpADOKey::get_Name() const
+{
+    OLEString aBSTR;
+    pInterface->get_Name(&aBSTR);
+    return aBSTR;
+}
+
+void WpADOKey::put_Name(const ::rtl::OUString& _rName)
+{
+    OLEString bstr(_rName);
+    sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+
+}
+
+KeyTypeEnum WpADOKey::get_Type() const
+{
+    KeyTypeEnum eNum=adKeyPrimary;
+    pInterface->get_Type(&eNum);
+    return eNum;
+}
+
+void WpADOKey::put_Type(const KeyTypeEnum& _eNum)
+{
+    pInterface->put_Type(_eNum);
+}
+
+::rtl::OUString WpADOKey::get_RelatedTable() const
+{
+    OLEString aBSTR;
+    pInterface->get_RelatedTable(&aBSTR);
+    return aBSTR;
+}
+
+void WpADOKey::put_RelatedTable(const ::rtl::OUString& _rName)
+{
+    OLEString bstr(_rName);
+    sal_Bool bErg = SUCCEEDED(pInterface->put_RelatedTable(bstr));
+
+}
+
+RuleEnum WpADOKey::get_DeleteRule() const
+{
+    RuleEnum eNum = adRINone;
+    pInterface->get_DeleteRule(&eNum);
+    return eNum;
+}
+
+void WpADOKey::put_DeleteRule(const RuleEnum& _eNum)
+{
+    pInterface->put_DeleteRule(_eNum);
+}
+
+RuleEnum WpADOKey::get_UpdateRule() const
+{
+    RuleEnum eNum = adRINone;
+    pInterface->get_UpdateRule(&eNum);
+    return eNum;
+}
+
+void WpADOKey::put_UpdateRule(const RuleEnum& _eNum)
+{
+    pInterface->put_UpdateRule(_eNum);
+}
+
+ADOColumns* WpADOKey::get_Columns() const
+{
+    ADOColumns* pCols = NULL;
+    pInterface->get_Columns(&pCols);
+    return pCols;
+}
+
+::rtl::OUString WpADOIndex::get_Name() const
+{
+    OLEString aBSTR;
+    pInterface->get_Name(&aBSTR);
+    return aBSTR;
+}
+
+void WpADOIndex::put_Name(const ::rtl::OUString& _rName)
+{
+    OLEString bstr(_rName);
+    sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+
+}
+
+sal_Bool WpADOIndex::get_Clustered() const
+{
+    VARIANT_BOOL eNum = VARIANT_FALSE;
+    pInterface->get_Clustered(&eNum);
+    return eNum == VARIANT_TRUE;
+}
+
+void WpADOIndex::put_Clustered(sal_Bool _b)
+{
+    pInterface->put_Clustered(_b ? VARIANT_TRUE : VARIANT_FALSE);
+}
+
+sal_Bool WpADOIndex::get_Unique() const
+{
+    VARIANT_BOOL eNum = VARIANT_FALSE;
+    pInterface->get_Unique(&eNum);
+    return eNum == VARIANT_TRUE;
+}
+
+void WpADOIndex::put_Unique(sal_Bool _b)
+{
+    pInterface->put_Unique(_b ? VARIANT_TRUE : VARIANT_FALSE);
+}
+
+sal_Bool WpADOIndex::get_PrimaryKey() const
+{
+    VARIANT_BOOL eNum = VARIANT_FALSE;
+    pInterface->get_PrimaryKey(&eNum);
+    return eNum == VARIANT_TRUE;
+}
+
+void WpADOIndex::put_PrimaryKey(sal_Bool _b)
+{
+    pInterface->put_PrimaryKey(_b ? VARIANT_TRUE : VARIANT_FALSE);
+}
+
+ADOColumns* WpADOIndex::get_Columns() const
+{
+    ADOColumns* pCols = NULL;
+    pInterface->get_Columns(&pCols);
+    return pCols;
+}
+
+void WpADOCatalog::putref_ActiveConnection(IDispatch* pCon)
+{
+    pInterface->putref_ActiveConnection(pCon);
+}
+
+ADOTables* WpADOCatalog::get_Tables()
+{
+    ADOTables* pRet = NULL;
+    pInterface->get_Tables(&pRet);
+    return pRet;
+}
+
+ADOViews* WpADOCatalog::get_Views()
+{
+    ADOViews* pRet = NULL;
+    pInterface->get_Views(&pRet);
+    return pRet;
+}
+
+ADOGroups* WpADOCatalog::get_Groups()
+{
+    ADOGroups* pRet = NULL;
+    pInterface->get_Groups(&pRet);
+    return pRet;
+}
+
+ADOUsers* WpADOCatalog::get_Users()
+{
+    ADOUsers* pRet = NULL;
+    pInterface->get_Users(&pRet);
+    return pRet;
+}
+
+ADOProcedures* WpADOCatalog::get_Procedures()
+{
+    ADOProcedures* pRet = NULL;
+    pInterface->get_Procedures(&pRet);
+    return pRet;
+}
+
+::rtl::OUString WpADOTable::get_Name() const
+{
+    OLEString aBSTR;
+    pInterface->get_Name(&aBSTR);
+    return aBSTR;
+}
+
+void WpADOTable::put_Name(const ::rtl::OUString& _rName)
+{
+    OLEString bstr(_rName);
+    sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+
+}
+
+::rtl::OUString WpADOTable::get_Type() const
+{
+    OLEString aBSTR;
+    pInterface->get_Type(&aBSTR);
+    return aBSTR;
+}
+
+ADOColumns* WpADOTable::get_Columns() const
+{
+    ADOColumns* pCols = NULL;
+    pInterface->get_Columns(&pCols);
+    return pCols;
+}
+
+ADOIndexes* WpADOTable::get_Indexes() const
+{
+    ADOIndexes* pCols = NULL;
+    pInterface->get_Indexes(&pCols);
+    return pCols;
+}
+
+ADOKeys* WpADOTable::get_Keys() const
+{
+    ADOKeys* pCols = NULL;
+    pInterface->get_Keys(&pCols);
+    return pCols;
+}
+
+WpADOCatalog WpADOTable::get_ParentCatalog() const
+{
+    ADOCatalog* pCat = NULL;
+    pInterface->get_ParentCatalog(&pCat);
+    return WpADOCatalog(pCat);
+}
+
+ADOProperties* WpADOTable::get_Properties() const
+{
+    ADOProperties* pProps = NULL;
+    pInterface->get_Properties(&pProps);
+    return pProps;
+}
+
+::rtl::OUString WpADOView::get_Name() const
+{
+    OLEString aBSTR;
+    pInterface->get_Name(&aBSTR);
+    return aBSTR;
+}
+
+void WpADOView::get_Command(OLEVariant& _rVar) const
+{
+    pInterface->get_Command(&_rVar);
+}
+
+void WpADOView::put_Command(OLEVariant& _rVar)
+{
+    pInterface->put_Command(_rVar);
+}
+
+::rtl::OUString WpADOGroup::get_Name() const
+{
+    OLEString aBSTR;
+    pInterface->get_Name(&aBSTR);
+    return aBSTR;
+}
+
+void WpADOGroup::put_Name(const ::rtl::OUString& _rName)
+{
+    OLEString bstr(_rName);
+    sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+
+}
+
+RightsEnum WpADOGroup::GetPermissions(
+    /* [in] */ const OLEVariant& Name,
+    /* [in] */ ObjectTypeEnum ObjectType)
+{
+    RightsEnum Rights=adRightNone;
+    OLEVariant ObjectTypeId;
+    ObjectTypeId.setNoArg();
+    pInterface->GetPermissions(Name,ObjectType,ObjectTypeId,&Rights);
+    return Rights;
+}
+
+sal_Bool WpADOGroup::SetPermissions(
+    /* [in] */ const OLEVariant& Name,
+    /* [in] */ ObjectTypeEnum ObjectType,
+    /* [in] */ ActionEnum Action,
+    /* [in] */ RightsEnum Rights)
+{
+    OLEVariant ObjectTypeId;
+    ObjectTypeId.setNoArg();
+    return SUCCEEDED(pInterface->SetPermissions(Name,ObjectType,Action,Rights,adInheritNone,ObjectTypeId));
+}
+
+ADOUsers* WpADOGroup::get_Users( )
+{
+    ADOUsers* pRet = NULL;
+    pInterface->get_Users( &pRet);
+    return pRet;
+}
+
+::rtl::OUString WpADOUser::get_Name() const
+{
+    OLEString aBSTR;
+    pInterface->get_Name(&aBSTR);
+    return aBSTR;
+}
+
+void WpADOUser::put_Name(const ::rtl::OUString& _rName)
+{
+    OLEString bstr(_rName);
+    sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+
+}
+
+sal_Bool WpADOUser::ChangePassword(const ::rtl::OUString& _rPwd,const ::rtl::OUString& _rNewPwd)
+{
+    OLEString sStr1(_rPwd);
+    OLEString sStr2(_rNewPwd);
+    sal_Bool bErg = SUCCEEDED(pInterface->ChangePassword(sStr1,sStr2));
+    return bErg;
+}
+
+ADOGroups* WpADOUser::get_Groups()
+{
+    ADOGroups* pRet = NULL;
+    pInterface->get_Groups(&pRet);
+    return pRet;
+}
+
+RightsEnum WpADOUser::GetPermissions(
+    /* [in] */ const OLEVariant& Name,
+    /* [in] */ ObjectTypeEnum ObjectType)
+{
+    RightsEnum Rights=adRightNone;
+    OLEVariant ObjectTypeId;
+    ObjectTypeId.setNoArg();
+    pInterface->GetPermissions(Name,ObjectType,ObjectTypeId,&Rights);
+    return Rights;
+}
+
+sal_Bool WpADOUser::SetPermissions(
+    /* [in] */ const OLEVariant& Name,
+    /* [in] */ ObjectTypeEnum ObjectType,
+    /* [in] */ ActionEnum Action,
+    /* [in] */ RightsEnum Rights)
+{
+    OLEVariant ObjectTypeId;
+    ObjectTypeId.setNoArg();
+    return SUCCEEDED(pInterface->SetPermissions(Name,ObjectType,Action,Rights,adInheritNone,ObjectTypeId));
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 14:06:30 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 07:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,20 +201,23 @@ sal_Int32 ODatabaseMetaData::getMaxSize(sal_uInt32 _nId) throw(SQLException, Run
 {
     if(!m_aLiteralInfo.size())
         fillLiterals();
+
+    sal_Int32 nSize = 0;
     ::std::map<sal_uInt32,LiteralInfo>::const_iterator aIter = m_aLiteralInfo.find(_nId);
     if(aIter != m_aLiteralInfo.end() && (*aIter).second.fSupported)
-        return ((*aIter).second.cchMaxLen == (-1)) ? 0 : (*aIter).second.cchMaxLen;
-    return 0;
+        nSize = ((*aIter).second.cchMaxLen == (-1)) ? 0 : (*aIter).second.cchMaxLen;
+    return nSize;
 }
 // -------------------------------------------------------------------------
 sal_Bool ODatabaseMetaData::isCapable(sal_uInt32 _nId) throw(SQLException, RuntimeException)
 {
     if(!m_aLiteralInfo.size())
         fillLiterals();
+    sal_Bool bSupported = sal_False;
     ::std::map<sal_uInt32,LiteralInfo>::const_iterator aIter = m_aLiteralInfo.find(_nId);
     if(aIter != m_aLiteralInfo.end())
-        (*aIter).second.fSupported;
-    return sal_False;
+        bSupported = (*aIter).second.fSupported;
+    return bSupported;
 }
 
 // -------------------------------------------------------------------------
@@ -222,10 +225,11 @@ sal_Bool ODatabaseMetaData::isCapable(sal_uInt32 _nId) throw(SQLException, Runti
 {
     if(!m_aLiteralInfo.size())
         fillLiterals();
+    ::rtl::OUString sStr;
     ::std::map<sal_uInt32,LiteralInfo>::const_iterator aIter = m_aLiteralInfo.find(_nId);
     if(aIter != m_aLiteralInfo.end() && (*aIter).second.fSupported)
-        return (*aIter).second.pwszLiteralValue;
-    return ::rtl::OUString();
+        sStr = (*aIter).second.pwszLiteralValue;
+    return sStr;
 }
 // -------------------------------------------------------------------------
 sal_Int32 ODatabaseMetaData::getInt32Property(const ::rtl::OUString& _aProperty) throw(SQLException, RuntimeException)
@@ -602,11 +606,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
-    Reference< XResultSet > xRef = NULL;
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(NULL);
-    xRef = pResult;
-    return xRef;
+    return new ODatabaseMetaDataResultSet(NULL);
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:53:31 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 07:27:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,7 +572,11 @@ SQLContext prependContextInfo(SQLException& _rException, const Reference< XInter
             aSeparator = sCatalogSep[0];
 
         sal_Int32 nIndex = 0;
-        ::rtl::OUString aFirstToken = aTableName.getToken(0, aSeparator, nIndex);
+        ::rtl::OUString aFirstToken = aTableName.getToken(0, aSeparator
+#if SUPD > 630
+            , nIndex
+#endif
+            );
         if( nIndex != -1 ) // one or more tokens follow
         {
             ::rtl::OUString aDatabaseName( aFirstToken );
@@ -585,9 +589,17 @@ SQLContext prependContextInfo(SQLException& _rException, const Reference< XInter
     if (_rxMeta->supportsSchemasInDataManipulation())
     {
         sal_Int32 nIndex = 0;
-        ::rtl::OUString aFirstToken( aTableName.getToken( 0, aGenericSep, nIndex ) );
-        ::rtl::OUString aSecondToken( nIndex != -1 ? aTableName.getToken( 1, aGenericSep, nIndex ) : ::rtl::OUString() );
-        if (nIndex == -1 && aSecondToken.getLength())
+        ::rtl::OUString aFirstToken( aTableName.getToken( 0, aGenericSep
+#if SUPD > 630
+            , nIndex
+#endif
+            ) );
+        ::rtl::OUString aSecondToken( nIndex != -1 ? aTableName.getToken( 1, aGenericSep
+#if SUPD > 630
+            , nIndex
+#endif
+            ) : ::rtl::OUString() );
+        if (nIndex != -1 && aSecondToken.getLength())
         {
             static ::rtl::OUString s_aGenericSep(&aGenericSep, 1);
             // need a method on the OUString to cancat a single unicode character ....
@@ -1261,6 +1273,9 @@ void showError(const SQLExceptionInfo& _rInfo,
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.25  2001/05/14 11:53:31  oj
+ *  #86528# lower size need
+ *
  *  Revision 1.24  2001/05/11 17:25:49  pl
  *  rtl string api changes
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CConnection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 10:08:09 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 07:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,8 +196,8 @@ IMPLEMENT_SERVICE_INFO(OCalcConnection, "com.sun.star.sdbc.drivers.calc.Connecti
 Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OConnection_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+
 
     Reference< XDatabaseMetaData > xMetaData = m_xMetaData;
     if(!xMetaData.is())
@@ -229,8 +229,8 @@ Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(S
 Reference< XStatement > SAL_CALL OCalcConnection::createStatement(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OConnection_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+
 
     Reference< XStatement > xReturn = new OCalcStatement(this);
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
@@ -243,10 +243,10 @@ Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareStatement( cons
     throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OConnection_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    OCalcPreparedStatement* pStmt = new OCalcPreparedStatement(this,m_aTypeInfo);
+
+    OCalcPreparedStatement* pStmt = new OCalcPreparedStatement(this);
     Reference< XPreparedStatement > xHoldAlive = pStmt;
     pStmt->construct(sql);
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
@@ -259,8 +259,8 @@ Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareCall( const ::r
     throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OConnection_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+
     return NULL;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APreparedStatement.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:40:04 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 07:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,8 +160,8 @@ void SAL_CALL OPreparedStatement::close(  ) throw(SQLException, RuntimeException
 
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        if (OStatement_BASE::rBHelper.bDisposed)
-            throw DisposedException();
+        checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     }
     dispose();
 
@@ -171,8 +171,8 @@ void SAL_CALL OPreparedStatement::close(  ) throw(SQLException, RuntimeException
 sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     SQLWarning  warning;
 
@@ -206,8 +206,8 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
 sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     ADORecordset* pSet=NULL;
     CHECK_RETURN(m_Command.Execute(m_RecordsAffected,m_Parameters,adCmdUnknown,&pSet))
@@ -220,8 +220,8 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
                                       const sal_Int32& _nSize,const OLEVariant& _Val) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     sal_Int32 nCount = 0;
     m_pParameters->get_Count(&nCount);
@@ -258,8 +258,8 @@ void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::r
 Reference< XConnection > SAL_CALL OPreparedStatement::getConnection(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     return (Reference< XConnection >)m_pConnection;
 }
@@ -268,8 +268,8 @@ Reference< XConnection > SAL_CALL OPreparedStatement::getConnection(  ) throw(SQ
 Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     // first clear the old things
     m_xMetaData = NULL;
@@ -435,8 +435,8 @@ void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, con
 void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     if(m_pParameters)
     {

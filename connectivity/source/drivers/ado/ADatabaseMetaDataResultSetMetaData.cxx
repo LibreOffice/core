@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:40:04 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 07:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,26 +96,30 @@ ODatabaseMetaDataResultSetMetaData::~ODatabaseMetaDataResultSetMetaData()
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    sal_Int32 nSize = 0;
     if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
-        return (*m_mColumnsIter).second.getColumnDisplaySize();
-
-    if(!m_pRecordSet)
-        return 0;
-    ADO_GETFIELD(m_vMapping[column]);
-    if(aField.IsValid())
-        return aField.GetActualSize();
-    return 0;
+        nSize = (*m_mColumnsIter).second.getColumnDisplaySize();
+    else if(m_pRecordSet)
+    {
+        ADO_GETFIELD(m_vMapping[column]);
+        if(aField.IsValid())
+            nSize = aField.GetActualSize();
+    }
+    return nSize;
 }
 // -------------------------------------------------------------------------
 
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnType( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    sal_Int32  nType = 0;
     if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
-        return (*m_mColumnsIter).second.getColumnType();
-    if(!m_pRecordSet)
-        return 0;
-    ADO_GETFIELD(m_vMapping[column]);
-    return MapADOType2Jdbc(aField.GetADOType());
+        nType = (*m_mColumnsIter).second.getColumnType();
+    else if(m_pRecordSet)
+    {
+        ADO_GETFIELD(m_vMapping[column]);
+        nType = ADOS::MapADOType2Jdbc(aField.GetADOType());
+    }
+    return nType;
 }
 // -------------------------------------------------------------------------
 
@@ -331,46 +335,6 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isWritable( sal_Int32 colu
     if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isWritable();
     return isDefinitelyWritable(column);
-}
-// -------------------------------------------------------------------------
-sal_Int32 ODatabaseMetaDataResultSetMetaData::MapADOType2Jdbc(DataTypeEnum eType)
-{
-    switch (eType)
-    {
-        case adUnsignedSmallInt:
-        case adSmallInt:            return DataType::SMALLINT; break;
-        case adUnsignedInt:
-        case adInteger:             return DataType::INTEGER; break;
-        case adUnsignedBigInt:
-        case adBigInt:              return DataType::BIGINT; break;
-        case adSingle:              return DataType::FLOAT; break;
-        case adDouble:              return DataType::DOUBLE; break;
-        case adCurrency:            return DataType::DOUBLE; break;
-        case adVarNumeric:
-        case adNumeric:             return DataType::NUMERIC; break;
-        case adDecimal:             return DataType::DECIMAL; break;
-        case adDate:
-        case adDBDate:              return DataType::DATE; break;
-        case adDBTime:              return DataType::TIME; break;
-        case adDBTimeStamp:         return DataType::TIMESTAMP; break;
-        case adBoolean:             return DataType::BIT; break;
-        case adBinary:
-        case adGUID:                return DataType::BINARY; break;
-        case adBSTR:
-        case adVarWChar:
-        case adVarChar:             return DataType::VARCHAR; break;
-        case adLongVarWChar:
-        case adLongVarChar:         return DataType::LONGVARCHAR; break;
-        case adVarBinary:           return DataType::VARBINARY; break;
-        case adLongVarBinary:       return DataType::LONGVARBINARY; break;
-        case adWChar:
-        case adChar:                return DataType::CHAR; break;
-        case adUnsignedTinyInt:
-        case adTinyInt:             return DataType::TINYINT; break;
-        default:
-            OSL_ENSURE(0,"MapADOType2Jdbc: Unknown Type!");
-    }
-    return DataType::VARCHAR;
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setColumnPrivilegesMap()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AResultSet.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-15 16:43:20 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 07:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,8 +224,8 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
 sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     Reference< XResultSetMetaData > xMeta = getMetaData();
     sal_Int32 nLen = xMeta->getColumnCount();
@@ -240,8 +240,8 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) t
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
     ADO_GETFIELD(columnIndex);
     if((aField.GetAttributes() & adFldLong) == adFldLong)
     {
@@ -280,8 +280,8 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getBinarySt
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
     return NULL;
 }
 
@@ -289,8 +289,8 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getCharacte
 sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
     if(m_aValue.isNull())
@@ -302,8 +302,8 @@ sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLExcep
 sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
     if(m_aValue.isNull())
@@ -315,8 +315,8 @@ sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLExceptio
 Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
     if(m_aValue.isNull())
@@ -328,8 +328,8 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
 ::com::sun::star::util::Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
@@ -342,8 +342,8 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
 double SAL_CALL OResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
@@ -356,8 +356,8 @@ double SAL_CALL OResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLExceptio
 float SAL_CALL OResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
@@ -370,8 +370,8 @@ float SAL_CALL OResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException,
 sal_Int32 SAL_CALL OResultSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
@@ -384,8 +384,8 @@ sal_Int32 SAL_CALL OResultSet::getInt( sal_Int32 columnIndex ) throw(SQLExceptio
 sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     PositionEnum aPos;
     m_pRecordSet->get_AbsolutePosition(&aPos);
@@ -397,8 +397,8 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
 sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     ADO_GETFIELD(columnIndex);
     if(m_aValue.isNull())
@@ -410,8 +410,8 @@ sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex ) throw(SQLExcepti
 Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     if(!m_xMetaData.is())
         m_xMetaData = new OResultSetMetaData(m_pRecordSet);
@@ -456,8 +456,8 @@ Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< ::co
 sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
@@ -470,8 +470,8 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
 ::rtl::OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     ADO_GETFIELD(columnIndex);
     m_aValue = aField.get_Value();
@@ -486,8 +486,8 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
 ::com::sun::star::util::Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
@@ -501,8 +501,8 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
 ::com::sun::star::util::DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     ADO_GETFIELD(columnIndex);
     aField.get_Value(m_aValue);
@@ -515,8 +515,8 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
 sal_Bool SAL_CALL OResultSet::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     VARIANT_BOOL bIsAtEOF;
     CHECK_RETURN(m_pRecordSet->get_EOF(&bIsAtEOF))
@@ -526,8 +526,8 @@ sal_Bool SAL_CALL OResultSet::isAfterLast(  ) throw(SQLException, RuntimeExcepti
 sal_Bool SAL_CALL OResultSet::isFirst(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     return m_nRowPos == 1;
 }
@@ -535,8 +535,8 @@ sal_Bool SAL_CALL OResultSet::isFirst(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL OResultSet::isLast(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     return sal_True;
 }
@@ -544,8 +544,8 @@ sal_Bool SAL_CALL OResultSet::isLast(  ) throw(SQLException, RuntimeException)
 void SAL_CALL OResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     if(first())
         previous();
@@ -554,8 +554,8 @@ void SAL_CALL OResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
 void SAL_CALL OResultSet::afterLast(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     if(last())
         next();
@@ -567,8 +567,8 @@ void SAL_CALL OResultSet::close(  ) throw(SQLException, RuntimeException)
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        if (OResultSet_BASE::rBHelper.bDisposed)
-            throw DisposedException();
+        checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
     }
     dispose();
 }
@@ -577,8 +577,8 @@ void SAL_CALL OResultSet::close(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL OResultSet::first(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     if(SUCCEEDED(m_pRecordSet->MoveFirst()))
     {
@@ -592,8 +592,8 @@ sal_Bool SAL_CALL OResultSet::first(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL OResultSet::last(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     sal_Bool bRet = SUCCEEDED(m_pRecordSet->MoveLast());
     if(bRet)
@@ -604,8 +604,8 @@ sal_Bool SAL_CALL OResultSet::last(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     if(!row)                 // absolute with zero not allowed
         throw SQLException();
@@ -634,8 +634,8 @@ sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, Runt
 sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     OLEVariant aEmpty;
     aEmpty.setNoArg();
@@ -648,8 +648,8 @@ sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, Runt
 sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     sal_Bool bRet = SUCCEEDED(m_pRecordSet->MovePrevious());
     if(bRet)
@@ -666,8 +666,8 @@ Reference< XInterface > SAL_CALL OResultSet::getStatement(  ) throw(SQLException
 sal_Bool SAL_CALL OResultSet::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     RecordStatusEnum eRec;
     m_pRecordSet->get_Status((sal_Int32*)&eRec);
@@ -679,8 +679,8 @@ sal_Bool SAL_CALL OResultSet::rowDeleted(  ) throw(SQLException, RuntimeExceptio
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::rowInserted(  ) throw(SQLException, RuntimeException)
 {   ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     RecordStatusEnum eRec;
     m_pRecordSet->get_Status((sal_Int32*)&eRec);
@@ -693,8 +693,8 @@ sal_Bool SAL_CALL OResultSet::rowInserted(  ) throw(SQLException, RuntimeExcepti
 sal_Bool SAL_CALL OResultSet::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     RecordStatusEnum eRec;
     m_pRecordSet->get_Status((sal_Int32*)&eRec);
@@ -705,8 +705,8 @@ sal_Bool SAL_CALL OResultSet::rowUpdated(  ) throw(SQLException, RuntimeExceptio
 sal_Bool SAL_CALL OResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     OSL_ENSURE(!m_nRowPos,"OResultSet::isBeforeFirst: Error in setting m_nRowPos!");
     VARIANT_BOOL bIsAtBOF;
@@ -718,8 +718,8 @@ sal_Bool SAL_CALL OResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeExcep
 sal_Bool SAL_CALL OResultSet::next(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     sal_Bool bRet = sal_True;
     if(m_bOnFirstAfterOpen)
@@ -749,8 +749,8 @@ sal_Bool SAL_CALL OResultSet::next(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL OResultSet::wasNull(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     return m_aValue.isNull();
 }
@@ -759,8 +759,8 @@ sal_Bool SAL_CALL OResultSet::wasNull(  ) throw(SQLException, RuntimeException)
 void SAL_CALL OResultSet::cancel(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     m_pRecordSet->Cancel();
 }
@@ -777,8 +777,8 @@ Any SAL_CALL OResultSet::getWarnings(  ) throw(SQLException, RuntimeException)
 void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     OLEVariant aEmpty;
     aEmpty.setNoArg();
@@ -788,8 +788,8 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
 void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     OLEVariant aEmpty;
     aEmpty.setNoArg();
@@ -799,8 +799,8 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
 void SAL_CALL OResultSet::deleteRow(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     m_pRecordSet->Delete(adAffectCurrent);
     m_pRecordSet->UpdateBatch(adAffectCurrent);
@@ -810,8 +810,8 @@ void SAL_CALL OResultSet::deleteRow(  ) throw(SQLException, RuntimeException)
 void SAL_CALL OResultSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     m_pRecordSet->CancelUpdate();
 }
@@ -829,8 +829,8 @@ void SAL_CALL OResultSet::moveToCurrentRow(  ) throw(SQLException, RuntimeExcept
 void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
 
     ADO_GETFIELD(columnIndex);
@@ -843,8 +843,8 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException
 void SAL_CALL OResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
 
     ADO_GETFIELD(columnIndex);
@@ -854,8 +854,8 @@ void SAL_CALL OResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) thr
 void SAL_CALL OResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
 
     ADO_GETFIELD(columnIndex);
@@ -866,8 +866,8 @@ void SAL_CALL OResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(
 void SAL_CALL OResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
 
     ADO_GETFIELD(columnIndex);
@@ -877,8 +877,8 @@ void SAL_CALL OResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) thro
 void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
 
     ADO_GETFIELD(columnIndex);
@@ -888,8 +888,8 @@ void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(
 void SAL_CALL OResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
 
     ADO_GETFIELD(columnIndex);
@@ -899,8 +899,8 @@ void SAL_CALL OResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw
 void SAL_CALL OResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
 
     ADO_GETFIELD(columnIndex);
@@ -911,8 +911,8 @@ void SAL_CALL OResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(SQ
 void SAL_CALL OResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
 
     ADO_GETFIELD(columnIndex);
@@ -922,8 +922,8 @@ void SAL_CALL OResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(
 void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
 
     ADO_GETFIELD(columnIndex);
@@ -933,8 +933,8 @@ void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUSt
 void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
 
     ADO_GETFIELD(columnIndex);
@@ -944,8 +944,8 @@ void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sa
 void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const ::com::sun::star::util::Date& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
 
     ADO_GETFIELD(columnIndex);
@@ -956,8 +956,8 @@ void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const ::com::sun::s
 void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const ::com::sun::star::util::Time& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
 
     ADO_GETFIELD(columnIndex);
@@ -968,8 +968,8 @@ void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const ::com::sun::s
 void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
 
     ADO_GETFIELD(columnIndex);
@@ -990,8 +990,8 @@ void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Re
 void SAL_CALL OResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     m_pRecordSet->Resync(adAffectCurrent,adResyncAllValues);
 }
@@ -1012,8 +1012,8 @@ void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any&
 Any SAL_CALL OResultSet::getBookmark(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     if(m_nRowPos < (sal_Int32)m_aBookmarks.size()) // this bookmark was already fetched
         return makeAny(sal_Int32(m_nRowPos-1));
@@ -1028,8 +1028,8 @@ Any SAL_CALL OResultSet::getBookmark(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL OResultSet::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     sal_Int32 nPos;
     bookmark >>= nPos;
@@ -1043,8 +1043,8 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const Any& bookmark ) throw(SQLExc
 sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     sal_Int32 nPos;
     bookmark >>= nPos;
@@ -1058,8 +1058,8 @@ sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const Any& bookmark, sal_I
 sal_Int32 SAL_CALL OResultSet::compareBookmarks( const Any& first, const Any& second ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     sal_Int32 nPos1;
     first >>= nPos1;
@@ -1078,8 +1078,8 @@ sal_Int32 SAL_CALL OResultSet::compareBookmarks( const Any& first, const Any& se
 sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     ADOProperties* pProps = NULL;
     m_pRecordSet->get_Properties(&pProps);
@@ -1103,8 +1103,8 @@ sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  ) throw(SQLException, Runtim
 sal_Int32 SAL_CALL OResultSet::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     sal_Int32 nPos;
     bookmark >>= nPos;
@@ -1115,8 +1115,8 @@ sal_Int32 SAL_CALL OResultSet::hashBookmark( const Any& bookmark ) throw(SQLExce
 Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const Sequence< Any >& rows ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
 
     OLEVariant aVar;
     sal_Int32 nPos;

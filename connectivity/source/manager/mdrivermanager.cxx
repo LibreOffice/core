@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mdrivermanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:54:31 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 07:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,11 @@ using namespace ::osl;
 
 #define SERVICE_SDBC_DRIVER     ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver")
 
+void throwNoSuchElementException() throw(NoSuchElementException)
+{
+    throw NoSuchElementException();
+}
+
 //==========================================================================
 //= ODriverEnumeration
 //==========================================================================
@@ -101,10 +106,9 @@ class ODriverEnumeration : public ::cppu::ImplHelper1< XEnumeration >
 {
     friend class OSDBCDriverManager;
 
-    oslInterlockedCount     m_refCount;
-
     DECLARE_STL_VECTOR(OSDBCDriverManager::SdbcDriver, Drivers);
     Drivers             m_aDrivers;
+    oslInterlockedCount m_refCount;
     sal_Int32           m_nPos;
 
     ~ODriverEnumeration();
@@ -154,7 +158,7 @@ sal_Bool SAL_CALL ODriverEnumeration::hasMoreElements(  ) throw(RuntimeException
 Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     if (!hasMoreElements())
-        throw NoSuchElementException();
+        throwNoSuchElementException();
     return makeAny(m_aDrivers[m_nPos++]);
 }
 
@@ -175,17 +179,15 @@ OSDBCDriverManager::OSDBCDriverManager(const Reference< XMultiServiceFactory >& 
 
     if (xEnumDrivers.is())
     {
+        Reference< XSingleServiceFactory > xFactory;
         while (xEnumDrivers->hasMoreElements())
         {
-            Any aCurrent = xEnumDrivers->nextElement();
-            Reference< XSingleServiceFactory > xFactory;
-
-            if (!::cppu::extractInterface(xFactory, aCurrent))
-                continue;
-
-            Reference< XDriver > xDriver(xFactory->createInstance(), UNO_QUERY);
-            if (xDriver.is())
-                m_aDriversBS.push_back(xDriver);
+            if (::cppu::extractInterface(xFactory, xEnumDrivers->nextElement()))
+            {
+                Reference< XDriver > xDriver(xFactory->createInstance(), UNO_QUERY);
+                if (xDriver.is())
+                    m_aDriversBS.push_back(xDriver);
+            }
         }
     }
 }
@@ -274,21 +276,19 @@ sal_Bool SAL_CALL OSDBCDriverManager::hasElements(  ) throw(::com::sun::star::un
 //--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OSDBCDriverManager::getImplementationName(  ) throw(RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
     return getImplementationName_Static();
 }
 
 //--------------------------------------------------------------------------
 sal_Bool SAL_CALL OSDBCDriverManager::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
     Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
     const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
-        if (pSupported->equals(_rServiceName))
-            return sal_True;
+    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
+        ;
 
-    return sal_False;
+    return pSupported != pEnd;
 }
 
 //--------------------------------------------------------------------------
@@ -323,7 +323,7 @@ Reference< XInterface > SAL_CALL OSDBCDriverManager::getRegisteredObject( const 
     MutexGuard aGuard(m_aMutex);
     ConstRuntimeDriversIterator aSearch = m_aDriversRT.find(_rName);
     if (aSearch == m_aDriversRT.end())
-        throw NoSuchElementException();
+        throwNoSuchElementException();
 
     return aSearch->second;
 }
@@ -333,14 +333,16 @@ void SAL_CALL OSDBCDriverManager::registerObject( const ::rtl::OUString& _rName,
 {
     MutexGuard aGuard(m_aMutex);
     ConstRuntimeDriversIterator aSearch = m_aDriversRT.find(_rName);
-    if (aSearch != m_aDriversRT.end())
+    if (aSearch == m_aDriversRT.end())
+    {
+        Reference< XDriver > xNewDriver(_rxObject, UNO_QUERY);
+        if (xNewDriver.is())
+            m_aDriversRT[_rName] = xNewDriver;
+        else
+            throw IllegalArgumentException();
+    }
+    else
         throw ElementExistException();
-
-    Reference< XDriver > xNewDriver(_rxObject, UNO_QUERY);
-    if (!xNewDriver.is())
-        throw IllegalArgumentException();
-
-    m_aDriversRT[_rName] = xNewDriver;
 }
 
 //--------------------------------------------------------------------------
@@ -349,7 +351,7 @@ void SAL_CALL OSDBCDriverManager::revokeObject( const ::rtl::OUString& _rName ) 
     MutexGuard aGuard(m_aMutex);
     ConstRuntimeDriversIterator aSearch = m_aDriversRT.find(_rName);
     if (aSearch == m_aDriversRT.end())
-        throw NoSuchElementException();
+        throwNoSuchElementException();
 
     m_aDriversRT.erase(_rName);
 }

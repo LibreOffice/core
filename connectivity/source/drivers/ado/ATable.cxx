@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:40:04 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 07:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,8 +267,8 @@ sal_Int64 OAdoTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Run
 void SAL_CALL OAdoTable::rename( const ::rtl::OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(rBHelper.bDisposed);
+
 
     m_aTable.put_Name(newName);
 }
@@ -277,8 +277,8 @@ void SAL_CALL OAdoTable::rename( const ::rtl::OUString& newName ) throw(SQLExcep
 void SAL_CALL OAdoTable::alterColumnByName( const ::rtl::OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(rBHelper.bDisposed);
+
 
         Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
@@ -300,8 +300,8 @@ void SAL_CALL OAdoTable::alterColumnByName( const ::rtl::OUString& colName, cons
 void SAL_CALL OAdoTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(rBHelper.bDisposed);
+
 
     Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())

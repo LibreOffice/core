@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:53:31 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 07:27:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,14 +191,20 @@ void ODatabaseMetaDataResultSet::setRows(const ORows& _rRows)
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed )
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
 
     Reference< XResultSetMetaData > xMeta = getMetaData();
     sal_Int32 nLen = xMeta->getColumnCount();
     sal_Int32 i = 1;
     for(;i<=nLen;++i)
-        if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) : columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
+        if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) :
+#if SUPD > 630
+            columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i))
+#else
+            columnName.equalsIgnoreCase(xMeta->getColumnName(i))
+#endif
+            )
             break;
     return i;
 }
@@ -206,8 +212,8 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const ::rtl::OUString
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
     if(m_aRowsIter == m_aRows.end())
         return NULL;
 
@@ -221,8 +227,8 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResult
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
 
     if(m_aRowsIter == m_aRows.end())
         return NULL;
@@ -238,8 +244,8 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResult
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
     if(m_aRowsIter == m_aRows.end())
         return sal_False;
 
@@ -253,8 +259,8 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex 
 sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
     if(m_aRowsIter == m_aRows.end())
         return 0;
 
@@ -269,8 +275,8 @@ sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex ) t
 Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
     if(m_aRowsIter == m_aRows.end())
         return Sequence< sal_Int8 >();
 
@@ -286,8 +292,8 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
 ::com::sun::star::util::Date SAL_CALL ODatabaseMetaDataResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
     if(m_aRowsIter == m_aRows.end())
         return ::com::sun::star::util::Date(0,0,0);
 
@@ -303,8 +309,8 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
 double SAL_CALL ODatabaseMetaDataResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
     if(m_aRowsIter == m_aRows.end())
         return 0.0;
 
@@ -320,8 +326,8 @@ double SAL_CALL ODatabaseMetaDataResultSet::getDouble( sal_Int32 columnIndex ) t
 float SAL_CALL ODatabaseMetaDataResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
 
     if(m_aRowsIter == m_aRows.end())
         return 0.0;
@@ -338,8 +344,8 @@ float SAL_CALL ODatabaseMetaDataResultSet::getFloat( sal_Int32 columnIndex ) thr
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
 
     if(m_aRowsIter == m_aRows.end())
         return 0;
@@ -357,8 +363,8 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) t
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getRow(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
 
     return m_nRowPos;
 }
@@ -367,8 +373,8 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getRow(  ) throw(SQLException, Ru
 sal_Int64 SAL_CALL ODatabaseMetaDataResultSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
     if(m_aRowsIter == m_aRows.end())
         return sal_Int64();
 
@@ -384,8 +390,8 @@ sal_Int64 SAL_CALL ODatabaseMetaDataResultSet::getLong( sal_Int32 columnIndex ) 
 Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
 
     if(!m_xMetaData.is())
         m_xMetaData = new ODatabaseMetaDataResultSetMetaData(this);
@@ -396,8 +402,8 @@ Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData
 Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
     if(m_aRowsIter == m_aRows.end())
         return NULL;
 
@@ -413,8 +419,8 @@ Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 col
 Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
     if(m_aRowsIter == m_aRows.end())
         return NULL;
 
@@ -428,8 +434,8 @@ Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 colum
 Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
     if(m_aRowsIter == m_aRows.end())
         return NULL;
 
@@ -444,8 +450,8 @@ Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 colum
 Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
     if(m_aRowsIter == m_aRows.end())
         return NULL;
 
@@ -460,8 +466,8 @@ Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 columnI
 Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
     if(m_aRowsIter == m_aRows.end())
         return Any();
 
@@ -475,8 +481,8 @@ Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 columnIndex, const
 sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
     if(m_aRowsIter == m_aRows.end())
         return 0;
 
@@ -491,8 +497,8 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 ::rtl::OUString SAL_CALL ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
 
     if(m_aRowsIter == m_aRows.end())
         return ::rtl::OUString();
@@ -512,8 +518,8 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 ::com::sun::star::util::Time SAL_CALL ODatabaseMetaDataResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
     if(m_aRowsIter == m_aRows.end())
         return ::com::sun::star::util::Time(0,0,0,0);
 
@@ -531,8 +537,8 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 ::com::sun::star::util::DateTime SAL_CALL ODatabaseMetaDataResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
 
     if(m_aRowsIter == m_aRows.end())
         return ::com::sun::star::util::DateTime(0,0,0,0,0,0,0);
@@ -580,8 +586,8 @@ void SAL_CALL ODatabaseMetaDataResultSet::close(  ) throw(SQLException, RuntimeE
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-                        throw DisposedException();
+        checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
     }
     dispose();
 }
@@ -653,8 +659,8 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst(  ) throw(SQLExcepti
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::next(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
 
     if(m_bBOF)
     {
@@ -675,8 +681,8 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::next(  ) throw(SQLException, Runti
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::wasNull(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
 
     if(m_aRowsIter == m_aRows.end())
         return sal_True;
@@ -687,16 +693,16 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::wasNull(  ) throw(SQLException, Ru
 void SAL_CALL ODatabaseMetaDataResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL ODatabaseMetaDataResultSet::cancel(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ODatabaseMetaDataResultSet::clearWarnings(  ) throw(SQLException, RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BConnection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 09:58:40 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 07:27:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,8 +244,8 @@ void OAdabasConnection::disposing()
 Reference< XDatabaseMetaData > SAL_CALL OAdabasConnection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OConnection_BASE2::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OConnection_BASE2::rBHelper.bDisposed);
+
 
     Reference< XDatabaseMetaData > xMetaData = m_xMetaData;
     if(!xMetaData.is())
@@ -266,8 +266,8 @@ sal_Bool OAdabasConnection::isStarted()
 Reference< XStatement > SAL_CALL OAdabasConnection::createStatement(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OConnection_BASE2::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OConnection_BASE2::rBHelper.bDisposed);
+
     Reference< XStatement > xReturn = new OAdabasStatement(this);
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
     return xReturn;
@@ -276,8 +276,8 @@ Reference< XStatement > SAL_CALL OAdabasConnection::createStatement(  ) throw(SQ
 Reference< XPreparedStatement > SAL_CALL OAdabasConnection::prepareStatement( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OConnection_BASE2::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OConnection_BASE2::rBHelper.bDisposed);
+
     if(m_aTypeInfo.empty())
         buildTypeInfo();
 
