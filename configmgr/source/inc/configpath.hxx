@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpath.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:40:31 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef CONFIGMGR_CONFIGNAME_HXX_
-#define CONFIGMGR_CONFIGNAME_HXX_
+#ifndef CONFIGMGR_CONFIGPATH_HXX_
+#define CONFIGMGR_CONFIGPATH_HXX_
 
 #include "apitypes.hxx"
 #include "configexcept.hxx"
@@ -142,20 +142,24 @@ namespace configmgr
         /// holds attributes a node in the schema
         struct Attributes
         {
-            bool writable       : 1;
-            bool nullable       : 1;
-            bool notified       : 1;
-            bool constrained    : 1;
+            bool bWritable      : 1;
+            bool bNullable      : 1;
+            bool bNotified      : 1;
+            bool bConstrained   : 1;
 
-            bool localized      : 1;
-            bool defaultable    : 1;
+            bool bReplacing     : 1;    // remember the state of a node
+            bool bLocalized     : 1;
+            bool bDefaultable   : 1;
+
+            Attributes():bWritable(true), bNullable(false), bNotified(true), bConstrained(false), bReplacing(false), bLocalized(false), bDefaultable(false){}
         };
+
         //--------------------------------------------------------------------
         /// holds information about a node in the schema
         struct NodeInfo
         {
-            Name        name;
-            Attributes  is;
+            Name        aName;
+            Attributes  aAttributes;
         };
     //-------------------------------------------------------------------------
 

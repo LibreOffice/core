@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-29 13:59:48 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,41 +62,25 @@
 #ifndef CONFIGMGR_MISC_OPTIONS_HXX_
 #define CONFIGMGR_MISC_OPTIONS_HXX_
 
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
+
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include "hashhelper.hxx"
-
-#ifndef CONFIGMGR_TYPECONVERTER_HXX
-#include "typeconverter.hxx"
-#endif
-
-#ifndef ASCII
-#define ASCII(x) OUString::createFromAscii(x)
-#endif
-
 #include <vos/ref.hxx>
+
+namespace com { namespace sun { namespace star {
+
+    namespace script    { class XTypeConverter; }
+}   }   }
 
 namespace configmgr
 {
     namespace css  = ::com::sun::star;
     namespace uno  = css::uno;
     namespace script = css::script;
-
-    class OptionValue {
-        rtl::OUString m_aName;
-        uno::Any m_aValue;
-    public:
-        OptionValue(const rtl::OUString &_aName, const uno::Any& _aValue)
-                : m_aName(_aName),
-                  m_aValue(_aValue)
-            {}
-
-        rtl::OUString getName() {return m_aName;}
-        uno::Any getValue() {return m_aValue;}
-
-        void setName(const rtl::OUString &_aName) {m_aName = _aName;}
-        void setValue(const uno::Any &_aAny) {m_aValue = _aAny;}
-    };
 
     /**
        class OOptions is created one time per Configuration[update]Access
@@ -110,73 +94,53 @@ namespace configmgr
 
     class OOptions : public vos::OReference
     {
-        HashMapAny m_aHashMap;
-#ifdef LLA_PRIVAT_DEBUG
-        rtl::OUString m_aLocale;
-#endif
-        uno::Reference<script::XTypeConverter> m_aTypeConverter;
-        sal_Bool m_bIsSetupMode;
+        uno::Reference< script::XTypeConverter > m_xConverter;  // typeconverter used
+        rtl::OUString   m_sLocale;                              // current locale used for data
+        rtl::OUString   m_sDefaultLocale;                       // default locale set for a user
+        rtl::OUString   m_sUser;                                // user key used (could be empty)
+        sal_Bool        m_bIsSetupMode;                         // special mode for setup and local configuration
+
     public:
-        OOptions()
-                :m_bIsSetupMode(false)
-            {}
+        OOptions(const uno::Reference< script::XTypeConverter >& _xConverter)
+            :m_xConverter(_xConverter)
+            ,m_bIsSetupMode(sal_False){}
 
-        void add(const rtl::OUString &_aName, const uno::Any& _aValue)
-            {
-                m_aHashMap[_aName] = _aValue;
-            }
-        uno::Any getValue(const rtl::OUString &_aName)
-            {
-                return m_aHashMap[_aName];
-            }
+        OOptions(const uno::Reference< script::XTypeConverter >& _xConverter,
+            const rtl::OUString& _rLocale, const rtl::OUString& _rDefaultLocale,
+            const rtl::OUString& _rUser)
+            :m_xConverter(_xConverter)
+            ,m_sDefaultLocale(_rDefaultLocale)
+            ,m_sLocale(_rLocale)
+            ,m_sUser(_rUser)
+            ,m_bIsSetupMode(sal_False){}
 
-        // Some Helperfunctions, to esaier setting Values
-        void add(const sal_Char* _pChar, const rtl::OUString &_aValueAsString)
-            {
-                uno::Any aAny;
-                aAny <<= _aValueAsString;
-                m_aHashMap[ASCII(_pChar)] = aAny;
-#ifdef LLA_PRIVAT_DEBUG
-                if (stricmp(_pChar, "Locale"))
-                {
-                    m_aLocale = _aValueAsString;
-                }
-#endif
-            }
+        OOptions(const OOptions& _rOptions)
+            :m_xConverter(_rOptions.getTypeConverter())
+            ,m_sDefaultLocale(_rOptions.getDefaultLocale())
+            ,m_sLocale(_rOptions.getLocale())
+            ,m_sUser(_rOptions.getUser())
+            ,m_bIsSetupMode(_rOptions.isSetupMode()){}
 
-        rtl::OUString getLocale()
-            {
-                rtl::OUString aLocalStr;
-                uno::Any aAny;
-                aAny = m_aHashMap[ASCII("Locale")];
-                if (aAny >>= aLocalStr)
-                {
-                    return aLocalStr;
-                }
-                return ASCII("en-US"); // Fallback Language
-            }
+        uno::Reference< script::XTypeConverter > getTypeConverter() const {return m_xConverter;}
+        const rtl::OUString& getUser() const {return m_sUser;}
+        const rtl::OUString& getLocale() const {return m_sLocale;}
+        const rtl::OUString& getDefaultLocale() const {return m_sDefaultLocale;}
 
-        void setTypeConverter(const uno::Reference<script::XTypeConverter> &_aConverter)
-            {
-                m_aTypeConverter = _aConverter;
-            }
-        uno::Reference<script::XTypeConverter> getTypeConverter()
-            {
-                OSL_ENSHURE(m_aTypeConverter.is(), "Warning, no TypeConverter set in the options.");
-                return m_aTypeConverter;
-            }
+        sal_Bool hasDefaultLocale() const {return !m_sLocale.getLength() || m_sLocale == m_sDefaultLocale;}
+        rtl::OUString getCurrentLocale() const {return m_sLocale.getLength() ? m_sLocale : m_sDefaultLocale;}
 
-        sal_Bool isSetupMode()
-            {
-                return m_bIsSetupMode;
-            }
+        void setUser(const rtl::OUString& _rUser) {m_sUser = _rUser;}
+        void setLocale(const rtl::OUString& _rLocale) {m_sLocale = _rLocale;}
+        void setDefaultLocale(const rtl::OUString& _rLocale) {m_sDefaultLocale = _rLocale;}
+
+        sal_Bool isSetupMode() const
+        {
+            return m_bIsSetupMode;
+        }
         void setSetupMode(sal_Bool _bMode)
-            {
-                m_bIsSetupMode = _bMode;
-            }
-
-        // vos::OReference implements acquire and release
-        // ...
+        {
+            m_bIsSetupMode = _bMode;
+        }
     };
 } // namespace
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:30:47 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 09:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,11 +110,12 @@ namespace configmgr
         /// provides information about the elements of a <type>Node</type> that is a Container ("set").
         class Template : public vos::OReference
         {
-            Name m_aName;
-            Name m_aModule;
-            UnoType m_aInstanceType;
+            Name        m_aName;
+            Name        m_aModule;
+            UnoType     m_aInstanceType;
+            Attributes  m_aAttributes;
         private:
-            explicit Template(Name const& aName, Name const& aModule,UnoType const& aType);
+            explicit Template(Name const& aName, Name const& aModule,UnoType const& aType, Attributes const& aAttrs);
 
         public:
         /// checks if the type of an instance of this is known
@@ -122,6 +123,12 @@ namespace configmgr
 
         /// checks if this is a 'value' template <p> PRE: the instance type is known </p>
             bool            isInstanceValue() const;
+
+        /// checks if this template is local dependend
+            bool            isLocalized() const {return m_aAttributes.bLocalized;}
+
+        /// access the node attributes
+            Attributes      getAttributes() const {return m_aAttributes;}
 
         /// get the UNO type for instances (primarily (only ?) for 'value' templates) <p> PRE: the instance type is known </p>
             UnoType         getInstanceType() const;
@@ -142,7 +149,7 @@ namespace configmgr
         };
 
         /// make a template instance that matches the given (simple) type
-        TemplateHolder makeSimpleTemplate(UnoType const& aType, TemplateProvider const& aProvider);
+        TemplateHolder makeSimpleTemplate(UnoType const& aType, Attributes const& aAttrs, TemplateProvider const& aProvider);
         /// make a template instance that matches the given path. Assume that it represents a (complex) tree structure.
         TemplateHolder makeTreeTemplate(OUString const& sPath, TemplateProvider const& aProvider);
         /// make a template instance that matches the elements of the given set. Ensures that the element type is known

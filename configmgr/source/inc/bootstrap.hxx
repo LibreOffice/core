@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-22 19:18:19 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@ namespace com { namespace sun { namespace star {
 } } }
 
 #include <rtl/ustring.hxx>
-#include "options.hxx"
 
 namespace configmgr
 {
@@ -93,15 +92,14 @@ namespace configmgr
     {
     public:
         ConnectionSettings();
-        explicit
-        ConnectionSettings(OUString const& aSettingsFile);
+        explicit ConnectionSettings(OUString const& aSettingsFile);
 
 
         /** create a connection with the current settings. If the user name provided in _rSecurityOverride
             is not empty, the security override will be used (if applicable), else it will be ignored
         */
         IConfigSession* createConnection(uno::Reference<lang::XMultiServiceFactory> const& aServiceMgr,
-            const SettingsOverride& _rSettings, vos::ORef<OOptions> &_aOptions) const;
+            const SettingsOverride& _rSettings) const;
 
     };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 09:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include <com/sun/star/uno/Any.h>
 #endif
 
+#ifndef CONFIGMGR_CONFIGPATH_HXX_
+#include "configpath.hxx"
+#endif
+
 namespace configmgr
 {
 
@@ -101,35 +105,25 @@ namespace configmgr
         void applyToChildren(ISubtree&);
     };
 
-    //==========================================================================
-    //= Base INode
-    //==========================================================================
-    struct NodeAttributes
-    {
-        bool writable : 1;                       // derived (from Parent)
-        bool optional : 1;
-        bool notified : 1;                       // derived (from Parent)
-        bool constrained : 1;
-        NodeAttributes()
-                :writable(true),
-                 optional(false),notified(true), constrained(false) {}
-
-    };
-
     class INode
     {
-        NodeAttributes m_aNodeAttribute;
-        rtl::OUString       m_aName;
+        rtl::OUString                       m_aName;
+        configuration::Attributes           m_aAttributes;
+
+    protected:
+        INode(){}
 
     public:
-        INode();
-        INode(rtl::OUString const& aName);
+        INode(configuration::Attributes);
+        INode(rtl::OUString const& aName, configuration::Attributes);
         virtual ~INode();
         virtual INode* clone() const = 0;
 
-        rtl::OUString getName() const;
-        NodeAttributes getAttributes() const;
+        const rtl::OUString& getName() const {return m_aName;}
+        configuration::Attributes getAttributes() const {return m_aAttributes;}
 
+        bool isLocalized() const {return m_aAttributes.bLocalized;}
+        bool isReplacing() const {return m_aAttributes.bReplacing;}
         void setName(const rtl::OUString& _rNewName) { m_aName = _rNewName; }
             // to be used with caution. If the node is referenced from somewhere else under it's old name,
             // you may have problems with this inconsistence
@@ -147,46 +141,50 @@ namespace configmgr
         RTTI_BASE(INode);
     };
 
-
     //==========================================================================
     //= ISubtree
     //==========================================================================
     class ISubtree : public INode
     {
-        ::rtl::OUString m_sId;
-        virtual INode* doGetChild(rtl::OUString const& name) const = 0;
-
+        sal_Int16           m_nLevel;                   /// determines if everything is read
+        ::rtl::OUString     m_sId;
         ::rtl::OUString     m_sTemplateName;            /// path of the template for child instantiation
 
+        virtual INode* doGetChild(rtl::OUString const& name) const = 0;
+
+    protected:
+        ISubtree():m_nLevel(0){}
+
     public:
-        ISubtree() : INode() {}
-        ISubtree(rtl::OUString const& aName) : INode(aName) {}
+        // subtree does current not support attributes in the right way
+        // ISubtree(const configuration::Attributes& _rAttrs) : INode(_rAttrs), m_nLevel(0) {}
+        ISubtree(const rtl::OUString& aName, const rtl::OUString& _rTemplate,
+                 const configuration::Attributes& _rAttrs)
+            :INode(aName, _rAttrs)
+            ,m_nLevel(0)
+            ,m_sTemplateName(_rTemplate){}
 
         ::rtl::OUString getId() const           { return m_sId; }
         void            setId(const ::rtl::OUString& _rId)  { m_sId = _rId; }
 
-//      virtual sal_Int32                   size() const = 0;
-//      virtual uno::Sequence< rtl::OUString >  elementNames() const = 0;
-
         INode* getChild(rtl::OUString const& name)              { return doGetChild(name); }
         INode const* getChild(rtl::OUString const& name) const  { return doGetChild(name); }
 
-        virtual INode* addChild(std::auto_ptr<INode> node) =0;                  // takes ownership
+        ISubtree* asISubtree();
+        ISubtree const* asISubtree() const;
+
+        sal_Int16 getLevel() const {return m_nLevel;}
+        void setLevel(sal_Int16);
+
+        bool                isSetNode() const { return m_sTemplateName.getLength() != 0; }
+        ::rtl::OUString     getChildTemplateName() const { return m_sTemplateName; }
+
+        virtual INode* addChild(std::auto_ptr<INode> node) =0;                      // takes ownership
         virtual ::std::auto_ptr<INode> removeChild(rtl::OUString const& name) =0;   // releases ownership
 
         // Iteration support, stop if (action returns true)
         virtual void forEachChild(NodeAction& anAction) const = 0;
         virtual void forEachChild(NodeModification& anAction) = 0;
-
-        ISubtree* asISubtree();
-        ISubtree const* asISubtree() const;
-
-        virtual sal_Int16 getLevel() const = 0;
-        virtual void setLevel(sal_Int16) = 0;
-
-        bool                isSetNode() const { return m_sTemplateName.getLength() != 0; }
-        ::rtl::OUString     getChildTemplateName() const { return m_sTemplateName; }
-        void                setChildTemplateName(const ::rtl::OUString& _rName) { m_sTemplateName = _rName; }
 
         // double dispatch support
         virtual void dispatch(NodeAction& anAction) const { anAction.handle(*this); }
@@ -201,23 +199,26 @@ namespace configmgr
     //==========================================================================
     class ValueNode : public INode
     {
-        uno::Type   m_aType;
-        uno::Any    m_aValue;
-        uno::Any    m_aDefaultValue;
+        uno::Type       m_aType;
+        uno::Any        m_aValue;
+        uno::Any        m_aDefaultValue;
+
     public:
         ValueNode(){}
 
-        ValueNode(rtl::OUString const& aName)
-            :INode(aName)
+        ValueNode(configuration::Attributes _aAttrs):INode(_aAttrs){}
+
+        ValueNode(rtl::OUString const& aName, configuration::Attributes _aAttrs)
+            :INode(aName, _aAttrs)
         {}
-        ValueNode(rtl::OUString const& aName,uno::Type const& aType)
-            :INode(aName), m_aType(aType)
+        ValueNode(rtl::OUString const& aName,uno::Type const& aType, configuration::Attributes _aAttrs)
+            :INode(aName, _aAttrs), m_aType(aType)
         { check_init(); }
-        ValueNode(rtl::OUString const& aName,uno::Any const& anAny)
-            :INode(aName), m_aValue(anAny)
+        ValueNode(rtl::OUString const& aName,uno::Any const& anAny, configuration::Attributes _aAttrs)
+            :INode(aName, _aAttrs), m_aValue(anAny)
         { init(); }
-        ValueNode(rtl::OUString const& aName,uno::Any const& anAny,uno::Any const& aDefault)
-            :INode(aName), m_aValue(anAny), m_aDefaultValue(aDefault)
+        ValueNode(rtl::OUString const& aName,uno::Any const& anAny,uno::Any const& aDefault, configuration::Attributes _aAttrs)
+            :INode(aName, _aAttrs), m_aValue(anAny), m_aDefaultValue(aDefault)
         { init(); }
 
         bool isNull() const;

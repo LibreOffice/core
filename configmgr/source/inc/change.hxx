@@ -2,9 +2,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-23 12:20:21 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,16 +155,18 @@ namespace configmgr
         typedef uno::Any Any;
         struct SetToDefault {};
         enum Mode { wasDefault, changeValue, setToDefault, changeDefault, typeIsAny };
+        configuration::Attributes   m_aAttributes;
 
     private:
         uno::Any        m_aValue;
         uno::Any        m_aOldValue;
-        Mode    m_eMode;
+        Mode            m_eMode;
     public:
-        ValueChange(rtl::OUString const& _rName, uno::Any aNewValue, Mode aMode = changeValue, uno::Any aOldValue = uno::Any());
+        ValueChange(rtl::OUString const& _rName, uno::Any aNewValue, const configuration::Attributes& _rAttributes,
+                    Mode aMode = changeValue, uno::Any aOldValue = uno::Any());
         ValueChange(const ValueChange&);
         ValueChange(uno::Any aNewValue, ValueNode const& aOldValue);
-        ValueChange(SetToDefault,  ValueNode const& aOldValue);
+        ValueChange(SetToDefault, ValueNode const& aOldValue);
 
         uno::Any    getNewValue() const { return m_aValue; }
         uno::Any    getOldValue() const { return m_aOldValue; }
@@ -173,7 +175,12 @@ namespace configmgr
         void        setNewValue(const uno::Any& _rNewVal, Mode aMode)
         { setNewValue(_rNewVal); m_eMode = aMode;}
 
+        bool isReplacing() const {return m_aAttributes.bReplacing;}
+        bool isLocalized() const {return m_aAttributes.bLocalized;}
+
         Mode getMode() const { return m_eMode; }
+
+        const configuration::Attributes& getAttributes() const {return m_aAttributes;}
 
         rtl::OUString getModeAsString() const;
         void setModeAsString(const rtl::OUString& _rMode);
@@ -308,8 +315,9 @@ namespace configmgr
     {
     protected:
         typedef ::std::map< ::rtl::OUString,Change* > Children;
-        Children m_aChanges;
-        ::rtl::OUString     m_sTemplateName;            /// path of the template for child instantiation
+        Children                    m_aChanges;
+        ::rtl::OUString             m_sTemplateName;            /// path of the template for child instantiation
+        configuration::Attributes   m_aAttributes;
 
         // don't create CopyCTor automatically
         SubtreeChange(SubtreeChange&);
@@ -329,11 +337,30 @@ namespace configmgr
         /// A parameter for disabling copying of children
         typedef argument::NoChildCopy NoChildCopy;
 
-        SubtreeChange(rtl::OUString const& _rName):Change(_rName){}
-        SubtreeChange(const SubtreeChange& _rChange, NoChildCopy) :Change(_rChange),m_sTemplateName(_rChange.getChildTemplateName()){}
+        SubtreeChange(const rtl::OUString& _rName,
+                      const rtl::OUString& _rTemplate,
+                      const configuration::Attributes& _rAttr)
+            :Change(_rName)
+            ,m_aAttributes(_rAttr)
+            ,m_sTemplateName(_rTemplate){}
+
+        SubtreeChange(const ISubtree& _rTree)
+            :Change(_rTree.getName())
+            ,m_aAttributes(_rTree.getAttributes())
+            ,m_sTemplateName(_rTree.getChildTemplateName()){}
+
+        SubtreeChange(const SubtreeChange& _rChange, NoChildCopy)
+            :Change(_rChange)
+            ,m_sTemplateName(_rChange.getChildTemplateName())
+            ,m_aAttributes(_rChange.getAttributes()){}
+
         ~SubtreeChange();
 
         void swap(SubtreeChange& aOther);
+
+        bool isReplacing() const {return m_aAttributes.bReplacing;}
+        bool isLocalized() const {return m_aAttributes.bLocalized;}
+        const configuration::Attributes& getAttributes() const {return m_aAttributes;}
 
         bool            isSetNodeChange() const { return m_sTemplateName.getLength() != 0; }
         rtl::OUString   getChildTemplateName() const { return m_sTemplateName; }
@@ -369,9 +396,9 @@ namespace configmgr
     class SubtreeChange::ChildIterator
     {
     protected:
-        const SubtreeChange*        m_pTree;
         uno::Sequence< rtl::OUString >  m_aNames;
-        sal_Int32                   m_nPos;
+        const SubtreeChange*            m_pTree;
+        sal_Int32                       m_nPos;
 
         friend class SubtreeChange;
         struct EndPos { };
@@ -436,7 +463,7 @@ namespace configmgr
     class SubtreeChangeReferrer : public SubtreeChange
     {
         // no explicit construction
-        SubtreeChangeReferrer() : SubtreeChange(::rtl::OUString()) { }
+        SubtreeChangeReferrer() : SubtreeChange(::rtl::OUString(), ::rtl::OUString(), configuration::Attributes()) { }
 
     public:
         SubtreeChangeReferrer(const SubtreeChange& _rSource);
@@ -469,14 +496,25 @@ namespace configmgr
     {
         rtl::OUString pathToRoot;                // path to the root of the whole to-be-updated subtree
         SubtreeChange root;                      // changes made within this sub tree
-        TreeChangeList(): root(::rtl::OUString()){}
+        // TreeChangeList(): root(::rtl::OUString(), configuration::Attributes()){}
 
         /** ctor
         @param      _rPathToRoot        path to the root of the whole to-be-updated subtree
         @param      _rLocalName         relative path within the to-be-updated subtree
         */
-        TreeChangeList( const rtl::OUString& _rPathToRoot, const rtl::OUString& _rLocalName)
-                :pathToRoot(_rPathToRoot), root(_rLocalName){}
+        TreeChangeList( const rtl::OUString& _rPathToRoot,
+                        const rtl::OUString& _rLocalName,
+                        const rtl::OUString& _rChildTemplateName,
+                        const configuration::Attributes& _rAttr)
+                :pathToRoot(_rPathToRoot), root(_rLocalName, _rChildTemplateName, _rAttr){}
+
+        /** ctor
+        @param      _rPathToRoot        path to the root of the whole to-be-updated subtree
+        @param      _rLocalName         relative path within the to-be-updated subtree
+        */
+        TreeChangeList( const rtl::OUString& _rPathToRoot,
+                        const ISubtree& _rTree)
+                :pathToRoot(_rPathToRoot), root(_rTree){}
 
         /** ctor
         @param      _rTreeList          list to initialize the path, no childs are copied

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-29 13:59:48 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 09:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,21 @@ public:
 private:
     // ensuring the correct state
     void ensure();
+};
+
+
+// ===================================================================
+// = OChangeCounter
+// ===================================================================
+struct OChangeCounter : public ChangeTreeAction
+{
+    sal_Int32   nCount;
+    OChangeCounter() : nCount(0) { }
+
+    virtual void handle(ValueChange const& aValueNode);
+    virtual void handle(AddNode const& aAddNode);
+    virtual void handle(RemoveNode const& aRemoveNode);
+    virtual void handle(SubtreeChange const& aSubtree);
 };
 
 // ===================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeprovider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-23 12:22:09 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 09:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #endif
-
+#ifndef CONFIGMGR_MISC_OPTIONS_HXX_
+#include <options.hxx>
+#endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -102,14 +104,6 @@
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
 #endif
-//#ifndef __SGI_STL_MEMORY
-//#include <stl/memory>
-//#endif
-//#ifndef _MAP_
-//#include <map>
-//#endif
-//#include <string.h>
-
 #ifndef CONFIGMGR_CONFNAME_HXX_
 #include "confname.hxx"
 #endif
@@ -134,15 +128,11 @@ namespace configmgr
     public:
         enum { ALL_LEVELS = -1  };
 
-        virtual ISubtree const* getSubtree( OUString const& aComponentName ) const = 0;
-        virtual ISubtree *      requestSubtree( OUString const& aSubtreePath, sal_Int16 nMinLevels = ALL_LEVELS) throw (container::NoSuchElementException) = 0;
-
-        /** returns the node for the given path. In opposite to <method>getSubtree</method>, this methods covers
-            leafs, too.
-        */
-        virtual const INode *   getNode(const OUString& _rPath) = 0;
-
-        virtual void updateTree(TreeChangeList& aChanges) throw (lang::WrappedTargetException, uno::RuntimeException) = 0;
+        virtual ISubtree * requestSubtree(OUString const& aSubtreePath,
+                                          const vos::ORef < OOptions >& _xOptions,
+                                          sal_Int16 nMinLevels = ALL_LEVELS) throw (container::NoSuchElementException) = 0;
+        virtual void updateTree(TreeChangeList& aChanges,
+                                const vos::ORef < OOptions >& _xOptions) throw (lang::WrappedTargetException, uno::RuntimeException) = 0;
     };
 
     class ITreeNotifier;
@@ -189,15 +179,7 @@ namespace configmgr
     //==========================================================================
     //= ref-counted providers
     //==========================================================================
-    class IRefCountedTreeProvider : public ITreeProvider, public IInterface
-    {
-    };
-
-    class IRefCountedTreeProvider2 : public ITreeProvider2, public IInterface
-    {
-    };
-
-    class IRefCountedTemplateProvider : public ITemplateProvider, public IInterface
+    class IRefCountedTreeProvider : public ITreeProvider2, public IInterface
     {
     };
 
