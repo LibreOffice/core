@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testfile.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-11 12:44:05 $
+ *  last change: $Author: obr $ $Date: 2001-05-11 12:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2719,21 +2719,6 @@ void print_error( ::rtl::OString& str, FileBase::RC rc )
 
 int MAIN( int argc, char* argv[] )
 {
-    OUString    aSearchPathList(L"");
-    OUString    aSearchFile(L"./testfile.exe");
-    OUString    aFoundPath;
-
-    FileBase::RC    error = FileBase::searchFileURL( aSearchFile, aSearchPathList, aFoundPath );
-
-    aSearchFile = L"file:///c:/winnt/explorer.exe";
-    error = FileBase::searchFileURL( aSearchFile, aSearchPathList, aFoundPath );
-
-    aSearchFile = L"testfile.exe";
-    error = FileBase::searchFileURL( aSearchFile, aSearchPathList, aFoundPath );
-
-    aSearchFile = L"explorer.exe";
-    error = FileBase::searchFileURL( aSearchFile, aSearchPathList, aFoundPath );
-
     sal_Bool fSuccess=sal_False;
 
     //Initialization
