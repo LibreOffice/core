@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinewin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:56:00 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,29 +229,29 @@ const ScOutlineEntry* ScOutlineWindow::GetOutlineEntry( sal_uInt16 nLevel, sal_u
     return pArray ? pArray->GetEntry( nLevel, nEntry ) : NULL;
 }
 
-bool ScOutlineWindow::IsHidden( sal_uInt16 nColRowIndex ) const
+bool ScOutlineWindow::IsHidden( SCCOLROW nColRowIndex ) const
 {
     sal_uInt8 nFlags = mbHoriz ?
-        GetDoc().GetColFlags( nColRowIndex, GetTab() ) :
-        GetDoc().GetRowFlags( nColRowIndex, GetTab() );
+        GetDoc().GetColFlags( static_cast<SCCOL>(nColRowIndex), GetTab() ) :
+        GetDoc().GetRowFlags( static_cast<SCROW>(nColRowIndex), GetTab() );
     return (nFlags & CR_HIDDEN) != 0;
 }
 
-bool ScOutlineWindow::IsFiltered( sal_uInt16 nColRowIndex ) const
+bool ScOutlineWindow::IsFiltered( SCCOLROW nColRowIndex ) const
 {
     // columns cannot be filtered
-    return !mbHoriz && GetDoc().IsFiltered( nColRowIndex, GetTab() );
+    return !mbHoriz && GetDoc().IsFiltered( static_cast<SCROW>(nColRowIndex), GetTab() );
 }
 
-bool ScOutlineWindow::IsFirstVisible( sal_uInt16 nColRowIndex ) const
+bool ScOutlineWindow::IsFirstVisible( SCCOLROW nColRowIndex ) const
 {
     bool bAllHidden = true;
-    for ( sal_uInt16 nPos = 0; (nPos < nColRowIndex) && bAllHidden; ++nPos )
+    for ( SCCOLROW nPos = 0; (nPos < nColRowIndex) && bAllHidden; ++nPos )
         bAllHidden = IsHidden( nPos );
     return bAllHidden;
 }
 
-void ScOutlineWindow::GetVisibleRange( sal_uInt16& rnColRowStart, sal_uInt16& rnColRowEnd ) const
+void ScOutlineWindow::GetVisibleRange( SCCOLROW& rnColRowStart, SCCOLROW& rnColRowEnd ) const
 {
     if ( mbHoriz )
     {
@@ -318,11 +318,11 @@ sal_uInt16 ScOutlineWindow::GetLevelFromPos( sal_Int32 nLevelPos ) const
         SC_OL_NOLEVEL;
 }
 
-sal_Int32 ScOutlineWindow::GetColRowPos( sal_uInt16 nColRowIndex ) const
+sal_Int32 ScOutlineWindow::GetColRowPos( SCCOLROW nColRowIndex ) const
 {
     sal_Int32 nDocPos = mbHoriz ?
-        mrViewData.GetScrPos( nColRowIndex, 0, meWhich, TRUE ).X() :
-        mrViewData.GetScrPos( 0, nColRowIndex, meWhich, TRUE ).Y();
+        mrViewData.GetScrPos( static_cast<SCCOL>(nColRowIndex), 0, meWhich, TRUE ).X() :
+        mrViewData.GetScrPos( 0, static_cast<SCROW>(nColRowIndex), meWhich, TRUE ).Y();
     return mnMainFirstPos + nDocPos;
 }
 
@@ -339,8 +339,8 @@ bool ScOutlineWindow::GetEntryPos(
     if ( !pEntry || !pEntry->IsVisible() )
         return false;
 
-    sal_uInt16 nStart = pEntry->GetStart();
-    sal_uInt16 nEnd = pEntry->GetEnd();
+    SCCOLROW nStart = pEntry->GetStart();
+    SCCOLROW nEnd = pEntry->GetEnd();
 
     sal_Int32 nEntriesSign = mbMirrorEntries ? -1 : 1;
 
@@ -367,7 +367,7 @@ bool ScOutlineWindow::GetEntryPos(
     if ( !bHidden && nEntry )
     {
         const ScOutlineEntry* pPrevEntry = GetOutlineEntry( nLevel, nEntry - 1 );
-        sal_uInt16 nPrevEnd = pPrevEntry->GetEnd();
+        SCCOLROW nPrevEnd = pPrevEntry->GetEnd();
         if ( (nPrevEnd + 1 == nStart) && IsHidden( nPrevEnd ) )
         {
             if ( IsFirstVisible( pPrevEntry->GetStart() ) )
@@ -391,7 +391,7 @@ bool ScOutlineWindow::GetEntryPos(
     if ( !mbHoriz )
     {
         bVisible = false;
-        for ( sal_uInt16 nRow = nStart; (nRow <= nEnd) && !bVisible; ++nRow )
+        for ( SCCOLROW nRow = nStart; (nRow <= nEnd) && !bVisible; ++nRow )
             bVisible = !IsFiltered( nRow );
     }
     return bVisible;
@@ -425,7 +425,7 @@ bool ScOutlineWindow::IsButtonVisible( sal_uInt16 nLevel, sal_uInt16 nEntry ) co
         const ScOutlineEntry* pEntry = GetOutlineEntry( nLevel, nEntry );
         if ( pEntry && pEntry->IsVisible() )
         {
-            sal_uInt16 nStart, nEnd;
+            SCCOLROW nStart, nEnd;
             GetVisibleRange( nStart, nEnd );
             bRet = (nStart <= pEntry->GetStart()) && (pEntry->GetStart() <= nEnd);
         }
@@ -438,7 +438,7 @@ bool ScOutlineWindow::ItemHit( const Point& rPos, sal_uInt16& rnLevel, sal_uInt1
     const ScOutlineArray* pArray = GetOutlineArray();
     if ( !pArray ) return false;
 
-    sal_uInt16 nStartIndex, nEndIndex;
+    SCCOLROW nStartIndex, nEndIndex;
     GetVisibleRange( nStartIndex, nEndIndex );
 
     sal_uInt16 nLevel = GetLevelFromPos( mbHoriz ? rPos.Y() : rPos.X() );
@@ -471,8 +471,8 @@ bool ScOutlineWindow::ItemHit( const Point& rPos, sal_uInt16& rnLevel, sal_uInt1
         --nEntry;
 
         const ScOutlineEntry* pEntry = pArray->GetEntry( nLevel, nEntry );
-        sal_uInt16 nStart = pEntry->GetStart();
-        sal_uInt16 nEnd = pEntry->GetEnd();
+        SCCOLROW nStart = pEntry->GetStart();
+        SCCOLROW nEnd = pEntry->GetEnd();
 
         if ( (nEnd >= nStartIndex) && (nStart <= nEndIndex) )
         {
@@ -698,7 +698,7 @@ void ScOutlineWindow::Paint( const Rectangle& rRect )
 
     SetEntryAreaClipRegion();
 
-    sal_uInt16 nStartIndex, nEndIndex;
+    SCCOLROW nStartIndex, nEndIndex;
     GetVisibleRange( nStartIndex, nEndIndex );
 
     for ( sal_uInt16 nLevel = 0; nLevel < nLevelCount - 1; ++nLevel )
@@ -715,8 +715,8 @@ void ScOutlineWindow::Paint( const Rectangle& rRect )
         for ( nEntry = 0; nEntry < nEntryCount; ++nEntry )
         {
             const ScOutlineEntry* pEntry = pArray->GetEntry( nLevel, nEntry );
-            sal_uInt16 nStart = pEntry->GetStart();
-            sal_uInt16 nEnd = pEntry->GetEnd();
+            SCCOLROW nStart = pEntry->GetStart();
+            SCCOLROW nEnd = pEntry->GetEnd();
 
             // visible range?
             bool bDraw = (nEnd >= nStartIndex) && (nStart <= nEndIndex);
@@ -747,8 +747,8 @@ void ScOutlineWindow::Paint( const Rectangle& rRect )
             --nEntry;
 
             const ScOutlineEntry* pEntry = pArray->GetEntry( nLevel, nEntry );
-            sal_uInt16 nStart = pEntry->GetStart();
-            sal_uInt16 nEnd = pEntry->GetEnd();
+            SCCOLROW nStart = pEntry->GetStart();
+            SCCOLROW nEnd = pEntry->GetEnd();
 
             // visible range?
             bool bDraw = (nStartIndex <= nStart) && (nStart <= nEndIndex + 1);
@@ -864,8 +864,8 @@ bool ScOutlineWindow::ImplMoveFocusByLevel( bool bForward )
         const ScOutlineEntry* pEntry = pArray->GetEntry( mnFocusLevel, mnFocusEntry );
         if ( pEntry )
         {
-            sal_uInt16 nStart = pEntry->GetStart();
-            sal_uInt16 nEnd = pEntry->GetEnd();
+            SCCOLROW nStart = pEntry->GetStart();
+            SCCOLROW nEnd = pEntry->GetEnd();
             sal_uInt16 nNewLevel = mnFocusLevel;
             sal_uInt16 nNewEntry;
 
