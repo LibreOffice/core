@@ -2,9 +2,9 @@
  *
  *  $RCSfile: useroptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-06 07:52:53 $
+ *  last change: $Author: pb $ $Date: 2000-10-09 06:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,12 +122,16 @@ private:
     String          m_aCustomerNumber;
 
     String          m_aEmptyString;
+    String          m_aFullName;
 
     ::osl::Mutex    m_aMutex;
 
+    typedef String SvtUserOptions_Impl:: *StrPtr;
+
     // not const because of using a mutex
-    const String&   GetUserToken( int nIndex );
-    void            SetUserToken( int nIndex, const String& rNewToken );
+    const String&   GetToken( StrPtr pPtr );
+    void            SetToken( StrPtr pPtr, const String& rNewToken );
+    void            InitFullName();
 
 public:
     SvtUserOptions_Impl();
@@ -136,43 +140,58 @@ public:
     virtual void    Commit();
 
     // get the user token, not const because of using a mutex
-    const String&   GetCompany() { return GetUserToken( USER_COMPANY ); }
-    const String&   GetFirstName() { return GetUserToken( USER_FIRSTNAME ); }
-    const String&   GetLastName() { return GetUserToken( USER_LASTNAME ); }
-    const String&   GetID() { return GetUserToken( USER_ID ); }
-    const String&   GetStreet() { return GetUserToken( USER_STREET ); }
-    const String&   GetCity() { return GetUserToken( USER_CITY ); }
-    const String&   GetState() { return GetUserToken( USER_STATE ); }
-    const String&   GetZip() { return GetUserToken( USER_ZIP ); }
-    const String&   GetCountry() { return GetUserToken( USER_COUNTRY ); }
-    const String&   GetPosition() { return GetUserToken( USER_POSITION ); }
-    const String&   GetTitle() { return GetUserToken( USER_TITLE ); }
-    const String&   GetTelephoneHome() { return GetUserToken( USER_TELEPHONEHOME ); }
-    const String&   GetTelephoneWork() { return GetUserToken( USER_TELEPHONEWORK ); }
-    const String&   GetFax() { return GetUserToken( USER_FAX ); }
-    const String&   GetEmail() { return GetUserToken( USER_EMAIL ); }
-    const String&   GetCustomerNumber() { return GetUserToken( USER_CUSTOMERNUMBER ); }
+    const String&   GetCompany() { return GetToken( &SvtUserOptions_Impl::m_aCompany ); }
+    const String&   GetFirstName() { return GetToken( &SvtUserOptions_Impl::m_aFirstName ); }
+    const String&   GetLastName() { return GetToken( &SvtUserOptions_Impl::m_aLastName ); }
+    const String&   GetID() { return GetToken( &SvtUserOptions_Impl::m_aID ); }
+    const String&   GetStreet() { return GetToken( &SvtUserOptions_Impl::m_aStreet ); }
+    const String&   GetCity() { return GetToken( &SvtUserOptions_Impl::m_aCity ); }
+    const String&   GetState() { return GetToken( &SvtUserOptions_Impl::m_aState ); }
+    const String&   GetZip() { return GetToken( &SvtUserOptions_Impl::m_aZip ); }
+    const String&   GetCountry() { return GetToken( &SvtUserOptions_Impl::m_aCountry ); }
+    const String&   GetPosition() { return GetToken( &SvtUserOptions_Impl::m_aPosition ); }
+    const String&   GetTitle() { return GetToken( &SvtUserOptions_Impl::m_aTitle ); }
+    const String&   GetTelephoneHome() { return GetToken( &SvtUserOptions_Impl::m_aTelephoneHome ); }
+    const String&   GetTelephoneWork() { return GetToken( &SvtUserOptions_Impl::m_aTelephoneWork ); }
+    const String&   GetFax() { return GetToken( &SvtUserOptions_Impl::m_aFax ); }
+    const String&   GetEmail() { return GetToken( &SvtUserOptions_Impl::m_aEmail ); }
+    const String&   GetCustomerNumber() { return GetToken( &SvtUserOptions_Impl::m_aCustomerNumber ); }
+
+    const String&   GetFullName();
 
     // set the address token
-    void            SetCompany( const String& rNewToken ) { SetUserToken( USER_COMPANY, rNewToken ); }
-    void            SetFirstName( const String& rNewToken ) { SetUserToken( USER_FIRSTNAME, rNewToken ); }
-    void            SetLastName( const String& rNewToken ) { SetUserToken( USER_LASTNAME, rNewToken ); }
-    void            SetID( const String& rNewToken ) { SetUserToken( USER_ID, rNewToken ); }
-    void            SetStreet( const String& rNewToken ) { SetUserToken( USER_STREET, rNewToken ); }
-    void            SetCity( const String& rNewToken ) { SetUserToken( USER_CITY, rNewToken ); }
-    void            SetState( const String& rNewToken ) { SetUserToken( USER_STATE, rNewToken ); }
-    void            SetZip( const String& rNewToken ) { SetUserToken( USER_ZIP, rNewToken ); }
-    void            SetCountry( const String& rNewToken ) { SetUserToken( USER_COUNTRY, rNewToken ); }
-    void            SetPosition( const String& rNewToken ) { SetUserToken( USER_POSITION, rNewToken ); }
-    void            SetTitle( const String& rNewToken ) { SetUserToken( USER_TITLE, rNewToken ); }
+    void            SetCompany( const String& rNewToken )
+                        { SetToken( &SvtUserOptions_Impl::m_aCompany, rNewToken ); }
+    void            SetFirstName( const String& rNewToken )
+                        { SetToken( &SvtUserOptions_Impl::m_aFirstName, rNewToken ); }
+    void            SetLastName( const String& rNewToken )
+                        { SetToken( &SvtUserOptions_Impl::m_aLastName, rNewToken ); }
+    void            SetID( const String& rNewToken )
+                        { SetToken( &SvtUserOptions_Impl::m_aID, rNewToken ); }
+    void            SetStreet( const String& rNewToken )
+                        { SetToken( &SvtUserOptions_Impl::m_aStreet, rNewToken ); }
+    void            SetCity( const String& rNewToken )
+                        { SetToken( &SvtUserOptions_Impl::m_aCity, rNewToken ); }
+    void            SetState( const String& rNewToken )
+                        { SetToken( &SvtUserOptions_Impl::m_aState, rNewToken ); }
+    void            SetZip( const String& rNewToken )
+                        { SetToken( &SvtUserOptions_Impl::m_aZip, rNewToken ); }
+    void            SetCountry( const String& rNewToken )
+                        { SetToken( &SvtUserOptions_Impl::m_aCountry, rNewToken ); }
+    void            SetPosition( const String& rNewToken )
+                        { SetToken( &SvtUserOptions_Impl::m_aPosition, rNewToken ); }
+    void            SetTitle( const String& rNewToken )
+                        { SetToken( &SvtUserOptions_Impl::m_aTitle, rNewToken ); }
     void            SetTelephoneHome( const String& rNewToken )
-                        { SetUserToken( USER_TELEPHONEHOME, rNewToken ); }
+                        { SetToken( &SvtUserOptions_Impl::m_aTelephoneHome, rNewToken ); }
     void            SetTelephoneWork( const String& rNewToken )
-                        { SetUserToken( USER_TELEPHONEWORK, rNewToken ); }
-    void            SetFax( const String& rNewToken ) { SetUserToken( USER_FAX, rNewToken ); }
-    void            SetEmail( const String& rNewToken ) { SetUserToken( USER_EMAIL, rNewToken ); }
+                        { SetToken( &SvtUserOptions_Impl::m_aTelephoneWork, rNewToken ); }
+    void            SetFax( const String& rNewToken )
+                        { SetToken( &SvtUserOptions_Impl::m_aFax, rNewToken ); }
+    void            SetEmail( const String& rNewToken )
+                        { SetToken( &SvtUserOptions_Impl::m_aEmail, rNewToken ); }
     void            SetCustomerNumber( const String& rNewToken )
-                        { SetUserToken( USER_CUSTOMERNUMBER, rNewToken ); }
+                        { SetToken( &SvtUserOptions_Impl::m_aCustomerNumber, rNewToken ); }
 };
 
 // global ----------------------------------------------------------------
@@ -215,90 +234,31 @@ Sequence< OUString > GetUserPropertyNames()
 
 // class SvtUserOptions_Impl ---------------------------------------------
 
-const String& SvtUserOptions_Impl::GetUserToken( int nIndex )
+const String& SvtUserOptions_Impl::GetToken( StrPtr pPtr )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-
-    if ( USER_COMPANY == nIndex )
-        return m_aCompany;
-    else if ( USER_FIRSTNAME == nIndex )
-        return m_aFirstName;
-    else if ( USER_LASTNAME == nIndex )
-        return m_aLastName;
-    else if ( USER_ID == nIndex )
-        return m_aID;
-    else if ( USER_STREET == nIndex )
-        return m_aStreet;
-    else if ( USER_CITY == nIndex )
-        return m_aCity;
-    else if ( USER_STATE == nIndex )
-        return m_aState;
-    else if ( USER_ZIP == nIndex )
-        return m_aZip;
-    else if ( USER_COUNTRY == nIndex )
-        return m_aCountry;
-    else if ( USER_POSITION == nIndex )
-        return m_aPosition;
-    else if ( USER_TITLE == nIndex )
-        return m_aTitle;
-    else if ( USER_TELEPHONEHOME == nIndex )
-        return m_aTelephoneHome;
-    else if ( USER_TELEPHONEWORK == nIndex )
-        return m_aTelephoneWork;
-    else if ( USER_FAX == nIndex )
-        return m_aFax;
-    else if ( USER_EMAIL == nIndex )
-        return m_aEmail;
-    else if ( USER_CUSTOMERNUMBER == nIndex )
-        return m_aCustomerNumber;
-    else
-    {
-        DBG_ERRORFILE( "invalid index to get a user token" );
-        return m_aEmptyString;
-    }
+    return this->*pPtr;
 }
 
 // -----------------------------------------------------------------------
 
-void SvtUserOptions_Impl::SetUserToken( int nIndex, const String& rNewToken )
+void SvtUserOptions_Impl::SetToken( StrPtr pPtr, const String& rNewToken )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-
-    if ( USER_COMPANY == nIndex )
-        m_aCompany = rNewToken;
-    else if ( USER_FIRSTNAME == nIndex )
-        m_aFirstName = rNewToken;
-    else if ( USER_LASTNAME == nIndex )
-        m_aLastName = rNewToken;
-    else if ( USER_ID == nIndex )
-        m_aID = rNewToken;
-    else if ( USER_STREET == nIndex )
-        m_aStreet = rNewToken;
-    else if ( USER_CITY == nIndex )
-        m_aCity = rNewToken;
-    else if ( USER_STATE == nIndex )
-        m_aState = rNewToken;
-    else if ( USER_ZIP == nIndex )
-        m_aZip = rNewToken;
-    else if ( USER_COUNTRY == nIndex )
-        m_aCountry = rNewToken;
-    else if ( USER_POSITION == nIndex )
-        m_aPosition = rNewToken;
-    else if ( USER_TITLE == nIndex )
-        m_aTitle = rNewToken;
-    else if ( USER_TELEPHONEHOME == nIndex )
-        m_aTelephoneHome = rNewToken;
-    else if ( USER_TELEPHONEWORK == nIndex )
-        m_aTelephoneWork = rNewToken;
-    else if ( USER_FAX == nIndex )
-        m_aFax = rNewToken;
-    else if ( USER_EMAIL == nIndex )
-        m_aEmail = rNewToken;
-    else if ( USER_CUSTOMERNUMBER == nIndex )
-        m_aCustomerNumber = rNewToken;
-    else
-        DBG_ERRORFILE( "invalid index to set a user token" );
+    this->*pPtr = rNewToken;
     SetModified();
+}
+
+// -----------------------------------------------------------------------
+
+void SvtUserOptions_Impl::InitFullName()
+{
+    m_aFullName = GetFirstName();
+    m_aFullName.EraseLeadingAndTrailingChars();
+    if ( m_aFullName.Len() )
+        m_aFullName += ' ';
+    m_aFullName += GetLastName();
+    m_aFullName.EraseTrailingChars();
 }
 
 // -----------------------------------------------------------------------
@@ -354,6 +314,7 @@ SvtUserOptions_Impl::SvtUserOptions_Impl() :
             }
         }
     }
+    InitFullName();
 }
 
 // -----------------------------------------------------------------------
@@ -395,6 +356,15 @@ void SvtUserOptions_Impl::Commit()
         pValues[nProp] <<= aTempStr;
     }
     PutProperties( aNames, aValues );
+}
+
+// -----------------------------------------------------------------------
+
+const String& SvtUserOptions_Impl::GetFullName()
+{
+    if ( IsModified() )
+        InitFullName();
+    return m_aFullName;
 }
 
 // -----------------------------------------------------------------------
@@ -540,15 +510,9 @@ const String& SvtUserOptions::GetCustomerNumber() const
 
 // -----------------------------------------------------------------------
 
-String SvtUserOptions::GetFullName() const
+const String& SvtUserOptions::GetFullName() const
 {
-    String aFullName = pImp->GetFirstName();
-    aFullName.EraseLeadingAndTrailingChars();
-    if ( aFullName.Len() )
-        aFullName += ' ';
-    aFullName += pImp->GetLastName();
-    aFullName.EraseTrailingChars();
-    return aFullName;
+    return pImp->GetFullName();
 }
 
 // -----------------------------------------------------------------------

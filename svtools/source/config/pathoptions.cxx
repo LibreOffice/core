@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-27 08:07:33 $
+ *  last change: $Author: pb $ $Date: 2000-10-09 06:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,9 +238,11 @@ private:
 
     ::osl::Mutex    m_aMutex;
 
+    typedef String SvtPathOptions_Impl:: *StrPtr;
+
     // not const because of using a mutex
-    const String&   GetPath( int nIndex );
-    void            SetPath( int nIndex, const String& rNewPath );
+    const String&   GetPath( StrPtr pPtr );
+    void            SetPath( StrPtr pPtr, const String& rNewPath );
 
 public:
                     SvtPathOptions_Impl();
@@ -249,64 +251,64 @@ public:
     virtual void    Commit();
 
     // get the pathes, not const because of using a mutex
-    const String&   GetAddinPath() { return GetPath( PATH_ADDIN ); }
-    const String&   GetAutoCorrectPath() { return GetPath( PATH_AUTOCORRECT ); }
-    const String&   GetAutoPilotPath() { return GetPath( PATH_AUTOPILOT ); }
-    const String&   GetBackupPath() { return GetPath( PATH_BACKUP ); }
-    const String&   GetBasicPath() { return GetPath( PATH_BASIC ); }
-    const String&   GetBitmapPath() { return GetPath( PATH_BITMAP ); }
-    const String&   GetConfigPath() { return GetPath( PATH_CONFIG ); }
-    const String&   GetDatabasePath() { return GetPath( PATH_DATABASE ); }
-    const String&   GetDictionaryPath() { return GetPath( PATH_DICTIONARY ); }
-    const String&   GetFavoritesPath() { return GetPath( PATH_FAVORITES ); }
-    const String&   GetFilterPath() { return GetPath( PATH_FILTER ); }
-    const String&   GetGalleryPath() { return GetPath( PATH_GALLERY ); }
-    const String&   GetGlossaryPath() { return GetPath( PATH_GLOSSARY ); }
-    const String&   GetGraphicPath() { return GetPath( PATH_GRAPHIC ); }
-    const String&   GetHelpPath() { return GetPath( PATH_HELP ); }
-    const String&   GetLinguisticPath() { return GetPath( PATH_LINGUISTIC ); }
-    const String&   GetModulePath() { return GetPath( PATH_MODULE ); }
-    const String&   GetNewMenuPath() { return GetPath( PATH_NEWMENU ); }
-    const String&   GetPalettePath() { return GetPath( PATH_PALETTE ); }
-    const String&   GetPluginPath() { return GetPath( PATH_PLUGIN ); }
-    const String&   GetStoragePath() { return GetPath( PATH_STORAGE ); }
-    const String&   GetSubIniPath() { return GetPath( PATH_SUBINI ); }
-    const String&   GetTempPath() { return GetPath( PATH_TEMP ); }
-    const String&   GetTemplatePath() { return GetPath( PATH_TEMPLATE ); }
-    const String&   GetTrashPath() { return GetPath( PATH_TRASH ); }
-    const String&   GetUserConfigPath() { return GetPath( PATH_USERCONFIG ); }
-    const String&   GetUserDictionaryPath() { return GetPath( PATH_USERDICTIONARY ); }
-    const String&   GetWorkPath() { return GetPath( PATH_WORK ); }
+    const String&   GetAddinPath() { return GetPath( &SvtPathOptions_Impl::m_aAddinPath ); }
+    const String&   GetAutoCorrectPath() { return GetPath( &SvtPathOptions_Impl::m_aAutoCorrectPath); }
+    const String&   GetAutoPilotPath() { return GetPath( &SvtPathOptions_Impl::m_aAutoPilotPath); }
+    const String&   GetBackupPath() { return GetPath( &SvtPathOptions_Impl::m_aBackupPath); }
+    const String&   GetBasicPath() { return GetPath( &SvtPathOptions_Impl::m_aBasicPath); }
+    const String&   GetBitmapPath() { return GetPath( &SvtPathOptions_Impl::m_aBitmapPath); }
+    const String&   GetConfigPath() { return GetPath( &SvtPathOptions_Impl::m_aConfigPath); }
+    const String&   GetDatabasePath() { return GetPath( &SvtPathOptions_Impl::m_aDatabasePath); }
+    const String&   GetDictionaryPath() { return GetPath( &SvtPathOptions_Impl::m_aDictionaryPath); }
+    const String&   GetFavoritesPath() { return GetPath( &SvtPathOptions_Impl::m_aFavoritesPath); }
+    const String&   GetFilterPath() { return GetPath( &SvtPathOptions_Impl::m_aFilterPath); }
+    const String&   GetGalleryPath() { return GetPath( &SvtPathOptions_Impl::m_aGalleryPath); }
+    const String&   GetGlossaryPath() { return GetPath( &SvtPathOptions_Impl::m_aGlossaryPath); }
+    const String&   GetGraphicPath() { return GetPath( &SvtPathOptions_Impl::m_aGraphicPath); }
+    const String&   GetHelpPath() { return GetPath( &SvtPathOptions_Impl::m_aHelpPath); }
+    const String&   GetLinguisticPath() { return GetPath( &SvtPathOptions_Impl::m_aLinguisticPath); }
+    const String&   GetModulePath() { return GetPath( &SvtPathOptions_Impl::m_aModulePath); }
+    const String&   GetNewMenuPath() { return GetPath( &SvtPathOptions_Impl::m_aNewMenuPath); }
+    const String&   GetPalettePath() { return GetPath( &SvtPathOptions_Impl::m_aPalettePath); }
+    const String&   GetPluginPath() { return GetPath( &SvtPathOptions_Impl::m_aPluginPath); }
+    const String&   GetStoragePath() { return GetPath( &SvtPathOptions_Impl::m_aStoragePath); }
+    const String&   GetSubIniPath() { return GetPath( &SvtPathOptions_Impl::m_aSubIniPath); }
+    const String&   GetTempPath() { return GetPath( &SvtPathOptions_Impl::m_aTempPath); }
+    const String&   GetTemplatePath() { return GetPath( &SvtPathOptions_Impl::m_aTemplatePath); }
+    const String&   GetTrashPath() { return GetPath( &SvtPathOptions_Impl::m_aTrashPath); }
+    const String&   GetUserConfigPath() { return GetPath( &SvtPathOptions_Impl::m_aUserConfigPath); }
+    const String&   GetUserDictionaryPath() { return GetPath( &SvtPathOptions_Impl::m_aUserDictionaryPath ); }
+    const String&   GetWorkPath() { return GetPath( &SvtPathOptions_Impl::m_aWorkPath ); }
 
     // set the pathes
-    void            SetAddinPath( const String& rPath ) { SetPath( PATH_ADDIN, rPath ); }
-    void            SetAutoCorrectPath( const String& rPath ) { SetPath( PATH_AUTOCORRECT, rPath ); }
-    void            SetAutoPilotPath( const String& rPath ) { SetPath( PATH_AUTOPILOT, rPath ); }
-    void            SetBackupPath( const String& rPath ) { SetPath( PATH_BACKUP, rPath ); }
-    void            SetBasicPath( const String& rPath ) { SetPath( PATH_BASIC, rPath ); }
-    void            SetBitmapPath( const String& rPath ) { SetPath( PATH_BITMAP, rPath ); }
-    void            SetConfigPath( const String& rPath ) { SetPath( PATH_CONFIG, rPath ); }
-    void            SetDatabasePath( const String& rPath ) { SetPath( PATH_DATABASE, rPath ); }
-    void            SetDictionaryPath( const String& rPath ) { SetPath( PATH_DICTIONARY, rPath ); }
-    void            SetFavoritesPath( const String& rPath ) { SetPath( PATH_FAVORITES, rPath ); }
-    void            SetFilterPath( const String& rPath ) { SetPath( PATH_FILTER, rPath ); }
-    void            SetGalleryPath( const String& rPath ) { SetPath( PATH_GALLERY, rPath ); }
-    void            SetGlossaryPath( const String& rPath ) { SetPath( PATH_GLOSSARY, rPath ); }
-    void            SetGraphicPath( const String& rPath ) { SetPath( PATH_GRAPHIC, rPath ); }
-    void            SetHelpPath( const String& rPath ) { SetPath( PATH_HELP, rPath ); }
-    void            SetLinguisticPath( const String& rPath ) { SetPath( PATH_LINGUISTIC, rPath ); }
-    void            SetModulePath( const String& rPath ) { SetPath( PATH_MODULE, rPath ); }
-    void            SetNewMenuPath( const String& rPath ) { SetPath( PATH_NEWMENU, rPath ); }
-    void            SetPalettePath( const String& rPath ) { SetPath( PATH_PALETTE, rPath ); }
-    void            SetPluginPath( const String& rPath ) { SetPath( PATH_PLUGIN, rPath ); }
-    void            SetStoragePath( const String& rPath ) { SetPath( PATH_STORAGE, rPath ); }
-    void            SetSubIniPath( const String& rPath ) { SetPath( PATH_SUBINI, rPath ); }
-    void            SetTempPath( const String& rPath ) { SetPath( PATH_TEMP, rPath ); }
-    void            SetTemplatePath( const String& rPath ) { SetPath( PATH_TEMPLATE, rPath ); }
-    void            SetTrashPath( const String& rPath ) { SetPath( PATH_TRASH, rPath ); }
-    void            SetUserConfigPath( const String& rPath ) { SetPath( PATH_USERCONFIG, rPath ); }
-    void            SetUserDictionaryPath( const String& rPath ) { SetPath( PATH_USERDICTIONARY, rPath ); }
-    void            SetWorkPath( const String& rPath ) { SetPath( PATH_WORK, rPath ); }
+    void            SetAddinPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aAddinPath, rPath ); }
+    void            SetAutoCorrectPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aAutoCorrectPath, rPath ); }
+    void            SetAutoPilotPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aAutoPilotPath, rPath ); }
+    void            SetBackupPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aBackupPath, rPath ); }
+    void            SetBasicPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aBasicPath, rPath ); }
+    void            SetBitmapPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aBitmapPath, rPath ); }
+    void            SetConfigPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aConfigPath, rPath ); }
+    void            SetDatabasePath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aDatabasePath, rPath ); }
+    void            SetDictionaryPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aDictionaryPath, rPath ); }
+    void            SetFavoritesPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aFavoritesPath, rPath ); }
+    void            SetFilterPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aFilterPath, rPath ); }
+    void            SetGalleryPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aGalleryPath, rPath ); }
+    void            SetGlossaryPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aGlossaryPath, rPath ); }
+    void            SetGraphicPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aGraphicPath, rPath ); }
+    void            SetHelpPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aHelpPath, rPath ); }
+    void            SetLinguisticPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aLinguisticPath, rPath ); }
+    void            SetModulePath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aModulePath, rPath ); }
+    void            SetNewMenuPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aNewMenuPath, rPath ); }
+    void            SetPalettePath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aPalettePath, rPath ); }
+    void            SetPluginPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aPluginPath, rPath ); }
+    void            SetStoragePath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aStoragePath, rPath ); }
+    void            SetSubIniPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aSubIniPath, rPath ); }
+    void            SetTempPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aTempPath, rPath ); }
+    void            SetTemplatePath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aTemplatePath, rPath ); }
+    void            SetTrashPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aTrashPath, rPath ); }
+    void            SetUserConfigPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aUserConfigPath, rPath ); }
+    void            SetUserDictionaryPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aUserDictionaryPath, rPath ); }
+    void            SetWorkPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aWorkPath, rPath ); }
 
     rtl::OUString   SubstVar( const rtl::OUString& rVar );
 };
@@ -363,137 +365,18 @@ Sequence< OUString > GetPathPropertyNames()
 
 // class SvtPathOptions_Impl ---------------------------------------------
 
-const String& SvtPathOptions_Impl::GetPath( int nIndex )
+const String& SvtPathOptions_Impl::GetPath( StrPtr pPtr )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-
-    if ( PATH_ADDIN == nIndex )
-        return m_aAddinPath;
-    else if ( PATH_AUTOCORRECT == nIndex )
-        return m_aAutoCorrectPath;
-    else if ( PATH_AUTOPILOT == nIndex )
-        return m_aAutoPilotPath;
-    else if ( PATH_BACKUP == nIndex )
-        return m_aBackupPath;
-    else if ( PATH_BASIC == nIndex )
-        return m_aBasicPath;
-    else if ( PATH_BITMAP == nIndex )
-        return m_aBitmapPath;
-    else if ( PATH_CONFIG == nIndex )
-        return m_aConfigPath;
-    else if ( PATH_DATABASE == nIndex )
-        return m_aDatabasePath;
-    else if ( PATH_DICTIONARY == nIndex )
-        return m_aDictionaryPath;
-    else if ( PATH_FAVORITES == nIndex )
-        return m_aFavoritesPath;
-    else if ( PATH_FILTER == nIndex )
-        return m_aFilterPath;
-    else if ( PATH_GALLERY == nIndex )
-        return m_aGalleryPath;
-    else if ( PATH_GLOSSARY == nIndex )
-        return m_aGlossaryPath;
-    else if ( PATH_GRAPHIC == nIndex )
-        return m_aGraphicPath;
-    else if ( PATH_HELP == nIndex )
-        return m_aHelpPath;
-    else if ( PATH_LINGUISTIC == nIndex )
-        return m_aLinguisticPath;
-    else if ( PATH_MODULE == nIndex )
-        return m_aModulePath;
-    else if ( PATH_NEWMENU == nIndex )
-        return m_aNewMenuPath;
-    else if ( PATH_PALETTE == nIndex )
-        return m_aPalettePath;
-    else if ( PATH_PLUGIN == nIndex )
-        return m_aPluginPath;
-    else if ( PATH_STORAGE == nIndex )
-        return m_aStoragePath;
-    else if ( PATH_SUBINI == nIndex )
-        return m_aSubIniPath;
-    else if ( PATH_TEMP == nIndex )
-        return m_aTempPath;
-    else if ( PATH_TEMPLATE == nIndex )
-        return m_aTemplatePath;
-    else if ( PATH_TRASH == nIndex )
-        return m_aTrashPath;
-    else if ( PATH_USERCONFIG == nIndex )
-        return m_aUserConfigPath;
-    else if ( PATH_USERDICTIONARY == nIndex )
-        return m_aUserDictionaryPath;
-    else if ( PATH_WORK == nIndex )
-        return m_aWorkPath;
-    else
-    {
-        DBG_ERRORFILE( "invalid index to get a path" );
-        return m_aEmptyString;
-    }
+    return this->*pPtr;
 }
 
 // -----------------------------------------------------------------------
 
-void SvtPathOptions_Impl::SetPath( int nIndex, const String& rNewPath )
+void SvtPathOptions_Impl::SetPath( StrPtr pPtr, const String& rNewPath )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-
-    if ( PATH_ADDIN == nIndex )
-        m_aAddinPath = rNewPath;
-    else if ( PATH_AUTOCORRECT == nIndex )
-        m_aAutoCorrectPath = rNewPath;
-    else if ( PATH_AUTOPILOT == nIndex )
-        m_aAutoPilotPath = rNewPath;
-    else if ( PATH_BACKUP == nIndex )
-        m_aBackupPath = rNewPath;
-    else if ( PATH_BASIC == nIndex )
-        m_aBasicPath = rNewPath;
-    else if ( PATH_BITMAP == nIndex )
-        m_aBitmapPath = rNewPath;
-    else if ( PATH_CONFIG == nIndex )
-        m_aConfigPath = rNewPath;
-    else if ( PATH_DATABASE == nIndex )
-        m_aDatabasePath = rNewPath;
-    else if ( PATH_DICTIONARY == nIndex )
-        m_aDictionaryPath = rNewPath;
-    else if ( PATH_FAVORITES == nIndex )
-        m_aFavoritesPath = rNewPath;
-    else if ( PATH_FILTER == nIndex )
-        m_aFilterPath = rNewPath;
-    else if ( PATH_GALLERY == nIndex )
-        m_aGalleryPath = rNewPath;
-    else if ( PATH_GLOSSARY == nIndex )
-        m_aGlossaryPath = rNewPath;
-    else if ( PATH_GRAPHIC == nIndex )
-        m_aGraphicPath = rNewPath;
-    else if ( PATH_HELP == nIndex )
-        m_aHelpPath = rNewPath;
-    else if ( PATH_LINGUISTIC == nIndex )
-        m_aLinguisticPath = rNewPath;
-    else if ( PATH_MODULE == nIndex )
-        m_aModulePath = rNewPath;
-    else if ( PATH_NEWMENU == nIndex )
-        m_aNewMenuPath = rNewPath;
-    else if ( PATH_PALETTE == nIndex )
-        m_aPalettePath = rNewPath;
-    else if ( PATH_PLUGIN == nIndex )
-        m_aPluginPath = rNewPath;
-    else if ( PATH_STORAGE == nIndex )
-        m_aStoragePath = rNewPath;
-    else if ( PATH_SUBINI == nIndex )
-        m_aSubIniPath = rNewPath;
-    else if ( PATH_TEMP == nIndex )
-        m_aTempPath = rNewPath;
-    else if ( PATH_TEMPLATE == nIndex )
-        m_aTemplatePath = rNewPath;
-    else if ( PATH_TRASH == nIndex )
-        m_aTrashPath = rNewPath;
-    else if ( PATH_USERCONFIG == nIndex )
-        m_aUserConfigPath = rNewPath;
-    else if ( PATH_USERDICTIONARY == nIndex )
-        m_aUserDictionaryPath = rNewPath;
-    else if ( PATH_WORK == nIndex )
-        m_aWorkPath = rNewPath;
-    else
-        DBG_ERRORFILE( "invalid index to set a path" );
+    this->*pPtr = rNewPath;
     SetModified();
 }
 
