@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: aw $ $Date: 2001-12-12 19:05:03 $
+ *  last change: $Author: aw $ $Date: 2001-12-13 13:18:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,7 +453,13 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
             USHORT nOutlMode = pOutliner->GetMode();
             pOutliner->Init( OUTLINERMODE_TEXTOBJECT );
             pOutliner->SetMinDepth(0);
-            pOutliner->SetStyleSheet( 0, NULL );
+
+            // #95114# Always set the object's StyleSheet at the Outliner to
+            // use the current objects StyleSheet. Thus it's the same as in
+            // SetText(...).
+            pOutliner->SetStyleSheet(0, pSdrObj->GetStyleSheet());
+            //pOutliner->SetStyleSheet( 0, NULL );
+
             pOutliner->SetVertical( bVertical );
 
             String aEmptyStr;
