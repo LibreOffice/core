@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:35:11 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 14:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,253 @@
         <value>Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Bitstream Vera Sans;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
       </prop>
     </node>
+
+    <node oor:name="cs-CZ" oor:op="replace">
+      <prop oor:name="LATIN_DISPLAY" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Serif;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_HEADING" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="LATIN_PRESENTATION" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_TEXT" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="SANS" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="SERIF" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
+        <value>Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Luxi Sans;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
+      </prop>
+    </node>
+   <node oor:name="hr-HR" oor:op="replace">
+      <prop oor:name="LATIN_DISPLAY" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Serif;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_HEADING" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="LATIN_PRESENTATION" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_TEXT" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="SANS" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="SERIF" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
+        <value>Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Luxi Sans;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
+      </prop>
+    </node>
+   <node oor:name="hu-HU" oor:op="replace">
+      <prop oor:name="LATIN_DISPLAY" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Serif;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_HEADING" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="LATIN_PRESENTATION" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_TEXT" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="SANS" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="SERIF" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
+        <value>Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Luxi Sans;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
+      </prop>
+    </node>
+   <node oor:name="pl-PL" oor:op="replace">
+      <prop oor:name="LATIN_DISPLAY" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Serif;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_HEADING" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="LATIN_PRESENTATION" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_TEXT" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="SANS" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="SERIF" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
+        <value>Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Luxi Sans;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
+      </prop>
+    </node>
+   <node oor:name="ro-RO" oor:op="replace">
+      <prop oor:name="LATIN_DISPLAY" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Serif;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_HEADING" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="LATIN_PRESENTATION" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_TEXT" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="SANS" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="SERIF" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
+        <value>Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Luxi Sans;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
+      </prop>
+    </node>
+   <node oor:name="sk-SK" oor:op="replace">
+      <prop oor:name="LATIN_DISPLAY" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Serif;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_HEADING" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="LATIN_PRESENTATION" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_TEXT" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="SANS" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="SERIF" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
+        <value>Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Luxi Sans;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
+      </prop>
+    </node>
+   <node oor:name="sl-SI" oor:op="replace">
+      <prop oor:name="LATIN_DISPLAY" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Serif;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_HEADING" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="LATIN_PRESENTATION" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="LATIN_TEXT" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="SANS" oor:type="xs:string" oor:op="replace">
+        <value>Albany;Arial;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+      </prop>
+      <prop oor:name="SERIF" oor:type="xs:string" oor:op="replace">
+        <value>Thorndale;Times New Roman;Luxi Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+      </prop>
+      <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
+        <value>Cumberland;Courier New;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+      </prop>
+      <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
+        <value>Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Luxi Sans;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
+      </prop>
+    </node>
+
     <node oor:name="ar" oor:op="replace">
      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
         <value>Tahoma;Traditional Arabic;Simplified Arabic;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
