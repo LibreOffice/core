@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:38:40 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 15:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,14 +207,9 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
         // !!!
         case W_META_SETMAPMODE:
         {
-            short nMapMode;
+            sal_Int16 nMapMode;
             *pWMF >> nMapMode;
-#ifdef DBG_ASSERT
-            if ( nMapMode != 8 )    // nur MM_ANISOTROPHIC == 8 wird unterstuetzt
-            {
-                DBG_ASSERT(0,"WMF-Import: MapMode ignored");
-            }
-#endif
+            pOut->SetMapMode( nMapMode );
         }
         break;
 
@@ -963,15 +958,15 @@ BOOL WMFReader::ReadHeader()
     aWMFSize = Size( labs( aPlaceableBound.GetWidth() ), labs( aPlaceableBound.GetHeight() ) );
     pOut->SetWinExt( aWMFSize );
 
+    Size aDevExt( 10000, 10000 );
     if( ( labs( aWMFSize.Width() ) > 1 ) && ( labs( aWMFSize.Height() ) > 1 ) )
     {
         const Fraction  aFrac( 1, nUnitsPerInch );
         MapMode         aWMFMap( MAP_INCH, Point(), aFrac, aFrac );
         Size            aSize100( OutputDevice::LogicToLogic( aWMFSize, aWMFMap, MAP_100TH_MM ) );
-        pOut->SetDevExt( Size( labs( aSize100.Width() ), labs( aSize100.Height() ) ) );
+        aDevExt = Size( labs( aSize100.Width() ), labs( aSize100.Height() ) );
     }
-    else
-        pOut->SetDevExt( Size( 10000, 10000 ) );
+    pOut->SetDevExt( aDevExt );
 
     // Einlesen des METAHEADER
     *pWMF >> nl; // Typ und Headergroesse
@@ -1000,6 +995,7 @@ void WMFReader::ReadWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, 
     nCurrentAction = 0;
     nUnicodeEscapeAction = 0;
 
+    pOut->SetMapMode( MM_ANISOTROPIC );
     pOut->SetWinOrg( Point() );
     pOut->SetWinExt( Size( 1, 1 ) );
     pOut->SetDevExt( Size( 10000, 10000 ) );
@@ -1063,22 +1059,25 @@ void WMFReader::ReadWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, 
 
 // ------------------------------------------------------------------------
 
-const static void GetWinExtMax( const Point& rSource, Rectangle& rPlaceableBound )
+const static void GetWinExtMax( const Point& rSource, Rectangle& rPlaceableBound, const sal_Int16 nMapMode )
 {
-    if ( rSource.X() < rPlaceableBound.Left() )
-        rPlaceableBound.Left() = rSource.X();
-    if ( rSource.X() > rPlaceableBound.Right() )
-        rPlaceableBound.Right() = rSource.X();
-    if ( rSource.Y() < rPlaceableBound.Top() )
-        rPlaceableBound.Top() = rSource.Y();
-    if ( rSource.Y() > rPlaceableBound.Bottom() )
-        rPlaceableBound.Bottom() = rSource.Y();
+    Point aSource( rSource );
+    if ( nMapMode == MM_HIMETRIC )
+        aSource.Y() = -rSource.Y();
+    if ( aSource.X() < rPlaceableBound.Left() )
+        rPlaceableBound.Left() = aSource.X();
+    if ( aSource.X() > rPlaceableBound.Right() )
+        rPlaceableBound.Right() = aSource.X();
+    if ( aSource.Y() < rPlaceableBound.Top() )
+        rPlaceableBound.Top() = aSource.Y();
+    if ( aSource.Y() > rPlaceableBound.Bottom() )
+        rPlaceableBound.Bottom() = aSource.Y();
 }
 
-const static void GetWinExtMax( const Rectangle& rSource, Rectangle& rPlaceableBound )
+const static void GetWinExtMax( const Rectangle& rSource, Rectangle& rPlaceableBound, const sal_Int16 nMapMode )
 {
-    GetWinExtMax( rSource.TopLeft(), rPlaceableBound );
-    GetWinExtMax( rSource.BottomRight(), rPlaceableBound );
+    GetWinExtMax( rSource.TopLeft(), rPlaceableBound, nMapMode );
+    GetWinExtMax( rSource.BottomRight(), rPlaceableBound, nMapMode );
 }
 
 sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWMF )
@@ -1089,6 +1088,8 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
     rPlaceableBound.Top()    = (sal_Int32)0x7fffffff;
     rPlaceableBound.Right()  = (sal_Int32)0x80000000;
     rPlaceableBound.Bottom() = (sal_Int32)0x80000000;
+
+    sal_Int16 nMapMode = MM_ANISOTROPIC;
 
     sal_uInt16 nFunction;
     sal_uInt32 nRecSize;
@@ -1123,22 +1124,26 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
                 }
                 break;
 
+                case W_META_SETMAPMODE :
+                    *pWMF >> nMapMode;
+                break;
+
                 case W_META_MOVETO:
                 case W_META_LINETO:
-                    GetWinExtMax( ReadYX(), rPlaceableBound );
+                    GetWinExtMax( ReadYX(), rPlaceableBound, nMapMode );
                 break;
 
                 case W_META_RECTANGLE:
                 case W_META_INTERSECTCLIPRECT:
                 case W_META_EXCLUDECLIPRECT :
                 case W_META_ELLIPSE:
-                    GetWinExtMax( ReadRectangle(), rPlaceableBound );
+                    GetWinExtMax( ReadRectangle(), rPlaceableBound, nMapMode );
                 break;
 
                 case W_META_ROUNDRECT:
                 {
                     Size aSize( ReadYXExt() );
-                    GetWinExtMax( ReadRectangle(), rPlaceableBound );
+                    GetWinExtMax( ReadRectangle(), rPlaceableBound, nMapMode );
                 }
                 break;
 
@@ -1148,7 +1153,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
                 {
                     Point aEnd( ReadYX() );
                     Point aStart( ReadYX() );
-                    GetWinExtMax( ReadRectangle(), rPlaceableBound );
+                    GetWinExtMax( ReadRectangle(), rPlaceableBound, nMapMode );
                 }
                 break;
 
@@ -1157,7 +1162,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
                     USHORT i,nPoints;
                     *pWMF >> nPoints;
                     for( i = 0; i < nPoints; i++ )
-                        GetWinExtMax( ReadPoint(), rPlaceableBound );
+                        GetWinExtMax( ReadPoint(), rPlaceableBound, nMapMode );
                 }
                 break;
 
@@ -1172,7 +1177,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
                         nPoints += nP;
                     }
                     for ( i = 0; i < nPoints; i++ )
-                        GetWinExtMax( ReadPoint(), rPlaceableBound );
+                        GetWinExtMax( ReadPoint(), rPlaceableBound, nMapMode );
                 }
                 break;
 
@@ -1181,14 +1186,14 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
                     USHORT i,nPoints;
                     *pWMF >> nPoints;
                     for( i = 0; i < nPoints; i++ )
-                        GetWinExtMax( ReadPoint(), rPlaceableBound );
+                        GetWinExtMax( ReadPoint(), rPlaceableBound, nMapMode );
                 }
                 break;
 
                 case W_META_SETPIXEL:
                 {
                     const Color aColor = ReadColor();
-                    GetWinExtMax( ReadYX(), rPlaceableBound );
+                    GetWinExtMax( ReadYX(), rPlaceableBound, nMapMode );
                 }
                 break;
 
@@ -1200,7 +1205,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
                     if ( nLength )
                     {
                         pWMF->SeekRel( ( nLength + 1 ) &~ 1 );
-                        GetWinExtMax( ReadYX(), rPlaceableBound );
+                        GetWinExtMax( ReadYX(), rPlaceableBound, nMapMode );
                     }
                 }
                 break;
@@ -1221,7 +1226,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
                     *pWMF >> nLen >> nOptions;
                     // todo: we also have to take care of the text width
                     if( nLen )
-                        GetWinExtMax( aPosition, rPlaceableBound );
+                        GetWinExtMax( aPosition, rPlaceableBound, nMapMode );
                 }
                 break;
                 case W_META_BITBLT:
@@ -1256,7 +1261,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
                         if ( aDestSize.Width() && aDestSize.Height() )  // #92623# do not try to read buggy bitmaps
                         {
                             Rectangle aDestRect( ReadYX(), aDestSize );
-                            GetWinExtMax( aDestRect, rPlaceableBound );
+                            GetWinExtMax( aDestRect, rPlaceableBound, nMapMode );
                         }
                     }
                 }
@@ -1267,7 +1272,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
                     UINT32 nROP;
                     *pWMF >> nROP;
                     Size aSize = ReadYXExt();
-                    GetWinExtMax( Rectangle( ReadYX(), aSize ), rPlaceableBound );
+                    GetWinExtMax( Rectangle( ReadYX(), aSize ), rPlaceableBound, nMapMode );
                 }
                 break;
             }
