@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:10:27 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,8 +297,6 @@ namespace xmloff
         // the int32 attributes
         m_aAttributeMetaData.addInt32Property(
             OAttributeMetaData::getSpecialAttributeName( SCA_PAGE_STEP_SIZE ), PROPERTY_BLOCK_INCREMENT, 10 );
-        m_aAttributeMetaData.addInt32Property(
-            OAttributeMetaData::getSpecialAttributeName( SCA_REPEAT_DELAY ), PROPERTY_REPEAT_DELAY, 50 );
 
         // the enum attributes
         m_aAttributeMetaData.addEnumProperty(
