@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hangulhanja.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:41:42 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,23 @@
 #ifndef SVX_HANGUL_HANJA_CONVERSION_HXX
 #include "hangulhanja.hxx"
 #endif
-#ifndef SVX_HANGUL_HANJA_DLG_HXX
-#include "hangulhanjadlg.hxx"
+//CHINA001 #ifndef SVX_HANGUL_HANJA_DLG_HXX
+//CHINA001 #include "hangulhanjadlg.hxx"
+//CHINA001 #endif
+#ifndef _SV_DIALOG_HXX
+#include <vcl/dialog.hxx> //add CHINA001
 #endif
-
+#ifndef _SV_BUTTON_HXX
+#include <vcl/button.hxx> //add CHINA001
+#endif
+#ifndef _SV_LSTBOX_HXX
+#include <vcl/lstbox.hxx> //add CHINA001
+#endif
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx> //add CHINA001
+#endif
 #ifndef _SV_MSGBOX_HXX
-#include <vcl/msgbox.hxx>
+#include <vcl/msgbox.hxx> //add CHINA001
 #endif
 
 #include <set>
@@ -104,6 +115,9 @@
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
+
+#include "svxdlg.hxx" //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 #define HHC HangulHanjaConversion
 
@@ -159,7 +173,7 @@ namespace svx
                 StringMap                       m_aChangeList;
 
         // general
-        HangulHanjaConversionDialog*
+        AbstractHangulHanjaConversionDialog* //CHINA001 HangulHanjaConversionDialog*
                                 m_pConversionDialog;    // the dialog to display for user interaction
         Window*                 m_pUIParent;            // the parent window for any UI we raise
         Reference< XMultiServiceFactory >
@@ -299,19 +313,26 @@ namespace svx
     {
         if ( !m_pConversionDialog )
         {
-            m_pConversionDialog = new HangulHanjaConversionDialog( m_pUIParent, m_ePrimaryConversionDirection );
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            if(pFact)
+            {
 
-            m_pConversionDialog->SetByCharacter( m_bByCharacter );
-            m_pConversionDialog->SetConversionFormat( m_eConversionFormat );
+                //CHINA001 m_pConversionDialog = new HangulHanjaConversionDialog( m_pUIParent, m_ePrimaryConversionDirection );
+                m_pConversionDialog = pFact->CreateHangulHanjaConversionDialog(m_pUIParent, m_ePrimaryConversionDirection, ResId(RID_SVX_MDLG_HANGULHANJA));
+                DBG_ASSERT(m_pConversionDialog, "Dialogdiet fail!");//CHINA001
 
-            // the handlers
-            m_pConversionDialog->SetIgnoreHdl( LINK( this, HangulHanjaConversion_Impl, OnIgnore ) );
-            m_pConversionDialog->SetIgnoreAllHdl( LINK( this, HangulHanjaConversion_Impl, OnIgnoreAll ) );
-            m_pConversionDialog->SetChangeHdl( LINK( this, HangulHanjaConversion_Impl, OnChange ) );
-            m_pConversionDialog->SetChangeAllHdl( LINK( this, HangulHanjaConversion_Impl, OnChangeAll ) );
-            m_pConversionDialog->SetClickByCharacterHdl( LINK( this, HangulHanjaConversion_Impl, OnByCharClicked ) );
-            m_pConversionDialog->SetConversionFormatChangedHdl( LINK( this, HangulHanjaConversion_Impl, OnConversionTypeChanged ) );
-            m_pConversionDialog->SetFindHdl( LINK( this, HangulHanjaConversion_Impl, OnFind ) );
+                m_pConversionDialog->SetByCharacter( m_bByCharacter );
+                m_pConversionDialog->SetConversionFormat( m_eConversionFormat );
+
+                // the handlers
+                m_pConversionDialog->SetIgnoreHdl( LINK( this, HangulHanjaConversion_Impl, OnIgnore ) );
+                m_pConversionDialog->SetIgnoreAllHdl( LINK( this, HangulHanjaConversion_Impl, OnIgnoreAll ) );
+                m_pConversionDialog->SetChangeHdl( LINK( this, HangulHanjaConversion_Impl, OnChange ) );
+                m_pConversionDialog->SetChangeAllHdl( LINK( this, HangulHanjaConversion_Impl, OnChangeAll ) );
+                m_pConversionDialog->SetClickByCharacterHdl( LINK( this, HangulHanjaConversion_Impl, OnByCharClicked ) );
+                m_pConversionDialog->SetConversionFormatChangedHdl( LINK( this, HangulHanjaConversion_Impl, OnConversionTypeChanged ) );
+                m_pConversionDialog->SetFindHdl( LINK( this, HangulHanjaConversion_Impl, OnFind ) );
+            }
         }
     }
 
