@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:59:24 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,12 +655,17 @@ void SwView::Replace()
     SwWait aWait( *GetDocShell(), TRUE );
 
     pWrtShell->StartAllAction();
-    pWrtShell->StartUndo(UIUNDO_REPLACE);
 
     if( pSrchItem->GetPattern() ) // Vorlagen?
+    {
+        pWrtShell->StartUndo(UIUNDO_REPLACE); // #111827#
+
         pWrtShell->SetTxtFmtColl( pWrtShell->GetParaStyle(
                             pSrchItem->GetReplaceString(),
                             SwWrtShell::GETSTYLE_CREATESOME ));
+
+        pWrtShell->EndUndo(UIUNDO_REPLACE); // #111827#
+    }
     else
     {
         pWrtShell->SwEditShell::Replace( pSrchItem->GetReplaceString(),
@@ -677,7 +682,7 @@ void SwView::Replace()
             }
         }
     }
-    pWrtShell->EndUndo(UIUNDO_REPLACE);
+
     pWrtShell->EndAllAction();
 }
 
