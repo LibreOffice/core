@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-16 09:57:36 $
+ *  last change: $Author: jp $ $Date: 2001-02-13 16:56:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,6 @@ class SwRTFWriter : public Writer
                                     // z.B. Font-Size, LR-Space,..
 
     USHORT nAktFlyPos;              // Index auf das naechste "FlyFrmFmt"
-
     void OutRTFColorTab();
     void OutRTFFontTab();
     void OutRTFStyleTab();
@@ -132,6 +131,7 @@ public:
                                         // ist das Format gesetzt, sonst 0
     const SwPageDesc* pAktPageDesc;     // aktuell gesetzter PageDesc.
     USHORT nBkmkTabPos;             // akt. Position in der Bookmark-Tabelle
+    USHORT nCurScript;                  // actual scripttype
 
 #if defined(MAC) || defined(UNX)
     static const sal_Char sNewLine;                 // nur \012 oder \015
@@ -160,6 +160,7 @@ public:
                                     // Header/Footer aus
     BOOL bOutSection : 1;           // TRUE: Section PageDesc ausgeben
     BOOL bIgnoreNextPgBreak : 1;    // TRUE: naechsten PageDesc/Break ignorieren
+    BOOL bAssociated : 1;           // use associated tokens
 
     // --- public Methoden ------------------------------------------------
 
@@ -201,6 +202,11 @@ public:
 
     const RTFEndPosLst* GetEndPosLst() const { return pCurEndPosLst; }
 
+    void SetAssociatedFlag( BOOL b )        { bAssociated = b; }
+    BOOL IsAssociatedFlag() const           { return bAssociated; }
+
+    void SetCurrScriptType( USHORT n )      { nCurScript = n; }
+    USHORT GetCurrScriptType() const        { return nCurScript; }
 };
 
 

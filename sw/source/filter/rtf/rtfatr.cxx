@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-13 09:24:35 $
+ *  last change: $Author: jp $ $Date: 2001-02-13 16:56:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,53 +390,12 @@ Writer& OutRTF_AsByteString( Writer& rWrt, const String& rStr )
     return rWrt;
 }
 
-void SwRTFWriter::Get_StyleDefaults( const SwFmt& rFmt )
-{
-    BOOL aFlags[ RES_FRMATR_END - RES_CHRATR_BEGIN ];
-    USHORT nStt = RES_CHRATR_BEGIN, nEnd, n;
-    SfxItemSet** ppSet;
-    if( RES_CHRFMT == rFmt.Which() )
-    {
-        ppSet = &pCharDefaults;
-           nEnd = RES_TXTATR_END;
-    }
-    else
-    {
-        ppSet = &pParaDefaults;
-          nEnd = RES_FRMATR_END;
-    }
-
-    *ppSet = new SfxItemSet( *rFmt.GetAttrSet().GetPool(), nStt, nEnd );
-
-    // dynamic defaults
-    const SfxItemPool& rPool = *rFmt.GetAttrSet().GetPool();
-    for( n = nStt; n < nEnd; ++n )
-        aFlags[ n - RES_CHRATR_BEGIN ] = 0 != rPool.GetPoolDefaultItem( n );
-
-    // static defaults, that differs between WinWord and SO
-    if( RES_CHRFMT != rFmt.Which() )
-    {
-        aFlags[ RES_PARATR_WIDOWS - RES_CHRATR_BEGIN ] = 1;
-        aFlags[ RES_PARATR_HYPHENZONE - RES_CHRATR_BEGIN ] = 1;
-    }
-    aFlags[ RES_CHRATR_FONTSIZE - RES_CHRATR_BEGIN ] = 1;
-//  aFlags[ RES_CHRATR_CJK_FONTSIZE - RES_CHRATR_BEGIN ] = 1;
-//  aFlags[ RES_CHRATR_CTL_FONTSIZE - RES_CHRATR_BEGIN ] = 1;
-
-    aFlags[ RES_CHRATR_LANGUAGE - RES_CHRATR_BEGIN ] = 1;
-//  aFlags[ RES_CHRATR_CJK_LANGUAGE - RES_CHRATR_BEGIN ] = 1;
-//  aFlags[ RES_CHRATR_CTL_LANGUAGE - RES_CHRATR_BEGIN ] = 1;
-
-    const BOOL* pFlags = aFlags + ( nStt - RES_CHRATR_BEGIN );
-    for( n = nStt; n < nEnd; ++n, ++pFlags )
-        if( *pFlags && SFX_ITEM_SET != rFmt.GetItemState( n, FALSE ))
-            (*ppSet)->Put( rFmt.GetAttr( n, TRUE ));
-}
-
-
-void OutRTF_SfxItemSet( Writer& rWrt, const SfxItemSet& rSet )
+void OutRTF_SfxItemSet( SwRTFWriter& rWrt, const SfxItemSet& rSet,
+                        BOOL bDeep )
 {
     // erst die eigenen Attribute ausgeben
+    SvPtrarr aAsian( 0, 5 ), aCmplx( 0, 5 ), aLatin( 0, 5 );
+
     const SfxItemPool& rPool = *rSet.GetPool();
     SfxWhichIter aIter( rSet );
     const SfxPoolItem* pItem;
@@ -444,7 +403,7 @@ void OutRTF_SfxItemSet( Writer& rWrt, const SfxItemSet& rSet )
     register USHORT nWhich = aIter.FirstWhich();
     while( nWhich )
     {
-        if( SFX_ITEM_SET == rSet.GetItemState( nWhich, TRUE, &pItem ))
+        if( SFX_ITEM_SET == rSet.GetItemState( nWhich, bDeep, &pItem ))
         {
             pOut = aRTFAttrFnTab[ nWhich - RES_CHRATR_BEGIN];
             if( pOut &&
@@ -456,21 +415,23 @@ void OutRTF_SfxItemSet( Writer& rWrt, const SfxItemSet& rSet )
             else
                 pOut = 0;
         }
+        else if( !bDeep )
+            pOut = 0;
         else if( 0 != ( pItem = rPool.GetPoolDefaultItem( nWhich )) )
             pOut = aRTFAttrFnTab[ nWhich - RES_CHRATR_BEGIN];
         else
             switch( nWhich )
             {
             case RES_CHRATR_FONTSIZE:
-//          case RES_CHRATR_CJK_FONTSIZE:
-//          case RES_CHRATR_CTL_FONTSIZE:
+            case RES_CHRATR_CJK_FONTSIZE:
+            case RES_CHRATR_CTL_FONTSIZE:
 
             case RES_CHRATR_LANGUAGE:
-//          case RES_CHRATR_CJK_LANGUAGE:
-//          case RES_CHRATR_CTL_LANGUAGE:
+            case RES_CHRATR_CJK_LANGUAGE:
+            case RES_CHRATR_CTL_LANGUAGE:
 
-            case RES_PARATR_WIDOWS:
-            case RES_PARATR_HYPHENZONE:
+//          case RES_PARATR_WIDOWS:
+//          case RES_PARATR_HYPHENZONE:
                 pItem = &rPool.GetDefaultItem( nWhich );
                 pOut = aRTFAttrFnTab[ nWhich - RES_CHRATR_BEGIN];
                 break;
@@ -480,8 +441,102 @@ void OutRTF_SfxItemSet( Writer& rWrt, const SfxItemSet& rSet )
             }
 
         if( pOut )
+        {
+            void* pVoidItem = (void*)pItem;
+            switch( nWhich )
+            {
+            case RES_CHRATR_FONT:
+            case RES_CHRATR_FONTSIZE:
+            case RES_CHRATR_LANGUAGE:
+            case RES_CHRATR_POSTURE:
+            case RES_CHRATR_WEIGHT:
+                aLatin.Insert( pVoidItem, aLatin.Count() );
+                pOut = 0;
+                break;
+
+            case RES_CHRATR_CJK_FONT:
+            case RES_CHRATR_CJK_FONTSIZE:
+            case RES_CHRATR_CJK_LANGUAGE:
+            case RES_CHRATR_CJK_POSTURE:
+            case RES_CHRATR_CJK_WEIGHT:
+                aAsian.Insert( pVoidItem, aAsian.Count() );
+                pOut = 0;
+                break;
+
+            case RES_CHRATR_CTL_FONT:
+            case RES_CHRATR_CTL_FONTSIZE:
+            case RES_CHRATR_CTL_LANGUAGE:
+            case RES_CHRATR_CTL_POSTURE:
+            case RES_CHRATR_CTL_WEIGHT:
+                aCmplx.Insert( pVoidItem, aCmplx.Count() );
+                pOut = 0;
+                break;
+            }
+        }
+
+        if( pOut )
             (*pOut)( rWrt, *pItem );
         nWhich = aIter.NextWhich();
+    }
+
+    if( aAsian.Count() || aCmplx.Count() ||aLatin.Count() )
+    {
+        SvPtrarr* aArr[ 3 ];
+        USHORT nScriptType = rWrt.GetCurrScriptType();
+        switch( nScriptType )
+        {
+        case ::com::sun::star::i18n::ScriptType::LATIN:
+            aArr[ 0 ] = &aCmplx;
+            aArr[ 1 ] = &aAsian;
+            aArr[ 2 ] = &aLatin;
+            break;
+
+        case ::com::sun::star::i18n::ScriptType::ASIAN:
+            aArr[ 0 ] = &aCmplx;
+            aArr[ 1 ] = &aLatin;
+            aArr[ 2 ] = &aAsian;
+            break;
+
+        case ::com::sun::star::i18n::ScriptType::COMPLEX:
+            aArr[ 0 ] = &aLatin;
+            aArr[ 1 ] = &aAsian;
+            aArr[ 2 ] = &aCmplx;
+            break;
+
+        default:
+            return ;
+        }
+
+        BOOL bOutLTOR = TRUE;
+        for( int nArrCnt = 0; nArrCnt < 3; ++nArrCnt )
+        {
+            SvPtrarr* pCurArr = aArr[ nArrCnt ];
+            if( pCurArr->Count() )
+            {
+                rWrt.SetAssociatedFlag( 2 != nArrCnt );
+                if( pCurArr == &aLatin )
+                {
+                    if( bOutLTOR )
+                    {   rWrt.Strm() << sRTF_LTRCH; bOutLTOR = FALSE; }
+                    rWrt.Strm() << sRTF_LOCH;
+                }
+                else if( pCurArr == &aAsian )
+                {
+                    if( bOutLTOR )
+                    {   rWrt.Strm() << sRTF_LTRCH; bOutLTOR = FALSE; }
+                    rWrt.Strm() << sRTF_DBCH;
+                }
+                else
+                    rWrt.Strm() << sRTF_RTLCH;
+
+                for( USHORT n = 0; n < pCurArr->Count(); ++n )
+                {
+                    pItem = (const SfxPoolItem*)(*pCurArr)[ n ];
+                    pOut = aRTFAttrFnTab[ pItem->Which() - RES_CHRATR_BEGIN];
+                    (*pOut)( rWrt, *pItem );
+                }
+            }
+        }
     }
 }
 
@@ -534,7 +589,7 @@ Writer& OutRTF_SwFmt( Writer& rWrt, const SwFmt& rFmt )
                     aLR.SetTxtFirstLineOfst( pNFmt->GetFirstLineOffset() );
 
                     aSet.Put( aLR );
-                    OutRTF_SfxItemSet( rWrt, aSet );
+                    OutRTF_SfxItemSet( rRTFWrt, aSet, TRUE );
                     bOutItemSet = FALSE;
                 }
             }
@@ -557,7 +612,7 @@ Writer& OutRTF_SwFmt( Writer& rWrt, const SwFmt& rFmt )
     }
 
     if( bOutItemSet )
-        OutRTF_SfxItemSet( rWrt, rFmt.GetAttrSet() );
+        OutRTF_SfxItemSet( rRTFWrt, rFmt.GetAttrSet(), TRUE );
 
     return rWrt;
 }
@@ -673,6 +728,8 @@ public:
     const SfxPoolItem* HasItem( USHORT nWhich ) const;
     const SfxPoolItem& GetItem( USHORT nWhich ) const;
     void OutFontAttrs( USHORT nScript );
+
+    SfxItemPool& GetPool() {return *rNode.GetSwAttrSet().GetPool(); }
 };
 
 
@@ -868,67 +925,81 @@ void RTFEndPosLst::OutFontAttrs( USHORT nScript )
 
     rWrt.bOutFmtAttr = TRUE;
     nCurScript = nScript;
+    rWrt.SetCurrScriptType( nScript );
+    rWrt.SetAssociatedFlag( FALSE );
 
-    USHORT nLatin = rWrt.GetId( (SvxFontItem&)GetItem( RES_CHRATR_FONT )),
-            nAsian = rWrt.GetId( (SvxFontItem&)GetItem( RES_CHRATR_CJK_FONT )),
-            nCmplx = rWrt.GetId( (SvxFontItem&)GetItem( RES_CHRATR_CTL_FONT ));
-
+    // the font MUST be at the first position !!!
     static const USHORT aLatinIds[] =  {
-            RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CJK_LANGUAGE,
-            RES_CHRATR_CJK_POSTURE,  RES_CHRATR_CJK_WEIGHT,
+            RES_CHRATR_FONT,
+            RES_CHRATR_FONTSIZE, RES_CHRATR_LANGUAGE,
+            RES_CHRATR_POSTURE,  RES_CHRATR_WEIGHT,
             0
         },
         aAsianIds[] =  {
+            RES_CHRATR_CJK_FONT,
             RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CJK_LANGUAGE,
             RES_CHRATR_CJK_POSTURE,  RES_CHRATR_CJK_WEIGHT,
             0
         },
         aCmplxIds[] =  {
-            RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CJK_LANGUAGE,
-            RES_CHRATR_CJK_POSTURE,  RES_CHRATR_CJK_WEIGHT,
+            RES_CHRATR_CTL_FONT,
+            RES_CHRATR_CTL_FONTSIZE, RES_CHRATR_CTL_LANGUAGE,
+            RES_CHRATR_CTL_POSTURE,  RES_CHRATR_CTL_WEIGHT,
             0
         };
-    const USHORT* pIdArr = aLatinIds;
 
     // size/weight/posture optional
+    const USHORT* pIdArr;
+    ByteString sOut;
     switch( nScript )
     {
     case ::com::sun::star::i18n::ScriptType::LATIN:
-        rWrt.Strm() << sRTF_RTLCH << sRTF_F;
-        rWrt.OutULong( nCmplx );
-        rWrt.Strm() << sRTF_LTRCH << sRTF_DBCH << sRTF_AF;
-        rWrt.OutULong( nAsian ) << sRTF_HICH << sRTF_AF;
-        rWrt.OutULong( nLatin ) << sRTF_LOCH << sRTF_F;
-        rWrt.OutULong( nLatin );
+        ( sOut += sRTF_LTRCH ) += sRTF_LOCH;
+        pIdArr = aLatinIds;
         break;
     case ::com::sun::star::i18n::ScriptType::ASIAN:
-        rWrt.Strm() << sRTF_RTLCH << sRTF_F;
-        rWrt.OutULong( nCmplx );
-        rWrt.Strm() << sRTF_LTRCH << sRTF_LOCH << sRTF_AF;
-        rWrt.OutULong( nLatin ) << sRTF_HICH << sRTF_AF;
-        rWrt.OutULong( nLatin ) << sRTF_DBCH << sRTF_F;
-        rWrt.OutULong( nAsian );
+        ( sOut += sRTF_LTRCH ) += sRTF_DBCH;
         pIdArr = aAsianIds;
         break;
 
     case ::com::sun::star::i18n::ScriptType::COMPLEX:
-        rWrt.Strm() << sRTF_LTRCH << sRTF_DBCH << sRTF_AF;
-        rWrt.OutULong( nAsian ) << sRTF_LOCH << sRTF_AF;
-        rWrt.OutULong( nLatin ) << sRTF_HICH << sRTF_F;
-        rWrt.OutULong( nLatin );
-        rWrt.Strm() << sRTF_RTLCH << sRTF_F;
-        rWrt.OutULong( nCmplx );
+        sOut += sRTF_RTLCH;
         pIdArr = aCmplxIds;
         break;
     }
 
-    FnAttrOut pOut;
-    const SfxPoolItem* pItem;
-    for( ; *pIdArr; ++pIdArr )
+    if( sOut.Len() )
     {
-        if( 0 != (pItem = HasItem( *pIdArr )) &&
-            0 != ( pOut = aRTFAttrFnTab[ *pIdArr - RES_CHRATR_BEGIN] ))
+        FnAttrOut pOut = aRTFAttrFnTab[ *pIdArr - RES_CHRATR_BEGIN];
+        if( pOut )
+        {
+            const SfxPoolItem* pItem = HasItem( *pIdArr );
+            if( !pItem )
+                pItem = &GetPool().GetDefaultItem( *pIdArr );
+            rWrt.Strm() << sOut.GetBuffer();
             (*pOut)( rWrt, *pItem );
+        }
+
+/*
+        FnAttrOut pOut;
+        const SfxPoolItem* pItem;
+        for( int nCnt = 0 ; *pIdArr; ++pIdArr, ++nCnt )
+        {
+            if( ( 0 != (pItem = HasItem( *pIdArr )) ||
+                    // the font must be written
+                  ( !nCnt &&
+                    0 != ( pItem = &GetPool().GetDefaultItem( *pIdArr ))) )&&
+                0 != ( pOut = aRTFAttrFnTab[ *pIdArr - RES_CHRATR_BEGIN] ))
+            {
+                if( sOut.Len() )
+                {
+                    rWrt.Strm() << sOut.GetBuffer();
+                    sOut.Erase();
+                }
+                (*pOut)( rWrt, *pItem );
+            }
+        }
+*/
     }
 }
 
@@ -1140,10 +1211,10 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             else
                 aSet.ClearItem( RES_PARATR_NUMRULE );
             aSet.Put( aLR );
-            Out_SfxItemSet( aRTFAttrFnTab, rWrt, aSet, FALSE );
+            OutRTF_SfxItemSet( rRTFWrt, aSet, FALSE );
         }
         else
-            Out_SfxItemSet( aRTFAttrFnTab, rWrt, rNdSet, FALSE );
+            OutRTF_SfxItemSet( rRTFWrt, rNdSet, FALSE );
     }
 
     rRTFWrt.pFlyFmt = pSaveFmt;
@@ -1677,6 +1748,7 @@ Writer& OutRTF_SwTblNode( Writer& rWrt, SwTableNode & rNode )
 
     // Pam hinter die Tabelle verschieben
     rRTFWrt.pCurPam->GetPoint()->nNode = *rNode.EndOfSectionNode();
+    rRTFWrt.SetAttrSet( 0 );
 
     return rWrt;
 }
@@ -1758,7 +1830,8 @@ static Writer& OutRTF_SwFont( Writer& rWrt, const SfxPoolItem& rHt )
         rRTFWrt.GetEndPosLst()->MatchScriptToId( rHt.Which() ) ))
     {
         rRTFWrt.bOutFmtAttr = TRUE;
-        rWrt.Strm() << sRTF_F;
+        const sal_Char* pCmd = rRTFWrt.IsAssociatedFlag() ? sRTF_AF : sRTF_F;
+        rWrt.Strm() << pCmd;
         rWrt.OutULong( rRTFWrt.GetId( (const SvxFontItem&)rHt ) );
     }
     return rWrt;
@@ -1777,7 +1850,8 @@ static Writer& OutRTF_SwPosture( Writer& rWrt, const SfxPoolItem& rHt )
         if( ITALIC_NORMAL == nPosture || bTxtOut )
         {
             rRTFWrt.bOutFmtAttr = TRUE;
-            rWrt.Strm() << sRTF_I;
+            const sal_Char* pCmd = rRTFWrt.IsAssociatedFlag() ? sRTF_AI : sRTF_I;
+            rWrt.Strm() << pCmd;
         }
         if( bTxtOut )
             rWrt.Strm() << '0';     // wieder abschalten
@@ -1799,7 +1873,8 @@ static Writer& OutRTF_SwWeight( Writer& rWrt, const SfxPoolItem& rHt )
         if( WEIGHT_BOLD == nBold || bTxtOut )
         {
             rRTFWrt.bOutFmtAttr = TRUE;
-            rWrt.Strm() << sRTF_B;
+            const sal_Char* pCmd = rRTFWrt.IsAssociatedFlag() ? sRTF_AB : sRTF_B;
+            rWrt.Strm() << pCmd;
         }
         if( bTxtOut )
             rWrt.Strm() <<  '0';
@@ -1966,7 +2041,8 @@ static Writer& OutRTF_SwLanguage( Writer& rWrt, const SfxPoolItem& rHt )
     {
 
         rRTFWrt.bOutFmtAttr = TRUE;
-        const sal_Char* p = RES_CHRATR_CJK_LANGUAGE ? sRTF_LANGFE : sRTF_LANG;
+        const sal_Char* p = RES_CHRATR_CJK_LANGUAGE == rHt.Which()
+                                    ? sRTF_LANGFE : sRTF_LANG;
         rWrt.Strm() << p;
         rWrt.OutULong( ((const SvxLanguageItem&)rHt).GetLanguage() );
     }
@@ -2036,7 +2112,8 @@ static Writer& OutRTF_SwSize( Writer& rWrt, const SfxPoolItem& rHt )
     {
         rRTFWrt.bOutFmtAttr = TRUE;
 
-        rWrt.Strm() << sRTF_FS;
+        const sal_Char* pCmd = rRTFWrt.IsAssociatedFlag() ? sRTF_AFS : sRTF_FS;
+        rWrt.Strm() << pCmd;
         rWrt.OutULong( ((const SvxFontHeightItem&)rHt).GetHeight() / 10 );
     }
     return rWrt;
@@ -3311,7 +3388,6 @@ static Writer& OutRTF_SwHypenZone( Writer& rWrt, const SfxPoolItem& rHt )
     if( !((SwRTFWriter&)rWrt).bWriteHelpFmt )
     {
         const SvxHyphenZoneItem& rAttr = (const SvxHyphenZoneItem&)rHt;
-
         USHORT nFlags = rAttr.IsHyphen() ? 1 : 0;
         if( rAttr.IsPageEnd() ) nFlags += 2;
 
@@ -3499,11 +3575,14 @@ SwNodeFnTab aRTFNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.10 2001-02-13 09:24:35 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.11 2001-02-13 16:56:38 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2001/02/13 09:24:35  jp
+      Bug #83787#: export default attributes, which are different to RTF-specification
+
       Revision 1.9  2000/12/21 16:20:36  jp
       writegraphic optional in original format and not general as JPG
 

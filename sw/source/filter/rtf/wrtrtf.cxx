@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-13 09:24:35 $
+ *  last change: $Author: jp $ $Date: 2001-02-13 16:56:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,9 @@ ULONG SwRTFWriter::WriteStream()
 
     bOutStyleTab = bOutTable = bOutPageDesc = bOutPageDescTbl =
     bAutoAttrSet = bOutListNumTxt = bOutLeftHeadFoot = bIgnoreNextPgBreak =
-        bTxtAttr = FALSE;
+        bTxtAttr = bAssociated = FALSE;
+
+    nCurScript = 1;                     // latin - ask the doc??
 
     pCurEndPosLst = 0;
     nBkmkTabPos = USHRT_MAX;
@@ -445,7 +447,9 @@ void SwRTFWriter::MakeHeader()
         OutULong( GetId( (SvxFontItem&)pDoc->GetAttrPool().GetDefaultItem(
                         RES_CHRATR_FONT ) ));
     }
-
+    // JP 13.02.2001 - if this not exist, MS don't understand our ansi
+    //                  characters (0x80-0xff).
+    Strm() << "\\adeflang1025";
 
     OutRTFFontTab();
     OutRTFColorTab();
@@ -1418,11 +1422,14 @@ void GetRTFWriter( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/wrtrtf.cxx,v 1.5 2001-02-13 09:24:35 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/wrtrtf.cxx,v 1.6 2001-02-13 16:56:38 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/02/13 09:24:35  jp
+      Bug #83787#: export default attributes, which are different to RTF-specification
+
       Revision 1.4  2001/02/06 15:55:19  mib
       real 6.0 file format
 
