@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-22 13:32:03 $
+ *  last change: $Author: sab $ $Date: 2002-10-31 11:23:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3997,8 +3997,22 @@ void SAL_CALL ScCellRangesObj::removeRangeAddress( const table::CellRangeAddress
 {
     ScUnoGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
+
+    ScRangeList aSheetRanges;
+    ScRangeList aNotSheetRanges;
+    for (sal_uInt32 i = 0; i < rRanges.Count(); ++i)
+    {
+        if (rRanges.GetObject(i)->aStart.Tab() == rRange.Sheet)
+        {
+            aSheetRanges.Append(*rRanges.GetObject(i));
+        }
+        else
+        {
+            aNotSheetRanges.Append(*rRanges.GetObject(i));
+        }
+    }
     ScMarkData aMarkData;
-    aMarkData.MarkFromRangeList( rRanges, FALSE );
+    aMarkData.MarkFromRangeList( aSheetRanges, FALSE );
     ScRange aRange(static_cast<sal_uInt16>(rRange.StartColumn),
                 static_cast<sal_uInt16>(rRange.StartRow),
                 static_cast<sal_uInt16>(rRange.Sheet),
@@ -4006,6 +4020,8 @@ void SAL_CALL ScCellRangesObj::removeRangeAddress( const table::CellRangeAddress
                 static_cast<sal_uInt16>(rRange.EndRow),
                 static_cast<sal_uInt16>(rRange.Sheet));
     if (aMarkData.GetTableSelect( aRange.aStart.Tab() ))
+    {
+        aMarkData.MarkToMulti();
         if (aMarkData.IsAllMarked( aRange ) )
         {
             aMarkData.SetMultiMarkArea( aRange, FALSE );
@@ -4013,9 +4029,14 @@ void SAL_CALL ScCellRangesObj::removeRangeAddress( const table::CellRangeAddress
         }
         else
             throw container::NoSuchElementException();
+    }
+    SetNewRanges(aNotSheetRanges);
     ScRangeList aNew;
     aMarkData.FillRangeListWithMarks( &aNew, FALSE );
-    SetNewRanges(aNew);
+    for (sal_uInt32 j = 0; j < aNew.Count(); ++j)
+    {
+        AddRange(*aNew.GetObject(j), sal_False);
+    }
 }
 
 void SAL_CALL ScCellRangesObj::addRangeAddresses( const uno::Sequence<table::CellRangeAddress >& rRanges,
@@ -4044,37 +4065,19 @@ void SAL_CALL ScCellRangesObj::removeRangeAddresses( const uno::Sequence<table::
                                 throw(::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    // with this implementation not needed
+//  ScUnoGuard aGuard;
 
+
+    // use sometimes a better/faster implementation
     sal_uInt32 nCount(rRangeSeq.getLength());
     if (nCount)
     {
-        const ScRangeList& rRanges = GetRangeList();
-        ScMarkData aMarkData;
-        aMarkData.MarkFromRangeList( rRanges, FALSE );
         const table::CellRangeAddress* pRanges = rRangeSeq.getConstArray();
-        for (sal_uInt32 i=0; i < nCount; i++, pRanges++)
+        for (sal_uInt32 i=0; i < nCount; ++i, ++pRanges)
         {
-            ScRange aDiffRange(static_cast<sal_uInt16>(pRanges->StartColumn),
-                            static_cast<sal_uInt16>(pRanges->StartRow),
-                            static_cast<sal_uInt16>(pRanges->Sheet),
-                            static_cast<sal_uInt16>(pRanges->EndColumn),
-                            static_cast<sal_uInt16>(pRanges->EndRow),
-                            static_cast<sal_uInt16>(pRanges->Sheet));
-            if (aMarkData.GetTableSelect( aDiffRange.aStart.Tab() ))
-                if (aMarkData.IsAllMarked( aDiffRange ) )
-                {
-                    aMarkData.SetMultiMarkArea( aDiffRange, FALSE );
-                    lcl_RemoveNamedEntry(aNamedEntries, aDiffRange);
-                }
-                else
-                    throw container::NoSuchElementException();
-
+            removeRangeAddress(*pRanges);
         }
-
-        ScRangeList aNew;
-        aMarkData.FillRangeListWithMarks( &aNew, FALSE );
-        SetNewRanges(aNew);
     }
 }
 
