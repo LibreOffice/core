@@ -7470,3 +7470,5 @@ _TI2?AVSAXException@sax@xml@star@sun@com@@
 _TI4?AVlength_error@_STL@@
 _TI4?AVout_of_range@_STL@@
 ?__query@?$Reference@VXDispatch@frame@star@sun@com@@@uno@star@sun@com@@CAPAVXDispatch@frame@345@PAVXInterface@2345@@Z
+??0?$_Vector_base@VOUString@rtl@@V?$allocator@VOUString@rtl@@@_STL@@@_STL@@QAE@ABV?$allocator@VOUString@rtl@@@1@@Z
+?deallocate@?$allocator@VOUString@rtl@@@_STL@@QBEXPAVOUString@rtl@@I@Z
