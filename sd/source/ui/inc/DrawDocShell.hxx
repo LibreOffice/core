@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawDocShell.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:35:47 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,10 @@ public:
 
     sal_Bool                IsNewDocument() const;
 
+    /** executes the SID_OPENDOC slot to let the framework open a document
+        with the given URL and this document as a referer */
+    void                    OpenBookmark( const String& rBookmarkURL );
+
     /** checks, if the given name is a valid new name for a slide
 
         <p>This method does not pop up any dialog (like CheckPageName).</p>
@@ -248,10 +252,8 @@ public:
 
     DECL_LINK( RenameSlideHdl, AbstractSvxNameDialog* );
 
-#ifndef SVX_LIGHT
                             // #91457# ExecuteSpellPopup now handled by DrawDocShell
                             DECL_LINK( OnlineSpellCallback, SpellCallbackInfo* );
-#endif
 
 public:
     SdFormatClipboard*      pFormatClipboard;
