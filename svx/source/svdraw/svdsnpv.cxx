@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdsnpv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-07 09:49:27 $
+ *  last change: $Author: cl $ $Date: 2002-09-04 15:56:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,14 +655,37 @@ void SdrSnapView::DrawDragHelpLine(OutputDevice* pOut) const
             }
             if (pO!=NULL)
             {
-                RasterOp eRop0=pO->GetRasterOp();
-                pO->SetRasterOp(ROP_INVERT);
-                Color aColor0( pO->GetLineColor() );
-                Color aBlackColor( COL_BLACK );
-                pO->SetLineColor( aBlackColor );
-                aDragHelpLine.Draw(*pO,Point());
-                pO->SetRasterOp(eRop0);
-                pO->SetLineColor( aColor0 );
+                bool bDontDraw = false;
+
+                // see if there is already a help line on same position
+                Point aPnt(aDragStat.GetNow());
+                SdrPageView* pPV=GetPageView(aPnt);
+                if (pPV!=NULL)
+                {
+                    const SdrHelpLineList& rList = pPV->GetHelpLines();
+                    sal_uInt16 nAnz = rList.GetCount(),i;
+
+                    for(i=0; i<nAnz; i++)
+                    {
+                        const SdrHelpLine rHelpLine = rList[i];
+
+                        // check if we already drawn a help line like this one
+                        if( aDragHelpLine.IsVisibleEqual( rHelpLine, *pO) )
+                            bDontDraw = true;
+                    }
+                }
+
+                if( !bDontDraw )
+                {
+                    RasterOp eRop0=pO->GetRasterOp();
+                    pO->SetRasterOp(ROP_INVERT);
+                    Color aColor0( pO->GetLineColor() );
+                    Color aBlackColor( COL_BLACK );
+                    pO->SetLineColor( aBlackColor );
+                    aDragHelpLine.Draw(*pO,Point());
+                    pO->SetRasterOp(eRop0);
+                    pO->SetLineColor( aColor0 );
+                }
             }
         } while (pOut==NULL && i<GetWinCount());
     }

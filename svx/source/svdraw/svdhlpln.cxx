@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhlpln.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-06 08:06:54 $
+ *  last change: $Author: cl $ $Date: 2002-09-04 15:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,24 @@ Rectangle SdrHelpLine::GetBoundRect(const OutputDevice& rOut) const
     return aRet;
 }
 
+bool SdrHelpLine::IsVisibleEqual( const SdrHelpLine& rHelpLine, const OutputDevice& rOut ) const
+{
+    if( eKind == rHelpLine.eKind)
+    {
+        Point aPt1(rOut.LogicToPixel(aPos)), aPt2(rOut.LogicToPixel(rHelpLine.aPos));
+        switch( eKind )
+        {
+            case SDRHELPLINE_POINT:
+                return aPt1 == aPt2;
+            case SDRHELPLINE_VERTICAL:
+                return aPt1.X() == aPt2.X();
+            case SDRHELPLINE_HORIZONTAL:
+                return aPt1.Y() == aPt2.Y();
+        }
+    }
+    return false;
+}
+
 SvStream& operator<<(SvStream& rOut, const SdrHelpLine& rHL)
 {
     SdrIOHeader aHead(rOut,STREAM_WRITE,SdrIOHlpLID);
@@ -258,9 +276,31 @@ void SdrHelpLineList::DrawAll(OutputDevice& rOut, const Point& rOfs) const
 
     rOut.SetLineColor( Color( COL_GREEN ) );
 
-    USHORT nAnz=GetCount();
-    for (USHORT i=0; i<nAnz; i++)
-        GetObject(i)->Draw(rOut,rOfs);
+    sal_uInt16 nAnz = GetCount();
+    sal_uInt16 i,j;
+    SdrHelpLine *pHL, *pHL2;
+
+    for(i=0; i<nAnz; i++)
+    {
+        pHL = GetObject(i);
+
+        // check if we already drawn a help line like this one
+        if( pHL )
+        {
+            for(j=0;j<i;j++)
+            {
+                pHL2 = GetObject(j);
+                if( pHL2 && pHL->IsVisibleEqual( *pHL2, rOut) )
+                {
+                    pHL = NULL;
+                    break;
+                }
+            }
+        }
+
+        if( pHL )
+            pHL->Draw(rOut,rOfs);
+    }
 
     rOut.SetLineColor( aOldLineColor );
 }
