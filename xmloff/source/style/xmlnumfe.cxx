@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
+ *  last change: $Author: nn $ $Date: 2001-10-25 17:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1054,6 +1054,10 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY,
                           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                               XML_STYLE_FAMILY_DATA_STYLE_NAME)) );
+
+    //  "volatile" attribute for styles used only in maps
+    if ( !bDefPart )
+        rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_VOLATILE, XML_TRUE );
 
     //  language / country
     LanguageType nLang = rFormat.GetLanguage();
