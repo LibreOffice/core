@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:16:00 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1650,4 +1650,13 @@ bool FuText::cancel()
     {
         return false;
     }
+}
+
+
+
+
+void FuText::TextEditingHasEnded (const SdrTextObj* pTextObject)
+{
+    if (pTextObj == pTextObject)
+        pTextObj = NULL;
 }
