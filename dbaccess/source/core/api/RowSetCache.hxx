@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-09 13:12:51 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ namespace dbaccess
         sal_Bool fillMatrix(sal_Int32 &_nNewStartPos,sal_Int32 _nNewEndPos);
         sal_Bool moveWindow();
 
-        void firePropertyChange(sal_Int32 _nColumnIndex,const ::com::sun::star::uno::Any& _rOldValue);
+        void firePropertyChange(sal_Int32 _nColumnIndex,const ::connectivity::ORowSetValue& _rOldValue);
 
         void rotateCacheIterator(sal_Int16 _nDist);
         void updateValue(sal_Int32 columnIndex,const connectivity::ORowSetValue& x);
@@ -331,6 +331,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.14  2001/08/09 13:12:51  oj
+    #90801# clear insertrow after insert
+
     Revision 1.13  2001/07/24 13:25:25  oj
     #89430# move ORowSetValue into dbtools
 

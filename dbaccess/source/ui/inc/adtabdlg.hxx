@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:21:14 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ namespace dbaui
         String              aDefaultString;
 
         OJoinTableView*     m_pTableView;
+        sal_Bool            m_bInitialized;
 
         BOOL IsAddAllowed();
         void AddTable();

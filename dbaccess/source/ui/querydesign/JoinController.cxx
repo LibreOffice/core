@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:39:09 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,9 @@
 #ifndef DBAUI_QYDLGTAB_HXX
 #include "adtabdlg.hxx"
 #endif
+#ifndef _SV_WAITOBJ_HXX
+#include <vcl/waitobj.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
@@ -184,6 +187,7 @@ DBG_NAME(OJoinController);
 OJoinController::OJoinController(const Reference< XMultiServiceFactory >& _rM) : OJoinController_BASE(_rM)
     ,m_bEditable(sal_True)
     ,m_bModified(sal_False)
+    ,m_bViewsAllowed(sal_True)
     ,m_pAddTabDlg(NULL)
 {
     DBG_CTOR(OJoinController,NULL);
@@ -351,7 +355,13 @@ void OJoinController::Execute(sal_uInt16 _nId)
                 m_pView->GrabFocus();
             }
             else if(getJoinView()->getTableView()->IsAddAllowed())
+            {
+                {
+                    WaitObject aWaitCursor(getView());
+                    m_pAddTabDlg->Update();
+                }
                 m_pAddTabDlg->Show(!m_pAddTabDlg->IsVisible());
+            }
             break;
     }
     InvalidateFeature(_nId);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:46:27 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _SV_WAITOBJ_HXX
+#include <vcl/waitobj.hxx>
+#endif
 
 extern "C" void SAL_CALL createRegistryInfo_ORelationControl()
 {
@@ -244,6 +247,7 @@ ORelationController::ORelationController(const Reference< XMultiServiceFactory >
     ,m_bRelationsPossible(sal_True)
 {
     DBG_CTOR(ORelationController,NULL);
+    m_bViewsAllowed = sal_False;
     InvalidateAll();
 }
 // -----------------------------------------------------------------------------
@@ -483,91 +487,32 @@ ToolBox* ORelationController::CreateToolBox(Window* _pParent)
 // -----------------------------------------------------------------------------
 void ORelationController::loadData()
 {
+    WaitObject aWaitCursor(getView());
     try
     {
         if(!m_xTables.is())
             return;
+        // this may take some time
 
+        Reference< XDatabaseMetaData> xMetaData = getConnection()->getMetaData();
         Sequence< ::rtl::OUString> aNames = m_xTables->getElementNames();
         const ::rtl::OUString* pBegin = aNames.getConstArray();
         const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
         for(;pBegin != pEnd;++pBegin)
         {
-            Reference<XKeysSupplier> xKeySup;
-            m_xTables->getByName(*pBegin) >>= xKeySup;
-            Reference<XIndexAccess> xKeys;
-            if(xKeySup.is())
-                xKeys = xKeySup->getKeys();
-            if(xKeys.is())
-            {
-                Reference<XPropertySet> xKey;
-                for(sal_Int32 i=0;i< xKeys->getCount();++i)
-                {
-                    xKeys->getByIndex(i) >>= xKey;
-                    sal_Int32 nKeyType = 0;
-                    xKey->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-                    if(KeyType::FOREIGN == nKeyType)
-                    {
-                        ::rtl::OUString sSourceName,sReferencedTable;
-                        Reference<XPropertySet> xTableProp(xKeySup,UNO_QUERY);
+            ::rtl::OUString sCatalog,sSchema,sTable;
+            ::dbtools::qualifiedNameComponents(xMetaData,
+                                                *pBegin,
+                                                sCatalog,
+                                                sSchema,
+                                                sTable);
+            Any aCatalog;
+            if(sCatalog.getLength())
+                aCatalog <<= sCatalog;
 
-                        ::dbaui::composeTableName(getMetaData(),xTableProp,sSourceName,sal_False);
-                        xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
-                        //////////////////////////////////////////////////////////////////////
-                        // insert windows
-                        if( !existsTable(sSourceName) )
-                        {
-                            OTableWindowData* pData = new OTableWindowData(sSourceName, sSourceName);
-                            pData->ShowAll(FALSE);
-                            m_vTableData.push_back(pData);
-                        }
-
-                        if( !existsTable(sReferencedTable) )
-                        {
-                            OTableWindowData* pData = new OTableWindowData(sReferencedTable, sReferencedTable);
-                            pData->ShowAll(FALSE);
-                            m_vTableData.push_back(pData);
-                        }
-
-                        ::rtl::OUString sKeyName;
-                        xKey->getPropertyValue(PROPERTY_NAME) >>= sKeyName;
-                        //////////////////////////////////////////////////////////////////////
-                        // insert connection
-                        ORelationTableConnectionData* pTabConnData = new ORelationTableConnectionData( m_xTables, sSourceName, sReferencedTable, sKeyName );
-                        m_vTableConnectionData.push_back(pTabConnData);
-                        //////////////////////////////////////////////////////////////////////
-                        // insert columns
-                        Reference<XColumnsSupplier> xColsSup(xKey,UNO_QUERY);
-                        OSL_ENSURE(xColsSup.is(),"Key is no XColumnsSupplier!");
-                        Reference<XNameAccess> xColumns     = xColsSup->getColumns();
-                        Sequence< ::rtl::OUString> aNames   = xColumns->getElementNames();
-                        const ::rtl::OUString* pBegin   = aNames.getConstArray();
-                        const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
-                        ::rtl::OUString sColumnName,sRelatedName;
-                        for(sal_uInt16 j=0;pBegin != pEnd;++pBegin,++j)
-                        {
-                            Reference<XPropertySet> xPropSet;
-                            xColumns->getByName(*pBegin) >>= xPropSet;
-                            xPropSet->getPropertyValue(PROPERTY_NAME)           >>= sColumnName;
-                            xPropSet->getPropertyValue(PROPERTY_RELATEDCOLUMN)  >>= sRelatedName;
-                            pTabConnData->SetConnLine( j, sColumnName, sRelatedName );
-                        }
-                        //////////////////////////////////////////////////////////////////////
-                        // Update/Del-Flags setzen
-                        sal_Int32   nUpdateRule,
-                                    nDeleteRule;
-                        xKey->getPropertyValue(PROPERTY_UPDATERULE) >>= nUpdateRule;
-                        xKey->getPropertyValue(PROPERTY_DELETERULE) >>= nDeleteRule;
-
-                        pTabConnData->SetUpdateRules( nUpdateRule );
-                        pTabConnData->SetDeleteRules( nDeleteRule );
-
-                        //////////////////////////////////////////////////////////////////////
-                        // Kardinalitaet setzen
-                        pTabConnData->SetCardinality();
-                    }
-                }
-            }
+            Reference< XResultSet > xResult = xMetaData->getImportedKeys(aCatalog, sSchema,sTable);
+            if(xResult.is() && xResult->next())
+                loadTableData(m_xTables->getByName(*pBegin));
         }
     }
     catch(SQLException& e)
@@ -577,6 +522,102 @@ void ORelationController::loadData()
     catch(Exception&)
     {
     }
+}
+// -----------------------------------------------------------------------------
+void ORelationController::loadTableData(const Any& _aTable)
+{
+        //  Reference<XIndexAccess> xTables(m_xTables,UNO_QUERY);
+
+//      Sequence< ::rtl::OUString> aNames = m_xTables->getElementNames();
+//      const ::rtl::OUString* pBegin = aNames.getConstArray();
+//      const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
+//      for(;pBegin != pEnd;++pBegin)
+//      {
+//          Reference<XKeysSupplier> xKeySup;
+//          m_xTables->getByName(*pBegin) >>= xKeySup;
+        Reference<XIndexAccess> xKeys;
+        //  sal_Int32 nCount = xTables->getCount();
+        //  for(sal_Int32 i = 0; i< nCount ;++i)
+        //  {
+            Reference<XKeysSupplier> xKeySup;
+            _aTable >>= xKeySup;
+
+            if(xKeySup.is())
+            {
+                xKeys = xKeySup->getKeys();
+                if(xKeys.is())
+                {
+                    Reference<XPropertySet> xKey;
+                    for(sal_Int32 i=0;i< xKeys->getCount();++i)
+                    {
+                        xKeys->getByIndex(i) >>= xKey;
+                        sal_Int32 nKeyType = 0;
+                        xKey->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
+                        if(KeyType::FOREIGN == nKeyType)
+                        {
+                            ::rtl::OUString sSourceName,sReferencedTable;
+                            Reference<XPropertySet> xTableProp(xKeySup,UNO_QUERY);
+
+                            ::dbaui::composeTableName(getConnection()->getMetaData(),xTableProp,sSourceName,sal_False);
+                            xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
+                            //////////////////////////////////////////////////////////////////////
+                            // insert windows
+                            if( !existsTable(sSourceName) )
+                            {
+                                OTableWindowData* pData = new OTableWindowData(sSourceName, sSourceName);
+                                pData->ShowAll(FALSE);
+                                m_vTableData.push_back(pData);
+                            }
+
+                            if( !existsTable(sReferencedTable) )
+                            {
+                                OTableWindowData* pData = new OTableWindowData(sReferencedTable, sReferencedTable);
+                                pData->ShowAll(FALSE);
+                                m_vTableData.push_back(pData);
+                            }
+
+                            ::rtl::OUString sKeyName;
+                            xKey->getPropertyValue(PROPERTY_NAME) >>= sKeyName;
+                            //////////////////////////////////////////////////////////////////////
+                            // insert connection
+                            ORelationTableConnectionData* pTabConnData = new ORelationTableConnectionData( m_xTables, sSourceName, sReferencedTable, sKeyName );
+                            m_vTableConnectionData.push_back(pTabConnData);
+                            //////////////////////////////////////////////////////////////////////
+                            // insert columns
+                            Reference<XColumnsSupplier> xColsSup(xKey,UNO_QUERY);
+                            OSL_ENSURE(xColsSup.is(),"Key is no XColumnsSupplier!");
+                            Reference<XNameAccess> xColumns     = xColsSup->getColumns();
+                            Sequence< ::rtl::OUString> aNames   = xColumns->getElementNames();
+                            const ::rtl::OUString* pBegin   = aNames.getConstArray();
+                            const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
+                            ::rtl::OUString sColumnName,sRelatedName;
+                            for(sal_uInt16 j=0;pBegin != pEnd;++pBegin,++j)
+                            {
+                                Reference<XPropertySet> xPropSet;
+                                xColumns->getByName(*pBegin) >>= xPropSet;
+                                xPropSet->getPropertyValue(PROPERTY_NAME)           >>= sColumnName;
+                                xPropSet->getPropertyValue(PROPERTY_RELATEDCOLUMN)  >>= sRelatedName;
+                                pTabConnData->SetConnLine( j, sColumnName, sRelatedName );
+                            }
+                            //////////////////////////////////////////////////////////////////////
+                            // Update/Del-Flags setzen
+                            sal_Int32   nUpdateRule,
+                                        nDeleteRule;
+                            xKey->getPropertyValue(PROPERTY_UPDATERULE) >>= nUpdateRule;
+                            xKey->getPropertyValue(PROPERTY_DELETERULE) >>= nDeleteRule;
+
+                            pTabConnData->SetUpdateRules( nUpdateRule );
+                            pTabConnData->SetDeleteRules( nDeleteRule );
+
+                            //////////////////////////////////////////////////////////////////////
+                            // Kardinalitaet setzen
+                            pTabConnData->SetCardinality();
+                        }
+                    }
+                }
+            }
+        //  }
+
 
 }
 // -----------------------------------------------------------------------------

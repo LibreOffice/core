@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-14 07:50:38 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,13 +476,6 @@ Reference< XNamed > OTableContainer::createObject(const ::rtl::OUString& _rName)
         m_xMasterTables->getByName(_rName) >>= xProp;
     Reference<XColumnsSupplier > xSup(xProp,UNO_QUERY);
 
-    ::rtl::OUString sCatalog,sSchema,sTable;
-    ::dbtools::qualifiedNameComponents(m_xMetaData,
-                                        _rName,
-                                        sCatalog,
-                                        sSchema,
-                                        sTable);
-
     OConfigurationNode aTableConfig;
     if(m_aTablesConfig.isValid())
     {
@@ -499,6 +492,12 @@ Reference< XNamed > OTableContainer::createObject(const ::rtl::OUString& _rName)
         return new ODBTableDecorator(aTableConfig,m_xMetaData,xSup);
     else
     {
+        ::rtl::OUString sCatalog,sSchema,sTable;
+        ::dbtools::qualifiedNameComponents(m_xMetaData,
+                                            _rName,
+                                            sCatalog,
+                                            sSchema,
+                                            sTable);
         Any aCatalog;
         if(sCatalog.getLength())
             aCatalog <<= sCatalog;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinDesignView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:39:09 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ void OJoinDesignView::Construct()
 // -----------------------------------------------------------------------------
 void OJoinDesignView::initialize()
 {
-    getAddTableDialog()->Update();
+    //  getAddTableDialog()->Update();
 }
 // -------------------------------------------------------------------------
 void OJoinDesignView::resizeDocumentView(Rectangle& _rPlayground)

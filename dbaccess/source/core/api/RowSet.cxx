@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-14 07:50:38 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,7 +738,7 @@ void ORowSet::updateValue(sal_Int32 columnIndex,const ORowSetValue& x)
     checkUpdateConditions(columnIndex);
     checkUpdateIterator();
 
-    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
+    ::connectivity::ORowSetValue aOldValue((*(*m_aCurrentRow))[columnIndex]);
     m_pCache->updateValue(columnIndex,x);
     // we have to notify all listeners
     (*(*m_aCurrentRow))[columnIndex] = x;
@@ -821,11 +821,11 @@ void SAL_CALL ORowSet::updateBinaryStream( sal_Int32 columnIndex, const Referenc
     checkUpdateConditions(columnIndex);
 
     checkUpdateIterator();
-    Any aOldValue;
+    ::connectivity::ORowSetValue aOldValue;
     if((*(*m_aCurrentRow))[columnIndex].getTypeKind() == DataType::BLOB)
     {
         m_pCache->updateBinaryStream(columnIndex,x,length);
-        aOldValue = (*(*m_aCurrentRow))[columnIndex].makeAny();
+        aOldValue = (*(*m_aCurrentRow))[columnIndex];
         (*(*m_aCurrentRow))[columnIndex] = makeAny(x);
     }
     else
@@ -834,7 +834,7 @@ void SAL_CALL ORowSet::updateBinaryStream( sal_Int32 columnIndex, const Referenc
         if(x.is())
             x->readSomeBytes(aSeq,length);
         updateValue(columnIndex,aSeq);
-        aOldValue = (*(*m_aCurrentRow))[columnIndex].makeAny();
+        aOldValue = (*(*m_aCurrentRow))[columnIndex];
         (*(*m_aCurrentRow))[columnIndex] = aSeq;
     }
 
@@ -852,7 +852,7 @@ void SAL_CALL ORowSet::updateCharacterStream( sal_Int32 columnIndex, const Refer
     checkUpdateIterator();
     m_pCache->updateCharacterStream(columnIndex,x,length);
 
-    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
+    ::connectivity::ORowSetValue aOldValue((*(*m_aCurrentRow))[columnIndex]);
     (*(*m_aCurrentRow))[columnIndex] = makeAny(x);
     firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
@@ -869,7 +869,7 @@ void SAL_CALL ORowSet::updateObject( sal_Int32 columnIndex, const Any& x ) throw
 
     if (!::dbtools::implUpdateObject(this, columnIndex, x))
     {   // there is no other updateXXX call which can handle the value in x
-        Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
+        ::connectivity::ORowSetValue aOldValue((*(*m_aCurrentRow))[columnIndex]);
         m_pCache->updateObject(columnIndex,x);
         // we have to notify all listeners
         (*(*m_aCurrentRow))[columnIndex] = x;
@@ -886,7 +886,7 @@ void SAL_CALL ORowSet::updateNumericObject( sal_Int32 columnIndex, const Any& x,
     checkUpdateConditions(columnIndex);
 
     checkUpdateIterator();
-    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
+    ::connectivity::ORowSetValue aOldValue((*(*m_aCurrentRow))[columnIndex]);
     m_pCache->updateNumericObject(columnIndex,x,scale);
     // we have to notify all listeners
     (*(*m_aCurrentRow))[columnIndex] = x;
@@ -2115,7 +2115,7 @@ void SAL_CALL ORowSet::clearParameters(  ) throw(SQLException, RuntimeException)
     m_aParameterRow.clear();
 }
 // -------------------------------------------------------------------------
-void ORowSet::firePropertyChange(sal_Int32 _nPos,const Any& _rOldValue)
+void ORowSet::firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowSetValue& _rOldValue)
 {
     OSL_ENSURE(_nPos < m_aDataColumns.size(),"nPos is invalid!");
     m_aDataColumns[_nPos]->fireValueChange(_rOldValue);

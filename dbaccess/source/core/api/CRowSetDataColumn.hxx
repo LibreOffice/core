@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:47:51 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ namespace dbaccess
 
         virtual OColumnSettings*    getSettings() { return static_cast<ORowSetDataColumn*>(this); }
 
-        virtual void fireValueChange(const ::com::sun::star::uno::Any& _rOldValue);
+        virtual void fireValueChange(const ::connectivity::ORowSetValue& _rOldValue);
     };
     // -------------------------------------------------------------------------
 //  typedef connectivity::ORefVector< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> >

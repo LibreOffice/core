@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:44:32 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,7 +591,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             stopTableListening();
             m_xTable = NULL;
         }
-        reload(); // a error occured so we have to reload
+        //  reload(); // a error occured so we have to reload
     }
     return !aInfo.isValid();
 }

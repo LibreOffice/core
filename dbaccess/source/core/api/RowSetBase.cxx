@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-14 07:50:38 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,9 +192,9 @@ Sequence< Type > ORowSetBase::getTypes() throw (RuntimeException)
 //--------------------------------------------------------------------------
 Any ORowSetBase::queryInterface( const Type & rType ) throw (RuntimeException)
 {
-    Any aRet = OPropertyContainer::queryInterface(rType);
+    Any aRet = ORowSetBase_BASE::queryInterface(rType);
     if(!aRet.hasValue())
-        aRet = ORowSetBase_BASE::queryInterface(rType);
+        aRet = OPropertyContainer::queryInterface(rType);
     return aRet;
 }
 // -------------------------------------------------------------------------
@@ -264,8 +264,7 @@ const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
     if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
         return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
     else
-    {
-        OSL_ENSURE(m_aCurrentRow && (m_bBeforeFirst || m_bAfterLast),"ORowSetBase::getValue: we don't stand on a valid row! Row is equal to end of matrix");
+    {   // currentrow is null when the clone move the window
         if(!m_aCurrentRow)
         {
             positionCache();
@@ -274,6 +273,7 @@ const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
             OSL_ENSURE(m_aCurrentRow,"ORowSetBase::getValue: we don't stand on a valid row! Row is null.");
             return getValue(columnIndex);
         }
+        OSL_ENSURE(m_aCurrentRow && (m_bBeforeFirst || m_bAfterLast),"ORowSetBase::getValue: we don't stand on a valid row! Row is equal to end of matrix");
     }
     // we should normally never reach this here
     return m_aEmptyValue;
@@ -925,6 +925,7 @@ void ORowSetBase::setCurrentRow(sal_Bool _bMoved,const ORowSetMatrix::iterator& 
         m_aBookmark     = m_pCache->getBookmark();
         OSL_ENSURE(m_aBookmark.hasValue(),"Bookmark has no value!");
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
+        OSL_ENSURE(m_aCurrentRow,"CurrentRow is null!");
         m_aCurrentRow.setBookmark(m_aBookmark);
         OSL_ENSURE((*(*m_aCurrentRow))[0].makeAny().hasValue(),"Bookamrk has no value!");
 
@@ -1029,8 +1030,8 @@ void ORowSetBase::firePropertyChange(const ORowSetMatrix::iterator& _rOldRow)
     sal_Int32 i=0;
     try
     {
-        for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != m_aDataColumns.begin();++aIter)
-            (*aIter)->fireValueChange(aRow.isValid() ? (*aRow)[i+1].makeAny() : Any());
+        for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != m_aDataColumns.end();++aIter)
+            (*aIter)->fireValueChange(aRow.isValid() ? (*aRow)[i+1] : ::connectivity::ORowSetValue());
     }
     catch(Exception&)
     {
@@ -1064,6 +1065,7 @@ void ORowSetBase::movementFailed()
     m_bAfterLast    = m_pCache->isAfterLast();
     m_aBookmark     = Any();
     m_aCurrentRow.setBookmark(m_aBookmark);
+    OSL_ENSURE(m_bBeforeFirst || m_bAfterLast,"BeforeFirst or AfterLast is wrong!");
 }
 // -----------------------------------------------------------------------------
 

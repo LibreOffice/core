@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetColumn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-26 09:30:20 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,31 +233,3 @@ Sequence< Type > ORowSetColumn::getTypes() throw (RuntimeException)
     return aTypes.getTypes();
 }
 //--------------------------------------------------------------------------
-//Sequence< sal_Int8 > ORowSetColumn::getImplementationId() throw (RuntimeException)
-//{
-//  static OImplementationId * pId = 0;
-//  if (! pId)
-//  {
-//      MutexGuard aGuard( Mutex::getGlobalMutex() );
-//      if (! pId)
-//      {
-//          static OImplementationId aId;
-//          pId = &aId;
-//      }
-//  }
-//  return pId->getImplementationId();
-//}
-// -------------------------------------------------------------------------
-void ORowSetColumn::fireValueChange(const ::com::sun::star::uno::Any& _rOldValue)
-{
-    sal_Int32 nHandle = PROPERTY_ID_VALUE;
-    Any aVal;
-
-    getFastPropertyValue(aVal,PROPERTY_ID_VALUE);
-    if(!::comphelper::compare(aVal,_rOldValue))
-    {
-        m_aOldValue = _rOldValue;
-
-        fire(&nHandle, &aVal, &_rOldValue, 1, sal_False );
-    }
-}

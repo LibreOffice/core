@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-14 14:20:13 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,6 +268,7 @@ OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
                                const Reference< XMultiServiceFactory >& _xServiceFactory)
  : OSubComponent(m_aMutex,_xConnection)
  , m_xConnection(_xConnection)
+ , m_xMetaData(_xConnection->getMetaData())
  , m_pSqlParseNode(NULL)
  , m_aSqlIterator(_xTableSupplier,_xConnection->getMetaData(),NULL)
  , m_xTableSupplier(_xTableSupplier)
@@ -412,20 +413,20 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
     }
 
     m_aWorkSql = STR_SELECT;
-    m_pSqlParseNode->getChild(1)->parseNodeToStr(m_aWorkSql,m_xConnection->getMetaData());
-    m_pSqlParseNode->getChild(2)->parseNodeToStr(m_aWorkSql,m_xConnection->getMetaData());
+    m_pSqlParseNode->getChild(1)->parseNodeToStr(m_aWorkSql,m_xMetaData);
+    m_pSqlParseNode->getChild(2)->parseNodeToStr(m_aWorkSql,m_xMetaData);
     m_aWorkSql += STR_FROM;
-    m_pSqlParseNode->getChild(3)->getChild(0)->getChild(1)->parseNodeToStr(m_aWorkSql,m_xConnection->getMetaData());
+    m_pSqlParseNode->getChild(3)->getChild(0)->getChild(1)->parseNodeToStr(m_aWorkSql,m_xMetaData);
 
     m_aFilter = m_aOrgFilter = m_aOrgOrder = m_aOrder = ::rtl::OUString();
 
     const OSQLParseNode* pWhereNode = m_aSqlIterator.getWhereTree();
     if(pWhereNode)
-        pWhereNode->getChild(1)->parseNodeToStr(m_aOrgFilter,m_xConnection->getMetaData());
+        pWhereNode->getChild(1)->parseNodeToStr(m_aOrgFilter,m_xMetaData);
 
     const OSQLParseNode* pOrderNode = m_aSqlIterator.getOrderTree();
     if(pOrderNode) // parse without "ORDER BY"
-        pOrderNode->getChild(2)->parseNodeToStr(m_aOrgOrder,m_xConnection->getMetaData());
+        pOrderNode->getChild(2)->parseNodeToStr(m_aOrgOrder,m_xMetaData);
 
     // first clear the tables and columns
     clearCurrentCollections();
@@ -445,7 +446,7 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
         Reference<XResultSetMetaData> xMeta = xResMetaDataSup->getMetaData();
 
         sal_Int32 nCount = xMeta.is() ? xMeta->getColumnCount() : sal_Int32(0);
-        ::comphelper::UStringMixEqual bCase(m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+        ::comphelper::UStringMixEqual bCase(m_xMetaData->storesMixedCaseQuotedIdentifiers());
         for(sal_Int32 i=1;i<=nCount;++i)
         {
             ::rtl::OUString sName = xMeta->getColumnName(i);
@@ -465,7 +466,7 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
                         Reference<XPropertySet> xProp(*aFind2,UNO_QUERY);
                         if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME))
                         {
-                            ::connectivity::parse::OParseColumn* pColumn = new ::connectivity::parse::OParseColumn(xProp,m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+                            ::connectivity::parse::OParseColumn* pColumn = new ::connectivity::parse::OParseColumn(xProp,m_xMetaData->storesMixedCaseQuotedIdentifiers());
                             pColumn->setName(sName);
                             pColumn->setRealName(::comphelper::getString(xProp->getPropertyValue(PROPERTY_REALNAME)));
                             pColumn->setTableName(::comphelper::getString(xProp->getPropertyValue(PROPERTY_TABLENAME)));
@@ -482,7 +483,7 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
         for(OSQLColumns::const_iterator aIter = aCols->begin(); aIter != aCols->end();++aIter)
             aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
     }
-    m_pColumns = new OPrivateColumns(aCols,m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
+    m_pColumns = new OPrivateColumns(aCols,m_xMetaData->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
 
     getTables();
     getParameters();
@@ -496,7 +497,7 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
 
     ::rtl::OUString aResult;
     if (m_pSqlParseNode)
-        m_pSqlParseNode->parseNodeToStr(aResult,m_xConnection->getMetaData());
+        m_pSqlParseNode->parseNodeToStr(aResult,m_xMetaData);
     else
         aResult = getQuery();
     return aResult;
@@ -609,7 +610,7 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
     column->getPropertyValue(PROPERTY_VALUE) >>= aValue;
 
     ::rtl::OUString aSql;
-    ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    ::rtl::OUString aQuote  = m_xMetaData->getIdentifierQuoteString();
     if(m_pColumns->hasByName(aName))
     {
         Reference<XPropertySet> xColumn;
@@ -623,8 +624,8 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
         if(sTableName.indexOf('.',0) != -1)
         {
             ::rtl::OUString aCatlog,aSchema,aTable;
-            ::dbtools::qualifiedNameComponents(m_xConnection->getMetaData(),sTableName,aCatlog,aSchema,aTable);
-            ::dbtools::composeTableName(m_xConnection->getMetaData(),aCatlog,aSchema,aTable,sTableName,sal_True);
+            ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable);
+            ::dbtools::composeTableName(m_xMetaData,aCatlog,aSchema,aTable,sTableName,sal_True);
         }
         else
             sTableName = ::dbtools::quoteName(aQuote,sTableName);
@@ -721,13 +722,13 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
     ::rtl::OUString aName,aAppendOrder;
     column->getPropertyValue(PROPERTY_NAME)         >>= aName;
 
-    if(!m_xConnection->getMetaData()->supportsOrderByUnrelated() && !m_pColumns->hasByName(aName))
+    if(!m_xMetaData->supportsOrderByUnrelated() && !m_pColumns->hasByName(aName))
         throw SQLException(::rtl::OUString::createFromAscii("Column not in select clause!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
 
     // filter anhaengen
     // select ohne where und order by aufbauen
     ::rtl::OUString aSql(m_aWorkSql);
-    ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    ::rtl::OUString aQuote  = m_xMetaData->getIdentifierQuoteString();
     if(m_pColumns->hasByName(aName))
     {
         Reference<XPropertySet> xColumn;
@@ -741,8 +742,8 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
         if(sTableName.indexOf('.',0) != -1)
         {
             ::rtl::OUString aCatlog,aSchema,aTable;
-            ::dbtools::qualifiedNameComponents(m_xConnection->getMetaData(),sTableName,aCatlog,aSchema,aTable);
-            ::dbtools::composeTableName(m_xConnection->getMetaData(),aCatlog,aSchema,aTable,sTableName,sal_True);
+            ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable);
+            ::dbtools::composeTableName(m_xMetaData,aCatlog,aSchema,aTable,sTableName,sal_True);
         }
         else
             sTableName = ::dbtools::quoteName(aQuote,sTableName);
@@ -814,7 +815,7 @@ Reference< XNameAccess > SAL_CALL OQueryComposer::getTables(  ) throw(RuntimeExc
         for(OSQLTables::const_iterator aIter = aTables.begin(); aIter != aTables.end();++aIter)
             aNames.push_back(aIter->first);
 
-        m_pTables = new OPrivateTables(aTables,m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
+        m_pTables = new OPrivateTables(aTables,m_xMetaData->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
     }
 
     return m_pTables;
@@ -900,10 +901,10 @@ sal_Bool OQueryComposer::setANDCriteria(OSQLParseNode * pCondition,
             ::rtl::OUString aColumnName;
 
 
-            //  pCondition->parseNodeToStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,m_sDecimalSep.toChar());
-            pCondition->parseNodeToStr(aValue,m_xConnection->getMetaData(),NULL);
-            //  pCondition->getChild(0)->parseNodeToStr(aColumnName,m_xConnection->getMetaData(), xFormatter, m_aLocale,m_sDecimalSep.toChar());
-            pCondition->getChild(0)->parseNodeToStr(aColumnName,m_xConnection->getMetaData(), NULL);
+            //  pCondition->parseNodeToStr(aValue,m_xMetaData, xFormatter, m_aLocale,m_sDecimalSep.toChar());
+            pCondition->parseNodeToStr(aValue,m_xMetaData,NULL);
+            //  pCondition->getChild(0)->parseNodeToStr(aColumnName,m_xMetaData, xFormatter, m_aLocale,m_sDecimalSep.toChar());
+            pCondition->getChild(0)->parseNodeToStr(aColumnName,m_xMetaData, NULL);
 
             // don't display the column name
             aValue = aValue.copy(aColumnName.getLength());
@@ -1002,7 +1003,7 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
 
             // go forward
             for (;i < pCondition->count();i++)
-                pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,m_sDecimalSep.toChar());
+                pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xMetaData, xFormatter, m_aLocale,m_sDecimalSep.toChar());
         }
         else if (SQL_ISRULE(pCondition->getChild(pCondition->count()-1), column_ref))
         {
@@ -1044,7 +1045,7 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
 
             // go backward
             for (; i >= 0; i--)
-                pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,m_sDecimalSep.toChar());
+                pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xMetaData, xFormatter, m_aLocale,m_sDecimalSep.toChar());
         }
         else
             return sal_False;
@@ -1060,8 +1061,8 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
         ::rtl::OUString aValue;
         ::rtl::OUString aColumnName;
 
-        pCondition->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,m_sDecimalSep.toChar());
-        pCondition->getChild(0)->parseNodeToPredicateStr(aColumnName,m_xConnection->getMetaData(), xFormatter, m_aLocale,m_sDecimalSep.toChar());
+        pCondition->parseNodeToPredicateStr(aValue,m_xMetaData, xFormatter, m_aLocale,m_sDecimalSep.toChar());
+        pCondition->getChild(0)->parseNodeToPredicateStr(aColumnName,m_xMetaData, xFormatter, m_aLocale,m_sDecimalSep.toChar());
 
         // don't display the column name
         aValue = aValue.copy(aColumnName.getLength());
@@ -1083,13 +1084,13 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
         // Feldnamen
         sal_uInt16 i;
         for (i=0;i< pLhs->count();i++)
-             pCondition->getChild(i)->parseNodeToPredicateStr(aName,m_xConnection->getMetaData(), xFormatter, m_aLocale,m_sDecimalSep.toChar());
+             pCondition->getChild(i)->parseNodeToPredicateStr(aName,m_xMetaData, xFormatter, m_aLocale,m_sDecimalSep.toChar());
 
         // Kriterium
         aItem.Handle = pCondition->getChild(1)->getNodeType();
         aValue       = pCondition->getChild(1)->getTokenValue();
         for(i=0;i< pRhs->count();i++)
-            pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,m_sDecimalSep.toChar());
+            pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xMetaData, xFormatter, m_aLocale,m_sDecimalSep.toChar());
 
         aItem.Name = aName;
         aItem.Value <<= aValue;
@@ -1147,11 +1148,11 @@ void OQueryComposer::resetIterator(const ::rtl::OUString& aSql)
     ::rtl::OUString aResult;
     const OSQLParseNode* pGroupBy = m_aSqlIterator.getGroupByTree();
     if(pGroupBy)
-        pGroupBy->parseNodeToStr(aResult,m_xConnection->getMetaData());
+        pGroupBy->parseNodeToStr(aResult,m_xMetaData);
 
     const OSQLParseNode* pHaving = m_aSqlIterator.getHavingTree();
     if(pHaving)
-        pHaving->parseNodeToStr(aResult,m_xConnection->getMetaData());
+        pHaving->parseNodeToStr(aResult,m_xMetaData);
     return aResult;
 }
 // -----------------------------------------------------------------------------
@@ -1190,7 +1191,7 @@ void OQueryComposer::resetIterator(const ::rtl::OUString& aSql)
         }
         else
         {
-            ::dbtools::composeTableName(m_xConnection->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_False);
+            ::dbtools::composeTableName(m_xMetaData,aCatalog,aSchema,aTable,aComposedName,sal_False);
 
             // first check if this is the table we want to or has it a tablealias
 
@@ -1221,7 +1222,7 @@ void OQueryComposer::resetIterator(const ::rtl::OUString& aSql)
         }
         if(pBegin != pEnd)
         {
-            ::dbtools::composeTableName(m_xConnection->getMetaData(),aCatalog,aSchema,aTable,sReturn,sal_True);
+            ::dbtools::composeTableName(m_xMetaData,aCatalog,aSchema,aTable,sReturn,sal_True);
             sReturn += ::rtl::OUString::createFromAscii(".");
         }
     }
@@ -1237,7 +1238,7 @@ Reference< XIndexAccess > SAL_CALL OQueryComposer::getParameters(  ) throw(Runti
         ::std::vector< ::rtl::OUString> aNames;
         for(OSQLColumns::const_iterator aIter = aCols->begin(); aIter != aCols->end();++aIter)
             aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
-        m_pParameters = new OPrivateColumns(aCols,m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
+        m_pParameters = new OPrivateColumns(aCols,m_xMetaData->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
     }
 
     return m_pParameters;

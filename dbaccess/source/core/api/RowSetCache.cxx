@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-09 13:12:51 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1177,10 +1177,12 @@ sal_Bool SAL_CALL ORowSetCache::last(  ) throw(SQLException, RuntimeException)
         moveWindow();
         // we have to repositioning because moveWindow can modify the cache
         m_pCacheSet->last();
-        if(m_nPosition > m_nFetchSize)
-            m_aMatrixIter = m_pMatrix->end() -1;
-        else
-            m_aMatrixIter = m_pMatrix->begin() + m_nPosition - 1;
+//      if(m_nPosition > m_nFetchSize)
+//          m_aMatrixIter = m_pMatrix->end() -1;
+//      else
+//          m_aMatrixIter = m_pMatrix->begin() + m_nPosition - 1;
+        OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
+        m_aMatrixIter = m_pMatrix->begin() + (m_nPosition - m_nStartPos) - 1; // if row == -1 that means it stands on the last
     }
     else
     {

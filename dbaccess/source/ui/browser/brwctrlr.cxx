@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:41:10 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,19 +502,23 @@ Sequence< sal_Int8 > SAL_CALL SbaXDataBrowserController::getImplementationId(  )
 Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType) throw (RuntimeException)
 {
     // check for our additional interfaces
-    Any aRet = SbaXDataBrowserController_Base::queryInterface(_rType);
+    Any aRet = OGenericUnoController::queryInterface(_rType);
 
     // check for the base controllers interfaces
     if (!aRet.hasValue())
-        aRet = OGenericUnoController::queryInterface(_rType);
+    {
+        aRet = SbaXDataBrowserController_Base::queryInterface(_rType);
 
-    // check for our aggregate (implementing the XFormController)
-    if (!aRet.hasValue())
-        aRet = m_xFormControllerImpl->queryAggregation(_rType);
+        // check for our aggregate (implementing the XFormController)
+        if (!aRet.hasValue())
+        {
+            aRet = m_xFormControllerImpl->queryAggregation(_rType);
 
-    // check for the property set interfaces
-    if (!aRet.hasValue())
-        aRet = OPropertySetHelper::queryInterface(_rType);
+            // check for the property set interfaces
+            if (!aRet.hasValue())
+                aRet = OPropertySetHelper::queryInterface(_rType);
+        }
+    }
 
     // no more to offer
     return aRet;
@@ -2459,8 +2463,8 @@ sal_Bool SbaXDataBrowserController::isValidCursor() const
     Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(m_xRowSet, UNO_QUERY);
     if (!xSupplyCols.is())
         return sal_False;
-    Reference< ::com::sun::star::container::XIndexAccess >  xCols(xSupplyCols->getColumns(), UNO_QUERY);
-    if (!xCols.is() || (xCols->getCount() == 0))
+    Reference< ::com::sun::star::container::XNameAccess >  xCols = xSupplyCols->getColumns();
+    if (!xCols.is() || !xCols->hasElements())
         return sal_False;
 
     Reference<XPropertySet> xProp(m_xRowSet,UNO_QUERY);

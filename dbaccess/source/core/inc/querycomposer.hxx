@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-14 14:20:13 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@ namespace dbaccess
         ::std::vector<OPrivateTables*>          m_aTablesCollection;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>              m_xConnection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>        m_xMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xTableSupplier;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xColumns;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-19 10:01:25 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,10 +649,13 @@ Reference< XNameAccess >  OConnection::getTables() throw( RuntimeException )
     {
         // check if out "master connection" can supply tables
         Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
-        Reference< XDataDefinitionSupplier > xSupp(xManager->getDriverByURL(m_xMasterConnection->getMetaData()->getURL()),UNO_QUERY);
+        Reference< XDriver > xDriver = xManager->getDriverByURL(m_xMasterConnection->getMetaData()->getURL());
+        OSL_ENSURE(xDriver.is(),"NO driver found for url already connected to!");
+        Reference< XDataDefinitionSupplier > xSupp(xDriver,UNO_QUERY);
         Reference< XTablesSupplier > xMasterTables;
         if(xSupp.is())
             xMasterTables = xSupp->getDataDefinitionByConnection(m_xMasterConnection);
+
 
         if (xMasterTables.is() && xMasterTables->getTables().is())
         {   // yes -> wrap them

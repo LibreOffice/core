@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace dbtools;
 
-DBG_NAME(OAddTableDlg);
+DBG_NAME(OAddTableDlg)
 //------------------------------------------------------------------------------
 OAddTableDlg::OAddTableDlg( Window* pParent)
              :ModelessDialog( pParent, ModuleRes(DLG_JOIN_TABADD) )
@@ -125,6 +125,7 @@ OAddTableDlg::OAddTableDlg( Window* pParent)
              ,aHelpButton( this, ResId( PB_HELP ) )
              ,aFixedLineTable( this, ResId( FL_TABLE ) )
              ,aDefaultString( ResId( STR_DEFAULT ) )
+             ,m_bInitialized(sal_False)
 {
     DBG_CTOR(OAddTableDlg,NULL);
     m_pTableView = static_cast<OJoinTableView*>(pParent);
@@ -158,17 +159,11 @@ OAddTableDlg::~OAddTableDlg()
 //------------------------------------------------------------------------------
 void OAddTableDlg::Update()
 {
-//  if (m_pShellAttachedTo == pNewShell)
-//      return;
-//
-//  m_pShellAttachedTo = pNewShell;
-//  if (m_pShellAttachedTo)
-//  {
-//      xDatabase = m_pShellAttachedTo->GetDocShell()->GetJoinDocDatabase();
-    UpdateTableList(sal_True);
-//  }
-
-    //DetermineAddTable();
+    if(!m_bInitialized)
+    {
+        UpdateTableList(m_pTableView->getDesignView()->getController()->isViewAllowed());
+        m_bInitialized = sal_True;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -258,15 +253,19 @@ void OAddTableDlg::UpdateTableList(BOOL bViewsAllowed)
     xTables = xTableSupp->getTables();
 
     // get the views supplier and the views
-    xViewSupp = Reference< XViewsSupplier >(xTableSupp, UNO_QUERY);
-    if (xViewSupp.is())
-        xViews = xViewSupp->getViews();
-
     Sequence< ::rtl::OUString> sTables,sViews;
     if (xTables.is())
         sTables = xTables->getElementNames();
-    if (xViews.is())
-        sViews = xViews->getElementNames();
+    if(bViewsAllowed)
+    {
+        xViewSupp = Reference< XViewsSupplier >(xTableSupp, UNO_QUERY);
+        if (xViewSupp.is())
+        {
+            xViews = xViewSupp->getViews();
+            if (xViews.is())
+                sViews = xViews->getElementNames();
+        }
+    }
 
     aTableList.UpdateTableList(Reference< XConnection>(xTableSupp,UNO_QUERY)->getMetaData(),sTables,sViews);
 /*

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 14:26:45 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ namespace dbaui
         short saveModified();
         // load the window positions out of the datasource
         void loadLayoutInformation();
+        void loadTableData(const ::com::sun::star::uno::Any& _aTable);
     public:
         ORelationController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 

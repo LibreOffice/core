@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:04:23 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,7 +318,7 @@ OColumnSettings*    OColumn::getSettings()
     return NULL;
 }
 // -----------------------------------------------------------------------------
-void OColumn::fireValueChange(const ::com::sun::star::uno::Any& _rOldValue)
+void OColumn::fireValueChange(const ::connectivity::ORowSetValue& _rOldValue)
 {
 }
 // -----------------------------------------------------------------------------

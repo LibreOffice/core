@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-19 11:42:36 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,9 @@
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 #include <connectivity/sdbcx/VCollection.hxx>
 #endif
+#ifndef _CONNECTIVITY_FILE_VALUE_HXX_
+#include <connectivity/FValue.hxx>
+#endif
 #ifndef _UNOTOOLS_CONFIGNODE_HXX_
 #include <unotools/confignode.hxx>
 #endif
@@ -213,7 +216,7 @@ namespace dbaccess
             @see    OColumns::loadSettings
         */
         virtual OColumnSettings*    getSettings();
-        virtual void fireValueChange(const ::com::sun::star::uno::Any& _rOldValue);
+        virtual void fireValueChange(const ::connectivity::ORowSetValue& _rOldValue);
     };
 
     //************************************************************

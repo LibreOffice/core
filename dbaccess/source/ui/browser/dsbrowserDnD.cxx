@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 06:20:24 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -843,6 +843,12 @@ namespace dbaui
         // now create,fill and execute the prepared statement
         Reference< XPreparedStatement > xPrep(_xMetaData->getConnection()->prepareStatement(aSql));
         Reference< XParameters > xParameter(xPrep,UNO_QUERY);
+        ::std::vector<sal_Int32> aColumnTypes;
+        aColumnTypes.reserve(nCount+1);
+        aColumnTypes.push_back(-1); // just to avoid a everytime i-1 call
+        for(sal_Int32 k=1;k <= nCount;++k)
+            aColumnTypes.push_back(xMeta->getColumnType(k));
+
 
         sal_Int32 nRowCount = 0;
         while(xSrcRs->next())
@@ -859,8 +865,7 @@ namespace dbaui
                     xParameter->setInt(1,nRowCount);
                     continue;
                 }
-                sal_Int32 nType = xMeta->getColumnType(i);
-                switch(nType)
+                switch(aColumnTypes[i])
                 {
                     case DataType::CHAR:
                     case DataType::VARCHAR:
@@ -915,7 +920,7 @@ namespace dbaui
                         OSL_ENSURE(0,"Unknown type");
                 }
                 if(xRow->wasNull())
-                    xParameter->setNull(nPos,nType);
+                    xParameter->setNull(nPos,aColumnTypes[i]);
             }
             xPrep->executeUpdate();
         }
@@ -1086,6 +1091,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.25  2001/07/30 06:20:24  oj
+ *  #90291# check if table should be appended
+ *
  *  Revision 1.24  2001/07/26 14:12:01  oj
  *  #90291# check if table should be appended
  *

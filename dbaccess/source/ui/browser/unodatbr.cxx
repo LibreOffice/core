@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-16 14:09:46 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2515,26 +2515,27 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
 // -----------------------------------------------------------------------------
 SvLBoxEntry* SbaTableQueryBrowser::getEntryFromContainer(const Reference<XNameAccess>& _rxNameAccess)
 {
-    SvLBoxEntry* pDSLoop = m_pTreeView->getListBox()->FirstChild(NULL);
+    DBTreeListBox* pListBox = m_pTreeView->getListBox();
+    SvLBoxEntry* pDSLoop = pListBox->FirstChild(NULL);
     SvLBoxEntry* pContainer = NULL;
     while (pDSLoop)
     {
-        pContainer  = m_pTreeView->getListBox()->GetEntry(pDSLoop, CONTAINER_QUERIES);
+        pContainer  = pListBox->GetEntry(pDSLoop, CONTAINER_QUERIES);
         DBTreeListModel::DBTreeListUserData* pQueriesData = static_cast<DBTreeListModel::DBTreeListUserData*>(pContainer->GetUserData());
         if(pQueriesData && pQueriesData->xObject.get() == _rxNameAccess.get())
             break;
 
-        pContainer  = m_pTreeView->getListBox()->GetEntry(pDSLoop, CONTAINER_TABLES);
+        pContainer  = pListBox->GetEntry(pDSLoop, CONTAINER_TABLES);
         DBTreeListModel::DBTreeListUserData* pTablesData = static_cast<DBTreeListModel::DBTreeListUserData*>(pContainer->GetUserData());
         if(pTablesData && pTablesData->xObject.get() == _rxNameAccess.get())
             break;
 
-        pContainer  = m_pTreeView->getListBox()->GetEntry(pDSLoop, CONTAINER_BOOKMARKS);
+        pContainer  = pListBox->GetEntry(pDSLoop, CONTAINER_BOOKMARKS);
         DBTreeListModel::DBTreeListUserData* pBookmarksData = static_cast<DBTreeListModel::DBTreeListUserData*>(pContainer->GetUserData());
         if(pBookmarksData && pBookmarksData->xObject.get() == _rxNameAccess.get())
             break;
 
-        pDSLoop     = m_pTreeView->getListBox()->NextSibling(pDSLoop);
+        pDSLoop     = pListBox->NextSibling(pDSLoop);
         pContainer  = NULL;
     }
     return pContainer;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:04:23 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,17 +251,15 @@ Sequence< sal_Int8 > ORowSetDataColumn::getImplementationId() throw (RuntimeExce
     return pId->getImplementationId();
 }
 // -------------------------------------------------------------------------
-void ORowSetDataColumn::fireValueChange(const ::com::sun::star::uno::Any& _rOldValue)
+void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)
 {
-    sal_Int32 nHandle = PROPERTY_ID_VALUE;
-    Any aVal;
-
-    getFastPropertyValue(aVal,PROPERTY_ID_VALUE);
-    if(!::comphelper::compare(aVal,_rOldValue))
+    if(!((*(*m_aColumnValue))[m_nPos] == _rOldValue))
     {
-        m_aOldValue = _rOldValue;
+        sal_Int32 nHandle = PROPERTY_ID_VALUE;
+        m_aOldValue = _rOldValue.makeAny();
+        Any aNew = (*(*m_aColumnValue))[m_nPos].makeAny();
 
-        fire(&nHandle, &aVal, &_rOldValue, 1, sal_False );
+        fire(&nHandle, &aNew, &m_aOldValue, 1, sal_False );
     }
 }
 

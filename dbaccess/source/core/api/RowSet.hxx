@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 11:01:19 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ namespace dbaccess
 
         // fire a change for one column
         // _nPos starts at zero
-        void firePropertyChange(sal_Int32 _nPos,const ::com::sun::star::uno::Any& _rNewValue);
+        void firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowSetValue& _rNewValue);
         // inform the clones that we have deleted some records
         void notifyClonesRowDeleted(const ::com::sun::star::uno::Any& _rBookmark);
         // inform the clones that we will delete some records
@@ -464,6 +464,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.26  2001/08/06 11:01:19  fs
+    #87960# moved the listers from the base class herein / call the listers in :disposing()
+
     Revision 1.25  2001/07/30 08:53:02  oj
     #90015# use ORowSetValue as const ref
 
