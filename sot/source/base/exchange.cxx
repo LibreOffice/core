@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:56:51 $
+ *  last change: $Author: shane $ $Date: 2000-10-02 19:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,4 +292,5 @@ ULONG SotExchange::GetMaxFormat( void )
     StringList & rSL = Init_Impl();
     return SOT_FORMATSTR_ID_USER_END + rSL.Count();
 }
+
 
