@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:20:11 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:34:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -953,7 +953,7 @@ String STR_QUERY_DELETE_GROUP2
     Text[ arabic ] = "ø";
     Text[ language_user1 ] = " ";
     Text[ greek ] = "Ì· ‰È·„Ò·ˆÂﬂ;";
-    Text[ korean ] = "ªË¡¶«œΩ√∞⁄Ω¿¥œ±Ó£ø";
+    Text[ korean ] = " ªË¡¶«œΩ√∞⁄Ω¿¥œ±Ó£ø";
     Text[ turkish ] = "silinsin mi?";
     Text[ catalan ] = "la categorÌa?";
     Text[ finnish ] = "?";
@@ -1234,4 +1234,5 @@ InfoBox MSG_NO_GLOSSARIES
     MESSAGE[ catalan ] = "Este archivo no contiene mÛdulos de texto.";
     MESSAGE[ finnish ] = "Tiedostossa ei ole automaattista teksti‰.";
 };
+
 
