@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-18 07:52:19 $
+ *  last change: $Author: cl $ $Date: 2002-07-09 07:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,7 +433,6 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                 if ( pView->IsAction() )
                 {
                     pView->BrkAction();
-                    bProc = TRUE;
                 }
                 else if ( pView->HasMarkedObj() )
                 {
@@ -448,13 +447,12 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                     {
                         ((Dialog*)GetParent())->GrabFocusToFirstControl();
                     }
-
-                    bProc = true;
                 }
                 else
                 {
                     ((Dialog*)GetParent())->GrabFocusToFirstControl();
                 }
+                bProc = TRUE;
             }
         }
         break;
