@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:03:57 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3056,18 +3056,18 @@ String STR_AL_TITLE_VERT_OUTLINE
     Text [ english_us ] = "Title, vertical text" ;
     Text[ portuguese ] = "Title, vertical text";
     Text[ russian ] = "Ηΰγξλξβξκ, βεπςθκΰλόνϋι ςεκρς";
-    Text[ greek ] = "Title, vertical text";
+    Text[ greek ] = "Τίτλος, κατακόρυφο κείμενο";
     Text[ dutch ] = "Title, vertical text";
-    Text[ french ] = "Title, vertical text";
-    Text[ spanish ] = "Title, vertical text";
+    Text[ french ] = "Titre, texte vertical";
+    Text[ spanish ] = "Tνtulo, texto vertical";
     Text[ italian ] = "Title, vertical text";
     Text[ danish ] = "Title, vertical text";
     Text[ swedish ] = "Rubrik, vertikal text";
     Text[ polish ] = "Tytu³, tekst w pionie";
     Text[ portuguese_brazilian ] = "Title, vertical text";
-    Text[ japanese ] = "Title, vertical text";
+    Text[ japanese ] = "ΐ²ΔΩAc‘‚«Γ·½Δ";
     Text[ korean ] = "Title, vertical text";
-    Text[ chinese_simplified ] = "Title, vertical text";
+    Text[ chinese_simplified ] = "±κΜβ£¬Φ±Κ½ΞΔΧΦ";
     Text[ chinese_traditional ] = "ΌΠΓD΅Aª½¦΅¤ε¦r";
     Text[ turkish ] = "Title, vertical text";
     Text[ arabic ] = "ΪδζΗδ΅ δΥ ΪγζΟν";
@@ -3079,18 +3079,18 @@ String STR_AL_TITLE_VERT_OUTLINE_CLIPART
     Text [ english_us ] = "Title, vertical text, clipart" ;
     Text[ portuguese ] = "Title, vertical text, clipart";
     Text[ russian ] = "Ηΰγξλξβξκ, βεπςθκΰλόνϋι ςεκρς, κΰπςθνκΰ";
-    Text[ greek ] = "Title, vertical text, clipart";
+    Text[ greek ] = "Τίτλος, κατακόρυφο κείμενο, Clipart";
     Text[ dutch ] = "Title, vertical text, clipart";
-    Text[ french ] = "Title, vertical text, clipart";
-    Text[ spanish ] = "Title, vertical text, clipart";
+    Text[ french ] = "Titre, texte vertical, clipart";
+    Text[ spanish ] = "Tνtulo, texto vertical, clipart";
     Text[ italian ] = "Title, vertical text, clipart";
     Text[ danish ] = "Title, vertical text, clipart";
     Text[ swedish ] = "Rubrik, vertikal text, clipart";
     Text[ polish ] = "Tytu³, tekst w pionie, klipart";
     Text[ portuguese_brazilian ] = "Title, vertical text, clipart";
-    Text[ japanese ] = "Title, vertical text, clipart";
+    Text[ japanese ] = "ΐ²ΔΩAc‘‚«Γ·½ΔAΈΨ―Μί±°Δ";
     Text[ korean ] = "Title, vertical text, clipart";
-    Text[ chinese_simplified ] = "Title, vertical text, clipart";
+    Text[ chinese_simplified ] = "±κΜβ£¬Φ±Κ½ΞΔΧΦ£¬ΓΐΚυΝΌΠΞ";
     Text[ chinese_traditional ] = "ΌΠΓD΅Aª½¦΅¤ε¦r΅A¬ό³NΉΟ§Ξ";
     Text[ turkish ] = "Title, vertical text, clipart";
     Text[ arabic ] = "ΪδζΗδ΅ δΥ ΪγζΟν΅ Clipart";
@@ -3102,18 +3102,18 @@ String STR_AL_VERT_TITLE_TEXT_CHART
     Text [ english_us ] = "Vertical title, text, chart" ;
     Text[ portuguese ] = "Vertical title, text, chart";
     Text[ russian ] = "Βεπςθκΰλόνϋι ηΰγξλξβξκ, ςεκρς, δθΰγπΰμμΰ";
-    Text[ greek ] = "Vertical title, text, chart";
+    Text[ greek ] = "Kατακόρυφος τίτλος, κείμενο, διάγραμμα";
     Text[ dutch ] = "Vertical title, text, chart";
-    Text[ french ] = "Vertical title, text, chart";
-    Text[ spanish ] = "Vertical title, text, chart";
+    Text[ french ] = "Titre vertical, texte, diagramme";
+    Text[ spanish ] = "Tνtulo vertical, texto, diagrama";
     Text[ italian ] = "Vertical title, text, chart";
     Text[ danish ] = "Vertical title, text, chart";
     Text[ swedish ] = "Vertikal rubrik, text, diagram";
     Text[ polish ] = "Pionowy tytu³, tekst, wykres";
     Text[ portuguese_brazilian ] = "Vertical title, text, chart";
-    Text[ japanese ] = "Vertical title, text, chart";
+    Text[ japanese ] = "c‘‚«ΐ²ΔΩAΓ·½ΔAΈήΧΜ";
     Text[ korean ] = "Vertical title, text, chart";
-    Text[ chinese_simplified ] = "Vertical title, text, chart";
+    Text[ chinese_simplified ] = "Φ±Κ½±κΜβ£¬ΞΔΧΦ£¬ΝΌ±ν";
     Text[ chinese_traditional ] = "ª½¦΅ΌΠΓD΅A¤ε¦r΅AΉΟªν";
     Text[ turkish ] = "Vertical title, text, chart";
     Text[ arabic ] = "ΪδζΗδ ΪγζΟν΅ δΥ΅ ΡΣγ ΘνΗδν";
@@ -3125,18 +3125,18 @@ String STR_AL_VERT_TITLE_VERT_OUTLINE
     Text [ english_us ] = "Vertical title, vertical text" ;
     Text[ portuguese ] = "Vertical title, vertical text";
     Text[ russian ] = "Βεπςθκΰλόνϋι ηΰγξλξβξκ, βεπςθκΰλόνϋι ςεκρς";
-    Text[ greek ] = "Vertical title, vertical text";
+    Text[ greek ] = "Κατακόρυφος τίτλος, κατακόρυφο κείμενο";
     Text[ dutch ] = "Vertical title, vertical text";
-    Text[ french ] = "Vertical title, vertical text";
-    Text[ spanish ] = "Vertical title, vertical text";
+    Text[ french ] = "Titre vertical, texte vertical";
+    Text[ spanish ] = "Tνtulo vertical, texto vertical";
     Text[ italian ] = "Vertical title, vertical text";
     Text[ danish ] = "Vertical title, vertical text";
     Text[ swedish ] = "Vertikal rubrik, vertikal text";
     Text[ polish ] = "Pionowy tytu³, tekst w pionie";
     Text[ portuguese_brazilian ] = "Vertical title, vertical text";
-    Text[ japanese ] = "Vertical title, vertical text";
+    Text[ japanese ] = "c‘‚«ΐ²ΔΩAc‘‚«Γ·½Δ";
     Text[ korean ] = "Vertical title, vertical text";
-    Text[ chinese_simplified ] = "Vertical title, vertical text";
+    Text[ chinese_simplified ] = "Φ±Κ½±κΜβ£¬Φ±Κ½ΞΔΧΦ";
     Text[ chinese_traditional ] = "ª½¦΅ΌΠΓD΅Aª½¦΅¤ε¦r";
     Text[ turkish ] = "Vertical title, vertical text";
     Text[ arabic ] = "ΪδζΗδ ΪγζΟν΅ δΥ ΪγζΟν";
@@ -4679,7 +4679,7 @@ String STR_ASK_DELETE_LAYER
     Text[ chinese_simplified ] = "ΔϊΥζµΔÒªΙΎ³ύ·Φ²γ'$' £Ώ\nΜαΚΎ£ΊΥβΡω΄Λ·Φ²γΔΪµΔΛωΣΠ¶ΤΟσ±γ»α±»ΙΎ³ύ£΅";
     Text[ russian ] = "Βϋ δειρςβθςελόνξ υξςθςε σδΰλθςό ύςξς ρλξι '$'?\nΚ Βΰψεμσ ρβεδενθώ: βρε ξαϊεκςϋ ύςξγξ ρλξÿ ασδσς ςΰκζε σδΰλενϋ!";
     Text[ polish ] = "Czy chcesz na pewno usunΉζ warstwκ '$' ?\nWskazσwka: Wszystkie obiekty tej warstwy zostanΉ rσwnieΏ usuniκte!";
-    Text[ japanese ] = "‘w'$'‚π–{“–‚Ιν‚µ‚ά‚·‚©?\nw¦:‚±‚Μ‘w‚Μ‚·‚Χ‚Δ‚ΜµΜήΌήªΈΔ‚ª“―—l‚Ιν‚³‚κ‚ά‚·!";
+    Text[ japanese ] = "‘w '$' ‚πν‚µ‚Δ‚ΰ‚©‚ά‚Ά‚ά‚Ή‚ρ‚©B\nw¦:‚±‚Μ‘w‚Μ‘SµΜήΌήªΈΔ‚ªν‚³‚κ‚ά‚·B";
     Text[ greek ] = "Θέλετε σίγουρα να διαγραφεί το επίπεδο \"$\";\nΌλα τα αντικείμενα αυτού του επιπέδου θα διαγραφούν!";
     Text[ korean ] = "·ΉΊ§\"$\"ΐ»£¨Έ¦£© Α¤Έ»·Ξ »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?\nΒόΑ¶: ΐΜ ·ΉΊ§Ώ΅ ΐΦ΄Β Έπµη °³ΓΌµµ Ώª½Γ »θΑ¦µΛ΄Ο΄Ω!";
     Text[ chinese_traditional ] = "±z―u­n§R°£¤ΐΌh'$' ΅H\n΄£¥ά΅G³o¤@¤ΐΌh©Ò¦³ªΊª«¥σ¤]·|³Q§R°£΅I";
@@ -5452,7 +5452,7 @@ String STR_WARN_DEL_SEL_PAGES
     Text[ japanese ] = "‚±‚Μ±ΈΌ®έ‚Ν‘I‘π‚µ‚½Νί°Όή‚πν‚µ‚ά‚·B\nΝί°Όή‚Ι‚Ν}`•`‰ζµΜήΌήªΈΔ‚ªά‚ά‚κ‚Δ‚Ά‚ά‚·B";
     Text[ greek ] = "Η ενέργεια αυτή διαγράφει την επιλεγμένη σελίδα. \nΗ σελίδα περιέχει αντικείμενα σχεδίασης!";
     Text[ korean ] = "ΐΜ°Νΐ» ½ΗΗΰΗΟΈι Ό±ΕΓµΘ ΒΚΐΜ »θΑ¦µΛ΄Ο΄Ω .\nΐΜ ΒΚΐΊ ±ΧΈ®±β°³ΓΌΈ¦ ΖχΗΤΗΟ°ν ΐΦ½ΐ΄Ο΄Ω!";
-    Text[ chinese_traditional ] = "³o­ΣΎή§@§R°£³QΏο¤¤ªΊ­¶΅C\n³o¨Η­¶§t¦³ΓΈΉΟª«Ι²΅I";
+    Text[ chinese_traditional ] = "³o­ΣΎή§@§R°£³QΏο¤¤ªΊ­¶΅C\n³o¨Η­¶§t¦³ΓΈΉΟª«¥σ΅I";
     Text[ arabic ] = "ΚΝΠέ εΠε ΗαΪγανΙ ΗαΥέΝΗΚ ΗαγΝΟΟΙ. \nΚΝΚζν εΠε ΗαΥέΝΗΚ Ϊαμ ίΗΖδΗΚ ΡΣζγνΙ!";
     Text[ turkish ] = "Bu iώlem seηilen sayfalarύ siler. \nSayfalar ηizim nesneleri iηeriyor!";
 };
@@ -5476,7 +5476,7 @@ String STR_WARN_DEL_SEL_PAGE
     Text[ japanese ] = "‚±‚Μμ‹Ζ‚Ν‘I‘πΝί°Όή‚πν‚µ‚ά‚·B\n‚±‚Μƒy[ƒW‚Ν•`‰ζµΜήΌήªΈΔ‚πά‚ρ‚Ε‚Ά‚ά‚·!";
     Text[ korean ] = "ΐΜ°Νΐ» ½ΗΗΰΗΟΈι Ό±ΕΓµΘ ΒΚΐΜ »θΑ¦µΛ΄Ο΄Ω.\nΐΜ ΒΚΐΊ ±ΧΈ®±β°³ΓΌΈ¦ ΖχΗΤΗΟ°ν ΐΦ½ΐ΄Ο΄Ω!";
     Text[ chinese_simplified ] = "ΥβΟξ²ΩΧχ»αΙΎ³ύΡ΅ΦΠµΔÒ³Γζ΅£\n΄ΛÒ³ΓζΊ¬ΣΠ»ζΝΌ¶ΤΟσ£΅";
-    Text[ chinese_traditional ] = "³o­ΣΎή§@·|§R°£Ώο¨ϊ±o­¶­±΅C\nµω·N΅G³o­Σ­¶­±¤Ί§tΓΈΉΟª«¥σ΅I";
+    Text[ chinese_traditional ] = "³o­Σ°Κ§@·|§R°£Ώο¨ϊªΊ­¶­±΅C\nµω·N΅G³o­Σ­¶­±¤Ί§tΓΈΉΟª«¥σ΅I";
     Text[ arabic ] = "ΚΝΠέ εΠε ΗαΪγανΙ ΗαΥέΝΙ ΗαγΝΟΟΙ. \nΚΝΚζν εΠε ΗαΥέΝΙ Ϊαμ ίΗΖδΗΚ ΡΣζγνΙ!";
     Text[ turkish ] = "Bu iώlem seηilen sayfayύ siler. \nSayfa ηizim nesneleri iηeriyor!";
 };
@@ -5992,7 +5992,7 @@ String STR_TEMPLATE
     Text [ dutch ] = "StarImpress 4.0 Sjabloon" ;
     Text [ swedish ] = "StarImpress 4.0 mall" ;
     Text [ danish ] = "StarImpress 4.0 skabelon" ;
-    Text [ portuguese ] = "Modelo StarImpress 4.0" ;
+    Text [ portuguese ] = "StarImpress 4.0 - Modelo" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME Draw 3.0 Vorlage" ;
     Text[ chinese_simplified ] = "StarImpress 4.0 ΡωΚ½";
     Text[ russian ] = "StarImpress 4.0 Ψΰαλξν";
@@ -6473,7 +6473,7 @@ String STR_WARN_SCALE_FAIL
     Text[ chinese_simplified ] = "ΔϊΦΈ¶¨µΔΏΜ¶ΘΚΗΞήΠ§µΔ΅£\nΔϊÒªΚδΘλÒ»ΈφΠΒµΔΏΜ¶ΘΒπ£Ώ";
     Text[ russian ] = "Ββεδεννϋι μΰρψςΰα ÿβλÿεςρÿ νεοπΰβθλόνϋμ.\nΒβερςθ νξβϋι μΰρψςΰα?";
     Text[ polish ] = "Podana skala jest nieprawid³owa.\nChcesz podaζ nowΉ skalκ?";
-    Text[ japanese ] = "“ό—Ν‚³‚κ‚½ξ€‚Ν–³ψ‚Ε‚·B\nV‚µ‚Ά‚Μ‚π“ό—Ν‚µ‚ά‚Ή‚ρ‚©?";
+    Text[ japanese ] = "“ό—Ν‚µ‚½–Ϊ·‚Ν–³ψ‚Ε‚·B\nV‚µ‚Ά‚Μ‚π“ό—Ν‚µ‚ά‚·‚©B";
     Text[ greek ] = "Η κλίμακα που έχετε εισάγει δεν είναι έγκυρη.\nΘέλετε να εισάγετε άλλη;";
     Text[ korean ] = "ΐΤ·ΒΗΡ Ήθΐ²ΐΜ ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.\n»υ·Ξ ΐΤ·ΒΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ chinese_traditional ] = "±z«ό©wªΊΕγ¥ά¤ρ¨ÒµL®Δ΅C\n±z­n­«·sΏι¤J¤@­ΣΕγ¥ά¤ρ¨Ò΅H";
@@ -6731,7 +6731,7 @@ String STR_CLICK_ACTION_VERB
     Text[ japanese ] = "µΜήΌήªΈΔ±ΈΌ®έ‚Μΐs";
     Text[ greek ] = "Εκτέλεση ενέργειας αντικειμένου";
     Text[ korean ] = "°³ΓΌµ·ΐΫ ½ΗΗΰ";
-    Text[ chinese_traditional ] = "°υ¦ζª«¥σΎή§@";
+    Text[ chinese_traditional ] = "°υ¦ζª«¥σ°Κ§@";
     Text[ arabic ] = "ΚδένΠ ΕΜΡΗΑ ίΗΖδ";
     Text[ turkish ] = "Nesne iώlemini yόrόt";
 };
@@ -10960,7 +10960,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_60
     Text[ russian ] = "Οπεηενςΰφθÿ β %PRODUCTNAME 6.0";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Prezentacja";
     Text[ japanese ] = "%PRODUCTNAME 6.0 ΜίΪΎήέΓ°Ό®έ";
-    Text[ greek ] = "Παρουσίαση (%PRODUCTNAME 6.0)";
+    Text[ greek ] = "%PRODUCTNAME 6.0 Παρουσίαση";
     Text[ korean ] = "%PRODUCTNAME 6.0 ΗΑΈ®Α¨ΕΧΐΜΌΗ";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 Β²³ψ";
     Text[ arabic ] = "ΪΡΦ ΚήΟνγν γδ %PRODUCTNAME 6.0";
@@ -11099,8 +11099,8 @@ String STR_GRAPHIC_DOCUMENT_FULLTYPE_60
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 »ζΝΌ";
     Text[ russian ] = "Πθρσνξκ β %PRODUCTNAME 6.0";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Rysunek";
-    Text[ japanese ] = "%PRODUCTNAME 6.0‚Μ}`•`‰ζ";
-    Text[ greek ] = "Σχέδιο (%PRODUCTNAME 6.0)";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 }`•`‰ζ";
+    Text[ greek ] = "%PRODUCTNAME 6.0 Σχέδιο";
     Text[ korean ] = "%PRODUCTNAME 6.0 ±ΧΈ®±β";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 ΓΈΉΟ";
     Text[ arabic ] = "ΡΣγΙ γδ %PRODUCTNAME 6.0";
@@ -11122,7 +11122,7 @@ String STR_VIEWTYPE_VIEW
     Text[ chinese_simplified ] = "ΟΤΚΎ";
     Text[ russian ] = "Οπεδρςΰβλενθε";
     Text[ polish ] = "Przedstawienie";
-    Text[ japanese ] = "•`Κ";
+    Text[ japanese ] = "•\\¦";
     Text[ greek ] = "Εμφάνιση";
     Text[ korean ] = "ΐ½Ώµ";
     Text[ chinese_traditional ] = "Εγ¥ά";
@@ -11551,7 +11551,7 @@ String STR_HTMLEXP_CREATED
     Text[ chinese_simplified ] = "ΧξΌΡΟΤΚΎ";
     Text[ russian ] = "Νΰθλσχψεε οπεδρΰβλενθε ρ";
     Text[ polish ] = "Najlepszy widok z";
-    Text[ japanese ] = "‚Ά‚Ώ‚Ξ‚ρ“KΨ‚Θ•`Κ‚Μ‘ΞΫ";
+    Text[ japanese ] = "Ε“K‚Θ•\\¦";
     Text[ greek ] = "Καλύτερη εμφάνιση με";
     Text[ korean ] = "ΓΦ»σΐΈ·Ξ ³ªΕΈ³»±β";
     Text[ chinese_traditional ] = "³ΜΣμΕγ¥ά";
@@ -11686,7 +11686,7 @@ String STR_HTMLEXP_SETGRAPHIC
     Text [ ENGLISH ] = "Graphic";
     Text[ italian ] = "Immagine";
     Text[ portuguese_brazilian ] = "Graphic";
-    Text[ portuguese ] = "Grαfica";
+    Text[ portuguese ] = "Imagem";
     Text[ danish ] = "Grafik";
     Text[ french ] = "Image";
     Text[ swedish ] = "Grafik";
