@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-10 20:04:55 $
+ *  last change: $Author: kz $ $Date: 2001-08-13 20:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1460,8 +1460,8 @@ String Newsletter
     Text[ russian ] = "General Layout";
     Text[ greek ] = "General Layout";
     Text[ dutch ] = "General Layout";
-    Text[ french ] = "General Layout";
-    Text[ spanish ] = "General Layout";
+    Text[ french ] = "Mise en page universelle";
+    Text[ spanish ] = "Dise�o general";
     Text[ finnish ] = "General Layout";
     Text[ italian ] = "General Layout";
     Text[ danish ] = "General Layout";
@@ -1471,7 +1471,7 @@ String Newsletter
     Text[ japanese ] = "全般ﾚｲｱｳﾄ";
     Text[ korean ] = "General Layout";
     Text[ chinese_simplified ] = "General Layout";
-    Text[ chinese_traditional ] = "General Layout";
+    Text[ chinese_traditional ] = "一般的版式";
     Text[ turkish ] = "General Layout";
     Text[ arabic ] = "General Layout";
     Text[ catalan ] = "General Layout";
@@ -1488,8 +1488,8 @@ String Newsletter + 1
     Text[ russian ] = "Standard Layout";
     Text[ greek ] = "Standard Layout";
     Text[ dutch ] = "Standard Layout";
-    Text[ french ] = "Standard Layout";
-    Text[ spanish ] = "Standard Layout";
+    Text[ french ] = "Mide en page standard";
+    Text[ spanish ] = "Dise�o predeterminado";
     Text[ finnish ] = "Standard Layout";
     Text[ italian ] = "Standard Layout";
     Text[ danish ] = "Standard Layout";
@@ -1499,7 +1499,7 @@ String Newsletter + 1
     Text[ japanese ] = "標準ﾚｲｱｳﾄ";
     Text[ korean ] = "Standard Layout";
     Text[ chinese_simplified ] = "Standard Layout";
-    Text[ chinese_traditional ] = "Standard Layout";
+    Text[ chinese_traditional ] = "標準的版式";
     Text[ turkish ] = "Standard Layout";
     Text[ arabic ] = "Standard Layout";
     Text[ catalan ] = "Standard Layout";
@@ -1515,8 +1515,8 @@ String Newsletter + 2
     Text[ russian ] = "Party Layout";
     Text[ greek ] = "Party Layout";
     Text[ dutch ] = "Party Layout";
-    Text[ french ] = "Party Layout";
-    Text[ spanish ] = "Party Layout";
+    Text[ french ] = "Mise en page F�te";
+    Text[ spanish ] = "Dise�o festivo";
     Text[ finnish ] = "Party Layout";
     Text[ italian ] = "Party Layout";
     Text[ danish ] = "Party Layout";
@@ -1526,7 +1526,7 @@ String Newsletter + 2
     Text[ japanese ] = "記念刊行物ﾚｲｱｳﾄ";
     Text[ korean ] = "Party Layout";
     Text[ chinese_simplified ] = "Party Layout";
-    Text[ chinese_traditional ] = "Party Layout";
+    Text[ chinese_traditional ] = "紀念文";
     Text[ turkish ] = "Party Layout";
     Text[ arabic ] = "Party Layout";
     Text[ catalan ] = "Party Layout";
@@ -1542,8 +1542,8 @@ String Newsletter + 3
     Text[ russian ] = "Brochure Layout";
     Text[ greek ] = "Brochure Layout";
     Text[ dutch ] = "Brochure Layout";
-    Text[ french ] = "Brochure Layout";
-    Text[ spanish ] = "Brochure Layout";
+    Text[ french ] = "Mise en page Prospectus";
+    Text[ spanish ] = "Dise�o prospecto";
     Text[ finnish ] = "Brochure Layout";
     Text[ italian ] = "Brochure Layout";
     Text[ danish ] = "Brochure Layout";
@@ -1553,7 +1553,7 @@ String Newsletter + 3
     Text[ japanese ] = "ﾊﾟﾝﾌﾚｯﾄ用ﾚｲｱｳﾄ";
     Text[ korean ] = "Brochure Layout";
     Text[ chinese_simplified ] = "Brochure Layout";
-    Text[ chinese_traditional ] = "Brochure Layout";
+    Text[ chinese_traditional ] = "小手冊的版式";
     Text[ turkish ] = "Brochure Layout";
     Text[ arabic ] = "Brochure Layout";
     Text[ catalan ] = "Brochure Layout";
@@ -1596,8 +1596,8 @@ String Newsletter + 11
     Text[ russian ] = "Single sided";
     Text[ greek ] = "Single sided";
     Text[ dutch ] = "Single sided";
-    Text[ french ] = "Single sided";
-    Text[ spanish ] = "Single sided";
+    Text[ french ] = "Page unique";
+    Text[ spanish ] = "Por un lado";
     Text[ finnish ] = "Single sided";
     Text[ italian ] = "Single sided";
     Text[ danish ] = "Single sided";
@@ -1607,7 +1607,7 @@ String Newsletter + 11
     Text[ japanese ] = "1ﾍﾟｰｼﾞ";
     Text[ korean ] = "Single sided";
     Text[ chinese_simplified ] = "Single sided";
-    Text[ chinese_traditional ] = "Single sided";
+    Text[ chinese_traditional ] = "單頁";
     Text[ turkish ] = "Single sided";
     Text[ arabic ] = "Single sided";
     Text[ catalan ] = "Single sided";
@@ -1623,8 +1623,8 @@ String Newsletter + 12
     Text[ russian ] = "double sided";
     Text[ greek ] = "double sided";
     Text[ dutch ] = "double sided";
-    Text[ french ] = "double sided";
-    Text[ spanish ] = "double sided";
+    Text[ french ] = "Pages vis-�-vis";
+    Text[ spanish ] = "Ambas caras";
     Text[ finnish ] = "double sided";
     Text[ italian ] = "double sided";
     Text[ danish ] = "double sided";
@@ -1634,11 +1634,12 @@ String Newsletter + 12
     Text[ japanese ] = "2ﾍﾟｰｼﾞ";
     Text[ korean ] = "double sided";
     Text[ chinese_simplified ] = "double sided";
-    Text[ chinese_traditional ] = "double sided";
+    Text[ chinese_traditional ] = "雙頁";
     Text[ turkish ] = "double sided";
     Text[ arabic ] = "double sided";
     Text[ catalan ] = "double sided";
 };
+
 
 
 
