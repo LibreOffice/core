@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-22 13:47:37 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:32:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ sal_Bool SfxObjectShell::DoInitNew( SvStorage * pStor )
 void SfxObjectShell::DoHandsOffNoMediumClose()
 {
     const SfxFilter *pFilter = pMedium->GetFilter();
-    if( !pFilter || pFilter->IsOwnFormat() || ( pFilter->GetFilterFlags() & SFX_FILTER_PACKED ) )
+    if( !pFilter || IsOwnStorageFormat_Impl( *pMedium ) || ( pFilter->GetFilterFlags() & SFX_FILTER_PACKED ) )
         HandsOff();
 
     // Force document library containers to release storage
@@ -911,6 +911,7 @@ sal_Bool SfxObjectShell::IsOwnStorageFormat_Impl(const SfxMedium &rMedium) const
 {
     return !rMedium.GetFilter() || // Embedded
            ( rMedium.GetFilter()->IsOwnFormat() &&
+             !rMedium.GetFilter()->IsAlienFormat() &&
              rMedium.GetFilter()->UsesStorage() );
 }
 
@@ -1440,7 +1441,7 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium * pNewMed )
         }
 
         SvStorage *pStorage=NULL;
-        if ( !pFilter || pFilter->IsOwnFormat())
+        if ( !pFilter || IsOwnStorageFormat_Impl( *pMedium ) )
         {
             pStorage = pMedium->GetStorage();
             bOk = SaveCompleted( pStorage );
@@ -1468,8 +1469,7 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium * pNewMed )
         if( pMedium )
         {
             const SfxFilter* pFilter = pMedium->GetFilter();
-            if( pFilter && !pFilter->IsOwnFormat() &&
-                (pMedium->GetOpenMode() & STREAM_WRITE ))
+            if( pFilter && !IsOwnStorageFormat_Impl( *pMedium ) && (pMedium->GetOpenMode() & STREAM_WRITE ))
                 pMedium->ReOpen();
             else
                 SaveCompleted( 0 );
