@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:32:53 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,23 @@
 #ifndef SC_DRWTRANS_HXX
 #define SC_DRWTRANS_HXX
 
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hxx>
+#endif
+
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
 #endif
 
-#ifndef _IPOBJ_HXX
-#include <so3/ipobj.hxx>
-#endif
+//REMOVE    #ifndef _IPOBJ_HXX
+//REMOVE    #include <so3/ipobj.hxx>
+//REMOVE    #endif
+
+#include <sfx2/objsh.hxx>
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
@@ -88,8 +98,11 @@ private:
     SdrModel*                       pModel;
     TransferableDataHelper          aOleData;
     TransferableObjectDescriptor    aObjDesc;
-    SvEmbeddedObjectRef             aDocShellRef;
-    SvEmbeddedObjectRef             aDrawPersistRef;
+//REMOVE        SvEmbeddedObjectRef             aDocShellRef;
+//REMOVE        SvEmbeddedObjectRef             aDrawPersistRef;
+    SfxObjectShellRef               aDocShellRef;
+    SfxObjectShellRef               aDrawPersistRef;
+
                                     // extracted from model in ctor:
     Size                            aSrcSize;
     INetBookmark*                   pBookmark;
@@ -106,7 +119,8 @@ private:
 
 
     void                InitDocShell();
-    SvInPlaceObjectRef  GetSingleObject();
+//REMOVE        SvInPlaceObjectRef  GetSingleObject();
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > GetSingleObject();
 
 public:
             ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContainerShell,
@@ -122,7 +136,7 @@ public:
 
     SdrModel*           GetModel()  { return pModel; }
 
-    void                SetDrawPersist( const SvEmbeddedObjectRef& rRef );
+    void                SetDrawPersist( const SfxObjectShellRef& rRef );
     void                SetDragSource( ScDrawView* pView );
     void                SetDragSourceObj( SdrObject* pObj, SCTAB nTab );
     void                SetDragSourceFlags( USHORT nFlags );
