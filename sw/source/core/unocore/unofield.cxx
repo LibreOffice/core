@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:56:14 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 11:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1797,7 +1797,7 @@ void SwXTextField::attachToRange(
 
                 // create field
                 USHORT nType = GSE_FORMULA;
-                if(!m_pProps->bBool1)
+                if(m_pProps->bBool1)
                 {
                     nType |= SUB_CMD;
                     if(m_pProps->bFormatIsDefault)

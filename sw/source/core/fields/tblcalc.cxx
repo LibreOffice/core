@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblcalc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 11:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,8 +271,11 @@ BOOL SwTblField::QueryValue( uno::Any& rAny, BYTE nMId ) const
     case FIELD_PROP_PAR1:
         rAny <<= rtl::OUString(GetExpStr());
         break;
+    case FIELD_PROP_FORMAT:
+        rAny <<= (sal_Int32)GetFormat();
+        break;
     default:
-        bRet = SwValueField::QueryValue( rAny, nMId );
+        bRet = sal_False;
     }
     return bRet;
 }
@@ -297,8 +300,15 @@ BOOL SwTblField::PutValue( const uno::Any& rAny, BYTE nMId )
     case FIELD_PROP_PAR1:
         ChgExpStr( ::GetString( rAny, sTmp ));
         break;
+    case FIELD_PROP_FORMAT:
+        {
+            sal_Int32 nTmp;
+            rAny >>= nTmp;
+            SetFormat(nTmp);
+        }
+        break;
     default:
-        bRet = SwValueField::PutValue( rAny, nMId );
+        bRet = sal_False;
     }
     return bRet;
 }
