@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:26:25 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:28:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ static sal_Bool showMessage(int MessageId)
 // InitDCOM
 //------------------------------------------------------------------------------
 
-static void InitDCOM( )
+static void InitDCOM(void)
 {
     HINSTANCE hInstance = GetModuleHandle( "ole32.dll" );
 
@@ -181,6 +181,10 @@ static void InitDCOM( )
 
 static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
 {
+    /* avoid warnings */
+    hinstDLL = hinstDLL;
+    lpvReserved = lpvReserved;
+
     switch (fdwReason)
     {
         case DLL_PROCESS_ATTACH:
