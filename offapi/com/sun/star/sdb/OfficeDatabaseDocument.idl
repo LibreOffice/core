@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDatabaseDocument.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:49:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,21 +61,10 @@
 #ifndef __com_sun_star_sdb_OfficeDatabaseDocument_idl__
 #define __com_sun_star_sdb_OfficeDatabaseDocument_idl__
 
-#ifndef __com_sun_star_sdb_DataSource_idl__
-#include <com/sun/star/sdb/DataSource.idl>
+#ifndef __com_sun_star_sdb_XOfficeDatabaseDocument_idl__
+#include <com/sun/star/sdb/XOfficeDatabaseDocument.idl>
 #endif
-#ifndef __com_sun_star_sdb_XFormDocumentsSupplier_idl__
-#include <com/sun/star/sdb/XFormDocumentsSupplier.idl>
-#endif
-#ifndef __com_sun_star_sdb_XReportDocumentsSupplier_idl__
-#include <com/sun/star/sdb/XReportDocumentsSupplier.idl>
-#endif
-#ifndef __com_sun_star_document_OfficeDocument_idl__
-#include <com/sun/star/document/OfficeDocument.idl>
-#endif
-#ifndef __com_sun_star_document_XDocumentSubStorageSupplier_idl__
-#include <com/sun/star/document/XDocumentSubStorageSupplier.idl>
-#endif
+
 module com {  module sun {  module star {  module sdb {
 
 /** specifies a office database document which is a storable document.
@@ -107,31 +96,15 @@ module com {  module sun {  module star {  module sdb {
     The service <type>OfficeDatabaseDocument</type> doesn't support any printing.
     </p>
 
-    @see com::sun::star::sdb::DataSource
-    @see com::sun::star::sdb::XFormDocumentsSupplier
-    @see com::sun::star::sdb::XReportDocumentsSupplier
-    @see com::sun::star::document::XDocumentSubStorageSupplier
+    @see com::sun::star::sdb::XOfficeDatabaseDocument
     @see com::sun::star::document::OfficeDocument
     @since OOo 2.0.0
  */
 service OfficeDatabaseDocument
 {
-    service DataSource;
     service com::sun::star::document::OfficeDocument;
 
-    /** allows to access the supplier for forms.
-        @see com::sun::star::sdb::Forms
-    */
-    interface com::sun::star::sdb::XFormDocumentsSupplier;
-
-    /** allows to access the supplier for reports.
-        @see com::sun::star::sdb::Reports
-    */
-    interface com::sun::star::sdb::XReportDocumentsSupplier;
-
-    /** allows the access to all sub storages in the office database document.
-    */
-    interface com::sun::star::document::XDocumentSubStorageSupplier;
+    interface XOfficeDatabaseDocument;
 };
 
 //=============================================================================
@@ -141,3 +114,4 @@ service OfficeDatabaseDocument
 /*===========================================================================
 ===========================================================================*/
 #endif
+
