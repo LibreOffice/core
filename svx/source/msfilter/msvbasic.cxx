@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:22 $
+ *  last change: $Author: cmc $ $Date: 2001-02-16 12:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,12 +382,26 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
          */
         //end section
 
-        xVBAProject->SeekRel(8);
-        BYTE no_of_octects;
-        *xVBAProject >> no_of_octects;
-        for(j=0;j<no_of_octects;j++)
-            xVBAProject->SeekRel(8);
+        //begin section, another problem area
+        /*
+        The various 0xFFFF seems to be makers that a particular
+        field is empty, though without having enough example of
+        what the fields are its difficult to determine where
+        they appear in the records
+        */
+
+        *xVBAProject >> nLen;
+        if ( nLen != 0xFFFF)
+            xVBAProject->SeekRel( nLen );
+
         xVBAProject->SeekRel(6);
+        USHORT nOctects;
+        *xVBAProject >> nOctects;
+        for(j=0;j<nOctects;j++)
+            xVBAProject->SeekRel(8);
+
+        xVBAProject->SeekRel(5);
+        //end section
 
         *xVBAProject >> pOffsets[i].nOffset;
         //*pOut << pOffsets[i].pName.GetStr() << " at 0x" << hex << pOffsets[i].nOffset << endl;
