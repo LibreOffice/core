@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2002-08-28 07:23:17 $
+ *  last change: $Author: abi $ $Date: 2002-09-09 12:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,18 +122,11 @@
 #endif
 
 
-#ifndef _TEST_ACTIVEDATASINK_HXX_
 #include "test_activedatasink.hxx"
-#endif
-#ifndef _TEST_MULTISERVICEFAC_HXX_
+#include "test_ftpurl.hxx"
 #include "test_multiservicefac.hxx"
-#endif
-#ifndef _FTP_CONTENTPROVIDER_HXX_
 #include "ftpcontentprovider.hxx"
-#endif
-#ifndef _FTP_CONTENTIDENTIFIER_HXX_
 #include "ftpcontentidentifier.hxx"
-#endif
 
 
 using namespace test_ftp;
@@ -143,7 +136,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::io;
-
 
 
 class FTPThread
@@ -215,38 +207,47 @@ void FTPThread::run() {
 
 int main(int argc,char* argv[])
 {
-    Reference< XMultiServiceFactory > xFac;
+    int err_level = 0;
+    err_level += test_ftpurl();
+    err_level += test_ftpproperties();
 
-    try {
-        OUString systemRegistryPath = comphelper::getPathToSystemRegistry();
-        OString path(systemRegistryPath.getStr(),
-                     systemRegistryPath.getLength(),
-                     RTL_TEXTENCODING_UTF8);
-        fprintf(stdout,"\nsystem registry path: %s\n",path.getStr());
+    if(err_level)
+        fprintf(stderr,"number of errors occured: %d",err_level);
 
-        xFac = cppu::createRegistryServiceFactory(systemRegistryPath,
-                                                  OUString(),
-                                                  true);
-        if(!xFac.is()) {
-            fprintf(stderr,"\ncould not create ServiceFactory");
-            return 1;
-        }
+    return err_level;
 
-        comphelper::setProcessServiceFactory(xFac);
+//      Reference< XMultiServiceFactory > xFac;
 
-        Reference< XMultiServiceFactory > xFac(new Test_MultiServiceFactory());
-        Reference< XContentProvider> xProvider(new ftp::FTPContentProvider(xFac));
-        FTPThread aThread(xProvider);
-        aThread.create();
-        aThread.join();
+//      try {
+//          OUString systemRegistryPath = comphelper::getPathToSystemRegistry();
+//          OString path(systemRegistryPath.getStr(),
+//                       systemRegistryPath.getLength(),
+//                       RTL_TEXTENCODING_UTF8);
+//          fprintf(stdout,"\nsystem registry path: %s\n",path.getStr());
 
-        Reference< XComponent > xComponent(xFac,UNO_QUERY);
-        if(xComponent.is())
-            xComponent->dispose();
-        return 0;
-    } catch(const Exception& e) {
-        fprintf(stderr,"\nERROR: any other error");
-        fprintf(stderr,"\nERROR: P0-bug to ABI\n");
-        return 1;
-    }
+//          xFac = cppu::createRegistryServiceFactory(systemRegistryPath,
+//                                                    OUString(),
+//                                                    true);
+//          if(!xFac.is()) {
+//              fprintf(stderr,"\ncould not create ServiceFactory");
+//              return 1;
+//          }
+
+//          comphelper::setProcessServiceFactory(xFac);
+
+//          Reference< XMultiServiceFactory > xFac(new Test_MultiServiceFactory());
+//          Reference< XContentProvider> xProvider(new ftp::FTPContentProvider(xFac));
+//          FTPThread aThread(xProvider);
+//          aThread.create();
+//          aThread.join();
+
+//          Reference< XComponent > xComponent(xFac,UNO_QUERY);
+//          if(xComponent.is())
+//              xComponent->dispose();
+//          return 0;
+//      } catch(const Exception& e) {
+//          fprintf(stderr,"\nERROR: any other error");
+//          fprintf(stderr,"\nERROR: P0-bug to ABI\n");
+//          return 1;
+//      }
 }

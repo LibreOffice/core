@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2002-08-28 07:23:17 $
+ *  last change: $Author: abi $ $Date: 2002-09-09 12:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ namespace ftp {
     /** Forward declarations.
      */
 
-    class FTPContentProvider;
+    class FTPHandleProvider;
 
 
 
@@ -118,7 +118,7 @@ namespace ftp {
 
         FTPURL(
             const rtl::OUString& aIdent,
-            FTPContentProvider* pFCP = 0
+            FTPHandleProvider* pFCP = 0
         )
             throw(
                 malformed_exception
@@ -133,13 +133,13 @@ namespace ftp {
 
         rtl::OUString host() const { return m_aHost; }
 
-        sal_Int32 port() const { return m_nPort; }
+        rtl::OUString port() const { return m_aPort; }
 
         /** This returns the URL, but cleaned from
          *  unnessary ellipses.
          */
 
-        rtl::OUString ident() const;
+        rtl::OUString ident() const { return m_aIdent; }
 
 
         std::vector<FTPDirentry> list(
@@ -161,7 +161,7 @@ namespace ftp {
 
         osl::Mutex m_mutex;
 
-        FTPContentProvider *m_pFCP;
+        FTPHandleProvider *m_pFCP;
 
         rtl::OUString m_aIdent;
 
@@ -169,7 +169,7 @@ namespace ftp {
         rtl::OUString m_aUsername;
         rtl::OUString m_aPassword;
         rtl::OUString m_aHost;
-        sal_Int32    m_nPort;
+        rtl::OUString m_aPort;
 
         /** Contains the decoded pathsegments of the url.
          */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentprovider.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2002-08-28 07:23:12 $
+ *  last change: $Author: abi $ $Date: 2002-09-09 12:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,12 +71,7 @@
 #ifndef _UCBHELPER_PROVIDERHELPER_HXX
 #include <ucbhelper/providerhelper.hxx>
 #endif
-#ifndef __CURL_TYPES_H
-#include <curl/types.h>
-#endif
-//  #ifndef _COM_SUN_STAR_UCB_XCONTENTIDENTIFIERFACTORY_HPP_
-//  #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
-//  #endif
+#include "ftphandleprovider.hxx"
 
 
 // UNO service name for the provider. This name will be used by the UCB to
@@ -102,7 +97,8 @@ namespace ftp {
 
 
     class FTPContentProvider:
-        public ::ucb::ContentProviderImplHelper
+        public ::ucb::ContentProviderImplHelper,
+        public FTPHandleProvider
     {
     public:
 
@@ -126,32 +122,16 @@ namespace ftp {
                    com::sun::star::uno::RuntimeException );
 
 
-        /**
-         *  Commented out, because I currently do not know wether this interface will be useful.
+        /** FTPHandleProvider.
          */
 
-//      // XContentIdentifierFactory
-
-//          virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > SAL_CALL
-//          createContentIdentifier(
-//              const rtl::OUString& ContentId )
-//              throw( com::sun::star::uno::RuntimeException );
-
-//          virtual sal_Int32 SAL_CALL
-//          compareContentIds(
-//              const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Id1,
-//              const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Id2 )
-//              throw( com::sun::star::uno::RuntimeException );
-
-        CURL* handle();
+        virtual CURL* handle();
 
     private:
 
         osl::Mutex m_aMutex;
         FTPLoaderThread *m_ftpLoaderThread;
         void init();
-
-
 
     };  // end class FTPContentProvider
 

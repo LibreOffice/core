@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: abi $ $Date: 2002-08-29 11:44:13 $
+#   last change: $Author: abi $ $Date: 2002-09-09 12:28:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -119,6 +119,7 @@ SHL1LIBS= \
 APP1TARGET=ftptest
 APP1OBJS=\
     $(OBJ)$/test.obj \
+    $(OBJ)$/test_ftpurl.obj \
     $(OBJ)$/test_activedatasink.obj  \
     $(OBJ)$/test_multiservicefac.obj  \
     $(SLO)$/ftpcontentcaps.obj \
