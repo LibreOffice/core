@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-24 12:07:49 $
+ *  last change: $Author: fs $ $Date: 2000-10-25 13:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,8 @@
 #define STR_GENERAL_SDB_ERROR               262
 #define STR_ENTER_CONNECTION_PASSWORD       263
 #define STR_DATASOURCE_DEFAULTNAME          264
+#define STR_REMEMBERPASSWORD_SESSION        265
+#define STR_REMEMBERPASSWORD_PERSISTENT     266
 
 //========================================================================
 // untyped resources
@@ -147,6 +149,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/10/24 12:07:49  fs
+ *  DLG_DATASOURCE_SELECTION
+ *
  *  Revision 1.4  2000/10/12 16:20:04  fs
  *  ERR_COULDNOTRESTOREDS/BMP_DATABASE_DELETED/MENU_DATASOURCELIST_POPUP
  *
