@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-28 06:41:47 $
+ *  last change: $Author: pluby $ $Date: 2000-12-01 18:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,17 +123,35 @@ SalFrame::SalFrame()
     maFrameData.mbCandidateMode     = FALSE;
     memset( &maFrameData.maState, 0, sizeof( SalFrameState ) );
     maFrameData.maSysData.nSize     = sizeof( SystemEnvData );
+
+    // insert frame in framelist
+    maFrameData.mpNextFrame = pSalData->mpFirstFrame;
+    pSalData->mpFirstFrame = this;
 }
 
 // -----------------------------------------------------------------------
 
 SalFrame::~SalFrame()
 {
+    SalData* pSalData = GetSalData();
+
     if ( maFrameData.mpGraphics )
         delete maFrameData.mpGraphics;
 
     if ( maFrameData.mhWnd )
         VCLWindow_Release( maFrameData.mhWnd );
+
+    // remove frame from framelist
+    if ( this == pSalData->mpFirstFrame )
+        pSalData->mpFirstFrame = maFrameData.mpNextFrame;
+    else
+    {
+        SalFrame* pTempFrame = pSalData->mpFirstFrame;
+        while ( pTempFrame->maFrameData.mpNextFrame != this )
+            pTempFrame = pTempFrame->maFrameData.mpNextFrame;
+
+        pTempFrame->maFrameData.mpNextFrame = maFrameData.mpNextFrame;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -228,7 +246,7 @@ void SalFrame::Show( BOOL bVisible )
     RGBColor  linePenColor  = { 25000, 65535, 25000 }; // shade of green
     RGBColor  pixelColor    = { 60000, 40000, 20000 }; // shade of orange
 
-    ULONG     polyVertexCount = 7;
+    ULONG    polyVertexCount = 7;
     long      polyVertexXCoors[polyVertexCount];
     long      polyVertexYCoors[polyVertexCount];
     long      pixelXCoor;
@@ -410,6 +428,7 @@ void SalFrame::SetAlwaysOnTop( BOOL bOnTop )
 
 void SalFrame::ToTop( USHORT nFlags )
 {
+    VCLWindow_Show( maFrameData.mhWnd );
 }
 
 // -----------------------------------------------------------------------

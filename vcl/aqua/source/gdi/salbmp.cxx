@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-01 22:12:32 $
+ *  last change: $Author: pluby $ $Date: 2000-12-01 18:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,9 @@
 #ifndef _SV_SALBMP_HXX
 #include <salbmp.hxx>
 #endif
-
+#ifndef _SV_SALBTYPE_HXX
+#include <salbtype.hxx>
+#endif
 
 // ==================================================================
 
@@ -84,28 +86,36 @@ SalBitmap::~SalBitmap()
 
 BOOL SalBitmap::Create( const Size& rSize, USHORT nBitCount, const BitmapPalette& rPal )
 {
-    return FALSE;
+    maSize = rSize;
+    mnBitCount = nBitCount;
+    return TRUE;
 }
 
 // ------------------------------------------------------------------
 
 BOOL SalBitmap::Create( const SalBitmap& rSalBitmap )
 {
-    return FALSE;
+    maSize = rSalBitmap.maSize;
+    mnBitCount = 1;
+    return TRUE;
 }
 
 // ------------------------------------------------------------------
 
 BOOL SalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
 {
-    return FALSE;
+    maSize = rSalBmp.maSize;
+    mnBitCount = rSalBmp.mnBitCount;
+    return TRUE;
 }
 
 // ------------------------------------------------------------------
 
 BOOL SalBitmap::Create( const SalBitmap& rSalBmp, USHORT nNewBitCount )
 {
-    return FALSE;
+    maSize = rSalBmp.maSize;
+    mnBitCount = nNewBitCount;
+    return TRUE;
 }
 
 // ------------------------------------------------------------------
@@ -118,11 +128,21 @@ void SalBitmap::Destroy()
 
 BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
 {
-    return NULL;
+    BitmapBuffer *pBuffer = new BitmapBuffer();
+
+    // Stub code: we have not yet written any interfaces to native bitmaps.
+    pBuffer->mnFormat = BMP_FORMAT_BOTTOM_UP | BMP_FORMAT_1BIT_MSB_PAL;
+    pBuffer->mnWidth = maSize.Width();
+    pBuffer->mnHeight = maSize.Height();
+    pBuffer->mnScanlineSize = AlignedWidth4Bytes( pBuffer->mnWidth * mnBitCount );
+    pBuffer->mpBits = new BYTE[ pBuffer->mnScanlineSize * pBuffer->mnHeight ];
+
+    return pBuffer;
 }
 
 // ------------------------------------------------------------------
 
 void SalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BOOL bReadOnly )
 {
+    delete pBuffer;
 }
