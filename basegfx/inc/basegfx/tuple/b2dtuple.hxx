@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dtuple.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:16:14 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,12 +70,11 @@
 #include <math.h>
 #endif
 
-#ifndef _BGFX_TUPLE_B2ITUPLE_HXX
-#include <basegfx/tuple/b2ituple.hxx>
-#endif
-
 namespace basegfx
 {
+    // predeclarations
+    class B2ITuple;
+
     /** Base class for all Points/Vectors with two double values
 
         This class provides all methods common to Point
@@ -130,10 +129,7 @@ namespace basegfx
             @param rTup
             The 2D Tuple which will be copied.
         */
-        B2DTuple(const B2ITuple& rTup)
-        :   mfX( rTup.getX() ),
-            mfY( rTup.getY() )
-        {}
+        B2DTuple(const B2ITuple& rTup);
 
         ~B2DTuple()
         {}
@@ -371,6 +367,12 @@ namespace basegfx
         aNew /= aTmp;
         return aNew;
     }
+
+    /** Round double to nearest integer for 2D tuple
+
+        @return the nearest integer for this tuple
+    */
+    B2ITuple fround(const B2DTuple& rTup);
 } // end of namespace basegfx
 
 #endif /* _BGFX_TUPLE_B2DTUPLE_HXX */
