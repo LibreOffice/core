@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-27 09:00:35 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,17 +60,18 @@
  ************************************************************************/
 
 #include "dialogs.hrc"
+#include "helpids.hrc"
 
 TabDialog RID_XMLSECDLG_CERTVIEWER
 {
-    // HelpID = HID_XMLSECDLG_CERTVIEWER;
+    HelpID = HID_XMLSEC_DLG_CERTVIEWER;
     Size = MAP_APPFONT( TD_WIDTH, TD_HEIGHT );
     OutputSize = TRUE;
     Closeable = TRUE;
     Moveable = TRUE;
     SVLook = TRUE;
 
-    Text = "View Certificate";
+    Text [ de ] = "Zertifikat zeigen";
     Text [ en-US ] = "View Certificate";
     TabControl 1
     {
@@ -82,19 +83,19 @@ TabDialog RID_XMLSECDLG_CERTVIEWER
             PageItem
             {
                 Identifier = RID_XMLSECTP_GENERAL;
-                Text = "General";
+                Text [ de ] = "Allgemein";
                 Text [ en-US ] = "General";
             };
             PageItem
             {
                 Identifier = RID_XMLSECTP_DETAILS;
-                Text = "Details";
+                Text [ de ] = "Details";
                 Text [ en-US ] = "Details";
             };
             PageItem
             {
                 Identifier = RID_XMLSECTP_CERTPATH;
-                Text = "Certification Path";
+                Text [ de ] = "Zertifikatspfad";
                 Text [ en-US ] = "Certification Path";
             };
         };
@@ -114,7 +115,7 @@ TabDialog RID_XMLSECDLG_CERTVIEWER
 
 TabPage RID_XMLSECTP_GENERAL
 {
-//  HelpId = HID_XMLSECTP_GENERAL;
+    HelpId = HID_XMLSEC_TP_GENERAL;
     Size = MAP_APPFONT( TP_WIDTH, TP_HEIGHT );
     OutputSize = TRUE;
     Hide = TRUE;
@@ -140,7 +141,7 @@ TabPage RID_XMLSECTP_GENERAL
     {
         Pos = MAP_APPFONT( CW_COL_3, CW_ROW_1 );
         Size = MAP_APPFONT( CW_COL_5-CW_COL_3, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text = " Certificate Information";
+        Text [ de ] = " Zertifikatsinformationen";
         Text [ en-US ] = " Certificate Information";
     };
     FixedLine FL_SEP1
@@ -153,7 +154,7 @@ TabPage RID_XMLSECTP_GENERAL
         Pos = MAP_APPFONT( CW_COL_1, CW_ROW_4 );
         Size = MAP_APPFONT( CW_COL_5a-CW_COL_1, CW_ROW_4a-CW_ROW_4 );
         WordBreak = TRUE;
-        Text = "This certificate is intended for the following purpose(s):";
+        Text [ de ] = "This certificate is intended for the following purpose(s):";
         Text [ en-US ] = "This certificate is intended for the following purpose(s):";
     };
     FixedLine FL_SEP2
@@ -165,7 +166,7 @@ TabPage RID_XMLSECTP_GENERAL
     {
         Pos = MAP_APPFONT( CW_COL_1, CW_ROW_6 );
         Size = MAP_APPFONT( CW_COL_4-CW_COL_1-1, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text = "Issued to:";
+        Text [ de ] = "Ausgestellt für:";
         Text [ en-US ] = "Issued to:";
     };
     FixedText FI_ISSTO
@@ -177,7 +178,7 @@ TabPage RID_XMLSECTP_GENERAL
     {
         Pos = MAP_APPFONT( CW_COL_1, CW_ROW_7 );
         Size = MAP_APPFONT( CW_COL_4-CW_COL_1-1, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text = "Issued by:";
+        Text [ de ] = "Ausgestellt durch:";
         Text [ en-US ] = "Issued by:";
     };
     FixedText FI_ISSBY
@@ -185,29 +186,12 @@ TabPage RID_XMLSECTP_GENERAL
         Pos = MAP_APPFONT( CW_COL_4, CW_ROW_7 );
         Size = MAP_APPFONT( CW_COL_5-CW_COL_4, RSC_CD_FIXEDTEXT_HEIGHT );
     };
-    FixedText FI_VALFROMLABEL
+    FixedText FI_VALIDDATE
     {
         Pos = MAP_APPFONT( CW_COL_1, CW_ROW_8 );
-        Size = MAP_APPFONT( CW_COL_4a-CW_COL_1-1, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text = "Valid from ";
-        Text [ en-US ] = "Valid from ";
-    };
-    FixedText FI_VALFROM
-    {
-        Pos = MAP_APPFONT( CW_COL_4a, CW_ROW_8 );
-        Size = MAP_APPFONT( CW_COL_4b-CW_COL_4a, RSC_CD_FIXEDTEXT_HEIGHT );
-    };
-    FixedText FI_VALTOLABEL
-    {
-        Pos = MAP_APPFONT( CW_COL_4c, CW_ROW_8 );
-        Size = MAP_APPFONT( CW_COL_4d-CW_COL_4c, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text = " to ";
-        Text [ en-US ] = " to ";
-    };
-    FixedText FI_VALTO
-    {
-        Pos = MAP_APPFONT( CW_COL_4e, CW_ROW_8 );
-        Size = MAP_APPFONT( CW_COL_5-CW_COL_4e, RSC_CD_FIXEDTEXT_HEIGHT );
+        Size = MAP_APPFONT( CW_COL_5-CW_COL_1-1, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text [ de ] = "Gültig von %SDATE% bis %EDATE%";
+        Text [ en-US ] = "Valid from %SDATE% to %EDATE%";
     };
     FixedImage IMG_KEY
     {
@@ -223,20 +207,21 @@ TabPage RID_XMLSECTP_GENERAL
     {
         Pos = MAP_APPFONT( CW_COL_1a, CW_ROW_10 );
         Size = MAP_APPFONT( CW_COL_5-CW_COL_1a, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text = "You have a private key that corresponds to this certificate.";
+        Text [ de ] = "Sie haben einen privaten Schlüssel, der mit diesem Zertifikat korrespondiert.";
         Text [ en-US ] = "You have a private key that corresponds to this certificate.";
     };
 };
 
 TabPage RID_XMLSECTP_DETAILS
 {
-//  HelpId = HID_XMLSECTP_DETAILS;
+    HelpId = HID_XMLSEC_TP_DETAILS;
     Size = MAP_APPFONT( TP_WIDTH, TP_HEIGHT );
     OutputSize = TRUE;
     Hide = TRUE;
     SVLook = TRUE;
     Control LB_ELEMENTS
     {
+        HelpId = HID_XMLSEC_CTRL_ELEMENTS;
         Pos = MAP_APPFONT( CV_COL_0, CV_ROW_0 );
         Size = MAP_APPFONT( CV_CONT_WIDTH, CV_ROW_1-CV_ROW_0 );
         SVLook = TRUE;
@@ -244,7 +229,7 @@ TabPage RID_XMLSECTP_DETAILS
     };
     String STR_HEADERBAR
     {
-        Text = "Field\tValue";
+        Text [ de ] = "Feld\tWert";
         Text [ en-US ] = "Field\tValue";
     };
     MultiLineEdit ML_ELEMENT
@@ -257,79 +242,79 @@ TabPage RID_XMLSECTP_DETAILS
     };
     String STR_VERSION
     {
-        Text = "Version";
+        Text [ de ] = "Version";
         Text [ en-US ] = "Version";
     };
     String STR_SERIALNUM
     {
-        Text = "Serial Number";
+        Text [ de ] = "Seriennummer";
         Text [ en-US ] = "Serial Number";
     };
     String STR_SIGALGORITHM
     {
-        Text = "Signature Algorithm";
+        Text [ de ] = "Signature Algorithm";
         Text [ en-US ] = "Signature Algorithm";
     };
     String STR_ISSUER
     {
-        Text = "Issuer";
+        Text [ de ] = "Aussteller";
         Text [ en-US ] = "Issuer";
     };
     String STR_ISSUER_ID
     {
-        Text = "Issuer";
+        Text [ de ] = "Issuer";
         Text [ en-US ] = "Issuer Unique ID";
     };
     String STR_VALIDFROM
     {
-        Text = "Valid From";
+        Text [ de ] = "Gültig von";
         Text [ en-US ] = "Valid From";
     };
     String STR_VALIDTO
     {
-        Text = "Valid to";
+        Text [ de ] = "Gültig bis";
         Text [ en-US ] = "Valid to";
     };
     String STR_SUBJECT
     {
-        Text = "Subject";
+        Text [ de ] = "Betreff";
         Text [ en-US ] = "Subject";
     };
     String STR_SUBJECT_ID
     {
-        Text = "Subject Unique ID";
+        Text [ de ] = "Subject Unique ID";
         Text [ en-US ] = "Subject Unique ID";
     };
     String STR_SUBJECT_PUBKEY_ALGO
     {
-        Text = "Subject Algorithm";
+        Text [ de ] = "Subject Algorithm";
         Text [ en-US ] = "Subject Algorithm";
     };
     String STR_SUBJECT_PUBKEY_VAL
     {
-        Text = "Subject Public Key";
-        Text [ en-US ] = "Subject Public Key";
+        Text [ de ] = "Öffentlicher Schlüssel";
+        Text [ en-US ] = "Public Key";
     };
     String STR_SIGNATURE_ALGO
     {
-        Text = "Signature Algorithm";
+        Text [ de ] = "Signature Algorithm";
         Text [ en-US ] = "Signature Algorithm";
     };
     String STR_THUMBPRINT_SHA1
     {
-        Text = "Thumbprint SHA1";
+        Text [ de ] = "Thumbprint SHA1";
         Text [ en-US ] = "Thumbprint SHA1";
     };
     String STR_THUMBPRINT_MD5
     {
-        Text = "Thumbprint MD5";
+        Text [ de ] = "Thumbprint MD5";
         Text [ en-US ] = "Thumbprint MD5";
     };
 };
 
 TabPage RID_XMLSECTP_CERTPATH
 {
-//  HelpId = HID_XMLSECTP_CERTPATH;
+    HelpId = HID_XMLSEC_TP_CERTPATH;
     Size = MAP_APPFONT( TP_WIDTH, TP_HEIGHT );
     OutputSize = TRUE;
     Hide = TRUE;
@@ -338,11 +323,12 @@ TabPage RID_XMLSECTP_CERTPATH
     {
         Pos = MAP_APPFONT( CV_COL_0, CV_ROW_0 );
         Size = MAP_APPFONT( CV_CONT_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text = "Certification path";
+        Text [ de ] = "Zertifikatspfad";
         Text [ en-US ] = "Certification path";
     };
     Control LB_SIGNATURES
     {
+        HelpId = HID_XMLSEC_CTRL_VIEWSIGNATURES;
         Pos = MAP_APPFONT( CV_COL_0, CV_ROW_0A );
         Size = MAP_APPFONT( CV_CONT_WIDTH, CV_ROW_1-CV_ROW_0A - 20 /*HACK MT*/ );
         SVLook = TRUE;
@@ -353,14 +339,14 @@ TabPage RID_XMLSECTP_CERTPATH
         // MT: Gunnar should check positions, also hack above...
         Pos = MAP_APPFONT( CV_COL_1-(CV_COL_B-CV_COL_A), CV_ROW_0A+CV_ROW_1-CV_ROW_0A - 20 + 5 );
         Size = MAP_APPFONT( CV_COL_B-CV_COL_A, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text = "Zertifikat anzeigen...";
+        Text [ de ] = "Zertifikat zeigen...";
         Text [ en-US ] = "View Certificate...";
     };
     FixedText FT_CERTSTATUS
     {
         Pos = MAP_APPFONT( CV_COL_0, CV_ROW_2 );
         Size = MAP_APPFONT( CV_CONT_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text = "Certification status";
+        Text [ de ] = "Zertifikatsstatus";
         Text [ en-US ] = "Certification status";
     };
     MultiLineEdit ML_CERTSTATUS
@@ -376,3 +362,4 @@ TabPage RID_XMLSECTP_CERTPATH
         MaskColor = STD_MASKCOLOR;
     };
 };
+
