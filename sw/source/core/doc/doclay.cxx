@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 16:44:37 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,17 @@ using namespace ::com::sun::star;
 using namespace ::rtl;
 
 #define DEF_FLY_WIDTH    2268   //Defaultbreite fuer FlyFrms    (2268 == 4cm)
+
+/* #109161# */
+static bool lcl_IsItemSet(const SwCntntNode & rNode, USHORT which)
+{
+    bool bResult = false;
+
+    if (SFX_ITEM_SET == rNode.GetSwAttrSet().GetItemState(which))
+        bResult = true;
+
+    return bResult;
+}
 
 /*************************************************************************
 |*
@@ -770,7 +781,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
 SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
                                     const SwPosition* pAnchorPos,
                                     const SfxItemSet* pFlySet,
-                                    SwFrmFmt* pFrmFmt )
+                                    SwFrmFmt* pFrmFmt, BOOL bCalledFromShell )
 {
     SwFlyFrmFmt* pFmt = 0;
     sal_Bool bCallMake = sal_True;
@@ -794,9 +805,24 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
             pFrmFmt = GetFrmFmtFromPool( RES_POOLFRM_FRAME );
 
         sal_uInt16 nCollId = IsHTMLMode() ? RES_POOLCOLL_TEXT : RES_POOLCOLL_FRAME;
-        pFmt = _MakeFlySection( *pAnchorPos, *GetNodes().MakeTxtNode(
-                                SwNodeIndex( GetNodes().GetEndOfAutotext() ),
-                                GetTxtCollFromPool( nCollId ) ),
+
+        /* #109161# If there exists no adjust item in the paragraph
+            style for the content node of the new fly section
+            propagate an existing adjust item at the anchor to the new
+            content node. */
+        SwCntntNode * pNewTxtNd = GetNodes().MakeTxtNode
+            (SwNodeIndex( GetNodes().GetEndOfAutotext()),
+             GetTxtCollFromPool( nCollId ));
+        SwCntntNode * pAnchorNode = pAnchorPos->nNode.GetNode().GetCntntNode();
+
+        const SfxPoolItem * pItem = NULL;
+
+        if (bCalledFromShell && !lcl_IsItemSet(*pNewTxtNd, RES_PARATR_ADJUST) &&
+            SFX_ITEM_SET == pAnchorNode->GetSwAttrSet().
+            GetItemState(RES_PARATR_ADJUST, TRUE, &pItem))
+            static_cast<SwCntntNode *>(pNewTxtNd)->SetAttr(*pItem);
+
+         pFmt = _MakeFlySection( *pAnchorPos, *pNewTxtNd,
                                 eAnchorType, pFlySet, pFrmFmt );
     }
     return pFmt;
