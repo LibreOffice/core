@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 16:58:49 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,29 +91,26 @@
 #ifndef _FM_FMMODEL_HXX
 #include "fmmodel.hxx"
 #endif
-
 #ifndef _SVX_FMTOOLS_HXX
 #include "fmtools.hxx"
 #endif
-
 #ifndef _SVX_FMPAGE_HXX //autogen
-#include <fmpage.hxx>
+#include "fmpage.hxx"
 #endif
-
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
 #endif
-
 #ifndef _SVX_DIALMGR_HXX
 #include "dialmgr.hxx"
 #endif
-
 #ifndef _SVX_FMUNOPGE_HXX
 #include "fmpgeimp.hxx"
 #endif
-
 #ifndef _SVX_FMPROP_HXX
 #include "fmprop.hxx"
+#endif
+#ifndef SVX_DBTOOLSCLIENT_HXX
+#include "dbtoolsclient.hxx"
 #endif
 
 #ifndef _SFXMACITEM_HXX //autogen
@@ -857,7 +854,11 @@ void FmXUndoEnvironment::RemoveElement(const Reference< XInterface >& _rxElement
         Reference< XForm > xForm( _rxElement, UNO_QUERY );
         Reference< XPropertySet > xFormProperties( xForm, UNO_QUERY );
         if ( xFormProperties.is() )
-            xFormProperties->setPropertyValue( FM_PROP_ACTIVE_CONNECTION, Any() );
+            if ( !::svxform::OStaticDataAccessTools().isEmbeddedInDatabase( _rxElement ) )
+                // (if there is a connection in the context of the component, setting
+                // a new connection would be vetoed, anyway)
+                // #i34196# - 2004-09-21 - fs@openoffice.org
+                xFormProperties->setPropertyValue( FM_PROP_ACTIVE_CONNECTION, Any() );
     }
 
     Reference< XIndexContainer > xContainer( _rxElement, UNO_QUERY );
