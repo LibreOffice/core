@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:36:44 $
+ *  last change: $Author: jsc $ $Date: 2001-03-30 13:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-#ifndef __REGISTRY_REFLREAD_HXX__
+#ifndef _REGISTRY_REFLREAD_HXX_
 #include <registry/reflread.hxx>
 #endif
 
@@ -81,6 +81,7 @@
 #include <com/sun/star/reflection/XTypeDescription.hpp>
 #include <com/sun/star/reflection/XInterfaceTypeDescription.hpp>
 #include <com/sun/star/reflection/XCompoundTypeDescription.hpp>
+#include <com/sun/star/reflection/XUnionTypeDescription.hpp>
 #include <com/sun/star/reflection/XEnumTypeDescription.hpp>
 #include <com/sun/star/reflection/XIndirectTypeDescription.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -136,6 +137,10 @@ inline Any getRTValue( const RTConstValue & rVal )
         return Any( &rVal.m_value.aLong, ::getCppuType( (const sal_Int32 *)0 ) );
     case RT_TYPE_UINT32:
         return Any( &rVal.m_value.aULong, ::getCppuType( (const sal_uInt32 *)0 ) );
+    case RT_TYPE_INT64:
+        return Any( &rVal.m_value.aHyper, ::getCppuType( (const sal_Int64 *)0 ) );
+    case RT_TYPE_UINT64:
+        return Any( &rVal.m_value.aUHyper, ::getCppuType( (const sal_uInt64 *)0 ) );
     case RT_TYPE_FLOAT:
         return Any( &rVal.m_value.aFloat, ::getCppuType( (const float *)0 ) );
     case RT_TYPE_DOUBLE:
@@ -264,6 +269,64 @@ public:
     virtual Reference< XTypeDescription > SAL_CALL getBaseType() throw(::com::sun::star::uno::RuntimeException);
     virtual Sequence< Reference< XTypeDescription > > SAL_CALL getMemberTypes() throw(::com::sun::star::uno::RuntimeException);
     virtual Sequence< OUString > SAL_CALL getMemberNames() throw(::com::sun::star::uno::RuntimeException);
+};
+
+//==================================================================================================
+class UnionTypeDescriptionImpl : public WeakImplHelper1< XUnionTypeDescription >
+{
+    Reference< XHierarchicalNameAccess >  _xTDMgr;
+    TypeClass                             _eTypeClass;
+    Sequence< sal_Int8 >                  _aBytes;
+    OUString                              _aName;
+
+    OUString                              _aDiscriminantType;
+    Mutex                                 _aDiscrimantTypeMutex;
+    Reference< XTypeDescription >         _xDiscriminantTD;
+
+    sal_Bool                              _bInit;
+//  Mutex                                 _aDefaultTypeMutex;
+    Any                                   _aDefautDisciminant;
+    Reference< XTypeDescription >         _xDefaultTD;
+    OUString                              _aDefaultName;
+
+//  Mutex                                 _aMemberDiscriminantsMutex;
+    Sequence< Any > *                     _pMemberDiscriminants;
+
+    Mutex                                 _aMembersMutex;
+    Sequence< Reference< XTypeDescription > > * _pMembers;
+
+//  Mutex                                 _aMemberNamesMutex;
+    Sequence< OUString > *                _pMemberNames;
+
+    void    initMembers() throw(::com::sun::star::uno::RuntimeException);
+public:
+    UnionTypeDescriptionImpl( const Reference< XHierarchicalNameAccess > & xTDMgr,
+                                TypeClass eTypeClass,
+                              const OUString & rName, const OUString & rDiscriminantName,
+                              const Sequence< sal_Int8 > & rBytes )
+        : _xTDMgr( xTDMgr )
+        , _eTypeClass( eTypeClass )
+        , _aBytes( rBytes )
+        , _aName( rName )
+        , _aDiscriminantType( rDiscriminantName )
+        , _bInit(sal_False)
+        , _pMemberDiscriminants( 0 )
+        , _pMembers( 0 )
+        , _pMemberNames( 0 )
+        {}
+    virtual ~UnionTypeDescriptionImpl();
+
+    // XTypeDescription
+    virtual TypeClass SAL_CALL getTypeClass() throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
+
+    // XUnionTypeDescription
+    virtual Reference< XTypeDescription > SAL_CALL getDiscriminantType(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual Any SAL_CALL getDefaultDiscriminant(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual Reference< XTypeDescription > SAL_CALL getDefaultMemberType(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual Sequence< Any > SAL_CALL getDiscriminants(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual Sequence< Reference< ::com::sun::star::reflection::XTypeDescription > > SAL_CALL getMemberTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getMemberNames(  ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 //==================================================================================================
