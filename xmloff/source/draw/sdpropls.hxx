@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-18 07:03:36 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 15:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,6 +286,14 @@ public:
                             ) const;
 
     void SetAutoStyles( sal_Bool bIsInAutoStyles ) { mbIsInAutoStyles = bIsInAutoStyles; }
+
+    virtual void handleSpecialItem(
+            SvXMLAttributeList& rAttrList,
+            const XMLPropertyState& rProperty,
+            const SvXMLUnitConverter& rUnitConverter,
+            const SvXMLNamespaceMap& rNamespaceMap,
+            const ::std::vector< XMLPropertyState > *pProperties = 0,
+            sal_uInt32 nIdx = 0 ) const;
 };
 
 class XMLPagePropertySetMapper : public XMLPropertySetMapper
