@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-04 00:41:36 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,6 +514,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
     };
 };
  // ********************************************************************** EOF
+
 
 
 
