@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 17:21:49 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_XLTOOLS_HXX
 #define SC_XLTOOLS_HXX
 
@@ -126,21 +125,18 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclGuid& rGuid );
 
 class SvStream;
 class ScDocument;
-class ScAddress;
-class ScRange;
-class ScRangeList;
 
 /** This class contains static helper methods for the Excel import and export filters. */
 class XclTools : ScfNoInstance
 {
 public:
-// GUID's ---------------------------------------------------------------------
+    // GUID's -----------------------------------------------------------------
 
     static const XclGuid maGuidStdLink;     /// GUID of StdLink (HLINK record).
     static const XclGuid maGuidUrlMoniker;  /// GUID of URL moniker (HLINK record).
     static const XclGuid maGuidFileMoniker; /// GUID of file moniker (HLINK record).
 
-// numeric conversion ---------------------------------------------------------
+    // numeric conversion -----------------------------------------------------
 
     /** Calculates the double value from an RK value (encoded integer or double). */
     static double       GetDoubleFromRK( sal_Int32 nRKValue );
@@ -193,23 +189,7 @@ public:
         @param nXclDefFontHeight  Excel height of application default font. */
     static double       GetXclDefColWidthCorrection( long nXclDefFontHeight );
 
-// cell/range addresses -------------------------------------------------------
-
-    /** Creates an ScAddress object from the passed Excel cell address. */
-    static ScAddress    MakeScAddress( sal_uInt16 nXclCol, sal_uInt16 nXclRow, SCTAB nScTab );
-    /** Creates an ScRange object from the passed Excel cell range address. */
-    static ScRange      MakeScRange(
-                            sal_uInt16 nStartXclCol, sal_uInt16 nStartXclRow, SCTAB nStartScTab,
-                            sal_uInt16 nEndXclCol, sal_uInt16 nEndXclRow, SCTAB nEndScTab );
-
-    /** Writes a cell range list using an index and count.
-        @descr The list has the following format (all values 16 bit):
-        (range count); n * (first row; last row; first column; last column).
-        @param nFirstRange is the index to the start of the list.
-        @param nRangeCount is the cell range count to be written.  */
-    static void WriteRangeList( XclExpStream& rStrm, const ScRangeList& rRanges, ULONG nFirstRange, ULONG nRangeCount);
-
-// text encoding --------------------------------------------------------------
+    // text encoding ----------------------------------------------------------
 
     /** Returns a text encoding from an Excel code page.
         @return  The corresponding text encoding or RTL_TEXTENCODING_DONTKNOW. */
@@ -217,12 +197,12 @@ public:
     /** Returns an Excel code page from a text encoding. */
     static sal_uInt16   GetXclCodePage( rtl_TextEncoding eTextEnc );
 
-// font names -----------------------------------------------------------------
+    // font names -------------------------------------------------------------
 
     /** Returns the matching Excel font name for a passed Calc font name. */
     static String       GetXclFontName( const String& rFontName );
 
-// built-in defined names -----------------------------------------------------
+    // built-in defined names -------------------------------------------------
 
     /** Returns the raw English UI representation of a built-in defined name used in NAME records.
         @param cBuiltIn  Excel index of the built-in name. */
@@ -237,7 +217,7 @@ public:
         @return  true = passed string is a built-in name; false = user-defined name. */
     static sal_Unicode  GetBuiltInDefNameIndex( const String& rDefName );
 
-// built-in style names -------------------------------------------------------
+    // built-in style names ---------------------------------------------------
 
     /** Returns the specified built-in cell style name.
         @param nStyleId  The identifier of the built-in style.
@@ -257,7 +237,7 @@ public:
                             sal_uInt8& rnStyleId, sal_uInt8& rnLevel,
                             const String& rStyleName );
 
-// conditional formatting style names -----------------------------------------
+    // conditional formatting style names -------------------------------------
 
     /** Returns the style name for a single condition of a conditional formatting.
         @param nScTab  The current Calc sheet index.
@@ -269,57 +249,22 @@ public:
         @param pnNextChar  If not 0, the index of the char after the evaluated substring will be returned here. */
     static bool         IsCondFormatStyleName( const String& rStyleName, xub_StrLen* pnNextChar = 0 );
 
-// ----------------------------------------------------------------------------
-
+    // ------------------------------------------------------------------------
 private:
     static const String maDefNamePrefix;        /// Prefix for built-in defined names.
     static const String maStyleNamePrefix;      /// Prefix for built-in cell style names.
     static const String maCFStyleNamePrefix;    /// Prefix for cond. formatting style names.
 };
 
-// read/write range lists -----------------------------------------------------
+// read/write colors ----------------------------------------------------------
 
-/** Reads a cell range list.
-    @descr  The list has the following format (all values 16 bit):
-    (range count); n * (first row; last row; first column; last column).
-    The new ranges are appended to the cell range list. */
-XclImpStream& operator>>( XclImpStream& rStrm, ScRangeList& rRanges );
+/** Reads a color from the passed stream.
+    @descr  The color has the format (all values 8-bit): Red, Green, Blue, 0. */
+XclImpStream& operator>>( XclImpStream& rStrm, Color& rColor );
 
-/** Writes a cell range list.
-    @descr  The list has the following format (all values 16 bit):
-    (range count); n * (first row; last row; first column; last column). */
-XclExpStream& operator<<( XclExpStream& rStrm, const ScRangeList& rRanges );
-
-// Rich-string formatting runs ================================================
-
-/** Represents a formatting run for rich-strings.
-    @descr  An Excel formatting run stores the first formatted character in a
-    rich-string and the index of a font used to format this and the following
-    characters. */
-struct XclFormatRun
-{
-    sal_uInt16          mnChar;         /// First character this format applies to.
-    sal_uInt16          mnXclFont;      /// Excel font index for the next characters.
-
-    explicit inline     XclFormatRun() : mnChar( 0 ), mnXclFont( 0 ) {}
-    explicit inline     XclFormatRun( sal_uInt16 nChar, sal_uInt16 nXclFont ) :
-                            mnChar( nChar ), mnXclFont( nXclFont ) {}
-};
-
-inline bool operator==( const XclFormatRun& rLeft, const XclFormatRun& rRight )
-{
-    return (rLeft.mnChar == rRight.mnChar) && (rLeft.mnXclFont == rRight.mnXclFont);
-}
-
-inline bool operator<( const XclFormatRun& rLeft, const XclFormatRun& rRight )
-{
-    return (rLeft.mnChar < rRight.mnChar) || ((rLeft.mnChar == rRight.mnChar) && (rLeft.mnXclFont < rRight.mnXclFont));
-}
-
-// ----------------------------------------------------------------------------
-
-/** A vector with all formatting runs for a rich-string. */
-typedef ::std::vector< XclFormatRun > XclFormatRunVec;
+/** Reads a color to the passed stream.
+    @descr  The color has the format (all values 8-bit): Red, Green, Blue, 0. */
+XclExpStream& operator<<( XclExpStream& rStrm, const Color& rColor );
 
 // ============================================================================
 
