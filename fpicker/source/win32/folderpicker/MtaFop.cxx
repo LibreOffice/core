@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaFop.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:05:05 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 17:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ namespace
         return ( 0 != aRequestContext->hEvent );
     }
 
-    inline DeinitializeRequestContext( RequestContext* aRequestContext )
+    inline void DeinitializeRequestContext( RequestContext* aRequestContext )
     {
         OSL_ASSERT( aRequestContext && aRequestContext->hEvent );
         CloseHandle( aRequestContext->hEvent );
