@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:color-table xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.org/2000/style" xmlns:text="http://openoffice.org/2000/text" xmlns:table="http://openoffice.org/2000/table" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="http://openoffice.org/2000/meta" xmlns:number="http://openoffice.org/2000/datastyle" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="http://openoffice.org/2000/chart" xmlns:dr3d="http://openoffice.org/2000/dr3d" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="http://openoffice.org/2000/form" xmlns:script="http://openoffice.org/2000/script" xmlns:config="http://openoffice.org/2001/config">
+ <draw:color draw:name=" White" draw:color="#ffffff"/>
+ <draw:color draw:name=" Light Grey" draw:color="#cccccc"/>
+ <draw:color draw:name=" Grey" draw:color="#999999"/>
+ <draw:color draw:name=" Dark Grey" draw:color="#666666"/>
+ <draw:color draw:name=" Charcoal Grey" draw:color="#333333"/>
+ <draw:color draw:name=" Black" draw:color="#000000"/>
+ <draw:color draw:name=" Dark Sun Blue" draw:color="#333366"/>
+ <draw:color draw:name=" Sun Blue" draw:color="#666699"/>
+ <draw:color draw:name=" Light Sun Blue" draw:color="#9999cc"/>
+ <draw:color draw:name=" Blue Tint" draw:color="#ccccff"/>
+ <draw:color draw:name=" Dark Blue" draw:color="#003366"/>
+ <draw:color draw:name=" Cold Blue" draw:color="#336699"/>
+ <draw:color draw:name=" Blue" draw:color="#6699cc"/>
+ <draw:color draw:name=" Light Blue" draw:color="#99ccff"/>
+ <draw:color draw:name=" Azure" draw:color="#99ffff"/>
+ <draw:color draw:name=" Ice Blue" draw:color="#ccffff"/>
+ <draw:color draw:name=" Bottle Green" draw:color="#003333"/>
+ <draw:color draw:name=" Dark Turquoise" draw:color="#336666"/>
+ <draw:color draw:name=" Turquoise" draw:color="#669999"/>
+ <draw:color draw:name=" Light Turquoise" draw:color="#99cccc"/>
+ <draw:color draw:name=" Dark Green" draw:color="#003300"/>
+ <draw:color draw:name=" Fir Green" draw:color="#336633"/>
+ <draw:color draw:name=" Green" draw:color="#669966"/>
+ <draw:color draw:name=" Light Green" draw:color="#99cc99"/>
+ <draw:color draw:name=" Pale Green" draw:color="#ccffcc"/>
+ <draw:color draw:name=" Umbra" draw:color="#333300"/>
+ <draw:color draw:name=" Olive Green" draw:color="#666633"/>
+ <draw:color draw:name=" Light Olive Green" draw:color="#999966"/>
+ <draw:color draw:name=" Khaki" draw:color="#cccc99"/>
+ <draw:color draw:name=" Sand" draw:color="#e1e1cc"/>
+ <draw:color draw:name=" Gold Ochre" draw:color="#cc9900"/>
+ <draw:color draw:name=" Lemon Green" draw:color="#cccc00"/>
+ <draw:color draw:name=" Greenish Yellow" draw:color="#cccc33"/>
+ <draw:color draw:name=" Light Lemon Green" draw:color="#cccc66"/>
+ <draw:color draw:name=" Burnt Umber" draw:color="#330000"/>
+ <draw:color draw:name=" Brown" draw:color="#663300"/>
+ <draw:color draw:name=" Coffee" draw:color="#996633"/>
+ <draw:color draw:name=" Beige" draw:color="#cc9966"/>
+ <draw:color draw:name=" Burnt Sienna" draw:color="#660000"/>
+ <draw:color draw:name=" Reddish Brown" draw:color="#993300"/>
+ <draw:color draw:name=" Sienna" draw:color="#cc6600"/>
+ <draw:color draw:name=" Orange" draw:color="#ff9900"/>
+ <draw:color draw:name=" Yellow" draw:color="#ffff00"/>
+ <draw:color draw:name=" Russet" draw:color="#990000"/>
+ <draw:color draw:name=" Java Red" draw:color="#cc3333"/>
+ <draw:color draw:name=" Buy Red" draw:color="#ff0000"/>
+ <draw:color draw:name=" Red" draw:color="#ff3333"/>
+ <draw:color draw:name=" Light Red" draw:color="#ff6666"/>
+ <draw:color draw:name=" Rose" draw:color="#ff9999"/>
+ <draw:color draw:name=" Crimson" draw:color="#cc0033"/>
+ <draw:color draw:name=" Bordeux" draw:color="#990033"/>
+</office:color-table>
