@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglestratum.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:24:07 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:36:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,10 @@ void SAL_CALL LocalSingleStratumBase::initialize(
     //OSL_TRACE ( " Url is %s " ,rtl::OUStringToOString(mStrataDataUrl, RTL_TEXTENCODING_ASCII_US).getStr());
     //validate DefaultDataUrls
     bool bOptional = checkOptionalArg(mStrataDataUrl);
+
+    // get modified base for special layer implementations (e.g. resources)
+    this->adjustBaseURL(mStrataDataUrl);
+
     validateFileURL(mStrataDataUrl, *this);
     //NormalizeURL
     implEnsureAbsoluteURL(mStrataDataUrl);
@@ -160,6 +164,11 @@ void SAL_CALL LocalSingleStratumBase::initialize(
     }
 }
 
+//------------------------------------------------------------------------------
+
+void LocalSingleStratumBase::adjustBaseURL(rtl::OUString& )
+{
+}
 //------------------------------------------------------------------------------
 
 sal_Bool LocalSingleStratumBase::isMoreRecent(const rtl::OUString& aFileUrl,
@@ -341,11 +350,18 @@ void LocalReadonlyStratum::getLayerDirectories(rtl::OUString& aLayerUrl,
 }
 //------------------------------------------------------------------------------
 
+void LocalResourceStratum::adjustBaseURL(rtl::OUString& aBaseUrl)
+{
+    impl_getLayerResDirectory(aBaseUrl,aBaseUrl);
+}
+//------------------------------------------------------------------------------
+
 void LocalResourceStratum::getLayerDirectories(rtl::OUString& aLayerUrl,
                                              rtl::OUString& aSubLayerUrl) const
 {
    aLayerUrl = OUString();
-   impl_getLayerResDirectory(getBaseUrl(),aSubLayerUrl);
+   aSubLayerUrl = getBaseUrl();
+   // impl_getLayerResDirectory(getBaseUrl(),aSubLayerUrl);
 }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------

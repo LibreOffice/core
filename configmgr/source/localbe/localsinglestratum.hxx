@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglestratum.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:24:22 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,9 @@ class LocalSingleStratumBase : public SingleBackendBase {
         { return mStrataDataUrl; }
 
     protected:
+        /// Parses and adjusts the passed base URL
+        virtual void adjustBaseURL(rtl::OUString& aBaseURL);
+
         /**
           Retrieves the appropriate layer and sublayers base directories.
 
@@ -313,6 +316,7 @@ public:
                     uno::RuntimeException) ;
 
 private:
+    virtual void adjustBaseURL(rtl::OUString& aBaseURL);
     virtual void getLayerDirectories(rtl::OUString& aLayerUrl, rtl::OUString& aSubLayerUrl) const;
     virtual const ServiceImplementationInfo * getServiceInfoData() const;
 };
