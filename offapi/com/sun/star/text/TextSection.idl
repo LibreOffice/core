@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextSection.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-06 13:17:43 $
+ *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
+#ifndef __com_sun_star_beans_XPropertyState_idl__
+#include <com/sun/star/beans/XPropertyState.idl>
+#endif
+
 #ifndef __com_sun_star_text_SectionFileLink_idl__
 #include <com/sun/star/text/SectionFileLink.idl>
 #endif
@@ -106,6 +110,7 @@ service TextSection
     interface com::sun::star::text::XTextSection;
     interface com::sun::star::container::XNamed;
     interface com::sun::star::beans::XPropertySet;
+    interface com::sun::star::beans::XPropertyState;
 
     //-------------------------------------------------------------------------
     /**  This property contains a conditional expression.
@@ -178,6 +183,77 @@ service TextSection
         @see enum GraphicLocation
     */
     [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
+    /** determins whether footnotes inside the section are displayed at the end of the
+     section text.
+    */
+    [property] boolean FootnoteIsCollectAtTextEnd;
+    //-------------------------------------------------------------------------
+    /** determins whether the footnotes numbering restarts within the section.
+     This is only valid if <code>FootnoteIsRestartNumbering</code> is set.
+    */
+    [property] boolean FootnoteIsRestartNumbering;
+    //-------------------------------------------------------------------------
+    /** determins at which number the footnote numbering inside of the section starts.
+     This is only valid if <code>FootnoteIsRestartNumbering</code> is set.
+    */
+    [property] short FootnoteRestartNumberingAt;
+    //-------------------------------------------------------------------------
+    /** determins whether the footnotes within the section use an own numbering format.
+     This is only valid if <code>FootnoteIsRestartNumbering</code> is set.
+    */
+    [property] boolean FootnoteIsOwnNumbering;
+    //-------------------------------------------------------------------------
+    /** determins the numbering type of the footnote numbering as a value of
+     <type scope="com::sun::star::style">NumberingType</type>.
+     This is only valid if <code>FootnoteIsOwnNumbering</code> is set.
+    */
+    [property] short FootnoteNumberingType;
+    //-------------------------------------------------------------------------
+    /** determins the prefix that is display before the footnote number.
+     This is only valid if <code>FootnoteIsOwnNumbering</code> is set.
+    */
+    [property] string FootnoteNumberingPrefix;
+    //-------------------------------------------------------------------------
+    /** determins the suffix that is display after of the footnote number.
+     This is only valid if <code>FootnoteIsOwnNumbering</code> is set.
+    */
+    [property] string FootnoteNumberingSuffix;
+    //-------------------------------------------------------------------------
+    /** determins whether endnotes inside the section are displayed at the end of the
+     section text.
+    */
+    [property] boolean EndnoteIsCollectAtTextEnd;
+    //-------------------------------------------------------------------------
+    /** determins whether the endnotes numbering restarts within the section.
+     This is only valid if <code>EndnoteIsRestartNumbering</code> is set.
+    */
+    [property] boolean EndnoteIsRestartNumbering;
+    //-------------------------------------------------------------------------
+    /** determins at which number the endnote numbering inside of the section starts.
+     This is only valid if <code>EndnoteIsRestartNumbering</code> is set.
+    */
+    [property] short EndnoteRestartNumberingAt;
+    //-------------------------------------------------------------------------
+    /** determins whether the endnotes within the section use an own numbering format.
+     This is only valid if <code>EndnoteIsRestartNumbering</code> is set.
+    */
+    [property] boolean EndnoteIsOwnNumbering;
+    //-------------------------------------------------------------------------
+    /** determins the numbering type of the endnote numbering as a value of
+     <type scope="com::sun::star::style">NumberingType</type>.
+     This is only valid if <code>EndoteIsOwnNumbering</code> is set.
+    */
+    [property] short EndnoteNumberingType;
+    //-------------------------------------------------------------------------
+    /** determins the prefix that is display before the endnote number.
+     This is only valid if <code>EndnoteIsOwnNumbering</code> is set.
+    */
+    [property] string EndnoteNumberingPrefix;
+    //-------------------------------------------------------------------------
+    /** determins the suffix that is display after the endnote number.
+     This is only valid if <code>EndnoteIsOwnNumbering</code> is set.
+    */
+    [property] string EndnoteNumberingSuffix;
 
 };
 

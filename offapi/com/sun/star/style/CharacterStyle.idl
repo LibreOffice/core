@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharacterStyle.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-06 13:17:27 $
+ *  last change: $Author: mi $ $Date: 2000-11-08 12:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_style_CharacterProperties_idl__
-#define __com_sun_star_style_CharacterProperties_idl__
+#ifndef __com_sun_star_style_CharacterStyle_idl__
+#define __com_sun_star_style_CharacterStyle_idl__
 
 #ifndef __com_sun_star_style_CharacterProperties_idl__
 #include <com/sun/star/style/CharacterProperties.idl>
@@ -78,7 +78,7 @@
 /** specifies a stylesheet for characters within a
     <type scope="com::sun::star">Text</type>.
  */
-service CharacterProperties
+service CharacterStyle
 {
     //-------------------------------------------------------------------------
     /// specifies administrative properties.

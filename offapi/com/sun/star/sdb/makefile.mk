@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-06 13:16:23 $
+#   last change: $Author: mi $ $Date: 2000-11-08 12:43:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ IDLFILES=\
     ColumnSettings.idl \
     CommandType.idl \
     Connection.idl \
+    ContentLoader.idl \
     DatabaseAccess.idl \
     DatabaseAccessConnection.idl \
     DatabaseAccessContext.idl \
@@ -87,6 +88,7 @@ IDLFILES=\
     DataSettings.idl \
     DataSource.idl \
     DatasourceAdministrationDialog.idl \
+    DataSourceBrowser.idl \
     DefinitionContainer.idl \
     DocumentDefinition.idl \
     InteractionHandler.idl \
