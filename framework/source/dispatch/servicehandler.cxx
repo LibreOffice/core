@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicehandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2002-05-29 12:29:31 $
+ *  last change: $Author: as $ $Date: 2002-05-29 12:47:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,13 +327,20 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     {
         // extract service name and may optional given parameters from given URL
         // and use it to create and start the component
-        ::rtl::OUString sServiceName = aURL.Complete.copy(PROTOCOL_LENGTH);
-        ::rtl::OUString sParameters  ;
-        sal_Int32 nParamStart = sServiceName.indexOf('?',0);
-        if (nParamStart!=-1)
+        ::rtl::OUString sServiceAndArguments = aURL.Complete.copy(PROTOCOL_LENGTH);
+        ::rtl::OUString sServiceName;
+        ::rtl::OUString sArguments  ;
+
+        sal_Int32 nArgStart = sServiceAndArguments.indexOf('?',0);
+        if (nArgStart!=-1)
         {
-            ++nParamStart; // don't copy first '?'!
-            sParameters = sServiceName.copy(nParamStart);
+            sServiceName = sServiceAndArguments.copy(0,nArgStart);
+            ++nArgStart; // ignore '?'!
+            sArguments   = sServiceAndArguments.copy(nArgStart);
+        }
+        else
+        {
+            sServiceName = sServiceAndArguments;
         }
 
         if (sServiceName.getLength()>0)
@@ -347,7 +354,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
             // or b) he implements the right interface and starts there (may with optional parameters)
             css::uno::Reference< css::task::XJobExecutor > xExecuteable( xService, css::uno::UNO_QUERY );
             if (xExecuteable.is())
-                xExecuteable->trigger(sParameters);
+                xExecuteable->trigger(sArguments);
         }
     }
 
