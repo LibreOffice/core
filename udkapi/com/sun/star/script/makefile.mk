@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: ab $ $Date: 2001-10-24 07:52:04 $
+#   last change: $Author: kz $ $Date: 2005-01-13 18:50:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,7 @@ PACKAGE=com$/sun$/star$/script
 IDLFILES=\
     AllEventObject.idl\
     AllListenerAdapter.idl\
+    BasicErrorException.idl\
     CannotConvertException.idl\
     CannotCreateAdapterException.idl\
     ContextInformation.idl\
