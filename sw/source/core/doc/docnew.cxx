@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-11 08:40:21 $
+ *  last change: $Author: mtg $ $Date: 2001-05-11 18:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -901,6 +901,17 @@ SwModify*   SwDoc::GetUnoCallBack() const
     return pUnoCallBack;
 }
 
+vos::ORef < SvxForbiddenCharactersTable > & SwDoc::GetForbiddenCharacterTbl()
+{
+    if( !xForbiddenCharsTable.isValid() )
+    {
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
+                                    ::comphelper::getProcessServiceFactory();
+        xForbiddenCharsTable = new SvxForbiddenCharactersTable( xMSF );
+    }
+    return xForbiddenCharsTable;
+}
 /* ------------------------------------------------------------------------*/
 
 const com::sun::star::i18n::
