@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-05 21:54:02 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3556,7 +3556,7 @@ String STR_CLOSE_OBJECT
     Text [ finnish ] = "Sulje ~objekti" ;
     Text [ danish ] = "Luk objekt" ;
     Text [ french ] = "Fermer l'objet" ;
-    Text [ swedish ] = "Stäng ~objekt" ;
+    Text [ swedish ] = "Slut ~objekt" ;
     Text [ dutch ] = "~Object sluiten" ;
     Text [ spanish ] = "Cerrar ~objeto" ;
     Text [ english_us ] = "Close ~Object" ;
@@ -8570,12 +8570,12 @@ String STR_EFFECT_MOVE
     Text[ english_us ] = "Move";
     Text[ portuguese ] = "Move";
     Text[ russian ] = "Ïåðåìåùàòü";
-    Text[ greek ] = "Move";
+    Text[ greek ] = "Ìåôáêßíçóç";
     Text[ dutch ] = "Move";
     Text[ french ] = "Déplacer";
     Text[ spanish ] = "Mover";
     Text[ finnish ] = "Move";
-    Text[ italian ] = "Move";
+    Text[ italian ] = "Sposta";
     Text[ danish ] = "Move";
     Text[ swedish ] = "Flytta";
     Text[ polish ] = "Poruszaj";
@@ -13342,3 +13342,4 @@ String STR_UNDO_GRAFTRANSPARENCY
     Text[ catalan ] = "Transparencia";
     Text[ finnish ] = "Läpikuultavuus";
 };
+
