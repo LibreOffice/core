@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:35:07 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 21:05:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ chinese_traditional ] = "­¶­±©M¦C¦L½d³ò¬Û¾AÀ³(~F)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÕİÍÉ áäØÇŞ ÇáØÈÇÚÉ";
         Text[ greek ] = "ĞñïóáñìïãŞ óå óåëßäá";
-        Text[ korean ] = "ÆäÀÌÁö¸¦ ÀÎ¼â ¹üÀ§¿¡ ¸ÂÃã(~F)";
+        Text[ korean ] = "ÂÊÀ» ÀÎ¼â¹üÀ§¿¡ ¸ÂÃã(~F)";
         Text[ turkish ] = "Sayfaya sığdır";
         Text[ language_user1 ] = " ";
     };
@@ -163,7 +163,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ chinese_traditional ] = "¤À¶}¦C¦L¦b¦h­Ó­¶­±¤W(~P)";
         Text[ arabic ] = "ØÈÇÚÉ Úáì ÕİÍÇÊ ãÊÚÏÏÉ";
         Text[ greek ] = "Åêôığùóç óå ğåñéóóüôåñåò óåëßäåò";
-        Text[ korean ] = "¿©·¯ ÆäÀÌÁö¿¡ ÀÎ¼â(~P)";
+        Text[ korean ] = "¿©·¯ ÂÊ¿¡ ÀÎ¼â(~P)";
         Text[ turkish ] = "Birden çok sayfaya yazdır";
         Text[ language_user1 ] = " ";
     };
@@ -218,12 +218,12 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ chinese_traditional ] = "­¶­±³]©w©M¦C¦L½d³ò¤£¤@­P¡C\n±z¯à°÷¿ï¾Ü¥H¤Uªº¿ï¶µ¡C";
         Text[ arabic ] = "ÅÚÏÇÏÇÊ ÇáÕİÍÉ ÛíÑ ãáÇÆãÉ áäØÇŞ ÇáØÈÇÚÉ.\nÇÎÊÑ ÃÍÏ ÇáÎíÇÑÇÊ ÇáÊÇáíÉ";
         Text[ greek ] = "Ç äéÜôáîç ôçò óåëßäáò äåí óõìğßğôåé ìå ôçí ğåñéï÷Ş åêôığùóçò.\nÅğéëİîôå ìßá áğü ôéò ğáñáêÜôù åğéëïãİò";
-        Text[ korean ] = "ÆäÀÌÁö ¼³Á¤ÀÌ ÀÎ¼â ¹üÀ§¿Í ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.\n»ç¿ëÀÚ´Â ´ÙÀ½°ú °°Àº ¿É¼ÇÀ» ¼±ÅÃÇÒ ¼ö ÀÖ½À´Ï´Ù.";
+        Text[ korean ] = "ÂÊ ¼³Á¤ÀÌ ÀÎ¼â¹üÀ§¿Í ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.\n»ç¿ëÀÚ´Â ´ÙÀ½°ú °°Àº ¿É¼ÇÀ» ¼±ÅÃÇÒ ¼ö ÀÖ½À´Ï´Ù.";
         Text[ turkish ] = "Sayfa ayarları ile yazdırma aralığı örtüşmüyor.\nAşağıdaki seçeneklerden birini seçin:";
         Text[ language_user1 ] = " ";
     };
     Text [ english_us ] = "Warning Print Options" ;
-    Text [ portuguese ] = "Aviso sobre opções de impressão" ;
+    Text [ portuguese ] = "Advertência sobre opções de impressão" ;
     Text [ swedish ] = "Varning utskriftsalternativ" ;
     Text [ danish ] = "Advarsel udskriftsindstillinger" ;
     Text [ italian ] = "Avvertimento opzioni di stampa" ;
