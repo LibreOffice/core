@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vendorbase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:53:12 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,11 @@ public:
      */
     virtual bool needsRestart() const;
 
-    /*
+    /* compares versions of this vendor. MUST be overridden
+       in a derived class.
+       ####################################################
+       OVERRIDE in derived class
+       ###################################################
       @return
       0 this.version == sSecond
       1 this.version > sSecond
