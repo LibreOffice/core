@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:47:25 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ void ImpTextPortionHandler::ConvertToPathObj(SdrObjGroup& rGroup, FASTBOOL bPoly
     }
 }
 
-void ImpTextPortionHandler::DrawTextToPath(ExtOutputDevice& rXOut, FASTBOOL bDrawEffect)
+void ImpTextPortionHandler::DrawTextToPath(XOutputDevice& rXOut, FASTBOOL bDrawEffect)
 {
     aFormTextBoundRect=Rectangle();
     const Rectangle& rBR = rTextObj.GetSnapRect();
@@ -224,7 +224,8 @@ void ImpTextPortionHandler::DrawTextToPath(ExtOutputDevice& rXOut, FASTBOOL bDra
 
         for(nParagraph = 0; nParagraph < nCnt; nParagraph++)
         {
-            Polygon aPoly = XOutCreatePolygon(aXPP[sal_uInt16(nParagraph)], rXOut.GetOutDev());
+//BFS09         Polygon aPoly = XOutCreatePolygon(aXPP[sal_uInt16(nParagraph)], rXOut.GetOutDev());
+            Polygon aPoly = XOutCreatePolygon(aXPP[sal_uInt16(nParagraph)]);
 
             rOutliner.SetDrawPortionHdl(LINK(this, ImpTextPortionHandler, FormTextRecordPortionHdl));
             rOutliner.StripPortions();
@@ -479,7 +480,7 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
     // xub_StrLen nCnt = pInfo->nTextLen;
 
     Point aStartPos(aPos);
-    SfxItemSet aAttrSet((SfxItemPool&)(*rTextObj.GetItemPool()));
+    SfxItemSet aAttrSet((SfxItemPool&)(*rTextObj.GetObjectItemPool()));
     long nHochTief(pInfo->rFont.GetEscapement());
     FontMetric aFontMetric(aVDev.GetFontMetric());
     sal_Int32 nLineLen(0L);
@@ -665,7 +666,7 @@ aVDev.SetFont( aFont );
     return 0;
 }
 
-void ImpTextPortionHandler::DrawFitText(ExtOutputDevice& rXOut, const Point& rPos, const Fraction& rXFact)
+void ImpTextPortionHandler::DrawFitText(XOutputDevice& rXOut, const Point& rPos, const Fraction& rXFact)
 {
     pXOut=&rXOut;
     aPos=rPos;
