@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageSelector.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:29:43 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,8 @@ PageSelector::PageSelector (
       mnSelectedPageCount(0),
       mnBroadcastDisableLevel(0),
       mbSelectionChangeBroadcastPending(false),
-      mpMostRecentlySelectedPage(NULL)
+      mpMostRecentlySelectedPage(NULL),
+      mpSelectionAnchor(NULL)
 {
     CountSelectedPages ();
 }
@@ -122,6 +123,7 @@ void PageSelector::DeselectAllPages (void)
         "PageSelector::DeselectAllPages: the selected pages counter is not 0");
     mnSelectedPageCount = 0;
     mpMostRecentlySelectedPage = NULL;
+    mpSelectionAnchor = NULL;
 }
 
 
@@ -179,7 +181,11 @@ void PageSelector::SelectPage (PageDescriptor& rDescriptor)
     {
         mnSelectedPageCount ++;
         mrController.GetView().RequestRepaint (rDescriptor);
+
         mpMostRecentlySelectedPage = &rDescriptor;
+        if (mpSelectionAnchor == NULL)
+            mpSelectionAnchor = &rDescriptor;
+
         if (mnBroadcastDisableLevel > 0)
             mbSelectionChangeBroadcastPending = true;
         else
@@ -319,6 +325,14 @@ void PageSelector::HandleModelChange (void)
 PageDescriptor* PageSelector::GetMostRecentlySelectedPage (void) const
 {
     return mpMostRecentlySelectedPage;
+}
+
+
+
+
+PageDescriptor* PageSelector::GetSelectionAnchor (void) const
+{
+    return mpSelectionAnchor;
 }
 
 
