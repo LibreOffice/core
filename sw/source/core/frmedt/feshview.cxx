@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-16 08:46:09 $
+ *  last change: $Author: ama $ $Date: 2002-09-16 14:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1783,16 +1783,28 @@ BOOL SwFEShell::ImpEndCreate()
         aSet.Put( SwFmtFrmSize( ATT_MIN_SIZE, Max( nWidth,  long(MINFLY) ),
                                               Max( nHeight, long(MINFLY) )));
 
-        SwFmtHoriOrient aHori( rBound.Left() -
-                                pAnch->Frm().Left(), HORI_NONE, FRAME );
+        SWRECTFN( pAnch )
+        SwTwips nXOffset;
         SwTwips nYOffset = rBound.Top() - pAnch->Frm().Top();
+        if( bVert )
+        {
+            nXOffset = nYOffset;
+            nYOffset = pAnch->Frm().Left()+pAnch->Frm().Width()-rBound.Right();
+        }
+        else if( pAnch->IsRightToLeft() )
+            nXOffset = pAnch->Frm().Left()+pAnch->Frm().Width()-rBound.Right();
+        else
+            nXOffset = rBound.Left() - pAnch->Frm().Left();
+
+        SwFmtHoriOrient aHori( nXOffset, HORI_NONE, FRAME );
         if( pAnch->IsTxtFrm() && ((SwTxtFrm*)pAnch)->IsFollow() )
         {
             SwTxtFrm* pTmp = (SwTxtFrm*)pAnch;
             do {
                 pTmp = pTmp->FindMaster();
                 ASSERT( pTmp, "Where's my Master?" );
-                nYOffset += pTmp->Prt().Height();
+                nYOffset += pTmp->IsVertical() ?
+                            pTmp->Prt().Width() : pTmp->Prt().Height();
             } while ( pTmp->IsFollow() );
         }
         SwFmtVertOrient aVert( nYOffset, VERT_NONE, FRAME );
