@@ -2,9 +2,9 @@
  *
  *  $RCSfile: polysc3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:01:08 $
+ *  last change: $Author: aw $ $Date: 2002-08-02 12:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,10 +253,11 @@ BOOL E3dPolyScene::LocalPaint3D(ExtOutputDevice& rOut,
     Rectangle aVisible(Point(0,0), pOut->GetOutputSizePixel());
     aVisible = pOut->PixelToLogic(aVisible);
 
-    // Bei GDIMetaFiles falsches aVisible korrigieren
-    if((aVisible.Left() == aVisible.Right() && aVisible.Top() == aVisible.Bottom())
-        || (aVisible.GetWidth() == 0L || aVisible.GetHeight() == 0L))
+    // #101867# If rendering to metafile
+    if(pOut && pOut->GetConnectMetaFile() && !pOut->IsOutputEnabled())
+    {
         aVisible = aBound;
+    }
 
     // Feststellen, ob transparente Teile enthalten sind
     pBase3D->SetTransparentPartsContainedHint(AreThereTransparentParts());
