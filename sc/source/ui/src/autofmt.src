@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-25 16:15:15 $
+ *  last change: $Author: vg $ $Date: 2001-05-30 19:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,12 +102,12 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ portuguese_brazilian ] = "~Formato" ;
         Text [ portuguese ] = "Fo~rmatar" ;
         Text [ finnish ] = "~Muotoile" ;
-        Text [ danish ] = "~Format" ;
+        Text [ danish ] = "Forma~ter" ;
         Text [ french ] = "Forma~t" ;
-        Text [ swedish ] = "Cell~format" ;
+        Text [ swedish ] = "~Format" ;
         Text [ dutch ] = "~Formaat" ;
         Text [ spanish ] = "~Formato" ;
-        Text [ english_us ] = "~Format" ;
+        Text [ english_us ] = "F~ormat" ;
         Text[ chinese_simplified ] = "¸ñÊ½(~F)";
         Text[ russian ] = "Ôîğ~ìàò";
         Text[ polish ] = "Format";
@@ -116,7 +116,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ arabic ] = "ÇáÊäÓíŞ";
         Text[ greek ] = "Ìïñöïğïßçóç";
         Text[ korean ] = "¼­½Ä(~F)";
-        Text[ turkish ] = "~Format";
+        Text[ turkish ] = "Format";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Formato";
     };
@@ -148,7 +148,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "µ÷Õû¿í/¸ß(~U)";
         Text[ russian ] = "Ïîäáîğ øèğèíû/âûñîòû";
-        Text[ polish ] = "Dostosuj szeroko?æ/wysoko?æ";
+        Text[ polish ] = "Dostosuj szerokoœæ/wysokoœæ";
         Text[ japanese ] = "•‚Æ‚‚³‚Ì’²®(~U)";
         Text[ chinese_traditional ] = "½Õ¾ã¼e/°ª(~U)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÚÑÖ æÇáÇÑÊİÇÚ";
@@ -763,7 +763,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ english_us ] = "Mid" ;
         Text[ chinese_simplified ] = "ÖĞ";
         Text[ russian ] = "Ñåğåäèíà";
-        Text[ polish ] = "?rodek";
+        Text[ polish ] = "Œrodek";
         Text[ japanese ] = "’†‰›";
         Text[ chinese_traditional ] = "¤¤";
         Text[ arabic ] = "ÇáæÓØ";
