@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2000-10-12 13:34:28 $
+#   last change: $Author: cmc $ $Date: 2001-02-08 12:35:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,8 +123,7 @@ SLOFILES =	\
 EXCEPTIONSFILES =	\
         $(SLO)$/ww8par5.obj \
         $(SLO)$/ww8graf.obj \
-        $(SLO)$/ww8graf2.obj \
-        $(SLO)$/msocximp.obj
+        $(SLO)$/ww8graf2.obj
 
 # --- Tagets -------------------------------------------------------
 
