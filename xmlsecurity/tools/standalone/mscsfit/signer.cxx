@@ -267,7 +267,7 @@ int SAL_CALL main( int argc, char **argv )
             "Signer - "
             "Cannot get interface of \"XXMLSecurityContext\" from service \"xsec.XMLSecurityContext\"" ) ;
 
-        xSecCtx->setSecurityEnvironment( xSecEnv ) ;
+        xSecCtx->addSecurityEnvironment( xSecEnv ) ;
 
         //Generate XML signature
         Reference< XInterface > xmlsigner =
@@ -282,10 +282,21 @@ int SAL_CALL main( int argc, char **argv )
             "Cannot get interface of \"XXMLSignature\" from service \"xsec.XMLSignature\"" ) ;
 
         //perform signature
-        xTemplate = xSigner->generate( xTemplate , xSecCtx ) ;
+        xTemplate = xSigner->generate( xTemplate , xSecEnv ) ;
         OSL_ENSURE( xTemplate.is() ,
             "Signer - "
             "Cannot generate the xml signature" ) ;
+
+        SecurityOperationStatus m_nStatus = xTemplate->getStatus();
+
+        if (m_nStatus == SecurityOperationStatus_OPERATION_SUCCEEDED)
+        {
+            fprintf( stdout, "Operation succeeds.\n") ;
+        }
+        else
+        {
+            fprintf( stdout, "Operation fails.\n") ;
+        }
     } catch( Exception& e ) {
         fprintf( stderr , "Error Message: %s\n" , OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).getStr() ) ;
         goto done ;

@@ -267,7 +267,7 @@ int SAL_CALL main( int argc, char **argv )
             "Verifier - "
             "Cannot get interface of \"XXMLSecurityContext\" from service \"xsec.XMLSecurityContext\"" ) ;
 
-        xSecCtx->setSecurityEnvironment( xSecEnv ) ;
+        xSecCtx->addSecurityEnvironment( xSecEnv ) ;
 
         //Generate XML signature
         Reference< XInterface > xmlsigner =
@@ -283,11 +283,17 @@ int SAL_CALL main( int argc, char **argv )
 
 
         //perform validation
-        sal_Bool valid = xSigner->validate( xTemplate , xSecCtx ) ;
-        if( !valid ) {
-            printf( "Signature is INVALID!\n" ) ;
-        } else {
-            printf( "Signature is VALID!\n" ) ;
+        xTemplate = xSigner->validate( xTemplate , xSecCtx ) ;
+
+        com::sun::star::xml::crypto::SecurityOperationStatus m_nStatus = xTemplate->getStatus();
+
+        if (m_nStatus == SecurityOperationStatus_OPERATION_SUCCEEDED)
+        {
+            fprintf( stdout, "Operation succeeds.\n") ;
+        }
+        else
+        {
+            fprintf( stdout, "Operation fails.\n") ;
         }
     } catch( Exception& e ) {
         fprintf( stderr , "Error Message: %s\n" , OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).getStr() ) ;
