@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 06:19:05 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #ifndef _SV_SPLIT_HXX
 #include <vcl/split.hxx>
 #endif
-#ifndef _VECTOR_
-#include <vector>
-#endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
@@ -81,6 +78,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef DBAUI_QUERYCONTROLLER_HXX
+#include "querycontroller.hxx"
 #endif
 
 namespace connectivity
@@ -94,7 +94,6 @@ namespace dbaui
     class OQueryViewSwitch;
     class OAddTableDlg;
     class OQueryTableWindow;
-    class OTableFieldDesc;
     class OSelectionBrowseBox;
     class OTableConnection;
     class OQueryTableConnectionData;
@@ -126,12 +125,12 @@ namespace dbaui
 
         void            GenerateInnerJoinCriterias(::rtl::OUString& _rJoinCrit,const ::std::vector<OTableConnection*>*  _pConnList);
         // erzeugt das Group Argument, falls vorhanden
-        ::rtl::OUString GenerateGroupBy(::std::vector<OTableFieldDesc*>* pFieldList, sal_Bool bMulti );
+        ::rtl::OUString GenerateGroupBy(OTableFields& _rFieldList, sal_Bool bMulti );
         // erzeugt Where und Having Argument, falls vorhanden
-        sal_Bool        GenerateCriterias(::rtl::OUString& aRetStr,::rtl::OUString& rHavingStr/*,::rtl::OUString& rOrderStr*/, ::std::vector<OTableFieldDesc*>* pFieldList, sal_Bool bMulti );
-        ::rtl::OUString GenerateOrder( ::std::vector<OTableFieldDesc*>* pFieldList , sal_Bool bMulti);
+        sal_Bool        GenerateCriterias(::rtl::OUString& aRetStr,::rtl::OUString& rHavingStr/*,::rtl::OUString& rOrderStr*/, OTableFields& _rFieldList, sal_Bool bMulti );
+        ::rtl::OUString GenerateOrder( OTableFields& _rFieldList , sal_Bool bMulti);
         // Erzeugt die SelectList. bAlias mu"s gesetzt sein, wenn mehr als 1 Tabelle vorhanden ist
-        ::rtl::OUString GenerateSelectList(::std::vector<OTableFieldDesc*>* pFieldList,sal_Bool bAlias);
+        ::rtl::OUString GenerateSelectList(OTableFields& _rFieldList,sal_Bool bAlias);
         // Erzeugt die Tabellenliste mit Joins aus pConnList, wenn bJoin == True. pConnList kann == NULL wenn bJoin == sal_False
         ::rtl::OUString GenerateFromClause(const OJoinTableView::OTableWindowMap*   pTabMap,::std::vector<OTableConnection*>*   pConnList);
 
@@ -154,7 +153,7 @@ namespace dbaui
         sal_Bool    InsertJoin(const ::connectivity::OSQLParseNode *pNode);
         sal_Bool    InsertJoinConnection(const ::connectivity::OSQLParseNode *pNode, const EJoinType& _eJoinType);
 
-        sal_Bool    FillDragInfo(const ::connectivity::OSQLParseNode* pTableRef,OTableFieldDesc& aDragInfo);
+        sal_Bool    FillDragInfo(const ::connectivity::OSQLParseNode* pTableRef,OTableFieldDescRef& aDragInfo);
 
         sal_Bool    HasFields();
         ::rtl::OUString     BuildTable(const OQueryTableWindow* pEntryTab);
@@ -171,7 +170,7 @@ namespace dbaui
 
         int         InsertColumnRef(const ::connectivity::OSQLParseNode * pColumnRef,
                                     ::rtl::OUString& aColumnName,const ::rtl::OUString& aColumnAlias,
-                                    ::rtl::OUString& aTableRange,OTableFieldDesc& aInfo,
+                                    ::rtl::OUString& aTableRange,OTableFieldDescRef& aInfo,
                                     OJoinTableView::OTableWindowMap* pTabList);
 
         sal_Int32   GetColumnFormatKey(const ::connectivity::OSQLParseNode* pColumnRef);
@@ -209,7 +208,7 @@ namespace dbaui
         ::rtl::OUString                     getDecimalSeparator() const { return m_sDecimalSep;}
 
         sal_Bool HasTable() const {return m_pTableView->GetTabWinMap()->size() != 0;}
-        sal_Bool InsertField( const OTableFieldDesc& rInfo, sal_Bool bVis=sal_True, sal_Bool bActivate = sal_True);
+        sal_Bool InsertField( const OTableFieldDescRef& rInfo, sal_Bool bVis=sal_True, sal_Bool bActivate = sal_True);
         // save the position of the table window and the pos of the splitters
         void SaveTabWinUIConfig(OQueryTableWindow* pWin);
         // called when fields are deleted
@@ -225,7 +224,7 @@ namespace dbaui
         void stopTimer();
         void startTimer();
 
-        ::connectivity::OSQLParseNode* getPredicateTreeFromEntry(   OTableFieldDesc* pEntry,
+        ::connectivity::OSQLParseNode* getPredicateTreeFromEntry(   OTableFieldDescRef pEntry,
                                                                     const String& _sCriteria,
                                                                     ::rtl::OUString& _rsErrorMessage,
                                                                     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn);

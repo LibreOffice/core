@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 14:24:23 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,7 +779,7 @@ OQueryTableWindow* OQueryTableView::FindTable(const String& rAliasName)
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OQueryTableView::FindTableFromField(const String& rFieldName, OTableFieldDesc& rInfo, sal_uInt16& rCnt)
+sal_Bool OQueryTableView::FindTableFromField(const String& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
     sal_Bool bRet = sal_False;
@@ -1040,7 +1040,7 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
 
 
 //------------------------------------------------------------------------
-void OQueryTableView::InsertField(const OTableFieldDesc& rInfo)
+void OQueryTableView::InsertField(const OTableFieldDescRef& rInfo)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
     DBG_ASSERT(getDesignView() != NULL, "OQueryTableView::InsertField : habe kein Parent !");

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableConnectionData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-19 09:27:16 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,23 +178,23 @@ OQueryTableConnectionData& OQueryTableConnectionData::operator=(const OQueryTabl
 }
 
 //------------------------------------------------------------------------------
-void OQueryTableConnectionData::InitFromDrag(const OTableFieldDesc& rDragLeft, const OTableFieldDesc& rDragRight)
+void OQueryTableConnectionData::InitFromDrag(const OTableFieldDescRef& rDragLeft, const OTableFieldDescRef& rDragRight)
 {
     DBG_CHKTHIS(OQueryTableConnectionData,NULL);
     // die Infos in rDrag in Parameter fuer das Basisklassen-Init umsetzen ...
-    OQueryTableWindow* pSourceWin = static_cast<OQueryTableWindow*>(rDragLeft.GetTabWindow());
-    OQueryTableWindow* pDestWin = static_cast<OQueryTableWindow*>(rDragRight.GetTabWindow());
+    OQueryTableWindow* pSourceWin = static_cast<OQueryTableWindow*>(rDragLeft->GetTabWindow());
+    OQueryTableWindow* pDestWin = static_cast<OQueryTableWindow*>(rDragRight->GetTabWindow());
     OSL_ENSURE(pSourceWin,"NO Source window found!");
     OSL_ENSURE(pDestWin,"NO Dest window found!");
 
     Init(pSourceWin->GetWinName(), pDestWin->GetWinName());
 
     // und dann meine Members setzen
-    SetFieldIndex(JTCS_FROM, rDragLeft.GetFieldIndex());
-    SetFieldIndex(JTCS_TO, rDragRight.GetFieldIndex());
+    SetFieldIndex(JTCS_FROM, rDragLeft->GetFieldIndex());
+    SetFieldIndex(JTCS_TO, rDragRight->GetFieldIndex());
 
-    SetFieldType(JTCS_FROM, rDragLeft.GetFieldType());
-    SetFieldType(JTCS_TO, rDragRight.GetFieldType());
+    SetFieldType(JTCS_FROM, rDragLeft->GetFieldType());
+    SetFieldType(JTCS_TO, rDragRight->GetFieldType());
 
     m_strSourceTableName = pSourceWin->GetTableName();
     m_aSourceWinName = pSourceWin->GetWinName();
@@ -202,7 +202,7 @@ void OQueryTableConnectionData::InitFromDrag(const OTableFieldDesc& rDragLeft, c
     m_strDestTableName = pDestWin->GetTableName();
     m_aDestWinName = pDestWin->GetWinName();
 
-    AppendConnLine((::rtl::OUString)rDragLeft.GetField(),(::rtl::OUString)rDragRight.GetField());
+    AppendConnLine((::rtl::OUString)rDragLeft->GetField(),(::rtl::OUString)rDragRight->GetField());
 }
 // -----------------------------------------------------------------------------
 OTableConnectionData* OQueryTableConnectionData::NewInstance() const

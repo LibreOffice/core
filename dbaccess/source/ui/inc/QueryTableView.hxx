@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 14:24:58 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
+#ifndef DBAUI_QUERYCONTROLLER_HXX
+#include "querycontroller.hxx"
+#endif
 
 
 namespace dbaui
@@ -82,7 +85,6 @@ namespace dbaui
     };
 
     //========================================================================
-    class OTableFieldDesc;
     class OQueryTabWinUndoAct;
     class OQueryTabConnUndoAction;
     class OQueryTableConnection;
@@ -113,7 +115,7 @@ namespace dbaui
 
         // TabWin suchen
         OQueryTableWindow*  FindTable(const String& rAliasName);
-        BOOL            FindTableFromField(const String& rFieldName, OTableFieldDesc& rInfo, USHORT& rCnt);
+        BOOL            FindTableFromField(const String& rFieldName, OTableFieldDescRef& rInfo, USHORT& rCnt);
 
         // Basisklasse ueberschrieben : Connections kreieren und loeschen
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest);
@@ -139,7 +141,7 @@ namespace dbaui
         sal_Int32   CountTableAlias(const String& rName, sal_Int32& rMax);
 
         // ein Feld einfuegen (wird einfach an das Elter weitergereicht
-        void InsertField(const OTableFieldDesc& rInfo);
+        void InsertField(const OTableFieldDescRef& rInfo);
 
         // alles (TabWins, Connections) neu aufbauen (PRECONDITION : vorher wurde ClearAll gerufen)
         virtual void ReSync();

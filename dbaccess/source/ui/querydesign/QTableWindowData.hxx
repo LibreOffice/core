@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableWindowData.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,8 @@
 #ifndef DBAUI_TABLEWINDOWDATA_HXX
 #include "TableWindowData.hxx"
 #endif
-#ifndef _VECTOR_
+#ifndef INCLUDED_VECTOR
+#define INCLUDED_VECTOR
 #include <vector>
 #endif
 #ifndef _COM_SUN_STAR_IO_XOBJECTOUTPUTSTREAM_HPP_

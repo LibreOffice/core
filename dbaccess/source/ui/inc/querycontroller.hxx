@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-01 11:57:41 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,9 @@
 #ifndef DBAUI_QUERYCONTAINERWINDOW_HXX
 #include "querycontainerwindow.hxx"
 #endif
-
+#ifndef DBAUI_TABLEFIELDDESC_HXX
+#include "TableFieldDescription.hxx"
+#endif
 
 class VCLXWindow;
 namespace dbaui
@@ -115,9 +117,11 @@ namespace dbaui
     class OAddTableDlg;
     class OTableFieldDesc;
     class OQueryTableWindow;
+
     class OQueryController : public OJoinController
     {
-        ::std::vector<OTableFieldDesc*>         m_vTableFieldDesc;
+        OTableFields                            m_vTableFieldDesc;
+        OTableFields                            m_vUnUsedFieldsDesc; // contains fields which aren't visible and don't have any criteria
 
         OQueryParseContext*                     m_pParseContext;
         ::connectivity::OSQLParser*             m_pSqlParser;   // to parse sql statements
@@ -161,9 +165,9 @@ namespace dbaui
         virtual FeatureState    GetState(sal_uInt16 nId);
         // execute a feature
         virtual void            Execute(sal_uInt16 nId);
-        virtual ToolBox* CreateToolBox(Window* pParent);
+        virtual ToolBox*        CreateToolBox(Window* pParent);
 
-        virtual void        reconnect( sal_Bool _bUI );
+        virtual void            reconnect( sal_Bool _bUI );
 
 
         OQueryContainerWindow*  getContainer() { return static_cast< OQueryContainerWindow* >( getView() ); }
@@ -172,7 +176,10 @@ namespace dbaui
         OQueryController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 
         ~OQueryController();
-        ::std::vector<OTableFieldDesc*>*        getTableFieldDesc()         { return &m_vTableFieldDesc; }
+        OTableFields&   getTableFieldDesc()         { return m_vTableFieldDesc; }
+        OTableFields&   getUnUsedFields()           { return m_vUnUsedFieldsDesc; }
+
+        void            clearFields();
 
         virtual void    setModified(sal_Bool _bModified=sal_True);
 

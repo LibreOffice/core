@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableWindow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-23 09:46:40 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ namespace dbaui
 
         sal_Int32       GetAliasNum() const { return m_nAliasNum; }
 
-        BOOL            ExistsField(const ::rtl::OUString& strFieldName, OTableFieldDesc& rInfo);
+        BOOL            ExistsField(const ::rtl::OUString& strFieldName, OTableFieldDescRef& rInfo);
         BOOL            ExistsAVisitedConn() const;
 
     protected:

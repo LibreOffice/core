@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableConnectionData.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-02-06 13:04:59 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
 #endif
+//#ifndef DBAUI_QUERYCONTROLLER_HXX
+//#include "querycontroller.hxx"
+//#endif
 
 namespace dbaui
 {
@@ -119,7 +122,7 @@ namespace dbaui
         ETableFieldType GetFieldType(EConnectionSide nWhich) const { return nWhich==JTCS_TO ? m_eDestType : m_eFromType; }
         void            SetFieldType(EConnectionSide nWhich, ETableFieldType eType) { if (nWhich==JTCS_TO) m_eDestType=eType; else m_eFromType=eType; }
 
-        void            InitFromDrag(const OTableFieldDesc& rDragLeft, const OTableFieldDesc& rDragRight);
+        void            InitFromDrag(const OTableFieldDescRef& rDragLeft, const OTableFieldDescRef& rDragRight);
 
         EJoinType       GetJoinType() const { return m_eJoinType; };
         void            SetJoinType(const EJoinType& eJT) { m_eJoinType = eJT; };

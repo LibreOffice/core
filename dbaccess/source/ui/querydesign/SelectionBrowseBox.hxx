@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 06:19:01 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
 #ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
 #include <svtools/editbrowsebox.hxx>
 #endif
-#ifndef _VECTOR_
-#include <vector>
-#endif
+//#ifndef DBAUI_QUERYCONTROLLER_HXX
+//#include "querycontroller.hxx"
+//#endif
 #ifndef DBAUI_TABLEFIELDDESC_HXX
 #include "TableFieldDescription.hxx"
 #endif
@@ -125,6 +125,8 @@ namespace dbaui
         ::svt::ListBoxControl*              m_pTableCell;
         ::svt::ListBoxControl*              m_pOrderCell;
 
+        OTableFieldDescRef                  m_pEmptyEntry;      // default entry in the list may reference more than once
+
         sal_Int32                           m_nMaxColumns;              // maximale Anzahl der Spalten in einem Select-Statement
 
         String                              m_aFunctionStrings;
@@ -138,20 +140,20 @@ namespace dbaui
                                     ~OSelectionBrowseBox();
 
         void                        initialize();
-        OTableFieldDesc*            InsertField( const OJoinExchangeData& jxdSource, long nColId=-1, sal_Bool bVis=sal_True, sal_Bool bActivate=sal_True );
-        OTableFieldDesc*            InsertField( const OTableFieldDesc& rInfo, long nCol=-1, sal_Bool bVis=sal_True, sal_Bool bActivate=sal_True );
-        void                        InsertColumn( OTableFieldDesc* pEntry, long& nColId );
+        OTableFieldDescRef          InsertField( const OJoinExchangeData& jxdSource, long nColId=-1, sal_Bool bVis=sal_True, sal_Bool bActivate=sal_True );
+        OTableFieldDescRef          InsertField( const OTableFieldDescRef& rInfo, long nCol=-1, sal_Bool bVis=sal_True, sal_Bool bActivate=sal_True );
+        void                        InsertColumn( OTableFieldDescRef pEntry, long& nColId );
         void                        RemoveColumn( sal_uInt16 nColId );
         void                        DeleteFields( const String& rAliasName );
         // AddGroupBy:: F"ugt ein Feld mit Funktion == Grupierung. Falls das Feld schon vorhanden ist und ein Aggregate Funktion
         // benutzt, wird das Flag nicht gesetzt
-        void                        AddGroupBy( const OTableFieldDesc& rInfo );
-        void                        AddCondition( const OTableFieldDesc& rInfo,
+        void                        AddGroupBy( const OTableFieldDescRef& rInfo );
+        void                        AddCondition( const OTableFieldDescRef& rInfo,
                                                   const String& rValue,
                                                   const sal_uInt16 nLevel, const char* pOp=0 );
-        void                        AddOrder(const OTableFieldDesc& rInfo, const EOrderDir eDir, sal_uInt16& nPos);
+        void                        AddOrder(const OTableFieldDescRef& rInfo, const EOrderDir eDir, sal_uInt16& nPos);
         void                        ClearAll();
-        OTableFieldDesc*            AppendNewCol( sal_uInt16 nCnt=1 );
+        OTableFieldDescRef          AppendNewCol( sal_uInt16 nCnt=1 );
         sal_Bool                    Save();
         OQueryDesignView*           getDesignView();
         OQueryDesignView*           getDesignView() const;
@@ -186,8 +188,6 @@ namespace dbaui
 
         virtual sal_Int8            AcceptDrop( const BrowserAcceptDropEvent& rEvt );
         virtual sal_Int8            ExecuteDrop( const BrowserExecuteDropEvent& rEvt );
-//      virtual sal_Bool            QueryDrop(const BrowserDropEvent& rEvt);
-//      virtual sal_Bool            Drop(const BrowserDropEvent& rEvt);
         virtual void                MouseButtonDown( const BrowserMouseEvent& rEvt );
         virtual void                MouseButtonUp( const BrowserMouseEvent& rEvt );
         virtual void                KeyInput( const KeyEvent& rEvt );
@@ -213,21 +213,25 @@ namespace dbaui
         void                        startTimer();
 
     private:
-        OTableFieldDesc*            FindFirstFreeCol(long & rCol);
+        OTableFieldDescRef          FindFirstFreeCol(long & rCol);
             // rCol enthaelt die Nummer (in pOTableFieldDescList) der ersten Spalte, die von sich sagt, dass sie leer ist
             // wenn es keine solche gibt, ist rCol undefiniert und der Rueckgabewert NULL
         void                        CheckFreeColumns(long& rCol);
             // testet, ob es noch freie Spalten gibt, wenn nicht, wird ein neuer Packen angefuegt
             // rCol enthaelt die Nummer der ersten freien Spalte (in pOTableFieldDescList)
 
-        void                        RemoveField( sal_uInt16 nId, sal_Bool bActivate = sal_True);
-        Rectangle                   GetInvalidRect( sal_uInt16 nColId );
-        long                        GetRealRow(long nRow) const;
-        long                        GetBrowseRow(long nRowId) const;
-        sal_Bool                    GetFunktionName(String& rFkt);
-        void                        appendUndoAction(const String& _rOldValue,const String& _rNewValue,sal_Int32 _nRow);
-        void                        PreFill();
-        ::std::vector<OTableFieldDesc*>* getFields() const;
+        void            RemoveField( sal_uInt16 nId, sal_Bool bActivate = sal_True);
+        Rectangle       GetInvalidRect( sal_uInt16 nColId );
+        long            GetRealRow(long nRow) const;
+        long            GetBrowseRow(long nRowId) const;
+        sal_Bool        GetFunktionName(String& rFkt);
+        void            appendUndoAction(const String& _rOldValue,const String& _rNewValue,sal_Int32 _nRow);
+        void            PreFill();
+        OTableFields&   getFields() const;
+        void            enableControl(const OTableFieldDescRef& _rEntry,Window* _pControl);
+        void            setTextCellContext(const OTableFieldDescRef& _rEntry,const String& _sText,ULONG _nHelpId);
+        void            invalidateUndoRedo();
+        OTableFieldDescRef getEntry(OTableFields::size_type _nPos);
     };
 }
 #endif // DBAUI_QUERYDESIGN_OSELECTIONBROWSEBOX_HXX

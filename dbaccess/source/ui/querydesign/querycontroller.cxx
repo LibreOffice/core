@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-02 08:30:19 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,17 +298,18 @@ void OQueryController::disposing()
     delete m_pSqlParser;
     delete m_pParseContext;
 
-    {
-        ::std::vector< OTableFieldDesc*>::iterator aIter = m_vTableFieldDesc.begin();
-        for(;aIter != m_vTableFieldDesc.end();++aIter)
-            delete *aIter;
-        m_vTableFieldDesc.clear();
-    }
+    clearFields();
+    OTableFields().swap(m_vUnUsedFieldsDesc);
 
     m_pView     = NULL;
 
     ::comphelper::disposeComponent(m_xComposer);
     OJoinController::disposing();
+}
+// -----------------------------------------------------------------------------
+void OQueryController::clearFields()
+{
+    OTableFields().swap(m_vTableFieldDesc);
 }
 // -----------------------------------------------------------------------------
 FeatureState OQueryController::GetState(sal_uInt16 _nId)
@@ -327,10 +328,10 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
             aReturn.aState = ::cppu::bool2any(m_bEditable);
             break;
         case ID_BROWSER_SAVEASDOC:
-            aReturn.bEnabled = !m_bCreateView && (!m_bDesign || (m_vTableFieldDesc.size() && m_vTableData.size()));
+            aReturn.bEnabled = !m_bCreateView && (!m_bDesign || !(m_vTableFieldDesc.empty() || m_vTableData.empty()));
             break;
         case ID_BROWSER_SAVEDOC:
-            aReturn.bEnabled = m_bModified && (!m_bDesign || (m_vTableFieldDesc.size() && m_vTableData.size()));
+            aReturn.bEnabled = m_bModified && (!m_bDesign || !(m_vTableFieldDesc.empty() || m_vTableData.empty()));
             break;
         case SID_PRINTDOCDIRECT:
             break;
@@ -348,7 +349,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
             aReturn.aState = ::cppu::bool2any(m_bDesign);
             break;
         case ID_BROWSER_CLEAR_QUERY:
-            aReturn.bEnabled = m_bEditable && (m_sStatement.getLength() || m_vTableData.size());
+            aReturn.bEnabled = m_bEditable && (m_sStatement.getLength() || !m_vTableData.empty());
             break;
         case ID_BROWSER_QUERY_VIEW_FUNCTIONS:
         case ID_BROWSER_QUERY_VIEW_TABLES:
@@ -751,7 +752,7 @@ OJoinDesignView* OQueryController::getJoinView()
 sal_Bool SAL_CALL OQueryController::suspend(sal_Bool bSuspend) throw( RuntimeException )
 {
     sal_Bool bRet = sal_True;
-    if(isConnected() && m_bModified && (!m_bDesign || (m_vTableFieldDesc.size() && m_vTableData.size())))
+    if(isConnected() && m_bModified && (!m_bDesign || !(m_vTableFieldDesc.empty() || m_vTableData.empty())))
     {
         QueryBox aQry(getView(), ModuleRes(m_bCreateView ? QUERY_VIEW_DESIGN_SAVEMODIFIED : QUERY_DESIGN_SAVEMODIFIED));
         switch (aQry.Execute())
@@ -856,7 +857,7 @@ void OQueryController::Save(const Reference< XObjectOutputStream>& _rxOut)
 
     // the fielddata
     _rxOut << (sal_Int32)m_vTableFieldDesc.size();
-    ::std::vector<OTableFieldDesc*>::const_iterator aFieldIter = m_vTableFieldDesc.begin();
+    OTableFields::const_iterator aFieldIter = m_vTableFieldDesc.begin();
     for(;aFieldIter != m_vTableFieldDesc.end();++aFieldIter)
     {
         if(!(*aFieldIter)->IsEmpty())
@@ -876,16 +877,13 @@ void OQueryController::Load(const Reference< XObjectInputStream>& _rxIn)
 
         //////////////////////////////////////////////////////////////////////
         // Liste loeschen
-        ::std::vector< OTableFieldDesc*>::iterator aFieldIter = m_vTableFieldDesc.begin();
-        for(;aFieldIter != m_vTableFieldDesc.end();++aFieldIter)
-            delete *aFieldIter;
-        m_vTableFieldDesc.clear();
+        OTableFields().swap(m_vTableFieldDesc);
 
         sal_Int32 nCount = 0;
         _rxIn >> nCount;
         for(sal_Int32 j=0;j<nCount;++j)
         {
-            OTableFieldDesc* pData = new OTableFieldDesc();
+            OTableFieldDescRef pData = new OTableFieldDesc();
             pData->Load(_rxIn);
             m_vTableFieldDesc.push_back(pData);
         }
@@ -1011,16 +1009,6 @@ void OQueryController::executeQuery()
             OSL_ENSURE(0,"Couldn't create a beamer window!");
         }
     }
-//  else
-//  {
-//      sal_Bool bAllEmpty = sal_True;
-//      ::std::vector< OTableFieldDesc*>::const_iterator aIter = m_vTableFieldDesc.begin();
-//      for(;bAllEmpty && aIter != m_vTableFieldDesc.end();++aIter)
-//          bAllEmpty = (*aIter)->IsEmpty();
-//
-//      ErrorBox aBox(getView(), ModuleRes(bAllEmpty ? ERR_QRY_NOCRITERIA : ERR_QRY_NOSTATEMENT));
-//      aBox.Execute();
-//  }
 }
 // -----------------------------------------------------------------------------
 String OQueryController::getMenu() const

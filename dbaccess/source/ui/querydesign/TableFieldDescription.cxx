@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldDescription.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:21:47 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,11 +113,11 @@ OTableFieldDesc::OTableFieldDesc(const OTableFieldDesc& rRS)
         m_eFieldType(rRS.GetFieldType()),
         m_nIndex(rRS.GetFieldIndex()),
         m_eFunctionType( rRS.GetFunctionType() ),
-        m_bGroupBy(rRS.IsGroupBy())
+        m_bGroupBy(rRS.IsGroupBy()),
+        m_vecCriteria( rRS.m_vecCriteria)
 
 {
     DBG_CTOR(OTableFieldDesc,NULL);
-    m_vecCriteria = rRS.GetCriteria();
 }
 
 //------------------------------------------------------------------------------
@@ -204,6 +204,7 @@ sal_Bool OTableFieldDesc::IsNumericDataType() const
         case DataType::INTEGER:
         case DataType::REAL:
         case DataType::DOUBLE:
+        case DataType::BIGINT:
         case DataType::DECIMAL:
         case DataType::NUMERIC:
             bErg = sal_True;

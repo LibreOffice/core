@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableWindow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 14:22:47 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,23 +335,22 @@ void OQueryTableWindow::OnEntryDoubleClicked(SvLBoxEntry* pEntry)
     DBG_ASSERT(pInf != NULL, "OQueryTableWindow::OnEntryDoubleClicked : Feld hat keine FieldInfo !");
 
     // eine DragInfo aufbauen
-    OTableFieldDesc aInfo;
-    aInfo.SetTabWindow(this);
-    aInfo.SetField(m_pListBox->GetEntryText(pEntry));
-    aInfo.SetTable(GetTableName());
-    aInfo.SetAlias(GetAliasName());
-    aInfo.SetDatabase(GetComposedName());
-    aInfo.SetFieldIndex(m_pListBox->GetModel()->GetAbsPos(pEntry));
-    aInfo.SetDataType(pInf->GetDataType());
+    OTableFieldDescRef aInfo = new OTableFieldDesc(GetTableName(),m_pListBox->GetEntryText(pEntry));
+    aInfo->SetTabWindow(this);
+    aInfo->SetAlias(GetAliasName());
+    aInfo->SetDatabase(GetComposedName());
+    aInfo->SetFieldIndex(m_pListBox->GetModel()->GetAbsPos(pEntry));
+    aInfo->SetDataType(pInf->GetDataType());
 
     // und das entsprechende Feld einfuegen
     static_cast<OQueryTableView*>(getTableView())->InsertField(aInfo);
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OQueryTableWindow::ExistsField(const ::rtl::OUString& strFieldName, OTableFieldDesc& rInfo)
+sal_Bool OQueryTableWindow::ExistsField(const ::rtl::OUString& strFieldName, OTableFieldDescRef& rInfo)
 {
     DBG_ASSERT(m_pListBox != NULL, "OQueryTableWindow::ExistsField : habe keine ::com::sun::star::form::ListBox !");
+    OSL_ENSURE(rInfo.isValid(),"OQueryTableWindow::ExistsField: invlid argument for OTableFieldDescRef!");
     Reference< XConnection> xConnection = getTableView()->getDesignView()->getController()->getConnection();
     sal_Bool bExists = sal_False;
     if(xConnection.is())
@@ -366,13 +365,13 @@ sal_Bool OQueryTableWindow::ExistsField(const ::rtl::OUString& strFieldName, OTa
                 OTableFieldInfo* pInf = static_cast<OTableFieldInfo*>(pEntry->GetUserData());
                 DBG_ASSERT(pInf != NULL, "OQueryTableWindow::ExistsField : Feld hat keine FieldInfo !");
 
-                rInfo.SetTabWindow(this);
-                rInfo.SetField(strFieldName);
-                rInfo.SetTable(GetTableName());
-                rInfo.SetAlias(GetAliasName());
-                rInfo.SetDatabase(GetComposedName());
-                rInfo.SetFieldIndex(m_pListBox->GetModel()->GetAbsPos(pEntry));
-                rInfo.SetDataType(pInf->GetDataType());
+                rInfo->SetTabWindow(this);
+                rInfo->SetField(strFieldName);
+                rInfo->SetTable(GetTableName());
+                rInfo->SetAlias(GetAliasName());
+                rInfo->SetDatabase(GetComposedName());
+                rInfo->SetFieldIndex(m_pListBox->GetModel()->GetAbsPos(pEntry));
+                rInfo->SetDataType(pInf->GetDataType());
                 bExists = sal_True;
                 break;
             }

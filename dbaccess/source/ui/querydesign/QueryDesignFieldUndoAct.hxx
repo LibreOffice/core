@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignFieldUndoAct.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-20 08:13:25 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,14 +137,14 @@ namespace dbaui
     class OTabFieldUndoAct : public OQueryDesignFieldUndoAct
     {
     protected:
-        OTableFieldDesc*            pDescr;     // geloeschte Spaltenbeschreibung
+        OTableFieldDescRef      pDescr;     // geloeschte Spaltenbeschreibung
         BOOL                    m_bOwnerOfDescription;
 
     public:
         OTabFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, USHORT nCommentID) : OQueryDesignFieldUndoAct(pSelBrwBox, nCommentID) { }
-        virtual ~OTabFieldUndoAct() { if (m_bOwnerOfDescription) delete pDescr; }
+        virtual ~OTabFieldUndoAct() { pDescr = NULL; }
 
-        void SetTabFieldDescr(OTableFieldDesc* pDescription) { pDescr = pDescription; }
+        void SetTabFieldDescr(OTableFieldDescRef pDescription) { pDescr = pDescription; }
             // anschliessend bitte SetOwnership
         void SetOwnership(BOOL bTakeIt) { m_bOwnerOfDescription = bTakeIt; }
     };
