@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-02 14:36:42 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 10:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,8 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
 // -----------------------------------------------------------------------
 
 VirtualDevice::VirtualDevice( USHORT nBitCount )
-    : mpVirDev( NULL )
+:   mpVirDev( NULL ),
+    meRefDevMode( REFDEV_NONE )
 {
     DBG_TRACE1( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
 
@@ -280,7 +281,8 @@ VirtualDevice::VirtualDevice( USHORT nBitCount )
 // -----------------------------------------------------------------------
 
 VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, USHORT nBitCount )
-    : mpVirDev( NULL )
+    : mpVirDev( NULL ),
+    meRefDevMode( REFDEV_NONE )
 {
     DBG_TRACE1( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
 
@@ -458,12 +460,39 @@ BOOL VirtualDevice::SetOutputSizePixel( const Size& rNewSize, BOOL bErase )
 #endif
 }
 
-void VirtualDevice::SetReferenceDevice()
+// -----------------------------------------------------------------------
+
+void VirtualDevice::SetReferenceDevice( RefDevMode eRefDevMode )
 {
-    // reference device has 600dpi
-    mnDPIX = 600;
-    mnDPIY = 600;
+    switch( eRefDevMode )
+    {
+    case REFDEV_NONE:
+    default:
+        DBG_ASSERT( FALSE, "VDev::SetRefDev illegal argument!" );
+        // fall through
+    case REFDEV_MODE06:
+        mnDPIX = mnDPIY = 600;
+        break;
+    case REFDEV_MODE48:
+        mnDPIX = mnDPIY = 4800;
+        break;
+    case REFDEV_MODE96:
+        mnDPIX = mnDPIY = 9600;
+        break;
+    }
+
+    EnableOutput( FALSE );  // prevent output on reference device
     mbScreenComp = FALSE;
+
+    // invalidate currently selected fonts
+    mbInitFont = TRUE;
+    mbNewFont = TRUE;
+
+    // avoid adjusting font lists when already in refdev mode
+    BYTE nOldRefDevMode = meRefDevMode;
+    meRefDevMode = (BYTE)eRefDevMode;
+    if( nOldRefDevMode != REFDEV_NONE )
+        return;
 
     // the reference device should have only scalable fonts
     // => clean up the original font lists before getting new ones
@@ -506,13 +535,10 @@ void VirtualDevice::SetReferenceDevice()
             pScalableDevFonts->Add( pNewData );
         }
     }
-    mpFontList = pScalableDevFonts;
 
     // prepare to use new font lists
+    mpFontList = pScalableDevFonts;
     mpFontCache = new ImplFontCache( FALSE );
-    mbInitFont = TRUE;
-    mbNewFont = TRUE;
-
-    // TODO: increase maFont's size accordingly?
 }
 
+// -----------------------------------------------------------------------
