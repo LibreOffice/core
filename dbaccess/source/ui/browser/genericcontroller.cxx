@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:36:44 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,7 +597,7 @@ void OGenericUnoController::addStatusListener(const Reference< ::com::sun::star:
     // remeber the listener together with the ::com::sun::star::util::URL
     m_arrStatusListener.insert(m_arrStatusListener.end(), DispatchTarget(_rURL, aListener));
     // initially broadcast the state
-    InvalidateFeature(_rURL.Complete, aListener, sal_True);
+    ImplBroadcastFeatureState(_rURL.Complete, aListener, sal_True);
         // force the new state to be broadcasted to the new listener
 }
 
