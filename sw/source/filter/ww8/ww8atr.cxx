@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:41:59 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,6 +349,9 @@
 #endif
 #ifndef _WW8PAR_HXX
 #include "ww8par.hxx"
+#endif
+#ifndef WW_FIELDS_HXX
+#include "fields.hxx"
 #endif
 
 #ifndef _SV_OUTDEV_HXX
@@ -1075,6 +1078,7 @@ static Writer& OutWW8_SwCaseMap( Writer& rWrt, const SfxPoolItem& rHt )
             OutWW8_SwBoldUSW(rWrt, 5, false);
             return OutWW8_SwBoldUSW(rWrt, 6, false);
     }
+    return rWrt;
 }
 
 static Writer& OutWW8_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
@@ -1436,20 +1440,18 @@ static Writer& OutWW8_SwFmtCharBackground( Writer& rWrt, const SfxPoolItem& rHt 
         const SvxBrushItem& rBack = (const SvxBrushItem&)rHt;
         WW8_SHD aSHD;
 
-        if( rWW8Wrt.TransBrush( rBack.GetColor(), aSHD ) )
-        {
-            // sprmCShd
-            rWW8Wrt.InsUInt16( 0x4866 );
-            rWW8Wrt.InsUInt16( aSHD.GetValue() );
+        rWW8Wrt.TransBrush(rBack.GetColor(), aSHD);
+        // sprmCShd
+        rWW8Wrt.InsUInt16( 0x4866 );
+        rWW8Wrt.InsUInt16( aSHD.GetValue() );
 
-            //Quite a few unknowns, some might be transparency or something
-            //of that nature...
-            rWW8Wrt.InsUInt16(0xCA71);
-            rWW8Wrt.pO->Insert(10, rWW8Wrt.pO->Count());
-            rWW8Wrt.InsUInt32(0xFF000000);
-            rWW8Wrt.InsUInt32(wwUtility::RGBToBGR(rBack.GetColor().GetColor()));
-            rWW8Wrt.InsUInt16(0x0000);
-        }
+        //Quite a few unknowns, some might be transparency or something
+        //of that nature...
+        rWW8Wrt.InsUInt16(0xCA71);
+        rWW8Wrt.pO->Insert(10, rWW8Wrt.pO->Count());
+        rWW8Wrt.InsUInt32(0xFF000000);
+        rWW8Wrt.InsUInt32(wwUtility::RGBToBGR(rBack.GetColor().GetColor()));
+        rWW8Wrt.InsUInt16(0x0000);
     }
     return rWrt;
 }
@@ -1486,20 +1488,15 @@ static Writer& OutSwFmtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
 static void InsertSpecialChar( SwWW8Writer& rWrt, BYTE c )
 {
     WW8Bytes aItems;
-    if( rWrt.pChpIter )
-        rWrt.pChpIter->GetItems( aItems );
+    rWrt.GetCurrentItems(aItems);
 
-    if( 0x13 == c )
-        rWrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell() );
+    if (c == 0x13)
+        rWrt.pChpPlc->AppendFkpEntry(rWrt.Strm().Tell());
     else
-        rWrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(), aItems.Count(),
-                                    aItems.GetData() );
+        rWrt.pChpPlc->AppendFkpEntry(rWrt.Strm().Tell(), aItems.Count(),
+            aItems.GetData());
 
-    // at end the attributes writes by the Textnode
-    if( 0x15 == c )
-        aItems.Remove( 0, aItems.Count() );
-
-    rWrt.WriteChar( c );
+    rWrt.WriteChar(c);
 
     // fSpec-Attribut true
     if( rWrt.bWrtWW8 )
@@ -1508,12 +1505,11 @@ static void InsertSpecialChar( SwWW8Writer& rWrt, BYTE c )
         aItems.Insert( 117, aItems.Count() );
     aItems.Insert( 1, aItems.Count() );
 
-    rWrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(), aItems.Count(),
-                                    aItems.GetData() );
+    rWrt.pChpPlc->AppendFkpEntry(rWrt.Strm().Tell(), aItems.Count(),
+        aItems.GetData());
 }
 
-
-void SwWW8Writer::OutField(const SwField* pFld, BYTE nFldType,
+void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
     const String& rFldCmd, BYTE nMode)
 {
     BYTE aFld13[2] = { 0x13, 0x00 };  // will change
@@ -1522,7 +1518,7 @@ void SwWW8Writer::OutField(const SwField* pFld, BYTE nFldType,
 
     bool bUnicode = IsUnicode();
     WW8_WrPlcFld* pFldP;
-    switch ( nTxtTyp )
+    switch (nTxtTyp)
     {
         case TXT_MAINTEXT:
             pFldP = pFldMain;
@@ -1549,7 +1545,7 @@ void SwWW8Writer::OutField(const SwField* pFld, BYTE nFldType,
 
     if (WRITEFIELD_START & nMode)
     {
-        aFld13[1] = nFldType;                           // Typ nachtragen
+        aFld13[1] = eFldType;                           // Typ nachtragen
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld13 );
         InsertSpecialChar( *this, 0x13 );
     }
@@ -1595,21 +1591,21 @@ void SwWW8Writer::OutField(const SwField* pFld, BYTE nFldType,
 
 void SwWW8Writer::StartCommentOutput(const String& rName)
 {
-    String sStr( CREATE_CONST_ASC( " ANGEBEN [" ));
+    String sStr(FieldString(ww::eQUOTE));
+    sStr.APPEND_CONST_ASC("[");
     sStr += rName;
-    sStr.APPEND_CONST_ASC( "] " );
-    OutField( 0, 35, sStr, WRITEFIELD_START | WRITEFIELD_CMD_START );
+    sStr.APPEND_CONST_ASC("] ");
+    OutField(0, ww::eQUOTE, sStr, WRITEFIELD_START | WRITEFIELD_CMD_START);
 }
 
 void SwWW8Writer::EndCommentOutput(const String& rName)
 {
-    String sStr( CREATE_CONST_ASC( " [" ));
+    String sStr(CREATE_CONST_ASC(" ["));
     sStr += rName;
-    sStr.APPEND_CONST_ASC(  "] " );
-    OutField( 0, 35, sStr, WRITEFIELD_CMD_END | WRITEFIELD_END |
-        WRITEFIELD_CLOSE );
+    sStr.APPEND_CONST_ASC("] ");
+    OutField(0, ww::eQUOTE, sStr, WRITEFIELD_CMD_END | WRITEFIELD_END |
+        WRITEFIELD_CLOSE);
 }
-
 
 USHORT SwWW8Writer::GetId( const SwTOXType& rTOXType )
 {
@@ -1667,69 +1663,64 @@ int lcl_CheckForm( const SwForm& rForm, BYTE nLvl, String& rText )
 
 void SwWW8Writer::StartTOX( const SwSection& rSect )
 {
-    const SwTOXBase* pTOX = rSect.GetTOXBase();
-    if( pTOX )
+    if (const SwTOXBase* pTOX = rSect.GetTOXBase())
     {
-        static const sal_Char sContent[] = " VERZEICHNIS \\w \\x ";
-        static const sal_Char sIndex[] = " INDEX ";
         static const sal_Char sEntryEnd[] = "\" ";
 
-        BYTE nCode = 13;
+        ww::eField eCode = ww::eTOC;
         String sStr;
-        switch( pTOX->GetType() )
+        switch (pTOX->GetType())
         {
         case TOX_INDEX:
+            eCode = ww::eINDEX;
+            sStr = FieldString(eCode);
+
+            if (pTOX->GetTOXForm().IsCommaSeparated())
+                sStr.APPEND_CONST_ASC("\\r ");
+
+            if (TOI_ALPHA_DELIMITTER & pTOX->GetOptions())
+                sStr.APPEND_CONST_ASC("\\h \"A\" ");
+
             {
-                nCode = 8;
-                sStr.AssignAscii( sIndex );
-
-                if( pTOX->GetTOXForm().IsCommaSeparated() )
-                    sStr.APPEND_CONST_ASC( "\\r " );
-
-                if( TOI_ALPHA_DELIMITTER & pTOX->GetOptions() )
-                    sStr.APPEND_CONST_ASC( "\\h \"A\" " );
-
+                String aFillTxt;
+                for (BYTE n = 1; n <= 3; ++n)
                 {
-                    String aFillTxt;
-                    for( BYTE n = 1; n <= 3; ++n )
-                    {
-                        String aTxt;
-                        int nRet = ::lcl_CheckForm(pTOX->GetTOXForm(),n,aTxt);
+                    String aTxt;
+                    int nRet = ::lcl_CheckForm(pTOX->GetTOXForm(), n, aTxt);
 
-                        if( 3 == nRet )
-                            aFillTxt = aTxt;
-                        else if ((4 == nRet) || (2 == nRet)) //#109414#
-                            aFillTxt = '\t';
-                        else
-                            aFillTxt.Erase();
-                    }
-                    sStr.APPEND_CONST_ASC( "\\e \"" );
-                    sStr += aFillTxt;
-                    sStr.AppendAscii( sEntryEnd );
+                    if( 3 == nRet )
+                        aFillTxt = aTxt;
+                    else if ((4 == nRet) || (2 == nRet)) //#109414#
+                        aFillTxt = '\t';
+                    else
+                        aFillTxt.Erase();
                 }
+                sStr.APPEND_CONST_ASC("\\e \"");
+                sStr += aFillTxt;
+                sStr.AppendAscii(sEntryEnd);
             }
             break;
 
-//      case TOX_AUTHORITIES:   nCode = 73; sStr = ???; break;
+//      case TOX_AUTHORITIES:   eCode = eTOA; sStr = ???; break;
 
         case TOX_ILLUSTRATIONS:
         case TOX_OBJECTS:
         case TOX_TABLES:
-            if( !pTOX->IsFromObjectNames() )
+            if (!pTOX->IsFromObjectNames())
             {
-                sStr.AssignAscii( sContent );
+                sStr = FieldString(eCode);
 
-                sStr.APPEND_CONST_ASC( "\\c \"" );
+                sStr.APPEND_CONST_ASC("\\c \"");
                 sStr += pTOX->GetSequenceName();
                 sStr.AppendAscii(sEntryEnd);
 
                 String aTxt;
                 int nRet = ::lcl_CheckForm( pTOX->GetTOXForm(), 1, aTxt );
-                if( 1 == nRet )
-                    sStr.APPEND_CONST_ASC( "\\n " );
+                if (1 == nRet)
+                    sStr.APPEND_CONST_ASC("\\n ");
                 else if( 3 == nRet || 4 == nRet )
                 {
-                    sStr.APPEND_CONST_ASC( "\\p \"" );
+                    sStr.APPEND_CONST_ASC("\\p \"");
                     sStr += aTxt;
                     sStr.AppendAscii(sEntryEnd);
                 }
@@ -1740,7 +1731,7 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
 //      case TOX_CONTENT:
         default:
             {
-                sStr.AssignAscii( sContent );
+                sStr = FieldString(eCode);
 
                 String sTOption;
                 USHORT n, nTOXLvl = pTOX->GetLevel();
@@ -1795,7 +1786,7 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
                         for( n = rColls.Count(); n; )
                             if( MAXLEVEL > (nLvl = ( pColl =
                                     rColls[ --n ] )->GetOutlineLevel() ) &&
-                                  nMinLvl <= nLvl )
+                                nMinLvl <= nLvl )
                             {
                                 if( sTOption.Len() )
                                     sTOption += ';';
@@ -1890,8 +1881,8 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
         if( sStr.Len() )
         {
             bInWriteTOX = true;
-            OutField( 0, nCode, sStr, WRITEFIELD_START | WRITEFIELD_CMD_START |
-                WRITEFIELD_CMD_END );
+            OutField(0, eCode, sStr, WRITEFIELD_START | WRITEFIELD_CMD_START |
+                WRITEFIELD_CMD_END);
         }
     }
     bStartTOX = false;
@@ -1902,8 +1893,8 @@ void SwWW8Writer::EndTOX( const SwSection& rSect )
     const SwTOXBase* pTOX = rSect.GetTOXBase();
     if( pTOX )
     {
-        BYTE nCode = TOX_INDEX == pTOX->GetType() ? 8 : 13;
-        OutField( 0, nCode, aEmptyStr, WRITEFIELD_CLOSE );
+        ww::eField eCode = TOX_INDEX == pTOX->GetType() ? ww::eINDEX : ww::eTOC;
+        OutField(0, eCode, aEmptyStr, WRITEFIELD_CLOSE);
     }
     bInWriteTOX = false;
 }
@@ -2044,82 +2035,102 @@ void SwWW8Writer::WritePostItBegin( WW8Bytes* pOut )
         pChpPlc->AppendFkpEntry( Strm().Tell(), pArr - aArr, aArr );
 }
 
+String FieldString(ww::eField eIndex)
+{
+    String sRet(CREATE_CONST_ASC("  "));
+    if (const char *pField = ww::GetEnglishFieldName(eIndex))
+        sRet.InsertAscii(pField, 1);
+    return sRet;
+}
+
+void OutWW8_RefField(SwWW8Writer& rWW8Wrt, const SwField &rFld,
+    const String &rRef)
+{
+    using namespace ww;
+    String sStr(FieldString(eREF));
+    sStr.APPEND_CONST_ASC("\"");
+    sStr += rRef;
+    sStr.APPEND_CONST_ASC( "\" " );
+    rWW8Wrt.OutField(&rFld, eREF, sStr, WRITEFIELD_START |
+        WRITEFIELD_CMD_START | WRITEFIELD_CMD_END);
+    String sVar = rFld.Expand();
+    if (sVar.Len())
+    {
+        if (rWW8Wrt.IsUnicode())
+            SwWW8Writer::WriteString16(rWW8Wrt.Strm(), sVar, false);
+        else
+        {
+            SwWW8Writer::WriteString8(rWW8Wrt.Strm(), sVar, false,
+                RTL_TEXTENCODING_MS_1252);
+        }
+    }
+    rWW8Wrt.OutField(&rFld, eREF, sStr, WRITEFIELD_CLOSE);
+}
+
 static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
 {
+    using namespace ww;
+
     SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
     const SwFmtFld& rFld = (SwFmtFld&)rHt;
     const SwField* pFld = rFld.GetFld();
     String sStr;        // fuer optionale Parameter
     bool bWriteExpand = false;
     USHORT nSubType = pFld->GetSubType();
-    BYTE nFldTyp = 0;
 
-    switch( pFld->GetTyp()->Which() )
+    switch (pFld->GetTyp()->Which())
     {
-//  case RES_CHAPTERFLD:
-//      break;
     case RES_GETEXPFLD:
         if (nSubType == GSE_STRING)
         {
             const SwGetExpField *pGet=(const SwGetExpField*)(pFld);
-            sStr.ASSIGN_CONST_ASC( " REF \"" );
-            sStr += pGet->GetFormula();
-            sStr.APPEND_CONST_ASC( "\" " );
-            rWW8Wrt.OutField( pFld, 3, sStr,WRITEFIELD_START |
-                WRITEFIELD_CMD_START | WRITEFIELD_CMD_END);
-            String sVar = pFld->Expand();
-            if (sVar.Len())
-            {
-                if (rWW8Wrt.IsUnicode())
-                    SwWW8Writer::WriteString16(rWrt.Strm(), sVar, false);
-                else
-                {
-                    SwWW8Writer::WriteString8(rWrt.Strm(), sVar, false,
-                        RTL_TEXTENCODING_MS_1252);
-                }
-            }
-            rWW8Wrt.OutField( pFld, 3, sStr, WRITEFIELD_CLOSE );
+            OutWW8_RefField(rWW8Wrt, *pGet, pGet->GetFormula());
         }
         else
             bWriteExpand = true;
         break;
     case RES_SETEXPFLD:
-        if( GSE_SEQ == nSubType )
+        if (GSE_SEQ == nSubType)
         {
-            sStr.ASSIGN_CONST_ASC( " SEQ \"" );
+            sStr = FieldString(eSEQ);
+            sStr.APPEND_CONST_ASC("\"");
             sStr += pFld->GetTyp()->GetName();
             sStr.APPEND_CONST_ASC( "\" " );
 
             ::WW8_GetNumberPara( sStr, *pFld );
-            rWW8Wrt.OutField( pFld, 12, sStr );
+            rWW8Wrt.OutField(pFld, eSEQ, sStr);
         }
         else if (nSubType & GSE_STRING)
         {
-            BYTE nFieldNo;
+            bool bShowAsWell = false;
+            ww::eField eFieldNo;
             const SwSetExpField *pSet=(const SwSetExpField*)(pFld);
             const String &rVar = pSet->GetPar2();
             if (pSet->GetInputFlag())
             {
-                sStr.ASSIGN_CONST_ASC( " ASK \"" );
+                sStr = FieldString(eASK);
+                sStr.APPEND_CONST_ASC("\"");
                 sStr += pSet->GetPar1();
                 sStr.APPEND_CONST_ASC( "\" " );
                 sStr += pSet->GetPromptText();
                 sStr.APPEND_CONST_ASC( " \\d " );
                 sStr += rVar;
-                nFieldNo = 38;
+                eFieldNo = eASK;
             }
             else
             {
-                sStr.ASSIGN_CONST_ASC( " SET \"" );
+                sStr = FieldString(eSET);
                 sStr += pSet->GetPar1();
-                sStr.APPEND_CONST_ASC( "\" " );
+                sStr.APPEND_CONST_ASC(" \"");
                 sStr += rVar;
-                nFieldNo = 6;
+                sStr.APPEND_CONST_ASC("\" ");
+                eFieldNo = eSET;
+                bShowAsWell = (nSubType & SUB_INVISIBLE) ? false : true;
             }
 
             ULONG nFrom = rWW8Wrt.Fc2Cp(rWrt.Strm().Tell());
 
-            rWW8Wrt.OutField( pFld, nFieldNo, sStr,WRITEFIELD_START |
+            rWW8Wrt.OutField(pFld, eFieldNo, sStr, WRITEFIELD_START |
                 WRITEFIELD_CMD_START | WRITEFIELD_CMD_END);
 
             /*
@@ -2142,150 +2153,132 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
                         RTL_TEXTENCODING_MS_1252);
                 }
             }
-            rWW8Wrt.OutField( pFld, nFieldNo, sStr, WRITEFIELD_CLOSE );
+            rWW8Wrt.OutField(pFld, eFieldNo, sStr, WRITEFIELD_CLOSE);
+
+            if (bShowAsWell)
+                OutWW8_RefField(rWW8Wrt, *pSet, pSet->GetPar1());
         }
         else
             bWriteExpand = true;
         break;
     case RES_PAGENUMBERFLD:
-        sStr.ASSIGN_CONST_ASC( " SEITE " );
-        ::WW8_GetNumberPara( sStr, *pFld );
-        rWW8Wrt.OutField( pFld, 33, sStr );
+        sStr = FieldString(ePAGE);
+        ::WW8_GetNumberPara(sStr, *pFld);
+        rWW8Wrt.OutField(pFld, ePAGE, sStr);
         break;
-
     case RES_FILENAMEFLD:
-        sStr.ASSIGN_CONST_ASC(" DATEINAME ");
+        sStr = FieldString(eFILENAME);
         if (pFld->GetFormat() == FF_PATHNAME)
             sStr.APPEND_CONST_ASC("\\p ");
-        rWW8Wrt.OutField(pFld, 29, sStr);
+        rWW8Wrt.OutField(pFld, eFILENAME, sStr);
         break;
-
     case RES_DBNAMEFLD:
-    {
-        sStr.ASSIGN_CONST_ASC( "DATENBANK " );          // ok ??
-        SwDBData aData = rWrt.pDoc->GetDBData();
-        sStr += String(aData.sDataSource);
-        sStr += DB_DELIM;
-        sStr += String(aData.sCommand);
-        rWW8Wrt.OutField( pFld, 78, sStr );
-    }
-    break;
-
+        {
+            sStr = FieldString(eDATABASE);
+            SwDBData aData = rWrt.pDoc->GetDBData();
+            sStr += String(aData.sDataSource);
+            sStr += DB_DELIM;
+            sStr += String(aData.sCommand);
+            rWW8Wrt.OutField(pFld, eDATABASE, sStr);
+        }
+        break;
     case RES_AUTHORFLD:
-        rWW8Wrt.OutField( pFld, (AF_SHORTCUT & nSubType ? 61 : 60),
-            CREATE_CONST_ASC( "AUTOR" ));
+        {
+            ww::eField eFld =
+                (AF_SHORTCUT & nSubType ? eUSERINITIALS : eUSERNAME);
+            rWW8Wrt.OutField(pFld, eFld, FieldString(eFld));
+        }
         break;
-
     case RES_TEMPLNAMEFLD:
-        rWW8Wrt.OutField( pFld, 30, CREATE_CONST_ASC("DOKVORLAGE" ));
+        rWW8Wrt.OutField(pFld, eTEMPLATE, FieldString(eTEMPLATE));
         break;
-
     case RES_DOCINFOFLD:    // Last printed, last edited,...
         if( DI_SUB_FIXED & nSubType )
             bWriteExpand = true;
         else
         {
-            static const sal_Char sFld15[] = "TITLE";
-            static const sal_Char sFld16[] = "THEMA";
-            static const sal_Char sFld17[] = "AUTOR ";
-            static const sal_Char sFld18[] = "STICHW\xd6RTER";
-            static const sal_Char sFld19[] = "KOMMENTAR";
-            static const sal_Char sFld20[] = "GESPEICHERTVON";
-            static const sal_Char sFld21[] = "ERSTELLDAT ";
-            static const sal_Char sFld22[] = "SPEICHERDAT ";
-            static const sal_Char sFld23[] = "DRUCKDAT ";
-            static const sal_Char sFld24[] = "\xdc" "BERARBEITUNGSNUMMER";
-
-            static const sal_Char* aFldArr[] =
+            ww::eField eFld(eNONE);
+            switch (0xff & nSubType)
             {
-                sFld15, sFld16, sFld17, sFld18, sFld19, sFld20, sFld21,
-                sFld22, sFld23, sFld24
-            };
+                case DI_TITEL:
+                    eFld = eTITLE;
+                    break;
+                case DI_THEMA:
+                    eFld = eSUBJECT;
+                    break;
+                case DI_KEYS:
+                    eFld = eKEYWORDS;
+                    break;
+                case DI_COMMENT:
+                    eFld = eCOMMENTS;
+                    break;
+                case DI_DOCNO:
+                    eFld = eREVNUM;
+                    break;
+                case DI_CREATE:
+                    if (DI_SUB_AUTHOR == (nSubType & ~DI_SUB_AUTHOR))
+                        eFld = eAUTHOR;
+                    else if (rWW8Wrt.GetNumberFmt(*pFld, sStr))
+                        eFld = eCREATEDATE;
+                    break;
 
-            switch( 0xff & nSubType )
-            {
-            case DI_TITEL:      nFldTyp = 15;   break;
-            case DI_THEMA:      nFldTyp = 16;   break;
-            case DI_KEYS:       nFldTyp = 18;   break;
-            case DI_COMMENT:    nFldTyp = 19;   break;
-            case DI_DOCNO:      nFldTyp = 24;   break;
+                case DI_CHANGE:
+                    if (DI_SUB_AUTHOR == (nSubType & ~DI_SUB_AUTHOR))
+                        eFld = eLASTSAVEDBY;
+                    break;
 
-            case DI_CREATE:
-                if( DI_SUB_AUTHOR == (nSubType & ~DI_SUB_AUTHOR ))
-                    nFldTyp = 17;
-                else if( rWW8Wrt.GetNumberFmt( *pFld, sStr ))
-                    nFldTyp = 21;
-                break;
-
-            case DI_CHANGE:
-                if( DI_SUB_AUTHOR == (nSubType & ~DI_SUB_AUTHOR ))
-                    nFldTyp = 20;
-                break;
-
-            case DI_PRINT:
-                if( DI_SUB_AUTHOR != (nSubType & ~DI_SUB_AUTHOR ) &&
-                    rWW8Wrt.GetNumberFmt( *pFld, sStr ))
-                    nFldTyp = 23;
-                break;
-            case DI_EDIT:
-                if( DI_SUB_AUTHOR != (nSubType & ~DI_SUB_AUTHOR ) &&
-                    rWW8Wrt.GetNumberFmt( *pFld, sStr ))
-                    nFldTyp = 22;
-                break;
+                case DI_PRINT:
+                    if (DI_SUB_AUTHOR != (nSubType & ~DI_SUB_AUTHOR) &&
+                        rWW8Wrt.GetNumberFmt(*pFld, sStr))
+                        eFld = ePRINTDATE;
+                    break;
+                case DI_EDIT:
+                    if( DI_SUB_AUTHOR != (nSubType & ~DI_SUB_AUTHOR ) &&
+                        rWW8Wrt.GetNumberFmt( *pFld, sStr ))
+                        eFld = eSAVEDATE;
+                    break;
             }
 
-            if( nFldTyp )
+            if (eFld != eNONE)
             {
-                sStr.InsertAscii( aFldArr[ nFldTyp - 15 ], 0 );
-                rWW8Wrt.OutField( pFld, nFldTyp, sStr );
+                sStr.Insert(FieldString(eFld), 0);
+                rWW8Wrt.OutField(pFld, eFld, sStr);
             }
             else
                 bWriteExpand = true;
         }
         break;
-
     case RES_DATETIMEFLD:
-        if( FIXEDFLD & nSubType || !rWW8Wrt.GetNumberFmt( *pFld, sStr ) )
+        if (FIXEDFLD & nSubType || !rWW8Wrt.GetNumberFmt(*pFld, sStr))
             bWriteExpand = true;
         else
         {
-            BYTE nTyp;
-            if( DATEFLD & nSubType )
-            {
-                sStr.InsertAscii(" AKTUALDAT ",0);
-                nTyp = 31;
-            }
-            else
-            {
-                sStr.InsertAscii(" ZEIT ",0);
-                nTyp = 32;
-            }
-            rWW8Wrt.OutField( pFld, nTyp, sStr );
+            ww::eField eFld = (DATEFLD & nSubType) ? eDATE : eTIME;
+            rWW8Wrt.OutField(pFld, eFld, FieldString(eFld));
         }
         break;
-
     case RES_DOCSTATFLD:
         {
-            switch( nSubType )
+            ww::eField eFld = eNONE;
+
+            switch (nSubType)
             {
                 case DS_PAGE:
-                    sStr.ASSIGN_CONST_ASC(" ANZSEITEN ");
-                    nFldTyp = 26;
+                    eFld = eNUMPAGE;
                     break;
                 case DS_WORD:
-                    sStr.ASSIGN_CONST_ASC(" ANZW\xd6RTER ");
-                    nFldTyp = 27;
+                    eFld = eNUMWORDS;
                     break;
                 case DS_CHAR:
-                    sStr.ASSIGN_CONST_ASC(" ANZZEICHEN ");
-                    nFldTyp = 28;
+                    eFld = eNUMCHARS;
                     break;
             }
 
-            if( nFldTyp )
+            if (eFld != eNONE)
             {
-                ::WW8_GetNumberPara( sStr, *pFld );
-                rWW8Wrt.OutField( pFld, nFldTyp, sStr );
+                sStr = FieldString(eFld);
+                ::WW8_GetNumberPara(sStr, *pFld);
+                rWW8Wrt.OutField(pFld, eFld, sStr);
             }
             else
                 bWriteExpand = true;
@@ -2293,32 +2286,30 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
         break;
     case RES_EXTUSERFLD:
         {
-            switch( 0xFF & nSubType  )
+            ww::eField eFld = eNONE;
+            switch (0xFF & nSubType)
             {
-            case EU_FIRSTNAME:
-            case EU_NAME:
-                nFldTyp = 60;
-                sStr.ASSIGN_CONST_ASC("BENUTZERNAME");
-                break;
-            case EU_SHORTCUT:
-                nFldTyp = 61;
-                sStr.ASSIGN_CONST_ASC("BENUTZERINITIALEN");
-                break;
-            case EU_STREET:
-            case EU_COUNTRY:
-            case EU_ZIP:
-            case EU_CITY:
-                nFldTyp = 62;
-                sStr.ASSIGN_CONST_ASC("BENUTZERADR");
-                break;
+                case EU_FIRSTNAME:
+                case EU_NAME:
+                    eFld = eUSERNAME;
+                    break;
+                case EU_SHORTCUT:
+                    eFld = eUSERINITIALS;
+                    break;
+                case EU_STREET:
+                case EU_COUNTRY:
+                case EU_ZIP:
+                case EU_CITY:
+                    eFld = eUSERADDRESS;
+                    break;
             }
-            if( nFldTyp )
-                rWW8Wrt.OutField( pFld, nFldTyp, sStr );
+
+            if (eFld != eNONE)
+                rWW8Wrt.OutField(pFld, eFld, sStr);
             else
                 bWriteExpand = true;
         }
         break;
-
     case RES_POSTITFLD:
         //Sadly only possible for word in main document text
         if (rWW8Wrt.nTxtTyp == TXT_MAINTEXT)
@@ -2328,76 +2319,72 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             rWW8Wrt.WritePostItBegin( rWW8Wrt.pO );
         }
         break;
-
     case RES_INPUTFLD:
-        sStr.ASSIGN_CONST_ASC("EINGEBEN \"" );
+        sStr = FieldString(eFILLIN);
+        sStr.ASSIGN_CONST_ASC("\"");
         sStr += pFld->GetPar2();
         sStr += '\"';
-        rWW8Wrt.OutField( pFld, 39, sStr );
+        rWW8Wrt.OutField(pFld, eFILLIN, sStr);
         break;
-
     case RES_GETREFFLD:
         {
-            sStr.ASSIGN_CONST_ASC(" REF ");
+            ww::eField eFld = eNONE;
             const SwGetRefField& rRFld = *(SwGetRefField*)pFld;
-            switch( nSubType )
+            switch (nSubType)
             {
                 case REF_SETREFATTR:
                 case REF_BOOKMARK:
-                    sStr += rWW8Wrt.GetBookmarkName( nSubType,
-                        &rRFld.GetSetRefName(), 0 );
-                    nFldTyp = 3;
-                    break;
-
-                case REF_FOOTNOTE:
-                case REF_ENDNOTE:
-                    sStr += rWW8Wrt.GetBookmarkName( nSubType, 0,
-                        rRFld.GetSeqNo() );
-                    nFldTyp = REF_ENDNOTE == nSubType ? 72 : 5;
-                    switch( pFld->GetFormat() )
+                    switch (pFld->GetFormat())
                     {
                         case REF_PAGE_PGDESC:
                         case REF_PAGE:
-                        case REF_UPDOWN:
+                            eFld = ePAGEREF;
                             break;
                         default:
-                            sStr.InsertAscii( "FUSSENDNOTE", 1 );
+                            eFld = eREF;
                             break;
                     }
+                    sStr = FieldString(eFld);
+                    sStr += rWW8Wrt.GetBookmarkName(nSubType,
+                        &rRFld.GetSetRefName(), 0);
                     break;
-
-    //          case REF_SEQUENCEFLD:   // ???
-    //          case REF_OUTLINE:       // 10
-                // page reference - 37
-                // DDE reference  - 45
-                // DDE automatic reference - 46
+                case REF_FOOTNOTE:
+                case REF_ENDNOTE:
+                    switch (pFld->GetFormat())
+                    {
+                        case REF_PAGE_PGDESC:
+                        case REF_PAGE:
+                            eFld = ePAGEREF;
+                            break;
+                        case REF_UPDOWN:
+                            eFld = eREF;
+                            break;
+                        default:
+                            eFld =
+                                REF_ENDNOTE == nSubType ? eNOTEREF : eFOOTREF;
+                            break;
+                    }
+                    sStr = FieldString(eFld);
+                    sStr += rWW8Wrt.GetBookmarkName(nSubType, 0,
+                        rRFld.GetSeqNo());
+                    break;
             }
 
-            if( nFldTyp )
+            if (eFld != eNONE)
             {
-                switch( pFld->GetFormat() )
+                switch (pFld->GetFormat())
                 {
-                    case REF_PAGE_PGDESC:
-                    case REF_PAGE:
-                        sStr.InsertAscii( "SEITEN", 1 );
-                        nFldTyp = 37;
-                        break;
                     case REF_UPDOWN:
-                        sStr.APPEND_CONST_ASC( " \\p" );
-                        nFldTyp = 3;
+                        sStr.APPEND_CONST_ASC(" \\p");
                         break;
                     case REF_CHAPTER:
-                        sStr.APPEND_CONST_ASC( " \\n" );
+                        sStr.APPEND_CONST_ASC(" \\n");
                         break;
-                    case REF_ONLYNUMBER:
-                    case REF_ONLYCAPTION:
-                    case REF_ONLYSEQNO:
+                    default:
                         break;
-                    // default:
-                    // case REF_CONTENT:
                 }
-                sStr.APPEND_CONST_ASC( " \\h " );       // insert hyperlink
-                rWW8Wrt.OutField( pFld, nFldTyp, sStr );
+                sStr.APPEND_CONST_ASC(" \\h ");       // insert hyperlink
+                rWW8Wrt.OutField(pFld, eFld, sStr);
             }
             else
                 bWriteExpand = true;
@@ -2435,7 +2422,8 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
         down == a fifth the font size
         */
         xub_StrLen nAbove = (pFld->GetPar1().Len()+1)/2;
-        sStr.ASSIGN_CONST_ASC("EQ \\o (\\s\\up ");
+        sStr = FieldString(eEQ);
+        sStr.APPEND_CONST_ASC("\\o (\\s\\up ");
         sStr += String::CreateFromInt32(nHeight/2);
 
         sStr.Append('(');
@@ -2446,14 +2434,15 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
         sStr.Append('(');
         sStr += String(pFld->GetPar1(),nAbove,pFld->GetPar1().Len()-nAbove);
         sStr.APPEND_CONST_ASC("))");
-        rWW8Wrt.OutField( pFld, 49, sStr);
+        rWW8Wrt.OutField(pFld, eEQ, sStr);
         }
         break;
     case RES_DROPDOWN:
         if (rWW8Wrt.bWrtWW8)
         {
             const SwDropDownField& rFld = *(SwDropDownField*)pFld;
-            com::sun::star::uno::Sequence<rtl::OUString> aItems = rFld.GetItemSequence();
+            com::sun::star::uno::Sequence<rtl::OUString> aItems =
+                rFld.GetItemSequence();
             rWW8Wrt.DoComboBox(rFld.GetName(), rFld.GetSelectedItem(), aItems);
         }
         else
@@ -2464,9 +2453,9 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
         break;
     }
 
-    if( bWriteExpand )
+    if (bWriteExpand)
     {
-        if( rWW8Wrt.IsUnicode() )
+        if (rWW8Wrt.IsUnicode())
             SwWW8Writer::WriteString16(rWrt.Strm(), pFld->Expand(), false);
         else
         {
@@ -2680,7 +2669,7 @@ void SwWW8Writer::WriteFtnBegin( const SwFmtFtn& rFtn, WW8Bytes* pOutArr )
             WW8Bytes* pOld = pO;
             pO = &aOutArr;
             SfxItemSet aSet( pDoc->GetAttrPool(), RES_CHRATR_FONT,
-                                                    RES_CHRATR_FONT );
+                                                  RES_CHRATR_FONT );
 
             pCFmt = pInfo->GetCharFmt( *pDoc );
             aSet.Set( pCFmt->GetAttrSet() );
@@ -3125,7 +3114,6 @@ static Writer& OutWW8_SwFmtBreak( Writer& rWrt, const SfxPoolItem& rHt )
                 rWW8Wrt.pSepx->CurrentNoColumns(*rWW8Wrt.pDoc) > 1)
             {
                 nC = 0xe;
-
             }
             break;
 
@@ -3584,26 +3572,24 @@ static Writer& OutWW8_SwFmtBackground( Writer& rWrt, const SfxPoolItem& rHt )
         const SvxBrushItem& rBack = (const SvxBrushItem&)rHt;
         WW8_SHD aSHD;
 
-        if( rWW8Wrt.TransBrush( rBack.GetColor(), aSHD ) )
-        {
-            // sprmPShd
-            if (rWW8Wrt.bWrtWW8)
-                rWW8Wrt.InsUInt16(0x442D);
-            else
-                rWW8Wrt.pO->Insert(47, rWW8Wrt.pO->Count());
-            rWW8Wrt.InsUInt16( aSHD.GetValue() );
+        rWW8Wrt.TransBrush(rBack.GetColor(), aSHD);
+        // sprmPShd
+        if (rWW8Wrt.bWrtWW8)
+            rWW8Wrt.InsUInt16(0x442D);
+        else
+            rWW8Wrt.pO->Insert(47, rWW8Wrt.pO->Count());
+        rWW8Wrt.InsUInt16( aSHD.GetValue() );
 
-            //Quite a few unknowns, some might be transparency or something
-            //of that nature...
-            if (rWW8Wrt.bWrtWW8)
-            {
-                rWW8Wrt.InsUInt16(0xC64D);
-                rWW8Wrt.pO->Insert(10, rWW8Wrt.pO->Count());
-                rWW8Wrt.InsUInt32(0xFF000000);
-                rWW8Wrt.InsUInt32(wwUtility::RGBToBGR(
-                    rBack.GetColor().GetColor()));
-                rWW8Wrt.InsUInt16(0x0000);
-            }
+        //Quite a few unknowns, some might be transparency or something
+        //of that nature...
+        if (rWW8Wrt.bWrtWW8)
+        {
+            rWW8Wrt.InsUInt16(0xC64D);
+            rWW8Wrt.pO->Insert(10, rWW8Wrt.pO->Count());
+            rWW8Wrt.InsUInt32(0xFF000000);
+            rWW8Wrt.InsUInt32(wwUtility::RGBToBGR(
+                rBack.GetColor().GetColor()));
+            rWW8Wrt.InsUInt16(0x0000);
         }
     }
     return rWrt;
@@ -3612,9 +3598,9 @@ static Writer& OutWW8_SwFmtBackground( Writer& rWrt, const SfxPoolItem& rHt )
 WW8_BRC SwWW8Writer::TranslateBorderLine(const SvxBorderLine& rLine,
     USHORT nDist, bool bShadow)
 {
-    // M.M. This function writes out border lines to the word format similar to what
-    // SwRTFWriter::OutRTFBorder does in the RTF filter
-    // Eventually it would be nice if all this functionality was in the one place
+    // M.M. This function writes out border lines to the word format similar to
+    // what SwRTFWriter::OutRTFBorder does in the RTF filter Eventually it
+    // would be nice if all this functionality was in the one place
     WW8_BRC aBrc;
     UINT16 nWidth = rLine.GetInWidth() + rLine.GetOutWidth();
     BYTE brcType = 0, nColCode = 0;
@@ -3822,13 +3808,13 @@ static Writer& OutWW8_SwFmtCol( Writer& rWrt, const SfxPoolItem& rHt )
     SwWW8Writer& rWW8Wrt = ((SwWW8Writer&)rWrt);
 
     USHORT nCols = rColumns.Count();
-    if( 1 < nCols
-        && !rWW8Wrt.bOutFlyFrmAttrs )       // mehrspaltige Rahmen kann WW nicht
+    if (1 < nCols && !rWW8Wrt.bOutFlyFrmAttrs)
     {
         // dann besorge mal die Seitenbreite ohne Raender !!
+
         SwTwips nLeft, nRight, nPageSize;
         nPageSize = rWW8Wrt.CurrentPageWidth(nLeft, nRight);
-        nPageSize += (nLeft + nRight);
+        nPageSize -= (nLeft + nRight);
 
         // CColumns
         if( rWW8Wrt.bWrtWW8 )
@@ -4111,7 +4097,7 @@ static Writer& OutWW8_SvxFrameDirection( Writer& rWrt, const SfxPoolItem& rHt )
     if (!rWrtWW8.bWrtWW8)   //8+ only
         return rWrt;
 
-      const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&)rHt;
+    const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&)rHt;
     UINT16 nTextFlow=0;
     bool bBiDi = false;
     short nDir = rItem.GetValue();
