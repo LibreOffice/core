@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-12 10:54:45 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 16:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2260,7 +2260,7 @@ Resource RID_ERRHDL
         Text[ chinese_simplified ] = "ÊéÇ©ÎÄ¼ş¼ĞÎŞĞ§";
         Text[ russian ] = "Íåïğàâèëüíàÿ ïàïêà çàêëàäîê";
         Text[ polish ] = "Folder z zak³adkami jest nieprawid³owy";
-        Text[ japanese ] = "ÌŞ¯¸Ï°¸ Ì«ÙÀŞ‚Í–³Œø‚Å‚·";
+        Text[ japanese ] = "ÌŞ¯¸Ï°¸Ì«ÙÀŞ‚Í–³Œø‚Å‚·";
         Text[ chinese_traditional ] = "®ÑÅÒ¸ê®Æ§¨µL®Ä";
         Text[ arabic ] = "ãÌáÏ ÇáÅÔÇÑÇÊ ÇáãÑÌÚíÉ ÛíÑ ÕÇáÍ";
         Text[ dutch ] = "De bookmark-ordner is ongeldig";
@@ -2412,7 +2412,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Âîññòàíîâèòü çàïèñü íåâîçìîæíî";
         Text[ polish ] = "Wpis nie móg³ zostaæ przywrócony";
         Text[ japanese ] = "€–Ú‚Í•œŒ³‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
-        Text[ chinese_traditional ] = "µLªk­×´_³o­Ó¶µ¥Ø";
+        Text[ chinese_traditional ] = "µLªk­×´_³o­Ó±ø¥Ø";
         Text[ arabic ] = "ÊÚĞÑÊ ÚãáíÉ ÇÓÊÚÇÏÉ ÇáÅÏÎÇá";
         Text[ dutch ] = "Het item kon niet worden hersteld";
         Text[ chinese_simplified ] = "ÎŞ·¨ĞŞ¸´Õâ¸öÌõÄ¿";
@@ -2611,7 +2611,7 @@ Resource RID_ERRHDL
     Text[ chinese_simplified ] = "Èç¹ûÒª°²×°ÆµµÀ£¬Äú¾ÍĞèÒªÏÈ´´½¨Ò»¸ö¶©ÔÄÎÄ¼ş¼Ğ¡£";
         Text[ russian ] = "Äëÿ èíñòàëëÿöèè Channel íåîáõîäèìà ïàïêà ïîäïèñêè.";
         Text[ polish ] = "Instalacja kana³u wymaga utworzenia folderu subkrypcji.";
-        Text[ japanese ] = "Á¬İÈÙ‚ğ²İ½Ä°Ù‚·‚éê‡‚Íw“ÇÌ«ÙÀŞ‚ª•K—v‚Å‚·B";
+        Text[ japanese ] = "Á¬İÈÙ‚ğ²İ½Ä°Ù‚·‚é‚É‚Íw“ÇÌ«ÙÀŞ‚ª•K—v‚Å‚·B";
         Text[ chinese_traditional ] = "¦pªG­n¦w¸ËÀW¹D¡M±z´N»İ­n«Ø¥ß¤@­Ó­q¾\\¸ê®Æ§¨";
         Text[ arabic ] = "áßí ÊÊãßä ãä ÊËÈíÊ ŞäÇÉ ÃäÊ ÈÍÇÌÉ Åáì ãÌáÏ ÇÔÊÑÇßÇÊ.";
         Text[ dutch ] = "Om een channel te installeren heeft u een abonnementenmap nodig.";
@@ -2763,7 +2763,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Íåâîçìîæíàÿ ôóíêöèÿ: óñòàíîâëåíà çàùèòà îò çàïèñè.";
         Text[ polish ] = "Wykonanie funkcji niemo¿liwe: Tylko do odczytu.";
         Text[ japanese ] = "‹@”\\•s‰Â”\\F‘‚«‚İ•ÛŒìB";
-        Text[ chinese_traditional ] = "µLªk°õ¦æ¥\\¯à¡G¨¾ÂĞ¼g";
+        Text[ chinese_traditional ] = "µLªk°õ¦æ¥\\¯à¡G°ßÅª";
         Text[ arabic ] = "åĞå ÇáãåãÉ ÛíÑ ããßäÉ: ãÍãí ÖÏ ÇáßÊÇÈÉ.";
         Text[ dutch ] = "Functie niet mogelijk: schrijfbeveiligd.";
         Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞ¹¦ÄÜ£º·À¸²Ğ´¡£";
