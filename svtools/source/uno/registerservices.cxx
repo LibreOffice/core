@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-28 11:57:33 $
+ *  last change: $Author: rt $ $Date: 2001-07-26 14:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@
 #include <osl/mutex.hxx>
 #endif
 
-#include <unoifac3.hxx>
 #include <unoiface.hxx>
 #include <imgprod.hxx>
 #include <filepicker.hxx>
