@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:23:48 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,13 +297,12 @@ namespace pcr
     #define PROPERTY_ID_SHOW_RECORDACTIONS   138
     #define PROPERTY_ID_SHOW_FILTERSORT      139
     #define PROPERTY_ID_TEXTTYPE             140
-    #define PROPERTY_ID_AUTOLINEBREAK        141
-    #define PROPERTY_ID_LINEEND_FORMAT       142
-    #define PROPERTY_ID_TOGGLE               143
-    #define PROPERTY_ID_FOCUSONCLICK         144
-    #define PROPERTY_ID_HIDEINACTIVESELECTION 145
-    #define PROPERTY_ID_VISUALEFFECT         146
-    #define PROPERTY_ID_BORDERCOLOR          147
+    #define PROPERTY_ID_LINEEND_FORMAT       141
+    #define PROPERTY_ID_TOGGLE               142
+    #define PROPERTY_ID_FOCUSONCLICK         143
+    #define PROPERTY_ID_HIDEINACTIVESELECTION 144
+    #define PROPERTY_ID_VISUALEFFECT         145
+    #define PROPERTY_ID_BORDERCOLOR          146
 
 //............................................................................
 } // namespace pcr
