@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ip_ce.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:10:46 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:26:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,8 @@ class CePilot
     Struct &            Store_Struct(
                             Ce_id               i_nOwner,
                             const String &      i_sName,
-                            Type_id             i_nBase );
+                            Type_id             i_nBase,
+                            const String &      i_sTemplateParam = String::Null_() );
     Exception &         Store_Exception(
                             Ce_id               i_nOwner,
                             const String &      i_sName,
@@ -239,7 +240,8 @@ class CePilot
     virtual Struct &    do_Store_Struct(
                             Ce_id               i_nOwner,
                             const String &      i_sName,
-                            Type_id             i_nBase ) = 0;
+                            Type_id             i_nBase,
+                            const String &      i_sTemplateParam ) = 0;
     virtual Exception & do_Store_Exception(
                             Ce_id               i_nOwner,
                             const String &      i_sName,
@@ -359,8 +361,9 @@ CePilot::Store_Interface(   Ce_id               i_nOwner,
 inline Struct &
 CePilot::Store_Struct(      Ce_id               i_nOwner,
                             const String &      i_sName,
-                            Type_id             i_nBase )
-    { return do_Store_Struct(i_nOwner,i_sName,i_nBase); }
+                            Type_id             i_nBase,
+                            const String &      i_sTemplateParam )
+    { return do_Store_Struct(i_nOwner,i_sName,i_nBase,i_sTemplateParam); }
 
 inline Exception &
 CePilot::Store_Exception(   Ce_id               i_nOwner,
