@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtutf8.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:47:16 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 17:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ static struct ImplUtf8ToUnicodeContext
 
 static struct ImplUnicodeToUtf8Context
 {
-    sal_Unicode nHighSurrogate; // 0xFFFF: write BOM
+    sal_Unicode nHighSurrogate; /* 0xFFFF: write BOM */
 };
 
 void * ImplCreateUtf8ToUnicodeContext(void)
@@ -101,11 +101,13 @@ sal_Size ImplConvertUtf8ToUnicode(ImplTextConverterData const * pData,
                                   sal_Size nDestChars, sal_uInt32 nFlags,
                                   sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes)
 {
-    // This function is very liberal with the UTF-8 input.  Accepted are:
-    // - non-shortest forms (e.g., C0 41 instead of 41 to represent U+0041)
-    // - surrogates (e.g., ED A0 80 to represent U+D800)
-    // - encodings with up to six bytes (everything outside the range
-    //   U+0000..10FFFF is considered "undefined")
+    /*
+       This function is very liberal with the UTF-8 input.  Accepted are:
+       - non-shortest forms (e.g., C0 41 instead of 41 to represent U+0041)
+       - surrogates (e.g., ED A0 80 to represent U+D800)
+       - encodings with up to six bytes (everything outside the range
+         U+0000..10FFFF is considered "undefined")
+      */
 
     sal_uInt32 nUtf32;
     int nShift = -1;
@@ -173,10 +175,12 @@ sal_Size ImplConvertUtf8ToUnicode(ImplTextConverterData const * pData,
         }
         else
         {
-            // This byte is preceeded by a broken UTF-8 sequence; if this byte
-            // is neither in the range [0x80..0xBF] nor in the range
-            // [0xFE..0xFF], assume that this byte does not belong to that
-            // broken sequence, but instead starts a new, legal UTF-8 sequence:
+            /*
+             This byte is preceeded by a broken UTF-8 sequence; if this byte
+             is neither in the range [0x80..0xBF] nor in the range
+             [0xFE..0xFF], assume that this byte does not belong to that
+             broken sequence, but instead starts a new, legal UTF-8 sequence:
+             */
             bConsume = nChar >= 0xFE;
             goto bad_input;
         }
@@ -310,7 +314,7 @@ sal_Size ImplConvertUnicodeToUtf8(ImplTextConverterData const * pData,
         if ((nFlags & RTL_UNICODETOTEXT_FLAGS_GLOBAL_SIGNATURE) != 0)
             if (pDestBufEnd - pDestBufPtr >= 3)
             {
-                // Write BOM (U+FEFF) as UTF-8:
+                /* Write BOM (U+FEFF) as UTF-8: */
                 *pDestBufPtr++ = (sal_Char) 0xEF;
                 *pDestBufPtr++ = (sal_Char) 0xBB;
                 *pDestBufPtr++ = (sal_Char) 0xBF;
