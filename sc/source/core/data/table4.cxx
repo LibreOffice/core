@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table4.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:00 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@
 #include "userlist.hxx"
 #include "zforauto.hxx"
 #include "subtotal.hxx"
-#include "compiler.hxx"
+#include "errorcodes.hxx"
 #include "rangenam.hxx"
 #include "docpool.hxx"
 #include "progress.hxx"
