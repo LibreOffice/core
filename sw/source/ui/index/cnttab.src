@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-26 20:44:11 $
+ *  last change: $Author: nf $ $Date: 2001-11-05 11:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1937,7 +1937,6 @@ TabPage TP_TOX_SELECT
             < "TSM: 23.10.00 En is correct D is wrong." ;               8;> ;
             < "TSM 23.10.00 En is correct / D is wrong" ;   16;> ;
             < " ";  128;> ;
-            < " ";  128;> ;
             };
         ItemList [ english_us ] =
         {
@@ -1946,7 +1945,6 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Other OLE Objects";  128;> ;
-            < "Other OLE objects";  128;> ;
             };
         ItemList [ portuguese ] =
         {
@@ -1955,7 +1953,6 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Outros objectos OLE";    128;> ;
-            < "Outros obejctos OLE";    128;> ;
             };
         ItemList [ russian ] =
         {
@@ -1964,7 +1961,6 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Äðóãèå îáúåêòû OLE";     128;> ;
-            < "Äðóãèå îáúêòû OLE";  128;> ;
             };
         ItemList [ greek ] =
         {
@@ -1972,7 +1968,6 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Chart" ;            2;> ;
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
-            < "¢ëëá áíôéêåßìåíá OLE";   128;> ;
             < "¢ëëá áíôéêåßìåíá OLE";   128;> ;
             };
         ItemList [ dutch ] =
@@ -1982,7 +1977,6 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Andere OLE-objecten";    128;> ;
-            < "Andere OLE-objecten";    128;> ;
             };
         ItemList [ french ] =
         {
@@ -1990,7 +1984,6 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Chart" ;            2;> ;
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
-            < "Autres objets OLE";  128;> ;
             < "Autres objets OLE";  128;> ;
             };
         ItemList [ spanish ] =
@@ -2000,7 +1993,6 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Otros objetos OLE";  128;> ;
-            < "Otros objetos OLE";  128;> ;
             };
         ItemList [ italian ] =
         {
@@ -2008,7 +2000,6 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Chart" ;            2;> ;
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
-            < "Altri oggetti OLE";  128;> ;
             < "Altri oggetti OLE";  128;> ;
             };
         ItemList [ danish ] =
@@ -2018,7 +2009,6 @@ TabPage TP_TOX_SELECT
             < "StarCalc" ;              8;> ;
             < "StarDraw/StarImpress" ;  16;> ;
             < "Andre OLE-objekter";     128;> ;
-            < "Andre OLE-objekter";     128;> ;
             };
         ItemList [ swedish ] =
         {
@@ -2026,7 +2016,6 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Chart" ;            2;> ;
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
-            < "Andra OLE-objekt";   128;> ;
             < "Andra OLE-objekt";   128;> ;
             };
         ItemList [ polish ] =
@@ -2036,7 +2025,6 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Inne obiekty OLE";   128;> ;
-            < "Inne obiekty OLE";   128;> ;
             };
         ItemList [ portuguese_brazilian ] =
         {
@@ -2045,7 +2033,6 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Image" ;                8;> ;
             < "%PRODUCTNAME Calc" ;     16;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress";     128;> ;
-            < "Andere OLE-Objekte";     128;> ;
             };
         ItemList [ japanese ] =
         {
@@ -2054,7 +2041,6 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "ãã®ã»ã‹ã® OLE ï½µï¾Œï¾žï½¼ï¾žï½ªï½¸ï¾„";   128;> ;
-            < "????? OLE ??????";   128;> ;
             };
         ItemList [ korean ] =
         {
@@ -2063,7 +2049,6 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "ë‹¤ë¥¸ OLE ê°œì²´";  128;> ;
-            < "±âÅ¸ OLE °³Ã¼";  128;> ;
             };
         ItemList [ chinese_simplified ] =
         {
@@ -2072,7 +2057,6 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "å…¶ä»– OLE å¯¹è±¡";  128;> ;
-            < "ÆäËü OLE ¶ÔÏó";  128;> ;
             };
         ItemList [ chinese_traditional ] =
         {
@@ -2081,7 +2065,6 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "å…¶å®ƒçš„ OLE ç‰©ä»¶";   128;> ;
-            < "¨ä¥L OLE ª«¥ó";  128;> ;
             };
         ItemList [ arabic ] =
         {
@@ -2089,7 +2072,6 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Chart" ;            2;> ;
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
-            < "ßÇÆäÇÊ OLE ÃÎÑì";    128;> ;
             < "ßÇÆäÇÊ OLE ÃÎÑì";    128;> ;
             };
         ItemList [ turkish ] =
@@ -2099,7 +2081,6 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Image" ;                8;> ;
             < "%PRODUCTNAME Calc" ;     16;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress";     128;> ;
-            < "Diðer OLE nesneleri";    128;> ;
             };
         ItemList [ catalan ] =
         {
@@ -2107,7 +2088,6 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Chart" ;            2;> ;
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
-            < "Otros objetos OLE";  128;> ;
             < "Otros objetos OLE";  128;> ;
             };
         ItemList [ finnish ] =
@@ -2117,7 +2097,6 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME! Calc" ;                8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Muut OLE-objekti";   128;> ;
-            < "Other OLE objects";  128;> ;
             };
     };
     };
