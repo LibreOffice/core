@@ -9701,3 +9701,9 @@ _real@8@3ffeccccccccccccd000
 ?IsFileURL@?%O:/SRC641/src/svtools/source/filepicker\iodlg.cxx2399815398@@YAEABVString@@@Z
 ?SetFsysExtension_Impl@?%O:/SRC641/src/svtools/source/filepicker\iodlg.cxx2399815398@@YAXAAVString@@ABV2@@Z
 ?lcl_MoveControl@?%O:/SRC641/src/svtools/source/filepicker\iodlg.cxx2399815398@@YAXPAVControl@@JJAAJ@Z
+?IsDropFormatSupported@BrowseBox@@IAEEABUDataFlavor@datatransfer@star@sun@com@@@Z
+?IsDropFormatSupported@BrowseBox@@IAEEK@Z
+?IsDropFormatSupported@BrowseBox@@IBEEABUDataFlavor@datatransfer@star@sun@com@@@Z
+?IsDropFormatSupported@BrowseBox@@IBEEK@Z
+??RFilterTitleMatch@?%O:\SRC641\src\svtools\source\filepicker\filepicker.cxx245163243@@QAE_NABUFilterEntry@@@Z
+??RGroupTitleMatch@?%O:\SRC641\src\svtools\source\filepicker\filepicker.cxx245163243@@QAE_NABUFilterEntry@@@Z
