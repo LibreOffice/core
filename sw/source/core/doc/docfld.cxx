@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:01:42 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,7 +537,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
     ASSERT( !pHt || RES_TABLEFML_UPDATE  == pHt->Which(),
             "Was ist das fuer ein MessageItem?" );
 
-    SwFieldType* pFldType;
+    SwFieldType* pFldType(0);
     USHORT i;
 
     for( i = 0; i < pFldTypes->Count(); ++i )
@@ -592,6 +592,8 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                             if( &pTblNd->GetTable() == pUpdtFld->pTbl )
                                 // zur relativen Darstellung
                                 pFld->ToRelBoxNm( pUpdtFld->pTbl );
+                            break;
+                        default:
                             break;
                         }
                     }
@@ -1085,6 +1087,8 @@ xub_StrLen _SetGetExpFld::GetCntPosFromCntnt() const
             break;
         case CRSRPOS:
             nRet =  CNTNT.pPos->nContent.GetIndex();
+            break;
+        default:
             break;
         }
     return nRet;
@@ -2858,7 +2862,7 @@ void SwDocUpdtFld::RemoveFldType( const SwFieldType& rType )
 }
 
 SwDocUpdtFld::SwDocUpdtFld()
-    : pFldSortLst( 0 ), nFldLstGetMode( 0 ), nFldUpdtPos( LONG_MAX )
+    : pFldSortLst(0),  nFldUpdtPos(LONG_MAX), nFldLstGetMode(0)
 {
     bInUpdateFlds = bFldsDirty = FALSE;
     memset( aFldTypeTable, 0, sizeof( aFldTypeTable ) );
