@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2001-07-18 17:44:43 $
+ *  last change: $Author: nf $ $Date: 2001-07-31 12:47:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ const char *ExeTable[][5] = {
 const char *NegativeList[] = {
     "officecfg/data/org.openoffice.Office.Labels.xcd",
     "officecfg/data/org/openoffice/Office/Labels.xcd",
+    "officecfg/data/org/openoffice/Office/SFX.xcd",
     "hidother.src",
     "NULL"
 };
