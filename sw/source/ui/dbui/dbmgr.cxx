@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2001-05-07 10:05:52 $
+ *  last change: $Author: os $ $Date: 2001-05-21 13:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1984,8 +1984,15 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
     {
         Reference< sdbc::XConnection> xConnection;
         OUString sDummy;
-        xConnection = xSource->getConnection(sDummy, sDummy);
-        pDlg->DataToDoc( aSelection , xSource, xConnection, xResSet);
+        try
+        {
+            xConnection = xSource->getConnection(sDummy, sDummy);
+            pDlg->DataToDoc( aSelection , xSource, xConnection, xResSet);
+        }
+        catch(Exception& )
+        {
+            DBG_ERROR("exception caught")
+        }
     }
     delete pDlg;
 
