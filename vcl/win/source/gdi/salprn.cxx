@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-14 09:47:51 $
+ *  last change: $Author: ssa $ $Date: 2001-12-03 13:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -780,10 +780,21 @@ static HDC ImplCreateSalPrnIC( SalInfoPrinter* pPrinter, ImplJobSetup* pSetupDat
     else
         pDevMode = NULL;
 // !!! UNICODE - NT Optimierung !!!
-    HDC hDC = CreateICA( ImplSalGetWinAnsiString( pPrinter->maPrinterData.maDriverName, TRUE ).GetBuffer(),
-                         ImplSalGetWinAnsiString( pPrinter->maPrinterData.maDeviceName, TRUE ).GetBuffer(),
+    // #95347 some buggy drivers (eg, OKI) write to those buffers in CreateIC, although declared const - so provide some space
+    ByteString aDriver ( ImplSalGetWinAnsiString( pPrinter->maPrinterData.maDriverName, TRUE ) );
+    ByteString aDevice ( ImplSalGetWinAnsiString( pPrinter->maPrinterData.maDeviceName, TRUE ) );
+    int n = aDriver.Len() > aDevice.Len() ? aDriver.Len() : aDevice.Len();
+    n += 2048;
+    char *lpszDriverName = new char[n];
+    char *lpszDeviceName = new char[n];
+    strcpy( lpszDriverName, aDriver.GetBuffer() );
+    strcpy( lpszDeviceName, aDevice.GetBuffer() );
+    HDC hDC = CreateICA( lpszDriverName,
+                         lpszDeviceName,
                          0,
                          (LPDEVMODE)pDevMode );
+    delete [] lpszDriverName;
+    delete [] lpszDeviceName;
     return hDC;
 }
 
@@ -1200,10 +1211,22 @@ BOOL SalPrinter::StartJob( const XubString* pFileName,
         pDevMode = NULL;
 
 // !!! UNICODE - NT Optimierung !!!
-    HDC hDC = CreateDCA( ImplSalGetWinAnsiString( maPrinterData.mpInfoPrinter->maPrinterData.maDriverName, TRUE ).GetBuffer(),
-                         ImplSalGetWinAnsiString( maPrinterData.mpInfoPrinter->maPrinterData.maDeviceName, TRUE ).GetBuffer(),
+    // #95347 some buggy drivers (eg, OKI) write to those buffers in CreateDC, although declared const - so provide some space
+    ByteString aDriver ( ImplSalGetWinAnsiString( maPrinterData.mpInfoPrinter->maPrinterData.maDriverName, TRUE ) );
+    ByteString aDevice ( ImplSalGetWinAnsiString( maPrinterData.mpInfoPrinter->maPrinterData.maDeviceName, TRUE ) );
+    int n = aDriver.Len() > aDevice.Len() ? aDriver.Len() : aDevice.Len();
+    n += 2048;
+    char *lpszDriverName = new char[n];
+    char *lpszDeviceName = new char[n];
+    strcpy( lpszDriverName, aDriver.GetBuffer() );
+    strcpy( lpszDeviceName, aDevice.GetBuffer() );
+    HDC hDC = CreateDCA( lpszDriverName,
+                         lpszDeviceName,
                          0,
-                         (LPDEVMODEA)pDevMode );
+                         (LPDEVMODE)pDevMode );
+
+    delete [] lpszDriverName;
+    delete [] lpszDeviceName;
 
     if ( pDevMode != pOrgDevMode )
         delete pDevMode;
