@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLImporter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:20:01 $
+ *  last change:$Date: 2003-05-27 14:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ public class XMLImporter extends TestCase {
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
 
         try {
             log.println( "creating a drawdocument" );
@@ -159,7 +159,7 @@ public class XMLImporter extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
 
-        XMultiServiceFactory xMSF = tParam.getMSF() ;
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF() ;
 
         try {
             oInt = xMSF.createInstance("com.sun.star.comp.Draw.XMLImporter") ;
