@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2000-09-29 10:00:17 $
+ *  last change: $Author: pl $ $Date: 2000-10-19 11:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 #include "rmwindow.hxx"
 #include "rvp.hxx"
 #include <vos/mutex.hxx>
+#include <unotools/processfactory.hxx>
 
 using namespace ::com::sun::star::uno;
 
@@ -1770,7 +1771,7 @@ BOOL Printer::EndJob()
 #else
     if ( mpPrinter )
     {
-        mpPrinter->mxPrintSpooler->EndJob();
+        mpPrinter->mxPrintSpooler->EndJob( ::utl::getProcessServiceFactory() );
         mbPrinting = FALSE;
         mnCurPage = 0;
         mnCurPrintPage = 0;
