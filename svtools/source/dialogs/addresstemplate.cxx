@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-08 14:51:44 $
+ *  last change: $Author: fs $ $Date: 2001-03-02 16:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,6 @@ namespace svt
     // -------------------------------------------------------------------
     AddressBookAssignment::~AddressBookAssignment()
     {
-        Commit();
     }
 
     // -------------------------------------------------------------------
@@ -182,7 +181,7 @@ namespace svt
         {
             ::rtl::OUString sFieldPath(RTL_CONSTASCII_USTRINGPARAM("Fields/"));
             sFieldPath += _rLogicalName;
-            sFieldPath += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/DatasourceFieldName"));
+            sFieldPath += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/DatabaseFieldName"));
             sAssignment = getStringProperty(sFieldPath);
         }
         return sAssignment;
@@ -263,7 +262,7 @@ namespace svt
         aNewFieldDescription[0].Value <<= _rLogicalName;
         // Fields/<field>/DatabaseFieldName
         aNewFieldDescription[1].Name = sFieldElementNodePath;
-        aNewFieldDescription[1].Name += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/DatasourceFieldName"));
+        aNewFieldDescription[1].Name += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/DatabaseFieldName"));
         aNewFieldDescription[1].Value <<= _rAssignment;
 
         // just set the new value
