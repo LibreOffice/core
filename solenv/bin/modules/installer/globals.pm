@@ -2,9 +2,8 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.6 $
-#
-#   last change: $Author: rt $ $Date: 2004-07-06 14:57:41 $
+#   $Revision: 1.7 $
+#   last change: $Author: rt $ $Date: 2004-07-12 12:58:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -174,6 +173,8 @@ BEGIN
     @regcompregisterlibs = ( "javavm.uno", "javaloader.uno" );
     @selfreglibraries = ("shlxthdl.dll");               # to be removed after scp changes, see parameter.pm
     @binarytablefiles = ("gid_File_Lib_Reg4msdocmsi", "gid_File_Lib_Regactivex_Msi", "gid_File_Lib_Jfregca");   # to be removed after scp changes, see parameter.pm
+    @msiassemblyfiles = ("cli_types.dll", "cli_cppuhelper.dll", "cli_ure.dll"); # to be removed after scp changes
+    @msiassemblynamecontent = ("cli_types.dll", "cli_types", "ce2cb7e279207b9e", "1.0.0.0", "cli_cppuhelper.dll", "cli_cppuhelper", "ce2cb7e279207b9e", "1.0.0.0", "cli_ure.dll", "cli_ure", "ce2cb7e279207b9e", "1.0.0.0");    # to be removed after scp changes
 
     @removedirs = ();
 
