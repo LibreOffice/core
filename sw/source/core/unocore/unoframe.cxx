@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: os $ $Date: 2002-03-19 15:58:38 $
+ *  last change: $Author: os $ $Date: 2002-03-20 08:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2474,11 +2474,17 @@ uno::Any SwXTextFrame::getPropertyValue(const OUString& rPropertyName)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+    uno::Any aRet;
     if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_START_REDLINE))||
             rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_END_REDLINE)))
-        return SwXText::getPropertyValue(rPropertyName);
+    {
+        //redline can only be returned if it's a living object
+        if(!IsDescriptor())
+            aRet = SwXText::getPropertyValue(rPropertyName);
+    }
     else
-        return SwXFrame::getPropertyValue(rPropertyName);
+        aRet = SwXFrame::getPropertyValue(rPropertyName);
+    return aRet;
 }
 /******************************************************************
  *  SwXTextGraphicObject
