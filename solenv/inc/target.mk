@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.119 $
+#   $Revision: 1.120 $
 #
-#   last change: $Author: hjs $ $Date: 2002-07-17 15:26:11 $
+#   last change: $Author: hjs $ $Date: 2002-08-21 11:39:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2721,34 +2721,34 @@ killbin:
 
 killobj:
 .IF "$(SLOFILES)" != ""
-    +-cd $(SLO) && $(TYPE) $(mktmp  $(SLOFILES:f)) | xargs -n 20 rm -v 
-    +-cd $(SLO) && $(TYPE) $(mktmp  $(SLOFILES:s/.obj/.o/:f)) | xargs -n 20 rm -v
+    +-cd $(SLO) && $(TYPE) $(mktmp  $(SLOFILES:f)) | xargs -n 20 rm 
+    +-cd $(SLO) && $(TYPE) $(mktmp  $(SLOFILES:s/.obj/.o/:f)) | xargs -n 20 rm
 .ENDIF
 .IF "$(OBJFILES)" != ""
-    +-cd $(OBJ) && $(TYPE) $(mktmp  $(OBJFILES:f)) | xargs -n 20 rm -v 
-    +-cd $(OBJ) && $(TYPE) $(mktmp  $(OBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm -v
+    +-cd $(OBJ) && $(TYPE) $(mktmp  $(OBJFILES:f)) | xargs -n 20 rm 
+    +-cd $(OBJ) && $(TYPE) $(mktmp  $(OBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm
 .ENDIF
 .IF "$(SVXLIGHT)"!=""
 .IF "$(REAL_SVXLIGHTSLOFILES)" != ""
-    +-cd $(REAL_SVXLIGHTSLO) && $(TYPE) $(mktmp  $(REAL_SVXLIGHTSLOFILES:f)) | xargs -n 20 rm -v 
-    +-cd $(REAL_SVXLIGHTSLO) && $(TYPE) $(mktmp  $(REAL_SVXLIGHTSLOFILES:s/.obj/.o/:f)) | xargs -n 20 rm -v
+    +-cd $(REAL_SVXLIGHTSLO) && $(TYPE) $(mktmp  $(REAL_SVXLIGHTSLOFILES:f)) | xargs -n 20 rm 
+    +-cd $(REAL_SVXLIGHTSLO) && $(TYPE) $(mktmp  $(REAL_SVXLIGHTSLOFILES:s/.obj/.o/:f)) | xargs -n 20 rm
 .ENDIF
 .IF "$(REAL_SVXLIGHTOBJFILES)" != ""
-    +-cd $(REAL_SVXLIGHTOBJ) && $(TYPE) $(mktmp  $(REAL_SVXLIGHTOBJFILES:f)) | xargs -n 20 rm -v 
-    +-cd $(REAL_SVXLIGHTOBJ) && $(TYPE) $(mktmp  $(REAL_SVXLIGHTOBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm -v
+    +-cd $(REAL_SVXLIGHTOBJ) && $(TYPE) $(mktmp  $(REAL_SVXLIGHTOBJFILES:f)) | xargs -n 20 rm 
+    +-cd $(REAL_SVXLIGHTOBJ) && $(TYPE) $(mktmp  $(REAL_SVXLIGHTOBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm
 .ENDIF
 .ENDIF			# "$(SVXLIGHT)"!=""
 .IF "$(REAL_$(SECOND_BUILD)_SLOFILES)" != ""
-    +-cd $(REAL_$(SECOND_BUILD)_SLO) && $(TYPE) $(mktmp  $(REAL_$(SECOND_BUILD)_SLOFILES:f)) | xargs -n 20 rm -v 
-    +-cd $(REAL_$(SECOND_BUILD)_SLO) && $(TYPE) $(mktmp  $(REAL_$(SECOND_BUILD)_SLOFILES:s/.obj/.o/:f)) | xargs -n 20 rm -v
+    +-cd $(REAL_$(SECOND_BUILD)_SLO) && $(TYPE) $(mktmp  $(REAL_$(SECOND_BUILD)_SLOFILES:f)) | xargs -n 20 rm
+    +-cd $(REAL_$(SECOND_BUILD)_SLO) && $(TYPE) $(mktmp  $(REAL_$(SECOND_BUILD)_SLOFILES:s/.obj/.o/:f)) | xargs -n 20 rm
 .ENDIF
 .IF "$(REAL_$(SECOND_BUILD)_OBJFILES)" != ""
-    +-cd $(REAL_$(SECOND_BUILD)_OBJ) && $(TYPE) $(mktmp  $(REAL_$(SECOND_BUILD)_OBJFILES:f)) | xargs -n 20 rm -v 
-    +-cd $(REAL_$(SECOND_BUILD)_OBJ) && $(TYPE) $(mktmp  $(REAL_$(SECOND_BUILD)_OBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm -v
+    +-cd $(REAL_$(SECOND_BUILD)_OBJ) && $(TYPE) $(mktmp  $(REAL_$(SECOND_BUILD)_OBJFILES:f)) | xargs -n 20 rm 
+    +-cd $(REAL_$(SECOND_BUILD)_OBJ) && $(TYPE) $(mktmp  $(REAL_$(SECOND_BUILD)_OBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm
 .ENDIF
 .IF "$(DEPOBJFILES)" != ""
-    +-cd $(DEPOBJ) && $(TYPE) $(mktmp  $(DEPOBJFILES:f)) | xargs -n 20 rm -v 
-    +-cd $(DEPOBJ) && $(TYPE) $(mktmp  $(DEPOBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm -v
+    +-cd $(DEPOBJ) && $(TYPE) $(mktmp  $(DEPOBJFILES:f)) | xargs -n 20 rm
+    +-cd $(DEPOBJ) && $(TYPE) $(mktmp  $(DEPOBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm
 .ENDIF
     @+echo objects weg!
 
