@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfexporter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:58:05 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,12 +246,14 @@ sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOut
 
     const sal_Int32 nPageCount = xDrawPages->getCount();
     sal_uInt16 nPage;
-    xStatusIndicator->start(OUString( RTL_CONSTASCII_USTRINGPARAM( "Macromedia Flash (SWF)" )), nPageCount);
+    if ( xStatusIndicator.is() )
+        xStatusIndicator->start(OUString( RTL_CONSTASCII_USTRINGPARAM( "Macromedia Flash (SWF)" )), nPageCount);
     for( nPage = 0; nPage < nPageCount; nPage++)
     {
         mnPageNumber = nPage + 1;
 
-        xStatusIndicator->setValue( nPage );
+        if ( xStatusIndicator.is() )
+            xStatusIndicator->setValue( nPage );
         xDrawPages->getByIndex(nPage) >>= xDrawPage;
 
         if( !xDrawPage.is())
