@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:26 $
+ *  last change: $Author: pluby $ $Date: 2000-10-31 22:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -642,8 +642,7 @@ SalGraphics* SalFrame::GetGraphics()
 
     if ( !maFrameData.mpGraphics )
     {
-#ifdef WIN
-        HDC hDC = GetDC( maFrameData.mhWnd );
+        HDC hDC = NSWindow_contentView( maFrameData.mhWnd );
         if ( hDC )
         {
             SalData* pSalData = GetSalData();
@@ -654,15 +653,16 @@ SalGraphics* SalFrame::GetGraphics()
             maFrameData.mpGraphics->maGraphicsData.mbVirDev  = FALSE;
             maFrameData.mpGraphics->maGraphicsData.mbWindow  = TRUE;
             maFrameData.mpGraphics->maGraphicsData.mbScreen  = TRUE;
+#ifdef WIN
             if ( pSalData->mhDitherPal )
             {
                 maFrameData.mpGraphics->maGraphicsData.mhDefPal = SelectPalette( hDC, pSalData->mhDitherPal, TRUE );
                 RealizePalette( hDC );
             }
             ImplSalInitGraphics( &(maFrameData.mpGraphics->maGraphicsData) );
+#endif
             maFrameData.mbGraphics = TRUE;
         }
-#endif
     }
     else
         maFrameData.mbGraphics = TRUE;
@@ -783,11 +783,10 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible )
 
 void SalFrame::Show( BOOL bVisible )
 {
-#ifdef WIN
-    // Send this Message to the window, because this only works
-    // in the thread of the window, which has create this window
-    ImplSendMessage( maFrameData.mhWnd, SAL_MSG_SHOW, bVisible, 0 );
-#endif
+    if ( bVisible )
+        NSWindow_makeKeyAndOrderFront( maFrameData.mhWnd );
+    else
+        NSWindow_close( maFrameData.mhWnd );
 }
 
 // -----------------------------------------------------------------------

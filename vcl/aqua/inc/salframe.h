@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-29 06:29:57 $
+ *  last change: $Author: pluby $ $Date: 2000-10-31 22:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,17 @@
 extern "C" {
 #endif // __cplusplus
 
-// Instantiate a native NSWindow
-HWND NSWindow_new( ULONG nSalFrameStyle );
+// Instantiate a native NSWindow.
+HWND NSWindow_new( ULONG nSalFrameStyle, HWND hParentWindow );
+
+// Get NSWindow contentView
+HDC NSWindow_contentView( HWND hWindow );
+
+// Display NSWindow
+NSWindow_makeKeyAndOrderFront( HWND hWindow );
+
+// Hide NSWindow
+NSWindow_close( HWND hWindow );
 
 // Release a native NSWindow
 void NSWindow_release( HWND hWindow );
