@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:24:45 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,8 @@
 #define ID_GetChildEnv     53
 #define ID_GetLinkDestination 54
 #define ID_GetRegistryValue 55
-#define ID_DoNothing    99
+#define ID_KillApp         56
+#define ID_DoNothing       99
 
 void ReadFlatArray( const ControlDefLoad arWas [], CNames *&pNames );
 
