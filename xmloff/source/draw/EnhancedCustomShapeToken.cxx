@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeToken.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:05:27 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,8 @@ struct TokenTable
 
 static const TokenTable pTokenTableArray[] =
 {
-    { "predefined-type",                    EAS_predefined_type },
+    { "type",                               EAS_type },
+    { "name",                               EAS_name },
     { "mirror-horizontal",                  EAS_mirror_horizontal },
     { "mirror-vertical",                    EAS_mirror_vertical },
     { "viewBox",                            EAS_viewBox },
@@ -126,7 +127,7 @@ static const TokenTable pTokenTableArray[] =
     { "enhanced-path",                      EAS_enhanced_path },
     { "path-stretchpoint-x",                EAS_path_stretchpoint_x },
     { "path-stretchpoint-y",                EAS_path_stretchpoint_y },
-    { "text-frames",                        EAS_text_frames },
+    { "text-areas",                         EAS_text_areas },
     { "glue-points",                        EAS_glue_points },
     { "glue-point-type",                    EAS_glue_point_type },
     { "glue-point-leaving-directions",      EAS_glue_point_leaving_directions },
@@ -134,7 +135,7 @@ static const TokenTable pTokenTableArray[] =
     { "text-path-mode",                     EAS_text_path_mode },
     { "text-path-scale-x",                  EAS_text_path_scale_x },
     { "text-path-same-letter-heights",      EAS_text_path_same_letter_heights },
-    { "adjustments",                        EAS_adjustments },
+    { "modifiers",                          EAS_modifiers },
     { "equation",                           EAS_equation },
     { "formula",                            EAS_formula },
     { "handle",                             EAS_handle },
@@ -152,7 +153,7 @@ static const TokenTable pTokenTableArray[] =
 
     { "CustomShapeEngine",                  EAS_CustomShapeEngine },
     { "CustomShapeData",                    EAS_CustomShapeData },
-    { "PredefinedType",                     EAS_PredefinedType },
+    { "Type",                               EAS_Type },
     { "MirroredX",                          EAS_MirroredX },
     { "MirroredY",                          EAS_MirroredY },
     { "ViewBox",                            EAS_ViewBox },
@@ -199,7 +200,8 @@ static const TokenTable pTokenTableArray[] =
     { "RadiusRangeMaximum",                 EAS_RadiusRangeMaximum },
     { "Coordinates",                        EAS_Coordinates },
     { "Segments",                           EAS_Segments },
-    { "StretchPoint",                       EAS_StretchPoint },
+    { "StretchX",                           EAS_StretchX },
+    { "StretchY",                           EAS_StretchY },
     { "TextFrames",                         EAS_TextFrames },
     { "GluePoints",                         EAS_GluePoints },
     { "GluePointLeavingDirections",         EAS_GluePointLeavingDirections },
