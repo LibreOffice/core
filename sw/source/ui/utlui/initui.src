@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:27:01 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "ÂÊ";
         TEXT[ turkish ] = "Sayfa";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Página";
     };
     String STR_POSTIT_LINE
     {
@@ -118,6 +119,7 @@ Resource RID_SW_SHELLRES
         Text[ korean ] = "Çà";
         Text[ turkish ] = "Satýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Línea";
     };
     String STR_POSTIT_AUTHOR
     {
@@ -144,6 +146,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "ÀÛ¼ºÀÚ";
         TEXT[ turkish ] = "Yazan";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Autor";
     };
     String STR_CALC_SYNTAX
     {
@@ -170,6 +173,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "** ±¸¹® ¿À·ù **";
         TEXT[ turkish ] = "** Söz dizimi hatasý **";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "** Error de sintaxis **";
     };
     String STR_CALC_ZERODIV
     {
@@ -196,6 +200,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "** 0À¸·Î ³ª´©±â **";
         TEXT[ turkish ] = "** Sýfýr ile bölme **";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "** Dividir por cero **";
     };
     String STR_CALC_BRACK
     {
@@ -222,6 +227,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "**Àß¸øµÈ °ýÈ£ **";
         TEXT[ turkish ] = "** Hatalý ayraç kullanýmý **";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "** Error de paréntesis **";
     };
     String STR_CALC_POW
     {
@@ -249,6 +255,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "**Á¦°ö ÇÔ¼ö ¿À¹öÇÃ·Î **";
         TEXT[ turkish ] = "** Kare fonksiyonu taþmasý **";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "** Desbordamiento en función al cuadrado **";
     };
     String STR_CALC_VARNFND
     {
@@ -275,6 +282,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "**º¯¼ö¸¦¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù. **";
         TEXT[ turkish ] = "** Deðiþken bulunamadý **";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "** No se ha encontrado la variable **";
     };
     String STR_CALC_OVERFLOW
     {
@@ -302,6 +310,7 @@ Resource RID_SW_SHELLRES
         TEXT[ greek ] = "** Õðåñ÷åßëéóç **";
         TEXT[ korean ] = "** ¿À¹ö ÇÃ·Î **";
         TEXT[ turkish ] = "** Taþma **";
+        TEXT[ catalan ] = "** Desbordamiento **";
     };
     String STR_CALC_WRONGTIME
     {
@@ -328,6 +337,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "**Àß¸øµÈ ½Ã°£ Æ÷¸Ë **";
         TEXT[ turkish ] = "** Yanlýþ zaman formatý **";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "** Formato de hora erróneo **";
     };
     String STR_CALC_DEFAULT
     {
@@ -354,6 +364,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "**¿À·ù **";
         TEXT[ turkish ] = "** Hata **";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "** Error **";
     };
     String STR_CALC_ERROR
     {
@@ -373,13 +384,14 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_simplified ] = "** ´íÎóµÄ±í´ïÊ½ **";
         TEXT[ russian ] = "** Îøèáêè â âûðàæåíèè **";
         TEXT[ polish ] = "** Nieprawid³owe wyra¿enie **";
-        TEXT[ japanese ] = "**ŠÔˆá‚Á‚½•\\Œ»**";
+        TEXT[ japanese ] = "**´×°•\\Œ»**";
         TEXT[ chinese_traditional ] = "** ¿ù»~ªºªí¹F¦¡ **";
         TEXT[ arabic ] = "** ÊÚÈíÑ ÎÇØÆ **";
         TEXT[ greek ] = "** ÅóöáëìÝíç Ýêöñáóç **";
         TEXT[ korean ] = "**Æ²¸°¡¡Ç¥Çö½Ä **";
         TEXT[ turkish ] = "** Yanlýþ ifade **";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "** Expresión errónea **";
     };
     String STR_GETREFFLD_UP
     {
@@ -404,6 +416,7 @@ Resource RID_SW_SHELLRES
         Text[ korean ] = "À§¿¡";
         Text[ turkish ] = "üst";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "arriba";
     };
     String STR_GETREFFLD_DOWN
     {
@@ -428,6 +441,7 @@ Resource RID_SW_SHELLRES
         Text[ korean ] = "¾Æ·¡";
         Text[ turkish ] = "alt";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "abajo";
     };
     String STR_ALLPAGE_HEADFOOT
     {
@@ -452,6 +466,7 @@ Resource RID_SW_SHELLRES
         Text[ korean ] = "ÀüÃ¼";
         Text[ turkish ] = "Tümü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Todos";
     };
     String STR_TEMPLATE_NONE
     {
@@ -476,6 +491,7 @@ Resource RID_SW_SHELLRES
         Text[ korean ] = "¾øÀ½";
         Text[ turkish ] = "yok";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ninguno";
     };
     String STR_FIELD_FIXED
     {
@@ -502,6 +518,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "(°íÁ¤µÊ)";
         TEXT[ turkish ] = "(sabit)";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "(fija)";
     };
     String STR_TOI
     {
@@ -528,6 +545,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "Ç¥Á¦¾î¡¡»öÀÎ";
         TEXT[ turkish ] = "Alfabetik dizin";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Índice alfabético";
     };
 
     String STR_TOU
@@ -555,6 +573,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ";
         TEXT[ turkish ] = "Kullanýcý tanýmlý";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Índice del usuario";
     };
 
     String STR_TOC
@@ -582,6 +601,7 @@ Resource RID_SW_SHELLRES
         TEXT[ greek ] = "ÊáôÜëïãïò ðåñéå÷ïìÝíùí";
         TEXT[ korean ] = "¸ñÂ÷";
         TEXT[ turkish ] = "Ýçindekiler dizini";
+        TEXT[ catalan ] = "Índice de contenido";
     };
 
     String STR_TOX_AUTH
@@ -607,6 +627,7 @@ Resource RID_SW_SHELLRES
         TEXT[ arabic ] = "ÝåÑÓ ÇáãÑÇÌÚ";
         TEXT[ turkish ] = "Kaynakça dizini";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Bibliografía";
     };
     String STR_TOX_TBL
     {
@@ -631,6 +652,7 @@ Resource RID_SW_SHELLRES
         TEXT[ arabic ] = "ÝåÑÓ ÇáÌÏÇæá";
         TEXT[ turkish ] = "Tablo dizini";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Índice de tablas";
     };
     String STR_TOX_OBJ
     {
@@ -655,6 +677,7 @@ Resource RID_SW_SHELLRES
         TEXT[ arabic ] = "ÝåÑÓ ÇáßÇÆäÇÊ";
         TEXT[ turkish ] = "Nesne dizini";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Índice de objetos";
     };
     String STR_TOX_ILL
     {
@@ -679,6 +702,7 @@ Resource RID_SW_SHELLRES
         TEXT[ arabic ] = "ÝåÑÓ ÇáÕæÑ ÇáÅíÖÇÍíÉ";
         TEXT[ turkish ] = "Resim dizini";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Índice de ilustraciones";
     };
 
 
@@ -709,6 +733,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "Á¦¸ñ";
         TEXT[ turkish ] = "Baþlýk";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Título";
     };
     String FLD_DOCINFO_THEMA
     {
@@ -735,6 +760,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "ÁÖÁ¦";
         TEXT[ turkish ] = "Konu";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Tema";
     };
     String FLD_DOCINFO_KEYS
     {
@@ -762,6 +788,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "Å° ¿öµå";
         TEXT[ turkish ] = "Anahtar sözcük";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Palabras clave";
     };
     String FLD_DOCINFO_COMMENT
     {
@@ -788,6 +815,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "¼³¸í";
         TEXT[ turkish ] = "Taným";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Descripción";
     };
     String FLD_DOCINFO_INFO1
     {
@@ -814,6 +842,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "Á¤º¸ 0";
         TEXT[ turkish ] = "Bilgi 0";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Info 0";
     };
     String FLD_DOCINFO_INFO2
     {
@@ -840,6 +869,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "Á¤º¸ 1";
         TEXT[ turkish ] = "Bilgi 1";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Info 1";
     };
     String FLD_DOCINFO_INFO3
     {
@@ -866,6 +896,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "Á¤º¸ 2";
         TEXT[ turkish ] = "Bilgi 2";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Info 2";
     };
     String FLD_DOCINFO_INFO4
     {
@@ -892,6 +923,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "Á¤º¸ 3";
         TEXT[ turkish ] = "Bilgi 3";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Info 3";
     };
     String FLD_DOCINFO_CREATE
     {
@@ -918,6 +950,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "ÀÛ¼º.";
         TEXT[ turkish ] = "Oluþturma";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Creación";
     };
     String FLD_DOCINFO_CHANGE
     {
@@ -945,6 +978,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "¼öÁ¤";
         TEXT[ turkish ] = "Deðiþtirme";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Modificación";
     };
     String FLD_DOCINFO_PRINT
     {
@@ -971,6 +1005,7 @@ Resource RID_SW_SHELLRES
         TEXT[ korean ] = "¸¶Áö¸· ÀÎ¼â";
         TEXT[ turkish ] = "Son yazdýrma";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Última impresión";
     };
     String FLD_DOCINFO_DOCNO
     {
@@ -995,6 +1030,7 @@ Resource RID_SW_SHELLRES
         Text[ korean ] = "¹®¼­ ¹øÈ£";
         Text[ turkish ] = "Belge numarasý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Número del documento";
     };
     String FLD_DOCINFO_EDIT
     {
@@ -1019,6 +1055,7 @@ Resource RID_SW_SHELLRES
         Text[ korean ] = "ÆíÁý ½Ã°£";
         Text[ turkish ] = "Düzenleme süresi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tiempo de edición";
     };
     BITMAP BMP_FRAME_ANCHOR { FILE = "anchor.bmp" ; };
     BITMAP BMP_FRAME_DRAG_ANCHOR { FILE = "danchor.bmp" ; };
@@ -1028,7 +1065,7 @@ Resource RID_SW_SHELLRES
         Text = "Konvert $(ARG1)" ;
         Text [ ENGLISH ] = "Convert $(ARG1)" ;
         Text[ english_us ] = "Convert $(ARG1)";
-        Text[ portuguese ] = "Convert $(ARG1)";
+        Text[ portuguese ] = "Conversão $(ARG1)";
         Text[ russian ] = "Ïðåîáðàçîâàíèå $(ARG1)";
         Text[ greek ] = "ÌåôáôñïðÞ $(ARG1)";
         Text[ dutch ] = "Converteert $(ARG1)";
@@ -1046,13 +1083,14 @@ Resource RID_SW_SHELLRES
         Text[ turkish ] = "Convert $(ARG1)";
         Text[ arabic ] = "ÊÍæíá $(ARG1)";
         Text[ language_user1 ] = "DD (05.04.2001):Dieser String ist Teil eines Dialoges der erscheint wenn man ein Word- oder RTF- Dokument importiert welches verschiedene Layouts beinhaltet.";
+        Text[ catalan ] = "Convertir $(ARG1)";
     };
     String STR_PAGEDESC_FIRSTNAME
     {
         Text = "Erste Konvert $(ARG1)" ;
         Text [ ENGLISH ] = "First convert $(ARG1)" ;
         Text[ english_us ] = "First convert $(ARG1)";
-        Text[ portuguese ] = "First convert $(ARG1)";
+        Text[ portuguese ] = "Primeira conversão $(ARG1)";
         Text[ russian ] = "Ïåðâîå ïðåîáðàçîâàíèå $(ARG1)";
         Text[ greek ] = "Ðñþôç ÌåôáôñïðÞ $(ARG1)";
         Text[ dutch ] = "Eerste convertering $(ARG1)";
@@ -1070,13 +1108,14 @@ Resource RID_SW_SHELLRES
         Text[ turkish ] = "First convert $(ARG1)";
         Text[ arabic ] = "Ãæá ÊÍæíá$(ARG1)";
         Text[ language_user1 ] = "DD (05.04.2001):Dieser String ist Teil eines Dialoges der erscheint wenn man ein Word- oder RTF- Dokument importiert welches verschiedene Layouts beinhaltet. Mit $(ARG1) ist die Seitenzahl oder eine Folge von Seiten (z.B. 1-12) gemeint.";
+        Text[ catalan ] = "Primera conversión $(ARG1)";
     };
     String STR_PAGEDESC_FOLLOWNAME
     {
         Text = "Konvert Folge $(ARG1)" ;
         Text [ ENGLISH ] = "Convert follow $(ARG1)" ;
         Text[ english_us ] = "Next convert $(ARG1)";
-        Text[ portuguese ] = "Convert follow $(ARG1)";
+        Text[ portuguese ] = "Conversão seguinte $(ARG1)";
         Text[ russian ] = "Ïîñëåäîâàòåëüíîñòü ïðåîáðàçîâàíèÿ $(ARG1)";
         Text[ greek ] = "ÌåôáôñïðÞ ÓõíÝ÷åéá $(ARG1)";
         Text[ dutch ] = "Converteer volgende $(ARG1)";
@@ -1094,6 +1133,7 @@ Resource RID_SW_SHELLRES
         Text[ turkish ] = "Convert follow $(ARG1)";
         Text[ arabic ] = "ÊÍæíá ÊÇáí $(ARG1)";
         Text[ language_user1 ] = "DD (05.04.2001):Dieser String ist Teil eines Dialoges der erscheint wenn man ein Word- oder RTF- Dokument importiert welches verschiedene Layouts beinhaltet. Mit $(ARG1) ist die Seitenzahl oder eine Folge von Seiten (z.B. 1-12) gemeint.";
+        Text[ catalan ] = "Convertir serie $(ARG1)";
     };
 };
 
@@ -1120,6 +1160,7 @@ String STR_AUTH_TYPE_ARTICLE
     Text[ arabic ] = "ãÞÇáÉ Ýí ãÌáÉ";
     Text[ turkish ] = "Dergi makalesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Artículo de revista";
 };
 String STR_AUTH_TYPE_BOOK
 {
@@ -1144,6 +1185,7 @@ String STR_AUTH_TYPE_BOOK
     Text[ arabic ] = "ßÊÇÈ";
     Text[ turkish ] = "Kitap";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Libro";
 };
 String STR_AUTH_TYPE_BOOKLET
 {
@@ -1168,6 +1210,7 @@ String STR_AUTH_TYPE_BOOKLET
     Text[ arabic ] = "ßõÊíÈ";
     Text[ turkish ] = "Broþür";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Folleto";
 };
 String STR_AUTH_TYPE_CONFERENCE
 {
@@ -1192,6 +1235,7 @@ String STR_AUTH_TYPE_CONFERENCE
     Text[ arabic ] = "ÊÞÑíÑ Úä ãÄÊãÑ";
     Text[ turkish ] = "Toplantý raporu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Informe de conferencia";
 };
 String STR_AUTH_TYPE_INBOOK
 {
@@ -1216,6 +1260,7 @@ String STR_AUTH_TYPE_INBOOK
     Text[ arabic ] = "ãÞÊÈÓÇÊ ãä ßÊÇÈ";
     Text[ turkish ] = "Kitap bölümü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Extracto de libro";
 };
 String STR_AUTH_TYPE_INCOLLECTION
 {
@@ -1240,6 +1285,7 @@ String STR_AUTH_TYPE_INCOLLECTION
     Text[ arabic ] = "ãÞÊÈÓÇÊ ãä ßÊÇÈ ÐÇÊ ÚäæÇä";
     Text[ turkish ] = "Baþlýklý kitap bölümü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Extracto de libro con título";
 };
 String STR_AUTH_TYPE_INPROCEEDINGS
 {
@@ -1264,6 +1310,7 @@ String STR_AUTH_TYPE_INPROCEEDINGS
     Text[ arabic ] = "ÈÑæÊæßæá ÇÌÊãÇÚ";
     Text[ turkish ] = "Konferans raporu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Informe de reunión";
 };
 String STR_AUTH_TYPE_JOURNAL
 {
@@ -1288,6 +1335,7 @@ String STR_AUTH_TYPE_JOURNAL
     Text[ arabic ] = "ÇáãÌáÉ";
     Text[ turkish ] = "Dergi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Revista";
 };
 String STR_AUTH_TYPE_MANUAL
 {
@@ -1312,6 +1360,7 @@ String STR_AUTH_TYPE_MANUAL
     Text[ arabic ] = "Ïáíá ÇÓÊÎÏÇã";
     Text[ turkish ] = "Teknik dokümantasyon";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Manual";
 };
 String STR_AUTH_TYPE_MASTERSTHESIS
 {
@@ -1336,6 +1385,7 @@ String STR_AUTH_TYPE_MASTERSTHESIS
     Text[ arabic ] = "ÑÓÇáÉ ãÇÌÓÊíÑ";
     Text[ turkish ] = "Tez";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Diplomatura";
 };
 String STR_AUTH_TYPE_MISC
 {
@@ -1360,6 +1410,7 @@ String STR_AUTH_TYPE_MISC
     Text[ arabic ] = "ãäæÚÇÊ";
     Text[ turkish ] = "Muhtelif";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Diversos";
 };
 String STR_AUTH_TYPE_PHDTHESIS
 {
@@ -1384,6 +1435,7 @@ String STR_AUTH_TYPE_PHDTHESIS
     Text[ arabic ] = "ÑÓÇáÉ ÏßÊæÑÇå";
     Text[ turkish ] = "Doktora çalýþmasý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tesis doctoral";
 };
 String STR_AUTH_TYPE_PROCEEDINGS
 {
@@ -1408,6 +1460,7 @@ String STR_AUTH_TYPE_PROCEEDINGS
     Text[ arabic ] = "ÈÑæÊæßæá ÇÌÊãÇÚ";
     Text[ turkish ] = "Konferans raporu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Informe de reunión";
 };
 String STR_AUTH_TYPE_TECHREPORT
 {
@@ -1432,6 +1485,7 @@ String STR_AUTH_TYPE_TECHREPORT
     Text[ arabic ] = "ÊÞÑíÑ Úä ÚãáíÉ ÇáÈÍË";
     Text[ turkish ] = "Araþtýrma raporu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Informe de investigación";
 };
 String STR_AUTH_TYPE_UNPUBLISHED
 {
@@ -1456,6 +1510,7 @@ String STR_AUTH_TYPE_UNPUBLISHED
     Text[ arabic ] = "áã íõäÔÑ ÈÚÏ";
     Text[ turkish ] = "Yayýmlanmamýþ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Inédito";
 };
 String STR_AUTH_TYPE_EMAIL
 {
@@ -1480,6 +1535,7 @@ String STR_AUTH_TYPE_EMAIL
     Text[ arabic ] = "ÈÑíÏ ÅáßÊÑæäí";
     Text[ turkish ] = "e-posta";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "E-mail";
 };
 String STR_AUTH_TYPE_WWW
 {
@@ -1504,6 +1560,7 @@ String STR_AUTH_TYPE_WWW
     Text[ arabic ] = "ãÓÊäÏ æíÈ";
     Text[ turkish ] = "WWW belgesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Documento WWW";
 };
 String STR_AUTH_TYPE_CUSTOM1
 {
@@ -1528,6 +1585,7 @@ String STR_AUTH_TYPE_CUSTOM1
     Text[ arabic ] = "ãõÚÑøóÝ ãä ÞÈá ÇáãÓÊÎÏã1";
     Text[ turkish ] = "Kullanýcý tipi1";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Usuario1";
 };
 String STR_AUTH_TYPE_CUSTOM2
 {
@@ -1552,6 +1610,7 @@ String STR_AUTH_TYPE_CUSTOM2
     Text[ arabic ] = "ãõÚÑøóÝ ãä ÞÈá ÇáãÓÊÎÏã2";
     Text[ turkish ] = "Kullanýcý tipi2";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Usuario2";
 };
 String STR_AUTH_TYPE_CUSTOM3
 {
@@ -1576,6 +1635,7 @@ String STR_AUTH_TYPE_CUSTOM3
     Text[ arabic ] = "ãõÚÑøóÝ ãä ÞÈá ÇáãÓÊÎÏã3";
     Text[ turkish ] = "Kullanýcý tipi3";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Usuario3";
 };
 String STR_AUTH_TYPE_CUSTOM4
 {
@@ -1600,6 +1660,7 @@ String STR_AUTH_TYPE_CUSTOM4
     Text[ arabic ] = "ãõÚÑøóÝ ãä ÞÈá ÇáãÓÊÎÏã4";
     Text[ turkish ] = "Kullanýcý tipi4";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Usuario4";
 };
 String STR_AUTH_TYPE_CUSTOM5
 {
@@ -1624,6 +1685,7 @@ String STR_AUTH_TYPE_CUSTOM5
     Text[ arabic ] = "ãõÚÑøóÝ ãä ÞÈá ÇáãÓÊÎÏã5";
     Text[ turkish ] = "Kullanýcý tipi5";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Usuario5";
 };
 
 String STR_AUTH_FIELD_IDENTIFIER
@@ -1648,6 +1710,7 @@ String STR_AUTH_FIELD_IDENTIFIER
     Text[ chinese_traditional ] = "Â²µu´y­z¤å";
     Text[ arabic ] = "ÇÓã ãÎÊÕÑ";
     Text[ turkish ] = "~Kýsa ad";
+    Text[ catalan ] = "~Abreviatura";
 };
 String STR_AUTH_FIELD_AUTHORITY_TYPE
 {
@@ -1672,6 +1735,7 @@ String STR_AUTH_FIELD_AUTHORITY_TYPE
     Text[ arabic ] = "ÇáäæÚ";
     Text[ turkish ] = "~Tip";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Tipo";
 };
 String STR_AUTH_FIELD_ADDRESS
 {
@@ -1696,6 +1760,7 @@ String STR_AUTH_FIELD_ADDRESS
     Text[ arabic ] = "ÚäæÇä ÏÇÑ ÇáäÔÑ";
     Text[ turkish ] = "~Yayýnevi adresi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Dirección editorial";
 };
 String STR_AUTH_FIELD_ANNOTE
 {
@@ -1720,6 +1785,7 @@ String STR_AUTH_FIELD_ANNOTE
     Text[ arabic ] = "ãáÇÍÙÉ";
     Text[ turkish ] = "~Not";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Notas";
 };
 String STR_AUTH_FIELD_AUTHOR
 {
@@ -1744,6 +1810,7 @@ String STR_AUTH_FIELD_AUTHOR
     Text[ arabic ] = "ÇáãÄáÝ (ÇáãÄáÝæä)";
     Text[ turkish ] = "Ya~zan(lar)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "A~utor(es)";
 };
 String STR_AUTH_FIELD_BOOKTITLE
 {
@@ -1768,6 +1835,7 @@ String STR_AUTH_FIELD_BOOKTITLE
     Text[ arabic ] = "ÚäæÇä ÇáßÊÇÈ";
     Text[ turkish ] = "Kitap ~adý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Título del li~bro";
 };
 String STR_AUTH_FIELD_CHAPTER
 {
@@ -1792,6 +1860,7 @@ String STR_AUTH_FIELD_CHAPTER
     Text[ arabic ] = "ÇáÝÕá";
     Text[ turkish ] = "B~ölüm";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Capít~ulo";
 };
 String STR_AUTH_FIELD_EDITION
 {
@@ -1816,6 +1885,7 @@ String STR_AUTH_FIELD_EDITION
     Text[ arabic ] = "ÇáØÈÚÉ";
     Text[ turkish ] = "Basý~m";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Edi~ción";
 };
 String STR_AUTH_FIELD_EDITOR
 {
@@ -1840,6 +1910,7 @@ String STR_AUTH_FIELD_EDITOR
     Text[ arabic ] = "ÇáäÇÔÑ";
     Text[ turkish ] = "Yayým~cý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Editor";
 };
 String STR_AUTH_FIELD_HOWPUBLISHED
 {
@@ -1864,6 +1935,7 @@ String STR_AUTH_FIELD_HOWPUBLISHED
     Text[ arabic ] = "ØÑíÞÉ ÇáØÈÇÚÉ";
     Text[ turkish ] = "Yayým ~türü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tip~o de edición";
 };
 String STR_AUTH_FIELD_INSTITUTION
 {
@@ -1888,6 +1960,7 @@ String STR_AUTH_FIELD_INSTITUTION
     Text[ arabic ] = "ÇáåíÆÉ";
     Text[ turkish ] = "K~urum";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Institu~ción";
 };
 String STR_AUTH_FIELD_JOURNAL
 {
@@ -1912,6 +1985,7 @@ String STR_AUTH_FIELD_JOURNAL
     Text[ arabic ] = "ÇáãÌáÉ";
     Text[ turkish ] = "De~rgi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Revista";
 };
 String STR_AUTH_FIELD_MONTH
 {
@@ -1936,6 +2010,7 @@ String STR_AUTH_FIELD_MONTH
     Text[ arabic ] = "ÔåÑ";
     Text[ turkish ] = "~Ay";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Mes";
 };
 String STR_AUTH_FIELD_NOTE
 {
@@ -1960,6 +2035,7 @@ String STR_AUTH_FIELD_NOTE
     Text[ arabic ] = "ãáÇÍÙÉ";
     Text[ turkish ] = "~Not";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Nota";
 };
 String STR_AUTH_FIELD_NUMBER
 {
@@ -1984,6 +2060,7 @@ String STR_AUTH_FIELD_NUMBER
     Text[ arabic ] = "ÇáÑÞã";
     Text[ turkish ] = "Numa~ra";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nú~mero";
 };
 String STR_AUTH_FIELD_ORGANIZATIONS
 {
@@ -2008,6 +2085,7 @@ String STR_AUTH_FIELD_ORGANIZATIONS
     Text[ arabic ] = "ãäÙãÉ";
     Text[ turkish ] = "~Organizasyon";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Organización";
 };
 String STR_AUTH_FIELD_PAGES
 {
@@ -2032,6 +2110,7 @@ String STR_AUTH_FIELD_PAGES
     Text[ arabic ] = "ÕÝÍÇÊ";
     Text[ turkish ] = "Sayfa";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Páginas";
 };
 String STR_AUTH_FIELD_PUBLISHER
 {
@@ -2056,6 +2135,7 @@ String STR_AUTH_FIELD_PUBLISHER
     Text[ arabic ] = "ÏÇÑ ÇáäÔÑ";
     Text[ turkish ] = "Yayýnev~i";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Editorial";
 };
 String STR_AUTH_FIELD_SCHOOL
 {
@@ -2080,6 +2160,7 @@ String STR_AUTH_FIELD_SCHOOL
     Text[ arabic ] = "ÌÇãÚÉ";
     Text[ turkish ] = "Üniversite";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Colegio/~Universidad";
 };
 String STR_AUTH_FIELD_SERIES
 {
@@ -2104,6 +2185,7 @@ String STR_AUTH_FIELD_SERIES
     Text[ arabic ] = "ÇÓã ÇáÓáÓáÉ";
     Text[ turkish ] = "Seri ~adý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No~mbre de la serie";
 };
 String STR_AUTH_FIELD_TITLE
 {
@@ -2128,6 +2210,7 @@ String STR_AUTH_FIELD_TITLE
     Text[ arabic ] = "ÇáÚäæÇä";
     Text[ turkish ] = "A~d";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tít~ulo";
 };
 String STR_AUTH_FIELD_TYPE
 {
@@ -2152,6 +2235,7 @@ String STR_AUTH_FIELD_TYPE
     Text[ arabic ] = "äæÚ ÇáÊÞÑíÑ";
     Text[ turkish ] = "Rapor türü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tipo de informe";
 };
 String STR_AUTH_FIELD_VOLUME
 {
@@ -2176,6 +2260,7 @@ String STR_AUTH_FIELD_VOLUME
     Text[ arabic ] = "ÑÞã ÇáãÌáÏ";
     Text[ turkish ] = "Cilt sayýsý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Número de tomo";
 };
 String STR_AUTH_FIELD_YEAR
 {
@@ -2200,6 +2285,7 @@ String STR_AUTH_FIELD_YEAR
     Text[ arabic ] = "ÓäÉ ÇáÅÕÏÇÑ";
     Text[ turkish ] = "Yayým yýlý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Año de publi~cación";
 };
 String STR_AUTH_FIELD_URL
 {
@@ -2224,6 +2310,7 @@ String STR_AUTH_FIELD_URL
     Text[ arabic ] = "URL";
     Text[ turkish ] = "URL";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "URL";
 };
 String STR_AUTH_FIELD_CUSTOM1
 {
@@ -2248,6 +2335,7 @@ String STR_AUTH_FIELD_CUSTOM1
     Text[ arabic ] = "ÍÞá ÇáãÓÊÎÏã 1";
     Text[ turkish ] = "Kullanýcý alaný~1";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo de usuario~1";
 };
 String STR_AUTH_FIELD_CUSTOM2
 {
@@ -2272,6 +2360,7 @@ String STR_AUTH_FIELD_CUSTOM2
     Text[ arabic ] = "ÍÞá ÇáãÓÊÎÏã2";
     Text[ turkish ] = "Kullanýcý alaný~2";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo de usuario~2";
 };
 String STR_AUTH_FIELD_CUSTOM3
 {
@@ -2296,6 +2385,7 @@ String STR_AUTH_FIELD_CUSTOM3
     Text[ arabic ] = "ÍÞá ÇáãÓÊÎÏã3";
     Text[ turkish ] = "Kullanýcý alaný~3";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo de usuario~3";
 };
 String STR_AUTH_FIELD_CUSTOM4
 {
@@ -2320,6 +2410,7 @@ String STR_AUTH_FIELD_CUSTOM4
     Text[ arabic ] = "ÍÞá ÇáãÓÊÎÏã4";
     Text[ turkish ] = "Kullanýcý alaný~4";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo de usuario~4";
 };
 String STR_AUTH_FIELD_CUSTOM5
 {
@@ -2344,6 +2435,7 @@ String STR_AUTH_FIELD_CUSTOM5
     Text[ arabic ] = "ÍÞá ÇáãÓÊÎÏã5";
     Text[ turkish ] = "Kullanýcý alaný~5";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo de usuario~5";
 };
 String STR_AUTH_FIELD_ISBN
 {
@@ -2368,6 +2460,7 @@ String STR_AUTH_FIELD_ISBN
     Text[ arabic ] = "ISBN";
     Text[ turkish ] = "ISBN";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "ISBN";
 };
 
 
