@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scalc.sdi,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:15:27 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -800,7 +800,7 @@ SfxVoidItem Cancel SID_CANCEL
 
 //--------------------------------------------------------------------------
 SfxObjectItem Cells SID_SC_CELLS
-(SfxUInt16Item Column SID_SC_CELLS,SfxUInt16Item Row FN_PARAM_1,SfxUInt16Item Table FN_PARAM_2)
+(SfxInt16Item Column SID_SC_CELLS,SfxInt32Item Row FN_PARAM_1,SfxInt16Item Table FN_PARAM_2)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -825,7 +825,7 @@ SfxObjectItem Cells SID_SC_CELLS
 
 //--------------------------------------------------------------------------
 SfxStringItem CellText SID_SC_CELLTEXT
-(SfxUInt16Item Column SID_SC_CELLTEXT,SfxUInt16Item Row FN_PARAM_1,SfxUInt16Item Table FN_PARAM_2)
+(SfxInt16Item Column SID_SC_CELLTEXT,SfxInt32Item Row FN_PARAM_1,SfxInt16Item Table FN_PARAM_2)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -1024,7 +1024,7 @@ SfxVoidItem ClearContents SID_DELETE_CONTENTS
 ]
 
 //--------------------------------------------------------------------------
-SfxUInt16Item Column SID_RANGE_COL
+SfxInt16Item Column SID_RANGE_COL
 
 [
     /* flags: */
@@ -1608,7 +1608,7 @@ SfxVoidItem DataSelect SID_DATA_SELECT
 
 //--------------------------------------------------------------------------
 SfxVoidItem DataSort SID_SORT
-(SfxBoolItem ByRows SID_SORT_BYROW,SfxBoolItem HasHeader SID_SORT_HASHEADER,SfxBoolItem CaseSensitive SID_SORT_CASESENS,SfxBoolItem IncludeAttribs SID_SORT_ATTRIBS,SfxUInt16Item UserDefIndex SID_SORT_USERDEF,SfxUInt16Item Col1 FN_PARAM_1,SfxBoolItem Ascending1 FN_PARAM_2,SfxUInt16Item Col2 FN_PARAM_3,SfxBoolItem Ascending2 FN_PARAM_4,SfxUInt16Item Col3 FN_PARAM_5,SfxBoolItem Ascending3 FN_PARAM_6)
+(SfxBoolItem ByRows SID_SORT_BYROW,SfxBoolItem HasHeader SID_SORT_HASHEADER,SfxBoolItem CaseSensitive SID_SORT_CASESENS,SfxBoolItem IncludeAttribs SID_SORT_ATTRIBS,SfxUInt16Item UserDefIndex SID_SORT_USERDEF,SfxInt32Item Col1 FN_PARAM_1,SfxBoolItem Ascending1 FN_PARAM_2,SfxInt32Item Col2 FN_PARAM_3,SfxBoolItem Ascending2 FN_PARAM_4,SfxInt32Item Col3 FN_PARAM_5,SfxBoolItem Ascending3 FN_PARAM_6)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -2358,7 +2358,7 @@ SfxVoidItem FillModeRemoveSuccessor SID_FILL_DEL_SUCC
 
 //--------------------------------------------------------------------------
 SfxVoidItem FillModeSelect SID_FILL_SELECT
-(SfxInt16Item PosX SID_RANGE_COL,SfxInt16Item PosY SID_RANGE_ROW)
+(SfxInt16Item PosX SID_RANGE_COL,SfxInt32Item PosY SID_RANGE_ROW)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4761,7 +4761,7 @@ SfxInt32Item ObjectWidth SID_OBJECT_WIDTH
 
 //--------------------------------------------------------------------------
 SfxObjectItem Offset SID_RANGE_OFFSET
-(SfxInt16Item Column FN_PARAM_1,SfxInt16Item Row FN_PARAM_2,SfxInt16Item Table FN_PARAM_3)
+(SfxInt16Item Column FN_PARAM_1,SfxInt32Item Row FN_PARAM_2,SfxInt16Item Table FN_PARAM_3)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4990,7 +4990,7 @@ SfxVoidItem ProtectTraceChangeMode SID_CHG_PROTECT
 
 //--------------------------------------------------------------------------
 SfxVoidItem PutCell SID_SC_SETTEXT
-(SfxUInt16Item Column FN_PARAM_1,SfxUInt16Item Row FN_PARAM_2,SfxUInt16Item Table FN_PARAM_3,SfxStringItem Text SID_SC_SETTEXT)
+(SfxInt16Item Column FN_PARAM_1,SfxInt32Item Row FN_PARAM_2,SfxInt16Item Table FN_PARAM_3,SfxStringItem Text SID_SC_SETTEXT)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -5289,7 +5289,7 @@ SfxVoidItem ResetPrintZoom FID_RESET_PRINTZOOM
 ]
 
 //--------------------------------------------------------------------------
-SfxUInt16Item Row SID_RANGE_ROW
+SfxInt32Item Row SID_RANGE_ROW
 
 [
     /* flags: */
@@ -6565,7 +6565,7 @@ SfxUInt16Item StatusSelectionModeNorm SID_STATUS_SELMODE_NORM
 ]
 
 //--------------------------------------------------------------------------
-SfxUInt16Item Table SID_RANGE_TABLE
+SfxInt16Item Table SID_RANGE_TABLE
 
 [
     /* flags: */
@@ -6592,7 +6592,7 @@ SfxUInt16Item Table SID_RANGE_TABLE
 ]
 
 //--------------------------------------------------------------------------
-SfxUInt16Item TableCount SID_TABLES_COUNT
+SfxInt16Item TableCount SID_TABLES_COUNT
 
 [
     /* flags: */
