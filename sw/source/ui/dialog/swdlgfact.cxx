@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdlgfact.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2004-05-13 12:30:14 $
+ *  last change: $Author: hr $ $Date: 2004-05-14 11:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,7 +624,7 @@ Window* AbstractAuthMarkFloatDlg_Impl::GetWindow()
 
 //-------------- SwAbstractDialogFactory implementation--------------
 
-AbstractSwWordCountDialog* CreateSwWordCountDialog(Window* pParent)
+AbstractSwWordCountDialog* SwAbstractDialogFactory_Impl::CreateSwWordCountDialog(Window* pParent)
 {
     SwWordCountDialog* pDlg = new SwWordCountDialog( pParent );
     return new AbstractSwWordCountDialog_Impl( pDlg );
