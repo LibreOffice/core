@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WWD_Startup.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $  $Date: 2004-09-08 14:16:38 $
+ *  last change: $Author: kz $  $Date: 2004-11-27 09:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,8 @@ public abstract class WWD_Startup extends WWD_General {
 
         proxies = getOOProxies();
 
-        String soTemplateDir = FileAccess.getOfficePath(xmsf, "Template","share");
+        String soTemplateDir = FileAccess.getOfficePath(xmsf, "Template", "share");
+
         String exclamationURL = FileAccess.connectURLs( soTemplateDir, "wizard/bitmap/caution_16.png");
         this.drawNaviBar();
         this.buildStep1();
@@ -300,7 +301,7 @@ public abstract class WWD_Startup extends WWD_General {
 
 
         desktopFrame = Desktop.getActiveFrame(xMSF);
-        myFrame = OfficeDocument.createNewFrame(xMSF);
+        myFrame = OfficeDocument.createNewFrame(xMSF, this);
 
         desktopFrame = Desktop.findAFrame(xMSF, myFrame, desktopFrame);
 
@@ -778,9 +779,8 @@ public abstract class WWD_Startup extends WWD_General {
             return true;
         } catch (FileNotFoundException ex) {
 
-            //int relocate = SystemDialog.showMessageBox(xMSF, xC.getPeer()
-            //        , "warningbox", VclWindowPeerAttribute.YES_NO + VclWindowPeerAttribute.DEF_NO, getFileAccess().getPath(doc.cp_URL,"") + "\n \n File not found. Would you like to specify a new file location?");
-            int relocate = 1;
+            int relocate = SystemDialog.showMessageBox(xMSF, xC.getPeer()
+                    , "WarningBox", VclWindowPeerAttribute.YES_NO + VclWindowPeerAttribute.DEF_NO, getFileAccess().getPath(doc.cp_URL,"") + "\n\n" + resources.resSpecifyNewFileLocation);
 
             if (relocate == 2) {
                 String[] file = getDocAddDialog().callOpenDialog(false, FileAccess.getParentDir(doc.cp_URL));
