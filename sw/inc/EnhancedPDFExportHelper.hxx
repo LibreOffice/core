@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:08:08 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 10:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,12 @@ class SwTaggedPDFHelper
  * Analyses the document structure and export Notes, Hyperlinks, References,
  * and Outline. Link ids created during pdf export are stored in
  * aReferenceIdMap and aHyperlinkIdMap, in order to use them during
- * tagged pdf output.
+ * tagged pdf output. Therefore the SwEnhancedPDFExportHelper is used
+ * before painting. Unfortunately links from the EditEngine into the
+ * Writer document require to be exported after they have been painted.
+ * Therefore SwEnhancedPDFExportHelper also has to be used after the
+ * painting process, the parameter bEditEngineOnly indicated that only
+ * the bookmarks from the EditEngine have to be processed.
  *************************************************************************/
 
 typedef std::pair< SwRect, sal_Int32 > IdMapEntry;
@@ -201,11 +206,12 @@ class SwEnhancedPDFExportHelper
     static LinkIdMap aLinkIdMap;
     static FrmTagIdMap aFrmTagIdMap;
 
+    void EnhancedPDFExport( bool bEditEngineOnly );
+
     public:
 
-    SwEnhancedPDFExportHelper( SwEditShell& rSh, OutputDevice& rOut );
-
-    void EnhancedPDFExport();
+    SwEnhancedPDFExportHelper( SwEditShell& rSh, OutputDevice& rOut,
+                               bool bEditEngineOnly = false );
 
     static LinkIdMap& GetLinkIdMap() { return aLinkIdMap; }
     static FrmTagIdMap& GetFrmTagIdMap() { return aFrmTagIdMap; }
