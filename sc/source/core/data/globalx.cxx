@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globalx.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-01-04 15:29:22 $
+ *  last change: $Author: nn $ $Date: 2001-06-08 17:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
 
 #pragma hdrstop
 
@@ -118,13 +117,10 @@ void ScGlobal::InitAddIns()
                         xResultSet = aCnt.createCursor(
                             aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
                     }
-                    catch ( CommandAbortedException& )
-                    {
-                        // no assertion if AddIn directory doesn't exist
-                    }
                     catch ( Exception& )
                     {
-                        DBG_ERRORFILE( "create cursor failed!" );
+                        // ucb may throw different exceptions on failure now
+                        // no assertion if AddIn directory doesn't exist
                     }
 
                     if ( xResultSet.is() )
