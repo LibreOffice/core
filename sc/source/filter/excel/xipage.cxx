@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xipage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:01:52 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:37:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-// ============================================================================
 
 #ifndef SC_XIPAGE_HXX
 #include "xipage.hxx"
@@ -195,7 +193,7 @@ void XclImpPageSettings::ReadHeaderFooter( XclImpStream& rStrm )
 
 void XclImpPageSettings::ReadPageBreaks( XclImpStream& rStrm )
 {
-    ScfUInt16Vec* pVec = NULL;
+    ScfUInt16Vec* pVec = 0;
     switch( rStrm.GetRecId() )
     {
         case EXC_ID_HORPAGEBREAKS:  pVec = &maData.maHorPageBreaks;     break;
@@ -268,7 +266,7 @@ void XclImpPageSettings::ReadBitmap( XclImpStream& rStrm )
                 }
 
                 aBmp.ReleaseAccess( pAccess );
-                maData.mpBrushItem.reset( new SvxBrushItem( Graphic( aBmp ), GPOS_TILED ) );
+                maData.mxBrushItem.reset( new SvxBrushItem( Graphic( aBmp ), GPOS_TILED ) );
             }
         }
         else
@@ -350,8 +348,8 @@ void XclImpPageSettings::CreatePageStyle()
     sal_uInt16 nStartPage = maData.mbManualStart ? maData.mnStartPage : 0;
     ScfTools::PutItem( rItemSet, SfxUInt16Item( ATTR_PAGE_FIRSTPAGENO, nStartPage ), true );
 
-    if( maData.mpBrushItem.get() )
-        rItemSet.Put( *maData.mpBrushItem );
+    if( maData.mxBrushItem.get() )
+        rItemSet.Put( *maData.mxBrushItem );
 
     if( mbValidPaper )
     {
