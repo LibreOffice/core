@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:09:45 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:30:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2573,7 +2573,8 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
     }
 
     ScDocument*             pDoc = GetViewData()->GetDocument();
-    ScMarkData&             rMark = GetViewData()->GetMarkData();
+    ScMarkData aFuncMark( GetViewData()->GetMarkData() );       // local copy for UnmarkFiltered
+    ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
     ScDocShell*             pDocSh = GetViewData()->GetDocShell();
     const ScPatternAttr*    pSelAttrs = GetSelectionPattern();
     const SfxPoolItem*      pBorderAttr = NULL;
@@ -2626,12 +2627,12 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
         }
         else // if ( eItemState == SFX_ITEM_DONTCARE )
         {
-            rMark.MarkToMulti();
-            pDoc->ApplySelectionLineStyle( rMark, pLine, bColorOnly );
+            aFuncMark.MarkToMulti();
+            pDoc->ApplySelectionLineStyle( aFuncMark, pLine, bColorOnly );
         }
 
         ScRange aMarkRange;
-        rMark.GetMultiMarkArea( aMarkRange );
+        aFuncMark.GetMultiMarkArea( aMarkRange );
         SCCOL nStartCol = aMarkRange.aStart.Col();
         SCROW nStartRow = aMarkRange.aStart.Row();
         SCTAB nStartTab = aMarkRange.aStart.Tab();
