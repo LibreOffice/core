@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_java2uno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-04 14:56:28 $
+ *  last change: $Author: dbo $ $Date: 2002-11-15 16:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,9 +340,15 @@ JNIEXPORT jobject JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch
     {
         OUString method_name( jstring_to_oustring( attach, jo_method ) );
 #ifdef DEBUG
+        OUStringBuffer trace_buf( 64 );
+        trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("java->uno call: ") );
+        trace_buf.append( method_name );
+        trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" on oid ") );
+        JLocalAutoRef jo_oid(
+            attach, attach->GetObjectField( jo_proxy, jni_info->m_field_JNI_proxy_m_oid ) );
+        trace_buf.append( jstring_to_oustring( attach, (jstring)jo_oid.get() ) );
         OString cstr_msg(
-            OUStringToOString(
-                OUSTR("java dispatch call occurs: ") + method_name, RTL_TEXTENCODING_ASCII_US ) );
+            OUStringToOString( trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
         OSL_TRACE( cstr_msg.getStr() );
 #endif
 
@@ -407,26 +413,39 @@ JNIEXPORT jobject JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch
         }
 
         // determine exact interface td
-        typelib_InterfaceTypeDescription * td =
-            reinterpret_cast< typelib_InterfaceTypeDescription * >(
+        typelib_TypeDescription * orig_td =
+            reinterpret_cast< typelib_TypeDescription * >(
                 attach->GetLongField( jo_proxy, jni_info->m_field_JNI_proxy_m_td_handle ) );
+        typelib_InterfaceTypeDescription * td =
+            reinterpret_cast< typelib_InterfaceTypeDescription * >( orig_td );
         OUString iface_name( jstring_to_oustring( attach, jo_decl_class ) );
-        while (! reinterpret_cast< OUString const * >(
+        while ((0 != td) &&
+               !reinterpret_cast< OUString const * >(
                    &((typelib_TypeDescription *)td)->pTypeName )->equals( iface_name ))
         {
             td = td->pBaseTypeDescription;
+        }
+        if (0 == td)
+        {
+            OUStringBuffer buf( 64 );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "proxy (type=") );
+            buf.append( *reinterpret_cast< OUString const * >( &orig_td->pTypeName ) );
+            buf.appendAscii(
+                RTL_CONSTASCII_STRINGPARAM( ") does not fit with called interface: ") );
+            buf.append( iface_name );
+            throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
 
         uno_Interface * pUnoI =
             reinterpret_cast< uno_Interface * >(
                 attach->GetLongField( jo_proxy, jni_info->m_field_JNI_proxy_m_receiver_handle ) );
 
-        typelib_TypeDescriptionReference ** ppMembers = td->ppMembers;
-        for ( sal_Int32 nPos = td->nMembers; nPos--; )
+        typelib_TypeDescriptionReference ** ppAllMembers = td->ppAllMembers;
+        for ( sal_Int32 nPos = td->nAllMembers; nPos--; )
         {
             // try to avoid getting typedescription as long as possible,
             // because of a Mutex.acquire() in typelib_typedescriptionreference_getDescription()
-            typelib_TypeDescriptionReference * member_type = ppMembers[ nPos ];
+            typelib_TypeDescriptionReference * member_type = ppAllMembers[ nPos ];
 
             // check method_name against fully qualified type_name of member_type
             OUString const & type_name =
@@ -440,7 +459,7 @@ JNIEXPORT jobject JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch
                         type_name.getStr() + type_name.getLength() - method_name.getLength() )
                      /* ends with method_name: */))
                 {
-                    TypeDescr member_td( ppMembers[ nPos ] );
+                    TypeDescr member_td( member_type );
                     typelib_InterfaceMethodTypeDescription * method_td =
                         (typelib_InterfaceMethodTypeDescription *)member_td.get();
                     return bridge->call_uno(
@@ -464,7 +483,7 @@ JNIEXPORT jobject JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch
                 {
                     if ('g' == method_name[ 0 ])
                     {
-                        TypeDescr member_td( ppMembers[ nPos ] );
+                        TypeDescr member_td( member_type );
                         typelib_InterfaceAttributeTypeDescription * attribute_td =
                             (typelib_InterfaceAttributeTypeDescription *)member_td.get();
                         return bridge->call_uno(
@@ -474,7 +493,7 @@ JNIEXPORT jobject JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch
                     }
                     else if ('s' == method_name[ 0 ])
                     {
-                        TypeDescr member_td( ppMembers[ nPos ] );
+                        TypeDescr member_td( member_type );
                         typelib_InterfaceAttributeTypeDescription * attribute_td =
                             (typelib_InterfaceAttributeTypeDescription *)member_td.get();
                         if (! attribute_td->bReadOnly)
@@ -493,7 +512,14 @@ JNIEXPORT jobject JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch
             }
         }
         // the thing that should not be... no method info found!
-        throw BridgeRuntimeError( OUSTR("no method info found for call: ") + method_name );
+        OUStringBuffer buf( 64 );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
+            "calling undeclared function on interface ") );
+        buf.append( *reinterpret_cast< OUString const * >(
+            &((typelib_TypeDescription *)td)->pTypeName ) );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(": ") );
+        buf.append( method_name );
+        throw BridgeRuntimeError( buf.makeStringAndClear() );
     }
     catch (BridgeRuntimeError & err)
     {

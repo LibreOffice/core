@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_base.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-29 10:55:06 $
+ *  last change: $Author: dbo $ $Date: 2002-11-15 16:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@ class JNI_attach
     JNI_info const *            m_jni_info;
     JavaVM *                    m_vm;
     JNIEnv *                    m_env;
+    bool                        m_revoke;
     bool                        m_detach;
 
 public:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_bridge.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-04 14:45:40 $
+ *  last change: $Author: dbo $ $Date: 2002-11-15 16:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,13 +263,21 @@ jni_Bridge::~jni_Bridge()
 
 //__________________________________________________________________________________________________
 JNI_attach::JNI_attach( uno_Environment * java_env, JNIEnv * jni_env ) SAL_THROW( () )
-    : m_env( jni_env ),
+    : m_thread_id( ::osl::Thread::getCurrentIdentifier() ),
+      m_env( jni_env ),
       m_detach( false )
 {
     OSL_ASSERT( 0 == rtl_ustr_ascii_compare( java_env->pTypeName->buffer, "java" ) );
     m_context = (JavaVMContext *)java_env->pContext;
     m_vm = m_context->_pJavaVM;
     m_jni_info = (JNI_info const *)m_context->m_extra;
+
+    MutexGuard guard( m_context->_mutex );
+    pair< JavaVMContext::t_map::iterator, bool > insertion(
+        m_context->_registeredThreadMap.insert(
+            JavaVMContext::t_map::value_type(
+                m_thread_id, JavaVMContext::t_entry( 1, m_env ) ) ) );
+    m_revoke = insertion.second;
 }
 //__________________________________________________________________________________________________
 JNI_attach::JNI_attach( uno_Environment * java_env )
@@ -281,35 +289,39 @@ JNI_attach::JNI_attach( uno_Environment * java_env )
     m_jni_info = (JNI_info const *)m_context->m_extra;
 
     MutexGuard guard( m_context->_mutex );
-    JavaVMContext::t_map::iterator iFind( m_context->_registeredThreadMap.find( m_thread_id ) );
-    if (m_context->_registeredThreadMap.end() == iFind)
+    pair< JavaVMContext::t_map::iterator, bool > insertion(
+        m_context->_registeredThreadMap.insert(
+            JavaVMContext::t_map::value_type(
+                m_thread_id, JavaVMContext::t_entry( 1, m_env ) ) ) );
+    if (insertion.second)
     {
+        m_revoke = true;
         jint res = m_vm->AttachCurrentThread( (void **)&m_env, 0 );
         if (0 < res)
+        {
+            m_detach = false;
             throw BridgeRuntimeError( OUSTR("AttachCurrentThread() failed!") );
-        pair< JavaVMContext::t_map::iterator, bool > insertion(
-            m_context->_registeredThreadMap.insert(
-                JavaVMContext::t_map::value_type(
-                    m_thread_id, JavaVMContext::t_entry( 1, m_env ) ) ) );
-        OSL_ENSURE( insertion.second, "### insertion into map failed?!" );
+        }
         m_detach = true;
     }
     else
     {
-        m_env = iFind->second.second;
+        m_revoke = false;
+        m_env = insertion.first->second.second;
         m_detach = false;
     }
 }
 //__________________________________________________________________________________________________
 JNI_attach::~JNI_attach() SAL_THROW( () )
 {
-    if (m_detach)
+    if (m_revoke)
     {
-        {
         MutexGuard guard( m_context->_mutex );
         size_t erased = m_context->_registeredThreadMap.erase( m_thread_id );
         OSL_ASSERT( 1 == erased );
-        }
+    }
+    if (m_detach)
+    {
         jint res = m_vm->DetachCurrentThread();
         OSL_ASSERT( 0 == res );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_data.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-01 14:24:56 $
+ *  last change: $Author: dbo $ $Date: 2002-11-15 16:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,11 +272,19 @@ void jni_Bridge::map_to_uno(
         JLocalAutoRef jo_type_name(
             attach, attach->GetObjectField( java_data.l, m_jni_info->m_field_Type__typeName ) );
         if (! jo_type_name.is())
-            throw BridgeRuntimeError( OUSTR("incomplete type object: no type name!") );
+        {
+            throw BridgeRuntimeError(
+                OUSTR("[map_to_uno():typelib_TypeClass_TYPE] "
+                      "incomplete type object: no type name!") );
+        }
         OUString type_name( jstring_to_oustring( attach, (jstring)jo_type_name.get() ) );
         ::com::sun::star::uno::TypeDescription td( type_name );
         if (! td.is())
-            throw BridgeRuntimeError( OUSTR("UNO type not found: ") + type_name );
+        {
+            throw BridgeRuntimeError(
+                OUSTR("[map_to_uno():typelib_TypeClass_TYPE] "
+                      "UNO type not found: ") + type_name );
+        }
         typelib_typedescriptionreference_acquire( td.get()->pWeakRef );
         if (assign)
         {
@@ -341,7 +349,11 @@ void jni_Bridge::map_to_uno(
             jo_type.reset(
                 attach, attach->GetObjectField( java_data.l, m_jni_info->m_field_Any__type ) );
             if (! jo_type.is())
-                throw BridgeRuntimeError( OUSTR("no type set at com.sun.star.uno.Any!") );
+            {
+                throw BridgeRuntimeError(
+                    OUSTR("[map_to_uno():typelib_TypeClass_ANY] "
+                          "no type set at com.sun.star.uno.Any!") );
+            }
             // wrapped value
             jo_wrapped_holder.reset(
                 attach, attach->GetObjectField( java_data.l, m_jni_info->m_field_Any__object ) );
@@ -374,7 +386,11 @@ void jni_Bridge::map_to_uno(
 
         ::com::sun::star::uno::TypeDescription value_td( type_name );
         if (! value_td.is())
-            throw BridgeRuntimeError( OUSTR("UNO type not found: ") + type_name );
+        {
+            throw BridgeRuntimeError(
+                OUSTR("[map_to_uno():typelib_TypeClass_ANY] "
+                      "UNO type not found: ") + type_name );
+        }
         typelib_TypeClass type_class = value_td.get()->eTypeClass;
 
         // just as fallback: should never happen
@@ -507,7 +523,9 @@ void jni_Bridge::map_to_uno(
                 break;
             }
             default:
-                throw BridgeRuntimeError( OUSTR("unsupported value type of any: ") + type_name );
+                throw BridgeRuntimeError(
+                    OUSTR("[map_to_uno():typelib_TypeClass_ANY] "
+                          "unsupported value type of any: ") + type_name );
             }
         }
         catch (...)
@@ -785,7 +803,8 @@ void jni_Bridge::map_to_uno(
         }
         default:
             throw BridgeRuntimeError(
-                OUSTR("unsupported sequence element type: ") +
+                OUSTR("[map_to_uno():typelib_TypeClass_SEQUENCE] "
+                      "unsupported sequence element type: ") +
                 *reinterpret_cast< OUString const * >( &element_type->pTypeName ) );
         }
 
@@ -835,7 +854,7 @@ void jni_Bridge::map_to_uno(
     }
     default:
         throw BridgeRuntimeError(
-            OUSTR("unsupported data type: ") +
+            OUSTR("[map_to_uno()] unsupported data type: ") +
             *reinterpret_cast< OUString const * >( &type->pTypeName ) );
     }
 }
@@ -1111,31 +1130,35 @@ void jni_Bridge::map_to_java(
         if (in_param)
         {
             uno_Any const * pAny = (uno_Any const *)uno_data;
-            jvalue args[ 2 ];
-            // map value
-            map_to_java(
-                attach, args, pAny->pData, pAny->pType, 0,
-                true /* in */, false /* no out */, true /* create integral wrappers */ );
-            switch (pAny->pType->eTypeClass)
+            if (typelib_TypeClass_VOID != pAny->pType->eTypeClass)
             {
-            case typelib_TypeClass_UNSIGNED_SHORT:
-            case typelib_TypeClass_UNSIGNED_LONG:
-            case typelib_TypeClass_UNSIGNED_HYPER:
-            {
-                // build up com.sun.star.uno.Any
-                JLocalAutoRef jo_val( attach, args[ 0 ].l );
-                JLocalAutoRef jo_type( attach, create_type( attach, pAny->pType ) );
-                args[ 0 ].l = jo_type.get();
-                args[ 1 ].l = jo_val.get();
-                jo_any.reset(
-                    attach, attach->NewObjectA(
-                        m_jni_info->m_class_Any, m_jni_info->m_ctor_Any_with_Type_Object, args ) );
-                attach.ensure_no_exception();
-                break;
-            }
-            default:
-                jo_any.reset( attach, args[ 0 ].l );
-                break;
+                jvalue args[ 2 ];
+                // map value
+                map_to_java(
+                    attach, args, pAny->pData, pAny->pType, 0,
+                    true /* in */, false /* no out */, true /* create integral wrappers */ );
+                switch (pAny->pType->eTypeClass)
+                {
+                case typelib_TypeClass_UNSIGNED_SHORT:
+                case typelib_TypeClass_UNSIGNED_LONG:
+                case typelib_TypeClass_UNSIGNED_HYPER:
+                {
+                    // build up com.sun.star.uno.Any
+                    JLocalAutoRef jo_val( attach, args[ 0 ].l );
+                    JLocalAutoRef jo_type( attach, create_type( attach, pAny->pType ) );
+                    args[ 0 ].l = jo_type.get();
+                    args[ 1 ].l = jo_val.get();
+                    jo_any.reset(
+                        attach, attach->NewObjectA(
+                            m_jni_info->m_class_Any,
+                            m_jni_info->m_ctor_Any_with_Type_Object, args ) );
+                    attach.ensure_no_exception();
+                    break;
+                }
+                default:
+                    jo_any.reset( attach, args[ 0 ].l );
+                    break;
+                }
             }
         }
         if (out_param)
@@ -1596,7 +1619,8 @@ void jni_Bridge::map_to_java(
         }
         default:
             throw BridgeRuntimeError(
-                OUSTR("unsupported element data type: ") +
+                OUSTR("[map_to_java():typelib_TypeClass_SEQUENCE] "
+                      "unsupported element data type: ") +
                 *reinterpret_cast< OUString const * >( &element_type->pTypeName ) );
         }
 
@@ -1667,7 +1691,7 @@ void jni_Bridge::map_to_java(
     }
     default:
         throw BridgeRuntimeError(
-            OUSTR("unsupported data type: ") +
+            OUSTR("[map_to_java()] unsupported data type: ") +
             *reinterpret_cast< OUString const * >( &type->pTypeName ) );
     }
 }

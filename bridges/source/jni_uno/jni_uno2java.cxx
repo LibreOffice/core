@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_uno2java.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-05 11:04:22 $
+ *  last change: $Author: dbo $ $Date: 2002-11-15 16:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #include <malloc.h>
 #else
 #include <alloca.h>
+#endif
+
+#ifdef DEBUG
+#include "rtl/ustrbuf.hxx"
 #endif
 
 #include "jni_bridge.h"
@@ -489,10 +493,13 @@ void SAL_CALL jni_unoInterfaceProxy_dispatch(
 {
     jni_unoInterfaceProxy const * that = static_cast< jni_unoInterfaceProxy const * >( pUnoI );
 #ifdef DEBUG
+    OUStringBuffer trace_buf( 64 );
+    trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("uno->java call: ") );
+    trace_buf.append( *reinterpret_cast< OUString const * >( &member_td->pTypeName ) );
+    trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" on oid ") );
+    trace_buf.append( that->m_oid );
     OString cstr_msg(
-        OUStringToOString(
-            OUSTR("uno dispatch call occurs: ") + member_td->pTypeName + that->m_oid,
-            RTL_TEXTENCODING_ASCII_US ) );
+        OUStringToOString( trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
     OSL_TRACE( cstr_msg.getStr() );
 #endif
 
