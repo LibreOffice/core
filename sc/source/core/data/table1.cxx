@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:50:26 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <svx/algitem.hxx>
 #include <unotools/textsearch.hxx>
 #include <sfx2/objsh.hxx>
 
@@ -157,6 +158,7 @@ ScTable::ScTable( ScDocument* pDoc, USHORT nNewTab, const String& rNewName,
     pDocument( pDoc ),
     aName( rNewName ),
     nTab( nNewTab ),
+    bLayoutRTL( FALSE ),
     bScenario( FALSE ),
     bActiveScenario( FALSE ),
     nScenarioFlags( 0 ),
@@ -208,6 +210,13 @@ ScTable::ScTable( ScDocument* pDoc, USHORT nNewTab, const String& rNewName,
             pRowHeight[i] = ScGlobal::nStdRowHeight;
             pRowFlags[i] = 0;
         }
+    }
+
+    if ( pDocument->IsDocVisible() )
+    {
+        //  when a sheet is added to a visible document,
+        //  initialize its RTL flag from the system locale
+        bLayoutRTL = ScGlobal::IsSystemRTL();
     }
 
     ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
@@ -266,6 +275,11 @@ void ScTable::SetName( const String& rNewName )
 void ScTable::SetVisible( BOOL bVis )
 {
     bVisible = bVis;
+}
+
+void ScTable::SetLayoutRTL( BOOL bSet )
+{
+    bLayoutRTL = bSet;
 }
 
 void ScTable::SetScenario( BOOL bFlag )
@@ -1300,11 +1314,37 @@ void ScTable::ExtendPrintArea( OutputDevice* pDev,
 
                         long nTwips = (long) (nPixel / nPPTX);
                         long nDocW = GetColWidth( nDataCol );
+
+                        long nMissing = nTwips - nDocW;
+                        if ( nMissing > 0 )
+                        {
+                            //  look at alignment
+
+                            const ScPatternAttr* pPattern = GetPattern( nDataCol, nRow );
+                            const SfxItemSet* pCondSet = NULL;
+                            if ( ((const SfxUInt32Item&)pPattern->GetItem(ATTR_CONDITIONAL)).GetValue() )
+                                pCondSet = pDocument->GetCondResult( nDataCol, nRow, nTab );
+
+                            SvxCellHorJustify eHorJust = (SvxCellHorJustify)((const SvxHorJustifyItem&)
+                                            pPattern->GetItem( ATTR_HOR_JUSTIFY, pCondSet )).GetValue();
+                            if ( eHorJust == SVX_HOR_JUSTIFY_CENTER )
+                                nMissing /= 2;                          // distributed into both directions
+                            else
+                            {
+                                // STANDARD is LEFT (only text is handled here)
+                                BOOL bRight = ( eHorJust == SVX_HOR_JUSTIFY_RIGHT );
+                                if ( IsLayoutRTL() )
+                                    bRight = !bRight;
+                                if ( bRight )
+                                    nMissing = 0;       // extended only to the left (logical)
+                            }
+                        }
+
                         USHORT nCol = nDataCol;
-                        while (nTwips > nDocW && nCol < MAXCOL)
+                        while (nMissing > 0 && nCol < MAXCOL)
                         {
                             ++nCol;
-                            nDocW += GetColWidth( nCol );
+                            nMissing -= GetColWidth( nCol );
                         }
                         if (nCol>nPrintCol)
                             nPrintCol = nCol;
