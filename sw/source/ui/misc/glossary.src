@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:59:47 $
+ *  last change: $Author: os $ $Date: 2001-02-23 14:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -675,6 +675,13 @@ ModalDialog DLG_GLOSSARY
                 Text[ korean ] = "¹Ù²Ù±â";
                 Text[ turkish ] = "Deðiþtir";
                 Text[ language_user1 ] = " ";
+            };
+            MenuItem
+            {
+                Identifier = FN_GL_REPLACE_TEXT;
+                HelpID = HID_MD_GLOS_REPLACE;
+                Text = "E~rsetzen (nur Text)" ;
+                Text [ ENGLISH ] = "Replace (text only)" ;
             };
             MenuItem
             {

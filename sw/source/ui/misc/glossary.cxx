@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-12-21 12:11:28 $
+ *  last change: $Author: os $ $Date: 2001-02-23 14:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -583,6 +583,7 @@ IMPL_LINK( SwGlossaryDlg, EnableHdl, Menu *, pMn )
     pMn->EnableItem(FN_GL_DEFINE_TEXT, bSelection && bHasEntry && !bExists);
     pMn->EnableItem(FN_GL_COPY_TO_CLIPBOARD, bExists);
     pMn->EnableItem(FN_GL_REPLACE, bSelection && bExists && !bIsOld );
+    pMn->EnableItem(FN_GL_REPLACE_TEXT, bSelection && bExists && !bIsOld );
     pMn->EnableItem(FN_GL_EDIT, bExists );
     pMn->EnableItem(FN_GL_RENAME, bExists && !bIsOld );
     pMn->EnableItem(FN_GL_DELETE, bExists && !bIsOld );
@@ -608,8 +609,11 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
     switch(pMn->GetCurItemId())
     {
         case FN_GL_REPLACE:
+        case FN_GL_REPLACE_TEXT:
             pGlossaryHdl->NewGlossary(  aNameED.GetText(),
-                                        aShortNameEdit.GetText() );
+                                        aShortNameEdit.GetText(),
+                                        sal_False,
+                                        pMn->GetCurItemId() == FN_GL_REPLACE_TEXT);
         break;
         case FN_GL_DEFINE_TEXT:
             bNoAttr = sal_True;

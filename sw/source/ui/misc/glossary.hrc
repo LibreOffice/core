@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *  last change: $Author: os $ $Date: 2001-02-23 14:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
 #define FN_GL_IMPORT        75
 #define ST_READONLY         76
 #define ST_READONLY_PATH    77
+#define FN_GL_REPLACE_TEXT  78
 
 // Box Bibliothek Textbausteine
 #define GB_EDIT             1
