@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivotsh.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:00 $
+ *  last change: $Author: dr $ $Date: 2002-05-30 14:33:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include "shellids.hxx"
 
 class ScTabViewShell;
+class ScDPObject;
 
 class ScPivotShell : public SfxShell
 {
@@ -87,6 +88,8 @@ public:
 
 private:
     ScTabViewShell* pViewShell;
+
+    ScDPObject*     GetCurrDPObject();
 };
 
 

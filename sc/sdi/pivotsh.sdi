@@ -4,6 +4,7 @@ interface Pivot : Object
 
     SID_PIVOT_RECALC    [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_PIVOT_KILL      [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+        SID_DP_FILTER           [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
 }
 
 shell ScPivotShell

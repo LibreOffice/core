@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:37:58 $
+ *  last change: $Author: dr $ $Date: 2002-05-30 14:34:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,27 +60,14 @@
  ************************************************************************/
 
 
-
-
-
-
-
-
-
-
-
-
-
 #include "sc.hrc" // -> #include <sfx.hrc>
 #include <offmgr/offmenu.hrc>
-
 
 
  // Popup-Menues ----------------------------------------------------------------
 
 String RID_POPUP_CELLS
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Zellen : Popup-Men³ f³r Zellen */
     Text = "Popup-Menü für Zellen" ;
     Text [ ENGLISH ] = "Cell Popup Menu" ;
     Text [ norwegian ] = "Cell Popup Menu" ;
@@ -94,17 +81,18 @@ String RID_POPUP_CELLS
     Text [ dutch ] = "PopUp-menu voor cellen" ;
     Text [ spanish ] = "Menú emergente para celdas" ;
     Text [ english_us ] = "Cell pop-up menu" ;
-    Text[ chinese_simplified ] = "µ¥Ôª¸ñµ¯³öÊ½²Ëµ¥";
+    Text[ chinese_simplified ] = "å•å…ƒæ ¼å¼¹å‡ºå¼èœå•";
     Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ ÿ÷ååê";
     Text[ polish ] = "Menu podrêczne dla komórek";
-    Text[ japanese ] = "¾Ù‚ÌÎß¯Ìß±¯ÌßÒÆ­°";
-    Text[ chinese_traditional ] = "Àx¦s®æ§ÖÅã¥\\¯àªí";
+    Text[ japanese ] = "ã‚»ãƒ«ã®ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼";
+    Text[ chinese_traditional ] = "å„²å­˜æ ¼å¿«é¡¯åŠŸèƒ½è¡¨";
     Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ ááÎáÇíÇ";
     Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá êåëéÜ";
-    Text[ korean ] = "¼¿ ÆË¾÷¸Ş´º";
+    Text[ korean ] = "ì…€ íŒì—… ë©”ë‰´";
     Text[ turkish ] = "Hücreler için popup mönü";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Menú emergente para celdas";
+    Text[ catalan ] = "Menú emergent de la cel·la";
+    Text[ thai ] = "à¹€à¸‹à¸¥à¸¥à¹Œà¹€à¸¡à¸™à¸¹à¹à¸šà¸šà¸œà¸¸à¸”à¸‚à¸¶à¹‰à¸™";
 };
 
 Menu RID_POPUP_CELLS
@@ -115,9 +103,6 @@ Menu RID_POPUP_CELLS
         {
             Identifier = SID_CELL_FORMAT_RESET ;
             HelpId = SID_CELL_FORMAT_RESET ;
-            /* ### ACHTUNG: Neuer Text in Resource? Standar~d : Standard */
-            /* ### ACHTUNG: Neuer Text in Resource? Standar~d : Standard */
-            /* ### ACHTUNG: Neuer Text in Resource? Standar~d : Standard */
             Text = "Standar~d" ;
             Text [ ENGLISH ] = "Standar~d" ;
             Text [ dutch ] = "~Standaard" ;
@@ -129,18 +114,19 @@ Menu RID_POPUP_CELLS
             Text [ danish ] = "Standar~d" ;
             Text [ portuguese_brazilian ] = "Standar~d" ;
             Text [ portuguese ] = "~Padrão" ;
-            Text[ chinese_simplified ] = "±ê×¼(~D)";
+            Text[ chinese_simplified ] = "æ ‡å‡†(~D)";
             Text[ language_user1 ] = " ";
             Text[ russian ] = "~Ïî óìîë÷àíèş";
             Text[ polish ] = "~Domyœlnie";
-            Text[ japanese ] = "•W€(~D)";
-            Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
+            Text[ japanese ] = "æ¨™æº–(~D)";
+            Text[ chinese_traditional ] = "æ¨™æº–(~D)";
             Text[ arabic ] = "ÇİÊÑÇÖí~";
             Text[ greek ] = "~ĞñïåğéëïãŞ";
-            Text[ korean ] = "±âº»°ª(~D)";
+            Text[ korean ] = "ê¸°ë³¸ ê°’(~D)";
             Text[ turkish ] = "~Standart";
-            Text[ catalan ] = "~Predeterminado";
+            Text[ catalan ] = "Per ~defecte";
             Text[ finnish ] = "~Oletusarvo";
+            Text[ thai ] = "~à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -162,17 +148,18 @@ Menu RID_POPUP_CELLS
             Text [ dutch ] = "Cellen ~opmaken..." ;
             Text [ spanish ] = "~Formatear celdas..." ;
             Text [ english_us ] = "~Format Cells..." ;
-            Text[ chinese_simplified ] = "µ¥Ôª¸ñ¸ñÊ½»¯(~F)...";
+            Text[ chinese_simplified ] = "å•å…ƒæ ¼æ ¼å¼åŒ–(~F)...";
             Text[ russian ] = "Ôîğìàò ÿ÷ååê...";
             Text[ polish ] = "Formatuj komórki...";
-            Text[ japanese ] = "¾Ù‚Ì‘®İ’è(~F)...";
-            Text[ chinese_traditional ] = "Àx¦s®æ®æ¦¡¤Æ(~F)...";
+            Text[ japanese ] = "ã‚»ãƒ«ã®æ›¸å¼è¨­å®š(~F)...";
+            Text[ chinese_traditional ] = "å„²å­˜æ ¼æ ¼å¼åŒ–(~F)...";
             Text[ arabic ] = "...ÊäÓíŞ ÇáÎáÇíÇ";
             Text[ greek ] = "Ìïñöï~ğïßçóç êåëéşí...";
-            Text[ korean ] = "¼¿ Æ÷¸ËÆÃ(~F)...";
+            Text[ korean ] = "ì…€ ì„œì‹ ì§€ì •(~F)...";
             Text[ turkish ] = "Hücreleri formatla...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Formatear celdas...";
+            Text[ catalan ] = "~Formata les cel·les...";
+            Text[ thai ] = "~à¸£à¸¹à¸›à¹à¸šà¸šà¹€à¸‹à¸¥à¸¥à¹Œ...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -181,103 +168,91 @@ Menu RID_POPUP_CELLS
         {
             Identifier = FID_INS_CELL ;
             HelpId = FID_INS_CELL ;
-            /* ### ACHTUNG: Neuer Text in Resource? Zellen ~einfügen... : Zellen einfügen... */
-            /* ### ACHTUNG: Neuer Text in Resource? Zellen ~einfügen... : Zellen einfügen... */
-            /* ### ACHTUNG: Neuer Text in Resource? Zellen ~einfügen... : Zellen einfügen... */
-            /* ### ACHTUNG: Neuer Text in Resource? Zellen ~einfügen... : Zellen ~einf³gen... */
             Text = "Zellen ~einfügen..." ;
             Text [ ENGLISH ] = "Insert Cells..." ;
             Text [ norwegian ] = "Insert Cells..." ;
             Text [ italian ] = "~Inserisci celle..." ;
             Text [ portuguese_brazilian ] = "Insert Cells..." ;
             Text [ portuguese ] = "~Inserir células..." ;
-            Text [ finnish ] = "~Lisää solut" ;
+            Text [ finnish ] = "~Lisää solut..." ;
             Text [ danish ] = "Indsæt celler..." ;
             Text [ french ] = "~Insérer des cellules..." ;
             Text [ swedish ] = "~Infoga celler..." ;
             Text [ dutch ] = "Cellen ~invoegen..." ;
             Text [ spanish ] = "~Insertar celdas..." ;
             Text [ english_us ] = "Insert C~ells..." ;
-            /* ### ACHTUNG: Neuer Text in Resource? Zellen einfügen : Zellen einf³gen */
-            Text[ chinese_simplified ] = "²åÈëµ¥Ôª¸ñ(~E)...";
+            Text[ chinese_simplified ] = "æ’å…¥å•å…ƒæ ¼(~E)...";
             Text[ russian ] = "Âñòàâèòü ÿ÷åéêè...";
             Text[ polish ] = "Wstaw komórki...";
-            Text[ japanese ] = "¾Ù‚Ì‘}“ü(~E)...";
-            Text[ chinese_traditional ] = "´¡¤JÀx¦s®æ(~E)...";
+            Text[ japanese ] = "ã‚»ãƒ«ã®æŒ¿å…¥(~E)...";
+            Text[ chinese_traditional ] = "æ’å…¥å„²å­˜æ ¼(~E)...";
             Text[ arabic ] = "...ÅÏÑÇÌ ÎáÇíÇ";
             Text[ greek ] = "ĞñïóèŞêç ê~åëéşí...";
-            Text[ korean ] = "¼¿ »ğÀÔ(~E)...";
+            Text[ korean ] = "ì…€ ì‚½ì…(~E)...";
             Text[ turkish ] = "Hücre ekle...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Insertar celdas...";
+            Text[ catalan ] = "Insereix ~cel·les...";
+            Text[ thai ] = "à¹à¸—à¸£à¸à¹€à¸‹~à¸¥à¸¥à¹Œ...";
         };
         MenuItem
         {
             Identifier = FID_DELETE_CELL ;
             HelpId = FID_DELETE_CELL ;
-            /* ### ACHTUNG: Neuer Text in Resource? Zellen ~löschen... : Zellen löschen... */
-            /* ### ACHTUNG: Neuer Text in Resource? Zellen ~löschen... : Zellen löschen... */
-            /* ### ACHTUNG: Neuer Text in Resource? Zellen ~löschen... : Zellen löschen... */
-            /* ### ACHTUNG: Neuer Text in Resource? Zellen ~löschen... : Zellen ~l÷schen... */
             Text = "Zellen ~löschen..." ;
             Text [ ENGLISH ] = "Delete Cells..." ;
             Text [ norwegian ] = "Delete Cells..." ;
             Text [ italian ] = "Elimina celle..." ;
             Text [ portuguese_brazilian ] = "Delete Cells..." ;
             Text [ portuguese ] = "Eliminar ~células..." ;
-            Text [ finnish ] = "~Poista solut" ;
+            Text [ finnish ] = "~Poista solut..." ;
             Text [ danish ] = "Slet celler..." ;
-            Text [ french ] = "Supprimer des ce~llules..." ;
+            Text [ french ] = "Suppr~imer des cellules..." ;
             Text [ swedish ] = "Radera ce~ller..." ;
             Text [ dutch ] = "Cellen ~wissen..." ;
             Text [ spanish ] = "~Eliminar celdas..." ;
             Text [ english_us ] = "De~lete Cells..." ;
-            /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Zellen, Zeilen oder Spalten löschen : Ausgewõhlte Zellen, Zeilen oder Spalten l÷schen */
-            Text[ chinese_simplified ] = "É¾³ıµ¥Ôª¸ñ(~L)...";
+            Text[ chinese_simplified ] = "åˆ é™¤å•å…ƒæ ¼(~L)...";
             Text[ russian ] = "Óäàëèòü ÿ÷åéêè...";
             Text[ polish ] = "Usuñ komórki...";
-            Text[ japanese ] = "¾Ù‚Ìíœ(~L)...";
-            Text[ chinese_traditional ] = "§R°£Àx¦s®æ(~L)...";
+            Text[ japanese ] = "ã‚»ãƒ«ã®å‰Šé™¤(~L)...";
+            Text[ chinese_traditional ] = "åˆªé™¤å„²å­˜æ ¼(~L)...";
             Text[ arabic ] = "...ÍĞİ ÎáÇíÇ";
             Text[ greek ] = "ÄéáãñáöŞ êå~ëéşí...";
-            Text[ korean ] = "¼¿ »èÁ¦(~L)...";
+            Text[ korean ] = "ì…€ ì‚­ì œ(~L)...";
             Text[ turkish ] = "Hücre sil...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Eliminar celdas...";
+            Text[ catalan ] = "Supr~imeix les cel·les...";
+            Text[ thai ] = "à¸¥~à¸šà¹€à¸‹à¸¥à¸¥à¹Œ...";
         };
         MenuItem
         {
             Identifier = SID_DELETE ;
             HelpId = SID_DELETE ;
-            /* ### ACHTUNG: Neuer Text in Resource? Inhalte l~öschen... : Inhalte löschen... */
-            /* ### ACHTUNG: Neuer Text in Resource? Inhalte l~öschen... : Inhalte löschen... */
-            /* ### ACHTUNG: Neuer Text in Resource? Inhalte l~öschen... : Inhalte löschen... */
-            /* ### ACHTUNG: Neuer Text in Resource? Inhalte l~öschen... : Inhalte l~÷schen... */
             Text = "Inhalte lö~schen..." ;
             Text [ ENGLISH ] = "Delete Data..." ;
             Text [ norwegian ] = "Delete Data..." ;
             Text [ italian ] = "Elimina contenuti..." ;
             Text [ portuguese_brazilian ] = "Delete Data..." ;
             Text [ portuguese ] = "Eliminar co~nteúdos..." ;
-            Text [ finnish ] = "~Poista sisällöt" ;
+            Text [ finnish ] = "~Poista sisällöt..." ;
             Text [ danish ] = "Slet indhold..." ;
             Text [ french ] = "Supprimer du ~contenu..." ;
             Text [ swedish ] = "Ra~dera innehåll..." ;
             Text [ dutch ] = "I~nhoud wissen..." ;
             Text [ spanish ] = "Eliminar contenidos..." ;
             Text [ english_us ] = "Delete C~ontents..." ;
-            /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Inhalte löschen (Formeln, Formate etc.) : Ausgewõhlte Inhalte l÷schen (Formeln, Formate etc.) */
-            Text[ chinese_simplified ] = "É¾³ıÄÚÈİ(~O)...";
+            Text[ chinese_simplified ] = "åˆ é™¤å†…å®¹(~O)...";
             Text[ russian ] = "Óäàëèòü ñîäåğæèìîå...";
             Text[ polish ] = "Usuñ zawartoœci...";
-            Text[ japanese ] = "“à—e‚Ìíœ(~O)...";
-            Text[ chinese_traditional ] = "§R°£¤º®e(~O)...";
+            Text[ japanese ] = "å†…å®¹ã®å‰Šé™¤(~O)...";
+            Text[ chinese_traditional ] = "åˆªé™¤å…§å®¹(~O)...";
             Text[ arabic ] = "...ÍĞİ ãÍÊæíÇÊ";
             Text[ greek ] = "Äéáãñá~öŞ ğåñéå÷ïìİíùí...";
-            Text[ korean ] = "³»¿ë »èÁ¦(~O)...";
+            Text[ korean ] = "ë‚´ìš© ì‚­ì œ(~O)...";
             Text[ turkish ] = "İçerikleri sil...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Eliminar contenidos...";
+            Text[ catalan ] = "Suprimeix el c~ontingut...";
+            Text[ thai ] = "à¸¥à¸šà¹€à¸™à¸·à¹‰à¸­~à¸«à¸²...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -293,24 +268,25 @@ Menu RID_POPUP_CELLS
             Text [ italian ] = "Taglia" ;
             Text [ portuguese_brazilian ] = "~Recortar" ;
             Text [ portuguese ] = "~Cortar" ;
-            Text [ finnish ] = "~Leikkaa" ;
+            Text [ finnish ] = "L~eikkaa" ;
             Text [ danish ] = "~Klip" ;
             Text [ french ] = "~Couper" ;
             Text [ swedish ] = "~Klipp ut" ;
             Text [ dutch ] = "K~nippen" ;
             Text [ spanish ] = "~Cortar" ;
             Text [ english_us ] = "Cu~t" ;
-            Text[ chinese_simplified ] = "¼ôÇĞ(~T)";
+            Text[ chinese_simplified ] = "å‰ªåˆ‡(~T)";
             Text[ russian ] = "Âûğåçàòü";
             Text[ polish ] = "Wytnij";
-            Text[ japanese ] = "Ø‚èæ‚è(~T)";
-            Text[ chinese_traditional ] = "°Å¤U(~T)";
+            Text[ japanese ] = "åˆ‡ã‚Šå–ã‚Š(~T)";
+            Text[ chinese_traditional ] = "å‰ªä¸‹(~T)";
             Text[ arabic ] = "ŞÕ";
             Text[ greek ] = "Á~ğïêïğŞ";
-            Text[ korean ] = "Àß¶ó³»±â(~T)";
+            Text[ korean ] = "ì˜ë¼ë‚´ê¸°(~T)";
             Text[ turkish ] = "~Kes";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Cortar";
+            Text[ catalan ] = "Re~talla";
+            Text[ thai ] = "à¸•à¸±~à¸”";
         };
         MenuItem
         {
@@ -329,17 +305,18 @@ Menu RID_POPUP_CELLS
             Text [ dutch ] = "~Kopiëren" ;
             Text [ spanish ] = "C~opiar" ;
             Text [ english_us ] = "~Copy" ;
-            Text[ chinese_simplified ] = "¸´ÖÆ(~C)";
+            Text[ chinese_simplified ] = "å¤åˆ¶(~C)";
             Text[ russian ] = "Êîïèğîâàòü";
             Text[ polish ] = "Kopiuj";
-            Text[ japanese ] = "ºËß°(~C)";
-            Text[ chinese_traditional ] = "½Æ»s(~C)";
+            Text[ japanese ] = "ã‚³ãƒ”ãƒ¼(~C)";
+            Text[ chinese_traditional ] = "è¤‡è£½(~C)";
             Text[ arabic ] = "äÓÎ";
             Text[ greek ] = "Áíôé~ãñáöŞ";
-            Text[ korean ] = "º¹»ç(~C)";
+            Text[ korean ] = "ë³µì‚¬(~C)";
             Text[ turkish ] = "K~opyala";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "C~opiar";
+            Text[ catalan ] = "~Copia";
+            Text[ thai ] = "~à¸„à¸±à¸”à¸¥à¸­à¸";
         };
 
         MenuItem
@@ -352,24 +329,25 @@ Menu RID_POPUP_CELLS
             Text [ italian ] = "~Incolla" ;
             Text [ portuguese_brazilian ] = "Colar" ;
             Text [ portuguese ] = "~Inserir" ;
-            Text [ finnish ] = "~Liitä" ;
+            Text [ finnish ] = "L~iitä" ;
             Text [ danish ] = "Sæt i~nd" ;
             Text [ french ] = "Coller" ;
             Text [ swedish ] = "K~listra in" ;
             Text [ dutch ] = "~Invoegen" ;
             Text [ spanish ] = "P~egar" ;
             Text [ english_us ] = "~Paste" ;
-            Text[ chinese_simplified ] = "²åÈë(~P)";
+            Text[ chinese_simplified ] = "æ’å…¥(~P)";
             Text[ russian ] = "~Âñòàâèòü";
             Text[ polish ] = "~Wstaw";
-            Text[ japanese ] = "“\\‚è•t‚¯(~P)";
-            Text[ chinese_traditional ] = "´¡¤J(~P)";
+            Text[ japanese ] = "è²¼ã‚Šä»˜ã‘(~P)";
+            Text[ chinese_traditional ] = "æ’å…¥(~P)";
             Text[ arabic ] = "áÕŞ";
             Text[ greek ] = "Å~éóáãùãŞ";
-            Text[ korean ] = "ºÙ¿©³Ö±â(~P)";
+            Text[ korean ] = "ë¶™ì—¬ë„£ê¸°(~P)";
             Text[ turkish ] = "~Ekle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "P~egar";
+            Text[ catalan ] = "En~ganxa";
+            Text[ thai ] = "~à¸§à¸²à¸‡";
         };
 
         MenuItem
@@ -382,24 +360,25 @@ Menu RID_POPUP_CELLS
             Text [ italian ] = "Incolla ~speciale..." ;
             Text [ portuguese_brazilian ] = "Colar ~Especial..." ;
             Text [ portuguese ] = "Colar e~special..." ;
-            Text [ finnish ] = "~Liitä määräten" ;
+            Text [ finnish ] = "~Liitä määräten..." ;
             Text [ danish ] = "Indsæt ind~hold..." ;
             Text [ french ] = "Collage spécial..." ;
             Text [ swedish ] = "Klistra in innehåll..." ;
             Text [ dutch ] = "~Plakken speciaal..." ;
             Text [ spanish ] = "Pega~do especial..." ;
             Text [ english_us ] = "P~aste Special..." ;
-            Text[ chinese_simplified ] = "²åÈëÄÚÈİ(~A)...";
+            Text[ chinese_simplified ] = "æ’å…¥å†…å®¹(~A)...";
             Text[ russian ] = "Ñï~åöèàëüíàÿ âñòàâêà...";
             Text[ polish ] = "~Wstaw zawartoœæ...";
-            Text[ japanese ] = "Œ`®‚ğ‘I‘ğ‚µ‚Ä“\\‚è•t‚¯(~A)...";
-            Text[ chinese_traditional ] = "´¡¤J¤º®e(~A)...";
+            Text[ japanese ] = "å½¢å¼ã‚’é¸æŠã—ã¦è²¼ã‚Šä»˜ã‘(~A)...";
+            Text[ chinese_traditional ] = "æ’å…¥å…§å®¹(~A)...";
             Text[ arabic ] = "áÕŞ ÎÇÕ...";
             Text[ greek ] = "ÅéäéêŞ åğéêüëë~çóç...";
-            Text[ korean ] = "¼±ÅÃÇÏ¿© ºÙ¿©³Ö±â(~A)...";
+            Text[ korean ] = "ì„ íƒí•˜ì—¬ ë¶™ì—¬ë„£ê¸°(~A)...";
             Text[ turkish ] = "Özel yapıştır...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Pega~do especial...";
+            Text[ catalan ] = "Eng~anxament especial...";
+            Text[ thai ] = "à¸§à¸²~à¸‡à¸à¸´à¹€à¸¨à¸©...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -419,18 +398,19 @@ Menu RID_POPUP_CELLS
             Text [ dutch ] = "~Aantekening weergeven" ;
             Text [ portuguese_brazilian ] = "~Notiz anzeigen" ;
             Text [ portuguese ] = "~Mostrar anotação" ;
-            Text[ chinese_simplified ] = "ÏÔÊ¾±¸×¢(~W)";
+            Text[ chinese_simplified ] = "æ˜¾ç¤ºå¤‡æ³¨(~W)";
             Text[ russian ] = "Ïîêàçàòü ïğèìå÷àíèÿ";
             Text[ polish ] = "Poka¿ notatkê";
-            Text[ japanese ] = "ºÒİÄ‚Ì•\\¦(~W)";
-            Text[ chinese_traditional ] = "Åã¥Ü³Æµù(~W)";
+            Text[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆã®è¡¨ç¤º(~W)";
+            Text[ chinese_traditional ] = "é¡¯ç¤ºå‚™è¨»(~W)";
             Text[ arabic ] = "ÅÙåÇÑ ÇáãáÇÍÙÉ";
             Text[ greek ] = "ÅìöÜ~íéóç óçìåßùóçò";
-            Text[ korean ] = "¸Ş¸ğ  ³ªÅ¸³»±â(~W)";
+            Text[ korean ] = "ë©”ëª¨ í‘œì‹œ(~W)";
             Text[ turkish ] = "Notu görüntüle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Mostrar nota";
+            Text[ catalan ] = "~Mostra la nota";
             Text[ finnish ] = "~Näytä huomautus";
+            Text[ thai ] = "à¹à¸ª~à¸”à¸‡à¸šà¸±à¸™à¸—à¸¶à¸à¸¢à¹ˆà¸­";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -439,9 +419,6 @@ Menu RID_POPUP_CELLS
         {
             Identifier = SID_DATA_SELECT ;
             HelpId = SID_DATA_SELECT ;
-            /* ### ACHTUNG: Neuer Text in Resource? Aus~wahlliste... : Auswahlliste... */
-            /* ### ACHTUNG: Neuer Text in Resource? Aus~wahlliste... : Auswahlliste... */
-            /* ### ACHTUNG: Neuer Text in Resource? Aus~wahlliste... : Auswahlliste... */
             Text = "Aus~wahlliste..." ;
             Text [ ENGLISH ] = "Select..." ;
             Text [ english_us ] = "~Selection List..." ;
@@ -453,25 +430,25 @@ Menu RID_POPUP_CELLS
             Text [ danish ] = "Udvalgsliste..." ;
             Text [ portuguese_brazilian ] = "Aus~wahlliste..." ;
             Text [ portuguese ] = "~Lista de selecção..." ;
-            Text[ chinese_simplified ] = "Ñ¡ÔñÁĞµ¥(~S)...";
+            Text[ chinese_simplified ] = "é€‰æ‹©åˆ—å•(~S)...";
             Text[ russian ] = "Ñïèñîê âûáîğà...";
             Text[ polish ] = "Lista wyboru...";
-            Text[ japanese ] = "‘I‘ğØ½Ä(~S)...";
-            Text[ chinese_traditional ] = "¿ï¾Ü²M³æ(~S)...";
+            Text[ japanese ] = "é¸æŠãƒªã‚¹ãƒˆ(~S)...";
+            Text[ chinese_traditional ] = "é¸æ“‡æ¸…å–®(~S)...";
             Text[ arabic ] = "ŞÇÆãÉ ÇáÊÍÏíÏ...";
             Text[ greek ] = "Ëßóôá åğéëï~ãşí...";
-            Text[ korean ] = "¼±ÅÃ¸ñ·Ï(~S)...";
+            Text[ korean ] = "ì„ íƒ ëª©ë¡(~S)...";
             Text[ turkish ] = "Seçim listesi...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Lista de selección...";
-            Text[ finnish ] = "~Valintaluettelo";
+            Text[ catalan ] = "Llista de ~selecció...";
+            Text[ finnish ] = "~Valintaluettelo...";
+            Text[ thai ] = "à¹€~à¸¥à¸·à¸­à¸à¸£à¸²à¸¢à¸à¸²à¸£...";
         };
     };
 };
 
 String RID_POPUP_TAB
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Tabellenleiste : Popup-Men³ f³r Tabellenleiste */
     Text = "Popup-Menü für Tabellenleiste" ;
     Text [ ENGLISH ] = "Table Control Popup Menu" ;
     Text [ norwegian ] = "Table Control Popup Menu" ;
@@ -485,17 +462,18 @@ String RID_POPUP_TAB
     Text [ dutch ] = "PopUp-menu voor werkbladenlijst" ;
     Text [ spanish ] = "Menú emergente para la barra de hojas" ;
     Text [ english_us ] = "Sheet bar pop-up menu" ;
-    Text[ chinese_simplified ] = "¹¤×÷±í·ÖÒ³µÄµ¯³öÊ½²Ëµ¥";
+    Text[ chinese_simplified ] = "å·¥ä½œè¡¨åˆ†é¡µçš„å¼¹å‡ºå¼èœå•";
     Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ ïàíåëè ëèñòà";
     Text[ polish ] = "Menu podrêczne dla paska arkusza";
-    Text[ japanese ] = "•\\‚ÌŒ©o‚µ‚ÌÎß¯Ìß±¯ÌßÒÆ­°";
-    Text[ chinese_traditional ] = "¤u§@ªí¤u¨ã¦Cªº§ÖÅã¥\\¯àªí";
+    Text[ japanese ] = "è¡¨ã®è¦‹å‡ºã—ã®ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼";
+    Text[ chinese_traditional ] = "å·¥ä½œè¡¨å·¥å…·åˆ—çš„å¿«é¡¯åŠŸèƒ½è¡¨";
     Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ áÔÑíØ ÌÏæá";
     Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá ãñáììŞ ğßíáêá";
-    Text[ korean ] = "½ÃÆ® ¹Ù ÆË¾÷¸Ş´º";
+    Text[ korean ] = "ì‹œíŠ¸ í‘œì‹œì¤„ íŒì—…ë©”ë‰´";
     Text[ turkish ] = "Tablo çubuğu için popup mönü";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Menú emergente para la barra de hojas";
+    Text[ catalan ] = "Menú emergent de la barra del full";
+    Text[ thai ] = "à¹€à¸¡à¸™à¸¹à¹à¸–à¸šà¹à¸œà¹ˆà¸™à¸‡à¸²à¸™à¹à¸šà¸šà¸œà¸¸à¸”à¸‚à¸¶à¹‰à¸™";
 };
 
 Menu RID_POPUP_TAB
@@ -506,7 +484,6 @@ Menu RID_POPUP_TAB
         {
             Identifier = FID_INS_TABLE ;
             HelpId = FID_INS_TABLE ;
-            /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen... : ~Einf³gen... */
             Text = "~Einfügen..." ;
             Text [ ENGLISH ] = "~Insert..." ;
             Text [ norwegian ] = "Insert..." ;
@@ -520,24 +497,23 @@ Menu RID_POPUP_TAB
             Text [ dutch ] = "~Invoegen..." ;
             Text [ spanish ] = "~Insertar..." ;
             Text [ english_us ] = "~Insert..." ;
-            /* ### ACHTUNG: Neuer Text in Resource? Tabelle einfügen : Tabelle einf³gen */
-            Text[ chinese_simplified ] = "²åÈë(~I)...";
+            Text[ chinese_simplified ] = "æ’å…¥(~I)...";
             Text[ russian ] = "Âñòàâêà...";
             Text[ polish ] = "W~staw...";
-            Text[ japanese ] = "‘}“ü(~I)...";
-            Text[ chinese_traditional ] = "´¡¤J(~I)...";
+            Text[ japanese ] = "æŒ¿å…¥(~I)...";
+            Text[ chinese_traditional ] = "æ’å…¥(~I)...";
             Text[ arabic ] = "ÅÏÑÇÌ...";
             Text[ greek ] = "~ÅéóáãùãŞ...";
-            Text[ korean ] = "»ğÀÔ(~I)...";
+            Text[ korean ] = "ì‚½ì…(~I)...";
             Text[ turkish ] = "~Ekle...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Insertar...";
+            Text[ catalan ] = "~Insereix...";
+            Text[ thai ] = "à¹~à¸—à¸£à¸...";
         };
         MenuItem
         {
             Identifier = FID_DELETE_TABLE ;
             HelpId = FID_DELETE_TABLE ;
-            /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
             Text = "~Löschen..." ;
             Text [ ENGLISH ] = "~Delete..." ;
             Text [ norwegian ] = "Slett..." ;
@@ -551,18 +527,18 @@ Menu RID_POPUP_TAB
             Text [ dutch ] = "~Wissen..." ;
             Text [ spanish ] = "~Eliminar..." ;
             Text [ english_us ] = "~Delete..." ;
-            /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Tabellen löschen : Ausgewõhlte Tabellen l÷schen */
-            Text[ chinese_simplified ] = "É¾³ı(~D)...";
+            Text[ chinese_simplified ] = "åˆ é™¤(~D)...";
             Text[ russian ] = "Óäàëèòü...";
             Text[ polish ] = "Usuñ...";
-            Text[ japanese ] = "íœ(~D)...";
-            Text[ chinese_traditional ] = "§R°£(~D)...";
+            Text[ japanese ] = "å‰Šé™¤(~D)...";
+            Text[ chinese_traditional ] = "åˆªé™¤(~D)...";
             Text[ arabic ] = "ÍĞİ...";
             Text[ greek ] = "Äéáãñá~öŞ...";
-            Text[ korean ] = "»èÁ¦(~D)...";
+            Text[ korean ] = "ì‚­ì œ(~D)...";
             Text[ turkish ] = "~Sil...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Eliminar...";
+            Text[ catalan ] = "Su~primeix...";
+            Text[ thai ] = "~à¸¥à¸š...";
         };
         MenuItem
         {
@@ -574,24 +550,25 @@ Menu RID_POPUP_TAB
             Text [ italian ] = "Rinomina..." ;
             Text [ portuguese_brazilian ] = "Rename..." ;
             Text [ portuguese ] = "~Mudar nome..." ;
-            Text [ finnish ] = "~Nimeä uudelleen" ;
+            Text [ finnish ] = "~Nimeä uudelleen..." ;
             Text [ danish ] = "Omdøb..." ;
             Text [ french ] = "Ren~ommer..." ;
             Text [ swedish ] = "~Byt namn..." ;
             Text [ dutch ] = "~Naam wijzigen..." ;
             Text [ spanish ] = "~Cambiar nombre..." ;
             Text [ english_us ] = "~Rename..." ;
-            Text[ chinese_simplified ] = "ÖØÃüÃû(~R)...";
+            Text[ chinese_simplified ] = "é‡å‘½å(~R)...";
             Text[ russian ] = "Ïåğåèìåíîâàòü...";
             Text[ polish ] = "Zmieñ nazwê...";
-            Text[ japanese ] = "–¼‘O‚Ì•ÏX(~R)...";
-            Text[ chinese_traditional ] = "­«·s©R¦W(~R)...";
+            Text[ japanese ] = "åå‰ã®å¤‰æ›´(~R)...";
+            Text[ chinese_traditional ] = "é‡æ–°å‘½å(~R)...";
             Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ...";
             Text[ greek ] = "Ìåôïíïìáóßá...";
-            Text[ korean ] = "ÀÌ¸§ ¹Ù²Ù±â(~R)...";
+            Text[ korean ] = "ì´ë¦„ ë°”ê¾¸ê¸°(~R)...";
             Text[ turkish ] = "Ye~niden adlandır...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Cambiar nombre...";
+            Text[ catalan ] = "~Reanomena...";
+            Text[ thai ] = "à¹€~à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸Šà¸·à¹ˆà¸­...";
         };
         MenuItem
         {
@@ -603,33 +580,30 @@ Menu RID_POPUP_TAB
             Text [ italian ] = "Sposta/copia..." ;
             Text [ portuguese_brazilian ] = "Move/Copy..." ;
             Text [ portuguese ] = "~Mover/Copiar..." ;
-            Text [ finnish ] = "~Siirrä/kopioi" ;
+            Text [ finnish ] = "~Siirrä/kopioi..." ;
             Text [ danish ] = "Flyt/kopier..." ;
             Text [ french ] = "~Déplacer/Copier..." ;
             Text [ swedish ] = "~Flytta/kopiera..." ;
             Text [ dutch ] = "~Verplaatsen/kopiëren..." ;
             Text [ spanish ] = "~Desplazar/Copiar..." ;
             Text [ english_us ] = "~Move/Copy..." ;
-            Text[ chinese_simplified ] = "ÒÆ¶¯/¸´ÖÆ(~M)...";
+            Text[ chinese_simplified ] = "ç§»åŠ¨/å¤åˆ¶(~M)...";
             Text[ russian ] = "Ïåğåìåñòèòü/ñêîïèğîâàòü...";
             Text[ polish ] = "Przesuñ/Kopiuj...";
-            Text[ japanese ] = "ˆÚ“®‚Ü‚½‚ÍºËß°(~M)...";
-            Text[ chinese_traditional ] = "²¾°Ê/½Æ»s(~M)...";
+            Text[ japanese ] = "ç§»å‹•ã¾ãŸã¯ã‚³ãƒ”ãƒ¼(~M)...";
+            Text[ chinese_traditional ] = "ç§»å‹•/è¤‡è£½(~M)...";
             Text[ arabic ] = "ÅÒÇÍÉ/äÓÎ...";
             Text[ greek ] = "Ìåôáêßíçóç/Á~íôéãñáöŞ...";
-            Text[ korean ] = "ÀÌµ¿/º¹»ç(~M)...";
+            Text[ korean ] = "ì´ë™/ë³µì‚¬(~M)...";
             Text[ turkish ] = "Taşı/kopyala...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Desplazar/Copiar...";
+            Text[ catalan ] = "~Mou/Copia...";
+            Text[ thai ] = "~à¸¢à¹‰à¸²à¸¢/à¸„à¸±à¸”à¸¥à¸­à¸...";
         };
         MenuItem
         {
             Identifier = FID_TAB_SELECTALL ;
             HelpId = FID_TAB_SELECTALL ;
-            /* ### ACHTUNG: Neuer Text in Resource? Alle ~Tabellen auswählen : Alle Tabellen auswählen */
-            /* ### ACHTUNG: Neuer Text in Resource? Alle ~Tabellen auswählen : Alle Tabellen auswählen */
-            /* ### ACHTUNG: Neuer Text in Resource? Alle ~Tabellen auswählen : Alle Tabellen auswählen */
-            /* ### ACHTUNG: Neuer Text in Resource? Alle ~Tabellen auswählen : Alle ~Tabellen auswõhlen */
             Text = "Alle ~Tabellen auswählen" ;
             Text [ ENGLISH ] = "~Select All" ;
             Text [ norwegian ] = "Select All" ;
@@ -643,25 +617,24 @@ Menu RID_POPUP_TAB
             Text [ dutch ] = "~Alle werkbladen selecteren" ;
             Text [ spanish ] = "~Seleccionar todas" ;
             Text [ english_us ] = "Select All S~heets" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Alle Tabellen auswählen : Alle Tabellen auswõhlen */
-            Text[ chinese_simplified ] = "Ñ¡ÔñÈ«²¿µÄ¹¤×÷±í(~H)";
+            Text[ chinese_simplified ] = "é€‰æ‹©å…¨éƒ¨çš„å·¥ä½œè¡¨(~H)";
             Text[ russian ] = "Âûäåëèòü âñå";
             Text[ polish ] = "Zaznacz wszystkie arkusze";
-            Text[ japanese ] = "‚·‚×‚Ä‚Ì•\\‚ğ‘I‘ğ(~H)";
-            Text[ chinese_traditional ] = "¿ï¾Ü¥ş³¡ªº¤u§@ªí(~H)";
+            Text[ japanese ] = "ã™ã¹ã¦ã®è¡¨ã‚’é¸æŠ(~H)";
+            Text[ chinese_traditional ] = "é¸æ“‡å…¨éƒ¨çš„å·¥ä½œè¡¨(~H)";
             Text[ arabic ] = "ÊÍÏíÏ ßá ÇáÌÏÇæá";
             Text[ greek ] = "ÅğéëïãŞ üëùí ôùí ~ğéíÜêùí";
-            Text[ korean ] = "¸ğµç Å×ÀÌºí ¼±ÅÃ(~H)";
+            Text[ korean ] = "ëª¨ë“  ì‹œíŠ¸ ì„ íƒ(~H)";
             Text[ turkish ] = "Tüm tabloları seç";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Seleccionar todas";
+            Text[ catalan ] = "Selecciona tots els ~fulls";
+            Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¹à¸œà¹ˆà¸™~à¸‡à¸²à¸™à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
         };
     };
 };
 
 String RID_POPUP_PIVOT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für den Datenpilot : Popup-Men³ f³r den Datenpilot */
     Text = "Popup-Menü für den Datenpilot" ;
     Text [ ENGLISH ] = "Data Pilot Popup Menu" ;
     Text [ norwegian ] = "Data Pilot Popup Menu" ;
@@ -675,17 +648,18 @@ String RID_POPUP_PIVOT
     Text [ swedish ] = "Popupmeny för datapiloten" ;
     Text [ finnish ] = "Tietojen ohjauksen ponnahdusvalikko" ;
     Text [ english_us ] = "DataPilot pop-up menu" ;
-    Text[ chinese_simplified ] = "Êı¾İÖúÀíµ¯³öÊ½²Ëµ¥";
+    Text[ chinese_simplified ] = "æ•°æ®åŠ©ç†å¼¹å‡ºå¼èœå•";
     Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ ñâîäíîé òàáëèöû";
     Text[ polish ] = "Menu podrêczne dla Pilota danych";
-    Text[ japanese ] = "ÃŞ°ÀÊß²Û¯Ä‚ÌÎß¯Ìß±¯ÌßÒÆ­°";
-    Text[ chinese_traditional ] = "¸ê®Æ§U²z§ÖÅã¥\\¯àªí";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ‘ã‚¤ãƒ­ãƒƒãƒˆã®ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼";
+    Text[ chinese_traditional ] = "è³‡æ–™åŠ©ç†å¿«é¡¯åŠŸèƒ½è¡¨";
     Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ ááãÑÔÏ ÇáÂáí ááÈíÇäÇÊ";
     Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá ôïí ğéëüôï äåäïìİíùí";
-    Text[ korean ] = "Å×ÀÌÅÍÆÄÀÏ·µ ÆË¾÷ ¸Ş´º";
+    Text[ korean ] = "í…Œì´í„° íŒŒì¼ëŸ¿ íŒì—… ë©”ë‰´";
     Text[ turkish ] = "Veri pilotu için popup mönü";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Menú emergente del piloto de datos";
+    Text[ catalan ] = "Menú emergent del DataPilot";
+    Text[ thai ] = "à¹€à¸¡à¸™à¸¹à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸™à¸³à¸£à¹ˆà¸­à¸‡à¹à¸šà¸šà¸œà¸¸à¸”à¸‚à¸¶à¹‰à¸™";
 };
 
 Menu RID_POPUP_PIVOT
@@ -709,25 +683,23 @@ Menu RID_POPUP_PIVOT
             Text [ swedish ] = "~Kör..." ;
             Text [ finnish ] = "~Aloita" ;
             Text [ english_us ] = "~Start..." ;
-            Text[ chinese_simplified ] = "Æô¶¯(~S)...";
+            Text[ chinese_simplified ] = "å¯åŠ¨(~S)...";
             Text[ russian ] = "Âûçâàòü...";
             Text[ polish ] = "Rozpoczynaj...";
-            Text[ japanese ] = "ŒÄ‚Ño‚·(~S)...";
-            Text[ chinese_traditional ] = "±Ò°Ê(~S)...";
+            Text[ japanese ] = "å‘¼ã³å‡ºã™(~S)...";
+            Text[ chinese_traditional ] = "å•Ÿå‹•(~S)...";
             Text[ arabic ] = "ÈÏÁ...";
             Text[ greek ] = "Åíåñã~ïğïßçóç...";
-            Text[ korean ] = "È£Ãâ(~S)...";
+            Text[ korean ] = "ì‹œì‘(~S)...";
             Text[ turkish ] = "Başlat...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Activar...";
+            Text[ catalan ] = "~Inicia...";
+            Text[ thai ] = "à¹€~à¸£à¸´à¹ˆà¸¡...";
         };
         MenuItem
         {
             Identifier = SID_PIVOT_RECALC ;
             HelpId = SID_PIVOT_RECALC ;
-            /* ### ACHTUNG: Neuer Text in Resource? A~ktualisieren : Aktualisieren */
-            /* ### ACHTUNG: Neuer Text in Resource? A~ktualisieren : Aktualisieren */
-            /* ### ACHTUNG: Neuer Text in Resource? A~ktualisieren : Aktualisieren */
             Text = "A~ktualisieren" ;
             Text [ ENGLISH ] = "~Update" ;
             Text [ norwegian ] = "~Update" ;
@@ -741,26 +713,31 @@ Menu RID_POPUP_PIVOT
             Text [ dutch ] = "~Actualiseren" ;
             Text [ spanish ] = "A~ctualizar" ;
             Text [ english_us ] = "~Refresh" ;
-            Text[ chinese_simplified ] = "¸üĞÂ(~R)";
+            Text[ chinese_simplified ] = "æ›´æ–°(~R)";
             Text[ russian ] = "Îáíîâèòü";
             Text[ polish ] = "Aktualizuj";
-            Text[ japanese ] = "XV(~R)";
-            Text[ chinese_traditional ] = "§ó·s(~R)";
+            Text[ japanese ] = "æ›´æ–°(~R)";
+            Text[ chinese_traditional ] = "æ›´æ–°(~R)";
             Text[ arabic ] = "ÊÍÏíË";
             Text[ greek ] = "Å~íçìİñùóç";
-            Text[ korean ] = "»õ·Î°íÄ§(~R)";
+            Text[ korean ] = "ì—…ë°ì´íŠ¸(~R)";
             Text[ turkish ] = "Güncelle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "A~ctualizar";
+            Text[ catalan ] = "~Refresca";
+            Text[ thai ] = "~à¸Ÿà¸·à¹‰à¸™à¸Ÿà¸¹";
+        };
+        MenuItem
+        {
+            Identifier = SID_DP_FILTER ;
+            HelpId = SID_DP_FILTER ;
+            Text = "~Filter..." ;
+            Text [ ENGLISH ] = "~Filter..." ;
+            Text [ english_us ] = "~Filter..." ;
         };
         MenuItem
         {
             Identifier = SID_PIVOT_KILL ;
             HelpId = SID_PIVOT_KILL ;
-            /* ### ACHTUNG: Neuer Text in Resource? L~öschen : Löschen */
-            /* ### ACHTUNG: Neuer Text in Resource? L~öschen : Löschen */
-            /* ### ACHTUNG: Neuer Text in Resource? L~öschen : Löschen */
-            /* ### ACHTUNG: Neuer Text in Resource? L~öschen : L~÷schen */
             Text = "L~öschen" ;
             Text [ ENGLISH ] = "~Delete" ;
             Text [ norwegian ] = "~Slett" ;
@@ -774,25 +751,24 @@ Menu RID_POPUP_PIVOT
             Text [ dutch ] = "~Wissen" ;
             Text [ spanish ] = "~Eliminar" ;
             Text [ english_us ] = "~Delete" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Löschen einer bestehenden Datenpilot-Tabelle : L÷schen einer bestehenden Datenpilot-Tabelle */
-            Text[ chinese_simplified ] = "É¾³ı(~D)";
+            Text[ chinese_simplified ] = "åˆ é™¤(~D)";
             Text[ russian ] = "Óäàëèòü";
             Text[ polish ] = "Usuñ";
-            Text[ japanese ] = "íœ(~D)";
-            Text[ chinese_traditional ] = "§R°£(~D)";
+            Text[ japanese ] = "å‰Šé™¤(~D)";
+            Text[ chinese_traditional ] = "åˆªé™¤(~D)";
             Text[ arabic ] = "ÍĞİ";
             Text[ greek ] = "Äéáãñá~öŞ";
-            Text[ korean ] = "»èÁ¦(~D)";
+            Text[ korean ] = "ì‚­ì œ(~D)";
             Text[ turkish ] = "~Sil";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Eliminar";
+            Text[ catalan ] = "Su~primeix";
+            Text[ thai ] = "~à¸¥à¸š";
         };
     };
 };
 
 String RID_POPUP_PREVIEW
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Seitenvorschau : Popup-Men³ f³r Seitenvorschau */
     Text = "Popup-Menü für Seitenvorschau" ;
     Text [ ENGLISH ] = "Page Preview Popup Menu" ;
     Text [ norwegian ] = "Page Preview Popup Menu" ;
@@ -806,17 +782,18 @@ String RID_POPUP_PREVIEW
     Text [ dutch ] = "PopUp-menu voor paginavoorbeeld" ;
     Text [ spanish ] = "Menú para previsualización" ;
     Text [ english_us ] = "Page Preview pop-up menu" ;
-    Text[ chinese_simplified ] = "Ò³ÃæÔ¤ÀÀµ¯³öÊ½²Ëµ¥";
+    Text[ chinese_simplified ] = "é¡µé¢é¢„è§ˆå¼¹å‡ºå¼èœå•";
     Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ ïğåäâàğèòåëüíîãî ïğîñìîòğà ñòğàíèöû";
     Text[ polish ] = "Menu podrêczne dla podgl¹du stron";
-    Text[ japanese ] = "Íß°¼ŞÌßÚËŞ­°‚ÌÎß¯Ìß±¯ÌßÒÆ­°";
-    Text[ chinese_traditional ] = "­¶­±ÀËµø§ÖÅã¥\\¯àªí";
+    Text[ japanese ] = "ãƒšãƒ¼ã‚¸ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼";
+    Text[ chinese_traditional ] = "é é¢æª¢è¦–å¿«é¡¯åŠŸèƒ½è¡¨";
     Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ áãÚÇíäÉ ÇáÕİÍÉ";
     Text[ greek ] = "Áíáäõüìåíï ìåíïı ğñïåğéóêüğçóçò óåëßäáò";
-    Text[ korean ] = "ÂÊ ¹Ì¸®º¸±â ÆË¾÷¸Ş´º";
+    Text[ korean ] = "í˜ì´ì§€ ë¯¸ë¦¬ë³´ê¸° íŒì—… ë©”ë‰´";
     Text[ turkish ] = "Sayfa önizlemesi için popup mönü";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Menú para previsualización";
+    Text[ catalan ] = "Menú emergent de la vista preliminar";
+    Text[ thai ] = "à¹€à¸¡à¸™à¸¹à¹à¸ªà¸”à¸‡à¸«à¸™à¹‰à¸²à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡à¹à¸šà¸šà¸œà¸¸à¸”à¸‚à¸¶à¹‰à¸™";
 };
 
 Menu RID_POPUP_PREVIEW
@@ -840,24 +817,23 @@ Menu RID_POPUP_PREVIEW
             Text [ dutch ] = "Vo~rige pagina" ;
             Text [ spanish ] = "Página ~anterior" ;
             Text [ english_us ] = "~Previous Page" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Auf die vorhergehende Seite blättern : Auf die vorhergehende Seite blõttern */
-            Text[ chinese_simplified ] = "ÉÏÒ»Ò³(~P)";
+            Text[ chinese_simplified ] = "ä¸Šä¸€é¡µ(~P)";
             Text[ russian ] = "Ïğåäûäóùàÿ ñòğàíèöà";
             Text[ polish ] = "Poprzednia strona";
-            Text[ japanese ] = "‘OÍß°¼Ş(~P)";
-            Text[ chinese_traditional ] = "¤W¤@­¶(~P)";
+            Text[ japanese ] = "å‰ãƒšãƒ¼ã‚¸(~P)";
+            Text[ chinese_traditional ] = "ä¸Šä¸€é (~P)";
             Text[ arabic ] = "ÇáÕİÍÉ ÇáÓÇÈŞÉ";
             Text[ greek ] = "Ğ~ñïçãïıìåíç óåëßäá";
-            Text[ korean ] = "ÀÌÀü ÆäÀÌÁö(~P)";
+            Text[ korean ] = "ì´ì „ í˜ì´ì§€(~P)";
             Text[ turkish ] = "Önceki sayfa";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Página ~anterior";
+            Text[ catalan ] = "~Pàgina anterior";
+            Text[ thai ] = "à¸«à¸™à¹‰à¸²~à¸à¹ˆà¸­à¸™";
         };
         MenuItem
         {
             Identifier = SID_PREVIEW_NEXT ;
             HelpId = SID_PREVIEW_NEXT ;
-            /* ### ACHTUNG: Neuer Text in Resource? ~Nächste Seite : ~Nõchste Seite */
             Text = "~Nächste Seite" ;
             Text [ ENGLISH ] = "~Next page" ;
             Text [ norwegian ] = "Neste side" ;
@@ -871,56 +847,53 @@ Menu RID_POPUP_PREVIEW
             Text [ dutch ] = "Vo~lgende pagina" ;
             Text [ spanish ] = "~Página siguiente" ;
             Text [ english_us ] = "~Next Page" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Auf die nächste Seite blättern : Auf die nõchste Seite blõttern */
-            Text[ chinese_simplified ] = "ÏÂÒ»Ò³(~N)";
+            Text[ chinese_simplified ] = "ä¸‹ä¸€é¡µ(~N)";
             Text[ russian ] = "Ñëåäóşùàÿ ñòğàíèöà";
             Text[ polish ] = "Nastêpna strona";
-            Text[ japanese ] = "ŸÍß°¼Ş(~N)";
-            Text[ chinese_traditional ] = "¤U¤@­¶(~N)";
+            Text[ japanese ] = "æ¬¡ãƒšãƒ¼ã‚¸(~N)";
+            Text[ chinese_traditional ] = "ä¸‹ä¸€é (~N)";
             Text[ arabic ] = "ÇáÕİÍÉ ÇáÊÇáíÉ";
             Text[ greek ] = "Åğüìå~íç óåëßäá";
-            Text[ korean ] = "´ÙÀ½ ÂÊ(~N)";
+            Text[ korean ] = "ë‹¤ìŒ í˜ì´ì§€(~N)";
             Text[ turkish ] = "Sonraki sayfa";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Página siguiente";
+            Text[ catalan ] = "Pàgina ~següent";
+            Text[ thai ] = "à¸«à¸™à¹‰à¸²~à¸–à¸±à¸”à¹„à¸›";
         };
         MenuItem
         {
             Identifier = SID_FORMATPAGE ;
             HelpId = SID_FORMATPAGE ;
-            /* ### ACHTUNG: Neuer Text in Resource? Seiten~layout... : Seitenlayout... */
-            /* ### ACHTUNG: Neuer Text in Resource? Seiten~layout... : Seitenlayout... */
-            /* ### ACHTUNG: Neuer Text in Resource? Seiten~layout... : Seitenlayout... */
             Text = "Seiten~layout..." ;
             Text [ ENGLISH ] = "Page ~layout..." ;
             Text [ norwegian ] = "Page layout..." ;
             Text [ italian ] = "Layout di pagina..." ;
             Text [ portuguese_brazilian ] = "Page layout..." ;
             Text [ portuguese ] = "Configurar ~página..." ;
-            Text [ finnish ] = "~Sivun taitto" ;
+            Text [ finnish ] = "~Sivun taitto..." ;
             Text [ danish ] = "Sidelayout..." ;
             Text [ french ] = "~Mise en page..." ;
             Text [ swedish ] = "Sid~layout..." ;
             Text [ dutch ] = "~Pagina-lay-out..." ;
             Text [ spanish ] = "~Diseño de página..." ;
             Text [ english_us ] = "Pa~ge Layout..." ;
-            Text[ chinese_simplified ] = "Ò³Ãæ°æÊ½(~G)...";
+            Text[ chinese_simplified ] = "é¡µé¢ç‰ˆå¼(~G)...";
             Text[ russian ] = "Ğàçìåòêà ñòğàíèöû...";
             Text[ polish ] = "Uk³ad strony...";
-            Text[ japanese ] = "Íß°¼ŞÚ²±³Ä(~G)...";
-            Text[ chinese_traditional ] = "­¶­±ª©¦¡(~G)...";
+            Text[ japanese ] = "ãƒšãƒ¼ã‚¸ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ(~G)...";
+            Text[ chinese_traditional ] = "é é¢ç‰ˆå¼(~G)...";
             Text[ arabic ] = "ÊÎØíØ ÇáÕİÍÉ...";
             Text[ greek ] = "ÄéÜô~áîç óåëßäáò...";
-            Text[ korean ] = "ÂÊ ·¹ÀÌ¾Æ¿ô(~G)...";
+            Text[ korean ] = "í˜ì´ì§€ ë ˆì´ì•„ì›ƒ(~G)...";
             Text[ turkish ] = "Sayfa düzeni...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Diseño de página...";
+            Text[ catalan ] = "Disseny de pà~gina...";
+            Text[ thai ] = "à¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡à¸«~à¸™à¹‰à¸²...";
         };
         MenuItem
         {
             Identifier = SID_CLOSEWIN ;
             HelpId = SID_CLOSEWIN ;
-            /* ### ACHTUNG: Neuer Text in Resource? ~Schließen : ~Schlie˜en */
             Text = "~Schließen" ;
             Text [ ENGLISH ] = "~Close" ;
             Text [ norwegian ] = "Lukk" ;
@@ -934,18 +907,18 @@ Menu RID_POPUP_PREVIEW
             Text [ dutch ] = "~Sluiten" ;
             Text [ spanish ] = "~Cerrar" ;
             Text [ english_us ] = "~Close" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Seitenvorschau schließen : Seitenvorschau schlie˜en */
-            Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
+            Text[ chinese_simplified ] = "å…³é—­(~C)";
             Text[ russian ] = "Çàêğûòü";
             Text[ polish ] = "Zamknij";
-            Text[ japanese ] = "•Â‚¶‚é(~C)";
-            Text[ chinese_traditional ] = "Ãö³¬(~C)";
+            Text[ japanese ] = "é–‰ã˜ã‚‹(~C)";
+            Text[ chinese_traditional ] = "é—œé–‰(~C)";
             Text[ arabic ] = "ÅÛáÇŞ";
             Text[ greek ] = "Êëåß~óéìï";
-            Text[ korean ] = "´İ±â(~C)";
+            Text[ korean ] = "ë‹«ê¸°(~C)";
             Text[ turkish ] = "Kapa~t";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Cerrar";
+            Text[ catalan ] = "Tan~ca";
+            Text[ thai ] = "~à¸›à¸´à¸”";
         };
     };
 };
@@ -953,7 +926,6 @@ Menu RID_POPUP_PREVIEW
 
 String RID_POPUP_EDIT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Texteingabe : Popup-Men³ f³r Texteingabe */
     Text = "Popup-Menü für Texteingabe" ;
     Text [ ENGLISH ] = "Text Edit Popup Menu" ;
     Text [ english_us ] = "Text Input pop-up menu" ;
@@ -965,18 +937,19 @@ String RID_POPUP_EDIT
     Text [ danish ] = "Popup-menu for tekstinput" ;
     Text [ portuguese ] = "Menu instantâneo para inserção de texto" ;
     Text [ portuguese_brazilian ] = "Popup-Men?f? Texteingabe" ;
-    Text[ chinese_simplified ] = "×Ö¶ÎÊäÈëÀ¸µ¯³öÊ½²Ëµ¥";
+    Text[ chinese_simplified ] = "å­—æ®µè¾“å…¥æ å¼¹å‡ºå¼èœå•";
     Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ ââîäà òåêñòà";
     Text[ polish ] = "Menu podrêczne dla wprowadzenia tekstu";
-    Text[ japanese ] = "Ã·½Ä“ü—Í‚ÌÎß¯Ìß±¯ÌßÒÆ­°";
-    Text[ chinese_traditional ] = "Äæ¦ì°Ï§ÖÅã¥\\¯àªí";
+    Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆå…¥åŠ›ã®ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼";
+    Text[ chinese_traditional ] = "æ¬„ä½å€å¿«é¡¯åŠŸèƒ½è¡¨";
     Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ áÅÏÎÇá ÇáäÕ";
     Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá ôçí åéóáãùãŞ êåéìİíïõ";
-    Text[ korean ] = "ÅØ½ºÆ®ÀÔ·Â ÆË¾÷¸Ş´º";
+    Text[ korean ] = "í…ìŠ¤íŠ¸ ì…ë ¥ íŒì—… ë©”ë‰´";
     Text[ turkish ] = "Metin girişi için popup mönü";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Menú emergente para entrada de texto";
+    Text[ catalan ] = "Menú emergent d'introducció de text";
     Text[ finnish ] = "Tekstin syöttämisen ponnahdusvalikko";
+    Text[ thai ] = "à¹€à¸¡à¸™à¸¹à¸›à¹‰à¸­à¸™à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¹à¸šà¸šà¸œà¸¸à¸”à¸‚à¸¶à¹‰à¸™";
 };
 
 Menu RID_POPUP_EDIT
@@ -987,9 +960,6 @@ Menu RID_POPUP_EDIT
         {
             Identifier = SID_CELL_FORMAT_RESET ;
             HelpId = SID_CELL_FORMAT_RESET ;
-            /* ### ACHTUNG: Neuer Text in Resource? Standar~d : Standard */
-            /* ### ACHTUNG: Neuer Text in Resource? Standar~d : Standard */
-            /* ### ACHTUNG: Neuer Text in Resource? Standar~d : Standard */
             Text = "Standar~d" ;
             Text [ ENGLISH ] = "Standar~d" ;
             Text [ dutch ] = "~Standaard" ;
@@ -1001,18 +971,19 @@ Menu RID_POPUP_EDIT
             Text [ danish ] = "Standar~d" ;
             Text [ portuguese_brazilian ] = "Standar~d" ;
             Text [ portuguese ] = "~Padrão" ;
-            Text[ chinese_simplified ] = "±ê×¼(~D)";
+            Text[ chinese_simplified ] = "æ ‡å‡†(~D)";
             Text[ russian ] = "~Ïî óìîë÷àíèş";
             Text[ polish ] = "~Domyœlnie";
-            Text[ japanese ] = "•W€(~D)";
-            Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
+            Text[ japanese ] = "æ¨™æº–(~D)";
+            Text[ chinese_traditional ] = "æ¨™æº–(~D)";
             Text[ arabic ] = "~ŞíÇÓí";
             Text[ greek ] = "~ĞñïåğéëïãŞ";
-            Text[ korean ] = "±âº»°ª(~D)";
+            Text[ korean ] = "ê¸°ë³¸ ê°’(~D)";
             Text[ turkish ] = "~Standart";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Predeterminado";
+            Text[ catalan ] = "Per ~defecte";
             Text[ finnish ] = "~Oletusarvo";
+            Text[ thai ] = "~à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1080,18 +1051,19 @@ Menu RID_POPUP_EDIT
                         Text [ french ] = "S~oulignage double" ;
                         Text [ dutch ] = "Du~bbel onderstrepen" ;
                         Text [ portuguese ] = "Sublinhado ~duplo" ;
-                        Text[ chinese_simplified ] = "Ë«ÏÂ»®Ïß(~U)";
+                        Text[ chinese_simplified ] = "åŒä¸‹åˆ’çº¿(~U)";
                         Text[ russian ] = "Äâîéíîå ïîä÷åğêèâàíèå";
                         Text[ polish ] = "Podwójne podkreœlenie";
-                        Text[ japanese ] = "“ñd‰ºü(~U)";
-                        Text[ chinese_traditional ] = "Âù©³½u(~U)";
+                        Text[ japanese ] = "äºŒé‡ä¸‹ç·š(~U)";
+                        Text[ chinese_traditional ] = "é›™åº•ç·š(~U)";
                         Text[ arabic ] = "ÊÍÊå ÎØ ãÒÏæÌ";
                         Text[ greek ] = "Äé~ğëŞ õğïãñÜììéóç";
-                        Text[ korean ] = "ÀÌÁß ¹ØÁÙ(~U)";
+                        Text[ korean ] = "ì´ì¤‘ ë°‘ì¤„(~U)";
                         Text[ turkish ] = "Altını çift çiz";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "Subrayado ~doble";
+                        Text[ catalan ] = "Subratllat d~oble";
                         Text[ finnish ] = "~Kaksinkertainen alleviivaus";
+                        Text[ thai ] = "à¸‚à¸µà¸”à¹€à¸ªà¹‰à¸™à¹ƒà¸•à¹‰~à¸„à¸¹à¹ˆ";
                     };
                     MenuItem
                     {
@@ -1126,17 +1098,18 @@ Menu RID_POPUP_EDIT
                         Text [ dutch ] = "S~uperscript" ;
                         Text [ spanish ] = "~Superíndice" ;
                         Text [ english_us ] = "S~uperscript" ;
-                        Text[ chinese_simplified ] = "ÉÏ±ê(~U)";
+                        Text[ chinese_simplified ] = "ä¸Šæ ‡(~U)";
                         Text[ russian ] = "Âåğõíèé èíäåêñ";
                         Text[ polish ] = "Indeks górny";
-                        Text[ japanese ] = "ã•t‚«•¶š(~U)";
-                        Text[ chinese_traditional ] = "¤W¼Ğ(~U)";
+                        Text[ japanese ] = "ä¸Šä»˜ãæ–‡å­—(~U)";
+                        Text[ chinese_traditional ] = "ä¸Šæ¨™(~U)";
                         Text[ arabic ] = "ãÑÊİÚ";
                         Text[ greek ] = "Åêèİô~çò";
-                        Text[ korean ] = "À­ Ã·ÀÚ(~U)";
+                        Text[ korean ] = "ìœ— ì²¨ì(~U)";
                         Text[ turkish ] = "Üst simge";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "~Superíndice";
+                        Text[ catalan ] = "Superíndex";
+                        Text[ thai ] = "à¸•à¸±à¸§~à¸¢à¸";
                     };
                     MenuItem
                     {
@@ -1155,17 +1128,18 @@ Menu RID_POPUP_EDIT
                         Text [ dutch ] = "Su~bscript" ;
                         Text [ spanish ] = "~Subíndice" ;
                         Text [ english_us ] = "Su~bscript" ;
-                        Text[ chinese_simplified ] = "ÏÂ±ê(~B)";
+                        Text[ chinese_simplified ] = "ä¸‹æ ‡(~B)";
                         Text[ russian ] = "Íèæíèé èíäåêñ";
                         Text[ polish ] = "Indeks dolny";
-                        Text[ japanese ] = "‰º•t‚«•¶š(~B)";
-                        Text[ chinese_traditional ] = "¤U¼Ğ(~B)";
+                        Text[ japanese ] = "ä¸‹ä»˜ãæ–‡å­—(~B)";
+                        Text[ chinese_traditional ] = "ä¸‹æ¨™(~B)";
                         Text[ arabic ] = "ãäÎİÖ";
                         Text[ greek ] = "Äåßê~ôçò";
-                        Text[ korean ] = "¾Æ·¡ Ã·ÀÚ(~B)";
+                        Text[ korean ] = "ì•„ë˜ ì²¨ì(~B)";
                         Text[ turkish ] = "Alt simge";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "~Subíndice";
+                        Text[ catalan ] = "Su~bíndex";
+                        Text[ thai ] = "à¸•à¸±~à¸§à¸¢à¸";
                     };
                 };
             };
@@ -1178,18 +1152,19 @@ Menu RID_POPUP_EDIT
             Text[ dutch ] = "T~ype";
             Text[ spanish ] = "~Estilo";
             Text[ english_us ] = "St~yle";
-    Text[ chinese_simplified ] = "Ê½Ñù(~Y)";
+    Text[ chinese_simplified ] = "å¼æ ·(~Y)";
             Text[ russian ] = "Ñòèëü";
             Text[ polish ] = "Styl";
-            Text[ japanese ] = "½À²Ù(~Y)";
-            Text[ chinese_traditional ] = "¼Ë¦¡(~Y)";
+            Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«(~Y)";
+            Text[ chinese_traditional ] = "æ¨£å¼(~Y)";
             Text[ arabic ] = "ÇáäãØ";
             Text[ greek ] = "Óôõ~ë";
-            Text[ korean ] = "½ºÅ¸ÀÏ(~Y)";
+            Text[ korean ] = "ìŠ¤íƒ€ì¼(~Y)";
             Text[ turkish ] = "Biçim";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Estilo";
-            Text[ finnish ] = "~Tyyli";
+            Text[ catalan ] = "Es~til";
+            Text[ finnish ] = "T~yyli";
+            Text[ thai ] = "à¸¥à¸±à¸~à¸©à¸“à¸°";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1203,7 +1178,6 @@ Menu RID_POPUP_EDIT
 
 String RID_POPUP_AUDIT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Detektiv-Füll-Modus : Popup-Men³ f³r Detektiv-F³ll-Modus */
     Text = "Popup-Menü für Detektiv-Füll-Modus" ;
     Text [ ENGLISH ] = "Auditing Fill Mode Popup Menu" ;
     Text [ english_us ] = "Detective Fill Mode pop-up menu" ;
@@ -1215,18 +1189,19 @@ String RID_POPUP_AUDIT
     Text [ danish ] = "Popup-menu for detektiv fyldmodus" ;
     Text [ portuguese_brazilian ] = "Popup-Men?f? Detektiv-F?l-Modus" ;
     Text [ portuguese ] = "Menu instantâneo para o modo preenchimento de auditoria" ;
-    Text[ chinese_simplified ] = "ÕìÌ½-³äÌî-µ¯³öÊ½²Ëµ¥";
+    Text[ chinese_simplified ] = "ä¾¦æ¢-å……å¡«-å¼¹å‡ºå¼èœå•";
     Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ ğåæèìà çàëèâêè çàâèñèìîñòè";
     Text[ polish ] = "Menu podrêczne dla trybu wype³niania detektywa";
-    Text[ japanese ] = "ÄÚ°½ÀsÓ°ÄŞ‚ÌÎß¯Ìß±¯ÌßÒÆ­°";
-    Text[ chinese_traditional ] = "°»±´-¶ñ¤J-§ÖÅã¥\\¯àªí";
+    Text[ japanese ] = "ãƒˆãƒ¬ãƒ¼ã‚¹å®Ÿè¡Œãƒ¢ãƒ¼ãƒ‰ã®ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼";
+    Text[ chinese_traditional ] = "åµæ¢-å¡«å…¥-å¿«é¡¯åŠŸèƒ½è¡¨";
     Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ áæÖÚ ÊÚÈÆÉ ÇáãÎÈÑ";
     Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá ôçí êáôÜóôáóç ãåìßóìáôïò ôïõ áíé÷íåõôŞ";
-    Text[ korean ] = "ÃßÀû Ã¤¿ì±â ¸ğµå ÆË¾÷¸Ş´º";
+    Text[ korean ] = "ì¶”ì  ì±„ìš°ê¸° ëª¨ë“œ íŒì—…ë©”ë‰´";
     Text[ turkish ] = "Doldurma kipi (dedektif) için popup mönü";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Menú emergente para el modo Detective de relleno";
+    Text[ catalan ] = "Menú emergent de mode d'emplenament Detective";
     Text[ finnish ] = "Havainnoivan täyttötilan ponnahdusvalikko";
+    Text[ thai ] = "à¹€à¸¡à¸™à¸¹à¸•à¸£à¸§à¸ˆà¸«à¸²à¹‚à¸«à¸¡à¸”à¹€à¸•à¸´à¸¡à¹à¸šà¸šà¸œà¸¸à¸”à¸‚à¸¶à¹‰à¸™";
 };
 
 Menu RID_POPUP_AUDIT
@@ -1237,10 +1212,6 @@ Menu RID_POPUP_AUDIT
         {
             Identifier = SID_FILL_ADD_PRED ;
             HelpId = SID_FILL_ADD_PRED ;
-            /* ### ACHTUNG: Neuer Text in Resource? Spur zum ~Vorgänger : Spur zum Vorgänger */
-            /* ### ACHTUNG: Neuer Text in Resource? Spur zum ~Vorgänger : Spur zum Vorgänger */
-            /* ### ACHTUNG: Neuer Text in Resource? Spur zum ~Vorgänger : Spur zum Vorgänger */
-            /* ### ACHTUNG: Neuer Text in Resource? Spur zum ~Vorgänger : Spur zum ~Vorgõnger */
             Text = "Spur zum ~Vorgänger" ;
             Text [ ENGLISH ] = "Trace ~Predescessor" ;
             Text [ norwegian ] = "Trace Predescessor" ;
@@ -1254,26 +1225,23 @@ Menu RID_POPUP_AUDIT
             Text [ dutch ] = "Spoor naar ~voorganger" ;
             Text [ spanish ] = "Rastrear ~precedentes" ;
             Text [ english_us ] = "Trace ~Precedent" ;
-            Text[ chinese_simplified ] = "ÏòÇ°µÄ×·×Ù¼ıÍ·(~P)";
+            Text[ chinese_simplified ] = "å‘å‰çš„è¿½è¸ªç®­å¤´(~P)";
             Text[ russian ] = "Âëèÿşùèå ÿ÷åéêè";
             Text[ polish ] = "ŒledŸ poprzedniki";
-            Text[ japanese ] = "QÆŒ³ÄÚ°½(~P)";
-            Text[ chinese_traditional ] = "Àx¦s®æ«e¾É½b¸¹(~P)";
+            Text[ japanese ] = "å‚ç…§å…ƒãƒˆãƒ¬ãƒ¼ã‚¹(~P)";
+            Text[ chinese_traditional ] = "å„²å­˜æ ¼å‰å°ç®­è™Ÿ(~P)";
             Text[ arabic ] = "ÊÊÈÚ ÇáÓÇÈŞÇÊ";
             Text[ greek ] = "º÷íïò ğñïçãïıìåíï~õ";
-            Text[ korean ] = "¼±·Ê ÃßÀû(~P)";
+            Text[ korean ] = "ì„ ë¡€ ì¶”ì (~P)";
             Text[ turkish ] = "Öncekini izle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Rastrear ~precedentes";
+            Text[ catalan ] = "Rastreja l'an~terior";
+            Text[ thai ] = "à¸•à¸´à¸”à¸•à¸²à¸¡à¹€à¸‹à¸¥à¸¥à¹Œ~à¸—à¸µà¹ˆà¸–à¸¹à¸à¸­à¹‰à¸²à¸‡à¸–à¸¶à¸‡";
         };
         MenuItem
         {
             Identifier = SID_FILL_DEL_PRED ;
             HelpId = SID_FILL_DEL_PRED ;
-            /* ### ACHTUNG: Neuer Text in Resource? Spur zum Vorgänger ~entfernen : Spur zum Vorgänger entfernen */
-            /* ### ACHTUNG: Neuer Text in Resource? Spur zum Vorgänger ~entfernen : Spur zum Vorgänger entfernen */
-            /* ### ACHTUNG: Neuer Text in Resource? Spur zum Vorgänger ~entfernen : Spur zum Vorgänger entfernen */
-            /* ### ACHTUNG: Neuer Text in Resource? Spur zum Vorgänger ~entfernen : Spur zum Vorgõnger ~entfernen */
             Text = "Spur zum Vorgänger ~entfernen" ;
             Text [ ENGLISH ] = "~Remove Predescessor" ;
             Text [ norwegian ] = "Remove Predescessor" ;
@@ -1287,25 +1255,23 @@ Menu RID_POPUP_AUDIT
             Text [ dutch ] = "Spoor naar voorganger v~erwijderen" ;
             Text [ spanish ] = "~Eliminar rastro a precedente" ;
             Text [ english_us ] = "~Remove Precedent" ;
-            Text[ chinese_simplified ] = "É¾³ıÏòÇ°µÄ×·×Ù¼ıÍ·(~R)";
+            Text[ chinese_simplified ] = "åˆ é™¤å‘å‰çš„è¿½è¸ªç®­å¤´(~R)";
             Text[ russian ] = "Óáğàòü ñòğåëêè ê âëèÿşùèì ÿ÷åéêàì";
             Text[ polish ] = "Usuñ strza³ki poprzedników";
-            Text[ japanese ] = "QÆŒ³ÄÚ°½‚Ìíœ(~R)";
-            Text[ chinese_traditional ] = "§R°£Àx¦s®æ«e¾É½b¸¹(~R)";
+            Text[ japanese ] = "å‚ç…§å…ƒãƒˆãƒ¬ãƒ¼ã‚¹ã®å‰Šé™¤(~R)";
+            Text[ chinese_traditional ] = "åˆªé™¤å„²å­˜æ ¼å‰å°ç®­è™Ÿ(~R)";
             Text[ arabic ] = "ÅÒÇáÉ ÇáÓÇÈŞÇÊ";
             Text[ greek ] = "ÊáôÜñãçóç ß÷íïõò ğñïçãïıì~åíïõ";
-            Text[ korean ] = "¼±·Ê ÃßÀû Á¦°Å(~R)";
+            Text[ korean ] = "ì„ ë¡€ ì¶”ì  ì œê±°(~R)";
             Text[ turkish ] = "Öncekinin izini sil";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Eliminar rastro a precedente";
+            Text[ catalan ] = "Sup~rimeix l'anterior";
+            Text[ thai ] = "à¹€~à¸­à¸²à¹€à¸‹à¸¥à¸¥à¹Œà¸—à¸µà¹ˆà¸–à¸¹à¸à¸­à¹‰à¸²à¸‡à¸–à¸¶à¸‡à¸­à¸­à¸";
         };
         MenuItem
         {
             Identifier = SID_FILL_ADD_SUCC ;
             HelpId = SID_FILL_ADD_SUCC ;
-            /* ### ACHTUNG: Neuer Text in Resource? Spur zum ~Nachfolger : Spur zum Nachfolger */
-            /* ### ACHTUNG: Neuer Text in Resource? Spur zum ~Nachfolger : Spur zum Nachfolger */
-            /* ### ACHTUNG: Neuer Text in Resource? Spur zum ~Nachfolger : Spur zum Nachfolger */
             Text = "Spur zum ~Nachfolger" ;
             Text [ ENGLISH ] = "Trace ~Successor" ;
             Text [ norwegian ] = "Trace Successor" ;
@@ -1319,25 +1285,23 @@ Menu RID_POPUP_AUDIT
             Text [ dutch ] = "Spoor naar ~opvolger" ;
             Text [ spanish ] = "Rastrear ~dependientes" ;
             Text [ english_us ] = "~Trace Dependent" ;
-            Text[ chinese_simplified ] = "ÏòºóµÄ×·×Ù¼ıÍ·(~T)";
+            Text[ chinese_simplified ] = "å‘åçš„è¿½è¸ªç®­å¤´(~T)";
             Text[ russian ] = "Çàâèñèìûå ÿ÷åéêè";
             Text[ polish ] = "ŒledŸ zale¿noœci";
-            Text[ japanese ] = "QÆæÄÚ°½(~T)";
-            Text[ chinese_traditional ] = "¦V«á°lÂÜ½b¸¹(~T)";
+            Text[ japanese ] = "å‚ç…§å…ˆãƒˆãƒ¬ãƒ¼ã‚¹(~T)";
+            Text[ chinese_traditional ] = "å‘å¾Œè¿½è¹¤ç®­è™Ÿ(~T)";
             Text[ arabic ] = "ÊÊÈÚ ÇáÊæÇÈÚ";
             Text[ greek ] = "º÷íïò ğñïò ôï åğüìå~íï";
-            Text[ korean ] = "Á¾¼Ó ÃßÀû(~T)";
+            Text[ korean ] = "ì¢…ì† ì¶”ì (~T)";
             Text[ turkish ] = "Sonrakinin izini sil";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Rastrear ~dependientes";
+            Text[ catalan ] = "Ras~treja el dependent";
+            Text[ thai ] = "~à¸•à¸´à¸”à¸•à¸²à¸¡à¹€à¸‹à¸¥à¸¥à¹Œà¸—à¸µà¹ˆà¸­à¹‰à¸²à¸‡à¸–à¸¶à¸‡";
         };
         MenuItem
         {
             Identifier = SID_FILL_DEL_SUCC ;
             HelpId = SID_FILL_DEL_SUCC ;
-            /* ### ACHTUNG: Neuer Text in Resource? Spur zum Nachfolger ent~fernen : Spur zum Nachfolger entfernen */
-            /* ### ACHTUNG: Neuer Text in Resource? Spur zum Nachfolger ent~fernen : Spur zum Nachfolger entfernen */
-            /* ### ACHTUNG: Neuer Text in Resource? Spur zum Nachfolger ent~fernen : Spur zum Nachfolger entfernen */
             Text = "Spur zum Nachfolger ent~fernen" ;
             Text [ ENGLISH ] = "R~emove Successor" ;
             Text [ norwegian ] = "Remove Successor" ;
@@ -1346,22 +1310,23 @@ Menu RID_POPUP_AUDIT
             Text [ portuguese ] = "Remover depe~ndentes" ;
             Text [ finnish ] = "Poista seuraaja" ;
             Text [ danish ] = "Fjern underordnede pile" ;
-            Text [ french ] = "~Supprimer le repérage des dépendants" ;
+            Text [ french ] = "S~upprimer le repérage des dépendants" ;
             Text [ swedish ] = "Ta bort spår till un~derordnade" ;
             Text [ dutch ] = "Spoor naar opvolger ve~rwijderen" ;
             Text [ spanish ] = "~Eliminar rastro a dependiente" ;
             Text [ english_us ] = "Remove Dependent" ;
-            Text[ chinese_simplified ] = "É¾³ıÏòºóµÄ×·×Ù¼ıÍ·";
+            Text[ chinese_simplified ] = "åˆ é™¤å‘åçš„è¿½è¸ªç®­å¤´";
             Text[ russian ] = "Óáğàòü ñòğåëêè ê çàâèñèìûì ÿ÷åéêàì";
             Text[ polish ] = "Usuñ strza³ki zale¿noœci";
-            Text[ japanese ] = "QÆæÄÚ°½‚Ìíœ";
-            Text[ chinese_traditional ] = "§R°£¦V«áªº°lÂÜ½b¸¹";
+            Text[ japanese ] = "å‚ç…§å…ˆãƒˆãƒ¬ãƒ¼ã‚¹ã®å‰Šé™¤";
+            Text[ chinese_traditional ] = "åˆªé™¤å‘å¾Œçš„è¿½è¹¤ç®­è™Ÿ";
             Text[ arabic ] = "ÅÒÇáÉ ÇáÊæÇÈÚ";
             Text[ greek ] = "Äéáãñá~öŞ ß÷íïõò ğñïò ôï åğüìåíï";
-            Text[ korean ] = "Á¾¼Ó ÃßÀû Á¦°Å";
+            Text[ korean ] = "ì¢…ì† ì¶”ì  ì œê±°";
             Text[ turkish ] = "Sonrakinin izini sil";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Eliminar rastro a dependiente";
+            Text[ catalan ] = "Suprimeix el dependent";
+            Text[ thai ] = "à¹€à¸­à¸²à¹€à¸‹à¸¥à¸¥à¹Œà¸—à¸µà¹ˆà¸­à¹‰à¸²à¸‡à¸–à¸¶à¸‡à¸­à¸­à¸";
         };
         MenuItem
         {
@@ -1373,33 +1338,30 @@ Menu RID_POPUP_AUDIT
             Text [ italian ] = "Rimuovi tutte le evidenziazioni" ;
             Text [ portuguese_brazilian ] = "Remover todos os Tra?os" ;
             Text [ portuguese ] = "Remover ~todas as setas" ;
-            Text [ finnish ] = "~Poista kaikki jäljet" ;
+            Text [ finnish ] = "Poista ~kaikki jäljitykset" ;
             Text [ danish ] = "Fjern alle pile" ;
-            Text [ french ] = "S~upprimer tous les repères" ;
+            Text [ french ] = "Su~pprimer tous les repères" ;
             Text [ swedish ] = "Ta bort ~alla spår" ;
             Text [ dutch ] = "~Alle sporen verwijderen" ;
             Text [ spanish ] = "Eliminar ~todos los rastros" ;
             Text [ english_us ] = "Remove ~All Traces" ;
-            Text[ chinese_simplified ] = "É¾³ıÈ«²¿µÄ×·×Ù¼ıÍ·(~A)";
+            Text[ chinese_simplified ] = "åˆ é™¤å…¨éƒ¨çš„è¿½è¸ªç®­å¤´(~A)";
             Text[ russian ] = "Óáğàòü âñå ñòğåëêè";
             Text[ polish ] = "Usuñ wszystkie strza³ki";
-            Text[ japanese ] = "‚·‚×‚Ä‚ÌÄÚ°½‚Ìíœ(~A)";
-            Text[ chinese_traditional ] = "§R°£¥ş³¡ªº°lÂÜ½b¸¹(~A)";
+            Text[ japanese ] = "ã™ã¹ã¦ã®ãƒˆãƒ¬ãƒ¼ã‚¹ã®å‰Šé™¤(~A)";
+            Text[ chinese_traditional ] = "åˆªé™¤å…¨éƒ¨çš„è¿½è¹¤ç®­è™Ÿ(~A)";
             Text[ arabic ] = "ãÍæ ßá ÇáÂËÇÑ";
             Text[ greek ] = "Äé~áãñáöŞ üëùí ôùí é÷íşí";
-            Text[ korean ] = "¸ğµç ÃßÀû Á¦°Å(~A)";
+            Text[ korean ] = "ëª¨ë“  ì¶”ì  ì œê±°(~A)";
             Text[ turkish ] = "Tüm izleri kaldır";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Eliminar ~todos los rastros";
+            Text[ catalan ] = "Suprimeix tots els r~astres";
+            Text[ thai ] = "à¹€à¸­à¸²à¸•à¸±à¸§à¸•à¸´à¸”à¸•à¸²à¸¡à¸­à¸­à¸~à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
         };
         MenuItem
         {
             Identifier = SID_FILL_NONE ;
             HelpId = SID_FILL_NONE ;
-            /* ### ACHTUNG: Neuer Text in Resource? Füll-Modus ~beenden : Füll-Modus beenden */
-            /* ### ACHTUNG: Neuer Text in Resource? Füll-Modus ~beenden : Füll-Modus beenden */
-            /* ### ACHTUNG: Neuer Text in Resource? Füll-Modus ~beenden : Füll-Modus beenden */
-            /* ### ACHTUNG: Neuer Text in Resource? Füll-Modus ~beenden : F³ll-Modus ~beenden */
             Text = "Füll-Modus ~beenden" ;
             Text [ ENGLISH ] = "End Fill ~Mode" ;
             Text [ english_us ] = "Exit Fill Mode" ;
@@ -1411,25 +1373,25 @@ Menu RID_POPUP_AUDIT
             Text [ danish ] = "Afslut fyldmodus" ;
             Text [ portuguese_brazilian ] = "F?l-Modus ~beenden" ;
             Text [ portuguese ] = "~Sair do modo de preenchimento" ;
-            Text[ chinese_simplified ] = "½áÊø³äÌîÄ£Ê½(~F)";
+            Text[ chinese_simplified ] = "ç»“æŸå……å¡«æ¨¡å¼";
             Text[ russian ] = "Âûõîä èç ğåæèìà çàëèâêè";
             Text[ polish ] = "Zakoñcz tryb wype³niania";
-            Text[ japanese ] = "ÀsÓ°ÄŞ‚ÌI—¹(~E)";
-            Text[ chinese_traditional ] = "µ²§ô¥R¶ñ¼Ò¦¡(~F)";
+            Text[ japanese ] = "å®Ÿè¡Œãƒ¢ãƒ¼ãƒ‰ã®çµ‚äº†";
+            Text[ chinese_traditional ] = "çµæŸå……å¡«æ¨¡å¼";
             Text[ arabic ] = "ÅäåÇÁ æÖÚ ÇáÊÚÈÆÉ";
             Text[ greek ] = "~Ôåñìáôéóìüò êáôÜóôáóçò ãåìßóìáôïò";
-            Text[ korean ] = "Ã¤¿ì±â ¸ğµå Á¾·á";
+            Text[ korean ] = "ì±„ìš°ê¸° ëª¨ë“œ ì¢…ë£Œ";
             Text[ turkish ] = "Doldurma kipinden çık";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Salir del modo de relleno";
+            Text[ catalan ] = "Surt del mode Emplena";
             Text[ finnish ] = "Poistu täyttötilasta";
+            Text[ thai ] = "à¸­à¸­à¸à¸ˆà¸²à¸à¹‚à¸«à¸¡à¸”à¹€à¸•à¸´à¸¡";
         };
     };
 };
 
 String RID_POPUP_PAGEBREAK
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Seitenumbruch-Vorschau : Popup-Men³ f³r Seitenumbruch-Vorschau */
     Text = "Popup-Menü für Seitenumbruch-Vorschau" ;
     Text [ ENGLISH ] = "Page Break Preview Popup Menu" ;
     Text [ portuguese ] = "Menu instantâneo para visualizar quebras de página" ;
@@ -1441,18 +1403,19 @@ String RID_POPUP_PAGEBREAK
     Text [ spanish ] = "Menú emergente para previsualización de saltos de página" ;
     Text [ french ] = "Menu Pop-up pour l'aperçu des sauts de page" ;
     Text [ dutch ] = "Popup-menu voor voorbeeld van paginaeinde" ;
-    Text[ chinese_simplified ] = "»»Ò³Ô¤ÀÀµÄµ¯³öÊ½²Ëµ¥";
+    Text[ chinese_simplified ] = "æ¢é¡µé¢„è§ˆçš„å¼¹å‡ºå¼èœå•";
     Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ ïğåäâàğèòåëüíîãî ïğîñìîòğà ğàçğûâà ñòğàíèö";
     Text[ polish ] = "Menu podrêczne dla podgl¹du ³amania strony";
-    Text[ japanese ] = "‰üÍß°¼ŞÌßÚËŞ­°‚ÌÎß¯Ìß±¯ÌßÒÆ­°";
-    Text[ chinese_traditional ] = "­¶­±ÀËµø§ÖÅã¥\\¯àªí";
+    Text[ japanese ] = "æ”¹ãƒšãƒ¼ã‚¸ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãƒ¡ãƒ‹ãƒ¥ãƒ¼";
+    Text[ chinese_traditional ] = "é é¢æª¢è¦–å¿«é¡¯åŠŸèƒ½è¡¨";
     Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ áãÚÇíäÉ İæÇÕá ÇáÕİÍÇÊ";
     Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá ğñïåğéóêüğçóç áëëáãŞò óåëßäáò";
-    Text[ korean ] = "ÂÊ ³ª´® ¹Ì¸® º¸±â ÆË¾÷¸Ş´º";
+    Text[ korean ] = "í˜ì´ì§€ ë‚˜ëˆ„ê¸° ë¯¸ë¦¬ ë³´ê¸° íŒì—… ë©”ë‰´";
     Text[ turkish ] = "Sayfa sonu önizlemesi için popup mönü";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Menú emergente para previsualización de saltos de página";
+    Text[ catalan ] = "Menú emergent de la visualització prèvia del salt de pàgina";
     Text[ finnish ] = "Sivunvaihdon esikatselun ponnahdusvalikko";
+    Text[ thai ] = "à¹€à¸¡à¸™à¸¹à¹à¸ªà¸”à¸‡à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡à¸•à¸±à¸§à¹à¸šà¹ˆà¸‡à¸«à¸™à¹‰à¸²à¹à¸šà¸šà¸œà¸¸à¸”à¸‚à¸¶à¹‰à¸™";
 };
 
 Menu RID_POPUP_PAGEBREAK
@@ -1474,18 +1437,19 @@ Menu RID_POPUP_PAGEBREAK
             Text [ danish ] = "Standar~d" ;
             Text [ portuguese_brazilian ] = "Standar~d" ;
             Text [ portuguese ] = "~Padrão" ;
-            Text[ chinese_simplified ] = "±ê×¼(~D)";
+            Text[ chinese_simplified ] = "æ ‡å‡†(~D)";
             Text[ russian ] = "~Ïî óìîë÷àíèş";
             Text[ polish ] = "~Domyœlnie";
-            Text[ japanese ] = "•W€(~D)";
-            Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
+            Text[ japanese ] = "æ¨™æº–(~D)";
+            Text[ chinese_traditional ] = "æ¨™æº–(~D)";
             Text[ arabic ] = "~ŞíÇÓí";
             Text[ greek ] = "~ĞñïåğéëïãŞ";
-            Text[ korean ] = "±âº»°ª(~D)";
+            Text[ korean ] = "ê¸°ë³¸ ê°’(~D)";
             Text[ turkish ] = "~Standart";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Predeterminado";
+            Text[ catalan ] = "Per ~defecte";
             Text[ finnish ] = "~Oletusarvo";
+            Text[ thai ] = "~à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1507,17 +1471,18 @@ Menu RID_POPUP_PAGEBREAK
             Text [ dutch ] = "~Cellen opmaken..." ;
             Text [ spanish ] = "Formatear ~celdas..." ;
             Text [ english_us ] = "~Format Cells..." ;
-            Text[ chinese_simplified ] = "µ¥Ôª¸ñ¸ñÊ½»¯(~F)...";
+            Text[ chinese_simplified ] = "å•å…ƒæ ¼æ ¼å¼åŒ–(~F)...";
             Text[ russian ] = "Ôîğìàò ÿ÷ååê...";
             Text[ polish ] = "Formatuj komórki...";
-            Text[ japanese ] = "¾Ù‚Ì‘®İ’è(~F)...";
-            Text[ chinese_traditional ] = "Àx¦s®æ®æ¦¡¤Æ(~F)...";
+            Text[ japanese ] = "ã‚»ãƒ«ã®æ›¸å¼è¨­å®š(~F)...";
+            Text[ chinese_traditional ] = "å„²å­˜æ ¼æ ¼å¼åŒ–(~F)...";
             Text[ arabic ] = "ÊäÓíŞ ÇáÎáÇíÇ...";
             Text[ greek ] = "Ìïñöï~ğïßçóç êåëéşí...";
-            Text[ korean ] = "¼¿ Æ÷¸ËÆÃ(~F)...";
+            Text[ korean ] = "ì…€ ì„œì‹ ì§€ì •(~F)...";
             Text[ turkish ] = "Hücreleri formatla...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Formatear ~celdas...";
+            Text[ catalan ] = "~Formata les cel·les...";
+            Text[ thai ] = "~à¸£à¸¹à¸›à¹à¸šà¸šà¹€à¸‹à¸¥à¸¥à¹Œ...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1526,7 +1491,6 @@ Menu RID_POPUP_PAGEBREAK
         {
             Identifier = FID_INS_ROWBRK ;
             HelpId = FID_INS_ROWBRK ;
-            /* ### ACHTUNG: Neuer Text in Resource? Z~eilenumbruch einfügen : Z~eilenumbruch einf³gen */
             Text = "Z~eilenumbruch einfügen" ;
             Text [ ENGLISH ] = "Insert ~Column Break" ;
             Text [ english_us ] = "Insert ~Row Break" ;
@@ -1538,24 +1502,24 @@ Menu RID_POPUP_PAGEBREAK
             Text [ french ] = "I~nsérer un renvoi à la ligne" ;
             Text [ dutch ] = "~Rijeinde invoegen" ;
             Text [ portuguese ] = "Inserir quebra de ~linha" ;
-            Text[ chinese_simplified ] = "²åÈë»»ĞĞ(~R)";
+            Text[ chinese_simplified ] = "æ’å…¥æ¢è¡Œ(~R)";
             Text[ russian ] = "Âñòàâèòü ğàçğûâ ñòğîê";
             Text[ polish ] = "Wstaw podzia³ wierszy";
-            Text[ japanese ] = "‰üs‚Ì‘}“ü(~R)";
-            Text[ chinese_traditional ] = "´¡¤J´«¦C(~R)";
+            Text[ japanese ] = "è¡Œã®åŒºåˆ‡ã‚Šã‚’æŒ¿å…¥(~R)";
+            Text[ chinese_traditional ] = "æ’å…¥æ›åˆ—(~R)";
             Text[ arabic ] = "ÅÏÑÇÌ İÇÕá ÃÓØÑ";
             Text[ greek ] = "~ÅéóáãùãŞ áëëáãŞò ãñáììŞò";
-            Text[ korean ] = "°³Çà »ğÀÔ(~R)";
+            Text[ korean ] = "ë‹¨ë½ ì‚½ì…(~R)";
             Text[ turkish ] = "Satır sonu ekle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Insertar salto de ~fila";
+            Text[ catalan ] = "Insereix un salt de fi~la";
             Text[ finnish ] = "~Lisää rivinvaihto";
+            Text[ thai ] = "à¹à¸—à¸£à¸à¸•à¸±à¸§à¹à¸šà¹ˆà¸‡à¹~à¸–à¸§";
         };
         MenuItem
         {
             Identifier = FID_INS_COLBRK ;
             HelpId = FID_INS_COLBRK ;
-            /* ### ACHTUNG: Neuer Text in Resource? S~paltenumbruch einfügen : S~paltenumbruch einf³gen */
             Text = "S~paltenumbruch einfügen" ;
             Text [ ENGLISH ] = "Insert ~Row Break" ;
             Text [ english_us ] = "Insert ~Column Break" ;
@@ -1567,24 +1531,24 @@ Menu RID_POPUP_PAGEBREAK
             Text [ french ] = "Insérer un saut de c~olonne" ;
             Text [ dutch ] = "~Kolomeinde invoegen" ;
             Text [ portuguese ] = "Inserir quebra de ~coluna" ;
-            Text[ chinese_simplified ] = "ÔÚÁĞÖ®¼ä²åÈë·Ö¸ô·û(~C)";
+            Text[ chinese_simplified ] = "åœ¨åˆ—ä¹‹é—´æ’å…¥åˆ†éš”ç¬¦(~C)";
             Text[ russian ] = "Âñòàâèòü ğàçğûâ ñòîëáöîâ";
             Text[ polish ] = "Wstaw podzia³ kolumny";
-            Text[ japanese ] = "—ñ‚Ì‹æØ‚è‚ğ‘}“ü(~C)";
-            Text[ chinese_traditional ] = "´¡¤J´«Äæ(~C)";
+            Text[ japanese ] = "åˆ—ã®åŒºåˆ‡ã‚Šã‚’æŒ¿å…¥(~C)";
+            Text[ chinese_traditional ] = "æ’å…¥æ›æ¬„(~C)";
             Text[ arabic ] = "ÅÏÑÇÌ İÇÕá ÃÚãÏÉ";
             Text[ greek ] = "ÅéóáãùãŞ áëëáãŞò ó~ôŞëçò";
-            Text[ korean ] = "¿­³ª´©±â »ğÀÔ(~C)";
+            Text[ korean ] = "ì—´ ì‚½ì…(~C)";
             Text[ turkish ] = "Sütun sonu ekle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Insertar salto de ~columna";
+            Text[ catalan ] = "Insereix un salt de ~columna";
             Text[ finnish ] = "~Lisää sarakevaihto";
+            Text[ thai ] = "à¹à¸—à¸£à¸à¸•à¸±à¸§à¹à¸šà¹ˆà¸‡~à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
         };
         MenuItem
         {
             Identifier = FID_DEL_MANUALBREAKS ;
             HelpId = FID_DEL_MANUALBREAKS ;
-            /* ### ACHTUNG: Neuer Text in Resource? Alle ~manuellen Umbrüche löschen : Alle ~manuellen Umbr³che l÷schen */
             Text = "Alle ~manuellen Umbrüche löschen" ;
             Text [ ENGLISH ] = "~Remove All Manual Breaks" ;
             Text [ english_us ] = "Delete All Manual Breaks" ;
@@ -1596,18 +1560,19 @@ Menu RID_POPUP_PAGEBREAK
             Text [ french ] = "Supprimer tous les sauts ~manuels" ;
             Text [ dutch ] = "Alle handmatige ~einden wissen" ;
             Text [ portuguese ] = "Remover todas as quebras ~manuais" ;
-            Text[ chinese_simplified ] = "É¾³ıÈ«²¿µÄÊÖ¹¤·Ö¸ô·û(~R)";
+            Text[ chinese_simplified ] = "åˆ é™¤å…¨éƒ¨çš„æ‰‹å·¥åˆ†éš”";
             Text[ russian ] = "Óáğàòü âñå ğàçğûâû";
             Text[ polish ] = "Usuñ wszystkie rêczne podzia³y";
-            Text[ japanese ] = "‚·‚×‚Ä‚Ì‰üÍß°¼Ş‚Ìíœ";
-            Text[ chinese_traditional ] = "§R°£¥ş³¡¤â°Ê¤À¹j²Å(~R)";
+            Text[ japanese ] = "ã™ã¹ã¦ã®ä»»æ„æ”¹ãƒšãƒ¼ã‚¸ã®å‰Šé™¤";
+            Text[ chinese_traditional ] = "åˆªé™¤å…¨éƒ¨æ‰‹å‹•åˆ†éš”";
             Text[ arabic ] = "ÅÒÇáÉ ßá ÇáİæÇÕá ÇáíÏæíÉ";
             Text[ greek ] = "ÄéáãñáöŞ üëùí ôùí ~÷åéñïêßíçôùí áëëáãşí";
-            Text[ korean ] = "¸ğµç ¼öµ¿ ³ª´©±â »èÁ¦";
+            Text[ korean ] = "ëª¨ë“  ìˆ˜ë™ ë‚˜ëˆ„ê¸° ì‚­ì œ";
             Text[ turkish ] = "Tüm manüel kesmeleri sil";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Eliminar todos los saltos ~manuales";
+            Text[ catalan ] = "Suprimeix tots els salts manuals";
             Text[ finnish ] = "Poista kaikki manuaaliset vaihdot";
+            Text[ thai ] = "à¸¥à¸šà¸•à¸±à¸§à¹à¸šà¹ˆà¸‡à¸”à¹‰à¸§à¸¢à¸•à¸™à¹€à¸­à¸‡à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
         };
         MenuItem
         {
@@ -1624,18 +1589,19 @@ Menu RID_POPUP_PAGEBREAK
             Text [ french ] = "Supprimer l'~échelle" ;
             Text [ dutch ] = "Schaal ~opheffen" ;
             Text [ portuguese ] = "Repor ~escala" ;
-            Text[ chinese_simplified ] = "ÖØÉèÏÔÊ¾±ÈÁĞ(~S)";
+            Text[ chinese_simplified ] = "é‡è®¾æ˜¾ç¤ºæ¯”ä¾‹";
             Text[ russian ] = "Ñíÿòü ìàñøòàáèğîâàíèå";
             Text[ polish ] = "Zresetuj skalowanie";
-            Text[ japanese ] = "½¹°Ù‚Ì‰ğœ";
-            Text[ chinese_traditional ] = "­«³]Åã¥Ü¤ñ¨Ò(~S)";
+            Text[ japanese ] = "ã‚¹ã‚±ãƒ¼ãƒ«ã®è§£é™¤";
+            Text[ chinese_traditional ] = "é‡è¨­é¡¯ç¤ºæ¯”ä¾‹";
             Text[ arabic ] = "ÅÒÇáÉ ÇáãŞíÇÓ";
             Text[ greek ] = "ÊáôÜñãçóç ~êëßìáêáò";
-            Text[ korean ] = "¹èÀ² ÇØÁ¦";
+            Text[ korean ] = "ë°°ìœ¨ í•´ì œ";
             Text[ turkish ] = "Ölçeklendirmeyi kaldır";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Restablecer ~escala";
+            Text[ catalan ] = "Reinicia l'escala";
             Text[ finnish ] = "Palauta skaala";
+            Text[ thai ] = "à¸•à¸±à¹‰à¸‡à¸ªà¹€à¸à¸¥à¹ƒà¸«à¸¡à¹ˆ";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1655,24 +1621,24 @@ Menu RID_POPUP_PAGEBREAK
             Text [ french ] = "~Définir la zone d'impression" ;
             Text [ dutch ] = "Afdrukbereik ~definiëren" ;
             Text [ portuguese ] = "~Definir área de impressão" ;
-            Text[ chinese_simplified ] = "¶¨Òå´òÓ¡ÇøÓò(~D)";
+            Text[ chinese_simplified ] = "å®šä¹‰æ‰“å°åŒºåŸŸ";
             Text[ russian ] = "Çàäàòü îáëàñòü ïå÷àòè";
             Text[ polish ] = "Zdefiniuj zakres wydruku";
-            Text[ japanese ] = "ˆóü”ÍˆÍ‚Ìw’è";
-            Text[ chinese_traditional ] = "³]©w¦C¦L½d³ò(~D)";
+            Text[ japanese ] = "å°åˆ·ç¯„å›²ã®æŒ‡å®š";
+            Text[ chinese_traditional ] = "è¨­å®šåˆ—å°ç¯„åœ";
             Text[ arabic ] = "ÊÚííä äØÇŞ ÇáØÈÇÚÉ";
             Text[ greek ] = "~Ïñéóìüò ğåñéï÷Şò åêôığùóçò";
-            Text[ korean ] = "ÀÎ¼â¹üÀ§ Á¤ÀÇ";
+            Text[ korean ] = "ì¸ì‡„ ì˜ì—­ ì •ì˜";
             Text[ turkish ] = "Yazdırma aralığını tanımla";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Definir área de impresión";
+            Text[ catalan ] = "Defineix l'àrea d'impressió";
             Text[ finnish ] = "Määritä tulostusalue";
+            Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸Šà¹ˆà¸§à¸‡à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œ";
         };
         MenuItem
         {
             Identifier = SID_ADD_PRINTAREA ;
             HelpId = SID_ADD_PRINTAREA ;
-            /* ### ACHTUNG: Neuer Text in Resource? Druckbereich ~hinzufügen : Druckbereich ~hinzuf³gen */
             Text = "Druckbereich ~hinzufügen" ;
             Text [ ENGLISH ] = "~Add Print Area" ;
             Text [ english_us ] = "Add Print Range" ;
@@ -1684,18 +1650,19 @@ Menu RID_POPUP_PAGEBREAK
             Text [ french ] = "Ajouter une ~zone d'impression" ;
             Text [ dutch ] = "Afdrukbereik ~toevoegen" ;
             Text [ portuguese ] = "~Adicionar área de impressão" ;
-            Text[ chinese_simplified ] = "ĞÂÔö´òÓ¡ÇøÓò(~A)";
+            Text[ chinese_simplified ] = "æ–°å¢æ‰“å°åŒºåŸŸ";
             Text[ russian ] = "Äîáàâèòü îáëàñòü ïå÷àòè";
             Text[ polish ] = "Dodaj zakres wydruku";
-            Text[ japanese ] = "ˆóü”ÍˆÍ‚Ì’Ç‰Á";
-            Text[ chinese_traditional ] = "·s¼W¦C¦L½d³ò(~A)";
+            Text[ japanese ] = "å°åˆ·ç¯„å›²ã®è¿½åŠ ";
+            Text[ chinese_traditional ] = "æ–°å¢åˆ—å°ç¯„åœ";
             Text[ arabic ] = "ÅÖÇİÉ äØÇŞ ØÈÇÚÉ";
             Text[ greek ] = "ĞñïóèŞêç ğåñéï~÷Şò åêôığùóçò";
-            Text[ korean ] = "ÀÎ¼â¹üÀ§ Ãß°¡";
+            Text[ korean ] = "ì¸ì‡„ ì˜ì—­ ì¶”ê°€";
             Text[ turkish ] = "Yazdırma aralığını ekle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Añadir área de impresión";
+            Text[ catalan ] = "Afegeix una àrea d'impressió";
             Text[ finnish ] = "Lisää tulostusalue";
+            Text[ thai ] = "à¹€à¸à¸´à¹ˆà¸¡à¸Šà¹ˆà¸§à¸‡à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œ";
         };
         MenuItem
         {
@@ -1712,18 +1679,19 @@ Menu RID_POPUP_PAGEBREAK
             Text [ french ] = "~Supprimer la zone d'impression" ;
             Text [ dutch ] = "Afdrukbereik op~heffen" ;
             Text [ portuguese ] = "~Restaurar área de impressão" ;
-            Text[ chinese_simplified ] = "ÖØÉè´òÓ¡ÇøÓò(~R)";
+            Text[ chinese_simplified ] = "é‡è®¾æ‰“å°åŒºåŸŸ";
             Text[ russian ] = "Óáğàòü îáëàñòü ïå÷àòè";
             Text[ polish ] = "Zresetuj zakres wydruku";
-            Text[ japanese ] = "ˆóü”ÍˆÍ‚Ì‰ğœ";
-            Text[ chinese_traditional ] = "­«³]¦C¦L½d³ò(~R)";
+            Text[ japanese ] = "å°åˆ·ç¯„å›²ã®è§£é™¤";
+            Text[ chinese_traditional ] = "é‡è¨­åˆ—å°ç¯„åœ";
             Text[ arabic ] = "ÅáÛÇÁ äØÇŞ ÇáØÈÇÚÉ";
             Text[ greek ] = "Ê~áôÜñãçóç ğåñéï÷Şò åêôığùóçò";
-            Text[ korean ] = "ÀÎ¼â¹üÀ§ ½ÇÇàÃë¼Ò";
+            Text[ korean ] = "ì¸ì‡„ ì˜ì—­ ì‹¤í–‰ì·¨ì†Œ";
             Text[ turkish ] = "Yazdırma aralığını kaldır";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Restablecer área de impresión";
+            Text[ catalan ] = "Desfés l'àrea d'impressió";
             Text[ finnish ] = "Peruuta tulostusalue";
+            Text[ thai ] = "à¹€à¸¥à¸´à¸à¸—à¸³à¸Šà¹ˆà¸§à¸‡à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œ";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1743,18 +1711,19 @@ Menu RID_POPUP_PAGEBREAK
             Text [ french ] = "~Format de page..." ;
             Text [ dutch ] = "~Paginaformaat...." ;
             Text [ portuguese ] = "Formato de ~página..." ;
-            Text[ chinese_simplified ] = "Ò³Ãæ¸ñÊ½(~G)...";
+            Text[ chinese_simplified ] = "é¡µé¢æ ¼å¼...";
             Text[ russian ] = "Ôîğìàò ñòğàíèöû...";
             Text[ polish ] = "Format strony...";
-            Text[ japanese ] = "Íß°¼Ş‘®...";
-            Text[ chinese_traditional ] = "­¶­±®æ¦¡(~G)...";
+            Text[ japanese ] = "ãƒšãƒ¼ã‚¸æ›¸å¼...";
+            Text[ chinese_traditional ] = "é é¢æ ¼å¼...";
             Text[ arabic ] = "ÊäÓíŞ ÇáÕİÍÉ...";
             Text[ greek ] = "ÌïñöŞ ~óåëßäáò...";
-            Text[ korean ] = "ÂÊ ¼­½Ä...";
+            Text[ korean ] = "í˜ì´ì§€ ì„œì‹...";
             Text[ turkish ] = "Sayfa formatı...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Formato de ~página...";
-            Text[ finnish ] = "Sivun muoto";
+            Text[ catalan ] = "Format de la pàgina...";
+            Text[ finnish ] = "Sivun muoto...";
+            Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¸«à¸™à¹‰à¸²...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1770,31 +1739,25 @@ Menu RID_POPUP_PAGEBREAK
             Text [ danish ] = "Vis note" ;
             Text [ italian ] = "Mostra nota" ;
             Text [ spanish ] = "Mostrar ~nota" ;
-            Text [ french ] = "Afficher la~note" ;
+            Text [ french ] = "Afficher la ~note" ;
             Text [ dutch ] = "~Aantekening weergeven" ;
             Text [ portuguese_brazilian ] = "~Notiz anzeigen" ;
             Text [ portuguese ] = "Mostrar ~anotação" ;
-            Text[ chinese_simplified ] = "ÏÔÊ¾±¸×¢(~W)";
+            Text[ chinese_simplified ] = "æ˜¾ç¤ºå¤‡æ³¨(~W)";
             Text[ russian ] = "Ïîêàçàòü ïğèìå÷àíèÿ";
             Text[ polish ] = "Poka¿ notatkê";
-            Text[ japanese ] = "ºÒİÄ‚Ì•\\¦(~W)";
-            Text[ chinese_traditional ] = "Åã¥Ü³Æµù(~W)";
+            Text[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆã®è¡¨ç¤º(~W)";
+            Text[ chinese_traditional ] = "é¡¯ç¤ºå‚™è¨»(~W)";
             Text[ arabic ] = "ÅÙåÇÑ ÇáãáÇÍÙÉ";
             Text[ greek ] = "ÅìöÜ~íéóç óçìåßùóçò";
-            Text[ korean ] = "¸Ş¸ğ ³ªÅ¸³»±â(~W)";
+            Text[ korean ] = "ë©”ëª¨ í‘œì‹œ(~W)";
             Text[ turkish ] = "Notu görüntüle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Mostrar ~nota";
+            Text[ catalan ] = "Mo~stra la nota";
             Text[ finnish ] = "~Näytä huomautus";
+            Text[ thai ] = "à¹à¸ªà¸”~à¸‡à¸šà¸±à¸™à¸—à¸¶à¸à¸¢à¹ˆà¸­";
         };
     };
 };
-
-
-
-
-
-
-
 
 

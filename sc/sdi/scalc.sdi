@@ -1847,6 +1847,31 @@ SfxVoidItem DeletePivotTable SID_PIVOT_KILL
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem DataPilotFilter SID_DP_FILTER
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+        HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_DATA;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem DeletePrintArea SID_DELETE_PRINTAREA
 ()
 [

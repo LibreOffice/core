@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivotsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2000-12-07 08:56:10 $
+ *  last change: $Author: dr $ $Date: 2002-05-30 14:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,13 +74,19 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/whiter.hxx>
+#include <vcl/msgbox.hxx>
 
+#include "sc.hrc"
 #include "pivotsh.hxx"
 #include "tabvwsh.hxx"
+#include "docsh.hxx"
 #include "scresid.hxx"
 #include "document.hxx"
-#include "docsh.hxx"
-#include "sc.hrc"
+#include "dpobject.hxx"
+#include "dpshttab.hxx"
+#include "dbdocfun.hxx"
+#include "uiitems.hxx"
+#include "pfiltdlg.hxx"
 
 //------------------------------------------------------------------------
 
@@ -126,6 +132,49 @@ void ScPivotShell::Execute( SfxRequest& rReq )
         case SID_PIVOT_KILL:
             pViewShell->DeletePivotTable();
             break;
+
+        case SID_DP_FILTER:
+        {
+            ScDPObject* pDPObj = GetCurrDPObject();
+            if( pDPObj )
+            {
+                ScQueryParam aQueryParam;
+                USHORT nSrcTab = 0;
+                const ScSheetSourceDesc* pDesc = pDPObj->GetSheetDesc();
+                DBG_ASSERT( pDesc, "no sheet source for DP filter dialog" );
+                if( pDesc )
+                {
+                    aQueryParam = pDesc->aQueryParam;
+                    nSrcTab = pDesc->aSourceRange.aStart.Tab();
+                }
+
+                ScViewData* pViewData = pViewShell->GetViewData();
+                SfxItemSet aArgSet( pViewShell->GetPool(),
+                    SCITEM_QUERYDATA, SCITEM_QUERYDATA );
+                aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, pViewData, &aQueryParam ) );
+
+                ScPivotFilterDlg* pDlg = new ScPivotFilterDlg(
+                    pViewShell->GetDialogParent(), aArgSet, nSrcTab );
+
+                if( pDlg->Execute() == RET_OK )
+                {
+                    ScSheetSourceDesc aNewDesc;
+                    if( pDesc )
+                        aNewDesc = *pDesc;
+
+                    const ScQueryItem& rQueryItem = pDlg->GetOutputItem();
+                    aNewDesc.aQueryParam = rQueryItem.GetQueryData();
+
+                    ScDPObject aNewObj( *pDPObj );
+                    aNewObj.SetSheetDesc( aNewDesc );
+                    ScDBDocFunc aFunc( *pViewData->GetDocShell() );
+                    aFunc.DataPilotUpdate( pDPObj, &aNewObj, TRUE, FALSE );
+                    pViewData->GetView()->CursorPosChanged();       // shells may be switched
+                }
+                delete pDlg;
+            }
+        }
+        break;
     }
 }
 
@@ -134,6 +183,7 @@ void __EXPORT ScPivotShell::GetState( SfxItemSet& rSet )
 {
     ScDocShell* pDocSh = pViewShell->GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
+    BOOL bDisable = pDocSh->IsReadOnly() || pDoc->GetChangeTrack();
 
     SfxWhichIter aIter(rSet);
     USHORT nWhich = aIter.FirstWhich();
@@ -143,19 +193,33 @@ void __EXPORT ScPivotShell::GetState( SfxItemSet& rSet )
         {
             case SID_PIVOT_RECALC:
             case SID_PIVOT_KILL:
+            {
+                //! move ReadOnly check to idl flags
+                if ( bDisable )
                 {
-                    //! move ReadOnly check to idl flags
-
-                    if ( pDocSh->IsReadOnly() || pDoc->GetChangeTrack()!=NULL )
-                    {
-                        rSet.DisableItem( nWhich );
-                    }
+                    rSet.DisableItem( nWhich );
                 }
-                break;
+            }
+            break;
+            case SID_DP_FILTER:
+            {
+                ScDPObject* pDPObj = GetCurrDPObject();
+                if( bDisable || !pDPObj || !pDPObj->IsSheetData() )
+                    rSet.DisableItem( nWhich );
+            }
+            break;
         }
         nWhich = aIter.NextWhich();
     }
 }
 
 
+//------------------------------------------------------------------------
+
+ScDPObject* ScPivotShell::GetCurrDPObject()
+{
+    const ScViewData& rViewData = *pViewShell->GetViewData();
+    return rViewData.GetDocument()->GetDPAtCursor(
+        rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
+}
 

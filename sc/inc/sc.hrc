@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-22 07:06:11 $
+ *  last change: $Author: dr $ $Date: 2002-05-30 14:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,6 +571,9 @@
 #define SID_RENAME_OBJECT               (SC_VIEW_START + 88)
 #define SID_FOCUS_INPUTLINE             (SC_VIEW_START + 89)
 #define SID_SELECT_TABLES               (SC_VIEW_START + 90)
+
+// #97776# new entry "Filter..." in DP popup menu
+#define SID_DP_FILTER                   (SC_VIEW_START + 91)
 
 // Nachrichten -------------------------------------------------------------
 
