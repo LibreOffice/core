@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: sw $ $Date: 2002-02-26 16:34:10 $
+#   last change: $Author: sw $ $Date: 2002-02-27 10:10:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,7 @@ SHL1STDLIBS+=\
             $(SALLIB) \
             $(SALHELPERLIB)
 
-SHL1VERSIONMAP = $(SHL1TARGET).map
+SHL1VERSIONMAP = $(MISC)$/$(SHL1TARGET).map
 SHL1DEPN=
 SHL1IMPLIB= i$(SHL1TARGET)
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
@@ -103,7 +103,7 @@ SHL2STDLIBS+=\
             $(SALLIB) \
             $(SALHELPERLIB)
 
-SHL2VERSIONMAP = $(SHL2TARGET).map
+SHL2VERSIONMAP = $(MISC)$/$(SHL2TARGET).map
 SHL2DEPN=
 SHL2IMPLIB= i$(SHL2TARGET)
 SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
@@ -114,23 +114,23 @@ DEF2NAME    =$(SHL2TARGET)
 
 .INCLUDE :  target.mk
 
-$(SHL1TARGET).map : sce$/$(SHL1TARGET).sce    
+$(MISC)$/$(SHL1TARGET).map : sce$/$(SHL1TARGET).sce    
     +$(TYPE) $< | sed $(REGEXP) > $@
     +$(TYPE) $@ | sed "s/^/test_/" >> $(MISC)$/$(SHL1TARGET).tst    
-    +$(TYPE) mapHeader > $(SHL1TARGET).map
+    +$(TYPE) mapHeader > $(MISC)$/$(SHL1TARGET).map
     +$(TYPE) $(MISC)$/$(SHL1TARGET).tst | sed "/test_./ w $(MISC)$/$(SHL1TARGET).map1"
-    +$(TYPE) $(MISC)$/$(SHL1TARGET).map1 >> $(SHL1TARGET).map
-    +$(RM) $(MISC)$/$(SHL1TARGET).map1    
-    +$(TYPE) mapFooter >> $(SHL1TARGET).map
+    +$(TYPE) $(MISC)$/$(SHL1TARGET).map1 | sed "s/.*/&;/" >> $(MISC)$/$(SHL1TARGET).map
+    +$(RM) $(MISC)$/$(SHL2TARGET).map1    
+    +$(TYPE) mapFooter >> $(MISC)$/$(SHL1TARGET).map
 
-$(SHL2TARGET).map : sce$/$(SHL2TARGET).sce    
+$(MISC)$/$(SHL2TARGET).map : sce$/$(SHL2TARGET).sce    
     +$(TYPE) $< | sed $(REGEXP) > $@
     +$(TYPE) $@ | sed "s/^/test_/" >> $(MISC)$/$(SHL2TARGET).tst    
-    +$(TYPE) mapHeader > $(SHL2TARGET).map
+    +$(TYPE) mapHeader > $(MISC)$/$(SHL2TARGET).map
     +$(TYPE) $(MISC)$/$(SHL2TARGET).tst | sed "/test_./ w $(MISC)$/$(SHL2TARGET).map1"    
-    +$(TYPE) $(MISC)$/$(SHL2TARGET).map1 >> $(SHL2TARGET).map
+    +$(TYPE) $(MISC)$/$(SHL2TARGET).map1 | sed "s/.*/&;/" >> $(MISC)$/$(SHL2TARGET).map
     +$(RM) $(MISC)$/$(SHL2TARGET).map1
-    +$(TYPE) mapFooter >> $(SHL2TARGET).map
+    +$(TYPE) mapFooter >> $(MISC)$/$(SHL2TARGET).map
 
 cleanup:
     +$(RM) $(SHL1TARGET).map
