@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameHyperlinkContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: mib $ $Date: 2002-01-17 11:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,18 +171,31 @@ SvXMLImportContext *XMLTextFrameHyperlinkContext::CreateChildContext(
     SvXMLImportContext *pContext = 0;
     XMLTextFrameContext *pTextFrameContext = 0;
 
-    if( XML_NAMESPACE_DRAW == nPrefix &&
-        IsXMLToken( rLocalName, XML_TEXT_BOX ) )
-        pTextFrameContext = new XMLTextFrameContext( GetImport(), nPrefix,
-                                            rLocalName, xAttrList,
-                                            eAnchorType,
-                                            XML_TEXT_FRAME_TEXTBOX);
-    else if( XML_NAMESPACE_DRAW == nPrefix &&
-             IsXMLToken( rLocalName, XML_IMAGE ) )
-        pTextFrameContext = new XMLTextFrameContext( GetImport(), nPrefix,
-                                            rLocalName, xAttrList,
-                                            eAnchorType,
-                                            XML_TEXT_FRAME_GRAPHIC );
+    if( XML_NAMESPACE_DRAW == nPrefix )
+    {
+        sal_uInt16 nFrameType = USHRT_MAX;
+        if( IsXMLToken( rLocalName, XML_TEXT_BOX ) )
+            nFrameType = XML_TEXT_FRAME_TEXTBOX;
+        else if( IsXMLToken( rLocalName, XML_IMAGE ) )
+            nFrameType = XML_TEXT_FRAME_GRAPHIC;
+        else if( IsXMLToken( rLocalName, XML_OBJECT ) )
+            nFrameType = XML_TEXT_FRAME_OBJECT;
+        else if( IsXMLToken( rLocalName, XML_OBJECT_OLE ) )
+            nFrameType = XML_TEXT_FRAME_OBJECT_OLE;
+        else if( IsXMLToken( rLocalName, XML_APPLET) )
+            nFrameType = XML_TEXT_FRAME_APPLET;
+        else if( IsXMLToken( rLocalName, XML_PLUGIN ) )
+            nFrameType = XML_TEXT_FRAME_PLUGIN;
+        else if( IsXMLToken( rLocalName, XML_FLOATING_FRAME ) )
+            nFrameType = XML_TEXT_FRAME_FLOATING_FRAME;
+
+        if( USHRT_MAX != nFrameType )
+            pTextFrameContext = new XMLTextFrameContext( GetImport(), nPrefix,
+                                                rLocalName, xAttrList,
+                                                eAnchorType,
+                                                nFrameType );
+    }
+
     if( pTextFrameContext )
     {
         pTextFrameContext->SetHyperlink( sHRef, sName, sTargetFrameName, bMap );
