@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
+ *  last change: $Author: mib $ $Date: 2001-12-03 09:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2774,10 +2774,12 @@ static Writer& OutCSS1_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
     ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
             "Farbe wirklich als Hint ausgeben?" );
 
-    const Color& rColor = ((const SvxColorItem&)rHt).GetValue();
+    Color aColor( ((const SvxColorItem&)rHt).GetValue() );
+    if( COL_AUTO == aColor.GetColor() )
+        aColor.SetColor( COL_BLACK );
 
     ByteString sOut;
-    GetCSS1Color( rColor, sOut );
+    GetCSS1Color( aColor, sOut );
 
     rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_color, sOut );
 
@@ -3940,6 +3942,9 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.12  2001/10/24 14:16:17  mib
+      #91961#: Support of language
+
       Revision 1.11  2001/10/11 12:53:49  vg
       #65293# added type vvoid
 

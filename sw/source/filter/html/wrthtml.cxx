@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
+ *  last change: $Author: mib $ $Date: 2001-12-03 09:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -988,10 +988,24 @@ static void OutBodyColor( const sal_Char *pTag, const SwFmt *pFmt,
         // ist oder einen anderen Wert hat, als in der HTML-Vorlage,
         // wird es gesetzt
         const SvxColorItem *pCItem = (const SvxColorItem*)pItem;
-        if( !bRefItemSet ||
-            !pCItem->GetValue().IsRGBEqual(
-                            ((const SvxColorItem*)pRefItem)->GetValue() ) )
+
+        if( !bRefItemSet )
+        {
             pColorItem = pCItem;
+        }
+        else
+        {
+            Color aColor( pCItem->GetValue() );
+            if( COL_AUTO == aColor.GetColor() )
+                aColor.SetColor( COL_BLACK );
+
+            Color aRefColor( ((const SvxColorItem*)pRefItem)->GetValue() );
+            if( COL_AUTO == aRefColor.GetColor() )
+                aRefColor.SetColor( COL_BLACK );
+
+            if( !aColor.IsRGBEqual( aRefColor ) )
+                pColorItem = pCItem;
+        }
     }
     else if( bRefItemSet )
     {
@@ -1006,9 +1020,12 @@ static void OutBodyColor( const sal_Char *pTag, const SwFmt *pFmt,
         ByteString sOut( ' ' );
         (sOut += pTag) += '=';
         rHWrt.Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_Color( rHWrt.Strm(), pColorItem->GetValue(), rHWrt.eDestEnc );
+        Color aColor( pColorItem->GetValue() );
+        if( COL_AUTO == aColor.GetColor() )
+            aColor.SetColor( COL_BLACK );
+        HTMLOutFuncs::Out_Color( rHWrt.Strm(), aColor, rHWrt.eDestEnc );
         if( RES_POOLCOLL_STANDARD==pFmt->GetPoolFmtId() )
-            rHWrt.pDfltColor = new Color( pColorItem->GetValue() );
+            rHWrt.pDfltColor = new Color( aColor );
     }
 }
 

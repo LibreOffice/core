@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
+ *  last change: $Author: mib $ $Date: 2001-12-03 09:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1983,11 +1983,15 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
         case HTML_COLOR_VALUE:
             // Eine Vordergrund-Farbe als Absatz-Attribut wird nur
             // exportiert, wenn sie nicht der Default-Farbe entspricht.
-            ASSERT( RES_CHRATR_COLOR == rItem.Which(),
-                    "Doch keine Vordergrund-Farbe" );
-            bSet = !bParaAttrs || !pDfltColor ||
-                   !pDfltColor->IsRGBEqual(
-                        ((const SvxColorItem&)rItem).GetValue() );
+            {
+                ASSERT( RES_CHRATR_COLOR == rItem.Which(),
+                        "Doch keine Vordergrund-Farbe" );
+                Color aColor( ((const SvxColorItem&)rItem).GetValue() );
+                if( COL_AUTO == aColor.GetColor() )
+                    aColor.SetColor( COL_BLACK );
+                bSet = !bParaAttrs || !pDfltColor ||
+                       !pDfltColor->IsRGBEqual( aColor );
+            }
             break;
 
         case HTML_DROPCAP_VALUE:
@@ -2863,8 +2867,6 @@ static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
     if( rHTMLWrt.bOutOpts )
         return rWrt;
 
-    const Color& rColor = ((const SvxColorItem&)rHt).GetValue();
-
     // die Default-Farbe nur Schreiben, wenn sie als Hint vorkommt
     //if( rHTMLWrt.bTagOn && !rHTMLWrt.bTxtAttr && rHTMLWrt.pDfltColor
     //  && rColor == *rHTMLWrt.pDfltColor )
@@ -2879,10 +2881,14 @@ static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( rHTMLWrt.bTagOn )
     {
+        Color aColor( ((const SvxColorItem&)rHt).GetValue() );
+        if( COL_AUTO == aColor.GetColor() )
+            aColor.SetColor( COL_BLACK );
+
         ByteString sOut( '<' );
         (((sOut += sHTML_font) += ' ') += sHTML_O_color) += '=';
         rWrt.Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_Color( rWrt.Strm(), rColor, rHTMLWrt.eDestEnc ) << '>';
+        HTMLOutFuncs::Out_Color( rWrt.Strm(), aColor, rHTMLWrt.eDestEnc ) << '>';
     }
     else
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_font, FALSE );
