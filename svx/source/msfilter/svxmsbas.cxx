@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxmsbas.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:42:34 $
+ *  last change: $Author: dr $ $Date: 2004-05-26 08:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,11 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                             if ((nBegin) && pStr->GetChar(nBegin-1) != cLineEnd)
                                 continue;
                             xub_StrLen nEnd = pStr->Search(cLineEnd ,nBegin);
-                            pStr->Erase(nBegin, (nEnd-nBegin)+1);
+                            // DR #i26521# catch STRING_NOTFOUND, will loop endless otherwise
+                            if( nEnd == STRING_NOTFOUND )
+                                pStr->Erase();
+                            else
+                                pStr->Erase(nBegin, (nEnd-nBegin)+1);
                         }
                     }
 
