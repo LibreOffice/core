@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-08 08:56:33 $
+ *  last change: $Author: oj $ $Date: 2002-05-22 11:11:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,6 @@ namespace dbaui
         virtual void    Paint( const Rectangle& rRect );
         virtual void    MouseMove( const MouseEvent& rEvt );
         virtual void    MouseButtonDown( const MouseEvent& rEvt );
-        virtual void    KeyInput( const KeyEvent& rEvt );
         virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
         virtual OTableWindowListBox*    CreateListBox();
@@ -147,6 +146,13 @@ namespace dbaui
         virtual void OnEntryDoubleClicked(SvLBoxEntry* pEntry) { }
             // wird aus dem DoubleClickHdl der ListBox heraus aufgerufen
 
+        /** HandleKeyInput triues to handle the KeyEvent. Movement or deletion
+            @param  rEvt
+                The KEyEvent
+            @return
+                <TRUE/> when the table could handle the keyevent.
+        */
+        BOOL            HandleKeyInput( const KeyEvent& rEvt );
     public:
         TYPEINFO();
         OTableWindow( Window* pParent, OTableWindowData* pTabWinData);

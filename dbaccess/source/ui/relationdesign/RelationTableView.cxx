@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationTableView.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-26 07:58:38 $
+ *  last change: $Author: oj $ $Date: 2002-05-22 11:16:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,12 +437,6 @@ void ORelationTableView::AddNewRelation()
     return aNextPos;
 }
 
-//------------------------------------------------------------------------------
-void ORelationTableView::KeyInput( const KeyEvent& rEvt )
-{
-    DBG_CHKTHIS(ORelationTableView,NULL);
-    OJoinTableView::KeyInput( rEvt );
-}
 //------------------------------------------------------------------------------
 void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, BOOL bNewTable)
 {

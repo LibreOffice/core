@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-08 08:56:33 $
+ *  last change: $Author: oj $ $Date: 2002-05-22 11:09:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ namespace dbaui
         void    HideTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction);
 
         // Sichbarkeit eines TabWins sicherstellen (+ Invalidieren der Connections)
-        void    EnsureVisible(const OTableWindow* _pWin);
+        virtual void EnsureVisible(const OTableWindow* _pWin);
 
         // wieviel Tabellen mit einem bestimmten Namen habe ich schon ?
         sal_Int32   CountTableAlias(const String& rName, sal_Int32& rMax);
