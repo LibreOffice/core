@@ -1,6 +1,3 @@
-To Redo:
-colorsettings
-
 General dups:
 objects3dtoolbox, cube
 spelling, spelldialog
@@ -23,3 +20,6 @@ alignvcenter, alignverticalcenter
 dsbinsertcolumns, <insert-fields?>
 dsbinsertcontent, <update-fields?>
 dsbformletter, <mail-merge?>
+diagramdata (charts), <database data>
+diaauto, diaeffect, diaspeed, diatime
+animationeffects,animationmode
