@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:52 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,45 +73,45 @@
 #ifndef _SV_SALINST_HXX
 #include <salinst.hxx>
 #endif
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#ifndef _SV_SALGDI_H
+#include <salgdi.h>
 #endif
-#ifndef _SV_SALVD_HXX
-#include <salvd.hxx>
+#ifndef _SV_SALVD_H
+#include <salvd.h>
 #endif
 
 // -=-= SalInstance =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-SalVirtualDevice* SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
-                                                    long nDX, long nDY,
-                                                    USHORT nBitCount )
+SalVirtualDevice* X11SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
+                                                       long nDX, long nDY,
+                                                       USHORT nBitCount )
 {
-    SalVirtualDevice *pVDev = new SalVirtualDevice();
+    X11SalVirtualDevice *pVDev = new X11SalVirtualDevice();
     if( !nBitCount && pGraphics )
         nBitCount = pGraphics->GetBitCount();
-    if( !pVDev->maVirDevData.Init( pGraphics->maGraphicsData.GetDisplay(),
-                                   nDX, nDY, nBitCount ) )
+    if( !pVDev->Init( GetSalData()->GetDefDisp(), nDX, nDY, nBitCount ) )
     {
         delete pVDev;
         return NULL;
     }
 
-    pVDev->maVirDevData.InitGraphics( pVDev, pGraphics );
+    pVDev->InitGraphics( pVDev );
     return pVDev;
 }
 
-void SalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
-{ delete pDevice; }
+void X11SalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
+{
+    delete pDevice;
+}
 
 // -=-= SalGraphicsData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalGraphicsData::Init( SalVirtualDevice *pDevice,
-                                  SalGraphics      *pGraphics )
+void X11SalGraphics::Init( X11SalVirtualDevice *pDevice )
 {
-    SalDisplay *pDisplay  = pDevice->maVirDevData.GetDisplay();
+    SalDisplay *pDisplay  = pDevice->GetDisplay();
 
     int nVisualDepth = pDisplay->GetColormap().GetVisual()->GetDepth();
-    int nDeviceDepth = pDevice->maVirDevData.GetDepth();
+    int nDeviceDepth = pDevice->GetDepth();
 
     if( nDeviceDepth == nVisualDepth )
         xColormap_ = &pDisplay->GetColormap();
@@ -119,7 +119,7 @@ void SalGraphicsData::Init( SalVirtualDevice *pDevice,
     if( nDeviceDepth == 1 )
         xColormap_ = new SalColormap();
 
-    hDrawable_   = pDevice->maVirDevData.GetDrawable();
+    hDrawable_   = pDevice->GetDrawable();
     m_pVDev      = pDevice;
     m_pFrame     = NULL;
 
@@ -133,12 +133,12 @@ void SalGraphicsData::Init( SalVirtualDevice *pDevice,
 
 // -=-= SalVirDevData / SalVirtualDevice -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-BOOL SalVirDevData::Init( SalDisplay *pDisplay,
+BOOL X11SalVirtualDevice::Init( SalDisplay *pDisplay,
                                 long nDX, long nDY,
                                 USHORT nBitCount )
 {
     pDisplay_               = pDisplay;
-    pGraphics_              = new SalGraphicsLayout();
+    pGraphics_              = new X11SalGraphics();
     pGraphics_->SetLayout( 0 ); // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
     nDX_                    = nDX;
     nDY_                    = nDY;
@@ -149,11 +149,13 @@ BOOL SalVirDevData::Init( SalDisplay *pDisplay,
                                      nDX_, nDY_,
                                      GetDepth() );
 
+    pGraphics_->Init( this );
+
     return hDrawable_ != None ? TRUE : FALSE;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-inline SalVirDevData::SalVirDevData()
+X11SalVirtualDevice::X11SalVirtualDevice()
 {
     pDisplay_               = (SalDisplay*)ILLEGAL_POINTER;
     pGraphics_              = NULL;
@@ -164,78 +166,61 @@ inline SalVirDevData::SalVirDevData()
     bGraphics_              = FALSE;
 }
 
-SalVirtualDevice::SalVirtualDevice() {}
-
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-inline SalVirDevData::~SalVirDevData()
+X11SalVirtualDevice::~X11SalVirtualDevice()
 {
     if( pGraphics_ )
-    {
-        pGraphics_->maGraphicsData.DeInit();
         delete pGraphics_;
-    }
 
     if( GetDrawable() )
         XFreePixmap( GetXDisplay(), GetDrawable() );
 }
 
-SalVirtualDevice::~SalVirtualDevice()
-{}
-
-// -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-#define _GetDrawable()   maVirDevData.GetDrawable()
-#define _GetDisplay()    maVirDevData.GetDisplay()
-#define _GetXDisplay()   maVirDevData.GetXDisplay()
-#define _GetDepth()      maVirDevData.nDepth_
-
-// -=-= SalVirtualDevice -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-SalGraphics* SalVirtualDevice::GetGraphics()
+SalGraphics* X11SalVirtualDevice::GetGraphics()
 {
-    if( maVirDevData.bGraphics_ )
+    if( bGraphics_ )
         return NULL;
 
-    if( maVirDevData.pGraphics_ )
-        maVirDevData.bGraphics_ = TRUE;
+    if( pGraphics_ )
+        bGraphics_ = TRUE;
 
-    return maVirDevData.pGraphics_;
+    return pGraphics_;
 }
 
-void SalVirtualDevice::ReleaseGraphics( SalGraphics* )
-{ maVirDevData.bGraphics_ = FALSE; }
+void X11SalVirtualDevice::ReleaseGraphics( SalGraphics* )
+{ bGraphics_ = FALSE; }
 
-BOOL SalVirtualDevice::SetSize( long nDX, long nDY )
+BOOL X11SalVirtualDevice::SetSize( long nDX, long nDY )
 {
     if( !nDX ) nDX = 1;
     if( !nDY ) nDY = 1;
 
-    Pixmap h = XCreatePixmap( _GetXDisplay(),
-                              maVirDevData.pDisplay_->GetDrawable(),
-                              nDX, nDY, _GetDepth() );
+    Pixmap h = XCreatePixmap( GetXDisplay(),
+                              pDisplay_->GetDrawable(),
+                              nDX, nDY, nDepth_ );
 
     if( !h )
     {
-        if( !_GetDrawable() )
+        if( !GetDrawable() )
         {
-            maVirDevData.hDrawable_ = XCreatePixmap( _GetXDisplay(),
-                                         maVirDevData.pDisplay_->GetDrawable(),
-                                         1, 1, _GetDepth() );
-            maVirDevData.nDX_ = 1;
-            maVirDevData.nDY_ = 1;
+            hDrawable_ = XCreatePixmap( GetXDisplay(),
+                                        pDisplay_->GetDrawable(),
+                                        1, 1, nDepth_ );
+            nDX_ = 1;
+            nDY_ = 1;
         }
         return FALSE;
     }
 
-    if( _GetDrawable() )
-        XFreePixmap( _GetXDisplay(), _GetDrawable() );
-    maVirDevData.hDrawable_ = h;
+    if( GetDrawable() )
+        XFreePixmap( GetXDisplay(), GetDrawable() );
+    hDrawable_ = h;
 
-    maVirDevData.nDX_ = nDX;
-    maVirDevData.nDY_ = nDY;
+    nDX_ = nDX;
+    nDY_ = nDY;
 
-    if( maVirDevData.pGraphics_ )
-        maVirDevData.InitGraphics( this, maVirDevData.pGraphics_ );
+    if( pGraphics_ )
+        InitGraphics( this );
 
     return TRUE;
 }
