@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wviewsh.sdi,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:12 $
+ *  last change: $Author: hjs $ $Date: 2003-09-25 10:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,11 @@ interface WebSourceView : View
     FID_SEARCH_NOW
     [
         ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_REPEAT_SEARCH // status(final|play)
+    [
+        ExecMethod = Execute;
         StateMethod = GetState ;
     ]
     SID_UNDO // status(final|play)
