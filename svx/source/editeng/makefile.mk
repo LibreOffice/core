@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mtg $ $Date: 2001-02-09 18:03:31 $
+#   last change: $Author: mt $ $Date: 2001-03-09 18:08:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,6 +93,7 @@ SLOFILES =	\
             $(SLO)$/svxacorr.obj \
             $(SLO)$/SvXMLAutoCorrectImport.obj \
             $(SLO)$/SvXMLAutoCorrectExport.obj \
+            $(SLO)$/forbiddencharacterstable.obj \
             $(SLO)$/swafopt.obj \
             $(SLO)$/editattr.obj \
             $(SLO)$/editdbg.obj	\
@@ -136,6 +137,7 @@ SVXLIGHTOBJFILES= \
             $(OBJ)$/impedit4.obj \
             $(OBJ)$/impedit5.obj \
             $(OBJ)$/textconv.obj \
+            $(OBJ)$/forbiddencharacterstable.obj \
             $(OBJ)$/unolingu.obj
 .ENDIF
 
