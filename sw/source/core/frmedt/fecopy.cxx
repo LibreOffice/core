@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-11 12:23:07 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1114,7 +1114,7 @@ BOOL SwFEShell::GetDrawObjGraphic( ULONG nFmt, Graphic& rGrf ) const
     if( rMrkList.GetMarkCount() )
     {
         if( rMrkList.GetMarkCount() == 1 &&
-            rMrkList.GetMark( 0 )->GetObj()->IsWriterFlyFrame() )
+            rMrkList.GetMark( 0 )->GetObj()->ISA(SwVirtFlyDrawObj) )
         {
             // Rahmen selektiert
             if( CNT_GRF == GetCntType() )
@@ -1219,7 +1219,7 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
         SdrObject* pClpObj = pModel->GetPage(0)->GetObj(0);
         SdrObject* pOldObj = pView->GetMarkList().GetMark( 0 )->GetObj();
 
-        if( SW_PASTESDR_SETATTR == nAction && pOldObj->IsWriterFlyFrame() )
+        if( SW_PASTESDR_SETATTR == nAction && pOldObj->ISA(SwVirtFlyDrawObj) )
             nAction = SW_PASTESDR_REPLACE;
 
         switch( nAction )
@@ -1228,7 +1228,7 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
             {
                 const SwFrmFmt* pFmt;
                 const SwFrm* pAnchor;
-                if( pOldObj->IsWriterFlyFrame() )
+                if( pOldObj->ISA(SwVirtFlyDrawObj) )
                 {
                     pFmt = FindFrmFmt( pOldObj );
 
@@ -1246,9 +1246,9 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
                 }
 
                 SdrObject* pNewObj = pClpObj->Clone();
-                Rectangle aOldObjRect( pOldObj->GetBoundRect() );
+                Rectangle aOldObjRect( pOldObj->GetCurrentBoundRect() );
                 Size aOldObjSize( aOldObjRect.GetSize() );
-                Rectangle aNewRect( pNewObj->GetBoundRect() );
+                Rectangle aNewRect( pNewObj->GetCurrentBoundRect() );
                 Size aNewSize( aNewRect.GetSize() );
 
                 Fraction aScaleWidth( aOldObjSize.Width(), aNewSize.Width() );
@@ -1265,7 +1265,7 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
                 else
                     pNewObj->SetLayer( pOldObj->GetLayer() );
 
-                if( pOldObj->IsWriterFlyFrame() )
+                if( pOldObj->ISA(SwVirtFlyDrawObj) )
                 {
                     // Attribute sichern und dam SdrObject setzen
                     SfxItemSet aFrmSet( pDoc->GetAttrPool(),
@@ -1310,8 +1310,7 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
         case SW_PASTESDR_SETATTR:
             {
                 SfxItemSet aSet( GetAttrPool() );
-//-/                pClpObj->TakeAttributes( aSet, TRUE, FALSE );
-                aSet.Put(pClpObj->GetItemSet());
+                aSet.Put(pClpObj->GetMergedItemSet());
                 pView->SetAttributes( aSet, FALSE );
             }
             break;
