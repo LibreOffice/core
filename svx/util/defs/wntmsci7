@@ -20530,3 +20530,8 @@ _real@8@400cfa00000000000000
 ?Store@SvxFrameDirectionItem@@UBEAAVSvStream@@AAV2@G@Z
 ?Type@SvxFrameDirectionItem@@UBEP6APAXXZXZ
 ?getWeakUnoShape@SdrObject@@QAE?AV?$WeakReference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@XZ
+?GetNotifyHdl@EditEngine@@QBE?AVLink@@XZ
+?SetNotifyHdl@EditEngine@@QAEXABVLink@@@Z
+?GetNotifyHdl@Outliner@@QBE?AVLink@@XZ
+?SetNotifyHdl@Outliner@@QAEXABVLink@@@Z
+?DataChanged@SvxFrameSelector@@MAEXABVDataChangedEvent@@@Z
