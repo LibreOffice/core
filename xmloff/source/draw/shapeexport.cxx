@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-28 13:32:20 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 15:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+
+#ifndef _XMLOFF_CONTEXTID_HXX_
+#include "contextid.hxx"
 #endif
 
 #include "xmlkywd.hxx"
@@ -237,6 +241,30 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
         // filter propset
         std::vector< XMLPropertyState > xPropStates = GetPropertySetMapper()->Filter( xPropSet );
+
+        if (XmlShapeTypeDrawControlShape == aShapeInfo.meShapeType)
+        {
+            // for control shapes, we additionally need the number format style (if any)
+            uno::Reference< drawing::XControlShape > xControl(xShape, uno::UNO_QUERY);
+            DBG_ASSERT(xControl.is(), "XMLShapeExport::collectShapeAutoStyles: ShapeType control, but no XControlShape!");
+            if (xControl.is())
+            {
+                uno::Reference< beans::XPropertySet > xControlModel(xControl->getControl(), uno::UNO_QUERY);
+                DBG_ASSERT(xControlModel.is(), "XMLShapeExport::collectShapeAutoStyles: no control model on the control shape!");
+
+                ::rtl::OUString sNumberStyle = rExport.GetFormExport()->getControlNumberStyle(xControlModel);
+                if (0 != sNumberStyle.getLength())
+                {
+                    sal_Int32 nIndex = GetPropertySetMapper()->getPropertySetMapper()->FindEntryIndex(CTF_SD_CONTROL_SHAPE_DATA_STYLE);
+                        // TODO : this retrieval of the index should be moved into the ctor, holding the index
+                        //          as member, thus saving time.
+                    DBG_ASSERT(-1 != nIndex, "XMLShapeExport::collectShapeAutoStyles: could not obtain the index for our context id!");
+
+                    XMLPropertyState aNewState(nIndex, uno::makeAny(sNumberStyle));
+                    xPropStates.push_back(aNewState);
+                }
+            }
+        }
 
         sal_Int32 nCount = 0;
         std::vector< XMLPropertyState >::iterator aIter = xPropStates.begin();
