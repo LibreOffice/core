@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:24:37 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2272,7 +2272,15 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                     m_pData->m_aPrintOptions[nArgs-1].Value <<= aPrintFile;
                 }
             }
-            else if ( pPrintHint->GetWhich() != -2 )
+            else if ( pPrintHint->GetWhich() == -3 )
+            {
+                sal_Int32 nOld = m_pData->m_aPrintOptions.getLength();
+                sal_Int32 nAdd = pPrintHint->GetAdditionalOptions().getLength();
+                m_pData->m_aPrintOptions.realloc(  nOld + nAdd );
+                for ( sal_Int32 n=0; n<nAdd; n++ )
+                    m_pData->m_aPrintOptions[ nOld+n ] = pPrintHint->GetAdditionalOptions()[n];
+            }
+            else
             {
                 view::PrintJobEvent aEvent;
                 aEvent.Source = m_pData->m_xPrintJob;
