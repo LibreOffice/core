@@ -28,7 +28,7 @@ public:
 
     /** Return the argument count
     */
-    size_t GetArgumentCount() const;
+    size_t get_arg_count() const;
 
     /** Return an argument by index
         This method doesn't skip argument
@@ -41,7 +41,7 @@ public:
         @throws std::out_of_range exception
         if the given index is to high
     */
-    std::string GetArgument(size_t Index) const;
+    std::string get_arg(size_t Index) const;
 
     /** Returns all argument name found in the
         command line. An argument will be identified
@@ -50,7 +50,7 @@ public:
         If there are no argument names the returned
         container is empty.
     */
-    StringListPtr_t GetArgumentNames() const;
+    StringListPtr_t get_arg_names() const;
 
     /** Returns an argument by name. If there are
         duplicate argument names in the command line,
@@ -68,7 +68,7 @@ public:
         if the specified argument could not be
         found
     */
-    std::string GetArgument(const std::string& ArgumentName) const;
+    std::string get_arg(const std::string& ArgumentName) const;
 
 
     //################################
@@ -84,13 +84,13 @@ public:
         @throws std::invalid_argument exception if
         the prefix is empty
     */
-    void SetArgumentPrefix(const std::string& Prefix);
+    void set_arg_prefix(const std::string& Prefix);
 
 private:
 
     /** Returns whether a given argument is an argument name
     */
-    bool IsArgumentName(const std::string& Argument) const;
+    bool is_arg_name(const std::string& Argument) const;
 
 private:
     size_t      m_argc;
