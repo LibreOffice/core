@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.pmk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tv $ $Date: 2001-03-27 11:29:14 $
+#   last change: $Author: tv $ $Date: 2001-03-27 16:11:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,5 +61,5 @@
 #*************************************************************************
 CONFIG_ALL_TARGET               = basicusr
 IMPORTWIZARD_ALL_TARGET         = basicsrvimport
-
+WEBWIZARD_ALL_TARGET            = basicsrvweb
 

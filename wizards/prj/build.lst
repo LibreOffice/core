@@ -34,3 +34,4 @@ wz      wizards\util                                            nmake           
 wz      wizards\source\euro                                     nmake           -       all     wz_euro NULL
 wz      wizards\source\config                                   nmake           -       all     wz_config NULL
 wz      wizards\source\importwizard                             nmake           -       all     wz_importwiz NULL
+wz      wizards\source\webwizard                                nmake           -       all     wz_webwiz NULL
