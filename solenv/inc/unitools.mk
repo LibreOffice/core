@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 09:18:39 $
+#   last change: $Author: rt $ $Date: 2004-09-08 14:59:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,6 +59,14 @@
 #
 #
 #*************************************************************************
+
+# Common tools
+TRANSEX*=transex3
+ULFEX*=ulfex
+XMLEX*=xmlex
+XRMEX*=xrmex
+CFGEX*=cfgex
+
 .IF "$(GUI)"=="WNT"
 AWK*=awk
 SORT*=sort
@@ -103,11 +111,6 @@ PERL*:=call perl5.btm
 RENAME*=ren
 TOUCH*=$(BUILD_TOOLS)$/touch.exe
 TYPE*=type
-TRANSEX*=transex3
-ULFEX*=ulfex
-XMLEX*=xmlex
-XRMEX*=xrmex
-CFGEX*=cfgex
 .ENDIF  "$(USE_SHELL)"!="4nt"
 MKDIRHIER=$(MKDIR) 
 SCP_CHECK_TOOL=checkscp.exe
@@ -144,14 +147,9 @@ FIND=find
 LS=ls
 ECHON=echo -n
 ECHONL=echo
-TRANSEX*=transex3
-ULFEX*=ulfex
-XMLEX*=xmlex
-XRMEX*=xrmex
-CFGEX*=cfgex
 .ENDIF			# "$(GUI)"=="UNX"
 
-MAKEDEPEND*=$(WRAPCMD) makedepend
+MAKEDEPEND*=$(WRAPCMD) $(SOLARBINDIR)$/makedepend
 ADJUSTVISIBILITY*=$(WRAPCMD) adjustvisibility
 
 RM+=$(RMFLAGS)
