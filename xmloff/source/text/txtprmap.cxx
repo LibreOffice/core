@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-24 14:30:38 $
+ *  last change: $Author: mib $ $Date: 2000-10-30 12:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // RES_END_AT_TXTEND
     // not required
     // RES_UNKNOWNATR_CONTAINER
-    M_E( "ParaUserDefinedAttributes", TEXT, xmlns, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
+    M_E( "UserDefinedAttributes", TEXT, xmlns, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
     { 0, 0, 0, 0 }
 };
 
@@ -373,7 +373,7 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     // RES_TXTATR_HARDBLANK
     // TODO
     // RES_UNKNOWNATR_CONTAINER
-    M_E( "CharUserDefinedAttributes", TEXT, xmlns, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
+    M_E( "UserDefinedAttributes", TEXT, xmlns, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
     { 0, 0, 0, 0 }
 };
 
@@ -497,6 +497,7 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     M_E( "VertMirrored",        STYLE,  mirror,     XML_TYPE_TEXT_MIRROR_VERTICAL|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
     // RES_GRFATR_CROPGRF
     M_E( "GraphicCrop",         FO,     clip,       XML_TYPE_TEXT_CLIP, 0 ),
+    M_E( "UserDefinedAttributes", TEXT, xmlns, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
     { 0, 0, 0, 0 }
 };
 
