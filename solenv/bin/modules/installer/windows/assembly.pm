@@ -2,9 +2,9 @@
 #
 #   $RCSfile: assembly.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-12 12:58:56 $
+#   last change: $Author: hr $ $Date: 2004-08-02 14:20:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -304,6 +304,66 @@ sub create_msiassemblyname_table
     my $infoline = "Created idt file: $msiassemblynametablename\n";
     push(@installer::globals::logfileinfo, $infoline);
 
+}
+
+####################################################################################
+# setting an installation condition for the assembly libraries saved in
+# @installer::globals::msiassemblynamecontent
+####################################################################################
+
+sub add_assembly_condition_into_component_table
+{
+    my ($filesref, $basedir) = @_;
+
+    my $componenttablename = $basedir . $installer::globals::separator . "Componen.idt";
+    my $componenttable = installer::files::read_file($componenttablename);
+    my $changed = 0;
+    my $infoline = "";
+
+    for ( my $i = 0; $i <= $#installer::globals::msiassemblyfiles; $i++ )
+    {
+        my $libraryname = $installer::globals::msiassemblyfiles[$i];
+        my $onefile = get_msiassembly_file($filesref, $libraryname);
+        my $filecomponent = get_msiassembly_component($onefile);
+
+        for ( my $j = 0; $j <= $#{$componenttable}; $j++ )
+        {
+            my $oneline = ${$componenttable}[$j];
+
+            if ( $oneline =~ /(.*)\t(.*)\t(.*)\t(.*)\t(.*)\t(.*)/ )
+            {
+                my $component = $1;
+                my $componentid = $2;
+                my $directory = $3;
+                my $attributes = $4;
+                my $condition = $5;
+                my $keypath = $6;
+
+                if ( $component eq $filecomponent )
+                {
+                    # setting the condition
+
+                    $condition = "NET_FRAMEWORK_INSTALLED=1";
+                    $oneline = $component . "\t" . $componentid . "\t" . $directory . "\t" . $attributes . "\t" . $condition . "\t" . $keypath . "\n";
+                    ${$componenttable}[$j] = $oneline;
+                    $changed = 1;
+                    $infoline = "Changing $componenttablename :\n";
+                    push(@installer::globals::logfileinfo, $infoline);
+                    $infoline = $oneline;
+                    push(@installer::globals::logfileinfo, $infoline);
+                    last;
+                }
+            }
+        }
+    }
+
+    if ( $changed )
+    {
+        # Saving the file
+        installer::files::save_file($componenttablename ,$componenttable);
+        $infoline = "Saved idt file: $componenttablename\n";
+        push(@installer::globals::logfileinfo, $infoline);
+    }
 }
 
 1;
