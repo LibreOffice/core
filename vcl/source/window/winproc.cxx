@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:33:10 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1309,7 +1309,7 @@ static long ImplHandleExtTextInput( Window* pWindow, ULONG nTime,
             pWinData->mpExtOldText->Erase();
         if ( pWinData->mpExtOldAttrAry )
         {
-            delete pWinData->mpExtOldAttrAry;
+            delete [] pWinData->mpExtOldAttrAry;
             pWinData->mpExtOldAttrAry = NULL;
         }
         pSVData->maWinData.mpExtTextInputWin = pChild;
@@ -1362,7 +1362,7 @@ static long ImplHandleExtTextInput( Window* pWindow, ULONG nTime,
     *pWinData->mpExtOldText = rText;
     if ( pWinData->mpExtOldAttrAry )
     {
-        delete pWinData->mpExtOldAttrAry;
+        delete [] pWinData->mpExtOldAttrAry;
         pWinData->mpExtOldAttrAry = NULL;
     }
     if ( pTextAttr )
@@ -1393,7 +1393,7 @@ static long ImplHandleEndExtTextInput( Window* /* pWindow */ )
         }
         if ( pWinData->mpExtOldAttrAry )
         {
-            delete pWinData->mpExtOldAttrAry;
+            delete [] pWinData->mpExtOldAttrAry;
             pWinData->mpExtOldAttrAry = NULL;
         }
         nRet = !ImplCallCommand( pChild, COMMAND_ENDEXTTEXTINPUT );
