@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabline.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-16 09:10:33 $
+ *  last change: $Author: af $ $Date: 2001-05-16 13:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #define FT_LINE_WIDTH 2
 #define MTR_FLD_LINE_WIDTH 1
 #define TSB_INVISIBLE 1
-#define GRP_LINE 1
-#define GRP_LINE_ENDS 2
+#define FL_LINE 1
+#define FL_LINE_ENDS 2
 #define FT_LINE_START 4
 #define FT_LINE_END 8
 #define FT_LINE_ENDS_STYLE 5
@@ -78,13 +78,12 @@
 #define MTR_FLD_START_WIDTH 3
 #define MTR_FLD_END_WIDTH 2
 #define CBX_SYNCHRONIZE 1
-#define GRP_MEASURING 3
+#define FL_MEASURING 3
 #define CTL_POSITION 2
 #define FT_POSITION 9
 #define TSB_SHOW_MEASURING 2
 #define CTL_PREVIEW 1
-#define GRP_PREVIEW 4
-#define GRP_DEFINITION 1
+#define FL_DEFINITION 1
 #define FT_NUMBER 3
 #define FT_DISTANCE 2
 #define FT_LENGTH 4
@@ -97,7 +96,7 @@
 #define MTR_FLD_DISTANCE 1
 #define MTR_FLD_LENGTH_1 3
 #define MTR_FLD_LENGTH_2 4
-#define GRP_LINESTYLES 2
+#define FT_LINESTYLE 10
 #define LB_LINESTYLES 2
 #define BTN_ADD 1
 #define BTN_MODIFY 2
@@ -106,18 +105,15 @@
 #define BTN_SAVE   6
 #define EDT_NAME 1
 #define LB_LINEENDS 1
-#define GRP_LINEENDS 2
-#define GRP_TIP 1
+#define FL_TIP 1
 #define FI_TIP 10
 #define TSB_CENTER_START 4
 #define TSB_CENTER_END 5
 #define FT_TRANSPARENT 10
-//#define LB_TRANSPARENT 5
 #define MTR_LINE_TRANSPARENT 5
-#define FL_LINE 1
-#define FL_LINE_SEP 2
-#define FL_LINE_ENDS 3
-#define FL_SYMBOL_FORMAT 4
+#define FL_SEPARATOR 4
+#define FT_LINE_END_STYLE 11
+#define FT_TITLE 12
 
 //Symbole (fuer StarChart)
 #define FT_SYMBOL_WIDTH     20
@@ -125,7 +121,7 @@
 #define MF_SYMBOL_WIDTH     22
 #define MF_SYMBOL_HEIGHT    23
 #define CB_SYMBOL_RATIO     24
-#define GB_SYMBOL_FORMAT    25
+#define FL_SYMBOL_FORMAT    25
 #define MB_SYMBOL_BITMAP    26
 
 

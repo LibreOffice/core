@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-16 09:10:33 $
+ *  last change: $Author: af $ $Date: 2001-05-16 13:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,6 @@ SvxLineTabPage::SvxLineTabPage
     aFtTransparent      ( this, ResId( FT_TRANSPARENT ) ),
     aMtrTransparent     ( this, ResId( MTR_LINE_TRANSPARENT ) ),
     aFlLine             ( this, ResId( FL_LINE ) ),
-    aFlLineSep          ( this, ResId( FL_LINE_SEP ) ),
     aFtLineEndsStyle    ( this, ResId( FT_LINE_ENDS_STYLE ) ),
     aFtLineEndsWidth    ( this, ResId( FT_LINE_ENDS_WIDTH ) ),
     aLbStartStyle       ( this, ResId( LB_START_STYLE ) ),
@@ -223,12 +222,13 @@ SvxLineTabPage::SvxLineTabPage
     aCbxSynchronize     ( this, ResId( CBX_SYNCHRONIZE ) ),
     aFlLineEnds         ( this, ResId( FL_LINE_ENDS ) ),
     aCtlPreview         ( this, ResId( CTL_PREVIEW ), &XOut ),
+    aFLSeparator        ( this, ResId( FL_SEPARATOR ) ),
     //#58425# Symbole auf einer Linie (z.B. StarChart) ->
     aSymbolWidthFT      ( this, ResId(FT_SYMBOL_WIDTH)),
     aSymbolWidthMF      ( this, ResId(MF_SYMBOL_WIDTH)),
     aSymbolHeightFT     ( this, ResId(FT_SYMBOL_HEIGHT)),
     aSymbolHeightMF     ( this, ResId(MF_SYMBOL_HEIGHT)),
-    aSymbolFL           ( this, ResId(FL_SYMBOL_FORMAT)),
+    aFlSymbol           ( this, ResId(FL_SYMBOL_FORMAT)),
     aSymbolRatioCB      ( this, ResId(CB_SYMBOL_RATIO)),
     aSymbolMB           ( this, ResId(MB_SYMBOL_BITMAP)),
     nSymbolType(SVX_SYMBOLTYPE_UNKNOWN), //unbekannt bzw. unchanged
@@ -289,8 +289,6 @@ SvxLineTabPage::SvxLineTabPage
     aMtrTransparent.SetModifyHdl(
         LINK( this, SvxLineTabPage, ChangeTransparentHdl_Impl ) );
 
-    aFlLineSep.SetStyle( aFlLineSep.GetStyle() | WB_VERT );
-
     Link aStart = LINK( this, SvxLineTabPage, ChangeStartHdl_Impl );
     Link aEnd = LINK( this, SvxLineTabPage, ChangeEndHdl_Impl );
     aLbStartStyle.SetSelectHdl( aStart );
@@ -317,6 +315,9 @@ SvxLineTabPage::SvxLineTabPage
 
     // #63083#
     nActLineWidth = -1;
+
+    //  Make the fixed line separator vertical.
+    aFLSeparator.SetStyle (aFLSeparator.GetStyle() | WB_VERT);
 }
 //#58425# Symbole auf einer Linie (z.B. StarChart) , Symbol-Controls aktivieren
 void SvxLineTabPage::ShowSymbolControls(BOOL bOn)
@@ -326,7 +327,7 @@ void SvxLineTabPage::ShowSymbolControls(BOOL bOn)
     aSymbolWidthMF.Show(bOn);
     aSymbolHeightFT.Show(bOn);
     aSymbolHeightMF.Show(bOn);
-    aSymbolFL.Show(bOn);
+    aFlSymbol.Show(bOn);
     aSymbolRatioCB.Show(bOn);
     aSymbolMB.Show(bOn);
     aCtlPreview.ShowSymbol(bOn);
@@ -417,13 +418,13 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             // SelectStyleHdl_Impl( this );
         }
 
-        // Ermitteln (evtl. abschneiden) des Namens und in
-        // der GroupBox darstellen
-        String          aString( ResId( RID_SVXSTR_TABLE, pMgr ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
         INetURLObject   aDashURL( pDashList->GetPath() );
 
         aDashURL.Append( pDashList->GetName() );
         DBG_ASSERT( aDashURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+/*      // Ermitteln (evtl. abschneiden) des Namens und in
+        // der GroupBox darstellen
+        String          aString( ResId( RID_SVXSTR_TABLE, pMgr ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
         if ( aDashURL.getBase().Len() > 18 )
         {
@@ -433,6 +434,8 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         else
             aString += aDashURL.getBase();
 
+        aGrpLine.SetText( aString );
+*/
         // LineEndliste
         if( ( *pnLineEndListState & CT_MODIFIED ) ||
             ( *pnLineEndListState & CT_CHANGED ) )
@@ -469,13 +472,13 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             else
                 aLbEndStyle.SelectEntryPos( nPos );
         }
-        // Ermitteln (evtl. abschneiden) des Namens und in
-        // der GroupBox darstellen
-        aString = String( ResId( RID_SVXSTR_TABLE, pMgr ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
         INetURLObject aLineURL( pLineEndList->GetPath() );
 
         aLineURL.Append( pLineEndList->GetName() );
         DBG_ASSERT( aLineURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+/*      // Ermitteln (evtl. abschneiden) des Namens und in
+        // der GroupBox darstellen
+        aString = String( ResId( RID_SVXSTR_TABLE, pMgr ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
         if ( aLineURL.getBase().Len() > 18 )
         {
@@ -485,6 +488,8 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         else
             aString += aLineURL.getBase();
 
+        aGrpLineEnds.SetText( aString );
+*/
         // Auswertung, ob von einer anderen TabPage ein anderer Fuelltyp gesetzt wurde
         if( aLbLineStyle.GetSelectEntryPos() != 0 )
         {
@@ -516,7 +521,6 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         aMtrEndWidth.Hide();
         aTsbCenterEnd.Hide();
         aCbxSynchronize.Hide();
-        aFlLineSep.Hide();
         aFlLineEnds.Hide();
     }
 }

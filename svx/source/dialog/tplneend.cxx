@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplneend.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-13 17:03:18 $
+ *  last change: $Author: af $ $Date: 2001-05-16 13:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,15 +131,15 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     aXColor             ( String(), COL_BLACK ),
 
     aFiTip              ( this, ResId( FI_TIP ) ),
-    aGrpTip             ( this, ResId( GRP_TIP ) ),
+    aFlTip              ( this, ResId( FL_TIP ) ),
     aEdtName            ( this, ResId( EDT_NAME ) ),
     aLbLineEnds         ( this, ResId( LB_LINEENDS ) ),
-    aGrpLineEnds        ( this, ResId( GRP_LINEENDS ) ),
+    aFTLineEndStyle     ( this, ResId( FT_LINE_END_STYLE ) ),
+    aFTTitle            ( this, ResId( FT_TITLE ) ),
     aBtnModify          ( this, ResId( BTN_MODIFY ) ),
     aBtnAdd             ( this, ResId( BTN_ADD ) ),
     aBtnDelete          ( this, ResId( BTN_DELETE ) ),
     aCtlPreview         ( this, ResId( CTL_PREVIEW ), &XOut ),
-    aGrpPreview         ( this, ResId( GRP_PREVIEW ) ),
     aBtnLoad            ( this, ResId( BTN_LOAD ) ),
     aBtnSave            ( this, ResId( BTN_SAVE ) ),
     rOutAttrs           ( rInAttrs )
@@ -205,13 +205,13 @@ void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& rSet )
                 aLbLineEnds.SelectEntryPos( *pPosLineEndLb );
                 SelectLineEndHdl_Impl( this );
             }
-            // Ermitteln (evtl. abschneiden) des Namens und in
-            // der GroupBox darstellen
-            String          aString( SVX_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
             INetURLObject   aURL( pLineEndList->GetPath() );
 
             aURL.Append( pLineEndList->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+/*          // Ermitteln (evtl. abschneiden) des Namens und in
+            // der GroupBox darstellen
+            String          aString( SVX_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
             if ( aURL.getBase().Len() > 18 )
             {
@@ -222,7 +222,7 @@ void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& rSet )
                 aString += aURL.getBase();
 
             aGrpLineEnds.SetText( aString );
-
+*/
             *pPageType = 0; // 3
             *pPosLineEndLb = LISTBOX_ENTRY_NOTFOUND;
         }
@@ -642,7 +642,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
                     pLineEndList->SetName( aURL.getName() );
 
-                    // Ermitteln (evtl. abschneiden) des Namens und in
+/*                  // Ermitteln (evtl. abschneiden) des Namens und in
                     // der GroupBox darstellen
                     String aString( ResId( RID_SVXSTR_TABLE, pMgr ) );
                     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
@@ -655,7 +655,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
                         aString += aURL.getBase();
 
                     aGrpLineEnds.SetText( aString );
-
+*/
                     // Flag fuer gewechselt setzen
                     *pnLineEndListState |= CT_CHANGED;
                     // Flag fuer modifiziert entfernen
@@ -720,7 +720,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
 
         if( pLineEndList->Save() )
         {
-            // Ermitteln (evtl. abschneiden) des Namens und in
+/*          // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
             String aString( SVX_RES( RID_SVXSTR_TABLE ) );
             aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
@@ -733,7 +733,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
             else
                 aString += aURL.getBase();
             aGrpLineEnds.SetText( aString );
-
+*/
             // Flag fuer gespeichert setzen
             *pnLineEndListState |= CT_SAVED;
             // Flag fuer modifiziert entfernen

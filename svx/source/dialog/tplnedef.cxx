@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplnedef.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-13 17:03:18 $
+ *  last change: $Author: af $ $Date: 2001-05-16 13:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,14 +147,13 @@ SvxLineDefTabPage::SvxLineDefTabPage
     aMtrLength1     ( this, ResId( MTR_FLD_LENGTH_1 ) ),
     aMtrLength2     ( this, ResId( MTR_FLD_LENGTH_2 ) ),
     aCbxSynchronize ( this, ResId( CBX_SYNCHRONIZE ) ),
-    aGrpDefinition  ( this, ResId( GRP_DEFINITION ) ),
+    aFlDefinition   ( this, ResId( FL_DEFINITION ) ),
     aLbLineStyles   ( this, ResId( LB_LINESTYLES ) ),
-    aGrpLinestyles  ( this, ResId( GRP_LINESTYLES ) ),
+    aFTLinestyle    ( this, ResId( FT_LINESTYLE ) ),
     aBtnAdd         ( this, ResId( BTN_ADD ) ),
     aBtnModify      ( this, ResId( BTN_MODIFY ) ),
     aBtnDelete      ( this, ResId( BTN_DELETE ) ),
     aCtlPreview     ( this, ResId( CTL_PREVIEW ), &XOut ),
-    aGrpPreview     ( this, ResId( GRP_PREVIEW ) ),
     aBtnLoad        ( this, ResId( BTN_LOAD ) ),
     aBtnSave        ( this, ResId( BTN_SAVE ) ),
     rOutAttrs       ( rInAttrs )
@@ -255,7 +254,7 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& rSet )
             aURL.Append( pDashList->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-            if ( aURL.getBase().Len() > 18 )
+/*          if ( aURL.getBase().Len() > 18 )
             {
                 aString += aURL.getBase().Copy( 0, 15 );
                 aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
@@ -263,8 +262,8 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& rSet )
             else
                 aString += aURL.getBase();
 
-            aGrpLinestyles.SetText( aString );
-
+            aFTLinestyle.SetText( aString );
+*/
             *pPageType = 0; // 2
             *pPosDashLb = LISTBOX_ENTRY_NOTFOUND;
         }
@@ -852,7 +851,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, p )
 
                     pDashList->SetName( aURL.getName() );
 
-                    // Ermitteln (evtl. abschneiden) des Namens und in
+/*                  // Ermitteln (evtl. abschneiden) des Namens und in
                     // der GroupBox darstellen
                     String aString( ResId( RID_SVXSTR_TABLE, pMgr ) );
                     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
@@ -866,7 +865,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, p )
                         aString += aURL.getBase();
 
                     aGrpLinestyles.SetText( aString );
-
+*/
                     // Flag fuer gewechselt setzen
                     *pnDashListState |= CT_CHANGED;
                     // Flag fuer modifiziert entfernen
@@ -932,7 +931,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickSaveHdl_Impl, void *, p )
 
         if( pDashList->Save() )
         {
-            // Ermitteln (evtl. abschneiden) des Namens und in
+/*          // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
             String aString( SVX_RES( RID_SVXSTR_TABLE ) );
             aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
@@ -946,7 +945,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickSaveHdl_Impl, void *, p )
                 aString += aURL.getBase();
 
             aGrpLinestyles.SetText( aString );
-
+*/
             // Flag fuer gespeichert setzen
             *pnDashListState |= CT_SAVED;
             // Flag fuer modifiziert entfernen
