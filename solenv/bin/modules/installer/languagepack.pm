@@ -111,9 +111,9 @@ sub select_language_items
                 # preparing different modules for Windows Installer language packs
                 if ( $installer::globals::iswindowsbuild ) { $oneitem->{'modules'} = "gid_Module_Langpack_" . $specificlanguage; }
 
-                if (! installer::existence::exists_in_array($oneitem->{'modules'}, \@installer::globals::languagepackfeature))  # DDD
+                if (! installer::existence::exists_in_array($oneitem->{'modules'}, \@installer::globals::languagepackfeature))
                 {
-                    push(@installer::globals::languagepackfeature, $oneitem->{'modules'});  # Collecting all language pack feature # DDD
+                    push(@installer::globals::languagepackfeature, $oneitem->{'modules'});  # Collecting all language pack feature
                 }
 
                 push(@itemsarray, $oneitem);
@@ -371,11 +371,18 @@ sub remove_package
 {
     my ( $installdir, $packagename ) = @_;
 
-    my $longpackagename = $installdir . $installer::globals::separator . $packagename;
-    unlink $longpackagename;
+    my $remove_package = 1;
 
-    my $infoline = "Removing package: $longpackagename \n";
-    push( @installer::globals::logfileinfo, $infoline);
+    if ( $ENV{'DONT_REMOVE_PACKAGE'} ) { $remove_package = 0; }
+
+    if ( $remove_package )
+    {
+        my $longpackagename = $installdir . $installer::globals::separator . $packagename;
+        unlink $longpackagename;
+
+        my $infoline = "Removing package: $longpackagename \n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
 }
 
 ####################################################
