@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: np $ $Date: 2002-03-08 14:32:38 $
+#   last change: $Author: np $ $Date: 2002-03-22 12:42:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ LIB1FILES= 	\
 # --- Targets ------------------------------------------------------
 
 LIB1TARGET= 	$(LB)$/$(TARGET).lib
-LIB1ARCHIV= 	$(LB)$/a$(TARGET).a
+LIB1ARCHIV= 	$(LB)$/lib$(TARGET).a
 
 
 .INCLUDE :  target.mk

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: np $ $Date: 2002-03-22 11:25:43 $
+#   last change: $Author: np $ $Date: 2002-03-22 12:43:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,17 +111,16 @@ APP1STACK=	1000000
 APP1OBJS=   $(OBJ)$/main.obj
 
 .IF "$(GUI)"=="WNT"
-APP1STDLIBS= $(LIBSTLPORT) msvcirt.lib cosv.lib udm.lib
+APP1STDLIBS= $(LIBSTLPORT) cosv.lib udm.lib
 .ELSE
-APP1STDLIBS= $(L)$/acosv.a $(L)$/audm.a
+APP1STDLIBS= -lcosv -ludm
 .ENDIF
 
 APP1LIBS=$(LB)$/atdoc.lib
 
 DEPOBJFILES += $(APP1OBJS)
 
-APP1DEPN=   $(L)$/cosv.lib \
-            $(LB)$/$(TARGET).lib $(LB)$/autodoc_tools.lib \
+APP1DEPN=   $(LB)$/$(TARGET).lib $(LB)$/autodoc_tools.lib \
             $(LB)$/ary_kernel.lib $(LB)$/ary_cpp.lib $(LB)$/ary_info.lib \
             $(LB)$/ary_loc.lib $(LB)$/ary_store.lib \
             $(LB)$/parser_kernel.lib $(LB)$/parser_tokens.lib $(LB)$/parser_semantic.lib \

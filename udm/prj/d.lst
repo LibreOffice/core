@@ -3,7 +3,7 @@ mkdir: %_DEST%\inc%_EXT%\udm\html
 mkdir: %_DEST%\inc%_EXT%\udm\xml
 
 ..\%__SRC%\lib\udm.lib %_DEST%\lib%_EXT%\udm.lib
-..\%__SRC%\lib\audm.a %_DEST%\lib%_EXT%\audm.a
+..\%__SRC%\lib\libudm.a %_DEST%\lib%_EXT%\libudm.a
 ..\inc\udm\*.hxx %_DEST%\inc%_EXT%\udm\*.hxx
 ..\inc\udm\html\*.hxx %_DEST%\inc%_EXT%\udm\html\*.hxx
 ..\inc\udm\xml\*.hxx %_DEST%\inc%_EXT%\udm\xml\*.hxx
