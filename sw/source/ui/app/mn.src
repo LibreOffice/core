@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:43:19 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ Menu MN_TAB_POPUPMENU
             Text[ polish ] = "Rozpoznawanie liczb";
             Text[ portuguese_brazilian ] = "Number recognition";
             Text[ japanese ] = "”‚Μ”F―";
-            Text[ korean ] = "ΌύΐΪ ΐΞ½Δ(~N)";
+            Text[ korean ] = "ΌύΐΪ ΐΞ½Δ";
             Text[ chinese_simplified ] = "ΚύΧΦΚ¶±π";
             Text[ chinese_traditional ] = "ΓΡ§OΌΖ¦r";
             Text[ arabic ] = "ΚΪΡνέ ΗαΓΡήΗγ";
@@ -472,7 +472,7 @@ String MN_PPREVIEW_POPUPMENU
     Text[ chinese_traditional ] = "ΓΈΉΟª«¥σ ¤ε¦r";
     Text[ arabic ] = "δΥ ίΗΖδ ΡΣζγν";
     Text[ greek ] = "Κείμενο αντικειμένου σχεδίασης";
-    Text[ korean ] = "±ΧΈ®±β °΄ΓΌ ΕΨ½ΊΖ®";
+    Text[ korean ] = "±ΧΈ®±β °³ΓΌ ΕΨ½ΊΖ®";
     Text[ turkish ] = "Ηizim nesnesi metni";
 };
 
@@ -502,7 +502,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ chinese_traditional ] = "¤W¤@­¶";
             Text[ arabic ] = "ΗαΥέΝΙ ΗαΣΗΘήΙ";
             Text[ greek ] = "Προηγούμενη σελίδα";
-            Text[ korean ] = "ΐΜΐό ΖδΐΜΑφ";
+            Text[ korean ] = "ΐΜΐό ΒΚ";
             Text[ turkish ] = "Φnceki sayfa";
         };
         MenuItem
@@ -528,7 +528,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ chinese_traditional ] = "¤U¤@­¶";
             Text[ arabic ] = "ΗαΥέΝΙ ΗαΚΗανΙ";
             Text[ greek ] = "Στην επόμενη σελίδα";
-            Text[ korean ] = "΄Ωΐ½ ΖδΐΜΑφ";
+            Text[ korean ] = "΄Ωΐ½ ΒΚ";
             Text[ turkish ] = "Sonraki sayfa";
         };
         MenuItem
@@ -560,7 +560,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ arabic ] = "ΗαΨΘΗΪΙ ΝΣΘ ΗαγΪΗνδΙ";
             Text[ language_user1 ] = "ίν?ΣΚΪΡ?Γν?ΨΘΗΪ?\\ζΓνδ γΪΗνδΙ ΗαΥέΝΙ ήΘ?ΨΘΗΪΚε?ΏΏΏΏ";
             Text[ greek ] = "Εκτύπωση προεπισκόπησης";
-            Text[ korean ] = "ΐΞΌβ";
+            Text[ korean ] = "ΒΚΉΜΈ®ΊΈ±β΅΅ΐΞΌβ";
             Text[ turkish ] = "Yazdύr";
         };
         MenuItem
