@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:54:51 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,7 @@ namespace rtl {
 #define BASEPROPERTY_VISUALEFFECT          111  // sal_Int16
 #define BASEPROPERTY_BORDERCOLOR           112  // sal_Int32
 #define BASEPROPERTY_IMAGEPOSITION         113  // sal_Int16
+#define BASEPROPERTY_NATIVE_WIDGET_LOOK    114  // sal_Bool
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.
 #define BASEPROPERTY_FONTDESCRIPTORPART_START           1000
