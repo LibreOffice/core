@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+#   last change: $Author: fs $ $Date: 2000-10-11 08:33:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,8 @@ TARGET=dialogs
 SRCFILES=		filedlg2.src	\
                 prnsetup.src	\
                 printdlg.src	\
-                colrdlg.src
+                colrdlg.src		\
+                logindlg.src
 
 SLOFILES=		$(SLO)$/filedlg.obj 	\
                 $(SLO)$/filedlg2.obj	\
@@ -86,7 +87,8 @@ SLOFILES=		$(SLO)$/filedlg.obj 	\
                 $(SLO)$/colrdlg.obj 	\
                 $(SLO)$/property.obj	\
                 $(SLO)$/wizdlg.obj		\
-                $(SLO)$/mcvmath.obj
+                $(SLO)$/mcvmath.obj		\
+                $(SLO)$/logindlg.obj
 
 # --- Targets ------------------------------------------------------
 
