@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2001-06-01 18:11:13 $
+#   last change: $Author: hjs $ $Date: 2001-07-18 16:42:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,9 +70,14 @@ LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
+
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
+
+.IF "$(GUI)"=="WNT"
+CFLAGSNOOPT+=-Ob0
+.ENDIF
 
 OBJFILES=   $(OBJ)$/javamaker.obj	\
             $(OBJ)$/javaoptions.obj	\
