@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: fs $ $Date: 2002-03-18 14:00:42 $
+#   last change: $Author: armin $ $Date: 2002-03-19 11:58:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,11 +86,6 @@ ENVCFLAGS+=/FR$(SLO)$/
 .INCLUDE : settings.mk
 .INCLUDE :  $(PRJ)$/version.mk
 
-.IF "$(BUILD_SOSL)"!=""
-all: 
-    echo "		Not building the addressbook driver in OpenOffice.org build"
-    echo "		dependency to Mozilla developer snapshots not feasable at the moment"
-.ENDIF
 
 #mozilla specific stuff.
 # --- Files -------------------------------------
