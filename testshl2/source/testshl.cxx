@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testshl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:16:57 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 13:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,12 +167,14 @@ int _cdecl main( int argc, char* argv[] )
         "-sf=s,         absolute path and name to the signal file.",
 //! new (helpful if at debug time)
         "-dntsf,        if given, do not touch signal file, also if one exist.",
+        "-rmsf,         remove signalfile.",
         "-jobonly=s,    job control file, these jobs should only executed.",
         "-jobfilter=s,  use a filter for just some tests.",
         "-onlyshowjobs, show only all jobs, do no tests.",
         "-forward=s,    this string will forwarded to the test libraries.",
         "-projectid=s,  this text is added to the date output line.",
         "-buildid=s,    this text is added to the date output line.",
+        "-waitforkey,   wait until key pressed.",
         "-verbose,      be verbose.",
         "-h:s,          display help or help on option",
         "-help:s,       see -h",
@@ -180,6 +182,10 @@ int _cdecl main( int argc, char* argv[] )
     };
 
     GetOpt opt( argv, optionSet );
+    if ( opt.hasOpt("-verbose") )
+    {
+        fprintf(stderr, "testshl2 $Revision: 1.9 $\n");
+    }
 
     // someone indicates that he needs help
     if ( opt.hasOpt( "-h" ) || opt.hasOpt( "-help" ) )
@@ -236,6 +242,15 @@ int _cdecl main( int argc, char* argv[] )
 
     // give the output
     pResult->print(*pOutput.get());
+
+    // this is a debug extension, so you can read the output and after a key is pressed the program will end.
+    if (opt.hasOpt("-waitforkey"))
+    {
+        fprintf(stderr, "Press return key.");
+        fflush(stderr);
+        getchar();
+    }
+
     return 0;
 }
 
