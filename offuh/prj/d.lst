@@ -25,8 +25,10 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\document
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\drawing
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\embed
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\form
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\xforms
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\form\binding
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\form\validation
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\form\submission
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\formula
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\frame
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\frame\status
@@ -59,6 +61,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\table
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\telephony
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\telephony\DIALER
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\text
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\xsd
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\ui
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\ui\dialogs
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\uno
@@ -158,10 +161,14 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\wrapper
 ..\%__SRC%\inc\com\sun\star\embed\*.hpp %_DEST%\inc%_EXT%\com\sun\star\embed\*.hpp
 ..\%__SRC%\inc\com\sun\star\form\*.hdl %_DEST%\inc%_EXT%\com\sun\star\form\*.hdl
 ..\%__SRC%\inc\com\sun\star\form\*.hpp %_DEST%\inc%_EXT%\com\sun\star\form\*.hpp
+..\%__SRC%\inc\com\sun\star\xforms\*.hdl %_DEST%\inc%_EXT%\com\sun\star\xforms\*.hdl
+..\%__SRC%\inc\com\sun\star\xforms\*.hpp %_DEST%\inc%_EXT%\com\sun\star\xforms\*.hpp
 ..\%__SRC%\inc\com\sun\star\form\binding\*.hdl %_DEST%\inc%_EXT%\com\sun\star\form\binding\*.hdl
 ..\%__SRC%\inc\com\sun\star\form\binding\*.hpp %_DEST%\inc%_EXT%\com\sun\star\form\binding\*.hpp
 ..\%__SRC%\inc\com\sun\star\form\validation\*.hdl %_DEST%\inc%_EXT%\com\sun\star\form\validation\*.hdl
 ..\%__SRC%\inc\com\sun\star\form\validation\*.hpp %_DEST%\inc%_EXT%\com\sun\star\form\validation\*.hpp
+..\%__SRC%\inc\com\sun\star\form\submission\*.hdl %_DEST%\inc%_EXT%\com\sun\star\form\submission\*.hdl
+..\%__SRC%\inc\com\sun\star\form\submission\*.hpp %_DEST%\inc%_EXT%\com\sun\star\form\submission\*.hpp
 ..\%__SRC%\inc\com\sun\star\formula\*.hdl %_DEST%\inc%_EXT%\com\sun\star\formula\*.hdl
 ..\%__SRC%\inc\com\sun\star\formula\*.hpp %_DEST%\inc%_EXT%\com\sun\star\formula\*.hpp
 ..\%__SRC%\inc\com\sun\star\frame\*.hdl %_DEST%\inc%_EXT%\com\sun\star\frame\*.hdl
@@ -226,6 +233,8 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\wrapper
 ..\%__SRC%\inc\com\sun\star\telephony\DIALER\*.hpp %_DEST%\inc%_EXT%\com\sun\star\telephony\DIALER\*.hpp
 ..\%__SRC%\inc\com\sun\star\text\*.hdl %_DEST%\inc%_EXT%\com\sun\star\text\*.hdl
 ..\%__SRC%\inc\com\sun\star\text\*.hpp %_DEST%\inc%_EXT%\com\sun\star\text\*.hpp
+..\%__SRC%\inc\com\sun\star\xsd\*.hdl %_DEST%\inc%_EXT%\com\sun\star\xsd\*.hdl
+..\%__SRC%\inc\com\sun\star\xsd\*.hpp %_DEST%\inc%_EXT%\com\sun\star\xsd\*.hpp
 ..\%__SRC%\inc\com\sun\star\ui\*.hdl %_DEST%\inc%_EXT%\com\sun\star\ui\*.hdl
 ..\%__SRC%\inc\com\sun\star\ui\*.hpp %_DEST%\inc%_EXT%\com\sun\star\ui\*.hpp
 ..\%__SRC%\inc\com\sun\star\ui\dialogs\*.hdl %_DEST%\inc%_EXT%\com\sun\star\ui\dialogs\*.hdl
