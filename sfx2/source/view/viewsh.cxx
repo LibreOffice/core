@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:34:24 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,12 +121,9 @@
 #include "docfile.hxx"
 #include "dispatch.hxx"
 #include "arrdecl.hxx"
-#include "accmgr.hxx"
 #include "intfrm.hxx"
 #include "docfac.hxx"
 #include "view.hrc"
-#include "mnumgr.hxx"
-#include "virtmenu.hxx"
 #include "objuno.hxx"
 #include "sfxlocal.hrc"
 #include "sfxbasecontroller.hxx"
@@ -1485,7 +1482,6 @@ void SfxViewShell::ReleaseMenuBar_Impl()
 SfxMenuBarManager* SfxViewShell::GetMenuBar_Impl( BOOL bPlugin )
 {
     // get the accelerators
-    GetAccMgr_Impl();
 
     Reference < XPropertySet > xPropSet( GetViewFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY );
     if ( xPropSet.is() )
@@ -1508,16 +1504,6 @@ SfxMenuBarManager* SfxViewShell::GetMenuBar_Impl( BOOL bPlugin )
     }
 
     return NULL;
-}
-
-SfxAcceleratorManager* SfxViewShell::GetAccMgr_Impl()
-{
-    // all views of a document share the accelerators
-#if SUPD>633
-    return GetObjectShell()->GetAccMgr_Impl();
-#else
-    return GetObjectShell()->GetFactory().GetAccMgr_Impl();
-#endif
 }
 
 void SfxViewShell::SetController( SfxBaseController* pController )
