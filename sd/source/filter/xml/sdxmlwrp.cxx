@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 17:13:22 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 23:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,6 +484,10 @@ sal_Bool SdXMLFilter::Export()
                     xDocStream = pStorage->OpenStream( sDocName, STREAM_WRITE | STREAM_SHARE_DENYWRITE );
                     xDocStream->SetBufferSize( 16*1024 );
                     xDocOut = new utl::OOutputStreamWrapper( *xDocStream );
+
+                    uno::Any aAny; aAny <<= OUString( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
+                    xDocStream->SetProperty(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aAny);
+
                 }
                 else
                 {
