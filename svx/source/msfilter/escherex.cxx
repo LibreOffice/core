@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-12 17:26:07 $
+ *  last change: $Author: sj $ $Date: 2000-12-13 14:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1050,57 +1050,13 @@ EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject
 
 // ---------------------------------------------------------------------------------------------
 
-EscherBlibEntry::EscherBlibEntry( SvMemoryStream& rStream, ESCHER_BlibType eBlibType, UINT32 nPictureOffset )
-{
-    UINT32* pPtr = &mnIdentifier[0];
-    UINT32 nLenght, nType, nPos, nCRC, nOldPos = rStream.Tell();
-    mnSizeExtra = 0;
-    mnRefCount = 1;
-    rStream.Seek( STREAM_SEEK_TO_END );
-    mnSize = rStream.Tell();
-    rStream.Seek( STREAM_SEEK_TO_BEGIN );
-    mnPictureOffset = nPictureOffset;
-    meBlibType = eBlibType;
-    if ( eBlibType == PNG )         // Bitmap ID ermitteln, um keine doppelten Grafiken abzuspeichern
-    {
-        rStream.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-        rStream.SeekRel( 8 );
-        do
-        {
-            rStream >> nLenght >> nType;                // wir ermitteln die den Identifier anhand der Checksumme des PNG IDat chunks
-            nPos = rStream.Tell() + nLenght;            // naechste chunk position
-            if ( nPos >= mnSize )                       // kein IDAT -> break;
-                break;
-            rStream.Seek( nPos );
-            rStream >> nCRC;
-        }
-        while ( nType != 0x49444154 );                  // IDAT chunk suchen
-    }
-    else
-    {
-        if ( mnSize > 8 )
-        {
-            rStream.SeekRel( mnSize - 8 );
-            rStream >> nPos >> nCRC;                    // ( Komprimiertes UINT32 + Checksumme des ZCodec ) ergeben einen Teil der UID
-            nLenght = mnSize;
-        }
-    }
-    *pPtr++ = nCRC;                                     // LitteEndian / BigEndian ist fuer die Checksumme egal
-    *pPtr++ = nLenght;
-    *pPtr++ = nPos;
-    *pPtr = 0;
-    rStream.Seek( nOldPos );
-};
-
-// ---------------------------------------------------------------------------------------------
-
-void EscherBlibEntry::WriteBlibEntry( SvStream& rSt, sal_Bool bWritePictureOffset )
+void EscherBlibEntry::WriteBlibEntry( SvStream& rSt, sal_Bool bWritePictureOffset, sal_uInt32 nResize )
 {
     sal_uInt8   nBlibType = meBlibType;
     sal_uInt32  nPictureOffset = ( bWritePictureOffset ) ? mnPictureOffset : 0;
 
     rSt << (sal_uInt32)( ( ESCHER_BSE << 16 ) | ( ( (sal_uInt16)meBlibType << 4 ) | 2 ) )
-        << (sal_uInt32)36
+        << (sal_uInt32)( 36 + nResize )
         << (sal_uInt8)meBlibType;
 
     switch ( meBlibType )
@@ -1214,7 +1170,7 @@ void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pM
 
                 sal_uInt8 nBlibType = pBlibEntry->meBlibType;
                 nBlipSize = pBlibEntry->mnSize + pBlibEntry->mnSizeExtra;
-                pBlibEntry->WriteBlibEntry( rSt, sal_False );
+                pBlibEntry->WriteBlibEntry( rSt, sal_False, nBlipSize );
 
                 // BLIP
                 pMergePicStreamBSE->Seek( pBlibEntry->mnPictureOffset );
@@ -1487,74 +1443,6 @@ EscherEx::~EscherEx()
     delete[] mpRecTypes;
     delete[] mpOffsets;
     delete mpImplEscherExSdr;
-}
-
-// ---------------------------------------------------------------------------------------------
-
-struct ESCHER_GDIStruct
-{
-    Rectangle   GDIBoundRect;
-    Size        GDISize;
-    UINT32      GDIUncompressedSize;
-};
-
-UINT32 EscherEx::ImplGetBlibID( SvStream& rPicOutStrm, SvMemoryStream& rSource, ESCHER_BlibType eBlibType, const ESCHER_GDIStruct* pGDI )
-{
-    EscherBlibEntry* pEscherBlibEntry = new EscherBlibEntry( rSource, eBlibType, rPicOutStrm.Tell() );
-    for ( UINT32 i = 0; i < mnBlibEntrys; i++ )
-    {
-        if ( *( mpBlibEntrys[ i ] ) == *pEscherBlibEntry )
-        {
-            mpBlibEntrys[ i ]->mnRefCount++;
-            delete pEscherBlibEntry;
-            return i + 1;
-        }
-    }
-    switch ( eBlibType )
-    {
-        case PNG :
-        {
-            const UINT32 nExtra = 17;
-            pEscherBlibEntry->mnSizeExtra += 8 + nExtra;
-            rPicOutStrm << (UINT32)0xf01e6e00 << (UINT32)( pEscherBlibEntry->mnSize + nExtra );
-            rPicOutStrm.Write( pEscherBlibEntry->mnIdentifier, 16 );
-            rPicOutStrm << (BYTE)0xff;
-            rPicOutStrm.Write( rSource.GetData(), pEscherBlibEntry->mnSize );
-        }
-        break;
-        case WMF :
-        case EMF :
-        {
-            const UINT32 nExtra = (eBlibType == WMF ? 0x42 : 0x32);
-            const UINT32 nHeaderID = (eBlibType == WMF ? 0xf01b2170 : 0xf01a3d40);
-            pEscherBlibEntry->mnSizeExtra += 8 + nExtra;
-            rPicOutStrm << nHeaderID << (UINT32)( pEscherBlibEntry->mnSize + nExtra );
-            if ( eBlibType == WMF )
-                rPicOutStrm.Write( pEscherBlibEntry->mnIdentifier, 16 );
-            rPicOutStrm.Write( pEscherBlibEntry->mnIdentifier, 16 );
-
-
-            UINT32 nWidth = pGDI->GDIBoundRect.GetWidth() * 360;
-            UINT32 nHeight = pGDI->GDIBoundRect.GetHeight() * 360;
-            double fWidth = (double)pGDI->GDIBoundRect.GetWidth() / 10000.0 * 1027.0;
-            double fHeight = (double)pGDI->GDIBoundRect.GetHeight() / 10000.0 * 1027.0;
-
-            rPicOutStrm << (UINT32)( pGDI->GDIUncompressedSize )// WMFSize ohne FileHeader
-                        << (INT32)0         // da die Originalgroesse des WMF's (ohne FileHeader)
-                        << (INT32)0         // nicht mehr feststellbar ist, schreiben wir 10cm / x
-                        << (INT32)fWidth
-                        << (INT32)fHeight
-                        << nWidth
-                        << nHeight
-                        << (UINT32)( pEscherBlibEntry->mnSize )
-                        << (UINT16)0xfe00;                      // compression Flags
-            rPicOutStrm.Write( rSource.GetData(), pEscherBlibEntry->mnSize );
-        }
-        break;
-        default:
-            DBG_ERRORFILE( "EscherEx::ImplGetBlibID: BlibType not handled" );
-    }
-    return ImplInsertBlib( pEscherBlibEntry );
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -1895,14 +1783,6 @@ UINT32 EscherEx::EnterGroup( const Rectangle* pBoundRect )
     else
     {
         AddShape( ESCHER_ShpInst_Min, 0x201, nShapeId );                // Flags: Group | HaveAnchor
-
-#if EES_WRITE_EPP
-        AddAtom( 8, ESCHER_ClientAnchor );
-        PtReplaceOrInsert( ESCHER_Persist_Grouping_Logic | mnGroupLevel,
-                            mpOutStrm->Tell() );
-        *mpOutStrm << (INT16)aRect.Top() << (INT16)aRect.Left()
-                   << (INT16)aRect.Right() << (INT16)aRect.Bottom();
-#else // !EES_WRITE_EPP
         EscherPropertyContainer aPropOpt;
         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x00040004 );
         aPropOpt.Commit( *mpOutStrm );
@@ -1921,8 +1801,6 @@ UINT32 EscherEx::EnterGroup( const Rectangle* pBoundRect )
                 pAppData->WriteClientAnchor( *this, aRect );
             pAppData->WriteClientData( *this );
         }
-#endif // EES_WRITE_EPP
-
     }
     CloseContainer();                                               // ESCHER_SpContainer
     mnGroupLevel++;
@@ -2101,78 +1979,5 @@ void EscherEx::WriteGradient( EscherPropertyContainer& rPropOpt, const awt::Grad
     rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, GetGradientColor( pVCLGradient, nFirstColor ^ 1 ) );
     rPropOpt.AddOpt( ESCHER_Prop_fillFocus, nFillFocus );
 };
-
-// ---------------------------------------------------------------------------------------------
-
-UINT32 EscherEx::AddGraphic( SvStream& rStrm, const Graphic& rGraphic )
-{
-    UINT32 nId = 0;
-    switch( rGraphic.GetType() )
-    {
-    case GRAPHIC_BITMAP:
-        {
-            SvMemoryStream aDestStrm;
-            if( ERRCODE_NONE == GraphicConverter::Export( aDestStrm,
-                    rGraphic, CVT_PNG ) )
-                nId = ImplGetBlibID( rStrm, aDestStrm, PNG );
-        }
-        break;
-
-    case GRAPHIC_GDIMETAFILE:
-        {
-            SvMemoryStream aGrfStrm;
-            WriteWindowMetafile( aGrfStrm, rGraphic.GetGDIMetaFile() );
-            const BYTE* pMem = (BYTE*)aGrfStrm.GetData();
-            UINT32 nLen = aGrfStrm.GetSize();
-
-             const MapMode aMap100mm( MAP_100TH_MM );
-            Size aSize( rGraphic.GetPrefSize() );
-            if( MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit() )
-                aSize = Application::GetDefaultDevice()->PixelToLogic( aSize,
-                                    aMap100mm );
-            else
-                aSize = OutputDevice::LogicToLogic( aSize,
-                                    rGraphic.GetPrefMapMode(), aMap100mm );
-
-            Rectangle aRect( Point(0,0), aSize );
-
-            nId = AddWMF( rStrm, pMem + 22, nLen - 22, aRect );
-        }
-        break;
-    }
-    return nId;
-}
-
-
-// ---------------------------------------------------------------------------------------------
-
-UINT32 EscherEx::ImplAddMetafile( SvStream& rStrm, const BYTE* pSource,
-            UINT32 nSize, const Rectangle& rRect, ESCHER_BlibType eType )
-{
-    ESCHER_GDIStruct aGDIStruct;
-    aGDIStruct.GDIBoundRect = rRect;
-    aGDIStruct.GDISize = rRect.GetSize();
-    aGDIStruct.GDIUncompressedSize = nSize;
-    ZCodec aZCodec( 0x8000, 0x8000 );
-    aZCodec.BeginCompression();
-    SvMemoryStream aDestStrm;
-    aZCodec.Write( aDestStrm, pSource, nSize );
-    aZCodec.EndCompression();
-    return ImplGetBlibID( rStrm, aDestStrm, eType, &aGDIStruct );
-}
-
-// ---------------------------------------------------------------------------------------------
-
-UINT32 EscherEx::AddWMF( SvStream& rStrm, const BYTE* pSource, UINT32 nSize, const Rectangle& rRect )
-{
-    return ImplAddMetafile( rStrm, pSource, nSize, rRect, WMF );
-}
-
-// ---------------------------------------------------------------------------------------------
-
-UINT32 EscherEx::AddEMF( SvStream& rStrm, const BYTE* pSource, UINT32 nSize, const Rectangle& rRect )
-{
-    return ImplAddMetafile( rStrm, pSource, nSize, rRect, EMF );
-}
 
 // ---------------------------------------------------------------------------------------------
