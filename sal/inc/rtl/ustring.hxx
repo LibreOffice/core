@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: th $ $Date: 2001-05-09 15:23:46 $
+ *  last change: $Author: th $ $Date: 2001-05-17 10:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,7 @@ public:
                 is less or than or equal to fromIndex, or <code>-1</code>
                 if the character does not occur before that point.
     */
-    sal_Int32 lastIndexOf( sal_Unicode ch, int fromIndex ) const SAL_THROW(())
+    sal_Int32 lastIndexOf( sal_Unicode ch, sal_Int32 fromIndex ) const SAL_THROW(())
     {
         return rtl_ustr_lastIndexOfChar_WithLength( pData->buffer, fromIndex, ch );
     }
@@ -446,7 +446,7 @@ public:
                 returned. If it does not occur as a substring starting
                 at fromIndex or beyond, <code>-1</code> is returned.
     */
-    sal_Int32 indexOf( const OUString & str, int fromIndex = 0 ) const SAL_THROW(())
+    sal_Int32 indexOf( const OUString & str, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
     {
         sal_Int32 ret = rtl_ustr_indexOfStr_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                         str.pData->buffer, str.pData->length );
@@ -489,7 +489,7 @@ public:
                 returned. If it does not occur as a substring starting
                 at fromIndex or earlier, <code>-1</code> is returned.
     */
-    sal_Int32 lastIndexOf( const OUString & str, int fromIndex ) const SAL_THROW(())
+    sal_Int32 lastIndexOf( const OUString & str, sal_Int32 fromIndex ) const SAL_THROW(())
     {
         return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, fromIndex,
                                                    str.pData->buffer, str.pData->length );
