@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-24 12:08:31 $
+ *  last change: $Author: af $ $Date: 2002-07-25 09:40:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -843,6 +843,10 @@ void SdWindow::DataChanged( const DataChangedEvent& rDCEvt )
                 }
 
                 pViewShell->Invalidate();
+
+                // Rearrange the UI elements of the view to reflect changes
+                // in the style settings.
+                pViewShell->ArrangeGUIElements ();
             }
         }
 
