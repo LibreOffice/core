@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 13:01:07 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,8 @@
 #include "editable.hxx"
 #include "dpobject.hxx"
 #include "dpsave.hxx"
+
+#include "dpgroup.hxx"      // for ScDPNumGroupInfo
 
 #include "globstr.hrc"
 #include "scui_def.hxx" //CHINA001
@@ -1001,7 +1003,45 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 BOOL bColumns;
                 BOOL bOk = TRUE;
 
-                if( pReqArgs != NULL )
+                if ( GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
+                                        GetViewData()->GetCurY(), GetViewData()->GetTabNo() ) )
+                {
+                    ScDPNumGroupInfo aNumInfo;
+                    aNumInfo.Enable    = sal_True;
+                    aNumInfo.AutoStart = sal_True;
+                    aNumInfo.AutoEnd   = sal_True;
+                    sal_Int32 nParts = 0;
+                    if ( pTabViewShell->HasSelectionForDateGroup( aNumInfo, nParts ) )
+                    {
+                        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                        DBG_ASSERT( pFact, "ScAbstractFactory create fail!" );
+                        Date aNullDate( *GetViewData()->GetDocument()->GetFormatTable()->GetNullDate() );
+                        AbstractScDPDateGroupDlg* pDlg = pFact->CreateScDPDateGroupDlg(
+                            pTabViewShell->GetDialogParent(), ResId( RID_SCDLG_DPDATEGROUP ),
+                            aNumInfo, nParts, aNullDate );
+                        DBG_ASSERT( pDlg, "Dialog create fail!" );
+                        if( pDlg->Execute() == RET_OK )
+                        {
+                            aNumInfo = pDlg->GetGroupInfo();
+                            pTabViewShell->DateGroupDataPilot( aNumInfo, pDlg->GetDatePart() );
+                        }
+                    }
+                    else if ( pTabViewShell->HasSelectionForNumGroup( aNumInfo ) )
+                    {
+                        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                        DBG_ASSERT( pFact, "ScAbstractFactory create fail!" );
+                        AbstractScDPNumGroupDlg* pDlg = pFact->CreateScDPNumGroupDlg(
+                            pTabViewShell->GetDialogParent(), ResId( RID_SCDLG_DPNUMGROUP ), aNumInfo );
+                        DBG_ASSERT( pDlg, "Dialog create fail!" );
+                        if( pDlg->Execute() == RET_OK )
+                            pTabViewShell->NumGroupDataPilot( pDlg->GetGroupInfo() );
+                    }
+                    else
+                        pTabViewShell->GroupDataPilot();
+
+                    bOk = FALSE;
+                }
+                else if( pReqArgs != NULL )
                 {
                     const SfxPoolItem* pItem;
                     bOk = FALSE;
@@ -1059,7 +1099,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 BOOL bColumns;
                 BOOL bOk = TRUE;
 
-                if( pReqArgs != NULL )
+                if ( GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
+                                        GetViewData()->GetCurY(), GetViewData()->GetTabNo() ) )
+                {
+                    pTabViewShell->UngroupDataPilot();
+                    bOk = FALSE;
+                }
+                else if( pReqArgs != NULL )
                 {
                     const SfxPoolItem* pItem;
                     bOk = FALSE;
