@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodispatch.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-03-13 11:43:03 $
+ *  last change: $Author: os $ $Date: 2001-03-13 13:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifdef PRECOMPILED
-#include "core_pch.hxx"
+#include "ui_pch.hxx"
 #endif
 
 #pragma hdrstop
