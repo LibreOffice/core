@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pglink.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:54:22 $
+ *  last change: $Author: ka $ $Date: 2001-07-02 11:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 
 SdPageLink::SdPageLink(SdPage* pPg, const String& rFileName,
                        const String& rBookmarkName) :
-    ::so3::SvBaseLink(LINKUPDATE_ONCALL, FORMAT_FILE),
+    ::so3::SvBaseLink(::so3::LINKUPDATE_ONCALL, FORMAT_FILE),
     pPage(pPg)
 {
     pPage->SetFileName(rFileName);
