@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:50:25 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,6 +386,13 @@ SwTxtNode::~SwTxtNode()
     // Achtung. im Dtor von SwCntntNode kann DelFrms gerufen werden, wo
     // ggf. pWrong nochmal deletet wird, deshalb diese Zuweisung
     pWrong = NULL; // hier nicht wegoptimieren!
+
+    // --> FME 2004-11-02 #114798# Force the deletion of the pList member
+    // of the num rule, otherwise this may still be contained in pList.
+    SwNumRule* pRule = GetNumRule();
+    if ( pRule )
+        pRule->SetInvalidRule( TRUE );
+    // <--
 
     delete pNdNum, pNdNum = 0;      // ggfs. wird in der BasisKlasse noch
 }
@@ -3016,19 +3023,6 @@ SwPosition * SwTxtNode::GetPosition(const SwTxtAttr * pAttr)
 // #i29363#
 const SwNodeNum * SwTxtNode::GetNum() const
 {
-    const SwNumRule * pRule = GetNumRule();
-
-    if (pRule && pRule->IsOutlineRule())
-    {
-        SwTxtFmtColl * pFmtColl = GetTxtColl();
-
-        if (pFmtColl && pNdNum)
-        {
-            pNdNum->SetLevel(pNdNum->GetLevel() - pNdNum->GetRealLevel() +
-                             pFmtColl->GetOutlineLevel());
-        }
-    }
-
     return pNdNum;
 }
 
