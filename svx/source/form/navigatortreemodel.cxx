@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortreemodel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:38:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,7 +499,7 @@ namespace svxform
             //////////////////////////////////////////////////////////////////////
             // Wenn keine Form mehr in der Root, an der Shell CurForm zuruecksetzen
             if (!GetRootList()->Count())
-                m_pFormShell->GetImpl()->setCurForm( Reference< XForm > () );
+                m_pFormShell->GetImpl()->forgetCurrentForm();
         }
 
         //////////////////////////////////////////////////////////////////////
