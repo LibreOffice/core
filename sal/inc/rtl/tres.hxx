@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tres.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-06-21 02:20:59 $
+ *  last change: $Author: bmahbod $ $Date: 2001-07-13 02:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,28 +58,13 @@
  *
  *
  ************************************************************************/
+
 #ifndef _RTL_TRES_HXX_
 #define _RTL_TRES_HXX_
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-enum
-{
-    eTerse         = 0,
-    eVerboseOnPass = 1,
-    eVerboseOnFail = 2,
-    eVerbose       = 3
-};
-
-static const sal_Char *kTestCasePassedStr = "Passed";
-static const sal_Char *kTestCaseFailedStr = "Failed";
 
 #define TST_BOOM(c, m)  OSL_ENSURE(c, m)
 
@@ -90,12 +75,12 @@ namespace rtl {
 class TestResult {
 
     // <private_members>
-    sal_Char* m_name;
-    sal_Char* m_result;
-    sal_Char* m_msg;
-    sal_Bool m_state;
-    sal_Bool m_boom;
-    sal_Int32 nVerbosityLevel;
+    sal_Char   *m_name;
+    sal_Char   *m_result;
+    sal_Char   *m_msg;
+    sal_Bool    m_state;
+    sal_Bool    m_boom;
+    sal_Int32   nVerbosityLevel;
     // </private_members>
 
     // <private_ctors>
@@ -155,115 +140,6 @@ class TestResult {
         return(len);
     } // </method_ln>
 
-    //--------------------------------------------------------------------
-    //--------------------------------------------------------------------
-
-    // <method_getLogTCSResultStr>
-    const sal_Char *getLogTCSResultStr( const sal_Bool bTestCaseState )
-    {
-        if ( bTestCaseState )
-        {
-            return  kTestCasePassedStr;
-        } // if
-        else
-        {
-            return kTestCaseFailedStr;
-        } // else
-    } // </method_getLogTCSResultStr>
-
-    //--------------------------------------------------------------------
-
-    // <method_getLogInfoStartString>
-    sal_Char *getLogInfoStartString( const sal_Bool   bTestCaseState,
-                                     const sal_Bool   bPrintTestCaseName
-                                   )
-    {
-        sal_Char  pBuffer[256];
-
-        if ( bPrintTestCaseName )
-        {
-            const sal_Char *pTestCaseName = getName();
-
-            if ( pTestCaseName != NULL )
-            {
-                const sal_Char *pTestCaseState
-                                  = getLogTCSResultStr( bTestCaseState );
-
-                sprintf ( pBuffer,
-                          ">> [%s]..[%s] ",
-                          pTestCaseName,
-                          pTestCaseState
-                        );
-            } // if
-            else
-            {
-                const sal_Char *pTestCaseState
-                                  = getLogTCSResultStr( bTestCaseState );
-
-                sprintf ( pBuffer,
-                          ">> [%s] ",
-                          pTestCaseState
-                        );
-            } // else
-        } // if
-        else
-        {
-            const sal_Char *pTestCaseState
-                              = getLogTCSResultStr( bTestCaseState );
-
-            sprintf ( pBuffer,
-                      ">> [%s] ",
-                      pTestCaseState
-                    );
-        } // else
-
-        return  pBuffer;
-    } // </method_getLogInfoStartString>
-
-    //--------------------------------------------------------------------
-
-    // <method_getPrintToLog>
-    sal_Bool getPrintToLog ( const sal_Bool  bTestCaseState )
-    {
-        sal_Bool  bPrintToLog = false;
-
-        switch ( nVerbosityLevel )
-        {
-            case eTerse:
-
-                break;
-
-            case eVerboseOnPass:
-
-                if ( bTestCaseState )
-                {
-                    bPrintToLog = true;
-                } // if
-
-                break;
-
-            case eVerboseOnFail:
-
-                if ( !bTestCaseState )
-                {
-                    bPrintToLog = true;
-                } // if
-
-                break;
-
-            case eVerbose:
-
-                bPrintToLog = true;
-
-                break;
-        } // switch
-
-        return  bPrintToLog;
-    } // </method_getPrintToLog>
-
-    //--------------------------------------------------------------------
-    //--------------------------------------------------------------------
-
     // </private_methods>
 
 public:
@@ -279,7 +155,6 @@ public:
 
         cpy( &m_name, meth );
     } // </public_ctors>
-
 
     // <dtor>
     ~TestResult() {
@@ -341,92 +216,6 @@ public:
     sal_Char* getMsg() {
         return m_msg;
     } // </method_getMsg>
-
-    // <method_getVerbosityLevel>
-    inline sal_Int32 getVerbosityLevel()
-    {
-        if ( ( nVerbosityLevel < 0 ) || ( nVerbosityLevel > 3 ) )
-         {
-              return 3;
-         }
-         else
-         {
-             return nVerbosityLevel;
-         }
-
-        return nVerbosityLevel;
-    } // </method_getVerbosityLevel>
-
-    // <method_setVerbosityLevel>
-    inline sal_Int32 setVerbosityLevel( const sal_Int32 nNewVerbosityLevel )
-    {
-      if ( ( nNewVerbosityLevel < 0 ) || ( nNewVerbosityLevel > 3 ) )
-      {
-        nVerbosityLevel = 3;
-      }
-      else
-      {
-        nVerbosityLevel = nNewVerbosityLevel;
-      }
-
-      return nVerbosityLevel;
-    }  // </method_setVerbosityLevel>
-
-    //--------------------------------------------------------------------
-    //--------------------------------------------------------------------
-
-    // <method_logPrintf>
-    inline sal_Bool logPrintf ( const sal_Bool   bTestCaseState,
-                                const sal_Bool   bPrintTestCaseName,
-                                const char      *pFormatStr, ...
-                              )
-    {
-        const sal_Bool bPrintToLog = getPrintToLog( bTestCaseState );
-
-        if ( bPrintToLog )
-        {
-            const sal_Char *pBeginBuffer
-                              = getLogInfoStartString( bTestCaseState,
-                                                       bPrintTestCaseName
-                                                     );
-
-            sal_Char  pEndBuffer[256];
-
-            strcpy( pEndBuffer, pBeginBuffer );
-
-            if ( pFormatStr != NULL )
-            {
-                va_list   vArgumentList;
-                sal_Char  pInfoStr[256];
-
-                // copy all arguments into the buffer
-
-                va_start ( vArgumentList, pFormatStr );
-
-                    if ( vArgumentList != NULL )
-                    {
-                        // one or more variable arguments do exist
-
-                        vsprintf ( pInfoStr, pFormatStr, vArgumentList );
-                    } // if
-                    else
-                    {
-                        strcpy ( pInfoStr, pFormatStr );
-                    } // else
-
-                va_end ( vArgumentList );
-
-                strcat( pEndBuffer, pInfoStr );
-            } // if
-
-            printf ( pEndBuffer );
-        } // if
-
-        return bPrintToLog;
-    } // </method_logPrintf>
-
-    //--------------------------------------------------------------------
-    //--------------------------------------------------------------------
 
     // </public_methods>
 
