@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpgradnt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:13 $
+ *  last change: $Author: pb $ $Date: 2000-09-26 06:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _SFXINIMGR_HXX
-#include <svtools/iniman.hxx>
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
 #endif
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
@@ -698,8 +698,7 @@ IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, p )
 
         String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.sog" ) );
         pFileDlg->AddFilter( aStrFilterType, aStrFilterType );
-
-        String aFile( SFX_APP()->GetAppIniManager()->Get( SFX_KEY_PALETTE_PATH ) );
+        String aFile( SvtPathOptions().GetPalettePath() );
         pFileDlg->SetPath( aFile );
 
         if( pFileDlg->Execute() == RET_OK )
@@ -790,8 +789,7 @@ IMPL_LINK( SvxGradientTabPage, ClickSaveHdl_Impl, void *, p )
 
     String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.sog" ) );
     pFileDlg->AddFilter( aStrFilterType, aStrFilterType );
-
-    INetURLObject aFile; aFile.SetSmartURL( SFX_APP()->GetAppIniManager()->Get( SFX_KEY_PALETTE_PATH ) );
+    INetURLObject aFile( SvtPathOptions().GetPalettePath(), INET_PROT_FILE );
 
     if( pGradientList->GetName().Len() )
     {

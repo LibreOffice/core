@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:07 $
+ *  last change: $Author: pb $ $Date: 2000-09-26 06:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,17 @@
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
 #ifndef _CTRLTOOL_HXX //autogen
 #include <svtools/ctrltool.hxx>
+#endif
+#ifndef _SFONTITM_HXX
+#include <svtools/sfontitm.hxx>
 #endif
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
@@ -75,12 +84,6 @@
 #endif
 #ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
-#endif
-#ifndef _SFX_INIMGR_HXX //autogen
-#include <sfx2/inimgr.hxx>
-#endif
-#ifndef _SFONTITM_HXX
-#include <svtools/sfontitm.hxx>
 #endif
 #pragma hdrstop
 
@@ -1114,18 +1117,16 @@ SvxCharStdPage::SvxCharStdPage( Window* pParent,
 
     // ColorBox aus der XColorTable fuellen.
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    DBG_ASSERT( pDocSh, "DocShell not found!" );
     XColorTable* pColorTable = NULL;
     FASTBOOL bKillTable = FALSE;
-    SfxIniManager* pIniMgr = SFX_INIMANAGER();
-
-    DBG_ASSERT( pDocSh, "DocShell not found!" );
 
     if ( pDocSh && ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
         pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
 
     if ( !pColorTable )
     {
-        pColorTable = new XColorTable( pIniMgr->Get( SFX_KEY_PALETTE_PATH ) );
+        pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
         bKillTable = TRUE;
     }
 

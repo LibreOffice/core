@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *  last change: $Author: pb $ $Date: 2000-09-26 06:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,22 +64,20 @@
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
-
-#ifndef _SFXITEMPOOL_HXX //autogen
-#include <svtools/itempool.hxx>
-#endif
-
-#ifndef _SFXITEMSET_HXX //autogen
-#include <svtools/itemset.hxx>
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
+#ifndef _SFXITEMPOOL_HXX //autogen
+#include <svtools/itempool.hxx>
 #endif
-#ifndef _SFX_INIMGR_HXX //autogen
-#include <sfx2/inimgr.hxx>
+#ifndef _SFXITEMSET_HXX //autogen
+#include <svtools/itemset.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
+#include <svtools/useroptions.hxx>
 #endif
 #pragma hdrstop
 
@@ -97,6 +95,7 @@
 #include "dialmgr.hxx"
 
 #include "helpid.hrc"
+
 // static ----------------------------------------------------------------
 
 static USHORT pRanges[] =
@@ -169,7 +168,7 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
         aAuthorStr = rAuthor.GetValue();
     }
     else
-        aAuthorStr = SFX_INIMANAGER()->Get(SFX_KEY_USER_ID);
+        aAuthorStr = SvtUserOptions().GetID();
 
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_DATE );
 
@@ -261,14 +260,12 @@ IMPL_LINK_INLINE_END( SvxPostItDialog, NextHdl, Button *, EMPTYARG )
 
 IMPL_LINK( SvxPostItDialog, Stamp, Button *, EMPTYARG )
 {
-    Date    aDate;
-    Time    aTime;
-    String  aTmp( SFX_INIMANAGER()->Get(SFX_KEY_USER_ID) );
+    Date aDate;
+    Time aTime;
+    String aTmp( SvtUserOptions().GetID() );
     International aInter( GetpApp()->GetAppInternational() );
     String aStr( aEditED.GetText() );
-
     aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "\n---- " ) );
-
 
     if ( aTmp.Len() > 0 )
     {
@@ -294,14 +291,13 @@ IMPL_LINK( SvxPostItDialog, OKHdl, Button *, EMPTYARG )
 {
     International aInter( GetpApp()->GetAppInternational() );
     pOutSet = new SfxItemSet( rSet );
-    pOutSet->Put( SvxPostItAuthorItem( SFX_INIMANAGER()->Get(SFX_KEY_USER_ID),
-        rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_AUTHOR ) ) );
+    pOutSet->Put( SvxPostItAuthorItem( SvtUserOptions().GetID(),
+                                         rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_AUTHOR ) ) );
     pOutSet->Put( SvxPostItDateItem( aInter.GetDate( Date() ),
-        rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_DATE ) ) );
+                                     rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_DATE ) ) );
     pOutSet->Put( SvxPostItTextItem( aEditED.GetText(),
-        rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_TEXT ) ) );
+                                     rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_TEXT ) ) );
     EndDialog( RET_OK );
     return 0;
 }
-
 

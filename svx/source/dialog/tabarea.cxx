@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:12 $
+ *  last change: $Author: pb $ $Date: 2000-09-26 06:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 
 #pragma hdrstop
 #include <tools/ref.hxx>
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
-#endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
@@ -74,6 +71,9 @@
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
 #endif
 #ifndef _SVDMARK_HXX //autogen
 #include <svdmark.hxx>
@@ -204,7 +204,7 @@ void SvxAreaTabDialog::SavePalettes()
 
     // Speichern der Tabellen, wenn sie geaendert wurden.
 
-    const String aPath( SFX_APP()->GetAppIniManager()->Get( SFX_KEY_PALETTE_PATH ) );
+    const String aPath( SvtPathOptions().GetPalettePath() );
 
     if( nHatchingListState & CT_MODIFIED )
     {

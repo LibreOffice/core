@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:10 $
+ *  last change: $Author: pb $ $Date: 2000-09-26 06:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,14 +125,14 @@
 #ifndef _SVX_DRAWITEM_HXX //autogen
 #include <drawitem.hxx>
 #endif
-#ifndef _SFX_INIMGR_HXX //autogen
-#include <sfx2/inimgr.hxx>
-#endif
 #ifndef _SVX_NUMVSET_HXX
 #include <numvset.hxx>
 #endif
 #ifndef _SVX_HTMLMODE_HXX //autogen
 #include <htmlmode.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
 #endif
 
 /*-----------------07.02.97 15.37-------------------
@@ -144,15 +144,14 @@
 #define NUM_PAGETYPE_BMP            3
 #define PAGETYPE_USER_START         10
 
+#define SHOW_NUMBERING              0
+#define SHOW_BULLET                 1
+#define SHOW_BITMAP                 2
 
-#define SHOW_NUMBERING  0
-#define SHOW_BULLET     1
-#define SHOW_BITMAP     2
+#define MAX_BMP_WIDTH               16
+#define MAX_BMP_HEIGHT              16
 
-#define MAX_BMP_WIDTH   16
-#define MAX_BMP_HEIGHT  16
-
-static BOOL bLastRelative = FALSE;
+static BOOL bLastRelative =         FALSE;
 
 /* -----------------27.10.98 15:40-------------------
  *
@@ -1697,18 +1696,18 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
     aSameLevelCB.Check(pActNum->IsContinuousNumbering());
 
     //ColorListBox bei Bedarf fuellen
-    if(pActNum->IsFeatureSupported(NUM_BULLET_COLOR))
+    if ( pActNum->IsFeatureSupported( NUM_BULLET_COLOR ) )
     {
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
+        DBG_ASSERT( pDocSh, "DocShell not found!" );
         XColorTable* pColorTable = NULL;
         FASTBOOL bKillTable = FALSE;
-        DBG_ASSERT( pDocSh, "DocShell not found!" );
         if ( pDocSh && ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
             pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
 
         if ( !pColorTable )
         {
-            pColorTable = new XColorTable( SFX_INIMANAGER()->Get( SFX_KEY_PALETTE_PATH));
+            pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
             bKillTable = TRUE;
         }
 
@@ -1717,7 +1716,8 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
             XColorEntry* pEntry = pColorTable->Get(i);
             aBulColLB.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
-        if(bKillTable)
+
+        if ( bKillTable )
             delete pColorTable;
     }
 
@@ -3695,8 +3695,4 @@ void SvxNumOptionsTabPage::SetModified(BOOL bRepaint)
         pPreviewWIN->Invalidate();
     }
 }
-
-
-
-
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:06 $
+ *  last change: $Author: pb $ $Date: 2000-09-26 06:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 // include ---------------------------------------------------------------
 
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
 #endif
@@ -70,14 +73,8 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _SFXINIMGR_HXX
-#include <svtools/iniman.hxx>
-#endif
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
-#endif
-#ifndef _SFX_INIMGR_HXX
-#include <sfx2/inimgr.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
@@ -1171,8 +1168,7 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
     if ( !pColorTable )
     {
         bOwn = TRUE;
-        pColorTable =
-            new XColorTable( SFX_INIMANAGER()->Get( SFX_KEY_PALETTE_PATH ) );
+        pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
     }
 
     if ( pColorTable )

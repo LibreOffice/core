@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: pb $ $Date: 2000-09-26 06:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,12 +75,6 @@
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
 #endif
-#ifndef _SFXINIMGR_HXX
-#include <svtools/iniman.hxx>
-#endif
-#ifndef _SFX_INIMGR_HXX
-#include <sfx2/inimgr.hxx>
-#endif
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
@@ -92,6 +86,12 @@
 #endif
 #ifndef _SV_WAITOBJ_HXX //autogen
 #include <vcl/waitobj.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
+#ifndef _SFX_INIMGR_HXX
+#include <sfx2/inimgr.hxx>
 #endif
 #pragma hdrstop
 
@@ -204,8 +204,8 @@ GraphicFilter* GetGrfFilter()
 USHORT FillFilter( GraphicFilter& rFilter )
 {
     ResMgr* pMgr = DIALOG_MGR();
-    SfxIniManager* pIniMgr = SFX_INIMANAGER();
-    String aModulesPath( pIniMgr->Get( SFX_KEY_MODULES_PATH ) );
+    SvtPathOptions aPathOpt;
+    String aModulesPath( aPathOpt.GetModulePath() );
     String aFullConfigPath;
 
     for ( xub_StrLen i = 0, nCount = aModulesPath.GetTokenCount(); i < nCount; i++ )
@@ -221,11 +221,12 @@ USHORT FillFilter( GraphicFilter& rFilter )
 
     rFilter.SetConfigPath( aFullConfigPath );
 
-    INetURLObject aFilterPath( pIniMgr->Get( SFX_KEY_FILTER_PATH ), INET_PROT_FILE );
+    INetURLObject aFilterPath( aPathOpt.GetFilterPath(), INET_PROT_FILE );
     rFilter.SetFilterPath( aFilterPath.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
-    INetURLObject aFltOptFile( pIniMgr->Get( SFX_KEY_USERCONFIG_PATH ), INET_PROT_FILE );
-    aFltOptFile.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( IMPGRF_GRAPHIC_OPTIONS_FILE ) ) );
+    INetURLObject aFltOptFile( aPathOpt.GetUserConfigPath(), INET_PROT_FILE );
+    aFltOptFile.Append(
+        UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( IMPGRF_GRAPHIC_OPTIONS_FILE ) ) );
     rFilter.SetOptionsConfigPath( aFltOptFile );
 
     return rFilter.GetImportFormatCount();
@@ -628,7 +629,7 @@ void SvxImportGraphicDialog::Construct_Impl( const String &rTitle, USHORT nEnabl
 
     // Ggf. "Eigenschaften" und "Verkn"upfung"
     SfxApplication* pSfxApp = SFX_APP();
-    SfxIniManager* pIniMgr = SFX_INIMANAGER();
+    SvtPathOptions aPathOpt;
 
     if ( ( ( ENABLE_LINK & nEnable ) && ( ENABLE_PROPERTY & nEnable ) ) ||
          ( ENABLE_PROP_WITHOUTLINK & nEnable ) )
@@ -649,6 +650,7 @@ void SvxImportGraphicDialog::Construct_Impl( const String &rTitle, USHORT nEnabl
     pFilterButton->SetHelpId( HID_IMPGRF_BTN_FILTER );
     AddControl( pFilterButton );
     pFilterButton->Show();
+    SfxIniManager* pIniMgr = SFX_INIMANAGER();
 
     if ( ENABLE_LINK & nEnable )
     {
@@ -741,10 +743,10 @@ void SvxImportGraphicDialog::Construct_Impl( const String &rTitle, USHORT nEnabl
     }
 
     // Pfad und Filter setzen
-    aStartPath = pIniMgr->Get( SFX_KEY_GRAPHICS_PATH );
+    aStartPath = aPathOpt.GetGraphicPath();
     FASTBOOL bGrfPath = ( aStartPath.Len() > 0 );
     if ( !bGrfPath )
-        aStartPath = pIniMgr->Get( SFX_KEY_WORK_PATH );
+        aStartPath = aPathOpt.GetWorkPath();
     SetStandardDir( aStartPath );
     String aLastPath;
     if ( pPathItem )

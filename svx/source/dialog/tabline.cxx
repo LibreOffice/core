@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabline.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:12 $
+ *  last change: $Author: pb $ $Date: 2000-09-26 06:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _SFXINIMGR_HXX
-#include <svtools/iniman.hxx>
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
 #endif
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
@@ -176,7 +176,7 @@ void SvxLineTabDialog::SavePalettes()
 
     // Speichern der Tabellen, wenn sie geaendert wurden.
 
-    const String aPath( SFX_APP()->GetAppIniManager()->Get( SFX_KEY_PALETTE_PATH ) );
+    const String aPath( SvtPathOptions().GetPalettePath() );
 
     if( nDashListState & CT_MODIFIED )
     {
