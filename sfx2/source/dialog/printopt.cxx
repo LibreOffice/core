@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-07 10:41:50 $
+ *  last change: $Author: ka $ $Date: 2001-05-21 11:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,12 +298,12 @@ void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOpt
 
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, CheckBox*, pBox )
 {
-    const BOOL bEnable = aReduceTransparencyCB.IsChecked();
+    const BOOL bReduceTransparency = aReduceTransparencyCB.IsChecked();
 
-    aReduceTransparencyAutoRB.Enable( bEnable );
-    aReduceTransparencyNoneRB.Enable( bEnable );
+    aReduceTransparencyAutoRB.Enable( bReduceTransparency );
+    aReduceTransparencyNoneRB.Enable( bReduceTransparency );
 
-    aTransparencyCB.Enable( bEnable );
+    aTransparencyCB.Enable( !bReduceTransparency );
 
     return 0;
 }
