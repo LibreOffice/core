@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 16:48:45 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 13:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,7 +389,9 @@
 #define HID_WARNING_MACROSDISABLED                  (HID_SFX_START + 319)
 #define HID_WARNING_ALIENFORMAT                     (HID_SFX_START + 320)
 
-#define ACT_SFX_HID_END HID_WARNING_ALIENFORMAT
+#define HID_HELP_ONSTARTUP_BOX                      (HID_SFX_START + 321)
+
+#define ACT_SFX_HID_END HID_HELP_ONSTARTUP_BOX
 
 // "Uberlaufpr"ufung --------------------------------------------------------
 
