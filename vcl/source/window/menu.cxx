@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:11:33 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,7 @@ struct MenuItemData
     KeyCode         aAccelKey;              // Accelerator-Key
     BOOL            bChecked;               // Checked
     BOOL            bEnabled;               // Enabled
+    BOOL            bVisible;               // Visible (note: this flag will not override MENU_FLAG_HIDEDISABLEDENTRIES when true)
     BOOL            bIsTemporary;           // Temporary inserted ('No selection possible')
     BOOL            bMirrorMode;
     long            nItemImageAngle;
@@ -309,6 +310,7 @@ MenuItemData* MenuItemList::Insert( USHORT nId, MenuItemType eType,
     pData->nUserValue       = 0;
     pData->bChecked         = FALSE;
     pData->bEnabled         = TRUE;
+    pData->bVisible         = TRUE;
     pData->bIsTemporary     = FALSE;
     pData->bMirrorMode      = FALSE;
     pData->nItemImageAngle  = 0;
@@ -340,6 +342,7 @@ void MenuItemList::InsertSeparator( USHORT nPos )
     pData->nUserValue       = 0;
     pData->bChecked         = FALSE;
     pData->bEnabled         = TRUE;
+    pData->bVisible         = TRUE;
     pData->bIsTemporary     = FALSE;
     pData->bMirrorMode      = FALSE;
     pData->nItemImageAngle  = 0;
@@ -1651,6 +1654,30 @@ BOOL Menu::IsItemEnabled( USHORT nItemId ) const
     return pData->bEnabled;
 }
 
+void Menu::ShowItem( USHORT nItemId, BOOL bVisible )
+{
+    USHORT          nPos;
+    MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
+
+    DBG_ASSERT( !bIsMenuBar, "Menu::ShowItem - ignored for menu bar entries!" );
+    if ( !bIsMenuBar && pData && ( pData->bVisible != bVisible ) )
+    {
+        Window* pWin = ImplGetWindow();
+        if ( pWin && pWin->IsVisible() )
+        {
+            DBG_ASSERT( 0, "Menu::ShowItem - ignored for visible popups!" );
+            return;
+        }
+        pData->bVisible = bVisible;
+
+        // update native menu
+        // as long as there is no support to hide native menu entries, we just disable them
+        // TODO: add support to show/hide native menu entries
+        if( ImplGetSalMenu() )
+            ImplGetSalMenu()->EnableItem( nPos, bVisible );
+    }
+}
+
 void Menu::SetItemText( USHORT nItemId, const XubString& rStr )
 {
     USHORT          nPos;
@@ -1928,12 +1955,16 @@ BOOL Menu::ImplIsVisible( USHORT nPos ) const
 {
     BOOL bVisible = TRUE;
 
+    MenuItemData* pData = pItemList->GetDataFromPos( nPos );
+    // check general visibility first
+    if( pData && !pData->bVisible )
+        bVisible = FALSE;
+
     // Fuer den Menubar nicht erlaubt, weil ich nicht mitbekomme
     // ob dadurch ein Eintrag verschwindet oder wieder da ist.
-    if ( !bIsMenuBar && ( nMenuFlags & MENU_FLAG_HIDEDISABLEDENTRIES ) &&
+    if ( bVisible && !bIsMenuBar && ( nMenuFlags & MENU_FLAG_HIDEDISABLEDENTRIES ) &&
         !( nMenuFlags & MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES ) )
     {
-        MenuItemData* pData = pItemList->GetDataFromPos( nPos );
         if( !pData ) // e.g. nPos == ITEMPOS_INVALID
             bVisible = FALSE;
         else if ( pData->eType != MENUITEM_SEPARATOR )
