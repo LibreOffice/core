@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-09 10:14:51 $
+#   last change: $Author: obo $ $Date: 2004-03-18 15:05:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,6 +108,7 @@ SCP1FILES  = installation_ooo.par          \
              configurationitem_draw.par    \
              module_impress.par            \
              file_impress.par              \
+             canvascommons.par             \
              configurationitem_impress.par \
              module_math.par               \
              file_math.par                 \
@@ -188,6 +189,19 @@ SCP1FILES += \
              file_crashrep_static.par
 .ENDIF
 .ENDIF
+
+.IF "$(GUI)"=="WNT"
+.IF "$(DIRECTX_SUPPORT)" != ""
+SCP1FILES += \
+             directxcanvas.par
+.ELSE # IF "$(DIRECTX_SUPPORT)" != ""
+SCP1FILES += \
+             vclcanvas.par
+.ENDIF # IF "$(DIRECTX_SUPPORT)" != ""
+.ELSE # IF "$(GUI)"=="WNT"
+SCP1FILES += \
+             vclcanvas.par
+.ENDIF #IF "$(GUI)"=="WNT"
 
 
 # --- target -------------------------------------------------------------

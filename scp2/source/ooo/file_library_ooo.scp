@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.7 $
+*  $Revision: 1.8 $
 *
-*  last change: $Author: obo $ $Date: 2004-03-17 14:10:00 $
+*  last change: $Author: obo $ $Date: 2004-03-18 15:04:15 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -60,35 +60,6 @@
 ************************************************************************/
 
 #include "macros.inc"
-
-#ifdef WNT
-
-File gid_File_Lib_DirectXCanvas
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-    Name = "directxcanvas.uno.dll";
-End
-
-#else
-
-File gid_File_Lib_VCLCanvas
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(vclcanvas.uno,UNXSUFFIX));
-  #else
-    Name = "vclcanvas.uno.dll";
-  #endif
-End
-
-#endif
-
-STD_LIB_FILE(gid_File_Lib_CppCanvas, cppcanvas)
-STD_LIB_FILE(gid_File_Lib_CanvasTools, canvastools)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Abp, abp)
 
