@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-12 09:37:54 $
+ *  last change: $Author: mba $ $Date: 2001-06-20 16:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,12 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
 
 #include <unotools/localfilehelper.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ucb/XContent.hpp>
@@ -1213,7 +1217,7 @@ void SfxViewFrame::SetObjectShell_Impl
 
     // was so in Activate passiert w"are
     SfxObjectShell *pDocSh = GetObjectShell();
-/*
+#if SUPD<635
     if ( SfxViewFrame::Current() == this )
     {
         // ggf. Config-Manager aktivieren
@@ -1221,7 +1225,8 @@ void SfxViewFrame::SetObjectShell_Impl
         if ( pCfgMgr )
             pCfgMgr->Activate( SFX_CFGMANAGER() );
     }
-*/
+#endif
+
     if ( !rObjSh.IsLoading() )
         rObjSh.PostActivateEvent_Impl();
 
@@ -3209,8 +3214,11 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_TOGGLESTATUSBAR:
         {
+#if SUPD<635
+            SfxToolBoxConfig *pTbxCfg = SfxToolBoxConfig::GetOrCreate();
+#else
             SfxToolBoxConfig* pTbxCfg = GetObjectShell()->GetToolBoxConfig_Impl();
-
+#endif
             // Parameter auswerten
             SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, rReq.GetSlot(), FALSE);
             BOOL bShow = pShowItem  ? pShowItem->GetValue()
@@ -3265,7 +3273,11 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
             {
                 case SID_TOGGLESTATUSBAR:
                 {
+#if SUPD<635
+                    rSet.Put( SfxBoolItem( nWhich, SfxToolBoxConfig::GetOrCreate()->IsStatusBarVisible() ) );
+#else
                     rSet.Put( SfxBoolItem( nWhich, GetObjectShell()->GetToolBoxConfig_Impl()->IsStatusBarVisible() ) );
+#endif
                     break;
                 }
 
@@ -3311,6 +3323,36 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
     // Parameter auswerten
     USHORT nSID = rReq.GetSlot();
 
+    if ( nSID == SID_VIEW_DATA_SOURCE_BROWSER )
+    {
+        Reference < XFrame > xFrame = GetFrame()->GetTopFrame()->GetFrameInterface();
+        Reference < XFrame > xBeamer( xFrame->findFrame( DEFINE_CONST_UNICODE("_beamer"), FrameSearchFlag::CHILDREN ) );
+        if ( xBeamer.is() )
+            SetChildWindow( SID_BROWSER, FALSE );
+        else
+        {
+            ::com::sun::star::util::URL aTargetURL;
+            aTargetURL.Complete = ::rtl::OUString::createFromAscii(".component:DB/DataSourceBrowser");
+            Reference < ::com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+            xTrans->parseStrict( aTargetURL );
+
+            Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
+            Reference < ::com::sun::star::frame::XDispatch > xDisp;
+            if ( xProv.is() )
+                xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_beamer"), 63 );
+            if ( xDisp.is() )
+            {
+                Sequence < ::com::sun::star::beans::PropertyValue > aArgs(1);
+                ::com::sun::star::beans::PropertyValue* pArg = aArgs.getArray();
+                pArg[0].Name = rtl::OUString::createFromAscii("Referer");
+                pArg[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
+                xDisp->dispatch( aTargetURL, aArgs );
+            }
+        }
+
+        return;
+    }
+
     SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSID, FALSE);
     BOOL bShow = FALSE;
     BOOL bHasChild = HasChildWindow(nSID);
@@ -3349,7 +3391,25 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
     SfxWhichIter aIter( rState );
     for ( USHORT nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
     {
-        if ( nSID == SID_BROWSER )
+        if ( nSID == SID_VIEW_DATA_SOURCE_BROWSER )
+        {
+            rState.Put( SfxBoolItem( nSID, HasChildWindow( SID_BROWSER ) ) );
+        }
+        else if ( nSID == SID_HYPERLINK_DIALOG )
+        {
+            const SfxPoolItem* pDummy = NULL;
+            SfxItemState eState = GetDispatcher()->QueryState( SID_HYPERLINK_SETLINK, pDummy );
+            if ( SFX_ITEM_DISABLED == eState )
+                rState.DisableItem(nSID);
+            else
+            {
+                if ( KnowsChildWindow(nSID) )
+                    rState.Put( SfxBoolItem( nSID, HasChildWindow(nSID)) );
+                else
+                    rState.DisableItem(nSID);
+            }
+        }
+        else if ( nSID == SID_BROWSER )
         {
             Reference < XFrame > xFrame = GetFrame()->GetTopFrame()->GetFrameInterface()->
                             findFrame( DEFINE_CONST_UNICODE("_beamer"), FrameSearchFlag::CHILDREN );
@@ -3387,7 +3447,12 @@ void SfxViewFrame::ToolboxExec_Impl( SfxRequest &rReq )
     }
 
     // Parameter auswerten
+#if SUPD<635
+    SfxToolBoxConfig *pTbxConfig = SfxToolBoxConfig::GetOrCreate();
+#else
     SfxToolBoxConfig *pTbxConfig = GetObjectShell()->GetToolBoxConfig_Impl();
+#endif
+
     SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSID, sal_False);
     sal_Bool bShow = pShowItem ? pShowItem->GetValue() : !pTbxConfig->IsToolBoxPositionVisible(nTbxID);
 
@@ -3418,7 +3483,11 @@ void SfxViewFrame::ToolboxState_Impl( SfxItemSet &rSet )
     SfxWhichIter aIter(rSet);
     for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
     {
+#if SUPD<635
+        SfxToolBoxConfig *pTbxConfig = SfxToolBoxConfig::GetOrCreate();
+#else
         SfxToolBoxConfig *pTbxConfig = GetObjectShell()->GetToolBoxConfig_Impl();
+#endif
         switch ( nSID )
         {
             case SID_TOGGLEFUNCTIONBAR:
@@ -3531,7 +3600,9 @@ SfxChildWindow* SfxViewFrame::GetChildWindow(USHORT nId)
     return pWork ? pWork->GetChildWindow_Impl(nId) : NULL;
 }
 
+#if SUPD>=635
 SfxImageManager* SfxViewFrame::GetImageManager()
 {
     return GetObjectShell()->GetImageManager_Impl();
 }
+#endif
