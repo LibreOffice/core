@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:32:52 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,10 +493,10 @@ TabPage TP_LINENUMBERING
         Text[ catalan ] = "Líneas";
         Text[ finnish ] = "viivat";
     };
-    GroupBox GB_DISPLAY
+    FixedLine FL_DISPLAY
     {
         Pos = MAP_APPFONT ( 6 , 17 ) ;
-        Size = MAP_APPFONT ( 248 , 90 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Anzeige" ;
         Text [ English ] = "Display" ;
         Text [ english_us ] = "View" ;
@@ -629,10 +629,10 @@ TabPage TP_LINENUMBERING
         Text[ catalan ] = "Líneas";
         Text[ finnish ] = "Viivat";
     };
-    GroupBox GB_DIVISOR
+    FixedLine FL_DIVISOR
     {
         Pos = MAP_APPFONT ( 6 , 110 ) ;
-        Size = MAP_APPFONT ( 121 , 53 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
         Text = "Teiler" ;
         Text [ English ] = "Divisor" ;
         Text [ english_us ] = "Separator" ;
@@ -743,10 +743,10 @@ TabPage TP_LINENUMBERING
         Text[ catalan ] = "~Reiniciar al comienzo de página";
         Text[ finnish ] = "~Aloita jokainen uusi sivu uudelleen";
     };
-    GroupBox GB_COUNT
+    FixedLine FL_COUNT
     {
         Pos = MAP_APPFONT ( 133 , 110 ) ;
-        Size = MAP_APPFONT ( 121 , 53 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
         Text = "Zählen" ;
         Text [ English ] = "Count" ;
         Text [ english_us ] = "Count" ;

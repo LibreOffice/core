@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-04-22 14:04:26 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ class SwNumNamesDlg: public ModalDialog
 {
     Edit         aFormEdit;
     ListBox      aFormBox;
-    GroupBox     aFormGrp;
+    FixedLine    aFormFL;
     OKButton     aOKBtn;
     CancelButton aCancelBtn;
     HelpButton   aHelpBtn;
@@ -296,7 +296,7 @@ SwNumNamesDlg::SwNumNamesDlg(Window *pParent)
     : ModalDialog(pParent, SW_RES(DLG_NUM_NAMES)),
     aFormEdit(this, SW_RES(ED_FORM)),
     aFormBox(this, SW_RES(LB_FORM)),
-    aFormGrp(this, SW_RES(GB_FORM)),
+    aFormFL(this, SW_RES(FL_FORM)),
     aOKBtn(this, SW_RES(BT_OK)),
     aCancelBtn(this, SW_RES(BT_CANCEL)),
     aHelpBtn(this, SW_RES(BT_HELP))
@@ -552,9 +552,8 @@ short SwOutlineTabDialog::Ok()
  * --------------------------------------------------*/
 SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_OUTLINE_NUM), rSet),
-    aLevelGB(       this, ResId(GB_LEVEL    )),
+    aLevelFL(       this, ResId(FL_LEVEL    )),
     aLevelLB(       this, ResId(LB_LEVEL    )),
-    aPreviewGB(     this, ResId(GB_PREVIEW  )),
     aPreviewWIN(    this, ResId(WIN_PREVIEW )),
     aCollLbl(this, SW_RES(FT_COLL)),
     aCollBox(this, SW_RES(LB_COLL)),
@@ -571,7 +570,7 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent, const SfxIte
     aSuffixED(this, SW_RES(ED_SUFFIX)),
     aStartLbl(this, SW_RES(FT_START)),
     aStartEdit(this, SW_RES(ED_START)),
-    aNumberGrp(this, SW_RES(GB_NUMBER)),
+    aNumberFL(this, SW_RES(FL_NUMBER)),
     aNoFmtName(SW_RES(ST_NO_COLL)),
     nActLevel(1),
     pCollNames(0),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:35:03 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,10 @@ TabPage TP_NUM_POSITION
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
-    GroupBox GB_LEVEL
+    FixedLine FL_LEVEL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 38 , 179 ) ;
+        Size = MAP_APPFONT ( 35 , 8 ) ;
         Text = "Ebene" ;
         Text [ ENGLISH ] = "Level" ;
         Text [ norwegian ] = "Level" ;
@@ -117,10 +117,10 @@ TabPage TP_NUM_POSITION
         Border = TRUE ;
         SimpleMode = TRUE ;
     };
-    GroupBox GB_POSITION
+    FixedLine FL_POSITION
     {
         Pos = MAP_APPFONT ( 47 , 3 ) ;
-        Size = MAP_APPFONT ( 207 , 92 ) ;
+        Size = MAP_APPFONT ( 207 , 8 ) ;
         Text = "Position und Abstand" ;
         Text [ ENGLISH ] = "Position and distance" ;
         Group = TRUE ;
@@ -148,8 +148,8 @@ TabPage TP_NUM_POSITION
     };
     FixedText FT_BORDERDIST
     {
-        Pos = MAP_APPFONT ( 50 , 16 ) ;
-        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Pos = MAP_APPFONT ( 53 , 16 ) ;
+        Size = MAP_APPFONT ( 102 , 10 ) ;
         Text = "Ein~rückung";
         Text [ ENGLISH ] = "Distance text <-> border" ;
         Text [ english_us ] = "Indent" ;
@@ -222,8 +222,8 @@ TabPage TP_NUM_POSITION
     };
     FixedText FT_INDENT
     {
-        Pos = MAP_APPFONT ( 50 , 32 ) ;
-        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Pos = MAP_APPFONT ( 53 , 32 ) ;
+        Size = MAP_APPFONT ( 102 , 10 ) ;
         Text = "Abstand zum Te~xt" ;
         Text [ ENGLISH ] = "Indent" ;
         Text [ english_us ] = "Space to Te~xt" ;
@@ -268,8 +268,8 @@ TabPage TP_NUM_POSITION
     };
     FixedText FT_NUMDIST
     {
-        Pos = MAP_APPFONT ( 50 , 48 ) ;
-        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Pos = MAP_APPFONT ( 53 , 48 ) ;
+        Size = MAP_APPFONT ( 102 , 10 ) ;
         Text = "~Mindestabstand Nummer <-> Text" ;
         Text [ ENGLISH ] = "Distance text <-> numbering" ;
         Text [ english_us ] = "~Minimum space numbering <-> text" ;
@@ -314,8 +314,8 @@ TabPage TP_NUM_POSITION
     };
     FixedText FT_ALIGN
     {
-        Pos = MAP_APPFONT ( 50 , 64 ) ;
-        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Pos = MAP_APPFONT ( 53 , 64 ) ;
+        Size = MAP_APPFONT ( 102 , 10 ) ;
         Text = "Ausri~chtung der Nummerierung" ;
         Text [ ENGLISH ] = "Alignment of the numbering" ;
         Text [ english_us ] = "Numbering ~alignment" ;
@@ -513,38 +513,10 @@ TabPage TP_NUM_POSITION
         Text[ catalan ] = "~Predeterminado";
         Text[ finnish ] = "~Oletusarvo";
     };
-    GroupBox GB_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 47 , 98 ) ;
-        Size = MAP_APPFONT ( 207 , 84 ) ;
-        Text = "Vorschau" ;
-        Text [ ENGLISH ] = "Preview" ;
-        Text [ english_us ] = "Preview" ;
-        Text [ portuguese_brazilian ] = "Vorschau" ;
-        Text [ swedish ] = "Förhandsvisning" ;
-        Text [ danish ] = "Eksempel" ;
-        Text [ italian ] = "Anteprima" ;
-        Text [ spanish ] = "Previsualización" ;
-        Text [ french ] = "Aperçu" ;
-        Text [ dutch ] = "Voorbeeld" ;
-        Text [ portuguese ] = "Previsualizar" ;
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ russian ] = "Ïðîñìîòð";
-        Text[ polish ] = "Podgl¹d";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ arabic ] = "ÇáãÚÇíäÉ";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ korean ] = "¹Ì¸®º¸±â";
-        Text[ turkish ] = "Önizleme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Previsualización";
-        Text[ finnish ] = "Esikatselu";
-    };
     Window WIN_PREVIEW
     {
-        Pos = MAP_APPFONT ( 50 , 109 ) ;
-        Size = MAP_APPFONT ( 201 , 70 ) ;
+        Pos = MAP_APPFONT ( 53 , 99 ) ;
+        Size = MAP_APPFONT ( 198 , 80 ) ;
     };
 };
 

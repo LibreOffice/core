@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selglos.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:12:23 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,10 +105,10 @@ ModalDialog DLG_SEL_GLOS
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    GroupBox GB_GLOS
+    FixedLine FL_GLOS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 152 , 91 ) ;
+        Size = MAP_APPFONT ( 152 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? AutoTexte zum Kürzel  : AutoTexte zum K³rzel  */
         Text = "AutoTexte zum Kürzel " ;
         Text [ ENGLISH ] = "Entries for Short Name " ;

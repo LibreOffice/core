@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrule.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:30:48 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,10 @@ ModalDialog DLG_INSERT_RULER
     Text = "Horizontale Linie einfügen" ;
     Text [ ENGLISH ] = "InsertRuler" ;
     Moveable = TRUE ;
-    GroupBox GB_SEL
+    FixedLine FL_SEL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 174 , 118 ) ;
+        Size = MAP_APPFONT ( 174 , 8 ) ;
         Text = "Auswahl" ;
         Text [ ENGLISH ] = "Selection" ;
         Text [ english_us ] = "Selection" ;
@@ -100,8 +100,8 @@ ModalDialog DLG_INSERT_RULER
     };
     Control VS_EXAMPLE
     {
-        Pos = MAP_APPFONT ( 9 , 12 ) ;
-        Size = MAP_APPFONT ( 168 , 106 ) ;
+        Pos = MAP_APPFONT ( 9 , 14 ) ;
+        Size = MAP_APPFONT ( 168 , 104 ) ;
         Hide = TRUE ;
         Border = TRUE ;
         TabStop = TRUE ;

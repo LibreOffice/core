@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-21 12:29:30 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@
 #define FN_GL_REPLACE_TEXT  78
 
 // Box Bibliothek Textbausteine
-#define GB_EDIT             1
-#define GB_BIB              2
+#define FL_EDIT                         1
+#define FL_BIB                          2
 #define ED_BIB              3
 
 #define PB_NEW              10
@@ -118,7 +118,7 @@
 #define   ED_OS              6
 #define   ED_NN              7
 #define   ED_NS              8
-#define   GB_NN              9
+#define   FL_NN              9
 #define   BT_CANCEL         10
 #define   BT_OKNEW          11
 

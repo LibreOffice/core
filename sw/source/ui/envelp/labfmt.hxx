@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 09:03:23 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ public:
  ---------------------------------------------------------------------------*/
 class SwSaveLabelDlg : public ModalDialog
 {
-    GroupBox        aOptionsGB;
+    FixedLine       aOptionsFL;
     FixedText       aMakeFT;
     ComboBox        aMakeCB;
     FixedText       aTypeFT;

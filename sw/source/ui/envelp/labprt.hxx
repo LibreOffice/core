@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,11 @@ class SwLabPrtPage : public SfxTabPage
     FixedText     aRowText;
     NumericField  aRowField;
     CheckBox      aSynchronCB;
-    GroupBox      aGBDontKnow;
+    FixedLine     aFLDontKnow;
 
     FixedInfo     aPrinterInfo;
     PushButton    aPrtSetup;
-    GroupBox      aGBPrinter;
+    FixedLine     aFLPrinter;
 
      SwLabPrtPage(Window* pParent, const SfxItemSet& rSet);
     ~SwLabPrtPage();

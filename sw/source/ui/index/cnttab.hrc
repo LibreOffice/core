@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-29 13:44:26 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,11 @@
 #define CB_OUTLN        5
 #define FT_LEVEL        6
 #define ED_LEVEL        7
-#define GB_CREATE       8
+#define FL_CREATE       8
 #define ED_BSP         11
-#define GB_BSP         12
+#define FL_BSP         12
 #define BT_OUTLN       13
-#define GB_TITLE       14
+#define FL_TITLE       14
 #define ED_TITLE       15
 #define BT_HELP        16
 #define ST_AUTHTYPE    17
@@ -99,14 +99,14 @@
 #define CB_CASE             43
 #define CB_SEC              44
 #define CB_ALPHA            45
-#define GB_OPT              46
+#define FL_OPT                  46
 #define CB_MAKRS            47
 #define DLB_TOD             48
 #define CB_TEMPL            49
 #define DLB_LAYOUT          50
 #define CB_OBJECT           51
 #define DLB_OBJECT          52
-#define GB_SOURCE           53
+#define FL_SOURCE           53
 #define CB_USER_MARKS       54
 #define BT_ALL_LEVEL        55
 #define FT_MAIN_ENTRY_STYLE 56
@@ -149,7 +149,7 @@
 
 #define CB_USE_DASH         33
 
-#define GB_LEVEL                34
+#define FL_LEVEL                                34
 #define WIN_TOKEN               35
 #define PB_ENTRYNO              36
 #define PB_ENTRY                37
@@ -170,12 +170,12 @@
 #define MF_TABPOS               52
 #define CB_AUTORIGHT            53
 #define CB_RELTOSTYLE           54
-//#define GB_ENTRY              55
+//#define FL_ENTRY                              55
 #define CB_RECALCTAB            56
 #define CB_NUMSTYLEFROMPDESC    57
 #define CB_ALPHADELIM           58
 #define CB_COMMASEPARATED       59
-//#define GB_FORMAT             60
+//#define FL_FORMAT                             60
 
 #define STR_NO_CHAR_STYLE       61
 #define CLB_FROMOBJ             62
@@ -214,7 +214,7 @@
 
 #define STR_CHARSTYLE               (STR_TOKEN_HELP_AUTHORITY + 1)
 #define TLB_STYLES              100
-#define GB_STYLES               101
+#define FL_STYLES                   101
 #define PB_OK                   102
 #define PB_CANCEL               103
 #define PB_HELP                 104
@@ -289,7 +289,7 @@
 
 // AutoMark dialog
 #define BB_ENTRIES          1
-#define GB_ENTRIES          2
+#define FL_ENTRIES          2
 
 #define ST_SEARCH           10
 #define ST_ALTERNATIVE      11

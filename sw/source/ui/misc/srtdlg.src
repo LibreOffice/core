@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:43:36 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,7 +568,7 @@ ModalDialog DLG_SORTING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Des~cendente";
     };
-    FixedLine GB_SORT
+    FixedLine FL_SORT_2
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 200 , 8 ) ;
@@ -658,10 +658,10 @@ ModalDialog DLG_SORTING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Filas";
     };
-    FixedLine GB_DIR
+    FixedLine FL_DIR
     {
         Pos = MAP_APPFONT ( 6 , 108 ) ;
-        Size = MAP_APPFONT ( 98 , 8 ) ;
+        Size = MAP_APPFONT ( 95 , 8 ) ;
         Text = "Richtung" ;
         Text [ ENGLISH ] = "Direction" ;
         Text [ norwegian ] = "Retning" ;
@@ -756,7 +756,7 @@ ModalDialog DLG_SORTING
         TabStop = TRUE ;
         Left = TRUE ;
     };
-    FixedLine GB_DELIM
+    FixedLine FL_DELIM
     {
         Pos = MAP_APPFONT ( 107 , 108 ) ;
         Size = MAP_APPFONT ( 99 , 8 ) ;
@@ -849,7 +849,7 @@ ModalDialog DLG_SORTING
     FixedLine FL_LANG
     {
         Pos = MAP_APPFONT ( 6 , 147 ) ;
-        Size = MAP_APPFONT ( 99 , 8 ) ;
+        Size = MAP_APPFONT ( 95 , 8 ) ;
         Text = "Sprache" ;
         Text [ ENGLISH ] = "Language" ;
         Text[ english_us ] = "Language";
@@ -875,8 +875,8 @@ ModalDialog DLG_SORTING
     };
     ListBox LB_LANG
     {
-        Pos = MAP_APPFONT ( 12 , 157 ) ;
-        Size = MAP_APPFONT ( 90 , 61 ) ;
+        Pos = MAP_APPFONT ( 12 , 158 ) ;
+        Size = MAP_APPFONT ( 83 , 61 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -910,8 +910,8 @@ ModalDialog DLG_SORTING
     };
     CheckBox CB_CASE
     {
-        Pos = MAP_APPFONT ( 113 , 160 ) ;
-        Size = MAP_APPFONT ( 90 , 12 ) ;
+        Pos = MAP_APPFONT ( 113 , 159 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
         TabStop = TRUE ;
         Text = "Exacter Vergleich" ;
         Text [ ENGLISH ] = "Case sensitive" ;

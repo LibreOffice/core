@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:27:35 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,10 +228,10 @@ ModalDialog DLG_MAILMERGE
         Minimum = 1 ;
         Maximum = 999999 ;
     };
-    GroupBox GB_RECORD
+    FixedLine FL_RECORD
     {
         Pos = MAP_APPFONT ( 6 , 86 ) ;
-        Size = MAP_APPFONT ( 130 , 109 ) ;
+        Size = MAP_APPFONT ( 130 , 8 ) ;
         Text = "Datensätze" ;
         Text [ ENGLISH ] = "Records" ;
         Text [ norwegian ] = "Records" ;
@@ -653,8 +653,8 @@ ModalDialog DLG_MAILMERGE
     };
     FixedText FT_FORMAT
     {
-        Pos = MAP_APPFONT ( 148 , 155 ) ;
-        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Pos = MAP_APPFONT ( 148 , 157 ) ;
+        Size = MAP_APPFONT ( 51 , 8 ) ;
         Disable = TRUE ;
         Text = "Mail-Format" ;
         Text [ ENGLISH ] = "Mail format" ;
@@ -682,7 +682,7 @@ ModalDialog DLG_MAILMERGE
     };
     CheckBox CB_FORMAT_HTML
     {
-        Pos = MAP_APPFONT ( 220 , 155 ) ;
+        Pos = MAP_APPFONT ( 220 , 156 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Disable = TRUE ;
         /* ### ACHTUNG: Neuer Text in Resource? HTM~L : HTML */
@@ -712,7 +712,7 @@ ModalDialog DLG_MAILMERGE
     };
     CheckBox CB_FORMAT_RTF
     {
-        Pos = MAP_APPFONT ( 220 , 168 ) ;
+        Pos = MAP_APPFONT ( 220 , 169 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Disable = TRUE ;
         Text = "~RTF" ;
@@ -741,7 +741,7 @@ ModalDialog DLG_MAILMERGE
     };
     CheckBox CB_FORMAT_SW
     {
-        Pos = MAP_APPFONT ( 220, 181 ) ;
+        Pos = MAP_APPFONT ( 220, 182 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Disable = TRUE ;
         Text = "%PRODUCTNAME Writer" ;
@@ -768,10 +768,10 @@ ModalDialog DLG_MAILMERGE
         Text[ catalan ] = "%PRODUCTNAME Writer";
         Text[ finnish ] = "%PRODUCTNAME! Writer";
     };
-    GroupBox GB_DEST
+    FixedLine FL_DEST
     {
         Pos = MAP_APPFONT ( 142 , 86 ) ;
-        Size = MAP_APPFONT ( 170 , 109 ) ;
+        Size = MAP_APPFONT ( 170 , 8 ) ;
         Text = "Ausgabe" ;
         Text [ ENGLISH ] = "Destination" ;
         Text [ english_us ] = "Output" ;

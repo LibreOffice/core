@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrule.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@
 
 SwInsertGrfRulerDlg::SwInsertGrfRulerDlg( Window* pParent, SwDocShell* pDocSh ) :
     SfxModalDialog(pParent, SW_RES(DLG_INSERT_RULER)),
-    aSelectionGB(this, ResId(GB_SEL     )),
+    aSelectionFL(this, ResId(FL_SEL     )),
     pExampleVS  (new SwRulerValueSet(this, ResId(VS_EXAMPLE ), aGrfNames, pDocSh)),
     aOkPB       (this, ResId(PB_OK      )),
     aCancelPB   (this, ResId(PB_CANCEL  )),
@@ -302,6 +302,9 @@ IMPL_LINK(SwInsertGrfRulerDlg, DoubleClickHdl, ValueSet*, pVS)
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:45  hr
+      initial import
+
       Revision 1.22  2000/09/18 16:05:57  willem.vandorp
       OpenOffice header added.
 

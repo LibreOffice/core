@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selglos.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,14 +85,14 @@
 SwSelGlossaryDlg::SwSelGlossaryDlg(Window * pParent, const String &rShortName)
     : ModalDialog(pParent, SW_RES(DLG_SEL_GLOS)),
     aGlosBox(this, SW_RES( LB_GLOS)),
-    aGlosFrm(this, SW_RES( GB_GLOS)),
+    aGlosFL(this, SW_RES( FL_GLOS)),
     aOKBtn(this, SW_RES( BT_OK)),
     aCancelBtn(this, SW_RES( BT_CANCEL)),
     aHelpBtn(this, SW_RES(BT_HELP))
 {
-    String sText(aGlosFrm.GetText());
+    String sText(aGlosFL.GetText());
     sText += rShortName;
-    aGlosFrm.SetText(sText);
+    aGlosFL.SetText(sText);
     FreeResource();
 
     aGlosBox.SetDoubleClickHdl(LINK(this, SwSelGlossaryDlg, DoubleClickHdl));
@@ -113,6 +113,9 @@ IMPL_LINK(SwSelGlossaryDlg, DoubleClickHdl, ListBox*, pBox)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:35  hr
+    initial import
+
     Revision 1.16  2000/09/18 16:05:22  willem.vandorp
     OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-29 13:44:26 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ class SwAutoMarkDlg_Impl : public ModalDialog
     HelpButton          aHelpPB;
 
     SwEntryBrowseBox    aEntriesBB;
-    GroupBox            aEntriesGB;
+    FixedLine           aEntriesFL;
 
     String              sAutoMarkURL;
     const String        sAutoMarkType;
@@ -1321,10 +1321,10 @@ class SwAddStylesDlg_Impl : public SfxModalDialog
     CancelButton    aCancel;
     HelpButton      aHelp;
 
-    GroupBox        aStylesGB;
+    FixedLine       aStylesFL;
     SwHeaderTree    aHeaderTree;
-    PushButton      aLeftPB;
-    PushButton      aRightPB;
+    ImageButton     aLeftPB;
+    ImageButton      aRightPB;
 
     String          sHBFirst;
     String*         pStyleArr;
@@ -1345,7 +1345,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
     SfxModalDialog(pParent, SW_RES(DLG_ADD_IDX_STYLES)),
     pStyleArr(rStringArr),
     aHeaderTree(this, ResId(TR_HEADER   )),
-    aStylesGB(  this, ResId(GB_STYLES   )),
+    aStylesFL(  this, ResId(FL_STYLES   )),
     aOk(        this, ResId(PB_OK       )),
     aCancel(    this, ResId(PB_CANCEL   )),
     aHelp(      this, ResId(PB_HELP     )),
@@ -2542,7 +2542,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     aLastTOXType.eType = (TOXTypes)USHRT_MAX;
     aLastTOXType.nIndex = 0;
     //aLevelGBSize = aLevelGB.GetSizePixel();
-    aLevelGBSize = aLevelFT.GetSizePixel();
+    aLevelFLSize = aLevelFT.GetSizePixel();
 
     SetExchangeSupport();
     aEntryNoPB.SetClickHdl(LINK(this, SwTOXEntryTabPage, InsertTokenHdl));
@@ -2779,17 +2779,17 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& rSet)
             aLevelFT.SetText(sLevelStr);
 
         long nDiff = 0;
-        if( bToxIsAuthorities ? aLevelFT.GetSizePixel() == aLevelGBSize
-                              : aLevelFT.GetSizePixel() != aLevelGBSize )
+        if( bToxIsAuthorities ? aLevelFT.GetSizePixel() == aLevelFLSize
+                              : aLevelFT.GetSizePixel() != aLevelFLSize )
         {
-            nDiff = aLevelGBSize.Width();
+            nDiff = aLevelFLSize.Width();
             if( !bToxIsAuthorities )
                 nDiff *= -1;
         }
 
         if(nDiff)
         {
-//          lcl_ChgWidth(aLevelGB, nDiff);
+//          lcl_ChgWidth(aLevelFL, nDiff);
             lcl_ChgWidth(aLevelFT, nDiff);
             lcl_ChgWidth(aLevelLB, nDiff);
             lcl_ChgXPos(aCharStyleFT, nDiff);
@@ -4733,7 +4733,7 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const String& rAutoMarkU
     aCancelPB(  this, ResId(PB_CANCEL   )),
     aHelpPB(    this, ResId(PB_HELP     )),
     aEntriesBB( this, ResId(BB_ENTRIES  )),
-    aEntriesGB( this, ResId(GB_ENTRIES  )),
+    aEntriesFL( this, ResId(FL_ENTRIES  )),
     sAutoMarkURL(rAutoMarkURL),
     sAutoMarkType(rAutoMarkType),
     bCreateMode(bCreate)

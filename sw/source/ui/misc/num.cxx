@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:29 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,9 +190,9 @@ static BOOL bLastRelative = FALSE;
 SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
                                const SfxItemSet& rSet) :
     SfxTabPage( pParent, SW_RES( TP_NUM_POSITION ), rSet ),
-    aLevelGB(       this, ResId(GB_LEVEL    )),
+    aLevelFL(       this, ResId(FL_LEVEL    )),
     aLevelLB(       this, ResId(LB_LEVEL    )),
-    aPositionGB(    this, ResId(GB_POSITION )),
+    aPositionFL(    this, ResId(FL_POSITION )),
     aAlignFT(       this, ResId(FT_ALIGN    )),
     aAlignLB(       this, ResId(LB_ALIGN    )),
     aDistBorderFT(  this, ResId(FT_BORDERDIST   )),
@@ -203,7 +203,6 @@ SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
     aIndentFT(      this, ResId(FT_INDENT       )),
     aIndentMF(      this, ResId(MF_INDENT       )),
     aStandardPB(    this, ResId(PB_STANDARD     )),
-    aPreviewGB(     this, ResId(GB_PREVIEW      )),
     aPreviewWIN(    this, ResId(WIN_PREVIEW     )),
     bInInintControl(FALSE),
     pActNum(0),
@@ -906,6 +905,9 @@ IMPL_LINK(SwSvxNumBulletTabDialog, RemoveNumberingHdl, PushButton*, EMPTYARG)
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/02/23 12:45:29  os
+      Complete use of DefaultNumbering component
+
       Revision 1.1.1.1  2000/09/18 17:14:45  hr
       initial import
 

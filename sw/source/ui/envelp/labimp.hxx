@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labimp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-26 19:45:44 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,6 @@
 #endif
 #ifndef _SVEDIT_HXX //autogen
 #include <svtools/svmedit.hxx>
-#endif
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
 #endif
 #ifndef _SV_FIELD_HXX //autogen
 #include <vcl/field.hxx>
@@ -273,7 +270,7 @@ class SwLabPage : public SfxTabPage
     FixedText     aDBFieldFT;
     ListBox       aDBFieldLB;
 //  PushButton    aDatabaseButton;
-    GroupBox      aWritingGroup;
+    FixedLine     aWritingFL;
 
     RadioButton   aContButton;
     RadioButton   aSheetButton;
@@ -282,7 +279,7 @@ class SwLabPage : public SfxTabPage
     FixedText     aTypeText;
     ListBox       aTypeBox;
     FixedInfo     aFormatInfo;
-    GroupBox      aFormatGroup;
+    FixedLine     aFormatFL;
 
     sal_Bool        m_bLabel;
 
@@ -328,10 +325,9 @@ class SwVisitingCardPage : public SfxTabPage
     FixedText       aAutoTextGroupFT;
     ListBox         aAutoTextGroupLB;
 
-    GroupBox        aContentGB;
+    FixedLine       aContentFL;
 
     Window          aExampleWIN;
-    GroupBox        aExampleGB;
 
     String          sVisCardGroup;
     String          sTempURL;
@@ -364,7 +360,7 @@ public:
  --------------------------------------------------*/
 class SwPrivateDataPage : public SfxTabPage
 {
-    GroupBox        aDataGB;
+    FixedLine       aDataFL;
 
     FixedText       aNameFT;
     Edit            aFirstNameED;
@@ -412,7 +408,7 @@ public:
  --------------------------------------------------*/
 class SwBusinessDataPage : public SfxTabPage
 {
-    GroupBox        aDataGB;
+    FixedLine       aDataFL;
     FixedText       aCompanyFT;
     Edit            aCompanyED;
     FixedText       aCompanyExtFT;

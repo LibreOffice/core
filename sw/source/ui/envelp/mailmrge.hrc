@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-03-07 13:40:13 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 
 // Elemente -----------------------------------------------------------------
 
-#define GB_RECORD       1
+#define FL_RECORD               1
 #define RB_ALL          2
 #define RB_MARKED       3
 #define RB_FROM         4
@@ -84,7 +84,7 @@
 #define LB_ADDRESSFLD   14
 #define FT_SUBJECT      15
 #define ED_SUBJECT      16
-#define GB_DEST         17
+#define FL_DEST                 17
 #define CB_SINGLE_JOBS  18
 #define FT_FORMAT       19
 #define CB_FORMAT_SW    20

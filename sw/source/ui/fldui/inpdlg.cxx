@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inpdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-24 11:38:19 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
     rSh( rS ),
     aLabelED    (this, SW_RES(ED_LABEL  )),
     aEditED     (this, SW_RES(ED_EDIT   )),
-    aEditGB     (this, SW_RES(GB_EDIT       )),
+    aEditFL     (this, SW_RES(FL_EDIT       )),
     aOKBT       (this, SW_RES(BT_OK     )),
     aCancelBT   (this, SW_RES(BT_CANCEL )),
     aNextBT     (this, SW_RES(PB_NEXT   )),
@@ -249,6 +249,9 @@ IMPL_LINK(SwFldInputDlg, NextHdl, PushButton*, EMPTYARG)
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/24 11:38:19  jp
+      must change: use charclass instead of international
+
       Revision 1.1.1.1  2000/09/18 17:14:37  hr
       initial import
 

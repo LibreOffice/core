@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,9 @@
  ************************************************************************/
 
 
-#define GB_LEVEL        1
+#define FL_LEVEL            1
 #define LB_LEVEL        2
-#define GB_POSITION     3
+#define FL_POSITION     3
 #define FT_BORDERDIST   4
 #define MF_BORDERDIST   5
 #define CB_RELATIVE     6
@@ -73,7 +73,6 @@
 #define FT_ALIGN        11
 #define LB_ALIGN        12
 #define PB_STANDARD     13
-#define GB_PREVIEW      14
 #define WIN_PREVIEW     15
 #define ST_RESET        16
 

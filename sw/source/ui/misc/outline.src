@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:38:09 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,10 +108,10 @@ ModalDialog DLG_NUM_NAMES
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    GroupBox GB_FORM
+    FixedLine FL_FORM
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 96 , 73 ) ;
+        Size = MAP_APPFONT ( 96 , 8 ) ;
         Text = "Form" ;
         Text [ ENGLISH ] = "Form" ;
         Text [ english_us ] = "Format" ;
@@ -871,15 +871,15 @@ TabPage TP_OUTLINE_NUM
     ListBox LB_LEVEL
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 21 , 129 ) ;
+        Size = MAP_APPFONT ( 26 , 129 ) ;
         TabStop = TRUE ;
         DropDown = FALSE ;
         Border = TRUE ;
     };
-    GroupBox GB_LEVEL
+    FixedLine FL_LEVEL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 33 , 143 ) ;
+        Size = MAP_APPFONT ( 35 , 8 ) ;
         Text = "Ebene" ;
         Text [ ENGLISH ] = "Level" ;
         Text [ norwegian ] = "Level" ;
@@ -907,7 +907,7 @@ TabPage TP_OUTLINE_NUM
     };
     FixedText FT_COLL
     {
-        Pos = MAP_APPFONT ( 48 , 14 ) ;
+        Pos = MAP_APPFONT ( 53 , 14 ) ;
         Size = MAP_APPFONT ( 81 , 8 ) ;
         Text = "~Absatzvorlage" ;
         Text [ ENGLISH ] = "~Paragraph style" ;
@@ -939,8 +939,8 @@ TabPage TP_OUTLINE_NUM
     ListBox LB_COLL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 48 , 25 ) ;
-        Size = MAP_APPFONT ( 122 , 75 ) ;
+        Pos = MAP_APPFONT ( 53 , 25 ) ;
+        Size = MAP_APPFONT ( 117 , 75 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         Sort = TRUE ;
@@ -949,7 +949,7 @@ TabPage TP_OUTLINE_NUM
     };
     FixedText FT_NUMBER
     {
-        Pos = MAP_APPFONT ( 48 , 43 ) ;
+        Pos = MAP_APPFONT ( 53 , 43 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
         Text = "~Nummer" ;
         Text [ ENGLISH ] = "~Number" ;
@@ -979,8 +979,8 @@ TabPage TP_OUTLINE_NUM
     };
     ListBox LB_NUMBER
     {
-        Pos = MAP_APPFONT ( 97 , 41 ) ;
-        Size = MAP_APPFONT ( 73 , 65 ) ;
+        Pos = MAP_APPFONT ( 100 , 41 ) ;
+        Size = MAP_APPFONT ( 70 , 65 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         DropDown = TRUE ;
@@ -988,7 +988,7 @@ TabPage TP_OUTLINE_NUM
     };
     FixedText FT_CHARFMT
     {
-        Pos = MAP_APPFONT ( 48 , 59 ) ;
+        Pos = MAP_APPFONT ( 53 , 59 ) ;
         Size = MAP_APPFONT ( 45 , 8 ) ;
         Text = "Zeichenv~orlage" ;
         Text [ ENGLISH ] = "Character style" ;
@@ -1018,13 +1018,13 @@ TabPage TP_OUTLINE_NUM
     {
         TabStop = TRUE ;
         DropDown = TRUE ;
-        Pos = MAP_APPFONT ( 97 , 57 ) ;
-        Size = MAP_APPFONT ( 73 , 65 ) ;
+        Pos = MAP_APPFONT ( 100 , 57 ) ;
+        Size = MAP_APPFONT ( 70 , 65 ) ;
     };
     FixedText FT_ALL_LEVEL
     {
-        Pos = MAP_APPFONT ( 48 , 75 ) ;
-        Size = MAP_APPFONT ( 48 , 10 ) ;
+        Pos = MAP_APPFONT ( 53 , 75 ) ;
+        Size = MAP_APPFONT ( 46 , 8 ) ;
         Text = "~Vollständig" ;
         Text [ ENGLISH ] = "~Complete" ;
         Text [ norwegian ] = "~Fullstendig" ;
@@ -1053,8 +1053,8 @@ TabPage TP_OUTLINE_NUM
     NumericField NF_ALL_LEVEL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 97 , 73 ) ;
-        Size = MAP_APPFONT ( 73 , 12 ) ;
+        Pos = MAP_APPFONT ( 100 , 73 ) ;
+        Size = MAP_APPFONT ( 70 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -1067,7 +1067,7 @@ TabPage TP_OUTLINE_NUM
     };
     FixedText FT_DELIM
     {
-        Pos = MAP_APPFONT ( 48 , 89 ) ;
+        Pos = MAP_APPFONT ( 53 , 89 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "Trennzeichen" ;
         Text [ ENGLISH ] = "Delimiter" ;
@@ -1097,7 +1097,7 @@ TabPage TP_OUTLINE_NUM
     };
     FixedText FT_PREFIX
     {
-        Pos = MAP_APPFONT ( 54 , 102 ) ;
+        Pos = MAP_APPFONT ( 59 , 102 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "~davor" ;
         Text [ ENGLISH ] = "before" ;
@@ -1128,15 +1128,15 @@ TabPage TP_OUTLINE_NUM
     Edit ED_PREFIX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 97 , 100 ) ;
-        Size = MAP_APPFONT ( 73 , 12 ) ;
+        Pos = MAP_APPFONT ( 100 , 100 ) ;
+        Size = MAP_APPFONT ( 70 , 12 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         Left = TRUE ;
     };
     FixedText FT_SUFFIX
     {
-        Pos = MAP_APPFONT ( 54 , 117 ) ;
+        Pos = MAP_APPFONT ( 59 , 117 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "dah~inter" ;
         Text [ ENGLISH ] = "behind" ;
@@ -1167,15 +1167,15 @@ TabPage TP_OUTLINE_NUM
     Edit ED_SUFFIX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 97 , 115 ) ;
-        Size = MAP_APPFONT ( 73 , 12 ) ;
+        Pos = MAP_APPFONT ( 100 , 115 ) ;
+        Size = MAP_APPFONT ( 70 , 12 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         Left = TRUE ;
     };
     FixedText FT_START
     {
-        Pos = MAP_APPFONT ( 48 , 133 ) ;
+        Pos = MAP_APPFONT ( 53 , 133 ) ;
         Size = MAP_APPFONT ( 43 , 8 ) ;
         Text = "~Beginn bei" ;
         Text [ English ] = "~Start at" ;
@@ -1206,8 +1206,8 @@ TabPage TP_OUTLINE_NUM
     NumericField ED_START
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 97 , 131 ) ;
-        Size = MAP_APPFONT ( 73 , 12 ) ;
+        Pos = MAP_APPFONT ( 100 , 131 ) ;
+        Size = MAP_APPFONT ( 70 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Spin = TRUE ;
@@ -1218,10 +1218,10 @@ TabPage TP_OUTLINE_NUM
         Last = 99 ;
         SpinSize = 1 ;
     };
-    GroupBox GB_NUMBER
+    FixedLine FL_NUMBER
     {
-        Pos = MAP_APPFONT ( 42 , 3 ) ;
-        Size = MAP_APPFONT ( 131 , 143 ) ;
+        Pos = MAP_APPFONT ( 47 , 3 ) ;
+        Size = MAP_APPFONT ( 207 , 8 ) ;
         Text = "Nummerierung" ;
         Text [ ENGLISH ] = "Numbering" ;
         Text [ norwegian ] = "Nummering" ;
@@ -1252,34 +1252,6 @@ TabPage TP_OUTLINE_NUM
     {
         Pos = MAP_APPFONT ( 179 , 14 ) ;
         Size = MAP_APPFONT ( 72 , 129 ) ;
-    };
-    GroupBox GB_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 176 , 3 ) ;
-        Size = MAP_APPFONT ( 78 , 143 ) ;
-        Text = "Vorschau" ;
-        Text [ ENGLISH ] = "Preview" ;
-        Text [ english_us ] = "Preview" ;
-        Text [ portuguese_brazilian ] = "Vorschau" ;
-        Text [ swedish ] = "Förhandsvisning" ;
-        Text [ danish ] = "Eksempel" ;
-        Text [ italian ] = "Anteprima" ;
-        Text [ spanish ] = "Previsualización" ;
-        Text [ french ] = "Aperçu" ;
-        Text [ dutch ] = "Voorbeeld" ;
-        Text [ portuguese ] = "Previsualizar" ;
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ russian ] = "Ïðîñìîòð";
-        Text[ polish ] = "Podgl¹d";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ arabic ] = "ÇáãÚÇíäÉ";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ korean ] = "¹Ì¸®º¸±â";
-        Text[ turkish ] = "Önizleme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Previsualización";
-        Text[ finnish ] = "Esikatselu";
     };
     String ST_NO_COLL
     {

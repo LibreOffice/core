@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:38:18 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1024,7 +1024,7 @@ TabPage TP_FRM_STD
     };
     PushButton BT_REALSIZE
     {
-        Pos = MAP_APPFONT ( 67 , 84 ) ;
+        Pos = MAP_APPFONT ( 55 , 86 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -1083,7 +1083,7 @@ TabPage TP_FRM_STD
     FixedLine FL_TYPE_SEP
     {
         Pos = MAP_APPFONT ( 111 , 10 ) ;
-        Size = MAP_APPFONT ( 4 , 87 ) ;
+        Size = MAP_APPFONT ( 4 , 90 ) ;
     };
     RadioButton RB_ANCHOR_PAGE
     {
@@ -1252,7 +1252,7 @@ TabPage TP_FRM_STD
     Window WN_BSP
     {
         Pos = MAP_APPFONT ( 202 , 14 ) ;
-        Size = MAP_APPFONT ( 54 , 84 ) ;
+        Size = MAP_APPFONT ( 54 , 86 ) ;
     };
     FixedText FT_HORIZONTAL
     {
@@ -1558,10 +1558,10 @@ TabPage TP_GRF_EXT
     {
         File = "dog.bmp" ;
     };
-    GroupBox GB_CONNECT
+    FixedLine FL_CONNECT
     {
         Pos = MAP_APPFONT ( 6 , 87 ) ;
-        Size = MAP_APPFONT ( 248 , 37 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Verknüpfung" ;
         Text [ ENGLISH ] = "Link" ;
         Text [ norwegian ] = "Kobling" ;
@@ -1821,10 +1821,10 @@ TabPage TP_GRF_EXT
         Pos = MAP_APPFONT ( 120 , 14 ) ;
         Size = MAP_APPFONT ( 127 , 66 ) ;
     };
-    GroupBox GB_MIRROR
+    FixedLine FL_MIRROR
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 81 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Spiegeln" ;
         Text [ ENGLISH ] = "Mirror" ;
         Text [ norwegian ] = "Speil" ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #define TXT_ROW       6
 #define FLD_ROW       7
 #define BTN_PRTSETUP  8
-#define GB_PRINTER    9
-#define GB_DONTKNOW  10
+#define FL_PRINTER    9
+#define FL_DONTKNOW  10
 #define CB_SYNCHRON  11
 
 // Ueberlaufpruefung ********************************************************

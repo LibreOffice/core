@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-06 08:59:01 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,17 +71,17 @@
 #define CB_KEY3     11
 #define ED_KEY3     12
 #define DLB_KEY3    13
-#define GB_SORT     14
+#define FL_SORT_2     14
 #define RB_COL      15
 #define RB_ROW      16
-#define GB_DIR      17
+#define FL_DIR      17
 #define RB_UP       18
 #define RB_DN       19
-#define GB_ORDER    20
+#define FL_ORDER    20
 #define RB_TAB      21
 #define RB_TABCH    22
 #define ED_TABCH    23
-#define GB_DELIM    24
+#define FL_DELIM    24
 #define STR_ROW     25
 #define STR_COL     26
 #define BT_HELP     27

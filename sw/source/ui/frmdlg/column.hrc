@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-29 13:37:13 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
 #define WN_BSP          41
 #define LB_REFERENCE        42
 #define CB_REGISTER             43
-#define GB_REGISTER             44
+#define FL_REGISTER             44
 #define FT_REFERENCE        45
 
 #define ED_DIST1                46

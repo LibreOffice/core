@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-04-27 11:29:00 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,7 +531,7 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
     aInsertBT      (this, SW_RES(BTN_INSERT )),
     aDBFieldFT     (this, SW_RES(FT_DBFIELD )),
     aDBFieldLB     (this, SW_RES(LB_DBFIELD )),
-    aWritingGroup  (this, SW_RES(GRP_WRITING)),
+    aWritingFL     (this, SW_RES(FL_WRITING)),
     aContButton    (this, SW_RES(BTN_CONT   )),
     aSheetButton   (this, SW_RES(BTN_SHEET  )),
     aMakeText      (this, SW_RES(TXT_MAKE   )),
@@ -539,7 +539,7 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
     aTypeText      (this, SW_RES(TXT_TYPE   )),
     aTypeBox       (this, SW_RES(BOX_TYPE   )),
     aFormatInfo    (this, SW_RES(INF_FORMAT )),
-    aFormatGroup   (this, SW_RES(GRP_FORMAT ))
+    aFormatFL      (this, SW_RES(FL_FORMAT ))
 {
     WaitObject aWait( pParent );
 
@@ -604,14 +604,14 @@ void SwLabPage::SetToBusinessCard()
     aInsertBT.Hide();
     aDBFieldFT.Hide();
     aDBFieldLB.Hide();
-    aWritingGroup.Hide();
+    aWritingFL.Hide();
 
     //resize the form
-     Point aGBPos(aWritingGroup.GetPosPixel());
-    long nDiffPos = aFormatGroup.GetPosPixel().Y() - aGBPos.Y();
-     Size aGBSz(aFormatGroup.GetSizePixel());
-//  aGBSz.Height() += nDiffPos;
-    aFormatGroup.SetPosSizePixel(aGBPos, aGBSz);
+    Point aFLPos(aWritingFL.GetPosPixel());
+    long nDiffPos = aFormatFL.GetPosPixel().Y() - aFLPos.Y();
+    Size aFLSz(aFormatFL.GetSizePixel());
+//  aFLSz.Height() += nDiffPos;
+    aFormatFL.SetPosSizePixel(aFLPos, aFLSz);
 
     // move all controls up
     lcl_ChgYPos(aContButton, -nDiffPos);
@@ -955,9 +955,8 @@ SwVisitingCardPage::SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet) 
     aAutoTextLB(this,       ResId( LB_AUTO_TEXT         )),
     aAutoTextGroupFT(this,  ResId( FT_AUTO_TEXT_GROUP   )),
     aAutoTextGroupLB(this,  ResId( LB_AUTO_TEXT_GROUP   )),
-    aContentGB(this,        ResId( GB_CONTENT           )),
+    aContentFL(this,        ResId( FL_CONTENT           )),
     aExampleWIN(this,       ResId( WIN_EXAMPLE          )),
-    aExampleGB(this,        ResId( GB_EXAMPLE           )),
     sVisCardGroup(ResId(ST_VISCARD_GROUP)),
     pExampleFrame(0)
 {
@@ -1311,7 +1310,7 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
  --------------------------------------------------*/
 SwPrivateDataPage::SwPrivateDataPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_PRIVATE_DATA), rSet),
-    aDataGB             (this, ResId( GB_DATA       )),
+    aDataFL             (this, ResId( FL_DATA       )),
     aNameFT             (this, ResId( FT_NAME       )),
     aFirstNameED        (this, ResId( ED_FIRSTNAME  )),
     aNameED             (this, ResId( ED_NAME       )),
@@ -1432,7 +1431,7 @@ void SwPrivateDataPage::Reset(const SfxItemSet& rSet)
  --------------------------------------------------*/
 SwBusinessDataPage::SwBusinessDataPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_BUSINESS_DATA), rSet),
-    aDataGB             (this, ResId( GB_DATA       )),
+    aDataFL             (this, ResId( FL_DATA       )),
     aCompanyFT          (this, ResId( FT_COMP       )),
     aCompanyED          (this, ResId( ED_COMP       )),
     aCompanyExtFT       (this, ResId( FT_COMP_EXT   )),

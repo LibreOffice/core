@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selglos.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,4 +62,4 @@
 #define BT_CANCEL   101
 #define BT_HELP     102
 #define LB_GLOS     1
-#define GB_GLOS     2
+#define FL_GLOS         2

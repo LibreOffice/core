@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 14:09:26 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,17 +172,17 @@ SwLineNumberingPage::SwLineNumberingPage( Window* pParent,
     aNumIntervalFT      ( this, SW_RES( FT_NUM_INVERVAL )),
     aNumIntervalNF      ( this, SW_RES( NF_NUM_INVERVAL )),
     aNumRowsFT          ( this, SW_RES( FT_NUM_ROWS )),
-    aDisplayGB          ( this, SW_RES( GB_DISPLAY )),
+    aDisplayFL          ( this, SW_RES( FL_DISPLAY )),
     aDivisorFT          ( this, SW_RES( FT_DIVISOR )),
     aDivisorED          ( this, SW_RES( ED_DIVISOR )),
     aDivIntervalFT      ( this, SW_RES( FT_DIV_INTERVAL )),
     aDivIntervalNF      ( this, SW_RES( NF_DIV_INTERVAL )),
     aDivRowsFT          ( this, SW_RES( FT_DIV_ROWS )),
-    aDivisorGB          ( this, SW_RES( GB_DIVISOR )),
+    aDivisorFL          ( this, SW_RES( FL_DIVISOR )),
     aCountEmptyLinesCB  ( this, SW_RES( CB_COUNT_EMPTYLINES )),
     aCountFrameLinesCB  ( this, SW_RES( CB_COUNT_FRAMELINES )),
     aRestartEachPageCB  ( this, SW_RES( CB_RESTART_PAGE )),
-    aCountGB            ( this, SW_RES( GB_COUNT ))
+    aCountFL            ( this, SW_RES( FL_COUNT ))
 
 {
     FreeResource();
@@ -315,17 +315,17 @@ IMPL_LINK( SwLineNumberingPage, LineOnOffHdl, CheckBox *, EMPTYARG )
     aNumIntervalFT.Enable(bEnable);
     aNumIntervalNF.Enable(bEnable);
     aNumRowsFT.Enable(bEnable);
-    aDisplayGB.Enable(bEnable);
+    aDisplayFL.Enable(bEnable);
     aDivisorFT.Enable(bEnable);
     aDivisorED.Enable(bEnable);
     aDivIntervalFT.Enable(bEnable);
     aDivIntervalNF.Enable(bEnable);
     aDivRowsFT.Enable(bEnable);
-    aDivisorGB.Enable(bEnable);
+    aDivisorFL.Enable(bEnable);
     aCountEmptyLinesCB.Enable(bEnable);
     aCountFrameLinesCB.Enable(bEnable);
     aRestartEachPageCB.Enable(bEnable);
-    aCountGB.Enable(bEnable);
+    aCountFL.Enable(bEnable);
 
     return 0;
 }
@@ -390,6 +390,9 @@ BOOL __EXPORT SwLineNumberingPage::FillItemSet( SfxItemSet& rSet )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/03/02 14:09:26  os
+    extended numbering types available
+
     Revision 1.2  2001/02/23 12:45:29  os
     Complete use of DefaultNumbering component
 

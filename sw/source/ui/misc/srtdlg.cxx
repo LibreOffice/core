@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-24 18:11:39 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,14 +222,14 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
     aTypDLB3(this,      SW_RES(DLB_KEY3 )),
     aSortUp3RB(this,    SW_RES(RB_UP3    )),
     aSortDn3RB(this,    SW_RES(RB_DN3    )),
-    aSortGrp(this,      SW_RES(GB_SORT  )),
+    aSortFL(this,      SW_RES(FL_SORT_2  )),
     aColumnRB(this,     SW_RES(RB_COL   )),
     aRowRB(this,        SW_RES(RB_ROW   )),
-    aDirGrp(this,       SW_RES(GB_DIR   )),
+    aDirFL(this,       SW_RES(FL_DIR   )),
     aDelimTabRB(this,   SW_RES(RB_TAB   )),
     aDelimFreeRB(this,  SW_RES(RB_TABCH )),
     aDelimEdt(this,     SW_RES(ED_TABCH )),
-    aDelimGrp(this,     SW_RES(GB_DELIM )),
+    aDelimFL(this,     SW_RES(FL_DELIM )),
     aDelimPB(this,      SW_RES( PB_DELIM)),
     aLangFL(this,       SW_RES( FL_LANG )),
     aLangLB(this,       SW_RES( LB_LANG )),
@@ -536,6 +536,9 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/04/24 18:11:39  jp
+    use CollatorResource
+
     Revision 1.5  2001/04/06 08:59:00  jp
     changes for international (CJK)-sorting
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 09:03:23 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,12 +85,12 @@
 #define FLD_COLUMNS  15
 #define TXT_ROWS     16
 #define FLD_ROWS     17
-#define GRP_NONAME   18
+#define FL_NONAME   18
 #define PB_SAVE      19
 #define FI_MAKE      20
 #define FI_TYPE      21
 
-#define GB_OPTIONS      1
+#define FL_OPTIONS              1
 #define FT_MAKE         2
 #define CB_MAKE         3
 #define FT_TYPE         4

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impfnote.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 14:09:26 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
@@ -100,25 +97,25 @@ class SwEndNoteOptionPage : public SfxTabPage
     FixedText       aPosFT;
     RadioButton     aPosPageBox;
     RadioButton     aPosChapterBox;
-    GroupBox        aNumGrp;
+    FixedLine       aNumFL;
 
     FixedText       aParaTemplLbl;
     ListBox         aParaTemplBox;
     FixedText       aPageTemplLbl;
     ListBox         aPageTemplBox;
-    GroupBox        aTemplGrp;
+    FixedLine        aTemplFL;
 
     FixedText       aFtnCharAnchorTemplLbl;
     ListBox         aFtnCharAnchorTemplBox;
     FixedText       aFtnCharTextTemplLbl;
     ListBox         aFtnCharTextTemplBox;
-    GroupBox        aCharTemplGrp;
+    FixedLine        aCharTemplFL;
 
     FixedText aContLbl;
     Edit aContEdit;
     FixedText aContFromLbl;
     Edit aContFromEdit;
-    GroupBox aContGrp;
+    FixedLine aContFL;
 
     String aNumPage;
     SwWrtShell *pSh;

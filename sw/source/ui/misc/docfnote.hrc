@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 08:01:42 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,19 +68,19 @@
 #define LB_NUMCOUNT     11
 #define FLD_OFFSET      12
 #define FT_OFFSET       13
-#define GB_NUM          14
+#define FL_NUM                  14
 
 #define LB_PARA_TEMPL   30
 #define LB_PAGE_TEMPL   31
 #define FT_PARA_TEMPL   32
 #define FT_PAGE_TEMPL   33
-#define GB_TEMPL        34
+#define FL_TEMPL                34
 
 #define FT_CONT         40
 #define ED_CONT         41
 #define FT_CONT_FROM    42
 #define ED_CONT_FROM    43
-#define GB_CONT         44
+#define FL_CONT                 44
 
 #define FT_PREFIX       45
 #define ED_PREFIX       46
@@ -89,6 +89,6 @@
 #define FT_TEXT_CHARFMT     49
 #define LB_TEXT_CHARFMT     50
 #define FT_ANCHR_CHARFMT    51
-#define GB_CHAR_TEMPL       52
+#define FL_CHAR_TEMPL           52
 #define LB_ANCHR_CHARFMT    53
 

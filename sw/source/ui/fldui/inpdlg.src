@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inpdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-30 20:22:45 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,10 +133,10 @@ ModalDialog DLG_FLD_INPUT
         TabStop = TRUE ;
         Left = TRUE ;
     };
-    GroupBox GB_EDIT
+    FixedLine FL_EDIT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 127 , 108 ) ;
+        Size = MAP_APPFONT ( 127 , 8 ) ;
         Text = "Bearbeiten" ;
         Text [ English ] = "Edit" ;
         Text [ norwegian ] = "Rediger" ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-29 13:44:26 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1005,7 +1005,7 @@ class SwCreateAuthEntryDlg_Impl : public ModalDialog
     CancelButton    aCancelBT;
     HelpButton      aHelpBT;
 
-    GroupBox        aEntriesGB;
+    FixedLine       aEntriesFL;
 
     FixedText*      pFixedTexts[AUTH_FIELD_END];
     ListBox*        pTypeListBox;
@@ -1523,7 +1523,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
     aOKBT(this,         ResId(PB_OK         )),
     aCancelBT(this,     ResId(PB_CANCEL     )),
     aHelpBT(this,       ResId(PB_HELP       )),
-    aEntriesGB(this,    ResId(GB_ENTRIES    )),
+    aEntriesFL(this,    ResId(FL_ENTRIES    )),
     pIdentifierBox(0),
     pTypeListBox(0),
     rWrtSh(rSh),
@@ -1531,10 +1531,10 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
     m_bNameAllowed(sal_True)
 {
     FreeResource();
-    Point aGBPos(aEntriesGB.GetPosPixel());
-    Point aTL1(aGBPos);
-    Size aGBSz(aEntriesGB.GetSizePixel());
-    long nControlSpace = aGBSz.Width() / 4;
+    Point aFLPos(aEntriesFL.GetPosPixel());
+    Point aTL1(aFLPos);
+    Size aFLSz(aEntriesFL.GetSizePixel().Width(), GetSizePixel().Height());
+    long nControlSpace = aFLSz.Width() / 4;
     long nControlWidth = nControlSpace - 2 * aTL1.X();
     aTL1.X() *= 2;
     aTL1.Y() *= 5;
@@ -1544,12 +1544,12 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
     aTL2.X() += nControlSpace;
     Point aTR2(aTL2);
     aTR2.X() += nControlSpace;
-    Size aFixedTextSize(aGBSz);
+    Size aFixedTextSize(aFLSz);
     Size aTmpSz(8,10);
     aTmpSz = LogicToPixel(aTmpSz, MAP_APPFONT);
     aFixedTextSize.Height() = aTmpSz.Width();
     Size aEditSize(aFixedTextSize);
-    aFixedTextSize.Width() = nControlWidth + aGBPos.X();
+    aFixedTextSize.Width() = nControlWidth + aFLPos.X();
     aEditSize.Height() = aTmpSz.Height();
     aEditSize.Width() = nControlWidth;
 
@@ -1642,10 +1642,10 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
     }
     EnableHdl(pTypeListBox);
 
-    long nHeightDiff = - aGBSz.Height();
-    aGBSz.Height() = aTL1.Y();
-    nHeightDiff += aGBSz.Height();
-    aEntriesGB.SetSizePixel(aGBSz);
+    long nHeightDiff = - aFLSz.Height();
+    aFLSz.Height() = aTL1.Y();
+    nHeightDiff += aFLSz.Height();
+//    aEntriesFL.SetSizePixel(aFLSz);
     Size aDlgSize(GetSizePixel());
     aDlgSize.Height() += nHeightDiff;
     SetSizePixel(aDlgSize);
@@ -1784,6 +1784,9 @@ void    SwAuthMarkModalDlg::Apply()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.10  2001/05/29 13:44:26  fme
+    Fix #86988#: Redesign of dialogs
+
     Revision 1.9  2001/05/25 14:43:23  fme
     Fix #86988#: Dialog redesign
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:20:57 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ TabPage TP_LAB_LAB
     };
     FixedText FT_DATABASE
     {
-        Pos = MAP_APPFONT ( 149 , 27 ) ;
+        Pos = MAP_APPFONT ( 149 , 16 ) ;
         Size = MAP_APPFONT ( 99 , 8 ) ;
         Text = "~Datenbank" ;
         Text [ English ] = "Database" ;
@@ -388,14 +388,14 @@ TabPage TP_LAB_LAB
     ListBox LB_DATABASE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 149 , 38 ) ;
+        Pos = MAP_APPFONT ( 149 , 27 ) ;
         Size = MAP_APPFONT ( 99 , 70 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_TABLE
     {
-        Pos = MAP_APPFONT ( 149 , 54 ) ;
+        Pos = MAP_APPFONT ( 149 , 45 ) ;
         Size = MAP_APPFONT ( 99 , 8 ) ;
         Text = "Tabe~lle" ;
         Text [ ENGLISH ] = "Table" ;
@@ -424,21 +424,21 @@ TabPage TP_LAB_LAB
     ListBox LB_TABLE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 149 , 65 ) ;
+        Pos = MAP_APPFONT ( 149 , 56 ) ;
         Size = MAP_APPFONT ( 99 , 70 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     ImageButton BTN_INSERT
     {
-        Pos = MAP_APPFONT ( 124 , 104 ) ;
+        Pos = MAP_APPFONT ( 124 , 92 ) ;
         Size = MAP_APPFONT ( 18 , 12 ) ;
         SYMBOL = IMAGEBUTTON_ARROW_LEFT ;
         TabStop = TRUE ;
     };
     FixedText FT_DBFIELD
     {
-        Pos = MAP_APPFONT ( 149 , 93 ) ;
+        Pos = MAP_APPFONT ( 149 , 81 ) ;
         Size = MAP_APPFONT ( 99 , 8 ) ;
         Text = "Datenbank~feld" ;
         Text [ English ] = "Database field" ;
@@ -468,15 +468,15 @@ TabPage TP_LAB_LAB
     ListBox LB_DBFIELD
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 149 , 104 ) ;
+        Pos = MAP_APPFONT ( 149 , 92 ) ;
         Size = MAP_APPFONT ( 99 , 70 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
-    GroupBox GRP_WRITING
+    FixedLine FL_WRITING
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 119 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Group = TRUE ;
         Text = "Aufschrift" ;
         Text [ English ] = "Writing" ;
@@ -646,10 +646,10 @@ TabPage TP_LAB_LAB
         Size = MAP_APPFONT ( 236 , 8 ) ;
         Left = TRUE ;
     };
-    GroupBox GRP_FORMAT
+    FixedLine FL_FORMAT
     {
         Pos = MAP_APPFONT ( 6 , 125 ) ;
-        Size = MAP_APPFONT ( 248 , 54 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Group = TRUE ;
         Text = "Format" ;
         Text [ English ] = "Format" ;
@@ -823,10 +823,10 @@ TabPage TP_VISITING_CARDS
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
-    GroupBox GB_CONTENT
+    FixedLine FL_CONTENT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 121 , 179 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Inhalt" ;
         Text [ English ] = "Content" ;
         Text[ english_us ] = "Content";
@@ -856,33 +856,6 @@ TabPage TP_VISITING_CARDS
         Pos = MAP_APPFONT ( 139, 14 ) ;
         Size = MAP_APPFONT ( 109 , 162 ) ;
     };
-    GroupBox GB_EXAMPLE
-    {
-        Pos = MAP_APPFONT ( 133 , 3 ) ;
-        Size = MAP_APPFONT ( 121 , 179 ) ;
-        Text = "Vorschau" ;
-        Text [ English ] = "Preview" ;
-        Text[ english_us ] = "Preview";
-        Text[ portuguese ] = "Previsualizar";
-        Text[ russian ] = "Ïðîñìîòð";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ dutch ] = "Voorbeeld";
-        Text[ french ] = "Aperçu";
-        Text[ spanish ] = "Previsualización";
-        Text[ italian ] = "Anteprima";
-        Text[ danish ] = "Eksempel";
-        Text[ swedish ] = "Förhandsvisning";
-        Text[ polish ] = "Podgl¹d";
-        Text[ portuguese_brazilian ] = "Preview";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ korean ] = "¹Ì¸®º¸±â";
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ arabic ] = "ÇáãÚÇíäÉ";
-        Text[ turkish ] = "Önizleme";
-        Text[ catalan ] = "Previsualización";
-        Text[ finnish ] = "Esikatselu";
-    };
     String ST_VISCARD_GROUP
     {
        Text = "Cards";
@@ -893,10 +866,10 @@ TabPage TP_PRIVATE_DATA
     HelpID = HID_TP_PRIVATE_DATA  ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
-    GroupBox GB_DATA
+    FixedLine FL_DATA
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 154 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Private Daten" ;
         Text [ English ] = "Private data" ;
         Text[ english_us ] = "Private data";
@@ -1285,10 +1258,10 @@ TabPage TP_BUSINESS_DATA
     HelpID = HID_TP_BUSINESS_DATA;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
-    GroupBox GB_DATA
+    FixedLine FL_DATA
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 170 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Geschäftliche Daten" ;
         Text [ English ] = "Business data" ;
         Text[ english_us ] = "Business data";

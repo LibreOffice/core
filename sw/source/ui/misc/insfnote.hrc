@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insfnote.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #define RB_NUMBER_CHAR      2
 #define ED_NUMBER_CHAR      3
 #define BT_NUMBER_CHAR      4
-#define GB_NUMBER           5
-#define GB_TYPE             6
+#define FL_NUMBER                       5
+#define FL_TYPE                         6
 #define RB_TYPE_FTN         7
 #define RB_TYPE_ENDNOTE     8
 

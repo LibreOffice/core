@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrule.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 #include "misc.hrc"
 
-#define GB_SEL              1
+#define FL_SEL                          1
 #define VS_EXAMPLE          2
 #define PB_OK               3
 #define PB_CANCEL           4

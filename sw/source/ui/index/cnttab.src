@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-29 13:44:26 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4127,37 +4127,63 @@ ModalDialog DLG_ADD_IDX_STYLES
     Control TR_HEADER
     {
         Pos = MAP_APPFONT ( 12 , 15 ) ;
-        Size = MAP_APPFONT ( 276 , 164 ) ;
+        Size = MAP_APPFONT ( 273 , 164 ) ;
         Border = TRUE;
         TabStop = TRUE;
         Window HB_STYLES
         {
             Pos = MAP_APPFONT ( 0 , 0 ) ;
-            Size = MAP_APPFONT ( 276 , 20 ) ;
+            Size = MAP_APPFONT ( 273 , 20 ) ;
         };
         Control TLB_STYLES
         {
             Pos = MAP_APPFONT ( 0 , 20 ) ;
-            Size = MAP_APPFONT ( 276 , 132 ) ;
+            Size = MAP_APPFONT ( 273 , 132 ) ;
             Border = TRUE;
         };
     };
-    PushButton PB_LEFT
+    ImageButton PB_LEFT
     {
         Pos = MAP_APPFONT ( 12 , 182 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
-        Text = "~<<";
+        TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "all_left.bmp" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xC000 ;
+                Green = 0xC000 ;
+                Blue = 0xC000 ;
+            };
+        };
     };
-    PushButton PB_RIGHT
+    ImageButton PB_RIGHT
     {
         Pos = MAP_APPFONT ( 65 , 182 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
-        Text = "~>>";
+        TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "all_right.bmp" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xC000 ;
+                Green = 0xC000 ;
+                Blue = 0xC000 ;
+            };
+        };
     };
-    GroupBox GB_STYLES
+    FixedLine FL_STYLES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 288 , 194 ) ;
+        Size = MAP_APPFONT ( 285 , 8 ) ;
         Text = "~Vorlagen";
         Text [English] = "Styles";
         Text[ english_us ] = "Styl~es";
@@ -4512,10 +4538,10 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ finnish ] = "Ei";
         };
     };
-    GroupBox        GB_ENTRIES
+    FixedLine        FL_ENTRIES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 288, 194 ) ;
+        Size = MAP_APPFONT ( 288, 8 ) ;
         Text = "Einträge" ;
         Text [ ENGLISH ] = "Entries" ;
         Text[ english_us ] = "Entries";

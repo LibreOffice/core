@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:38:18 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -709,7 +709,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
             aRealSizeBT.SetClickHdl(LINK(this, SwFrmPage, RealSizeHdl));
         }
 //      else
-//          aTypeGB.SetSizePixel(Size(aTypeGB.GetSizePixel().Width(), aSizeGB.GetSizePixel().Height()));
+//          aTypeFL.SetSizePixel(Size(aTypeFL.GetSizePixel().Width(), aSizeFL.GetSizePixel().Height()));
 
         if ( nDlgType == DLG_FRM_GRF )
             aFixedRatioCB.Check( FALSE );
@@ -723,7 +723,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     }
     else
     {
-//      aTypeGB.SetSizePixel(Size(aTypeGB.GetSizePixel().Width(), aSizeGB.GetSizePixel().Height()));
+//      aTypeFL.SetSizePixel(Size(aTypeFL.GetSizePixel().Width(), aSizeFL.GetSizePixel().Height()));
         aGrfSize = ((const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE)).GetSize();
     }
 
@@ -2110,7 +2110,7 @@ void SwFrmPage::SetFormatUsed(BOOL bFmt)
 SwGrfExtPage::SwGrfExtPage(Window *pParent, const SfxItemSet &rSet) :
     SfxTabPage( pParent, SW_RES(TP_GRF_EXT), rSet ),
     aBmpWin                 (this, WN_BMP, Graphic(), Bitmap(BMP_EXAMPLE) ),
-    aConnectGB              (this, SW_RES( GB_CONNECT )),
+    aConnectFL              (this, SW_RES( FL_CONNECT )),
     aConnectFT              (this, SW_RES( FT_CONNECT )),
     aConnectED              (this, SW_RES( ED_CONNECT )),
     aBrowseBT               (this, SW_RES( PB_BROWSE )),
@@ -2122,7 +2122,7 @@ SwGrfExtPage::SwGrfExtPage(Window *pParent, const SfxItemSet &rSet) :
     aLeftPagesRB(           this, SW_RES( RB_MIRROR_LEFT_PAGES )),
     aRightPagesRB(          this, SW_RES( RB_MIRROR_RIGHT_PAGES )),
 
-    aMirrorFrm              (this, SW_RES( GB_MIRROR )),
+    aMirrorFL               (this, SW_RES( FL_MIRROR )),
     pGrfDlg( 0 )
 {
     FreeResource();
@@ -2244,7 +2244,7 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
     aRightPagesRB.Enable(bEnableMirrorRB);
     aMirrorHorzBox.Enable(bEnable);
     aMirrorVertBox.Enable(bEnable);
-    aMirrorFrm.Enable(bEnable);
+    aMirrorFL.Enable(bEnable);
 
     aAllPagesRB .SaveValue();
     aLeftPagesRB.SaveValue();

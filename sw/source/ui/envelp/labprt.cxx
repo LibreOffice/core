@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,10 +99,10 @@ SwLabPrtPage::SwLabPrtPage(Window* pParent, const SfxItemSet& rSet) :
     aRowText       (this, SW_RES(TXT_ROW    )),
     aRowField      (this, SW_RES(FLD_ROW    )),
     aSynchronCB    (this, SW_RES(CB_SYNCHRON)),
-    aGBDontKnow    (this, SW_RES(GB_DONTKNOW)),
+    aFLDontKnow    (this, SW_RES(FL_DONTKNOW)),
     aPrinterInfo   (this, SW_RES(INF_PRINTER)),
     aPrtSetup      (this, SW_RES(BTN_PRTSETUP)),
-    aGBPrinter     (this, SW_RES(GB_PRINTER ))
+    aFLPrinter     (this, SW_RES(FL_PRINTER ))
 
 {
     FreeResource();
@@ -261,6 +261,9 @@ void SwLabPrtPage::Reset(const SfxItemSet& rSet)
 // --------------------------------------------------------------------------
 /*
 $Log: not supported by cvs2svn $
+Revision 1.1.1.1  2000/09/18 17:14:36  hr
+initial import
+
 Revision 1.37  2000/09/18 16:05:26  willem.vandorp
 OpenOffice header added.
 

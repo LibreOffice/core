@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #define FI_3            13
 #define FI_4            14
 #define FI_5            15
-//#define GB_LEVEL        16
+//#define FL_LEVEL        16
 
 #define FT_COLL         20
 #define LB_COLL         21
@@ -85,21 +85,21 @@
 #define ED_DELIM_BEVOR  27
 #define ED_DELIM_AFTER  28
 #define CB_COMPLETE     29
-#define GB_NUMBER       30
+#define FL_NUMBER       30
 
 #define LB_ALIGN        31
-#define GB_ALIGN        33
+#define FL_ALIGN        33
 
 #define FT_START        40
 #define ED_START        41
-#define GB_START        42
+#define FL_START        42
 
 #define BT_OK           100
 #define BT_CANCEL       101
 #define BT_HELP         102
 #define BT_FORM         103
 #define BT_RESET        104
-#define GB_FORM         105
+#define FL_FORM         105
 #define LB_FORM         106
 #define ED_FORM         107
 #define FT_ALL_LEVEL    108
@@ -118,10 +118,9 @@
 #define MN_FORM9        119
 #define MN_SAVE         120
 
-#define GB_LEVEL        130
+#define FL_LEVEL                130
 #define LB_LEVEL        131
 #define WIN_PREVIEW     132
-#define GB_PREVIEW      133
 #define FT_SUFFIX       134
 #define ED_SUFFIX       135
 #define FT_PREFIX       136

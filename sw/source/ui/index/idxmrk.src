@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 20:10:37 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1163,10 +1163,10 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
         Pos = MAP_APPFONT ( 312 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    GroupBox GB_ENTRIES
+    FixedLine FL_ENTRIES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 300 , 197 ) ;
+        Size = MAP_APPFONT ( 300 , 8 ) ;
         Text = "Eintragsdaten" ;
         Text [ ENGLISH ] = "Entry data" ;
         Text[ english_us ] = "Entry data";

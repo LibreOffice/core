@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 14:08:37 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,25 +185,25 @@ SwEndNoteOptionPage::SwEndNoteOptionPage( Window *pParent, BOOL bEN,
     aPosFT          (this, ResId( FT_POS    )),
     aPosPageBox     (this, ResId( RB_POS_PAGE    )),
     aPosChapterBox  (this, ResId( RB_POS_CHAPTER)),
-    aNumGrp         (this, ResId( GB_NUM        )),
+    aNumFL         (this, ResId( FL_NUM        )),
 
     aParaTemplLbl   (this, ResId( FT_PARA_TEMPL)),
     aParaTemplBox   (this, ResId( LB_PARA_TEMPL)),
     aPageTemplLbl   (this, ResId( FT_PAGE_TEMPL)),
     aPageTemplBox   (this, ResId( LB_PAGE_TEMPL)),
-    aTemplGrp       (this, ResId( GB_TEMPL      )),
+    aTemplFL       (this, ResId( FL_TEMPL      )),
 
     aFtnCharTextTemplLbl(   this, ResId( FT_TEXT_CHARFMT)),
     aFtnCharTextTemplBox(   this, ResId( LB_TEXT_CHARFMT)),
     aFtnCharAnchorTemplLbl( this, ResId( FT_ANCHR_CHARFMT)),
     aFtnCharAnchorTemplBox( this, ResId( LB_ANCHR_CHARFMT)),
-    aCharTemplGrp(          this, ResId(GB_CHAR_TEMPL)),
+    aCharTemplFL(          this, ResId(FL_CHAR_TEMPL)),
 
     aContLbl        (this, ResId( FT_CONT       )),
     aContEdit       (this, ResId( ED_CONT       )),
     aContFromLbl    (this, ResId( FT_CONT_FROM )),
     aContFromEdit   (this, ResId( ED_CONT_FROM )),
-    aContGrp        (this, ResId( GB_CONT       )),
+    aContFL        (this, ResId( FL_CONT       )),
 
     aNumPage(aNumCountBox.GetEntry(FTNNUM_PAGE)),
     pSh( 0 ),
@@ -233,8 +233,8 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
         aFtnCharTextTemplBox.Hide();
         aFtnCharAnchorTemplLbl.Hide();
         aFtnCharAnchorTemplBox.Hide();
-        aCharTemplGrp   .Hide();
-        aTemplGrp       .Hide();
+        aCharTemplFL   .Hide();
+        aTemplFL       .Hide();
     }
     if ( bEndNote )
     {
@@ -245,7 +245,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
         aContEdit.Hide();
         aContFromLbl.Hide();
         aContFromEdit.Hide();
-        aContGrp.Hide();
+        aContFL.Hide();
         bPosDoc = TRUE;
     }
     else
@@ -534,6 +534,9 @@ SfxTabPage *SwFootNoteOptionPage::Create(Window *pParent, const SfxItemSet &rSet
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/03/02 14:08:37  os
+    extended numbering types available
+
     Revision 1.3  2001/02/23 12:45:29  os
     Complete use of DefaultNumbering component
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 09:03:23 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,7 +665,7 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec) :
     ModalDialog(pParent, SW_RES(DLG_SAVE_LABEL)),
     rLabRec(rRec),
     pLabPage(pParent),
-    aOptionsGB(this,ResId(GB_OPTIONS  )),
+    aOptionsFL(this,ResId(FL_OPTIONS  )),
     aMakeFT(this,   ResId(FT_MAKE     )),
     aMakeCB(this,   ResId(CB_MAKE     )),
     aTypeFT(this,   ResId(FT_TYPE     )),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:25:07 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,10 +237,11 @@ TabPage TP_LAB_PRT
         Text[ finnish ] = "~Synkronoi sisältö";
         Text[ catalan ] = "~Sincronizar contenidos";
     };
-    GroupBox GB_DONTKNOW
+    FixedLine FL_DONTKNOW
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 53 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Verteilen" ;
     };
     FixedText INF_PRINTER
     {
@@ -298,10 +299,10 @@ TabPage TP_LAB_PRT
         Text[ finnish ] = "Asennus";
         Text[ catalan ] = "Configurar...";
     };
-    GroupBox GB_PRINTER
+    FixedLine FL_PRINTER
     {
         Pos = MAP_APPFONT ( 6 , 59 ) ;
-        Size = MAP_APPFONT ( 248 , 28 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = " Drucker " ;
         Text [ ENGLISH ] = " Printer " ;
         Text [ dutch ] = "Printer " ;

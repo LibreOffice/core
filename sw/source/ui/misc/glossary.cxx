@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-28 15:03:34 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ class SwNewGlosNameDlg : public ModalDialog
     NoSpaceEdit     aNewShort;
     OKButton        aOk;
     CancelButton    aCancel;
-     GroupBox       aGrp;
+    FixedLine       aFL;
     FixedText       aONFT;
     Edit            aOldName;
     FixedText       aOSFT;
@@ -295,7 +295,7 @@ SwNewGlosNameDlg::SwNewGlosNameDlg(Window* pParent,
     aOldShort(this,SW_RES( ED_OS    )),
     aNewName(this, SW_RES( ED_NN    )),
     aNewShort(this,SW_RES( ED_NS    )),
-    aGrp    (this, SW_RES( GB_NN    ))
+    aFL    (this, SW_RES( FL_NN    ))
 {
     FreeResource();
     aOldName.SetText( rOldName );

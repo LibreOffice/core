@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-05-15 10:02:00 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aFromNF         (this, SW_RES(NF_FROM)),
     aBisFT          (this, SW_RES(FT_BIS)),
     aToNF           (this, SW_RES(NF_TO)),
-    aRecordGB       (this, SW_RES(GB_RECORD)),
+    aRecordFL       (this, SW_RES(FL_RECORD)),
 
     aPrinterRB      (this, SW_RES(RB_PRINTER)),
     aMailingRB      (this, SW_RES(RB_MAILING)),
@@ -200,7 +200,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aFormatSwCB     (this, SW_RES(CB_FORMAT_SW)),
     aFormatHtmlCB   (this, SW_RES(CB_FORMAT_HTML)),
     aFormatRtfCB    (this, SW_RES(CB_FORMAT_RTF)),
-    aDestGB         (this, SW_RES(GB_DEST)),
+    aDestFL         (this, SW_RES(FL_DEST)),
 
     aOkBTN          (this, SW_RES(BTN_OK)),
     aCancelBTN      (this, SW_RES(BTN_CANCEL)),
@@ -217,7 +217,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     {
         aSelection = *pSelection;
         //move all controls
-        long nDiff = aRecordGB.GetPosPixel().Y() - pBeamerWin->GetPosPixel().Y();
+        long nDiff = aRecordFL.GetPosPixel().Y() - pBeamerWin->GetPosPixel().Y();
         pBeamerWin->Show(FALSE);
         Size aSize = GetSizePixel();
         aSize.Height() -= nDiff;
@@ -229,7 +229,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
             &aFromNF      ,
             &aBisFT       ,
             &aToNF        ,
-            &aRecordGB    ,
+            &aRecordFL    ,
             &aPrinterRB   ,
             &aMailingRB   ,
             &aFileRB      ,
@@ -253,7 +253,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
             &aFormatHtmlCB,
             &aFormatRtfCB ,
             &aFormatSwCB  ,
-            &aDestGB      ,
+            &aDestFL      ,
             0};
 
         for( Window** ppW = aCntrlArr; *ppW; ++ppW )

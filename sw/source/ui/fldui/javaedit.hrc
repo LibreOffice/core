@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #define ED_TYPE             11
 #define RB_EDIT             12
 #define ED_EDIT             13
-#define GB_POSTIT           14
+#define FL_POSTIT                       14
 #define BTN_PREV            15
 #define BTN_NEXT            16
 #define STR_JAVA_EDIT       17

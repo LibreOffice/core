@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:22:15 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,10 +164,10 @@ TabPage TP_FOOTNOTEOPTION
     HelpID = HID_FOOTNOTE_OPTIONS ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    GroupBox GB_NUM
+    FixedLine FL_NUM
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 83 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Automatische Nummerierung" ;
         Text [ ENGLISH ] = "Automatic numbering" ;
         Text [ norwegian ] = "Auto. nummerering" ;
@@ -618,10 +618,10 @@ TabPage TP_FOOTNOTEOPTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "F~in del documento";
     };
-    GroupBox GB_TEMPL
+    FixedLine FL_TEMPL
     {
         Pos = MAP_APPFONT ( 6 , 89 ) ;
-        Size = MAP_APPFONT ( 115 , 42 ) ;
+        Size = MAP_APPFONT ( 115 , 8 ) ;
         Text = "Vorlagen" ;
         Text [ ENGLISH ] = "Styles" ;
         Text [ norwegian ] = "Styles" ;
@@ -725,10 +725,10 @@ TabPage TP_FOOTNOTEOPTION
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
-    GroupBox GB_CHAR_TEMPL
+    FixedLine FL_CHAR_TEMPL
     {
         Pos = MAP_APPFONT ( 125 , 89 ) ;
-        Size = MAP_APPFONT ( 129 , 42 ) ;
+        Size = MAP_APPFONT ( 129 , 8 ) ;
         Text = "Zeichenvorlagen" ;
         Text [ ENGLISH ] = "Character styles" ;
 
@@ -830,10 +830,10 @@ TabPage TP_FOOTNOTEOPTION
         DropDown = TRUE ;
         Sort = TRUE ;
     };
-    GroupBox GB_CONT
+    FixedLine FL_CONT
     {
         Pos = MAP_APPFONT ( 6 , 134 ) ;
-        Size = MAP_APPFONT ( 248 , 42 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Hinweistext mehrseitige Fuﬂnoten" ;
         Text [ ENGLISH ] = "Continuation notice" ;
         Text [ norwegian ] = "+++Continuation notice" ;
@@ -945,10 +945,10 @@ TabPage TP_ENDNOTEOPTION
     HelpID = HID_ENDNOTE_OPTIONS ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    GroupBox GB_NUM
+    FixedLine FL_NUM
     {
         Pos = MAP_APPFONT ( 6 , 2 ) ;
-        Size = MAP_APPFONT ( 248 , 42 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Automatische Nummerierung" ;
         Text [ ENGLISH ] = "Automatic numbering" ;
         Text [ norwegian ] = "Auto. nummerering" ;
@@ -1221,10 +1221,10 @@ TabPage TP_ENDNOTEOPTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fin del ~documento";
     };
-    GroupBox GB_TEMPL
+    FixedLine FL_TEMPL
     {
         Pos = MAP_APPFONT ( 6 , 46 ) ;
-        Size = MAP_APPFONT ( 115 , 42 ) ;
+        Size = MAP_APPFONT ( 115 , 8 ) ;
         Text = "Vorlagen" ;
         Text [ ENGLISH ] = "Styles" ;
         Text [ norwegian ] = "Styles" ;
@@ -1328,10 +1328,10 @@ TabPage TP_ENDNOTEOPTION
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
-    GroupBox GB_CHAR_TEMPL
+    FixedLine FL_CHAR_TEMPL
     {
         Pos = MAP_APPFONT ( 125 , 46 ) ;
-        Size = MAP_APPFONT ( 129 , 42 ) ;
+        Size = MAP_APPFONT ( 129 , 8 ) ;
         Text = "Zeichenvorlagen" ;
         Text [ ENGLISH ] = "Character styles" ;
         Text[ english_us ] = "Character Styles";
@@ -1430,10 +1430,10 @@ TabPage TP_ENDNOTEOPTION
         DropDown = TRUE ;
         Sort = TRUE ;
     };
-    GroupBox GB_CONT
+    FixedLine FL_CONT
     {
         Pos = MAP_APPFONT ( 80 , 91 ) ;
-        Size = MAP_APPFONT ( 174 , 42 ) ;
+        Size = MAP_APPFONT ( 174 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Hinweistext mehrseitige Fuﬂnoten : Hinweistext mehrseitige Fuònoten */
         Text = "Hinweistext mehrseitige Fuﬂnoten" ;
         Text [ ENGLISH ] = "Continuation notice" ;

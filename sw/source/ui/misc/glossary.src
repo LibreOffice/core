@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-21 12:29:30 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ ModalDialog DLG_GLOSSARY
     };
     CheckBox CB_FILE_REL
     {
-        Pos = MAP_APPFONT ( 14 , 144 ) ;
+        Pos = MAP_APPFONT ( 14 , 145 ) ;
         Size = MAP_APPFONT ( 90 , 12 ) ;
         Text = "Im ~Dateisystem" ;
         Text [ ENGLISH ] = "on ~filesystem" ;
@@ -282,7 +282,7 @@ ModalDialog DLG_GLOSSARY
     };
     CheckBox CB_NET_REL
     {
-        Pos = MAP_APPFONT ( 109 , 144 ) ;
+        Pos = MAP_APPFONT ( 109 , 145 ) ;
         Size = MAP_APPFONT ( 90 , 12 ) ;
         Text = "Im ~Internet" ;
         Text [ ENGLISH ] = "on int~ernet" ;
@@ -314,7 +314,7 @@ ModalDialog DLG_GLOSSARY
     };
     CheckBox CB_SHOW_EXAMPLE
     {
-        Pos = MAP_APPFONT ( 231 , 144 ) ;
+        Pos = MAP_APPFONT ( 231 , 145 ) ;
         Size = MAP_APPFONT ( 82 , 12 ) ;
         Text = "~Vorschau anzeigen" ;
         Text [ ENGLISH ] = "Show ~preview" ;
@@ -1137,10 +1137,10 @@ ModalDialog DLG_RENAME_GLOS
         Size = MAP_APPFONT ( 21 , 12 ) ;
         Left = TRUE ;
     };
-    GroupBox GB_NN
+    FixedLine FL_NN
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 219 , 41 ) ;
+        Size = MAP_APPFONT ( 219 , 8 ) ;
     };
     Text [ dutch ] = "Naam tekstbouwsteen wijzigen" ;
     Text [ english_us ] = "Rename AutoText" ;

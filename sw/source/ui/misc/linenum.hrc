@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,15 +70,15 @@
 #define FT_NUM_INVERVAL     10
 #define NF_NUM_INVERVAL     11
 #define FT_NUM_ROWS         12
-#define GB_DISPLAY          13
+#define FL_DISPLAY          13
 #define FT_DIVISOR          14
 #define ED_DIVISOR          15
 #define FT_DIV_INTERVAL     16
 #define NF_DIV_INTERVAL     17
 #define FT_DIV_ROWS         18
-#define GB_DIVISOR          19
+#define FL_DIVISOR          19
 #define CB_COUNT_EMPTYLINES 20
 #define CB_COUNT_FRAMELINES 21
-#define GB_COUNT            22
+#define FL_COUNT            22
 #define CB_RESTART_PAGE     23
 

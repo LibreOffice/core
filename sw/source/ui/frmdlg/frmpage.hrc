@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:38:18 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,11 +96,11 @@
 #define CB_VERT                 47
 //#define LB_MIRROR_PAGES           49
 //#define FT_MIRROR_PAGES           50
-#define GB_MIRROR               51
+#define FL_MIRROR                               51
 #define WN_BMP                  52
 #define PB_BROWSE               53
 #define ED_CONNECT              54
-#define GB_CONNECT              55
+#define FL_CONNECT              55
 #define FT_CONNECT              57
 #define FT_URL                  58
 #define ED_URL                  59
