@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-15 09:12:02 $
+ *  last change: $Author: fs $ $Date: 2001-10-16 08:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3753,9 +3753,13 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
         }
     }
     UniString aSynPath;
-    if (getSchemeInfo().m_bHierarchical
-        && rThePath.Len() == 0 || rThePath.GetChar(0) != '/')
+    if  (   getSchemeInfo().m_bHierarchical
+        &&  (   ( rThePath.Len() == 0 )
+            ||  ( rThePath.GetChar(0) != '/' )
+            )
+        )
         aSynPath = '/';
+
     aSynPath += rThePath;
     m_aPath.set(m_aAbsURIRef,
                 encodeText(aSynPath, false,
