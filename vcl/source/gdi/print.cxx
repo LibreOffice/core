@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-15 12:02:22 $
+ *  last change: $Author: ssa $ $Date: 2002-08-22 07:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,10 @@ struct SalPrinterQueueInfo
 #endif
 
 using namespace com::sun::star::portal::client;
+
+#ifdef DEBUG
+#undef DEBUG
+#endif
 
 #endif
 
