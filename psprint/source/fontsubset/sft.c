@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-08 16:32:30 $
+ *  last change: $Author: pl $ $Date: 2001-06-26 19:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.c,v 1.4 2001-06-08 16:32:30 pl Exp $
+/* $Id: sft.c,v 1.5 2001-06-26 19:23:12 pl Exp $
  * Sun Font Tools
  *
  * Author: Alexander Gelfenbain
@@ -1079,18 +1079,26 @@ static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **pat
 
 /*- Extracts a string from the name table and allocates memory for it -*/
 
-static char *nameExtract(byte *name, int n, int dbFlag)
+static char *nameExtract(byte *name, int n, int dbFlag, uint16** ucs2result )
 {
     int i;
     char *res;
     byte *ptr =  name + GetUInt16(name, 4, 1) + GetUInt16(name + 6, 12 * n + 10, 1);
     int len = GetUInt16(name+6, 12 * n + 8, 1);
 
+    if( ucs2result )
+        *ucs2result = NULL;
     if (dbFlag) {
         res = malloc(1 + len/2);
         assert(res != 0);
         for (i = 0; i < len/2; i++) res[i] = *(ptr + i * 2 + 1);
         res[len/2] = 0;
+        if( ucs2result )
+        {
+            *ucs2result = malloc( len+2 );
+            for (i = 0; i < len/2; i++ ) (*ucs2result)[i] = GetUInt16( ptr, 2*i, 1 );
+            (*ucs2result)[len/2] = 0;
+        }
     } else {
         res = malloc(1 + len);
         assert(res != 0);
@@ -1149,9 +1157,9 @@ static void GetNames(TrueTypeFont *t)
 
     /* PostScript name: preferred Microsoft */
     if ((r = findname(table, n, 3, 1, 0x0409, 6)) != -1) {
-        t->psname = nameExtract(table, r, 1);
+        t->psname = nameExtract(table, r, 1, NULL);
     } else if ((r = findname(table, n, 1, 0, 0, 6)) != -1) {
-        t->psname = nameExtract(table, r, 0);
+        t->psname = nameExtract(table, r, 0, NULL);
     } else {
         char* pReverse = t->fname + strlen(t->fname);
         /* take only last token of filename */
@@ -1168,19 +1176,23 @@ static void GetNames(TrueTypeFont *t)
     }
 
     /* Font family and subfamily names: preferred Apple */
-    if ((r = findname(table, n, 1, 0, 0, 1)) != -1) {
-        t->family = nameExtract(table, r, 0);
+    if ((r = findname(table, n, 0, 0, 0, 1)) != -1) {
+        t->family = nameExtract(table, r, 1, &t->ufamily);
     } else if ((r = findname(table, n, 3, 1, 0x0409, 1)) != -1) {
-        t->family = nameExtract(table, r, 1);
+        t->family = nameExtract(table, r, 1, &t->ufamily);
+    } else if ((r = findname(table, n, 1, 0, 0, 1)) != -1) {
+        t->family = nameExtract(table, r, 0, NULL);
+    } else if ((r = findname(table, n, 3, 1, 0x0411, 1)) != -1) {
+        t->family = nameExtract(table, r, 1, &t->ufamily);
     } else {
         t->family = strdup(t->psname);
         assert(t->family != 0);
     }
 
     if ((r = findname(table, n, 1, 0, 0, 2)) != -1) {
-        t->subfamily = nameExtract(table, r, 0);
+        t->subfamily = nameExtract(table, r, 0, NULL);
     } else if ((r = findname(table, n, 3, 1, 0x0409, 2)) != -1) {
-        t->subfamily = nameExtract(table, r, 1);
+        t->subfamily = nameExtract(table, r, 1, NULL);
     } else {
         t->subfamily = strdup("");
         assert(t->family != 0);
@@ -1720,6 +1732,8 @@ void CloseTTFont(TrueTypeFont *ttf) /*FOLD01*/
     free(ttf->goffsets);
     free(ttf->psname);
     free(ttf->family);
+    if( ttf->ufamily )
+        free( ttf->ufamily );
     free(ttf->subfamily);
     free(ttf->tables);
     free(ttf->tlens);
@@ -2435,6 +2449,7 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
     memset(info, 0, sizeof(TTGlobalFontInfo));
 
     info->family = ttf->family;
+    info->ufamily = ttf->ufamily;
     info->subfamily = ttf->subfamily;
     info->psname = ttf->psname;
     info->symbolEncoded = ttf->cmapType == CMAP_MS_Symbol ? 1 : 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-08 16:32:30 $
+ *  last change: $Author: pl $ $Date: 2001-06-26 19:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.h,v 1.3 2001-06-08 16:32:30 pl Exp $ */
+/* $Id: sft.h,v 1.4 2001-06-26 19:23:12 pl Exp $ */
 
 /**
  *
@@ -292,6 +292,7 @@ extern "C" {
 
     typedef struct {
         char *family;             /**< family name                                             */
+        uint16 *ufamily;          /**< family name UCS2                                         */
         char *subfamily;          /**< subfamily name                                          */
         char *psname;             /**< PostScript name                                         */
         int   weight;             /**< value of WeightClass or 0 if can't be determined        */
@@ -320,7 +321,7 @@ extern "C" {
         uint32 ur3;               /**< bits 64 - 95 of Unicode Range flags                     */
         uint32 ur4;               /**< bits 96 - 127 of Unicode Range flags                    */
         byte   panose[10];        /**< PANOSE classification number                            */
-        uint16 typeFlags;
+        uint16 typeFlags;         /**< type flags (copyright information)                      */
     } TTGlobalFontInfo;
 
 /** Structure used by KernGlyphs()      */
@@ -630,6 +631,7 @@ extern "C" {
 
         char   *psname;
         char   *family;
+        uint16  *ufamily;
         char   *subfamily;
 
         uint32 ntables;
