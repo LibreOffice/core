@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:12:07 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 13:00:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,28 @@ private:
 
     ScDPObject&         mrDPObj;            /// The DataPilot object (for member names).
     ScDPLabelData       maLabelData;        /// Cache for members data.
+};
+
+// ============================================================================
+
+class ScDPShowDetailDlg : public ModalDialog
+{
+public:
+    explicit            ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, USHORT nOrient );
+
+    virtual short       Execute();
+
+    String              GetDimensionName() const;
+
+private:
+    DECL_LINK( DblClickHdl, ListBox* );
+
+private:
+    FixedText           maFtDims;
+    ListBox             maLbDims;
+    OKButton            maBtnOk;
+    CancelButton        maBtnCancel;
+    HelpButton          maBtnHelp;
 };
 
 // ============================================================================
