@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.176 $
+ *  $Revision: 1.177 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:31:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 16:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@
 #if defined(SOLARIS) || defined(IRIX)
   #include <alloca.h>
 #else
-#ifndef MACOSX
+#if !(defined(MACOSX) || defined(FREEBSD))
   #include <malloc.h>
 #endif
 #endif
