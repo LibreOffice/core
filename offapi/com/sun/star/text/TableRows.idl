@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRows.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:17:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:14:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ module com {  module sun {  module star {  module text {
 
     @since #107627#
  */
-service TableRows
+published service TableRows
 {
     //-------------------------------------------------------------------------
     /** provides methods to insert and remove rows.
