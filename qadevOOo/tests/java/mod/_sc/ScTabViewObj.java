@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScTabViewObj.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-04 15:26:41 $
+ *  last change:$Date: 2003-02-28 09:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ import com.sun.star.uno.Type;
 */
 public class ScTabViewObj extends TestCase {
     public XSpreadsheetDocument xSpreadsheetDoc;
+    public XSpreadsheetDocument xSpreadsheetDoc2;
 
     /**
     * Creates Spreadsheet document.
@@ -130,6 +131,7 @@ public class ScTabViewObj extends TestCase {
         try {
             log.println("creating a spreadsheetdocument");
             xSpreadsheetDoc = SOF.createCalcDoc(null);
+            xSpreadsheetDoc2 = SOF.createCalcDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document ", e );
@@ -144,6 +146,9 @@ public class ScTabViewObj extends TestCase {
         XComponent oComp = (XComponent)
             UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
         oComp.dispose();
+        XComponent oComp2 = (XComponent)
+            UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc2) ;
+        oComp2.dispose();
     }
 
     /**
@@ -165,6 +170,9 @@ public class ScTabViewObj extends TestCase {
 
         XModel aModel = (XModel)
                     UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
+
+        XModel aSecondModel = (XModel)
+                    UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc2);
 
         XInterface oObj = aModel.getCurrentController();
 
@@ -193,7 +201,9 @@ public class ScTabViewObj extends TestCase {
 
         log.println("adding 'Sheet' as ObjRelation");
         tEnv.addObjRelation("Sheet", oSheet);
-
+        tEnv.addObjRelation("Frame",aModel.getCurrentController().getFrame());
+        tEnv.addObjRelation("SecondModel",aSecondModel);
+        tEnv.addObjRelation("FirstModel",aModel);
 
         //Relations for XSelectionSupplier
         XCell cell_1 = null;
