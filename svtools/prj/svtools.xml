@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
 <module-description xmlns:xlink="http://www.w3.org/1999/xlink">
-
     <module-name>svtools</module-name>
-
     <component-description>
         <author>Ocke Janssen</author>
         <name>com.sun.star.comp.svtools.AccessibleBrowseBox</name>
@@ -13,7 +11,6 @@
         <status value="final"/>
         <supported-service>drafts.com.sun.star.accessibility.AccessibleContext</supported-service>
     </component-description>
-
     <component-description>
         <author>Ocke Janssen</author>
         <name>com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderBar</name>
@@ -23,7 +20,6 @@
         <status value="final"/>
         <supported-service>drafts.com.sun.star.accessibility.AccessibleContext</supported-service>
     </component-description>
-
     <component-description>
         <author>Ocke Janssen</author>
         <name>com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderBar</name>
@@ -33,7 +29,6 @@
         <status value="final"/>
         <supported-service>drafts.com.sun.star.accessibility.AccessibleContext</supported-service>
     </component-description>
-
     <component-description>
         <author>Ocke Janssen</author>
         <name>com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderCell</name>
@@ -43,7 +38,6 @@
         <status value="final"/>
         <supported-service>drafts.com.sun.star.accessibility.AccessibleContext</supported-service>
     </component-description>
-
     <component-description>
         <author>Ocke Janssen</author>
         <name>com.sun.star.comp.svtools.AccessibleBrowseBoxTable</name>
@@ -53,7 +47,6 @@
         <status value="final"/>
         <supported-service>drafts.com.sun.star.accessibility.AccessibleContext</supported-service>
     </component-description>
-
     <component-description>
         <author>Ocke Janssen</author>
         <name>com.sun.star.comp.svtools.AccessibleBrowseBoxTableCell</name>
@@ -63,5 +56,40 @@
         <status value="final"/>
         <supported-service>drafts.com.sun.star.accessibility.AccessibleContext</supported-service>
     </component-description>
-
+    <component-description>
+        <author>Hans-Peter Burow</author>
+        <name>com.sun.star.comp.svtools.AccessibleListBox</name>
+        <description>specifies accessibility support for a treelistbox.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleTreeListBox</supported-service>
+    </component-description>
+    <component-description>
+        <author>Hans-Peter Burow</author>
+        <name>com.sun.star.comp.svtools.AccessibleListBoxEntry</name>
+        <description>specifies accessibility support for a treelistbox entry.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleTreeListBoxEntry</supported-service>
+    </component-description>
+    <component-description>
+        <author>Hans-Peter Burow</author>
+        <name>com.sun.star.comp.svtools.AccessibleIconChoiceCtrl</name>
+        <description>specifies accessibility support for an iconchoicecontrol.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleIconChoiceControl</supported-service>
+    </component-description>
+    <component-description>
+        <author>Hans-Peter Burow</author>
+        <name>com.sun.star.comp.svtools.AccessibleIconChoiceCtrlEntry</name>
+        <description>specifies accessibility support for an iconchoicecontrol entry.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleIconChoiceControlEntry</supported-service>
+    </component-description>
 </module-description>
