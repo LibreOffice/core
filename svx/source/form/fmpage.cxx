@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-15 10:27:12 $
+ *  last change: $Author: fs $ $Date: 2001-12-18 14:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,9 @@
 #endif
 using namespace ::svxform;
 #endif
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
 
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
@@ -317,6 +320,32 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContai
     static ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >  aRef;
     return aRef;
 #endif
+}
+
+//------------------------------------------------------------------
+sal_Bool FmFormPage::containsActiveCode( const String& _rScriptType ) const
+{
+    sal_Bool bContains = sal_False;
+    try
+    {
+        Reference< XIndexAccess > xForms( pImpl->getForms(), UNO_QUERY );
+        DBG_ASSERT( xForms.is(), "FmFormPage::containsActiveCode: invalid forms collection!" );
+        if ( xForms.is() )
+        {
+            bContains = pImpl->containsActiveCode( xForms, _rScriptType );
+        }
+        else
+            // be on the safe side: If we can't check this, assume there is active (potential dangerous) code
+            bContains = pImpl->getForms().is();
+                // (if and only if there is a forms collection)
+    }
+    catch( const Exception& )
+    {
+        DBG_ERROR( "FmFormPage::containsActiveCode: caught an exception!" );
+        // be on the safe side: If we can't check this, assume there is active (potential dangerous) code
+        bContains = sal_True;
+    }
+    return bContains;
 }
 
 //------------------------------------------------------------------

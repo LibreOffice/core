@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmmodel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-15 08:38:30 $
+ *  last change: $Author: fs $ $Date: 2001-12-18 14:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,6 +416,23 @@ void FmFormModel::SetAutoControlFocus( sal_Bool _bAutoControlFocus )
         pObjShell->SetModified( sal_True );
     }
 #endif
+}
+
+//------------------------------------------------------------------------
+sal_Bool FmFormModel::containsActiveCode( const String& _rScriptType ) const
+{
+    sal_Bool bContainsActiveCode = sal_False;
+
+    // loop through all our pages
+    USHORT nPageCount = GetPageCount( );
+    for ( USHORT i=0; i<nPageCount && !bContainsActiveCode; ++i )
+    {
+        const FmFormPage* pPage = PTR_CAST( FmFormPage, GetPage( i ) );
+        if ( pPage && pPage->containsActiveCode( _rScriptType ) )
+            bContainsActiveCode = sal_True;
+    }
+
+    return bContainsActiveCode;
 }
 
 //------------------------------------------------------------------------
