@@ -2,9 +2,9 @@
 #
 #   $RCSfile: sw.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2002-07-01 16:10:52 $
+#   last change: $Author: vg $ $Date: 2003-04-17 13:33:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,68 +70,4 @@ CDEFS+=-DVERTICAL_LAYOUT
 CDEFS+=-DACCESSIBLE_LAYOUT
 CDEFS+=-DBIDI
 
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
-CDEFS+=-DSBASIC
-.ENDIF
-
-.IF "$(GUI)" == "WIN"
-CDEFS+=-DOLE -DOLE2
-.ENDIF
-
-.IF "$(compact)" != ""
-CDEFS+=-DCOMPACT
-.ENDIF
-
-.IF "$(debug)" != ""
-DB=cv
-.ENDIF
-
-.IF "$(prjpch)" != ""
-CDEFS+=-DPRECOMPILED
-.ENDIF
-
-
-# ------------------------------------------------------------------
-# alte defines fuer die Sourcen
-# ------------------------------------------------------------------
-
-.IF "$(GUI)" == "WIN"
-CDEFS+=-DW30
-.ENDIF
-
-.IF "$(GUI)" == "OS2"
-CDEFS+=-DPM2 -DPM20
-RSCFLAGS+=-DPM2 -DPM20
-.IF "$(debug)" != ""
-# fuer OS/2 und debug groessere Pages
-LIBFLAGS=/C /P512
-.ENDIF
-.ENDIF
-
-.IF "$(COM)" == "BLC"
-CDEFS+=-DTCPP
-.ENDIF
-
-.IF "$(COM)" == "STC"
-CDEFS+=-DZTC
-.ENDIF
-
-.IF "$(COM)" == "ICC"
-CDEFS+=-DCSET
-.ENDIF
-
-
-# ------------------------------------------------------------------------
-# WINMSCI Compiler
-# ------------------------------------------------------------------------
-.IF "$(GUI)$(COM)" == "WINMSC"
-
-.IF "$(optimize)" != ""
-CFLAGS+=-OV9
-.ENDIF
-
-# kein -GEfs wegen dann fehlender inlinings
-CFLAGSOBJGUIST=-Alfd -GA -GEd
-
-.ENDIF # WINMSCI
 # ------------------------------------------------------------------------
