@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel_impl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-05 06:40:48 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel(::com::sun::star::uno
 template <class CONTROLMODEL>
 ::cppu::IPropertyArrayHelper& SAL_CALL OGeometryControlModel<CONTROLMODEL>::getInfoHelper()
 {
-    return *getArrayHelper();
+    return *this->getArrayHelper();
 }
 
 //--------------------------------------------------------------------
@@ -125,6 +125,12 @@ OGeometryControlModel_Base* OGeometryControlModel<CONTROLMODEL>::createClone_Imp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3.268.1  2004/07/13 16:56:04  hr
+ *  #i31439#: fix template resolution
+ *
+ *  Revision 1.3  2001/09/05 06:40:48  fs
+ *  #88891# override the XTypeProvider methods
+ *
  *  Revision 1.2  2001/03/02 12:34:13  tbe
  *  clone geometry control model
  *
