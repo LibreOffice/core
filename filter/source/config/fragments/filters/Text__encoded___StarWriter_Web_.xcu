@@ -1,4 +1,4 @@
-    <node oor:name="Text (encoded) (StarWriter/Web)" oor:op="replace">
+    <node oor:name="Text (encoded) (StarWriter/Web)" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_Text</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.text.WebDocument</value></prop>
@@ -9,15 +9,15 @@
         <prop oor:name="UIName">
             <value xml:lang="pl">Tekst zakodowany (%productname% Writer/Web)</value>
             <value xml:lang="hu">Kódolt szöveg (%productname% Writer/Web)</value>
-            <value xml:lang="ja">エンコードされたテキスト (%productname% Writer/Web)</value>
+            <value xml:lang="ja">エンコード�?�れ�?�テキスト (%productname% Writer/Web)</value>
             <value xml:lang="es">Texto codificado (%productname% Writer/Web)</value>
             <value xml:lang="tr">Kodlanmış Metin (%productname% Writer/Web)</value>
-            <value xml:lang="ru">Текст кодированный (%productname% Writer/Web)</value>
+            <value xml:lang="ru">Тек�?т кодированный (%productname% Writer/Web)</value>
             <value xml:lang="th">Text Encoded (%productname% Writer/Web)</value>
             <value xml:lang="x-comment">Text Kodiert (%productname% Writer/Web)</value>
             <value xml:lang="ca">Text Encoded (%productname% Writer/Web)</value>
             <value xml:lang="el">Κείμενο Κωδικοποιημένο (%productname% Writer/Web)</value>
-            <value xml:lang="zh-CN">文字 使用编码的（%productname% Writer/Web）</value>
+            <value xml:lang="zh-CN">文字 使用编�?的（%productname% Writer/Web）</value>
             <value xml:lang="pt">Texto codificado (%productname% Writer/Web)</value>
             <value xml:lang="cs">Kódovaný text (%productname% Writer/Web)</value>
             <value xml:lang="fr">Texte codé (%productname% Writer/Web)</value>
@@ -32,7 +32,7 @@
             <value xml:lang="sv">Text - kodad (%productname% Writer/Web)</value>
             <value xml:lang="da">Tekst encoded (%productname% Writer/Web)</value>
             <value xml:lang="de">Text Kodiert (%productname% Writer/Web)</value>
-            <value xml:lang="ko">인코드된 텍스트 (%productname% Writer/Web)</value>
+            <value xml:lang="ko">�?�코드�?� �?스트 (%productname% Writer/Web)</value>
             <value xml:lang="nl">Tekst gecodeerd (%productname% Writer/Web)</value>
             <value xml:lang="pt-BR">Text (encoded)</value>
             <value xml:lang="it">Testo codificato (%productname% Writer/Web)</value>
