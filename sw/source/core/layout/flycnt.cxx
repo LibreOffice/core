@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:20:20 $
+ *  last change: $Author: ama $ $Date: 2001-11-07 14:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,6 +394,22 @@ void SwFlyAtCntFrm::MakeAll()
         //Jetzt Stufe 3: einfach ein globales Flag und schon flaggen sie sich
         //selbst.
         bSetCompletePaintOnInvalidate = TRUE;
+        {
+            SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
+            const SwFmtFrmSize &rFrmSz = GetFmt()->GetFrmSize();
+            if( rFrmSz.GetHeightPercent() != 0xFF &&
+                rFrmSz.GetHeightPercent() >= 100 )
+            {
+                pFmt->LockModify();
+                SwFmtSurround aMain( pFmt->GetSurround() );
+                if ( aMain.GetSurround() == SURROUND_NONE )
+                {
+                    aMain.SetSurround( SURROUND_THROUGHT );
+                    pFmt->SetAttr( aMain );
+                }
+                pFmt->UnlockModify();
+            }
+        }
         SwOszControl aOszCntrl( this );
 
         if( GetAnchor()->IsInSct() )
@@ -1389,6 +1405,10 @@ BOOL MA_FASTCALL lcl_Minor( SwRelationOrient eRelO, SwRelationOrient eRelO2,
         return aLeft[ eRelO ] >= aLeft[ eRelO2 ];
     return aRight[ eRelO ] >= aRight[ eRelO2 ];
 }
+
+#ifndef VERTICAL_LAYOUT
+#define PHEIGHT , pHeight
+#endif
 
 void SwFlyAtCntFrm::MakeFlyPos()
 {

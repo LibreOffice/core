@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-22 09:04:03 $
+ *  last change: $Author: ama $ $Date: 2001-11-07 14:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
     if ( bBot || bRig )
     {
         FASTBOOL bAgain = FALSE;
-        if ( bBot && !GetDrawObjs() )
+        if ( bBot && !GetDrawObjs() && !GetAnchor()->IsInTab() )
         {
             SwFrm* pHeader = FindFooterOrHeader();
             // In a header, correction of the position is no good idea.

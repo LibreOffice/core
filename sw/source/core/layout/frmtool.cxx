@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-06 09:32:12 $
+ *  last change: $Author: ama $ $Date: 2001-11-07 14:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,7 +459,12 @@ void MA_FASTCALL lcl_MoveDrawObjs( SwFrm *pLow, const Point &rDiff,
                     if ( pF->IsFlyFreeFrm() )
                     {
                         if ( aNotify.GetOldPage() != pNewPage )
-                            aNotify.GetOldPage()->MoveFly( pF, pNewPage );
+                        {
+                            if( aNotify.GetOldPage() )
+                                aNotify.GetOldPage()->MoveFly( pF, pNewPage );
+                            else
+                                pNewPage->SwPageFrm::AppendFly( pF );
+                        }
                     }
                 }
             }
@@ -2411,7 +2416,8 @@ void MA_FASTCALL lcl_Regist( SwPageFrm *pPage, const SwFrm *pAnch )
         }
 
         const SwFlyFrm *pFly = pAnch->FindFlyFrm();
-        if ( pFly && pObj->GetOrdNum() < pFly->GetVirtDrawObj()->GetOrdNum() )
+        if( pFly && pObj->GetOrdNum() < pFly->GetVirtDrawObj()->GetOrdNum() &&
+            pObj->GetPage() )
             pObj->GetPage()->SetObjectOrdNum( pObj->GetOrdNumDirect(),
                                     pFly->GetVirtDrawObj()->GetOrdNumDirect() + 1 );
     }
