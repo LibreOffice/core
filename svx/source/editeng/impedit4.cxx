@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-22 10:58:43 $
+ *  last change: $Author: mt $ $Date: 2001-06-22 13:18:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -879,7 +879,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             USHORT nMark = ((const SvxEmphasisMarkItem&)rItem).GetValue();
             if ( nMark == EMPHASISMARK_NONE )
                 rOutput << sRTF_ACCNONE;
-            if ( nMark == EMPHASISMARK_SIDE_DOTS )
+            else if ( nMark == EMPHASISMARK_SIDE_DOTS )
                 rOutput << sRTF_ACCCOMMA;
             else
                 rOutput << sRTF_ACCDOT;
