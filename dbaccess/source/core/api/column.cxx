@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:02:32 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:31:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,11 +656,11 @@ void OColumns::impl_refresh() throw(::com::sun::star::uno::RuntimeException)
 }
 
 // -------------------------------------------------------------------------
-Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
+connectivity::sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
 {
     OSL_ENSURE(m_pColFactoryImpl, "OColumns::createObject: no column factory!");
 
-    Reference< XNamed > xRet;
+    connectivity::sdbcx::ObjectType xRet;
     if ( m_pColFactoryImpl )
     {
         xRet = m_pColFactoryImpl->createColumn(_rName);
@@ -803,17 +803,15 @@ void OColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
     ::dbaccess::notifyDataSourceModified(m_xParent,sal_True);
 }
 // -------------------------------------------------------------------------
-Reference< XNamed > OColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+connectivity::sdbcx::ObjectType OColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
     Reference<XPropertySet> xProp = createEmptyObject();
-    Reference< XNamed > xName(xProp,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
     if ( xProp.is() )
         ::comphelper::copyProperties(_xDescriptor,xProp);
 
     if ( m_pColFactoryImpl )
         m_pColFactoryImpl->columnCloned(xProp);
-    return xName;
+    return xProp;
 }
 // -----------------------------------------------------------------------------
 
