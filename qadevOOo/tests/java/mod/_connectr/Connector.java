@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Connector.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:29 $
+ *  last change:$Date: 2003-05-27 12:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._connectr;
 
 import com.sun.star.uno.XInterface;
+import com.sun.star.lang.XMultiServiceFactory;
 import java.io.PrintWriter;
 import lib.StatusException;
 import lib.TestCase;
@@ -117,8 +118,9 @@ public class Connector extends TestCase {
         XInterface oObj = null ;
 
         try {
-            XInterface connector = (XInterface) Param.getMSF().createInstance
-                ("com.sun.star.connection.Connector") ;
+            XInterface connector = (XInterface)
+                ((XMultiServiceFactory)Param.getMSF()).createInstance
+                                    ("com.sun.star.connection.Connector") ;
 
             oObj = connector ;
         } catch (com.sun.star.uno.Exception e) {
