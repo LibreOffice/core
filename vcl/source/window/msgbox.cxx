@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgbox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2000-12-05 15:17:42 $
+ *  last change: $Author: ssa $ $Date: 2001-04-27 14:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef _SV_MSGBOX_HXX
 #include <msgbox.hxx>
 #endif
+#ifndef _SV_BUTTON_HXX
+#include <button.hxx>
+#endif
 #ifndef _SV_RC_H
 #include <rc.h>
 #endif
@@ -115,6 +118,8 @@ void MessBox::ImplInitData()
     mnSoundType         = 0;
     mbHelpBtn           = FALSE;
     mbSound             = TRUE;
+    mpCheckBox          = NULL;
+    mbCheck             = FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -245,6 +250,8 @@ MessBox::~MessBox()
         delete mpFixedText;
     if ( mpFixedImage )
         delete mpFixedImage;
+    if ( mpCheckBox )
+        delete mpCheckBox;
 }
 
 // -----------------------------------------------------------------------
@@ -291,6 +298,13 @@ void MessBox::ImplPosControls()
         delete mpFixedImage;
         mpFixedImage = NULL;
     }
+    if ( mpCheckBox )
+    {
+        mbCheck = mpCheckBox->IsChecked();
+        delete mpCheckBox;
+        mpCheckBox = NULL;
+    }
+
 
     // Message-Text um Tabs bereinigen
     XubString   aTabStr( RTL_CONSTASCII_USTRINGPARAM( "    " ) );
@@ -378,10 +392,39 @@ void MessBox::ImplPosControls()
     aPageSize.Width()  += (IMPL_DIALOG_OFFSET*2)+(IMPL_MSGBOX_OFFSET_EXTRA_X*2);
     aPageSize.Width()  += aFixedSize.Width()+1;
     aPageSize.Height() += (IMPL_DIALOG_OFFSET*2)+(IMPL_MSGBOX_OFFSET_EXTRA_Y*2);
+
     if ( aPageSize.Width() < IMPL_MINSIZE_MSGBOX_WIDTH )
         aPageSize.Width() = IMPL_MINSIZE_MSGBOX_WIDTH;
     if ( aPageSize.Width() < nTitleWidth )
         aPageSize.Width() = nTitleWidth;
+
+    if ( maCheckBoxText.Len() )
+    {
+        Size aMinCheckboxSize ( aFixedSize );
+        if ( aPageSize.Width() < IMPL_MINSIZE_MSGBOX_WIDTH+80 )
+        {
+            aPageSize.Width() = IMPL_MINSIZE_MSGBOX_WIDTH+80;
+            aMinCheckboxSize.Width() += 80;
+        }
+
+
+        mpCheckBox = new CheckBox( this );
+        mpCheckBox->Check( mbCheck );
+        mpCheckBox->SetText( maCheckBoxText );
+        mpCheckBox->SetStyle( mpCheckBox->GetStyle() | WB_WORDBREAK );
+
+        // align checkbox with message text
+        Size aSize = mpCheckBox->CalcMinimumSize( aMinCheckboxSize.Width() );
+        Point aPos( aTextPos );
+        aPos.Y() += aFixedSize.Height() + (IMPL_DIALOG_OFFSET)+(IMPL_MSGBOX_OFFSET_EXTRA_Y*2);
+
+        // increase messagebox
+        aPageSize.Height() += aSize.Height() + (IMPL_DIALOG_OFFSET*2)+(IMPL_MSGBOX_OFFSET_EXTRA_Y*2);
+
+        mpCheckBox->SetPosSizePixel( aPos, aSize );
+        mpCheckBox->Show();
+    }
+
     mpFixedText = new FixedText( this, nWinStyle );
     mpFixedText->SetPosSizePixel( aTextPos, aFixedSize );
     mpFixedText->SetText( aMessText );
@@ -400,6 +443,21 @@ void MessBox::StateChanged( StateChangedType nType )
             Sound::Beep( (SoundType)(mnSoundType-1), this );
     }
     ButtonDialog::StateChanged( nType );
+}
+
+// -----------------------------------------------------------------------
+
+BOOL MessBox::GetCheckBoxState() const
+{
+    return mpCheckBox ? mpCheckBox->IsChecked() : mbCheck;
+}
+
+// -----------------------------------------------------------------------
+
+void MessBox::SetCheckBoxState( BOOL bCheck )
+{
+    if( mpCheckBox ) mpCheckBox->Check( bCheck );
+    mbCheck = bCheck;
 }
 
 // -----------------------------------------------------------------------
