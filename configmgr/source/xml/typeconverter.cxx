@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconverter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: babak.mahbod $ $Date: 2000-09-21 20:17:23 $
+ *  last change: $Author: lla $ $Date: 2000-09-22 14:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,11 +130,12 @@ namespace configmgr
         staruno::Any aRes;
         try
         {
-            xTypeConverter->convertToSimpleType(staruno::makeAny(_rValue), _rTypeClass) >>= aRes;
+            aRes = xTypeConverter->convertToSimpleType(staruno::makeAny(_rValue), _rTypeClass);
         }
         catch (starscript::CannotConvertException&)
         {
-            OSL_ENSHURE(sal_False, "toAny : could not convert !");
+            if (_rValue.getLength() != 0)
+                OSL_ENSHURE(sal_False, "toAny : could not convert !");
         }
         catch (starlang::IllegalArgumentException&)
         {
@@ -336,18 +337,18 @@ namespace configmgr
         OSL_ASSERT(pSequenceTD->pType);
 
         if ( pSequenceTD && pSequenceTD->pType )
-            {
-                // SUPD expects a decimal constant, hence,
-                // build version comparison is made using
-                // a decimal number
+        {
+            // SUPD expects a decimal constant, hence,
+            // build version comparison is made using
+            // a decimal number
 
-                #if ( SUPD >= 601 )
-                    return staruno::Type(pSequenceTD->pType);
-                #else
-                    OSL_ASSERT(pSequenceTD->pType);
-                    return staruno::Type(pSequenceTD->pType->pWeakRef);
-                #endif
-            } //if
+#if ( SUPD >= 601 )
+            return staruno::Type(pSequenceTD->pType);
+#else
+            OSL_ASSERT(pSequenceTD->pType);
+            return staruno::Type(pSequenceTD->pType->pWeakRef);
+#endif
+        } //if
 
         return staruno::Type();
     }
