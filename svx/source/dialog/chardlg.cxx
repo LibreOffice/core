@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-30 15:17:35 $
+ *  last change: $Author: mt $ $Date: 2001-04-05 12:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4043,7 +4043,7 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     FontEmphasisMark eMark = (FontEmphasisMark)m_aEmphasisLB.GetSelectEntryPos();
     eMark |= bUnder ? EMPHASISMARK_POS_BELOW : EMPHASISMARK_POS_ABOVE;
     rFont.SetEmphasisMark( eMark );
-    short nRelief = m_aReliefLB.GetSelectEntryPos();
+    USHORT nRelief = m_aReliefLB.GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nRelief)
         rFont.SetRelief( (FontRelief)nRelief );
     rFont.SetOutline( StateToAttr( m_aOutlineBtn.GetState() ) );
