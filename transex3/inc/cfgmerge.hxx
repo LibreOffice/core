@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-26 12:56:08 $
+ *  last change: $Author: nf $ $Date: 2001-08-03 14:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #include <tools/string.hxx>
 #include <tools/list.hxx>
+
+
+//=============================================
 
 //
 // class CfgStackData
