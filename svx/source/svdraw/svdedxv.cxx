@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:53:46 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1328,20 +1328,7 @@ USHORT SdrObjEditView::GetScriptType() const
 
             if( pParaObj )
             {
-                USHORT nType = pParaObj->GetTextObject().GetScriptType();
-
-                switch ( nType )
-                {
-                    case SCRIPTTYPE_LATIN:
-                        nScriptType |= SCRIPTTYPE_LATIN;
-                    break;
-                    case SCRIPTTYPE_ASIAN:
-                        nScriptType |= SCRIPTTYPE_ASIAN;
-                    break;
-                    case SCRIPTTYPE_COMPLEX:
-                        nScriptType |= SCRIPTTYPE_COMPLEX;
-                    break;
-                }
+                nScriptType |= pParaObj->GetTextObject().GetScriptType();
             }
         }
     }
