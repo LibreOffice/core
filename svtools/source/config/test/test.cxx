@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-04-26 13:53:10 $
+ *  last change: $Author: dbo $ $Date: 2001-05-11 12:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,10 @@
 
 #ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
 #include <cppuhelper/servicefactory.hxx>
+#endif
+
+#ifndef _CPPUHELPER_BOOTSTRAP_HXX_
+#include <cppuhelper/bootstrap.hxx>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -324,11 +328,10 @@ void TestApplication::impl_testDynamicMenuOptions()
 Reference< XMultiServiceFactory > TestApplication::getUNOServiceManager()
 {
     // Algorithm: (create global manager one times only!)
-    //      a)  get uninitialized manager from cppu helper method
-    //      b)  get paths to user.rdb and applicat.rdb
-    //      c)  open rdb files (if user.rdb not exist - create it)
-    //      d)  initialize manager
-    //      e)  if created manager valid set it on static member
+    //      a)  get paths to user.rdb and applicat.rdb
+    //      b)  open rdb files (if user.rdb not exist - create it)
+    //      c)  initialize component context
+    //      d)  set service manager of component context as static member
 
     static Reference< XMultiServiceFactory >* m_pManager = NULL;
     if( m_pManager == NULL )
@@ -336,85 +339,68 @@ Reference< XMultiServiceFactory > TestApplication::getUNOServiceManager()
         // Global access, must be guarded (multithreading!).
         MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
 
-        // Check pointer again ...
-        // another call could be faster then these on!
-        if( m_pManager == NULL )
+        try
         {
+            // a) (getPath... comes from comphelper)
+            OUString sNameUserRegistry      = getPathToUserRegistry()   ;
+            OUString sNameSystemRegistry    = getPathToSystemRegistry() ;
 
-            try
+            // b)
+            Reference< XSimpleRegistry > xUserRegistry  ( ::cppu::createSimpleRegistry() );
+            Reference< XSimpleRegistry > xSystemRegistry( ::cppu::createSimpleRegistry() );
+
+            if  (
+                ( xUserRegistry.is()            ==  sal_True    )   &&
+                ( sNameUserRegistry.getLength() >   0           )
+                )
             {
-                // a)
-                static Reference< XMultiServiceFactory > xManager = ::cppu::createServiceFactory();
-                if( xManager.is() == sal_True )
+                xUserRegistry->open( sNameUserRegistry, sal_False, sal_True ); // try to open/create it writable ... (second param = sal_False)
+                if( xUserRegistry->isValid() == sal_False )
                 {
-                    // b) (getPath... comes from comphelper)
-                    OUString sNameUserRegistry      = ::comphelper::getPathToUserRegistry()   ;
-                    OUString sNameSystemRegistry    = ::comphelper::getPathToSystemRegistry() ;
-
-                    // c)
-                    Reference< XSimpleRegistry > xUserRegistry  ( xManager->createInstance( SERVICENAME_SIMPLEREGISTRY ), UNO_QUERY );
-                    Reference< XSimpleRegistry > xSystemRegistry( xManager->createInstance( SERVICENAME_SIMPLEREGISTRY ), UNO_QUERY );
-
-                    if  (
-                            ( xUserRegistry.is()            ==  sal_True    )   &&
-                            ( sNameUserRegistry.getLength() >   0           )
-                        )
-                    {
-                        xUserRegistry->open( sNameUserRegistry, sal_False, sal_True ); // try to open/create it writable ... (second param = sal_False)
-                        if( xUserRegistry->isValid() == sal_False )
-                        {
-                            xUserRegistry->open( sNameUserRegistry, sal_True, sal_True ); // try to open/create it readonly ... (second param = sal_True)
-                        }
-                    }
-
-                    if  (
-                            ( xSystemRegistry.is()              ==  sal_True    )   &&
-                            ( sNameSystemRegistry.getLength()   >   0           )
-                        )
-                    {
-                        xSystemRegistry->open( sNameSystemRegistry, sal_True, sal_False );
-                    }
-
-                    // d)
-                    if  (
-                            ( xSystemRegistry.is()          ==  sal_True    )   &&
-                            ( xSystemRegistry->isValid()    ==  sal_True    )
-                        )
-                    {
-                        Sequence< Any > lNestedParameters(1);
-                        lNestedParameters[0] <<= xSystemRegistry;
-                        if  (
-                                ( xUserRegistry.is()            ==  sal_True    )   &&
-                                ( xUserRegistry->isValid()      ==  sal_True    )
-                            )
-                        {
-                            lNestedParameters.realloc(2);
-                            lNestedParameters[1] <<= xUserRegistry;
-                        }
-
-                        Reference< XSimpleRegistry > xNestedRegistry( xManager->createInstanceWithArguments( SERVICENAME_NESTEDREGISTRY, lNestedParameters ), UNO_QUERY );
-                        if( xNestedRegistry.is() == sal_True )
-                        {
-                            Sequence< Any > lInitParameter(1);
-                            lInitParameter[0] <<= xNestedRegistry;
-
-                            Reference< XInitialization > xInit( xManager, UNO_QUERY );
-                            if( xInit.is() == sal_True )
-                            {
-                                xInit->initialize( lInitParameter );
-                                m_pManager = &xManager;
-                            }
-                        }
-                    }
+                    xUserRegistry->open( sNameUserRegistry, sal_True, sal_True ); // try to open/create it readonly ... (second param = sal_True)
                 }
             }
-            catch(...)
+
+            if  (
+                ( xSystemRegistry.is()              ==  sal_True    )   &&
+                ( sNameSystemRegistry.getLength()   >   0           )
+                )
             {
-                // If an exception is thrown - we set the return value to NULL!
-                // Its neccessary, because it can be, that we have overwrite the default from beginning of this method with an "HALF-VALID" value!
-                OSL_ENSURE( sal_False, "getUNOServiceManager()\nException detected! Manager not valid ...\n" );
-                m_pManager = NULL;
+                xSystemRegistry->open( sNameSystemRegistry, sal_True, sal_False );
             }
+
+            if  (
+                ( xSystemRegistry.is()          ==  sal_True    )   &&
+                ( xSystemRegistry->isValid()    ==  sal_True    )
+                )
+            {
+                Sequence< Any > lNestedParameters(1);
+                lNestedParameters[0] <<= xSystemRegistry;
+                if  (
+                    ( xUserRegistry.is()            ==  sal_True    )   &&
+                    ( xUserRegistry->isValid()      ==  sal_True    )
+                    )
+                {
+                    lNestedParameters.realloc(2);
+                    lNestedParameters[1] <<= xUserRegistry;
+                }
+
+                Reference < XSimpleRegistry > xNestedRegistry( ::cppu::createNestedRegistry() );
+                Reference< XInitialization > xInit( xNestedRegistry, UNO_QUERY );
+                xInit->initialize( lNestedParameters );
+
+                // c)
+                Reference< XComponentContext > xContext( ::cppu::bootstrap_InitialComponentContext( xNestedRegistry ) );
+                // d)
+                static Reference< XMultiServiceFactory > xManager( xContext->getServiceManager(), UNO_QUERY );
+                m_pManager = &xManager;
+            }
+        }
+        catch(...)
+        {
+            // If an exception is thrown - we set the return value to NULL!
+            // Its neccessary, because it can be, that we have overwrite the default from beginning of this method with an "HALF-VALID" value!
+            m_pManager = NULL;
         }
     }
 
