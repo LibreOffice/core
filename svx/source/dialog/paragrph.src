@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:01:03 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,9 +281,8 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Pos = MAP_APPFONT ( 12 , 90 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Left = TRUE ;
-        Text = "V~or Absatz" ;
-        Text [ english ] = "Bef~ore paragraph" ;
-        Text [ english_us ] = "Before paragraph" ;
+        Text = "άber Absatz" ;
+        Text [ english ] = "Ab~ove paragraph" ;
         Text[ portuguese ] = "~Superior";
         Text[ russian ] = "Ββεπ~υσ";
         Text[ greek ] = "Πάνω";
@@ -325,9 +324,9 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Pos = MAP_APPFONT ( 12 , 104 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Left = TRUE ;
-        Text = "H~inter Text" ;
-        Text [ english ] = "After paragraph" ;
-        Text [ english_us ] = "After text" ;
+        Text = "Unter Absatz" ;
+            Text [ english ] = "Below paragraph" ;
+            Text [ english_us ] = "Below paragraph" ;
         Text[ portuguese ] = "~Inferior";
         Text[ russian ] = "Ρνθησ";
         Text[ greek ] = "Κάτω";
