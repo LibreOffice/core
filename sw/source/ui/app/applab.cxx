@@ -2,9 +2,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-30 14:34:22 $
+ *  last change: $Author: hr $ $Date: 2000-10-31 15:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #endif
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
+#endif
+#ifndef _SFXREQUEST_HXX
+#include <sfx2/request.hxx>
 #endif
 #ifndef _LINKMGR_HXX
 #include <so3/linkmgr.hxx>
