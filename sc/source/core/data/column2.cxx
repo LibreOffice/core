@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:54:06 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2295,7 +2295,8 @@ void lcl_UpdateSubTotal( ScFunctionData& rData, ScBaseCell* pCell )
 
 //  Mehrfachselektion:
 void ScColumn::UpdateSelectionFunction( const ScMarkData& rMark,
-                                        ScFunctionData& rData, const BYTE* pRowFlags,
+                                        ScFunctionData& rData,
+                                        const ScBitMaskCompressedArray< SCROW, BYTE>* pRowFlags,
                                         BOOL bDoExclude, SCROW nExStartRow, SCROW nExEndRow )
 {
     SCSIZE nIndex;
@@ -2303,14 +2304,15 @@ void ScColumn::UpdateSelectionFunction( const ScMarkData& rMark,
     while (aDataIter.Next( nIndex ))
     {
         SCROW nRow = pItems[nIndex].nRow;
-        if ( !pRowFlags || !( pRowFlags[nRow] & CR_HIDDEN ) )
+        if ( !pRowFlags || !( pRowFlags->GetValue(nRow) & CR_HIDDEN ) )
             if ( !bDoExclude || nRow < nExStartRow || nRow > nExEndRow )
                 lcl_UpdateSubTotal( rData, pItems[nIndex].pCell );
     }
 }
 
 //  bei bNoMarked die Mehrfachselektion weglassen
-void ScColumn::UpdateAreaFunction( ScFunctionData& rData, BYTE* pRowFlags,
+void ScColumn::UpdateAreaFunction( ScFunctionData& rData,
+                                    const ScBitMaskCompressedArray< SCROW, BYTE>* pRowFlags,
                                     SCROW nStartRow, SCROW nEndRow )
 {
     SCSIZE nIndex;
@@ -2318,7 +2320,7 @@ void ScColumn::UpdateAreaFunction( ScFunctionData& rData, BYTE* pRowFlags,
     while ( nIndex<nCount && pItems[nIndex].nRow<=nEndRow )
     {
         SCROW nRow = pItems[nIndex].nRow;
-        if ( !pRowFlags || !( pRowFlags[nRow] & CR_HIDDEN ) )
+        if ( !pRowFlags || !( pRowFlags->GetValue(nRow) & CR_HIDDEN ) )
             lcl_UpdateSubTotal( rData, pItems[nIndex].pCell );
         ++nIndex;
     }
