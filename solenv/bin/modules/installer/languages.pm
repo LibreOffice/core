@@ -2,9 +2,6 @@
 #
 #   $RCSfile: languages.pm,v $
 #
-#   $Revision: 1.3 $
-#
-#   last change: $Author: obo $ $Date: 2004-10-18 13:52:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
