@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLShapePropertySetContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-05 16:27:42 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ public:
                 const ::rtl::OUString& rLName,
                  const ::com::sun::star::uno::Reference<
                          ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+                 sal_uInt32 nFam,
                  ::std::vector< XMLPropertyState > &rProps,
                  const UniReference < SvXMLImportPropertyMapper > &rMap );
 
