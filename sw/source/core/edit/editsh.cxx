@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:43:44 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -1173,7 +1172,6 @@ void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
     }
 }
 
-
 void SwEditShell::TransliterateText( sal_uInt32 nType )
 {
     utl::TransliterationWrapper aTrans(
@@ -1198,3 +1196,14 @@ void SwEditShell::TransliterateText( sal_uInt32 nType )
 
     EndAllAction();
 }
+
+void SwEditShell::CountWords( SwDocStat& rStat ) const
+{
+    FOREACHPAM_START( this )
+
+        if( PCURCRSR->HasMark() )
+            GetDoc()->CountWords( *PCURCRSR, rStat );
+
+    FOREACHPAM_END()
+}
+
