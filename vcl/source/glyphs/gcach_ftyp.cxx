@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hdu $ $Date: 2001-02-23 17:28:33 $
+ *  last change: $Author: cp $ $Date: 2001-02-23 17:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,7 @@ FreetypeServerFont* FreetypeManager::CreateFont( const ImplFontSelectData& rFSD 
 
 FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, const FtFontInfo& rFI )
 :   ServerFont(rFSD),
-    mrFontInfo(rFI),
+    mrFontInfo(const_cast<FtFontInfo&>(rFI)),
     maFaceFT(NULL)
 {
     const char* pszFontFileName = rFI.aNativeFileName.getStr();
