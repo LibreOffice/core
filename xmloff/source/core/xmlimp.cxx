@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-24 16:56:12 $
+ *  last change: $Author: sab $ $Date: 2000-11-29 15:34:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,10 +97,6 @@
 #endif
 #ifndef _XMLOFF_XMLNUMFI_HXX
 #include "xmlnumfi.hxx"
-#endif
-
-#ifndef _XMLOFF_PROGRESSBARHELPER_HXX
-#include "ProgressBarHelper.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HDL_
@@ -217,7 +213,7 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel ) throw () :
     pNumImport( NULL ),
     xModel( rModel ),
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
-    pProgressBarHelper( new ProgressBarHelper(rModel, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("XML Import"))))
+    pProgressBarHelper( NULL )
 {
     _InitCtor();
     if (xNumberFormatsSupplier.is())
