@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optctl.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2002-12-02 07:56:11 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,17 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Sequenzüberprüfung" ;
         Text[ english_us ] = "Sequence checking";
+        Text[ portuguese ] = "Sequence checking";
+        Text[ russian ] = "Sequence checking";
+        Text[ spanish ] = "Sequence checking";
+        Text[ italian ] = "Sequence checking";
+        Text[ swedish ] = "Sequence checking";
+        Text[ polish ] = "Sequence checking";
+        Text[ portuguese_brazilian ] = "Sequence checking";
+        Text[ japanese ] = "Sequence checking";
+        Text[ korean ] = "Sequence checking";
+        Text[ turkish ] = "Sequence checking";
+        Text[ thai ] = "Sequence checking";
     };
     CheckBox CB_SEQUENCECHECKING
     {
@@ -87,6 +98,17 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text = "Se~quenzüberprüfung anwenden" ;
         Text[ english_us ] = "Use se~quence checking";
+        Text[ portuguese ] = "Use se~quence checking";
+        Text[ russian ] = "Use se~quence checking";
+        Text[ spanish ] = "Use se~quence checking";
+        Text[ italian ] = "Use se~quence checking";
+        Text[ swedish ] = "Use se~quence checking";
+        Text[ polish ] = "Use se~quence checking";
+        Text[ portuguese_brazilian ] = "Use se~quence checking";
+        Text[ japanese ] = "Use se~quence checking";
+        Text[ korean ] = "Use se~quence checking";
+        Text[ turkish ] = "Use se~quence checking";
+        Text[ thai ] = "Use se~quence checking";
     };
     FixedLine FL_CURSORCONTROL
     {
@@ -94,6 +116,17 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Cursorkontrolle" ;
         Text[ english_us ] = "Cursor control";
+        Text[ portuguese ] = "Cursor control";
+        Text[ russian ] = "Cursor control";
+        Text[ spanish ] = "Cursor control";
+        Text[ italian ] = "Cursor control";
+        Text[ swedish ] = "Cursor control";
+        Text[ polish ] = "Cursor control";
+        Text[ portuguese_brazilian ] = "Cursor control";
+        Text[ japanese ] = "Cursor control";
+        Text[ korean ] = "Cursor control";
+        Text[ turkish ] = "Cursor control";
+        Text[ thai ] = "Cursor control";
     };
     FixedText FT_MOVEMENT
     {
@@ -101,6 +134,17 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Bewegung" ;
         Text[ english_us ] = "Movement";
+        Text[ portuguese ] = "Movement";
+        Text[ russian ] = "Movement";
+        Text[ spanish ] = "Movement";
+        Text[ italian ] = "Movement";
+        Text[ swedish ] = "Movement";
+        Text[ polish ] = "Movement";
+        Text[ portuguese_brazilian ] = "Movement";
+        Text[ japanese ] = "Movement";
+        Text[ korean ] = "Movement";
+        Text[ turkish ] = "Movement";
+        Text[ thai ] = "Movement";
     };
     RadioButton RB_MOVEMENT_LOGICAL
     {
@@ -108,6 +152,17 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Size = MAP_APPFONT ( 69 , 10 ) ;
         Text = "Lo~gisch" ;
         Text[ english_us ] = "Lo~gical";
+        Text[ portuguese ] = "Lo~gical";
+        Text[ russian ] = "Lo~gical";
+        Text[ spanish ] = "Lo~gical";
+        Text[ italian ] = "Lo~gical";
+        Text[ swedish ] = "Lo~gical";
+        Text[ polish ] = "Lo~gical";
+        Text[ portuguese_brazilian ] = "Lo~gical";
+        Text[ japanese ] = "Lo~gical";
+        Text[ korean ] = "Lo~gical";
+        Text[ turkish ] = "Lo~gical";
+        Text[ thai ] = "Lo~gical";
     };
     RadioButton RB_MOVEMENT_VISUAL
     {
@@ -115,6 +170,17 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Size = MAP_APPFONT ( 69 , 10 ) ;
         Text = "~Visuell" ;
         Text[ english_us ] = "~Visual";
+        Text[ portuguese ] = "~Visual";
+        Text[ russian ] = "~Visual";
+        Text[ spanish ] = "~Visual";
+        Text[ italian ] = "~Visual";
+        Text[ swedish ] = "~Visual";
+        Text[ polish ] = "~Visual";
+        Text[ portuguese_brazilian ] = "~Visual";
+        Text[ japanese ] = "~Visual";
+        Text[ korean ] = "~Visual";
+        Text[ turkish ] = "~Visual";
+        Text[ thai ] = "~Visual";
     };
     FixedLine FL_GENERAL
     {
@@ -122,6 +188,17 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Allgemeine Optionen" ;
         Text[ english_us ] = "General options";
+        Text[ portuguese ] = "General options";
+        Text[ russian ] = "General options";
+        Text[ spanish ] = "General options";
+        Text[ italian ] = "General options";
+        Text[ swedish ] = "General options";
+        Text[ polish ] = "General options";
+        Text[ portuguese_brazilian ] = "General options";
+        Text[ japanese ] = "General options";
+        Text[ korean ] = "General options";
+        Text[ turkish ] = "General options";
+        Text[ thai ] = "General options";
     };
     FixedText FT_NUMERALS
     {
@@ -129,6 +206,17 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "~Ziffern (nur in Text)" ;
         Text[ english_us ] = "~Numerals (in text only)";
+        Text[ portuguese ] = "~Numerals (in text only)";
+        Text[ russian ] = "~Numerals (in text only)";
+        Text[ spanish ] = "~Numerals (in text only)";
+        Text[ italian ] = "~Numerals (in text only)";
+        Text[ swedish ] = "~Numerals (in text only)";
+        Text[ polish ] = "~Numerals (in text only)";
+        Text[ portuguese_brazilian ] = "~Numerals (in text only)";
+        Text[ japanese ] = "~Numerals (in text only)";
+        Text[ korean ] = "~Numerals (in text only)";
+        Text[ turkish ] = "~Numerals (in text only)";
+        Text[ thai ] = "~Numerals (in text only)";
     };
     ListBox LB_NUMERALS
     {
@@ -148,6 +236,89 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
             < "Hindi" ; > ;
             < "System" ; > ;
         };
+    StringList [ language_user1 ] =
+    {
+         < "; Arabisch" ; > ;
+        < "; Hindi" ; > ;
+        < "; System" ; > ;
     };
+    StringList [ portuguese ] =
+    {
+         < "Árabe" ; > ;
+        < "Hindi" ; > ;
+        < "Sistema" ; > ;
+    };
+    StringList [ russian ] =
+    {
+         < "Àðàáñêèé" ; > ;
+        < "Õèíäè" ; > ;
+        < "Èç ñèñòåìû" ; > ;
+    };
+    StringList [ spanish ] =
+    {
+         < "Árabe" ; > ;
+        < "Hindi" ; > ;
+        < "Sistema" ; > ;
+    };
+    StringList [ italian ] =
+    {
+         < "Arabo" ; > ;
+        < "Hindi" ; > ;
+        < "Sistema" ; > ;
+    };
+    StringList [ swedish ] =
+    {
+         < "Arabisk" ; > ;
+        < "Hindi" ; > ;
+        < "System" ; > ;
+    };
+    StringList [ polish ] =
+    {
+         < "Arabski" ; > ;
+        < "Hindi" ; > ;
+        < "System" ; > ;
+    };
+    StringList [ portuguese_brazilian ] =
+    {
+         < "??rabe" ; > ;
+        < "Hindi" ; > ;
+        < "Sistema" ; > ;
+    };
+    StringList [ japanese ] =
+    {
+         < "ã‚¢ãƒ©ãƒ“ã‚¢æ•°å­—" ; > ;
+        < "ãƒ’ãƒ³ãƒ‡ã‚£ãƒ¼èªž" ; > ;
+        < "ã‚·ã‚¹ãƒ†ãƒ " ; > ;
+    };
+    StringList [ korean ] =
+    {
+         < "ì•„ë¼ë¹„ì•„" ; > ;
+        < "ížŒë‘ì–´" ; > ;
+        < "ì‹œìŠ¤í…œ" ; > ;
+    };
+    StringList [ turkish ] =
+    {
+         < "Arap rakamlarý" ; > ;
+        < "Hindi" ; > ;
+        < "Sistem" ; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "à¸ à¸²à¸©à¸²à¸­à¸²à¸£à¸šà¸´à¸" ; > ;
+        < "à¸®à¸´à¸™à¸”à¸µ" ; > ;
+        < "à¸£à¸°à¸šà¸š" ; > ;
+    };
+    };
+    Text[ portuguese ] = "Complex Text Layout";
+    Text[ russian ] = "Complex Text Layout";
+    Text[ spanish ] = "Complex Text Layout";
+    Text[ italian ] = "Complex Text Layout";
+    Text[ swedish ] = "Complex Text Layout";
+    Text[ polish ] = "Complex Text Layout";
+    Text[ portuguese_brazilian ] = "Complex Text Layout";
+    Text[ japanese ] = "Complex Text Layout";
+    Text[ korean ] = "Complex Text Layout";
+    Text[ turkish ] = "Complex Text Layout";
+    Text[ thai ] = "Complex Text Layout";
 };
 
