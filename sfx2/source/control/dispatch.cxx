@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-21 15:36:57 $
+ *  last change: $Author: cd $ $Date: 2001-08-03 18:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@
 #include "tbxconf.hxx"
 #include "topfrm.hxx"
 #include "sfxuno.hxx"
+#include "cfgmgr.hxx"
 
 //==================================================================
 DBG_NAME(SfxDispatcherFlush);
@@ -1911,6 +1912,27 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
 
             if ( !bVisible )
                 rBar.aResId = ResId( 0,0 );
+        }
+
+        if ( bUIActive || bIsActive )
+        {
+            SfxConfigManager* pMgr = pImp->pFrame->GetObjectShell()->GetConfigManager();
+            SfxInterface* pIFace = pImp->pFrame->GetObjectShell()->GetInterface();
+            USHORT nMask = SFX_VISIBILITY_CLIENT | SFX_VISIBILITY_STANDARD;
+            if ( !pMgr )
+            {
+                pMgr = SFX_APP()->GetConfigManager_Impl();
+                pIFace = SFX_APP()->GetInterface();
+                nMask = SFX_VISIBILITY_SERVER | SFX_VISIBILITY_STANDARD;
+
+            }
+
+            for ( USHORT n=0; n<4; n++ )
+            {
+                USHORT nType = n + RID_SFX_TOOLBOX_START + 10;
+                if ( pMgr->HasConfigItem( nType ) )
+                    pWorkWin->SetObjectBar_Impl( (SFX_OBJECTBAR_USERDEF1 + n) | nMask, nType, pIFace, (const String*) NULL );
+            }
         }
 
         for ( nNo=0; pIFace && nNo<pIFace->GetChildWindowCount(); nNo++ )
