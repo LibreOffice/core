@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DtObjFactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-14 14:45:14 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,21 +87,21 @@ using namespace com::sun::star::lang;
 // implementation
 //------------------------------------------------------------------------
 
-IDataObjectPtr SAL_CALL CDTransObjFactory::createDataObjFromTransferable( const Reference< XMultiServiceFactory >& aServiceManager,
-                                                                       const Reference< XTransferable >& refXTransferable )
+IDataObjectPtr SAL_CALL CDTransObjFactory::createDataObjFromTransferable(const Reference<XMultiServiceFactory>& aServiceManager,
+                                                                       const Reference< XTransferable >& refXTransferable)
 {
-    return ( IDataObjectPtr( new CXTDataObject( aServiceManager, refXTransferable ) ) );
+    return (IDataObjectPtr(new CXTDataObject(aServiceManager, refXTransferable)));
 }
 
 Reference< XTransferable > SAL_CALL CDTransObjFactory::createTransferableFromDataObj( const Reference< XMultiServiceFactory >& aServiceManager,
-                                                                                     IDataObject* pIDataObject )
+                                                                                     IDataObjectPtr pIDataObject )
 {
-    CDOTransferable* pTransf = new CDOTransferable( aServiceManager, pIDataObject );
-    Reference< XTransferable > refDOTransf( pTransf );
+    CDOTransferable* pTransf = new CDOTransferable(aServiceManager, pIDataObject);
+    Reference<XTransferable> refDOTransf(pTransf);
 
-    pTransf->acquire( );
-    pTransf->initFlavorList( );
-    pTransf->release( );
+    pTransf->acquire();
+    pTransf->initFlavorList();
+    pTransf->release();
 
     return refDOTransf;
 }
