@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: tl $ $Date: 2002-10-10 11:13:34 $
+#   last change: $Author: fs $ $Date: 2002-11-13 09:05:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,6 +91,7 @@ IDLFILES=\
     NumberFormatProperties.idl\
     NumberFormats.idl\
     NumberFormatSettings.idl\
+    NumberFormatsSupplier.idl\
     NumberFormatter.idl\
     ModeChangeEvent.idl\
     ReplaceDescriptor.idl\
