@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2001-05-15 21:06:16 $
+ *  last change: $Author: er $ $Date: 2001-05-16 23:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2799,7 +2799,7 @@ void ScInterpreter::ScMatch()
             rParam.bHasHeader  = FALSE;
             rParam.bInplace    = TRUE;
             rParam.bCaseSens   = FALSE;
-            rParam.bRegExp     = TRUE;
+            rParam.bRegExp     = pDoc->GetDocOptions().IsFormulaRegexEnabled();
             rParam.bDuplicate  = FALSE;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
@@ -3071,7 +3071,7 @@ void ScInterpreter::ScCountIf()
             rParam.bHasHeader  = FALSE;
             rParam.bInplace    = TRUE;
             rParam.bCaseSens   = FALSE;
-            rParam.bRegExp     = TRUE;
+            rParam.bRegExp     = pDoc->GetDocOptions().IsFormulaRegexEnabled();
             rParam.bDuplicate  = FALSE;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
@@ -3241,7 +3241,7 @@ void ScInterpreter::ScSumIf()
             rParam.bHasHeader  = FALSE;
             rParam.bInplace    = TRUE;
             rParam.bCaseSens   = FALSE;
-            rParam.bRegExp     = TRUE;
+            rParam.bRegExp     = pDoc->GetDocOptions().IsFormulaRegexEnabled();
             rParam.bDuplicate  = FALSE;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
@@ -3444,7 +3444,7 @@ void ScInterpreter::ScLookup()
             rParam.bHasHeader  = FALSE;
             rParam.bInplace    = TRUE;
             rParam.bCaseSens   = FALSE;
-            rParam.bRegExp     = TRUE;
+            rParam.bRegExp     = pDoc->GetDocOptions().IsFormulaRegexEnabled();
             rParam.bDuplicate  = FALSE;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
@@ -3866,7 +3866,7 @@ void ScInterpreter::ScHLookup()
             rParam.bHasHeader  = FALSE;
             rParam.bInplace    = TRUE;
             rParam.bCaseSens   = FALSE;
-            rParam.bRegExp     = TRUE;
+            rParam.bRegExp     = pDoc->GetDocOptions().IsFormulaRegexEnabled();
             rParam.bDuplicate  = FALSE;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
@@ -4108,7 +4108,7 @@ void ScInterpreter::ScVLookup()
             rParam.bHasHeader  = FALSE;
             rParam.bInplace    = TRUE;
             rParam.bCaseSens   = FALSE;
-            rParam.bRegExp     = TRUE;
+            rParam.bRegExp     = pDoc->GetDocOptions().IsFormulaRegexEnabled();
             rParam.bDuplicate  = FALSE;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
