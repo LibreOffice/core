@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-11 09:56:10 $
+ *  last change: $Author: thb $ $Date: 2003-11-12 12:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,11 @@ namespace basegfx
         double B2DVector::scalar( const B2DVector& rVec ) const
         {
             return((mfX * rVec.mfX) + (mfY * rVec.mfY));
+        }
+
+        double B2DVector::cross( const B2DVector& rVec ) const
+        {
+            return(mfX * rVec.getY() - mfY * rVec.getX());
         }
 
         double B2DVector::angle( const B2DVector& rVec ) const
