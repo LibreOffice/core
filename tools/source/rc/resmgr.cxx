@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ok $ $Date: 2001-05-28 12:07:45 $
+ *  last change: $Author: pl $ $Date: 2001-07-05 10:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,12 +100,25 @@
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
+#ifndef _URLOBJ_HXX
+#include <urlobj.hxx>
+#endif
 
 #ifndef _TOOLS_SIMPLERESMGR_HXX_
 #include "simplerm.hxx"
 #endif
 
 #pragma hdrstop
+
+#ifdef UNX
+#define SEARCH_PATH_DELIMITER_CHAR_STRING ":"
+#define SEARCH_PATH_DELIMITER ':'
+#else
+#define SEARCH_PATH_DELIMITER_CHAR_STRING ";"
+#define SEARCH_PATH_DELIMITER ';'
+#endif
+
+#define SEARCH_PATH_DELIMITER_STRING ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SEARCH_PATH_DELIMITER_CHAR_STRING ) )
 
 // =======================================================================
 
@@ -197,64 +210,94 @@ void InternalResMgr::GetResMgrPath( InternalResMgr* pThis,
                                     const UniString* pAppFileName,
                                     const UniString* pResourcePath )
 {
-    UniString aResFile;
+    String aResFile;
+    String aFileName( rFileName );
+    ::rtl::OUString aResPath( rFileName.Len() && pResourcePath ? *pResourcePath : String() );
+
     if ( rFileName.Len() )
     {
-        UniString aResPath;
-        if( pResourcePath )
-            aResPath += *pResourcePath;
         if ( pAppFileName )
         {
-            DirEntry aAppDir( *pAppFileName );
+            INetURLObject aAppDir( *pAppFileName, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
             aAppDir.CutName();
-            UniString aAppPath = aAppDir.GetFull();
-            DirEntry aResSubPath( UniString( RTL_CONSTASCII_USTRINGPARAM( "resource" ) ) );
-            aAppDir += aResSubPath;
-            UniString aAppResPath = aAppDir.GetFull();
+            UniString aAppPath = aAppDir.PathToFileName();
+            aAppDir.Append( String( RTL_CONSTASCII_USTRINGPARAM( "resource" ) ) );
+            UniString aAppResPath = aAppDir.PathToFileName();
 
             // Default resource path is bin\resource
-            if ( aResPath.Len() )
-                aResPath += DirEntry::GetSearchDelimiter();
+            if ( aResPath.getLength() )
+                aResPath += SEARCH_PATH_DELIMITER_STRING;
             aResPath += aAppResPath;
 
             // we a search also in the bin path
-            aResPath += DirEntry::GetSearchDelimiter();
+            aResPath += SEARCH_PATH_DELIMITER_STRING;
             aResPath += aAppPath;
         }
         const sal_Char* pEnv = getenv( "STAR_RESOURCEPATH" );
         if( pEnv )
         {
-            if ( aResPath.Len() )
-                aResPath += DirEntry::GetSearchDelimiter();
-            aResPath.AppendAscii( pEnv );
+            if ( aResPath.getLength() )
+                aResPath += SEARCH_PATH_DELIMITER_STRING;
+            aResPath += ::rtl::OStringToOUString( pEnv, osl_getThreadTextEncoding() );
         }
 
-        DirEntry aFullName( rFileName );
-        if ( aFullName.Find( aResPath ) )
-            aResFile = aFullName.GetFull();
-        else
-            aResFile = rFileName;
     }
     else if ( pAppFileName )
     {
-        // Default Resourcefile ist die Anwendung
-        aResFile = *pAppFileName;
+        INetURLObject aPath( *pAppFileName, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
+        aFileName = aPath.GetName();
+        aPath.CutName();
+        aResPath = aPath.PathToFileName();
 #if defined( OS2 ) || defined( WIN ) || defined( WNT )
-        aResFile.Erase( aResFile.Len() - 4 );
+        aFileName.Erase( aResFile.Len() - 4 );
 #endif
-        aResFile.AppendAscii( ".res" );
+        aFileName.AppendAscii( ".res" );
+    }
+
+    sal_Int32 nIndex = 0;
+    while( nIndex != -1 )
+    {
+        ::rtl::OUString aPath( aResPath.getToken( 0, SEARCH_PATH_DELIMITER, nIndex ) );
+        if( aPath.getLength() )
+        {
+            ::rtl::OUString aUrl;
+            ::osl::File::getFileURLFromSystemPath( aPath, aUrl );
+            aUrl += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+            aUrl += aFileName;
+            ::osl::FileStatus aStatus( FileStatusMask_Type | FileStatusMask_LinkTargetURL );
+            ::osl::DirectoryItem aItem;
+            if( ::osl::DirectoryItem::get( aUrl, aItem ) == ::osl::FileBase::E_None
+                && aItem.getFileStatus( aStatus ) == ::osl::FileBase::E_None
+                    )
+            {
+                ::osl::FileStatus::Type eType = aStatus.getFileType();
+                if( eType == ::osl::FileStatus::Link )
+                {
+                    aUrl = aStatus.getLinkTargetURL();
+                    ::osl::FileStatus aRealStatus( FileStatusMask_Type );
+
+                    if( ::osl::DirectoryItem::get( aUrl, aItem ) != ::osl::FileBase::E_None
+                        || aItem.getFileStatus( aRealStatus ) != ::osl::FileBase::E_None
+                        )
+                        continue;
+                    eType = aRealStatus.getFileType();
+                }
+                if( eType == ::osl::FileStatus::Regular )
+                {
+                    ::rtl::OUString aSysPath;
+                    ::osl::FileBase::getSystemPathFromFileURL( aUrl, aSysPath );
+                    aResFile = aSysPath;
+                    break;
+                    }
+            }
+        }
     }
 
     if( aResFile.Len() )
     {
-        DirEntry aEntry = aResFile;
-
-        FileStat aStat( aEntry );
-        if( aStat.IsKind( FSYS_KIND_FILE ) )
-        {
-            pThis->aFileName = aEntry.GetFull();
-            pThis->aShortFileName = aEntry.GetName();
-        }
+        INetURLObject aPath( aResFile, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
+        pThis->aFileName = aPath.PathToFileName();
+        pThis->aShortFileName = aPath.GetName();
     }
 }
 
