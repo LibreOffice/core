@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-19 14:11:07 $
+ *  last change: $Author: mt $ $Date: 2002-08-20 14:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1701,7 +1701,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
     sal_Unicode cAlternateReplChar = 0;
     sal_Unicode cAlternateExtraChar = 0;
 
-    if ( pNode->GetChar( nMaxBreakPos ) == ' ' )
+    if ( ( nMaxBreakPos < ( nMax + pLine->GetStart() ) ) && ( pNode->GetChar( nMaxBreakPos ) == ' ' ) )
     {
         // Break behind the blank, blank will be compressed...
         nBreakPos = nMaxBreakPos + 1;
@@ -1743,7 +1743,15 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
 
         // BUG in I18N - under special condition (break behind field, #87327#) breakIndex is < nMinBreakPos
         if ( nBreakPos < nMinBreakPos )
+        {
+            DBG_ERROR( "I18N: XBreakIterator::getLineBreak returns position < Min" );
             nBreakPos = nMinBreakPos;
+        }
+        else if ( nBreakPos > nMaxBreakPos )
+        {
+            DBG_ERROR( "I18N: XBreakIterator::getLineBreak returns position > Max" );
+            nBreakPos = nMaxBreakPos;
+        }
 
         // BUG in I18N - the japanese dot is in the next line!
         // !!!  Testen!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
