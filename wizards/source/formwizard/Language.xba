@@ -154,8 +154,8 @@ End Sub
 
 Sub InitializeWidthList()
 
-	If Ubound(WidthList(),1) &gt; 15 Then
-		ReDim WidthList(15,4)
+	If Ubound(WidthList(),1) &gt; 16 Then
+		ReDim WidthList(16,4)
 	End If
 
 	WidthList(0,0) = com.sun.star.sdbc.DataType.BIT   			&apos; = -7;
@@ -237,6 +237,11 @@ Sub InitializeWidthList()
 	WidthList(15,1) = cDateBox
 	WidthList(15,2) = False
 	WidthList(15,3) = &quot;DateField&quot;
+
+	WidthList(16,0) = com.sun.star.sdbc.DataType.BOOLEAN   			&apos; = 16;
+	WidthList(16,1) = cCheckbox
+	WidthList(16,2) = False
+	WidthList(16,3) = &quot;CheckBox&quot;
 
 	ImgWidthList(0,0) = com.sun.star.sdbc.DataType.BINARY			&apos; =  -2;
 	ImgWidthList(0,1) = cImageControl
