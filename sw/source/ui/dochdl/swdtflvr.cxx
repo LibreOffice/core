@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:53:58 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1469,6 +1469,7 @@ ASSERT( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
                                                 nActionFlags, bMsg );
                 break;
 
+            case SOT_FORMATSTR_ID_XFORMS:
             case SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE:
             case SOT_FORMATSTR_ID_SBA_DATAEXCHANGE:
             case SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE:
@@ -2632,7 +2633,18 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
                                     : FN_QRY_INSERT_FIELD );
         DataFlavorExVector& rVector = rData.GetDataFlavorExVector();
         sal_Bool bHaveColumnDescriptor = OColumnTransferable::canExtractColumnDescriptor(rVector, CTF_COLUMN_DESCRIPTOR | CTF_CONTROL_EXCHANGE);
-        if( nWh )
+        if ( SOT_FORMATSTR_ID_XFORMS == nFmt )
+        {
+            SdrObject* pObj;
+            rSh.MakeDrawView();
+            FmFormView* pFmView = PTR_CAST( FmFormView, rSh.GetDrawView() );
+            if ( pFmView )
+            {
+                if ( 0 != (pObj = pFmView->CreateXFormsControl() ) )
+                    rSh.SwFEShell::Insert( *pObj, 0, 0, pDragPt );
+            }
+        }
+        else if( nWh )
         {
             SfxUsrAnyItem* pConnectionItem  = 0;
             SfxUsrAnyItem* pCursorItem      = 0;
