@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tagtest.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gh $ $Date: 2001-12-05 11:12:30 $
+ *  last change: $Author: gh $ $Date: 2003-03-14 13:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@ typedef USHORT Token;
 
 #define TAG_REFSTART                ( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x100 )
 
+#define TAG_GRAPHIC                 ( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x200 )
+#define TAG_NEXTVERSION             ( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x400 )
+
 #define TAG_GROUP_SYSSWITCH         0x4
 #define TAG_WIN                     ( TAG_GROUP_SYSSWITCH << TAG_GROUPSHIFT | 0x001 )
 #define TAG_UNIX                    ( TAG_GROUP_SYSSWITCH << TAG_GROUPSHIFT | 0x002 )
@@ -137,9 +140,12 @@ typedef USHORT Token;
 
 
 #define TAG_GROUP_MULTI             0x8
-#define TAG_END                     ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x100 )
-#define TAG_ELSE                    ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x200 )
-#define TAG_AEND                    ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x400 )
+#define TAG_END                     ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x010 )
+#define TAG_ELSE                    ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x020 )
+#define TAG_AEND                    ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x040 )
+#define TAG_VERSIONEND              ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x080 )
+#define TAG_ENDGRAPHIC              ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x100 )
+
 #define TAG_UNKNOWN_TAG             ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x800 )
 
 DECLARE_LIST( TokenListImpl, Token* );
