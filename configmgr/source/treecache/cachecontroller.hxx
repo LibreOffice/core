@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachecontroller.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-12 11:42:48 $
+ *  last change: $Author: hr $ $Date: 2002-10-24 08:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,8 +361,8 @@ namespace configmgr
 
         bool m_bDisposing; // disables async writing and automatic refresh
 
-        friend class OTreeDisposeScheduler;
-        friend class OCacheWriteScheduler;
+        friend class configmgr::OTreeDisposeScheduler;
+        friend class configmgr::OCacheWriteScheduler;
         friend class OInvalidateTreeThread;
 
     };
