@@ -1,0 +1,2869 @@
+/*************************************************************************
+ *
+ *  $RCSfile: swmn_tmpl.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:34:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _SWMN_HRC
+#define _SWMN_HRC
+
+#include <svx/dialogs.hrc>
+#include <svx/globlmn.hrc>
+#include "cmdid.h"
+#include "app.hrc"
+#include "globals.hrc"
+#include "helpid.h"
+#include "popup.hrc"
+#include "cfgid.h"
+
+/***********************************************************************
+   per define MN_SW_WEB wird auf das Menu des StarWriter/WEB umgeschaltet
+***********************************************************************/
+
+/* --------------------- F O R M A T --------------------------------- */
+
+#define SEPARATOR       MenuItem { Separator = TRUE; }
+
+
+#ifndef  SW_FILEFORMAT_40
+#define MN_AT_FRAME \
+    MenuItem\
+    {\
+        Identifier = FN_TOOL_ANKER_FRAME ; \
+        HelpID = FN_TOOL_ANKER_FRAME ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Am ~Rahmen : Am Rahmen */\
+        Text [ de ] = "Am ~Rahmen" ; \
+        Text [ en-US ] = "To ~Frame" ; \
+    };
+#else
+#define MN_AT_FRAME
+#endif
+
+
+#define MN_ALWAYS_TEMPLATE    \
+    MenuItem\
+    {\
+        Identifier = MN_SUB_TEMPLATES ; \
+        HelpID = HID_MN_SUB_TEMPLATES ; \
+        Command = ".uno:TemplatesMenu" ; \
+        Text [ de ] = "~Vorlagen" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_TEMPLATECATALOG\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_TEMPLATE_LOAD ; \
+                    HelpID = SID_TEMPLATE_LOAD ; \
+                    Text [ de ] = "~Laden..." ; \
+                    Text [ en-US ] = "~Load..." ; \
+                };\
+            };\
+        };\
+        Text [ en-US ] = "Styl~es" ; \
+    };
+
+#define MN_ALWAYS \
+    SEPARATOR;\
+    MN_ALWAYS_TEMPLATE \
+    MenuItem\
+    {\
+        ITEM_FORMAT_TEMPLATE\
+    };
+
+#ifdef ITEM_FORMAT_NUMBERING
+//das obere kann mit > 513c raus
+#define DEFINE_FOR_SLOTID_NUMBER_BULLETS FN_NUMBER_BULLETS
+#define DEFINE_SLOTID_FOR_NUMBER_BULLETS FN_NUMBER_BULLETS
+#define MN_NUMBERING ITEM_FORMAT_NUMBERING
+#else
+#define MN_NUMBERING \
+    MenuItem\
+    {\
+        Identifier = FN_NUMBER_BULLETS ; \
+        HelpID = FN_NUMBER_BULLETS ; \
+        /* ### ACHTUNG: Neuer Text in Resource? ~Numerierung/Aufzählung... : ~Numerierung/Aufzõhlung... */\
+        Text [ de ] = "~Nummerierung/Aufzählung..." ; \
+        Text [ en-US ] = "~Numbering/Bullets..." ; \
+    };
+#endif
+
+
+#define MN_AUTOFORMAT \
+    MenuItem\
+    {\
+        Identifier = MN_SUB_AUTOFORMAT ; \
+        HelpID = HID_MN_SUB_AUTOFORMAT ; \
+        Command = ".uno:AutoFormatMenu" ; \
+        Text [ de ] = "Auto~Format" ; \
+        Text [ en-US ] = "Auto~Format" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Einstellunen für die automatische Formatierung : Einstellunen f³r die automatische Formatierung */\
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = FN_AUTOFORMAT_AUTO ; \
+                    HelpID = FN_AUTOFORMAT_AUTO ; \
+                    Text [ de ] = "~Während der Eingabe" ; \
+                    Text [ en-US ] = "~While Typing" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_AUTOFORMAT_APPLY ; \
+                    HelpID = FN_AUTOFORMAT_APPLY ; \
+                    Text [ de ] = "~Anwenden" ; \
+                    Text [ en-US ] = "~Apply" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_AUTOFORMAT_REDLINE_APPLY ; \
+                    HelpID = FN_AUTOFORMAT_REDLINE_APPLY ; \
+                    Text [ de ] = "Anwenden und Änderungen ~bearbeiten" ; \
+                    Text [ en-US ] = "Apply and Edit ~Changes";\
+                };\
+            };\
+        };\
+    };
+
+
+#define MN_RUBY_DIALOG \
+        MenuItem                                    \
+        {                                           \
+            Identifier = SID_RUBY_DIALOG ;          \
+            HelpID = SID_RUBY_DIALOG ;              \
+            Text [ de ] = "Ruby..." ;  \
+            Text [ en-US ] = "Ruby...";\
+    };                                          \
+        SEPARATOR ;                                 \
+
+#define MN_TAB1 \
+    MenuItem\
+    {\
+        Identifier = FN_FORMAT_TABLE_DLG ; \
+        HelpID = FN_FORMAT_TABLE_DLG ; \
+        Text [ de ] = "Tab~elle..." ; \
+        Text [ en-US ] = "~Table..." ; \
+    };\
+    MenuItem\
+    {\
+        Identifier = FN_TABLE_MERGE_TABLE ; \
+        HelpID = FN_TABLE_MERGE_TABLE ; \
+        Text [ de ] = "Tabellen verbinden" ; \
+        Text [ en-US ] = "Merge Tables";\
+    };\
+    MenuItem\
+    {\
+        Identifier = FN_TABLE_SPLIT_TABLE ; \
+        HelpID = FN_TABLE_SPLIT_TABLE ; \
+        Text [ de ] = "Tabelle auf~trennen" ; \
+        Text [ en-US ] = "~Split Table" ; \
+    };\
+    MenuItem\
+    {\
+        Identifier = FN_NUM_FORMAT_TABLE_DLG ; \
+        HelpID = FN_NUM_FORMAT_TABLE_DLG ; \
+        Text [ de ] = "Zahlenf~ormat..." ; \
+        Text [ en-US ] = "N~umber Format..." ; \
+    };\
+    MenuItem\
+    {\
+        Identifier = MN_CELL ; \
+        HelpID = MN_CELL ; \
+        Command = ".uno:CellMenu" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Ze~lle : Zelle */\
+        Text [ de ] = "~Zelle" ; \
+        Text [ en-US ] = "~Cell" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Einstellungen für die Tabellenzelle : Einstellungen f³r die Tabellenzelle */\
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = FN_TABLE_MERGE_CELLS ; \
+                    HelpID = FN_TABLE_MERGE_CELLS ; \
+                    Text [ de ] = "~Verbinden" ; \
+                    Text [ en-US ] = "~Merge" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_TABLE_SPLIT_CELLS ; \
+                    HelpID = FN_TABLE_SPLIT_CELLS ; \
+                    Text [ de ] = "~Teilen..." ; \
+                    Text [ en-US ] = "~Split..." ; \
+                };\
+                SEPARATOR ; \
+                MenuItem\
+                {\
+                    Identifier = FN_TABLE_VERT_NONE ; \
+                    HelpID = FN_TABLE_VERT_NONE ; \
+                    Text [ de ] = "~Oben" ; \
+                    Text [ en-US ] = "~Top" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_TABLE_VERT_CENTER ; \
+                    HelpID = FN_TABLE_VERT_CENTER ; \
+                    Text [ de ] = "~Mitte" ; \
+                    Text [ en-US ] = "C~enter" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_TABLE_VERT_BOTTOM ; \
+                    HelpID = FN_TABLE_VERT_BOTTOM ; \
+                    Text [ de ] = "~Unten" ; \
+                    Text [ en-US ] = "~Bottom" ; \
+                };\
+                SEPARATOR ; \
+                MenuItem\
+                {\
+                    Identifier = FN_TABLE_SET_READ_ONLY_CELLS ; \
+                    HelpID = FN_TABLE_SET_READ_ONLY_CELLS ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? ~Schützen : ~Sch³tzen */\
+                    Text [ de ] = "~Schützen" ; \
+                    Text [ en-US ] = "~Protect" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_TABLE_UNSET_READ_ONLY_CELLS ; \
+                    HelpID = FN_TABLE_UNSET_READ_ONLY_CELLS ; \
+                    Text [ de ] = "Schutz ~aufheben" ; \
+                    Text [ en-US ] = "~Unprotect" ; \
+                };\
+            };\
+        };\
+    };
+
+
+#define MN_TAB2 \
+    MenuItem\
+    {\
+        Identifier = MN_SUB_TBLROW ; \
+        HelpID = HID_MN_SUB_TBLROW ; \
+        Command = ".uno:RowMenu" ;  \
+        /* ### ACHTUNG: Neuer Text in Resource? Ze~ile : Zeile */\
+        Text [ de ] = "Ze~ile" ; \
+        Text [ en-US ] = "~Row" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Einstellungen für die Tabellenzeile : Einstellungen f³r die Tabellenzeile */\
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = FN_TABLE_SET_ROW_HEIGHT ; \
+                    HelpID = FN_TABLE_SET_ROW_HEIGHT ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? ~Höhe... : ~H÷he... */\
+                    Text [ de ] = "~Höhe..." ; \
+                    Text [ en-US ] = "~Height..." ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_TABLE_ROW_SPLIT;\
+                    HelpID = FN_TABLE_ROW_SPLIT ; \
+                    Text [ de ] = "Zeilenumb~ruch an Seiten- und Spaltenenden zulassen" ; \
+                    Text [ en-US ] = "Allow Row to Break A~cross Pages and Columns" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_TABLE_OPTIMAL_HEIGHT ; \
+                    HelpID = FN_TABLE_OPTIMAL_HEIGHT ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? ~Optimale Höhe : ~Optimale H÷he */\
+                    Text [ de ] = "~Optimale Höhe" ; \
+                    Text [ en-US ] = "~Optimal Height" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_TABLE_BALANCE_ROWS ; \
+                    HelpID = FN_TABLE_BALANCE_ROWS ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? Gleichmäßig ~verteilen : Gleichmõ˜ig ~verteilen */\
+                    Text [ de ] = "Gleichmäßig ~verteilen" ; \
+                    Text [ en-US ] = "Space ~Equally" ; \
+                };\
+                SEPARATOR ; \
+                MenuItem\
+                {\
+                    Identifier = FN_TABLE_SELECT_ROW ; \
+                    HelpID = FN_TABLE_SELECT_ROW ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? Ausw~ählen : Auswählen */\
+                    /* ### ACHTUNG: Neuer Text in Resource? Ausw~ählen : Ausw~õhlen */\
+                    Text [ de ] = "Aus~wählen" ; \
+                    Text [ en-US ] = "~Select" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_TABLE_INSERT_ROW_DLG ; \
+                    HelpID = FN_TABLE_INSERT_ROW_DLG ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen... : ~Einf³gen... */\
+                    Text [ de ] = "~Einfügen..." ; \
+                    Text [ en-US ] = "~Insert..." ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_TABLE_DELETE_ROW ; \
+                    HelpID = FN_TABLE_DELETE_ROW ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */\
+                    Text [ de ] = "~Löschen" ; \
+                    Text [ en-US ] = "~Delete" ; \
+                };\
+            };\
+    };\
+    };\
+    MenuItem\
+    {\
+        Identifier = MN_SUB_TBLCOL ; \
+        HelpID = HID_MN_SUB_TBLCOL ; \
+        Command = ".uno:ColumnMenu" ; \
+        Text [ de ] = "S~palte" ; \
+        Text [ en-US ] = "Colu~mn" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Einstellungen für die Tabellenspalte : Einstellungen f³r die Tabellenspalte */\
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = FN_TABLE_SET_COL_WIDTH ; \
+                    HelpID = FN_TABLE_SET_COL_WIDTH ; \
+                    Text [ de ] = "~Breite..." ; \
+                    Text [ en-US ] = "~Width..." ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_TABLE_ADJUST_CELLS ; \
+                    HelpID = FN_TABLE_ADJUST_CELLS ; \
+                    Text [ de ] = "~Optimale Breite " ; \
+                    Text [ en-US ] = "~Optimal Width " ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_TABLE_BALANCE_CELLS ; \
+                    HelpID = FN_TABLE_BALANCE_CELLS ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? Gleichmäßig ~verteilen : Gleichmõ˜ig ~verteilen */\
+                    Text [ de ] = "Gleichmäßig ~verteilen" ; \
+                    Text [ en-US ] = "Space ~Equally" ; \
+                };\
+                SEPARATOR ; \
+                MenuItem\
+                {\
+                    Identifier = FN_TABLE_SELECT_COL ; \
+                    HelpID = FN_TABLE_SELECT_COL ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? Ausw~ählen : Auswählen */\
+                    /* ### ACHTUNG: Neuer Text in Resource? Ausw~ählen : Ausw~õhlen */\
+                    Text [ de ] = "Aus~wählen" ; \
+                    Text [ en-US ] = "~Select" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_TABLE_INSERT_COL_DLG ; \
+                    HelpID = FN_TABLE_INSERT_COL_DLG ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen... : ~Einf³gen... */\
+                    Text [ de ] = "~Einfügen..." ; \
+                    Text [ en-US ] = "~Insert..." ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_TABLE_DELETE_COL ; \
+                    HelpID = FN_TABLE_DELETE_COL ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */\
+                    Text [ de ] = "~Löschen" ; \
+                    Text [ en-US ] = "~Delete" ; \
+                };\
+            };\
+};\
+    };
+
+
+#define MN_TXT\
+    MenuItem\
+    {\
+        ITEM_FORMAT_CHAR_DLG\
+    };\
+    MenuItem\
+    {\
+        ITEM_FORMAT_PARA_DLG\
+    };\
+    MenuItem\
+    {\
+        Identifier = FN_FORMAT_PAGE_DLG ; \
+        HelpID = FN_FORMAT_PAGE_DLG ; \
+        Text [ de ] = "~Seite..." ; \
+        Text [ en-US ] = "Pa~ge..." ; \
+    };
+
+#define MN_DRWTXT \
+    MenuItem\
+    {\
+        ITEM_FORMAT_CHAR_DLG\
+    };\
+    MenuItem\
+    {\
+        ITEM_FORMAT_PARA_DLG\
+    };\
+
+#define MN_NAME_GROUP \
+    MenuItem\
+    {\
+        Identifier = FN_NAME_GROUP ; \
+        HelpID = FN_NAME_GROUP ; \
+        Text [ de ] = "Obje~kt benennen..." ; \
+        Text [ en-US ] = "~Name Object..." ; \
+    };
+
+#define MN_FONTWORK \
+    MenuItem\
+    {\
+        ITEM_FORMAT_FONTWORK\
+    };
+
+
+#define MN_DRWTXTATTR \
+    MenuItem\
+    {\
+        Identifier = FN_DRAWTEXT_ATTR_DLG ; \
+        HelpID = FN_DRAWTEXT_ATTR_DLG ; \
+        Text [ de ] = "~Text..." ; \
+        Text [ en-US ] = "Te~xt..." ; \
+    };
+
+
+#define MN_PASTE \
+    MenuItem\
+    {\
+        ITEM_EDIT_CUT\
+    };\
+    MenuItem\
+    {\
+        ITEM_EDIT_COPY\
+    };
+
+
+#define MN_CUT \
+    MenuItem\
+    {\
+        ITEM_EDIT_DELETE\
+    };
+
+
+#define MN_RESET\
+    MenuItem\
+    {\
+        Text [ de ] = "Standar~d" ; \
+        Identifier = FN_FORMAT_RESET ; \
+        HelpID = FN_FORMAT_RESET ; \
+        Text [ en-US ] = "~Default" ; \
+        Text [ de ] = "Standar~d" ; \
+    };
+
+
+#define MN_TEXT_ATTR\
+    MenuItem\
+    {\
+        ITEM_FORMAT_ATTR_CHAR_FONT\
+    };\
+    MenuItem\
+    {\
+        ITEM_FORMAT_ATTR_CHAR_FONTHEIGHT\
+    };\
+    MenuItem\
+    {\
+        Identifier = MN_FORMAT_STYLE ; \
+        HelpID = MN_FORMAT_STYLE ; \
+        Command = ".uno:StyleMenu" ; \
+        Text [ de ] = "Sti~l" ; \
+        Text [ en-US ] = "St~yle" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_WEIGHT\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_POSTURE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_UNDERLINE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_STRIKEOUT\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_SHADOWED\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_CONTOUR\
+                };\
+                SEPARATOR ; \
+                MenuItem\
+                {\
+                    Identifier = FN_SET_SUPER_SCRIPT ; \
+                    HelpID = FN_SET_SUPER_SCRIPT ; \
+                    Text [ de ] = "~Hochstellen" ; \
+                    Text [ en-US ] = "Superscript" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_SET_SUB_SCRIPT ; \
+                    HelpID = FN_SET_SUB_SCRIPT ; \
+                    Text [ de ] = "~Tiefstellen" ; \
+                    Text [ en-US ] = "Subscript" ; \
+                };\
+            };\
+        };\
+    };\
+    MenuItem\
+    {\
+        Identifier = MN_FORMAT_ALGN ; \
+        HelpID = MN_FORMAT_ALGN ; \
+        Command = ".uno:AlignTextMenu" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Aus~richtung : Ausrichtung */\
+        /* ### ACHTUNG: Neuer Text in Resource? Aus~richtung : Ausrichtung */\
+        Text [ de ] = "Aus~richtung" ; \
+        Text [ en-US ] = "A~lignment" ; \
+        RadioCheck = TRUE ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Objektausrichtung auswählen : Objektausrichtung auswõhlen */\
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    ITEM_FORMAT_ATTR_PARA_ADJUST_LEFT\
+                };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    ITEM_FORMAT_ATTR_PARA_ADJUST_RIGHT\
+                };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    ITEM_FORMAT_ATTR_PARA_ADJUST_CENTER\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_PARA_ADJUST_BLOCK ; \
+                    HelpID = SID_ATTR_PARA_ADJUST_BLOCK ; \
+                    RadioCheck = TRUE ; \
+                    Text [ de ] = "~Blocksatz" ; \
+                    Text [ en-US ] = "Justified" ; \
+                };\
+            };\
+        };\
+    };\
+    MenuItem\
+    {\
+        Identifier = MN_FORMAT_LINESPACE ; \
+        HelpID = MN_FORMAT_LINESPACE ; \
+        Command = ".uno:LineSpacingMenu" ; \
+        Text [ de ] = "Zeilenabs~tand" ; \
+        Text [ en-US ] = "Line Spacing" ; \
+        _MenuItemFlags = MIB_RADIOCHECK ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Zeilenabstand auswählen : Zeilenabstand auswõhlen */\
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    ITEM_FORMAT_PARA_LINESPACE_10\
+                };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    ITEM_FORMAT_PARA_LINESPACE_15\
+                };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    ITEM_FORMAT_PARA_LINESPACE_20\
+                };\
+            };\
+        };\
+    };
+
+ // Rahmen, Grafik, OLE,
+#define MN_TOP \
+    MenuItem\
+    {\
+        ITEM_FORMAT_FRAME_TO_TOP\
+    };\
+
+
+
+
+
+
+
+
+
+#define MN_BOTTOM \
+    MenuItem\
+    {\
+        ITEM_FORMAT_FRAME_TO_BOTTOM\
+    };\
+
+
+
+
+
+
+
+
+
+#define MN_ANCHOR \
+    MenuItem\
+    {\
+        Identifier = FN_TOOL_ANKER ; \
+        HelpID = FN_TOOL_ANKER ; \
+        Command = ".uno:AnchorMenu" ; \
+        Text [ de ] = "~Verankerung" ; \
+        Text [ en-US ] = "An~chor" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Objektverankerung auswählen : Objektverankerung auswõhlen */\
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = FN_TOOL_ANKER_PAGE ; \
+                    HelpID = FN_TOOL_ANKER_PAGE ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? An der ~Seite : An der Seite */\
+                    Text [ de ] = "An der ~Seite" ; \
+                    Text [ en-US ] = "To P~age" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_TOOL_ANKER_PARAGRAPH ; \
+                    HelpID = FN_TOOL_ANKER_PARAGRAPH ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? Am ~Absatz : Am Absatz */\
+                    Text [ de ] = "Am ~Absatz" ; \
+                    Text [ en-US ] = "To ~Paragraph" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_TOOL_ANKER_AT_CHAR ; \
+                    HelpID = FN_TOOL_ANKER_AT_CHAR ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? Am ~Zeichen : Am Zeichen */\
+                    Text [ de ] = "Am ~Zeichen" ; \
+                    Text [ en-US ] = "To ~Character" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_TOOL_ANKER_CHAR ; \
+                    HelpID = FN_TOOL_ANKER_CHAR ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? Am ~Zeichen : Am Zeichen */\
+                    Text [ de ] = "Als Z~eichen" ; \
+                    Text [ en-US ] = "As C~haracter" ; \
+                };\
+                MN_AT_FRAME\
+            };\
+        };\
+    };
+
+
+#define MN_ONE_STEP \
+    MenuItem\
+    {\
+        Identifier = FN_FRAME_UP ; \
+        HelpID = FN_FRAME_UP ; \
+        Text [ de ] = "W~eiter nach vorn" ; \
+        Text [ en-US ] = "Bring ~Forward" ; \
+    };\
+    MenuItem\
+    {\
+        Identifier = FN_FRAME_DOWN ; \
+        HelpID = FN_FRAME_DOWN ; \
+        Text [ de ] = "Weiter ~nach hinten" ; \
+        Text [ en-US ] = "Send Back~ward" ; \
+    };
+
+#define MN_FRM \
+    MenuItem\
+    {\
+        Identifier = FN_FORMAT_FRAME_DLG ; \
+        HelpID = FN_FORMAT_FRAME_DLG ; \
+        Text [ de ] = "Rah~men..." ; \
+        Text [ en-US ] = "~Frame..." ; \
+    };
+
+
+#define MN_ALIGN \
+    MenuItem\
+    {\
+        ITEM_FORMAT_OBJECT_ALIGN\
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_LEFT\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_CENTER\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_RIGHT\
+                };\
+                SEPARATOR ; \
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_UP\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_MIDDLE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_DOWN\
+                };\
+            };\
+        };\
+    };
+
+
+#define MN_DRAW1 \
+    MenuItem\
+    {\
+        ITEM_FORMAT_ATTRIBUTES_LINE\
+    };\
+    MenuItem\
+    {\
+        ITEM_FORMAT_ATTRIBUTES_AREA\
+    };
+
+
+#define MN_DRAW4 \
+    MenuItem\
+    {\
+        Identifier = SID_SHOW_BROWSER ; \
+        HelpID = SID_SHOW_BROWSER ; \
+        Text [ de ] = "~Eigenschaften..." ; \
+        Text [ en-US ] = "Propert~ies..." ; \
+    };
+
+
+#define MN_DRAW5 \
+    MenuItem\
+    {\
+        Identifier = MN_SUB_ARRANGE ; \
+        HelpID = HID_MN_SUB_ARRANGE ; \
+        Command = ".uno:ArrangeMenu" ; \
+        Text [ de ] = "~Anordnung" ; \
+        Text [ en-US ] = "~Arrange" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_TOP\
+                MN_ONE_STEP\
+                MN_BOTTOM\
+                SEPARATOR ; \
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_HEAVEN\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_HELL\
+                };\
+            };\
+        };\
+    };\
+    MN_ALIGN\
+
+
+#define MN_DRAW6 \
+    MenuItem\
+    {\
+        Identifier = MN_SUB_ARRANGE ; \
+        HelpID = HID_MN_SUB_ARRANGE ; \
+        Command = ".uno:ArrangeMenu" ; \
+        Text [ de ] = "~Anordnung" ; \
+        Text [ en-US ] = "~Arrange" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_TOP\
+                MN_ONE_STEP\
+                MN_BOTTOM\
+            };\
+        };\
+    };\
+    MN_ALIGN\
+
+#define MN_DRAW2 \
+    MenuItem\
+    {\
+        Identifier = MN_SUB_MIRROR ; \
+        HelpID = HID_MN_SUB_MIRROR ; \
+        Command = ".uno:MirrorMenu" ; \
+        Text [ de ] = "Sp~iegeln" ; \
+        Text [ en-US ] = "~Flip" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = FN_FLIP_HORZ_GRAFIC ; \
+                    HelpID = FN_FLIP_HORZ_GRAFIC ; \
+                    Text [ de ] = "~Vertikal" ; \
+                    Text [ en-US ] = "~Vertically" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_FLIP_VERT_GRAFIC ; \
+                    HelpID = FN_FLIP_VERT_GRAFIC ; \
+                    Text [ de ] = "~Horizontal" ; \
+                    Text [ en-US ] = "~Horizontally" ; \
+                };\
+            };\
+        };\
+        Text [ en-US ] = "~Flip" ; \
+        Text [ de ] = "Sp~iegeln" ; \
+    };\
+    MN_DRAW5\
+
+#define MN_DRAW3 \
+    ITEM_GROUP_MENU
+
+#define MN_FORM \
+    MenuItem\
+    {\
+        ITEM_FORM_CONTROL_PROPERTIES\
+    };\
+    MenuItem\
+    {\
+        ITEM_FORM_PROPERTIES\
+    };\
+    MenuItem\
+    {\
+        ITEM_REPLACE_CONTROL\
+    };\
+
+#define MN_WRAP_CONTOUR \
+    MenuItem\
+    {\
+        Identifier = FN_FRAME_WRAP_CONTOUR ; \
+        HelpID = FN_FRAME_WRAP_CONTOUR ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Kon~tur : Kontur */\
+        Text [ de ] = "K~ontur" ; \
+        Text [ en-US ] = "~Contour" ; \
+    };\
+
+
+
+
+#define MN_EDIT_CONTOUR \
+    MenuItem\
+    {\
+        Identifier = SID_CONTOUR_DLG ; \
+        HelpID = SID_CONTOUR_DLG ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Kontur ~bearbeiten... : Kontur bearbeiten... */\
+        Text [ de ] = "Kontur ~bearbeiten..." ; \
+        Text [ en-US ] = "~Edit Contour..." ; \
+    };\
+
+#define  MN_WRAP_CONTOUR_1 MN_WRAP_CONTOUR
+#define  MN_EDIT_CONTOUR_1 MN_EDIT_CONTOUR
+
+
+
+#define MN_WRAP_DRAW                                                                                                            \
+    MenuItem\
+    {\
+        Identifier = MN_WRAP ; \
+        HelpID = MN_WRAP ; \
+        Command = ".uno:WrapMenu" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    Identifier = FN_FRAME_NOWRAP ; \
+                    HelpID = FN_FRAME_NOWRAP ; \
+                    Text [ de ] = "~Kein Umlauf" ; \
+                    Text [ en-US ] = "~No Wrap" ; \
+                };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    Identifier = FN_FRAME_WRAP ; \
+                    HelpID = FN_FRAME_WRAP ; \
+                    Text [ de ] = "~Seitenumlauf" ; \
+                    Text [ en-US ] = "~Page Wrap" ; \
+                };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    Identifier = FN_FRAME_WRAP_IDEAL ; \
+                    HelpID = FN_FRAME_WRAP_IDEAL ; \
+                    Text [ de ] = "~Dynamischer Seitenumlauf" ; \
+                    Text [ en-US ] = "~Optimal Page Wrap" ; \
+                };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    Identifier = FN_FRAME_WRAPTHRU ; \
+                    HelpID = FN_FRAME_WRAPTHRU ; \
+                    Text [ de ] = "D~urchlauf" ; \
+                    Text [ en-US ] = "~Wrap Through" ; \
+                };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    Identifier = FN_FRAME_WRAPTHRU_TRANSP ; \
+                    HelpID = FN_FRAME_WRAPTHRU_TRANSP ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? Im ~Hintergrund : Durchlauf im ~Hintergrund */\
+                    /* ### ACHTUNG: Neuer Text in Resource? Im ~Hintergrund : Durchlauf im ~Hintergrund */\
+                    Text [ de ] = "Im ~Hintergrund" ; \
+                    Text [ en-US ] = "In ~Background" ; \
+                };\
+                SEPARATOR ; \
+                MN_WRAP_CONTOUR_1\
+                MenuItem\
+                {\
+                    Identifier = FN_WRAP_ANCHOR_ONLY ; \
+                    HelpID = FN_WRAP_ANCHOR_ONLY ; \
+                    Text [ de ] = "~Erster Absatz" ; \
+                    Text [ en-US ] = "~First Paragraph" ; \
+                };\
+                SEPARATOR ; \
+                MenuItem\
+                {\
+                    Identifier = FN_DRAW_WRAP_DLG ; \
+                    HelpID = FN_DRAW_WRAP_DLG ; \
+                    Text [ de ] = "~Bearbeiten..." ; \
+                    Text [ en-US ] = "~Edit..." ; \
+                };\
+            };\
+        };\
+        Text [ de ] = "~Umlauf" ; \
+        Text [ en-US ] = "~Wrap" ; \
+    };
+
+ // Zusaetze Rahmen
+
+#define MN_MOUSE_FRAME_BEGIN \
+    MenuItem\
+    {\
+        Identifier = MN_WRAP ; \
+        HelpID = MN_WRAP ; \
+        Command = ".uno:WrapMenu" ; \
+        Text [ de ] = "~Umlauf" ; \
+        Text [ en-US ] = "~Wrap" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    Identifier = FN_FRAME_NOWRAP ; \
+                    HelpID = FN_FRAME_NOWRAP ; \
+                    Text [ de ] = "~Kein Umlauf" ; \
+                    Text [ en-US ] = "~No Wrap" ; \
+                };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    Identifier = FN_FRAME_WRAP ; \
+                    HelpID = FN_FRAME_WRAP ; \
+                    Text [ de ] = "~Seitenumlauf" ; \
+                    Text [ en-US ] = "~Page Wrap" ; \
+                };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    Identifier = FN_FRAME_WRAP_IDEAL ; \
+                    HelpID = FN_FRAME_WRAP_IDEAL ; \
+                    Text [ de ] = "~Dynamischer Seitenumlauf" ; \
+                    Text [ en-US ] = "~Optimal Page Wrap" ; \
+                };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    Identifier = FN_FRAME_WRAPTHRU ; \
+                    HelpID = FN_FRAME_WRAPTHRU ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? D~urchlauf : ~Durchlauf */\
+                    /* ### ACHTUNG: Neuer Text in Resource? D~urchlauf : ~Durchlauf */\
+                    Text [ de ] = "D~urchlauf" ; \
+                    Text [ en-US ] = "~Wrap Through" ; \
+                };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    Identifier = FN_FRAME_WRAPTHRU_TRANSP ; \
+                    HelpID = FN_FRAME_WRAPTHRU_TRANSP ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? Im ~Hintergrund : Im Hin~tergrund */\
+                    /* ### ACHTUNG: Neuer Text in Resource? Im ~Hintergrund : Im Hin~tergrund */\
+                    Text [ de ] = "Im ~Hintergrund" ; \
+                    Text [ en-US ] = "In ~Background" ; \
+                };\
+                SEPARATOR ; \
+                MN_WRAP_CONTOUR_1\
+                MN_EDIT_CONTOUR\
+                MenuItem\
+                {\
+                    Identifier = FN_WRAP_ANCHOR_ONLY ; \
+                    HelpID = FN_WRAP_ANCHOR_ONLY ; \
+                    Text [ de ] = "~Erster Absatz" ; \
+                    Text [ en-US ] = "~First Paragraph" ; \
+                    };\
+            };\
+        };\
+    };
+
+#define MN_MOUSE_FRAME_WITH_CONTOUR MN_MOUSE_FRAME_BEGIN
+
+#undef  MN_WRAP_CONTOUR_1
+#undef  MN_EDIT_CONTOUR_1
+#define  MN_WRAP_CONTOUR_1
+#define  MN_EDIT_CONTOUR_1
+#define MN_MOUSE_FRAME_WITHOUT_CONTOUR MN_MOUSE_FRAME_BEGIN
+
+
+
+#define MN_ALIGN_FRAME \
+    MenuItem\
+    {\
+        Identifier = MN_SUB_ALIGN ; \
+        HelpID = HID_MN_SUB_ALIGN ; \
+        Command = ".uno:ArrangeFrameMenu" ; \
+        Text [ de ] = "~Anordnung" ; \
+        Text [ en-US ] = "~Arrange" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_FRAME_TO_TOP\
+                };\
+                MN_ONE_STEP\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_FRAME_TO_BOTTOM\
+                };\
+            };\
+        };\
+        };\
+    MenuItem\
+    {\
+        Identifier = MN_FORMAT_FRM_HORZ ; \
+        HelpID = MN_FORMAT_FRM_HORZ ; \
+        Command = ".uno:AlignFrameMenu" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Aus~richtung : Ausrichtung */\
+        /* ### ACHTUNG: Neuer Text in Resource? Aus~richtung : Ausrichtung */\
+        Text [ de ] = "Aus~richtung" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = FN_FRAME_ALIGN_HORZ_LEFT ; \
+                    HelpID = FN_FRAME_ALIGN_HORZ_LEFT ; \
+                    Text [ de ] = "~Links" ; \
+                    Text [ en-US ] = "~Left" ; \
+                    };\
+                MenuItem\
+                {\
+                    Identifier = FN_FRAME_ALIGN_HORZ_CENTER ; \
+                    HelpID = FN_FRAME_ALIGN_HORZ_CENTER ; \
+                    Text [ de ] = "~Zentriert" ; \
+                    Text [ en-US ] = "~Centered" ; \
+                    };\
+                MenuItem\
+                {\
+                    Identifier = FN_FRAME_ALIGN_HORZ_RIGHT ; \
+                    HelpID = FN_FRAME_ALIGN_HORZ_RIGHT ; \
+                    Text [ de ] = "~Rechts" ; \
+                    Text [ en-US ] = "~Right" ; \
+                    };\
+                SEPARATOR ; \
+                MenuItem\
+                {\
+                    Identifier = FN_FRAME_ALIGN_VERT_TOP ; \
+                    HelpID = FN_FRAME_ALIGN_VERT_TOP ; \
+                    Text [ de ] = "Basis ~oben" ; \
+                    Text [ en-US ] = "Base at ~Top" ; \
+                    };\
+                MenuItem\
+                {\
+                    Identifier = FN_FRAME_ALIGN_VERT_CENTER ; \
+                    HelpID = FN_FRAME_ALIGN_VERT_CENTER ; \
+                    Text [ de ] = "Basis ~mitte" ; \
+                    Text [ en-US ] = "Base in ~Middle" ; \
+                    };\
+                MenuItem\
+                {\
+                    Identifier = FN_FRAME_ALIGN_VERT_BOTTOM ; \
+                    HelpID = FN_FRAME_ALIGN_VERT_BOTTOM ; \
+                    Text [ de ] = "Basis ~unten" ; \
+                    Text [ en-US ] = "Base at ~Bottom" ; \
+                    };\
+            };\
+        };\
+        Text [ en-US ] = "A~lignment" ; \
+        };\
+    MN_ANCHOR
+
+
+
+
+
+
+
+
+#define MN_GRAFIC \
+    MenuItem\
+    {\
+        Identifier = FN_FORMAT_GRAFIC_DLG ; \
+        HelpID = FN_FORMAT_GRAFIC_DLG ; \
+        Text [ de ] = "~Grafik..." ; \
+        Text [ en-US ] = "~Graphics..." ; \
+    };
+
+
+#define MN_OLE \
+    MenuItem\
+    {\
+        Identifier = FN_FORMAT_FRAME_DLG ; \
+        HelpID = FN_FORMAT_FRAME_DLG ; \
+        Text [ de ] = "Objekt..." ; \
+        Text [ en-US ] = "Object..." ; \
+    };
+
+#define ITEM_EDIT_READONLY_SELECTION_MODE \
+    Identifier = FN_READONLY_SELECTION_MODE ; \
+    HelpID = FN_READONLY_SELECTION_MODE ; \
+    Text [ de ] = "Text auswählen" ; \
+    Text [ en-US ] = "Select Text"; \
+
+/* --------------------- M E N U  --------------------------------- */
+
+/*
+
+
+The application menu bar resource has become obsolete. You can now find the menu bar at the following
+location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
+
+
+*/
+
+
+/* --------------------- D O C U M E N T -------------------------- */
+#ifdef MN_SW_WEB
+    #ifdef MN_SW_PORTAL
+        #define _MN_FILE  MN_WEBFILE_PORT
+    #else
+        #define _MN_FILE  MN_WEBFILE
+    #endif
+#elif defined MN_SW_GLOBAL //3
+    #ifdef MN_SW_PORTAL
+        #define _MN_FILE  MN_GLOBALFILE_PORT
+    #else
+        #define _MN_FILE  MN_GLOBALFILE
+    #endif
+#else
+    #ifdef MN_SW_PORTAL
+        #define _MN_FILE MN_FILE_PORT
+    #else
+        #define _MN_FILE  MN_FILE
+    #endif
+#endif
+
+MenuItem _MN_FILE
+{
+    ITEM_FILE_PICKLIST
+    SubMenu = Menu
+    {
+        ItemList =
+        {
+            MenuItem
+            {
+                ITEM_FILE_NEWDOC
+            };
+            MenuItem
+            {
+                ITEM_FILE_OPENDOC
+            };
+            ITEM_FILE_AUTOPILOT
+            SEPARATOR ;
+            MenuItem
+            {
+                ITEM_FILE_CLOSEDOC
+            };
+            MenuItem
+            {
+                ITEM_FILE_SAVEDOC
+            };
+            MenuItem
+            {
+                ITEM_FILE_SAVEASDOC
+            };
+                        MenuItem
+            {
+                ITEM_FILE_SAVEDOCS
+            };
+            MenuItem
+            {
+                ITEM_FILE_LASTVERSIONDOC
+            };
+                        SEPARATOR ;
+#ifndef MN_SW_WEB
+            MenuItem
+            {
+                ITEM_FILE_VERSIONDIALOG
+            };
+                        SEPARATOR ;
+#endif
+                        MenuItem
+            {
+                                ITEM_FILE_EXPORTDOC
+            };
+#ifndef MN_SW_WEB
+            MenuItem
+            {
+                ITEM_FILE_EXPORTDOCASPDF
+            };
+#endif
+#ifdef MN_SW_WEB
+            MenuItem MN_SUB_SENDTO
+            {
+                Command = ".uno:SendToMenu" ;
+                Text [ de ] = "Senden" ;
+                SubMenu = Menu
+                {
+                    ItemList =
+                    {
+                        MenuItem
+                        {
+                            ITEM_FILE_MAIL_SENDDOC
+                        };
+                        MenuItem
+                        {
+                            ITEM_FILE_MAIL_SENDDOCASPDF
+                        };
+                    };
+                };
+                Text [ en-US ] = "Send";
+            };
+#endif
+#ifndef MN_SW_WEB
+            MenuItem MN_SUB_SENDTO
+            {
+                Text [ de ] = "S~enden" ;
+                Command = ".uno:SendToMenu" ;
+                SubMenu = Menu
+                {
+                    ItemList =
+                    {
+                        MenuItem
+                        {
+                            ITEM_FILE_MAIL_SENDDOC
+                        };
+                                                MenuItem
+                                                {
+                                                        ITEM_FILE_MAIL_SENDDOCASPDF
+                                                };
+                        SEPARATOR ;
+                        MenuItem
+                        {
+                            Identifier = FN_NEW_GLOBAL_DOC ;
+                            HelpID = FN_NEW_GLOBAL_DOC ;
+                            Text [ de ] = "Global~dokument erzeugen" ;
+                            Text [ en-US ] = "Create Master ~Document" ;
+                        };
+                        MenuItem
+                        {
+                            Identifier = FN_NEW_HTML_DOC ;
+                            HelpID = FN_NEW_HTML_DOC ;
+                            Text [ de ] = "~HTML-Dokument erzeugen" ;
+                            Text [ en-US ] = "Create ~HTML Document" ;
+                        };
+                        SEPARATOR ;
+                        MenuItem
+                        {
+                            Identifier = FN_OUTLINE_TO_IMPRESS ;
+                            HelpID = FN_OUTLINE_TO_IMPRESS ;
+                            /* ### ACHTUNG: Neuer Text in Resource? ~Gliederung an Präsentation : ~Gliederung an Prõsentation */
+                            Text [ de ] = "~Gliederung an Präsentation" ;
+                            Text [ en-US ] = "Outline to ~Presentation" ;
+                        };
+                        MenuItem
+                        {
+                            Identifier = FN_OUTLINE_TO_CLIPBOARD ;
+                            HelpID = FN_OUTLINE_TO_CLIPBOARD ;
+                            Text [ de ] = "Gliederung zur Zwis~chenablage" ;
+                            Text [ en-US ] = "Outline to ~Clipboard" ;
+                        };
+                        SEPARATOR ;
+                        MenuItem
+                        {
+                            Identifier = FN_ABSTRACT_NEWDOC ;
+                            HelpID = FN_ABSTRACT_NEWDOC ;
+                            Text [ de ] = "A~utoAbstract erzeugen..." ;
+                            Text [ en-US ] = "Create A~utoAbstract..." ;
+                        };
+                        MenuItem
+                        {
+                            Identifier = FN_ABSTRACT_STARIMPRESS ;
+                            HelpID = FN_ABSTRACT_STARIMPRESS ;
+                            /* ### ACHTUNG: Neuer Text in Resource? AutoAbstract an ~Präsentation... : AutoAbstract an ~Prõsentation... */
+                            Text [ de ] = "AutoAbstract an ~Präsentation..." ;
+                            Text [ en-US ] = "AutoAbst~ract to Presentation..." ;
+                        };
+                    };
+                    Text [ en-US ] = "Send";
+            };
+                Text [ en-US ] = "Sen~d" ;
+            };
+#endif
+            SEPARATOR ;
+            MenuItem
+            {
+                ITEM_FILE_DOCINFO
+            };
+            MenuItem
+            {
+                ITEM_FILE_DOCTEMPLATE
+            };
+            SEPARATOR ;
+            MenuItem
+            {
+                Identifier = SID_PRINTPREVIEW ; \
+                HelpID = SID_PRINTPREVIEW ; \
+                Text [ de ] = "Sei~tenansicht/Seitendruck" ; \
+                Text [ en-US ] = "Pa~ge Preview" ;
+            };
+#ifdef MAC
+            MenuItem
+            {
+                ITEM_FILE_SETUPPRINTER
+            };
+            MenuItem
+            {
+                ITEM_FILE_PRINTDOC
+            };
+#else
+            MenuItem
+            {
+                ITEM_FILE_PRINTDOC
+            };
+            MenuItem
+            {
+                ITEM_FILE_SETUPPRINTER
+            };
+            SEPARATOR ;
+#endif
+#ifdef MN_SW_PORTAL
+            MenuItem
+            {
+                ITEM_FILE_BACKTOWEBTOP
+            };
+            MenuItem
+            {
+                ITEM_FILE_LOGOUT
+            };
+#else
+            MenuItem
+            {
+                ITEM_FILE_QUITAPP
+            };
+#endif //MN_SW_PORTAL
+        };
+    };
+};
+
+#ifdef MN_SW_WEB
+    #ifdef MN_SW_PORTAL
+        #define _MN_EDIT MN_WEBEDIT_PORT
+    #else
+        #define _MN_EDIT MN_WEBEDIT
+    #endif
+#elif defined MN_SW_GLOBAL // 4
+    #ifdef MN_SW_PORTAL
+        #define _MN_EDIT  MN_GLOBALEDIT_PORT
+    #else
+        #define _MN_EDIT  MN_GLOBALEDIT
+    #endif
+#else
+    #ifdef MN_SW_PORTAL
+        #define _MN_EDIT MN_EDIT_PORT
+    #else
+        #define _MN_EDIT MN_EDIT
+    #endif
+#endif
+
+MenuItem _MN_EDIT
+{
+    Identifier = FN_EDIT ;
+    HelpID = FN_EDIT ;
+    Command = ".uno:EditMenu";
+    Text [ de ] = "~Bearbeiten" ;
+    Text [ en-US ] = "~Edit" ;
+    SubMenu = Menu
+    {
+        ItemList =
+        {
+            MenuItem
+            {
+                ITEM_EDIT_UNDO
+            };
+            MenuItem
+            {
+                ITEM_EDIT_REDO
+            };
+            MenuItem
+            {
+                ITEM_EDIT_REPEAT
+            };
+            SEPARATOR ;
+            MN_PASTE
+            MenuItem
+            {
+                ITEM_EDIT_PASTE
+            };
+            MenuItem
+            {
+                Identifier = FN_PASTESPECIAL ;
+                HelpID = FN_PASTESPECIAL ;
+#ifdef MAC
+                Text [ de ] = "Inhalte einsetzen..." ;
+#else
+                Text [ de ] = "In~halte einfügen..." ;
+#endif
+                Text [ en-US ] = "Paste ~Special..." ;
+                /* ### ACHTUNG: Neuer Text in Resource? In~halte einfügen... : In~halte einf³gen... */
+                Text [ de ] = "In~halte einfügen..." ;
+            };
+             //            MN_CUT
+            MenuItem
+            {
+                ITEM_EDIT_READONLY_SELECTION_MODE
+            };
+            MenuItem
+            {
+                ITEM_EDIT_SELECTALL
+            };
+            SEPARATOR ;
+#ifndef MN_SW_WEB
+            MenuItem MN_SUB_REVISE
+            {
+                Text [ de ] = "Änder~ungen" ;
+                Command = ".uno:ChangesMenu" ;
+                SubMenu = Menu
+                {
+                    ItemList =
+                    {
+                        MenuItem
+                        {
+                            Identifier = FN_REDLINE_ON ;
+                            HelpID = FN_REDLINE_ON ;
+                            Text [ de ] = "~Aufzeichnen" ;
+                            Text [ en-US ] = "~Record" ;
+                        };
+                        MenuItem
+                        {
+                            Identifier = FN_REDLINE_PROTECT ;
+                            HelpID = FN_REDLINE_PROTECT ;
+                            Text [ de ] = "Aufzeichnung ~schützen..." ;
+                            Text [ en-US ] = "~Protect Records...";
+                        };
+                        MenuItem
+                        {
+                            Identifier = FN_REDLINE_SHOW ;
+                            HelpID = FN_REDLINE_SHOW ;
+                            Text [ de ] = "An~zeigen" ;
+                            Text [ en-US ] = "~Show" ;
+                        };
+                        SEPARATOR ;
+                        MenuItem
+                        {
+                            Identifier = FN_REDLINE_ACCEPT ;
+                            HelpID = FN_REDLINE_ACCEPT ;
+                            Text [ de ] = "Akzeptieren oder ~verwerfen..." ;
+                            Text [ en-US ] = "~Accept or Reject..." ;
+                        };
+                        MenuItem
+                        {
+                            Identifier = FN_REDLINE_COMMENT ;
+                            HelpID = FN_REDLINE_COMMENT ;
+                            Text [ de ] = "~Kommentar..." ;
+                            Text [ en-US ] = "~Comment..." ;
+                        };
+                        SEPARATOR ;
+                        MenuItem
+                        {
+                            Identifier = SID_DOCUMENT_MERGE ;
+                            HelpID = SID_DOCUMENT_MERGE ;
+                            Text [ de ] = "~Dokument zusammenführen..." ;
+                            Text [ en-US ] = "~Merge Document..." ;
+                        };
+                    };
+                };
+                Text [ en-US ] = "Chan~ges" ;
+            };
+            MenuItem
+            {
+                Identifier = SID_DOCUMENT_COMPARE ;
+                HelpID = SID_DOCUMENT_COMPARE ;
+                Text [ de ] = "Dokument ve~rgleichen..." ;
+                Text [ en-US ] = "Compar~e Document..." ;
+            };
+#endif
+            MenuItem
+            {
+                ITEM_EDIT_SEARCH_DLG
+            };
+            MenuItem
+            {
+                ITEM_EDIT_NAVIGATOR
+            };
+            MenuItem
+            {
+                Identifier = FN_GLOSSARY_DLG ;
+                HelpID = FN_GLOSSARY_DLG ;
+                Text [ de ] = "Auto~Text..." ;
+                Text [ en-US ] = "AutoTe~xt..." ;
+            };
+            SEPARATOR ;
+#ifndef MN_SW_WEB
+            MenuItem
+            {
+                Identifier = FN_CHANGE_DBFIELD ;
+                HelpID = FN_CHANGE_DBFIELD ;
+                Text [ de ] = "Dat~enbank austauschen..." ;
+                Text [ en-US ] = "Exc~hange Database..." ;
+            };
+#endif
+            MenuItem
+            {
+                Identifier = FN_EDIT_FIELD ;
+                HelpID = FN_EDIT_FIELD ;
+                Text [ de ] = "~Feldbefehl..." ;
+                Text [ en-US ] = "F~ields..." ;
+            };
+            MenuItem
+            {
+                Identifier = FN_EDIT_FOOTNOTE ;
+                HelpID = FN_EDIT_FOOTNOTE ;
+                Text [ de ] = "Fußnote~..." ;
+                Text [ en-US ] = "Footnote~..." ;
+            };
+#ifndef MN_SW_WEB
+            MenuItem
+            {
+                Identifier = FN_EDIT_IDX_ENTRY_DLG ;
+                HelpID = FN_EDIT_IDX_ENTRY_DLG ;
+                Text [ de ] = "Ver~zeichniseintrag..." ;
+                Text [ en-US ] = "Index Entr~y..." ;
+            };
+            MenuItem
+            {
+                Identifier = FN_EDIT_AUTH_ENTRY_DLG ;
+                HelpID = FN_EDIT_AUTH_ENTRY_DLG ;
+                Text [ de ] = "Literaturverzeichniseintra~g..." ;
+                Text [ en-US ] = "~Bibliography Entry...";
+            };
+#endif
+            MenuItem
+            {
+                Identifier = FN_EDIT_HYPERLINK;
+                HelpID = FN_EDIT_HYPERLINK ;
+                Text [ de ] = "H~yperlink" ;
+                Text [ en-US ] = "H~yperlink";
+            };
+            SEPARATOR ;
+            MenuItem
+            {
+                Identifier = FN_EDIT_LINK_DLG ;
+                HelpID = FN_EDIT_LINK_DLG ;
+                Text [ de ] = "~Verknüpfungen..." ;
+                Text [ en-US ] = "Lin~ks..." ;
+            };
+#ifndef MN_SW_PORTAL
+            MenuItem
+            {
+                ITEM_EDIT_PLUGINS_ACTIVE
+            };
+#endif //MN_SW_PORTAL
+            MenuItem
+            {
+                ITEM_EDIT_IMAP
+            };
+            MenuItem
+            {
+                ITEM_EDIT_OBJECT
+            };
+        };
+    };
+};
+
+#ifdef MN_SW_WEB
+    #ifdef MN_SW_PORTAL
+        #define _MN_VIEW MN_WEBVIEW_PORT
+    #else
+        #define _MN_VIEW MN_WEBVIEW
+    #endif
+#elif defined MN_SW_GLOBAL //5
+    #ifdef MN_SW_PORTAL
+        #define _MN_VIEW  MN_GLOBALVIEW_PORT
+    #else
+        #define _MN_VIEW  MN_GLOBALVIEW
+    #endif
+#else
+    #ifdef MN_SW_PORTAL
+        #define _MN_VIEW MN_VIEW_PORT
+    #else
+        #define _MN_VIEW MN_VIEW
+    #endif
+#endif
+
+MenuItem _MN_VIEW
+{
+    Identifier = FN_VIEW ;
+    HelpID = FN_VIEW ;
+    Command = ".uno:ViewMenu" ;
+    Text [ de ] = "~Ansicht" ;
+    Text [ en-US ] = "~View" ;
+    SubMenu = Menu
+    {
+        ItemList =
+        {
+            MenuItem
+            {
+                ITEM_VIEW_ATTR_ZOOM
+            };
+#ifndef MN_SW_WEB
+#ifndef MN_SW_PORTAL
+            SEPARATOR ;
+            MenuItem
+            {
+                ITEM_VIEW_DATA_SOURCE_BROWSER
+            };
+#endif //MN_SW_PORTAL
+#endif
+            SEPARATOR ;
+            MenuItem
+            {
+                Identifier = MN_SUB_TOOLBAR ;
+                HelpID = HID_MN_SUB_TOOLBAR ;
+                Command = ".uno:ToolbarsMenu" ;
+                Text [ de ] = "S~ymbolleisten" ;
+                SubMenu = Menu
+                {
+                    ItemList =
+                    {
+                        MenuItem
+                        {
+                            ITEM_VIEW_TOGGLEFUNCTIONBAR
+                        };
+                        MenuItem
+                        {
+                            ITEM_VIEW_TOGGLEOBJECTBAR
+                        };
+                        MenuItem
+                        {
+                            Identifier = SID_TOGGLETOOLBAR ;
+                            HelpID = SID_TOGGLETOOLBAR ;
+                            Text [ de ] = "~Werkzeugleiste" ;
+                            Text [ en-US ] = "Main ~Toolbar" ;
+                        };
+                        MenuItem
+                        {
+                            ITEM_INSERT_HYPERLINK_INSERT
+                        };
+                        MenuItem
+                        {
+                            Identifier = FN_EDIT_FORMULA ;
+                            HelpID = FN_EDIT_FORMULA ;
+                            Text [ de ] = "~Rechenleiste" ;
+                            Text [ en-US ] = "Fo~rmula Bar" ;
+                        };
+                        SEPARATOR ;
+                        MenuItem
+                        {
+                            Identifier = SID_CUSTOMIZETOOLBOX ;
+                            HelpID = SID_CUSTOMIZETOOLBOX ;
+                            Text [ de ] = "~Bearbeiten..." ;
+                            Text [ en-US ] = "Customi~ze..." ;
+                        };
+                    };
+                };
+                Text [ en-US ] = "~Toolbars" ;
+            };
+            MenuItem
+            {
+                Identifier = FN_RULER ;
+                HelpID = FN_RULER ;
+                Text [ de ] = "~Lineal" ;
+                Text [ en-US ] = "~Ruler" ;
+            };
+            MenuItem
+            {
+                ITEM_VIEW_TOGGLESTATUSBAR
+            };
+            MenuItem
+            {
+                ITEM_VIEW_TOGGLEIMESTATUSWINDOW
+            };
+            SEPARATOR ;
+            MenuItem
+            {
+                Identifier = FN_VIEW_BOUNDS ;
+                HelpID = FN_VIEW_BOUNDS ;
+                Text [ de ] = "Te~xtbegrenzungen" ;
+                Text [ en-US ] = "Te~xt Boundaries" ;
+            };
+            MenuItem
+            {
+                Identifier = FN_VIEW_MARKS ;
+                HelpID = FN_VIEW_MARKS ;
+                Text [ de ] = "Ma~rkierungen" ;
+                Text [ en-US ] = "Fie~ld Shadings" ;
+            };
+            MenuItem
+            {
+                Identifier = FN_VIEW_FIELDNAME ;
+                HelpID = FN_VIEW_FIELDNAME ;
+                Text [ de ] = "~Feldbefehle" ;
+                Text [ en-US ] = "~Fields" ;
+            };
+            MenuItem
+            {
+                Identifier = FN_VIEW_META_CHARS ;
+                HelpID = FN_VIEW_META_CHARS ;
+                Text [ de ] = "Steuer~zeichen" ;
+                Text [ en-US ] = "~Nonprinting Characters" ;
+            };
+            MenuItem
+            {
+                Identifier = FN_VIEW_HIDDEN_PARA ;
+                HelpID = FN_VIEW_HIDDEN_PARA ;
+                /* ### ACHTUNG: Neuer Text in Resource? ~Versteckte Absätze : ~Versteckte Absõtze */
+                Text [ de ] = "~Versteckte Absätze" ;
+                Text [ en-US ] = "~Hidden Paragraphs" ;
+            };
+            SEPARATOR ;
+#ifndef MN_SW_WEB
+            MenuItem
+            {
+                ITEM_VIEW_BROWSER_MODE
+            };
+#else
+            MenuItem
+            {
+                Identifier = FN_PRINT_LAYOUT ;
+                HelpID = FN_PRINT_LAYOUT ;
+                Text [ de ] = "~Druck - Layout" ;
+                Text [ en-US ] = "~Print Layout" ;
+            };
+            MenuItem
+            {
+                Identifier = SID_SOURCEVIEW ;
+                HelpID = HID_SOURCEVIEW ;
+                Text [ de ] = "HTML - ~Quelltext" ;
+                Text [ en-US ] = "HT~ML - Source" ;
+            };
+#endif
+            ITEM_VIEW_SCREENMODE
+        };
+    };
+};
+
+#ifdef MN_SW_WEB
+    #ifdef MN_SW_PORTAL
+        #define _MN_INS MN_WEBINS_PORT
+    #else
+        #define _MN_INS MN_WEBINS
+    #endif
+#elif defined MN_SW_GLOBAL //6
+    #ifdef MN_SW_PORTAL
+        #define _MN_INS  MN_GLOBALINS_PORT
+    #else
+        #define _MN_INS  MN_GLOBALINS
+    #endif
+#else
+    #ifdef MN_SW_PORTAL
+        #define _MN_INS MN_INS_PORT
+    #else
+        #define _MN_INS MN_INS
+    #endif
+#endif
+
+MenuItem _MN_INS
+{
+    Identifier = MN_INS ;
+    HelpID = MN_INS ;
+    Command = ".uno:InsertMenu" ;
+    /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen : ~Einf³gen */
+    Text [ de ] = "~Einfügen" ;
+    Text [ en-US ] = "~Insert" ;
+    SubMenu = Menu
+    {
+        ItemList =
+        {
+#ifndef MN_SW_WEB
+            MenuItem
+            {
+                Identifier = FN_INSERT_BREAK_DLG ;
+                HelpID = FN_INSERT_BREAK_DLG ;
+                Text [ de ] = "Manueller ~Umbruch..." ;
+                Text [ en-US ] = "Manual ~Break..." ;
+            };
+#endif
+            MenuItem
+            {
+                Identifier = MN_SUB_FIELD ;
+                HelpID = HID_MN_SUB_FIELD ;
+                Command = ".uno:FieldMenu" ;
+                Text [ de ] = "~Feldbefehl" ;
+                Text [ en-US ] = "Fiel~ds" ;
+                /* ### ACHTUNG: Neuer Text in Resource? Feldbefehle einfügen : Feldbefehle einf³gen */
+                SubMenu = Menu
+                {
+                    ItemList =
+                    {
+                        MenuItem
+                        {
+                            Identifier = FN_INSERT_FLD_DATE ;
+                            HelpID = FN_INSERT_FLD_DATE ;
+                            Text [ de ] = "~Datum" ;
+                            Text [ en-US ] = "~Date" ;
+                        };
+                        MenuItem
+                        {
+                            Identifier = FN_INSERT_FLD_TIME ;
+                            HelpID = FN_INSERT_FLD_TIME ;
+                            Text [ de ] = "~Uhrzeit" ;
+                            Text [ en-US ] = "~Time" ;
+                        };
+                        MenuItem
+                        {
+                            Identifier = FN_INSERT_FLD_PGNUMBER ;
+                            HelpID = FN_INSERT_FLD_PGNUMBER ;
+                            Text [ de ] = "~Seitennummer" ;
+                            Text [ en-US ] = "~Page Number" ;
+                        };
+                        MenuItem
+                        {
+                            Identifier = FN_INSERT_FLD_PGCOUNT ;
+                            HelpID = FN_INSERT_FLD_PGCOUNT ;
+                            /* ### ACHTUNG: Neuer Text in Resource? Seitenan~zahl : Seitenanzahl */
+                            Text [ de ] = "Seitenan~zahl" ;
+                            Text [ en-US ] = "Page ~Count" ;
+                        };
+#ifndef MN_SW_WEB
+                        MenuItem
+                        {
+                            Identifier = FN_INSERT_FLD_TOPIC ;
+                            HelpID = FN_INSERT_FLD_TOPIC ;
+                            Text [ de ] = "~Thema" ;
+                            Text [ en-US ] = "~Subject" ;
+                        };
+#endif
+                        MenuItem
+                        {
+                            Identifier = FN_INSERT_FLD_TITLE ;
+                            HelpID = FN_INSERT_FLD_TITLE ;
+                            /* ### ACHTUNG: Neuer Text in Resource? T~itel : Titel */
+                            Text [ de ] = "T~itel" ;
+                            Text [ en-US ] = "~Title" ;
+                        };
+                        MenuItem
+                        {
+                            Identifier = FN_INSERT_FLD_AUTHOR ;
+                            HelpID = FN_INSERT_FLD_AUTHOR ;
+                            /* ### ACHTUNG: Neuer Text in Resource? Aut~or : Autor */
+                            Text [ de ] = "Aut~or" ;
+                            Text [ en-US ] = "~Author" ;
+                        };
+                        SEPARATOR ;
+                        MenuItem
+                        {
+                            Identifier = FN_INSERT_FIELD ;
+                            HelpID = FN_INSERT_FIELD ;
+                            Text [ de ] = "~Andere..." ;
+                            Text [ en-US ] = "~Other..." ;
+                        };
+                    };
+                };
+            };
+            MenuItem
+            {
+                Identifier = FN_INSERT_SYMBOL ;
+                HelpID = FN_INSERT_SYMBOL ;
+                Text [ de ] = "~Sonderzeichen..." ;
+                Text [ en-US ] = "S~pecial Character..." ;
+            };
+            SEPARATOR ;
+            MenuItem
+            {
+                Identifier = FN_INSERT_REGION ;
+                HelpID = FN_INSERT_REGION;
+                Text [ de ] = "Bereic~h..." ;
+                Text [ en-US ] = "~Section..." ;
+            };
+            ITEM_HYPERLINK_DIALOG
+            SEPARATOR ;
+#ifndef MN_SW_WEB
+            MenuItem
+            {
+                Identifier = FN_INSERT_PAGEHEADER ;
+                HelpID = FN_INSERT_PAGEHEADER ;
+                Command = ".uno:InsertPageHeader" ;
+                Text [ de ] = "Ko~pfzeile" ;
+                Text [ en-US ] = "He~ader" ;
+            };
+            MenuItem
+            {
+                Identifier = FN_INSERT_PAGEFOOTER ;
+                HelpID = FN_INSERT_PAGEFOOTER ;
+                /* ### ACHTUNG: Neuer Text in Resource? Fuß~zeile : F~ußzeile */
+                /* ### ACHTUNG: Neuer Text in Resource? Fuß~zeile : F~ußzeile */
+                Command = ".uno:InsertPageFooter" ;
+                Text [ de ] = "Fuß~zeile" ;
+                Text [ en-US ] = "Foote~r" ;
+            };
+#endif
+            MenuItem
+            {
+                Identifier = FN_INSERT_FOOTNOTE_DLG ;
+                HelpID = FN_INSERT_FOOTNOTE_DLG ;
+                Text [ de ] = "Fußnote~..." ;
+                Text [ en-US ] = "Footnote~..." ;
+            };
+#ifndef MN_SW_WEB
+            MenuItem
+            {
+                Identifier = FN_INSERT_CAPTION ;
+                HelpID = FN_INSERT_CAPTION ;
+                Text [ de ] = "Bes~chriftung..." ;
+                Text [ en-US ] = "Caption..." ;
+            };
+#endif
+            MenuItem
+            {
+                Identifier = FN_INSERT_BOOKMARK ;
+                HelpID = FN_INSERT_BOOKMARK ;
+                Text [ de ] = "Te~xtmarke..." ;
+                Text [ en-US ] = "Bookmar~k..." ;
+            };
+#ifndef MN_SW_WEB
+            MenuItem
+            {
+                Identifier = FN_INSERT_REF_FIELD ;
+                HelpID = FN_INSERT_REF_FIELD ;
+                Text [ de ] = "~Querverweis..." ;
+                Text [ en-US ] = "Cross-reference...";
+            };
+#endif
+            MenuItem
+            {
+                Identifier = FN_POSTIT ;
+                HelpID = FN_POSTIT ;
+                Text [ de ] = "~Notiz..." ;
+                Text [ en-US ] = "Not~e..." ;
+                /* ### ACHTUNG: Neuer Text in Resource? Einfügen oder bearbeiten einer Notiz : Einf³gen oder bearbeiten einer Notiz */
+            };
+#ifdef SOLAR_JAVA
+            MenuItem
+            {
+                Identifier = FN_JAVAEDIT ;
+                HelpID = FN_JAVAEDIT ;
+                Text [ de ] = "Script..." ;
+                Text [ en-US ] = "S~cript..." ;
+            };
+#endif
+
+#ifndef MN_SW_WEB
+            MenuItem
+            {
+                Identifier = MN_DIRSUBMENU ;
+                HelpID = MN_DIRSUBMENU ;
+                Command = ".uno:IndexesMenu" ;
+                Text [ de ] = "~Verzeichnisse" ;
+                Text [ en-US ] = "Inde~xes and Tables" ;
+                SubMenu = Menu
+                {
+                    ItemList =
+                    {
+                        MenuItem
+                        {
+                            Identifier = FN_INSERT_IDX_ENTRY_DLG ;
+                            HelpID = FN_INSERT_IDX_ENTRY_DLG ;
+                            Text [ de ] = "Eintra~g..." ;
+                            Text [ en-US ] = "~Entry..." ;
+                        };
+                        MenuItem
+                        {
+                            Identifier = FN_INSERT_MULTI_TOX;
+                            HelpID =  FN_INSERT_MULTI_TOX;
+                            Text [ de ] = "~Verzeichnisse..." ;
+                            Text [ en-US ] = "~Indexes and Tables...";
+                        };
+                        MenuItem
+                        {
+                            Identifier = FN_INSERT_AUTH_ENTRY_DLG ;
+                            HelpID = FN_INSERT_AUTH_ENTRY_DLG ;
+                            Text [ de ] = "~Literaturverzeichniseintrag..." ;
+
+                            Text [ en-US ] = "~Bibliography Entry...";
+                        };
+                    };
+                };
+            };
+            SEPARATOR ;
+            MenuItem
+            {
+                Identifier = FN_ENVELOP ;
+                HelpID = FN_ENVELOP ;
+                Text [ de ] = "~Briefumschlag..." ;
+                Text [ en-US ] = "En~velope..." ;
+            };
+#endif //MN_SW_WEB
+            SEPARATOR ;
+            MenuItem
+            {
+                Identifier = FN_INSERT_FRAME ;
+                HelpID = FN_INSERT_FRAME ;
+                Text [ de ] = "~Rahmen..." ;
+                Text [ en-US ] = "Fra~me..." ;
+            };
+            MenuItem
+            {
+                Identifier = FN_INSERT_TABLE ;
+                HelpID = FN_INSERT_TABLE ;
+                Text [ de ] = "~Tabelle..." ;
+                Text [ en-US ] = "~Table..." ;
+            };
+            MenuItem
+            {
+                Identifier = FN_INSERT_HRULER ;
+                HelpID = FN_INSERT_HRULER ;
+                Text [ de ] = "Horizontale ~Linie..." ;
+                Text [ en-US ] = "Hori~zontal Ruler..." ;
+            };
+#if (!defined MN_SW_WEB && !defined MN_SW_PORTAL)
+            MenuItem
+            {
+                Identifier = MN_SUB_GRAPHIC ;
+                HelpID = HID_MN_SUB_GRAPHIC ;
+                Command = ".uno:GraphicMenu" ;
+                Text [ de ] = "~Grafik" ;
+                /* ### ACHTUNG: Neuer Text in Resource? Grafiken einfügen : Grafiken einf³gen */
+                SubMenu = Menu
+                {
+                    ItemList =
+                    {
+                        MenuItem
+                        {
+                            ITEM_INSERT_INSERT_GRAPHIC
+                            Text [ de ] = "Aus ~Datei..." ;
+                            Text [ en-US ] = "From ~File..." ;
+                        };
+#ifndef MN_SW_PORTAL
+#if defined WIN || defined WNT || defined UNX
+                        ITEM_INSERT_TWAIN_MENU
+#endif
+#endif //MN_SW_PORTAL
+                    };
+                };
+                Text [ en-US ] = "~Graphics" ;
+            };
+#else
+            MenuItem
+            {
+                ITEM_INSERT_INSERT_GRAPHIC
+            };
+#endif
+             //#ifndef MN_SW_WEB
+#ifdef MN_SW_PORTAL
+            ITEM_INSERT_OBJECT_PORTAL
+#else
+            MenuItem
+            {
+                Identifier = SID_MN_INSERT_OBJECT_DLGS ;
+                HelpID = SID_MN_INSERT_OBJECT_DLGS ;
+                Command = ".uno:ObjectMenu" ;
+                Text [ de ] = "~Objekt" ;
+                Text [ en-US ] = "~Object" ;
+                SubMenu = Menu
+                {
+                    ItemList =
+                    {
+                        MenuItem
+                        {
+                            Identifier = SID_INSERT_OBJECT ;
+                            HelpID = SID_INSERT_OBJECT ;
+                            Text [ de ] = "~OLE-Objekt..." ;
+                            Text [ en-US ] = "~OLE Object..." ;
+                        };
+                        TMP_SID_INSERT_PLUGIN
+                        TMP_SID_INSERT_SOUND
+                        TMP_SID_INSERT_VIDEO
+#ifdef SOLAR_JAVA
+                        MenuItem
+                        {
+                            Identifier = SID_INSERT_APPLET ;
+                            HelpID = SID_INSERT_APPLET ;
+                            Text [ de ] = "~Applet..." ;
+                            Text [ en-US ] = "~Applet..." ;
+                        };
+#endif
+                        MenuItem
+                        {
+                            Identifier = FN_INSERT_SMA ;
+                            HelpID = FN_INSERT_SMA ;
+                            Text [ de ] = "~Formel" ;
+                            Text [ en-US ] = "~Formula" ;
+                        };
+                        MenuItem
+                        {
+                            ITEM_INSERT_INSERT_DIAGRAM
+                        };
+                    };
+                };
+            };
+#endif //MN_SW_PORTAL
+
+             //#else
+#if 0
+            MenuItem
+            {
+                Identifier = SID_INSERT_PLUGIN ;
+                HelpID = SID_INSERT_PLUGIN ;
+                Text [ de ] = "PlugIn..." ;
+                Text [ en-US ] = "Plug-in..." ;
+            };
+            MenuItem
+            {
+                Identifier = SID_INSERT_APPLET ;
+                HelpID = SID_INSERT_APPLET ;
+                Text [ de ] = "Applet..." ;
+                Text [ en-US ] = "Applet..." ;
+            };
+#endif
+            MenuItem
+            {
+                Identifier = SID_INSERT_FLOATINGFRAME ;
+                HelpID = SID_INSERT_FLOATINGFRAME ;
+                Text [ de ] = "Fra~me" ;
+                Text [ en-US ] = "Float~ing Frame" ;
+            };
+            SEPARATOR ;
+            MenuItem
+            {
+                ITEM_INSERT_INSERTDOC
+            };
+        };
+    };
+};
+
+#ifdef MN_SW_WEB
+    #ifdef MN_SW_PORTAL
+        #define _MN_FORMAT MN_WEBFORMAT_PORT
+    #else
+        #define _MN_FORMAT MN_WEBFORMAT
+    #endif
+#elif defined MN_SW_GLOBAL //7
+    #ifdef MN_SW_PORTAL
+        #define _MN_FORMAT  MN_GLOBALFORMAT_PORT
+    #else
+        #define _MN_FORMAT  MN_GLOBALFORMAT
+    #endif
+#else
+    #ifdef MN_SW_PORTAL
+        #define _MN_FORMAT MN_FORMAT_PORT
+    #else
+        #define _MN_FORMAT MN_FORMAT
+    #endif
+#endif
+
+MenuItem _MN_FORMAT
+{
+    Identifier = SID_OBJECTMENU0 ;
+    HelpID = SID_OBJECTMENU0 ;
+    Command = ".uno:FormatMenu" ;
+     // Identifier = FN_FORMAT;
+     // HelpID = FN_FORMAT;
+    Text [ de ] = "~Format" ;
+    Text [ en-US ] = "F~ormat" ;
+};
+#ifndef MN_SW_PORTAL
+    #ifdef MN_SW_WEB
+        Menu MN_OBJECTMENU_WEBTEXT
+    #elif defined MN_SW_GLOBAL
+        Menu MN_OBJECTMENU_GLOBALTEXT
+    #else
+        Menu MN_OBJECTMENU_TEXT
+    #endif
+{
+    ItemList =
+    {
+        MN_RESET
+        SEPARATOR ;
+        MN_TXT
+            MenuItem
+            {
+                Identifier = FN_EDIT_REGION ;
+                HelpID = FN_EDIT_REGION ;
+                Text [ de ] = "Bereic~he..." ;
+                Text [ en-US ] = "Sections..." ;
+        };
+            MenuItem
+            {
+                Text [ de ] = "Spa~lten..." ;
+                Identifier = FN_FORMAT_COLUMN ;
+                HelpID = FN_FORMAT_COLUMN ;
+                Text [ en-US ] = "Co~lumns...";
+        };
+        SEPARATOR ;
+        ITEM_TRANSLITERATE_MENU
+        SEPARATOR ;
+#ifndef MN_SW_WEB
+        MN_RUBY_DIALOG
+#endif
+        MN_NUMBERING
+        MN_ALWAYS
+        MN_AUTOFORMAT
+    };
+};
+
+#if (!defined MN_SW_WEB && !defined MN_SW_GLOBAL)
+Menu MN_OBJECTMENU_LIST
+{
+    ItemList =
+    {
+        MN_RESET
+        SEPARATOR ;
+        MN_TXT
+        SEPARATOR ;
+        ITEM_TRANSLITERATE_MENU
+        SEPARATOR ;
+        MN_RUBY_DIALOG
+        MN_NUMBERING
+        MN_ALWAYS
+        MN_AUTOFORMAT
+    };
+};
+
+Menu MN_OBJECTMENU_TABLE
+{
+    ItemList =
+    {
+        MN_RESET
+        SEPARATOR ;
+        MN_TXT
+            MenuItem
+            {
+                Identifier = FN_EDIT_REGION ;
+                HelpID = FN_EDIT_REGION ;
+                Text [ de ] = "Bereic~he..." ;
+                Text [ en-US ] = "Sections..." ;
+        };
+        SEPARATOR ;
+        ITEM_TRANSLITERATE_MENU
+        SEPARATOR ;
+#ifndef MN_SW_WEB
+        MN_RUBY_DIALOG
+#endif
+        MN_NUMBERING
+         //     SEPARATOR;
+         //       MN_BB
+        SEPARATOR ;
+        MN_TAB1
+        MN_TAB2
+        MN_ALWAYS
+        MenuItem
+        {
+            ITEM_FORMAT_AUTOFORMAT
+        };
+    };
+};
+
+
+Menu MN_OBJECTMENU_OLE
+{
+    ItemList =
+    {
+        MN_OLE
+        SEPARATOR ;
+        MN_ALIGN_FRAME
+        MN_MOUSE_FRAME_WITH_CONTOUR
+        MN_ALWAYS
+    };
+};
+
+Menu MN_OBJECTMENU_GRAFIK
+{
+    ItemList =
+    {
+        MN_GRAFIC
+        SEPARATOR ;
+        MN_ALIGN_FRAME
+        MN_MOUSE_FRAME_WITH_CONTOUR
+        MN_ALWAYS
+    };
+};
+
+Menu MN_OBJECTMENU_FRAME
+{
+    ItemList =
+    {
+        MN_FRM
+        SEPARATOR ;
+        MN_ALIGN_FRAME
+        MN_MOUSE_FRAME_WITHOUT_CONTOUR
+        MN_ALWAYS
+    };
+};
+Menu MN_OBJECTMENU_DRAW
+{
+    ItemList =
+    {
+        MN_DRAW1
+        MN_DRWTXTATTR
+        MenuItem
+        {
+            ITEM_FORMAT_ATTR_TRANSFORM
+        };
+        MN_NAME_GROUP
+        SEPARATOR ;
+        MN_DRAW2
+        MN_ANCHOR
+        MN_WRAP_DRAW
+        SEPARATOR ;
+        MN_DRAW3
+        SEPARATOR ;
+        MN_FONTWORK
+    };
+};
+
+Menu MN_OBJECTMENU_DRAWFORM
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_FORMAT_ATTR_TRANSFORM
+        };
+        MN_NAME_GROUP
+        MN_FORM
+        SEPARATOR ;
+        MN_DRAW6
+        MN_ANCHOR
+        MN_WRAP_DRAW
+        SEPARATOR ;
+        MN_DRAW3
+    };
+};
+
+Menu MN_OBJECTMENU_DRWTXT
+{
+    ItemList =
+    {
+        MN_RESET
+        SEPARATOR ;
+        MN_TEXT_ATTR
+        SEPARATOR ;
+        MN_DRWTXT
+        SEPARATOR ;
+        ITEM_TRANSLITERATE_MENU
+        SEPARATOR ;
+        MN_DRWTXTATTR
+        MN_FONTWORK
+    };
+};
+#endif // MN_SW_WEB
+#endif //MN_SW_PORTAL
+
+#ifdef MN_SW_WEB
+    #ifdef MN_SW_PORTAL
+        #define _MN_EXTRA MN_WEBEXTRA_PORT
+    #else
+        #define _MN_EXTRA MN_WEBEXTRA
+    #endif
+#elif defined MN_SW_GLOBAL //8
+    #ifdef MN_SW_PORTAL
+        #define _MN_EXTRA  MN_GLOBALEXTRA_PORT
+    #else
+        #define _MN_EXTRA  MN_GLOBALEXTRA
+    #endif
+#else
+    #ifdef MN_SW_PORTAL
+        #define _MN_EXTRA MN_EXTRA_PORT
+    #else
+        #define _MN_EXTRA MN_EXTRA
+    #endif
+#endif
+
+MenuItem _MN_EXTRA
+{
+    Identifier = ITEM_TOOLS_ID ;
+    HelpID = FN_EXTRA ;
+    Command = ".uno:ToolsMenu" ;
+    Text [ de ] = "E~xtras" ;
+    Text [ en-US ] = "~Tools" ;
+    SubMenu = Menu
+    {
+        ItemList =
+        {
+            MenuItem
+            {
+                Identifier = MN_SUB_SPELLING ;
+                HelpID = HID_MN_SUB_SPELLING ;
+                Command = ".uno:SpellingMenu" ;
+                Text [ de ] = "~Rechtschreibprüfung" ;
+                Text [ en-US ] = "~Spellcheck" ;
+                /* ### ACHTUNG: Neuer Text in Resource? Rechtschreibprüfung : Rechtschreibpr³fung */
+                SubMenu = Menu
+                {
+                    ItemList =
+                    {
+                        MenuItem
+                        {
+                            Identifier = FN_SPELLING_DLG ;
+                            HelpID = FN_SPELLING_DLG ;
+                            /* ### ACHTUNG: Neuer Text in Resource? ~Prüfen... : ~Pr³fen... */
+                            Text [ de ] = "~Prüfen..." ;
+                            Text [ en-US ] = "~Check..." ;
+                        };
+                        MenuItem
+                        {
+                            Identifier = SID_AUTOSPELL_CHECK ;
+                            HelpID = SID_AUTOSPELL_CHECK ;
+                            /* ### ACHTUNG: Neuer Text in Resource? ~Automatisch prüfen : ~Automatisch pr³fen */
+                            Text [ de ] = "~Automatisch prüfen" ;
+                            Text [ en-US ] = "~AutoSpellcheck" ;
+                        };
+                    };
+                };
+            };
+                        MenuItem
+                        {
+                                ITEM_HANGUL_HANJA_CONVERSION
+                        };
+            MenuItem
+            {
+                Identifier = FN_THESAURUS_DLG ;
+                HelpID = FN_THESAURUS_DLG ;
+                Text [ de ] = "T~hesaurus..." ;
+                Text [ en-US ] = "~Thesaurus..." ;
+            };
+#ifndef MN_SW_WEB
+            MenuItem
+            {
+                Identifier = FN_HYPHENATE_OPT_DLG ;
+                HelpID = FN_HYPHENATE_OPT_DLG ;
+                Text [ de ] = "Silben~trennung..." ;
+                Text [ en-US ] = "~Hyphenation..." ;
+            };
+#endif
+            SEPARATOR ;
+            MenuItem
+            {
+                Identifier = SID_AUTO_CORRECT_DLG;
+                HelpID = SID_AUTO_CORRECT_DLG;
+                Text [ de ] = "~AutoKorrektur/AutoFormat..." ;
+                Text [ en-US ] = "~AutoCorrect/AutoFormat..." ;
+            };
+#ifndef MN_SW_WEB
+            SEPARATOR ;
+            MenuItem
+            {
+                Identifier = FN_NUMBERING_OUTLINE_DLG ;
+                HelpID = FN_NUMBERING_OUTLINE_DLG ;
+                Text [ de ] = "~Kapitelnummerierung..." ;
+                Text [ en-US ] = "Outline ~Numbering..." ;
+            };
+            MenuItem
+            {
+                Identifier = FN_LINE_NUMBERING_DLG ;
+                HelpID = FN_LINE_NUMBERING_DLG ;
+                Text [ de ] = "~Zeilennummerierung..." ;
+                Text [ en-US ] = "~Line Numbering..." ;
+            };
+#endif
+            MenuItem
+            {
+                Identifier = FN_FORMAT_FOOTNOTE_DLG ;
+                HelpID = FN_FORMAT_FOOTNOTE_DLG ;
+                /* ### ACHTUNG: Neuer Text in Resource? ~Fußnoten... : ~Fu˜noten... */
+                Text [ de ] = "~Fußnoten..." ;
+                Text [ en-US ] = "~Footnotes..." ;
+            };
+            SEPARATOR ;
+            MenuItem
+            {
+                ITEM_INSERT_GALLERY
+            };
+            SEPARATOR ;
+            MenuItem
+            {
+                ITEM_EDIT_BIBLIOGRAPHY
+            };
+            ITEM_DATASOURCE_ADMINISTRATION
+            SEPARATOR ;
+#ifndef MN_SW_WEB
+            MenuItem
+            {
+                Identifier = FN_QRY_MERGE ;
+                HelpID = FN_QRY_MERGE ;
+                Text [ de ] = "Se~riendruck..." ;
+                Text [ en-US ] = "~Mail Merge..." ;
+            };
+            SEPARATOR ;
+#endif
+            MenuItem
+            {
+                Identifier = FN_CONVERT_TEXT_TABLE ;
+                HelpID = FN_CONVERT_TEXT_TABLE ;
+                Text [ de ] = "Te~xt <-> Tabelle..." ;
+                Text [ en-US ] = "Te~xt <-> Table..." ;
+            };
+            MenuItem
+            {
+                Identifier = FN_SORTING_DLG ;
+                HelpID = FN_SORTING_DLG ;
+                Text [ de ] = "S~ortieren..." ;
+                Text [ en-US ] = "So~rt..." ;
+            };
+            MenuItem
+            {
+                Identifier = FN_CALCULATE ;
+                HelpID = FN_CALCULATE ;
+                Text [ de ] = "~Berechnen" ;
+                Text [ en-US ] = "Calculat~e" ;
+            };
+#ifndef MN_SW_WEB
+            MenuItem
+            {
+                Identifier = MN_SUB_UPDATE ;
+                HelpID = HID_MN_SUB_UPDATE ;
+                Command = ".uno:UpdateMenu" ;
+                Text [ de ] = "Akt~ualisieren" ;
+                SubMenu = Menu
+                {
+                    ItemList =
+                    {
+                        MenuItem
+                        {
+                            Identifier = FN_UPDATE_ALL ;
+                            HelpID = FN_UPDATE_ALL ;
+                            Text [ de ] = "~Alles Aktualisieren" ;
+                            Text [ en-US ] = "~Update All" ;
+                        };
+                        SEPARATOR ;
+                        MenuItem
+                        {
+                            Identifier = FN_UPDATE_FIELDS ;
+                            HelpID = FN_UPDATE_FIELDS ;
+                            Text [ de ] = "~Felder" ;
+                            Text [ en-US ] = "~Fields" ;
+                        };
+                        MenuItem
+                        {
+                            Identifier = FN_UPDATE_ALL_LINKS ;
+                            HelpID = FN_UPDATE_ALL_LINKS ;
+                            Text [ de ] = "Verkn~üpfungen" ;
+                            Text [ en-US ] = "~Links" ;
+                        };
+                        MenuItem
+                        {
+                            Identifier = FN_UPDATE_CHARTS ;
+                            HelpID = FN_UPDATE_CHARTS ;
+                            Text [ de ] = "Alle Dia~gramme" ;
+                            Text [ en-US ] = "All ~Charts";
+                        };
+                        MenuItem
+                        {
+                            Identifier = FN_UPDATE_CUR_TOX ;
+                            HelpID = FN_UPDATE_CUR_TOX ;
+                            Text [ de ] = "Aktuelles ~Verzeichnis" ;
+                            Text [ en-US ] = "Current ~Index" ;
+                        };
+                        MenuItem
+                        {
+                            Identifier = FN_UPDATE_TOX ;
+                            HelpID = FN_UPDATE_TOX ;
+                            Text [ de ] = "Alle Ver~zeichnisse" ;
+                            Text [ en-US ] = "~All Indexes and Tables" ;
+                        };
+#endif
+                        MenuItem
+                        {
+                            Identifier = FN_REPAGINATE ;
+                            HelpID = FN_REPAGINATE ;
+                            Text [ de ] = "Se~itenformatierung" ;
+                            Text [ en-US ] = "Page Formatting" ;
+                        };
+#ifndef MN_SW_WEB
+                    };
+                };
+                Text [ en-US ] = "~Update" ;
+            };
+#endif
+            SEPARATOR ;
+            MenuItem
+            {
+                Identifier = MN_SUB_MACRO;
+                HelpID = HID_MN_SUB_MACRO;
+                ITEM_TOOLS_BASICCHOOSER
+            };
+            MenuItem
+            {
+                ITEM_OPEN_XML_FILTERSETTINGS
+            };
+            MenuItem
+            {
+                ITEM_TOOLS_CONFIG
+            };
+            ITEM_MN_OPTIONS
+        };
+    };
+};
+
+#ifdef MN_SW_WEB
+#define MN_FRM_CAPTION_ITEM
+#else
+#define MN_FRM_CAPTION_ITEM \
+        MenuItem\
+        {\
+            Identifier = FN_INSERT_CAPTION ;\
+            HelpID = FN_INSERT_CAPTION ;\
+            Text [ de ] = "Bes~chriftung..." ;\
+            Text [ en-US ] = "~Caption..." ;\
+    };
+#endif
+
+#define _MN_EDIT_FIELD                                                      \
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_EDIT_FIELD ;                                    \
+            HelpID = FN_EDIT_FIELD ;                                        \
+            Text [ de ] = "~Feldbefehl..." ;                                       \
+            Text [ en-US ] = "Fields..." ;                             \
+    };
+#define _MN_EDIT_FOOTNOTE                                                    \
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_EDIT_FOOTNOTE ;                                 \
+            HelpID = FN_EDIT_FOOTNOTE ;                                     \
+            Text [ de ] = "Fußnote~..." ;                                          \
+            Text [ en-US ] = "Footnote~..." ;                          \
+        };
+#ifdef MN_SW_WEB                                                            \
+    #define _MN_EDIT_IDX_ENTRY_DLG
+    #define _MN_EDIT_BIB_ENTRY_DLG
+#else
+    #define _MN_EDIT_IDX_ENTRY_DLG                                          \
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_EDIT_IDX_ENTRY_DLG ;                            \
+            HelpID = FN_EDIT_IDX_ENTRY_DLG ;                                \
+            Text [ de ] = "Ver~zeichniseintrag..." ;                               \
+            Text [ en-US ] = "Inde~x Entry..." ;                       \
+    };
+#define _MN_EDIT_BIB_ENTRY_DLG                                              \
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_EDIT_AUTH_ENTRY_DLG ;                           \
+            HelpID = FN_EDIT_AUTH_ENTRY_DLG ;                               \
+            Text [ de ] = "~Literaturverzeichniseintrag..." ;                      \
+            Text [ en-US ] = "~Bibliography Entry...";                  \
+    };                                                                  \
+        SEPARATOR ;
+#endif /* \ */
+#define _MN_EDIT_OPEN_HYPERLINK                                             \
+    MenuItem                                                                \
+    {                                                                       \
+        ITEM_OPEN_HYPERLINK                                                 \
+    };
+
+#ifdef MN_SW_WEB
+#define _DEFAULT_TEXT_EDIT_ELEMENTS                                         \
+    _MN_EDIT_FIELD                                                              \
+    _MN_EDIT_FOOTNOTE                                                           \
+    MenuItem                                                            \
+    {                                                                   \
+        ITEM_POPUP_TEMPLATE_EDIT                                        \
+    };                                                                  \
+    SEPARATOR ;                                                         \
+    _MN_EDIT_OPEN_HYPERLINK
+#else
+#define _DEFAULT_TEXT_EDIT_ELEMENTS                                         \
+    _MN_EDIT_FIELD                                                              \
+    _MN_EDIT_FOOTNOTE                                                           \
+    _MN_EDIT_IDX_ENTRY_DLG                                                      \
+    _MN_EDIT_BIB_ENTRY_DLG                                                      \
+    MenuItem                                                            \
+    {                                                                   \
+        ITEM_POPUP_TEMPLATE_EDIT                                        \
+    };                                                                  \
+    SEPARATOR ;                                                         \
+    _MN_EDIT_OPEN_HYPERLINK
+#endif
+
+#ifndef MN_SW_PORTAL
+#ifdef MN_SW_WEB
+    Menu MN_WEB_TEXT_POPUPMENU
+#elif defined MN_SW_GLOBAL
+    Menu MN_GLOBAL_TEXT_POPUPMENU
+#else
+    Menu MN_TEXT_POPUPMENU
+#endif
+{
+    ItemList =
+    {
+        MN_RESET
+        SEPARATOR ;
+        MN_TEXT_ATTR
+        SEPARATOR ;
+        MN_TXT
+        MN_NUMBERING
+        ITEM_TRANSLITERATE_MENU
+        SEPARATOR ;
+#ifndef MN_SW_WEB
+        MenuItem
+        {
+            Identifier = FN_UPDATE_CUR_TOX ;
+            HelpID = FN_UPDATE_CUR_TOX ;
+            Text [ de ] = "Ver~zeichnis aktualisieren" ;
+            Text [ en-US ] = "~Update Index/Table";
+        };
+        MenuItem
+        {
+            Identifier = FN_EDIT_CURRENT_TOX;
+            HelpID = FN_EDIT_CURRENT_TOX;
+            Text [ de ] = "V~erzeichnis bearbeiten" ;
+            Text [ en-US ] = "~Edit Index/Table";
+        };
+        MenuItem
+        {
+            Identifier = FN_REMOVE_CUR_TOX;
+            HelpID = FN_REMOVE_CUR_TOX;
+            Text [ de ] = "Verzeichnis l~öschen" ;
+            Text [ en-US ] = "Delete Index/Table";
+        };
+        SEPARATOR ;
+#endif
+        _DEFAULT_TEXT_EDIT_ELEMENTS
+    };
+};
+
+#endif //MN_SW_PORTAL
+
+
+/*-------------------------------------------------------------------------
+    Fenster und Hilfe
+-------------------------------------------------------------------------*/
+
+#ifdef MN_SW_PORTAL
+    #ifdef MN_SW_WEB
+        #define _MN_WIN MN_WEBWIN_PORT
+    #elif defined MN_SW_GLOBAL
+        #define _MN_WIN MN_GLOBALWIN_PORT
+    #else
+        #define _MN_WIN MN_WIN_PORT
+    #endif
+    MenuItem _MN_WIN
+    {
+        ITEM_WINDOW_MDIWINDOWLIST
+        SubMenu = Menu
+        {
+            ItemList =
+            {
+                GLOBLMN_CLONEWIN
+            };
+        };
+    };
+    #else
+        ITEM_WINDOW_MENU
+        #if !defined  MN_SW_WEB && !defined MN_SW_GLOBAL
+        ITEM_HELP_MENU
+        #endif
+#endif //MN_SW_PORTAL
+
+#endif
