@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:18:55 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1612,36 +1612,40 @@ void SwRootFrm::RemoveSuperfluous()
             for ( USHORT i = 0; bOnlySuperfluosObjs && i < rObjs.Count(); ++i )
             {
                 SdrObject *pO = rObjs[i];
-                if ( pO->ISA(SwVirtFlyDrawObj) )
+                // OD 2004-01-19 #110582# - do not consider hidden objects
+                if ( pPage->GetFmt()->GetDoc()->IsVisibleLayerId( pO->GetLayer() ) )
                 {
-                    SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                    // OD 19.06.2003 #108784# - correction
-                    if ( !pFly->GetAnchor()->FindFooterOrHeader() )
+                    if ( pO->ISA(SwVirtFlyDrawObj) )
                     {
-                        bOnlySuperfluosObjs = false;
-                    }
-                }
-                else
-                {
-                    // OD 19.06.2003 #108784# - determine, if drawing object
-                    // isn't anchored in header/footer frame. If so, drawing
-                    // object isn't superfluos.
-                    SwFrm* pAnchorFrm = 0L;
-                    if ( pO->ISA(SwDrawVirtObj) )
-                    {
-                        pAnchorFrm = static_cast<SwDrawVirtObj*>(pO)->GetAnchorFrm();
+                        SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                        // OD 19.06.2003 #108784# - correction
+                        if ( !pFly->GetAnchor()->FindFooterOrHeader() )
+                        {
+                            bOnlySuperfluosObjs = false;
+                        }
                     }
                     else
                     {
-                        SwDrawContact* pDrawContact =
-                                static_cast<SwDrawContact*>(pO->GetUserCall());
-                        pAnchorFrm = pDrawContact ? pDrawContact->GetAnchor() : 0L;
-                    }
-                    if ( pAnchorFrm )
-                    {
-                        if ( !pAnchorFrm->FindFooterOrHeader() )
+                        // OD 19.06.2003 #108784# - determine, if drawing object
+                        // isn't anchored in header/footer frame. If so, drawing
+                        // object isn't superfluos.
+                        SwFrm* pAnchorFrm = 0L;
+                        if ( pO->ISA(SwDrawVirtObj) )
                         {
-                            bOnlySuperfluosObjs = false;
+                            pAnchorFrm = static_cast<SwDrawVirtObj*>(pO)->GetAnchorFrm();
+                        }
+                        else
+                        {
+                            SwDrawContact* pDrawContact =
+                                    static_cast<SwDrawContact*>(pO->GetUserCall());
+                            pAnchorFrm = pDrawContact ? pDrawContact->GetAnchor() : 0L;
+                        }
+                        if ( pAnchorFrm )
+                        {
+                            if ( !pAnchorFrm->FindFooterOrHeader() )
+                            {
+                                bOnlySuperfluosObjs = false;
+                            }
                         }
                     }
                 }
