@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclunohelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:12:35 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ namespace com { namespace sun { namespace star { namespace awt {
 #include <vcl/bitmapex.hxx>
 #include <vcl/region.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/mapunit.hxx>
 #include <tools/poly.hxx>
 
 class Window;
@@ -146,6 +147,10 @@ public:
     static sal_Bool                                 IsZero( ::com::sun::star::awt::Rectangle rRect );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer>  CreateControlContainer( Window* pWindow );
+
+    // MapUnits
+    static MapUnit                                  UnoEmbed2VCLMapUnit( sal_Int32 nUnoEmbedMapUnit );
+    static sal_Int32                                VCL2UnoEmbedMapUnit( MapUnit nVCLMapUnit );
 
 };
 
