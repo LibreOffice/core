@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-06 10:57:27 $
+ *  last change: $Author: oj $ $Date: 2001-08-06 10:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,7 +436,7 @@ sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLExcep
 sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     sal_Int8 nRet(0);
-    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_CHAR,&nRet,sizeof nVal);
+    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_CHAR,&nRet,sizeof nRet);
     return (&aValue == &m_aEmptyValue) ? nRet : (sal_Int8)aValue;
 }
 // -------------------------------------------------------------------------
