@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 15:30:08 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:58:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,50 +66,16 @@ PRJNAME=sw
 TARGET=sw
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
-.IF "$(CPU)"=="i386"
-USE_LDUMP2=TRUE
-.ENDIF
-
 
 # --- Settings ------------------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-
-#	nmake		 	-	swdll
-
-DESK=T
-
-.IF "$(GUI)" == "WIN"
-RESLIBSPLIT1NAME=sw
-.ELSE
-RESLIB1NAME=sw
-.ENDIF
-MYRESLIBNAME=sw
-
-#RSCLOCINC=$(RSCLOCINC);$(PRJ)$/RES
 
 # --- Allgemein -----------------------------------------------------------
-.IF "$(GUI)"=="WIN"
-LIBFLAGS=/PAGE:128 /NOE /NOI
-#OPTLINKS=YES
-MAPSYM=tmapsym
-.IF "$(debug)" != ""
-LINKFLAGS= /F /PACKCODE:65520 /PACKDATA /NOD /NOE /MAP /COD /NOCV
-.ELSE
-LINKFLAGS= /F /PACKCODE:65520 /PACKDATA /NOD /NOE /MAP
-.ENDIF
-.ENDIF
 
-.IF "$(COM)"=="ICC"
-LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
-.ENDIF
 .IF "$(OS)"=="IRIX"
 LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=40
 .ENDIF
-
-.IF "$(header)" == ""
 
 sw_res_files= \
     $(SRS)$/app.srs          \
@@ -138,13 +104,10 @@ sw_res_files= \
     $(SRS)$/wrtsh.srs        \
     $(SOLARRESDIR)$/sfx.srs
 
-.IF "$(GUI)" == "WIN"
-RESLIBSPLIT1SRSFILES= \
-    $(sw_res_files)
-.ELSE
+RESLIB1NAME=sw
+
 RESLIB1SRSFILES= \
     $(sw_res_files)
-.ENDIF
 
 LIB1TARGET=$(LB)$/swlib.lib
 LIB1ARCHIV=$(LB)$/libswlib.a
@@ -152,8 +115,6 @@ LIB1OBJFILES= \
         $(OUT)$/obj$/swlib.obj \
         $(OUT)$/obj$/swcomlib.obj \
         $(OUT)$/obj$/w4wflt.obj
-
-
 
 
 SHL2TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
@@ -224,64 +185,7 @@ SHL2OBJS= \
 SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
 SHL2BASE=	0x1e000000
 
-
-.IF "$(GUI)"=="WNT"
-do_build+= \
-    $(MISC)$/linkinc.ls
-.ENDIF
-
-do_build+= \
-    $(SHL2TARGETN)
-
-.IF "$(depend)"==""
-ALL:\
-    $(do_build) \
-    $(INC)$/sw.lst	\
-    ALLTAR
-.ENDIF
-.ENDIF
+DEF2NAME	=$(SHL2TARGET)
 
 .INCLUDE :  target.mk
-
-$(MISCX)$/$(SHL2TARGET).flt:
-    @echo ------------------------------
-    @echo Making: $@
-    @echo WEP>$@
-    @echo LIBMAIN>>$@
-    @echo LibMain>>$@
-
-# ------------------------------------------------------------------
-# Windows NT
-# ------------------------------------------------------------------
-
-.IF "$(GUI)" == "WNT"
-
-$(MISC)$/$(SHL2TARGET).def:  makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo LIBRARY     $(SHL2TARGET)                                  >$@
-    @echo DESCRIPTION 'SWriter4 DLL'                                 >>$@
-    @echo DATA        READ WRITE NONSHARED                          >>$@
-    @echo EXPORTS                                                   >>$@
-    @echo   CreateSwDocShellDll @20                            >>$@
-    @echo   CreateSwWebDocShellDll @30                            >>$@
-    @echo   CreateSwGlobalDocShellDll @40                            >>$@
-    @echo   CreateObjSwDocShellDll @21                         >>$@
-    @echo   CreateObjSwWebDocShellDll @22                         >>$@
-    @echo   CreateObjSwGlobalDocShellDll @23                         >>$@
-    @echo   InitSwDll @24                                          >>$@
-    @echo   DeInitSwDll @25                                        >>$@
-    @echo   component_getImplementationEnvironment @50				>>$@
-    @echo   component_writeInfo @51									>>$@
-    @echo   component_getFactory @52								>>$@
-
-.ENDIF
-
-$(INC)$/sw.lst:
-.IF "$(GUI)" =="WNT"
-    +-@echo clook missed!!!!
-#clook -o $@ -p 1 -i ..\inc;..\source\ui\inc;..\source\core\inc;..\source\filter\inc;. dummy.cxx
-.ELSE
-    @echo wnt only
-.ENDIF
 
