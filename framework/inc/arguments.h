@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arguments.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:35:27 $
+ *  last change: $Author: as $ $Date: 2001-07-31 06:53:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,8 @@ namespace framework{
 #define ARGUMENTNAME_REFERRER                               DECLARE_ASCII("Referer"             )   // string
 #define ARGUMENTNAME_TEMPLATENAME                           DECLARE_ASCII("TemplateName"        )   // string
 #define ARGUMENTNAME_TEMPLATEREGIONNAME                     DECLARE_ASCII("TemplateRegionName"  )   // string
+#define ARGUMENTNAME_JUMPMARK                               DECLARE_ASCII("JumpMark"            )   // string
+#define ARGUMENTNAME_TYPENAME                               DECLARE_ASCII("TypeName"            )   // string
 #define ARGUMENTNAME_VERSION                                DECLARE_ASCII("Version"             )   // int16
 #define ARGUMENTNAME_VIEWID                                 DECLARE_ASCII("ViewId"              )   // int16
 #define ARGUMENTNAME_FLAGS                                  DECLARE_ASCII("Flags"               )   // int32
@@ -108,73 +110,87 @@ namespace framework{
 #define ARGUMENTNAME_INPUTSTREAM                            DECLARE_ASCII("InputStream"         )   // Reference< XInputStream >
 #define ARGUMENTNAME_OUTPUTSTREAM                           DECLARE_ASCII("OutputStream"        )   // Reference< XOutputStream >
 #define ARGUMENTNAME_DEEPDETECTION                          DECLARE_ASCII("DeepDetection"       )   // bool
-#define ARGUMENTNAME_JUMPMARK                               DECLARE_ASCII("JumpMark"            )   // string
-#define ARGUMENTNAME_TYPENAME                               DECLARE_ASCII("TypeName"            )   // string
+#define ARGUMENTNAME_STATUSINDICATOR                        DECLARE_ASCII("StatusIndicator"     )   // Reference< XStatusIndicator >
 
 /*-************************************************************************************************************//**
-    @short          These values are used by class ArgumentAnalyzer internal to mark existing arguments.
-                    My be they can be usefull for other things ... Thats why I publish it here!
+    @short          define our argument mask
+    @descr          These mask could be used to define a subset for analyzing arguments or specify
+                    one argument for set/get operations.
+                    We use first byte [bit 0..7] of an int32 to define 8 layer, and follow 3 bytes [bit 8..31]
+                    to address 24 properties per layer! Please use defines to build these mask!!!
+                    With these values we build an special enum field for better using at our Argumentanalyzer-interface ...
+                    Special define ANALYZE_ALL is our default for analyzing. Then we analyze complete argument list.
 *//*-*************************************************************************************************************/
+#define ARGUMENTLAYER_1                                     0x00000001
+#define ARGUMENTLAYER_2                                     0x00000002
+#define ARGUMENTLAYER_3                                     0x00000004
+#define ARGUMENTLAYER_4                                     0x00000008
+#define ARGUMENTLAYER_5                                     0x00000010
+#define ARGUMENTLAYER_6                                     0x00000020
+#define ARGUMENTLAYER_7                                     0x00000040
+#define ARGUMENTLAYER_8                                     0x00000080
 
-#define ARGUMENTFLAG_CHARACTERSET                           0x0000000000000001L
-#define ARGUMENTFLAG_MEDIATYPE                              0x0000000000000002L
-#define ARGUMENTFLAG_DETECTSERVICE                          0x0000000000000004L
-#define ARGUMENTFLAG_EXTENSION                              0x0000000000000008L
-#define ARGUMENTFLAG_URL                                    0x0000000000000010L
-#define ARGUMENTFLAG_FILTERNAME                             0x0000000000000020L
-#define ARGUMENTFLAG_FORMAT                                 0x0000000000000040L
-#define ARGUMENTFLAG_FRAMENAME                              0x0000000000000080L
-#define ARGUMENTFLAG_PATTERN                                0x0000000000000100L
-#define ARGUMENTFLAG_POSTDATA                               0x0000000000000200L
-#define ARGUMENTFLAG_POSTSTRING                             0x0000000000000400L
-#define ARGUMENTFLAG_REFERRER                               0x0000000000000800L
-#define ARGUMENTFLAG_TEMPLATENAME                           0x0000000000001000L
-#define ARGUMENTFLAG_TEMPLATEREGIONNAME                     0x0000000000002000L
-#define ARGUMENTFLAG_VERSION                                0x0000000000004000L
-#define ARGUMENTFLAG_VIEWID                                 0x0000000000008000L
-#define ARGUMENTFLAG_FLAGS                                  0x0000000000010000L
-#define ARGUMENTFLAG_ASTEMPLATE                             0x0000000000020000L
-#define ARGUMENTFLAG_HIDDEN                                 0x0000000000040000L
-#define ARGUMENTFLAG_OPENNEWVIEW                            0x0000000000080000L
-#define ARGUMENTFLAG_READONLY                               0x0000000000100000L
-#define ARGUMENTFLAG_PREVIEW                                0x0000000000200000L
-#define ARGUMENTFLAG_SILENT                                 0x0000000000400000L
-#define ARGUMENTFLAG_POSSIZE                                0x0000000000800000L
-#define ARGUMENTFLAG_INPUTSTREAM                            0x0000000001000000L
-#define ARGUMENTFLAG_OUTPUTSTREAM                           0x0000000002000000L
-#define ARGUMENTFLAG_DEEPDETECTION                          0x0000000004000000L
-#define ARGUMENTFLAG_JUMPMARK                               0x0000000008000000L
-#define ARGUMENTFLAG_TYPENAME                               0x0000000010000000L
+#define ARGUMENTFLAG_1                                      0x00000100
+#define ARGUMENTFLAG_2                                      0x00000200
+#define ARGUMENTFLAG_3                                      0x00000400
+#define ARGUMENTFLAG_4                                      0x00000800
+#define ARGUMENTFLAG_5                                      0x00001000
+#define ARGUMENTFLAG_6                                      0x00002000
+#define ARGUMENTFLAG_7                                      0x00004000
+#define ARGUMENTFLAG_8                                      0x00008000
+#define ARGUMENTFLAG_9                                      0x00010000
+#define ARGUMENTFLAG_10                                     0x00020000
+#define ARGUMENTFLAG_11                                     0x00040000
+#define ARGUMENTFLAG_12                                     0x00080000
+#define ARGUMENTFLAG_13                                     0x00100000
+#define ARGUMENTFLAG_14                                     0x00200000
+#define ARGUMENTFLAG_15                                     0x00400000
+#define ARGUMENTFLAG_16                                     0x00800000
+#define ARGUMENTFLAG_17                                     0x01000000
+#define ARGUMENTFLAG_18                                     0x02000000
+#define ARGUMENTFLAG_19                                     0x04000000
+#define ARGUMENTFLAG_20                                     0x08000000
+#define ARGUMENTFLAG_21                                     0x10000000
+#define ARGUMENTFLAG_22                                     0x20000000
+#define ARGUMENTFLAG_23                                     0x40000000
+#define ARGUMENTFLAG_24                                     0x80000000
 
-#define DISABLE_ARGUMENT_CHARACTERSET                       0xFFFFFFFFFFFFFFFEL
-#define DISABLE_ARGUMENT_MEDIATYPE                          0xFFFFFFFFFFFFFFFDL
-#define DISABLE_ARGUMENT_DETECTSERVICE                      0xFFFFFFFFFFFFFFFBL
-#define DISABLE_ARGUMENT_EXTENSION                          0xFFFFFFFFFFFFFFF7L
-#define DISABLE_ARGUMENT_URL                                0xFFFFFFFFFFFFFFEFL
-#define DISABLE_ARGUMENT_FILTERNAME                         0xFFFFFFFFFFFFFFDFL
-#define DISABLE_ARGUMENT_FORMAT                             0xFFFFFFFFFFFFFFBFL
-#define DISABLE_ARGUMENT_FRAMENAME                          0xFFFFFFFFFFFFFF7FL
-#define DISABLE_ARGUMENT_PATTERN                            0xFFFFFFFFFFFFFEFFL
-#define DISABLE_ARGUMENT_POSTDATA                           0xFFFFFFFFFFFFFDFFL
-#define DISABLE_ARGUMENT_POSTSTRING                         0xFFFFFFFFFFFFFBFFL
-#define DISABLE_ARGUMENT_REFERRER                           0xFFFFFFFFFFFFF7FFL
-#define DISABLE_ARGUMENT_TEMPLATENAME                       0xFFFFFFFFFFFFEFFFL
-#define DISABLE_ARGUMENT_TEMPLATEREGIONNAME                 0xFFFFFFFFFFFFDFFFL
-#define DISABLE_ARGUMENT_VERSION                            0xFFFFFFFFFFFFBFFFL
-#define DISABLE_ARGUMENT_VIEWID                             0xFFFFFFFFFFFF7FFFL
-#define DISABLE_ARGUMENT_FLAGS                              0xFFFFFFFFFFFEFFFFL
-#define DISABLE_ARGUMENT_ASTEMPLATE                         0xFFFFFFFFFFFDFFFFL
-#define DISABLE_ARGUMENT_HIDDEN                             0xFFFFFFFFFFFBFFFFL
-#define DISABLE_ARGUMENT_OPENNEWVIEW                        0xFFFFFFFFFFF7FFFFL
-#define DISABLE_ARGUMENT_READONLY                           0xFFFFFFFFFFEFFFFFL
-#define DISABLE_ARGUMENT_PREVIEW                            0xFFFFFFFFFFDFFFFFL
-#define DISABLE_ARGUMENT_SILENT                             0xFFFFFFFFFFBFFFFFL
-#define DISABLE_ARGUMENT_POSSIZE                            0xFFFFFFFFFF7FFFFFL
-#define DISABLE_ARGUMENT_INPUTSTREAM                        0xFFFFFFFFFEFFFFFFL
-#define DISABLE_ARGUMENT_OUTPUTSTREAM                       0xFFFFFFFFFDFFFFFFL
-#define DISABLE_ARGUMENT_DEEPDETECTION                      0xFFFFFFFFFBFFFFFFL
-#define DISABLE_ARGUMENT_JUMPMARK                           0xFFFFFFFFF7FFFFFFL
-#define DISABLE_ARGUMENT_TYPENAME                           0xFFFFFFFFEFFFFFFFL
+#define ANALYZE_ALL_ARGUMENTS                               0xFFFFFFFF
+
+enum EArgument
+{
+    E_CHARACTERSET          = ARGUMENTLAYER_1 | ARGUMENTFLAG_1  ,
+    E_MEDIATYPE             = ARGUMENTLAYER_1 | ARGUMENTFLAG_2  ,
+    E_DETECTSERVICE         = ARGUMENTLAYER_1 | ARGUMENTFLAG_3  ,
+    E_EXTENSION             = ARGUMENTLAYER_1 | ARGUMENTFLAG_4  ,
+    E_URL                   = ARGUMENTLAYER_1 | ARGUMENTFLAG_5  ,
+    E_FILTERNAME            = ARGUMENTLAYER_1 | ARGUMENTFLAG_6  ,
+    E_FORMAT                = ARGUMENTLAYER_1 | ARGUMENTFLAG_7  ,
+    E_FRAMENAME             = ARGUMENTLAYER_1 | ARGUMENTFLAG_8  ,
+    E_PATTERN               = ARGUMENTLAYER_1 | ARGUMENTFLAG_9  ,
+    E_POSTDATA              = ARGUMENTLAYER_1 | ARGUMENTFLAG_10 ,
+    E_POSTSTRING            = ARGUMENTLAYER_1 | ARGUMENTFLAG_11 ,
+    E_REFERRER              = ARGUMENTLAYER_1 | ARGUMENTFLAG_12 ,
+    E_TEMPLATENAME          = ARGUMENTLAYER_1 | ARGUMENTFLAG_13 ,
+    E_TEMPLATEREGIONNAME    = ARGUMENTLAYER_1 | ARGUMENTFLAG_14 ,
+    E_JUMPMARK              = ARGUMENTLAYER_1 | ARGUMENTFLAG_15 ,
+    E_VERSION               = ARGUMENTLAYER_1 | ARGUMENTFLAG_16 ,
+    E_VIEWID                = ARGUMENTLAYER_1 | ARGUMENTFLAG_17 ,
+    E_FLAGS                 = ARGUMENTLAYER_1 | ARGUMENTFLAG_18 ,
+    E_ASTEMPLATE            = ARGUMENTLAYER_1 | ARGUMENTFLAG_19 ,
+    E_HIDDEN                = ARGUMENTLAYER_1 | ARGUMENTFLAG_20 ,
+    E_OPENNEWVIEW           = ARGUMENTLAYER_1 | ARGUMENTFLAG_21 ,
+    E_READONLY              = ARGUMENTLAYER_1 | ARGUMENTFLAG_22 ,
+    E_PREVIEW               = ARGUMENTLAYER_1 | ARGUMENTFLAG_23 ,
+    E_SILENT                = ARGUMENTLAYER_1 | ARGUMENTFLAG_24 ,
+
+    E_DEEPDETECTION         = ARGUMENTLAYER_2 | ARGUMENTFLAG_1  ,
+    E_POSSIZE               = ARGUMENTLAYER_2 | ARGUMENTFLAG_2  ,
+    E_INPUTSTREAM           = ARGUMENTLAYER_2 | ARGUMENTFLAG_3  ,
+    E_OUTPUTSTREAM          = ARGUMENTLAYER_2 | ARGUMENTFLAG_4  ,
+    E_TYPENAME              = ARGUMENTLAYER_2 | ARGUMENTFLAG_5  ,
+    E_STATUSINDICATOR       = ARGUMENTLAYER_2 | ARGUMENTFLAG_6
+};
 
 }       //  namespace framework
 
