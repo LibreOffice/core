@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: th $ $Date: 2001-05-09 12:55:09 $
+#   last change: $Author: jbu $ $Date: 2001-05-17 09:01:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,9 @@ SLOFILES=   $(SLO)$/alloc.obj       \
             $(SLO)$/uuid.obj        \
             $(SLO)$/rtl_process.obj \
             $(SLO)$/byteseq.obj     \
-            $(SLO)$/uri.obj
+            $(SLO)$/uri.obj			\
+            $(SLO)$/bootstrap.obj  	\
+            $(SLO)$/cmdargs.obj
 
 #.IF "$(UPDATER)"=="YES"
 OBJFILES=   $(OBJ)$/alloc.obj       \
@@ -113,7 +115,9 @@ OBJFILES=   $(OBJ)$/alloc.obj       \
             $(OBJ)$/uuid.obj        \
             $(OBJ)$/rtl_process.obj \
             $(OBJ)$/byteseq.obj     \
-            $(OBJ)$/uri.obj
+            $(OBJ)$/uri.obj			\
+            $(OBJ)$/bootstrap.obj  	\
+            $(OBJ)$/cmdargs.obj
 #.ENDIF
 
 .ENDIF

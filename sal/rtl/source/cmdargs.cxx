@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: rtl_process.c,v $
+ *  $RCSfile: cmdargs.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: jbu $ $Date: 2001-05-17 09:01:51 $
  *
@@ -58,26 +58,82 @@
  *
  *
  ************************************************************************/
-#include <string.h>
-#include <osl/mutex.h>
-#include <rtl/uuid.h>
+#include <osl/mutex.hxx>
+#include <rtl/process.h>
+#include <rtl/ustring.hxx>
 
-/* rtl_getCommandArg, rtl_getCommandArgCount see cmdargs.cxx  */
 
-void SAL_CALL rtl_getGlobalProcessId( sal_uInt8 *pTargetUUID )
+::rtl::OUString *g_pCommandArgs = 0;
+sal_Int32 g_nCommandArgCount = -1;
+
+struct rtl_CmdArgs_ArgHolder
 {
-    static sal_uInt8 *pUuid = 0;
-    if( ! pUuid )
-    {
-        osl_acquireMutex( * osl_getGlobalMutex() );
-        if( ! pUuid )
-        {
-            static sal_uInt8 aUuid[16];
-            rtl_createUuid( aUuid , 0 , sal_False );
-            pUuid = aUuid;
-        }
-        osl_releaseMutex( * osl_getGlobalMutex() );
-    }
-    memcpy( pTargetUUID , pUuid , 16 );
+    ~rtl_CmdArgs_ArgHolder();
+};
+
+rtl_CmdArgs_ArgHolder::~rtl_CmdArgs_ArgHolder()
+{
+    delete [] g_pCommandArgs;
 }
 
+rtl_CmdArgs_ArgHolder MyHolder;
+
+void impl_rtl_initCommandArgs()
+{
+    ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
+    if( !g_pCommandArgs )
+    {
+        sal_Int32 nCount = osl_getCommandArgCount();
+        ::rtl::OUString * p = new ::rtl::OUString[nCount];
+        sal_Int32 i = 0, i2 = 0;
+        for( ; i < nCount ; i ++ )
+        {
+            ::rtl::OUString data;
+            osl_getCommandArg( i, &(data.pData) );
+            if( ('-' == data.pData->buffer[0] || '/' == data.pData->buffer[0] ) &&
+                 'e' == data.pData->buffer[1] &&
+                 'n' == data.pData->buffer[2] &&
+                 'v' == data.pData->buffer[3] &&
+                 ':' == data.pData->buffer[4] &&
+                rtl_ustr_indexOfChar( &(data.pData->buffer[5]), '=' ) >= 0 )
+            {
+                // ignore
+            }
+            else
+            {
+                p[i2] = data;
+                i2 ++;
+            }
+        }
+        g_nCommandArgCount = i2;
+        g_pCommandArgs = p;
+    }
+}
+
+
+extern "C"
+{
+    oslProcessError SAL_CALL rtl_getCommandArg(sal_uInt32 nArg, rtl_uString **strCommandArg)
+    {
+        if( !g_pCommandArgs )
+            impl_rtl_initCommandArgs();
+
+        oslProcessError err = osl_Process_E_None;
+        if( nArg < g_nCommandArgCount )
+        {
+            rtl_uString_assign( strCommandArg, g_pCommandArgs[nArg].pData );
+        }
+        else
+        {
+            err = osl_Process_E_NotFound;
+        }
+        return err;
+    }
+
+    sal_uInt32 SAL_CALL rtl_getCommandArgCount()
+    {
+        if( !g_pCommandArgs )
+            impl_rtl_initCommandArgs();
+        return g_nCommandArgCount;
+    }
+}
