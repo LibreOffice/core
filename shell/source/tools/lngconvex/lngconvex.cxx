@@ -21,6 +21,10 @@
 #include <osl/thread.h>
 #endif
 
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+
 #ifndef _TOOLS_CONFIG_HXX_
 #include <tools/config.hxx>
 #endif
@@ -91,21 +95,14 @@ void ShowUsage()
     is located as system directory,
     the returned directory has a trailing '\'
 */
+
 rtl::OUString GetModuleDirectory()
 {
-    rtl_uString* url = 0;
+    rtl::OUString cwd_url;
     rtl::OUString module_dir;
 
-    bool bSuccess = osl_getModuleURLFromAddress(ShowUsage, &url);
-
-    if (bSuccess)
-    {
-        module_dir = rtl::OUString(url);
-        rtl_uString_release(url);
-
-        osl::FileBase::getSystemPathFromFileURL(module_dir, module_dir);
-        module_dir = rtl::OUString(module_dir.getStr(), module_dir.lastIndexOf(L'\\') + 1);
-    }
+    if (osl_Process_E_None == osl_getProcessWorkingDir(&cwd_url.pData))
+        osl::FileBase::getSystemPathFromFileURL(cwd_url, module_dir);
 
     return module_dir;
 }
