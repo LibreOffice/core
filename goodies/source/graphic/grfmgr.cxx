@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:16 $
+ *  last change: $Author: ka $ $Date: 2000-09-22 14:22:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/salbtype.hxx>
 #include "grfmgr.hxx"
 
 // -----------
@@ -288,6 +289,58 @@ void GraphicObject::ImplAutoSwapIn( BOOL bIgnoreSwapState )
                 mpMgr->ImplGraphicObjectWasSwappedIn( *this );
         }
     }
+}
+
+// -----------------------------------------------------------------------------
+
+BOOL GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
+                                       PolyPolygon& rClipPolyPoly, BOOL& bRectClipRegion ) const
+{
+    BOOL bRet = FALSE;
+
+    if( GetType() != GRAPHIC_NONE )
+    {
+        const Graphic&  rGraphic = GetGraphic();
+        const MapMode   aMap100( MAP_100TH_MM );
+        Size            aSize100;
+        long            nTotalWidth, nTotalHeight;
+        long            nNewLeft, nNewTop, nNewRight, nNewBottom;
+        double          fScale;
+
+        if( rGraphic.GetPrefMapMode() == MAP_PIXEL )
+            aSize100 = pOut->PixelToLogic( rGraphic.GetPrefSize(), aMap100 );
+        else
+            aSize100 = pOut->LogicToLogic( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode(), aMap100 );
+
+        nTotalWidth = aSize100.Width() - pAttr->GetLeftCrop() - pAttr->GetRightCrop();
+        nTotalHeight = aSize100.Height() - pAttr->GetTopCrop() - pAttr->GetBottomCrop();
+
+        if( aSize100.Width() && aSize100.Height() && nTotalWidth && nTotalHeight )
+        {
+            rClipPolyPoly = Polygon( Rectangle( rPt, rSz ) );
+            bRectClipRegion = TRUE;
+
+            fScale = (double) aSize100.Width() / nTotalWidth;
+            nNewLeft = -FRound( pAttr->GetLeftCrop() * fScale );
+            nNewRight = nNewLeft + FRound( aSize100.Width() * fScale ) - 1;
+
+            fScale = (double) rSz.Width() / aSize100.Width();
+            rPt.X() += FRound( nNewLeft * fScale );
+            rSz.Width() = FRound( ( nNewRight - nNewLeft + 1 ) * fScale );
+
+            fScale = (double) aSize100.Height() / nTotalHeight;
+            nNewTop = -FRound( pAttr->GetTopCrop() * fScale );
+            nNewBottom = nNewTop + FRound( aSize100.Height() * fScale ) - 1;
+
+            fScale = (double) rSz.Height() / aSize100.Height();
+            rPt.Y() += FRound( nNewTop * fScale );
+            rSz.Height() = FRound( ( nNewBottom - nNewTop + 1 ) * fScale );
+
+            bRet = TRUE;
+        }
+    }
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------------
@@ -529,8 +582,37 @@ BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                           const GraphicAttr* pAttr, ULONG nFlags )
 {
     const GraphicAttr&  rActAttr = ( pAttr ? *pAttr : GetAttr() );
+    const Point*        pPt;
+    const Size*         pSz;
+    const BOOL          bCropped = rActAttr.IsCropped();
     BOOL                bCached = FALSE;
     BOOL                bRet;
+
+    if( bCropped )
+    {
+        pPt = new Point( rPt );
+        pSz = new Size( rSz );
+
+        PolyPolygon aClipPolyPoly;
+        BOOL        bRectClip;
+        const BOOL  bCrop = ImplGetCropParams( pOut, (Point&) *pPt, (Size&) *pSz,
+                                               &rActAttr, aClipPolyPoly, bRectClip );
+
+        pOut->Push( PUSH_CLIPREGION );
+
+        if( bCrop )
+        {
+            if( bRectClip )
+                pOut->IntersectClipRegion( aClipPolyPoly.GetBoundRect() );
+            else
+                pOut->IntersectClipRegion( aClipPolyPoly );
+        }
+    }
+    else
+    {
+        pPt = &rPt;
+        pSz = &rSz;
+    }
 
     if( IsAnimated() || !( nFlags & GRFMGR_DRAW_CACHED ) )
     {
@@ -542,7 +624,7 @@ BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
 
             if( aGraphic.IsSupportedGraphic() )
             {
-                aGraphic.Draw( pOut, rPt, rSz );
+                aGraphic.Draw( pOut, *pPt, *pSz );
                 bRet = TRUE;
             }
             else
@@ -552,7 +634,7 @@ BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
             bRet = FALSE;
     }
     else
-        bRet = mpMgr->DrawObj( pOut, rPt, rSz, *this, rActAttr, nFlags, bCached );
+        bRet = mpMgr->DrawObj( pOut, *pPt, *pSz, *this, rActAttr, nFlags, bCached );
 
     if( bCached )
     {
@@ -560,6 +642,13 @@ BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
             mpSwapOutTimer->Start();
         else
             FireSwapOutRequest();
+    }
+
+    if( bCropped )
+    {
+        pOut->Pop();
+        delete (Point*) pPt;
+        delete (Size*) pSz;
     }
 
     return bRet;
@@ -580,6 +669,36 @@ BOOL GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const 
     {
         if( mbAnimated )
         {
+            const BOOL      bCropped = rActAttr.IsCropped();
+            const Point*    pPt;
+            const Size*     pSz;
+
+            if( bCropped )
+            {
+                pPt = new Point( rPt );
+                pSz = new Size( rSz );
+
+                PolyPolygon aClipPolyPoly;
+                BOOL        bRectClip;
+                const BOOL  bCrop = ImplGetCropParams( pOut, (Point&) *pPt, (Size&) *pSz,
+                                                       &rActAttr, aClipPolyPoly, bRectClip );
+
+                pOut->Push( PUSH_CLIPREGION );
+
+                if( bCrop )
+                {
+                    if( bRectClip )
+                        pOut->IntersectClipRegion( aClipPolyPoly.GetBoundRect() );
+                    else
+                        pOut->IntersectClipRegion( aClipPolyPoly );
+                }
+            }
+            else
+            {
+                pPt = &rPt;
+                pSz = &rSz;
+            }
+
             if( !mpSimpleCache || ( mpSimpleCache->maAttr != rActAttr ) || pFirstFrameOutDev )
             {
                 if( mpSimpleCache )
@@ -589,7 +708,15 @@ BOOL GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const 
                 mpSimpleCache->maGraphic.SetAnimationNotifyHdl( GetAnimationNotifyHdl() );
             }
 
-            mpSimpleCache->maGraphic.StartAnimation( pOut, rPt, rSz, nExtraData, pFirstFrameOutDev );
+            mpSimpleCache->maGraphic.StartAnimation( pOut, *pPt, *pSz, nExtraData, pFirstFrameOutDev );
+
+            if( bCropped )
+            {
+                pOut->Pop();
+                delete (Point*) pPt;
+                delete (Size*) pSz;
+            }
+
             bRet = TRUE;
         }
         else

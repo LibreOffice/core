@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:16 $
+ *  last change: $Author: ka $ $Date: 2000-09-22 14:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,7 @@ BOOL GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
 
     rCached = FALSE;
 
+    // mirrored horizontically
     if( aSz.Width() < 0L )
     {
         aPt.X() += aSz.Width() + 1;
@@ -183,6 +184,7 @@ BOOL GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
         aAttr.SetMirrorFlags( aAttr.GetMirrorFlags() ^ BMP_MIRROR_HORZ );
     }
 
+    // mirrored vertically
     if( aSz.Height() < 0L )
     {
         aPt.Y() += aSz.Height() + 1;

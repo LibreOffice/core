@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:09 $
+ *  last change: $Author: ka $ $Date: 2000-09-22 14:23:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,6 +259,8 @@ private:
     void                    ImplSetGraphicManager( const GraphicManager* pMgr, const ByteString* pID = NULL );
     void                    ImplAutoSwapIn( BOOL bIgnoreSwapState );
     BOOL                    ImplIsAutoSwapped() const { return mbAutoSwapped; }
+    BOOL                    ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
+                                               PolyPolygon& rClipPolyPoly, BOOL& bRectClipRegion ) const;
 
                             DECL_LINK( ImplAutoSwapOutHdl, void* );
 
