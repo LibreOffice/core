@@ -2,9 +2,9 @@
  *
  *  $RCSfile: register.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:52:54 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,11 +116,23 @@ extern OUString SAL_CALL
 extern Reference< XInterface > SAL_CALL
         SmXMLExport_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception );
 extern Sequence< OUString > SAL_CALL
+        SmXMLExportMetaOOO_getSupportedServiceNames() throw();
+extern OUString SAL_CALL
+        SmXMLExportMetaOOO_getImplementationName() throw();
+extern Reference< XInterface > SAL_CALL
+        SmXMLExportMetaOOO_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception );
+extern Sequence< OUString > SAL_CALL
         SmXMLExportMeta_getSupportedServiceNames() throw();
 extern OUString SAL_CALL
         SmXMLExportMeta_getImplementationName() throw();
 extern Reference< XInterface > SAL_CALL
         SmXMLExportMeta_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception );
+extern Sequence< OUString > SAL_CALL
+        SmXMLExportSettingsOOO_getSupportedServiceNames() throw();
+extern OUString SAL_CALL
+        SmXMLExportSettingsOOO_getImplementationName() throw();
+extern Reference< XInterface > SAL_CALL
+        SmXMLExportSettingsOOO_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception );
 extern Sequence< OUString > SAL_CALL
         SmXMLExportSettings_getSupportedServiceNames() throw();
 extern OUString SAL_CALL
@@ -178,6 +190,13 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     for(i = 0; i < aServices.getLength(); i++ )
         xNewKey->createKey( aServices.getConstArray()[i] );
 
+    xNewKey = xKey->createKey( aDelimiter + SmXMLExportMetaOOO_getImplementationName() +
+                               aUnoServices );
+
+    aServices = SmXMLExportMetaOOO_getSupportedServiceNames();
+    for(i = 0; i < aServices.getLength(); i++ )
+        xNewKey->createKey( aServices.getConstArray()[i] );
+
     xNewKey = xKey->createKey( aDelimiter + SmXMLExportMeta_getImplementationName() +
                                aUnoServices );
 
@@ -189,6 +208,13 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
                                aUnoServices );
 
     aServices = SmXMLImportSettings_getSupportedServiceNames();
+    for(i = 0; i < aServices.getLength(); i++ )
+        xNewKey->createKey( aServices.getConstArray()[i] );
+
+    xNewKey = xKey->createKey( aDelimiter + SmXMLExportSettingsOOO_getImplementationName() +
+                               aUnoServices );
+
+    aServices = SmXMLExportSettingsOOO_getSupportedServiceNames();
     for(i = 0; i < aServices.getLength(); i++ )
         xNewKey->createKey( aServices.getConstArray()[i] );
 
@@ -256,6 +282,14 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplementationName,
             SmXMLImportMeta_createInstance,
             SmXMLImportMeta_getSupportedServiceNames() );
         }
+        else if( SmXMLExportMetaOOO_getImplementationName().equalsAsciiL(
+            pImplementationName, strlen(pImplementationName)) )
+        {
+            xFactory = ::cppu::createSingleFactory( xServiceManager,
+            SmXMLExportMetaOOO_getImplementationName(),
+            SmXMLExportMetaOOO_createInstance,
+            SmXMLExportMetaOOO_getSupportedServiceNames() );
+        }
         else if( SmXMLExportMeta_getImplementationName().equalsAsciiL(
             pImplementationName, strlen(pImplementationName)) )
         {
@@ -271,6 +305,14 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplementationName,
             SmXMLImportSettings_getImplementationName(),
             SmXMLImportSettings_createInstance,
             SmXMLImportSettings_getSupportedServiceNames() );
+        }
+        else if( SmXMLExportSettingsOOO_getImplementationName().equalsAsciiL(
+            pImplementationName, strlen(pImplementationName)) )
+        {
+            xFactory = ::cppu::createSingleFactory( xServiceManager,
+            SmXMLExportSettingsOOO_getImplementationName(),
+            SmXMLExportSettingsOOO_createInstance,
+            SmXMLExportSettingsOOO_getSupportedServiceNames() );
         }
         else if( SmXMLExportSettings_getImplementationName().equalsAsciiL(
             pImplementationName, strlen(pImplementationName)) )
