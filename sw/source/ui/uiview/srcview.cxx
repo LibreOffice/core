@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 09:24:39 $
+ *  last change: $Author: hr $ $Date: 2000-11-15 14:55:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
 #include <svtools/saveopt.hxx>
+#endif
+#ifndef _SFXAPP_HXX
+#include <sfx2/app.hxx>
 #endif
 #ifndef _IODLG_HXX //autogen
 #include <sfx2/iodlg.hxx>
