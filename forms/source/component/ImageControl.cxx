@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-11 10:12:24 $
+ *  last change: $Author: oj $ $Date: 2001-05-28 09:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ void OImageControlModel::_propertyChanged( const PropertyChangeEvent& rEvt )
 
         Reference<XInputStream> xInput
             (new ::utl::OInputStreamHelper(new SvLockBytes(pFileStream, sal_True),
-                                           pFileStream->GetBufferSize()));
+                                           nSize));
         xSink->setInputStream(xInput);
         Reference<XInputStream>  xInStream(xSink, UNO_QUERY);
         if (m_xColumnUpdate.is())
@@ -299,7 +299,13 @@ void OImageControlModel::_propertyChanged( const PropertyChangeEvent& rEvt )
         }
 
         // usually the setBinaryStream should close the input, but just in case ....
-        try { xInStream->closeInput(); } catch (NotConnectedException& e) { e; }
+        try
+        {
+            xInStream->closeInput();
+        }
+        catch (NotConnectedException&)
+        {
+        }
     }
     else
     {
