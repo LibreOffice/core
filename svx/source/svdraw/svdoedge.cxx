@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:11:25 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,12 +105,12 @@
 
 SdrObjConnection::~SdrObjConnection()
 {
-    if (pSuro!=NULL) delete pSuro;
+    //BFS01if (pSuro!=NULL) delete pSuro;
 }
 
 void SdrObjConnection::ResetVars()
 {
-    pSuro=NULL;
+    //BFS01pSuro=NULL;
     pObj=NULL;
     nConId=0;
     nXDist=0;
@@ -152,73 +152,73 @@ FASTBOOL SdrObjConnection::TakeGluePoint(SdrGluePoint& rGP, FASTBOOL bSetAbsPos)
     return bRet;
 }
 
-void SdrObjConnection::Write(SvStream& rOut, const SdrObject* pEdgeObj) const
-{
-    SdrIOHeader aHead(rOut,STREAM_WRITE,SdrIOConnID); // ab V11 eingepackt
-    SdrObjSurrogate aSuro(pObj,pEdgeObj);
-    rOut<<aSuro;
-    rOut<<nConId;
-    rOut<<nXDist;
-    rOut<<nYDist;
-    BOOL bTmp;
-    bTmp=bBestConn;   rOut<<bTmp;
-    bTmp=bBestVertex; rOut<<bTmp;
-    bTmp=bXDistOvr;   rOut<<bTmp;
-    bTmp=bYDistOvr;   rOut<<bTmp;
-    bTmp=bAutoVertex; rOut<<bTmp;
-    bTmp=bAutoCorner; rOut<<bTmp;
-    UINT32 nReserve=0;
-    rOut<<nReserve;
-    rOut<<nReserve;
-}
+//BFS01void SdrObjConnection::Write(SvStream& rOut, const SdrObject* pEdgeObj) const
+//BFS01{
+//BFS01 SdrIOHeader aHead(rOut,STREAM_WRITE,SdrIOConnID); // ab V11 eingepackt
+//BFS01 SdrObjSurrogate aSuro(pObj,pEdgeObj);
+//BFS01 rOut<<aSuro;
+//BFS01 rOut<<nConId;
+//BFS01 rOut<<nXDist;
+//BFS01 rOut<<nYDist;
+//BFS01 BOOL bTmp;
+//BFS01 bTmp=bBestConn;   rOut<<bTmp;
+//BFS01 bTmp=bBestVertex; rOut<<bTmp;
+//BFS01 bTmp=bXDistOvr;   rOut<<bTmp;
+//BFS01 bTmp=bYDistOvr;   rOut<<bTmp;
+//BFS01 bTmp=bAutoVertex; rOut<<bTmp;
+//BFS01 bTmp=bAutoCorner; rOut<<bTmp;
+//BFS01 UINT32 nReserve=0;
+//BFS01 rOut<<nReserve;
+//BFS01 rOut<<nReserve;
+//BFS01}
 
-void SdrObjConnection::Read(SvStream& rIn, const SdrObject* pEdgeObj)
-{
-    if (rIn.GetError()!=0) return;
-    SdrIOHeader aHead(rIn,STREAM_READ,SdrIOConnID); // ab V11 eingepackt
-    pSuro=new SdrObjSurrogate(*pEdgeObj,rIn);
-    BOOL bBit;
-    rIn>>nConId;
-    rIn>>nXDist;
-    rIn>>nYDist;
-    rIn>>bBit; bBestConn  =bBit;
-    rIn>>bBit; bBestVertex=bBit;
-    rIn>>bBit; bXDistOvr  =bBit;
-    rIn>>bBit; bYDistOvr  =bBit;
-    rIn>>bBit; bAutoVertex=bBit;
-    rIn>>bBit; bAutoCorner=bBit;
-    UINT32 nReserve;
-    rIn>>nReserve;
-    rIn>>nReserve;
-}
+//BFS01void SdrObjConnection::Read(SvStream& rIn, const SdrObject* pEdgeObj)
+//BFS01{
+//BFS01 if (rIn.GetError()!=0) return;
+//BFS01 SdrIOHeader aHead(rIn,STREAM_READ,SdrIOConnID); // ab V11 eingepackt
+//BFS01 pSuro=new SdrObjSurrogate(*pEdgeObj,rIn);
+//BFS01 BOOL bBit;
+//BFS01 rIn>>nConId;
+//BFS01 rIn>>nXDist;
+//BFS01 rIn>>nYDist;
+//BFS01 rIn>>bBit; bBestConn  =bBit;
+//BFS01 rIn>>bBit; bBestVertex=bBit;
+//BFS01 rIn>>bBit; bXDistOvr  =bBit;
+//BFS01 rIn>>bBit; bYDistOvr  =bBit;
+//BFS01 rIn>>bBit; bAutoVertex=bBit;
+//BFS01 rIn>>bBit; bAutoCorner=bBit;
+//BFS01 UINT32 nReserve;
+//BFS01 rIn>>nReserve;
+//BFS01 rIn>>nReserve;
+//BFS01}
 
-void SdrObjConnection::ReadTilV10(SvStream& rIn, const SdrObject* pEdgeObj)
-{
-    if (rIn.GetError()!=0) return;
-    pSuro=new SdrObjSurrogate(*pEdgeObj,rIn);
-    BOOL bBit;
-    rIn>>nConId;
-    rIn>>nXDist;
-    rIn>>nYDist;
-    rIn>>bBit; bBestConn  =bBit;
-    rIn>>bBit; bBestVertex=bBit;
-    rIn>>bBit; bXDistOvr  =bBit;
-    rIn>>bBit; bYDistOvr  =bBit;
-    rIn>>bBit; bAutoVertex=bBit;
-    rIn>>bBit; bAutoCorner=bBit;
-    UINT32 nReserve;
-    rIn>>nReserve;
-    rIn>>nReserve;
-}
+//BFS01void SdrObjConnection::ReadTilV10(SvStream& rIn, const SdrObject* pEdgeObj)
+//BFS01{
+//BFS01 if (rIn.GetError()!=0) return;
+//BFS01 pSuro=new SdrObjSurrogate(*pEdgeObj,rIn);
+//BFS01 BOOL bBit;
+//BFS01 rIn>>nConId;
+//BFS01 rIn>>nXDist;
+//BFS01 rIn>>nYDist;
+//BFS01 rIn>>bBit; bBestConn  =bBit;
+//BFS01 rIn>>bBit; bBestVertex=bBit;
+//BFS01 rIn>>bBit; bXDistOvr  =bBit;
+//BFS01 rIn>>bBit; bYDistOvr  =bBit;
+//BFS01 rIn>>bBit; bAutoVertex=bBit;
+//BFS01 rIn>>bBit; bAutoCorner=bBit;
+//BFS01 UINT32 nReserve;
+//BFS01 rIn>>nReserve;
+//BFS01 rIn>>nReserve;
+//BFS01}
 
-void SdrObjConnection::AfterRead(const SdrObject* pEdgeObj)
-{
-    if (pSuro!=NULL) {
-        pObj=pSuro->GetObject();
-        delete pSuro;
-        pSuro=NULL;
-    }
-}
+//BFS01void SdrObjConnection::AfterRead(const SdrObject* pEdgeObj)
+//BFS01{
+//BFS01 if (pSuro!=NULL) {
+//BFS01     pObj=pSuro->GetObject();
+//BFS01     delete pSuro;
+//BFS01     pSuro=NULL;
+//BFS01 }
+//BFS01}
 
 Point& SdrEdgeInfoRec::ImpGetLineVersatzPoint(SdrEdgeLineCode eLineCode)
 {
@@ -270,45 +270,45 @@ long SdrEdgeInfoRec::ImpGetLineVersatz(SdrEdgeLineCode eLineCode, const XPolygon
     else return rPt.X();
 }
 
-SvStream& operator<<(SvStream& rOut, const SdrEdgeInfoRec& rEI)
-{
-    SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrEdgeInfoRec");
-#endif
-    rOut<<rEI.aObj1Line2;
-    rOut<<rEI.aObj1Line3;
-    rOut<<rEI.aObj2Line2;
-    rOut<<rEI.aObj2Line3;
-    rOut<<rEI.aMiddleLine;
-    rOut<<rEI.nAngle1;
-    rOut<<rEI.nAngle2;
-    rOut<<rEI.nObj1Lines;
-    rOut<<rEI.nObj2Lines;
-    rOut<<rEI.nMiddleLine;
-    rOut<<rEI.cOrthoForm;
-    return rOut;
-}
+//BFS01SvStream& operator<<(SvStream& rOut, const SdrEdgeInfoRec& rEI)
+//BFS01{
+//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrEdgeInfoRec");
+//BFS01#endif
+//BFS01 rOut<<rEI.aObj1Line2;
+//BFS01 rOut<<rEI.aObj1Line3;
+//BFS01 rOut<<rEI.aObj2Line2;
+//BFS01 rOut<<rEI.aObj2Line3;
+//BFS01 rOut<<rEI.aMiddleLine;
+//BFS01 rOut<<rEI.nAngle1;
+//BFS01 rOut<<rEI.nAngle2;
+//BFS01 rOut<<rEI.nObj1Lines;
+//BFS01 rOut<<rEI.nObj2Lines;
+//BFS01 rOut<<rEI.nMiddleLine;
+//BFS01 rOut<<rEI.cOrthoForm;
+//BFS01 return rOut;
+//BFS01}
 
-SvStream& operator>>(SvStream& rIn, SdrEdgeInfoRec& rEI)
-{
-    SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrEdgeInfoRec");
-#endif
-    rIn>>rEI.aObj1Line2;
-    rIn>>rEI.aObj1Line3;
-    rIn>>rEI.aObj2Line2;
-    rIn>>rEI.aObj2Line3;
-    rIn>>rEI.aMiddleLine;
-    rIn>>rEI.nAngle1;
-    rIn>>rEI.nAngle2;
-    rIn>>rEI.nObj1Lines;
-    rIn>>rEI.nObj2Lines;
-    rIn>>rEI.nMiddleLine;
-    rIn>>rEI.cOrthoForm;
-    return rIn;
-}
+//BFS01SvStream& operator>>(SvStream& rIn, SdrEdgeInfoRec& rEI)
+//BFS01{
+//BFS01 SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrEdgeInfoRec");
+//BFS01#endif
+//BFS01 rIn>>rEI.aObj1Line2;
+//BFS01 rIn>>rEI.aObj1Line3;
+//BFS01 rIn>>rEI.aObj2Line2;
+//BFS01 rIn>>rEI.aObj2Line3;
+//BFS01 rIn>>rEI.aMiddleLine;
+//BFS01 rIn>>rEI.nAngle1;
+//BFS01 rIn>>rEI.nAngle2;
+//BFS01 rIn>>rEI.nObj1Lines;
+//BFS01 rIn>>rEI.nObj2Lines;
+//BFS01 rIn>>rEI.nMiddleLine;
+//BFS01 rIn>>rEI.cOrthoForm;
+//BFS01 return rIn;
+//BFS01}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -561,6 +561,13 @@ void SdrEdgeObj::RecalcBoundRect()
     // Linienenden beruecksichtigen
     long nLEndWdt=ImpGetLineEndAdd();
     if (nLEndWdt>nLineWdt) nLineWdt=nLEndWdt;
+
+    //BFS09
+    if(ImpAddLineGeomteryForMiteredLines())
+    {
+        nLineWdt = 0;
+    }
+
     if (nLineWdt!=0) {
         aOutRect.Left  ()-=nLineWdt;
         aOutRect.Top   ()-=nLineWdt;
@@ -576,7 +583,7 @@ void SdrEdgeObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
     rRect=GetSnapRect();
 }
 
-sal_Bool SdrEdgeObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrEdgeObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
     // #110094#-16 Moved to ViewContactOfSdrObj::ShouldPaintObject(..)
     //// Hidden objects on masterpages, draw nothing
@@ -686,11 +693,12 @@ SdrObject* SdrEdgeObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
     aR.Top()   -=nMyTol;
     aR.Bottom()+=nMyTol;
 
-    FASTBOOL bHit=FALSE;
+    sal_Bool bHit(sal_False);
 
-    Polygon aPoly=XOutCreatePolygon(*pEdgeTrack,NULL);
-    bHit=IsRectTouchesLine(aPoly,aR);
-    if (!bHit && HasText()) bHit=SdrTextObj::CheckHit(rPnt,nTol,pVisiLayer)!=NULL;
+//BFS09 Polygon aPoly=XOutCreatePolygon(*pEdgeTrack,NULL);
+    Polygon aPoly=XOutCreatePolygon(*pEdgeTrack);
+    bHit = IsRectTouchesLine(aPoly,aR);
+    if (!bHit && HasText()) bHit = SdrTextObj::CheckHit(rPnt,nTol,pVisiLayer)!=NULL;
     return bHit ? (SdrObject*)this : NULL;
 }
 
@@ -2130,7 +2138,7 @@ void SdrEdgeObj::TakeDragPoly(const SdrDragStat& rDragStat, XPolyPolygon& rXPP) 
     rXPP.Insert(pEdgeUser->aXP);
 }
 
-void SdrEdgeObj::NspToggleEdgeXor(const SdrDragStat& rDragStat, ExtOutputDevice& rXOut, FASTBOOL bTail1, FASTBOOL bTail2, FASTBOOL bDetail) const
+void SdrEdgeObj::NspToggleEdgeXor(const SdrDragStat& rDragStat, XOutputDevice& rXOut, FASTBOOL bTail1, FASTBOOL bTail2, FASTBOOL bDetail) const
 {
     SdrDragMethod* pDM=rDragStat.GetDragMethod();
     if (pDM!=NULL) {
@@ -2148,7 +2156,8 @@ void SdrEdgeObj::NspToggleEdgeXor(const SdrDragStat& rDragStat, ExtOutputDevice&
 
             if (pOut->GetOutDevType() == OUTDEV_WINDOW)
             {
-                const Polygon aPolygon( XOutCreatePolygon(aXP, pOut) );
+//BFS09             const Polygon aPolygon( XOutCreatePolygon(aXP, pOut) );
+                const Polygon aPolygon( XOutCreatePolygon(aXP) );
                 ((Window*) pOut)->InvertTracking(aPolygon, SHOWTRACK_WINDOW);
             }
             else
@@ -2503,108 +2512,108 @@ void SdrEdgeObj::RestGeoData(const SdrObjGeoData& rGeo)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrEdgeObj::WriteData(SvStream& rOut) const
-{
-    SdrTextObj::WriteData(rOut);
-    SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrEdgeObj");
-#endif
+//BFS01void SdrEdgeObj::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01 SdrTextObj::WriteData(rOut);
+//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrEdgeObj");
+//BFS01#endif
+//BFS01
+//BFS01 {
+//BFS01     SdrDownCompat aTrackCompat(rOut,STREAM_WRITE); // ab V11 eingepackt
+//BFS01#ifdef DBG_UTIL
+//BFS01     aTrackCompat.SetID("SdrEdgeObj(EdgeTrack)");
+//BFS01#endif
+//BFS01     rOut << *pEdgeTrack;
+//BFS01 }
+//BFS01
+//BFS01 aCon1.Write(rOut, this); // Die Connections haben
+//BFS01 aCon2.Write(rOut, this); // ihren eigenen Header
+//BFS01
+//BFS01 SfxItemPool* pPool = GetItemPool();
+//BFS01
+//BFS01 if(pPool)
+//BFS01 {
+//BFS01     const SfxItemSet& rSet = GetObjectItemSet();
+//BFS01
+//BFS01     pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_EDGE));
+//BFS01 }
+//BFS01 else
+//BFS01 {
+//BFS01     rOut << UINT16(SFX_ITEMS_NULL);
+//BFS01 }
+//BFS01
+//BFS01 rOut << aEdgeInfo;
+//BFS01}
 
-    {
-        SdrDownCompat aTrackCompat(rOut,STREAM_WRITE); // ab V11 eingepackt
-#ifdef DBG_UTIL
-        aTrackCompat.SetID("SdrEdgeObj(EdgeTrack)");
-#endif
-        rOut << *pEdgeTrack;
-    }
+//BFS01void SdrEdgeObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 if (rIn.GetError()!=0) return;
+//BFS01 SdrTextObj::ReadData(rHead,rIn);
+//BFS01 if (rHead.GetVersion()<2) { // frueher war EdgeObj von PathObj abgeleitet
+//BFS01     DBG_ERROR("SdrEdgeObj::ReadData(): Dateiversion<2 wird nicht mehr unterstuetzt");
+//BFS01     rIn.SetError(SVSTREAM_WRONGVERSION); // Format-Fehler, File zu alt
+//BFS01     return;
+//BFS01 }
+//BFS01 SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrEdgeObj");
+//BFS01#endif
+//BFS01 if (rHead.GetVersion()>=11) { // ab V11 ist alles eingepackt
+//BFS01     {
+//BFS01         SdrDownCompat aTrackCompat(rIn,STREAM_READ); // ab V11 eingepackt
+//BFS01#ifdef DBG_UTIL
+//BFS01         aTrackCompat.SetID("SdrEdgeObj(EdgeTrack)");
+//BFS01#endif
+//BFS01         rIn>>*pEdgeTrack;
+//BFS01     }
+//BFS01     aCon1.Read(rIn,this); // Die Connections haben
+//BFS01     aCon2.Read(rIn,this); // ihren eigenen Header.
+//BFS01 } else {
+//BFS01     rIn>>*pEdgeTrack;
+//BFS01     if (rHead.GetBytesLeft()>0) { // Aha, da ist noch mehr (Verbindungsdaten)
+//BFS01         aCon1.ReadTilV10(rIn,this); // Import der
+//BFS01         aCon2.ReadTilV10(rIn,this); // Connections
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 if(aCompat.GetBytesLeft() > 0)
+//BFS01 {
+//BFS01     // ab 10-08-1996 (noch Vers 12) Items fuer Verbinder
+//BFS01     SfxItemPool* pPool = GetItemPool();
+//BFS01     if(pPool)
+//BFS01     {
+//BFS01         sal_uInt16 nSetID = SDRATTRSET_EDGE;
+//BFS01         const SdrEdgeSetItem* pEdgeAttr = (const SdrEdgeSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
+//BFS01         if(pEdgeAttr)
+//BFS01             SetObjectItemSet(pEdgeAttr->GetItemSet());
+//BFS01     }
+//BFS01     else
+//BFS01     {
+//BFS01         sal_uInt16 nSuroDum;
+//BFS01         rIn >> nSuroDum;
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 if(aCompat.GetBytesLeft() > 0)
+//BFS01 {
+//BFS01     // ab 14-01-1997 (noch Vers 12) EdgeInfoRec
+//BFS01     rIn >> aEdgeInfo;
+//BFS01 }
+//BFS01}
 
-    aCon1.Write(rOut, this); // Die Connections haben
-    aCon2.Write(rOut, this); // ihren eigenen Header
-
-    SfxItemPool* pPool = GetItemPool();
-
-    if(pPool)
-    {
-        const SfxItemSet& rSet = GetObjectItemSet();
-
-        pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_EDGE));
-    }
-    else
-    {
-        rOut << UINT16(SFX_ITEMS_NULL);
-    }
-
-    rOut << aEdgeInfo;
-}
-
-void SdrEdgeObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    if (rIn.GetError()!=0) return;
-    SdrTextObj::ReadData(rHead,rIn);
-    if (rHead.GetVersion()<2) { // frueher war EdgeObj von PathObj abgeleitet
-        DBG_ERROR("SdrEdgeObj::ReadData(): Dateiversion<2 wird nicht mehr unterstuetzt");
-        rIn.SetError(SVSTREAM_WRONGVERSION); // Format-Fehler, File zu alt
-        return;
-    }
-    SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrEdgeObj");
-#endif
-    if (rHead.GetVersion()>=11) { // ab V11 ist alles eingepackt
-        {
-            SdrDownCompat aTrackCompat(rIn,STREAM_READ); // ab V11 eingepackt
-#ifdef DBG_UTIL
-            aTrackCompat.SetID("SdrEdgeObj(EdgeTrack)");
-#endif
-            rIn>>*pEdgeTrack;
-        }
-        aCon1.Read(rIn,this); // Die Connections haben
-        aCon2.Read(rIn,this); // ihren eigenen Header.
-    } else {
-        rIn>>*pEdgeTrack;
-        if (rHead.GetBytesLeft()>0) { // Aha, da ist noch mehr (Verbindungsdaten)
-            aCon1.ReadTilV10(rIn,this); // Import der
-            aCon2.ReadTilV10(rIn,this); // Connections
-        }
-    }
-
-    if(aCompat.GetBytesLeft() > 0)
-    {
-        // ab 10-08-1996 (noch Vers 12) Items fuer Verbinder
-        SfxItemPool* pPool = GetItemPool();
-        if(pPool)
-        {
-            sal_uInt16 nSetID = SDRATTRSET_EDGE;
-            const SdrEdgeSetItem* pEdgeAttr = (const SdrEdgeSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
-            if(pEdgeAttr)
-                SetObjectItemSet(pEdgeAttr->GetItemSet());
-        }
-        else
-        {
-            sal_uInt16 nSuroDum;
-            rIn >> nSuroDum;
-        }
-    }
-
-    if(aCompat.GetBytesLeft() > 0)
-    {
-        // ab 14-01-1997 (noch Vers 12) EdgeInfoRec
-        rIn >> aEdgeInfo;
-    }
-}
-
-void SdrEdgeObj::AfterRead()
-{
-    SdrTextObj::AfterRead();
-    aCon1.AfterRead(this);
-    aCon2.AfterRead(this);
-    if (aCon1.pObj!=NULL) aCon1.pObj->AddListener(*this);
-    if (aCon2.pObj!=NULL) aCon2.pObj->AddListener(*this);
-
-    // #84026# always recalculate edgetrack after load
-    bEdgeTrackDirty=TRUE;
-}
+//BFS01void SdrEdgeObj::AfterRead()
+//BFS01{
+//BFS01 SdrTextObj::AfterRead();
+//BFS01 aCon1.AfterRead(this);
+//BFS01 aCon2.AfterRead(this);
+//BFS01 if (aCon1.pObj!=NULL) aCon1.pObj->AddListener(*this);
+//BFS01 if (aCon2.pObj!=NULL) aCon2.pObj->AddListener(*this);
+//BFS01
+//BFS01 // #84026# always recalculate edgetrack after load
+//BFS01 bEdgeTrackDirty=TRUE;
+//BFS01}
 
 Point SdrEdgeObj::GetTailPoint( BOOL bTail ) const
 {
