@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpgrp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-30 14:29:26 $
+ *  last change: $Author: cl $ $Date: 2001-05-08 12:47:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,6 @@ void SdXMLGroupShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
     {
         SetStyle();
 
-        SdXMLShapeContext::StartElement(xAttrList);
         mxChilds = uno::Reference< drawing::XShapes >::query( mxShape );
         if( mxChilds.is() )
             GetImport().GetShapeImport()->pushGroupForSorting( mxChilds );
