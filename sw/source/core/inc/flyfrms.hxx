@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyfrms.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:20 $
+ *  last change: $Author: ama $ $Date: 2001-02-01 13:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,8 @@ public:
     virtual void  Format(  const SwBorderAttrs *pAttrs = 0 );
     virtual void  Modify( SfxPoolItem*, SfxPoolItem* );
 
-    void SetRefPoint( const Point& rPoint, const Point &rRelPos );
+    void SetRefPoint( const Point& rPoint, const Point &rRelAttr,
+        const Point &rRelPos );
     const Point &GetRefPoint() const { return aRef; }
     const Point &GetRelPos() const;
           long   GetLineHeight() const { return nLine; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: possiz.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: ama $ $Date: 2001-02-01 13:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ public:
 
     inline Size SvLSize() const { return Size( nWidth, nHeight ); }
     inline void SvLSize( const Size &rSize );
+    inline void SvXSize( const Size &rSize );
     inline sal_Bool operator==( const SwPosSize &rSize ) const;
     inline SwPosSize &operator=( const SwPosSize &rSize );
     inline SwPosSize &operator=( const Size &rSize );
@@ -106,6 +107,12 @@ inline void SwPosSize::SvLSize( const Size &rSize )
 {
     nWidth  = KSHORT(rSize.Width());
     nHeight = KSHORT(rSize.Height());
+}
+
+inline void SwPosSize::SvXSize( const Size &rSize )
+{
+    nHeight = KSHORT(rSize.Width());
+    nWidth = KSHORT(rSize.Height());
 }
 
 inline SwPosSize &SwPosSize::operator=( const Size &rSize )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-09 13:37:53 $
+ *  last change: $Author: ama $ $Date: 2001-02-01 14:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,8 @@ class SwTxtFormatter : public SwTxtPainter
         { return GetInfo().GetIdx() < GetInfo().GetReformatStart(); }
 
     // durch das Adjustment aendert sich die Position der Portions
-    void UpdatePos( SwLineLayout *pCurr, sal_Bool bAllWays = sal_False ) const;
+    void UpdatePos( SwLineLayout *pCurr, Point aStart, xub_StrLen nStartIdx,
+            sal_Bool bAllWays = sal_False ) const;
 
     // Setze alle FlyInCntFrms auf die uebergebene BaseLine
     void AlignFlyInCntBase( long nBaseLine ) const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-17 10:21:27 $
+ *  last change: $Author: ama $ $Date: 2001-02-01 14:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #include "flyfrm.hxx"     // SwFlyFrm
 #include "frmtool.hxx"    // ::DrawGraphic
 #include "porfld.hxx"       // SwGrfNumPortion
+#ifndef _PORMULTI_HXX
+#include <pormulti.hxx>     // SwMultiPortion
+#endif
 
 #ifdef VERT_DISTANCE
 #include <math.h>
@@ -252,7 +255,8 @@ void SwTxtFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
  * ( hauptsaechlich Korrrektur der X-Position )
  *************************************************************************/
 
-void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, sal_Bool bAllWays ) const
+void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, Point aStart,
+    xub_StrLen nStartIdx, sal_Bool bAllWays ) const
 {
     if( GetInfo().IsTest() )
         return;
@@ -262,14 +266,33 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, sal_Bool bAllWays ) const
     aTmpInf.SetSpaceAdd( pCurr->GetpSpaceAdd() );
     aTmpInf.ResetSpaceIdx();
     // Die Groesse des Frames
-    aTmpInf.SetIdx( GetStart() );
-    aTmpInf.SetPos( GetTopLeft() );
+    aTmpInf.SetIdx( nStartIdx );
+    aTmpInf.SetPos( aStart );
 
     long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
     lcl_MaxAscDescent( pPos, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
-    KSHORT nAscent, nTmpHeight;
-    CalcAscentAndHeight( nAscent, nTmpHeight );
-    long nTmpY = Y() + nAscent;
+    KSHORT nTmpHeight = pCurr->GetRealHeight();
+    KSHORT nAscent = pCurr->GetAscent() + nTmpHeight - pCurr->Height();
+    sal_uInt8 nFlags = SETBASE_ULSPACE;
+    if( GetMulti() )
+    {
+        aTmpInf.SetDirection( GetMulti()->GetDirection() );
+        if( GetMulti()->HasRotation() )
+        {
+            nFlags |= SETBASE_ROTATE;
+            if( GetMulti()->IsRevers() )
+            {
+                nFlags |= SETBASE_REVERSE;
+                aTmpInf.X( aTmpInf.X() - nAscent );
+            }
+            else
+                aTmpInf.X( aTmpInf.X() + nAscent );
+        }
+        else
+            aTmpInf.Y( aTmpInf.Y() + nAscent );
+    }
+    else
+        aTmpInf.Y( aTmpInf.Y() + nAscent );
 
     while( pPos )
     {
@@ -295,10 +318,34 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, sal_Bool bAllWays ) const
             }
             else
             {
-                const Point aBase( aTmpInf.X(), nTmpY );
-                ((SwFlyCntPortion*)pPos)->SetBase( aBase, nTmpAscent,
-                    nTmpDescent, nFlyAsc, nFlyDesc, SETBASE_ULSPACE );
+                ((SwFlyCntPortion*)pPos)->SetBase( aTmpInf.GetPos(), nTmpAscent,
+                    nTmpDescent, nFlyAsc, nFlyDesc, nFlags );
             }
+        }
+        if( pPos->IsMultiPortion() && ((SwMultiPortion*)pPos)->HasFlyInCntnt() )
+        {
+            ASSERT( !GetMulti(), "Too much multi" );
+            ((SwTxtFormatter*)this)->pMulti = (SwMultiPortion*)pPos;
+            SwLineLayout *pLay = &GetMulti()->GetRoot();
+            Point aSt( aStart );
+            if( GetMulti()->HasRotation() )
+            {
+                aSt.X() = aTmpInf.X();
+                aSt.Y() += pCurr->GetAscent() - GetMulti()->GetAscent();
+                if( GetMulti()->IsRevers() )
+                    aSt.X() += GetMulti()->Width();
+                else
+                    aSt.Y() += GetMulti()->Height();
+               }
+            xub_StrLen nStIdx = aTmpInf.GetIdx();
+            do
+            {
+                UpdatePos( pLay, aSt, nStIdx, bAllWays );
+                nStIdx += pLay->GetLen();
+                aSt.Y() += pLay->Height();
+                pLay = pLay->GetNext();
+            } while ( pLay );
+            ((SwTxtFormatter*)this)->pMulti = NULL;
         }
         pPos->Move( aTmpInf );
         pPos = pPos->GetPortion();
@@ -316,6 +363,13 @@ void SwTxtFormatter::AlignFlyInCntBase( long nBaseLine ) const
         return;
     SwLinePortion *pFirst = pCurr->GetFirstPortion();
     SwLinePortion *pPos = pFirst;
+    sal_uInt8 nFlags = SETBASE_NOFLAG;
+    if( GetMulti() && GetMulti()->HasRotation() )
+    {
+        nFlags |= SETBASE_ROTATE;
+        if( GetMulti()->IsRevers() )
+            nFlags |= SETBASE_REVERSE;
+    }
 
     long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
 
@@ -333,7 +387,7 @@ void SwTxtFormatter::AlignFlyInCntBase( long nBaseLine ) const
                 const Point aBase( ( (SwFlyCntPortion*)pPos)->GetRefPoint().X(),
                                    nBaseLine );
                 ((SwFlyCntPortion*)pPos)->SetBase( aBase, nTmpAscent, nTmpDescent,
-                    nFlyAsc, nFlyDesc, SETBASE_NOFLAG );
+                    nFlyAsc, nFlyDesc, nFlags );
             }
         }
         pPos = pPos->GetPortion();
@@ -578,11 +632,18 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
         nFlyAsc = nAscent;
 
     Point aBase( GetLeftMargin() + rInf.X(), Y() + nAscent );
+    sal_uInt8 nMode = IsQuick() ? SETBASE_QUICK : 0;
+    if( GetMulti() && GetMulti()->HasRotation() )
+    {
+        nMode |= SETBASE_ROTATE;
+        if( GetMulti()->IsRevers() )
+            nMode |= SETBASE_REVERSE;
+    }
 
     if( pFly )
     {
         pRet = new SwFlyCntPortion( pFly, aBase, nTmpAscent, nTmpDescent,
-                                    nFlyAsc, nFlyDesc, IsQuick() );
+                        nFlyAsc, nFlyDesc, nMode );
         // Wir muessen sicherstellen, dass unser Font wieder im OutputDevice
         // steht. Es koennte sein, dass der FlyInCnt frisch eingefuegt wurde,
         // dann hat GetFlyFrm dazu gefuehrt, dass er neu angelegt wird.
@@ -592,9 +653,7 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
         if( pRet->GetAscent() > nAscent )
         {
             aBase.Y() = Y() + pRet->GetAscent();
-            sal_uInt8 nMode = SETBASE_ULSPACE;
-            if( IsQuick() )
-                nMode |= SETBASE_QUICK;
+            nMode |= SETBASE_ULSPACE;
             if( !rInf.IsTest() )
                 pRet->SetBase( aBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc,
                                nMode );
@@ -603,7 +662,7 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
     else
     {
         pRet = new SwFlyCntPortion( (SwDrawContact*)pFrmFmt->FindContactObj(),
-           aBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, IsQuick() );
+           aBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode );
     }
     return pRet;
 }

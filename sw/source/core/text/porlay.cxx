@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-21 09:04:35 $
+ *  last change: $Author: ama $ $Date: 2001-02-01 14:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #include "porfly.hxx"   // SwFlyCntPortion
 #ifndef _PORRST_HXX
 #include <porrst.hxx>       // SwHangingPortion
+#endif
+#ifndef _PORMULTI_HXX
+#include <pormulti.hxx>     // SwMultiPortion
 #endif
 
 
@@ -342,7 +345,8 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                     {
                         if( Height() < nPosHeight )
                             Height( nPosHeight );
-                        if( pPos->IsFlyCntPortion() )
+                        if( pPos->IsFlyCntPortion() || ( pPos->IsMultiPortion()
+                            && ((SwMultiPortion*)pPos)->HasFlyInCntnt() ) )
                             rLine.SetFlyInCntBase();
                         if( pPos->IsFlyCntPortion() &&
                             ((SwFlyCntPortion*)pPos)->GetAlign() )

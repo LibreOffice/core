@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-21 09:10:30 $
+ *  last change: $Author: ama $ $Date: 2001-02-01 14:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -769,7 +769,8 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
              && ( rInf.X() + GetLeftMargin() >= rInf.GetPaintOfst() ) )
             rInf.SetPaintOfst( 0 );
 
-        if ( pPor->IsFlyCntPortion() )
+        if( pPor->IsFlyCntPortion() || ( pPor->IsMultiPortion() &&
+            ((SwMultiPortion*)pPor)->HasFlyInCntnt() ) )
             SetFlyInCntBase();
 
         rInf.SetFull( bFull );
@@ -834,7 +835,7 @@ void SwTxtFormatter::CalcAdjustLine( SwLineLayout *pCurr )
             CalcAdjLine( pCurr );
             // 23348: z.B. bei zentrierten Flys muessen wir den RefPoint
             // auf jeden Fall umsetzen, deshalb bAllWays = sal_True
-            UpdatePos( pCurr, sal_True );
+            UpdatePos( pCurr, GetTopLeft(), GetStart(), sal_True );
         }
     }
 }
@@ -1233,10 +1234,20 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
             {
                 SwMultiPortion* pTmp = NULL;
                 if( RES_TXTATR_CJK_RUBY == pTwoLines->Which() )
-                    pTmp = new SwRubyPortion( *pTwoLines,*rInf.GetFont(),nEnd );
+                     pTmp = new SwRubyPortion( *pTwoLines,*rInf.GetFont(),nEnd );
                 else
 #ifdef ROTATION_TEST
-                    pTmp = new SwRotatedPortion( nEnd );
+                {
+                    static sal_uInt8 nTst = 1;
+                    switch ( nTst )
+                    {
+                        case 1 :
+                        case 3 : pTmp = new SwRotatedPortion( nEnd, nTst );
+                                 break;
+                        default:
+                        pTmp = new SwDoubleLinePortion( *pTwoLines, nEnd );
+                    }
+                }
 #else
                     pTmp = new SwDoubleLinePortion( *pTwoLines, nEnd );
 #endif
@@ -1447,7 +1458,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
     }
 
     if ( IsFlyInCntBase() && !IsQuick() )
-        UpdatePos( pCurr );
+        UpdatePos( pCurr, GetTopLeft(), GetStart() );
 
     return nNewStart;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyincnt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:22 $
+ *  last change: $Author: ama $ $Date: 2001-02-01 13:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,12 +123,13 @@ SwFlyInCntFrm::~SwFlyInCntFrm()
 |*  Letzte Aenderung    MA 06. Aug. 95
 |*
 |*************************************************************************/
-void SwFlyInCntFrm::SetRefPoint( const Point& rPoint, const Point& rRelPos )
+void SwFlyInCntFrm::SetRefPoint( const Point& rPoint, const Point& rRelAttr,
+    const Point& rRelPos )
 {
-    ASSERT( rPoint != aRef || rRelPos != aRelPos, "SetRefPoint: no change" );
+    ASSERT( rPoint != aRef || rRelAttr != aRelPos, "SetRefPoint: no change" );
     const SwFlyNotify aNotify( this );
     aRef = rPoint;
-    aRelPos = rRelPos;
+    aRelPos = rRelAttr;
     Frm().Pos( rPoint + rRelPos );
 /*
     //Kein InvalidatePos hier, denn das wuerde dem Cntnt ein Prepare
