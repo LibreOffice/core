@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-07 14:50:41 $
+ *  last change: $Author: mtg $ $Date: 2001-06-12 16:07:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,8 +614,8 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
         { SW_PROP_NAME(UNO_NAME_HYPER_LINK_U_R_L   ),           RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),      PropertyAttribute::MAYBEVOID ,MID_URL_URL},                                                                 \
         { SW_PROP_NAME(UNO_NAME_HYPER_LINK_TARGET  ),           RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),      PropertyAttribute::MAYBEVOID ,MID_URL_TARGET},                                                              \
         { SW_PROP_NAME(UNO_NAME_HYPER_LINK_NAME ),          RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID ,MID_URL_HYPERLINKNAME  },                                                      \
-        { SW_PROP_NAME(UNO_NAME_UNVISITED_CHAR_STYLE_NAME),   RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),       PropertyAttribute::MAYBEVOID ,MID_URL_VISITED_FMT   },                                                       \
-        { SW_PROP_NAME(UNO_NAME_VISITED_CHAR_STYLE_NAME),     RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),        PropertyAttribute::MAYBEVOID ,MID_URL_UNVISITED_FMT  },                                                     \
+        { SW_PROP_NAME(UNO_NAME_UNVISITED_CHAR_STYLE_NAME),   RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),       PropertyAttribute::MAYBEVOID ,MID_URL_UNVISITED_FMT   },                                                       \
+        { SW_PROP_NAME(UNO_NAME_VISITED_CHAR_STYLE_NAME),     RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),        PropertyAttribute::MAYBEVOID ,MID_URL_VISITED_FMT  },                                                     \
         { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),       RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },                                   \
         { SW_PROP_NAME(UNO_NAME_TEXT_USER_DEFINED_ATTRIBUTES),  RES_TXTATR_UNKNOWN_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },                               \
         { SW_PROP_NAME(UNO_NAME_PARA_SHADOW_FORMAT),            RES_SHADOW,             &::getCppuType((const table::ShadowFormat*)0),  PROPERTY_NONE, CONVERT_TWIPS}, \
