@@ -51,4 +51,4 @@ st	svtools\source\svhtml				nmake	-	all	st_html NULL
 st	svtools\source\passwordcontainer		nmake	-	all	st_passcont NULL
 st  svtools\source\syslocale                nmake   -   all st_sysloc NULL
 st	svtools\source\filepicker               nmake	-	all	st_filepick st_bmp NULL
-st  svtools\util                            nmake   -   all st_util st__brw st__access st__ctr st__dde st__item st__misc st__srch st__url st_cmdparse st_ctl st_dial st_edit st_file st_html st_papp st_rtf st_sql st_usdde.u st_ufilt.u st_undo st_uno st_vfilt st_vigif st_vipng st_vixbm st_vixpm st_vjpeg st_vwmf st_passcont st_sysloc st_filepick	st_not NULL
+st  svtools\util                            nmake   -   all st_util st__brw st__access st__ctr st__dde st__item st__misc st__srch st__url st_cmdparse st_ctl st_dial st_edit st_file st_html st_papp st_rtf st_sql st_usdde.u st_ufilt.u st_undo st_uno st_vfilt st_vigif st_vipng st_vixbm st_vixpm st_vjpeg st_vwmf st_passcont st_sysloc st_filepick st_not st_conf NULL
