@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-24 20:44:00 $
+ *  last change: $Author: kz $ $Date: 2001-11-01 22:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_traditional ] = "ι‚„δΈε—ζ”―ζ΄η„ Excel ζª”ζ΅ζ ΌεΌγ€‚";
         Text[ arabic ] = "ΚδΣνή γαέ Excel αγ νΚγ ΚδένΠε ΘΪΟ.";
         Text[ greek ] = "Μορφή αρχείου Excel που δεν έχει υλοποιηθεί ακόμη.";
-        Text[ korean ] = "Excel νμΌν¬λ§·μ΄ μ•„μ§ κµ¬ν„λμ§€ μ•μ•μµλ‹λ‹¤.";
+        Text[ korean ] = "Excel νμΌ ν•μ‹μ΄ μ•„μ§ κµ¬ν„λμ§€ μ•μ•μµλ‹λ‹¤.";
         Text[ turkish ] = "Henόz kullanύlmayan Excel dosya formatύ.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Formato del archivo Excel aϊn no implementado.";
@@ -355,7 +355,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_traditional ] = "ε…§ιƒ¨θΌΈε…¥ι―θª¤γ€‚";
         Text[ arabic ] = "ΞΨΓ ΗΣΚνΡΗΟ ΟΗΞαν";
         Text[ greek ] = "Εσωτερικό σφάλμα εισαγωγής.";
-        Text[ korean ] = "λ‚΄λ¶€ κ°€μ Έμ¤κΈ°μ¤λ¥.";
+        Text[ korean ] = "λ‚΄λ¶€ κ°€μ Έμ¤κΈ° μ¤λ¥.";
         Text[ turkish ] = "έη iηe aktarma hatasύ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error de importaciσn interno.";
@@ -652,7 +652,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_traditional ] = "ι€™ε€‹ζ–‡δ»¶ε«ζ‰η„ε—ζ•Έθ¶…ιε—ε°ζ ΌεΌζ”―ζη„η―„εγ€‚\nθ¶…ιη„ε—δΈζƒθΆ«ε„²ε­γ€‚";
         Text[ arabic ] = "νΝΚζν ΗαγΣΚδΟ Ϊαμ ΪΟΟ γδ ΗαΥέζέ νέζή ΗαΪΟΟ ΗαΠν νγίδ ααΚδΣνή ΗαγΝΟΟ ΟΪγε.\nαγ νΚγ ΝέΩ ΗαΥέζέ ΗαÒΗΖΟΙ.";
         Text[ greek ] = "Το έγγραφο περιέχει περισσότερες γραμμές από ότι υποστηρίζει η μορφή \nεξαγωγής. Οι πλεονάζουσες γραμμές δεν αποθηκεύτηκαν.";
-        Text[ korean ] = "μ¶λ ¥ν¬λ§·μ΄ μ§€μ›ν•  μ μλ”κ²ƒλ³΄λ‹¤ λ” λ§μ€ ν–‰μ΄ λ¬Έμ„μ— ν¬ν•¨λμ–΄ μμµλ‹λ‹¤.\nμ΄κ³Όλλ” ν–‰μ€ μ €μ¥λμ§€ μ•μ•μµλ‹λ‹¤.";
+        Text[ korean ] = "μ¶λ ¥ ν•μ‹μ΄ μ§€μ›ν•  μ μλ”κ²ƒλ³΄λ‹¤ λ” λ§μ€ ν–‰μ΄ λ¬Έμ„μ— ν¬ν•¨λμ–΄ μμµλ‹λ‹¤.\nμ΄κ³Όλλ” ν–‰μ€ μ €μ¥λμ§€ μ•μ•μµλ‹λ‹¤.";
         Text[ turkish ] = "Belge, ηύktύ formatύnύn desteklediπinden ηok satύr iηeriyor.\nFazla gelen satύrlar kaydedilmedi.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El documento contiene mas filas de las que soporta el formato seleccionado.\nLas filas adicionales no se guardaron.";
@@ -720,7 +720,7 @@ Resource RID_ERRHDLSC
         Text[ russian ] = "Οπεξαπΰηξβΰςό ρλεδσώωθε ηνΰκθ β βϋαπΰννϋι νΰαξπ ηνΰκξβ νεβξημξζνξ.\nΟξύςξμσ ξνθ οπεδρςΰβλενϋ κΰκ &#1234:\n\n$(ARG1)";
         Text[ greek ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
         Text[ dutch ] = "De volgende tekens konden niet worden geconverteerd naar het geselecteerde tekenset\nen werden geschreven als ? vervangende weergave:\n\n$(ARG1)";
-        Text[ french ] = "Impossible de convertir les caractθres suivants dans le jeu choisi ;\nils ont ιtι ιcrits comme substituants &#1234; :\n\n$(ARG1)";
+        Text[ french ] = "Impossible de convertir les caractθres suivants dans le jeu choisi ;\nils ont ιtι ιcrits comme substitution &#1234; :\n\n$(ARG1)";
         Text[ spanish ] = "No se pudieron convertir los siguientes caracteres en los juegos de caracteres seleccionados,\npor lo que se guardaron en la representaciσn sustitutoria:\n\n$(ARG1)";
         Text[ finnish ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
         Text[ italian ] = "I seguenti caratteri non possono essere convertiti secondo il tipo di caratttere selezionato\ne sono stati scritti come surrogati &#1234; :\n\n$(ARG1)";
@@ -763,6 +763,7 @@ Resource RID_ERRHDLSC
         Text[ language_user1 ] = "should be the same text like in the writer";
     };
 };
+
 
 
 
