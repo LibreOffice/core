@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:15:28 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -757,7 +757,9 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
     const INetURLObject aActName(pActMed->GetName());
 
     // Don't show filter options dialog
-    if ( pRequest->GetSlot() == SID_DIRECTEXPORTDOCASPDF )
+    if ( pRequest->GetSlot() == SID_DIRECTEXPORTDOCASPDF ||
+            (pParams && SFX_ITEM_SET == pParams->GetItemState( SID_FILE_FILTEROPTIONS, sal_False ))
+            )
         bSuppressFilterOptionsDialog = sal_True;
 
     if( !bSuppressFilterOptionsDialog &&
