@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DeviceCapability.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:32 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,27 +68,25 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::awt::DeviceCapability
 /** defines which capabilities a device supports.
  */
 constants DeviceCapability
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::DeviceCapability::RASTEROPERATIONS
     /** supports the device raster operations.
 
-                @see XGraphics::setRasterOp
+        @see XGraphics::setRasterOp
      */
     const long RASTEROPERATIONS = 1;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::DeviceCapability::GETBITS
-    /** supports the XDevice::copyBitmap,
-                the XDevice::createDevice and the XGraphics::copy and methods.
+    /** supports the <member>XDevice::createBitmap</member>,
+        the <member>XDevice::createDevice</member> and the
+        <member>XGraphics::copy</member> methods.
 
-                @see XGraphics::setRasterOp
+        @see XGraphics::setRasterOp
      */
     const long GETBITS = 2;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DeviceInfo.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:32 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,76 +68,69 @@
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::awt::DeviceInfo
 /** contains information about a device.
  */
 struct DeviceInfo
 {
-    // DocMerge from xml: field com::sun::star::awt::DeviceInfo::Width
+    //-------------------------------------------------------------------------
+
     /** contains the width of the device in pixels.
      */
     long Width;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::DeviceInfo::Height
     /** contains the height of the device in pixels.
      */
     long Height;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::DeviceInfo::LeftInset
     /** contains the inset from the left.
      */
     long LeftInset;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::DeviceInfo::TopInset
     /** contains the inset from the top.
      */
     long TopInset;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::DeviceInfo::RightInset
     /** contains the inset from the right.
      */
     long RightInset;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::DeviceInfo::BottomInset
     /** contains the inset from the bottom.
      */
     long BottomInset;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::DeviceInfo::PixelPerMeterX
     /** contains the X-axis resolution of the device in pixel/meter.
      */
     double PixelPerMeterX;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::DeviceInfo::PixelPerMeterY
     /** contains the Y-axis resolution of the device in pixel/meter.
      */
     double PixelPerMeterY;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::DeviceInfo::BitsPerPixel
     /** contains the color-depth of the device.
      */
     short BitsPerPixel;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::DeviceInfo::Capabilities
-    /** specifies special operations which are possible on the device.@see DeviceCapability
+    /** specifies special operations which are possible on the device.
+
+        @see DeviceCapability
      */
     long Capabilities;
 
