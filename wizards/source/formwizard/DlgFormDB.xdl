@@ -4,11 +4,11 @@
  <dlg:bulletinboard>
   <dlg:text dlg:id="lblSelFields" dlg:tab-index="0" dlg:left="154" dlg:top="70" dlg:width="110" dlg:height="8" dlg:page="1" dlg:value="lblSelFields"/>
   <dlg:menulist dlg:id="lstDatabases" dlg:tab-index="1" dlg:left="6" dlg:top="51" dlg:width="110" dlg:height="12" dlg:page="1" dlg:help-url="HID:34410" dlg:spin="true">
-   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="FormWizard.DBMeta.GetSelectedDBMetaData" script:language="StarBasic"/>
+   <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="FormWizard.DBMeta.GetSelectedDBMetaData" script:language="StarBasic"/>
    <script:event script:event-name="on-mousedown" script:location="application" script:macro-name="FormWizard.FormWizard.DeleteFirstDBListBoxEntry" script:language="StarBasic"/>
   </dlg:menulist>
   <dlg:menulist dlg:id="lstTables" dlg:tab-index="2" dlg:left="122" dlg:top="51" dlg:width="142" dlg:height="12" dlg:page="1" dlg:help-url="HID:34411" dlg:spin="true">
-   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="FormWizard.FormWizard.FormGetFields" script:language="StarBasic"/>
+   <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="FormWizard.FormWizard.FormGetFields" script:language="StarBasic"/>
    <script:event script:event-name="on-mousedown" script:location="application" script:macro-name="FormWizard.FormWizard.DeleteFirstTableListBoxEntry" script:language="StarBasic"/>
   </dlg:menulist>
   <dlg:img dlg:id="imgTheme" dlg:tab-index="3" dlg:left="6" dlg:top="6" dlg:width="258" dlg:height="26" dlg:scale-image="false"/>
