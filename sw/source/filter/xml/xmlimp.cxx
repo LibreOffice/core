@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 17:28:24 $
+ *  last change: $Author: mib $ $Date: 2001-03-06 11:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,6 +314,7 @@ SwXMLImport::SwXMLImport(sal_uInt16 nImportFlags) :
     bLoadDoc( sal_True ),
     bInsert( sal_False ),
     bBlock( sal_False ),
+    bOrganizerMode( sal_False ),
     nStyleFamilyMask( SFX_STYLE_FAMILY_ALL ),
     pDocElemTokenMap( 0 ),
     pTableElemTokenMap( 0 ),
@@ -391,6 +392,10 @@ void SwXMLImport::setBlockMode( )
     bBlock = sal_True;
 }
 
+void SwXMLImport::setOrganizerMode( )
+{
+    bOrganizerMode = sal_True;
+}
 
 const Sequence< sal_Int8 > & SwXMLImport::getUnoTunnelId() throw()
 {

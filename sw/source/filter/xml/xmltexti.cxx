@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-02 14:03:38 $
+ *  last change: $Author: mib $ $Date: 2001-03-06 11:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,8 +126,9 @@ using namespace ::com::sun::star::xml::sax;
 SwXMLTextImportHelper::SwXMLTextImportHelper(
         const Reference < XModel>& rModel,
         sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress,
-        sal_Bool bBlockM) :
-    XMLTextImportHelper( rModel, bInsertM, bStylesOnlyM, bProgress, bBlockM ),
+        sal_Bool bBlockM, sal_Bool bOrganizerM ) :
+    XMLTextImportHelper( rModel, bInsertM, bStylesOnlyM, bProgress, bBlockM,
+                         bOrganizerM ),
     pRedlineHelper(NULL)
 {
 }
@@ -379,7 +380,7 @@ XMLTextImportHelper* SwXMLImport::CreateTextImport()
 {
     return new SwXMLTextImportHelper( GetModel(), IsInsertMode(),
                                       IsStylesOnlyMode(), bShowProgress,
-                                      IsBlockMode() );
+                                      IsBlockMode(), IsOrganizerMode() );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-02 21:02:30 $
+ *  last change: $Author: mib $ $Date: 2001-03-06 11:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ class SwXMLImport: public SvXMLImport
     sal_Bool                bAutoStylesValid : 1;
     sal_Bool                bProgressValid : 1;
     sal_Bool                bShowProgress : 1;
+    sal_Bool                bOrganizerMode : 1;
 
     void                    _InitItemImport();
     void                    _FinitItemImport();
@@ -155,6 +156,7 @@ public:
     void         setStyleInsertMode( sal_uInt16 nFamilies,
                                      sal_Bool bOverwrite );
     void         setBlockMode();
+    void         setOrganizerMode();
 
     // ::com::sun::star::xml::sax::XDocumentHandler
     virtual void SAL_CALL startDocument(void)
@@ -190,6 +192,7 @@ public:
     sal_Bool IsInsertMode() const { return bInsert; }
     sal_Bool IsStylesOnlyMode() const { return !bLoadDoc; }
     sal_Bool IsBlockMode() const { return bBlock; }
+    sal_Bool IsOrganizerMode() const { return bOrganizerMode; }
 
     inline const SvXMLUnitConverter& GetTwipUnitConverter() const;
     inline const SvXMLImportItemMapper& GetTableItemMapper() const;

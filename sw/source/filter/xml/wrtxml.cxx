@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-02 21:02:30 $
+ *  last change: $Author: mib $ $Date: 2001-03-06 11:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,20 +306,22 @@ sal_uInt32 SwXMLWriter::_Write()
     // export sub streams for package, else full stream into a file
     if (NULL != pStg)
     {
-        WriteThroughComponent(
-            pStg, xModelComp, "content.xml", xServiceFactory,
-            "com.sun.star.comp.Writer.XMLContentExporter",
-            aFilterArgs, aProps, bBlock );
+        if( !bOrganizerMode )
+            WriteThroughComponent(
+                pStg, xModelComp, "meta.xml", xServiceFactory,
+                "com.sun.star.comp.Writer.XMLMetaExporter",
+                aEmptyArgs, aProps, bBlock );
 
         WriteThroughComponent(
             pStg, xModelComp, "styles.xml", xServiceFactory,
             "com.sun.star.comp.Writer.XMLStylesExporter",
             aFilterArgs, aProps, bBlock );
 
-        WriteThroughComponent(
-            pStg, xModelComp, "meta.xml", xServiceFactory,
-            "com.sun.star.comp.Writer.XMLMetaExporter",
-            aEmptyArgs, aProps, bBlock );
+        if( !bOrganizerMode )
+            WriteThroughComponent(
+                pStg, xModelComp, "content.xml", xServiceFactory,
+                "com.sun.star.comp.Writer.XMLContentExporter",
+                aFilterArgs, aProps, bBlock );
 
         // export auto text events (if in block mode)
         if ( bBlock  )
@@ -376,7 +378,7 @@ sal_Bool SwXMLWriter::IsStgWriter() const
 
 void GetXMLWriter( const String& rName, WriterRef& xRet )
 {
-    xRet = new SwXMLWriter( rName.EqualsAscii( "XML" ) );
+    xRet = new SwXMLWriter( rName.EqualsAscii( FILTER_XMLP ) );
 }
 
 // -----------------------------------------------------------------------
@@ -385,11 +387,14 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.18 2001-03-02 21:02:30 dvo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.19 2001-03-06 11:05:07 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.18  2001/03/02 21:02:30  dvo
+      - changed: content and styles are written as separate streams
+
       Revision 1.17  2001/03/01 15:47:53  dvo
       - #84291# fixed: assertion removed (it's legal for the asserted condition to occur)
 

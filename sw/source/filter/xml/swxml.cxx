@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-05 13:11:51 $
+ *  last change: $Author: mib $ $Date: 2001-03-06 11:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,8 @@ sal_Int32 ReadThroughComponent(
     Reference<XTextRange> & rInsertTextRange,
     sal_Bool bFormatsOnly,
     sal_uInt16 nStyleFamilyMask,
-    sal_Bool bMergeStyles)
+    sal_Bool bMergeStyles,
+    sal_Bool bOrganizerMode )
 {
     DBG_ASSERT(xInputStream.is(), "input stream missing");
     DBG_ASSERT(xModelComponent.is(), "document missing");
@@ -191,7 +192,7 @@ sal_Int32 ReadThroughComponent(
     xImporter->setTargetDocument( xModelComponent );
 
     // prepare filter for special modes
-    if( bBlockMode || bFormatsOnly || rInsertTextRange.is() )
+    if( bBlockMode || bFormatsOnly || rInsertTextRange.is() || bOrganizerMode )
     {
         Reference<XUnoTunnel> xFilterTunnel( xFilter, UNO_QUERY );
         if (xFilterTunnel.is())
@@ -210,6 +211,9 @@ sal_Int32 ReadThroughComponent(
 
                 if ( bBlockMode )
                     pFilter->setBlockMode();
+
+                if ( bOrganizerMode )
+                    pFilter->setOrganizerMode();
             }
         }
     }
@@ -261,7 +265,8 @@ sal_Int32 ReadThroughComponent(
     Reference<XTextRange> & rInsertTextRange,
     sal_Bool bFormatsOnly,
     sal_uInt16 nStyleFamilyMask,
-    sal_Bool bMergeStyles)
+    sal_Bool bMergeStyles,
+    sal_Bool bOrganizerMode )
 {
     DBG_ASSERT(NULL != pStorage, "Need storage!");
     DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
@@ -294,7 +299,7 @@ sal_Int32 ReadThroughComponent(
     return ReadThroughComponent(
         xInputStream, xModelComponent, rFactory, pFilterName, rFilterArguments,
         rName, bBlockMode, rInsertTextRange, bFormatsOnly,
-        nStyleFamilyMask, bMergeStyles);
+        nStyleFamilyMask, bMergeStyles, bOrganizerMode );
 }
 
 
@@ -416,24 +421,28 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     if ( NULL != pStorage )
     {
         // read storage streams
-
-        nRet = ReadThroughComponent(
-           pStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
-           "com.sun.star.comp.Writer.XMLContentImporter",
-           aFilterArgs, rName, IsBlockMode(), xInsertTextRange,
-           aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge() );
+        if( !IsOrganizerMode() )
+            ReadThroughComponent(
+                pStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
+                "com.sun.star.comp.Writer.XMLMetaImporter",
+                aEmptyArgs, rName, IsBlockMode(), xInsertTextRange,
+                aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
+                sal_False );
 
         ReadThroughComponent(
             pStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
             "com.sun.star.comp.Writer.XMLStylesImporter",
             aFilterArgs, rName, IsBlockMode(), xInsertTextRange,
-            aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge() );
+            aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
+            IsOrganizerMode() );
 
-        ReadThroughComponent(
-            pStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
-            "com.sun.star.comp.Writer.XMLMetaImporter",
-            aEmptyArgs, rName, IsBlockMode(), xInsertTextRange,
-            aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge() );
+        if( !IsOrganizerMode() )
+            nRet = ReadThroughComponent(
+               pStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
+               "com.sun.star.comp.Writer.XMLContentImporter",
+               aFilterArgs, rName, IsBlockMode(), xInsertTextRange,
+               aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
+               sal_False );
 
         if (IsBlockMode())
             ReadThroughComponent(
@@ -441,7 +450,8 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
                 xServiceFactory,
                 "com.sun.star.comp.Writer.XMLAutotextEventsImporter",
                 aEmptyArgs, rName, IsBlockMode(), xInsertTextRange,
-                aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge() );
+                aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
+                sal_False );
     }
     else
     {
@@ -459,7 +469,8 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
             xInputStream, xModelComp, xServiceFactory,
             "com.sun.star.comp.Writer.XMLImporter",
             aFilterArgs, rName, IsBlockMode(), xInsertTextRange,
-            aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge() );
+            aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
+            IsOrganizerMode() );
     }
 
     if( pGraphicHelper )
