@@ -2,9 +2,9 @@
 #
 #   $RCSfile: postset.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hjs $ $Date: 2001-12-05 13:01:27 $
+#   last change: $Author: hjs $ $Date: 2001-12-14 19:05:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,10 +61,8 @@
 #*************************************************************************
 
 
-defaultlang=deut
-defaultlangext=49
 
-.IF "$(RES_GER)"!=""
+#.IF "$(RES_GER)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=49
 deut$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_49=deut
@@ -74,9 +72,10 @@ rsclang_49=-lgGERMAN $(IBM_PC_437)
 rescharset_49=$(deut$(LANG_GUI))
 RCLANGFLAGS_49+= -d GERMAN
 iso_49=de
-.ENDIF
+defaultlangext=49
+#.ENDIF
 
-.IF "$(RES_ENUS)"!=""
+.IF "$(RES_ENUS)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=01
 enus$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_01=enus
@@ -86,6 +85,7 @@ rsclang_01=-lgENGLISH_US $(IBM_PC_437)
 rescharset_01=$(enus$(LANG_GUI))
 RCLANGFLAGS_01+= -d ENGLISH
 iso_01=en-US
+#defaultlangext=01
 .ENDIF
 
 .IF "$(RES_ITAL)"!="" || "$(give_me_all_languages)"!=""
