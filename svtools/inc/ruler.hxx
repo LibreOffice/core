@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 17:18:47 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:46:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,6 +632,9 @@ struct RulerBorder
     long    nPos;
     long    nWidth;
     USHORT  nStyle;
+    //minimum/maximum position, supported for table borders/rows
+    long    nMinPos;
+    long    nMaxPos;
 };
 
 // ---------------
