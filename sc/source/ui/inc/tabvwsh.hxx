@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:29:51 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 
 #ifndef _VIEWFAC_HXX //autogen
 #include <sfx2/viewfac.hxx>
+#endif
+
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
 #endif
 
 #ifndef SC_DBFUNC_HXX
@@ -143,7 +147,7 @@ enum ObjectSelectionType
 //==================================================================
 
 
-class ScTabViewShell: public SfxViewShell, public ScDBFunc
+class SC_DLLPUBLIC ScTabViewShell: public SfxViewShell, public ScDBFunc
 {
 private:
     static USHORT           nInsertCtrlState;
@@ -223,18 +227,18 @@ private:
 
 
 private:
-    void    Construct( BYTE nForceDesignMode = SC_FORCEMODE_NONE );
+    SC_DLLPRIVATE void  Construct( BYTE nForceDesignMode = SC_FORCEMODE_NONE );
 
-    void            SetMySubShell( SfxShell* pShell );
-    SfxShell*       GetMySubShell() const;
+    SC_DLLPRIVATE void          SetMySubShell( SfxShell* pShell );
+    SC_DLLPRIVATE SfxShell*     GetMySubShell() const;
 
-    void            DoReadUserData( const String& rData );
+    SC_DLLPRIVATE void          DoReadUserData( const String& rData );
 
-    DECL_LINK( SimpleRefClose, String* );
-    DECL_LINK( SimpleRefDone, String* );
-    DECL_LINK( SimpleRefAborted, String* );
-    DECL_LINK( SimpleRefChange, String* );
-    DECL_LINK( FormControlActivated, FmFormShell* );
+    SC_DLLPRIVATE DECL_LINK( SimpleRefClose, String* );
+    SC_DLLPRIVATE DECL_LINK( SimpleRefDone, String* );
+    SC_DLLPRIVATE DECL_LINK( SimpleRefAborted, String* );
+    SC_DLLPRIVATE DECL_LINK( SimpleRefChange, String* );
+    SC_DLLPRIVATE DECL_LINK( FormControlActivated, FmFormShell* );
 
 protected:
     virtual void    Activate(BOOL bMDI);
