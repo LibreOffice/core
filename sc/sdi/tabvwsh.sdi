@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.sdi,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:27:54 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 17:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,9 +139,18 @@ interface BaseSelection : Selection
     SID_DRAW_NOTEEDIT       [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
     SID_OBJECTRESIZE        [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
 
-     //SID_CHOOSE_CONTROLS  [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
-    SID_OBJECT_SELECT       [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
-    SID_INSERT_DRAW         [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+     //SID_CHOOSE_CONTROLS          [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_OBJECT_SELECT               [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_INSERT_DRAW                 [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_FONTWORK_GALLERY_FLOATER    [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAWTBX_CS_BASIC            [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAWTBX_CS_SYMBOL           [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAWTBX_CS_ARROW            [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAWTBX_CS_FLOWCHART        [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAWTBX_CS_CALLOUT          [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAWTBX_CS_STAR             [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_DRAW_CS_ID                  [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+
     SID_FM_CREATE_CONTROL   [ ExecMethod = ExecDraw ; ]
     SID_LINKS               [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_DRAW_CHART          [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
