@@ -2,9 +2,9 @@
 *
 *  $RCSfile: UCBStreamHandler.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: svesik $ $Date: 2004-04-19 23:07:24 $
+*  last change: $Author: hr $ $Date: 2004-07-23 14:00:14 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -71,40 +71,42 @@ import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.io.XInputStream;
+import com.sun.star.io.XOutputStream;
+import com.sun.star.io.XTruncate;
 
 import com.sun.star.script.framework.log.LogUtils;
+import com.sun.star.script.framework.provider.PathUtils;
 
 public class UCBStreamHandler extends URLStreamHandler {
 
-    public final static String UCBSCHEME = "vnd.sun.star.pkg";
     public final static String separator = "/ucb/";
 
     private XComponentContext m_xContext = null;
     private XMultiComponentFactory m_xMultiComponentFactory = null;
     private XSimpleFileAccess m_xSimpleFileAccess = null;
     private HashMap m_jarStreamMap = new HashMap(12);
+    public static String m_ucbscheme;
 
-    public UCBStreamHandler(XComponentContext ctxt) {
+    public UCBStreamHandler( XComponentContext ctxt, String scheme, XSimpleFileAccess xSFA )
+    {
+        LogUtils.DEBUG( "UCBStreamHandler ctor, scheme = " + scheme );
         this.m_xContext = ctxt;
-        this.m_xMultiComponentFactory = m_xContext.getServiceManager();
-
-        try {
-            Object obj = m_xMultiComponentFactory.createInstanceWithContext(
-                "com.sun.star.ucb.SimpleFileAccess", ctxt);
-            m_xSimpleFileAccess = (XSimpleFileAccess)
-                UnoRuntime.queryInterface( XSimpleFileAccess.class, obj );
-        }
-        catch (Exception e) {}
+        this.m_ucbscheme = scheme;
+        this.m_xSimpleFileAccess = xSFA;
     }
 
     public void parseURL(URL url, String spec, int start, int limit) {
+        LogUtils.DEBUG("**XUCBStreamHandler, parseURL: " + url + " spec: " + spec + " start: " + start + " limit: " + limit );
+
         String file = url.getFile();
         if (file == null)
-            file = spec.substring(start, limit);
+            file =  spec.substring(start, limit);
         else
             file += spec.substring(start, limit);
 
-        setURL(url, url.getProtocol(), null, -1, null, null, file, null, null);
+        LogUtils.DEBUG("**For scheme = " + m_ucbscheme );
+        LogUtils.DEBUG("**Setting path = " + file );
+        setURL(url, m_ucbscheme, null, -1, null, null, file, null, null);
     }
 
     public URLConnection openConnection(URL u) throws IOException {
@@ -121,22 +123,60 @@ public class UCBStreamHandler extends URLStreamHandler {
         }
 
         public InputStream getInputStream() throws IOException {
-            String url = UCBSCHEME + ":" + getURL().getFile().toString();
-            if (url.lastIndexOf(separator) == -1) {
-                return getFileStreamFromUCB(url);
+            LogUtils.DEBUG("UCBConnectionHandler GetInputStream on " + url );
+            String sUrl = url.toString();
+            if (sUrl.lastIndexOf(separator) == -1) {
+                LogUtils.DEBUG("getInputStream straight file load" );
+                return getFileStreamFromUCB(sUrl);
             }
             else {
-                String path = url.substring(0, url.lastIndexOf(separator));
-                String file = url.substring(
-                    url.lastIndexOf(separator) + separator.length());
-
-                // System.out.println("[Loading: " + file + " from: " +
-                //     path.substring(path.lastIndexOf("/")) + "]");
-
+                String path = sUrl.substring(0, sUrl.lastIndexOf(separator) );
+                String file = sUrl.substring(
+                    sUrl.lastIndexOf(separator) + separator.length());
+                LogUtils.DEBUG("getInputStream, load of file from another file eg. " + file + " from " + path );
                 return getUCBStream(file, path);
             }
         }
+        public OutputStream getOutputStream() throws IOException {
+            LogUtils.DEBUG("UCBConnectionHandler getOutputStream on " + url );
+            OutputStream os = null;
+            try
+            {
+                String sUrl = url.toString();
+                if ( !( sUrl.lastIndexOf(separator) == -1) ) {
+                    String path = sUrl.substring(0, sUrl.lastIndexOf(separator));
+                    String file = sUrl.substring(
+                        sUrl.lastIndexOf(separator) + separator.length());
+                    LogUtils.DEBUG("getOutputStream, create o/p  stream  for file eg. " + path  );
+
+                    // we will only deal with simple file write
+                    XOutputStream xos = m_xSimpleFileAccess.openFileWrite( path );
+                    XTruncate xtrunc = ( XTruncate ) UnoRuntime.queryInterface( XTruncate.class, xos );
+                    if ( xtrunc != null )
+                    {
+                        xtrunc.truncate();
+                    }
+                    os = new XOutputStreamWrapper( xos );
+                }
+                if ( os == null )
+                {
+                    throw new IOException("Failed to get OutputStream for " + sUrl );
+                }
+            }
+            catch ( com.sun.star.ucb.CommandAbortedException cae )
+            {
+                LogUtils.DEBUG("caught exception: " + cae.toString() + " getting writable stream from " + url );
+                throw new IOException( cae.toString() );
+            }
+            catch ( com.sun.star.uno.Exception e )
+            {
+                LogUtils.DEBUG("caught unknown exception: " + e.toString() + " getting writable stream from " + url );
+                throw new IOException( e.toString() );
+            }
+            return os;
+        }
     }
+
 
     private InputStream getUCBStream(String file, String path)
         throws IOException
@@ -166,8 +206,8 @@ public class UCBStreamHandler extends URLStreamHandler {
             }
             else
             {
-                path += file;
-                result = getFileStreamFromUCB(path);
+                String fileUrl = PathUtils.make_url(path,file);
+                result = getFileStreamFromUCB(fileUrl);
             }
         }
         finally {
@@ -210,11 +250,24 @@ public class UCBStreamHandler extends URLStreamHandler {
         XInputStream xInputStream = null;
 
         try {
+            LogUtils.DEBUG("Trying to read from " + path );
             xInputStream = m_xSimpleFileAccess.openFileRead(path);
+            LogUtils.DEBUG("sfa appeared to read file " );
             byte[][] inputBytes = new byte[1][];
 
             int ln = 0;
             int sz = m_xSimpleFileAccess.getSize(path);
+            // TODO don't depend on result of available() or size()
+            // just read stream 'till complete
+            if ( sz == 0 )
+            {
+                if ( xInputStream.available() > 0 )
+                {
+                    sz = xInputStream.available();
+                }
+            }
+            LogUtils.DEBUG("size of file " + path  + " is " + sz );
+            LogUtils.DEBUG("available = " + xInputStream.available() );
             inputBytes[0] = new byte[sz];
 
             ln = xInputStream.readBytes(inputBytes, sz);
@@ -227,9 +280,11 @@ public class UCBStreamHandler extends URLStreamHandler {
             result = new ByteArrayInputStream(inputBytes[0]);
         }
         catch (com.sun.star.io.IOException ioe) {
+            LogUtils.DEBUG("caught exception " + ioe );
             throw new IOException(ioe.getMessage());
         }
         catch (com.sun.star.uno.Exception e) {
+            LogUtils.DEBUG("caught exception " + e );
             throw new IOException(e.getMessage());
         }
         finally
@@ -250,4 +305,5 @@ public class UCBStreamHandler extends URLStreamHandler {
     private String convertClassNameToFileName(String name) {
         return name.replace('.', File.separatorChar) + ".class";
     }
+
 }
