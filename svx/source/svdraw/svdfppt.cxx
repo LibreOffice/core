@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-30 14:51:14 $
+ *  last change: $Author: sj $ $Date: 2001-02-09 12:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,7 +641,7 @@ SvStream& operator>>( SvStream& rIn, PptFontEntityAtom& rAtom )
         break;
     }
 
-    sal_uInt32 i;
+    sal_uInt16 i;
     for ( i = 0; i < 32; i++ )
     {
         nTemp = cData[ i ];
@@ -867,7 +867,7 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
 
         if ( ( nGlobalColorsCount <= 64 ) && ( nFillColorsCount <= 64 ) )
         {
-            if ( ( ( nGlobalColorsCount + nFillColorsCount ) * 44 + 12 ) == nRecLen )
+            if ( (sal_uInt32)( ( nGlobalColorsCount + nFillColorsCount ) * 44 + 12 ) == nRecLen )
             {
                 sal_uInt32 OriginalGlobalColors[ 64 ];
                 sal_uInt32 NewGlobalColors[ 64 ];
@@ -1089,7 +1089,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 eTextKind = OBJ_TITLETEXT;
             }
 
-            UINT32 nInstanceInSheet = aTextObj.GetInstance();
+            sal_uInt32 nInstanceInSheet = aTextObj.GetInstance();
             if ( ( rPersistEntry.ePageKind == PPT_MASTERPAGE ) )
             {
                 if ( !rPersistEntry.pPresentationObjects )
@@ -1118,7 +1118,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     nInstanceInSheet = TSS_TYPE_BODY;
                 break;
             }
-            aTextObj.SetMappedInstance( nInstanceInSheet );
+            aTextObj.SetMappedInstance( (sal_uInt16)nInstanceInSheet );
 
             // Abstaende an den Raendern der Textbox lesen
             INT32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 92076 );
@@ -1763,7 +1763,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
     for ( pOe = (PPTOleEntry*)((SdrPowerPointImport*)this)->aOleObjectList.First(); pOe;
             pOe = (PPTOleEntry*)((SdrPowerPointImport*)this)->aOleObjectList.Next() )
     {
-        if ( pOe->nId != nOLEId )
+        if ( pOe->nId != (sal_uInt32)nOLEId )
             continue;
 
         rStCtrl.Seek( pOe->nRecHdOfs );
@@ -2027,7 +2027,7 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
 
             pHd->SeekToBegOfRecord( rStCtrl );
             pExObjListManager = new DffRecordManager( rStCtrl );
-            UINT32 i, nRecType;
+            sal_uInt16 i, nRecType;
 
             for ( i = 0; i < 2; i++ )
             {
@@ -2128,7 +2128,7 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
         DffRecordHeader aListHd;
         if ( SeekToRec( rStCtrl, PPT_PST_FontCollection, pEnvHd->GetRecEndFilePos(), &aListHd ) )
         {
-            UINT32 nCount = 0;
+            sal_uInt16 nCount = 0;
             while ( SeekToRec( rStCtrl, PPT_PST_FontEntityAtom, aListHd.GetRecEndFilePos() ) )
             {
                 bRet = TRUE;
@@ -2276,14 +2276,14 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                     {
                         const sal_Unicode *pF, *pPtr = pPortion->maString.GetBuffer();
                         const sal_Unicode *pMax = pPtr + pPortion->maString.Len();
-                        INT32 nLen;
+                        sal_Int32 nLen;
                         for ( pF = pPtr; pPtr < pMax; pPtr++ )
                         {
                             if ( *pPtr == 0xb )
                             {
                                 nLen = pPtr - pF;
                                 if ( nLen )
-                                    aSelection.nEndPos += nLen;
+                                    aSelection.nEndPos += (sal_uInt16)nLen;
                                 pF = pPtr + 1;
                                 rOutliner.QuickInsertLineBreak( ESelection( nParaIndex, aSelection.nEndPos, nParaIndex, aSelection.nEndPos + 1 ) );
                                 aSelection.nEndPos++;
@@ -2291,7 +2291,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                         }
                         nLen = pPtr - pF;
                         if ( nLen )
-                            aSelection.nEndPos += nLen;
+                            aSelection.nEndPos += (sal_uInt16)nLen;
                     }
                     pPortion->ApplyTo( aPortionAttribs, (SdrPowerPointImport&)*this, nInstanceInSheet );
                     rOutliner.QuickSetAttribs( aPortionAttribs, aSelection );
@@ -3450,7 +3450,7 @@ BOOL PPTExtParaProv::SeekToContentOfBinaryData( SvStream& rSt, const DffRecordHe
     if ( ( rContentHd.nRecType == PPT_PST_CString ) && ( rContentHd.nRecLen == 14 ) )
     {
         String      aString;
-        sal_Int32   i = 7;
+        sal_uInt16  i = 7;
         sal_Unicode *pTmp = aString.AllocBuffer( i );
         while ( i-- )
         {
@@ -3911,7 +3911,7 @@ void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport& rManager,
     Font    aFont;
 
     aFont.SetColor( aCol );
-    sal_Unicode c = rManager.PPTSubstitute( nBulletFont, nBulletChar, nMappedFontId, aFont, ( nLevel & 1 ) ? 150 : 149 );
+    sal_Unicode c = rManager.PPTSubstitute( (sal_uInt16)nBulletFont, (sal_uInt16)nBulletChar, nMappedFontId, aFont, ( nLevel & 1 ) ? 150 : 149 );
 
     rNumberFormat.SetBulletFont( &aFont );
     rNumberFormat.SetBulletChar( c );
@@ -4347,14 +4347,14 @@ PPTStyleSheet::PPTStyleSheet( SvStream& rIn, SdrPowerPointImport& rManager )
                     if ( rIn.Tell() > aTxMasterStyleHd.GetRecEndFilePos() )
                     {
                         aMsg += "\n  ";
-                        aMsg += rIn.Tell() - aTxMasterStyleHd.GetRecEndFilePos();
-                        aMsg += " Bytes zuviel gelesen";
+                        aMsg += "reading too many bytes:";
+                        aMsg += ByteString::CreateFromInt32( rIn.Tell() - aTxMasterStyleHd.GetRecEndFilePos() );
                     }
                     if ( rIn.Tell() < aTxMasterStyleHd.GetRecEndFilePos() )
                     {
                         aMsg += "\n  ";
-                        aMsg += aTxMasterStyleHd.GetRecEndFilePos() - rIn.Tell();
-                        aMsg += " Bytes zuwenig gelesen";
+                        aMsg += "reading too less bytes:";
+                        aMsg += ByteString::CreateFromInt32( aTxMasterStyleHd.GetRecEndFilePos() - rIn.Tell() );
                     }
                     if ( aMsg.Len() != 0 )
                     {
@@ -4717,20 +4717,20 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                                                     PPTTextRulerInterpreter& rRuler, const DffRecordHeader& rExtParaHd ) :
     pCharPropsATable    ( NULL )
 {
-    UINT32 nMerk = rIn.Tell();
+    sal_uInt32 nMerk = rIn.Tell();
 
-    UINT32  nExtParaPos = ( rExtParaHd.nRecType == PPT_PST_ExtendedParagraphAtom ) ? rExtParaHd.nFilePos + 8 : 0;
+    sal_uInt32 nExtParaPos = ( rExtParaHd.nRecType == PPT_PST_ExtendedParagraphAtom ) ? rExtParaHd.nFilePos + 8 : 0;
     String aString;
     DffRecordHeader aTextHd;
     rIn >> aTextHd;
-    UINT32 nMaxLen = aTextHd.nRecLen;
+    sal_uInt32 nMaxLen = aTextHd.nRecLen;
     if ( nMaxLen > 0xFFFF )
         nMaxLen = 0xFFFF;
 
 
     if( aTextHd.nRecType == PPT_PST_TextCharsAtom )
     {
-        sal_Int32 i;
+        sal_uInt32 i;
         sal_Unicode nChar,*pBuf = new sal_Unicode[ ( nMaxLen >> 1 ) + 1 ];
         rIn.Read( pBuf, nMaxLen );
         nMaxLen >>= 1;
@@ -4771,7 +4771,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
             }
         }
         if ( i )
-            aString = String( pBuf, i );
+            aString = String( pBuf, (sal_uInt16)i );
         delete[] pBuf;
     }
     else
@@ -4936,7 +4936,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
             nParaCount = 1;
             if ( nCharCount )
             {
-                sal_Int32    nCount;
+                sal_uInt32   nCount;
                 const sal_Unicode* pDat = aString.GetBuffer() + nCharAnzRead;
                 for ( nCount = 0; nCount < nCharCount; nCount++ )
                 {
@@ -5094,9 +5094,9 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                         UINT32  nMappedFontId;
 
                         pCPropSet->maString =  rMan.PPTSubstitute( aCharPropSet.pCharSet->mnSymbolFont,
-                                                    aString.GetChar( nCharAnzRead ), nMappedFontId, aFont, 0 );
+                                                    aString.GetChar( (sal_uInt16)nCharAnzRead ), nMappedFontId, aFont, 0 );
 
-                        pCPropSet->SetFont( nMappedFontId );
+                        pCPropSet->SetFont( (sal_uInt16)nMappedFontId );
                         aCharPropList.Insert( pCPropSet, LIST_APPEND );
                         nCharCount--;
                         nCharAnzRead++;
@@ -5771,7 +5771,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
         {
             UINT32 nFontHeight;
             pPortion->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nInstanceInSheet );
-            nVal2 = - ( ( nFontHeight * nVal * 8 ) / 100 );
+            nVal2 = -(sal_Int16)( ( nFontHeight * nVal * 8 ) / 100 );
         }
         SvxLineSpacingItem aItem( 200, EE_PARA_SBL );
         if ( nVal2 <= 0 )
@@ -5794,9 +5794,9 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
         {
             mpPortionList[ mnPortionCount - 1 ]->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nInstanceInSheet );
             if ( ((INT16)nUpperDist) > 0 )
-                nUpperDist = - ( ( nFontHeight * nUpperDist * 100 ) / 1000 );
+                nUpperDist = - (sal_Int16)( ( nFontHeight * nUpperDist * 100 ) / 1000 );
             if ( ((INT16)nLowerDist) > 0 )
-                nLowerDist = - ( ( nFontHeight * nLowerDist * 100 ) / 1000 );
+                nLowerDist = - (sal_Int16)( ( nFontHeight * nLowerDist * 100 ) / 1000 );
         }
         bIsHardAttribute = TRUE;
     }
@@ -6349,7 +6349,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                 if ( pFE->nPos == nPos )
                                                 {
                                                     INT32 nCharPropAdd = 0;
-                                                    if ( aString.GetChar( nCount ) == 0x2a )
+                                                    if ( aString.GetChar( (sal_uInt16)nCount ) == 0x2a )
                                                     {
                                                         UINT32 nBehind = aString.Len() - ( nCount + 1 );
                                                         pSet->maString = String();
