@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:45:37 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:32:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef SC_XIHELPER_HXX
 #include "xihelper.hxx"
 #endif
@@ -99,11 +100,133 @@
 #include "attrib.hxx"
 #endif
 
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
+#endif
 #ifndef SC_XISTYLE_HXX
 #include "xistyle.hxx"
 #endif
 
 #include "excform.hxx"
+
+// Excel->Calc cell address/range conversion ==================================
+
+namespace {
+
+/** Fills the passed Calc address with the passed Excel cell coordinates without checking any limits. */
+inline void lclFillAddress( ScAddress& rScPos, sal_uInt16 nXclCol, sal_uInt16 nXclRow, SCTAB nScTab )
+{
+    rScPos.SetCol( static_cast< SCCOL >( nXclCol ) );
+    rScPos.SetRow( static_cast< SCROW >( nXclRow ) );
+    rScPos.SetTab( nScTab );
+}
+
+} // namespace
+
+// ----------------------------------------------------------------------------
+
+XclImpAddressConverter::XclImpAddressConverter( const XclImpRoot& rRoot ) :
+    XclAddressConverterBase( rRoot.GetTracer(), rRoot.GetScMaxPos() )
+{
+}
+
+// cell address ---------------------------------------------------------------
+
+bool XclImpAddressConverter::CheckAddress( const XclAddress& rXclPos, bool bWarn )
+{
+    bool bValidCol = rXclPos.mnCol <= mnMaxCol;
+    bool bValidRow = rXclPos.mnRow <= mnMaxRow;
+    bool bValid = bValidCol && bValidRow;
+    if( !bValid && bWarn )
+    {
+        mbColTrunc |= !bValidCol;
+        mbRowTrunc |= !bValidRow;
+        mrTracer.TraceInvalidAddress( ScAddress(
+            static_cast< SCCOL >( rXclPos.mnCol ), static_cast< SCROW >( rXclPos.mnRow ), 0 ), maMaxPos );
+    }
+    return bValid;
+}
+
+bool XclImpAddressConverter::ConvertAddress( ScAddress& rScPos,
+        const XclAddress& rXclPos, SCTAB nScTab, bool bWarn )
+{
+    bool bValid = CheckAddress( rXclPos, bWarn );
+    if( bValid )
+        lclFillAddress( rScPos, rXclPos.mnCol, rXclPos.mnRow, nScTab );
+    return bValid;
+}
+
+ScAddress XclImpAddressConverter::CreateValidAddress(
+        const XclAddress& rXclPos, SCTAB nScTab, bool bWarn )
+{
+    ScAddress aScPos( ScAddress::UNINITIALIZED );
+    if( !ConvertAddress( aScPos, rXclPos, nScTab, bWarn ) )
+    {
+        aScPos.SetCol( static_cast< SCCOL >( ::std::min( rXclPos.mnCol, mnMaxCol ) ) );
+        aScPos.SetRow( static_cast< SCROW >( ::std::min( rXclPos.mnRow, mnMaxRow ) ) );
+        aScPos.SetTab( limit_cast< SCTAB >( nScTab, 0, maMaxPos.Tab() ) );
+    }
+    return aScPos;
+}
+
+// cell range -----------------------------------------------------------------
+
+bool XclImpAddressConverter::CheckRange( const XclRange& rXclRange, bool bWarn )
+{
+    return CheckAddress( rXclRange.maFirst, bWarn ) && CheckAddress( rXclRange.maLast, bWarn );
+}
+
+bool XclImpAddressConverter::ConvertRange( ScRange& rScRange,
+        const XclRange& rXclRange, SCTAB nScTab1, SCTAB nScTab2, bool bWarn )
+{
+    // check start position
+    bool bValidStart = CheckAddress( rXclRange.maFirst, bWarn );
+    if( bValidStart )
+    {
+        lclFillAddress( rScRange.aStart, rXclRange.maFirst.mnCol, rXclRange.maFirst.mnRow, nScTab1 );
+
+        // check & correct end position
+        sal_uInt16 nXclCol2 = rXclRange.maLast.mnCol;
+        sal_uInt16 nXclRow2 = rXclRange.maLast.mnRow;
+        if( !CheckAddress( rXclRange.maLast, bWarn ) )
+        {
+            nXclCol2 = ::std::min( nXclCol2, mnMaxCol );
+            nXclRow2 = ::std::min( nXclRow2, mnMaxRow );
+        }
+        lclFillAddress( rScRange.aEnd, nXclCol2, nXclRow2, nScTab2 );
+    }
+    return bValidStart;
+}
+
+ScRange XclImpAddressConverter::CreateValidRange(
+        const XclRange& rXclRange, SCTAB nScTab1, SCTAB nScTab2, bool bWarn )
+{
+    return ScRange(
+        CreateValidAddress( rXclRange.maFirst, nScTab1, bWarn ),
+        CreateValidAddress( rXclRange.maLast,  nScTab2, bWarn ) );
+}
+
+// cell range list ------------------------------------------------------------
+
+bool XclImpAddressConverter::CheckRangeList( const XclRangeList& rXclRanges, bool bWarn )
+{
+    for( XclRangeList::const_iterator aIt = rXclRanges.begin(), aEnd = rXclRanges.end(); aIt != aEnd; ++aIt )
+        if( !CheckRange( *aIt, bWarn ) )
+            return false;
+    return true;
+}
+
+void XclImpAddressConverter::ConvertRangeList( ScRangeList& rScRanges,
+        const XclRangeList& rXclRanges, SCTAB nScTab, bool bWarn )
+{
+    rScRanges.RemoveAll();
+    for( XclRangeList::const_iterator aIt = rXclRanges.begin(), aEnd = rXclRanges.end(); aIt != aEnd; ++aIt )
+    {
+        ScRange aScRange( ScAddress::UNINITIALIZED );
+        if( ConvertRange( aScRange, *aIt, nScTab, nScTab, bWarn ) )
+            rScRanges.Append( aScRange );
+    }
+}
 
 // Byte/Unicode strings =======================================================
 
@@ -124,16 +247,15 @@ XclImpString::XclImpString( XclImpStream& rStrm, XclStrFlags nFlags )
 
     switch( rStrm.GetRoot().GetBiff() )
     {
-        case xlBiff2:
-        case xlBiff3:
-        case xlBiff4:
-        case xlBiff5:
-        case xlBiff7:
+        case EXC_BIFF2:
+        case EXC_BIFF3:
+        case EXC_BIFF4:
+        case EXC_BIFF5:
             // no integrated formatting in BIFF2-BIFF7
             maString = rStrm.ReadByteString( b16BitLen );
         break;
 
-        case xlBiff8:
+        case EXC_BIFF8:
         {
             // --- string header ---
             sal_uInt16 nChars = b16BitLen ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
@@ -181,7 +303,7 @@ void XclImpString::AppendFormat( sal_uInt16 nChar, sal_uInt16 nXclFont )
 
 void XclImpString::ReadFormats( XclImpStream& rStrm )
 {
-    bool bBiff8 = rStrm.GetRoot().GetBiff() >= xlBiff8;
+    bool bBiff8 = rStrm.GetRoot().GetBiff() == EXC_BIFF8;
     sal_uInt16 nCount = bBiff8 ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
     ReadFormats( rStrm, nCount );
 }
@@ -194,11 +316,10 @@ void XclImpString::ReadFormats( XclImpStream& rStrm, sal_uInt16 nRunCount )
         -> use AppendFormat() to validate formats */
     switch( rStrm.GetRoot().GetBiff() )
     {
-        case xlBiff2:
-        case xlBiff3:
-        case xlBiff4:
-        case xlBiff5:
-        case xlBiff7:
+        case EXC_BIFF2:
+        case EXC_BIFF3:
+        case EXC_BIFF4:
+        case EXC_BIFF5:
             for( sal_uInt16 nIdx = 0; nIdx < nRunCount; ++nIdx )
             {
                 sal_uInt8 nChar, nXclFont;
@@ -206,7 +327,7 @@ void XclImpString::ReadFormats( XclImpStream& rStrm, sal_uInt16 nRunCount )
                 AppendFormat( nChar, nXclFont );
             }
         break;
-        case xlBiff8:
+        case EXC_BIFF8:
             for( sal_uInt16 nIdx = 0; nIdx < nRunCount; ++nIdx )
             {
                 sal_uInt16 nChar, nXclFont;
@@ -880,7 +1001,7 @@ XclImpCachedMatrix::XclImpCachedMatrix( XclImpStream& rStrm ) :
     mnScCols = rStrm.ReaduInt8();
     mnScRows = rStrm.ReaduInt16();
 
-    if( rStrm.GetRoot().GetBiff() < xlBiff8 )
+    if( rStrm.GetRoot().GetBiff() <= EXC_BIFF5 )
     {
         // in BIFF2-BIFF7: 256 columns represented by 0 columns
         if( mnScCols == 0 )
