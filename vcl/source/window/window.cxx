@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-23 15:09:17 $
+ *  last change: $Author: cp $ $Date: 2002-05-29 13:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,9 @@
 #ifndef _SV_WALL_HXX
 #include <wall.hxx>
 #endif
-
+#ifndef _VCL_FONTCFG_HXX
+#include <fontcfg.hxx>
+#endif
 #define SYSDATA_ONLY_BASETYPE
 #include <sysdata.hxx>
 
@@ -314,49 +316,71 @@ static void ImplInitAppFontData( Window* pWindow )
 
 void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
 {
-    // We prefer Andale Sans UI as our UI Font
-    String aAndaleSansUI( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI" ) );
-    if ( mpFrameData->mpFontList->FindFont( aAndaleSansUI ) && !rSettings.GetStyleSettings().GetUseSystemUIFonts() )
+    // Verify availability of the configured UI font, otherwise choose "Andale Sans UI"
+    String aUserInterfaceFont;
+    if ( !rSettings.GetStyleSettings().GetUseSystemUIFonts() )
+    {
+        String aConfigFont = vcl::DefaultFontConfigItem::get()->getUserInterfaceFont();
+        xub_StrLen nIndex = 0;
+        while( nIndex != STRING_NOTFOUND )
+        {
+            String aName( aConfigFont.GetToken( 0, ';', nIndex ) );
+            if ( aName.Len() && mpFrameData->mpFontList->FindFont (aName) )
+            {
+                aUserInterfaceFont = aConfigFont;
+                break;
+            }
+        }
+
+        if ( ! aUserInterfaceFont.Len() )
+        {
+            String aFallbackFont (RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI" ));
+            if ( mpFrameData->mpFontList->FindFont( aFallbackFont ) )
+                aUserInterfaceFont = aFallbackFont;
+        }
+    }
+
+    if ( !rSettings.GetStyleSettings().GetUseSystemUIFonts() && aUserInterfaceFont.Len() )
     {
         StyleSettings aStyleSettings = rSettings.GetStyleSettings();
         Font aFont = aStyleSettings.GetAppFont();
-        aFont.SetName( aAndaleSansUI );
+        aFont.SetName( aUserInterfaceFont );
         aStyleSettings.SetAppFont( aFont );
         aFont = aStyleSettings.GetHelpFont();
-        aFont.SetName( aAndaleSansUI );
+        aFont.SetName( aUserInterfaceFont );
         aStyleSettings.SetHelpFont( aFont );
         aFont = aStyleSettings.GetTitleFont();
-        aFont.SetName( aAndaleSansUI );
+        aFont.SetName( aUserInterfaceFont );
         aStyleSettings.SetTitleFont( aFont );
         aFont = aStyleSettings.GetFloatTitleFont();
-        aFont.SetName( aAndaleSansUI );
+        aFont.SetName( aUserInterfaceFont );
         aStyleSettings.SetFloatTitleFont( aFont );
         aFont = aStyleSettings.GetMenuFont();
-        aFont.SetName( aAndaleSansUI );
+        aFont.SetName( aUserInterfaceFont );
         aStyleSettings.SetMenuFont( aFont );
         aFont = aStyleSettings.GetToolFont();
-        aFont.SetName( aAndaleSansUI );
+        aFont.SetName( aUserInterfaceFont );
         aStyleSettings.SetToolFont( aFont );
         aFont = aStyleSettings.GetLabelFont();
-        aFont.SetName( aAndaleSansUI );
+        aFont.SetName( aUserInterfaceFont );
         aStyleSettings.SetLabelFont( aFont );
         aFont = aStyleSettings.GetInfoFont();
-        aFont.SetName( aAndaleSansUI );
+        aFont.SetName( aUserInterfaceFont );
         aStyleSettings.SetInfoFont( aFont );
         aFont = aStyleSettings.GetRadioCheckFont();
-        aFont.SetName( aAndaleSansUI );
+        aFont.SetName( aUserInterfaceFont );
         aStyleSettings.SetRadioCheckFont( aFont );
         aFont = aStyleSettings.GetPushButtonFont();
-        aFont.SetName( aAndaleSansUI );
+        aFont.SetName( aUserInterfaceFont );
         aStyleSettings.SetPushButtonFont( aFont );
         aFont = aStyleSettings.GetFieldFont();
-        aFont.SetName( aAndaleSansUI );
+        aFont.SetName( aUserInterfaceFont );
         aStyleSettings.SetFieldFont( aFont );
         aFont = aStyleSettings.GetIconFont();
-        aFont.SetName( aAndaleSansUI );
+        aFont.SetName( aUserInterfaceFont );
         aStyleSettings.SetIconFont( aFont );
         aFont = aStyleSettings.GetGroupFont();
-        aFont.SetName( aAndaleSansUI );
+        aFont.SetName( aUserInterfaceFont );
         aStyleSettings.SetGroupFont( aFont );
         rSettings.SetStyleSettings( aStyleSettings );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-07 15:47:26 $
+ *  last change: $Author: cp $ $Date: 2002-05-29 13:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <svapp.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
@@ -387,6 +390,29 @@ const OUString& DefaultFontConfigItem::getDefaultFont( int nLanguage, int nType 
         }
     }
     return lang->second.find(nType)->second;
+}
+
+/*
+ *  DefaultFontConfigItem::getUserInterfaceFont
+ */
+
+const OUString& DefaultFontConfigItem::getUserInterfaceFont( int nLanguage ) const
+{
+    #define FALLBACKFONT_UI_SANS "Andale Sans UI;Tahoma;Arial Unicode MS;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;Arial;MS Sans Serif;Helv;Times;Times New Roman;Interface System"
+
+    if( nLanguage == LANGUAGE_SYSTEM )
+        nLanguage = Application::GetSettings().GetUILanguage();
+    const OUString& aUIFont = getDefaultFont( nLanguage, DEFAULTFONT_UI_SANS );
+
+    if( aUIFont.getLength() )
+    {
+        return aUIFont;
+    }
+    else
+    {
+        static const OUString aFallback (RTL_CONSTASCII_USTRINGPARAM(FALLBACKFONT_UI_SANS));
+        return aFallback;
+    }
 }
 
 /*
