@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-03 15:29:06 $
+ *  last change: $Author: cl $ $Date: 2002-05-21 09:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,7 +388,7 @@ ImplGrafControl::ImplGrafControl( Window* pParent, USHORT nSID, SfxBindings& rBi
     SetSizePixel( Size( aImgSize.Width() + aFldSize.Width() + SYMBOL_TO_FIELD_OFFSET,
                   Max( aImgSize.Height(), aFldSize.Height() ) ) );
 
-    maImage.SetHelpId( nSID );
+//  maImage.SetHelpId( nSID );
     maImage.Show();
 
     maField.SetHelpId( nSID );
