@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:15:16 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1939,19 +1939,19 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_DRAW_HEADER:
     {
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW, XML_HEADER, sal_False, sal_False );
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_PRESENTATION, XML_HEADER, sal_False, sal_False );
     }
     break;
 
     case FIELD_ID_DRAW_FOOTER:
     {
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW, XML_FOOTER, sal_False, sal_False );
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_PRESENTATION, XML_FOOTER, sal_False, sal_False );
     }
     break;
 
     case FIELD_ID_DRAW_DATE_TIME:
     {
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW, XML_DATE_TIME, sal_False, sal_False );
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_PRESENTATION, XML_DATE_TIME, sal_False, sal_False );
     }
     break;
 
