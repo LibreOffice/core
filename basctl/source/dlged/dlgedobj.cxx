@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:17:09 $
+ *  last change: $Author: vg $ $Date: 2003-03-26 12:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1147,6 +1147,21 @@ void SAL_CALL DlgEdObj::_elementRemoved(const ::com::sun::star::container::Conta
         {
             GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(TRUE);
         }
+    }
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEdObj::SetLayer(SdrLayerID nLayer)
+{
+    SdrLayerID nOldLayer = GetLayer();
+
+    if ( nLayer != nOldLayer )
+    {
+        SdrUnoObj::SetLayer( nLayer );
+
+        DlgEdHint aHint( DLGED_HINT_LAYERCHANGED, this );
+        GetDlgEdForm()->GetDlgEditor()->Broadcast( aHint );
     }
 }
 
