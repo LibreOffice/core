@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-27 22:34:54 $
+ *  last change: $Author: nn $ $Date: 2001-03-30 17:11:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1072,7 +1072,8 @@ static const sal_Char* pServiceNames[] =
     "com.sun.star.text.TextField.DateTime",
     "com.sun.star.text.TextField.FileName",
     "com.sun.star.text.TextField.Author",
-    "com.sun.star.text.TextField.Measure"
+    "com.sun.star.text.TextField.Measure",
+    "com.sun.star.text.TextField.DateTime"
 };
 
 uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
