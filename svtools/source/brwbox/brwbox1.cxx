@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-30 11:18:38 $
+ *  last change: $Author: pb $ $Date: 2002-09-13 12:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,16 +59,25 @@
  *
  ************************************************************************/
 
-#include <brwbox.hxx>
-#include <tools/debug.hxx>
-#include <tools/stream.hxx>
-#include <vcl/sound.hxx>
+#ifndef _SVX_BRWBOX_HXX
+#include "brwbox.hxx"
+#endif
+#ifndef _BRWHEAD_HXX
 #include "brwhead.hxx"
+#endif
+#ifndef _SFXDATWIN_HXX
 #include "datwin.hxx"
+#endif
+
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+#ifndef _STREAM_HXX
+#include <tools/stream.hxx>
+#endif
 
 #include <functional>
 #include <algorithm>
-
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETABLEMODELCHANGE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleTableModelChange.hpp>
@@ -79,7 +88,6 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-
 
 #pragma hdrstop
 
@@ -92,9 +100,6 @@
 #ifndef _SVTOOLS_ACCESSIBLEBROWSEBOXHEADERCELL_HXX
 #include "AccessibleBrowseBoxHeaderCell.hxx"
 #endif
-
-
-
 
 DBG_NAME(BrowseBox);
 

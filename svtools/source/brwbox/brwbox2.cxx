@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:21:28 $
+ *  last change: $Author: pb $ $Date: 2002-09-13 12:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1024,7 +1024,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
                 _rOut.DrawRect( aFieldRect );
             }
 
-            if (!m_bFocusOnlyCursor && (pCol->GetId() == GetCurColumnId()) && (nCurRow == GetCurRow()))
+            if (!m_bFocusOnlyCursor && (pCol->GetId() == GetCurColumnId()) && (nCurRow == (ULONG)GetCurRow()))
                 DrawCursor();
 
             // draw a single field
@@ -2143,7 +2143,7 @@ Rectangle BrowseBox::calcTableRect(BOOL _bOnScreen)
     return Rectangle(aRowBar.TopRight(), Size(aSize.A() - nX, aSize.B() - nY - aHScroll.GetSizePixel().Height()) );
 }
 // -----------------------------------------------------------------------------
-Rectangle BrowseBox::GetFieldRectPixelAbs(sal_Int32 _nRowId,sal_uInt16 _nColId, BOOL _bOnScreen)
+Rectangle BrowseBox::GetFieldRectPixelAbs( sal_Int32 _nRowId,sal_uInt16 _nColId, BOOL /*_bIsHeader*/, BOOL _bOnScreen )
 {
     Window* pParent = NULL;
     if ( !_bOnScreen )
@@ -2156,7 +2156,6 @@ Rectangle BrowseBox::GetFieldRectPixelAbs(sal_Int32 _nRowId,sal_uInt16 _nColId, 
 
     return Rectangle(aTopLeft,aRect.GetSize());
 }
-// -----------------------------------------------------------------------------
 
-
+// ------------------------------------------------------------------------- EOF
 
