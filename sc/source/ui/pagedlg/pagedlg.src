@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:59:16 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -867,7 +867,7 @@ TabPage RID_SCPAGE_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 73 ) ;
         Size = MAP_APPFONT ( 142 , 10 ) ;
-        Text = "Zeilen- & Sp~altenköpfe" ;
+        Text = "Zeilen- & Spalten~köpfe" ;
         Text [ ENGLISH ] = "Column- & row he~adings" ;
         Text [ norwegian ] = "Column- & row he~adings" ;
         Text [ italian ] = "Intesta~zioni colonna/riga" ;
@@ -1023,7 +1023,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ swedish ] = "~Diagram" ;
         Text [ dutch ] = "~Diagrammen" ;
         Text [ spanish ] = "~Diagramas" ;
-        Text [ ENGLISH_US ] = "Cha~rts" ;
+        Text [ ENGLISH_US ] = "Ch~arts" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å›¾è¡¨(~R)";
         Text[ russian ] = "Äèàãğàììû";
@@ -1047,7 +1047,7 @@ TabPage RID_SCPAGE_TABLE
     {
         Pos = MAP_APPFONT ( 160 , 87 ) ;
         Size = MAP_APPFONT ( 91 , 10 ) ;
-        Text = "Zeichenob~jekte" ;
+        Text = "Z~eichenobjekte" ;
         Text [ ENGLISH ] = "Drawob~jects" ;
         Text [ norwegian ] = "Drawob~jects" ;
         Text [ italian ] = "Oggetti di d~isegno" ;
@@ -1119,7 +1119,7 @@ TabPage RID_SCPAGE_TABLE
     {
         Pos = MAP_APPFONT ( 160 , 115 ) ;
         Size = MAP_APPFONT ( 91 , 10 ) ;
-        Text = "N~ullwerte" ;
+        Text = "Null~werte" ;
         Text [ ENGLISH ] = "N~ull values" ;
         Text [ norwegian ] = "N~ull values" ;
         Text [ italian ] = "Valori zero" ;
@@ -1131,7 +1131,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ swedish ] = "N~ollvärden" ;
         Text [ dutch ] = "N~ulwaarden" ;
         Text [ spanish ] = "~Valores cero" ;
-        Text [ english_us ] = "Zero val~ues" ;
+        Text [ english_us ] = "Zero ~values" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "é›¶å€¼(~U)";
         Text[ russian ] = "Íóëåâûå çíà÷åíèÿ";
@@ -1226,7 +1226,7 @@ TabPage RID_SCPAGE_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 142 , 10 ) ;
-        Text = "Von lin~ks nach rechts, dann nach unten" ;
+        Text = "Von ~links nach rechts, dann nach unten" ;
         Text [ ENGLISH ] = "Left to rig~ht, then to bottom" ;
         Text [ norwegian ] = "Left to rig~ht" ;
         Text [ italian ] = "Da sinistra a d~estra, poi in basso" ;
@@ -1238,7 +1238,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ swedish ] = "Från vänster till hög~er, sedan nedåt" ;
         Text [ dutch ] = "Van ~links naar rechts, dan naar beneden" ;
         Text [ spanish ] = "De ~izquierda a derecha, después hacia abajo" ;
-        Text [ english_us ] = "L~eft to right, then down" ;
+        Text [ english_us ] = "~Left to right, then down" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ä»å·¦å‘å³ï¼Œå†å‘ä¸‹(~E)";
         Text[ russian ] = "Ñëåâà íàïğàâî, çàòåì âíèç";
@@ -1287,8 +1287,8 @@ TabPage RID_SCPAGE_TABLE
     CheckBox BTN_PAGENO
     {
         Pos = MAP_APPFONT ( 12 , 46 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text = "Erste Seiten~zahl" ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Erste ~Seitenzahl" ;
         Text [ ENGLISH ] = "First ~page" ;
         Text [ norwegian ] = "First ~page" ;
         Text [ italian ] = "Primo numero di ~pagina" ;
@@ -1323,7 +1323,7 @@ TabPage RID_SCPAGE_TABLE
     NumericField ED_PAGENO
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 86 , 44 ) ;
+        Pos = MAP_APPFONT ( 106 , 44 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
@@ -1367,84 +1367,41 @@ TabPage RID_SCPAGE_TABLE
         Text[ hungarian ] = "Oldalak sorrendje";
         Text[ slovenian ] = "Vrstni red strani";
     };
-    RadioButton BTN_SCALEALL
+    FixedText FT_SCALEMODE
     {
-        Pos = MAP_APPFONT ( 12 , 144 ) ;
-        Size = MAP_APPFONT ( 142 , 10 ) ;
-        Text = "Ausdruck verk~leinern/vergrößern" ;
-        Text [ ENGLISH ] = "Sc~ale down/scale up printout" ;
-        TabStop = TRUE ;
-        Text[ english_us ] = "Reduce/enlarge printout";
-        Text[ portuguese ] = "~Ampliar/diminuir impressão";
-        Text[ russian ] = "Óìåíüøèòü/óâåëè÷èòü ğàñïå÷àòêó";
-        Text[ greek ] = "Óìßêñõíóç/Ìåãİèõíóç åêôığùóçò";
-        Text[ dutch ] = "Afdruk v~erkleinen/vergroten";
-        Text[ french ] = "~Réduire/agrandir l'impression";
-        Text[ spanish ] = "Aumentar/disminuir impresión [%]";
-        Text[ finnish ] = "Pienennä/suurenna tulostetta";
-        Text[ italian ] = "Riduci/ingrandisci ~stampa";
-        Text[ danish ] = "Formindsk/Forstør udskrift";
-        Text[ swedish ] = "För~minska/förstora utskrift";
-        Text[ polish ] = "Pomniejsz/powiêksz wydruk";
-        Text[ portuguese_brazilian ] = "Ampliar/Diminuir impressão";
-        Text[ japanese ] = "æ‹¡å¤§ç¸®å°å°åˆ·";
-        Text[ korean ] = "ì¸ì‡„ ì¶•ì†Œ/í™•ëŒ€";
-        Text[ chinese_simplified ] = "ç¼©å°æˆ–æ”¾å¤§æ‰“å°é¡µé¢";
-        Text[ chinese_traditional ] = "ç¸®å°æˆ–æ”¾å¤§åˆ—å°";
-        Text[ turkish ] = "Çıktı küçült/büyüt ";
-        Text[ arabic ] = "Çáßá Åáì  [%]";
-        Text[ catalan ] = "~Tot al [%]";
-        Text[ thai ] = "~à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸–à¸¶à¸‡ [%]";
-        Text[ czech ] = "Upravit mÄ›Å™Ã­tko tisku";
-        Text[ hebrew ] = "Ausdruck verk~leinern/vergrÃ¶ÃŸern";
-        Text[ hindi ] = "à¤›à¤ªà¤¾à¤ˆ à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤† à¤¶à¥€à¤Ÿà¥ à¤•à¥‹ à¤˜à¤Ÿà¤¾à¤“/à¤¬à¤¢à¤¼à¤¾à¤“";
-        Text[ slovak ] = "ZvÃ¤ÄÅ¡iÅ¥/zmenÅ¡iÅ¥ tlaÄ";
-        Text[ hungarian ] = "NyomtatÃ¡si kÃ©p nagyÃ­tÃ¡sa/kicsinyÃ­tÃ©se";
-        Text[ slovenian ] = "ZmanjÅ¡aj/poveÄaj izpis";
+        Pos = MAP_APPFONT( 12, 144 );
+        Size = MAP_APPFONT( 124, 8 );
+        Text = "Skalierungs~modus";
+        Text[ english_us ] = "Scaling ~mode";
     };
-    RadioButton BTN_SCALEPAGENUM
+    ListBox LB_SCALEMODE
     {
-        Pos = MAP_APPFONT ( 12 , 160 ) ;
-        Size = MAP_APPFONT ( 142 , 10 ) ;
-        Text = "Ausdruck auf Seitenzahl an~passen" ;
-        Text [ ENGLISH ] = "~Fit printout on pages" ;
-        TabStop = TRUE ;
-        Text[ english_us ] = "Fit printout on nu~mber of pages";
-        Text[ portuguese ] = "A~justar impressão ao número de páginas";
-        Text[ russian ] = "Ñîãëàñîâàòü ğàñïå÷àòêó ñ ÷èñëîì ñòğàíèö";
-        Text[ greek ] = "Ğñï~óáñìïãŞ ôçò åêôığùóçò óôïí áñéèìü óåëßäùí";
-        Text[ dutch ] = "Afdruk~paginanummer aanpassen";
-        Text[ french ] = "Ada~pter l'impression au nombre de pages";
-        Text[ spanish ] = "Adaptar la impresión al número de páginas";
-        Text[ finnish ] = "Sää~dä tuloste sivumäärän mukaan";
-        Text[ italian ] = "~Adatta la stampa al numero di pagine";
-        Text[ danish ] = "Til~pas udskrift til sidetal";
-        Text[ swedish ] = "An~passa utskrift till antal sidor";
-        Text[ polish ] = "Dopasuj wydruk do ~liczby stron";
-        Text[ portuguese_brazilian ] = "A~justar impressão ao número de páginas";
-        Text[ japanese ] = "ãƒšãƒ¼ã‚¸æ•°ã«åˆã‚ã›ã¦å°åˆ·(~M)";
-        Text[ korean ] = "í˜ì´ì§€ ë²ˆí˜¸ë¡œ ì¸ì‡„ ë§ì¶¤(~M)";
-        Text[ chinese_simplified ] = "æŒ‰é¡µæ•°è°ƒæ•´æ‰“å°é¡µé¢(~M)";
-        Text[ chinese_traditional ] = "æŒ‰é æ•¸èª¿æ•´åˆ—å°(~M)";
-        Text[ turkish ] = "Çıktıyı sayfa sayısına göre ayarla ";
-        Text[ arabic ] = "ÇáÚÏÏ ÇáÃŞÕì ááÕİÍÇÊ";
-        Text[ catalan ] = "Nombre ~màxim de pàgines";
-        Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™à¸«à¸™à¹‰à¸²~à¸¡à¸²à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”";
-        Text[ czech ] = "Tisk pÅ™izpÅ¯sobit na urÄenÃ½ poÄet strÃ¡nek";
-        Text[ hebrew ] = "Ausdruck auf Seitenzahl an~passen";
-        Text[ hindi ] = "~à¤ªà¥ƒà¤·à¥à¤ à¥‹à¤‚ à¤®à¥‡à¤‚ à¤›à¤ªà¤¾à¤ˆ à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤† à¤¶à¥€à¤Ÿà¥ à¤•à¥‹ à¤¯à¥‹à¤—à¥à¤¯ à¤¬à¤¨à¤¾à¤“";
-        Text[ slovak ] = "PrispÃ´sobiÅ¥ tlaÄ poÄtu strÃ¡~n";
-        Text[ hungarian ] = "Nyo~mtatÃ¡s illesztÃ©se oldalszÃ¡mhoz";
-        Text[ slovenian ] = "Prilagodi izpis Å¡te~vilu strani";
+        Border = TRUE;
+        Pos = MAP_APPFONT( 12, 155 );
+        Size = MAP_APPFONT( 124, 60 );
+        DropDown = TRUE;
+        StringList =
+        {
+            < "Ausdruck verkleinern/vergrößern"; SC_TPTABLE_SCALE_PERCENT; >;
+            < "Druckbereich(e) auf Breite/Höhe anpassen"; SC_TPTABLE_SCALE_TO; >;
+            < "Druckbereich(e) auf Seitenzahl anpassen"; SC_TPTABLE_SCALE_TO_PAGES; >;
+        };
+        StringList[ english_us ] =
+        {
+            < "Reduce/enlarge printout"; SC_TPTABLE_SCALE_PERCENT; >;
+            < "Fit print range(s) to width/height"; SC_TPTABLE_SCALE_TO; >;
+            < "Fit print range(s) on number of pages"; SC_TPTABLE_SCALE_TO_PAGES; >;
+        };
     };
     MetricField ED_SCALEALL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 160 , 142 ) ;
-        Size = MAP_APPFONT ( 35 , 12 ) ;
+        Pos = MAP_APPFONT ( 218 , 155 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
         Repeat = TRUE ;
+        Minimum = 10 ;
         Maximum = 400 ;
         First = 15 ;
         Last = 200 ;
@@ -1452,17 +1409,76 @@ TabPage RID_SCPAGE_TABLE
         Unit = FUNIT_CUSTOM ;
         CustomUnitText = "%" ;
     };
-    NumericField ED_SCALEPAGENUM
+    NumericField ED_SCALEPAGEWIDTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 160 , 158 ) ;
-        Size = MAP_APPFONT ( 35 , 12 ) ;
+        Pos = MAP_APPFONT ( 218 , 144 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
+        Hide = TRUE ;
         Spin = TRUE ;
         Repeat = TRUE ;
         Minimum = 1 ;
-        Maximum = 999 ;
+        Maximum = 1000 ;
         SpinSize = 1 ;
+    };
+    NumericField ED_SCALEPAGEHEIGHT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 218 , 160 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Minimum = 1 ;
+        Maximum = 1000 ;
+        SpinSize = 1 ;
+    };
+    NumericField ED_SCALEPAGENUM
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 218 , 155 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Minimum = 1 ;
+        Maximum = 1000 ;
+        SpinSize = 1 ;
+    };
+    FixedText FT_SCALEFACTOR
+    {
+        Pos = MAP_APPFONT( 148, 157 );
+        Size = MAP_APPFONT( 68 , 8 );
+        Hide = TRUE;
+        Text = "Sk~alierungsfaktor";
+        Text[ english_us ] = "~Scaling factor";
+    };
+    FixedText FT_SCALEPAGEWIDTH
+    {
+        Pos = MAP_APPFONT( 148, 146 );
+        Size = MAP_APPFONT( 68 , 8 );
+        Hide = TRUE;
+        Text = "Br~eite in Seiten";
+        Text[ english_us ] = "~Width in pages";
+    };
+    FixedText FT_SCALEPAGEHEIGHT
+    {
+        Pos = MAP_APPFONT( 148, 162 );
+        Size = MAP_APPFONT( 68 , 8 );
+        Hide = TRUE;
+        Text = "H~öhe in Seiten";
+        Text[ english_us ] = "H~eight in pages";
+    };
+    FixedText FT_SCALEPAGENUM
+    {
+        Pos = MAP_APPFONT( 148, 157 );
+        Size = MAP_APPFONT( 68, 8 );
+        Hide = TRUE;
+        Text = "Seiten~anzahl";
+        Text[ english_us ] = "N~umber of pages";
     };
     FixedLine FL_SCALE
     {
