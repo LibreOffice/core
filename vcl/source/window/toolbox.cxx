@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-03 17:42:46 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,9 @@
 #endif
 #ifndef _SV_MENU_HXX
 #include <menu.hxx>
+#endif
+#ifndef _SV_WINDOW_H
+#include <window.h>
 #endif
 
 // =======================================================================
@@ -1348,7 +1351,7 @@ ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
          *  this works in one frame only anyway. If the dialogue
          *  changes to a system window, we need a new implementation here
          */
-        if ( pBox->IsReallyVisible() && pBox->mpFrame == mpDragBox->mpFrame )
+        if ( pBox->IsReallyVisible() && pBox->mpWindowImpl->mpFrame == mpDragBox->mpWindowImpl->mpFrame )
         {
             if ( !pBox->ImplIsFloatingMode() )
             {
@@ -1641,7 +1644,7 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
 {
 
     // Variablen initialisieren
-    mbToolBox         = TRUE;
+    mpWindowImpl->mbToolBox         = TRUE;
     mpBtnDev          = NULL;
     mpFloatSizeAry    = NULL;
     mpData              = new ImplToolBoxPrivateData;
@@ -1714,8 +1717,8 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     {
         // dockingwindow's ImplInit removes some bits, so restore them here
         // to allow keyboard handling for toolbars
-        mnStyle |= WB_TABSTOP|WB_NODIALOGCONTROL;
-        mnStyle &= ~WB_DIALOGCONTROL;
+        mpWindowImpl->mnStyle |= WB_TABSTOP|WB_NODIALOGCONTROL;
+        mpWindowImpl->mnStyle &= ~WB_DIALOGCONTROL;
     }
 
     ImplInitSettings( TRUE, TRUE, TRUE );
@@ -4208,17 +4211,17 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
     // and do not hilight when focus is in a different toolbox
     BOOL bDrawHotSpot = TRUE;
     Window *pWin = Application::GetFocusWindow();
-    if( pWin && pWin->mbToolBox && pWin != this )
+    if( pWin && pWin->mpWindowImpl->mbToolBox && pWin != this )
         bDrawHotSpot = FALSE;
     else if( !HasFocus() && HasChildPathFocus() )   // focus is in our childwindow: no highlight
         bDrawHotSpot = FALSE;
     /*
     else
-        if( pWin && !pWin->mbToolBox )
+        if( pWin && !pWin->mpWindowImpl->mbToolBox )
             while( pWin )
             {
                 pWin = pWin->GetParent();
-                if( pWin && pWin->mbToolBox )
+                if( pWin && pWin->mpWindowImpl->mbToolBox )
                 {
                     bDrawHotSpot = FALSE;
                     break;
@@ -6249,8 +6252,8 @@ void ToolBox::ImplShowFocus()
         ImplToolItem* pItem = ImplGetItem( mnHighItemId );
         if( pItem->mpWindow )
         {
-            Window *pWin = pItem->mpWindow->mpBorderWindow ? pItem->mpWindow->mpBorderWindow : pItem->mpWindow;
-            pWin->mbDrawSelectionBackground = TRUE;
+            Window *pWin = pItem->mpWindow->mpWindowImpl->mpBorderWindow ? pItem->mpWindow->mpWindowImpl->mpBorderWindow : pItem->mpWindow;
+            pWin->mpWindowImpl->mbDrawSelectionBackground = TRUE;
             pWin->Invalidate( 0 );
         }
     }
@@ -6265,8 +6268,8 @@ void ToolBox::ImplHideFocus()
         ImplToolItem* pItem = ImplGetItem( mnHighItemId );
         if( pItem->mpWindow )
         {
-            Window *pWin = pItem->mpWindow->mpBorderWindow ? pItem->mpWindow->mpBorderWindow : pItem->mpWindow;
-            pWin->mbDrawSelectionBackground = FALSE;
+            Window *pWin = pItem->mpWindow->mpWindowImpl->mpBorderWindow ? pItem->mpWindow->mpWindowImpl->mpBorderWindow : pItem->mpWindow;
+            pWin->mpWindowImpl->mbDrawSelectionBackground = FALSE;
             pWin->Invalidate( 0 );
         }
     }
