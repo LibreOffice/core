@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-15 12:23:10 $
+ *  last change: $Author: hdu $ $Date: 2002-04-19 11:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,8 +206,7 @@ Point GenericSalLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
 
     int nMaxIndex = 0;
     const GlyphItem* pG = mpGlyphItems;
-    int i;
-    for( i = 0; i < mnGlyphCount; ++i, ++pG )
+    for( int i = 0; i < mnGlyphCount; ++i, ++pG )
     {
         int n = pG->mnCharIndex;
         if( n < mnFirstCharIndex || n >= mnEndCharIndex )
@@ -235,14 +234,14 @@ Point GenericSalLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
     }
     else        // relative to right edge
     {
-        // adjust end to cluster end
+        // find end of last cluster
         pG = mpGlyphItems + nMaxIndex;
         const GlyphItem* pGLimit = mpGlyphItems + mnGlyphCount;
-        while( (pG < pGLimit) && !(pG->mnFlags & GlyphItem::CLUSTER_START) )
-            ++pG;
+        while( (++pG < pGLimit) && !(pG->mnFlags & GlyphItem::CLUSTER_START) );
 
+        // adjust offset from start to last cluster
         pGLimit = pG;
-        for( pG = mpGlyphItems + nStartIndex; pG < pGLimit; ++pG )
+        for( pG = mpGlyphItems + nStartIndex ; pG < pGLimit; ++pG )
             nXPos -= pG->mnWidth;
     }
 
