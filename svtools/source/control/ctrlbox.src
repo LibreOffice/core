@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-19 20:40:53 $
+ *  last change: $Author: kz $ $Date: 2001-10-31 21:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ String STR_SVT_COLLATE_ALPHANUMERIC
     Text[ polish ] = "Alfanumeryczny";
     Text[ portuguese_brazilian ] = "Alphanumeric";
     Text[ japanese ] = "英数字";
-    Text[ korean ] = "Alphanumeric";
+    Text[ korean ] = "영숫자";
     Text[ chinese_simplified ] = "字母数字式";
     Text[ chinese_traditional ] = "字母數字式";
     Text[ turkish ] = "Alphanumeric";
@@ -355,6 +355,7 @@ String STR_SVT_COLLATE_ZHUYIN
     Text[ catalan ] = "Zhuyin";
     Text[ finnish ] = "Zhuyin";
 };
+
 
 
 
