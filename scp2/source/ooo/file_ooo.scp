@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.60 $
+*  $Revision: 1.61 $
 *
-*  last change: $Author: hjs $ $Date: 2004-12-14 14:00:36 $
+*  last change: $Author: rt $ $Date: 2004-12-16 11:03:10 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -149,7 +149,7 @@ End
 File gid_File_Bin_Javaldx
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED, SETUPZIP);
+    Styles = (PACKED);
     Name = EXENAME(javaldx);
 End
 
@@ -315,7 +315,11 @@ End
 File gid_File_Bin_Soffice_Bin
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
+  #ifdef WNT
+    Styles = (PACKED, PATCH_SO_NAME);
+  #else
     Styles = (PACKED);
+  #endif
     Name = "soffice.bin";
 End
 
@@ -376,7 +380,6 @@ File gid_File_Bin_Senddoc
   #endif
 End
 
-
 #ifdef UNX
 
 File gid_File_Bin_Spadmin_Bin
@@ -388,7 +391,12 @@ End
 
 #endif
 
-STD_SETUPZIP_BMP_FILE( gid_File_Bmp_Installation, oo_product.bmp )
+File gid_File_Bmp_Installation
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "oo_product.bmp";
+    Styles = (PACKED);
+End
 
 File gid_File_Bmp_Intro
     TXT_FILE_BODY;
@@ -607,7 +615,7 @@ File gid_File_Images_Zip
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Config;
     Name = "images.zip";
-    Styles = (PACKED,SETUPZIP);
+    Styles = (PACKED);
 End
 
 File gid_File_Inethist_Dat_Delete_Only
@@ -623,7 +631,7 @@ File gid_File_Jar_Accessbridge
     TXT_FILE_BODY;
     Name = "java_uno_accessbridge.jar";
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,DONT_OVERWRITE,SETUPZIP, UNO_COMPONENT);
+    Styles = (PACKED,DONT_OVERWRITE, UNO_COMPONENT);
 End
 
 #endif
@@ -646,7 +654,7 @@ File gid_File_Jar_Java_Uno
     TXT_FILE_BODY;
     Name = JARFILENAME(java_uno);
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,SETUPZIP);
+    Styles = (PACKED);
 End
 
 #endif
@@ -663,7 +671,7 @@ File gid_File_Jar_Juh
     TXT_FILE_BODY;
     Name = JARFILENAME(juh);
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,SETUPZIP);
+    Styles = (PACKED);
 End
 
 #endif
@@ -674,7 +682,7 @@ File gid_File_Jar_Jurt
     TXT_FILE_BODY;
     Name = JARFILENAME(jurt);
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,SETUPZIP);
+    Styles = (PACKED);
 End
 
 #endif
@@ -685,7 +693,7 @@ File gid_File_Jar_Jut
     TXT_FILE_BODY;
     Name = JARFILENAME(jut);
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,SETUPZIP);
+    Styles = (PACKED);
 End
 
 #endif
@@ -748,7 +756,7 @@ File gid_File_Jar_Commonwizards
     TXT_FILE_BODY;
     Name = JARFILENAME(commonwizards);
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,SETUPZIP);
+    Styles = (PACKED);
 End
 #endif
 
@@ -758,7 +766,7 @@ File gid_File_Jar_Ridl
     TXT_FILE_BODY;
     Name = JARFILENAME(ridl);
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,SETUPZIP);
+    Styles = (PACKED);
 End
 
 #endif
@@ -769,7 +777,7 @@ File gid_File_Jar_Sandbox
     TXT_FILE_BODY;
     Name = JARFILENAME(sandbox);
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,SETUPZIP);
+    Styles = (PACKED);
 End
 
 #endif
@@ -804,7 +812,7 @@ File gid_File_Jar_Unoil
     TXT_FILE_BODY;
     Name = "unoil.jar";
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,DONT_OVERWRITE,SETUPZIP);
+    Styles = (PACKED,DONT_OVERWRITE);
 End
 
 #endif
@@ -1114,6 +1122,20 @@ File gid_File_Oo_Office_Ui_Category_Xcs
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
     Name = "/registry/schema/org/openoffice/Office/UI/Category.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Drawimpresscommands_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/DrawImpressCommands.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Drawimpresscommands_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+    Name = "/registry/data/org/openoffice/Office/UI/DrawImpressCommands.xcu";
 End
 
 File gid_File_Oo_Office_Ui_Genericcategories_Xcs
@@ -1754,7 +1776,7 @@ End
 File gid_File_Rdb_Types
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED, OVERWRITE, SETUPZIP);
+    Styles = (PACKED, OVERWRITE);
     Name = "types.rdb";
 End
 
@@ -2133,7 +2155,7 @@ File gid_File_Txt_License
   #ifdef WNT
     README_TXT_ALL_LANG(Name, license, txt);
   #endif
-    Styles = (PACKED, SETUPZIP, SCPZIP_REPLACE);
+    Styles = (PACKED, SCPZIP_REPLACE);
 End
 
 File gid_File_Txt_License_Html
@@ -2212,7 +2234,7 @@ File gid_File_Txt_Readme
   #ifdef WNT
     README_TXT_ALL_LANG(Name, readme, txt);
   #endif
-    Styles = (PACKED, SETUPZIP, SCPZIP_REPLACE);
+    Styles = (PACKED, SCPZIP_REPLACE);
 End
 
 File gid_File_Txt_Readme_Html
