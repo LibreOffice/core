@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:19:32 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 #ifndef _SBA_BWRCTRLR_HXX
 #include "brwctrlr.hxx"
 #endif
-
+#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+#include <com/sun/star/sdbc/XConnection.hpp>
+#endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
@@ -180,6 +182,7 @@ namespace dbaui
         sal_Bool                m_bShowMenu;            // if TRUE the menu should be visible otherwise not
         sal_Bool                m_bInSuspend;
         sal_Bool                m_bEnableBrowser;
+        sal_Bool                m_bOwnConnection;
 
 
         /** updateTitle will be called when a new frame is attached
@@ -331,7 +334,9 @@ namespace dbaui
         */
         void implAddDatasource(const String& _rDbName, Image& _rDbImage,
                 String& _rQueryName, Image& _rQueryImage,
-                String& _rTableName, Image& _rTableImage);
+                String& _rTableName, Image& _rTableImage
+                ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+            );
 
         /// clears the tree list box
         void clearTreeModel();
@@ -446,7 +451,8 @@ namespace dbaui
         SvLBoxEntry* getObjectEntry(
             const ::rtl::OUString& _rDataSource, const ::rtl::OUString& _rCommand, sal_Int32 _nCommandType,
             SvLBoxEntry** _ppDataSourceEntry = NULL, SvLBoxEntry** _ppContainerEntry = NULL,
-            sal_Bool _bExpandAncestors = sal_True
+            sal_Bool _bExpandAncestors = sal_True,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection = NULL
         );
 
         /// checks if m_aDocumentDataSource describes a known object
