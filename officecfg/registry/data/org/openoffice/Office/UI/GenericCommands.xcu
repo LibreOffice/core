@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:02:43 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 15:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2067,8 +2067,8 @@
             </node>
             <node oor:name=".uno:NewDoc" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Neu</value>
-                    <value xml:lang="en-US">New</value>
+                    <value xml:lang="de">Neues Dokument aus Vorlage</value>
+                    <value xml:lang="en-US">New Document From Template</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -2526,8 +2526,8 @@
             </node>
             <node oor:name=".uno:AddDirect" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Neu</value>
-                    <value xml:lang="en-US">~New</value>
+                    <value xml:lang="de">~Neues Dokument</value>
+                    <value xml:lang="en-US">~New Document</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
