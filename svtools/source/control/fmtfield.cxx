@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-12 06:29:37 $
+ *  last change: $Author: fs $ $Date: 2001-07-20 12:34:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ SvNumberFormatter* FormattedField::StaticFormatter::GetFormatter()
     {
         s_cFormatter = new SvNumberFormatter(
             ::comphelper::getProcessServiceFactory(),
-            Application::GetAppInternational().GetLanguage());
+            Application::GetSettings().GetUILanguage());
     }
     return s_cFormatter;
 }
@@ -903,8 +903,8 @@ void DoubleNumericField::ResetConformanceTester()
     // the thousands and the decimal separator are language dependent
     const SvNumberformat* pFormatEntry = ImplGetFormatter()->GetEntry(m_nFormatKey);
 
-    unsigned char cSeparatorThousand = ',';
-    unsigned char cSeparatorDecimal = '.';
+    sal_Unicode cSeparatorThousand = ',';
+    sal_Unicode cSeparatorDecimal = '.';
     if (pFormatEntry)
     {
         String aLanguage, aCountry, aVariant;
@@ -921,11 +921,11 @@ void DoubleNumericField::ResetConformanceTester()
     }
 
     String sReplaceWith((sal_Unicode)'\\');
-    sReplaceWith += (sal_Unicode)cSeparatorThousand;
+    sReplaceWith += cSeparatorThousand;
     sDescription.SearchAndReplaceAscii("\\,", sReplaceWith);
 
     sReplaceWith = (sal_Unicode)'\\';
-    sReplaceWith += (sal_Unicode)cSeparatorDecimal;
+    sReplaceWith += cSeparatorDecimal;
     sDescription.SearchAndReplaceAscii("\\.", sReplaceWith);
 
     delete m_pConformanceTester;
@@ -1032,12 +1032,15 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
     USHORT nDigits = GetDecimalDigits();
 
     // build a new format string with the base class' and my own settings
-    International aIntl(eLanguage);
+    String aLanguage, aCountry, aVariant;
+    ConvertLanguageToIsoNames( eLanguage, aLanguage, aCountry );
+    LocaleDataWrapper aLocaleInfo(::comphelper::getProcessServiceFactory(), Locale( aLanguage, aCountry, aVariant ));
+
     XubString sNewFormat;
     if (bThSep)
     {
         sNewFormat = '#';
-        sNewFormat += aIntl.GetNumThousandSep();
+        sNewFormat += aLocaleInfo.getNumThousandSep();
         sNewFormat.AppendAscii("##0");
     }
     else
@@ -1045,7 +1048,7 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
 
     if (nDigits)
     {
-        sNewFormat += aIntl.GetNumDecimalSep();
+        sNewFormat += aLocaleInfo.getNumDecimalSep();
 
         XubString sTemp;
         sTemp.Fill(nDigits, '0');
