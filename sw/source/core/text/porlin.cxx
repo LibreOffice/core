@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-21 09:08:26 $
+ *  last change: $Author: fme $ $Date: 2002-04-25 13:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ sal_Bool SwLinePortion::Format( SwTxtFormatInfo &rInf )
     const KSHORT nNewWidth = rInf.X() + PrtWidth();
     // Nur Portions mit echter Breite koennen ein sal_True zurueckliefern
     // Notizen beispielsweise setzen niemals bFull==sal_True
-    if( rInf.Width() <= nNewWidth && PrtWidth() )
+    if( rInf.Width() <= nNewWidth && PrtWidth() && ! IsKernPortion() )
     {
         Truncate();
         if( nNewWidth > rInf.Width() )
