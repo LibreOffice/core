@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: dg $ $Date: 2001-09-18 19:27:13 $
+ *  last change: $Author: dg $ $Date: 2001-09-26 15:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,11 +175,7 @@ namespace configmgr
         if (bNeedProfile)
         try
         {
-#ifdef TF_CFGDATA
             static ::rtl::OUString ssUserProfile(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup"));
-#else
-            static ::rtl::OUString ssUserProfile(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.UserProfile"));
-#endif
             AbsolutePath aProfileModule = AbsolutePath::makeModulePath(ssUserProfile, AbsolutePath::NoValidate());
             if (ISubtree* pSubTree = m_pTreeMgr->requestSubtree(aProfileModule, m_xDefaultOptions))
                 implInitFromProfile(pSubTree);
@@ -244,13 +240,8 @@ namespace configmgr
         // read the default locale for the user
         if (m_xDefaultOptions->getDefaultLocale().getLength() == 0)
         {
-#ifdef TF_CFGDATA
             static ::rtl::OUString ssSubGroup(RTL_CONSTASCII_USTRINGPARAM("L10N"));
             static ::rtl::OUString ssLocale(RTL_CONSTASCII_USTRINGPARAM("ooLocale"));
-#else
-            static ::rtl::OUString ssSubGroup(RTL_CONSTASCII_USTRINGPARAM("International"));
-            static ::rtl::OUString ssLocale(RTL_CONSTASCII_USTRINGPARAM("Locale"));
-#endif
 
             INode const* pNode = pProfile->getChild(ssSubGroup);
             ISubtree const* pSubTree = pNode ? pNode->asISubtree() : NULL;
