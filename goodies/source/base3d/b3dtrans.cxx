@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dtrans.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:56:13 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,11 +256,12 @@ void B3dTransformationSet::CalcViewport()
         // Berechne aktuelles Seitenverhaeltnis der Bounds
         double fBoundWidth = (double)(aViewportRectangle.GetWidth() + 1);
         double fBoundHeight = (double)(aViewportRectangle.GetHeight() + 1);
-        double fActRatio;
+        double fActRatio = 1;
         double fFactor;
 
         if(fBoundWidth != 0.0)
             fActRatio = fBoundHeight / fBoundWidth;
+        // FIXME   else in this case has a lot of problems,  should this return.
 
         switch(eRatio)
         {
