@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-10-23 10:49:52 $
+ *  last change: $Author: obr $ $Date: 2000-11-01 08:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,6 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
-
-#ifndef __FRAMEWORK_HELPER_OPIPECONNECTION_HXX_
-#include <helper/opipeconnection.hxx>
-#endif
 
 #ifndef __FRAMEWORK_HELPER_OINSTANCEPROVIDER_HXX_
 #include <helper/oinstanceprovider.hxx>
@@ -324,6 +320,9 @@ void FrameWork::Main()
 
         //---------------------------------------------------------------------------------------------------------
         // c) Initialize connection to possible PlugIn dll.
+
+// OPipeConnection removed, connection to plugin now uses acceptor service
+#if 0
         if ( m_bUsePlugIn == sal_True )
         {
             Reference< XConnection >    xConnection         = new OPipeConnection( xGlobalServiceManager );
@@ -344,7 +343,7 @@ void FrameWork::Main()
                 LOG_ASSERT( sal_False, "FrameWork::Main()\nNo connection to plugin. Initialization of bridge failed.\n" )
             }
         }
-
+#endif
         //---------------------------------------------------------------------------------------------------------
         // d) Initialize new task with a HTML-URL in it.
 
