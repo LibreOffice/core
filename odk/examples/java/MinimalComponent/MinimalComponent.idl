@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MinimalComponent.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:56:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 17:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,19 +38,21 @@
  *
  *************************************************************************/
 
-#ifndef __org_OpenOffice_MinimalComponent_idl__
-#define __org_OpenOffice_MinimalComponent_idl__
+#ifndef _org_openoffice_MinimalComponent_idl_
+#define _org_openoffice_MinimalComponent_idl_
 
-#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/XServiceInfo.idl>
 
-/// org
+// org
 module org {
-  /// openoffice
-  module OpenOffice {
-    ///  example service
-    service MinimalComponent {
+    // openoffice
+    module openoffice {
+        // example service, XServiceInfo is implemented here for demonstration
+        // issues. XServiceInfo must be implemented by all components. But
+        // here it is used to show the new code generation feature for services.
+        // See the TestMinimalComponent.java how it can be used!
+        service MinimalComponent: ::com::sun::star::lang::XServiceInfo;
     };
-  };
 };
 
 #endif
