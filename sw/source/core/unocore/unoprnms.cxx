@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-21 15:00:11 $
+ *  last change: $Author: os $ $Date: 2001-03-28 10:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,6 +385,7 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_SCRIPT_TYPE                            
 const SwPropNameLen __FAR_DATA  UNO_NAME_SEARCH_ALL                             (MAP_CHAR_LEN("SearchAll"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SEARCH_WORDS                           (MAP_CHAR_LEN("SearchWords"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SEQUENCE_VALUE                         (MAP_CHAR_LEN("SequenceValue"));
+const SwPropNameLen __FAR_DATA UNO_NAME_IMAGE_MAP                               (MAP_CHAR_LEN("ImageMap"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SERVER_MAP                             (MAP_CHAR_LEN("ServerMap"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SET_NUMBER                             (MAP_CHAR_LEN("SetNumber"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SHADOW_FORMAT                          (MAP_CHAR_LEN("ShadowFormat"));

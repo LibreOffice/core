@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-27 15:07:06 $
+ *  last change: $Author: os $ $Date: 2001-03-28 10:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,11 +267,20 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXTCONTENT_HPP_
 #include <com/sun/star/text/XTextContent.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
+#include <com/sun/star/container/XIndexContainer.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
 #endif
 #include <string>
 #include <algorithm>
+#ifndef _SVTOOLS_UNOIMAP_HXX
+#include <svtools/unoimap.hxx>
+#endif
+#ifndef _SVTOOLS_UNOEVENT_HXX_
+#include <svtools/unoevent.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -1865,8 +1874,21 @@ BOOL SwFmtURL::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             rVal <<= OUString( GetName() );
             break;
         case MID_URL_CLIENTMAP:
-            ASSERT( !this, "not implemented" );
-            break;
+        {
+            if(pMap)
+            {
+                static const SvEventDescription aMacroDescriptionsImpl[] =
+                {
+                    { SFX_EVENT_MOUSEOVER_OBJECT, "OnMouseOver" },
+                    { SFX_EVENT_MOUSEOUT_OBJECT, "OnMouseOut" },
+                    { 0, NULL }
+                };
+                Reference< XInterface > xInt = SvUnoImageMap_createInstance( *pMap, aMacroDescriptionsImpl );
+                Reference< XIndexContainer > xCont(xInt, UNO_QUERY);
+                rVal <<= xCont;
+            }
+        }
+        break;
         case MID_URL_SERVERMAP:
         {
             BOOL bTmp = IsServerMap();
@@ -1897,8 +1919,20 @@ BOOL SwFmtURL::PutValue( const uno::Any& rVal, BYTE nMemberId )
             SetName( *(OUString*)rVal.getValue() );
         break;
         case MID_URL_CLIENTMAP:
-            ASSERT( !this, "not implemented" );
-            break;
+        {
+            Reference<XIndexContainer> xCont;
+            if(!rVal.hasValue())
+                DELETEZ(pMap);
+            else if(rVal >>= xCont)
+            {
+                if(!pMap)
+                    pMap = new ImageMap;
+                bRet = SvUnoImageMap_fillImageMap( xCont, *pMap );
+            }
+            else
+                bRet = FALSE;
+        }
+        break;
         case MID_URL_SERVERMAP:
             bIsServerMap = *(sal_Bool*)rVal.getValue();
             break;
