@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventattachermgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-07 07:01:18 $
+ *  last change: $Author: fs $ $Date: 2001-08-13 16:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,10 +707,10 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
         aEvtIt++;
     }
 #else
-    sal_Int32 nLen = (*aIt).aEventList.getLength();
+    Sequence< ScriptEventDescriptor >& rEventList = (*aIt).aEventList;
 
-            ScriptEventDescriptor* pEventList = (*aIt).aEventList.getArray();
-    const   ScriptEventDescriptor* pEventListEnd = pEventList + (*aIt).aEventList.getLength();
+            ScriptEventDescriptor* pEventList = rEventList.getArray();
+    const   ScriptEventDescriptor* pEventListEnd = pEventList + rEventList.getLength();
     for( ; pEventList < pEventListEnd; ++pEventList )
     {
         if  (   (aLstType               == pEventList->ListenerType )
@@ -724,6 +724,7 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
             {
                 *pMoveTo++ = *pMoveFrom++;
             }
+            rEventList.realloc( rEventList.getLength() - 1 );
             break;
         }
     }
@@ -1114,6 +1115,9 @@ void SAL_CALL ImplEventAttacherManager::read(const Reference< XObjectInputStream
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/08/07 07:01:18  fs
+ *  #90621# corrected revokeScriptEvent
+ *
  *  Revision 1.2  2001/03/15 07:46:02  fs
  *  NAMESPACE_STD(\:i) => ::std::\1
  *
