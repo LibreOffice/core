@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:33:04 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ TabDialog DLG_CHAR
                 Text [ italian ] = "Carattere" ;
                 Text [ portuguese_brazilian ] = "Caractere" ;
                 Text [ portuguese ] = "Tipo de letra" ;
-                Text [ finnish ] = "Merkki" ;
+                Text [ finnish ] = "Fontti" ;
                 Text [ danish ] = "Skrifttype" ;
                 Text [ french ] = "Police" ;
                 Text [ swedish ] = "Teckensnitt" ;
@@ -126,7 +126,7 @@ TabDialog DLG_CHAR
                 Text [ italian ] = "Effetto carattere" ;
                 Text [ portuguese_brazilian ] = "Extensão de Caracter" ;
                 Text [ portuguese ] = "Efeitos do tipo de letra" ;
-                Text [ finnish ] = "Merkin tehosteet" ;
+                Text [ finnish ] = "Fonttitehosteet" ;
                 Text [ danish ] = "Skrifteffekt" ;
                 Text [ french ] = "Effets de caractères" ;
                 Text [ swedish ] = "Teckensnittseffekt" ;
@@ -161,7 +161,7 @@ TabDialog DLG_CHAR
                 Text[ french ] = "Position";
                 Text[ spanish ] = "Posición";
                 Text[ italian ] = "Posizione";
-                Text[ danish ] = "Position";
+                Text[ danish ] = "Start_ved";
                 Text[ swedish ] = "Position";
                 Text[ polish ] = "Pozycja";
                 Text[ portuguese_brazilian ] = "Position";
@@ -169,9 +169,10 @@ TabDialog DLG_CHAR
                 Text[ korean ] = "À§Ä¡";
                 Text[ chinese_simplified ] = "Î»ÖÃ";
                 Text[ chinese_traditional ] = "¦ì¸m";
-                Text[ turkish ] = "Position";
+                Text[ turkish ] = "Pozisyon";
                 Text[ arabic ] = "ÇáãæÖÚ";
                 Text[ catalan ] = "Posición";
+                Text[ finnish ] = "Sijainti";
             };
             PageItem
             {
@@ -198,6 +199,7 @@ TabDialog DLG_CHAR
                 Text[ turkish ] = "Asian layout";
                 Text[ arabic ] = "ÊÎØíØ ÂÓíæí";
                 Text[ catalan ] = "Diseño asiático";
+                Text[ finnish ] = "Aasialainen asettelu";
             };
             PageItem
             {
@@ -225,6 +227,7 @@ TabDialog DLG_CHAR
                 Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©";
                 Text[ turkish ] = "Hyperlink";
                 Text[ catalan ] = "Hiperenlace";
+                Text[ finnish ] = "Hyperlinkki";
             };
             PageItem
             {
@@ -282,7 +285,7 @@ TabDialog DLG_DRAWCHAR
     Text [ italian ] = "Carattere" ;
     Text [ portuguese_brazilian ] = "Caractere" ;
     Text [ portuguese ] = "Tipo de letra" ;
-    Text [ finnish ] = "Merkki" ;
+    Text [ finnish ] = "Fontti" ;
     Text [ danish ] = "Skrifttype" ;
     Text [ french ] = "Police" ;
     Text [ swedish ] = "Teckensnitt" ;
@@ -305,7 +308,7 @@ TabDialog DLG_DRAWCHAR
                 Text [ italian ] = "Carattere" ;
                 Text [ portuguese_brazilian ] = "Caractere" ;
                 Text [ portuguese ] = "Tipo de letra" ;
-                Text [ finnish ] = "Merkki" ;
+                Text [ finnish ] = "Fontti" ;
                 Text [ danish ] = "Skrifttype" ;
                 Text [ french ] = "Police" ;
                 Text [ swedish ] = "Teckensnitt" ;
@@ -374,6 +377,7 @@ TabPage TP_CHAR_URL
         Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©";
         Text[ turkish ] = "Hyperlink";
         Text[ catalan ] = "Hiperenlace";
+        Text[ finnish ] = "Hyperlinkki";
     };
     FixedText FT_URL
     {
@@ -402,6 +406,7 @@ TabPage TP_CHAR_URL
         Text[ korean ] = "~URL";
         Text[ turkish ] = "U~RL";
         Text[ catalan ] = "~URL";
+        Text[ finnish ] = "~URL-osoite";
     };
     Edit ED_URL
     {
@@ -438,6 +443,7 @@ TabPage TP_CHAR_URL
         Text[ korean ] = "¼±ÅÃÇÏ±â(~B)...";
         Text[ turkish ] = "A~raþtýr...";
         Text[ catalan ] = "~Seleccionar...";
+        Text[ finnish ] = "~Selaa";
     };
     FixedText FT_TEXT
     {
@@ -464,6 +470,7 @@ TabPage TP_CHAR_URL
         Text[ turkish ] = "B~ilgi";
         Text[ arabic ] = "äÕ";
         Text[ catalan ] = "Texto";
+        Text[ finnish ] = "Teks~ti";
     };
     Edit ED_TEXT
     {
@@ -500,6 +507,7 @@ TabPage TP_CHAR_URL
         Text[ korean ] = "ÀÌ¸§(~N)";
         Text[ turkish ] = "~Ad";
         Text[ catalan ] = "~Nombre";
+        Text[ finnish ] = "~Nimi";
     };
     Edit ED_NAME
     {
@@ -536,6 +544,7 @@ TabPage TP_CHAR_URL
         Text[ korean ] = "ÇÁ·¹ÀÓ";
         Text[ turkish ] = "~Frame";
         Text[ catalan ] = "~Frame";
+        Text[ finnish ] = "Kohdekehys";
     };
     ComboBox LB_TARGET
     {
@@ -574,6 +583,7 @@ TabPage TP_CHAR_URL
         Text[ korean ] = "ÀÌº¥Æ®(~E)...";
         Text[ turkish ] = "Olaylar...";
         Text[ catalan ] = "~Acontecimientos...";
+        Text[ finnish ] = "~Tapahtumat";
     };
     GroupBox GB_STYLE
     {
@@ -602,6 +612,7 @@ TabPage TP_CHAR_URL
         Text[ korean ] = "¹®ÀÚ À¯Çü";
         Text[ turkish ] = "Karakter biçimi";
         Text[ catalan ] = "Estilos de caracteres";
+        Text[ finnish ] = "Merkistöjen tyylit";
     };
     FixedText FT_VISITED
     {
@@ -630,6 +641,7 @@ TabPage TP_CHAR_URL
         Text[ korean ] = "¹æ¹®ÇÑ ¸µÅ©(~V)";
         Text[ turkish ] = "~Kullanýlmýþ hyperlink";
         Text[ catalan ] = "Vínculos ~visitados";
+        Text[ finnish ] = "~Käydyt linkit";
     };
     ListBox LB_VISITED
     {
@@ -668,6 +680,7 @@ TabPage TP_CHAR_URL
         Text[ korean ] = "¹æ¹®ÇÏÁö ¾ÊÀº ¸µÅ©(~L)";
         Text[ turkish ] = "Kullanýl~mamýþ hyperlink";
         Text[ catalan ] = "Vínculos no v~isitados";
+        Text[ finnish ] = "~Käymättömät linkit";
     };
     ListBox LB_NOT_VISITED
     {
