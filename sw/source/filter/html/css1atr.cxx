@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:19:29 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -732,48 +732,6 @@ void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
             Strm() << sOut.GetBuffer();
     }
 }
-
-#if USED
-void SwHTMLWriter::OutCSS1_SfxItem( USHORT nMode,
-                                    const SfxPoolItem *pItem1,
-                                    const SfxPoolItem *pItem2 )
-{
-    // den ItemSet ausgeben, und zwar inklusive aller Attribute
-    nSaveMode = nCSS1OutMode;
-    nCSS1OutMode = nMode;
-    bFirstCSS1Property = TRUE;
-
-    Out( aCSS1AttrFnTab, *pItem1, *this );
-    if( pItem2 )
-        Out( aCSS1AttrFnTab, *pItem2, *this );
-
-
-    if( !bFirstCSS1Property )
-    {
-        // wenn eine Property als Bestandteil einer Style-Option
-        // ausgegeben wurde, muss die Optiomn noch beendet werden
-        ByteString sOut;
-        switch( nCSS1OutMode & CSS1_OUTMODE_ANY_OFF )
-        {
-        case CSS1_OUTMODE_SPAN_TAG_OFF:
-            sOut = sCSS1_span_tag_end;
-            break;
-
-        case CSS1_OUTMODE_STYLE_OPT_OFF:
-            sOut = cCSS1_style_opt_end;
-            break;
-
-        case CSS1_OUTMODE_RULE:
-            sOut = sCSS1_rule_end;
-            break;
-        }
-        if( sOut.Len() )
-            rStrm << sOut.GetBuffer();
-    }
-
-    nCSS1OutMode = nSaveMode;
-}
-#endif
 
 void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, BOOL bUsed )
 {
@@ -3707,11 +3665,7 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
     }
     else
     {
-#ifdef USE_MAPMODE_MM100
-        nWidth = (USHORT)((double)nWidth * (25.4/72));  // 1/100pt
-#else
         nWidth *= 5;    // 1/100pt
-#endif
 
         // Breite als n.nn pt
         sOut += ByteString::CreateFromInt32( nWidth / 100 );
