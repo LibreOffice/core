@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-11 11:56:31 $
+ *  last change: $Author: aw $ $Date: 2001-01-15 13:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,10 @@
 
 #ifndef _SVX_ADJITEM_HXX
 #include <adjitem.hxx>
+#endif
+
+#ifndef _SVX_XFLBCKIT_HXX
+#include "xflbckit.hxx"
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1712,16 +1716,14 @@ FASTBOOL SdrAttrObj::ImpSetShadowAttributes(ExtOutputDevice& rXOut, FASTBOOL bNo
 //          }
         if(!bNoFill)
         {
-            const SdrShadowColorItem& rShadColItem = ((SdrShadowColorItem&)(rSet.Get(SDRATTR_SHADOWCOLOR)));
+            const SdrShadowColorItem& rShadColItem = ((const SdrShadowColorItem&)(rSet.Get(SDRATTR_SHADOWCOLOR)));
             Color aShadCol(rShadColItem.GetValue());
-            sal_uInt16 nTransp = ((SdrShadowTransparenceItem&)(rSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue();
-            XFillStyle eStyle = ((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
-
-//-/            XFillAttrSetItem aF(rSet.GetPool());
+            sal_uInt16 nTransp = ((const SdrShadowTransparenceItem&)(rSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue();
+            XFillStyle eStyle = ((const XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
+            BOOL bFillBackground = ((const XFillBackgroundItem&)(rSet.Get(XATTR_FILLBACKGROUND))).GetValue();
             SfxItemSet aSet(rSet);
-//-/            aF.GetItemSet().Put(rSet);
 
-            if(eStyle==XFILL_HATCH)
+            if(eStyle==XFILL_HATCH && !bFillBackground)
             {
                 // #41666#
                 XHatch aHatch = ((XFillHatchItem&)(rSet.Get(XATTR_FILLHATCH))).GetValue();
