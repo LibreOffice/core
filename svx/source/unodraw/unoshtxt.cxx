@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: thb $ $Date: 2002-03-14 13:43:27 $
+ *  last change: $Author: thb $ $Date: 2002-04-16 14:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,6 +356,8 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
 
             case HINT_ENDEDIT:
+                // remove as listener - outliner might outlive ourselves
+                mpModel->GetDrawOutliner().SetNotifyHdl( Link() );
                 Broadcast( *pSdrHint );
                 break;
         }
