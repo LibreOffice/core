@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-12-04 11:28:26 $
+ *  last change: $Author: os $ $Date: 2001-12-04 16:37:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,7 +429,7 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
     {
         // Printer konnte nicht gestartet werden
         delete pProgress;
-        return PRINTER_GENERALERROR;
+        return pPrinter->GetError();
     }
 
     pProgress->Stop();
