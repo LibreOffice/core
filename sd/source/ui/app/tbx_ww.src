@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbx_ww.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:05:44 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ FloatingWindow RID_ALIGNMENT
     Text[ arabic ] = "„Õ«–«…";
     Text[ turkish ] = "Hizalama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "AlineaciÛn";
 };
 FloatingWindow RID_ZOOM
 {
@@ -220,6 +221,7 @@ FloatingWindow RID_ZOOM
     Text[ arabic ] = " ﬂ»Ì— Ê ’€Ì—";
     Text[ turkish ] = "Yak˝nla˛t˝r";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Escala";
 };
 FloatingWindow RID_CHOOSE_MODE
 {
@@ -319,6 +321,7 @@ FloatingWindow RID_CHOOSE_MODE
     Text[ arabic ] = " √ÀÌ—« ";
     Text[ turkish ] = "Efektler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Efectos";
 };
 FloatingWindow RID_TEXT
 {
@@ -395,6 +398,7 @@ FloatingWindow RID_TEXT
     Text[ arabic ] = "‰’";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto";
 };
 FloatingWindow RID_RECTANGLES
 {
@@ -493,6 +497,7 @@ FloatingWindow RID_RECTANGLES
     Text[ arabic ] = "„” ÿÌ·« ";
     Text[ turkish ] = "Dikdˆrtgenler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Rect·ngulos";
 };
 FloatingWindow RID_ELLIPSES
 {
@@ -619,6 +624,7 @@ FloatingWindow RID_ELLIPSES
     Text[ arabic ] = "√‘ﬂ«· »Ì÷ÊÌ…";
     Text[ turkish ] = "Elipsler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Elipses";
 };
 FloatingWindow RID_LINES
 {
@@ -710,6 +716,7 @@ FloatingWindow RID_LINES
     Text[ arabic ] = "„‰Õ‰Ì« ";
     Text[ turkish ] = "Eri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Curvas";
 };
 FloatingWindow RID_ARROWS
 {
@@ -826,6 +833,7 @@ FloatingWindow RID_ARROWS
     Text[ arabic ] = "ŒÿÊÿ";
     Text[ turkish ] = "«izgiler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "LÌneas";
 };
 FloatingWindow RID_3D_OBJECTS
 {
@@ -917,6 +925,7 @@ FloatingWindow RID_3D_OBJECTS
     Text[ arabic ] = "ﬂ«∆‰«  À·«ÀÌ… «·√»⁄«œ";
     Text[ turkish ] = "3B nesneler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos 3D";
 };
 FloatingWindow RID_CONNECTORS
 {
@@ -1163,6 +1172,7 @@ FloatingWindow RID_CONNECTORS
     Text[ arabic ] = "—Ê«»ÿ";
     Text[ turkish ] = "Balay˝c˝lar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Conector";
 };
 FloatingWindow RID_INSERT
 {
@@ -1276,6 +1286,7 @@ FloatingWindow RID_INSERT
     Text[ arabic ] = "≈œ—«Ã";
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar";
 };
 FloatingWindow RID_POSITION
 {
@@ -1355,6 +1366,7 @@ FloatingWindow RID_POSITION
     Text[ arabic ] = " — Ì»";
     Text[ turkish ] = "S˝ralama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "PosiciÛn";
 };
 
 
