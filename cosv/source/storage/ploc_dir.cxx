@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ploc_dir.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:25:40 $
+ *  last change: $Author: np $ $Date: 2002-03-22 10:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ Directory::PhysicalCreate_Dir( const char * i_sStr ) const
 void
 Directory::GetContainedDirectories( StringVector & o_rResult ) const
 {
-    DIR *           pDir = opendir( StrPath().c_str() );
+    DIR *           pDir = opendir( StrPath() );
     dirent *        pEntry = 0;
     struct stat     aEntryStatus;
 
@@ -297,7 +297,7 @@ Directory::GetContainedFiles( StringVector &    o_rResult,
     bool            bUseFilter = strcmp( i_sFilter, "*.*" ) != 0
                                  AND strncmp( i_sFilter, "*.", 2) == 0;
 
-    DIR *           pDir = opendir( StrPath().c_str() );
+    DIR *           pDir = opendir( StrPath() );
     dirent *        pEntry = 0;
     char *          sEnding = "";
     struct stat     aEntryStatus;
