@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemanager.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:08 $
+ *  last change: $Author: jsc $ $Date: 2001-08-17 13:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ sal_Bool RegistryTypeManager::init(sal_Bool bMerged, const StringVector& regFile
     Registry tmpReg(loader);
     while (iter != regFiles.end())
     {
-        if (!tmpReg.open( OStringToOUString(*iter, RTL_TEXTENCODING_UTF8), REG_READONLY))
+        if (!tmpReg.open( convertToFileUrl(*iter), REG_READONLY))
             m_pImpl->m_registries.push_back(new Registry(tmpReg));
         else
         {
@@ -168,7 +168,7 @@ sal_Bool RegistryTypeManager::init(sal_Bool bMerged, const StringVector& regFile
         Registry *pTmpReg = new Registry(loader);
         OString tmpName(makeTempName(NULL));
 
-        if (!pTmpReg->create( OStringToOUString(tmpName, RTL_TEXTENCODING_UTF8) ) )
+        if (!pTmpReg->create( convertToFileUrl(tmpName) ) )
         {
             RegistryKey rootKey;
             RegError ret = REG_NO_ERROR;
@@ -178,7 +178,7 @@ sal_Bool RegistryTypeManager::init(sal_Bool bMerged, const StringVector& regFile
 
             while (iter != regFiles.end())
             {
-                if ( ret = pTmpReg->mergeKey(rootKey, aRoot, OUString::createFromAscii( *iter )) )
+                if ( ret = pTmpReg->mergeKey(rootKey, aRoot, convertToFileUrl( *iter )) )
                 {
                     if (ret != REG_MERGE_CONFLICT)
                     {

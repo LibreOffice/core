@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlcmain.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-07-27 09:47:09 $
+ *  last change: $Author: jsc $ $Date: 2001-08-17 13:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,6 @@
 #include <idlc/idlc.hxx>
 #endif
 
-#ifdef SAL_UNX
-sal_Char SEPARATOR = '/';
-#else
-sal_Char SEPARATOR = '\\';
-#endif
-
 using namespace ::rtl;
 
 void SAL_CALL main( int argc, char** argv )
@@ -94,26 +88,30 @@ void SAL_CALL main( int argc, char** argv )
     sal_Int32   nErrors = 0;
     for ( sal_Int32 i=0; i < nFiles; i++ )
     {
+        OString sysFileName( convertToAbsoluteSystemPath(files[i]) );
+
         fprintf(stdout, "%s: compile '%s' ... \n",
                 options.getProgramName().getStr(), files[i].getStr());
-        nErrors = compileFile(files[i]);
+        nErrors = compileFile(sysFileName);
         if ( nErrors )
         {
-            OString outputName;
             if ( options.isValid("-O") )
             {
-                outputName = options.getOption("-O");
-                sal_Char c = outputName.getStr()[outputName.getLength()-1];
+                OString sysOutputName = convertToAbsoluteSystemPath(options.getOption("-O"));
+                sal_Char c = sysOutputName.getStr()[sysOutputName.getLength()-1];
 
-                if ( c != SEPARATOR )
-                    outputName += OString::valueOf(SEPARATOR);
+                if ( c != '/' )
+                    sysOutputName += OString::valueOf('/');
+
+                OString strippedFileName(sysFileName.copy(sysFileName.lastIndexOf(SEPARATOR) + 1));
+                sysOutputName += strippedFileName.replaceAt(strippedFileName.getLength() -3 , 3, "urd");
+                removeIfExists(sysOutputName);
+            } else
+            {
+                removeIfExists(sysFileName);
             }
-
-            OString strippedFileName(files[i].copy(files[i].lastIndexOf(SEPARATOR) + 1));
-            outputName += strippedFileName.replaceAt(strippedFileName.getLength() -3 , 3, "urd");
-            removeIfExists(outputName);
         } else
-            nErrors = produceFile(files[i]);
+            nErrors = produceFile(sysFileName);
 
         idlc()->reset();
         if ( nErrors > 0 )

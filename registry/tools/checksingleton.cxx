@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checksingleton.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-06-25 14:37:48 $
+ *  last change: $Author: jsc $ $Date: 2001-08-17 13:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,56 @@
 #include <rtl/alloc.h>
 #endif
 
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+
+#ifdef SAL_UNX
+#define SEPARATOR '/'
+#else
+#define SEPARATOR '\\'
+#endif
+
 using namespace ::rtl;
+using namespace ::osl;
+
+sal_Bool isFileUrl(const OString& fileName)
+{
+    if (fileName.indexOf("file://") == 0 )
+        return sal_True;
+    return sal_False;
+}
+
+OUString convertToFileUrl(const OString& fileName)
+{
+    if ( isFileUrl(fileName) )
+    {
+        return OStringToOUString(fileName, osl_getThreadTextEncoding());
+    }
+
+    OUString uUrlFileName;
+    OUString uFileName(fileName.getStr(), fileName.getLength(), osl_getThreadTextEncoding());
+    if ( fileName.indexOf('.') == 0 || fileName.indexOf(SEPARATOR) < 0 )
+    {
+        OUString uWorkingDir;
+        OSL_VERIFY( osl_getProcessWorkingDir(&uWorkingDir.pData) == osl_Process_E_None );
+        OSL_VERIFY( FileBase::getAbsoluteFileURL(uWorkingDir, uFileName, uUrlFileName) == FileBase::E_None );
+    } else
+    {
+        OSL_VERIFY( FileBase::getFileURLFromSystemPath(uFileName, uUrlFileName) == FileBase::E_None );
+    }
+
+    return uUrlFileName;
+}
 
 #define U2S( s ) \
     OUStringToOString(s, RTL_TEXTENCODING_UTF8).getStr()
@@ -392,8 +441,8 @@ void _cdecl main( int argc, char * argv[] )
         exit(1);
     }
 
-    OUString indexRegName( S2U(options.getIndexReg()) );
-    OUString typeRegName( S2U(options.getTypeReg()) );
+    OUString indexRegName( convertToFileUrl(options.getIndexReg()) );
+    OUString typeRegName( convertToFileUrl(options.getTypeReg()) );
 
     RegistryLoader regLoader;
     Registry indexReg(regLoader);

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2001-06-05 09:29:21 $
+#   last change: $Author: jsc $ $Date: 2001-08-17 13:09:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,11 +116,6 @@ APP1STDLIBS=\
             $(REGLIB) \
             $(CPPULIB) \
             $(CPPUHELPERLIB)
-
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS+= \
-            $(LIBCIMT) $(LIBCMT)
-.ENDIF
 
 APP1LIBS= \
         $(LB)$/codemaker.lib

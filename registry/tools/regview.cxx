@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regview.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:43 $
+ *  last change: $Author: jsc $ $Date: 2001-08-17 13:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,58 @@
 #include    <rtl/alloc.h>
 #endif
 
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+
+#ifdef SAL_UNX
+#define SEPARATOR '/'
+#else
+#define SEPARATOR '\\'
+#endif
+
+using namespace ::rtl;
+using namespace ::osl;
+
+sal_Bool isFileUrl(const OString& fileName)
+{
+    if (fileName.indexOf("file://") == 0 )
+        return sal_True;
+    return sal_False;
+}
+
+OUString convertToFileUrl(const OString& fileName)
+{
+    if ( isFileUrl(fileName) )
+    {
+        return OStringToOUString(fileName, osl_getThreadTextEncoding());
+    }
+
+    OUString uUrlFileName;
+    OUString uFileName(fileName.getStr(), fileName.getLength(), osl_getThreadTextEncoding());
+    if ( fileName.indexOf('.') == 0 || fileName.indexOf(SEPARATOR) < 0 )
+    {
+        OUString uWorkingDir;
+        OSL_VERIFY( osl_getProcessWorkingDir(&uWorkingDir.pData) == osl_Process_E_None );
+        OSL_VERIFY( FileBase::getAbsoluteFileURL(uWorkingDir, uFileName, uUrlFileName) == FileBase::E_None );
+    } else
+    {
+        OSL_VERIFY( FileBase::getFileURLFromSystemPath(uFileName, uUrlFileName) == FileBase::E_None );
+    }
+
+    return uUrlFileName;
+}
+
+
 #if (defined UNX) || (defined OS2)
 int main( int argc, char * argv[] )
 #else
@@ -86,7 +138,7 @@ int _cdecl main( int argc, char * argv[] )
         exit(1);
     }
 
-    ::rtl::OUString regName( ::rtl::OUString::createFromAscii(argv[1]) );
+    OUString regName( convertToFileUrl(argv[1]) );
     if (reg_openRegistry(regName.pData, &hReg, REG_READONLY))
     {
         fprintf(stderr, "open registry \"%s\" failed\n", argv[1]);
@@ -97,7 +149,7 @@ int _cdecl main( int argc, char * argv[] )
     {
         if (argc == 3)
         {
-            ::rtl::OUString keyName( ::rtl::OUString::createFromAscii(argv[2]) );
+            OUString keyName( OUString::createFromAscii(argv[2]) );
             if (!reg_openKey(hRootKey, keyName.pData, &hKey))
             {
                 if (reg_dumpRegistry(hKey))

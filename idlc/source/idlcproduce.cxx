@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlcproduce.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 19:50:04 $
+ *  last change: $Author: jsc $ $Date: 2001-08-17 13:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,15 @@
 #ifndef _RTL_STRBUF_HXX_
 #include <rtl/strbuf.hxx>
 #endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
+#endif
 
 #if defined(SAL_W32) || defined(SAL_OS2)
 #include <io.h>
@@ -80,15 +89,35 @@
 #include <errno.h>
 #endif
 
-#ifdef SAL_UNX
-extern sal_Char SEPARATOR;
-#else
-extern sal_Char SEPARATOR;
-#endif
-
 using namespace ::rtl;
+using namespace ::osl;
 
 StringList* pCreatedDirectories = NULL;
+
+static OUString getWorkingDir()
+{
+    OUString workingDir;
+    if ( osl_getProcessWorkingDir(&workingDir.pData) != osl_Process_E_None )
+        return OUString();
+
+    return workingDir;
+}
+
+static OString getTempDir()
+{
+    sal_Char* pTemp = NULL;
+    if ( !(pTemp = getenv("TEMP")) )
+    {
+        if ( !(pTemp = getenv("TMP")) )
+            return OString();
+    }
+
+    OString tempDir(pTemp);
+    if ( pTemp[strlen(pTemp)-1] != SEPARATOR )
+        tempDir += OString::valueOf(SEPARATOR);
+
+    return tempDir;
+}
 
 static sal_Bool checkOutputPath(const OString& completeName)
 {
@@ -177,25 +206,19 @@ sal_Int32 SAL_CALL produceFile(const OString& fileName)
     OString regFileName;
     if ( pOptions->isValid("-O") )
     {
-        regFileName = pOptions->getOption("-O");
+        regFileName = convertToAbsoluteSystemPath(pOptions->getOption("-O"));
         sal_Char c = regFileName.getStr()[regFileName.getLength()-1];
 
         if ( c != SEPARATOR )
             regFileName += OString::valueOf(SEPARATOR);
     }
 
-    OString regTmpName(regFileName);
     OString strippedFileName(fileName.copy(fileName.lastIndexOf(SEPARATOR) + 1));
+    OString tempName(strippedFileName.copy(0, strippedFileName.indexOf('.')));
+    tempName += "_";
+    OString regTmpName( makeTempName(tempName, "._idlc_"));
     regFileName += strippedFileName.replaceAt(strippedFileName.getLength() -3 , 3, "urd");
     regTmpName += strippedFileName.replaceAt(strippedFileName.getLength() -3 , 3, "_idlc_");
-
-    if ( !checkOutputPath(regTmpName) )
-    {
-        fprintf(stderr, "%s: could not create path of registry file '%s'.\n",
-                pOptions->getProgramName().getStr(), regFileName.getStr());
-        removeIfExists(regFileName);
-        return 1;
-    }
 
     RegistryLoader              regLoader;
     RegistryTypeWriterLoader    writerLoader;
@@ -212,7 +235,8 @@ sal_Int32 SAL_CALL produceFile(const OString& fileName)
     Registry regFile(regLoader);
 
     removeIfExists(regTmpName);
-    if ( regFile.create(OStringToOUString(regTmpName, RTL_TEXTENCODING_UTF8)) )
+    OString urlRegTmpName = convertToFileUrl(regTmpName);
+    if ( regFile.create(OStringToOUString(urlRegTmpName, RTL_TEXTENCODING_UTF8)) )
     {
         fprintf(stderr, "%s: could not create registry file '%s'\n",
                 pOptions->getProgramName().getStr(), regTmpName.getStr());
@@ -264,15 +288,24 @@ sal_Int32 SAL_CALL produceFile(const OString& fileName)
     }
 
     removeIfExists(regFileName);
-    if ( rename(regTmpName.getStr(), regFileName.getStr()) != 0 )
+    if ( !checkOutputPath(regFileName) )
     {
-        fprintf(stderr, "%s: cannot rename temporary registry '%s' to '%s'\n",
+        fprintf(stderr, "%s: could not create path of registry file '%s'.\n",
+                pOptions->getProgramName().getStr(), regFileName.getStr());
+        removeIfExists(regTmpName);
+        return 1;
+    }
+
+    if ( !copyFile(regTmpName, regFileName) )
+    {
+        fprintf(stderr, "%s: cannot copy temporary registry '%s' to '%s'\n",
                 idlc()->getOptions()->getProgramName().getStr(),
                 regTmpName.getStr(), regFileName.getStr());
         removeIfExists(regTmpName);
         cleanPath();
         return 1;
     }
+    removeIfExists(regTmpName);
 
     return 0;
 }

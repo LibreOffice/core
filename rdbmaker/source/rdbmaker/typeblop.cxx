@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeblop.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-14 10:27:32 $
+ *  last change: $Author: jsc $ $Date: 2001-08-17 13:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,10 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+
+#ifndef _CODEMAKER_GLOBAL_HXX_
+#include <codemaker/global.hxx>
 #endif
 
 using namespace com::sun::star;
@@ -296,7 +300,7 @@ sal_Bool SAL_CALL initTypeMapper( const sal_Char* pRegName )
         if (!pRegName)
             return sal_False;
 
-        Reference< XMultiServiceFactory > xSMgr( createRegistryServiceFactory( OUString::createFromAscii(pRegName) ) );
+        Reference< XMultiServiceFactory > xSMgr( createRegistryServiceFactory( convertToFileUrl(pRegName) ) );
 
         if ( !xSMgr.is() )
             return sal_False;

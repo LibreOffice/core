@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rdbmaker.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-21 15:45:07 $
+ *  last change: $Author: jsc $ $Date: 2001-08-17 13:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ void cleanUp( sal_Bool bError)
     }
     if ( listFile.isValid() )
     {
-        listFile.closeFile();
+        listFile.close();
         unlink(listFile.getName().getStr());
     }
 
@@ -420,7 +420,7 @@ int _cdecl main( int argc, char * argv[] )
     if ( options.generateTypeList() )
     {
         OString fileName = createFileName( options.getOption("-O") );
-        listFile.openFile(fileName);
+        listFile.open(fileName);
 
         if ( !listFile.isValid() )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2001-07-18 18:02:39 $
+ *  last change: $Author: jsc $ $Date: 2001-08-17 13:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,13 @@
 #include <rtl/ustring.hxx>
 #endif
 
+#ifndef     _OSL_THREAD_H_
+#include    <osl/thread.h>
+#endif
+#ifndef     _OSL_FILE_HXX_
+#include    <osl/file.hxx>
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #if defined(SAL_W32) || defined(SAL_OS2)
@@ -86,7 +93,14 @@
 #include    <codemaker/global.hxx>
 #endif
 
-using namespace rtl;
+#ifdef SAL_UNX
+#define SEPARATOR '/'
+#else
+#define SEPARATOR '\\'
+#endif
+
+using namespace ::rtl;
+using namespace ::osl;
 
 OString makeTempName(sal_Char* prefix)
 {
@@ -224,11 +238,7 @@ OString createFileNameFromType( const OString& destination,
            if (mkdir((char*)nameBuffer.getStr()) == -1)
 #endif
         {
-// #if __SUNPRO_CC >= 0x500
-//          if( * ::___errno() == ENOENT )
-// #else
             if ( errno == ENOENT )
-// #endif
                 return OString();
         }
 
@@ -311,6 +321,34 @@ const OString inGlobalSet(const OUString & rValue)
     return *(aGlobalMap.insert( sValue ).first);
 }
 
+static sal_Bool isFileUrl(const OString& fileName)
+{
+    if (fileName.indexOf("file://") == 0 )
+        return sal_True;
+    return sal_False;
+}
+
+OUString convertToFileUrl(const OString& fileName)
+{
+    if ( isFileUrl(fileName) )
+    {
+        return OStringToOUString(fileName, osl_getThreadTextEncoding());
+    }
+
+    OUString uUrlFileName;
+    OUString uFileName(fileName.getStr(), fileName.getLength(), osl_getThreadTextEncoding());
+    if ( fileName.indexOf('.') == 0 || fileName.indexOf(SEPARATOR) < 0 )
+    {
+        OUString uWorkingDir;
+        OSL_VERIFY( osl_getProcessWorkingDir(&uWorkingDir.pData) == osl_Process_E_None );
+        OSL_VERIFY( FileBase::getAbsoluteFileURL(uWorkingDir, uFileName, uUrlFileName) == FileBase::E_None );
+    } else
+    {
+        OSL_VERIFY( FileBase::getFileURLFromSystemPath(uFileName, uUrlFileName) == FileBase::E_None );
+    }
+
+    return uUrlFileName;
+}
 
 //*************************************************************************
 // FileStream
@@ -319,60 +357,85 @@ FileStream::FileStream()
 {
 }
 
-FileStream::FileStream(const OString& name, sal_Int32 nMode)
-    : ofstream(name, nMode)
-    , m_name(name)
+FileStream::FileStream(const OString& name, FileAccessMode mode)
+    : m_pFile(NULL)
 {
+    if ( name.getLength() > 0 )
+    {
+        m_name = name;
+        m_pFile = fopen(m_name, checkAccessMode(mode));
+    }
 }
 
 FileStream::~FileStream()
 {
-    flush();
-    close();
+    if ( isValid() )
+    {
+        fflush(m_pFile);
+        fclose(m_pFile);
+    }
 }
 
 sal_Bool FileStream::isValid()
 {
-#ifndef __STL_NO_NEW_IOSTREAMS
-#if STLPORT_VERSION < 400
-    if(rdbuf()->fd() < 0)
-#else
-    if( !is_open() )
-#endif
-#else
-    if(fd() < 0)
-#endif
-    {
-        return sal_False;
-    }
+    if ( m_pFile )
+        return sal_True;
 
-    return sal_True;
+    return sal_False;
 }
 
-void FileStream::openFile(const OString& name, sal_Int32 nMode)
+void FileStream::open(const OString& name, FileAccessMode mode)
 {
     if ( name.getLength() > 0 )
+    {
         m_name = name;
-
-    if ( m_name.getLength() > 0 )
-        open(m_name, nMode);
+        m_pFile = fopen(m_name, checkAccessMode(mode));
+    }
 }
 
-void FileStream::closeFile()
+void FileStream::close()
 {
-    flush();
-    close();
+    if ( isValid() )
+    {
+        fflush(m_pFile);
+        fclose(m_pFile);
+        m_pFile = NULL;
+        m_name = OString();
+    }
 }
 
 sal_Int32 FileStream::getSize()
 {
-    flush();
-
-    FILE* f = fopen(m_name, "r");
+    sal_Int32 pos = 0;
     sal_Int32 size = 0;
-    if (!fseek(f, 0, SEEK_END))
-        size = ftell(f);
-    fclose(f);
+    if ( isValid() )
+    {
+        fflush(m_pFile);
+        pos = ftell(m_pFile);
+        if (!fseek(m_pFile, 0, SEEK_END))
+            size = ftell(m_pFile);
+        fseek(m_pFile, pos, SEEK_SET);
+    }
     return size;
+}
+
+const sal_Char* FileStream::checkAccessMode(FileAccessMode mode)
+{
+    switch( mode )
+    {
+    case FAM_READ:
+        return "r";
+    case FAM_WRITE:
+        return "w";
+    case FAM_APPEND:
+        return "a";
+    case FAM_READWRITE_EXIST:
+        return "r+";
+    case FAM_READWRITE:
+        return "w+";
+    case FAM_READAPPEND:
+        return "a+";
+    }
+    return "w+";
 }
 

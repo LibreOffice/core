@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoexe.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-29 08:59:01 $
+ *  last change: $Author: jsc $ $Date: 2001-08-17 12:59:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,22 @@
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
 #include <com/sun/star/bridge/XBridge.hpp>
 
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+
+#ifdef SAL_UNX
+#define SEPARATOR '/'
+#else
+#define SEPARATOR '\\'
+#endif
+
 using namespace std;
 using namespace rtl;
 using namespace osl;
@@ -108,9 +124,36 @@ using namespace com::sun::star::connection;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::container;
 
-
 namespace unoexe
 {
+
+static sal_Bool isFileUrl(const OUString& fileName)
+{
+    if (fileName.indexOf(OUString::createFromAscii("file://")) == 0 )
+        return sal_True;
+    return sal_False;
+}
+
+static OUString convertToFileUrl(const OUString& fileName)
+{
+    if ( isFileUrl(fileName) )
+    {
+        return fileName;
+    }
+
+    OUString uUrlFileName;
+    if ( fileName.indexOf('.') == 0 || fileName.indexOf(SEPARATOR) < 0 )
+    {
+        OUString uWorkingDir;
+        OSL_VERIFY( osl_getProcessWorkingDir(&uWorkingDir.pData) == osl_Process_E_None );
+        OSL_VERIFY( FileBase::getAbsoluteFileURL(uWorkingDir, fileName, uUrlFileName) == FileBase::E_None );
+    } else
+    {
+        OSL_VERIFY( FileBase::getFileURLFromSystemPath(fileName, uUrlFileName) == FileBase::E_None );
+    }
+
+    return uUrlFileName;
+}
 
 //--------------------------------------------------------------------------------------------------
 static inline void out( const sal_Char * pText )
@@ -329,7 +372,7 @@ static Reference< XSimpleRegistry > openRegistry(
 
     try
     {
-        xNewReg->open( rURL, bReadOnly, bCreate );
+        xNewReg->open( convertToFileUrl(rURL), bReadOnly, bCreate );
         if (xNewReg->isValid())
             return xNewReg;
         else

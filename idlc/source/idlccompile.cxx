@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlccompile.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-06-11 11:45:54 $
+ *  last change: $Author: jsc $ $Date: 2001-08-17 13:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,12 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
 
 #if defined(SAL_W32) || defined(SAL_OS2)
 #include <io.h>
@@ -84,11 +90,12 @@
 #if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD)
 #include <sys/wait.h>
 #else
-#include <wait.h>
+#include <wait.h
 #endif
 #endif
 
 using namespace ::rtl;
+using namespace ::osl;
 
 extern int yyparse();
 extern FILE* yyin;
@@ -100,6 +107,48 @@ sal_Int32 lineNumber = 1;
 static OUString TMP(RTL_CONSTASCII_USTRINGPARAM("TMP"));
 static OUString TEMP(RTL_CONSTASCII_USTRINGPARAM("TEMP"));
 static sal_Char tmpFilePattern[512];
+
+sal_Bool isFileUrl(const OString& fileName)
+{
+    if (fileName.indexOf("file://") == 0 )
+        return sal_True;
+    return sal_False;
+}
+
+OString convertToAbsoluteSystemPath(const OString& fileName)
+{
+    OUString uSysFileName;
+    OUString uFileName(fileName.getStr(), fileName.getLength(), osl_getThreadTextEncoding());
+    if ( isFileUrl(fileName) )
+    {
+        OSL_VERIFY(FileBase::getSystemPathFromFileURL(uFileName, uSysFileName) == FileBase::E_None);
+    } else
+    if ( fileName.indexOf('.') == 0 || fileName.indexOf(SEPARATOR) < 0)
+    {
+        OUString uWorkingDir, uUrlFileName;
+        OSL_VERIFY( osl_getProcessWorkingDir(&uWorkingDir.pData) == osl_Process_E_None );
+        OSL_VERIFY( FileBase::getAbsoluteFileURL(uWorkingDir, uFileName, uUrlFileName) == FileBase::E_None );
+        OSL_VERIFY( FileBase::getSystemPathFromFileURL(uUrlFileName, uSysFileName) == FileBase::E_None );
+    } else
+    {
+        return fileName;
+    }
+
+    return OUStringToOString(uSysFileName, osl_getThreadTextEncoding());
+}
+
+OString convertToFileUrl(const OString& fileName)
+{
+    if ( !isFileUrl(fileName) )
+    {
+        OUString uFileName(fileName.getStr(), fileName.getLength(), osl_getThreadTextEncoding());
+        OUString uUrlFileName;
+        OSL_VERIFY(FileBase::getFileURLFromSystemPath(uFileName, uUrlFileName) == FileBase::E_None);
+        return OUStringToOString(uUrlFileName, osl_getThreadTextEncoding());
+    }
+
+    return fileName;
+}
 
 // prefix must be specified, postfix could be empty string
 OString makeTempName(const OString& prefix, const OString& postfix)
@@ -124,15 +173,15 @@ OString makeTempName(const OString& prefix, const OString& postfix)
 
 #if defined(SAL_W32) || defined(SAL_UNX)
     strcpy(tmpFilePattern, tmpPath);
-#ifdef SAL_UNX
-    strcat(tmpFilePattern, "/");
-#else
-    strcat(tmpFilePattern, "\\");
-#endif
+    strcat(tmpFilePattern, PATH_SEPARATOR);
     strcat(tmpFilePattern, prefix.getStr());
     strcat(tmpFilePattern, "XXXXXX");
 
+#ifdef SAL_UNX
+    (void) mkstemp(tmpFilePattern);
+#else
     (void) mktemp(tmpFilePattern);
+#endif
     if ( postfix.getLength() )
         strcat(tmpFilePattern, postfix.getStr());
 #endif
@@ -144,37 +193,47 @@ OString makeTempName(const OString& prefix, const OString& postfix)
     return OString(tmpFilePattern);
 }
 
-void copyFile(const OString& sourceFile, const OString& targetFile)
+sal_Bool copyFile(const OString& sourceFile, const OString& targetFile)
 {
-    FILE* pSource = fopen(sourceFile.getStr(), "r");
+    sal_Bool bRet = sal_True;
+
+    FILE* pSource = fopen(sourceFile.getStr(), "rb");
 
     if ( !pSource )
-    {
-          fprintf(stderr, "%s: couldn't open file: %s\n",
-            idlc()->getOptions()->getProgramName().getStr(), sourceFile.getStr());
-          exit(99);
-    }
+        return sal_False;
 
-    FILE* pTarget = fopen(targetFile.getStr(), "w");
+    FILE* pTarget = fopen(targetFile.getStr(), "wb");
 
     if ( !pTarget )
     {
-          fprintf(stderr, "%s: couldn't create file: %s\n",
-            idlc()->getOptions()->getProgramName().getStr(), targetFile.getStr());
-          exit(99);
+        fclose(pSource);
+        return sal_False;
     }
 
+    sal_uInt32 totalSize = 512;
+    sal_uInt32 readSize = 0;
+    sal_uInt32 writeSize = 0;
     sal_Char pBuffer[513];
 
-    fgets(pBuffer, 512, pSource);
     while ( !feof(pSource) )
     {
-        fprintf(pTarget, "%s", pBuffer);
-        fgets(pBuffer, 512, pSource);
+        if ( (readSize = fread(pBuffer, 1, totalSize, pSource)) > 0 && !ferror(pSource) )
+        {
+            if ( (writeSize = fwrite(pBuffer, 1, readSize, pTarget)) != readSize || ferror(pTarget) )
+            {
+                fclose(pSource);
+                fclose(pTarget);
+                return sal_False;
+            }
+        }
     }
 
     fclose(pSource);
+    if ( fflush(pTarget) )
+        bRet = sal_False;
     fclose(pTarget);
+
+    return bRet;
 }
 
 sal_Int32 SAL_CALL compileFile(const OString& fileName)
@@ -183,7 +242,12 @@ sal_Int32 SAL_CALL compileFile(const OString& fileName)
     OString tmpFile = makeTempName(OString("idli_"), OString(".idl"));
     OString preprocFile = makeTempName(OString("idlf_"), OString(".idl"));
 
-    copyFile(fileName, tmpFile);
+    if ( !copyFile(fileName, tmpFile) )
+    {
+          fprintf(stderr, "%s: couldn't copy file '%' to '%s'\n",
+            idlc()->getOptions()->getProgramName().getStr(), fileName.getStr(), tmpFile.getStr());
+          exit(99);
+    }
 
     idlc()->setFileName(fileName);
     idlc()->setMainFileName(fileName);
@@ -194,11 +258,8 @@ sal_Int32 SAL_CALL compileFile(const OString& fileName)
     Options* pOptions = idlc()->getOptions();
 
     OString filePath;
-#if defined(SAL_W32) || defined(SAL_OS2)
-    sal_uInt32 index = fileName.lastIndexOf('\\');
-#else
-    sal_uInt32 index = fileName.lastIndexOf('/');
-#endif
+    sal_uInt32 index = fileName.lastIndexOf(SEPARATOR);
+
     if ( index > 0)
     {
         filePath = fileName.copy(0, index);

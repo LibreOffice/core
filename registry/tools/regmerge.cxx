@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regmerge.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:43 $
+ *  last change: $Author: jsc $ $Date: 2001-08-17 13:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,57 @@
 #ifndef _RTL_ALLOC_H_
 #include    <rtl/alloc.h>
 #endif
+
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+
+#ifdef SAL_UNX
+#define SEPARATOR '/'
+#else
+#define SEPARATOR '\\'
+#endif
+
+using namespace ::rtl;
+using namespace ::osl;
+
+sal_Bool isFileUrl(const OString& fileName)
+{
+    if (fileName.indexOf("file://") == 0 )
+        return sal_True;
+    return sal_False;
+}
+
+OUString convertToFileUrl(const OString& fileName)
+{
+    if ( isFileUrl(fileName) )
+    {
+        return OStringToOUString(fileName, osl_getThreadTextEncoding());
+    }
+
+    OUString uUrlFileName;
+    OUString uFileName(fileName.getStr(), fileName.getLength(), osl_getThreadTextEncoding());
+    if ( fileName.indexOf('.') == 0 || fileName.indexOf(SEPARATOR) < 0 )
+    {
+        OUString uWorkingDir;
+        OSL_VERIFY( osl_getProcessWorkingDir(&uWorkingDir.pData) == osl_Process_E_None );
+        OSL_VERIFY( FileBase::getAbsoluteFileURL(uWorkingDir, uFileName, uUrlFileName) == FileBase::E_None );
+    } else
+    {
+        OSL_VERIFY( FileBase::getFileURLFromSystemPath(uFileName, uUrlFileName) == FileBase::E_None );
+    }
+
+    return uUrlFileName;
+}
 
 int realargc;
 char* realargv[2048];
@@ -154,7 +205,7 @@ int _cdecl main( int argc, char * argv[] )
         exit(1);
     }
 
-    ::rtl::OUString regName( ::rtl::OUString::createFromAscii(realargv[1]) );
+    ::rtl::OUString regName( convertToFileUrl(realargv[1]) );
     if (reg_openRegistry(regName.pData, &hReg, REG_READWRITE))
     {
         if (reg_createRegistry(regName.pData, &hReg))
@@ -172,7 +223,7 @@ int _cdecl main( int argc, char * argv[] )
         RegError _ret = REG_NO_ERROR;
         for (int i = 3; i < realargc; i++)
         {
-            targetRegName = ::rtl::OUString::createFromAscii(realargv[i]);
+            targetRegName = convertToFileUrl(realargv[i]);
             if (_ret = reg_mergeKey(hRootKey, mergeKeyName.pData, targetRegName.pData, sal_False, sal_True))
             {
                 if (_ret == REG_MERGE_CONFLICT)

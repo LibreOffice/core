@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registercomponent.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-02-19 16:24:38 $
+ *  last change: $Author: jsc $ $Date: 2001-08-17 13:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,16 +64,63 @@
 
 #include <vector>
 
-#ifndef _OSL_THREAD_H_
-#include <osl/thread.h>
-#endif
-
 #include <cppuhelper/servicefactory.hxx>
 
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <algorithm>
+
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+
+#ifdef SAL_UNX
+#define SEPARATOR '/'
+#else
+#define SEPARATOR '\\'
+#endif
+
+using namespace ::rtl;
+using namespace ::osl;
+
+sal_Bool isFileUrl(const OUString& fileName)
+{
+    if (fileName.indexOf(OUString::createFromAscii("file://")) == 0 )
+        return sal_True;
+    return sal_False;
+}
+
+OUString convertToFileUrl(const OUString& fileName)
+{
+    if ( isFileUrl(fileName) )
+    {
+        return fileName;
+    }
+
+    OUString uUrlFileName;
+    if ( fileName.indexOf('.') == 0 || fileName.indexOf(SEPARATOR) < 0 )
+    {
+        OUString uWorkingDir;
+        OSL_VERIFY( osl_getProcessWorkingDir(&uWorkingDir.pData) == osl_Process_E_None );
+        OSL_VERIFY( FileBase::getAbsoluteFileURL(uWorkingDir, fileName, uUrlFileName) == FileBase::E_None );
+    } else
+    {
+        OSL_VERIFY( FileBase::getFileURLFromSystemPath(fileName, uUrlFileName) == FileBase::E_None );
+    }
+
+    return uUrlFileName;
+}
+
 static void usingRegisterImpl()
 {
     fprintf(stderr, "\nusing: regcomp -register|revoke -r registryfile -c locationUrl [-br registryfile] [-l componentLoaderUrl]\n");
@@ -424,7 +471,7 @@ void _cdecl main( int argc, char * argv[] )
     {
         if ( aOptions.sBootRegName.getLength() )
         {
-            xSMgr = createRegistryServiceFactory( aOptions.sBootRegName );
+            xSMgr = createRegistryServiceFactory( convertToFileUrl(aOptions.sBootRegName) );
         } else
           {
             xSMgr = createServiceFactory();
@@ -468,7 +515,7 @@ void _cdecl main( int argc, char * argv[] )
         {
             try
             {
-                xReg->open( aOptions.sRegName, sal_False, sal_True);
+                xReg->open( convertToFileUrl(aOptions.sRegName), sal_False, sal_True);
                 if (!xReg->isValid())
                 {
                     fprintf(stderr, "ERROR: open|create registry \"%s\" failed!\n", sRegName.getStr());

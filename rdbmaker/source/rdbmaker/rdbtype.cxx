@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rdbtype.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:08 $
+ *  last change: $Author: jsc $ $Date: 2001-08-17 13:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ sal_Bool produceType(const OString& typeName,
     {
         if ( pOptions->generateTypeList() )
         {
-            o << typeName.getStr() << endl;
+            o << typeName.getStr() << "\n";
         } else
         {
 /*
