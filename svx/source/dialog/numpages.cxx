@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-22 17:26:31 $
+ *  last change: $Author: hr $ $Date: 2001-06-25 16:40:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2636,7 +2636,7 @@ IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton )
     String                  aGrfName;
     Size                    aSize;
     sal_Bool                bSucc(sal_False);
-    SvxOpenGraphicDialog    aGrfDlg( SVX_RESSTR(RID_STR_EDIT_GRAPHIC) );
+    SvxOpenGraphicDialog    aGrfDlg( SVX_RES(RID_STR_EDIT_GRAPHIC) );
 
     if(MN_GALLERY_ENTRY <= nItemId )
     {
