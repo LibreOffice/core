@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pfuncache.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-28 17:57:00 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,11 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
     }
 
     ScDocument* pDoc = pDocSh->GetDocument();
-    USHORT nTabCount = pDoc->GetTableCount();
-    USHORT nTab;
+    SCTAB nTabCount = pDoc->GetTableCount();
+    SCTAB nTab;
     for ( nTab=0; nTab<nTabCount; nTab++ )
     {
-        long nAttrPage = nTab ? nFirstAttr[nTab-1] : 1;
+        long nAttrPage = nTab > 0 ? nFirstAttr[nTab-1] : 1;
 
         long nThisTab = 0;
         if ( rMark.GetTableSelect( nTab ) )
@@ -124,31 +124,31 @@ BOOL ScPrintFuncCache::IsSameSelection( const ScPrintSelectionStatus& rStatus ) 
     return aSelection == rStatus;
 }
 
-USHORT ScPrintFuncCache::GetTabForPage( long nPage ) const
+SCTAB ScPrintFuncCache::GetTabForPage( long nPage ) const
 {
     ScDocument* pDoc = pDocSh->GetDocument();
-    USHORT nTabCount = pDoc->GetTableCount();
-    USHORT nTab = 0;
+    SCTAB nTabCount = pDoc->GetTableCount();
+    SCTAB nTab = 0;
     while ( nTab < nTabCount && nPage >= nPages[nTab] )
         nPage -= nPages[nTab++];
     return nTab;
 }
 
-long ScPrintFuncCache::GetTabStart( USHORT nTab ) const
+long ScPrintFuncCache::GetTabStart( SCTAB nTab ) const
 {
     long nRet = 0;
-    for ( USHORT i=0; i<nTab; i++ )
+    for ( SCTAB i=0; i<nTab; i++ )
         nRet += nPages[i];
     return nRet;
 }
 
-long ScPrintFuncCache::GetDisplayStart( USHORT nTab ) const
+long ScPrintFuncCache::GetDisplayStart( SCTAB nTab ) const
 {
     //! merge with lcl_GetDisplayStart in preview?
 
     long nDisplayStart = 0;
     ScDocument* pDoc = pDocSh->GetDocument();
-    for (USHORT i=0; i<nTab; i++)
+    for (SCTAB i=0; i<nTab; i++)
     {
         if ( pDoc->NeedPageResetAfterTab(i) )
             nDisplayStart = 0;
