@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:13:14 $
+ *  last change: $Author: rt $ $Date: 2004-08-24 10:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1700,7 +1700,7 @@ void SwXShape::setPropertyToDefault( const rtl::OUString& rPropertyName )
         if(pMap)
         {
             if ( pMap->nFlags & beans::PropertyAttribute::READONLY)
-                throw beans::RuntimeException( rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw uno::RuntimeException( rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             if(pFmt)
             {
                 const SfxItemSet& rSet = pFmt->GetAttrSet();
