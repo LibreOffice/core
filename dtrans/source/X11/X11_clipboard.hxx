@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_clipboard.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-22 17:47:46 $
+ *  last change: $Author: pl $ $Date: 2001-06-25 10:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,32 +78,46 @@
 #include <cppuhelper/compbase4.hxx>
 #endif
 
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
-#include <cppuhelper/compbase2.hxx>
-#endif
-
 // ------------------------------------------------------------------------
 
 #define X11_CLIPBOARD_IMPLEMENTATION_NAME "com.sun.star.datatransfer.X11ClipboardSupport"
 
 namespace x11 {
 
-    class X11ClipboardHolder :
+    class X11Clipboard :
         public ::cppu::WeakComponentImplHelper4 <
         ::com::sun::star::datatransfer::clipboard::XClipboardEx,
         ::com::sun::star::datatransfer::clipboard::XClipboardNotifier,
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::lang::XInitialization
-        >
+        >,
+        public SelectionAdaptor
     {
         ::osl::Mutex m_aMutex;
-        Reference< ::com::sun::star::datatransfer::clipboard::XClipboardEx >
-                m_xRealClipboard;
-        Reference< ::com::sun::star::datatransfer::clipboard::XClipboardNotifier >
-                m_xRealNotifier;
+
+        Reference< ::com::sun::star::datatransfer::XTransferable > m_aContents;
+        Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner > m_aOwner;
+
+        SelectionManager&                                       m_rSelectionManager;
+        Reference< ::com::sun::star::lang::XInitialization >    m_xSelectionManager;
+        ::std::list< Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener > > m_aListeners;
+        Atom                                                    m_aSelection;
+
+    protected:
+
+
+        friend class SelectionManager;
+        friend class X11_Transferable;
+
+        void fireChangedContentsEvent();
+        void clearContents();
+
     public:
-        X11ClipboardHolder();
-        virtual ~X11ClipboardHolder();
+
+        X11Clipboard( SelectionManager& rManager, Atom aSelection );
+        virtual ~X11Clipboard();
+
+        static X11Clipboard* get( const ::rtl::OUString& rDisplayName, Atom aSelection );
 
         /*
          *  XInitialization
@@ -122,77 +136,6 @@ namespace x11 {
 
         virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
             throw(RuntimeException);
-
-        /*
-         * XClipboard
-         */
-
-        virtual Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents()
-            throw(RuntimeException);
-
-        virtual void SAL_CALL setContents(
-            const Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans,
-            const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
-            throw(RuntimeException);
-
-        virtual ::rtl::OUString SAL_CALL getName()
-            throw(RuntimeException);
-
-        /*
-         * XClipboardEx
-         */
-
-        virtual sal_Int8 SAL_CALL getRenderingCapabilities()
-            throw(RuntimeException);
-
-        /*
-         * XClipboardNotifier
-         */
-        virtual void SAL_CALL addClipboardListener( const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
-            throw(RuntimeException);
-
-        virtual void SAL_CALL removeClipboardListener(
-            const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
-            throw(RuntimeException);
-    };
-
-    class X11Clipboard :
-        public ::cppu::WeakImplHelper2 <
-        ::com::sun::star::datatransfer::clipboard::XClipboardEx,
-        ::com::sun::star::datatransfer::clipboard::XClipboardNotifier
-        >,
-        public SelectionAdaptor
-    {
-        static ::std::hash_map< ::rtl::OUString, ::std::hash_map< Atom, X11Clipboard* >, ::rtl::OUStringHash >
-                m_aInstances;
-
-        ::osl::Mutex m_aMutex;
-
-        Reference< ::com::sun::star::datatransfer::XTransferable > m_aContents;
-        Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner > m_aOwner;
-
-        SelectionManager&                                       m_rSelectionManager;
-        Reference< ::com::sun::star::lang::XInitialization >    m_xSelectionManager;
-        ::std::list< Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener > > m_aListeners;
-        Atom                                                    m_aSelection;
-        ::com::sun::star::datatransfer::clipboard::XClipboardEx* m_pHolder;
-
-    protected:
-
-
-        friend class SelectionManager;
-        friend class X11_Transferable;
-
-        void fireChangedContentsEvent();
-        void clearContents();
-
-    public:
-
-        X11Clipboard( SelectionManager& rManager, Atom aSelection );
-        virtual ~X11Clipboard();
-
-        static X11Clipboard* get( const ::rtl::OUString& rDisplayName, Atom aSelection );
-        void setHolder( ::com::sun::star::datatransfer::clipboard::XClipboardEx* pHolder ) { m_pHolder = pHolder; }
 
         /*
          * XClipboard

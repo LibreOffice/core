@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_service.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-16 14:37:50 $
+ *  last change: $Author: pl $ $Date: 2001-06-25 10:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,27 +82,114 @@
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
+#ifndef _CPPUHELPER_COMPBASE1_HXX_
+#include <cppuhelper/compbase1.hxx>
+#endif
 
 using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::datatransfer::clipboard;
+using namespace com::sun::star::awt;
 using namespace x11;
 
 namespace x11 {
+
+class X11ClipboardFactory : public ::cppu::WeakComponentImplHelper1 <
+    ::com::sun::star::lang::XSingleServiceFactory
+>
+{
+    ::osl::Mutex m_aMutex;
+    ::std::hash_map< OUString, ::std::hash_map< Atom, Reference< XClipboard > >, ::rtl::OUStringHash > m_aInstances;
+public:
+    X11ClipboardFactory();
+    virtual ~X11ClipboardFactory();
+
+    /*
+     *  XSingleServiceFactory
+     */
+    virtual Reference< XInterface > createInstance();
+    virtual Reference< XInterface > createInstanceWithArguments( const Sequence< Any >& rArgs );
+};
+
+// ------------------------------------------------------------------------
+
+X11ClipboardFactory::X11ClipboardFactory() :
+        ::cppu::WeakComponentImplHelper1<
+    ::com::sun::star::lang::XSingleServiceFactory
+>( m_aMutex )
+{
+}
+
+// ------------------------------------------------------------------------
+
+X11ClipboardFactory::~X11ClipboardFactory()
+{
+}
+
+// ------------------------------------------------------------------------
+
+Reference< XInterface > X11ClipboardFactory::createInstance()
+{
+    return createInstanceWithArguments( Sequence< Any >() );
+}
+
+// ------------------------------------------------------------------------
+
+Reference< XInterface > X11ClipboardFactory::createInstanceWithArguments( const Sequence< Any >& arguments )
+{
+    OUString aDisplayName;
+    Atom nSelection;
+
+    // extract display name from connection argument. An exception is thrown
+    // by SelectionManager.initialize() if no display connection is given.
+    if( arguments.getLength() > 0 )
+    {
+        Reference< XDisplayConnection > xConn;
+        arguments.getConstArray()[0] >>= xConn;
+
+        if( xConn.is() )
+        {
+            Any aIdentifier = xConn->getIdentifier();
+            aIdentifier >>= aDisplayName;
+        }
+    }
+
+    SelectionManager& rManager = SelectionManager::get( aDisplayName );
+    rManager.initialize( arguments );
+
+    // check if any other selection than clipboard selection is specified
+    if( arguments.getLength() > 1 )
+    {
+        OUString aSelectionName;
+
+        arguments.getConstArray()[1] >>= aSelectionName;
+        nSelection = rManager.getAtom( aSelectionName );
+    }
+    else
+    {
+        // default atom is clipboard selection
+        nSelection = rManager.getAtom( OUString::createFromAscii( "CLIPBOARD" ) );
+    }
+
+    ::std::hash_map< Atom, Reference< XClipboard > >& rMap( m_aInstances[ aDisplayName ] );
+    ::std::hash_map< Atom, Reference< XClipboard > >::iterator it = rMap.find( nSelection );
+    if( it != rMap.end() )
+        return it->second;
+
+    X11Clipboard* pClipboard = new X11Clipboard( rManager, nSelection );
+    rMap[ nSelection ] = pClipboard;
+
+    return static_cast<OWeakObject*>(pClipboard);
+}
+
+// ------------------------------------------------------------------------
 
 Sequence< OUString > SAL_CALL X11Clipboard_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
     aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.clipboard.SystemClipboard");
     return aRet;
-}
-
-// ------------------------------------------------------------------------
-
-Reference< XInterface > SAL_CALL X11Clipboard_createInstance(
-    const Reference< XMultiServiceFactory > & xMultiServiceFactory)
-{
-    return Reference < XInterface >( ( OWeakObject * ) new X11ClipboardHolder());
 }
 
 // ------------------------------------------------------------------------
@@ -237,11 +324,7 @@ extern "C" {
                 );
             Reference< ::com::sun::star::lang::XSingleServiceFactory > xFactory;
             if( aImplName.equals( getClipboardImplementationName() ) )
-            {
-                xFactory = ::cppu::createSingleFactory(
-                    xMgr, aImplName, X11Clipboard_createInstance,
-                    X11Clipboard_getSupportedServiceNames() );
-            }
+                xFactory = new X11ClipboardFactory();
             else if( aImplName.equals( getXdndImplementationName() ) )
             {
                 xFactory = ::cppu::createSingleFactory(
