@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-13 16:39:04 $
+ *  last change: $Author: mt $ $Date: 2002-06-14 13:20:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1937,7 +1937,12 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                     pWin->SetTextColor( rSettings.GetMenuTextColor() );
             }
             if( bLayout )
-                mpLayoutData->m_aVisibleItemBoundRects[ pData->nId ] = Rectangle( aTopLeft, pData->aSz );
+            {
+                if ( !bIsMenuBar )
+                    mpLayoutData->m_aVisibleItemBoundRects[ pData->nId ] = Rectangle( aTopLeft, Size( aOutSz.Width(), pData->aSz.Height() ) );
+                else
+                    mpLayoutData->m_aVisibleItemBoundRects[ pData->nId ] = Rectangle( aTopLeft, pData->aSz );
+            }
         }
 
         if ( !bIsMenuBar )
