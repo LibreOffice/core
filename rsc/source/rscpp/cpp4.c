@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp4.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:56:31 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ void InitCpp4()
 }
 
 
-dodefine()
+void dodefine()
 /*
  * Called from control when a #define is scanned.  This module
  * parses formal parameters and the replacement string.  When
@@ -126,7 +126,7 @@ dodefine()
         register int            c;
         register DEFBUF         *dp;            /* -> new definition    */
         int                     isredefine;     /* TRUE if redefined    */
-        char                    *old;           /* Remember redefined   */
+        char                    *old = 0;       /* Remember redefined   */
 
 #ifndef ZTC  /* BP */
     extern int      save();     /* Save char in work[]  */
@@ -275,7 +275,7 @@ bad_define:
         inmacro = FALSE;                        /* Stop <newline> hack  */
 }
 
-checkparm(c, dp)
+int checkparm(c, dp)
 register int    c;
 DEFBUF          *dp;
 /*
@@ -306,7 +306,7 @@ DEFBUF          *dp;
 }
 
 #if STRING_FORMAL
-stparmscan(delim, dp)
+void stparmscan(delim, dp)
 int             delim;
 register DEFBUF *dp;
 /*
@@ -343,7 +343,7 @@ register DEFBUF *dp;
         save(c);
 }
 #else
-stparmscan(delim)
+int stparmscan(delim)
 int             delim;
 /*
  * Normal string parameter scan.
