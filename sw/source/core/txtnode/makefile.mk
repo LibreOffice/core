@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 14:35:00 $
+#   last change: $Author: obo $ $Date: 2003-10-20 16:51:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,22 +65,14 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=txtnode
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/inc$/sw.mk
 
-INCEXT=s:$/solar$/inc$/hm
-
 .IF "$(mydebug)" != ""
 CDEFS+=-Dmydebug
-.ENDIF
-
-.IF "$(GUI)$(COM)" == "WINMSC"
-LIBFLAGS=/NOI /NOE /PAGE:512
 .ENDIF
 
 .IF "$(COMID)" == "gcc3"
@@ -88,29 +80,6 @@ ENVCFLAGS=-fno-access-control
 .ENDIF
 
 # --- Files --------------------------------------------------------
-
-CXXFILES = \
-        atrfld.cxx \
-        atrflyin.cxx \
-        atrftn.cxx \
-        atrref.cxx \
-        atrtox.cxx \
-        chrfmt.cxx \
-        fmtatr1.cxx \
-        fmtatr2.cxx \
-        fntcap.cxx \
-        fntcache.cxx \
-        swfntcch.cxx \
-        ndhints.cxx \
-        ndtxt.cxx \
-        swfont.cxx \
-        thints.cxx \
-        txatbase.cxx \
-        txatritr.cxx \
-        txtatr2.cxx \
-        txtedt.cxx
-
-
 
 SLOFILES =  \
         $(SLO)$/atrfld.obj \
