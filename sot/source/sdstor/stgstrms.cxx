@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgstrms.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-13 12:30:13 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ INT32 StgFAT::FindBlock( INT32& nPgs )
     INT32 nTmpStart = STG_EOF, nTmpLen = 0;
     INT32 nPages    = rStrm.GetSize() >> 2;
     BOOL bFound     = FALSE;
-    StgPage* pPg;
+    StgPage* pPg = NULL;
     short nEntry = 0;
     for( INT32 i = 0; i < nPages; i++, nEntry++ )
     {
@@ -247,7 +247,8 @@ INT32 StgFAT::AllocPages( INT32 nBgn, INT32 nPgs )
 {
     INT32 nOrig = nBgn;
     INT32 nLast = nBgn;
-    INT32 nBegin, nAlloc;
+    INT32 nBegin = STG_EOF;
+    INT32 nAlloc;
     INT32 nPages = rStrm.GetSize() >> 2;
     short nPasses = 0;
     // allow for two passes
