@@ -240,7 +240,7 @@ public class Frame extends java.awt.Frame implements javax.accessibility.Accessi
                 // dispatch thread ..
                 javax.accessibility.AccessibleContext ac = accessibleContext;
                 if (ac!= null) {
-                    ac.setAccessibleDescription(title);
+                    ac.setAccessibleName(title);
                 }
             } catch (com.sun.star.lang.IllegalArgumentException e) {
             }
@@ -408,7 +408,7 @@ public class Frame extends java.awt.Frame implements javax.accessibility.Accessi
                 }
             }
 
-              /** Invoked when a window is changed from a minimized to a normal state. */
+            /** Invoked when a window is changed from a minimized to a normal state. */
             public void windowDeiconified(java.awt.event.WindowEvent e) {
                 if (Build.DEBUG) {
                     System.err.println("[frame] " + getTitle() + " is no longer iconified");
