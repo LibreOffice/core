@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 12:13:27 $
+ *  last change: $Author: fs $ $Date: 2001-02-21 13:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,22 +271,6 @@ struct CursorActionDescription
 };
 
 //========================================================================
-class WizardUsageConfigItem : public ::utl::ConfigItem
-{
-protected:
-    sal_Bool    m_bUseThem;
-
-public:
-    WizardUsageConfigItem();
-
-    sal_Bool    getWizardUsage() const { return m_bUseThem; }
-    void        setWizardUsage(sal_Bool _bUseThem);
-//
-//protected:
-//  virtual void Commit();
-};
-
-//========================================================================
 class SfxViewFrame;
 typedef ::cppu::WeakComponentImplHelper6<   ::com::sun::star::sdbc::XRowSetListener,
                                             ::com::sun::star::beans::XPropertyChangeListener,
@@ -295,11 +279,15 @@ typedef ::cppu::WeakComponentImplHelper6<   ::com::sun::star::sdbc::XRowSetListe
                                             ::com::sun::star::view::XSelectionChangeListener,
                                             ::com::sun::star::form::XFormControllerListener> FmXFormShell_BASE;
 
-class FmXFormShell : public FmXFormShell_BASE,
-                     public FmDispatchInterceptor
+typedef ::utl::ConfigItem   FmXFormShell_CFGBASE;
+
+class FmXFormShell  :public FmXFormShell_BASE
+                    ,public FmXFormShell_CFGBASE
+                    ,public FmDispatchInterceptor
 {
     friend class FmFormShell;
     friend class FmFormView;
+    friend class WizardUsageConfigItem;
 
     // Timer um verzoegerte Markierung vorzunehmen
     Timer              m_aMarkTimer;
@@ -333,9 +321,6 @@ class FmXFormShell : public FmXFormShell_BASE,
     DECLARE_STL_USTRINGACCESS_MAP(CursorActionDescription, CursorActions);
     CursorActions   m_aCursorActions;
         // all actions on async cursors
-
-    WizardUsageConfigItem   m_aWizardUsing;
-        // access to the configuration flag for the wizard using
 
     SvBools     m_aControlLocks;
         // while doing a async cursor action we have to lock all controls of the active controller.
@@ -397,6 +382,8 @@ class FmXFormShell : public FmXFormShell_BASE,
 
     sal_Bool        m_bTrackProperties  : 1;
         // soll ich (bzw. der Owner diese Impl-Klasse) mich um die Aktualisierung des ::com::sun::star::beans::Property-Browsers kuemmern ?
+
+    sal_Bool        m_bUseWizards : 1;
 
     sal_Bool        m_bActiveModified   : 1;    // Controller modifiziert
     sal_Bool        m_bDatabaseBar      : 1;    // Gibt es eine Datenbankleiste
@@ -532,8 +519,8 @@ public:
 
     void SetDesignMode(sal_Bool bDesign);
 
-    sal_Bool    GetWizardUsing() const { return m_aWizardUsing.getWizardUsage(); }
-    void        SetWizardUsing(sal_Bool _bUseThem) { m_aWizardUsing.setWizardUsage(_bUseThem); }
+    sal_Bool    GetWizardUsing() const { return m_bUseWizards; }
+    void        SetWizardUsing(sal_Bool _bUseThem);
 
         // Setzen des Filtermodus
     sal_Bool isInFilterMode() const {return m_bFilterMode;}
@@ -598,6 +585,10 @@ private:
 
     void    CloseExternalFormViewer();
         // closes the task-local beamer displaying a grid view for a form
+
+    // ConfigItem related stuff
+    virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
+    void implAdjustConfigCache();
 
     // ---------------------------------------------------
     // asyncronous cursor actions/navigation slot handling

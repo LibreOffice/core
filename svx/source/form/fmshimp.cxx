@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 12:13:50 $
+ *  last change: $Author: fs $ $Date: 2001-02-21 13:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,39 +602,13 @@ Reference< XForm> FmXFormShell::DetermineCurForm(const SdrMarkList& rMarkList, s
 
 
 //========================================================================
-//= WizardUsageConfigItem
-//========================================================================
-//------------------------------------------------------------------------
-WizardUsageConfigItem::WizardUsageConfigItem()
-    :ConfigItem(::rtl::OUString::createFromAscii("Office.Common/Misc"), CONFIG_MODE_DELAYED_UPDATE)
-    ,m_bUseThem(sal_True)
-{
-    // get (cache) the wizard usage flag
-    ::rtl::OUString sWizardUsageFlag = ::rtl::OUString::createFromAscii("FormControlPilotsEnabled");
-    Sequence< Any > aFlags = GetProperties(Sequence< ::rtl::OUString >(&sWizardUsageFlag, 1));
-    if (1 == aFlags.getLength())
-        m_bUseThem = ::cppu::any2bool(aFlags[0]);
-}
-
-//------------------------------------------------------------------------
-void WizardUsageConfigItem::setWizardUsage(sal_Bool _bUseThem)
-{
-    m_bUseThem = _bUseThem;
-
-    Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii("FormControlPilotsEnabled");
-    Sequence< Any > aValues(1);
-    aValues[0] = ::cppu::bool2any(m_bUseThem);
-    PutProperties(aNames, aValues);
-}
-
-//========================================================================
 // class FmXFormShell
 //========================================================================
 DBG_NAME(FmXFormShell);
 //------------------------------------------------------------------------
 FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
         :FmXFormShell_BASE(m_aMutex)
+        ,FmXFormShell_CFGBASE(::rtl::OUString::createFromAscii("Office.Common/Misc"), CONFIG_MODE_DELAYED_UPDATE)
         ,m_pShell(_pShell)
         ,m_bDatabaseBar(sal_False)
         ,m_eNavigate(NavigationBarMode_NONE)
@@ -650,6 +624,7 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
         ,m_pMainFrameInterceptor(NULL)
         ,m_pExternalViewInterceptor(NULL)
         ,m_bChangingDesignMode(sal_False)
+        ,m_bUseWizards(sal_True)
 {
     DBG_CTOR(FmXFormShell,NULL);
     m_aMarkTimer.SetTimeout(100);
@@ -679,6 +654,13 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
 
     // correct the refcounter
     ::comphelper::decrement(FmXFormShell_BASE::m_refCount);
+
+    // cache the current configuration settings we're interested in
+    implAdjustConfigCache();
+    // and register for changes on this settings
+    Sequence< ::rtl::OUString > aNames(1);
+    aNames[0] = ::rtl::OUString::createFromAscii("FormControlPilotsEnabled");
+    EnableNotification(aNames);
 }
 
 //------------------------------------------------------------------------
@@ -4620,6 +4602,42 @@ void FmXFormShell::CreateExternalView()
     }
 #endif
     InvalidateSlot(SID_FM_VIEW_AS_GRID, sal_True, sal_False);
+}
+
+//------------------------------------------------------------------------
+void FmXFormShell::implAdjustConfigCache()
+{
+    // get (cache) the wizard usage flag
+    Sequence< ::rtl::OUString > aNames(1);
+    aNames[0] = ::rtl::OUString::createFromAscii("FormControlPilotsEnabled");
+    Sequence< Any > aFlags = GetProperties(aNames);
+    if (1 == aFlags.getLength())
+        m_bUseWizards = ::cppu::any2bool(aFlags[0]);
+}
+
+//------------------------------------------------------------------------
+void FmXFormShell::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames)
+{
+    const ::rtl::OUString* pSearch = _rPropertyNames.getConstArray();
+    const ::rtl::OUString* pSearchTil = pSearch + _rPropertyNames.getLength();
+    for (;pSearch < pSearchTil; ++pSearch)
+        if (0 == pSearch->compareToAscii("FormControlPilotsEnabled"))
+        {
+            implAdjustConfigCache();
+            InvalidateSlot(SID_FM_USE_WIZARDS, sal_True, sal_True);
+        }
+}
+
+//------------------------------------------------------------------------
+void FmXFormShell::SetWizardUsing(sal_Bool _bUseThem)
+{
+    m_bUseWizards = _bUseThem;
+
+    Sequence< ::rtl::OUString > aNames(1);
+    aNames[0] = ::rtl::OUString::createFromAscii("FormControlPilotsEnabled");
+    Sequence< Any > aValues(1);
+    aValues[0] = ::cppu::bool2any(m_bUseWizards);
+    PutProperties(aNames, aValues);
 }
 
 //==============================================================================
