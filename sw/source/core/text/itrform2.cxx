@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-09 13:38:10 $
+ *  last change: $Author: ama $ $Date: 2000-11-14 08:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1247,11 +1247,8 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                 SwMultiPortion* pTmp = NULL;
                 if( RES_TXTATR_CJK_RUBY == pTwoLines->Which() )
                     pTmp = new SwRubyPortion( *pTwoLines,*rInf.GetFont(),nEnd );
-
-                //pTmp = new SwDoubleLinePortion(*pTwoLines->GetEnd());
-#ifdef DEBUG
-                //pTmp->SetBrackets( '(', ')' );
-#endif
+                else
+                    pTmp = new SwDoubleLinePortion( *pTwoLines, nEnd );
                 return pTmp;
             }
         }
