@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 08:02:33 $
+ *  last change: $Author: fs $ $Date: 2002-01-09 15:30:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2899,7 +2899,14 @@ void SAL_CALL ODatabaseForm::setGroup( const Sequence<Reference<XControlModel> >
 
     for( sal_Int32 i=0; i<_rGroup.getLength(); ++i, ++pControls )
     {
-        Reference<XPropertySet> xSet(*pControls, UNO_QUERY);
+        Reference< XPropertySet > xSet(*pControls, UNO_QUERY);
+        if ( !xSet.is() )
+        {
+            // can't throw an exception other than a RuntimeException (which would not be appropriate),
+            // so we ignore (and only assert) this
+            OSL_ENSURE( sal_False, "ODatabaseForm::setGroup: invalid arguments!" );
+            continue;
+        }
 
         if (!sGroupName.getLength())
             xSet->getPropertyValue(PROPERTY_NAME) >>= sGroupName;
