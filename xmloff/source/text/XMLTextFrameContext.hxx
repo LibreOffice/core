@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:48:13 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ class XMLTextFrameContext : public SvXMLImportContext
         ::com::sun::star::xml::sax::XAttributeList > m_xAttrList;
 
     SvXMLImportContextRef m_xImplContext;
+    SvXMLImportContextRef m_xReplImplContext;
     SvXMLAttributeList *m_pAttrList;
 
     XMLTextFrameContextHyperlink_Impl   *m_pHyperlink;
@@ -91,6 +92,7 @@ class XMLTextFrameContext : public SvXMLImportContext
     ::com::sun::star::text::TextContentAnchorType   m_eDefaultAnchorType;
 
     sal_Bool m_bHasName;
+    sal_Bool m_bSupportsReplacement;
 
     sal_Bool CreateIfNotThere();
     sal_Bool CreateIfNotThere( ::com::sun::star::uno::Reference <
