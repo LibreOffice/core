@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 21:24:40 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 07:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ turkish ] = "Yazdýrma seçenekleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opciones de impresión";
+        Text[ finnish ] = "Tulostusasetukset";
     };
     RadioButton RBT_SCALE
     {
@@ -141,6 +142,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ turkish ] = "Sayfaya sýðdýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ajustar ~página a área de impresión";
+        Text[ finnish ] = "~Sovita sivu tulostusalueen mukaan";
     };
     RadioButton RBT_POSTER
     {
@@ -169,6 +171,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ turkish ] = "Birden çok sayfaya yazdýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Imprimir en ~varias páginas";
+        Text[ finnish ] = "~Tee julisteeksi";
     };
     RadioButton RBT_CUT
     {
@@ -197,6 +200,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ turkish ] = "Kes";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cortar";
+        Text[ finnish ] = "~Siisti";
     };
     FixedText FI_INFO
     {
@@ -226,6 +230,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ turkish ] = "Sayfa ayarlarý ile yazdýrma aralýðý örtüþmüyor.\nAþaðýdaki seçeneklerden birini seçin:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "La configuración de página no coincide con el área de impresión.\nSeleccione una de las siguientes opciones.";
+        Text[ finnish ] = "Sivuasetukset eivät täsmää tulostusalueen kanssa.\nValitse jokin seuraavista asetuksista";
     };
     Text [ english_us ] = "Warning Print Options" ;
     Text [ portuguese ] = "Advertência sobre opções de impressão" ;
@@ -247,4 +252,5 @@ ModalDialog DLG_PRINT_WARNINGS
     Text[ turkish ] = "Uyarý: Yazdýrma seçenekleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Advertencia opciones de impresión";
+    Text[ finnish ] = "Tulostimen varoitusasetukset";
 };
