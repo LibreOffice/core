@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:07 $
+ *  last change: $Author: mtg $ $Date: 2001-04-30 18:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ using namespace rtl;
 
 ZipPackageStream::ZipPackageStream (ZipPackage & rNewPackage )
 : rZipPackage(rNewPackage)
-, bToBeCompressed ( sal_False )
+, bToBeCompressed ( sal_True )
 , bToBeEncrypted ( sal_False )
 , bPackageMember ( sal_False )
 , xEncryptionData ( new EncryptionData )
