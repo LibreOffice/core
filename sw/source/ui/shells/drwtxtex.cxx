@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:51:49 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -679,6 +679,7 @@ ASK_ESCAPE:
         }
         break;
         case SID_HANGUL_HANJA_CONVERSION:
+        case SID_CHINESE_CONVERSION:
         {
             if (!SvtCJKOptions().IsAnyEnabled())
                 rSet.DisableItem(nWhich);
