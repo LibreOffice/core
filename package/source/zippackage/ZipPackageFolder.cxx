@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mtg $ $Date: 2001-01-16 17:06:14 $
+ *  last change: $Author: mtg $ $Date: 2001-01-17 13:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,8 +365,8 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
             // If the entry is already stored in the zip file in the format we
             // want for this write...copy it raw
             if (pStream->bPackageMember &&
-                ( (pStream->aEntry.nMethod == DEFLATED && bToBeCompressed) ||
-                  (pStream->aEntry.nMethod == STORED && !bToBeCompressed) ) )
+                ( (pMan->aEntry.nMethod == DEFLATED && bToBeCompressed) ||
+                  (pMan->aEntry.nMethod == STORED && !bToBeCompressed) ) )
             {
                 try
                 {

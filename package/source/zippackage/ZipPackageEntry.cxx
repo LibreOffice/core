@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2001-01-16 17:06:14 $
+ *  last change: $Author: mtg $ $Date: 2001-01-17 13:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,10 +148,13 @@ void SAL_CALL ZipPackageEntry::setPropertyValue( const ::rtl::OUString& aPropert
     {
         aValue >>= sMediaType;
 
-        if ( sMediaType.indexOf (OUString::createFromAscii("text")) != -1)
-            bToBeCompressed = sal_True;
-        else
-            bToBeCompressed = sal_False;
+        if (sMediaType.getLength() > 0)
+        {
+            if ( sMediaType.indexOf (OUString::createFromAscii("text")) != -1)
+                bToBeCompressed = sal_True;
+            else
+                bToBeCompressed = sal_False;
+        }
     }
     else if (aPropertyName == OUString::createFromAscii("Size"))
         aValue >>= aEntry.nSize;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-20 12:36:37 $
+ *  last change: $Author: mtg $ $Date: 2001-01-17 13:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,29 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
 
                 pEntry->nCrc = aCRC.getValue();
                 if (!((pEntry->nFlag & 8) == 0))
-                    writeEXT(*pEntry);
+                {
+                    //writeEXT(*pEntry);
+                    // instead of writing a data descriptor (due to the fact
+                    // that the 'jar' tool doesn't like data descriptors
+                    // for STORED streams), we seek back and update the LOC
+                    // header. We could do this for DEFLATED entries also
+                    pEntry->nFlag    =  0;
+                    pEntry->nVersion = 10;
+                    sal_Int64 nPos = aChucker.getPosition();
+
+                    aChucker.seek( pEntry->nOffset );
+                    aChucker << LOCSIG;
+                    aChucker << pEntry->nVersion;
+                    aChucker << pEntry->nFlag;
+                    aChucker << pEntry->nMethod;
+                    aChucker << static_cast < sal_uInt32 > (pEntry->nTime);
+                    aChucker << static_cast < sal_uInt32 > (pEntry->nCrc);
+                    aChucker << pEntry->nCompressedSize;
+                    aChucker << pEntry->nSize;
+
+                    aChucker.seek( nPos );
+                }
+
                 /*
                 if (static_cast < sal_uInt32 > (pEntry->nCrc) != static_cast <sal_uInt32> (aCRC.getValue()))
                 {
