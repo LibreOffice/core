@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionPage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:11:45 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,6 +312,13 @@ namespace dbaui
                 m_aET_Connection.SetHelpId( HID_DSADMIN_LDAP_HOSTNAME );
                 break;
             case DST_MOZILLA:
+                m_aFT_Connection.SetText(String(ModuleRes(STR_MOZILLA_PROFILE_NAME)));
+                m_aET_Connection.SetHelpId( HID_DSADMIN_MOZILLA_PROFILE_NAME );
+                break;
+            case DST_THUNDERBIRD:
+                m_aFT_Connection.SetText(String(ModuleRes(STR_THUNDERBIRD_PROFILE_NAME)));
+                m_aET_Connection.SetHelpId( HID_DSADMIN_THUNDERBIRD_PROFILE_NAME );
+                break;
             case DST_OUTLOOK:
             case DST_OUTLOOKEXP:
             case DST_EVOLUTION:
