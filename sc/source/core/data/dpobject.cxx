@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpobject.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-06 08:57:29 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@
 #include "miscuno.hxx"
 #include "scerrors.hxx"
 #include "refupdat.hxx"
+#include "scresid.hxx"
+#include "sc.hrc"
+#include "attrib.hxx"
+#include "scitems.hxx"
 
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -166,6 +170,9 @@ USHORT lcl_GetDataGetOrientation( const uno::Reference<sheet::XDimensionsSupplie
 ScDPObject::ScDPObject( ScDocument* pD ) :
     pDoc( pD ),
     bAlive( FALSE ),
+    nHeaderRows( 0 ),
+    bAllowMove( FALSE ),
+    bInfoValid( FALSE ),
     pSaveData( NULL ),
     pSheetDesc( NULL ),
     pImpDesc( NULL ),
@@ -178,6 +185,9 @@ ScDPObject::ScDPObject( ScDocument* pD ) :
 ScDPObject::ScDPObject(const ScDPObject& r) :
     pDoc( r.pDoc ),
     bAlive( FALSE ),
+    nHeaderRows( r.nHeaderRows ),
+    bAllowMove( FALSE ),
+    bInfoValid( r.bInfoValid ),
     pSaveData( NULL ),
     aTableName( r.aTableName ),
     aTableTag( r.aTableTag ),
@@ -216,6 +226,11 @@ DataObject* ScDPObject::Clone() const
 void ScDPObject::SetAlive(BOOL bSet)
 {
     bAlive = bSet;
+}
+
+void ScDPObject::SetAllowMove(BOOL bSet)
+{
+    bAllowMove = bSet;
 }
 
 void ScDPObject::SetSaveData(const ScDPSaveData& rData)
@@ -300,6 +315,12 @@ void ScDPObject::WriteSourceDataTo( ScDPObject& rDest ) const
     rDest.aTableTag  = aTableTag;
 }
 
+void ScDPObject::WriteTempDataTo( ScDPObject& rDest ) const
+{
+    rDest.nHeaderRows = nHeaderRows;
+    rDest.bInfoValid = bInfoValid;
+}
+
 BOOL ScDPObject::IsSheetData() const
 {
     return ( pSheetDesc != NULL );
@@ -325,7 +346,34 @@ void ScDPObject::CreateOutput()
 {
     CreateObjects();
     if (!pOutput)
+    {
         pOutput = new ScDPOutput( pDoc, xSource, aOutRange.aStart, IsSheetData() );
+
+        long nOldRows = nHeaderRows;
+        nHeaderRows = pOutput->GetHeaderRows();
+        bInfoValid = TRUE;
+
+        if ( bAllowMove && nHeaderRows != nOldRows )
+        {
+            long nDiff = nOldRows - nHeaderRows;
+            if ( nOldRows == 0 )
+                --nDiff;
+            if ( nHeaderRows == 0 )
+                ++nDiff;
+
+            long nNewRow = aOutRange.aStart.Row() + nDiff;
+            if ( nNewRow < 0 )
+                nNewRow = 0;
+
+            ScAddress aStart( aOutRange.aStart );
+            aStart.SetRow( (USHORT) nNewRow );
+            pOutput->SetPosition( aStart );
+
+            //! modify aOutRange?
+
+            bAllowMove = FALSE;     // use only once
+        }
+    }
 }
 
 void ScDPObject::CreateObjects()
@@ -389,11 +437,13 @@ void ScDPObject::CreateObjects()
 void ScDPObject::InvalidateData()
 {
     bSettingsChanged = TRUE;
+    bInfoValid = FALSE;
 }
 
 void ScDPObject::InvalidateSource()
 {
     xSource = NULL;
+    bInfoValid = FALSE;
 }
 
 ScRange ScDPObject::GetNewOutputRange( BOOL& rOverflow )
@@ -414,8 +464,11 @@ void ScDPObject::Output()
 {
     //  clear old output area
     pDoc->DeleteAreaTab( aOutRange.aStart.Col(), aOutRange.aStart.Row(),
-                         aOutRange.aEnd.Col(), aOutRange.aEnd.Row(),
+                         aOutRange.aEnd.Col(),   aOutRange.aEnd.Row(),
                          aOutRange.aStart.Tab(), IDF_ALL );
+    pDoc->RemoveFlagsTab( aOutRange.aStart.Col(), aOutRange.aStart.Row(),
+                          aOutRange.aEnd.Col(),   aOutRange.aEnd.Row(),
+                          aOutRange.aStart.Tab(), SC_MF_AUTO );
 
     CreateOutput();             // create xSource and pOutput if not already done
 
@@ -423,6 +476,45 @@ void ScDPObject::Output()
 
     //  aOutRange is always the range that was last output to the document
     aOutRange = pOutput->GetOutputRange();
+}
+
+BOOL lcl_HasButton( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab )
+{
+    return ((const ScMergeFlagAttr*)pDoc->GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->HasButton();
+}
+
+void ScDPObject::RefreshAfterLoad()
+{
+    // apply drop-down attribute, initialize nHeaderRows, without accessing the source
+    // (button attribute must be present)
+
+    // simple test: block of button cells at the top, followed by an empty cell
+
+    USHORT nFirstCol = aOutRange.aStart.Col();
+    USHORT nFirstRow = aOutRange.aStart.Row();
+    USHORT nTab = aOutRange.aStart.Tab();
+
+    USHORT nInitial = 0;
+    USHORT nOutRows = aOutRange.aEnd.Row() + 1 - aOutRange.aStart.Row();
+    while ( nInitial + 1 < nOutRows && lcl_HasButton( pDoc, nFirstCol, nFirstRow + nInitial, nTab ) )
+        ++nInitial;
+
+    if ( nInitial + 1 < nOutRows &&
+        pDoc->IsBlockEmpty( nTab, nFirstCol, nFirstRow + nInitial, nFirstCol, nFirstRow + nInitial ) &&
+        aOutRange.aEnd.Col() > nFirstCol )
+    {
+        BOOL bFilterButton = IsSheetData();         // when available, filter button setting must be checked here
+
+        USHORT nSkip = bFilterButton ? 1 : 0;
+        for (USHORT nPos=nSkip; nPos<nInitial; nPos++)
+            pDoc->ApplyAttr( nFirstCol + 1, nFirstRow + nPos, nTab, ScMergeFlagAttr(SC_MF_AUTO) );
+
+        nHeaderRows = nInitial;
+    }
+    else
+        nHeaderRows = 0;        // nothing found, no drop-down lists
+
+    bInfoValid = TRUE;
 }
 
 void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
@@ -550,6 +642,91 @@ String ScDPObject::GetDimName( long nDim, BOOL& rIsDataLayout )
     return aRet;
 }
 
+void ScDPObject::FillPageList( TypedStrCollection& rStrings, long nField )
+{
+    //! merge members access with ToggleDetails?
+
+    //! convert field index to dimension index?
+
+    DBG_ASSERT( xSource.is(), "no source" );
+    if ( !xSource.is() ) return;
+
+    uno::Reference<container::XNamed> xDim;
+    uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
+    uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
+    long nIntCount = xIntDims->getCount();
+    if ( nField < nIntCount )
+    {
+        uno::Reference<uno::XInterface> xIntDim = ScUnoHelpFunctions::AnyToInterface(
+                                    xIntDims->getByIndex(nField) );
+        xDim = uno::Reference<container::XNamed>( xIntDim, uno::UNO_QUERY );
+    }
+    DBG_ASSERT( xDim.is(), "dimension not found" );
+    if ( !xDim.is() ) return;
+
+    uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
+    long nHierarchy = ScUnoHelpFunctions::GetLongProperty( xDimProp,
+                            rtl::OUString::createFromAscii(DP_PROP_USEDHIERARCHY) );
+    long nLevel = 0;
+
+    long nHierCount = 0;
+    uno::Reference<container::XIndexAccess> xHiers;
+    uno::Reference<sheet::XHierarchiesSupplier> xHierSupp( xDim, uno::UNO_QUERY );
+    if ( xHierSupp.is() )
+    {
+        uno::Reference<container::XNameAccess> xHiersName = xHierSupp->getHierarchies();
+        xHiers = new ScNameToIndexAccess( xHiersName );
+        nHierCount = xHiers->getCount();
+    }
+    uno::Reference<uno::XInterface> xHier;
+    if ( nHierarchy < nHierCount )
+        xHier = ScUnoHelpFunctions::AnyToInterface( xHiers->getByIndex(nHierarchy) );
+    DBG_ASSERT( xHier.is(), "hierarchy not found" );
+    if ( !xHier.is() ) return;
+
+    long nLevCount = 0;
+    uno::Reference<container::XIndexAccess> xLevels;
+    uno::Reference<sheet::XLevelsSupplier> xLevSupp( xHier, uno::UNO_QUERY );
+    if ( xLevSupp.is() )
+    {
+        uno::Reference<container::XNameAccess> xLevsName = xLevSupp->getLevels();
+        xLevels = new ScNameToIndexAccess( xLevsName );
+        nLevCount = xLevels->getCount();
+    }
+    uno::Reference<uno::XInterface> xLevel;
+    if ( nLevel < nLevCount )
+        xLevel = ScUnoHelpFunctions::AnyToInterface( xLevels->getByIndex(nLevel) );
+    DBG_ASSERT( xLevel.is(), "level not found" );
+    if ( !xLevel.is() ) return;
+
+    uno::Reference<container::XNameAccess> xMembers;
+    uno::Reference<sheet::XMembersSupplier> xMbrSupp( xLevel, uno::UNO_QUERY );
+    if ( xMbrSupp.is() )
+        xMembers = xMbrSupp->getMembers();
+    DBG_ASSERT( xMembers.is(), "members not found" );
+    if ( !xMembers.is() ) return;
+
+    uno::Sequence<rtl::OUString> aNames = xMembers->getElementNames();
+    long nNameCount = aNames.getLength();
+    const rtl::OUString* pNameArr = aNames.getConstArray();
+    for (long nPos=0; nPos<nNameCount; nPos++)
+    {
+        TypedStrData* pData = new TypedStrData( pNameArr[nPos] );
+
+//      if ( !rStrings.Insert( pData ) )
+//          delete pData;                               // duplicate
+
+        // use the order from getElementNames
+        if ( !rStrings.AtInsert( rStrings.GetCount(), pData ) )
+            delete pData;
+    }
+
+    //  add "-all-" entry to the top (unsorted)
+    TypedStrData* pAllData = new TypedStrData( String( ScResId( SCSTR_ALL ) ) );    //! separate string? (also output)
+    if ( !rStrings.AtInsert( 0, pAllData ) )
+        delete pAllData;
+}
+
 void ScDPObject::GetPositionData( ScDPPositionData& rData, const ScAddress& rPos )
 {
     CreateOutput();             // create xSource and pOutput if not already done
@@ -564,11 +741,11 @@ BOOL ScDPObject::IsFilterButton( const ScAddress& rPos )
     return pOutput->IsFilterButton( rPos );
 }
 
-long ScDPObject::GetHeaderDim( const ScAddress& rPos )
+long ScDPObject::GetHeaderDim( const ScAddress& rPos, USHORT& rOrient )
 {
     CreateOutput();             // create xSource and pOutput if not already done
 
-    return pOutput->GetHeaderDim( rPos );
+    return pOutput->GetHeaderDim( rPos, rOrient );
 }
 
 BOOL ScDPObject::GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMouseTop, long nDragDim,
@@ -771,15 +948,17 @@ USHORT lcl_FillOldFields( PivotField* pFields,
     USHORT nOutCount = 0;
     BOOL bDataFound = FALSE;
 
+    USHORT nCount = (nOrient == sheet::DataPilotFieldOrientation_PAGE) ? PIVOT_MAXPAGEFIELD : PIVOT_MAXFIELD;
+
     //! merge multiple occurences (data field with different functions)
     //! force data field in one dimension
 
-    long nPos[PIVOT_MAXFIELD];
+    std::vector< long > aPos( nCount, 0 );
 
     uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
     uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
     long nDimCount = xDims->getCount();
-    for (long nDim=0; nDim < nDimCount && nOutCount < PIVOT_MAXFIELD; nDim++)
+    for (long nDim=0; nDim < nDimCount && nOutCount < nCount; nDim++)
     {
         uno::Reference<uno::XInterface> xIntDim =
             ScUnoHelpFunctions::AnyToInterface( xDims->getByIndex(nDim) );
@@ -864,7 +1043,7 @@ USHORT lcl_FillOldFields( PivotField* pFields,
 
                 pFields[nOutCount].nFuncMask = nMask;
                 pFields[nOutCount].nFuncCount = lcl_CountBits( nMask );
-                nPos[nOutCount] = ScUnoHelpFunctions::GetLongProperty( xDimProp,
+                aPos[nOutCount] = ScUnoHelpFunctions::GetLongProperty( xDimProp,
                                     rtl::OUString::createFromAscii(DP_PROP_POSITION) );
                 ++nOutCount;
             }
@@ -876,20 +1055,16 @@ USHORT lcl_FillOldFields( PivotField* pFields,
     for (long i=0; i+1<nOutCount; i++)
     {
         for (long j=0; j+i+1<nOutCount; j++)
-            if ( nPos[j+1] < nPos[j] )
+            if ( aPos[j+1] < aPos[j] )
             {
-                long nTemp = nPos[j+1];
-                nPos[j+1] = nPos[j];
-                nPos[j] = nTemp;
-                PivotField aField = pFields[j+1];
-                pFields[j+1] = pFields[j];
-                pFields[j] = aField;
+                std::swap( aPos[j], aPos[j+1] );
+                std::swap( pFields[j], pFields[j+1] );
             }
     }
 
     if ( bAddData && !bDataFound )
     {
-        if ( nOutCount >= PIVOT_MAXFIELD )              //  space for data field?
+        if ( nOutCount >= nCount )                //  space for data field?
             --nOutCount;                                //! error?
         pFields[nOutCount].nCol = PIVOT_DATA_FIELD;
         pFields[nOutCount].nFuncMask = 0;
@@ -905,6 +1080,7 @@ void lcl_SaveOldFieldArr( SvStream& rStream,
                             USHORT nOrient, USHORT nColAdd, BOOL bAddData )
 {
     // PIVOT_MAXFIELD = max. number in old files
+    DBG_ASSERT( nOrient != sheet::DataPilotFieldOrientation_PAGE, "lcl_SaveOldFieldArr - do not try to save page fields" );
     PivotField aFields[PIVOT_MAXFIELD];
     USHORT nOutCount = lcl_FillOldFields( aFields, xSource, nOrient, nColAdd, bAddData );
 
@@ -1122,6 +1298,8 @@ BOOL ScDPObject::FillOldParam(ScPivotParam& rParam, BOOL bForFile) const
     }
 
     BOOL bAddData = ( lcl_GetDataGetOrientation( xSource ) == sheet::DataPilotFieldOrientation_HIDDEN );
+    rParam.nPageCount = lcl_FillOldFields( rParam.aPageArr,
+                            xSource, sheet::DataPilotFieldOrientation_PAGE,   nColAdd, FALSE );
     rParam.nColCount  = lcl_FillOldFields( rParam.aColArr,
                             xSource, sheet::DataPilotFieldOrientation_COLUMN, nColAdd, bAddData );
     rParam.nRowCount  = lcl_FillOldFields( rParam.aRowArr,
@@ -1395,6 +1573,9 @@ void ScDPObject::InitFromOldPivot( const ScPivot& rOld, ScDocument* pDoc, BOOL b
     ScArea aArea;
     rOld.GetParam( aParam, aQuery, aArea );
 
+    ConvertOrientation( aSaveData, aParam.aPageArr, aParam.nPageCount,
+                            sheet::DataPilotFieldOrientation_PAGE, pDoc, aArea.nRowStart, aArea.nTab,
+                            uno::Reference<sheet::XDimensionsSupplier>(), TRUE );
     ConvertOrientation( aSaveData, aParam.aColArr, aParam.nColCount,
                             sheet::DataPilotFieldOrientation_COLUMN, pDoc, aArea.nRowStart, aArea.nTab,
                             uno::Reference<sheet::XDimensionsSupplier>(), TRUE );
