@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcu,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-08 13:55:24 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,11 @@
               <value xml:lang="en-US">Table</value>
               <value xml:lang="de">Tabelle</value>
             </prop>
+            <prop oor:name="CaptionText">
+              <value xml:lang="en-US">: </value>
+              <value xml:lang="de">: </value>
+              <value xml:lang="fr">: </value>
+            </prop>
           </node>
         </node>
         <node oor:name="Frame">
@@ -85,6 +90,11 @@
               <value xml:lang="en-US">Text</value>
               <value xml:lang="de">Text</value>
             </prop>
+            <prop oor:name="CaptionText">
+              <value xml:lang="en-US">: </value>
+              <value xml:lang="de">: </value>
+              <value xml:lang="fr">: </value>
+            </prop>
           </node>
         </node>
         <node oor:name="Graphic">
@@ -92,6 +102,11 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
+            </prop>
+            <prop oor:name="CaptionText">
+              <value xml:lang="en-US">: </value>
+              <value xml:lang="de">: </value>
+              <value xml:lang="fr">: </value>
             </prop>
           </node>
         </node>
@@ -103,6 +118,11 @@
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
             </prop>
+            <prop oor:name="CaptionText">
+              <value xml:lang="en-US">: </value>
+              <value xml:lang="de">: </value>
+              <value xml:lang="fr">: </value>
+            </prop>
           </node>
         </node>
         <node oor:name="Draw">
@@ -110,6 +130,11 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
+            </prop>
+            <prop oor:name="CaptionText">
+              <value xml:lang="en-US">: </value>
+              <value xml:lang="de">: </value>
+              <value xml:lang="fr">: </value>
             </prop>
           </node>
         </node>
@@ -119,6 +144,11 @@
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
             </prop>
+            <prop oor:name="CaptionText">
+              <value xml:lang="en-US">: </value>
+              <value xml:lang="de">: </value>
+              <value xml:lang="fr">: </value>
+            </prop>
           </node>
         </node>
         <node oor:name="Image">
@@ -126,6 +156,11 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
+            </prop>
+            <prop oor:name="CaptionText">
+              <value xml:lang="en-US">: </value>
+              <value xml:lang="de">: </value>
+              <value xml:lang="fr">: </value>
             </prop>
           </node>
         </node>
@@ -135,6 +170,11 @@
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
             </prop>
+            <prop oor:name="CaptionText">
+              <value xml:lang="en-US">: </value>
+              <value xml:lang="de">: </value>
+              <value xml:lang="fr">: </value>
+            </prop>
           </node>
         </node>
         <node oor:name="Impress">
@@ -143,6 +183,11 @@
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
             </prop>
+            <prop oor:name="CaptionText">
+              <value xml:lang="en-US">: </value>
+              <value xml:lang="de">: </value>
+              <value xml:lang="fr">: </value>
+            </prop>
           </node>
         </node>
         <node oor:name="OLEMisc">
@@ -150,6 +195,11 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
+            </prop>
+            <prop oor:name="CaptionText">
+              <value xml:lang="en-US">: </value>
+              <value xml:lang="de">: </value>
+              <value xml:lang="fr">: </value>
             </prop>
           </node>
         </node>
