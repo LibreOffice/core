@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:32 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ ModalDialog DLG_FIELD_MODIFY
     Text [ danish ] = "Rediger felt" ;
     Text [ italian ] = "Modifica comando di campo" ;
     Text [ spanish ] = "Editar campo" ;
-    Text [ french ] = "Édition d'une instruction de champ" ;
+    Text [ french ] = "Édition de champ" ;
     Text [ dutch ] = "Veldopdracht bewerken" ;
     Text [ portuguese ] = "Editar campos" ;
     Text[ chinese_simplified ] = "±à¼­×Ö¶ÎÖ¸Áî";
