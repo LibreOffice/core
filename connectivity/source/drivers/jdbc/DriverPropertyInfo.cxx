@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DriverPropertyInfo.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-26 09:32:48 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ jclass java_sql_DriverPropertyInfo::getMyClass()
     // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
     {
-        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
         if( !t.pEnv ) return (jclass)0;
         jclass tempClass = t.pEnv->FindClass("java/sql/DriverPropertyInfo");
         OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
@@ -128,7 +128,7 @@ java_sql_DriverPropertyInfo::operator starsdbc::DriverPropertyInfo()
 ::rtl::OUString java_sql_DriverPropertyInfo::name() const
 {
     ::rtl::OUString aStr;
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         jfieldID id = t.pEnv->GetFieldID(java_sql_DriverPropertyInfo::getMyClass(),"name","Ljava/lang/String;");
@@ -141,7 +141,7 @@ java_sql_DriverPropertyInfo::operator starsdbc::DriverPropertyInfo()
 ::rtl::OUString java_sql_DriverPropertyInfo::description() const
 {
     ::rtl::OUString aStr;
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         jfieldID id = t.pEnv->GetFieldID(java_sql_DriverPropertyInfo::getMyClass(),"description","Ljava/lang/String;");
@@ -154,7 +154,7 @@ java_sql_DriverPropertyInfo::operator starsdbc::DriverPropertyInfo()
 ::rtl::OUString java_sql_DriverPropertyInfo::value() const
 {
     ::rtl::OUString aStr;
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         jfieldID id = t.pEnv->GetFieldID(java_sql_DriverPropertyInfo::getMyClass(),"value","Ljava/lang/String;");
@@ -167,7 +167,7 @@ java_sql_DriverPropertyInfo::operator starsdbc::DriverPropertyInfo()
 sal_Bool java_sql_DriverPropertyInfo::required() const
 {
     jboolean out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         jfieldID id = t.pEnv->GetFieldID(java_sql_DriverPropertyInfo::getMyClass(),"required","Z");
@@ -179,7 +179,7 @@ sal_Bool java_sql_DriverPropertyInfo::required() const
 // --------------------------------------------------------------------------------
 Sequence< ::rtl::OUString> java_sql_DriverPropertyInfo::choices() const
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         jfieldID id = t.pEnv->GetFieldID(java_sql_DriverPropertyInfo::getMyClass(),"choices","[Ljava/lang/String;");
