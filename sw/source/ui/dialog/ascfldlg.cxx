@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:46:20 $
+ *  last change: $Author: fme $ $Date: 2001-07-25 15:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
         aLanguageFT.Hide();
         aLanguageLB.Hide();
 
-        long nY = aFontFT.GetPosPixel().Y();
+        long nY = aFontFT.GetPosPixel().Y() + 1;
         Point aPos( aCRLF_FT.GetPosPixel() );   aPos.Y() = nY;
         aCRLF_FT.SetPosPixel( aPos );
 
@@ -292,6 +292,13 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
 
         aPos = aLF_RB.GetPosPixel();    aPos.Y() = nY;
         aLF_RB.SetPosPixel( aPos );
+
+        Size aSize = GetSizePixel();
+        Size aTmpSz( 6, 6 );
+        aTmpSz = LogicToPixel(aTmpSz, MAP_APPFONT);
+        aSize.Height() = aHelpPB.GetPosPixel().Y() +
+                         aHelpPB.GetSizePixel().Height() + aTmpSz.Height();
+        SetSizePixel( aSize );
     }
 
     // initialisiere Zeichensatz
@@ -522,6 +529,9 @@ IMPL_LINK( SwAsciiFilterDlg, LineEndHdl, RadioButton*, pBtn )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/06/01 10:46:20  fme
+      Fix #86988#: Redesign of dialogs
+
       Revision 1.5  2001/03/27 21:47:58  jp
       use GetAppLanguage
 
