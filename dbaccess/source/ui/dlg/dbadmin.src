@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-11 16:32:49 $
+ *  last change: $Author: fs $ $Date: 2000-12-14 08:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,6 +569,7 @@ TabPage PAGE_GENERAL
         Pos = MAP_APPFONT ( 6, 112 );
         Size = MAP_APPFONT ( 248, 20 );
         WordBreak = TRUE;
+        HelpId = HID_DSADMIN_SPECIAL_MESSAGE;
     };
     String STR_NAMEINVALID
     {
@@ -1845,6 +1846,9 @@ Menu MENU_DATASOURCELIST_POPUP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2000/12/11 16:32:49  fs
+ *  broaded the data source list
+ *
  *  Revision 1.20  2000/12/06 15:13:35  rt
  *  Merge SRC614: 06.12.00 - 16:13:06
  *
