@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:59:23 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -837,7 +837,6 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
     }
 
     pOptions->StoreConfig();
-    SFX_APP()->SaveConfiguration();
 
     // Nur, wenn auch der Dokumenttyp uebereinstimmt...
     if( pDocSh && pDoc && eDocType == pDoc->GetDocumentType() )
