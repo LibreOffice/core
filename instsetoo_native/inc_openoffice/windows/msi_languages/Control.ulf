@@ -756,11 +756,11 @@ de = "Abbruch"
 
 [OOO_CONTROL_234]
 en-US = "The program features you selected are being installed."
-de = "Die Programmbestandteile, die Sie ausgewählt haben, wurden installiert."
+de = "Die Programmbestandteile, die Sie ausgewählt haben, werden installiert."
 
 [OOO_CONTROL_235]
 en-US = "The program features you selected are being uninstalled."
-de = "Die Programmbestandteile, die Sie ausgewählt haben, wurden deinstalliert."
+de = "Die Programmbestandteile, die Sie ausgewählt haben, werden deinstalliert."
 
 [OOO_CONTROL_236]
 en-US = "Please wait while the Installation Wizard installs [ProductName]. This may take several minutes."
