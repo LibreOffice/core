@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:26:53 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/uno/XCurrentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <test/XSimpleInterface.hpp>
 #include <test/XLanguageBindingTest.hpp>
 
@@ -115,11 +116,62 @@ sal_Int32 getSize( const Type & rT )
     typelib_typedescription_release( pTD );
     return nSize;
 }
+
 /*
  * main.
  */
 void testCppu()
 {
+    Any a(false);
+#if 0
+    // the following don't compile, which is ok:
+    a.get<sal_Unicode>();
+    a.get<sal_uInt16>();
+    a.has<sal_Unicode>();
+    a.has<sal_uInt16>();
+    Any a_( static_cast<sal_Unicode>('a') );
+#endif
+    OSL_ASSERT( a.getValueTypeClass() == TypeClass_BOOLEAN );
+    OSL_ASSERT( !a.get<bool>() && !a.get<sal_Bool>() );
+    a <<= sal_False;
+    OSL_ASSERT( a.getValueTypeClass() == TypeClass_BOOLEAN );
+    OSL_ASSERT( !a.get<bool>() && !a.get<sal_Bool>() );
+    a = Any(sal_False);
+    OSL_ASSERT( a.getValueTypeClass() == TypeClass_BOOLEAN );
+    OSL_ASSERT( !a.get<bool>() && !a.get<sal_Bool>() );
+    Any b( static_cast<sal_Int8>(32) );
+    OSL_ASSERT( b.getValueTypeClass() == TypeClass_BYTE );
+    OSL_ASSERT( b.get<sal_Int64>() == 32 &&
+                b.get<sal_uInt64>() == 32 &&
+                b.get<sal_Int32>() == 32 &&
+                b.get<sal_uInt32>() == 32 &&
+                b.get<sal_Int16>() == 32 &&
+                b.get<sal_Int8>() == 32 );
+    OSL_ASSERT( b.has<sal_Int64>() &&
+                b.has<sal_uInt64>() &&
+                b.has<sal_Int32>() &&
+                b.has<sal_uInt32>() &&
+                b.has<sal_Int16>() &&
+                b.has<sal_Int8>() );
+    b <<= true;
+    OSL_ASSERT( b.getValueTypeClass() == TypeClass_BOOLEAN );
+    OSL_ASSERT( b.get<bool>() && b.get<sal_Bool>() );
+    try {
+        b.get<sal_Int8>();
+        OSL_ASSERT(false);
+    }
+    catch (RuntimeException & exc) {
+        exc;
+    }
+    try {
+        const Sequence<beans::PropertyValue> seq(
+            b.get< Sequence<beans::PropertyValue> >() );
+        OSL_ASSERT(false);
+    }
+    catch (RuntimeException & exc) {
+        exc;
+    }
+
     sal_Int32 big = 0x7fffffff;
     try
     {
@@ -1123,47 +1175,52 @@ void testArray(void)
  */
 int SAL_CALL main(int argc, char **argv)
 {
-    {
-    typelib_setCacheSize( 200 );
-    Reference< registry::XSimpleRegistry > xRegistry( ::cppu::createSimpleRegistry() );
-    xRegistry->open( OUString( RTL_CONSTASCII_USTRINGPARAM("testcppu.rdb") ), sal_True, sal_False );
-    Reference< XComponentContext > xContext(
-        ::cppu::bootstrap_InitialComponentContext( xRegistry ) );
-    testEnvironments();
-    ::rtl_unloadUnusedModules( 0 );
-    testMappingCallback();
-    ::rtl_unloadUnusedModules( 0 );
+    try {
+        typelib_setCacheSize( 200 );
+        Reference< registry::XSimpleRegistry > xRegistry(
+            ::cppu::createSimpleRegistry() );
+        xRegistry->open( OUString( RTL_CONSTASCII_USTRINGPARAM("testcppu.rdb") ), sal_True, sal_False );
+        Reference< XComponentContext > xContext(
+            ::cppu::bootstrap_InitialComponentContext( xRegistry ) );
+        testEnvironments();
+        ::rtl_unloadUnusedModules( 0 );
+        testMappingCallback();
+        ::rtl_unloadUnusedModules( 0 );
 
 //      // security test
 //  void test_security( const Reference< XMultiServiceFactory > & );
 //      test_security( xMgr );
 
-    // C++, C bridges test
-    void test_CppBridge(void);
-    test_CppBridge();
-    ::rtl_unloadUnusedModules( 0 );
+        // C++, C bridges test
+        void test_CppBridge(void);
+        test_CppBridge();
+        ::rtl_unloadUnusedModules( 0 );
 //      void test_CBridge(void);
 //      void test_CBridge2(void);
 //      test_CBridge();
 //      test_CBridge2();
 
-    testCurrentContext();
-    testAssignment();
-    testCppu();
+        testCurrentContext();
+        testAssignment();
+        testCppu();
 //      testArray();
 #if 0 // cache test not possible if types are loaded dynamically (cppumaker -L)
-    test_cache();
+        test_cache();
 #endif
-    test_interface();
-    test_inheritance();
+        test_interface();
+        test_inheritance();
 
-      // shutdown
-    Reference< XComponent > xComp( xContext, UNO_QUERY_THROW );
-    xComp.set( xContext, UNO_QUERY_THROW );
-    Reference< XInterface > x(
-        xContext->getValueByName(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theTypeDescriptionManager") ) ), UNO_QUERY_THROW );
-    xComp->dispose();
+        // shutdown
+        Reference< XComponent > xComp( xContext, UNO_QUERY_THROW );
+        xComp.set( xContext, UNO_QUERY_THROW );
+        Reference< XInterface > x(
+            xContext->getValueByName(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theTypeDescriptionManager") ) ), UNO_QUERY_THROW );
+        xComp->dispose();
+    }
+    catch (Exception & exc) {
+        fprintf( stderr, "error: %s\n", rtl::OUStringToOString(
+                     exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 
     typelib_setCacheSize( 0 );
