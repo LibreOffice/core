@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-01-10 15:59:20 $
+ *  last change: $Author: os $ $Date: 2001-02-02 11:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #include <sfx2/basedlgs.hxx>
 #endif
 
+#ifndef _HEADBAR_HXX
+#include <svtools/headbar.hxx>
+#endif
 #ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
@@ -80,6 +83,23 @@
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
+#ifndef _SV_EDIT_HXX
+#include <vcl/edit.hxx>
+#endif
+#ifndef _SV_SCRBAR_HXX
+#include <vcl/scrbar.hxx>
+#endif
+
+
+class RubyPreview : public Window
+{
+protected:
+    virtual void Paint( const Rectangle& rRect );
+
+public:
+    RubyPreview(Window* pParent, const ResId& rResId) :
+        Window(pParent, rResId){}
+};
 
 class SvxRubyChildWindow : public SfxChildWindow
 {
@@ -88,32 +108,102 @@ class SvxRubyChildWindow : public SfxChildWindow
     SvxRubyChildWindow( Window*, USHORT, SfxBindings*, SfxChildWinInfo* );
 
     SFX_DECL_CHILDWINDOW( SvxRubyChildWindow );
+
 };
-class SvxRubyDialog : public SfxFloatingWindow
+struct SvxRubyData_Impl;
+class SvxRubyDialog : public SfxModelessDialog
 {
-    //TabListBox ??
+    HeaderBar           aHeaderHB;
+    Edit                aLeft1ED;
+    Edit                aRight1ED;
+    Edit                aLeft2ED;
+    Edit                aRight2ED;
+    Edit                aLeft3ED;
+    Edit                aRight3ED;
+    Edit                aLeft4ED;
+    Edit                aRight4ED;
 
-    CheckBox        aAutoDetectionCB;
+    Edit*               aEditArr[8];
+    ScrollBar           aScrollSB;
 
-    FixedText       aCharStyleFT;
-    ListBox         aCharStyleLB;
-    PushButton      aStylistPB;
+    CheckBox            aAutoDetectionCB;
 
-    FixedText       aPreviewFT;
-    Window          aPreviewWin;
+    FixedText           aAdjustFT;
+    ListBox             aAdjustLB;
 
-    OKButton        aApplyPB;
-    PushButton      aClosePB;
-    HelpButton      aHelpPB;
+    FixedText           aCharStyleFT;
+    ListBox             aCharStyleLB;
+    PushButton          aStylistPB;
 
-    virtual void        Resize();
+    FixedText           aPreviewFT;
+    RubyPreview         aPreviewWin;
+
+    OKButton            aApplyPB;
+    PushButton          aClosePB;
+    HelpButton          aHelpPB;
+
+    String              sBaseText;
+    String              sRubyText;
+
+    long                nLastPos;
+    BOOL                bModified;
+
+    SfxBindings*    pBindings;
+    SvxRubyData_Impl* pImpl;
+
+    DECL_LINK(ApplyHdl_Impl, PushButton*);
+    DECL_LINK(CloseHdl_Impl, PushButton*);
+    DECL_LINK(StylistHdl_Impl, PushButton*);
+    DECL_LINK(DragHdl_Impl, HeaderBar*);
+    DECL_LINK(AutomaticHdl_Impl, CheckBox*);
+    DECL_LINK(ScrollHdl_Impl, ScrollBar*);
+    DECL_LINK(AdjustHdl_Impl, ListBox*);
+    DECL_LINK(CharStyleHdl_Impl, ListBox*);
+
+    void                SetText(sal_Int32 nPos, Edit& rLeft, Edit& rRight);
+    void                GetText();
+    void                ClearCharStyleList();
+
+    void                Update();
     virtual BOOL        Close();
+
+    long                GetLastPos() const {return nLastPos;}
+    void                SetLastPos(long nSet) {nLastPos = nSet;}
+
+    BOOL                IsModified() const {return bModified;}
+    void                SetModified(BOOL bSet) {bModified = bSet;}
+
+    void EnableControls(sal_Bool bEnable)
+        {
+            aHeaderHB.Enable(bEnable);
+            aLeft1ED.Enable(bEnable);
+            aRight1ED.Enable(bEnable);
+            aLeft2ED.Enable(bEnable);
+            aRight2ED.Enable(bEnable);
+            aLeft3ED.Enable(bEnable);
+            aRight3ED.Enable(bEnable);
+            aLeft4ED.Enable(bEnable);
+            aRight4ED.Enable(bEnable);
+            aScrollSB.Enable(bEnable);
+            aAutoDetectionCB.Enable(bEnable);
+            aAdjustFT.Enable(bEnable);
+            aAdjustLB.Enable(bEnable);
+            aCharStyleFT.Enable(bEnable);
+            aCharStyleLB.Enable(bEnable);
+            aStylistPB.Enable(bEnable);
+            aPreviewFT.Enable(bEnable);
+            aPreviewWin.Enable(bEnable);
+            aApplyPB.Enable(bEnable);
+        }
 
 public:
 
                         SvxRubyDialog( SfxBindings *pBindings, SfxChildWindow *pCW,
                                     Window* pParent, const ResId& rResId );
                         ~SvxRubyDialog();
+
+    virtual void        Activate();
+    virtual void        Deactivate();
 };
 
 #endif // _SVX_RUBYDLG_HXX_
