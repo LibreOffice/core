@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-20 20:26:01 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1616,11 +1616,11 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ french ] = "Toujours ~exécuter" ;
         Text [ dutch ] = "~altijd uitvoeren" ;
         Text [ portuguese ] = "~Executar sempre" ;
-        Text[ chinese_simplified ] = "×ÜÊÇÖ´ĞĞ(~X)";
+        Text[ chinese_simplified ] = "×Ô¶¯Ö´ĞĞ(~X)";
         Text[ russian ] = "Âûïîëíÿòü âñåãäà";
         Text[ polish ] = "Wykonuj zawsze";
         Text[ japanese ] = "í‚ÉÀs(~X)";
-        Text[ chinese_traditional ] = "Á`¬O°õ¦æ(~X)";
+        Text[ chinese_traditional ] = "¦Û°Ê°õ¦æ(~X)";
         Text[ arabic ] = "ÇáÊäİíĞ ÏÇÆãÇğ";
         Text[ greek ] = "ğÜíôá åêôİëåóç";
         Text[ korean ] = "Ç×»ó ¼öÇà(~X)";
@@ -1957,7 +1957,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         };
         StringList [ chinese_traditional ] =
         {
-            < "µL­­¨îªº" ; > ;
+            < "µL­­»sªº" ; > ;
             < "µL" ; > ;
             < "¹q¸£" ; > ;
         };
@@ -2260,6 +2260,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
 };
 
  // ******************************************************************* EOF
+
 
 
 
