@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmduicollector.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cd $ $Date: 2004-01-30 15:52:54 $
+ *  last change: $Author: cd $ $Date: 2004-02-03 07:40:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,6 +306,7 @@ bool ReadCSVFile( const OUString& aCVSFileURL, MODULES eModule, const OUString& 
             OString     aStatusState;
             OString     aToolbarState;
             OString     aCmdName;
+            OString     aSlotName;
 
             sal_Int32 nIndex = 0;
             aID              = aLine.getToken( 2, ',', nIndex );
@@ -313,7 +314,11 @@ bool ReadCSVFile( const OUString& aCVSFileURL, MODULES eModule, const OUString& 
             aMenuState       = aLine.getToken( 0, ',', nIndex );
             aStatusState     = aLine.getToken( 0, ',', nIndex );
             aToolbarState    = aLine.getToken( 0, ',', nIndex );
-            aCmdName         = aLine.getToken( 20, ',', nIndex );
+            aCmdName         = aLine.getToken( 18, ',', nIndex );
+            aSlotName        = aLine.getToken( 1, ',', nIndex );
+
+            if ( aCmdName.getLength() == 0 )
+                aCmdName = aSlotName;
 
             int nID = aID.toInt32();
 
