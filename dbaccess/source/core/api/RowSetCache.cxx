@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-22 13:08:22 $
+ *  last change: $Author: oj $ $Date: 2001-06-22 13:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -690,6 +690,8 @@ sal_Bool SAL_CALL ORowSetCache::moveToBookmark( const Any& bookmark ) throw(SQLE
         else
             m_aMatrixIter = m_pMatrix->end();
     }
+    else
+        return sal_False;
 
     return m_aMatrixIter != m_pMatrix->end() && (*m_aMatrixIter).isValid();
 }
@@ -1819,6 +1821,9 @@ void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRo
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.35  2001/05/22 13:08:22  oj
+    #87199# check column names
+
     Revision 1.34  2001/05/11 06:14:11  oj
     #86724# clear updaterow after update
 

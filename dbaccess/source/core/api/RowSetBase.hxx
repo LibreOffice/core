@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-28 13:01:26 $
+ *  last change: $Author: oj $ $Date: 2001-06-22 13:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,8 @@ namespace dbaccess
 
     // OPropertyContainer
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;
+        // postions the cache which the currently bookmark m_aBookmark
+        void positionCache();
 
     public:
         virtual ~ORowSetBase();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-28 13:01:26 $
+ *  last change: $Author: oj $ $Date: 2001-06-22 13:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,7 +480,6 @@ Reference< XArray > SAL_CALL ORowSetBase::getArray( sal_Int32 columnIndex ) thro
     return Reference< XArray >();
 }
 // -------------------------------------------------------------------------
-
 // ::com::sun::star::sdbcx::XRowLocate
 Any SAL_CALL ORowSetBase::getBookmark(  ) throw(SQLException, RuntimeException)
 {
@@ -755,9 +754,7 @@ sal_Bool SAL_CALL ORowSetBase::isFirst(  ) throw(SQLException, RuntimeException)
         return sal_False;
 
     ::osl::MutexGuard aGuard( m_rMutex );
-
-    if(m_aBookmark.hasValue())
-        m_pCache->moveToBookmark(m_aBookmark);
+    positionCache();
 
     return m_pCache->isFirst();
 }
@@ -774,8 +771,7 @@ sal_Bool SAL_CALL ORowSetBase::isLast(  ) throw(SQLException, RuntimeException)
         return sal_False;
 
     ::osl::MutexGuard aGuard( m_rMutex );
-    if(m_aBookmark.hasValue())
-        m_pCache->moveToBookmark(m_aBookmark);
+    positionCache();
 
     return m_pCache->isLast();
 }
@@ -1149,8 +1145,7 @@ void SAL_CALL ORowSetBase::refreshRow(  ) throw(SQLException, RuntimeException)
         return; // nothing to do here
 
     ::osl::MutexGuard aGuard( m_rMutex );
-    if(m_aBookmark.hasValue())
-        m_pCache->moveToBookmark(m_aBookmark);
+    positionCache();
     m_pCache->refreshRow();
 }
 // -------------------------------------------------------------------------
@@ -1244,6 +1239,16 @@ void ORowSetBase::firePropertyChange(const ORowSetMatrix::iterator& _rOldRow)
     }
 }
 // -----------------------------------------------------------------------------
-
+void ORowSetBase::positionCache()
+{
+    if(m_aBookmark.hasValue())
+    {
+        sal_Bool bOK = m_pCache->moveToBookmark(m_aBookmark);
+        OSL_ENSURE(bOK ,"ORowSetBase::positionCache: positioning cache fails!");
+    }
+    else
+        OSL_ENSURE(0,"ORowSetBase::positionCache: no bookmark set!");
+}
+// -----------------------------------------------------------------------------
 
 }   // namespace dbaccess

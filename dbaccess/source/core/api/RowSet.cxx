@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-22 10:48:40 $
+ *  last change: $Author: oj $ $Date: 2001-06-22 13:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1178,8 +1178,7 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
     // this call position the cache indirect
     notifyClonesRowDelete(m_aBookmark);
 
-    if(m_aBookmark.hasValue())
-        m_pCache->moveToBookmark(m_aBookmark);
+    positionCache();
 
     ORowSetMatrix::iterator aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
 
@@ -1216,8 +1215,7 @@ void SAL_CALL ORowSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException
 
     ::osl::MutexGuard aGuard( m_rMutex );
 
-    if(m_aBookmark.hasValue())
-        m_pCache->moveToBookmark(m_aBookmark);
+    positionCache();
 
     m_pCache->cancelRowUpdates();
     ORowSetMatrix::iterator aOldValues = m_aCurrentRow;
@@ -1329,8 +1327,7 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
     if(notifyAllListenersCursorBeforeMove())
     {
         // remember old value for fire
-        if(m_aBookmark.hasValue())
-            m_pCache->moveToBookmark(m_aBookmark);
+        positionCache();
 
         ORowSetMatrix::iterator aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
 
@@ -1361,8 +1358,7 @@ void SAL_CALL ORowSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
     {
         if(notifyAllListenersCursorBeforeMove())
         {
-            if(m_aBookmark.hasValue())
-                m_pCache->moveToBookmark(m_aBookmark);
+            positionCache();
             m_pCache->moveToCurrentRow();
             notifyAllListenersCursorMoved();
 
@@ -2022,8 +2018,7 @@ Sequence< sal_Int32 > SAL_CALL ORowSet::deleteRows( const Sequence< Any >& rows 
             notifyClonesRowDelete(*pBegin);
             if(compareBookmarks( m_aBookmark,*pBegin) == 0)
             {
-                if(m_aBookmark.hasValue())
-                    m_pCache->moveToBookmark(m_aBookmark);
+                positionCache();
                 m_nPosition = m_pCache->getRow();
             }
         }
