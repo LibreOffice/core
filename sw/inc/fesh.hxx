@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:30:06 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,6 +686,9 @@ public:
 
     USHORT GetRowsToRepeat() const;
     void SetRowsToRepeat( USHORT nNumOfRows );
+    //returns the number of table rows currently selected
+    //if the selection start at the top of the table
+    USHORT    GetRowSelectionFromTop() const;
 
     BOOL IsInRepeatedHeadline() const { return CheckHeadline( true ); }
     BOOL IsInHeadline() const { return CheckHeadline( false ); }
