@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:07:45 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1281,7 +1281,7 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
                     else
                         aNullPt = aOldObjRect.TopLeft();
 
-                    Point aNewAnchor = pAnchor->GetAnchorPos();
+                    Point aNewAnchor = pAnchor->GetFrmAnchorPos( ::HasWrap( pOldObj ) );
                     pNewObj->NbcSetRelativePos( aNullPt - aNewAnchor );
                     pNewObj->NbcSetAnchorPos( aNewAnchor );
 
