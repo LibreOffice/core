@@ -273,6 +273,15 @@ public class TestCaseOldAPI extends ComplexTestCase {
             xProp.setPropertyValue( "Logarithmic", new Boolean( false ));
             assure( "Scaling is not logarithmic",
                     ! AnyConverter.toBoolean( xProp.getPropertyValue( "Logarithmic" )) );
+
+            int nNewColor =  0xcd853f; // peru
+            xProp.setPropertyValue( "LineColor", new Integer( nNewColor ));
+            assure( "Property LineColor",
+                    AnyConverter.toInt( xProp.getPropertyValue( "LineColor" )) == nNewColor );
+            float fNewCharHeight = (float)(16.0);
+            xProp.setPropertyValue( "CharHeight", new Float( fNewCharHeight ));
+            assure( "Property CharHeight",
+                    AnyConverter.toFloat( xProp.getPropertyValue( "CharHeight" )) == fNewCharHeight );
         }
         catch( Exception ex )
         {
