@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-20 12:55:09 $
+ *  last change: $Author: hr $ $Date: 2000-11-24 16:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,7 +491,8 @@ SotStorage::SotStorage( const String & rName, StreamMode nMode, StorageMode nSto
             aObj.SetURL( aURL );
         }
 
-        pStorStm = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL(), nMode );
+//        pStorStm = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL(), nMode );
+        pStorStm = new SvFileStream( aObj.GetMainURL(), nMode );
         if ( pStorStm )
         {
             // try as UCBStorage, next try as OLEStorage
