@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2000-10-19 08:53:23 $
+ *  last change: $Author: tra $ $Date: 2000-11-13 08:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@
 // ctor
 //------------------------------------------------------------------------
 
-CXTDataObject::CXTDataObject( ) :
-    m_nRefCnt( 0 )
+CXTDataObject::CXTDataObject( LONG nRefCntInitVal ) :
+    m_nRefCnt( nRefCntInitVal )
 {
 }
 
@@ -169,7 +169,7 @@ STDMETHODIMP CXTDataObject::GetData(LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium 
     if ( ( NULL == pFormatetc ) || ( NULL == pmedium ) )
         return E_INVALIDARG;
 
-    HRESULT hr = S_OK;
+    HRESULT hr = E_FAIL;
 
     if ( CF_TEXT == pFormatetc->cfFormat )
     {
@@ -191,6 +191,34 @@ STDMETHODIMP CXTDataObject::GetData(LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium 
                 pmedium->pUnkForRelease = NULL;
             }
             lpStream->Release( );
+            hr = S_OK;
+        }
+        else
+        {
+            pmedium->tymed = TYMED_NULL;
+        }
+    }
+    else if ( CF_UNICODETEXT == pFormatetc->cfFormat )
+    {
+        WCHAR     buff[] = L"Hello World, How are you!";
+        LPSTREAM lpStream;
+
+        hr = CreateStreamOnHGlobal( NULL, FALSE, &lpStream );
+        if ( SUCCEEDED( hr ) )
+        {
+            hr = lpStream->Write( buff, sizeof( buff ) * sizeof( WCHAR ), NULL );
+            if ( SUCCEEDED( hr ) )
+            {
+                HGLOBAL hGlob;
+
+                GetHGlobalFromStream( lpStream, &hGlob );
+
+                pmedium->tymed          = TYMED_HGLOBAL;
+                pmedium->hGlobal        = hGlob;
+                pmedium->pUnkForRelease = NULL;
+            }
+            lpStream->Release( );
+            hr = S_OK;
         }
         else
         {
@@ -311,8 +339,8 @@ CEnumFormatEtc::CEnumFormatEtc( LPUNKNOWN pUnkDataObj ) :
     m_pUnkDataObj( pUnkDataObj ),
     m_nCurrentPos( 0 )
 {
-    m_cfFormats[0] = CF_TEXT;
-    m_cfFormats[1] = CF_UNICODETEXT;
+    m_cfFormats[0] = CF_UNICODETEXT;
+    m_cfFormats[1] = CF_TEXT;
 }
 
 //----------------------------------------------------------------------------

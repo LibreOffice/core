@@ -2,6 +2,7 @@
 //
 
 #define _WIN32_DCOM
+#undef _UNICODE
 
 #include "stdafx.h"
 
@@ -22,20 +23,29 @@
 #define MAX_LOADSTRING 100
 #undef USE_MTACB
 
+#define MSG_FLUSHCLIPBOARD WM_USER + 1
+
 // Globale Variablen:
 HINSTANCE           hInst;                      // aktuelle Instanz
-WCHAR               szTitle[MAX_LOADSTRING];            // Text der Titelzeile
-WCHAR               szWindowClass[MAX_LOADSTRING];  // Text der Titelzeile
+TCHAR               szTitle[MAX_LOADSTRING];            // Text der Titelzeile
+TCHAR               szWindowClass[MAX_LOADSTRING];  // Text der Titelzeile
 ATOM                MyRegisterClass( HINSTANCE hInstance );
 BOOL                InitInstance( HINSTANCE, int );
 LRESULT CALLBACK    WndProc( HWND, UINT, WPARAM, LPARAM );
 LRESULT CALLBACK    About( HWND, UINT, WPARAM, LPARAM );
 void                CopyClipboardData(HWND hwndParent);
+void                FlushClipboard( );
+void                PasteData( HWND hWnd );
+void                SetLocale();
+
 
 LPSTREAM            g_pStm    = NULL;
 char*               pTextBuff = NULL;
 DWORD               lData     = 0;
 CXTDataObject*      g_xtDo    = NULL;
+HWND                g_hWnd;
+HANDLE              g_hEvent;
+BOOL                g_bEnd;
 
 //----------------------------------------------------
 // a thread function
@@ -43,60 +53,11 @@ CXTDataObject*      g_xtDo    = NULL;
 
 unsigned int _stdcall ThreadProc(LPVOID pParam)
 {
-    IDataObject* pIDataObj = NULL;
-    FORMATETC    formatETC;
-    STGMEDIUM    stgMedium;
-    LPVOID       pGlobMem;
-    HWND         hwnd;
-    DWORD        sizeGlobBuff;
-    HRESULT      hr;
-
-    hwnd = (HWND)pParam;
-
-    OleInitialize( NULL );
-
-    hr = OleGetClipboard( &pIDataObj );
-
-    hr = CoGetInterfaceAndReleaseStream(
-        g_pStm,
-        __uuidof(IDataObject),
-        reinterpret_cast<LPVOID*>(&pIDataObj));
-
-    formatETC.cfFormat = CF_TEXT;
-    formatETC.ptd      = NULL;
-    formatETC.dwAspect = DVASPECT_CONTENT;
-    formatETC.lindex   = -1;
-    formatETC.tymed    = TYMED_HGLOBAL;
-
-    hr = pIDataObj->GetData( &formatETC, &stgMedium );
-    pGlobMem = GlobalLock( stgMedium.hGlobal );
-    if ( NULL != pGlobMem )
+    while( !g_bEnd )
     {
-        if ( NULL != pTextBuff )
-        {
-            free( pTextBuff );
-        }
-
-        sizeGlobBuff = GlobalSize( stgMedium.hGlobal );
-        pTextBuff = (char*)malloc( sizeGlobBuff + 1 );
-        ZeroMemory( pTextBuff, sizeGlobBuff + 1 );
-
-        memcpy( pTextBuff, pGlobMem, sizeGlobBuff );
-        lData = sizeGlobBuff;
-
-        InvalidateRect( hwnd, NULL, TRUE );
-        UpdateWindow( hwnd );
+        WaitForSingleObject( g_hEvent, INFINITE );
+        SendMessage( g_hWnd, MSG_FLUSHCLIPBOARD, WPARAM(0), LPARAM(0) );
     }
-
-    GlobalUnlock( stgMedium.hGlobal );
-
-    ReleaseStgMedium( &stgMedium );
-
-    pIDataObj->Release();
-
-    //CoUninitialize( );
-
-    OleUninitialize( );
 
     return 0;
 }
@@ -115,6 +76,23 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     HACCEL  hAccelTable;
     HRESULT hr = E_FAIL;
 
+    /*
+    g_hEvent = CreateEvent( 0,
+                            FALSE,
+                            FALSE,
+                            NULL
+                          );
+
+    g_bEnd = FALSE;
+
+    _beginthreadex( ThreadProc,
+                    0,
+                    NULL,
+                    0,
+                    0,
+                    NULL );
+    */
+
     // it's important to initialize ole
     // in order to use the clipboard
 #ifdef USE_MTACB
@@ -125,8 +103,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 
     // Globale Zeichenfolgen initialisieren
-    LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-    LoadStringW(hInstance, IDC_TESTWIN32, szWindowClass, MAX_LOADSTRING);
+    LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
+    LoadString(hInstance, IDC_TESTWIN32, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
     // Initialisierung der Anwendung durchführen:
@@ -154,12 +132,14 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     OleUninitialize( );
 #endif
 
+    CloseHandle( g_hEvent );
+
     return msg.wParam;
 }
 
 
 
-//
+//----------------------------------------------------------------
 //  FUNKTION: MyRegisterClass()
 //
 //  AUFGABE: Registriert die Fensterklasse.
@@ -171,10 +151,11 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 //    die zu Windows 95 hinzugefügt wurde. Es ist wichtig diese Funktion aufzurufen,
 //    damit der Anwendung kleine Symbole mit den richtigen Proportionen zugewiesen
 //    werden.
-//
+//----------------------------------------------------------------
+
 ATOM MyRegisterClass( HINSTANCE hInstance )
 {
-    WNDCLASSEXW wcex;
+    WNDCLASSEX wcex;
 
     wcex.cbSize = sizeof(WNDCLASSEX);
 
@@ -186,14 +167,14 @@ ATOM MyRegisterClass( HINSTANCE hInstance )
     wcex.hIcon          = LoadIcon(hInstance, (LPCTSTR)IDI_TESTWIN32);
     wcex.hCursor        = LoadCursor(NULL, IDC_ARROW);
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = (LPCWSTR)IDC_TESTWIN32;
-    wcex.lpszClassName  = szWindowClass;
+    wcex.lpszMenuName   = (LPCTSTR)IDC_TESTWIN32;
+    wcex.lpszClassName  = _T(szWindowClass);
     wcex.hIconSm        = LoadIcon(wcex.hInstance, (LPCTSTR)IDI_SMALL);
 
-    return RegisterClassExW(&wcex);
+    return RegisterClassEx(&wcex);
 }
 
-//
+//----------------------------------------------------------------
 //   FUNKTION: InitInstance(HANDLE, int)
 //
 //   AUFGABE: Speichert die Instanzzugriffsnummer und erstellt das Hauptfenster
@@ -202,28 +183,27 @@ ATOM MyRegisterClass( HINSTANCE hInstance )
 //
 //        In dieser Funktion wird die Instanzzugriffsnummer in einer globalen Variable
 //        gespeichert und das Hauptprogrammfenster erstellt und angezeigt.
-//
+//----------------------------------------------------------------
+
 BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 {
-   HWND hWnd;
-
    hInst = hInstance; // Instanzzugriffsnummer in unserer globalen Variable speichern
 
-   hWnd = CreateWindowExW(0, szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+   g_hWnd = CreateWindowEx(0, szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
 
-   if( !hWnd )
+   if( !g_hWnd )
    {
       return FALSE;
    }
 
-   ShowWindow( hWnd, nCmdShow );
-   UpdateWindow( hWnd );
+   ShowWindow( g_hWnd, nCmdShow );
+   UpdateWindow( g_hWnd );
 
    return TRUE;
 }
 
-//
+//----------------------------------------------------------------
 //  FUNKTION: WndProc(HWND, unsigned, WORD, LONG)
 //
 //  AUFGABE:  Verarbeitet Nachrichten für das Hauptfenster.
@@ -231,8 +211,8 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 //  WM_COMMAND  - Anwendungsmenü verarbeiten
 //  WM_PAINT    - Hauptfenster darstellen
 //  WM_DESTROY  - Beendigungsnachricht ausgeben und zurückkehren
-//
-//
+//----------------------------------------------------------------
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     int         wmId;
@@ -253,10 +233,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             switch( wmId )
             {
                 case IDD_COPY:
-                    //PasteClipboardData(hWnd);
                     CopyClipboardData(hWnd);
                     break;
-
+                case IDD_PASTE2:
+                    PasteData(hWnd);
+                    break;
+                case IDD_LOCALE:
+                    SetLocale();
+                    break;
                 case IDM_EXIT:
                    DestroyWindow( hWnd );
                    break;
@@ -285,6 +269,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             break;
 
         case WM_DESTROY:
+            g_bEnd = TRUE;
+            SetEvent( g_hEvent );
+            FlushClipboard( );
             PostQuitMessage( 0 );
             break;
 
@@ -294,63 +281,92 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
    return 0;
 }
 
+//----------------------------------------------
+// copy data into the clipboard
+//----------------------------------------------
+
 void CopyClipboardData( HWND hWnd )
 {
-    g_xtDo = new CXTDataObject;
+    g_xtDo = new CXTDataObject( 1 );
 #ifdef USE_MTACB
     MTASetClipboard( static_cast< IDataObject* >( g_xtDo ) );
-    MTAFlushClipboard( );
 #else
     OleSetClipboard( static_cast< IDataObject* >( g_xtDo ) );
-    OleFlushClipboard( );
 #endif
 }
 
-void PasteClipboardData2(HWND hwndParent)
+//----------------------------------------------
+// flush the content into the clipboard
+//----------------------------------------------
+
+void FlushClipboard( )
 {
-    IDataObject* pIDataObject;
-    HRESULT      hr;
-    FORMATETC    formatETC;
-    STGMEDIUM    stgMedium;
-    LPVOID       pGlobMem;
-    HWND         hwnd;
-    DWORD        sizeGlobBuff;
-
-    //hr = MTAGetClipboard( &pIDataObject );
-    if ( SUCCEEDED( hr ) )
+    if ( NULL != g_xtDo )
     {
-        formatETC.cfFormat = CF_TEXT;
-        formatETC.ptd      = NULL;
-        formatETC.dwAspect = DVASPECT_CONTENT;
-        formatETC.lindex   = -1;
-        formatETC.tymed    = TYMED_HGLOBAL;
+#ifdef USE_MTACB
+        HRESULT hr = MTAIsCurrentClipboard( static_cast< IDataObject* >( g_xtDo ) );
+        if ( S_OK == hr )
+            MTAFlushClipboard( );
+#else
+        HRESULT hr = OleIsCurrentClipboard( static_cast< IDataObject* >( g_xtDo ) );
+        if ( S_OK == hr )
+            OleFlushClipboard( );
+#endif
 
-        hr = pIDataObject->GetData( &formatETC, &stgMedium );
-        pGlobMem = GlobalLock( stgMedium.hGlobal );
-        if ( NULL != pGlobMem )
-        {
-            if ( NULL != pTextBuff )
-            {
-                free( pTextBuff );
-            }
-
-            sizeGlobBuff = GlobalSize( stgMedium.hGlobal );
-            pTextBuff = (char*)malloc( sizeGlobBuff + 1 );
-            ZeroMemory( pTextBuff, sizeGlobBuff + 1 );
-
-            memcpy( pTextBuff, pGlobMem, sizeGlobBuff );
-            lData = sizeGlobBuff;
-
-            InvalidateRect( hwndParent, NULL, TRUE );
-            UpdateWindow( hwndParent );
-        }
-
-        GlobalUnlock( stgMedium.hGlobal );
-
-        ReleaseStgMedium( &stgMedium );
-
-        pIDataObject->Release();
+        static_cast< IDataObject* >( g_xtDo )->Release( );
     }
 }
 
+
+void PasteData(HWND hWnd)
+{
+    IDataObject* pDataObj;
+
+    //FlushClipboard( );
+
+    HRESULT hr = OleGetClipboard( &pDataObj );
+    if ( SUCCEEDED( hr ) )
+    {
+        FORMATETC fetc;
+        STGMEDIUM stgmedium;
+
+        fetc.cfFormat = CF_LOCALE;
+        fetc.ptd      = NULL;
+        fetc.dwAspect = DVASPECT_CONTENT;
+        fetc.lindex   = -1;
+        fetc.tymed    = TYMED_HGLOBAL;
+
+        hr = pDataObj->GetData( &fetc, &stgmedium );
+        if ( SUCCEEDED( hr ) )
+        {
+            LPVOID lpData = GlobalLock( stgmedium.hGlobal );
+
+            if ( NULL != lpData )
+            {
+                LCID lcid = *( (WORD*)lpData );
+
+                WORD langID = LANGIDFROMLCID( lcid );
+                WORD sublangID = SUBLANGID( langID );
+
+                TCHAR buff[6];
+                int cbWritten = GetLocaleInfo( lcid, LOCALE_IDEFAULTANSICODEPAGE, buff, sizeof( buff ) );
+                cbWritten     = GetLocaleInfo( lcid, LOCALE_IDEFAULTCODEPAGE, buff, sizeof( buff ) );
+
+                GlobalUnlock( stgmedium.hGlobal );
+            }
+            else
+            {
+                DWORD dwLastError = GetLastError( );
+            }
+
+            ReleaseStgMedium( &stgmedium );
+        }
+    }
+}
+
+
+void SetLocale()
+{
+    LCID threadLcid = GetThreadLocale();
+}
 

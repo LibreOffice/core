@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2000-10-19 08:53:30 $
+ *  last change: $Author: tra $ $Date: 2000-11-13 08:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,7 @@ class EnumFormatEtc;
 class CXTDataObject : public IDataObject
 {
 public:
-    CXTDataObject( /*CWinClipboard& theWinClipboard,
-                   const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& theXClipboardOwner,
-                   const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& theXTDataSource*/ );
+    CXTDataObject( LONG nRefCntInitVal = 0);
     ~CXTDataObject( );
 
     //-----------------------------------------------------------------

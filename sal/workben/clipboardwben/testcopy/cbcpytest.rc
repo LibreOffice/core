@@ -44,6 +44,8 @@ BEGIN
     POPUP "&Datei"
     BEGIN
         MENUITEM "&Copy",                       IDD_COPY
+        MENUITEM "Paste",                       IDD_PASTE2
+        MENUITEM "Set Locale",                  IDD_LOCALE
         MENUITEM SEPARATOR
         MENUITEM "&Beenden",                    IDM_EXIT
     END
