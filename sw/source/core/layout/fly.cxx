@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:35:20 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,10 @@
 #ifndef _FMTFOLLOWTEXTFLOW_HXX
 #include <fmtfollowtextflow.hxx>
 #endif
+// OD 2004-04-06 #i26791#
+#ifndef _ANCHOREDOBJECT_HXX
+#include <anchoredobject.hxx>
+#endif
 
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
@@ -179,6 +183,8 @@
 
 SV_IMPL_PTRARR_SORT(SwSortDrawObjs,SdrObjectPtr)
 
+// OD 2004-03-23 #i26791
+TYPEINIT2(SwFlyFrm,SwLayoutFrm,SwAnchoredObject);
 
 /*************************************************************************
 |*
@@ -191,8 +197,10 @@ SV_IMPL_PTRARR_SORT(SwSortDrawObjs,SdrObjectPtr)
 
 SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     SwLayoutFrm( pFmt ),
-    aRelPos(),
-    pAnchor( 0 ),
+    // OD 2004-03-22 #i26791#
+    SwAnchoredObject(),
+    // OD 2004-05-27 #i26791# - moved to <SwAnchoredObject>
+//    aRelPos(),
     pPrevLink( 0 ),
     pNextLink( 0 ),
     bInCnt( FALSE ),
@@ -350,7 +358,7 @@ SwFlyFrm::~SwFlyFrm()
     // For frames bound as char or frames that don't have an anchor we have
     // to do that ourselves. For any other frame the call RemoveFly at the
     // anchor will do that.
-    if( IsAccessibleFrm() && GetFmt() && (IsFlyInCntFrm() || !pAnchor) )
+    if( IsAccessibleFrm() && GetFmt() && (IsFlyInCntFrm() || !GetAnchorFrm()) )
     {
         SwRootFrm *pRootFrm = FindRootFrm();
         if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
@@ -374,8 +382,8 @@ SwFlyFrm::~SwFlyFrm()
         DeleteCnt();
 
         //Tschuess sagen.
-        if ( pAnchor )
-            pAnchor->RemoveFly( this );
+        if ( GetAnchorFrm() )
+            AnchorFrm()->RemoveFly( this );
     }
 
     FinitDrawObj();
@@ -455,15 +463,17 @@ void SwFlyFrm::InitDrawObj( BOOL bNotify )
         pContact = new SwFlyDrawContact( (SwFlyFrmFmt*)GetFmt(),
                             GetFmt()->GetDoc()->MakeDrawModel() );
     ASSERT( pContact, "InitDrawObj failed" );
-    pDrawObj = pContact->CreateNewRef( this );
+    // OD 2004-03-22 #i26791#
+    SetDrawObj( *(pContact->CreateNewRef( this )) );
 
     //Den richtigen Layer setzen.
     // OD 2004-01-19 #110582#
     SdrLayerID nHeavenId = GetFmt()->GetDoc()->GetHeavenId();
     SdrLayerID nHellId = GetFmt()->GetDoc()->GetHellId();
-    pDrawObj->SetLayer( GetFmt()->GetOpaque().GetValue()
-                        ? nHeavenId
-                        : nHellId );
+    // OD 2004-03-22 #i26791#
+    GetVirtDrawObj()->SetLayer( GetFmt()->GetOpaque().GetValue()
+                                ? nHeavenId
+                                : nHellId );
     if ( bNotify )
         NotifyDrawObj();
 }
@@ -481,7 +491,7 @@ void SwFlyFrm::InitDrawObj( BOOL bNotify )
 
 void SwFlyFrm::FinitDrawObj()
 {
-    if ( !pDrawObj )
+    if ( !GetVirtDrawObj() )
         return;
 
     //Bei den SdrPageViews abmelden falls das Objekt dort noch selektiert ist.
@@ -529,8 +539,8 @@ void SwFlyFrm::FinitDrawObj()
     {
         pMyContact->GetMaster()->SetUserCall( 0 );
     }
-    pDrawObj->SetUserCall( 0 ); //Ruft sonst Delete des ContactObj
-    delete pDrawObj;            //Meldet sich selbst beim Master ab.
+    GetVirtDrawObj()->SetUserCall( 0 ); //Ruft sonst Delete des ContactObj
+    delete GetVirtDrawObj();            //Meldet sich selbst beim Master ab.
     if ( pMyContact )
         delete pMyContact;      //zerstoert den Master selbst.
 }
@@ -652,7 +662,7 @@ SwFlyFrm *SwFlyFrm::FindChainNeighbour( SwFrmFmt &rChain, SwFrm *pAnch )
     //Bereiche koennen zunaechst nur Kopf-/Fusszeilen oder Flys sein.
 
     if ( !pAnch )           //Wenn ein Anchor uebergeben Wurde zaehlt dieser: Ctor!
-        pAnch = GetAnchor();
+        pAnch = AnchorFrm();
 
     SwLayoutFrm *pLay;
     if ( pAnch->IsInFly() )
@@ -672,11 +682,11 @@ SwFlyFrm *SwFlyFrm::FindChainNeighbour( SwFrmFmt &rChain, SwFrm *pAnch )
     {
         while ( pFly )
         {
-            if ( pFly->GetAnchor() )
+            if ( pFly->GetAnchorFrm() )
             {
-                if ( pFly->GetAnchor()->IsInFly() )
+                if ( pFly->GetAnchorFrm()->IsInFly() )
                 {
-                    if ( pFly->GetAnchor()->FindFlyFrm() == pLay )
+                    if ( pFly->AnchorFrm()->FindFlyFrm() == pLay )
                         break;
                 }
                 else if ( pLay == pFly->FindFooterOrHeader() )
@@ -870,12 +880,10 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
         case RES_PROTECT:
             {
             const SvxProtectItem *pP = (SvxProtectItem*)pNew;
-            GetVirtDrawObj()->SetMoveProtect( pP->IsPosProtected()  );
+            GetVirtDrawObj()->SetMoveProtect( pP->IsPosProtected()   );
             GetVirtDrawObj()->SetResizeProtect( pP->IsSizeProtected() );
-#ifdef ACCESSIBLE_LAYOUT
             if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
                 pSh->Imp()->InvalidateAccessibleEditableState( sal_True, this );
-#endif
             break;
             }
 
@@ -947,7 +955,7 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                 }
             }
             const SvxProtectItem &rP = GetFmt()->GetProtect();
-            GetVirtDrawObj()->SetMoveProtect( rP.IsPosProtected()   );
+            GetVirtDrawObj()->SetMoveProtect( rP.IsPosProtected()    );
             GetVirtDrawObj()->SetResizeProtect( rP.IsSizeProtected() );
 
             if ( pSh )
@@ -1017,19 +1025,17 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
 
         case RES_OPAQUE:
             {
-            if ( pSh )
-                pSh->InvalidateWindows( Frm() );
-            const BYTE nId = ((SvxOpaqueItem*)pNew)->GetValue() ?
-                                GetFmt()->GetDoc()->GetHeavenId() :
-                                GetFmt()->GetDoc()->GetHellId();
-            GetVirtDrawObj()->SetLayer( nId );
-#ifdef ACCESSIBLE_LAYOUT
-            if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
-            {
-                pSh->Imp()->DisposeAccessibleFrm( this );
-                pSh->Imp()->AddAccessibleFrm( this );
-            }
-#endif
+                if ( pSh )
+                    pSh->InvalidateWindows( Frm() );
+                const BYTE nId = ((SvxOpaqueItem*)pNew)->GetValue() ?
+                                    GetFmt()->GetDoc()->GetHeavenId() :
+                                    GetFmt()->GetDoc()->GetHellId();
+                GetVirtDrawObj()->SetLayer( nId );
+                if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
+                {
+                    pSh->Imp()->DisposeAccessibleFrm( this );
+                    pSh->Imp()->AddAccessibleFrm( this );
+                }
             }
             break;
 
@@ -1145,7 +1151,7 @@ void SwFlyFrm::_Invalidate( SwPageFrm *pPage )
     bNotifyBack = bInvalid = TRUE;
 
     SwFlyFrm *pFrm;
-    if ( GetAnchor() && 0 != (pFrm = GetAnchor()->FindFlyFrm()) )
+    if ( GetAnchorFrm() && 0 != (pFrm = AnchorFrm()->FindFlyFrm()) )
     {
         //Gaanz dumm: Wenn der Fly innerhalb eines Fly gebunden ist, der
         //Spalten enthaehlt, sollte das Format von diesem ausgehen.
@@ -1168,10 +1174,10 @@ void SwFlyFrm::_Invalidate( SwPageFrm *pPage )
 
 void SwFlyFrm::ChgRelPos( const Point &rNewPos )
 {
-    if ( GetCurRelPos() != rNewPos )
+    if ( GetCurrRelPos() != rNewPos )
     {
         SwFrmFmt *pFmt = GetFmt();
-        SWRECTFN( GetAnchor() )
+        SWRECTFN( GetAnchorFrm() )
         SwTwips nNewY = bVert ? rNewPos.X() : rNewPos.Y();
         SwTwips nTmpY = nNewY == LONG_MAX ? 0 : nNewY;
         if( bVert )
@@ -1190,12 +1196,12 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
                     aVert.SetVertOrient( VERT_NONE );
                     xub_StrLen nOfs =
                         pFmt->GetAnchor().GetCntntAnchor()->nContent.GetIndex();
-                    ASSERT( GetAnchor()->IsTxtFrm(), "TxtFrm expected" );
-                    pAutoFrm = (SwTxtFrm*)GetAnchor();
+                    ASSERT( GetAnchorFrm()->IsTxtFrm(), "TxtFrm expected" );
+                    pAutoFrm = (SwTxtFrm*)GetAnchorFrm();
                     while( pAutoFrm->GetFollow() &&
                            pAutoFrm->GetFollow()->GetOfst() <= nOfs )
                     {
-                        if( pAutoFrm == GetAnchor() )
+                        if( pAutoFrm == GetAnchorFrm() )
                             nTmpY += pAutoFrm->GetRelPos().Y();
                         nTmpY -= pAutoFrm->GetUpper()->Prt().Height();
                         pAutoFrm = pAutoFrm->GetFollow();
@@ -1232,8 +1238,8 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
                         {
                             xub_StrLen nOfs = pFmt->GetAnchor().GetCntntAnchor()
                                           ->nContent.GetIndex();
-                            ASSERT( GetAnchor()->IsTxtFrm(), "TxtFrm expected");
-                            pAutoFrm = (SwTxtFrm*)GetAnchor();
+                            ASSERT( GetAnchorFrm()->IsTxtFrm(), "TxtFrm expected");
+                            pAutoFrm = (SwTxtFrm*)GetAnchorFrm();
                             while( pAutoFrm->GetFollow() &&
                                    pAutoFrm->GetFollow()->GetOfst() <= nOfs )
                                 pAutoFrm = pAutoFrm->GetFollow();
@@ -1660,22 +1666,23 @@ void CalcCntnt( SwLayoutFrm *pLay,
 |*  Letzte Aenderung    MA 14. Nov. 96
 |*
 |*************************************************************************/
-
-void SwFlyFrm::MakeFlyPos()
+// OD 2004-03-23 #i26791#
+//void SwFlyFrm::MakeFlyPos()
+void SwFlyFrm::MakeObjPos()
 {
     if ( !bValidPos )
     {
         bValidPos = TRUE;
 
         // OD 29.10.2003 #113049# - use new class to position object
-        GetAnchor()->Calc();
+        GetAnchorFrm()->Calc();
         objectpositioning::SwToLayoutAnchoredObjectPosition
                 aObjPositioning( *GetVirtDrawObj() );
         aObjPositioning.CalcPosition();
 
-        SWRECTFN( GetAnchor() );
+        SWRECTFN( GetAnchorFrm() );
         aFrm.Pos( aObjPositioning.GetRelPos() );
-        aFrm.Pos() += (GetAnchor()->Frm().*fnRect->fnGetPos)();
+        aFrm.Pos() += (GetAnchorFrm()->Frm().*fnRect->fnGetPos)();
     }
 }
 
@@ -1792,8 +1799,8 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, BOOL bTst )
                 InvalidateSize();
                 ::Notify( this, FindPageFrm(), aOld );
                 NotifyDrawObj();
-                if ( GetAnchor()->IsInFly() )
-                    GetAnchor()->FindFlyFrm()->Shrink( nDist, bTst );
+                if ( GetAnchorFrm()->IsInFly() )
+                    AnchorFrm()->FindFlyFrm()->Shrink( nDist, bTst );
             }
             return 0L;
         }
@@ -1816,8 +1823,8 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, BOOL bTst )
             if ( aOld != aNew )
             {
                 ::Notify( this, FindPageFrm(), aOld );
-                if ( GetAnchor()->IsInFly() )
-                    GetAnchor()->FindFlyFrm()->Shrink( nDist, bTst );
+                if ( GetAnchorFrm()->IsInFly() )
+                    AnchorFrm()->FindFlyFrm()->Shrink( nDist, bTst );
             }
             return (aOld.*fnRect->fnGetHeight)() -
                    (aNew.*fnRect->fnGetHeight)();
@@ -1859,15 +1866,17 @@ void SwFlyFrm::ChgSize( const Size& aNewSize )
 |*
 |*************************************************************************/
 
-BOOL SwFlyFrm::IsLowerOf( const SwLayoutFrm *pUpper ) const
+BOOL SwFlyFrm::IsLowerOf( const SwLayoutFrm* pUpper ) const
 {
-    ASSERT( GetAnchor(), "8-( Fly is lost in Space." );
-    const SwFrm *pFrm = GetAnchor();
+    ASSERT( GetAnchorFrm(), "8-( Fly is lost in Space." );
+    const SwFrm* pFrm = GetAnchorFrm();
     do
-    {   if ( pFrm == pUpper )
+    {
+        if ( pFrm == pUpper )
             return TRUE;
-        pFrm = pFrm->IsFlyFrm() ? ((const SwFlyFrm*)pFrm)->GetAnchor() :
-                                  pFrm->GetUpper();
+        pFrm = pFrm->IsFlyFrm()
+               ? ((const SwFlyFrm*)pFrm)->GetAnchorFrm()
+               : pFrm->GetUpper();
     } while ( pFrm );
     return FALSE;
 }
@@ -1898,9 +1907,9 @@ void SwFrm::AppendFly( SwFlyFrm *pNew )
 {
     if ( !pDrawObjs )
         pDrawObjs = new SwDrawObjs();
-    SdrObject *pObj = pNew->GetVirtDrawObj();
+    SdrObject* pObj = pNew->GetVirtDrawObj();
     pDrawObjs->Insert( pObj, pDrawObjs->Count() );
-    pNew->ChgAnchor( this );
+    pNew->ChgAnchorFrm( this );
 
     //Bei der Seite anmelden; kann sein, dass noch keine da ist - die
     //Anmeldung wird dann in SwPageFrm::PreparePage durch gefuehrt.
@@ -1952,7 +1961,7 @@ void SwFrm::RemoveFly( SwFlyFrm *pToRemove )
     if ( !pDrawObjs->Count() )
         DELETEZ( pDrawObjs );
 
-    pToRemove->ChgAnchor( 0 );
+    pToRemove->ChgAnchorFrm( 0 );
 
     if ( !pToRemove->IsFlyInCntFrm() && GetUpper() && IsInTab() )//MA_FLY_HEIGHT
         GetUpper()->InvalidateSize();
@@ -1969,33 +1978,21 @@ void SwFrm::RemoveFly( SwFlyFrm *pToRemove )
 
 void SwFrm::AppendDrawObj( SwDrawContact *pNew )
 {
-    if ( pNew->GetAnchor() && pNew->GetAnchor() != this )
+    if ( pNew->GetAnchorFrm() && pNew->GetAnchorFrm() != this )
         pNew->DisconnectFromLayout( false );
 
     SdrObject* pObj = pNew->GetMaster();
-    if ( pNew->GetAnchor() != this )
+    if ( pNew->GetAnchorFrm() != this )
     {
         if ( !pDrawObjs )
             pDrawObjs = new SwDrawObjs();
         pDrawObjs->Insert( pObj, pDrawObjs->Count() );
-        pNew->ChgAnchor( this );
+        pNew->ChgAnchorFrm( this );
     }
 
-    const SwFmtAnchor &rAnch = pNew->GetFmt()->GetAnchor();
-    if( FLY_AUTO_CNTNT == rAnch.GetAnchorId() )
-    {
-        SwRect aTmpRect;
-        SwPosition *pPos = (SwPosition*)rAnch.GetCntntAnchor();
-        if ( IsValid() )
-            GetCharRect( aTmpRect, *pPos );
-        else
-            aTmpRect = Frm();
-        pNew->GetMaster()->SetAnchorPos( aTmpRect.Pos() );
-    }
-    else if( FLY_IN_CNTNT != rAnch.GetAnchorId() )
-    {
-        pNew->GetMaster()->SetAnchorPos( GetFrmAnchorPos( ::HasWrap( pNew->GetMaster() ) ) );
-    }
+    // OD 2004-04-01 #i26791# - no direct positioning needed, but invalidate
+    // the drawing object position
+    pNew->GetAnchoredObj( pNew->GetMaster() )->InvalidateObjPos();
 
     // OD 27.06.2003 #108784# - move 'master' drawing object to visible layer
     {
@@ -2014,12 +2011,10 @@ void SwFrm::AppendDrawObj( SwDrawContact *pNew )
     if ( pPage )
         pPage->SwPageFrm::AppendDrawObj( pNew );
 
-#ifdef ACCESSIBLE_LAYOUT
     // Notify accessible layout.
     ViewShell* pSh = GetShell();
     if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
         pSh->Imp()->AddAccessibleObj( pNew->GetMaster() );
-#endif
 }
 
 // OD 20.05.2003 #108784# - add 'virtual' drawing object to frame.
@@ -2034,37 +2029,9 @@ void SwFrm::AppendVirtDrawObj( SwDrawContact* _pDrawContact,
         _pDrawVirtObj->SetAnchorFrm( this );
     }
 
-    // positioning of 'virtual' drawing object.
-    const SwFmtAnchor &rAnch = _pDrawContact->GetFmt()->GetAnchor();
-    switch ( rAnch.GetAnchorId() )
-    {
-        case FLY_AUTO_CNTNT:
-            {
-                ASSERT( false,
-                        "<SwFrm::AppendVirtDrawObj(..)> - at character anchored drawing objects aren't supported." );
-            }
-            break;
-        case FLY_PAGE:
-        case FLY_AT_CNTNT:
-        case FLY_AT_FLY:
-            {
-                // set anchor position
-                _pDrawVirtObj->NbcSetAnchorPos( GetFrmAnchorPos( ::HasWrap( _pDrawVirtObj ) ) );
-                // set offset in relation to reference object
-                Point aOffset = GetFrmAnchorPos( ::HasWrap( _pDrawVirtObj ) ) -
-                                _pDrawContact->GetAnchor()->GetFrmAnchorPos( ::HasWrap( _pDrawVirtObj ) );
-                _pDrawVirtObj->SetOffset( aOffset );
-                // correct relative position at 'virtual' drawing object
-                _pDrawVirtObj->AdjustRelativePosToReference();
-            }
-            break;
-        case FLY_IN_CNTNT:
-        {
-            /*nothing to do*/;
-        }
-        break;
-        default:    ASSERT( false, "<SwFrm::AppendVirtDrawObj(..) - unknown anchor type." );
-    }
+    // OD 2004-04-01 #i26791# - no direct positioning needed, but invalidate
+    // the drawing object position
+    _pDrawContact->GetAnchoredObj( _pDrawVirtObj )->InvalidateObjPos();
 
     //Bei der Seite anmelden; kann sein, dass noch keine da ist - die
     //Anmeldung wird dann in SwPageFrm::PreparePage durch gefuehrt.
@@ -2086,13 +2053,12 @@ void SwFrm::RemoveDrawObj( SwDrawContact *pToRemove )
 {
     //Bei der Seite Abmelden - kann schon passiert sein weil die Seite
     //bereits destruiert wurde.
-#ifdef ACCESSIBLE_LAYOUT
     // Notify accessible layout.
     ViewShell* pSh = GetShell();
     if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
         pSh->Imp()->DisposeAccessibleObj( pToRemove->GetMaster() );
-#endif
-    SwPageFrm *pPage = pToRemove->GetPage();
+
+    SwPageFrm *pPage = pToRemove->GetPageFrm();
     if ( pPage && pPage->GetSortedObjs() )
         pPage->SwPageFrm::RemoveDrawObj( pToRemove );
 
@@ -2101,7 +2067,7 @@ void SwFrm::RemoveDrawObj( SwDrawContact *pToRemove )
     if ( !pDrawObjs->Count() )
         DELETEZ( pDrawObjs );
 
-    pToRemove->ChgAnchor( 0 );
+    pToRemove->ChgAnchorFrm( 0 );
 }
 
 // OD 20.05.2003 #108784# - remove 'virtual' drawing object from frame.
@@ -2137,21 +2103,21 @@ void SwFrm::RemoveVirtDrawObj( SwDrawContact* _pDrawContact,
 |*
 |*************************************************************************/
 
-void lcl_MakeFlyPosition( SwFlyFrm *pFly )
-{
-    if( pFly->IsFlyFreeFrm() )
-    {
-        ((SwFlyFreeFrm*)pFly)->SwFlyFreeFrm::MakeAll();
-        return;
-    }
+//void lcl_MakeFlyPosition( SwFlyFrm *pFly )
+//{
+//  if( pFly->IsFlyFreeFrm() )
+//  {
+//      ((SwFlyFreeFrm*)pFly)->SwFlyFreeFrm::MakeAll();
+//      return;
+//  }
 
-    BOOL bOldLock = pFly->IsLocked();
-    pFly->Lock();
-    SwFlyNotify aNotify( pFly );
-    pFly->MakeFlyPos();
-    if( !bOldLock )
-        pFly->Unlock();
-}
+//  BOOL bOldLock = pFly->IsLocked();
+//  pFly->Lock();
+//  SwFlyNotify aNotify( pFly );
+//  pFly->MakeFlyPos();
+//  if( !bOldLock )
+//      pFly->Unlock();
+//}
 
 // OD 10.10.2003 #i17629# - Due to the re-work of method <SwDrawContact::ChkPage(..)>
 // for supporting drawing objects in page header/footer, the internal list
@@ -2215,11 +2181,19 @@ void SwFrm::CalcFlys( BOOL bPosOnly )
                     aObjsAtFrm.pop_back();
                     continue;
                 }
+                // OD 2004-03-22 #i26791# - removing local method <lcl_MakeFlyPosition>,
+                // because its always called for a <SwFlyFreeFrm>.
+                ASSERT( pFly->IsFlyFreeFrm(),
+                        "<SwFrm::CalcFlys(..) - <pFly> isn't a <SwFlyFreeFrm>." );
+
                 pFly->_Invalidate();
                 pFly->_InvalidatePos();
 
                 if ( bPosOnly && pFly->GetValidSizeFlag() && pFly->GetValidPrtAreaFlag() )
-                    ::lcl_MakeFlyPosition( pFly );
+                {
+                    ((SwFlyFreeFrm*)pFly)->SwFlyFreeFrm::MakeAll();
+                    //::lcl_MakeFlyPosition( pFly );
+                }
                 else
                 {
                     if ( !bPosOnly )
@@ -2230,43 +2204,18 @@ void SwFrm::CalcFlys( BOOL bPosOnly )
             else
             {
                 // assumption: <pObjAtFrm> is a drawing object.
-                SwFrmFmt* pFrmFmt = ::FindFrmFmt( pObjAtFrm );
-                if( !pFrmFmt ||
-                    FLY_IN_CNTNT != pFrmFmt->GetAnchor().GetAnchorId() )
+                // OD 2004-04-06 #i26791# - Direct object positioning is
+                // no longer needed.
+                // Instead invalidate object position and determine its position
+                SwContact* pContact = ::GetUserCall( pObjAtFrm );
+                ASSERT( pContact,
+                        "<SwFrm::CalcFlys(..)> - missing contact object - please inform OD." );
+                if ( pContact )
                 {
-                    // change anchor position
-                    pObjAtFrm->SetAnchorPos( GetFrmAnchorPos( ::HasWrap( pObjAtFrm ) ) );
-                    // OD 19.06.2003 #108784# - correct relative position of
-                    // <SwDrawVirtObj>-objects to reference object.
-                    if ( pObjAtFrm->ISA(SwDrawVirtObj) )
-                    {
-                        static_cast<SwDrawVirtObj*>(pObjAtFrm)->AdjustRelativePosToReference();
-                    }
-                    else
-                    {
-                        if ( GetValidPosFlag() )
-                        {
-                            SwPageFrm* pPage = FindPageFrm();
-                            if ( pPage && !pPage->IsInvalidLayout() )
-                            {
-                                // check if the new position
-                                // would not exceed the margins of the page
-                                CaptureDrawObj( *pObjAtFrm, pPage->Frm() );
-                            }
-                        }
-
-                        SwDrawContact* pDrawContact =
-                            static_cast<SwDrawContact*>(pObjAtFrm->GetUserCall());
-                        if ( pDrawContact )
-                        {
-                            pDrawContact->ChkPage();
-
-                            // OD 27.06.2003 #108784# - correct movement of 'virtual'
-                            // drawing objects caused by the <SetAnchorPos(..)>
-                            // of the 'master' drawing object.
-                            pDrawContact->CorrectRelativePosOfVirtObjs();
-                        }
-                    }
+                    SwAnchoredObject* pAnchoredObj =
+                                        pContact->GetAnchoredObj( pObjAtFrm );
+                    pAnchoredObj->InvalidateObjPos();
+                    pAnchoredObj->MakeObjPos();
                 }
             } // end of distinction between writer fly frames and drawing objects
 
@@ -2310,25 +2259,14 @@ void SwFrm::InvalidateObjPos() const
                         static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
                 pFlyFrm->InvalidatePos();
             }
-            else if ( pObj->ISA(SwDrawVirtObj) )
-            {
-                // 'virtual' drawing object
-                // re-calculate its position by settings its anchor position
-                SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pObj);
-                pDrawVirtObj->SetAnchorPos(
-                    pDrawVirtObj->GetAnchorFrm()->GetFrmAnchorPos( ::HasWrap( pObj ) ) );
-                pDrawVirtObj->AdjustRelativePosToReference();
-            }
             else
             {
-                // 'master' drawing object
-                // re-calculate its position by settings its anchor position
+                // OD 2004-04-14 #i26791# - invalidate object position
                 SwDrawContact* pDrawContact =
                             static_cast<SwDrawContact*>(GetUserCall(pObj));
                 ASSERT( pDrawContact,
                     "<SwRootFrm::InvalidateAllObjPos()> - no contact found for connected object" );
-                pObj->SetAnchorPos( pDrawContact->GetAnchor()->GetFrmAnchorPos( ::HasWrap( pObj ) ) );
-                pDrawContact->CorrectRelativePosOfVirtObjs();
+                pDrawContact->GetAnchoredObj( pObj )->InvalidateObjPos();
             }
         }
     }
@@ -2383,7 +2321,7 @@ void SwLayoutFrm::NotifyFlys()
                     continue;
 
                 const BOOL bLow = pFly->IsLowerOf( this );
-                if ( bLow || pFly->GetAnchor()->FindPageFrm() != pPage )
+                if ( bLow || pFly->GetAnchorFrm()->FindPageFrm() != pPage )
                 {
                     pFly->_Invalidate( pPage );
                     if ( !bLow || pFly->IsFlyAtCntFrm() )
@@ -2407,12 +2345,12 @@ void SwLayoutFrm::NotifyFlys()
 
 void SwFlyFrm::NotifyDrawObj()
 {
-    pDrawObj->SetRect();
-    pDrawObj->_SetRectsDirty();
-    pDrawObj->SetChanged();
-    pDrawObj->BroadcastObjectChange();
+    GetVirtDrawObj()->SetRect();
+    GetVirtDrawObj()->_SetRectsDirty();
+    GetVirtDrawObj()->SetChanged();
+    GetVirtDrawObj()->BroadcastObjectChange();
     if ( GetFmt()->GetSurround().IsContour() )
-        ClrContourCache( pDrawObj );
+        ClrContourCache( GetVirtDrawObj() );
 }
 
 /*************************************************************************
@@ -2428,7 +2366,7 @@ Size SwFlyFrm::CalcRel( const SwFmtFrmSize &rSz ) const
 {
     Size aRet( rSz.GetSize() );
 
-    const SwFrm *pRel = IsFlyLayFrm() ? GetAnchor() : GetAnchor()->GetUpper();
+    const SwFrm *pRel = IsFlyLayFrm() ? GetAnchorFrm() : GetAnchorFrm()->GetUpper();
     if( pRel ) // LAYER_IMPL
     {
         long nRelWidth = LONG_MAX, nRelHeight = LONG_MAX;
@@ -2678,12 +2616,52 @@ BOOL SwFlyFrm::ConvertHoriTo40( SwHoriOrient &rHori, SwRelationOrient &rRel,
                                 SwTwips &rPos ) const
 {
     ASSERT( rHori > PRTAREA, "ConvertHoriTo40: Why?" );
-    if( !GetAnchor() )
+    if( !GetAnchorFrm() )
         return FALSE;
     rHori = HORI_NONE;
     rRel = FRAME;
-    rPos = Frm().Left() - GetAnchor()->Frm().Left();
+    rPos = Frm().Left() - GetAnchorFrm()->Frm().Left();
     return TRUE;
 }
 
+// OD 2004-03-25 #i26791#
+const SwVirtFlyDrawObj* SwFlyFrm::GetVirtDrawObj() const
+{
+    return static_cast<const SwVirtFlyDrawObj*>(GetDrawObj());
+}
+SwVirtFlyDrawObj* SwFlyFrm::GetVirtDrawObj()
+{
+    return static_cast<SwVirtFlyDrawObj*>(DrawObj());
+}
 
+// =============================================================================
+// OD 2004-03-24 #i26791# - implementation of pure virtual method declared in
+// base class <SwAnchoredObject>
+// =============================================================================
+void SwFlyFrm::InvalidateObjPos()
+{
+    InvalidatePos();
+}
+
+SwFrmFmt& SwFlyFrm::GetFrmFmt()
+{
+    return *GetFmt();
+}
+const SwFrmFmt& SwFlyFrm::GetFrmFmt() const
+{
+    return *GetFmt();
+}
+
+const SwRect SwFlyFrm::GetObjRect() const
+{
+    return Frm();
+}
+void SwFlyFrm::SetObjTop( const SwTwips _nTop )
+{
+    Frm().Pos().Y() = _nTop;
+}
+void SwFlyFrm::SetObjLeft( const SwTwips _nLeft )
+{
+    Frm().Pos().X() = _nLeft;
+}
+// =============================================================================
