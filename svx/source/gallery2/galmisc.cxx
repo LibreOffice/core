@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:14:02 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ BOOL GallerySvDrawImport( SvStream& rIStm, FmFormModel& rModel )
         uno::Reference< io::XInputStream > xInputStream( new utl::OInputStreamWrapper( rIStm ) );
 
         rModel.GetItemPool().SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
-        rModel.SetStreamingSdrModel( TRUE );
+//BFS04     rModel.SetStreamingSdrModel( TRUE );
         uno::Reference< lang::XComponent > xComponent;
 
         bRet = SvxDrawingLayerImport( &rModel, xInputStream, xComponent, "com.sun.star.comp.Draw.XMLOasisImporter" );
@@ -213,8 +213,9 @@ BOOL GallerySvDrawImport( SvStream& rIStm, FmFormModel& rModel )
             rIStm.Seek(0);
             bRet = SvxDrawingLayerImport( &rModel, xInputStream, xComponent, "com.sun.star.comp.Draw.XMLImporter" );
         }
-//      bRet = SvxDrawingLayerImport( &rModel, xInputStream );
-        rModel.SetStreamingSdrModel( FALSE );
+
+//        bRet = SvxDrawingLayerImport( &rModel, xInputStream );
+//BFS04     rModel.SetStreamingSdrModel( FALSE );
     }
 
     return bRet;
