@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-10 17:55:57 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:31:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2943,7 +2943,7 @@ String STR_DESC_RENAMESLIDE
 String STR_PLACEHOLDER_DESCRIPTION_TITLE
 {
     Text [ de ] = "Titelbereich für AutoLayouts" ;
-    Text [ en-US ] = "Titel Area for AutoLayouts" ;
+    Text [ en-US ] = "Title Area for AutoLayouts" ;
 };
 
 String STR_PLACEHOLDER_DESCRIPTION_OUTLINE
