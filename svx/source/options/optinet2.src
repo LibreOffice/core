@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 17:33:06 $
+ *  last change: $Author: obo $ $Date: 2000-11-03 16:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3085,7 +3085,7 @@ TabPage RID_SVXPAGE_INET_OTHER
         Text[ chinese_simplified ] = "ΚΗΥβΈφΧΦ¶ΞµΔΞήΠ§ΜυΔΏ£¬ΗλΔϊΚδΘλÒ»ΈφΤΪ 0 ΊΝ 255 Φ®ΌδµΔΚύΦµ΅£";
         Text[ russian ] = "νεοπΰβθλόνΰÿ ηΰοθρό δλÿ ύςξγξ οξλÿ. Ββεδθςε. οξζΰλσιρςΰ, ηνΰχενθε μεζδσ 0 θ 255.";
         Text[ polish ] = "jest nieprawid³owym wpisem dla tego pola. Proszκ podaζ wartoζ miκdzy 0 a 255.";
-        Text[ japanese ] = "‚±‚ΜΜ¨°ΩΔή‚Ι–³ψ‚Θ“ό—Ν‚Ε‚·B0‚Ζ255‚ΜΤ‚Μ”’l‚π“ό—Ν‚µ‚Δ‰Ί‚³‚ΆB";
+        Text[ japanese ] = " ‚±‚ΜΜ¨°ΩΔή‚Ε‚Ν–³ψ‚Ε‚·B0 ` 255 ‚ά‚Ε‚Μ”’l‚π“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆB";
         Text[ chinese_traditional ] = "¬O³o­ΣΔζ¦μªΊµL®Δ¶µ¥Ψ΅M½Π±z¦bΏι¤J¤@­Σ¦b0©M255¤§¶΅ªΊΌΖ­Θ΅C";
         Text[ arabic ] = "εζ ΕΟΞΗα ΫνΡ ΥΗαΝ αεΠΗ ΗαΝήα. ΗαΡΜΗΑ ΕΟΞΗα ήνγΙ ΚΚΡΗζΝ Θνδ 0 ζ 255.";
         Text[ greek ] = "δεν είναι έγκυρη εισαγωγή για αυτό το πεδίο. Παρακαλώ εισάγετε μια τιμή μεταξύ 0 και 255.";
@@ -3109,7 +3109,7 @@ TabPage RID_SVXPAGE_INET_OTHER
         Text[ chinese_simplified ] = "ΚΗΥβΈφΧΦ¶ΞµΔΞήΠ§ΜυΔΏ£¬ΗλΔϊΚδΘλÒ»ΈφΤΪ 1 ΊΝ 255 Φ®ΌδµΔΚύΦµ΅£";
         Text[ russian ] = "νεοπΰβθλόνΰÿ ηΰοθρό δλÿ ύςξγξ οξλÿ. Ββεδθςε, οξζΰλσιρςΰ, ηνΰχενθε μεζδσ 1 θ 255.";
         Text[ polish ] = "jest nieprawid³owym wpisem dla tego pola. Proszκ wpisaζ wartoζ miκdzy 1 a 255 .";
-        Text[ japanese ] = "‚±‚ΜΜ¨°ΩΔή‚Ι–³ψ‚Θ“ό—Ν‚Ε‚·B1‚Ζ255‚ΜΤ‚Μ”’l‚π“ό—Ν‚µ‚Δ‰Ί‚³‚ΆB";
+        Text[ japanese ] = " ‚±‚ΜΜ¨°ΩΔή‚Ε‚Ν–³ψ‚Ε‚·B1 ` 255 ‚ά‚Ε‚Μ”’l‚π“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆB";
         Text[ chinese_traditional ] = "¬O³o­ΣΔζ¦μªΊµL®Δ¶µ¥Ψ΅M½Π±z¦bΏι¤J¤@­Σ¦b1©M255¤§¶΅ªΊΌΖ­Θ΅C";
         Text[ arabic ] = "εζ ΕΟΞΗα ΫνΡ ΥΗαΝ αεΠΗ ΗαΝήα. ΗαΡΜΗΑ ΕΟΞΗα ήνγΙ ΚΚΡΗζΝ Θνδ 1 ζ 255.";
         Text[ greek ] = "δεν είναι έγκυρη εισαγωγή για αυτό το πεδίο. Παρακαλώ εισάγετε μια τιμή μεταξύ 0 και 255.";
