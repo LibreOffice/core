@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:18:14 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,15 +214,11 @@ public:
     template< typename Type2 >
     inline this_type&   operator=( const ScfRef< Type2 >& rRef ) { rel(); eat( rRef.mpObj, rRef.mpnCount ); return *this; }
 
-    inline const element_type* get() const { return mpObj; }
-    inline element_type* get() { return mpObj; }
+    inline element_type* get() const { return mpObj; }
     inline bool         is() const { return mpObj != 0; }
 
-    inline const element_type* operator->() const { return mpObj; }
-    inline element_type* operator->() { return mpObj; }
-
-    inline const element_type& operator*() const { return *mpObj; }
-    inline element_type& operator*() { return *mpObj; }
+    inline element_type* operator->() const { return mpObj; }
+    inline element_type& operator*() const { return *mpObj; }
 
     inline bool         operator!() const { return mpObj == 0; }
 
