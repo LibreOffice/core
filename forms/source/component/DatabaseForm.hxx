@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: oj $ $Date: 2001-01-10 07:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,6 +318,7 @@ class ODatabaseForm :public OFormComponents
 //  </properties>
     sal_Bool                    m_bLoaded : 1;
     sal_Bool                    m_bSubForm : 1;
+    sal_Bool                    m_bOwnConnection : 1; // is set to false when an activeconnection was set
 
 public:
     ODatabaseForm(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);

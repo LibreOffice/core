@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-05 17:58:36 $
+ *  last change: $Author: oj $ $Date: 2001-01-10 07:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,6 +765,7 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
         ,m_bAllowInsert(sal_True)
         ,m_pLoadTimer(NULL)
         ,m_nResetsPending(0)
+        ,m_bOwnConnection(sal_True)
 {
     DBG_CTOR(ODatabaseForm,NULL);
 
@@ -1911,8 +1912,8 @@ void ODatabaseForm::disposing()
     if (query_aggregation(m_xAggregate, xAggregationComponent))
         xAggregationComponent->dispose();
 
-    // dispose it after the rowset
-    if(xConnection.is())
+    // dispose it after the rowset and only when it is our own
+    if(m_bOwnConnection && xConnection.is())
         xConnection->dispose();
 }
 
@@ -1938,13 +1939,15 @@ void ODatabaseForm::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    BEGIN_AGGREGATION_PROPERTY_HELPER(14, m_xAggregateSet)
+    BEGIN_AGGREGATION_PROPERTY_HELPER(15, m_xAggregateSet)
         // this property is overwritten by the form
         RemoveProperty(_rAggregateProps, PROPERTY_PRIVILEGES);
         RemoveProperty(_rAggregateProps, PROPERTY_DATASOURCE);
+        RemoveProperty(_rAggregateProps, PROPERTY_ACTIVE_CONNECTION);
             // we remove and re-declare the DataSourceName property, 'cause we want it to be constrained, and the
             // original property of our aggregate isn't
 
+        DECL_IFACE_PROP2(ACTIVE_CONNECTION,         XConnection,        TRANSIENT,MAYBEVOID);
         DECL_PROP1(NAME,            ::rtl::OUString,                BOUND);
         DECL_PROP1(MASTERFIELDS,    StringSequence,                 BOUND);
         DECL_PROP1(DETAILFIELDS,    StringSequence,                 BOUND);
@@ -2039,6 +2042,15 @@ void ODatabaseForm::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
             catch(Exception&) { }
         }
         break;
+        case PROPERTY_ID_ACTIVE_CONNECTION:
+        {
+            try
+            {
+                rValue = m_xAggregateSet->getPropertyValue(PROPERTY_ACTIVE_CONNECTION);
+            }
+            catch(Exception&) { }
+        }
+        break;
         case PROPERTY_ID_TARGET_URL:
             rValue <<= m_aTargetURL;
             break;
@@ -2095,6 +2107,13 @@ sal_Bool ODatabaseForm::convertFastPropertyValue( Any& rConvertedValue, Any& rOl
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, aAggregateProperty, ::getCppuType(static_cast<const ::rtl::OUString*>(NULL)));
         }
         break;
+        case PROPERTY_ID_ACTIVE_CONNECTION:
+        {
+            Any aAggregateProperty;
+            getFastPropertyValue(aAggregateProperty, PROPERTY_ID_ACTIVE_CONNECTION);
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, aAggregateProperty, ::getCppuType(static_cast<const Reference<XConnection>*>(NULL)));
+        }
+        break;
         case PROPERTY_ID_TARGET_URL:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aTargetURL);
             break;
@@ -2146,6 +2165,15 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
             try
             {
                 m_xAggregateSet->setPropertyValue(PROPERTY_DATASOURCE, rValue);
+                m_bOwnConnection = sal_True;
+            }
+            catch(Exception&) { }
+            break;
+        case PROPERTY_ID_ACTIVE_CONNECTION:
+            try
+            {
+                m_xAggregateSet->setPropertyValue(PROPERTY_ACTIVE_CONNECTION, rValue);
+                m_bOwnConnection = sal_False;
             }
             catch(Exception&) { }
             break;
