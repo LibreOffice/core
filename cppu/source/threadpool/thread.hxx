@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:52 $
+ *  last change: $Author: jbu $ $Date: 2001-02-20 12:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 #ifndef _CPPU_THREADPOOL_THREAD_HXX
 #define _CPPU_THREADPOOL_THREAD_HXX
 
+#include <list>
 #include <osl/types.h>
 #include <osl/thread.h>
 
@@ -85,14 +86,32 @@ namespace cppu_threadpool {
         void setTask( JobQueue * , const ::rtl::ByteSequence & aThreadId , sal_Bool bAsynchron );
 
         sal_Bool create();
+        void join();
         void onTerminated();
         void run();
+        inline void setDeleteSelf( sal_Bool b )
+            { m_bDeleteSelf = b; }
 
     private:
         oslThread m_thread;
         JobQueue *m_pQueue;
         ::rtl::ByteSequence m_aThreadId;
         sal_Bool m_bAsynchron;
+        sal_Bool m_bDeleteSelf;
+    };
+
+    class ThreadAdmin
+    {
+    public:
+        ~ThreadAdmin ();
+        static ThreadAdmin *getInstance();
+        void add( ORequestThread * );
+        void remove( ORequestThread * );
+        void join();
+
+    private:
+        ::osl::Mutex m_mutex;
+        ::std::list< ORequestThread * > m_lst;
     };
 
 } // end cppu_threadpool

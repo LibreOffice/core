@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 12:42:17 $
+ *  last change: $Author: jbu $ $Date: 2001-02-20 12:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include "threadpool.hxx"
 
 
+using namespace osl;
 extern "C" {
 
 void SAL_CALL cppu_requestThreadWorker( void *pVoid )
@@ -78,8 +79,73 @@ void SAL_CALL cppu_requestThreadWorker( void *pVoid )
 }
 
 }
+
 namespace cppu_threadpool {
 
+// ----------------------------------------------------------------------------------
+    ThreadAdmin::~ThreadAdmin()
+    {
+#ifdef DEBUG
+        if( m_lst.size() )
+        {
+            fprintf( stderr, "%d Threads left\n" , m_lst.size() );
+        }
+#endif
+    }
+
+    void ThreadAdmin::add( ORequestThread *p )
+    {
+        MutexGuard aGuard( m_mutex );
+        m_lst.push_back( p );
+    }
+
+    void ThreadAdmin::remove( ORequestThread * p )
+    {
+        MutexGuard aGuard( m_mutex );
+        ::std::list< ORequestThread * >::iterator ii = ::std::find( m_lst.begin(), m_lst.end(), p );
+        OSL_ASSERT( ii != m_lst.end() );
+        m_lst.erase( ii );
+    }
+
+    void ThreadAdmin::join()
+    {
+        ORequestThread *pCurrent;
+        do
+        {
+            pCurrent = 0;
+            {
+                MutexGuard aGuard( m_mutex );
+                if( ! m_lst.empty() )
+                {
+                    pCurrent = m_lst.front();
+                    pCurrent->setDeleteSelf( sal_False );
+                }
+            }
+            if ( pCurrent )
+            {
+                pCurrent->join();
+                delete pCurrent;
+            }
+        } while( pCurrent );
+    }
+
+    ThreadAdmin* ThreadAdmin::getInstance()
+    {
+        static ThreadAdmin *pThreadAdmin = 0;
+        if( ! pThreadAdmin )
+        {
+            MutexGuard guard( Mutex::getGlobalMutex() );
+            if( ! pThreadAdmin )
+            {
+                static ThreadAdmin admin;
+                pThreadAdmin = &admin;
+            }
+        }
+        return pThreadAdmin;
+
+    }
+
+// ----------------------------------------------------------------------------------
     ORequestThread::ORequestThread( JobQueue *pQueue,
                                     const ByteSequence &aThreadId,
                                     sal_Bool bAsynchron )
@@ -87,8 +153,9 @@ namespace cppu_threadpool {
         , m_thread( 0 )
         , m_aThreadId( aThreadId )
         , m_bAsynchron( bAsynchron )
+        , m_bDeleteSelf( sal_True )
     {
-
+        ThreadAdmin::getInstance()->add( this );
     }
 
 
@@ -122,9 +189,18 @@ namespace cppu_threadpool {
         return m_thread != 0;
     }
 
+    void ORequestThread::join()
+    {
+        osl_joinWithThread( m_thread );
+    }
+
     void ORequestThread::onTerminated()
     {
-        delete this;
+        ThreadAdmin::getInstance()->remove( this );
+        if( m_bDeleteSelf )
+        {
+            delete this;
+        }
     }
 
     void ORequestThread::run()
