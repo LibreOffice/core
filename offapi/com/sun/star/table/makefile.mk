@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-24 17:46:52 $
+#   last change: $Author: rt $ $Date: 2004-04-02 10:41:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,6 +113,9 @@ IDLFILES=\
     XTableChartsSupplier.idl\
     XTableColumns.idl\
     XTableRows.idl\
+    CellRangeListSource.idl\
+    CellValueBinding.idl\
+    ListPositionCellBinding.idl\
 
 # ------------------------------------------------------------------
 
