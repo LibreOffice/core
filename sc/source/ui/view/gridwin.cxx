@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:02:46 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,13 +173,6 @@ extern USHORT nScFillModeMouseModifier;             // global.cxx
 
 #define SC_FILTERLISTBOX_LINES  12
 
-// STATIC DATA -----------------------------------------------------------
-
-static long nFilterBoxTabs[] =
-    {   1, // Number of Tabs
-        0
-    };
-
 //==================================================================
 
 /*
@@ -188,8 +181,9 @@ static long nFilterBoxTabs[] =
  */
 
 //==================================================================
-class ScFilterListBox : public SvTabListBox
+class ScFilterListBox : public ListBox
 {
+private:
     ScGridWindow*   pGridWin;
     USHORT          nCol;
     USHORT          nRow;
@@ -201,17 +195,15 @@ class ScFilterListBox : public SvTabListBox
 
 protected:
     virtual void    LoseFocus();
-    virtual void    SelectHdl();
+    void            SelectHdl();
 
 public:
                 ScFilterListBox( Window* pParent, ScGridWindow* pGrid,
-                                    USHORT nNewCol, USHORT nNewRow, ScFilterBoxMode eNewMode );
+                                 USHORT nNewCol, USHORT nNewRow, ScFilterBoxMode eNewMode );
                 ~ScFilterListBox();
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-
-    virtual void    KeyInput( const KeyEvent& rKEvt );
+    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual void    Select();
 
     USHORT          GetCol() const          { return nCol; }
     USHORT          GetRow() const          { return nRow; }
@@ -225,8 +217,8 @@ public:
 
 //  ListBox in einem FloatingWindow (pParent)
 ScFilterListBox::ScFilterListBox( Window* pParent, ScGridWindow* pGrid,
-                                    USHORT nNewCol, USHORT nNewRow, ScFilterBoxMode eNewMode ) :
-    SvTabListBox( pParent, WinBits(0) ),    // ohne Border
+                                  USHORT nNewCol, USHORT nNewRow, ScFilterBoxMode eNewMode ) :
+    ListBox( pParent, WB_AUTOHSCROLL ),
     pGridWin( pGrid ),
     nCol( nNewCol ),
     nRow( nNewRow ),
@@ -246,11 +238,11 @@ __EXPORT ScFilterListBox::~ScFilterListBox()
 
 void ScFilterListBox::EndInit()
 {
-    SvLBoxEntry* pEntry = FirstSelected();
-    if (pEntry)
-        nSel = GetModel()->GetAbsPos( pEntry );
-    else
+    USHORT nPos = GetSelectEntryPos();
+    if ( LISTBOX_ENTRY_NOTFOUND == nPos )
         nSel = 0;
+    else
+        nSel = nPos;
 
     bInit = FALSE;
 }
@@ -262,50 +254,48 @@ void __EXPORT ScFilterListBox::LoseFocus()
 #endif
 }
 
-void __EXPORT ScFilterListBox::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    bButtonDown = TRUE;
-    SvTabListBox::MouseButtonDown( rMEvt );
-}
+// -----------------------------------------------------------------------
 
-void __EXPORT ScFilterListBox::MouseButtonUp( const MouseEvent& rMEvt )
+long ScFilterListBox::PreNotify( NotifyEvent& rNEvt )
 {
-    bButtonDown = FALSE;
-    SvTabListBox::MouseButtonUp( rMEvt );
-
-    if (!bCancelled)
-        pGridWin->FilterSelect( nSel );
-}
-
-void __EXPORT ScFilterListBox::KeyInput( const KeyEvent& rKEvt )
-{
-    KeyCode aCode = rKEvt.GetKeyCode();
-    if ( !aCode.GetModifier() )             // ohne alle Modifiers
+    long nDone = 0;
+    if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
-        USHORT nKey = aCode.GetCode();
-        if ( nKey == KEY_RETURN )
+        KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
+        KeyCode aCode = aKeyEvt.GetKeyCode();
+        if ( !aCode.GetModifier() )             // ohne alle Modifiers
         {
-            SelectHdl();                    // auswaehlen
-            return;
-        }
-        else if ( nKey == KEY_ESCAPE )
-        {
-            pGridWin->ClickExtern();        // loescht die List-Box !!!
-            return;
+            USHORT nKey = aCode.GetCode();
+            if ( nKey == KEY_RETURN )
+            {
+                SelectHdl();                    // auswaehlen
+                nDone = 1;
+            }
+            else if ( nKey == KEY_ESCAPE )
+            {
+                pGridWin->ClickExtern();        // loescht die List-Box !!!
+                nDone = 1;
+            }
         }
     }
 
-    SvTabListBox::KeyInput( rKEvt );
+    return nDone ? nDone : ListBox::PreNotify( rNEvt );
+}
+
+void __EXPORT ScFilterListBox::Select()
+{
+    ListBox::Select();
+    SelectHdl();
 }
 
 void __EXPORT ScFilterListBox::SelectHdl()
 {
     if ( !IsTravelSelect() && !bInit && !bCancelled )
     {
-        SvLBoxEntry* pEntry = FirstSelected();
-        if (pEntry)
+        USHORT nPos = GetSelectEntryPos();
+        if ( LISTBOX_ENTRY_NOTFOUND != nPos )
         {
-            nSel = GetModel()->GetAbsPos( pEntry );
+            nSel = nPos;
             if (!bButtonDown)
                 pGridWin->FilterSelect( nSel );
         }
@@ -336,7 +326,7 @@ ScFilterFloatingWindow::~ScFilterFloatingWindow()
 Window* ScFilterFloatingWindow::GetPreferredKeyInputWindow()
 {
     // redirect keyinput in the child window
-    return GetWindow(WINDOW_FIRSTCHILD) ? GetWindow(WINDOW_FIRSTCHILD) : NULL;    // will be the FilterBox
+    return GetWindow(WINDOW_FIRSTCHILD) ? GetWindow(WINDOW_FIRSTCHILD)->GetPreferredKeyInputWindow() : NULL;    // will be the FilterBox
 }
 
 // ============================================================================
@@ -483,6 +473,7 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
     SetUniqueId( HID_SC_WIN_GRIDWIN );
 
     SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
+    EnableRTL( FALSE );
 }
 
 __EXPORT ScGridWindow::~ScGridWindow()
@@ -528,11 +519,15 @@ void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
     USHORT i;
     ScDocument* pDoc = pViewData->GetDocument();
     USHORT nTab = pViewData->GetTabNo();
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+
     long nSizeX  = 0;
     long nSizeY  = 0;
     long nHeight = 0;
     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
     Point aPos = pViewData->GetScrPos( nCol, nRow, eWhich );
+    if ( bLayoutRTL )
+        aPos.X() -= nSizeX;
     Rectangle aCellRect( OutputToScreenPixel(aPos), Size(nSizeX,nSizeY) );
     aCellRect.Top()    -= nSizeY;
     aCellRect.Bottom() -= nSizeY - 1;
@@ -542,6 +537,8 @@ void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
     pFilterFloat = new ScFilterFloatingWindow( this, WinBits(WB_BORDER) );      // nicht resizable etc.
     pFilterFloat->SetPopupModeEndHdl( LINK( this, ScGridWindow, PopupModeEndHdl ) );
     pFilterBox = new ScFilterListBox( pFilterFloat, this, nCol, nRow, SC_FILTERBOX_SCENARIO );
+    if ( bLayoutRTL )
+        pFilterBox->EnableMirroring();
 
     nSizeX += 1;
 
@@ -557,12 +554,13 @@ void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
     }
 
     //  SetSize spaeter
+/*
     pFilterBox->SetSelectionMode( SINGLE_SELECTION );
     pFilterBox->SetTabs( nFilterBoxTabs, MapUnit( MAP_APPFONT ));
-
+    pFilterBox->SetTabJustify( 1, bLayoutRTL ? AdjustRight : AdjustLeft );
+*/
 
     //  ParentSize Abfrage fehlt
-
     Size aSize( nSizeX, nHeight );
     pFilterBox->SetSizePixel( aSize );
     pFilterBox->Show();                 // Show muss vor SetUpdateMode kommen !!!
@@ -604,11 +602,14 @@ void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
         pFilterBox->SetSizePixel( aSize );
         pFilterFloat->SetOutputSizePixel( aSize );
 
-        //  auch Startposition verschieben
-        long nNewX = aCellRect.Left() - nDiff;
-        if ( nNewX < 0 )
-            nNewX = 0;
-        aCellRect.Left() = nNewX;
+        if ( !bLayoutRTL )
+        {
+            //  also move popup position
+            long nNewX = aCellRect.Left() - nDiff;
+            if ( nNewX < 0 )
+                nNewX = 0;
+            aCellRect.Left() = nNewX;
+        }
     }
 
     pFilterFloat->SetOutputSizePixel( aSize );
@@ -618,16 +619,18 @@ void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
     pFilterBox->GrabFocus();
 
     //  Select erst nach GrabFocus, damit das Focus-Rechteck richtig landet
-    SvLBoxEntry* pSelect = NULL;
+//! SvLBoxEntry* pSelect = NULL;
+    USHORT nPos = LISTBOX_ENTRY_NOTFOUND;
     if (aCurrent.Len())
     {
-        ULONG nPos = pFilterBox->GetEntryPos( aCurrent );
-        pSelect = pFilterBox->GetEntry( nPos );
+        nPos = pFilterBox->GetEntryPos( aCurrent );
+//!     pSelect = pFilterBox->GetEntry( nPos );
     }
-    if (!pSelect)
-        pSelect = pFilterBox->GetEntry(0);          // einer sollte immer selektiert sein
-    if (pSelect)
-        pFilterBox->Select(pSelect);
+    if (/*!pSelect*/ LISTBOX_ENTRY_NOTFOUND == nPos && pFilterBox->GetEntryCount() > 0 )
+        nPos = 0;
+//!     pSelect = pFilterBox->GetEntry(0);          // einer sollte immer selektiert sein
+    if (/*pSelect*/ LISTBOX_ENTRY_NOTFOUND != nPos )
+        pFilterBox->SelectEntryPos(nPos);
 
     pFilterBox->EndInit();
 
@@ -659,11 +662,15 @@ void ScGridWindow::DoAutoFilterMenue( USHORT nCol, USHORT nRow, BOOL bDataSelect
     USHORT i;
     ScDocument* pDoc = pViewData->GetDocument();
     USHORT nTab = pViewData->GetTabNo();
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+
     long nSizeX  = 0;
     long nSizeY  = 0;
     long nHeight = 0;
     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
     Point aPos = pViewData->GetScrPos( nCol, nRow, eWhich );
+    if ( bLayoutRTL )
+        aPos.X() -= nSizeX;
 
     Rectangle aCellRect( OutputToScreenPixel(aPos), Size(nSizeX,nSizeY) );
 
@@ -672,8 +679,10 @@ void ScGridWindow::DoAutoFilterMenue( USHORT nCol, USHORT nRow, BOOL bDataSelect
 
     pFilterFloat = new ScFilterFloatingWindow( this, WinBits(WB_BORDER) );      // nicht resizable etc.
     pFilterFloat->SetPopupModeEndHdl( LINK( this, ScGridWindow, PopupModeEndHdl ) );
-    pFilterBox = new ScFilterListBox( pFilterFloat, this, nCol, nRow,
-                        bDataSelect ? SC_FILTERBOX_DATASELECT : SC_FILTERBOX_FILTER );
+    pFilterBox = new ScFilterListBox(
+        pFilterFloat, this, nCol, nRow, bDataSelect ? SC_FILTERBOX_DATASELECT : SC_FILTERBOX_FILTER );
+    if ( bLayoutRTL )
+        pFilterBox->EnableMirroring();
 
     nSizeX += 1;
 
@@ -689,8 +698,11 @@ void ScGridWindow::DoAutoFilterMenue( USHORT nCol, USHORT nRow, BOOL bDataSelect
     }
 
     //  SetSize spaeter
+/*
     pFilterBox->SetSelectionMode( SINGLE_SELECTION );
     pFilterBox->SetTabs( nFilterBoxTabs, MapUnit( MAP_APPFONT ));
+    pFilterBox->SetTabJustify( 1, bLayoutRTL ? AdjustRight : AdjustLeft );
+*/
 
     BOOL bEmpty = FALSE;
     TypedStrCollection aStrings( 128, 128 );
@@ -787,7 +799,8 @@ void ScGridWindow::DoAutoFilterMenue( USHORT nCol, USHORT nRow, BOOL bDataSelect
         pFilterBox->SetUpdateMode(TRUE);
     }
 
-    SvLBoxEntry* pSelect = NULL;
+//! SvLBoxEntry* pSelect = NULL;
+    USHORT nSelPos = LISTBOX_ENTRY_NOTFOUND;
 
     if (!bDataSelect)                       // AutoFilter: aktiven Eintrag selektieren
     {
@@ -814,26 +827,26 @@ void ScGridWindow::DoAutoFilterMenue( USHORT nCol, USHORT nRow, BOOL bDataSelect
                             String* pStr = rEntry.pStr;
                             if (pStr)
                             {
-                                ULONG nPos = pFilterBox->GetEntryPos( *pStr );
-                                pSelect = pFilterBox->GetEntry( nPos );
+                                nSelPos = pFilterBox->GetEntryPos( *pStr );
+//!                             pSelect = pFilterBox->GetEntry( nPos );
                             }
                         }
                         else if (rEntry.eOp == SC_TOPVAL && rEntry.pStr &&
                                     rEntry.pStr->EqualsAscii("10"))
-                            pSelect = pFilterBox->GetEntry( SC_AUTOFILTER_TOP10 );
+                            nSelPos = pFilterBox->GetEntryPos( SC_AUTOFILTER_TOP10 );
                         else
-                            pSelect = pFilterBox->GetEntry( SC_AUTOFILTER_CUSTOM );
+                            nSelPos = pFilterBox->GetEntryPos( SC_AUTOFILTER_CUSTOM );
                     }
                 }
 
             if (!bValid)
-                pSelect = pFilterBox->GetEntry( SC_AUTOFILTER_CUSTOM );
+                nSelPos = pFilterBox->GetEntryPos( SC_AUTOFILTER_CUSTOM );
         }
     }
 
         //  neu (309): irgendwas muss immer selektiert sein:
-    if (!pSelect)
-        pSelect = pFilterBox->GetEntry(0);
+    if ( LISTBOX_ENTRY_NOTFOUND == nSelPos && pFilterBox->GetEntryCount() > 0 )
+        nSelPos = 0;
 
     //  keine leere Auswahl-Liste anzeigen:
 
@@ -849,8 +862,8 @@ void ScGridWindow::DoAutoFilterMenue( USHORT nCol, USHORT nRow, BOOL bDataSelect
         pFilterBox->GrabFocus();
 
             //  Select erst nach GrabFocus, damit das Focus-Rechteck richtig landet
-        if (pSelect)
-            pFilterBox->Select(pSelect);
+        if ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
+            pFilterBox->SelectEntryPos( nSelPos );
 
         pFilterBox->EndInit();
 
@@ -976,6 +989,7 @@ void ScGridWindow::DoAutoFilterPopup( USHORT nCol, USHORT nRow, BOOL bDataSelect
 void ScGridWindow::FilterSelect( ULONG nSel )
 {
     String aString;
+/*
     SvLBoxEntry* pEntry = pFilterBox->GetEntry( nSel );
     if (pEntry)
     {
@@ -983,6 +997,8 @@ void ScGridWindow::FilterSelect( ULONG nSel )
         if ( pStringEntry )
             aString = pStringEntry->GetText();
     }
+*/
+    aString = pFilterBox->GetEntry( static_cast< USHORT >( nSel ) );
 
     USHORT nCol = pFilterBox->GetCol();
     USHORT nRow = pFilterBox->GetRow();
@@ -1169,6 +1185,11 @@ BOOL ScGridWindow::TestMouse( const MouseEvent& rMEvt, BOOL bAction )
 
     if ( pViewData->IsActive() && !bOleActive )
     {
+        ScDocument* pDoc = pViewData->GetDocument();
+        USHORT nTab = pViewData->GetTabNo();
+        BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+        long nLayoutSign = bLayoutRTL ? -1 : 1;
+
         //  Auto-Fill
 
         ScRange aMarkRange;
@@ -1184,8 +1205,10 @@ BOOL ScGridWindow::TestMouse( const MouseEvent& rMEvt, BOOL bAction )
                 long nSizeXPix;
                 long nSizeYPix;
                 pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
-                aFillPos.X() += nSizeXPix;
+                aFillPos.X() += nSizeXPix * nLayoutSign;
                 aFillPos.Y() += nSizeYPix;
+                if ( bLayoutRTL )
+                    aFillPos.X() -= 1;
 
                 Point aMousePos = rMEvt.GetPosPixel();
                 //  Abfrage hier passend zu DrawAutoFillMark
@@ -1214,7 +1237,6 @@ BOOL ScGridWindow::TestMouse( const MouseEvent& rMEvt, BOOL bAction )
 
         //  Embedded-Rechteck
 
-        ScDocument* pDoc = pViewData->GetDocument();
         if (pDoc->IsEmbedded())
         {
             ScTripel aStart;
@@ -1225,6 +1247,11 @@ BOOL ScGridWindow::TestMouse( const MouseEvent& rMEvt, BOOL bAction )
                 Point aStartPos = pViewData->GetScrPos( aStart.GetCol(), aStart.GetRow(), eWhich );
                 Point aEndPos   = pViewData->GetScrPos( aEnd.GetCol()+1, aEnd.GetRow()+1, eWhich );
                 Point aMousePos = rMEvt.GetPosPixel();
+                if ( bLayoutRTL )
+                {
+                    aStartPos.X() += 2;
+                    aEndPos.X()   += 2;
+                }
                 BOOL bTop = ( aMousePos.X() >= aStartPos.X()-3 && aMousePos.X() <= aStartPos.X()+1 &&
                               aMousePos.Y() >= aStartPos.Y()-3 && aMousePos.Y() <= aStartPos.Y()+1 );
                 BOOL bBottom = ( aMousePos.X() >= aEndPos.X()-3 && aMousePos.X() <= aEndPos.X()+1 &&
@@ -1457,6 +1484,10 @@ void __EXPORT ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
             Point   aDiffPix = aPos;
 
             aDiffPix -= aScrPos;
+            BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+            if ( bLayoutRTL )
+                aDiffPix.X() = -aDiffPix.X();
+
             pViewData->GetMergeSizePixel( nPosX, nPosY, nSizeX, nSizeY );
 
             //  Breite des Buttons ist nicht von der Zellhoehe abhaengig
@@ -3657,10 +3688,15 @@ BOOL ScGridWindow::HitRangeFinder( const Point& rMouse, BOOL& rCorner,
         if ( pRangeFinder && !pRangeFinder->IsHidden() &&
                 pRangeFinder->GetDocName() == pViewData->GetDocShell()->GetTitle() )
         {
+            ScDocument* pDoc = pViewData->GetDocument();
+            USHORT nTab = pViewData->GetTabNo();
+            BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+            long nLayoutSign = bLayoutRTL ? -1 : 1;
+
             short nPosX, nPosY;
             pViewData->GetPosFromPixel( rMouse.X(), rMouse.Y(), eWhich, nPosX, nPosY );
             //  zusammengefasste (einzeln/Bereich) ???
-            ScAddress aAddr( nPosX, nPosY, pViewData->GetTabNo() );
+            ScAddress aAddr( nPosX, nPosY, nTab );
 
 //          Point aNext = pViewData->GetScrPos( nPosX+1, nPosY+1, eWhich );
 
@@ -3668,12 +3704,18 @@ BOOL ScGridWindow::HitRangeFinder( const Point& rMouse, BOOL& rCorner,
             long nSizeXPix;
             long nSizeYPix;
             pViewData->GetMergeSizePixel( nPosX, nPosY, nSizeXPix, nSizeYPix );
-            aNext.X() += nSizeXPix;
+            aNext.X() += nSizeXPix * nLayoutSign;
             aNext.Y() += nSizeYPix;
 
-            BOOL bCellCorner = ( rMouse.X() >= aNext.X() - 8 && rMouse.X() <= aNext.X() &&
+            BOOL bCornerHor;
+            if ( bLayoutRTL )
+                bCornerHor = ( rMouse.X() >= aNext.X() && rMouse.X() <= aNext.X() + 8 );
+            else
+                bCornerHor = ( rMouse.X() >= aNext.X() - 8 && rMouse.X() <= aNext.X() );
+
+            BOOL bCellCorner = ( bCornerHor &&
                                  rMouse.Y() >= aNext.Y() - 8 && rMouse.Y() <= aNext.Y() );
-            //  Corner wird nur erkannt, wenn noch innerhalb der Zelle
+            //  corner is hit only if the mouse is within the cell
 
             USHORT nCount = (USHORT)pRangeFinder->Count();
             for (USHORT i=nCount; i;)
@@ -4134,6 +4176,8 @@ BOOL ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScenRang
     USHORT nTabCount = pDoc->GetTableCount();
     if ( nTab+1<nTabCount && pDoc->IsScenario(nTab+1) && !pDoc->IsScenario(nTab) )
     {
+        BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+
         Size aButSize = pViewData->GetScenButSize();
         long nBWidth  = aButSize.Width();
         if (!nBWidth)
@@ -4173,7 +4217,10 @@ BOOL ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScenRang
                                                     eWhich, TRUE );
                 aButtonPos.Y() -= nBHeight;
             }
-            aButtonPos.X() -= nBWidth - nHSpace;    // in beiden Faellen gleich
+            if ( bLayoutRTL )
+                aButtonPos.X() -= nHSpace - 1;
+            else
+                aButtonPos.X() -= nBWidth - nHSpace;    // same for top or bottom
 
             Rectangle aButRect( aButtonPos, Size(nBWidth,nBHeight) );
             if ( aButRect.IsInside( rPosPixel ) )
