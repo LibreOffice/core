@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-04 17:12:08 $
+ *  last change: $Author: hdu $ $Date: 2002-09-12 07:34:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,15 +234,15 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolyVector& rVector )
             break;
 
         // get outline of individual glyph, ignoring "empty" glyphs
-        bool bIsGlyph = (nLGlyph & GF_ISCHAR) != 0;
+        bool bIsGlyph = (nLGlyph & GF_ISCHAR) == 0;
         bool bSuccess = rSalGraphics.GetGlyphOutline( nLGlyph, bIsGlyph, aGlyphOutline, NULL );
         bRet &= bSuccess;
         // only add non-empty outlines
         if( bSuccess && (aGlyphOutline.Count() > 0) )
         {
             // insert outline at correct position
-            aGlyphOutline.Move( aPos.X(), aPos.Y() );
             rVector.push_back( aGlyphOutline );
+            rVector.back().Move( aPos.X(), aPos.Y() );
         }
     }
 
@@ -256,16 +256,16 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRectangle )
     bool bRet = false;
     rRectangle.SetEmpty();
 
+    Point aPos;
     Rectangle aRectangle;
     for( int nStart = 0;;)
     {
-        Point aPos;
         long nLGlyph;
         if( !GetNextGlyphs( 1, &nLGlyph, aPos, nStart ) )
             break;
 
         // get bounding rectangle of individual glyph
-        bool bIsGlyph = (nLGlyph & GF_ISCHAR) != 0;
+        bool bIsGlyph = (nLGlyph & GF_ISCHAR) == 0;
         if( rSalGraphics.GetGlyphBoundRect( nLGlyph, bIsGlyph, aRectangle, NULL ) )
         {
             // merge rectangle
