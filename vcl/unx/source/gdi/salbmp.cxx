@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cp $ $Date: 2001-06-28 13:11:24 $
+ *  last change: $Author: cp $ $Date: 2001-08-29 16:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,6 +502,95 @@ BOOL SalBitmap::ImplCreateFromDrawable(  Drawable aDrawable, long nDrawableDepth
 // -----------------------------------------------------------------------------
 #endif
 
+BOOL
+SalBitmap::SnapShot (Display* pDisplay, XLIB_Window hWindow)
+{
+    if (hWindow != None)
+    {
+        XWindowAttributes aAttribute;
+        XGetWindowAttributes (pDisplay, hWindow, &aAttribute);
+        if (aAttribute.map_state == IsViewable)
+        {
+            // get coordinates relative to root window
+            XLIB_Window hPetitFleur;
+            int nRootX, nRootY;
+
+            if (XTranslateCoordinates (pDisplay, hWindow, aAttribute.root,
+                                       0, 0, &nRootX, &nRootY, &hPetitFleur))
+            {
+                XWindowAttributes aRootAttribute;
+                XGetWindowAttributes (pDisplay, aAttribute.root, &aRootAttribute);
+
+                int width  = aAttribute.width;
+                int height = aAttribute.height;
+                int x      = nRootX;
+                int y      = nRootY;
+
+                // horizontal range check
+                if (x < 0)
+                {
+                    width  = width + x;
+                    x      = 0;
+                }
+                else
+                if (x > aRootAttribute.width)
+                {
+                    width = 0;
+                    x     = aRootAttribute.width;
+                }
+                else
+                if (x + width > aRootAttribute.width)
+                {
+                    width = aRootAttribute.width - x;
+                }
+
+                // vertical range check
+                if (y < 0)
+                {
+                    height = height + y;
+                    y      = 0;
+                }
+                else
+                if (y > aRootAttribute.height)
+                {
+                    height = 0;
+                    y      = aRootAttribute.height;
+                }
+                else
+                if (y + height > aRootAttribute.height)
+                {
+                    height = aRootAttribute.height - y;
+                }
+
+                if ((width > 0) && (height > 0))
+                {
+                    XImage* pImage = XGetImage (pDisplay, aAttribute.root,
+                                                x, y, width, height, AllPlanes, ZPixmap);
+                    BOOL bSnapShot = ImplCreateFromXImage (pDisplay, aAttribute.root, pImage);
+                    XDestroyImage (pImage);
+
+                    return bSnapShot;
+                }
+            }
+        }
+    }
+
+    return False;
+}
+
+BOOL
+SalBitmap::ImplCreateFromXImage (Display* pDisplay, XLIB_Window hWindow, XImage* pImage)
+{
+    Destroy();
+
+    if (pImage != NULL && pImage->width != 0 && pImage->height != 0 && pImage->depth != 0)
+    {
+        mpDDB = new ImplSalDDB (pDisplay, hWindow, pImage);
+        return True;
+    }
+    return False;
+}
+
 #ifdef _USE_PRINT_EXTENSION_
 void SalBitmap::ImplDraw( SalDisplay *pDisplay, Drawable aDrawable, long nDrawableDepth,
                           const SalTwoRect& rTwoRect, const GC& rGC ) const
@@ -788,6 +877,44 @@ ImplSalDDB::ImplSalDDB(
         aGC = XCreateGC( pXDisp, maPixmap, nValues, &aValues );
         XPutImage( pXDisp, maPixmap, aGC, pImage, 0, 0, 0, 0, maTwoRect.mnDestWidth, maTwoRect.mnDestHeight );
         XFreeGC( pXDisp, aGC );
+    }
+}
+
+// -----------------------------------------------------------------------------------------
+// create from XImage
+
+ImplSalDDB::ImplSalDDB (Display* pDisplay, XLIB_Window hWindow, XImage* pImage)
+{
+    maPixmap = XCreatePixmap (pDisplay, hWindow, pImage->width, pImage->height, pImage->depth);
+    if (maPixmap != 0)
+    {
+        XGCValues   aValues;
+        GC          aGC;
+        int         nValues = GCFunction;
+
+        aValues.function = GXcopy;
+
+        if (pImage->depth == 1)
+        {
+            nValues |= ( GCForeground | GCBackground );
+            aValues.foreground = 1;
+            aValues.background = 0;
+        }
+
+        aGC = XCreateGC (pDisplay, maPixmap, nValues, &aValues);
+        XPutImage (pDisplay, maPixmap, aGC, pImage, 0, 0, 0, 0, pImage->width, pImage->height);
+        XFreeGC (pDisplay, aGC);
+
+        maTwoRect.mnSrcX       = 0;
+        maTwoRect.mnSrcY       = 0;
+        maTwoRect.mnDestX      = 0;
+        maTwoRect.mnDestY      = 0;
+        maTwoRect.mnSrcWidth   = pImage->width;
+        maTwoRect.mnDestWidth  = pImage->width;
+        maTwoRect.mnSrcHeight  = pImage->height;
+        maTwoRect.mnDestHeight = pImage->height;
+
+        mnDepth = pImage->depth;
     }
 }
 

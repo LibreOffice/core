@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cp $ $Date: 2001-06-20 10:53:08 $
+ *  last change: $Author: cp $ $Date: 2001-08-29 16:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,6 +746,21 @@ YieldMutexReleaser::~YieldMutexReleaser()
 
 void SalXLib::Yield( BOOL bWait )
 {
+    struct timeval Timeout;
+
+    // check for timeouts
+    if( Timeout_.tv_sec ) // timer is started
+    {
+        gettimeofday( &Timeout, NULL );
+
+        if( Timeout >= Timeout_ )
+        {
+            Timeout_ = Timeout + nTimeoutMS_;
+            GetSalData()->Timeout();
+        }
+    }
+
+    // check for events already queued
     fd_set   ReadFDS;
     fd_set   ExceptionFDS;
     int      nFound = 0;
@@ -779,7 +794,6 @@ void SalXLib::Yield( BOOL bWait )
     ReadFDS         = *pReadFDS_;
     ExceptionFDS    = *pExceptionFDS_;
 
-    struct timeval Timeout;
     Timeout = bWait ? yield : noyield;
 
     nStateOfYield_ = 1;
@@ -806,18 +820,6 @@ void SalXLib::Yield( BOOL bWait )
         if( EINTR == errno )
         {
             errno = 0;
-        }
-    }
-
-    // check for timeouts
-    if( Timeout_.tv_sec ) // timer is started
-    {
-        gettimeofday( &Timeout, NULL );
-
-        if( Timeout >= Timeout_ )
-        {
-            Timeout_ = Timeout + nTimeoutMS_;
-            GetSalData()->Timeout();
         }
     }
 
