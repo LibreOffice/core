@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxsoli4.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2004-10-18 13:52:23 $
+#   last change: $Author: pjunck $ $Date: 2004-10-22 09:29:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,6 +117,14 @@ LINK=/usr/local/purify-4.2-solaris2/purify CC
 .ELSE
 LINK=CC
 .ENDIF
+
+# link against set of baseline libraries
+.IF "$(SYSBASE)"!=""
+.IF "$(UPDATER)"!=""
+LD_OPTIONS+:=-L$(SYSBASE)$/usr/lib
+.EXPORT : LD_OPTIONS
+.ENDIF          # "$(UPDATER)"!=""
+.ENDIF          # "$(SYSBASE)"!=""
 
 # -z combreloc combines multiple relocation sections. Reduces overhead on startup
 # -norunpath prevents the compiler from recording his own libs in the runpath
