@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: cd $ $Date: 2001-06-18 10:01:26 $
+#   last change: $Author: cd $ $Date: 2001-06-20 10:25:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,9 @@ LIB1OBJFILES=	$(SLO)$/menuconfiguration.obj				\
                 $(SLO)$/toolboxconfiguration.obj			\
                 $(SLO)$/toolboxdocumenthandler.obj			\
                 $(SLO)$/lockhelper.obj						\
-                $(SLO)$/toolboxlayoutdocumenthandler.obj
+                $(SLO)$/toolboxlayoutdocumenthandler.obj		\
+                $(SLO)$/statusbarconfiguration.obj			\
+                $(SLO)$/statusbardocumenthandler.obj
 
 # --- services library ----------------------------------------------------
 

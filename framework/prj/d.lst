@@ -8,12 +8,14 @@ mkdir: %_DEST%\inc%_EXT%\framework
 
 ..\dtd\menubar.dtd %_DEST%\bin%_EXT%\menubar.dtd
 ..\dtd\toolbar.dtd %_DEST%\bin%_EXT%\toolbar.dtd
+..\dtd\statusbar.dtd %_DEST%\bin%_EXT%\statusbar.dtd
 
 ..\%__SRC%\lib\ifwe.lib %_DEST%\lib%_EXT%\ifwe.lib
 ..\inc\helper\imageproducer.hxx %_DEST%\inc%_EXT%\framework\imageproducer.hxx
 ..\inc\classes\menuconfiguration.hxx %_DEST%\inc%_EXT%\framework\menuconfiguration.hxx
 ..\inc\classes\bmkmenu.hxx %_DEST%\inc%_EXT%\framework\bmkmenu.hxx
 ..\inc\classes\toolboxconfiguration.hxx %_DEST%\inc%_EXT%\framework\toolboxconfiguration.hxx
+..\inc\classes\statusbarconfiguration.hxx %_DEST%\inc%_EXT%\framework\statusbarconfiguration.hxx
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx

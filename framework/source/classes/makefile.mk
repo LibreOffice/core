@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: cd $ $Date: 2001-06-18 10:34:20 $
+#   last change: $Author: cd $ $Date: 2001-06-20 10:22:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,16 +63,12 @@ PRJ=..$/..
 
 PRJNAME=			framework
 TARGET=				fwk_classes
-USE_DEFFILE=		TRUE
-NO_BSYMBOLIC=		TRUE
 ENABLE_EXCEPTIONS=	TRUE
 BOOTSTRAP_SERVICE=	FALSE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  		svpre.mk
 .INCLUDE :  		settings.mk
-.INCLUDE :  		sv.mk
 
 # --- Generate -----------------------------------------------------
 
@@ -93,7 +89,9 @@ SLOFILES=			$(SLO)$/servicemanager.obj						\
                     $(SLO)$/toolboxconfiguration.obj				\
                     $(SLO)$/toolboxdocumenthandler.obj				\
                     $(SLO)$/toolboxlayoutdocumenthandler.obj		\
-                    $(SLO)$/droptargetlistener.obj
+                    $(SLO)$/droptargetlistener.obj					\
+                    $(SLO)$/statusbarconfiguration.obj				\
+                    $(SLO)$/statusbardocumenthandler.obj
 
 SRCFILES=			fltdlg.src
 
