@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XInvocationAdapterFactory2.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:26 $
+ *  last change:$Date: 2003-05-27 12:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@ package ifc.script;
 
 import com.sun.star.io.XInputStream;
 import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.script.XInvocation;
 import com.sun.star.script.XInvocationAdapterFactory2;
 import com.sun.star.uno.Type;
@@ -102,11 +103,13 @@ public class _XInvocationAdapterFactory2 extends MultiMethodTest {
     */
     public void _createAdapter() {
         XInvocation xInv = null ;
+        XMultiServiceFactory xMSF = null;
         try {
-            Object[] args = {tParam.getMSF().createInstance
+            xMSF = (XMultiServiceFactory)tParam.getMSF();
+            Object[] args = {xMSF.createInstance
                 ("com.sun.star.io.Pipe")};
 
-            Object oInvFac = tParam.getMSF().createInstance
+            Object oInvFac = xMSF.createInstance
                 ("com.sun.star.script.Invocation") ;
 
             XSingleServiceFactory xInvFac = (XSingleServiceFactory) UnoRuntime.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XEventAttacherManager.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:28 $
+ *  last change:$Date: 2003-05-27 12:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,7 @@ public class _XEventAttacherManager extends MultiMethodTest {
         requiredMethod("insertEntry()");
 
         try {
-            XMultiServiceFactory xMSF = tParam.getMSF();
+            XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
             attachedObject = xMSF.createInstance
                 ( "com.sun.star.reflection.TypeDescriptionProvider" );
         } catch( com.sun.star.uno.Exception e ) {
