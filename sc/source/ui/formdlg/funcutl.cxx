@@ -2,9 +2,9 @@
  *
  *  $RCSfile: funcutl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-03-13 11:41:13 $
+ *  last change: $Author: nn $ $Date: 2002-11-26 13:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -797,6 +797,11 @@ ScEditBox::ScEditBox( Window* pParent, const ResId& rResId )
     Resize();
     WinBits nWinStyle=GetStyle() | WB_DIALOGCONTROL;
     SetStyle(nWinStyle);
+
+    //  #105582# the HelpId from the resource must be set for the MultiLineEdit,
+    //  not for the control that contains it.
+    pMEdit->SetHelpId( GetHelpId() );
+    SetHelpId( 0 );
 }
 
 ScEditBox::~ScEditBox()
