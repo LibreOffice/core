@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-22 10:49:52 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 12:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2100,6 +2100,7 @@ namespace pcr
                     {
                     case TypeClass_INTERFACE:
                     case TypeClass_ARRAY:
+                        delete pProperty->pControl;
                         delete pProperty;
                         continue;
                     }
@@ -2114,24 +2115,28 @@ namespace pcr
                     case TypeClass_INTERFACE:
                     case TypeClass_ARRAY:
                     case TypeClass_UNKNOWN:
+                        delete pProperty->pControl;
                         delete pProperty;
                         continue;
                     }
 
                     if (pProps->Name.compareTo(::rtl::OUString::createFromAscii("type unknown")) == COMPARE_EQUAL )
                     {
+                        delete pProperty->pControl;
                         delete pProperty;
                         continue;
                     }
 
                     if (pProps->Attributes & PropertyAttribute::TRANSIENT )
                     {
+                        delete pProperty->pControl;
                         delete pProperty;
                         continue;
                     }
 
                     else if (pProps->Attributes & PropertyAttribute::READONLY )
                     {
+                        delete pProperty->pControl;
                         delete pProperty;
                         continue;
                     }
@@ -2311,6 +2316,8 @@ namespace pcr
                 {
                     getPropertyBox()->InsertEntry(*pProperty);
                 }
+                else
+                    delete pProperty->pControl;
 
                 delete pProperty;
             }
@@ -2733,6 +2740,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.50  2002/08/22 10:49:52  oj
+ *  #96105# set the modified flag at the model
+ *
  *  Revision 1.49  2002/08/06 08:14:05  oj
  *  #102058# set control type to BCT_COMBOBOX
  *
