@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 13:08:44 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@
 #endif
 //#include "3dchld.hxx"
 #include "app.hrc"
+#include "SpellDialogChildWindow.hxx"
 #ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
 #endif
@@ -250,6 +251,7 @@ void SdDLL::RegisterControllers()
     SvxIMapDlgChildWindow::RegisterChildWindow(0, pMod);
     SvxHyperlinkDlgWrapper::RegisterChildWindow(0, pMod);
     SvxHlinkDlgWrapper::RegisterChildWindow(0, pMod);
+    ::sd::SpellDialogChildWindow::RegisterChildWindow(0, pMod);
     ::avmedia::MediaPlayer::RegisterChildWindow(0, pMod);
     ::sd::LeftPaneChildWindow::RegisterChildWindow(0, pMod);
     ::sd::RightPaneChildWindow::RegisterChildWindow(0, pMod);
