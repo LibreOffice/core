@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-11 12:39:26 $
+ *  last change: $Author: mav $ $Date: 2002-11-05 09:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,7 +514,7 @@ sal_Bool SvtSecurityOptions_Impl::IsSecureURL(  const   OUString&   sURL    ,
 
     // All other URLs must checked in combination with referer and internal information about security
     if ( aProtocol != INET_PROT_MACRO && aProtocol !=  INET_PROT_SLOT ||
-         aURL.GetMainURL().CompareIgnoreCaseToAscii( "macro:///", 9 )  ==  COMPARE_EQUAL )
+         aURL.GetMainURL( INetURLObject::NO_DECODE ).CompareIgnoreCaseToAscii( "macro:///", 9 )  ==  COMPARE_EQUAL )
     {
         // security check only for "macro" ( without app basic ) or "slot" protocols
         bState = sal_True;

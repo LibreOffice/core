@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-21 10:25:15 $
+ *  last change: $Author: mav $ $Date: 2002-11-05 09:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -966,15 +966,15 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
             for ( i = 0; i < nCount; ++i )
                 aObj.insertName( aIniFile.GetToken( i, '/' ) );
 
-            if ( !::utl::UCBContentHelper::Exists( aObj.GetMainURL() ) )
+            if ( !::utl::UCBContentHelper::Exists( aObj.GetMainURL( INetURLObject::NO_DECODE ) ) )
             {
                 aObj.SetSmartURL( bCfg ? GetConfigPath() : GetDictionaryPath() );
                 aObj.insertName( aIniFile );
-                bRet = ::utl::UCBContentHelper::Exists( aObj.GetMainURL() );
+                bRet = ::utl::UCBContentHelper::Exists( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
             }
 
             if ( bRet )
-                rIniFile = aObj.GetMainURL();
+                rIniFile = aObj.GetMainURL( INetURLObject::NO_DECODE );
 
             break;
         }
@@ -1025,15 +1025,15 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                 xub_StrLen i, nCount = aIniFile.GetTokenCount( '/' );
                 for ( i = 0; i < nCount; ++i )
                     aObj.insertName( aIniFile.GetToken( i, '/' ) );
-                bRet = ::utl::UCBContentHelper::Exists( aObj.GetMainURL() );
+                bRet = ::utl::UCBContentHelper::Exists( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
                 if ( bRet )
                 {
                     if ( !bIsURL )
                         ::utl::LocalFileHelper::ConvertURLToPhysicalName(
-                                            aObj.GetMainURL(), rIniFile );
+                                            aObj.GetMainURL( INetURLObject::NO_DECODE ), rIniFile );
                     else
-                        rIniFile = aObj.GetMainURL();
+                        rIniFile = aObj.GetMainURL( INetURLObject::NO_DECODE );
                     break;
                 }
             }
@@ -1080,3 +1080,4 @@ sal_Bool SAL_CALL PathService::supportsService( const ::rtl::OUString& ServiceNa
     *aRet.getArray() = OUString::createFromAscii("com.sun.star.config.SpecialConfigManager");
     return aRet;
 }
+

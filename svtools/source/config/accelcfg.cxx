@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accelcfg.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-10 07:56:31 $
+ *  last change: $Author: mav $ $Date: 2002-11-05 09:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ SvtAcceleratorConfiguration::~SvtAcceleratorConfiguration()
                 String aUserConfig = SvtPathOptions().GetUserConfigPath();
                 INetURLObject aObj( aUserConfig );
                 aObj.insertName( String::CreateFromAscii("GlobalKeyBindings.xml") );
-                SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL(), STREAM_STD_READWRITE|STREAM_TRUNC );
+                SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READWRITE|STREAM_TRUNC );
                 ::utl::OOutputStreamWrapper aHelper( *pStream );
                 com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xOut( &aHelper );
                 pImp->Commit( xOut );
@@ -323,5 +323,5 @@ SvStream* SvtAcceleratorConfiguration::GetDefaultStream( StreamMode nMode )
     String aUserConfig = SvtPathOptions().GetUserConfigPath();
     INetURLObject aObj( aUserConfig );
     aObj.insertName( GetStreamName() );
-    return ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL(), nMode );
+    return ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), nMode );
 }
