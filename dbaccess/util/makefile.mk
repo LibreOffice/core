@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: oj $ $Date: 2000-10-26 15:07:03 $
+#   last change: $Author: fs $ $Date: 2000-10-27 08:09:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,6 +141,7 @@ LIB2FILES=\
         $(SLB)$/uidlg.lib		\
         $(SLB)$/dbushared.lib	\
         $(SLB)$/browser.lib		\
+        $(SLB)$/uiuno.lib		\
         $(SLB)$/uicontrols.lib
 
 SHL2TARGET=$(TARGET2)$(UPD)$(DLLPOSTFIX)
