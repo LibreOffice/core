@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: th $ $Date: 2001-04-24 15:13:16 $
+ *  last change: $Author: th $ $Date: 2001-04-27 14:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4593,11 +4593,10 @@ void OutputDevice::ImplDrawSpecialText( long nX, long nY,
                 nOff++;
             SetTextLineColor();
             if ( (GetTextColor().GetColor() == COL_BLACK) ||
-                 (GetTextColor().GetColor() == COL_WHITE) || // We assume a dark background in this case
-                 (GetTextColor().GetLuminance() < 127) )
+                 (GetTextColor().GetLuminance() < 8) )
                 SetTextColor( Color( COL_LIGHTGRAY ) );
             else
-                SetTextColor( Color( COL_GRAY ) );
+                SetTextColor( Color( COL_BLACK ) );
             ImplInitTextColor();
             ImplDrawTextDirect( nX+nOff, nY+nOff, pStr, nLen, pDXAry, mbTextLines );
             SetTextColor( aOldColor );
