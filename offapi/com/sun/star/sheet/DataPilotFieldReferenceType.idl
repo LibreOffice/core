@@ -1,0 +1,209 @@
+/*************************************************************************
+ *
+ *  $RCSfile: DataPilotFieldReferenceType.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:50:41 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_DataPilotFieldReferenceType_idl__
+#define __com_sun_star_sheet_DataPilotFieldReferenceType_idl__
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** These constants select different types of References to calculate
+    the data fields.
+ */
+constants DataPilotFieldReferenceType
+{
+    //-------------------------------------------------------------------------
+
+    /** This type means, that the results in the data fields are displayed like they are.
+     */
+    const long NONE = 0;
+
+    //-------------------------------------------------------------------------
+
+    /** From each result, its reference value (see below) is subtracted, and the difference is shown.
+        Totals outside of the base field are shown as empty results.
+
+    <p><b>Named Item</b></p>
+
+    <p>If a base item name is specified, the reference value for a combination of field items is the
+       result where the item in the base field is replaced by the specified base item.</p>
+
+    <p>If the reference value isn't shown in the DataPilot table because of hidden details for a
+       parent field, the difference isn't calculated and an error value is shown.</p>
+
+    <p>If the result for an item combination is empty, the value 0 is used for the difference, even
+       if the summary function is undefined without values, like average or variance. The difference
+       is shown in the result table even if the original result was empty.</p>
+
+    <p>The difference for item combinations containing the base item is shown as empty result.</p>
+
+    <p><b>Previous or Next</b></p>
+
+    <p>If "previous" or "next" is specified as the base item, the reference value is the result for
+       the next visible member of the base field, in the base field's sort order. If details for one
+       item in the base field are hidden, that item is skipped. The difference for the item with
+       hidden details isn't calculated, not even for the item's summary, to have a consistent order
+       of previous and next items.</p>
+
+    <p>Empty results are handled as for named items (see above).<p>
+
+    <p>The difference for the first (for <TYPE>com::sun::star::sheet::DataPilotFieldReferenceItemType::PREVIOUS</TYPE>)
+       or last (for <TYPE>com::sun::star::sheet::DataPilotFieldReferenceItemType::NEXT</TYPE>) item of the base field is
+       shown as empty result.</p>
+    */
+
+    const long ITEM_DIFFERENCE = 1;
+
+    //-------------------------------------------------------------------------
+
+    /** Each result is divided by its reference value. The reference value is determined in the
+        same way as for <const scope="::com::sun::star::sheet">DataPilotFieldReferenceType::ITEM_DIFFERENCE</const>.
+        Totals outside of the base field are shown as empty results.
+
+        <p>Division by zero results in an error. Otherwise, empty results are shown as 0. Results for
+           the base item, first (for <TYPE>com::sun::star::sheet::DataPilotFieldReferenceItemType::PREVIOUS</TYPE>)
+           or last (for <TYPE>com::sun::star::sheet::DataPilotFieldReferenceItemType::NEXT</TYPE>) item of the base field are shown
+           as 1 if not empty.</p>
+    */
+
+        const long ITEM_PERCENTAGE = 2;
+
+    //-------------------------------------------------------------------------
+
+    /** From each result, its reference value is subtracted, and the difference divided by the
+        reference value. The reference value is determined in the same way as for
+        <const scope="::com::sun::star::sheet">DataPilotFieldReferenceType::ITEM_DIFFERENCE</const>.
+        Totals outside of the base field are shown as empty results.
+
+    <p>Division by zero results in an error. Otherwise, the rules for <const scope="::com::sun::star::sheet">DataPilotFieldReferenceType::ITEM_DIFFERENCE</const> apply.</p>
+    */
+
+        const long ITEM_PERCENTAGE_DIFFERENCE = 3;
+
+    //-------------------------------------------------------------------------
+
+    /** Each result is added to the sum of the results for preceding items in the base field,
+        in the base field's sort order, and the total sum is shown.
+
+    <p>If details for one item in the base field are hidden, that item isn't included in
+    calculating the sum, and results for that item are shown as error, to ensure consistency
+    between details and subtotals for the following items.</p>
+
+    <p>Results are always summed, even if a different summary function was used to get each result.</p>
+
+    <p>Totals outside of the base field are shown as empty results.</p>
+    */
+
+        const long RUNNING_TOTAL = 4;
+
+    //-------------------------------------------------------------------------
+
+    /** Each result is divided by the total result for its row in the DataPilot table.
+
+        <p>If there are several data fields, the total for the result's data field is used.</p>
+
+        <p>If there are subtotals with manually selected summary functions, still the total with
+        the data field's summary function is used.</p>
+
+        <p>Division by zero results in an error.</p>
+
+        <p>Otherwise, empty results remain empty.</p>
+    */
+
+        const long ROW_PERCENTAGE = 5;
+
+    //-------------------------------------------------------------------------
+
+    /** Same as <const scope="::com::sun::star::sheet">DataPilotFieldReferenceType::ROW_PERCENTAGE</const>, but the total for the result's column is used.
+    */
+
+        const long COLUMN_PERCENTAGE = 6;
+
+    //-------------------------------------------------------------------------
+
+    /** Same as <const scope="::com::sun::star::sheet">DataPilotFieldReferenceType::ROW_PERCENTAGE</const>, but the grand total for the result's data field is used.
+    */
+
+        const long TOTAL_PERCENTAGE = 7;
+
+    //-------------------------------------------------------------------------
+
+    /** The row and column totals and the grand total, following the same rules as above, are used to calculate the following expression.
+
+    <p>( original result * grand total ) / ( row total * column total )</p>
+
+    <p>Division by zero results in an error. Otherwise, empty results remain empty.</p>
+    */
+
+        const long INDEX = 8;
+
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
