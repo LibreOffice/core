@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:36:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:18:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ namespace configmgr
     {
         SearchNode searchObj(aName);
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         for (ChildList::iterator it2 = m_aChildren.GetSet().begin();
             it2 != m_aChildren.GetSet().end();
             ++it2)
