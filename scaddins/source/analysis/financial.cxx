@@ -2,9 +2,9 @@
  *
  *  $RCSfile: financial.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-22 11:51:24 $
+ *  last change: $Author: gt $ $Date: 2001-05-22 14:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ double SAL_CALL AnalysisAddIn::getCumprinc( double fRate, sal_Int32 nNumPeriods,
     double fRmz, fKapZ;
 
     if( nStartPer < 1 || nEndPer < nStartPer || fRate <= 0.0 || nEndPer > nNumPeriods  || nNumPeriods <= 0 ||
-        fVal <= 0.0 || nPayType != 0 || nPayType != 1 )
+        fVal <= 0.0 || ( nPayType != 0 && nPayType != 1 ) )
         THROW_IAE;
 
     fRmz = GetRmz( fRate, nNumPeriods, fVal, 0.0, nPayType );
@@ -194,7 +194,7 @@ double SAL_CALL AnalysisAddIn::getCumipmt( double fRate, sal_Int32 nNumPeriods, 
     double fRmz, fZinsZ;
 
     if( nStartPer < 1 || nEndPer < nStartPer || fRate <= 0.0 || nEndPer > nNumPeriods  || nNumPeriods <= 0 ||
-        fVal <= 0.0 || nPayType != 0 || nPayType != 1 )
+        fVal <= 0.0 || ( nPayType != 0 && nPayType != 1 ) )
         THROW_IAE;
 
     fRmz = GetRmz( fRate, nNumPeriods, fVal, 0.0, nPayType );
