@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:34:54 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -801,8 +801,12 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                         SfxItemSet& rItemSet = rSet.GetItemSet( &rPam );
                         String sStyle;
                         SwStyleNameMapper::FillUIName(uStyle, sStyle, GET_POOLID_CHRFMT, sal_True );
+                        SwDoc* pDoc = rPam.GetDoc();
+                        //default character style mustn't be set as default format
+                        if(sStyle.EqualsAscii("Standard"))
+                            throw lang::IllegalArgumentException();
                         SwDocStyleSheet* pStyle =
-                            (SwDocStyleSheet*)rPam.GetDoc()->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR);
+                            (SwDocStyleSheet*)pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR);
                         SwFmtDrop* pDrop = 0;
                         if(pStyle)
                         {
@@ -1959,7 +1963,7 @@ Any SwXTextCursor::GetPropertyValue(
  ---------------------------------------------------------------------------*/
 void SwXTextCursor::SetPropertyValue(
     SwPaM& rPaM, const SfxItemPropertySet& rPropSet, const OUString& rPropertyName,
-    const Any& aValue, const SfxItemPropertyMap* _pMap)
+    const Any& aValue, const SfxItemPropertyMap* _pMap, USHORT nAttrMode)
         throw (UnknownPropertyException, PropertyVetoException,
             IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
@@ -1976,7 +1980,7 @@ void SwXTextCursor::SetPropertyValue(
         if(!lcl_setCrsrPropertyValue( pMap, rPaM, aSet, aValue ))
             rPropSet.setPropertyValue(*pMap, aValue, aSet.GetItemSet( &rPaM ) );
         if( aSet.GetItemSetPtr() )
-            SwXTextCursor::SetCrsrAttr(rPaM, aSet.GetItemSet(), 0 );
+            SwXTextCursor::SetCrsrAttr(rPaM, aSet.GetItemSet(), nAttrMode );
     }
     else
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( 0 ) );
