@@ -7585,3 +7585,9 @@ _TI2?AVUnsupportedFlavorException@datatransfer@star@sun@com@@
 ?Write@JPEGWriter@@QAEEABVGraphic@@E@Z
 ?GetExternalFormat@DdeData@@SAKK@Z
 ?GetInternalFormat@DdeData@@SAKK@Z
+??0DataFlavor@datatransfer@star@sun@com@@QAE@ABU01234@@Z
+??1?$Sequence@UDataFlavor@datatransfer@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?GetFormat@TransferableDataHelper@@QBEKK@Z
+?GetFormatCount@TransferableDataHelper@@QBEKXZ
+?GetFormatDataFlavor@TransferableDataHelper@@QBE?AUDataFlavor@datatransfer@star@sun@com@@K@Z
+?InitFormats@TransferableDataHelper@@IAEXXZ
