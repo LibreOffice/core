@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-02 20:31:29 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 21:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ korean ] = "¼±";
                 Text[ turkish ] = "Çizgi";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Línea";
             };
             PageItem
             {
@@ -143,6 +144,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ korean ] = "¸é";
                 Text[ turkish ] = "Alan";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Relleno";
             };
             PageItem
             {
@@ -169,6 +171,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ korean ] = "À½¿µ";
                 Text[ turkish ] = "Gölge";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Sombra";
             };
             PageItem
             {
@@ -193,6 +196,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ chinese_traditional ] = "³z©ú";
                 Text[ arabic ] = "ÔÝÇÝíÉ";
                 Text[ turkish ] = "Saydamlýk";
+                Text[ catalan ] = "Transparencia";
             };
             PageItem
             {
@@ -221,6 +225,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ korean ] = "±Û²Ã";
                 Text[ turkish ] = "Yazýtipi";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Fuente";
             };
             PageItem
             {
@@ -249,6 +254,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ korean ] = "µé¿©¾²±â¿Í °£°Ý";
                 Text[ turkish ] = "Girintiler ve aralýklar";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Sangrías y espacios";
             };
         };
     };
@@ -262,6 +268,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
     Text[ korean ] = "ÇÁ¸®Á¨Å×ÀÌ¼Ç ·¹ÀÌ¾Æ¿ô";
     Text[ turkish ] = "Sunu düzeni";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Diseño de presentación";
 };
 TabDialog TAB_PRES_LAYOUT_TEMPLATE_1
 {
@@ -303,6 +310,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_1
                 Text[ korean ] = "¼±";
                 Text[ turkish ] = "Çizgi";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Línea";
             };
         };
     };
@@ -347,6 +355,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_2
                 Text[ korean ] = "¸é";
                 Text[ turkish ] = "Alan";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Relleno";
             };
         };
     };
@@ -391,6 +400,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ korean ] = "±Û²Ã";
                 Text[ turkish ] = "Yazýtipi";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Fuente";
             };
             PageItem
             {
@@ -419,6 +429,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ korean ] = "µé¿©¾²±â¿Í °£°Ý";
                 Text[ turkish ] = "Girintiler ve aralýklar";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Sangrías y espacios";
             };
             PageItem
             {
@@ -444,6 +455,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ korean ] = "±Û¸Ó¸®±âÈ£";
                 Text[ turkish ] = "Madde iþaretleri";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Viñetas";
             };
             PageItem
             {
@@ -469,6 +481,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ greek ] = "Óôõë áñßèìçóçò";
                 Text[ korean ] = "¹øÈ£¸Å±â±â À¯Çü";
                 Text[ turkish ] = "Numaralama türü";
+                Text[ catalan ] = "Tipo de numeración";
             };
             PageItem
             {
@@ -494,6 +507,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ korean ] = "±×·¡ÇÈ";
                 Text[ turkish ] = "Grafikler";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Imágenes";
             };
             PageItem
             {
@@ -519,6 +533,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ korean ] = "¿É¼Ç";
                 Text[ turkish ] = "Seçenekler";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Opciones";
             };
         };
     };
