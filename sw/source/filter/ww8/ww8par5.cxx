@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:25:32 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:55:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,16 +566,18 @@ void SwWW8ImplReader::ConvertFFileName( String& rName, const String& rOrg )
 
 // ConvertUFNneme uebersetzt FeldParameter-Namen u. ae. in den
 // System-Zeichensatz und Upcased sie ( z.B. fuer Ref-Felder )
-void SwWW8ImplReader::ConvertUFName( String& rName )
+namespace
 {
-    GetAppCharClass().toUpper( rName );
+    void ConvertUFName( String& rName )
+    {
+        GetAppCharClass().toUpper( rName );
+    }
 }
 
-void lcl_ConvertSequenceName( SwWW8ImplReader& rReader, String& rSequenceName )
+static void lcl_ConvertSequenceName(String& rSequenceName)
 {
-    rReader.ConvertUFName( rSequenceName );
-    if(    '0' <= rSequenceName.GetChar( 0 )
-        && '9' >= rSequenceName.GetChar( 0 ) )
+    ConvertUFName(rSequenceName);
+    if ('0' <= rSequenceName.GetChar(0) && '9' >= rSequenceName.GetChar(0))
         rSequenceName.Insert('_', 0);
 }
 
@@ -2767,7 +2769,7 @@ void lcl_toxMatchACSwitch(  SwWW8ImplReader& rReader,
         rBase.SetCaptionDisplay( eCaptionType );
         // Read Sequence Name and store in TOXBase
         String sSeqName( rParam.GetResult() );
-        lcl_ConvertSequenceName( rReader, sSeqName );
+        lcl_ConvertSequenceName( sSeqName );
         rBase.SetSequenceName( sSeqName );
     }
 }
