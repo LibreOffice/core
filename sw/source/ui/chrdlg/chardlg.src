@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:12:41 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:48:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ TabDialog DLG_CHAR
                 Text[ czech ] = "Písmo";
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "अक्षर";
+                Text[ slovak ] = "Písmo";
             };
             PageItem
             {
@@ -154,6 +155,7 @@ TabDialog DLG_CHAR
                 Text[ czech ] = "Efekty pro písmo";
                 Text[ hebrew ] = "‮אפקטים לגופנים‬";
                 Text[ hindi ] = "अक्षर प्रभाव";
+                Text[ slovak ] = "Efekty pre písmo";
             };
             PageItem
             {
@@ -185,6 +187,7 @@ TabDialog DLG_CHAR
                 Text[ czech ] = "Umístění";
                 Text[ hebrew ] = "‮מיקום‬";
                 Text[ hindi ] = "स्थान";
+                Text[ slovak ] = "Umiestnenie";
             };
             PageItem
             {
@@ -216,6 +219,7 @@ TabDialog DLG_CHAR
                 Text[ czech ] = "Asijský formát";
                 Text[ hebrew ] = "Asiatisches Layout";
                 Text[ hindi ] = "ऐशियन अभिन्यास";
+                Text[ slovak ] = "Ázijské rozloženie";
             };
             PageItem
             {
@@ -248,6 +252,7 @@ TabDialog DLG_CHAR
                 Text[ czech ] = "Hypertextový odkaz";
                 Text[ hebrew ] = "Hyperlink";
                 Text[ hindi ] = "हाइपरलिंक";
+                Text[ slovak ] = "Hypertextový odkaz";
             };
             PageItem
             {
@@ -282,6 +287,7 @@ TabDialog DLG_CHAR
                 Text[ czech ] = "Pozadí";
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
+                Text[ slovak ] = "Pozadie";
             };
         };
     };
@@ -302,6 +308,7 @@ TabDialog DLG_CHAR
     Text[ czech ] = "Znak";
     Text[ hebrew ] = "Zeichen";
     Text[ hindi ] = "अक्षर";
+    Text[ slovak ] = "Znak";
 };
 TabDialog DLG_DRAWCHAR
 {
@@ -360,6 +367,7 @@ TabDialog DLG_DRAWCHAR
                 Text[ czech ] = "Písmo";
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "अक्षर";
+                Text[ slovak ] = "Písmo";
             };
         };
     };
@@ -379,6 +387,7 @@ TabDialog DLG_DRAWCHAR
     Text[ czech ] = "Písmo";
     Text[ hebrew ] = "‮גופן‬";
     Text[ hindi ] = "अक्षर";
+    Text[ slovak ] = "Písmo";
 };
 TabPage TP_CHAR_URL
 {
@@ -418,6 +427,7 @@ TabPage TP_CHAR_URL
         Text[ czech ] = "Hypertextový odkaz";
         Text[ hebrew ] = "Hyperlink";
         Text[ hindi ] = "हाइपरलिंक";
+        Text[ slovak ] = "Hypertextový odkaz";
     };
     FixedText FT_URL
     {
@@ -451,6 +461,7 @@ TabPage TP_CHAR_URL
         Text[ czech ] = "URL";
         Text[ hebrew ] = "U~RL";
         Text[ hindi ] = "~URL";
+        Text[ slovak ] = "~URL";
     };
     Edit ED_URL
     {
@@ -492,6 +503,7 @@ TabPage TP_CHAR_URL
         Text[ czech ] = "Listovat...";
         Text[ hebrew ] = "‮עיון...‬";
         Text[ hindi ] = "~ब्रउज़...";
+        Text[ slovak ] = "~Listovať...";
     };
     FixedText FT_TEXT
     {
@@ -523,6 +535,7 @@ TabPage TP_CHAR_URL
         Text[ czech ] = "Text";
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "टे~क्स्ट्";
+        Text[ slovak ] = "Te~xt";
     };
     Edit ED_TEXT
     {
@@ -564,6 +577,7 @@ TabPage TP_CHAR_URL
         Text[ czech ] = "Název";
         Text[ hebrew ] = "~Name";
         Text[ hindi ] = "~नाम";
+        Text[ slovak ] = "~Názov";
     };
     Edit ED_NAME
     {
@@ -605,6 +619,7 @@ TabPage TP_CHAR_URL
         Text[ czech ] = "Cílový rámec";
         Text[ hebrew ] = "~Frame";
         Text[ hindi ] = "~लक्ष्य फ्रेम ";
+        Text[ slovak ] = "~Cieľový rámec";
     };
     ComboBox LB_TARGET
     {
@@ -635,7 +650,7 @@ TabPage TP_CHAR_URL
         Text[ russian ] = "�������...";
         Text[ polish ] = "~Wydarzenia...";
         Text[ japanese ] = "イベント(~E)...";
-        Text[ chinese_traditional ] = "動作(~E)...";
+        Text[ chinese_traditional ] = "事件(~E)...";
         Text[ arabic ] = "�����...";
         Text[ dutch ] = "~Gebeurtenissen";
         Text[ chinese_simplified ] = "事件(~E)...";
@@ -648,6 +663,7 @@ TabPage TP_CHAR_URL
         Text[ czech ] = "Události";
         Text[ hebrew ] = "~Ereignisse...";
         Text[ hindi ] = "~घटनें...";
+        Text[ slovak ] = "~Udalosti";
     };
     FixedLine FL_STYLE
     {
@@ -681,6 +697,7 @@ TabPage TP_CHAR_URL
         Text[ czech ] = "Znakové styly";
         Text[ hebrew ] = "Zeichenvorlagen";
         Text[ hindi ] = "अक्षर शैलियाँ";
+        Text[ slovak ] = "Znakové štýly";
     };
     FixedText FT_VISITED
     {
@@ -714,6 +731,7 @@ TabPage TP_CHAR_URL
         Text[ czech ] = "Navštívené odkazy";
         Text[ hebrew ] = "~Besuchter Link";
         Text[ hindi ] = "भें~ट की हुयी लिंक्स ";
+        Text[ slovak ] = "~Navštívené odkazy";
     };
     ListBox LB_VISITED
     {
@@ -757,6 +775,7 @@ TabPage TP_CHAR_URL
         Text[ czech ] = "Nenavštívené odkazy";
         Text[ hebrew ] = "~Unbesuchter Link";
         Text[ hindi ] = "भेंट ~न की हुयी लिंक्स ";
+        Text[ slovak ] = "Nenavštívené ~odkazy";
     };
     ListBox LB_NOT_VISITED
     {
@@ -769,6 +788,8 @@ TabPage TP_CHAR_URL
         Group = TRUE ;
     };
 };
+
+
 
 
 
