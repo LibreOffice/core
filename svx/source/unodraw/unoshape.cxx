@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-22 13:16:27 $
+ *  last change: $Author: cl $ $Date: 2000-11-22 19:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1811,7 +1811,8 @@ uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
     if( xInfo.is() )
         aSeq = xInfo->getSupportedServiceNames();
 
-    addToSequence( aSeq, 2, "com.sun.star.drawing.ShapeDescriptor",
+    addToSequence( aSeq, 3, "com.sun.star.style.ParagraphProperties",
+                            "com.sun.star.drawing.ShapeDescriptor",
                             "com.sun.star.drawing.Shape");
 
 
