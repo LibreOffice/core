@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-20 14:43:28 $
+ *  last change: $Author: mib $ $Date: 2000-10-23 12:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // RES_COL
     // not required
     // RES_KEEP
-    M_E( "KeepTogether",    FO, keep_with_next,     XML_TYPE_BOOL, 0 ),
+    M_E( "ParaKeepTogether",    FO, keep_with_next,     XML_TYPE_BOOL, 0 ),
     // RES_URL
     // not required
     // RES_EDIT_IN_READONLY
