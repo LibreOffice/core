@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-19 13:54:17 $
+#   last change: $Author: hr $ $Date: 2004-08-02 15:36:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,8 @@ EXCEPTIONSFILES=\
         $(SLO)$/RelationControl.obj		\
         $(SLO)$/tabletree.obj			\
         $(SLO)$/TableGrantCtrl.obj		\
-        $(SLO)$/sqledit.obj			\
+        $(SLO)$/dbtreelistbox.obj       \
+        $(SLO)$/sqledit.obj				\
         $(SLO)$/ColumnControlWindow.obj	\
         $(SLO)$/FieldDescControl.obj
 
@@ -94,7 +95,7 @@ EXCEPTIONSFILES=\
 SLOFILES=	\
         $(EXCEPTIONSFILES)				\
         $(SLO)$/ScrollHelper.obj		\
-        $(SLO)$/urlcontrol.obj			\
+        $(SLO)$/VertSplitView.obj		\
         $(SLO)$/SqlNameEdit.obj			\
         $(SLO)$/listviewitems.obj		\
         $(SLO)$/undosqledit.obj			\
