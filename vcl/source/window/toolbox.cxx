@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-25 11:09:34 $
+ *  last change: $Author: ssa $ $Date: 2002-03-26 15:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4816,6 +4816,14 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
 
 // -----------------------------------------------------------------------
 
+static bool ImplIsFixedControl( ImplToolItem *pItem )
+{
+    return ( pItem->mpWindow &&
+            (pItem->mpWindow->GetType() == WINDOW_FIXEDTEXT ||
+             pItem->mpWindow->GetType() == WINDOW_FIXEDLINE ||
+             pItem->mpWindow->GetType() == WINDOW_GROUPBOX) );
+}
+
 // returns the current toolbox line of the item
 USHORT ToolBox::ImplGetItemLine( ImplToolItem* pCurrentItem )
 {
@@ -4849,7 +4857,7 @@ ImplToolItem* ToolBox::ImplGetFirstValidItem( USHORT nLine )
         {
             // find first useful item
             while( pItem && ((pItem->meType != TOOLBOXITEM_BUTTON) ||
-                !pItem->mbEnabled || !pItem->mbVisible) )
+                !pItem->mbEnabled || !pItem->mbVisible || ImplIsFixedControl( pItem )) )
             {
                 pItem = mpItemList->Next();
                 if( !pItem || pItem->mbBreak )
@@ -4881,7 +4889,7 @@ ImplToolItem* ToolBox::ImplGetLastValidItem( USHORT nLine )
         {
             // find last useful item
             while( pItem && ((pItem->meType == TOOLBOXITEM_BUTTON) &&
-                pItem->mbEnabled && pItem->mbVisible) )
+                pItem->mbEnabled && pItem->mbVisible && !ImplIsFixedControl( pItem )) )
             {
                 pFound = pItem;
                 pItem = mpItemList->Next();
@@ -4979,7 +4987,7 @@ BOOL ToolBox::ImplChangeHighlightUpDn( BOOL bUp, BOOL bNoCycle )
             while( pItem )
             {
                 if ( (pItem->meType == TOOLBOXITEM_BUTTON) &&
-                    pItem->mbEnabled && pItem->mbVisible )
+                    pItem->mbEnabled && pItem->mbVisible && !ImplIsFixedControl( pItem ))
                     break;
                 else
                     pItem = mpItemList->Next();
@@ -4995,7 +5003,7 @@ BOOL ToolBox::ImplChangeHighlightUpDn( BOOL bUp, BOOL bNoCycle )
             while( pItem )
             {
                 if ( (pItem->meType == TOOLBOXITEM_BUTTON) &&
-                    pItem->mbEnabled && pItem->mbVisible )
+                    pItem->mbEnabled && pItem->mbVisible && !ImplIsFixedControl( pItem ) )
                     break;
                 else
                     pItem = mpItemList->Prev();
@@ -5035,7 +5043,7 @@ BOOL ToolBox::ImplChangeHighlightUpDn( BOOL bUp, BOOL bNoCycle )
 
             pItem = mpItemList->GetObject( pos );
             if ( (pItem->meType == TOOLBOXITEM_BUTTON) &&
-                pItem->mbEnabled && pItem->mbVisible )
+                pItem->mbEnabled && pItem->mbVisible && !ImplIsFixedControl( pItem ) )
                 break;
         } while( ++i < nCount);
 
