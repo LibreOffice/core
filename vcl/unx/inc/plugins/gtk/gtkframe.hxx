@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:28:41 $
+ *  last change: $Author: obo $ $Date: 2004-11-22 10:13:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,9 @@ class GtkSalFrame : public SalFrame
 
     GtkWindow*                      m_pWindow;
     GdkWindow*                      m_pForeignParent;
+    GdkNativeWindow                 m_aForeignParentWindow;
     GdkWindow*                      m_pForeignTopLevel;
+    GdkNativeWindow                 m_aForeignTopLevelWindow;
     ULONG                           m_nStyle;
     GtkFixed*                       m_pFixedContainer;
     GtkSalFrame*                    m_pParent;
