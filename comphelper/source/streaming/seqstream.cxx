@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seqstream.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-02 14:56:32 $
+ *  last change: $Author: oj $ $Date: 2001-02-02 16:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ void SAL_CALL OSequenceOutputStream::writeBytes( const Sequence< sal_Int8 >& _rD
         throw NotConnectedException();
 
     // ensure the sequence has enoungh space left
-    if (m_nSize + _rData.getLength() < m_rSequence.getLength())
+    if (m_nSize + _rData.getLength() > m_rSequence.getLength())
     {
         sal_Int32 nCurrentLength = m_rSequence.getLength();
         sal_Int32 nNewLength = nCurrentLength * m_nResizeFactor;
