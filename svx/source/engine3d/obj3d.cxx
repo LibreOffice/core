@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-07 12:52:01 $
+ *  last change: $Author: aw $ $Date: 2000-11-14 13:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3565,17 +3565,19 @@ void E3dCompoundObject::SetBase3DParams(ExtOutputDevice& rOut, Base3D* pBase3D,
                         aBmp = Bitmap(Size(4,4), 8);
                     }
 
-                    if(bGhosted)
-                    {
-                        aBmp.Adjust( 50 );
-                    }
-
                     // Texturattribute bilden
-                    TextureAttributesBitmap aTexAttr(aBmp);
+                    TextureAttributesBitmap aTexAttr(aBmp, bGhosted);
 
                     pTexture = pBase3D->ObtainTexture(aTexAttr);
                     if(!pTexture)
+                    {
+                        if(bGhosted)
+                        {
+                            aBmp.Adjust( 50 );
+                        }
+
                         pTexture = pBase3D->ObtainTexture(aTexAttr, aBmp);
+                    }
 
                     USHORT nOffX = ITEMVALUE( rSet, XATTR_FILLBMP_TILEOFFSETX, SfxUInt16Item );
                     USHORT nOffY = ITEMVALUE( rSet, XATTR_FILLBMP_TILEOFFSETY, SfxUInt16Item );
@@ -3742,7 +3744,8 @@ void E3dCompoundObject::SetBase3DParams(ExtOutputDevice& rOut, Base3D* pBase3D,
                 {
                     TextureAttributesGradient aTexAttr(
                         (void*)&rSet.Get(XATTR_FILLGRADIENT),
-                        (void*)&rSet.Get(XATTR_GRADIENTSTEPCOUNT));
+                        (void*)&rSet.Get(XATTR_GRADIENTSTEPCOUNT),
+                        bGhosted);
 
                     pTexture = pBase3D->ObtainTexture(aTexAttr);
                     if(!pTexture)
@@ -3760,7 +3763,8 @@ void E3dCompoundObject::SetBase3DParams(ExtOutputDevice& rOut, Base3D* pBase3D,
                 else if(eFillStyle == XFILL_HATCH)
                 {
                     TextureAttributesHatch aTexAttr(
-                        (void*)&rSet.Get(XATTR_FILLHATCH));
+                        (void*)&rSet.Get(XATTR_FILLHATCH),
+                        bGhosted);
 
                     pTexture = pBase3D->ObtainTexture(aTexAttr);
                     if(!pTexture)
@@ -4647,7 +4651,7 @@ void E3dCompoundObject::Paint3D(ExtOutputDevice& rOut, Base3D* pBase3D,
             pBase3D->GetLightGroup()->EnableLighting(FALSE);
             pBase3D->SetLightGroup(pBase3D->GetLightGroup());
 
-            // #79585# switch off texturing (if used)
+            // #79585#
             pBase3D->SetActiveTexture();
 
             pBase3D->DrawPolygonGeometry(GetDisplayGeometry(), TRUE);
