@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:41:25 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,6 @@ namespace dbaccess
 
         connectivity::ORowVector< connectivity::ORowSetValue >  m_aParameterRow; // contains the parameters from rowset
         ::std::vector< ::rtl::OUString >                        m_aAutoColumns;  // contains all columns which are autoincrement ones
-        ::std::vector< sal_Int32 >                              m_aKeyColumnTypes;
 
         OColumnNamePos*                                         m_pKeyColumnNames;  // contains all key column names
         OColumnNamePos*                                         m_pColumnNames;     // contains all column names
