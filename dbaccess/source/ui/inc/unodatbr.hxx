@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-27 07:26:13 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 07:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,6 +494,18 @@ namespace dbaui
         void clearGridColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _xColContainer);
 
         sal_Bool isHiContrast() const;
+
+        /** called to handle all entries in the context menu for bookmarks
+            @param  _nPos
+                The entry in the context menu.
+            @param  pEntry
+                The entry to wish the context menu should be handled.
+            @param  eType
+                The type of pEntry.
+            @param  pDSEntry
+                The root entry of pEntry.
+        */
+        void handleLinkContextMenu(USHORT _nPos,SvLBoxEntry* pEntry,EntryType eType,SvLBoxEntry* pDSEntry);
     };
 
 // .........................................................................

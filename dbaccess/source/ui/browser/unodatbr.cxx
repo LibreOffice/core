@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-08 08:11:21 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 07:46:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3722,10 +3722,9 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             {
                 // 1.2 pasting tables
                 sal_Bool bPasteAble = isTableFormat();
-                aContextMenu.EnableItem(ID_TREE_TABLE_PASTE, bIsConnectionWriteAble && bPasteAble);
+                aContextMenu.EnableItem(SID_PASTE, bIsConnectionWriteAble && bPasteAble);
 
                 sal_Bool bRenameAllowed = sal_False,
-                         bDropAllowed   = sal_False,
                          bSelectAllowed = sal_False;
                 if(bIsConnectionWriteAble)
                 {
@@ -3738,9 +3737,8 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                         {
                             Reference<XPropertySet> xProp(pData->xObject,UNO_QUERY);
                             sal_Int32 nPrivileges = 0;
-                            if(xProp.is())
+                            if ( xProp.is() )
                                 xProp->getPropertyValue(PROPERTY_PRIVILEGES) >>= nPrivileges;
-                            bDropAllowed    = (Privilege::DROP & nPrivileges) == Privilege::DROP;
                             bSelectAllowed  = (Privilege::SELECT & nPrivileges) == Privilege::SELECT;
                         }
                         catch(SQLException&)
@@ -3750,9 +3748,9 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                 }
                 // 1.3 actions on existing tables
                 aContextMenu.EnableItem(ID_EDIT_TABLE,      etTable == eType && bIsConnectionWriteAble && bSelectAllowed);
-                aContextMenu.EnableItem(ID_DROP_TABLE,      etTable == eType && bIsConnectionWriteAble && bDropAllowed);
+                aContextMenu.EnableItem(SID_DELETE,         etTable == eType && bIsConnectionWriteAble);
                 aContextMenu.EnableItem(ID_RENAME_ENTRY,    etTable == eType && bIsConnectionWriteAble && bRenameAllowed);
-                aContextMenu.EnableItem(ID_TREE_TABLE_COPY, etTable == eType);
+                aContextMenu.EnableItem(SID_COPY,           etTable == eType);
                 // these have to be disabled if the connection is readonly
                 if(!bIsConnectionWriteAble)
                 {
@@ -3766,12 +3764,12 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             {
                 // 2.2 pasting tables
                 sal_Bool bPasteAble = isTableFormat();
-                aContextMenu.EnableItem(ID_TREE_VIEW_PASTE, bIsConnectionWriteAble && bPasteAble);
+                aContextMenu.EnableItem(SID_PASTE, bIsConnectionWriteAble && bPasteAble);
 
                 // 2.3 actions on existing tables
-                aContextMenu.EnableItem(ID_DROP_VIEW,       bIsConnectionWriteAble);
+                aContextMenu.EnableItem(SID_DELETE,         bIsConnectionWriteAble);
                 aContextMenu.EnableItem(ID_RENAME_ENTRY,    bIsConnectionWriteAble);
-                aContextMenu.EnableItem(ID_TREE_VIEW_COPY,  sal_True);
+                aContextMenu.EnableItem(SID_COPY,           sal_True);
 
                 // these have to be disabled if the connection is readonly
                 if(!bIsConnectionWriteAble)
@@ -3788,11 +3786,11 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             {
                 TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
                 sal_Bool bPasteAble = aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY);
-                aContextMenu.EnableItem(ID_TREE_QUERY_PASTE, bPasteAble);
+                aContextMenu.EnableItem(SID_PASTE, bPasteAble);
                 // 3.2 actions on existing queries
                 aContextMenu.EnableItem(ID_EDIT_QUERY_DESIGN,   etQuery == eType);
-                aContextMenu.EnableItem(ID_DROP_QUERY,          etQuery == eType);
-                aContextMenu.EnableItem(ID_TREE_QUERY_COPY,     etQuery == eType);
+                aContextMenu.EnableItem(SID_DELETE,             etQuery == eType);
+                aContextMenu.EnableItem(SID_COPY,               etQuery == eType);
                 aContextMenu.EnableItem(ID_RENAME_ENTRY,        etQuery == eType);
             }
             break;
@@ -3802,7 +3800,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             case etBookmark:
             {
                 aContextMenu.EnableItem(ID_EDIT_LINK,       etBookmark == eType);
-                aContextMenu.EnableItem(ID_DROP_LINK,       etBookmark == eType);
+                aContextMenu.EnableItem(SID_DELETE,         etBookmark == eType);
                 aContextMenu.EnableItem(ID_OPEN_DOCUMENT,   etBookmark == eType);
                 aContextMenu.EnableItem(ID_EDIT_DOCUMENT,   etBookmark == eType);
 
@@ -3866,31 +3864,30 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             implCreateObject( pEntry, nPos );
             break;
 
-        case ID_DROP_QUERY:
-            implRemoveQuery( pEntry );
-            break;
-
-        case ID_DROP_TABLE:
-        case ID_DROP_VIEW:
-            implDropTable( pEntry );
+        case SID_DELETE:
+            switch ( eType )
+            {
+                case etBookmark:
+                    handleLinkContextMenu(ID_DROP_LINK,pEntry,eType,pDSEntry);
+                    break;
+                case etQuery:
+                    implRemoveQuery( pEntry );
+                    break;
+                case etView:
+                case etTable:
+                    implDropTable( pEntry );
+                    break;
+                default:
+                    OSL_ENSURE(0,"Illegal type for delete!");
+            }
             break;
         case ID_RENAME_ENTRY:
             implRenameEntry(pEntry);
             break;
 
-        case ID_TREE_QUERY_COPY:
+        case SID_COPY:
         {
-            TransferableHelper* pTransfer = implCopyObject( pEntry, CommandType::QUERY );
-            Reference< XTransferable> aEnsureDelete = pTransfer;
-            if (pTransfer)
-                pTransfer->CopyToClipboard(getView());
-        }
-        break;
-
-        case ID_TREE_TABLE_COPY:
-        case ID_TREE_VIEW_COPY:
-        {
-            TransferableHelper* pTransfer = implCopyObject( pEntry, CommandType::TABLE );
+            TransferableHelper* pTransfer = implCopyObject( pEntry, (etQuery == eType) ? CommandType::QUERY : CommandType::TABLE );
             Reference< XTransferable> aEnsureDelete = pTransfer;
 
             if (pTransfer)
@@ -3898,18 +3895,13 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
         }
         break;
 
-        case ID_TREE_QUERY_PASTE:
+        case SID_PASTE:
         {
             TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
-            implPasteQuery( pEntry, ODataAccessObjectTransferable::extractObjectDescriptor(aTransferData) );
-        }
-        break;
-
-        case ID_TREE_TABLE_PASTE:
-        case ID_TREE_VIEW_PASTE:
-        {
-            TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
-            implPasteTable( pEntry, aTransferData );
+            if ( etQuery == eType )
+                implPasteQuery( pEntry, ODataAccessObjectTransferable::extractObjectDescriptor(aTransferData) );
+            else
+                implPasteTable( pEntry, aTransferData );
         }
         break;
 
@@ -3917,89 +3909,90 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
         case ID_OPEN_DOCUMENT:
         case ID_EDIT_DOCUMENT:
         case ID_EDIT_LINK:
-        case ID_DROP_LINK:
         case ID_FORM_NEW_TEXT:
         case ID_FORM_NEW_CALC:
         case ID_FORM_NEW_IMPRESS:
         case ID_FORM_NEW_PILOT:
         case ID_FORM_NEW_TEMPLATE:
-        {
-            // get the container of the bookmarks
-            SvLBoxEntry* pContainer = isContainer(pEntry) ? pEntry : m_pTreeView->getListBox()->GetParent(pEntry);
-            if (!ensureEntryObject(pContainer))
-                break;
-
-            String sSelectedObject = GetEntryText(pEntry);
-
-            DBTreeListModel::DBTreeListUserData* pContainerData = static_cast<DBTreeListModel::DBTreeListUserData*>(pContainer->GetUserData());
-            Reference< XNameAccess > xBookmarks(pContainerData->xObject, UNO_QUERY);
-
-            OLinkedDocumentsAccess aHelper(getView(), getORB(), xBookmarks);
-
-            switch (nPos)
-            {
-                case ID_NEW_LINK:
-                    aHelper.addLinkUI();
-                    break;
-
-                case ID_OPEN_DOCUMENT:
-                    aHelper.open(sSelectedObject, sal_True);
-                    break;
-
-                case ID_EDIT_DOCUMENT:
-                    aHelper.open(sSelectedObject, sal_False);
-                    break;
-
-                case ID_EDIT_LINK:
-                {
-                    ::rtl::OUString sNewName, sNewLocation;
-                    aHelper.edit(sSelectedObject, sNewName, sNewLocation);
-                }
-                break;
-
-                case ID_DROP_LINK:
-                    aHelper.drop(sSelectedObject);
-                    break;
-
-                case ID_FORM_NEW_TEXT:
-                case ID_FORM_NEW_CALC:
-                case ID_FORM_NEW_IMPRESS:
-                case ID_FORM_NEW_TEMPLATE:
-                    aHelper.newForm(nPos);
-                    break;
-
-                case ID_FORM_NEW_PILOT:
-                {
-                    // the type of the object to initially select
-                    sal_Int32 nObjectType = -1;
-                    if (etTable == eType)
-                        nObjectType = CommandType::TABLE;
-                    else if (etQuery == eType)
-                        nObjectType = CommandType::QUERY;
-
-                    // the object name
-                    String sObjectName;
-                    if (-1 != nObjectType)
-                        sObjectName = GetEntryText(pEntry);
-
-                    // the connection
-                    Reference< XConnection > xConn;
-                    if (ensureConnection(pEntry, xConn))
-                        aHelper.newFormWithPilot(GetEntryText(pDSEntry), nObjectType, sObjectName, xConn);
-                }
-                break;
-
-                default:
-                    DBG_ERROR("SbaTableQueryBrowser::requestContextMenu: invalid menu id!");
-                    break;
-            }
-        }
+            handleLinkContextMenu(nPos,pEntry,eType,pDSEntry);
         break;
     }
 
     return sal_True;    // handled
 }
+// -----------------------------------------------------------------------------
+void SbaTableQueryBrowser::handleLinkContextMenu(USHORT _nPos,SvLBoxEntry* pEntry,EntryType eType,SvLBoxEntry* pDSEntry)
+{
+    // get the container of the bookmarks
+    SvLBoxEntry* pContainer = isContainer(pEntry) ? pEntry : m_pTreeView->getListBox()->GetParent(pEntry);
+    if (!ensureEntryObject(pContainer))
+        return;
 
+    String sSelectedObject = GetEntryText(pEntry);
+
+    DBTreeListModel::DBTreeListUserData* pContainerData = static_cast<DBTreeListModel::DBTreeListUserData*>(pContainer->GetUserData());
+    Reference< XNameAccess > xBookmarks(pContainerData->xObject, UNO_QUERY);
+
+    OLinkedDocumentsAccess aHelper(getView(), getORB(), xBookmarks);
+
+    switch (_nPos)
+    {
+        case ID_NEW_LINK:
+            aHelper.addLinkUI();
+            break;
+
+        case ID_OPEN_DOCUMENT:
+            aHelper.open(sSelectedObject, sal_True);
+            break;
+
+        case ID_EDIT_DOCUMENT:
+            aHelper.open(sSelectedObject, sal_False);
+            break;
+
+        case ID_EDIT_LINK:
+        {
+            ::rtl::OUString sNewName, sNewLocation;
+            aHelper.edit(sSelectedObject, sNewName, sNewLocation);
+        }
+        break;
+
+        case ID_DROP_LINK:
+            aHelper.drop(sSelectedObject);
+            break;
+
+        case ID_FORM_NEW_TEXT:
+        case ID_FORM_NEW_CALC:
+        case ID_FORM_NEW_IMPRESS:
+        case ID_FORM_NEW_TEMPLATE:
+            aHelper.newForm(_nPos);
+            break;
+
+        case ID_FORM_NEW_PILOT:
+        {
+            // the type of the object to initially select
+            sal_Int32 nObjectType = -1;
+            if (etTable == eType)
+                nObjectType = CommandType::TABLE;
+            else if (etQuery == eType)
+                nObjectType = CommandType::QUERY;
+
+            // the object name
+            String sObjectName;
+            if (-1 != nObjectType)
+                sObjectName = GetEntryText(pEntry);
+
+            // the connection
+            Reference< XConnection > xConn;
+            if (ensureConnection(pEntry, xConn))
+                aHelper.newFormWithPilot(GetEntryText(pDSEntry), nObjectType, sObjectName, xConn);
+        }
+        break;
+
+        default:
+            DBG_ERROR("SbaTableQueryBrowser::requestContextMenu: invalid menu id!");
+            break;
+    }
+}
 
 // -----------------------------------------------------------------------------
 void SbaTableQueryBrowser::setDefaultTitle() const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: vg $ $Date: 2002-06-11 12:33:57 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 07:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -817,10 +817,8 @@ Menu MENU_BROWSER_BOOKMARKCONTEXT
         {
             MID_LINK_EDIT
         };
-        MenuItem
-        {
-            MID_LINK_DROP
-        };
+        MenuItem { ITEM_EDIT_DELETE     };
+
         MenuItem
         {
             Separator = TRUE;
@@ -867,66 +865,9 @@ Menu MENU_BROWSER_QUERYCONTEXT
             Separator = TRUE;
         };
         MenuItem { MID_RENAME_ENTRY     };
-        MenuItem
-        {
-            MID_QUERY_DROP
-        };
-        MenuItem
-        {
-            Identifier = ID_TREE_QUERY_COPY ;
-            HelpId = HID_BROWSER_QUERY_COPY ;
-            Text = "Abfrage ~kopieren" ;
-            Text [ english ] = "c~opy query" ;
-            Text [ english_us ] = "C~opy Query" ;
-            Text[ portuguese ] = "~Copiar consulta";
-            Text[ russian ] = "~Êîïèğîâàòü çàïğîñ";
-            Text[ greek ] = "ÁíôéãñáöŞ åñùôŞìáôïò";
-            Text[ dutch ] = "query k~opiëren";
-            Text[ french ] = "C~opier la requête";
-            Text[ spanish ] = "Copiar co~nsulta";
-            Text[ italian ] = "~Copia ricerca";
-            Text[ danish ] = "c~opy query";
-            Text[ swedish ] = "~Kopiera sökning";
-            Text[ polish ] = "K~opiuj kwerendê";
-            Text[ portuguese_brazilian ] = "c~opy query";
-            Text[ japanese ] = "ã‚¯ã‚¨ãƒªãƒ¼ã®ã‚³ãƒ”ãƒ¼(~O)";
-            Text[ korean ] = "ì§ˆì˜ ë³µì‚¬(~O)";
-            Text[ chinese_simplified ] = "å¤åˆ¶æŸ¥è¯¢(~O)";
-            Text[ chinese_traditional ] = "è¤‡è£½æŸ¥è©¢(~O)";
-            Text[ turkish ] = "c~opy query";
-            Text[ arabic ] = "äÓÎ ÇáÇÓÊİÓÇÑ";
-            Text[ finnish ] = "K~opioi kysely";
-            Text[ catalan ] = "C~opia la consulta";
-            Text[ thai ] = "~à¸„à¸±à¸”à¸¥à¸­à¸à¹à¸šà¸šà¸ªà¸­à¸šà¸–à¸²à¸¡";
-        };
-        MenuItem
-        {
-            Identifier = ID_TREE_QUERY_PASTE ;
-            HelpId = HID_BROWSER_QUERY_PASTE ;
-            Text = "Abfrage e~infügen..." ;
-            Text [ english ] = "~insert query..." ;
-            Text [ english_us ] = "~Paste Query..." ;
-            Text[ portuguese ] = "~Inserir consulta...";
-            Text[ russian ] = "~Âñòàâèòü çàïğîñ...";
-            Text[ greek ] = "~Insert Query...";
-            Text[ dutch ] = "Qu~ery invoegen...";
-            Text[ french ] = "~Insérer une requête...";
-            Text[ spanish ] = "~Insertar consulta...";
-            Text[ finnish ] = "~Insert Query...";
-            Text[ italian ] = "~Inserisci ricerca...";
-            Text[ danish ] = "~Insert Query...";
-            Text[ swedish ] = "~Infoga sökning...";
-            Text[ polish ] = "~Wstaw kwerendê...";
-            Text[ portuguese_brazilian ] = "~Insert Query...";
-            Text[ japanese ] = "ã‚¯ã‚¨ãƒªãƒ¼ã®æŒ¿å…¥(~P)...";
-            Text[ korean ] = "ì§ˆì˜ ë¶™ì—¬ë„£ê¸°(~P)...";
-            Text[ chinese_simplified ] = "æ’å…¥æŸ¥è¯¢(~P)...";
-            Text[ chinese_traditional ] = "æ’å…¥æŸ¥è©¢(~P)...";
-            Text[ turkish ] = "~Insert Query...";
-            Text[ arabic ] = "~Insert Query...";
-            Text[ catalan ] = "~Inserta una consulta...";
-            Text[ thai ] = "~à¸§à¸²à¸‡à¹à¸šà¸šà¸ªà¸­à¸šà¸–à¸²à¸¡...";
-        };
+        MenuItem { ITEM_EDIT_DELETE     };
+        MenuItem { ITEM_EDIT_COPY       };
+        MenuItem { ITEM_EDIT_PASTE      };
     };
 };
 
@@ -943,64 +884,11 @@ Menu MENU_BROWSER_TABLECONTEXT
         {
             Separator = TRUE;
         };
-        MenuItem { MID_DROP_TABLE       };
+        MenuItem { ITEM_EDIT_DELETE     };
         MenuItem { MID_RENAME_ENTRY     };
-        MenuItem
-        {
-            Identifier = ID_TREE_TABLE_COPY ;
-            HelpId = HID_BROWSER_TABLE_COPY ;
-            Text = "Tabelle ~kopieren" ;
-            Text [ english ] = "c~opy table" ;
-            Text [ english_us ] = "C~opy Table" ;
-            Text[ portuguese ] = "~Copiar tabela";
-            Text[ russian ] = "Ê~îïèğîâàòü òàáëèöó";
-            Text[ greek ] = "ÁíôéãñáöŞ ğßíá~êá";
-            Text[ dutch ] = "tabel ~kopiëren";
-            Text[ french ] = "~Copier la table";
-            Text[ spanish ] = "C~opiar tabla";
-            Text[ italian ] = "~Copia tabella";
-            Text[ danish ] = "c~opy table";
-            Text[ swedish ] = "~Kopiera tabell";
-            Text[ polish ] = "~Kopiuj tabelê";
-            Text[ portuguese_brazilian ] = "c~opy table";
-            Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ã®ã‚³ãƒ”ãƒ¼(~O)";
-            Text[ korean ] = "ì‹œíŠ¸ ë³µì‚¬(~O)";
-            Text[ chinese_simplified ] = "å¤åˆ¶è¡¨æ ¼(~O)";
-            Text[ chinese_traditional ] = "è¤‡è£½è¡¨æ ¼(~O)";
-            Text[ turkish ] = "c~opy table";
-            Text[ arabic ] = "äÓÎ ÇáÌÏæá";
-            Text[ finnish ] = "K~opioi taulukko";
-            Text[ catalan ] = "C~opia la taula";
-            Text[ thai ] = "~à¸„à¸±à¸”à¸¥à¸­à¸à¸•à¸²à¸£à¸²à¸‡";
-            };
-        MenuItem
-        {
-            Identifier = ID_TREE_TABLE_PASTE ;
-            HelpId = HID_BROWSER_TABLE_PASTE ;
-            Text = "Tabelle e~infügen..." ;
-            Text [ english ] = "~insert table..." ;
-            Text [ english_us ] = "~Paste Table..." ;
-            Text[ portuguese ] = "~Inserir tabela...";
-                Text[ russian ] = "~Âñòàâèòü òàáëèöó...";
-                Text[ greek ] = "Å~éóáãùãŞ ğßíáêá...";
-                Text[ dutch ] = "Tabel ~invoegen...";
-                Text[ french ] = "~Insérer une table...";
-                Text[ spanish ] = "~Insertar tabla";
-                Text[ finnish ] = "~Lisää taulukko";
-                Text[ italian ] = "~Inserisci tabella...";
-                Text[ danish ] = "~insert table";
-                Text[ swedish ] = "Kl~istra in tabell...";
-                Text[ polish ] = "~Wstaw tabelê...";
-                Text[ portuguese_brazilian ] = "~insert table";
-                Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ã®æŒ¿å…¥(~P)";
-                Text[ korean ] = "ì‹œíŠ¸ ë¶™ì—¬ë„£ê¸°(~P)";
-                Text[ chinese_simplified ] = "æ’å…¥è¡¨æ ¼(~P)...";
-                Text[ chinese_traditional ] = "æ’å…¥è¡¨æ ¼(~P)...";
-                Text[ turkish ] = "~insert table";
-                Text[ arabic ] = "ÅÏÑÇÌ ÌÏæá...";
-                Text[ catalan ] = "~Insereix la taula";
-                Text[ thai ] = "à¹~à¸—à¸£à¸à¸•à¸²à¸£à¸²à¸‡";
-            };
+        MenuItem { ITEM_EDIT_COPY       };
+        MenuItem { ITEM_EDIT_PASTE      };
+
         MenuItem
         {
             Separator = TRUE;
@@ -1047,64 +935,11 @@ Menu MENU_BROWSER_VIEWCONTEXT
         {
             Separator = TRUE;
         };
-        MenuItem { MID_DBAUI_DROP_VIEW  };
+        MenuItem { ITEM_EDIT_DELETE     };
         MenuItem { MID_RENAME_ENTRY     };
-        MenuItem
-        {
-            Identifier = ID_TREE_VIEW_COPY ;
-            HelpId = HID_BROWSER_VIEW_COPY ;
-            Text = "Ansicht ~kopieren" ;
-            Text [ english ] = "c~opy view" ;
-            Text [ english_us ] = "C~opy View" ;
-            Text[ portuguese ] = "C~opiar vista";
-                Text[ russian ] = "Êîïèğîâàòü âèä";
-                Text[ greek ] = "ÁíôéãñáöŞ ğñïâïëŞò";
-                Text[ dutch ] = "Beeld ~kopiëren";
-                Text[ french ] = "C~opier la vue";
-                Text[ spanish ] = "Copiar ~visualización";
-                Text[ finnish ] = "K~opioi näkymä";
-                Text[ italian ] = "Copia vista";
-                Text[ danish ] = "C~opy View";
-                Text[ swedish ] = "~Kopiera vy";
-                Text[ polish ] = "~Kopiuj widok";
-                Text[ portuguese_brazilian ] = "C~opy View";
-                Text[ japanese ] = "ãƒ“ãƒ¥ãƒ¼ã®ã‚³ãƒ”ãƒ¼(~O)";
-                Text[ korean ] = "ë³´ê¸° ë³µì‚¬(~O)";
-                Text[ chinese_simplified ] = "å¤åˆ¶è§†å›¾(~O)";
-                Text[ chinese_traditional ] = "è¤‡è£½æª¢è¦–(~O)";
-                Text[ turkish ] = "C~opy View";
-                Text[ arabic ] = "C~opy View";
-                Text[ catalan ] = "C~opia la vista";
-                Text[ thai ] = "~à¸„à¸±à¸”à¸¥à¸­à¸à¸¡à¸¸à¸¡à¸¡à¸­à¸‡";
-            };
-        MenuItem
-        {
-            Identifier = ID_TREE_VIEW_PASTE ;
-            HelpId = HID_BROWSER_VIEW_PASTE ;
-            Text = "Ansicht e~infügen" ;
-            Text [ english ] = "~insert view" ;
-            Text [ english_us ] = "~Paste View" ;
-            Text[ portuguese ] = "~Inserir vista";
-                Text[ russian ] = "Âñòàâèòü âèä";
-                Text[ greek ] = "Å~éóáãùãŞ ğñïâïëŞò";
-                Text[ dutch ] = "~Beeld invoegen";
-                Text[ french ] = "~Insérer une vue";
-                Text[ spanish ] = "~Insertar visualización";
-                Text[ finnish ] = "~Lisää näkymä";
-                Text[ italian ] = "~Inserisci vista";
-                Text[ danish ] = "~Insert View";
-                Text[ swedish ] = "Kl~istra in vy";
-                Text[ polish ] = "~Wstaw widok";
-                Text[ portuguese_brazilian ] = "~Insert View";
-                Text[ japanese ] = "ãƒ“ãƒ¥ãƒ¼ã®æŒ¿å…¥(~P)";
-                Text[ korean ] = "ë³´ê¸° ë¶™ì—¬ë„£ê¸°(~P)";
-                Text[ chinese_simplified ] = "æ’å…¥è§†å›¾(~P)";
-                Text[ chinese_traditional ] = "è²¼ä¸Šæª¢è¦–(~P)";
-                Text[ turkish ] = "~Insert View";
-                Text[ arabic ] = "~Insert View";
-                Text[ catalan ] = "~Insereix la vista";
-                Text[ thai ] = "à¹~à¸—à¸£à¸à¸¡à¸¸à¸¡à¸¡à¸­à¸‡";
-            };
+        MenuItem { ITEM_EDIT_COPY       };
+        MenuItem { ITEM_EDIT_PASTE      };
+
         MenuItem
         {
             Separator = TRUE;
