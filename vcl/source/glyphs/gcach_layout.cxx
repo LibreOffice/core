@@ -4,8 +4,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.2 $
- *  last change: $Author: hdu $ $Date: 2002-02-26 13:43:51 $
+ *  $Revision: 1.3 $
+ *  last change: $Author: hdu $ $Date: 2002-04-18 16:39:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,9 @@ ServerFontLayout* ServerFontLayoutEngine::operator()( ServerFont* pFont,
 #include <layout/LayoutEngine.h>
 #include <layout/LEFontInstance.h>
 #include <layout/LEScripts.h>
+#include <unicode/uscript.h>
+
+using namespace icu_2_0;
 
 // -----------------------------------------------------------------------
 
@@ -249,7 +252,9 @@ const void* IcuFontFromServerFont::getFontTable( LETag nICUTableTag ) const
 
     ULONG nLength;
     const unsigned char* pBuffer = mpServerFont->GetTable( pTagName, &nLength );
-fprintf(stderr,"IcuGetTable(\"%s\") => %p\n",pTagName,pBuffer);
+#ifdef DEBUG
+    fprintf(stderr,"IcuGetTable(\"%s\") => %p\n",pTagName,pBuffer);
+#endif
     return (const void*)pBuffer;
 }
 
@@ -270,16 +275,16 @@ le_int32 IcuFontFromServerFont::getUnitsPerEM() const
 
 // -----------------------------------------------------------------------
 
-void IcuFontFromServerFont::mapCharsToGlyphs( const LEUnicode chars[],
-    le_int32 offset, le_int32 count, le_bool reverse,
-    const LECharMapper* mapper, LEGlyphID glyphs[] ) const
+void IcuFontFromServerFont::mapCharsToGlyphs( const LEUnicode pChars[],
+    le_int32 nOffset, le_int32 nCount, le_bool bReverse,
+    const LECharMapper* pMapper, LEGlyphID pGlyphs[] ) const
 {
-    for( int i = 0; i < count; ++i )
-        glyphs[i] = mapCharToGlyph( chars[offset+i], mapper );
+    for( int i = 0; i < nCount; ++i )
+        pGlyphs[i] = mapCharToGlyph( pChars[nOffset+i], pMapper );
 
-    if( reverse )
+    if( bReverse )
     {
-        for( LEGlyphID *p1=glyphs, *p2=p1+count; p1 < --p2; ++p1 )
+        for( LEGlyphID *p1=pGlyphs, *p2=p1+nCount; p1 < --p2; ++p1 )
         {
             LEGlyphID t = *p1; *p1 = *p2; *p2 = t;
         }
@@ -346,7 +351,9 @@ float IcuFontFromServerFont::getXPixelsPerEm() const
 float IcuFontFromServerFont::getYPixelsPerEm() const
 {
     float fY = mpServerFont->GetFontSelData().mnHeight;
-fprintf(stderr,"mnHeight %d\n",(int)fY);
+#ifdef DEBUG
+    fprintf(stderr,"mnHeight %d\n",(int)fY);
+#endif
     return fY;
 }
 
@@ -354,7 +361,9 @@ fprintf(stderr,"mnHeight %d\n",(int)fY);
 
 float IcuFontFromServerFont::xUnitsToPoints( float xUnits ) const
 {
-fprintf(stderr,"xu2p\n");
+#ifdef DEBUG
+    fprintf(stderr,"xu2p\n");
+#endif
     // assumption: pixels==points
     float fPoints = xUnits;
     fPoints *= mpServerFont->GetFontSelData().mnWidth;
@@ -366,7 +375,9 @@ fprintf(stderr,"xu2p\n");
 
 float IcuFontFromServerFont::yUnitsToPoints( float yUnits ) const
 {
-fprintf(stderr,"yu2p\n");
+#ifdef DEBUG
+    fprintf(stderr,"yu2p\n");
+#endif
     // assumption: pixels==points
     float fPoints = yUnits;
     fPoints *= mpServerFont->GetFontSelData().mnHeight;
@@ -378,7 +389,9 @@ fprintf(stderr,"yu2p\n");
 
 void IcuFontFromServerFont::unitsToPoints( LEPoint &units, LEPoint &points ) const
 {
-fprintf(stderr,"pu2p\n");
+#ifdef DEBUG
+    fprintf(stderr,"pu2p\n");
+#endif
     points.fX = xUnitsToPoints( units.fX );
     points.fY = yUnitsToPoints( units.fY );
 }
@@ -387,7 +400,9 @@ fprintf(stderr,"pu2p\n");
 
 float IcuFontFromServerFont::xPixelsToUnits( float xPixels ) const
 {
-fprintf(stderr,"xp2u\n");
+#ifdef DEBUG
+    fprintf(stderr,"xp2u\n");
+#endif
     float fPixels = xPixels;
     fPixels *= mpServerFont->GetEmUnits();
     fPixels /= mpServerFont->GetFontSelData().mnWidth;
@@ -398,7 +413,9 @@ fprintf(stderr,"xp2u\n");
 
 float IcuFontFromServerFont::yPixelsToUnits( float yPixels ) const
 {
-fprintf(stderr,"yp2u\n");
+#ifdef DEBUG
+    fprintf(stderr,"yp2u\n");
+#endif
     float fPixels = yPixels;
     fPixels *= mpServerFont->GetEmUnits();
     fPixels /= mpServerFont->GetFontSelData().mnHeight;
@@ -409,7 +426,9 @@ fprintf(stderr,"yp2u\n");
 
 void IcuFontFromServerFont::pixelsToUnits( LEPoint &pixels, LEPoint &units ) const
 {
-fprintf(stderr,"pp2u\n");
+#ifdef DEBUG
+    fprintf(stderr,"pp2u\n");
+#endif
     units.fX = xPixelsToUnits( pixels.fX );
     units.fY = yPixelsToUnits( pixels.fY );
 }
@@ -418,7 +437,9 @@ fprintf(stderr,"pp2u\n");
 
 void IcuFontFromServerFont::transformFunits( float xFunits, float yFunits, LEPoint &pixels ) const
 {
-fprintf(stderr,"tfu\n");
+#ifdef DEBUG
+    fprintf(stderr,"tfu\n");
+#endif
     //TODO: replace dummy implementation
     Point aOrig( (int)(xFunits + 0.5), (int)(yFunits + 0.5) );
     Point aDest = mpServerFont->TransformPoint( aOrig );
@@ -431,8 +452,10 @@ fprintf(stderr,"tfu\n");
 class IcuLayoutEngine : public ServerFontLayoutEngine
 {
 private:
-    LayoutEngine*           mpIcuLE;
     IcuFontFromServerFont   maIcuFont;
+
+    le_int32                meScriptCode;
+    LayoutEngine*           mpIcuLE;
 
 public:
                             IcuLayoutEngine( FreetypeServerFont* pServerFont );
@@ -445,21 +468,10 @@ public:
 // -----------------------------------------------------------------------
 
 IcuLayoutEngine::IcuLayoutEngine( FreetypeServerFont* pServerFont )
-:   mpIcuLE( NULL ),
-    maIcuFont( pServerFont )
-{
-    le_int32 eLangCode = 0;
-    le_int32 eScriptCode = /*TODO*/ thaiScriptCode;
-    //le_int32 eScriptCode = arabScriptCode;
-
-    LEErrorCode rcIcu = LE_NO_ERROR;
-    mpIcuLE = LayoutEngine::layoutEngineFactory( &maIcuFont, eScriptCode, eLangCode, rcIcu );
-    if( LE_FAILURE(rcIcu) )
-    {
-        delete mpIcuLE;
-        mpIcuLE = NULL;
-    }
-}
+:   maIcuFont( pServerFont ),
+    mpIcuLE( NULL ),
+    meScriptCode( USCRIPT_INVALID_CODE )
+{}
 
 // -----------------------------------------------------------------------
 
@@ -487,10 +499,40 @@ ServerFontLayout* IcuLayoutEngine::operator()( ServerFont* pFont,
             pIcuChars[ic] = static_cast<LEUnicode>( rArgs.mpStr[ic] );
     }
 
+    UErrorCode rcI18n = U_ZERO_ERROR;
+    LEErrorCode rcIcu = LE_NO_ERROR;
+
+    // find matching script
+    // TODO: handle errors better
+    // TODO: consider script changes
+    le_int32 eScriptCode = uscript_getScript( pIcuChars[0], &rcI18n );
+
+    // get layout engine matching to this script
+    // no engine change necessary if script is latin
+    if( (meScriptCode != eScriptCode)
+    &&   (eScriptCode > USCRIPT_INHERITED)
+    &&   (eScriptCode != latnScriptCode) )
+    {
+        // TODO: cache multiple layout engines when multiple scripts are used
+        delete mpIcuLE;
+        meScriptCode = eScriptCode;
+        le_int32 eLangCode = 0;
+        mpIcuLE = LayoutEngine::layoutEngineFactory( &maIcuFont, eScriptCode, eLangCode, rcIcu );
+        if( LE_FAILURE(rcIcu) )
+        {
+            delete mpIcuLE;
+            mpIcuLE = NULL;
+        }
+    }
+
+    // fall back to default layout if needed
+    if( !mpIcuLE )
+        return aSimpleLayoutEngine( pFont, rArgs );
+
+    // TODO: split up BiDi runs
     le_bool bRightToLeft = (SAL_LAYOUT_BIDI_RTL & rArgs.mnFlags) != 0;
 
-    // forward to ICU layout engine
-    LEErrorCode rcIcu = LE_NO_ERROR;
+    // run ICU layout engine
     int nGlyphCount = mpIcuLE->layoutChars( pIcuChars, rArgs.mnFirstCharIndex,
         rArgs.mnEndCharIndex - rArgs.mnFirstCharIndex, rArgs.mnLength,
         bRightToLeft, 0.0, 0.0, rcIcu );
@@ -554,17 +596,8 @@ bool FreetypeServerFont::InitLayoutEngine()
 {
     // find best layout engine for font, platform, script and language
 #ifdef ENABLE_ICU_LAYOUT
-    ULONG nLength;
-    if( GetTable("GSUB",&nLength) || GetTable("GPOS",&nLength) )
-    {
-        IcuLayoutEngine* pLE = new IcuLayoutEngine( this );
-        if( !pLE->IsReady() )
-        {
-            delete pLE;
-            pLE = NULL;
-        }
-        mpLayoutData = (void*)pLE;
-    }
+    IcuLayoutEngine* pLE = new IcuLayoutEngine( this );
+    mpLayoutData = (void*)pLE;
 #endif // ENABLE_ICU_LAYOUT
 
     return (mpLayoutData != NULL);
