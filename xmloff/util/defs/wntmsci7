@@ -8242,3 +8242,4 @@ _real@8@bffdf1a9fbe76c8b4000
 ?clear@?$_Rb_tree@VOUString@rtl@@V12@U?$_Identity@VOUString@rtl@@@_STL@@U?$less@VOUString@rtl@@@4@V?$allocator@VOUString@rtl@@@4@@_STL@@QAEXXZ
 ?encounteredAttribute@OPropertyImport@xmloff@@IBEEABVOUString@rtl@@@Z
 ?simluateDefaultedAttribute@OPropertyImport@xmloff@@IAEXPBDABVOUString@rtl@@0@Z
+?applyTableSimple@SchXMLTableHelper@@SAXABUSchXMLTable@@V?$Reference@VXChartDocument@chart@star@sun@com@@@uno@star@sun@com@@@Z
