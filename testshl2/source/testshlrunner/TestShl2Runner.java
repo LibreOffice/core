@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestShl2Runner.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-21 13:21:47 $
+ *  last change: $Author: lla $ $Date: 2003-01-22 06:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,6 +540,13 @@ public class TestShl2Runner
             return res;
         }
 
+    public String getSignalFileParameter()
+    {
+        String sParameter;
+        sParameter = " -sf /var/tmp/signalfile_" + m_sProjectName + "_" + m_sEnvironment + ".txt ";
+        return sParameter;
+    }
+
     public String getLogParameter(String job)
     {
         String sParameter = " -log " + getLogName(job) + " ";
@@ -663,15 +670,24 @@ public class TestShl2Runner
             out.write(ls);
         }
 
-    public void do_cvs(FileWriter out, String _sPreExec) throws IOException
+    public void do_cvs(FileWriter out, String _sPreExec, ArrayList _aJobList) throws IOException
         {
+            String fs = System.getProperty("file.separator");
             String ls = System.getProperty("line.separator");
-            out.write(getRemark() + " do a cvs and a dmake" + ls);
             out.write(getChangeDirFkt() + " " + getInputDir() + ls);
-            // setenv VCSID lla
-            // set VCSID=lla
-            out.write(getRemark() + " " + _sPreExec + " " + "cvs update -d" + ls);
-            out.write(getRemark() + " " + _sPreExec + " " + "dmake -u" + ls);
+            out.write(getRemark() + " do a cvs and a dmake" + ls);
+
+            out.write(_sPreExec + " " + "cvs -d" + m_aProps.getProperty("CVSROOT") + " update -d" + ls);
+
+            for (int i=0; i<_aJobList.size();i++)
+            {
+                String sJob = (String) _aJobList.get(i);
+
+                out.write(getChangeDirFkt() + " " + getInputDir() + fs + sJob + ls);
+                // setenv VCSID lla
+                // set VCSID=lla
+                out.write(_sPreExec + " " + "dmake -u" + ls);
+            }
             out.write(ls);
         }
 
@@ -689,7 +705,7 @@ public class TestShl2Runner
             {
                 String sLine = (String) _aJobList.get(i);
                 // String sJob = getJob(sLine);
-                out.write(_sPreExec + " " + m_aProps.getProperty("TESTTOOL") + " " + getLibName(sLine, m_sEnvironment) + getLogParameter(sLine) + ls);
+                out.write(_sPreExec + " " + m_aProps.getProperty("TESTTOOL") + " " + getLibName(sLine, m_sEnvironment) + getLogParameter(sLine) + getSignalFileParameter() + ls);
             }
             out.write(ls);
         }
@@ -710,7 +726,7 @@ public class TestShl2Runner
 
             String sBatchPreExec = "call";
             do_setsolar(out, sBatchPreExec);
-            do_cvs(out, sBatchPreExec);
+            do_cvs(out, sBatchPreExec, _aJobList);
             do_testtool(out, sBatchPreExec, _aJobList);
 
             PreNPost(out, "POST");
@@ -745,7 +761,7 @@ public class TestShl2Runner
 
             String sBatchPreExec = "";
             do_setsolar(out, sBatchPreExec);
-            do_cvs(out, sBatchPreExec);
+            do_cvs(out, sBatchPreExec, _aJobList);
             do_testtool(out, sBatchPreExec, _aJobList);
 
             PreNPost(out, "POST");
