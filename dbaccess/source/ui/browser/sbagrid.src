@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:50:26 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,7 +392,7 @@ String STR_OBJECT_ALREADY_EXISTS
     Text[ english_us ] = "The name \"#\" already exists.";
     Text[ portuguese ] = "O nome # jα existe.";
     Text[ russian ] = "Θμÿ # σζε ρσωερςβσες.";
-    Text[ greek ] = "The name # already exists.";
+    Text[ greek ] = "Το όνομα # υπάρχει ήδη.";
     Text[ dutch ] = "De naam # bestaat reeds.";
     Text[ french ] = "Le nom # existe dιjΰ.";
     Text[ spanish ] = "El nombre \"#\" ya existe.";
@@ -424,7 +424,7 @@ String STR_NO_COLUMNNAME_MATCHING
     Text[ english_us ] = "No matching column names were found.";
     Text[ portuguese ] = "Foi impossνvel encontrar nomes de colunas correspondentes!";
     Text[ russian ] = "Νε νΰιδενξ ρξξςβεςρςβσώωθυ θμεν ρςξλαφξβ.";
-    Text[ greek ] = "No matching column names found.";
+    Text[ greek ] = "Δεν βρέθηκαν ονόματα στηλών που να συμφωνούν.";
     Text[ dutch ] = "Geen overeenstemmende kolomnamen gevonden!";
     Text[ french ] = "Impossible de dιtecter les noms de colonnes correspondants !";
     Text[ spanish ] = "No se encontraron nombres de columna idιnticos.";
@@ -455,7 +455,7 @@ String STR_ERROR_OCCURED_WHILE_COPYING
     Text[ english_us ] = "An error occurred. Do you want to continue copying?";
     Text[ portuguese ] = "Ocorreu um erro. Continuar o processo de cσpia?";
     Text[ russian ] = "Ξψθακΰ. Οπξδξλζθςό κξοθπξβΰνθε?";
-    Text[ greek ] = "A error occured. Would you like to continue the copying?";
+    Text[ greek ] = "Παρουσιάστηκε σφάλμα. Θέλετε να συνεχιστεί η αντιγραφή;";
     Text[ dutch ] = "Er is een fout opgetreden. Wilt u doorgaan met kopiλren?";
     Text[ french ] = "Une erreur est survenue ! Continuer le processus de copie ?";
     Text[ spanish ] = "‘Ha ocurrido un error! ΏDesea continuar el proceso de copia?";
@@ -504,7 +504,7 @@ String STR_DATASOURCE_GRIDCONTROL_NAME
     Text[ czech ] = "TabulkovΓ½ pohled na zdroj dat";
     Text[ hebrew ] = "Tabellenansicht der Datenquelle";
     Text[ catalan ] = "Data source table view";
-    Text[ portuguese_brazilian ] = "Data source table view";
+    Text[ portuguese_brazilian ] = "Visualizar tabelas da fonte de dados";
     Text[ thai ] = "Data source table view";
     Text[ hindi ] = "Data source table view";
     Text[ slovak ] = "TabuΔΎkovΓ½ pohΔΎad na zdroj dΓ‘t";
@@ -535,11 +535,12 @@ String STR_DATASOURCE_GRIDCONTROL_DESC
     Text[ czech ] = "Zobrazit vybranou tabulku nebo dotaz.";
     Text[ hebrew ] = "Zeigt die ausgewΓ€hlte Tabelle oder Abfrage an.";
     Text[ catalan ] = "Shows the selected table or query.";
-    Text[ portuguese_brazilian ] = "Shows the selected table or query.";
+    Text[ portuguese_brazilian ] = "Mostra as tabelas ou consultas selecionadas";
     Text[ thai ] = "Shows the selected table or query.";
     Text[ hindi ] = "Shows the selected table or query.";
     Text[ slovak ] = "UkΓ‘ΕΎe vybranΓΊ tabuΔΎku alebo dotaz.";
 };
+
 
 
 
