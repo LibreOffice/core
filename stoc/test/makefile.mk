@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2001-11-07 11:12:32 $
+#   last change: $Author: jbu $ $Date: 2001-12-07 16:24:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,7 @@ TARGET5=testinvocation
 TARGET6=testintrosp
 TARGET7=testconv
 TARGET8=testproxyfac
+TARGET9=testsmgr2
 TARGETTYPE=CUI
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
@@ -191,14 +192,25 @@ APP8STDLIBS= \
 APP8STDLIBS+=	$(LIBCIMT)
 .ENDIF
 
+# --- Application 9 - testproxyfac main ------------------------------------
+APP9TARGET= 	$(TARGET9)
+APP9OBJS  = 	$(OBJ)$/testsmgr2.obj 
+APP9STDLIBS= \
+        $(CPPULIB) 		\
+        $(CPPUHELPERLIB) 	\
+        $(SALLIB)
+
+
 ALLIDLFILES:=	testcorefl.idl language_binding.idl testintrosp.idl
 
 
 # --- Target ------------------------------------------------
 
 .IF "$(depend)" == ""
-ALL : 	$(MISC)$/test_types_generated.flag	\
-        ALLTAR 
+ALL : 	$(MISC)$/test_types_generated.flag \
+    $(BIN)$/test1.rdb 		   \
+    $(BIN)$/test2.rdb		   \
+    ALLTAR
 .ELSE
 ALL: 		ALLDEP
 .ENDIF
@@ -222,13 +234,28 @@ FACTORYTYPES:= 	-T com.sun.star.lang.XSingleComponentFactory \
         -T com.sun.star.registry.XImplementationRegistration \
         -T com.sun.star.container.XSet \
         -T com.sun.star.lang.XSingleServiceFactory\
-        -T com.sun.star.lang.XServiceInfo
+        -T com.sun.star.lang.XServiceInfo \
+        -T com.sun.star.container.XContentEnumerationAccess \
+        -T com.sun.star.container.XEnumeration
 
+.IF "$(GUI)"=="WNT"
+MY_DLLPOSTFIX=.dll
+MY_DLLPREFIX=
+.ELSE
+MY_DLLPOSTFIX=.so
+MY_DLLPREFIX=lib
+.ENDIF
 TESTCOREFL:=ModuleC;ModuleC.XInterfaceA;ModuleC.XInterfaceB;ModuleA.XInterface1;com.sun.star.reflection.XIdlReflection;com.sun.star.reflection.XIdlField;com.sun.star.reflection.XIdlArray;com.sun.star.reflection.XIdlMethod;com.sun.star.reflection.XIdlClass;com.sun.star.beans.XPropertySet;com.sun.star.lang.XComponent;com.sun.star.container.XHierarchicalNameAccess;com.sun.star.reflection.XIdlField2
 TESTIADAPTER:=com.sun.star.beans.XIntrospection;com.sun.star.beans.MethodConcept;com.sun.star.beans.XExactName;com.sun.star.lang.XTypeProvider;com.sun.star.uno.XAggregation;com.sun.star.script.XInvocationAdapterFactory;com.sun.star.script.XInvocation;com.sun.star.lang.XMultiServiceFactory;com.sun.star.registry.XSimpleRegistry;com.sun.star.lang.XInitialization;test.XLanguageBindingTest
 TESTINTROSP:=ModuleA;ModuleA.XIntroTest;com.sun.star.beans.XPropertySet;com.sun.star.container.XIndexAccess;com.sun.star.container.XNameAccess;com.sun.star.beans.PropertyAttribute;com.sun.star.beans.PropertyConcept
 TESTCONV:=com.sun.star.script.XTypeConverter
 TESTPROXYFAC:=com.sun.star.reflection.XProxyFactory
+
+$(BIN)$/test1.rdb:
+    +cd $(BIN) && regcomp -register -r test1.rdb -c $(MY_DLLPREFIX)at$(MY_DLLPOSTFIX)
+
+$(BIN)$/test2.rdb:
+    +cd $(BIN) && regcomp -register -r test2.rdb -c $(MY_DLLPREFIX)remotebridge$(MY_DLLPOSTFIX)
 
 $(BIN)$/stoctest.rdb: $(ALLIDLFILES)
     +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
