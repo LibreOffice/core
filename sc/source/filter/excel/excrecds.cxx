@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:34:48 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@
 #include "stlsheet.hxx"
 #include "stlpool.hxx"
 #include "editutil.hxx"
+#include "errorcodes.hxx"
 
 #include "excrecds.hxx"
 #include "excdoc.hxx"
@@ -1334,10 +1335,9 @@ void ExcFormula::SaveDiff( XclExpStream& rStrm )
                 }
                 else
                 {
-                    BYTE nByte = ScErrorCodeToExc(nErrorCode);
                     rStrm << (UINT8)0x02
                           << (UINT8)0
-                          << (UINT8)nByte
+                          << XclTools::GetXclErrorCode( nErrorCode )
                           << (UINT16)0 << (UINT8)0
                           << (UINT16)0xFFFF;
                 }
@@ -1390,34 +1390,6 @@ UINT16 ExcFormula::GetNum( void ) const
 ULONG ExcFormula::GetDiffLen( void ) const
 {
     return 16 + nFormLen;
-}
-
-BYTE ExcFormula::ScErrorCodeToExc(UINT16 nErrorCode)
-{
-    BYTE nRetVal;
-
-    switch(nErrorCode)
-    {
-        case errIllegalFPOperation:     //503 to #DIV/0
-            nRetVal = 0x07;
-            break;
-        case errNoValue :               //519 to #VALUE (wrong argument or operand)
-            nRetVal = 0x0F;
-            break;
-        case errNoCode:                 //521 to #NULL
-            nRetVal = 0x00;
-            break;
-        case errNoRef:                  //524 to #REF(cell referral not valid)
-            nRetVal = 0x17;
-            break;
-        case errNoName:                 //525 to #NAME (does not recognise text)
-            nRetVal = 0x1D;
-            break;
-        default:
-            nRetVal = 0x0F;             // all others to #VALUE
-            break;
-    }
-    return nRetVal;
 }
 
 
