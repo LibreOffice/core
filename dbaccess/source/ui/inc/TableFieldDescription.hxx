@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldDescription.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-30 11:08:26 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:54:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,8 @@
 #ifndef _RTL_USTRING_
 #include <rtl/ustring>
 #endif
-#ifndef _COM_SUN_STAR_IO_XOBJECTOUTPUTSTREAM_HPP_
-#include <com/sun/star/io/XObjectOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOBJECTINPUTSTREAM_HPP_
-#include <com/sun/star/io/XObjectInputStream.hpp>
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
@@ -180,8 +177,8 @@ namespace dbaui
         void                    NextOrderDir();
         const ::std::vector< ::rtl::OUString>&  GetCriteria() const { return m_vecCriteria;}
 
-        void Load(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxIn);
-        void Save(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOut);
+        void Load(const ::com::sun::star::beans::PropertyValue& _rProperty);
+        void Save(::com::sun::star::beans::PropertyValue& _rProperty);
     };
 
     //------------------------------------------------------------------
