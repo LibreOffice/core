@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 08:45:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,6 @@ public:
     DWORD                   mnAppThreadId;          // Id from Applikation-Thread
     WIN_BOOL                mbScrSvrEnabled;        // ScreenSaver enabled
     int                     mnSageStatus;           // status of Sage-DLL (DISABLE_AGENT == nicht vorhanden)
-    HINSTANCE               mhSageInst;             // instance handle for the Sage-DLL
     SysAgt_Enable_PROC      mpSageEnableProc;       // funktion to deactivate the system agent
     SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none
     TempFontItem*           mpTempFontItem;
