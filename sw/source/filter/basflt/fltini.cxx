@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 13:44:45 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 12:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1132,6 +1132,7 @@ const LangNameMap *GetLangNameMap()
         {LANGUAGE_ENGLISH_TRINIDAD,         "ENGLISH (TRINIDAD)"    },
         {LANGUAGE_ENGLISH_ZIMBABWE,         "ENGLISH (ZIMBABWE)"    },
         {LANGUAGE_ENGLISH_PHILIPPINES,      "ENGLISH (PHILIPPINES)" },
+        {LANGUAGE_USER_ESPERANTO,           "ESPERANTO"             },
         {LANGUAGE_ESTONIAN,                 "ESTONIAN"              },
         {LANGUAGE_FAEROESE,                 "FAEROESE"              },
         {LANGUAGE_FARSI,                    "FARSI"                 },
