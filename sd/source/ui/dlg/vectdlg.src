@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vectdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:45 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ ModalDialog DLG_VECTORIZE
         Text [ ENGLISH ] = "~Preview" ;
         Text [ english_us ] = "Preview" ;
         Text[ italian ] = "Anteprima";
-        Text[ portuguese_brazilian ] = "~Preview";
+        Text[ portuguese_brazilian ] = "Visualizar";
         Text[ portuguese ] = "~Previsualizar";
         Text[ danish ] = "Eksempel";
         Text[ french ] = "AperÁu";
@@ -122,17 +122,20 @@ ModalDialog DLG_VECTORIZE
         Text[ spanish ] = "~PrevisualizaciÛn";
         Text[ chinese_simplified ] = "È¢ÑËßà";
         Text[ russian ] = "~œÓÒÏÓÚ";
-        Text[ polish ] = "Podglπ~d";
+        Text[ polish ] = "Podglπd";
         Text[ japanese ] = "„Éó„É¨„Éì„É•„Éº";
         Text[ chinese_traditional ] = "È†êË¶Ω";
         Text[ arabic ] = "„⁄«Ì‰…";
         Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
-        Text[ korean ] = "ÎØ∏Î¶¨Î≥¥Í∏∞";
+        Text[ korean ] = "ÎØ∏Î¶¨ Î≥¥Í∏∞";
         Text[ turkish ] = "÷nizleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Previsualitza";
         Text[ finnish ] = "Esikatselu";
         Text[ thai ] = "‡πÅ‡∏™‡∏î‡∏á‡∏ï‡∏±‡∏ß‡∏≠‡∏¢‡πà‡∏≤‡∏á";
+        Text[ czech ] = "N√°hled";
+        Text[ hebrew ] = "~Vorschau";
+        Text[ hindi ] = "‡§™‡•Ç‡§∞‡•ç‡§µ‡§¶‡•É‡§∂‡•ç‡§Ø";
     };
 
     FixedLine GRP_SETTINGS
@@ -149,7 +152,7 @@ ModalDialog DLG_VECTORIZE
         Text [ swedish ] = "Inst‰llningar" ;
         Text [ danish ] = "Indstillinger" ;
         Text [ portuguese ] = "DefiniÁıes" ;
-        Text [ portuguese_brazilian ] = "Einstellungen" ;
+        Text [ portuguese_brazilian ] = "DefiniÁıes" ;
         Text[ chinese_simplified ] = "ËÆæÂÆö";
         Text[ russian ] = "Õ‡ÒÚÓÈÍË";
         Text[ polish ] = "Ustawienia";
@@ -163,6 +166,9 @@ ModalDialog DLG_VECTORIZE
         Text[ catalan ] = "ConfiguraciÛ";
         Text[ finnish ] = "Asetukset";
         Text[ thai ] = "‡∏Å‡∏≥‡∏´‡∏ô‡∏î";
+        Text[ czech ] = "Nastaven√≠";
+        Text[ hebrew ] = "‚ÄÆ◊î◊í◊ì◊®◊ï◊™‚Ä¨";
+        Text[ hindi ] = "Settings";
     };
 
     FixedText FT_LAYERS
@@ -173,7 +179,7 @@ ModalDialog DLG_VECTORIZE
         Text [ ENGLISH ] = "~Number of colors:";
         Text [ english_us ] = "Number of colors:";
         Text[ italian ] = "~Numero colori:";
-        Text[ portuguese_brazilian ] = "~Number of colors:";
+        Text[ portuguese_brazilian ] = "Quantidade de cores";
         Text[ portuguese ] = "~Quantidade de cores:";
         Text[ danish ] = "Antal farver:";
         Text[ french ] = "~Nombre de couleurs :";
@@ -193,6 +199,9 @@ ModalDialog DLG_VECTORIZE
         Text[ catalan ] = "Nombre de colors:";
         Text[ finnish ] = "V‰rien m‰‰r‰:";
         Text[ thai ] = "‡∏à‡∏≥‡∏ô‡∏ß‡∏ô‡∏™‡∏µ:";
+        Text[ czech ] = "Poƒçet barev:";
+        Text[ hebrew ] = "~Farbanzahl:";
+        Text[ hindi ] = "‡§∞‡§Ç‡§ó‡•ã‡§Ç ‡§ï‡•Ä ‡§∏‡§Ç‡§ñ‡•ç‡§Ø‡§æ:";
     };
 
     NumericField NM_LAYERS
@@ -219,7 +228,7 @@ ModalDialog DLG_VECTORIZE
         Text [ ENGLISH ] = "~Point reduction:";
         Text [ english_us ] = "Point reduction:";
         Text[ italian ] = "Riduzione punti:";
-        Text[ portuguese_brazilian ] = "~Point reduction:";
+        Text[ portuguese_brazilian ] = "ReduÁ„o de pontos:";
         Text[ portuguese ] = "~ReduÁ„o de pontos:";
         Text[ danish ] = "Punktreduktion:";
         Text[ french ] = "~RÈduction de points :";
@@ -239,6 +248,9 @@ ModalDialog DLG_VECTORIZE
         Text[ catalan ] = "~ReducciÛ de punts:";
         Text[ finnish ] = "Pisteiden v‰hennys:";
         Text[ thai ] = "‡∏•‡∏î‡∏à‡∏∏‡∏î:";
+        Text[ czech ] = "Redukce bod≈Ø:";
+        Text[ hebrew ] = "~Punkt-Reduktion:";
+        Text[ hindi ] = "‡§¨‡§ø‡§®‡•ç‡§¶‡•Å ‡§ò‡§ü‡§æ‡§®‡§æ:";
     };
 
     MetricField MT_REDUCE
@@ -268,7 +280,7 @@ ModalDialog DLG_VECTORIZE
         Text [ ENGLISH ] = "~Fill holes";
         Text [ english_us ] = "~Fill holes:";
         Text[ italian ] = "Riempi vuoti:";
-        Text[ portuguese_brazilian ] = "~Fill holes:";
+        Text[ portuguese_brazilian ] = "~Preencher buracos:";
         Text[ portuguese ] = "~Preencher buracos:";
         Text[ danish ] = "Fyld huller:";
         Text[ french ] = "~Boucher les trous";
@@ -277,7 +289,7 @@ ModalDialog DLG_VECTORIZE
         Text[ spanish ] = "Rellenar agujeros";
         Text[ chinese_simplified ] = "Â°´ÂÖÖÁ©∫Ê¥û(~F)";
         Text[ russian ] = "~«‡ÔÓÎÌËÚ¸ ‰˚˚";
-        Text[ polish ] = "Wype≥nij puste miejsca";
+        Text[ polish ] = "~Wype≥nij puste miejsca:";
         Text[ japanese ] = "Á©¥„ÇíÂ°ó„Çä„Å§„Å∂„Åô(~F)";
         Text[ chinese_traditional ] = "Â°´ÂÖÖÁ©∫Ê¥û(~F)";
         Text[ arabic ] = " ⁄»∆… «·ÀﬁÊ»";
@@ -288,6 +300,9 @@ ModalDialog DLG_VECTORIZE
         Text[ catalan ] = "~Emplena els forats:";
         Text[ finnish ] = "~T‰yt‰ aukot";
         Text[ thai ] = "‡πÄ~‡∏ï‡∏¥‡∏°‡∏£‡∏π:";
+        Text[ czech ] = "V√Ωpl≈à dƒõr:";
+        Text[ hebrew ] = "~L√∂cher f√ºllen";
+        Text[ hindi ] = "~‡§õ‡•á‡§¶‡•ã‡§Ç ‡§ï‡•ã ‡§≠‡§∞‡•ã:";
     };
 
     FixedText FT_FILLHOLES
@@ -298,7 +313,7 @@ ModalDialog DLG_VECTORIZE
         Text [ ENGLISH ] = "~Tile size:";
         Text [ english_us ] = "Tile size:";
         Text[ italian ] = "Dimensione piastrella:";
-        Text[ portuguese_brazilian ] = "~Tile size:";
+        Text[ portuguese_brazilian ] = "Tamanho do mosaico:";
         Text[ portuguese ] = "~Tamanho do azulejo:";
         Text[ danish ] = "Flisest¯rrelse:";
         Text[ french ] = "~Taille de carrelage :";
@@ -307,7 +322,7 @@ ModalDialog DLG_VECTORIZE
         Text[ spanish ] = "~TamaÒo del mosaico:";
         Text[ chinese_simplified ] = "Âπ≥Èì∫Â§ßÂ∞èÔºö";
         Text[ russian ] = "~–‡ÁÏÂ ÏÓÁ‡ËÍË:";
-        Text[ polish ] = "WielkoúÊ p≥ytek:";
+        Text[ polish ] = "Rozmiar p≥ytek:";
         Text[ japanese ] = "„Çø„Ç§„É´„ÅÆ„Çµ„Ç§„Ç∫:";
         Text[ chinese_traditional ] = "Âπ≥Èã™Â§ßÂ∞èÔºö";
         Text[ arabic ] = "ÕÃ„ «·»·«ÿ:";
@@ -318,6 +333,9 @@ ModalDialog DLG_VECTORIZE
         Text[ catalan ] = "~Mida del mirall:";
         Text[ finnish ] = "T‰ytelohkojen koko:";
         Text[ thai ] = "‡∏Ç‡∏ô‡∏≤‡∏î‡πÅ‡∏ö‡∏ö‡∏Å‡∏£‡∏∞‡πÄ‡∏ö‡∏∑‡πâ‡∏≠‡∏á:";
+        Text[ czech ] = "Velikost dla≈ædic:";
+        Text[ hebrew ] = "~Kachelgr√∂√üe:";
+        Text[ hindi ] = "‡§ü‡§á‡§≤ ‡§™‡§∞‡§ø‡§Æ‡§æ‡§£:";
     };
 
     MetricField MT_FILLHOLES
@@ -346,7 +364,7 @@ ModalDialog DLG_VECTORIZE
         Text [ ENGLISH ] = "Source image:";
         Text [ english_us ] = "Source picture:";
         Text[ italian ] = "Immagine originale:";
-        Text[ portuguese_brazilian ] = "Source image:";
+        Text[ portuguese_brazilian ] = "Imagem de origem:";
         Text[ portuguese ] = "Imagem original:";
         Text[ danish ] = "Oprindeligt billede:";
         Text[ french ] = "Image d'origine :";
@@ -366,6 +384,9 @@ ModalDialog DLG_VECTORIZE
         Text[ catalan ] = "Imatge font:";
         Text[ finnish ] = "L‰hdekuva";
         Text[ thai ] = "‡πÅ‡∏´‡∏•‡πà‡∏á‡∏£‡∏π‡∏õ‡∏†‡∏≤‡∏û:";
+        Text[ czech ] = "Zdrojov√Ω obr√°zek:";
+        Text[ hebrew ] = "Originalbild:";
+        Text[ hindi ] = "‡§Æ‡•Ç‡§≤ ‡§ö‡§ø‡§§‡•ç‡§∞:";
     };
 
     Control CTL_BMP
@@ -383,7 +404,7 @@ ModalDialog DLG_VECTORIZE
         Text [ ENGLISH ] = "Vectorized image:";
         Text [ english_us ] = "Vectorized image:";
         Text[ italian ] = "Immagine vettoriale:";
-        Text[ portuguese_brazilian ] = "Vectorized image:";
+        Text[ portuguese_brazilian ] = "Imagem vetorizada:";
         Text[ portuguese ] = "Imagem vectorizada:";
         Text[ danish ] = "Vektoriseret billede:";
         Text[ french ] = "Image vectorielle :";
@@ -392,7 +413,7 @@ ModalDialog DLG_VECTORIZE
         Text[ spanish ] = "Imagen vectorizada:";
         Text[ chinese_simplified ] = "Áü¢ÈáèÂõæÂÉèÔºö";
         Text[ russian ] = "¬ÂÍÚÓÌÓÂ ËÁÓ·‡ÊÂÌËÂ:";
-        Text[ polish ] = "Obraz zwektorowany:";
+        Text[ polish ] = "Obraz wektorowy:";
         Text[ japanese ] = "„Éô„ÇØ„ÇøÊñπÂºè„ÅÆÁîªÂÉè";
         Text[ chinese_traditional ] = "ÂêëÈáèÂΩ±ÂÉèÔºö";
         Text[ arabic ] = "’Ê—… ›ﬂ Ê—Ì…:";
@@ -403,6 +424,9 @@ ModalDialog DLG_VECTORIZE
         Text[ catalan ] = "Imatge amb format vectorial:";
         Text[ finnish ] = "Vektorikuva";
         Text[ thai ] = "‡∏†‡∏≤‡∏û‡πÅ‡∏ö‡∏ö‡πÄ‡∏ß‡∏Ñ‡πÄ‡∏ï‡∏≠‡∏£‡πå:";
+        Text[ czech ] = "Vektorov√Ω obr√°zek:";
+        Text[ hebrew ] = "Vektorisiertes Bild:";
+        Text[ hindi ] = "‡§µ‡•á‡§ï‡•ç‡§ü‡§∞‡§á‡§∏‡•ç‡§° ‡§ö‡§ø‡§§‡•ç‡§∞:";
     };
 
     Control CTL_WMF
@@ -420,7 +444,7 @@ ModalDialog DLG_VECTORIZE
         Text [ ENGLISH ] = "Progress";
         Text [ english_us ] = "Progress";
         Text[ italian ] = "Progresso";
-        Text[ portuguese_brazilian ] = "Progress";
+        Text[ portuguese_brazilian ] = "Progresso";
         Text[ portuguese ] = "Progress„o";
         Text[ danish ] = "Fremgang";
         Text[ french ] = "Progression";
@@ -435,11 +459,14 @@ ModalDialog DLG_VECTORIZE
         Text[ arabic ] = "«· ﬁœ„";
         Text[ greek ] = "–Ò¸Ô‰ÔÚ";
         Text[ korean ] = "ÏßÑÌñâ ÏÉÅÌÉú";
-        Text[ turkish ] = "Art˝˛";
+        Text[ turkish ] = "›lerleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "ProgrÈs";
         Text[ finnish ] = "Eteneminen";
         Text[ thai ] = "‡∏Ñ‡∏∑‡∏ö‡∏´‡∏ô‡πâ‡∏≤";
+        Text[ czech ] = "Pr≈Øbƒõh";
+        Text[ hebrew ] = "Fortschritt";
+        Text[ hindi ] = "Progress";
     };
 
     Window WND_PRGS
@@ -450,7 +477,7 @@ ModalDialog DLG_VECTORIZE
         Size = MAP_APPFONT ( 188, 10 ) ;
     };
     Text[ italian ] = "Converti in poligono";
-    Text[ portuguese_brazilian ] = "Convert to polygon";
+    Text[ portuguese_brazilian ] = "Converter num PolÌgono";
     Text[ portuguese ] = "Converter em polÌgono";
     Text[ danish ] = "Konverter til polygon";
     Text[ french ] = "Convertir en polygone";
@@ -470,7 +497,23 @@ ModalDialog DLG_VECTORIZE
     Text[ catalan ] = "Convertir en un polÌgon";
     Text[ finnish ] = "Muunna monikulmioksi";
     Text[ thai ] = "‡πÅ‡∏õ‡∏•‡∏á‡∏Å‡∏•‡∏±‡∏ö‡πÄ‡∏õ‡πá‡∏ô‡∏£‡∏π‡∏õ‡∏´‡∏•‡∏≤‡∏¢‡πÄ‡∏´‡∏•‡∏µ‡πà‡∏¢‡∏°";
+    Text[ czech ] = "P≈ôev√©st na mnoho√∫heln√≠k";
+    Text[ hebrew ] = "In Polygon umwandeln";
+    Text[ hindi ] = "‡§¨‡§π‡•Å‡§≠‡•Å‡§ú ‡§Æ‡•á‡§Ç ‡§¨‡§¶‡§≤‡•ã";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
