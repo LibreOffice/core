@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HStorageMap.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 09:42:43 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 11:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,15 +137,6 @@ namespace connectivity
     //........................................................................
 //........................................................................
 }   // namespace connectivity
-
-#if OSL_DEBUG_LEVEL > 0
-#include <stdio.h>
-//#include <process.h>
-
-DECLARE_STL_USTRINGACCESS_MAP(FILE *,TDebugStreamMap);
-
-TDebugStreamMap& getStreams();
-#endif
 
 //........................................................................
 #endif // CONNECTIVI_HSQLDB_HSTORAGEMAP_HXX
