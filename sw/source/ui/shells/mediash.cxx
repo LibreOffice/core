@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediash.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:30:40 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,17 +224,14 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
         switch( nSlotId )
         {
             case SID_DELETE:
-            case FN_BACKSPACE:
             {
                 if( pSh->IsObjSelected() )
                 {
+                    pSh->SetModified();
                     pSh->DelSelectedObj();
 
                     if( pSh->IsSelFrmMode() )
-                    {
                         pSh->LeaveSelFrmMode();
-                        pSh->NoEdit();
-                    }
 
                     GetView().AttrChangedNotify( pSh );
                 }
