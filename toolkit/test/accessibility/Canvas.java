@@ -132,8 +132,27 @@ class Canvas
         repaint ();
     }
 
+    public boolean getAntialiasing ()
+    {
+        return mbAntialiasing;
+    }
+
+    public void setAntialiasing (boolean bNewValue)
+    {
+        mbAntialiasing = bNewValue;
+        repaint ();
+    }
+
     public void paintComponent (Graphics g)
     {
+        Graphics2D g2 = (Graphics2D)g;
+        if (mbAntialiasing)
+            g2.setRenderingHint (RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+        else
+            g2.setRenderingHint (RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_OFF);
+
         Rectangle r = g.getClipBounds();
         g.clearRect (r.x,r.y,r.width,r.height);
 
@@ -325,5 +344,6 @@ class Canvas
         maTree;
     protected boolean
         mbShowDescriptions = true,
-        mbShowNames = true;
+        mbShowNames = true,
+        mbAntialiasing = true;
 }
