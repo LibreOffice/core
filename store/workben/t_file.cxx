@@ -2,9 +2,9 @@
  *
  *  $RCSfile: t_file.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:32 $
+ *  last change: $Author: mhu $ $Date: 2001-02-26 14:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,15 +54,19 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
-#define _T_FILE_CXX "$Revision: 1.1.1.1 $"
+#define _T_FILE_CXX "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
+#endif
+
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
 #endif
 
 #ifndef _RTL_USTRING_HXX_
@@ -86,26 +90,6 @@ using namespace store;
 
 /*========================================================================
  *
- * __store_getProcessTextEncoding.
- *
- *======================================================================*/
-inline rtl_TextEncoding __store_getProcessTextEncoding (void)
-{
-    rtl_TextEncoding eEncoding;
-#if defined(SAL_OS2)
-    eEncoding = RTL_TEXTENCODING_IBM850;
-#elif defined(SAL_UNX)
-    eEncoding = RTL_TEXTENCODING_ISO8859_1;
-#elif defined(SAL_W32)
-    eEncoding = RTL_TEXTENCODING_MS_1252;
-#else
-    eEncoding = RTL_TEXTENCODING_ASCII_US;
-#endif
-    return eEncoding;
-}
-
-/*========================================================================
- *
  * main.
  *
  *======================================================================*/
@@ -120,7 +104,7 @@ int SAL_CALL main (int argc, char **argv)
 
     NAMESPACE_RTL(OUString) aFilename (
         argv[1], rtl_str_getLength(argv[1]),
-        __store_getProcessTextEncoding());
+        osl_getThreadTextEncoding());
 
     storeError eErrCode = xLockBytes->create (
         aFilename.pData, store_AccessReadWrite);
