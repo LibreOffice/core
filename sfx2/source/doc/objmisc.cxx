@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-20 10:26:33 $
+ *  last change: $Author: fs $ $Date: 2001-08-27 16:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1179,6 +1179,77 @@ ErrCode SfxObjectShell::Call( const String & rCode, sal_Bool bIsBasicReturn, Sbx
 
 extern ::com::sun::star::uno::Any sbxToUnoValue( SbxVariable* pVar );
 
+//-------------------------------------------------------------------------
+namespace {
+    using namespace ::com::sun::star::uno;
+
+    //.....................................................................
+    static SbxArrayRef lcl_translateUno2Basic( void* _pAnySequence )
+    {
+        SbxArrayRef xReturn;
+        if ( _pAnySequence )
+        {
+            // in real it's a sequence of Any (by convention)
+            Sequence< Any >* pArguments = static_cast< Sequence< Any >* >( _pAnySequence );
+
+            // do we have arguments ?
+            if ( pArguments->getLength() )
+            {
+                // yep
+                xReturn = new SbxArray;
+                String sEmptyName;
+
+                // loop through the sequence
+                const Any* pArg     =           pArguments->getConstArray();
+                const Any* pArgEnd  = pArg  +   pArguments->getLength();
+
+                for ( sal_uInt16 nArgPos=1; pArg != pArgEnd; ++pArg, ++nArgPos )
+                    // and create a Sb object for every Any
+                    xReturn->Put( GetSbUnoObject( sEmptyName, *pArg ), nArgPos );
+            }
+        }
+        return xReturn;
+    }
+    //.....................................................................
+    void lcl_translateBasic2Uno( const SbxVariableRef& _rBasicValue, void* _pAny )
+    {
+        if ( _pAny )
+            *static_cast< Any* >( _pAny ) = sbxToUnoValue( _rBasicValue );
+    }
+}
+//-------------------------------------------------------------------------
+ErrCode SfxObjectShell::CallStarBasicScript( const String& _rMacroName, const String& _rLocation,
+    void* _pArguments, void* _pReturn )
+{
+    ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
+
+    // the arguments for the call
+    SbxArrayRef xMacroArguments = lcl_translateUno2Basic( _pArguments );
+
+    // the return value
+    SbxVariableRef xReturn = _pReturn ? new SbxVariable : NULL;
+
+    // the location (document or application)
+    String sMacroLocation;
+    if ( _rLocation.EqualsAscii( "application" ) )
+        sMacroLocation = SFX_APP()->GetName();
+#ifdef DBG_UTIL
+    else
+        DBG_ASSERT( _rLocation.EqualsAscii( "document" ),
+            "SfxObjectShell::CallStarBasicScript: invalid (unknown) location!" );
+#endif
+
+    // call the script
+    ErrCode eError = CallBasic( _rMacroName, sMacroLocation, NULL, xMacroArguments, xReturn );
+
+    // translate the return value
+    lcl_translateBasic2Uno( xReturn, _pReturn );
+
+    // outta here
+    return eError;
+}
+
+//-------------------------------------------------------------------------
 ErrCode SfxObjectShell::CallScript(
     const String & rScriptType,
     const String & rCode,
@@ -1191,32 +1262,22 @@ ErrCode SfxObjectShell::CallScript(
     ErrCode nErr = ERRCODE_NONE;
     if( rScriptType.EqualsAscii( "StarBasic" ) )
     {
+        // the arguments for the call
+        SbxArrayRef xMacroArguments = lcl_translateUno2Basic( pArgs );
 
-        SbxArrayRef xArray;
-        String aTmp;
-        if( pArgs )
-        {
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > * pTmpArgs = (::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > *)pArgs;
-            sal_Int32 nCnt = pTmpArgs->getLength();
+        // the return value
+        SbxVariableRef xReturn = pRet ? new SbxVariable : NULL;
 
-            if( nCnt )
-            {
-                xArray = new SbxArray;
-                const ::com::sun::star::uno::Any *pArgs = pTmpArgs->getConstArray();
-                for( sal_Int32 i = 0; i < nCnt; i++ )
-                    xArray->Put( GetSbUnoObject( aTmp, pArgs[i] ), i+1 );
-            }
-        }
+        // call the script
+        nErr = CallBasic( rCode, String(), NULL, xMacroArguments, xReturn );
 
-        SbxVariableRef xValue = pRet ? new SbxVariable : 0;
-        nErr = CallBasic( rCode, aTmp, NULL, xArray, xValue );
-        if ( pRet )
-            *((::com::sun::star::uno::Any*)pRet) = sbxToUnoValue( xValue );
+        // translate the return value
+        lcl_translateBasic2Uno( xReturn, pRet );
 
+        // did this fail because the method was not found?
         if ( nErr == ERRCODE_BASIC_PROC_UNDEFINED )
-        {
-            aTmp = SFX_APP()->GetName();
-            nErr = CallBasic( rCode, aTmp, 0, xArray );
+        {   // yep-> look in the application BASIC module
+            nErr = CallBasic( rCode, SFX_APP()->GetName(), NULL, xMacroArguments, xReturn );
         }
     }
     else if( rScriptType.EqualsAscii( "JavaScript" ) )
