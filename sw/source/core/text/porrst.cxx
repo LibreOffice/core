@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-13 09:10:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@ USHORT SwBreakPortion::CalcViewWidth( const SwTxtSizeInfo &rInf )
     USHORT nViewWidth = 0;
 
     // The view width is not depending on the zoom factor anymore.
-    if( rInf.GetWin() && nRestWidth )
+    if( rInf.OnWin() && nRestWidth )
         nViewWidth = LINE_BREAK_WIDTH;
 
     return nViewWidth;
@@ -244,7 +244,7 @@ USHORT SwBreakPortion::CalcViewWidth( const SwTxtSizeInfo &rInf )
 
 sal_Bool SwBreakPortion::Format( SwTxtFormatInfo &rInf )
 {
-    nRestWidth = rInf.Width() - rInf.X();
+    nRestWidth = (USHORT)(rInf.Width() - rInf.X());
     register const SwLinePortion *pRoot = rInf.GetRoot();
     Width( 0 );
     Height( pRoot->Height() );
@@ -341,7 +341,7 @@ SwArrowPortion::SwArrowPortion( const SwLinePortion &rPortion ) :
 SwArrowPortion::SwArrowPortion( const SwTxtPaintInfo &rInf )
     : bLeft( sal_False )
 {
-    Height( rInf.GetTxtFrm()->Prt().Height() );
+    Height( (USHORT)(rInf.GetTxtFrm()->Prt().Height()) );
     aPos.X() = rInf.GetTxtFrm()->Frm().Left() +
                rInf.GetTxtFrm()->Prt().Right();
     aPos.Y() = rInf.GetTxtFrm()->Frm().Top() +
@@ -381,9 +381,7 @@ SwTwips SwTxtFrm::EmptyHeight() const
     if ( !pOut || !rTxtNode.GetDoc()->IsBrowseMode() ||
          ( pSh->GetViewOptions()->IsPrtFormat() ) )
     {
-        Printer *pPrt = rTxtNode.GetDoc()->GetPrt();
-        if( !pOut || ( pPrt && pPrt->IsValid() ) )
-            pOut = pPrt;
+        pOut = &rTxtNode.GetDoc()->GetRefDev();
     }
 
     const SwDoc* pDoc = rTxtNode.GetDoc();
@@ -528,8 +526,8 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                             OutputDevice *pOut = 0;
                             if( !GetTxtNode()->GetDoc()->IsBrowseMode() ||
                                 (pSh && pSh->GetViewOptions()->IsPrtFormat()) )
-                                pOut = GetTxtNode()->GetDoc()->GetPrt();
-                            if( (!pOut || !((Printer*)pOut)->IsValid()) && pSh )
+                                pOut = &GetTxtNode()->GetDoc()->GetRefDev();
+                            if( pSh && !pOut )
                                 pOut = pSh->GetWin();
                             if( !pOut )
                                 pOut = GetpApp()->GetDefaultDevice();
