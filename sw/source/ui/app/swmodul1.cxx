@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-28 15:22:17 $
+ *  last change: $Author: jp $ $Date: 2000-10-09 10:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
+#include <svtools/useroptions.hxx>
+#endif
+
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
@@ -89,6 +93,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
 #include <com/sun/star/frame/XStatusListener.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx> // helper for implementations
 #endif
 
 #ifndef _SBASLTID_HRC //autogen
@@ -177,9 +184,7 @@
 #ifndef _APP_HRC
 #include <app.hrc>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx> // helper for implementations
-#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 /* -----------------------------05.01.00 15:14--------------------------------
@@ -723,7 +728,8 @@ sal_uInt16 SwModule::GetRedlineAuthor()
 {
     if (!bAuthorInitialised)
     {
-        sActAuthor = SFX_APP()->GetIniManager()->GetUserFullName();
+        SvtUserOptions aOpt;
+        sActAuthor = aOpt.GetFullName();
         bAuthorInitialised = sal_True;
     }
 

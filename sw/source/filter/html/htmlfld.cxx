@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfld.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:08:26 $
+ *  last change: $Author: jp $ $Date: 2000-10-09 10:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,8 @@
 #ifndef _ZFORMAT_HXX //autogen
 #include <svtools/zformat.hxx>
 #endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
-#endif
-#ifndef _SFXAPP_HXX //autogen
-#include <sfx2/app.hxx>
+#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
+#include <svtools/useroptions.hxx>
 #endif
 #ifndef _SFXDOCINF_HXX //autogen
 #include <sfx2/docinf.hxx>
@@ -323,12 +320,13 @@ void SwHTMLParser::NewField()
         (RES_EXTUSERFLD == (RES_FIELDS)nType ||
          RES_AUTHORFLD == (RES_FIELDS)nType) )
     {
-        String aUser( SFX_APP()->GetIniManager()->GetUserFullName() );
+        SvtUserOptions aOpt;
+        const String& rUser = aOpt.GetFullName();
         const SfxDocumentInfo *pDocInfo = pDoc->GetInfo();
         const String& rChanged = pDocInfo->GetChanged().GetName();
         const String& rCreated = pDocInfo->GetCreated().GetName();
-        if( !aUser.Len() ||
-            (rChanged.Len() ? aUser!=rChanged : aUser!=rCreated) )
+        if( !rUser.Len() ||
+            (rChanged.Len() ? rUser != rChanged : rUser != rCreated) )
             bFixed = TRUE;
     }
 
@@ -699,11 +697,14 @@ void SwHTMLParser::InsertComment( const String& rComment, const sal_Char *pTag )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfld.cxx,v 1.2 2000-10-06 13:08:26 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfld.cxx,v 1.3 2000-10-09 10:45:11 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/06 13:08:26  jp
+      should changes: don't use IniManager
+
       Revision 1.1.1.1  2000/09/18 17:14:55  hr
       initial import
 
