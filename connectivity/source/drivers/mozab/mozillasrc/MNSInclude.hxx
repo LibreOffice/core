@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MNSInclude.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-17 12:08:41 $
+ *  last change: $Author: fs $ $Date: 2002-10-10 15:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,16 +72,24 @@
 # define Bool mozBooL
 #endif
 
-
 // Turn off DEBUG Assertions
 #ifdef _DEBUG
-# define MOZ_TMP_UDEBUG _DEBUG
-# undef _DEBUG
+    #define _DEBUG_WAS_DEFINED _DEBUG
+    #undef _DEBUG
+#else
+    #undef _DEBUG_WAS_DEFINED _DEBUG
 #endif
+
+// and turn off the additional virtual methods which are part of some interfaces when compiled
+// with debug
+#ifdef DEBUG
+    #define DEBUG_WAS_DEFINED DEBUG
+    #undef DEBUG
+#else
+    #undef DEBUG_WAS_DEFINED DEBUG
+#endif
+
 #include <nsDebug.h>
-#ifdef MOZ_TMP_UDEBUG
-# define _DEBUG MOZ_TMP_UDEBUG
-#endif
 
 #include <nsCOMPtr.h>
 #include <nsISupportsArray.h>
@@ -115,5 +123,12 @@
 # undef Bool
 #endif
 
+#ifdef DEBUG_WAS_DEFINED
+    #define DEBUG DEBUG_WAS_DEFINED
+#endif
+
+#ifdef _DEBUG_WAS_DEFINED
+    #define _DEBUG _DEBUG_WAS_DEFINED
+#endif
 
 #endif // _CONNECTIVITY_MAB_NS_INCLUDE_HXX_
