@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-12 09:44:26 $
+ *  last change: $Author: mav $ $Date: 2002-09-17 08:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1780,7 +1780,8 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         // restore BaseURL
         INetURLObject::SetBaseURL( aOldURL );
 
-        pMediumTmp->GetItemSet()->ClearItem( SID_INTERACTIONHANDLER );
+        if( pMediumTmp->GetItemSet() )
+            pMediumTmp->GetItemSet()->ClearItem( SID_INTERACTIONHANDLER );
 
         SetError(pMediumTmp->GetErrorCode());
 
