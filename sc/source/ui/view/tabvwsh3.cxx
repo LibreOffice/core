@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-22 18:13:02 $
+ *  last change: $Author: er $ $Date: 2001-04-24 18:20:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -869,28 +869,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     if (pDlg->Execute() == RET_OK)
                     {
                         String aPassword = pDlg->GetPassword();
-                        BOOL bOk = FALSE;
-
-                        if ( aPassword.Len() )
-                        {
-                            //  compare strings
-                            if ( aPassword == pDlg->GetConfirm() )
-                                bOk = TRUE;
-                            else
-                            {
-                                InfoBox aBox( GetDialogParent(),
-                                                String( ScResId( SCSTR_WRONGPASSWORD ) ) );
-                                aBox.Execute();
-                            }
-                        }
-                        else
-                            bOk = TRUE;     // ohne Passwort
-
-                        if (bOk)
-                        {
-                            Protect( TABLEID_DOC, aPassword );
-                            rReq.Done();
-                        }
+                        Protect( TABLEID_DOC, aPassword );
+                        rReq.Done();
                     }
 
                     delete pDlg;
@@ -953,20 +933,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         pDlg->ShowExtras( SHOWEXTRAS_CONFIRM );
 
                         if (pDlg->Execute() == RET_OK)
-                        {
                             aPassword = pDlg->GetPassword();
-                            if ( aPassword.Len() )
-                            {
-                                //  compare strings
-                                if ( aPassword != pDlg->GetConfirm() )
-                                {
-                                    InfoBox aBox( GetDialogParent(),
-                                                    String( ScResId( SCSTR_WRONGPASSWORD ) ) );
-                                    aBox.Execute();
-                                    bCancel = TRUE;
-                                }
-                            }
-                        }
                         else
                             bCancel = TRUE;
 
