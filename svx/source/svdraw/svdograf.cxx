@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-16 16:45:03 $
+ *  last change: $Author: ka $ $Date: 2001-11-02 16:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include <math.h>
 #include <vcl/salbtype.hxx>
 #include <sot/formats.hxx>
-#include <tools/urlobj.hxx>
+#include <so3/svstor.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <svtools/style.hxx>
@@ -1960,6 +1960,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
 
                 aStreamInfo.mbDeleteAfterUse = FALSE;
                 aStreamInfo.maUserData = pGraphic->GetUserData();
+                aStreamInfo.mpStorageRef = NULL;
 
                 SvStream* pStream = pModel->GetDocumentStream( aStreamInfo );
 
@@ -1986,8 +1987,11 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
 
                     pStream->ResetError();
 
-                    if( aStreamInfo.mbDeleteAfterUse )
+                    if( aStreamInfo.mbDeleteAfterUse || aStreamInfo.mpStorageRef )
+                    {
                         delete pStream;
+                        delete aStreamInfo.mpStorageRef;
+                    }
 
                     pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
                 }
