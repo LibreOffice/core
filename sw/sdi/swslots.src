@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-09 23:17:33 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1578,7 +1578,7 @@ SfxSlotInfo FN_FLIP_HORZ_GRAFIC
     SlotName[ russian ] = "Îòğàçèòü ïî âåğòèêàëè";
     SlotName[ dutch ] = "Horizontaal spiegelen";
     SlotName[ french ] = "Refléter verticalement";
-    SlotName[ spanish ] = "Reflejar horizontal";
+    SlotName[ spanish ] = "Reflejar vertical";
     SlotName[ italian ] = "Rispecchia orizzontalmente";
     SlotName[ danish ] = "Spejlvend vandret";
     SlotName[ swedish ] = "Spegelvänd vertikalt";
@@ -1604,7 +1604,7 @@ SfxSlotInfo FN_FLIP_VERT_GRAFIC
     SlotName[ russian ] = "Îòğàçèòü ïî ãîğèçîíòàëè";
     SlotName[ dutch ] = "Verticaal spiegelen";
     SlotName[ french ] = "Refléter horizontalement";
-    SlotName[ spanish ] = "Reflejar verticalmente";
+    SlotName[ spanish ] = "Reflejar horizontal";
     SlotName[ italian ] = "Rispecchia verticalmente";
     SlotName[ danish ] = "Spejlvend lodret";
     SlotName[ swedish ] = "Spegelvänd horisontellt";
@@ -1636,7 +1636,7 @@ SfxSlotInfo FN_FOOTNOTE_TO_ANCHOR
     SlotName[ swedish ] = "Till fotnot/ankare";
     SlotName[ polish ] = "Do przypisu dolnego/kotwicy";
     SlotName[ portuguese_brazilian ] = "GoToFootnoteOrAnchor";
-    SlotName[ japanese ] = "‹r’‚Ü‚½‚Í‹r’±İ¶°‚Ö";
+    SlotName[ japanese ] = "‹r’‚Ü‚½‚Í‹r’QÆ‚Ö";
     SlotName[ chinese_simplified ] = "×ªµ½×¢½Å/±ê¼Ç";
     SlotName[ chinese_traditional ] = "Âà¨ìµù¸}/¼Ğ¸¹";
     SlotName[ arabic ] = "Åáì ÇáÍÇÔíÉ ÇáÓİáíÉ/ÇáÅÑÓÇÁ";
@@ -7133,7 +7133,7 @@ SfxSlotInfo FN_TABLE_BALANCE_CELLS
     SlotName[ spanish ] = "Ordenar columnas";
     SlotName[ italian ] = "Distribuisci le colonne uniformemente";
     SlotName[ danish ] = "Fordel kolonner jævnt";
-    SlotName[ swedish ] = "Fördela kolumnerna jämnt";
+    SlotName[ swedish ] = "Fördela kolumner jämnt";
     SlotName[ polish ] = "Roz³ó¿ równomiernie kolumny";
     SlotName[ portuguese_brazilian ] = "ArrangeColumns";
     SlotName[ japanese ] = "—ñ‚Ì‹Ï“™•ªŠ„";
