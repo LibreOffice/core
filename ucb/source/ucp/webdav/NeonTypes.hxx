@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonTypes.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:47:58 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 12:13:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,30 +62,24 @@
 #ifndef _NEONTYPES_HXX_
 #define _NEONTYPES_HXX_
 
-#ifndef NE_BASIC_H
-#include <neon/ne_basic.h>
+#ifndef NE_SESSION_H
+#include <neon/ne_session.h> // for ne_session
 #endif
-#ifndef NE_REQUEST_H
-#include <neon/ne_request.h>
+#ifndef NE_UTILS_H
+#include <neon/ne_utils.h> // for ne_status
+#endif
+#ifndef NE_BASIC_H
+#include <neon/ne_basic.h> // for ne_server_capabilities
 #endif
 #ifndef NE_PROPS_H
-#include <neon/ne_props.h>
-#endif
-
-#ifdef WIN32
-// http_request.h -> nsocket.h -> winsock2.h defines ERROR!!!
-#undef ERROR
+#include <neon/ne_props.h> // for ne_propname, ne_prop_result_set
 #endif
 
 typedef ne_session                  HttpSession;
-typedef ne_request                  HttpRequest;
 typedef ne_status                   HttpStatus;
 typedef ne_server_capabilities      HttpServerCapabilities;
 
-typedef ne_propfind_handler         NeonPropFindHandler;
 typedef ne_propname                 NeonPropName;
-typedef struct hip_xml_elm          NeonPropFindXmlElem;
-typedef ne_xml_elmid                NeonPropFindXmlId;
 typedef ne_prop_result_set          NeonPropFindResultSet;
 
 #endif // _NEONTYPES_HXX_
