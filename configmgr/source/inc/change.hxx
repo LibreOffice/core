@@ -2,9 +2,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:13:52 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:24:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,8 @@ namespace configmgr
 
         void applyToChange(Change const& aChange);
         void applyToChildren(SubtreeChange const& aSubtree);
+    protected:
+        virtual ~ChangeTreeAction() {}
     };
 
     struct ChangeTreeModification
@@ -126,6 +128,8 @@ namespace configmgr
 
         void applyToChange(Change& aChange);
         void applyToChildren(SubtreeChange& aSubtree);
+    protected:
+        virtual ~ChangeTreeModification() {}
     };
 
     //==========================================================================
@@ -409,9 +413,9 @@ namespace configmgr
 
         SubtreeChange(const ISubtree& _rTree, bool _bToDefault = false)
         : Change(_rTree.getName(),_bToDefault)
-        , m_aAttributes(_rTree.getAttributes())
         , m_sTemplateName(_rTree.getElementTemplateName())
         , m_sTemplateModule(_rTree.getElementTemplateModule())
+        , m_aAttributes(_rTree.getAttributes())
         {
             m_aAttributes.markAsDefault(_bToDefault);
         }
