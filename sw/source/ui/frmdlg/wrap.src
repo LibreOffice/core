@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:49:14 $
+ *  last change: $Author: avy $ $Date: 2001-03-09 21:09:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ TabPage TP_FRM_WRAP
         Text[ chinese_traditional ] = "µL(~N)";
         Text[ arabic ] = "ÈÏæä";
         Text[ greek ] = "Êáíİíá";
-        Text[ korean ] = "¾øÀ½(~N)";
+        Text[ korean ] = "¾øÀ½";
         Text[ turkish ] = "~Yok";
     };
     ImageRadioButton RB_WRAP_LEFT
@@ -131,7 +131,7 @@ TabPage TP_FRM_WRAP
         Text[ chinese_traditional ] = "¥ª(~L)";
         Text[ arabic ] = "Åáì ÇáíÓÇÑ";
         Text[ greek ] = "ÁñéóôåñÜ";
-        Text[ korean ] = "¿ŞÂÊ(~L)";
+        Text[ korean ] = "¿ŞÂÊ";
         Text[ turkish ] = "So~l";
     };
     ImageRadioButton RB_WRAP_RIGHT
@@ -157,7 +157,7 @@ TabPage TP_FRM_WRAP
         Text[ chinese_traditional ] = "¥k(~R)";
         Text[ arabic ] = "Åáì Çáíãíä";
         Text[ greek ] = "ÄåîéÜ";
-        Text[ korean ] = "¿À¸¥ÂÊ(~I)";
+        Text[ korean ] = "¿À¸¥ÂÊ";
         Text[ turkish ] = "Sa~ğ";
     };
     ImageRadioButton RB_WRAP_PARALLEL
@@ -183,7 +183,7 @@ TabPage TP_FRM_WRAP
         Text[ chinese_traditional ] = "¥­¦æ(~P)";
         Text[ arabic ] = "ãÊæÇÒ";
         Text[ greek ] = "ĞáñÜëëçëá";
-        Text[ korean ] = "ÆòÇà(~P)";
+        Text[ korean ] = "ÆòÇà";
         Text[ turkish ] = "~Paralel";
     };
     ImageRadioButton RB_WRAP_THROUGH
@@ -211,7 +211,7 @@ TabPage TP_FRM_WRAP
         Text[ chinese_traditional ] = "¤£ÀôÂ¶(~T)";
         Text[ arabic ] = "ÚÈÑ";
         Text[ greek ] = "Äéá ìİóïõ";
-        Text[ korean ] = "ÀüÃ¼ µ¹¸²(~U)";
+        Text[ korean ] = "¹®ÀåÈå¸£±â";
         Text[ turkish ] = "~Metin arkasına gönder";
     };
     ImageRadioButton RB_WRAP_IDEAL
@@ -237,7 +237,7 @@ TabPage TP_FRM_WRAP
         Text[ chinese_traditional ] = "³Ì¾A(~O)";
         Text[ arabic ] = "ÏíäÇãíßí";
         Text[ greek ] = "ÄõíáìéêÜ";
-        Text[ korean ] = "ÃÖÀûÀÇ(~O)";
+        Text[ korean ] = "ÃÖÀûÀÇ";
         Text[ turkish ] = "D~inamik";
     };
     CheckBox CB_ANCHOR_ONLY
@@ -287,7 +287,7 @@ TabPage TP_FRM_WRAP
         Text[ chinese_traditional ] = "¸m©ó­I´º(~K)";
         Text[ arabic ] = "İí ÇáÎáİíÉ";
         Text[ greek ] = "Óå öüíôï";
-        Text[ korean ] = "¹è°æ¿¡(~K)";
+        Text[ korean ] = "¹è°æ¿¡";
         Text[ turkish ] = "Arta~landa";
     };
     CheckBox CB_OUTLINE
@@ -392,7 +392,7 @@ TabPage TP_FRM_WRAP
         Text[ chinese_traditional ] = "¥ª(~E)";
         Text[ arabic ] = "Åáì ÇáíÓÇÑ";
         Text[ greek ] = "ÁñéóôåñÜ";
-        Text[ korean ] = "¿ŞÂÊ(~E)";
+        Text[ korean ] = "¿ŞÂÊ";
         Text[ turkish ] = "S~ol";
     };
     MetricField ED_LEFT_MARGIN
@@ -435,7 +435,7 @@ TabPage TP_FRM_WRAP
         Text[ chinese_traditional ] = "¥k(~H)";
         Text[ arabic ] = "Åáì Çáíãíä";
         Text[ greek ] = "ÄåîéÜ";
-        Text[ korean ] = "¿À¸¥ÂÊ(~H)";
+        Text[ korean ] = "¿À¸¥ÂÊ";
         Text[ turkish ] = "S~ağ";
     };
     MetricField ED_RIGHT_MARGIN
@@ -478,7 +478,7 @@ TabPage TP_FRM_WRAP
         Text[ chinese_traditional ] = "¤W(~T)";
         Text[ arabic ] = "ÃÚáì";
         Text[ greek ] = "ĞÜíù";
-        Text[ korean ] = "À§(~T)";
+        Text[ korean ] = "À§";
         Text[ turkish ] = "Üs~t";
     };
     MetricField ED_TOP_MARGIN
@@ -521,7 +521,7 @@ TabPage TP_FRM_WRAP
         Text[ chinese_traditional ] = "¤U(~B)";
         Text[ arabic ] = "ÃÓİá";
         Text[ greek ] = "ÊÜôù";
-        Text[ korean ] = "¾Æ·¡(~B)";
+        Text[ korean ] = "¾Æ·¡";
         Text[ turkish ] = "A~lt";
     };
     MetricField ED_BOTTOM_MARGIN
@@ -559,7 +559,7 @@ TabPage TP_FRM_WRAP
         Text[ chinese_simplified ] = "¼ä¸ô";
         Text[ russian ] = "Èíòåğâàëû";
         Text[ polish ] = "Odstêpy";
-        Text[ japanese ] = "ŠÔŠu";
+        Text[ japanese ] = "—]”’";
         Text[ chinese_traditional ] = "¶¡¹j";
         Text[ arabic ] = "ÇáÊÈÇÚÏ";
         Text[ greek ] = "AğïóôÜóåéò";
