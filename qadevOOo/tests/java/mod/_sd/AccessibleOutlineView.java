@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineView.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:21:44 $
+ *  last change:$Date: 2003-09-08 12:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,21 @@
 
 package mod._sd;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.AccessibilityTools;
+import util.SOfficeFactory;
+import util.utils;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
 import com.sun.star.awt.XWindow;
 import com.sun.star.drawing.XDrawPages;
 import com.sun.star.drawing.XDrawPagesSupplier;
-import com.sun.star.drawing.XDrawView;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XModel;
@@ -74,16 +85,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.AccessibilityTools;
-import util.SOfficeFactory;
-import util.utils;
 
 public class AccessibleOutlineView extends TestCase {
 
@@ -114,7 +115,7 @@ public class AccessibleOutlineView extends TestCase {
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
 
-        oObj = at.SearchedContext;
+        oObj = AccessibilityTools.SearchedContext;
 
         log.println("ImplementationName "+utils.getImplName(oObj));
 
@@ -123,8 +124,6 @@ public class AccessibleOutlineView extends TestCase {
         XDrawPagesSupplier oDPS = (XDrawPagesSupplier)
             UnoRuntime.queryInterface(XDrawPagesSupplier.class, aModel);
         final XDrawPages oDPn = oDPS.getDrawPages();
-        final XDrawView xView = (XDrawView) UnoRuntime.queryInterface
-            (XDrawView.class, aModel.getCurrentController()) ;
 
         tEnv.addObjRelation("EventMsg","Inserting a drawpage via API has no "+
                                         "effect to the outline view #101050# \r\n"+
