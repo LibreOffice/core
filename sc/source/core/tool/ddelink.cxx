@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddelink.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:35:08 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 #include "sc.hrc"
 #include "hints.hxx"
 
-TYPEINIT2(ScDdeLink,::so3::SvBaseLink,SfxBroadcaster);
+TYPEINIT2(ScDdeLink,::sfx2::SvBaseLink,SfxBroadcaster);
 
 #ifdef PM2
 #define DDE_TXT_ENCODING    RTL_TEXTENCODING_IBM_850
@@ -98,7 +98,7 @@ BOOL ScDdeLink::bIsInUpdate = FALSE;
 
 ScDdeLink::ScDdeLink( ScDocument* pD, const String& rA, const String& rT, const String& rI,
                         BYTE nM ) :
-    ::so3::SvBaseLink(so3::LINKUPDATE_ALWAYS,FORMAT_STRING),
+    ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ALWAYS,FORMAT_STRING),
     pDoc( pD ),
     aAppl( rA ),
     aTopic( rT ),
@@ -117,7 +117,7 @@ __EXPORT ScDdeLink::~ScDdeLink()
 }
 
 ScDdeLink::ScDdeLink( ScDocument* pD, const ScDdeLink& rOther ) :
-    ::so3::SvBaseLink(so3::LINKUPDATE_ALWAYS,FORMAT_STRING),
+    ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ALWAYS,FORMAT_STRING),
     pDoc    ( pD ),
     aAppl   ( rOther.aAppl ),
     aTopic  ( rOther.aTopic ),
@@ -131,7 +131,7 @@ ScDdeLink::ScDdeLink( ScDocument* pD, const ScDdeLink& rOther ) :
 }
 
 ScDdeLink::ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& rHdr ) :
-    ::so3::SvBaseLink(so3::LINKUPDATE_ALWAYS,FORMAT_STRING),
+    ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ALWAYS,FORMAT_STRING),
     pDoc( pD ),
     pResult( NULL ),
     bNeedUpdate( FALSE )
