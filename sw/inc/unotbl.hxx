@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-01 10:04:35 $
+ *  last change: $Author: mib $ $Date: 2001-11-01 13:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,8 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor();
     sal_Bool                            IsValid();
 public:
-    SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, const String& rCellName);
+    SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, const String& rCellName,
+            sal_uInt16 nPos=USHRT_MAX );
     SwXCell(SwFrmFmt* pTblFmt, const SwStartNode& rStartNode); // XML import interface
     virtual ~SwXCell();
 
@@ -195,7 +196,7 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 
     SwTableBox*   GetTblBox()const {return pBox;}
-    static SwXCell*     CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, const String* pCellName = 0);
+    static SwXCell*     CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, const String* pCellName = 0, SwTable *pTbl = 0 );
     SwTableBox*     FindBox(SwTable* pTable, SwTableBox* pBox);
 
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
