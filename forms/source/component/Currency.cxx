@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Currency.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-22 10:06:00 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 11:27:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ void OCurrencyModel::fillProperties(
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OCurrencyModel::getServiceName()
+::rtl::OUString SAL_CALL OCurrencyModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return FRM_COMPONENT_CURRENCYFIELD; // old (non-sun) name for compatibility !
 }
