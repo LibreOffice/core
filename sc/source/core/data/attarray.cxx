@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-12 08:49:54 $
+ *  last change: $Author: nn $ $Date: 2001-07-02 19:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,7 +489,13 @@ void ScAttrArray::ApplyStyleArea( USHORT nStartRow, USHORT nEndRow, ScStyleSheet
             USHORT nY2 = pData[nPos].nRow;
             nStart = pData[nPos].nRow + 1;
 
-            if ( nY1 < nStartRow || nY2 > nEndRow )
+            if ( *pNewPattern == *pOldPattern )
+            {
+                // keep the original pattern (might be default)
+                // pNewPattern is deleted below
+                nPos++;
+            }
+            else if ( nY1 < nStartRow || nY2 > nEndRow )
             {
                 if (nY1 < nStartRow) nY1=nStartRow;
                 if (nY2 > nEndRow) nY2=nEndRow;
