@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:16:00 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,9 +353,11 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
 
     SwPageDesc *pDesc = aPageDescs[i];
 
+    BOOL bDoesUndo = DoesUndo();
     if (DoesUndo())
     {
         AppendUndo(new SwUndoPageDesc(*pDesc, rChged, this));
+        DoUndo(FALSE);
     }
 
     //Als erstes wird ggf. gespiegelt.
@@ -559,6 +561,8 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
         }
     }
     SetModified();
+
+    DoUndo(bDoesUndo);
 }
 
 /*************************************************************************
@@ -661,7 +665,26 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
     }
 }
 
-void SwDoc::DelPageDesc( USHORT i )
+// #116530#
+void SwDoc::BroadcastStyleOperation(String rName, SfxStyleFamily eFamily,
+                                    USHORT nOp)
+{
+    if (pDocShell)
+    {
+        SfxStyleSheetBasePool * pPool = pDocShell->GetStyleSheetPool();
+
+        if (pPool)
+        {
+            pPool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL );
+            SfxStyleSheetBase * pBase = pPool->Find(rName);
+
+            pPool->Broadcast
+                (SfxStyleSheetHint( nOp, *pBase ));
+        }
+    }
+}
+
+void SwDoc::DelPageDesc( USHORT i, BOOL bBroadcast )
 {
     ASSERT( i < aPageDescs.Count(), "PageDescs ueberindiziert." );
     ASSERT( i != 0, "Default Pagedesc loeschen is nicht." );
@@ -669,6 +692,12 @@ void SwDoc::DelPageDesc( USHORT i )
         return;
 
     SwPageDesc *pDel = aPageDescs[i];
+
+    // -> #116530#
+    if (bBroadcast)
+        BroadcastStyleOperation(pDel->GetName(), SFX_STYLE_FAMILY_PAGE,
+                                SFX_STYLESHEET_ERASED);
+    // <- #116530#
 
     if (DoesUndo())
     {
@@ -694,7 +723,7 @@ void SwDoc::DelPageDesc( USHORT i )
 |*************************************************************************/
 
 USHORT SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
-                            BOOL bRegardLanguage)
+                            BOOL bRegardLanguage, BOOL bBroadcast) // #116530#
 {
     SwPageDesc *pNew;
     if( pCpy )
@@ -728,8 +757,14 @@ USHORT SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
     }
     aPageDescs.Insert( pNew, aPageDescs.Count() );
 
+    // -> #116530#
+    if (bBroadcast)
+        BroadcastStyleOperation(rName, SFX_STYLE_FAMILY_PAGE,
+                                SFX_STYLESHEET_CREATED);
+    // <- #116530#
+
     if (DoesUndo())
-        AppendUndo(new SwUndoPageDescCreate(*pNew, this));
+        AppendUndo(new SwUndoPageDescCreate(pNew, this));    //  #116530#
 
     SetModified();
     return (aPageDescs.Count()-1);
@@ -1158,12 +1193,12 @@ SwPageDesc * SwDoc::GetPageDesc( const String & rName )
     return aResult;
 }
 
-void SwDoc::DelPageDesc( const String & rName )
+void SwDoc::DelPageDesc( const String & rName, BOOL bBroadcast ) // #116530#
 {
     sal_uInt16 nI;
 
     if (FindPageDesc(rName, &nI))
-        DelPageDesc(nI);
+        DelPageDesc(nI, bBroadcast); // #116530#
 }
 
 void SwDoc::ChgPageDesc( const String & rName, const SwPageDesc & rDesc)
