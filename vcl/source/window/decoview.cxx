@@ -2,9 +2,9 @@
  *
  *  $RCSfile: decoview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 16:28:29 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:43:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -943,10 +943,11 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
     {
         if ( nStyle & FRAME_DRAW_MONO )
         {
-            // flat borders will be drawn in the shadow color
-            // but flat window borders will use black
-            Color aColor( bRound ? rStyleSettings.GetShadowColor() : COL_BLACK );
-            if( aColor.IsDark() && pDev->GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+            Color aColor = bRound ? rStyleSettings.GetShadowColor()
+                                  : pDev->GetSettings().GetStyleSettings().GetMonoColor();
+            // when the MonoColor wasn't set, check face color
+            if ( ( ( bRound && aColor.IsDark() ) || ( aColor == Color( COL_BLACK ) ) &&
+                 ( pDev->GetSettings().GetStyleSettings().GetFaceColor().IsDark() ) ) )
                 aColor = Color( COL_WHITE );
             ImplDrawDPILineRect( pDev, rRect, &aColor, bRound );
         }
