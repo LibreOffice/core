@@ -2,9 +2,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:19:55 $
+#   last change: $Author: rt $ $Date: 2004-07-06 15:01:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,13 +87,15 @@ sub write_ddf_file_header
 
     $oneline = ".Set CabinetName1=" . $cabinetfile . "\n";
     push(@{$ddffileref} ,$oneline);
-    $oneline = ".Set ReservePerCabinetSize=8\n";
+    $oneline = ".Set ReservePerCabinetSize=128\n";  # This reserves space for a digital signature.
     push(@{$ddffileref} ,$oneline);
-    $oneline = ".Set MaxDiskSize=CDROM\n";
+    $oneline = ".Set MaxDiskSize=CDROM\n";          # This allows the .cab file to be as large as needed.
     push(@{$ddffileref} ,$oneline);
     $oneline = ".Set CompressionType=MSZIP\n";
     push(@{$ddffileref} ,$oneline);
     $oneline = ".Set Compress=ON\n";
+    push(@{$ddffileref} ,$oneline);
+    $oneline = ".Set CompressionLevel=$installer::globals::cabfilecompressionlevel\n";
     push(@{$ddffileref} ,$oneline);
     $oneline = ".Set Cabinet=ON\n";
     push(@{$ddffileref} ,$oneline);
@@ -115,7 +117,7 @@ sub generate_cab_file_list
 
     installer::logger::include_header_into_logfile("Generating ddf files");
 
-    if ( $installer::globals::many_cab_files )
+    if (( $installer::globals::cab_file_per_component ) || ( $installer::globals::fix_number_of_cab_files ))
     {
         for ( my $i = 0; $i <= $#{$filesref}; $i++ )
         {
@@ -146,10 +148,11 @@ sub generate_cab_file_list
                 push(@ddffile, $ddfline);
                 $i++;                                           # increasing the counter!
                 $nextfile = ${$filesref}[$i+1];
-                $nextcabinetfile = $nextfile->{'cabinet'};
+                if ( $nextfile ) { $nextcabinetfile = $nextfile->{'cabinet'}; }
+                else { $nextcabinetfile = "_lastfile_"; }
             }
 
-            # creating the DDF file for each component
+            # creating the DDF file
 
             my $ddffilename = $cabinetfile;
             $ddffilename =~ s/.cab/.ddf/;
@@ -167,8 +170,7 @@ sub generate_cab_file_list
             push(@cabfilelist, $oneline);
         }
     }
-
-    if ( $installer::globals::one_cab_file )
+    elsif ( $installer::globals::one_cab_file )
     {
         my @ddffile = ();
 
@@ -204,6 +206,11 @@ sub generate_cab_file_list
 
         push(@cabfilelist, $oneline);
     }
+    else
+    {
+        installer::exiter::exit_program("ERROR: No cab file specification in globals.pm !", "create_media_table");
+    }
+
 
     return \@cabfilelist;   # contains all system calls for packaging process
 }
@@ -266,7 +273,7 @@ sub create_msi_database
 
     if ($returnvalue)
     {
-        $infoline = "Error: Could not execute $msidb!\n";
+        $infoline = "ERROR: Could not execute $msidb!\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
     else
@@ -496,7 +503,7 @@ sub write_summary_into_msi_database
 
     if ($returnvalue)
     {
-        $infoline = "Error: Could not execute $msiinfo!\n";
+        $infoline = "ERROR: Could not execute $msiinfo!\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
     else
@@ -549,7 +556,7 @@ sub create_transforms
 
         if ($returnvalue)
         {
-            $infoline = "Error: Could not execute $msitran!\n";
+            $infoline = "ERROR: Could not execute $msitran!\n";
             push( @installer::globals::logfileinfo, $infoline);
         }
         else
