@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swunohelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:07:22 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <sal/types.h>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 namespace com { namespace sun { namespace star {
     namespace uno {
         class Any;
@@ -90,7 +94,7 @@ BOOL UCB_CopyFile( const String& rURL, const String& rNewURL,
                     BOOL bCopyIsMove = FALSE );
 
     // is the URL on the current system case sentive?
-BOOL UCB_IsCaseSensitiveFileName( const String& rURL );
+SW_DLLPUBLIC BOOL UCB_IsCaseSensitiveFileName( const String& rURL );
 
     // is the URL readonly?
 BOOL UCB_IsReadOnlyFileName( const String& rURL );
