@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 12:35:55 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1267,6 +1267,15 @@ void XMLShapeExportPropertyMapper::ContextFilter(
                         property->mnIndex = -1;
                 }
                 break;
+            case CTF_FRAME_MARGIN_HORI:
+            case CTF_FRAME_MARGIN_VERT:
+                {
+                    sal_Int32 nValue;
+                    if( (property->maValue >>= nValue) && (nValue < 0) )
+                        property->mnIndex = -1;
+                }
+                break;
+
             case CTF_SD_MOVE_PROTECT:
                 {
                     sal_Bool bProtected;
