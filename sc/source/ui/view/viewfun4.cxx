@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:34:19 $
+ *  last change: $Author: rt $ $Date: 2004-09-24 10:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,8 +464,7 @@ void ScViewFunc::DoSheetConversion( ScConversionType eConvType, BOOL bRecord, co
         break;
         case SC_CONVERSION_HANGULHANJA:
             pEngine = new ScTextConversionEngine(
-                pDoc->GetEnginePool(), rViewData, pUndoDoc, pRedoDoc, pEditSel,
-                nCol, nRow, nTab, bMarked,
+                pDoc->GetEnginePool(), rViewData, pUndoDoc, pRedoDoc,
                 LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL, 0, sal_True );
         break;
         case SC_CONVERSION_CHINESE_TRANSLATION:
@@ -474,8 +473,7 @@ void ScViewFunc::DoSheetConversion( ScConversionType eConvType, BOOL bRecord, co
             if (pChParams)
             {
                 pEngine = new ScTextConversionEngine(
-                    pDoc->GetEnginePool(), rViewData, pUndoDoc, pRedoDoc, pEditSel,
-                    nCol, nRow, nTab, bMarked,
+                    pDoc->GetEnginePool(), rViewData, pUndoDoc, pRedoDoc,
                     pChParams->nSourceLang, pChParams->nTargetLang, &pChParams->aTargetFont,
                     pChParams->nOptions, sal_False );
             }

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 10:40:40 $
+#   last change: $Author: rt $ $Date: 2004-09-24 10:31:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -145,7 +145,6 @@ SLOFILES =  \
         $(SLO)$/notemark.obj \
         $(SLO)$/tabcont.obj \
         $(SLO)$/tabsplit.obj \
-        $(SLO)$/viewdata.obj \
         $(SLO)$/viewutil.obj \
         $(SLO)$/hdrcont.obj \
         $(SLO)$/colrowba.obj \
@@ -180,6 +179,12 @@ SLOFILES =  \
         $(SLO)$/dbfunc2.obj     \
         $(SLO)$/tabvwsh2.obj
 .ENDIF
+
+EXCEPTIONSFILES= \
+    $(SLO)$/cellsh1.obj \
+    $(SLO)$/formatsh.obj \
+    $(SLO)$/viewdata.obj
+
 # goal seek -O2
 
 

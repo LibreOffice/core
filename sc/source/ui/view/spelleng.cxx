@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelleng.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:07:58 $
+ *  last change: $Author: rt $ $Date: 2004-09-24 10:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,15 +415,12 @@ Window* ScSpellingEngine::GetDialogParent()
 ScTextConversionEngine::ScTextConversionEngine(
         SfxItemPool* pEnginePool, ScViewData& rViewData,
         ScDocument* pUndoDoc, ScDocument* pRedoDoc,
-        ESelection* pEdSelection,
-        SCCOL nCol, SCROW nRow, SCTAB nTab,
-        bool bCellSelection,
         LanguageType eSourceLanguage,
         LanguageType eTargetLanguage,
         const Font *pTargetFont,
         sal_Int32 nOptions,
         sal_Bool bIsInteractive ) :
-    ScConversionEngineBase( pEnginePool, rViewData, pUndoDoc, pRedoDoc, pEdSelection, nCol, nRow, nTab, bCellSelection ),
+    ScConversionEngineBase( pEnginePool, rViewData, pUndoDoc, pRedoDoc ),
     meSourceLang( eSourceLanguage ),
     meTargetLang( eTargetLanguage ),
     mpTargetFont( pTargetFont ),
