@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:05:51 $
+ *  last change: $Author: obo $ $Date: 2003-04-08 18:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,6 +348,7 @@ ImageList RID_DEFAULTIMAGELIST_SC
         File [ greek ] = "sc_out30.bmp" ;
         File [ japanese ] = "sc_out81.bmp" ;
         File [ portuguese ] = "sc_out03.bmp" ;
+        File [ portuguese_brazilian ] = "sc_out55.bmp" ;
         File [ korean ] = "sc_out82.bmp" ;
     };
     MaskColor = IMAGE_MASK_COLOR ;
@@ -371,6 +372,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
         File [ greek ] = "lc_out30.bmp" ;
         File [ japanese ] = "lc_out81.bmp" ;
         File [ portuguese ] = "lc_out03.bmp" ;
+        File [ portuguese_brazilian ] = "lc_out55.bmp" ;
         File [ korean ] = "lc_out82.bmp" ;
     };
     MaskColor = IMAGE_MASK_COLOR ;
@@ -395,6 +397,7 @@ ImageList RID_DEFAULTIMAGELIST_SCH
         File [ greek ] = "sch_out30.bmp" ;
         File [ japanese ] = "sch_out81.bmp" ;
         File [ portuguese ] = "sch_out03.bmp" ;
+        File [ portuguese_brazilian ] = "sch_out55.bmp" ;
         File [ korean ] = "sch_out82.bmp" ;
     };
         MaskColor = IMAGE_MASK_COLOR ;
@@ -418,6 +421,7 @@ ImageList RID_DEFAULTIMAGELIST_LCH
         File [ greek ] = "lch_out30.bmp" ;
         File [ japanese ] = "lch_out81.bmp" ;
         File [ portuguese ] = "lch_out03.bmp" ;
+        File [ portuguese_brazilian ] = "lch_out55.bmp" ;
         File [ korean ] = "lch_out82.bmp" ;
     };
         MaskColor = IMAGE_MASK_COLOR ;
