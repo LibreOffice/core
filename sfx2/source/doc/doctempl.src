@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:15:45 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,6 +480,8 @@ String RID_CNT_STR_WAITING
     Text[ hindi ] = "नमूनों को पहिले बार उपयोग करने केलिए इनिश्यलैज़ किया है ।";
     Text[ slovak ] = "Šablóny sú inicializované pre prvé použitie.";
 };
+
+
 
 
 
