@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:55:48 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,7 +461,7 @@ extern char     *strcpy();
 extern char     *strcat();
 extern char     *strrchr();
 extern char     *strchr();
-#if ! ( defined UNX && defined ALPHA )
+#if ! ( defined UNX && defined ALPHA ) && !defined(FREEBSD)
 extern long     time();
 #endif
 /* extern char     *sprintf();  */           /* Lint needs this              */
