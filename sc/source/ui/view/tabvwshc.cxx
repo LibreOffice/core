@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-20 10:07:33 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@
 #include "autoform.hxx"         // Core
 #include "autofmt.hxx"          // Dialog
 #include "consdlg.hxx"
-#include "sortdlg.hxx"
+//CHINA001 #include "sortdlg.hxx"
 #include "filtdlg.hxx"
 #include "dbnamdlg.hxx"
 #include "pvlaydlg.hxx"
