@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regexp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2001-11-02 12:34:11 $
+ *  last change: $Author: sb $ $Date: 2001-11-07 08:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,20 +235,21 @@ inline bool isDigit(sal_Unicode c)
     return c >= '0' && c <= '9';
 }
 
-bool isScheme(rtl::OUString const & rString)
+bool isScheme(rtl::OUString const & rString, bool bColon)
 {
-    // Return true if rString matches <scheme> from RFC 2396:
+    // Return true if rString matches <scheme> (plus a trailing ":" if bColon
+    // is true) from RFC 2396:
     sal_Unicode const * p = rString.getStr();
     sal_Unicode const * pEnd = p + rString.getLength();
     if (p != pEnd && isAlpha(*p))
         for (++p;;)
         {
             if (p == pEnd)
-                return true;
+                return !bColon;
             sal_Unicode c = *p++;
             if (!(isAlpha(c) || isDigit(c)
                   || c == '+' || c == '-' || c == '.'))
-                break;
+                return bColon && c == ':' && p == pEnd;
         }
     return false;
 }
@@ -322,8 +323,8 @@ rtl::OUString Regexp::getRegexp(bool bReverse) const
         aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\\1"));
         return aBuffer.makeStringAndClear();
     }
-    else if (m_eKind == KIND_PREFIX && isScheme(m_aPrefix))
-        return m_aPrefix;
+    else if (m_eKind == KIND_PREFIX && isScheme(m_aPrefix, true))
+        return m_aPrefix.copy(0, m_aPrefix.getLength() - 1);
     else
     {
         rtl::OUStringBuffer aBuffer;
@@ -415,7 +416,7 @@ Regexp Regexp::parse(rtl::OUString const & rRegexp)
 {
     // Detect an input of '<scheme>' as an abbreviation of '"<scheme>:".*'
     // where <scheme> is as defined in RFC 2396:
-    if (isScheme(rRegexp))
+    if (isScheme(rRegexp, false))
         return Regexp(Regexp::KIND_PREFIX,
                       rRegexp
                           + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":")),
