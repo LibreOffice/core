@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-27 16:29:41 $
+ *  last change: $Author: mav $ $Date: 2002-04-05 07:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1695,8 +1695,12 @@ void SfxMedium::GetMedium_Impl()
                 // no callbacks for opening read/write because we might try readonly later
                 pImp->bDontCallDoneLinkOnSharingError = ( bIsWritable && bAllowReadOnlyMode );
                 if ( pImp->bDontCallDoneLinkOnSharingError )
+                {
+                    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > aTempHandler =
+                            new SfxMediumHandler_Impl( xInteractionHandler );
                     pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes(
-                        GetContent(), aProps, nStorOpenMode, new SfxMediumHandler_Impl( xInteractionHandler ) );
+                        GetContent(), aProps, nStorOpenMode, aTempHandler );
+                }
                 else
                     pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes(
                         GetContent(), aProps, nStorOpenMode, xInteractionHandler, bIsWritable ? NULL : pHandler );
