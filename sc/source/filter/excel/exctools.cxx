@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:25:33 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:37:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,8 +111,6 @@ RootData::RootData( void )
     pExtNameBuff = NULL;
     pFmlaConverter = NULL;
 
-    bChartTab = FALSE;
-
     pAutoFilterBuffer = NULL;
     pPrintRanges = new _ScRangeListTabs;
     pPrintTitles = new _ScRangeListTabs;
@@ -141,7 +139,7 @@ RootData::~RootData()
 
 
 
-OutlineBuffer::OutlineBuffer( SCSIZE nNewSize )
+XclImpOutlineBuffer::XclImpOutlineBuffer( SCSIZE nNewSize )
 {
     DBG_ASSERT( nNewSize > 0, "-OutlineBuffer::Ctor: nNewSize == 0!" );
 
@@ -155,7 +153,7 @@ OutlineBuffer::OutlineBuffer( SCSIZE nNewSize )
 }
 
 
-OutlineBuffer::~OutlineBuffer()
+XclImpOutlineBuffer::~XclImpOutlineBuffer()
 {
     delete[] pLevel;
     delete[] pOuted;
@@ -163,7 +161,7 @@ OutlineBuffer::~OutlineBuffer()
 }
 
 
-void OutlineBuffer::SetLevel( SCSIZE nIndex, BYTE nVal, BOOL bOuted, BOOL bHidden )
+void XclImpOutlineBuffer::SetLevel( SCSIZE nIndex, BYTE nVal, BOOL bOuted, BOOL bHidden )
 {
     if( nIndex < nSize )
     {
@@ -179,14 +177,14 @@ void OutlineBuffer::SetLevel( SCSIZE nIndex, BYTE nVal, BOOL bOuted, BOOL bHidde
 }
 
 
-void OutlineBuffer::SetOutlineArray( ScOutlineArray* pOArray )
+void XclImpOutlineBuffer::SetOutlineArray( ScOutlineArray* pOArray )
 {
     pOutlineArray = pOArray;
 }
 
 
 // transtorm xcl-outline into SC-outline
-void OutlineBuffer::MakeScOutline( void )
+void XclImpOutlineBuffer::MakeScOutline( void )
 {
     if( !pOutlineArray || !HasOutline() )
         return;
@@ -280,7 +278,7 @@ void OutlineBuffer::MakeScOutline( void )
 }
 
 
-void OutlineBuffer::SetLevelRange( SCSIZE nF, SCSIZE nL, BYTE nVal,
+void XclImpOutlineBuffer::SetLevelRange( SCSIZE nF, SCSIZE nL, BYTE nVal,
                                     BOOL bOuted, BOOL bHidden )
 {
     DBG_ASSERT( nF <= nL, "+OutlineBuffer::SetLevelRange(): Last < First!" );
@@ -313,7 +311,7 @@ void OutlineBuffer::SetLevelRange( SCSIZE nF, SCSIZE nL, BYTE nVal,
 }
 
 
-void OutlineBuffer::Reset( void )
+void XclImpOutlineBuffer::Reset( void )
 {
     for( SCSIZE nC = 0 ; nC < nSize ; nC++  )
     {
@@ -325,7 +323,7 @@ void OutlineBuffer::Reset( void )
 }
 
 
-void OutlineBuffer::Reset( ScOutlineArray *pOArray )
+void XclImpOutlineBuffer::Reset( ScOutlineArray *pOArray )
 {
     for( SCSIZE nC = 0 ; nC < nSize ; nC++  )
     {
