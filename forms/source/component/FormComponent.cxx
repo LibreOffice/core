@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:13:27 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,7 +786,7 @@ OControlModel::OControlModel(
 }
 
 //------------------------------------------------------------------
-OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< XMultiServiceFactory>& _rxFactory, const sal_Bool _bSetDelegator )
+OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< XMultiServiceFactory>& _rxFactory, const sal_Bool _bCloneAggregate, const sal_Bool _bSetDelegator )
     :OComponentHelper( m_aMutex )
     ,OPropertySetAggregationHelper( OComponentHelper::rBHelper )
     ,m_nTabIndex( FRM_DEFAULT_TABINDEX )
@@ -802,23 +802,26 @@ OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< 
     m_nTabIndex = _pOriginal->m_nTabIndex;
     m_nClassId = _pOriginal->m_nClassId;
 
-    // temporarily increment refcount because of temporary references to ourself in the following
-    increment( m_refCount );
-
+    if ( _bCloneAggregate )
     {
-        // transfer the (only, at the very moment!) ref count
-        m_xAggregate = createAggregateClone( _pOriginal );
+        // temporarily increment refcount because of temporary references to ourself in the following
+        increment( m_refCount );
 
-        // set aggregation (retrieve other direct interfaces of the aggregate)
-        setAggregation( m_xAggregate );
+        {
+            // transfer the (only, at the very moment!) ref count
+            m_xAggregate = createAggregateClone( _pOriginal );
+
+            // set aggregation (retrieve other direct interfaces of the aggregate)
+            setAggregation( m_xAggregate );
+        }
+
+        // set the delegator, if allowed by our derived class
+        if ( _bSetDelegator )
+            doSetDelegator();
+
+        // decrement ref count
+        decrement( m_refCount );
     }
-
-    // set the delegator, if allowed by our derived class
-    if ( _bSetDelegator )
-        doSetDelegator();
-
-    // decrement ref count
-    decrement( m_refCount );
 }
 
 //------------------------------------------------------------------
@@ -879,7 +882,7 @@ void SAL_CALL OControlModel::setParent(const InterfaceRef& _rxParent) throw(com:
 
     {
         xComp = xComp.query( _rxParent );
-        RTL_LOGFILE_CONTEXT( aLogger, "forms::OControlModel::setParent::logOnEventListener" );
+        RTL_LOGFILE_CONTEXT( aLogger, "OControlModel::setParent::logOnEventListener" );
         if ( xComp.is() )
             xComp->addEventListener(static_cast<XPropertiesChangeListener*>(this));
     }
@@ -977,6 +980,22 @@ void OControlModel::disposing()
 }
 
 //------------------------------------------------------------------------------
+void OControlModel::writeAggregate( const Reference< XObjectOutputStream >& _rxOutStream ) const
+{
+    Reference< XPersistObject > xPersist;
+    if ( query_aggregation( m_xAggregate, xPersist ) )
+        xPersist->write( _rxOutStream );
+}
+
+//------------------------------------------------------------------------------
+void OControlModel::readAggregate( const Reference< XObjectInputStream >& _rxInStream )
+{
+    Reference< XPersistObject > xPersist;
+    if ( query_aggregation( m_xAggregate, xPersist ) )
+        xPersist->read( _rxInStream );
+}
+
+//------------------------------------------------------------------------------
 void SAL_CALL OControlModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
                         throw(stario::IOException, RuntimeException)
 {
@@ -997,9 +1016,7 @@ void SAL_CALL OControlModel::write(const Reference<stario::XObjectOutputStream>&
 
     _rxOutStream->writeLong(nLen);
 
-    Reference<stario::XPersistObject> xPersist;
-    if (query_aggregation(m_xAggregate, xPersist))
-        xPersist->write(_rxOutStream);
+    writeAggregate( _rxOutStream );
 
     // feststellen der Laenge
     nLen = xMark->offsetToMark(nMark) - 4;
@@ -1044,9 +1061,7 @@ void OControlModel::read(const Reference<stario::XObjectInputStream>& InStream) 
     {
         sal_Int32 nMark = xMark->createMark();
 
-        Reference<stario::XPersistObject> xPersist;
-        if (query_aggregation(m_xAggregate, xPersist))
-            xPersist->read(InStream);
+        readAggregate( InStream );
 
         xMark->jumpToMark(nMark);
         InStream->skipBytes(nLen);
@@ -1254,7 +1269,7 @@ OBoundControlModel::OBoundControlModel(
 //------------------------------------------------------------------
 OBoundControlModel::OBoundControlModel(
         const OBoundControlModel* _pOriginal, const Reference< XMultiServiceFactory>& _rxFactory )
-    :OControlModel( _pOriginal, _rxFactory, sal_False )
+    :OControlModel( _pOriginal, _rxFactory, sal_True, sal_False )
     ,OPropertyChangeListener( m_aMutex )
     ,m_aUpdateListeners( m_aMutex )
     ,m_aResetListeners( m_aMutex )
