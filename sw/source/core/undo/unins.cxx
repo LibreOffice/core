@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:19:41 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:45:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -986,11 +986,17 @@ void SwUndoReRead::SaveGraphicData( const SwGrfNode& rGrfNd )
 /*  */
 
 SwUndoInsertLabel::SwUndoInsertLabel( const SwLabelType eTyp,
-                                    const String &rTxt, const BOOL bBef,
-                                    const USHORT nId, const BOOL bCpyBorder )
-    : SwUndo( UNDO_INSERTLABEL ), eType( eTyp ), sText( rTxt ),
-    bBefore( bBef ), nFldId( nId ), aPos( 0, 0 ), nLayerId( 0 ),
-    bCpyBrd( bCpyBorder )
+                                      const String &rTxt,
+                                      const BOOL bBef,
+                                      const USHORT nId,
+                                      const BOOL bCpyBorder )
+    : SwUndo( UNDO_INSERTLABEL ),
+      eType( eTyp ),
+      sText( rTxt ),
+      bBefore( bBef ),
+      nFldId( nId ),
+      nLayerId( 0 ),
+      bCpyBrd( bCpyBorder )
 {
     bUndoKeep = FALSE;
     OBJECT.pUndoFly = 0;
@@ -1026,7 +1032,6 @@ void SwUndoInsertLabel::Undo( SwUndoIter& rIter )
             OBJECT.pUndoFly->Undo( rIter );
             if( LTYPE_DRAW == eType )
             {
-                pSdrObj->SetRelativePos( aPos );
                 pSdrObj->SetLayer( nLayerId );
             }
         }
@@ -1067,7 +1072,6 @@ void SwUndoInsertLabel::Redo( SwUndoIter& rIter )
             OBJECT.pUndoAttr->Redo( rIter );
             if( LTYPE_DRAW == eType )
             {
-                pSdrObj->SetRelativePos( Point(0,0) );
                 pSdrObj->SetLayer( nLayerId );
                 if( pSdrObj->GetLayer() == rDoc.GetHellId() )
                     pSdrObj->SetLayer( rDoc.GetHeavenId() );
@@ -1157,11 +1161,10 @@ void SwUndoInsertLabel::SetFlys( SwFrmFmt& rOldFly, SfxItemSet& rChgSet,
     }
 }
 
-void SwUndoInsertLabel::SetDrawObj( const Point& rPos, BYTE nLId )
+void SwUndoInsertLabel::SetDrawObj( BYTE nLId )
 {
     if( LTYPE_DRAW == eType )
     {
-        aPos = rPos;
         nLayerId = nLId;
     }
 }
