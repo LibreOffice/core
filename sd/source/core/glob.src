@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:05:24 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 19:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1207,7 +1207,7 @@ String STR_LAYOUT_DEFAULT_NAME
     Text [ english_us ] = "Default" ;
     Text[ chinese_simplified ] = "±ê×¼";
     Text[ russian ] = "Ñòàíäàğò";
-    Text[ polish ] = "Domy?lnie";
+    Text[ polish ] = "Domyœlnie";
     Text[ japanese ] = "•W€";
     Text[ chinese_traditional ] = "¼Ğ·Ç";
     Text[ arabic ] = "ŞíÇÓí";
@@ -1264,7 +1264,7 @@ String STR_STANDARD_STYLESHEET_NAME
     Text [ english_us ] = "Default" ;
     Text[ chinese_simplified ] = "±ê×¼";
     Text[ russian ] = "Ñòàíäàğò";
-    Text[ polish ] = "Domy?lnie";
+    Text[ polish ] = "Domyœlnie";
     Text[ japanese ] = "•W€";
     Text[ chinese_traditional ] = "¼Ğ·Ç";
     Text[ arabic ] = "ŞíÇÓí";
@@ -1572,7 +1572,7 @@ String STR_POOLSHEET_TEXTBODY_JUSTIFY
     Text [ portuguese ] = "Corpo do texto justificado" ;
     Text[ chinese_simplified ] = "ÕıÎÄ×óÓÒ¶ÔÆë";
     Text[ russian ] = "Âûğàâíèâàíèå òåêñòà ïî øèğèíå";
-    Text[ polish ] = "Wyjustowany obszar tekst.";
+    Text[ polish ] = "Tekst wyrównany do lewej i prawej";
     Text[ japanese ] = "–{•¶‹Ï“™Š„•t";
     Text[ chinese_traditional ] = "¤º¤å¥ª¥k¹ï»ô";
     Text[ arabic ] = "ÌÓã ÇáäÕ ãÖÈæØ";
@@ -2094,7 +2094,7 @@ String STR_POOLSHEET_ARROW
     Text [ spanish ] = "Flecha" ;
     Text [ danish ] = "Pil" ;
     Text [ swedish ] = "Pil" ;
-    Text [ finnish ] = "Pfeil" ;
+    Text [ finnish ] = "Nuoli" ;
     Text [ english_us ] = "Arrow" ;
     Text[ chinese_simplified ] = "¼ıÍ·";
     Text[ russian ] = "Ñòğåëêà";
