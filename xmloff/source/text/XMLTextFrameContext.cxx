@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-06 11:41:56 $
+ *  last change: $Author: mib $ $Date: 2000-12-08 08:22:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,7 @@ XMLTextFrameContext::XMLTextFrameContext(
     sal_Int32   nWidth = 0;
     sal_Int32   nMinWidth = 0;
     sal_Int32   nHeight = 0;
-    sal_Int32   nMinHeight;
+    sal_Int32   nMinHeight = 0;
     sal_Int32   nZIndex = -1;
     sal_Int16   nPage = 0;
 
