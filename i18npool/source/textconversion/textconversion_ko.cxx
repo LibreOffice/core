@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textconversion_ko.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 17:17:58 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ TextConversion_ko::TextConversion_ko( const Reference < XMultiServiceFactory >& 
         xI->queryInterface( getCppuType((const Reference< XConversionDictionary>*)0) ) >>= xCD;
 
     xI = xMSF->createInstance(
-        OUString::createFromAscii("com.sun.star.linguist2.ConversionDictionaryList"));
+        OUString::createFromAscii( "com.sun.star.linguistic2.ConversionDictionaryList" ));
 
     if ( xI.is() )
         xI->queryInterface( getCppuType((const Reference< XConversionDictionaryList>*)0) ) >>= xCDL;
@@ -112,10 +112,10 @@ TextConversion_ko::TextConversion_ko( const Reference < XMultiServiceFactory >& 
                     OUString::createFromAscii("KR"),
                     OUString());
         maxLeftLength = xCDL->queryMaxCharCount(loc,
-                        ConversionDictionaryType::HANJA_HANGUL,
+                        ConversionDictionaryType::HANGUL_HANJA,
                         ConversionDirection_FROM_LEFT);
         maxRightLength = xCDL->queryMaxCharCount(loc,
-                        ConversionDictionaryType::HANJA_HANGUL,
+                        ConversionDictionaryType::HANGUL_HANJA,
                         ConversionDirection_FROM_RIGHT);
         if (xCD.is()) {
             sal_Int32 tmp = xCD->getMaxCharCount(ConversionDirection_FROM_LEFT);
@@ -265,6 +265,8 @@ TextConversion_ko::getConversions( const OUString& aText, sal_Int32 nStartPos, s
                 }
 
                 toHanja = (scriptType == SCRIPT_HANGUL);
+                // FROM_LEFT:  Hangul -> Hanja
+                // FROM_RIGHT: Hanja  -> Hangul
                 eDirection = toHanja ?
                         ConversionDirection_FROM_LEFT : ConversionDirection_FROM_RIGHT;
 
@@ -282,7 +284,7 @@ TextConversion_ko::getConversions( const OUString& aText, sal_Int32 nStartPos, s
             for (sal_Int32 len = end - start; len > 0; len--) {
                 if (xCDL.is())
                     result.Candidates = xCDL->queryConversions(aText, start + nStartPos, len,
-                        aLocale, ConversionDictionaryType::HANJA_HANGUL, eDirection, nConversionOptions); // user dictionary
+                        aLocale, ConversionDictionaryType::HANGUL_HANJA, eDirection, nConversionOptions); // user dictionary
                 if (xCD.is() && toHanja) { // System dictionary would not do Hanja_to_Hangul conversion.
                                          // Char2char converison below is enough.
                     candidates = xCD->getConversions(aText, start + nStartPos, len, eDirection, nConversionOptions); // system dictionary
