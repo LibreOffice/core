@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:57 $
+ *  last change: $Author: dv $ $Date: 2001-07-09 14:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,18 +71,6 @@
 #include <vcl/button.hxx>
 #endif
 
-#ifndef _IODLG_HXX
-#include <sfx2/iodlg.hxx>
-#endif
-
-// forward ---------------------------------------------------------------
-
-class  SvxGraphicHdl_Impl;
-class  SfxObjectShell;
-struct SvxImportGraphicRes_Impl;
-class  SvxGraphicPrevWin_Impl;
-class  SfxMedium;
-
 // Funktionen ------------------------------------------------------------
 
 // returnt einen static Graphic-Filter, wird einmalig angelegt,
@@ -105,75 +93,6 @@ int     LoadGraphic( const String& rPath, const String& rFilter,
 #define ENABLE_PROP_WITHOUTLINK ((USHORT)0x0008)    // Eigenschaften ohne Link
 #define ENABLE_EMPTY_FILENAMES  ((USHORT)0x0010)    // Leere Dateinamen zulassen
 
-class SvxImportGraphicDialog : public SfxFileDialog
-{
-public:
-    SvxImportGraphicDialog( Window* pParent,
-                            const String& rTitle,
-                            const USHORT nEnable = ENABLE_STANDARD,
-                            WinBits nWinBits = WB_OPEN | WB_3DLOOK );
-    ~SvxImportGraphicDialog();
-
-    short                   Execute();
-    void                    SetPath( const String& rPath, BOOL bDir,
-                                        BOOL bLink = FALSE );
-
-    BOOL                    IsURL() const;
-    BOOL                    AsLink() const
-                                { return pLinkBox && pLinkBox->IsChecked(); }
-    GraphicFilter&          GetFilter() { return *GetGrfFilter(); }
-    SvxGraphicPrevWin_Impl& GetPreviewWindow() { return *pPrevWin; }
-
-    void                    SetPreviewing( BOOL bPrev );
-    BOOL                    IsPreviewing() const { return bPreviewing; }
-
-    Link                    GetPropertyHdl() const { return aPropertyLink; }
-    void                    SetPropertyHdl( const Link& rLink )
-                                { aPropertyLink = rLink; }
-
-    Graphic*                GetGraphic() const;
-    String                  GetPath() const;
-
-private:
-friend class SvxGraphicPrevWin_Impl;
-
-    SvxImportGraphicRes_Impl*   pResImpl;
-    SvxGraphicPrevWin_Impl*     pPrevWin;
-
-    SfxMedium*              pMedium;
-
-    PushButton*             pStandardButton;
-    PushButton*             pInternetButton;
-    PushButton*             pPropertiesButton;
-    PushButton*             pFilterButton;
-    CheckBox*               pLinkBox;
-    CheckBox*               pPreviewBox;
-
-    Link                    aPropertyLink;
-    String                  aStartPath;
-    String                  aCurrPath;
-    Timer                   aPrevTimer;
-    BOOL                    bPreviewing;
-    void                    FileSelect();
-    long                    OK();
-    void                    SetPath( const String& ); // just to make private
-
-#ifdef _SVX_IMPGRF_CXX
-    void                    Construct_Impl( const String &rTitle,
-                                            USHORT nEnable );
-
-    DECL_LINK( StandardHdl_Impl, Button * );
-    DECL_LINK( PropertiesHdl_Impl, Button * );
-    DECL_LINK( FilterHdl_Impl, Button * );
-    DECL_LINK( PreviewHdl_Impl, Button * );
-    DECL_LINK( TimeOutHdl_Impl, Timer * );
-    DECL_LINK( FilterSelectHdl_Impl, void * );
-    DECL_LINK( FileSelectHdl_Impl, void * );
-#endif
-};
-
 #endif  // SV_NODIALOG
 
-
 #endif
-
