@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPilotItem.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:35:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:51:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,12 @@ service DataPilotItem
     /** specifies whether the item is showing detail.
      */
     [property] boolean ShowDetail;
+
+    //=========================================================================
+
+        /** specifies whether the item is hidden.
+        */
+        [property] boolean IsHidden;
 
 };
 
