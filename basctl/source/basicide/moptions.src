@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moptions.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,9 +163,9 @@ ModalDialog RID_MACROOPTIONS
         Text [ dutch ] = "Help informatie" ;
         Text [ spanish ] = "Informaciones - Ayuda" ;
         Text [ english_us ] = "Help information" ;
-        Text[ chinese_simplified ] = "ÇóÖú×ÊÁÏ";
-        Text[ russian ] = "Ïîìîùü-èíôîğìàöèÿ";
-        Text[ polish ] = "Pomoc-Informacje";
+        Text[ chinese_simplified ] = "°ïÖú×ÊÁÏ";
+        Text[ russian ] = "Ñïğàâêà-èíôîğìàöèÿ";
+        Text[ polish ] = "Pomoc - Informacje";
         Text[ japanese ] = "ÍÙÌßî•ñ";
         Text[ chinese_traditional ] = "»¡©ú¸ê°T";
         Text[ arabic ] = "ãÚáæãÇÊ Úä ÇáãÓÇÚÏÉ";
@@ -192,9 +192,9 @@ ModalDialog RID_MACROOPTIONS
         Text [ dutch ] = "Help identificatie" ;
         Text [ spanish ] = "Identificación de ayuda" ;
         Text [ english_us ] = "Help ID" ;
-        Text[ chinese_simplified ] = "ÇóÖúÊ¶±ğ·û";
-        Text[ russian ] = "Èäåíòèôèêàöèÿ ïîìîùè";
-        Text[ polish ] = "Identyfikacja pomocy";
+        Text[ chinese_simplified ] = "°ïÖú±êÖ¾";
+        Text[ russian ] = "Èäåíòèôèêàöèÿ ñïğàâêè";
+        Text[ polish ] = "Pomoc - Identyfikacja";
         Text[ japanese ] = "ÍÙÌßID";
         Text[ chinese_traditional ] = "»¡©úÃÑ§O²Å";
         Text[ arabic ] = "ÊÚÑíİ ÇáãÓÇÚÏÉ";
@@ -231,9 +231,9 @@ ModalDialog RID_MACROOPTIONS
         Text [ dutch ] = "Help-bestandsnaam" ;
         Text [ spanish ] = "Nombre del archivo de ayuda" ;
         Text [ english_us ] = "Help file name" ;
-        Text[ chinese_simplified ] = "ÇóÖúÎÄ¼şÃû";
-        Text[ russian ] = "Èìÿ ôàéëà ïîìîùè";
-        Text[ polish ] = "Nazwa pliku-Pomoc";
+        Text[ chinese_simplified ] = "°ïÖúÎÄ¼şÃû";
+        Text[ russian ] = "Èìÿ ôàéëà ñïğàâêè";
+        Text[ polish ] = "Pomoc - Nazwa pliku";
         Text[ japanese ] = "ÍÙÌß‚ÌÌ§²Ù–¼";
         Text[ chinese_traditional ] = "»¡©úÀÉ®×¦W";
         Text[ arabic ] = "ÇÓã ãáİ ÇáãÓÇÚÏÉ";
