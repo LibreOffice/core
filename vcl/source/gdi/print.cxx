@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:05:54 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 15:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1817,6 +1817,7 @@ BOOL Printer::StartJob( const XubString& rJobName )
     else
     {
         mpQPrinter = new ImplQPrinter( this );
+        mpQPrinter->SetDigitLanguage( GetDigitLanguage() );
         mpQPrinter->SetUserCopy( bUserCopy );
         mpQPrinter->SetPrinterOptions( *mpPrinterOptions );
         if ( mpQPrinter->StartJob( rJobName ) )
