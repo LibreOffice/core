@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: os $ $Date: 2001-01-25 10:04:27 $
+#   last change: $Author: os $ $Date: 2001-02-02 10:49:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,6 +131,7 @@ IDLFILES=\
     ReferenceMark.idl\
     ReferenceMarks.idl\
     RelOrientation.idl\
+    RubyAdjust.idl\
     SectionFileLink.idl\
     SetVariableType.idl\
     SizeType.idl\
@@ -208,6 +209,7 @@ IDLFILES=\
     XReferenceMarksSupplier.idl\
     XRelativeTextContentInsert.idl \
     XRelativeTextContentRemove.idl\
+    XRubySelection.idl\
     XSentenceCursor.idl\
     XSimpleText.idl\
     XText.idl\
