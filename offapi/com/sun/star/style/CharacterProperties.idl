@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharacterProperties.idl,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:55:35 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:18:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,8 @@ service CharacterProperties
     //-------------------------------------------------------------------------
     /** contains the font emphasis value as <type scope="com::sun::star::text">FontEmphasis</type>.
      */
-    [optional, property] short CharEmphasize;
+    [optional, property] short CharEmphasis;
+
     //-------------------------------------------------------------------------
     /** contains the relief value as <type scope="com::sun::star::text">FontRelief</type>.
      */
