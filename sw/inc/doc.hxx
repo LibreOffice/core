@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:15:16 $
+ *  last change: $Author: mtg $ $Date: 2001-08-14 13:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1174,7 +1174,7 @@ public:
         { if( !bCreate || pPrt ) return pPrt; else return _GetPrt(); }
     SfxPrinter* GetPrt() const { return pPrt; }
     inline void _SetPrt( SfxPrinter *pP )   { pPrt = pP; }
-    void        SetPrt( SfxPrinter *pP );
+    void        SetPrt( SfxPrinter *pP, sal_Bool bCallPrtDataChanged = sal_True );
     const JobSetup* GetJobsetup() const;
     void        SetJobsetup( const JobSetup& rJobSetup );
 
