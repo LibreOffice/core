@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:45:06 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,11 +116,21 @@
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
+#ifndef _UTL_CONFIGITEM_HXX_
+#include <unotools/configitem.hxx>
+#endif
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX
+#include <rtl/ustrbuf.hxx>
+#endif
 
 using namespace psp;
 using namespace rtl;
 using namespace padmin;
 using namespace osl;
+using namespace com::sun::star::uno;
 
 PADialog* PADialog::Create( Window* pParent, BOOL bAdmin )
 {
@@ -376,7 +386,12 @@ void PADialog::PrintTestPage()
 
     m_pPrinter->SetMapMode( aMapMode );
     m_pPrinter->SetEndPrintHdl( LINK( this, PADialog, EndPrintHdl ) );
-    String aJobName( String( RTL_CONSTASCII_USTRINGPARAM( "StarOffice Test" ) ) );
+
+    Any aRet = utl::ConfigManager::GetDirectConfigProperty( utl::ConfigManager::PRODUCTNAME );
+    OUString aJobName;
+    aRet >>= aJobName;
+
+    aJobName = aJobName + OUString( RTL_CONSTASCII_USTRINGPARAM( " Testpage" ) );
     if( m_pPrinter->GetName() != sPrinter || ! m_pPrinter->StartJob( aJobName ) )
     {
         String aString( PaResId( RID_ERR_NOPRINTER ) );
@@ -413,65 +428,65 @@ void PADialog::PrintTestPage()
     aFont.SetItalic( ITALIC_NONE );
     m_pPrinter->SetFont( aFont );
 
-    String aPrintText;
+    OUStringBuffer aPrintText(1024);
     long nWidth = 0, nMaxWidth = 0;
     String aToken;
 
-    aToken = String( PaResId( RID_TXT_TESTPAGE_NAME ) );
-    nMaxWidth = ( nWidth = m_pPrinter->GetTextWidth( aToken ) ) > nMaxWidth ? nWidth : nMaxWidth;
-    aPrintText += aToken;
-    aPrintText += '\n';
-    aToken = String( PaResId( RID_TXT_TESTPAGE_MODEL ) );
-    nMaxWidth = ( nWidth = m_pPrinter->GetTextWidth( aToken ) ) > nMaxWidth ? nWidth : nMaxWidth;
-    aPrintText += aToken;
-    aPrintText += '\n';
-    aPrintText.AppendAscii( "PPD" );
-    aPrintText += '\n';
-    aToken = String( PaResId( RID_TXT_TESTPAGE_QUEUE ) );
-    nMaxWidth = ( nWidth = m_pPrinter->GetTextWidth( aToken ) ) > nMaxWidth ? nWidth : nMaxWidth;
-    aPrintText += aToken;
-    aPrintText += '\n';
-    aToken = String( PaResId( RID_TXT_TESTPAGE_COMMENT ) );
-    nMaxWidth = ( nWidth = m_pPrinter->GetTextWidth( aToken ) ) > nMaxWidth ? nWidth : nMaxWidth;
-    aPrintText += aToken;
-    aPrintText += '\n';
-    aToken = String( PaResId( RID_TXT_TESTPAGE_DATE ) );
-    nMaxWidth = ( nWidth = m_pPrinter->GetTextWidth( aToken ) ) > nMaxWidth ? nWidth : nMaxWidth;
-    aPrintText += aToken;
-    aPrintText += '\n';
-    aToken = String( PaResId( RID_TXT_TESTPAGE_TIME ) );
-    nMaxWidth = ( nWidth = m_pPrinter->GetTextWidth( aToken ) ) > nMaxWidth ? nWidth : nMaxWidth;
-    aPrintText += aToken;
+    static const struct
+    {
+            const char* const pDirect;
+            USHORT nResId;
+    } aResIds[] =
+        {
+            { NULL, RID_TXT_TESTPAGE_NAME },
+            { NULL, RID_TXT_TESTPAGE_MODEL },
+            { "PPD", 0 },
+            { NULL, RID_TXT_TESTPAGE_QUEUE },
+            { NULL, RID_TXT_TESTPAGE_COMMENT },
+            { NULL, RID_TXT_TESTPAGE_DATE },
+            { NULL, RID_TXT_TESTPAGE_TIME }
+        };
+
+    for( int i = 0; i < sizeof(aResIds)/sizeof(aResIds[0]); i++ )
+    {
+        if( aResIds[i].pDirect )
+            aToken = String::CreateFromAscii( aResIds[i].pDirect );
+        else
+            aToken = String( PaResId( aResIds[i].nResId ) );
+        nMaxWidth = ( nWidth = m_pPrinter->GetTextWidth( aToken ) ) > nMaxWidth ? nWidth : nMaxWidth;
+        aPrintText.append( aToken );
+        aPrintText.append( (sal_Unicode)'\n' );
+    };
 
     m_pPrinter->DrawText( Rectangle( Point( 1000, 2000 ),
                                     Size( aPaperSize.Width() - 2000,
                                           aPaperSize.Height() - 4000 ) ),
-                         aPrintText,
-                         TEXT_DRAW_MULTILINE );
+                          aPrintText.makeStringAndClear(),
+                          TEXT_DRAW_MULTILINE );
 
     AllSettings aSettings( Application::GetSettings() );
     const LocaleDataWrapper& rLocaleWrapper( aSettings.GetLocaleDataWrapper() );
 
-    aPrintText = String( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
-    aPrintText += sPrinter;
-    aPrintText.AppendAscii( "\n: " );
-    aPrintText += pPrintParser->getPrinterName();
-    aPrintText.AppendAscii( "\n: " );
+    aPrintText.appendAscii( ": " );
+    aPrintText.append( sPrinter );
+    aPrintText.appendAscii( "\n: " );
+    aPrintText.append( pPrintParser->getPrinterName() );
+    aPrintText.appendAscii( "\n: " );
     INetURLObject aDriverPath( pPrintParser->getFilename(), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
-    aPrintText += aDriverPath.GetName();
-    aPrintText.AppendAscii( "\n: " );
-    aPrintText += String( aInfo.m_aCommand );
-    aPrintText.AppendAscii( "\n: " );
-    aPrintText += String( aInfo.m_aComment );
-    aPrintText.AppendAscii( "\n: " );
-    aPrintText += rLocaleWrapper.getDate( Date() );
-    aPrintText.AppendAscii( "\n: " );
-    aPrintText += rLocaleWrapper.getTime( Time() );
+    aPrintText.append( aDriverPath.GetName() );
+    aPrintText.appendAscii( "\n: " );
+    aPrintText.append( aInfo.m_aCommand );
+    aPrintText.appendAscii( "\n: " );
+    aPrintText.append( aInfo.m_aComment );
+    aPrintText.appendAscii( "\n: " );
+    aPrintText.append( rLocaleWrapper.getDate( Date() ) );
+    aPrintText.appendAscii( "\n: " );
+    aPrintText.append( rLocaleWrapper.getTime( Time() ) );
 
     m_pPrinter->DrawText( Rectangle( Point( 1100 + nMaxWidth, 2000 ),
                                     Size( aPaperSize.Width() - 2100 - nMaxWidth,
                                           aPaperSize.Height() - 4000 ) ),
-                         aPrintText,
+                         aPrintText.makeStringAndClear(),
                          TEXT_DRAW_MULTILINE );
 
     m_pPrinter->DrawBitmap( Point( aPaperSize.Width() - 4000, 1000 ),
