@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pngread.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:07:21 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:57:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -679,7 +679,7 @@ void PNGReaderImpl::ImplReadTransparent()
                 {
                     mpTransTab = new BYTE [ 256 ];
                     rtl_fillMemory( mpTransTab, 256, 0xff );
-                    rtl_copyMemory( mpTransTab, maDataIter, mnChunkLen );
+                    rtl_copyMemory( mpTransTab, &(*maDataIter), mnChunkLen );
                     maDataIter += mnChunkLen;
                     mbTransparent = TRUE;
                 }
@@ -797,7 +797,7 @@ void PNGReaderImpl::ImplReadIDAT()
             mpZCodec->BeginCompression( ZCODEC_PNG_DEFAULT );
         }
         mpZCodec->SetBreak( mnChunkLen );
-        SvMemoryStream aIStrm( maDataIter, mnChunkLen, STREAM_READ );
+        SvMemoryStream aIStrm( &(*maDataIter), mnChunkLen, STREAM_READ );
 
         while ( ( mpZCodec->GetBreak() ) )
         {
