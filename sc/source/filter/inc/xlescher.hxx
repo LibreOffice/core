@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlescher.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:20:30 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ const sal_uInt16 EXC_OBJ_INVALID_ID         = 0x0000;
 
 // sub records
 const sal_uInt16 EXC_ID_OBJ_FTEND           = 0x0000;   /// End of OBJ.
+const sal_uInt16 EXC_ID_OBJ_FTMACRO         = 0x0004;   /// Macro link.
 const sal_uInt16 EXC_ID_OBJ_FTGMO           = 0x0006;   /// Group marker.
 const sal_uInt16 EXC_ID_OBJ_FTCF            = 0x0007;   /// Clipboard format.
 const sal_uInt16 EXC_ID_OBJ_FTPIOGRBIT      = 0x0008;   /// Option flags.
@@ -149,11 +150,15 @@ const sal_uInt16 EXC_OBJ_CBLS_FLAT          = 0x0001;
 const sal_uInt16 EXC_OBJ_GBO_FLAT           = 0x0001;
 
 // ftLbsData: List box data
-const sal_uInt16 EXC_OBJ_LBS_SELMASK        = 0x0030;
+const sal_uInt16 EXC_OBJ_LBS_SELMASK        = 0x0030;   /// Mask for selection type.
 const sal_uInt16 EXC_OBJ_LBS_SEL_SIMPLE     = 0x0000;   /// Simple selection.
 const sal_uInt16 EXC_OBJ_LBS_SEL_MULTI      = 0x0010;   /// Multi selection.
 const sal_uInt16 EXC_OBJ_LBS_SEL_EXT        = 0x0020;   /// Extended selection.
 const sal_uInt16 EXC_OBJ_LBS_FLAT           = 0x0008;
+const sal_uInt16 EXC_OBJ_LBS_COMBOMASK      = 0x0003;   /// Mask for combobox style.
+const sal_uInt16 EXC_OBJ_LBS_COMBO_STD      = 0x0000;   /// Standard combo box.
+const sal_uInt16 EXC_OBJ_LBS_COMBO_SIMPLE   = 0x0002;   /// Simple dropdown without field.
+const sal_uInt16 EXC_OBJ_LBS_FILTERED       = 0x0008;   /// Drowdown style: filtered.
 
 // ftSbs: Spin button/scrollbar data
 const sal_uInt16 EXC_OBJ_SBS_HORIZONTAL     = 0x0001;
@@ -249,6 +254,29 @@ SvStream& operator<<( SvStream& rStrm, const XclEscherAnchor& rAnchor );
 XclImpStream& operator>>( XclImpStream& rStrm, XclEscherAnchor& rAnchor );
 XclExpStream& operator<<( XclExpStream& rStrm, const XclEscherAnchor& rAnchor );
 
+// ============================================================================
+
+/** Provides static helper functions for textbox (TBX) form controls. */
+class XclTbxControlHelper
+{
+public:
+    /** Returns the component service name for the passed control type. */
+    static ::rtl::OUString GetServiceName( sal_uInt16 nCtrlType );
+    /** Returns a default control name for the passed control type. */
+    static ::rtl::OUString GetControlName( sal_uInt16 nCtrlType );
+
+    /** Returns the listener type (interface name) for macro events for the passed control type. */
+    static ::rtl::OUString GetListenerType( sal_uInt16 nCtrlType );
+    /** Returns the event method (function name) for macro events for the passed control type. */
+    static ::rtl::OUString GetEventMethod( sal_uInt16 nCtrlType );
+    /** Returns the script type string needed for a script event descriptor. */
+    static ::rtl::OUString GetScriptType();
+
+    /** Returns the Calc macro name from an Excel macro name. */
+    static ::rtl::OUString GetScMacroName( const String& rXclMacroName );
+    /** Returns the Excel macro name from a Calc macro name. */
+    static String       GetXclMacroName( const ::rtl::OUString& rScMacroName );
+};
 
 // ============================================================================
 
