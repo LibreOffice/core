@@ -74,7 +74,7 @@ End Sub
 Sub ConvertAllDocuments(sFilterName())
 Dim FileProperties(1) as new com.sun.star.beans.PropertyValue
 Dim WriterWebProperties(0) as new com.sun.star.beans.PropertyValue
-Dim OpenProperties(2) as new com.sun.star.beans.PropertyValue
+Dim OpenProperties(1) as new com.sun.star.beans.PropertyValue
 Dim FilesList(0,2) as String
 Dim sViewPath as String
 Dim i as Integer
@@ -126,8 +126,6 @@ Dim bIsPassWordProtected as Boolean
 		OpenProperties(0).Value = True
 		OpenProperties(1).Name = &quot;AsTemplate&quot;
 		OpenProperties(1).Name = False
-		OpenProperties(2).Name = &quot;Silent&quot;
-		OpenProperties(2).Name = True
 		
 		MaxFileIndex = Ubound(FilesList(),1)
 		FileCount = 0
