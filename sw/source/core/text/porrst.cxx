@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-21 08:30:44 $
+ *  last change: $Author: fme $ $Date: 2002-01-23 14:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,6 +364,7 @@ void SwArrowPortion::PaintIt( OutputDevice *pOut ) const
         aRect.Pos().X() -= aRect.Width() + 20;
     }
 
+    Color aCol( COL_LIGHTRED );
     SvxFont::DrawArrow( *pOut, aRect.SVRect(), aSize, aCol, bLeft );
 }
 #endif
