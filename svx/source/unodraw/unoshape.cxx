@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-08 14:36:00 $
+ *  last change: $Author: cl $ $Date: 2001-02-19 16:07:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1519,6 +1519,21 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
 
         switch( pMap->nWID )
         {
+            case OWN_ATTR_INTERNAL_OLE:
+            {
+                sal_Bool bInternal = sal_False;
+                if( pObj && pObj->ISA(SdrOle2Obj))
+                {
+                    const SvInPlaceObjectRef& rIPRef = ((SdrOle2Obj*)pObj)->GetObjRef();
+                    if (rIPRef.Is() )
+                    {
+                        const SvGlobalName &rClassName = rIPRef->GetClassName();
+                        bInternal = SvFactory::IsIntern( rClassName, 0 );
+                    }
+                }
+                aAny = uno::Any( &bInternal, ::getBooleanCppuType() );
+                break;
+            }
             case OWN_ATTR_TRANSFORMATION:
             {
                 Matrix3D aMatrix3D;
