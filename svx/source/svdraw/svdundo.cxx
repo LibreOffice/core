@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-12 10:09:34 $
+ *  last change: $Author: aw $ $Date: 2001-11-07 14:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,21 @@ void SdrUndoObj::ImpTakeDescriptionStr(USHORT nStrCacheID, XubString& rStr, FAST
     }
 }
 
+// #94278# common call method for evtl. page change when UNDO/REDO
+// is triggered
+void SdrUndoObj::ImpShowPageOfThisObject()
+{
+    if(pObj && pObj->IsInserted() && pObj->GetPage() && pObj->GetModel())
+    {
+        SdrHint aHint(HINT_SWITCHTOPAGE);
+
+        aHint.SetObject(pObj);
+        aHint.SetPage(pObj->GetPage());
+
+        pObj->GetModel()->Broadcast(aHint);
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, FASTBOOL bStyleSheet1, FASTBOOL bSaveText):
@@ -357,6 +372,9 @@ void SdrUndoAttrObj::Undo()
 {
     BOOL bIs3DScene(pObj && pObj->ISA(E3dScene));
 
+    // #94278# Trigger PageChangeCall
+    ImpShowPageOfThisObject();
+
     if(!pUndoGroup || bIs3DScene)
     {
         if(bHaveToTakeRedoSet)
@@ -412,6 +430,9 @@ void SdrUndoAttrObj::Redo()
     {
         pUndoGroup->Redo();
     }
+
+    // #94278# Trigger PageChangeCall
+    ImpShowPageOfThisObject();
 }
 
 XubString SdrUndoAttrObj::GetComment() const
@@ -463,12 +484,18 @@ XubString SdrUndoAttrObj::GetSdrRepeatComment(SdrView& rView) const
 
 void SdrUndoMoveObj::Undo()
 {
+    // #94278# Trigger PageChangeCall
+    ImpShowPageOfThisObject();
+
     pObj->Move(Size(-aDistance.Width(),-aDistance.Height()));
 }
 
 void SdrUndoMoveObj::Redo()
 {
     pObj->Move(Size(aDistance.Width(),aDistance.Height()));
+
+    // #94278# Trigger PageChangeCall
+    ImpShowPageOfThisObject();
 }
 
 XubString SdrUndoMoveObj::GetComment() const
@@ -527,6 +554,9 @@ SdrUndoGeoObj::~SdrUndoGeoObj()
 
 void SdrUndoGeoObj::Undo()
 {
+    // #94278# Trigger PageChangeCall
+    ImpShowPageOfThisObject();
+
     if (pUndoGroup!=NULL) {
         pUndoGroup->Undo();
     } else {
@@ -545,6 +575,9 @@ void SdrUndoGeoObj::Redo()
         pUndoGeo=pObj->GetGeoData();
         pObj->SetGeoData(*pRedoGeo);
     }
+
+    // #94278# Trigger PageChangeCall
+    ImpShowPageOfThisObject();
 }
 
 XubString SdrUndoGeoObj::GetComment() const
@@ -608,6 +641,9 @@ void SdrUndoObjList::SetOwner(BOOL bNew)
 
 void SdrUndoRemoveObj::Undo()
 {
+    // #94278# Trigger PageChangeCall
+    ImpShowPageOfThisObject();
+
     DBG_ASSERT(!pObj->IsInserted(),"UndoRemoveObj: pObj ist bereits Inserted");
     if (!pObj->IsInserted()) {
         SdrInsertReason aReason(SDRREASON_UNDO);
@@ -634,12 +670,18 @@ void SdrUndoRemoveObj::Redo()
                 pScene->CorrectSceneDimensions();
         }
     }
+
+    // #94278# Trigger PageChangeCall
+    ImpShowPageOfThisObject();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrUndoInsertObj::Undo()
 {
+    // #94278# Trigger PageChangeCall
+    ImpShowPageOfThisObject();
+
     DBG_ASSERT(pObj->IsInserted(),"UndoInsertObj: pObj ist nicht Inserted");
     if (pObj->IsInserted()) {
         SdrObject* pChkObj=pObjList->RemoveObject(nOrdNum);
@@ -666,6 +708,9 @@ void SdrUndoInsertObj::Redo()
                 pScene->CorrectSceneDimensions();
         }
     }
+
+    // #94278# Trigger PageChangeCall
+    ImpShowPageOfThisObject();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -769,6 +814,9 @@ SdrUndoReplaceObj::~SdrUndoReplaceObj()
 
 void SdrUndoReplaceObj::Undo()
 {
+    // #94278# Trigger PageChangeCall
+    ImpShowPageOfThisObject();
+
     if (IsOldOwner() && !IsNewOwner()) {
         DBG_ASSERT(!pObj->IsInserted(),"SdrUndoReplaceObj::Undo(): Altes Objekt ist bereits inserted!");
         DBG_ASSERT(pNewObj->IsInserted(),"SdrUndoReplaceObj::Undo(): Neues Objekt ist nicht inserted!");
@@ -791,6 +839,9 @@ void SdrUndoReplaceObj::Redo()
     } else {
         DBG_ERROR("SdrUndoReplaceObj::Redo(): IsMine-Flags stehen verkehrt. Doppelter Redo-Aufruf?");
     }
+
+    // #94278# Trigger PageChangeCall
+    ImpShowPageOfThisObject();
 }
 
 void SdrUndoReplaceObj::SetNewOwner(BOOL bNew)
@@ -855,6 +906,9 @@ SdrUndoObjOrdNum::SdrUndoObjOrdNum(SdrObject& rNewObj, UINT32 nOldOrdNum1, UINT3
 
 void SdrUndoObjOrdNum::Undo()
 {
+    // #94278# Trigger PageChangeCall
+    ImpShowPageOfThisObject();
+
     SdrObjList* pOL=pObj->GetObjList();
     if (pOL==NULL) {
         DBG_ERROR("UndoObjOrdNum: pObj hat keine ObjList");
@@ -871,6 +925,9 @@ void SdrUndoObjOrdNum::Redo()
         return;
     }
     pOL->SetObjectOrdNum(nOldOrdNum,nNewOrdNum);
+
+    // #94278# Trigger PageChangeCall
+    ImpShowPageOfThisObject();
 }
 
 XubString SdrUndoObjOrdNum::GetComment() const
@@ -915,6 +972,9 @@ void SdrUndoObjSetText::AfterSetText()
 
 void SdrUndoObjSetText::Undo()
 {
+    // #94278# Trigger PageChangeCall
+    ImpShowPageOfThisObject();
+
     // alten Text sichern fuer Redo
     if (!bNewTextAvailable)
         AfterSetText();
@@ -932,6 +992,9 @@ void SdrUndoObjSetText::Redo()
     OutlinerParaObject* pText1=pNewText;
     if (pText1!=NULL) pText1=pText1->Clone();
     pObj->SetOutlinerParaObject(pText1);
+
+    // #94278# Trigger PageChangeCall
+    ImpShowPageOfThisObject();
 }
 
 XubString SdrUndoObjSetText::GetComment() const
