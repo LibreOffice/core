@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-14 11:41:19 $
+ *  last change: $Author: oj $ $Date: 2001-01-04 14:30:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,50 +150,53 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     // check if all keys of the updateable table are fetched
     sal_Bool bAllKeysFound = sal_False;
 
-    Reference<XTablesSupplier> xTabSup(_xComposer,UNO_QUERY);
-    OSL_ENSHURE(xTabSup.is(),"ORowSet::execute composer isn't a tablesupplier!");
-    Reference<XNameAccess> xTables = xTabSup->getTables();
-
-    if(_rUpdateTableName.getLength())
-        xTables->getByName(_rUpdateTableName) >>= m_aUpdateTable;
-    else
-        xTables->getByName(xTables->getElementNames()[0]) >>= m_aUpdateTable;
-
-    if(m_aUpdateTable.is())
+    if(_xComposer.is())
     {
-        Reference<XKeysSupplier> xKeys(m_aUpdateTable,UNO_QUERY);
-        if(xKeys.is())
+        Reference<XTablesSupplier> xTabSup(_xComposer,UNO_QUERY);
+        OSL_ENSHURE(xTabSup.is(),"ORowSet::execute composer isn't a tablesupplier!");
+        Reference<XNameAccess> xTables = xTabSup->getTables();
+
+        if(_rUpdateTableName.getLength())
+            xTables->getByName(_rUpdateTableName) >>= m_aUpdateTable;
+        else
+            xTables->getByName(xTables->getElementNames()[0]) >>= m_aUpdateTable;
+
+        if(m_aUpdateTable.is())
         {
-            Reference< XIndexAccess> xKeyIndex = xKeys->getKeys();
-            Reference<XColumnsSupplier> xColumnsSupplier;
-            // search the one and only primary key
-            for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
+            Reference<XKeysSupplier> xKeys(m_aUpdateTable,UNO_QUERY);
+            if(xKeys.is())
             {
-                Reference<XPropertySet> xProp;
-                xKeyIndex->getByIndex(i) >>= xProp;
-                sal_Int32 nKeyType = 0;
-                xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-                if(KeyType::PRIMARY == nKeyType)
+                Reference< XIndexAccess> xKeyIndex = xKeys->getKeys();
+                Reference<XColumnsSupplier> xColumnsSupplier;
+                // search the one and only primary key
+                for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
                 {
-                    xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
-                    break;
-                }
-            }
-
-            if(xColumnsSupplier.is())
-            {
-                Reference<XNameAccess> xColumns = xColumnsSupplier->getColumns();
-
-                Sequence< ::rtl::OUString> aNames(xColumns->getElementNames());
-                const ::rtl::OUString* pBegin = aNames.getConstArray();
-                const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
-
-                Reference<XColumnsSupplier> xColSup(_xComposer,UNO_QUERY);
-                Reference<XNameAccess> xSelColumns = xColSup->getColumns();
-                for(;pBegin != pEnd ;++pBegin)
-                {
-                    if(bAllKeysFound = xSelColumns->hasByName(*pBegin)) // found a column which is not refetched
+                    Reference<XPropertySet> xProp;
+                    xKeyIndex->getByIndex(i) >>= xProp;
+                    sal_Int32 nKeyType = 0;
+                    xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
+                    if(KeyType::PRIMARY == nKeyType)
+                    {
+                        xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
                         break;
+                    }
+                }
+
+                if(xColumnsSupplier.is())
+                {
+                    Reference<XNameAccess> xColumns = xColumnsSupplier->getColumns();
+
+                    Sequence< ::rtl::OUString> aNames(xColumns->getElementNames());
+                    const ::rtl::OUString* pBegin = aNames.getConstArray();
+                    const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
+
+                    Reference<XColumnsSupplier> xColSup(_xComposer,UNO_QUERY);
+                    Reference<XNameAccess> xSelColumns = xColSup->getColumns();
+                    for(;pBegin != pEnd ;++pBegin)
+                    {
+                        if(bAllKeysFound = xSelColumns->hasByName(*pBegin)) // found a column which is not refetched
+                            break;
+                    }
                 }
             }
         }
@@ -1555,6 +1558,9 @@ void SAL_CALL ORowSetCache::clearWarnings(  ) throw(SQLException, RuntimeExcepti
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.18  2000/12/14 11:41:19  oj
+    #82061# beforeFirst called everytime
+
     Revision 1.17  2000/12/12 12:19:01  oj
     #80933# change flush of attributes
 
