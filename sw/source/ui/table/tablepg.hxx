@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablepg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:28:50 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 10:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,11 +229,12 @@ class SwTextFlowPage : public SfxTabPage
     TriStateBox     aSplitRowCB;
     CheckBox        aKeepCB;
     CheckBox        aHeadLineCB;
+    FixedText       aTextDirectionFT;
+    ListBox         aTextDirectionLB;
 
-    FixedLine        aVertOrientFL;
-    RadioButton     aTopRB;
-    RadioButton     aCenterRB;
-    RadioButton     aBottomRB;
+    FixedLine       aVertOrientFL;
+    FixedText       aVertOrientFT;
+    ListBox         aVertOrientLB;
 
     SwWrtShell*     pShell;
 
