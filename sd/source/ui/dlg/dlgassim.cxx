@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgassim.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: af $ $Date: 2002-08-22 10:05:46 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,15 +68,19 @@
 #include <svtools/pathoptions.hxx>
 
 #include "sdpage.hxx"
-#include "sdoutl.hxx"
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
 #include "res_bmp.hrc"
 
 #include <vcl/svapp.hxx>
 
 #include "dlgassim.hxx"
 
-SdPageListControl::SdPageListControl( Window* pParent, const ResId& rResId ) :
-            SvTreeListBox(pParent, rResId)
+SdPageListControl::SdPageListControl(
+    ::Window* pParent,
+    const ResId& rResId )
+    : SvTreeListBox(pParent, rResId)
 {
     // Tree-ListBox mit Linien versehen
     SetWindowBits( WinBits( WB_TABSTOP | WB_BORDER | WB_HASLINES |
