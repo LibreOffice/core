@@ -31,6 +31,7 @@ mkdir: %_DEST%\inc%_EXT%\ucbhelper
 ..\inc\ucbhelper\simpleinteractionrequest.hxx %_DEST%\inc%_EXT%\ucbhelper\simpleinteractionrequest.hxx
 ..\inc\ucbhelper\simpleauthenticationrequest.hxx %_DEST%\inc%_EXT%\ucbhelper\simpleauthenticationrequest.hxx
 ..\inc\ucbhelper\simplenameclashresolverequest.hxx %_DEST%\inc%_EXT%\ucbhelper\simplenameclashresolverequest.hxx
+..\inc\ucbhelper\simpleioerrorrequest.hxx %_DEST%\inc%_EXT%\ucbhelper\simpleioerrorrequest.hxx
 ..\version.mk %_DEST%\inc%_EXT%\ucbhelper\version.mk
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
