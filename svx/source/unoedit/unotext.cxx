@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-22 16:27:19 $
+ *  last change: $Author: cl $ $Date: 2000-12-01 16:45:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@
 #include "unofield.hxx"
 #include "flditem.hxx"
 #include "unoshprp.hxx"
+#include "numitem.hxx"
 
 using namespace ::rtl;
 using namespace ::vos;
@@ -442,25 +443,13 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet& rOldSet,
 
     case EE_PARA_NUMBULLET:
         {
-            uno::Reference< container::XIndexReplace > xNumRule;
-            if(aValue >>= xNumRule)
+            if( !aValue.hasValue() )
             {
-                if( xNumRule.is())
-                {
-                    SvxUnoNumberingRules *pNumRules = SvxUnoNumberingRules::getImplementation( xNumRule );
-
-                    if( pNumRules && pNumRules->GetNumBulletItem())
-                    {
-                        rNewSet.Put(*pNumRules->GetNumBulletItem());
-                        return sal_True;
-                    }
-                }
-                else
-                {
                     rNewSet.ClearItem(EE_PARA_NUMBULLET);
                     return sal_True;
-                }
             }
+
+            return sal_False;
         }
         break;
 
@@ -492,20 +481,6 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet& rOldSet,
                             return sal_True;
                         }
                     }
-                }
-            }
-        }
-        break;
-    case WID_NUMNAME:
-        {
-            OUString aName;
-            if( aValue >>= aName )
-            {
-                SvxNumBulletItem* pNumItem = SvxGetNumBulletItemByName( rOldSet.GetPool(), aName );
-                if( pNumItem )
-                {
-                    rNewSet.Put(*pNumItem);
-                    return sal_True;
                 }
             }
         }
@@ -616,7 +591,6 @@ sal_Bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const S
         break;
 
     case EE_PARA_NUMBULLET:
-    case WID_NUMNAME:
         {
             if((rSet.GetItemState( EE_PARA_NUMBULLET, sal_True ) & (SFX_ITEM_SET|SFX_ITEM_DEFAULT)) == 0)
                 throw uno::RuntimeException();
@@ -626,10 +600,7 @@ sal_Bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const S
             if( pBulletItem == NULL )
                 throw uno::RuntimeException();
 
-            if( pMap->nWID == EE_PARA_NUMBULLET )
-                aAny <<= pBulletItem->getUnoNumRule();
-            else
-                aAny <<= pBulletItem->getName();
+            aAny <<= SvxCreateNumRule( pBulletItem->GetNumRule() );
         }
         break;
 
@@ -754,9 +725,6 @@ beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const OUStr
         }
         break;
 
-    case WID_NUMNAME:
-        nWID = EE_PARA_NUMBULLET;
-        break;
     case WID_NUMLEVEL:
         eItemState = SFX_ITEM_SET;
         break;
@@ -836,10 +804,6 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(const OUString& PropertyName, sa
         SvxUnoFontDescriptor::setPropertyToDefault( aSet );
         break;
 
-    case WID_NUMNAME:
-        {
-        }
-        break;
     case WID_NUMLEVEL:
         {
             sal_Int16 nLevel = 0;
@@ -890,14 +854,6 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aProp
     case WID_FONTDESC:
         return SvxUnoFontDescriptor::getPropertyDefault( pPool );
 
-    case WID_NUMNAME:
-        {
-            OUString aEmpty;
-            uno::Any aValue;
-            aValue <<= aEmpty;
-            return aValue;
-        }
-        break;
     case WID_NUMLEVEL:
         {
             uno::Any aValue;
