@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regtype.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2000-11-03 13:44:33 $
+ *  last change: $Author: jsc $ $Date: 2001-05-04 13:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,11 @@
 
 // version number of the library. This number is used for the load on call
 // mechanism and must be modifed when the library will be upgraded to a new version.
+#ifdef SAL_W32
 #define LIBRARY_VERSION "2"
+#else
+#define LIBRARY_VERSION
+#endif
 
 typedef void*       RegHandle;
 
