@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-04 08:18:41 $
+ *  last change: $Author: cyrillem $ $Date: 2002-07-19 18:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,11 +141,9 @@ static NodeResult merge(
             rtl::OUString bestLocale = findBestLocale(
                     compositeLayer->listSubLayerIds(), aLocale) ;
 
-            LayerMergeHandler * pLocaleMerger = new LayerMergeHandler(aFactory, aData, bestLocale);
-            uno::Reference<backenduno::XLayerHandler> xLocaleMerger(pLocaleMerger);
-
             if (bestLocale.getLength() > 0) {
-                compositeLayer->readSubLayerData(xLocaleMerger, bestLocale) ;
+                promoteToDefault(aData) ;
+                compositeLayer->readSubLayerData(xLayerMerger, bestLocale) ;
             }
         }
     }
