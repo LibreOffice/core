@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:42:54 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:25:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -941,9 +941,12 @@ class EventsNameReplace_Impl:
             // do we need to connect?
             if ( !xReturn.is() )
             {
-                connectRowset( );
-                // get the property again
-                xProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xReturn;
+                if ( !::dbtools::isEmbeddedInDatabase( getRowSet(), xReturn ) )
+                {
+                    connectRowset( );
+                    // get the property again
+                    xProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xReturn;
+                }
             }
         }
 
@@ -1107,9 +1110,11 @@ class EventsNameReplace_Impl:
     sal_Bool OPropertyBrowserController::haveRowsetConnection( ) const
     {
         Reference< XConnection > xConnection = m_xRowsetConnection;
-        Reference< XPropertySet > xProps( getRowSet( ), UNO_QUERY );
+        Reference< XPropertySet > xProps( getRowSet(), UNO_QUERY );
         if ( xProps.is() )
             xProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xConnection;
+        if ( !xConnection.is() )
+            isEmbeddedInDatabase( getRowSet(), xConnection );
         return xConnection.is();
     }
 
@@ -2424,8 +2429,16 @@ class EventsNameReplace_Impl:
 
                 sal_Int32   nPropertyId = m_pPropertyInfo->getPropertyId( sPropertyName );
                 sal_uInt32  nPropertyUIFlags = m_pPropertyInfo->getPropertyUIFlags( nPropertyId );
-                bool bIsDataProperty      = ( nPropertyUIFlags & PROP_FLAG_DATA_PROPERTY  ) != 0;
-                bool bIsActuatingProperty = ( nPropertyUIFlags & PROP_FLAG_ACTUATING      ) != 0;
+                bool bIsDataProperty         = ( nPropertyUIFlags & PROP_FLAG_DATA_PROPERTY  ) != 0;
+                bool bIsActuatingProperty    = ( nPropertyUIFlags & PROP_FLAG_ACTUATING      ) != 0;
+                bool bIsExperimentalProperty = ( nPropertyUIFlags & PROP_FLAG_EXPERIMENTAL   ) != 0;
+
+                // don't show experimental properties unless allowed to do so
+                if ( bIsExperimentalProperty )
+                {
+                    if ( true ) // TODO
+                        continue;
+                }
 
                 //////////////////////////////////////////////////////////////////////
                 if ( bIsDataProperty )
