@@ -5,6 +5,7 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\awt
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\chart
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\configuration
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\datatransfer
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\datatransfer\dnd
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\datatransfer\clipboard
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\document
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\drawing
