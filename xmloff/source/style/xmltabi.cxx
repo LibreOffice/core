@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: mib $ $Date: 2000-09-21 09:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ SvXMLImportContext *SvxXMLTabStopImportContext::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     if( XML_NAMESPACE_STYLE == nPrefix &&
-        0 == rLocalName.compareToAscii( sXML_tabstop_tab_stop , sizeof( sXML_tabstop_tab_stop ) ) )
+        0 == rLocalName.equalsAsciiL( sXML_tabstop_tab_stop , sizeof( sXML_tabstop_tab_stop ) ) )
     {
         // create new tabstop import context
         SvxXMLTabStopContext_Impl *pTabStopContext =
