@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 17:58:38 $
+ *  last change: $Author: rt $ $Date: 2004-08-12 08:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include <io.h>
 #include <osl/thread.h>
 #include <osl/file.hxx>
+#include <qswin32.h>
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -106,11 +107,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::osl;
 
 
-#define LISTENER_WINDOWCLASS    "SO Listener Class"
-#define LISTENER_WINDOWNAME     "SO Listener Window"
 #define EXECUTER_WINDOWCLASS    "SO Executer Class"
 #define EXECUTER_WINDOWNAME     "SO Executer Window"
-#define KILLTRAY_MESSAGE        TEXT("SO KillTray")
+
 
 #define ID_QUICKSTART               1
 #define IDM_EXIT                    2
@@ -354,7 +353,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 // request notfication when taskbar is recreated
                 // we then have to add our icon again
                 s_uTaskbarRestart = RegisterWindowMessage(TEXT("TaskbarCreated"));
-                s_uMsgKillTray = RegisterWindowMessage( KILLTRAY_MESSAGE );
+                s_uMsgKillTray = RegisterWindowMessage( SHUTDOWN_QUICKSTART_MESSAGE );
 
                 // create the menu
                 if( !popupMenu )
@@ -544,8 +543,8 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 DWORD WINAPI SystrayThread( LPVOID lpParam )
 {
     aListenerWindow = CreateWindowExA(0,
-        LISTENER_WINDOWCLASS,       // registered class name
-        LISTENER_WINDOWNAME,        // window name
+        QUICKSTART_CLASSNAME,       // registered class name
+        QUICKSTART_WINDOWNAME,        // window name
         0,                          // window style
         CW_USEDEFAULT,              // horizontal position of window
         CW_USEDEFAULT,              // vertical position of window
@@ -584,7 +583,7 @@ void ShutdownIcon::initSystray()
     listenerClass.hCursor       = NULL;
     listenerClass.hbrBackground = NULL;
     listenerClass.lpszMenuName  = NULL;
-    listenerClass.lpszClassName = LISTENER_WINDOWCLASS;
+    listenerClass.lpszClassName = QUICKSTART_CLASSNAME;
     listenerClass.hIconSm       = NULL;
 
     RegisterClassExA(&listenerClass);
@@ -634,7 +633,7 @@ void ShutdownIcon::deInitSystray()
         DestroyWindow( aExecuterWindow );
         aExecuterWindow = NULL;
     }
-    UnregisterClassA( LISTENER_WINDOWCLASS, GetModuleHandle( NULL ) );
+    UnregisterClassA( QUICKSTART_CLASSNAME, GetModuleHandle( NULL ) );
     UnregisterClassA( EXECUTER_WINDOWCLASS, GetModuleHandle( NULL ) );
 }
 
