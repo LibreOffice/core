@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implncvt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:57 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,11 +134,11 @@ ImplFloatPoint ImplFloatPoint::GetNVec( const ImplFloatPoint& rPoint ) const
 // --------------------
 
 ImplLineConverter::ImplLineConverter( const Polygon& rPolygon, const LineInfo& rLineInfo, const Point* pRefPoint ) :
-    maLineInfo      ( rLineInfo ),
     mfWidthHalf     ( rLineInfo.GetWidth() >> 1 ),
-    mpFloatPoint    ( NULL ),
+    maLineInfo      ( rLineInfo ),
     mpFloat0        ( new ImplFloatPoint[ 6 ] ),
     mpFloat1        ( new ImplFloatPoint[ 6 ] ),
+    mpFloatPoint    ( NULL ),
     mnLines         ( 0 )
 {
     UINT16  nIndex, nPolySize = rPolygon.GetSize();
@@ -249,7 +249,6 @@ const Polygon* ImplLineConverter::ImplGetFirst()
                 INT32 nDashLen = maLineInfo.GetDashLen() + nDistance;
                 INT32 nDashesLen = maLineInfo.GetDashCount() * nDashLen;
                 INT32 nDotLen = maLineInfo.GetDotLen() + nDistance;
-                INT32 nDotsLen = maLineInfo.GetDotCount() * nDotLen;
 
                 if ( mnRefDistance >= nDashesLen )
                 {
