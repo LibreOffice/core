@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 09:31:05 $
+ *  last change: $Author: pw $ $Date: 2000-10-23 14:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,18 +417,19 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
                 aLbLineStyle.SelectEntryPos( nPos );
             // SelectStyleHdl_Impl( this );
         }
+
         // Ermitteln (evtl. abschneiden) des Namens und in
         // der GroupBox darstellen
         String          aString( ResId( RID_SVXSTR_TABLE, pMgr ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-        INetURLObject   aURL; aURL.SetSmartURL( pDashList->GetName() );
+        INetURLObject   aURLDash( pDashList->GetName(), INET_PROT_FILE );
 
-        if ( aURL.getBase().Len() > 18 )
+        if ( aURLDash.getBase().Len() > 18 )
         {
-            aString += aURL.getBase().Copy( 0, 15 );
+            aString += aURLDash.getBase().Copy( 0, 15 );
             aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
         }
         else
-            aString += aURL.getBase();
+            aString += aURLDash.getBase();
 
         aGrpLine.SetText( aString );
 
@@ -471,15 +472,15 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         // Ermitteln (evtl. abschneiden) des Namens und in
         // der GroupBox darstellen
         aString = String( ResId( RID_SVXSTR_TABLE, pMgr ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-        aURL.SetSmartURL( pLineEndList->GetName() );
+        INetURLObject   aURLEnd( pLineEndList->GetName(), INET_PROT_FILE );
 
-        if ( aURL.getBase().Len() > 18 )
+        if ( aURLEnd.getBase().Len() > 18 )
         {
-            aString += aURL.getBase().Copy( 0, 15 );
+            aString += aURLEnd.getBase().Copy( 0, 15 );
             aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
         }
         else
-            aString += aURL.getBase();
+            aString += aURLEnd.getBase();
 
         aGrpLineEnds.SetText( aString );
 
