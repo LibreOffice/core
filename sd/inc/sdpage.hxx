@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:12:46 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ struct StyleRequestData;
 class SdPage;
 class Paragraph;
 class Outliner;
+class SdStyleSheet;
 
 namespace sd
 {
@@ -179,14 +180,6 @@ namespace sd {
         isPresObjKind_func( PresObjKind eKind ) : meKind( eKind ) {}
         bool operator() (PresentationObjectDescriptor x) { return x.meKind == meKind; }
         PresObjKind meKind;
-    };
-
-    /** this unary_function can be used with stl algorithms to remove presentation objects from its page */
-    struct removePresObj_func : public std::unary_function< PresentationObjectDescriptor, void >
-    {
-        removePresObj_func( SdPage* pPage ) : mpPage( pPage ) {}
-        void operator() (PresentationObjectDescriptor x);
-        SdPage* mpPage;
     };
 
     struct SD_DLLPUBLIC HeaderFooterSettings
@@ -452,6 +445,10 @@ public:
 
     /** callback from the sd::View when an object just left text edit mode */
     void onEndTextEdit( SdrObject* pObj );
+
+    /** returns the presentation style with the given helpid from this masterpage or this
+        slides masterpage */
+    SdStyleSheet* getPresentationStyle( sal_uInt32 nHelpId ) const;
 };
 
 #endif     // _SDPAGE_HXX
