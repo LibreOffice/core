@@ -8198,3 +8198,12 @@ _real@bfe45f306dc9c883
 ?iquery@?$Reference@VXFilePicker@dialogs@ui@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
 ?iquery@?$Reference@VXFilterManager@dialogs@ui@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
 ?iquery@?$Reference@VXInitialization@lang@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?Paint@TabPage@@UAEXABVRectangle@@@Z
+_real@3f5b4e81b4e81b4f
+_real@4020000000000000
+?PreNotify@CheckBox@@UAEJAAVNotifyEvent@@@Z
+?PreNotify@PushButton@@UAEJAAVNotifyEvent@@@Z
+?PreNotify@RadioButton@@UAEJAAVNotifyEvent@@@Z
+?PreNotify@ScrollBar@@UAEJAAVNotifyEvent@@@Z
+?PreNotify@SpinField@@UAEJAAVNotifyEvent@@@Z
+?PreNotify@TabControl@@UAEJAAVNotifyEvent@@@Z
