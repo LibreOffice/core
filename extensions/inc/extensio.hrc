@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extensio.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-03-09 12:32:48 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 16:32:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,5 +108,26 @@
 #define HID_BIB_CONTROL_PAGE                    (HID_EXTENSIONS_START + 39)
 #define HID_BIB_CONTROL_PARENT                  (HID_EXTENSIONS_START + 40)
 
+#define HID_GRIDWIZARD_PREVIOUS                 (HID_EXTENSIONS_START + 41)
+#define HID_GRIDWIZARD_NEXT                     (HID_EXTENSIONS_START + 42)
+#define HID_GRIDWIZARD_CANCEL                   (HID_EXTENSIONS_START + 43)
+#define HID_GRIDWIZARD_FINISH                   (HID_EXTENSIONS_START + 44)
+#define HID_GROUPWIZARD_PREVIOUS                (HID_EXTENSIONS_START + 45)
+#define HID_GROUPWIZARD_NEXT                    (HID_EXTENSIONS_START + 46)
+#define HID_GROUPWIZARD_CANCEL                  (HID_EXTENSIONS_START + 47)
+#define HID_GROUPWIZARD_FINISH                  (HID_EXTENSIONS_START + 48)
+#define HID_LISTWIZARD_PREVIOUS                 (HID_EXTENSIONS_START + 49)
+#define HID_LISTWIZARD_NEXT                     (HID_EXTENSIONS_START + 50)
+#define HID_LISTWIZARD_CANCEL                   (HID_EXTENSIONS_START + 51)
+#define HID_LISTWIZARD_FINISH                   (HID_EXTENSIONS_START + 52)
+#define HID_DBIWIZARD_PREVIOUS                  (HID_EXTENSIONS_START + 53)
+#define HID_DBIWIZARD_NEXT                      (HID_EXTENSIONS_START + 54)
+#define HID_DBIWIZARD_CANCEL                    (HID_EXTENSIONS_START + 55)
+#define HID_DBIWIZARD_FINISH                    (HID_EXTENSIONS_START + 56)
+#define UID_DBIWIZARD_SOURCESTATS               (HID_EXTENSIONS_START + 57)
+#define UID_DBIWIZARD_SOURCEFILE                (HID_EXTENSIONS_START + 58)
+#define UID_DBIWIZARD_QUERIES                   (HID_EXTENSIONS_START + 59)
+#define UID_DBIWIZARD_FORMS                     (HID_EXTENSIONS_START + 60)
+#define UID_DBIWIZARD_FORMS_SAVETO              (HID_EXTENSIONS_START + 61)
 
 #endif
