@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commands.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:36:43 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1145,7 +1145,7 @@ Menu RID_COMMANDMENU
             Text = "~Unäre/Binäre Operatoren" ;
             Text [ ENGLISH ] = "Unary/binary operators" ;
             Text [ english_us ] = "~Unary/Binary Operators" ;
-            Text [ portuguese_brazilian ] = "Unäre/Binäre Operatoren" ;
+            Text [ portuguese_brazilian ] = "Un?re/Bin?re Operatoren" ;
             Text [ swedish ] = "~Unära/binära operatorer" ;
             Text [ danish ] = "Monadiske/binære operatorer" ;
             Text [ italian ] = "Operatori unari/binari" ;
