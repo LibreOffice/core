@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:52:00 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 08:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2218,7 +2218,7 @@ void SwCntntFrm::_UpdateAttr( SfxPoolItem* pOld, SfxPoolItem* pNew,
             rInvFlags |= 0x01;
             if ( IsTxtFrm() )
             {
-                static_cast<SwTxtFrm*>(this)->InvalidateNextPrtArea();
+                InvalidateNextPrtArea();
             }
             if ( !GetIndNext() && IsInTab() && IsInSplitTableRow() )
             {
