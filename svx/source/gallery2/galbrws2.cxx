@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 15:32:16 $
+ *  last change: $Author: rt $ $Date: 2005-02-04 11:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1254,8 +1254,8 @@ IMPL_LINK( GalleryBrowser2, MiscHdl, void*, p )
 
     maViewBox.SetOutStyle( maMiscOptions.GetToolboxStyle() );
 
-    BitmapEx aIconBmpEx( Image( GAL_RESID( bHC? RID_SVXIMG_GALLERY_VIEW_ICON_HC : RID_SVXIMG_GALLERY_VIEW_ICON ) ).GetBitmapEx() );
-    BitmapEx aListBmpEx( Image( GAL_RESID( bHC? RID_SVXIMG_GALLERY_VIEW_LIST_HC : RID_SVXIMG_GALLERY_VIEW_LIST ) ).GetBitmapEx() );
+    BitmapEx aIconBmpEx = BitmapEx( Image( GAL_RESID( bHC? RID_SVXIMG_GALLERY_VIEW_ICON_HC : RID_SVXIMG_GALLERY_VIEW_ICON ) ).GetBitmapEx() );
+    BitmapEx aListBmpEx = BitmapEx( Image( GAL_RESID( bHC? RID_SVXIMG_GALLERY_VIEW_LIST_HC : RID_SVXIMG_GALLERY_VIEW_LIST ) ).GetBitmapEx() );
 
     if( SFX_SYMBOLS_SMALL != eOptSymbolSet )
     {
