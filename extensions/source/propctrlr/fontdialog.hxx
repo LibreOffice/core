@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontdialog.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-21 15:41:58 $
+ *  last change: $Author: fs $ $Date: 2001-06-11 11:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,13 @@
 #ifndef _SFXTABDLG_HXX
 #include <sfx2/tabdlg.hxx>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 
 class SvxFontListItem;
+class FontList;
+
 //............................................................................
 namespace pcr
 {
@@ -81,6 +86,26 @@ namespace pcr
         ControlCharacterDialog(Window* _pParent, const SfxItemSet& _rCoreSet);
         ~ControlCharacterDialog();
 
+        /// creates an item set to be used with this dialog
+        static SfxItemSet*  createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults);
+
+        /// destroys an item previously created with <method>createItemSet</method>
+        static void         destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults);
+
+        /// fills the given item set with values obtained from the given property set
+        static void         translatePropertiesToItems(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel,
+            SfxItemSet* _pSet);
+
+        /** fills the given property set with values obtained from the given item set
+            @return
+                the name of the selected font (if changed by the user)
+        */
+        static String       translatePropertiesToItems(
+            const SfxItemSet* _pSet,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel);
+
+    protected:
         virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage);
     };
 //............................................................................
@@ -92,6 +117,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/03/21 15:41:58  fs
+ *  initial checkin - font dialog for form controls
+ *
  *
  *  Revision 1.0 21.03.01 10:13:24  fs
  ************************************************************************/
