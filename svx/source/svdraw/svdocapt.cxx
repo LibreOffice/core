@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocapt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: john.marmion $ $Date: 2000-09-28 08:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,15 +92,15 @@
 #include "svdpage.hxx"
 
 #ifndef _SVX_XFLHTIT_HXX
-#include <svx/xflhtit.hxx>
+#include <xflhtit.hxx>
 #endif
 
 #ifndef _SVX_XFLCLIT_HXX
-#include <svx/xflclit.hxx>
+#include <xflclit.hxx>
 #endif
 
 #ifndef _SVX_XFLTRIT_HXX
-#include <svx/xfltrit.hxx>
+#include <xfltrit.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
