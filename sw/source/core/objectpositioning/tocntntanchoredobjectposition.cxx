@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tocntntanchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:43:10 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,49 @@ SwTxtFrm& SwToCntntAnchoredObjectPosition::GetAnchorTxtFrm() const
     return static_cast<SwTxtFrm&>(GetAnchorFrm());
 }
 
+// --> OD 2004-07-20 #i23512#
+bool lcl_DoesVertPosFits( const SwTwips _nRelPosY,
+                          const SwTwips _nAvail,
+                          const SwLayoutFrm* _pUpperOfOrientFrm,
+                          const bool _bBrowse,
+                          const bool _bGrowInTable,
+                          SwLayoutFrm*& _orpLayoutFrmToGrow )
+{
+    bool bVertPosFits = false;
+
+    if ( _nRelPosY <= _nAvail )
+    {
+        bVertPosFits = true;
+    }
+    else if ( _bBrowse )
+    {
+        if ( _pUpperOfOrientFrm->IsInSct() )
+        {
+            SwSectionFrm* pSctFrm =
+                    const_cast<SwSectionFrm*>(_pUpperOfOrientFrm->FindSctFrm());
+            bVertPosFits = pSctFrm->GetUpper()->Grow( _nRelPosY - _nAvail, TRUE ) > 0;
+            // Note: do not provide a layout frame for a grow.
+        }
+        else
+        {
+            bVertPosFits = const_cast<SwLayoutFrm*>(_pUpperOfOrientFrm)->
+                                        Grow( _nRelPosY - _nAvail, TRUE ) > 0;
+            if ( bVertPosFits )
+                _orpLayoutFrmToGrow = const_cast<SwLayoutFrm*>(_pUpperOfOrientFrm);
+        }
+    }
+    else if ( _pUpperOfOrientFrm->IsInTab() && _bGrowInTable )
+    {
+        bVertPosFits = const_cast<SwLayoutFrm*>(_pUpperOfOrientFrm)->
+                                        Grow( _nRelPosY - _nAvail, TRUE ) > 0;
+        if ( bVertPosFits )
+            _orpLayoutFrmToGrow = const_cast<SwLayoutFrm*>(_pUpperOfOrientFrm);
+    }
+
+    return bVertPosFits;
+}
+// <--
+
 void SwToCntntAnchoredObjectPosition::CalcPosition()
 {
     // get format of object
@@ -240,7 +283,9 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
             if ( !GetAnchoredObj().GetLastCharRect().Height() ||
                  !GetAnchoredObj().GetLastTopOfLine() )
             {
-                GetAnchoredObj().CheckCharRectAndTopOfLine();
+                // --> OD 2004-07-15 #117380# - suppress check for paragraph
+                // portion information by passing <false> as first parameter
+                GetAnchoredObj().CheckCharRectAndTopOfLine( false );
                 if ( !GetAnchoredObj().GetLastCharRect().Height() ||
                      !GetAnchoredObj().GetLastTopOfLine() )
                 {
@@ -439,10 +484,18 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
         {
             pUpperOfOrientFrm = pOrientFrm->GetUpper();
         }
+
         // ignore one-column sections.
-        while ( pUpperOfOrientFrm->IsSctFrm() )
+        // --> OD 2004-07-20 #i23512# - correction: also ignore one-columned
+        // sections with footnotes/endnotes
+        if ( pUpperOfOrientFrm->IsInSct() )
         {
-            pUpperOfOrientFrm = pUpperOfOrientFrm->GetUpper();
+            const SwSectionFrm* pSctFrm = pUpperOfOrientFrm->FindSctFrm();
+            const bool bIgnoreSection = pUpperOfOrientFrm->IsSctFrm() ||
+                                        ( pSctFrm->Lower()->IsColumnFrm() &&
+                                          !pSctFrm->Lower()->GetNext() );
+            if ( bIgnoreSection )
+                pUpperOfOrientFrm = pSctFrm->GetUpper();
         }
 
         if ( aVert.GetVertOrient() == VERT_NONE )
@@ -565,9 +618,15 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
             {
                 // OD 08.09.2003 #110354# - allow negative position, but keep it
                 // inside environment layout frame.
-                const SwFrm& rVertEnvironLayFrm =
+                const SwLayoutFrm& rVertEnvironLayFrm =
                     aEnvOfObj.GetVertEnvironmentLayoutFrm( *pUpperOfOrientFrm, false );
-                nRelPosY = _AdjustVertRelPos( rVertEnvironLayFrm, nRelPosY );
+                // --> OD 2004-07-22 #i31805# - do not check, if bottom of
+                // anchored object would fit into environment layout frame, if
+                // anchored object has to follow the text flow.
+                const bool bCheckBottom = !bFollowTextFlow;
+                nRelPosY = _AdjustVertRelPos( rVertEnvironLayFrm, nRelPosY,
+                                              bCheckBottom );
+                // <--
                 if ( bVert )
                     aRelPos.X() = nRelPosY;
                 else
@@ -585,11 +644,15 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                 const bool bInFtn = rAnchorTxtFrm.IsInFtn();
                 while ( nRelPosY )
                 {
-                    if ( nRelPosY <= nAvail ||
-                         ( bBrowse &&
-                           ( const_cast<SwLayoutFrm*>(pUpperOfOrientFrm)->Grow( nRelPosY-nAvail, TRUE) ) ) ||
-                         ( pUpperOfOrientFrm->IsInTab() && bGrow &&
-                           ( const_cast<SwLayoutFrm*>(pUpperOfOrientFrm)->Grow( nRelPosY-nAvail, TRUE) ) ) )
+                    // --> OD 2004-07-20 #i23512# - correction:
+                    // consider section frame for grow in online layout.
+                    // use new local method <lcl_DoesVertPosFits(..)>
+                    SwLayoutFrm* pLayoutFrmToGrow = 0L;
+                    const bool bDoesVertPosFits = lcl_DoesVertPosFits(
+                            nRelPosY, nAvail, pUpperOfOrientFrm, bBrowse,
+                            bGrow, pLayoutFrmToGrow );
+
+                    if ( bDoesVertPosFits )
                     {
                         SwTwips nTmpRelPosY =
                             (*fnRect->fnYDiff)( (pUpperOfOrientFrm->*fnRect->fnGetPrtBottom)(),
@@ -612,12 +675,14 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
 //                                          nAvail + nRelPosY -
 //                                          rAnchorTxtFrm.Frm().Top();
 
-                        if ( ( bBrowse ||
-                               ( pUpperOfOrientFrm->IsInTab() && bGrow ) ) &&
-                             nRelPosY - nAvail > 0 )
+                        // --> OD 2004-07-20 #i23512# - use local variable
+                        // <pLayoutFrmToGrow> provided by new method
+                        // <lcl_DoesVertPosFits(..)>.
+                        if ( pLayoutFrmToGrow )
                         {
-                            const_cast<SwLayoutFrm*>(pUpperOfOrientFrm)->Grow( nRelPosY-nAvail );
+                            pLayoutFrmToGrow->Grow( nRelPosY - nAvail );
                         }
+                        // <--
                         nRelPosY = 0;
                     }
                     else
@@ -712,17 +777,54 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
         }
 
         // grow environment under certain conditions
-        while ( pUpperOfOrientFrm->IsSctFrm() )
-            pUpperOfOrientFrm = pUpperOfOrientFrm->GetUpper();
+        // ignore one-column sections.
+        // --> OD 2004-07-20 #i23512# - correction: also ignore one-columned
+        // sections with footnotes/endnotes
+        if ( pUpperOfOrientFrm->IsInSct() )
+        {
+            const SwSectionFrm* pSctFrm = pUpperOfOrientFrm->FindSctFrm();
+            const bool bIgnoreSection = pUpperOfOrientFrm->IsSctFrm() ||
+                                        ( pSctFrm->Lower()->IsColumnFrm() &&
+                                          !pSctFrm->Lower()->GetNext() );
+            if ( bIgnoreSection )
+                pUpperOfOrientFrm = pSctFrm->GetUpper();
+        }
         SwTwips nDist = (GetAnchoredObj().GetObjRect().*fnRect->fnBottomDist)(
                           (pUpperOfOrientFrm->*fnRect->fnGetPrtBottom)() );
         if( nDist < 0 )
         {
-            if ( ( bBrowse && rAnchorTxtFrm.IsMoveable() ) ||
-                 ( rAnchorTxtFrm.IsInTab() && bGrow ) )
+            // --> OD 2004-07-20 #i23512# - correction:
+            // consider section frame for grow in online layout and
+            // consider page alignment for grow in table.
+            SwLayoutFrm* pLayoutFrmToGrow = 0L;
+            if ( bBrowse && rAnchorTxtFrm.IsMoveable() )
             {
-                const_cast<SwLayoutFrm*>(pUpperOfOrientFrm)->Grow( -nDist );
+                if ( pUpperOfOrientFrm->IsInSct() )
+                {
+                    pLayoutFrmToGrow = const_cast<SwLayoutFrm*>(
+                                    pUpperOfOrientFrm->FindSctFrm()->GetUpper());
+                    nDist = (GetAnchoredObj().GetObjRect().*fnRect->fnBottomDist)(
+                              (pLayoutFrmToGrow->*fnRect->fnGetPrtBottom)() );
+                    if ( nDist >= 0 )
+                    {
+                        pLayoutFrmToGrow = 0L;
+                    }
+                }
+                else
+                {
+                    pLayoutFrmToGrow =
+                                    const_cast<SwLayoutFrm*>(pUpperOfOrientFrm);
+                }
             }
+            else if ( rAnchorTxtFrm.IsInTab() && bGrow )
+            {
+                pLayoutFrmToGrow = const_cast<SwLayoutFrm*>(pUpperOfOrientFrm);
+            }
+            if ( pLayoutFrmToGrow )
+            {
+                pLayoutFrmToGrow->Grow( -nDist );
+            }
+            // <--
         }
 
         if ( bFollowTextFlow &&
