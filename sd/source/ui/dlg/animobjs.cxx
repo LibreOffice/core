@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-06 10:54:25 $
+ *  last change: $Author: cl $ $Date: 2002-08-30 11:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,7 +689,7 @@ void SdAnimationWin::UpdateControl( ULONG nListPos, BOOL bDisableCtrls )
             aRbtGroup.Enable();
 
         aRbtBitmap.Enable();
-        aBtnCreateGroup.Enable();
+        aBtnCreateGroup.Enable(aBmpExList.Count() != 0);
         aFtAdjustment.Enable( TRUE );
         aLbAdjustment.Enable( TRUE );
     }
