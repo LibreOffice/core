@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-19 10:48:15 $
+ *  last change: $Author: svesik $ $Date: 2001-10-25 02:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@
 #include "scriptcont.hxx"
 
 #ifndef _SFX_HELP_HXX
-#include <sfx2/sfxhelp.hxx>
+#include "sfxhelp.hxx"
 #endif
 #ifndef _SFX_HELPID_HRC
 #include "helpid.hrc"
