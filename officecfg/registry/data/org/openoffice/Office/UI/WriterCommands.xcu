@@ -1216,6 +1216,9 @@
                     <value xml:lang="zh-CN">编辑表格</value>
                     <value xml:lang="pt">Editar tabela</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:FootnoteDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
