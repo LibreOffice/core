@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:23:46 $
+ *  last change: $Author: cl $ $Date: 2002-05-28 12:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,8 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId,
     aColor          ( COL_WHITE ),
     aImgOle         ( Bitmap( SdResId( BMP_OLE ) ), aColor ),
     aImgGraphic     ( Bitmap( SdResId( BMP_GRAPHIC ) ), aColor ),
+    aImgOleH        ( Bitmap( SdResId( BMP_OLE_H ) ), Color( COL_BLACK ) ),
+    aImgGraphicH    ( Bitmap( SdResId( BMP_GRAPHIC_H ) ), Color( COL_BLACK ) ),
     pDropNavWin     ( NULL ),
     bOleSelected    ( FALSE ),
     bGraphicSelected( FALSE )
@@ -160,6 +162,11 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId,
                             WB_HASBUTTONSATROOT ) );
     SetNodeBitmaps( Bitmap( SdResId( BMP_EXPAND ) ),
                     Bitmap( SdResId( BMP_COLLAPSE ) ) );
+
+    SetNodeBitmaps( Bitmap( SdResId( BMP_EXPAND_H ) ),
+                    Bitmap( SdResId( BMP_COLLAPSE_H ) ),
+                    BMP_COLOR_HIGHCONTRAST );
+
 }
 
 /*************************************************************************
@@ -280,16 +287,17 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
     SdPage*      pPage = NULL;
     SvLBoxEntry* pEntry = NULL;
 
-    Bitmap aBmpPage( SdResId( BMP_PAGE ) );
-    Image aImgPage( aBmpPage, aColor );
-    Bitmap aBmpPageExcluded( SdResId( BMP_PAGE_EXCLUDED ) );
-    Image aImgPageExcl( aBmpPageExcluded, aColor );
-    Bitmap aBmpPageObjsExcluded( SdResId( BMP_PAGEOBJS_EXCLUDED ) );
-    Image aImgPageObjsExcl( aBmpPageObjsExcluded, aColor );
-    Bitmap aBmpPageObjs( SdResId( BMP_PAGEOBJS ) );
-    Image aImgPageObjs( aBmpPageObjs, aColor );
-    Bitmap aBmpObjects( SdResId( BMP_OBJECTS ) );
-    Image aImgObjects( aBmpObjects, aColor );
+    Image aImgPage( Bitmap( SdResId( BMP_PAGE ) ), aColor );
+    Image aImgPageExcl( Bitmap( SdResId( BMP_PAGE_EXCLUDED ) ), aColor );
+    Image aImgPageObjsExcl( Bitmap( SdResId( BMP_PAGEOBJS_EXCLUDED ) ), aColor );
+    Image aImgPageObjs( Bitmap( SdResId( BMP_PAGEOBJS ) ), aColor );
+    Image aImgObjects( Bitmap( SdResId( BMP_OBJECTS ) ), aColor );
+
+    Image aImgPageH( Bitmap( SdResId( BMP_PAGE_H ) ), Color( COL_BLACK ) );
+    Image aImgPageExclH( Bitmap( SdResId( BMP_PAGE_EXCLUDED_H ) ), Color( COL_BLACK ) );
+    Image aImgPageObjsExclH( Bitmap( SdResId( BMP_PAGEOBJS_EXCLUDED_H ) ), Color( COL_BLACK ) );
+    Image aImgPageObjsH( Bitmap( SdResId( BMP_PAGEOBJS_H ) ), Color( COL_BLACK ) );
+    Image aImgObjectsH( Bitmap( SdResId( BMP_OBJECTS_H ) ), Color( COL_BLACK ) );
 
     // Zuerst alle Pages incl. Objekte einfuegen
     USHORT nPage = 0;
@@ -305,6 +313,8 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
             pEntry = InsertEntry( pPage->GetName(),
                                     bPageExluded ? aImgPageExcl : aImgPage,
                                     bPageExluded ? aImgPageExcl : aImgPage );
+            SetExpandedEntryBmp( pEntry, bPageExluded ? aImgPageExclH : aImgPageH, BMP_COLOR_HIGHCONTRAST );
+            SetCollapsedEntryBmp( pEntry, bPageExluded ? aImgPageExclH : aImgPageH, BMP_COLOR_HIGHCONTRAST );
 
             SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
 
@@ -314,20 +324,32 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
                 String aStr( GetObjectName( pObj ) );
                 if( aStr.Len() )
                 {
-                    if( pObj->GetObjInventor() == SdrInventor &&
-                        pObj->GetObjIdentifier() == OBJ_OLE2 )
-                        InsertEntry( aStr, aImgOle, aImgOle, pEntry ); // pEntry entspr. Parent
-                    else if( pObj->GetObjInventor() == SdrInventor &&
-                        pObj->GetObjIdentifier() == OBJ_GRAF )
-                        InsertEntry( aStr, aImgGraphic, aImgGraphic, pEntry ); // pEntry entspr. Parent
+                    if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_OLE2 )
+                    {
+                        SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgOle, aImgOle, pEntry ); // pEntry entspr. Parent
+                        SetExpandedEntryBmp( pNewEntry, aImgOleH, BMP_COLOR_HIGHCONTRAST );
+                        SetCollapsedEntryBmp( pNewEntry, aImgOleH, BMP_COLOR_HIGHCONTRAST );
+                    }
+                    else if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF )
+                    {
+                        SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgGraphic, aImgGraphic, pEntry ); // pEntry entspr. Parent
+                        SetExpandedEntryBmp( pNewEntry, aImgGraphicH, BMP_COLOR_HIGHCONTRAST );
+                        SetCollapsedEntryBmp( pNewEntry, aImgGraphicH, BMP_COLOR_HIGHCONTRAST );
+                    }
                     else
-                        InsertEntry( aStr, aImgObjects, aImgObjects, pEntry );
+                    {
+                        SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgObjects, aImgObjects, pEntry );
+                        SetExpandedEntryBmp( pNewEntry, aImgObjectsH, BMP_COLOR_HIGHCONTRAST );
+                        SetCollapsedEntryBmp( pNewEntry, aImgObjectsH, BMP_COLOR_HIGHCONTRAST );
+                    }
                 }
             }
             if( pEntry->HasChilds() )
             {
                 SetExpandedEntryBmp( pEntry, bPageExluded ? aImgPageObjsExcl : aImgPageObjs );
                 SetCollapsedEntryBmp( pEntry, bPageExluded ? aImgPageObjsExcl : aImgPageObjs );
+                SetExpandedEntryBmp( pEntry, bPageExluded ? aImgPageObjsExclH : aImgPageObjsH, BMP_COLOR_HIGHCONTRAST );
+                SetCollapsedEntryBmp( pEntry, bPageExluded ? aImgPageObjsExclH : aImgPageObjsH, BMP_COLOR_HIGHCONTRAST );
             }
         }
         nPage++;
@@ -343,6 +365,8 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
         {
             pPage = (SdPage*) pDoc->GetMasterPage( nPage );
             pEntry = InsertEntry( pPage->GetName(), aImgPage, aImgPage );
+            SetExpandedEntryBmp( pEntry, aImgPageH, BMP_COLOR_HIGHCONTRAST );
+            SetCollapsedEntryBmp( pEntry, aImgPageH, BMP_COLOR_HIGHCONTRAST );
 
             SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
 
@@ -352,20 +376,32 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
                 String aStr( GetObjectName( pObj ) );
                 if( aStr.Len() )
                 {
-                    if( pObj->GetObjInventor() == SdrInventor &&
-                        pObj->GetObjIdentifier() == OBJ_OLE2 )
-                        InsertEntry( aStr, aImgOle, aImgOle, pEntry ); // pEntry entspr. Parent
-                    else if( pObj->GetObjInventor() == SdrInventor &&
-                        pObj->GetObjIdentifier() == OBJ_GRAF )
-                        InsertEntry( aStr, aImgGraphic, aImgGraphic, pEntry ); // pEntry entspr. Parent
+                    if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_OLE2 )
+                    {
+                        SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgOle, aImgOle, pEntry ); // pEntry entspr. Parent
+                        SetExpandedEntryBmp( pNewEntry, aImgOleH, BMP_COLOR_HIGHCONTRAST );
+                        SetCollapsedEntryBmp( pNewEntry, aImgOleH, BMP_COLOR_HIGHCONTRAST );
+                    }
+                    else if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF )
+                    {
+                        SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgGraphic, aImgGraphic, pEntry ); // pEntry entspr. Parent
+                        SetExpandedEntryBmp( pNewEntry, aImgGraphicH, BMP_COLOR_HIGHCONTRAST );
+                        SetCollapsedEntryBmp( pNewEntry, aImgGraphicH, BMP_COLOR_HIGHCONTRAST );
+                    }
                     else
-                        InsertEntry( aStr, aImgObjects, aImgObjects, pEntry );
+                    {
+                        SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgObjects, aImgObjects, pEntry );
+                        SetExpandedEntryBmp( pNewEntry, aImgObjectsH, BMP_COLOR_HIGHCONTRAST );
+                        SetCollapsedEntryBmp( pNewEntry, aImgObjectsH, BMP_COLOR_HIGHCONTRAST );
+                    }
                 }
             }
             if( pEntry->HasChilds() )
             {
                 SetExpandedEntryBmp( pEntry, aImgPageObjs );
                 SetCollapsedEntryBmp( pEntry, aImgPageObjs );
+                SetExpandedEntryBmp( pEntry, aImgPageObjsH, BMP_COLOR_HIGHCONTRAST );
+                SetCollapsedEntryBmp( pEntry, aImgPageObjsH, BMP_COLOR_HIGHCONTRAST );
             }
             nPage++;
         }
@@ -392,14 +428,15 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
     SvLBoxEntry* pFileEntry = NULL;
     SvLBoxEntry* pPageEntry = NULL;
 
-    Bitmap aBmpDocOpen( SdResId( BMP_DOC_OPEN ) );
-    Image aImgDocOpen( aBmpDocOpen, aColor );
-    Bitmap aBmpDocClosed( SdResId( BMP_DOC_CLOSED ) );
-    Image aImgDocClosed( aBmpDocClosed, aColor );
+    Image aImgDocOpen( Bitmap( SdResId( BMP_DOC_OPEN ) ), aColor );
+    Image aImgDocClosed( Bitmap( SdResId( BMP_DOC_CLOSED ) ), aColor );
+    Image aImgDocOpenH( Bitmap( SdResId( BMP_DOC_OPEN_H ) ), Color( COL_BLACK ) );
+    Image aImgDocClosedH( Bitmap( SdResId( BMP_DOC_CLOSED_H ) ), Color( COL_BLACK ) );
 
     // Dokumentnamen einfuegen
-    pFileEntry = InsertEntry( aDocName, aImgDocOpen, aImgDocClosed,
-                                NULL, TRUE ); // ChildsOnDemand
+    pFileEntry = InsertEntry( aDocName, aImgDocOpen, aImgDocClosed, NULL, TRUE ); // ChildsOnDemand
+    SetExpandedEntryBmp( pFileEntry, aImgDocOpenH, BMP_COLOR_HIGHCONTRAST );
+    SetCollapsedEntryBmp( pFileEntry, aImgDocClosedH, BMP_COLOR_HIGHCONTRAST );
 }
 
 /*************************************************************************
@@ -582,12 +619,12 @@ void SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
             SdPage*      pPage = NULL;
             SvLBoxEntry* pPageEntry = NULL;
 
-            Bitmap aBmpPage( SdResId( BMP_PAGE ) );
-            Image aImgPage( aBmpPage, aColor );
-            Bitmap aBmpPageObjs( SdResId( BMP_PAGEOBJS ) );
-            Image aImgPageObjs( aBmpPageObjs, aColor );
-            Bitmap aBmpObjects( SdResId( BMP_OBJECTS ) );
-            Image aImgObjects( aBmpObjects, aColor );
+            Image aImgPage( Bitmap( SdResId( BMP_PAGE ) ), aColor );
+            Image aImgPageObjs( Bitmap( SdResId( BMP_PAGEOBJS ) ), aColor );
+            Image aImgObjects( Bitmap( SdResId( BMP_OBJECTS ) ), aColor );
+            Image aImgPageH( Bitmap( SdResId( BMP_PAGE_H ) ), Color( COL_BLACK ) );
+            Image aImgPageObjsH( Bitmap( SdResId( BMP_PAGEOBJS_H ) ), Color( COL_BLACK ) );
+            Image aImgObjectsH( Bitmap( SdResId( BMP_OBJECTS_H ) ), Color( COL_BLACK ) );
 
             // Dokumentname ist schon eingefuegt
 
@@ -601,6 +638,8 @@ void SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
                 if( pPage->GetPageKind() == PK_STANDARD )
                 {
                     pPageEntry = InsertEntry( pPage->GetName(), aImgPage, aImgPage, pFileEntry );
+                    SetExpandedEntryBmp( pPageEntry, aImgPageH, BMP_COLOR_HIGHCONTRAST );
+                    SetCollapsedEntryBmp( pPageEntry, aImgPageH, BMP_COLOR_HIGHCONTRAST );
 
                     SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
 
@@ -610,20 +649,32 @@ void SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
                         String aStr( GetObjectName( pObj ) );
                         if( aStr.Len() )
                         {
-                            if( pObj->GetObjInventor() == SdrInventor &&
-                                pObj->GetObjIdentifier() == OBJ_OLE2 )
-                                InsertEntry( aStr, aImgOle, aImgOle, pPageEntry );
-                            else if( pObj->GetObjInventor() == SdrInventor &&
-                                pObj->GetObjIdentifier() == OBJ_GRAF )
-                                InsertEntry( aStr, aImgGraphic, aImgGraphic, pPageEntry ); // pEntry entspr. Parent
+                            if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_OLE2 )
+                            {
+                                SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgOle, aImgOle, pPageEntry );
+                                SetExpandedEntryBmp( pNewEntry, aImgOleH, BMP_COLOR_HIGHCONTRAST );
+                                SetCollapsedEntryBmp( pNewEntry, aImgOleH, BMP_COLOR_HIGHCONTRAST );
+                            }
+                            else if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF )
+                            {
+                                SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgGraphic, aImgGraphic, pPageEntry ); // pEntry entspr. Parent
+                                SetExpandedEntryBmp( pNewEntry, aImgGraphicH, BMP_COLOR_HIGHCONTRAST );
+                                SetCollapsedEntryBmp( pNewEntry, aImgGraphicH, BMP_COLOR_HIGHCONTRAST );
+                            }
                             else
-                                InsertEntry( aStr, aImgObjects, aImgObjects, pPageEntry );
+                            {
+                                SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgObjects, aImgObjects, pPageEntry );
+                                SetExpandedEntryBmp( pNewEntry, aImgObjectsH, BMP_COLOR_HIGHCONTRAST );
+                                SetCollapsedEntryBmp( pNewEntry, aImgObjectsH, BMP_COLOR_HIGHCONTRAST );
+                            }
                         }
                     }
                     if( pPageEntry->HasChilds() )
                     {
                         SetExpandedEntryBmp( pPageEntry, aImgPageObjs );
                         SetCollapsedEntryBmp( pPageEntry, aImgPageObjs );
+                        SetExpandedEntryBmp( pPageEntry, aImgPageObjsH, BMP_COLOR_HIGHCONTRAST );
+                        SetCollapsedEntryBmp( pPageEntry, aImgPageObjsH, BMP_COLOR_HIGHCONTRAST );
                     }
                 }
                 nPage++;

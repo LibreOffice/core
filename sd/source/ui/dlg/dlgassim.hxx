@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgassim.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:32 $
+ *  last change: $Author: cl $ $Date: 2002-05-28 12:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ class SdPageListControl : public SvTreeListBox
 {
 private:
     SvLBoxButtonData*   m_pCheckButton;
+    SvLBoxButtonData*   m_pCheckButtonH;
 
     SvLBoxEntry* InsertPage( const String& rPageName );
     void InsertTitle( SvLBoxEntry* pEntry, const String& rTitle );
@@ -96,6 +97,9 @@ public:
     BOOL IsPageChecked( USHORT nPage );
 
     DECL_LINK( CheckButtonClickHdl, SvLBoxButtonData * );
+
+    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+
 };
 
 class TemplateCacheInfo

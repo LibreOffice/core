@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgassim.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 15:39:14 $
+ *  last change: $Author: cl $ $Date: 2002-05-28 12:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@ SdPageListControl::SdPageListControl( Window* pParent, const ResId& rResId ) :
                             WB_HASBUTTONSATROOT ) );
     SetNodeBitmaps( Bitmap( SdResId( BMP_EXPAND ) ),
                     Bitmap( SdResId( BMP_COLLAPSE ) ) );
+    SetNodeBitmaps( Bitmap( SdResId( BMP_EXPAND_H ) ),
+                    Bitmap( SdResId( BMP_COLLAPSE_H ) ) );
 
     m_pCheckButton = new SvLBoxButtonData();
     m_pCheckButton->aBmps[SV_BMP_UNCHECKED]   = Bitmap( SdResId( BMP_PAGE_OFF ) );
@@ -91,7 +93,17 @@ SdPageListControl::SdPageListControl( Window* pParent, const ResId& rResId ) :
     m_pCheckButton->aBmps[SV_BMP_HIUNCHECKED] = Bitmap( SdResId( BMP_PAGE_OFF ) );
     m_pCheckButton->aBmps[SV_BMP_TRISTATE]    = Bitmap( SdResId( BMP_PAGE_OFF ) );
     m_pCheckButton->aBmps[SV_BMP_HITRISTATE]  = Bitmap( SdResId( BMP_PAGE_OFF ) );
-    EnableCheckButton( m_pCheckButton );
+
+    m_pCheckButtonH = new SvLBoxButtonData();
+    m_pCheckButtonH->aBmps[SV_BMP_UNCHECKED]   = Bitmap( SdResId( BMP_PAGE_OFF_H ) );
+    m_pCheckButtonH->aBmps[SV_BMP_CHECKED]     = Bitmap( SdResId( BMP_PAGE_ON_H ) );
+    m_pCheckButtonH->aBmps[SV_BMP_HICHECKED]   = Bitmap( SdResId( BMP_PAGE_ON_H ) );
+    m_pCheckButtonH->aBmps[SV_BMP_HIUNCHECKED] = Bitmap( SdResId( BMP_PAGE_OFF_H ) );
+    m_pCheckButtonH->aBmps[SV_BMP_TRISTATE]    = Bitmap( SdResId( BMP_PAGE_OFF_H ) );
+    m_pCheckButtonH->aBmps[SV_BMP_HITRISTATE]  = Bitmap( SdResId( BMP_PAGE_OFF_H ) );
+
+    const bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+    EnableCheckButton( bHighContrast ? m_pCheckButtonH : m_pCheckButton );
 
     SetCheckButtonHdl( LINK(this,SdPageListControl,CheckButtonClickHdl) );
 }
@@ -117,6 +129,7 @@ IMPL_LINK( SdPageListControl, CheckButtonClickHdl, SvLBoxButtonData *, EMPTYARG 
 SdPageListControl::~SdPageListControl()
 {
     delete m_pCheckButton;
+    delete m_pCheckButtonH;
 }
 
 void SdPageListControl::Clear()
@@ -234,6 +247,17 @@ BOOL SdPageListControl::IsPageChecked( USHORT nPage )
 {
     SvLBoxEntry* pEntry = GetModel()->GetEntry(nPage);
     return pEntry?GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED: FALSE;
+}
+
+void SdPageListControl::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        const bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+        EnableCheckButton( bHighContrast ? m_pCheckButtonH : m_pCheckButton );
+    }
+
+    SvTreeListBox::DataChanged( rDCEvt );
 }
 
 // ====================================================================
