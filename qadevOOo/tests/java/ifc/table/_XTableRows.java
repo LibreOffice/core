@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTableRows.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:11:33 $
+ *  last change:$Date: 2003-12-11 11:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,12 @@
 
 package ifc.table;
 
+import com.sun.star.table.XCellRange;
 import lib.MultiMethodTest;
 
 import com.sun.star.table.XTableRows;
+import lib.Status;
+import lib.StatusException;
 
 /**
 * Testing <code>com.sun.star.table.XTableRows</code>
@@ -71,13 +74,25 @@ import com.sun.star.table.XTableRows;
 * <ul>
 *  <li><code> insertByIndex()</code></li>
 *  <li><code> removeByIndex()</code></li>
-* </ul> <p>
-* Test is multithread compilant. <p>
-* @see com.sun.star.table.XTableRows
+* </ul>
 */
 public class _XTableRows extends MultiMethodTest {
 
     public XTableRows oObj = null;
+    public XCellRange range = null;
+
+    public void before() {
+        range = (XCellRange) tEnv.getObjRelation("XTableRows.XCellRange");
+        if (range==null) {
+            throw new StatusException(Status.failed("ObjectRelation missing"));
+        }
+        try {
+            range.getCellByPosition(0,0).setValue(17);
+            range.getCellByPosition(0,1).setValue(15);
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            log.println("Couldn't set value for Cell A1");
+        }
+    }
 
     /**
      * First a row inserted to valid position, then to invalid. <p>
@@ -88,10 +103,13 @@ public class _XTableRows extends MultiMethodTest {
 
         boolean result = true;
 
+        requiredMethod("removeByIndex()");
+
         int origCnt = oObj.getCount();
+        log.println("Inserting row before first row");
         oObj.insertByIndex(0,1);
-        result &= oObj.getCount() == origCnt + 1;
-        log.println("Inserting row at Index 0 ... OK");
+        result &= checkCell(1,15);
+        if (checkCell(1,15)) log.println("... successful");
 
         try {
             oObj.insertByIndex(-1,1);
@@ -116,12 +134,10 @@ public class _XTableRows extends MultiMethodTest {
 
         boolean result = true;
 
-        requiredMethod("insertByIndex()");
-
-        int origCnt = oObj.getCount();
         oObj.removeByIndex(0,1);
-        result &= oObj.getCount() == origCnt - 1;
-        log.println("Removing row at Index 0 ... OK");
+        log.println("Removing first row");
+        result &= checkCell(0,15);
+        if (checkCell(0,15)) log.println("... successful");
 
         try {
             oObj.removeByIndex(-1,1);
@@ -134,6 +150,23 @@ public class _XTableRows extends MultiMethodTest {
 
         tRes.tested( "removeByIndex()", result );
     } // end removeByIndex()
+
+    public boolean checkCell(int row,double expected) {
+        double getting=0;
+        try {
+            getting = range.getCellByPosition(0,row).getValue();
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            log.println("Couldn't set value for Cell A1");
+        }
+
+        boolean res = (getting==expected);
+        if (!res) {
+            log.println("Expected for row "+row+" was "+expected);
+            log.println("Getting for row "+row+" - "+getting);
+            log.println("=> FAILED");
+        }
+        return res;
+    }
 
 } //finish class _XTableRows
 
