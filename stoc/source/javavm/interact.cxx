@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interact.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2002-07-23 14:07:16 $
+ *  last change: $Author: jl $ $Date: 2002-09-16 12:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,11 @@
  *
  ************************************************************************/
 #include "interact.hxx"
+
+#ifndef _COM_SUN_STAR_JAVA_JAVADISABLEDEXCEPTION_HPP_
+#include <com/sun/star/java/JavaDisabledException.hpp>
+#endif
+
 
 namespace stoc_javavm
 {
@@ -120,12 +125,32 @@ SAL_CALL InteractionRequest::getContinuations(  ) throw (RuntimeException)
         MutexGuard guard(javavm_getMutex());
         if( ! m_pseqContinuations)
         {
+#ifdef LINUX
+            // Only if java is disabled we allow retry
+            if( m_anyRequest.getValueType() == getCppuType( (JavaDisabledException*)0))
+            {
+                Reference<XInteractionContinuation> arObjs[2];
+                arObjs[0]= Reference< XInteractionContinuation >(
+                    static_cast<XWeak*> (new InteractionRetry(m_xJVM, m_pJVM)), UNO_QUERY);
+                arObjs[1]= Reference< XInteractionContinuation> (
+                    static_cast<XWeak*> (new InteractionAbort(m_xJVM, m_pJVM)), UNO_QUERY);
+                m_seqContinuations= Sequence< Reference< XInteractionContinuation> >( arObjs, 2);
+            }
+            else
+            {
+                Reference<XInteractionContinuation> arObjs[1];
+                arObjs[0]= Reference< XInteractionContinuation> (
+                    static_cast<XWeak*> (new InteractionAbort(m_xJVM, m_pJVM)), UNO_QUERY);
+                m_seqContinuations= Sequence< Reference< XInteractionContinuation> >( arObjs, 1);
+            }
+#else
             Reference<XInteractionContinuation> arObjs[2];
             arObjs[0]= Reference< XInteractionContinuation >(
                 static_cast<XWeak*> (new InteractionRetry(m_xJVM, m_pJVM)), UNO_QUERY);
             arObjs[1]= Reference< XInteractionContinuation> (
                 static_cast<XWeak*> (new InteractionAbort(m_xJVM, m_pJVM)), UNO_QUERY);
             m_seqContinuations= Sequence< Reference< XInteractionContinuation> >( arObjs, 2);
+#endif
         }
     }
     return m_seqContinuations;
