@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-19 14:56:08 $
+ *  last change: $Author: dbo $ $Date: 2000-12-14 15:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,11 +123,18 @@ static Reference< XSingleServiceFactory > loadLibComponentFactory(
 #ifdef SAL_UNX
     aLibNameBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM("lib") );
     aLibNameBuf.append( rLibName );
+#ifdef MACOSX
+    aLibNameBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".dylib.framework") );
+#else
     aLibNameBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".so") );
+#endif
 #else
     aLibNameBuf.append( rLibName );
+#ifndef OS2
     aLibNameBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".dll") );
 #endif
+#endif
+
     OUString aLibName( aLibNameBuf.makeStringAndClear() );
     oslModule lib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
 
@@ -136,8 +143,13 @@ static Reference< XSingleServiceFactory > loadLibComponentFactory(
         void * pSym;
 
         // ========================= LATEST VERSION =========================
+#ifdef MACOSX
+        OUString aGetEnvName(
+            rLibName + OUString( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) ) );
+#else
         OUString aGetEnvName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) );
-        if (pSym = osl_getSymbol( lib, aGetEnvName.pData ))
+#endif
+        if (pSym = ::osl_getSymbol( lib, aGetEnvName.pData ))
         {
             uno_Environment * pCurrentEnv = 0;
             uno_Environment * pEnv = 0;
@@ -162,8 +174,13 @@ static Reference< XSingleServiceFactory > loadLibComponentFactory(
                 }
             }
 
+#ifdef MACOSX
+            OUString aGetFactoryName(
+                rLibName + OUString( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY) ) );
+#else
             OUString aGetFactoryName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY) );
-            if (pSym = osl_getSymbol( lib, aGetFactoryName.pData ))
+#endif
+            if (pSym = ::osl_getSymbol( lib, aGetFactoryName.pData ))
             {
                 OString aImplName( OUStringToOString( rImplName, RTL_TEXTENCODING_ASCII_US ) );
 
