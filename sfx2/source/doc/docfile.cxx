@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: as $ $Date: 2001-11-08 12:02:21 $
+ *  last change: $Author: mba $ $Date: 2001-11-30 13:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1191,7 +1191,7 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
     SFX_ITEMSET_ARG( pSet, pVersion, SfxInt16Item, SID_VERSION, sal_False);
 
     BOOL bResetStorage = FALSE;
-    if ( pVersion )
+    if ( pVersion && pVersion->GetValue() )
     {
         // Alle verf"ugbaren Versionen einlesen
         if ( pImp->pVersions )
