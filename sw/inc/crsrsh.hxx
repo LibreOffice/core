@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:42:46 $
+ *  last change: $Author: rt $ $Date: 2004-09-27 13:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,7 @@ private:
     SW_DLLPRIVATE FASTBOOL UpDown( BOOL, USHORT );
     SW_DLLPRIVATE FASTBOOL LRMargin( BOOL, BOOL bAPI = FALSE );
     SW_DLLPRIVATE FASTBOOL IsAtLRMargin( BOOL, BOOL bAPI = FALSE ) const;
-    SW_DLLPRIVATE FASTBOOL SttEndDoc( BOOL bStt );
+    FASTBOOL SttEndDoc( BOOL bStt );
 
 #ifdef BIDI
     SW_DLLPRIVATE short GetTextDirection( const Point* pPt = 0 ) const;
