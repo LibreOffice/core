@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-18 17:09:50 $
+ *  last change: $Author: mib $ $Date: 2002-02-20 17:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,7 @@ protected:
 public:
 
     SwAccessibleDocument(
-        const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
-            const Rectangle& rVisArea,
-            const SwRootFrm *pRootFrm );
+        SwAccessibleMap *pMap );
     virtual ~SwAccessibleDocument();
 
     //=====  XAccessibleContext  ==============================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-18 17:09:50 $
+ *  last change: $Author: mib $ $Date: 2002-02-20 17:55:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,12 @@
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
+#ifndef _VIEWSH_HXX
+#include <viewsh.hxx>
+#endif
+#ifndef _VIEWIMP_HXX
+#include <viewimp.hxx>
+#endif
 #ifndef _ACCMAP_HXX
 #include <accmap.hxx>
 #endif
@@ -138,21 +144,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::drafts::com::sun::star::accessibility;
 using namespace ::rtl;
 
-void SwAccessibleContext::_Dispose()
-{
-    EventObject aEvent;
-    Reference < XAccessibleContext > xThis( this );
-    aEvent.Source = xThis;
-    aAccessibleEventListeners.disposeAndClear( aEvent );
-    aFocusListeners.disposeAndClear( aEvent );
-    DBG_MSG_CD( "dispose" )
-
-    ASSERT( GetFrm(), "already disposed" );
-    if( GetFrm() )
-        aAccMap.RemoveContext( this );
-    ClearFrm();
-}
-
 void SwAccessibleContext::_Moved()
 {
     AccessibleEventObject aEvent;
@@ -167,9 +158,10 @@ sal_Bool SwAccessibleContext::ChildScrolledIn( const SwFrm *pFrm )
     WeakReference < XAccessible > xWeakChild;
     SwAccessibleContext *pChildImpl = 0;
 
+    if( GetMap() )
     {
         ::vos::ORef < SwAccessibleContext > xChildImpl(
-                aAccMap.GetContextImpl( GetVisArea(), pFrm ) );
+            GetMap()->GetContextImpl( pFrm ) );
         xChildImpl->SetParent( this );
 
         // The accessible should be freshly created, because it
@@ -213,13 +205,14 @@ sal_Bool SwAccessibleContext::ChildScrolledOut( const SwFrm *pFrm )
     WeakReference < XAccessible > xWeakChild;
     SwAccessibleContext *pChildImpl = 0;
 
+    if( GetMap() )
     {
         // If the child is existing, the child's chilren have to be
         // removed, too. If not, some grandchildren might exist anyway.
         // They are removed by seekaing the SwFrm tree. This is indicated
         // by the return value.
         ::vos::ORef < SwAccessibleContext > xChildImpl(
-                aAccMap.GetContextImpl( GetVisArea(), pFrm, sal_False ) );
+            GetMap()->GetContextImpl( pFrm, sal_False ) );
 
         if( xChildImpl.isValid() )
         {
@@ -232,22 +225,16 @@ sal_Bool SwAccessibleContext::ChildScrolledOut( const SwFrm *pFrm )
     }
 
     Reference < XAccessible > xChild( xWeakChild );
-    if( !xChild.is() )
+    if( !xChild.is() && GetMap() )
     {
         ::vos::ORef < SwAccessibleContext > xChildImpl(
-                aAccMap.GetContextImpl( GetVisArea(), pFrm ) );
+            GetMap()->GetContextImpl( pFrm ) );
         pChildImpl = xChildImpl.getBodyPtr();
         xChild = pChildImpl;
     }
 
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
-    aEvent.OldValue <<= xChild;
-
-    AccessibleEvent( aEvent );
-    DBG_MSG_PARAM( "AccessibleChild (removed)", pChildImpl )
-
-    pChildImpl->_Dispose();
+    pChildImpl->SetParent( this );
+    pChildImpl->Dispose();
 
     return bUpdateChildren;
 }
@@ -257,27 +244,59 @@ sal_Bool SwAccessibleContext::ChildScrolled( const SwFrm *pFrm )
     sal_Bool bUpdateChildren = sal_True;
 
     // get child
-    ::vos::ORef < SwAccessibleContext > xChildImpl(
-            aAccMap.GetContextImpl( GetVisArea(), pFrm, sal_False ) );
-
-    if( xChildImpl.isValid() )
+    if( GetMap() )
     {
+        ::vos::ORef < SwAccessibleContext > xChildImpl(
+            GetMap()->GetContextImpl( pFrm, sal_False ) );
 
-        // Now update the frame's children. In fact, they are updated before
-        // the update event for the parent has been send.
-        xChildImpl->SetVisArea( GetVisArea() );
+        if( xChildImpl.isValid() )
+        {
 
-        xChildImpl->_Moved();
-        bUpdateChildren = sal_False;
+            // Now update the frame's children. In fact, they are updated before
+            // the update event for the parent has been send.
+            xChildImpl->SetVisArea( GetVisArea() );
+
+            xChildImpl->_Moved();
+            bUpdateChildren = sal_False;
+        }
     }
 
     return bUpdateChildren;
 }
 
-void SwAccessibleContext::Dispose()
+sal_Bool SwAccessibleContext::DisposeChild( const SwFrm *pFrm,
+                                             sal_Bool bRecursive )
 {
+    sal_Bool bDisposeChildren = sal_True;
+
+    if( GetMap() )
+    {
+        // If the child is existing, the child's chilren have to be
+        // removed, too. If not, some grandchildren might exist anyway.
+        // They are removed by seeking the SwFrm tree. This is indicated
+        // by the return value.
+        ::vos::ORef < SwAccessibleContext > xChildImpl(
+            GetMap()->GetContextImpl( pFrm, sal_False ) );
+
+        if( xChildImpl.isValid() )
+        {
+            xChildImpl->Dispose( bRecursive );
+            bDisposeChildren = sal_False;
+        }
+    }
+
+    return bDisposeChildren;
+}
+
+void SwAccessibleContext::Dispose( sal_Bool bRecursive )
+{
+    // dispose children
+    if( bRecursive )
+        DisposeChildren( bRecursive );
+
     // get parent
     Reference< XAccessible > xParent( xWeakParent );
+    Reference < XAccessibleContext > xThis( this );
 
     if( xParent.is() )
     {
@@ -285,13 +304,24 @@ void SwAccessibleContext::Dispose()
 
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
-        Reference < XAccessibleContext > xThis( this );
         aEvent.OldValue <<= xThis;
         pAcc->AccessibleEvent( aEvent );
         DBG_MSG_THIS_PARAM( "AccessibleChild (removed)", pAcc, this )
     }
 
-    _Dispose();
+    {
+        EventObject aEvent;
+        aEvent.Source = xThis;
+        aAccessibleEventListeners.disposeAndClear( aEvent );
+        aFocusListeners.disposeAndClear( aEvent );
+        DBG_MSG_CD( "dispose" )
+    }
+
+    ASSERT( GetFrm(), "already disposed" );
+    if( GetMap() && GetFrm() )
+        GetMap()->RemoveContext( this );
+    ClearFrm();
+    pMap = 0;
 }
 
 void SwAccessibleContext::PosChanged()
@@ -329,7 +359,7 @@ void SwAccessibleContext::ChildPosChanged( const SwFrm *pFrm,
         // needs to be send. However, there is no wrapper existing, and so
         // no notifications for grandchildren are required. If the are
         // grandgrandchildren, they would be notified by the layout.
-        if( IsShowing( rOldFrm.SVRect() ) )
+        if( !rOldFrm.IsEmpty() && IsShowing( rOldFrm.SVRect() ) )
             ChildScrolledOut( pFrm );
     }
 }
@@ -355,30 +385,31 @@ void SwAccessibleContext::SetStates(
         ::utl::AccessibleStateSetHelper& rStateSet )
 {
     // DEFUNC and SHOWING
-    if( GetFrm() )
+    if( GetFrm() && GetMap() )
     {
         ASSERT(  IsShowing(),
                 "invisible object is not disposed" );
         rStateSet.AddState( AccessibleStateType::SHOWING );
+
+        // EDITABLE
+        ViewShell *pVSh = GetMap()->GetShell();
+        if( IsEditable( pVSh ) )
+            rStateSet.AddState( AccessibleStateType::EDITABLE );
+
+        // ENABLED
+        rStateSet.AddState( AccessibleStateType::ENABLED );
+
+        // OPAQUE
+        if( IsOpaque( pVSh ) )
+            rStateSet.AddState( AccessibleStateType::OPAQUE );
+
+        // VISIBLE
+        rStateSet.AddState( AccessibleStateType::VISIBLE );
     }
     else
     {
         rStateSet.AddState( AccessibleStateType::DEFUNC );
     }
-
-    // EDITABLE
-    if( IsEditable() )
-        rStateSet.AddState( AccessibleStateType::EDITABLE );
-
-    // ENABLED
-    rStateSet.AddState( AccessibleStateType::ENABLED );
-
-    // OPAQUE
-    if( IsOpaque() )
-        rStateSet.AddState( AccessibleStateType::OPAQUE );
-
-    // VISIBLE
-    rStateSet.AddState( AccessibleStateType::VISIBLE );
 }
 
 OUString SwAccessibleContext::GetResource( sal_uInt16 nResId,
@@ -408,25 +439,45 @@ OUString SwAccessibleContext::GetResource( sal_uInt16 nResId,
     return OUString( sStr );
 }
 
-SwAccessibleContext::SwAccessibleContext( sal_Int16 nR,
-                                          const Rectangle& rVisArea,
+Window *SwAccessibleContext::GetWindow()
+{
+    Window *pWin = 0;
+
+    if( GetMap() )
+    {
+        const ViewShell *pVSh = GetMap()->GetShell();
+        ASSERT( pVSh, "no view shell" );
+        if( pVSh )
+            pWin = pVSh->GetWin();
+
+        ASSERT( pWin, "no window" );
+    }
+
+    return pWin;
+}
+
+
+SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
+                                          sal_Int16 nR,
                                           const SwFrm *pF ) :
-    SwAccessibleFrame( rVisArea, pF ),
+    SwAccessibleFrame( pM->GetShell()->VisArea().SVRect(), pF ),
     aAccessibleEventListeners( aMutex ),
     aFocusListeners( aMutex ),
+    pMap( pM ),
     nRole( nR )
 {
     DBG_MSG_CD( "constructed" )
 }
 
-SwAccessibleContext::SwAccessibleContext( const OUString& rName,
+SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
+                                          const OUString& rName,
                                           sal_Int16 nR,
-                                          const Rectangle& rVisArea,
                                           const SwFrm *pF ) :
-    SwAccessibleFrame( rVisArea, pF ),
+    SwAccessibleFrame( pM->GetShell()->VisArea().SVRect(), pF ),
     sName( rName ),
     aAccessibleEventListeners( aMutex ),
     aFocusListeners( aMutex ),
+    pMap( pM ),
     nRole( nR )
 {
     DBG_MSG_CD( "constructed" )
@@ -435,8 +486,8 @@ SwAccessibleContext::SwAccessibleContext( const OUString& rName,
 SwAccessibleContext::~SwAccessibleContext()
 {
     DBG_MSG_CD( "destructed" )
-    if( GetFrm() )
-        aAccMap.RemoveContext( this );
+    if( GetFrm() && GetMap() )
+        GetMap()->RemoveContext( this );
 }
 
 Reference< XAccessibleContext > SAL_CALL
@@ -476,7 +527,7 @@ Reference< XAccessible> SAL_CALL
     }
 
     ::vos::ORef < SwAccessibleContext > xChildImpl(
-            aAccMap.GetContextImpl( GetVisArea(), pChild )  );
+            GetMap()->GetContextImpl( pChild )  );
     xChildImpl->SetParent( this );
     Reference< XAccessible > xChild( xChildImpl.getBodyPtr() );
 
@@ -495,7 +546,7 @@ Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent (void)
 
     Reference< XAccessible > xAcc;
     if( pUpper )
-        xAcc = aAccMap.GetContext( GetVisArea(), pUpper );
+        xAcc = GetMap()->GetContext( pUpper );
 
     ASSERT( xAcc.is(), "no parent found" );
     if( !xAcc.is() )
@@ -523,7 +574,7 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleIndexInParent (void)
     if( pUpper )
     {
         ::vos::ORef < SwAccessibleContext > xAccImpl(
-            aAccMap.GetContextImpl( GetVisArea(), pUpper )  );
+            GetMap()->GetContextImpl( pUpper )  );
         ASSERT( xAccImpl.isValid(), "no parent found" );
         if( xAccImpl.isValid() )
             nIndex = xAccImpl->GetChildIndex( GetFrm() );
@@ -656,7 +707,7 @@ Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAt(
 
     const SwFrm *pFrm = GetChildAt( aLogPoint );
     if( pFrm )
-        xAcc = aAccMap.GetContext( GetVisArea(), pFrm );
+        xAcc = GetMap()->GetContext( pFrm );
 
     return xAcc;
 }

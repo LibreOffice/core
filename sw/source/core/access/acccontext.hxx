@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-18 17:09:50 $
+ *  last change: $Author: mib $ $Date: 2002-02-20 17:55:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
 
+class Window;
+class SwAccessibleMap;
 namespace utl { class AccessibleStateSetHelper; };
 
 class SwAccessibleContext :
@@ -119,6 +121,8 @@ class SwAccessibleContext :
     ::com::sun::star::uno::WeakReference <
         ::drafts::com::sun::star::accessibility::XAccessible > xWeakParent;
 
+    SwAccessibleMap *pMap;
+
     sal_Int16 nRole;
 
 protected:
@@ -135,6 +139,10 @@ protected:
     // A child has been moved while setting the vis area
     virtual sal_Bool ChildScrolled( const SwFrm *pFrm );
 
+    // A child shall be disposed
+    virtual sal_Bool DisposeChild( const SwFrm *pFrm,
+                                   sal_Bool bRecursive );
+
     void AccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventObject& rEvent );
 
     ::rtl::OUString GetResource( sal_uInt16 nResId,
@@ -146,19 +154,18 @@ protected:
     // SHOWING(0/1), OPAQUE(0/1) and VISIBLE(1).
     virtual void SetStates( ::utl::AccessibleStateSetHelper& rStateSet );
 
-    // broadcast dispose event and remove object from map.
-    void _Dispose();
-
     // broadcast visual data event
     void _Moved();
 
+    Window *GetWindow();
+    SwAccessibleMap *GetMap() { return pMap; }
 
 public:
 
-    SwAccessibleContext( sal_Int16 nRole, const Rectangle& rVisArea,
+    SwAccessibleContext( SwAccessibleMap *pMap, sal_Int16 nRole,
                          const SwFrm *pFrm );
-    SwAccessibleContext( const ::rtl::OUString& rName, sal_Int16 nRole,
-                         const Rectangle& rVisArea, const SwFrm *pFrm );
+    SwAccessibleContext( SwAccessibleMap *pMap, const ::rtl::OUString& rName,
+                         sal_Int16 nRole, const SwFrm *pFrm );
     virtual ~SwAccessibleContext();
 
     //=====  XAccessible  =====================================================
@@ -321,7 +328,7 @@ public:
     //====== C++ interface ====================================================
 
     // The object is not visible an longer and should be destroyed
-    virtual void Dispose();
+    virtual void Dispose( sal_Bool bRecursive = sal_False );
 
     // The object has been moved by the layout
     void PosChanged();
@@ -349,7 +356,7 @@ const sal_Char sMissingWindow[] = "window is missing";
     throw aExcept;
 
 #define CHECK_FOR_DEFUNC( ifc )                                             \
-    if( !GetFrm() )                                                         \
+    if( !(GetFrm() && GetMap()) )                                           \
     {                                                                       \
         THROW_RUNTIME_EXCEPTION( ifc, sDefunc );                            \
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-18 17:09:50 $
+ *  last change: $Author: mib $ $Date: 2002-02-20 17:55:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,15 @@
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _VIEWSH_HXX
+#include <viewsh.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _ACCMAP_HXX
+#include <accmap.hxx>
+#endif
 
 #ifndef _ACCDOC_HXX
 #include <accdoc.hxx>
@@ -117,12 +126,10 @@ void SwAccessibleDocument::SetStates(
     rStateSet.AddState( AccessibleStateType::MULTISELECTABLE );
 }
 
-SwAccessibleDocument::SwAccessibleDocument (
-        const Reference< XAccessible >& rxParent,
-        const Rectangle& rVisArea,
-        const SwRootFrm *pRoot) :
-    SwAccessibleContext( AccessibleRole::DOCUMENT, rVisArea, pRoot ),
-    xParent( rxParent )
+SwAccessibleDocument::SwAccessibleDocument ( SwAccessibleMap *pMap ) :
+    SwAccessibleContext( pMap, AccessibleRole::DOCUMENT,
+                           pMap->GetShell()->GetDoc()->GetRootFrm() ),
+    xParent( pMap->GetShell()->GetWin()->GetParent()->GetAccessible() )
 {
     SetName( GetResource( STR_ACCESS_DOC_NAME ) );
 }

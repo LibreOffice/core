@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-19 19:11:48 $
+ *  last change: $Author: mib $ $Date: 2002-02-20 17:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ class SwAccessibleParagraph : public    SwAccessibleContext,
 
 public:
 
-    SwAccessibleParagraph( sal_Int32 nPara, const Rectangle& rVisArea,
+    SwAccessibleParagraph( SwAccessibleMap *pMap, sal_Int32 nPara,
                            const SwTxtFrm *pTxtFrm );
     virtual ~SwAccessibleParagraph();
 

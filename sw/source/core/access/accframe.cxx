@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-11 12:50:47 $
+ *  last change: $Author: mib $ $Date: 2002-02-20 17:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #include <frmatr.hxx>
 #endif
 
+#ifndef _ACCMAP_HXX
+#include <accmap.hxx>
+#endif
 #ifndef _ACCFRAME_HXX
 #include <accframe.hxx>
 #endif
@@ -269,6 +272,38 @@ void SwAccessibleFrame::SetVisArea( const SwFrm *pFrm,
     }
 }
 
+void SwAccessibleFrame::DisposeChildren( const SwFrm *pFrm,
+                                         const Rectangle& rOldVisArea,
+                                         sal_Bool bRecursive,
+                                         SwAccessibleFrame *pAcc )
+{
+    const SwFrm *pLower = pFrm->GetLower();
+    while( pLower )
+    {
+        SwRect aFrm( pLower->Frm() );
+        if( IsAccessible( pLower ) )
+        {
+            sal_Bool bDisposeLower = sal_False;
+            if( aFrm.IsOver( rOldVisArea ) )
+            {
+                if( pAcc )
+                    bDisposeLower = pAcc->DisposeChild( pLower, bRecursive );
+                else
+                    bDisposeLower = sal_True;
+            }
+            if( bDisposeLower && bRecursive )
+                DisposeChildren( pLower, rOldVisArea, bRecursive );
+        }
+        else if( aFrm.IsOver( rOldVisArea ) )
+        {
+            DisposeChildren( pLower, rOldVisArea, bRecursive, pAcc );
+        }
+
+        pLower = pLower->GetNext();
+    }
+}
+
+
 sal_Bool SwAccessibleFrame::ChildScrolledIn( const SwFrm *pFrm )
 {
     return sal_True;
@@ -283,6 +318,11 @@ sal_Bool SwAccessibleFrame::ChildScrolled( const SwFrm *pFrm )
 {
     return sal_True;
 }
+sal_Bool SwAccessibleFrame::DisposeChild( const SwFrm *pFrm,
+                                          sal_Bool bRecursive )
+{
+    return sal_True;
+}
 
 Rectangle SwAccessibleFrame::GetBounds( const SwFrm *pFrm )
 {
@@ -294,24 +334,7 @@ Rectangle SwAccessibleFrame::GetBounds( const SwFrm *pFrm )
     return aBounds;
 }
 
-Window *SwAccessibleFrame::GetWindow()
-{
-    Window *pWin = 0;
-
-    if( pFrm )
-    {
-        const ViewShell *pVSh = pFrm->GetShell();
-        ASSERT( pVSh, "no view shell" );
-        if( pVSh )
-            pWin = pVSh->GetWin();
-
-        ASSERT( pWin, "no window" );
-    }
-
-    return pWin;
-}
-
-sal_Bool SwAccessibleFrame::IsEditable() const
+sal_Bool SwAccessibleFrame::IsEditable( ViewShell *pVSh ) const
 {
     const SwFrm *pFrm = GetFrm();
     if( !pFrm )
@@ -320,7 +343,6 @@ sal_Bool SwAccessibleFrame::IsEditable() const
     if( !pFrm->IsRootFrm() && pFrm->IsProtected() )
         return sal_False;
 
-    ViewShell *pVSh = pFrm->GetShell();
     ASSERT( pVSh, "no view shell" );
     if( pVSh )
     {
@@ -334,13 +356,12 @@ sal_Bool SwAccessibleFrame::IsEditable() const
     return sal_False;
 }
 
-sal_Bool SwAccessibleFrame::IsOpaque() const
+sal_Bool SwAccessibleFrame::IsOpaque( ViewShell *pVSh ) const
 {
     const SwFrm *pFrm = GetFrm();
     if( !pFrm )
         return sal_False;
 
-    ViewShell *pVSh = pFrm->GetShell();
     ASSERT( pVSh, "no view shell" );
     if( !pVSh )
         return sal_False;

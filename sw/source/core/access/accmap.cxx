@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-11 12:50:47 $
+ *  last change: $Author: mib $ $Date: 2002-02-20 17:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,12 @@
 #ifndef _ACCPARA_HXX
 #include <accpara.hxx>
 #endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _VIEWSH_HXX
+#include <viewsh.hxx>
+#endif
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
 #endif
@@ -97,8 +103,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::drafts::com::sun::star::accessibility;
 using namespace ::rtl;
-
-SwAccessibleMap aAccMap;
 
 struct SwFrmFunc
 {
@@ -115,22 +119,33 @@ class SwAccessibleMap_Impl: public _SwAccessibleMap_Impl
 {
 };
 
-SwAccessibleMap::SwAccessibleMap() :
+SwAccessibleMap::SwAccessibleMap( ViewShell *pSh ) :
     pMap( 0  ),
+    pVSh( pSh ),
     nPara( 1 )
 {
 }
 
 SwAccessibleMap::~SwAccessibleMap()
 {
+    vos::OGuard aGuard( aMutex );
+    if( pMap )
+    {
+        Reference < XAccessible > xAcc;
+        const SwRootFrm *pRootFrm = GetShell()->GetDoc()->GetRootFrm();
+        SwAccessibleMap_Impl::iterator aIter = pMap->find( pRootFrm );
+        if( aIter != pMap->end() )
+            xAcc = (*aIter).second;
+        if( !xAcc.is() )
+            xAcc = new SwAccessibleDocument( this );
+        SwAccessibleDocument *pAcc = (SwAccessibleDocument *)xAcc.get();
+        pAcc->Dispose( sal_True );
+    }
+
     delete pMap;
 }
 
-Reference< XAccessible > SwAccessibleMap::GetDocumentView(
-        const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
-            const Rectangle& rVisArea,
-            const SwRootFrm *pRootFrm )
+Reference< XAccessible > SwAccessibleMap::GetDocumentView()
 {
     vos::OGuard aGuard( aMutex );
 
@@ -138,17 +153,18 @@ Reference< XAccessible > SwAccessibleMap::GetDocumentView(
 
     if( !pMap )
         pMap = new SwAccessibleMap_Impl;
+    const SwRootFrm *pRootFrm = GetShell()->GetDoc()->GetRootFrm();
     SwAccessibleMap_Impl::iterator aIter = pMap->find( pRootFrm );
     if( aIter != pMap->end() )
         xAcc = (*aIter).second;
     if( xAcc.is() )
     {
         SwAccessibleDocument *pAcc = (SwAccessibleDocument *)xAcc.get();
-        pAcc->SetVisArea( rVisArea );
+        pAcc->SetVisArea( GetShell()->VisArea().SVRect() );
     }
     else
     {
-        xAcc = new SwAccessibleDocument( rxParent, rVisArea, pRootFrm );
+        xAcc = new SwAccessibleDocument( this );
         if( aIter != pMap->end() )
         {
             (*aIter).second = xAcc;
@@ -163,37 +179,39 @@ Reference< XAccessible > SwAccessibleMap::GetDocumentView(
     return xAcc;
 }
 
-Reference< XAccessible> SwAccessibleMap::GetContext( const Rectangle& rVisArea,
-                                                      const SwFrm *pFrm,
+Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                                                      sal_Bool bCreate )
 {
     vos::OGuard aGuard( aMutex );
 
     Reference < XAccessible > xAcc;
 
-    if( !pMap )
+    if( !pMap && bCreate )
         pMap = new SwAccessibleMap_Impl;
-    SwAccessibleMap_Impl::iterator aIter = pMap->find( pFrm );
-    if( aIter != pMap->end() )
-        xAcc = (*aIter).second;
-
-    if( !xAcc.is() && bCreate )
+    if( pMap )
     {
-        if( pFrm->IsTxtFrm() )
-            xAcc = new SwAccessibleParagraph( nPara++, rVisArea,
-                                              (const SwTxtFrm *)pFrm );
+        SwAccessibleMap_Impl::iterator aIter = pMap->find( pFrm );
+        if( aIter != pMap->end() )
+            xAcc = (*aIter).second;
 
-        ASSERT( xAcc.is(), "unknown frame type" );
-        if( xAcc.is() )
+        if( !xAcc.is() && bCreate )
         {
-            if( aIter != pMap->end() )
+            if( pFrm->IsTxtFrm() )
+                xAcc = new SwAccessibleParagraph( this, nPara++,
+                                                  (const SwTxtFrm *)pFrm );
+
+            ASSERT( xAcc.is(), "unknown frame type" );
+            if( xAcc.is() )
             {
-                (*aIter).second = xAcc;
-            }
-            else
-            {
-                SwAccessibleMap_Impl::value_type aEntry( pFrm, xAcc );
-                pMap->insert( aEntry );
+                if( aIter != pMap->end() )
+                {
+                    (*aIter).second = xAcc;
+                }
+                else
+                {
+                    SwAccessibleMap_Impl::value_type aEntry( pFrm, xAcc );
+                    pMap->insert( aEntry );
+                }
             }
         }
     }
@@ -202,11 +220,10 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const Rectangle& rVisArea,
 }
 
 ::vos::ORef < SwAccessibleContext > SwAccessibleMap::GetContextImpl(
-            const Rectangle& rVisArea,
             const SwFrm *pFrm,
             sal_Bool bCreate )
 {
-    Reference < XAccessible > xAcc( GetContext( rVisArea, pFrm, bCreate ) );
+    Reference < XAccessible > xAcc( GetContext( pFrm, bCreate ) );
 
     ::vos::ORef < SwAccessibleContext > xAccImpl(
          (SwAccessibleContext *)xAcc.get() );

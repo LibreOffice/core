@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-11 12:50:47 $
+ *  last change: $Author: mib $ $Date: 2002-02-20 17:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #include <frame.hxx>
 #endif
 
-class Window;
 
 class SwAccessibleFrame
 {
@@ -101,11 +100,12 @@ protected:
     // A child has been moved while setting the vis area
     virtual sal_Bool ChildScrolled( const SwFrm *pFrm );
 
-    Window *GetWindow();
+    // A child shall be disposed
+    virtual sal_Bool DisposeChild( const SwFrm *pFrm, sal_Bool bRecursive );
 
-    sal_Bool IsEditable() const;
+    sal_Bool IsEditable( ViewShell *pVSh ) const;
 
-    sal_Bool IsOpaque() const;
+    sal_Bool IsOpaque( ViewShell *pVSh ) const;
 
     inline sal_Bool IsShowing( const Rectangle& rFrm ) const;
     inline sal_Bool IsShowing( const SwFrm *pFrm ) const;
@@ -115,7 +115,8 @@ protected:
 
 public:
 
-    SwAccessibleFrame( const Rectangle& rVisArea, const SwFrm *pFrm );
+    SwAccessibleFrame( const Rectangle& rVisArea,
+                       const SwFrm *pFrm );
     virtual ~SwAccessibleFrame();
 
     // Does a frame of theis type may have an accessible?
@@ -143,8 +144,16 @@ public:
                             const Rectangle& rOldVisArea,
                             const Rectangle& rNewVisArea,
                             SwAccessibleFrame *pAcc = 0 );
-    void SetVisArea( const Rectangle& rNewVisArea );
+    inline void SetVisArea( const Rectangle& rNewVisArea );
+
+    static void DisposeChildren( const SwFrm *pFrm,
+                                  const Rectangle& rOldVisArea,
+                                 sal_Bool bRecursive,
+                                  SwAccessibleFrame *pAcc = 0 );
+    inline void DisposeChildren( sal_Bool bRecursive );
+
     const Rectangle& GetVisArea() const { return aVisArea; }
+
 };
 
 inline sal_Bool SwAccessibleFrame::IsShowing( const Rectangle& rFrm ) const
@@ -189,6 +198,11 @@ inline void SwAccessibleFrame::SetVisArea( const Rectangle& rNewVisArea )
     aVisArea = rNewVisArea;
 
     SetVisArea( GetFrm(), aOldVisArea, aVisArea, this );
+}
+
+inline void SwAccessibleFrame::DisposeChildren( sal_Bool bRecursive )
+{
+    DisposeChildren( GetFrm(), aVisArea, bRecursive, this );
 }
 
 #endif

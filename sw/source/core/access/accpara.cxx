@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-20 15:22:26 $
+ *  last change: $Author: mib $ $Date: 2002-02-20 17:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,10 +155,10 @@ void SwAccessibleParagraph::SetStates(
 }
 
 SwAccessibleParagraph::SwAccessibleParagraph(
+        SwAccessibleMap *pMap,
         sal_Int32 nPara,
-        const Rectangle& rVisArea,
         const SwTxtFrm *pTxtFrm ) :
-    SwAccessibleContext( AccessibleRole::PARAGRAPH, rVisArea, pTxtFrm ),
+    SwAccessibleContext( pMap, AccessibleRole::PARAGRAPH, pTxtFrm ),
     pPortionData( NULL )
 {
     const SwTxtNode *pTxtNd = pTxtFrm->GetTxtNode();
@@ -750,13 +750,13 @@ sal_Bool SwAccessibleParagraph::replaceText(
 
         // create SwPosition for nStartIndex
         SwIndex aIndex(
-            pNode, static_cast<sal_uInt32>(
+            pNode, static_cast<sal_uInt16>(
                 GetPortionData().GetModelPosition( nStartIndex )) );
         SwPosition aStartPos( *pNode, aIndex );
 
         // create SwPosition for nEndIndex
         SwPosition aEndPos( aStartPos );
-        aEndPos.nContent = static_cast<sal_uInt32>(
+        aEndPos.nContent = static_cast<sal_uInt16>(
             GetPortionData().GetModelPosition( nEndIndex ) );
 
         // now create XTextRange as helper and set string
