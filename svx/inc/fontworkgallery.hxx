@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontworkgallery.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:06:36 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:37:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #include <sfx2/tbxctrl.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 #include <vector>
 
 class FmFormModel;
@@ -146,7 +150,7 @@ public:
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 };
 
-class FontWorkAlignmentControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC FontWorkAlignmentControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -198,7 +202,7 @@ public:
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 };
 
-class FontWorkCharacterSpacingControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC FontWorkCharacterSpacingControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -213,7 +217,7 @@ public:
 
 //------------------------------------------------------------------------
 
-class FontWorkShapeTypeControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC FontWorkShapeTypeControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -245,7 +249,7 @@ public:
 };
 
 
-class FontWorkGalleryDialog : public ModalDialog
+class SVX_DLLPUBLIC FontWorkGalleryDialog : public ModalDialog
 {
     ValueSet            maCtlFavorites;
     FixedLine           maFLFavorites;
