@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.185 $
+ *  $Revision: 1.186 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:15:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:27:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -882,7 +882,7 @@ void X11SalFrame::SetIcon( USHORT nIcon )
 {
     if ( !( nStyle_ & (SAL_FRAME_STYLE_CHILD|SAL_FRAME_STYLE_FLOAT) ) )
     {
-        mnIconID = nIcon;
+        mnIconID = (nIcon > 0) ? nIcon : 1;
 
         XIconSize *pIconSize = NULL;
         int nSizes = 0;
