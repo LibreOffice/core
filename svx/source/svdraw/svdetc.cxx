@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-12 15:02:49 $
+ *  last change: $Author: dl $ $Date: 2001-06-08 12:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,10 +170,6 @@
 /******************************************************************************
 * Globale Daten der DrawingEngine
 ******************************************************************************/
-::com::sun::star::lang::Locale*     SdrGlobalData::pLocale = NULL;
-CharClass*  SdrGlobalData::pCharClass = NULL;
-LocaleDataWrapper* SdrGlobalData::pLocaleData = NULL;
-
 
 SdrGlobalData::SdrGlobalData() :
     pOutliner(NULL),
