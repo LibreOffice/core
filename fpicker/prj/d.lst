@@ -1,0 +1,4 @@
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+
+..\source\win32\filepicker\*.xml %_DEST%\xml%_EXT%\*.xml
+..\source\win32\folderpicker\*.xml %_DEST%\xml%_EXT%\*.xml
