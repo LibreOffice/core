@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2001-11-08 18:04:43 $
+ *  last change: $Author: er $ $Date: 2001-11-23 19:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,10 @@
 #include "svdopath.hxx"
 #include "svdpage.hxx"
 
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrMeasureObjGeoData::SdrMeasureObjGeoData() {}
@@ -235,8 +239,7 @@ void SdrMeasureField::TakeRepresentation(const SdrMeasureObj& rObj, XubString& r
                     rStr += sal_Unicode('?');
                 }
 
-                International aInter(GetpApp()->GetAppInternational());
-                sal_Unicode cDec(aInter.GetNumDecimalSep());
+                sal_Unicode cDec(SvtSysLocale().GetLocaleData().getNumDecimalSep().GetChar(0));
 
                 if(rStr.Search(cDec) != STRING_NOTFOUND)
                 {

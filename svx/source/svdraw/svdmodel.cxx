@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-05 14:02:01 $
+ *  last change: $Author: er $ $Date: 2001-11-23 19:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,6 @@
 
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
 #endif
 
 #include "svdmodel.hxx"
@@ -158,6 +154,10 @@
 // #90477#
 #ifndef _TOOLS_TENCCVT_HXX
 #include <tools/tenccvt.hxx>
+#endif
+
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -1273,9 +1273,10 @@ void SdrModel::TakeMetricStr(long nVal, XubString& rStr, FASTBOOL bNoUnitChars) 
     if(bNeg)
         nVal = -nVal;
 
-    International aInter(Application::GetAppInternational());
+    SvtSysLocale aSysLoc;
+    const LocaleDataWrapper& rLoc = aSysLoc.GetLocaleData();
     sal_Int32 nKomma(nUIUnitKomma);
-    sal_Int32 nNumDigits(aInter.GetNumDigits());
+    sal_Int32 nNumDigits(rLoc.getNumDigits());
 
     while(nKomma > nNumDigits)
     {
@@ -1315,44 +1316,44 @@ void SdrModel::TakeMetricStr(long nVal, XubString& rStr, FASTBOOL bNoUnitChars) 
         // Fuer Komma evtl. vorne Nullen dran
         sal_Int32 nAnz(nKomma - rStr.Len());
 
-        if(nAnz >= 0 && aInter.IsNumLeadingZero())
+        if(nAnz >= 0 && rLoc.isNumLeadingZero())
             nAnz++;
 
         for(sal_Int32 i=0; i<nAnz; i++)
             rStr.Insert(sal_Unicode('0'), 0);
     }
 
+    sal_Unicode cDec( rLoc.getNumDecimalSep().GetChar(0) );
+
     // KommaChar einfuegen
     sal_Int32 nVorKomma(rStr.Len() - nKomma);
 
     if(nKomma > 0)
-    {
-        sal_Unicode cDec(aInter.GetNumDecimalSep());
+        rStr.Insert(cDec, (xub_StrLen) nVorKomma);
 
-        rStr.Insert(cDec, (USHORT) nVorKomma);
-    }
-
-    if(!aInter.IsNumTrailingZeros())
+    if(!rLoc.isNumTrailingZeros())
     {
         while(rStr.Len() && rStr.GetChar(rStr.Len() - 1) == sal_Unicode('0'))
             rStr.Erase(rStr.Len() - 1);
-
-        sal_Unicode cDec(aInter.GetNumDecimalSep());
 
         if(rStr.Len() && rStr.GetChar(rStr.Len() - 1) == cDec)
             rStr.Erase(rStr.Len() - 1);
     }
 
     // ggf. Trennpunkte bei jedem Tausender einfuegen
-    if(nVorKomma > 3 && aInter.IsNumThousandSep())
+    if( nVorKomma > 3 )
     {
-        sal_Unicode cDot(aInter.GetNumThousandSep());
-        sal_Int32 i(nVorKomma - 3);
-
-        while(i > 0) // #78311#
+        String aThoSep( rLoc.getNumThousandSep() );
+        if ( aThoSep.Len() > 0 )
         {
-            rStr.Insert(cDot, (xub_StrLen)i);
-            i -= 3;
+            sal_Unicode cTho( aThoSep.GetChar(0) );
+            sal_Int32 i(nVorKomma - 3);
+
+            while(i > 0) // #78311#
+            {
+                rStr.Insert(cTho, (xub_StrLen)i);
+                i -= 3;
+            }
         }
     }
 
@@ -1380,18 +1381,17 @@ void SdrModel::TakeWinkStr(long nWink, XubString& rStr, FASTBOOL bNoDegChar) con
 
     rStr = UniString::CreateFromInt32(nWink);
 
-    International aInter(Application::GetAppInternational());
+    SvtSysLocale aSysLoc;
+    const LocaleDataWrapper& rLoc = aSysLoc.GetLocaleData();
     xub_StrLen nAnz(2);
 
-    if(aInter.IsNumLeadingZero())
+    if(rLoc.isNumLeadingZero())
         nAnz++;
 
     while(rStr.Len() < nAnz)
         rStr.Insert(sal_Unicode('0'), 0);
 
-    sal_Unicode cDec(aInter.GetNumDecimalSep());
-
-    rStr.Insert(cDec, rStr.Len() - 2);
+    rStr.Insert(rLoc.getNumDecimalSep().GetChar(0), rStr.Len() - 2);
 
     if(bNeg)
         rStr.Insert(sal_Unicode('-'), 0);

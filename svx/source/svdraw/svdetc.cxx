@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-17 15:17:12 $
+ *  last change: $Author: er $ $Date: 2001-11-23 19:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,9 @@
 #include <unotools/charclass.hxx>
 #endif
 
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
+#endif
 
 
 /******************************************************************************
@@ -174,11 +177,9 @@ SdrGlobalData::SdrGlobalData() :
     pStrCache(NULL),
     nExchangeFormat(0)
 {
-    String aLanguage, aCountry;
-    ConvertLanguageToIsoNames( International::GetRealLanguage( LANGUAGE_SYSTEM ), aLanguage, aCountry );
-    pLocale = new ::com::sun::star::lang::Locale( aLanguage, aCountry, String() );
-    pCharClass = new CharClass( ::comphelper::getProcessServiceFactory(), *pLocale );
-    pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), *pLocale );
+    pSysLocale = new SvtSysLocale;
+    pCharClass = pSysLocale->GetCharClassPtr();
+    pLocaleData = pSysLocale->GetLocaleDataPtr();
 }
 
 SdrGlobalData::~SdrGlobalData()
@@ -187,9 +188,8 @@ SdrGlobalData::~SdrGlobalData()
     delete pDefaults;
     delete pResMgr;
     delete [] pStrCache;
-    DELETEZ( pLocaleData );
-    DELETEZ( pCharClass );
-    DELETEZ( pLocale );
+    //! do NOT delete pCharClass and pLocaleData
+    delete pSysLocale;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -756,7 +756,7 @@ ResMgr* ImpGetResMgr()
         INT32 nSolarUpd(SOLARUPD);
         aName += ByteString::CreateFromInt32( nSolarUpd );
         rGlobalData.pResMgr =
-            ResMgr::CreateResMgr( aName.GetBuffer(), GetpApp()->GetAppInternational().GetLanguage() );
+            ResMgr::CreateResMgr( aName.GetBuffer(), Application::GetSettings().GetUILanguage() );
     }
 
     return rGlobalData.pResMgr;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-12 10:44:11 $
+ *  last change: $Author: er $ $Date: 2001-11-23 19:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1391,11 +1391,11 @@ SfxItemPresentation __EXPORT SdrAngleItem::GetPresentation(
 
         const IntlWrapper* pMyIntlWrapper = NULL;
         DBG_ASSERT( pIntlWrapper, "SdrAngleItem::GetPresentation: "
-            "using default App-International-IntlWrapper" );
+            "using default App-IntlWrapper" );
         if(!pIntlWrapper)
             pIntlWrapper = pMyIntlWrapper = new IntlWrapper(
                 ::comphelper::getProcessServiceFactory(),
-                GetpApp()->GetAppInternational().GetLanguage() );
+                Application::GetSettings().GetLanguage() );
 
         if(pIntlWrapper->getLocaleData()->isNumLeadingZero())
             nAnz++;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtrans.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-18 09:40:54 $
+ *  last change: $Author: er $ $Date: 2001-11-23 19:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,6 @@
 #include <math.h>
 #include "xpoly.hxx"
 
-#ifndef _APP_HXX //autogen
-#include <vcl/svapp.hxx>
-#endif
-
 #ifndef _VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
 #endif
@@ -77,6 +73,10 @@
 
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
+#endif
+
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1002,7 +1002,8 @@ void SdrFormatter::TakeStr(long nVal, XubString& rStr) const
 
     // Hier fallen trotzdem evtl. Nachkommastellen weg, wg. MulDiv statt Real
     BOOL bNeg(nVal < 0);
-    International aInter(GetpApp()->GetAppInternational());
+    SvtSysLocale aSysLoc;
+    const LocaleDataWrapper& rLoc = aSysLoc.GetLocaleData();
 
     ForceUndirty();
 
@@ -1034,14 +1035,14 @@ void SdrFormatter::TakeStr(long nVal, XubString& rStr) const
         // Komma erforderlich
         xub_StrLen nAnz(nK - aStr.Len());
 
-        if(nAnz >= 0 && aInter.IsNumLeadingZero())
+        if(nAnz >= 0 && rLoc.isNumLeadingZero())
             nAnz++;
 
         for(xub_StrLen  i=0; i<nAnz; i++)
             aStr.Insert(aNullCode, 0);
 
         // zuviele Nachkommastellen abhacken
-        xub_StrLen nNumDigits(aInter.GetNumDigits());
+        xub_StrLen nNumDigits(rLoc.getNumDigits());
         xub_StrLen nWeg(nK - nNumDigits);
 
         if(nWeg > 0)
@@ -1068,21 +1069,25 @@ void SdrFormatter::TakeStr(long nVal, XubString& rStr) const
         if(nK > 0)
         {
             // na, noch Nachkommastellen da?
-            sal_Unicode cDec(aInter.GetNumDecimalSep());
+            sal_Unicode cDec(rLoc.getNumDecimalSep().GetChar(0));
             aStr.Insert(cDec, nVorKomma);
         }
     }
 
     // ggf. Trennpunkte bei jedem Tausender einfuegen
-    if(nVorKomma > 3 && aInter.IsNumThousandSep())
+    if( nVorKomma > 3 )
     {
-        sal_Unicode cDot(aInter.GetNumThousandSep());
-        xub_StrLen i(nVorKomma - 3);
-
-        while(i > 0)
+        String aThoSep( rLoc.getNumThousandSep() );
+        if ( aThoSep.Len() > 0 )
         {
-            aStr.Insert(cDot, i);
-            i -= 3;
+            sal_Unicode cTho( aThoSep.GetChar(0) );
+            sal_Int32 i(nVorKomma - 3);
+
+            while(i > 0)
+            {
+                rStr.Insert(cTho, (xub_StrLen)i);
+                i -= 3;
+            }
         }
     }
 

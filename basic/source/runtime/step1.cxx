@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:35:14 $
+ *  last change: $Author: er $ $Date: 2001-11-23 19:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 #ifndef _TOOLS_SOLMATH_HXX //autogen wg. SolarMath
 #include <tools/solmath.hxx>
 #endif
-#ifndef _TOOLS_INTN_HXX //autogen wg. International
-#include <tools/intn.hxx>
-#endif
 #include "runtime.hxx"
 #pragma hdrstop
 #include "sbintern.hxx"
@@ -77,8 +74,6 @@
 
 void SbiRuntime::StepLOADNC( USHORT nOp1 )
 {
-    static International aEnglischIntn( LANGUAGE_ENGLISH_US, LANGUAGE_ENGLISH_US );
-
     SbxVariable* p = new SbxVariable( SbxDOUBLE );
 
     // #57844 Lokalisierte Funktion benutzen
@@ -94,7 +89,7 @@ void SbiRuntime::StepLOADNC( USHORT nOp1 )
         aStr += '.';
         aStr += aStr2;
     }
-    double n = SolarMath::StringToDouble( aStr.GetBuffer(), aEnglischIntn, nErrno );
+    double n = SolarMath::StringToDouble( aStr.GetBuffer(), '.', ',', nErrno );
     //ALT: double n = atof( pImg->GetString( nOp1 ) );
 
     p->PutDouble( n );

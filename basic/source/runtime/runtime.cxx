@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:35:14 $
+ *  last change: $Author: er $ $Date: 2001-11-23 19:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,6 @@
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
-#endif
 
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
@@ -84,6 +81,10 @@
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
 #endif
 
 // Makro MEMBER()
@@ -344,8 +345,7 @@ SvNumberFormatter* SbiInstance::GetNumberFormatter()
 void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
     ULONG &rnStdDateIdx, ULONG &rnStdTimeIdx, ULONG &rnStdDateTimeIdx )
 {
-    const International& rInter = GetpApp()->GetAppInternational();
-    LanguageType eLangType = rInter.GetLanguage();
+    LanguageType eLangType = Application::GetSettings().GetLanguage();
 
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
         xFactory = comphelper::getProcessServiceFactory();
@@ -364,7 +364,7 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
     // austauscht. Problem: Print Year(Date) unter engl. BS
     // siehe auch svtools\source\sbx\sbxdate.cxx
 
-    DateFormat eDate = rInter.GetDateFormat();
+    DateFormat eDate = SvtSysLocale().GetLocaleData().getDateFormat();
     String aDateStr;
     switch( eDate )
     {
