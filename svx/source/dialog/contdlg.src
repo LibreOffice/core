@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:16:12 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:09:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,31 @@ FloatingWindow RID_SVXDLG_CONTOUR
     Text = "Kontur-Editor" ;
     Text [ ENGLISH ] = "Contour editor" ;
     Text [ english_us ] = "Contour Editor" ;
+    Text [ portuguese_brazilian ] = "Editor de Contornos" ;
+    Text [ swedish ] = "Konturredigerare" ;
+    Text [ danish ] = "Kontur-redigering" ;
+    Text [ italian ] = "Editor contorno" ;
+    Text [ spanish ] = "Editor de contornos" ;
+    Text [ french ] = "Éditeur de contour" ;
+    Text [ dutch ] = "Contouren-editor" ;
+    Text [ portuguese ] = "Editor de contornos" ;
+    Text [ chinese_simplified ] = "å›¾å½¢è½®å»“ç¼–è¾‘å™¨";
+    Text [ russian ] = "Ğåäàêòîğ êîíòóğà";
+    Text [ polish ] = "Edytor konturu";
+    Text [ japanese ] = "è¼ªéƒ­ã‚¨ãƒ‡ã‚£ã‚¿";
+    Text [ chinese_traditional ] = "åœ–å½¢è¼ªå»“ç·¨è¼¯å™¨";
+    Text [ arabic ] = "ãÍÑÑ ÇáÎØ ÇáßİÇİí";
+    Text [ greek ] = "ÅğåîåñãáóôŞò ğåñéãñÜììáôïò";
+    Text [ korean ] = "ìœ¤ê³½ í¸ì§‘ê¸°";
+    Text [ turkish ] = "Kontur editörü";
+    Text [ language_user1 ] = " ";
+    Text [ catalan ] = "Editor del contorn";
+    Text [ finnish ] = "Ääriviivaeditori";
+    Text [ thai ] = "à¸•à¸±à¸§à¹à¸à¹‰à¹„à¸‚à¹€à¸ªà¹‰à¸™à¹à¸ªà¸”à¸‡à¸£à¸¹à¸›à¸£à¹ˆà¸²à¸‡";
+    Text[ czech ] = "Editor obrysÅ¯";
+    Text[ hebrew ] = "Kontur-Editor";
+    Text[ hindi ] = "à¤ªà¤°à¤¿à¤µà¥‡à¤¶ à¤¸à¤‚à¤ªà¤¾à¤¦à¤•";
+    Text[ slovak ] = "Editor obrysov";
     Sizeable = TRUE ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -683,27 +708,6 @@ FloatingWindow RID_SVXDLG_CONTOUR
         Pos = MAP_APPFONT ( 6 , 24 ) ;
         HelpId = HID_CONTDLG_GRAPHWND ;
     };
-    Text [ portuguese_brazilian ] = "Editor de Contornos" ;
-    Text [ swedish ] = "Konturredigerare" ;
-    Text [ danish ] = "Kontur-redigering" ;
-    Text [ italian ] = "Editor contorno" ;
-    Text [ spanish ] = "Editor de contornos" ;
-    Text [ french ] = "Éditeur de contour" ;
-    Text [ dutch ] = "Contouren-editor" ;
-    Text [ portuguese ] = "Editor de contornos" ;
-    Text[ chinese_simplified ] = "å›¾å½¢è½®å»“ç¼–è¾‘å™¨";
-    Text[ russian ] = "Ğåäàêòîğ êîíòóğà";
-    Text[ polish ] = "Edytor konturu";
-    Text[ japanese ] = "è¼ªéƒ­ã‚¨ãƒ‡ã‚£ã‚¿";
-    Text[ chinese_traditional ] = "åœ–å½¢è¼ªå»“ç·¨è¼¯å™¨";
-    Text[ arabic ] = "ãÍÑÑ ÇáÎØ ÇáßİÇİí";
-    Text[ greek ] = "ÅğåîåñãáóôŞò ğåñéãñÜììáôïò";
-    Text[ korean ] = "ìœ¤ê³½ í¸ì§‘ê¸°";
-    Text[ turkish ] = "Kontur editörü";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Editor del contorn";
-    Text[ finnish ] = "Ääriviivaeditori";
-    Text[ thai ] = "à¸•à¸±à¸§à¹à¸à¹‰à¹„à¸‚à¹€à¸ªà¹‰à¸™à¹à¸ªà¸”à¸‡à¸£à¸¹à¸›à¸£à¹ˆà¸²à¸‡";
 
 #define CONTOURDLG_IDLIST \
         IdList =            \
@@ -737,10 +741,6 @@ FloatingWindow RID_SVXDLG_CONTOUR
         MASKCOLOR
         CONTOURDLG_IDLIST
     };
-    Text[ czech ] = "Editor obrysÅ¯";
-    Text[ hebrew ] = "Kontur-Editor";
-    Text[ hindi ] = "à¤ªà¤°à¤¿à¤µà¥‡à¤¶ à¤¸à¤‚à¤ªà¤¾à¤¦à¤•";
-    Text[ slovak ] = "Editor obrysov";
 };
 /******************************************************************************/
 String STR_CONTOURDLG_MODIFY

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:16:57 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@ DockingWindow RID_SVXDLG_FONTWORK
     Text [ swedish ] = "Fontwork" ;
     Text [ finnish ] = "Fonttity�" ;
     Text [ english_us ] = "Fontwork" ;
+    Text [ czech ] = "Písmomalba";
+    Text [ hebrew ] = "‮FontWork‬";
+    Text [ hindi ] = "फ़ॉन्टवर्क्";
+    Text [ slovak ] = "Písmomaľba";
     Moveable = TRUE ;
     Zoomable = TRUE ;
     Closeable = TRUE ;
@@ -1092,10 +1096,6 @@ DockingWindow RID_SVXDLG_FONTWORK
         MaskColor = IMAGE_STDBTN_COLOR ;
         FONTWORK_IDLIST
     };
-    Text[ czech ] = "Písmomalba";
-    Text[ hebrew ] = "‮FontWork‬";
-    Text[ hindi ] = "फ़ॉन्टवर्क्";
-    Text[ slovak ] = "Písmomaľba";
 };
  // Bitmaps ---------------------------------------------------------------
 Bitmap RID_SVXBMP_FONTWORK_FORM1
