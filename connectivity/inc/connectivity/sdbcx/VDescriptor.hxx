@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDescriptor.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:19:19 $
+ *  last change: $Author: fs $ $Date: 2001-03-19 07:32:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,14 +77,22 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
 
 
 namespace connectivity
 {
     namespace sdbcx
     {
-        class ODescriptor : public ::comphelper::OPropertyContainer,
-                            public ::com::sun::star::lang::XUnoTunnel
+        // =========================================================================
+        // = ODescriptor
+        // =========================================================================
+        typedef ::comphelper::OPropertyContainer ODescriptor_PBASE;
+        class ODescriptor
+                    :public ODescriptor_PBASE
+                    ,public ::com::sun::star::lang::XUnoTunnel
         {
         protected:
             ::rtl::OUString         m_Name;
@@ -101,18 +109,17 @@ namespace connectivity
                 }
             }
         private:
-            sal_Bool                m_bNew;
             comphelper::UStringMixEqual m_aCase;
+            sal_Bool                    m_bNew;
 
         public:
-            ODescriptor(::cppu::OBroadcastHelper& _rBHelper,sal_Bool _bCase, sal_Bool _bNew = sal_False)
-                : ::comphelper::OPropertyContainer(_rBHelper)
-                , m_bNew(_bNew),m_aCase(_bCase){}
+            ODescriptor(::cppu::OBroadcastHelper& _rBHelper,sal_Bool _bCase, sal_Bool _bNew = sal_False);
 
             virtual ~ODescriptor();
-            sal_Bool isNew()  const         { return m_bNew;    }
-            sal_Bool getNew() const         { return m_bNew;    }
-            void     setNew(sal_Bool _bNew) { m_bNew = _bNew;   }
+
+                    sal_Bool isNew()  const         { return m_bNew;    }
+                    sal_Bool getNew() const         { return m_bNew;    }
+            virtual void     setNew(sal_Bool _bNew);
 
             sal_Bool isCaseSensitive() const { return m_aCase.isCaseSensitive(); }
 
@@ -120,15 +127,9 @@ namespace connectivity
 
             // XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
-            {
-                ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
-                                                ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
-                                                ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *)0 ),
-                                                ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > *)0 ));
-                return aTypes.getTypes();
-            }
+            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
+            // compare
             inline sal_Bool operator == ( const ::rtl::OUString & _rRH )
             {
                 return m_aCase(m_Name,_rRH);
