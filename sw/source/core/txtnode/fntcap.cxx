@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcap.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:34:48 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:39:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,24 @@
 
 #pragma hdrstop
 
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
+
+#ifndef _SVX_CMAPITEM_HXX //autogen
+#include <svx/cmapitem.hxx>
+#endif
+
 #ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
 #endif
 #ifndef _COM_SUN_STAR_I18N_CHARTYPE_HDL
 #include <com/sun/star/i18n/CharType.hdl>
 #endif
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
+#include <com/sun/star/i18n/WordType.hdl>
+#endif
+
 #ifndef _PRINT_HXX //autogen
 #include <vcl/print.hxx>
 #endif
@@ -97,6 +109,69 @@ using namespace ::com::sun::star::i18n;
 #define KAPITAELCHENPROP 66
 
 /*************************************************************************
+ *                      class SwCapitalInfo
+ *
+ * The information encapsulated in SwCapitalInfo is required
+ * by the ::Do functions. They contain the information about
+ * the original string, whereas rDo.GetInf() contains information
+ * about the display string.
+ *************************************************************************/
+
+class SwCapitalInfo
+{
+public:
+    explicit SwCapitalInfo( const XubString& rOrigText ) :
+        rString( rOrigText ), nIdx( 0 ), nLen( 0 ) {};
+    const XubString& rString;
+    xub_StrLen nIdx;
+    xub_StrLen nLen;
+};
+
+/*************************************************************************
+ *                      xub_StrLen lcl_CalcCaseMap()
+ *
+ * rFnt: required for CalcCaseMap
+ * rOrigString: The original string
+ * nOfst: Position of the substring in rOrigString
+ * nLen: Length if the substring in rOrigString
+ * nIdx: Referes to a position in the display string and should be mapped
+ *       to a position in rOrigString
+ *************************************************************************/
+
+xub_StrLen lcl_CalcCaseMap( const SwFont& rFnt,
+                            const XubString& rOrigString,
+                            xub_StrLen nOfst,
+                            xub_StrLen nLen,
+                            xub_StrLen nIdx )
+{
+    int j = 0;
+    const xub_StrLen nEnd = nOfst + nLen;
+    ASSERT( nEnd <= rOrigString.Len(), "lcl_CalcCaseMap: Wrong parameters" )
+
+    // special case for title case:
+    const bool bTitle = SVX_CASEMAP_TITEL == rFnt.GetCaseMap() &&
+                        pBreakIt->xBreak.is();
+    for ( int i = nOfst; i < nEnd; ++i )
+    {
+        XubString aTmp( rOrigString, i, 1 );
+
+        if ( !bTitle ||
+             pBreakIt->xBreak->isBeginWord(
+                 rOrigString, i,
+                 pBreakIt->GetLocale( rFnt.GetLanguage() ),
+                 WordType::ANYWORD_IGNOREWHITESPACES ) )
+            aTmp = rFnt.GetActualFont().CalcCaseMap( aTmp );
+
+        j += aTmp.Len();
+
+        if ( j > nIdx )
+            return i;
+    }
+
+    return nOfst + nLen;
+}
+
+/*************************************************************************
  *                      class SwDoCapitals
  *************************************************************************/
 
@@ -104,12 +179,16 @@ class SwDoCapitals
 {
 protected:
     SwDrawTextInfo &rInf;
+    SwCapitalInfo* pCapInf; // referes to additional information
+                           // required by the ::Do function
 public:
-    SwDoCapitals ( SwDrawTextInfo &rInfo ) : rInf( rInfo ) { }
+    SwDoCapitals ( SwDrawTextInfo &rInfo ) : rInf( rInfo ), pCapInf( 0 ) { }
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) = 0;
     virtual void Do() = 0;
     inline OutputDevice *GetOut() { return rInf.GetpOut(); }
     inline SwDrawTextInfo& GetInf() { return rInf; }
+    inline SwCapitalInfo* GetCapInf() const { return pCapInf; }
+    inline void SetCapInf( SwCapitalInfo& rNew ) { pCapInf = &rNew; }
 };
 
 /*************************************************************************
@@ -210,8 +289,23 @@ void SwDoGetCapitalBreak::Do()
             else
                 nBreak = GetOut()->GetTextBreak( rInf.GetText(), nTxtWidth,
                                rInf.GetIdx(), rInf.GetLen(), rInf.GetKern() );
+
             if( nBreak > nEnd )
                 nBreak = nEnd;
+
+            // nBreak may be relative to the display string. It has to be
+            // calculated relative to the original string:
+            if ( GetCapInf()  )
+            {
+                if ( GetCapInf()->nLen != rInf.GetLen() )
+                    nBreak = lcl_CalcCaseMap( *rInf.GetFont(),
+                                              GetCapInf()->rString,
+                                              GetCapInf()->nIdx,
+                                              GetCapInf()->nLen, nBreak );
+                else
+                    nBreak += GetCapInf()->nIdx;
+            }
+
             nTxtWidth = 0;
         }
     }
@@ -534,8 +628,11 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     // #107816#
     // Look if the length of the original text and the ToUpper-converted
     // text is different. If yes, do special handling.
-    sal_Bool bCaseMapLengthDiffers(aTxt.Len() != rOldText.Len());
     XubString aNewText;
+    SwCapitalInfo aCapInf( rOldText );
+    sal_Bool bCaseMapLengthDiffers( aTxt.Len() != rOldText.Len() );
+    if ( bCaseMapLengthDiffers )
+        rDo.SetCapInf( aCapInf );
 
     SwFntObj *pOldLast = pLastFont;
     SwFntAccess *pBigFontAccess = NULL;
@@ -615,18 +712,19 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
             pLastFont = pSmallFont;
             pLastFont->SetDevFont( rDo.GetInf().GetShell(), rDo.GetOut() );
 
-            // #107816#
-            if(bCaseMapLengthDiffers)
+            // #107816#, #i14820#
+            if( bCaseMapLengthDiffers )
             {
                 // Build an own 'changed' string for the given part of the
                 // source string and use it. That new string may differ in length
                 // from the source string.
-                const XubString aSnippet(rOldText, nOldPos, nPos - nOldPos);
-                aNewText = CalcCaseMap(aSnippet);
-
-                rDo.GetInf().SetText( aNewText );
+                const XubString aSnippet( rOldText, nOldPos, nPos - nOldPos);
+                aNewText = CalcCaseMap( aSnippet );
+                aCapInf.nIdx = nOldPos;
+                aCapInf.nLen = nPos - nOldPos;
                 rDo.GetInf().SetIdx( 0 );
                 rDo.GetInf().SetLen( aNewText.Len() );
+                rDo.GetInf().SetText( aNewText );
             }
             else
             {
@@ -677,23 +775,24 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                         pLastFont->SetDevFont( rDo.GetInf().GetShell(),
                                                rDo.GetOut() );
 
-                        // #107816#
-                        if(bCaseMapLengthDiffers)
+                        // #107816#, #i14820#
+                        if( bCaseMapLengthDiffers )
                         {
                             // Build an own 'changed' string for the given part of the
                             // source string and use it. That new string may differ in length
                             // from the source string.
-                            const XubString aSnippet(rOldText, nOldPos, nTmp - nOldPos);
-                            aNewText = CalcCaseMap(aSnippet);
-
-                            rDo.GetInf().SetText( aNewText );
+                            const XubString aSnippet( rOldText, nOldPos, nTmp - nOldPos);
+                            aNewText = CalcCaseMap( aSnippet );
+                            aCapInf.nIdx = nOldPos;
+                            aCapInf.nLen = nTmp - nOldPos;
                             rDo.GetInf().SetIdx( 0 );
                             rDo.GetInf().SetLen( aNewText.Len() );
+                            rDo.GetInf().SetText( aNewText );
                         }
                         else
                         {
                             rDo.GetInf().SetIdx( nOldPos );
-                            rDo.GetInf().SetLen( nTmp - nOldPos );
+                            rDo.GetInf().SetLen( nPos - nOldPos );
                         }
 
                         rDo.GetInf().SetOut( *pOutSize );
@@ -716,23 +815,24 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                     nTmp = nPos;
                 if( nTmp > nOldPos )
                 {
-                    // #107816#
-                    if(bCaseMapLengthDiffers)
+                      // #107816#, #i14820#
+                    if( bCaseMapLengthDiffers )
                     {
                         // Build an own 'changed' string for the given part of the
                         // source string and use it. That new string may differ in length
                         // from the source string.
-                        const XubString aSnippet(rOldText, nOldPos, nTmp - nOldPos);
-                        aNewText = CalcCaseMap(aSnippet);
-
-                        rDo.GetInf().SetText( aNewText );
+                        const XubString aSnippet( rOldText, nOldPos, nTmp - nOldPos);
+                        aNewText = CalcCaseMap( aSnippet );
+                        aCapInf.nIdx = nOldPos;
+                        aCapInf.nLen = nTmp - nOldPos;
                         rDo.GetInf().SetIdx( 0 );
                         rDo.GetInf().SetLen( aNewText.Len() );
+                        rDo.GetInf().SetText( aNewText );
                     }
                     else
                     {
                         rDo.GetInf().SetIdx( nOldPos );
-                        rDo.GetInf().SetLen( nTmp - nOldPos );
+                        rDo.GetInf().SetLen( nPos - nOldPos );
                     }
 
                     rDo.GetInf().SetOut( *pOutSize );
