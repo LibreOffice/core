@@ -2,8 +2,8 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.37 $
- *  last change: $Author: obo $ $Date: 2005-01-27 15:30:27 $
+ *  $Revision: 1.38 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1698,7 +1698,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
     }
     else if ( SFX_KIND_ATTR == pSlot->GetKind() )
     {
-        // bei Attr-Slots muá der Which-Wert gemapped werden
+        // bei Attr-Slots muss der Which-Wert gemapped werden
         const sal_uInt16 nSlotId = pSlot->GetSlotId();
         aReq.SetSlot( nSlotId );
         if ( pSlot->IsMode(SFX_SLOT_TOGGLE) )
