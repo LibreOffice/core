@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 08:45:17 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2289,6 +2289,9 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, BOOL bCalc )
     const USHORT nMyCol = lcl_ColumnNum( this );
     SWRECTFN( this )
 
+    // --> OD 2004-06-11 #i21478# - keep last inserted footnote in order to
+    // format the content of the following one.
+    SwFtnFrm* pLastInsertedFtn = 0L;
     for ( USHORT i = 0; i < rFtnArr.Count(); ++i )
     {
         SwFtnFrm *pFtn = (SwFtnFrm*)rFtnArr[i];
@@ -2364,6 +2367,8 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, BOOL bCalc )
                     {
                         pFtn->Cut();
                         delete pFtn;
+                        // --> OD 2004-06-10 #i21478#
+                        pFtn = 0L;
                     }
                 }
             }
@@ -2372,6 +2377,50 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, BOOL bCalc )
         {   ASSERT( !pFtn->GetMaster() && !pFtn->GetFollow(),
                     "DelFtn und Master/Follow?" );
             delete pFtn;
+            // --> OD 2004-06-10 #i21478#
+            pFtn = 0L;
+        }
+
+        // --> OD 2004-06-10 #i21478#
+        if ( pFtn )
+        {
+            pLastInsertedFtn = pFtn;
+        }
+    }
+
+    // --> OD 2004-06-10 #i21478# - format content of footnote following
+    // the new inserted ones.
+    if ( bCalc && pLastInsertedFtn )
+    {
+        if ( pLastInsertedFtn->GetNext() )
+        {
+            SwFtnFrm* pNextFtn = static_cast<SwFtnFrm*>(pLastInsertedFtn->GetNext());
+            SwTxtFtn* pAttr = pNextFtn->GetAttr();
+            SwFrm* pCnt = pNextFtn->ContainsAny();
+
+            BOOL bUnlock = !pNextFtn->IsBackMoveLocked();
+            pNextFtn->LockBackMove();
+
+            while ( pCnt && pCnt->FindFtnFrm()->GetAttr() == pAttr )
+            {
+                pCnt->_InvalidatePos();
+                pCnt->Calc();
+                if( pCnt->IsSctFrm() )
+                {   // Wenn es sich um einen nichtleeren Bereich handelt,
+                    // iterieren wir auch ueber seinen Inhalt
+                    SwFrm* pTmp = ((SwSectionFrm*)pCnt)->ContainsAny();
+                    if( pTmp )
+                        pCnt = pTmp;
+                    else
+                        pCnt = pCnt->FindNext();
+                }
+                else
+                    pCnt = pCnt->FindNext();
+            }
+            if( bUnlock )
+            {
+                pNextFtn->UnlockBackMove();
+            }
         }
     }
 }
