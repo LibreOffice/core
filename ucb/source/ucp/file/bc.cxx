@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: abi $ $Date: 2001-04-24 13:50:50 $
+ *  last change: $Author: kso $ $Date: 2001-05-09 14:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,7 +393,6 @@ BaseContent::execute( const Command& aCommand,
                 throw CommandAbortedException();
 
             setPropertyValues( CommandId,sPropertyValues );
-            aAny <<= getCppuVoidType();
         }
         else if( ! aCommand.Name.compareToAscii( "getPropertyValues" ) )
         {
@@ -432,13 +431,7 @@ BaseContent::execute( const Command& aCommand,
 
             uno::Reference< XDynamicResultSet > result = open( CommandId,aOpenArgument );
             if( result.is() )
-            {
                 aAny <<= result;
-            }
-            else
-            {
-                aAny <<= getCppuVoidType();
-            }
         }
         else if( ! aCommand.Name.compareToAscii( "delete" ) )
         {
@@ -447,16 +440,13 @@ BaseContent::execute( const Command& aCommand,
                 throw CommandAbortedException();
             deleteContent( CommandId,
                            aDeleteArgument );
-            aAny <<= getCppuVoidType();
         }
         else if( ! aCommand.Name.compareToAscii( "transfer" ) )
         {
             TransferInfo aTransferInfo;
             if( ! ( aCommand.Argument >>= aTransferInfo ) )
                 throw CommandAbortedException();
-            transfer( CommandId,
-                      aTransferInfo );
-            aAny <<= getCppuVoidType();
+            transfer( CommandId, aTransferInfo );
         }
         else if( ! aCommand.Name.compareToAscii( "insert" ) )
         {
@@ -465,11 +455,9 @@ BaseContent::execute( const Command& aCommand,
                 throw CommandAbortedException();
 
             insert( CommandId,aInsertArgument );
-            aAny <<= getCppuVoidType();
         }
         else if( ! aCommand.Name.compareToAscii( "update" ) )
         {
-            aAny <<= getCppuVoidType();
         }
         else
         {
