@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-03 16:08:13 $
+ *  last change: $Author: ab $ $Date: 2002-07-30 13:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,22 +84,29 @@ ModalDialog RID_MACROCHOOSER
     Text [ english_us ] = "Macro" ;
     Moveable = TRUE ;
      // Closeable = TRUE;
+
+    FixedText RID_TXT_MACROSIN
+    {
+        Pos = MAP_APPFONT ( 122 , 30 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "Makros ~in " ;
+        Text [ ENGLISH ] = "Macros ~in " ;
+    };
     Control RID_CTRL_MACRO
     {
         HelpID = HID_BASICIDE_MACROS ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 31 ) ;
-        //Size = MAP_APPFONT ( 100 , 80 ) ;
-        Size = MAP_APPFONT ( 100 , 128 ) ;
+        Pos = MAP_APPFONT ( 122 , 41 ) ;
+        Size = MAP_APPFONT ( 100 , 117 ) ;
+        // Size = MAP_APPFONT ( 100 , 117 ) ;
         TabStop = TRUE ;
     };
     Control RID_CTRL_LIB
     {
         HelpID = HID_BASICIDE_LIBS ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 112 , 16 ) ;
-        //Size = MAP_APPFONT ( 110 , 95 ) ;
-        Size = MAP_APPFONT ( 110 , 143 ) ;
+        Pos = MAP_APPFONT ( 6 , 41 ) ;
+        Size = MAP_APPFONT ( 110 , 117 ) ;
         TabStop = TRUE ;
     };
     FixedText RID_TXT_MACRONAME
@@ -131,9 +138,17 @@ ModalDialog RID_MACROCHOOSER
         Text[ catalan ] = "Nom de la ~macro";
         Text[ thai ] = "ชื่อ~มาโคร";
     };
+    Edit RID_ED_MACRONAME
+    {
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 110 , 12 ) ;
+        TabStop = TRUE ;
+    };
     FixedText RID_TXT_MACROFROM
     {
-        Pos = MAP_APPFONT ( 112 , 3 ) ;
+        Pos = MAP_APPFONT ( 6 , 30 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Makro a~us" ;
         Text [ ENGLISH ] = "Macro ~from" ;
@@ -160,14 +175,14 @@ ModalDialog RID_MACROCHOOSER
         Text[ catalan ] = "Macro ~des de";
         Text[ thai ] = "มาโคร~จาก";
     };
-    Edit RID_ED_MACRONAME
+    FixedText RID_TXT_SAVEMACRO
     {
-        Border = TRUE ;
-        SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 16 ) ;
-        Size = MAP_APPFONT ( 100 , 12 ) ;
-        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 30 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "M~akro speichern in" ;
+        Text [ ENGLISH ] = "Save m~acros in" ;
     };
+
     FixedText RID_TXT_DESCRIPTION
     {
         Pos = MAP_APPFONT ( 6 , 117 ) ;
@@ -258,6 +273,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ catalan ] = "Close";
         Text[ thai ] = "ปิด";
     };
+
     PushButton RID_PB_ASSIGN
     {
         Pos = MAP_APPFONT ( 231 , 60 ) ;
@@ -317,6 +333,20 @@ ModalDialog RID_MACROCHOOSER
         Text[ turkish ] = "D�zenle";
         Text[ catalan ] = "~Edita";
         Text[ thai ] = "แ~ก้ไข";
+    };
+    PushButton RID_PB_NEWLIB
+    {
+        Pos = MAP_APPFONT ( 231 , 60 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "Neue ~Bibliothek" ;
+        Text [ English ] = "New ~libary" ;
+    };
+    PushButton RID_PB_NEWMOD
+    {
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 231 , 77 ) ;
+        Text = "Neues M~odul" ;
+        Text [ English ] = "New m~odule" ;
     };
     PushButton RID_PB_DEL
     {
@@ -574,8 +604,8 @@ String RID_STR_RUN
 
 String RID_STR_RECORD
 {
-    Text = "~Aufzeichnen" ;
-    Text [ ENGLISH ] = "~Record" ;
+    Text = "~Speichern" ;
+    Text [ ENGLISH ] = "~Save" ;
     Text [ norwegian ] = "~Record" ;
     Text [ italian ] = "~Registra" ;
     Text [ portuguese_brazilian ] = "~Gravar" ;
@@ -599,3 +629,4 @@ String RID_STR_RECORD
     Text[ catalan ] = "~Record";
     Text[ thai ] = "~Record";
 };
+

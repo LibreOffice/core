@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-22 16:59:54 $
+ *  last change: $Author: ab $ $Date: 2002-07-30 13:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,10 @@ class MacroChooser : public SfxModalDialog
 private:
     FixedText               aMacroNameTxt;
     Edit                    aMacroNameEdit;
+    FixedText               aMacrosInTxt;
     SvTreeListBox           aMacroBox;
     FixedText               aMacroFromTxT;
+    FixedText               aMacrosSaveInTxt;
     BasicTreeListBox        aBasicBox;
 
     PushButton              aRunButton;
@@ -110,6 +112,8 @@ private:
     PushButton              aNewDelButton;
     PushButton              aOrganizeButton;
     HelpButton              aHelpButton;
+    PushButton              aNewLibButton;
+    PushButton              aNewModButton;
 
     //FixedText             aDescrTxt;
     //ExtendedMultiLineEdit aDescrEdit;
@@ -141,7 +145,6 @@ private:
 
     void                StoreMacroDescription();
     void                RestoreMacroDescription();
-
 
 public:
                         MacroChooser( Window* pParent, BOOL ScanBasics = TRUE );

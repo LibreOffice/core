@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ab $ $Date: 2002-07-30 10:35:43 $
+ *  last change: $Author: ab $ $Date: 2002-07-30 13:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,10 @@ MacroChooser::MacroChooser( Window* pParnt, BOOL bScanBasics ) :
         SfxModalDialog(     pParnt, IDEResId( RID_MACROCHOOSER ) ),
         aMacroNameTxt(      this,   IDEResId( RID_TXT_MACRONAME ) ),
         aMacroNameEdit(     this,   IDEResId( RID_ED_MACRONAME ) ),
+        aMacrosInTxt(       this,   IDEResId( RID_TXT_MACROSIN ) ),
         aMacroBox(          this,   IDEResId( RID_CTRL_MACRO ) ),
         aMacroFromTxT(      this,   IDEResId( RID_TXT_MACROFROM ) ),
+        aMacrosSaveInTxt(   this,   IDEResId( RID_TXT_SAVEMACRO ) ),
         aBasicBox(          this,   IDEResId( RID_CTRL_LIB ) ),
         aRunButton(         this,   IDEResId( RID_PB_RUN ) ),
         aCloseButton(       this,   IDEResId( RID_PB_CLOSE ) ),
@@ -111,7 +113,9 @@ MacroChooser::MacroChooser( Window* pParnt, BOOL bScanBasics ) :
         aEditButton(        this,   IDEResId( RID_PB_EDIT ) ),
         aNewDelButton(      this,   IDEResId( RID_PB_DEL ) ),
         aOrganizeButton(    this,   IDEResId( RID_PB_ORG ) ),
-        aHelpButton(        this,   IDEResId( RID_PB_HELP ) )
+        aHelpButton(        this,   IDEResId( RID_PB_HELP ) ),
+        aNewLibButton(  this,   IDEResId( RID_PB_NEWLIB ) ),
+        aNewModButton(  this,   IDEResId( RID_PB_NEWMOD ) )
         //aDescrTxt(            this,   IDEResId( RID_TXT_DESCRIPTION ) ),
         //aDescrEdit(           this,   IDEResId( RID_ML_DESCRIPTION ) )
 {
@@ -135,6 +139,13 @@ MacroChooser::MacroChooser( Window* pParnt, BOOL bScanBasics ) :
     aEditButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
     aNewDelButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
     aOrganizeButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
+
+    // Buttons only for MACROCHOOSER_RECORDING
+    aNewLibButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
+    aNewModButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
+    aNewLibButton.Hide();       // default
+    aNewModButton.Hide();       // default
+    aMacrosSaveInTxt.Hide();    // default
 
     aMacroNameEdit.SetModifyHdl( LINK( this, MacroChooser, EditModifyHdl ) );
 
@@ -436,38 +447,10 @@ SbMethod* MacroChooser::CreateMacro()
 
     if ( aLibName != pBasic->GetName() )
         aLibName = pBasic->GetName();
-    if ( aModName.Len() == 0 )
-        aModName = pModule ? pModule->GetName() : BasicIDE::CreateModuleName( pShell, aLibName );
-
     if ( !pModule )
     {
-        std::auto_ptr< NewObjectDialog > xNewDlg(
-            new NewObjectDialog(this, NEWOBJECTMODE_MOD, true));
-        xNewDlg->SetObjectName(aModName);
-        if (xNewDlg->Execute() != 0)
-        {
-            aModName = xNewDlg->GetObjectName();
-
-            if ( aModName.Len() == 0 )
-                aModName = BasicIDE::CreateModuleName( pShell, aLibName );
-
-            try
-            {
-                ::rtl::OUString aModule = BasicIDE::CreateModule( pShell, aLibName, aModName, FALSE );
-                pModule = pBasic->FindModule( aModName );
-                DBG_ASSERT( pModule , "MacroChooser::CreateMacro: module was not created!" );
-            }
-            catch ( container::ElementExistException& )
-            {
-                ErrorBox( this, WB_OK | WB_DEF_OK,
-                        String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
-            }
-            catch ( container::NoSuchElementException& e )
-            {
-                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                DBG_ERROR( aBStr.GetBuffer() );
-            }
-        }
+        pModule = createModImpl( static_cast<Window*>( this ),
+            pShell, pBasic, aBasicBox, aLibName, aModName );
     }
 
     DBG_ASSERT( !pModule || !pModule->GetMethods()->Find( aSubName, SbxCLASS_METHOD ), "Macro existiert schon!" );
@@ -816,6 +799,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
             }
         }
     }
+
     else if ( pButton == &aAssignButton )
     {
         String aLib, aMod, aSub;
@@ -838,6 +822,31 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         SfxChildWindow* pChildWin = pCurFrame ? pCurFrame->GetChildWindow(SID_CUSTOMIZETOOLBOX) : NULL;
         if ( pChildWin )
             EndDialog( MACRO_CLOSE );
+    }
+    else if ( pButton == &aNewLibButton )
+    {
+        String aLib, aMod, aSub;
+        BasicManager* pBasMgr = aBasicBox.GetSelectedSbx( aLib, aMod, aSub );
+
+        DBG_ASSERT( pBasMgr, "Record/New library: No BasicManager?" );
+        SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+        createLibImpl( static_cast<Window*>( this ), pShell, NULL, &aBasicBox );
+    }
+    else if ( pButton == &aNewModButton )
+    {
+        String aLibName, aModName, aSubName;
+        BasicManager* pBasMgr = aBasicBox.GetSelectedSbx( aLibName, aModName, aSubName );
+
+        DBG_ASSERT( pBasMgr, "Record/New module: No BasicManager?" );
+        StarBASIC* pBasic = aLibName.Len() ? pBasMgr->GetLib( aLibName ) : pBasMgr->GetLib( 0 );
+        if ( !pBasic )
+            pBasic = pBasMgr->GetLib( 0 );
+        DBG_ASSERT( pBasic, "Record/New module: Kein Basic?" );
+
+        SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+        aModName = String();
+        createModImpl( static_cast<Window*>( this ), pShell,
+            pBasic, aBasicBox, aLibName, aModName );
     }
     else if ( pButton == &aOrganizeButton )
     {
@@ -917,9 +926,25 @@ void MacroChooser::SetMode( USHORT nM )
         aRunButton.SetText( String( IDEResId( RID_STR_RECORD ) ) );
         EnableButton( aNewDelButton, FALSE );
         EnableButton( aOrganizeButton, FALSE );
+
+        aAssignButton.Hide();
+        aEditButton.Hide();
+        aNewDelButton.Hide();
+        aOrganizeButton.Hide();
+        aMacroFromTxT.Hide();
+
+        aNewLibButton.Show();
+        aNewModButton.Show();
+        aMacrosSaveInTxt.Show();
+
+        Point aHelpPos = aHelpButton.GetPosPixel();
+        Point aHelpPosLogic = PixelToLogic( aHelpPos, MapMode(MAP_APPFONT) );
+        aHelpPosLogic.Y() -= 34;
+        aHelpPos = LogicToPixel( aHelpPosLogic, MapMode(MAP_APPFONT) );
+        aHelpButton.SetPosPixel( aHelpPos );
+
         //aDescrEdit.Disable();
     }
-
     CheckButtons();
 }
 

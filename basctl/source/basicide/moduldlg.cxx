@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-09 08:12:30 $
+ *  last change: $Author: ab $ $Date: 2002-07-30 13:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -904,50 +904,9 @@ void ObjectPage::NewModule()
         if ( pBasMgr )
         {
             SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-            std::auto_ptr< NewObjectDialog > xNewDlg(
-                new NewObjectDialog(this, NEWOBJECTMODE_MOD, true));
-            xNewDlg->SetObjectName( BasicIDE::CreateModuleName( pShell, aLibName ) );
-
-            if (xNewDlg->Execute() != 0)
-            {
-                String aModName( xNewDlg->GetObjectName() );
-
-                if ( aModName.Len() == 0 )
-                    aModName = BasicIDE::CreateModuleName( pShell, aLibName );
-
-                try
-                {
-                    ::rtl::OUString aModule = BasicIDE::CreateModule( pShell, aLibName, aModName, TRUE );
-                    SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, pShell, aLibName, aModName, BASICIDE_TYPE_MODULE );
-                    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-                    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-                    SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-                    if( pDispatcher )
-                    {
-                        pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
-                                              SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
-                    }
-                    SvLBoxEntry* pLibEntry = aBasicBox.FindLibEntry( pLib );
-                    DBG_ASSERT( pLibEntry, "Libeintrag nicht gefunden!" );
-                    SvLBoxEntry * pEntry = aBasicBox.insertEntry(
-                        aModName, IMGID_MODULE, pLibEntry, false,
-                        std::auto_ptr< BasicEntry >(new BasicEntry(
-                                                        OBJTYPE_MODULE)));
-                    DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
-                    aBasicBox.SetCurEntry( pEntry );
-                    aBasicBox.Select( aBasicBox.GetCurEntry() );        // OV-Bug?!
-                }
-                catch ( container::ElementExistException& )
-                {
-                    ErrorBox( this, WB_OK | WB_DEF_OK,
-                            String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
-                }
-                catch ( container::NoSuchElementException& e )
-                {
-                    ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                    DBG_ERROR( aBStr.GetBuffer() );
-                }
-            }
+            String aModName;
+            createModImpl( static_cast<Window*>( this ), pShell,
+                           pLib, aBasicBox, aLibName, aModName );
         }
     }
 }
@@ -1091,3 +1050,62 @@ void LibDialog::SetStorageName( const String& rName )
     aName += rName;
     aStorageName.SetText( aName );
 }
+
+// Helper function
+SbModule* createModImpl( Window* pWin, SfxObjectShell* pShell, StarBASIC* pLib,
+    BasicTreeListBox& rBasicBox, const String& aLibName, String aModName )
+{
+    SbModule* pModule = NULL;
+
+    std::auto_ptr< NewObjectDialog > xNewDlg(
+        new NewObjectDialog( pWin, NEWOBJECTMODE_MOD, true ) );
+    if ( aModName.Len() == 0 )
+        aModName = BasicIDE::CreateModuleName( pShell, aLibName );
+    xNewDlg->SetObjectName( aModName );
+
+    if (xNewDlg->Execute() != 0)
+    {
+        if ( aModName.Len() == 0 )
+            aModName = BasicIDE::CreateModuleName( pShell, aLibName );
+
+        try
+        {
+            ::rtl::OUString aModule = BasicIDE::CreateModule( pShell, aLibName, aModName, TRUE );
+            pModule = pLib->FindModule( aModName );
+
+            SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, pShell, aLibName, aModName, BASICIDE_TYPE_MODULE );
+            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+            SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+            if( pDispatcher )
+            {
+                pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
+                                      SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
+            }
+            SvLBoxEntry* pLibEntry = rBasicBox.FindLibEntry( pLib );
+            DBG_ASSERT( pLibEntry, "Libeintrag nicht gefunden!" );
+            SvLBoxEntry * pEntry = rBasicBox.insertEntry(
+                aModName, IMGID_MODULE, pLibEntry, false,
+                std::auto_ptr< BasicEntry >(new BasicEntry(
+                                                OBJTYPE_MODULE)));
+            DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
+            rBasicBox.SetCurEntry( pEntry );
+            rBasicBox.Select( rBasicBox.GetCurEntry() );        // OV-Bug?!
+        }
+        catch ( container::ElementExistException& )
+        {
+            ErrorBox( pWin, WB_OK | WB_DEF_OK,
+                    String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
+        }
+        catch ( container::NoSuchElementException& e )
+        {
+            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+            DBG_ERROR( aBStr.GetBuffer() );
+        }
+    }
+    return pModule;
+}
+
+
+
+

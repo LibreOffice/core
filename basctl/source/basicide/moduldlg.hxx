@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-09 08:12:31 $
+ *  last change: $Author: ab $ $Date: 2002-07-30 13:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,5 +306,11 @@ public:
 
     void                SetTabDlg( TabDialog* p ) { pTabDlg = p;}
 };
+
+// Helper functions
+SbModule* createModImpl( Window* pWin, SfxObjectShell* pShell, StarBASIC* pLib,
+    BasicTreeListBox& rBasicBox, const String& aLibName, String aModName );
+void createLibImpl( Window* pWin, SfxObjectShell* pShell,
+                    BasicCheckBox* pLibBox, BasicTreeListBox* pBasicBox );
 
 #endif // _MODULDLG_HXX

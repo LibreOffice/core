@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-22 16:59:54 $
+ *  last change: $Author: ab $ $Date: 2002-07-30 13:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,5 +84,10 @@
 #define RID_PB_ASSIGN                   13
 #define RID_PB_HELP                     15
 #define RID_ML_DESCRIPTION              16
+#define RID_TXT_MACROSIN                17
+#define RID_TXT_SAVEMACRO               18
+#define RID_PB_NEWLIB                   19
+#define RID_PB_NEWMOD                   20
 
 #endif // _MACRODLG_HRC
+
