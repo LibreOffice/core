@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hhcwrp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 10:34:50 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,6 @@
 
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
