@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 17:04:49 $
+#   last change: $Author: rt $ $Date: 2005-01-11 12:43:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,17 +72,45 @@ TARGET=str
 .INCLUDE : sv.mk
 
 # --- Files --------------------------------------------------------
+ALWAYSDBGFILES = $(SLO)$/debugprint.obj
+
+.IF "$(ALWAYSDBGFILES)" != ""
+ALWAYSDBGTARGET=do_it_alwaysdebug
+.ENDIF
 
 SLOFILES=   $(SLO)$/tstring.obj     \
             $(SLO)$/tustring.obj    \
             $(SLO)$/charset.obj     \
-            $(SLO)$/tenccvt.obj
+            $(SLO)$/tenccvt.obj     \
+            $(SLO)$/debugprint.obj
 
 OBJFILES=   $(OBJ)$/tstring.obj     \
             $(OBJ)$/tustring.obj    \
             $(OBJ)$/charset.obj     \
-            $(OBJ)$/tenccvt.obj
+            $(OBJ)$/tenccvt.obj     \
+            $(OBJ)$/debugprint.obj
 
 # --- Targets ------------------------------------------------------
 
+.IF "$(ALWAYSDBG_FLAG)"==""
+TARGETDEPS+=$(ALWAYSDBGTARGET)
+.ENDIF
+
 .INCLUDE : target.mk
+
+.IF "$(ALWAYSDBGTARGET)" != ""
+.IF "$(ALWAYSDBG_FLAG)" == ""
+# --------------------------------------------------
+# - ALWAYSDBG - files always compiled with debugging
+# --------------------------------------------------
+$(ALWAYSDBGTARGET):
+       @+echo --- ALWAYSDBGFILES ---
+       @dmake $(MFLAGS) $(MAKEFILE) debug=true $(ALWAYSDBGFILES) ALWAYSDBG_FLAG=TRUE $(CALLMACROS)
+       @+echo --- ALWAYSDBGFILES OVER ---
+
+$(ALWAYSDBGFILES):
+       @+echo --- ALWAYSDBG ---
+       @dmake $(MFLAGS) $(MAKEFILE) debug=true ALWAYSDBG_FLAG=TRUE $(CALLMACROS) $@
+       @+echo --- ALWAYSDBG OVER ---
+.ENDIF
+.ENDIF
