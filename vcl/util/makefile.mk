@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obr $ $Date: 2001-02-22 12:24:51 $
+#   last change: $Author: pluby $ $Date: 2001-03-09 23:44:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -580,7 +580,7 @@ SHL1STDLIBS += -lxp$(UPD)$(DLLPOSTFIX) -lXm -lXt -lX11
 
 # MacOSX
 .ELIF "$(OS)"=="MACOSX"
-SHL1STDLIBS +=
+SHL1STDLIBS += -framework Cocoa
 
 # Others
 .ELSE
