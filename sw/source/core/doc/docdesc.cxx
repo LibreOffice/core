@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:03:33 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,110 +195,76 @@
 
 using namespace com::sun::star;
 
-static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId, SwFrmFmt &rFmt1,
-                         SwFrmFmt &rFmt2, SfxPrinter *pPrt, BOOL bCheck )
+static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
+                                SwFrmFmt &rFmt1,
+                                SwFrmFmt &rFmt2 )
 {
-    //Einstellung von Seitengroesse und Seitenraendern. Dazu wird
-    //der Default-Printer benutzt.
-    //Die Physikalische Seitengroesse ist die des Printers
-    //oder DIN-A4 wenn der Printer eine Groesse von 0 liefert.
-    //Der Seitenrand ergibt sich aus der Seitengroesse, der Output-
-    //SSize des Printers und einem Offset der die linke obere Ecke
-    //der Output-SSize relativ zur Physikalischen Pagesize angibt.
-    //Wenn der Offset 0 ist, werden eingestellt.
-    //!!!Die Seitengroesse wird hier im Attribut eingestellt,
-    //dies wird im Ctor des SwPageFrm beachtet.
+    // --> FME 2005-01-21 #i41075# Printer on demand
+    // This function does not require a printer anymore.
+    // The default page size is obtained from the application
+    //locale
+    // <--
 
-    SvxLRSpaceItem aLR;
-    SvxULSpaceItem aUL;
-    SwFmtFrmSize aFrmSize( ATT_FIX_SIZE );
-    BOOL bSetFmt1 = TRUE,
-         bSetFmt2 = TRUE;
-    if ( pPrt )
+    // Size and Margin
+    SvxPaper ePaper;
+    const ULONG nAppLanguage = GetAppLanguage();
+    switch ( nAppLanguage )
     {
-        if ( bCheck )
-        {
-            const SwFmtFrmSize &rFrmSize = rFmt1.GetFrmSize();
-            const SwFmtFrmSize &rFrmSize2 = rFmt2.GetFrmSize();
-            bSetFmt1 = LONG_MAX == rFrmSize.GetWidth() ||
-                       LONG_MAX == rFrmSize.GetHeight();
-            bSetFmt2 = LONG_MAX == rFrmSize2.GetWidth() ||
-                       LONG_MAX == rFrmSize2.GetHeight();
-            if ( !bSetFmt1 && !bSetFmt2 )
-                return;
-        }
+        case LANGUAGE_ENGLISH_US:
+        case LANGUAGE_ENGLISH_CAN:
+        case LANGUAGE_FRENCH_CANADIAN:
+            ePaper = SvxPaper( SVX_PAPER_LETTER );
+            break;
+        default:
+            ePaper = SvxPaper( SVX_PAPER_A4 );
+    }
 
-        //Seitengrosse
-        //fuer das Erfragen von SV, ob ein Drucker angeschlossen ist,
-        //werden die SV'ler noch eine Methode anbieten.
-        const Size aPhysSize( SvxPaperInfo::GetPaperSize( (Printer*)pPrt ));
+    SwFmtFrmSize aFrmSize( ATT_FIX_SIZE );
+    const Size aPhysSize = SvxPaperInfo::GetPaperSize( ePaper );
+    aFrmSize.SetSize( aPhysSize );
 
-        //if ( aPhysSize.Width() <= 0 )
-        //  aPhysSize.Width() = lA4Width;
-        //if ( aPhysSize.Height() <= 0 )
-        //  aPhysSize.Height() = lA4Height;
-        aFrmSize.SetSize( aPhysSize );
-
-        //Raender
-        Point   aOffst( pPrt->GetPageOffset() );
-        aOffst += pPrt->GetMapMode().GetOrigin();
-
-        //Auf Default-Raender vorbereiten.
-        //Raender haben eine defaultmaessige Mindestgroesse.
-        //wenn der Drucker einen groesseren Rand vorgibt, so
-        //ist mir dass auch recht.
-        // MIB 06/25/2002, #99397#: The HTML page desc had A4 as page size
-        // always. This has been changed to take the page size from the printer.
-        // Unfortunately, the margins of the HTML page desc are smaller than
-        // the margins used here in general, so one extra case is required.
-        // In the long term, this needs to be changed to always keep the
-        // margins from the page desc.
-        sal_Int32 nMinTop, nMinBottom, nMinLeft, nMinRight;
-        if( RES_POOLPAGE_HTML == nPoolFmtId )
-        {
-            nMinRight = nMinTop = nMinBottom = GetMetricVal( CM_1 );
-            nMinLeft = nMinRight * 2;
-        }
-        else if( MEASURE_METRIC == GetAppLocaleData().getMeasurementSystemEnum() )
-        {
-            nMinTop = nMinBottom = nMinLeft = nMinRight = 1134; //2 Zentimeter
-        }
-        else
-        {
-            nMinTop = nMinBottom = 1440;    //al la WW: 1Inch
-            nMinLeft = nMinRight = 1800;    //          1,25 Inch
-        }
-
-        //Raender einstellen.
-        aUL.SetUpper( static_cast< sal_uInt16 >(
-                        nMinTop > aOffst.Y() ? nMinTop : aOffst.Y() ) );
-        aUL.SetLower( static_cast< sal_uInt16 >(
-                        nMinBottom > aOffst.Y() ? nMinBottom : aOffst.Y() ));
-        aLR.SetRight( nMinRight > aOffst.X() ? nMinRight : aOffst.X() );
-        aLR.SetLeft(  nMinLeft > aOffst.X() ? nMinLeft : aOffst.X());
+    //Auf Default-Raender vorbereiten.
+    //Raender haben eine defaultmaessige Mindestgroesse.
+    //wenn der Drucker einen groesseren Rand vorgibt, so
+    //ist mir dass auch recht.
+    // MIB 06/25/2002, #99397#: The HTML page desc had A4 as page size
+    // always. This has been changed to take the page size from the printer.
+    // Unfortunately, the margins of the HTML page desc are smaller than
+    // the margins used here in general, so one extra case is required.
+    // In the long term, this needs to be changed to always keep the
+    // margins from the page desc.
+    sal_Int32 nMinTop, nMinBottom, nMinLeft, nMinRight;
+    if( RES_POOLPAGE_HTML == nPoolFmtId )
+    {
+        nMinRight = nMinTop = nMinBottom = GetMetricVal( CM_1 );
+        nMinLeft = nMinRight * 2;
+    }
+    else if( MEASURE_METRIC == GetAppLocaleData().getMeasurementSystemEnum() )
+    {
+        nMinTop = nMinBottom = nMinLeft = nMinRight = 1134; //2 Zentimeter
     }
     else
     {
-        aFrmSize.SetWidth( LONG_MAX );
-        aFrmSize.SetHeight( LONG_MAX );
-        aUL.SetUpper( 0 );
-        aUL.SetLower( 0 );
-        aLR.SetRight( 0 );
-        aLR.SetLeft(  0 );
+        nMinTop = nMinBottom = 1440;    //al la WW: 1Inch
+        nMinLeft = nMinRight = 1800;    //          1,25 Inch
     }
 
-    if ( bSetFmt1 )
-    {
-        rFmt1.SetAttr( aFrmSize );
-        rFmt1.SetAttr( aLR );
-        rFmt1.SetAttr( aUL );
-    }
-    if ( bSetFmt2 )
-    {
-        rFmt2.SetAttr( aFrmSize );
-        rFmt2.SetAttr( aLR );
-        rFmt2.SetAttr( aUL );
-    }
+    //Raender einstellen.
+    SvxLRSpaceItem aLR;
+    SvxULSpaceItem aUL;
+
+    aUL.SetUpper( (USHORT)nMinTop );
+    aUL.SetLower( (USHORT)nMinBottom );
+    aLR.SetRight( nMinRight );
+    aLR.SetLeft( nMinLeft );
+
+    rFmt1.SetAttr( aFrmSize );
+    rFmt1.SetAttr( aLR );
+    rFmt1.SetAttr( aUL );
+
+    rFmt2.SetAttr( aFrmSize );
+    rFmt2.SetAttr( aLR );
+    rFmt2.SetAttr( aUL );
 }
 
 /*************************************************************************
@@ -743,8 +709,7 @@ USHORT SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
     {
         pNew = new SwPageDesc( rName, GetDfltFrmFmt(), this );
         //Default-Seitenformat einstellen.
-        lcl_DefaultPageFmt( USHRT_MAX, pNew->GetMaster(), pNew->GetLeft(),
-                              GetPrt(), FALSE );
+        lcl_DefaultPageFmt( USHRT_MAX, pNew->GetMaster(), pNew->GetLeft() );
 
         SvxFrameDirection aFrameDirection = bRegardLanguage ?
             GetDefaultFrameDirection(GetAppLanguage())
@@ -752,10 +717,6 @@ USHORT SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
 
         pNew->GetMaster().SetAttr( SvxFrameDirectionItem(aFrameDirection) );
         pNew->GetLeft().SetAttr( SvxFrameDirectionItem(aFrameDirection) );
-
-        if( GetPrt() )
-            pNew->SetLandscape( ORIENTATION_LANDSCAPE ==
-                                GetPrt()->GetOrientation() );
     }
     aPageDescs.Insert( pNew, aPageDescs.Count() );
 
@@ -798,6 +759,12 @@ SwPageDesc* SwDoc::FindPageDescByName( const String& rName, USHORT* pPos ) const
 void SwDoc::PrtDataChanged()
 {
 //!!!!!!!! Bei Aenderungen hier bitte ggf. InJobSetup im Sw3io mitpflegen
+
+    // --> FME 2005-01-21 #i41075#
+    ASSERT( com::sun::star::document::PrinterIndependentLayout::DISABLED !=
+            IsUseVirtualDevice() ||
+            0 != GetPrt(), "PrtDataChanged will be called recursive!" )
+    // <--
 
     SwWait *pWait = 0;
     BOOL bEndAction = FALSE;
@@ -990,35 +957,17 @@ void SwDoc::SetPrt( SfxPrinter *pP, sal_Bool bCallPrtDataChanged )
 {
     ASSERT( pP, "Kein Drucker!" );
 
-    const BOOL bInitPageDesc = pPrt == 0;
-
     if ( (ULONG) pP != (ULONG) pPrt)
     {
         delete pPrt;
         pPrt = pP;
     }
-    // OD 05.03.2003 #107870# - first adjust page description, before trigger formatting.
-    if( bInitPageDesc )
-    {
-        // JP 17.04.97: Bug 38924 - falls noch kein Drucker gesetzt war
-        //              und der PageDesc nicht eingelesen wurde
-        //      -> passe an den Drucker an
-        if( pPrt && LONG_MAX == _GetPageDesc( 0 ).GetMaster().GetFrmSize().GetWidth() )
-            _GetPageDesc( 0 ).SetLandscape( ORIENTATION_LANDSCAPE ==
-                                            pPrt->GetOrientation() );
 
-        //MA 11. Mar. 97: Das sollten wir fuer alle Formate tun, weil die
-        //Werte auf LONG_MAX initalisiert sind (spaetes anlegen des Druckers)
-        //und die Reader u.U. "unfertige" Formate stehenlassen.
-        for ( USHORT i = 0; i < GetPageDescCnt(); ++i )
-        {
-            SwPageDesc& rDesc = _GetPageDesc( i );
-            lcl_DefaultPageFmt( rDesc.GetPoolFmtId(), rDesc.GetMaster(),
-                                  rDesc.GetLeft(), pPrt, TRUE );
-        }
-        }
-
-    if ( bCallPrtDataChanged )
+    if ( bCallPrtDataChanged &&
+         // --> FME 2005-01-21 #i41075# Do not call PrtDataChanged() if we do not
+         // use the printer for formatting:
+         com::sun::star::document::PrinterIndependentLayout::DISABLED == IsUseVirtualDevice() )
+        // <--
         PrtDataChanged();
 }
 
@@ -1037,6 +986,16 @@ void SwDoc::SetUseVirtualDevice( short nNew )
                         "Virtual device type: != DISABLED, LOW_RESOLUTION, HIGH_RESOLUTION" )
                 pVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
             }
+        }
+        else
+        {
+            // --> FME 2005-01-21 #i41075#
+            // We have to take care that a printer exists before calling
+            // PrtDataChanged() in order to prevent that PrtDataChanged()
+            // triggers this funny situation:
+            // GetRevDef() -> GetPrt() -> _GetPrt() ->SetPrt() -> PrtDataChanged()
+            GetPrt( sal_True );
+            // <--
         }
 
         _SetUseVirtualDevice( nNew );
