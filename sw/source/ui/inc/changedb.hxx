@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-05-31 07:19:24 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ class SwChangeDBDlg: public SvxStandardDialog
     FixedText       aAvailDBFT;
     SvTreeListBox   aUsedDBTLB;
     SwDBTreeList    aAvailDBTLB;
+    PushButton      aAddDBPB;
     FixedInfo       aDescFT;
     FixedText       aDocDBTextFT;
     FixedText       aDocDBNameFT;
@@ -119,6 +120,7 @@ class SwChangeDBDlg: public SvxStandardDialog
 
     DECL_LINK(TreeSelectHdl, SvTreeListBox* pBox = 0);
     DECL_LINK(ButtonHdl, Button* pBtn);
+    DECL_LINK(AddDBHdl, PushButton*);
 
     virtual void    Apply();
     void            UpdateFlds();
