@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDropTarget.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:19 $
+ *  last change: $Author: arellano $ $Date: 2001-07-27 18:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,9 @@ interface XDropTargetListener;
     operations.
 
     <p>Different to Java, the association between view and interface is fixed
-    and can not be changed. Otherwise the awt messaging would have to be
-    implemented for any window supporting Drag and Drop operations, what would
-    be a real performance issue.</p>
+    and cannot be changed. Otherwise, the awt messaging would have to be
+    implemented for any window supporting Drag and Drop operations, which would
+    be a performance issue.</p>
 */
 
 interface XDropTarget: com::sun::star::uno::XInterface
@@ -91,11 +91,11 @@ interface XDropTarget: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** add a DropTargetListener.
 
-        <p>The listener will be querried for <type>XAutoscroll</type> interface
+        <p>The listener will be querried for the <type>XAutoscroll</type> interface
         to see if it supports autoscrolling.</p>
 
         @param dtl
-        the listener to add to notification list.
+        the listener to add to the notification list.
     */
 
     [oneway] void addDropTargetListener( [in] XDropTargetListener dtl );
@@ -110,8 +110,9 @@ interface XDropTarget: com::sun::star::uno::XInterface
     [oneway] void removeDropTargetListener( [in] XDropTargetListener dtl );
 
     //-------------------------------------------------------------------------
-    /** @returns a boolean indicating whether or not this DropTarget is
-        currently active (ready to accept drops).
+    /** @returns
+     a boolean indicating whether or not this DropTarget is
+        currently active, that is ready to accept drops.
     */
 
     boolean isActive();
@@ -121,12 +122,15 @@ interface XDropTarget: com::sun::star::uno::XInterface
 
         @param active
         see describtion above.
+
+    <!-- Editor: Should the first sentence be an @return ? -->
     */
 
     void setActive( [in] boolean active );
 
     //-------------------------------------------------------------------------
-    /** @returns the current action(s) supported by this DropTarget.
+    /** @returns
+    the current action or actions supported by this DropTarget.
 
         <p>By default this will include all drag and drop actions.</p>
 
@@ -141,10 +145,11 @@ interface XDropTarget: com::sun::star::uno::XInterface
         <p>This method is a way to reduce the number of drag and drop events
         by blocking events for actions not supported by this target.</p>
 
-        <p>By default the will listener recevieve notifications for all actions.</p>
+        <p>By default the listener will receive notifications for all actions.</p>
+
 
         @param actions
-        the actions
+        the actions.
 
         @see DNDConstants
     */
