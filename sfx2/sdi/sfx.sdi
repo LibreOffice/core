@@ -977,6 +977,10 @@ SfxVoidItem BasicBreak SID_BASICBREAK
 
 //--------------------------------------------------------------------------
 SfxVoidItem BasicIDEAppear SID_BASICIDE_APPEAR
+(SfxStringItem Document SID_BASICIDE_ARG_DOCUMENT,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME,
+ SfxStringItem Name SID_BASICIDE_ARG_NAME,SfxStringItem Type SID_BASICIDE_ARG_TYPE,
+ SfxUInt32Item Line SID_BASICIDE_ARG_LINE,SfxUInt16Item Column1 SID_BASICIDE_ARG_COLUMN1,
+ SfxUInt16Item Column2 SID_BASICIDE_ARG_COLUMN2)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -7769,6 +7773,34 @@ SfxVoidItem ToggleBreakPoint SID_BASICIDE_TOGGLEBRKPNT
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_MACRO;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem BasicIDEShowWindow SID_BASICIDE_SHOWWINDOW
+(SfxStringItem Document SID_BASICIDE_ARG_DOCUMENT,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME,
+ SfxStringItem Name SID_BASICIDE_ARG_NAME,SfxStringItem Type SID_BASICIDE_ARG_TYPE,
+ SfxUInt32Item Line SID_BASICIDE_ARG_LINE,SfxUInt16Item Column1 SID_BASICIDE_ARG_COLUMN1,
+ SfxUInt16Item Column2 SID_BASICIDE_ARG_COLUMN2)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_APPLICATION;
 ]
 
 //--------------------------------------------------------------------------
