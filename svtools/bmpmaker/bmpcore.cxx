@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpcore.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:35:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 13:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,8 @@ void BmpCreator::ImplCreate( SvStream& rStm,
 
 
             // create bit vector to hold flags for valid bitmaps
-            ::std::bit_vector aValidBmpBitVector( aNameVector.size(), false );
+            ::std::bit_vector   aValidBmpBitVector( aNameVector.size(), false );
+            sal_Bool            bTrueColor = sal_False;
 
             for( sal_uInt32 n = 0; n < aNameVector.size(); n++ )
             {
@@ -246,8 +247,6 @@ void BmpCreator::ImplCreate( SvStream& rStm,
 
                     if( ( aSize.Width() > aOneSize.Width() ) || ( aSize.Height() > aOneSize.Height() ) )
                          Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Different dimensions in file: " ) ).Append( aString ), EXIT_DIMENSIONERROR );
-                    else if( aBmp.GetBitCount() != aTotalBmp.GetBitCount() )
-                         Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Different color depth in file: ") ).Append( aString ), EXIT_COLORDEPTHERROR );
                     else
                     {
                         Point           aPoint;
@@ -256,6 +255,17 @@ void BmpCreator::ImplCreate( SvStream& rStm,
 
                         if( !aTotalBmp.IsEmpty() && !aBmp.IsEmpty() && !aDst.IsEmpty() && !aSrc.IsEmpty() )
                         {
+                            const long nBitCount = aBmp.GetBitCount();
+
+                            if( ( nBitCount != aTotalBmp.GetBitCount() ) && !bTrueColor )
+                            {
+                                aTotalBmp.Convert( BMP_CONVERSION_24BIT );
+                                bTrueColor = sal_True;
+                            }
+
+                            if( bTrueColor && ( nBitCount != 24 ) )
+                                aBmp.Convert( BMP_CONVERSION_24BIT );
+
                             aTotalBmp.CopyPixel( aDst, aSrc, &aBmp );
                             aValidBmpBitVector[ n ] = true;
                         }
