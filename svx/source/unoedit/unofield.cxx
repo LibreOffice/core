@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-22 16:27:18 $
+ *  last change: $Author: cl $ $Date: 2000-11-28 17:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( sal_Int32 mnId )
         { MAP_CHAR_LEN("DateTime"),         WID_DATE,       &::getCppuType((const util::DateTime*)0),       0, 0 },
         { MAP_CHAR_LEN("IsFixed"),          WID_BOOL1,      &::getBooleanCppuType(),                0, 0 },
         { MAP_CHAR_LEN("IsDate"),           WID_BOOL2,      &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("NumberFormat"),     WID_INT16,      &::getCppuType((const sal_Int16*)0),    0, 0 },
+        { MAP_CHAR_LEN("NumberFormat"),     WID_INT32,      &::getCppuType((const sal_Int16*)0),    0, 0 },
         {0,0}
     };
 
@@ -306,7 +306,7 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
     {
     case ID_DATEFIELD:
         mpImpl->mbBoolean2 = sal_True;
-        mpImpl->mnInt16 = SVXDATEFORMAT_STDSMALL;
+        mpImpl->mnInt32 = SVXDATEFORMAT_STDSMALL;
         mpImpl->mbBoolean1 = sal_False;
         break;
 
@@ -368,7 +368,7 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
             case ID_DATEFIELD:
                 mpImpl->mbBoolean2 = sal_True;
                 mpImpl->maDateTime = getDate( ((SvxDateField*)pData)->GetFixDate() );
-                mpImpl->mnInt16 = ((SvxDateField*)pData)->GetFormat();
+                mpImpl->mnInt32 = ((SvxDateField*)pData)->GetFormat();
                 mpImpl->mbBoolean1 = ((SvxDateField*)pData)->GetType() == SVXDATETYPE_FIX;
                 break;
 
@@ -428,8 +428,8 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         {
             Date aDate( setDate( mpImpl->maDateTime ) );
             pData = new SvxDateField( aDate, mpImpl->mbBoolean1?SVXDATETYPE_FIX:SVXDATETYPE_VAR );
-            if( mpImpl->mnInt16 >= SVXDATEFORMAT_APPDEFAULT && mpImpl->mnInt16 <= SVXDATEFORMAT_F )
-                ((SvxDateField*)pData)->SetFormat( (SvxDateFormat)mpImpl->mnInt16 );
+            if( mpImpl->mnInt32 >= SVXDATEFORMAT_APPDEFAULT && mpImpl->mnInt32 <= SVXDATEFORMAT_F )
+                ((SvxDateField*)pData)->SetFormat( (SvxDateFormat)mpImpl->mnInt32 );
         }
         else
         {
@@ -440,8 +440,8 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
                 Time aTime( setTime( mpImpl->maDateTime ) );
                 pData = new SvxExtTimeField( aTime, mpImpl->mbBoolean1?SVXTIMETYPE_FIX:SVXTIMETYPE_VAR );
 
-                if( mpImpl->mnInt16 >= SVXTIMEFORMAT_APPDEFAULT && mpImpl->mnInt16 <= SVXTIMEFORMAT_AM_HMSH )
-                    ((SvxExtTimeField*)pData)->SetFormat( (SvxTimeFormat)mpImpl->mnInt16 );
+                if( mpImpl->mnInt32 >= SVXTIMEFORMAT_APPDEFAULT && mpImpl->mnInt32 <= SVXTIMEFORMAT_AM_HMSH )
+                    ((SvxExtTimeField*)pData)->SetFormat( (SvxTimeFormat)mpImpl->mnInt32 );
             }
             else
             {
