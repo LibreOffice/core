@@ -34,7 +34,7 @@ SRC =\
     dmdump.c macparse.c rulparse.c percent.c function.c
 
 # Common Include files.
-HDR = dmake.h extern.h struct.h vextern.h patchlvl.h version.h
+HDR = dmake.h extern.h struct.h vextern.h
 
 # Define the TARGET we are making, and where the OBJECT files go.
 OBJDIR := objects
