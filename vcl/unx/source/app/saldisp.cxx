@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-27 09:42:34 $
+ *  last change: $Author: pl $ $Date: 2001-08-30 09:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -833,20 +833,32 @@ SalDisplay::~SalDisplay( )
 static int DisplayHasEvent( int fd, SalDisplay *pDisplay  )
 {
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
-              "wrong fd in DisplayHasEvent" )
-  return pDisplay->IsDisplay() && pDisplay->IsEvent();
+              "wrong fd in DisplayHasEvent" );
+  if( ! pDisplay->IsDisplay() )
+      return 0;
+
+  SalYieldMutex* pSalInstYieldMutex =
+      GetSalData()->pFirstInstance_->maInstData.mpSalYieldMutex;
+  ::vos::OGuard aGuard( *pSalInstYieldMutex );
+  return pDisplay->IsEvent();
 }
 static int DisplayQueue( int fd, SalDisplay *pDisplay )
 {
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
               "wrong fd in DisplayHasEvent" )
+  SalYieldMutex* pSalInstYieldMutex =
+      GetSalData()->pFirstInstance_->maInstData.mpSalYieldMutex;
+  ::vos::OGuard aGuard( *pSalInstYieldMutex );
   return XEventsQueued( pDisplay->GetDisplay(),
                         QueuedAfterReading );
 }
 static int DisplayYield( int fd, SalDisplay *pDisplay )
 {
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
-              "wrong fd in DisplayHasEvent" )
+              "wrong fd in DisplayHasEvent" );
+  SalYieldMutex* pSalInstYieldMutex =
+      GetSalData()->pFirstInstance_->maInstData.mpSalYieldMutex;
+  ::vos::OGuard aGuard( *pSalInstYieldMutex );
   pDisplay->Yield( TRUE );
   return TRUE;
 }
