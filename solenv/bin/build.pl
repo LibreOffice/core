@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.108 $
+#   $Revision: 1.109 $
 #
-#   last change: $Author: vg $ $Date: 2004-04-21 10:36:31 $
+#   last change: $Author: vg $ $Date: 2004-04-21 13:47:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,11 +74,8 @@
 
     if (defined $ENV{CWS_WORK_STAMP}) {
         require lib; import lib ("$ENV{SOLARENV}/bin/modules", "$ENV{COMMON_ENV_TOOLS}/modules");
-        if (defined $ENV{NO_LOGGING}) {
-            require Cws; import Cws;
-        } else {
-            require Logging; import Logging ;
-        }
+        require Cws; import Cws;
+        require Logging; import Logging ;
         require CvsModule; import CvsModule;
         require GenInfoParser; import GenInfoParser;
         require IO::Handle; import IO::Handle;
@@ -88,7 +85,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.108 $ ';
+    $id_str = ' $Revision: 1.109 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -106,7 +103,7 @@
         } else {
             print_error("Can't determine VCSID. Please use setsolar.", 5);
         };
-        $log = Logging->new() if (!defined $ENV{NO_LOGGING});
+        $log = Logging->new();
     };
     $modules_number++;
     $perl = "";
@@ -800,7 +797,7 @@ sub GetDirectoryList {
 };
 
 sub finish_logging {
-    return if (!defined $ENV{CWS_WORK_STAMP} || $show || defined $ENV{NO_LOGGING});
+    return if (!defined $ENV{CWS_WORK_STAMP} || $show);
     my $message = shift;
     $message = 'SUCCESS.'  if (!$message);
     $message .= " Built $modules_number modules.";
@@ -844,7 +841,7 @@ sub usage {
 };
 
 sub init_logging {
-    return if (!defined $ENV{CWS_WORK_STAMP} || $show || defined $ENV{NO_LOGGING});
+    return if (!defined $ENV{CWS_WORK_STAMP} || $show);
     my $parameter_list = '';
     foreach (@ARGV) {$parameter_list .= "$_\;"};
     $parameter_list = $` if ($parameter_list =~ /;$/o);
@@ -1699,15 +1696,15 @@ sub clear_delivered {
 #
 sub read_ssolar_vars {
     my ($setsolar, $entries_file, $tmp_file);
+    $setsolar = $ENV{ENV_ROOT} . '/etools/setsolar.pl';
     my ($platform, $solar_vars) = @_;
     if ( $^O eq 'MSWin32' ) {
-        $setsolar = 'r:\\etools\\setsolar.pl';
         $tmp_file = $ENV{TEMP} . "\\solar.env.$$.tmp";
     } else {
-        $setsolar = '/so/env/etools/setsolar.pl';
         $setsolar = '/net/jumbo.germany/cvs/buildenv/etools/setsolar.pl' if ! -e $setsolar;
         $tmp_file = $ENV{HOME} . "/.solar.env.$$.tmp";
     };
+    print_error('There is no setsolar found') if !-e $setsolar;
     my $pro = "";
     if ($platform =~ /\.pro$/) {
         $pro = "-pro";
