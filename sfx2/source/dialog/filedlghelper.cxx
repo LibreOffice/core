@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-09 14:56:54 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:22:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1793,7 +1793,7 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
     sQuery.appendAscii("getSortedFilterList()");
     if ( rFactory.Len() )
     {
-        // translöate short to long name
+        // translate short to long name
         SvtModuleOptions::EFactory eFactory = SvtModuleOptions::ClassifyFactoryByShortName(rFactory);
         ::rtl::OUString            sFactory = SvtModuleOptions().GetFactoryName(eFactory);
         sQuery.appendAscii(":module=");
