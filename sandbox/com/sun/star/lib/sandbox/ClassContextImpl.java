@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClassContextImpl.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2000-10-27 09:24:30 $
+ *  last change: $Author: kr $ $Date: 2000-11-07 12:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,9 +228,9 @@ final class ClassContextImpl extends ClassLoader implements ClassContext {
                 xClass = defineClass(className, bytes, 0, bytes.length);
                 //                      xClass = defineClass(className, bytes, 0, bytes.length, protectionDomain);
 
-                Object objects[] = new Object[2];
-                objects[0] = resourceProxy.getProtectionDomain();
-                setSigners(xClass, objects);
+//                  Object objects[] = new Object[2];
+//                  objects[0] = resourceProxy.getProtectionDomain();
+//                  setSigners(xClass, objects);
             }
             catch(MalformedURLException malformedURLException) {
                 if(DEBUG) System.err.println("#### ClassContext.loadClasss - URL exception:" + malformedURLException);
