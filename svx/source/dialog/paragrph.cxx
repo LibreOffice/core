@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-04-24 08:34:33 $
+ *  last change: $Author: ama $ $Date: 2001-04-25 10:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1861,12 +1861,12 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
     aPagenumEdit        ( this, ResId( ED_PAGENUM ) ),
     aKeepTogetherBox    ( this, ResId( BTN_KEEPTOGETHER ) ),
     aKeepParaBox        ( this, ResId( CB_KEEPTOGETHER ) ),
-    aWidowBox           ( this, ResId( BTN_WIDOWS ) ),
-    aWidowRowNo         ( this, ResId( ED_WIDOWS ) ),
-    aWidowRowLabel      ( this, ResId( FT_WIDOWS ) ),
     aOrphanBox          ( this, ResId( BTN_ORPHANS ) ),
     aOrphanRowNo        ( this, ResId( ED_ORPHANS ) ),
     aOrphanRowLabel     ( this, ResId( FT_ORPHANS ) ),
+    aWidowBox           ( this, ResId( BTN_WIDOWS ) ),
+    aWidowRowNo         ( this, ResId( ED_WIDOWS ) ),
+    aWidowRowLabel      ( this, ResId( FT_WIDOWS ) ),
     aExtendFrm          ( this, ResId( GB_OPTIONS ) ),
 
     bHtmlMode   ( FALSE ),

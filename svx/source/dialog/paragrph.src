@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-04-24 08:34:33 $
+ *  last change: $Author: ama $ $Date: 2001-04-25 10:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1794,39 +1794,17 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     TriStateBox BTN_WIDOWS
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 147 ) ;
+        Pos = MAP_APPFONT ( 12 , 161 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
-
-        Text = "Schuster~jungenregelung" ;
-        Text [ ENGLISH ] = "~Widows" ;
-        Text [ norwegian ] = "~Enkelinjer øverst" ;
-        Text [ italian ] = "Vedove" ;
-        Text [ portuguese_brazilian ] = "~Viúvas" ;
-        Text [ portuguese ] = "Controlo de linhas ~isoladas" ;
-        Text [ finnish ] = "~Leskirivit" ;
-        Text [ danish ] = "Fransk horeunge-ordning" ;
-        Text [ french ] = "Traitement des orphelines" ;
-        Text [ swedish ] = "~Änkekontroll" ;
-        Text [ dutch ] = "~Zwevende regels: wezen" ;
-        Text [ spanish ] = "Ajuste de ~huérfanas" ;
-        Text [ english_us ] = "~Orphan control" ;
+        Text = "Hu~renkinderregelung" ;
+        Text [ ENGLISH ] = "~Widow control" ;
         Group = TRUE ;
-        Text[ chinese_simplified ] = "¶ÎÂäÖ®ÖĞ²»·ÖÒ³(~O)";
-        Text[ russian ] = "Áåç êîíöåâûõ âèñÿ÷èõ ñòğîê";
-        Text[ polish ] = "Bez oddz. pierw. wiersza akap.";
-        Text[ japanese ] = "‰üÍß°¼Ş‚Éc‚·s”(~O)";
-        Text[ chinese_traditional ] = "¬q¸¨¤§¤¤¤£¤À­¶(~O)";
-        Text[ arabic ] = "ÊÚÏíá ÇäİÕÇá ÓØÑ ÇáİŞÑÉ ÇáÃæá";
-        Text[ greek ] = "Êáíüíáò '~ïñöáíïı'";
-        Text[ korean ] = "Ã³À½ ÇÑÁÙ ºĞ¸® ¹æÁö(~O)";
-        Text[ turkish ] = "~İlk satırı paragrafla birleştir";
-        Text[ language_user1 ] = " ";
     };
     NumericField ED_WIDOWS
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 176 , 145 ) ;
+        Pos = MAP_APPFONT ( 176 , 159 ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
         Group = TRUE ;
         Left = TRUE ;
@@ -1841,7 +1819,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     FixedText FT_WIDOWS
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 205 , 147 ) ;
+        Pos = MAP_APPFONT ( 205 , 161 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "Zeilen" ;
         Text [ ENGLISH ] = "Rows" ;
@@ -1871,38 +1849,17 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     TriStateBox BTN_ORPHANS
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 161 ) ;
+        Pos = MAP_APPFONT ( 12 , 147 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
-        Text = "Hu~renkinderregelung" ;
-        Text [ ENGLISH ] = "~Orphans" ;
-        Text [ norwegian ] = "~Enkelinje nederst" ;
-        Text [ italian ] = "~Orfane" ;
-        Text [ portuguese_brazilian ] = "~Órfãos" ;
-        Text [ portuguese ] = "Controlo de linhas ~viúvas" ;
-        Text [ finnish ] = "~Orporivit" ;
-        Text [ danish ] = "Horeunge-ordning" ;
-        Text [ french ] = "Traitement des veuves" ;
-        Text [ swedish ] = "H~orungekontroll" ;
-        Text [ dutch ] = "Z~wevende regels: weduwen" ;
-        Text [ spanish ] = "Ajuste de ~viudas" ;
-        Text [ english_us ] = "~Widow control" ;
+        Text = "Schuster~jungenregelung" ;
+        Text [ ENGLISH ] = "~Orphan control" ;
         Group = TRUE ;
-        Text[ chinese_simplified ] = "ÓëÏÂ¶ÎÍ¬Ò³(~W)";
-        Text[ russian ] = "Áåç íà÷àëüíûõ âèñÿ÷èõ ñòğîê";
-        Text[ polish ] = "Bez oddz. os~tat. wiersza akap.";
-        Text[ japanese ] = "’i—‘O‚Å‰üÍß°¼Ş(~W)";
-        Text[ chinese_traditional ] = "»P¤U¬q¦P­¶(~W)";
-        Text[ arabic ] = "ÊÚÏíá ÇäİÕÇá ÓØÑ ÇáİŞÑÉ ÇáÃÎíÑ";
-        Text[ greek ] = "Êáíüíáò \"~÷Şñáò\"";
-        Text[ korean ] = "¸¶Áö¸·  ÇÑÁÙ ºĞ¸® ¹æÁö(~W)";
-        Text[ turkish ] = "So~n satırı paragrafla birleştir";
-        Text[ language_user1 ] = " ";
     };
     NumericField ED_ORPHANS
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 176 , 159 ) ;
+        Pos = MAP_APPFONT ( 176 , 145 ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
         Group = TRUE ;
         Left = TRUE ;
@@ -1917,7 +1874,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     FixedText FT_ORPHANS
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 205 , 161 ) ;
+        Pos = MAP_APPFONT ( 205 , 147 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "Zeilen" ;
         Text [ ENGLISH ] = "Rows" ;
