@@ -29,6 +29,7 @@ class AccTreeNode
     private XAccessibleContext mxContext;
     private XAccessibleComponent mxComponent;
     private XAccessibleText mxText;
+    private XAccessibleTable mxTable;
 
     public AccTreeNode (XAccessibleContext xContext, AccessibleTreeNode aParent)
     {
@@ -97,6 +98,15 @@ class AccTreeNode
         return (XAccessibleEditableText)UnoRuntime.queryInterface(
                 XAccessibleEditableText.class, mxContext);
     }
+
+    public XAccessibleTable getTable ()
+    {
+        if (mxTable == null && mxContext != null)
+            mxTable = (XAccessibleTable)UnoRuntime.queryInterface(
+                XAccessibleTable.class, mxContext);
+        return mxTable;
+    }
+
 
     public XAccessible getAccessible()
     {

@@ -47,6 +47,7 @@ public class AccessibilityTreeModel
     private static NodeHandler maActionHandler = new AccessibleActionHandler();
     private static NodeHandler maImageHandler = new AccessibleImageHandler();
     private static NodeHandler maTableHandler = new AccessibleTableHandler();
+    private static NodeHandler maCellHandler = new AccessibleCellHandler();
     private static NodeHandler maHypertextHandler = new AccessibleHypertextHandler();
     private static NodeHandler maHyperlinkHandler = new AccessibleHyperlinkHandler();
     private static NodeHandler maSelectionHandler = new AccessibleSelectionHandler();
@@ -535,6 +536,7 @@ public class AccessibilityTreeModel
             aNode.addHandler (maActionHandler.createHandler (xContext));
             aNode.addHandler (maImageHandler.createHandler (xContext));
             aNode.addHandler (maTableHandler.createHandler (xContext));
+            aNode.addHandler (maCellHandler.createHandler (xContext));
             aNode.addHandler (maHypertextHandler.createHandler (xContext));
             aNode.addHandler (maHyperlinkHandler.createHandler (xContext));
             aNode.addHandler (maSelectionHandler.createHandler (xContext));
@@ -563,6 +565,7 @@ public class AccessibilityTreeModel
             aNode.addHandler (maActionHandler.createHandler (xContext));
             aNode.addHandler (maImageHandler.createHandler (xContext));
             aNode.addHandler (maTableHandler.createHandler (xContext));
+            aNode.addHandler (maCellHandler.createHandler (xContext));
             aNode.addHandler (maSelectionHandler.createHandler (xContext));
             aNode.addHandler (maTreeHandler.createHandler (xContext));
         }
