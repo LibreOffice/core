@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: er $ $Date: 2001-04-23 17:05:30 $
+ *  last change: $Author: er $ $Date: 2001-04-25 19:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2291,9 +2291,7 @@ void SvNumberFormatter::GenerateFormat(String& sString,
         {
             sString += '#';
             sString += rThSep;
-            sString += '#';
-            sString += '#';
-            sString += '#';
+            sString.Expand( sString.Len() + 3, '#' );
         }
     }
     else
@@ -2316,9 +2314,8 @@ void SvNumberFormatter::GenerateFormat(String& sString,
     }
     if (nPrecision > 0)
     {
-                sString += pLocaleData->getNumDecimalSep();
-                for (i = 0; i < nPrecision; i++)
-                    sString += '0';
+        sString += pLocaleData->getNumDecimalSep();
+        sString.Expand( sString.Len() + nPrecision, '0' );
     }
     if (eType == NUMBERFORMAT_PERCENT)
         sString += '%';
