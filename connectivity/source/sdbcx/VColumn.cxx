@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VColumn.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 09:13:14 $
+ *  last change: $Author: hr $ $Date: 2001-10-16 18:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,12 +169,12 @@ OColumn::~OColumn()
     return *OColumn_PROP::getArrayHelper(isNew() ? 1 : 0);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OColumn::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OColumn::acquire() throw()
 {
     OColumnDescriptor_BASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OColumn::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OColumn::release() throw()
 {
     OColumnDescriptor_BASE::release();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VUser.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:06:12 $
+ *  last change: $Author: hr $ $Date: 2001-10-16 18:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,12 +210,12 @@ void SAL_CALL OUser::setName( const ::rtl::OUString& aName ) throw(::com::sun::s
 }
 // -----------------------------------------------------------------------------
 // XInterface
-void SAL_CALL OUser::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OUser::acquire() throw()
 {
     OUser_BASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OUser::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OUser::release() throw()
 {
     OUser_BASE::release();
 }

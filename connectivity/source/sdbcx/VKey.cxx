@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VKey.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:10:28 $
+ *  last change: $Author: hr $ $Date: 2001-10-16 18:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,12 +243,12 @@ void SAL_CALL OKey::setName( const ::rtl::OUString& aName ) throw(::com::sun::st
 }
 // -----------------------------------------------------------------------------
 // XInterface
-void SAL_CALL OKey::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OKey::acquire() throw()
 {
     ODescriptor_BASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OKey::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OKey::release() throw()
 {
     ODescriptor_BASE::release();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:53:59 $
+ *  last change: $Author: hr $ $Date: 2001-10-16 18:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,12 +305,12 @@ void SAL_CALL OCollection::removeContainerListener( const Reference< XContainerL
     m_aContainerListeners.removeInterface(_rxListener);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OCollection::acquire() throw(RuntimeException)
+void SAL_CALL OCollection::acquire() throw()
 {
     m_rParent.acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OCollection::release() throw(RuntimeException)
+void SAL_CALL OCollection::release() throw()
 {
     m_rParent.release();
 }

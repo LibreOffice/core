@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTable.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:12:51 $
+ *  last change: $Author: hr $ $Date: 2001-10-16 18:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,12 +174,12 @@ void OTable::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),            PROPERTY_ID_TYPE,       nAttrib,&m_Type,        ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OTable::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OTable::acquire() throw()
 {
     OTableDescriptor_BASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OTable::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OTable::release() throw()
 {
     OTableDescriptor_BASE::release();
 }

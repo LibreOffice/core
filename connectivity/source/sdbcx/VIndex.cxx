@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VIndex.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 09:13:14 $
+ *  last change: $Author: hr $ $Date: 2001-10-16 18:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,12 +240,12 @@ void SAL_CALL OIndex::setName( const ::rtl::OUString& aName ) throw(::com::sun::
 }
 // -----------------------------------------------------------------------------
 // XInterface
-void SAL_CALL OIndex::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OIndex::acquire() throw()
 {
     ODescriptor_BASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OIndex::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OIndex::release() throw()
 {
     ODescriptor_BASE::release();
 }
