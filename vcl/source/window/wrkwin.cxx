@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrkwin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-20 14:12:10 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,11 @@
 
 #define _SV_WRKWIN_CXX
 
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
-#endif
-#else
-#include <rmwindow.hxx>
 #endif
 
 #ifndef _DEBUG_HXX
@@ -101,10 +97,6 @@
 #include <sysdata.hxx>
 #endif
 
-#include <rvp.hxx>
-
-#pragma hdrstop
-
 // =======================================================================
 
 #define WORKWIN_WINDOWSTATE_FULLSCREEN          ((ULONG)0x00010000)
@@ -127,11 +119,6 @@ void WorkWindow::ImplInitData()
 
 void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
-#ifdef REMOTE_APPSERVER
-    static ::com::sun::star::uno::Any aVoid;
-    DBG_ASSERT( ! pSystemParentData, "SystemParentData not implemented in remote vcl" );
-    ImplInit( pParent, nStyle, aVoid );
-#else
 #if defined WNT
     /*
      * #98153# since SystemParentData typically contains a HWND from
@@ -160,14 +147,12 @@ void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pS
     }
 
     SetActivateMode( ACTIVATE_MODE_GRABFOCUS );
-#endif
 }
 
 // -----------------------------------------------------------------------
 
 void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::uno::Any& aSystemWorkWindowToken )
 {
-#ifndef REMOTE_APPSERVER
     if( aSystemWorkWindowToken.hasValue() )
     {
         ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
@@ -179,26 +164,6 @@ void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::st
     }
     else
         ImplInit( pParent, nStyle, NULL );
-#else
-    USHORT nFrameStyle = BORDERWINDOW_STYLE_FRAME;
-    if ( nStyle & WB_APP )
-        nFrameStyle |= BORDERWINDOW_STYLE_APP;
-    ImplBorderWindow* pBorderWin  = new ImplBorderWindow( pParent, nStyle, nFrameStyle, aSystemWorkWindowToken );
-    Window::ImplInit( pBorderWin, nStyle & (WB_3DLOOK | WB_CLIPCHILDREN | WB_DIALOGCONTROL), aSystemWorkWindowToken );
-    pBorderWin->mpClientWindow = this;
-    pBorderWin->GetBorder( mnLeftBorder, mnTopBorder, mnRightBorder, mnBottomBorder );
-    mpBorderWindow  = pBorderWin;
-//        mpRealParent    = pParent; // !!! Muesste eigentlich gesetzt werden, aber wegen Fehlern mit dem MenuBar erstmal nicht gesetzt !!!
-
-    if ( nStyle & WB_APP )
-    {
-        ImplSVData* pSVData = ImplGetSVData();
-        DBG_ASSERT( !pSVData->maWinData.mpAppWin, "WorkWindow::WorkWindow(): More than one window with style WB_APP" );
-        pSVData->maWinData.mpAppWin = this;
-    }
-
-    SetActivateMode( ACTIVATE_MODE_GRABFOCUS );
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -303,7 +268,6 @@ void WorkWindow::StartPresentationMode( BOOL bPresentation, USHORT nFlags )
 
         if ( !(mnPresentationFlags & PRESENTATION_NOFULLSCREEN) )
             ShowFullScreenMode( TRUE );
-#ifndef REMOTE_APPSERVER
         if ( !mbSysChild )
         {
             if ( mnPresentationFlags & PRESENTATION_HIDEALLAPPS )
@@ -312,10 +276,6 @@ void WorkWindow::StartPresentationMode( BOOL bPresentation, USHORT nFlags )
                 ToTop();
             mpFrame->StartPresentation( TRUE );
         }
-#else
-        if ( !mbSysChild )
-            mpFrame->StartPresentation( TRUE, nFlags | PRESENTATION_NOFULLSCREEN | PRESENTATION_NOAUTOSHOW );
-#endif
 
         if ( !(mnPresentationFlags & PRESENTATION_NOAUTOSHOW) )
             Show();
@@ -323,17 +283,12 @@ void WorkWindow::StartPresentationMode( BOOL bPresentation, USHORT nFlags )
     else
     {
         Show( mbPresentationVisible );
-#ifndef REMOTE_APPSERVER
         if ( !mbSysChild )
         {
             mpFrame->StartPresentation( FALSE );
             if ( mnPresentationFlags & PRESENTATION_HIDEALLAPPS )
                 mpFrame->SetAlwaysOnTop( FALSE );
         }
-#else
-        if ( !mbSysChild )
-            mpFrame->StartPresentation( FALSE, mnPresentationFlags | PRESENTATION_NOFULLSCREEN | PRESENTATION_NOAUTOSHOW );
-#endif
         ShowFullScreenMode( mbPresentationFull );
 
         mbPresentationMode      = FALSE;
