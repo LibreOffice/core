@@ -2,9 +2,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:14:18 $
+#   last change: $Author: oj $ $Date: 2000-10-06 06:19:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,21 +124,21 @@ ADABAS_CPP=1
 
 ADABAS=$(ADABAS_TARGET_TARGET)_$(CMPEXT)
 
-# ----------------------------OTERRO settings-----------------------------------#
+# ----------------------------flat settings-----------------------------------#
 # target
-OTERRO_TARGET=oterro
+FLAT_TARGET=flat
 
 # the major 
-OTERRO_MAJOR=2
+FLAT_MAJOR=2
 # the minor 
-OTERRO_MINOR=0
+FLAT_MINOR=0
 # the micro 
-OTERRO_MICRO=0
+FLAT_MICRO=0
 
 # this is a c++ compatible library 
-OTERRO_CPP=1
+FLAT_CPP=1
 
-OTERRO=$(OTERRO_TARGET_TARGET)_$(CMPEXT)
+FLAT=$(FLAT_TARGET_TARGET)_$(CMPEXT)
 
 # -----------------------DRIVER MANAGER settings--------------------------------#
 # target
