@@ -2,9 +2,9 @@
  *
  *  $RCSfile: useroptions.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:25:36 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 17:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
 #endif
+#include <rtl/logfile.hxx>
+#include "itemholder2.hxx"
+
 using namespace utl;
 using namespace rtl;
 using namespace com::sun::star::uno;
@@ -560,7 +563,13 @@ SvtUserOptions::SvtUserOptions()
     ::osl::MutexGuard aGuard( GetInitMutex() );
 
     if ( !pOptions )
+    {
+        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtUserOptions_Impl::ctor()");
         pOptions = new SvtUserOptions_Impl;
+
+        ItemHolder2* pHolder = ItemHolder2::getGlobalItemHolder();
+        pHolder->holdConfigItem(E_USEROPTIONS);
+    }
     ++nRefCount;
     pImp = pOptions;
     StartListening( *pImp);
