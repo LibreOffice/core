@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-21 13:51:10 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:55:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,9 @@ Reference< XInterface > SAL_CALL ORelationController::Create(const Reference<XMu
     return *(new ORelationController(_rxFactory));
 }
 // -----------------------------------------------------------------------------
-ORelationController::ORelationController(const Reference< XMultiServiceFactory >& _rM) : OJoinController(_rM)
+ORelationController::ORelationController(const Reference< XMultiServiceFactory >& _rM)
+    : OJoinController(_rM)
+    ,m_bRelationsPossible(sal_True)
 {
     InvalidateAll();
 }
@@ -247,10 +249,13 @@ ORelationController::~ORelationController()
 FeatureState ORelationController::GetState(sal_uInt16 _nId)
 {
     FeatureState aReturn;
+    aReturn.bEnabled = m_bRelationsPossible;
     switch (_nId)
     {
+        case ID_BROWSER_EDITDOC:
+            aReturn.aState = ::cppu::bool2any(m_bEditable);
+            break;
         case ID_REALTION_ADD_RELATION:
-            aReturn.bEnabled = m_bEditable;
             aReturn.aState = ::cppu::bool2any(sal_False);
             break;
         default:
@@ -345,21 +350,26 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
         }
         if(!m_xConnection.is()) // so what should otherwise
         {
+            m_bEditable             = sal_False;
+            m_bRelationsPossible    = sal_False;
             {
                 String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
                 ODataView* pWindow = getView();
                 InfoBox(pWindow, aMessage).Execute();
             }
-            m_bEditable = sal_False;
         }
         else if(!m_xConnection->getMetaData()->supportsIntegrityEnhancementFacility())
         {// check if this database supports relations
+
+            m_bEditable             = sal_False;
+            m_bRelationsPossible    = sal_False;
             {
                 OSQLMessageBox aDlg(getView(),ModuleRes(STR_RELATIONDESIGN),ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE));
                 aDlg.Execute();
             }
-            m_bEditable = sal_False;
         }
+        if(!m_bRelationsPossible)
+            InvalidateAll();
 
         // we need a datasource
         if(m_xConnection.is())
