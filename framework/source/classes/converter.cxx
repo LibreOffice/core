@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:03:02 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,64 @@ DateTime Converter::convert_String2DateTime( /*IN*/ const ::rtl::OUString& sSour
     sBuffer.append( (sal_Int32)aSource.GetMin()   );
     sBuffer.append( (sal_Unicode)':'              );
     sBuffer.append( (sal_Int32)aSource.GetSec()   );
+
+    return sBuffer.makeStringAndClear();
+}
+
+::rtl::OUString Converter::convert_DateTime2ISO8601( const DateTime& aSource )
+{
+    ::rtl::OUStringBuffer sBuffer(25);
+
+    sal_Int32 nYear  = aSource.GetYear();
+    sal_Int32 nMonth = aSource.GetMonth();
+    sal_Int32 nDay   = aSource.GetDay();
+
+    sal_Int32 nHour  = aSource.GetHour();
+    sal_Int32 nMin   = aSource.GetMin();
+    sal_Int32 nSec   = aSource.GetSec();
+
+    // write year formated as "YYYY"
+    if (nYear<10)
+        sBuffer.appendAscii("000");
+    else
+    if (nYear<100)
+        sBuffer.appendAscii("00");
+    else
+    if (nYear<1000)
+        sBuffer.appendAscii("0");
+    sBuffer.append( (sal_Int32)nYear );
+
+    sBuffer.appendAscii("-");
+    // write month formated as "MM"
+    if (nMonth<10)
+        sBuffer.appendAscii("0");
+    sBuffer.append( (sal_Int32)nMonth );
+
+    sBuffer.appendAscii("-");
+    // write day formated as "DD"
+    if (nDay<10)
+        sBuffer.appendAscii("0");
+    sBuffer.append( (sal_Int32)nDay );
+
+    sBuffer.appendAscii("T");
+    // write hours formated as "hh"
+    if (nHour<10)
+        sBuffer.appendAscii("0");
+    sBuffer.append( (sal_Int32)nHour );
+
+    sBuffer.appendAscii(":");
+    // write min formated as "mm"
+    if (nMin<10)
+        sBuffer.appendAscii("0");
+    sBuffer.append( (sal_Int32)nMin );
+
+    sBuffer.appendAscii(":");
+    // write sec formated as "ss"
+    if (nSec<10)
+        sBuffer.appendAscii("0");
+    sBuffer.append( (sal_Int32)nSec );
+
+    sBuffer.appendAscii("Z");
 
     return sBuffer.makeStringAndClear();
 }
