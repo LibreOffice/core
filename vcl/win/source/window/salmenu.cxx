@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salmenu.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:58:14 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 14:49:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ SalMenuItem* WinSalInstance::CreateMenuItem( const SalItemParams* pItemData )
         // item
         pSalMenuItem->mText   = pItemData->aText;
         pSalMenuItem->mpMenu  = pItemData->pMenu;
-        pSalMenuItem->maBitmap= !!pItemData->aImage ? pItemData->aImage.GetBitmap() : Bitmap();
+        pSalMenuItem->maBitmap= !!pItemData->aImage ? pItemData->aImage.GetBitmapEx().GetBitmap() : Bitmap();
         pSalMenuItem->mnId    = pItemData->nId;
 
         // 'translate' mnemonics
@@ -360,7 +360,7 @@ void WinSalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const I
     {
     WinSalMenuItem* pWItem = static_cast<WinSalMenuItem*>(pSalMenuItem);
         if( !!rImage )
-            pWItem->maBitmap = rImage.GetBitmap();
+            pWItem->maBitmap = rImage.GetBitmapEx().GetBitmap();
         else
             pWItem->maBitmap = Bitmap();
     }
