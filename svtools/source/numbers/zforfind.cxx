@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: er $ $Date: 2002-08-05 16:33:23 $
+ *  last change: $Author: er $ $Date: 2002-08-07 14:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,6 +591,11 @@ short ImpSvNumberInputScan::GetLogical( const String& rString )
 
 short ImpSvNumberInputScan::GetMonth( const String& rString, xub_StrLen& nPos )
 {
+    // #102136# The correct English form of month September abbreviated is
+    // SEPT, but almost every data contains SEP instead.
+    static const String aSeptCorrect( RTL_CONSTASCII_USTRINGPARAM( "SEPT" ) );
+    static const String aSepShortened( RTL_CONSTASCII_USTRINGPARAM( "SEP" ) );
+
     short res = 0;      // no month found
 
     if (rString.Len() > nPos)                           // only if needed
@@ -609,6 +614,13 @@ short ImpSvNumberInputScan::GetMonth( const String& rString, xub_StrLen& nPos )
             else if ( StringContains( pUpperAbbrevMonthText[i], rString, nPos ) )
             {                                           // abbreviated
                 nPos += pUpperAbbrevMonthText[i].Len();
+                res = -(i+1);                           // negative
+                break;  // for
+            }
+            else if ( i == 8 && pUpperAbbrevMonthText[i] == aSeptCorrect &&
+                    StringContains( aSepShortened, rString, nPos ) )
+            {                                           // #102136# SEPT/SEP
+                nPos += aSepShortened.Len();
                 res = -(i+1);                           // negative
                 break;  // for
             }
