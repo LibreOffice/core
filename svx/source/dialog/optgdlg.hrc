@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:33:52 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,11 +123,9 @@
 #define CB_3D_DITHERING         4
 #define CB_3D_SHOWFULL          5
 
-#define GB_APPEARANCE           10
-#define FT_APPEARANCE           13
-#define LB_APPEARANCE           14
-#define FT_SCALING              17
-#define MF_SCALING              18
+#define FL_USERINTERFACE        14
+#define FT_WINDOWSIZE           17
+#define MF_WINDOWSIZE           18
 
 #define FL_MOUSE                20
 #define LB_MOUSEPOS             21
@@ -136,18 +134,15 @@
 #define LB_MOUSEMIDDLE          24
 
 #define CB_MENU_ICONS           30
-//#define CB_BIG                  31
-#define CB_STYLE                32
+#define FL_MENU                 31
+#define FL_FONTLISTS            32
+
 #define GB_WORKINGSET           33
 #define BTN_DOCVIEW             34
 #define BTN_OPENWIN             35
-#define LB_BIG                  37
-#define FT_BIG                  38
+#define LB_ICONSIZE             37
+#define FT_ICONSIZE             38
 
-
-#define CB_MOUSE_FOLLOW         41
-#define CB_FLAT_TAB_CTRL        42
-#define CB_COLOR_TAB_CTRL       43
 #define CB_FONT_SHOW            44
 #define CB_SHOW_INACTIVE        45
 #define CB_FONT_HISTORY         46
@@ -159,20 +154,17 @@
 
 // defines for positions and sizes
 
-#define ROW_LB_APPEARANCE       13
-#define ROW_MF_SCALING          (ROW_LB_APPEARANCE+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
+#define ROW_MF_SCALING          (13)
 #define ROW_LB_BIG              (ROW_MF_SCALING+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
-#define ROW_CB_STYLE            (ROW_LB_BIG+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
-#define ROW_CB_FONTANTIALIASING (ROW_CB_STYLE+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#define ROW_CB_FONTANTIALIASING (ROW_LB_BIG+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
 #define ROW_NF_AA_POINTLIMIT    (ROW_CB_FONTANTIALIASING+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
-#define ROW_CB_MOUSE_FOLLOW     (ROW_NF_AA_POINTLIMIT+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
-#define ROW_CB_FLAT_TAB_CTRL    (ROW_CB_MOUSE_FOLLOW+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
-#define ROW_CB_COLOR_TAB_CTRL   (ROW_CB_FLAT_TAB_CTRL+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
-#define ROW_CB_FONT_SHOW        (ROW_CB_COLOR_TAB_CTRL+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
-#define ROW_CB_SHOW_INACTIVE    (ROW_CB_FONT_SHOW+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
-#define ROW_CB_FONT_HISTORY     (ROW_CB_SHOW_INACTIVE+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
-#define ROW_CB_MENU_ICONS       (ROW_CB_FONT_HISTORY+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
 
+#define ROW_FL_MENU             (ROW_NF_AA_POINTLIMIT+RSC_CD_DROPDOWN_HEIGHT+RSC_SP_FLGR_SPACE_X)
+#define ROW_CB_MENU_ICONS       (ROW_FL_MENU +RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#define ROW_CB_SHOW_INACTIVE    (ROW_CB_MENU_ICONS+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#define ROW_FL_FONTLISTS        (ROW_CB_SHOW_INACTIVE + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_SPACE_X)
+#define ROW_CB_FONT_SHOW        (ROW_FL_FONTLISTS + RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#define ROW_CB_FONT_HISTORY     (ROW_CB_FONT_SHOW + RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
 
 
 // TabPage Languages -------------------------------------------------------
