@@ -5,10 +5,6 @@
 #include <sfx2/tbxctrl.hxx>
 #endif
 
-#ifndef _SFXTBXMGR_HXX //autogen
-#include <sfx2/tbxmgr.hxx>
-#endif
-
 #ifndef _SV_FIELD_HXX //autogen
 #include <vcl/field.hxx>
 #endif
