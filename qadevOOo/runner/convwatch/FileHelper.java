@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileHelper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:09:15 $
+ *  last change: $Date: 2005-02-24 17:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@ import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import javax.swing.JOptionPane;
+
 public class FileHelper
 {
     public FileHelper()
@@ -83,6 +85,13 @@ public class FileHelper
 
         }
 
+    public static void MessageBox(String _sStr)
+        {
+            String sVersion = System.getProperty("java.version");
+            String sOSName  = System.getProperty("os.name");
+            JOptionPane.showMessageDialog( null, _sStr, sVersion + " " + sOSName + " Hello World Debugger", JOptionPane.INFORMATION_MESSAGE );
+        }
+
     public static boolean exists(String _sFile)
         {
             if (_sFile == null) return false;
@@ -92,6 +101,22 @@ public class FileHelper
             {
                 return true;
             }
+            // This is just nice for DEBUG behaviour
+            // due to the fact this is absolutly context dependency no one should use it.
+            // else
+            // {
+            //     System.out.println("FileHelper:exists() tell this path doesn't exists. Check it. path is:" );
+            //     System.out.println( _sFile );
+            //     System.out.println( aFile.getAbsolutePath() );
+            //     MessageBox("Der JavaProzess wartet auf eine interaktion ihrerseits.");
+            //
+            //     File aFile2 = new File(_sFile);
+            //     if (aFile2.exists())
+            //     {
+            //         System.out.println("Thanks, file exists." );
+            //         return true;
+            //     }
+            // }
             return false;
         }
 
@@ -292,5 +317,27 @@ public class FileHelper
         }
         return sSystemFile;
     }
+
+    private static boolean m_bDebugTextShown = false;
+    public static boolean isDebugEnabled()
+        {
+            boolean bDebug = false;
+            String sTmpPath = System.getProperty("java.io.tmpdir");
+            String fs = System.getProperty("file.separator");
+            String sName = sTmpPath + fs + "DOC_COMPARATOR_DEBUG";
+            File aFile = new File(sName);
+            if (aFile.exists())
+            {
+                if (m_bDebugTextShown == false)
+                {
+                    System.out.println("Found file: " + sName);
+                    System.out.println("Activate debug mode.");
+                    System.out.println("If debug mode is no longer necessary, remove the above file.");
+                    m_bDebugTextShown = true;
+                }
+                bDebug = true;
+            }
+            return bDebug;
+        }
 
 }
