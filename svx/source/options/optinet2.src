@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-08 08:40:07 $
+ *  last change: $Author: pb $ $Date: 2001-11-29 07:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     {
         Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 13 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text = "Pro~xy Server" ;
+        Text = "Pro~xy-Server" ;
         Text [ English ] = "Proxy S~erver" ;
         Text [ english_us ] = "Proxy s~erver" ;
         Text [ portuguese_brazilian ] = "Proxy S~erver" ;
@@ -289,7 +289,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     {
         Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 29 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text = "~Http Proxy" ;
+        Text = "~Http-Proxy" ;
         Text [ English ] = "Http Pro~xy" ;
         Text [ english_us ] = "Ht~tp proxy" ;
         Text [ italian ] = "Pro~xy Http" ;
@@ -357,7 +357,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     {
         Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 45 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text = "~Ftp Proxy" ;
+        Text = "~Ftp-Proxy" ;
         Text [ English ] = "~Ftp Proxy" ;
         Text [ english_us ] = "~Ftp proxy" ;
         Text [ italian ] = "Proxy ~Ftp" ;
@@ -425,7 +425,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     {
         Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 61 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "~Socks Proxy" ;
+        Text = "~Socks-Proxy" ;
         Text [ English ] = "~Socks Proxy" ;
         Text [ english_us ] = "~Socks proxy" ;
         Text [ italian ] = "Socks Prox~y" ;
