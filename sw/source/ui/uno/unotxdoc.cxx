@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-01-18 10:25:03 $
+ *  last change: $Author: os $ $Date: 2001-01-24 13:36:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,9 @@
 
 #ifndef _SVX_UNOMID_HXX
 #include <svx/unomid.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
@@ -2742,9 +2745,14 @@ SwXDocumentPropertyHelper::~SwXDocumentPropertyHelper()
 ForbiddenCharacters SwXDocumentPropertyHelper::getForbiddenCharacters( const Locale& rLocale )
     throw(NoSuchElementException, RuntimeException)
 {
-    throw NoSuchElementException();
-    DBG_ERROR("not implemented")
-    return ForbiddenCharacters();
+    if(!m_pDoc)
+        throw RuntimeException();
+    LanguageType eLang = SvxLocaleToLanguage( rLocale );
+
+    const ForbiddenCharacters* pForbidden = m_pDoc->GetForbiddenCharacters( eLang, FALSE );
+    if(!pForbidden)
+        throw NoSuchElementException();
+    return *pForbidden;
 }
 /* -----------------------------17.01.01 16:06--------------------------------
 
@@ -2752,8 +2760,12 @@ ForbiddenCharacters SwXDocumentPropertyHelper::getForbiddenCharacters( const Loc
 sal_Bool SwXDocumentPropertyHelper::hasForbiddenCharacters( const Locale& rLocale )
     throw(RuntimeException)
 {
-    DBG_ERROR("not implemented")
-    return sal_False;
+    if(!m_pDoc)
+        throw RuntimeException();
+    LanguageType eLang = SvxLocaleToLanguage( rLocale );
+
+    const ForbiddenCharacters* pForbidden = m_pDoc->GetForbiddenCharacters( eLang, FALSE );
+    return 0 != pForbidden;
 }
 /* -----------------------------17.01.01 16:06--------------------------------
 
@@ -2762,7 +2774,10 @@ void SwXDocumentPropertyHelper::setForbiddenCharacters(
     const Locale& rLocale, const ForbiddenCharacters& rForbiddenCharacters )
         throw(RuntimeException)
 {
-    DBG_ERROR("not implemented")
+    if(!m_pDoc)
+        throw RuntimeException();
+    LanguageType eLang = SvxLocaleToLanguage( rLocale );
+    m_pDoc->SetForbiddenCharacters( eLang, rForbiddenCharacters );
 }
 /* -----------------------------17.01.01 16:06--------------------------------
 
@@ -2770,6 +2785,9 @@ void SwXDocumentPropertyHelper::setForbiddenCharacters(
 void SwXDocumentPropertyHelper::removeForbiddenCharacters( const Locale& rLocale )
     throw(RuntimeException)
 {
-    DBG_ERROR("not implemented")
+    if(!m_pDoc)
+        throw RuntimeException();
+    LanguageType eLang = SvxLocaleToLanguage( rLocale );
+    m_pDoc->ClearForbiddenCharacters( eLang );
 }
 
