@@ -6981,57 +6981,7 @@ SfxVoidItem InsertDateAndTime SID_INSERT_DATE_TIME
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem MasterLayoutsSlide SID_MASTER_LAYOUTS_SLIDE
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_MODIFY;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem MasterLayoutsNotes SID_MASTER_LAYOUTS_NOTES
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_MODIFY;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem MasterLayoutsHandouts SID_MASTER_LAYOUTS_HANDOUTS
+SfxVoidItem MasterLayouts SID_MASTER_LAYOUTS
 ()
 [
     /* flags: */
