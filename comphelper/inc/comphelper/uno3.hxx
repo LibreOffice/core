@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno3.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 10:03:05 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 10:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,16 +90,16 @@ namespace comphelper
     /** used for declaring UNO3-Defaults, i.e. acquire/release
     */
     #define DECLARE_UNO3_DEFAULTS(classname, baseclass) \
-        virtual void    SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException) { baseclass::acquire(); } \
-        virtual void    SAL_CALL release() throw(::com::sun::star::uno::RuntimeException) { baseclass::release(); } \
+        virtual void    SAL_CALL acquire() throw() { baseclass::acquire(); }    \
+        virtual void    SAL_CALL release() throw() { baseclass::release(); }    \
         void            SAL_CALL PUT_SEMICOLON_AT_THE_END()
 
     /** used for declaring UNO3-Defaults, i.e. acquire/release if you want to forward all queryInterfaces to the base class,
         (e.g. if you overload queryAggregation)
     */
     #define DECLARE_UNO3_AGG_DEFAULTS(classname, baseclass) \
-        virtual void            SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException) { baseclass::acquire(); } \
-        virtual void            SAL_CALL release() throw(::com::sun::star::uno::RuntimeException) { baseclass::release(); } \
+        virtual void            SAL_CALL acquire() throw() { baseclass::acquire(); } \
+        virtual void            SAL_CALL release() throw() { baseclass::release(); }    \
         virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException) \
             { return baseclass::queryInterface(_rType); } \
         void                    SAL_CALL PUT_SEMICOLON_AT_THE_END()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oslfile2streamwrap.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 11:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,9 +104,9 @@ public:
     virtual ~OSLInputStreamWrapper();
 
 // UNO Anbindung
-    virtual void            SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)
+    virtual void            SAL_CALL acquire() throw()
         { InputStreamWrapper_Base::acquire(); }
-    virtual void            SAL_CALL release() throw(::com::sun::star::uno::RuntimeException)
+    virtual void            SAL_CALL release() throw()
         { InputStreamWrapper_Base::release(); }
     virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException)
         { return InputStreamWrapper_Base::queryInterface(_rType); }
@@ -133,9 +133,9 @@ public:
     OSLOutputStreamWrapper(::osl::File& _rFile) :rFile(_rFile) { }
 
 // UNO Anbindung
-    virtual void            SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)
+    virtual void            SAL_CALL acquire() throw()
         { OutputStreamWrapper_Base::acquire(); }
-    virtual void            SAL_CALL release() throw(::com::sun::star::uno::RuntimeException)
+    virtual void            SAL_CALL release() throw()
         { OutputStreamWrapper_Base::release(); }
     virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException)
         { return OutputStreamWrapper_Base::queryInterface(_rType); }
