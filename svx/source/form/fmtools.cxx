@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-16 11:41:45 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 12:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1844,7 +1844,8 @@ void SAL_CALL FmSlotDispatch::removeStatusListener( const Reference< ::com::sun:
 //------------------------------------------------------------------------------
 void SAL_CALL FmSlotDispatch::dispose(  ) throw(RuntimeException)
 {
-    ::com::sun::star::lang::EventObject aEvt(Reference< XInterface >(*this));
+    Reference< XInterface > xXInterface((*this));
+    ::com::sun::star::lang::EventObject aEvt(xXInterface);
     m_aDisposeListeners.disposeAndClear(aEvt);
     m_aStatusListeners.disposeAndClear(aEvt);
 }
