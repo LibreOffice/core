@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-14 17:22:49 $
+ *  last change: $Author: mt $ $Date: 2002-02-14 17:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,18 +117,22 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleChildCount() throw (::com::sun::
 
     sal_Int32 nChildren = 0;
     if ( GetWindow() )
-        nChildren = GetWindow()->GetChildCount();
+        nChildren = GetWindow()->GetAccessibleChildWindowCount();
 
     return nChildren;
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
     if ( GetWindow() )
     {
+        if ( i >= getAccessibleChildCount() )
+            throw ::com::sun::star::lang::IndexOutOfBoundsException();
+
+
         Window* pChild = GetWindow()->GetAccessibleChildWindow( (USHORT)i );
         if ( pChild )
             xAcc = pChild->GetAccessible();
