@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
+ *  last change: $Author: oj $ $Date: 2001-01-04 14:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,8 +202,12 @@ void OQueryContainer::dispose()
 
     for (ConstQueriesIterator i = m_aQueries.begin(); i != m_aQueries.end(); ++i)
     {
-        i->second->dispose();
-        i->second->release();
+        OQuery* pQuery = i->second;
+        if(pQuery)
+        {
+            pQuery->dispose();
+            pQuery->release();
+        }
     }
     m_aQueriesIndexed.clear();
         //  !!! do this before clearing the map which the vector elements refer to !!!
@@ -562,6 +566,18 @@ void SAL_CALL OQueryContainer::disposing( const ::com::sun::star::lang::EventObj
         DBG_ERROR("OQueryContainer::disposing : nobody should dispose the CommandDefinition container before disposing my connection !");
         dispose();
     }
+    else
+    {
+        QueriesIndexAccessIterator aIter = m_aQueriesIndexed.begin();
+        for(;aIter != m_aQueriesIndexed.end();++aIter)
+        {
+            if(Reference<XInterface>(static_cast< ::cppu::OWeakObject*>((*aIter)->second),UNO_QUERY) == _rSource.Source)
+            {
+                m_xCommandDefinitions->removeByName((*aIter)->first);
+                break;
+            }
+        }
+    }
 }
 
 //--------------------------------------------------------------------------
@@ -617,6 +633,7 @@ OQuery* OQueryContainer::implCreateWrapper(const ::rtl::OUString& _rName)
 OQuery* OQueryContainer::implCreateWrapper(const Reference< XPropertySet >& _rxCommandDesc)
 {
     OQuery* pNewObject = new OQuery(_rxCommandDesc, Reference< XConnection >((Reference< XInterface >)m_rParent, UNO_QUERY));
+    pNewObject->acquire();
 
     ::rtl::OUString sName;
     pNewObject->getPropertyValue(PROPERTY_NAME) >>= sName;
