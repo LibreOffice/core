@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implreg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 11:08:11 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 09:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1125,15 +1125,15 @@ static void insert_singletons(
             catch (registry::InvalidValueException &)
             {
             }
-            OUString const * p = implnames.getConstArray();
             // check implname is already in
-            sal_Int32 nPos = implnames.getLength();
-            while (nPos--)
+            sal_Int32 nPos_implnames = implnames.getLength();
+            OUString const * pImplnames = implnames.getConstArray();
+            while (nPos_implnames--)
             {
-                if (implname.equals( p[ nPos ] ))
+                if (implname.equals( pImplnames[ nPos_implnames ] ))
                     break;
             }
-            if (0 > nPos)
+            if (nPos_implnames < 0)
             {
                 // append and write back
                 implnames.realloc( implnames.getLength() +1 );
