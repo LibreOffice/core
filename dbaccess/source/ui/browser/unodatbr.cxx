@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 07:57:49 $
+ *  last change: $Author: fs $ $Date: 2001-08-02 13:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1103,7 +1103,7 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::svx::ODataAccessDescri
     sal_Bool bEscapeProcessing = sal_True;
     extractDescriptorProps(_rDescriptor, sDataSource, sCommand, nCommandType, bEscapeProcessing);
 
-    return getObjectEntry(sDataSource, sCommand, nCommandType, _ppContainerEntry, _ppDataSourceEntry, _bExpandAncestors);
+    return getObjectEntry(sDataSource, sCommand, nCommandType, _ppDataSourceEntry, _ppContainerEntry, _bExpandAncestors);
 }
 
 // -------------------------------------------------------------------------
@@ -2202,8 +2202,16 @@ sal_Bool SbaTableQueryBrowser::implSelect(const ::rtl::OUString& _rDataSourceNam
             if (pCommand)
                m_pTreeView->getListBox()->Select(pCommand);
             else if (!pCommandType)
+            {
+                if ( m_pCurrentlyDisplayed )
+                {   // tell the old entry (if any) it has been deselected
+                    selectPath(m_pCurrentlyDisplayed, sal_False);
+                    m_pCurrentlyDisplayed = NULL;
+                }
+
                 // we have a command and need to display this in the rowset
                 return implLoadAnything(_rDataSourceName, _rCommand, _nCommandType, _bEscapeProcessing, _rxConnection);
+            }
         }
     }
     return sal_False;
