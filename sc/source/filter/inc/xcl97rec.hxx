@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-27 16:21:00 $
+ *  last change: $Author: dr $ $Date: 2001-03-01 15:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,8 +454,6 @@ class SdrTextObj;
 
 class XclObj : public ExcRecord
 {
-    friend void XclObjList::Save( XclExpStream& );
-
 protected:
 
     enum FtType {
