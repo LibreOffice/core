@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-26 09:28:14 $
+ *  last change: $Author: dr $ $Date: 2001-11-08 14:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #include <com/sun/star/sheet/XCompatibilityNames.hpp>
 
 #include "addincol.hxx"
+#include "addinhelpid.hxx"
 #include "compiler.hxx"
 #include "scmatrix.hxx"
 #include "addinlis.hxx"
@@ -147,12 +148,14 @@ private:
     ScAddInArgDesc*     pArgDescs;
     long                nCallerPos;
     USHORT              nCategory;
+    USHORT              nHelpId;
     uno::Sequence<sheet::LocalizedName> aCompNames;
     BOOL                bCompInitialized;
 
 public:
                 ScUnoAddInFuncData( const String& rNam, const String& rLoc,
-                                    const String& rDesc, USHORT nCat,
+                                    const String& rDesc,
+                                    USHORT nCat, USHORT nHelp,
                                     const uno::Reference<reflection::XIdlMethod>& rFunc,
                                     const uno::Any& rO,
                                     long nAC, const ScAddInArgDesc* pAD,
@@ -171,6 +174,7 @@ public:
     long                    GetCallerPos() const        { return nCallerPos; }
     const String&           GetDescription() const      { return aDescription; }
     USHORT                  GetCategory() const         { return nCategory; }
+    USHORT                  GetHelpId() const           { return nHelpId; }
 
     const uno::Sequence<sheet::LocalizedName>& GetCompNames();
 };
@@ -178,7 +182,8 @@ public:
 //------------------------------------------------------------------------
 
 ScUnoAddInFuncData::ScUnoAddInFuncData( const String& rNam, const String& rLoc,
-                                        const String& rDesc, USHORT nCat,
+                                        const String& rDesc,
+                                        USHORT nCat, USHORT nHelp,
                                         const uno::Reference<reflection::XIdlMethod>& rFunc,
                                         const uno::Any& rO,
                                         long nAC, const ScAddInArgDesc* pAD,
@@ -189,6 +194,7 @@ ScUnoAddInFuncData::ScUnoAddInFuncData( const String& rNam, const String& rLoc,
     aUpperLocal( rLoc ),
     aDescription( rDesc ),
     nCategory( nCat ),
+    nHelpId( nHelp ),
     xFunction( rFunc ),
     aObject( rO ),
     nArgCount( nAC ),
@@ -544,6 +550,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
         xAddIn->setLocale( aLocale );
 
         String aServiceName = String( xName->getServiceName() );
+        ScUnoAddInHelpIdGenerator aHelpIdGenerator( xName->getServiceName() );
 
         //! pass XIntrospection to ReadFromAddIn
 
@@ -653,6 +660,8 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                             xAddIn->getProgrammaticCategoryName(
                                             aFuncU ) ) );
 
+                                        USHORT nHelpId = aHelpIdGenerator.GetHelpId( aFuncU );
+
                                         rtl::OUString aLocalU;
                                         try
                                         {
@@ -727,7 +736,8 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                         }
 
                                         ppFuncData[nFuncPos+nOld] = new ScUnoAddInFuncData(
-                                            aFuncName, aLocalName, aDescription, nCategory,
+                                            aFuncName, aLocalName, aDescription,
+                                            nCategory, nHelpId,
                                             xFunc, aObject,
                                             nVisibleCount, pVisibleArgs, nCallerPos );
 
@@ -839,18 +849,21 @@ BOOL ScUnoAddInCollection::FillFunctionDesc( long nFunc, ScFuncDesc& rDesc )
     if (nFunc >= nFuncCount || !ppFuncData[nFunc])
         return FALSE;
 
-    long nArgCount = ppFuncData[nFunc]->GetArgumentCount();
+    const ScUnoAddInFuncData& rFuncData = *ppFuncData[nFunc];
+
+    long nArgCount = rFuncData.GetArgumentCount();
     if ( nArgCount > USHRT_MAX )
         return FALSE;
 
     // nFIndex is set from outside
 
-    rDesc.pFuncName = new String( ppFuncData[nFunc]->GetUpperLocal() );     //! upper?
-    rDesc.nCategory = ppFuncData[nFunc]->GetCategory();
+    rDesc.pFuncName = new String( rFuncData.GetUpperLocal() );     //! upper?
+    rDesc.nCategory = rFuncData.GetCategory();
+    rDesc.nHelpId = rFuncData.GetHelpId();
 
-    String aDesc = ppFuncData[nFunc]->GetDescription();
+    String aDesc = rFuncData.GetDescription();
     if (!aDesc.Len())
-        aDesc = ppFuncData[nFunc]->GetLocalName();      // use name if no description is available
+        aDesc = rFuncData.GetLocalName();      // use name if no description is available
     rDesc.pFuncDesc = new String( aDesc );
 
     // AddInArgumentType_CALLER is already left out in FuncData
@@ -859,7 +872,7 @@ BOOL ScUnoAddInCollection::FillFunctionDesc( long nFunc, ScFuncDesc& rDesc )
     if ( nArgCount )
     {
         BOOL bMultiple = FALSE;
-        const ScAddInArgDesc* pArgs = ppFuncData[nFunc]->GetArguments();
+        const ScAddInArgDesc* pArgs = rFuncData.GetArguments();
 
         rDesc.aDefArgNames = new String*[nArgCount];
         rDesc.aDefArgDescs = new String*[nArgCount];

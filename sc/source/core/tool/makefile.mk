@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: nn $ $Date: 2001-05-29 19:33:50 $
+#   last change: $Author: dr $ $Date: 2001-11-08 14:00:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,63 +80,6 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        adiasync.cxx \
-        appoptio.cxx \
-        autoform.cxx \
-        callform.cxx \
-        cellform.cxx \
-        chartarr.cxx \
-        chartlis.cxx \
-        chgtrack.cxx \
-        chgviset.cxx \
-        collect.cxx  \
-        compiler.cxx \
-        consoli.cxx  \
-        dbcolect.cxx \
-        ddelink.cxx \
-        detfunc.cxx  \
-        detdata.cxx  \
-        docoptio.cxx \
-        editutil.cxx \
-        indexmap.cxx \
-        interpr1.cxx \
-        interpr2.cxx \
-        interpr3.cxx \
-        interpr4.cxx \
-        interpr5.cxx \
-        interpr6.cxx \
-        linelink.cxx \
-        progress.cxx \
-        rangenam.cxx \
-        rangelst.cxx \
-        rangeutl.cxx \
-        rechead.cxx  \
-        refupdat.cxx \
-        refdata.cxx \
-        reffind.cxx \
-        scdebug.cxx \
-        scmatrix.cxx \
-        sctictac.cxx \
-        subtotal.cxx \
-        token.cxx \
-        unitconv.cxx \
-        userlist.cxx \
-        viewopti.cxx \
-        inputopt.cxx \
-        filtopt.cxx \
-        printopt.cxx \
-        optutil.cxx \
-        zforauto.cxx \
-        hints.cxx \
-        prnsave.cxx \
-        navicfg.cxx \
-        addincol.cxx \
-        addinlis.cxx \
-        rangeseq.cxx \
-        refreshtimer.cxx
-
-
 SLOFILES =  \
         $(SLO)$/adiasync.obj \
         $(SLO)$/appoptio.obj \
@@ -190,6 +133,7 @@ SLOFILES =  \
         $(SLO)$/navicfg.obj \
         $(SLO)$/addincol.obj \
         $(SLO)$/addinlis.obj \
+        $(SLO)$/addinhelpid.obj \
         $(SLO)$/rangeseq.obj \
         $(SLO)$/refreshtimer.obj
 
