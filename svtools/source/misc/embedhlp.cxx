@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedhlp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:30:35 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,7 +660,7 @@ uno::Reference< io::XInputStream > EmbeddedObjectRef::GetGraphicReplacementStrea
     {
         try
         {
-            TryRunningState( xObj );
+            // retrieving of the visual representation can switch object to running state
             embed::VisualRepresentation aRep = xObj->getPreferredVisualRepresentation( nViewAspect );
             if ( pMediaType )
                 *pMediaType = aRep.Flavor.MimeType;
