@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 12:58:14 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 21:03:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,20 +136,20 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTICOMPONENTFACTORY_HPP_
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XPOPUPMENUCONTROLLER_HPP_
-#include <drafts/com/sun/star/frame/XPopupMenuController.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XPOPUPMENUCONTROLLER_HPP_
+#include <com/sun/star/frame/XPopupMenuController.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XUICONTROLLERREGISTRATION_HPP_
-#include <drafts/com/sun/star/frame/XUIControllerRegistration.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XUICONTROLLERREGISTRATION_HPP_
+#include <com/sun/star/frame/XUIControllerRegistration.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSYSTEMDEPENDENT_HPP_
 #include <com/sun/star/lang/SystemDependent.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_ITEMTYPE_HPP_
-#include <drafts/com/sun/star/ui/ItemType.hpp>
+#ifndef _COM_SUN_STAR_UI_ITEMTYPE_HPP_
+#include <com/sun/star/ui/ItemType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_IMAGETYPE_HPP_
-#include <drafts/com/sun/star/ui/ImageType.hpp>
+#ifndef _COM_SUN_STAR_UI_IMAGETYPE_HPP_
+#include <com/sun/star/ui/ImageType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLECOMPONENTFACTORY_HPP_
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -157,14 +157,14 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_STATUS_VISIBILITY_HPP_
 #include <com/sun/star/frame/status/Visibility.hpp>
@@ -227,8 +227,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-using namespace ::drafts::com::sun::star::frame;
-using namespace ::drafts::com::sun::star::ui;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::ui;
 
 static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
 static const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
@@ -292,9 +292,9 @@ static sal_Int16 getImageTypeFromBools( sal_Bool bBig, sal_Bool bHighContrast )
 {
     sal_Int16 n( 0 );
     if ( bBig )
-        n |= ::drafts::com::sun::star::ui::ImageType::SIZE_LARGE;
+        n |= ::com::sun::star::ui::ImageType::SIZE_LARGE;
     if ( bHighContrast )
-        n |= ::drafts::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST;
+        n |= ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST;
     return n;
 }
 
@@ -311,9 +311,8 @@ MenuBarManager::MenuBarManager(
     , m_bRetrieveImages( sal_False )
     , m_bAcceleratorCfg( sal_False )
 {
-    m_xPopupMenuControllerRegistration = Reference< ::drafts::com::sun::star::frame::XUIControllerRegistration >(
-        // #110897# ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.frame.PopupMenuControllerFactory" ))),
-        getServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.frame.PopupMenuControllerFactory" ))),
+    m_xPopupMenuControllerRegistration = Reference< ::com::sun::star::frame::XUIControllerRegistration >(
+        getServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.PopupMenuControllerFactory" ))),
         UNO_QUERY );
     FillMenuManager( pMenu, rFrame, bDelete, bDeleteChildren );
 }
@@ -340,9 +339,8 @@ MenuBarManager::MenuBarManager(
     m_bInitialized      = sal_False;
     m_bIsBookmarkMenu   = sal_True;
 
-    m_xPopupMenuControllerRegistration = Reference< ::drafts::com::sun::star::frame::XUIControllerRegistration >(
-        // #110897# ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.frame.PopupMenuControllerFactory" ))),
-        getServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.frame.PopupMenuControllerFactory" ))),
+    m_xPopupMenuControllerRegistration = Reference< ::com::sun::star::frame::XUIControllerRegistration >(
+        getServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.PopupMenuControllerFactory" ))),
         UNO_QUERY );
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
@@ -427,9 +425,8 @@ MenuBarManager::MenuBarManager(
     m_bInitialized      = sal_False;
     m_bIsBookmarkMenu   = sal_True;
 
-    m_xPopupMenuControllerRegistration = Reference< ::drafts::com::sun::star::frame::XUIControllerRegistration >(
-        // #110897# ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.frame.PopupMenuControllerFactory" ))),
-        getServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.frame.PopupMenuControllerFactory" ))),
+    m_xPopupMenuControllerRegistration = Reference< ::com::sun::star::frame::XUIControllerRegistration >(
+        getServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.PopupMenuControllerFactory" ))),
         UNO_QUERY );
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
@@ -497,7 +494,7 @@ Any SAL_CALL MenuBarManager::queryInterface( const ::com::sun::star::uno::Type &
                 rType ,
                 SAL_STATIC_CAST( ::com::sun::star::frame::XStatusListener*, this ),
                 SAL_STATIC_CAST( ::com::sun::star::frame::XFrameActionListener*, this ),
-                SAL_STATIC_CAST( ::drafts::com::sun::star::ui::XUIConfigurationListener*, this ),
+                SAL_STATIC_CAST( ::com::sun::star::ui::XUIConfigurationListener*, this ),
                 SAL_STATIC_CAST( ::com::sun::star::lang::XEventListener*, (XStatusListener *)this ),
                 SAL_STATIC_CAST( ::com::sun::star::lang::XComponent*, this ),
                 SAL_STATIC_CAST( ::com::sun::star::awt::XSystemDependentMenuPeer*, this ));
@@ -642,7 +639,7 @@ void SAL_CALL MenuBarManager::removeEventListener( const Reference< XEventListen
     m_aListenerContainer.removeInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), xListener );
 }
 
-void SAL_CALL MenuBarManager::elementInserted( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event )
+void SAL_CALL MenuBarManager::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event )
 throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aGuard( m_aLock );
@@ -658,7 +655,7 @@ throw (::com::sun::star::uno::RuntimeException)
         RequestImages();
 }
 
-void SAL_CALL MenuBarManager::elementRemoved( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event )
+void SAL_CALL MenuBarManager::elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event )
 throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aGuard( m_aLock );
@@ -674,7 +671,7 @@ throw (::com::sun::star::uno::RuntimeException)
         RequestImages();
 }
 
-void SAL_CALL MenuBarManager::elementReplaced( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event )
+void SAL_CALL MenuBarManager::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event )
 throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aGuard( m_aLock );
@@ -1872,7 +1869,7 @@ void MenuBarManager::FillMenu( USHORT& nId, Menu* pMenu, const Reference< XIndex
                     }
                 }
 
-                if ( nType == drafts::com::sun::star::ui::ItemType::DEFAULT )
+                if ( nType == ::com::sun::star::ui::ItemType::DEFAULT )
                 {
                     pMenu->InsertItem( nId, aLabel );
                     pMenu->SetItemCommand( nId, aCommandURL );
