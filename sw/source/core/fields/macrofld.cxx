@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrofld.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:06:31 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,19 @@
 #include <unofldmid.h>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_URI_XURIREFERENCEFACTORY_HPP_
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_URI_XVNDSUNSTARSCRIPTURL_HPP_
+#include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::rtl;
 /*--------------------------------------------------------------------
@@ -100,8 +113,9 @@ SwFieldType* SwMacroFieldType::Copy() const
 
 SwMacroField::SwMacroField(SwMacroFieldType* pType,
                            const String& rLibAndName, const String& rTxt) :
-    SwField(pType), aMacro(rLibAndName), aText(rTxt)
+    SwField(pType), aMacro(rLibAndName), aText(rTxt), bIsScriptURL(FALSE)
 {
+    bIsScriptURL = isScriptURL(aMacro);
 }
 
 String SwMacroField::Expand() const
@@ -128,6 +142,12 @@ String SwMacroField::GetCntnt(BOOL bName) const
 
 String SwMacroField::GetLibName() const
 {
+    // if it is a Scripting Framework macro return an empty string
+    if (bIsScriptURL)
+    {
+        return String();
+    }
+
     if (aMacro.Len())
     {
         USHORT nPos = aMacro.Len();
@@ -146,16 +166,35 @@ String SwMacroField::GetMacroName() const
 {
     if (aMacro.Len())
     {
-        USHORT nPos = aMacro.Len();
+        if (bIsScriptURL)
+        {
+            return aMacro.Copy( 0 );
+        }
+        else
+        {
+            USHORT nPos = aMacro.Len();
 
-        for (USHORT i = 0; i < 3 && nPos > 0; i++)
-            while (aMacro.GetChar(--nPos) != '.' && nPos > 0);
+            for (USHORT i = 0; i < 3 && nPos > 0; i++)
+                while (aMacro.GetChar(--nPos) != '.' && nPos > 0);
 
-        return aMacro.Copy( ++nPos );
+            return aMacro.Copy( ++nPos );
+        }
     }
 
     DBG_ASSERT(0, "Kein Macroname vorhanden")
     return aEmptyStr;
+}
+
+SvxMacro SwMacroField::GetSvxMacro() const
+{
+  if (bIsScriptURL)
+    {
+        return SvxMacro(aMacro, String(), EXTENDED_STYPE);
+    }
+    else
+    {
+        return SvxMacro(GetMacroName(), GetLibName(), STARBASIC);
+    }
 }
 
 /*--------------------------------------------------------------------
@@ -165,6 +204,7 @@ String SwMacroField::GetMacroName() const
 void SwMacroField::SetPar1(const String& rStr)
 {
     aMacro = rStr;
+    bIsScriptURL = isScriptURL(aMacro);
 }
 
 const String& SwMacroField::GetPar1() const
@@ -203,6 +243,9 @@ BOOL SwMacroField::QueryValue( uno::Any& rAny, BYTE nMId ) const
     case FIELD_PROP_PAR3:
         rAny <<= OUString(GetLibName());
         break;
+    case FIELD_PROP_PAR4:
+        rAny <<= bIsScriptURL ? OUString(GetMacroName()): OUString();
+        break;
     default:
         DBG_ERROR("illegal property");
     }
@@ -226,9 +269,14 @@ BOOL SwMacroField::PutValue( const uno::Any& rAny, BYTE nMId )
     case FIELD_PROP_PAR3:
         CreateMacroString(aMacro, GetMacroName(), ::GetString(rAny, sTmp) );
         break;
+    case FIELD_PROP_PAR4:
+        ::GetString(rAny, aMacro);
+        bIsScriptURL = isScriptURL(aMacro);
+        break;
     default:
         DBG_ERROR("illegal property");
     }
+
     return TRUE;
 }
 
@@ -245,3 +293,25 @@ void SwMacroField::CreateMacroString(
     rMacro += rMacroName;
 }
 
+BOOL SwMacroField::isScriptURL( const String& str )
+{
+    uno::Reference< lang::XMultiServiceFactory > xSMgr =
+        ::comphelper::getProcessServiceFactory();
+
+    uno::Reference< uri::XUriReferenceFactory >
+        xFactory( xSMgr->createInstance(
+            OUString::createFromAscii(
+                "com.sun.star.uri.UriReferenceFactory" ) ), uno::UNO_QUERY );
+
+    if ( xFactory.is() )
+    {
+        uno::Reference< uri::XVndSunStarScriptUrl >
+            xUrl( xFactory->parse( str ), uno::UNO_QUERY );
+
+        if ( xUrl.is() )
+        {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
