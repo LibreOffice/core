@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:09:13 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 15:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,7 +668,7 @@ TabPage PAGE_DBASE
     GroupBox GB_DBASE_MAIN
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 248 , 55 ) ;
+        Size = MAP_APPFONT ( 248 , 37 ) ;
     };
 
     CheckBox CB_SHOWDELETEDROWS
@@ -700,36 +700,9 @@ TabPage PAGE_DBASE
         Text[ turkish ] = "Etkin olmayan kayýtlarý görüntüle";
         Text[ language_user1 ] = " ";
     };
-    CheckBox CB_ALLOWLONGNAMES
-    {
-        Pos = MAP_APPFONT ( 76 , 26 ) ;
-        Size = MAP_APPFONT ( 127 , 10 ) ;
-        TabStop = TRUE ;
-        Text= "~Lange Tabellennamen";
-        Text[ italian ] = "~Nomi di tabella lunghi";
-        Text[ portuguese_brazilian ] = "Lange Tabellennamen";
-        Text[ portuguese ] = "Nomes de tabelas ~longos";
-        Text[ danish ] = "Lange tabelnavn";
-        Text[ french ] = "Noms de tables ~longs";
-        Text[ swedish ] = "~Långa tabellnamn";
-        Text[ dutch ] = "~Lange tabelnamen";
-        Text[ spanish ] = "Nombres de ta~bla largos";
-        Text[ english_us ] = "~Long table names";
-        Text[ chinese_simplified ] = "³¤±í¸ñÃû³Æ(~L)";
-        Text[ russian ] = "Äëèííûå èìåíà òàáëèö";
-        Text[ polish ] = "D³ugie nazwy tabel";
-        Text[ japanese ] = "’·‚¢•\\–¼";
-        Text [ english ] = "Long table names" ;
-        Text[ chinese_traditional ] = "ªøªí®æ¦WºÙ";
-        Text[ arabic ] = "ÃÓãÇÁ ÌÏÇæá ØæíáÉ";
-        Text[ greek ] = "Ïíüìáôá ðéíÜêùí ìåãÜ~ëïõ ìÞêïõò";
-        Text[ korean ] = "±ä Å×ÀÌºí ¸í";
-        Text[ turkish ] = "Uzun tablo adlarý";
-        Text[ language_user1 ] = " ";
-    };
     FixedText FT_CHARSET
     {
-        Pos = MAP_APPFONT ( 12 , 43 ) ;
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 57 , 10 ) ;
         Text = "~Zeichensatz" ;
         Text [ english ] = "~Character set" ;
@@ -758,7 +731,7 @@ TabPage PAGE_DBASE
     ListBox LB_CHARSET
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 76 , 41 ) ;
+        Pos = MAP_APPFONT ( 76 , 25 ) ;
         Size = MAP_APPFONT ( 105 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -1853,6 +1826,9 @@ Menu MENU_DATASOURCELIST_POPUP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2000/11/15 21:09:13  kz
+ *  Merge SRC613: 11/15/00 - 22:08:39 (NoBranch)
+ *
  *  Revision 1.13  2000/11/10 17:42:46  fs
  *  +STR_NO_ADABASE_DATASOURCES
  *

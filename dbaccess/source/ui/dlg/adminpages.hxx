@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-10 17:35:28 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 15:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,6 @@ public:
 private:
     GroupBox            m_aFrame;
     CheckBox            m_aShowDeleted;
-    CheckBox            m_aLongTableNames;
     PushButton          m_aIndexes;
 
     String              m_sDsn;
@@ -458,6 +457,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2000/11/10 17:35:28  fs
+ *  no parameter in checkItems anymore - did not make sense in the context it is called / some small bug fixes
+ *
  *  Revision 1.9  2000/11/02 15:20:04  fs
  *  #79983# +isBrowseable / #79830# +checkItems
  *

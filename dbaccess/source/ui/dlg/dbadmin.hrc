@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-10 17:42:46 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 15:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,6 @@
 
 #define CB_PASSWORD_REQUIRED    1
 #define CB_SHOWDELETEDROWS      2
-#define CB_ALLOWLONGNAMES       3
 #define CB_HEADER               4
 #define CB_SUPPRESVERSIONCL     5
 
@@ -159,6 +158,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2000/11/10 17:42:46  fs
+ *  +STR_NO_ADABASE_DATASOURCES
+ *
  *  Revision 1.6  2000/10/24 12:11:15  fs
  *  functionality added: browsing for system data sources (ODBC/Adabas/dbase/text)
  *

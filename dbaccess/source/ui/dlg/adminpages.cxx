@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-10 17:35:29 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 15:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -780,15 +780,13 @@ ODbaseDetailsPage::ODbaseDetailsPage( Window* pParent, const SfxItemSet& _rCoreA
     :OCommonBehaviourTabPage(pParent, PAGE_DBASE, _rCoreAttrs, CBTP_USE_CHARSET)
     ,m_aFrame           (this, ResId(GB_DBASE_MAIN))
     ,m_aShowDeleted     (this, ResId(CB_SHOWDELETEDROWS))
-    ,m_aLongTableNames  (this, ResId(CB_ALLOWLONGNAMES))
     ,m_aIndexes         (this, ResId(PB_INDICIES))
 {
     m_aIndexes.SetClickHdl(LINK(this, ODbaseDetailsPage, OnButtonClicked));
     m_aShowDeleted.SetClickHdl(LINK(this, ODbaseDetailsPage, OnButtonClicked));
-    m_aLongTableNames.SetClickHdl(LINK(this, ODbaseDetailsPage, OnButtonClicked));
 
     // correct the z-order which is mixed-up because the base class constructed some controls before we did
-    m_pCharset->SetZOrder(&m_aLongTableNames, WINDOW_ZORDER_BEHIND);
+    m_pCharset->SetZOrder(&m_aShowDeleted, WINDOW_ZORDER_BEHIND);
 
     FreeResource();
 }
@@ -807,7 +805,6 @@ sal_Int32* ODbaseDetailsPage::getDetailIds()
         static sal_Int32 nRelevantIds[] =
         {
             DSID_SHOWDELETEDROWS,
-            DSID_ALLOWLONGTABLENAMES,
             DSID_CHARSET,
             0
         };
@@ -841,27 +838,17 @@ void ODbaseDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSav
 
     // get the other relevant items
     SFX_ITEMSET_GET(_rSet, pDeletedItem, SfxBoolItem, DSID_SHOWDELETEDROWS, sal_True);
-    SFX_ITEMSET_GET(_rSet, pLongNameItem, SfxBoolItem, DSID_ALLOWLONGTABLENAMES, sal_True);
     sal_Bool bDeleted = sal_False, bLongNames = sal_False;
     if (bValid)
-    {
         bDeleted = pDeletedItem->GetValue();
-        bLongNames = pLongNameItem->GetValue();
-    }
+
     m_aShowDeleted.Check(pDeletedItem->GetValue());
-    m_aLongTableNames.Check(pLongNameItem->GetValue());
 
     if (_bSaveValue)
-    {
         m_aShowDeleted.SaveValue();
-        m_aLongTableNames.SaveValue();
-    }
 
     if (bReadonly)
-    {
         m_aShowDeleted.Disable();
-        m_aLongTableNames.Disable();
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -872,12 +859,6 @@ sal_Bool ODbaseDetailsPage::FillItemSet( SfxItemSet& _rSet )
     if( m_aShowDeleted.IsChecked() != m_aShowDeleted.GetSavedValue() )
     {
         _rSet.Put( SfxBoolItem(DSID_SHOWDELETEDROWS, m_aShowDeleted.IsChecked() ) );
-        bChangedSomething = sal_True;
-    }
-
-    if( m_aLongTableNames.IsChecked() != m_aLongTableNames.GetSavedValue() )
-    {
-        _rSet.Put( SfxBoolItem(DSID_ALLOWLONGTABLENAMES, m_aLongTableNames.IsChecked() ) );
         bChangedSomething = sal_True;
     }
 
@@ -1753,6 +1734,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2000/11/10 17:35:29  fs
+ *  no parameter in checkItems anymore - did not make sense in the context it is called / some small bug fixes
+ *
  *  Revision 1.12  2000/11/02 15:20:04  fs
  *  #79983# +isBrowseable / #79830# +checkItems
  *
