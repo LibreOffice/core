@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splittbl.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-16 21:56:09 $
+ *  last change: $Author: vg $ $Date: 2001-07-14 20:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ chinese_traditional ] = "½Ζ»sΌΠΓD(~C)";
         Text[ arabic ] = "δΣΞ ΗαΪδζΗδ";
         Text[ greek ] = "Αντιγραφή επικεφαλίδας";
-        Text[ korean ] = "Η¥Α¦ ΊΉ»η(~C)";
+        Text[ korean ] = "Α¦Έρ ΊΉ»η(~C)";
         Text[ turkish ] = "B~aώlύπύ kopyala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Copiar encabezado";
@@ -171,7 +171,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ chinese_traditional ] = "¦Ϋ­qΌΠΓD΅A±aΌΛ¦΅(~U)";
         Text[ arabic ] = "ΪδζΗδ ΞΗΥ (ΚΨΘνή ΗαδγΨ)";
         Text[ greek ] = "Προσαρμοσμένη επικεφαλίδα (με στυλ)";
-        Text[ korean ] = "°νΐ― Η¥Α¦£¨Ό­½Δ ΖΔΐΟ ΐϋΏλ£©(~U)";
+        Text[ korean ] = "°νΐ― Α¦Έρ£¨Ό­½Δ ΖΔΐΟ ΐϋΏλ£©(~U)";
         Text[ turkish ] = "~Φzel baώlύk (biηim uygula)";
         Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
         Text[ catalan ] = "~Encabezado propio, con estilos";
@@ -199,7 +199,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ chinese_traditional ] = "¦Ϋ­qΌΠΓD(~S)";
         Text[ arabic ] = "ΪδζΗδ ΞΗΥ";
         Text[ greek ] = "Προσαρμοσμένη επικεφαλίδα";
-        Text[ korean ] = "»ηΏλΐΪ Η¥Α¦(~S)";
+        Text[ korean ] = "»ηΏλΐΪ Α¦Έρ(~S)";
         Text[ turkish ] = "Φ~zel baώlύk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Encabezado ~propio";
@@ -227,7 +227,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ chinese_traditional ] = "µLΌΠΓD(~N)";
         Text[ arabic ] = "ΘΟζδ ΪδζΗδ";
         Text[ greek ] = "Χωρίς επικεφαλίδα";
-        Text[ korean ] = "Η¥Α¦ Ύψΐ½(~N)";
+        Text[ korean ] = "Α¦Έρ Ύψΐ½(~N)";
         Text[ turkish ] = "~Baώlύk yok";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Sin encabezado";
@@ -255,6 +255,7 @@ ModalDialog DLG_SPLIT_TABLE
     Text[ catalan ] = "Dividir tabla";
     Text[ finnish ] = "Jaa taulukko";
 };
+
 
 
 
