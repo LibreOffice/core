@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:30:43 $
+ *  last change: $Author: jsc $ $Date: 2001-03-19 09:31:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ OString Options::prepareHelp()
     help += "                 The generated output is a registry file with\n";
     help += "                 the same name as the idl input file.\n";
     help += "    -I<path>   = path specifies a directory where are include\n";
-    help += "                 files will be searched by the preprcessor.\n";
+    help += "                 files will be searched by the preprocessor.\n";
     help += "                 Multible directories could be combined with ';'.\n";
     help += "    -D<name>   = name defines a macro for the preprocessor.\n";
     help += "    -C         = generate complete type information, including\n";
