@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseForm.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:11 $
+ *  last change:$Date: 2003-02-04 08:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@ import util.DrawTools;
 import util.FormTools;
 import util.WriterTools;
 import util.utils;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
  * Test for object which is represented by service
@@ -246,7 +249,7 @@ import util.utils;
  */
 public class ODatabaseForm extends TestCase {
 
-    XTextDocument xTextDoc;
+    protected XTextDocument xTextDoc = null;
 
     protected final static String dbSourceName = "ODatabaseFormDataSource" ;
 
@@ -261,8 +264,8 @@ public class ODatabaseForm extends TestCase {
 
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        log.println( "creating a draw document" );
-        xTextDoc = WriterTools.createTextDoc(tParam.getMSF());
+        //log.println( "creating a draw document" );
+        //xTextDoc = WriterTools.createTextDoc(tParam.getMSF());
 
         tmpDir = utils.getOfficeTemp(tParam.getMSF());
 
@@ -332,6 +335,14 @@ public class ODatabaseForm extends TestCase {
      *  *    creating a Testenvironment for the interfaces to be tested
      */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+
+        if (xTextDoc != null) {
+            xTextDoc.dispose();
+            log.println("Exiting document disposed");
+        }
+
+        log.println( "creating a text document" );
+        xTextDoc = WriterTools.createTextDoc(Param.getMSF());
 
         //initialize test table
         if (isMySQLDB) {
@@ -449,13 +460,14 @@ public class ODatabaseForm extends TestCase {
         formLoader.load();
 
         try {
-            oObj = (XForm) (FormTools.getForms(
-                        WriterTools.getDrawPage(xTextDoc))).getByName("MyForm");
+            oObj = (XForm) AnyConverter.toObject(new Type(XForm.class),
+                (FormTools.getForms(
+                        WriterTools.getDrawPage(xTextDoc))).getByName("MyForm"));
 
             XPropertySet xSetProp = (XPropertySet) UnoRuntime.queryInterface
                 (XPropertySet.class, oObj) ;
-            connection = (XConnection)
-                xSetProp.getPropertyValue("ActiveConnection") ;
+            connection = (XConnection) AnyConverter.toObject(new Type(XConnection.class),
+                xSetProp.getPropertyValue("ActiveConnection")) ;
         } catch ( com.sun.star.uno.Exception e ) {
             log.println("Couldn't get Form");
             e.printStackTrace(log);

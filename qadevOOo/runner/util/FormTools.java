@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormTools.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 11:32:36 $
+ *  last change:$Date: 2003-02-04 08:50:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,8 @@ public class FormTools {
     public static XLoadable bindForm( XTextDocument aDoc, String sourceName, String tableName )
         throws com.sun.star.uno.Exception {
 
-        XForm the_form = (XForm) FormTools.getForms(WriterTools.getDrawPage(aDoc)).getByName("Standard");
+        XForm the_form = (XForm) AnyConverter.toObject(new Type(XForm.class),
+            FormTools.getForms(WriterTools.getDrawPage(aDoc)).getByName("Standard"));
         XPropertySet formProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, the_form);
         formProps.setPropertyValue("DataSourceName",sourceName);
         formProps.setPropertyValue("Command",tableName);
@@ -332,7 +333,8 @@ public class FormTools {
     public static XLoadable bindForm( XTextDocument aDoc, String formName, String sourceName,
         String tableName) throws com.sun.star.uno.Exception {
 
-        XForm the_form = (XForm) FormTools.getForms(WriterTools.getDrawPage(aDoc)).getByName(formName);
+        XForm the_form = (XForm) AnyConverter.toObject(new Type(XForm.class),
+            FormTools.getForms(WriterTools.getDrawPage(aDoc)).getByName(formName));
         XPropertySet formProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, the_form);
         formProps.setPropertyValue("DataSourceName",sourceName);
         formProps.setPropertyValue("Command",tableName);
