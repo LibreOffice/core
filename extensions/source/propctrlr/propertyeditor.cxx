@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyeditor.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 09:06:54 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ namespace pcr
         // create a new page
         OBrowserPage* pPage = new OBrowserPage(&m_aTabControl);
         // some knittings
-        pPage->SetSizePixel(m_aTabControl.GetOutputSizePixel());
+        pPage->SetSizePixel(m_aTabControl.GetTabPageSizePixel());
         pPage->getListBox()->setListener(m_pListener);
         pPage->SetHelpId(_nHelpId);
 
