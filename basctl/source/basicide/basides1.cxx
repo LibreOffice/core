@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 12:00:08 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,7 +450,9 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                 if ( !pModule->GetMethods()->Find( rInfo.GetMethod(), SbxCLASS_METHOD ) )
                     BasicIDE::CreateMacro( pModule, rInfo.GetMethod() );
             }
-            BasicIDE::Appear();
+            SfxViewFrame* pViewFrame = GetViewFrame();
+            if ( pViewFrame )
+                pViewFrame->ToTop();
             ModulWindow* pWin = FindBasWin( pShell, aLibName, rInfo.GetModule(), TRUE );
             DBG_ASSERT( pWin, "Edit/Create Macro: Fenster wurde nicht erzeugt/gefunden!" );
             SetCurWindow( pWin, TRUE );
