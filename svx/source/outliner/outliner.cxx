@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-13 13:46:05 $
+ *  last change: $Author: mt $ $Date: 2002-01-16 10:35:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -622,7 +622,17 @@ BOOL Outliner::ImpConvertEdtToOut(Paragraph* pPara,ULONG nPara,EditView* pView)
         nOutlLevel = rLevel.GetValue();
     }
     ImplCheckDepth( nOutlLevel );
+
+    SfxItemSet aOldAttrs( GetParaAttribs( nPara ) );
     ImplInitDepth( nPara, nOutlLevel, FALSE );
+    if ( !ImplHasBullet( nPara ) && aOldAttrs.GetItemState( EE_PARA_LRSPACE ) == SFX_ITEM_ON )
+    {
+        // #96298# ImplInitDepth overwrite LRSpace to depth default, but we want to keep it,
+        // when hard set in RTF
+        SfxItemSet aAttrs( GetParaAttribs( nPara ) );
+        aAttrs.Put( aOldAttrs.Get( EE_PARA_LRSPACE ) );
+        SetParaAttribs( nPara, aAttrs );
+    }
 
     return bConverted;
 }
