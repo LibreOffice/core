@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:05:41 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,10 +99,12 @@ void java_util_Properties::setProperty(const ::rtl::OUString key, const ::rtl::O
         args[0].l = convertwchar_tToJavaString(t.pEnv,key);
         args[1].l = convertwchar_tToJavaString(t.pEnv,value);
         // temporaere Variable initialisieren
-        char * cSignature = "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;";
-        char * cMethodName = "setProperty";
+        static char * cSignature = "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;";
+        static char * cMethodName = "setProperty";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             out = t.pEnv->CallObjectMethod(object, mID, args[0].l,args[1].l);
@@ -150,9 +152,11 @@ java_util_Properties::java_util_Properties( ): java_lang_Object( NULL, (jobject)
         return;
     // Java-Call fuer den Konstruktor absetzen
     // temporaere Variable initialisieren
-    char * cSignature = "()V";
+    static char * cSignature = "()V";
     jobject tempObj;
-    jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
+    static jmethodID mID = NULL;
+    if ( !mID  )
+        mID  = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
     tempObj = t.pEnv->NewObject( getMyClass(), mID);
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
@@ -161,13 +165,10 @@ java_util_Properties::java_util_Properties( ): java_lang_Object( NULL, (jobject)
 // --------------------------------------------------------------------------------
 jstring connectivity::convertwchar_tToJavaString(JNIEnv *pEnv,const ::rtl::OUString& _rTemp)
 {
-    jstring pStr = NULL;
-    if (pEnv)
-    {
-        pStr = pEnv->NewString(_rTemp.getStr(), _rTemp.getLength());
-        pEnv->ExceptionClear();
-        OSL_ENSURE(pStr,"Could not create a jsstring object!");
-    }
+    OSL_ENSURE(pEnv,"Environment is NULL!");
+    jstring pStr = pEnv->NewString(_rTemp.getStr(), _rTemp.getLength());
+    pEnv->ExceptionClear();
+    OSL_ENSURE(pStr,"Could not create a jsstring object!");
     return pStr;
 }
 
