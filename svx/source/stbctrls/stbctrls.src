@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:11:13 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 21:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ Menu RID_SVXMNU_ZOOM
             Text [ english_us ] = "Page Width" ;
             Text[ chinese_simplified ] = "Ò³¿í";
             Text[ russian ] = "Ïî øèğèíå ñòğàíèöû";
-            Text[ polish ] = "Szeroko?æ strony";
+            Text[ polish ] = "Szerokoœæ strony";
             Text[ japanese ] = "Íß°¼Ş•";
             Text[ chinese_traditional ] = "­¶¼e";
             Text[ arabic ] = "ÚÑÖ ÇáÕİÍÉ";
@@ -365,7 +365,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text [ portuguese ] = "Média" ;
             Text[ chinese_simplified ] = "Æ½¾ùÖµ";
             Text[ russian ] = "Ñğåäíåå çíà÷åíèå";
-            Text[ polish ] = "?rednia warto?æ";
+            Text[ polish ] = "Œrednia wartoœæ";
             Text[ japanese ] = "•½‹Ï’l";
             Text[ chinese_traditional ] = "¥­§¡­È";
             Text[ arabic ] = "ÇáãÚÏá";
@@ -395,7 +395,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text [ portuguese_brazilian ] = "Anzahl2" ;
             Text[ chinese_simplified ] = "ÊıÄ¿2";
             Text[ russian ] = "Êîëè÷åñòâî2";
-            Text[ polish ] = "ILO?Æ2";
+            Text[ polish ] = "ILOŒÆ2";
             Text[ japanese ] = "”2";
             Text[ chinese_traditional ] = "¼Æ¥Ø2";
             Text[ arabic ] = "ÚÏÏ2";
@@ -587,3 +587,4 @@ Image RID_SVXBMP_SIZE
         Blue = 0xC000 ;
     };
 };
+
