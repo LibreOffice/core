@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 13:57:50 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 163 , 126 ) ;
-    Text = "Pipette" ;
-    Text [ ENGLISH ] = "Eyedropper" ;
+    Text [ de ] = "Pipette" ;
     Sizeable = FALSE ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -89,141 +88,33 @@ DockingWindow RID_SVXDLG_BMPMASK
     {
         Pos = MAP_APPFONT ( 6 , 26 ) ;
         Size = MAP_APPFONT ( 151 , 8 ) ;
-        Text = "Farben" ;
-        Text [ ENGLISH ] = "Colors" ;
-        Text [ dutch ] = "Kleuren" ;
-        Text [ english_us ] = "Colors" ;
-        Text [ italian ] = "Colori" ;
-        Text [ spanish ] = "Colores" ;
-        Text [ french ] = "Couleurs" ;
-        Text [ swedish ] = "Färger" ;
-        Text [ danish ] = "Farver" ;
-        Text [ portuguese_brazilian ] = "Cores" ;
-        Text [ portuguese ] = "Cores" ;
-        Text[ chinese_simplified ] = "é¢œè‰²";
-        Text[ russian ] = "Öâåòà";
-        Text[ polish ] = "Kolory";
-        Text[ japanese ] = "è‰²";
-        Text[ chinese_traditional ] = "é¡è‰²";
-        Text[ arabic ] = "ÇáÃáæÇä";
-        Text[ greek ] = "×ñşìáôá";
-        Text[ korean ] = "ìƒ‰ìƒ";
-        Text[ turkish ] = "Renkler";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Colors";
-        Text[ finnish ] = "Värit";
-        Text[ thai ] = "à¸ªà¸µ";
-        Text[ czech ] = "Barvy";
-        Text[ hebrew ] = "â€®×¦×‘×¢×™×â€¬";
-        Text[ hindi ] = "à¤°à¤‚à¤—";
-        Text[ slovak ] = "Farby";
-        Text[ hungarian ] = "SzÃ­nek";
-        Text[ slovenian ] = "Barve";
+        Text [ de ] = "Farben" ;
+        Text [ en-US ] = "Colors" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_1
     {
         Pos = MAP_APPFONT ( 12 , 37 ) ;
         Size = MAP_APPFONT ( 44 , 8 ) ;
-        Text = "Quellfarbe" ;
-        Text [ ENGLISH ] = "Source color" ;
-        Text [ dutch ] = "Uitgangskleur" ;
-        Text [ english_us ] = "Source color" ;
-        Text [ italian ] = "Colore d'origine" ;
-        Text [ spanish ] = "Color de origen" ;
-        Text [ french ] = "Couleur d'origine" ;
-        Text [ swedish ] = "Källfärg" ;
-        Text [ danish ] = "Kildefarve" ;
-        Text [ portuguese_brazilian ] = "Cor de origem" ;
-        Text [ portuguese ] = "Cor-fonte" ;
-        Text[ chinese_simplified ] = "æºé¢œè‰²";
-        Text[ russian ] = "Èñõîäíûé öâåò";
-        Text[ polish ] = "Pocz¹tkowy";
-        Text[ japanese ] = "ã‚½ãƒ¼ã‚¹ã‚«ãƒ©ãƒ¼";
-        Text[ chinese_traditional ] = "æºé¡è‰²";
-        Text[ arabic ] = "Çááæä ÇáÃÕáí";
-        Text[ greek ] = "Âáóéêü ÷ñşìá";
-        Text[ korean ] = "ì›ë³¸ ìƒ‰ìƒ";
-        Text[ turkish ] = "Kaynak renk";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Color font";
-        Text[ finnish ] = "Lähdeväri";
-        Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¸ªà¸µ";
-        Text[ czech ] = "PÅ¯vodnÃ­ barva";
-        Text[ hebrew ] = "â€®×¦×‘×¢ ××§×•×¨â€¬";
-        Text[ hindi ] = "à¤®à¥‚à¤² à¤°à¤‚à¤—";
-        Text[ slovak ] = "PÃ´vodnÃ¡ farba";
-        Text[ hungarian ] = "ForrÃ¡sszÃ­n";
-        Text[ slovenian ] = "Izvorna barva";
+        Text [ de ] = "Quellfarbe" ;
+        Text [ en-US ] = "Source color" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_2
     {
         Pos = MAP_APPFONT ( 58 , 37 ) ;
         Size = MAP_APPFONT ( 34 , 8 ) ;
-        Text = "Toleranz" ;
-        Text [ ENGLISH ] = "Tolerance" ;
-        Text [ english_us ] = "Tolerance" ;
-        Text [ italian ] = "Tolleranza" ;
-        Text [ spanish ] = "Tolerancia" ;
-        Text [ french ] = "Tolérance" ;
-        Text [ dutch ] = "Tolerantie" ;
-        Text [ swedish ] = "Tolerans" ;
-        Text [ danish ] = "Tolerance" ;
-        Text [ portuguese_brazilian ] = "Tolerância" ;
-        Text [ portuguese ] = "Tolerância" ;
-        Text[ chinese_simplified ] = "åå·®";
-        Text[ russian ] = "Äîïóñê";
-        Text[ polish ] = "Tolerancja";
-        Text[ japanese ] = "è¨±å®¹ç¯„å›²";
-        Text[ chinese_traditional ] = "åå·®";
-        Text[ arabic ] = "ÇáÊÓÇãÍ";
-        Text[ greek ] = "Áíï÷Ş";
-        Text[ korean ] = "í—ˆìš© ì˜¤ì°¨";
-        Text[ turkish ] = "Tolerans";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tolerància";
-        Text[ finnish ] = "Toleranssi";
-        Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸à¸§à¹‰à¸²à¸‡";
-        Text[ czech ] = "Tolerance";
-        Text[ hebrew ] = "â€®×˜×•×œ×¨× ×¡×™×â€¬";
-        Text[ hindi ] = "à¤¸à¤¹à¤¨à¤¶à¥€à¤²à¤¤à¤¾";
-        Text[ slovak ] = "Tolerancia";
-        Text[ hungarian ] = "Tolerancia";
-        Text[ slovenian ] = "Toleranca";
+        Text [ de ] = "Toleranz" ;
+        Text [ en-US ] = "Tolerance" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_3
     {
         Pos = MAP_APPFONT ( 93 , 37 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
-        Text = "Ersetzen durch..." ;
-        Text [ ENGLISH ] = "Replace with..." ;
-        Text [ english_us ] = "Replace with..." ;
-        Text [ italian ] = "Sostituisci con..." ;
-        Text [ spanish ] = "Reemplazar por..." ;
-        Text [ french ] = "Remplacer par..." ;
-        Text [ dutch ] = "Vervangen door..." ;
-        Text [ swedish ] = "Ersätt med..." ;
-        Text [ danish ] = "Erstat med..." ;
-        Text [ portuguese_brazilian ] = "Substituir por..." ;
-        Text [ portuguese ] = "Substituir por..." ;
-        Text[ chinese_simplified ] = "æ›¿æ¢ä¸º...";
-        Text[ russian ] = "Çàìåíèòü íà...";
-        Text[ polish ] = "Zamieñ na...";
-        Text[ japanese ] = "ç½®æ›å€™è£œ...";
-        Text[ chinese_traditional ] = "æ›¿ä»£æˆ...";
-        Text[ arabic ] = "ÇÓÊÈÏÇá ÈÜ...";
-        Text[ greek ] = "ÁíôéêáôÜóôáóç ìå...";
-        Text[ korean ] = "ë°”ê¾¸ê¸°...";
-        Text[ turkish ] = "Yeni değer...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Reemplaça amb...";
-        Text[ finnish ] = "Korvaa värillä...";
-        Text[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆà¸”à¹‰à¸§à¸¢...";
-        Text[ czech ] = "Nahradit za...";
-        Text[ hebrew ] = "â€®×•×œ×”×—×œ×™×£ ×‘...â€¬";
-        Text[ hindi ] = "à¤¸à¥‡ à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤•à¤°à¥‹...";
-        Text[ slovak ] = "NahradiÅ¥ za...";
-        Text[ hungarian ] = "Csere erre...";
-        Text[ slovenian ] = "Zamenjaj z...";
+        Text [ de ] = "Ersetzen durch..." ;
+        Text [ en-US ] = "Replace with..." ;
+        Text [ x-comment ] = " ";
     };
 
     // line 1
@@ -390,73 +281,19 @@ DockingWindow RID_SVXDLG_BMPMASK
     {
         Pos = MAP_APPFONT ( 12 , 110 ) ;
         Size = MAP_APPFONT ( 71 , 10 ) ;
-        Text = "~Transparenz" ;
-        Text [ ENGLISH ] = "~Transparency" ;
+        Text [ de ] = "~Transparenz" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Tr~ansparency" ;
-        Text [ italian ] = "Trasparenza" ;
-        Text [ spanish ] = "Transparencia" ;
-        Text [ french ] = "Transparence" ;
-        Text [ dutch ] = "~Transparantie" ;
-        Text [ swedish ] = "~Transparens" ;
-        Text [ danish ] = "Tr~ansparens" ;
-        Text [ portuguese_brazilian ] = "Tr~ansparência" ;
-        Text [ portuguese ] = "~Transparência" ;
-        Text[ chinese_simplified ] = "é€æ˜(~A)";
-        Text[ russian ] = "Ïğîçğà÷íîñòü";
-        Text[ polish ] = "~Przezroczystoœæ";
-        Text[ japanese ] = "é€éæ€§(~A)";
-        Text[ chinese_traditional ] = "é€æ˜(~A)";
-        Text[ arabic ] = "ÔİÇİíÉ";
-        Text[ greek ] = "~ÄéáöÜíåéá";
-        Text[ korean ] = "íˆ¬ëª…(~A)";
-        Text[ turkish ] = "Ş~effaflık";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Transparència";
-        Text[ finnish ] = "~Läpinäkyvyys";
-        Text[ thai ] = "à¹‚à¸›à¸£à¹ˆ~à¸‡à¹à¸ªà¸‡";
-        Text[ czech ] = "PrÅ¯hlednost";
-        Text[ hebrew ] = "â€®×©×§×£â€¬";
-        Text[ hindi ] = "à¤ªà¤¾à¤°~à¤¦à¤°à¥à¤¶à¤•à¤¤à¤¾";
-        Text[ slovak ] = "~PriehÄ¾adnosÅ¥";
-        Text[ hungarian ] = "ÃtlÃ¡tszÃ³~sÃ¡g";
-        Text[ slovenian ] = "Pr~osojnost";
+        Text [ en-US ] = "Tr~ansparency" ;
+        Text [ x-comment ] = " ";
     };
 
     PushButton BTN_EXEC
     {
         Pos = MAP_APPFONT ( 93 , 6 ) ;
         Size = MAP_APPFONT ( 64 , 14 ) ;
-        Text = "~Ersetzen" ;
-        Text [ ENGLISH ] = "~Replace" ;
-        Text [ dutch ] = "~Vervangen" ;
-        Text [ english_us ] = "~Replace" ;
-        Text [ italian ] = "Sostituisci" ;
-        Text [ spanish ] = "Reemplazar" ;
-        Text [ french ] = "Remplacer" ;
-        Text [ swedish ] = "~Ersätt" ;
-        Text [ danish ] = "~Erstat" ;
-        Text [ portuguese ] = "~Substituir" ;
-        Text [ portuguese_brazilian ] = "~Substituir" ;
-        Text[ chinese_simplified ] = "æ›¿æ¢(~R)";
-        Text[ russian ] = "Çàìåíèòü";
-        Text[ polish ] = "~Zamieñ";
-        Text[ japanese ] = "ç½®æ›(~R)";
-        Text[ chinese_traditional ] = "æ›¿ä»£(~R)";
-        Text[ arabic ] = "ÇÓÊÈÏÇá";
-        Text[ greek ] = "~ÁíôéêáôÜóôáóç";
-        Text[ korean ] = "ë°”ê¾¸ê¸°(~R)";
-        Text[ turkish ] = "~Değiştir";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Reemplaça";
-        Text[ finnish ] = "~Korvaa";
-        Text[ thai ] = "à¹~à¸—à¸™à¸—à¸µà¹ˆ";
-        Text[ czech ] = "Nahradit";
-        Text[ hebrew ] = "â€®×”×—×œ×¤×”â€¬";
-        Text[ hindi ] = "~à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤•à¤°à¥‹";
-        Text[ slovak ] = "Nah~radiÅ¥";
-        Text[ hungarian ] = "~Csere";
-        Text[ slovenian ] = "~Zamenjaj";
+        Text [ de ] = "~Ersetzen" ;
+        Text [ en-US ] = "~Replace" ;
+        Text [ x-comment ] = " ";
     };
 
     ListBox LB_TRANS
@@ -479,41 +316,14 @@ DockingWindow RID_SVXDLG_BMPMASK
                 AutoCheck = TRUE ;
                 Identifier = TBI_PIPETTE ;
                 HelpId = HID_BMPMASK_TBI_PIPETTE ;
-                Text = "Pipette" ;
-                Text [ ENGLISH ] = "Eyedropper" ;
+                Text [ de ] = "Pipette" ;
                 ItemImage = Image
                 {
                     ImageBitmap = Bitmap { File = "sc10350.bmp" ; };
                     MASKCOLOR
                 };
-                Text [ dutch ] = "Pipet" ;
-                Text [ english_us ] = "Eyedropper" ;
-                Text [ italian ] = "Contagocce" ;
-                Text [ spanish ] = "Pipeta" ;
-                Text [ french ] = "Pipette" ;
-                Text [ swedish ] = "Pipett" ;
-                Text [ danish ] = "Pipette" ;
-                Text [ portuguese ] = "Pipeta" ;
-                Text [ portuguese_brazilian ] = "Pipeta" ;
-                Text[ chinese_simplified ] = "å–è‰²å™¨";
-                Text[ russian ] = "Ïèïåòêà";
-                Text[ polish ] = "Pipeta";
-                Text[ japanese ] = "ã‚¹ãƒã‚¤ãƒˆ";
-                Text[ chinese_traditional ] = "å–è‰²";
-                Text[ arabic ] = "ŞØøÇÑÉ";
-                Text[ greek ] = "Óôáãïíüìåôñï";
-                Text[ korean ] = "ìƒ‰ ê³¨ë¼ë‚´ê¸°";
-                Text[ turkish ] = "Renk örneği al";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Comptagotes";
-                Text[ finnish ] = "Valitse korvattava väri";
-                Text[ thai ] = "à¸•à¸±à¸§à¸«à¸¢à¸”à¸ªà¸µ";
-                Text[ czech ] = "KapÃ¡tko";
-                Text[ hebrew ] = "â€®×˜×¤×˜×¤×ªâ€¬";
-                Text[ hindi ] = "à¤…à¤‡à¤¡à¥à¤°à¤¾à¤ªà¥à¤ªà¤°";
-                Text[ slovak ] = "Kvapkadlo";
-                Text[ hungarian ] = "SzemcseppentÅ‘";
-                Text[ slovenian ] = "Kapalka";
+                Text [ en-US ] = "Eyedropper" ;
+                Text [ x-comment ] = " ";
             };
         };
     };
@@ -524,28 +334,8 @@ DockingWindow RID_SVXDLG_BMPMASK
         Pos = MAP_APPFONT ( 22 , 6 ) ;
         Size = MAP_APPFONT ( 43 , 14 ) ;
     };
-    Text [ english_us ] = "Eyedropper" ;
-    Text [ italian ] = "Contagocce" ;
-    Text [ spanish ] = "Pipeta" ;
-    Text [ french ] = "Pipette" ;
-    Text [ dutch ] = "Pipet" ;
-    Text [ swedish ] = "Pipett" ;
-    Text [ danish ] = "Pipette" ;
-    Text [ portuguese_brazilian ] = "Pipeta" ;
-    Text [ portuguese ] = "Pipeta" ;
-    Text[ chinese_simplified ] = "å–è‰²å™¨";
-    Text[ russian ] = "Ïèïåòêà";
-    Text[ polish ] = "Pipeta";
-    Text[ japanese ] = "ã‚¹ãƒã‚¤ãƒˆ";
-    Text[ chinese_traditional ] = "å–è‰²";
-    Text[ arabic ] = "ŞØøÇÑÉ";
-    Text[ greek ] = "Óôáãïíüìåôñï";
-    Text[ korean ] = "ìƒ‰ ê³¨ë¼ë‚´ê¸°";
-    Text[ turkish ] = "Renk örneği al";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Comptagotes";
-    Text[ finnish ] = "Värinvalitsin";
-    Text[ thai ] = "à¸•à¸±à¸§à¸«à¸¢à¸”à¸ªà¸µ";
+    Text [ en-US ] = "Eyedropper" ;
+    Text [ x-comment ] = " ";
 
     Image IMG_PIPETTE
     {
@@ -558,80 +348,20 @@ DockingWindow RID_SVXDLG_BMPMASK
         ImageBitmap = Bitmap { File = "sc10350_h.bmp" ; };
         MASKCOLOR
     };
-    Text[ czech ] = "KapÃ¡tko";
-    Text[ hebrew ] = "â€®×˜×¤×˜×¤×ªâ€¬";
-    Text[ hindi ] = "à¤…à¤‡à¤¡à¥à¤°à¤¾à¤ªà¥à¤ªà¤°";
-    Text[ slovak ] = "Kvapkadlo";
-    Text[ hungarian ] = "SzemcseppentÅ‘";
-    Text[ slovenian ] = "Kapalka";
 };
 
 String RID_SVXDLG_BMPMASK_STR_TRANSP
 {
-    Text = "Transparent";
-    Text [ ENGLISH ] = "Transparent";
-    Text [ english_us ] = "Transparent";
-    Text[ portuguese ] = "Transparente";
-    Text[ russian ] = "Ïğîçğà÷íûé";
-    Text[ greek ] = "Äéáöáíİò";
-    Text[ dutch ] = "Transparant";
-    Text[ french ] = "Transparent";
-    Text[ spanish ] = "Transparente";
-    Text[ italian ] = "Trasparente";
-    Text[ danish ] = "Transparent";
-    Text[ swedish ] = "Transparent";
-    Text[ polish ] = "Przezroczysty";
-    Text[ portuguese_brazilian ] = "Transparente";
-    Text[ japanese ] = "å¡—ã‚Šã¤ã¶ã—ãªã—";
-    Text[ korean ] = "íˆ¬ëª…";
-    Text[ chinese_simplified ] = "é€æ˜";
-    Text[ chinese_traditional ] = "é€æ˜";
-    Text[ turkish ] = "Saydam";
-    Text[ arabic ] = "ÔİÇİ";
-    Text[ catalan ] = "Transparent";
-    Text[ finnish ] = "Läpinäkyvä";
-    Text[ thai ] = "à¹‚à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡";
-    Text[ czech ] = "PrÅ¯hlednÃ©";
-    Text[ hebrew ] = "â€®×©×§×•×£â€¬";
-    Text[ hindi ] = "à¤ªà¤¾à¤°à¤¦à¤°à¥à¤¶à¤•";
-    Text[ slovak ] = "PriehÄ¾adnÃ©";
-    Text[ hungarian ] = "ÃtlÃ¡tszÃ³";
-    Text[ slovenian ] = "Prosojno";
+    Text [ de ] = "Transparent";
+    Text [ en-US ] = "Transparent";
 };
 
 String RID_SVXDLG_BMPMASK_STR_SOURCECOLOR
 {
     // This string is used by the eyedropper dialog to denote a color in an image
     // that will be replaced by another color.
-    Text = "Quellfarbe";
-    Text [ ENGLISH ] = "Source Color";
-    Text[ english_us ] = "Source Color";
-    Text[ french ] = "Couleur d'origine";
-    Text[ spanish ] = "Color de origen";
-    Text[ italian ] = "Colore d'origine";
-    Text[ swedish ] = "Källfärg";
-    Text[ japanese ] = "ã‚½ãƒ¼ã‚¹ã‚«ãƒ©ãƒ¼";
-    Text[ korean ] = "ì›ë³¸ ìƒ‰ìƒ";
-    Text[ chinese_simplified ] = "æºé¢œè‰²";
-    Text[ chinese_traditional ] = "æºé¡è‰²";
-    Text[ turkish ] = "Renk kodu";
-    Text[ greek ] = "Âáóéêü ÷ñşìá";
-    Text[ dutch ] = "Uitgangskleur";
-    Text[ finnish ] = "Lähdeväri";
-    Text[ czech ] = "PÅ¯vodnÃ­ barva";
-    Text[ danish ] = "Kildefarve";
-    Text[ arabic ] = "Çááæä ÇáÃÕáí";
-    Text[ hebrew ] = "â€®×¦×‘×¢ ××§×•×¨â€¬";
-    Text[ catalan ] = "Color font";
-    Text[ portuguese ] = "Cor-fonte";
-    Text[ russian ] = "Èñõîäíûé";
-    Text[ polish ] = "Kolor orygin.";
-    Text[ portuguese_brazilian ] = "Cor de origem";
-    Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¸ªà¸µ";
-    Text[ hindi ] = "à¤®à¥‚à¤² à¤°à¤‚à¤—";
-    Text[ slovak ] = "PÃ´vodnÃ¡ farba";
-    Text[ hungarian ] = "ForrÃ¡sszÃ­n";
-    Text[ slovenian ] = "Izvorna barva";
+    Text [ de ] = "Quellfarbe";
+    Text [ en-US ] = "Source Color";
 };
 
  // ********************************************************************** EOF
