@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdde.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:15:46 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ BOOL SwDoc::SetData( const String& rItem, const String& rMimeType,
 
 
 
-::so3::SvLinkSource* SwDoc::CreateLinkSource( const String& rItem )
+::sfx2::SvLinkSource* SwDoc::CreateLinkSource( const String& rItem )
 {
     // haben wir ueberhaupt das Item vorraetig?
     String sItem( GetAppCharClass().lower( rItem ));
