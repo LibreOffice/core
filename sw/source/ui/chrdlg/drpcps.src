@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:43:06 $
+ *  last change: $Author: avy $ $Date: 2001-03-09 20:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ TabDialog DLG_DROPCAPS
     Text [ norwegian ] = "Drop Caps" ;
     Text [ italian ] = "Capolettera" ;
     Text [ portuguese_brazilian ] = "Capitulares descidas" ;
-    Text [ portuguese ] = "Iniciais" ;
+    Text [ portuguese ] = "Capitulares" ;
     Text [ finnish ] = "Anfangit" ;
     Text [ danish ] = "Initialer" ;
     Text [ french ] = "Lettrines" ;
@@ -96,7 +96,7 @@ TabDialog DLG_DROPCAPS
                 Text [ norwegian ] = "Drop Caps" ;
                 Text [ italian ] = "Capolettera" ;
                 Text [ portuguese_brazilian ] = "Capitulares descidas" ;
-                Text [ portuguese ] = "Iniciais" ;
+                Text [ portuguese ] = "Capitulares" ;
                 Text [ finnish ] = "Anfangit" ;
                 Text [ danish ] = "Initialer" ;
                 Text [ french ] = "Lettrines" ;
@@ -122,7 +122,7 @@ TabDialog DLG_DROPCAPS
     Text[ russian ] = "Èíèöèàëû";
     Text[ polish ] = "Inicja³y";
     Text[ japanese ] = "ÄŞÛ¯Ìß·¬¯Ìß";
-    Text[ chinese_traditional ] = "¤j¼g¦r¥À";
+    Text[ chinese_traditional ] = "¦r­º¤j¼g";
     Text[ arabic ] = "ÇáÃÍÑİ ÇáÇÓÊåáÇáíÉ";
     Text[ greek ] = "Áñ÷éãñÜììáôá";
     Text[ korean ] = "´Ü¶ô Ã¹¹®ÀÚ Àå½Ä";
@@ -149,7 +149,7 @@ TabPage TP_DROPCAPS
         Text [ swedish ] = "Visa a~nfanger" ;
         Text [ danish ] = "Vis initialer" ;
         Text [ portuguese_brazilian ] = "Initialen anzeigen" ;
-        Text [ portuguese ] = "Mostrar i~niciais" ;
+        Text [ portuguese ] = "Mostrar ~capitulares" ;
         Text[ chinese_simplified ] = "ÏÔÊ¾´óĞ´Ê××ÖÄ¸";
         Text[ russian ] = "Ïîêàçàòü èíèöèàëû";
         Text[ polish ] = "Po~ka¿ inicja³y";
@@ -201,7 +201,7 @@ TabPage TP_DROPCAPS
         Text [ swedish ] = "Antal te~cken" ;
         Text [ danish ] = "Antal tegn" ;
         Text [ portuguese_brazilian ] = "Anzahl der Ze~ichen" ;
-        Text [ portuguese ] = "Quantidade de ~caracteres" ;
+        Text [ portuguese ] = "Número de ~caracteres" ;
         Text[ chinese_simplified ] = "×Ö·ûÊıÄ¿(~C)";
         Text[ russian ] = "Êîëè÷åñòâî çíàêîâ";
         Text[ polish ] = "Liczba znaków";
@@ -295,7 +295,7 @@ TabPage TP_DROPCAPS
         Text[ chinese_traditional ] = "¦Ü¤º¤åªº¶ZÖÃ(~D)";
         Text[ arabic ] = "ÇáãÓÇİÉ ÍÊì ÇáäÕ";
         Text[ greek ] = "Á~ğüóôáóç áğü ôï êåßìåíï";
-        Text[ korean ] = "ÅØ½ºÆ®·ÎºÎÅÍÀÇ °Å¸®(~D)";
+        Text[ korean ] = "ÅØ½ºÆ®¿¡¡¡´ëÇÑ¡¡°£°İ(~D)";
         Text[ turkish ] = "Metne uzaklık";
         Text[ language_user1 ] = " ";
     };
@@ -401,7 +401,7 @@ TabPage TP_DROPCAPS
         Text[ chinese_traditional ] = "¤j¼g¦r(~T)";
         Text[ arabic ] = "ÇáäÕ";
         Text[ greek ] = "Êåßìåíï";
-        Text[ korean ] = "ÅØ½ºÆ®(~T)";
+        Text[ korean ] = "Ã¹ÅØ½ºÆ®(~T)";
         Text[ turkish ] = "Başharf metni";
         Text[ language_user1 ] = " ";
     };
