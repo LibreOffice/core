@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porglue.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
+ *  last change: $Author: mh $ $Date: 2001-10-25 17:08:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #include "paratr.hxx"   // pTabStop, ADJ*
 #include "viewopt.hxx"  // SwViewOptions
 #include "errhdl.hxx"   // ASSERT
-#include "segmentc.hxx"
 
 #include "txtcfg.hxx"
 #include "porglue.hxx"

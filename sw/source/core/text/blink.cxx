@@ -2,9 +2,9 @@
  *
  *  $RCSfile: blink.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:24 $
+ *  last change: $Author: mh $ $Date: 2001-10-25 17:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,6 @@
 #endif
 #include "viewsh.hxx"
 #include "rootfrm.hxx"  // GetOleShell()
-#include "segmentc.hxx"
 
 #include "txtfrm.hxx"   // FindRootFrm()
 #include "blink.hxx"

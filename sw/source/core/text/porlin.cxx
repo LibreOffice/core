@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-29 15:47:40 $
+ *  last change: $Author: mh $ $Date: 2001-10-25 17:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 #pragma hdrstop
 
 #include "errhdl.hxx"   // ASSERT
-#include "segmentc.hxx"
 
 #include "txtcfg.hxx"
 #include "porlin.hxx"
