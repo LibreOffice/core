@@ -19,7 +19,7 @@
 <TimeSeparator>:</TimeSeparator>
 <Time100SecSeparator>.</Time100SecSeparator>
 <ListSeparator>,</ListSeparator>
-<LongDateDayOfWeekSeparator>,</LongDateDayOfWeekSeparator>
+<LongDateDayOfWeekSeparator>, </LongDateDayOfWeekSeparator>
 <LongDateDaySeparator>日</LongDateDaySeparator>
 <LongDateMonthSeparator>月</LongDateMonthSeparator>
 <LongDateYearSeparator>年</LongDateYearSeparator>
