@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-15 17:23:40 $
+ *  last change: $Author: nn $ $Date: 2002-11-12 09:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,8 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     nScrH = 0;
     for (USHORT nArrY=1; nArrY+1<nArrCount; nArrY++)
         nScrH += pRowInfo[nArrY].nHeight;
+
+    bTabProtected = pDoc->IsTabProtected( nTab );
 }
 
 ScOutputData::~ScOutputData()

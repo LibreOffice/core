@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-15 17:23:41 $
+ *  last change: $Author: nn $ $Date: 2002-11-12 09:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,6 +693,7 @@ BOOL ScOutputData::GetMergeOrigin( USHORT nX, USHORT nY, USHORT nArrY,
             bVOver = ((nOverlap & SC_MF_VER) != 0);
         }
     }
+
     return TRUE;
 }
 
@@ -816,6 +817,47 @@ inline BOOL IsAmbiguousScript( BYTE nScript )
              nScript != SCRIPTTYPE_COMPLEX );
 }
 
+BOOL ScOutputData::IsEmptyCellText( RowInfo* pThisRowInfo, USHORT nX, USHORT nY )
+{
+    // pThisRowInfo may be NULL
+
+    BOOL bEmpty = pThisRowInfo && nX <= nX2 && pThisRowInfo->pCellInfo[nX+1].bEmptyCellText;
+    if ( !bEmpty && ( nX < nX1 || nX > nX2 || !pThisRowInfo ) )
+    {
+        //  for the range nX1..nX2 in RowInfo, cell protection attribute is already evaluated
+        //  into bEmptyCellText in ScDocument::FillInfo / lcl_HidePrint (printfun)
+
+        BOOL bIsPrint = ( eType == OUTTYPE_PRINTER );
+
+        if ( bIsPrint || bTabProtected )
+        {
+            const ScProtectionAttr* pAttr = (const ScProtectionAttr*)
+                    pDoc->GetEffItem( nX, nY, nTab, ATTR_PROTECTION );
+            if ( bIsPrint && pAttr->GetHidePrint() )
+                bEmpty = TRUE;
+            else if ( bTabProtected )
+            {
+                if ( pAttr->GetHideCell() )
+                    bEmpty = TRUE;
+                else if ( bShowFormulas && pAttr->GetHideFormula() )
+                {
+                    ScBaseCell* pCell = pDoc->GetCell( ScAddress( nX, nY, nTab ) );
+                    if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
+                        bEmpty = TRUE;
+                }
+            }
+        }
+    }
+    return bEmpty;
+}
+
+void ScOutputData::GetVisibleCell( USHORT nCol, USHORT nRow, USHORT nTab, ScBaseCell*& rpCell )
+{
+    pDoc->GetCell( nCol, nRow, nTab, rpCell );
+    if ( rpCell && IsEmptyCellText( NULL, nCol, nRow ) )
+        rpCell = NULL;
+}
+
 void ScOutputData::DrawStrings( BOOL bPixelToLogic )
 {
     DBG_ASSERT( pDev == pRefDevice ||
@@ -874,7 +916,7 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                                             FALSE, bVisChanged ))
                     {
                         ScBaseCell* pCell;
-                        pDoc->GetCell( nOverX, nOverY, nTab, pCell );
+                        GetVisibleCell( nOverX, nOverY, nTab, pCell );
                         if (pCell)
                         {
                             BOOL bEdit = ( pCell->GetCellType() == CELLTYPE_EDIT );
@@ -946,14 +988,14 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                     {
                         nOutWidth = ((long)pRowInfo[0].pCellInfo[nX+1].nWidth) - 1;
                         USHORT nTempX=nX;
-                        while (nTempX > 0 && pThisRowInfo->pCellInfo[nTempX+1].bEmptyCellText)
+                        while (nTempX > 0 && IsEmptyCellText( pThisRowInfo, nTempX, nY ))
                         {
                             --nTempX;
                             nVirtPosX -= pRowInfo[0].pCellInfo[nTempX+1].nWidth;
                             nOutWidth += pRowInfo[0].pCellInfo[nTempX+1].nWidth;
                         }
                         nJustPosX = nVirtPosX;
-                        if ( !pThisRowInfo->pCellInfo[nTempX+1].bEmptyCellText )
+                        if ( !IsEmptyCellText( pThisRowInfo, nTempX, nY ) )
                         {
                             ScBaseCell* pCell = pThisRowInfo->pCellInfo[nTempX+1].pCell;
                             CellType eCellType = pCell->GetCellType();
@@ -1130,7 +1172,7 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                         if (bMergeOver)
                         {
                             ScBaseCell* pBCell;
-                            pDoc->GetCell( nOverX, nOverY, nTab, pBCell );
+                            GetVisibleCell( nOverX, nOverY, nTab, pBCell );
                             eCellType = (pBCell ? pBCell->GetCellType() : CELLTYPE_NONE);
                             if ( aVars.GetHorJust() != SVX_HOR_JUSTIFY_STANDARD )
                                 eOutHorJust = aVars.GetHorJust();
@@ -1747,7 +1789,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             }
                             pInfo = NULL;
                             pCondSet = pDoc->GetCondResult( nX, nY, nTab );
-                            pDoc->GetCell( nX, nY, nTab, pCell );
+                            GetVisibleCell( nX, nY, nTab, pCell );
                         }
                         else
                         {
@@ -1761,7 +1803,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             }
                             pCell = pInfo->pCell;
                             if ( bFromDoc && !pCell )
-                                pDoc->GetCell( nX, nY, nTab, pCell );
+                                GetVisibleCell( nX, nY, nTab, pCell );
 
                             bVisChanged = !pRowInfo[nArrY-1].bChanged;
                             if (bVisChanged)
@@ -1774,7 +1816,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     bFromDoc = TRUE;
                                 }
                                 pInfo = NULL;
-                                pDoc->GetCell( nX, nY, nTab, pCell );
+                                GetVisibleCell( nX, nY, nTab, pCell );
                             }
                             if (bFromDoc)
                                 pCondSet = pDoc->GetCondResult( nX, nY, nTab );
@@ -2638,10 +2680,10 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                             pCondSet = pDoc->GetCondResult( nX, nY, nTab );
 
                         if (!pCell && nX>nX2)
-                            pDoc->GetCell( nX, nY, nTab, pCell );
+                            GetVisibleCell( nX, nY, nTab, pCell );
 
-                        if (!pCell)
-                            bHidden = TRUE;     // nRotateDir wird auch ohne Zelle gesetzt
+                        if ( !pCell || IsEmptyCellText( pThisRowInfo, nX, nY ) )
+                            bHidden = TRUE;     // nRotateDir is also set without a cell
 
                         long nCellWidth = (long) pRowInfo[0].pCellInfo[nX+1].nWidth;
 

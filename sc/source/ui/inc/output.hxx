@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-24 14:18:34 $
+ *  last change: $Author: nn $ $Date: 2002-11-12 09:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ private:
 
     BOOL    bAnyRotated;        // intern
     BOOL    bAnyClipped;        // intern
+    BOOL    bTabProtected;
 
                             // private Methoden
 
@@ -176,6 +177,8 @@ private:
                                     USHORT& rOverX, USHORT& rOverY,
                                     long& rVirtPosX, long& rVirtPosY,
                                     BOOL bClipVirt, BOOL bVisRowChanged );
+    BOOL            IsEmptyCellText( RowInfo* pThisRowInfo, USHORT nX, USHORT nY );
+    void            GetVisibleCell( USHORT nCol, USHORT nRow, USHORT nTab, ScBaseCell*& rpCell );
 
     void            SetSyntaxColor( Font* pFont, ScBaseCell* pCell );
     void            SetEditSyntaxColor( EditEngine& rEngine, ScBaseCell* pCell );
