@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futempl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-12 12:37:23 $
+ *  last change: $Author: dl $ $Date: 2001-04-24 15:23:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,13 +379,6 @@ FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                 {
                     case RET_OK:
                     {
-                        /* muss Req mit Done abgeschlossen werden?
-                           wenn ja, mit welchem Set (es kann ja nur
-                           Family und Name
-
-                        rReq.Done( *( pDlg->GetOutputItemSet() ) );
-                        pArgs = rReq.GetArgs();
-                        */
                         nRetMask = pStyleSheet->GetMask();
 
                         if (eFamily == SFX_STYLE_FAMILY_PSEUDO)
@@ -398,18 +391,6 @@ FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                             // Pointer auf die DefaultItems in der Vorlage;
                             // beides wuerde die Attribut-Vererbung unterbinden)
                             aTempSet.ClearInvalidItems();
-
-/* altes Bullet ist rausgeflogen
-                            // Sonderbehandlung: nur die gueltigen Anteile des
-                            // BulletItems
-                            if (aTempSet.GetItemState(EE_PARA_BULLET) == SFX_ITEM_SET)
-                            {
-                                SvxBulletItem aOldBulItem((SvxBulletItem&)pStyleSheet->GetItem(EE_PARA_BULLET));
-                                SvxBulletItem& rNewBulItem = (SvxBulletItem&)aTempSet.Get(EE_PARA_BULLET);
-                                aOldBulItem.CopyValidProperties(rNewBulItem);
-                                aTempSet.Put(aOldBulItem);
-                            }
-  */
                             if (aTempSet.GetItemState(EE_PARA_NUMBULLET) == SFX_ITEM_SET)
                             {
                                 SvxNumRule aRule(*((SvxNumBulletItem*)aTempSet.GetItem(EE_PARA_NUMBULLET))->GetNumRule());
@@ -445,37 +426,30 @@ FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                                 }
                             }
 
+
                             pStyleSheet->GetItemSet().Put(aTempSet);
                             SdStyleSheet* pRealSheet =((SdStyleSheet*)pStyleSheet)->GetRealStyleSheet();
                             pRealSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                         }
-                        else
+
+                        SfxItemSet& rAttr = pStyleSheet->GetItemSet();
+                        if ( rAttr.GetItemState( EE_PARA_LRSPACE ) == SFX_ITEM_ON )
                         {
-                            // Das ehemals eingebaute PutExtended kann entfernt werden,
-                            // da im Vorlagendialog direkt auf dem Set gearbeitet wird
-                            //pStyleSheet->GetItemSet().PutExtended(
-                            //        *pOutSet, SFX_ITEM_DEFAULT, SFX_ITEM_DEFAULT );
-
-                            SfxItemSet& rAttr = pStyleSheet->GetItemSet();
-                            if ( rAttr.GetItemState( EE_PARA_LRSPACE ) == SFX_ITEM_ON )
+                            // SvxLRSpaceItem hart gesetzt: NumBulletItem anpassen
+                            if ( aOriSet.GetItemState( EE_PARA_LRSPACE ) != SFX_ITEM_ON ||
+                                    (const SvxLRSpaceItem&) aOriSet.Get( EE_PARA_LRSPACE ) !=
+                                    (const SvxLRSpaceItem&) rAttr.Get( EE_PARA_LRSPACE ) )
                             {
-                                // SvxLRSpaceItem hart gesetzt: NumBulletItem anpassen
+                                SvxNumBulletItem aNumBullet( (const SvxNumBulletItem&) rAttr.Get(EE_PARA_NUMBULLET) );
 
-                                if ( aOriSet.GetItemState( EE_PARA_LRSPACE ) != SFX_ITEM_ON ||
-                                     (const SvxLRSpaceItem&) aOriSet.Get( EE_PARA_LRSPACE ) !=
-                                     (const SvxLRSpaceItem&) rAttr.Get( EE_PARA_LRSPACE ) )
-                                {
-                                    SvxNumBulletItem aNumBullet( (const SvxNumBulletItem&) rAttr.Get(EE_PARA_NUMBULLET) );
+                                EditEngine::ImportBulletItem( aNumBullet, 0, NULL,
+                                                        &(const SvxLRSpaceItem&) rAttr.Get( EE_PARA_LRSPACE ) );
 
-                                    EditEngine::ImportBulletItem( aNumBullet, 0, NULL,
-                                                          &(const SvxLRSpaceItem&) rAttr.Get( EE_PARA_LRSPACE ) );
-
-                                    ( (SfxItemSet&) rAttr).Put( aNumBullet );
-                                }
+                                ( (SfxItemSet&) rAttr).Put( aNumBullet );
                             }
-
-                            ( (SfxStyleSheet*) pStyleSheet )->Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
                         }
+
+                        ( (SfxStyleSheet*) pStyleSheet )->Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
                         pDoc->SetChanged(TRUE);
                     }
                     break;
