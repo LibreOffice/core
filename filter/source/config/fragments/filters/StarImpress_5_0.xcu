@@ -1,0 +1,13 @@
+    <node oor:name="StarImpress 5.0" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>5050</value></prop>
+        <prop oor:name="Type"><value>impress_StarImpress_50</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">StarImpress 5.0</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN ALIEN PREFERRED</value></prop>
+    </node>
