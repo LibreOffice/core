@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:17:27 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ String STR_SFX_FILEDLG_ACTUALVERSION
     Text[ french ] = "Version actuelle";
     Text[ spanish ] = "Versi�n actual";
     Text[ italian ] = "Versione attuale";
-    Text[ danish ] = "Aktuel version";
+    Text[ danish ] = "Nuv�rende version";
     Text[ swedish ] = "Aktuell version";
     Text[ polish ] = "Bie��ca wersja";
     Text[ portuguese_brazilian ] = "Vers�o atual";
@@ -97,6 +97,8 @@ String STR_SFX_FILEDLG_ACTUALVERSION
     Text[ hebrew ] = "‮גרסה נוכחית‬";
     Text[ hindi ] = "वर्तमान आवर्तन";
     Text[ slovak ] = "Aktuálna verzia";
+    Text[ hungarian ] = "Aktuális verzió";
+    Text[ slovenian ] = "Trenutna različica";
 };
 
 String STR_SFX_EXPLORERFILE_EXPORT
@@ -128,6 +130,8 @@ String STR_SFX_EXPLORERFILE_EXPORT
     Text[ portuguese_brazilian ] = "Exportar";
     Text[ hindi ] = "Export";
     Text[ slovak ] = "Exportovať";
+    Text[ hungarian ] = "Exportálás";
+    Text[ slovenian ] = "Izvoz";
 };
 
 String STR_SFX_EXPLORERFILE_INSERT
@@ -138,7 +142,7 @@ String STR_SFX_EXPLORERFILE_INSERT
     Text[ english_us ] = "Insert" ;
     Text[ portuguese_brazilian ] = "Inserir" ;
     Text[ swedish ] = "Infoga" ;
-    Text[ danish ] = "S�t ind" ;
+    Text[ danish ] = "Inds�t" ;
     Text[ italian ] = "Inserisci" ;
     Text[ spanish ] = "Insertar" ;
     Text[ french ] = "Ins�rer" ;
@@ -159,6 +163,8 @@ String STR_SFX_EXPLORERFILE_INSERT
     Text[ hebrew ] = "‮הוספה‬";
     Text[ hindi ] = "जोड़ो";
     Text[ slovak ] = "Vložiť";
+    Text[ hungarian ] = "Beszúrás";
+    Text[ slovenian ] = "Vstavi";
 };
 
 String STR_SFX_EXPLORERFILE_BUTTONINSERT
@@ -169,7 +175,7 @@ String STR_SFX_EXPLORERFILE_BUTTONINSERT
     Text[ english_us ] = "~Insert" ;
     Text[ portuguese_brazilian ] = "~Inserir" ;
     Text[ swedish ] = "~Infoga" ;
-    Text[ danish ] = "S�t i~nd" ;
+    Text[ danish ] = "~Inds�t" ;
     Text[ italian ] = "Inserisci" ;
     Text[ spanish ] = "~Insertar" ;
     Text[ french ] = "Ins�rer" ;
@@ -190,6 +196,8 @@ String STR_SFX_EXPLORERFILE_BUTTONINSERT
     Text[ hebrew ] = "‮הוספה‬";
     Text[ hindi ] = "~जोड़ो";
     Text[ slovak ] = "Vlož~iť";
+    Text[ hungarian ] = "~Beszúrás";
+    Text[ slovenian ] = "~Vstavi";
 };
 
 String STR_SFX_IMPORT_ALL
@@ -223,6 +231,8 @@ String STR_SFX_IMPORT_ALL
     Text[ hebrew ] = "‮<כל הצורות>‬";
     Text[ hindi ] = "<सब रचनें>";
     Text[ slovak ] = "<Všetky formáty>";
+    Text[ hungarian ] = "<Minden formátum>";
+    Text[ slovenian ] = "<Vse oblike zapisa>";
 };
 
 String STR_CB_AUTO_EXTENSION
@@ -232,7 +242,7 @@ String STR_CB_AUTO_EXTENSION
     Text[ english_us ] = "~Automatic file name extension" ;
     Text[ portuguese_brazilian ] = "E~xtens�o autom�tica do nome de arquivo" ;
     Text[ swedish ] = "~Automatiskt filnamnstill�gg" ;
-    Text[ danish ] = "automatisk filtype~navn" ;
+    Text[ danish ] = "~Automatisk filtypenavn" ;
     Text[ italian ] = "~Estensione automatica del nome del file" ;
     Text[ spanish ] = "~Extensi�n autom. del nombre de archivo" ;
     Text[ french ] = "Extension automatique du nom de fichier" ;
@@ -254,6 +264,8 @@ String STR_CB_AUTO_EXTENSION
     Text[ hebrew ] = "‮סיומת אוטומטית לשם קובץ‬";
     Text[ hindi ] = "~स्वचालित फाइल नाम का विस्तार";
     Text[ slovak ] = "~Automatická prípona súboru";
+    Text[ hungarian ] = "~Automatikus fájlnévkiterjesztés";
+    Text[ slovenian ] = "S~amodejna pripona imena datoteke";
 };
 
 String STR_CB_SELECTION
@@ -286,6 +298,8 @@ String STR_CB_SELECTION
     Text[ hebrew ] = "‮בחירה‬";
     Text[ hindi ] = "~चुनाव";
     Text[ slovak ] = "~Výber";
+    Text[ hungarian ] = "~Kijelölés";
+    Text[ slovenian ] = "I~zbor";
 };
 
 String STR_CB_INSERT_AS_LINK
@@ -319,6 +333,8 @@ String STR_CB_INSERT_AS_LINK
     Text[ hebrew ] = "‮קישור‬";
     Text[ hindi ] = "~लिंक";
     Text[ slovak ] = "~Odkaz";
+    Text[ hungarian ] = "~Hivatkozás";
+    Text[ slovenian ] = "~Povezava";
 };
 
 String STR_CB_SHOW_PREVIEW
@@ -330,7 +346,7 @@ String STR_CB_SHOW_PREVIEW
     Text[ portuguese_brazilian ] = "~Visualizar" ;
     Text[ portuguese ] = "~Visualizar" ;
     Text[ finnish ] = "Esi~katselu" ;
-    Text[ danish ] = "E~ksempel" ;
+    Text[ danish ] = "~Eksempel" ;
     Text[ french ] = "Aper�u" ;
     Text[ swedish ] = "~F�rhandsvisning" ;
     Text[ dutch ] = "~Voorbeeld" ;
@@ -352,6 +368,8 @@ String STR_CB_SHOW_PREVIEW
     Text[ hebrew ] = "‮תצוגה מקדימה‬";
     Text[ hindi ] = "पूर्व~दृश्य";
     Text[ slovak ] = "~Náhľad";
+    Text[ hungarian ] = "~Előnézet";
+    Text[ slovenian ] = "Pr~edogled";
 };
 
 String STR_CB_READONLY
@@ -361,7 +379,7 @@ String STR_CB_READONLY
     Text[ english_us ] = "~Read-only" ;
     Text[ portuguese_brazilian ] = "Somente ~leitura" ;
     Text[ swedish ] = "~Bara l�sning" ;
-    Text[ danish ] = "K~un l�se" ;
+    Text[ danish ] = "Skrive~beskyttet" ;
     Text[ italian ] = "Sola lettura" ;
     Text[ spanish ] = "S�lo ~lectura" ;
     Text[ french ] = "En lecture seule" ;
@@ -383,6 +401,8 @@ String STR_CB_READONLY
     Text[ hebrew ] = "‮קריאה בלבד‬";
     Text[ hindi ] = "~केवल-पढने केलिए";
     Text[ slovak ] = "Iba na čí~tanie";
+    Text[ hungarian ] = "~Csak olvasható";
+    Text[ slovenian ] = "Samo za ~branje";
 };
 
 String STR_CB_PASSWORD
@@ -414,6 +434,8 @@ String STR_CB_PASSWORD
     Text[ hebrew ] = "‮שמירה עם סיסמה‬";
     Text[ hindi ] = "~कूटशब्द सहित संचित करो";
     Text[ slovak ] = "Uložiť s ~heslom";
+    Text[ hungarian ] = "Mentés ~jelszóval";
+    Text[ slovenian ] = "Shrani z ~geslom";
 };
 
 String STR_CB_FILTER_OPTIONS
@@ -445,6 +467,8 @@ String STR_CB_FILTER_OPTIONS
     Text[ hebrew ] = "‮עריכת מאפייני סינון‬";
     Text[ hindi ] = "~फिल्टर निर्धारण का संपादन";
     Text[ slovak ] = "Upraviť nastavenie ~filtra";
+    Text[ hungarian ] = "Szűrő~beállítások szerkesztése";
+    Text[ slovenian ] = "Uredi nastavitve ~filtra";
 };
 
 String STR_PB_PLAY
@@ -457,7 +481,7 @@ String STR_PB_PLAY
     Text[ french ] = "Reproduire" ;
     Text[ dutch ] = "Af~spelen" ;
     Text[ swedish ] = "~Spela upp" ;
-    Text[ danish ] = "Af~spil" ;
+    Text[ danish ] = "~Afspil" ;
     Text[ portuguese ] = "~Tocar" ;
     Text[ portuguese_brazilian ] = "~Reproduzir" ;
     Text[ chinese_simplified ] = "放映(~P)";
@@ -476,6 +500,8 @@ String STR_PB_PLAY
     Text[ hebrew ] = "‮נגן‬";
     Text[ hindi ] = "~बजाओ";
     Text[ slovak ] = "~Prehrať";
+    Text[ hungarian ] = "~Lejátszás";
+    Text[ slovenian ] = "~Predvajaj";
 };
 
 String STR_PB_STOP
@@ -507,6 +533,8 @@ String STR_PB_STOP
     Text[ hebrew ] = "‮עצירה‬";
     Text[ hindi ] = "रो~को";
     Text[ slovak ] = "~Zastaviť";
+    Text[ hungarian ] = "~Leállítás";
+    Text[ slovenian ] = "~Ustavi";
 };
 
 String STR_PB_OPEN
@@ -538,6 +566,8 @@ String STR_PB_OPEN
     Text[ hebrew ] = "‮פתיחה‬";
     Text[ hindi ] = "~खोलो";
     Text[ slovak ] = "~Otvoriť";
+    Text[ hungarian ] = "~Megnyitás";
+    Text[ slovenian ] = "~Odpri";
 };
 
 String STR_PB_SAVE
@@ -569,6 +599,8 @@ String STR_PB_SAVE
     Text[ hebrew ] = "‮שמירה‬";
     Text[ hindi ] = "~संचित करो";
     Text[ slovak ] = "~Uložiť";
+    Text[ hungarian ] = "~Mentés";
+    Text[ slovenian ] = "~Shrani";
 };
 
 String STR_LB_IMAGE_TEMPLATE
@@ -600,6 +632,8 @@ String STR_LB_IMAGE_TEMPLATE
     Text[ hebrew ] = "‮סגנון:‬";
     Text[ hindi ] = "शैली:";
     Text[ slovak ] = "Štýl:";
+    Text[ hungarian ] = "Stílus:";
+    Text[ slovenian ] = "Slog:";
 };
 
 String STR_LB_TEMPLATES
@@ -611,7 +645,7 @@ String STR_LB_TEMPLATES
     Text[ portuguese_brazilian ] = "~Modelos:" ;
     Text[ portuguese ] = "~Modelos:" ;
     Text[ finnish ] = "~Mallit:" ;
-    Text[ danish ] = "~Skabeloner:" ;
+    Text[ danish ] = "Skabel~oner:" ;
     Text[ french ] = "Mod�les :" ;
     Text[ swedish ] = "~Mallar:" ;
     Text[ dutch ] = "S~jablonen:" ;
@@ -632,6 +666,8 @@ String STR_LB_TEMPLATES
     Text[ hebrew ] = "‮תבניות:‬";
     Text[ hindi ] = "~नमूनें:";
     Text[ slovak ] = "Ša~blóny:";
+    Text[ hungarian ] = "~Sablonok:";
+    Text[ slovenian ] = "~Predloge:";
 };
 
 String STR_LB_VERSION
@@ -663,9 +699,16 @@ String STR_LB_VERSION
     Text[ hebrew ] = "‮גירסה:‬";
     Text[ hindi ] = "~आवर्तन:";
     Text[ slovak ] = "~Verzia:";
+    Text[ hungarian ] = "~Verzió:";
+    Text[ slovenian ] = "Ra~zličica:";
 };
 
 //******************************************************************** EOF
+
+
+
+
+
 
 
 
