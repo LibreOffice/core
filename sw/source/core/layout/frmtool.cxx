@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: od $ $Date: 2002-11-20 15:33:03 $
+ *  last change: $Author: fme $ $Date: 2002-12-09 10:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1679,8 +1679,9 @@ void SwBorderAttrs::_CalcRight()
 
 long SwBorderAttrs::CalcRight( const SwFrm* pCaller )
 {
+    // for paragraphs, "left" is "before text" and "right" is "after text"
     nRight = CalcRightLine() +
-             ( pCaller->IsRightToLeft() ?
+             ( pCaller->IsTxtFrm() && pCaller->IsRightToLeft() ?
                rLR.GetLeft() :
                rLR.GetRight() );
 
@@ -1689,8 +1690,9 @@ long SwBorderAttrs::CalcRight( const SwFrm* pCaller )
 
 long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
 {
+    // for paragraphs, "left" is "before text" and "right" is "after text"
     long nLeft = CalcLeftLine() +
-                 ( pCaller->IsRightToLeft() ?
+                 ( pCaller->IsTxtFrm() && pCaller->IsRightToLeft() ?
                    rLR.GetRight() :
                    rLR.GetLeft() );
 

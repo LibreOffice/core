@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ama $ $Date: 2002-11-15 16:07:05 $
+ *  last change: $Author: fme $ $Date: 2002-12-09 10:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2925,7 +2925,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
     const USHORT nLeft = (USHORT)pAttrs->CalcLeft( this );
     const USHORT nUpper = pAttrs->CalcTop();
 
-    const USHORT nRight = (USHORT)pAttrs->CalcRight();
+    const USHORT nRight = (USHORT)((SwBorderAttrs*)pAttrs)->CalcRight( this );
     const USHORT nLower = pAttrs->CalcBottom();
     BOOL bVert = IsVertical() && !IsPageFrm();
     SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
