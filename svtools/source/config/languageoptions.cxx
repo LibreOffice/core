@@ -2,9 +2,9 @@
  *
  *  $RCSfile: languageoptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:24:47 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 12:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,7 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
         case LANGUAGE_JAPANESE:
         case LANGUAGE_KOREAN:
         case LANGUAGE_KOREAN_JOHAB:
+        case LANGUAGE_USER_KOREAN_NORTH:
             nScript = SCRIPTTYPE_ASIAN;
             break;
 
