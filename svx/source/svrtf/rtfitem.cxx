@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-16 17:45:47 $
+ *  last change: $Author: jp $ $Date: 2001-10-30 14:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -972,7 +972,7 @@ ATTR_SETUNDERLINE:
             case RTF_CB:
                 if( PLAINID->nBgColor )
                 {
-                    pSet->Put( SvxColorItem( GetColor( USHORT(nTokenValue) ),
+                    pSet->Put( SvxBrushItem( GetColor( USHORT(nTokenValue) ),
                                 PLAINID->nBgColor ));
                 }
                 break;
