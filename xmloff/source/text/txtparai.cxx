@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 14:00:16 $
+ *  last change: $Author: mtg $ $Date: 2001-02-23 14:42:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1607,6 +1607,24 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
             pContext = rImport.GetShapeImport()->CreateGroupChildContext(
                     rImport, nPrefix, rLocalName, xAttrList, xShapes );
         }
+        break;
+    case XML_TOK_TEXT_APPLET:
+        pContext = new XMLTextFrameContext( rImport, nPrefix,
+                                            rLocalName, xAttrList,
+                                            TextContentAnchorType_AS_CHARACTER,
+                                            XML_TEXT_FRAME_APPLET );
+        break;
+    case XML_TOK_TEXT_FLOATING_FRAME:
+        pContext = new XMLTextFrameContext( rImport, nPrefix,
+                                            rLocalName, xAttrList,
+                                            TextContentAnchorType_AS_CHARACTER,
+                                            XML_TEXT_FRAME_FLOATING_FRAME );
+        break;
+    case XML_TOK_TEXT_PLUGIN:
+        pContext = new XMLTextFrameContext( rImport, nPrefix,
+                                            rLocalName, xAttrList,
+                                            TextContentAnchorType_AS_CHARACTER,
+                                            XML_TEXT_FRAME_PLUGIN );
         break;
 
     case XML_TOK_TEXT_OBJECT:
