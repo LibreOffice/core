@@ -175,33 +175,6 @@ err () {
     exit 1
 }
 
-#
-# parse command line arguments
-#
-plugin_mode=false
-for DUMMY in ${1+"$@"}
-do
-    case $1 in
-
-    ?display)
-        if [ $# -lt 2 ]; then
-            err "$1 option requires a display name"
-        fi
-        DISPLAY=$2
-        export DISPLAY
-        shift; shift
-        ;;
-    ?plugin)
-
-        plugin_mode=true
-        shift
-        ;;
-    *)
-        break;
-        ;;
-    esac
-done
-
 # start soffice by remote shell
 if [ "X${SO_REMOTE_START}" = "Xrsh" ]; then
     remote_server=`echo ${SO_REMOTE_APPLICATION} | sed 's/:.*//g'`
@@ -262,11 +235,5 @@ else
 fi
 
 # execute soffice binary
-if [ "X${plugin_mode}" = "Xtrue" ]; then
-    SAL_IGNOREXERRORS=true
-    export SAL_IGNOREXERRORS
-    exec "$sd_prog/$sd_binary" -plugin "$@"
-else
-    exec "$sd_prog/$sd_binary" $crashrepswitch "$@"
-fi
+exec "$sd_prog/$sd_binary" $crashrepswitch "$@"
 
