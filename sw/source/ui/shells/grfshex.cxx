@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfshex.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:30:18 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,9 @@ BOOL SwTextShell::InsertGraphicDlg( SfxRequest& rReq )
         {
             SwFrmFmt* pFmt = pDoc->FindFrmFmtByName( sGraphicFormat );
             if(!pFmt)
-                pFmt = pDoc->MakeFrmFmt(sGraphicFormat, 0);
+                pFmt = pDoc->MakeFrmFmt(sGraphicFormat,
+                                        pDocShell->GetDoc()->GetDfltFrmFmt(),
+                                        TRUE, FALSE);
             rSh.SetFrmFmt( pFmt );
         }
 
