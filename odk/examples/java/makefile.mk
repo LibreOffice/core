@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-27 16:46:48 $
+#   last change: $Author: obo $ $Date: 2003-10-20 13:12:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,6 +111,7 @@ DOCUMENTHANDLING_FILES= \
 CONVERTERSERVLET_FILES= \
     $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/ConverterServlet.html	\
     $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/ConverterServlet.java	\
+    $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/web.xml	\
     $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/Makefile			\
     $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/README
 
@@ -120,7 +121,9 @@ INSPECTOR_FILES= \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/InstanceInspector.java \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/Makefile \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/Test.java \
-    $(DESTDIRJAVAEXAMPLES)$/Inspector$/XInstanceInspector.idl
+    $(DESTDIRJAVAEXAMPLES)$/Inspector$/XInstanceInspector.idl \
+    $(DESTDIRJAVAEXAMPLES)$/Inspector$/InstanceInspector.idl \
+    $(DESTDIRJAVAEXAMPLES)$/Inspector$/InstanceInspectorTest.sxw
 
 NOTESACCESS_FILES= \
     $(DESTDIRJAVAEXAMPLES)$/NotesAccess$/NotesAccess.java \
