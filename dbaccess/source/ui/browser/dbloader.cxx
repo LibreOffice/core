@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:23:06 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -269,9 +272,9 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
 
     if(bSuccess = xController.is())
     {
+        Reference<XModel> xModel;
         if ( bAttachModel )
         {
-            Reference<XModel> xModel;
             PropertyValue aValue;
             const PropertyValue* pIter  = m_aArgs.getConstArray();
             const PropertyValue* pEnd       = pIter + m_aArgs.getLength();
@@ -280,21 +283,17 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
             {
                 if(0 == pIter->Name.compareToAscii(PROPERTY_DATASOURCE))
                 {
-                    xModel.set(pIter->Value,UNO_QUERY);
+                    Reference<XDataSource> xProp(pIter->Value,UNO_QUERY);
+                    xModel.set(getDataSourceOrModel(xProp),UNO_QUERY);
                     break;
                 }
                 else if(0 == pIter->Name.compareToAscii(PROPERTY_DATASOURCENAME))
                 {
                     ::rtl::OUString sDataSource;
                     pIter->Value >>= sDataSource;
+
                     Reference< XNameAccess > xDatabaseContext(m_xServiceFactory->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
-                    try
-                    {
-                        xModel.set(xDatabaseContext->getByName(sDataSource),UNO_QUERY);
-                    }
-                    catch(Exception)
-                    {
-                    }
+                    xModel.set(getDataSourceOrModel(getDataSourceByName_displayError(xDatabaseContext,sDataSource,NULL,m_xServiceFactory,sal_False)),UNO_QUERY);
                     break;
                 }
                 else if ( 0 == pIter->Name.compareToAscii( PROPERTY_ACTIVECONNECTION ) )
@@ -304,7 +303,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
                     {
                         OSL_ENSURE( Reference< XDataSource >( xAsChild->getParent(), UNO_QUERY ).is(),
                             "DBContentLoader::load: a connection whose parent is no data source?" );
-                        xModel = xModel.query( xAsChild->getParent() );
+                        xModel.set(getDataSourceOrModel( xAsChild->getParent() ),UNO_QUERY);
                     }
                 }
             }
@@ -350,6 +349,15 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
             catch(Exception&)
             {
                 bSuccess = sal_False;
+                try
+                {
+                    xController->attachModel(NULL);
+                    xModel->disconnectController( xController );
+                }
+                catch( const Exception& )
+                {
+                    OSL_ENSURE( sal_False, "DBContentLoader::load: caught an exception!" );
+                }
             }
         }
 
