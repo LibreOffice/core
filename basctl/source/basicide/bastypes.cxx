@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 12:04:26 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 16:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,7 @@ String IDEBaseWindow::CreateQualifiedName()
     if ( m_aLibName.Len() )
     {
         LibraryLocation eLocation = BasicIDE::GetLibraryLocation( m_pShell, m_aLibName );
-        aName = BasicIDE::GetTitle( m_pShell, eLocation, SFX_TITLE_APINAME );
+        aName = BasicIDE::GetTitle( m_pShell, eLocation, SFX_TITLE_CAPTION );
         aName += '.';
         aName += m_aLibName;
         aName += '.';
