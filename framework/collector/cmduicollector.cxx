@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmduicollector.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:48:31 $
+ *  last change: $Author: obo $ $Date: 2004-07-07 13:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1747,10 +1747,11 @@ bool ReadResourceWriteToolBarXML( const OUString& aOutDirURL,
 
     String aSysDirPathStr( aSysDirPath );
 
-    String aLangString( String::CreateFromAscii( Language_Mapping[0].pISO ));
-    LanguageType aLangtype = ConvertIsoStringToLanguage( aLangString );
+    ::com::sun::star::lang::Locale aLocale;
+    aLocale.Language = OUString::createFromAscii( Language_codes[0].pLanguage );
+    aLocale.Country = OUString::createFromAscii( Language_codes[0].pCountry );
     ResMgr* pResMgr = ResMgr::CreateResMgr( aResFilePrefix.getStr(),
-                                            aLangtype,
+                                            aLocale,
                                             NULL,
                                             &aSysDirPathStr );
 
@@ -1855,10 +1856,11 @@ bool ReadResourceWriteSubToolBarXML( const OUString& aOutDirURL,
 
     String aSysDirPathStr( aSysDirPath );
 
-    String aLangString( String::CreateFromAscii( Language_Mapping[0].pISO ));
-    LanguageType aLangtype = ConvertIsoStringToLanguage( aLangString );
+    ::com::sun::star::lang::Locale aLocale;
+    aLocale.Language = OUString::createFromAscii( Language_codes[0].pLanguage );
+    aLocale.Country = OUString::createFromAscii( Language_codes[0].pCountry );
     ResMgr* pResMgr = ResMgr::CreateResMgr( aResFilePrefix.getStr(),
-                                            aLangtype,
+                                            aLocale,
                                             NULL,
                                             &aSysDirPathStr );
 
