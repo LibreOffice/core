@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-16 15:52:37 $
+ *  last change: $Author: mba $ $Date: 2001-08-20 10:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2293,6 +2293,9 @@ void SfxViewFrame::Show()
     // hat oder wenn er keine Component enth"alt
     if ( &GetWindow() == &GetFrame()->GetWindow() || !GetFrame()->HasComponent() )
         GetWindow().Show();
+
+    if ( GetFrame()->GetFrameInterface()->isActive() && SfxViewFrame::Current() != this && !GetActiveChildFrame_Impl() )
+        MakeActive_Impl( FALSE );
 }
 
 //--------------------------------------------------------------------
@@ -2662,23 +2665,20 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
     GetDispatcher()->SetDisableFlags( 0 );
     SetViewShell_Impl(pSh);
 
-//    if( !pSh->pImp->bControllerSet )
+    Reference < ::com::sun::star::awt::XWindow > xWindow(
+        GetFrame()->GetWindow().GetComponentInterface(), UNO_QUERY );
+    Reference < XFrame > xFrame( GetFrame()->GetFrameInterface() );
+    if ( !pSh->GetController().is() )
+        pSh->SetController( new SfxBaseController( pSh ) );
+    Reference < XController > xController( pSh->GetController() );
+    xFrame->setComponent( xWindow, xController );
+    xController->attachFrame( xFrame );
+    Reference < XModel > xModel( GetObjectShell()->GetModel() );
+    if ( xModel.is() )
     {
-        Reference < ::com::sun::star::awt::XWindow > xWindow(
-            GetFrame()->GetWindow().GetComponentInterface(), UNO_QUERY );
-        Reference < XFrame > xFrame( GetFrame()->GetFrameInterface() );
-        if ( !pSh->GetController().is() )
-            pSh->SetController( new SfxBaseController( pSh ) );
-        Reference < XController > xController( pSh->GetController() );
-        xFrame->setComponent( xWindow, xController );
-        xController->attachFrame( xFrame );
-        Reference < XModel > xModel( GetObjectShell()->GetModel() );
-        if ( xModel.is() )
-        {
-            xController->attachModel( xModel );
-            xModel->connectController( xController );
-            xModel->setCurrentController( xController );
-        }
+        xController->attachModel( xModel );
+        xModel->connectController( xController );
+        xModel->setCurrentController( xController );
     }
 
     GetDispatcher()->Push( *pSh );
@@ -2710,11 +2710,7 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
 
     if ( pEditWin && pSh->IsShowView_Impl() )
     {
-        SfxFrameSetViewShell *pFrSh = PTR_CAST( SfxFrameSetViewShell, pSh );
-        if ( pFrSh )
-            pFrSh->GetSplitWindow()->Show();
-        else
-            pEditWin->Show();
+        pEditWin->Show();
         if ( bHasFocus )
             GetFrame()->GrabFocusOnComponent_Impl();
     }
