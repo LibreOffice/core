@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2000-11-30 10:47:34 $
+ *  last change: $Author: gt $ $Date: 2000-12-02 15:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1522,7 +1522,7 @@ ExcScenario::ExcScenario( SvStream& rIn, const RootData& rR ) : nTab( *rR.pAktTa
 
     UINT16          nCref;
     UINT8           nName, nComment;
-    INT32           nD;
+    INT32           nD = 0x7FFFFFFF;
 
     rIn >> nCref;
     rIn.SeekRel( 2 );
