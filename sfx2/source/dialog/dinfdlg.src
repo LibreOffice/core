@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:07:56 $
+ *  last change: $Author: pb $ $Date: 2001-05-31 10:22:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,6 @@ TabPage TP_DOCINFODESC
         Size = MAP_APPFONT ( 184 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
-        MaxTextLength = 63 ;
     };
     FixedText FT_THEMA
     {
@@ -148,7 +147,6 @@ TabPage TP_DOCINFODESC
         Size = MAP_APPFONT ( 184 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
-        MaxTextLength = 63 ;
     };
     FixedText FT_KEYWORDS
     {
@@ -187,7 +185,6 @@ TabPage TP_DOCINFODESC
         Size = MAP_APPFONT ( 184 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
-        MaxTextLength = 127 ;
     };
     FixedText FT_COMMENT
     {
@@ -226,7 +223,6 @@ TabPage TP_DOCINFODESC
         Size = MAP_APPFONT ( 184 , 128 ) ;
         IgnoreTab = TRUE ;
         Left = TRUE ;
-        MaxTextLength = 255 ;
         VScroll = TRUE ;
     };
 };
@@ -696,7 +692,6 @@ TabPage TP_DOCINFOUSER
         Pos = MAP_APPFONT ( 72 , 6 ) ;
         Size = MAP_APPFONT ( 182 , 12 ) ;
         Left = TRUE ;
-        MaxTextLength = 19 ;
     };
     FixedText FT_INFO2
     {
@@ -711,7 +706,6 @@ TabPage TP_DOCINFOUSER
         Pos = MAP_APPFONT ( 72 , 21 ) ;
         Size = MAP_APPFONT ( 182 , 12 ) ;
         Left = TRUE ;
-        MaxTextLength = 19 ;
     };
     FixedText FT_INFO3
     {
@@ -726,7 +720,6 @@ TabPage TP_DOCINFOUSER
         Pos = MAP_APPFONT ( 72 , 36 ) ;
         Size = MAP_APPFONT ( 182 , 12 ) ;
         Left = TRUE ;
-        MaxTextLength = 19 ;
     };
     FixedText FT_INFO4
     {
@@ -741,7 +734,6 @@ TabPage TP_DOCINFOUSER
         Pos = MAP_APPFONT ( 72 , 51 ) ;
         Size = MAP_APPFONT ( 182 , 12 ) ;
         Left = TRUE ;
-        MaxTextLength = 19 ;
     };
     PushButton BTN_EDITLABEL
     {
@@ -944,6 +936,13 @@ TabDialog SID_DOCINFO
     Text[ polish ] = "W≥a?ciwo?ci   ";
     Text[ japanese ] = "Ãﬂ€ ﬂ√® ";
     Text[ chinese_traditional ] = "ƒ›© °G ";
+    Text[ greek ] = "…‰È¸ÙÁÙÂÚ ÙÔı ";
+    Text[ korean ] = "µÓ∑œ¡§∫∏ ";
+    Text[ arabic ] = "Œ’«∆’ ";
+    Text[ turkish ] = "÷zellikler ";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Propiedades de  ";
+    Text[ finnish ] = "Ominaisuudet:";
     TabControl 1
     {
         SVLook = TRUE ;
@@ -1060,18 +1059,5 @@ TabDialog SID_DOCINFO
             };
         };
     };
-    Text[ greek ] = "…‰È¸ÙÁÙÂÚ ÙÔı ";
-    Text[ korean ] = "µÓ∑œ¡§∫∏ ";
-    Text[ arabic ] = "Œ’«∆’ ";
-    Text[ turkish ] = "÷zellikler ";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Propiedades de  ";
-    Text[ finnish ] = "Ominaisuudet:";
 };
-
- // ********************************************************************** EOF
-
-
-
-
 

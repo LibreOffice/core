@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfedt.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-10 05:29:41 $
+ *  last change: $Author: pb $ $Date: 2001-05-31 10:22:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,11 @@
  *
  *
  ************************************************************************/
- // include ---------------------------------------------------------------
+
 #include "sfx.hrc"
 #include "helpid.hrc"
 #include "dinfedt.hrc"
- // pragma ----------------------------------------------------------------
 
- // DLG_DOCINFO_EDT -------------------------------------------------------
 ModalDialog DLG_DOCINFO_EDT
 {
     HelpId = HID_DOCINFO_EDT ;
@@ -84,34 +82,41 @@ ModalDialog DLG_DOCINFO_EDT
     Text [ dutch ] = "Labels bewerken" ;
     Text [ spanish ] = "Editar nombres informaciones" ;
     Text [ english_us ] = "Edit Field Names" ;
+    Text[ chinese_simplified ] = "±ΰΌ­±κΜβ";
+    Text[ russian ] = "Οπΰβκΰ θμεν θντξπμΰφθθ";
+    Text[ polish ] = "Edytuj nazwy informacji";
+    Text[ japanese ] = "ξ•ρ–Ό‚π•ÒW";
+    Text[ chinese_traditional ] = "½sΏθΌΠΓD";
+    Text[ arabic ] = "ΚΝΡνΡ ΘΨΗήΗΚ ΗαγΪαζγΗΚ";
+    Text[ greek ] = "Επεξεργασία ονόματος πληροφορίας";
+    Text[ korean ] = "Α¤ΊΈΐΜΈ§ ΖνΑύ";
+    Text[ turkish ] = "Etiketleri dόzenle";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Editar nombres informaciones";
     Moveable = TRUE ;
     Edit ED_INFO1
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 86 , 12 ) ;
-        MaxTextLength = 19 ;
     };
     Edit ED_INFO2
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 86 , 12 ) ;
-        MaxTextLength = 19 ;
     };
     Edit ED_INFO3
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 86 , 12 ) ;
-        MaxTextLength = 19 ;
     };
     Edit ED_INFO4
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 59 ) ;
         Size = MAP_APPFONT ( 86 , 12 ) ;
-        MaxTextLength = 19 ;
     };
     GroupBox GB_INFO
     {
@@ -161,16 +166,5 @@ ModalDialog DLG_DOCINFO_EDT
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    Text[ chinese_simplified ] = "±ΰΌ­±κΜβ";
-    Text[ russian ] = "Οπΰβκΰ θμεν θντξπμΰφθθ";
-    Text[ polish ] = "Edytuj nazwy informacji";
-    Text[ japanese ] = "ξ•ρ–Ό‚π•ÒW";
-    Text[ chinese_traditional ] = "½sΏθΌΠΓD";
-    Text[ arabic ] = "ΚΝΡνΡ ΘΨΗήΗΚ ΗαγΪαζγΗΚ";
-    Text[ greek ] = "Επεξεργασία ονόματος πληροφορίας";
-    Text[ korean ] = "Α¤ΊΈΐΜΈ§ ΖνΑύ";
-    Text[ turkish ] = "Etiketleri dόzenle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Editar nombres informaciones";
 };
- // ********************************************************************** EOF
+
