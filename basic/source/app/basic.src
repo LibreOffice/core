@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-09 22:55:18 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1976,7 +1976,7 @@ Menu RID_FILE {
             TEXT[ swedish ] = "Save ~As...";
             TEXT[ polish ] = "Save~ As... ";
             TEXT[ portuguese_brazilian ] = "Speichern ~unter...";
-            TEXT[ japanese ] = "ã‘‚«•Û‘¶(~U)...";
+            TEXT[ japanese ] = "–¼‘O‚ğ•t‚¯‚Ä•Û‘¶(~U)...";
             TEXT[ korean ] = "´Ù¸¥ ÀÌ¸§À¸·Î ÀúÀå(~ )...";
             TEXT[ chinese_simplified ] = "Save ~As...";
             TEXT[ chinese_traditional ] = "Save ~as...";
@@ -2078,7 +2078,7 @@ Menu RID_FILE {
             TEXT[ swedish ] = "P~rinter Setup...";
             TEXT[ polish ] = "P~rinter Setup... ";
             TEXT[ portuguese_brazilian ] = "Druckereinstellun~g...";
-            TEXT[ japanese ] = "ˆóüİ’è(~R)...";
+            TEXT[ japanese ] = "ÌßØİÀ‚Ìİ’è(~R)...";
             TEXT[ korean ] = "ÇÁ¸°ÅÍ ¼³Á¤(~R)...";
             TEXT[ chinese_simplified ] = "P~rinter Setting...";
             TEXT[ chinese_traditional ] = "P~rinter Setup...";
