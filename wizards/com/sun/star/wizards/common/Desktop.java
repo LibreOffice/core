@@ -2,9 +2,9 @@
 *
 *  $RCSfile: Desktop.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-10-27 13:28:27 $
+*  last change: $Author: vg $ $Date: 2005-02-21 13:50:24 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,7 +57,6 @@
 *  Contributor(s): _______________________________________
 *
 */
-
 package com.sun.star.wizards.common;
 
 import java.util.Date;
@@ -76,18 +75,11 @@ import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XNamingService;
-import com.sun.star.util.MalformedNumberFormatException;
-import com.sun.star.util.XNumberFormatTypes;
-import com.sun.star.util.XNumberFormats;
-import com.sun.star.util.XNumberFormatsSupplier;
-import com.sun.star.util.XNumberFormatter;
 import com.sun.star.util.XURLTransformer;
 import com.sun.star.lang.Locale;
 import com.sun.star.uno.XInterface;
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.container.NoSuchElementException;
@@ -232,7 +224,6 @@ public class Desktop {
         int nStartFlags = com.sun.star.i18n.KParseTokens.ANY_LETTER_OR_NUMBER + com.sun.star.i18n.KParseTokens.ASC_UNDERSCORE;
         int nContFlags = nStartFlags;
         Object ocharservice = _xMSF.createInstance("com.sun.star.i18n.CharacterClassification");
-        int ilength = _sString.length();
         XCharacterClassification xCharacterClassification = (XCharacterClassification) UnoRuntime.queryInterface(XCharacterClassification.class, ocharservice);
         ParseResult aResult = xCharacterClassification.parsePredefinedToken(KParseType.IDENTNAME, _sString, 0, _aLocale, nStartFlags, "", nContFlags, " ");
         return aResult.EndPos;
@@ -240,6 +231,20 @@ public class Desktop {
         e.printStackTrace(System.out);
         return -1;
     }}
+
+
+    public static String removeSpecialCharacters(XMultiServiceFactory _xMSF, Locale _aLocale, String _sname){
+        String snewname = _sname;
+        int i = 0;
+        while(i < snewname.length()){
+            i = Desktop.checkforfirstSpecialCharacter(_xMSF, snewname, _aLocale);
+            if (i < snewname.length()){
+                String sspecialchar = snewname.substring(i,i+1);
+                snewname = JavaTools.replaceSubString(snewname, "", sspecialchar);
+            }
+        }
+        return snewname;
+    }
 
 
     /**
@@ -269,16 +274,15 @@ public class Desktop {
     }
 
 
-
-
     /**
      * Checks if the passed Element Name already exists in the list If yes it appends a
      * suffix to make it unique
      * @param _slist
      * @param _sElementName
+     * @param _sSuffixSeparator
      * @return a unique Name not being in the passed list.
      */
-    public static String getUniqueName(String[] _slist, String _sElementName) {
+    public static String getUniqueName(String[] _slist, String _sElementName, String _sSuffixSeparator) {
         int a = 2;
         String scompname = _sElementName;
         boolean bElementexists = true;
@@ -291,11 +295,10 @@ public class Desktop {
                 if (JavaTools.FieldInList(_slist, scompname) == -1)
                     return scompname;
             }
-            scompname = _sElementName + "_" + a++;
+            scompname = _sElementName + _sSuffixSeparator + a++;
         }
         return null;
     }
-
 
 
     /**
@@ -323,129 +326,6 @@ public class Desktop {
             return null;
         }
     }
-
-
-    /**
-     * @deprecated use Configuration.getProductName instead
-     * @param xMSF
-     * @return
-     */
-    public static String getProductName(XMultiServiceFactory xMSF) {
-    try {
-        Object oProdNameAccess = Configuration.getConfigurationRoot(xMSF, "org.openoffice.Setup/Product", false);
-        String ProductName = (String) Helper.getUnoObjectbyName(oProdNameAccess, "ooName");
-        return ProductName;
-    } catch (Exception exception) {
-        exception.printStackTrace(System.out);
-        return null;
-    }}
-
-
-    public static XNumberFormatter createNumberFormatter(XMultiServiceFactory _xMSF, XNumberFormatsSupplier _xNumberFormatsSupplier) throws Exception{
-        Object oNumberFormatter = _xMSF.createInstance("com.sun.star.util.NumberFormatter");
-        XNumberFormatter xNumberFormatter = (XNumberFormatter) UnoRuntime.queryInterface(XNumberFormatter.class, oNumberFormatter);
-        xNumberFormatter.attachNumberFormatsSupplier(_xNumberFormatsSupplier);
-        return xNumberFormatter;
-    }
-
-
-    /**
-     * gives a key to pass to a NumberFormat object. <br/>
-     * example: <br/>
-     * <pre>
-     * XNumberFormatsSupplier nsf = (XNumberFormatsSupplier)UnoRuntime.queryInterface(...,document);
-     * int key = Desktop.getNumberFormatterKey( nsf, ...star.i18n.NumberFormatIndex.DATE...);
-     * XNumberFormatter nf = Desktop.createNumberFormatter(xmsf, nsf);
-     * nf.convertNumberToString( key, 1972 );
-     * </pre>
-     * @param numberFormatsSupplier
-     * @param type - a constant out of i18n.NumberFormatIndex enumeration.
-     * @return a key to use with a util.NumberFormat instance.
-     *
-     */
-    public static int getNumberFormatterKey( Object numberFormatsSupplier, short type) {
-        Object numberFormatTypes = ((XNumberFormatsSupplier)UnoRuntime.queryInterface(XNumberFormatsSupplier.class,numberFormatsSupplier)).getNumberFormats();
-        Locale l = new Locale();
-        return ((XNumberFormatTypes)UnoRuntime.queryInterface(XNumberFormatTypes.class,numberFormatTypes)).getFormatIndex(type, l);
-    }
-
-    public static String convertNumberToString(XNumberFormatter _xNumberFormatter, int _nkey, double _dblValue){
-        return _xNumberFormatter.convertNumberToString(_nkey, _dblValue);
-    }
-
-
-    public static double convertStringToNumber(XNumberFormatter _xNumberFormatter, int _nkey, String _sString)throws Exception{
-        return _xNumberFormatter.convertStringToNumber(_nkey, _sString);
-    }
-
-
-    /**
-     * returns a numberformat for a FormatString. As Locale the american english locale is assumed
-     * @param _xFormatObject
-     * @param _xNumberFormats
-     * @param FormatString
-     * @return
-     */
-    public static int defineNumberFormat(XNumberFormats _xNumberFormats, String _FormatString){
-        Locale oLocale = new Locale();
-        oLocale.Country = "US";
-        oLocale.Language = "en";
-        return (defineNumberFormat(_xNumberFormats, _FormatString, oLocale));
-    }
-
-
-    /**
-     * returns a numberformat for a FormatString.
-     * @param _xFormatObject
-     * @param _xNumberFormats
-     * @param FormatString
-     * @return
-     */
-    public static int defineNumberFormat(XNumberFormats _xNumberFormats, String FormatString, Locale _oLocale){
-    try {
-        int NewFormatKey = _xNumberFormats.queryKey(FormatString, _oLocale, true);
-        if (NewFormatKey == -1)
-            NewFormatKey = _xNumberFormats.addNew(FormatString, _oLocale);
-        return NewFormatKey;
-    } catch (MalformedNumberFormatException e) {
-        e.printStackTrace(System.out);
-        return -1;
-    }}
-
-
-
-    public static void setNumberFormat(XInterface _xFormatObject, XNumberFormats _xNumberFormats, int _FormatKey) {
-        try {
-            XPropertySet xNumberFormat = _xNumberFormats.getByKey(_FormatKey); //CurDBField.DBFormatKey);
-            String FormatString = AnyConverter.toString(Helper.getUnoPropertyValue(xNumberFormat, "FormatString"));
-            Locale oLocale = (Locale) Helper.getUnoPropertyValue(xNumberFormat, "Locale");
-            int NewFormatKey = defineNumberFormat(_xNumberFormats, FormatString, oLocale);
-            XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _xFormatObject);
-            if (xPSet.getPropertySetInfo().hasPropertyByName("NumberFormat"))
-                xPSet.setPropertyValue("NumberFormat", new Integer(NewFormatKey));
-            else if (xPSet.getPropertySetInfo().hasPropertyByName("FormatKey"))
-                xPSet.setPropertyValue("FormatKey", new Integer(NewFormatKey));
-            else
-                throw new Exception();
-        } catch (Exception exception){
-            exception.printStackTrace(System.out);
-        }
-    }
-
-
-    public static long getNullDateCorrection(XNumberFormatsSupplier _xNumberFormatsSupplier){
-        com.sun.star.util.Date dNullDate = (com.sun.star.util.Date) Helper.getUnoStructValue(_xNumberFormatsSupplier.getNumberFormatSettings(), "NullDate");
-        long lNullDate = Helper.convertUnoDatetoInteger(dNullDate);
-        java.util.Calendar oCal = java.util.Calendar.getInstance();
-        oCal.set(1900, 1, 1);
-        Date dTime = oCal.getTime();
-        long lTime = dTime.getTime();
-        long lDBNullDate = lTime / (3600 * 24000);
-        long iDiffValue = lDBNullDate - lNullDate;
-        return iDiffValue;
-    }
-
-
 
     /**
      * used to retrieve the most common paths used in the office application
