@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-15 16:02:00 $
+ *  last change: $Author: hjs $ $Date: 2000-11-17 11:25:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 #include <limits>  // included here to prevent problems if compiling with C52
 
-#ifdef LINUX
+#ifdef GCC
 #include <iostream>
 #endif
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
