@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:30:19 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,6 +417,8 @@ void DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rComp,co
         {
             xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= _rFilter.Name;
         }
+        ::rtl::OUString aQuote  = m_xMetaData.is() ? m_xMetaData->getIdentifierQuoteString() : ::rtl::OUString();
+        _rFilter.Name = ::dbtools::quoteName(aQuote,_rFilter.Name);
     }
     catch(Exception)
     {
