@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:06:06 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,7 +629,8 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
     xInfoSet->setPropertyValue( sPropName,
                             makeAny( OUString(INetURLObject::GetBaseURL()) ) );
-    if( SFX_CREATE_MODE_EMBEDDED == rDoc.GetDocShell()->GetCreateMode() )
+    if( SFX_CREATE_MODE_EMBEDDED == rDoc.GetDocShell()->GetCreateMode() &&
+         !pStorage->IsRoot() )
     {
         OUString aName( pStorage->GetName() );
         if( aName.getLength() )
