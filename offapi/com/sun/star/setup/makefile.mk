@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: ok $ $Date: 2000-11-16 14:06:55 $
+#   last change: $Author: fs $ $Date: 2002-05-28 15:29:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,6 +93,7 @@ IDLFILES=\
     ModuleInfo.idl			\
     ModuleState.idl			\
     OSType.idl			\
+    ProductRegistration.idl	\
     ProfileItemAction.idl		\
     Setup.idl			\
     SizeInfo.idl			\
