@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 19:18:17 $
+#   last change: $Author: obo $ $Date: 2005-01-05 12:11:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,11 @@ TARGET=launcher
 # --- Files --------------------------------------------------------
 
 ZIP1TARGET      = $(LAUNCHER_ALL_TARGET)
-ZIP1LIST        = *.xdl *.xba *.xlb
+XBAFILES	= DicOOo.xba
+.IF "$(WITH_FONTOOO)" == "YES"
+XBAFILES	+= FontOOo.xba
+.ENDIF
+ZIP1LIST        = *.xdl $(XBAFILES) *.xlb
 
 # --- Targets ------------------------------------------------------
 
