@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-10 14:16:30 $
+ *  last change: $Author: oj $ $Date: 2000-11-13 07:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1003,7 +1003,7 @@ sal_Int32 SAL_CALL ORowSet::getRow(  ) throw(SQLException, RuntimeException)
 
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
     // check if we are inserting a row
-    if(m_pCache->m_bInserted)
+    if(m_pCache && m_pCache->m_bInserted)
         return 0;
     return ORowSetBase::getRow();
 }
@@ -1187,7 +1187,7 @@ void SAL_CALL ORowSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
 
-    if(m_pCache->m_bInserted)
+    if(m_pCache && m_pCache->m_bInserted)
     {
         if(m_aBookmark.hasValue())
             m_pCache->moveToBookmark(m_aBookmark);
@@ -1211,13 +1211,13 @@ sal_Bool SAL_CALL ORowSet::wasNull(  ) throw(SQLException, RuntimeException)
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
 
-    return m_pCache->m_bInserted ? (*(*m_pCache->m_aInsertRow))[m_nLastColumnIndex].isNull() : ORowSetBase::wasNull();
+    return (m_pCache && m_pCache->m_bInserted) ? (*(*m_pCache->m_aInsertRow))[m_nLastColumnIndex].isNull() : ORowSetBase::wasNull();
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ORowSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    if(m_pCache->m_bInserted)
+    if(m_pCache && m_pCache->m_bInserted)
     {
         if (ORowSet_BASE1::rBHelper.bDisposed)
             throw DisposedException();
@@ -1232,7 +1232,7 @@ sal_Bool SAL_CALL ORowSet::wasNull(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL ORowSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    if(m_pCache->m_bInserted)
+    if(m_pCache && m_pCache->m_bInserted)
     {
         if (ORowSet_BASE1::rBHelper.bDisposed)
             throw DisposedException();
@@ -1247,7 +1247,7 @@ sal_Bool SAL_CALL ORowSet::getBoolean( sal_Int32 columnIndex ) throw(SQLExceptio
 sal_Int8 SAL_CALL ORowSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    if(m_pCache->m_bInserted)
+    if(m_pCache && m_pCache->m_bInserted)
     {
         if (ORowSet_BASE1::rBHelper.bDisposed)
             throw DisposedException();
@@ -1262,7 +1262,7 @@ sal_Int8 SAL_CALL ORowSet::getByte( sal_Int32 columnIndex ) throw(SQLException, 
 sal_Int16 SAL_CALL ORowSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    if(m_pCache->m_bInserted)
+    if(m_pCache && m_pCache->m_bInserted)
     {
         if (ORowSet_BASE1::rBHelper.bDisposed)
             throw DisposedException();
@@ -1277,7 +1277,7 @@ sal_Int16 SAL_CALL ORowSet::getShort( sal_Int32 columnIndex ) throw(SQLException
 sal_Int32 SAL_CALL ORowSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    if(m_pCache->m_bInserted)
+    if(m_pCache && m_pCache->m_bInserted)
     {
         if (ORowSet_BASE1::rBHelper.bDisposed)
             throw DisposedException();
@@ -1292,7 +1292,7 @@ sal_Int32 SAL_CALL ORowSet::getInt( sal_Int32 columnIndex ) throw(SQLException, 
 sal_Int64 SAL_CALL ORowSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    if(m_pCache->m_bInserted)
+    if(m_pCache && m_pCache->m_bInserted)
     {
         if (ORowSet_BASE1::rBHelper.bDisposed)
             throw DisposedException();
@@ -1307,7 +1307,7 @@ sal_Int64 SAL_CALL ORowSet::getLong( sal_Int32 columnIndex ) throw(SQLException,
 float SAL_CALL ORowSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    if(m_pCache->m_bInserted)
+    if(m_pCache && m_pCache->m_bInserted)
     {
         if (ORowSet_BASE1::rBHelper.bDisposed)
             throw DisposedException();
@@ -1322,7 +1322,7 @@ float SAL_CALL ORowSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, Ru
 double SAL_CALL ORowSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    if(m_pCache->m_bInserted)
+    if(m_pCache && m_pCache->m_bInserted)
     {
         if (ORowSet_BASE1::rBHelper.bDisposed)
             throw DisposedException();
@@ -1337,7 +1337,7 @@ double SAL_CALL ORowSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, 
 Sequence< sal_Int8 > SAL_CALL ORowSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    if(m_pCache->m_bInserted)
+    if(m_pCache && m_pCache->m_bInserted)
     {
         if (ORowSet_BASE1::rBHelper.bDisposed)
             throw DisposedException();
@@ -1352,7 +1352,7 @@ Sequence< sal_Int8 > SAL_CALL ORowSet::getBytes( sal_Int32 columnIndex ) throw(S
 ::com::sun::star::util::Date SAL_CALL ORowSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    if(m_pCache->m_bInserted)
+    if(m_pCache && m_pCache->m_bInserted)
     {
         if (ORowSet_BASE1::rBHelper.bDisposed)
             throw DisposedException();
@@ -1367,7 +1367,7 @@ Sequence< sal_Int8 > SAL_CALL ORowSet::getBytes( sal_Int32 columnIndex ) throw(S
 ::com::sun::star::util::Time SAL_CALL ORowSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    if(m_pCache->m_bInserted)
+    if(m_pCache && m_pCache->m_bInserted)
     {
         if (ORowSet_BASE1::rBHelper.bDisposed)
             throw DisposedException();
@@ -1382,7 +1382,7 @@ Sequence< sal_Int8 > SAL_CALL ORowSet::getBytes( sal_Int32 columnIndex ) throw(S
 ::com::sun::star::util::DateTime SAL_CALL ORowSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    if(m_pCache->m_bInserted)
+    if(m_pCache && m_pCache->m_bInserted)
     {
         if (ORowSet_BASE1::rBHelper.bDisposed)
             throw DisposedException();
@@ -1397,7 +1397,7 @@ Sequence< sal_Int8 > SAL_CALL ORowSet::getBytes( sal_Int32 columnIndex ) throw(S
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    if(m_pCache->m_bInserted)
+    if(m_pCache && m_pCache->m_bInserted)
     {
         if (ORowSet_BASE1::rBHelper.bDisposed)
             throw DisposedException();
@@ -1412,7 +1412,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSet::getBinaryStrea
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    if(m_pCache->m_bInserted)
+    if(m_pCache && m_pCache->m_bInserted)
     {
         if (ORowSet_BASE1::rBHelper.bDisposed)
             throw DisposedException();
@@ -2350,7 +2350,7 @@ void ORowSet::firePropertyChange(sal_Int32 _nPos,const Any& _rOldValue)
 // -------------------------------------------------------------------------
 void ORowSet::checkInsert()
 {
-    if(m_pCache->m_bInserted)
+    if(m_pCache && m_pCache->m_bInserted)
     {
         m_pCache->cancelInsert();
         fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
