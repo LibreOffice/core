@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:02:58 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,7 @@ TabPage TP_ENV_ENV
         Text[ chinese_traditional ] = "¦¬¥σªΜ(~E)";
         Text[ arabic ] = "ΗαγΣΚαγ";
         Text[ greek ] = "Παραλήπτης";
-        Text[ korean ] = "Ήή΄Β »η¶χ";
+        Text[ korean ] = "Ήή΄Β »η¶χ(~E)";
         Text[ turkish ] = "Alύcύ";
         Text[ language_user1 ] = " ";
     };
@@ -386,7 +386,7 @@ TabPage TP_ENV_ENV
         Text[ chinese_traditional ] = "Έκ®Ζ®wΔζ¦μ(~D)";
         Text[ arabic ] = "Νήα ήΗΪΟΙ ΗαΘνΗδΗΚ";
         Text[ greek ] = "Πεδίο βάσης δεδομένων";
-        Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½Ί ΗΚµε";
+        Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½Ί ΗΚµε(~D)";
         Text[ turkish ] = "Veritabanύ alanύ";
         Text[ language_user1 ] = " ";
     };
@@ -423,7 +423,7 @@ TabPage TP_ENV_ENV
         Text[ chinese_traditional ] = "±H¥σªΜ(~S)";
         Text[ arabic ] = "ΗαγΡΣα";
         Text[ greek ] = "Αποστολέας";
-        Text[ korean ] = "ΊΈ³½ »η¶χ";
+        Text[ korean ] = "ΊΈ³½ »η¶χ(~S)";
         Text[ turkish ] = "Gφnderen";
         Text[ language_user1 ] = " ";
     };
