@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-19 15:22:26 $
+ *  last change: $Author: sj $ $Date: 2001-01-22 18:18:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -916,7 +916,7 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_Bool            ImplGetPageByIndex( sal_uInt32 nIndex, PageType );
         sal_Bool            ImplGetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup = FALSE );
         sal_uInt32          ImplGetMasterIndex( PageType ePageType );
-        void                ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt, const ::com::sun::star::awt::Point& rRefPoint );
+        void                ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt );
         sal_Bool            ImplGetText();
         sal_Bool            ImplGetEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                                 ::com::sun::star::presentation::AnimationEffect& eEffect,
