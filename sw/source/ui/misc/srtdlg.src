@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:30:14 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ ModalDialog DLG_SORTING
         Text [ english_us ] = "Order" ;
         Text[ chinese_simplified ] = "À≥–Ú";
         Text[ russian ] = "œÓˇ‰ÓÍ";
-        Text[ polish ] = "KolejnoúÊ";
+        Text[ polish ] = "Kolejno?Ê";
         Text[ japanese ] = "èáèò";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "∂∂ß«";
@@ -666,7 +666,7 @@ ModalDialog DLG_SORTING
         Text [ ENGLISH ] = "Direction" ;
         Text [ norwegian ] = "Retning" ;
         Text [ italian ] = "Direzione" ;
-        Text [ portuguese_brazilian ] = "DireÁ„o" ;
+        Text [ portuguese_brazilian ] = "Dire??o" ;
         Text [ portuguese ] = "DirecÁ„o" ;
         Text [ finnish ] = "Suunta" ;
         Text [ danish ] = "Retning" ;
@@ -695,7 +695,7 @@ ModalDialog DLG_SORTING
         Text [ ENGLISH ] = "~Tab" ;
         Text [ norwegian ] = "~Tab" ;
         Text [ italian ] = "~Tabulazione" ;
-        Text [ portuguese_brazilian ] = "~TabulaÁ„o" ;
+        Text [ portuguese_brazilian ] = "~Tabula??o" ;
         Text [ portuguese ] = "~TabulaÁıes" ;
         Text [ finnish ] = "~Sarkaimet" ;
         Text [ danish ] = "Tabulator" ;
@@ -887,7 +887,7 @@ ModalDialog DLG_SORTING
         Size = MAP_APPFONT ( 99 , 8 ) ;
         Text = "Einstellung" ;
         Text [ ENGLISH ] = "Options" ;
-        Text[ english_us ] = "Options";
+        Text[ english_us ] = "Setting";
         Text[ portuguese ] = "ConfiguraÁ„o";
         Text[ russian ] = "Õ‡ÒÚÓÈÍ‡";
         Text[ greek ] = "Options";
@@ -915,7 +915,7 @@ ModalDialog DLG_SORTING
         TabStop = TRUE ;
         Text = "Exacter Vergleich" ;
         Text [ ENGLISH ] = "Case sensitive" ;
-        Text[ english_us ] = "Case-sensitive";
+        Text[ english_us ] = "Match case";
         Text[ portuguese ] = "ComparaÁ„o exacta";
         Text[ russian ] = "“Ó˜ÌÓÂ Ò‡‚ÌÂÌËÂ";
         Text[ greek ] = "Case sensitive";
@@ -957,7 +957,7 @@ InfoBox MSG_SRTERR
     MESSAGE [ English ] = "Cannot sort selection" ;
     MESSAGE [ norwegian ] = "Kan ikke sortere utvalget" ;
     MESSAGE [ italian ] = "Impossibile ordinare la selezione" ;
-    MESSAGE [ portuguese_brazilian ] = "N„o posso ordenar seleÁ„o" ;
+    MESSAGE [ portuguese_brazilian ] = "N?o posso ordenar sele??o" ;
     MESSAGE [ portuguese ] = "ImpossÌvel ordenar selecÁ„o" ;
     MESSAGE [ finnish ] = "Valinnan j‰rjest‰minen ei onnistu" ;
     MESSAGE [ danish ] = "Kan ikke sortere det markerede" ;
