@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsave.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:57:29 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -760,7 +760,9 @@ ScDPSaveData::ScDPSaveData() :
     nColumnGrandMode( SC_DPSAVEMODE_DONTKNOW ),
     nRowGrandMode( SC_DPSAVEMODE_DONTKNOW ),
     nIgnoreEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
-    nRepeatEmptyMode( SC_DPSAVEMODE_DONTKNOW )
+    nRepeatEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
+    bFilterButton( TRUE ),
+    bDrillDown( TRUE )
 {
 }
 
@@ -768,7 +770,9 @@ ScDPSaveData::ScDPSaveData(const ScDPSaveData& r) :
     nColumnGrandMode( r.nColumnGrandMode ),
     nRowGrandMode( r.nRowGrandMode ),
     nIgnoreEmptyMode( r.nIgnoreEmptyMode ),
-    nRepeatEmptyMode( r.nRepeatEmptyMode )
+    nRepeatEmptyMode( r.nRepeatEmptyMode ),
+    bFilterButton( r.bFilterButton ),
+    bDrillDown( r.bDrillDown )
 {
     long nCount = r.aDimList.Count();
     for (long i=0; i<nCount; i++)
@@ -786,6 +790,8 @@ ScDPSaveData& ScDPSaveData::operator= ( const ScDPSaveData& r )
         nRowGrandMode    = r.nRowGrandMode;
         nIgnoreEmptyMode = r.nIgnoreEmptyMode;
         nRepeatEmptyMode = r.nRepeatEmptyMode;
+        bFilterButton    = r.bFilterButton;
+        bDrillDown       = r.bDrillDown;
 
         //  remove old dimensions
 
@@ -813,7 +819,9 @@ BOOL ScDPSaveData::operator== ( const ScDPSaveData& r ) const
     if ( nColumnGrandMode != r.nColumnGrandMode ||
          nRowGrandMode    != r.nRowGrandMode    ||
          nIgnoreEmptyMode != r.nIgnoreEmptyMode ||
-         nRepeatEmptyMode != r.nRepeatEmptyMode )
+         nRepeatEmptyMode != r.nRepeatEmptyMode ||
+         bFilterButton    != r.bFilterButton    ||
+         bDrillDown       != r.bDrillDown )
         return FALSE;
 
     long nCount = aDimList.Count();
@@ -910,6 +918,37 @@ ScDPSaveDimension& ScDPSaveData::DuplicateDimension( const ScDPSaveDimension& rD
     return *pNew;
 }
 
+ScDPSaveDimension* ScDPSaveData::GetInnermostDimension(USHORT nOrientation)
+{
+    //  return the innermost dimension for the given orientation,
+    //  excluding data layout dimension
+
+    ScDPSaveDimension* pInner = NULL;
+    long nCount = aDimList.Count();
+    for (long i=0; i<nCount; i++)
+    {
+        ScDPSaveDimension* pDim = static_cast<ScDPSaveDimension*>(aDimList.GetObject(i));
+        if ( pDim->GetOrientation() == nOrientation && !pDim->IsDataLayout() )
+            pInner = pDim;
+    }
+    return pInner;      // the last matching one
+}
+
+long ScDPSaveData::GetDataDimensionCount() const
+{
+    long nDataCount = 0;
+
+    long nCount = aDimList.Count();
+    for (long i=0; i<nCount; i++)
+    {
+        const ScDPSaveDimension* pDim = static_cast<const ScDPSaveDimension*>(aDimList.GetObject(i));
+        if ( pDim->GetOrientation() == sheet::DataPilotFieldOrientation_DATA )
+            ++nDataCount;
+    }
+
+    return nDataCount;
+}
+
 void ScDPSaveData::SetPosition( ScDPSaveDimension* pDim, long nNew )
 {
     //  position (nNew) is counted within dimensions of the same orientation
@@ -948,6 +987,16 @@ void ScDPSaveData::SetIgnoreEmptyRows(BOOL bSet)
 void ScDPSaveData::SetRepeatIfEmpty(BOOL bSet)
 {
     nRepeatEmptyMode = bSet;
+}
+
+void ScDPSaveData::SetFilterButton(BOOL bSet)
+{
+    bFilterButton = bSet;
+}
+
+void ScDPSaveData::SetDrillDown(BOOL bSet)
+{
+    bDrillDown = bSet;
 }
 
 void lcl_ResetOrient( const uno::Reference<sheet::XDimensionsSupplier>& xSource )
