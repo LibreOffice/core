@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-02 16:57:30 $
+#   last change: $Author: obo $ $Date: 2004-11-15 16:36:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -128,7 +128,6 @@ SLOFILES =  \
         $(SLO)$/reffind.obj \
         $(SLO)$/refreshtimer.obj \
         $(SLO)$/refupdat.obj \
-        $(SLO)$/scdebug.obj \
         $(SLO)$/scmatrix.obj \
         $(SLO)$/sctictac.obj \
         $(SLO)$/subtotal.obj \
