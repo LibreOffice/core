@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnemonic.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-16 11:35:22 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,17 @@ BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
     // #107889# in CJK versions ALL strings (even those that contain latin characters)
     // will get mnemonics in the form: xyz (M)
     // thus steps 1) and 2) are skipped for CJK locales
+
+    // follow-up: #110361# but no CJK mnemonics for '...' an '>>'
+    if( bCJK && nLen <= 3 )
+    {
+        static sal_Unicode cDotDotDot[] = { 0xFF0E, 0xFF0E, 0xFF0E };
+        static sal_Unicode cGreaterGreater[] = { 0xFF1E, 0xFF1E };
+        if ( rKey.EqualsAscii( "..." ) || rKey.Equals( cDotDotDot ) ||
+             rKey.EqualsAscii( ">>")   || rKey.Equals( cGreaterGreater ) )
+            return FALSE;
+    }
+
 
     int             nCJK = 0;
     USHORT          nMnemonicIndex;
