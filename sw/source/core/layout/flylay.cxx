@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 12:59:40 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 16:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1127,6 +1127,20 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                     SwRect aTmp( pTabFrm->Prt() );
                     aTmp += pTabFrm->Frm().Pos();
                     rRect.Union( aTmp );
+                    // --> OD 2005-03-30 #i43913# - consider also the cell frame
+                    const SwFrm* pCellFrm = const_cast<SwFlyFrm*>(pFly)
+                                ->GetAnchorFrmContainingAnchPos()->GetUpper();
+                    while ( pCellFrm && !pCellFrm->IsCellFrm() )
+                    {
+                        pCellFrm = pCellFrm->GetUpper();
+                    }
+                    if ( pCellFrm )
+                    {
+                        aTmp = pCellFrm->Prt();
+                        aTmp += pCellFrm->Frm().Pos();
+                        rRect.Union( aTmp );
+                    }
+                    // <--
                 }
             }
             else if ( rV.GetRelationOrient() == REL_PG_FRAME ||
