@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: oj $ $Date: 2000-10-24 11:41:12 $
+#   last change: $Author: ganaya $ $Date: 2001-01-30 16:53:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -162,6 +162,7 @@ SLOFILES=\
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
 .IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
 SLOFILES+=$(SLO)$/staticmbjdbc.obj
+SLOFILES+=$(SLO)$/staticmbodbc.obj
 .ENDIF
 
 
