@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:46:20 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,9 @@ ModalDialog DLG_ASCII_FILTER
         Text[ italian ] = "Propriet‡";
         Text[ danish ] = "Egenskaber";
         Text[ swedish ] = "Egenskaper";
-        Text[ polish ] = "W≥a?ciwo?ci";
+        Text[ polish ] = "W≥aúciwoúci";
         Text[ portuguese_brazilian ] = "Properties";
-        Text[ japanese ] = "Ãﬂ€ ﬂ√®";
+        Text[ japanese ] = "ëÆê´";
         Text[ korean ] = "µÓ∑œ¡§∫∏";
         Text[ chinese_simplified ] = " Ù–‘";
         Text[ chinese_traditional ] = "ƒ›© ";
@@ -389,6 +389,7 @@ ModalDialog DLG_ASCII_FILTER
     Text[ catalan ] = "Opciones de filtro ASCII";
     Text[ finnish ] = "ASCII-suodatusasetukset";
 };
+
 
 
 
