@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokrecv.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:36 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:31:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ class Token_Receiver
     virtual             ~Token_Receiver() {}
     virtual void        Receive(
                             DYN Token &         let_drToken ) = 0;
+    virtual void        Increment_CurLine() = 0;
 };
 
 }   // namespace uidl
