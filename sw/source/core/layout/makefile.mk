@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-02 14:10:53 $
+#   last change: $Author: obo $ $Date: 2004-11-16 15:47:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,6 +105,7 @@ SLOFILES =  \
                 $(SLO)$/objectformatter.obj \
                 $(SLO)$/objectformattertxtfrm.obj \
                 $(SLO)$/objectformatterlayfrm.obj \
+                $(SLO)$/objstmpconsiderwrapinfl.obj \
                 $(SLO)$/pagechg.obj \
         $(SLO)$/pagedesc.obj \
         $(SLO)$/pageiter.obj \
