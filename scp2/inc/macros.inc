@@ -211,6 +211,14 @@
         Styles   = (PACKED,DONT_OVERWRITE); \
     End
 
+#define UNO_JAR_FILE(id,name) \
+    File id \
+        TXT_FILE_BODY; \
+        Name     = STRING(CONCAT2(name,.jar)); \
+        Dir      = gid_Dir_Classes; \
+        Styles   = (PACKED,DONT_OVERWRITE, UNO_COMPONENT); \
+    End
+
 #define JARFILENAME(name) STRING(CONCAT2(name,.jar))
 
 #define PACKED_SHELLNEW_FILE_BODY \
