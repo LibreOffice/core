@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:50:30 $
+ *  last change: $Author: kz $ $Date: 2001-01-19 20:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,7 +526,7 @@ Resource RID_GLOBSTR
         Text [ finnish ] = "Automaattimuoto" ;
         Text [ danish ] = "AutoFormat" ;
         Text [ french ] = "AutoFormat" ;
-        Text [ swedish ] = "AutoFormat" ;
+        Text [ swedish ] = "Autoformat" ;
         Text [ dutch ] = "AutoOpmaak" ;
         Text [ spanish ] = "AutoFormato" ;
         Text [ english_us ] = "AutoFormat" ;
@@ -5873,7 +5873,7 @@ Resource RID_GLOBSTR
         Text [ finnish ] = "You entered an invalid name.\nThe desired AutoFormat could not be createdTry again using a different name." ;
         Text [ danish ] = "Du har angivet et ugyldigt navn.\nDet var ikke muligt at oprette det ønskede AutoFormat\nVælg et andet navn." ;
         Text [ french ] = "Vous avez indiqué un nom incorrect.\nImpossible de créer l'AutoFormat.\nChoisissez un autre nom." ;
-        Text [ swedish ] = "Du har angett ett ogiltigt namn.\nAutoFormat kunde inte skapas.\nVälj ett annat namn." ;
+        Text [ swedish ] = "Du har angett ett ogiltigt namn.\nDet gick inte att skapa autoformatet.\nVälj ett annat namn." ;
         Text [ dutch ] = "U gebruikte een ongeldige naam.\nDe gewenste AutoOpmaak kon niet worden uitgevoerd.\nKies een andere naam." ;
         Text [ spanish ] = "Ha escrito un nombre no válido,\npor lo que no se pudo crear el AutoFormato.\nSeleccione otro nombre por favor." ;
         Text [ ENGLISH_US ] = "You have entered an invalid name.\nAutoFormat could not be created. \nTry again using a different name." ;
@@ -6085,7 +6085,7 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "Om AutoOpmaak te kunnen uitvoeren\nmoet er een tabelbereik van tenminste\n3x3 cellen gemarkeerd zijn." ;
         Text [ spanish ] = "Para poder aplicar el AutoFormato\nes necesario marcar un área en la tabla\nde por lo menos 3x3 celdas." ;
         Text [ danish ] = "For at kunne anvende AutoFormat,\nskal et tabelområde på mindst\n3x3 celler være markeret." ;
-        Text [ swedish ] = "För att kunna använda Autoformat\nmåste ett tabellområde på minst\n3x3 celler vara markerat." ;
+        Text [ swedish ] = "För att du ska kunna använda autoformatet\nmåste ett tabellområde på minst\n3x3 celler vara markerat." ;
         Text [ finnish ] = "You have to select an table area of at least\n3x3 cells, to apply an AutoFormat" ;
         Text [ english_us ] = "To apply an AutoFormat,\na table range of at least\n3x3 cells must be selected." ;
         Text[ chinese_simplified ] = "ÎªÁËÊ¹ÓÃ×Ô¶¯¸ñÊ½£¬\nÄú±ØÐëÖÁÉÙÑ¡ÖÐÁË\n3x3 ¹¤×÷±íÇøÓò¡£";
