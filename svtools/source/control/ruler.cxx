@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-18 08:25:32 $
+ *  last change: $Author: os $ $Date: 2002-09-25 09:16:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1322,12 +1322,8 @@ void Ruler::ImplFormat()
         maVirDev.SetLineColor( rStyleSettings.GetShadowColor() );
     else
         maVirDev.SetLineColor( rStyleSettings.GetWindowTextColor() );
-    ImplVDrawLine( nVirLeft, nVirTop, nM1, nVirTop );
-    ImplVDrawLine( nM2, nVirTop, nP2, nVirTop );
-    if ( b3DLook )
-        maVirDev.SetLineColor( rStyleSettings.GetLightColor() );
-    ImplVDrawLine( nVirLeft, nVirBottom, nM1, nVirBottom );
-    ImplVDrawLine( nM2, nVirBottom, nP2, nVirBottom );
+    ImplVDrawLine( nVirLeft, nVirTop, nM1 - 1, nVirTop ); //top left line
+    ImplVDrawLine( nM2 +1, nVirTop, nP2 -1, nVirTop );      //top right line
 
     // Jetzt wird zwischen dem Schatten ausgegeben
     nVirTop++;
@@ -1340,32 +1336,33 @@ void Ruler::ImplFormat()
     else
         maVirDev.SetFillColor( rStyleSettings.GetWindowColor() );
     if ( nM1 > nVirLeft )
-        ImplVDrawRect( nP1, nVirTop, nM1-1, nVirBottom );
+        ImplVDrawRect( nP1, nVirTop, nM1-1, nVirBottom ); //left gray rectangle
     if ( nM2 < nP2 )
-        ImplVDrawRect( nM2+1, nVirTop, nP2, nVirBottom );
+        ImplVDrawRect( nM2+1, nVirTop, nP2, nVirBottom ); //right gray rectangle
     if ( nM2-nM1 > 0 )
     {
         maVirDev.SetFillColor( rStyleSettings.GetWindowColor() );
-        ImplVDrawRect( nM1, nVirTop, nM2-1, nVirBottom );
+        ImplVDrawRect( nM1, nVirTop, nM2-1, nVirBottom ); //center rectangle
     }
     if ( b3DLook )
     {
         maVirDev.SetLineColor( rStyleSettings.GetShadowColor() );
         if ( nM1 > nVirLeft )
         {
-            ImplVDrawLine( nM1-1, nVirTop, nM1-1, nVirBottom );
-            ImplVDrawLine( nP1, nVirBottom, nM1-1, nVirBottom );
+            ImplVDrawLine( nM1-1, nVirTop, nM1-1, nVirBottom );//right line of the left rectangle
+            ImplVDrawLine( nP1, nVirBottom, nM1-1, nVirBottom );//bottom line of the left rectangle
             if ( nP1 >= nVirLeft )
             {
-                ImplVDrawLine( nP1, nVirTop, nP1, nVirBottom );
-                ImplVDrawLine( nP1, nVirBottom, nP1+1, nVirBottom );
+                ImplVDrawLine( nP1, nVirTop, nP1, nVirBottom );//left line of the left rectangle
+                ImplVDrawLine( nP1, nVirBottom, nP1+1, nVirBottom );//?
             }
         }
         if ( nM2 < nP2 )
         {
-            ImplVDrawLine( nM2+1, nVirBottom, nP2-1, nVirBottom );
+            ImplVDrawLine( nM2+1, nVirBottom, nP2-1, nVirBottom );//bottom line of the right rectangle
+            ImplVDrawLine( nM2+1, nVirTop, nM2+1, nVirBottom );//left line of the right rectangle
             if ( nP2 <= nVirRight+1 )
-                ImplVDrawLine( nP2-1, nVirTop, nP2-1, nVirBottom );
+                ImplVDrawLine( nP2-1, nVirTop, nP2-1, nVirBottom );//right line of the right rectangle
         }
     }
     else
