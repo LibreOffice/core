@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdgrffilter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:14:55 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,8 @@ private:
 
     static GDIMetaFile      ImplRemoveClipRegionActions( const GDIMetaFile& rMtf );
     static BitmapEx         ImplGetBitmapFromMetaFile( const GDIMetaFile& rMtf, BOOL bTransparent, const Size* pSizePixel = NULL );
+
+    bool mbHideSpell;
 
 };
 
