@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accimplaccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-23 11:02:25 $
+ *  last change: $Author: fs $ $Date: 2002-04-26 05:53:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ namespace comphelper
     protected:
         /// retrieves the parent previously set via <method>setAccessibleParent</method>
         ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
-                implGetAccessibleParent( ) const;
+                implGetForeignControlledParent( ) const;
 
         /** retrieves the set of currently set states which are controlled by a foreign instance
         @return
@@ -127,11 +127,11 @@ namespace comphelper
         sal_Int64   implGetForeignControlledStates( ) const;
 
         /// sets the accessible parent component
-        void    setAccessibleParent(
+        virtual void    setAccessibleParent(
             const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& _rxAccParent );
 
         /// sets or resets a bit of the foreign controlled states
-        void    setStateBit( const sal_Int16 _nState, const sal_Bool _bSet );
+        virtual void    setStateBit( const sal_Int16 _nState, const sal_Bool _bSet );
 
     protected:
         OAccessibleImplementationAccess( );
@@ -204,6 +204,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2002/04/23 11:02:25  fs
+ *  #98750# removed the unnecessary new/delete operators
+ *
  *  Revision 1.1  2002/04/17 08:37:53  fs
  *  initial checkin - helper class for tunneling an XAccessibleContext implementation
  *
