@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptSecurityManager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-02-19 16:25:09 $
+ *  last change: $Author: dfoster $ $Date: 2003-02-25 16:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,11 +167,19 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
                     OSL_TRACE( "no of elts in path list = %d",
                         (int)m_secureURL.getLength() );
                     bool match = false;
+                    OSL_TRACE("document path: %s",
+                        ::rtl::OUStringToOString( path,
+                            RTL_TEXTENCODING_ASCII_US ).pData->buffer);
                     for(int j=m_secureURL.getLength();j>0;j--)
                     {
-#ifdef __WIN32__
+                        OSL_TRACE("path list element: %s",
+                            ::rtl::OUStringToOString( m_secureURL[j-1],
+                                RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+#ifdef WIN32
+                        OSL_TRACE("case insensitive comparison");
                         if( path.equalsIgnoreAsciiCase( m_secureURL[j-1] ) )
 #else
+                        OSL_TRACE("case sensitive comparison");
                         if( path.equals( m_secureURL[j-1] ) )
 #endif
                         {
@@ -180,8 +188,9 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
                             {
                                 OUString dummyStr;
                                 OSL_TRACE("path match & warning dialog");
-                                short result = executeDialog( dummyStr );
-                                if ( result&1 == 1 )
+                                int result = (int)executeDialog( dummyStr );
+                                OSL_TRACE("result = %d", (int)result);
+                                if ( (result&1) == 1 )
                                 {
                                     newPerm.execPermission=sal_True;
                                 }
@@ -201,12 +210,13 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
                     if( m_confirmationRequired == sal_True )
                     {
                         OSL_TRACE("no path match & confirmation dialog");
-                        short result = executeDialog( path );
-                        if ( result&1 == 1 )
+                        int result = (int)executeDialog( path );
+                        OSL_TRACE("result = %d", (int)result);
+                        if ( (result&1) == 1 )
                         {
                             newPerm.execPermission=sal_True;
                         }
-                        if ( result&2 == 2 )
+                        if ( (result&2) == 2 )
                         {
                             /* if checkbox clicked then need to add path to registry*/
                             addToSecurePaths(path);
