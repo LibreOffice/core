@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:07:45 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,8 +240,9 @@ using namespace ::cppu;
 #define PAGE_DBSETUPWIZARD_ODBC                      12
 #define PAGE_DBSETUPWIZARD_SPREADSHEET               13
 #define PAGE_DBSETUPWIZARD_AUTHENTIFICATION          14
-#define PAGE_DBSETUPWIZARD_FINAL                     15
-#define PAGE_DBSETUPWIZARD_USERDEFINED               16
+#define PAGE_DBSETUPWIZARD_MOZILLA                   15
+#define PAGE_DBSETUPWIZARD_FINAL                     16
+#define PAGE_DBSETUPWIZARD_USERDEFINED               17
 
 
 #define DBASE_PATH             1
@@ -260,8 +261,9 @@ using namespace ::cppu;
 #define OUTLOOK_PATH           14
 #define MOZILLA_PATH           15
 #define EVOLUTION_PATH         16
-#define CREATENEW_PATH         17
-#define USERDEFINED_PATH       18
+#define THUNDERBIRD_PATH       17
+#define CREATENEW_PATH         18
+#define USERDEFINED_PATH       19
 
 OFinalDBPageSetup*          pFinalPage;
 
@@ -402,6 +404,11 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
         declarePath( MOZILLA_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
     else
         declarePath( MOZILLA_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
+
+    if ( m_pCollection->hasAuthentication(DST_THUNDERBIRD))
+        declarePath( THUNDERBIRD_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
+    else
+        declarePath( THUNDERBIRD_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
 
     if ( m_pCollection->hasAuthentication(DST_EVOLUTION))
         declarePath( EVOLUTION_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
@@ -583,6 +590,10 @@ void ODbTypeWizDialogSetup::activateDatabasePath(OGeneralPage* _pTabPage){
                 activatePath( MOZILLA_PATH, sal_True);
                 break;
 
+            case DST_THUNDERBIRD:
+                activatePath( THUNDERBIRD_PATH, sal_True);
+                break;
+
             case DST_EVOLUTION:
                 activatePath( EVOLUTION_PATH, sal_True);
                 break;
@@ -634,6 +645,7 @@ sal_Bool ODbTypeWizDialogSetup::IsConnectionUrlRequired(){
         case DST_OUTLOOK:
         case DST_OUTLOOKEXP:
         case DST_MOZILLA:
+        case DST_THUNDERBIRD:
             return sal_False;
             break;
         default:
