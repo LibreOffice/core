@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: dr $ $Date: 2001-05-21 12:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 
 #pragma hdrstop
 
-#ifndef PCH
-#include "segmentc.hxx"
-#endif
-
 #include "tpsubt.hxx"
 #include "scresid.hxx"
 #include "subtdlg.hxx"
@@ -76,9 +72,7 @@
 
 #pragma hdrstop
 
-SEG_EOFGLOBALS()
 //==================================================================
-#pragma SEG_FUNCDEF(subtdlg_01)
 
 ScSubTotalDlg::ScSubTotalDlg( Window*           pParent,
                               const SfxItemSet* pArgSet ) :
@@ -96,7 +90,6 @@ ScSubTotalDlg::ScSubTotalDlg( Window*           pParent,
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(subtdlg_02)
 
 IMPL_LINK_INLINE_START( ScSubTotalDlg, RemoveHdl, PushButton *, pBtn )
 {
@@ -107,46 +100,4 @@ IMPL_LINK_INLINE_START( ScSubTotalDlg, RemoveHdl, PushButton *, pBtn )
     return 0;
 }
 IMPL_LINK_INLINE_END( ScSubTotalDlg, RemoveHdl, PushButton *, pBtn )
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.10  2000/09/17 14:08:57  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.9  2000/08/31 16:38:21  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.8  1996/10/29 13:04:12  NN
-    ueberall ScResId statt ResId
-
-
-      Rev 1.7   29 Oct 1996 14:04:12   NN
-   ueberall ScResId statt ResId
-
-      Rev 1.6   29 Jan 1996 15:12:28   MO
-   neuer Link
-
-      Rev 1.5   08 Nov 1995 13:06:24   MO
-   301-Aenderungen
-
-      Rev 1.4   31 Jan 1995 16:46:32   TRI
-   Pragmas zur Segmentierung eingebaut
-
-      Rev 1.3   25 Jan 1995 18:28:16   MO
-   tpsubt.hxx-include
-
-      Rev 1.2   22 Jan 1995 15:10:14   SC
-   2.37 Anpassung
-
-      Rev 1.1   20 Jan 1995 18:33:24   MO
-   Gruppen-TabPages 2 und 3 hinzugefuegt
-   Remove-Button als Exit-Button mit Return-Wert SCRET_REMOVE
-
-      Rev 1.0   19 Jan 1995 11:42:04   MO
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:40:05 $
+ *  last change: $Author: dr $ $Date: 2001-05-21 13:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,19 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
 {
     HelpId = HID_SCPAGE_SUBT_OPTIONS ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 240 , 150 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
+    FixedLine FL_GROUP
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Gruppen" ;
+        Text [ ENGLISH ] = "Groups" ;
+    };
     CheckBox BTN_PAGEBREAK
     {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 170 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
         Text = "Neue Seite bei Gru~ppenwechsel" ;
         Text [ ENGLISH ] = "Pagebreak for each grou~p" ;
         Text [ NORWEGIAN ] = "Sideskift for hver grupp~e" ;
@@ -99,8 +106,8 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
     };
     CheckBox BTN_CASE
     {
-        Pos = MAP_APPFONT ( 6 , 19 ) ;
-        Size = MAP_APPFONT ( 170 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Groﬂ-/Kleinschreibung beachten : ~Groò-/Kleinschreibung beachten */
         Text = "~Groﬂ-/Kleinschreibung beachten" ;
         Text [ ENGLISH ] = "~Case sensitive" ;
@@ -130,8 +137,8 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
     };
     CheckBox BTN_SORT
     {
-        Pos = MAP_APPFONT ( 6 , 32 ) ;
-        Size = MAP_APPFONT ( 170 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
         Text = "Bereich vorher nach Gruppen ~sortieren" ;
         Text [ ENGLISH ] = "~Sort area" ;
         Text [ NORWEGIAN ] = "~Sorter omr’de" ;
@@ -160,8 +167,8 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
     };
     CheckBox BTN_FORMATS
     {
-        Pos = MAP_APPFONT ( 12 , 59 ) ;
-        Size = MAP_APPFONT ( 137 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 101 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Formate einschlieﬂen : ~Formate einschlieòen */
         Text = "~Formate einschlieﬂen" ;
         Text [ ENGLISH ] = "Include ~formats" ;
@@ -191,8 +198,8 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
     };
     CheckBox BTN_USERDEF
     {
-        Pos = MAP_APPFONT ( 12 , 72 ) ;
-        Size = MAP_APPFONT ( 130 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 115 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
         Text = "~Benutzerdefinierte Sortierreihenfolge" ;
         Text [ ENGLISH ] = "~Userdefined sort precedence" ;
         Text [ NORWEGIAN ] = "~Brukerdefinert sorteringsrekkef∞lge " ;
@@ -222,15 +229,15 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
     ListBox LB_USERDEF
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 23 , 85 ) ;
-        Size = MAP_APPFONT ( 200 , 90 ) ;
+        Pos = MAP_APPFONT ( 20 , 127 ) ;
+        Size = MAP_APPFONT ( 231 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     RadioButton BTN_ASCENDING
     {
-        Pos = MAP_APPFONT ( 12 , 102 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 69 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
         Text = "A~ufsteigend" ;
         Text [ ENGLISH ] = "~Ascending" ;
         Text [ NORWEGIAN ] = "St~igende" ;
@@ -259,9 +266,9 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
     };
     RadioButton BTN_DESCENDING
     {
-        Pos = MAP_APPFONT ( 12 , 115 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text = "A~bsteigend" ;
+        Pos = MAP_APPFONT ( 12 , 83 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text = "Abs~teigend" ;
         Text [ ENGLISH ] = "~Descending" ;
         Text [ NORWEGIAN ] = "~Synkende" ;
         Text [ DANISH ] = "Faldende" ;
@@ -287,10 +294,10 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Descendente";
     };
-    GroupBox GB_OPTIONS
+    FixedLine FL_SORT
     {
-        Pos = MAP_APPFONT ( 5 , 48 ) ;
-        Size = MAP_APPFONT ( 228 , 84 ) ;
+        Pos = MAP_APPFONT ( 6 , 58 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Sortieren" ;
         Text [ ENGLISH ] = "Sort" ;
         Text [ NORWEGIAN ] = "Sorter" ;
@@ -325,12 +332,12 @@ TabPage RID_SUBTBASE
      // aus den Ableitungen nicht in der HID-Liste auftauchen wuerden
     HelpId = HID_SCPAGE_SUBT_GROUP ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 240 , 150 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
     FixedText FT_GROUP
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
         Text = "~Gruppieren nach" ;
         Text [ ENGLISH ] = "~Group by" ;
         Text [ norwegian ] = "~Gruppe ved " ;
@@ -360,15 +367,15 @@ TabPage RID_SUBTBASE
     {
         HelpId = HID_SC_SUBT_GROUP ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 16 ) ;
-        Size = MAP_APPFONT ( 110 , 90 ) ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 121 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_COLUMNS
     {
-        Pos = MAP_APPFONT ( 6 , 34 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Teilergebnisse berechnen f¸r : ~Teilergebnisse berechnen f≥r */
         Text = "~Teilergebnisse berechnen f¸r" ;
         Text [ ENGLISH ] = "Calculate sub~totals on" ;
@@ -399,14 +406,14 @@ TabPage RID_SUBTBASE
     {
         HelpId = HID_SC_SUBT_COLS ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 47 ) ;
-        Size = MAP_APPFONT ( 110 , 90 ) ;
+        Pos = MAP_APPFONT ( 6 , 43 ) ;
+        Size = MAP_APPFONT ( 121 , 136 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_FUNCTIONS
     {
-        Pos = MAP_APPFONT ( 123 , 34 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 133 , 32 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
         Text = "~Berechnungsvorschrift" ;
         Text [ ENGLISH ] = "Funct~ion" ;
         Text [ norwegian ] = "Funks~jon" ;
@@ -436,8 +443,8 @@ TabPage RID_SUBTBASE
     {
         HelpId = HID_SC_SUBT_FUNC ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 123 , 47 ) ;
-        Size = MAP_APPFONT ( 110 , 90 ) ;
+        Pos = MAP_APPFONT ( 133 , 43 ) ;
+        Size = MAP_APPFONT ( 121 , 136 ) ;
         TabStop = TRUE ;
         StringList =
         {

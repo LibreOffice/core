@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: dr $ $Date: 2001-05-21 12:57:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,29 +69,30 @@
 
 // TabDialog
 #define BTN_REMOVE          1
-#define PAGE_GROUP1         1
-#define PAGE_GROUP2         2
-#define PAGE_GROUP3         3
-#define PAGE_OPTIONS        4
+#define PAGE_GROUP1         2
+#define PAGE_GROUP2         3
+#define PAGE_GROUP3         4
+#define PAGE_OPTIONS        5
 
 // Gruppen TabPages
-#define FT_GROUP            1
-#define LB_GROUP            1
-#define FT_COLUMNS          2
-#define WND_COLUMNS         2
-#define LB_FUNCTIONS        3
-#define FT_FUNCTIONS        3
+#define FT_GROUP            10
+#define LB_GROUP            11
+#define FT_COLUMNS          12
+#define WND_COLUMNS         13
+#define LB_FUNCTIONS        14
+#define FT_FUNCTIONS        15
 
 // Optionen TabPage
-#define BTN_PAGEBREAK       2
-#define BTN_CASE            3
-#define BTN_SORT            4
+#define FL_GROUP            20
+#define BTN_PAGEBREAK       21
+#define BTN_CASE            22
+#define BTN_SORT            23
 
-#define BTN_FORMATS         5
-#define BTN_USERDEF         6
-#define LB_USERDEF          1
-#define BTN_ASCENDING       1
-#define BTN_DESCENDING      2
-#define GB_OPTIONS          1
+#define FL_SORT             30
+#define BTN_ASCENDING       31
+#define BTN_DESCENDING      32
+#define BTN_FORMATS         33
+#define BTN_USERDEF         34
+#define LB_USERDEF          35
 
 

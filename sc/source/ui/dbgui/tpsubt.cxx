@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpsubt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-08 10:29:37 $
+ *  last change: $Author: dr $ $Date: 2001-05-21 12:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 
 #ifndef PCH
 #include <vcl/system.hxx>
-#include <segmentc.hxx>
 #endif
 
 //#include <checklbx.hxx>
@@ -94,12 +93,8 @@ static USHORT pSubTotalsRanges[] =
     0
 };
 
-SEG_EOFGLOBALS()
-
-
 //========================================================================
 // Zwischenergebnisgruppen-Tabpage:
-#pragma SEG_FUNCDEF(tpsubt_01)
 
 ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent, USHORT nResId,
                                       const SfxItemSet& rArgSet )
@@ -135,7 +130,6 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent, USHORT nResId,
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsubt_02)
 
 __EXPORT ScTpSubTotalGroup::~ScTpSubTotalGroup()
 {
@@ -156,7 +150,6 @@ __EXPORT ScTpSubTotalGroup::~ScTpSubTotalGroup()
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsubt_03)
 
 void ScTpSubTotalGroup::Init()
 {
@@ -178,7 +171,6 @@ void ScTpSubTotalGroup::Init()
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsubt_1d)
 
 USHORT* __EXPORT ScTpSubTotalGroup::GetRanges()
 {
@@ -186,7 +178,6 @@ USHORT* __EXPORT ScTpSubTotalGroup::GetRanges()
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsubt_04)
 
 BOOL ScTpSubTotalGroup::DoReset( USHORT             nGroupNo,
                                  const SfxItemSet&  rArgSet  )
@@ -236,7 +227,6 @@ BOOL ScTpSubTotalGroup::DoReset( USHORT             nGroupNo,
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsubt_05)
 
 BOOL ScTpSubTotalGroup::DoFillItemSet( USHORT       nGroupNo,
                                        SfxItemSet&  rArgSet  )
@@ -321,7 +311,6 @@ BOOL ScTpSubTotalGroup::DoFillItemSet( USHORT       nGroupNo,
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsubt_06)
 
 void ScTpSubTotalGroup::FillListBoxes()
 {
@@ -369,7 +358,6 @@ void ScTpSubTotalGroup::FillListBoxes()
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsubt_18)
 
 USHORT ScTpSubTotalGroup::GetFieldSelPos( USHORT nField )
 {
@@ -389,7 +377,6 @@ USHORT ScTpSubTotalGroup::GetFieldSelPos( USHORT nField )
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsubt_19)
 
 ScSubTotalFunc ScTpSubTotalGroup::LbPosToFunc( USHORT nPos )
 {
@@ -414,7 +401,6 @@ ScSubTotalFunc ScTpSubTotalGroup::LbPosToFunc( USHORT nPos )
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsubt_1a)
 
 USHORT ScTpSubTotalGroup::FuncToLbPos( ScSubTotalFunc eFunc )
 {
@@ -441,7 +427,6 @@ USHORT ScTpSubTotalGroup::FuncToLbPos( ScSubTotalFunc eFunc )
 // -----------------------------------------------------------------------
 // Handler:
 //---------
-#pragma SEG_FUNCDEF(tpsubt_07)
 
 IMPL_LINK( ScTpSubTotalGroup, SelectHdl, ListBox *, pLb )
 {
@@ -471,7 +456,6 @@ IMPL_LINK( ScTpSubTotalGroup, SelectHdl, ListBox *, pLb )
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsubt_20)
 
 IMPL_LINK( ScTpSubTotalGroup, CheckHdl, ListBox *, pLb )
 {
@@ -490,21 +474,18 @@ IMPL_LINK( ScTpSubTotalGroup, CheckHdl, ListBox *, pLb )
 
 //========================================================================
 // Abgeleitete Gruppen-TabPages:
-#pragma SEG_FUNCDEF(tpsubt_08)
 
 SfxTabPage* __EXPORT ScTpSubTotalGroup1::Create( Window*            pParent,
                                                  const SfxItemSet&  rArgSet )
     { return ( new ScTpSubTotalGroup1( pParent, rArgSet ) ); }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsubt_09)
 
 SfxTabPage* __EXPORT ScTpSubTotalGroup2::Create( Window*             pParent,
                                        const SfxItemSet&    rArgSet )
     { return ( new ScTpSubTotalGroup2( pParent, rArgSet ) ); }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsubt_0a)
 
 SfxTabPage* __EXPORT ScTpSubTotalGroup3::Create( Window*             pParent,
                                        const SfxItemSet&    rArgSet )
@@ -512,19 +493,13 @@ SfxTabPage* __EXPORT ScTpSubTotalGroup3::Create( Window*             pParent,
 
 // -----------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(tpsubt_21)
-
 ScTpSubTotalGroup1::ScTpSubTotalGroup1( Window* pParent, const SfxItemSet& rArgSet ) :
     ScTpSubTotalGroup( pParent, RID_SCPAGE_SUBT_GROUP1, rArgSet )
 {}
 
-#pragma SEG_FUNCDEF(tpsubt_22)
-
 ScTpSubTotalGroup2::ScTpSubTotalGroup2( Window* pParent, const SfxItemSet& rArgSet ) :
     ScTpSubTotalGroup( pParent, RID_SCPAGE_SUBT_GROUP2, rArgSet )
 {}
-
-#pragma SEG_FUNCDEF(tpsubt_23)
 
 ScTpSubTotalGroup3::ScTpSubTotalGroup3( Window* pParent, const SfxItemSet& rArgSet ) :
     ScTpSubTotalGroup( pParent, RID_SCPAGE_SUBT_GROUP3, rArgSet )
@@ -535,15 +510,9 @@ ScTpSubTotalGroup3::ScTpSubTotalGroup3( Window* pParent, const SfxItemSet& rArgS
 
 #define RESET(i) (ScTpSubTotalGroup::DoReset( (i), rArgSet ))
 
-#pragma SEG_FUNCDEF(tpsubt_0b)
-
 void __EXPORT ScTpSubTotalGroup1::Reset( const SfxItemSet& rArgSet ) { RESET(1); }
 
-#pragma SEG_FUNCDEF(tpsubt_1b)
-
 void __EXPORT ScTpSubTotalGroup2::Reset( const SfxItemSet& rArgSet ) { RESET(2); }
-
-#pragma SEG_FUNCDEF(tpsubt_1c)
 
 void __EXPORT ScTpSubTotalGroup3::Reset( const SfxItemSet& rArgSet ) { RESET(3); }
 
@@ -553,15 +522,9 @@ void __EXPORT ScTpSubTotalGroup3::Reset( const SfxItemSet& rArgSet ) { RESET(3);
 
 #define FILLSET(i) (ScTpSubTotalGroup::DoFillItemSet( (i), rArgSet ))
 
-#pragma SEG_FUNCDEF(tpsubt_0c)
-
 BOOL __EXPORT ScTpSubTotalGroup1::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(1); }
 
-#pragma SEG_FUNCDEF(tpsubt_0d)
-
 BOOL __EXPORT ScTpSubTotalGroup2::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(2); }
-
-#pragma SEG_FUNCDEF(tpsubt_0e)
 
 BOOL __EXPORT ScTpSubTotalGroup3::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(3); }
 
@@ -569,7 +532,6 @@ BOOL __EXPORT ScTpSubTotalGroup3::FillItemSet( SfxItemSet& rArgSet ) { return FI
 
 //========================================================================
 // Optionen-Tabpage:
-#pragma SEG_FUNCDEF(tpsubt_0f)
 
 ScTpSubTotalOptions::ScTpSubTotalOptions( Window*               pParent,
                                           const SfxItemSet&     rArgSet )
@@ -578,15 +540,16 @@ ScTpSubTotalOptions::ScTpSubTotalOptions( Window*               pParent,
                               ScResId( RID_SCPAGE_SUBT_OPTIONS ),
                               rArgSet ),
             //
+            aFlGroup        ( this, ScResId( FL_GROUP ) ),
             aBtnPagebreak   ( this, ScResId( BTN_PAGEBREAK ) ),
             aBtnCase        ( this, ScResId( BTN_CASE ) ),
             aBtnSort        ( this, ScResId( BTN_SORT ) ),
+            aFlSort         ( this, ScResId( FL_SORT ) ),
+            aBtnAscending   ( this, ScResId( BTN_ASCENDING ) ),
+            aBtnDescending  ( this, ScResId( BTN_DESCENDING ) ),
             aBtnFormats     ( this, ScResId( BTN_FORMATS ) ),
             aBtnUserDef     ( this, ScResId( BTN_USERDEF ) ),
             aLbUserDef      ( this, ScResId( LB_USERDEF ) ),
-            aBtnAscending   ( this, ScResId( BTN_ASCENDING ) ),
-            aBtnDescending  ( this, ScResId( BTN_DESCENDING ) ),
-            aGbOptions      ( this, ScResId( GB_OPTIONS ) ),
             //
             nWhichSubTotals ( rArgSet.GetPool()->GetWhich( SID_SUBTOTALS ) ),
             rSubTotalData   ( ((const ScSubTotalItem&)
@@ -600,14 +563,12 @@ ScTpSubTotalOptions::ScTpSubTotalOptions( Window*               pParent,
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsubt_10)
 
 __EXPORT ScTpSubTotalOptions::~ScTpSubTotalOptions()
 {
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsubt_11)
 
 void ScTpSubTotalOptions::Init()
 {
@@ -626,7 +587,6 @@ void ScTpSubTotalOptions::Init()
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsubt_12)
 
 SfxTabPage* __EXPORT ScTpSubTotalOptions::Create( Window*                pParent,
                                           const SfxItemSet&     rArgSet )
@@ -635,7 +595,6 @@ SfxTabPage* __EXPORT ScTpSubTotalOptions::Create( Window*                pParent
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsubt_13)
 
 void __EXPORT ScTpSubTotalOptions::Reset( const SfxItemSet& rArgSet )
 {
@@ -663,7 +622,6 @@ void __EXPORT ScTpSubTotalOptions::Reset( const SfxItemSet& rArgSet )
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsubt_14)
 
 BOOL __EXPORT ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
 {
@@ -694,7 +652,6 @@ BOOL __EXPORT ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(tpsubt_15)
 
 void ScTpSubTotalOptions::FillUserSortListBox()
 {
@@ -712,7 +669,6 @@ void ScTpSubTotalOptions::FillUserSortListBox()
 
 // -----------------------------------------------------------------------
 // Handler:
-#pragma SEG_FUNCDEF(tpsubt_16)
 
 IMPL_LINK( ScTpSubTotalOptions, CheckHdl, CheckBox *, pBox )
 {
@@ -720,7 +676,7 @@ IMPL_LINK( ScTpSubTotalOptions, CheckHdl, CheckBox *, pBox )
     {
         if ( aBtnSort.IsChecked() )
         {
-            aGbOptions      .Enable();
+            aFlSort         .Enable();
             aBtnFormats     .Enable();
             aBtnUserDef     .Enable();
             aBtnAscending   .Enable();
@@ -731,7 +687,7 @@ IMPL_LINK( ScTpSubTotalOptions, CheckHdl, CheckBox *, pBox )
         }
         else
         {
-            aGbOptions      .Disable();
+            aFlSort         .Disable();
             aBtnFormats     .Disable();
             aBtnUserDef     .Disable();
             aBtnAscending   .Disable();
@@ -753,161 +709,15 @@ IMPL_LINK( ScTpSubTotalOptions, CheckHdl, CheckBox *, pBox )
     return 0;
 }
 
-#pragma SEG_FUNCDEF(tpsubt_17)
-
 __EXPORT ScTpSubTotalGroup1::~ScTpSubTotalGroup1()
 {
 }
-
-#pragma SEG_FUNCDEF(tpsubt_1e)
 
 __EXPORT ScTpSubTotalGroup2::~ScTpSubTotalGroup2()
 {
 }
 
-#pragma SEG_FUNCDEF(tpsubt_1f)
-
 __EXPORT ScTpSubTotalGroup3::~ScTpSubTotalGroup3()
 {
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 16:44:54  hr
-    initial import
-
-    Revision 1.41  2000/09/17 14:08:59  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.40  2000/08/31 16:38:21  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.39  2000/04/14 17:38:03  nn
-    unicode changes
-
-    Revision 1.38  2000/02/11 12:24:18  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.37  1999/05/28 16:05:24  NN
-    #66447# MAXFIELDS ist fuer Feldanzahl, nicht Spaltennummer
-
-
-      Rev 1.36   28 May 1999 18:05:24   NN
-   #66447# MAXFIELDS ist fuer Feldanzahl, nicht Spaltennummer
-
-      Rev 1.35   17 Dec 1997 19:49:54   ER
-   #46215# NULL-Pointer abfangen (aus nem Paint den SelectHandler gerufen?!?)
-
-      Rev 1.34   05 Dec 1997 20:02:36   ANK
-   Includes geaendert
-
-      Rev 1.33   05 Feb 1997 21:29:32   NN
-   SfxTabPage Umstellung: FillItemSet bekommt leeren Set
-
-      Rev 1.32   07 Nov 1996 19:51:58   NN
-   eigene RIDs fuer die unterschiedlichen Pages
-
-      Rev 1.31   29 Oct 1996 14:04:12   NN
-   ueberall ScResId statt ResId
-
-      Rev 1.30   23 May 1996 09:00:50   TRI
-   GetAbsPos jetzt uber GetModel aufgerufen
-
-      Rev 1.29   29 Jan 1996 15:12:36   MO
-   neuer Link
-
-      Rev 1.28   14 Nov 1995 11:30:10   MO
-   SvxCheckListBox verwenden
-
-      Rev 1.27   08 Nov 1995 13:06:24   MO
-   301-Aenderungen
-
-      Rev 1.26   25 Sep 1995 14:16:48   JN
-   Funktion _Keine_ entfernt
-
-      Rev 1.25   13 Sep 1995 12:27:58   MO
-   Funktionszuordnung bei einem Feld-Eintrag (BugIId: 18867)
-
-      Rev 1.24   08 Sep 1995 14:42:44   MO
-   Replace CheckBox entfernt (BugId: 18821)
-
-      Rev 1.23   04 Sep 1995 12:00:28   MO
-   GetStandardFont() statt GetAppFont()
-
-      Rev 1.22   24 Aug 1995 17:38:52   HJS
-   DRAGDROP_NONE => SV_DRAGDROP_NONE
-
-      Rev 1.21   24 Jul 1995 14:17:14   MO
-   EXPORT
-
-      Rev 1.20   18 Jul 1995 14:08:30   MO
-   CheckEntry impliziert SelectEntry an TreeListBox
-
-      Rev 1.19   04 Jul 1995 18:28:46   MO
-   __EXPORTs
-
-      Rev 1.18   30 Jun 1995 17:50:10   HJS
-   exports fuer create
-
-      Rev 1.17   04 May 1995 08:16:10   TRI
-   pApp -> Application::
-
-      Rev 1.16   07 Apr 1995 17:58:40   MO
-   Erste Seite Selektiert erste Spaltenueberschrift in Gruppen-ListBox
-
-      Rev 1.15   24 Mar 1995 13:29:02   TRI
-   Segmentierung
-
-      Rev 1.14   07 Mar 1995 16:46:54   MO
-   * Enanble/Disable-Fehler auf der Optionen-Seite beseitigt
-
-      Rev 1.13   21 Feb 1995 03:31:08   NN
-   Absturz ausgebaut
-
-      Rev 1.12   05 Feb 1995 12:17:00   MO
-   * Reset() aus den Ctord entfernt
-
-      Rev 1.11   31 Jan 1995 13:40:36   TRI
-   __EXPORT vor virtuelle Funktion eingebaut
-
-      Rev 1.10   31 Jan 1995 11:56:34   MO
-   * User-Listen einlesen/auswerten
-
-      Rev 1.9   30 Jan 1995 16:40:50   MO
-   Funktions-enum-Zuordnung korrigiert
-
-      Rev 1.8   27 Jan 1995 16:16:08   MO
-   * Umstellung auf Slot-IDs
-   * GetRanges()-Methode
-
-      Rev 1.7   26 Jan 1995 14:09:48   MO
-   * Auswertung des Param-structs in den Gruppen-Pages (eigene Reset()-Metoden)
-
-      Rev 1.6   25 Jan 1995 13:49:32   MO
-   Segmentierungspragmas eingefuegt
-
-      Rev 1.5   25 Jan 1995 13:42:02   MO
-   Umbenennung tp_* tp*
-
-      Rev 1.4   25 Jan 1995 13:28:26   MO
-   Check in der TreeListBox, wenn Funktion selektiert wird
-   (funktioniert noch nicht so richtig (TreeListBox?))
-
-      Rev 1.3   22 Jan 1995 19:38:44   NN
-   Position des DB-Bereichs im Output-Item initialisieren
-
-      Rev 1.2   22 Jan 1995 15:10:14   SC
-   2.37 Anpassung
-
-      Rev 1.1   20 Jan 1995 18:34:02   MO
-   Gruppen-TabPages 2 und 3
-
-      Rev 1.0   19 Jan 1995 11:42:20   MO
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
-
 

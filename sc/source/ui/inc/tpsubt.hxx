@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpsubt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-04 09:16:31 $
+ *  last change: $Author: dr $ $Date: 2001-05-21 12:57:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,6 @@
 
 #ifndef _SV_FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
 #endif
 
 #ifndef SC_SCGLOB_HXX
@@ -206,15 +202,16 @@ public:
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 
 private:
+    FixedLine   aFlGroup;
     CheckBox    aBtnPagebreak;
     CheckBox    aBtnCase;
     CheckBox    aBtnSort;
+    FixedLine   aFlSort;
+    RadioButton aBtnAscending;
+    RadioButton aBtnDescending;
     CheckBox    aBtnFormats;
     CheckBox    aBtnUserDef;
     ListBox     aLbUserDef;
-    RadioButton aBtnAscending;
-    RadioButton aBtnDescending;
-    GroupBox    aGbOptions;
 
     ScViewData*             pViewData;
     ScDocument*             pDoc;
