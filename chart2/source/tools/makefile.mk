@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: bm $ $Date: 2003-12-11 13:54:07 $
+#   last change: $Author: bm $ $Date: 2003-12-12 17:02:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,6 +104,7 @@ SLOFILES=	\
     $(SLO)$/Rotation.obj \
     $(SLO)$/RelativeSizeHelper.obj \
     $(SLO)$/Scaling.obj \
+    $(SLO)$/StatisticsHelper.obj \
     $(SLO)$/ChartModelHelper.obj \
     $(SLO)$/ChartTypeHelper.obj \
     $(SLO)$/MeterHelper.obj \

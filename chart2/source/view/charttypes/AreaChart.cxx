@@ -172,7 +172,7 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel, bool bC
     }
     catch( uno::Exception& e )
     {
-        e;
+        ASSERT_EXCEPTION( e );
     }
     PlotterBase::m_pPosHelper = m_pPosHelper;
 }
@@ -557,8 +557,9 @@ void AreaChart::createShapes()
 
     //update/create information for current group
     double fLogicZ        = -0.5;//as defined
-    double fLogicBaseWidth = 1.0;//as defined
-    double fLogicBaseDepth = fLogicBaseWidth;//Logic Depth and Width are identical by define ... (symmetry is not necessary anymore)
+    // BM: unused:
+//     double fLogicBaseWidth = 1.0;//as defined
+//     double fLogicBaseDepth = fLogicBaseWidth;//Logic Depth and Width are identical by define ... (symmetry is not necessary anymore)
 
     sal_Int32 nStartIndex = 0; // inclusive       ;..todo get somehow from x scale
     sal_Int32 nEndIndex = VSeriesPlotter::getPointCount(m_aXSlots);
@@ -688,46 +689,31 @@ void AreaChart::createShapes()
                                             , aTransformedGeom.m_aPosition, aSize
                                             , pSymbolProperties->nStandardSymbol
                                             , pSymbolProperties->nFillColor );
-#if 0
-                                    m_pShapeFactory->createErrorBar2D(
-                                            xPointGroupShape_Shapes
-                                          , aTransformedGeom.m_aPosition
-                                            , drawing::Direction3D(
-                                                aSize.DirectionX * 1.5,
-                                                aSize.DirectionY * 3.0,
-                                                0.0 ),
-                                            ShapeFactory::UP
-                                        );
-                                    m_pShapeFactory->createErrorBar2D(
-                                            xPointGroupShape_Shapes
-                                          , aTransformedGeom.m_aPosition
-                                            , drawing::Direction3D(
-                                                aSize.DirectionX * 1.5,
-                                                aSize.DirectionY * 2.0,
-                                                0.0 ),
-                                            ShapeFactory::DOWN
-                                        );
-                                    m_pShapeFactory->createErrorBar2D(
-                                            xPointGroupShape_Shapes
-                                          , aTransformedGeom.m_aPosition
-                                            , drawing::Direction3D(
-                                                aSize.DirectionX * 1.5,
-                                                aSize.DirectionY * 1.5,
-                                                0.0 ),
-                                            ShapeFactory::RIGHT
-                                        );
-                                    m_pShapeFactory->createErrorBar2D(
-                                            xPointGroupShape_Shapes
-                                          , aTransformedGeom.m_aPosition
-                                            , drawing::Direction3D(
-                                                aSize.DirectionX * 3.5,
-                                                aSize.DirectionY * 1.5,
-                                                0.0 ),
-                                            ShapeFactory::LEFT
-                                        );
-#endif
                                     }
                                 //@todo other symbol styles
+                            }
+
+                            // error bars
+                            uno::Reference< beans::XPropertySet > xPointProp(
+                                (*aSeriesIter)->getPropertiesOfPoint( nIndex ));
+                            uno::Reference< beans::XPropertySet > xErrorBarProp;
+                            if( xPointProp.is() &&
+                                ( xPointProp->getPropertyValue( C2U( "ErrorBarY" )) >>= xErrorBarProp ) &&
+                                xErrorBarProp.is())
+                            {
+                                if(    !::rtl::math::isNan(fLogicX) && !::rtl::math::isInf(fLogicX)
+                                    && !::rtl::math::isNan(fLogicY) && !::rtl::math::isInf(fLogicY)
+                                    && !::rtl::math::isNan(fLogicZ) && !::rtl::math::isInf(fLogicZ) )
+                                {
+                                    drawing::Position3D aScaledLogicPosition( fLogicX, fLogicY,fLogicZ);
+
+                                    createErrorBar(   xPointGroupShape_Shapes
+                                                    , aScaledLogicPosition
+                                                    , xErrorBarProp
+                                                    , (*aSeriesIter)->getAllY()
+                                                    , nIndex
+                                                    , true /* bVertical */ );
+                                }
                             }
                         }
                     }

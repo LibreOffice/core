@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-11 18:53:26 $
+ *  last change: $Author: bm $ $Date: 2003-12-12 17:02:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1841,7 +1841,7 @@ uno::Reference< drawing::XShape > ShapeFactory::createErrorBar2D(
 
     switch( eDirection )
     {
-        case UP:
+        case ERROR_BAR_UP:
             // body
             aPPShape.SequenceX[0][0] = aPPShape.SequenceX[0][1] = fX;
             aPPShape.SequenceY[0][0] = fY;
@@ -1852,7 +1852,7 @@ uno::Reference< drawing::XShape > ShapeFactory::createErrorBar2D(
             aPPShape.SequenceY[1][0] = aPPShape.SequenceY[1][1] = fY - fHeight;
             break;
 
-        case RIGHT:
+        case ERROR_BAR_RIGHT:
             // body
             aPPShape.SequenceX[0][0] = fX;
             aPPShape.SequenceX[0][1] = fX + fWidth;
@@ -1863,7 +1863,7 @@ uno::Reference< drawing::XShape > ShapeFactory::createErrorBar2D(
             aPPShape.SequenceY[1][1] = fY + fHeightHalf;
             break;
 
-        case DOWN:
+        case ERROR_BAR_DOWN:
             // body
             aPPShape.SequenceX[0][0] = aPPShape.SequenceX[0][1] = fX;
             aPPShape.SequenceY[0][0] = fY;
@@ -1874,7 +1874,7 @@ uno::Reference< drawing::XShape > ShapeFactory::createErrorBar2D(
             aPPShape.SequenceY[1][0] = aPPShape.SequenceY[1][1] = fY + fHeight;
             break;
 
-        case LEFT:
+        case ERROR_BAR_LEFT:
             // body
             aPPShape.SequenceX[0][0] = fX;
             aPPShape.SequenceX[0][1] = fX - fWidth;

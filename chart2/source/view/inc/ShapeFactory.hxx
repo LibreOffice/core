@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-11 18:53:25 $
+ *  last change: $Author: bm $ $Date: 2003-12-12 17:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,10 +111,10 @@ public:
 
     enum tErrorBarDirection
     {
-        UP,
-        RIGHT,
-        DOWN,
-        LEFT
+        ERROR_BAR_UP,
+        ERROR_BAR_RIGHT,
+        ERROR_BAR_DOWN,
+        ERROR_BAR_LEFT
     };
 
     //------
