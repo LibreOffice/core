@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlFormattedField.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:43 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:55:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,19 +65,29 @@
 #include <com/sun/star/awt/UnoControlEdit.idl>
 #endif
 
+#ifndef __com_sun_star_awt_XSpinField_idl__
+#include <com/sun/star/awt/XSpinField.idl>
+#endif
+
+
 //=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::awt::UnoControlFormattedField
-/** implements an control for formatted text in- and output based on the <type>UnoControlEdit</type> service.
+/** specifies a formatted field control.
  */
 service UnoControlFormattedField
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlEdit;
+
+    /** gives access to the value of a spin field and makes it possible to
+        register for spin events.
+
+        @since #106832#
+     */
+    [optional] interface com::sun::star::awt::XSpinField;
 
 };
 
