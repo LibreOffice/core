@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:24:36 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 09:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,10 +157,7 @@ hidspecial HID_JOINSH_ADDTAB_CLOSE                      { HelpId = HID_JOINSH_AD
 hidspecial HID_JOINSH_ADDTAB_TABLELIST                  { HelpId = HID_JOINSH_ADDTAB_TABLELIST; };
 hidspecial HID_CTL_QRYDGNTAB                            { HelpId = HID_CTL_QRYDGNTAB; };
 hidspecial HID_DLG_QRY_JOIN                             { HelpId = HID_DLG_QRY_JOIN; };
-hidspecial HID_DLG_QRY_INNER                            { HelpId = HID_DLG_QRY_INNER; };
-hidspecial HID_DLG_QRY_LEFT                             { HelpId = HID_DLG_QRY_LEFT; };
-hidspecial HID_DLG_QRY_RIGHT                            { HelpId = HID_DLG_QRY_RIGHT; };
-hidspecial HID_DLG_QRY_FULL                             { HelpId = HID_DLG_QRY_FULL; };
+hidspecial HID_DLG_QRY_JOINTYPE                         { HelpId = HID_DLG_QRY_JOINTYPE; };
 hidspecial HID_DLG_QRY_HELPTEXT                         { HelpId = HID_DLG_QRY_HELPTEXT; };
 
 hidspecial HID_CTL_QRYDGNCRIT                           { HelpId = HID_CTL_QRYDGNCRIT; };
@@ -289,9 +286,14 @@ hidspecial HID_QUERY_SQLMODE                            { HelpId = HID_QUERY_SQL
 hidspecial HID_BROWSER_REFRESH_REBUILDVIEW              { HelpId = HID_BROWSER_REFRESH_REBUILDVIEW ; };
 hidspecial HID_BROWSER_RENAME_ENTRY                     { HelpId = HID_BROWSER_RENAME_ENTRY ; };
 
+hidspecial HID_QUERY_EDIT_JOINCONNECTION                { HelpId = HID_QUERY_EDIT_JOINCONNECTION ; };
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.37  2001/09/25 13:24:36  oj
+ *  #91719# implementing the XRename handling
+ *
  *  Revision 1.36  2001/08/16 10:57:22  fs
  *  #90573# +HID_BROWSER_REFRESH_REBUILDVIEW
  *
@@ -309,28 +311,6 @@ hidspecial HID_BROWSER_RENAME_ENTRY                     { HelpId = HID_BROWSER_R
  *
  *  Revision 1.31  2001/07/03 13:59:27  oj
  *  #86890# impl query paste in contextmenu
- *
- *  Revision 1.30  2001/06/25 08:23:11  oj
- *  #88699# new helpids
- *
- *  Revision 1.29  2001/06/20 06:56:39  oj
- *  #88434# new helpids for useradmin page
- *
- *  Revision 1.28  2001/06/18 15:12:44  fs
- *  #88393# HID_DSBROWSER_DIRECTSQL
- *
- *  Revision 1.27  2001/05/29 13:11:51  oj
- *  #87149# addressbook ui impl
- *
- *  Revision 1.26  2001/05/23 14:15:20  oj
- *  #87149# new helpids
- *
- *  Revision 1.25  2001/05/14 11:57:35  oj
- *  #86744# new helpids for views
- *
- *  Revision 1.24  2001/05/10 12:09:25  fs
- *  #86223# new help ids (not surprising ...)
- *
  *
  *  Revision 1.0 30.10.00 14:02:39  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 09:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,10 +171,7 @@
 #define HID_JOINSH_ADDTAB_TABLELIST                 (HID_DBACCESS_START + 85)
 #define HID_CTL_QRYDGNTAB                           (HID_DBACCESS_START + 86)
 #define HID_DLG_QRY_JOIN                            (HID_DBACCESS_START + 87)
-#define HID_DLG_QRY_INNER                           (HID_DBACCESS_START + 88)
-#define HID_DLG_QRY_LEFT                            (HID_DBACCESS_START + 89)
-#define HID_DLG_QRY_RIGHT                           (HID_DBACCESS_START + 90)
-#define HID_DLG_QRY_FULL                            (HID_DBACCESS_START + 91)
+#define HID_DLG_QRY_JOINTYPE                        (HID_DBACCESS_START + 88)
 #define HID_DLG_QRY_HELPTEXT                        (HID_DBACCESS_START + 92)
 
 #define HID_CTL_QRYDGNCRIT                          (HID_DBACCESS_START + 93)
@@ -304,6 +301,8 @@
 #define HID_BROWSER_REFRESH_REBUILDVIEW             (HID_DBACCESS_START + 209)
 #define HID_BROWSER_RENAME_ENTRY                    (HID_DBACCESS_START + 210)
 
+#define HID_QUERY_EDIT_JOINCONNECTION               (HID_DBACCESS_START + 211)
+
 // don't forget to update the file util/hidother.src
 
 
@@ -313,6 +312,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.44  2001/09/25 13:28:23  oj
+ *  #91719# implementing the XRename handling
+ *
  *  Revision 1.43  2001/08/16 10:57:02  fs
  *  #90573# +HID_BROWSER_REFRESH_REBUILDVIEW
  *
