@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recently_used_file_handler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 14:55:04 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ namespace /* private */ {
             write_xml_tag(TAG_URI, uri_, file);
             write_xml_tag(TAG_MIME_TYPE, mime_type_, file);
 
-            rtl::OString ts = rtl::OString::valueOf(timestamp_);
+            rtl::OString ts = rtl::OString::valueOf((sal_sSize)timestamp_);
             write_xml_tag(TAG_TIMESTAMP, ts.getStr(), file);
 
             if (is_private_)
