@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-30 09:24:48 $
+ *  last change: $Author: pb $ $Date: 2001-04-17 12:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ sal_Bool SfxContentHelper::Transfer_Impl( const String& rSource, const String& r
     {
         bRet = sal_False;
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
         bRet = sal_False;
@@ -216,7 +216,7 @@ sal_Bool SfxContentHelper::IsDocument( const String& rContent )
     {
         DBG_WARNING( "IllegalIdentifierException" );
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
@@ -248,7 +248,7 @@ sal_Bool SfxContentHelper::IsFolder( const String& rContent )
     {
         DBG_WARNING( "IllegalIdentifierException" );
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
@@ -275,7 +275,7 @@ sal_Bool SfxContentHelper::GetTitle( const String& rContent, String& rTitle )
     {
         DBG_ERRORFILE( "CommandAbortedException" );
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
@@ -300,7 +300,7 @@ sal_Bool SfxContentHelper::Kill( const String& rContent )
         DBG_WARNING( "CommandAbortedException" );
         bRet = sal_False;
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
         bRet = sal_False;
@@ -363,7 +363,7 @@ Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rFolder
         {
             DBG_ERRORFILE( "createCursor: CommandAbortedException" );
         }
-        catch( ... )
+        catch( ::com::sun::star::uno::Exception& )
         {
             DBG_ERRORFILE( "createCursor: Any other exception" );
         }
@@ -385,13 +385,13 @@ Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rFolder
             {
                 DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
             }
-            catch( ... )
+            catch( ::com::sun::star::uno::Exception& )
             {
                 DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
             }
         }
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "GetFolderContents: Any other exception" );
     }
@@ -475,7 +475,7 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
         {
             DBG_ERRORFILE( "createCursor: CommandAbortedException" );
         }
-        catch( ... )
+        catch( ::com::sun::star::uno::Exception& )
         {
             DBG_ERRORFILE( "createCursor: Any other exception" );
         }
@@ -525,13 +525,13 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
             {
                 DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
             }
-            catch( ... )
+            catch( ::com::sun::star::uno::Exception& )
             {
                 DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
             }
         }
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "GetFolderContents: Any other exception" );
     }
@@ -580,7 +580,7 @@ Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
         {
             DBG_ERRORFILE( "createCursor: CommandAbortedException" );
         }
-        catch( ... )
+        catch( ::com::sun::star::uno::Exception& )
         {
             DBG_ERRORFILE( "createCursor: Any other exception" );
         }
@@ -611,13 +611,13 @@ Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
             {
                 DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
             }
-            catch( ... )
+            catch( ::com::sun::star::uno::Exception& )
             {
                 DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
             }
         }
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "GetResultSet: Any other exception" );
     }
@@ -681,9 +681,9 @@ sal_Bool SfxContentHelper::MakeFolder( const String& rFolder )
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {
-        DBG_ERRORFILE( "CommandAbortedException" );
+        // double name?
     }
-    catch( ::com::sun::star::uno::Exception& e )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
@@ -709,7 +709,7 @@ ErrCode SfxContentHelper::QueryDiskSpace( const String& rPath, sal_Int64& rFreeB
         DBG_ERRORFILE( "CommandAbortedException" );
         nErr = ERRCODE_IO_GENERAL;
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
         nErr = ERRCODE_IO_GENERAL;
@@ -734,7 +734,7 @@ ULONG SfxContentHelper::GetSize( const String& rContent )
     {
         DBG_ERRORFILE( "CommandAbortedException" );
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
@@ -767,7 +767,7 @@ sal_Bool SfxContentHelper::IsYounger( const String& rIsYoung, const String& rIsO
     {
         DBG_ERRORFILE( "CommandAbortedException" );
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
