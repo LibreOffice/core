@@ -7,8 +7,8 @@
 #*                      Fuer WindowsNT-Envrionments
 #*
 #*    Ersterstellung    MH 9.2.96
-#*    Letzte Aenderung  $Author: svesik $ $Date: 2000-10-25 14:09:29 $
-#*    $Revision: 1.3 $
+#*    Letzte Aenderung  $Author: hr $ $Date: 2000-10-26 10:40:09 $
+#*    $Revision: 1.4 $
 #*
 #*    $Logfile:   T:/solar/inc/unx.mkv  $
 #*
@@ -46,7 +46,7 @@ OLE2DEF=-DOLE2
 .INCLUDE : unxsoli2.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "C60SOLARISS"
+.IF "$(COM)$(OS)$(CPU)" == "C52SOLARISS"
 .INCLUDE : unxsols3.mk
 .ENDIF
 
