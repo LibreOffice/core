@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-08 13:29:17 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 13:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,8 @@ sal_Int16 lcl_RelToINT(SwRelationOrient eRelation)
     case  REL_FRM_RIGHT:    nRet = text::RelOrientation::FRAME_RIGHT; break;
     case  REL_PG_FRAME:     nRet = text::RelOrientation::PAGE_FRAME; break;
     case  REL_PG_PRTAREA:   nRet = text::RelOrientation::PAGE_PRINT_AREA; break;
+    // OD 13.11.2003 #i22341#
+    case  REL_VERT_LINE:    nRet = text::RelOrientation::TEXT_LINE; break;
     }
     return nRet;
 }
@@ -358,6 +360,8 @@ SwRelationOrient    lcl_IntToRelation(const uno::Any& rVal)
         case  text::RelOrientation::FRAME_RIGHT:    eRet =   REL_FRM_RIGHT     ; break;
         case  text::RelOrientation::PAGE_FRAME:    eRet =   REL_PG_FRAME      ; break;
         case  text::RelOrientation::PAGE_PRINT_AREA:    eRet =   REL_PG_PRTAREA    ; break;
+        // OD 13.11.2003 #i22341#
+        case  text::RelOrientation::TEXT_LINE: eRet = REL_VERT_LINE; break;
     }
     return eRet;
 }
