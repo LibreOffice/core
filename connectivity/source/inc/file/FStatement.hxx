@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-01 11:24:23 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 16:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ namespace connectivity
             virtual void SAL_CALL disposing(void);
             // XInterface
             //      virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException) = 0;
-            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL acquire() throw();
             // XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
@@ -246,7 +246,7 @@ namespace connectivity
             // OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XInterface
-            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL release() throw();
         };
 
         class OStatement :  public OStatement_BASE2,
@@ -261,8 +261,8 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL acquire() throw();
+            virtual void SAL_CALL release() throw();
         };
     }
 }

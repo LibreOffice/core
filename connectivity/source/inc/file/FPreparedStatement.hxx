@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-01 11:24:24 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 16:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,8 +147,8 @@ namespace connectivity
             virtual void SAL_CALL disposing(void);
             //XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL acquire() throw();
+            virtual void SAL_CALL release() throw();
             //XTypeProvider
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
