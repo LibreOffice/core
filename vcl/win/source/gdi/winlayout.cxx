@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:57:15 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -830,7 +830,7 @@ int SimpleWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor 
 
 void SimpleWinLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
 {
-    long nXPos = 0;
+    long nXPos = mnBaseAdv;
 
     if( !mpGlyphs2Chars )
     {
@@ -851,8 +851,9 @@ void SimpleWinLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
         int nLeftIdx = 0;
         for( i = 0; i < mnGlyphCount; ++i )
         {
-            long nXRight = nXPos + mpGlyphAdvances[ i ];
-            int nCurrIdx = 2 * (mpGlyphs2Chars[ i ] - mnMinCharPos);
+            int nCurrIdx = mpGlyphs2Chars[ i ] - mnMinCharPos;
+            long nXRight = nXPos + mpCharWidths[ nCurrIdx ];
+            nCurrIdx *= 2;
             if( nLeftIdx <= nCurrIdx )
             {
                 // normal positions for LTR case
@@ -866,16 +867,7 @@ void SimpleWinLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
                 pCaretXArray[ nCurrIdx+1 ] = nXPos;
             }
             nLeftIdx = nCurrIdx;
-            nXPos = nXRight;
-        }
-
-        // fixup unknown character positions to neighbor
-        for( i = 0; i < nMaxIdx; ++i )
-        {
-            if( pCaretXArray[ i ] >= 0 )
-                nXPos = pCaretXArray[ i ];
-            else
-                pCaretXArray[ i ] = nXPos;
+            nXPos += mpGlyphAdvances[ i ];
         }
     }
 }
