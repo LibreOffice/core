@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:32:40 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:55:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,8 @@ public:
     FASTBOOL        InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, ULONG nOptions=0);
 
     SdrEndTextEditKind  ScEndTextEdit();    // ruft SetDrawTextUndo(0)
+    void                    StoreCaptionAttribs();
+    void                    StoreCaptionDimensions();
 };
 
 
