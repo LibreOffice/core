@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABQuery.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 08:45:55 $
+ *  last change: $Author: wvd $ $Date: 2001-07-19 14:48:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 #endif
 #ifndef _DATE_HXX
 #include <tools/date.hxx>
+#endif
+
+#ifndef _CONNECTIVITY_MAB_COLUMNALIAS_HXX_
+#include "MABColumnAlias.hxx"
 #endif
 
 namespace connectivity
@@ -147,6 +151,8 @@ namespace connectivity
             sal_Int32                       m_nMaxNrOfReturns;
             sal_Bool                        m_bQuerySubDirs;
             ::std::vector<eSqlOppr>         m_aSqlOppr;
+            ::std::map< ::rtl::OUString,
+                                    ::rtl::OUString>    m_aColumnAliasMap;
         protected:
             ::osl::Mutex                    m_aMutex;
         public:
@@ -184,6 +190,7 @@ namespace connectivity
 
         public:
             OMozabQuery();
+            OMozabQuery(const ::std::map< ::rtl::OUString, ::rtl::OUString> &);
             virtual ~OMozabQuery();
         };
     }
