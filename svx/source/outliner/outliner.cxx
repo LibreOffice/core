@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-24 11:30:26 $
+ *  last change: $Author: cl $ $Date: 2001-01-16 18:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1937,4 +1937,10 @@ String Outliner::ImplGetBulletText( USHORT nPara )
 //  if( pPara->nFlags & PARAFLAG_SETBULLETTEXT )
         ImplCalcBulletText( nPara, FALSE, FALSE );
     return pPara->GetText();
+}
+
+// this is needed for StarOffice Api
+void Outliner::SetLevelDependendStyleSheet( USHORT nPara )
+{
+    ImplSetLevelDependendStyleSheet( nPara );
 }

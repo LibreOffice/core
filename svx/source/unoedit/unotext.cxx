@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 13:05:28 $
+ *  last change: $Author: cl $ $Date: 2001-01-16 18:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,8 +467,8 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet& rOldSet,
                     if(pObj == NULL)
                         return sal_False;
 
-                    if((pObj->GetObjInventor() == SdrInventor) &&
-                       (pObj->GetObjIdentifier() == OBJ_OUTLINETEXT))
+                    const sal_Bool bOutlinerText = (pObj->GetObjInventor() == SdrInventor) && (pObj->GetObjIdentifier() == OBJ_OUTLINETEXT);
+                    if(bOutlinerText)
                         nLevel++;
 
                     if(nLevel >= 0 && nLevel <= 9)
@@ -479,6 +479,8 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet& rOldSet,
                         if( pPara )
                         {
                             rOutliner.SetDepth( pPara, nLevel );
+                            if( bOutlinerText )
+                                rOutliner.SetLevelDependendStyleSheet( pSelection->nStartPara );
                             return sal_True;
                         }
                     }
