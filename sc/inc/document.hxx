@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 15:25:32 $
+ *  last change: $Author: sab $ $Date: 2000-11-28 16:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1135,6 +1135,8 @@ public:
 
     USHORT          GetLastFlaggedCol( USHORT nTab ) const;
     USHORT          GetLastFlaggedRow( USHORT nTab ) const;
+    USHORT          GetNextDifferentFlaggedCol( USHORT nTab, USHORT nStart) const;
+    USHORT          GetNextDifferentFlaggedRow( USHORT nTab, USHORT nStart) const;
 
     BOOL            IsFiltered( USHORT nRow, USHORT nTab ) const;
 

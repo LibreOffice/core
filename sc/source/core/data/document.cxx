@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-30 11:33:41 $
+ *  last change: $Author: sab $ $Date: 2000-11-28 16:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2287,6 +2287,41 @@ USHORT ScDocument::GetLastFlaggedRow( USHORT nTab ) const
     return 0;
 }
 
+USHORT ScDocument::GetNextDifferentFlaggedCol( USHORT nTab, USHORT nStart) const
+{
+    if ( nTab<=MAXTAB && pTab[nTab] )
+    {
+        BYTE nStartFlags = GetColFlags(nStart, nTab);
+        USHORT nStartWidth = pTab[nTab]->GetColWidth(nStart);
+        for (USHORT nCol = nStart + 1; nCol <= MAXCOL; nCol++)
+        {
+            if (((nStartFlags & CR_PAGEBREAK) != (pTab[nTab]->GetColFlags(nCol) & CR_PAGEBREAK)) ||
+                ((nStartFlags & CR_MANUALSIZE) != (pTab[nTab]->GetColFlags(nCol) & CR_MANUALSIZE)) ||
+                ((nStartFlags & ~CR_MANUALSIZE) && (nStartWidth != pTab[nTab]->GetColWidth(nCol))))
+                return nCol;
+        }
+        return MAXCOL;
+    }
+    return 0;
+}
+
+USHORT ScDocument::GetNextDifferentFlaggedRow( USHORT nTab, USHORT nStart) const
+{
+    if ( nTab<=MAXTAB && pTab[nTab] )
+    {
+        BYTE nStartFlags = GetRowFlags(nStart, nTab);
+        USHORT nStartWidth = pTab[nTab]->GetRowHeight(nStart);
+        for (USHORT nRow = nStart + 1; nRow <= MAXROW; nRow++)
+        {
+            if (((nStartFlags & CR_PAGEBREAK) != (pTab[nTab]->GetRowFlags(nRow) & CR_PAGEBREAK)) ||
+                ((nStartFlags & CR_MANUALSIZE) != (pTab[nTab]->GetRowFlags(nRow) & CR_MANUALSIZE)) ||
+                ((nStartFlags & ~CR_MANUALSIZE) && (nStartWidth != pTab[nTab]->GetRowHeight(nRow))))
+                return nRow;
+        }
+        return MAXROW;
+    }
+    return 0;
+}
 
 void ScDocument::StripHidden( USHORT& rX1, USHORT& rY1, USHORT& rX2, USHORT& rY2, USHORT nTab )
 {
