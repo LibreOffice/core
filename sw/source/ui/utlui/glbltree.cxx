@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-17 17:29:48 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 
 
 #pragma hdrstop
-#include <so3/iface.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
@@ -90,9 +89,7 @@
 #ifndef _HELP_HXX //autogen
 #include <vcl/help.hxx>
 #endif
-#ifndef _FILELIST_HXX //autogen
-#include <so3/filelist.hxx>
-#endif
+#include <sot/filelist.hxx>
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
@@ -604,7 +601,7 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
             if(pItem && SV_ITEM_ID_LBOXSTRING == pItem->IsA())
             {
                 const SwSection* pSect = pCont->GetSection();
-                String sEntry = pSect->GetLinkFileName().GetToken(0, so3::cTokenSeperator);
+                String sEntry = pSect->GetLinkFileName().GetToken(0, sfx2::cTokenSeperator);
                 if(!pSect->IsConnectFlag())
                     sEntry.Insert(aContextStrings[ST_BROKEN_LINK - ST_GLOBAL_CONTEXT_FIRST], 0 );
                 Point aPos = GetEntryPos( pEntry );
@@ -900,9 +897,9 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont,
             while(pMed)
             {
                 String sFileName = URIHelper::SmartRelToAbs( pMed->GetName() );
-                sFileName += so3::cTokenSeperator;
+                sFileName += sfx2::cTokenSeperator;
                 sFileName += pMed->GetFilter()->GetFilterName();
-                sFileName += so3::cTokenSeperator;
+                sFileName += sfx2::cTokenSeperator;
                 pFileNames[nPos++] = sFileName;
                 pMed = pMedList->Next();
             }
@@ -934,7 +931,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont,
             String sFileName(pFileNames[nFile - 1]);
             INetURLObject aFileUrl(sFileName);
             String sSectionName(aFileUrl.GetLastName(INetURLObject::DECODE_UNAMBIGUOUS).
-                                                 GetToken(0, so3::cTokenSeperator));
+                                                 GetToken(0, sfx2::cTokenSeperator));
             USHORT nSectCount = rSh.GetSectionFmtCount();
             String sTempSectionName(sSectionName);
             USHORT nAddNumber = 0;
@@ -1440,7 +1437,7 @@ BOOL    SwGlobalTree::Update(BOOL bHard)
 void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
 {
     String sFileName(pCont->GetSection()->GetLinkFileName().GetToken(0,
-            so3::cTokenSeperator));
+            sfx2::cTokenSeperator));
     BOOL bFound = FALSE;
     const SfxObjectShell* pCurr = SfxObjectShell::GetFirst();
     while( !bFound && pCurr )
