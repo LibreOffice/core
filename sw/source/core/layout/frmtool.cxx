@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:30:51 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:57:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2936,16 +2936,12 @@ void Notify_Background( const SdrObject* pObj,
         // on the object positioning, the complete area has to be processed,
         // because content frames before the anchor frame also have to consider
         // the object for the text wrapping.
-        if ( PREP_FLY_LEAVE != eHint && pAnchor->IsCntntFrm() &&
-             pArea->IsAnLower( pAnchor ) &&
-             !pArea->GetFmt()->GetDoc()->ConsiderWrapOnObjPos() )
-        {
-            pCnt = (SwCntntFrm*)pAnchor;
-        }
-        else
+        // --> OD 2004-08-25 #i3317# - The complete area has always been
+        // processed.
         {
             pCnt = pArea->ContainsCntnt();
         }
+        // <--
     }
     SwFrm *pLastTab = 0;
 
