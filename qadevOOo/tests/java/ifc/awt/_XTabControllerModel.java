@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTabControllerModel.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:32 $
+ *  last change:$Date: 2003-09-08 10:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,10 @@
 
 package ifc.awt;
 
-import com.sun.star.awt.XControlModel;
-import com.sun.star.awt.XTabControllerModel;
 import lib.MultiMethodTest;
 import lib.Status;
+
+import com.sun.star.awt.XTabControllerModel;
 
 /**
 * Testing <code>com.sun.star.awt.XTabControllerModel</code>
@@ -96,8 +96,7 @@ import lib.Status;
 public class _XTabControllerModel extends MultiMethodTest {
 
     public XTabControllerModel oObj = null;
-    private XControlModel[] Modelseq1 = new XControlModel[1];
-    private XControlModel[] Modelseq2 = new XControlModel[1];
+
 
     /**
     * Sets group control to <code>true</code> then calls
