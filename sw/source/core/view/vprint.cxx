@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-14 09:57:12 $
+ *  last change: $Author: ama $ $Date: 2001-03-02 10:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,13 +378,13 @@ USHORT _PostItFld::GetPageNo( MultiSelection &rMulti, BOOL bRgt, BOOL bLft,
             pFrm->HasFollow() && pFrm->GetFollow()->GetOfst() <= nPos )
             continue;
         USHORT nPgNo = pFrm->GetPhyPageNum();
-        USHORT nVirt = pFrm->GetVirtPageNum();
+        BOOL bRight = pFrm->OnRightPage();
         if( rMulti.IsSelected( nPgNo ) &&
-            ( ((nVirt % 2) && bRgt) || (!(nVirt % 2) && bLft) ) )
+            ( (bRight && bRgt) || (!bRight && bLft) ) )
         {
             rLineNo = (USHORT)(pFrm->GetLineCount( nPos ) +
                       pFrm->GetAllLines() - pFrm->GetThisLines());
-            rVirtPgNo = nVirt;
+            rVirtPgNo = pFrm->GetVirtPageNum();
             return nPgNo;
         }
     }
@@ -1196,10 +1196,10 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
                         pPrt->SetMapMode( aTmp );
                     }
 
-                    USHORT nVirtNo = pStPage->GetVirtPageNum();
+                    BOOL bRightPg = pStPage->OnRightPage();
                     if( aMulti.IsSelected( nPageNo ) &&
-                        ( ((nVirtNo % 2) && rOptions.bPrintRightPage) ||
-                            (!(nVirtNo % 2) && rOptions.bPrintLeftPage)    ) )
+                        ( (bRightPg && rOptions.bPrintRightPage) ||
+                            (!bRightPg && rOptions.bPrintLeftPage) ) )
                     {
                         if ( bSetPrt && pLastPageDesc != pStPage->GetPageDesc() )
                         {
@@ -1557,6 +1557,9 @@ void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/02/14 09:57:12  jp
+      changes: international -> localdatawrapper
+
       Revision 1.3  2001/01/17 12:09:31  jp
       remove compiler warning
 

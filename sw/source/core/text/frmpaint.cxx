@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-16 09:02:43 $
+ *  last change: $Author: ama $ $Date: 2001-03-02 10:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,13 +215,18 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
         LineNumberPosition ePos = rLineInf.GetPos();
         if( ePos != LINENUMBER_POS_LEFT && ePos != LINENUMBER_POS_RIGHT )
         {
-            nVirtPageNum = pFrm->FindPageFrm()->GetVirtPageNum();
-            if( nVirtPageNum % 2 )
+            if( pFrm->FindPageFrm()->OnRightPage() )
+            {
+                nVirtPageNum = 1;
                 ePos = ePos == LINENUMBER_POS_INSIDE ?
                         LINENUMBER_POS_LEFT : LINENUMBER_POS_RIGHT;
+            }
             else
+            {
+                nVirtPageNum = 2;
                 ePos = ePos == LINENUMBER_POS_OUTSIDE ?
                         LINENUMBER_POS_LEFT : LINENUMBER_POS_RIGHT;
+            }
         }
         if( LINENUMBER_POS_LEFT == ePos )
         {
@@ -243,7 +248,7 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
         if( HORI_INSIDE == eHor || HORI_OUTSIDE == eHor )
         {
             if( !nVirtPageNum )
-                nVirtPageNum = pFrm->FindPageFrm()->GetVirtPageNum();
+                nVirtPageNum = pFrm->FindPageFrm()->OnRightPage() ? 1 : 2;
             if( nVirtPageNum % 2 )
                 eHor = eHor == HORI_INSIDE ? HORI_LEFT : HORI_RIGHT;
             else
