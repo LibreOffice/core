@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-23 15:18:23 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 14:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,7 +589,7 @@ BOOL __EXPORT ScDocShell::Load( SvStorage* pStor )
             aDocument.GetStyleSheetPool()->CreateStandardStyles();
             aDocument.UpdStlShtPtrsFrmNms();
 
-            bRet = LoadXML( NULL, pStor );
+            bRet = LoadXML( GetMedium(), pStor );
         }
         else
             bRet = LoadCalc( pStor );
