@@ -42,27 +42,25 @@ ALL : \
 
 include $(SETTINGS)/stdtarget.mk
 
-# create all component sepcific output directories
-# and use OUT_COMP_GEN for dependencies 
-$(OUT_COMP_GEN) : $(OUT)
-	$(MKDIR) $(subst /,$(PS),$@)
-	$(MKDIR) $(subst /,$(PS),$(OUT_COMP_INC))
-	$(MKDIR) $(subst /,$(PS),$(OUT_COMP_OBJ))
-
 # This example type library will be extended by the office types
-$(OUT_BIN)/%.rdb : $(OUT_COMP_GEN)
+$(OUT_BIN)/%.rdb :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$@)
 	regmerge $@ / $(DKREGISTRYNAME) 
 
-$(COMPONENT_TYPEFLAG) : $(COMPONENT_RDB) $(OUT_COMP_GEN)
+$(COMPONENT_TYPEFLAG) : $(COMPONENT_RDB)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
 	cppumaker -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB)
 	echo flagged > $@
 
-$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG) $(OUT_COMP_GEN)
+$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
-$(OUT_BIN)/%$(EXE_EXT) : $(OUT_COMP_OBJ)/%.$(OBJ_EXT) $(OUT_COMP_GEN)
+$(OUT_BIN)/%$(EXE_EXT) : $(OUT_COMP_OBJ)/%.$(OBJ_EXT)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN))
 ifeq "$(OS)" "WIN"
 	$(LINK) $(EXE_LINK_FLAGS) /OUT:$@ /MAP:$(OUT_COMP_GEN)/$(basename $(@F)).map \
 	  $< $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB)
@@ -72,6 +70,7 @@ else
 endif
 
 $(COMPOENNT_ENV_FLAG) : 
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $@
 	@echo --------------------------------------------------------------------------------
 	@echo        Register necessary runtime components in the DocumentLoader.rdb 
