@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:22:32 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,7 +558,7 @@ void ODBTable::refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys)
     if(m_CatalogName.getLength())
         aVal <<= m_CatalogName;
 
-    Reference< XResultSet > xResult = m_xMetaData->getExportedKeys(aVal,m_SchemaName,m_Name);
+    Reference< XResultSet > xResult = m_xMetaData->getImportedKeys(aVal,m_SchemaName,m_Name);
 
     if(xResult.is())
     {
