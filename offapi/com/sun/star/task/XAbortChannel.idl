@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAbortChannel.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 11:52:31 $
+ *  last change: $Author: kz $ $Date: 2004-07-27 11:53:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #if ! defined INCLUDED_com_sun_star_task_XAbortChannel_idl
 #define INCLUDED_com_sun_star_task_XAbortChannel_idl
 
@@ -68,7 +67,7 @@
 module com { module sun { module star { module task {
 
 /** Use this interface to abort a command asynchronously.
-    For example, have a look at <type scope="com::sun::star::deployment>
+    For example, have a look at <type scope="com::sun::star::deployment">
     XPackageManager</type>.
 */
 interface XAbortChannel
