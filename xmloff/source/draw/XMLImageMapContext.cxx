@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLImageMapContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-29 14:40:26 $
+ *  last change: $Author: dvo $ $Date: 2001-03-30 13:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ static __FAR_DATA SvXMLTokenMapEntry aImageMapObjectTokenMap[] =
     { XML_NAMESPACE_SVG,    sXML_height,        XML_TOK_IMAP_HEIGTH         },
     { XML_NAMESPACE_SVG,    sXML_r,             XML_TOK_IMAP_RADIUS         },
     { XML_NAMESPACE_SVG,    sXML_viewBox,       XML_TOK_IMAP_VIEWBOX        },
-    { XML_NAMESPACE_DRAW,   sXML_points,        XML_TOK_IMAP_POINTS         },
+    { XML_NAMESPACE_SVG,    sXML_points,        XML_TOK_IMAP_POINTS         },
     { XML_NAMESPACE_OFFICE, sXML_target_frame_name, XML_TOK_IMAP_TARGET     },
     XML_TOKEN_MAP_END
 };
