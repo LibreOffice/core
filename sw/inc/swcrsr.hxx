@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 15:39:22 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,9 +126,18 @@ protected:
     const _SwCursor_SavePos* GetSavePos() const { return pSavePos; }
 
 public:
+    // single argument ctors shall be explicit.
     SwCursor( const SwPosition &rPos, SwPaM* pRing = 0 );
-    SwCursor( SwCursor& );
     virtual ~SwCursor();
+
+    // @@@ semantic: no copy ctor.
+    SwCursor( SwCursor& rCpy);
+private:
+    // forbidden and not implemented.
+    SwCursor( const SwCursor& );
+    // @@@ used e.g. in core/frmedt/fetab.cxx @@@
+    // SwCursor & operator= ( const SwCursor& );
+public:
 
     virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
 
