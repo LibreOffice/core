@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: mt $ $Date: 2000-10-10 10:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3971,7 +3971,10 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                      long nWidth, const XubString& rStr,
                                      USHORT nStyle ) const
 {
-    DBG_ASSERT( nWidth >= 0, "ImplGetTextLines: nWidth <= 0!" );
+    DBG_ASSERTWARNING( nWidth >= 0, "ImplGetTextLines: nWidth <= 0!" );
+
+    if ( nWidth <= 0 )
+        nWidth = 1;
 
     long nMaxLineWidth  = 0;
     rLineInfo.Clear();
