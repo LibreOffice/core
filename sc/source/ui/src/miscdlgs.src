@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:52:32 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text [ norwegian ] = "Options" ;
         Text [ italian ] = "Opzioni" ;
         Text [ portuguese_brazilian ] = "Op??s" ;
-        Text [ portuguese ] = "Opções" ;
+        Text [ portuguese ] = "Selecção" ;
         Text [ finnish ] = "Valinta" ;
         Text [ danish ] = "Udvalg" ;
         Text [ french ] = "Sélection" ;
@@ -246,7 +246,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ russian ] = "Âûáîð";
         Text[ polish ] = "Wybór";
         Text[ japanese ] = "‘I‘ð";
-        Text[ chinese_traditional ] = "¿ï¾Ü";
+        Text[ chinese_traditional ] = "¿ï¨ú";
         Text[ arabic ] = "ÊÍÏíÏ";
         Text[ greek ] = "ÅðéëïãÞ";
         Text[ korean ] = "¼±ÅÃ";
@@ -450,7 +450,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ russian ] = "Âûáîð";
         Text[ polish ] = "Wybór";
         Text[ japanese ] = "‘I‘ð";
-        Text[ chinese_traditional ] = "¿ï¾Ü";
+        Text[ chinese_traditional ] = "¿ï¨ú";
         Text[ arabic ] = "ÊÍÏíÏ";
         Text[ greek ] = "ÅðéëïãÞ";
         Text[ korean ] = "¼±ÅÃ";
@@ -766,7 +766,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text [ norwegian ] = "Options" ;
         Text [ italian ] = "Selezione" ;
         Text [ portuguese_brazilian ] = "Op??s" ;
-        Text [ portuguese ] = "Opções" ;
+        Text [ portuguese ] = "Selecção" ;
         Text [ finnish ] = "Valinta" ;
         Text [ danish ] = "Udvalg" ;
         Text [ french ] = "Sélection" ;
@@ -778,7 +778,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ russian ] = "Âûáîð";
         Text[ polish ] = "Wybór";
         Text[ japanese ] = "‘I‘ð";
-        Text[ chinese_traditional ] = "¿ï¾Ü";
+        Text[ chinese_traditional ] = "¿ï¨ú";
         Text[ arabic ] = "ÊÍÏíÏ";
         Text[ greek ] = "ÅðéëïãÞ";
         Text[ korean ] = "¼±ÅÃ";
@@ -1061,7 +1061,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ norwegian ] = "Options" ;
         Text [ italian ] = "Selezione" ;
         Text [ portuguese_brazilian ] = "Op??s" ;
-        Text [ portuguese ] = "Opções" ;
+        Text [ portuguese ] = "Selecção" ;
         Text [ finnish ] = "Valinta" ;
         Text [ danish ] = "Udvalg" ;
         Text [ french ] = "Sélection" ;
@@ -1073,7 +1073,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ russian ] = "Âûáîð";
         Text[ polish ] = "Wybór";
         Text[ japanese ] = "‘I‘ð";
-        Text[ chinese_traditional ] = "¿ï¾Ü";
+        Text[ chinese_traditional ] = "¿ï¨ú";
         Text[ arabic ] = "ÊÍÏíÏ";
         Text[ greek ] = "ÅðéëïãÞ";
         Text[ korean ] = "¼±ÅÃ";
@@ -2298,7 +2298,7 @@ ModalDialog RID_SCDLG_SELECTDB
     Text [ norwegian ] = "Options" ;
     Text [ italian ] = "Selezione" ;
     Text [ portuguese_brazilian ] = "Op??s" ;
-    Text [ portuguese ] = "Selecção" ;
+    Text [ portuguese ] = "~Selecção" ;
     Text [ finnish ] = "Valitse" ;
     Text [ danish ] = "Vælg" ;
     Text [ french ] = "~Sélection" ;
@@ -2897,7 +2897,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ norwegian ] = "Type" ;
         Text [ italian ] = "Tipo" ;
         Text [ portuguese_brazilian ] = "Tipo" ;
-        Text [ portuguese ] = "Tipos" ;
+        Text [ portuguese ] = "Tipo de série" ;
         Text [ finnish ] = "Sarjatyyppi" ;
         Text [ danish ] = "Serietype" ;
         Text [ french ] = "Type" ;
@@ -3495,7 +3495,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ russian ] = "Ñîçäàòü èìÿ èç";
         Text[ polish ] = "Utwórz nazwê z";
         Text[ japanese ] = "“K—p‚·‚é–¼‘O‚ÌˆÊ’u";
-        Text[ chinese_traditional ] = "²£¥Í¦WºÙ±q";
+        Text[ chinese_traditional ] = "·s«Ø¦WºÙ±q";
         Text[ arabic ] = "ÅäÔÇÁ ÃÓãÇÁ ãä";
         Text[ greek ] = "Äçìéïõñãßá ïíüìáôïò áðü";
         Text[ korean ] = "·ÎºÎÅÍ ÀÌ¸§ ¸¸µé±â";
@@ -3672,7 +3672,7 @@ FloatingWindow RID_SCDLG_TEAM
     Text[ russian ] = "Ðàçðàáîò÷èêè %PRODUCTNAME Calc";
     Text[ polish ] = "Zespó³ %PRODUCTNAME Calc";
     Text[ japanese ] = "%PRODUCTNAME Calc Á°Ñ";
-    Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤p²Õ";
+    Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤u§@²Õ";
     Text[ arabic ] = "ÝÑíÞ %PRODUCTNAME Calc";
     Text[ greek ] = "Ç ïìÜäá ôïõ %PRODUCTNAME Calc";
     Text[ korean ] = "StarCalc ÆÀ";
@@ -3813,5 +3813,6 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     Text[ catalan ] = "Modificar datos fuente";
     Text[ finnish ] = "Vaihda lähdetietoalue";
 };
+
 
 
