@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 17:14:22 $
+ *  last change: $Author: fs $ $Date: 2001-10-16 11:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ SV_DECL_PTRARR(SdrObjArray, SdrObject*, 32, 16);
 DECLARE_STL_VECTOR( ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > ,FmFormArray);
 
 // catch databse exceptions if occur
-#define DO_SAFE(statement) try { statement; } catch(...) { DBG_WARNING("unhandled exception (I tried to move a cursor (or something like that).)"); }
+#define DO_SAFE(statement) try { statement; } catch( const Exception& ) { DBG_ERROR("unhandled exception (I tried to move a cursor (or something like that).)"); }
 
 #define GA_DISABLE_SYNC     1
 #define GA_FORCE_SYNC       2
@@ -377,7 +377,7 @@ class FmXFormShell  :public FmXFormShell_BASE
         // und das ist ebenfalls fuer's 'gefunden' : Beim Finden in GridControls brauche ich die Spalte, bekomme aber
         // nur die Nummer des Feldes, die entspricht der Nummer der Spalte + <offset>, wobei der Offset von der Position
         // des GridControls im Formular abhaengt. Also hier eine Umrechnung.
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>         m_aLastGridFound;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>         m_xLastGridFound;
         // we want to be a DispatchInterceptor within our frame
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>              m_xAttachedFrame;
         // Administration of external form views (see the SID_FM_VIEW_AS_GRID-slot)
