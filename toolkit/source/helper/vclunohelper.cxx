@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclunohelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:12:59 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,12 @@
 #include <com/sun/star/awt/FontWidth.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_EMBEDMAPUNITS_HPP_
+#include <com/sun/star/embed/EmbedMapUnits.hpp>
 #endif
 
 #pragma hdrstop
@@ -458,6 +462,68 @@ sal_Bool VCLUnoHelper::IsZero( ::com::sun::star::awt::Rectangle rRect )
     return ( !rRect.X && !rRect.Y && !rRect.Width && !rRect.Height );
 }
 
+MapUnit VCLUnoHelper::UnoEmbed2VCLMapUnit( sal_Int32 nUnoEmbedMapUnit )
+{
+    switch( nUnoEmbedMapUnit )
+    {
+        case ::com::sun::star::embed::EmbedMapUnits::ONE_100TH_MM:
+            return MAP_100TH_MM;
+        case ::com::sun::star::embed::EmbedMapUnits::ONE_10TH_MM:
+            return MAP_10TH_MM;
+        case ::com::sun::star::embed::EmbedMapUnits::ONE_MM:
+            return MAP_MM;
+        case ::com::sun::star::embed::EmbedMapUnits::ONE_CM:
+            return MAP_CM;
+        case ::com::sun::star::embed::EmbedMapUnits::ONE_1000TH_INCH:
+            return MAP_1000TH_INCH;
+        case ::com::sun::star::embed::EmbedMapUnits::ONE_100TH_INCH:
+            return MAP_100TH_INCH;
+        case ::com::sun::star::embed::EmbedMapUnits::ONE_10TH_INCH:
+            return MAP_10TH_INCH;
+        case ::com::sun::star::embed::EmbedMapUnits::ONE_INCH:
+            return MAP_INCH;
+        case ::com::sun::star::embed::EmbedMapUnits::POINT:
+            return MAP_POINT;
+        case ::com::sun::star::embed::EmbedMapUnits::TWIP:
+            return MAP_TWIP;
+        case ::com::sun::star::embed::EmbedMapUnits::PIXEL:
+            return MAP_PIXEL;
+    }
 
+    OSL_ENSURE( sal_False, "Unexpected UNO map mode is provided!\n" );
+    return MAP_LASTENUMDUMMY;
+}
+
+sal_Int32 VCLUnoHelper::VCL2UnoEmbedMapUnit( MapUnit nVCLMapUnit )
+{
+    switch( nVCLMapUnit )
+    {
+        case MAP_100TH_MM:
+            return ::com::sun::star::embed::EmbedMapUnits::ONE_100TH_MM;
+        case MAP_10TH_MM:
+            return ::com::sun::star::embed::EmbedMapUnits::ONE_10TH_MM;
+        case MAP_MM:
+            return ::com::sun::star::embed::EmbedMapUnits::ONE_MM;
+        case MAP_CM:
+            return ::com::sun::star::embed::EmbedMapUnits::ONE_CM;
+        case MAP_1000TH_INCH:
+            return ::com::sun::star::embed::EmbedMapUnits::ONE_1000TH_INCH;
+        case MAP_100TH_INCH:
+            return ::com::sun::star::embed::EmbedMapUnits::ONE_100TH_INCH;
+        case MAP_10TH_INCH:
+            return ::com::sun::star::embed::EmbedMapUnits::ONE_10TH_INCH;
+        case MAP_INCH:
+            return ::com::sun::star::embed::EmbedMapUnits::ONE_INCH;
+        case MAP_POINT:
+            return ::com::sun::star::embed::EmbedMapUnits::POINT;
+        case MAP_TWIP:
+            return ::com::sun::star::embed::EmbedMapUnits::TWIP;
+        case MAP_PIXEL:
+            return ::com::sun::star::embed::EmbedMapUnits::PIXEL;
+    }
+
+    OSL_ENSURE( sal_False, "Unexpected VCL map mode is provided!\n" );
+    return -1;
+}
 
 
