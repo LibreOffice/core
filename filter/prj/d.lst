@@ -9,3 +9,6 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 ..\%__SRC%\bin\*.xsl %_DEST%\bin%_EXT%\*.xsl
 ..\%__SRC%\bin\*.stw %_DEST%\bin%_EXT%\*.stw
+
+mkdir: %_DEST%\pkg%_EXT%\filter
+..\%__SRC%\bin\fcfg_*.zip %_DEST%\pkg%_EXT%\filter\fcfg_*.zip
