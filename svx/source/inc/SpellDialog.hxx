@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpellDialog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:16:39 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,8 @@ private:
     Size            aOldWordEDSize;
     Link            aDialogUndoLink;
 
-    sal_Bool        bModified;
+    bool            bModified;
+    bool            bFocusLocked;
 
     svx::SpellDialogChildWindow& rParent;
     svx::SpellPortions           m_aSavedSentence;
@@ -261,6 +262,7 @@ private:
     void            UpdateBoxes_Impl();
     void            Init_Impl();
     void            SpellContinue_Impl(bool UseSavedSentence = false);
+    void            LockFocusChanges( bool bLock ) {bFocusLocked = bLock;}
 
     void            SetSelectedLang_Impl( LanguageType nLang );
     LanguageType    GetSelectedLang_Impl() const;
