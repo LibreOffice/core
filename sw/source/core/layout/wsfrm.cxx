@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-06 13:04:30 $
+ *  last change: $Author: fme $ $Date: 2002-11-11 13:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,15 +591,14 @@ void SwFrm::ChgSize( const Size& aNewSize )
                     else
                         Shrink( -nDiff );
 
-                    ASSERT( (aFrm.*fnRect->fnGetHeight)() == nNew,
-                            "Unexpected frame height" )
-
+                    if ( GetUpper() && (aFrm.*fnRect->fnGetHeight)() != nNew )
+                        GetUpper()->_InvalidateSize();
                 }
-                else
-                    // Auch wenn das Grow/Shrink noch nicht die gewuenschte Breite eingestellt hat,
-                    // wie z.B. beim Aufruf durch ChgColumns, um die Spaltenbreiten einzustellen,
-                    // wird die Breite jetzt gesetzt.
-                    (aFrm.*fnRect->fnSetHeight)( nNew );
+
+                // Auch wenn das Grow/Shrink noch nicht die gewuenschte Breite eingestellt hat,
+                // wie z.B. beim Aufruf durch ChgColumns, um die Spaltenbreiten einzustellen,
+                // wird die Breite jetzt gesetzt.
+                (aFrm.*fnRect->fnSetHeight)( nNew );
             }
         }
     }
