@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 09:28:41 $
+ *  last change: $Author: rt $ $Date: 2000-12-01 07:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1279,26 +1279,26 @@ String RID_STR_FILTBASIC
 {
     Text = "StarBasic Bibliotheken" ;
     Text [ ENGLISH ] = "StarBasic Libraries" ;
-    Text [ dutch ] = "StarOffice Basic Bibliotheken" ;
-    Text [ english_us ] = "StarOffice Basic Libraries" ;
-    Text [ italian ] = "Biblioteche di StarOffice Basic" ;
-    Text [ spanish ] = "Bibliotecas StarOffice Basic" ;
-    Text [ french ] = "Bibilothθques StarOffice Basic" ;
-    Text [ swedish ] = "StarOffice Basic Bibliotek" ;
-    Text [ danish ] = "StarOffice Basic biblioteker" ;
-    Text [ portuguese_brazilian ] = "StarOffice Basic Bibliotheken" ;
-    Text [ portuguese ] = "Bibliotecas StarOffice Basic" ;
-    Text[ chinese_simplified ] = "StarOffice Basic Ώβ";
-    Text[ russian ] = "Αθαλθξςεκθ StarOffice Basic";
-    Text[ polish ] = "Biblioteki w StarOffice Basic";
-    Text[ japanese ] = "StarOffice Basic Χ²ΜήΧΨ";
-    Text[ chinese_traditional ] = "StarOffice Basic µ{¦΅®w";
-    Text[ arabic ] = "γίΗΚΘ StarOffice Basic";
-    Text[ dutch ] = "StarOffice Basic Bibliotheken";
-    Text[ chinese_simplified ] = "StarOffice Basic Ώβ";
-    Text[ greek ] = "Βιβλιοθήκες StarOffice Basic";
-    Text[ korean ] = "StarOffice Basic ¶σΐΜΊκ·―Έ®";
-    Text[ turkish ] = "StarOffice Basic kitaplύklarύ";
+    Text [ dutch ] = "%PRODUCTNAME Basic Bibliotheken" ;
+    Text [ english_us ] = "%PRODUCTNAME Basic Libraries" ;
+    Text [ italian ] = "Biblioteche di %PRODUCTNAME Basic" ;
+    Text [ spanish ] = "Bibliotecas %PRODUCTNAME Basic" ;
+    Text [ french ] = "Bibilothθques %PRODUCTNAME Basic" ;
+    Text [ swedish ] = "%PRODUCTNAME Basic Bibliotek" ;
+    Text [ danish ] = "%PRODUCTNAME Basic biblioteker" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Basic Bibliotheken" ;
+    Text [ portuguese ] = "Bibliotecas %PRODUCTNAME Basic" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME Basic Ώβ";
+    Text[ russian ] = "Αθαλθξςεκθ %PRODUCTNAME Basic";
+    Text[ polish ] = "Biblioteki w %PRODUCTNAME Basic";
+    Text[ japanese ] = "%PRODUCTNAME Basic Χ²ΜήΧΨ";
+    Text[ chinese_traditional ] = "%PRODUCTNAME Basic µ{¦΅®w";
+    Text[ arabic ] = "γίΗΚΘ %PRODUCTNAME Basic";
+    Text[ dutch ] = "%PRODUCTNAME Basic Bibliotheken";
+    Text[ chinese_simplified ] = "%PRODUCTNAME Basic Ώβ";
+    Text[ greek ] = "Βιβλιοθήκες %PRODUCTNAME Basic";
+    Text[ korean ] = "%PRODUCTNAME Basic ¶σΐΜΊκ·―Έ®";
+    Text[ turkish ] = "%PRODUCTNAME Basic kitaplύklarύ";
     Text[ language_user1 ] = " ";
 };
 String RID_STR_WARNSTYLEOVERWRITE
@@ -1518,28 +1518,28 @@ String STR_EDIT
 };
 String RID_OFFICEFILTER
 {
-    Text = "StarOffice Dokumente" ;
+    Text = "%PRODUCTNAME Dokumente" ;
     Text [ English ] = "StarOffice Documents" ;
-    Text [ english_us ] = "StarOffice Documents" ;
-    Text [ italian ] = "Documenti  StarOffice" ;
-    Text [ spanish ] = "Documentos StarOffice" ;
-    Text [ french ] = "Documents StarOffice" ;
-    Text [ dutch ] = "StarOffice-documenten" ;
-    Text [ swedish ] = "StarOffice-dokument" ;
-    Text [ danish ] = "StarOffice dokumenter" ;
-    Text [ portuguese_brazilian ] = "StarOffice Dokumente" ;
-    Text [ portuguese ] = "Documentos StarOffice" ;
-    Text[ chinese_simplified ] = "StarOffice ΞΔµµ";
-    Text[ russian ] = "StarOffice - Δξκσμενςϋ";
-    Text[ polish ] = "StarOffice - Dokumenty";
-    Text[ japanese ] = "StarOfficeΔή·­ÒέΔ";
-    Text[ chinese_traditional ] = "StarOffice ¤ε¥σ";
-    Text[ arabic ] = "γΣΚδΟΗΚ StarOffice ";
-    Text[ dutch ] = "StarOffice-documenten";
-    Text[ chinese_simplified ] = "StarOffice ΞΔµµ";
-    Text[ greek ] = "StarOffice - Έγγραφα";
-    Text[ korean ] = "StarOffice Ή®Ό­";
-    Text[ turkish ] = "StarOffice belgeleri";
+    Text [ english_us ] = "%PRODUCTNAME Documents" ;
+    Text [ italian ] = "Documenti  %PRODUCTNAME" ;
+    Text [ spanish ] = "Documentos %PRODUCTNAME" ;
+    Text [ french ] = "Documents %PRODUCTNAME" ;
+    Text [ dutch ] = "%PRODUCTNAME-documenten" ;
+    Text [ swedish ] = "%PRODUCTNAME-dokument" ;
+    Text [ danish ] = "%PRODUCTNAME dokumenter" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Dokumente" ;
+    Text [ portuguese ] = "Documentos %PRODUCTNAME" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME ΞΔµµ";
+    Text[ russian ] = "%PRODUCTNAME - Δξκσμενςϋ";
+    Text[ polish ] = "%PRODUCTNAME - Dokumenty";
+    Text[ japanese ] = "%PRODUCTNAMEΔή·­ÒέΔ";
+    Text[ chinese_traditional ] = "%PRODUCTNAME ¤ε¥σ";
+    Text[ arabic ] = "γΣΚδΟΗΚ %PRODUCTNAME ";
+    Text[ dutch ] = "%PRODUCTNAME-documenten";
+    Text[ chinese_simplified ] = "%PRODUCTNAME ΞΔµµ";
+    Text[ greek ] = "%PRODUCTNAME - Έγγραφα";
+    Text[ korean ] = "%PRODUCTNAME Ή®Ό­";
+    Text[ turkish ] = "%PRODUCTNAME belgeleri";
     Text[ language_user1 ] = " ";
 };
 String RID_OFFICEFILTER_WILDCARD
@@ -1609,28 +1609,28 @@ String STR_FSET_FILTERNAME0
 String STR_FSET_FILTERNAME1
 {
     // nur 'Dokument' "ubersetzen - only translate 'Document'
-    Text = "StarOffice Frame Dokument" ;
+    Text = "%PRODUCTNAME Frame Dokument" ;
     Text [ ENGLISH ] = "StarOffice Frame Document" ;
-    Text [ english_us ] = "StarOffice Frame Document" ;
+    Text [ english_us ] = "%PRODUCTNAME Frame Document" ;
     Text [ portuguese_brazilian ] = "StarFrame Dokument" ;
-    Text [ swedish ] = "StarOffice Frame-dokument" ;
-    Text [ danish ] = "StarOffice Frame-dokument" ;
-    Text [ italian ] = "Documento StarOffice Frame" ;
-    Text [ spanish ] = "Documento StarOffice Frame" ;
-    Text [ french ] = "Document StarOffice Frame" ;
-    Text [ dutch ] = "StarOffice Frame-document" ;
-    Text [ portuguese ] = "Documento StarOffice Frame" ;
-    Text[ chinese_simplified ] = "StarOffice Frame ΞΔµµ";
-    Text[ russian ] = "StarOffice Frame - Δξκσμενς";
-    Text[ polish ] = "Dokument StarOffice Frame";
-    Text[ japanese ] = "StarOffice Frame Δή·­ÒέΔ";
-    Text[ chinese_traditional ] = "StarOffice Frame ¤ε¥σ";
-    Text[ arabic ] = "γΣΚδΟ StarOffice Frame";
-    Text[ dutch ] = "StarOffice Frame-document";
-    Text[ chinese_simplified ] = "StarOffice Frame ΞΔµµ";
-    Text[ greek ] = "Έγγραφο του StarOfficeFrame";
-    Text[ korean ] = "StarOffice Frame Ή®Ό­";
-    Text[ turkish ] = "StarOffice frame belgesi";
+    Text [ swedish ] = "%PRODUCTNAME Frame-dokument" ;
+    Text [ danish ] = "%PRODUCTNAME Frame-dokument" ;
+    Text [ italian ] = "Documento %PRODUCTNAME Frame" ;
+    Text [ spanish ] = "Documento %PRODUCTNAME Frame" ;
+    Text [ french ] = "Document %PRODUCTNAME Frame" ;
+    Text [ dutch ] = "%PRODUCTNAME Frame-document" ;
+    Text [ portuguese ] = "Documento %PRODUCTNAME Frame" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME Frame ΞΔµµ";
+    Text[ russian ] = "%PRODUCTNAME Frame - Δξκσμενς";
+    Text[ polish ] = "Dokument %PRODUCTNAME Frame";
+    Text[ japanese ] = "%PRODUCTNAME Frame Δή·­ÒέΔ";
+    Text[ chinese_traditional ] = "%PRODUCTNAME Frame ¤ε¥σ";
+    Text[ arabic ] = "γΣΚδΟ %PRODUCTNAME Frame";
+    Text[ dutch ] = "%PRODUCTNAME Frame-document";
+    Text[ chinese_simplified ] = "%PRODUCTNAME Frame ΞΔµµ";
+    Text[ greek ] = "Έγγραφο του %PRODUCTNAMEFrame";
+    Text[ korean ] = "%PRODUCTNAME Frame Ή®Ό­";
+    Text[ turkish ] = "%PRODUCTNAME frame belgesi";
     Text[ language_user1 ] = " ";
 };
 String STR_TEMPL_MOVED
@@ -1655,7 +1655,7 @@ String STR_TEMPL_MOVED
     Text[ dutch ] = "Sjabloon \"$(TEMPLATE)\" werd niet op de oorspronkelijke plaats gevonden. Een sjabloon met dezelfde naam bevindt zich op \"$(FOUND)\". Wilt u deze sjabloon in de toekomst voor het synchroniseren gebruiken?";
     Text[ chinese_simplified ] = "Γ»ΣΠΤΪΤ­ΐ΄Ξ»ΦΓΥÒµ½ΡωΚ½΅°$(TEMPLATE)΅±΅£ΣΠÒ»ΈφΝ¬ΓϋµΔΡωΚ½ΤΪ΅°$(FOUND)΅±΄¦΅£½ρΊσΔϊÒªΚΉΣΓΥβΈφΡωΚ½½ψΠΠµχΥϋΒπ£Ώ";
     Text[ greek ] = "Το πρότυπο $(TEMPLATE) δεν βρέθηκε στον αρχική του θέση. Υπάρχει ένα ομόνυμο πρότυπο στη θέση $(FOUND). Θέλετε να χρησιμοποιηθεί στο μέλλον αυτό το πρότυπο για την ενημέρωση;";
-    Text[ korean ] = "Ό­½ΔΖΔΐΟ$(TEMPLATE)ΐΜ Ώψ·΅ ΐ§Δ΅Ώ΅Ό­ Ήί°ίµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω. ΐΜΈ§ΐΜ °°ΐΊ Ό­½ΔΖΔΐΟΐΜ $(FOUND)Ώ΅ ΐΦ½ΐ΄Ο΄Ω. ΎΥΐΈ·Ξ ΐΜ ΖΔΐΟΐ» µΏ±βΘ­Ώ΅ ΐΜΏλΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Text[ korean ] = "Ό­½ΔΖΔΐΟ$(TEMPLATE)ΐ» Ώψ·΅ ΐ§Δ΅Ώ΅Ό­ Γ£Αφ ΈψΗί½ΐ΄Ο΄Ω. ΐΜΈ§ΐΜ °°ΐΊ Ό­½ΔΖΔΐΟΐΜ $(FOUND)Ώ΅ ΐΦ½ΐ΄Ο΄Ω. ΎΥΐΈ·Ξ ΐΜ ΖΔΐΟΐ» µΏ±βΘ­Ώ΅ ΐΜΏλΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "\"$(TEMPLATE)\" ώablonu asύl yerinde bulunamadύ. Aynύ adlύ ώablonun bulunduπu yerin adύ: \"$(FOUND)\". Bu ώablon gelecekte karώύlaώtύrma iηin kullanύlsύn mύ?";
     Text[ language_user1 ] = " ";
 };
@@ -1681,7 +1681,7 @@ String STR_TEMPL_RESET
     Text[ dutch ] = "De sjabloon \"$(TEMPLATE)\" werd niet gevonden. Wilt u dat er ook in de toekomst naar wordt gezocht?";
     Text[ chinese_simplified ] = "Ξή·¨ΥÒµ½ΡωΚ½΅°$(TEMPLATE)΅±΅£Δϊ½ρΊσÒªΌΜΠψΡ°ΥÒΛόΒπ£Ώ";
     Text[ greek ] = "Το πρότυπο $(TEMPLATE) δεν βρέθηκε. Θέλετε να γίνει και μελλοντικά αναζήτηση αυτού του προτύπου;";
-    Text[ korean ] = "Ό­½Δ ΖΔΐΟ$(TEMPLATE)ΐΜ Ήί°ίµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω. ΎΥΐΈ·Ξµµ °θΌΣ ΐΜ ΖΔΐΟΐ» Γ£ΐΈ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Text[ korean ] = "Ό­½Δ ΖΔΐΟ$(TEMPLATE)ΐ» Γ£Αφ ΈψΗί½ΐ΄Ο΄Ω. ΎΥΐΈ·Ξµµ °θΌΣ ΐΜ ΖΔΐΟΐ» Γ£ΐΈ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "\"$(TEMPLATE)\" ώablonu bulunamadύ. Bu ώablon gelecekte de aransύn mύ?";
     Text[ language_user1 ] = " ";
 };
@@ -1849,7 +1849,7 @@ String STR_DOCTYPENAME_SD
     Text[ polish ] = "Rysunek";
     Text[ portuguese_brazilian ] = "Drawing";
     Text[ japanese ] = "}`•`‰ζ";
-    Text[ korean ] = "±ΧΈ®±β";
+    Text[ korean ] = "±ΧΈ²";
     Text[ chinese_simplified ] = "»ζΝΌ";
     Text[ chinese_traditional ] = "ΓΈΉΟ¤ε¥σ";
     Text[ turkish ] = "Ηizim";
@@ -1892,7 +1892,7 @@ String STR_NOSAVEANDCLOSE
     Text[ spanish ] = "~Rechazar";
     Text[ italian ] = "~Rigetta";
     Text[ danish ] = "Forkast";
-    Text[ swedish ] = "~Kasta bort";
+    Text[ swedish ] = "A~vslε";
     Text[ polish ] = "Odrzuζ";
     Text[ portuguese_brazilian ] = "~Discard";
     Text[ japanese ] = "”jό(~D)";
