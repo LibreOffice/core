@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideTransitionPane.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:15:02 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,8 @@
 #ifndef _SDDLL_HXX
 #include "sddll.hxx"
 #endif
+
+#include "DialogListBox.hxx"
 
 #include <algorithm>
 #include <memory>
@@ -492,11 +494,13 @@ namespace sd
 SlideTransitionPane::SlideTransitionPane(
     ::Window * pParent,
     ViewShellBase & rBase,
+    const Size& rMinSize,
     SdDrawDocument* pDoc ) :
         Control( pParent, SdResId( DLG_SLIDE_TRANSITION_PANE ) ),
 
         mrBase( rBase ),
         mpDrawDoc( pDoc ),
+        maMinSize( rMinSize ),
         maFL_APPLY_TRANSITION( this, SdResId( FL_APPLY_TRANSITION ) ),
         maLB_SLIDE_TRANSITIONS( this, SdResId( LB_SLIDE_TRANSITIONS ) ),
         maFL_MODIFY_TRANSITION( this, SdResId( FL_MODIFY_TRANSITION ) ),
@@ -628,6 +632,11 @@ void SlideTransitionPane::onChangeCurrentPage()
 void SlideTransitionPane::updateLayout()
 {
     ::Size aPaneSize( GetSizePixel() );
+    if( aPaneSize.Width() < maMinSize.Width() )
+        aPaneSize.Width() = maMinSize.Width();
+
+    if( aPaneSize.Height() < maMinSize.Height() )
+        aPaneSize.Height() = maMinSize.Height();
 
     // start layouting elements from bottom to top.  The remaining space is used
     // for the topmost list box
@@ -1200,6 +1209,9 @@ IMPL_LINK(SlideTransitionPane,EventMultiplexerListener,
                 onChangeCurrentPage();
             }
             break;
+
+        default:
+            break;
     }
     return 0;
 }
@@ -1299,11 +1311,18 @@ IMPL_LINK( SlideTransitionPane, AutoPreviewClicked, void *, EMPTYARG )
 
 ::Window * createSlideTransitionPanel( ::Window* pParent, ViewShellBase& rBase )
 {
-    ::Window* pWindow = 0;
+    DialogListBox* pWindow = 0;
 
     DrawDocShell* pDocSh = rBase.GetDocShell();
     if( pDocSh )
-        pWindow = new SlideTransitionPane( pParent, rBase, pDocSh->GetDoc() );
+    {
+        pWindow = new DialogListBox( pParent, WB_CLIPCHILDREN|WB_TABSTOP|WB_AUTOHSCROLL );
+
+        Size aMinSize( pWindow->LogicToPixel( Size( 72, 216 ), MAP_APPFONT ) );
+        ::Window* pPaneWindow = new SlideTransitionPane( pWindow, rBase, aMinSize, pDocSh->GetDoc() );
+        pWindow->SetChildWindow( pPaneWindow, aMinSize );
+        pWindow->SetText( pPaneWindow->GetText() );
+    }
 
     return pWindow;
 }
