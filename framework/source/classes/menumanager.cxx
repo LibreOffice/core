@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:14:53 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,12 +440,12 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
                         if ( !!aImage )
                                pMenu->SetItemImage( nItemId, aImage );
                     }
-
-                    REFERENCE< XDISPATCH > aXDispatchRef;
-                    m_aMenuItemHandlerVector.push_back( new MenuItemHandler( nItemId, NULL, aXDispatchRef ));
-                    if ( pMenu->GetItemText( nItemId ).Len() == 0 )
-                        aQueryLabelItemIdVector.push_back( nItemId );
                 }
+
+                REFERENCE< XDISPATCH > aXDispatchRef;
+                m_aMenuItemHandlerVector.push_back( new MenuItemHandler( nItemId, NULL, aXDispatchRef ));
+                if ( pMenu->GetItemText( nItemId ).Len() == 0 )
+                    aQueryLabelItemIdVector.push_back( nItemId );
             }
         }
     }
