@@ -260,7 +260,6 @@ public:
         const sal_Int8 * pElements = &kTestByte;
     ::rtl::ByteSequence aByteSeq1( pElements, len);
     ::rtl::ByteSequence aByteSeq2( pElements, len);
-    //aByteSeq2 = aByteSeq1;
     sal_Bool res = aByteSeq1 == aByteSeq2;
         CPPUNIT_ASSERT_MESSAGE
         (
@@ -269,9 +268,24 @@ public:
         );
     }
 
+    void equal_003()
+    {
+        sal_Int32 len = kTestByteCount1 ;
+        const sal_Int8 * pElements = kTestByte5;
+    ::rtl::ByteSequence aByteSeq1( pElements, len);
+    pElements = kTestByte6;
+    ::rtl::ByteSequence aByteSeq2( pElements, len);
+    sal_Bool res = aByteSeq1 == aByteSeq2;
+        CPPUNIT_ASSERT_MESSAGE
+        (
+            "Equality operator: compare two sequences 2",
+            !res
+        );
+    }
     CPPUNIT_TEST_SUITE(equal);
     CPPUNIT_TEST(equal_001);
     CPPUNIT_TEST(equal_002);
+    CPPUNIT_TEST(equal_003);
     CPPUNIT_TEST_SUITE_END();
 }; // class equal
 
@@ -351,25 +365,32 @@ public:
     }
     CPPUNIT_ASSERT_MESSAGE
         (
-            "Gets the pointer to byte array: normal sequence",
-        res
+            "Gets the pointer to byte array: one element sequence",
+        res == sal_True
         );
     }
 
-   /* void getArray_002()
+    void getArray_002()
     {
-    ::rtl::ByteSequence aByteSeq1;
-    sal_Int8 * pArray = aByteSeq1.getArray();
+    sal_Int8 * pElements = kTestByte6;
+        ::rtl::ByteSequence aByteSeq(pElements, 5);
+    sal_Int8 * pArray = aByteSeq.getArray();
+    sal_Bool res = sal_True;
+    for (sal_Int32 i = 0; i < 5; i++)
+    {
+        if (pElements[i] != pArray[i])
+        res = sal_False;
+    }
     CPPUNIT_ASSERT_MESSAGE
         (
-            "Gets the pointer to byte array: empty sequence",
-            pArray == 0 // how to define a null pointer?
+            "Gets the pointer to byte array: more elements sequence",
+            res == sal_True
         );
-    }*/
+    }
 
     CPPUNIT_TEST_SUITE(getArray);
     CPPUNIT_TEST(getArray_001);
-    //CPPUNIT_TEST(getArray_002);
+    CPPUNIT_TEST(getArray_002);
     CPPUNIT_TEST_SUITE_END();
 }; // class getArray
 
@@ -393,12 +414,10 @@ public:
     sal_Int32 nSize = 20;
     aByteSeq.realloc( nSize );
     sal_Int32 nNewLen = aByteSeq.getLength();
-       //sal_Int8  nValue = aByteSeq[nSize-10];
         CPPUNIT_ASSERT_MESSAGE
         (
             "Reallocates sequence to new length: empty sequence",
             nNewLen == nSize
-          //  nValue == 0
         );
     }
 
@@ -424,18 +443,23 @@ public:
     sal_Int32 nElements = kTestSeqLen2;
     aByteSeq.realloc( nSize );
     sal_Int32 nNewLen = aByteSeq.getLength();
-    sal_Int8 nValue = aByteSeq[nElements + 1];
+    sal_Bool res = sal_True;
+    for (int i = nSize; i < nElements; i++)
+    {
+            sal_Int8 nValue = aByteSeq[i];
+        if (nValue != 0)
+                res = sal_False;
+        }
     CPPUNIT_ASSERT_MESSAGE
         (
             "Reallocates sequence: reference count > 1 && nSize > nElements",
             nNewLen == nSize
-        && nValue == 0
+        && res == sal_True
         );
     }
 
     void realloc_004()
     {
-        //reference count = 1
     sal_Int8 * pElements = &kTestByte3;
     sal_Int32 len = kTestByteCount3;
     ::rtl::ByteSequence aByteSeq( pElements, len);
@@ -451,18 +475,16 @@ public:
 
     void realloc_005()
     {
-        //reference count = 1
-    sal_Int8 * pElements = &kTestByte3;
-    sal_Int32 len = kTestByteCount3;
+    sal_Int8 * pElements = kTestByte6;
+    sal_Int32 len = 4;
     ::rtl::ByteSequence aByteSeq( pElements, len);
-    sal_Int32 nSize = kTestByteCount3 + 10 ;
+    sal_Int32 nSize = len + 10 ;
     aByteSeq.realloc( nSize );
     sal_Int32 nNewLen = aByteSeq.getLength();
     CPPUNIT_ASSERT_MESSAGE
         (
             "Reallocates sequence: nSize > nElements",
             nNewLen == nSize
-        //&& aByteSeq[kTestByteCount3 + 2] == 0
         );
     }
 
@@ -472,6 +494,7 @@ public:
     CPPUNIT_TEST(realloc_003);
     CPPUNIT_TEST(realloc_004);
     CPPUNIT_TEST(realloc_005);
+    //CPPUNIT_TEST(realloc_006);
     CPPUNIT_TEST_SUITE_END();
 }; // class realloc
 
