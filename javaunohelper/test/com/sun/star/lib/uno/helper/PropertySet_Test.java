@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertySet_Test.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2002-10-21 11:23:24 $
+ *  last change: $Author: rt $ $Date: 2004-08-02 09:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,10 @@ public class PropertySet_Test
             cl.setPropertyValue("PropXWeakA",value);
             ret= cl.getPropertyValue("PropXWeakA");
             r[i++]= ((XWeak) ret).equals((XWeak) value);
+            value = com.sun.star.beans.PropertyState.AMBIGUOUS_VALUE;
+            cl.setPropertyValue("PropEnum",value);
+            ret= cl.getPropertyValue("PropEnum");
+            r[i++]= ret == value;
             value= new byte[]{1,2,3};
             cl.setPropertyValue("PropArrayByteA", value);
             ret= cl.getPropertyValue("PropArrayByteA");
@@ -1153,6 +1157,9 @@ class TestClass extends PropertySet
     public XInterface xInterfacePropA;
     public Property propXWeakA= new Property("PropXWeakA", 13, new Type(Any.class), (short) 0);
     public XWeak xWeakPropA;
+    public Property propEnum =
+        new Property("PropEnum", 14, new Type("com.sun.star.beans.PropertyState", TypeClass.ENUM), (short)0);
+    public com.sun.star.beans.PropertyState enumPropertyState = com.sun.star.beans.PropertyState.DEFAULT_VALUE;
     // Test private, protected, package access, Anys as arguments and members, members whith a value
 
     public Property propBoolB= new Property("PropBoolB", 101, new Type(Boolean.TYPE), (short) 0);
@@ -1203,6 +1210,7 @@ class TestClass extends PropertySet
         registerProperty(propAnyA, "anyPropA");
         registerProperty(propXInterfaceA, "xInterfacePropA");
         registerProperty(propXWeakA, "xWeakPropA");
+        registerProperty(propEnum,"enumPropertyState");
         registerProperty(propBoolB, "boolPropB");
         registerProperty(propBoolC, "boolPropC");
         registerProperty(propBoolD, "boolPropD");
@@ -1224,7 +1232,7 @@ class TestClass extends PropertySet
                     propBoolA, propCharA, propByteA, propShortA,
                     propIntA, propLongA, propFloatA, propDoubleA,
                     propStringA, propArrayByteA, propTypeA, propObjectA,
-                    propAnyA, propXInterfaceA, propXWeakA, propBoolB,
+                    propAnyA, propXInterfaceA, propXWeakA, propEnum, propBoolB,
                     propBoolC, propBoolD, propBoolClass, propCharClass,
                     propByteClass, propShortClass, propIntClass, propLongClass,
                     propFloatClass, propDoubleClass
@@ -1306,6 +1314,10 @@ class TestClass extends PropertySet
             r[i++]= outNewVal[0] instanceof XInterface && outNewVal[0].equals(value);
             r[i++]= convertPropertyValue(propXWeakA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof XWeak && outNewVal[0].equals(value);
+
+            value = com.sun.star.beans.PropertyState.DIRECT_VALUE;
+            r[i++]= convertPropertyValue(propEnum, outNewVal, outOldVal, value);
+            r[i++]= outNewVal[0] instanceof com.sun.star.uno.Enum && outNewVal[0].equals(value);
 
             // Any arguments ------------------------------------------------------------------
             value= new Any( new Type(Integer.class),new Integer(111));
@@ -1440,9 +1452,9 @@ class TestClass extends PropertySet
             r[i++]= xInterfacePropA instanceof XInterface && xInterfacePropA.equals(value);
             setPropertyValueNoBroadcast(propXWeakA, value);
             r[i++]= xInterfacePropA instanceof XWeak && xInterfacePropA.equals(value);
-            objectPropA= new Object();
-
-
+            value = com.sun.star.beans.PropertyState.AMBIGUOUS_VALUE;
+            setPropertyValueNoBroadcast(propEnum, value);
+            r[i++]= enumPropertyState == value;
             value= new Boolean(true);
             setPropertyValueNoBroadcast(propBoolB, value);
             r[i++]= boolPropB == ((Boolean) value).booleanValue();
@@ -1482,6 +1494,7 @@ class TestClass extends PropertySet
         anyPropA= null;
         xInterfacePropA= null;
         xWeakPropA= null;
+        enumPropertyState = com.sun.star.beans.PropertyState.DEFAULT_VALUE;
         boolPropB= false;
         boolPropC= false;
         boolPropD= false;
