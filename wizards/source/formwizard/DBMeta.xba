@@ -37,6 +37,7 @@ Dim DBIndex as Integer
 				End With
 			End If
 		End If
+		bEnableBinaryOptionGroup = False
 		ToggleDatabasePage(True)
 	End If
 End Sub

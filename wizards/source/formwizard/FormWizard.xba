@@ -68,7 +68,6 @@ End Sub
 Sub MainWithDefault(Optional DatasourceName as String, Optional oConnection as Object, Optional CommandType as Integer, Optional sContent as String)
 Dim i as Integer
 Dim SelCount as Integer
-&apos;On Local Error Goto GlobalError
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	BasicLibraries.LoadLibrary(&quot;WebWizard&quot;)
 	bDebug = True
@@ -78,6 +77,7 @@ Dim SelCount as Integer
 &apos; Todo: Variable is initialized due to Bug#88329
 	CurArrangement = 0
 	bControlsareCreated = False
+	bEnableBinaryOptionGroup = False
 	bDisposeDoc = True
 	MaxIndex = -1
 	If Not InitResources(&quot;Formwizard&quot;,&quot;dbw&quot;) Then
@@ -150,8 +150,7 @@ Dim SelCount as Integer
 	ImportStyles()
 	ToggleWindow(True)
 	oDialogModel.imgTheme.ImageURL = FormPath &amp; &quot;FormWizard_1.bmp&quot;
-	oDialogModel.cmdBack.Enabled = False
-	oDialogModel.cmdGoOn.Enabled = False
+	ToggleDatabasePage(True)
 	DlgFormDB.GetControl(&quot;lstDatabases&quot;).SetFocus()
 	DlgFormDB.Execute()
 	DlgFormDB.Dispose
@@ -289,6 +288,7 @@ End Sub
 
 Sub ToggleDatabasePage(bDoEnable as Boolean)
 	With oDialogModel
+		.cmdBack.Enabled = False
 		.cmdHelp.Enabled = bDoEnable
 		.cmdGoOn.Enabled = Ubound(oDialogModel.lstSelFields.StringItemList()) &lt;&gt; -1
 		.hlnBinaries.Enabled = ((bDoEnable = True) And (bEnableBinaryOptionGroup = True))

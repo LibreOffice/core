@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="DlgFormDB" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="2" dlg:help-url="HID:34400">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="DlgFormDB" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="1" dlg:help-url="HID:34400">
  <dlg:bulletinboard>
   <dlg:text dlg:id="lblSelFields" dlg:tab-index="0" dlg:left="154" dlg:top="70" dlg:width="110" dlg:height="8" dlg:page="1" dlg:value="lblSelFields"/>
   <dlg:menulist dlg:id="lstDatabases" dlg:tab-index="1" dlg:left="6" dlg:top="51" dlg:width="110" dlg:height="12" dlg:page="1" dlg:help-url="HID:34410" dlg:spin="true">
