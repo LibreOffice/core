@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configurationhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:39:56 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 16:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,17 @@ css::uno::Any ConfigurationHelper::readRelativeKey(const css::uno::Reference< cs
 
     css::uno::Reference< css::beans::XPropertySet > xProps;
     xAccess->getByHierarchicalName(sRelPath) >>= xProps;
+    if (!xProps.is())
+    {
+        ::rtl::OUStringBuffer sMsg(256);
+        sMsg.appendAscii("The requested path \"");
+        sMsg.append     (sRelPath               );
+        sMsg.appendAscii("\" does not exists."  );
+
+        throw css::container::NoSuchElementException(
+                    sMsg.makeStringAndClear(),
+                    css::uno::Reference< css::uno::XInterface >());
+    }
     return xProps->getPropertyValue(sKey);
 }
 
@@ -148,6 +159,17 @@ void ConfigurationHelper::writeRelativeKey(const css::uno::Reference< css::uno::
 
     css::uno::Reference< css::beans::XPropertySet > xProps;
     xAccess->getByHierarchicalName(sRelPath) >>= xProps;
+    if (!xProps.is())
+    {
+        ::rtl::OUStringBuffer sMsg(256);
+        sMsg.appendAscii("The requested path \"");
+        sMsg.append     (sRelPath               );
+        sMsg.appendAscii("\" does not exists."  );
+
+        throw css::container::NoSuchElementException(
+                    sMsg.makeStringAndClear(),
+                    css::uno::Reference< css::uno::XInterface >());
+    }
     xProps->setPropertyValue(sKey, aValue);
 }
 
