@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScTableConditionalEntry</Name>
 <Description>
-    This component provides ...
+    This component provides access to a single entry in a TableConditionalFormat object.
 </Description>
 
 <ModuleName>sc</ModuleName>

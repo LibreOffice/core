@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScModelObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to a spreadsheet document.
 </Description>
 
 <ModuleName>sc</ModuleName>

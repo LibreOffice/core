@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScDataPilotTableObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to a data pilot table on a spreadsheet.
 </Description>
 
 <ModuleName>sc</ModuleName>

@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScCellFieldObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to a field in the text of a cell.
 </Description>
 
 <SupportedService>com.sun.star.text.TextField</SupportedService>

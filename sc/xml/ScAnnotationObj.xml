@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScAnnotationObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to an annotation of a cell.
 </Description>
 
 <SupportedService>com.sun.star.sheet.CellAnnotation</SupportedService>

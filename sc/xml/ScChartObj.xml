@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScChartObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to a chart based on the data in a table.
 </Description>
 
 <SupportedService>com.sun.star.table.TableChart</SupportedService>

@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScDDELinkObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to a DDE link.
 </Description>
 
 <ModuleName>sc</ModuleName>

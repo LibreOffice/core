@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScTableValidationObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to the validation settings for a cell or cell range.
 </Description>
 
 <ModuleName>sc</ModuleName>

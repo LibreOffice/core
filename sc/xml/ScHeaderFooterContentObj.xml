@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScHeaderFooterContentObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to the content of a header or footer in a page format.
 </Description>
 
 <ModuleName>sc</ModuleName>

@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScTableRowsObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to the collection of all rows of a spreadsheet.
 </Description>
 
 <ModuleName>sc</ModuleName>

@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScTableConditionalFormat</Name>
 <Description>
-    This component provides ...
+    This component provides access to the conditional formatting for a cell or cell range.
 </Description>
 
 <ModuleName>sc</ModuleName>

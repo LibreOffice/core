@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScCellsEnumeration</Name>
 <Description>
-    This component provides ...
+    This component enumerates all cells.
 </Description>
 
 <SupportedService>com.sun.star.sheet.CellsEnumeration</SupportedService>

@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScCellFormatsObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to ranges with different formatting.
 </Description>
 
 <SupportedService>com.sun.star.sheet.CellFormatRanges</SupportedService>

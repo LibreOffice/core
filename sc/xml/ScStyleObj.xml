@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScStyleObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to a single style sheet in a spreadsheet document.
 </Description>
 
 <ModuleName>sc</ModuleName>

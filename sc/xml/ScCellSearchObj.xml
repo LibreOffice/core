@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScCellSearchObj</Name>
 <Description>
-    This component provides ...
+    This component describes what and how to replace strings.
 </Description>
 
 <SupportedService>com.sun.star.util.ReplaceDescriptor</SupportedService>

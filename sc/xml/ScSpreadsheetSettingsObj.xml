@@ -5,7 +5,8 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScSpreadsheetSettingsObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to the configuration
+    which is global for all views of a spreadsheet document.
 </Description>
 
 <ModuleName>sc</ModuleName>

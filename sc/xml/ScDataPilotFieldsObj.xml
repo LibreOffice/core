@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScDataPilotFieldsObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to the collection of fields in a DataPilotDescriptor.
 </Description>
 
 <ModuleName>sc</ModuleName>

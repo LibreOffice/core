@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScAutoFormatObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to an autoformat for tables.
 </Description>
 
 <SupportedService>com.sun.star.sheet.TableAutoFormat</SupportedService>

@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScAreaLinksObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to a collection of area links.
 </Description>
 
 <SupportedService>com.sun.star.sheet.CellAreaLinks</SupportedService>

@@ -5,7 +5,8 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScStyleFamiliesObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to the collection of style families within a
+    spreadsheet document.
 </Description>
 
 <ModuleName>sc</ModuleName>

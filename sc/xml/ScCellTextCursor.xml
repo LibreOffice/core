@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScCellTextCursor</Name>
 <Description>
-    This component provides ...
+    This component provides access to a text cursor within a spreadsheet cell.
 </Description>
 
 <SupportedService>com.sun.star.text.TextCursor</SupportedService>

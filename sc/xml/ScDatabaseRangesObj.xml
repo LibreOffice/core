@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScDatabaseRangesObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to the collection of database ranges in a spreadsheet document.
 </Description>
 
 <SupportedService>com.sun.star.sheet.DatabaseRanges</SupportedService>

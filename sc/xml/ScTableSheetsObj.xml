@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScTableSheetsObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to the collection of spreadsheets in a spreadsheet document.
 </Description>
 
 <ModuleName>sc</ModuleName>

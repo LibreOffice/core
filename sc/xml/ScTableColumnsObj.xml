@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScTableColumnsObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to the collection of all columns of a spreadsheet.
 </Description>
 
 <ModuleName>sc</ModuleName>

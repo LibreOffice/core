@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScFunctionListObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to the list of function descriptions.
 </Description>
 
 <ModuleName>sc</ModuleName>

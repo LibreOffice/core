@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScSubTotalDescriptorBase</Name>
 <Description>
-    This component provides ...
+    This component provides access to a description of how subtotals are created.
 </Description>
 
 <ModuleName>sc</ModuleName>

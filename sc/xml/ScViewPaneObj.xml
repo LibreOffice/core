@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScViewPaneObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to a single pane in a view of a spreadsheet document.
 </Description>
 
 <ModuleName>sc</ModuleName>

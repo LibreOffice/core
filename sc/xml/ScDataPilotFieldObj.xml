@@ -5,7 +5,7 @@
     <Author>Niklas Nebel</Author>
     <Name>com.sun.star.comp.office.ScDataPilotFieldObj</Name>
     <Description>
-    This component provides ...
+    This component provides access to a single field in a DataPilotDescriptor.
 </Description>
     <ModuleName>sc</ModuleName>
     <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>

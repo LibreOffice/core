@@ -5,7 +5,7 @@
 <Author>Niklas Nebel</Author>
 <Name>com.sun.star.comp.office.ScCellRangesObj</Name>
 <Description>
-    This component provides ...
+    This component provides access to a collection of cell ranges.
 </Description>
 
 <SupportedService>com.sun.star.sheet.SheetCellRanges</SupportedService>
