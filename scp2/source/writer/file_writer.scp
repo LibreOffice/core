@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_writer.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:20:33 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 18:26:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ File gid_File_Help_Swriter_Zip
     EXTRA_ALL_LANG(swriter);
 End
 
+/*
 File gid_File_Share_Config_Sofficecfg_Writer_Menubar_Xml
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -155,7 +156,7 @@ File gid_File_Share_Config_Sofficecfg_Writerglobal_Menubar_Xml
     Dir = gid_Dir_Share_Config_Sofficecfg_Sglobal_Menubar;
     Name = "/uiconfig/sglobal/menubar/menubar.xml";
 End
-
+*/
 File gid_File_Oo_Office_Ui_Writercommands_Xcs
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -189,4 +190,46 @@ File gid_File_Registry_Spool_Oo_Common_Dicooo_Xcu
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Spool;
     Name = "/registry/spool/org.openoffice.Office.Common-dicooo.xcu";
+End
+
+File gid_File_Oo_Office_Ui_Writerwindowstate_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/WriterWindowState.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Writerglobalwindowstate_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/WriterGlobalWindowState.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Writerwebwindowstate_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/WriterWebWindowState.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Writerwindowstate_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+    Name = "/registry/data/org/openoffice/Office/UI/WriterWindowState.xcu";
+End
+
+File gid_File_Oo_Office_Ui_Writerglobalwindowstate_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+    Name = "/registry/data/org/openoffice/Office/UI/WriterGlobalWindowState.xcu";
+End
+
+File gid_File_Oo_Office_Ui_Writerwebwindowstate_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+    Name = "/registry/data/org/openoffice/Office/UI/WriterWebWindowState.xcu";
 End
