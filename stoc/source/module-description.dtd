@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright (c) 1999 SUN MICROSYSTEMS, INC. -->
 
-<!ENTITY % module-description-optional "project-build-dependency|runtime-module-dependency">
 <!ENTITY % component-description-optional "reference-docu|service-dependency|type">
+<!ENTITY % module-description-optional "project-build-dependency|runtime-module-dependency|(%component-description-optional;)">
 <!ELEMENT module-description (module-name, component-description+,(%module-description-optional;)* )>
 <!ELEMENT component-description (author,name,description,loader-name,language,status, supported-service+, (%component-description-optional;)* )>
 
@@ -27,4 +27,3 @@
 <!ELEMENT status EMPTY >
 <!ATTLIST status value (under_construction | alpha | beta | final) #REQUIRED>
 <!ELEMENT type (#PCDATA)>
-
