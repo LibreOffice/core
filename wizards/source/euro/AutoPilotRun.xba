@@ -66,8 +66,9 @@ Dim FilesList()
 &apos;		ChangeToNextProgressStep()
 		sTotDocCount = CStr(TotDocCount)
 		OpenProperties(0).Name = &quot;Hidden&quot;
-		OpenProperties(0).Value = True
+		OpenProperties(0).Value = False
 		OpenProperties(1).Name = &quot;AsTemplate&quot;
+		
 		For DocIndex = 0 To TotDocCount - 1
 			If InitializeDocument(FilesList()) Then
 				If StoreDocument() Then
@@ -79,6 +80,7 @@ Dim FilesList()
 				End If
 			End If
 		Next DocIndex
+		DialogModel.cmdBack.Enabled = True
 		DialogModel.cmdGoOn.Enabled = True
 		DialogModel.cmdGoOn.Label = sReady
 		DialogModel.cmdCancel.Label = sEnd
@@ -101,29 +103,29 @@ Dim sExtension as String
 			SourceFile = Source
 			TargetFile = TargetDir &amp; &quot;/&quot; &amp; FileNameoutofPath(SourceFile, &quot;/&quot;)
 		End If
-
-		If Not oUcb.Exists(TargetDir) Then
-			oUcb.CreateFolder(TargetDir)
-		End If
-		sExtension = GetFileNameExtension(SourceFile, &quot;/&quot;)
-		OpenProperties(1).Value = False
-		Select Case sExtension
-			Case &quot;vor&quot;, &quot;stc&quot;, &quot;stw&quot;, &quot;sti&quot;, &quot;std&quot;
-				OpenProperties(1).Value = False
-			Case Else
-				OpenProperties(1).Value = True
-		End Select
- 		oDocument = OpenDocument(SourceFile, OpenProperties(), bDisposable)
-		If (oDocument.IsReadOnly) AND (UCase(SourceFile) = UCase(TargetFile)) Then
-			bIsReadOnly = True
-			Msgbox(sMsgDOCISREADONLY, 16, GetProductName())
+		If CreateFolder(TargetDir) Then
+			sExtension = GetFileNameExtension(SourceFile, &quot;/&quot;)
+			OpenProperties(1).Value = False
+			Select Case sExtension
+				Case &quot;vor&quot;, &quot;stc&quot;, &quot;stw&quot;, &quot;sti&quot;, &quot;std&quot;
+					OpenProperties(1).Value = False
+				Case Else
+					OpenProperties(1).Value = False
+			End Select
+ 			oDocument = OpenDocument(SourceFile, OpenProperties(), bDisposable)
+			If (oDocument.IsReadOnly) AND (UCase(SourceFile) = UCase(TargetFile)) Then
+				bIsReadOnly = True
+				Msgbox(sMsgDOCISREADONLY, 16, GetProductName())
+			Else
+				bIsReadOnly = False
+				RetrieveDocumentObjects()
+				sViewPath = CutPathView(SourceFile, 60)
+				DialogModel.lblCurDocument.Label = Str(DocIndex+1) &amp; &quot;/&quot; &amp; sTotDocCount &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
+			End If
+			InitializeDocument() = Not bIsReadOnly
 		Else
-			bIsReadOnly = False
-			RetrieveDocumentObjects()
-			sViewPath = CutPathView(SourceFile, 60)
-			DialogModel.lblCurDocument.Label = Str(DocIndex+1) &amp; &quot;/&quot; &amp; sTotDocCount &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
+			InitializeDocument() = False
 		End If
-		InitializeDocument() = Not bIsReadOnly
 	Else
 		InitializeDocument() = False
 	End If
@@ -138,7 +140,6 @@ End Function
 
 Sub ChangeToNextProgressStep()
 	DialogModel.lblCurProgress.FontWeight = com.sun.star.awt.FontWeight.NORMAL
-&apos;	DialogConvert.GetControl(&quot;lblCurProgress&quot;).Visible = False
 	DialogConvert.GetControl(&quot;lblCurProgress&quot;).Visible = True
 End Sub
 
@@ -442,4 +443,11 @@ Sub CallFilePicker()
 		GetFolderName(DialogModel.txtSource)
 	End If
 	ToggleGoOnButton()
+End Sub
+
+
+Sub PreviousStep()
+	DialogModel.Step = 2
+	DialogModel.cmdGoOn.Label =  sGOON
+	DialogModel.cmdCancel.Label = sCANCEL
 End Sub</script:module>

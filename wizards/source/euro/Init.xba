@@ -467,7 +467,8 @@ Dim Isthere as Boolean
 &apos;	bMacroStopped = False
 	bRangeListDefined = False
 	PWIndex = -1
-	sDocType = GetDocumentType(StarDesktop.ActiveFrame.Controller.Model)
+	sDocType = GetDocumentType(ThisComponent)
+    oStatusline = ThisComponent.GetCurrentController.GetFrame.CreateStatusIndicator()
 	If sDocType = &quot;sCalc&quot; Then
 		bDocHasProtectedSheets = CheckSheetProtection(oSheets)
 	End If

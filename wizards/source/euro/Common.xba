@@ -7,14 +7,12 @@ Public DialogPassword as Object
 Public PasswordModel as Object
 
 Sub	RetrieveDocumentObjects()
-
 	CurMimeType = GetDocumentType(oDocument)
 	If Instr(1, CurMimeType, &quot;calc&quot;) &lt;&gt; 0 Then
 	    oSheets = oDocument.Sheets
 		oSheet = oDocument.Sheets.GetbyIndex(0)
 		oAddressRanges = oDocument.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
 	End If
-    oStatusline = oDocument.GetCurrentController.GetFrame.CreateStatusIndicator
     &apos; Retrieve the indices for the cellformatations
     oFormats = oDocument.NumberFormats
 End Sub
@@ -67,9 +65,9 @@ Function ConvertDocument()
 		ConvertTextFields()
 		oStatusline.SetValue(80)
 		ConvertWriterTables()
-	End If	
+	End If
 	oStatusline.End
-	On Local Error Goto 0 
+	On Local Error Goto 0
 End Function
 
 
@@ -182,7 +180,6 @@ End Function
 
 Sub StartConversion()
 	GoOn = True
-&apos;	ToggleWindow(False)
 	Select Case DialogModel.Step
 		Case 1
 			If DialogModel.chkComplete.State = 1 Then
