@@ -2,9 +2,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:26:31 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:15:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,7 @@ use installer::files;
 use installer::globals;
 use installer::packagelist;
 use installer::pathanalyzer;
+use installer::remover;
 use installer::scriptitems;
 
 ############################################################################
@@ -247,7 +248,13 @@ sub create_epm_header
     $line = "%product" . " " . $installer::globals::listfileproductname . "\n";
     push(@epmheader, $line);
 
-    $line = "%version" . " " . $variableshashref->{'PRODUCTVERSION'} . "\n";
+    # Determining the release version
+    # This release version has to be listed in the line %version : %version versionnumber releasenumber
+
+    my $releasenumber = 1;  # default
+    if ( $variableshashref->{'RELEASENUMBER'} ) { $releasenumber = $variableshashref->{'RELEASENUMBER'}; }
+
+    $line = "%version" . " " . $variableshashref->{'PRODUCTVERSION'} . " " . $releasenumber . "\n";
     push(@epmheader, $line);
 
     # Description, Copyright and Vendor are multilingual and are defined in
@@ -374,9 +381,9 @@ sub adding_header_to_epm_file
     push( @{$epmfileref}, "\n\n" );
 }
 
-##########################################
-# Replace variables in shell scripts
-##########################################
+#####################################################
+# Replace one in shell scripts ( ${VARIABLENAME} )
+#####################################################
 
 sub replace_variable_in_shellscripts
 {
@@ -384,7 +391,40 @@ sub replace_variable_in_shellscripts
 
     for ( my $i = 0; $i <= $#{$scriptref}; $i++ )
     {
-        ${$scriptref}[$i] =~ s/\$\{$searchstring\}/$variable/;
+        ${$scriptref}[$i] =~ s/\$\{$searchstring\}/$variable/g;
+    }
+}
+
+###################################################
+# Replace one in shell scripts ( %VARIABLENAME )
+###################################################
+
+sub replace_percent_variable_in_shellscripts
+{
+    my ($scriptref, $variable, $searchstring) = @_;
+
+    for ( my $i = 0; $i <= $#{$scriptref}; $i++ )
+    {
+        ${$scriptref}[$i] =~ s/\%$searchstring/$variable/g;
+    }
+}
+
+################################################
+# Replacing many variables in shell scripts
+################################################
+
+sub replace_many_variables_in_shellscripts
+{
+    my ($scriptref, $variableshashref) = @_;
+
+    my $key;
+
+    foreach $key (keys %{$variableshashref})
+    {
+        my $value = $variableshashref->{$key};
+        $value = lc($value);    # lowercase !
+        $value =~ s/\.org//g;   # openoffice instead of openoffice.org
+        replace_variable_in_shellscripts($scriptref, $value, $key);
     }
 }
 
@@ -394,7 +434,7 @@ sub replace_variable_in_shellscripts
 
 sub adding_shellscripts_to_epm_file
 {
-    my ($epmfileref, $shellscriptsfilename, $localrootpath) = @_;
+    my ($epmfileref, $shellscriptsfilename, $localrootpath, $allvariableshashref) = @_;
 
     # $installer::globals::shellscriptsfilename
 
@@ -403,6 +443,8 @@ sub adding_shellscripts_to_epm_file
     my $shellscriptsfileref = installer::files::read_file($shellscriptsfilename);
 
     replace_variable_in_shellscripts($shellscriptsfileref, $localrootpath, "rootpath");
+
+    replace_many_variables_in_shellscripts($shellscriptsfileref, $allvariableshashref);
 
     for ( my $i = 0; $i <= $#{$shellscriptsfileref}; $i++ )
     {
@@ -413,26 +455,74 @@ sub adding_shellscripts_to_epm_file
 }
 
 #################################################
-# Calling epm to create the installation sets
+# Determining the epm on the system
 #################################################
 
-sub call_epm
+sub find_epm_on_system
 {
-    my ($epmlistfilename, $allvariables, $packagename, $includepatharrayref) = @_;
+    my ($includepatharrayref) = @_;
 
-    installer::logger::include_header_into_logfile("epm call for $packagename");
+    installer::logger::include_header_into_logfile("Check epm on system");
 
     # searching for epm. It has to be found in the solver or it has to be in the path (saved in $installer::globals::epm_in_path)
 
     my $epmname = "epm";
-    my $epmfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$epmname, $includepatharrayref, 1);
+    my $epmfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$epmname, $includepatharrayref, 0);
 
-    if (($$epmfileref eq "") && (!($installer::globals::epm_in_path))) { installer::exiter::exit_program("ERROR: Could not find program $epmname!", "call_epm"); }
+    if (($$epmfileref eq "") && (!($installer::globals::epm_in_path))) { installer::exiter::exit_program("ERROR: Could not find program $epmname!", "find_epm_on_system"); }
     if (($$epmfileref eq "") && ($installer::globals::epm_in_path)) { $epmname = $installer::globals::epm_path; }
     if (!($$epmfileref eq "")) { $epmname = $$epmfileref; }
 
     my $infoline = "Using epmfile: $epmname\n";
     push( @installer::globals::logfileinfo, $infoline);
+
+    return $epmname;
+}
+
+#################################################
+# Determining the epm patch state
+# saved in $installer::globals::is_special_epm
+#################################################
+
+sub set_patch_state
+{
+    my ($epmexecutable) = @_;
+
+    my $infoline = "";
+
+    my $systemcall = "$epmexecutable |";
+    open (EPMPATCH, "$systemcall");
+
+    while (<EPMPATCH>)
+    {
+        chop;
+        if ( $_ =~ /Patched for OpenOffice.org/ ) { $installer::globals::is_special_epm = 1; }
+    }
+
+    close (EPMPATCH);
+
+    if ( $installer::globals::is_special_epm )
+    {
+        $infoline = "\nPatch state: This is a patched version of epm!\n\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "\nPatch state: This is an unpatched version of epm!\n\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+}
+
+#################################################
+# Calling epm to create the installation sets
+#################################################
+
+sub call_epm
+{
+    my ($epmname, $epmlistfilename, $allvariables, $packagename, $includepatharrayref) = @_;
+
+    installer::logger::include_header_into_logfile("epm call for $packagename");
 
     my $packageformat = $installer::globals::packageformat;
 
@@ -583,6 +673,34 @@ sub set_topdir_in_specfile
 
 }
 
+#####################################################################
+# Setting the release number in the spec file
+#####################################################################
+
+sub set_releaseversion_in_specfile
+{
+    my ($changefile, $variableshashref) = @_;
+
+    my $releasenumber = 1;  # default value
+    if ( $variableshashref->{'RELEASENUMBER'} ) { $releasenumber = $variableshashref->{'RELEASENUMBER'}; }
+
+    for ( my $i = 0; $i <= $#{$changefile}; $i++ )
+    {
+        if ( ${$changefile}[$i] =~ /^\s*Release\s*:\s*(\d+)\s*$/ )
+        {
+            my $number = $1;
+
+            if ( $number != $releasenumber )
+            {
+                ${$changefile}[$i] =~ s/$number/$releasenumber/;
+                my $infoline = "Info: Changed release number in spec file from $number to $releasenumber!\n";
+                push( @installer::globals::logfileinfo, $infoline);
+                last;
+            }
+        }
+    }
+}
+
 #########################################################
 # Building relocatable Solaris packages means:
 # 1. Add "BASEDIR=/opt" into pkginfo
@@ -630,6 +748,30 @@ sub replace_variables_in_shellscripts
 }
 
 ############################################################
+# Determinig the directory created by epm, in which the
+# RPMS or Solaris packages are created.
+############################################################
+
+sub determine_installdir_ooo
+{
+    # A simple "ls" command returns the directory name
+
+    my $dirname = "";
+
+    my $systemcall = "ls |";
+    open (LS, "$systemcall");
+    $dirname = <LS>;
+    close (LS);
+
+    $dirname =~ s/\s*$//;
+
+    my $infoline = "Info: Directory created by epm: $dirname\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+    return $dirname;
+}
+
+############################################################
 # Including the relocatable directory into
 # spec file and pkginfo file
 # Linux: set topdir in specfile
@@ -640,7 +782,7 @@ sub replace_variables_in_shellscripts
 
 sub prepare_packages
 {
-    my ($loggingdir, $packagename, $staticpath, $relocatablepath, $onepackage) = @_;
+    my ($loggingdir, $packagename, $staticpath, $relocatablepath, $onepackage, $variableshashref) = @_;
 
     my $filename;
     my $newline;
@@ -674,6 +816,7 @@ sub prepare_packages
     if ( $installer::globals::islinuxbuild )
     {
         set_topdir_in_specfile($changefile, $filename, $newepmdir);
+        set_releaseversion_in_specfile($changefile, $variableshashref);
         installer::files::save_file($completefilename, $changefile);
     }
 
@@ -720,6 +863,37 @@ sub resolve_path_in_epm_list_before_packaging
 
 }
 
+#################################################################
+# Determining the rpm version. Beginning with rpm version 4.0
+# the tool to create RPMs is "rpmbuild" and no longer "rpm"
+#################################################################
+
+sub determine_rpm_version
+{
+    my $rpmversion = 0;
+    my $rpmout = "";
+
+    my $systemcall = "rpm --version |";
+    open (RPM, "$systemcall");
+    $rpmout = <RPM>;
+    close (RPM);
+
+    $rpmout =~ s/\s*$//g;
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ( $rpmout eq "" ) { $infoline = "ERROR: Could not find file $searchfile !\n"; }
+    else { $infoline = "Success: rpm version: $rpmout\n"; }
+
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ( $rpmout =~ /(\d+)\.(\d+)\.(\d+)/ ) { $rpmversion = $1; }
+    else { installer::exiter::exit_program("ERROR: Unknown format: $rpmout ! Expected: a.b.c", "determine_rpm_version"); }
+
+    return $rpmversion;
+}
+
 #################################################
 # Systemcall to start the packaging process
 #################################################
@@ -730,6 +904,7 @@ sub create_packages_without_epm
 
     # Solaris: pkgmk -o -f solaris-2.8-sparc/SUNWso8m34.prototype -d solaris-2.8-sparc
     # Solaris: pkgtrans solaris-2.8-sparc SUNWso8m34.pkg SUNWso8m34
+    # Solaris: tar -cf - SUNWso8m34 | gzip > SUNWso8m34.tar.gz
 
     if ( $installer::globals::issolarisbuild )
     {
@@ -741,7 +916,6 @@ sub create_packages_without_epm
         $destinationdir =~ s/\/\s*$//;  # removing ending slashes
 
         my $systemcall = "pkgmk -o -f $prototypefile -d $destinationdir";
-
         print "... $systemcall ...\n";
 
         my $returnvalue = system($systemcall);
@@ -760,9 +934,54 @@ sub create_packages_without_epm
             push( @installer::globals::logfileinfo, $infoline);
         }
 
+        # Setting unix rights to "775" for all created directories inside the package
 
-        my $streamname = $packagename . ".pkg";
-        $systemcall = "pkgtrans $destinationdir $streamname $packagename";
+        $systemcall = "cd $destinationdir; find $packagename -type d -exec chmod 775 \{\} \\\;";
+        print "... $systemcall ...\n";
+
+        $returnvalue = system($systemcall);
+
+        $infoline = "Systemcall: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        if ($returnvalue)
+        {
+            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+        else
+        {
+            $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+
+        # making pkg files
+
+        # my $streamname = $packagename . ".pkg";
+        # $systemcall = "pkgtrans $destinationdir $streamname $packagename";
+        # print "... $systemcall ...\n";
+
+        # $returnvalue = system($systemcall);
+
+        # $infoline = "Systemcall: $systemcall\n";
+        # push( @installer::globals::logfileinfo, $infoline);
+
+        # if ($returnvalue)
+        # {
+        #   $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        #   push( @installer::globals::logfileinfo, $infoline);
+        # }
+        # else
+        # {
+        #   $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        #   push( @installer::globals::logfileinfo, $infoline);
+        # }
+
+        # making tar.gz files
+
+        my $targzname = $packagename . ".tar.gz";
+        $systemcall = "cd $destinationdir; tar -cf - $packagename | gzip > $targzname";
+        print "... $systemcall ...\n";
 
         $returnvalue = system($systemcall);
 
@@ -787,8 +1006,14 @@ sub create_packages_without_epm
     {
         my $specfilename = $epmdir . $packagename . ".spec";
         if (! -f $specfilename) { installer::exiter::exit_program("ERROR: Did not find file: $specfilename", "create_packages_without_epm"); }
-        my $systemcall = "rpm -bb $specfilename";
 
+        my $rpmcommand = "rpm";
+
+        my $rpmversion = determine_rpm_version();
+
+        if ( $rpmversion >= 4 ) { $rpmcommand = "rpmbuild"; }
+
+        my $systemcall = "$rpmcommand -bb $specfilename --target i586";
         print "... $systemcall ...\n";
 
         my $returnvalue = system($systemcall);
@@ -837,7 +1062,7 @@ sub remove_temporary_epm_files
 
             if (! -f $removefile) { next; }
 
-            my $systemcall = "mv $removefile $destfile";
+            my $systemcall = "mv -f $removefile $destfile";
             system($systemcall);     # ignoring the return value
             $infoline = "Systemcall: $systemcall\n";
             push( @installer::globals::logfileinfo, $infoline);
@@ -875,7 +1100,7 @@ sub remove_temporary_epm_files
 
          # if (! -f $removefile) { next; }
 
-        my $systemcall = "mv $removefile $destfile";
+        my $systemcall = "mv -f $removefile $destfile";
         system($systemcall);     # ignoring the return value
         $infoline = "Systemcall: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
@@ -904,7 +1129,242 @@ sub remove_temporary_epm_files
             push( @installer::globals::logfileinfo, $infoline);
         }
     }
+}
 
+######################################################
+# Creating a better directory structure in the solver.
+# This is also preparation for the Java installer.
+# Linux: Removing the directory "linux-..."
+# Solaris: Renaming "solaris-..." to "packages"
+######################################################
+
+sub create_new_directory_structure
+{
+    my ($newepmdir) = @_;
+
+    my $localdir = $newepmdir;
+    installer::remover::remove_ending_pathseparator(\$localdir);
+    my $newdir = "";
+
+    if ( $installer::globals::issolarisbuild )
+    {
+        # my $directoryname = installer::systemactions::get_directoryname($newepmdir, "solaris");
+
+        $newdir = "packages";
+
+        my $systemcall = "mv $localdir $newdir";
+
+        my $returnvalue = system($systemcall);
+
+        my $infoline = "Systemcall: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        if ($returnvalue)
+        {
+            $infoline = "ERROR: Could not move \"$localdir\" to \"packages\"!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+        else
+        {
+            $infoline = "Success: Moved \"$localdir\" to \"packages\"!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+
+        my $localcall = "chmod 775 $newdir \>\/dev\/null 2\>\&1";
+        system($localcall);
+
+    }
+
+    if ( $installer::globals::islinuxbuild )
+    {
+        # my $directoryname = installer::systemactions::get_directoryname($localdir, "linux");
+
+        # creating a directory "RPMS" directly in the current directory
+
+        $newdir = "RPMS";
+        my $rpmdir = "$localdir/RPMS/i586";
+
+        installer::systemactions::create_directory($newdir);
+
+        my $systemcall = "mv $rpmdir/* $newdir";    # moving the rpms into the directory "RPMS"
+
+        my $returnvalue = system($systemcall);
+
+        my $infoline = "Systemcall: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        if ($returnvalue)
+        {
+            $infoline = "ERROR: Could not move content of \"$rpmdir\" to \"$newdir\"!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+        else
+        {
+            $infoline = "Success: Moved content of \"$rpmdir\" to \"$newdir\"!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+
+        # and removing the empty directory
+
+        installer::systemactions::remove_empty_directory("$localdir/RPMS/i586");
+        installer::systemactions::remove_empty_directory("$localdir/RPMS/i386");
+        installer::systemactions::remove_empty_directory("$localdir/RPMS");
+        installer::systemactions::remove_empty_directory("$localdir");
+
+    }
+
+    return $newdir;
+}
+
+######################################################
+# Including child packages into the
+# installation set.
+######################################################
+
+sub put_childprojects_into_installset
+{
+    my ($newdir) = @_;
+
+    my $infoline = "";
+
+    # the source directory is defined with the parameter "-javafilespath"
+    # in the variable $installer::globals::javafilespath (no extra path shall be used now (scp todo!)
+
+    if (! ($installer::globals::javafilespath))
+    {
+        $infoline = "Warning: Cannot copy child project, \"-javafilespath\" not set!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        my $sourcedir = "$installer::globals::javafilespath";
+        installer::remover::remove_ending_pathseparator(\$sourcedir);
+
+        my $destdir = "$newdir";
+
+        if ( $installer::globals::issolarisbuild ) { $sourcedirjava = $sourcedir . $installer::globals::separator . "java" . $installer::globals::separator . "solaris"; }
+        if ( $installer::globals::islinuxbuild ) { $sourcedirjava = $sourcedir . $installer::globals::separator . "java" . $installer::globals::separator . "linux"; }
+
+        installer::systemactions::copy_directory($sourcedirjava, $destdir);
+
+        if ( $installer::globals::issolarisbuild ) { $sourcedirada = $sourcedir . $installer::globals::separator . "adabas" . $installer::globals::separator . "solaris"; }
+        if ( $installer::globals::islinuxbuild ) { $sourcedirada = $sourcedir . $installer::globals::separator . "adabas" . $installer::globals::separator . "linux"; }
+
+        installer::systemactions::copy_directory($sourcedirada, $destdir);
+
+        # unpacking tar.gz files
+    }
+}
+
+######################################################
+# Including the Java installer into the
+# installation sets.
+######################################################
+
+sub put_java_installer_into_installset
+{
+    my ($newdir) = @_;
+
+    # the source directory is defined with the parameter "-javafilespath"
+    # in the variable $installer::globals::javafilespath
+
+    my $sourcedir = $installer::globals::javafilespath;
+    installer::remover::remove_ending_pathseparator(\$sourcedir);
+
+    my $destdir = ".";
+
+    if ( $installer::globals::issolarisbuild ) { $sourcedir = $sourcedir . $installer::globals::separator . "solaris"; }
+    if ( $installer::globals::islinuxbuild ) { $sourcedir = $sourcedir . $installer::globals::separator . "linux"; }
+
+    installer::systemactions::copy_directory_except_fileextension($sourcedir, $destdir, "xml");
+
+    # Setting Unix rights for Java starter (file "setup")
+
+    my $localcall = "chmod 775 $destdir/setup \>\/dev\/null 2\>\&1";
+    system($localcall);
+
+}
+
+######################################################
+# Including the Java installer into the
+# installation sets.
+######################################################
+
+sub put_systemintegration_into_installset
+{
+    my ($newdir, $includepatharrayref, $variables) = @_;
+
+    # The system integration packages have to be found in the solver in the bin directory.
+    # Linux: "staroffice-redhat-menus-8-1.noarch.rpm", "staroffice-suse-menus-8-1.noarch.rpm"
+    # Solaris: "SUNWsogm.tar.gz"
+    # scp Todo: This files have to be included into scp after removal of old setup.
+
+    my @systemfiles = ();
+    my $destdir = $newdir;
+
+    # Attention: OOO has other names !
+
+    if ( $installer::globals::issolarisbuild )
+    {
+        if ($installer::globals::product =~ /OpenOffice/i )
+        {
+            push(@systemfiles, "OOOopenoffice-gnome.tar.gz");
+            push(@systemfiles, "OOOopenoffice-cde.tar.gz");
+        }
+        else
+        {
+            my $productname = lc($variables->{'PRODUCTNAME'});
+            push(@systemfiles, "SUNW$productname-gnome-ea.tar.gz");
+            push(@systemfiles, "SUNW$productname-cde-ea.tar.gz");
+        }
+    }
+
+    if ( $installer::globals::islinuxbuild )
+    {
+        if ($installer::globals::product =~ /OpenOffice/i )
+        {
+            push(@systemfiles, "openoffice-redhat-menus-2.0-1.noarch.rpm");
+            push(@systemfiles, "openoffice-suse-menus-2.0-1.noarch.rpm");
+        }
+        else
+        {
+            my $productname = lc($variables->{'PRODUCTNAME'});
+            push(@systemfiles, "$productname-redhat-menus-ea-8-1.noarch.rpm");
+            push(@systemfiles, "$productname-suse-menus-ea-8-1.noarch.rpm");
+        }
+    }
+
+    for ( my $i = 0; $i <= $#systemfiles; $i++ )
+    {
+        my $onefilename = $systemfiles[$i];
+        my $sourcepathref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$onefilename, $includepatharrayref, 1);
+
+        my $destfile = $destdir . $installer::globals::separator . $systemfiles[$i];
+        installer::systemactions::copy_one_file($$sourcepathref, $destfile);
+
+        # unpacking the tar.gz file for Solaris
+
+        if ( $installer::globals::issolarisbuild )
+        {
+            my $systemcall = "cd $destdir; cat $systemfiles[$i] | gunzip | tar -xf -";
+
+            $returnvalue = system($systemcall);
+
+            my $infoline = "Systemcall: $systemcall\n";
+            push( @installer::globals::logfileinfo, $infoline);
+
+            if ($returnvalue)
+            {
+                $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
+            else
+            {
+                $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
+        }
+    }
 }
 
 ######################################################
