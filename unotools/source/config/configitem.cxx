@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:18:26 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 12:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,8 +287,9 @@ void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) th
 /* -----------------------------29.08.00 16:34--------------------------------
 
  ---------------------------------------------------------------------------*/
-void ConfigChangeListener_Impl::disposing( const EventObject& Source ) throw(RuntimeException)
+void ConfigChangeListener_Impl::disposing( const EventObject& rSource ) throw(RuntimeException)
 {
+    pParent->RemoveListener();
 }
 /* -----------------------------29.08.00 12:50--------------------------------
 
@@ -793,12 +794,6 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
 /* -----------------------------29.08.00 16:19--------------------------------
 
  ---------------------------------------------------------------------------*/
-#if SUPD<637
-sal_Bool    ConfigItem::EnableNotification(const Sequence< OUString >& rNames)
-{
-    return EnableNotification(rNames, sal_False);
-}
-#endif
 sal_Bool    ConfigItem::EnableNotification(const Sequence< OUString >& rNames,
                 sal_Bool bEnableInternalNotification )
 
@@ -837,6 +832,7 @@ void ConfigItem::RemoveListener()
         try
         {
             xChgNot->removeChangesListener( xChangeLstnr );
+            xChangeLstnr = 0;
         }
         catch(Exception & )
         {
