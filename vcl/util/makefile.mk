@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: svesik $ $Date: 2001-05-24 12:36:50 $
+#   last change: $Author: pluby $ $Date: 2001-06-11 20:19:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -270,7 +270,9 @@ LINKFLAGSSHL += /ENTRY:LibMain@12
 
 # Solaris
 .IF "$(OS)"=="SOLARIS"
-
+# Disable lazyloading of this library as lazyloading of this library will
+# cause core dumping of executables that have lazyloading enabled
+LINKFLAGS += -Qoption ld -z,nolazyload
 .IF "$(USE_XPRINT)" == "TRUE"
 SHL1STDLIBS += -lXp -lXm -lXt -lX11
 .ELSE
