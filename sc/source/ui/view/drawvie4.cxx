@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-30 19:14:44 $
+ *  last change: $Author: nn $ $Date: 2001-04-10 07:55:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,8 +393,13 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#include <sch/memchrt.hxx>
+#include <sch/schdll.hxx>
+#include <sch/schdll0.hxx>
+#include <svx/svditer.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
@@ -410,6 +415,7 @@
 #include "drawutil.hxx"
 #include "scmod.hxx"
 #include "globstr.hrc"
+#include "chartarr.hxx"
 
 using namespace com::sun::star;
 
@@ -454,6 +460,40 @@ void lcl_CheckOle( const SdrMarkList& rMarkList, BOOL& rAnyOle, BOOL& rOneOle )
         }
 }
 
+void lcl_RefreshChartData( SdrModel* pModel, ScDocument* pSourceDoc )
+{
+    USHORT nPages = pModel->GetPageCount();
+    for (USHORT nTab=0; nTab<nPages; nTab++)
+    {
+        SdrPage* pPage = pModel->GetPage(nTab);
+        SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+        SdrObject* pObject = aIter.Next();
+        while (pObject)
+        {
+            if ( pObject->GetObjIdentifier() == OBJ_OLE2 )
+            {
+                SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+                if ( aIPObj.Is() && SchModuleDummy::HasID( aIPObj->GetStorage()->GetClassName() ) )
+                {
+                    SchMemChart* pOldData = SchDLL::GetChartData(aIPObj);
+                    if ( pOldData )
+                    {
+                        //  create data from source document
+                        ScChartArray aArray( pSourceDoc, *pOldData );
+                        if ( aArray.IsValid() )
+                        {
+                            SchMemChart* pNewData = aArray.CreateMemChart();
+                            SchDLL::Update( aIPObj, pNewData );
+                            delete pNewData;
+                        }
+                    }
+                }
+            }
+            pObject = aIter.Next();
+        }
+    }
+}
+
 BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 {
     BOOL bReturn = FALSE;
@@ -486,6 +526,9 @@ BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
         SdrModel* pModel = GetAllMarkedModel();
         ScDrawLayer::SetGlobalDrawPersist(NULL);
 
+        //  update chart data (with data from source document)
+        lcl_RefreshChartData( pModel, pViewData->GetDocument() );
+
         ScDocShell* pDocSh = pViewData->GetDocShell();
 
         TransferableObjectDescriptor aObjDesc;
@@ -496,7 +539,9 @@ BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
         ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
         uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
-        pTransferObj->SetDragSource( this );        // copies selection
+        SvEmbeddedObjectRef aPersistRef( aDragShellRef );
+        pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
+        pTransferObj->SetDragSource( this );            // copies selection
 
         SC_MOD()->SetDragObject( NULL, pTransferObj );      // for internal D&D
         pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
@@ -530,6 +575,9 @@ void ScDrawView::DoCopy()
     SdrModel* pModel = GetAllMarkedModel();
     ScDrawLayer::SetGlobalDrawPersist(NULL);
 
+    //  update chart data (with data from source document)
+    lcl_RefreshChartData( pModel, pViewData->GetDocument() );
+
     ScDocShell* pDocSh = pViewData->GetDocShell();
 
     TransferableObjectDescriptor aObjDesc;
@@ -539,6 +587,12 @@ void ScDrawView::DoCopy()
 
     ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
     uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
+
+    if ( ScGlobal::pDrawClipDocShellRef )
+    {
+        SvEmbeddedObjectRef aPersistRef( *ScGlobal::pDrawClipDocShellRef );
+        pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
+    }
 
     pTransferObj->CopyToClipboard();                    // system clipboard
     SC_MOD()->SetClipObject( NULL, pTransferObj );      // internal clipboard
