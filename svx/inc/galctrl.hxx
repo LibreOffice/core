@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galctrl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 08:57:57 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #include <goodies/grfmgr.hxx>
 #include "galmisc.hxx"
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // ------------
 // - Forwards -
 // ------------
@@ -90,7 +94,7 @@ class GalleryBrowser2;
 // - GalleryPreview -
 // ------------------
 
-class GalleryPreview : public Window, public DropTargetHelper, public DragSourceHelper
+class SVX_DLLPUBLIC GalleryPreview : public Window, public DropTargetHelper, public DragSourceHelper
 {
 private:
 
@@ -99,23 +103,23 @@ private:
     Sound               aSound;
     GalleryTheme*       mpTheme;
 
-    BOOL                ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const;
-    void                InitSettings();
+    SVX_DLLPRIVATE BOOL             ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const;
+    SVX_DLLPRIVATE void                InitSettings();
 
     // Window
-    virtual void        Paint(const Rectangle& rRect);
-    virtual void        MouseButtonDown(const MouseEvent& rMEvt);
-    virtual void        Command(const CommandEvent& rCEvt);
-    virtual void        KeyInput( const KeyEvent& rKEvt );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    SVX_DLLPRIVATE virtual void         Paint(const Rectangle& rRect);
+    SVX_DLLPRIVATE virtual void         MouseButtonDown(const MouseEvent& rMEvt);
+    SVX_DLLPRIVATE virtual void     Command(const CommandEvent& rCEvt);
+    SVX_DLLPRIVATE virtual void     KeyInput( const KeyEvent& rKEvt );
+    SVX_DLLPRIVATE virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
 
     // DropTargetHelper
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    SVX_DLLPRIVATE virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
+    SVX_DLLPRIVATE virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
 
     // DragSourceHelper
-    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    SVX_DLLPRIVATE virtual void     StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
                         DECL_LINK( MenuSelectHdl, Menu* );
                         DECL_LINK( SoundEndHdl, Sound* );
