@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexMarkExport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
+ *  last change: $Author: dvo $ $Date: 2001-05-14 13:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
+
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
 #endif
@@ -99,6 +103,7 @@
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::beans::XPropertySetInfo;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
@@ -186,7 +191,9 @@ void XMLIndexMarkExport::ExportIndexMark(
         // asking for specific properties
         // Export attributes for -mark-start and -mark elements,
         // but not for -mark-end
-        if (xIndexMarkPropSet->getPropertySetInfo()->hasPropertyByName(sLevel))
+        Reference<XPropertySetInfo> xPropertySetInfo =
+            xIndexMarkPropSet->getPropertySetInfo();
+        if (xPropertySetInfo->hasPropertyByName(sLevel))
         {
             // table of content:
             pElementNames = lcl_pTocMarkNames;
@@ -195,8 +202,7 @@ void XMLIndexMarkExport::ExportIndexMark(
                 ExportTOCMarkAttributes(xIndexMarkPropSet);
             }
         }
-        else if (xIndexMarkPropSet->getPropertySetInfo()->
-                 hasPropertyByName(sPrimaryKey))
+        else if (xPropertySetInfo->hasPropertyByName(sPrimaryKey))
         {
             // alphabetical index mark
             pElementNames = lcl_pAlphaIndexMarkName;
