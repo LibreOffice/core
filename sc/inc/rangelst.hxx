@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangelst.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-24 14:44:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,13 @@
 #include "global.hxx"
 #endif
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+#ifndef _SOLAR_H
+#include <tools/solar.h>
+#endif
+
 class ScDocument;
 
 typedef ScRange* ScRangePtr;
@@ -90,7 +97,7 @@ public:
     void            Join( const ScRange&, BOOL bIsInList = FALSE );
     BOOL            UpdateReference( UpdateRefMode, ScDocument*,
                                     const ScRange& rWhere,
-                                    short nDx, short nDy, short nDz );
+                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     ScRange*        Find( const ScAddress& ) const;
     ScRange*        Find( const ScRange& ) const;
     BOOL            Load( SvStream&, USHORT nVer );
@@ -129,7 +136,7 @@ public:
     void            Join( const ScRangePair&, BOOL bIsInList = FALSE );
     BOOL            UpdateReference( UpdateRefMode, ScDocument*,
                                     const ScRange& rWhere,
-                                    short nDx, short nDy, short nDz );
+                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     ScRangePair*    Find( const ScAddress& ) const;
     ScRangePair*    Find( const ScRange& ) const;
     BOOL            Load( SvStream&, USHORT nVer );
