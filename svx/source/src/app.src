@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 09:45:00 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:17:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,33 +78,8 @@
 ErrorBox RID_ERRBOX_MODULENOTINSTALLED
 {
     Buttons = WB_OK ;
-    Message = "Die Aktion konnte nicht ausgeführt werden. Das dafür benötigte %PRODUCTNAME Modul ist momentan nicht installiert." ;
-    Message [ ENGLISH ] = "The action couldn't be executed. The %PRODUCTNAME program module, needed for this action, is currently not installed." ;
-    Message[ english_us ] = "The action could not be executed. The %PRODUCTNAME program module needed for this action is currently not installed.";
-    Message[ portuguese ] = "The action couldn't be executed. The %PRODUCTNAME program module, needed for this action, is currently not installed.";
-    Message[ russian ] = "Íåâîçìîæíî âûïîëíèòü äåéñòâèå. Íå óñòàíîâëåí ñîîòâåòñòâóşùèé ïğîãğàììíûé ìîäóëü %PRODUCTNAME.";
-    Message[ greek ] = "Äåí Şôáí äõíáôŞ ç åêôİëåóç ôçò åíİñãåéáò. Ç ëåéôïõñãéêŞ ìïíÜäá ôïõ ğñïãñÜììáôïò %PRODUCTNAME ğïõ ÷ñåéÜæåôáé ãéá áõôŞ ôçí åíİñãåéá äåí åßíáé åãêáôåóôçìİíç áõôŞí ôç óôéãìŞ.";
-    Message[ dutch ] = "De activiteit kan niet worden uitgevoerd. De vereiste module %PRODUCTNAME is niet geïnstalleerd.";
-    Message[ french ] = "Impossible d'exécuter cette opération : le module requis de %PRODUCTNAME n'est actuellement pas installé !";
-    Message[ spanish ] = "No se pudo ejecutar la acción. El módulo de programa %PRODUCTNAME necesario para esta acción no está instalado por el momento. ";
-    Message[ finnish ] = "Toimintoa ei voitu suorittaa. %PRODUCTNAMEn ohjelmamoduulia, jota tämä toiminto tarvitsee, ei ole asennettu.";
-    Message[ italian ] = "Impossibile eseguire l'azione. Il modulo necessario per %PRODUCTNAME non è installato.";
-    Message[ danish ] = "Handlingen kunne ikke udføres. Det nødvendige %PRODUCTNAME-modul er ikke installeret i øjeblikket.";
-    Message[ swedish ] = "Det gick inte att utföra den här åtgärden. %PRODUCTNAME-programmodulen som behövs till det är inte installerad.";
-    Message[ polish ] = "Tej akcji nie mo¿na by³o wykonaæ. Modu³ programu %PRODUCTNAME, potrzebny do jej wykonania, nie jest zainstalowany.";
-    Message[ portuguese_brazilian ] = "Não foi possível executar a ação. O módulo do programa %PRODUCTNAME necessário para esta ação não esta instalado no momento.";
-    Message[ japanese ] = "ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã¯å®Ÿè¡Œã§ãã¾ã›ã‚“ã€‚ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®å®Ÿè¡Œã«å¿…è¦ãª %PRODUCTNAME ãƒ—ãƒ­ã‚°ãƒ©ãƒ ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãŒã¾ã ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
-    Message[ korean ] = "ì‘ë™ì„ ì‹¤í–‰í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤. ì´ ì‘ë™ì— í•„ìš”í•œ %PRODUCTNAME í”„ë¡œê·¸ë¨ ëª¨ë“ˆì´ í˜„ì¬ ì„¤ì¹˜ë˜ì–´ ìˆì§€ ì•ŠìŠµë‹ˆë‹¤.";
-    Message[ chinese_simplified ] = "æ— æ³•æ‰§è¡Œè¿™ä¸ªæ“ä½œã€‚å› ä¸ºæ‰€éœ€è¦çš„ %PRODUCTNAME æ¨¡å—æ²¡æœ‰å®‰è£…å¥½ã€‚";
-    Message[ chinese_traditional ] = "ç„¡æ³•åŸ·è¡Œé€™å€‹å‹•ä½œã€‚å› çˆ²æ‰€éœ€è¦çš„ %PRODUCTNAME å…ƒä»¶æ²’æœ‰å®‰è£å¥½ã€‚";
-    Message[ turkish ] = "Bu işlem gerçekleştirilemedi.Bu işlem için şu anda sistemde kurulu  olmayan  %PRODUCTNAME program modülü gerekli.";
-    Message[ arabic ] = "The action couldn't be executed. The %PRODUCTNAME program module, needed for this action, is currently not installed.";
-    Message[ catalan ] = "No es pot executar l'acció. El mòdul de programa de l'%PRODUCTNAME necessari per aquesta acció no està instal·lat.";
-    Message[ thai ] = "The action could not be executed. The %PRODUCTNAME program module needed for this action is currently not installed.";
-    Message[ czech ] = "Tuto Äinnost nelze vykonat. VyÅ¾adovanÃ½ programovÃ½ modul %PRODUCTNAME nenÃ­ nainstalovÃ¡n.";
-    Message[ hebrew ] = "Die Aktion konnte nicht ausgefÃ¼hrt werden. Das dafÃ¼r benÃ¶tigte %PRODUCTNAME Modul ist momentan nicht installiert.";
-    Message[ hindi ] = "The action could not be executed. The %PRODUCTNAME program module needed for this action is currently not installed.";
-    Message[ slovak ] = "Akcia sa nedÃ¡ vykonaÅ¥. programovÃ½ modul %PRODUCTNAME potrebnÃ½ pre tÃºto akciu momentÃ¡lne nie je nainÅ¡talovanÃ½";
+    Message [ de ] = "Die Aktion konnte nicht ausgeführt werden. Das dafür benötigte %PRODUCTNAME Modul ist momentan nicht installiert." ;
+    Message [ en-US ] = "The action could not be executed. The %PRODUCTNAME program module needed for this action is currently not installed.";
 };
 
  // Image-Listen ----------------------------------------------------------
@@ -597,6 +572,7 @@ ImageList RID_OFFICEIMAGELIST_LCH
 #define MN_HELP 31
 #define MN_TEMPLATES 11
 
+/*
 Menu RID_DEFAULTMENU
 {
     ItemList =
@@ -680,19 +656,8 @@ Menu RID_DEFAULTMENU
         MenuItem
         {
             Identifier = MN_EDIT ;
-            Text = "~Bearbeiten" ;
-            Text [ English ] = "~Edit" ;
-            Text [ norwegian ] = "~Rediger" ;
-            Text [ italian ] = "~Modifica" ;
-            Text [ portuguese_brazilian ] = "~Editar" ;
-            Text [ portuguese ] = "~Editar" ;
-            Text [ finnish ] = "~Muokkaa" ;
-            Text [ danish ] = "~Rediger" ;
-            Text [ french ] = "~Édition" ;
-            Text [ swedish ] = "~Redigera" ;
-            Text [ dutch ] = "Be~werken" ;
-            Text [ spanish ] = "~Editar" ;
-            Text [ english_us ] = "~Edit" ;
+            Text [ de ] = "~Bearbeiten" ;
+            Text [ en-US ] = "~Edit" ;
             SubMenu = Menu
             {
                 ItemList =
@@ -719,41 +684,13 @@ Menu RID_DEFAULTMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "ç¼–è¾‘(~E)";
-            Text[ russian ] = "~Ïğàâêà";
-            Text[ polish ] = "~Edytuj";
-            Text[ japanese ] = "ç·¨é›†(~E)";
-            Text[ chinese_traditional ] = "ç·¨è¼¯(~E)";
-            Text[ dutch ] = "Be~werken";
-            Text[ chinese_simplified ] = "ç¼–è¾‘(~E)";
-            Text[ greek ] = "~Åğåîåñãáóßá";
-            Text[ korean ] = "í¸ì§‘(~E)";
-            Text[ arabic ] = "~ÊÍÑíÑ";
-            Text[ turkish ] = "Dü~zenle";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Edita";
-            Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚";
-            Text[ czech ] = "Ãš~pravy";
-            Text[ hebrew ] = "â€®×¢×¨×™×›×”â€¬";
-            Text[ hindi ] = "~à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
-            Text[ slovak ] = "Ãš~pravy";
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MN_EXTRA ;
-            Text = "E~xtras" ;
-            Text [ English ] = "T~ools" ;
-            Text [ norwegian ] = "Verk~tøy" ;
-            Text [ italian ] = "~Strumenti" ;
-            Text [ portuguese_brazilian ] = "F~erramentas" ;
-            Text [ portuguese ] = "Ferra~mentas" ;
-            Text [ finnish ] = "Ty~ökalut" ;
-            Text [ danish ] = "Fun~ktioner" ;
-            Text [ french ] = "~Outils" ;
-            Text [ swedish ] = "~Verktyg" ;
-            Text [ dutch ] = "E~xtra" ;
-            Text [ spanish ] = "~Herramientas" ;
-            Text [ english_us ] = "~Tools" ;
+            Text [ de ] = "E~xtras" ;
+            Text [ en-US ] = "~Tools" ;
             SubMenu = Menu
             {
                 ItemList =
@@ -765,29 +702,13 @@ Menu RID_DEFAULTMENU
                     ITEM_MN_OPTIONS
                 };
             };
-            Text[ chinese_simplified ] = "å·¥å…·(~T)";
-            Text[ russian ] = "~Ñåğâèñ";
-            Text[ polish ] = "~Narzêdzia";
-            Text[ japanese ] = "ãƒ„ãƒ¼ãƒ«(~T)";
-            Text[ chinese_traditional ] = "å·¥å…·(~T)";
-            Text[ dutch ] = "E~xtra";
-            Text[ chinese_simplified ] = "å·¥å…·(~T)";
-            Text[ greek ] = "Å~ñãáëåßá";
-            Text[ korean ] = "ë„êµ¬(~T)";
-            Text[ arabic ] = "Ã~ÏæÇÊ";
-            Text[ turkish ] = "~Araçlar";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Ei~nes";
-            Text[ thai ] = "à¹€~à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸¡à¸·à¸­";
-            Text[ czech ] = "~NÃ¡stroje";
-            Text[ hebrew ] = "â€®×›×œ×™×â€¬";
-            Text[ hindi ] = "~à¤”à¤œà¤¼à¤¾à¤°";
-            Text[ slovak ] = "NÃ¡s~troje";
+            Text [ x-comment ] = " ";
         };
         ITEM_WINDOW_MENU
         ITEM_HELP_MENU
     };
 };
+*/
 
 #define  ACC Accelerator
 #define ACCK AcceleratorItem
@@ -827,64 +748,14 @@ String RID_DESKTOP
 
 String STR_SD_STAROFFICE_XML_DRAW
 {
-    Text = "%PRODUCTNAME XML (Draw)" ;
-    Text [ ENGLISH ] = "StarOffice XML (Draw)" ;
-    Text[ english_us ] = "%PRODUCTNAME XML (Draw)";
-    Text[ portuguese ] = "%PRODUCTNAME XML (Draw)";
-    Text[ russian ] = "%PRODUCTNAME XML (Draw)";
-    Text[ greek ] = "%PRODUCTNAME XML (Draw)";
-    Text[ dutch ] = "%PRODUCTNAME XML (Draw)";
-    Text[ french ] = "%PRODUCTNAME XML (Draw)";
-    Text[ spanish ] = "%PRODUCTNAME XML (Draw)";
-    Text[ italian ] = "%PRODUCTNAME XML (Draw)";
-    Text[ danish ] = "%PRODUCTNAME XML (Draw)";
-    Text[ swedish ] = "%PRODUCTNAME XML (Draw)";
-    Text[ polish ] = "%PRODUCTNAME XML (Draw)";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME XML (Draw)";
-    Text[ japanese ] = "%PRODUCTNAME XML (Draw)";
-    Text[ korean ] = "%PRODUCTNAME XML (Draw)";
-    Text[ chinese_simplified ] = "%PRODUCTNAME XML (Draw)";
-    Text[ chinese_traditional ] = "%PRODUCTNAME XML (Draw)";
-    Text[ turkish ] = "%PRODUCTNAME XML (Draw)";
-    Text[ arabic ] = "%PRODUCTNAME XML (Draw)";
-    Text[ catalan ] = "%PRODUCTNAME XML (Draw)";
-    Text[ finnish ] = "%PRODUCTNAME XML (Draw)";
-    Text[ thai ] = "%PRODUCTNAME XML (Draw)";
-    Text[ czech ] = "%PRODUCTNAME XML (Draw)";
-    Text[ hebrew ] = "%PRODUCTNAME XML (Draw)";
-    Text[ hindi ] = "%PRODUCTNAME XML (à¤°à¥‡à¤–à¤¾à¤šà¤¿à¤¤à¥à¤°)";
-    Text[ slovak ] = "%PRODUCTNAME XML (Draw)";
+    Text [ de ] = "%PRODUCTNAME XML (Draw)" ;
+    Text [ en-US ] = "%PRODUCTNAME XML (Draw)";
 };
 
 String STR_SD_STAROFFICE_XML_IMPRESS
 {
-    Text = "%PRODUCTNAME XML (Impress)" ;
-    Text [ ENGLISH ] = "StarOffice XML (Impress)" ;
-    Text[ english_us ] = "%PRODUCTNAME XML (Impress)";
-    Text[ portuguese ] = "%PRODUCTNAME XML (Impress)";
-    Text[ russian ] = "%PRODUCTNAME XML (Impress)";
-    Text[ greek ] = "%PRODUCTNAME XML (Impress)";
-    Text[ dutch ] = "%PRODUCTNAME XML (Impress)";
-    Text[ french ] = "%PRODUCTNAME XML (Impress)";
-    Text[ spanish ] = "%PRODUCTNAME XML (Impress)";
-    Text[ italian ] = "%PRODUCTNAME XML (Impress)";
-    Text[ danish ] = "%PRODUCTNAME XML (Impress)";
-    Text[ swedish ] = "%PRODUCTNAME XML (Impress)";
-    Text[ polish ] = "%PRODUCTNAME XML (Impress)";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME XML (Impress)";
-    Text[ japanese ] = "%PRODUCTNAME XML (Impress)";
-    Text[ korean ] = "%PRODUCTNAME XML (Impress)";
-    Text[ chinese_simplified ] = "%PRODUCTNAME XML (Impress)";
-    Text[ chinese_traditional ] = "%PRODUCTNAME XML (Impress)";
-    Text[ turkish ] = "%PRODUCTNAME XML (Impress)";
-    Text[ arabic ] = "%PRODUCTNAME XML (Impress)";
-    Text[ catalan ] = "%PRODUCTNAME XML (Impress)";
-    Text[ finnish ] = "%PRODUCTNAME XML (Impress)";
-    Text[ thai ] = "%PRODUCTNAME XML (Impress)";
-    Text[ czech ] = "%PRODUCTNAME XML (Impress)";
-    Text[ hebrew ] = "%PRODUCTNAME XML (Impress)";
-    Text[ hindi ] = "%PRODUCTNAME XML (à¤‡à¤®à¥à¤ªà¥à¤°à¥‡à¤¸à¥à¤¸)";
-    Text[ slovak ] = "%PRODUCTNAME XML (Impress)";
+    Text [ de ] = "%PRODUCTNAME XML (Impress)" ;
+    Text [ en-US ] = "%PRODUCTNAME XML (Impress)";
 };
 
 
