@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 09:45:02 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 13:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -791,6 +791,7 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
         pMultiplexer->addProperty(PROPERTY_COMMAND);
         pMultiplexer->addProperty(PROPERTY_FILTER_CRITERIA);
         pMultiplexer->addProperty(PROPERTY_APPLYFILTER);
+        pMultiplexer->addProperty(PROPERTY_ACTIVE_CONNECTION);
     }
 
     decrement(m_refCount);
