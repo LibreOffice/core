@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:51:28 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,7 +595,7 @@ String STR_ADABAS_HELP_MEMORYUSING
     Text[ english_us ] = "Currently used memory";
     Text[ portuguese ] = "Memσria utilizada actualmente";
     Text[ russian ] = "Θροξλόηξβΰνξ οΰμÿςθ νΰ ςεκσωθι μξμενς";
-    Text[ greek ] = "Προς το παρόν κατελημμένη μνήμη";
+    Text[ greek ] = "Μνήμη που χρησιμοποιείται";
     Text[ dutch ] = "Momenteel gebruikte vrije ruimte";
     Text[ french ] = "Mιmoire actuellement utilisιe";
     Text[ spanish ] = "Memoria utilizada actualmente";
@@ -626,7 +626,7 @@ String STR_ADABAS_ERROR_SYSTEMTABLES
     Text[ english_us ] = "No information could be displayed because no access rights exist for the required system tables.";
     Text[ portuguese ] = "Ι impossνvel mostrar informaηυes. Os direitos de acesso ΰs tabelas do sistema necessαrias nγo existem.";
     Text[ russian ] = "Νεβξημξζνξ ξςξαπΰηθςό θντξπμΰφθώ, ςΰκ κΰκ νες οπΰβ δξρςσοΰ κ νεξαυξδθμϋμ ρθρςεμνϋμ ςΰαλθφΰμ.";
-    Text[ greek ] = "Could no display the information. No access rights for system tables.";
+    Text[ greek ] = "Δεν ήταν δυνατή η εμφάνιση πληροφοριών, επειδή δεν υπάρχουν δικαιώματα πρόσβασης για τους απαιτούμενους πίνακες συστήματος.";
     Text[ dutch ] = "Er kunnen geen gegevens worden weergegeven omdat er geen toegangsrecht bestaat voor de vereiste systeemtabellen.";
     Text[ french ] = "Impossible d'afficher les informations : aucun droit d'accθs aux tables de systθme requises.";
     Text[ spanish ] = "No se puede mostrar ninguna informaciσn porque no existe derecho de acceso a las tablas de sistema necesarias.";
@@ -635,7 +635,7 @@ String STR_ADABAS_ERROR_SYSTEMTABLES
     Text[ danish ] = "Oplysninger kan ikke vises, da du ikke har adgangsrettigheder til de nψdvendige systemtabeller!";
     Text[ swedish ] = "Det gεr inte att visa nεgon information eftersom det saknas εtkomstbehφrighet till de nφdvδndiga systemtabellerna.";
     Text[ polish ] = "Nie moΏna wywietliζ informacji, poniewaΏ brak praw dostκpu do wymaganych tabel systemu.";
-    Text[ portuguese_brazilian ] = "Nenhuma informaηγo pode ser mostrada por que nγo exitem direitos de acesso para as tabelas do sistema.  ";
+    Text[ portuguese_brazilian ] = "Nenhuma informaηγo pode ser mostrada por que nγo existem direitos de acesso para as tabelas do sistema.  ";
     Text[ japanese ] = "θ¦ζ±‚γ—γγ‚·γ‚Ήγƒ†γƒ γƒ†γƒΌγƒ–γƒ«γΈγ®γ‚Άγ‚―γ‚»γ‚Ήζ¨©γγªγ„γγ‚γ«γ€ζƒ…ε ±γ―θ΅¨η¤Ίγ•γ‚γΎγ›γ‚“γ§γ—γγ€‚";
     Text[ korean ] = "μ •λ³΄λ¥Ό ν‘μ‹ν•  μ μ—†μµλ‹λ‹¤. μ‹μ¤ν… ν…μ΄λΈ”μ— λ€ν• μ•΅μ„Έμ¤ κ¶ν•μ΄ μ—†μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "ε› δΈΊδΈε…·ε¤‡θ―»ε–ι€θ¦η„η³»η»θ΅¨ζ Όη„ζƒι™θ€ζ— ζ³•ζΎη¤Ίδ»»δ½•δΏ΅ζ―γ€‚";
@@ -649,6 +649,7 @@ String STR_ADABAS_ERROR_SYSTEMTABLES
     Text[ hindi ] = "ΰ¤Έΰ¤Ώΰ¤Έΰ¥ΰ¤ΰ¤® ΰ¤Έΰ¤Ύΰ¤°ΰ¤£ΰ¥€ ΰ¤•ΰ¥‡ΰ¤²ΰ¤Ώΰ¤ ΰ¤ªΰ¥ΰ¤°ΰ¤µΰ¥‡ΰ¤¶ ΰ¤…ΰ¤§ΰ¤Ώΰ¤•ΰ¤Ύΰ¤° ΰ¤¨ ΰ¤Ήΰ¥‹ΰ¤¨ΰ¥‡ ΰ¤•ΰ¥‡ ΰ¤•ΰ¤Ύΰ¤°ΰ¤£ ΰ¤•ΰ¥‹ΰ¤ ΰ¤ΰ¤Ύΰ¤¨ΰ¤•ΰ¤Ύΰ¤°ΰ¥€ ΰ¤•ΰ¥‹ ΰ¤¨ΰ¤Ήΰ¥€ΰ¤‚ ΰ¤¦ΰ¤Ώΰ¤–ΰ¤Ύ ΰ¤Έΰ¤•ΰ¤¤ΰ¥‡ ΰ¤Ήΰ¥ ΰ¥¤";
     Text[ slovak ] = "Nebola zobrazenΓ΅ ΕΎiadna informΓ΅cia, pretoΕΎe neexistujΓΊ prΓ­stupovΓ© prΓ΅va k poΕΎadovanΓ½m systΓ©movΓ½m tabuΔΎkΓ΅m.";
 };
+
 
 
 
