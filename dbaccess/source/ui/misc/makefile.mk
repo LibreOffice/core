@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: oj $ $Date: 2001-02-23 15:10:55 $
+#   last change: $Author: fs $ $Date: 2001-03-16 16:22:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ SRCFILES =	\
 # ... object files ............................
 
 SLOFILES=	\
+        $(SLO)$/indexcollection.obj			\
         $(SLO)$/UITools.obj					\
         $(SLO)$/WCPage.obj					\
         $(SLO)$/WExtendPages.obj			\
