@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hdu $ $Date: 2001-12-10 11:32:48 $
+ *  last change: $Author: hdu $ $Date: 2001-12-10 15:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3964,11 +3964,9 @@ int OutputDevice::ImplNewFont()
         if( nNewWidth != nOrigWidth )
         {
             aSize.Width() = nNewWidth;
-            maFont.SetSize( aSize );
+            maFont.SetSize( PixelToLogic( aSize ) );
             mbNewFont = TRUE;
-            mbMap = FALSE;
             ImplNewFont();  // recurse once using stretched width
-            mbMap = TRUE;
         }
     }
 
