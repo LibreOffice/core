@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:20:57 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,6 +369,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     rAdmin.NewLayer(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("hinten")),   SC_LAYER_BACK);
     rAdmin.NewLayer(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("intern")),   SC_LAYER_INTERN);
     rAdmin.NewLayer(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Controls")), SC_LAYER_CONTROLS);
+    rAdmin.NewLayer(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("hidden")),   SC_LAYER_HIDDEN);
     // "Controls" is new - must also be created when loading
 
     //  Link fuer URL-Fields setzen
