@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: tbe $ $Date: 2002-07-11 11:12:04 $
+ *  last change: $Author: ssa $ $Date: 2002-07-12 15:49:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3736,6 +3736,7 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
     aFloatBtn( this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE ),
     aHideBtn( this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE )
 {
+    mnType = WINDOW_MENUBARWINDOW;
     pMenu = NULL;
     pActivePopup = NULL;
     nSaveFocusId = 0;
