@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2001-03-28 11:56:00 $
+ *  last change: $Author: jp $ $Date: 2001-03-28 12:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4732,6 +4732,7 @@ SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rIn
     m_aFontSizeFT       ( this, ResId( FT_FONTSIZE ) ),
     m_aFontSizeEdit     ( this, ResId( ED_FONTSIZE ) ),
     m_aRotationScalingFL( this, ResId( FL_ROTATION_SCALING ) ),
+    m_aScalingFL        ( this, ResId( FL_SCALING ) ),
     m_a0degRB           ( this, ResId( RB_0_DEG ) ),
     m_a90degRB          ( this, ResId( RB_90_DEG ) ),
     m_a270degRB         ( this, ResId( RB_270_DEG ) ),
@@ -5306,31 +5307,47 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
 
     // Rotation
     nWhich = GetWhich( SID_ATTR_CHAR_ROTATED );
-    Link aOldLink( m_aFitToLineCB.GetClickHdl() );
-    m_aFitToLineCB.SetClickHdl( Link() );
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    SfxItemState eState = rSet.GetItemState( nWhich );
+    if( SFX_ITEM_UNKNOWN == eState )
     {
-        const SvxCharRotateItem& rItem =
-                (SvxCharRotateItem&) rSet.Get( nWhich );
-        if (rItem.IsBottomToTop())
-            m_a90degRB.Check( TRUE );
-        else if (rItem.IsTopToBotton())
-            m_a270degRB.Check( TRUE );
-        else
-        {
-            DBG_ASSERT( 0 == rItem.GetValue(), "incorrect value" );
-            m_a0degRB.Check( TRUE );
-        }
-        m_aFitToLineCB.Check( rItem.IsFitToLine() );
+        m_aRotationScalingFL.Hide();
+        m_a0degRB.Hide();
+        m_a90degRB.Hide();
+        m_a270degRB.Hide();
+        m_aFitToLineCB.Hide();
     }
     else
     {
-        m_a0degRB.Check( TRUE );
-        m_aFitToLineCB.Check( FALSE );
-    }
-    m_aFitToLineCB.SetClickHdl( aOldLink );
+        Link aOldLink( m_aFitToLineCB.GetClickHdl() );
+        m_aFitToLineCB.SetClickHdl( Link() );
+        if( eState >= SFX_ITEM_DEFAULT )
+        {
+            const SvxCharRotateItem& rItem =
+                    (SvxCharRotateItem&) rSet.Get( nWhich );
+            if (rItem.IsBottomToTop())
+                m_a90degRB.Check( TRUE );
+            else if (rItem.IsTopToBotton())
+                m_a270degRB.Check( TRUE );
+            else
+            {
+                DBG_ASSERT( 0 == rItem.GetValue(), "incorrect value" );
+                m_a0degRB.Check( TRUE );
+            }
+            m_aFitToLineCB.Check( rItem.IsFitToLine() );
+        }
+        else
+        {
+            m_a0degRB.Check( TRUE );
+            m_aFitToLineCB.Check( FALSE );
+        }
+        m_aFitToLineCB.SetClickHdl( aOldLink );
+        m_aFitToLineCB.Enable( !m_a0degRB.IsChecked() );
 
-    m_aFitToLineCB.Enable( !m_a0degRB.IsChecked() );
+        // is this value set?
+        if( SFX_ITEM_UNKNOWN == rSet.GetItemState( GetWhich(
+                                        SID_ATTR_CHAR_WIDTH_FIT_TO_LINE ) ))
+            m_aFitToLineCB.Hide();
+    }
 
     m_aHighPosBtn.SaveValue();
     m_aNormalPosBtn.SaveValue();

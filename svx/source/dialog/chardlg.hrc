@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-03-12 16:24:06 $
+ *  last change: $Author: jp $ $Date: 2001-03-28 12:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,12 +217,13 @@
 #define FT_FONTSIZE             307
 #define ED_FONTSIZE             308
 #define FL_ROTATION_SCALING     309
-#define RB_0_DEG                310
-#define RB_90_DEG               311
-#define RB_270_DEG              312
-#define CB_FIT_TO_LINE          313
-#define FT_SCALE_WIDTH          314
-#define MF_SCALE_WIDTH          315
+#define FL_SCALING              310
+#define RB_0_DEG                311
+#define RB_90_DEG               312
+#define RB_270_DEG              313
+#define CB_FIT_TO_LINE          314
+#define FT_SCALE_WIDTH          315
+#define MF_SCALE_WIDTH          316
 
 #define FL_KERNING2             320
 #define LB_KERNING2             321
