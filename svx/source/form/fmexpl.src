@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 10:57:38 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1051,6 +1051,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text = "Bildlaufleiste" ;
             Text [ english ] = "Scroll bar" ;
             Text [ english_us ] = "Scroll bar";
+            Text[ chinese_simplified ] = "滚动条";
         };
         MenuItem
         {
@@ -1060,6 +1061,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text = "Drehfeld" ;
             Text [ english ] = "Spin Button" ;
             Text [ english_us ] = "Spin Button";
+            Text[ chinese_simplified ] = "选值按钮";
         };
     };
 };
