@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:37:38 $
+ *  last change: $Author: fs $ $Date: 2001-07-19 11:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,10 @@ namespace dbaccess
             @param      _rxConfigNode       the configuratoin node to read from
         */
         void        readUIFrom(const ::utl::OConfigurationNode& _rConfigNode);
+
+        /** check if the persistent settings have their default value
+        */
+        sal_Bool    isDefaulted() const;
     };
 
     //============================================================
