@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:43:49 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,8 +403,8 @@ void OApplicationController::deleteObjects( const Reference< XNameContainer>& _r
                     // #i33353# - 2004-09-27 - fs@openoffice.org
                     sal_Int32 nLastCharPos = aThisRound->getLength() - 1;
                     OSL_ENSURE( nLastCharPos >= 0, "OApplicationController::deleteObjects: empty name?" );
-                    ::rtl::OUStringBuffer sSmallestSiblingName( aThisRound->copy( 0, nLastCharPos ) );
-                    sSmallestSiblingName.append( (sal_Unicode)( aThisRound->getStr()[ nLastCharPos ] + 1 ) );
+                    ::rtl::OUStringBuffer sSmallestSiblingName( *aThisRound );
+                    sSmallestSiblingName.append( (sal_Unicode)( '/' + 1) );
 
                     ::std::set< ::rtl::OUString >::iterator aUpperChildrenBound = aDeleteNames.lower_bound( sSmallestSiblingName.makeStringAndClear() );
                     for ( ::std::set< ::rtl::OUString >::iterator aObsolete = aThisRound;
