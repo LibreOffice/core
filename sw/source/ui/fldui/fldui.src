@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-02 20:20:40 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ String STR_FLD_EDIT_DLG
     Text[ korean ] = "파일 편집";
     Text[ turkish ] = "Alan ��esi d�zenle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Editar campos";
+    Text[ catalan ] = "Edita els camps";
     Text[ thai ] = "แก้ไขเขตข้อมูล";
 };
 /*--------------------------------------------------------------------
@@ -124,7 +124,7 @@ String STR_DATEFLD
     TEXT[ korean ] = "날짜";
     TEXT[ turkish ] = "Tarih";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Fecha";
+    TEXT[ catalan ] = "Data";
     TEXT[ thai ] = "วันที่";
 };
 String STR_TIMEFLD
@@ -180,7 +180,7 @@ String STR_FILENAMEFLD
     TEXT[ korean ] = "파일 이름";
     TEXT[ turkish ] = "Dosya ad�";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Nombre del archivo";
+    TEXT[ catalan ] = "Nom del fitxer";
     TEXT[ thai ] = "ชื่อแฟ้ม";
 };
 String STR_DBNAMEFLD
@@ -208,7 +208,7 @@ String STR_DBNAMEFLD
     TEXT[ korean ] = "데이터베이스 이름";
     TEXT[ turkish ] = "Veritaban� ad�";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Nombre de base de datos";
+    TEXT[ catalan ] = "Nom de la base de dades";
     TEXT[ thai ] = "ชื่อฐานข้อมูล";
 };
 String STR_CHAPTERFLD
@@ -236,7 +236,7 @@ String STR_CHAPTERFLD
     TEXT[ greek ] = "��������";
     TEXT[ korean ] = "장";
     TEXT[ turkish ] = "B�l�m";
-    TEXT[ catalan ] = "Cap�tulo";
+    TEXT[ catalan ] = "Cap�tol";
     TEXT[ thai ] = "บท";
 };
 String STR_PAGENUMBERFLD
@@ -264,7 +264,7 @@ String STR_PAGENUMBERFLD
     TEXT[ korean ] = "페이지 번호";
     TEXT[ turkish ] = "Sayfa numaras�";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "N�mero de p�gina";
+    TEXT[ catalan ] = "N�mero de p�gina";
     TEXT[ thai ] = "เลขหน้า";
 };
 String STR_DOCSTATFLD
@@ -318,7 +318,7 @@ String STR_AUTHORFLD
     Text[ korean ] = "작성자";
     Text[ turkish ] = "Yazan";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Usuario";
+    Text[ catalan ] = "Autor";
     Text[ finnish ] = "Laatija";
     Text[ thai ] = "ผู้เขียน";
 };
@@ -347,7 +347,7 @@ String STR_TEMPLNAMEFLD
     TEXT[ korean ] = "문서 서식 파일";
     TEXT[ turkish ] = "Belge �ablonu";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Plantilla";
+    TEXT[ catalan ] = "Plantilles";
     TEXT[ thai ] = "แม่แบบ";
 };
 String STR_EXTUSERFLD
@@ -375,7 +375,7 @@ String STR_EXTUSERFLD
     TEXT[ korean ] = "보낸 사람";
     TEXT[ turkish ] = "G�nderen";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Remitente";
+    TEXT[ catalan ] = "Remitent";
     TEXT[ thai ] = "ผู้ส่ง";
 };
  //
@@ -406,7 +406,7 @@ String STR_SETFLD
     TEXT[ korean ] = "변수 설정";
     TEXT[ turkish ] = "De�i�ken tan�mla";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Establecer variable";
+    TEXT[ catalan ] = "Defineix la variable";
     TEXT[ thai ] = "กำหนดตัวแปร";
 };
 String STR_GETFLD
@@ -434,7 +434,7 @@ String STR_GETFLD
     TEXT[ korean ] = "변수 표시";
     TEXT[ turkish ] = "De�i�ken g�r�nt�le";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Mostrar variable";
+    TEXT[ catalan ] = "Mostra la variable";
     TEXT[ thai ] = "แสดงตัวแปร";
 };
 String STR_FORMELFLD
@@ -462,7 +462,7 @@ String STR_FORMELFLD
     TEXT[ korean ] = "수식 삽입";
     TEXT[ turkish ] = "Form�l ekle";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Insertar f�rmula";
+    TEXT[ catalan ] = "Insereix f�rmula";
     TEXT[ thai ] = "แทรกสูตรคำนวณ";
 };
 String STR_INPUTFLD
@@ -490,7 +490,7 @@ String STR_INPUTFLD
     TEXT[ korean ] = "입력 필드";
     TEXT[ turkish ] = "Giri� alan�";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Campo de entrada";
+    TEXT[ catalan ] = "Camp d'entrada";
     TEXT[ thai ] = "ใส่เขตข้อมูล";
 };
 String STR_SETINPUTFLD
@@ -521,7 +521,7 @@ String STR_SETINPUTFLD
     Text[ korean ] = "입력 필드(변수)";
     Text[ turkish ] = "Giri� alan� (de�i�ken)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Campo de entrada (variable)";
+    Text[ catalan ] = "Camp d'entrada (variable)";
     Text[ finnish ] = "Sy�tt�kentt� (muuttuja)";
     Text[ thai ] = "ใส่เขตข้อมูล (ตัวแปร)";
 };
@@ -548,7 +548,7 @@ String STR_USRINPUTFLD
     Text[ korean ] = "입력 필드 (사용자)";
     Text[ turkish ] = "Giri� alan� (Kullan�c�)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Campo de entrada (Usuario)";
+    Text[ catalan ] = "Camp d'entrada (usuari)";
     Text[ finnish ] = "Sy�tt�kentt� (k�ytt�j�)";
     Text[ thai ] = "ใส่เขตข้อมูล (ผู้ใช้)";
 };
@@ -577,7 +577,7 @@ String STR_CONDTXTFLD
     TEXT[ korean ] = "조건적 텍스트";
     TEXT[ turkish ] = "Ko�ullu metin";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Texto condicionado";
+    TEXT[ catalan ] = "Text condicional";
     TEXT[ thai ] = "ข้อความเงื่อนไข";
 };
 String STR_DDEFLD
@@ -605,7 +605,7 @@ String STR_DDEFLD
     TEXT[ korean ] = "DDE 필드";
     TEXT[ turkish ] = "DDE alan�";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Campo DDE";
+    TEXT[ catalan ] = "Camp DDE";
     TEXT[ thai ] = "เขตข้อมูล DDE ";
 };
 String STR_MACROFLD
@@ -633,7 +633,7 @@ String STR_MACROFLD
     TEXT[ korean ] = "매크로 실행";
     TEXT[ turkish ] = "Makroyu �al��t�r";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Ejecutar macro";
+    TEXT[ catalan ] = "Executa la macro";
     TEXT[ thai ] = "กระทำมาโคร";
 };
 String STR_SEQFLD
@@ -661,7 +661,7 @@ String STR_SEQFLD
     TEXT[ korean ] = "숫자 범위";
     TEXT[ turkish ] = "Numara aral���";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Secuencia";
+    TEXT[ catalan ] = "Seq��ncia";
     TEXT[ thai ] = "ช่วงหน้า";
 };
 String STR_SETREFPAGEFLD
@@ -687,7 +687,7 @@ String STR_SETREFPAGEFLD
     Text[ korean ] = "페이지 변수 설정";
     Text[ turkish ] = "Sayfa de�i�keni tan�mla";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Determinar variable de p�gina";
+    Text[ catalan ] = "Determina variable de p�gina";
     Text[ finnish ] = "M��rit� sivumuuttuja";
     Text[ thai ] = "กำหนดตัวแปรหน้า";
 };
@@ -714,7 +714,7 @@ String STR_GETREFPAGEFLD
     Text[ korean ] = "페이지 변수 표시";
     Text[ turkish ] = "Sayfa de�i�kenini g�r�nt�le";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Mostrar variable de p�gina";
+    Text[ catalan ] = "Mostra variable de p�gina";
     Text[ finnish ] = "N�yt� sivumuuttuja";
     Text[ thai ] = "แสดงตัวแปรหน้า";
 };
@@ -741,7 +741,7 @@ String STR_INTERNETFLD
     Text[ korean ] = "URL 로드";
     Text[ turkish ] = "URL'yi y�kle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cargar URL";
+    Text[ catalan ] = "Carrega l'URL";
     Text[ finnish ] = "Lataa URL-osoite";
     Text[ thai ] = "โหลด URL";
 };
@@ -768,7 +768,7 @@ String STR_JUMPEDITFLD
     Text[ korean ] = "플레이스홀더";
     Text[ turkish ] = "Genel arama  karakteri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Comod�n";
+    Text[ catalan ] = "Marcador";
     Text[ finnish ] = "Paikkamerkki";
     Text[ thai ] = "ตัวยึดตำแหน่ง";
 };
@@ -794,7 +794,7 @@ String STR_COMBINED_CHARS
     TEXT[ chinese_traditional ] = "字元組合";
     TEXT[ turkish ] = "Combine characters";
     TEXT[ arabic ] = "�� ������";
-    TEXT[ catalan ] = "Combinar caracteres";
+    TEXT[ catalan ] = "Combina car�cters";
     TEXT[ finnish ] = "Yhdist� merkit";
     TEXT[ thai ] = "เชื่อมตัวอักขระ";
 };
@@ -827,7 +827,7 @@ String STR_SETREFFLD
     TEXT[ korean ] = "참조 설정";
     TEXT[ turkish ] = "Referans tan�mla";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Establecer referencia";
+    TEXT[ catalan ] = "Estableix refer�ncia";
     TEXT[ thai ] = "กำหนดการอ้างอิง";
 };
 String STR_GETREFFLD
@@ -855,7 +855,7 @@ String STR_GETREFFLD
     TEXT[ korean ] = "참조 삽입";
     TEXT[ turkish ] = "Referans ekle";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Insertar referencia";
+    TEXT[ catalan ] = "Insereix refer�ncia";
     TEXT[ thai ] = "แทรกการอ้างอิง";
 };
  //
@@ -886,7 +886,7 @@ String STR_DBFLD
     TEXT[ korean ] = "편지지 양식 필드";
     TEXT[ turkish ] = "Standart mektup";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Campo de carta en serie";
+    TEXT[ catalan ] = "Camp de carta formulari";
     TEXT[ thai ] = "เขตข้อมูลแบบจดหมาย";
 };
 String STR_DBNEXTSETFLD
@@ -914,7 +914,7 @@ String STR_DBNEXTSETFLD
     TEXT[ korean ] = "다음 레코드";
     TEXT[ turkish ] = "Sonraki veri k�mesi";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Registro siguiente";
+    TEXT[ catalan ] = "Registre seg�ent";
     TEXT[ thai ] = "ระเบียนถัดไป";
 };
 String STR_DBNUMSETFLD
@@ -942,7 +942,7 @@ String STR_DBNUMSETFLD
     TEXT[ korean ] = "임의의 레코드";
     TEXT[ turkish ] = "Herhangi bir veri k�mesi";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Cualquier registro";
+    TEXT[ catalan ] = "Qualsevol registre";
     TEXT[ thai ] = "ระเบียนใด ๆ";
 };
 String STR_DBSETNUMBERFLD
@@ -970,7 +970,7 @@ String STR_DBSETNUMBERFLD
     TEXT[ korean ] = "레코드 번호";
     TEXT[ turkish ] = "Veri k�mesi numaras�";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "N�mero de registro";
+    TEXT[ catalan ] = "N�mero de registre";
     TEXT[ thai ] = "เลขระเบียน";
 };
 String STR_PREVPAGEFLD
@@ -998,7 +998,7 @@ String STR_PREVPAGEFLD
     TEXT[ korean ] = "이전 페이지";
     TEXT[ turkish ] = "�nceki sayfa";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "P�gina anterior";
+    TEXT[ catalan ] = "P�gina anterior";
     TEXT[ thai ] = "หน้าก่อน";
 };
 String STR_NEXTPAGEFLD
@@ -1026,7 +1026,7 @@ String STR_NEXTPAGEFLD
     TEXT[ korean ] = "다음 페이지";
     TEXT[ turkish ] = "Sonraki sayfa";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "P�gina siguiente";
+    TEXT[ catalan ] = "P�gina seg�ent";
     TEXT[ thai ] = "หน้าถัดไป";
 };
 String STR_HIDDENTXTFLD
@@ -1054,7 +1054,7 @@ String STR_HIDDENTXTFLD
     TEXT[ korean ] = "숨겨진 텍스트";
     TEXT[ turkish ] = "Gizli";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Texto oculto";
+    TEXT[ catalan ] = "Text ocult";
     TEXT[ thai ] = "ข้อความที่ซ่อนไว้";
 };
  //
@@ -1085,7 +1085,7 @@ String STR_USERFLD
     TEXT[ korean ] = "사용자 필드";
     TEXT[ turkish ] = "Kullan�c� alan�";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Campo del usuario";
+    TEXT[ catalan ] = "Camp de l'usuari";
     TEXT[ thai ] = "เขตข้อมูลผู้ใช้";
 };
 String STR_POSTITFLD
@@ -1166,7 +1166,7 @@ String STR_AUTHORITY
     TEXT[ arabic ] = "����� �� ���� �������";
     TEXT[ turkish ] = "Kaynak�a giri�i";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Entrada bibliograf�a";
+    TEXT[ catalan ] = "Entrada bibliografia";
     TEXT[ finnish ] = "Bibliografiamerkint�";
     TEXT[ thai ] = "รายการบรรณานุกรม";
 };
@@ -1195,7 +1195,7 @@ String STR_HIDDENPARAFLD
     TEXT[ korean ] = "숨겨진 단락";
     TEXT[ turkish ] = "Gizli paragraf";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "P�rrafo oculto";
+    TEXT[ catalan ] = "Par�graf ocult";
     TEXT[ thai ] = "ย่อหน้าที่ซ่อนไว้";
 };
  //
@@ -1226,7 +1226,7 @@ String STR_DOCINFOFLD
     TEXT[ korean ] = "문서 정보";
     TEXT[ turkish ] = "Belge bilgileri";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Informaci�n del documento";
+    TEXT[ catalan ] = "Informaci� del document";
     TEXT[ thai ] = "ข้อมูลเอกสาร";
 };
 /*--------------------------------------------------------------------
@@ -1255,7 +1255,7 @@ String FLD_DATE_STD
     TEXT[ korean ] = "날짜";
     TEXT[ turkish ] = "Tarih";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Fecha";
+    TEXT[ catalan ] = "Data";
     TEXT[ finnish ] = "P�iv�m��r�";
     TEXT[ thai ] = "วันที่";
 };
@@ -1284,7 +1284,7 @@ String FLD_DATE_FIX
     TEXT[ korean ] = "날짜(고정됨)";
     TEXT[ turkish ] = "Tarih (sabit)";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Fecha (fija)";
+    TEXT[ catalan ] = "Data (fixa)";
     TEXT[ thai ] = "วันที่ (คงที่)";
 };
 String FLD_TIME_STD
@@ -1339,7 +1339,7 @@ String FLD_TIME_FIX
     TEXT[ korean ] = "시간 (고정됨)";
     TEXT[ turkish ] = "Saat (sabit)";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Hora (fija)";
+    TEXT[ catalan ] = "Hora (fixa)";
     TEXT[ thai ] = "เวลา (คงที่)";
 };
  //
@@ -1370,7 +1370,7 @@ String FLD_STAT_TABLE
     TEXT[ korean ] = "표";
     TEXT[ turkish ] = "Tablo";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Tablas";
+    TEXT[ catalan ] = "Taules";
     TEXT[ thai ] = "ตาราง";
 };
 String FLD_STAT_CHAR
@@ -1398,7 +1398,7 @@ String FLD_STAT_CHAR
     TEXT[ greek ] = "����������";
     TEXT[ korean ] = "문자";
     TEXT[ turkish ] = "Karakter";
-    TEXT[ catalan ] = "Caracteres";
+    TEXT[ catalan ] = "Car�cters";
     TEXT[ thai ] = "ตัวอักขระ";
 };
 String FLD_STAT_WORD
@@ -1426,7 +1426,7 @@ String FLD_STAT_WORD
     TEXT[ korean ] = "단어";
     TEXT[ turkish ] = "S�zc�k";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Palabras";
+    TEXT[ catalan ] = "Paraules";
     TEXT[ thai ] = "คำ";
 };
 String FLD_STAT_PARA
@@ -1454,7 +1454,7 @@ String FLD_STAT_PARA
     TEXT[ korean ] = "단락";
     TEXT[ turkish ] = "Paragraf";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "P�rrafos";
+    TEXT[ catalan ] = "Par�grafs";
     TEXT[ thai ] = "ย่อหน้า";
 };
 String FLD_STAT_GRF
@@ -1482,7 +1482,7 @@ String FLD_STAT_GRF
     TEXT[ korean ] = "그래픽";
     TEXT[ turkish ] = "Grafik";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Im�genes";
+    TEXT[ catalan ] = "Imatges";
     TEXT[ thai ] = "กราฟิค";
 };
 String FLD_STAT_OBJ
@@ -1510,7 +1510,7 @@ String FLD_STAT_OBJ
     TEXT[ korean ] = "개체";
     TEXT[ turkish ] = "Nesne";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Objetos";
+    TEXT[ catalan ] = "Objectes";
     TEXT[ thai ] = "วัตถุ";
 };
 String FLD_STAT_PAGE
@@ -1538,7 +1538,7 @@ String FLD_STAT_PAGE
     TEXT[ korean ] = "페이지";
     TEXT[ turkish ] = "Sayfa";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "P�ginas";
+    TEXT[ catalan ] = "P�gines";
     TEXT[ thai ] = "หน้า";
 };
  //  SubCmd DDETypen
@@ -1568,7 +1568,7 @@ String FMT_DDE_HOT
     TEXT[ korean ] = "DDE 자동";
     TEXT[ turkish ] = "Otomatik DDE";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "DDE autom�tico";
+    TEXT[ catalan ] = "DDE autom�tic";
     TEXT[ thai ] = "DDE อัตโนมัติ";
 };
 String FMT_DDE_NORMAL
@@ -1659,7 +1659,7 @@ String FLD_EU_VORNAME
     TEXT[ korean ] = "성";
     TEXT[ turkish ] = "Ad";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Nombre";
+    TEXT[ catalan ] = "Nom";
     TEXT[ thai ] = "ชื่อ";
 };
 String FLD_EU_NAME
@@ -1685,7 +1685,7 @@ String FLD_EU_NAME
     Text[ korean ] = "이름";
     Text[ turkish ] = "Soyad";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Apellidos";
+    Text[ catalan ] = "Cognom";
     Text[ finnish ] = "Sukunimi";
     Text[ thai ] = "นามสกุล";
 };
@@ -1714,7 +1714,7 @@ String FLD_EU_ABK
     TEXT[ korean ] = "머리글자";
     TEXT[ turkish ] = "Ba�harfler";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Iniciales";
+    TEXT[ catalan ] = "Inicials";
     TEXT[ thai ] = "ชื่อย่อ";
 };
 String FLD_EU_STRASSE
@@ -1742,7 +1742,7 @@ String FLD_EU_STRASSE
     TEXT[ korean ] = "주소번지";
     TEXT[ turkish ] = "Sokak";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Calle";
+    TEXT[ catalan ] = "Carrer";
     TEXT[ thai ] = "ถนน";
 };
 String FLD_EU_LAND
@@ -1798,7 +1798,7 @@ String FLD_EU_PLZ
     TEXT[ korean ] = "우편번호";
     TEXT[ turkish ] = "P.Kodu";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "CP";
+    TEXT[ catalan ] = "Codi postal";
     TEXT[ thai ] = "รหัสไปรษณีย์";
 };
 String FLD_EU_ORT
@@ -1826,7 +1826,7 @@ String FLD_EU_ORT
     TEXT[ korean ] = "시";
     TEXT[ turkish ] = "�ehir";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Ciudad";
+    TEXT[ catalan ] = "Ciutat";
     TEXT[ thai ] = "เมือง";
 };
 String FLD_EU_TITEL
@@ -1854,7 +1854,7 @@ String FLD_EU_TITEL
     TEXT[ korean ] = "직함";
     TEXT[ turkish ] = "Unvan";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "T�tulo";
+    TEXT[ catalan ] = "T�tol";
     TEXT[ thai ] = "ยศ";
 };
 String FLD_EU_POS
@@ -1882,7 +1882,7 @@ String FLD_EU_POS
     TEXT[ korean ] = "직위";
     TEXT[ turkish ] = "Pozisyon";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Posici�n";
+    TEXT[ catalan ] = "Posici�";
     TEXT[ thai ] = "ตำแหน่ง";
 };
 String FLD_EU_TELPRIV
@@ -1910,7 +1910,7 @@ String FLD_EU_TELPRIV
     TEXT[ korean ] = "전화번호 (자택)";
     TEXT[ turkish ] = "Tlf. (Ev)";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Tel. (Priv.)";
+    TEXT[ catalan ] = "Tel. (particular)";
     TEXT[ thai ] = "โทรศัพท์ (บ้าน)";
 };
 String FLD_EU_TELFIRMA
@@ -1938,7 +1938,7 @@ String FLD_EU_TELFIRMA
     TEXT[ korean ] = "전화번호 (직장)";
     TEXT[ turkish ] = "Tlf. (��)";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Tel. (Emp.)";
+    TEXT[ catalan ] = "Tel. (feina)";
     TEXT[ thai ] = "โทรศัพท์ (ที่ทำงาน)";
 };
 String FLD_EU_FAX
@@ -1968,7 +1968,7 @@ String FLD_EU_EMAIL
     Text[ korean ] = "e-mail";
     Text[ turkish ] = "E-posta";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "E-mail";
+    Text[ catalan ] = "correu electr�nic";
     Text[ finnish ] = "S�hk�posti";
     Text[ thai ] = "อีเมล์";
 };
@@ -1995,7 +1995,7 @@ String FLD_EU_STATE
     Text[ korean ] = "주";
     Text[ turkish ] = "�l";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Estado";
+    Text[ catalan ] = "Comarca";
     Text[ finnish ] = "Osavaltio";
     Text[ thai ] = "รัฐ";
 };
@@ -2022,7 +2022,7 @@ String FLD_PAGEREF_OFF
     Text[ korean ] = "해제";
     Text[ turkish ] = "kapal�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "de";
+    Text[ catalan ] = "off";
     Text[ finnish ] = "off";
     Text[ thai ] = "ปิด";
 };
@@ -2049,7 +2049,7 @@ String FLD_PAGEREF_ON
     Text[ korean ] = "작동";
     Text[ turkish ] = "A��k";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "en";
+    Text[ catalan ] = "on";
     Text[ finnish ] = "on";
     Text[ thai ] = "เปิด";
 };
@@ -2082,7 +2082,7 @@ String FMT_FF_NAME
     TEXT[ korean ] = "파일 이름";
     TEXT[ turkish ] = "Dosya ad�";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Nombre del archivo";
+    TEXT[ catalan ] = "Nom del fitxer";
     TEXT[ thai ] = "ชื่อแฟ้ม";
 };
 String FMT_FF_NAME_NOEXT
@@ -2108,7 +2108,7 @@ String FMT_FF_NAME_NOEXT
     Text[ korean ] = "확장자 없는 파일 이름";
     Text[ turkish ] = "Uzant�s�z dosya ad�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Nombre del archivo sin extensi�n";
+    Text[ catalan ] = "Nom del fitxer sense extensi�";
     Text[ finnish ] = "Tiedostonimi ilman tunnistetta";
     Text[ thai ] = "ชื่อแฟ้มไม่มีส่วนขยาย";
 };
@@ -2137,7 +2137,7 @@ String FMT_FF_PATHNAME
     TEXT[ korean ] = "경로/파일 이름";
     TEXT[ turkish ] = "Veri yolu/Dosya ad�";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Ruta de acceso/Nombre de archivo";
+    TEXT[ catalan ] = "Cam� d'acc�s/Nom de fitxer";
     TEXT[ thai ] = "เส้นทาง/ชื่อแฟ้ม";
 };
 String FMT_FF_PATH
@@ -2164,7 +2164,7 @@ String FMT_FF_PATH
     TEXT[ greek ] = "��������";
     TEXT[ korean ] = "경로";
     TEXT[ turkish ] = "Veri yolu";
-    TEXT[ catalan ] = "Ruta";
+    TEXT[ catalan ] = "Cam�";
     TEXT[ thai ] = "เส้นทาง";
 };
 String FMT_FF_UI_NAME
@@ -2190,7 +2190,7 @@ String FMT_FF_UI_NAME
     Text[ korean ] = "서식";
     Text[ turkish ] = "�ablon";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Plantilla";
+    Text[ catalan ] = "Estil";
     Text[ finnish ] = "Tyyli";
     Text[ thai ] = "ลักษณะ";
 };
@@ -2217,7 +2217,7 @@ String FMT_FF_UI_RANGE
     Text[ korean ] = "영역";
     Text[ turkish ] = "Aral�k";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Area";
+    Text[ catalan ] = "�rea";
     Text[ finnish ] = "Luokka";
     Text[ thai ] = "ประเภท";
 };
@@ -2249,7 +2249,7 @@ String FMT_CHAPTER_NAME
     TEXT[ greek ] = "����� ���������";
     TEXT[ korean ] = "장 이름";
     TEXT[ turkish ] = "B�l�m ad�";
-    TEXT[ catalan ] = "Nombre del cap�tulo";
+    TEXT[ catalan ] = "Nom del cap�tol";
     TEXT[ thai ] = "ชื่อบท";
 };
 String FMT_CHAPTER_NO
@@ -2275,7 +2275,7 @@ String FMT_CHAPTER_NO
     Text[ korean ] = "장 번호";
     Text[ turkish ] = "B�l�m numaras�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "N�mero del cap�tulo";
+    Text[ catalan ] = "N�mero del cap�tol";
     Text[ finnish ] = "Luvun numero";
     Text[ thai ] = "เลขบท";
 };
@@ -2302,7 +2302,7 @@ String FMT_CHAPTER_NO_NOSEPARATOR
     Text[ korean ] = "구분 기호 없는 장 번호";
     Text[ turkish ] = "Ay�rma i�areti i�ermeyen b�l�m numaras�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "N�mero de cap�tulo sin separador";
+    Text[ catalan ] = "N�mero de cap�tol sense separador";
     Text[ finnish ] = "Luvun numero ilman erotinta";
     Text[ thai ] = "เลขบทไม่มีตัวแยก";
 };
@@ -2330,7 +2330,7 @@ String FMT_CHAPTER_NAMENO
     Text[ korean ] = "장 번호와 이름";
     Text[ turkish ] = "B�l�m numaras� ve ad�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "N�mero y nombre";
+    Text[ catalan ] = "N�mero i nom";
     Text[ finnish ] = "Luvun numero ja nimi";
     Text[ thai ] = "เลขบทและชื่อ";
 };
@@ -2378,7 +2378,7 @@ String FMT_NUM_ROMAN
     TEXT[ korean ] = "로마식 (I II III)";
     TEXT[ turkish ] = "Roma (I II III)";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Romanos (I II III)";
+    TEXT[ catalan ] = "Xifres romanes (I II III)";
     TEXT[ thai ] = "โรมัน (I II III)";
 };
 String FMT_NUM_SROMAN
@@ -2406,7 +2406,7 @@ String FMT_NUM_SROMAN
     TEXT[ korean ] = "로마식 (i ii iii)";
     TEXT[ turkish ] = "Roma (i ii iii)";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Romanos (i ii iii)";
+    TEXT[ catalan ] = "Xifres romanes (i ii iii)";
     TEXT[ thai ] = "โรมัน (i ii iii)";
 };
 String FMT_NUM_ARABIC
@@ -2434,7 +2434,7 @@ String FMT_NUM_ARABIC
     TEXT[ korean ] = "아라비아 식 (1 2 3)";
     TEXT[ turkish ] = "Arap (1 2 3)";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "�rabes (1 2 3)";
+    TEXT[ catalan ] = "�rabs (1 2 3)";
     TEXT[ thai ] = "อาราบิก (1 2 3)";
 };
 String FMT_NUM_PAGEDESC
@@ -2462,7 +2462,7 @@ String FMT_NUM_PAGEDESC
     TEXT[ korean ] = "페이지 스타일로 설정";
     TEXT[ turkish ] = "Sayfa bi�imi gibi";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Como estilo de p�gina";
+    TEXT[ catalan ] = "Com estil de p�gina";
     TEXT[ thai ] = "เป็นลักษณะหน้า";
 };
 String FMT_NUM_PAGESPECIAL
@@ -2488,7 +2488,7 @@ String FMT_NUM_PAGESPECIAL
     Text[ korean ] = "텍스트";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Texto";
+    Text[ catalan ] = "Text";
     Text[ finnish ] = "Teksti";
     Text[ thai ] = "ข้อความ";
 };
@@ -2520,7 +2520,7 @@ String FMT_AUTHOR_NAME
     TEXT[ korean ] = "이름";
     TEXT[ turkish ] = "Ad";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Nombre";
+    TEXT[ catalan ] = "Nom";
     TEXT[ thai ] = "ชื่อ";
 };
 String FMT_AUTHOR_SCUT
@@ -2548,7 +2548,7 @@ String FMT_AUTHOR_SCUT
     TEXT[ korean ] = "머리글자";
     TEXT[ turkish ] = "Ba�harfler";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Iniciales";
+    TEXT[ catalan ] = "Inicials";
     TEXT[ thai ] = "ชื่อย่อ";
 };
 /*--------------------------------------------------------------------
@@ -2604,7 +2604,7 @@ String FMT_SETVAR_TEXT
     Text[ korean ] = "텍스트";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Texto";
+    Text[ catalan ] = "Text";
     Text[ finnish ] = "Teksti";
     Text[ thai ] = "ข้อความ";
 };
@@ -2631,7 +2631,7 @@ String FMT_GETVAR_NAME
     Text[ korean ] = "이름";
     Text[ turkish ] = "Ad";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Nombre";
+    Text[ catalan ] = "Nom";
     Text[ finnish ] = "Nimi";
     Text[ thai ] = "ชื่อ";
 };
@@ -2658,7 +2658,7 @@ String FMT_GETVAR_TEXT
     Text[ korean ] = "텍스트";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Texto";
+    Text[ catalan ] = "Text";
     Text[ finnish ] = "Teksti";
     Text[ thai ] = "ข้อความ";
 };
@@ -2712,7 +2712,7 @@ String FMT_USERVAR_TEXT
     Text[ korean ] = "텍스트";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Texto";
+    Text[ catalan ] = "Text";
     Text[ finnish ] = "Teksti";
     Text[ thai ] = "ข้อความ";
 };
@@ -2739,7 +2739,7 @@ String FMT_DBFLD_DB
     Text[ korean ] = "데이터베이스";
     Text[ turkish ] = "Veritaban�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Base de datos";
+    Text[ catalan ] = "Base de dades";
     Text[ finnish ] = "Tietokanta";
     Text[ thai ] = "ฐานข้อมูล";
 };
@@ -2854,7 +2854,7 @@ String FMT_REG_DATE
     TEXT[ korean ] = "일자";
     TEXT[ turkish ] = "Tarih";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Fecha";
+    TEXT[ catalan ] = "Data";
     TEXT[ thai ] = "วันที่";
 };
 /*--------------------------------------------------------------------
@@ -2885,7 +2885,7 @@ String FMT_REF_TEXT
     TEXT[ korean ] = "참조";
     TEXT[ turkish ] = "Referans metni";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Texto de referencia";
+    TEXT[ catalan ] = "Text de refer�ncia";
     TEXT[ thai ] = "อ้างอิง";
 };
 String FMT_REF_PAGE
@@ -2913,7 +2913,7 @@ String FMT_REF_PAGE
     TEXT[ korean ] = "페이지";
     TEXT[ turkish ] = "Sayfa";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "P�gina";
+    TEXT[ catalan ] = "P�gina";
     TEXT[ thai ] = "หน้า";
 };
 String FMT_REF_CHAPTER
@@ -2941,7 +2941,7 @@ String FMT_REF_CHAPTER
     TEXT[ greek ] = "��������";
     TEXT[ korean ] = "장";
     TEXT[ turkish ] = "B�l�m";
-    TEXT[ catalan ] = "Cap�tulo";
+    TEXT[ catalan ] = "Cap�tol";
     TEXT[ thai ] = "บท";
 };
 String FMT_REF_UPDOWN
@@ -2967,7 +2967,7 @@ String FMT_REF_UPDOWN
     Text[ korean ] = "위/아래";
     Text[ turkish ] = "�stte/Altta";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Encima/Debajo";
+    Text[ catalan ] = "Sobre/Sota";
     Text[ finnish ] = "Ylh��ll�/alhaalla";
     Text[ thai ] = "ข้างบน/ข้างล่าง";
 };
@@ -2996,7 +2996,7 @@ String FMT_REF_PAGE_PGDSC
     TEXT[ korean ] = "페이지 스타일로 설정";
     TEXT[ turkish ] = "Sayfa bi�imi gibi";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Como estilo de p�gina";
+    TEXT[ catalan ] = "Com estil de p�gina";
     TEXT[ thai ] = "เป็นลักษณะหน้า";
 };
 String FMT_REF_ONLYNUMBER
@@ -3022,7 +3022,7 @@ String FMT_REF_ONLYNUMBER
     Text[ korean ] = "범주와 번호";
     Text[ turkish ] = "Kategori ve numara";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Categor�a y n�mero";
+    Text[ catalan ] = "Categoria i n�mero";
     Text[ finnish ] = "Luokka ja numero";
     Text[ thai ] = "ประเภทและตัวเลข";
 };
@@ -3049,7 +3049,7 @@ String FMT_REF_ONLYCAPTION
     Text[ korean ] = "캡션 텍스트";
     Text[ turkish ] = "Altyaz� metni";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Texto de etiqueta";
+    Text[ catalan ] = "Text de la llegenda";
     Text[ finnish ] = "Kuvateksti";
     Text[ thai ] = "ข้อความอธิบายภาพ";
 };
@@ -3106,7 +3106,7 @@ String FMT_MARK_TEXT
     Text[ korean ] = "텍스트";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Texto";
+    Text[ catalan ] = "Text";
     Text[ finnish ] = "Teksti";
     Text[ thai ] = "ข้อความ";
 };
@@ -3135,7 +3135,7 @@ String FMT_MARK_TABLE
     Text[ korean ] = "시트";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tabla";
+    Text[ catalan ] = "Taula";
     Text[ thai ] = "ตาราง";
 };
 String FMT_MARK_FRAME
@@ -3163,7 +3163,7 @@ String FMT_MARK_FRAME
     Text[ korean ] = "텍스트 상자";
     Text[ turkish ] = "�er�eve";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Marco";
+    Text[ catalan ] = "Marc";
     Text[ thai ] = "กรอบ";
 };
 String FMT_MARK_GRAFIC
@@ -3191,7 +3191,7 @@ String FMT_MARK_GRAFIC
     Text[ korean ] = "그래픽";
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Imagen";
+    Text[ catalan ] = "Imatge";
     Text[ thai ] = "กราฟิค";
 };
 String FMT_MARK_OLE
@@ -3219,7 +3219,7 @@ String FMT_MARK_OLE
     Text[ korean ] = "개체";
     Text[ turkish ] = "Nesne";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Objeto";
+    Text[ catalan ] = "Objecte";
     Text[ thai ] = "วัตถุ";
 };
 /*--------------------------------------------------------------------
@@ -3257,7 +3257,7 @@ String STR_ALL
     Text[ korean ] = "전체";
     Text[ turkish ] = "T�m�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Todo";
+    Text[ catalan ] = "Tot";
     Text[ thai ] = "ทั้งหมด";
 };
 String STR_INSERT
@@ -3285,7 +3285,7 @@ String STR_INSERT
     Text[ korean ] = "삽입";
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar";
+    Text[ catalan ] = "Insereix";
     Text[ thai ] = "แทรก";
 };
 /*--------------------------------------------------------------------
@@ -3316,7 +3316,7 @@ String STR_COND
     TEXT[ korean ] = "조건(~C)";
     TEXT[ turkish ] = "Ko�ul";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "~Condici�n";
+    TEXT[ catalan ] = "~Condici�";
     TEXT[ thai ] = "เ~งื่อนไข";
 };
 String STR_TEXT
@@ -3344,7 +3344,7 @@ String STR_TEXT
     TEXT[ korean ] = "다음, 기타";
     TEXT[ turkish ] = "O halde, Yoksa";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Entonces, si no";
+    TEXT[ catalan ] = "Aleshores, si no";
     TEXT[ thai ] = "จากนั้น, อย่างอื่น";
 };
 String STR_DDE_CMD
@@ -3372,7 +3372,7 @@ String STR_DDE_CMD
     TEXT[ korean ] = "DDE 문장";
     TEXT[ turkish ] = "DDE deyimi";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Instrucci�n DDE";
+    TEXT[ catalan ] = "Instrucci� DDE";
     TEXT[ thai ] = "ประโยค DDE ";
 };
 String STR_INSTEXT
@@ -3399,6 +3399,7 @@ String STR_INSTEXT
     TEXT[ turkish ] = "Metin ekle";
     TEXT[ arabic ] = "����� ��";
     TEXT[ thai ] = "แทรกข้อ~ความ";
+    TEXT[ catalan ] = "Insereix el t~ext";
 };
 String STR_MACNAME
 {
@@ -3425,7 +3426,7 @@ String STR_MACNAME
     TEXT[ korean ] = "매크로 이름(~M)";
     TEXT[ turkish ] = "Makro ~ad�";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Nombre de la ~macro";
+    TEXT[ catalan ] = "Nom de la ~macro";
     TEXT[ thai ] = "ชื่อ~มาโคร";
 };
 String STR_PROMPT
@@ -3453,7 +3454,7 @@ String STR_PROMPT
     TEXT[ korean ] = "참조(~R)";
     TEXT[ turkish ] = "Bilgi";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "I~ndicaci�n";
+    TEXT[ catalan ] = "I~ndicaci�";
     TEXT[ thai ] = "~อ้างอิง";
 };
 String STR_COMBCHRS_FT
@@ -3478,7 +3479,7 @@ String STR_COMBCHRS_FT
     TEXT[ chinese_traditional ] = "字元(~A)";
     TEXT[ turkish ] = "Ch~aracters";
     TEXT[ arabic ] = "����";
-    TEXT[ catalan ] = "C~ar�cter";
+    TEXT[ catalan ] = "C~ar�cter";
     TEXT[ finnish ] = "~Merkit";
     TEXT[ thai ] = "ตัวอัก~ขระ";
 };
@@ -3507,7 +3508,7 @@ String STR_SETNO
     TEXT[ korean ] = "레코드 번호";
     TEXT[ turkish ] = "Veri kayd� numaras�";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "N�mero de registro";
+    TEXT[ catalan ] = "N�mero de registre";
     TEXT[ thai ] = "เลขระเบียน";
 };
 String STR_OFFSET
@@ -3535,7 +3536,7 @@ String STR_OFFSET
     TEXT[ korean ] = "수정(~F)";
     TEXT[ turkish ] = "D�zeltme";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "C~orrecci�n";
+    TEXT[ catalan ] = "C~orrecci�";
     TEXT[ thai ] = "ออ~ฟเซต";
 };
 String STR_VALUE
@@ -3563,7 +3564,7 @@ String STR_VALUE
     Text[ korean ] = "값";
     Text[ turkish ] = "De~�er";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Valor";
+    Text[ catalan ] = "Valor";
     Text[ thai ] = "ค่า";
 };
 String STR_FORMULA
@@ -3618,7 +3619,7 @@ String STR_LEVEL
     TEXT[ korean ] = "계층";
     TEXT[ turkish ] = "D�zey";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Nivel ";
+    TEXT[ catalan ] = "Capa";
     TEXT[ thai ] = "ระดับ ";
 };
 String STR_URLPROMPT
@@ -3670,7 +3671,7 @@ String STR_ALL_DATABASE
     Text[ korean ] = "<전체>";
     Text[ turkish ] = "<T�m�>";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "<Todos>";
+    Text[ catalan ] = "<Tots>";
     Text[ finnish ] = "<Kaikki>";
     Text[ thai ] = "<ทั้งหมด>";
 };
@@ -3718,7 +3719,7 @@ PushButton PB_FLDEDT_ADDRESS
     Text[ korean ] = "편집";
     Text[ turkish ] = "D�zenle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Editar";
+    Text[ catalan ] = "Edita";
     Text[ finnish ] = "Muokkaa";
     Text[ thai ] = "แก้ไข";
 };
