@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implsprite.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,15 @@
 #ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
 #endif
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#endif
 #ifndef _CANVAS_CANVASTOOLS_HXX
 #include <canvas/canvastools.hxx>
 #endif
 
-#include "implsprite.hxx"
+
+#include <implsprite.hxx>
 
 
 using namespace ::drafts::com::sun::star;
@@ -84,31 +88,56 @@ namespace cppcanvas
     namespace internal
     {
 
-        ImplSprite::ImplSprite( const uno::Reference< rendering::XSpriteCanvas >&   rParentCanvas,
-                                const uno::Reference< rendering::XSprite >&         rSprite ) :
-            mxGraphicDevice( rParentCanvas.is() ? rParentCanvas->getDevice() : NULL ),
+        ImplSprite::ImplSprite( const uno::Reference< rendering::XSpriteCanvas >&       rParentCanvas,
+                                const uno::Reference< rendering::XSprite >&             rSprite,
+                                const ImplSpriteCanvas::TransformationArbiterSharedPtr& rTransformArbiter ) :
+            mxGraphicDevice(),
             mxSprite( rSprite ),
-            mxAnimatedSprite()
+            mxAnimatedSprite(),
+            mpTransformArbiter( rTransformArbiter )
         {
+            // Avoiding ternary operator in initializer list (Solaris
+            // compiler bug, when function call and temporary is
+            // involved)
+            if( rParentCanvas.is() )
+                mxGraphicDevice = rParentCanvas->getDevice();
+
             OSL_ENSURE( rParentCanvas.is() , "ImplSprite::ImplSprite(): Invalid canvas");
             OSL_ENSURE( mxGraphicDevice.is(), "ImplSprite::ImplSprite(): Invalid graphic device");
             OSL_ENSURE( mxSprite.is(), "ImplSprite::ImplSprite(): Invalid sprite");
+            OSL_ENSURE( mpTransformArbiter.get(), "ImplSprite::ImplSprite(): Invalid transformation arbiter");
         }
 
-        ImplSprite::ImplSprite( const uno::Reference< rendering::XSpriteCanvas >&   rParentCanvas,
-                                const uno::Reference< rendering::XAnimatedSprite >& rSprite ) :
-            mxGraphicDevice( rParentCanvas.is() ? rParentCanvas->getDevice() : NULL ),
+        ImplSprite::ImplSprite( const uno::Reference< rendering::XSpriteCanvas >&       rParentCanvas,
+                                const uno::Reference< rendering::XAnimatedSprite >&     rSprite,
+                                const ImplSpriteCanvas::TransformationArbiterSharedPtr& rTransformArbiter ) :
+            mxGraphicDevice(),
             mxSprite( uno::Reference< rendering::XSprite >(rSprite,
                                                            uno::UNO_QUERY) ),
-            mxAnimatedSprite( rSprite )
+            mxAnimatedSprite( rSprite ),
+            mpTransformArbiter( rTransformArbiter )
         {
+            // Avoiding ternary operator in initializer list (Solaris
+            // compiler bug, when function call and temporary is
+            // involved)
+            if( rParentCanvas.is() )
+                mxGraphicDevice = rParentCanvas->getDevice();
+
             OSL_ENSURE( rParentCanvas.is() , "ImplSprite::ImplSprite(): Invalid canvas");
             OSL_ENSURE( mxGraphicDevice.is(), "ImplSprite::ImplSprite(): Invalid graphic device");
             OSL_ENSURE( mxSprite.is(), "ImplSprite::ImplSprite(): Invalid sprite");
+            OSL_ENSURE( mpTransformArbiter.get(), "ImplSprite::ImplSprite(): Invalid transformation arbiter");
         }
 
         ImplSprite::~ImplSprite()
         {
+            // hide the sprite on the canvas. If we don't hide the
+            // sprite, it will stay on the canvas forever, since the
+            // canvas naturally keeps a list of visible sprites
+            // (otherwise, it wouldn't be able to paint them
+            // autonomously)
+            if( mxSprite.is() )
+                mxSprite->hide();
         }
 
         void ImplSprite::setAlpha( const double& rAlpha )
@@ -139,8 +168,23 @@ namespace cppcanvas
 
         void ImplSprite::move( const ::basegfx::B2DPoint& rNewPos )
         {
-            // TODO: Not yet implemented. Need reference to parent canvas here
-            OSL_ENSURE( false, "ImplSprite::move(): Not yet implemented!");
+            OSL_ENSURE( mxSprite.is(), "ImplSprite::move(): Invalid sprite");
+
+            if( mxSprite.is() )
+            {
+                rendering::ViewState    aViewState;
+                rendering::RenderState  aRenderState;
+
+                ::canvas::tools::initViewState( aViewState );
+                ::canvas::tools::initRenderState( aRenderState );
+
+                ::canvas::tools::setViewStateTransform( aViewState,
+                                                        mpTransformArbiter->getTransformation() );
+
+                mxSprite->move( ::basegfx::unotools::point2DFromB2DPoint( rNewPos ),
+                                aViewState,
+                                aRenderState );
+            }
         }
 
         void ImplSprite::transform( const ::basegfx::B2DHomMatrix& rMatrix )
@@ -156,6 +200,18 @@ namespace cppcanvas
             }
         }
 
+        void ImplSprite::setClipPixel( const ::basegfx::B2DPolyPolygon& rClipPoly )
+        {
+            OSL_ENSURE( mxGraphicDevice.is(), "ImplSprite::setClip(): Invalid canvas");
+            OSL_ENSURE( mxSprite.is(), "ImplSprite::transform(): Invalid sprite");
+
+            if( mxSprite.is() && mxGraphicDevice.is() )
+            {
+                mxSprite->clip( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( mxGraphicDevice,
+                                                                                     rClipPoly ) );
+            }
+        }
+
         void ImplSprite::setClip( const ::basegfx::B2DPolyPolygon& rClipPoly )
         {
             OSL_ENSURE( mxGraphicDevice.is(), "ImplSprite::setClip(): Invalid canvas");
@@ -163,16 +219,19 @@ namespace cppcanvas
 
             if( mxSprite.is() && mxGraphicDevice.is() )
             {
-                rendering::ViewState    aViewState;
-                rendering::RenderState  aRenderState;
+                ::basegfx::B2DPolyPolygon   aTransformedClipPoly( rClipPoly );
 
-                ::canvas::tools::initViewState( aViewState );
-                ::canvas::tools::initRenderState( aRenderState );
+                // extract linear part of canvas view transformation (linear means:
+                // without translational components)
+                ::basegfx::B2DHomMatrix     aViewTransform( mpTransformArbiter->getTransformation() );
+                aViewTransform.set( 0, 2, 0.0 );
+                aViewTransform.set( 1, 2, 0.0 );
+
+                // transform polygon from view to device coordinate space
+                aTransformedClipPoly.transform( aViewTransform );
 
                 mxSprite->clip( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( mxGraphicDevice,
-                                                                                     rClipPoly ),
-                                aViewState,
-                                aRenderState );
+                                                                                     aTransformedClipPoly ) );
             }
         }
 
