@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:35 $
+ *  last change: $Author: mba $ $Date: 2001-01-25 18:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,6 @@ protected:
     DECL_LINK( Highlight, Menu * );
     DECL_LINK( Activate, Menu * );
     DECL_LINK( Deactivate, Menu * );
-    DECL_LINK( Select, Menu * );
 
 public:
                     ~SfxVirtualMenu();
@@ -155,6 +154,8 @@ public:
     void            SetHelpIds( ResMgr* );
     void            RemoveDisabledEntries();
     void            SetRemoveDisabledEntries();
+
+    DECL_LINK( Select, Menu * );
 };
 
 //--------------------------------------------------------------------
