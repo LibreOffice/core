@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:33:14 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 #pragma hdrstop
+
+#ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
+#include "unointerfacetouniqueidentifiermapper.hxx"
+#endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include "nmspmap.hxx"
@@ -165,6 +169,10 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATIONNODESUPPLIER_HPP_
+#include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
 #endif
@@ -241,6 +249,8 @@
 #ifndef _XMLOFF_NUMBERSTYLESEXPORT_HXX
 #include "XMLNumberStylesExport.hxx"
 #endif
+
+#include "animationexport.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -764,6 +774,16 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
         GetXMLToken(XML_NP_PRESENTATION),
         GetXMLToken(XML_N_PRESENTATION),
         XML_NAMESPACE_PRESENTATION);
+
+    _GetNamespaceMap().Add(
+        GetXMLToken(XML_NP_SMIL),
+        GetXMLToken(XML_N_SMIL),
+        XML_NAMESPACE_SMIL);
+
+    _GetNamespaceMap().Add(
+        GetXMLToken(XML_NP_ANIMATION),
+        GetXMLToken(XML_N_ANIMATION),
+        XML_NAMESPACE_ANIMATION);
 
     GetShapeExport()->enableLayerExport();
 
@@ -1956,12 +1976,11 @@ void SdXMLExport::_ExportContent()
     // page export
     for(sal_Int32 nPageInd(0); nPageInd < mnDocDrawPageCount; nPageInd++)
     {
-        Any aAny(mxDocDrawPages->getByIndex(nPageInd));
-        Reference<XDrawPage> xDrawPage;
+        uno::Reference<drawing::XDrawPage> xDrawPage( mxDocDrawPages->getByIndex(nPageInd), uno::UNO_QUERY );
 
         SetProgress(((nPageInd + 1) * 100) / mnDocDrawPageCount);
 
-        if(aAny >>= xDrawPage)
+        if(xDrawPage.is())
         {
             // prepare page attributes, name of page
             Reference < container::XNamed > xNamed(xDrawPage, UNO_QUERY);
@@ -2037,11 +2056,14 @@ void SdXMLExport::_ExportContent()
             // write optional office:forms
             exportFormsElement( xDrawPage );
 
+            UniReference< xmloff::AnimationsExporter >  xAnimationsExporter;
+            uno::Reference< ::com::sun::star::animations::XAnimationNodeSupplier > xAnimNodeSupplier( xDrawPage, UNO_QUERY );
+
             // prepare animations exporter if impress
-            if(IsImpress())
+            if(xAnimNodeSupplier.is())
             {
-                UniReference< XMLAnimationsExporter > xAnimExport = new XMLAnimationsExporter( GetShapeExport().get() );
-                GetShapeExport()->setAnimationsExporter( xAnimExport );
+                xAnimationsExporter = new xmloff::AnimationsExporter( *this );
+                xAnimationsExporter->prepare( xAnimNodeSupplier->getAnimationNode() );
             }
 
             // write graphic objects on this page (if any)
@@ -2052,12 +2074,12 @@ void SdXMLExport::_ExportContent()
             // write animations and presentation notes (ONLY if presentation)
             if(IsImpress())
             {
-                // animations
-                UniReference< XMLAnimationsExporter > xAnimExport( GetShapeExport()->getAnimationsExporter() );
-                if( xAnimExport.is() )
-                    xAnimExport->exportAnimations( *this );
+                if(xAnimNodeSupplier.is())
+                {
+                    xAnimationsExporter->exportAnimations( xAnimNodeSupplier->getAnimationNode() );
+                }
 
-                xAnimExport = NULL;
+                UniReference< XMLAnimationsExporter > xAnimExport;
                 GetShapeExport()->setAnimationsExporter( xAnimExport );
 
                 // presentations
