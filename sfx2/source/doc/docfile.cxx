@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-19 14:39:54 $
+ *  last change: $Author: mba $ $Date: 2001-10-02 07:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1397,11 +1397,16 @@ void SfxMedium::Transfer_Impl()
             if ( !aFileName.Len() )
                 aFileName = GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
 
-            if ( ::ucb::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aSourceContent ) &&
-                ::ucb::Content::create( aDest.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aTransferContent ) )
+            if ( ::ucb::Content::create( aDest.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aTransferContent ) )
             {
                 // free resources, otherwise the transfer may fail
                 Close();
+
+                // don't create content before Close(), because if the storage was opened in direct mode, it will be flushed
+                // in Close() and this leads to a transfer command executed in the package, which currently is implemented as
+                // remove+move in the file FCP. The "remove" is notified to the ::ucb::Content, that clears its URL and its
+                // content reference in this notification and thus will never get back any URL, so my transfer will fail!
+                ::ucb::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aSourceContent );
 
                 // check for external parameters that may customize the handling of NameClash situations
                 SFX_ITEMSET_ARG( GetItemSet(), pRename, SfxBoolItem, SID_RENAME, sal_False );
