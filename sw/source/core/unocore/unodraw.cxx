@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:10:52 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:46:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,10 @@
 #ifndef _FMTSRND_HXX //autogen
 #include <fmtsrnd.hxx>
 #endif
+// OD 2004-04-21 #i26791#
+#ifndef _FMTFOLLOWTEXTFLOW_HXX
+#include <fmtfollowtextflow.hxx>
+#endif
 #ifndef _ROOTFRM_HXX //autogen
 #include <rootfrm.hxx>
 #endif
@@ -187,17 +191,23 @@ class SwShapeDescriptor_Impl
     SvxULSpaceItem*     pULSpace;
     SvxLRSpaceItem*     pLRSpace;
     sal_Bool            bOpaque;
-    uno::Reference< XTextRange >        xTextRange;
+    uno::Reference< XTextRange > xTextRange;
+    // OD 2004-04-21 #i26791#
+    SwFmtFollowTextFlow* mpFollowTextFlow;
 
 public:
     SwShapeDescriptor_Impl() :
-     pHOrient(0),
-     pVOrient(0),
+     // OD 2004-06-03 #i26791# - set default value of <SwFmtHoriOrient>
+     pHOrient( new SwFmtHoriOrient( 0, HORI_NONE, FRAME ) ),
+     // OD 2004-04-21 #i26791# - set default value of <SwFmtVertOrient>
+     pVOrient( new SwFmtVertOrient( 0, VERT_NONE, FRAME ) ),
      pAnchor(0),
      pSurround(0),
      pULSpace(0),
      pLRSpace(0),
-     bOpaque(sal_False)
+     bOpaque(sal_False),
+     // OD 2004-04-21 #i26791#
+     mpFollowTextFlow( new SwFmtFollowTextFlow( FALSE ) )
      {}
 
     ~SwShapeDescriptor_Impl()
@@ -208,6 +218,8 @@ public:
         delete pSurround;
         delete pULSpace;
         delete pLRSpace;
+        // OD 2004-04-22 #i26791#
+        delete mpFollowTextFlow;
     }
     SwFmtAnchor*    GetAnchor(sal_Bool bCreate = sal_False)
         {
@@ -217,14 +229,20 @@ public:
         }
     SwFmtHoriOrient* GetHOrient(sal_Bool bCreate = sal_False)
         {
-            if(bCreate && !pHOrient)
-                pHOrient = new SwFmtHoriOrient();
+            if (bCreate && !pHOrient)
+            {
+                // OD 2004-06-03 #i26791# - change default
+                pHOrient = new SwFmtHoriOrient( 0, HORI_NONE, FRAME );
+            }
             return pHOrient;
         }
     SwFmtVertOrient* GetVOrient(sal_Bool bCreate = sal_False)
         {
             if(bCreate && !pVOrient)
-                pVOrient = new SwFmtVertOrient(0, VERT_TOP);
+            {
+                // OD 2004-04-21 #i26791# - change default
+                pVOrient = new SwFmtVertOrient( 0, VERT_NONE, FRAME );
+            }
             return pVOrient;
         }
 
@@ -265,6 +283,18 @@ public:
     void RemoveULSpace(){DELETEZ(pULSpace);}
     void RemoveLRSpace(){DELETEZ(pLRSpace);}
     void SetOpaque(sal_Bool bSet){bOpaque = bSet;}
+
+    // OD 2004-04-21 #i26791#
+    SwFmtFollowTextFlow* GetFollowTextFlow( sal_Bool _bCreate = sal_False )
+    {
+        if ( _bCreate && !mpFollowTextFlow )
+            mpFollowTextFlow = new SwFmtFollowTextFlow( FALSE );
+        return mpFollowTextFlow;
+    }
+    void RemoveFollowTextFlow()
+    {
+        DELETEZ(mpFollowTextFlow);
+    }
 };
 /****************************************************************************
     class SwFmDrawPage
@@ -627,6 +657,12 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         if(pDesc->GetSurround())
             aSet.Put( *pDesc->GetSurround());
         bOpaque = pDesc->IsOpaque();
+
+        // OD 2004-04-22 #i26791#
+        if ( pDesc->GetFollowTextFlow() )
+        {
+            aSet.Put( *pDesc->GetFollowTextFlow() );
+        }
     }
 
     pSvxShape->setPosition(aMM100Pos);
@@ -1001,8 +1037,8 @@ uno::Reference< XPropertySetInfo >  SwXShape::getPropertySetInfo(void) throw( un
 
   -----------------------------------------------------------------------*/
 void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
-    throw( UnknownPropertyException, PropertyVetoException,
-        IllegalArgumentException, WrappedTargetException, RuntimeException)
+     throw( UnknownPropertyException, PropertyVetoException,
+            IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
     SwFrmFmt*   pFmt = GetFrmFmt();
@@ -1071,6 +1107,34 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     }
 
                 }
+                // OD 2004-04-22 #i26791# - special handling for property FN_TEXT_RANGE
+                else if ( FN_TEXT_RANGE == pMap->nWID )
+                {
+                    SwFmtAnchor aAnchor( static_cast<const SwFmtAnchor&>(aSet.Get( RES_ANCHOR )) );
+                    if ( aAnchor.GetAnchorId() == FLY_PAGE )
+                    {
+                        // set property <TextRange> not valid for to-page anchored shapes
+                        throw IllegalArgumentException();
+                    }
+                    else
+                    {
+                        SwUnoInternalPaM* pInternalPam =
+                                        new SwUnoInternalPaM( *(pFmt->GetDoc()) );
+                        uno::Reference< XTextRange > xRg;
+                        aValue >>= xRg;
+                        if ( SwXTextRange::XTextRangeToSwPaM(*pInternalPam, xRg) )
+                        {
+                            aAnchor.SetAnchor( pInternalPam->GetPoint() );
+                            aSet.Put(aAnchor);
+                            pFmt->SetAttr(aSet);
+                        }
+                        else
+                        {
+                            throw RuntimeException();
+                        }
+                        delete pInternalPam;
+                    }
+                }
                 else if( pDoc->GetRootFrm() )
                 {
                     UnoActionContext aCtx(pDoc);
@@ -1082,7 +1146,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         aList.InsertEntry(aMark);
                         sal_Int32 nAnchor;
                         cppu::enum2int( nAnchor, aValue );
-                        pDoc->ChgAnchor( aList, nAnchor,
+                        pDoc->ChgAnchor( aList, (RndStdIds)nAnchor,
                                                 sal_False, sal_True );
                     }
                     else
@@ -1132,6 +1196,12 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     break;
                     case RES_OPAQUE :
                         pImpl->SetOpaque(*(sal_Bool*)aValue.getValue());
+                    break;
+                    // OD 2004-04-22 #i26791#
+                    case RES_FOLLOW_TEXT_FLOW:
+                    {
+                        pItem = pImpl->GetFollowTextFlow( sal_True );
+                    }
                     break;
                 }
                 if(pItem)
@@ -1200,6 +1270,36 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                         aRet.setValue(&aPoint, ::getCppuType( (::com::sun::star::awt::Point*)0 ));
                     }
                 }
+                // OD 2004-04-22 #i26791# - special handling for FN_TEXT_RANGE
+                else if ( FN_TEXT_RANGE == pMap->nWID )
+                {
+                    const SwFmtAnchor aAnchor = pFmt->GetAnchor();
+                    if ( aAnchor.GetAnchorId() == FLY_PAGE )
+                    {
+                        // return nothing, because property <TextRange> isn't
+                        // valid for to-page anchored shapes
+                        Any aAny;
+                        aRet = aAny;
+                    }
+                    else
+                    {
+                        if ( aAnchor.GetCntntAnchor() )
+                        {
+                            uno::Reference< XTextRange > xTextRange =
+                                SwXTextRange::CreateTextRangeFromPosition(
+                                                    pFmt->GetDoc(),
+                                                    *aAnchor.GetCntntAnchor(),
+                                                    0L );
+                            aRet.setValue(&xTextRange, ::getCppuType((Reference<XTextRange>*)0));
+                        }
+                        else
+                        {
+                            // return nothing
+                            Any aAny;
+                            aRet = aAny;
+                        }
+                    }
+                }
                 else
                 {
                     const SwAttrSet& rSet = pFmt->GetAttrSet();
@@ -1236,8 +1336,16 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                         aRet.setValue(&pImpl->GetOpaque(), ::getBooleanCppuType());
                     break;
                     case FN_ANCHOR_POSITION :
+                    {
                         awt::Point aPoint;
                         aRet.setValue(&aPoint, ::getCppuType( (::com::sun::star::awt::Point*)0 ));
+                    }
+                    break;
+                    // OD 2004-04-22 #i26791#
+                    case RES_FOLLOW_TEXT_FLOW :
+                    {
+                        pItem = pImpl->GetFollowTextFlow();
+                    }
                     break;
                 }
                 if(pItem)
@@ -1314,16 +1422,6 @@ Sequence< PropertyState > SwXShape::getPropertyStates(
                     const SwAttrSet& rSet = pFmt->GetAttrSet();
                     SfxItemState eItemState = rSet.GetItemState(pMap->nWID, FALSE);
 
-                    //special handling for #88835#: vertical orientation should only be
-                    //exported if the anchor type is FLY_AUTO_CNTNT
-                    if(RES_VERT_ORIENT == pMap->nWID && SFX_ITEM_SET == eItemState)
-                    {
-                        const SwFmtAnchor& rAnchor = rSet.GetAnchor();
-                        if(rAnchor.GetAnchorId() != FLY_IN_CNTNT)
-                        {
-                            eItemState = SFX_ITEM_DEFAULT;
-                        }
-                    }
                     if(SFX_ITEM_SET == eItemState)
                         pRet[nProperty] = PropertyState_DIRECT_VALUE;
                     else if(SFX_ITEM_DEFAULT == eItemState)
@@ -1415,6 +1513,12 @@ void SwXShape::setPropertyToDefault( const OUString& rPropertyName )
                     case  RES_SURROUND:     pImpl->RemoveSurround();break;
                     case RES_OPAQUE :       pImpl->SetOpaque(sal_False);  break;
                     case FN_TEXT_RANGE :
+                    break;
+                    // OD 2004-04-22 #i26791#
+                    case RES_FOLLOW_TEXT_FLOW:
+                    {
+                        pImpl->RemoveFollowTextFlow();
+                    }
                     break;
                 }
             }
