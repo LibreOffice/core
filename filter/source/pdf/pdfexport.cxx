@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-30 12:40:05 $
+ *  last change: $Author: sj $ $Date: 2002-10-08 16:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <vcl/poly.hxx>
 #include <vcl/salbtype.hxx>
 #include <so3/embobj.hxx>
+#include <vcl/bmpacc.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <svtools/FilterConfigItem.hxx>
@@ -861,14 +862,9 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
         {
             sal_Bool bUseJPGCompression = sal_False;
 
-            // use jpeg not for too small graphics
-            if ( ( aSizePixel.Width() > 32 ) && ( aSizePixel.Height() > 32 ) )
-            {
-                if ( aBitmapEx.GetBitCount() > 8 )
-                    bUseJPGCompression = sal_True;
-                if ( ( aBitmapEx.GetBitCount() == 8 ) && aBitmapEx.GetBitmap().HasGreyPalette() )
-                    bUseJPGCompression = sal_True;
-            }
+            // use jpeg not for too small graphics and graphics with more than 256 colors
+            if ( ( aSizePixel.Width() > 32 ) && ( aSizePixel.Height() > 32 ) && ( aBitmapEx.GetBitCount() > 8 ) )
+                bUseJPGCompression = sal_True;
             if ( bUseJPGCompression )
             {
                 Bitmap aMask;
