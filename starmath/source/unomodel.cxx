@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-05 10:11:33 $
+ *  last change: $Author: tl $ $Date: 2002-09-06 10:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -939,8 +939,6 @@ void SAL_CALL SmModel::render(
         rSelection >>= xModel;
         if (xModel == pDocSh->GetModel())
         {
-            Point aTemp;
-            pDocSh->Draw( *pOut, aTemp );
             SmViewShell *pView = SmGetActiveView();
             if (pView)
             {
