@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-07 10:30:39 $
+ *  last change: $Author: mt $ $Date: 2001-03-28 15:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1622,6 +1622,8 @@ void Edit::Command( const CommandEvent& rCEvt )
         ImplInitSettings( TRUE, FALSE, FALSE );
 
         SetInsertMode( bInsertMode );
+
+        ImplModified();
     }
     else if ( rCEvt.GetCommand() == COMMAND_EXTTEXTINPUT )
     {
@@ -1629,7 +1631,6 @@ void Edit::Command( const CommandEvent& rCEvt )
 
         maText.Erase( mpIMEInfos->nPos, mpIMEInfos->nLen );
         maText.Insert( pData->GetText(), mpIMEInfos->nPos );
-        ImplModified();
 
         if ( pData->GetTextAttr() )
         {
