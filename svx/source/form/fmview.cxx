@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:43:36 $
+ *  last change: $Author: fs $ $Date: 2001-08-09 09:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,22 +60,6 @@
  ************************************************************************/
 #pragma hdrstop
 
-#ifndef _COMPHELPER_STLTYPES_HXX_
-#include <comphelper/stl_types.hxx>
-#endif
-#ifndef _COMPHELPER_NUMBERS_HXX_
-#include <comphelper/numbers.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
-#include <comphelper/property.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
-#ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
-#include <cppuhelper/servicefactory.hxx>
-#endif
-
 #ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
 #endif
@@ -85,15 +69,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
 #include <com/sun/star/uno/XNamingService.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XPREPAREDSTATEMENT_HPP_
-#include <com/sun/star/sdbc/XPreparedStatement.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDDB_XTABLESSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -107,12 +82,6 @@
 
 #ifndef _COM_SUN_STAR_FORM_XRESET_HPP_
 #include <com/sun/star/form/XReset.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATS_HPP_
-#include <com/sun/star/util/XNumberFormats.hpp>
 #endif
 
 #ifndef _SVX_FMVWIMP_HXX
@@ -147,14 +116,13 @@
 #include <svtools/sbx.hxx>
 #endif
 
-#ifndef _SVX_DIALMGR_HXX //autogen
-#include "dialmgr.hxx"
-#endif
-
 #ifndef _SVX_FMITEMS_HXX
 #include "fmitems.hxx"
 #endif
 
+#ifndef _SVX_FMOBJ_HXX
+#include "fmobj.hxx"
+#endif
 #ifndef _SVDITER_HXX //autogen
 #include "svditer.hxx"
 #endif
@@ -179,12 +147,6 @@
 #ifndef _SVX_FMPGEIMP_HXX
 #include "fmpgeimp.hxx"
 #endif
-#ifndef _SVX_FMGLOB_HXX
-#include "fmglob.hxx"
-#endif
-#ifndef _SVX_FMOBJ_HXX
-#include "fmobj.hxx"
-#endif
 #ifndef _SVX_FMTOOLS_HXX
 #include "fmtools.hxx"
 #endif
@@ -199,14 +161,9 @@
 #endif
 #ifndef _SVX_FMUNDO_HXX
 #include "fmundo.hxx"
-#endif // _SVX_FMUNDO_HXX
-
-#ifndef _MULTIPRO_HXX
-#include "multipro.hxx"
 #endif
-
-#ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
+#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
+#include "dataaccessdescriptor.hxx"
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -222,8 +179,8 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
 #endif
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
+#ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
+#include <com/sun/star/form/FormComponentType.hpp>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -251,52 +208,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::util;
 using namespace ::svxform;
+using namespace ::svx;
 using namespace ::dbtools;
-
-void getConnectionSpecs(const Reference< XConnection >& _rxConn, ::rtl::OUString& rURL, ::rtl::OUString& _rRegisteredTitle)
-{
-    Reference< ::com::sun::star::beans::XPropertySet > xURLSupplier(_rxConn, UNO_QUERY);
-    if (!::comphelper::hasProperty(FM_PROP_URL, xURLSupplier))
-    {
-        Reference< ::com::sun::star::container::XChild > xChild(_rxConn, UNO_QUERY);
-        if (xChild.is())
-            xURLSupplier = Reference< ::com::sun::star::beans::XPropertySet >(xChild->getParent(), UNO_QUERY);
-    }
-    if (::comphelper::hasProperty(FM_PROP_URL, xURLSupplier))
-    {
-        try { rURL = ::comphelper::getString(xURLSupplier->getPropertyValue(FM_PROP_URL)); } catch(const Exception&) { }
-    }
-
-    if (rURL.getLength())
-        _rRegisteredTitle = rURL;
-}
-
-namespace svxform
-{
-    //========================================================================
-    class OAutoDispose
-    {
-    protected:
-        Reference< XComponent > m_xComp;
-
-    public:
-        OAutoDispose( const Reference< XInterface > _rxObject );
-        ~OAutoDispose();
-    };
-
-    //------------------------------------------------------------------------
-    OAutoDispose::OAutoDispose( const Reference< XInterface > _rxObject )
-        :m_xComp(_rxObject, UNO_QUERY)
-    {
-    }
-
-    //------------------------------------------------------------------------
-    OAutoDispose::~OAutoDispose()
-    {
-        if (m_xComp.is())
-            m_xComp->dispose();
-    }
-}
 
 //========================================================================
 //------------------------------------------------------------------------
@@ -658,400 +571,31 @@ void FmFormView::ObjectCreated(FmFormObj* pObj)
 }
 
 //------------------------------------------------------------------------
-void FmFormView::CreateControlWithLabel(OutputDevice* pOutDev, sal_Int32 nYOffsetMM, Reference< ::com::sun::star::beans::XPropertySet >  xField,
-    Reference< ::com::sun::star::util::XNumberFormats >  xNumberFormats, sal_uInt16 nObjID, const ::rtl::OUString& rFieldPostfix,
-    FmFormObj*& pLabel, FmFormObj*& pControl) const
+SdrObject* FmFormView::CreateFieldControl( const ODataAccessDescriptor& _rColumnDescriptor )
 {
-    sal_Int32 nDataType = ::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FIELDTYPE));
-    sal_Int32 nFormatKey = ::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FORMATKEY));
-
-    Any aFieldName(xField->getPropertyValue(FM_PROP_NAME));
-    ::rtl::OUString sFieldName;
-    aFieldName >>= sFieldName;
-
-    // das Label
-    pLabel = (FmFormObj*)SdrObjFactory::MakeNewObject( FmFormInventor, OBJ_FM_FIXEDTEXT, NULL, NULL );
-    Reference< ::com::sun::star::beans::XPropertySet >  xLabelSet(pLabel->GetUnoControlModel(), UNO_QUERY);
-    xLabelSet->setPropertyValue(FM_PROP_LABEL, makeAny(sFieldName + rFieldPostfix));
-
-    // positionieren unter Beachtung der Einstellungen des Ziel-Output-Devices
-    Size aTextSize(pOutDev->GetTextWidth(sFieldName + rFieldPostfix), pOutDev->GetTextHeight());
-
-    SdrModel* pModel    = GetModel();
-    MapMode   eTargetMode(pOutDev->GetMapMode()),
-              eSourceMode(MAP_100TH_MM);
-
-    // Textbreite ist mindestens 5cm
-    // Texthoehe immer halber cm
-    Size aDefTxtSize(3000, 500);
-    Size aDefSize(4000, 500);
-    Size aDefImageSize(4000, 4000);
-    // Abstand zwischen Text und Control
-    Size aDelta(500, 0);
-
-    Size aRealSize = pOutDev->LogicToLogic(aTextSize, eTargetMode, eSourceMode);
-    aRealSize.Width() = max(aRealSize.Width(), aDefTxtSize.Width()) + aDelta.Width();
-    aRealSize.Height()= aDefSize.Height();
-
-    // je nach Skalierung des Zieldevices muss die Groesse noch normiert werden (#53523#)
-    aRealSize.Width() = sal_Int32(Fraction(aRealSize.Width(), 1) * eTargetMode.GetScaleX());
-    aRealSize.Height() = sal_Int32(Fraction(aRealSize.Height(), 1) * eTargetMode.GetScaleY());
-    pLabel->SetLogicRect(
-        Rectangle(  pOutDev->LogicToLogic(Point(0, nYOffsetMM), eSourceMode, eTargetMode),
-                    pOutDev->LogicToLogic(aRealSize, eSourceMode, eTargetMode)
-        ));
-
-    // jetzt das Control
-    pControl = (FmFormObj*)SdrObjFactory::MakeNewObject( FmFormInventor, nObjID, NULL, NULL );
-
-    // positionieren
-    Size szControlSize;
-    if (DataType::BIT == nDataType)
-        szControlSize = aDefSize;
-    else if (OBJ_FM_IMAGECONTROL == nObjID || DataType::LONGVARCHAR == nDataType)
-        szControlSize = aDefImageSize;
-    else
-        szControlSize = aDefSize;
-
-    // normieren wie oben
-    szControlSize.Width() = sal_Int32(Fraction(szControlSize.Width(), 1) * eTargetMode.GetScaleX());
-    szControlSize.Height() = sal_Int32(Fraction(szControlSize.Height(), 1) * eTargetMode.GetScaleY());
-    pControl->SetLogicRect(
-        Rectangle(  pOutDev->LogicToLogic(Point(aRealSize.Width(), nYOffsetMM), eSourceMode, eTargetMode),
-                    pOutDev->LogicToLogic(szControlSize, eSourceMode, eTargetMode)
-        ));
-
-    // ein paar initiale Einstellungen am ControlModel
-    Reference< ::com::sun::star::beans::XPropertySet >  xControlSet = Reference< ::com::sun::star::beans::XPropertySet > (pControl->GetUnoControlModel(), UNO_QUERY);
-    if (xControlSet.is())
-    {
-        // ein paar numersiche Eigenschaften durchschleifen
-        if (::comphelper::hasProperty(FM_PROP_DECIMAL_ACCURACY, xControlSet))
-        {
-            // Number braucht eine Scale
-            Any aScaleVal(::comphelper::getNumberFormatDecimals(xNumberFormats, nFormatKey));
-            xControlSet->setPropertyValue(FM_PROP_DECIMAL_ACCURACY, aScaleVal);
-        }
-        if (::comphelper::hasProperty(FM_PROP_VALUEMIN, xControlSet) && ::comphelper::hasProperty(FM_PROP_VALUEMAX, xControlSet))
-        {
-            // die minimale/maximale Zahl in diesem Feld
-            sal_Int32 nMinValue = -1000000000, nMaxValue = 1000000000;
-            switch (nDataType)
-            {
-                case DataType::TINYINT  : nMinValue = 0; nMaxValue = 255; break;
-                case DataType::SMALLINT : nMinValue = -32768; nMaxValue = 32767; break;
-                case DataType::INTEGER  : nMinValue = 0x80000000; nMaxValue = 0x7FFFFFFF; break;
-                    // um die doubles/singles kuemmere ich mich nicht, da es ein wenig sinnlos ist
-            }
-
-            Reference< XPropertySetInfo > xControlPropInfo = xControlSet->getPropertySetInfo();
-            Any aVal;
-
-            Property aMinProp = xControlPropInfo->getPropertyByName(FM_PROP_VALUEMIN);
-            if (aMinProp.Type.getTypeClass() == TypeClass_DOUBLE)
-                aVal <<= (double)nMinValue;
-            else if (aMinProp.Type.getTypeClass() == TypeClass_LONG)
-                aVal <<= (sal_Int32)nMinValue;
-            else
-                DBG_ERROR("FmFormView::CreateControlWithLabel: unexpected property type (MinValue)!");
-            xControlSet->setPropertyValue(FM_PROP_VALUEMIN,aVal);
-
-            Property aMaxProp = xControlPropInfo->getPropertyByName(FM_PROP_VALUEMAX);
-            if (aMaxProp.Type.getTypeClass() == TypeClass_DOUBLE)
-                aVal <<= (double)nMaxValue;
-            else if (aMaxProp.Type.getTypeClass() == TypeClass_LONG)
-                aVal <<= (sal_Int32)nMaxValue;
-            else
-                DBG_ERROR("FmFormView::CreateControlWithLabel: unexpected property type (MaxValue)!");
-            xControlSet->setPropertyValue(FM_PROP_VALUEMAX,aVal);
-        }
-
-        if (::comphelper::hasProperty(FM_PROP_STRICTFORMAT, xControlSet))
-        {   // Formatueberpruefung fue numeric fields standardmaessig sal_True
-            sal_Bool bB(sal_True);
-            Any aVal(&bB,getBooleanCppuType());
-            xControlSet->setPropertyValue(FM_PROP_STRICTFORMAT, aVal);
-        }
-
-        xControlSet->setPropertyValue(FM_PROP_CONTROLSOURCE, aFieldName);
-        xControlSet->setPropertyValue(FM_PROP_NAME, aFieldName);
-
-        if (nDataType == DataType::LONGVARCHAR)
-        {
-            sal_Bool bB(sal_True);
-            xControlSet->setPropertyValue(FM_PROP_MULTILINE,Any(&bB,getBooleanCppuType()));
-        }
-
-        if (nObjID == OBJ_FM_CHECKBOX)
-            xControlSet->setPropertyValue(FM_PROP_TRISTATE,
-                makeAny(xField->getPropertyValue(FM_PROP_ISNULLABLE))
-            );
-    }
-
-    // announce the label to the control
-    if (::comphelper::hasProperty(FM_PROP_CONTROLLABEL, xControlSet))
-    {
-        // (try-catch as the control may refuse a model without the right service name - which we don't know
-        // usually a fixed text we use as label should be accepted, but to be sure ....)
-        try
-        {
-            xControlSet->setPropertyValue(FM_PROP_CONTROLLABEL, makeAny(xLabelSet));
-        }
-        catch(Exception&)
-        {
-            DBG_ERROR("FmFormView::CreateControlWithLabel : could not marry the control and the label !");
-        }
-    }
+    return pImpl->implCreateFieldControl( _rColumnDescriptor );
 }
 
 //------------------------------------------------------------------------
 SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
 {
-    if (!IsDesignMode())
-        return NULL;
-
-    FmFormPage& rPage = *(FmFormPage*)GetPageViewPvNum(0)->GetPage();
-
     // SBA_FIELDEXCHANGE_FORMAT
     // "Datenbankname";"Tabellen/QueryName";1/0(fuer Tabelle/Abfrage);"Feldname"
-    ::rtl::OUString aDatabaseName   = rFieldDesc.GetToken(0,sal_Unicode(11));
-    ::rtl::OUString aObjectName     = rFieldDesc.GetToken(1,sal_Unicode(11));
+    ::rtl::OUString sDataSource     = rFieldDesc.GetToken(0,sal_Unicode(11));
+    ::rtl::OUString sObjectName     = rFieldDesc.GetToken(1,sal_Unicode(11));
     sal_uInt16 nObjectType          = (sal_uInt16)rFieldDesc.GetToken(2,sal_Unicode(11)).ToInt32();
-    ::rtl::OUString aFieldName      = rFieldDesc.GetToken(3,sal_Unicode(11));
+    ::rtl::OUString sFieldName      = rFieldDesc.GetToken(3,sal_Unicode(11));
 
-    if (!aFieldName.getLength() || !aObjectName.getLength() || !aDatabaseName.getLength())
+    if (!sFieldName.getLength() || !sObjectName.getLength() || !sDataSource.getLength())
         return NULL;
 
+    ODataAccessDescriptor aColumnDescriptor;
+    aColumnDescriptor[ daDataSource ]       <<= sDataSource;
+    aColumnDescriptor[ daCommand ]          <<= sObjectName;
+    aColumnDescriptor[ daCommandType ]      <<= nObjectType;
+    aColumnDescriptor[ daColumnName ]       <<= sFieldName;
 
-    // Einlesen des default workspace
-    Reference< XConnection >            xConnection;
-    Reference< XDataSource >            xDataSource;
-    Reference< XPreparedStatement >     xStatement;
-
-
-    ::rtl::OUString sDatabaseName = aDatabaseName;
-    SQLErrorEvent aError;
-    try
-    {
-        xDataSource = getDatasourceObject(sDatabaseName, pImpl->getORB());
-        xConnection = getDatasourceConnection(sDatabaseName, pImpl->getORB());
-    }
-    catch(const SQLContext& e) { aError.Reason <<= e; }
-    catch(const SQLWarning& e) { aError.Reason <<= e; }
-    catch(const SQLException& e) { aError.Reason <<= e; }
-    if (aError.Reason.hasValue())
-    {
-        displayException(aError);
-        return NULL;
-    }
-
-    OAutoDispose aDisposeConnection(xConnection.get());
-        // automatically dispose the connection when leaving this method
-
-    if (!xDataSource.is() || !xConnection.is())
-    {
-        DBG_ERROR("FmGridHeader::FmFormView::CreateFieldControl : could not retrieve the data source or the connection!");
-        return NULL;
-    }
-    try
-    {
-        // Festellen des Feldes
-        Reference< ::com::sun::star::container::XNameAccess >   xFields;
-        Reference< ::com::sun::star::beans::XPropertySet >      xField;
-        switch (nObjectType)
-        {
-            case 0: // old : DataSelectionType_TABLE:
-            {
-                Reference< ::com::sun::star::sdbcx::XTablesSupplier >  xSupplyTables(xConnection, UNO_QUERY);
-                Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyColumns;
-                xSupplyTables->getTables()->getByName(aObjectName) >>= xSupplyColumns;
-                xFields = xSupplyColumns->getColumns();
-            }
-            break;
-            case 1: // old : DataSelectionType_QUERY:
-            {
-                Reference< ::com::sun::star::sdb::XQueriesSupplier >  xSupplyQueries(xConnection, UNO_QUERY);
-                Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyColumns;
-                xSupplyQueries->getQueries()->getByName(aObjectName) >>= xSupplyColumns;
-                xFields  = xSupplyColumns->getColumns();
-            }
-            break;
-            default:
-            {
-                xStatement = xConnection->prepareStatement(aObjectName);
-                // not interested in any results
-                Reference< ::com::sun::star::beans::XPropertySet > (xStatement,UNO_QUERY)->setPropertyValue(::rtl::OUString::createFromAscii("MaxRows"),makeAny(sal_Int32(0)));
-                Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(xStatement->executeQuery(), UNO_QUERY);
-                if (xSupplyCols.is())
-                    xFields = xSupplyCols->getColumns();
-            }
-        }
-
-        if (xFields.is() && xFields->hasByName(aFieldName))
-            xFields->getByName(aFieldName) >>= xField;
-
-        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = OStaticDataAccessTools().getNumberFormats(xConnection, sal_False);
-        if (!xSupplier.is() || !xField.is())
-            return NULL;
-
-        Reference< ::com::sun::star::util::XNumberFormats >  xNumberFormats(xSupplier->getNumberFormats());
-        if (!xNumberFormats.is())
-            return NULL;
-
-        // Vom Feld werden nun zwei Informationen benoetigt:
-        // a.) Name des Feldes fuer Label und ControlSource
-        // b.) FormatKey, um festzustellen, welches Feld erzeugt werden soll
-        sal_Int32 nDataType = ::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FIELDTYPE));
-        sal_Int32 nFormatKey = ::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FORMATKEY));
-
-        ::rtl::OUString sLabelPostfix;
-
-        ////////////////////////////////////////////////////////////////
-        // nur fuer Textgroesse
-        OutputDevice* pOutDev = NULL;
-        if (pActualOutDev && pActualOutDev->GetOutDevType() == OUTDEV_WINDOW)
-            pOutDev = (OutputDevice*)pActualOutDev;
-        else
-        {// OutDev suchen
-            SdrPageView* pPageView = GetPageViewPvNum(0);
-            if( pPageView && !pOutDev )
-            {
-                const SdrPageViewWinList& rWinList = pPageView->GetWinList();
-                for( sal_uInt16 i = 0; i < rWinList.GetCount(); i++ )
-                {
-                    if( rWinList[i].GetOutputDevice()->GetOutDevType() == OUTDEV_WINDOW)
-                    {
-                        pOutDev = rWinList[i].GetOutputDevice();
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (!pOutDev)
-            return NULL;
-
-        if ((DataType::BINARY == nDataType) || (DataType::VARBINARY == nDataType))
-            return NULL;
-
-        //////////////////////////////////////////////////////////////////////
-        // Anhand des FormatKeys wird festgestellt, welches Feld benoetigt wird
-        sal_uInt16 nOBJID = 0;
-        sal_Bool bDateNTimeField = sal_False;
-
-        sal_Bool bIsCurrency = sal_False;
-        if (::comphelper::hasProperty(FM_PROP_ISCURRENCY, xField))
-            bIsCurrency = ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_ISCURRENCY));
-
-        if (bIsCurrency)
-            nOBJID = OBJ_FM_CURRENCYFIELD;
-        else
-            switch (nDataType)
-            {
-                case DataType::LONGVARBINARY:
-                    nOBJID = OBJ_FM_IMAGECONTROL;
-                    break;
-                case DataType::LONGVARCHAR:
-                    nOBJID = OBJ_FM_EDIT;
-                    break;
-                case DataType::BINARY:
-                case DataType::VARBINARY:
-                    return NULL;
-                case DataType::BIT:
-                    nOBJID = OBJ_FM_CHECKBOX;
-                    break;
-                case DataType::TINYINT:
-                case DataType::SMALLINT:
-                case DataType::INTEGER:
-                    nOBJID = OBJ_FM_NUMERICFIELD;
-                    break;
-                case DataType::REAL:
-                case DataType::DOUBLE:
-                case DataType::NUMERIC:
-                case DataType::DECIMAL:
-                    nOBJID = OBJ_FM_FORMATTEDFIELD;
-                    break;
-                case DataType::TIMESTAMP:
-                    bDateNTimeField = sal_True;
-                    sLabelPostfix = UniString(SVX_RES(RID_STR_DATETIME_LABELPOSTFIX)).GetToken(0, ';');
-                    // DON'T break !
-                case DataType::DATE:
-                    nOBJID = OBJ_FM_DATEFIELD;
-                    break;
-                case DataType::TIME:
-                    nOBJID = OBJ_FM_TIMEFIELD;
-                    break;
-                case DataType::CHAR:
-                case DataType::VARCHAR:
-                default:
-                    nOBJID = OBJ_FM_EDIT;
-                    break;
-            }
-        if (!nOBJID)
-            return NULL;
-
-        FmFormObj* pLabel;
-        FmFormObj* pControl;
-        CreateControlWithLabel(pOutDev, 0, xField, xNumberFormats, nOBJID, sLabelPostfix, pLabel, pControl);
-        if (!pLabel || !pControl)
-        {
-            delete pLabel;
-            delete pControl;
-            return NULL;
-        }
-
-        //////////////////////////////////////////////////////////////////////
-        // Feststellen ob eine ::com::sun::star::form erzeugt werden muss
-        // Dieses erledigt die Page fuer uns bzw. die PageImpl
-        Reference< ::com::sun::star::form::XFormComponent >  xContent(pLabel->GetUnoControlModel(), UNO_QUERY);
-        Reference< ::com::sun::star::container::XIndexContainer >  xContainer(rPage.GetImpl()->SetDefaults(xContent, xDataSource, aDatabaseName, aObjectName, nObjectType), UNO_QUERY);
-        if (xContainer.is())
-            xContainer->insertByIndex(xContainer->getCount(), makeAny(xContent));
-
-        xContent = Reference< ::com::sun::star::form::XFormComponent > (pControl->GetUnoControlModel(), UNO_QUERY);
-        xContainer = Reference< ::com::sun::star::container::XIndexContainer > (rPage.GetImpl()->SetDefaults(xContent, xDataSource,
-            aDatabaseName, aObjectName, nObjectType), UNO_QUERY);
-        if (xContainer.is())
-            xContainer->insertByIndex(xContainer->getCount(), makeAny(xContent));
-
-        //////////////////////////////////////////////////////////////////////
-        // Objekte gruppieren
-        SdrObjGroup* pGroup  = new SdrObjGroup();
-        SdrObjList* pObjList = pGroup->GetSubList();
-        pObjList->InsertObject(pLabel);
-        pObjList->InsertObject(pControl);
-
-
-        if (bDateNTimeField)
-        {   // wir haben bis jetzt nur ein Datums-Feld eingefuegt, brauchen aber noch ein extra Feld fuer
-            // die Zeit-Komponente
-            pLabel = pControl = NULL;
-            CreateControlWithLabel(pOutDev, 1000, xField, xNumberFormats, OBJ_FM_TIMEFIELD,
-                UniString(SVX_RES(RID_STR_DATETIME_LABELPOSTFIX)).GetToken(1, ';'),
-                pLabel, pControl);
-
-            if (pLabel && pControl)
-            {
-                pObjList->InsertObject(pLabel);
-                pObjList->InsertObject(pControl);
-            }
-            else
-            {
-                delete pLabel;
-                delete pControl;
-            }
-        }
-
-        return pGroup; // und fertig
-    }
-    catch(const Exception&)
-    {
-        DBG_ERROR("FmFormView::CreateFieldControl : catched an exception while creating the control !");
-        ::comphelper::disposeComponent(xStatement);
-    }
-
-
-    return NULL;
+    return pImpl->implCreateFieldControl( aColumnDescriptor );
 }
 
 //------------------------------------------------------------------------
