@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hdu $ $Date: 2002-10-01 15:35:44 $
+ *  last change: $Author: hdu $ $Date: 2002-10-09 12:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,7 +518,7 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& n
             int nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[nStart] : nStart;
             if( nCharPos >= 0 )
                 nCharPos += mnMinCharPos;
-            *(pCharIndexes++) =  nCharPos;
+            *(pCharIndexes++) = nCharPos;
         }
 
         // stop at last glyph
@@ -767,18 +767,29 @@ void SimpleWinLayout::Justify( long nNewWidth )
 
 void SimpleWinLayout::ApplyDXArray( const long* pDXArray )
 {
+    // try to avoid disturbance of text flow for LSB rounding case
+    int i = 0;
     long nOldWidth = 0;
-
-    int i;
-    for( i = 0; i < mnGlyphCount; ++i )
+    for(; i < mnGlyphCount; ++i )
     {
-        nOldWidth += mpGlyphAdvances[i];
-        int nDiff = nOldWidth - pDXArray[i];
-        if( nDiff>+1 || nDiff<-1)
-            break;
+        int j = !mpChars2Glyphs ? i : mpChars2Glyphs[i];
+        if( j >= 0 )
+        {
+            nOldWidth += mpGlyphAdvances[ j ];
+            int nDiff = nOldWidth - pDXArray[ i ];
+            if( nDiff>+1 || nDiff<-1)
+                break;
+        }
     }
     if( i >= mnGlyphCount )
         return;
+
+    if( !mpGlyphOrigAdvs )
+    {
+        mpGlyphOrigAdvs = new int[ mnGlyphCount ];
+        for( i = 0; i < mnGlyphCount; ++i )
+            mpGlyphOrigAdvs[ i ] = mpGlyphAdvances[ i ];
+    }
 
     mnWidth = 0;
     for( i = 0; i < mnGlyphCount; ++i )
