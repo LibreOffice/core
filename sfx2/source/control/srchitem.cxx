@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-27 21:58:42 $
+ *  last change: $Author: jp $ $Date: 2001-04-09 16:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     ConfigItem( OUString::createFromAscii( CFG_ROOT_NODE ) ),
 
     aSearchOpt      (   SearchAlgorithms_ABSOLUTE,
-                        SearchFlags::ALL_IGNORE_CASE | SearchFlags::LEV_RELAXED,
+                        SearchFlags::LEV_RELAXED,
                           OUString(),
                           OUString(),
                           Locale(),
@@ -192,11 +192,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     INT32 &rFlags = aSearchOpt.transliterateFlags;
 
     if (!aOpt.IsMatchCase())
-    {
-        aSearchOpt.searchFlag |= SearchFlags::ALL_IGNORE_CASE;
         rFlags |= TransliterationModules_IGNORE_CASE;
-    }
-
     if (!aOpt.IsMatchFullHalfWidthForms())
         rFlags |= TransliterationModules_IGNORE_WIDTH;
     if (!aOpt.IsMatchHiraganaKatakana())
@@ -462,10 +458,6 @@ void SvxSearchItem::SetLevenshtein( sal_Bool bVal )
 void SvxSearchItem::SetTransliterationFlags( sal_Int32 nFlags )
 {
     aSearchOpt.transliterateFlags = nFlags;
-    if (nFlags & TransliterationModules_IGNORE_CASE)
-        aSearchOpt.searchFlag |=  SearchFlags::ALL_IGNORE_CASE;
-    else
-        aSearchOpt.searchFlag &= ~SearchFlags::ALL_IGNORE_CASE;
 }
 
 
