@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-22 08:52:20 $
+ *  last change: $Author: dbo $ $Date: 2002-01-18 09:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,7 @@ protected:
     Reference< xml::XImportContext > getStyle(
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
 public:
-    vector< Reference< xml::XImportContext > > const * getEvents() SAL_THROW( () )
+    vector< Reference< xml::XImportContext > > * getEvents() SAL_THROW( () )
         { return &_events; }
 
     ControlElement(

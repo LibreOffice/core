@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-14 12:08:03 $
+ *  last change: $Author: dbo $ $Date: 2002-01-18 09:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@ void ProgressBarElement::endElement()
                             OUString( RTL_CONSTASCII_USTRINGPARAM("value-max") ),
                             _xAttributes );
     ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
 }
 
 //##################################################################################################
@@ -188,6 +191,9 @@ void ScrollBarElement::endElement()
                             OUString( RTL_CONSTASCII_USTRINGPARAM("visible-size") ),
                             _xAttributes );
     ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
 }
 
 //##################################################################################################
@@ -236,6 +242,9 @@ void FixedLineElement::endElement()
                                    OUString( RTL_CONSTASCII_USTRINGPARAM("align") ),
                                    _xAttributes );
     ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
 }
 
 //##################################################################################################
@@ -298,6 +307,9 @@ void PatternFieldElement::endElement()
                               OUString( RTL_CONSTASCII_USTRINGPARAM("literal-mask") ),
                               _xAttributes );
     ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
 }
 
 //##################################################################################################
@@ -452,6 +464,9 @@ void FormattedFieldElement::endElement()
     }
 
     ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
 }
 
 //##################################################################################################
@@ -520,6 +535,9 @@ void TimeFieldElement::endElement()
                                OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
                                _xAttributes );
     ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
 }
 
 //##################################################################################################
@@ -594,6 +612,9 @@ void NumericFieldElement::endElement()
                                OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
                                _xAttributes );
     ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
 }
 
 //##################################################################################################
@@ -662,6 +683,9 @@ void DateFieldElement::endElement()
                                OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
                                _xAttributes );
     ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
 }
 
 //##################################################################################################
@@ -739,6 +763,9 @@ void CurrencyFieldElement::endElement()
                                OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
                                _xAttributes );
     ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
 }
 
 //##################################################################################################
@@ -789,6 +816,9 @@ void FileControlElement::endElement()
                               OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
                               _xAttributes );
     ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
 }
 
 //##################################################################################################
@@ -837,6 +867,9 @@ void ImageControlElement::endElement()
                               OUString( RTL_CONSTASCII_USTRINGPARAM("src") ),
                               _xAttributes );
     ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
 }
 
 //##################################################################################################
@@ -890,6 +923,9 @@ void TextElement::endElement()
                              OUString( RTL_CONSTASCII_USTRINGPARAM("align") ),
                              _xAttributes );
     ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
 }
 
 //##################################################################################################
@@ -971,6 +1007,9 @@ void TextFieldElement::endElement()
     }
 
     ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
 }
 
 //##################################################################################################
@@ -1046,6 +1085,9 @@ void TitledBoxElement::endElement()
                                          makeAny( _label ) );
     }
     ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
     }
 
     // create radios AFTER group box!
@@ -1085,8 +1127,16 @@ void TitledBoxElement::endElement()
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ),
                                          makeAny( nVal ) );
 
-        ctx.importEvents( * static_cast< RadioElement * >( xRadio.get() )->getEvents() );
+        vector< Reference< xml::XImportContext > > * radioEvents =
+            static_cast< RadioElement * >( xRadio.get() )->getEvents();
+        ctx.importEvents( *radioEvents );
+        // avoid ring-reference:
+        // vector< event elements > holding event elements holding this (via _pParent)
+        radioEvents->clear();
     }
+    // avoid ring-reference:
+    // vector< radio elements > holding radio elements holding this (via _pParent)
+    _radios.clear();
 }
 
 //##################################################################################################
@@ -1183,8 +1233,16 @@ void RadioGroupElement::endElement()
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ),
                                          makeAny( nVal ) );
 
-        ctx.importEvents( * static_cast< RadioElement * >( xRadio.get() )->getEvents() );
+        vector< Reference< xml::XImportContext > > * radioEvents =
+            static_cast< RadioElement * >( xRadio.get() )->getEvents();
+        ctx.importEvents( *radioEvents );
+        // avoid ring-reference:
+        // vector< event elements > holding event elements holding this (via _pParent)
+        radioEvents->clear();
     }
+    // avoid ring-reference:
+    // vector< radio elements > holding radio elements holding this (via _pParent)
+    _radios.clear();
 }
 
 //##################################################################################################
@@ -1326,6 +1384,9 @@ void MenuListElement::endElement()
                                          makeAny( p->getSelectedItems() ) );
     }
     ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
 }
 
 //##################################################################################################
@@ -1411,6 +1472,9 @@ void ComboBoxElement::endElement()
                                   _xAttributes );
     }
     ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
 }
 
 //##################################################################################################
@@ -1481,6 +1545,9 @@ void CheckBoxElement::endElement()
     }
 
     ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
 }
 
 //##################################################################################################
@@ -1537,6 +1604,9 @@ void ButtonElement::endElement()
                                   _xAttributes );
 
     ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
 }
 
 //##################################################################################################
@@ -1837,6 +1907,9 @@ void WindowElement::endElement()
                               _xAttributes );
 
     ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
 }
 
 }
