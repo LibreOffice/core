@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2001-12-20 09:50:38 $
+ *  last change: $Author: tl $ $Date: 2002-02-04 14:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,17 @@
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
 #endif
+#ifndef _SWDOCSH_HXX
+#include <docsh.hxx>
+#endif
 #ifndef _UNOMAP_HXX
 #include <unomap.hxx>
+#endif
+#ifndef _UNOPORT_HXX
+#include <unoport.hxx>
+#endif
+#ifndef _UNOCRSR_HXX
+#include <unocrsr.hxx>
 #endif
 #ifndef _SWUNDO_HXX //autogen
 #include <swundo.hxx>
@@ -151,6 +160,10 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#endif
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
@@ -1474,7 +1487,57 @@ void SwXShape::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 void SwXShape::attach(const Reference< XTextRange > & xTextRange)
     throw( IllegalArgumentException, RuntimeException )
 {
-    //hier passiert nichts
+    vos::OGuard  aGuard(Application::GetSolarMutex());
+
+    // get access to SwDoc
+    // (see also SwXTextRange::XTextRangeToSwPaM)
+    SwDoc*      pDoc = 0;
+    uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
+    if(xRangeTunnel.is())
+    {
+        SwXTextRange* pRange = 0;
+        SwXTextCursor* pCursor = 0;
+        SwXTextPortion* pPortion = 0;
+        SwXText* pText = 0;
+
+        pRange = (SwXTextRange*)xRangeTunnel->getSomething(
+                                SwXTextRange::getUnoTunnelId());
+        pText = (SwXText*)xRangeTunnel->getSomething(
+                                SwXText::getUnoTunnelId());
+        pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
+                                SwXTextCursor::getUnoTunnelId());
+        pPortion = (SwXTextPortion*)xRangeTunnel->getSomething(
+                                SwXTextPortion::getUnoTunnelId());
+        SwUnoCrsr* pUnoCrsr = pCursor? pCursor->GetCrsr() : pPortion ? pPortion->GetCrsr() : 0;
+
+        if (pRange)
+            pDoc = pRange->GetDoc();
+        if (!pDoc && pText)
+            pDoc = pText->GetDoc();
+        if (!pDoc && pUnoCrsr)
+            pDoc = pUnoCrsr->GetDoc();
+    }
+
+    if(!pDoc)
+        throw uno::RuntimeException();
+    SwDocShell *pDocSh = pDoc->GetDocShell();
+    if (pDocSh)
+    {
+        uno::Reference< frame::XModel > xModel;
+        xModel = pDocSh->GetModel();
+        uno::Reference< drawing::XDrawPageSupplier > xDPS(xModel, UNO_QUERY);
+        if (xDPS.is())
+        {
+            uno::Reference< drawing::XDrawPage > xDP( xDPS->getDrawPage() );
+            if (xDP.is())
+            {
+                Any aPos;  aPos <<= xTextRange;
+                setPropertyValue(S2U("TextRange"), aPos);
+                Reference< drawing::XShape > xTemp( (cppu::OWeakObject*) this, UNO_QUERY );
+                xDP->add( xTemp );
+            }
+        }
+    }
 }
 /* -----------------14.04.99 13:02-------------------
  *
