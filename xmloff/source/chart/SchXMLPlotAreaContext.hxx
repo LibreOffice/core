@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: bm $ $Date: 2001-12-17 10:22:10 $
+ *  last change: $Author: bm $ $Date: 2002-05-06 07:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,14 +98,26 @@ namespace chartxml
 
 struct DataRowPointStyle
 {
+    enum StyleType
+    {
+        DATA_POINT,
+        DATA_SERIES,
+        MEAN_VALUE,
+        REGRESSION,
+        ERROR_INDICATOR
+    };
+
+    StyleType meType;
     sal_Int32 mnSeries;
     sal_Int32 mnIndex;
     sal_Int32 mnRepeat;
     ::rtl::OUString msStyleName;
     sal_Int32 mnAttachedAxis;
 
-    DataRowPointStyle( sal_Int32 nSeries, sal_Int32 nIndex, sal_Int32 nRepeat, ::rtl::OUString sStyleName,
+    DataRowPointStyle( StyleType eType,
+                       sal_Int32 nSeries, sal_Int32 nIndex, sal_Int32 nRepeat, ::rtl::OUString sStyleName,
                        sal_Int32 nAttachedAxis = 0 ) :
+            meType( eType ),
             mnSeries( nSeries ),
             mnIndex( nIndex ),
             mnRepeat( nRepeat ),
@@ -213,7 +225,7 @@ public:
                          sal_Int32 nSeriesIndex,
                          sal_Int32& rMaxSeriesLength,
                          sal_Int32& rDomainOffset );
-    ~SchXMLSeriesContext();
+    virtual ~SchXMLSeriesContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual SvXMLImportContext* CreateChildContext(
@@ -259,7 +271,7 @@ public:
                                    sal_uInt16 nPrefix,
                                    const rtl::OUString& rLocalName,
                                    rtl::OUString& rAddress );
-    ~SchXMLCategoriesDomainContext();
+    virtual ~SchXMLCategoriesDomainContext();
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
@@ -286,7 +298,7 @@ public:
                             const rtl::OUString& rLocalName,
                             com::sun::star::uno::Reference< com::sun::star::chart::XDiagram >& xDiagram,
                             ContextType eContextType );
-    ~SchXMLWallFloorContext();
+    virtual ~SchXMLWallFloorContext();
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
@@ -314,8 +326,40 @@ public:
                         const rtl::OUString& rLocalName,
                         com::sun::star::uno::Reference< com::sun::star::chart::XDiagram >& xDiagram,
                         ContextType eContextType );
-    ~SchXMLStockContext();
+    virtual ~SchXMLStockContext();
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+};
+
+// ----------------------------------------
+
+class SchXMLStatisticsObjectContext : public SvXMLImportContext
+{
+public:
+    enum ContextType
+    {
+        CONTEXT_TYPE_MEAN_VALUE_LINE,
+        CONTEXT_TYPE_REGRESSION_CURVE,
+        CONTEXT_TYPE_ERROR_INDICATOR
+    };
+
+    SchXMLStatisticsObjectContext(
+        SchXMLImportHelper& rImportHelper,
+        SvXMLImport& rImport,
+        sal_uInt16 nPrefix,
+        const rtl::OUString& rLocalName,
+        ::std::list< ::chartxml::DataRowPointStyle >& rStyleList,
+        sal_Int32 nSeries,
+        ContextType eContextType );
+
+    virtual ~SchXMLStatisticsObjectContext();
+
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+
+private:
+    SchXMLImportHelper &                           mrImportHelper;
+    ::std::list< ::chartxml::DataRowPointStyle > & mrStyleList;
+    sal_Int32                                      mnSeriesIndex;
+    ContextType                                    meContextType;
 };
 
 #endif  // _SCH_XMLPLOTAREACONTEXT_HXX_

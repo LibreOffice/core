@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: bm $ $Date: 2002-02-11 09:55:20 $
+ *  last change: $Author: bm $ $Date: 2002-05-06 07:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,11 +176,14 @@
 #endif
 
 #include    "MultiPropertySetHandler.hxx"
+#include    "PropertyMap.hxx"
 
 using namespace rtl;
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 struct SchXMLDataPointStruct
 {
@@ -1123,6 +1126,9 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
     for( sal_Int32 nSeries = mnDomainAxes; nSeries < mnSeriesCount; nSeries++ )
     {
         nAttachedAxis = chart::ChartAxisAssign::PRIMARY_Y;
+        sal_Bool bHasMeanValueLine = false;
+        chart::ChartRegressionCurveType eRegressionType( chart::ChartRegressionCurveType_NONE );
+        chart::ChartErrorIndicatorType eErrorType( chart::ChartErrorIndicatorType_NONE );
 
         // get property states for autostyles
         xPropSet = xDiagram->getDataRowProperties( nSeries );
@@ -1132,12 +1138,29 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
             try
             {
                 uno::Any aAny( xPropSet->getPropertyValue(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Axis" ))));
+                                   OUString( RTL_CONSTASCII_USTRINGPARAM( "Axis" ))));
                 aAny >>= nAttachedAxis;
+
+                aAny = xPropSet->getPropertyValue(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM ( "MeanValue" )));
+                aAny >>= bHasMeanValueLine;
+
+                aAny = xPropSet->getPropertyValue(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "RegressionCurves" )));
+                aAny >>= eRegressionType;
+
+                aAny = xPropSet->getPropertyValue(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "ErrorIndicator" )));
+                aAny >>= eErrorType;
             }
-            catch( beans::UnknownPropertyException )
+            catch( beans::UnknownPropertyException aEx )
             {
-                DBG_WARNING( "Required property not found in DataRowProperties" );
+                OSL_TRACE(
+                    OUStringToOString(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                      "Required property not found in DataRowProperties: " )) +
+                        aEx.Message,
+                        RTL_TEXTENCODING_ASCII_US ).getStr());
             }
 
             if( mxExpPropMapper.is())
@@ -1249,6 +1272,99 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                     mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, msString );
                 }
                 SvXMLElementExport aDomain( mrExport, XML_NAMESPACE_CHART, XML_DOMAIN, sal_True, sal_True );
+            }
+        }
+
+        // statistical objects:
+        // regression curves and mean value lines
+        if( bHasMeanValueLine &&
+            xPropSet.is() &&
+            mxExpPropMapper.is() )
+        {
+            uno::Reference< beans::XPropertySet > xStatProp;
+            uno::Any aPropAny( xPropSet->getPropertyValue(
+                                   OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMeanValueProperties" ))));
+            aPropAny >>= xStatProp;
+
+            if( xStatProp.is() )
+            {
+                aPropertyStates = mxExpPropMapper->Filter( xStatProp );
+
+                if( aPropertyStates.size() > 0 )
+                {
+                    // write element
+                    if( bExportContent )
+                    {
+                        // add style name attribute
+                        AddAutoStyleAttribute( aPropertyStates );
+
+                        SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_MEAN_VALUE, sal_True, sal_True );
+                    }
+                    else    // autostyles
+                    {
+                        CollectAutoStyle( aPropertyStates );
+                    }
+                }
+            }
+        }
+
+        if( eRegressionType != chart::ChartRegressionCurveType_NONE &&
+            xPropSet.is() &&
+            mxExpPropMapper.is() )
+        {
+            uno::Reference< beans::XPropertySet > xStatProp;
+            uno::Any aPropAny( xPropSet->getPropertyValue(
+                                   OUString( RTL_CONSTASCII_USTRINGPARAM( "DataRegressionProperties" ))));
+            aPropAny >>= xStatProp;
+
+            if( xStatProp.is() )
+            {
+                aPropertyStates = mxExpPropMapper->Filter( xStatProp );
+
+                if( aPropertyStates.size() > 0 )
+                {
+                    // write element
+                    if( bExportContent )
+                    {
+                        // add style name attribute
+                        AddAutoStyleAttribute( aPropertyStates );
+                        SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_REGRESSION_CURVE, sal_True, sal_True );
+                    }
+                    else    // autostyles
+                    {
+                        CollectAutoStyle( aPropertyStates );
+                    }
+                }
+            }
+        }
+
+        if( eErrorType != chart::ChartErrorIndicatorType_NONE &&
+            xPropSet.is() &&
+            mxExpPropMapper.is() )
+        {
+            uno::Reference< beans::XPropertySet > xStatProp;
+            uno::Any aPropAny( xPropSet->getPropertyValue(
+                                   OUString( RTL_CONSTASCII_USTRINGPARAM( "DataErrorProperties" ))));
+            aPropAny >>= xStatProp;
+
+            if( xStatProp.is() )
+            {
+                aPropertyStates = mxExpPropMapper->Filter( xStatProp );
+
+                if( aPropertyStates.size() > 0 )
+                {
+                    // write element
+                    if( bExportContent )
+                    {
+                        // add style name attribute
+                        AddAutoStyleAttribute( aPropertyStates );
+                        SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_ERROR_INDICATOR, sal_True, sal_True );
+                    }
+                    else    // autostyles
+                    {
+                        CollectAutoStyle( aPropertyStates );
+                    }
+                }
             }
         }
 

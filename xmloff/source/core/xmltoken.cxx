@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-03 11:34:49 $
+ *  last change: $Author: bm $ $Date: 2002-05-06 07:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2109,6 +2109,9 @@ namespace xmloff { namespace token {
         TOKEN( "glyph-orientation-vertical" ), // XML_GLYPH_ORIENTATION_VERTICAL
 
         TOKEN( "marked-invalid" ),             //XML_MARKED_INVALID
+
+        TOKEN( "regression-curve" ),           // XML_REGRESSION_CURVE
+        TOKEN( "error-indicator" ),            // XML_ERROR_INDICATOR
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };

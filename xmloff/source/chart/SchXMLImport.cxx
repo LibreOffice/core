@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: bm $ $Date: 2002-02-11 09:54:28 $
+ *  last change: $Author: bm $ $Date: 2002-05-06 07:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,8 +162,11 @@ static __FAR_DATA SvXMLTokenMapEntry aPlotAreaElemTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aSeriesElemTokenMap[] =
 {
-    { XML_NAMESPACE_CHART,  XML_DATA_POINT, XML_TOK_SERIES_DATA_POINT   },
-    { XML_NAMESPACE_CHART,  XML_DOMAIN,     XML_TOK_SERIES_DOMAIN       },
+    { XML_NAMESPACE_CHART,  XML_DATA_POINT,       XML_TOK_SERIES_DATA_POINT       },
+    { XML_NAMESPACE_CHART,  XML_DOMAIN,           XML_TOK_SERIES_DOMAIN           },
+    { XML_NAMESPACE_CHART,  XML_MEAN_VALUE,       XML_TOK_SERIES_MEAN_VALUE_LINE  },
+    { XML_NAMESPACE_CHART,  XML_REGRESSION_CURVE, XML_TOK_SERIES_REGRESSION_CURVE },
+    { XML_NAMESPACE_CHART,  XML_ERROR_INDICATOR,  XML_TOK_SERIES_ERROR_INDICATOR  },
     XML_TOKEN_MAP_END
 };
 

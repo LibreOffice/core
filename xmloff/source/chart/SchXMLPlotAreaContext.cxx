@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: bm $ $Date: 2001-12-17 10:22:10 $
+ *  last change: $Author: bm $ $Date: 2002-05-06 07:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,8 @@
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
+
+using ::rtl::OUString;
 
 static __FAR_DATA SvXMLEnumMapEntry aXMLAxisClassMap[] =
 {
@@ -459,7 +461,7 @@ void SchXMLPlotAreaContext::EndElement()
         // iterate over series attributes first ...
         for( iStyle = maSeriesStyleList.begin(); iStyle != maSeriesStyleList.end(); iStyle++ )
         {
-            if( iStyle->mnIndex == -1 )
+            if( iStyle->meType != ::chartxml::DataRowPointStyle::DATA_POINT )
             {
                 // data row style
                 for( i = 0; i < iStyle->mnRepeat; i++ )
@@ -467,6 +469,32 @@ void SchXMLPlotAreaContext::EndElement()
                     try
                     {
                         xProp = mxDiagram->getDataRowProperties( iStyle->mnSeries + i );
+
+                        if( iStyle->meType != ::chartxml::DataRowPointStyle::DATA_SERIES &&
+                            xProp.is() )
+                        {
+                            // we have a statistical proertyset
+                            uno::Any aAny;
+                            switch( iStyle->meType )
+                            {
+                                case ::chartxml::DataRowPointStyle::MEAN_VALUE:
+                                    aAny = xProp->getPropertyValue(
+                                        OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                      "DataMeanValueProperties" )));
+                                    break;
+                                case ::chartxml::DataRowPointStyle::REGRESSION:
+                                    aAny = xProp->getPropertyValue(
+                                        OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                      "DataRegressionProperties" )));
+                                    break;
+                                case ::chartxml::DataRowPointStyle::ERROR_INDICATOR:
+                                    aAny = xProp->getPropertyValue(
+                                        OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                      "DataErrorProperties" )));
+                                    break;
+                            }
+                            aAny >>= xProp;
+                        }
 
                         if( xProp.is())
                         {
@@ -483,7 +511,8 @@ void SchXMLPlotAreaContext::EndElement()
                                     (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
                             }
 
-                            if( iStyle->mnAttachedAxis != 1 )
+                            if( iStyle->meType == ::chartxml::DataRowPointStyle::DATA_SERIES &&
+                                iStyle->mnAttachedAxis != 1 )
                             {
                                 uno::Any aAny;
                                 aAny <<= chart::ChartAxisAssign::SECONDARY_Y;
@@ -1123,7 +1152,10 @@ void SchXMLSeriesContext::EndElement()
     if( msAutoStyleName.getLength() ||
         mnAttachedAxis != 1 )
     {
-        ::chartxml::DataRowPointStyle aStyle( mnSeriesIndex + mrDomainOffset, -1, 1, msAutoStyleName, mnAttachedAxis );
+        ::chartxml::DataRowPointStyle aStyle(
+            ::chartxml::DataRowPointStyle::DATA_SERIES,
+            mnSeriesIndex + mrDomainOffset, -1, 1,
+            msAutoStyleName, mnAttachedAxis );
         mrStyleList.push_back( aStyle );
     }
 }
@@ -1149,6 +1181,29 @@ SvXMLImportContext* SchXMLSeriesContext::CreateChildContext(
                     mrSeriesAddress.DomainRangeAddresses[ nIndex ] );
             }
             break;
+
+        case XML_TOK_SERIES_MEAN_VALUE_LINE:
+            pContext = new SchXMLStatisticsObjectContext(
+                mrImportHelper, GetImport(),
+                nPrefix, rLocalName,
+                mrStyleList, mnSeriesIndex + mrDomainOffset,
+                SchXMLStatisticsObjectContext::CONTEXT_TYPE_MEAN_VALUE_LINE );
+            break;
+        case XML_TOK_SERIES_REGRESSION_CURVE:
+            pContext = new SchXMLStatisticsObjectContext(
+                mrImportHelper, GetImport(),
+                nPrefix, rLocalName,
+                mrStyleList, mnSeriesIndex + mrDomainOffset,
+                SchXMLStatisticsObjectContext::CONTEXT_TYPE_REGRESSION_CURVE );
+            break;
+        case XML_TOK_SERIES_ERROR_INDICATOR:
+            pContext = new SchXMLStatisticsObjectContext(
+                mrImportHelper, GetImport(),
+                nPrefix, rLocalName,
+                mrStyleList, mnSeriesIndex + mrDomainOffset,
+                SchXMLStatisticsObjectContext::CONTEXT_TYPE_ERROR_INDICATOR );
+            break;
+
         case XML_TOK_SERIES_DATA_POINT:
             pContext = new SchXMLDataPointContext( mrImportHelper, GetImport(), rLocalName, mxDiagram,
                                                    mrStyleList, mnSeriesIndex + mrDomainOffset, mnDataPointIndex );
@@ -1205,7 +1260,9 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
 
     if( sAutoStyleName.getLength())
     {
-        ::chartxml::DataRowPointStyle aStyle( mnSeries, mrIndex, nRepeat, sAutoStyleName );
+        ::chartxml::DataRowPointStyle aStyle(
+            ::chartxml::DataRowPointStyle::DATA_POINT,
+            mnSeries, mrIndex, nRepeat, sAutoStyleName );
         mrStyleList.push_back( aStyle );
     }
     mrIndex += nRepeat;
@@ -1379,5 +1436,68 @@ void SchXMLStockContext::StartElement( const uno::Reference< xml::sax::XAttribut
                 }
             }
         }
+    }
+}
+
+// ========================================
+
+SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
+
+    SchXMLImportHelper& rImpHelper,
+    SvXMLImport& rImport,
+    sal_uInt16 nPrefix,
+    const rtl::OUString& rLocalName,
+    ::std::list< ::chartxml::DataRowPointStyle >& rStyleList,
+    sal_Int32 nSeries, ContextType eContextType ) :
+
+        SvXMLImportContext( rImport, nPrefix, rLocalName ),
+        mrImportHelper( rImpHelper ),
+        mnSeriesIndex( nSeries ),
+        mrStyleList( rStyleList ),
+        meContextType( eContextType )
+{}
+
+SchXMLStatisticsObjectContext::~SchXMLStatisticsObjectContext()
+{
+}
+
+void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+{
+    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
+    ::rtl::OUString aValue;
+    ::rtl::OUString sAutoStyleName;
+    sal_Int32 nRepeat = 1;
+
+    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    {
+        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        rtl::OUString aLocalName;
+        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+
+        if( nPrefix == XML_NAMESPACE_CHART )
+        {
+            if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
+                sAutoStyleName = xAttrList->getValueByIndex( i );
+        }
+    }
+
+    if( sAutoStyleName.getLength())
+    {
+        ::chartxml::DataRowPointStyle::StyleType eType = ::chartxml::DataRowPointStyle::MEAN_VALUE;
+        switch( meContextType )
+        {
+            case CONTEXT_TYPE_MEAN_VALUE_LINE:
+                eType = ::chartxml::DataRowPointStyle::MEAN_VALUE;
+                break;
+            case CONTEXT_TYPE_REGRESSION_CURVE:
+                eType = ::chartxml::DataRowPointStyle::REGRESSION;
+                break;
+            case CONTEXT_TYPE_ERROR_INDICATOR:
+                eType = ::chartxml::DataRowPointStyle::ERROR_INDICATOR;
+                break;
+        }
+        ::chartxml::DataRowPointStyle aStyle(
+            eType, mnSeriesIndex, -1, 1, sAutoStyleName );
+        mrStyleList.push_back( aStyle );
     }
 }

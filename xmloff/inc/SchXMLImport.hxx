@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: bm $ $Date: 2002-02-11 09:54:08 $
+ *  last change: $Author: bm $ $Date: 2002-05-06 07:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,10 @@ enum SchXMLPlotAreaElemTokenMap
 enum SchXMLSeriesElemTokenMap
 {
     XML_TOK_SERIES_DATA_POINT,
-    XML_TOK_SERIES_DOMAIN
+    XML_TOK_SERIES_DOMAIN,
+    XML_TOK_SERIES_MEAN_VALUE_LINE,
+    XML_TOK_SERIES_REGRESSION_CURVE,
+    XML_TOK_SERIES_ERROR_INDICATOR
 };
 
 // ----------------------------------------
