@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Linguistic.xcs,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-24 13:12:12 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 				<desc xml:lang="th">Contains general settings for the linguistic configurations.</desc>
 				<desc xml:lang="hi-IN">Contains general settings for the linguistic configurations.</desc>
 				<desc xml:lang="x-comment">Contains general settings for the linguistic configurations.</desc>
+				<desc xml:lang="hu">Contains general settings for the linguistic configurations.</desc>
+				<desc xml:lang="sk">Contains general settings for the linguistic configurations.</desc>
+				<desc xml:lang="sl">Contains general settings for the linguistic configurations.</desc>
 			</info>
 			<prop oor:name="IsIgnoreControlCharacters" oor:type="xs:boolean">
 				<!-- OldLocation: NEW -->
@@ -122,6 +125,9 @@
 					<desc xml:lang="th">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
 					<desc xml:lang="hi-IN">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
 					<desc xml:lang="x-comment">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
+					<desc xml:lang="hu">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
+					<desc xml:lang="sk">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
+					<desc xml:lang="sl">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
 				</info>
 				<value>true</value>
 			</prop>
@@ -156,9 +162,12 @@
 						<desc xml:lang="th">Specifies the default document language.</desc>
 						<desc xml:lang="hi-IN">Specifies the default document language.</desc>
 						<desc xml:lang="x-comment">Specifies the default document language.</desc>
+						<desc xml:lang="hu">Specifies the default document language.</desc>
+						<desc xml:lang="sk">Specifies the default document language.</desc>
+						<desc xml:lang="sl">Specifies the default document language.</desc>
 					<label xml:lang="en-US">Default language</label>
 					<label xml:lang="el">Default language</label>
-					<label xml:lang="nl">Default language</label>
+					<label xml:lang="nl">Standaardtaal</label>
 					<label xml:lang="fr">Default language</label>
 					<label xml:lang="fi">Default language</label>
 					<label xml:lang="cs">Default language</label>
@@ -181,6 +190,9 @@
 					<label xml:lang="th">Default language</label>
 					<label xml:lang="hi-IN">Default language</label>
 					<label xml:lang="x-comment">Default language</label>
+					<label xml:lang="hu">Default language</label>
+					<label xml:lang="sk">Default language</label>
+					<label xml:lang="sl">Default language</label>
 				</info>
 				<value>en-US</value>
 			</prop>
@@ -214,9 +226,12 @@
 						<desc xml:lang="th">Specifies the default document CJK language.</desc>
 						<desc xml:lang="hi-IN">Specifies the default document CJK language.</desc>
 						<desc xml:lang="x-comment">Specifies the default document CJK language.</desc>
+						<desc xml:lang="hu">Specifies the default document CJK language.</desc>
+						<desc xml:lang="sk">Specifies the default document CJK language.</desc>
+						<desc xml:lang="sl">Specifies the default document CJK language.</desc>
 					<label xml:lang="en-US">Default language for CJK linguistics</label>
 					<label xml:lang="el">Default language for CJK linguistics</label>
-					<label xml:lang="nl">Default language for CJK linguistics</label>
+					<label xml:lang="nl">Standaardtaal voor CJK linguïstiek</label>
 					<label xml:lang="fr">Default language for CJK linguistics</label>
 					<label xml:lang="fi">Default language for CJK linguistics</label>
 					<label xml:lang="cs">Default language for CJK linguistics</label>
@@ -239,6 +254,9 @@
 					<label xml:lang="th">Default language for CJK linguistics</label>
 					<label xml:lang="hi-IN">Default language for CJK linguistics</label>
 					<label xml:lang="x-comment">Default language for CJK linguistics</label>
+					<label xml:lang="hu">Default language for CJK linguistics</label>
+					<label xml:lang="sk">Default language for CJK linguistics</label>
+					<label xml:lang="sl">Default language for CJK linguistics</label>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -273,9 +291,12 @@
 						<desc xml:lang="th">Specifies the default document CTL language.</desc>
 						<desc xml:lang="hi-IN">Specifies the default document CTL language.</desc>
 						<desc xml:lang="x-comment">Specifies the default document CTL language.</desc>
+						<desc xml:lang="hu">Specifies the default document CTL language.</desc>
+						<desc xml:lang="sk">Specifies the default document CTL language.</desc>
+						<desc xml:lang="sl">Specifies the default document CTL language.</desc>
 					<label xml:lang="en-US">Default language for CTL linguistics</label>
 					<label xml:lang="el">Default language for CTL linguistics</label>
-					<label xml:lang="nl">Default language for CTL linguistics</label>
+					<label xml:lang="nl">Standaardtaal voor CJK linguïstiek</label>
 					<label xml:lang="fr">Default language for CTL linguistics</label>
 					<label xml:lang="fi">Default language for CTL linguistics</label>
 					<label xml:lang="cs">Default language for CTL linguistics</label>
@@ -298,6 +319,9 @@
 					<label xml:lang="th">Default language for CTL linguistics</label>
 					<label xml:lang="hi-IN">Default language for CTL linguistics</label>
 					<label xml:lang="x-comment">Default language for CTL linguistics</label>
+					<label xml:lang="hu">Default language for CTL linguistics</label>
+					<label xml:lang="sk">Default language for CTL linguistics</label>
+					<label xml:lang="sl">Default language for CTL linguistics</label>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -333,9 +357,12 @@
 						<desc xml:lang="th">Determines if the Old German spelling should be used (true) or not (false).</desc>
 						<desc xml:lang="hi-IN">Determines if the Old German spelling should be used (true) or not (false).</desc>
 						<desc xml:lang="x-comment">Determines if the Old German spelling should be used (true) or not (false).</desc>
+						<desc xml:lang="hu">Determines if the Old German spelling should be used (true) or not (false).</desc>
+						<desc xml:lang="sk">Determines if the Old German spelling should be used (true) or not (false).</desc>
+						<desc xml:lang="sl">Determines if the Old German spelling should be used (true) or not (false).</desc>
 					<label xml:lang="en-US">Old German spelling</label>
 					<label xml:lang="el">Old German spelling</label>
-					<label xml:lang="nl">Old German spelling</label>
+					<label xml:lang="nl">Oudduitse spelling</label>
 					<label xml:lang="fr">Old German spelling</label>
 					<label xml:lang="fi">Old German spelling</label>
 					<label xml:lang="cs">Old German spelling</label>
@@ -358,6 +385,9 @@
 					<label xml:lang="th">Old German spelling</label>
 					<label xml:lang="hi-IN">Old German spelling</label>
 					<label xml:lang="x-comment">Old German spelling</label>
+					<label xml:lang="hu">Old German spelling</label>
+					<label xml:lang="sk">Old German spelling</label>
+					<label xml:lang="sl">Old German spelling</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -388,6 +418,9 @@
 					<desc xml:lang="th">Defines which personal dictionaries are used.</desc>
 					<desc xml:lang="hi-IN">Defines which personal dictionaries are used.</desc>
 					<desc xml:lang="x-comment">Defines which personal dictionaries are used.</desc>
+					<desc xml:lang="hu">Defines which personal dictionaries are used.</desc>
+					<desc xml:lang="sk">Defines which personal dictionaries are used.</desc>
+					<desc xml:lang="sl">Defines which personal dictionaries are used.</desc>
 				</info>
 				<prop oor:name="ActiveDictionaries" oor:type="oor:string-list">
 					<!-- OldPath: Active-Dictionaries -->
@@ -420,6 +453,9 @@
 							<desc xml:lang="th">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
 							<desc xml:lang="hi-IN">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
 							<desc xml:lang="x-comment">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
+							<desc xml:lang="hu">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
+							<desc xml:lang="sk">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
+							<desc xml:lang="sl">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
 						<label xml:lang="en-US">Custom dictionaries</label>
 						<label xml:lang="el">Λεξικά χρήστη</label>
 						<label xml:lang="nl">Gebruikerswoordenboek</label>
@@ -445,6 +481,9 @@
 						<label xml:lang="th">Custom dictionaries</label>
 						<label xml:lang="hi-IN">Custom dictionaries</label>
 						<label xml:lang="x-comment">Custom dictionaries</label>
+						<label xml:lang="hu">Custom dictionaries</label>
+						<label xml:lang="sk">Custom dictionaries</label>
+						<label xml:lang="sl">Custom dictionaries</label>
 					</info>
 					<value oor:separator=";">IgnoreAllList;soffice.dic;standard.dic;sun.dic</value>
 				</prop>
@@ -477,6 +516,9 @@
 						<desc xml:lang="th">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
 						<desc xml:lang="hi-IN">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
 						<desc xml:lang="x-comment">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
+						<desc xml:lang="hu">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
+						<desc xml:lang="sk">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
+						<desc xml:lang="sl">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -509,6 +551,9 @@
 				<desc xml:lang="th">Contains spell checking-relevant settings.</desc>
 				<desc xml:lang="hi-IN">Contains spell checking-relevant settings.</desc>
 				<desc xml:lang="x-comment">Contains spell checking-relevant settings.</desc>
+				<desc xml:lang="hu">Contains spell checking-relevant settings.</desc>
+				<desc xml:lang="sk">Contains spell checking-relevant settings.</desc>
+				<desc xml:lang="sl">Contains spell checking-relevant settings.</desc>
 			</info>
 			<prop oor:name="IsSpellUpperCase" oor:type="xs:boolean">
 				<!-- OldPath: MiscOptions / SpellOptions -->
@@ -541,9 +586,12 @@
 						<desc xml:lang="th">Specifies whether to include uppercase words in the spellcheck process.</desc>
 						<desc xml:lang="hi-IN">Specifies whether to include uppercase words in the spellcheck process.</desc>
 						<desc xml:lang="x-comment">Specifies whether to include uppercase words in the spellcheck process.</desc>
+						<desc xml:lang="hu">Specifies whether to include uppercase words in the spellcheck process.</desc>
+						<desc xml:lang="sk">Specifies whether to include uppercase words in the spellcheck process.</desc>
+						<desc xml:lang="sl">Specifies whether to include uppercase words in the spellcheck process.</desc>
 					<label xml:lang="en-US">Spell uppercase words</label>
 					<label xml:lang="el">Spell uppercase words</label>
-					<label xml:lang="nl">Spell uppercase words</label>
+					<label xml:lang="nl">Spelling controleren van in hoofdletters geschreven woorden</label>
 					<label xml:lang="fr">Spell uppercase words</label>
 					<label xml:lang="fi">Spell uppercase words</label>
 					<label xml:lang="cs">Spell uppercase words</label>
@@ -566,6 +614,9 @@
 					<label xml:lang="th">Spell uppercase words</label>
 					<label xml:lang="hi-IN">Spell uppercase words</label>
 					<label xml:lang="x-comment">Spell uppercase words</label>
+					<label xml:lang="hu">Spell uppercase words</label>
+					<label xml:lang="sk">Spell uppercase words</label>
+					<label xml:lang="sl">Spell uppercase words</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -600,9 +651,12 @@
 						<desc xml:lang="th">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
 						<desc xml:lang="hi-IN">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
 						<desc xml:lang="x-comment">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
+						<desc xml:lang="hu">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
+						<desc xml:lang="sk">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
+						<desc xml:lang="sl">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
 					<label xml:lang="en-US">Spell words with digits</label>
 					<label xml:lang="el">Spell words with digits</label>
-					<label xml:lang="nl">Spell words with digits</label>
+					<label xml:lang="nl">Spelling controleren van woorden met cijfers</label>
 					<label xml:lang="fr">Spell words with digits</label>
 					<label xml:lang="fi">Spell words with digits</label>
 					<label xml:lang="cs">Spell words with digits</label>
@@ -625,6 +679,9 @@
 					<label xml:lang="th">Spell words with digits</label>
 					<label xml:lang="hi-IN">Spell words with digits</label>
 					<label xml:lang="x-comment">Spell words with digits</label>
+					<label xml:lang="hu">Spell words with digits</label>
+					<label xml:lang="sk">Spell words with digits</label>
+					<label xml:lang="sl">Spell words with digits</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -636,7 +693,7 @@
 					<author>TL</author>
 					<desc xml:lang="en-US">Checks the correct use of capitalization.</desc>
 						<desc xml:lang="el">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="nl">Checks the correct use of capitalization.</desc>
+						<desc xml:lang="nl">Controleer correct gebruik van hoofdletters.</desc>
 						<desc xml:lang="fr">Checks the correct use of capitalization.</desc>
 						<desc xml:lang="fi">Checks the correct use of capitalization.</desc>
 						<desc xml:lang="cs">Checks the correct use of capitalization.</desc>
@@ -659,6 +716,9 @@
 						<desc xml:lang="th">Checks the correct use of capitalization.</desc>
 						<desc xml:lang="hi-IN">Checks the correct use of capitalization.</desc>
 						<desc xml:lang="x-comment">Checks the correct use of capitalization.</desc>
+						<desc xml:lang="hu">Checks the correct use of capitalization.</desc>
+						<desc xml:lang="sk">Checks the correct use of capitalization.</desc>
+						<desc xml:lang="sl">Checks the correct use of capitalization.</desc>
 					<label xml:lang="en-US">Check capitalization</label>
 					<label xml:lang="el">Έλεγχος κεφαλαία/πεζά</label>
 					<label xml:lang="nl">Hoofd-/kleine letters controleren</label>
@@ -685,6 +745,8 @@
 					<label xml:lang="hi-IN">केपिटलैज़ेशन् की जाँच</label>
 					<label xml:lang="x-comment">Check capitalization</label>
 					<label xml:lang="sk">Kontrolovať veľké písmená</label>
+					<label xml:lang="hu">Check capitalization</label>
+					<label xml:lang="sl">Check capitalization</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -696,7 +758,7 @@
 					<author>TL</author>
 					<desc xml:lang="en-US">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
 						<desc xml:lang="el">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="nl">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
+						<desc xml:lang="nl">Verberg de golflijntjes die mogelijke spelfouten markeren wanneer AutoSpellingcontrole actief is.</desc>
 						<desc xml:lang="fr">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
 						<desc xml:lang="fi">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
 						<desc xml:lang="cs">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
@@ -719,9 +781,12 @@
 						<desc xml:lang="th">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
 						<desc xml:lang="hi-IN">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
 						<desc xml:lang="x-comment">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
+						<desc xml:lang="hu">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
+						<desc xml:lang="sk">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
+						<desc xml:lang="sl">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
 					<label xml:lang="en-US">Hide markings</label>
 					<label xml:lang="el">Hide markings</label>
-					<label xml:lang="nl">Hide markings</label>
+					<label xml:lang="nl">Markeringen verbergen</label>
 					<label xml:lang="fr">Hide markings</label>
 					<label xml:lang="fi">Hide markings</label>
 					<label xml:lang="cs">Hide markings</label>
@@ -744,6 +809,9 @@
 					<label xml:lang="th">Hide markings</label>
 					<label xml:lang="hi-IN">Hide markings</label>
 					<label xml:lang="x-comment">Hide markings</label>
+					<label xml:lang="hu">Hide markings</label>
+					<label xml:lang="sk">Hide markings</label>
+					<label xml:lang="sl">Hide markings</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -755,7 +823,7 @@
 					<author>TL</author>
 					<desc xml:lang="en-US">Checks spelling automatically.</desc>
 						<desc xml:lang="el">Checks spelling automatically.</desc>
-						<desc xml:lang="nl">Checks spelling automatically.</desc>
+						<desc xml:lang="nl">Automatisch de spelling controleren.</desc>
 						<desc xml:lang="fr">Checks spelling automatically.</desc>
 						<desc xml:lang="fi">Checks spelling automatically.</desc>
 						<desc xml:lang="cs">Checks spelling automatically.</desc>
@@ -778,9 +846,12 @@
 						<desc xml:lang="th">Checks spelling automatically.</desc>
 						<desc xml:lang="hi-IN">Checks spelling automatically.</desc>
 						<desc xml:lang="x-comment">Checks spelling automatically.</desc>
+						<desc xml:lang="hu">Checks spelling automatically.</desc>
+						<desc xml:lang="sk">Checks spelling automatically.</desc>
+						<desc xml:lang="sl">Checks spelling automatically.</desc>
 					<label xml:lang="en-US">Automatic spellchecking</label>
 					<label xml:lang="el">Automatic spellchecking</label>
-					<label xml:lang="nl">Automatic spellchecking</label>
+					<label xml:lang="nl">Automatische spellingcontrole</label>
 					<label xml:lang="fr">Automatic spellchecking</label>
 					<label xml:lang="fi">Automatic spellchecking</label>
 					<label xml:lang="cs">Automatic spellchecking</label>
@@ -803,6 +874,9 @@
 					<label xml:lang="th">Automatic spellchecking</label>
 					<label xml:lang="hi-IN">Automatic spellchecking</label>
 					<label xml:lang="x-comment">Automatic spellchecking</label>
+					<label xml:lang="hu">Automatic spellchecking</label>
+					<label xml:lang="sk">Automatic spellchecking</label>
+					<label xml:lang="sl">Automatic spellchecking</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -814,7 +888,7 @@
 					<author>TL</author>
 					<desc xml:lang="en-US">Allows spellchecking in headers, footers, and frames.</desc>
 						<desc xml:lang="el">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="nl">Allows spellchecking in headers, footers, and frames.</desc>
+						<desc xml:lang="nl">Staat spellingcontrole van koptekst, voettekst en kaders toe.</desc>
 						<desc xml:lang="fr">Allows spellchecking in headers, footers, and frames.</desc>
 						<desc xml:lang="fi">Allows spellchecking in headers, footers, and frames.</desc>
 						<desc xml:lang="cs">Allows spellchecking in headers, footers, and frames.</desc>
@@ -837,9 +911,12 @@
 						<desc xml:lang="th">Allows spellchecking in headers, footers, and frames.</desc>
 						<desc xml:lang="hi-IN">Allows spellchecking in headers, footers, and frames.</desc>
 						<desc xml:lang="x-comment">Allows spellchecking in headers, footers, and frames.</desc>
+						<desc xml:lang="hu">Allows spellchecking in headers, footers, and frames.</desc>
+						<desc xml:lang="sk">Allows spellchecking in headers, footers, and frames.</desc>
+						<desc xml:lang="sl">Allows spellchecking in headers, footers, and frames.</desc>
 					<label xml:lang="en-US">Check spelljng in special regions</label>
 					<label xml:lang="el">Check spelljng in special regions</label>
-					<label xml:lang="nl">Check spelljng in special regions</label>
+					<label xml:lang="nl">Controleer de spelling in speciale bereiken</label>
 					<label xml:lang="fr">Check spelljng in special regions</label>
 					<label xml:lang="fi">Check spelljng in special regions</label>
 					<label xml:lang="cs">Check spelljng in special regions</label>
@@ -862,6 +939,9 @@
 					<label xml:lang="th">Check spelljng in special regions</label>
 					<label xml:lang="hi-IN">Check spelljng in special regions</label>
 					<label xml:lang="x-comment">Check spelljng in special regions</label>
+					<label xml:lang="hu">Check spelljng in special regions</label>
+					<label xml:lang="sk">Check spelljng in special regions</label>
+					<label xml:lang="sl">Check spelljng in special regions</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -873,7 +953,7 @@
 					<author>TL</author>
 					<desc xml:lang="en-US">Checks spelling in all languages.</desc>
 						<desc xml:lang="el">Checks spelling in all languages.</desc>
-						<desc xml:lang="nl">Checks spelling in all languages.</desc>
+						<desc xml:lang="nl">Controleert de spelling in alle talen.</desc>
 						<desc xml:lang="fr">Checks spelling in all languages.</desc>
 						<desc xml:lang="fi">Checks spelling in all languages.</desc>
 						<desc xml:lang="cs">Checks spelling in all languages.</desc>
@@ -896,9 +976,12 @@
 						<desc xml:lang="th">Checks spelling in all languages.</desc>
 						<desc xml:lang="hi-IN">Checks spelling in all languages.</desc>
 						<desc xml:lang="x-comment">Checks spelling in all languages.</desc>
+						<desc xml:lang="hu">Checks spelling in all languages.</desc>
+						<desc xml:lang="sk">Checks spelling in all languages.</desc>
+						<desc xml:lang="sl">Checks spelling in all languages.</desc>
 					<label xml:lang="en-US">Check spelling in all languages</label>
 					<label xml:lang="el">Check spelling in all languages</label>
-					<label xml:lang="nl">Check spelling in all languages</label>
+					<label xml:lang="nl">Controleer de spelling in alle talen</label>
 					<label xml:lang="fr">Check spelling in all languages</label>
 					<label xml:lang="fi">Check spelling in all languages</label>
 					<label xml:lang="cs">Check spelling in all languages</label>
@@ -921,6 +1004,9 @@
 					<label xml:lang="th">Check spelling in all languages</label>
 					<label xml:lang="hi-IN">Check spelling in all languages</label>
 					<label xml:lang="x-comment">Check spelling in all languages</label>
+					<label xml:lang="hu">Check spelling in all languages</label>
+					<label xml:lang="sk">Check spelling in all languages</label>
+					<label xml:lang="sl">Check spelling in all languages</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -932,7 +1018,7 @@
 					<author>TL</author>
 					<desc xml:lang="en-US">Advances backwards through the text for spell checking.</desc>
 						<desc xml:lang="el">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="nl">Advances backwards through the text for spell checking.</desc>
+						<desc xml:lang="nl">Controleer de spelling van de tekst van achter naar voren.</desc>
 						<desc xml:lang="fr">Advances backwards through the text for spell checking.</desc>
 						<desc xml:lang="fi">Advances backwards through the text for spell checking.</desc>
 						<desc xml:lang="cs">Advances backwards through the text for spell checking.</desc>
@@ -955,9 +1041,12 @@
 						<desc xml:lang="th">Advances backwards through the text for spell checking.</desc>
 						<desc xml:lang="hi-IN">Advances backwards through the text for spell checking.</desc>
 						<desc xml:lang="x-comment">Advances backwards through the text for spell checking.</desc>
+						<desc xml:lang="hu">Advances backwards through the text for spell checking.</desc>
+						<desc xml:lang="sk">Advances backwards through the text for spell checking.</desc>
+						<desc xml:lang="sl">Advances backwards through the text for spell checking.</desc>
 					<label xml:lang="en-US">Reverse direction.</label>
 					<label xml:lang="el">Reverse direction.</label>
-					<label xml:lang="nl">Reverse direction.</label>
+					<label xml:lang="nl">Richting omkeren.</label>
 					<label xml:lang="fr">Reverse direction.</label>
 					<label xml:lang="fi">Reverse direction.</label>
 					<label xml:lang="cs">Reverse direction.</label>
@@ -980,6 +1069,9 @@
 					<label xml:lang="th">Reverse direction.</label>
 					<label xml:lang="hi-IN">Reverse direction.</label>
 					<label xml:lang="x-comment">Reverse direction.</label>
+					<label xml:lang="hu">Reverse direction.</label>
+					<label xml:lang="sk">Reverse direction.</label>
+					<label xml:lang="sl">Reverse direction.</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -1011,6 +1103,9 @@
 				<desc xml:lang="th">Contains hyphenation relevant settings.</desc>
 				<desc xml:lang="hi-IN">Contains hyphenation relevant settings.</desc>
 				<desc xml:lang="x-comment">Contains hyphenation relevant settings.</desc>
+				<desc xml:lang="hu">Contains hyphenation relevant settings.</desc>
+				<desc xml:lang="sk">Contains hyphenation relevant settings.</desc>
+				<desc xml:lang="sl">Contains hyphenation relevant settings.</desc>
 			</info>
 			<prop oor:name="MinLeading" oor:type="xs:short">
 				<!-- OldPath: HyphMinLeading -->
@@ -1043,9 +1138,12 @@
 						<desc xml:lang="th">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
 						<desc xml:lang="hi-IN">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
 						<desc xml:lang="x-comment">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
+						<desc xml:lang="hu">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
+						<desc xml:lang="sk">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
+						<desc xml:lang="sl">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
 					<label xml:lang="en-US">Characters per syllable before hyphen</label>
 					<label xml:lang="el">Characters per syllable before hyphen</label>
-					<label xml:lang="nl">Characters per syllable before hyphen</label>
+					<label xml:lang="nl">Karakters per lettergreep voor afbreekstreep</label>
 					<label xml:lang="fr">Characters per syllable before hyphen</label>
 					<label xml:lang="fi">Characters per syllable before hyphen</label>
 					<label xml:lang="cs">Characters per syllable before hyphen</label>
@@ -1068,6 +1166,9 @@
 					<label xml:lang="th">Characters per syllable before hyphen</label>
 					<label xml:lang="hi-IN">Characters per syllable before hyphen</label>
 					<label xml:lang="x-comment">Characters per syllable before hyphen</label>
+					<label xml:lang="hu">Characters per syllable before hyphen</label>
+					<label xml:lang="sk">Characters per syllable before hyphen</label>
+					<label xml:lang="sl">Characters per syllable before hyphen</label>
 				</info>
 				<constraints>
 					<minInclusive oor:value="2">
@@ -1098,6 +1199,8 @@
 							<desc xml:lang="hi-IN">Specifies the minimum value allowed.</desc>
 							<desc xml:lang="x-comment">Specifies the minimum value allowed.</desc>
 							<desc xml:lang="sk">Specifies the minimum value allowed.</desc>
+							<desc xml:lang="hu">Specifies the minimum value allowed.</desc>
+							<desc xml:lang="sl">Specifies the minimum value allowed.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="9">
@@ -1128,6 +1231,8 @@
 							<desc xml:lang="hi-IN">Specifies the maximum value allowed.</desc>
 							<desc xml:lang="x-comment">Specifies the maximum value allowed.</desc>
 							<desc xml:lang="sk">Specifies the maximum value allowed.</desc>
+							<desc xml:lang="hu">Specifies the maximum value allowed.</desc>
+							<desc xml:lang="sl">Specifies the maximum value allowed.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1164,9 +1269,12 @@
 						<desc xml:lang="th">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
 						<desc xml:lang="hi-IN">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
 						<desc xml:lang="x-comment">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
+						<desc xml:lang="hu">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
+						<desc xml:lang="sk">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
+						<desc xml:lang="sl">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
 					<label xml:lang="en-US">Characters per syllable after hyphen</label>
 					<label xml:lang="el">Characters per syllable after hyphen</label>
-					<label xml:lang="nl">Characters per syllable after hyphen</label>
+					<label xml:lang="nl">Karakters per lettergreep achter afbreekstreep</label>
 					<label xml:lang="fr">Characters per syllable after hyphen</label>
 					<label xml:lang="fi">Characters per syllable after hyphen</label>
 					<label xml:lang="cs">Characters per syllable after hyphen</label>
@@ -1189,6 +1297,9 @@
 					<label xml:lang="th">Characters per syllable after hyphen</label>
 					<label xml:lang="hi-IN">Characters per syllable after hyphen</label>
 					<label xml:lang="x-comment">Characters per syllable after hyphen</label>
+					<label xml:lang="hu">Characters per syllable after hyphen</label>
+					<label xml:lang="sk">Characters per syllable after hyphen</label>
+					<label xml:lang="sl">Characters per syllable after hyphen</label>
 				</info>
 				<constraints>
 					<minInclusive oor:value="2">
@@ -1219,6 +1330,8 @@
 							<desc xml:lang="hi-IN">Specifies the minimum value allowed.</desc>
 							<desc xml:lang="x-comment">Specifies the minimum value allowed.</desc>
 							<desc xml:lang="sk">Specifies the minimum value allowed.</desc>
+							<desc xml:lang="hu">Specifies the minimum value allowed.</desc>
+							<desc xml:lang="sl">Specifies the minimum value allowed.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="9">
@@ -1249,6 +1362,8 @@
 							<desc xml:lang="hi-IN">Specifies the maximum value allowed.</desc>
 							<desc xml:lang="x-comment">Specifies the maximum value allowed.</desc>
 							<desc xml:lang="sk">Specifies the maximum value allowed.</desc>
+							<desc xml:lang="hu">Specifies the maximum value allowed.</desc>
+							<desc xml:lang="sl">Specifies the maximum value allowed.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1284,9 +1399,12 @@
 						<desc xml:lang="th">Specifies the minimum word length to allow a hyphenation.</desc>
 						<desc xml:lang="hi-IN">Specifies the minimum word length to allow a hyphenation.</desc>
 						<desc xml:lang="x-comment">Specifies the minimum word length to allow a hyphenation.</desc>
+						<desc xml:lang="hu">Specifies the minimum word length to allow a hyphenation.</desc>
+						<desc xml:lang="sk">Specifies the minimum word length to allow a hyphenation.</desc>
+						<desc xml:lang="sl">Specifies the minimum word length to allow a hyphenation.</desc>
 					<label xml:lang="en-US">Minimal word length</label>
 					<label xml:lang="el">Ελάχιστο μήκος λέξης</label>
-					<label xml:lang="nl">Minimal word length</label>
+					<label xml:lang="nl">Minimale woordlengte</label>
 					<label xml:lang="fr">Longueur de mot minimum</label>
 					<label xml:lang="fi">Sanojen vähimmäispituus</label>
 					<label xml:lang="cs">Minimal word length</label>
@@ -1309,6 +1427,9 @@
 					<label xml:lang="th">ความยาวคำที่น้อยที่สุด</label>
 					<label xml:lang="hi-IN">न्यूनतम शब्द विस्तार</label>
 					<label xml:lang="x-comment">Minimal word length</label>
+					<label xml:lang="hu">Minimal word length</label>
+					<label xml:lang="sk">Minimal word length</label>
+					<label xml:lang="sl">Minimal word length</label>
 				</info>
 				<constraints>
 					<minInclusive oor:value="2">
@@ -1339,6 +1460,8 @@
 							<desc xml:lang="hi-IN">Specifies the minimum value allowed.</desc>
 							<desc xml:lang="x-comment">Specifies the minimum value allowed.</desc>
 							<desc xml:lang="sk">Specifies the minimum value allowed.</desc>
+							<desc xml:lang="hu">Specifies the minimum value allowed.</desc>
+							<desc xml:lang="sl">Specifies the minimum value allowed.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="9">
@@ -1369,6 +1492,8 @@
 							<desc xml:lang="hi-IN">Specifies the maximum value allowed.</desc>
 							<desc xml:lang="x-comment">Specifies the maximum value allowed.</desc>
 							<desc xml:lang="sk">Specifies the maximum value allowed.</desc>
+							<desc xml:lang="hu">Specifies the maximum value allowed.</desc>
+							<desc xml:lang="sl">Specifies the maximum value allowed.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1382,7 +1507,7 @@
 					<author>TL</author>
 					<desc xml:lang="en-US">Allows hyphenation in headers, footers, and frames.</desc>
 						<desc xml:lang="el">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="nl">Allows hyphenation in headers, footers, and frames.</desc>
+						<desc xml:lang="nl">Staat woordafbreking in koptekst, voettekst en kaders toe.</desc>
 						<desc xml:lang="fr">Allows hyphenation in headers, footers, and frames.</desc>
 						<desc xml:lang="fi">Allows hyphenation in headers, footers, and frames.</desc>
 						<desc xml:lang="cs">Allows hyphenation in headers, footers, and frames.</desc>
@@ -1405,9 +1530,12 @@
 						<desc xml:lang="th">Allows hyphenation in headers, footers, and frames.</desc>
 						<desc xml:lang="hi-IN">Allows hyphenation in headers, footers, and frames.</desc>
 						<desc xml:lang="x-comment">Allows hyphenation in headers, footers, and frames.</desc>
+						<desc xml:lang="hu">Allows hyphenation in headers, footers, and frames.</desc>
+						<desc xml:lang="sk">Allows hyphenation in headers, footers, and frames.</desc>
+						<desc xml:lang="sl">Allows hyphenation in headers, footers, and frames.</desc>
 					<label xml:lang="en-US">Hyphenate in special regions.</label>
 					<label xml:lang="el">Hyphenate in special regions.</label>
-					<label xml:lang="nl">Hyphenate in special regions.</label>
+					<label xml:lang="nl">Woordafbreking in speciale bereiken.</label>
 					<label xml:lang="fr">Hyphenate in special regions.</label>
 					<label xml:lang="fi">Hyphenate in special regions.</label>
 					<label xml:lang="cs">Hyphenate in special regions.</label>
@@ -1430,6 +1558,9 @@
 					<label xml:lang="th">Hyphenate in special regions.</label>
 					<label xml:lang="hi-IN">Hyphenate in special regions.</label>
 					<label xml:lang="x-comment">Hyphenate in special regions.</label>
+					<label xml:lang="hu">Hyphenate in special regions.</label>
+					<label xml:lang="sk">Hyphenate in special regions.</label>
+					<label xml:lang="sl">Hyphenate in special regions.</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -1441,7 +1572,7 @@
 					<author>TL</author>
 					<desc xml:lang="en-US">Allows for automatic insertion of soft hyphens.</desc>
 						<desc xml:lang="el">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="nl">Allows for automatic insertion of soft hyphens.</desc>
+						<desc xml:lang="nl">Staat automatische invoeging van zachte afbreekstreepjes toe.</desc>
 						<desc xml:lang="fr">Allows for automatic insertion of soft hyphens.</desc>
 						<desc xml:lang="fi">Allows for automatic insertion of soft hyphens.</desc>
 						<desc xml:lang="cs">Allows for automatic insertion of soft hyphens.</desc>
@@ -1464,9 +1595,12 @@
 						<desc xml:lang="th">Allows for automatic insertion of soft hyphens.</desc>
 						<desc xml:lang="hi-IN">Allows for automatic insertion of soft hyphens.</desc>
 						<desc xml:lang="x-comment">Allows for automatic insertion of soft hyphens.</desc>
+						<desc xml:lang="hu">Allows for automatic insertion of soft hyphens.</desc>
+						<desc xml:lang="sk">Allows for automatic insertion of soft hyphens.</desc>
+						<desc xml:lang="sl">Allows for automatic insertion of soft hyphens.</desc>
 					<label xml:lang="en-US">Automatic hyphention.</label>
 					<label xml:lang="el">Automatic hyphention.</label>
-					<label xml:lang="nl">Automatic hyphention.</label>
+					<label xml:lang="nl">Automatische woordafbreking.</label>
 					<label xml:lang="fr">Automatic hyphention.</label>
 					<label xml:lang="fi">Automatic hyphention.</label>
 					<label xml:lang="cs">Automatic hyphention.</label>
@@ -1489,6 +1623,9 @@
 					<label xml:lang="th">Automatic hyphention.</label>
 					<label xml:lang="hi-IN">Automatic hyphention.</label>
 					<label xml:lang="x-comment">Automatic hyphention.</label>
+					<label xml:lang="hu">Automatic hyphention.</label>
+					<label xml:lang="sk">Automatic hyphention.</label>
+					<label xml:lang="sl">Automatic hyphention.</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -1520,6 +1657,9 @@
 				<desc xml:lang="th">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
 				<desc xml:lang="hi-IN">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
 				<desc xml:lang="x-comment">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
+				<desc xml:lang="hu">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
+				<desc xml:lang="sk">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
+				<desc xml:lang="sl">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
 			</info>
 			<group oor:name="SpellCheckerList" oor:extensible="true">
 				<info>
@@ -1548,6 +1688,9 @@
 					<desc xml:lang="th">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
 					<desc xml:lang="hi-IN">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
 					<desc xml:lang="x-comment">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
+					<desc xml:lang="hu">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
+					<desc xml:lang="sk">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
+					<desc xml:lang="sl">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
 				</info>
 			</group>
 			<group oor:name="ThesaurusList" oor:extensible="true">
@@ -1577,6 +1720,9 @@
 					<desc xml:lang="th">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
 					<desc xml:lang="hi-IN">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
 					<desc xml:lang="x-comment">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
+					<desc xml:lang="hu">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
+					<desc xml:lang="sk">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
+					<desc xml:lang="sl">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
 				</info>
 			</group>
 			<group oor:name="HyphenatorList" oor:extensible="true">
@@ -1606,6 +1752,9 @@
 					<desc xml:lang="th">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
 					<desc xml:lang="hi-IN">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
 					<desc xml:lang="x-comment">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
+					<desc xml:lang="hu">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
+					<desc xml:lang="sk">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
+					<desc xml:lang="sl">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
 				</info>
 			</group>
 			<group oor:name="LastFoundSpellCheckers" oor:extensible="true">
@@ -1635,6 +1784,9 @@
 					<desc xml:lang="th">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
 					<desc xml:lang="hi-IN">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
 					<desc xml:lang="x-comment">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
+					<desc xml:lang="hu">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
+					<desc xml:lang="sk">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
+					<desc xml:lang="sl">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
 				</info>
 			</group>
 			<group oor:name="LastFoundThesauri" oor:extensible="true">
@@ -1664,6 +1816,9 @@
 					<desc xml:lang="th">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
 					<desc xml:lang="hi-IN">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
 					<desc xml:lang="x-comment">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
+					<desc xml:lang="hu">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
+					<desc xml:lang="sk">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
+					<desc xml:lang="sl">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
 				</info>
 			</group>
 			<group oor:name="LastFoundHyphenators" oor:extensible="true">
@@ -1693,11 +1848,15 @@
 					<desc xml:lang="th">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
 					<desc xml:lang="hi-IN">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
 					<desc xml:lang="x-comment">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
+					<desc xml:lang="hu">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
+					<desc xml:lang="sk">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
+					<desc xml:lang="sl">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
 				</info>
 			</group>
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 
