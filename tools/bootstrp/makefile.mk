@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: nf $ $Date: 2001-04-30 14:40:17 $
+#   last change: $Author: nf $ $Date: 2001-05-07 14:16:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,8 +89,6 @@ OBJFILES=                       \
     $(OBJ)$/cppdep.obj      \
     $(OBJ)$/command.obj     \
     $(OBJ)$/prj.obj         \
-    $(OBJ)$/errdumm.obj     \
-    $(OBJ)$/errhdl.obj      \
     $(OBJ)$/inimgr.obj      \
     $(OBJ)$/revision.obj    \
     $(OBJ)$/shellprp.obj 	\
@@ -103,8 +101,6 @@ SLOFILES=                   \
     $(SLO)$/cppdep.obj      \
     $(SLO)$/command.obj     \
     $(SLO)$/prj.obj         \
-    $(SLO)$/errdumm.obj     \
-    $(SLO)$/errhdl.obj      \
     $(SLO)$/inimgr.obj      \
     $(SLO)$/revision.obj    \
     $(SLO)$/shellprp.obj 	\
@@ -153,6 +149,13 @@ APP5TARGET= zipdep
 APP5OBJS=	$(OBJ)$/zipdep.obj
 APP5LIBS=	$(LB)$/bootstrp.lib
 APP5STDLIBS=$(STATIC_LIBS) 
+APP5DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib $(OBJ)$/zipdep.obj
+
+APP6TARGET= sspretty
+APP6OBJS=	$(OBJ)$/sspretty.obj
+APP6LIBS=	$(LB)$/bootstrp.lib
+APP6STDLIBS=$(STATIC_LIBS) 
+APP6DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib $(OBJ)$/sspretty.obj
 
 
 DEPOBJFILES		=	$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) 
