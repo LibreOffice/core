@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-12 13:06:32 $
+ *  last change: $Author: os $ $Date: 2002-11-01 15:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1380,7 +1380,7 @@ SwXDocumentIndexMark::SwXDocumentIndexMark(TOXTypes eToxType) :
     m_pDoc(0),
     aLstnrCntnr( (text::XTextContent*)this),
     m_pTOXMark(0),
-    nLevel(USHRT_MAX),
+    nLevel(0),
     eType(eToxType),
     bMainEntry(sal_False),
     bIsDescriptor(sal_True)
@@ -1397,7 +1397,7 @@ SwXDocumentIndexMark::SwXDocumentIndexMark(const SwTOXType* pType,
     aLstnrCntnr( (text::XTextContent*)this),
     m_pDoc(pDc),
     m_pTOXMark(pMark),
-    nLevel(USHRT_MAX),
+    nLevel(0),
     eType(pType->GetType()),
     bIsDescriptor(sal_False),
     bMainEntry(sal_False)
