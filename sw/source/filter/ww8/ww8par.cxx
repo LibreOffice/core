@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.141 $
+ *  $Revision: 1.142 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:20:18 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,18 @@
 #include "filt_pch.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
+#include <com/sun/star/embed/XStorage.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
+#include <com/sun/star/io/XStream.hpp>
+#endif
+
+#include <unotools/ucbstreamhelper.hxx>
+
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -73,9 +85,7 @@
 #include <rtl/tencinfo.h>
 #endif
 
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 
 #ifndef _SFXDOCINF_HXX
 #include <sfx2/docinf.hxx>
@@ -350,10 +360,11 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId, const Graphic& rGrf,
 {
     SdrObject* pRet = 0;
     String sStorageName;
-    SvStorageRef xSrcStg, xDstStg;
+    SotStorageRef xSrcStg;
+    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xDstStg;
     if( GetOLEStorageName( nOLEId, sStorageName, xSrcStg, xDstStg ))
     {
-        SvStorageRef xSrc = xSrcStg->OpenStorage( sStorageName,
+        SvStorageRef xSrc = xSrcStg->OpenSotStorage( sStorageName,
             STREAM_READWRITE| STREAM_SHARE_DENYALL );
         ASSERT(rReader.pFormImpl, "No Form Implementation!");
         STAR_REFERENCE( drawing::XShape ) xShape;
@@ -364,8 +375,9 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId, const Graphic& rGrf,
         }
         else
         {
+            ErrCode nError = ERRCODE_NONE;
             pRet = CreateSdrOLEFromStorage( sStorageName, xSrcStg, xDstStg,
-                rGrf, rBoundRect, pStData, nSvxMSDffOLEConvFlags );
+                rGrf, rBoundRect, pStData, nError, nSvxMSDffOLEConvFlags );
         }
     }
     return pRet;
@@ -3564,14 +3576,22 @@ void SwWW8ImplReader::StoreMacroCmds()
 
         pTableStream->Seek(pWwFib->fcCmds);
 
-        SvStorageRef xDestRoot(mpDocShell->GetStorage());
-        SvStorageStreamRef xDestStream =
-            xDestRoot->OpenStream(CREATE_CONST_ASC(SL::aMSMacroCmds));
+        com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xRoot(mpDocShell->GetStorage());
+        try
+        {
+            com::sun::star::uno::Reference < com::sun::star::io::XStream > xStream =
+                    xRoot->openStreamElement( CREATE_CONST_ASC(SL::aMSMacroCmds), com::sun::star::embed::ElementModes::READWRITE );
+            SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xStream );
 
-        sal_uInt8 *pBuffer = new sal_uInt8[pWwFib->lcbCmds];
-        pTableStream->Read(pBuffer, pWwFib->lcbCmds);
-        xDestStream->Write(pBuffer, pWwFib->lcbCmds);
-        delete[] pBuffer;
+            sal_uInt8 *pBuffer = new sal_uInt8[pWwFib->lcbCmds];
+            pTableStream->Read(pBuffer, pWwFib->lcbCmds);
+            pStream->Write(pBuffer, pWwFib->lcbCmds);
+            delete[] pBuffer;
+            delete pStream;
+        }
+        catch ( com::sun::star::uno::Exception& )
+        {
+        }
     }
 }
 
@@ -3986,14 +4006,14 @@ ULONG SwWW8ImplReader::SetSubStreams(SvStorageStreamRef &rTableStream,
                 break;
             }
 
-            rTableStream = pStg->OpenStream(String::CreateFromAscii(
+            rTableStream = pStg->OpenSotStream( String::CreateFromAscii(
                 pWwFib->fWhichTblStm ? SL::a1Table : SL::a0Table),
                 STREAM_STD_READ);
 
             pTableStream = &rTableStream;
             pTableStream->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
-            rDataStream = pStg->OpenStream(CREATE_CONST_ASC(SL::aData),
+            rDataStream = pStg->OpenSotStream(CREATE_CONST_ASC(SL::aData),
                 STREAM_STD_READ | STREAM_NOCREATE );
 
             if (rDataStream.Is() && SVSTREAM_OK == rDataStream->GetError())
@@ -4652,7 +4672,7 @@ BOOL WW8Reader::ReadGlossaries(SwTextBlocks& rBlocks, BOOL bSaveRelFiles) const
 }
 
 BOOL SwMSDffManager::GetOLEStorageName(long nOLEId, String& rStorageName,
-    SvStorageRef& rSrcStorage, SvStorageRef& rDestStorage) const
+    SvStorageRef& rSrcStorage, com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rDestStorage) const
 {
     bool bRet = false;
 
@@ -4719,7 +4739,7 @@ BOOL SwMSDffManager::GetOLEStorageName(long nOLEId, String& rStorageName,
     {
         rStorageName = '_';
         rStorageName += String::CreateFromInt32(nPictureId);
-        rSrcStorage = rReader.pStg->OpenStorage(CREATE_CONST_ASC(
+        rSrcStorage = rReader.pStg->OpenSotStorage(CREATE_CONST_ASC(
             SL::aObjectPool));
         if (!rReader.mpDocShell)
             bRet=false;
