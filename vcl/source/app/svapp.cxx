@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-11 15:03:05 $
+ *  last change: $Author: ssa $ $Date: 2002-07-01 07:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -963,6 +963,9 @@ void Application::SetSettings( const AllSettings& rSettings )
             DataChangedEvent aDCEvt( DATACHANGED_SETTINGS, &aOldSettings, nChangeFlags );
             GetpApp()->DataChanged( aDCEvt );
 
+            // notify data change handler
+            pSVData->maAppData.maDataChangeHdl.Call( &aDCEvt );
+
             // Update all windows
             Window* pFirstFrame = pSVData->maWinData.mpFirstFrame;
             // Daten, die neu berechnet werden muessen, zuruecksetzen
@@ -1065,6 +1068,16 @@ void Application::NotifyAllWindows( DataChangedEvent& rDCEvt )
 
         pFrame = pFrame->mpFrameData->mpNextFrame;
     }
+}
+
+// -----------------------------------------------------------------------
+
+Link Application::SetDataChangeHdl( const Link& rLink )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    Link aOldLink = pSVData->maAppData.maDataChangeHdl;
+    pSVData->maAppData.maDataChangeHdl = rLink;
+    return aOldLink;
 }
 
 // -----------------------------------------------------------------------
