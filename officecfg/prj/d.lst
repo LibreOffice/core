@@ -13,6 +13,7 @@ mkdir: %_DEST%\xml%_EXT%\office\definition
 ..\%__SRC%\misc\org.openoffice.Office.Chart.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Chart.xml
 ..\%__SRC%\misc\org.openoffice.Office.Common.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Common.xml
 ..\%__SRC%\misc\org.openoffice.Office.DataAccess.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.DataAccess.xml
+..\%__SRC%\misc\org.openoffice.Office.Labels.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Labels.xml
 ..\%__SRC%\misc\org.openoffice.Office.Views.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Views.xml
 ..\%__SRC%\misc\org.openoffice.Office.TypeDetection.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.TypeDetection.xml
 ..\%__SRC%\misc\org.openoffice.Office.Draw.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Draw.xml
@@ -37,6 +38,7 @@ mkdir: %_DEST%\xml%_EXT%\office\definition
 ..\data\org.openoffice.Office.Chart.xcd %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Chart.xcd
 ..\data\org.openoffice.Office.Common.xcd %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Common.xcd
 ..\data\org.openoffice.Office.DataAccess.xcd %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.DataAccess.xcd
+..\data\org.openoffice.Office.Labels.xcd %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Labels.xcd
 ..\data\org.openoffice.Office.Views.xcd %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Views.xcd
 ..\data\org.openoffice.Office.TypeDetection.xcd %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.TypeDetection.xcd
 ..\data\org.openoffice.Office.Draw.xcd %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Draw.xcd
