@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DescriptionGenerator.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: af $ $Date: 2002-03-18 10:04:20 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 
 namespace accessibility {
 
@@ -83,7 +87,7 @@ namespace accessibility {
     are all the specified property names and values that differ from the
     default values in the style.</p>
 */
-class DescriptionGenerator
+class SVX_DLLPUBLIC DescriptionGenerator
 {
 public:
     enum PropertyType {
@@ -217,24 +221,24 @@ private:
 
     /** Add a property value formated as color to the description string.
     */
-    void AddColor (const ::rtl::OUString& sPropertyName,
+    SVX_DLLPRIVATE void AddColor (const ::rtl::OUString& sPropertyName,
         const ::rtl::OUString& sLocalizedName);
 
     /** Add a property value of unknown type to the description string.
     */
-    void AddUnknown (const ::rtl::OUString& sPropertyName,
+    SVX_DLLPRIVATE void AddUnknown (const ::rtl::OUString& sPropertyName,
         const ::rtl::OUString& sLocalizedName);
 
     /** Add a property value formated as integer to the description string.
     */
-    void AddInteger (const ::rtl::OUString& sPropertyName,
+    SVX_DLLPRIVATE void AddInteger (const ::rtl::OUString& sPropertyName,
         const ::rtl::OUString& sLocalizedName);
 
     /** Add a property value formated as string to the description string.
         @param sPropertyName
             Name of the property.
     */
-    void AddString (const ::rtl::OUString& sPropertyName,
+    SVX_DLLPRIVATE void AddString (const ::rtl::OUString& sPropertyName,
         const ::rtl::OUString& sLocalizedName, long nWhichId = -1);
 
     /** Add a property value formated as fill style to the description
@@ -244,7 +248,7 @@ private:
         @param sPropertyName
             Name of the property.  Usually this will be "FillStyle".
     */
-    void AddFillStyle (const ::rtl::OUString& sPropertyName,
+    SVX_DLLPRIVATE void AddFillStyle (const ::rtl::OUString& sPropertyName,
         const ::rtl::OUString& sLocalizedName);
 };
 
