@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-15 16:45:09 $
+ *  last change: $Author: aw $ $Date: 2002-02-27 10:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,7 +559,7 @@ void SdOptionsMisc::SetDefaults()
     // #90356#
     SetShowUndoDeleteWarning( TRUE );
     // #97016#
-    SetDefaultObjectSizeWidth(5000);
+    SetDefaultObjectSizeWidth(8000);
     SetDefaultObjectSizeHeight(5000);
 }
 
