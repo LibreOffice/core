@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-10 08:52:12 $
+ *  last change: $Author: fs $ $Date: 2001-04-11 12:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1728,13 +1728,13 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
     Reference< XPropertySet >  xDataSource(getDataSource(), UNO_QUERY);
     DBG_ASSERT(xDataSource.is(), "SbaGridControl::DoColumnDrag : invalid data source !");
 
+    Reference< XPropertySet >  xAffectedCol;
     // determine the field to drag
     ::rtl::OUString sField;
     try
     {
         sal_uInt16 nModelPos = GetModelColumnPos(GetColumnIdFromViewPos(nColumnPos));
         Reference< XIndexContainer >  xCols(GetPeer()->getColumns(), UNO_QUERY);
-        Reference< XPropertySet >  xAffectedCol;
         xCols->getByIndex(nModelPos) >>= xAffectedCol;
         if (xAffectedCol.is())
             xAffectedCol->getPropertyValue(PROPERTY_CONTROLSOURCE) >>= sField;
@@ -1746,7 +1746,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
     if (0 == sField.getLength())
         return;
 
-    OColumnTransferable* pDataTransfer = new OColumnTransferable(xDataSource, sField, CTF_FIELD_DESCRIPTOR);
+    OColumnTransferable* pDataTransfer = new OColumnTransferable(xDataSource, sField, xAffectedCol, CTF_FIELD_DESCRIPTOR | CTF_COLUMN_DESCRIPTOR);
     Reference< XTransferable > xEnsureDelete = pDataTransfer;
     pDataTransfer->StartDrag(this, DND_ACTION_COPY | DND_ACTION_LINK);
 }
@@ -1904,7 +1904,11 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
     } while (sal_False);
 
 */
+#if SUPD<628
+    return DND_ACTION_NONE;
+#else
     return (DND_ACTION_NONE != nAction) ? nAction : FmGridControl::AcceptDrop(rEvt);
+#endif
 }
 
 //------------------------------------------------------------------------------
