@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 13:17:56 $
+#   last change: $Author: kz $ $Date: 2004-05-19 14:05:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -154,6 +154,7 @@ IDLFILES=\
     PushButtonType.idl\
     RasterOperation.idl\
     Rectangle.idl\
+    RoadmapItem.idl\
     ScrollBarOrientation.idl\
     Selection.idl\
     SimpleFontMetric.idl\
@@ -207,6 +208,8 @@ IDLFILES=\
     UnoControlProgressBarModel.idl\
     UnoControlRadioButton.idl\
     UnoControlRadioButtonModel.idl\
+    UnoControlRoadmap.idl\
+    UnoControlRoadmapModel.idl\
     UnoControlScrollBar.idl\
     UnoControlScrollBarModel.idl\
     UnoControlSpinButton.idl\
@@ -249,6 +252,7 @@ IDLFILES=\
     XImageConsumer.idl\
     XImageProducer.idl\
     XInfoPrinter.idl\
+    XItemEventBroadcaster.idl\
     XItemListener.idl\
     XKeyHandler.idl\
     XKeyListener.idl\
