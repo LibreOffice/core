@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unogtabl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-28 16:24:30 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include "svdmodel.hxx"
 #include "xdef.hxx"
 #include "xflgrit.hxx"
+#include "unomid.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -101,7 +102,7 @@ public:
 };
 
 SvxUnoGradientTable::SvxUnoGradientTable( SdrModel* pModel ) throw()
-: SvxUnoNameItemTable( pModel, XATTR_FILLGRADIENT )
+    : SvxUnoNameItemTable( pModel, XATTR_FILLGRADIENT, MID_FILLGRADIENT )
 {
 }
 
