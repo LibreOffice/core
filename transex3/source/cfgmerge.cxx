@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:47:57 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:40:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #include "tokens.h"
 #include "utf8conv.hxx"
 
-extern "C" { yyerror( char * ); }
-extern "C" { YYWarning( char * ); }
+extern "C" { int yyerror( char * ); }
+extern "C" { int YYWarning( char * ); }
 
 // defines to parse command line
 #define STATE_NON       0x0001
@@ -844,7 +844,7 @@ void CfgMerge::WorkOnRessourceEnd()
                     ( nIndex != ENGLISH_INDEX ) &&
                     ( LANGUAGE_ALLOWED( nIndex )) &&
                     ( pEntrys->GetText(
-                        sContent, STRING_TYP_TEXT, nIndex, TRUE )) &&
+                        sContent, STRING_TYP_TEXT, ( USHORT ) nIndex, TRUE )) &&
                     ( sContent != "-" ) && ( sContent.Len()))
                 {
                     ByteString sText = UTF8Converter::ConvertToUTF8(
@@ -864,7 +864,7 @@ void CfgMerge::WorkOnRessourceEnd()
 
                     ByteString sReplace = sTemp.GetToken( 0, '\"' );
                     sReplace += "\"";
-                    sReplace += Export::GetIsoLangByIndex( nIndex );
+                    sReplace += Export::GetIsoLangByIndex(( USHORT ) nIndex );
                     sReplace += "\"";
 
                     sTextTag.SearchAndReplace( sSearch, sReplace );
