@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDictionary.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:23 $
+ *  last change: $Author: tl $ $Date: 2000-12-04 14:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,128 +88,140 @@ module com { module sun { module star { module linguistic2 {
 //=============================================================================
 /** This interfaces enables the object to access personal dictionaries.
 
-    @see    XDictionaryEntry
-    @see    XDictionaryEvent
-    @see    XNamed
+    <P>Personal dictionaries are used to supply additional
+    information for spellchecking and hyphenation (see
+    <type scope="com::sun::star::linguistic2">XDictionaryEntry</type>).
+    Only active dictionaries with an appropriate language are used
+    for that purpose.
+    The entries of a active positive dictionary are words that are
+    required to be recognized as correct during the spellchecking
+    process. Additionally they will be used for hyphenation.
+    Entries of a negative dictionary are required to be recognized
+    as negative words (i.e. words that should not be used) during
+    spellcheck. An entry of a negative dictionary may supply a
+    proposal for a word to be used instead of used one.</P>
+
+    @see    com::sun::star::linguistic2::XDictionaryEvent
+    @see    com::sun::star::container::XNamed
 */
 [ uik(4BD5A950-5D68-11d4-9F090050-04D8BBC5), ident( "XDictionary", 1.0 ) ]
 interface XDictionary : com::sun::star::container::XNamed
 {
     //-------------------------------------------------------------------------
-    /** This method returns the type of the dictionary.
+    /** returns the type of the dictionary.
 
         @returns
-        the type of the dictionary.
+            the type of the dictionary.
 
-        @see    DictionaryType
+        @see    com::sun::star::linguistic2::DictionaryType
     */
     com::sun::star::linguistic2::DictionaryType getDictionaryType();
 
     //-------------------------------------------------------------------------
-    /** This method determines wether the dictionary should be
-        used or not.
+    /** specifies wether the dictionary should be used or not.
 
         @param  bAvtivate
-        <TRUE/> if the dictionary should be used, <FALSE/> else.
+            <TRUE/> if the dictionary should be used, <FALSE/> else.
     */
     void setActive( [in] boolean bActivate );
 
     //-------------------------------------------------------------------------
     /**
         @returns
-        <TRUE/> if the dictionary is active, <FALSE/> otherwise.
+            <TRUE/> if the dictionary is active, <FALSE/> otherwise.
     */
     boolean isActive();
 
     //-------------------------------------------------------------------------
     /**
         @returns
-        the number of entries in the dictionary.
+               the number of entries in the dictionary.
     */
     short getCount();
 
     //-------------------------------------------------------------------------
-    /** @returns
-         the language of the dictionary.
+    /**
+         @returns
+             the language of the dictionary.
 
-        @see    Locale
+        @see    com::sun::star::lang::Locale
     */
     com::sun::star::lang::Locale getLocale();
 
     //-------------------------------------------------------------------------
-    /** This method sets the language of the dictionary.
+    /** is used to set the language of the dictionary.
 
          @param aLocale
-         the language of the dictionary.
+             the (new) language of the dictionary.
 
-        @see    Locale
+        @see    com::sun::star::lang::Locale
     */
     void setLocale( [in] com::sun::star::lang::Locale aLocale );
 
     //-------------------------------------------------------------------------
-    /** This method returns the reference to the dictionary entry that
-        matches the given word.
+    /** searches for an entry that matches the given word.
 
         @returns
-        the reference to the entry found. If no entry was found
-        it is NULL.
+            the reference to the entry found. If no entry was found
+            it is NULL.
 
         @param  aWord
-        the word to be looked for.
+            the word to be looked for.
 
-        @see    XDictionaryEntry
+        @see    com::sun::star::linguistic2::XDictionaryEntry
     */
     com::sun::star::linguistic2::XDictionaryEntry getEntry( [in] string aWord );
 
     //-------------------------------------------------------------------------
-    /** This method adds an entry to the dictionary.
+    /** is used to add an entry to the dictionary.
 
         <P>If an entry already exists the dictionary remains unchanged
          and <FALSE/> will be returned.</P>
 
-        <P>Of course in positive dictionaries only postiv entries
+        <P>In positive dictionaries only postiv entries
         can be made, and in negativ ones only negativ entries.</P>
 
         @param  xDicEntry
-        the entry to be added.
+            the entry to be added.
 
         @returns
-        <TRUE/> if the entry was successfully added <FALSE/> else.
+            <TRUE/> if the entry was successfully added <FALSE/> else.
 
          @see   add
         @see    remove
         @see    isFull
-        @see    XDictionaryEntry
-        @see    DictionaryType
+        @see    com::sun::star::linguistic2::XDictionaryEntry
+        @see    com::sun::star::linguistic2::DictionaryType
     */
-    boolean addEntry( [in] com::sun::star::linguistic2::XDictionaryEntry xDicEntry );
+    boolean addEntry(
+        [in] com::sun::star::linguistic2::XDictionaryEntry xDicEntry );
 
     //-------------------------------------------------------------------------
-    /** This method adds an entry to the dictionary.
+    /** is used to make an entry in the dictionary.
 
         <P>If an entry already exists the dictionary remains unchanged
          and <FALSE/> will be returned.</P>
 
-        <P>Of course in positive dictionaries only postiv entries
+        <P>In positive dictionaries only postiv entries
         can be made, and in negativ ones only negativ entries.</P>
 
         @param  aWord
-        the word to be added.
+            the word to be added.
 
         @param  bIsNegative
-        specifies wether the entry will be a negative one or not.
+            specifies wether the entry will be a negative one or not.
 
         @param  aRplcText
-        in case of a negative entry this is the replacement text to
-        be used when replacing aWord. Otherwise it is undefined.
+            in case of a negative entry this is the replacement text to
+            be used when replacing aWord. Otherwise it is undefined.
 
         @returns
-        <TRUE/> if the entry was successfully added <FALSE/> else.
+            <TRUE/> if the entry was successfully added <FALSE/> else.
 
          @see   addEntry
         @see    remove
         @see    isFull
-        @see    DictionaryType
+        @see    com::sun::star::linguistic2::DictionaryType
     */
     boolean add(
             [in] string aWord,
@@ -217,14 +229,14 @@ interface XDictionary : com::sun::star::container::XNamed
             [in] string aRplcText );
 
     //-------------------------------------------------------------------------
-    /** This method removes an entry from the dictionary.
+    /** removes an entry from the dictionary.
 
         @param  aWord
-        the word corresponding to the entry to be removed.
+            the word matching the entry to be removed.
 
         @returns
-        <TRUE/> if the entry was successfully removed, <FALSE/>
-        otherwise (especially if the entry was not found).
+            <TRUE/> if the entry was successfully removed, <FALSE/>
+            otherwise (especially if the entry was not found).
 
          @see   addEntry
         @see    add
@@ -233,8 +245,9 @@ interface XDictionary : com::sun::star::container::XNamed
 
     //-------------------------------------------------------------------------
     /**
-        @returns    <TRUE/> if the dictionary is full and no further
-        item can be added, <FALSE/> else.
+        @returns
+             <TRUE/> if the dictionary is full and no further
+            entry can be made, <FALSE/> else.
 
          @see   addEntry
         @see    add
@@ -244,50 +257,51 @@ interface XDictionary : com::sun::star::container::XNamed
     //-------------------------------------------------------------------------
     /**
          @returns
-         a sequence with all the entries of the dictionary.
+             a sequence with all the entries of the dictionary.
 
-        @see    XDictionaryEntry
+        @see    com::sun::star::linguistic2::XDictionaryEntry
     */
 
     sequence<com::sun::star::linguistic2::XDictionaryEntry> getEntries();
 
     //-------------------------------------------------------------------------
-    /** This method removes all entries from the dictionary.
+    /** removes all entries from the dictionary.
     */
     void clear();
 
     //-------------------------------------------------------------------------
     /** add an entry to the list of dictionary event listeners.
 
-        <P>On events each entry in the list is getting a notification.</P>
+        <P>On dictionary events each entry in the listener list will
+         be notified via a call to
+         <member scope="com::sun::star::linguistic2">
+         XDictionaryEventListener::processDictionaryEvent</member>.</P>
 
         @param  xListener
-        the entry to be made (i.e. the object that wants get notifications).
+            the entry to be made (i.e. the object that wants get notifications).
 
         @returns
-        <TRUE/> if the entry was successfully made, <FALSE/> else.
-        If the object disposes it will always fail.
+            <TRUE/> if the entry was successfully made, <FALSE/> else.
+            If the object disposes it will always fail.
 
-        @see    DictionaryEvent
         @see    removeDictionaryEventListener
-        @see    dispose
+         @see   com::sun::star::linguistic2::XDictionaryEventListener
     */
     boolean addDictionaryEventListener(
         [in] com::sun::star::linguistic2::XDictionaryEventListener xListener );
 
     //-------------------------------------------------------------------------
-    /** remove an entry from he list of dictionary event listeners.
+    /** remove an entry from the list of dictionary event listeners.
 
         @param  xListener
-        the reference to the listening object.
+            the reference to the listening object to be removed.
 
         @returns
-        <TRUE/> if the object to be removed was found (and removed),
-        <FALSE/> if the object was not found in the list.
+            <TRUE/> if the object to be removed was found (and removed),
+            <FALSE/> if the object was not found in the list.
 
-        @see    DictionaryEvent
         @see    addDictionaryEventListener
-        @see    dispose
+         @see   com::sun::star::linguistic2::XDictionaryEventListener
     */
     boolean removeDictionaryEventListener(
         [in] com::sun::star::linguistic2::XDictionaryEventListener xListener );

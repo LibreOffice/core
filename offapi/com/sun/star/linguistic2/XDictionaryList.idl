@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDictionaryList.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:23 $
+ *  last change: $Author: tl $ $Date: 2000-12-04 14:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,140 +78,153 @@
 module com { module sun { module star { module linguistic2 {
 
 //=============================================================================
-/** This interface allows to maintain a list of dictionaries.
+/** is used to manage and maintain a list of dictionaries.
 
-    @see    XDictionary
-    @see    XInterface
+    <P>A dictionary-list may be given to a spellchecker or hyphenator
+    service implementation on their creation in order to supply a set
+    of dictionaries and thus additional information to be used for
+    those purposes.</P>
+
+    @see    com::sun::star::linguistic2::XDictionary
+    @see    com::sun::star::uno::XInterface
 */
 [ uik(4BD5A954-5D68-11d4-9F090050-04D8BBC5), ident( "XDictionaryList", 1.0 ) ]
 interface XDictionaryList : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** This method returns the number of available dictionaries in
-        the list.
-
+    /**
         @returns
-        the number of dictionaries.
+            the number of dictionaries in the list.
     */
     short getCount();
 
     //-------------------------------------------------------------------------
     /**
-         @returns
-         a sequence with an entry for every dictionary in the list.
+        @returns
+             a sequence with an entry for every dictionary
+            in the list.
 
-        @see    XDictionary
+        @see    com::sun::star::linguistic2::XDictionary
     */
     sequence<com::sun::star::linguistic2::XDictionary> getDictionaries();
 
     //-------------------------------------------------------------------------
-    /** @returns
-        the XDictionary with the specified name. If no such
-        dictionary exists <NULL/> will be returned.
+    /** searches the list for a dictionary with a given name.
+
+         @returns
+            the XDictionary with the specified name. If no such
+            dictionary exists <NULL/> will be returned.
 
         @param  aDictionaryName
-        specify the name of the dictionary to look for.
+            specifies the name of the dictionary to look for.
 
-        @see    XDictionary
+        @see    com::sun::star::linguistic2::XDictionary
     */
     com::sun::star::linguistic2::XDictionary getDictionaryByName(
             [in] string aDictionaryName );
 
     //-------------------------------------------------------------------------
-    /** This method adds a dictionary to the list.
+    /** adds a dictionary to the list.
+
+        <P>Additionally the dictionary-list will add itself to the list of dictionary
+         event listeners of that dictionary.</P>
 
         @returns
-         <TRUE/> if the dictionary was added successfully, <FALSE/>
-         otherwise.
+             <TRUE/> if the dictionary was added successfully,
+            <FALSE/> otherwise.
 
         @param  xDictionary
-        the dictionary to be added.
+            the dictionary to be added.
 
         @see    removeDictionary
-        @see    XDictionary
+        @see    com::sun::star::linguistic2::XDictionary
     */
     boolean addDictionary(
             [in] com::sun::star::linguistic2::XDictionary xDictionary );
 
     //-------------------------------------------------------------------------
-    /** This method removes a single dictionary from the list of
-        available ones.
+    /** removes a single dictionary from the list.
 
-        <P>If the dictionary is still active it will be deactivated first.
-         The dictionary-list will remove itself from the list of dictionary
-         event listeners of the dictionary.</P>
+        <P>If the dictionary is still active it will be deactivated
+        first. The dictionary-list will remove itself from the list of
+        dictionary event listeners of the dictionary.</P>
 
         @returns
-         <TRUE/> if the dictionary was removed successfully, <FALSE/>
-         otherwise.
+             <TRUE/> if the dictionary was removed successfully, <FALSE/>
+             otherwise.
 
         @param  xDictionary
-        dictionary to be removed from the list of available dictionaries.
+            dictionary to be removed from the list of dictionaries.
 
         @see    addDictionary
-        @see    XDictionary
+        @see    com::sun::star::linguistic2::XDictionary
     */
     boolean removeDictionary(
             [in] com::sun::star::linguistic2::XDictionary xDictionary );
 
     //-------------------------------------------------------------------------
-    /** This method adds an entry to the list of dictionary-list event
-        listeners.
+    /** adds an entry to the list of dictionary-list event listeners.
 
-        <P>On events each entry in the listener list will be notified.</P>
+        <P>On dictionary-list events each entry in the listener list will
+         be notified via a call to
+         <member scope="com::sun::star::linguistic2">
+         XDictionaryListEventListener::processDictionaryListEvent</member>.</P>
 
         @returns
-        <TRUE/> if the entry was made, <FALSE/> else.
-        If the object disposes it will always fail.
+            <TRUE/> if the entry was made, <FALSE/> else.
+            If the object disposes it will always fail.
 
         @param  xListener
-        the object to be notified of dictionary list events.
+            the object to be notified of dictionary-list events.
+
+        @param  bReceiveVerbose
+            </TRUE> if the listener requires are more detailed event
+            notification as usual.
 
         @see    removeDictionaryListEventListener
-        @see    XDictionaryListEventListener
+        @see    com::sun::star::linguistic2::XDictionaryListEventListener
+        @see    com::sun::star::linguistic2::XDictionaryListEvent
     */
     boolean addDictionaryListEventListener(
         [in] com::sun::star::linguistic2::XDictionaryListEventListener xListener,
         [in] boolean bReceiveVerbose );
 
     //-------------------------------------------------------------------------
-    /** This method removes an entry from the list of dictionary-list
-        event listeners.
+    /** removes an entry from the list of dictionary-list event listeners.
 
         @returns
-        <TRUE/> if the object to be removed was found (and removed),
-        <FALSE/> if the object was not found in the list.
+            <TRUE/> if the object to be removed was found and removed,
+            <FALSE/> otherwise.
 
         @param  xListener
-        the object to be removed from the listener-list.
+            the object to be removed from the listener list.
 
         @see    addDictionaryListEventListener
-        @see    XDictionaryListEventListener
+        @see    com::sun::star::linguistic2::XDictionaryListEventListener
     */
     boolean removeDictionaryListEventListener(
         [in] com::sun::star::linguistic2::XDictionaryListEventListener xListener );
 
     //-------------------------------------------------------------------------
-    /** increase calling level for beginCollectEvents by one.
+    /** increase request level for event buffering by one.
 
-         <P>The calling level for beginCollectEvents is just an integer
-         counter that is initially set to 0.</P>
-
-        <P>As long as the calling level for beginCollectEvents is not 0
-         events will be buffered untill the next call to flushEvents.</P>
+         <P>The request level for event buffering is just an integer
+         counter that is initially set to 0.
+        As long as the request level is not 0 events will be buffered
+         until the next flushing of the buffer.</P>
 
         @returns
-         the current number of calling levels for beginCollectEvents.
+             the current request level for event buffering.
 
-        @see    XDictionaryListEvent
-        @see    XDictionaryListEventListener
+        @see    com::sun::star::linguistic2::XDictionaryListEvent
+        @see    com::sun::star::linguistic2::XDictionaryListEventListener
         @see    flushEvents
     */
     short beginCollectEvents();
 
     //-------------------------------------------------------------------------
-    /** flush the buffered events and decrease calling level for
-         beginCollectEvents by one.
+    /** flushes the event buffer and decreases the request level for
+         event buffering by one.
 
          <P>There should be one matching endCollectEvents call for every
          beginCollectEvents call. Usually you will group these around
@@ -219,10 +232,10 @@ interface XDictionaryList : com::sun::star::uno::XInterface
          event.</P>
 
         @returns
-         the current number of calling levels for beginCollectEvents.
+             the current request level for event buffering.
 
-        @see    XDictionaryListEvent
-        @see    XDictionaryListEventListener
+        @see    com::sun::star::linguistic2::XDictionaryListEvent
+        @see    com::sun::star::linguistic2::XDictionaryListEventListener
         @see    flushEvents
     */
     short endCollectEvents();
@@ -232,39 +245,39 @@ interface XDictionaryList : com::sun::star::uno::XInterface
          that buffer.
 
         @returns
-         the current number of calling levels for beginCollectEvents.
+             the current request level for event buffering.
 
-        @see    XDictionaryListEvent
-        @see    XDictionaryListEventListener
+        @see    com::sun::star::linguistic2::XDictionaryListEvent
+        @see    com::sun::star::linguistic2::XDictionaryListEventListener
     */
     short flushEvents();
 
     //-------------------------------------------------------------------------
-    /** creates a new personal dictionary.
+    /** creates a new dictionary.
 
         @returns
-        an empty dictionary with the given name, language and type.
-         <NULL/> on failure.
+            an empty dictionary with the given name, language and type.
+             <NULL/> on failure.
 
         @param  aName
-        is the name of the dictionary (should be unique).
+            is the name of the dictionary (should be unique).
 
         @param  aLocale
-        defines the language of the dictionary.
-         Use an empty Locale
-        for dictionaries which may contain entries of all languages.
+            defines the language of the dictionary.
+             Use an empty Locale
+            for dictionaries which may contain entries of all languages.
 
         @param  eDicType
-        specifies the type of the dictionary.
+            specifies the type of the dictionary.
 
          @param aURL
-        is the URL of the location where the dictionary is persistent if
-        the XStorable interface is supported.
-        It may be empty which means the dictionary will not be persistent.
+            is the URL of the location where the dictionary is persistent if
+            the XStorable interface is supported.
+            It may be empty which means the dictionary will not be persistent.
 
-        @see    XDictionary
-        @see    Locale
-        @see    DictionaryType
+        @see    com::sun::star::linguistic2::XDictionary
+        @see    com::sun::star::lang::Locale
+        @see    com::sun::star::linguistic2::DictionaryType
     */
     com::sun::star::linguistic2::XDictionary createDictionary(
             [in] string aName,

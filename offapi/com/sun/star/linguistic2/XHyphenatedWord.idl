@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XHyphenatedWord.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:23 $
+ *  last change: $Author: tl $ $Date: 2000-12-04 14:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,12 @@
 module com { module sun { module star { module linguistic2 {
 
 //=============================================================================
-/** Specifies the information obtained by a successful hyphenation attempt.
+/** gives information obtained by a successfull hyphenation attempt.
 
-    @see    XHyphenator
+    <P>This interface is used as a return value for some of the hyphenators
+    functions.</P>
+
+    @see    com::sun::star::linguistic2::XHyphenator
 */
 [ uik(4BD5A957-5D68-11d4-9F090050-04D8BBC5), ident( "XHyphenatedWord", 1.0 ) ]
 interface XHyphenatedWord : com::sun::star::uno::XInterface
@@ -85,54 +88,57 @@ interface XHyphenatedWord : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /**
          @returns
-         the word that was hyphenated.
+             the word that was hyphenated.
      */
     string getWord();
 
     //-------------------------------------------------------------------------
-    /** @returns
-        the language of the hyphenated word.
+    /**
+         @returns
+            the language of the hyphenated word.
 
-        @see    Locale
+        @see    com::sun::star::lang::Locale
     */
     com::sun::star::lang::Locale getLocale();
 
     //-------------------------------------------------------------------------
-    /** @returns
-        the position where hyphenation was applied in the word.
+    /**
+        @returns
+            the position where hyphenation was applied in the word.
 
         <P>The value has to be in the range from 0 (after the first character)
          to n-2 (before the last character) where n is the length of
          the word.</P>
-
-         @see   getWord
-         @see   getHyphenPos
     */
     short getHyphenationPos();
 
     //-------------------------------------------------------------------------
     /**
          @returns
-         the hyphenated word as it should be written (without the hyphen
-         character though).
+             the hyphenated word as it should be written (without the hyphen
+             character though).
      */
     string getHyphenatedWord();
 
     //-------------------------------------------------------------------------
     /**
         @returns
-        the position of the hyphen in the hyphenated word.
+            the position of the hyphen in the hyphenated word.
 
         <P>The value has to be in the range from 0 (after the first character)
          to m-2 (before the last character) where m is the length of
          the hyphenated word.</P>
-
-        @see    getHyphenatedWord
     */
     short getHyphenPos();
 
     //-------------------------------------------------------------------------
-    /**
+    /** is used to query if the hyphenation result is an alternative spelling.
+
+         <p>A hyphenation result is an alternative spelling if the hyphenated
+         word is different from the word that was hyphenated.</p>
+
+         @returns
+             <TRUE/> if it is an alternative spelling, <FALSE/> otherwise.
     */
     boolean isAlternativeSpelling();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LinguServiceEventFlags.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:23 $
+ *  last change: $Author: tl $ $Date: 2000-12-04 14:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,17 +67,27 @@
 module com { module sun { module star { module linguistic2 {
 
 //=============================================================================
-/**
+/** to be used in lingu-service events.
+
+    <P>These values define the flags which may be logically combined
+    to build the event type of a
+    <type scope="com::sun::star::linguistic2">LinguServiceEvent</type></P>
 */
 constants LinguServiceEventFlags
 {
     //-------------------------------------------------------------------------
+    /** The spelling of previously correct words should be checked again.
+    */
     const short SPELL_CORRECT_WORDS_AGAIN = 1;
 
     //-------------------------------------------------------------------------
+    /** The spelling of previously misspelled words should be checked again.
+    */
     const short SPELL_WRONG_WORDS_AGAIN = 2;
 
     //-------------------------------------------------------------------------
+    /** The hyphenation of words may have changed.
+    */
     const short HYPHENATE_AGAIN = 4;
 
 };

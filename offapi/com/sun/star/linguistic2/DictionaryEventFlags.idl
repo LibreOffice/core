@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DictionaryEventFlags.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:23 $
+ *  last change: $Author: tl $ $Date: 2000-12-04 14:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,46 +67,47 @@
 module com { module sun { module star { module linguistic2 {
 
 //=============================================================================
-/** These constants represents the possible dictionary events.
-     Events can be combined with logical or.
+/** flags used for the event type in dictionary events.
 
-    @see    XDictionaryEventListener
-    @see    DictionaryEvent
+    <P>These flags represent the types of event that a dictionary
+    may broadcast.</P>
+
+    @see    com::sun::star::linguistic2::DictionaryEvent
 */
 constants DictionaryEventFlags
 {
     //-------------------------------------------------------------------------
-    /** At least one entry has been added.
+    /** indicates that at least one entry has been added.
     */
     const short ADD_ENTRY       = 1;
 
     //-------------------------------------------------------------------------
-    /** At least one entry has been deleted.
+    /** indicates that at least one entry has been deleted.
     */
     const short DEL_ENTRY       = 2;
 
     //-------------------------------------------------------------------------
-    /** The name has changed.
+    /** the dictionaries name has changed.
     */
     const short CHG_NAME        = 4;
 
     //-------------------------------------------------------------------------
-    /** The language has changed.
+    /** the dictionaries language has changed.
     */
     const short CHG_LANGUAGE    = 8;
 
     //-------------------------------------------------------------------------
-    /** All entries have been removed.
+    /** all entries have been removed.
     */
     const short ENTRIES_CLEARED = 16;
 
     //-------------------------------------------------------------------------
-    /** Dictionary was activated.
+    /** used when the dictionary was activated.
     */
     const short ACTIVATE_DIC    = 32;
 
     //-------------------------------------------------------------------------
-    /** Dictionary was deactivated.
+    /** used when the dictionary was deactivated.
     */
     const short DEACTIVATE_DIC  = 64;
 

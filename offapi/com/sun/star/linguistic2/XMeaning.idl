@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMeaning.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:23 $
+ *  last change: $Author: tl $ $Date: 2000-12-04 14:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,14 @@
 module com { module sun { module star { module linguistic2 {
 
 //=============================================================================
-/**
-    Represents one of the possible meanings that may be returned from a
-     XThesaurus::queryMeanings call and allows for retrieval of its synonyms.
+/** one of the possible meanings for a word.
 
-    @see    XThesaurus
+    <P> Represents one of the possible meanings that may be returned from a
+     <member scope="com::sun::star::linguistic2">XThesaurus::queryMeanings</member>
+    call and allows for retrieval of its synonyms.
+    </P>
+
+    @see    com::sun::star::linguistic2::XThesaurus
  */
 [ uik(4BD5A95C-5D68-11d4-9F090050-04D8BBC5), ident( "XMeaning", 1.0 ) ]
 interface XMeaning : com::sun::star::uno::XInterface
@@ -83,15 +86,15 @@ interface XMeaning : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /**
          @returns
-         the meaning represented by this object.
+             the meaning represented by this object.
      */
     string getMeaning();
 
     //-------------------------------------------------------------------------
     /**
          @returns
-         a sequence of string where each entry is a synonym of the
-         current objects meaning.
+             a sequence of string where each entry is a synonym of the
+             current objects meaning.
      */
     sequence<string> querySynonyms();
 
