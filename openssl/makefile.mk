@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-11 15:24:05 $
+#   last change: $Author: hjs $ $Date: 2001-10-11 16:33:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,9 +78,13 @@ PATCH_FILE_NAME=openssl-0.9.5a.patch
 .IF "$(GUI)"=="UNX"
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=config
-.IF "$(OS)$(CPU)$(COM)"=="SOLARISSC52"
-CONFIGURE_FLAGS=-DPIC -KPIC
-.ENDIF			# "$(OS)$(CPU)$(COM)"=="SOLARISSC52"
+CONFIGURE_FLAGS=-DPIC
+
+.IF "$(COM)"=="GCC"
+CONFIGURE_FLAGS+=-fpic
+.ELSE
+CONFIGURE_FLAGS+=-KPIC
+.ENDIF
 
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=make
