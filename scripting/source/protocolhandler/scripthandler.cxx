@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.cxx,v $
 *
-*  $Revision: 1.14 $
+*  $Revision: 1.15 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-10-29 15:44:29 $
+*  last change: $Author: rt $ $Date: 2004-01-05 14:13:31 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -62,12 +62,17 @@
 #include "scripthandler.hxx"
 
 #include <osl/mutex.hxx>
+
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+
 #include <com/sun/star/document/MacroExecMode.hpp>
+
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+
+#include <drafts/com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/frame.hxx>
@@ -359,39 +364,12 @@ throw ( RuntimeException )
             }
         }
 
-        rtl::OUString documentString = rtl::OUString::createFromAscii( "location=document" );
-        rtl::OUString filesystemString = rtl::OUString::createFromAscii( "location=filesystem" );
-
-        // Detect if workaround is necessary.
-        // Problem, when ScriptProvider is created,
-        // and document contains scripts, storage mangager adds script
-        // storage to security manager ( this results in security dialogs
-        // getting raised. ) This is a problem as ScriptProvider is not
-        // at this time created by the document and dialogs are raised
-        // at unexpected times. This code should be removed when provider
-        // is created by document.
-        // Workaround: If uri of script to be invoked is NOT a document
-        // located script create ScriptProvider with extra paramater
-        // which indicates to storage not to use security
-        //
-        // workaround also applies to scripts located on the filesystem
-        if ( ( url.indexOf( documentString ) == -1 ) && ( url.indexOf( filesystemString ) == -1 ) )
-        {
-            // Not a document or filesystem script - no need to use security
-            OSL_TRACE(" Will create special ScriptProvider eg. one that doesn't user security" );
-            args.realloc( 2 );
-            args[ 1 ] <<= sal_False;
-        }
         args[ 0 ] <<= xModel;
-        Reference< XInterface > xXinterface =
-        m_xFactory->createInstanceWithArguments(
-            ::rtl::OUString::createFromAscii(
-            "drafts.com.sun.star.script.provider.MasterScriptProvider" ),
-            args );
-        validateXRef( xXinterface,
-            "ScriptProtocolHandler::initialize: cannot get instance of MasterScriptProvider" );
-        m_xScriptProvider = Reference< provider::XScriptProvider >( xXinterface,
-            UNO_QUERY_THROW );
+
+        Reference< provider::XScriptProviderSupplier > xSPS =
+            Reference< provider::XScriptProviderSupplier >
+                ( xModel, UNO_QUERY_THROW );
+        m_xScriptProvider = xSPS->getScriptProvider();
     }
     catch ( RuntimeException & e )
     {
