@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 09:46:38 $
+ *  last change: $Author: vg $ $Date: 2003-07-01 14:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     sal_Char     name[PATH_MAX + 1];
     oslPipe  pPipe;
 
-    if (access(PIPEDEFAULTPATH, O_RDWR) == 0)
+    if (access(PIPEDEFAULTPATH, R_OK|W_OK) == 0)
     {
         strncpy(name, PIPEDEFAULTPATH, sizeof(name));
     }
@@ -226,11 +226,11 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
 
         OSL_VERIFY(osl_psz_getUserIdent(Security, Ident, sizeof(Ident)));
 
-        sprintf(&name[strlen(name)], SECPIPENAMEMASK, Ident, pszPipeName);
+        snprintf(&name[strlen(name)], sizeof(name), SECPIPENAMEMASK, Ident, pszPipeName);
     }
     else
     {
-        sprintf(&name[strlen(name)], PIPENAMEMASK, pszPipeName);
+        snprintf(&name[strlen(name)], sizeof(name), PIPENAMEMASK, pszPipeName);
     }
 
 
