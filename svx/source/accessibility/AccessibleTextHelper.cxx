@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-23 17:50:51 $
+ *  last change: $Author: thb $ $Date: 2002-10-02 17:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1326,9 +1326,8 @@ namespace accessibility
             throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleTextHelper_Impl::getAccessibleAt: frontend is no XAccessibleComponent")),
                                         mxFrontEnd );
 
+        // #103862# No longer need to make given position relative
         Point aPoint( _aPoint.X, _aPoint.Y );
-        awt::Point aRefPoint = xFrontEndComponent->getLocationOnScreen();
-        aPoint -= Point( aRefPoint.X, aRefPoint.Y );
 
         // respect EditEngine offset to surrounding shape/cell
         aPoint -= GetOffset();
