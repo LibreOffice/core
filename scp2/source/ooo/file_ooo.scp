@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.8 $
+*  $Revision: 1.9 $
 *
-*  last change: $Author: svesik $ $Date: 2004-04-20 12:21:50 $
+*  last change: $Author: obo $ $Date: 2004-04-29 16:36:42 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1178,6 +1178,13 @@ File gid_File_Oo_Office_Writerweb_Xcs
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/WriterWeb.xcs";
+End
+
+File gid_File_Oo_Office_TypeDetection_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/TypeDetection.xcs";
 End
 
 File gid_File_Oo_Setup_Xcs
