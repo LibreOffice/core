@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleMenuItem.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2003-03-26 12:06:26 $
+ *  last change: $Date: 2003-03-26 12:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,20 +149,16 @@ public class AccessibleMenuItem extends TestCase {
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 //        at.printAccessibleTree(log, xRoot);
 
-        XAccessibleContext Menu = at.getAccessibleObjectForRole(xRoot, AccessibleRole.MENU);
+        XAccessibleContext MenuBar = at.getAccessibleObjectForRole(xRoot, AccessibleRole.MENUBAR);
 
         try {
-            //activate File-Menu
+            //activate Edit-Menu
+            XAccessible Menu = MenuBar.getAccessibleChild(1);
             XAccessibleAction act = (XAccessibleAction) UnoRuntime.queryInterface(XAccessibleAction.class, Menu);
             act.doAccessibleAction(0);
 
-            //activate File-Autopilots submenu
-            act = (XAccessibleAction) UnoRuntime.queryInterface(
-                           XAccessibleAction.class, Menu.getAccessibleChild(0));
-            act.doAccessibleAction(0);
-
-            //get the first child of this submenu
-            oObj = Menu.getAccessibleChild(0).getAccessibleContext().getAccessibleChild(1);
+            //get a menue-item
+            oObj = Menu.getAccessibleContext().getAccessibleChild(6);
 
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
 
