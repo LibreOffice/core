@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2001-09-27 07:39:50 $
+ *  last change: $Author: cd $ $Date: 2001-09-28 13:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,13 +547,13 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
     sal_Bool bInstalled = sal_False;
     switch( eModule )
     {
+
         case SvtModuleOptions::E_SWRITER    :   {
-                                                    // Module writer knows more then one factory!
-                                                    bInstalled = (
-                                                                    ( m_lFactories[SvtModuleOptions::E_WRITER      ].getInstalled() == sal_True ) ||
-                                                                    ( m_lFactories[SvtModuleOptions::E_WRITERWEB   ].getInstalled() == sal_True ) ||
-                                                                    ( m_lFactories[SvtModuleOptions::E_WRITERGLOBAL].getInstalled() == sal_True )
-                                                                 );
+            // Module writer knows more then one factory!
+            if (( m_lFactories[SvtModuleOptions::E_WRITER].getInstalled() == sal_True ) ||
+                ( m_lFactories[SvtModuleOptions::E_WRITERWEB].getInstalled() == sal_True ) ||
+                ( m_lFactories[SvtModuleOptions::E_WRITERGLOBAL].getInstalled() == sal_True ) )
+                bInstalled = sal_True;
                                                 }
                                                 break;
         case SvtModuleOptions::E_SCALC      :   bInstalled = m_lFactories[SvtModuleOptions::E_CALC].getInstalled();
