@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: kr $ $Date: 2001-09-11 15:57:18 $
+#   last change: $Author: vg $ $Date: 2003-05-22 09:33:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -57,31 +57,13 @@
 #   Contributor(s): _______________________________________
 #
 #
-#
 #*************************************************************************
 
-PRJ=..$/..$/..$/..$/..$/..$/..
-
+PRJ := ..$/..$/..$/..$/..$/..$/..
 PRJNAME := ridljar
+TARGET := test_com_sun_star_lib_uno_typedesc
+
 PACKAGE := com$/sun$/star$/lib$/uno$/typedesc
-TARGET  := test_com_sun_star_lib_uno_typedesc
+JAVATESTFILES := TypeDescription_Test.java
 
-
-# --- Settings -----------------------------------------------------
-.INCLUDE : settings.mk
-
-JARFILES = sandbox.jar 
-JAVAFILES		= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
-
-
-# Files --------------------------------------------------------
-
-
-JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/TypeDescription_Test.class
-
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+.INCLUDE: javaunittest.mk
