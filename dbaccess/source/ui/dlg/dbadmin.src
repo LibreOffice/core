@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 14:16:42 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 10:15:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,7 +586,7 @@ TabPage PAGE_GENERAL
     {
         HelpId = HID_DSADMIN_DSTYPE;
         Pos = MAP_APPFONT ( 90, 33 ) ;
-        Size = MAP_APPFONT ( 60, 90 ) ;
+        Size = MAP_APPFONT ( 60, 120 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -702,7 +702,7 @@ TabPage PAGE_GENERAL
     FixedText FT_SPECIAL_MESSAGE
     {
         Pos = MAP_APPFONT ( 6, 125 );
-        Size = MAP_APPFONT ( 248, 20 );
+        Size = MAP_APPFONT ( 248, 24 );
         WordBreak = TRUE;
         HelpId = HID_DSADMIN_SPECIAL_MESSAGE;
     };
@@ -836,6 +836,12 @@ TabPage PAGE_GENERAL
         Text [ arabic ] = "ÊÚÐÑ ÇáÚËæÑ Úáì ãÕÇÏÑ ÈíÇäÇÊ Adabas Úáì äÙÇãß.";
         Text[ finnish ] = "Järjestelmässä ei ole Adabas-tietolähteitä.";
         Text[ catalan ] = "No se han encontrado fuentes de datos Adabas en su sistema.";
+    };
+    String STR_UNSUPPORTED_DATASOURCE_TYPE
+    {
+        Text = "Dieser Datenquellen-Typ wird auf dieser Plattform nicht unterstützt.\nSie können die Einstellungen verändern, werden aber vermutlich keine Verbindung zu der Datenbank herstellen können.";
+        Text [ english ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
+        Text [ english_us ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
     };
 };
 
@@ -2992,6 +2998,9 @@ QueryBox QUERY_NEED_TO_SAVE_FILTER
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.48  2001/05/23 14:16:42  oj
+ *  #87149# new helpids
+ *
  *  Revision 1.47  2001/05/18 05:13:53  kz
  *  Merge SRC632: 18.05.01 - 07:13:45 (NoBranch)
  *
