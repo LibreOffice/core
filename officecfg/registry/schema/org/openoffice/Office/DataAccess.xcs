@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-08-14 15:21:25 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,8 +194,7 @@
 					<desc xml:lang="en-US">Describes an optional help text which can be used by UI components when representing this column.</desc>
 				</info>
 			</prop>
-			<prop oor:name="ControlDefault" oor:type="xs:string">
-				<value xsi:nil="true"/>
+			<prop oor:name="ControlDefault" oor:type="oor:any">
 				<info>
 					<desc xml:lang="en-US">Describes the default value which should be displayed by a control when moving to a new row.</desc>
 				</info>
