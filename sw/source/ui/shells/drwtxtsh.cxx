@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-09-03 14:22:40 $
+ *  last change: $Author: os $ $Date: 2002-09-09 13:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,9 +242,6 @@ void SwDrawTextShell::Init()
         nCtrl &= ~(EE_CNTRL_ONLINESPELLING|EE_CNTRL_NOREDLINES);
 
     pOutliner->SetControlWord(nCtrl);
-    Color aBackground(rSh.GetShapeBackgrd());
-    EditEngine* pEditEng = pOLV->GetEditView().GetEditEngine();
-    pEditEng->SetBackgroundColor(aBackground);
     pOLV->ShowCursor();
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-05-29 09:33:51 $
+ *  last change: $Author: os $ $Date: 2002-09-09 13:17:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,12 @@
 #endif
 #ifndef _SVDPAGE_HXX //autogen
 #include <svx/svdpage.hxx>
+#endif
+#ifndef _MyEDITVIEW_HXX
+#include <svx/editview.hxx>
+#endif
+#ifndef _MyEDITENG_HXX
+#include <svx/editeng.hxx>
 #endif
 #ifndef _OUTLINER_HXX //autogen
 #include <svx/outliner.hxx>
@@ -499,6 +505,10 @@ sal_Bool SwView::BeginTextEdit( SdrObject* pObj, SdrPageView* pPV,
         if( bIsNewObj )
             pOutliner->SetVertical( SID_DRAW_TEXT_VERTICAL == nDrawSfxId ||
                                     SID_DRAW_CAPTION_VERTICAL == nDrawSfxId );
+        Color aBackground(pSh->GetShapeBackgrd());
+//        EditEngine* pEditEng = pSdrView->GetTextEditOutlinerView()->GetEditView().GetEditEngine();
+        pOutliner->SetBackgroundColor(aBackground);
+//        pEditEng->SetBackgroundColor(aBackground);
     }
     sal_Bool bRet = pSdrView->BegTextEdit( pObj, pPV, pWin, TRUE, pOutliner );
 
