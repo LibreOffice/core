@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backbuffer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:08:48 $
+ *  last change: $Author: thb $ $Date: 2004-12-02 12:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@ namespace vclcanvas
 
         VirtualDevice&                  getVirDev();
         const VirtualDevice&            getVirDev() const;
+
+        void setSize( const ::Size& rNewSize );
 
     private:
         ::canvas::vcltools::VCLObject<VirtualDevice>    maVDev;

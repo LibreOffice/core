@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spritecanvas.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:15:27 $
+ *  last change: $Author: thb $ $Date: 2004-12-02 12:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,10 +143,12 @@ namespace
 namespace vclcanvas
 {
     SpriteCanvas::SpriteCanvas( const uno::Reference< uno::XComponentContext >& rxContext ) :
+        maBounds(),
         mxComponentContext( rxContext ),
         mxDevice(),
         mpBackBuffer(),
-        mpRedrawManager()
+        mpRedrawManager(),
+    mbIsVisible( false )
     {
     }
 
@@ -158,10 +160,7 @@ namespace vclcanvas
     {
         tools::LocalGuard aGuard;
 
-        mxComponentContext.clear();
-        mxDevice.reset();
-        mpBackBuffer.reset(),
-        mpRedrawManager.reset();
+    dispose();
 
         // forward to parent
         SpriteCanvas_Base::disposing();
@@ -208,6 +207,11 @@ namespace vclcanvas
 
         if( !mpRedrawManager.get() )
             return sal_False; // disposed
+
+        // hidden windows need not paint anything, thus prevent
+        // screen updates, then
+        if( !mbIsVisible )
+            return sal_False;
 
         // pass background dirty state to redrawmanager
         if( mbSurfaceDirty )
@@ -259,8 +263,7 @@ namespace vclcanvas
 
             // setup back buffer
             mpBackBuffer.reset( new BackBuffer( *pOutputWindow ) );
-            mpBackBuffer->getVirDev().SetOutputSizePixel(
-                pOutputWindow->GetOutputSizePixel() );
+            mpBackBuffer->setSize( pOutputWindow->GetOutputSizePixel() );
 
             // always render into back buffer, don't preserve state
             // (it's our private VDev, after all)
@@ -270,6 +273,134 @@ namespace vclcanvas
             mpRedrawManager.reset( new RedrawManager( *pOutputWindow,
                                                       mpBackBuffer ) );
         }
+    }
+
+    void SAL_CALL SpriteCanvas::dispose(  ) throw (uno::RuntimeException)
+    {
+        tools::LocalGuard aGuard;
+
+        mxComponentContext.clear();
+        mxDevice.reset();
+        mpBackBuffer.reset(),
+        mpRedrawManager.reset();
+    }
+
+    void SAL_CALL SpriteCanvas::addEventListener( const uno::Reference< lang::XEventListener >& xListener ) throw (uno::RuntimeException)
+    {
+        // Ignored
+    }
+
+    void SAL_CALL SpriteCanvas::removeEventListener( const uno::Reference< lang::XEventListener >& aListener ) throw (uno::RuntimeException)
+    {
+        // Ignored
+    }
+
+    void SAL_CALL SpriteCanvas::setPosSize( sal_Int32 nX,
+                                            sal_Int32 nY,
+                                            sal_Int32 nWidth,
+                                            sal_Int32 nHeight,
+                                            sal_Int16 nFlags ) throw (uno::RuntimeException)
+    {
+        tools::LocalGuard aGuard;
+
+    if( maBounds.X != nX ||
+        maBounds.Y != nY ||
+        maBounds.Width != nWidth ||
+        maBounds.Height != nHeight )
+    {
+            maBounds.X = nX;
+        maBounds.Y = nY;
+        maBounds.Width = nWidth;
+        maBounds.Height = nHeight;
+
+        if( mpBackBuffer.get() )
+            mpBackBuffer->setSize( Size( nWidth,
+                         nHeight ) );
+    }
+    }
+
+    awt::Rectangle SAL_CALL SpriteCanvas::getPosSize(  ) throw (uno::RuntimeException)
+    {
+        tools::LocalGuard aGuard;
+
+        return maBounds;
+    }
+
+    void SAL_CALL SpriteCanvas::setVisible( ::sal_Bool bVisible ) throw (uno::RuntimeException)
+    {
+        tools::LocalGuard aGuard;
+
+        mbIsVisible = bVisible;
+    }
+
+    void SAL_CALL SpriteCanvas::setEnable( ::sal_Bool Enable ) throw (uno::RuntimeException)
+    {
+        // Ignored
+    }
+
+    void SAL_CALL SpriteCanvas::setFocus(  ) throw (uno::RuntimeException)
+    {
+        // Ignored
+    }
+
+    void SAL_CALL SpriteCanvas::addWindowListener( const uno::Reference< awt::XWindowListener >& xListener ) throw (uno::RuntimeException)
+    {
+        // Ignored
+    }
+
+    void SAL_CALL SpriteCanvas::removeWindowListener( const uno::Reference< awt::XWindowListener >& xListener ) throw (uno::RuntimeException)
+    {
+        // Ignored
+    }
+
+    void SAL_CALL SpriteCanvas::addFocusListener( const uno::Reference< awt::XFocusListener >& xListener ) throw (uno::RuntimeException)
+    {
+        // Ignored
+    }
+
+    void SAL_CALL SpriteCanvas::removeFocusListener( const uno::Reference< awt::XFocusListener >& xListener ) throw (uno::RuntimeException)
+    {
+        // Ignored
+    }
+
+    void SAL_CALL SpriteCanvas::addKeyListener( const uno::Reference< awt::XKeyListener >& xListener ) throw (uno::RuntimeException)
+    {
+        // Ignored
+    }
+
+    void SAL_CALL SpriteCanvas::removeKeyListener( const uno::Reference< awt::XKeyListener >& xListener ) throw (uno::RuntimeException)
+    {
+        // Ignored
+    }
+
+    void SAL_CALL SpriteCanvas::addMouseListener( const uno::Reference< awt::XMouseListener >& xListener ) throw (uno::RuntimeException)
+    {
+        // Ignored
+    }
+
+    void SAL_CALL SpriteCanvas::removeMouseListener( const uno::Reference< awt::XMouseListener >& xListener ) throw (uno::RuntimeException)
+    {
+        // Ignored
+    }
+
+    void SAL_CALL SpriteCanvas::addMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener ) throw (uno::RuntimeException)
+    {
+        // Ignored
+    }
+
+    void SAL_CALL SpriteCanvas::removeMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener ) throw (uno::RuntimeException)
+    {
+        // Ignored
+    }
+
+    void SAL_CALL SpriteCanvas::addPaintListener( const uno::Reference< awt::XPaintListener >& xListener ) throw (uno::RuntimeException)
+    {
+        // Ignored
+    }
+
+    void SAL_CALL SpriteCanvas::removePaintListener( const uno::Reference< awt::XPaintListener >& xListener ) throw (uno::RuntimeException)
+    {
+        // Ignored
     }
 
     ::rtl::OUString SAL_CALL SpriteCanvas::getImplementationName() throw( uno::RuntimeException )

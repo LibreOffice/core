@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backbuffer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:08:33 $
+ *  last change: $Author: thb $ $Date: 2004-12-02 12:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,4 +95,10 @@ namespace vclcanvas
     {
         return maVDev.get();
     }
+
+    void BackBuffer::setSize( const ::Size& rNewSize )
+    {
+        maVDev->SetOutputSizePixel( rNewSize );
+    }
+
 }

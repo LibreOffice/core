@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spritecanvas.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:15:43 $
+ *  last change: $Author: thb $ $Date: 2004-12-02 12:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #include <com/sun/star/lang/XServiceName.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
+#include <com/sun/star/awt/XWindow.hpp>
+#endif
 #ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XSPRITECANVAS_HPP_
 #include <drafts/com/sun/star/rendering/XSpriteCanvas.hpp>
 #endif
@@ -83,8 +86,8 @@
 #include <drafts/com/sun/star/rendering/XIntegerBitmap.hpp>
 #endif
 
-#ifndef _CPPUHELPER_COMPBASE5_HXX_
-#include <cppuhelper/compbase5.hxx>
+#ifndef _CPPUHELPER_COMPBASE6_HXX_
+#include <cppuhelper/compbase6.hxx>
 #endif
 
 #ifndef _SV_VIRDEV_HXX
@@ -114,8 +117,9 @@ namespace com { namespace sun { namespace star { namespace uno
 
 namespace vclcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper5< ::drafts::com::sun::star::rendering::XSpriteCanvas,
+    typedef ::cppu::WeakComponentImplHelper6< ::drafts::com::sun::star::rendering::XSpriteCanvas,
                                                ::drafts::com::sun::star::rendering::XIntegerBitmap,
+                                              ::com::sun::star::awt::XWindow,
                                                ::com::sun::star::lang::XInitialization,
                                                ::com::sun::star::lang::XServiceInfo,
                                                ::com::sun::star::lang::XServiceName >                   CanvasBase_Base;
@@ -139,6 +143,30 @@ namespace vclcanvas
         virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCustomSprite > SAL_CALL createCustomSprite( const ::drafts::com::sun::star::geometry::RealSize2D& spriteSize ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XSprite > SAL_CALL createClonedSprite( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XSprite >& original ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XComponent (comes implicitely with XWindow)
+        virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XWindow
+        virtual void SAL_CALL setPosSize( ::sal_Int32 X, ::sal_Int32 Y, ::sal_Int32 Width, ::sal_Int32 Height, ::sal_Int16 Flags ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::awt::Rectangle SAL_CALL getPosSize(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setVisible( ::sal_Bool Visible ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setEnable( ::sal_Bool Enable ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setFocus(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addPaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removePaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
         // XInitialization
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw( ::com::sun::star::uno::Exception,
@@ -173,10 +201,16 @@ namespace vclcanvas
         SpriteCanvas(const SpriteCanvas&);
         SpriteCanvas& operator=( const SpriteCanvas& );
 
+        /// Current bounds of the owning Window
+        ::com::sun::star::awt::Rectangle                                                maBounds;
+
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    mxComponentContext;
         WindowGraphicDevice::ImplRef                                                    mxDevice;
         BackBufferSharedPtr                                                             mpBackBuffer;
         ::std::auto_ptr< RedrawManager >                                                mpRedrawManager;    // handles smooth screen updates for us
+
+        /// True, if the window this canvas is contained in, is visible
+        bool                                                                            mbIsVisible;
     };
 }
 
