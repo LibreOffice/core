@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: as $ $Date: 2002-09-05 12:13:03 $
+ *  last change: $Author: mba $ $Date: 2002-10-24 12:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,30 +611,37 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         (sTargetFrameName.getLength()<1      )
        )
     {
-        // Ask our controller for his agreement for these dispatched URL ...
-        // because some URLs are internal and can be handled faster by SFX - which most is the current controller!
-        // But in case of e.g. the bibliography not all queries will be handled successfully here.
-        css::uno::Reference< css::frame::XDispatchProvider > xController( xFrame->getController(), css::uno::UNO_QUERY );
-        if (xController.is())
-            xDispatcher = xController->queryDispatch(aURL, SPECIALTARGET_SELF, 0);
-
-        // If controller has no fun to dispatch these URL - we must search another right dispatcher.
-        // Search for any registered protocol handler first.
-        if (!xDispatcher.is())
-            xDispatcher = implts_searchProtocolHandler(aURL);
-
-        // Not for controller - not for protocol handler
-        // It should be a loadable content - may be a file. Check it ...
-        // This check is neccessary to found out, that
-        // support for some protocols isn't installed by user. May be
-        // "ftp" isn't available. So we suppress creation of our self dispatcher.
-        // The result will be clear. He can't handle it - but he would try it.
-        if (
-            ( ! xDispatcher.is()             )  &&
-            ( implts_isLoadableContent(aURL) )
-           )
+        if ( aURL.Complete.equalsAscii(".uno:CloseDoc") || aURL.Complete.equalsAscii(".uno:CloseWin") )
         {
             xDispatcher = implts_getOrCreateDispatchHelper( E_SELFDISPATCHER, xFrame );
+        }
+        else
+        {
+            // Ask our controller for his agreement for these dispatched URL ...
+            // because some URLs are internal and can be handled faster by SFX - which most is the current controller!
+            // But in case of e.g. the bibliography not all queries will be handled successfully here.
+            css::uno::Reference< css::frame::XDispatchProvider > xController( xFrame->getController(), css::uno::UNO_QUERY );
+            if (xController.is())
+                xDispatcher = xController->queryDispatch(aURL, SPECIALTARGET_SELF, 0);
+
+            // If controller has no fun to dispatch these URL - we must search another right dispatcher.
+            // Search for any registered protocol handler first.
+            if (!xDispatcher.is())
+                xDispatcher = implts_searchProtocolHandler(aURL);
+
+            // Not for controller - not for protocol handler
+            // It should be a loadable content - may be a file. Check it ...
+            // This check is neccessary to found out, that
+            // support for some protocols isn't installed by user. May be
+            // "ftp" isn't available. So we suppress creation of our self dispatcher.
+            // The result will be clear. He can't handle it - but he would try it.
+            if (
+                ( ! xDispatcher.is()             )  &&
+                ( implts_isLoadableContent(aURL) )
+               )
+            {
+                xDispatcher = implts_getOrCreateDispatchHelper( E_SELFDISPATCHER, xFrame );
+            }
         }
     }
 

@@ -1,10 +1,10 @@
-/*************************************************************************
+C/*************************************************************************
  *
  *  $RCSfile: menudispatcher.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-10 08:24:16 $
+ *  last change: $Author: mba $ $Date: 2002-10-24 12:24:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,35 +590,18 @@ IMPL_LINK( MenuDispatcher, Close_Impl, void*, pVoid )
     if ( !xFrame.is() )
         return 0;
 
-    if ( xFrame->getController().is() && !xFrame->getController()->suspend( TRUE ) )
-    {
-        xFrame->getController()->suspend( FALSE );
-        return 0;
-    }
-
-    Window* pContainer = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
-    Window* pWindow = new Window( pContainer, WB_BORDER );
-    pWindow->Show();
-    pWindow->SetBackground( Wallpaper( pWindow->GetSettings().GetStyleSettings().GetFaceColor() ) );
-    xFrame->setComponent(  VCLUnoHelper::GetInterface( pWindow ), css::uno::Reference < css::frame::XController >() );
-    pContainer->SetText( Application::GetDisplayName() );
-
-    String aMenuRes( RTL_CONSTASCII_USTRINGPARAM( "private:resource/" ));
-    aMenuRes += String::CreateFromInt32(261);
-
     css::util::URL aURL;
-    aURL.Complete = aMenuRes;
-
+    aURL.Complete = ::rtl::OUString::createFromAscii(".uno:CloseWin");
     css::uno::Reference< css::util::XURLTransformer >  xTrans ( m_xFactory->createInstance(
                         ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer") ), css::uno::UNO_QUERY );
     if( xTrans.is() )
     {
         // Datei laden
         xTrans->parseStrict( aURL );
-        Reference< XDispatchProvider >  xProv( xFrame, UNO_QUERY );
+        Reference< XDispatchProvider > xProv( xFrame, UNO_QUERY );
         if ( xProv.is() )
         {
-            css::uno::Reference < css::frame::XDispatch >  aDisp = xProv->queryDispatch( aURL,  ::rtl::OUString::createFromAscii("_menubar"), 12 );
+            css::uno::Reference < css::frame::XDispatch > aDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
             if ( aDisp.is() )
                 aDisp->dispatch( aURL, css::uno::Sequence < css::beans::PropertyValue>() );
         }

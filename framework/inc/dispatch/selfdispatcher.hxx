@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selfdispatcher.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2002-05-24 11:32:35 $
+ *  last change: $Author: mba $ $Date: 2002-10-24 12:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ class SelfDispatcher   :   // -interfaces  ... are supported by our BaseDispatch
                            // -baseclasses ... order is neccessary for right initialization!
                            public BaseDispatcher
 {
+    void Close_Impl();
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
