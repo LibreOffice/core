@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:59:38 $
+ *  last change: $Author: hr $ $Date: 2004-12-10 17:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,13 +141,6 @@ String STR_GRAPHIC_TEXT_TOOLBOX
 String RID_APPTITLE
 {
     Text = "StarImpress 4.0" ;
-};
-String RID_BUILDVERSION
-{
-    Text [ de ] = UPDVER ;
-    Text [ en-US ] = UPDVER ;
-     // Text = "CeBIT'95";
-     //     Text ="CeBIT'95";
 };
 String STR_DEFAULTVIEW
 {
