@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-01-26 03:41:26 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-27 04:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,10 +186,28 @@ static inline short GetNewPixMapMinCTabCount( const short           nPixMapColor
 
 // ------------------------------------------------------------------
 
-static short GetCTableSize( )
+static inline short GetNewPixMapCmpSize( const long nPixMapBitDepth )
 {
-    GDPtr  pGDevice  = NULL;
-    short  nCTabSize = 0;
+    short nPixMapCmpSize = 0;
+
+    if( nPixMapBitDepth == kThousandsColor )
+    {
+        nPixMapCmpSize = 5;
+    } // if
+    else
+    {
+        nPixMapCmpSize = 8;
+    } // else
+
+    return nPixMapCmpSize;
+} // GetNewPixMapCmpSize
+
+// ------------------------------------------------------------------
+
+static CTabHandle CopyGDeviceCTab( )
+{
+    GDPtr       pGDevice = NULL;
+    CTabHandle  hCTable  = NULL;
 
     pGDevice = *GetGDevice ( );
 
@@ -207,35 +225,60 @@ static short GetCTableSize( )
 
             if ( pCTable != NULL )
             {
-                nCTabSize = pCTable->ctSize;
+                const short  nCTableSize       = pCTable->ctSize + 1;
+                long         nCTableHandleSize = 0;
+
+                nCTableHandleSize =   ( nCTableSize * sizeof( ColorSpec ) )
+                                    + ( sizeof( ColorTable ) - sizeof( CSpecArray ) );
+
+                hCTable = (CTabHandle) NewHandleClear( nCTableHandleSize );
+
+                if ( ( hCTable != NULL ) && ( *hCTable != NULL ) )
+                {
+                    SInt8  nFlags = noErr;
+
+                    nFlags = HGetState( (Handle)hCTable );
+
+                    if ( nFlags == noErr )
+                    {
+                        HLock( (Handle)hCTable );
+
+                        if ( nCTableSize > 0 )
+                        {
+                            unsigned long  nCTableIndex;
+
+                            (**hCTable).ctSize  = nCTableSize;
+                            (**hCTable).ctFlags = pCTable->ctFlags;
+                            (**hCTable).ctSeed  = GetCTSeed();
+
+                            for ( nCTableIndex = 0;
+                                  nCTableIndex < nCTableSize;
+                                  nCTableIndex++
+                                )
+                            {
+                                (**hCTable).ctTable[nCTableIndex]
+                                    = pCTable->ctTable[nCTableIndex];
+                            } // for
+                          } // if
+                          else
+                          {
+                              DisposeHandle( (Handle)hCTable );
+
+                              hCTable = NULL;
+                          } // else
+
+                          if ( hCTable != NULL )
+                          {
+                              HSetState( (Handle)hCTable, nFlags );
+                          } // if
+                      } // if
+                  } // if
             } // if
         } // if
     } // if
 
-    return nCTabSize;
-} // GetCTableSize
-
-// ------------------------------------------------------------------
-
-static CTabHandle NewCTableHandleClear( )
-{
-    const short  nCTableSize = GetCTableSize( );
-
-    CTabHandle   hCTable           = 0;
-    long         nCTableHandleSize = 0;
-
-    nCTableHandleSize =   (  ( nCTableSize + 1 ) * sizeof( ColorSpec  ) )
-                        + ( sizeof( ColorTable ) - sizeof( CSpecArray ) );
-
-    hCTable = (CTabHandle) NewHandleClear( nCTableHandleSize );
-
-    if ( ( hCTable != NULL ) && ( *hCTable != NULL ) )
-    {
-          (**hCTable).ctSeed = GetCTSeed ( );
-      } // if
-
     return hCTable;
-} // NewCTableHandleClear
+} // CopyGDeviceCTab
 
 // ------------------------------------------------------------------
 
@@ -245,7 +288,7 @@ PixMapHandle GetNewPixMap ( const Size&           rSize,
                             const SalGraphics    *rSalGraphics
                           )
 {
-    // Handles only 16 and 32 bit color depth
+    // Handles only 16 and 32 bit color depths
 
     PixMapHandle  hPixMap = NULL;
     short         nWidth  = rSize.Width();
@@ -262,6 +305,7 @@ PixMapHandle GetNewPixMap ( const Size&           rSize,
             const long   nPixMapImageSize  = GetNewPixMapImageSize( nHeight, nPixMapRowOffset );
             const short  nPixMapRowBytes   = GetNewPixMapRowBytes( nPixMapRowOffset );
             const short  nPixMapColorDepth = GetNewPixMapColorDepth( nBits );
+            const short  nPixMapCmpSize    = GetNewPixMapCmpSize( nPixMapBitDepth );
             Rect         aPixMapBoundsRect;
 
             GetNewPixMapBoudsRect( nWidth, nHeight, &aPixMapBoundsRect );
@@ -270,34 +314,39 @@ PixMapHandle GetNewPixMap ( const Size&           rSize,
 
             if ( pPixMapData != NULL )
             {
-                (**hPixMap).baseAddr    = pPixMapData;
-                (**hPixMap).rowBytes    = nPixMapRowBytes;
-                (**hPixMap).bounds      = aPixMapBoundsRect;
-                (**hPixMap).pmVersion   = 0;
-                (**hPixMap).packType    = 0;
-                (**hPixMap).packSize    = 0;
-                (**hPixMap).hRes        = 0x00640000;
-                (**hPixMap).vRes        = 0x00480000;
-                (**hPixMap).pixelSize   = nPixMapBitDepth;
-                (**hPixMap).pixelFormat = 0;
-                (**hPixMap).pmExt       = NULL;
-                (**hPixMap).pixelType   = RGBDirect;
-                (**hPixMap).cmpCount    = 3;
+                GWorldFlags  nPixMapFlags = noErr;
 
-                if( nPixMapBitDepth == kThousandsColor)
+                nPixMapFlags = GetPixelsState( hPixMap );
+
+                if ( nPixMapFlags == noErr )
                 {
-                    (**hPixMap).cmpSize = 5;
+                    if ( LockPixels( hPixMap ) )
+                    {
+                        (**hPixMap).baseAddr    = pPixMapData;
+                        (**hPixMap).rowBytes    = nPixMapRowBytes;
+                        (**hPixMap).bounds      = aPixMapBoundsRect;
+                        (**hPixMap).pmVersion   = 0;
+                        (**hPixMap).packType    = 0;
+                        (**hPixMap).packSize    = 0;
+                        (**hPixMap).hRes        = 0x00480000;
+                        (**hPixMap).vRes        = 0x00480000;
+                        (**hPixMap).pixelSize   = nPixMapBitDepth;
+                        (**hPixMap).pixelFormat = 0;
+                        (**hPixMap).pmExt       = NULL;
+                        (**hPixMap).pixelType   = RGBDirect;
+                        (**hPixMap).cmpCount    = 3;
+                        (**hPixMap).cmpSize     = nPixMapCmpSize;
+                        (**hPixMap).pmTable     = CopyGDeviceCTab( );
+
+                        SetPixelsState( hPixMap, nPixMapFlags );
+                    } // if
                 } // if
-                else
-                {
-                    (**hPixMap).cmpSize = 8;
-                } // else
-
-                (**hPixMap).pmTable = NewCTableHandleClear( );
-            }
+            } // if
             else
             {
                 DisposePixMap( hPixMap );
+
+                hPixMap = NULL;
             } // else
         } // if
     } // if
@@ -576,9 +625,9 @@ BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
 
                                         if ( nCTabFlags == noErr )
                                         {
-                                            USHORT          nCTabCount  = 0;
-                                            USHORT          nCTTabIndex = 0;
-                                            BitmapPalette  &rPal        = pBuffer->maPalette;
+                                            USHORT          nCTabCount = 0;
+                                            USHORT          nCTabIndex = 0;
+                                            BitmapPalette  &rPal       = pBuffer->maPalette;
 
                                             HLock( (Handle)hCTab );
 
@@ -589,17 +638,17 @@ BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
 
                                             rPal.SetEntryCount( nCTabCount );
 
-                                            for ( nCTTabIndex = 0;
-                                                  nCTTabIndex < nCTabCount;
-                                                  nCTTabIndex++
+                                            for ( nCTabIndex = 0;
+                                                  nCTabIndex < nCTabCount;
+                                                  nCTabIndex++
                                                 )
                                             {
-                                                BitmapColor &rCol     = rPal[nCTTabIndex];
-                                                ColorSpec    aColSpec = (**hCTab).ctTable[nCTTabIndex];
+                                                BitmapColor &rBitmapColor = rPal[nCTabIndex];
+                                                ColorSpec    aColorSpec   = (**hCTab).ctTable[nCTabIndex];
 
-                                                rCol.SetRed   ( (BYTE)( aColSpec.rgb.red   >> 8 ) );
-                                                rCol.SetGreen ( (BYTE)( aColSpec.rgb.green >> 8 ) );
-                                                rCol.SetBlue  ( (BYTE)( aColSpec.rgb.blue  >> 8 ) );
+                                                rBitmapColor.SetRed   ( (BYTE)( aColorSpec.rgb.red   >> 8 ) );
+                                                rBitmapColor.SetGreen ( (BYTE)( aColorSpec.rgb.green >> 8 ) );
+                                                rBitmapColor.SetBlue  ( (BYTE)( aColorSpec.rgb.blue  >> 8 ) );
                                             } // for
 
                                             HSetState( (Handle)hCTab, nCTabFlags );
