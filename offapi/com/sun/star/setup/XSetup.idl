@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSetup.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: ok $ $Date: 2001-05-08 11:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,11 @@ interface XSetup: com::sun::star::uno::XInterface
     ModuleInfo              getRootModule               ( [in] VersionIdentifier aVerIdentifier );
 
     // DocMerge: empty anyway
+    void                    setHiddenModule             ( [in] VersionIdentifier aVerIdentifier,
+                                                          [in] string strModuleID,
+                                                          [in] boolean bHidden );
+
+    // DocMerge: empty anyway
     string                  getProductname              ( [in] VersionIdentifier aVerIdentifier );
 
     // DocMerge: empty anyway
@@ -117,6 +122,10 @@ interface XSetup: com::sun::star::uno::XInterface
     // DocMerge: empty anyway
     UpdateType              isUpdateAvailable           ( [in] VersionIdentifier aVerIdentifier,
                                                           [out] VersionIdentifier aNewVerIdentifier );
+
+    // DocMerge: empty anyway
+    boolean                 isModuleAvailable           ( [in] VersionIdentifier aVerIdentifier,
+                                                          [in] string strModuleID );
 
     // DocMerge: empty anyway
     sequence < any >        getActionListForInstall     ( [in] VersionIdentifier aVerIdentifier,
