@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocument.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:07:53 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:55:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,15 @@ service OfficeDocument
         </p>
     */
     [property, optional] boolean ApplyFormDesignMode;
+
+    //-------------------------------------------------------------------------
+    /** contains a unique id for the document
+
+        <p>Once calculated, the id must not change until the document has been
+        closed. Upon closing it will not be made persistent. Thus, the document
+        may get a different id every time it gets loaded.</p>
+    */
+    [property, optional, readonly] string RuntimeUID;
 };
 
 //=============================================================================
