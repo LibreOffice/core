@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:08:59 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,166 +69,46 @@ ModalDialog DLG_BIB_BASE
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 349 , 121 ) ;
     Moveable = TRUE ;
-    Text = "Bereiche bearbeiten" ;
-    Text [ ENGLISH ] = "Edit groups" ;
-    Text [ dutch ] = "Categorieën bewerken" ;
-    Text [ english_us ] = "Edit Categories" ;
-    Text [ italian ] = "Modifica categorie" ;
-    Text [ spanish ] = "Editar categorías" ;
-    Text [ french ] = "Édition des catégories" ;
-    Text [ swedish ] = "Redigera områden" ;
-    Text [ danish ] = "Rediger kategorier" ;
-    Text [ portuguese ] = "Editar categorias" ;
-    Text [ portuguese_brazilian ] = "Editar Categorias" ;
+    Text [ de ]= "Bereiche bearbeiten" ;
+    Text [ en-US ] = "Edit Categories" ;
     PushButton PB_NEW
     {
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 293 , 66 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Neu" ;
-        Text [ ENGLISH ] = "~New" ;
-        Text [ norwegian ] = "~New" ;
-        Text [ italian ] = "~Nuovo" ;
-        Text [ portuguese_brazilian ] = "~Novo" ;
-        Text [ portuguese ] = "~Novo" ;
-        Text [ finnish ] = "~Uusi" ;
-        Text [ danish ] = "~Ny(t)" ;
-        Text [ french ] = "~Nouvelle" ;
-        Text [ swedish ] = "~Nytt" ;
-        Text [ dutch ] = "~Nieuw" ;
-        Text [ spanish ] = "~Nuevo" ;
-        Text [ english_us ] = "~New" ;
+        Text [ de ] = "~Neu" ;
+        Text [ en-US ] = "~New" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "æ–°å»º(~N)";
-        Text[ russian ] = "Ñîçäàòü";
-        Text[ polish ] = "~Nowy";
-        Text[ japanese ] = "æ–°è¦ä½œæˆ(~N)";
-        Text[ chinese_traditional ] = "é–‹å•Ÿæ–°æª”(~N)";
-        Text[ arabic ] = "ÌÏíÏ";
-        Text[ greek ] = "Äçìéïõñãßá";
-        Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)";
-        Text[ turkish ] = "~Yeni";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nou";
-        Text[ thai ] = "à¹ƒ~à¸«à¸¡à¹ˆ";
-        Text[ czech ] = "NovÃ½";
-        Text[ hebrew ] = "â€®×—×“×©â€¬";
-        Text[ hindi ] = "~à¤¨à¤¯à¤¾";
-        Text[ slovak ] = "~NovÃ½";
-        Text[ hungarian ] = "Ãš~j";
-        Text[ slovenian ] = "~Nov";
+        Text [ x-comment ] = " ";
     };
     PushButton PB_DELETE
     {
         Pos = MAP_APPFONT ( 293 , 83 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-        Text = "~Löschen" ;
-        Text [ ENGLISH ] = "~Delete" ;
-        Text [ norwegian ] = "~Slett" ;
-        Text [ italian ] = "~Elimina" ;
-        Text [ portuguese_brazilian ] = "~Excluir" ;
-        Text [ portuguese ] = "E~liminar" ;
-        Text [ finnish ] = "~Poista" ;
-        Text [ danish ] = "~Slet" ;
-        Text [ french ] = "Supprimer" ;
-        Text [ swedish ] = "~Radera" ;
-        Text [ dutch ] = "~Wissen" ;
-        Text [ spanish ] = "~Borrar" ;
-        Text [ english_us ] = "~Delete" ;
+        Text [ de ] = "~Löschen" ;
+        Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
         Disable = TRUE ;
-        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
-        Text[ russian ] = "Óäàëèòü";
-        Text[ polish ] = "~Usuñ";
-        Text[ japanese ] = "å‰Šé™¤(~D)";
-        Text[ chinese_traditional ] = "åˆªé™¤(~D)";
-        Text[ arabic ] = "ÍĞİ";
-        Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "ì‚­ì œ(~D)";
-        Text[ turkish ] = "~Sil";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Suprimeix";
-        Text[ thai ] = "~à¸¥à¸š";
-        Text[ czech ] = "Smazat";
-        Text[ hebrew ] = "â€®××—×™×§×”â€¬";
-        Text[ hindi ] = "~à¤®à¤¿à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "Z~mazaÅ¥";
-        Text[ hungarian ] = "~TÃ¶rlÃ©s";
-        Text[ slovenian ] = "~IzbriÅ¡i";
+        Text [ x-comment ] = " ";
     };
     PushButton PB_RENAME
     {
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 293 , 100 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Umbenennen" ;
-        Text [ ENGLISH ] = "Ren~ame" ;
-        Text [ dutch ] = "~Naam wijzigen" ;
-        Text [ english_us ] = "~Rename" ;
-        Text [ italian ] = "~Rinomina" ;
-        Text [ spanish ] = "~Cambiar nombre" ;
-        Text [ french ] = "~Renommer" ;
-        Text [ swedish ] = "~Byt namn" ;
-        Text [ danish ] = "~Omdøb" ;
-        Text [ portuguese ] = "~Mudar nome" ;
+        Text [ de ] = "~Umbenennen" ;
+        Text [ en-US ] = "~Rename" ;
         TabStop = TRUE ;
-        Text[ portuguese_brazilian ] = "~Renomear";
-        Text[ chinese_simplified ] = "é‡å‘½å(~R)";
-        Text[ russian ] = "Ïåğåèìåíîâàòü";
-        Text[ polish ] = "~Zmieñ nazwê";
-        Text[ japanese ] = "åå‰ã®å¤‰æ›´(~R)";
-        Text[ chinese_traditional ] = "é‡æ–°å‘½å(~R)";
-        Text[ arabic ] = "ÅÚÇÏÉ ÇáÊÓãíÉ";
-        Text[ greek ] = "Ìåôïíïìáóßá";
-        Text[ korean ] = "ì´ë¦„ ë°”ê¾¸ê¸°(~R)";
-        Text[ turkish ] = "~Yeniden adlandır";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Reanomena";
-        Text[ finnish ] = "~Nimeä uudelleen";
-        Text[ thai ] = "à¹€~à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸Šà¸·à¹ˆà¸­";
-        Text[ czech ] = "PÅ™ejmenovat";
-        Text[ hebrew ] = "~Umbenennen";
-        Text[ hindi ] = "~à¤ªà¥à¤¨à¤ƒ à¤¨à¤¾à¤® à¤¦à¥‹";
-        Text[ slovak ] = "P~remenovaÅ¥";
-        Text[ hungarian ] = "Ãt~nevezÃ©s";
-        Text[ slovenian ] = "P~reimenuj";
+        Text [ x-comment ] = " ";
     };
     FixedText FT_BIB
     {
         Pos = MAP_APPFONT ( 12 , 3 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text = "Bereichstitel" ;
-        Text [ ENGLISH ] = "Group" ;
-        Text [ norwegian ] = "Gruppe" ;
-        Text [ italian ] = "Sezione" ;
-        Text [ portuguese_brazilian ] = "Categoria" ;
-        Text [ portuguese ] = "Categoria" ;
-        Text [ finnish ] = "Luokka" ;
-        Text [ danish ] = "Kategori" ;
-        Text [ french ] = "Catégorie" ;
-        Text [ swedish ] = "Område" ;
-        Text [ dutch ] = "Bereik" ;
-        Text [ spanish ] = "Categoría" ;
-        Text [ english_us ] = "Category" ;
-        Text[ chinese_simplified ] = "åˆ†ç±»æ ‡é¢˜";
-        Text[ russian ] = "Êàòåãîğèÿ";
-        Text[ polish ] = "Kategoria";
-        Text[ japanese ] = "ã‚°ãƒ«ãƒ¼ãƒ—å";
-        Text[ chinese_traditional ] = "åˆ†é¡æ¨™é¡Œ";
-        Text[ arabic ] = "İÆÉ";
-        Text[ greek ] = "Ôßôëïò êáôçãïñßáò";
-        Text[ korean ] = "ì˜ì—­ ì œëª©";
-        Text[ turkish ] = "Kategori";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Area";
-        Text[ thai ] = "à¸›à¸£à¸°à¹€à¸ à¸—";
-        Text[ czech ] = "Kategorie";
-        Text[ hebrew ] = "Bereichstitel";
-        Text[ hindi ] = "à¤µà¤°à¥à¤—";
-        Text[ slovak ] = "KategÃ³rie";
-        Text[ hungarian ] = "KategÃ³ria";
-        Text[ slovenian ] = "Kategorija";
+        Text [ de ] = "Bereichstitel" ;
+        Text [ en-US ] = "Category" ;
+        Text [ x-comment ] = " ";
     };
     OKButton BT_OK
     {
@@ -261,35 +141,8 @@ ModalDialog DLG_BIB_BASE
     {
         Pos = MAP_APPFONT ( 174 , 3 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text = "Pfad" ;
-        Text [ ENGLISH ] = "Path" ;
-        Text[ english_us ] = "Path";
-        Text[ portuguese ] = "Atalho";
-        Text[ russian ] = "Ïóòü";
-        Text[ greek ] = "ÄéáäñïìŞ";
-        Text[ dutch ] = "Pad";
-        Text[ french ] = "Chemin";
-        Text[ spanish ] = "Ruta";
-        Text[ finnish ] = "Polku";
-        Text[ italian ] = "Percoso";
-        Text[ danish ] = "Sti";
-        Text[ swedish ] = "Sökväg";
-        Text[ polish ] = "Œcie¿ka";
-        Text[ portuguese_brazilian ] = "Caminho";
-        Text[ japanese ] = "ãƒ‘ã‚¹";
-        Text[ korean ] = "ê²½ë¡œ";
-        Text[ chinese_simplified ] = "è·¯å¾„";
-        Text[ chinese_traditional ] = "è·¯å¾‘";
-        Text[ turkish ] = "Yol";
-        Text[ arabic ] = "ÇáãÓÇÑ";
-        Text[ catalan ] = "Camí";
-        Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸—à¸²à¸‡";
-        Text[ czech ] = "Cesta";
-        Text[ hebrew ] = "Pfad";
-        Text[ hindi ] = "à¤®à¤¾à¤°à¥à¤—";
-        Text[ slovak ] = "Cesta";
-        Text[ hungarian ] = "Ãštvonal";
-        Text[ slovenian ] = "Pot";
+        Text [ de ] = "Pfad" ;
+        Text [ en-US ] = "Path";
     };
     ListBox LB_PATH
     {
@@ -304,35 +157,8 @@ ModalDialog DLG_BIB_BASE
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text = "Auswahlliste" ;
-        Text [ ENGLISH ] = "Group" ;
-        Text[ english_us ] = "Selection list";
-        Text[ portuguese ] = "Lista de selecção";
-        Text[ russian ] = "Ñïèñîê âûáîğà";
-        Text[ greek ] = "Ëßóôá åğéëïãŞò";
-        Text[ dutch ] = "Keuzelijst";
-        Text[ french ] = "Liste de sélection";
-        Text[ spanish ] = "Lista de selección";
-        Text[ finnish ] = "Valintaluettelo";
-        Text[ italian ] = "Lista di scelta";
-        Text[ danish ] = "Udvalgsliste";
-        Text[ swedish ] = "Urvalslista";
-        Text[ polish ] = "Lista wyboru";
-        Text[ portuguese_brazilian ] = "Lista de seleção";
-        Text[ japanese ] = "é¸æŠãƒªã‚¹ãƒˆ";
-        Text[ korean ] = "ê·¸ë£¹";
-        Text[ chinese_simplified ] = "é€‰æ‹©åˆ—å•";
-        Text[ chinese_traditional ] = "é¸æ“‡æ¸…å–®";
-        Text[ turkish ] = "Seçim listesi";
-        Text[ arabic ] = "Group";
-        Text[ catalan ] = "Grup";
-        Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¸£à¸²à¸¢à¸à¸²à¸£";
-        Text[ czech ] = "Seznam pro vÃ½bÄ›r";
-        Text[ hebrew ] = "Auswahlliste";
-        Text[ hindi ] = "à¤šà¥à¤¨à¤¾à¤µ à¤¸à¥‚à¤šà¥€";
-        Text[ slovak ] = "Zoznam pre vÃ½ber";
-        Text[ hungarian ] = "LÃ©tezÅ‘ kategÃ³riÃ¡k";
-        Text[ slovenian ] = "Izbirni seznam";
+        Text [ de ] = "Auswahlliste" ;
+        Text [ en-US ] = "Selection list";
     };
     Control TLB_GROUPS
     {
@@ -353,40 +179,13 @@ ModalDialog DLG_BIB_BASE
 #endif
         Sort = TRUE ;
     };*/
-    Text[ chinese_simplified ] = "ç¼–è¾‘åˆ†ç±»";
-    Text[ russian ] = "Ïğàâêà êàòåãîğèé";
-    Text[ polish ] = "Edytuj kategorie";
-    Text[ japanese ] = "ã‚°ãƒ«ãƒ¼ãƒ—ã®ç·¨é›†";
-    Text[ chinese_traditional ] = "ç·¨è¼¯åˆ†é¡";
-    Text[ arabic ] = "ÊÍÑíÑ ÇáİÆÇÊ";
-    Text[ greek ] = "Åğåîåñãáóßá êáôçãïñéşí";
-    Text[ korean ] = "ë²”ì£¼ í¸ì§‘";
-    Text[ turkish ] = "Kategorileri düzenle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Edita les categories";
-    Text[ finnish ] = "Muokkaa luokkia";
-    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸›à¸£à¸°à¹€à¸ à¸—";
-    Text[ czech ] = "Upravit kategorie";
-    Text[ hebrew ] = "Bereiche bearbeiten";
-    Text[ hindi ] = "à¤µà¤°à¥à¤—à¥‹à¤‚ à¤•à¤¾ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
-    Text[ slovak ] = "UpraviÅ¥ kategÃ³rie";
-    Text[ hungarian ] = "KategÃ³riÃ¡k szerkesztÃ©se";
-    Text[ slovenian ] = "Uredi kategorije";
+    Text [ x-comment ] = " ";
 };
 /*
 String STR_GLOSSARY_BIB_DLG
 {
-    Text = "Bereiche bearbeiten" ;
-    Text [ ENGLISH ] = "Edit groups" ;
-    Text [ dutch ] = "Bereiken bewerken" ;
-    Text [ english_us ] = "Edit Categories" ;
-    Text [ italian ] = "Modifica aree" ;
-    Text [ spanish ] = "Editar secciones" ;
-    Text [ french ] = "Modifier sections" ;
-    Text [ swedish ] = "Redigera områden" ;
-    Text [ danish ] = "Rediger område" ;
-    Text [ portuguese ] = "Editar secções" ;
-    Text [ portuguese_brazilian ] = "Bereiche bearbeiten" ;
+    Text [ de ]= "Bereiche bearbeiten" ;
+    Text [ en-US ] = "Edit Categories" ;
 };*/
 
 
