@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfact.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 16:38:08 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,17 +124,3 @@ SwDoc *SwDocFac::GetDoc()
     }
     return pDoc;
 }
-
-
-/******************************************************************************
- *  Erstellt    :   JP 01-27-94 11:37am
- *  Aenderung   :   JP 01-27-94 11:37am
- ******************************************************************************/
-
-ULONG SwDocFac::Count() const
-{
-    // minus den Grund-SectionNodes
-    return pDoc ? pDoc->GetNodes().GetEndOfContent().GetIndex() - 10 : 0;
-}
-
-
