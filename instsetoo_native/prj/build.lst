@@ -1,4 +1,4 @@
-oon	instsetoo_native	:	helpcontent2 UnoControls basctl configmgr cpputools dbaccess desktop eventattacher extensions extras fileaccess forms io package padmin readlicense_oo remotebridges scaddins scp2 setup_native SO:epm shell sc sch chart2 sd starmath sw ucb wizards officecfg xmlhelp MathMLDTD dictionaries bitstream_vera_fonts filter psprint_config fpicker odk embedserv pyuno crashrep scripting embeddedobj hwpfilter unoxml slideshow binfilter msfontextract xmlsecurity NULL
+oon	instsetoo_native	:	helpcontent2 UnoControls basctl configmgr cpputools dbaccess desktop eventattacher extensions extras fileaccess forms io package padmin readlicense_oo remotebridges scaddins scp2 setup_native SO:epm shell sc sch chart2 sd starmath sw ucb wizards officecfg xmlhelp MathMLDTD dictionaries bitstream_vera_fonts filter psprint_config fpicker odk embedserv pyuno crashrep scripting embeddedobj hwpfilter unoxml slideshow binfilter msfontextract xmlsecurity bean NULL
 oon	instsetoo_native						usr1	-	all	oon_mkout NULL
 oon	instsetoo_native\packimages				nmake	-	all	oon_pack NULL
 oon	instsetoo_native\packconfig				nmake	-	all	oon_config NULL
