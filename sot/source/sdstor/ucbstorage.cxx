@@ -1245,7 +1245,9 @@ void UCBStorage::SetClass( const SvGlobalName & rClass, ULONG nOriginalClipForma
 
 void UCBStorage::SetClassId( const ClsId& rClsId )
 {
-    pImp->m_aClassId = SvGlobalName( (const CLSID&) pImp->m_aClassId );
+    pImp->m_aClassId = SvGlobalName( (const CLSID&) rClsId );
+    if ( pImp->m_aClassId == SvGlobalName() )
+        return;
 
     // in OLE storages the clipboard format an the user name will be transferred when a storage is copied because both are
     // stored in one the substreams
