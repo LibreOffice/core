@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:32:24 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,6 @@ namespace dbaui
         sal_Bool                m_bQueryEscapeProcessing : 1;   // the escape processing flag of the query currently loaded (if any)
         sal_Bool                m_bHiContrast;          // in which mode we are
         sal_Bool                m_bShowMenu;            // if TRUE the menu should be visible otherwise not
-        sal_Bool                m_bPreview;             // if TRUE the grid will hide some features
         sal_Bool                m_bInSuspend;
         sal_Bool                m_bEnableBrowser;
 
@@ -341,6 +340,9 @@ namespace dbaui
         void implAddDatasource(const String& _rDbName, Image& _rDbImage,
                 String& _rQueryName, Image& _rQueryImage,
                 String& _rTableName, Image& _rTableImage);
+
+        /// clears the tree list box
+        void clearTreeModel();
 
         /** unloads the form, empties the grid model, cleans up anything related to the currently displayed object
             @param _bDisposeConnection
