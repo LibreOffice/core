@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-06 12:26:27 $
+ *  last change: $Author: mib $ $Date: 2002-05-15 13:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,17 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
+#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include <cppuhelper/weakref.hxx>
+#endif
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
+#endif
+#ifndef _SVX_ACCESSIBILITY_IACCESSIBLE_VIEW_FORWARDER_HXX
+#include <svx/IAccessibleViewForwarder.hxx>
 #endif
 #ifndef _VIEWSH_HXX
 #include "viewsh.hxx"
@@ -85,12 +91,14 @@ class SwAccessibleContext;
 class SwAccessibleContextMap_Impl;
 class SwAccessibleEventList_Impl;
 class SwAccessibleEventMap_Impl;
+class SwShapeList_Impl;
 class SdrObject;
 namespace accessibility { class AccessibleShape; }
 class SwAccessibleShapeMap_Impl;
 struct SwAccessibleEvent_Impl;
 class SwRect;
 class ViewShell;
+class SwFrmOrObj;
 
 // real states for events
 #define ACC_STATE_EDITABLE 0x01
@@ -105,25 +113,33 @@ class ViewShell;
 
 #define ACC_STATE_MASK 0x1F
 
-class SwAccessibleMap
+class SwAccessibleMap : public accessibility::IAccessibleViewForwarder
 {
     ::vos::OMutex maMutex;
     ::vos::OMutex maEventMutex;
     SwAccessibleContextMap_Impl *mpFrmMap;
     SwAccessibleShapeMap_Impl *mpShapeMap;
+    SwShapeList_Impl *mpShapes;
     SwAccessibleEventList_Impl *mpEvents;
     SwAccessibleEventMap_Impl *mpEventMap;
     ViewShell *mpVSh;
+
+    ::com::sun::star::uno::WeakReference < ::drafts::com::sun::star::accessibility::XAccessible > mxCursorContext;
+
     sal_Int32 mnPara;
     sal_Int32 mnFootnote;
     sal_Int32 mnEndnote;
 
-    static void FireEvent( const SwAccessibleEvent_Impl& rEvent );
+    sal_Bool mbShapeSelected;
+
+    void FireEvent( const SwAccessibleEvent_Impl& rEvent );
     void AppendEvent( const SwAccessibleEvent_Impl& rEvent );
 
     void InvalidateCursorPosition(
         const ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::accessibility::XAccessible>& rAcc );
+    void DoInvalidateShapeSelection();
+    void InvalidateShapeSelection();
 
     void _InvalidateRelationSet( const SwFrm* pFrm, sal_Bool bFrom );
 
@@ -145,23 +161,26 @@ public:
 
     ::vos::ORef < ::accessibility::AccessibleShape > GetContextImpl(
                                         const SdrObject *pObj,
-                                        const SwAccessibleContext *pParentImpl,
+                                        SwAccessibleContext *pParentImpl,
                                         sal_Bool bCreate = sal_True );
     ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible> GetContext(
                                         const SdrObject *pObj,
-                                        const SwAccessibleContext *pParentImpl,
+                                        SwAccessibleContext *pParentImpl,
                                         sal_Bool bCreate = sal_True );
 
     ViewShell *GetShell() const { return mpVSh; }
     const SwRect& GetVisArea() const { return mpVSh->VisArea(); }
 
     void RemoveContext( const SwFrm *pFrm );
+    void RemoveContext( const SdrObject *pObj );
 
     // Dispose frame and its children if bRecursive is set
-    void Dispose( const SwFrm *pFrm, sal_Bool bRecursive=sal_False );
+    void Dispose( const SwFrm *pFrm, const SdrObject *pObj,
+                  sal_Bool bRecursive=sal_False );
 
-    void InvalidatePosOrSize( const SwFrm *pFrm, const SwRect& rOldFrm );
+    void InvalidatePosOrSize( const SwFrm *pFrm, const SdrObject *pObj,
+                              const SwRect& rOldFrm );
 
     void InvalidateContent( const SwFrm *pFrm );
 
@@ -177,6 +196,15 @@ public:
     void InvalidateRelationSet( const SwFrm* pMaster, const SwFrm* pFollow );
 
     void FireEvents();
+
+    // IAccessibleViewForwarder
+
+    virtual sal_Bool IsValid() const;
+    virtual Rectangle GetVisibleArea() const;
+    virtual Point LogicToPixel (const Point& rPoint) const;
+    virtual Size LogicToPixel (const Size& rSize) const;
+    virtual Point PixelToLogic (const Point& rPoint) const;
+    virtual Size PixelToLogic (const Size& rSize) const;
 };
 
 #endif

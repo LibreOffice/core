@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfrmobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
+ *  last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ public:
     inline SwFrmOrObj();
     inline SwFrmOrObj( const SdrObject *pO );
     inline SwFrmOrObj( const SwFrm *pF );
+    inline SwFrmOrObj( const SwFrm *pF, const SdrObject *pO );
     inline SwFrmOrObj( const SwFrmOrObj& r );
 
     inline SwFrmOrObj& operator=( const SwFrmOrObj& r );
@@ -103,7 +104,7 @@ public:
     inline const SwFrm *GetSwFrm() const;
 
     inline sal_Bool IsAccessible() const;
-    inline sal_Bool IsBoundAsChar() const;
+    sal_Bool IsBoundAsChar() const;
     inline sal_Bool IsVisibleChildrenOnly() const;
     inline SwRect GetBox() const;
     inline SwRect GetBounds() const;
@@ -137,6 +138,17 @@ inline SwFrmOrObj::SwFrmOrObj( const SdrObject *pO )
 inline SwFrmOrObj::SwFrmOrObj( const SwFrm *pF )
 {
     Init( pF );
+}
+
+inline SwFrmOrObj::SwFrmOrObj( const SwFrm *pF, const SdrObject *pO )
+{
+    if( pF )
+        Init( pF );
+    else
+        Init( pO );
+    ASSERT( (!pF || pF == pFrm) && (!pO || pO == pObj),
+            "invalid frame/object combination" );
+
 }
 
 inline SwFrmOrObj::SwFrmOrObj( const SwFrmOrObj& r ) :
@@ -194,19 +206,13 @@ inline const SwFrm *SwFrmOrObj::GetSwFrm() const
 
 inline sal_Bool SwFrmOrObj::IsAccessible() const
 {
-    // currently only SwFrms are accessible
-    return pFrm && pFrm->IsAccessibleFrm() &&
-           ( !pFrm->IsCellFrm() ||
-             static_cast<const SwCellFrm *>( pFrm )->GetTabBox()
-                                                     ->GetSttNd() != 0 );
+    return ( pFrm && pFrm->IsAccessibleFrm() &&
+             ( !pFrm->IsCellFrm() ||
+              static_cast<const SwCellFrm *>( pFrm )->GetTabBox()
+                                                     ->GetSttNd() != 0 ) ) ||
+           pObj;
 }
 
-inline sal_Bool SwFrmOrObj::IsBoundAsChar() const
-{
-    // currently only SwFrms are accessible
-    return pFrm && pFrm->IsFlyFrm() &&
-           static_cast< const SwFlyFrm *>(pFrm)->IsFlyInCntFrm();
-}
 
 inline sal_Bool SwFrmOrObj::IsVisibleChildrenOnly() const
 {

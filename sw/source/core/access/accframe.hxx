@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
+ *  last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
+#include <list>
 #ifndef _FRAME_HXX
 #include <frame.hxx>
 #endif
@@ -90,6 +91,8 @@ class SwAccessibleFrame
     static SwFrmOrObj GetChildAt( const SwRect& rVisArea,
                                     const SwFrm *pFrm,
                                     const Point& rPos );
+    static void GetChildren( const SwRect& rVisArea, const SwFrm *pFrm,
+                             ::std::list< SwFrmOrObj >& rChildren );
 
     static void MergeLowerBounds( SwRect& rBounds,
                                   const SwRect& rVisArea,
@@ -101,8 +104,8 @@ protected:
     sal_Bool IsOpaque( ViewShell *pVSh ) const;
 
     inline sal_Bool IsShowing( const SwRect& rFrm ) const;
-    inline sal_Bool IsShowing( const SwFrm *pFrm ) const;
-    inline sal_Bool IsShowing() const { return IsShowing( GetFrm() ); }
+    inline sal_Bool IsShowing( const SwFrmOrObj& rFrmOrObj ) const;
+    inline sal_Bool IsShowing() const;
 
     void ClearFrm() { pFrm = 0; }
 
@@ -115,7 +118,7 @@ public:
     const SwFrm *GetFrm() const { return pFrm; };
 
 
-    static const SwFrm *GetParent( const SwFrm *pFrm );
+    static const SwFrm *GetParent( const SwFrmOrObj& rFrmOrObj );
 
 protected:
 
@@ -133,6 +136,7 @@ protected:
     inline SwFrmOrObj GetChild( sal_Int32 nPos ) const;
     inline sal_Int32 GetChildIndex( const SwFrmOrObj& rChild ) const;
     inline SwFrmOrObj GetChildAt( const Point& rPos ) const;
+    inline void GetChildren( ::std::list< SwFrmOrObj >& rChildren ) const;
 
     inline void SetVisArea( const SwRect& rNewVisArea );
     const SwRect& GetVisArea() const { return aVisArea; }
@@ -146,14 +150,21 @@ inline sal_Bool SwAccessibleFrame::IsShowing( const SwRect& rFrm ) const
     return rFrm.IsOver( aVisArea );
 }
 
-inline sal_Bool SwAccessibleFrame::IsShowing( const SwFrm *pFrm ) const
+inline sal_Bool SwAccessibleFrame::IsShowing( const SwFrmOrObj& rFrmOrObj ) const
 {
-    return IsShowing( pFrm->Frm().SVRect() );
+    return IsShowing( rFrmOrObj.GetBox() );
+}
+
+inline sal_Bool SwAccessibleFrame::IsShowing() const
+{
+    SwFrmOrObj aFrmOrObj( GetFrm() );
+    return IsShowing( aFrmOrObj );
 }
 
 inline const SwFrm *SwAccessibleFrame::GetParent() const
 {
-    return GetParent( pFrm );
+    SwFrmOrObj aFrmOrObj( GetFrm() );
+    return GetParent( aFrmOrObj );
 }
 
 inline sal_Int32 SwAccessibleFrame::GetChildCount() const
@@ -175,6 +186,12 @@ inline sal_Int32 SwAccessibleFrame::GetChildIndex( const SwFrmOrObj& rChild ) co
 inline SwFrmOrObj SwAccessibleFrame::GetChildAt( const Point& rPos ) const
 {
     return GetChildAt( aVisArea, pFrm, rPos );
+}
+
+inline void SwAccessibleFrame::GetChildren(
+        ::std::list< SwFrmOrObj >& rChildren ) const
+{
+    GetChildren( aVisArea, pFrm, rChildren );
 }
 
 inline void SwAccessibleFrame::SetVisArea( const SwRect& rNewVisArea )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:57:37 $
+ *  last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,14 @@
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
 #endif
+#ifndef _FMTANCHR_HXX
+#include <fmtanchr.hxx>
+#endif
 #ifndef _FLDBAS_HXX
 #include <fldbas.hxx>
+#endif
+#ifndef _DCONTACT_HXX
+#include <dcontact.hxx>
 #endif
 
 #ifndef _ACCMAP_HXX
@@ -337,6 +343,52 @@ SwFrmOrObj SwAccessibleFrame::GetChildAt( const SwRect& rVisArea,
     return aRet;
 }
 
+void SwAccessibleFrame::GetChildren( const SwRect& rVisArea, const SwFrm *pFrm,
+                             ::std::list< SwFrmOrObj >& rChildren )
+{
+    if( SwFrmOrObjMap::IsSortingRequired( pFrm ) )
+    {
+        // We need a sorted list here
+        const SwFrmOrObjMap aVisMap( rVisArea, pFrm );
+        SwFrmOrObjMap::const_iterator aIter( aVisMap.begin() );
+        while( aIter != aVisMap.end() )
+        {
+            const SwFrmOrObj& rLower = (*aIter).second;
+            if( rLower.IsAccessible() )
+            {
+                rChildren.push_back( rLower );
+            }
+            else if( rLower.GetSwFrm() )
+            {
+                // There are no unaccessible SdrObjects that count
+                GetChildren( rVisArea, rLower.GetSwFrm(), rChildren );
+            }
+            ++aIter;
+        }
+    }
+    else
+    {
+        // The unsorted list is sorted enough, because it return lower
+        // frames in the correct order.
+        const SwFrmOrObjSList aVisList( rVisArea, pFrm );
+        SwFrmOrObjSList::const_iterator aIter( aVisList.begin() );
+        while( aIter != aVisList.end() )
+        {
+            const SwFrmOrObj& rLower = *aIter;
+            if( rLower.IsAccessible() )
+            {
+                rChildren.push_back( rLower );
+            }
+            else if( rLower.GetSwFrm() )
+            {
+                // There are no unaccessible SdrObjects that count
+                GetChildren( rVisArea, rLower.GetSwFrm(), rChildren );
+            }
+            ++aIter;
+        }
+    }
+}
+
 void SwAccessibleFrame::MergeLowerBounds( SwRect& rBounds,
                                              const SwRect& rVisArea,
                                           const SwFrm *pFrm )
@@ -437,31 +489,60 @@ SwAccessibleFrame::~SwAccessibleFrame()
 {
 }
 
-const SwFrm *SwAccessibleFrame::GetParent( const SwFrm *pFrm )
+const SwFrm *SwAccessibleFrame::GetParent( const SwFrmOrObj& rFrmOrObj )
 {
     SwFrmOrObj aParent;
-    if( pFrm->IsFlyFrm() )
+    const SwFrm *pFrm = rFrmOrObj.GetSwFrm();
+    if( pFrm )
     {
-        const SwFlyFrm *pFly = static_cast< const SwFlyFrm *>( pFrm );
-        if( pFly->IsFlyInCntFrm() )
+        if( pFrm->IsFlyFrm() )
         {
-            // For FLY_IN_CNTNT the parent is the anchor
-            aParent = pFly->GetAnchor();
-            ASSERT( aParent.IsAccessible(),
-                    "parent is not accessible" );
+            const SwFlyFrm *pFly = static_cast< const SwFlyFrm *>( pFrm );
+            if( pFly->IsFlyInCntFrm() )
+            {
+                // For FLY_IN_CNTNT the parent is the anchor
+                aParent = pFly->GetAnchor();
+                ASSERT( aParent.IsAccessible(),
+                        "parent is not accessible" );
+            }
+            else
+            {
+                // In any other case the parent is the root frm
+                aParent = pFly->FindRootFrm();
+            }
         }
         else
         {
-            // In any other case the parent is the root frm
-            aParent = pFly->FindRootFrm();
+            SwFrmOrObj aUpper( pFrm->GetUpper() );
+            while( aUpper.GetSwFrm() && !aUpper.IsAccessible() )
+                aUpper = aUpper.GetSwFrm()->GetUpper();
+            aParent = aUpper;
         }
     }
-    else
+    else if( rFrmOrObj.GetSdrObject() )
     {
-        SwFrmOrObj aUpper( pFrm->GetUpper() );
-        while( aUpper.GetSwFrm() && !aUpper.IsAccessible() )
-            aUpper = aUpper.GetSwFrm()->GetUpper();
-        aParent = aUpper;
+        const SwDrawContact *pContact =
+            static_cast< const SwDrawContact* >(
+                    GetUserCall( rFrmOrObj.GetSdrObject() ) );
+        ASSERT( pContact, "sdr contact is missing" );
+        if( pContact )
+        {
+            const SwFrmFmt *pFrmFmt = pContact->GetFmt();
+            ASSERT( pFrmFmt, "frame format is missing" );
+            if( pFrmFmt && FLY_IN_CNTNT == pFrmFmt->GetAnchor().GetAnchorId() )
+            {
+                // For FLY_IN_CNTNT the parent is the anchor
+                aParent = pContact->GetAnchor();
+                ASSERT( aParent.IsAccessible(),
+                        "parent is not accessible" );
+
+            }
+            else
+            {
+                // In any other case the parent is the root frm
+                aParent = pContact->GetAnchor()->FindRootFrm();
+            }
+        }
     }
 
     return aParent.GetSwFrm();

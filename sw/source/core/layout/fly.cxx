@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-03 12:36:42 $
+ *  last change: $Author: mib $ $Date: 2002-05-15 13:20:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,7 +518,7 @@ void SwFlyFrm::ChainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
 #ifdef ACCESSIBLE_LAYOUT
     // invalidate accessible relation set (accessibility wrapper)
     ViewShell* pSh = pMaster->GetShell();
-    if( pSh )
+    if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
         pSh->Imp()->InvalidateAccessibleRelationSet( pMaster, pFollow );
 #endif
 
@@ -565,7 +565,7 @@ void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
 #ifdef ACCESSIBLE_LAYOUT
     // invalidate accessible relation set (accessibility wrapper)
     ViewShell* pSh = pMaster->GetShell();
-    if( pSh )
+    if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
         pSh->Imp()->InvalidateAccessibleRelationSet( pMaster, pFollow );
 #endif
 }
@@ -2409,12 +2409,25 @@ void SwFrm::AppendDrawObj( SwDrawContact *pNew )
     SwPageFrm *pPage = FindPageFrm();
     if ( pPage )
         pPage->SwPageFrm::AppendDrawObj( pNew );
+
+#ifdef ACCESSIBLE_LAYOUT
+    // Notify accessible layout.
+    ViewShell* pSh = GetShell();
+    if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
+        pSh->Imp()->AddAccessibleObj( pNew->GetMaster() );
+#endif
 }
 
 void SwFrm::RemoveDrawObj( SwDrawContact *pToRemove )
 {
     //Bei der Seite Abmelden - kann schon passiert sein weil die Seite
     //bereits destruiert wurde.
+#ifdef ACCESSIBLE_LAYOUT
+    // Notify accessible layout.
+    ViewShell* pSh = GetShell();
+    if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
+        pSh->Imp()->DisposeAccessibleObj( pToRemove->GetMaster() );
+#endif
     SwPageFrm *pPage = pToRemove->GetPage();
     if ( pPage && pPage->GetSortedObjs() )
         pPage->SwPageFrm::RemoveDrawObj( pToRemove );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2002-04-09 14:19:15 $
+ *  last change: $Author: mib $ $Date: 2002-05-15 13:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,9 +291,14 @@ BOOL SwFEShell::SelectObj( const Point& rPt, BYTE nFlag, SdrObject *pObj )
     }
 
     if ( pObj )
-        pDView->MarkObj( pObj, Imp()->GetPageView(), bAddSelect, bEnterGroup );
+    {
+        ASSERT( !bEnterGroup, "SW_ENTER_GROUP is not supported" );
+        pDView->MarkObj( pObj, Imp()->GetPageView() );
+    }
     else
+    {
         pDView->MarkObj( rPt, MINMOVE, bAddSelect, bEnterGroup );
+    }
 
     const FASTBOOL bRet = 0 != rMrkList.GetMarkCount();
 
@@ -852,6 +857,17 @@ BOOL SwFEShell::IsFrmSelected() const
         return 0 != ::GetFlyFromMarked( &Imp()->GetDrawView()->GetMarkList(),
                                         (ViewShell*)this );
 }
+
+#ifdef ACCESSIBLE_LAYOUT
+sal_Bool SwFEShell::IsObjSelected( const SdrObject& rObj ) const
+{
+    if ( IsFrmSelected() || !Imp()->HasDrawView() )
+        return sal_False;
+    else
+        return Imp()->GetDrawView()
+                    ->IsObjMarked( const_cast< SdrObject * >( &rObj ) );
+}
+#endif
 
 Rectangle *SwFEShell::IsAnchorAtPos( const Point &rPt ) const
 {

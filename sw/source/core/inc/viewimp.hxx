@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-26 13:22:00 $
+ *  last change: $Author: mib $ $Date: 2002-05-15 13:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ class SdrPaintInfoRec;
 struct SdrPaintProcRec;
 #ifdef ACCESSIBLE_LAYOUT
 class SwAccessibleMap;
+class SdrObject;
 #endif
 
 class SwViewImp
@@ -255,14 +256,21 @@ public:
     void UpdateAccessible();
 
     // Remove a frame from the accessible view
-    void DisposeAccessibleFrm( const SwFrm *pFrm,
+    void DisposeAccessible( const SwFrm *pFrm, const SdrObject *pObj,
+                            sal_Bool bRecursive );
+    inline void DisposeAccessibleFrm( const SwFrm *pFrm,
                                sal_Bool bRecursive=sal_False );
+    inline void DisposeAccessibleObj( const SdrObject *pObj );
 
     // Move a frame's position in the accessible view
-    void MoveAccessibleFrm( const SwFrm *pFrm, const SwRect& rOldFrm );
+    void MoveAccessible( const SwFrm *pFrm, const SdrObject *pObj,
+                         const SwRect& rOldFrm );
+    inline void MoveAccessibleFrm( const SwFrm *pFrm, const SwRect& rOldFrm );
 
     // Add a frame in the accessible view
     inline void AddAccessibleFrm( const SwFrm *pFrm );
+
+    inline void AddAccessibleObj( const SdrObject *pObj );
 
     // Invalidate accessible frame's frame's content
     void InvalidateAccessibleFrmContent( const SwFrm *pFrm );
@@ -322,10 +330,33 @@ inline SwAccessibleMap& SwViewImp::GetAccessibleMap()
     return *pAccMap;
 }
 
+inline void SwViewImp::DisposeAccessibleFrm( const SwFrm *pFrm,
+                               sal_Bool bRecursive )
+{
+    DisposeAccessible( pFrm, 0, bRecursive );
+}
+
+inline void SwViewImp::DisposeAccessibleObj( const SdrObject *pObj )
+{
+    DisposeAccessible( 0, pObj, sal_False );
+}
+
+inline void SwViewImp::MoveAccessibleFrm( const SwFrm *pFrm,
+                                          const SwRect& rOldFrm )
+{
+    MoveAccessible( pFrm, 0, rOldFrm );
+}
+
 inline void SwViewImp::AddAccessibleFrm( const SwFrm *pFrm )
 {
     SwRect aEmptyRect;
-    MoveAccessibleFrm( pFrm, aEmptyRect );
+    MoveAccessible( pFrm, 0, aEmptyRect );
+}
+
+inline void SwViewImp::AddAccessibleObj( const SdrObject *pObj )
+{
+    SwRect aEmptyRect;
+    MoveAccessible( 0, pObj, aEmptyRect );
 }
 
 #endif

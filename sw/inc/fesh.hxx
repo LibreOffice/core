@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2002-04-09 14:17:34 $
+ *  last change: $Author: mib $ $Date: 2002-05-15 13:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,6 +430,9 @@ public:
 
     USHORT IsObjSelected() const;   //Liefert gleich die Anzahl der Objekte,
                                     //zaehlt aber nicht die Objekte in Gruppen.
+#ifdef ACCESSIBLE_LAYOUT
+    sal_Bool IsObjSelected( const SdrObject& rObj ) const;
+#endif
 
     void EndTextEdit();             //Loescht ggf. das Objekt.
 

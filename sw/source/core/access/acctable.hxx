@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-06 14:03:40 $
+ *  last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,8 +238,8 @@ public:
     // The object has been moved by the layout
     virtual void InvalidatePosOrSize( const SwRect& rOldBox );
 
-    virtual void DisposeChild( const SwFrm *pFrm, sal_Bool bRecursive );
-    virtual void InvalidateChildPosOrSize( const SwFrm *pFrm,
+    virtual void DisposeChild( const SwFrmOrObj& rFrmOrObj, sal_Bool bRecursive );
+    virtual void InvalidateChildPosOrSize( const SwFrmOrObj& rFrmOrObj,
                                         const SwRect& rFrm );
 
     //=====  XAccessibleSelection  ============================================

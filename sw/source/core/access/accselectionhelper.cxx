@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accselectionhelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-12 12:48:59 $
+ *  last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _ACCMAP_HXX
 #include <accmap.hxx>
 #endif
+#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
+#include <svx/AccessibleShape.hxx>
+#endif
 
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
@@ -125,25 +128,6 @@ SwFEShell* SwAccessibleSelectionHelper::GetFEShell()
     return pFEShell;
 }
 
-const SwFlyFrm* SwAccessibleSelectionHelper::GetSelectedChildFlyFrame()
-{
-    const SwFlyFrm* pSelectedChildFlyFrame = NULL;
-
-    SwFEShell* pFEShell = GetFEShell();
-    if( pFEShell != NULL )
-    {
-        // Get the selected frame, and check if it's ours (rather
-        // than, say, child of a paragraph).
-        const SwFlyFrm* pFlyFrm = pFEShell->GetCurrFlyFrm();
-        if( (pFlyFrm != NULL) &&
-            (rContext.GetParent(pFlyFrm) == rContext.GetFrm()) )
-            pSelectedChildFlyFrame = pFlyFrm;
-    }
-    // else: no FE-Shell -> no selected frames -> no selected children
-
-    return pSelectedChildFlyFrame;
-}
-
 
 //=====  XAccessibleSelection  ============================================
 
@@ -162,13 +146,18 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
     // we can only select fly frames, so we ignore (should: return
     // false) all other attempts at child selection
     sal_Bool bRet = sal_False;
-    const SwFrm* pFrm = aChild.GetSwFrm();
     SwFEShell* pFEShell = GetFEShell();
-    if( (pFEShell != NULL) && (pFrm != NULL) && (pFrm->IsFlyFrm()) )
+    if( pFEShell != NULL )
     {
-        pFEShell->SelectFlyFrm(
-            *(static_cast<SwFlyFrm*>(const_cast<SwFrm*>(pFrm))), TRUE );
-        bRet = sal_True;
+        const SdrObject *pObj = aChild.GetSdrObject();
+        if( pObj )
+        {
+            Point aDummy;
+            sal_uInt8 nFlags = aChild.GetSwFrm() ? 0 : SW_ADD_SELECT;
+            pFEShell->SelectObj( aDummy, nFlags,
+                                  const_cast< SdrObject *>( pObj ) );
+            bRet = sal_True;
+        }
     }
     // no frame shell, or no frame, or no fly frame -> can't select
 
@@ -188,8 +177,21 @@ sal_Bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
         throw IndexOutOfBoundsException();
 
     // ... and compare to the currently selected frame
-    const SwFlyFrm* pSelectedFrame = GetSelectedChildFlyFrame();
-    return (pSelectedFrame == aChild.GetSwFrm());
+    sal_Bool bRet = sal_False;
+    SwFEShell* pFEShell = GetFEShell();
+    if( pFEShell )
+    {
+        if( aChild.GetSwFrm() != 0 )
+        {
+            bRet = (pFEShell->GetCurrFlyFrm() == aChild.GetSwFrm());
+        }
+        else
+        {
+            bRet = pFEShell->IsObjSelected( *aChild.GetSdrObject() );
+        }
+    }
+
+    return bRet;
 }
 
 void SwAccessibleSelectionHelper::clearAccessibleSelection(  )
@@ -207,35 +209,29 @@ void SwAccessibleSelectionHelper::selectAllAccessible(  )
     // the first we can select, and select it.
 
     sal_Int32 nIndex = 0;
-    const SwFlyFrm* pFirstSelectable = NULL;
-    sal_Bool bContinue = sal_True;
-    do
+    SwFEShell* pFEShell = GetFEShell();
+    if( pFEShell )
     {
-        const SwFrmOrObj aChild = rContext.GetChild( nIndex );
-        if( aChild.IsValid() )
+        ::std::list< SwFrmOrObj > aChildren;
+        rContext.GetChildren( aChildren );
+
+        ::std::list< SwFrmOrObj >::const_iterator aIter = aChildren.begin();
+        ::std::list< SwFrmOrObj >::const_iterator aEndIter = aChildren.end();
+        while( aIter != aEndIter )
         {
-            const SwFrm* pFrm = aChild.GetSwFrm();
-            if( (pFrm != NULL) && pFrm->IsFlyFrm() )
+            const SwFrmOrObj& rChild = *aIter;
+            const SdrObject *pObj = rChild.GetSdrObject();
+            const SwFrm* pFrm = rChild.GetSwFrm();
+            if( pObj && !(pFrm != 0 && pFEShell->IsObjSelected()) )
             {
-                pFirstSelectable = static_cast<const SwFlyFrm*>( pFrm );
-                bContinue = sal_False;
+                Point aDummy;
+                sal_uInt8 nFlags = pFrm ? 0 : SW_ADD_SELECT;
+                pFEShell->SelectObj( aDummy, nFlags,
+                                     const_cast< SdrObject *>( pObj ) );
+                if( pFrm )
+                    break;
             }
-        }
-        else
-            bContinue = sal_False;
-
-        nIndex++;
-    }
-    while( bContinue );
-
-    // select frame (if we found any)
-    if( pFirstSelectable != NULL )
-    {
-        SwFEShell* pFEShell = GetFEShell();
-        if( pFEShell != NULL )
-        {
-            pFEShell->SelectFlyFrm( *(const_cast<SwFlyFrm*>(pFirstSelectable)),
-                                    TRUE );
+            ++aIter;
         }
     }
 }
@@ -245,9 +241,45 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
+    sal_Int32 nCount = 0;
     // Only one frame can be selected at a time, and we only frames
     // for selectable children.
-    return (GetSelectedChildFlyFrame() != NULL) ? 1 : 0;
+    SwFEShell* pFEShell = GetFEShell();
+    if( pFEShell != 0 )
+    {
+        const SwFlyFrm *pFlyFrm = pFEShell->GetCurrFlyFrm();
+        if( pFlyFrm )
+        {
+            if( rContext.GetParent(pFlyFrm) == rContext.GetFrm() )
+                nCount = 1;
+        }
+        else
+        {
+            sal_uInt16 nSelObjs = pFEShell->IsObjSelected();
+            if( nSelObjs > 0 )
+            {
+                ::std::list< SwFrmOrObj > aChildren;
+                rContext.GetChildren( aChildren );
+
+                ::std::list< SwFrmOrObj >::const_iterator aIter =
+                    aChildren.begin();
+                ::std::list< SwFrmOrObj >::const_iterator aEndIter =
+                    aChildren.end();
+                while( aIter != aEndIter && nCount < nSelObjs )
+                {
+                    const SwFrmOrObj& rChild = *aIter;
+                    if( rChild.GetSdrObject() && !rChild.GetSwFrm() &&
+                        rContext.GetParent(rChild) == rContext.GetFrm() &&
+                         pFEShell->IsObjSelected( *rChild.GetSdrObject() ) )
+                    {
+                        nCount++;
+                    }
+                    ++aIter;
+                }
+            }
+        }
+    }
+    return nCount;
 }
 
 Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
@@ -257,18 +289,74 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    const SwFlyFrm* pFlyFrm = GetSelectedChildFlyFrame();
-
     // Since the index is relative to the selected children, and since
     // there can be at most one selected frame child, the index must
     // be 0, and a selection must exist, otherwise we have to throw an
     // IndexOutOfBoundsException
-
-    if( (pFlyFrm == NULL) || (nSelectedChildIndex != 0) )
+    SwFEShell* pFEShell = GetFEShell();
+    if( 0 == pFEShell )
         throw IndexOutOfBoundsException();
 
-    DBG_ASSERT( rContext.GetMap() != NULL, "We need the map." )
-    return rContext.GetMap()->GetContext( pFlyFrm, sal_True );
+    SwFrmOrObj aChild;
+    const SwFlyFrm *pFlyFrm = pFEShell->GetCurrFlyFrm();
+    if( pFlyFrm )
+    {
+        if( 0 == nSelectedChildIndex &&
+            rContext.GetParent(pFlyFrm) == rContext.GetFrm() )
+            aChild = pFlyFrm;
+    }
+    else
+    {
+        sal_uInt16 nSelObjs = pFEShell->IsObjSelected();
+        if( 0 == nSelObjs || nSelectedChildIndex >= nSelObjs )
+            throw IndexOutOfBoundsException();
+
+        ::std::list< SwFrmOrObj > aChildren;
+        rContext.GetChildren( aChildren );
+
+        ::std::list< SwFrmOrObj >::const_iterator aIter = aChildren.begin();
+        ::std::list< SwFrmOrObj >::const_iterator aEndIter = aChildren.end();
+        while( aIter != aEndIter && !aChild.IsValid() )
+        {
+            const SwFrmOrObj& rChild = *aIter;
+            if( rChild.GetSdrObject() && !rChild.GetSwFrm() &&
+                rContext.GetParent(rChild) == rContext.GetFrm() &&
+                pFEShell->IsObjSelected( *rChild.GetSdrObject() ) )
+            {
+                if( 0 == nSelectedChildIndex )
+                    aChild = rChild;
+                else
+                    --nSelectedChildIndex;
+            }
+            ++aIter;
+        }
+    }
+
+    if( !aChild.IsValid() )
+            throw IndexOutOfBoundsException();
+
+    DBG_ASSERT( rContext.GetMap() != NULL, "We need the map." );
+    Reference< XAccessible > xChild;
+    if( aChild.GetSwFrm() )
+    {
+        ::vos::ORef < SwAccessibleContext > xChildImpl(
+                rContext.GetMap()->GetContextImpl( aChild.GetSwFrm(),
+                sal_True ) );
+        if( xChildImpl.isValid() )
+        {
+            xChildImpl->SetParent( &rContext );
+            xChild = xChildImpl.getBodyPtr();
+        }
+    }
+    else
+    {
+        ::vos::ORef < ::accessibility::AccessibleShape > xChildImpl(
+                rContext.GetMap()->GetContextImpl( aChild.GetSdrObject(),
+                                          &rContext, sal_True )  );
+        if( xChildImpl.isValid() )
+            xChild = xChildImpl.getBodyPtr();
+    }
+    return xChild;
 }
 
 void SwAccessibleSelectionHelper::deselectSelectedAccessibleChild(

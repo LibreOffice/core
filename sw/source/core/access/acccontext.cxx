@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-06 14:03:40 $
+ *  last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,36 +245,36 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
         if( rLower.IsAccessible() )
         {
             Action eAction = NONE;
-            if( pLower  )
+            if( aBox.IsOver( rNewVisArea ) )
             {
-                if( aBox.IsOver( rNewVisArea ) )
+                if( aBox.IsOver( rOldVisArea ) )
                 {
-                    if( aBox.IsOver( rOldVisArea ) )
-                    {
-                        eAction = SCROLLED_WITHIN;
-                    }
-                    else
-                    {
-                        if( bVisibleOnly )
-                            eAction = SCROLLED_IN;
-                        else
-                            eAction = SCROLLED;
-                    }
+                    eAction = SCROLLED_WITHIN;
                 }
-                else if( aBox.IsOver( rOldVisArea ) )
+                else
                 {
                     if( bVisibleOnly )
-                        eAction = SCROLLED_OUT;
+                        eAction = SCROLLED_IN;
                     else
                         eAction = SCROLLED;
                 }
-                else if( !bVisibleOnly )
-                {
-                    // This wouldn't be required if the SwAccessibleFrame,
-                    // wouldn't know about the vis area.
+            }
+            else if( aBox.IsOver( rOldVisArea ) )
+            {
+                if( bVisibleOnly )
+                    eAction = SCROLLED_OUT;
+                else
                     eAction = SCROLLED;
-                }
-                if( NONE != eAction )
+            }
+            else if( !bVisibleOnly )
+            {
+                // This wouldn't be required if the SwAccessibleFrame,
+                // wouldn't know about the vis area.
+                eAction = SCROLLED;
+            }
+            if( NONE != eAction )
+            {
+                if( pLower  )
                 {
                     ::vos::ORef< SwAccessibleContext > xAccImpl =
                         GetMap()->GetContextImpl( pLower, SCROLLED_OUT == eAction ||
@@ -302,10 +302,39 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                         ChildrenScrolled( pLower, rOldVisArea );
                     }
                 }
-            }
-            else
-            {
-                // TODO: SdrObjects
+                else
+                {
+                    ::vos::ORef< accessibility::AccessibleShape > xAccImpl =
+                        GetMap()->GetContextImpl( rLower.GetSdrObject(),
+                                                  this,
+                                                  SCROLLED_OUT == eAction ||
+                                                  SCROLLED_IN == eAction );
+                    if( xAccImpl.isValid() )
+                    {
+                        switch( eAction )
+                        {
+                        case SCROLLED:
+                        case SCROLLED_WITHIN:
+                            xAccImpl->ViewForwarderChanged(
+                                accessibility::IAccessibleViewForwarderListener::ChangeType::VISIBLE_AREA,
+                                GetMap() );
+                            break;
+                        case SCROLLED_IN:
+                            ScrolledInShape( rLower.GetSdrObject(),
+                                             xAccImpl.getBodyPtr() );
+                            break;
+                        case SCROLLED_OUT:
+                            {
+                                xAccImpl->ViewForwarderChanged(
+                                    accessibility::IAccessibleViewForwarderListener::ChangeType::VISIBLE_AREA,
+                                    GetMap() );
+                                DisposeShape( rLower.GetSdrObject(),
+                                              xAccImpl.getBodyPtr() );
+                            }
+                            break;
+                        }
+                    }
+                }
             }
         }
         else if( pLower && (!bVisibleOnly ||
@@ -444,14 +473,11 @@ void SwAccessibleContext::DisposeChildren( const SwFrm *pFrm,
         }
         else
         {
-            Reference< XAccessible > xAcc( GetMap()->GetContext(
-                                           rLower.GetSdrObject(),
-                                           this, sal_False )  );
-            if( xAcc.is() )
-            {
-                Reference < XComponent > xComp( xAcc, UNO_QUERY );
-                xComp->dispose();
-            }
+            ::vos::ORef< accessibility::AccessibleShape > xAccImpl(
+                    GetMap()->GetContextImpl( rLower.GetSdrObject(),
+                                          this, sal_False )  );
+            if( xAccImpl.isValid() )
+                DisposeShape( rLower.GetSdrObject(), xAccImpl.getBodyPtr() );
         }
         ++aIter;
     }
@@ -1011,6 +1037,33 @@ Sequence< OUString > SAL_CALL SwAccessibleContext::getSupportedServiceNames()
     THROW_RUNTIME_EXCEPTION( XServiceInfo, "supported services needs to be overloaded" )
 }
 
+void SwAccessibleContext::DisposeShape( const SdrObject *pObj,
+                                accessibility::AccessibleShape *pAccImpl )
+{
+    ::vos::ORef< accessibility::AccessibleShape > xAccImpl( pAccImpl );
+    if( !xAccImpl.isValid() )
+        xAccImpl = GetMap()->GetContextImpl( pObj, this, sal_True );
+
+    AccessibleEventObject aEvent;
+    aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+    Reference< XAccessible > xAcc( xAccImpl.getBodyPtr() );
+    aEvent.OldValue <<= xAcc;
+    FireAccessibleEvent( aEvent );
+
+    GetMap()->RemoveContext( pObj );
+    xAccImpl->dispose();
+}
+
+void SwAccessibleContext::ScrolledInShape( const SdrObject *pObj,
+                                accessibility::AccessibleShape *pAccImpl )
+{
+    AccessibleEventObject aEvent;
+    aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+    Reference< XAccessible > xAcc( pAccImpl );
+    aEvent.NewValue <<= xAcc;
+    FireAccessibleEvent( aEvent );
+}
+
 void SwAccessibleContext::Dispose( sal_Bool bRecursive )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1067,22 +1120,35 @@ void SwAccessibleContext::Dispose( sal_Bool bRecursive )
     bDisposing = sal_False;
 }
 
-void SwAccessibleContext::DisposeChild( const SwFrm *pFrm, sal_Bool bRecursive )
+void SwAccessibleContext::DisposeChild( const SwFrmOrObj& rChildFrmOrObj,
+                                        sal_Bool bRecursive )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    SwFrmOrObj aFrm( GetFrm() );
-    if( IsShowing( pFrm ) || !aFrm.IsVisibleChildrenOnly() )
+    SwFrmOrObj aFrmOrObj( GetFrm() );
+    if( IsShowing( rChildFrmOrObj ) || !aFrmOrObj.IsVisibleChildrenOnly() )
     {
         // If the object could have existed before, than there is nothing to do,
         // because no wrapper exists now and therefor no one is interested to
         // get notified of the movement.
-        ::vos::ORef< SwAccessibleContext > xAccImpl =
-                GetMap()->GetContextImpl( pFrm, sal_True );
-        xAccImpl->Dispose( bRecursive );
+        if( rChildFrmOrObj.GetSwFrm() )
+        {
+            ::vos::ORef< SwAccessibleContext > xAccImpl =
+                    GetMap()->GetContextImpl( rChildFrmOrObj.GetSwFrm(),
+                                              sal_True );
+            xAccImpl->Dispose( bRecursive );
+        }
+        else
+        {
+            ::vos::ORef< accessibility::AccessibleShape > xAccImpl =
+                    GetMap()->GetContextImpl( rChildFrmOrObj.GetSdrObject(),
+                                              this, sal_True );
+            DisposeShape( rChildFrmOrObj.GetSdrObject(),
+                          xAccImpl.getBodyPtr() );
+        }
     }
-    else if( bRecursive )
-        DisposeChildren( GetFrm(), bRecursive );
+    else if( bRecursive && rChildFrmOrObj.GetSwFrm() )
+        DisposeChildren( rChildFrmOrObj.GetSwFrm(), bRecursive );
 }
 
 void SwAccessibleContext::InvalidatePosOrSize( const SwRect& rOldPos )
@@ -1120,24 +1186,37 @@ void SwAccessibleContext::InvalidatePosOrSize( const SwRect& rOldPos )
     }
 }
 
-void SwAccessibleContext::InvalidateChildPosOrSize( const SwFrm *pFrm,
-                                           const SwRect& rOldFrm )
+void SwAccessibleContext::InvalidateChildPosOrSize(
+                    const SwFrmOrObj& rChildFrmOrObj,
+                    const SwRect& rOldFrm )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     SwFrmOrObj aFrm( GetFrm() );
     sal_Bool bNew = rOldFrm.IsEmpty() || (rOldFrm.Left() == 0 && rOldFrm.Top());
-    if( IsShowing( pFrm ) )
+    if( IsShowing( rChildFrmOrObj ) )
     {
         // If the object could have existed before, than there is nothing to do,
         // because no wrapper exists now and therefor no one is interested to
         // get notified of the movement.
         if( bNew || (aFrm.IsVisibleChildrenOnly() && !IsShowing( rOldFrm )) )
         {
-            // The frame becomes visible. A child event must be send.
-            ::vos::ORef< SwAccessibleContext > xAccImpl =
-                GetMap()->GetContextImpl( pFrm, sal_True );
-            xAccImpl->ScrolledIn();
+            if( rChildFrmOrObj.GetSwFrm() )
+            {
+                // The frame becomes visible. A child event must be send.
+                ::vos::ORef< SwAccessibleContext > xAccImpl =
+                    GetMap()->GetContextImpl( rChildFrmOrObj.GetSwFrm(),
+                                              sal_True );
+                xAccImpl->ScrolledIn();
+            }
+            else
+            {
+                ::vos::ORef< accessibility::AccessibleShape > xAccImpl =
+                        GetMap()->GetContextImpl( rChildFrmOrObj.GetSdrObject(),
+                                                  this, sal_True );
+                ScrolledInShape( rChildFrmOrObj.GetSdrObject(),
+                                 xAccImpl.getBodyPtr() );
+            }
         }
     }
     else
@@ -1149,10 +1228,22 @@ void SwAccessibleContext::InvalidateChildPosOrSize( const SwFrm *pFrm,
         if( aFrm.IsVisibleChildrenOnly() &&
             !bNew && IsShowing( rOldFrm ) )
         {
-            ::vos::ORef< SwAccessibleContext > xAccImpl =
-                GetMap()->GetContextImpl( pFrm, sal_True );
-            xAccImpl->SetParent( this );
-            xAccImpl->Dispose( sal_True );
+            if( rChildFrmOrObj.GetSwFrm() )
+            {
+                ::vos::ORef< SwAccessibleContext > xAccImpl =
+                    GetMap()->GetContextImpl( rChildFrmOrObj.GetSwFrm(),
+                                              sal_True );
+                xAccImpl->SetParent( this );
+                xAccImpl->Dispose( sal_True );
+            }
+            else
+            {
+                ::vos::ORef< accessibility::AccessibleShape > xAccImpl =
+                        GetMap()->GetContextImpl( rChildFrmOrObj.GetSdrObject(),
+                                                  this, sal_True );
+                DisposeShape( rChildFrmOrObj.GetSdrObject(),
+                          xAccImpl.getBodyPtr() );
+            }
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-06 14:03:40 $
+ *  last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ILLEGALACCESSIBLECOMPONENTSTATEEXCEPTION_HDL_
 #include <drafts/com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -104,6 +107,7 @@ class Window;
 class SwAccessibleMap;
 class SwCrsrShell;
 namespace utl { class AccessibleStateSetHelper; };
+namespace accessibility { class AccessibleShape; }
 
 class SwAccessibleContext :
     public ::cppu::WeakImplHelper5<
@@ -194,6 +198,11 @@ protected:
     // the current object or to any other child or grandchild.
     void SwAccessibleContext::DisposeChildren( const SwFrm *pFrm,
                                        sal_Bool bRecursive );
+
+    void SwAccessibleContext::DisposeShape( const SdrObject *pObj,
+                                ::accessibility::AccessibleShape *pAccImpl );
+    void SwAccessibleContext::ScrolledInShape( const SdrObject *pObj,
+                                ::accessibility::AccessibleShape *pAccImpl );
 
     virtual void _InvalidateContent( sal_Bool bVisibleDataFired );
 
@@ -372,13 +381,14 @@ public:
     virtual void Dispose( sal_Bool bRecursive = sal_False );
 
     // The child object is not visible an longer and should be destroyed
-    virtual void DisposeChild( const SwFrm *pFrm, sal_Bool bRecursive );
+    virtual void DisposeChild( const SwFrmOrObj& rFrmOrObj, sal_Bool bRecursive );
 
     // The object has been moved by the layout
     virtual void InvalidatePosOrSize( const SwRect& rFrm );
 
     // The vhild object has been moved by the layout
-    virtual void InvalidateChildPosOrSize( const SwFrm *pFrm, const SwRect& rFrm );
+    virtual void InvalidateChildPosOrSize( const SwFrmOrObj& rFrmOrObj,
+                                           const SwRect& rFrm );
 
     // The content may have changed (but it hasn't tohave changed)
     void InvalidateContent();
@@ -416,7 +426,11 @@ const sal_Char sMissingWindow[] = "window is missing";
 #define CHECK_FOR_DEFUNC( ifc )                                             \
     if( !(GetFrm() && GetMap()) )                                           \
     {                                                                       \
-        THROW_RUNTIME_EXCEPTION( ifc, sDefunc );                            \
+        Reference < ifc > xThis( this );                                    \
+        ::com::sun::star::lang::DisposedException aExcept(                  \
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(sDefunc) ),       \
+                    xThis );                                                \
+        throw aExcept;                                                      \
     }
 
 #define CHECK_FOR_WINDOW( i, w )                                            \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-06 14:03:40 $
+ *  last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1180,11 +1180,13 @@ void SwAccessibleTable::InvalidatePosOrSize( const SwRect& rOldBox )
     SwAccessibleContext::InvalidatePosOrSize( rOldBox );
 }
 
-void SwAccessibleTable::DisposeChild( const SwFrm *pFrm,
+void SwAccessibleTable::DisposeChild( const SwFrmOrObj& rChildFrmOrObj,
                                     sal_Bool bRecursive )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
+    const SwFrm *pFrm = rChildFrmOrObj.GetSwFrm();
+    ASSERT( pFrm, "frame expected" );
     if( HasTableData() )
     {
         FireTableChangeEvent( GetTableData() );
@@ -1198,10 +1200,10 @@ void SwAccessibleTable::DisposeChild( const SwFrm *pFrm,
     // about its change. We then must not call the superclass
     Reference< XAccessible > xAcc( GetMap()->GetContext( pFrm, sal_False ) );
     if( !xAcc.is() )
-        SwAccessibleContext::DisposeChild( pFrm, bRecursive );
+        SwAccessibleContext::DisposeChild( rChildFrmOrObj, bRecursive );
 }
 
-void SwAccessibleTable::InvalidateChildPosOrSize( const SwFrm *pFrm,
+void SwAccessibleTable::InvalidateChildPosOrSize( const SwFrmOrObj& rChildFrmOrObj,
                                                   const SwRect& rOldBox )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1234,9 +1236,10 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwFrm *pFrm,
     // the map, and we have to call our superclass.
     // The other situation is that we have been call by a call to get notified
     // about its change. We then must not call the superclass
-    Reference< XAccessible > xAcc( GetMap()->GetContext( pFrm, sal_False ) );
+    ASSERT( rChildFrmOrObj.GetSwFrm(), "frame expected" );
+    Reference< XAccessible > xAcc( GetMap()->GetContext( rChildFrmOrObj.GetSwFrm(), sal_False ) );
     if( !xAcc.is() )
-        SwAccessibleContext::InvalidateChildPosOrSize( pFrm, rOldBox );
+        SwAccessibleContext::InvalidateChildPosOrSize( rChildFrmOrObj, rOldBox );
 }
 
 
@@ -1292,7 +1295,7 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
         pPaM->DeleteMark();
         *(pPaM->GetPoint()) = SwPosition( *pStartNode );
         pPaM->Move( fnMoveForward, fnGoNode );
-        pCrsrShell->SelTblBox();
+//        pCrsrShell->SelTblBox();
     }
     else
     {
@@ -1309,7 +1312,7 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
         if( aPaM.GetPoint()->nNode.GetNode().FindTableBoxStartNode() ==
             aPaM.GetMark()->nNode.GetNode().FindTableBoxStartNode() )
         {
-            pCrsrShell->SelTblBox();
+//            pCrsrShell->SelTblBox();
         }
         else
         {
@@ -1455,7 +1458,7 @@ void SAL_CALL SwAccessibleTable::deselectSelectedAccessibleChild(
             // reduce selection to mark
             pCrsrShell->GetCrsr()->Exchange();
             pCrsrShell->GetCrsr()->DeleteMark();
-            pCrsrShell->SelTblBox();
+//            pCrsrShell->SelTblBox();
         }
     }
     // else: not selected -> ignore

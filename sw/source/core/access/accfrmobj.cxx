@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfrmobj.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:05:04 $
+ *  last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,90 +65,31 @@
 
 #pragma hdrstop
 
-#ifndef _PAGEFRM_HXX
-#include <pagefrm.hxx>
+#ifndef _FRMFMT_HXX
+#include <frmfmt.hxx>
 #endif
-#ifndef _ACCFLYMAP_HXX
-#include <accflymap.hxx>
+#ifndef _FMTANCHR_HXX
+#include <fmtanchr.hxx>
 #endif
 #ifndef _ACCFRMOBJ_HXX
 #include <accfrmobj.hxx>
 #endif
+#ifndef _DCONTACT_HXX
+#include <dcontact.hxx>
+#endif
 
-SwFrmOrObjIter::SwFrmOrObjIter( const SwFrm *pF ) :
-    pFrm( pF ),
-    aNext( pF->GetLower() ),
-    nNextObj( 0 )
+sal_Bool SwFrmOrObj::IsBoundAsChar() const
 {
-    if( !aNext.GetSwFrm() )
+    // currently only SwFrms are accessible
+    if( pFrm )
     {
-        // No lowers?  Maybe thare are some fly frames or SdrObjects
-        if( pFrm->IsPageFrm() )
-        {
-            const SwPageFrm *pPgFrm =
-                static_cast< const SwPageFrm * >( pFrm );
-            const SwSortDrawObjs *pObjs = pPgFrm->GetSortedObjs();
-            if( pObjs && pObjs->Count() > 0 )
-                aNext = (*pObjs)[0];
-        }
-    }
-}
-
-const SwFrmOrObj& SwFrmOrObjIter::Next()
-{
-    aCurr = aNext;
-    if( !aCurr.GetSdrObject() ) // We are within the lowers
-    {
-        ASSERT( aCurr.GetSwFrm(), "next called at end of iterator" );
-        if( aCurr.GetSwFrm() )
-        {
-            aNext = aCurr.GetSwFrm()->GetNext();
-            if( !aNext.GetSwFrm() ) // This was the last lower, but maybe
-            {                       // maybe there are some draw objs
-                if( pFrm->IsPageFrm() )
-                {
-                    const SwPageFrm *pPgFrm =
-                        static_cast< const SwPageFrm * >( pFrm );
-                    const SwSortDrawObjs *pObjs = pPgFrm->GetSortedObjs();
-                    if( pObjs && pObjs->Count() > 0 )
-                        aNext = (*pObjs)[0];
-                }
-            }
-        }
+        return pFrm->IsFlyFrm() &&
+               static_cast< const SwFlyFrm *>(pFrm)->IsFlyInCntFrm();
     }
     else
     {
-        nNextObj++;
-        aNext = (const SdrObject *)0; // clear next
-        if( pFrm->IsPageFrm() )
-        {
-            const SwPageFrm *pPgFrm =
-                    static_cast< const SwPageFrm * >( pFrm );
-            const SwSortDrawObjs *pObjs = pPgFrm->GetSortedObjs();
-            if( pObjs && nNextObj < pObjs->Count() )
-                aNext = (*pObjs)[nNextObj];
-        }
-    }
-
-    return aCurr;
-}
-
-SwFrmOrObjSortedIter::SwFrmOrObjSortedIter( const SwFrm *pF,
-                                             sal_Bool bReverse ) :
-    pFrm( pF ),
-    aNext( pF->GetLower() ),
-    nNextObj( 0 )
-{
-    if( !aNext.GetSwFrm() )
-    {
-        // No lowers?  Maybe thare are some fly frames or SdrObjects
-        if( pFrm->IsPageFrm() )
-        {
-            const SwPageFrm *pPgFrm =
-                static_cast< const SwPageFrm * >( pFrm );
-            const SwSortDrawObjs *pObjs = pPgFrm->GetSortedObjs();
-            if( pObjs && pObjs->Count() > 0 )
-                aNext = (*pObjs)[0];
-        }
+        const SwFrmFmt *pFrmFmt = pObj ? ::FindFrmFmt( pObj ) : 0;
+        return pFrmFmt ? FLY_IN_CNTNT == pFrmFmt->GetAnchor().GetAnchorId()
+                       : sal_False;
     }
 }

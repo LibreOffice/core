@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accselectionhelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-12 12:48:59 $
+ *  last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,6 @@ class SwAccessibleSelectionHelper
 
     /// get FE-Shell
     SwFEShell* GetFEShell();
-
-    /// get current selected Fly-Frame, if it's a child of this frame
-    const SwFlyFrm* GetSelectedChildFlyFrame();
 
 public:
 
