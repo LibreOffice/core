@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopback.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-26 15:33:16 $
+ *  last change: $Author: cl $ $Date: 2001-03-06 17:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,8 +218,8 @@ uno::Sequence< OUString > SAL_CALL SdUnoPageBackground::getSupportedServiceNames
     uno::Sequence< OUString > aNameSequence( 2 );
     OUString* pStrings = aNameSequence.getArray();
 
-    *pStrings++ = OUString::createFromAscii( sUNO_Service_PageBackground );
-    *pStrings   = OUString::createFromAscii( sUNO_Service_AreaShapeDescriptor );
+    *pStrings++ = OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_Service_PageBackground ) );
+    *pStrings   = OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_Service_FillProperties ) );
 
     return aNameSequence;
 }
