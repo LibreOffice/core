@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-25 10:15:46 $
+ *  last change: $Author: dv $ $Date: 2001-07-27 13:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,8 @@ struct SortingData_Impl
 class ViewTabListBox_Impl : public SvHeaderTabListBox
 {
 private:
+    Reference< XCommandEnvironment >    mxCmdEnv;
+
     ::osl::Mutex            maMutex;
     HeaderBar*              mpHeaderBar;
     SvtFileView_Impl*       mpParent;
@@ -211,6 +213,7 @@ private:
 
     void            DeleteEntries();
     void            DoQuickSearch( const xub_Unicode& rChar );
+    sal_Bool        Kill( const OUString& rURL );
 
 public:
                     ViewTabListBox_Impl( Window* pParentWin,
@@ -230,6 +233,8 @@ public:
     void            EnableAutoResize() { mbAutoResize = sal_True; }
     void            EnableContextMenu( sal_Bool bEnable ) { mbContextMenuEnabled = bEnable; }
     void            EnableDelete( sal_Bool bEnable ) { mbEnableDelete = bEnable; }
+
+    Reference< XCommandEnvironment >    GetCommandEnvironment() const { return mxCmdEnv; }
 
     DECL_LINK( ResetQuickSearch_Impl, Timer * );
 };
@@ -394,6 +399,13 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
 
     maResetQuickSearch.SetTimeout( QUICK_SEARCH_TIMEOUT );
     maResetQuickSearch.SetTimeoutHdl( LINK( this, ViewTabListBox_Impl, ResetQuickSearch_Impl ) );
+
+    Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+    Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
+               xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
+
+    mxCmdEnv = new CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
+
 }
 
 // -----------------------------------------------------------------------
@@ -600,7 +612,7 @@ void ViewTabListBox_Impl::DeleteEntries()
         if ( ( eResult == svtools::QUERYDELETE_ALL ) ||
              ( eResult == svtools::QUERYDELETE_YES ) )
         {
-            if ( ::utl::UCBContentHelper::Kill( aURL ) )
+            if ( Kill( aURL ) )
             {
                 delete (SvtContentEntry*)pCurEntry->GetUserData();
                 GetModel()->Remove( pCurEntry );
@@ -627,7 +639,7 @@ BOOL ViewTabListBox_Impl::EditedEntry( SvLBoxEntry* pEntry,
 
     try
     {
-        Content aContent( aURL, Reference< XCommandEnvironment > () );
+        Content aContent( aURL, mxCmdEnv );
 
         OUString aPropName = OUString::createFromAscii( "Title" );
         Any aValue;
@@ -682,6 +694,30 @@ void ViewTabListBox_Impl::DoQuickSearch( const xub_Unicode& rChar )
         Sound::Beep();
 
     maResetQuickSearch.Start();
+}
+
+// -----------------------------------------------------------------------
+sal_Bool ViewTabListBox_Impl::Kill( const OUString& rContent )
+{
+    sal_Bool bRet = sal_True;
+
+    try
+    {
+        Content aCnt( rContent, mxCmdEnv );
+        aCnt.executeCommand( OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
+    }
+    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    {
+        DBG_WARNING( "CommandAbortedException" );
+        bRet = sal_False;
+    }
+    catch( ::com::sun::star::uno::Exception& )
+    {
+        DBG_WARNING( "Any other exception" );
+        bRet = sal_False;
+    }
+
+    return bRet;
 }
 
 
@@ -1164,12 +1200,7 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
 
     try
     {
-        Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
-                   xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
-
-        Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ),
-                      new CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() ) );
+        Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), mpView->GetCommandEnvironment() );
         Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps(6);
 
