@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-09 13:58:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,7 +388,9 @@ void ScXMLRowExportPropertyMapper::ContextFilter(
     ::std::vector< XMLPropertyState >& rProperties,
     uno::Reference< beans::XPropertySet > rPropSet ) const
 {
-    XMLPropertyState* pHeight = NULL;
+    //#108550#; don't filter the height, so other applications know the calculated height
+
+/*  XMLPropertyState* pHeight = NULL;
     XMLPropertyState* pOptimalHeight = NULL;
 
     for( ::std::vector< XMLPropertyState >::iterator propertie = rProperties.begin();
@@ -411,7 +413,7 @@ void ScXMLRowExportPropertyMapper::ContextFilter(
     {
         pOptimalHeight->mnIndex = -1;
         pOptimalHeight->maValue.clear();
-    }
+    }*/
 }
 
 ScXMLColumnExportPropertyMapper::ScXMLColumnExportPropertyMapper(
