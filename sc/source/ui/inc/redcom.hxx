@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redcom.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:00 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,14 +72,14 @@
 
 class ScDocShell;
 
-class ScRedComDialog : public SvxPostItDialog
+class ScRedComDialog
 {
-
 private:
 
     ScChangeAction  *pChangeAction;
     ScDocShell      *pDocShell;
     String          aComment;
+    SvxPostItDialog* pDlg;
 
     DECL_LINK( PrevHdl, SvxPostItDialog* );
     DECL_LINK( NextHdl, SvxPostItDialog* );
@@ -98,7 +98,7 @@ public:
                     ScDocShell *,ScChangeAction *,BOOL bPrevNext = FALSE);
     ~ScRedComDialog();
 
-    virtual short Execute();
+    short Execute();
 };
 
 #endif
