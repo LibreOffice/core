@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-13 08:48:31 $
+ *  last change: $Author: kz $ $Date: 2002-09-17 13:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3722,7 +3722,7 @@ ModalDialog RID_SCDLG_NAMES_PASTE
         Text [ english_us ] = "Insert ~All" ;
         Text [ italian ] = "Inserici tutto" ;
         Text [ spanish ] = "~Insertar todo" ;
-        Text [ french ] = "~Liste" ;
+        Text [ french ] = "Insérer tout" ;
         Text [ dutch ] = "~Lijst" ;
         Text [ swedish ] = "Infoga ~alla" ;
         Text [ danish ] = "Liste" ;
