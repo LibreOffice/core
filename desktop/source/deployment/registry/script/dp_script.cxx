@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_script.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:18:31 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,12 +78,9 @@ using namespace ::com::sun::star::ucb;
 using ::rtl::OUString;
 namespace css = ::com::sun::star;
 
-namespace dp_registry
-{
-namespace backend
-{
-namespace script
-{
+namespace dp_registry {
+namespace backend {
+namespace script {
 
 //==============================================================================
 class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
@@ -103,19 +100,11 @@ public:
     OUString m_strBasicLib;
     OUString m_strDialogLib;
 
-    inline BackendImpl(
+    BackendImpl(
+        Sequence<Any> const & args,
         Reference<XComponentContext> const & xComponentContext,
         OUString const & implName,
-        Sequence<OUString> const & supportedMediaTypes )
-        : PackageRegistryBackend(
-            xComponentContext, implName, supportedMediaTypes ),
-          m_strBasicLib( getResourceString(RID_STR_BASIC_LIB) ),
-          m_strDialogLib( getResourceString(RID_STR_DIALOG_LIB) )
-        {}
-
-    // XInitialization
-    virtual void SAL_CALL initialize( Sequence<Any> const & args )
-        throw (Exception);
+        Sequence<OUString> const & supportedMediaTypes );
 };
 
 //==============================================================================
@@ -126,11 +115,11 @@ protected:
     OUString m_dialogURL;
     OUString m_dialogName;
 
-    inline BackendImpl * getMyBackend() const
-        { return static_cast<BackendImpl *>(m_myBackend.get()); }
+    inline BackendImpl * getMyBackend() const {
+        return static_cast<BackendImpl *>(m_myBackend.get()); }
 
     // Package
-    virtual bool isRegistered_(
+    virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
         ::osl::ResettableMutexGuard & guard,
         ::rtl::Reference<AbortChannel> const & abortChannel,
         Reference<XCommandEnvironment> const & xCmdEnv );
@@ -192,48 +181,48 @@ PackageImpl * PackageImpl::create(
 }
 
 //______________________________________________________________________________
-void BackendImpl::initialize( Sequence< Any > const & args )
-    throw (Exception)
+BackendImpl::BackendImpl(
+    Sequence<Any> const & args,
+    Reference<XComponentContext> const & xComponentContext,
+    OUString const & implName,
+    Sequence<OUString> const & supportedMediaTypes )
+    : PackageRegistryBackend(
+        args, xComponentContext, implName, supportedMediaTypes ),
+      m_strBasicLib( getResourceString(RID_STR_BASIC_LIB) ),
+      m_strDialogLib( getResourceString(RID_STR_DIALOG_LIB) )
 {
-    PackageRegistryBackend::initialize( args );
-
-    if (! transientMode())
+    OSL_ASSERT( ! transientMode() );
+    if (office_is_running())
     {
-        if (office_is_running())
-        {
-            Reference<XComponentContext> xContext( getComponentContext() );
-            m_xScriptLibs.set(
-                xContext->getServiceManager()->createInstanceWithContext(
-                    OUSTR("com.sun.star."
-                          "script.ApplicationScriptLibraryContainer"),
-                    xContext ), UNO_QUERY_THROW );
-            m_xDialogLibs.set(
-                xContext->getServiceManager()->createInstanceWithContext(
-                    OUSTR("com.sun.star."
-                          "script.ApplicationDialogLibraryContainer"),
-                    xContext ), UNO_QUERY_THROW );
-        }
-        else
-        {
-            OUString basic_path(
-                m_eContext == CONTEXT_USER
-                ? OUSTR("vnd.sun.star.expand:${$SYSBINDIR/"
-                        SAL_CONFIGFILE("bootstrap")
-                        ":UserInstallation}/user/basic")
-                : OUSTR("vnd.sun.star.expand:${$SYSBINDIR/"
-                        SAL_CONFIGFILE("bootstrap")
-                        ":BaseInstallation}/share/basic") );
-            m_basic_script_libs.reset(
-                new LibraryContainer(
-                    make_url( basic_path, OUSTR("/script.xlc") ),
-                    getMutex(),
-                    getComponentContext() ) );
-            m_dialog_libs.reset(
-                new LibraryContainer(
-                    make_url( basic_path, OUSTR("/dialog.xlc") ),
-                    getMutex(),
-                    getComponentContext() ) );
-        }
+        m_xScriptLibs.set(
+            xComponentContext->getServiceManager()->createInstanceWithContext(
+                OUSTR("com.sun.star.script.ApplicationScriptLibraryContainer"),
+                xComponentContext ), UNO_QUERY_THROW );
+        m_xDialogLibs.set(
+            xComponentContext->getServiceManager()->createInstanceWithContext(
+                OUSTR("com.sun.star.script.ApplicationDialogLibraryContainer"),
+                xComponentContext ), UNO_QUERY_THROW );
+    }
+    else
+    {
+        OUString basic_path(
+            m_eContext == CONTEXT_USER
+            ? OUSTR("vnd.sun.star.expand:${$SYSBINDIR/"
+                    SAL_CONFIGFILE("bootstrap")
+                    ":UserInstallation}/user/basic")
+            : OUSTR("vnd.sun.star.expand:${$SYSBINDIR/"
+                    SAL_CONFIGFILE("bootstrap")
+                    ":BaseInstallation}/share/basic") );
+        m_basic_script_libs.reset(
+            new LibraryContainer(
+                make_url( basic_path, OUSTR("/script.xlc") ),
+                getMutex(),
+                xComponentContext ) );
+        m_dialog_libs.reset(
+            new LibraryContainer(
+                make_url( basic_path, OUSTR("/dialog.xlc") ),
+                getMutex(),
+                xComponentContext ) );
     }
 }
 
@@ -245,16 +234,16 @@ OUString SAL_CALL getImplementationName()
 
 //==============================================================================
 Reference<XInterface> SAL_CALL create(
+    Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext )
-    SAL_THROW( (Exception) )
 {
     OUString const mediaTypes [] = {
-        OUSTR("application/vnd.sun.star.basic-script"),
+        OUSTR("application/vnd.sun.star.basic-library"),
         OUSTR("application/vnd.sun.star.dialog-library")
     };
     return static_cast< ::cppu::OWeakObject * >(
         new BackendImpl(
-            xComponentContext, getImplementationName(),
+            args, xComponentContext, getImplementationName(),
             Sequence<OUString >( mediaTypes, ARLEN(mediaTypes) ) ) );
 }
 
@@ -276,7 +265,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             if (create_ucb_content(
                     0, make_url( url, OUSTR("script.xlb") ),
                     xCmdEnv, false /* no throw */ ))
-                mediaType = OUSTR("application/vnd.sun.star.basic-script");
+                mediaType = OUSTR("application/vnd.sun.star.basic-library");
             // probe for dialog.xlb:
             else if (create_ucb_content(
                          0, make_url( url, OUSTR("dialog.xlb") ),
@@ -295,7 +284,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     {
         if (type.EqualsIgnoreCaseAscii("application"))
         {
-            if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.basic-script"))
+            if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.basic-library"))
             {
                 OUString dialogURL( make_url( url, OUSTR("dialog.xlb") ) );
                 if (! create_ucb_content(
@@ -328,8 +317,7 @@ Any PackageImpl::getIcon( sal_Bool highContrast, sal_Bool smallIcon )
     throw (RuntimeException)
 {
     OSL_ASSERT( smallIcon );
-    if (smallIcon)
-    {
+    if (smallIcon) {
         sal_uInt16 ret;
         if (m_scriptURL.getLength() > 0)
             ret = highContrast ? RID_IMG_SCRIPTLIB_HC : RID_IMG_SCRIPTLIB;
@@ -342,26 +330,28 @@ Any PackageImpl::getIcon( sal_Bool highContrast, sal_Bool smallIcon )
 
 // Package
 //______________________________________________________________________________
-bool PackageImpl::isRegistered_(
+beans::Optional< beans::Ambiguous<sal_Bool> > PackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard & guard,
     ::rtl::Reference<AbortChannel> const & abortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     BackendImpl * that = getMyBackend();
-    if (m_scriptURL.getLength() > 0)
-    {
+    bool reg;
+    if (m_scriptURL.getLength() > 0) {
         if (that->m_xScriptLibs.is())
-            return that->m_xScriptLibs->hasByName( m_name );
+            reg = that->m_xScriptLibs->hasByName( m_name );
         else
-            return that->m_basic_script_libs->has( m_name, xCmdEnv );
+            reg = that->m_basic_script_libs->has( m_name, xCmdEnv );
     }
-    else
-    {
+    else {
         if (that->m_xDialogLibs.is())
-            return that->m_xDialogLibs->hasByName( m_dialogName );
+            reg = that->m_xDialogLibs->hasByName( m_dialogName );
         else
-            return that->m_dialog_libs->has( m_dialogName, xCmdEnv );
+            reg = that->m_dialog_libs->has( m_dialogName, xCmdEnv );
     }
+    return beans::Optional< beans::Ambiguous<sal_Bool> >(
+        true /* IsPresent */,
+        beans::Ambiguous<sal_Bool>( reg, false /* IsAmbiguous */ ) );
 }
 
 //______________________________________________________________________________
@@ -374,8 +364,7 @@ void PackageImpl::processPackage_(
     BackendImpl * that = getMyBackend();
     if (registerPackage)
     {
-        if (m_scriptURL.getLength() > 0)
-        {
+        if (m_scriptURL.getLength() > 0) {
             if (that->m_xScriptLibs.is())
                 that->m_xScriptLibs->createLibraryLink(
                     m_name, m_scriptURL, false /* ! read-only */ );
@@ -383,8 +372,7 @@ void PackageImpl::processPackage_(
                 that->m_basic_script_libs->insert(
                     m_name, m_scriptURL, xCmdEnv );
         }
-        if (m_dialogURL.getLength() > 0)
-        {
+        if (m_dialogURL.getLength() > 0) {
             if (that->m_xDialogLibs.is())
                 that->m_xDialogLibs->createLibraryLink(
                     m_dialogName, m_dialogURL, false /* ! read-only */ );
@@ -395,18 +383,15 @@ void PackageImpl::processPackage_(
     }
     else // revokePackage()
     {
-        try
-        {
-            if (m_scriptURL.getLength() > 0)
-            {
+        try {
+            if (m_scriptURL.getLength() > 0) {
                 if (that->m_xScriptLibs.is())
                     that->m_xScriptLibs->removeLibrary( m_name );
                 else
                     that->m_basic_script_libs->remove(
                         m_name, m_scriptURL, xCmdEnv );
             }
-            if (m_dialogURL.getLength() > 0)
-            {
+            if (m_dialogURL.getLength() > 0) {
                 if (that->m_xDialogLibs.is())
                     that->m_xDialogLibs->removeLibrary( m_dialogName );
                 else
@@ -414,8 +399,7 @@ void PackageImpl::processPackage_(
                         m_dialogName, m_dialogURL, xCmdEnv );
             }
         }
-        catch (lang::WrappedTargetException & exc)
-        {
+        catch (lang::WrappedTargetException & exc) {
             // unwrap WrappedTargetException:
             ::cppu::throwException( exc.TargetException );
         }
