@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-05 09:56:30 $
+ *  last change: $Author: sab $ $Date: 2002-08-08 13:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,12 @@
 #endif
 #ifndef SC_UNOGUARD_HXX
 #include "unoguard.hxx"
+#endif
+#ifndef SC_SCRESID_HXX
+#include "scresid.hxx"
+#endif
+#ifndef SC_SC_HRC
+#include "sc.hrc"
 #endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
@@ -355,20 +361,23 @@ uno::Reference< XAccessible > SAL_CALL
     ScAccessibleTableBase::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
-    return getAccessibleName();
+    String sDesc(ScResId(STR_ACC_TABLE_DESCR));
+    String sCoreName;
+    if (mpDoc && mpDoc->GetName( maRange.aStart.Tab(), sCoreName ))
+        sDesc.SearchAndReplaceAscii("%1", sCoreName);
+    sDesc.SearchAndReplaceAscii("%2", String(ScResId(SCSTR_UNKNOWN)));
+    return rtl::OUString(sDesc);
 }
 
 ::rtl::OUString SAL_CALL
     ScAccessibleTableBase::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    IsObjectValid();
-    rtl::OUString sName;
+    String sName(ScResId(STR_ACC_TABLE_NAME));
     String sCoreName;
     if (mpDoc && mpDoc->GetName( maRange.aStart.Tab(), sCoreName ))
-        sName = rtl::OUString(sCoreName);
-    return sName;
+        sName.SearchAndReplaceAscii("%1", sCoreName);
+    return rtl::OUString(sName);
 }
 
 uno::Reference<XAccessibleRelationSet> SAL_CALL

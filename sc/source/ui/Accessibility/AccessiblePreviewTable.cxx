@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-01 12:47:05 $
+ *  last change: $Author: sab $ $Date: 2002-08-08 13:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,12 @@
 #include "prevloc.hxx"
 #include "attrib.hxx"
 #include "document.hxx"
+#ifndef SC_SCRESID_HXX
+#include "scresid.hxx"
+#endif
+#ifndef SC_SC_HRC
+#include "sc.hrc"
+#endif
 
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
 #include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -645,13 +651,40 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessiblePreviewTable::getImplementationId()
 ::rtl::OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleDescription(void)
                     throw (uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("This is a table in a page preview of a Spreadsheet Document."));
+    String sDesc(ScResId(STR_ACC_TABLE_DESCR));
+    if (mpViewShell && mpViewShell->GetDocument())
+    {
+        FillTableInfo();
+
+        if ( mpTableInfo )
+        {
+            String sCoreName;
+            if (mpViewShell->GetDocument()->GetName( mpTableInfo->GetTab(), sCoreName ))
+                sDesc.SearchAndReplaceAscii("%1", sCoreName);
+        }
+    }
+    sDesc.SearchAndReplaceAscii("%2", String(ScResId(SCSTR_UNKNOWN)));
+    return rtl::OUString(sDesc);
 }
 
 ::rtl::OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleName(void)
                     throw (uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Spreadsheet Page Preview Table"));
+    String sName(ScResId(STR_ACC_TABLE_NAME));
+
+    if (mpViewShell && mpViewShell->GetDocument())
+    {
+        FillTableInfo();
+
+        if ( mpTableInfo )
+        {
+            String sCoreName;
+            if (mpViewShell->GetDocument()->GetName( mpTableInfo->GetTab(), sCoreName ))
+                sName.SearchAndReplaceAscii("%1", sCoreName);
+        }
+    }
+
+    return rtl::OUString(sName);
 }
 
 Rectangle ScAccessiblePreviewTable::GetBoundingBoxOnScreen() const throw (uno::RuntimeException)

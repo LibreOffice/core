@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeaderArea.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-04 08:23:35 $
+ *  last change: $Author: sab $ $Date: 2002-08-08 13:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,12 @@
 #endif
 #include "prevwsh.hxx"
 #include "prevloc.hxx"
+#ifndef SC_SCRESID_HXX
+#include "scresid.hxx"
+#endif
+#ifndef SC_SC_HRC
+#include "sc.hrc"
+#endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
@@ -227,49 +233,45 @@ uno::Sequence<sal_Int8> SAL_CALL
 rtl::OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleDescription(void)
     throw(uno::RuntimeException)
 {
-    rtl::OUStringBuffer sBuffer(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("This is a ")));
+    rtl::OUString sDesc;
     switch (meAdjust)
     {
     case SVX_ADJUST_LEFT :
-        sBuffer.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("left ")));
+        sDesc = rtl::OUString(String(ScResId(STR_ACC_LEFTAREA_DESCR)));
         break;
     case SVX_ADJUST_RIGHT:
-        sBuffer.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("right ")));
+        sDesc = rtl::OUString(String(ScResId(STR_ACC_RIGHTAREA_DESCR)));
         break;
     case SVX_ADJUST_CENTER:
-        sBuffer.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("center ")));
+        sDesc = rtl::OUString(String(ScResId(STR_ACC_CENTERAREA_DESCR)));
         break;
     default:
         DBG_ERRORFILE("wrong adjustment found");
     }
-    sBuffer.append(rtl::OUString::createFromAscii( mbHeader ?
-        "header in a page preview of a Spreadsheet Document." :
-        "footer in a page preview of a Spreadsheet Document." ));
 
-    return sBuffer.makeStringAndClear();
+    return sDesc;
 }
 
 rtl::OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    rtl::OUStringBuffer sBuffer(rtl::OUString::createFromAscii( mbHeader ?
-        "Spreadsheet Page Preview Header" : "Spreadsheet Page Preview Footer" ));
-
+    rtl::OUString sName;
     switch (meAdjust)
     {
     case SVX_ADJUST_LEFT :
-        sBuffer.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(left)")));
+        sName = rtl::OUString(String(ScResId(STR_ACC_LEFTAREA_NAME)));
         break;
     case SVX_ADJUST_RIGHT:
-        sBuffer.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(right)")));
+        sName = rtl::OUString(String(ScResId(STR_ACC_RIGHTAREA_NAME)));
         break;
     case SVX_ADJUST_CENTER:
-        sBuffer.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(center)")));
+        sName = rtl::OUString(String(ScResId(STR_ACC_CENTERAREA_NAME)));
         break;
     default:
         DBG_ERRORFILE("wrong adjustment found");
     }
-    return sBuffer.makeStringAndClear();
+
+    return sName;
 }
 
 Rectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen(void) const

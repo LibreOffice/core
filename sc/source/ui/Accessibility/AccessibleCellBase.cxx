@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCellBase.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-02 12:37:36 $
+ *  last change: $Author: sab $ $Date: 2002-08-08 13:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,12 @@
 #endif
 #ifndef SC_UNOGUARD_HXX
 #include "unoguard.hxx"
+#endif
+#ifndef SC_SCRESID_HXX
+#include "scresid.hxx"
+#endif
+#ifndef SC_SC_HRC
+#include "sc.hrc"
 #endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
@@ -183,17 +189,7 @@ sal_Int32
     ScAccessibleCellBase::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
-    rtl::OUString sDescription;
-
-    if (mpDoc)
-    {
-        ScPostIt aNote;
-        mpDoc->GetNote(maCellAddress.Col(), maCellAddress.Row(), maCellAddress.Tab(), aNote);
-        sDescription = rtl::OUString (aNote.GetText());
-    }
-
-    if (!sDescription.getLength())
-        sDescription = getAccessibleName();
+    rtl::OUString sDescription( String(ScResId(STR_ACC_CELL_DESCR)) );
 
     return sDescription;
 }
@@ -202,12 +198,12 @@ sal_Int32
     ScAccessibleCellBase::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    rtl::OUString sName;
+    String sName( ScResId(STR_ACC_CELL_NAME) );
     String sAddress;
     // Document not needed, because only the cell address, but not the tablename is needed
     maCellAddress.Format( sAddress, SCA_VALID, NULL );
-    sName = rtl::OUString(sAddress);
-    return sName;
+    sName.SearchAndReplaceAscii("%1", sAddress);
+    return rtl::OUString(sName);
 }
 
     //=====  XAccessibleValue  ================================================

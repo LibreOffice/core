@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditObject.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-06 11:05:03 $
+ *  last change: $Author: sab $ $Date: 2002-08-08 13:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,13 @@ namespace accessibility
 class EditView;
 class Window;
 
+enum EditObjectType
+{
+    CellInEditMode,
+    EditLine,
+    EditControl,
+};
+
 /** @descr
         This base class provides an implementation of the
         <code>AccessibleCell</code> service.
@@ -86,7 +93,8 @@ public:
     ScAccessibleEditObject(
         const ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
-        EditView* pEditView, Window* pWin, sal_Bool bCellInEditMode);
+        EditView* pEditView, Window* pWin, const rtl::OUString& rName,
+        const rtl::OUString& rDescription, EditObjectType eObjectType);
 
 protected:
     virtual ~ScAccessibleEditObject();
@@ -185,7 +193,7 @@ private:
     accessibility::AccessibleTextHelper* mpTextHelper;
     EditView* mpEditView;
     Window* mpWindow;
-    sal_Bool mbCellInEditMode;
+    EditObjectType meObjectType;
     sal_Bool mbHasFocus;
 
     sal_Bool IsDefunc(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeader.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-01 14:16:53 $
+ *  last change: $Author: sab $ $Date: 2002-08-08 13:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,12 @@
 #endif
 #ifndef SC_SCATTR_HXX
 #include "attrib.hxx"
+#endif
+#ifndef SC_SCRESID_HXX
+#include "scresid.hxx"
+#endif
+#ifndef SC_SC_HRC
+#include "sc.hrc"
 #endif
 
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
@@ -384,16 +390,15 @@ uno::Sequence<rtl::OUString> SAL_CALL ScAccessiblePageHeader::getSupportedServic
 ::rtl::OUString SAL_CALL ScAccessiblePageHeader::createAccessibleDescription(void)
                     throw (uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( mbHeader ?
-        "This is a header in a page preview of a Spreadsheet Document." :
-        "This is a footer in a page preview of a Spreadsheet Document." );
+    String sDesc(ScResId(mbHeader ? STR_ACC_HEADER_DESCR : STR_ACC_FOOTER_DESCR));
+    sDesc.SearchAndReplaceAscii("%1", String(ScResId(SCSTR_UNKNOWN)));
+    return rtl::OUString( sDesc );
 }
 
 ::rtl::OUString SAL_CALL ScAccessiblePageHeader::createAccessibleName(void)
                     throw (uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( mbHeader ?
-        "Spreadsheet Page Preview Header" : "Spreadsheet Page Preview Footer" );
+    return rtl::OUString( String(ScResId(mbHeader ? STR_ACC_HEADER_NAME : STR_ACC_FOOTER_NAME)) );
 }
 
 Rectangle ScAccessiblePageHeader::GetBoundingBoxOnScreen() const throw (uno::RuntimeException)

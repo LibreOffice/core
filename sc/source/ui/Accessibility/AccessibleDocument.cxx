@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-07 12:40:22 $
+ *  last change: $Author: sab $ $Date: 2002-08-08 13:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,12 @@
 #endif
 #ifndef _SC_ACCESSIBLEEDITOBJECT_HXX
 #include "AccessibleEditObject.hxx"
+#endif
+#ifndef SC_SCRESID_HXX
+#include "scresid.hxx"
+#endif
+#ifndef SC_SC_HRC
+#include "sc.hrc"
 #endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
@@ -1116,7 +1122,9 @@ ScAccessibleDocument::ScAccessibleDocument(
         }
         if (pViewShell->GetViewData()->HasEditView( eSplitPos ))
         {
-            uno::Reference<XAccessible> xAcc = new ScAccessibleEditObject(this, pViewShell->GetViewData()->GetEditView(eSplitPos), pViewShell->GetWindowByPos(eSplitPos), sal_True);
+            uno::Reference<XAccessible> xAcc = new ScAccessibleEditObject(this, pViewShell->GetViewData()->GetEditView(eSplitPos),
+                pViewShell->GetWindowByPos(eSplitPos), GetCurrentCellName(), GetCurrentCellDescription(),
+                CellInEditMode);
             AddChild(xAcc, sal_False);
         }
     }
@@ -1249,7 +1257,8 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             if (mpViewShell && mpViewShell->GetViewData()->GetEditView(meSplitPos))
             {
-                mpTempAccEdit = new ScAccessibleEditObject(this, mpViewShell->GetViewData()->GetEditView(meSplitPos), mpViewShell->GetWindowByPos(meSplitPos), sal_True);
+                mpTempAccEdit = new ScAccessibleEditObject(this, mpViewShell->GetViewData()->GetEditView(meSplitPos),
+                    mpViewShell->GetWindowByPos(meSplitPos), GetCurrentCellName(), GetCurrentCellDescription(), CellInEditMode);
                 uno::Reference<XAccessible> xAcc = mpTempAccEdit;
 
                 AddChild(xAcc, sal_True);
@@ -1715,7 +1724,7 @@ utl::AccessibleRelationSetHelper* ScAccessibleDocument::GetRelationSet(const ScA
     ScAccessibleDocument::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("This is a view of a Spreadsheet Document."));
+    return rtl::OUString(String(ScResId(STR_ACC_DOC_DESCR)));
 }
 
 ::rtl::OUString SAL_CALL
@@ -1724,7 +1733,7 @@ utl::AccessibleRelationSetHelper* ScAccessibleDocument::GetRelationSet(const ScA
 {
     ScUnoGuard aGuard;
     IsObjectValid();
-    rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM ("Spreadsheet Document View "));
+    rtl::OUString sName(String(ScResId(STR_ACC_DOC_NAME)));
     sal_Int32 nNumber(sal_Int32(meSplitPos) + 1);
     sName += rtl::OUString::valueOf(nNumber);
     return sName;
@@ -1845,4 +1854,22 @@ void ScAccessibleDocument::RemoveChild(const uno::Reference<XAccessible>& xAcc, 
         }
         mxTempAcc = NULL;
     }
+}
+
+rtl::OUString ScAccessibleDocument::GetCurrentCellName() const
+{
+    String sName( ScResId(STR_ACC_CELL_NAME) );
+    if (mpViewShell)
+    {
+        String sAddress;
+        // Document not needed, because only the cell address, but not the tablename is needed
+        mpViewShell->GetViewData()->GetCurPos().Format( sAddress, SCA_VALID, NULL );
+        sName.SearchAndReplaceAscii("%1", sAddress);
+    }
+    return rtl::OUString(sName);
+}
+
+rtl::OUString ScAccessibleDocument::GetCurrentCellDescription() const
+{
+    return rtl::OUString();
 }

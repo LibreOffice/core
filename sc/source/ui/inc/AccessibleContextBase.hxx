@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-06 11:06:28 $
+ *  last change: $Author: sab $ $Date: 2002-08-08 13:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,6 +372,11 @@ protected:
 
     virtual void IsObjectValid() const
         throw (::com::sun::star::lang::DisposedException);
+
+    /// Use this method to set initial Name without notification
+    void SetName(const rtl::OUString& rName) { msName = rName; }
+    /// Use this method to set initial Description without notification
+    void SetDescription(const rtl::OUString& rDesc) { msDescription = rDesc; }
 
 private:
     /// Reference to the parent object.

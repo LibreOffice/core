@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-02 10:01:25 $
+ *  last change: $Author: sab $ $Date: 2002-08-08 13:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,12 @@
 #endif
 #ifndef SC_EDITSRC_HXX
 #include "editsrc.hxx"
+#endif
+#ifndef SC_SCRESID_HXX
+#include "scresid.hxx"
+#endif
+#ifndef SC_SC_HRC
+#include "sc.hrc"
 #endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
@@ -1749,16 +1755,13 @@ uno::Sequence<sal_Int8> SAL_CALL
 ::rtl::OUString SAL_CALL ScAccessibleDocumentPagePreview::createAccessibleDescription(void)
                     throw (uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("This is a page preview of a Spreadsheet Document."));
+    return rtl::OUString(String(ScResId(STR_ACC_PREVIEWDOC_DESCR)));
 }
 
 ::rtl::OUString SAL_CALL ScAccessibleDocumentPagePreview::createAccessibleName(void)
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    IsObjectValid();
-    rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("Spreadsheet Document Page Preview"));
-    return sName;
+    return rtl::OUString (String(ScResId(STR_ACC_PREVIEWDOC_NAME)));
 }
 
 Rectangle ScAccessibleDocumentPagePreview::GetBoundingBoxOnScreen() const throw (uno::RuntimeException)

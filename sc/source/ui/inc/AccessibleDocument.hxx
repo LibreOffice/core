@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-08 09:41:32 $
+ *  last change: $Author: sab $ $Date: 2002-08-08 13:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,6 +362,9 @@ private:
 
     void AddChild(const com::sun::star::uno::Reference<drafts::com::sun::star::accessibility::XAccessible>& xAcc, sal_Bool bFireEvent);
     void RemoveChild(const com::sun::star::uno::Reference<drafts::com::sun::star::accessibility::XAccessible>& xAcc, sal_Bool bFireEvent);
+
+    rtl::OUString GetCurrentCellName() const;
+    rtl::OUString GetCurrentCellDescription() const;
 };
 
 

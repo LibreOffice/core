@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewHeaderCell.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-01 12:46:25 $
+ *  last change: $Author: sab $ $Date: 2002-08-08 13:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,12 @@
 #include "unoguard.hxx"
 #include "miscuno.hxx"
 #include "prevloc.hxx"
+#ifndef SC_SCRESID_HXX
+#include "scresid.hxx"
+#endif
+#ifndef SC_SC_HRC
+#include "sc.hrc"
+#endif
 
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
 #include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -334,12 +340,12 @@ Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBox() const throw (uno::Runt
 
 rtl::OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleDescription() throw(uno::RuntimeException)
 {
-    return createAccessibleName();
+    return rtl::OUString(String(ScResId(STR_ACC_HEADERCELL_DESCR)));
 }
 
 rtl::OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleName() throw(uno::RuntimeException)
 {
-    rtl::OUString sName;
+    rtl::OUString sName(String(ScResId(STR_ACC_HEADERCELL_NAME)));
 
     if ( mbColumnHeader )
     {
@@ -352,13 +358,13 @@ rtl::OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleName() thr
         else
         {
             // name of column header
-            sName = ColToAlpha( maCellPos.Col() );
+            sName += ColToAlpha( maCellPos.Col() );
         }
     }
     else
     {
         // name of row header
-        sName = rtl::OUString::valueOf( (sal_Int32) ( maCellPos.Row() + 1 ) );
+        sName += rtl::OUString::valueOf( (sal_Int32) ( maCellPos.Row() + 1 ) );
     }
 
     return sName;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditObject.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-06 11:05:53 $
+ *  last change: $Author: sab $ $Date: 2002-08-08 13:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,16 +112,19 @@ using namespace ::drafts::com::sun::star::accessibility;
 
 ScAccessibleEditObject::ScAccessibleEditObject(
         const uno::Reference<XAccessible>& rxParent,
-        EditView* pEditView, Window* pWin, sal_Bool bCellInEditMode)
+        EditView* pEditView, Window* pWin, const rtl::OUString& rName,
+        const rtl::OUString& rDescription, EditObjectType eObjectType)
     :
     ScAccessibleContextBase(rxParent, AccessibleRole::PANEL),
     mpTextHelper(NULL),
     mpEditView(pEditView),
     mpWindow(pWin),
-    mbCellInEditMode(bCellInEditMode),
+    meObjectType(eObjectType),
     mbHasFocus(sal_False)
 {
     CreateTextHelper();
+    SetName(rName);
+    SetDescription(rDescription);
 }
 
 ScAccessibleEditObject::~ScAccessibleEditObject()
@@ -193,7 +196,7 @@ Rectangle ScAccessibleEditObject::GetBoundingBox(void) const
         throw (uno::RuntimeException)
 {
     Rectangle aCellRect;
-    if (mbCellInEditMode)
+    if (meObjectType == CellInEditMode)
     {
         if (mpEditView && mpWindow && mpEditView->GetEditEngine())
         {
@@ -268,17 +271,16 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleEditObject::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
-    return getAccessibleName();
+//    DBG_ERRORFILE("Should never be called, because is set in the constructor.")
+    return rtl::OUString();
 }
 
 ::rtl::OUString SAL_CALL
     ScAccessibleEditObject::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    if (mbCellInEditMode)
-        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("Cell in Editmode"));
-    else
-        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("Editline"));
+    DBG_ERRORFILE("Should never be called, because is set in the constructor.");
+    return rtl::OUString();
 }
 
     ///=====  XAccessibleEventBroadcaster  =====================================
@@ -345,7 +347,7 @@ void ScAccessibleEditObject::CreateTextHelper()
 {
     if (!mpTextHelper)
     {
-        if (mbCellInEditMode)
+        if (meObjectType == CellInEditMode || meObjectType == EditControl)
         {
             ::std::auto_ptr < ScAccessibleTextData > pAccessibleTextData
                 (new ScAccessibleEditObjectTextData(mpEditView, mpWindow));
