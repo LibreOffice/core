@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:01:39 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,14 +75,14 @@ ModalDialog DLG_BREAK
         Size = MAP_APPFONT( 85, 10 );
         Text = "Bearbeitetes Metafile:";
         Text [ ENGLISH ] = "Processing Metafile:";
-        Text[ language_user1 ] = "EM Dec 2002: This string shows up in an error message at the time when the metafile is being worked on. To read like the answer to 'Which metafile am I processing?' \"processsing metafile: 2\"";
+        Text[ language_user1 ] = "; EM Dec 2002: This string shows up in an error message at the time when the metafile is being worked on. To read like the answer to 'Which metafile am I processing?' \"processsing metafile: 2\"";
         Text[ portuguese ] = "Processing metafile:";
         Text[ russian ] = "Processing metafile:";
         Text[ spanish ] = "Procesando el metaarchivo:";
         Text[ italian ] = "Metafile elaborati:";
         Text[ swedish ] = "Metafil som bearbetas:";
         Text[ polish ] = "Processing metafile:";
-        Text[ portuguese_brazilian ] = "Processing metafile:";
+        Text[ portuguese_brazilian ] = "Processando o meta-arquivo:";
         Text[ japanese ] = "メタファイルの処理:";
         Text[ korean ] = "처리 중인 메타 파일:";
         Text[ turkish ] = "��lenecek metadosyas�:";
@@ -108,14 +108,14 @@ ModalDialog DLG_BREAK
         Size = MAP_APPFONT( 106, 10 );
         Text = "Metaobjekte aufgebrochen:";
         Text [ ENGLISH ] = "Brokened down metaobjects:";
-        Text[ language_user1 ] = "EM Dec 2002: This string shows up in an error message. The colon is followed by the number of metaobjects that were broken down. (as in \"Break\" found in context menu of a selected metafile)";
+        Text[ language_user1 ] = "; EM Dec 2002: This string shows up in an error message. The colon is followed by the number of metaobjects that were broken down. (as in \"Break\" found in context menu of a selected metafile)";
         Text[ portuguese ] = "Brokened down metaobjects:";
         Text[ russian ] = "Brokened down metaobjects:";
         Text[ spanish ] = "Metaobjetos quebrados:";
         Text[ italian ] = "Metaoggetti suddivisi:";
         Text[ swedish ] = "Uppbrutna metaobjekt:";
         Text[ polish ] = "Brokened down metaobjects:";
-        Text[ portuguese_brazilian ] = "Brokened down metaobjects:";
+        Text[ portuguese_brazilian ] = "Meta-objetos quebrados: ";
         Text[ japanese ] = "詳細なメタオブジェクト:";
         Text[ korean ] = "메타 개체 분할됨:";
         Text[ turkish ] = "Bozulmu� metanesneleri:";
@@ -141,14 +141,14 @@ ModalDialog DLG_BREAK
         Size = MAP_APPFONT( 90, 10 );
         Text = "Zeichenobjekte eingef�gt:";
         Text [ ENGLISH ] = "Inserted drawing objects:";
-        Text[ language_user1 ] = "EM Dec 2002: This string shows up in a rare error message. The colon is followed by a number. How many inserted drawing objects? \"Inserted drawing objects: 3\"";
+        Text[ language_user1 ] = "; EM Dec 2002: This string shows up in a rare error message. The colon is followed by a number. How many inserted drawing objects? \"Inserted drawing objects: 3\"";
         Text[ portuguese ] = "Inserted drawing objects:";
         Text[ russian ] = "Inserted drawing objects:";
         Text[ spanish ] = "Objetos de dibujo insertados:";
         Text[ italian ] = "Oggetti di disegno inseriti:";
         Text[ swedish ] = "Infogade ritobjekt:";
         Text[ polish ] = "Inserted drawing objects:";
-        Text[ portuguese_brazilian ] = "Inserted drawing objects:";
+        Text[ portuguese_brazilian ] = "Objetos de desenho inseridos";
         Text[ japanese ] = "挿入された図形オブジェクト:";
         Text[ korean ] = "그리기 개체 삽입됨:";
         Text[ turkish ] = "Eklenmi� �izim nesneleri:";
@@ -189,14 +189,14 @@ ModalDialog DLG_BREAK
         Size = MAP_APPFONT( 50, 14 );
         TabStop = TRUE;
     };
-    Text[ language_user1 ] = "EM Dec 2002: As in \"break\" found in context menu of a selected metafile inserted into a document.";
+    Text[ language_user1 ] = "; EM Dec 2002: As in \"break\" found in context menu of a selected metafile inserted into a document.";
     Text[ portuguese ] = "Subdividir";
     Text[ russian ] = "�������";
     Text[ spanish ] = "Quebrar";
     Text[ italian ] = "Suddividi";
     Text[ swedish ] = "Bryt upp";
     Text[ polish ] = "Podziel";
-    Text[ portuguese_brazilian ] = "Romper";
+    Text[ portuguese_brazilian ] = "Quebrar";
     Text[ japanese ] = "区切る";
     Text[ korean ] = "분할";
     Text[ turkish ] = "Kesme";
@@ -216,6 +216,7 @@ ModalDialog DLG_BREAK
     Text[ hindi ] = "खण्डन";
     Text[ slovak ] = "Zalomenie";
 };
+
 
 
 
