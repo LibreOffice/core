@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:46:52 $
+#   last change: $Author: vg $ $Date: 2003-12-16 11:38:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,7 +97,7 @@ APP1 APP2 APP3 APP4 APP5 APP6 APP7 APP8 APP9 :
 
 .IF "$(APP$(TNR)LINKTYPE)" != ""
 #darf nur STATIC oder SHARED sein
-APP_LINKTYPE=$(APPLINK$(APP$(TNR)LINKTYPE))
+APP$(TNR)LINKTYPEFLAG=$(APPLINK$(APP$(TNR)LINKTYPE))
 .ENDIF
 
 .IF "$(APP$(TNR)STACK)" != ""
@@ -163,7 +163,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     `cat /dev/null $(APP$(TNR)LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP$(TNR)STDLIBS) $(STDLIB) $(STDLIB$(TNR))` \
-    $(APP_LINKTYPE) $(APP$(TNR)STDLIBS) $(STDLIB) $(STDLIB$(TNR)) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    $(APP$(TNR)LINKTYPEFLAG) $(APP$(TNR)STDLIBS) $(STDLIB) $(STDLIB$(TNR)) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -189,7 +189,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP$(TNR)OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP$(TNR)LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP$(TNR)LIBSALCPPRT) $(APP$(TNR)STDLIBS) $(STDLIB) $(STDLIB$(TNR)) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP$(TNR)LINKTYPEFLAG) $(APP$(TNR)LIBSALCPPRT) $(APP$(TNR)STDLIBS) $(STDLIB) $(STDLIB$(TNR)) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
