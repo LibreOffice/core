@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: od $ $Date: 2002-08-22 09:31:20 $
+ *  last change: $Author: ama $ $Date: 2002-09-02 15:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ void SwTxtFrm::ValidateFrm()
     SWAP_IF_SWAPPED( this )
 #endif
 
-    if ( !IsInFly() )
+    if ( !IsInFly() && !IsInTab() )
     {   //Innerhalb eines Flys nur this validieren, der Rest sollte eigentlich
         //nur fuer Fussnoten notwendig sein und die gibt es innerhalb von
         //Flys nicht. Fix fuer 5544
@@ -260,7 +260,7 @@ void SwTxtFrm::ValidateFrm()
 
 void _ValidateBodyFrm( SwFrm *pFrm )
 {
-    if( pFrm )
+    if( pFrm && !pFrm->IsCellFrm() )
     {
         if( !pFrm->IsBodyFrm() && pFrm->GetUpper() )
             _ValidateBodyFrm( pFrm->GetUpper() );
@@ -284,7 +284,8 @@ void SwTxtFrm::ValidateBodyFrm()
 #endif
 
      //siehe Kommtar in ValidateFrm()
-    if ( !IsInFly() && !( IsInSct() && FindSctFrm()->Lower()->IsColumnFrm() ) )
+    if ( !IsInFly() && !IsInTab() &&
+         !( IsInSct() && FindSctFrm()->Lower()->IsColumnFrm() ) )
         _ValidateBodyFrm( GetUpper() );
 
 #ifdef VERTICAL_LAYOUT
