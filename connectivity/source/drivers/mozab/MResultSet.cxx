@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:32:02 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2007,8 +2007,30 @@ sal_Bool OResultSet::determineReadOnly()
     if (m_bIsReadOnly == -1)
     {
         //m_nRowCountResult == 0 mean user call with where case 0 = 1
-        m_bIsReadOnly = !m_aQuery.isWritable() || (m_nRowCountResult == 0);
+        OConnection* xConnection = static_cast<OConnection*>(m_pStatement->getConnection().get());
+        m_bIsReadOnly = !m_aQuery.isWritable(xConnection) || (m_nRowCountResult == 0);
     }
 
     return m_bIsReadOnly != 0;
+}
+
+void OResultSet::setTable(OTable* _rTable)
+{
+    OSL_TRACE("In : setTable");
+    m_pTable = _rTable;
+    m_pTable->acquire();
+    m_xTableColumns = m_pTable->getColumns();
+    if(m_xTableColumns.is())
+        m_aColumnNames = m_xTableColumns->getElementNames();
+    OSL_TRACE("Out : setTable");
+}
+
+void OResultSet::setOrderByColumns(const ::std::vector<sal_Int32>& _aColumnOrderBy)
+{
+    m_aOrderbyColumnNumber = _aColumnOrderBy;
+}
+
+void OResultSet::setOrderByAscending(const ::std::vector<sal_Int16>& _aOrderbyAsc)
+{
+    m_aOrderbyAscending = _aOrderbyAsc;
 }
