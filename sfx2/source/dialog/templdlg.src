@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-04 12:16:06 $
+ *  last change: $Author: kz $ $Date: 2002-08-01 20:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ ModalDialog RID_STYLECATALOG
         Text[ greek ] = "Äéá÷åßñéóç...";
         Text[ korean ] = "ê´€ë¦¬(~O)...";
         Text[ turkish ] = "~Yönet...";
-        Text[ catalan ] = "~Administrar...";
+        Text[ catalan ] = "~Organitzador...";
         Text[ thai ] = "~à¸•à¸±à¸§à¸ˆà¸±à¸”à¸£à¸°à¹€à¸šà¸µà¸¢à¸š...";
     };
     PushButton BT_DEL
@@ -190,7 +190,7 @@ ModalDialog RID_STYLECATALOG
         Text[ greek ] = "ÄéáãñáöÞ...";
         Text[ korean ] = "ì‚­ì œ(~D)...";
         Text[ turkish ] = "~Sil...";
-        Text[ catalan ] = "~Eliminar...";
+        Text[ catalan ] = "Su~primeix...";
         Text[ thai ] = "~à¸¥à¸š...";
     };
     PushButton BT_EDIT
@@ -250,7 +250,7 @@ ModalDialog RID_STYLECATALOG
         Text[ greek ] = "Äçìéïõñãßá...";
         Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)...";
         Text[ turkish ] = "~Yeni...";
-        Text[ catalan ] = "~Nuevo...";
+        Text[ catalan ] = "~Nou...";
         Text[ thai ] = "à¹ƒ~à¸«à¸¡à¹ˆ...";
     };
     HelpButton BT_HELP
@@ -434,7 +434,7 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text [ portuguese_brazilian ] = "Atualizar estilo por exemplo" ;
                 Text [ portuguese ] = "Actualizar modelo" ;
                 Text [ english_us ] = "Update Style" ;
-                Text [ finnish ] = "P?ivit? tyyli" ;
+                Text [ finnish ] = "Päivitä tyyli" ;
                 Text [ danish ] = "Opdater typografi" ;
                 Text [ french ] = "Actualiser le style" ;
                 Text [ swedish ] = "Uppdatera formatmall" ;
