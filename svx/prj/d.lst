@@ -550,6 +550,7 @@ hedabu: ..\inc\unofored.hxx %_DEST%\inc%_EXT%\svx\unofored.hxx
 hedabu: ..\inc\unoforou.hxx %_DEST%\inc%_EXT%\svx\unoforou.hxx
 hedabu: ..\inc\e3dundo.hxx %_DEST%\inc%_EXT%\svx\e3dundo.hxx
 hedabu: ..\inc\anchorid.hxx %_DEST%\inc%_EXT%\svx\anchorid.hxx
+hedabu: ..\inc\mscodec.hxx %_DEST%\inc%_EXT%\svx\mscodec.hxx
 hedabu: ..\inc\msdffimp.hxx %_DEST%\inc%_EXT%\svx\msdffimp.hxx
 hedabu: ..\inc\msdffdef.hxx %_DEST%\inc%_EXT%\svx\msdffdef.hxx
 hedabu: ..\inc\msfiltertracer.hxx %_DEST%\inc%_EXT%\svx\msfiltertracer.hxx
