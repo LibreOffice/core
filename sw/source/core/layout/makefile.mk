@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: ama $ $Date: 2001-05-29 12:38:15 $
+#   last change: $Author: jp $ $Date: 2001-10-18 12:12:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -158,9 +158,6 @@ SLOFILES =  \
         $(SLO)$/unusedf.obj \
         $(SLO)$/virtoutp.obj \
         $(SLO)$/wsfrm.obj
-
-EXCEPTIONSFILES= \
-        $(SLO)$/atrfrm.obj
 
 .IF "$(product)"==""
 .IF "$(cap)"==""
