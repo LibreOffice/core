@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:40 $
+ *  last change: $Author: sj $ $Date: 2000-09-29 12:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,6 @@ private:
 public:
                     SdParagraphDlg( Window* pParent, const SfxItemSet* pAttr );
                     ~SdParagraphDlg() {};
-
-    virtual void    PageCreated( USHORT nId, SfxTabPage &rPage );
 };
 
 #endif // _SD_PARAGR_HXX

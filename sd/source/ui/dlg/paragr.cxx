@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:33 $
+ *  last change: $Author: sj $ $Date: 2000-09-29 12:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,25 +92,3 @@ SdParagraphDlg::SdParagraphDlg( Window* pParent, const SfxItemSet* pAttr ) :
     // AddTabPage( RID_SVXPAGE_EXT_PARAGRAPH, SvxExtParagraphTabPage::Create, 0);
     AddTabPage( RID_SVXPAGE_TABULATOR, SvxTabulatorTabPage::Create, 0);
 }
-
-/*************************************************************************
-|*
-|*  PageCreated: Disabled nicht unterstuetzte Controls
-|*
-\************************************************************************/
-
-void __EXPORT SdParagraphDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
-{
-    switch( nId )
-    {
-        case RID_SVXPAGE_TABULATOR:
-            ( (SvxTabulatorTabPage&) rPage ).
-                    DisableControls( TABTYPE_ALL &~TABTYPE_LEFT |
-                                     TABFILL_ALL &~TABFILL_NONE );
-        break;
-    }
-}
-
-
-
-
