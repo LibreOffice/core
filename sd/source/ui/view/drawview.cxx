@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-01 15:03:56 $
+ *  last change: $Author: ka $ $Date: 2002-10-23 07:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -870,7 +870,9 @@ IMPL_LINK( SdDrawView, PaintProc, SdrPaintProcRec *, pRecord )
         if( bPreview && ( !pInfo || pInfo->bIsShown ) )
             pFuSlideShow->StopTextOrGraphicAnimation( pRecord->pObj, TRUE );
 
-        if( pInfo && pInfo->bIsShown )
+        if( pInfo && ( pInfo->bInvisibleInPresentation || !pInfo->bIsShown ) )
+            bDrawn = TRUE;
+        else if( pInfo && pInfo->bIsShown )
         {
             const BOOL bLive     = pFuSlideShow->IsLivePresentation();
             const BOOL bDimmed = pInfo->bDimmed;
@@ -907,8 +909,6 @@ IMPL_LINK( SdDrawView, PaintProc, SdrPaintProcRec *, pRecord )
                 bDrawn = TRUE;
             }
         }
-        else if( pInfo && !pInfo->bIsShown )
-            bDrawn = TRUE;
 
         if( !bDrawn )
         {
