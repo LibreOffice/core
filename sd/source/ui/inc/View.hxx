@@ -2,9 +2,9 @@
  *
  *  $RCSfile: View.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:11:03 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ class DrawDocShell;
 struct SdNavigatorDropEvent;
 class ViewShell;
 class Window;
+class ViewClipboard;
 
 // -------------------
 // - SdViewRedrawRec -
@@ -165,8 +166,9 @@ public:
 
     void                    UpdateSelectionClipboard( BOOL bForceDeselect );
 
-    DrawDocShell*         GetDocSh() const { return pDocSh; }
-    SdDrawDocument*         GetDoc() const { return pDoc; }
+    inline DrawDocShell* GetDocSh (void) const;
+    inline SdDrawDocument* GetDoc (void) const;
+    inline ViewShell* GetViewShell (void) const;
 
     BOOL                    BegTextEdit( SdrObject* pObj, SdrPageView* pPV=NULL, Window* pWin=NULL, BOOL bIsNewObj=FALSE,
                                          SdrOutliner* pGivenOutliner=NULL, OutlinerView* pGivenOutlinerView=NULL,
@@ -220,7 +222,25 @@ protected:
                             DECL_LINK( DropErrorHdl, Timer* );
                             DECL_LINK( DropInsertFileHdl, Timer* );
                             DECL_LINK( ExecuteNavigatorDrop, SdNavigatorDropEvent* pSdNavigatorDropEvent );
+
+private:
+    ::std::auto_ptr<ViewClipboard> mpClipboard;
 };
+
+
+DrawDocShell* View::GetDocSh (void) const
+{
+    return pDocSh;
+}
+SdDrawDocument* View::GetDoc (void) const
+{
+    return pDoc;
+}
+
+ViewShell* View::GetViewShell (void) const
+{
+    return pViewSh;
+}
 
 } // end of namespace sd
 
