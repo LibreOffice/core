@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-08 14:19:57 $
+ *  last change: $Author: ab $ $Date: 2002-01-18 11:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,6 @@
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCONTROL_HPP_
-#include <com/sun/star/awt/XControl.hpp>
 #endif
 
 // Makro MEMBER()
@@ -320,25 +317,9 @@ SbiInstance::~SbiInstance()
         ComponentVector_t::const_iterator iPos( ComponentVector.begin() );
         while( iPos != ComponentVector.end() )
         {
-            if ( iPos->is() )
-            {
-                Reference< XComponent > xDisposeMe;
-
-                ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xDialogComponent( *iPos, ::com::sun::star::uno::UNO_QUERY );
-                if ( xDialogComponent.is() )
-                    xDisposeMe = xDisposeMe.query( xDialogComponent->getModel() );
-
-                if ( !xDisposeMe.is() )
-                {
-                    DBG_ERROR( "SbiInstance::~SbiInstance: not a valid control component!" );
-                        // at the moment, there are only XControl's stored in the component vector.
-                        // If this changes some time in the future, this assertion has to be removed
-                    xDisposeMe = *iPos;
-                }
-
-                xDisposeMe->dispose();
-            }
-
+            Reference< XComponent > xDlgComponent = *iPos ;
+            if( xDlgComponent.is() )
+                xDlgComponent->dispose();
             ++iPos;
         }
     }
