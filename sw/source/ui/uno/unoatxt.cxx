@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tl $ $Date: 2002-02-04 13:46:58 $
+ *  last change: $Author: tl $ $Date: 2002-08-14 12:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,9 @@
 #ifndef _SWUNODEF_HXX
 #include <swunodef.hxx>
 #endif
-
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
 
 SV_IMPL_REF ( SwDocShell )
 using namespace ::com::sun::star;
@@ -182,6 +184,9 @@ String lcl_FindGroupName(SwGlossaries* pGlossaries, const OUString& GroupName)
 Reference< uno::XInterface > SAL_CALL SwXAutoTextContainer_createInstance(
     const Reference< XMultiServiceFactory > & rSMgr) throw( Exception )
 {
+    //the module may not be loaded
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SW_MOD()->Load();
     static Reference< uno::XInterface > xAText = (cppu::OWeakObject*)new SwXAutoTextContainer();;
     return xAText;
 }
