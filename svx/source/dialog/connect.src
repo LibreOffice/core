@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 13:59:46 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,51 +72,15 @@ TabPage RID_SVXPAGE_CONNECTION
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text = "Verbinder" ;
-    Text [ ENGLISH ] = "Connectors" ;
-    Text [ english_us ] = "Connector" ;
-    Text [ portuguese_brazilian ] = "Conector" ;
-    Text [ swedish ] = "Förbindelse" ;
-    Text [ danish ] = "Forbindelse" ;
-    Text [ italian ] = "Connettore" ;
-    Text [ spanish ] = "Conector" ;
-    Text [ french ] = "Connecteur" ;
-    Text [ dutch ] = "Verbinding" ;
-    Text [ portuguese ] = "Conector" ;
+    Text [ de ] = "Verbinder" ;
+    Text [ en-US ] = "Connector" ;
     FixedText FT_TYPE
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 25 , 8 ) ;
-        Text = "~Typ" ;
-        Text [ ENGLISH ] = "~Type" ;
-        Text [ english_us ] = "~Type" ;
-        Text [ portuguese_brazilian ] = "~Tipo" ;
-        Text [ swedish ] = "~Typ" ;
-        Text [ danish ] = "~Type" ;
-        Text [ italian ] = "~Tipo" ;
-        Text [ spanish ] = "~Tipo" ;
-        Text [ french ] = "Type" ;
-        Text [ dutch ] = "~Type" ;
-        Text [ portuguese ] = "~Tipo" ;
-        Text[ chinese_simplified ] = "ç±»å‹(~T)";
-        Text[ russian ] = "Òèï";
-        Text[ polish ] = "~Typ";
-        Text[ japanese ] = "ç¨®é¡(~T)";
-        Text[ chinese_traditional ] = "é¡å‹(~T)";
-        Text[ arabic ] = "ÇáäæÚ";
-        Text[ greek ] = "~Ôığïò";
-        Text[ korean ] = "í˜•íƒœ(~T)";
-        Text[ turkish ] = "~Tip";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tipus";
-        Text[ finnish ] = "~Tyyppi";
-        Text[ thai ] = "~à¸Šà¸™à¸´à¸”";
-        Text[ czech ] = "Typ";
-        Text[ hebrew ] = "â€®×¡×•×’â€¬";
-        Text[ hindi ] = "~à¤µà¤°à¥à¤—";
-        Text[ slovak ] = "~Typ";
-        Text[ hungarian ] = "~TÃ­pus";
-        Text[ slovenian ] = "~Vrsta";
+        Text [ de ] = "~Typ" ;
+        Text [ en-US ] = "~Type" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_TYPE
     {
@@ -130,71 +94,17 @@ TabPage RID_SVXPAGE_CONNECTION
     {
         Pos = MAP_APPFONT ( 6 , 24 ) ;
         Size = MAP_APPFONT ( 120 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text = "Linienversatz" ;
-        Text [ ENGLISH ] = "Delta" ;
-        Text [ english_us ] = "Line skew" ;
-        Text [ portuguese_brazilian ] = "Inclinação da linha" ;
-        Text [ swedish ] = "Linjeförskjutning" ;
-        Text [ danish ] = "Linjeskævhed" ;
-        Text [ italian ] = "Spostamento linea" ;
-        Text [ spanish ] = "Desplazamiento de líneas" ;
-        Text [ french ] = "Décalage de ligne" ;
-        Text [ dutch ] = "Lijnverloop" ;
-        Text [ portuguese ] = "Transposição de linhas" ;
-        Text[ chinese_simplified ] = "çº¿åç¦»";
-        Text[ russian ] = "Íàêëîí ëèíèè";
-        Text[ polish ] = "Przekrzywienie linii";
-        Text[ japanese ] = "ç·šã®ãšã‚Œ";
-        Text[ chinese_traditional ] = "ç·šåé›¢";
-        Text[ arabic ] = "ÊÎÇáİ ÇáÎØæØ";
-        Text[ greek ] = "Ìåôáôüğéóç ãñáììŞò";
-        Text[ korean ] = "íœ˜ì¸ ì„ ";
-        Text[ turkish ] = "Çizgi eğriliği";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Desplaçament de línies";
-        Text[ finnish ] = "Viivanosien viistoudet";
-        Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”à¹€à¸‰";
-        Text[ czech ] = "ZkosenÃ­ ÄÃ¡ry";
-        Text[ hebrew ] = "â€®×”×˜×™×ª ×§×•â€¬";
-        Text[ hindi ] = "à¤°à¥‡à¤–à¤¾ à¤¤à¤¿à¤°à¤›à¤¾";
-        Text[ slovak ] = "Skosenie Äiary";
-        Text[ hungarian ] = "VonaltÃ¶rÃ©s";
-        Text[ slovenian ] = "Nagib Ärte";
+        Text [ de ] = "Linienversatz" ;
+        Text [ en-US ] = "Line skew" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_LINE_1
     {
         Pos = MAP_APPFONT ( 12 , 37  ) ;
         Size = MAP_APPFONT ( 66 , 8 ) ;
-        Text = "Linie ~1" ;
-        Text [ ENGLISH ] = "Line ~1" ;
-        Text [ english_us ] = "Line ~1" ;
-        Text [ portuguese_brazilian ] = "Linha ~1" ;
-        Text [ swedish ] = "Linje ~1" ;
-        Text [ danish ] = "Linje ~1" ;
-        Text [ italian ] = "Linea ~1" ;
-        Text [ spanish ] = "Línea ~1" ;
-        Text [ french ] = "Ligne ~1" ;
-        Text [ dutch ] = "Lijn ~1" ;
-        Text [ portuguese ] = "Linha ~1" ;
-        Text[ chinese_simplified ] = "çº¿æ¡ ~1";
-        Text[ russian ] = "Ëèíèÿ ~1";
-        Text[ polish ] = "Linia ~1";
-        Text[ japanese ] = "ç·š1";
-        Text[ chinese_traditional ] = "ç·šæ¢ ~1";
-        Text[ arabic ] = "ÇáÎØ 1";
-        Text[ greek ] = "ÃñáììŞ ~1";
-        Text[ korean ] = "ì„ 1";
-        Text[ turkish ] = "Çizgi ~1";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Línia ~1";
-        Text[ finnish ] = "Viivanosa ~1";
-        Text[ thai ] = "Line ~1";
-        Text[ czech ] = "ÄŒÃ¡ra 1";
-        Text[ hebrew ] = "â€®×§×• 1â€¬";
-        Text[ hindi ] = "à¤°à¥‡à¤–à¤¾ ~1";
-        Text[ slovak ] = "ÄŒiara ~1";
-        Text[ hungarian ] = "~1. sor";
-        Text[ slovenian ] = "ÄŒrta ~1";
+        Text [ de ] = "Linie ~1" ;
+        Text [ en-US ] = "Line ~1" ;
+        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_LINE_1
     {
@@ -216,36 +126,9 @@ TabPage RID_SVXPAGE_CONNECTION
     {
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 66 , 8 ) ;
-        Text = "Linie ~2" ;
-        Text [ ENGLISH ] = "Line ~2" ;
-        Text [ english_us ] = "Line ~2" ;
-        Text [ portuguese_brazilian ] = "Linha ~2" ;
-        Text [ swedish ] = "Linje ~2" ;
-        Text [ danish ] = "Linje ~2" ;
-        Text [ italian ] = "Linea ~2" ;
-        Text [ spanish ] = "Línea ~2" ;
-        Text [ french ] = "Ligne ~2" ;
-        Text [ dutch ] = "Lijn ~2" ;
-        Text [ portuguese ] = "Linha ~2" ;
-        Text[ chinese_simplified ] = "çº¿æ¡ ~2";
-        Text[ russian ] = "Ëèíèÿ ~2";
-        Text[ polish ] = "Linia ~2";
-        Text[ japanese ] = "ç·š2";
-        Text[ chinese_traditional ] = "ç·šæ¢ ~2";
-        Text[ arabic ] = "ÇáÎØ 2";
-        Text[ greek ] = "ÃñáììŞ 2";
-        Text[ korean ] = "ì„ 2";
-        Text[ turkish ] = "Çizgi ~2";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Línia ~2";
-        Text[ finnish ] = "Viivanosa ~2";
-        Text[ thai ] = "Line ~2";
-        Text[ czech ] = "ÄŒÃ¡ra 2";
-        Text[ hebrew ] = "â€®×§×• 2â€¬";
-        Text[ hindi ] = "à¤°à¥‡à¤–à¤¾ ~2";
-        Text[ slovak ] = "ÄŒiara ~2";
-        Text[ hungarian ] = "~2. sor";
-        Text[ slovenian ] = "ÄŒrta ~2";
+        Text [ de ] = "Linie ~2" ;
+        Text [ en-US ] = "Line ~2" ;
+        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_LINE_2
     {
@@ -267,36 +150,9 @@ TabPage RID_SVXPAGE_CONNECTION
     {
         Pos = MAP_APPFONT ( 12 , 69 ) ;
         Size = MAP_APPFONT ( 66 , 8 ) ;
-        Text = "Linie ~3" ;
-        Text [ ENGLISH ] = "Line ~3" ;
-        Text [ english_us ] = "Line ~3" ;
-        Text [ portuguese_brazilian ] = "Linha ~3" ;
-        Text [ swedish ] = "Linje ~3" ;
-        Text [ danish ] = "Linje ~3" ;
-        Text [ italian ] = "Linea ~3" ;
-        Text [ spanish ] = "Línea~3" ;
-        Text [ french ] = "Ligne ~3" ;
-        Text [ dutch ] = "Lijn ~3" ;
-        Text [ portuguese ] = "Linha ~3" ;
-        Text[ chinese_simplified ] = "çº¿æ¡ ~3";
-        Text[ russian ] = "Ëèíèÿ ~3";
-        Text[ polish ] = "Linia ~3";
-        Text[ japanese ] = "ç·š3";
-        Text[ chinese_traditional ] = "ç·šæ¢ ~3";
-        Text[ arabic ] = "ÇáÎØ 3";
-        Text[ greek ] = "ÃñáììŞ ~3";
-        Text[ korean ] = "ì„ 3";
-        Text[ turkish ] = "Çizgi ~3";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Línia ~3";
-        Text[ finnish ] = "Viivanosa ~3";
-        Text[ thai ] = "Line ~3";
-        Text[ czech ] = "ÄŒÃ¡ra 3";
-        Text[ hebrew ] = "â€®×§×• 3â€¬";
-        Text[ hindi ] = "à¤°à¥‡à¤–à¤¾ ~3";
-        Text[ slovak ] = "ÄŒiara ~3";
-        Text[ hungarian ] = "~3. sor";
-        Text[ slovenian ] = "ÄŒrta ~3";
+        Text [ de ] = "Linie ~3" ;
+        Text [ en-US ] = "Line ~3" ;
+        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_LINE_3
     {
@@ -318,71 +174,17 @@ TabPage RID_SVXPAGE_CONNECTION
     {
         Pos = MAP_APPFONT ( 6 , 85 ) ;
         Size = MAP_APPFONT ( 120 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text = "Linienabstand" ;
-        Text [ ENGLISH ] = "Distance" ;
-        Text [ english_us ] = "Line spacing" ;
-        Text [ portuguese_brazilian ] = "Entrelinhas" ;
-        Text [ swedish ] = "Linjeavstånd" ;
-        Text [ danish ] = "Linjeafstand" ;
-        Text [ italian ] = "Distanza tra le linee" ;
-        Text [ spanish ] = "Interlineado" ;
-        Text [ french ] = "Écart entre les lignes" ;
-        Text [ dutch ] = "Lijnafstand" ;
-        Text [ portuguese ] = "Intervalo entre linhas" ;
-        Text[ chinese_simplified ] = "çº¿é—´éš”";
-        Text[ russian ] = "Èíòåğâàë ìåæäó ëèíèÿìè";
-        Text[ polish ] = "Odstêp miêdzy liniami";
-        Text[ japanese ] = "ç·šé–“éš”";
-        Text[ chinese_traditional ] = "ç·šé–“éš”";
-        Text[ arabic ] = "ÊÈÇÚÏ ÇáÎØæØ";
-        Text[ greek ] = "ÄéÜóôé÷ï";
-        Text[ korean ] = "ì„  ê°„ê²©";
-        Text[ turkish ] = "Satır aralığı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Distància entre línies";
-        Text[ finnish ] = "Viivan välit";
-        Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡à¸šà¸£à¸£à¸—à¸±à¸”";
-        Text[ czech ] = "Å˜Ã¡dkovÃ¡nÃ­";
-        Text[ hebrew ] = "â€®×¨×™×•×•×— ×©×•×¨×”â€¬";
-        Text[ hindi ] = "à¤°à¥‡à¤–à¤¾ à¤•à¥‡ à¤¬à¥€à¤š à¤…à¤‚à¤¤à¤° à¤¦à¥‡à¤¨à¤¾";
-        Text[ slovak ] = "Riadkovanie";
-        Text[ hungarian ] = "SorkÃ¶z";
-        Text[ slovenian ] = "Razmik med Ärtami";
+        Text [ de ] = "Linienabstand" ;
+        Text [ en-US ] = "Line spacing" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_HORZ_1
     {
         Pos = MAP_APPFONT ( 12 , 98 ) ;
         Size = MAP_APPFONT ( 66 , 8 ) ;
-        Text = "Anfang h~orizontal" ;
-        Text [ ENGLISH ] = "Start h~orizontal" ;
-        Text [ english_us ] = "~Begin horizontal" ;
-        Text [ portuguese_brazilian ] = "Início h~orizontal" ;
-        Text [ swedish ] = "Start h~orisontellt" ;
-        Text [ danish ] = "~Start vandret" ;
-        Text [ italian ] = "Inizio ~orizzontale" ;
-        Text [ spanish ] = "Comienzo h~orizontal" ;
-        Text [ french ] = "Début h~orizontal" ;
-        Text [ dutch ] = "Begin h~orizontaal" ;
-        Text [ portuguese ] = "Início h~orizontal" ;
-        Text[ chinese_simplified ] = "èµ·å§‹éƒ¨åˆ†æ˜¯æ°´å¹³æ–¹å‘(~B)";
-        Text[ russian ] = "Íà÷àëî ãîğèçîíòàëüíî";
-        Text[ polish ] = "~Pocz¹tek poziomo";
-        Text[ japanese ] = "æ¨ªç·šã®å§‹ç‚¹(~B)";
-        Text[ chinese_traditional ] = "èµ·å§‹æ–¹å‘æ˜¯æ°´å¹³æ–¹å‘(~B)";
-        Text[ arabic ] = "ÇáÈÏÇíÉ ÃİŞíÇğ";
-        Text[ greek ] = "Åêêßíçóç ïñéæüíôéá";
-        Text[ korean ] = "ê°€ë¡œì„  ì‹œì‘(~B)";
-        Text[ turkish ] = "Başı ~yatay";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Inici h~oritzontal";
-        Text[ finnish ] = "Alussa, ~vaakasuuntaan";
-        Text[ thai ] = "~Begin horizontal";
-        Text[ czech ] = "VodorovnÃ½ poÄÃ¡tek";
-        Text[ hebrew ] = "â€®×”×—×œ ××•×¤×§×™â€¬";
-        Text[ hindi ] = "~à¤¸à¤®à¤¤à¤² à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­";
-        Text[ slovak ] = "V~odorovnÃ½ zaÄiatok";
-        Text[ hungarian ] = "~VÃ­zszintes kezdet";
-        Text[ slovenian ] = "~ZaÄetek vodoravno";
+        Text [ de ] = "Anfang h~orizontal" ;
+        Text [ en-US ] = "~Begin horizontal" ;
+        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_HORZ_1
     {
@@ -404,36 +206,9 @@ TabPage RID_SVXPAGE_CONNECTION
     {
         Pos = MAP_APPFONT ( 12 , 130 ) ;
         Size = MAP_APPFONT ( 66 , 8 ) ;
-        Text = "Ende ho~rizontal" ;
-        Text [ ENGLISH ] = "End ho~rizontal" ;
-        Text [ english_us ] = "End ~horizontal" ;
-        Text [ portuguese_brazilian ] = "Fim hori~zontal" ;
-        Text [ swedish ] = "Slut ho~risontellt" ;
-        Text [ danish ] = "Slut vandret" ;
-        Text [ italian ] = "Fine o~rizzontale" ;
-        Text [ spanish ] = "Final hori~zontal" ;
-        Text [ french ] = "Fin ho~rizontale" ;
-        Text [ dutch ] = "Einde ho~rizontaal" ;
-        Text [ portuguese ] = "Fim ho~rizontal" ;
-        Text[ chinese_simplified ] = "ç»“å°¾ä¸ºæ°´å¹³æ–¹å‘(~H)";
-        Text[ russian ] = "Êîíåö ãîğèçîíòàëüíî";
-        Text[ polish ] = "Ko~niec poziomo";
-        Text[ japanese ] = "æ¨ªç·šã®çµ‚ç‚¹(~H)";
-        Text[ chinese_traditional ] = "çµå°¾æ˜¯æ°´å¹³æ–¹å‘(~H)";
-        Text[ arabic ] = "ÇáäåÇíÉ ÃİŞíÇğ";
-        Text[ greek ] = "Ôİëïò ïñéæïíôßùò";
-        Text[ korean ] = "ê°€ë¡œì„  ë(~H)";
-        Text[ turkish ] = "Sonu ya~tay";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Fi ~horitzontal";
-        Text[ finnish ] = "~Lopussa, vaa~kasuuntaan";
-        Text[ thai ] = "End ~horizontal";
-        Text[ czech ] = "VodorovnÃ½ konec";
-        Text[ hebrew ] = "â€®×§×¦×” ××•×¤×§×™â€¬";
-        Text[ hindi ] = "à¤¸~à¤®à¤¤à¤² à¤…à¤‚à¤¤";
-        Text[ slovak ] = "VodorovnÃ½ ~koniec";
-        Text[ hungarian ] = "VÃ­~zszintes vÃ©g";
-        Text[ slovenian ] = "Konec ~vodoravno";
+        Text [ de ] = "Ende ho~rizontal" ;
+        Text [ en-US ] = "End ~horizontal" ;
+        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_HORZ_2
     {
@@ -455,36 +230,9 @@ TabPage RID_SVXPAGE_CONNECTION
     {
         Pos = MAP_APPFONT ( 12 , 114 ) ;
         Size = MAP_APPFONT ( 66 , 8 ) ;
-        Text = "Anfang ~vertikal" ;
-        Text [ ENGLISH ] = "Start ~vertical" ;
-        Text [ english_us ] = "Begin ~vertical" ;
-        Text [ portuguese_brazilian ] = "Início ~vertical" ;
-        Text [ swedish ] = "Start ~vertikalt" ;
-        Text [ danish ] = "Start lodret" ;
-        Text [ italian ] = "Inizio ~verticale" ;
-        Text [ spanish ] = "Comienzo ~vertical" ;
-        Text [ french ] = "Début ~vertical" ;
-        Text [ dutch ] = "Begin ~verticaal" ;
-        Text [ portuguese ] = "Início ~vertical" ;
-        Text[ chinese_simplified ] = "èµ·å§‹éƒ¨åˆ†æ˜¯å‚ç›´æ–¹å‘(~V)";
-        Text[ russian ] = "Íà~÷àëî âåğòèêàëüíî";
-        Text[ polish ] = "P~ocz¹tek pionowo";
-        Text[ japanese ] = "ç¸¦ç·šã®å§‹ç‚¹(~V)";
-        Text[ chinese_traditional ] = "èµ·å§‹æ–¹å‘æ˜¯å‚ç›´æ–¹å‘(~V)";
-        Text[ arabic ] = "ÇáÈÏÇíÉ ÑÃÓíÇğ";
-        Text[ greek ] = "Áñ÷Ş êáôáêüñõ~öá";
-        Text[ korean ] = "ì„¸ë¡œì„  ì‹œì‘(~V)";
-        Text[ turkish ] = "Başı ~dikey";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Inici ~vertical";
-        Text[ finnish ] = "Alussa, ~pystysuuntaan";
-        Text[ thai ] = "Begin ~vertical";
-        Text[ czech ] = "SvislÃ½ poÄÃ¡tek";
-        Text[ hebrew ] = "â€®×”×—×œ ×× ×›×™â€¬";
-        Text[ hindi ] = "~à¤²à¤®à¥à¤¬ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­";
-        Text[ slovak ] = "ZvislÃ½ ~zaÄiatok";
-        Text[ hungarian ] = "~FÃ¼ggÅ‘leges kezdet";
-        Text[ slovenian ] = "ZaÄetek ~navpiÄno";
+        Text [ de ] = "Anfang ~vertikal" ;
+        Text [ en-US ] = "Begin ~vertical" ;
+        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_VERT_1
     {
@@ -506,36 +254,9 @@ TabPage RID_SVXPAGE_CONNECTION
     {
         Pos = MAP_APPFONT ( 12 , 146 ) ;
         Size = MAP_APPFONT ( 66 , 8 ) ;
-        Text = "Ende v~ertikal" ;
-        Text [ ENGLISH ] = "End v~ertical" ;
-        Text [ english_us ] = "~End vertical" ;
-        Text [ portuguese_brazilian ] = "Fim ~vertical" ;
-        Text [ swedish ] = "Slut v~ertikalt" ;
-        Text [ danish ] = "~Slut lodret" ;
-        Text [ italian ] = "~Fine verticale" ;
-        Text [ spanish ] = "Final v~ertical" ;
-        Text [ french ] = "Fin v~erticale" ;
-        Text [ dutch ] = "Einde v~erticaal" ;
-        Text [ portuguese ] = "Fim v~ertical" ;
-        Text[ chinese_simplified ] = "ç»“å°¾éƒ¨åˆ†æ˜¯å‚ç›´æ–¹å‘(~E)";
-        Text[ russian ] = "Êîíåö âåğòèêàëüíî";
-        Text[ polish ] = "~Koniec pionowo";
-        Text[ japanese ] = "ç¸¦ç·šã®çµ‚ç‚¹(~E)";
-        Text[ chinese_traditional ] = "çµå°¾éƒ¨åˆ†æ˜¯å‚ç›´æ–¹å‘(~E)";
-        Text[ arabic ] = "ÇáäåÇíÉ ÑÃÓíÇğ";
-        Text[ greek ] = "Ôİëïò êáôáêüñõöá";
-        Text[ korean ] = "ì„¸ë¡œì„  ë(~E)";
-        Text[ turkish ] = "Sonu d~ikey";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Fi vertical";
-        Text[ finnish ] = "Lopussa, pyst~ysuuntaan";
-        Text[ thai ] = "~End vertical";
-        Text[ czech ] = "SvislÃ½ konec";
-        Text[ hebrew ] = "â€®×§×¦×” ×× ×›×™â€¬";
-        Text[ hindi ] = "à¤²à¤®à¥à¤¬ ~à¤…à¤‚à¤¤";
-        Text[ slovak ] = "Z~vislÃ½ koniec";
-        Text[ hungarian ] = "FÃ¼~ggÅ‘leges vÃ©g";
-        Text[ slovenian ] = "~Konec navpiÄno";
+        Text [ de ] = "Ende v~ertikal" ;
+        Text [ en-US ] = "~End vertical" ;
+        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_VERT_2
     {
@@ -559,55 +280,10 @@ TabPage RID_SVXPAGE_CONNECTION
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 + 120 + RSC_SP_FLGR_SPACE_Y + RSC_SP_FLGR_INNERBORDER_LEFT , 35  ) ;
         Size = MAP_APPFONT ( 118 , 121 ) ;
-        QuickHelpText = "Vorschau" ;
-        QuickHelpText [ ENGLISH ] = "Preview" ;
-        QuickHelpText[ english_us ] = "Preview";
-        QuickHelpText[ portuguese ] = "Visualizar";
-        QuickHelpText[ russian ] = "Ïğîñìîòğ";
-        QuickHelpText[ greek ] = "Preview";
-        QuickHelpText[ dutch ] = "Voorbeeld";
-        QuickHelpText[ french ] = "Aperçu";
-        QuickHelpText[ spanish ] = "Previsualización";
-        QuickHelpText[ finnish ] = "Esikatselu";
-        QuickHelpText[ italian ] = "Anteprima";
-        QuickHelpText[ danish ] = "Eksempel";
-        QuickHelpText[ swedish ] = "Förhandsvisning";
-        QuickHelpText[ polish ] = "Podgl¹d";
-        QuickHelpText[ portuguese_brazilian ] = "Visualizar";
-        QuickHelpText[ japanese ] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼";
-        QuickHelpText[ korean ] = "ë¯¸ë¦¬ ë³´ê¸°";
-        QuickHelpText[ chinese_simplified ] = "é¢„è§†";
-        QuickHelpText[ chinese_traditional ] = "é è¦½";
-        QuickHelpText[ turkish ] = "Önizleme";
-        QuickHelpText[ arabic ] = "Preview";
-        QuickHelpText[ catalan ] = "Previsualitza";
-        QuickHelpText[ thai ] = "Preview";
-        QuickHelpText[ czech ] = "NÃ¡hled";
-        QuickHelpText[ hebrew ] = "Vorschau";
-        QuickHelpText[ hindi ] = "à¤ªà¥‚à¤°à¥à¤µà¤¦à¥ƒà¤¶à¥à¤¯";
-        QuickHelpText[ slovak ] = "NÃ¡hÄ¾ad";
-        QuickHelpText[ hungarian ] = "ElÅ‘nÃ©zet";
-        QuickHelpText[ slovenian ] = "Predogled";
+        QuickHelpText [ de ] = "Vorschau" ;
+        QuickHelpText [ en-US ] = "Preview";
     };
-    Text[ chinese_simplified ] = "è¿æ¥ç¬¦";
-    Text[ russian ] = "Ñîåäèíèòåëüíàÿ ëèíèÿ";
-    Text[ polish ] = "£¹cznik";
-    Text[ japanese ] = "ã‚³ãƒã‚¯ã‚¿";
-    Text[ chinese_traditional ] = "é€£æ¥ç¬¦";
-    Text[ arabic ] = "ÇáÑÇÈØ";
-    Text[ greek ] = "Óıíäåóç";
-    Text[ korean ] = "ì—°ê²°ì";
-    Text[ turkish ] = "Bağlayıcı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Connector";
-    Text[ finnish ] = "Yhdysviiva";
-    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­";
-    Text[ czech ] = "Spojnice";
-    Text[ hebrew ] = "â€®××—×‘×¨â€¬";
-    Text[ hindi ] = "à¤•à¤¨à¥‡à¤•à¥à¤Ÿà¤°";
-    Text[ slovak ] = "Spojnica";
-    Text[ hungarian ] = "Ã–sszekÃ¶tÅ‘";
-    Text[ slovenian ] = "Konektor";
+    Text [ x-comment ] = " ";
 };
  // ******************************************************************* EOF
 
