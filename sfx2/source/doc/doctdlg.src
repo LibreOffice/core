@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctdlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:20:01 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:50:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ ModalDialog DLG_DOC_TEMPLATE
     Text [ portuguese_brazilian ] = "Modelos de documentos" ;
     Text [ portuguese ] = "Modelos de documentos" ;
     Text [ finnish ] = "Mallit" ;
-    Text [ danish ] = "Dokumentskabeloner" ;
+    Text [ danish ] = "Skabeloner" ;
     Text [ french ] = "Mod�les de document" ;
     Text [ swedish ] = "Dokumentmallar" ;
     Text [ dutch ] = "Sjablonen" ;
@@ -106,7 +106,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ spanish ] = "Plantilla nueva" ;
         Text [ french ] = "Nouveau mod�le de document" ;
         Text [ swedish ] = "Ny dokumentmall" ;
-        Text [ danish ] = "Ny dokumentskabelon" ;
+        Text [ danish ] = "Ny skabelon" ;
         Text [ portuguese_brazilian ] = "Novo modelo" ;
         Text [ portuguese ] = "Novo modelo" ;
         Text[ chinese_simplified ] = "新建文档样式";
@@ -126,6 +126,8 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ hebrew ] = "‮תבנית חדשה‬";
         Text[ hindi ] = "नया नमूना";
         Text[ slovak ] = "Nová šablóna";
+        Text[ hungarian ] = "Új sablon";
+        Text[ slovenian ] = "Nova predloga";
     };
     Edit ED_NAME
     {
@@ -144,7 +146,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ portuguese_brazilian ] = "Modelos" ;
         Text [ portuguese ] = "Modelos" ;
         Text [ finnish ] = "Mallit" ;
-        Text [ danish ] = "Typografier" ;
+        Text [ danish ] = "Skabeloner" ;
         Text [ french ] = "Mod�les" ;
         Text [ swedish ] = "Mallar" ;
         Text [ dutch ] = "Sjablonen" ;
@@ -166,6 +168,8 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ hebrew ] = "‮תבניות‬";
         Text[ hindi ] = "नमूनें";
         Text[ slovak ] = "Šablóny";
+        Text[ hungarian ] = "Sablonok";
+        Text[ slovenian ] = "Predloge";
     };
     FixedText FT_SECTION
     {
@@ -178,7 +182,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ portuguese_brazilian ] = "~Categorias" ;
         Text [ portuguese ] = "~Categorias" ;
         Text [ finnish ] = "~Luokat" ;
-        Text [ danish ] = "Omr�der" ;
+        Text [ danish ] = "~Kategorier" ;
         Text [ french ] = "~Cat�gories" ;
         Text [ swedish ] = "~Kategorier" ;
         Text [ dutch ] = "~Bereiken" ;
@@ -200,6 +204,8 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ hebrew ] = "‮סיווגים‬";
         Text[ hindi ] = "~वर्ग";
         Text[ slovak ] = "~Kategórie";
+        Text[ hungarian ] = "~Kategóriák";
+        Text[ slovenian ] = "~Kategorije";
     };
     ListBox LB_SECTION
     {
@@ -218,7 +224,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ portuguese_brazilian ] = "~Modelos" ;
         Text [ portuguese ] = "Modelos" ;
         Text [ finnish ] = "Mallit" ;
-        Text [ danish ] = "Skabeloner" ;
+        Text [ danish ] = "Skabel~oner" ;
         Text [ french ] = "~Mod�les" ;
         Text [ swedish ] = "~Mallar" ;
         Text [ dutch ] = "S~jablonen" ;
@@ -240,6 +246,8 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ hebrew ] = "‮תבניות‬";
         Text[ hindi ] = "~नमूनें";
         Text[ slovak ] = "Šabló~ny";
+        Text[ hungarian ] = "~Sablonok";
+        Text[ slovenian ] = "~Predloge";
     };
     ListBox LB_STYLESHEETS
     {
@@ -276,7 +284,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ spanish ] = "Editar" ;
         Text [ french ] = "�diter" ;
         Text [ swedish ] = "~Redigera" ;
-        Text [ danish ] = "Rediger" ;
+        Text [ danish ] = "~Rediger" ;
         Text [ portuguese ] = "~Editar" ;
         Text [ portuguese_brazilian ] = "~Editar" ;
         Text[ chinese_simplified ] = "编辑(~E)";
@@ -296,6 +304,8 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ hebrew ] = "‮עריכה‬";
         Text[ hindi ] = "~संपादन";
         Text[ slovak ] = "~Upraviť";
+        Text[ hungarian ] = "~Szerkesztés";
+        Text[ slovenian ] = "~Uredi";
     };
     PushButton BT_ORGANIZE
     {
@@ -308,7 +318,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ portuguese_brazilian ] = "~Gerenciador..." ;
         Text [ portuguese ] = "~Gerir..." ;
         Text [ finnish ] = "~J�rjestelyty�kalu..." ;
-        Text [ danish ] = "Administrer..." ;
+        Text [ danish ] = "~Administration..." ;
         Text [ french ] = "~G�rer..." ;
         Text [ swedish ] = "~Administrera..." ;
         Text [ dutch ] = "Be~heren..." ;
@@ -330,13 +340,18 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ hebrew ] = "‮סדרן...‬";
         Text[ hindi ] = "~व्यवस्थापक...";
         Text[ slovak ] = "~Organizátor...";
+        Text[ hungarian ] = "S~zervező...";
+        Text[ slovenian ] = "~Organizator...";
     };
     Text[ thai ] = "แม่แบบ";
     Text[ czech ] = "Šablony";
     Text[ hebrew ] = "‮תבניות‬";
     Text[ hindi ] = "नमूनें";
     Text[ slovak ] = "Šablóny";
+    Text[ hungarian ] = "Sablonok";
+    Text[ slovenian ] = "Predloge";
 };
+
 
 
 
