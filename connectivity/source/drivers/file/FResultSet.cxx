@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:14:48 $
+ *  last change: $Author: oj $ $Date: 2000-11-10 11:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -734,10 +734,14 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
         sal_Int32 nPos = (*m_aInsertRow)[0];
         m_pFileSet->push_back(nPos);
         m_aRow = m_aInsertRow;
-        if(m_nRowPos < 0)
-            m_aBookmarkToPos[nPos] = 1;
+        // we know that we append new rows at the end
+        // so we can assume this
+        if(m_aBookmarkToPos.size())
+            m_aBookmarkToPos[nPos] = m_aBookmarkToPos.rbegin()->second + 1;
         else
-            m_aBookmarkToPos[nPos] = m_nRowPos + 1;
+            m_aBookmarkToPos[nPos] = 1;
+//      else
+//          m_aBookmarkToPos[nPos] = m_nRowPos + 1;
     }
 }
 // -------------------------------------------------------------------------
