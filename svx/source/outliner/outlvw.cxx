@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-23 14:02:48 $
+ *  last change: $Author: mt $ $Date: 2001-03-20 09:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,27 +234,14 @@ BOOL OutlinerView::PostKeyEvent( const KeyEvent& rKEvt )
                          ( pOwner->ImplGetOutlinerMode() != OUTLINERMODE_TITLEOBJECT ) &&
                          ( bSelection || !aSel.nStartPos ) )
                     {
-                        if ( aKeyCode.IsShift() )
-                            AdjustDepth( -1 );
-                        else
-                            AdjustDepth( 1 );
+                        Indent( aKeyCode.IsShift() ? (-1) : (+1) );
                         bKeyProcessed = TRUE;
                     }
                     else if ( ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_TEXTOBJECT ) &&
                               !bSelection && !aSel.nEndPos && pOwner->ImplHasBullet( aSel.nEndPara ) )
                     {
-                        // Ein-Ausruecken...
-                        Paragraph* pPara = pOwner->pParaList->GetParagraph( aSel.nEndPara );
-                        USHORT nDepth = pPara->GetDepth();
-                        if ( nDepth || !aKeyCode.IsShift() )
-                        {
-                            if ( aKeyCode.IsShift() )
-                                nDepth--;
-                            else
-                                nDepth++;
-                            pOwner->ImplInitDepth( aSel.nEndPara, nDepth, TRUE, TRUE );
-                            bKeyProcessed = TRUE;
-                        }
+                        Indent( aKeyCode.IsShift() ? (-1) : (+1) );
+                        bKeyProcessed = TRUE;
                     }
                 }
             }
@@ -804,7 +791,7 @@ void OutlinerView::Indent( short nDiff )
     for ( USHORT nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
-        if ( !nPara && !pPara->GetDepth() )
+        if ( !nPara && !pPara->GetDepth() && ( pOwner->ImplGetOutlinerMode() != OUTLINERMODE_TEXTOBJECT ) )
         {
             // Seite 0 nicht einruecken.
             // Absatz muss neu gepaintet werden (wg. doppeltem Highlight beim Painten der Selektion )
@@ -829,7 +816,7 @@ void OutlinerView::Indent( short nDiff )
 
         if( nOldDepth != nNewDepth )
         {
-            if ( ( nPara == aSel.nStartPara ) && aSel.nStartPara )
+            if ( ( nPara == aSel.nStartPara ) && aSel.nStartPara && ( pOwner->ImplGetOutlinerMode() != OUTLINERMODE_TEXTOBJECT ))
             {
                 // Sonderfall: Der Vorgaenger eines eingerueckten Absatzes ist
                 // unsichtbar und steht jetzt auf der gleichen Ebene wie der

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:29:30 $
+ *  last change: $Author: mt $ $Date: 2001-03-20 09:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,7 +360,7 @@ void Outliner::SetMaxDepth( USHORT nDepth, BOOL bCheckParagraphs )
 {
     if( nMaxDepth != nDepth )
     {
-        nMaxDepth = nDepth;
+        nMaxDepth = Min( nDepth, (USHORT)(SVX_MAX_NUM-1) );
 
         if( bCheckParagraphs )
         {
@@ -1396,7 +1396,7 @@ BOOL Outliner::ImpCanIndentSelectedPages( OutlinerView* pCurView )
 
     // Wenn der erste Absatz auf Ebene 0 liegt darf er auf keinen Fall
     // eingerueckt werden, evtl folgen aber weitere auf Ebene 0.
-    if ( (ULONG)pHdlParagraph == 0 )
+    if ( ( (ULONG)pHdlParagraph == 0 ) && ( ImplGetOutlinerMode() != OUTLINERMODE_TEXTOBJECT ) )
     {
         if ( nDepthChangedHdlPrevDepth == 1 )   // ist die einzige Seite
             return FALSE;
