@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cp $ $Date: 2001-09-11 15:48:04 $
+ *  last change: $Author: cp $ $Date: 2002-01-10 13:06:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ extern "C" char * XSetIMValues(XIM im, ...);
 // ------------------------------------------------------------------------------------
 //
 // kinput2 IME needs special key handling since key release events are filtered in
-// preeditmode
+// preeditmode and XmbResetIC does not work
 //
 // ------------------------------------------------------------------------------------
 
@@ -106,6 +106,31 @@ IMServerKinput2 ()
                                       && (strcmp(p_xmodifiers, "@im=kinput2") == 0);
 
     return b_kinput2;
+}
+
+extern "C" Bool CallDoneAfterResetIC()
+{
+    const static char* p_xicpolicy = getenv ("SAL_XIMRESETPOLICY");
+    static Bool b_once = False;
+    static Bool b_call = False;
+
+    if (b_once == False)
+    {
+        b_once = True;
+
+        if (p_xicpolicy && (strcasecmp(p_xicpolicy, "force") == 0))
+            b_call = True;
+        else
+        if (p_xicpolicy && (strcasecmp(p_xicpolicy, "none") == 0))
+            b_call = False;
+        else
+        if (IMServerKinput2())
+            b_call = True;
+        else
+            b_call = False;
+    }
+
+    return b_call;
 }
 
 class XKeyEventOp : XKeyEvent
