@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:05:39 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,14 +84,14 @@ ModalDialog DLG_PASSWD
     Text [ dutch ] = "Wachtwoord invoeren" ;
     Text [ spanish ] = "Introduzca la contraseña" ;
     Text [ english_us ] = "Enter Password" ;
-    Text[ chinese_simplified ] = "ÊäÈëÃÜÂë";
+    Text[ chinese_simplified ] = "è¾“å…¥å¯†ç ";
     Text[ russian ] = "Ââåñòè ïàğîëü";
     Text[ polish ] = "WprowadŸ has³o";
-    Text[ japanese ] = "Êß½Ü°ÄŞ‚Ì“ü—Í";
-    Text[ chinese_traditional ] = "¿é¤J±K½X";
+    Text[ japanese ] = "ï¾Šï¾Ÿï½½ï¾œï½°ï¾„ï¾ã®å…¥åŠ›";
+    Text[ chinese_traditional ] = "è¼¸å…¥å¯†ç¢¼";
     Text[ arabic ] = "ÅÏÎÇá ßáãÉ ÇáÓÑ";
     Text[ greek ] = "ÅéóáãùãŞ êùäéêïı ğñüóâáóçò";
-    Text[ korean ] = "ÄÚµå ¿öµå ÀÔ·Â";
+    Text[ korean ] = "ì½”ë“œ ì›Œë“œ ì…ë ¥";
     Moveable = TRUE ;
     FixedText FT_PASSWD_USER
     {
@@ -111,10 +111,10 @@ ModalDialog DLG_PASSWD
         Text[ swedish ] = "Användare";
         Text[ polish ] = "U¿ytkownik";
         Text[ portuguese_brazilian ] = "User";
-        Text[ japanese ] = "Õ°»Ş°(~U)";
-        Text[ korean ] = "»ç¿ëÀÚ(~U)";
-        Text[ chinese_simplified ] = "Ê¹ÓÃÃû(~U)";
-        Text[ chinese_traditional ] = "¨Ï¥ÎªÌ(~U)";
+        Text[ japanese ] = "ï¾•ï½°ï½»ï¾ï½°(~U)";
+        Text[ korean ] = "ì‚¬ìš©ì(~U)";
+        Text[ chinese_simplified ] = "ä½¿ç”¨å(~U)";
+        Text[ chinese_traditional ] = "ä½¿ç”¨è€…(~U)";
         Text[ arabic ] = "ÇáãÓÊÎÏã";
         Text[ turkish ] = "~Kullanıcı";
         Text[ language_user1 ] = " ";
@@ -145,10 +145,10 @@ ModalDialog DLG_PASSWD
         Text[ swedish ] = "~Lösenord";
         Text[ polish ] = "Has³o";
         Text[ portuguese_brazilian ] = "Password";
-        Text[ japanese ] = "Êß½Ü°ÄŞ(~P)";
-        Text[ korean ] = "ÄÚµå ¿öµå(~P)";
-        Text[ chinese_simplified ] = "ÃÜÂë(~P)";
-        Text[ chinese_traditional ] = "±K½X(~P)";
+        Text[ japanese ] = "ï¾Šï¾Ÿï½½ï¾œï½°ï¾„ï¾(~P)";
+        Text[ korean ] = "ì½”ë“œ ì›Œë“œ(~P)";
+        Text[ chinese_simplified ] = "å¯†ç (~P)";
+        Text[ chinese_traditional ] = "å¯†ç¢¼(~P)";
         Text[ arabic ] = "ßáãÉ ÇáÓÑ";
         Text[ turkish ] = "~Şifre";
         Text[ language_user1 ] = " ";
@@ -180,10 +180,10 @@ ModalDialog DLG_PASSWD
         Text[ swedish ] = "Bekräfta";
         Text[ polish ] = "PotwierdŸ";
         Text[ portuguese_brazilian ] = "Confirm";
-        Text[ japanese ] = "Šm”F(~C)";
-        Text[ korean ] = "È®ÀÎ(~C)";
-        Text[ chinese_simplified ] = "È·ÈÏ(~C)";
-        Text[ chinese_traditional ] = "½T»{(~C)";
+        Text[ japanese ] = "ç¢ºèª(~C)";
+        Text[ korean ] = "í™•ì¸(~C)";
+        Text[ chinese_simplified ] = "ç¡®è®¤(~C)";
+        Text[ chinese_traditional ] = "ç¢ºèª(~C)";
         Text[ arabic ] = "ÊÃßíÏ";
         Text[ turkish ] = "~Onayla";
         Text[ catalan ] = "~Confirmar";
@@ -213,14 +213,14 @@ ModalDialog DLG_PASSWD
         Text [ dutch ] = "Wachtwoord" ;
         Text [ spanish ] = "Contraseña" ;
         Text [ english_us ] = "Password" ;
-        Text[ chinese_simplified ] = "ÃÜÂë";
+        Text[ chinese_simplified ] = "å¯†ç ";
         Text[ russian ] = "Ïàğîëü";
         Text[ polish ] = "Has³o";
-        Text[ japanese ] = "Êß½Ü°ÄŞ";
-        Text[ chinese_traditional ] = "±K½X";
+        Text[ japanese ] = "ï¾Šï¾Ÿï½½ï¾œï½°ï¾„ï¾";
+        Text[ chinese_traditional ] = "å¯†ç¢¼";
         Text[ arabic ] = "ßáãÉ ÇáÓÑ";
         Text[ greek ] = "Êùäéêüò ğñüóâáóçò";
-        Text[ korean ] = "ÆĞ½º¿öµå";
+        Text[ korean ] = "íŒ¨ìŠ¤ì›Œë“œ";
         Text[ turkish ] = "Şifre";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Contraseña";
@@ -257,14 +257,14 @@ ModalDialog DLG_PASSWD
         Text [ dutch ] = "Wachtwoord bevestigen" ;
         Text [ spanish ] = "Confirmar contraseña" ;
         Text [ english_us ] = "Confirm password" ;
-        Text[ chinese_simplified ] = "È·ÈÏÃÜÂë";
+        Text[ chinese_simplified ] = "ç¡®è®¤å¯†ç ";
         Text[ russian ] = "Ïîäòâåğäèòü ïàğîëü";
         Text[ polish ] = "PotwierdŸ has³o";
-        Text[ japanese ] = "Êß½Ü°ÄŞ‚ÌŠm”F";
-        Text[ chinese_traditional ] = "½T»{±K½X";
+        Text[ japanese ] = "ï¾Šï¾Ÿï½½ï¾œï½°ï¾„ï¾ã®ç¢ºèª";
+        Text[ chinese_traditional ] = "ç¢ºèªå¯†ç¢¼";
         Text[ arabic ] = "ÊÃßíÏ ßáãÉ ÇáÓÑ";
         Text[ greek ] = "Åğéâåâáßùóç êùäéêïı ğñüóâáóçò";
-        Text[ korean ] = "ÄÚµå ¿öµå È®ÀÎ";
+        Text[ korean ] = "ì½”ë“œ ì›Œë“œ í™•ì¸";
         Text[ turkish ] = "Şifreyi onayla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Confirmar contraseña";
@@ -275,6 +275,7 @@ ModalDialog DLG_PASSWD
 };
 
 // ********************************************************************** EOF
+
 
 
 
