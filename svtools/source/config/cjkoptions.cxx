@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cjkoptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:32 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,11 @@
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include "cjkoptions.hxx"
 #endif
+#include "languageoptions.hxx"
+#ifndef _LANG_HXX
+#include <tools/lang.hxx>
+#endif
+
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
 #endif
@@ -254,6 +259,12 @@ void SvtCJKOptions_Impl::Load()
                 }
             }
         }
+    }
+
+    sal_uInt16 nType = SvtLanguageOptions::GetScriptTypeOfLanguage(LANGUAGE_SYSTEM);
+    if ( !bCJKFont && ( nType & SCRIPTTYPE_ASIAN ) )
+    {
+        bCJKFont = sal_True;
     }
     bIsLoaded = sal_True;
 }
@@ -520,3 +531,4 @@ sal_Bool    SvtCJKOptions::IsReadOnly(EOption eOption) const
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded")
     return pCJKOptions->IsReadOnly(eOption);
 }
+
