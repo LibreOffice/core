@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlrowi.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
+ *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
 //  sOptimalHeight(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_false)))
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableRowAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
@@ -127,8 +128,6 @@ ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
-
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableRowAttrTokenMap();
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {

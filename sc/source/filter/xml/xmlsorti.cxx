@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsorti.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 18:32:40 $
+ *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
     nUserListIndex = 0;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetSortAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
@@ -118,8 +119,6 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
-
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetSortAttrTokenMap();
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -260,6 +259,7 @@ ScXMLSortByContext::ScXMLSortByContext( ScXMLImport& rImport,
     sDataType = rtl::OUString::createFromAscii(sXML_automatic);
     pSortContext = pTempSortContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetSortSortByAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
@@ -267,8 +267,6 @@ ScXMLSortByContext::ScXMLSortByContext( ScXMLImport& rImport,
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
-
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetSortSortByAttrTokenMap();
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilti.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 18:32:39 $
+ *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
     pDatabaseRangeContext = pTempDatabaseRangeContext;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetFilterAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
@@ -112,8 +113,6 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
-
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetFilterAttrTokenMap();
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -321,6 +320,7 @@ ScXMLConditionContext::ScXMLConditionContext( ScXMLImport& rImport,
     sDataType = rtl::OUString::createFromAscii(sXML_text);
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetFilterConditionAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
@@ -328,8 +328,6 @@ ScXMLConditionContext::ScXMLConditionContext( ScXMLImport& rImport,
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
-
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetFilterConditionAttrTokenMap();
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -465,6 +463,7 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
     pDataPilotTable = pTempDataPilotTableContext;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetFilterAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
@@ -472,8 +471,6 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
-
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetFilterAttrTokenMap();
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -681,6 +678,7 @@ ScXMLDPConditionContext::ScXMLDPConditionContext( ScXMLImport& rImport,
     sDataType = rtl::OUString::createFromAscii(sXML_text);
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetFilterConditionAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
@@ -688,8 +686,6 @@ ScXMLDPConditionContext::ScXMLDPConditionContext( ScXMLImport& rImport,
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
-
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetFilterConditionAttrTokenMap();
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {

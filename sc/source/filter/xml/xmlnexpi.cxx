@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnexpi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-11 13:19:29 $
+ *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,7 @@ ScXMLNamedRangeContext::ScXMLNamedRangeContext( ScXMLImport& rImport,
 {
     ScMyNamedExpression* pNamedExpression = new ScMyNamedExpression;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetNamedRangeAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
@@ -240,8 +241,6 @@ ScXMLNamedRangeContext::ScXMLNamedRangeContext( ScXMLImport& rImport,
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
-
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetNamedRangeAttrTokenMap();
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -306,6 +305,7 @@ ScXMLNamedExpressionContext::ScXMLNamedExpressionContext( ScXMLImport& rImport,
 {
     ScMyNamedExpression* pNamedExpression = new ScMyNamedExpression;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetNamedExpressionAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
@@ -313,8 +313,6 @@ ScXMLNamedExpressionContext::ScXMLNamedExpressionContext( ScXMLImport& rImport,
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
-
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetNamedExpressionAttrTokenMap();
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {

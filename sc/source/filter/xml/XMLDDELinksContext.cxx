@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDDELinksContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
+ *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,6 @@ ScXMLDDESourceContext::ScXMLDDESourceContext( ScXMLImport& rImport,
     if( !xAttrList.is() ) return;
 
     sal_Int16               nAttrCount      = xAttrList->getLength();
-    const SvXMLTokenMap&    rAttrTokenMap   = GetScImport().GetConsolidationAttrTokenMap();
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; nIndex++ )
     {
@@ -348,7 +347,6 @@ ScXMLDDEColumnContext::ScXMLDDEColumnContext( ScXMLImport& rImport,
     sal_Int32 nCols(1);
 
     sal_Int16               nAttrCount      = xAttrList->getLength();
-    const SvXMLTokenMap&    rAttrTokenMap   = GetScImport().GetConsolidationAttrTokenMap();
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; nIndex++ )
     {
@@ -395,7 +393,6 @@ ScXMLDDERowContext::ScXMLDDERowContext( ScXMLImport& rImport,
     if( !xAttrList.is() ) return;
 
     sal_Int16               nAttrCount      = xAttrList->getLength();
-    const SvXMLTokenMap&    rAttrTokenMap   = GetScImport().GetConsolidationAttrTokenMap();
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; nIndex++ )
     {
@@ -455,7 +452,6 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
     if( !xAttrList.is() ) return;
 
     sal_Int16               nAttrCount      = xAttrList->getLength();
-    const SvXMLTokenMap&    rAttrTokenMap   = GetScImport().GetConsolidationAttrTokenMap();
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; nIndex++ )
     {

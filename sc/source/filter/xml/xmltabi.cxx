@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 17:39:59 $
+ *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
         rtl::OUString sName;
         rtl::OUString sStyleName;
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
         for( sal_Int16 i=0; i < nAttrCount; i++ )
         {
             rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
@@ -127,8 +128,6 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
             USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                                 sAttrName, &aLocalName );
             rtl::OUString sValue = xAttrList->getValueByIndex( i );
-
-            const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
 
             switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
             {

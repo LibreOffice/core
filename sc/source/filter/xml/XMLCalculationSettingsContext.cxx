@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLCalculationSettingsContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-04 14:09:00 $
+ *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,8 +127,6 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
 
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableRowCellAttrTokenMap();
-
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
             if (aLocalName.compareToAscii(sXML_case_sensitive) == 0)
@@ -225,8 +223,6 @@ ScXMLNullDateContext::ScXMLNullDateContext( ScXMLImport& rImport,
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
 
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableRowCellAttrTokenMap();
-
         if (nPrefix == XML_NAMESPACE_TABLE && aLocalName.compareToAscii(sXML_date_value) == 0)
         {
             util::DateTime aDateTime;
@@ -274,8 +270,6 @@ ScXMLIterationContext::ScXMLIterationContext( ScXMLImport& rImport,
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
-
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableRowCellAttrTokenMap();
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTrackedChangesContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 07:13:41 $
+ *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,8 +192,6 @@ ScXMLChangeInfoContext::ScXMLChangeInfoContext(  ScXMLImport& rImport,
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
 
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
-
         if (nPrefix == XML_NAMESPACE_OFFICE)
         {
             if (aLocalName.compareToAscii(sXML_chg_author) == 0)
@@ -267,8 +265,6 @@ ScXMLBigRangeContext::ScXMLBigRangeContext(  ScXMLImport& rImport,
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
-
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -357,8 +353,6 @@ ScXMLCellContentDeletionContext::ScXMLCellContentDeletionContext(  ScXMLImport& 
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
 
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
-
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
             if (aLocalName.compareToAscii(sXML_id) == 0)
@@ -429,8 +423,6 @@ ScXMLDependenceContext::ScXMLDependenceContext(  ScXMLImport& rImport,
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
-
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -519,8 +511,6 @@ ScXMLChangeDeletionContext::ScXMLChangeDeletionContext(  ScXMLImport& rImport,
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
-
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -710,8 +700,6 @@ ScXMLChangeCellContext::ScXMLChangeCellContext(  ScXMLImport& rImport,
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
-
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -905,8 +893,6 @@ ScXMLPreviousContext::ScXMLPreviousContext(  ScXMLImport& rImport,
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
 
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
-
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
             if (aLocalName.compareToAscii(sXML_id) == 0)
@@ -963,8 +949,6 @@ ScXMLContentChangeContext::ScXMLContentChangeContext(  ScXMLImport& rImport,
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
-
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -1061,8 +1045,6 @@ ScXMLInsertionContext::ScXMLInsertionContext( ScXMLImport& rImport,
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
-
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -1163,8 +1145,6 @@ ScXMLInsertionCutOffContext::ScXMLInsertionCutOffContext( ScXMLImport& rImport,
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
 
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
-
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
             if (aLocalName.compareToAscii(sXML_id) == 0)
@@ -1223,8 +1203,6 @@ ScXMLMovementCutOffContext::ScXMLMovementCutOffContext( ScXMLImport& rImport,
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
-
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -1338,8 +1316,6 @@ ScXMLDeletionContext::ScXMLDeletionContext( ScXMLImport& rImport,
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
 
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
-
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
             if (aLocalName.compareToAscii(sXML_id) == 0)
@@ -1444,8 +1420,6 @@ ScXMLMovementContext::ScXMLMovementContext( ScXMLImport& rImport,
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
 
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
-
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
             if (aLocalName.compareToAscii(sXML_id) == 0)
@@ -1531,8 +1505,6 @@ ScXMLRejectionContext::ScXMLRejectionContext( ScXMLImport& rImport,
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
-
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
