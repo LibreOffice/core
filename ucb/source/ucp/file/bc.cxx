@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: abi $ $Date: 2001-02-02 16:53:39 $
+ *  last change: $Author: hro $ $Date: 2001-04-03 12:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -995,7 +995,7 @@ BaseContent::setPropertyValues(
                                           aDstName,
                                           NameClash::KEEP );
                     }
-                    catch( const CommandAbortedException& e )
+                    catch( const CommandAbortedException& )
                     {
                     }
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrset.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-01 08:03:26 $
+ *  last change: $Author: hro $ $Date: 2001-04-03 12:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,7 +318,7 @@ XResultSet_impl::OneMoreFaked( void )
     throw( sdbc::SQLException,
            uno::RuntimeException )
 {
-    sal_Int32 k = m_aItems.size();
+    sal_uInt32 k = m_aItems.size();
     if( k < m_pMyShell->m_vecMountPoint.size() &&
         ( m_nOpenMode == OpenMode::ALL || m_nOpenMode == OpenMode::FOLDERS ) )
     {
@@ -526,7 +526,7 @@ XResultSet_impl::isAfterLast(
     throw( sdbc::SQLException,
            uno::RuntimeException )
 {
-    return m_nRow >= sal_Int32( m_aItems.size() );   // Cannot happen, if m_aFolder.isOpen()
+    return m_nRow >= m_aItems.size();   // Cannot happen, if m_aFolder.isOpen()
 }
 
 

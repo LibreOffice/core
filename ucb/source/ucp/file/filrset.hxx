@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrset.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 09:55:55 $
+ *  last change: $Author: hro $ $Date: 2001-04-03 12:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,7 +688,7 @@ namespace fileaccess {
         shell*                              m_pMyShell;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >  m_xProvider;
         sal_Bool                            m_nIsOpen;
-        sal_Int32                           m_nRow;
+        sal_uInt32                           m_nRow;
         sal_Bool                            m_nWasNull;
         sal_Int32                           m_nOpenMode;
         sal_Bool                            m_bRowCountFinal;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hro $ $Date: 2001-03-30 12:53:50 $
+ *  last change: $Author: hro $ $Date: 2001-04-03 12:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -640,7 +640,7 @@ void SAL_CALL shell::page( sal_Int32 CommandId,
         no_err = aFile.read( (void*) BFF,bfz,nrc ) == osl::FileBase::E_None;
         if( no_err )
         {
-            uno::Sequence< sal_Int8 > seq( BFF,nrc );
+            uno::Sequence< sal_Int8 > seq( BFF, (sal_uInt32)nrc );
             xOutputStream->writeBytes( seq );
         }
         else
@@ -1484,7 +1484,7 @@ XStream_impl::readBytes(
     sal_uInt64 nrc;
     m_aFile.read( (void* )buffer,sal_uInt64(nBytesToRead),nrc );
 
-    aData = uno::Sequence< sal_Int8 > ( buffer,nrc );
+    aData = uno::Sequence< sal_Int8 > ( buffer, (sal_uInt32)nrc );
     delete[] buffer;
     return ( sal_Int32 ) nrc;
 }
@@ -2764,15 +2764,15 @@ shell::write( sal_Int32 CommandId,
                 nReadBytes = aInputStream->readBytes( seq,
                                                       nRequestedBytes );
             }
-            catch( const io::NotConnectedException& e )
+            catch( const io::NotConnectedException& )
             {
                 bSuccess = false;
             }
-            catch( const io::BufferSizeExceededException& e )
+            catch( const io::BufferSizeExceededException& )
             {
                 bSuccess = false;
             }
-            catch( const io::IOException& e )
+            catch( const io::IOException& )
             {
                 bSuccess = false;
             }
@@ -2956,7 +2956,7 @@ shell::commit( const shell::ContentMap::iterator& it,
 
         if( m_bFaked )
         {
-            for( sal_Int32 i = 0; i < m_vecMountPoint.size(); ++i )
+            for( sal_uInt32 i = 0; i < m_vecMountPoint.size(); ++i )
                 if( it->first == m_vecMountPoint[i].m_aDirectory )
                     aAny <<= m_vecMountPoint[i].m_aTitle;
         }
@@ -3437,7 +3437,7 @@ void SAL_CALL
 shell::notifyContentExchanged( std::vector< std::list< ContentEventNotifier* >* >* listeners_vec )
 {
     std::list< ContentEventNotifier* >* listeners;
-    for( sal_Int32 i = 0; i < listeners_vec->size(); ++i )
+    for( sal_uInt32 i = 0; i < listeners_vec->size(); ++i )
     {
         listeners = (*listeners_vec)[i];
         std::list< ContentEventNotifier* >::iterator it = listeners->begin();
