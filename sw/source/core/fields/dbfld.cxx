@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:58:58 $
+ *  last change: $Author: vg $ $Date: 2003-07-21 11:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1088,16 +1088,11 @@ void SwDBSetNumberField::Evaluate(SwDoc* pDoc)
 {
     SwNewDBMgr* pMgr = pDoc->GetNewDBMgr();
 
-    if (!pMgr->IsInMerge())
-        return;
-
     const SwDBData& aTmpData = GetDBData();
-    if(!pMgr || !pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, sal_False))
-    {
-        nNumber = 0;
-        return ;
-    }
-    nNumber = pMgr->GetSelectedRecordId() + 1;
+    if (!pMgr || !pMgr->IsInMerge() ||
+        !pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, sal_False))
+        return;
+    nNumber = pMgr->GetSelectedRecordId();
 }
 
 
