@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-19 04:08:45 $
+ *  last change: $Author: sab $ $Date: 2000-10-19 07:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,12 +495,8 @@ void ScFormatRangeStyles::Sort()
 {
     sal_Int16 nTables = aTables.size();
     for (sal_Int16 i = 0; i < nTables; i++)
-    {
-        ScMyFormatRangeAddresses* aFormatRanges = aTables[i];
-        sal_Int32 nFormatRangesCount = aFormatRanges->size();
-        if (nFormatRangesCount > 1)
-            std::sort(aFormatRanges->begin(), aFormatRanges->end(), LessFormatRange);
-    }
+        if (aTables[i]->size() > 1)
+            std::sort(aTables[i]->begin(), aTables[i]->end(), LessFormatRange);
 }
 
 //===========================================================================
@@ -648,11 +644,9 @@ sal_Bool LessShape(const ScMyShape& aShape1, const ScMyShape& aShape2)
     if (aShape1.aAddress.Row() < aShape2.aAddress.Row())
         return sal_True;
     else
-        if (aShape1.aAddress.Row() == aShape2.aAddress.Row())
-            if (aShape1.aAddress.Col() < aShape1.aAddress.Col())
-                return sal_True;
-            else
-                return sal_False;
+        if (aShape1.aAddress.Row() == aShape2.aAddress.Row() &&
+            aShape1.aAddress.Col() < aShape2.aAddress.Col())
+            return sal_True;
         else
             return sal_False;
 }
@@ -661,12 +655,8 @@ void ScShapesContainer::Sort()
 {
     sal_Int16 nTables = aDrawPages.size();
     for (sal_Int16 i = 0; i < nTables; i++)
-    {
-        ScMyShapes aShapes = aDrawPages[i];
-        sal_Int32 nShapesCount = aShapes.size();
-        if (nShapesCount > 1)
-            std::sort(aShapes.begin(), aShapes.end(), LessShape);
-    }
+        if (aDrawPages[i].size() > 1)
+            std::sort(aDrawPages[i].begin(), aDrawPages[i].end(), LessShape);
 }
 
 //==============================================================================
