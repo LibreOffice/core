@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 16:29:05 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1927,10 +1927,20 @@ FloatingWindow RID_TBXCTL_INSOBJ
         SID_EURO_CONVERTER;\
         SID_ATTR_GRAF_CROP;\
         SID_ENABLE_HYPHENATION;         /* 26087    */  \
-        SID_ATTR_ZOOM; \
+        SID_ATTR_ZOOM;\
+        SID_EXTRUSION_TOOGLE;\
+        SID_EXTRUSION_TILT_DOWN;\
+        SID_EXTRUSION_TILT_UP;\
+        SID_EXTRUSION_TILT_LEFT;\
+        SID_EXTRUSION_TILT_RIGHT;\
+        SID_EXTRUSION_DEPTH_FLOATER;\
+        SID_EXTRUSION_DIRECTION_FLOATER;\
+        SID_EXTRUSION_LIGHTING_FLOATER;\
+        SID_EXTRUSION_SURFACE_FLOATER;\
+        SID_EXTRUSION_3D_COLOR;\
     };                                                  \
     IdCount = {                                         \
-        163;                                            \
+        173;                                            \
     };
 
 
