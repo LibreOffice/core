@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 12:37:12 $
+ *  last change: $Author: nn $ $Date: 2001-11-23 18:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2078,6 +2078,8 @@ namespace xmloff { namespace token {
         TOKEN( "row-mapping" ),                // XML_ROW_MAPPING
 
         TOKEN( "table-formula" ),               // XML_TABLE_FORMULA
+
+        TOKEN( "embedded-text" ),              // XML_EMBEDDED_TEXT
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
