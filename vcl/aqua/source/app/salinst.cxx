@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-02 01:55:46 $
+ *  last change: $Author: pluby $ $Date: 2000-12-22 06:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,9 +93,9 @@
 void SalAbort( const XubString& rErrorText )
 {
     if( !rErrorText.Len() )
-        fprintf( stderr, "Application Error" );
+        fprintf( stderr, "Application Error " );
     else
-        fprintf( stderr,
+        fprintf( stderr, "%s ",
             ByteString( rErrorText, gsl_getSystemTextEncoding() ).GetBuffer() );
     abort();
 }
