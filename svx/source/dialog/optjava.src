@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjava.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:00:35 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 13:09:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,16 +173,15 @@ ModalDialog RID_SVXDLG_JAVA_PARAMETER
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 270 , 140 ) ;
-    Text [ de ] = "Start Parameter" ;
-    Text [ en-US ] = "Start Parameters" ;
+    Text [ de ] = "Java Start-parameter" ;
+    Text [ en-US ] = "Java Start Parameters" ;
     Moveable = TRUE ;
-
     FixedText FT_PARAMETER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 202 , 8 ) ;
-        Text [ de ] = "Start ~Parameter" ;
-        Text [ en-US ] = "Start ~parameter" ;
+        Text [ de ] = "Java Start-~parameter" ;
+        Text [ en-US ] = "Java start ~parameter" ;
     };
     Edit ED_PARAMETER
     {
@@ -208,8 +207,15 @@ ModalDialog RID_SVXDLG_JAVA_PARAMETER
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 42 ) ;
-        Size = MAP_APPFONT ( 202 , 64 ) ;
+        Size = MAP_APPFONT ( 202 , 53 ) ;
         AutoHScroll = TRUE ;
+    };
+    FixedText FT_EXAMPLE
+    {
+        Pos = MAP_APPFONT ( 6 , 98 ) ;
+        Size = MAP_APPFONT ( 202 , 8 ) ;
+        Text [ de ] = "Zum Beispiel: -Dmyprop=c:\\program files\\java" ;
+        Text [ en-US ] = "For example: -Dmyprop=c:\\program files\\java" ;
     };
     PushButton PB_REMOVE
     {
@@ -252,7 +258,6 @@ ModalDialog RID_SVXDLG_JAVA_CLASSPATH
     Text [ de ] = "Class Path" ;
     Text [ en-US ] = "Class Path" ;
     Moveable = TRUE ;
-
     FixedText FT_PATH
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -331,7 +336,15 @@ WarningBox RID_SVX_MSGBOX_JAVA_RESTART
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Damit die ausgewählte Java-Laufzeitumgebung richtig funktioniert, muss %PRODUCTNAME neugestartet werden. Bitte starten Sie %PRODUCTNAME neu." ;
-    Message [ en-US ] = "For the selected Java runtime environment to work properly, %PRODUCTNAME must be restarted. Please restart %PRODUCTNAME now." ;
+    Message [ de ] = "Damit die ausgewählte Java-Laufzeitumgebung richtig funktioniert, muss %PRODUCTNAME neugestartet werden.\nBitte starten Sie %PRODUCTNAME neu." ;
+    Message [ en-US ] = "For the selected Java runtime environment to work properly, %PRODUCTNAME must be restarted.\nPlease restart %PRODUCTNAME now." ;
+};
+
+WarningBox RID_SVX_MSGBOX_JAVA_RESTART2
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ de ] = "Damit die geänderten Werte benutzt werden, muss %PRODUCTNAME neugestartet werden.\nBitte starten Sie %PRODUCTNAME neu." ;
+    Message [ en-US ] = "You have to restart %PRODUCTNAME so the new or modified values can take effect.\nPlease restart %PRODUCTNAME now." ;
 };
 
