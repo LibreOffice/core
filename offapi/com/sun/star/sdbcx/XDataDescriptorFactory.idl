@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataDescriptorFactory.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:15:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #endif
 
  module com {  module sun {  module star {  module beans {
-interface XPropertySet;
+ published interface XPropertySet;
 };};};};
 
  module com {  module sun {  module star {  module sdbcx {
@@ -74,7 +74,7 @@ interface XPropertySet;
 // DocMerge from xml: interface com::sun::star::beans::com::sun::star::sdbcx::XDataDescriptorFactory
 /** provides the creation of a descriptor for a definition object.
  */
-interface XDataDescriptorFactory: com::sun::star::uno::XInterface
+published interface XDataDescriptorFactory: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::beans::com::sun::star::sdbcx::XDataDescriptorFactory::createDataDescriptor
