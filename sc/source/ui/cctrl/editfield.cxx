@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editfield.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:35:45 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+#ifdef SC_DLLIMPLEMENTATION
+#undef SC_DLLIMPLEMENTATION
+#endif
+
 #ifndef SC_EDITFIELD_HXX
 #include "editfield.hxx"
 #endif
@@ -79,12 +83,12 @@ namespace {
 
 sal_Unicode lclGetDecSep()
 {
-    return GetScGlobalpLocaleData()->getNumDecimalSep().GetChar( 0 );
+    return ScGlobal::GetpLocaleData()->getNumDecimalSep().GetChar( 0 );
 }
 
 sal_Unicode lclGetGroupSep()
 {
-    return GetScGlobalpLocaleData()->getNumThousandSep().GetChar( 0 );
+    return ScGlobal::GetpLocaleData()->getNumThousandSep().GetChar( 0 );
 }
 
 } // namespace
