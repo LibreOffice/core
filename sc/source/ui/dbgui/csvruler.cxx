@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvruler.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-05 15:47:37 $
+ *  last change: $Author: obo $ $Date: 2002-07-10 14:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,7 +439,8 @@ void ScCsvRuler::MouseMove( const MouseEvent& rMEvt )
         }
         else
         {
-            Rectangle aRect( Point(), maWinSize );
+        Point aPoint;
+            Rectangle aRect( aPoint, maWinSize );
             if( !IsVisibleSplitPos( nPos ) || !aRect.IsInside( rMEvt.GetPosPixel() ) )
                 // if focused, keep old cursor position for key input
                 nPos = HasFocus() ? GetRulerCursorPos() : POS_INVALID;

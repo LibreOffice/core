@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-10 13:37:02 $
+ *  last change: $Author: obo $ $Date: 2002-07-10 14:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -919,7 +919,8 @@ void ScCsvGrid::Command( const CommandEvent& rCEvt )
         break;
         case COMMAND_WHEEL:
         {
-            Rectangle aRect( Point(), maWinSize );
+        Point aPoint;
+            Rectangle aRect( aPoint, maWinSize );
             if( aRect.IsInside( rCEvt.GetMousePosPixel() ) )
             {
                 const CommandWheelData* pData = rCEvt.GetWheelData();
@@ -1138,7 +1139,8 @@ void ScCsvGrid::ImplDrawCursor( sal_Int32 nPos )
 {
     if( IsVisibleSplitPos( nPos ) )
     {
-        Rectangle aRect( Point( GetX( nPos ) - 1, 0 ), Size( 3, GetOffsetY() ) );
+    int aVal = GetX( nPos ) - 1;
+        Rectangle aRect( Point( aVal, 0 ), Size( 3, GetOffsetY() ) );
         ImplInvertRect( maGridDev, aRect );
         aRect.Top() = GetOffsetY() + 1;
         aRect.Bottom() = GetY( GetLastVisLine() + 1 );
