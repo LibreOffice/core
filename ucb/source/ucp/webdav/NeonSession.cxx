@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kso $ $Date: 2001-10-25 13:47:41 $
+ *  last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,13 +177,14 @@ static sal_uInt16 makeStatusCode( const rtl::OUString & rStatusText )
 // -------------------------------------------------------------------
 // Constructor
 // -------------------------------------------------------------------
-NeonSession::NeonSession( DAVSessionFactory* pSessionFactory,
-                          const rtl::OUString& inUri,
-                          const ProxyConfig& rProxyCfg )
+NeonSession::NeonSession(
+            rtl::Reference< DAVSessionFactory > const & rSessionFactory,
+            const rtl::OUString& inUri,
+            const ProxyConfig& rProxyCfg )
     throw ( DAVException )
-: mListener( 0 ),
-  mRedirectionListener( 0 ),
-  m_pSessionFactory( pSessionFactory )
+: DAVSession( rSessionFactory ),
+  mListener( 0 ),
+  mRedirectionListener( 0 )
 {
     // @@@ We need to keep the char buffer for hostname and proxyname
     // for the whole session lifetime because neon only stores a pointer
@@ -233,8 +234,6 @@ NeonSession::NeonSession( DAVSessionFactory* pSessionFactory,
 // -------------------------------------------------------------------
 NeonSession::~NeonSession( )
 {
-    m_pSessionFactory->ReleaseDAVSession( this );
-
     if ( mHttpSession != NULL )
     {
         http_session_destroy( mHttpSession );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSession.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-10-25 13:47:41 $
+ *  last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,10 @@
 #ifndef _DAVSESSION_HXX_
 #define _DAVSESSION_HXX_
 
+#include <memory>
+
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
@@ -101,9 +100,23 @@ namespace webdav_ucp
 class DAVAuthListener;
 class DAVRedirectionListener;
 
-class DAVSession : public ::cppu::OWeakObject
+class DAVSession
 {
 public:
+    inline void acquire() SAL_THROW(())
+    {
+        osl_incrementInterlockedCount( &m_nRefCount );
+    }
+
+    void release() SAL_THROW(())
+    {
+        if ( osl_decrementInterlockedCount( &m_nRefCount ) == 0 )
+        {
+            m_xFactory->releaseElement( this );
+            delete this;
+        }
+    }
+
     virtual sal_Bool CanUse( const ::rtl::OUString & inPath ) = 0;
 
     // Authentication methods
@@ -224,6 +237,28 @@ public:
                             com::sun::star::ucb::XCommandEnvironment >& inEnv)
         throw( DAVException ) = 0;
     */
+protected:
+    rtl::Reference< DAVSessionFactory > m_xFactory;
+
+    DAVSession( rtl::Reference< DAVSessionFactory > const & rFactory )
+    : m_xFactory( rFactory ), m_nRefCount( 0 ) {}
+
+    virtual ~DAVSession() {}
+
+private:
+    DAVSessionFactory::Map::iterator m_aContainerIt;
+    oslInterlockedCount m_nRefCount;
+
+    DAVSession( DAVSession & ); // not implemented
+    void operator =( DAVSession ); // not implemented
+
+    friend class DAVSessionFactory;
+#if defined WNT
+    friend struct std::auto_ptr< DAVSession >;
+    // work around compiler bug...
+#else // WNT
+    friend class std::auto_ptr< DAVSession >;
+#endif // WNT
 };
 
 }; // namespace webdav_ucp

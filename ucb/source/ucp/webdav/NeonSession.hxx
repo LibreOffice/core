@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2001-10-25 13:47:41 $
+ *  last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,6 @@ class NeonSession : public DAVSession
         HttpSession *             mHttpSession;
         DAVAuthListener *         mListener;
         DAVRedirectionListener *  mRedirectionListener;
-        DAVSessionFactory *       m_pSessionFactory;
         // Note: Uncomment the following if locking support is required
         // NeonLockSession *      mNeonLockSession;
 
@@ -123,13 +122,14 @@ class NeonSession : public DAVSession
 
         rtl::OUString mContentType;
 
+    protected:
+        virtual ~NeonSession();
+
     public:
-        NeonSession( DAVSessionFactory* pSessionFactory,
+        NeonSession( rtl::Reference< DAVSessionFactory > const & rSessionFactory,
                      const rtl::OUString& inUri,
                      const ProxyConfig& rProxyCfg )
             throw ( DAVException );
-        virtual ~NeonSession();
-
 
         // DAVSession methods
         virtual sal_Bool CanUse( const ::rtl::OUString & inUri );

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kso $ $Date: 2001-06-27 08:57:37 $
+#   last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,7 @@ SLOFILES=\
     $(SLO)$/NeonInputStream.obj	\
     $(SLO)$/NeonPropFindRequest.obj	\
     $(SLO)$/NeonPUTFile.obj		\
-        $(SLO)$/NeonPOSTFile.obj         \
+        $(SLO)$/NeonPOSTFile.obj        \
     $(SLO)$/NeonSession.obj 	\
     $(SLO)$/DateTimeHelper.obj	\
     $(SLO)$/proxyconfig.obj		\
@@ -126,12 +126,13 @@ SHL1VERSIONMAP=exports.map
 .ENDIF
 
 SHL1STDLIBS=\
-    $(CPPUHELPERLIB) \
-    $(CPPULIB) \
-    $(SALLIB)  \
-        $(VOSLIB)  \
-    $(UCBHELPERLIB) \
-    $(NEON3RDLIB) \
+        $(CPPUHELPERLIB)        \
+        $(CPPULIB)              \
+        $(SALLIB)               \
+        $(SALHELPERLIB)         \
+        $(VOSLIB)               \
+        $(UCBHELPERLIB)         \
+        $(NEON3RDLIB)           \
     $(EXPATASCII3RDLIB)
 
 .IF "$(GUI)"=="WNT"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSessionFactory.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
+ *  last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,11 @@
 #ifndef _DAVSESSIONFACTORY_HXX_
 #define _DAVSESSIONFACTORY_HXX_
 
-#include <vector>
+#include <map>
 
+#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+#include "salhelper/simplereferenceobject.hxx"
+#endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
@@ -90,26 +93,27 @@ namespace webdav_ucp
 
 class DAVSession;
 
-class DAVSessionFactory
+class DAVSessionFactory : public salhelper::SimpleReferenceObject
 {
-        osl::Mutex m_aMutex;
-        rtl::Reference< ProxySettings > m_xProxySettings;
-        std::vector< DAVSession * > sActiveSessions;
+public:
+    ~DAVSessionFactory() SAL_THROW(());
 
-    public:
-        ~DAVSessionFactory();
-
-        rtl::Reference< DAVSession >
+    rtl::Reference< DAVSession >
         createDAVSession( const ::rtl::OUString & inUri,
                           const ::com::sun::star::uno::Reference<
                                ::com::sun::star::lang::XMultiServiceFactory >&
                                 rxSMgr )
             throw( DAVException );
+private:
+    typedef std::map< rtl::OUString, DAVSession * > Map;
 
-        void ReleaseDAVSession( DAVSession * inSession );
+    Map m_aMap;
+    osl::Mutex m_aMutex;
+    rtl::Reference< ProxySettings > m_xProxySettings;
 
-    private:
-        DAVSession * GetExistingSession( const ::rtl::OUString & inUri );
+    void releaseElement( DAVSession * pElement ) SAL_THROW(());
+
+    friend class DAVSession;
 };
 
 }; // namespace webdav_ucp

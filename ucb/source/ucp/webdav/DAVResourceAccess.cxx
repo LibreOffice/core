@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-10-25 13:47:41 $
+ *  last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,13 +184,13 @@ AuthListener webdavAuthListener;
 //=========================================================================
 DAVResourceAccess::DAVResourceAccess(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr,
-                DAVSessionFactory* pSessionFactory,
+                rtl::Reference< DAVSessionFactory > const & rSessionFactory,
                 const rtl::OUString & rURL )
     throw( DAVException )
 : m_aURL( rURL ),
   m_bRedirected( sal_False ),
   m_xSMgr( rSMgr ),
-  m_pSessionFactory( pSessionFactory )
+  m_xSessionFactory( rSessionFactory )
 {
 }
 
@@ -609,7 +609,7 @@ void DAVResourceAccess::initialize()
             try
             {
                 m_xSession
-                    = m_pSessionFactory->createDAVSession( m_aURL, m_xSMgr );
+                    = m_xSessionFactory->createDAVSession( m_aURL, m_xSMgr );
                 m_xSession->setServerAuthListener( &webdavAuthListener );
                 m_xSession->setRedirectionListener( this );
             }

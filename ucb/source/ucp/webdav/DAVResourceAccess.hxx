@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-10-25 13:47:41 $
+ *  last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,15 +119,16 @@ class DAVResourceAccess : public DAVRedirectionListener
     rtl::OUString m_aPath;
     rtl::Reference< DAVSession > m_xSession;
     sal_Bool m_bRedirected;
-    DAVSessionFactory*           m_pSessionFactory;
+    rtl::Reference< DAVSessionFactory > m_xSessionFactory;
     com::sun::star::uno::Reference<
         com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
 
 public:
-    DAVResourceAccess() : m_pSessionFactory( 0 ), m_bRedirected( sal_False ) {}
+    DAVResourceAccess() : m_xSessionFactory( 0 ), m_bRedirected( sal_False ) {}
     DAVResourceAccess( const com::sun::star::uno::Reference<
                         com::sun::star::lang::XMultiServiceFactory > & rSMgr,
-                       DAVSessionFactory* pSessionFactory,
+                       rtl::Reference<
+                        DAVSessionFactory > const & rSessionFactory,
                        const rtl::OUString & rURL )
         throw( DAVException );
 
@@ -136,7 +137,8 @@ public:
 
     const rtl::OUString & getURL() const { return m_aURL; }
 
-    DAVSessionFactory * getSessionFactory() const { return m_pSessionFactory; }
+    rtl::Reference< DAVSessionFactory > getSessionFactory() const
+    { return m_xSessionFactory; }
 
     // DAV methods
     //

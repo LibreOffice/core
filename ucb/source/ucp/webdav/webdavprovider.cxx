@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavprovider.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kso $ $Date: 2001-11-21 15:01:58 $
+ *  last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ using namespace webdav_ucp;
 ContentProvider::ContentProvider(
                 const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
 : ::ucb::ContentProviderImplHelper( rSMgr ),
+  m_xDAVSessionFactory( new DAVSessionFactory() ),
   m_pProps( 0 )
 {
 }
@@ -239,7 +240,7 @@ ContentProvider::queryContent(
     try
     {
         xContent = new ::webdav_ucp::Content(
-                          m_xSMgr, this, xCanonicId, &m_aDAVSessionFactory );
+                        m_xSMgr, this, xCanonicId, m_xDAVSessionFactory );
     }
     catch ( com::sun::star::ucb::ContentCreationException const & )
     {

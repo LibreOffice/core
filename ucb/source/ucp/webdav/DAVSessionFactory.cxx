@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSessionFactory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
+ *  last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,55 +87,55 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
                 const uno::Reference< lang::XMultiServiceFactory > & rxSMgr )
     throw( DAVException )
 {
-     osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if ( !m_xProxySettings.is() )
         m_xProxySettings = new ProxySettings( rxSMgr );
 
-    DAVSession * theSession = GetExistingSession( inUri );
-    if ( theSession == NULL )
+    Map::iterator aIt( m_aMap.begin() );
+    Map::iterator aEnd( m_aMap.end() );
+
+    while ( aIt != aEnd )
     {
-        theSession = new NeonSession( this,
-                                      inUri,
-                                      m_xProxySettings->getProxy( inUri ) );
-        sActiveSessions.push_back( theSession );
-    }
-
-    return theSession;
-}
-
-void DAVSessionFactory::ReleaseDAVSession( DAVSession * inSession )
-{
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
-    std::vector< DAVSession * >::iterator theIterator =
-                                            sActiveSessions.begin();
-    while ( theIterator != sActiveSessions.end() )
-    {
-        if ( *theIterator == inSession )
-        {
-            sActiveSessions.erase( theIterator );
+        if ( (*aIt).second->CanUse( inUri ) )
             break;
-        }
-        ++theIterator;
+
+        ++aIt;
     }
-}
 
-DAVSession * DAVSessionFactory::GetExistingSession( const rtl::OUString & inUri )
-{
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
-    DAVSession * theSession = NULL;
-    std::vector< DAVSession * >::iterator theIterator =
-                                            sActiveSessions.begin();
-    while ( theIterator != sActiveSessions.end() )
+    if ( aIt == aEnd )
     {
-        if ( (*theIterator)->CanUse( inUri ) )
-        {
-            theSession = *theIterator;
-            break;
-        }
-        ++theIterator;
+        std::auto_ptr< DAVSession > xElement(
+            new NeonSession(
+                this, inUri, m_xProxySettings->getProxy( inUri ) ) );
+        aIt = m_aMap.insert( Map::value_type( inUri, xElement.get() ) ).first;
+        aIt->second->m_aContainerIt = aIt;
+        xElement.release();
+        return aIt->second;
     }
-    return theSession;
+    else if ( osl_incrementInterlockedCount( &aIt->second->m_nRefCount ) > 1 )
+    {
+        rtl::Reference< DAVSession > xElement( aIt->second );
+        osl_decrementInterlockedCount( &aIt->second->m_nRefCount );
+        return xElement;
+    }
+    else
+    {
+        osl_decrementInterlockedCount( &aIt->second->m_nRefCount );
+        aIt->second->m_aContainerIt = m_aMap.end();
+        aIt->second = new NeonSession( this,
+                                       inUri,
+                                       m_xProxySettings->getProxy( inUri ) );
+        aIt->second->m_aContainerIt = aIt;
+        return aIt->second;
+    }
 }
+
+void DAVSessionFactory::releaseElement( DAVSession * pElement ) SAL_THROW(())
+{
+    OSL_ASSERT( pElement );
+    osl::MutexGuard aGuard( m_aMutex );
+    if ( pElement->m_aContainerIt != m_aMap.end() )
+        m_aMap.erase( pElement->m_aContainerIt );
+}
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2001-09-28 07:53:59 $
+ *  last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ Content::Content(
           const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
           ContentProvider* pProvider,
           const uno::Reference< star::ucb::XContentIdentifier >& Identifier,
-          DAVSessionFactory* pSessionFactory )
+          rtl::Reference< DAVSessionFactory > const & rSessionFactory )
   throw ( star::ucb::ContentCreationException )
 : ContentImplHelper( rxSMgr, pProvider, Identifier ),
   m_pProvider( pProvider ),
@@ -217,7 +217,7 @@ Content::Content(
     try
     {
         m_xResAccess.reset( new DAVResourceAccess(
-            rxSMgr, pSessionFactory, Identifier->getContentIdentifier() ) );
+            rxSMgr, rSessionFactory, Identifier->getContentIdentifier() ) );
     }
     catch ( DAVException const & )
     {
@@ -234,7 +234,7 @@ Content::Content(
             const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
             ContentProvider* pProvider,
             const uno::Reference< star::ucb::XContentIdentifier >& Identifier,
-            DAVSessionFactory* pSessionFactory,
+            rtl::Reference< DAVSessionFactory > const & rSessionFactory,
             sal_Bool isCollection )
   throw ( star::ucb::ContentCreationException )
 : ContentImplHelper( rxSMgr, pProvider, Identifier, sal_False ),
@@ -245,7 +245,7 @@ Content::Content(
     try
     {
         m_xResAccess.reset( new DAVResourceAccess(
-            rxSMgr, pSessionFactory, Identifier->getContentIdentifier() ) );
+            rxSMgr, rSessionFactory, Identifier->getContentIdentifier() ) );
     }
     catch ( DAVException const & )
     {

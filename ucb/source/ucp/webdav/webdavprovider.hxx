@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavprovider.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-08 10:04:35 $
+ *  last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 
 #include <hash_set>
 
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
 #include <com/sun/star/beans/Property.hpp>
 #endif
@@ -116,8 +120,8 @@ namespace webdav_ucp {
 
 class ContentProvider : public ::ucb::ContentProviderImplHelper
 {
-    DAVSessionFactory   m_aDAVSessionFactory;
-    PropertyMap *       m_pProps;
+    rtl::Reference< DAVSessionFactory > m_xDAVSessionFactory;
+    PropertyMap * m_pProps;
 
 public:
     ContentProvider( const ::com::sun::star::uno::Reference<
@@ -149,7 +153,8 @@ public:
     // Non-interface methods.
     //////////////////////////////////////////////////////////////////////
 
-    DAVSessionFactory* getDAVSessionFactory() { return &m_aDAVSessionFactory; }
+    rtl::Reference< DAVSessionFactory > getDAVSessionFactory()
+    { return m_xDAVSessionFactory; }
 
     bool getProperty( const ::rtl::OUString & rPropName,
                       ::com::sun::star::beans::Property & rProp,
