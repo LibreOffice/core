@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:35 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1001,33 +1001,6 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
             case SID_APPLICATION:
                 rSet.Put( SfxObjectItem( SID_APPLICATION, this ) );
                 break;
-
-            case SID_STARWRITER:
-            {
-                SfxModule *pMod = (*(SfxModule**) GetAppData(SHL_WRITER))->Load();
-                if ( pMod ) HACK(muss vom Modul selbst gemacht werden)
-                    pMod->SetName( DEFINE_CONST_UNICODE("StarWriter") );
-                rSet.Put( SfxObjectItem( nSID, pMod ) );
-                break;
-            }
-
-            case SID_STARDRAW:
-            {
-                SfxModule *pMod = (*(SfxModule**) GetAppData(SHL_DRAW))->Load();
-                if ( pMod ) HACK(muss vom Modul selbst gemacht werden)
-                    pMod->SetName( DEFINE_CONST_UNICODE("StarDraw") );
-                rSet.Put( SfxObjectItem( nSID, pMod  ) );
-                break;
-            }
-
-            case SID_STARCALC:
-            {
-                SfxModule *pMod = (*(SfxModule**) GetAppData(SHL_CALC))->Load();
-                if ( pMod ) HACK(muss vom Modul selbst gemacht werden)
-                    pMod->SetName( DEFINE_CONST_UNICODE("StarCalc") );
-                rSet.Put( SfxObjectItem( nSID, pMod  ) );
-                break;
-            }
 
             case SID_PROGFILENAME:
                 rSet.Put( SfxStringItem( SID_PROGFILENAME, Application::GetAppFileName() ) );
