@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:24:09 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@
 #ifndef _SVTOOLS_PASSWORDHELPER_HXX
 #include <svtools/PasswordHelper.hxx>
 #endif
-
+#include <com/sun/star/sdbc/XResultSet.hpp>
 #include "docsh.hxx"
 #include "docfunc.hxx"
 #include "sc.hrc"
@@ -277,6 +277,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if ( pReqArgs->GetItemState( FN_PARAM_2, TRUE, &pItem ) == SFX_ITEM_SET )
                     bIsNewArea = ((const SfxBoolItem*)pItem)->GetValue();
 
+                ::com::sun::star::uno::Reference<
+                        ::com::sun::star::sdbc::XResultSet > xResultSet;
+                if ( pReqArgs->GetItemState( FN_PARAM_3, FALSE, &pItem ) == SFX_ITEM_SET && pItem )
+                    xResultSet.set(((const SfxUsrAnyItem*)pItem)->GetValue(),::com::sun::star::uno::UNO_QUERY);
+
                 String sDBName  = sSbaData.GetToken(0,cSbaSep);     // Datenbankname
                 String sDBTable = sSbaData.GetToken(1,cSbaSep);     // Tabellen- oder Query-Name
                 String sTabFlag = sSbaData.GetToken(2,cSbaSep);
@@ -339,8 +344,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                 if (bDo)
                 {
-                    ::com::sun::star::uno::Reference<
-                        ::com::sun::star::sdbc::XResultSet > xResultSet;
                     ScDBDocFunc(*this).UpdateImport( sTarget, sDBName,
                             sDBTable, sDBSql, TRUE, nType, xResultSet,
                             pSelectionList );
