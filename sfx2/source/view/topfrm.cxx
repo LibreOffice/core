@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:35:21 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -994,9 +994,12 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
         GetWindow().Show();
         pFrame->MakeActive_Impl( TRUE );
         pDoc->OwnerLock( sal_False );
+        // Dont show container window! Its done by framework ...
+        /*
         GetFrameInterface()->getContainerWindow()->setVisible( sal_True );
-        if( GetTopWindow_Impl()->HasFocus() )
+        if( GetTopWindow_Impl()->HasFocus() ) // ??? influenced by disabling setVisible() before ???
             pFrame->MakeActive_Impl( TRUE );
+        */
 
         if ( IsInPlace() )
             pFrame->UnlockAdjustPosSizePixel();
