@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-08 19:38:57 $
+ *  last change: $Author: hdu $ $Date: 2002-10-10 10:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,7 +530,7 @@ void ImplGetEnglishSearchFontName( String& rName )
             {
                 c -= 0xFF00-0x0020;
                 // Upper to Lower
-                if ( (c >= 0x0041) && (c <= 0x005A) )
+                if ( (c >= 'A') && (c <= 'Z') )
                     c += 0x0020;
                 rName.SetChar( i, c );
             }
@@ -541,15 +541,15 @@ void ImplGetEnglishSearchFontName( String& rName )
             }
         }
         // not lowercase Ascii
-        else if ( !((c >= 0x0061) && (c <= 0x007A)) )
+        else if ( !((c >= 'a') && (c <= 'z')) )
         {
             // To Lowercase-Ascii
-            if ( (c >= 0x0041) && (c <= 0x005A) )
+            if ( (c >= 'A') && (c <= 'Z') )
             {
                 c += 0x0020;
                 rName.SetChar( i, c );
             }
-            else if ( !((c >= 0x0030) && (c <= 0x0039)) ) // not 0-9
+            else if( ((c < '0') || (c > '9')) && (c != ';') ) // not 0-9 or semicolon
             {
                 // Remove white spaces and special characters
                 rName.Erase( i, 1 );
@@ -583,7 +583,7 @@ void ImplGetEnglishSearchFontName( String& rName )
 
         pTranslateNames++;
     }
-};
+}
 
 // -----------------------------------------------------------------------
 
@@ -2302,9 +2302,23 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
                 }
             }
 
-            // If nothing helps, we use the first one
+            // if nothing helps, we try to use a reasonable non-symbol font
             if ( !pFoundData )
-                pFoundData = pFontList->Get( 0 );
+            {
+                pFontList->InitMatchData();
+                for( i = 0; i < nFontCount; ++i )
+                {
+                    ImplDevFontListData* pData = pFontList->Get( i );
+                    if( pData->mnMatchType & IMPL_FONT_ATTR_SYMBOL )
+                        continue;
+                    pFoundData = pData;
+                    if( pData->mnMatchType & (IMPL_FONT_ATTR_DEFAULT|IMPL_FONT_ATTR_STANDARD) )
+                        break;
+                }
+                // if there was no reasonable font just use the first in the font list
+                if( i >= nFontCount )
+                    pFoundData = pFontList->Get( 0 );
+            }
         }
     }
 
@@ -5654,8 +5668,8 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         const xub_Unicode* pEnd = pStr + (nEndIndex-nMinIndex);
         for( ; pStr < pEnd; ++pStr )
             if( (*pStr >= 0x0590) && (*pStr < 0x1900)
-           ||  (*pStr >= 0xFB1D) && (*pStr < 0xFE00)   // middle east presentation
-           ||  (*pStr >= 0xFE70) && (*pStr < 0xFF00) ) // arabic presentation B                )
+            ||  (*pStr >= 0xFB1D) && (*pStr < 0xFE00)   // middle east presentation
+            ||  (*pStr >= 0xFE70) && (*pStr < 0xFF00) ) // arabic presentation B
                 break;
         if( pStr >= pEnd )
             nLayoutFlags |= SAL_LAYOUT_COMPLEX_DISABLED;
@@ -5805,7 +5819,9 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rStr, long nTextWidth,
         pHyphenatorLayout->Release();
 
         // calculate hyphenated break position
-        nTextPixelWidth -= nHyphenatorPixelWidth + nExtraPixelWidth;
+        nTextPixelWidth -= nHyphenatorPixelWidth;
+        if( nExtraPixelWidth > 0 )
+            nTextPixelWidth -= nExtraPixelWidth;
         rHyphenatorPos = pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor );
 
         if( rHyphenatorPos > nRetVal )
@@ -5831,7 +5847,6 @@ void OutputDevice::DrawText( const Rectangle& rRect,
     if ( ( !IsDeviceOutputNecessary() && ! pVector ) || !rOrigStr.Len() || rRect.IsEmpty() )
         return;
 
-    // better get graphics here because ImplDrawMnemonicLine() will not
 #ifndef REMOTE_APPSERVER
     // we need a graphics
     if( !mpGraphics && !ImplGetGraphics() )
@@ -6806,11 +6821,15 @@ ULONG OutputDevice::GetKerningPairCount() const
 
 // -----------------------------------------------------------------------
 
+// TODO: best is to get rid of this method completely
 void OutputDevice::GetKerningPairs( ULONG nPairs, KerningPair* pKernPairs ) const
 {
     DBG_TRACE( "OutputDevice::GetKerningPairs()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
+    // TODO: kerning pairs are no longer used by anybody else in this layer
+    // TODO: remove it from FontEntry and from ImplInitFont()
+    // NOTE: beware that OutputDevice owns the kern array
     const_cast<OutputDevice*>(this)->ImplInitKerningPairs();
     if ( nPairs > mpFontEntry->mnKernPairs )
         nPairs = mpFontEntry->mnKernPairs;
