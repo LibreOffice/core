@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frm_strings.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-12 16:31:58 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,14 +305,20 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_ENFORCE_FORMAT,           "EnforceFormat" );
 
     FORMS_CONSTASCII_STRING( PROPERTY_BORDER,                   "Border" );
+    FORMS_CONSTASCII_STRING( PROPERTY_BORDERCOLOR,              "BorderColor" );
     FORMS_CONSTASCII_STRING( PROPERTY_BACKGROUNDCOLOR,          "BackgroundColor"   );
     FORMS_CONSTASCII_STRING( PROPERTY_ICONSIZE,                 "IconSize"        );
     FORMS_CONSTASCII_STRING( PROPERTY_TEXTLINECOLOR,            "TextLineColor" );
+    FORMS_CONSTASCII_STRING( PROPERTY_HIDEINACTIVESELECTION,    "HideInactiveSelection" );
 
     FORMS_CONSTASCII_STRING( PROPERTY_SHOW_POSITION,            "ShowPosition" );
     FORMS_CONSTASCII_STRING( PROPERTY_SHOW_NAVIGATION,          "ShowNavigation" );
     FORMS_CONSTASCII_STRING( PROPERTY_SHOW_RECORDACTIONS,       "ShowRecordActions" );
     FORMS_CONSTASCII_STRING( PROPERTY_SHOW_FILTERSORT,          "ShowFilterSort" );
+
+    FORMS_CONSTASCII_STRING( PROPERTY_DYNAMIC_CONTROL_BORDER,   "DynamicControlBorder" );
+    FORMS_CONSTASCII_STRING( PROPERTY_CONTROL_BORDER_COLOR_FOCUS, "ControlBorderColorOnFocus" );
+    FORMS_CONSTASCII_STRING( PROPERTY_CONTROL_BORDER_COLOR_MOUSE, "ControlBorderColorOnHover" );
 
     //--------------------------------------------------------------------------
     //- URLs
