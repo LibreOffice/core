@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:54:27 $
+ *  last change: $Author: kz $ $Date: 2001-08-21 22:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,6 +331,9 @@ ModalDialog DLG_DBASE_INDEXES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/08/13 20:54:27  kz
+ *  Merge SRC638: 13.08.01 - 22:53:46
+ *
  *  Revision 1.13  2001/08/10 21:01:33  kz
  *  Merge SRC638: 10.08.01 - 23:00:53
  *
@@ -373,6 +376,7 @@ ModalDialog DLG_DBASE_INDEXES
  *
  *  Revision 1.0 26.09.00 17:03:30  fs
  ************************************************************************/
+
 
 
 
