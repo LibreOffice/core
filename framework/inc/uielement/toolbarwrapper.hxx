@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarwrapper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:31:31 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@ class ToolBarWrapper : public ::com::sun::star::ui::XUIFunctionListener,
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
     //-------------------------------------------------------------------------------------------------------------
+    protected:
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any&  aValue ) throw( com::sun::star::uno::Exception );
+
     private:
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
         com::sun::star::uno::Reference< com::sun::star::lang::XComponent >              m_xToolBarManager;
