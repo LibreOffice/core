@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 08:43:38 $
+ *  last change: $Author: nn $ $Date: 2002-03-14 15:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,8 +190,18 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     if (nNewId == SID_INSERT_FRAME)                     // vom Tbx-Button
         nNewId = SID_DRAW_TEXT;
 
+    //  #97016# CTRL-SID_OBJECT_SELECT is used to select the first object,
+    //  but not if SID_OBJECT_SELECT is the result of clicking a create function again,
+    //  so this must be tested before changing nNewId below.
+    BOOL bSelectFirst = ( nNewId == SID_OBJECT_SELECT && (rReq.GetModifier() & KEY_MOD1) );
+
     BOOL bEx = IsDrawSelMode();
-    if ( nNewId == nDrawSfxId && ( nNewId != SID_FM_CREATE_CONTROL ||
+    if ( bSelectFirst )
+    {
+        //  #97016# always allow keyboard selection also on background layer
+        bEx = TRUE;
+    }
+    else if ( nNewId == nDrawSfxId && ( nNewId != SID_FM_CREATE_CONTROL ||
                                     nNewFormId == nFormSfxId || nNewFormId == 0 ) )
     {
         //  SID_FM_CREATE_CONTROL mit nNewFormId==0 (ohne Parameter) kommt beim Deaktivieren
@@ -223,6 +233,21 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     SdrLayer* pLayer = pView->GetModel()->GetLayerAdmin().GetLayerPerID(SC_LAYER_BACK);
     if (pLayer)
         pView->SetLayerLocked( pLayer->GetName(), !bEx );
+
+    if ( bSelectFirst )
+    {
+        //  #97016# select first draw object if none is selected yet
+        if(!pView->HasMarkedObj())
+        {
+            // select first object
+            pView->UnmarkAllObj();
+            pView->MarkNextObj(TRUE);
+
+            // ...and make it visible
+            if(pView->HasMarkedObj())
+                pView->MakeVisible(pView->GetAllMarkedRect(), *pWin);
+        }
+    }
 
     nDrawSfxId = nNewId;
 
