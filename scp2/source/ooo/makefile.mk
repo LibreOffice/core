@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 16:51:43 $
+#   last change: $Author: obo $ $Date: 2004-11-18 09:00:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,7 +133,6 @@ PARFILES=                          \
         scpaction_ooo.par          \
         helptext_ooo.par           \
         directory_ooo.par          \
-        starregistry_ooo.par       \
         datacarrier_ooo.par        \
         file_ooo.par               \
         file_extra_ooo.par         \
@@ -151,11 +150,13 @@ PARFILES=                          \
 .IF "$(GUI)"=="WNT"
 PARFILES +=                        \
         folder_ooo.par             \
+        folderitem_ooo.par         \
         registryitem_ooo.par
 .ENDIF
 
 ULFFILES=                          \
         directory_ooo.ulf          \
+        folderitem_ooo.ulf         \
         helptext_ooo.ulf           \
         module_ooo.ulf             \
         registryitem_ooo.ulf
