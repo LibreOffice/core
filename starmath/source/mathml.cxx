@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-05 10:36:18 $
+ *  last change: $Author: cmc $ $Date: 2001-02-08 09:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,11 +58,6 @@
  *
  *
  ************************************************************************/
-
-/*
- Warning: Implicit mrows, or other implicit grouping tags are not supported
- yet, only matters of course for mathml written outside staroffice
- */
 
 /*
  Warning: The SvXMLElementExport helper class creates the beginning and
@@ -429,6 +424,9 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
         xServiceFactory->createInstanceWithArguments(
         OUString::createFromAscii("com.sun.star.office.sax.exporter.Math"),
         aArgs),uno::UNO_QUERY);
+    DBG_ASSERT(xExporter.is(),"com.sun.star.office.sax.exporter.Math service missing");
+    if (!xExporter.is())
+        return bRet;
 
     //Get model
     uno::Reference< lang::XComponent > xModelComp(rModel, uno::UNO_QUERY );
@@ -504,7 +502,7 @@ public:
         return (SmXMLImport&)GetImport();
     }
     virtual void TCharacters(const ::rtl::OUString &rChars) {}
-    void Characters(const ::rtl::OUString &rChars)
+    virtual void Characters(const ::rtl::OUString &rChars)
     {
         /*
         Whitespace occurring within the content of token elements is "trimmed"
@@ -1135,7 +1133,7 @@ public:
     SmXMLAnnotationContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
         : SmXMLImportContext(rImport,nPrefix,rLName), bIsStarMath(sal_False) {}
-    virtual void TCharacters(const ::rtl::OUString &rChars);
+    virtual void Characters(const ::rtl::OUString &rChars);
     void StartElement(const uno::Reference<xml::sax::XAttributeList > &
         xAttrList );
 private:
@@ -1168,7 +1166,7 @@ void SmXMLAnnotationContext_Impl::StartElement(const uno::Reference<
     }
 }
 
-void SmXMLAnnotationContext_Impl::TCharacters(const ::rtl::OUString &rChars)
+void SmXMLAnnotationContext_Impl::Characters(const ::rtl::OUString &rChars)
 {
     if (bIsStarMath)
         GetSmImport().GetText().Append(String(rChars));
@@ -2729,7 +2727,7 @@ void SmXMLExport::_ExportContent()
         AddAttribute(XML_NAMESPACE_MATH,sXML_encoding,
             OUString(RTL_CONSTASCII_USTRINGPARAM("StarMath 5.0")));
         SvXMLElementExport aAnnotation(*this,XML_NAMESPACE_MATH,
-            sXML_annotation,sal_True, sal_True);
+            sXML_annotation,sal_True, sal_False);
         GetDocHandler()->characters(*pText);
     }
 }
