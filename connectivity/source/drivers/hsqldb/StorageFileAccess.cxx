@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StorageFileAccess.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 15:52:12 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,9 +131,6 @@ JNIEXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess
                 env->ExceptionClear();
             ::rtl::OString cstr( ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
             OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
-            ThrowException( env,
-                            "java/io/IOException",
-                            cstr.getStr());
         }
     }
     return JNI_FALSE;
@@ -157,17 +154,13 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_rem
         }
         catch(NoSuchElementException&)
         {
+            if (JNI_FALSE != env->ExceptionCheck())
+                env->ExceptionClear();
         }
         catch(Exception& e)
         {
             OSL_ENSURE(0,"Exception catched! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_renameElement");
-            if (JNI_FALSE != env->ExceptionCheck())
-                env->ExceptionClear();
-            ::rtl::OString cstr( ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
-            OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
-            ThrowException( env,
-                            "java/io/IOException",
-                            cstr.getStr());
+            StorageContainer::throwJavaException(e,env);
         }
     }
 }
@@ -194,13 +187,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_ren
         catch(Exception& e)
         {
             OSL_ENSURE(0,"Exception catched! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_renameElement");
-            if (JNI_FALSE != env->ExceptionCheck())
-                env->ExceptionClear();
-            ::rtl::OString cstr( ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
-            OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
-            ThrowException( env,
-                            "java/io/IOException",
-                            cstr.getStr());
+            StorageContainer::throwJavaException(e,env);
         }
     }
 }
