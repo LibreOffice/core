@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaloader.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:09:48 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:46:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,296 +110,351 @@ using namespace ::rtl;
 using namespace ::osl;
 
 namespace stoc_javaloader {
-    static Sequence< OUString > loader_getSupportedServiceNames()
-    {
-        static Sequence < OUString > *pNames = 0;
-        if( ! pNames )
-        {
-            MutexGuard guard( Mutex::getGlobalMutex() );
-            if( !pNames )
-            {
-                static Sequence< OUString > seqNames(2);
-                seqNames.getArray()[0] = OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.Java") );
-                seqNames.getArray()[1] = OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.Java2") );
-                pNames = &seqNames;
-            }
-        }
-        return *pNames;
-    }
 
-    static OUString loader_getImplementationName()
+static Mutex & getInitMutex();
+
+static Sequence< OUString > loader_getSupportedServiceNames()
+{
+    static Sequence < OUString > *pNames = 0;
+    if( ! pNames )
     {
-        static OUString *pImplName = 0;
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        if( !pNames )
+        {
+            static Sequence< OUString > seqNames(2);
+            seqNames.getArray()[0] = OUString(
+                RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.Java") );
+            seqNames.getArray()[1] = OUString(
+                RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.Java2") );
+            pNames = &seqNames;
+        }
+    }
+    return *pNames;
+}
+
+static OUString loader_getImplementationName()
+{
+    static OUString *pImplName = 0;
+    if( ! pImplName )
+    {
+        MutexGuard guard( Mutex::getGlobalMutex() );
         if( ! pImplName )
         {
-            MutexGuard guard( Mutex::getGlobalMutex() );
-            if( ! pImplName )
-            {
-                static OUString implName(
-                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.stoc.JavaComponentLoader" ) );
-                pImplName = &implName;
-            }
+            static OUString implName(
+                RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.stoc.JavaComponentLoader" ) );
+            pImplName = &implName;
         }
-        return *pImplName;
     }
+    return *pImplName;
+}
 
-    class JavaComponentLoader : public WeakImplHelper2<XImplementationLoader, XServiceInfo> {
-        css::uno::Reference<XImplementationLoader> _javaLoader;
+class JavaComponentLoader : public WeakImplHelper2<XImplementationLoader, XServiceInfo>
+{
+    css::uno::Reference<XComponentContext> m_xComponentContext;
+    /** Do not use m_javaLoader directly. Instead use getJavaLoader.
+     */
+    css::uno::Reference<XImplementationLoader> m_javaLoader;
+    /** The retured Reference contains a null pointer if the office is not configured
+        to run java.
 
-    public:
-        JavaComponentLoader(const css::uno::Reference<XComponentContext> & xCtx) throw(RuntimeException);
-        virtual ~JavaComponentLoader() throw();
-
-    public:
-        // XServiceInfo
-        virtual OUString           SAL_CALL getImplementationName()                      throw(RuntimeException);
-        virtual sal_Bool           SAL_CALL supportsService(const OUString& ServiceName) throw(RuntimeException);
-        virtual Sequence<OUString> SAL_CALL getSupportedServiceNames()                   throw(RuntimeException);
-
-        // XImplementationLoader
-        virtual css::uno::Reference<XInterface> SAL_CALL activate(const OUString& implementationName, const OUString& implementationLoaderUrl, const OUString& locationUrl, const css::uno::Reference<XRegistryKey>& xKey) throw(CannotActivateFactoryException, RuntimeException);
-        virtual sal_Bool SAL_CALL writeRegistryInfo(const css::uno::Reference<XRegistryKey>& xKey, const OUString& implementationLoaderUrl, const OUString& locationUrl) throw(CannotRegisterImplementationException, RuntimeException);
-    };
-
-    JavaComponentLoader::JavaComponentLoader(const css::uno::Reference<XComponentContext> & xCtx) throw(RuntimeException)
-    {
-        sal_Int32 size = 0;
-        uno_Environment * pJava_environment = NULL;
-        uno_Environment * pUno_environment = NULL;
-        typelib_InterfaceTypeDescription * pType_XImplementationLoader = 0;
-
-        try {
-            // get a java vm, where we can create a loader
-            css::uno::Reference<XJavaVM> javaVM_xJavaVM(
-                xCtx->getValueByName(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                 "/singletons/"
-                                 "com.sun.star.java.theJavaVirtualMachine"))),
-                UNO_QUERY_THROW);
-
-            // Use the special protocol of XJavaVM.getJavaVM:  If the passed in
-            // process ID has an extra 17th byte of value zero, the returned any
-            // contains a pointer to a jvmaccess::VirtualMachine, instead of the
-            // underlying JavaVM pointer:
-            Sequence<sal_Int8> processID(17);
-            rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8 *>(processID.getArray()));
-            processID[16] = 0;
-
-            // We get a non-refcounted pointer to a jvmaccess::VirtualMachine
-            // from the XJavaVM service (the pointer is guaranteed to be valid
-            // as long as our reference to the XJavaVM service lasts), and
-            // convert the non-refcounted pointer into a refcounted one
-            // immediately:
-            OSL_ENSURE(sizeof (sal_Int64)
-                           >= sizeof (jvmaccess::VirtualMachine *),
-                       "Pointer cannot be represented as sal_Int64");
-            sal_Int64 nPointer = reinterpret_cast< sal_Int64 >(
-                static_cast< jvmaccess::VirtualMachine * >(0));
-            javaVM_xJavaVM->getJavaVM(processID) >>= nPointer;
-            rtl::Reference< jvmaccess::VirtualMachine > xVirtualMachine(
-                reinterpret_cast< jvmaccess::VirtualMachine * >(nPointer));
-            if (!xVirtualMachine.is())
-                //throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                //   "javaloader error - JavaVirtualMachine service could not provide a VM")), css::uno::Reference<XInterface>());
-                // We must not throw a RuntimeException, because this might end the applications. It is ok if java components
-                // are not working because the office can be installed without Java support.
-                return;
-
-            try
-            {
-                jvmaccess::VirtualMachine::AttachGuard aGuard(xVirtualMachine);
-                JNIEnv * pJNIEnv = aGuard.getEnvironment();
-
-                // instantiate the java JavaLoader
-                jclass jcJavaLoader = pJNIEnv->FindClass("com/sun/star/comp/loader/JavaLoader");
-                if(pJNIEnv->ExceptionOccurred())
-                    throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "javaloader error - could not find class com/sun/star/comp/loader/JavaLoader")), css::uno::Reference<XInterface>());
-                jmethodID jmJavaLoader_init = pJNIEnv->GetMethodID(jcJavaLoader, "<init>", "()V");
-                if(pJNIEnv->ExceptionOccurred())
-                    throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "javaloader error - instantiation of com.sun.star.comp.loader.JavaLoader failed")), css::uno::Reference<XInterface>());
-                jobject joJavaLoader = pJNIEnv->NewObject(jcJavaLoader, jmJavaLoader_init);
-                if(pJNIEnv->ExceptionOccurred())
-                    throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "javaloader error - instantiation of com.sun.star.comp.loader.JavaLoader failed")), css::uno::Reference<XInterface>());
-
-                // map the java JavaLoader to this environment
-                OUString sJava(RTL_CONSTASCII_USTRINGPARAM("java"));
-                uno_getEnvironment(&pJava_environment, sJava.pData,
-                                   xVirtualMachine.get());
-                if(!pJava_environment)
-                    throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "javaloader error - no Java environment available")), css::uno::Reference<XInterface>());
-
-                // why is there no convinient contructor?
-                OUString sCppu_current_lb_name(RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME));
-                uno_getEnvironment(&pUno_environment, sCppu_current_lb_name.pData, NULL);
-                if(!pUno_environment)
-                    throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "javaloader error - no C++ environment available")), css::uno::Reference<XInterface>());
-
-                Mapping java_curr(pJava_environment, pUno_environment);
-                if(!java_curr.is())
-                    throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "javaloader error - no mapping from java to C++ ")), css::uno::Reference<XInterface>());
-
-                // release java environment
-                pJava_environment->release(pJava_environment);
-                pJava_environment = NULL;
-
-                // release uno environment
-                pUno_environment->release(pUno_environment);
-                pUno_environment = NULL;
-
-                getCppuType((css::uno::Reference<XImplementationLoader> *) 0).getDescription((typelib_TypeDescription **) & pType_XImplementationLoader);
-                if(!pType_XImplementationLoader)
-                    throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "javaloader error - no type information for XImplementationLoader")), css::uno::Reference<XInterface>());
-
-                _javaLoader = css::uno::Reference<XImplementationLoader>(reinterpret_cast<XImplementationLoader *>(
-                              java_curr.mapInterface(joJavaLoader, pType_XImplementationLoader)));
-                pJNIEnv->DeleteLocalRef( joJavaLoader );
-                if(!_javaLoader.is())
-                    throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "javaloader error - mapping of java XImplementationLoader to c++ failed")), css::uno::Reference<XInterface>());
-
-                typelib_typedescription_release(reinterpret_cast<typelib_TypeDescription *>(pType_XImplementationLoader));
-                pType_XImplementationLoader = NULL;
-            }
-            catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
-            {
-                throw RuntimeException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                 "jvmaccess::VirtualMachine::AttachGuard"
-                                 "::CreationException")),
-                    0);
-            }
-
-            // set the service manager at the javaloader
-            css::uno::Reference<XInitialization> javaLoader_XInitialization(_javaLoader, UNO_QUERY);
-            if(!javaLoader_XInitialization.is())
-                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "javaloader error - initialization of java javaloader failed, no XInitialization")), css::uno::Reference<XInterface>());
-
-            Any any;
-            any <<= css::uno::Reference<XMultiComponentFactory>(
-                xCtx->getServiceManager());
-
-            javaLoader_XInitialization->initialize(Sequence<Any>(&any, 1));
-        }
-        catch(RuntimeException &) {
-            if(pJava_environment)
-                pJava_environment->release(pJava_environment);
-
-            if(pUno_environment)
-                pUno_environment->release(pUno_environment);
-
-            if(pType_XImplementationLoader)
-                typelib_typedescription_release(reinterpret_cast<typelib_TypeDescription *>(pType_XImplementationLoader));
-
-            throw;
-        }
-        OSL_TRACE("javaloader.cxx: mapped javaloader - 0x%x", _javaLoader.get());
-    }
+        @exception com::sun::star::uno::RuntimeException
+        If the Java implementation of the loader could not be obtained, for reasons other
+        then that java was not configured the RuntimeException is thrown.
+     */
+    const css::uno::Reference<XImplementationLoader> & getJavaLoader();
 
 
-    JavaComponentLoader::~JavaComponentLoader() throw() {
-    }
+public:
+    JavaComponentLoader(const css::uno::Reference<XComponentContext> & xCtx)
+        throw(RuntimeException);
+    virtual ~JavaComponentLoader() throw();
 
+public:
     // XServiceInfo
-    OUString SAL_CALL JavaComponentLoader::getImplementationName() throw(::com::sun::star::uno::RuntimeException)
-    {
-        return loader_getImplementationName();
-    }
-
-    sal_Bool SAL_CALL JavaComponentLoader::supportsService(const OUString & ServiceName) throw(::com::sun::star::uno::RuntimeException) {
-        sal_Bool bSupport = sal_False;
-
-        Sequence<OUString> aSNL = getSupportedServiceNames();
-        const OUString * pArray = aSNL.getArray();
-        for(sal_Int32 i = 0; i < aSNL.getLength() && !bSupport; ++ i)
-            bSupport = pArray[i] == ServiceName;
-
-        return bSupport;
-    }
-
-    Sequence<OUString> SAL_CALL JavaComponentLoader::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
-    {
-        return loader_getSupportedServiceNames();
-    }
-
-
+    virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
+        throw(RuntimeException);
+    virtual Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw(RuntimeException);
 
     // XImplementationLoader
-    sal_Bool SAL_CALL JavaComponentLoader::writeRegistryInfo(const css::uno::Reference<XRegistryKey> & xKey, const OUString & blabla, const OUString & rLibName)
-        throw(CannotRegisterImplementationException, RuntimeException)
-    {
-        if (_javaLoader.is())
-            return _javaLoader->writeRegistryInfo(xKey, blabla, rLibName);
-        else
-            throw CannotRegisterImplementationException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Could not create Java implementation loader")), NULL);
+    virtual css::uno::Reference<XInterface> SAL_CALL activate(
+        const OUString& implementationName, const OUString& implementationLoaderUrl,
+        const OUString& locationUrl, const css::uno::Reference<XRegistryKey>& xKey)
+        throw(CannotActivateFactoryException, RuntimeException);
+    virtual sal_Bool SAL_CALL writeRegistryInfo(
+        const css::uno::Reference<XRegistryKey>& xKey,
+        const OUString& implementationLoaderUrl, const OUString& locationUrl)
+        throw(CannotRegisterImplementationException, RuntimeException);
+};
+
+const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaLoader()
+{
+    MutexGuard aGuard(getInitMutex());
+
+    if (m_javaLoader.is())
+        return m_javaLoader;
+
+    sal_Int32 size = 0;
+    uno_Environment * pJava_environment = NULL;
+    uno_Environment * pUno_environment = NULL;
+    typelib_InterfaceTypeDescription * pType_XImplementationLoader = 0;
+
+    try {
+        // get a java vm, where we can create a loader
+        css::uno::Reference<XJavaVM> javaVM_xJavaVM(
+            m_xComponentContext->getValueByName(
+                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                             "/singletons/"
+                             "com.sun.star.java.theJavaVirtualMachine"))),
+            UNO_QUERY_THROW);
+
+        // Use the special protocol of XJavaVM.getJavaVM:  If the passed in
+        // process ID has an extra 17th byte of value zero, the returned any
+        // contains a pointer to a jvmaccess::VirtualMachine, instead of the
+        // underlying JavaVM pointer:
+        Sequence<sal_Int8> processID(17);
+        rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8 *>(processID.getArray()));
+        processID[16] = 0;
+
+        // We get a non-refcounted pointer to a jvmaccess::VirtualMachine
+        // from the XJavaVM service (the pointer is guaranteed to be valid
+        // as long as our reference to the XJavaVM service lasts), and
+        // convert the non-refcounted pointer into a refcounted one
+        // immediately:
+        OSL_ENSURE(sizeof (sal_Int64)
+                        >= sizeof (jvmaccess::VirtualMachine *),
+                    "Pointer cannot be represented as sal_Int64");
+        sal_Int64 nPointer = reinterpret_cast< sal_Int64 >(
+            static_cast< jvmaccess::VirtualMachine * >(0));
+        javaVM_xJavaVM->getJavaVM(processID) >>= nPointer;
+        rtl::Reference< jvmaccess::VirtualMachine > xVirtualMachine(
+            reinterpret_cast< jvmaccess::VirtualMachine * >(nPointer));
+        if (!xVirtualMachine.is())
+            //throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+            //   "javaloader error - JavaVirtualMachine service could not provide a VM")),
+            //   css::uno::Reference<XInterface>());
+            // We must not throw a RuntimeException, because this might end the applications.
+            // It is ok if java components
+            // are not working because the office can be installed without Java support.
+            return css::uno::Reference<XImplementationLoader>();
+
+        try
+        {
+            jvmaccess::VirtualMachine::AttachGuard aGuard(xVirtualMachine);
+            JNIEnv * pJNIEnv = aGuard.getEnvironment();
+
+            // instantiate the java JavaLoader
+            jclass jcJavaLoader = pJNIEnv->FindClass("com/sun/star/comp/loader/JavaLoader");
+            if(pJNIEnv->ExceptionOccurred())
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - could not find class com/sun/star/comp/loader/JavaLoader")),
+                    css::uno::Reference<XInterface>());
+            jmethodID jmJavaLoader_init = pJNIEnv->GetMethodID(jcJavaLoader, "<init>", "()V");
+            if(pJNIEnv->ExceptionOccurred())
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - instantiation of com.sun.star.comp.loader.JavaLoader failed")),
+                    css::uno::Reference<XInterface>());
+            jobject joJavaLoader = pJNIEnv->NewObject(jcJavaLoader, jmJavaLoader_init);
+            if(pJNIEnv->ExceptionOccurred())
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - instantiation of com.sun.star.comp.loader.JavaLoader failed")),
+                    css::uno::Reference<XInterface>());
+
+            // map the java JavaLoader to this environment
+            OUString sJava(RTL_CONSTASCII_USTRINGPARAM("java"));
+            uno_getEnvironment(&pJava_environment, sJava.pData,
+                                xVirtualMachine.get());
+            if(!pJava_environment)
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - no Java environment available")), css::uno::Reference<XInterface>());
+
+            // why is there no convinient contructor?
+            OUString sCppu_current_lb_name(RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME));
+            uno_getEnvironment(&pUno_environment, sCppu_current_lb_name.pData, NULL);
+            if(!pUno_environment)
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - no C++ environment available")), css::uno::Reference<XInterface>());
+
+            Mapping java_curr(pJava_environment, pUno_environment);
+            if(!java_curr.is())
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - no mapping from java to C++ ")), css::uno::Reference<XInterface>());
+
+            // release java environment
+            pJava_environment->release(pJava_environment);
+            pJava_environment = NULL;
+
+            // release uno environment
+            pUno_environment->release(pUno_environment);
+            pUno_environment = NULL;
+
+            getCppuType((css::uno::Reference<XImplementationLoader> *) 0).
+                getDescription((typelib_TypeDescription **) & pType_XImplementationLoader);
+            if(!pType_XImplementationLoader)
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - no type information for XImplementationLoader")),
+                    css::uno::Reference<XInterface>());
+
+            m_javaLoader = css::uno::Reference<XImplementationLoader>(reinterpret_cast<XImplementationLoader *>(
+                            java_curr.mapInterface(joJavaLoader, pType_XImplementationLoader)));
+            pJNIEnv->DeleteLocalRef( joJavaLoader );
+            if(!m_javaLoader.is())
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - mapping of java XImplementationLoader to c++ failed")),
+                    css::uno::Reference<XInterface>());
+
+            typelib_typedescription_release(reinterpret_cast<typelib_TypeDescription *>(pType_XImplementationLoader));
+            pType_XImplementationLoader = NULL;
+        }
+        catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
+        {
+            throw RuntimeException(
+                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "jvmaccess::VirtualMachine::AttachGuard"
+                                "::CreationException")),0);
+        }
+
+        // set the service manager at the javaloader
+        css::uno::Reference<XInitialization> javaLoader_XInitialization(m_javaLoader, UNO_QUERY);
+        if(!javaLoader_XInitialization.is())
+            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "javaloader error - initialization of java javaloader failed, no XInitialization")),
+                css::uno::Reference<XInterface>());
+
+        Any any;
+        any <<= css::uno::Reference<XMultiComponentFactory>(
+            m_xComponentContext->getServiceManager());
+
+        javaLoader_XInitialization->initialize(Sequence<Any>(&any, 1));
     }
+    catch(RuntimeException &) {
+        if(pJava_environment)
+            pJava_environment->release(pJava_environment);
 
+        if(pUno_environment)
+            pUno_environment->release(pUno_environment);
 
-    css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(const OUString & rImplName,
-                                                                 const OUString & blabla,
-                                                                 const OUString & rLibName,
-                                                                 const css::uno::Reference<XRegistryKey> & xKey)
-        throw(CannotActivateFactoryException, RuntimeException)
-    {
-        if (_javaLoader.is())
-            return _javaLoader->activate(rImplName, blabla, rLibName, xKey);
-        else
-            throw CannotActivateFactoryException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Could not create Java implementation loader")), NULL);
+        if(pType_XImplementationLoader)
+            typelib_typedescription_release(
+                reinterpret_cast<typelib_TypeDescription *>(pType_XImplementationLoader));
+        throw;
     }
+    OSL_TRACE("javaloader.cxx: mapped javaloader - 0x%x", m_javaLoader.get());
+    return m_javaLoader;
+}
 
-    static Mutex & getInitMutex()
+JavaComponentLoader::JavaComponentLoader(const css::uno::Reference<XComponentContext> & xCtx) throw(RuntimeException) :
+    m_xComponentContext(xCtx)
+
+{
+
+}
+
+JavaComponentLoader::~JavaComponentLoader() throw()
+{
+}
+
+// XServiceInfo
+OUString SAL_CALL JavaComponentLoader::getImplementationName()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    return loader_getImplementationName();
+}
+
+sal_Bool SAL_CALL JavaComponentLoader::supportsService(const OUString & ServiceName)
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    sal_Bool bSupport = sal_False;
+
+    Sequence<OUString> aSNL = getSupportedServiceNames();
+    const OUString * pArray = aSNL.getArray();
+    for(sal_Int32 i = 0; i < aSNL.getLength() && !bSupport; ++ i)
+        bSupport = pArray[i] == ServiceName;
+
+    return bSupport;
+}
+
+Sequence<OUString> SAL_CALL JavaComponentLoader::getSupportedServiceNames()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    return loader_getSupportedServiceNames();
+}
+
+
+
+// XImplementationLoader
+sal_Bool SAL_CALL JavaComponentLoader::writeRegistryInfo(
+    const css::uno::Reference<XRegistryKey> & xKey, const OUString & blabla,
+    const OUString & rLibName)
+    throw(CannotRegisterImplementationException, RuntimeException)
+{
+    const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader();
+    if (loader.is())
+        return loader->writeRegistryInfo(xKey, blabla, rLibName);
+    else
+        throw CannotRegisterImplementationException(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("Could not create Java implementation loader")), NULL);
+}
+
+
+css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(
+    const OUString & rImplName, const OUString & blabla, const OUString & rLibName,
+    const css::uno::Reference<XRegistryKey> & xKey)
+    throw(CannotActivateFactoryException, RuntimeException)
+{
+    const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader();
+    if (loader.is())
+        return loader->activate(rImplName, blabla, rLibName, xKey);
+    else
+        throw CannotActivateFactoryException(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("Could not create Java implementation loader")), NULL);
+}
+
+static Mutex & getInitMutex()
+{
+    static Mutex * pMutex = 0;
+    if( ! pMutex )
     {
-        static Mutex * pMutex = 0;
+        MutexGuard guard( Mutex::getGlobalMutex() );
         if( ! pMutex )
         {
-            MutexGuard guard( Mutex::getGlobalMutex() );
-            if( ! pMutex )
-            {
-                static Mutex mutex;
-                pMutex = &mutex;
-            }
+            static Mutex mutex;
+            pMutex = &mutex;
         }
-        return *pMutex;
     }
-    css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader_CreateInstance(const css::uno::Reference<XComponentContext> & xCtx) throw(Exception)
-    {
-        css::uno::Reference<XInterface> xRet;
-
-        try {
-            MutexGuard guard( getInitMutex() );
-            // The javaloader is never destroyed and there can be only one!
-            // Note that the first context wins ....
-            static css::uno::Reference< XInterface > *pStaticRef = 0;
-            if( pStaticRef )
-            {
-                xRet = *pStaticRef;
-            }
-            else
-            {
-                xRet = *new JavaComponentLoader(xCtx);
-                pStaticRef = new css::uno::Reference< XInterface > ( xRet );
-            }
-        }
-        catch(RuntimeException & runtimeException) {
-            OString message = OUStringToOString(runtimeException.Message, RTL_TEXTENCODING_ASCII_US);
-            osl_trace("javaloader - could not init javaloader cause of %s", message.getStr());
-            throw;
-        }
-
-        return xRet;
-    }
+    return *pMutex;
 }
+
+css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader_CreateInstance(const css::uno::Reference<XComponentContext> & xCtx) throw(Exception)
+{
+    css::uno::Reference<XInterface> xRet;
+
+    try {
+        MutexGuard guard( getInitMutex() );
+        // The javaloader is never destroyed and there can be only one!
+        // Note that the first context wins ....
+        static css::uno::Reference< XInterface > *pStaticRef = 0;
+        if( pStaticRef )
+        {
+            xRet = *pStaticRef;
+        }
+        else
+        {
+            xRet = *new JavaComponentLoader(xCtx);
+            pStaticRef = new css::uno::Reference< XInterface > ( xRet );
+        }
+    }
+    catch(RuntimeException & runtimeException) {
+        OString message = OUStringToOString(runtimeException.Message, RTL_TEXTENCODING_ASCII_US);
+        osl_trace("javaloader - could not init javaloader cause of %s", message.getStr());
+        throw;
+    }
+
+    return xRet;
+}
+
+} //end namespace
 
 
 using namespace stoc_javaloader;
