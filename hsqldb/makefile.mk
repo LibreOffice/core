@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2005-01-25 15:11:29 $
+#   last change: $Author: vg $ $Date: 2005-02-16 16:02:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,13 +78,8 @@ all:
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=hsqldb_$(HSQLDB_VERSION)
-PATCH_FILE_NAME=hsqldb_$(HSQLDB_VERSION).patch
       
 TARFILE_ROOTDIR=hsqldb
-ADDITIONAL_FILES=src$/org$/hsqldb$/Storage.java\
-                src$/org$/hsqldb$/lib$/FileAccess.java \
-                src$/org$/hsqldb$/lib$/FileStorage.java
-
 
 .IF "$(ANT_HOME)" == ""
 ANT_HOME*:=$(COMMON_BUILD_TOOLS)$/apache-ant-1.6.1
