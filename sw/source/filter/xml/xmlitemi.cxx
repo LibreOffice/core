@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlitemi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:15:39 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:35:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ sal_Bool SwXMLImportTableItemMapper_Impl::handleSpecialItem(
                                         const SvXMLNamespaceMap& ) const
 {
     sal_Bool bRet = sal_False;
-    sal_uInt16 nMemberId = rEntry.nMemberId & MID_FLAG_MASK;
+    sal_uInt16 nMemberId = rEntry.nMemberId & MID_SW_FLAG_MASK;
     switch( rItem.Which() )
     {
     case RES_FRM_SIZE:
