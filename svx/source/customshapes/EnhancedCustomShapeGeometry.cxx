@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeGeometry.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:06:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,29 +252,49 @@ static const mso_CustomShape msoRectangle =
     NULL, 0     // handles
 };
 
-static const SvxMSDffCalculationData mso_sptRoundRectangleCalc[] =  // adjustment1 : 0 - 10800
+static const SvxMSDffVertPair mso_sptRoundRectangleVert[] = // adj value 0 -> 10800
 {
-    { 0x2001, DFF_Prop_adjustValue, 1, 3 },
-    { 0xa000, DFF_Prop_geoRight, 0, 0x400},
-    { 0xa000, DFF_Prop_geoBottom, 0, 0x400},
-    { 0x6000, DFF_Prop_geoLeft, 0x400, 0 },
-    { 0x6000, DFF_Prop_geoTop, 0x400, 0 }
+    { 7 MSO_I, 0 }, { 0, 8 MSO_I }, { 0, 9 MSO_I }, { 7 MSO_I, 21600 },
+    { 10 MSO_I, 21600 }, { 21600, 9 MSO_I }, { 21600, 8 MSO_I }, { 10 MSO_I, 0 }
+};
+static const sal_uInt16 mso_sptRoundRectangleSegm[] =
+{
+    0x4000, 0xa701, 0x0001, 0xa801, 0x0001, 0xa701, 0x0001, 0xa801, 0x6000, 0x8000
+};
+static const SvxMSDffCalculationData mso_sptRoundRectangleCalc[] =
+{
+    { 0x000e, 0, 45, 0 },
+    { 0x6009, DFF_Prop_adjustValue, 0x400, 0 },
+    { 0x2001, 0x401, 3163, 7636 },
+    { 0x6000, DFF_Prop_geoLeft, 0x402, 0 },
+    { 0x6000, DFF_Prop_geoTop, 0x402, 0 },
+    { 0xa000, DFF_Prop_geoRight, 0, 0x402 },
+    { 0xa000, DFF_Prop_geoBottom, 0, 0x402 },
+    { 0x6000, DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 },
+    { 0x6000, DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 },
+    { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
+    { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue }
 };
 static const SvxMSDffTextRectangles mso_sptRoundRectangleTextRect[] =
 {
-    { { 3 MSO_I, 4 MSO_I }, { 1 MSO_I, 2 MSO_I } }
+    { { 3 MSO_I, 4 MSO_I }, { 5 MSO_I, 6 MSO_I } }
+};
+static const SvxMSDffHandle mso_sptRoundRectangleHandle[] =
+{
+    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_SWITCHED,
+        0x100, 0, 10800, 10800, 0, 10800, 0x80000000, 0x7fffffff }
 };
 static const mso_CustomShape msoRoundRectangle =
 {
-    NULL, 0,
-    NULL, 0,
+    (SvxMSDffVertPair*)mso_sptRoundRectangleVert, sizeof( mso_sptRoundRectangleVert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptRoundRectangleSegm, sizeof( mso_sptRoundRectangleSegm ) >> 1,
     (SvxMSDffCalculationData*)mso_sptRoundRectangleCalc, sizeof( mso_sptRoundRectangleCalc ) / sizeof( SvxMSDffCalculationData ),
     (sal_Int32*)mso_sptDefault3600,
     (SvxMSDffTextRectangles*)mso_sptRoundRectangleTextRect, sizeof( mso_sptRoundRectangleTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    21600, 21600,
     10800, 10800,
-    0x80000000, 0x80000000,
     NULL, 0,
-    NULL, 0     // handles
+    (SvxMSDffHandle*)mso_sptRoundRectangleHandle, sizeof( mso_sptRoundRectangleHandle ) / sizeof( SvxMSDffHandle )      // handles
 };
 
 static const SvxMSDffVertPair mso_sptRightTriangleVert[] =
