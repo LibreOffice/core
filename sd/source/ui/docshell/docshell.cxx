@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 10:08:36 $
+ *  last change: $Author: af $ $Date: 2004-08-18 17:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,6 +319,12 @@ DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
 
 DrawDocShell::~DrawDocShell()
 {
+    // Tell all listeners that the doc shell is about to be
+    // destroyed.  This has been introduced for the PreviewRenderer to
+    // free its view (that uses the item poll of the doc shell) but
+    // may be usefull in other places as well.
+    Broadcast(SfxSimpleHint(SFX_HINT_DYING));
+
     bInDestruction = TRUE;
     delete pFuActual;
     pFuActual = NULL;
