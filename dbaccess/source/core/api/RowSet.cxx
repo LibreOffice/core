@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-26 15:00:05 $
+ *  last change: $Author: oj $ $Date: 2001-01-31 12:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1777,10 +1777,10 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
             if(m_xStatement.is())
             {
                 Reference<XPropertySet> xProp(m_xStatement,UNO_QUERY);
-                xProp->setPropertyValue(PROPERTY_RESULTSETTYPE,makeAny(m_nResultSetType));
-                xProp->setPropertyValue(PROPERTY_RESULTSETCONCURRENCY,makeAny(m_nResultSetConcurrency));
-                if(m_nFetchDirection != FetchDirection::FORWARD)
-                    xProp->setPropertyValue(PROPERTY_FETCHDIRECTION,makeAny((sal_Int32)m_nFetchDirection));
+                //  xProp->setPropertyValue(PROPERTY_RESULTSETTYPE,makeAny(m_nResultSetType));
+                //  xProp->setPropertyValue(PROPERTY_RESULTSETCONCURRENCY,makeAny(m_nResultSetConcurrency));
+                //  if(m_nFetchDirection != FetchDirection::FORWARD)
+                    //  xProp->setPropertyValue(PROPERTY_FETCHDIRECTION,makeAny((sal_Int32)m_nFetchDirection));
 
                 {
                     Reference<XParameters> xParam(m_xStatement,UNO_QUERY);

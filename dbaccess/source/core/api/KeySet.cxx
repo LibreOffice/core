@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-30 14:27:46 $
+ *  last change: $Author: oj $ $Date: 2001-01-31 12:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_KEYTYPE_HPP_
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
+#endif
 
 using namespace dbaccess;
 using namespace connectivity;
@@ -161,12 +164,21 @@ OKeySet::OKeySet(const Reference< XResultSet>& _xDriverSet,
         static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
         static ::rtl::OUString aQuote   = m_xConnection->getMetaData()->getIdentifierQuoteString();
 
-        ::rtl::OUString aFilter;
+        ::rtl::OUString aFilter,aCatalog,aSchema,aTable,aComposedName;
+
+        Reference<XPropertySet> xTableProp(_xTable,UNO_QUERY);
+        xTableProp->getPropertyValue(PROPERTY_CATALOGNAME)  >>= aCatalog;
+        xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)   >>= aSchema;
+        xTableProp->getPropertyValue(PROPERTY_NAME)         >>= aTable;
+
+        ::dbtools::composeTableName(m_xConnection->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True);
 
         ::std::vector< ::rtl::OUString>::const_iterator aIter = m_aColumnNames.begin();
         for(;aIter != m_aColumnNames.end();)
         {
-            ((aFilter += aQuote) += *aIter) += aQuote;
+            aFilter += aComposedName;
+            aFilter += ::rtl::OUString::createFromAscii(".");
+            aFilter += ::dbtools::quoteName( aQuote,*aIter);
             aFilter += ::rtl::OUString::createFromAscii(" = ?");
             ++aIter;
             if(aIter != m_aColumnNames.end())
@@ -293,7 +305,7 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
         const ::rtl::OUString*pColumnEnd = pColumnBegin + aColumnNames.getLength();
         for(;pColumnBegin != pColumnEnd;++pColumnBegin)
         {
-            ((aSql += aQuote) += *pColumnBegin) += aQuote;
+            aSql += ::dbtools::quoteName( aQuote,*pColumnBegin);
             aSql += ::rtl::OUString::createFromAscii(" = ?");
             aSql += aAnd;
         }
@@ -765,6 +777,9 @@ void OKeySet::fillAllRows()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2001/01/30 14:27:46  oj
+    new member which holds the column names
+
     Revision 1.8  2001/01/24 09:50:49  oj
     #82628# rowset modifications
 
