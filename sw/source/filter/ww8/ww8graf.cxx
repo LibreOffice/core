@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-11 14:06:35 $
+ *  last change: $Author: cmc $ $Date: 2002-05-13 11:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,15 +702,12 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
     BOOL bDoingSymbol = FALSE;
     sal_Unicode cReplaceSymbol = cSymbol;
 
-    nAktColl = pPlcxMan->GetColl();
-
     SfxItemSet *pS = new SfxItemSet(pDrawEditEngine->GetEmptyItemSet());
     WW8PLCFManResult aRes;
 
-    USHORT nIstd;
     //Here store stack location
     USHORT nCurrentCount = pCtrlStck->Count();
-    while( nStart <= nEndCp )
+    while (nStart < nEndCp)
     {
         // get position of next SPRM
         BOOL bStartAttr = pPlcxMan->Get( &aRes );
@@ -759,7 +756,6 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
             }
         }
 
-        nIstd = pPlcxMan->GetPapPLCF()->GetIstd();
         (*pPlcxMan)++;
         nNext = pPlcxMan->Where();
 
@@ -796,7 +792,7 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
                 }
             }
             //Fill in the remainder from the style
-            InsertTxbxStyAttrs( *pS, nIstd );
+            InsertTxbxStyAttrs(*pS, nAktColl);
 
             if( pS->Count() )
             {
