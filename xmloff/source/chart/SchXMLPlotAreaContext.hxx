@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: bm $ $Date: 2000-11-27 17:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,8 @@ private:
     SchXMLAxis maCurrentAxis;
     std::vector< SchXMLAxis >& maAxes;
     rtl::OUString msAutoStyleName;
+
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > getTitleShape();
 
 public:
     SchXMLAxisContext( SchXMLImportHelper& rImpHelper,

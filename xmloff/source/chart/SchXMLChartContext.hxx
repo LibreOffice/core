@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-27 09:09:12 $
+ *  last change: $Author: bm $ $Date: 2000-11-27 17:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
+#include <com/sun/star/drawing/XShape.hpp>
+#endif
 
 #include "transporttypes.hxx"
 
@@ -121,13 +124,19 @@ public:
 class SchXMLTitleContext : public SvXMLImportContext
 {
 private:
+    SchXMLImportHelper& mrImportHelper;
     rtl::OUString& maTitle;
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxTitleShape;
 
 public:
-    SchXMLTitleContext( SvXMLImport& rImport, const rtl::OUString& rLocalName,
-                        rtl::OUString& aTitle );
+    SchXMLTitleContext( SchXMLImportHelper& rImpHelper,
+                        SvXMLImport& rImport, const rtl::OUString& rLocalName,
+                        rtl::OUString& aTitle,
+                        com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xTitleShape );
     virtual ~SchXMLTitleContext();
 
+    virtual void StartElement( const com::sun::star::uno::Reference<
+                               com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual SvXMLImportContext *CreateChildContext(
         USHORT nPrefix,
         const rtl::OUString& rLocalName,

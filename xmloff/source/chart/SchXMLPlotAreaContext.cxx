@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-24 15:07:03 $
+ *  last change: $Author: bm $ $Date: 2000-11-27 17:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,13 @@
 #endif
 #ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_POINT_HPP_
+#include <com/sun/star/awt/Point.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
 #endif
 
 using namespace com::sun::star;
@@ -245,6 +252,18 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
 
 void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
+    awt::Size aSize;
+    awt::Point aPosition;
+
+    // initialize size and position
+    uno::Reference< drawing::XShape > xDiaShape( mxDiagram, uno::UNO_QUERY );
+    if( xDiaShape.is())
+    {
+        aSize = xDiaShape->getSize();
+        aPosition = xDiaShape->getPosition();
+    }
+
+
     // parse attributes
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     rtl::OUString aValue;
@@ -252,7 +271,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
-                rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
         rtl::OUString aValue = xAttrList->getValueByIndex( i );
         USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
@@ -260,15 +279,28 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {
             case XML_TOK_PA_X:
-            case XML_TOK_PA_Y:
-            case XML_TOK_PA_WIDTH:
-            case XML_TOK_PA_HEIGHT:
+                GetImport().GetMM100UnitConverter().convertMeasure( aPosition.X, aValue );
                 break;
-
+            case XML_TOK_PA_Y:
+                GetImport().GetMM100UnitConverter().convertMeasure( aPosition.Y, aValue );
+                break;
+            case XML_TOK_PA_WIDTH:
+                GetImport().GetMM100UnitConverter().convertMeasure( aSize.Width, aValue );
+                break;
+            case XML_TOK_PA_HEIGHT:
+                GetImport().GetMM100UnitConverter().convertMeasure( aSize.Height, aValue );
+                break;
             case XML_TOK_PA_STYLE_NAME:
                 msAutoStyleName = aValue;
                 break;
         }
+    }
+
+    // set changed size and position
+    if( xDiaShape.is())
+    {
+        xDiaShape->setSize( aSize );
+        xDiaShape->setPosition( aPosition );
     }
 }
 
@@ -308,6 +340,66 @@ SchXMLAxisContext::SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
 
 SchXMLAxisContext::~SchXMLAxisContext()
 {}
+
+/* returns a shape for the current axis's title. The property
+   "Has...AxisTitle" is set to "True" to get the shape
+ */
+uno::Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
+{
+    uno::Reference< drawing::XShape > xResult;
+    uno::Any aTrueBool;
+    aTrueBool <<= (sal_Bool)(sal_True);
+    uno::Reference< beans::XPropertySet > xDiaProp( mxDiagram, uno::UNO_QUERY );
+
+    uno::Reference< chart::XChartDocument > xDoc( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
+    sal_Bool bHasControllersLocked = sal_False;
+    if( xDoc.is() &&
+        (bHasControllersLocked = xDoc->hasControllersLocked()) == sal_True )
+        xDoc->unlockControllers();
+
+    switch( maCurrentAxis.eClass )
+    {
+        case SCH_XML_AXIS_CATEGORY:
+        case SCH_XML_AXIS_DOMAIN:
+            if( maCurrentAxis.nIndexInCategory == 0 )
+            {
+                uno::Reference< chart::XAxisXSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                if( xSuppl.is())
+                {
+                    if( xDiaProp.is())
+                        xDiaProp->setPropertyValue( rtl::OUString::createFromAscii( "HasXAxisTitle" ), aTrueBool );
+                    xResult = uno::Reference< drawing::XShape >( xSuppl->getXAxisTitle(), uno::UNO_QUERY );
+                }
+            }
+            break;
+        case SCH_XML_AXIS_VALUE:
+            if( maCurrentAxis.nIndexInCategory == 0 )
+            {
+                uno::Reference< chart::XAxisYSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                if( xSuppl.is())
+                {
+                    if( xDiaProp.is())
+                        xDiaProp->setPropertyValue( rtl::OUString::createFromAscii( "HasYAxisTitle" ), aTrueBool );
+                    xResult = uno::Reference< drawing::XShape >( xSuppl->getYAxisTitle(), uno::UNO_QUERY );
+                }
+            }
+            break;
+        case SCH_XML_AXIS_SERIES:
+            uno::Reference< chart::XAxisZSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+            if( xSuppl.is())
+            {
+                if( xDiaProp.is())
+                    xDiaProp->setPropertyValue( rtl::OUString::createFromAscii( "HasZAxisTitle" ), aTrueBool );
+                xResult = uno::Reference< drawing::XShape >( xSuppl->getZAxisTitle(), uno::UNO_QUERY );
+            }
+            break;
+    }
+
+    if( bHasControllersLocked && xDoc.is())
+        xDoc->lockControllers();
+
+    return xResult;
+}
 
 void SchXMLAxisContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -374,9 +466,6 @@ void SchXMLAxisContext::EndElement()
                 {
                     xDiaProp->setPropertyValue(
                         rtl::OUString::createFromAscii( "HasXAxis" ), aTrueBool );
-                    if( bHasTitle )
-                        xDiaProp->setPropertyValue(
-                            rtl::OUString::createFromAscii( "HasXAxisTitle" ), aTrueBool );
                 }
                 catch( beans::UnknownPropertyException )
                 {
@@ -429,9 +518,6 @@ void SchXMLAxisContext::EndElement()
                 {
                     xDiaProp->setPropertyValue(
                         rtl::OUString::createFromAscii( "HasYAxis" ), aTrueBool );
-                    if( bHasTitle )
-                        xDiaProp->setPropertyValue(
-                            rtl::OUString::createFromAscii( "HasYAxisTitle" ), aTrueBool );
                 }
                 catch( beans::UnknownPropertyException )
                 {
@@ -483,9 +569,6 @@ void SchXMLAxisContext::EndElement()
                 {
                     xDiaProp->setPropertyValue(
                         rtl::OUString::createFromAscii( "HasZAxis" ), aTrueBool );
-                    if( bHasTitle )
-                        xDiaProp->setPropertyValue(
-                            rtl::OUString::createFromAscii( "HasZAxisTitle" ), aTrueBool );
                 }
                 catch( beans::UnknownPropertyException )
                 {
@@ -545,7 +628,10 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
     {
         if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_title )))
         {
-            pContext = new SchXMLTitleContext( rImport, rLocalName, maCurrentAxis.aTitle );
+            uno::Reference< drawing::XShape > xTitleShape = getTitleShape();
+            pContext = new SchXMLTitleContext( mrImportHelper, rImport, rLocalName,
+                                               maCurrentAxis.aTitle,
+                                               xTitleShape );
         }
         else if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_grid )))
         {
