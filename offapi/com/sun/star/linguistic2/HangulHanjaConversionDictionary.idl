@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HangulHanjaConversionDictionary.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:14:45 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:53:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,10 @@ module com { module sun { module star { module linguistic2 {
     <p>A dictionary implementing this service will be used for
     Hangul/Hanja conversion. Therefore the locale of the
     dictionary has to be Korean, and the conversion type
-    <member scope="com::sun::star::linguistic2">ConversionDictionaryType::HANJA_HANGUL</member>.</p>
+    <member scope="com::sun::star::linguistic2">ConversionDictionaryType::HANGUL_HANJA</member>.</p>
 
     <p>Also for a pair (entry) to be added the
-    left part has to be in Hanja and the right to be in Hangul,
+    left part has to be in Hangul and the right in Hanja,
     and the number of characters for the left part has to be the
     same as for the right part.</p>
 
