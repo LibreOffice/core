@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:17:37 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,6 +341,8 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SvStorage& rStorage
                 nSvxMSDffOLEConvFlags |= OLE_WINWORD_2_STARWRITER;
             if ( pBasOpt->IsExcel2Calc() )
                 nSvxMSDffOLEConvFlags |= OLE_EXCEL_2_STARCALC;
+            if ( pBasOpt->IsPowerPoint2Impress() )
+                nSvxMSDffOLEConvFlags |= OLE_POWERPOINT_2_STARIMPRESS;
         }
 
         InitSvxMSDffManager( nDggContainerOfs, pStData, nSvxMSDffOLEConvFlags );
