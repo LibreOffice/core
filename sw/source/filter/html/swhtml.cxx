@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-29 14:27:59 $
+ *  last change: $Author: os $ $Date: 2002-06-24 08:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,8 +402,6 @@ ULONG HTMLReader::Read( SwDoc &rDoc,SwPaM &rPam, const String & rName )
     {
         Reader::SetNoOutlineNum( rDoc );
         Reader::ResetFrmFmts( rDoc );
-
-        rDoc.SetBrowseMode( TRUE );
 
         // Die HTML-Seitenvorlage setzen, wenn des kein HTML-Dokument ist,
         // sonst ist sie schon gesetzt.
