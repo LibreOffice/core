@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sb $ $Date: 2001-05-03 08:43:46 $
+ *  last change: $Author: mba $ $Date: 2001-06-25 10:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_POSTCOMMANDARGUMENT_HPP_
+#include <com/sun/star/ucb/PostCommandArgument.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
 #include <com/sun/star/ucb/OpenMode.hpp>
@@ -310,8 +313,9 @@ public:
     Reference < XInteractionHandler >       m_xInteract;
     Reference < XProgressHandler >          m_xProgress;
     Reference < XPropertiesChangeListener > m_xListener;
+    Reference < XInterface >                m_xSink;
     ::ucb::Content*                         m_pContent;
-    OpenCommandArgument2                    m_aArgument;
+    Command                                 m_aArgument;
     UcbLockBytesRef                         m_xLockBytes;
     UcbLockBytesHandlerRef                  m_xHandler;
     sal_Bool                                m_bCanceled : 1;
@@ -319,7 +323,8 @@ public:
 
                     CommandThread_Impl( UcbLockBytesRef xLockBytes,
                                         Reference < XContent > xContent,
-                                        const OpenCommandArgument2& rArg,
+                                        const Command& rArg,
+                                        Reference < XInterface > xSink,
                                         Reference < XInteractionHandler > xInteract,
                                         Reference < XProgressHandler > xProgress,
                                         UcbLockBytesHandlerRef xRef );
@@ -335,7 +340,8 @@ public:
 //----------------------------------------------------------------------------
 CommandThread_Impl::CommandThread_Impl( UcbLockBytesRef xLockBytes,
                     Reference < XContent > xContent,
-                    const OpenCommandArgument2& rArg,
+                    const Command& rArg,
+                    Reference < XInterface > xSink,
                     Reference < XInteractionHandler > xInteract,
                     Reference < XProgressHandler > xProgress,
                     UcbLockBytesHandlerRef xRef )
@@ -344,6 +350,7 @@ CommandThread_Impl::CommandThread_Impl( UcbLockBytesRef xLockBytes,
     , m_xProgress( xProgress )
     , m_xLockBytes( xLockBytes )
     , m_xHandler( xRef )
+    , m_xSink( xSink )
     , m_aArgument( rArg )
     , m_bCanceled( sal_False )
     , m_bRunning( sal_False )
@@ -386,15 +393,14 @@ void CommandThread_Impl::run()
 sal_Bool CommandThread_Impl::DoIt()
 {
     // create content and execute command
-    Any aParam;
-    aParam <<= m_aArgument;
     Any aResult;
     bool bException = false;
     bool bAborted = false;
 
     try
     {
-        aResult = m_pContent->executeCommand( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("open") ), aParam );
+        // "synchronize" ????
+        aResult = m_pContent->executeCommand( m_aArgument.Name, m_aArgument.Argument );
     }
     catch ( CommandAbortedException )
     {
@@ -410,16 +416,16 @@ sal_Bool CommandThread_Impl::DoIt()
         if( m_xHandler.Is() )
             m_xHandler->Handle( UcbLockBytesHandler::CANCEL, m_xLockBytes );
 
-        Reference < XActiveDataSink > xSink( m_aArgument.Sink, UNO_QUERY );
+        Reference < XActiveDataSink > xSink( m_xSink, UNO_QUERY );
         if ( xSink.is() )
             xSink->setInputStream( Reference < XInputStream >() );
 
-        Reference < XActiveDataStreamer > xStreamer( m_aArgument.Sink, UNO_QUERY );
+        Reference < XActiveDataStreamer > xStreamer( m_xSink, UNO_QUERY );
         if ( xStreamer.is() )
             xStreamer->setStream( Reference < XStream >() );
     }
 
-    Reference < XActiveDataControl > xControl( m_aArgument.Sink, UNO_QUERY );
+    Reference < XActiveDataControl > xControl( m_xSink, UNO_QUERY );
     if ( xControl.is() )
         xControl->terminate();
 
@@ -778,7 +784,58 @@ UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStrea
     return xLockBytes;
 }
 
-UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent > xContent, StreamMode eOpenMode, UcbLockBytesHandler* pHandler )
+UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent > xContent, const Sequence < PropertyValue >& rProps,
+        Reference < XInputStream > xPostData, UcbLockBytesHandler* pHandler )
+{
+    if( !xContent.is() )
+        return NULL;;
+
+    Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+    Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
+                xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
+
+    UcbLockBytesRef xLockBytes = new UcbLockBytes( pHandler );
+    xLockBytes->SetSynchronMode( !pHandler );
+    Reference< XActiveDataControl > xSink = (XActiveDataControl*) new UcbDataSink_Impl( xLockBytes );
+
+    if ( rProps.getLength() )
+    {
+        Reference < XCommandProcessor > xProcessor( xContent, UNO_QUERY );
+        Command aCommand;
+        aCommand.Name     = ::rtl::OUString::createFromAscii("setPropertyValues");
+        aCommand.Handle   = -1; /* unknown */
+        aCommand.Argument <<= rProps;
+        xProcessor->execute( aCommand, 0, Reference < XCommandEnvironment >() );
+    }
+
+    PostCommandArgument aArgument;
+    aArgument.Source = xPostData;
+    aArgument.Sink = xSink;
+
+    Command aCommand;
+    aCommand.Name = ::rtl::OUString::createFromAscii ("post");
+    aCommand.Argument <<= aArgument;
+
+    Reference< XProgressHandler > xProgressHdl = new ProgressHandler_Impl( LINK( &xLockBytes, UcbLockBytes, DataAvailHdl ) );
+    CommandThread_Impl* pThread = new CommandThread_Impl( xLockBytes, xContent, aCommand, xSink, xInteractionHandler, xProgressHdl, pHandler );
+
+    if ( !pHandler )
+    {
+        sal_Bool bError = pThread->DoIt();
+        if ( bError || !xLockBytes->getInputStream_Impl().is() )
+            xLockBytes->SetError( ERRCODE_IO_NOTEXISTS );
+        delete pThread;
+    }
+    else
+    {
+        pThread->create();
+    }
+
+    return xLockBytes;
+}
+
+UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent > xContent, const Sequence < PropertyValue >& rProps,
+        StreamMode eOpenMode, UcbLockBytesHandler* pHandler )
 {
     if( !xContent.is() )
         return NULL;;
@@ -795,12 +852,26 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent > xCon
     else
         xSink = (XActiveDataControl*) new UcbDataSink_Impl( xLockBytes );
 
+    if ( rProps.getLength() )
+    {
+        Reference < XCommandProcessor > xProcessor( xContent, UNO_QUERY );
+        Command aCommand;
+        aCommand.Name     = ::rtl::OUString::createFromAscii("setPropertyValues");
+        aCommand.Handle   = -1; /* unknown */
+        aCommand.Argument <<= rProps;
+        xProcessor->execute( aCommand, 0, Reference < XCommandEnvironment >() );
+    }
+
     OpenCommandArgument2 aArgument;
     aArgument.Sink = xSink;
     aArgument.Mode = OpenMode::DOCUMENT;
 
+    Command aCommand;
+    aCommand.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("open") );
+    aCommand.Argument <<= aArgument;
+
     Reference< XProgressHandler > xProgressHdl = new ProgressHandler_Impl( LINK( &xLockBytes, UcbLockBytes, DataAvailHdl ) );
-    CommandThread_Impl* pThread = new CommandThread_Impl( xLockBytes, xContent, aArgument, xInteractionHandler, xProgressHdl, pHandler );
+    CommandThread_Impl* pThread = new CommandThread_Impl( xLockBytes, xContent, aCommand, xSink, xInteractionHandler, xProgressHdl, pHandler );
 
     if ( ( eOpenMode & STREAM_WRITE ) || !pHandler )
     {
@@ -809,7 +880,6 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent > xCon
         if ( bError || !xLockBytes->getInputStream_Impl().is() )
             xLockBytes->SetError( ERRCODE_IO_NOTEXISTS );
         delete pThread;
-        return xLockBytes;
     }
     else
     {

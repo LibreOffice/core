@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstreamhelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-19 12:49:08 $
+ *  last change: $Author: mba $ $Date: 2001-06-25 10:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOp
 
             // create LockBytes using UCB
             ::ucb::Content aContent( rFileName, Reference < XCommandEnvironment >() );
-            xLockBytes = UcbLockBytes::CreateLockBytes( aContent.get(), eOpenMode, pHandler );
+            xLockBytes = UcbLockBytes::CreateLockBytes( aContent.get(), Sequence < PropertyValue >(), eOpenMode, pHandler );
             if ( xLockBytes.Is() )
             {
                 pStream = new SvStream( xLockBytes );
@@ -132,15 +132,14 @@ SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOp
                 pStream->SetError( xLockBytes->GetError() );
             }
         }
-        catch ( CommandAbortedException& e )
+        catch ( CommandAbortedException& )
         {
         }
-        catch ( ContentCreationException& e )
+        catch ( ContentCreationException& )
         {
         }
-        catch ( Exception& e )
+        catch ( Exception& )
         {
-            DBG_ERROR( "Any other exception!" );
         }
     }
     else

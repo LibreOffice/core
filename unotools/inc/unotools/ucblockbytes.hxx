@@ -19,6 +19,9 @@
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 
 #include <vos/thread.hxx>
 #include <vos/conditn.hxx>
@@ -59,6 +62,7 @@ SV_DECL_IMPL_REF( UcbLockBytesHandler )
 #define NS_UNO ::com::sun::star::uno
 #define NS_IO ::com::sun::star::io
 #define NS_UCB ::com::sun::star::ucb
+#define NS_BEANS ::com::sun::star::beans
 
 class CommandThread_Impl;
 class UcbLockBytes : public virtual SvLockBytes
@@ -92,9 +96,15 @@ protected:
     virtual                 ~UcbLockBytes (void);
 
 public:
+                            // properties: Referer, PostMimeType
+    static UcbLockBytesRef  CreateLockBytes( const NS_UNO::Reference < NS_UCB::XContent > xContent,
+                                            const NS_UNO::Sequence < NS_BEANS::PropertyValue >& rProps,
+                                            NS_UNO::Reference < NS_IO::XInputStream > xPostData, UcbLockBytesHandler* pHandler=0 );
 
-    static UcbLockBytesRef  CreateLockBytes( const NS_UNO::Reference < NS_UCB::XContent > xContent, StreamMode eMode,
-                                            UcbLockBytesHandler* pHandler=0 );
+    static UcbLockBytesRef  CreateLockBytes( const NS_UNO::Reference < NS_UCB::XContent > xContent,
+                                            const NS_UNO::Sequence < NS_BEANS::PropertyValue >& rProps,
+                                            StreamMode eMode, UcbLockBytesHandler* pHandler=0 );
+
     static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_IO::XInputStream > xContent );
 
     // SvLockBytes
