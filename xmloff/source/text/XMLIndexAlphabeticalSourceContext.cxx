@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexAlphabeticalSourceContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,8 @@ void XMLIndexAlphabeticalSourceContext::EndElement()
 
     if (bMainEntryStyleNameOK)
     {
-        aAny <<= sMainEntryStyleName;
+        aAny <<= GetImport().GetStyleDisplayName(
+                            XML_STYLE_FAMILY_TEXT_TEXT, sMainEntryStyleName );
         rIndexPropertySet->setPropertyValue(sMainEntryCharacterStyleName,aAny);
     }
 
