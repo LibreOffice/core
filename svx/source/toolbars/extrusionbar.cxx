@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrusionbar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:46:34 $
+ *  last change: $Author: rt $ $Date: 2005-02-04 14:21:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,10 +159,10 @@ TYPEINIT1( ExtrusionBar, SfxShell );
 ExtrusionBar::ExtrusionBar(SfxViewShell* pViewShell )
 : SfxShell(pViewShell)
 {
-//  SdDrawDocShell* pDocShell = pSdViewShell->GetDocSh();
-//  SetPool(&pDocShell->GetPool());
-//  SetUndoManager(pDocShell->GetUndoManager());
-//  SetRepeatTarget(pViewShell);
+    DBG_ASSERT( pViewShell, "svx::ExtrusionBar::ExtrusionBar(), I need a viewshell!" );
+    if( pViewShell )
+        SetPool(&pViewShell->GetPool());
+
     SetHelpId( SVX_INTERFACE_EXTRUSION_BAR );
     SetName( String( SVX_RES( RID_SVX_EXTRUSION_BAR )));
 }
