@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *  last change: $Author: dr $ $Date: 2002-07-19 14:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,10 @@
 #define BMP_STR_OPEN        2
 #define BMP_STR_END         3
 #define BMP_STR_ERROR       4
+#define BMP_STR_CLOSE_H     11
+#define BMP_STR_OPEN_H      12
+#define BMP_STR_END_H       13
+#define BMP_STR_ERROR_H     14
 
 // Texte
 #define STR_STRUCT_ERR1     1

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: structpg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *  last change: $Author: dr $ $Date: 2002-07-19 14:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,21 +133,25 @@ ScStructPage::ScStructPage(Window* pParent):
     //
     aFtStruct       ( this, ScResId( FT_STRUCT ) ),
     aTlbStruct      ( this, ScResId( TLB_STRUCT ) ),
-    aExpBmp         ( ScResId( RID_BMP_EXPAND ) ),
-    aCollBmp        ( ScResId( RID_BMP_COLLAPSE ) ),
-    aCloseBmp       ( ScResId( BMP_STR_CLOSE ) ),
-    aOpenBmp        ( ScResId( BMP_STR_OPEN  ) ),
-    aEndBmp         ( ScResId( BMP_STR_END   ) ),
-    aErrorBmp       ( ScResId( BMP_STR_ERROR ) ),
+    maImgEnd        ( ScResId( BMP_STR_END ) ),
+    maImgError      ( ScResId( BMP_STR_ERROR ) ),
+    maImgEndHC      ( ScResId( BMP_STR_END_H ) ),
+    maImgErrorHC    ( ScResId( BMP_STR_ERROR_H ) ),
     pSelectedToken  ( NULL )
 {
-    FreeResource();
     aTlbStruct.SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|
                         WB_HASBUTTONS|WB_HSCROLL|WB_NOINITIALSELECTION);
 
+    Bitmap aExpBmp( ScResId( RID_BMP_EXPAND ) );
+    Bitmap aCollBmp( ScResId( RID_BMP_COLLAPSE ) );
     aTlbStruct.SetNodeBitmaps( aExpBmp, aCollBmp );
-    aTlbStruct.SetDefaultExpandedEntryBmp( aOpenBmp);
-    aTlbStruct.SetDefaultCollapsedEntryBmp( aCloseBmp);
+    aTlbStruct.SetDefaultExpandedEntryBmp( Image( ScResId( BMP_STR_OPEN ) ) );
+    aTlbStruct.SetDefaultCollapsedEntryBmp( Image( ScResId( BMP_STR_CLOSE ) ) );
+    aTlbStruct.SetDefaultExpandedEntryBmp( Image( ScResId( BMP_STR_OPEN_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aTlbStruct.SetDefaultCollapsedEntryBmp( Image( ScResId( BMP_STR_CLOSE_H ) ), BMP_COLOR_HIGHCONTRAST );
+
+    FreeResource();
+
     Font aFont=GetFont();
     Size aSize=aFont.GetSize();
     aSize.Height()-=2;
@@ -193,12 +197,12 @@ SvLBoxEntry* ScStructPage::InsertEntry( const XubString& rText, SvLBoxEntry* pPa
                     if(pParent!=NULL) aTlbStruct.Expand(pParent);
                     break;
         case STRUCT_END:
-                    pEntry=aTlbStruct.InsertEntry(rText,aEndBmp,aEndBmp,
+                    pEntry=aTlbStruct.InsertEntry(rText,maImgEnd,maImgEnd,
                                         pParent,FALSE,nPos,pScToken);
                     if(pParent!=NULL) aTlbStruct.Expand(pParent);
                     break;
         case STRUCT_ERROR:
-                    pEntry=aTlbStruct.InsertEntry(rText,aErrorBmp,aErrorBmp,
+                    pEntry=aTlbStruct.InsertEntry(rText,maImgError,maImgError,
                                         pParent,FALSE,nPos,pScToken);
                     if(pParent!=NULL) aTlbStruct.Expand(pParent);
                     break;

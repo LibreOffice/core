@@ -2,9 +2,9 @@
  *
  *  $RCSfile: structpg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: dr $ $Date: 2002-07-19 14:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,12 +163,10 @@ private:
 
     FixedText       aFtStruct;
     ScStructListBox aTlbStruct;
-    Bitmap          aExpBmp;
-    Bitmap          aCollBmp;
-    Bitmap          aCloseBmp;
-    Bitmap          aOpenBmp;
-    Bitmap          aEndBmp;
-    Bitmap          aErrorBmp;
+    Image           maImgEnd;
+    Image           maImgError;
+    Image           maImgEndHC;
+    Image           maImgErrorHC;
 
     ScToken*        pSelectedToken;
 

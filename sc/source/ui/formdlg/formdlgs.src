@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-21 09:27:27 $
+ *  last change: $Author: dr $ $Date: 2002-07-19 14:24:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ TabPage RID_SCTAB_FUNCTION
         QuickHelpText[ turkish ] = "Funktion �bernehmen";
         QuickHelpText[ catalan ] = "Aplicar funci�n";
         QuickHelpText[ finnish ] = "K�yt� funktiota";
+        QuickHelpText[ thai ] = "Apply Function";
     };
     ListBox LB_CATEGORY
     {
@@ -504,6 +505,22 @@ TabPage RID_SCTAB_FUNCTION
         < "Text" ; Default ; > ;
         < "Complement" ; Default ; > ;
     };
+    StringList [ thai ] =
+    {
+         < "ใช้ครั้งสุดท้าย" ; Default ; > ;
+        < "ทั้งหมด" ; Default ; > ;
+        < "ฐานข้อมูล" ; Default ; > ;
+        < "วันที่และเวลา" ; Default ; > ;
+        < "การเงิน" ; Default ; > ;
+        < "ข้อมูล" ; Default ; > ;
+        < "ตรรกะ" ; Default ; > ;
+        < "คณิตศาสตร์" ; Default ; > ;
+        < "แถวลำดับ" ; Default ; > ;
+        < "สถิติ" ; Default ; > ;
+        < "กระดาษคำนวณ" ; Default ; > ;
+        < "ข้อความ" ; Default ; > ;
+        < "เพิ่มใน" ; Default ; > ;
+    };
     };
     ListBox LB_FUNCTION
     {
@@ -539,6 +556,7 @@ TabPage RID_SCTAB_FUNCTION
         Text[ korean ] = "범주(~C)";
         Text[ turkish ] = "~Kategori";
         Text[ catalan ] = "~Categoria";
+        Text[ thai ] = "~ประเภท";
     };
     FixedText FT_FUNCTION
     {
@@ -567,6 +585,7 @@ TabPage RID_SCTAB_FUNCTION
         Text[ korean ] = "함수(~F)";
         Text[ turkish ] = "~Fonksiyon";
         Text[ catalan ] = "~Funci�";
+        Text[ thai ] = "~ฟังก์ชั่น";
     };
 };
 TabPage RID_SCTAB_STRUCT
@@ -609,22 +628,47 @@ TabPage RID_SCTAB_STRUCT
         Text[ turkish ] = "~Yap�";
         Text[ catalan ] = "~Estructura";
         Text[ finnish ] = "~Rakenne";
+        Text[ thai ] = "โ~ครงสร้าง";
     };
-    Bitmap BMP_STR_CLOSE
+    Image BMP_STR_CLOSE
     {
-        File = "dir-clos.bmp" ;
+        ImageBitmap = Bitmap { File = "fapclose.bmp"; };
+        MaskColor = SC_HC_MASKCOLOR;
     };
-    Bitmap BMP_STR_OPEN
+    Image BMP_STR_CLOSE_H
     {
-        File = "dir-open.bmp" ;
+        ImageBitmap = Bitmap { File = "fapclose_h.bmp"; };
+        MaskColor = SC_HC_MASKCOLOR;
     };
-    Bitmap BMP_STR_END
+    Image BMP_STR_OPEN
     {
-        File = "basobj2.bmp" ;
+        ImageBitmap = Bitmap { File = "fapopen.bmp"; };
+        MaskColor = SC_HC_MASKCOLOR;
     };
-    Bitmap BMP_STR_ERROR
+    Image BMP_STR_OPEN_H
     {
-        File = "basbrk.bmp" ;
+        ImageBitmap = Bitmap { File = "fapopen_h.bmp"; };
+        MaskColor = SC_HC_MASKCOLOR;
+    };
+    Image BMP_STR_END
+    {
+        ImageBitmap = Bitmap { File = "fapok.bmp"; };
+        MaskColor = SC_HC_MASKCOLOR;
+    };
+    Image BMP_STR_END_H
+    {
+        ImageBitmap = Bitmap { File = "fapok_h.bmp"; };
+        MaskColor = SC_HC_MASKCOLOR;
+    };
+    Image BMP_STR_ERROR
+    {
+        ImageBitmap = Bitmap { File = "faperror.bmp"; };
+        MaskColor = SC_HC_MASKCOLOR;
+    };
+    Image BMP_STR_ERROR_H
+    {
+        ImageBitmap = Bitmap { File = "faperror_h.bmp"; };
+        MaskColor = SC_HC_MASKCOLOR;
     };
     String STR_STRUCT_ERR1
     {
@@ -650,6 +694,7 @@ TabPage RID_SCTAB_STRUCT
         Text[ turkish ] = "=?";
         Text[ catalan ] = "=?";
         Text[ finnish ] = "=?";
+        Text[ thai ] = "=?";
     };
     String STR_STRUCT_ERR2
     {
@@ -675,6 +720,7 @@ TabPage RID_SCTAB_STRUCT
         Text[ turkish ] = "Hata";
         Text[ catalan ] = "Error";
         Text[ finnish ] = "Virhe";
+        Text[ thai ] = "ข้อผิดพลาด";
     };
 };
 ModelessDialog RID_SCDLG_FORMULA
@@ -717,6 +763,7 @@ ModelessDialog RID_SCDLG_FORMULA
                 Text[ turkish ] = "Fonksiyon";
                 Text[ catalan ] = "Funcions";
                 Text[ finnish ] = "Toiminnot";
+                Text[ thai ] = "ฟังก์ชั่น";
             };
             PageItem
             {
@@ -743,6 +790,7 @@ ModelessDialog RID_SCDLG_FORMULA
                 Text[ turkish ] = "Yap�";
                 Text[ catalan ] = "Estructura";
                 Text[ finnish ] = "Rakenne";
+                Text[ thai ] = "โครงสร้าง";
             };
         };
     };
@@ -802,6 +850,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ turkish ] = "F~orm�l";
         Text[ catalan ] = "F�r~mula";
         Text[ finnish ] = "~Kaava";
+        Text[ thai ] = "สู~ตร";
     };
     Control ED_FORMULA
     {
@@ -838,6 +887,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ turkish ] = "Ara sonu�";
         Text[ catalan ] = "Resultat de la funci�";
         Text[ finnish ] = "Funktion tulos";
+        Text[ thai ] = "ฟังก์ชั่นผลลัพธ์";
     };
     Window WND_RESULT
     {
@@ -873,6 +923,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ korean ] = "결과";
         Text[ turkish ] = "Sonu�";
         Text[ catalan ] = "Resultat";
+        Text[ thai ] = "ผลลัพธ์";
     };
     Window WND_FORMULA_RESULT
     {
@@ -909,6 +960,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ turkish ] = "Matri~s";
         Text[ catalan ] = "Matriu";
         Text[ finnish ] = "Matriisi";
+        Text[ thai ] = "แถวลำดับ";
     };
     Edit ED_REF
     {
@@ -943,6 +995,7 @@ ModelessDialog RID_SCDLG_FORMULA
         QuickHelpText[ turkish ] = "Vergr��ern";
         QuickHelpText[ catalan ] = "Aumentar";
         QuickHelpText[ finnish ] = "Suurenna";
+        QuickHelpText[ thai ] = "Maximize";
     };
      //
     HelpButton BTN_HELP
@@ -986,6 +1039,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ korean ] = "<< 뒤로(~B)";
         Text[ turkish ] = "<< ~Geri";
         Text[ catalan ] = "<< ~Enrere";
+        Text[ thai ] = "<< ~กลับไป";
     };
     PushButton BTN_FORWARD
     {
@@ -1000,7 +1054,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ portuguese ] = ">>~Seguinte" ;
         Text [ finnish ] = "~Seuraava >>" ;
         Text [ danish ] = "N�ste >>" ;
-        Text [ french ] = ">> Suivant" ;
+        Text [ french ] = "Suivant >>" ;
         Text [ swedish ] = "~N�sta >>" ;
         Text [ dutch ] = "~Volgende >>" ;
         Text [ spanish ] = "~Siguiente >>" ;
@@ -1015,6 +1069,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ korean ] = "다음(~N) >>";
         Text[ turkish ] = "~�leri >>";
         Text[ catalan ] = "~Seg�ent >>";
+        Text[ thai ] = "~ถัดไป >>";
     };
     OKButton BTN_END
     {
@@ -1049,6 +1104,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ korean ] = "자동 파일럿 기능";
         Text[ turkish ] = "Fonksiyon oto pilotu";
         Text[ catalan ] = "AutoPilot: Funcions";
+        Text[ thai ] = "ฟังก์ชั่นนำร่องอัตโนมัติ";
     };
     String STR_TITLE2
     {
@@ -1075,7 +1131,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ korean ] = "자동 파일럿 기능  -";
         Text[ turkish ] = "Fonksiyon oto pilotu  -";
         Text[ catalan ] = "AutoPilot: Funcions  -";
+        Text[ thai ] = "ฟังก์ชั่นนำร่องอัตโนมัติ  -";
     };
 };
-
 
