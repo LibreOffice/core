@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:12:14 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 // includes --------------------------------------------------------------
 
 #ifndef  _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
@@ -209,7 +208,7 @@ void SAL_CALL OMailSendThread::run()
     if ( m_bSend == sal_False )
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        InfoBox aBox( SFX_APP()->GetTopWindow(), SfxResId( MSG_ERROR_SEND_MAIL ));
+        ErrorBox aBox( SFX_APP()->GetTopWindow(), SfxResId( RID_ERRBOX_MAIL_CONFIG ));
         aBox.Execute();
     }
 }
@@ -217,55 +216,6 @@ void SAL_CALL OMailSendThread::run()
 void SAL_CALL OMailSendThread::onTerminated()
 {
     delete this;
-}
-
-// class DefaultMailer_Impl ------------------------------------------------
-
-class DefaultMailerConfig_Impl : public utl::ConfigItem
-{
-    public:
-        DefaultMailerConfig_Impl();
-        virtual ~DefaultMailerConfig_Impl();
-
-    sal_Bool    GetUseDefaultMailer();
-};
-
-DefaultMailerConfig_Impl::DefaultMailerConfig_Impl() : ConfigItem( String::CreateFromAscii( "Office.Common/ExternalMailer" ))
-{
-}
-
-DefaultMailerConfig_Impl::~DefaultMailerConfig_Impl()
-{
-}
-
-sal_Bool DefaultMailerConfig_Impl::GetUseDefaultMailer()
-{
-#ifdef UNIX
-    sal_Bool bUseDefaultMailer = sal_False;
-#else
-    sal_Bool bUseDefaultMailer = sal_True;
-#endif
-
-    Sequence< ::rtl::OUString > aPropertyNames( 1 );
-    ::rtl::OUString* pPropertyNames = aPropertyNames.getArray();
-    pPropertyNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseDefaultMailer" ));
-    Sequence< Any > aPropertyValues = GetProperties( aPropertyNames );
-
-    const Any* pPropertyValues = aPropertyValues.getConstArray();
-    if ( aPropertyValues.getLength() == 1 &&
-         pPropertyValues[0].hasValue() )
-    {
-
-        try
-        {
-            bUseDefaultMailer = ::cppu::any2bool(pPropertyValues[0]);
-        }
-        catch(const ::com::sun::star::lang::IllegalArgumentException&)
-        {
-        }
-    }
-
-    return bUseDefaultMailer;
 }
 
 // class AddressList_Impl ------------------------------------------------
@@ -695,18 +645,19 @@ SfxMailModel_Impl::SendMailResult SfxMailModel_Impl::Send( MailDocType eMailDocT
             Reference < XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
             if ( xMgr.is() )
             {
-                // read configuration to choose between "SimpleCommandMail" or "SimpleSystemMail"!
-                DefaultMailerConfig_Impl                aMailConfig;
                 Reference< XSimpleMailClientSupplier >  xSimpleMailClientSupplier;
 
-                if ( aMailConfig.GetUseDefaultMailer() )
+                // Prefer the SimpleSystemMail service if available
+                xSimpleMailClientSupplier = Reference< XSimpleMailClientSupplier >(
+                    xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SimpleSystemMail" ))),
+                    UNO_QUERY );
+
+                if ( ! xSimpleMailClientSupplier.is() )
+                {
                     xSimpleMailClientSupplier = Reference< XSimpleMailClientSupplier >(
-                                                        xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SimpleSystemMail" ))),
-                                                    UNO_QUERY );
-                else
-                    xSimpleMailClientSupplier = Reference< XSimpleMailClientSupplier >(
-                                                        xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SimpleCommandMail" ))),
-                                                    UNO_QUERY );
+                        xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SimpleCommandMail" ))),
+                        UNO_QUERY );
+                }
 
                 if ( xSimpleMailClientSupplier.is() )
                 {
