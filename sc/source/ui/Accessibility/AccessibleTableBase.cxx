@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-14 15:37:54 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 07:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
 
 
 using namespace ::com::sun::star;
@@ -109,42 +112,32 @@ ScAccessibleTableBase::~ScAccessibleTableBase()
 {
 }
 
-void ScAccessibleTableBase::SetDefunc()
+void SAL_CALL ScAccessibleTableBase::disposing()
 {
     mpDoc = NULL;
 
-    ScAccessibleContextBase::SetDefunc();
+    ScAccessibleContextBase::disposing();
 }
 
-    //=====  XInterface  ======================================================
+    //=====  XInterface  =====================================================
 
-uno::Any SAL_CALL
-    ScAccessibleTableBase::queryInterface(
-    const uno::Type & rType )
-    throw(uno::RuntimeException)
+uno::Any SAL_CALL ScAccessibleTableBase::queryInterface( uno::Type const & rType )
+    throw (uno::RuntimeException)
 {
-    SC_QUERYINTERFACE( XAccessibleTable )
-    SC_QUERYINTERFACE( XAccessibleSelection )
-
-    return ScAccessibleContextBase::queryInterface( rType );
+    uno::Any aAny (ScAccessibleTableBaseImpl::queryInterface(rType));
+    return aAny.hasValue() ? aAny : ScAccessibleContextBase::queryInterface(rType);
 }
 
-/** Increase the reference count.
-*/
-void SAL_CALL
-    ScAccessibleTableBase::acquire(void)
+void SAL_CALL ScAccessibleTableBase::acquire()
     throw ()
 {
-    OWeakObject::acquire ();
+    ScAccessibleContextBase::acquire();
 }
 
-/** Decrease the reference count.
-*/
-void SAL_CALL
-    ScAccessibleTableBase::release(void)
+void SAL_CALL ScAccessibleTableBase::release()
     throw ()
 {
-    OWeakObject::release ();
+    ScAccessibleContextBase::release();
 }
 
     //=====  XAccessibleTable  ================================================
@@ -448,22 +441,10 @@ void SAL_CALL
 
     //=====  XTypeProvider  ===================================================
 
-uno::Sequence< uno::Type> SAL_CALL ScAccessibleTableBase::getTypes(void)
+uno::Sequence< uno::Type > SAL_CALL ScAccessibleTableBase::getTypes()
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    uno::Sequence< uno::Type>
-        aTypeSequence = ScAccessibleContextBase::getTypes();
-    sal_Int32 nOldSize(aTypeSequence.getLength());
-    aTypeSequence.realloc(nOldSize + 2);
-    uno::Type* pTypes = aTypeSequence.getArray();
-
-    pTypes[nOldSize] = ::getCppuType((const uno::Reference<
-            XAccessibleTable>*)0);
-    pTypes[nOldSize + 1] = ::getCppuType((const uno::Reference<
-            XAccessibleSelection>*)0);
-
-    return aTypeSequence;
+    return comphelper::concatSequences(ScAccessibleTableBaseImpl::getTypes(), ScAccessibleContextBase::getTypes());
 }
 
 uno::Sequence<sal_Int8> SAL_CALL
@@ -475,7 +456,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     if (aId.getLength() == 0)
     {
         aId.realloc (16);
-        rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
+        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
     }
     return aId;
 }

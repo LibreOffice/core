@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-12 09:43:13 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 07:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #include <vcl/window.hxx>
 #include <svtools/smplhint.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
@@ -102,7 +105,7 @@ ScAccessiblePreviewTable::~ScAccessiblePreviewTable()
     delete mpTableInfo;
 }
 
-void ScAccessiblePreviewTable::SetDefunc()
+void SAL_CALL ScAccessiblePreviewTable::disposing()
 {
     if (mpViewShell)
     {
@@ -110,7 +113,7 @@ void ScAccessiblePreviewTable::SetDefunc()
         mpViewShell = NULL;
     }
 
-    ScAccessibleContextBase::SetDefunc();
+    ScAccessibleContextBase::disposing();
 }
 
 //=====  SfxListener  =====================================================
@@ -122,7 +125,7 @@ void ScAccessiblePreviewTable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
         const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
         ULONG nId = rRef.GetId();
         if ( nId == SFX_HINT_DYING )
-            SetDefunc();
+            dispose();
         else if ( nId == SFX_HINT_DATACHANGED )
         {
             //  column / row layout may change with any document change,
@@ -132,22 +135,23 @@ void ScAccessiblePreviewTable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
     }
 }
 
-//=====  XInterface  ======================================================
+//=====  XInterface  =====================================================
 
-uno::Any SAL_CALL ScAccessiblePreviewTable::queryInterface( const uno::Type& rType )
-                                                throw(uno::RuntimeException)
+uno::Any SAL_CALL ScAccessiblePreviewTable::queryInterface( uno::Type const & rType )
+    throw (uno::RuntimeException)
 {
-    SC_QUERYINTERFACE( XAccessibleTable )
-
-    return ScAccessibleContextBase::queryInterface( rType );
+    uno::Any aAny (ScAccessiblePreviewTableImpl::queryInterface(rType));
+    return aAny.hasValue() ? aAny : ScAccessibleContextBase::queryInterface(rType);
 }
 
-void SAL_CALL ScAccessiblePreviewTable::acquire() throw()
+void SAL_CALL ScAccessiblePreviewTable::acquire()
+    throw ()
 {
     ScAccessibleContextBase::acquire();
 }
 
-void SAL_CALL ScAccessiblePreviewTable::release() throw()
+void SAL_CALL ScAccessiblePreviewTable::release()
+    throw ()
 {
     ScAccessibleContextBase::release();
 }
@@ -602,18 +606,10 @@ uno::Sequence<rtl::OUString> SAL_CALL ScAccessiblePreviewTable::getSupportedServ
 
 //=====  XTypeProvider  ===================================================
 
-uno::Sequence<uno::Type> SAL_CALL ScAccessiblePreviewTable::getTypes() throw(uno::RuntimeException)
+uno::Sequence< uno::Type > SAL_CALL ScAccessiblePreviewTable::getTypes()
+        throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    uno::Sequence< uno::Type>
-        aTypeSequence = ScAccessibleContextBase::getTypes();
-    sal_Int32 nOldSize(aTypeSequence.getLength());
-    aTypeSequence.realloc(nOldSize + 1);
-    uno::Type* pTypes = aTypeSequence.getArray();
-
-    pTypes[nOldSize] = ::getCppuType((const uno::Reference<XAccessibleTable>*)0);
-
-    return aTypeSequence;
+    return comphelper::concatSequences(ScAccessiblePreviewTableImpl::getTypes(), ScAccessibleContextBase::getTypes());
 }
 
 uno::Sequence<sal_Int8> SAL_CALL ScAccessiblePreviewTable::getImplementationId()
@@ -623,7 +619,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessiblePreviewTable::getImplementationId()
     if( aId.getLength() == 0 )
     {
         aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
+        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
     }
     return aId;
 }
@@ -683,7 +679,7 @@ Rectangle ScAccessiblePreviewTable::GetBoundingBox() throw (uno::RuntimeExceptio
 
 sal_Bool ScAccessiblePreviewTable::IsDefunc( const uno::Reference<XAccessibleStateSet>& rxParentStates )
 {
-    return (mpViewShell == NULL) || !getAccessibleParent().is() ||
+    return ScAccessibleContextBase::IsDefunc() || (mpViewShell == NULL) || !getAccessibleParent().is() ||
         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 

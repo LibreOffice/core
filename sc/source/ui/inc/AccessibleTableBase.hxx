@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-14 15:26:29 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 07:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,16 +77,24 @@
 #include <drafts/com/sun/star/accessibility/XAccessibleSelection.hpp>
 #endif
 
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
+
 class ScTabViewShell;
 
 /** @descr
         This base class provides an implementation of the
         <code>AccessibleTable</code> service.
 */
-class ScAccessibleTableBase
-    :   public  ::drafts::com::sun::star::accessibility::XAccessibleTable,
-        public  ::drafts::com::sun::star::accessibility::XAccessibleSelection,
-        public  ScAccessibleContextBase
+
+typedef cppu::ImplHelper2<::drafts::com::sun::star::accessibility::XAccessibleTable,
+                    ::drafts::com::sun::star::accessibility::XAccessibleSelection>
+                    ScAccessibleTableBaseImpl;
+
+class ScAccessibleTableBase :
+            public ScAccessibleContextBase,
+            public ScAccessibleTableBaseImpl
 {
 public:
     //=====  internal  ========================================================
@@ -99,25 +107,17 @@ protected:
     virtual ~ScAccessibleTableBase();
 public:
 
-    virtual void SetDefunc();
+     virtual void SAL_CALL disposing();
 
-    ///=====  XInterface  ======================================================
+    ///=====  XInterface  =====================================================
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-                    const ::com::sun::star::uno::Type & rType )
-                    throw(::com::sun::star::uno::RuntimeException);
+        ::com::sun::star::uno::Type const & rType )
+        throw (::com::sun::star::uno::RuntimeException);
 
-    /** Increase the reference count.
-    */
-    virtual void SAL_CALL
-                acquire(void)
-                    throw ();
+    virtual void SAL_CALL acquire() throw ();
 
-    /** Decrease the reference count.
-    */
-    virtual void SAL_CALL
-                release(void)
-                    throw ();
+    virtual void SAL_CALL release() throw ();
 
     ///=====  XAccessibleTable  ================================================
 
@@ -307,10 +307,9 @@ public:
 
     ///=====  XTypeProvider  ===================================================
 
-    /** Returns a sequence of all supported interfaces.
-    */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
-        getTypes(void)
+    /// returns the possible types
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
+        getTypes()
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Returns a implementation id.

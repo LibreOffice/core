@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2002-02-28 19:28:48 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 07:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,14 +71,19 @@
 #include <drafts/com/sun/star/accessibility/XAccessibleTable.hpp>
 #endif
 
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 
 class ScPreviewShell;
 class ScPreviewTableInfo;
 
+typedef cppu::ImplHelper1<::drafts::com::sun::star::accessibility::XAccessibleTable>
+                    ScAccessiblePreviewTableImpl;
 
 class ScAccessiblePreviewTable :
-        public ::drafts::com::sun::star::accessibility::XAccessibleTable,
-        public ScAccessibleContextBase
+        public ScAccessibleContextBase,
+        public ScAccessiblePreviewTableImpl
 {
 public:
     ScAccessiblePreviewTable( const ::com::sun::star::uno::Reference<
@@ -89,19 +94,21 @@ protected:
     virtual ~ScAccessiblePreviewTable();
 
 public:
-    void SetDefunc();
+     virtual void SAL_CALL disposing();
 
     //=====  SfxListener  =====================================================
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    //=====  XInterface  ======================================================
+    ///=====  XInterface  =====================================================
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-                                const ::com::sun::star::uno::Type & rType )
-                                    throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   acquire() throw();
-    virtual void SAL_CALL   release() throw();
+        ::com::sun::star::uno::Type const & rType )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL acquire() throw ();
+
+    virtual void SAL_CALL release() throw ();
 
     //=====  XAccessibleTable  ================================================
 
@@ -183,8 +190,10 @@ public:
 
     //=====  XTypeProvider  ===================================================
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-                                throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
+        getTypes()
+        throw (::com::sun::star::uno::RuntimeException);
+
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
                                 throw(::com::sun::star::uno::RuntimeException);
 
