@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdlg2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:39:52 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@
 #ifndef _MODOPT_HXX //autogen
 #include <modcfg.hxx>
 #endif
+
+#include <tools/shl.hxx>
 
 #include "swmodule.hxx"
 #include "view.hxx"
