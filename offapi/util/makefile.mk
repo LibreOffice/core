@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.68 $
+#   $Revision: 1.69 $
 #
-#   last change: $Author: rt $ $Date: 2004-01-05 12:47:38 $
+#   last change: $Author: rt $ $Date: 2004-02-11 09:36:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssauth.db \
     $(UCR)$/cssawt.db \
     $(UCR)$/csschart.db \
+    $(UCR)$/csschart2.db \
     $(UCR)$/cssconfiguration.db \
     $(UCR)$/csscbootstrap.db\
     $(UCR)$/csscbackend.db\
@@ -143,7 +144,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssframe.db \
     $(UCR)$/dcssform.db \
     $(UCR)$/dcssformcomp.db \
-    $(UCR)$/dcsstable.db \
+    $(UCR)$/dcsstable.db
 
 
 REFERENCE_RDB=$(PRJ)$/type_reference$/OO_11$/types.rdb
