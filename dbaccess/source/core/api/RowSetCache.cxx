@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 14:20:28 $
+ *  last change: $Author: oj $ $Date: 2001-08-09 13:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1360,6 +1360,7 @@ void SAL_CALL ORowSetCache::insertRow(  ) throw(SQLException, RuntimeException)
         ++m_nRowCount;
         Any aBookmark = (*(*m_aInsertRow))[0].makeAny();
         m_bAfterLast = m_bBeforeFirst = sal_False;
+        clearInsertRow();
         if(aBookmark.hasValue())
             moveToBookmark(aBookmark);
         else
@@ -1401,17 +1402,10 @@ void SAL_CALL ORowSetCache::updateRow(  ) throw(SQLException, RuntimeException)
         throw SQLException();
 
     m_pCacheSet->updateRow(*m_aInsertRow,*m_aMatrixIter,m_aUpdateTable);
-    // we don't unbound the bookmark column
-    connectivity::ORowVector< ORowSetValue >::iterator aIter = (*m_aInsertRow)->begin()+1;
-    for(;aIter != (*m_aInsertRow)->end();++aIter)
-    {
-        aIter->setBound(sal_False);
-        aIter->setModified(sal_False);
-        aIter->setNull();
-    }
-    //  moveToBookmark((*(*m_aInsertRow))[0].makeAny());
-//  if(m_pCacheSet->rowUpdated())
-//      *m_aMatrixIter = m_aInsertRow;
+
+    clearInsertRow();
+
+    // we don't need to repositioning here refresh will do it for us
     m_bModified = sal_False;
     refreshRow(  );
 }
@@ -1688,4 +1682,15 @@ sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
     return bOk;
 }
 // -----------------------------------------------------------------------------
-
+void ORowSetCache::clearInsertRow()
+{
+    // we don't unbound the bookmark column
+    connectivity::ORowVector< ORowSetValue >::iterator aIter = (*m_aInsertRow)->begin()+1;
+    for(;aIter != (*m_aInsertRow)->end();++aIter)
+    {
+        aIter->setBound(sal_False);
+        aIter->setModified(sal_False);
+        aIter->setNull();
+    }
+}
+// -----------------------------------------------------------------------------

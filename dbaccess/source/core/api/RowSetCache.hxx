@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
+ *  last change: $Author: oj $ $Date: 2001-08-09 13:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,8 @@ namespace dbaccess
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >& _xComposer,
                             const ::rtl::OUString& _sUpdateTableName);
 
+        // clears the insert row
+        void clearInsertRow();
     protected:
         ORowSetMatrix::iterator& getIterator() { return m_aMatrixIter;}
         ORowSetMatrix::iterator& getEnd() { return m_aMatrixEnd;}
@@ -329,6 +331,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.13  2001/07/24 13:25:25  oj
+    #89430# move ORowSetValue into dbtools
+
     Revision 1.12  2001/07/19 09:29:22  oj
     #86186# check parsetree for joins
 
