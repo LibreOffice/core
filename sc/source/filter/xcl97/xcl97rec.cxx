@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:38:30 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1019,7 +1019,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
             if( ::getPropValue( nApiColor, xPropSet, PROPNAME( "TextColor" ) ) )
             {
                 Color aColor( static_cast< sal_uInt32 >( nApiColor ) );
-                pFont->SetColorId( rRoot.GetPalette().InsertColor( aColor, xlColorChartText, EXC_FONT_AUTOCOLOR ) );
+                pFont->SetColorId( rRoot.GetPalette().InsertColor( aColor, xlColorChartText, EXC_COLOR_FONTAUTO ) );
             }
             nFontIx = rRoot.GetFontBuffer().Insert( pFont );
             // font buffer owns pFont, forget it
@@ -1365,7 +1365,7 @@ ExcLabelSst::ExcLabelSst(
 {
     const XclExpRoot& rRoot = *rRootData.pER;
     XclExpString* pString = XclExpStringHelper::CreateString( rRoot, rEdCell, pAttr );
-    SetXFId( rRoot.GetXFBuffer().Insert( pAttr, pString->IsWrapped() ) );
+    SetXFId( rRoot.GetXFBuffer().Insert( pAttr, pString->IsWrapped(), pString->RemoveFontOfChar(0)) );
     nIsst = rRoot.GetSst().Insert( pString );
 }
 
@@ -1519,7 +1519,7 @@ ExcWindow28::ExcWindow28( const XclExpRoot& rRoot, UINT16 nTab ) :
     nFlags |= rOpt.pGridCol ? 0 : EXC_WIN2_DEFAULTCOLOR;
     nGridColorSer = rOpt.pGridCol ?
         rPal.InsertColor( *rOpt.pGridCol, xlColorGrid ) :
-        XclExpPalette::GetColorIdFromIndex( EXC_XF_AUTOCOLOR );
+        XclExpPalette::GetColorIdFromIndex( EXC_COLOR_WINDOWTEXT );
 
     const ScExtTabOptions* pTabOpt = rOpt.GetExtTabOptions( nTab );
     if( pTabOpt )
@@ -1581,305 +1581,6 @@ ULONG ExcWindow28::GetLen() const
 {
     return 18;
 }
-
-
-// --- class XclCondFormat -------------------------------------------
-
-XclCondFormat::XclCondFormat( const ScConditionalFormat& _rCF, ScRangeList* _pRL, RootData& rER )
-                :
-                rCF( _rCF )
-{
-    pRL = _pRL;
-    nTabNum = rER.pER->GetScTab();
-    nComplLen = 0;
-
-    USHORT                      n;
-    USHORT                      nNum = _rCF.Count();
-    const ScCondFormatEntry*    pCFE;
-
-    for( n = 0 ; n < nNum ; n++ )
-    {
-        pCFE = _rCF.GetEntry( n );
-        if( pCFE )
-            Append( new XclCf( *rER.pER, *pCFE ) );
-    }
-}
-
-
-XclCondFormat::~XclCondFormat()
-{
-    delete pRL;
-}
-
-
-void XclCondFormat::WriteCondfmt( XclExpStream& rStrm )
-{
-    DBG_ASSERT( Count() < 65536, "XclCondFormat::SaveCont - to much CFs!" );
-
-    rStrm.StartRecord( 0x01B0, 0 );     // real size calculated by XclExpStream
-
-    rStrm << (UINT16) Count() << (UINT16) 0x0001;
-
-    ULONG               nMinMaxPos = rStrm.GetStreamPos();
-    UINT16              nRowFirst = 0xFFFF;
-    UINT16              nRowLast = 0;
-    UINT16              nColFirst = 0xFFFF;
-    UINT16              nColLast = 0;
-    UINT16              nRefCnt = 0;
-
-    rStrm << nRowFirst << nRowLast << nColFirst << nColLast << nRefCnt;     // dummies
-
-    const ScRange*      pAct = pRL->First();
-
-    while( pAct )
-    {
-        const ScAddress&    rStart = pAct->aStart;
-        const ScAddress&    rEnd = pAct->aEnd;
-
-        if( rStart.Tab() == nTabNum )
-        {
-            nRefCnt++;
-
-            UINT16      nRF = rStart.Row();
-            UINT16      nCF = rStart.Col();
-            UINT16      nRL = rEnd.Row();
-            UINT16      nCL = rEnd.Col();
-
-            nRowFirst = Min( nRF, nRowFirst );
-            nRowLast = Max( nRL, nRowLast );
-            nColFirst = Min( nCF, nColFirst );
-            nColLast = Max( nCL, nColLast );
-
-            rStrm << nRF << nRL << nCF << nCL;
-        }
-        pAct = pRL->Next();
-    }
-
-    rStrm.EndRecord();
-
-    // write min / max and num of refs
-    rStrm.SetStreamPos( nMinMaxPos );
-    rStrm << nRowFirst << nRowLast << nColFirst << nColLast << nRefCnt;
-}
-
-
-void XclCondFormat::Save( XclExpStream& rStrm )
-{
-    // write CONDFMT
-    WriteCondfmt( rStrm );
-
-    // write list of CF records
-    for( XclCf* pCf = First(); pCf; pCf = Next() )
-        pCf->Save( rStrm );
-}
-
-
-
-// --- class XclCf ---------------------------------------------------
-
-XclCf::XclCf( const XclExpRoot& rRoot, const ScCondFormatEntry& r ) :
-    XclExpRoot( rRoot )
-{
-    nType = 0x01;   // compare
-    nFormatLen = 0;
-    bHasStyle = bHasFont = bHasLine = bHasPattern = FALSE;
-
-    BOOL bSingForm = TRUE;
-    switch( r.GetOperation() )
-    {
-        case SC_COND_EQUAL:         nOp = 0x03;                                     break;
-        case SC_COND_LESS:          nOp = 0x06;                                     break;
-        case SC_COND_GREATER:       nOp = 0x05;                                     break;
-        case SC_COND_EQLESS:        nOp = 0x08;                                     break;
-        case SC_COND_EQGREATER:     nOp = 0x07;                                     break;
-        case SC_COND_NOTEQUAL:      nOp = 0x04;                                     break;
-        case SC_COND_BETWEEN:       nOp = 0x01; bSingForm = FALSE;                  break;
-        case SC_COND_NOTBETWEEN:    nOp = 0x02; bSingForm = FALSE;                  break;
-        case SC_COND_DIRECT:        nOp = 0x00;                     nType = 0x02;   break;
-        default:                    nOp = 0x00;                     nType = 0x00;
-    }
-
-    // creating formats
-    const String&       rStyleName = r.GetStyle();
-    SfxStyleSheetBase*  pStyle =
-        GetDoc().GetStyleSheetPool()->Find( rStyleName, SFX_STYLE_FAMILY_PARA );
-    bHasStyle = pStyle ? TRUE : FALSE;
-    if( bHasStyle )
-    {
-        const SfxItemSet&   rSet = pStyle->GetItemSet();
-        BOOL bHasItalic     = rSet.GetItemState( ATTR_FONT_POSTURE, TRUE ) == SFX_ITEM_SET;
-        BOOL bHasUnderline  = rSet.GetItemState( ATTR_FONT_UNDERLINE, TRUE ) == SFX_ITEM_SET;
-        BOOL bHasStrikeOut  = rSet.GetItemState( ATTR_FONT_CROSSEDOUT, TRUE ) == SFX_ITEM_SET;
-        BOOL bHasWeight     = rSet.GetItemState( ATTR_FONT_WEIGHT, TRUE ) == SFX_ITEM_SET;
-        bHasColor       = rSet.GetItemState( ATTR_FONT_COLOR, TRUE ) == SFX_ITEM_SET;
-
-        bHasFont = bHasItalic || bHasUnderline || bHasStrikeOut || bHasWeight || bHasColor;
-        bHasLine = rSet.GetItemState( ATTR_BORDER, TRUE ) == SFX_ITEM_SET;
-        bHasPattern = rSet.GetItemState( ATTR_BACKGROUND, TRUE ) == SFX_ITEM_SET;
-
-        // constants for formatsstart
-        nStart = 0x00FFFFFF;    // nothing included, all DC
-        nFormatLen = 6;
-
-        if( bHasFont )
-        {
-            nStart |= 0x04000000;
-            nStart &= 0xFF3FFFFF;
-            nFormatLen += 118;
-        }
-        if( bHasLine )
-        {
-            nStart |= 0x10000000;
-            nStart &= 0xFFFFC3FF;
-            nFormatLen += 8;
-        }
-        if( bHasPattern )
-        {
-            nStart |= 0x20000000;
-            nStart &= 0xFF3BFFFF;
-            nFormatLen += 4;
-        }
-
-        // font data
-        if( bHasFont )
-        {
-            Font aFont;
-            ScPatternAttr::GetFont( aFont, rSet, SC_AUTOCOL_RAW );
-            XclFontData aFontData( aFont );
-
-            nFontData1 = (bHasItalic && aFontData.mbItalic) ? 0x00000002 : 0;
-            nFontData1 |= (bHasStrikeOut && aFontData.mbStrikeout) ? 0x00000080 : 0;
-
-            if( bHasWeight )
-                nFontData2 = aFontData.mnWeight;
-            else
-                nFontData2 = bHasItalic ? 0x00000400 : 0;
-            nFontData3 = bHasUnderline ? static_cast< sal_uInt32 >( aFontData.meUnderline ) : 0;
-
-            if( bHasColor )
-                nIcvTextSer = GetPalette().InsertColor( aFont.GetColor(), xlColorCellText );
-
-            nFontData4 = bHasStrikeOut ? 0x00000018 : 0x00000098;
-            nFontData4 |= (bHasWeight || bHasItalic) ? 0 : 0x00000002;
-            nFontData5 = bHasUnderline ? 0 : 0x00000001;
-            nFontData6 = (bHasWeight || bHasItalic) ? 0 : 0x01;
-        }
-
-        // border data
-        if( bHasLine )
-            maBorder.FillFromItemSet( rSet, GetPalette(), GetBiff() );
-
-        // background / foreground data
-        if( bHasPattern )
-            maArea.FillFromItemSet( rSet, GetPalette(), GetBiff() );
-    }
-
-    ScTokenArray*   pScTokArry1 = r.CreateTokenArry( 0 );
-    EC_Codetype     eDummy;
-    ExcUPN*         pForm1      = new ExcUPN( mpRD, *pScTokArry1, eDummy, NULL, TRUE );
-    nFormLen1 = pForm1->GetLen();
-
-    ScTokenArray*   pScTokArry2 = NULL;
-    ExcUPN*         pForm2 = NULL;
-    if( bSingForm )
-        nFormLen2 = 0;
-    else
-    {
-        pScTokArry2 = r.CreateTokenArry( 1 );
-        pForm2 = new ExcUPN( mpRD, *pScTokArry2, eDummy, NULL, TRUE );
-        nFormLen2 = pForm2->GetLen();
-    }
-
-    DBG_ASSERT( nFormLen1 + nFormLen2 < 4096, "*XclCf::XclCf(): possible overflow of var data" );
-
-    nVarLen = nFormLen1 + nFormLen2;
-    pVarData = new sal_Char[ nVarLen ];
-
-    if( nFormLen1 )
-        memcpy( pVarData, pForm1->GetData(), nFormLen1 );
-    delete pForm1;
-    delete pScTokArry1;
-
-    if( pForm2 )
-    {
-        memcpy( pVarData + nFormLen1, pForm2->GetData(), nFormLen2 );
-        delete pForm2;
-        delete pScTokArry2;
-    }
-}
-
-
-XclCf::~XclCf()
-{
-    if( pVarData )
-        delete [] pVarData;
-}
-
-
-void XclCf::SaveCont( XclExpStream& rStrm )
-{
-    const UINT8 pPre[ 68 ] =
-    {   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0xDF, 0x3F, 0x8A, 0x1D, 0x3C, 0xFC, 0xFD, 0x7E, 0xDF, 0x3F,
-        0x4E, 0x4A, 0x54, 0x30, 0x00, 0x00, 0x00, 0x00, 0x65, 0x10,
-        0x00, 0x30, 0xF0, 0x59, 0x54, 0x30, 0xEC, 0x04, 0xC8, 0x00,
-        0x4C, 0x00, 0x00, 0x00, 0x89, 0x10, 0x00, 0x30, 0xEC, 0x04,
-        0xC8, 0x00, 0xF0, 0x59, 0x54, 0x30, 0x4C, 0x00, 0x00, 0x00,
-        0x4E, 0x4A, 0x54, 0x30, 0xFF, 0xFF, 0xFF, 0xFF
-    };
-    const UINT8 pPost[ 17 ] =
-    {   0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0xFF, 0xFF, 0xFF, 0x7F, 0x01, 0x00
-    };
-
-    rStrm << nType << nOp << nFormLen1 << nFormLen2;
-    if( bHasStyle )
-    {
-        rStrm << nStart << (UINT16)0x0002;
-        if( bHasFont )
-        {
-            rStrm.Write( pPre, 68 );
-            rStrm << nFontData1 << nFontData2 << nFontData3;
-            if( bHasColor )
-                rStrm << (UINT32) GetPalette().GetColorIndex( nIcvTextSer );
-            else
-                rStrm << (UINT32)0xFFFFFFFF;
-            rStrm   << (UINT32)0x00000000 << nFontData4
-                    << (UINT32)0x00000001 << nFontData5
-                    << nFontData6;
-            rStrm.Write( pPost, 17 );
-        }
-        if( bHasLine )
-        {
-            sal_uInt16 nLineStyle = 0;
-            sal_uInt32 nLineColor = 0;
-            maBorder.SetFinalColors( GetPalette() );
-            maBorder.FillToCF8( nLineStyle, nLineColor );
-            rStrm << nLineStyle << nLineColor << (UINT16)0xBA00;
-        }
-        if( bHasPattern )
-        {
-            sal_uInt16 nPattern = 0, nColor = 0;
-            maArea.SetFinalColors( GetPalette() );
-            maArea.FillToCF8( nPattern, nColor );
-            rStrm << nPattern << nColor;
-        }
-    }
-    rStrm.Write( pVarData, nVarLen );
-}
-
-
-UINT16 XclCf::GetNum() const
-{
-    return 0x01B1;
-}
-
-
-ULONG XclCf::GetLen() const
-{
-    return 6 + nFormatLen + nVarLen;
-}
-
 
 
 // --- class XclObproj -----------------------------------------------
