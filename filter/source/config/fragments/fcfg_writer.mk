@@ -77,6 +77,23 @@ F4_WRITER = \
     writer8_template
 
 # -----------------------------------------------
+# count = 13
+F4_UI_WRITER = \
+    HTML__StarWriter__ui \
+    MS_Word_95_Vorlage_ui \
+    MS_Word_97_Vorlage_ui \
+    StarOffice_XML__Writer__ui \
+    StarWriter_3_0_Vorlage_Template_ui \
+    StarWriter_4_0_Vorlage_Template_ui \
+    StarWriter_5_0_Vorlage_Template_ui \
+    Text_ui \
+    Text__encoded__ui \
+    writer_JustSystem_Ichitaro_10_template_ui \
+    writer_StarOffice_XML_Writer_Template_ui \
+    writer8_ui \
+    writer8_template_ui
+    
+# -----------------------------------------------
 # count = 0
 L4_WRITER =
 
@@ -85,15 +102,22 @@ L4_WRITER =
 C4_WRITER =
 
 # -----------------------------------------------
-TYPES_4fcfg_writer           = $(foreach,i,$(T4_WRITER) types$/$i.xcu          )
-FILTERS_4fcfg_writer         = $(foreach,i,$(F4_WRITER) filters$/$i.xcu        )
-FRAMELOADERS_4fcfg_writer    = $(foreach,i,$(L4_WRITER) frameloaders$/$i.xcu   )
-CONTENTHANDLERS_4fcfg_writer = $(foreach,i,$(C4_WRITER) contenthandlers$/$i.xcu)
+TYPES_4fcfg_writer           = $(foreach,i,$(T4_WRITER)    types$/$i.xcu                     )
+FILTERS_4fcfg_writer         = $(foreach,i,$(F4_WRITER)    filters$/$i.xcu                   )
+UI_FILTERS_4fcfg_writer      = $(foreach,i,$(F4_UI_WRITER) $(DIR_LOCFRAG)$/filters$/$i.xcu   )
+FRAMELOADERS_4fcfg_writer    = $(foreach,i,$(L4_WRITER)    frameloaders$/$i.xcu              )
+CONTENTHANDLERS_4fcfg_writer = $(foreach,i,$(C4_WRITER)    contenthandlers$/$i.xcu           )
 
 # -----------------------------------------------
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_writer = \
     $(TYPES_4fcfg_writer) \
-    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
+    $(FILTERS_4fcfg_writer) \
+    $(UI_FILTERS_4fcfg_writer) \
     $(FRAMELOADERS_4fcfg_writer) \
     $(CONTENTHANDLERS_4fcfg_writer)
+    
+ALL_UI_FILTERS+=$(UI_FILTERS_4fcfg_writer)
+    
+ALL_PACKAGES+=writer
+    
