@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: jl $ $Date: 2002-05-16 13:03:34 $
+#   last change: $Author: jb $ $Date: 2002-05-17 10:03:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-LIBSMKREV!:="$$Revision: 1.48 $$"
+LIBSMKREV!:="$$Revision: 1.49 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -128,6 +128,7 @@ SOTLIB=-lsot$(OFFICEUPD)$(DLLPOSTFIX)
 ONELIB=-lone$(OFFICEUPD)$(DLLPOSTFIX)
 MOZBASELIBST=$(STATIC) -lnspr4 -lxpcombase_s $(DYNAMIC)
 MOZBASELIB=-lnspr4 -lxpcom
+LDAPSDKLIB=-lldap40
 ONELIB=
 UNOLIB=
 SVLIBDEPEND=$(L)$/libvcl$(OFFICEUPD)$(DLLPOSTFIX)$(DLLPOST)
@@ -278,6 +279,7 @@ SOTLIB=$(LIBPRE) sot.lib
 ONELIB=$(LIBPRE) one.lib
 MOZBASELIBST=$(LIBPRE) nspr4_s.lib $(LIBPRE) xpcombase_s.lib
 MOZBASELIB=$(LIBPRE) nspr4.lib $(LIBPRE) xpcom.lib
+LDAPSDKLIB=$(LIBPRE) nsldap32v40.lib
 ONELIB=
 UNOLIB=
 PAPILIB=$(LIBPRE) ipap.lib
