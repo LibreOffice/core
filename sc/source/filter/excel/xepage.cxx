@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xepage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:08:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
 {
     ScDocument& rDoc = GetDoc();
-    USHORT nScTab = GetCurrScTab();
+    SCTAB nScTab = GetCurrScTab();
 
     if( SfxStyleSheetBase* pStyleSheet = GetStyleSheetPool().Find( rDoc.GetPageStyle( nScTab ), SFX_STYLE_FAMILY_PAGE ) )
     {
@@ -345,10 +345,10 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
 
     // *** page breaks ***
 
-    for( USHORT nScRow = 1, nScMaxRow = GetMaxPos().Row(); nScRow <= nScMaxRow; ++nScRow )
+    for( SCROW nScRow = 1, nScMaxRow = GetMaxPos().Row(); nScRow <= nScMaxRow; ++nScRow )
         if( rDoc.GetRowFlags( nScRow, nScTab ) & CR_MANUALBREAK )
             maData.maHorPageBreaks.push_back( static_cast< sal_uInt16 >( nScRow ) );
-    for( USHORT nScCol = 1, nScMaxCol = GetMaxPos().Col(); nScCol <= nScMaxCol; ++nScCol )
+    for( SCCOL nScCol = 1, nScMaxCol = GetMaxPos().Col(); nScCol <= nScMaxCol; ++nScCol )
         if( rDoc.GetColFlags( nScCol, nScTab ) & CR_MANUALBREAK )
             maData.maVerPageBreaks.push_back( static_cast< sal_uInt16 >( nScCol ) );
 }
