@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: er $ $Date: 2002-09-24 14:16:50 $
+ *  last change: $Author: er $ $Date: 2002-09-25 11:19:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2494,7 +2494,9 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
                 if ( nDecPos == 2 && k < nAnzNums )     // . somewhere
                 {
                     sResString += '.';
-                    for ( ; k < nAnzNums; k++)
+                    USHORT nStop = (eScannedType == NUMBERFORMAT_SCIENTIFIC ?
+                            nAnzNums-1 : nAnzNums);
+                    for ( ; k < nStop; k++)
                         sResString += sStrArray[nNums[k]];  // fractional part
                 }
 
@@ -2505,10 +2507,7 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
                     sResString += 'E';
                     if ( nESign == -1 )
                         sResString += '-';
-                    if (nDecPos == 2)
-                        sResString += sStrArray[nNums[nThousand+2]];
-                    else
-                        sResString += sStrArray[nNums[nThousand+1]];
+                    sResString += sStrArray[nNums[nAnzNums-1]];
                     int nErrno = 0;
                     fOutNumber = SolarMath::StringToDouble(
                         sResString.GetBuffer(), ',', '.', nErrno );
