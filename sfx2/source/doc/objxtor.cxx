@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-11 15:28:34 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 10:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,11 +97,7 @@
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
 #endif
-#if SUPD<613//MUSTINI
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
-#endif
-#endif
+
 #include "objsh.hxx"
 
 #ifndef _BASIC_SBUNO_HXX
@@ -142,6 +138,9 @@
 #include "basmgr.hxx"
 #include "dlgcont.hxx"
 #include "scriptcont.hxx"
+#include "imgmgr.hxx"
+#include "tbxconf.hxx"
+#include "accmgr.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
@@ -244,8 +243,11 @@ SfxObjectShell::~SfxObjectShell()
 
     DELETEX(pMedium);
     DELETEX(pImp->pEventConfig);
+    DELETEX(pImp->pImageManager);
+    DELETEX(pImp->pTbxConfig);
     DELETEX(pImp->pCfgMgr);
-    DELETEX( pImp->pReloadTimer );
+    DELETEX(pImp->pReloadTimer );
+    DELETEX(pImp->pAccMgr);
 
     SfxApplication *pSfxApp = SFX_APP();
     if ( USHRT_MAX != pImp->nVisualDocumentNumber )
