@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-04 03:10:53 $
+#   last change: $Author: kz $ $Date: 2005-03-01 11:57:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ OBJFILES = \
     $(OBJ)$/global.obj \
     $(OBJ)$/options.obj \
     $(OBJ)$/typemanager.obj \
-    $(OBJ)$/unotype.obj
+    $(OBJ)$/unotype.obj \
+    $(OBJ)$/codemaker.obj
 
 .INCLUDE: target.mk
