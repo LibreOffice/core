@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmn_tmpl.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:04:04 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 13:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1092,16 +1092,6 @@
         };\
     };
 
-#define MN_MOUSE_FRAME_WITH_CONTOUR MN_MOUSE_FRAME_BEGIN
-
-#undef  MN_WRAP_CONTOUR_1
-#undef  MN_EDIT_CONTOUR_1
-#define  MN_WRAP_CONTOUR_1
-#define  MN_EDIT_CONTOUR_1
-#define MN_MOUSE_FRAME_WITHOUT_CONTOUR MN_MOUSE_FRAME_BEGIN
-
-
-
 #define MN_ALIGN_FRAME \
     MenuItem\
     {\
@@ -1233,23 +1223,11 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
 
 /* --------------------- D O C U M E N T -------------------------- */
 #ifdef MN_SW_WEB
-    #ifdef MN_SW_PORTAL
-        #define _MN_FILE  MN_WEBFILE_PORT
-    #else
         #define _MN_FILE  MN_WEBFILE
-    #endif
 #elif defined MN_SW_GLOBAL //3
-    #ifdef MN_SW_PORTAL
-        #define _MN_FILE  MN_GLOBALFILE_PORT
-    #else
         #define _MN_FILE  MN_GLOBALFILE
-    #endif
 #else
-    #ifdef MN_SW_PORTAL
-        #define _MN_FILE MN_FILE_PORT
-    #else
         #define _MN_FILE  MN_FILE
-    #endif
 #endif
 
 MenuItem _MN_FILE
@@ -1436,43 +1414,20 @@ MenuItem _MN_FILE
             };
             SEPARATOR ;
 #endif
-#ifdef MN_SW_PORTAL
-            MenuItem
-            {
-                ITEM_FILE_BACKTOWEBTOP
-            };
-            MenuItem
-            {
-                ITEM_FILE_LOGOUT
-            };
-#else
             MenuItem
             {
                 ITEM_FILE_QUITAPP
             };
-#endif //MN_SW_PORTAL
         };
     };
 };
 
 #ifdef MN_SW_WEB
-    #ifdef MN_SW_PORTAL
-        #define _MN_EDIT MN_WEBEDIT_PORT
-    #else
         #define _MN_EDIT MN_WEBEDIT
-    #endif
 #elif defined MN_SW_GLOBAL // 4
-    #ifdef MN_SW_PORTAL
-        #define _MN_EDIT  MN_GLOBALEDIT_PORT
-    #else
         #define _MN_EDIT  MN_GLOBALEDIT
-    #endif
 #else
-    #ifdef MN_SW_PORTAL
-        #define _MN_EDIT MN_EDIT_PORT
-    #else
         #define _MN_EDIT MN_EDIT
-    #endif
 #endif
 
 MenuItem _MN_EDIT
@@ -1662,12 +1617,10 @@ MenuItem _MN_EDIT
                 Text [ de ] = "~Verknüpfungen..." ;
                 Text [ en-US ] = "Lin~ks..." ;
             };
-#ifndef MN_SW_PORTAL
             MenuItem
             {
                 ITEM_EDIT_PLUGINS_ACTIVE
             };
-#endif //MN_SW_PORTAL
             MenuItem
             {
                 ITEM_EDIT_IMAP
@@ -1681,23 +1634,11 @@ MenuItem _MN_EDIT
 };
 
 #ifdef MN_SW_WEB
-    #ifdef MN_SW_PORTAL
-        #define _MN_VIEW MN_WEBVIEW_PORT
-    #else
         #define _MN_VIEW MN_WEBVIEW
-    #endif
 #elif defined MN_SW_GLOBAL //5
-    #ifdef MN_SW_PORTAL
-        #define _MN_VIEW  MN_GLOBALVIEW_PORT
-    #else
         #define _MN_VIEW  MN_GLOBALVIEW
-    #endif
 #else
-    #ifdef MN_SW_PORTAL
-        #define _MN_VIEW MN_VIEW_PORT
-    #else
         #define _MN_VIEW MN_VIEW
-    #endif
 #endif
 
 MenuItem _MN_VIEW
@@ -1716,13 +1657,11 @@ MenuItem _MN_VIEW
                 ITEM_VIEW_ATTR_ZOOM
             };
 #ifndef MN_SW_WEB
-#ifndef MN_SW_PORTAL
             SEPARATOR ;
             MenuItem
             {
                 ITEM_VIEW_DATA_SOURCE_BROWSER
             };
-#endif //MN_SW_PORTAL
 #endif
             SEPARATOR ;
             MenuItem
@@ -1853,23 +1792,11 @@ MenuItem _MN_VIEW
 };
 
 #ifdef MN_SW_WEB
-    #ifdef MN_SW_PORTAL
-        #define _MN_INS MN_WEBINS_PORT
-    #else
         #define _MN_INS MN_WEBINS
-    #endif
 #elif defined MN_SW_GLOBAL //6
-    #ifdef MN_SW_PORTAL
-        #define _MN_INS  MN_GLOBALINS_PORT
-    #else
         #define _MN_INS  MN_GLOBALINS
-    #endif
 #else
-    #ifdef MN_SW_PORTAL
-        #define _MN_INS MN_INS_PORT
-    #else
         #define _MN_INS MN_INS
-    #endif
 #endif
 
 MenuItem _MN_INS
@@ -2125,7 +2052,7 @@ MenuItem _MN_INS
                 Text [ de ] = "Horizontale ~Linie..." ;
                 Text [ en-US ] = "Hori~zontal Ruler..." ;
             };
-#if (!defined MN_SW_WEB && !defined MN_SW_PORTAL)
+#if (!defined MN_SW_WEB )
             MenuItem
             {
                 Identifier = MN_SUB_GRAPHIC ;
@@ -2143,11 +2070,9 @@ MenuItem _MN_INS
                             Text [ de ] = "Aus ~Datei..." ;
                             Text [ en-US ] = "From ~File..." ;
                         };
-#ifndef MN_SW_PORTAL
 #if defined WIN || defined WNT || defined UNX
                         ITEM_INSERT_TWAIN_MENU
 #endif
-#endif //MN_SW_PORTAL
                     };
                 };
                 Text [ en-US ] = "~Graphics" ;
@@ -2159,9 +2084,6 @@ MenuItem _MN_INS
             };
 #endif
              //#ifndef MN_SW_WEB
-#ifdef MN_SW_PORTAL
-            ITEM_INSERT_OBJECT_PORTAL
-#else
             MenuItem
             {
                 Identifier = SID_MN_INSERT_OBJECT_DLGS ;
@@ -2191,7 +2113,7 @@ MenuItem _MN_INS
                             Text [ de ] = "~Applet..." ;
                             Text [ en-US ] = "~Applet..." ;
                         };
-#endif
+#endif //SOLAR_JAVA
                         MenuItem
                         {
                             Identifier = FN_INSERT_SMA ;
@@ -2206,25 +2128,7 @@ MenuItem _MN_INS
                     };
                 };
             };
-#endif //MN_SW_PORTAL
 
-             //#else
-#if 0
-            MenuItem
-            {
-                Identifier = SID_INSERT_PLUGIN ;
-                HelpID = SID_INSERT_PLUGIN ;
-                Text [ de ] = "PlugIn..." ;
-                Text [ en-US ] = "Plug-in..." ;
-            };
-            MenuItem
-            {
-                Identifier = SID_INSERT_APPLET ;
-                HelpID = SID_INSERT_APPLET ;
-                Text [ de ] = "Applet..." ;
-                Text [ en-US ] = "Applet..." ;
-            };
-#endif
             MenuItem
             {
                 Identifier = SID_INSERT_FLOATINGFRAME ;
@@ -2242,23 +2146,11 @@ MenuItem _MN_INS
 };
 
 #ifdef MN_SW_WEB
-    #ifdef MN_SW_PORTAL
-        #define _MN_FORMAT MN_WEBFORMAT_PORT
-    #else
         #define _MN_FORMAT MN_WEBFORMAT
-    #endif
 #elif defined MN_SW_GLOBAL //7
-    #ifdef MN_SW_PORTAL
-        #define _MN_FORMAT  MN_GLOBALFORMAT_PORT
-    #else
         #define _MN_FORMAT  MN_GLOBALFORMAT
-    #endif
 #else
-    #ifdef MN_SW_PORTAL
-        #define _MN_FORMAT MN_FORMAT_PORT
-    #else
         #define _MN_FORMAT MN_FORMAT
-    #endif
 #endif
 
 MenuItem _MN_FORMAT
@@ -2271,206 +2163,13 @@ MenuItem _MN_FORMAT
     Text [ de ] = "~Format" ;
     Text [ en-US ] = "F~ormat" ;
 };
-#ifndef MN_SW_PORTAL
-#if (!defined MN_SW_WEB && !defined MN_SW_GLOBAL)
-Menu MN_OBJECTMENU_TEXT
-{
-    ItemList =
-    {
-        MN_RESET
-        SEPARATOR ;
-        MN_TXT
-            MenuItem
-            {
-                Identifier = FN_EDIT_REGION ;
-                HelpID = FN_EDIT_REGION ;
-                Text [ de ] = "Bereic~he..." ;
-                Text [ en-US ] = "Sections..." ;
-        };
-            MenuItem
-            {
-                Text [ de ] = "Spa~lten..." ;
-                Identifier = FN_FORMAT_COLUMN ;
-                HelpID = FN_FORMAT_COLUMN ;
-                Text [ en-US ] = "Co~lumns...";
-        };
-        SEPARATOR ;
-        ITEM_TRANSLITERATE_MENU
-        SEPARATOR ;
-#ifndef MN_SW_WEB
-        MN_RUBY_DIALOG
-#endif
-        MN_NUMBERING
-        MN_ALWAYS
-        MN_AUTOFORMAT
-    };
-};
-
-Menu MN_OBJECTMENU_LIST
-{
-    ItemList =
-    {
-        MN_RESET
-        SEPARATOR ;
-        MN_TXT
-        SEPARATOR ;
-        ITEM_TRANSLITERATE_MENU
-        SEPARATOR ;
-        MN_RUBY_DIALOG
-        MN_NUMBERING
-        MN_ALWAYS
-        MN_AUTOFORMAT
-    };
-};
-
-Menu MN_OBJECTMENU_TABLE
-{
-    ItemList =
-    {
-        MN_RESET
-        SEPARATOR ;
-        MN_TXT
-            MenuItem
-            {
-                Identifier = FN_EDIT_REGION ;
-                HelpID = FN_EDIT_REGION ;
-                Text [ de ] = "Bereic~he..." ;
-                Text [ en-US ] = "Sections..." ;
-        };
-        SEPARATOR ;
-        ITEM_TRANSLITERATE_MENU
-        SEPARATOR ;
-#ifndef MN_SW_WEB
-        MN_RUBY_DIALOG
-#endif
-        MN_NUMBERING
-         //     SEPARATOR;
-         //       MN_BB
-        SEPARATOR ;
-        MN_TAB1
-        MN_TAB2
-        MN_ALWAYS
-        MenuItem
-        {
-            ITEM_FORMAT_AUTOFORMAT
-        };
-    };
-};
-
-
-Menu MN_OBJECTMENU_OLE
-{
-    ItemList =
-    {
-        MN_OLE
-        SEPARATOR ;
-        MN_ALIGN_FRAME
-        MN_MOUSE_FRAME_WITH_CONTOUR
-        MN_ALWAYS
-    };
-};
-
-Menu MN_OBJECTMENU_GRAFIK
-{
-    ItemList =
-    {
-        MN_GRAFIC
-        SEPARATOR ;
-        MN_ALIGN_FRAME
-        MN_MOUSE_FRAME_WITH_CONTOUR
-        MN_ALWAYS
-    };
-};
-
-Menu MN_OBJECTMENU_FRAME
-{
-    ItemList =
-    {
-        MN_FRM
-        SEPARATOR ;
-        MN_ALIGN_FRAME
-        MN_MOUSE_FRAME_WITHOUT_CONTOUR
-        MN_ALWAYS
-    };
-};
-Menu MN_OBJECTMENU_DRAW
-{
-    ItemList =
-    {
-        MN_DRAW1
-        MN_DRWTXTATTR
-        MenuItem
-        {
-            ITEM_FORMAT_ATTR_TRANSFORM
-        };
-        MN_NAME_GROUP
-        SEPARATOR ;
-        MN_DRAW2
-        MN_ANCHOR
-        MN_WRAP_DRAW
-        SEPARATOR ;
-        MN_DRAW3
-        SEPARATOR ;
-        MN_FONTWORK
-    };
-};
-
-Menu MN_OBJECTMENU_DRAWFORM
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            ITEM_FORMAT_ATTR_TRANSFORM
-        };
-        MN_NAME_GROUP
-        MN_FORM
-        SEPARATOR ;
-        MN_DRAW6
-        MN_ANCHOR
-        MN_WRAP_DRAW
-        SEPARATOR ;
-        MN_DRAW3
-    };
-};
-
-Menu MN_OBJECTMENU_DRWTXT
-{
-    ItemList =
-    {
-        MN_RESET
-        SEPARATOR ;
-        MN_TEXT_ATTR
-        SEPARATOR ;
-        MN_DRWTXT
-        SEPARATOR ;
-        ITEM_TRANSLITERATE_MENU
-        SEPARATOR ;
-        MN_DRWTXTATTR
-        MN_FONTWORK
-    };
-};
-#endif // MN_SW_WEB
-#endif //MN_SW_PORTAL
 
 #ifdef MN_SW_WEB
-    #ifdef MN_SW_PORTAL
-        #define _MN_EXTRA MN_WEBEXTRA_PORT
-    #else
         #define _MN_EXTRA MN_WEBEXTRA
-    #endif
 #elif defined MN_SW_GLOBAL //8
-    #ifdef MN_SW_PORTAL
-        #define _MN_EXTRA  MN_GLOBALEXTRA_PORT
-    #else
         #define _MN_EXTRA  MN_GLOBALEXTRA
-    #endif
 #else
-    #ifdef MN_SW_PORTAL
-        #define _MN_EXTRA MN_EXTRA_PORT
-    #else
         #define _MN_EXTRA MN_EXTRA
-    #endif
 #endif
 
 MenuItem _MN_EXTRA
@@ -2749,7 +2448,6 @@ MenuItem _MN_EXTRA
     _MN_EDIT_OPEN_HYPERLINK
 #endif
 
-#ifndef MN_SW_PORTAL
 #ifdef MN_SW_WEB
     Menu MN_WEB_TEXT_POPUPMENU
 #elif defined MN_SW_GLOBAL
@@ -2795,38 +2493,5 @@ MenuItem _MN_EXTRA
         _DEFAULT_TEXT_EDIT_ELEMENTS
     };
 };
-
-#endif //MN_SW_PORTAL
-
-
-/*-------------------------------------------------------------------------
-    Fenster und Hilfe
--------------------------------------------------------------------------*/
-
-#ifdef MN_SW_PORTAL
-    #ifdef MN_SW_WEB
-        #define _MN_WIN MN_WEBWIN_PORT
-    #elif defined MN_SW_GLOBAL
-        #define _MN_WIN MN_GLOBALWIN_PORT
-    #else
-        #define _MN_WIN MN_WIN_PORT
-    #endif
-    MenuItem _MN_WIN
-    {
-        ITEM_WINDOW_MDIWINDOWLIST
-        SubMenu = Menu
-        {
-            ItemList =
-            {
-                GLOBLMN_CLONEWIN
-            };
-        };
-    };
-    #else
-        ITEM_WINDOW_MENU
-        #if !defined  MN_SW_WEB && !defined MN_SW_GLOBAL
-        ITEM_HELP_MENU
-        #endif
-#endif //MN_SW_PORTAL
 
 #endif
