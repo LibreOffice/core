@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 07:55:28 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,7 +639,9 @@ public:
 class SdXMLFrameShapeContext : public SdXMLShapeContext
 {
 private:
+    sal_Bool mbSupportsReplacement;
     SvXMLImportContextRef mxImplContext;
+    SvXMLImportContextRef mxReplImplContext;
 
 public:
     TYPEINFO();
