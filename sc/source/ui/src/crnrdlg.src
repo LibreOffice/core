@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:24:55 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 21:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienennä";
+        QuickHelpText[ finnish ] = "Kutista!";
     };
     RadioButton BTN_COLHEAD
     {
@@ -155,7 +155,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ italian ] = "Contiene intestazioni colonne" ;
         Text [ portuguese_brazilian ] = "inclui cabe?alhos da coluna" ;
         Text [ portuguese ] = "Contém ~cabeçalhos das colunas" ;
-        Text [ finnish ] = "~Sisältää sarakkeen otsikot" ;
+        Text [ finnish ] = "~Sis?lt?? sarakkeen otsikot" ;
         Text [ danish ] = "indeholder kolonneoverskrifter" ;
         Text [ french ] = "En-têtes de ~colonnes inclus" ;
         Text [ swedish ] = "innehåller ~kolumnhuvuden" ;
@@ -201,7 +201,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ turkish ] = "Satýr baþlýklarý  i~çeriyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "contiene títulos de ~filas";
-        Text[ finnish ] = "~Sisältää rivien otsikot";
+        Text[ finnish ] = "~Sis?lt?? rivien otsikot";
     };
     FixedText FT_DATA_LABEL
     {
@@ -229,7 +229,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ turkish ] = "Veri aralýðý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "para el área de datos";
-        Text[ finnish ] = "Tietoalueelle";
+        Text[ finnish ] = "~Tietoalueelle";
     };
     Edit ED_DATA
     {
@@ -265,7 +265,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienennä";
+        QuickHelpText[ finnish ] = "Kutista!";
     };
     OKButton BTN_OK
     {
@@ -289,7 +289,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ italian ] = "Aggiungi" ;
         Text [ portuguese_brazilian ] = "~Acrescentar" ;
         Text [ portuguese ] = "~Adicionar" ;
-        Text [ finnish ] = "~Lisää" ;
+        Text [ finnish ] = "~Lis??" ;
         Text [ danish ] = "Tilføj" ;
         Text [ french ] = "~Ajouter" ;
         Text [ swedish ] = "~Lägg till" ;
@@ -366,8 +366,9 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     Text[ turkish ] = "Baþlýk aralýðýný belirle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Definir área de etiqueta";
-    Text[ finnish ] = "Määritä nimiöalue";
+    Text[ finnish ] = "M??rit? nimi?lue";
 };
+
 
 
 
