@@ -19,4 +19,5 @@ mkdir: %_DEST%\inc%_EXT%\berkeleydb
 ..\%__SRC%\bin\libdb_java32.dll %_DEST%\bin%_EXT%\libdb_java32.dll
 
 ..\%__SRC%\bin\db.jar %_DEST%\bin%_EXT%\db.jar
+..\%__SRC%\class\db.jar %_DEST%\bin%_EXT%\db.jar
 
