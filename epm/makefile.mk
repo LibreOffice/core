@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hjs $ $Date: 2005-02-23 15:12:27 $
+#   last change: $Author: vg $ $Date: 2005-03-08 16:32:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ TARGET=epm
 TARFILE_NAME=epm-3.7
 PATCH_FILE_NAME=epm-3.7.patch
 
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" && "$(BUILD_EPM)" != "NO"
 
 CONFIGURE_ACTION=.$/configure
 BUILD_ACTION=make
