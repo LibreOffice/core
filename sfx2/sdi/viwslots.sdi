@@ -3,7 +3,7 @@
  // shell SfxViewShell
  //
  // (C) 1996 StarDivision GmbH, Hamburg, Germany
- // $Author: mba $ $Date: 2002-05-27 13:49:06 $  $Revision: 1.2 $
+ // $Author: mba $ $Date: 2002-07-08 07:31:47 $  $Revision: 1.3 $
  // $Logfile:   T:/sfx2/sdi/viwslots.sdv  $ $Workfile:   viwslots.sdi  $
  //-------------------------------------------------------------------------
 interface View : Object
@@ -29,14 +29,12 @@ interface View : Object
         ExecMethod = ExecPrint_Impl ;
         StateMethod = GetState_Impl ;
     ]
-     //---------------------------------------------------------------------
-    SID_SETUPPRINTER // ole(no) api(play/rec)
+    SID_PRINTER_NAME // ole(no) api(play/rec)
     [
         ExecMethod = ExecPrint_Impl ;
-        StateMethod = GetState_Impl ;
     ]
      //---------------------------------------------------------------------
-    SID_PRINTER_NAME // ole(no) api(play/norec)
+    SID_SETUPPRINTER // ole(no) api(play/rec)
     [
         ExecMethod = ExecPrint_Impl ;
         StateMethod = GetState_Impl ;

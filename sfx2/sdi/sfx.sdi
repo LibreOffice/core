@@ -6317,7 +6317,16 @@ SfxBoolItem PlugInsActive SID_PLUGINS_ACTIVE
 
 //--------------------------------------------------------------------------
 SfxBoolItem Print SID_PRINTDOC
-(SfxInt16Item from SID_PRINT_FIRST_PAGE,SfxInt16Item to SID_PRINT_LAST_PAGE,SfxInt16Item copies SID_PRINT_COPIES,SfxBoolItem silent SID_SILENT)
+(SfxStringItem PrinterName SID_PRINTER_NAME,
+ SfxStringItem FileName SID_FILE_NAME,
+ SfxInt16Item From SID_PRINT_FIRST_PAGE,
+ SfxInt16Item To SID_PRINT_LAST_PAGE,
+ SfxInt16Item Copies SID_PRINT_COPIES,
+ SfxStringItem RangeText SID_PRINT_PAGES,
+ SfxBoolItem Selection SID_SELECTION,
+ SfxBoolItem Asynchron SID_ASYNCHRON,
+ SfxBoolItem Collate SID_PRINT_COLLATE,
+ SfxBoolItem Silent SID_SILENT)
 [
     /* flags: */
     AutoUpdate = FALSE,
