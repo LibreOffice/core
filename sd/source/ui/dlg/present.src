@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nf $ $Date: 2002-01-07 12:48:59 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:43:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ portuguese ] = "~Todos os diapositivos" ;
         Text [ finnish ] = "Kaikki ~diat" ;
         Text [ danish ] = "Alle dias" ;
-        Text [ french ] = "~Toutes les diapos" ;
+        Text [ french ] = "Toutes les diapos" ;
         Text [ swedish ] = "~Alla diabilder" ;
         Text [ dutch ] = "~Alle dia's" ;
         Text [ spanish ] = "~Todas las diapositivas" ;
@@ -221,8 +221,8 @@ ModalDialog DLG_START_PRESENTATION
         Text [ swedish ] = "~Individuell presentation" ;
         Text [ danish ] = "Individuel præsentation" ;
         Text [ italian ] = "Presentazione su schermo personalizzata" ;
-        Text [ spanish ] = "~Presentación personalizada" ;
-        Text [ french ] = "~Présentation à l'écran personnalisée" ;
+        Text [ spanish ] = "Presentación personalizada" ;
+        Text [ french ] = "Présentation à l'écran personnalisée" ;
         Text [ dutch ] = "~Individuele schermpresentatie" ;
         Text[ chinese_simplified ] = "è‡ªå®šçš„æ¼”ç¤ºæ–‡ç¨¿(~C)";
         Text[ russian ] = "Ïðîèçâîëüíàÿ äåìîíñòðàöèÿ";
@@ -285,8 +285,8 @@ ModalDialog DLG_START_PRESENTATION
         Text[ portuguese ] = "~Padrão";
         Text[ russian ] = "Ñòàíäàðòíûé";
         Text[ dutch ] = "Stan~daard";
-        Text[ french ] = "Par ~défaut";
-        Text[ spanish ] = "~Predeterminado";
+        Text[ french ] = "Par défaut";
+        Text[ spanish ] = "Predeterminado";
         Text[ italian ] = "Standard";
         Text[ danish ] = "Standard";
         Text[ swedish ] = "S~tandard";
@@ -431,7 +431,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ russian ] = "Ïîêàçàòü ýìáëåìó";
         Text[ dutch ] = "~Logo weergeven";
         Text[ french ] = "Afficher le ~logo";
-        Text[ spanish ] = "Mostrar ~logotipo";
+        Text[ spanish ] = "Mostrar logotipo";
         Text[ italian ] = "Mostra logo";
         Text[ danish ] = "Vis logo";
         Text[ swedish ] = "Visa ~logotyp";
@@ -490,7 +490,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ portuguese ] = "Transição ~manual de diapositivos" ;
         Text [ finnish ] = "~Vaihda diakuvat manuaalisesti" ;
         Text [ danish ] = "Manuel diasovergang" ;
-        Text [ french ] = "~Transition manuelle" ;
+        Text [ french ] = "Transition manuelle" ;
         Text [ swedish ] = "~Manuell diabildsväxling" ;
         Text [ dutch ] = "~Dia´s handmatig wisselen" ;
         Text [ spanish ] = "Avan~ce manual de diapositivas" ;
@@ -550,7 +550,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ portuguese ] = "Ponteiro do rato como ~lápis" ;
         Text [ finnish ] = "~Kynä hiiren osoittimena" ;
         Text [ danish ] = "Musemarkør som pen" ;
-        Text [ french ] = "Pointeur ~crayon" ;
+        Text [ french ] = "Pointeur crayon" ;
         Text [ swedish ] = "Muspekare ~som penna" ;
         Text [ dutch ] = "~Muisaanwijzer als pen" ;
         Text [ spanish ] = "Puntero del ratón como p~luma" ;
@@ -636,7 +636,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ english_us ] = "Change slides by clic~king on background" ;
         Text [ italian ] = "Cambio dia dopo clic sullo sfondo" ;
         Text [ spanish ] = "Transición de dia. pulsando en ~fondo" ;
-        Text [ french ] = "Transition : ~clic sur l'arrière-plan" ;
+        Text [ french ] = "Transition : clic sur l'arrière-plan" ;
         Text [ dutch ] = "Dia~wissel per klik op achtergrond" ;
         Text [ swedish ] = "Diaväxling vid ~klick på bakgrunden" ;
         Text [ danish ] = "Diasovergang ved klik på baggrunden" ;
@@ -665,8 +665,8 @@ ModalDialog DLG_START_PRESENTATION
         TabStop = TRUE ;
         Text [ english_us ] = "Presentation always ~on top" ;
         Text [ italian ] = "Presentazione in primo piano" ;
-        Text [ spanish ] = "Prese~ntación siempre en primer plano" ;
-        Text [ french ] = "~Présentation toujours au premier plan" ;
+        Text [ spanish ] = "Presentación siempre en primer plano" ;
+        Text [ french ] = "Présentation toujours au premier plan" ;
         Text [ dutch ] = "Schermpresentatie ~steeds op de voorgrond" ;
         Text [ swedish ] = "Presentation alltid i förgrunden" ;
         Text [ danish ] = "Præsentation altid i forgrunden" ;
