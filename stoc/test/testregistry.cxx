@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testregistry.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 17:19:49 $
+ *  last change: $Author: jl $ $Date: 2001-03-19 11:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,17 +63,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef _VOS_MODULE_HXX_
-#include <vos/module.hxx>
+#ifndef _OSL_MODULE_HXX_
+#include <osl/module.hxx>
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-#ifndef _VOS_PROCESS_HXX_
-#include <vos/process.hxx>
-#endif
-#ifndef _VOS_DYNLOAD_HXX_
-#include <vos/dynload.hxx>
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
 #endif
 
 #ifndef _REGISTRY_REGISTRY_HXX_
@@ -105,8 +102,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
-using namespace vos;
 using namespace rtl;
+using namespace osl;
 
 #ifdef _DEBUG
 #define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)
@@ -118,11 +115,8 @@ OString userRegEnv("STAR_USER_REGISTRY=");
 
 OUString getExePath()
 {
-    OStartupInfo    startupInfo;
     OUString        exe;
-
-    OSL_VERIFY(startupInfo.getExecutableFile(exe) == OStartupInfo::E_None);
-
+    OSL_VERIFY( osl_getExecutableFile( &exe.pData ) == osl_Process_E_None);
 #if defined(WIN32) || defined(__OS2__) || defined(WNT)
     exe = exe.copy(0, exe.getLength() - 16);
 #else
@@ -193,7 +187,7 @@ void setLinkInDefaultRegistry(const OUString& linkName, const OUString& linkTarg
 void test_SimpleRegistry()
 {
     Reference<XInterface> xIFace;
-    OModule* pModule = new OModule(OUString());
+    Module* pModule = new Module(OUString());
 
 #ifdef SAL_W32
     OUString dllName( OUString::createFromAscii("simreg.dll") );
@@ -359,7 +353,7 @@ void test_SimpleRegistry()
         TEST_ENSHURE( seqUnicode2.getArray()[2] == OUString( RTL_CONSTASCII_USTRINGPARAM("ich als unicode") ), "test_SimpleRegistry error 25");
 
 
-        xReg->open(OUString( RTL_CONSTASCII_USTRINGPARAM("testreg2.rdb") ), False, True);
+        xReg->open(OUString( RTL_CONSTASCII_USTRINGPARAM("testreg2.rdb") ), sal_False, sal_True);
         TEST_ENSHURE( xReg->isValid() != sal_False, "test_SimpleRegistry error 25" );
         xRootKey = xReg->getRootKey();
         xKey = xRootKey->createKey(OUString( RTL_CONSTASCII_USTRINGPARAM("ThirdKey/FirstSubKey/WithSubSubKey") ));
@@ -367,7 +361,7 @@ void test_SimpleRegistry()
         xRootKey->closeKey();
         xReg->close();
 
-        xReg->open(OUString( RTL_CONSTASCII_USTRINGPARAM("testreg.rdb") ), False, False);
+        xReg->open(OUString( RTL_CONSTASCII_USTRINGPARAM("testreg.rdb") ), sal_False, sal_False);
         TEST_ENSHURE( xReg->isValid() != sal_False, "test_SimpleRegistry error 26" );
 
         xReg->mergeKey(OUString(), OUString( RTL_CONSTASCII_USTRINGPARAM("testreg2.rdb") ));
@@ -442,7 +436,7 @@ void test_SimpleRegistry()
 
 //      xRootKey->closeKey();
 
-//      xReg->open(L"testreg2.rdb", False, True);
+//      xReg->open(L"testreg2.rdb", sal_False, sal_True);
 //      xReg->destroy();
     }
     catch(InvalidRegistryException&)
