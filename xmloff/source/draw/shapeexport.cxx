@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-24 11:51:36 $
+ *  last change: $Author: cl $ $Date: 2000-11-06 12:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,9 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 }
 
 // This method exports the given XShape
-void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape)
+void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape,
+                                 sal_Int32 nFeatures /* = SEF_DEFAULT */,
+                                 com::sun::star::awt::Point* pRefPoint /* = NULL */ )
 {
     uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
