@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-09 11:00:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:50:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ void ScSimpleUndo::EndRedo()
     pDocShell->SetInUndo( FALSE );
 }
 
-void ScSimpleUndo::ShowTable( USHORT nTab )         // static
+void ScSimpleUndo::ShowTable( SCTAB nTab )          // static
 {
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -186,9 +186,9 @@ void ScSimpleUndo::ShowTable( const ScRange& rRange )           // static
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
-        USHORT nStart = rRange.aStart.Tab();
-        USHORT nEnd   = rRange.aEnd.Tab();
-        USHORT nTab = pViewShell->GetViewData()->GetTabNo();
+        SCTAB nStart = rRange.aStart.Tab();
+        SCTAB nEnd   = rRange.aEnd.Tab();
+        SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
         if ( nTab < nStart || nTab > nEnd )                     // wenn nicht im Bereich:
             pViewShell->SetTabNo( nStart );                     // auf erste des Bereiches
     }
@@ -290,7 +290,7 @@ void ScBlockUndo::ShowBlock()
         ShowTable( aBlockRange );       // bei mehreren Tabs im Range ist jede davon gut
         pViewShell->MoveCursorAbs( aBlockRange.aStart.Col(), aBlockRange.aStart.Row(),
                                    SC_FOLLOW_JUMP, FALSE, FALSE );
-        USHORT nTab = pViewShell->GetViewData()->GetTabNo();
+        SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
         ScRange aRange = aBlockRange;
         aRange.aStart.SetTab( nTab );
         aRange.aEnd.SetTab( nTab );
