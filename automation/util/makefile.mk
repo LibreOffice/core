@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: gh $ $Date: 2002-11-20 11:27:40 $
+#   last change: $Author: gh $ $Date: 2002-11-20 14:11:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -195,6 +195,7 @@ RESLIB1SRSFILES= \
 
 APP3TARGET=miniapp
 APP3STDLIBS= \
+            $(CPPULIB) \
             $(CPPUHELPERLIB) \
              $(UCBHELPERLIB) \
             $(COMPHELPERLIB) \
@@ -209,9 +210,6 @@ APP3STDLIBS= \
 .IF "$(GUI)"=="UNX"
 APP3STDLIBS+= \
             $(VOSLIB) $(SALLIB)
-.ENDIF
-.IF "$(GUI)"=="WNT" || "$(COM)"=="GCC"
-APP3STDLIBS+=$(CPPULIB)
 .ENDIF
 
 
