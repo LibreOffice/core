@@ -309,7 +309,7 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, ::rtl::OUS
         {
             aNew = m_xConverter->convertToSimpleType( aValue, css::uno::TypeClass_STRING );
         }
-        catch (css::script::CannotConvertException&) { LOG_WARNING("","Type not scriptable!") }
+        catch (css::script::CannotConvertException&) {}
         catch (css::uno::Exception&) {}
         ::rtl::OUString sVal;
         aNew >>= sVal;
@@ -331,6 +331,9 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
 {
     ::rtl::OUStringBuffer aArgumentBuffer(1000);
     ::rtl::OUString       sArrayName;
+    // this value is used to name the arrays of aArgumentBuffer
+    sArrayName = ::rtl::OUString::createFromAscii("args");
+    sArrayName += ::rtl::OUString::valueOf((sal_Int32)m_nRecordingID);
 
     aScriptBuffer.appendAscii("rem ----------------------------------------------------------------------\n");
 
@@ -338,15 +341,22 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
     sal_Int32 nValidArgs = 0;
     for( sal_Int32 i=0; i<nLength; ++i )
     {
-        if(lArguments[i].Value.hasValue())
-        {
-            // this value is used to name the arrays of aArgumentBuffer
-            if(sArrayName.getLength()<1)
-            {
-                sArrayName = ::rtl::OUString::createFromAscii("args");
-                sArrayName += ::rtl::OUString::valueOf((sal_Int32)m_nRecordingID);
-            }
+        if(!lArguments[i].Value.hasValue())
+            continue;
 
+        ::rtl::OUStringBuffer sValBuffer(100);
+        try
+        {
+            AppendToBuffer(lArguments[i].Value, sValBuffer);
+        }
+        catch(const css::uno::Exception&)
+        {
+            sValBuffer.setLength(0);
+        }
+        if (!sValBuffer.getLength())
+            continue;
+
+        {
             ++nValidArgs;
 
             // add arg().Name
@@ -366,7 +376,7 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
             aArgumentBuffer.appendAscii("(");
             aArgumentBuffer.append     (i);
             aArgumentBuffer.appendAscii(").Value = ");
-            AppendToBuffer( lArguments[i].Value, aArgumentBuffer);
+            aArgumentBuffer.append     (sValBuffer.makeStringAndClear());
             aArgumentBuffer.appendAscii("\n");
         }
     }
