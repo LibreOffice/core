@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-19 14:58:07 $
+ *  last change: $Author: ssa $ $Date: 2002-07-17 09:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,6 +593,11 @@ void DeInitVCL()
     {
         delete pSVData->maAppData.mpResPath;
         pSVData->maAppData.mpResPath = NULL;
+    }
+    if ( pSVData->maAppData.mpEventListeners )
+    {
+        delete pSVData->maAppData.mpEventListeners;
+        pSVData->maAppData.mpEventListeners = NULL;
     }
 
     if ( pSVData->maAppData.mpFirstHotKey )

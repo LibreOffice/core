@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-01 07:39:55 $
+ *  last change: $Author: ssa $ $Date: 2002-07-17 09:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -964,7 +964,7 @@ void Application::SetSettings( const AllSettings& rSettings )
             GetpApp()->DataChanged( aDCEvt );
 
             // notify data change handler
-            pSVData->maAppData.maDataChangeHdl.Call( &aDCEvt );
+            ImplCallEventListeners( VCLEVENT_APPLICATION_DATACHANGED, NULL, &aDCEvt);
 
             // Update all windows
             Window* pFirstFrame = pSVData->maWinData.mpFirstFrame;
@@ -1072,12 +1072,33 @@ void Application::NotifyAllWindows( DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-Link Application::SetDataChangeHdl( const Link& rLink )
+void Application::ImplCallEventListeners( ULONG nEvent, Window *pWin, void* pData )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    Link aOldLink = pSVData->maAppData.maDataChangeHdl;
-    pSVData->maAppData.maDataChangeHdl = rLink;
-    return aOldLink;
+    VclWindowEvent aEvent( pWin, nEvent, pData );
+
+    if ( pSVData->maAppData.mpEventListeners )
+        if ( !pSVData->maAppData.mpEventListeners->empty() )
+            pSVData->maAppData.mpEventListeners->Call( &aEvent );
+}
+
+// -----------------------------------------------------------------------
+
+void Application::AddEventListener( const Link& rEventListener )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if( !pSVData->maAppData.mpEventListeners )
+        pSVData->maAppData.mpEventListeners = new VclEventListeners;
+    pSVData->maAppData.mpEventListeners->push_back( rEventListener );
+}
+
+// -----------------------------------------------------------------------
+
+void Application::RemoveEventListener( const Link& rEventListener )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if( pSVData->maAppData.mpEventListeners )
+        pSVData->maAppData.mpEventListeners->remove( rEventListener );
 }
 
 // -----------------------------------------------------------------------
