@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngs3904.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-02 11:34:27 $
+#   last change: $Author: hr $ $Date: 2004-09-09 11:17:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,9 +100,8 @@ CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
-# -fpermissive should be removed as soon as possible
-CFLAGSCXX= -fsigned-char -pipe -fno-for-scope -fpermissive -fno-rtti 
-#CFLAGSCXX= -fsigned-char -pipe -fno-for-scope -fpermissive
+CFLAGSCXX= -fsigned-char -pipe -fno-rtti 
+#CFLAGSCXX= -fsigned-char -pipe
 
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
