@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 12:45:14 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 14:19:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@
          </prop>
         </node>
       </node>
-      <node oor:name="KMail 1.2 or later" oor:op="replace">
+      <node oor:name="KMail 1.2 - 1.x" oor:op="replace">
         <node oor:name="FormatStrings">
           <prop oor:name="base">
             <value>--composer %s</value>
