@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-26 19:18:08 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,9 +653,10 @@ void ScSubTotalParam::Clear()
 
         if ( (nSubTotals[i] > 0) && pSubTotals[i] && pFunctions[i] )
         {
-            for ( USHORT j=0; j<nSubTotals[i]; j++ )
+            for ( USHORT j=0; j<nSubTotals[i]; j++ ) {
                 pSubTotals[i][j] = 0;
                 pFunctions[i][j] = SUBTOTAL_FUNC_NONE;
+            }
         }
     }
 }
