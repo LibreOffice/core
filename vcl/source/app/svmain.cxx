@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: th $ $Date: 2001-03-20 10:32:13 $
+ *  last change: $Author: pl $ $Date: 2001-04-11 18:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,10 +684,12 @@ void DeInitVCL()
         ImplFreeEventHookData();
 
     ImplDeletePrnQueueList();
+#if SUPD != 627
     delete pSVData->maGDIData.mpScreenFontList;
     pSVData->maGDIData.mpScreenFontList = NULL;
     delete pSVData->maGDIData.mpScreenFontCache;
     pSVData->maGDIData.mpScreenFontCache = NULL;
+#endif
     ImplFreeOutDevFontData();
 
     ResMgr::DestroyAllResMgr();
