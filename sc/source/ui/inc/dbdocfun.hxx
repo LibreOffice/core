@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocfun.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:33:41 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ public:
     BOOL            RepeatDB( const String& rDBName, BOOL bRecord, BOOL bApi );
 
     BOOL            DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
-                                        BOOL bRecord, BOOL bApi );
+                                        BOOL bRecord, BOOL bApi, BOOL bAllowMove = FALSE );
 };
 
 
