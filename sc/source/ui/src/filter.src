@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:20:58 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 15:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3295,7 +3295,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ chinese_traditional ] = "¤j¤p¼g(~C)";
         Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
         Text[ greek ] = "ĞåæÜ-Êåöáëáßá";
-        Text[ korean ] = "´ë/¼Ò ¹®ÀÚ ±¸ºĞ(~C)";
+        Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ(~C)";
         Text[ turkish ] = "~Büyük/Küçük harf duyarlı";
     };
     CheckBox BTN_REGEXP
