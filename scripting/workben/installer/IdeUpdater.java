@@ -40,17 +40,19 @@ public class IdeUpdater extends Thread {
         if (installPath.endsWith(File.separator) == false)
             installPath += File.separator;
 
-    File jeditLauncher = new File( installPath + "jedit.jar" );
+    //File jeditLauncher = new File( installPath + "jedit.jar" );
     File netbeansLauncher = new File( installPath + "bin" );
 
     if( netbeansLauncher.isDirectory() ) {
         isNetbeansPath = true;
         installPath = installPath +"modules" + File.separator;
     }
+    /*
     else if( jeditLauncher.isFile() ){
         isNetbeansPath =  false;
         installPath = installPath + "jars" + File.separator;
     }
+    */
 
     System.out.println( "IdeUpdater installPath is " + installPath + " isNetbeansPath is " + isNetbeansPath );
         this.installPath = installPath;

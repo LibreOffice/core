@@ -45,9 +45,9 @@ public class IdeWelcome extends javax.swing.JPanel implements ActionListener {
     if( InstUtil.hasNetbeansInstallation() ) {
         area.append("\n \tA version of Netbeans has been detected. \n");
     }
-    if( InstUtil.hasJeditInstallation() ) {
-        area.append("\n \tA version of jEdit has been detected.");
-    }   
+    //if( InstUtil.hasJeditInstallation() ) {
+    //  area.append("\n \tA version of jEdit has been detected.");
+    //} 
         
         welcomePanel.add(area, java.awt.BorderLayout.CENTER);
         add(welcomePanel, java.awt.BorderLayout.CENTER);

@@ -44,7 +44,7 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
             //props = InstUtil.getNetbeansLocation();
 
         Properties netbeansProps = InstUtil.getNetbeansLocation();
-        Properties jeditProps = InstUtil.getJeditLocation();
+        //Properties jeditProps = InstUtil.getJeditLocation();
         Properties ideProps = new Properties();
         if(netbeansProps!=null )
         {
@@ -62,7 +62,8 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
             }
         }
         }
-                System.out.println("*** About to look for jedit install");
+                //System.out.println("*** About to look for jedit install");
+        /*
         if(jeditProps!=null)
         {
             for( int j = 0; j < jeditProps.size(); j++ ) {
@@ -77,6 +78,7 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
                 }
             }
         }
+        */
         props = ideProps;
     }
         catch (IOException eIO) {

@@ -137,7 +137,8 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
     _final = new Final(this);
         screens.add(FINAL, _final);
     
-    boolean hasIDEInstallation = (InstUtil.hasNetbeansInstallation() || InstUtil.hasJeditInstallation()) ;
+    //boolean hasIDEInstallation = (InstUtil.hasNetbeansInstallation() || InstUtil.hasJeditInstallation()) ;
+    boolean hasIDEInstallation = ( InstUtil.hasNetbeansInstallation() ) ;
     
     if( hasIDEInstallation )
     {
@@ -221,7 +222,7 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
     public static void main(String args[]) {
         String officePath = null;
         String netbeansPath = null;
-        String jeditPath = null;
+        //String jeditPath = null;
         int i = 0;
 
         while (i < args.length) {
@@ -233,12 +234,13 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
                 officePath = args[++i];
             if (args[i].equals("-netbeans"))
                 netbeansPath = args[++i];
-            if (args[i].equals("-jedit"))
-                jeditPath = args[++i];
+            //if (args[i].equals("-jedit"))
+            //    jeditPath = args[++i];
             i++;
         }
 
-        if (officePath == null && netbeansPath == null && jeditPath == null)
+        //if (officePath == null && netbeansPath == null && jeditPath == null)
+        if (officePath == null && netbeansPath == null)
             new InstallWizard().show();
 
         JLabel label = new JLabel();
@@ -269,17 +271,17 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
             ideup.run();
         }
 
-        if (jeditPath != null) {
-            IdeUpdater ideup = new IdeUpdater(jeditPath, label, progressbar);
-            ideup.run();
-        }
+        //if (jeditPath != null) {
+        //    IdeUpdater ideup = new IdeUpdater(jeditPath, label, progressbar);
+        //    ideup.run();
+        //}
     }
 
     private static void printUsage() {
         System.err.println("java -jar SFrameworkInstall.jar");
         System.err.println("\t[-office <path_to_office_installation]");
         System.err.println("\t[-netbeans <path_to_netbeans_installation]");
-        System.err.println("\t[-jedit <path_to_jedit_installation]");
+        //System.err.println("\t[-jedit <path_to_jedit_installation]");
     }
 
     public static synchronized boolean isPatchedTypes()
