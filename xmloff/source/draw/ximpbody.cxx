@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-11 08:00:05 $
+ *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     USHORT nPrfx, const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXMLGroupShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+:   SdXMLGenericPageContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
 
@@ -336,14 +336,14 @@ SvXMLImportContext *SdXMLDrawPageContext::CreateChildContext( USHORT nPrefix,
 
     // call parent when no own context was created
     if(!pContext)
-        pContext = SdXMLGroupShapeContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
+        pContext = SdXMLGenericPageContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 
     return pContext;
 }
 
 void SdXMLDrawPageContext::EndElement()
 {
-    SdXMLGroupShapeContext::EndElement();
+    SdXMLGenericPageContext::EndElement();
     GetImport().GetShapeImport()->restoreConnections();
 }
 

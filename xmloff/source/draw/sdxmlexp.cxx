@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-13 11:00:00 $
+ *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3375,6 +3375,14 @@ void SdXMLExport::ImpStartWriteGroupShape(SvXMLExport& rExp,
     uno::Reference< container::XIndexAccess > xShapes(xShape, uno::UNO_QUERY);
     if(xShapes.is() && xShapes->getCount())
     {
+        // export shape id if needed
+        sal_Int32 nShapeId = rExp.GetShapeExport()->getShapeId( xShape );
+        if( nShapeId != -1 )
+        {
+            const OUString sId( OUString::valueOf( nShapeId ) );
+            rExp.AddAttribute(XML_NAMESPACE_DRAW, sXML_id, sId );
+        }
+
         // group shape or 3Dscene?
         sal_Bool bIsScene(FALSE);
         uno::Reference< drawing::XShapeDescriptor > xShapeDescriptor(xShape, uno::UNO_QUERY);
@@ -3686,6 +3694,14 @@ void SdXMLExport::ImpWriteSingleShapeStyleInfos(uno::Reference< container::XInde
             uno::Reference< container::XIndexAccess > xShapes(xShape, uno::UNO_QUERY);
             if(xShapes.is() && xShapes->getCount())
             {
+                // export shape id if needed
+                sal_Int32 nShapeId = GetShapeExport()->getShapeId( xShape );
+                if( nShapeId != -1 )
+                {
+                    const OUString sId( OUString::valueOf( nShapeId ) );
+                    AddAttribute(XML_NAMESPACE_DRAW, sXML_id, sId );
+                }
+
                 // group shape or 3Dscene?
                 sal_Bool bIsScene(FALSE);
                 uno::Reference< drawing::XShapeDescriptor > xShapeDescriptor(xShape, uno::UNO_QUERY);

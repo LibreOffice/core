@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpnote.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 23:25:41 $
+ *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,14 +74,14 @@
 #include "nmspmap.hxx"
 #endif
 
-#ifndef _XIMPGROUP_HXX
-#include "ximpgrp.hxx"
+#ifndef _XIMPPAGE_HXX
+#include "ximppage.hxx"
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
 // presentation:notes context
 
-class SdXMLNotesContext : public SdXMLGroupShapeContext
+class SdXMLNotesContext : public SdXMLGenericPageContext
 {
     BOOL                        mbNotesMode;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 23:26:19 $
+ *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #include "sdxmlimp_impl.hxx"
 #endif
 
-#ifndef _XIMPGROUP_HXX
-#include "ximpgrp.hxx"
+#ifndef _XIMPPAGE_HXX
+#include "ximppage.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLSTYLE_HXX
@@ -149,7 +149,7 @@ public:
 //////////////////////////////////////////////////////////////////////////////
 // style:masterpage context
 
-class SdXMLMasterPageContext: public SdXMLGroupShapeContext
+class SdXMLMasterPageContext: public SdXMLGenericPageContext
 {
     rtl::OUString               msPageMasterName;
     rtl::OUString               msName;

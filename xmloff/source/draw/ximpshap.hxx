@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 23:26:19 $
+ *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,9 +111,22 @@ protected:
     sal_Bool                    mbIsPlaceholder;
     sal_Bool                    mbIsUserTransformed;
     sal_Int32                   mnZOrder;
+    sal_Int32                   mnShapeId;
+
+    com::sun::star::awt::Size   maSize;
+    com::sun::star::awt::Point  maPosition;
+    sal_Int32                   mnX;
+    sal_Int32                   mnY;
+    sal_Int32                   mnWidth;
+    sal_Int32                   mnHeight;
 
     void SetStyle();
     void AddShape(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape);
+    void AddShape(const char* pServiceName );
+    void SetSize();
+    void SetPosition();
+    void SetRotation();
+    void SetSizeAndPosition() { SetPosition(); SetSize(); }
 
     SvXMLImport& GetImport() { return SvXMLImportContext::GetImport(); }
     const SvXMLImport& GetImport() const { return SvXMLImportContext::GetImport(); }
@@ -142,10 +155,6 @@ public:
 
 class SdXMLRectShapeContext : public SdXMLShapeContext
 {
-    sal_Int32                   mnX;
-    sal_Int32                   mnY;
-    sal_Int32                   mnWidth;
-    sal_Int32                   mnHeight;
     sal_Int32                   mnRadius;
 
 public:
@@ -157,6 +166,9 @@ public:
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
     virtual ~SdXMLRectShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
+
+    // this is called from the parent group for each unparsed attribute in the attribute list
+    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -178,6 +190,9 @@ public:
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
     virtual ~SdXMLLineShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
+
+    // this is called from the parent group for each unparsed attribute in the attribute list
+    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -199,6 +214,9 @@ public:
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
     virtual ~SdXMLEllipseShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
+
+    // this is called from the parent group for each unparsed attribute in the attribute list
+    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -208,10 +226,6 @@ class SdXMLPolygonShapeContext : public SdXMLShapeContext
 {
     rtl::OUString               maPoints;
     rtl::OUString               maViewBox;
-    sal_Int32                   mnX;
-    sal_Int32                   mnY;
-    sal_Int32                   mnWidth;
-    sal_Int32                   mnHeight;
     sal_Bool                    mbClosed;
 
 public:
@@ -223,6 +237,9 @@ public:
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes, sal_Bool bClosed);
     virtual ~SdXMLPolygonShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
+
+    // this is called from the parent group for each unparsed attribute in the attribute list
+    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -232,10 +249,6 @@ class SdXMLPathShapeContext : public SdXMLShapeContext
 {
     rtl::OUString               maD;
     rtl::OUString               maViewBox;
-    sal_Int32                   mnX;
-    sal_Int32                   mnY;
-    sal_Int32                   mnWidth;
-    sal_Int32                   mnHeight;
     sal_Bool                    mbClosed;
 
 public:
@@ -247,6 +260,9 @@ public:
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
     virtual ~SdXMLPathShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
+
+    // this is called from the parent group for each unparsed attribute in the attribute list
+    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -254,11 +270,6 @@ public:
 
 class SdXMLTextBoxShapeContext : public SdXMLShapeContext
 {
-    sal_Int32                   mnX;
-    sal_Int32                   mnY;
-    sal_Int32                   mnWidth;
-    sal_Int32                   mnHeight;
-
 public:
     TYPEINFO();
 
@@ -275,11 +286,6 @@ public:
 
 class SdXMLControlShapeContext : public SdXMLShapeContext
 {
-    sal_Int32                   mnX;
-    sal_Int32                   mnY;
-    sal_Int32                   mnWidth;
-    sal_Int32                   mnHeight;
-
 public:
     TYPEINFO();
 
@@ -352,11 +358,6 @@ public:
 
 class SdXMLPageShapeContext : public SdXMLShapeContext
 {
-    sal_Int32                   mnX;
-    sal_Int32                   mnY;
-    sal_Int32                   mnWidth;
-    sal_Int32                   mnHeight;
-
 public:
     TYPEINFO();
 
@@ -389,11 +390,7 @@ public:
 
 class SdXMLGraphicObjectShapeContext : public SdXMLShapeContext
 {
-    sal_Int32                   mnX;
-    sal_Int32                   mnY;
-    sal_Int32                   mnWidth;
-    sal_Int32                   mnHeight;
-
+    ::rtl::OUString maURL;
 public:
     TYPEINFO();
 
@@ -402,6 +399,11 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
     virtual ~SdXMLGraphicObjectShapeContext();
+
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+
+    // this is called from the parent group for each unparsed attribute in the attribute list
+    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -409,10 +411,6 @@ public:
 
 class SdXMLChartShapeContext : public SdXMLShapeContext
 {
-    sal_Int32                   mnX;
-    sal_Int32                   mnY;
-    sal_Int32                   mnWidth;
-    sal_Int32                   mnHeight;
     SvXMLImportContext*         mpChartContext;
 
 public:

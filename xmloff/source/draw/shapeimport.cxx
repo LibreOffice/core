@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-11 07:51:20 $
+ *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,10 @@
 #include "ximp3dobject.hxx"
 #endif
 
+#ifndef _XIMPGROUP_HXX
+#include "ximpgrp.hxx"
+#endif
+
 using namespace ::rtl;
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -124,16 +128,6 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpStylesContext(0L),
     mpAutoStylesContext(0L),
     mpGroupShapeElemTokenMap(0L),
-    mpShapeAttrTokenMap(0L),
-    mpRectShapeAttrTokenMap(0L),
-    mpLineShapeAttrTokenMap(0L),
-    mpEllipseShapeAttrTokenMap(0L),
-    mpPolygonShapeAttrTokenMap(0L),
-    mpPathShapeAttrTokenMap(0L),
-    mpTextBoxShapeAttrTokenMap(0L),
-    mpControlShapeAttrTokenMap(0L),
-    mpPageShapeAttrTokenMap(0L),
-    mpGraphicObjectShapeAttrTokenMap(0L),
     mp3DSceneShapeElemTokenMap(0L),
     mp3DObjectAttrTokenMap(0L),
     mp3DPolygonBasedAttrTokenMap(0L),
@@ -141,7 +135,24 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mp3DSphereObjectAttrTokenMap(0L),
     mp3DSceneShapeAttrTokenMap(0L),
     mp3DLightAttrTokenMap(0L),
-    mpSortContext(0L)
+    mpPathShapeAttrTokenMap(0L),
+    mpPolygonShapeAttrTokenMap(0L),
+/*
+    mpShapeAttrTokenMap(0L),
+    mpRectShapeAttrTokenMap(0L),
+    mpLineShapeAttrTokenMap(0L),
+    mpEllipseShapeAttrTokenMap(0L),
+    mpTextBoxShapeAttrTokenMap(0L),
+    mpControlShapeAttrTokenMap(0L),
+    mpPageShapeAttrTokenMap(0L),
+    mpGraphicObjectShapeAttrTokenMap(0L),
+*/
+    mpSortContext(0L),
+    msStartShape(RTL_CONSTASCII_USTRINGPARAM("StartShape")),
+    msEndShape(RTL_CONSTASCII_USTRINGPARAM("EndShape")),
+    msStartGluePointIndex(RTL_CONSTASCII_USTRINGPARAM("StartGluePointIndex")),
+    msEndGluePointIndex(RTL_CONSTASCII_USTRINGPARAM("EndGluePointIndex"))
+
 {
     mpSdPropHdlFactory = new XMLSdPropHdlFactory( rModel );
 
@@ -177,6 +188,8 @@ XMLShapeImportHelper::XMLShapeImportHelper(
 
 XMLShapeImportHelper::~XMLShapeImportHelper()
 {
+    DBG_ASSERT( maConnections.empty(), "XMLShapeImportHelper::restoreConnections() was not called!" );
+
     // cleanup factory, decrease refcount. Should lead to destruction.
     if(mpSdPropHdlFactory)
     {
@@ -199,16 +212,18 @@ XMLShapeImportHelper::~XMLShapeImportHelper()
     }
 
     if(mpGroupShapeElemTokenMap) delete mpGroupShapeElemTokenMap;
+/*
     if(mpShapeAttrTokenMap) delete mpShapeAttrTokenMap;
     if(mpRectShapeAttrTokenMap) delete mpRectShapeAttrTokenMap;
     if(mpLineShapeAttrTokenMap) delete mpLineShapeAttrTokenMap;
     if(mpEllipseShapeAttrTokenMap) delete mpEllipseShapeAttrTokenMap;
-    if(mpPolygonShapeAttrTokenMap) delete mpPolygonShapeAttrTokenMap;
-    if(mpPathShapeAttrTokenMap) delete mpPathShapeAttrTokenMap;
     if(mpTextBoxShapeAttrTokenMap) delete mpTextBoxShapeAttrTokenMap;
     if(mpControlShapeAttrTokenMap) delete mpControlShapeAttrTokenMap;
     if(mpPageShapeAttrTokenMap) delete mpPageShapeAttrTokenMap;
     if(mpGraphicObjectShapeAttrTokenMap) delete mpGraphicObjectShapeAttrTokenMap;
+*/
+    if(mpPolygonShapeAttrTokenMap) delete mpPolygonShapeAttrTokenMap;
+    if(mpPathShapeAttrTokenMap) delete mpPathShapeAttrTokenMap;
     if(mp3DSceneShapeElemTokenMap) delete mp3DSceneShapeElemTokenMap;
     if(mp3DObjectAttrTokenMap) delete mp3DObjectAttrTokenMap;
     if(mp3DPolygonBasedAttrTokenMap) delete mp3DPolygonBasedAttrTokenMap;
@@ -278,7 +293,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DSceneShapeElemTokenMap()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-
+/*
 static __FAR_DATA SvXMLTokenMapEntry aShapeAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW,           sXML_name,              XML_TOK_SHAPE_NAME                          },
@@ -297,7 +312,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetShapeAttrTokenMap()
         mpShapeAttrTokenMap = new SvXMLTokenMap(aShapeAttrTokenMap);
     return *mpShapeAttrTokenMap;
 }
-
+*/
 //////////////////////////////////////////////////////////////////////////////
 
 static __FAR_DATA SvXMLTokenMapEntry a3DObjectAttrTokenMap[] =
@@ -363,7 +378,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DSphereObjectAttrTokenMap()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-
+/*
 static __FAR_DATA SvXMLTokenMapEntry aRectShapeAttrTokenMap[] =
 {
     { XML_NAMESPACE_SVG,    sXML_x,                 XML_TOK_RECTSHAPE_X                 },
@@ -419,7 +434,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetEllipseShapeAttrTokenMap()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-
+*/
 static __FAR_DATA SvXMLTokenMapEntry aPolygonShapeAttrTokenMap[] =
 {
     { XML_NAMESPACE_SVG,    sXML_x,                 XML_TOK_POLYGONSHAPE_X              },
@@ -457,7 +472,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetPathShapeAttrTokenMap()
         mpPathShapeAttrTokenMap = new SvXMLTokenMap(aPathShapeAttrTokenMap);
     return *mpPathShapeAttrTokenMap;
 }
-
+/*
 //////////////////////////////////////////////////////////////////////////////
 
 static __FAR_DATA SvXMLTokenMapEntry aTextBoxShapeAttrTokenMap[] =
@@ -493,7 +508,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetControlShapeAttrTokenMap()
         mpControlShapeAttrTokenMap = new SvXMLTokenMap(aControlShapeAttrTokenMap);
     return *mpControlShapeAttrTokenMap;
 }
-
+*/
 //////////////////////////////////////////////////////////////////////////////
 
 static __FAR_DATA SvXMLTokenMapEntry a3DSceneShapeAttrTokenMap[] =
@@ -542,7 +557,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DLightAttrTokenMap()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-
+/*
 static __FAR_DATA SvXMLTokenMapEntry aPageShapeAttrTokenMap[] =
 {
     { XML_NAMESPACE_SVG,    sXML_x,                 XML_TOK_PAGESHAPE_X             },
@@ -577,7 +592,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetGraphicObjectShapeAttrTokenMap()
         mpGraphicObjectShapeAttrTokenMap = new SvXMLTokenMap(aGraphicObjectShapeAttrTokenMap);
     return *mpGraphicObjectShapeAttrTokenMap;
 }
-
+*/
 //////////////////////////////////////////////////////////////////////////////
 
 SvXMLImportContext* XMLShapeImportHelper::Create3DSceneChildContext(
@@ -606,26 +621,7 @@ SvXMLImportContext* XMLShapeImportHelper::Create3DSceneChildContext(
             case XML_TOK_3DSCENE_3DSCENE:
             {
                 // dr3d:3dscene inside dr3d:3dscene context
-                // create new 3DScene shape and add it to rShapes, use it
-                // as base for the new 3DScene import
-                uno::Reference< lang::XMultiServiceFactory > xServiceFact(mxModel, uno::UNO_QUERY);
-                if(xServiceFact.is())
-                {
-                    uno::Reference< drawing::XShape > xShape(
-                        xServiceFact->createInstance(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shape3DSceneObject"))),
-                        uno::UNO_QUERY);
-                    if(xShape.is())
-                    {
-                        rShapes->add( xShape );
-
-                        uno::Reference< drawing::XShapes > xNewShapes(xShape, uno::UNO_QUERY);
-                        if(xNewShapes.is())
-                        {
-                            pContext = new SdXML3DSceneShapeContext( rImport, nPrefix, rLocalName, xAttrList, xNewShapes);
-                        }
-                    }
-                }
+                pContext = new SdXML3DSceneShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes);
                 break;
             }
             case XML_TOK_3DSCENE_3DCUBE:
@@ -693,51 +689,13 @@ SvXMLImportContext* XMLShapeImportHelper::CreateGroupChildContext(
         case XML_TOK_GROUP_GROUP:
         {
             // draw:g inside group context (RECURSIVE)
-            // create new group shape and add it to rShapes, use it
-            // as base for the new group import
-            uno::Reference< lang::XMultiServiceFactory > xServiceFact(mxModel, uno::UNO_QUERY);
-            if(xServiceFact.is())
-            {
-                uno::Reference< drawing::XShape > xShape(
-                    xServiceFact->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GroupShape"))),
-                    uno::UNO_QUERY);
-                if(xShape.is())
-                {
-                    addShape( xShape, xAttrList, rShapes );
-
-                    uno::Reference< drawing::XShapes > xNewShapes(xShape, uno::UNO_QUERY);
-                    if(xNewShapes.is())
-                    {
-                        pContext = new SdXMLGroupShapeContext( rImport, nPrefix, rLocalName, xAttrList, xNewShapes);
-                    }
-                }
-            }
+            pContext = new SdXMLGroupShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes);
             break;
         }
         case XML_TOK_GROUP_3DSCENE:
         {
             // dr3d:3dscene inside group context
-            // create new 3DScene shape and add it to rShapes, use it
-            // as base for the new 3DScene import
-            uno::Reference< lang::XMultiServiceFactory > xServiceFact(mxModel, uno::UNO_QUERY);
-            if(xServiceFact.is())
-            {
-                uno::Reference< drawing::XShape > xShape(
-                    xServiceFact->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shape3DSceneObject"))),
-                    uno::UNO_QUERY);
-                if(xShape.is())
-                {
-                    addShape( xShape, xAttrList, rShapes );
-
-                    uno::Reference< drawing::XShapes > xNewShapes(xShape, uno::UNO_QUERY);
-                    if(xNewShapes.is())
-                    {
-                        pContext = new SdXML3DSceneShapeContext( rImport, nPrefix, rLocalName, xAttrList, xNewShapes);
-                    }
-                }
-            }
+            pContext = new SdXML3DSceneShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes);
             break;
         }
         case XML_TOK_GROUP_RECT:
@@ -875,55 +833,25 @@ struct ZOrderHint
     int operator<(const ZOrderHint& rComp) const { return nShould < rComp.nShould; }
 };
 
-struct ConnectionHint
-{
-    sal_Int32 nConnectorIndex;
-    sal_Bool  bStart;
-    sal_Int32 nDestShapeId;
-    sal_Int32 nDestGlueId;
-};
-
-struct ltint32
-{
-  bool operator()(const sal_Int32 p, sal_Int32 q) const
-  {
-    return p < q;
-  }
-};
-
 class ShapeSortContext
 {
 public:
     uno::Reference< drawing::XShapes > mxShapes;
     list<ZOrderHint>              maZOrderList;
     list<ZOrderHint>              maUnsortedList;
-    vector<ConnectionHint>        maConnections;
-    map<sal_Int32,sal_Int32,ltint32> maShapeIdMap;
 
     sal_Int32                     mnCurrentZ;
     ShapeSortContext*             mpParentContext;
     const OUString                msZOrder;
-    const OUString                msStartShape;
-    const OUString                msEndShape;
-    const OUString                msStartGluePointIndex;
-    const OUString                msEndGluePointIndex;
 
     ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, ShapeSortContext* pParentContext = NULL );
 
     void moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos );
-    void restoreConnections();
-
-    void createShapeId( sal_Int32 nId );
-    uno::Reference< drawing::XShape > getShapeFromId( sal_Int32 nId );
 };
 
 ShapeSortContext::ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, ShapeSortContext* pParentContext )
 :   mxShapes( rShapes ), mnCurrentZ( 0 ), mpParentContext( pParentContext ),
-    msZOrder(RTL_CONSTASCII_USTRINGPARAM("ZOrder")),
-    msStartShape(RTL_CONSTASCII_USTRINGPARAM("StartShape")),
-    msEndShape(RTL_CONSTASCII_USTRINGPARAM("EndShape")),
-    msStartGluePointIndex(RTL_CONSTASCII_USTRINGPARAM("StartGluePointIndex")),
-    msEndGluePointIndex(RTL_CONSTASCII_USTRINGPARAM("EndGluePointIndex"))
+    msZOrder(RTL_CONSTASCII_USTRINGPARAM("ZOrder"))
 {
 }
 
@@ -964,52 +892,6 @@ void ShapeSortContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
             aIter++;
         }
     }
-}
-
-void ShapeSortContext::restoreConnections()
-{
-    if( !maConnections.empty() )
-    {
-        uno::Any aAny;
-        uno::Reference< beans::XPropertySet > xConnector;
-
-        const vector<ConnectionHint>::size_type nCount = maConnections.size();
-        for( vector<ConnectionHint>::size_type i = 0; i < nCount; i++ )
-        {
-            ConnectionHint& rHint = maConnections[i];
-            if( mxShapes->getByIndex( rHint.nConnectorIndex ) >>= xConnector )
-            {
-                uno::Reference< drawing::XShape > xShape( getShapeFromId( rHint.nDestShapeId ) );
-                if( xShape.is() )
-                {
-                    aAny <<= xShape;
-                    xConnector->setPropertyValue( rHint.bStart ? msStartShape : msEndShape, aAny );
-                }
-
-                aAny <<= rHint.nDestGlueId;
-                xConnector->setPropertyValue( rHint.bStart ? msStartGluePointIndex : msEndGluePointIndex, aAny );
-            }
-        }
-    }
-}
-
-void ShapeSortContext::createShapeId( sal_Int32 nId )
-{
-    maShapeIdMap[mnCurrentZ] = nId;
-}
-
-uno::Reference< drawing::XShape > ShapeSortContext::getShapeFromId( sal_Int32 nId )
-{
-    uno::Reference< drawing::XShape > xShape;
-
-    map<sal_Int32,sal_Int32,ltint32>::iterator aIter = maShapeIdMap.find( nId );
-    if( aIter != maShapeIdMap.end() )
-    {
-        uno::Any aAny( mxShapes->getByIndex( maShapeIdMap[nId] ) );
-        aAny >>= xShape;
-    }
-
-    return xShape;
 }
 
 void XMLShapeImportHelper::pushGroupForSorting( uno::Reference< drawing::XShapes >& rShapes )
@@ -1086,38 +968,66 @@ void XMLShapeImportHelper::shapeWithZIndexAdded( com::sun::star::uno::Reference<
     }
 }
 
+void XMLShapeImportHelper::createShapeId( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, sal_Int32 nId )
+{
+    DBG_ASSERT( maShapeIds.find(nId) == maShapeIds.end(), "draw:id imported twice!" );
+    maShapeIds[nId] = xShape;
+}
+
+uno::Reference< drawing::XShape > XMLShapeImportHelper::getShapeFromId( sal_Int32 nId )
+{
+    IdShapeMap::iterator aShapeIter( maShapeIds.find( nId ) );
+    if( aShapeIter != maShapeIds.end() )
+    {
+        return (*aShapeIter).second;
+    }
+    else
+    {
+        DBG_ERROR( "unknown draw:id found!" );
+        uno::Reference< drawing::XShape > xShape;
+        return xShape;
+    }
+}
+
 void XMLShapeImportHelper::addShapeConnection( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rConnectorShape,
                          sal_Bool bStart,
                          sal_Int32 nDestShapeId,
                          sal_Int32 nDestGlueId )
 {
-    DBG_ASSERT( mpSortContext, "Connection Shapes are not working without a sort context!" );
-    if( mpSortContext )
-    {
-        ConnectionHint aHint;
-        aHint.nConnectorIndex = mpSortContext->mnCurrentZ;
-        aHint.bStart = bStart;
-        aHint.nDestShapeId = nDestShapeId;
-        aHint.nDestGlueId = nDestGlueId;
+    ConnectionHint aHint;
+    aHint.mxConnector = rConnectorShape;
+    aHint.bStart = bStart;
+    aHint.nDestShapeId = nDestShapeId;
+    aHint.nDestGlueId = nDestGlueId;
 
-        mpSortContext->maConnections.push_back( aHint );
-    }
-}
-
-void XMLShapeImportHelper::createShapeId( sal_Int32 nId )
-{
-    /*
-    if( mpSortContext )
-        mpSortContext->createShapeId( nId );
-    */
+    maConnections.push_back( aHint );
 }
 
 void XMLShapeImportHelper::restoreConnections()
 {
-    if( mpSortContext )
+    if( !maConnections.empty() )
     {
-        // restore connections for connection shapes
-        // mpSortContext->restoreConnections();
+        uno::Any aAny;
+
+        const vector<ConnectionHint>::size_type nCount = maConnections.size();
+        for( vector<ConnectionHint>::size_type i = 0; i < nCount; i++ )
+        {
+            ConnectionHint& rHint = maConnections[i];
+            uno::Reference< beans::XPropertySet > xConnector( rHint.mxConnector, uno::UNO_QUERY );
+            if( xConnector.is() )
+            {
+                uno::Reference< drawing::XShape > xShape( getShapeFromId( rHint.nDestShapeId ) );
+                if( xShape.is() )
+                {
+                    aAny <<= xShape;
+                    xConnector->setPropertyValue( rHint.bStart ? msStartShape : msEndShape, aAny );
+                }
+
+                aAny <<= rHint.nDestGlueId;
+                xConnector->setPropertyValue( rHint.bStart ? msStartGluePointIndex : msEndGluePointIndex, aAny );
+            }
+        }
+        maConnections.clear();
     }
 }
 

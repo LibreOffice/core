@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-11 08:00:05 $
+ *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,7 +562,7 @@ SdXMLPresentationPlaceholderContext::~SdXMLPresentationPlaceholderContext()
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( SdXMLMasterPageContext, SdXMLGroupShapeContext );
+TYPEINIT1( SdXMLMasterPageContext, SdXMLGenericPageContext );
 
 SdXMLMasterPageContext::SdXMLMasterPageContext(
     SdXMLImport& rImport,
@@ -570,7 +570,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
     const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXMLGroupShapeContext( rImport, nPrfx, rLName, xAttrList, rShapes )
+:   SdXMLGenericPageContext( rImport, nPrfx, rLName, xAttrList, rShapes )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -759,7 +759,7 @@ void SdXMLMasterPageContext::EndElement()
             ((SdXMLStylesContext*)pContext)->SetMasterPageStyles(*this);
     }
 
-    SdXMLGroupShapeContext::EndElement();
+    SdXMLGenericPageContext::EndElement();
     GetImport().GetShapeImport()->restoreConnections();
 }
 
@@ -806,7 +806,7 @@ SvXMLImportContext* SdXMLMasterPageContext::CreateChildContext(
 
     // call base class
     if(!pContext)
-        pContext = SdXMLGroupShapeContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
+        pContext = SdXMLGenericPageContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 
     return pContext;
 }

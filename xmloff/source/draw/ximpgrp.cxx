@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpgrp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-23 18:25:49 $
+ *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,8 @@ SdXMLGroupShapeContext::SdXMLGroupShapeContext(
     USHORT nPrfx, const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
-    mxShapes( rShapes )
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
 {
-    GetImport().GetShapeImport()->pushGroupForSorting( rShapes );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -103,7 +101,7 @@ SvXMLImportContext* SdXMLGroupShapeContext::CreateChildContext( USHORT nPrefix,
 
     // call GroupChildContext function at common ShapeImport
     pContext = GetImport().GetShapeImport()->CreateGroupChildContext(
-        GetImport(), nPrefix, rLocalName, xAttrList, mxShapes);
+        GetImport(), nPrefix, rLocalName, xAttrList, mxChilds);
 
     // call parent when no own context was created
     if(!pContext)
@@ -115,9 +113,30 @@ SvXMLImportContext* SdXMLGroupShapeContext::CreateChildContext( USHORT nPrefix,
 
 //////////////////////////////////////////////////////////////////////////////
 
+void SdXMLGroupShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+{
+    // create new group shape and add it to rShapes, use it
+    // as base for the new group import
+    AddShape( "com.sun.star.drawing.GroupShape" );
+    SdXMLShapeContext::StartElement(xAttrList);
+
+    if(mxShape.is())
+    {
+        SdXMLShapeContext::StartElement(xAttrList);
+        mxChilds = uno::Reference< drawing::XShapes >::query( mxShape );
+        if( mxChilds.is() )
+            GetImport().GetShapeImport()->pushGroupForSorting( mxChilds );
+    }
+
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 void SdXMLGroupShapeContext::EndElement()
 {
-    GetImport().GetShapeImport()->popGroupAndSort();
+    if( mxChilds.is() )
+        GetImport().GetShapeImport()->popGroupAndSort();
 }
 
 

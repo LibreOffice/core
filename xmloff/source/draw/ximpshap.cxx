@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-06 16:53:44 $
+ *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,65 +142,10 @@ SdXMLShapeContext::SdXMLShapeContext(
     mbIsPlaceholder(FALSE),
     mbIsUserTransformed(FALSE),
     mxAttrList(xAttrList),
-    mnZOrder(-1)
+    mnZOrder(-1),
+    mnShapeId(-1),
+    maSize( 1, 1 )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
-    {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-        const SvXMLTokenMap& rAttrTokenMap = GetImport().GetShapeImport()->GetShapeAttrTokenMap();
-
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
-        {
-            case XML_TOK_SHAPE_NAME:
-            {
-                maShapeName = sValue;
-                break;
-            }
-            case XML_TOK_SHAPE_IS_USER_TRANSFORMED:
-            {
-                if(sValue.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true))))
-                    mbIsUserTransformed = TRUE;
-                break;
-            }
-            case XML_TOK_SHAPE_IS_PLACEHOLDER:
-            {
-                if(sValue.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true))))
-                    mbIsPlaceholder = TRUE;
-                break;
-            }
-            case XML_TOK_SHAPE_DRAWSTYLE_NAME_GRAPHICS:
-            {
-                maDrawStyleName = sValue;
-                break;
-            }
-            case XML_TOK_SHAPE_PRESENTATION_CLASS:
-            {
-                maPresentationClass = sValue;
-                break;
-            }
-            case XML_TOK_SHAPE_DRAWSTYLE_NAME_PRESENTATION:
-            {
-                maDrawStyleName = sValue;
-                mnStyleFamily = XML_STYLE_FAMILY_SD_PRESENTATION_ID;
-                break;
-            }
-            case XML_TOK_SHAPE_TRANSFORM:
-            {
-                SdXMLImExTransform2D aTransform(sValue, GetImport().GetMM100UnitConverter());
-                if(aTransform.NeedsAction())
-                {
-                    double fVal(0.0);
-                    if(aTransform.FindRotate(fVal) && fVal != 0.0)
-                        mnRotate = (sal_Int32)(fVal * 100.0);
-                }
-                break;
-            }
-        }
-    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -264,18 +209,7 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( USHORT nPrefix,
 
 void SdXMLShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    // set parameters on shape
-    if(mnRotate != 0L)
-    {
-        uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-        if(xPropSet.is())
-        {
-            uno::Any aAny;
-            aAny <<= mnRotate;
-            xPropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("RotateAngle")), aAny);
-        }
-    }
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -294,8 +228,58 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
                 xNamed->setName( maShapeName );
         }
 
-        GetImport().GetShapeImport()->addShape( xShape, mxAttrList, mxShapes );
-        GetImport().GetShapeImport()->shapeWithZIndexAdded( xShape, mnZOrder );
+        UniReference< XMLShapeImportHelper > xImp( GetImport().GetShapeImport() );
+        xImp->addShape( xShape, mxAttrList, mxShapes );
+        xImp->shapeWithZIndexAdded( xShape, mnZOrder );
+
+        if( mnShapeId != -1 )
+            xImp->createShapeId( xShape, mnShapeId );
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLShapeContext::AddShape(const char* pServiceName )
+{
+    uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetImport().GetModel(), uno::UNO_QUERY);
+    if(xServiceFact.is())
+    {
+        uno::Reference< drawing::XShape > xShape(xServiceFact->createInstance(OUString::createFromAscii(pServiceName)), uno::UNO_QUERY);
+        if( xShape.is() )
+            AddShape( xShape );
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLShapeContext::SetSize()
+{
+    if( mxShape.is() )
+        mxShape->setSize(maSize);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLShapeContext::SetPosition()
+{
+    if( mxShape.is() )
+        mxShape->setPosition(maPosition);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLShapeContext::SetRotation()
+{
+    if(mnRotate != 0L)
+    {
+        uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+        if(xPropSet.is())
+        {
+            uno::Any aAny;
+            aAny <<= mnRotate;
+            xPropSet->setPropertyValue(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("RotateAngle")), aAny);
+        }
     }
 }
 
@@ -359,9 +343,66 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
         {
             mnZOrder = rValue.toInt32();
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_id)) )
+        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_id)) )
         {
-            GetImport().GetShapeImport()->createShapeId( rValue.toInt32() );
+            mnShapeId = rValue.toInt32();
+        }
+        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_name)) )
+        {
+            maShapeName = rValue;
+        }
+        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_style_name)) )
+        {
+            maDrawStyleName = rValue;
+        }
+    }
+    else if( XML_NAMESPACE_PRESENTATION == nPrefix )
+    {
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_user_transformed)) )
+        {
+            mbIsUserTransformed = rValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_true));
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_placeholder)) )
+        {
+            mbIsPlaceholder = rValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_true));
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_class)) )
+        {
+            maPresentationClass = rValue;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_style_name)) )
+        {
+            maDrawStyleName = rValue;
+            mnStyleFamily = XML_STYLE_FAMILY_SD_PRESENTATION_ID;
+        }
+    }
+    else if( XML_NAMESPACE_SVG == nPrefix )
+    {
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_x)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(maPosition.X, rValue);
+        }
+        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_y)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(maPosition.Y, rValue);
+        }
+        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_width)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(maSize.Width, rValue);
+        }
+        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_height)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(maSize.Height, rValue);
+        }
+        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_transform)) )
+        {
+            SdXMLImExTransform2D aTransform(rValue, GetImport().GetMM100UnitConverter());
+            if(aTransform.NeedsAction())
+            {
+                double fVal(0.0);
+                if(aTransform.FindRotate(fVal) && fVal != 0.0)
+                    mnRotate = (sal_Int32)(fVal * 100.0);
+            }
         }
     }
 }
@@ -378,50 +419,8 @@ SdXMLRectShapeContext::SdXMLRectShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
-    mnX( 0L ),
-    mnY( 0L ),
-    mnWidth( 1L ),
-    mnHeight( 1L ),
     mnRadius( 0L )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
-    {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-        const SvXMLTokenMap& rAttrTokenMap = GetImport().GetShapeImport()->GetRectShapeAttrTokenMap();
-
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
-        {
-            case XML_TOK_RECTSHAPE_X:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnX, sValue);
-                break;
-            }
-            case XML_TOK_RECTSHAPE_Y:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnY, sValue);
-                break;
-            }
-            case XML_TOK_RECTSHAPE_WIDTH:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnWidth, sValue);
-                break;
-            }
-            case XML_TOK_RECTSHAPE_HEIGHT:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnHeight, sValue);
-                break;
-            }
-            case XML_TOK_RECTSHAPE_CORNER_RADIUS:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnRadius, sValue);
-                break;
-            }
-        }
-    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -432,43 +431,49 @@ SdXMLRectShapeContext::~SdXMLRectShapeContext()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLRectShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+// this is called from the parent group for each unparsed attribute in the attribute list
+void SdXMLRectShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
 {
-    // create rectangle shape
-    uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetImport().GetModel(), uno::UNO_QUERY);
-    if(xServiceFact.is())
+    if( XML_NAMESPACE_DRAW == nPrefix )
     {
-        uno::Reference< drawing::XShape > xShape(xServiceFact->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.RectangleShape"))),
-            uno::UNO_QUERY);
-        if(xShape.is())
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_corner_radius)) )
         {
-            // Add, set Style and properties from base shape
-            AddShape(xShape);
-            SetStyle();
-            SdXMLShapeContext::StartElement(xAttrList);
-
-            // set local parameters on shape
-            awt::Point aPoint(mnX, mnY);
-            awt::Size aSize(mnWidth, mnHeight);
-            xShape->setPosition(aPoint);
-            xShape->setSize(aSize);
-
-            if(mnRadius)
-            {
-                uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-                if(xPropSet.is())
-                {
-                    uno::Any aAny;
-                    aAny <<= mnRadius;
-                    xPropSet->setPropertyValue(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("CornerRadius")), aAny);
-                }
-            }
+            GetImport().GetMM100UnitConverter().convertMeasure(mnRadius, rValue);
+            return;
         }
     }
 
-    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
+    SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLRectShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+{
+    // create rectangle shape
+    AddShape("com.sun.star.drawing.RectangleShape");
+    if(mxShape.is())
+    {
+        // Add, set Style and properties from base shape
+        SetStyle();
+
+        // set local parameters on shape
+        SetSizeAndPosition();
+        SetRotation();
+
+        if(mnRadius)
+        {
+            uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+            if(xPropSet.is())
+            {
+                uno::Any aAny;
+                aAny <<= mnRadius;
+                xPropSet->setPropertyValue(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("CornerRadius")), aAny);
+            }
+        }
+        SdXMLShapeContext::StartElement(xAttrList);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -488,39 +493,6 @@ SdXMLLineShapeContext::SdXMLLineShapeContext(
     mnX2( 1L ),
     mnY2( 1L )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
-    {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-        const SvXMLTokenMap& rAttrTokenMap = GetImport().GetShapeImport()->GetLineShapeAttrTokenMap();
-
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
-        {
-            case XML_TOK_LINESHAPE_X1:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnX1, sValue);
-                break;
-            }
-            case XML_TOK_LINESHAPE_Y1:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnY1, sValue);
-                break;
-            }
-            case XML_TOK_LINESHAPE_X2:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnX2, sValue);
-                break;
-            }
-            case XML_TOK_LINESHAPE_Y2:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnY2, sValue);
-                break;
-            }
-        }
-    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -531,43 +503,68 @@ SdXMLLineShapeContext::~SdXMLLineShapeContext()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+// this is called from the parent group for each unparsed attribute in the attribute list
+void SdXMLLineShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
 {
-    // create rectangle shape
-    uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetImport().GetModel(), uno::UNO_QUERY);
-    if(xServiceFact.is())
+    if( XML_NAMESPACE_SVG == nPrefix )
     {
-        uno::Reference< drawing::XShape > xShape(xServiceFact->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineShape"))), uno::UNO_QUERY);
-        if(xShape.is())
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_x1)) )
         {
-            // Add, set Style and properties from base shape
-            AddShape(xShape);
-            SetStyle();
-            SdXMLShapeContext::StartElement(xAttrList);
-
-            // set local parameters on shape
-            uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-            if(xPropSet.is())
-            {
-                drawing::PointSequenceSequence aPolyPoly(1L);
-                drawing::PointSequence* pOuterSequence = aPolyPoly.getArray();
-                pOuterSequence->realloc(2L);
-                awt::Point* pInnerSequence = pOuterSequence->getArray();
-                uno::Any aAny;
-
-                *pInnerSequence = awt::Point( mnX1, mnY1 );
-                pInnerSequence++;
-                *pInnerSequence = awt::Point( mnX2, mnY2 );
-
-                aAny <<= aPolyPoly;
-                xPropSet->setPropertyValue(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygon")), aAny);
-            }
+            GetImport().GetMM100UnitConverter().convertMeasure(mnX1, rValue);
+            return;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_y1)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(mnY1, rValue);
+            return;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_x2)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(mnX2, rValue);
+            return;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_y2)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(mnY2, rValue);
+            return;
         }
     }
 
-    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
+    SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+{
+    // create rectangle shape
+    AddShape("com.sun.star.drawing.LineShape");
+    if(mxShape.is())
+    {
+        // Add, set Style and properties from base shape
+        SetStyle();
+
+        // set local parameters on shape
+        uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+        if(xPropSet.is())
+        {
+            drawing::PointSequenceSequence aPolyPoly(1L);
+            drawing::PointSequence* pOuterSequence = aPolyPoly.getArray();
+            pOuterSequence->realloc(2L);
+            awt::Point* pInnerSequence = pOuterSequence->getArray();
+            uno::Any aAny;
+
+            *pInnerSequence = awt::Point( mnX1, mnY1 );
+            pInnerSequence++;
+            *pInnerSequence = awt::Point( mnX2, mnY2 );
+
+            aAny <<= aPolyPoly;
+            xPropSet->setPropertyValue(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygon")), aAny);
+        }
+
+        SdXMLShapeContext::StartElement(xAttrList);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -587,46 +584,6 @@ SdXMLEllipseShapeContext::SdXMLEllipseShapeContext(
     mnRX( 1L ),
     mnRY( 1L )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
-    {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-        const SvXMLTokenMap& rAttrTokenMap = GetImport().GetShapeImport()->GetEllipseShapeAttrTokenMap();
-
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
-        {
-            case XML_TOK_ELLIPSESHAPE_CX:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnCX, sValue);
-                break;
-            }
-            case XML_TOK_ELLIPSESHAPE_CY:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnCY, sValue);
-                break;
-            }
-            case XML_TOK_ELLIPSESHAPE_RX:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnRX, sValue);
-                break;
-            }
-            case XML_TOK_ELLIPSESHAPE_RY:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnRY, sValue);
-                break;
-            }
-            case XML_TOK_ELLIPSESHAPE_R:
-            {
-                // single radius, it's a circle and both radii are the same
-                GetImport().GetMM100UnitConverter().convertMeasure(mnRX, sValue);
-                mnRY = mnRX;
-                break;
-            }
-        }
-    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -637,31 +594,64 @@ SdXMLEllipseShapeContext::~SdXMLEllipseShapeContext()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+// this is called from the parent group for each unparsed attribute in the attribute list
+void SdXMLEllipseShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
 {
-    // create rectangle shape
-    uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetImport().GetModel(), uno::UNO_QUERY);
-    if(xServiceFact.is())
+    if( XML_NAMESPACE_SVG == nPrefix )
     {
-        uno::Reference< drawing::XShape > xShape(xServiceFact->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.EllipseShape"))),
-            uno::UNO_QUERY);
-        if(xShape.is())
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_rx)) )
         {
-            // Add, set Style and properties from base shape
-            AddShape(xShape);
-            SetStyle();
-            SdXMLShapeContext::StartElement(xAttrList);
-
-            // set local parameters on shape
-            awt::Point aPoint(mnCX - mnRX, mnCY - mnRY);
-            awt::Size aSize(mnRX + mnRX, mnRY + mnRY);
-            xShape->setPosition(aPoint);
-            xShape->setSize(aSize);
+            GetImport().GetMM100UnitConverter().convertMeasure(mnRX, rValue);
+            return;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_ry)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(mnRY, rValue);
+            return;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_cx)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(mnCX, rValue);
+            return;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_cy)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(mnCY, rValue);
+            return;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_r)) )
+        {
+            // single radius, it's a circle and both radii are the same
+            GetImport().GetMM100UnitConverter().convertMeasure(mnRX, rValue);
+            mnRY = mnRX;
+            return;
         }
     }
 
-    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
+    SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+{
+    // create rectangle shape
+    AddShape("com.sun.star.drawing.EllipseShape");
+    if(mxShape.is())
+    {
+        // Add, set Style and properties from base shape
+        SetStyle();
+
+        // set local parameters on shape
+        awt::Point aPoint(mnCX - mnRX, mnCY - mnRY);
+        awt::Size aSize(mnRX + mnRX, mnRY + mnRY);
+        mxShape->setPosition(aPoint);
+        mxShape->setSize(aSize);
+
+        SetRotation();
+
+        SdXMLShapeContext::StartElement(xAttrList);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -676,55 +666,33 @@ SdXMLPolygonShapeContext::SdXMLPolygonShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes, sal_Bool bClosed)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
-    mnX( 0L ),
-    mnY( 0L ),
-    mnWidth( 1L ),
-    mnHeight( 1L ),
     mbClosed( bClosed )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
-    {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-        const SvXMLTokenMap& rAttrTokenMap = GetImport().GetShapeImport()->GetPolygonShapeAttrTokenMap();
+}
 
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
+//////////////////////////////////////////////////////////////////////////////
+
+// this is called from the parent group for each unparsed attribute in the attribute list
+void SdXMLPolygonShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+{
+    if( XML_NAMESPACE_SVG == nPrefix )
+    {
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_viewBox)) )
         {
-            case XML_TOK_POLYGONSHAPE_VIEWBOX:
-            {
-                maViewBox = sValue;
-                break;
-            }
-            case XML_TOK_POLYGONSHAPE_POINTS:
-            {
-                maPoints = sValue;
-                break;
-            }
-            case XML_TOK_POLYGONSHAPE_X:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnX, sValue);
-                break;
-            }
-            case XML_TOK_POLYGONSHAPE_Y:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnY, sValue);
-                break;
-            }
-            case XML_TOK_POLYGONSHAPE_WIDTH:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnWidth, sValue);
-                break;
-            }
-            case XML_TOK_POLYGONSHAPE_HEIGHT:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnHeight, sValue);
-                break;
-            }
+            maViewBox = rValue;
+            return;
         }
     }
+    else if( XML_NAMESPACE_DRAW == nPrefix )
+    {
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_points)) )
+        {
+            maPoints = rValue;
+            return;
+        }
+    }
+
+    SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -737,48 +705,35 @@ SdXMLPolygonShapeContext::~SdXMLPolygonShapeContext()
 
 void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    // create rectangle shape
-    uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetImport().GetModel(), uno::UNO_QUERY);
-    if(xServiceFact.is())
+    // Add, set Style and properties from base shape
+    AddShape("com.sun.star.drawing.PolyLineShape");
+    if( mxShape.is() )
     {
-        uno::Reference< drawing::XShape > xShape(xServiceFact->createInstance(
-            mbClosed ? OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PolyPolygonShape"))
-            : OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PolyLineShape"))),
-            uno::UNO_QUERY);
-        if(xShape.is())
+        SetStyle();
+
+        // set parameters on shape
+        SetSizeAndPosition();
+        SetRotation();
+
+        // set local parameters on shape
+        uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+        if(xPropSet.is())
         {
-            // Add, set Style and properties from base shape
-            AddShape(xShape);
-            SetStyle();
-            SdXMLShapeContext::StartElement(xAttrList);
-
-            // set local parameters on shape
-            uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-            if(xPropSet.is())
+            // set polygon
+            if(maPoints.getLength() && maViewBox.getLength())
             {
-                // set parameters on shape
-                awt::Point aPoint(mnX, mnY);
-                awt::Size aSize(mnWidth, mnHeight);
+                SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
+                SdXMLImExPointsElement aPoints(maPoints, aViewBox, maPosition, maSize, GetImport().GetMM100UnitConverter());
+
                 uno::Any aAny;
-
-                xShape->setPosition(aPoint);
-                xShape->setSize(aSize);
-
-                // set polygon
-                if(maPoints.getLength() && maViewBox.getLength())
-                {
-                    SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
-                    SdXMLImExPointsElement aPoints(maPoints, aViewBox, aPoint, aSize, GetImport().GetMM100UnitConverter());
-
-                    aAny <<= aPoints.GetPointSequenceSequence();
-                    xPropSet->setPropertyValue(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygon")), aAny);
-                }
+                aAny <<= aPoints.GetPointSequenceSequence();
+                xPropSet->setPropertyValue(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygon")), aAny);
             }
         }
-    }
 
-    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
+        SdXMLShapeContext::StartElement(xAttrList);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -793,55 +748,8 @@ SdXMLPathShapeContext::SdXMLPathShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
-    mnX( 0L ),
-    mnY( 0L ),
-    mnWidth( 1L ),
-    mnHeight( 1L ),
     mbClosed( TRUE )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
-    {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-        const SvXMLTokenMap& rAttrTokenMap = GetImport().GetShapeImport()->GetPathShapeAttrTokenMap();
-
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
-        {
-            case XML_TOK_PATHSHAPE_VIEWBOX:
-            {
-                maViewBox = sValue;
-                break;
-            }
-            case XML_TOK_PATHSHAPE_D:
-            {
-                maD = sValue;
-                break;
-            }
-            case XML_TOK_PATHSHAPE_X:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnX, sValue);
-                break;
-            }
-            case XML_TOK_PATHSHAPE_Y:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnY, sValue);
-                break;
-            }
-            case XML_TOK_PATHSHAPE_WIDTH:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnWidth, sValue);
-                break;
-            }
-            case XML_TOK_PATHSHAPE_HEIGHT:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnHeight, sValue);
-                break;
-            }
-        }
-    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -852,99 +760,102 @@ SdXMLPathShapeContext::~SdXMLPathShapeContext()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+// this is called from the parent group for each unparsed attribute in the attribute list
+void SdXMLPathShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
 {
-    // create polygon shape
-    uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetImport().GetModel(), uno::UNO_QUERY);
-    if(xServiceFact.is())
+    if( XML_NAMESPACE_SVG == nPrefix )
     {
-        if(maD.getLength())
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_viewBox)) )
         {
-            // prepare some of the parameters
-            uno::Reference< drawing::XShape > xShape;
-            awt::Point aPoint(mnX, mnY);
-            awt::Size aSize(mnWidth, mnHeight);
-            SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
-            SdXMLImExSvgDElement aPoints(maD, aViewBox, aPoint, aSize, GetImport().GetMM100UnitConverter());
-
-            // now create shape
-            if(aPoints.IsCurve())
-            {
-                if(aPoints.IsClosed())
-                {
-                    xShape = uno::Reference< drawing::XShape > (
-                        xServiceFact->createInstance(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ClosedBezierShape"))),
-                        uno::UNO_QUERY);
-                }
-                else
-                {
-                    xShape = uno::Reference< drawing::XShape > (
-                        xServiceFact->createInstance(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.OpenBezierShape"))),
-                        uno::UNO_QUERY);
-                }
-            }
-            else
-            {
-                if(aPoints.IsClosed())
-                {
-                    xShape = uno::Reference< drawing::XShape > (
-                        xServiceFact->createInstance(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PolyPolygonShape"))),
-                        uno::UNO_QUERY);
-                }
-                else
-                {
-                    xShape = uno::Reference< drawing::XShape > (
-                        xServiceFact->createInstance(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PolyLineShape"))),
-                        uno::UNO_QUERY);
-                }
-            }
-
-            if(xShape.is())
-            {
-                // Add, set Style and properties from base shape
-                AddShape(xShape);
-                SetStyle();
-                SdXMLShapeContext::StartElement(xAttrList);
-
-                // set local parameters on shape
-                uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-                if(xPropSet.is())
-                {
-                    uno::Any aAny;
-
-                    xShape->setPosition(aPoint);
-                    xShape->setSize(aSize);
-
-                    // set svg:d
-                    if(maD.getLength())
-                    {
-                        if(aPoints.IsCurve())
-                        {
-                            drawing::PolyPolygonBezierCoords aSourcePolyPolygon(
-                                aPoints.GetPointSequenceSequence(),
-                                aPoints.GetFlagSequenceSequence());
-
-                            aAny <<= aSourcePolyPolygon;
-                            xPropSet->setPropertyValue(
-                                OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygonBezier")), aAny);
-                        }
-                        else
-                        {
-                            aAny <<= aPoints.GetPointSequenceSequence();
-                            xPropSet->setPropertyValue(
-                                OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygon")), aAny);
-                        }
-                    }
-                }
-            }
+            maViewBox = rValue;
+            return;
+        }
+        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_d)) )
+        {
+            maD = rValue;
+            return;
         }
     }
 
-    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
+    SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+{
+    // create polygon shape
+    if(maD.getLength())
+    {
+        // prepare some of the parameters
+        SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
+        SdXMLImExSvgDElement aPoints(maD, aViewBox, maPosition, maSize, GetImport().GetMM100UnitConverter());
+
+        char* pService;
+        // now create shape
+        if(aPoints.IsCurve())
+        {
+            if(aPoints.IsClosed())
+            {
+                pService = "com.sun.star.drawing.ClosedBezierShape";
+            }
+            else
+            {
+                pService = "com.sun.star.drawing.OpenBezierShape";
+            }
+        }
+        else
+        {
+            if(aPoints.IsClosed())
+            {
+                pService = "com.sun.star.drawing.PolyPolygonShape";
+            }
+            else
+            {
+                pService = "com.sun.star.drawing.PolyLineShape";
+            }
+        }
+
+        // Add, set Style and properties from base shape
+        AddShape(pService);
+        if( mxShapes.is() )
+        {
+            SetStyle();
+
+            // set parameters on shape
+            SetSizeAndPosition();
+            SetRotation();
+
+            // set local parameters on shape
+            uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+            if(xPropSet.is())
+            {
+                uno::Any aAny;
+
+                // set svg:d
+                if(maD.getLength())
+                {
+                    if(aPoints.IsCurve())
+                    {
+                        drawing::PolyPolygonBezierCoords aSourcePolyPolygon(
+                            aPoints.GetPointSequenceSequence(),
+                            aPoints.GetFlagSequenceSequence());
+
+                        aAny <<= aSourcePolyPolygon;
+                        xPropSet->setPropertyValue(
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygonBezier")), aAny);
+                    }
+                    else
+                    {
+                        aAny <<= aPoints.GetPointSequenceSequence();
+                        xPropSet->setPropertyValue(
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygon")), aAny);
+                    }
+                }
+            }
+            SdXMLShapeContext::StartElement(xAttrList);
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -958,45 +869,8 @@ SdXMLTextBoxShapeContext::SdXMLTextBoxShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
-    mnX( 0L ),
-    mnY( 0L ),
-    mnWidth( 1L ),
-    mnHeight( 1L )
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
-    {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-        const SvXMLTokenMap& rAttrTokenMap = GetImport().GetShapeImport()->GetTextBoxShapeAttrTokenMap();
-
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
-        {
-            case XML_TOK_TEXTBOXSHAPE_X:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnX, sValue);
-                break;
-            }
-            case XML_TOK_TEXTBOXSHAPE_Y:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnY, sValue);
-                break;
-            }
-            case XML_TOK_TEXTBOXSHAPE_WIDTH:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnWidth, sValue);
-                break;
-            }
-            case XML_TOK_TEXTBOXSHAPE_HEIGHT:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnHeight, sValue);
-                break;
-            }
-        }
-    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1010,89 +884,76 @@ SdXMLTextBoxShapeContext::~SdXMLTextBoxShapeContext()
 void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
     // create textbox shape
-    uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetImport().GetModel(), uno::UNO_QUERY);
-    if(xServiceFact.is())
+    sal_Bool bIsPresShape(FALSE);
+
+    char *pService;
+
+    if(maPresentationClass.getLength())
     {
-        uno::Reference< drawing::XShape > xShape;
-        sal_Bool bIsPresShape(FALSE);
-
-        if(maPresentationClass.getLength())
+        if(maPresentationClass.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_subtitle))))
         {
-            if(maPresentationClass.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_subtitle))))
-            {
-                // XmlShapeTypePresSubtitleShape
-                xShape = uno::Reference< drawing::XShape > (xServiceFact->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.SubtitleShape"))), uno::UNO_QUERY);
-                bIsPresShape = TRUE;
-            }
-            else if(maPresentationClass.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_title))))
-            {
-                // XmlShapeTypePresTitleTextShape
-                xShape = uno::Reference< drawing::XShape > (xServiceFact->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TitleTextShape"))), uno::UNO_QUERY);
-                bIsPresShape = TRUE;
-            }
-            else if(maPresentationClass.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_outline))))
-            {
-                // XmlShapeTypePresOutlinerShape
-                xShape = uno::Reference< drawing::XShape > (xServiceFact->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OutlinerShape"))), uno::UNO_QUERY);
-                bIsPresShape = TRUE;
-            }
-            else if(maPresentationClass.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_notes))))
-            {
-                // XmlShapeTypePresNotesShape
-                xShape = uno::Reference< drawing::XShape > (xServiceFact->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.NotesShape"))), uno::UNO_QUERY);
-                bIsPresShape = TRUE;
-            }
+            // XmlShapeTypePresSubtitleShape
+            pService = "com.sun.star.presentation.SubtitleShape";
         }
-        else
+        else if(maPresentationClass.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_outline))))
         {
-            // normal text shape
-            xShape = uno::Reference< drawing::XShape > (xServiceFact->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.TextShape"))), uno::UNO_QUERY);
+            // XmlShapeTypePresOutlinerShape
+            pService = "com.sun.star.presentation.OutlinerShape";
         }
-
-        if(xShape.is())
+        else if(maPresentationClass.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_notes))))
         {
-            // Add, set Style and properties from base shape
-            AddShape(xShape);
-
-            if(bIsPresShape)
-            {
-                uno::Reference< beans::XPropertySet > xProps(xShape, uno::UNO_QUERY);
-                if(xProps.is())
-                {
-                    uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
-                    if( xPropsInfo.is() )
-                    {
-                        if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") )))
-                            xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ), ::cppu::bool2any( sal_False ) );
-
-                        if( mbIsUserTransformed && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") )))
-                            xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") ), ::cppu::bool2any( sal_False ) );
-                    }
-                }
-            }
-
-            SetStyle();
-
-            SdXMLShapeContext::StartElement(xAttrList);
-
-            if(!bIsPresShape || mbIsUserTransformed)
-            {
-                // set pos and size on shape, this should remove binding
-                // to pres object on masterpage
-                awt::Point aPoint(mnX, mnY);
-                awt::Size aSize(mnWidth, mnHeight);
-                xShape->setPosition(aPoint);
-                xShape->setSize(aSize);
-            }
+            // XmlShapeTypePresNotesShape
+            pService = "com.sun.star.presentation.NotesShape";
         }
+        else // if(maPresentationClass.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_title))))
+        {
+            // XmlShapeTypePresTitleTextShape
+            pService = "com.sun.star.presentation.TitleTextShape";
+        }
+        bIsPresShape = TRUE;
+    }
+    else
+    {
+        // normal text shape
+        pService = "com.sun.star.drawing.TextShape";
     }
 
-    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
+    // Add, set Style and properties from base shape
+    AddShape(pService);
+
+    if( mxShape.is() )
+    {
+        SetStyle();
+
+        if(bIsPresShape)
+        {
+            uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
+            if(xProps.is())
+            {
+                uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
+                if( xPropsInfo.is() )
+                {
+                    if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") )))
+                        xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ), ::cppu::bool2any( sal_False ) );
+
+                    if( mbIsUserTransformed && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") )))
+                        xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") ), ::cppu::bool2any( sal_False ) );
+                }
+            }
+        }
+
+        // set parameters on shape
+        if(!bIsPresShape || mbIsUserTransformed)
+        {
+            // set pos and size on shape, this should remove binding
+            // to pres object on masterpage
+            SetSizeAndPosition();
+        }
+
+        SetRotation();
+
+        SdXMLShapeContext::StartElement(xAttrList);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1106,45 +967,8 @@ SdXMLControlShapeContext::SdXMLControlShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
-    mnX( 0L ),
-    mnY( 0L ),
-    mnWidth( 1L ),
-    mnHeight( 1L )
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
-    {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-        const SvXMLTokenMap& rAttrTokenMap = GetImport().GetShapeImport()->GetControlShapeAttrTokenMap();
-
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
-        {
-            case XML_TOK_CONTROLSHAPE_X:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnX, sValue);
-                break;
-            }
-            case XML_TOK_CONTROLSHAPE_Y:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnY, sValue);
-                break;
-            }
-            case XML_TOK_CONTROLSHAPE_WIDTH:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnWidth, sValue);
-                break;
-            }
-            case XML_TOK_CONTROLSHAPE_HEIGHT:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnHeight, sValue);
-                break;
-            }
-        }
-    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1158,27 +982,18 @@ SdXMLControlShapeContext::~SdXMLControlShapeContext()
 void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
     // create Control shape
-    uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetImport().GetModel(), uno::UNO_QUERY);
-    if(xServiceFact.is())
+    // add, set style and properties from base shape
+    AddShape("com.sun.star.drawing.ControlShape");
+    if( mxShape.is() )
     {
-        uno::Reference< drawing::XShape > xShape(xServiceFact->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape"))), uno::UNO_QUERY);
-        if(xShape.is())
-        {
-            // add, set style and properties from base shape
-            AddShape(xShape);
-            SetStyle();
-            SdXMLShapeContext::StartElement(xAttrList);
+        SetStyle();
 
-            // set local parameters on shape
-            awt::Point aPoint(mnX, mnY);
-            awt::Size aSize(mnWidth, mnHeight);
-            xShape->setPosition(aPoint);
-            xShape->setSize(aSize);
-        }
+        // set parameters on shape
+        SetSizeAndPosition();
+        SetRotation();
+
+        SdXMLShapeContext::StartElement(xAttrList);
     }
-
-    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1224,22 +1039,22 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const ::r
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_start_shape)) )
         {
             mnStartShapeId = rValue.toInt32();
-            break;
+            return;
         }
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_start_glue_point)) )
         {
             mnStartGlueId = rValue.toInt32();
-            break;
+            return;
         }
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_end_shape)) )
         {
             mnEndShapeId = rValue.toInt32();
-            break;
+            return;
         }
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_end_glue_point)) )
         {
             mnEndGlueId = rValue.toInt32();
-            break;
+            return;
         }
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_line_skew)) )
         {
@@ -1257,12 +1072,12 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const ::r
                     }
                 }
             }
-            break;
+            return;
         }
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_type)) )
         {
             SvXMLUnitConverter::convertEnum( mnType, rValue, aXML_ConnectionKind_EnumMap );
-            break;
+            return;
         }
     }
     case XML_NAMESPACE_SVG:
@@ -1270,25 +1085,27 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const ::r
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_x1)) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maStart.X, rValue);
-            break;
+            return;
         }
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_y1)) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maStart.Y, rValue);
-            break;
+            return;
         }
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_x2)) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maEnd.X, rValue);
-            break;
+            return;
         }
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_y2)) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maEnd.Y, rValue);
-            break;
+            return;
         }
     }
     }
+
+    SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1296,50 +1113,42 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const ::r
 void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
     // create Connector shape
-    uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetImport().GetModel(), uno::UNO_QUERY);
-    if(xServiceFact.is())
+    // add, set style and properties from base shape
+    AddShape("com.sun.star.drawing.ConnectorShape");
+    if(mxShape.is())
     {
-        uno::Reference< drawing::XShape > xShape(xServiceFact->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ConnectorShape"))), uno::UNO_QUERY);
-        if(xShape.is())
+        // add connection ids
+        if( mnStartShapeId != -1 )
+            GetImport().GetShapeImport()->addShapeConnection( mxShape, sal_True, mnStartShapeId, mnStartGlueId );
+        if( mnEndShapeId != -1 )
+            GetImport().GetShapeImport()->addShapeConnection( mxShape, sal_False, mnEndShapeId, mnEndGlueId );
+
+        uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+        if( xProps.is() )
         {
-            // add connection ids
-            if( mnStartShapeId != -1 )
-                GetImport().GetShapeImport()->addShapeConnection( xShape, sal_True, mnStartShapeId, mnStartGlueId );
-            if( mnEndShapeId != -1 )
-                GetImport().GetShapeImport()->addShapeConnection( xShape, sal_False, mnEndShapeId, mnEndGlueId );
+            uno::Any aAny;
+            aAny <<= maStart;
+            xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition")), aAny);
 
-            // add, set style and properties from base shape
-            AddShape(xShape);
+            aAny <<= maEnd;
+            xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition")), aAny );
 
-            uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-            if( xProps.is() )
-            {
-                uno::Any aAny;
-                aAny <<= maStart;
-                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition")), aAny);
+            aAny <<= (drawing::ConnectorType)mnType;
+            xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeKind")), aAny );
 
-                aAny <<= maEnd;
-                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition")), aAny );
+            aAny <<= mnDelta1;
+            xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine1Delta")), aAny );
 
-                aAny <<= (drawing::ConnectorType)mnType;
-                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeKind")), aAny );
+            aAny <<= mnDelta2;
+            xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine2Delta")), aAny );
 
-                aAny <<= mnDelta1;
-                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine1Delta")), aAny );
-
-                aAny <<= mnDelta2;
-                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine2Delta")), aAny );
-
-                aAny <<= mnDelta3;
-                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine3Delta")), aAny );
-            }
-            SetStyle();
-            SdXMLShapeContext::StartElement(xAttrList);
+            aAny <<= mnDelta3;
+            xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine3Delta")), aAny );
         }
-    }
+        SetStyle();
 
-    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
+        SdXMLShapeContext::StartElement(xAttrList);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1375,25 +1184,27 @@ void SdXMLMeasureShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_x1)) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maStart.X, rValue);
-            break;
+            return;
         }
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_y1)) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maStart.Y, rValue);
-            break;
+            return;
         }
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_x2)) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maEnd.X, rValue);
-            break;
+            return;
         }
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_y2)) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maEnd.Y, rValue);
-            break;
+            return;
         }
     }
     }
+
+    SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1401,33 +1212,23 @@ void SdXMLMeasureShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
 void SdXMLMeasureShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
     // create Measure shape
-    uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetImport().GetModel(), uno::UNO_QUERY);
-    if(xServiceFact.is())
+    // add, set style and properties from base shape
+    AddShape("com.sun.star.drawing.MeasureShape");
+    if(mxShape.is())
     {
-        uno::Reference< drawing::XShape > xShape(xServiceFact->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.MeasureShape"))), uno::UNO_QUERY);
-        if(xShape.is())
+        SetStyle();
+        uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+        if( xProps.is() )
         {
-            // add, set style and properties from base shape
-            AddShape(xShape);
+            uno::Any aAny;
+            aAny <<= maStart;
+            xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition")), aAny);
 
-            uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-            if( xProps.is() )
-            {
-                uno::Any aAny;
-                aAny <<= maStart;
-                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition")), aAny);
-
-                aAny <<= maEnd;
-                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition")), aAny );
-            }
-
-            SetStyle();
-            SdXMLShapeContext::StartElement(xAttrList);
+            aAny <<= maEnd;
+            xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition")), aAny );
         }
+        SdXMLShapeContext::StartElement(xAttrList);
     }
-
-    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1441,45 +1242,8 @@ SdXMLPageShapeContext::SdXMLPageShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
-    mnX( 0L ),
-    mnY( 0L ),
-    mnWidth( 1L ),
-    mnHeight( 1L )
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
-    {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-        const SvXMLTokenMap& rAttrTokenMap = GetImport().GetShapeImport()->GetPageShapeAttrTokenMap();
-
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
-        {
-            case XML_TOK_PAGESHAPE_X:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnX, sValue);
-                break;
-            }
-            case XML_TOK_PAGESHAPE_Y:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnY, sValue);
-                break;
-            }
-            case XML_TOK_PAGESHAPE_WIDTH:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnWidth, sValue);
-                break;
-            }
-            case XML_TOK_PAGESHAPE_HEIGHT:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnHeight, sValue);
-                break;
-            }
-        }
-    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1493,28 +1257,17 @@ SdXMLPageShapeContext::~SdXMLPageShapeContext()
 void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
     // create Page shape
-    uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetImport().GetModel(), uno::UNO_QUERY);
-    if(xServiceFact.is())
+    // add, set style and properties from base shape
+    AddShape("com.sun.star.drawing.PageShape");
+    if(mxShape.is())
     {
-        uno::Reference< drawing::XShape > xShape(xServiceFact->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PageShape"))), uno::UNO_QUERY);
-        if(xShape.is())
-        {
-            // add, set style and properties from base shape
-            AddShape(xShape);
+        SetStyle();
 
-            SetStyle();
-            SdXMLShapeContext::StartElement(xAttrList);
+        // set parameters on shape
+        SetSizeAndPosition();
 
-            // set local parameters on shape
-            awt::Point aPoint(mnX, mnY);
-            awt::Size aSize(mnWidth, mnHeight);
-            xShape->setPosition(aPoint);
-            xShape->setSize(aSize);
-        }
+        SdXMLShapeContext::StartElement(xAttrList);
     }
-
-    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1543,21 +1296,18 @@ SdXMLCaptionShapeContext::~SdXMLCaptionShapeContext()
 void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
     // create Caption shape
-    uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetImport().GetModel(), uno::UNO_QUERY);
-    if(xServiceFact.is())
+    // add, set style and properties from base shape
+    AddShape("com.sun.star.drawing.CaptionShape");
+    if( mxShape.is() )
     {
-        uno::Reference< drawing::XShape > xShape(xServiceFact->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"))), uno::UNO_QUERY);
-        if(xShape.is())
-        {
-            // add, set style and properties from base shape
-            AddShape(xShape);
-            SetStyle();
-            SdXMLShapeContext::StartElement(xAttrList);
-        }
-    }
+        SetStyle();
 
-    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
+        // set parameters on shape
+        SetSizeAndPosition();
+        SetRotation();
+
+        SdXMLShapeContext::StartElement(xAttrList);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1572,84 +1322,55 @@ SdXMLGraphicObjectShapeContext::SdXMLGraphicObjectShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
-    mnX( 0L ),
-    mnY( 0L ),
-    mnWidth( 1L ),
-    mnHeight( 1L )
+    maURL()
 {
-    OUString aURL;
+}
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
+//////////////////////////////////////////////////////////////////////////////
+
+// this is called from the parent group for each unparsed attribute in the attribute list
+void SdXMLGraphicObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+{
+    if( XML_NAMESPACE_XLINK == nPrefix )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-        const SvXMLTokenMap& rAttrTokenMap = GetImport().GetShapeImport()->GetGraphicObjectShapeAttrTokenMap();
-
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_href)) )
         {
-            case XML_TOK_GOSHAPE_X:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnX, sValue);
-                break;
-            }
-            case XML_TOK_GOSHAPE_Y:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnY, sValue);
-                break;
-            }
-            case XML_TOK_GOSHAPE_WIDTH:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnWidth, sValue);
-                break;
-            }
-            case XML_TOK_GOSHAPE_HEIGHT:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnHeight, sValue);
-                break;
-            }
-            case XML_TOK_GOSHAPE_URL:
-            {
-                aURL = sValue;
-            }
+            maURL = rValue;
+            return;
         }
     }
 
+    SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+{
     // create graphic object shape
-    uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetImport().GetModel(), uno::UNO_QUERY);
-    if(xServiceFact.is())
+    AddShape( "com.sun.star.drawing.GraphicObjectShape" );
+    if(mxShape.is())
     {
-        OUString aType(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicObjectShape"));
-        if( maPresentationClass.getLength() )
-            aType = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.GraphicObjectShape"));
-
-        uno::Reference< drawing::XShape > xShape( xServiceFact->createInstance( aType ), uno::UNO_QUERY);
-        if(xShape.is())
+        SetStyle();
+        if( !mbIsPlaceholder )
         {
-            AddShape( xShape );
-
-            if( !mbIsPlaceholder )
+            uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
+            if(xProps.is())
             {
-                uno::Reference< beans::XPropertySet > xProps(xShape, uno::UNO_QUERY);
-                if(xProps.is())
-                {
-                    uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
-                    if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") )))
-                        xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ), ::cppu::bool2any( sal_False ) );
+                uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
+                if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") )))
+                    xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ), ::cppu::bool2any( sal_False ) );
 
-                    if( aURL.getLength() )
+                if( maURL.getLength() )
+                {
+                    uno::Any aAny;
+                    aAny <<= GetImport().ResolveGraphicObjectURL( maURL, sal_False );
+                    try
                     {
-                        uno::Any aAny;
-                        aAny <<= rImport.ResolveGraphicObjectURL( aURL, sal_False );
-                        try
-                        {
-                            xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL") ), aAny );
-                        }
-                        catch (lang::IllegalArgumentException const &)
-                        {
-                        }
+                        xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL") ), aAny );
+                    }
+                    catch (lang::IllegalArgumentException const &)
+                    {
                     }
                 }
             }
@@ -1657,7 +1378,7 @@ SdXMLGraphicObjectShapeContext::SdXMLGraphicObjectShapeContext(
 
         if(mbIsUserTransformed)
         {
-            uno::Reference< beans::XPropertySet > xProps(xShape, uno::UNO_QUERY);
+            uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
             if(xProps.is())
             {
                 uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
@@ -1669,18 +1390,12 @@ SdXMLGraphicObjectShapeContext::SdXMLGraphicObjectShapeContext(
             }
         }
 
-        SetStyle();
-
-        // set local parameters on shape
-        awt::Point aPoint(mnX, mnY);
-        awt::Size aSize(mnWidth, mnHeight);
-        xShape->setPosition(aPoint);
-        xShape->setSize(aSize);
+        // set parameters on shape
+        SetSizeAndPosition();
+        SetRotation();
 
         SdXMLShapeContext::StartElement(xAttrList);
     }
-
-    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1702,106 +1417,8 @@ SdXMLChartShapeContext::SdXMLChartShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
-    mnX( 0L ),
-    mnY( 0L ),
-    mnWidth( 1L ),
-    mnHeight( 1L ),
     mpChartContext( NULL )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
-    {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-        const SvXMLTokenMap& rAttrTokenMap = GetImport().GetShapeImport()->GetRectShapeAttrTokenMap();
-
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
-        {
-            case XML_TOK_RECTSHAPE_X:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnX, sValue);
-                break;
-            }
-            case XML_TOK_RECTSHAPE_Y:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnY, sValue);
-                break;
-            }
-            case XML_TOK_RECTSHAPE_WIDTH:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnWidth, sValue);
-                break;
-            }
-            case XML_TOK_RECTSHAPE_HEIGHT:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnHeight, sValue);
-                break;
-            }
-        }
-    }
-
-    // create rectangle shape
-    uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetImport().GetModel(), uno::UNO_QUERY);
-    if(xServiceFact.is())
-    {
-        OUString aType(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.OLE2Shape"));
-        if( maPresentationClass.getLength() )
-            aType = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.ChartShape"));
-
-        uno::Reference< drawing::XShape > xShape( xServiceFact->createInstance( aType ), uno::UNO_QUERY);
-        if(xShape.is())
-        {
-            AddShape( xShape );
-
-            if( !mbIsPlaceholder )
-            {
-                uno::Reference< beans::XPropertySet > xProps(xShape, uno::UNO_QUERY);
-                if(xProps.is())
-                {
-                    uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
-                    if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") )))
-                        xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ), ::cppu::bool2any( sal_False ) );
-
-                    uno::Any aAny;
-
-                    const OUString aCLSID( RTL_CONSTASCII_USTRINGPARAM("BF884321-85DD-11D1-89d0-008029e4b0b1"));
-                    aAny <<= aCLSID;
-                    xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID") ), aAny );
-
-                    aAny = xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Model") ) );
-                    uno::Reference< frame::XModel > xChartModel;
-                    if( aAny >>= xChartModel )
-                    {
-                        mpChartContext = rImport.GetChartImport()->CreateChartContext( rImport, nPrfx, rLocalName, xChartModel, xAttrList );
-                    }
-                }
-            }
-        }
-
-        if(mbIsUserTransformed)
-        {
-            uno::Reference< beans::XPropertySet > xProps(xShape, uno::UNO_QUERY);
-            if(xProps.is())
-            {
-                uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
-                if( xPropsInfo.is() )
-                {
-                    if( xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") )))
-                        xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") ), ::cppu::bool2any( sal_False ) );
-                }
-            }
-        }
-
-        SetStyle();
-
-        // set local parameters on shape
-        awt::Point aPoint(mnX, mnY);
-        awt::Size aSize(mnWidth, mnHeight);
-        xShape->setPosition(aPoint);
-        xShape->setSize(aSize);
-    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1816,10 +1433,60 @@ SdXMLChartShapeContext::~SdXMLChartShapeContext()
 
 void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    if( mpChartContext )
-        mpChartContext->StartElement( xAttrList );
+    const sal_Bool bIsPresentation = maPresentationClass.getLength() != 0;
+    AddShape( bIsPresentation ? "com.sun.star.presentation.ChartShape" : "com.sun.star.drawing.OLE2Shape" );
 
-    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
+    if(mxShape.is())
+    {
+        SetStyle();
+
+        if( !mbIsPlaceholder )
+        {
+            uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
+            if(xProps.is())
+            {
+                uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
+                if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") )))
+                    xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ), ::cppu::bool2any( sal_False ) );
+
+                uno::Any aAny;
+
+                const OUString aCLSID( RTL_CONSTASCII_USTRINGPARAM("BF884321-85DD-11D1-89d0-008029e4b0b1"));
+                aAny <<= aCLSID;
+                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID") ), aAny );
+
+                aAny = xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Model") ) );
+                uno::Reference< frame::XModel > xChartModel;
+                if( aAny >>= xChartModel )
+                {
+                    mpChartContext = GetImport().GetChartImport()->CreateChartContext( GetImport(), XML_NAMESPACE_SVG, OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_chart)), xChartModel, xAttrList );
+                }
+            }
+        }
+
+        if(mbIsUserTransformed)
+        {
+            uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
+            if(xProps.is())
+            {
+                uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
+                if( xPropsInfo.is() )
+                {
+                    if( xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") )))
+                        xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") ), ::cppu::bool2any( sal_False ) );
+                }
+            }
+        }
+
+
+        // set parameters on shape
+        SetSizeAndPosition();
+
+        SdXMLShapeContext::StartElement(xAttrList);
+
+        if( mpChartContext )
+            mpChartContext->StartElement( xAttrList );
+    }
 }
 
 void SdXMLChartShapeContext::EndElement()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dscene.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-07 15:15:53 $
+ *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ SdXML3DLightContext::~SdXML3DLightContext()
 
 //////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( SdXML3DSceneShapeContext, SvXMLImportContext );
+TYPEINIT1( SdXML3DSceneShapeContext, SdXMLShapeContext );
 
 SdXML3DSceneShapeContext::SdXML3DSceneShapeContext(
     SvXMLImport& rImport,
@@ -157,7 +157,6 @@ SdXML3DSceneShapeContext::SdXML3DSceneShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
-    mxShapes(rShapes),
     mbSetTransform( FALSE ),
     mxPrjMode(drawing::ProjectionMode_PERSPECTIVE),
     mnDistance(1000),
@@ -179,7 +178,6 @@ SdXML3DSceneShapeContext::SdXML3DSceneShapeContext(
 
 SdXML3DSceneShapeContext::~SdXML3DSceneShapeContext()
 {
-
     // release remembered light contexts, they are no longer needed
     while(maList.Count())
         maList.Remove(maList.Count() - 1)->ReleaseRef();
@@ -189,6 +187,16 @@ SdXML3DSceneShapeContext::~SdXML3DSceneShapeContext()
 
 void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
+    // create new 3DScene shape and add it to rShapes, use it
+    // as base for the new 3DScene import
+    AddShape( "com.sun.star.drawing.Shape3DSceneObject" );
+    if( mxShape.is() )
+    {
+        mxChilds = uno::Reference< drawing::XShapes >::query( mxShape );
+
+        SetSizeAndPosition();
+    }
+
     // read attributes for the 3DScene
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -317,156 +325,154 @@ void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
 void SdXML3DSceneShapeContext::EndElement()
 {
-    if(mxShapes.is())
+    if(mxShape.is())
     {
-        uno::Reference< drawing::XShape > xShape(mxShapes, uno::UNO_QUERY);
-        if(xShape.is())
+        // set local parameters on shape
+/*
+        awt::Point aPoint(mnX, mnY);
+        awt::Size aSize(mnWidth, mnHeight);
+        mxShape->setPosition(aPoint);
+        mxShape->setSize(aSize);
+*/
+
+        uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+        if(xPropSet.is())
         {
-            // set local parameters on shape
-            awt::Point aPoint(mnX, mnY);
-            awt::Size aSize(mnWidth, mnHeight);
-            xShape->setPosition(aPoint);
-            xShape->setSize(aSize);
+            uno::Any aAny;
 
-            uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-            if(xPropSet.is())
+            // world transformation
+            if(mbSetTransform)
             {
-                uno::Any aAny;
+                aAny <<= mxHomMat;
+                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DTransformMatrix")), aAny);
+            }
 
-                // world transformation
-                if(mbSetTransform)
+            // projection "D3DScenePerspective" drawing::ProjectionMode
+            aAny <<= mxPrjMode;
+            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DScenePerspective")), aAny);
+
+            // distance
+            aAny <<= mnDistance;
+            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneDistance")), aAny);
+
+            // focalLength
+            aAny <<= mnFocalLength;
+            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneFocalLength")), aAny);
+
+            // shadowSlant
+            aAny <<= (sal_Int16)mnShadowSlant;
+            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadowSlant")), aAny);
+
+            // shadeMode
+            aAny <<= mxShadeMode;
+            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadeMode")), aAny);
+
+            // ambientColor
+            aAny <<= maAmbientColor.GetColor();
+            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneAmbientColor")), aAny);
+
+            // lightingMode
+            aAny <<= mbLightingMode;
+            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneTwoSidedLighting")), aAny);
+
+            if(maList.Count())
+            {
+                uno::Any aAny2;
+                uno::Any aAny3;
+
+                // set lights
+                for(sal_uInt32 a(0L); a < maList.Count(); a++)
                 {
-                    aAny <<= mxHomMat;
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DTransformMatrix")), aAny);
-                }
+                    SdXML3DLightContext* pCtx = (SdXML3DLightContext*)maList.GetObject(a);
 
-                // projection "D3DScenePerspective" drawing::ProjectionMode
-                aAny <<= mxPrjMode;
-                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DScenePerspective")), aAny);
+                    // set anys
+                    aAny <<= pCtx->GetDiffuseColor().GetColor();
+                    drawing::Direction3D xLightDir;
+                    xLightDir.DirectionX = pCtx->GetDirection().X();
+                    xLightDir.DirectionY = pCtx->GetDirection().Y();
+                    xLightDir.DirectionZ = pCtx->GetDirection().Z();
+                    aAny2 <<= xLightDir;
+                    aAny3 <<= pCtx->GetEnabled();
 
-                // distance
-                aAny <<= mnDistance;
-                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneDistance")), aAny);
-
-                // focalLength
-                aAny <<= mnFocalLength;
-                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneFocalLength")), aAny);
-
-                // shadowSlant
-                aAny <<= (sal_Int16)mnShadowSlant;
-                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadowSlant")), aAny);
-
-                // shadeMode
-                aAny <<= mxShadeMode;
-                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadeMode")), aAny);
-
-                // ambientColor
-                aAny <<= maAmbientColor.GetColor();
-                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneAmbientColor")), aAny);
-
-                // lightingMode
-                aAny <<= mbLightingMode;
-                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneTwoSidedLighting")), aAny);
-
-                if(maList.Count())
-                {
-                    uno::Any aAny2;
-                    uno::Any aAny3;
-
-                    // set lights
-                    for(sal_uInt32 a(0L); a < maList.Count(); a++)
+                    switch(a)
                     {
-                        SdXML3DLightContext* pCtx = (SdXML3DLightContext*)maList.GetObject(a);
-
-                        // set anys
-                        aAny <<= pCtx->GetDiffuseColor().GetColor();
-                        drawing::Direction3D xLightDir;
-                        xLightDir.DirectionX = pCtx->GetDirection().X();
-                        xLightDir.DirectionY = pCtx->GetDirection().Y();
-                        xLightDir.DirectionZ = pCtx->GetDirection().Z();
-                        aAny2 <<= xLightDir;
-                        aAny3 <<= pCtx->GetEnabled();
-
-                        switch(a)
+                        case 0:
                         {
-                            case 0:
-                            {
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor1")), aAny);
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection1")), aAny2);
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn1")), aAny3);
-                                break;
-                            }
-                            case 1:
-                            {
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor2")), aAny);
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection2")), aAny2);
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn2")), aAny3);
-                                break;
-                            }
-                            case 2:
-                            {
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor3")), aAny);
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection3")), aAny2);
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn3")), aAny3);
-                                break;
-                            }
-                            case 3:
-                            {
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor4")), aAny);
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection4")), aAny2);
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn4")), aAny3);
-                                break;
-                            }
-                            case 4:
-                            {
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor5")), aAny);
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection5")), aAny2);
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn5")), aAny3);
-                                break;
-                            }
-                            case 5:
-                            {
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor6")), aAny);
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection6")), aAny2);
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn6")), aAny3);
-                                break;
-                            }
-                            case 6:
-                            {
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor7")), aAny);
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection7")), aAny2);
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn7")), aAny3);
-                                break;
-                            }
-                            case 7:
-                            {
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor8")), aAny);
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection8")), aAny2);
-                                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn8")), aAny3);
-                                break;
-                            }
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor1")), aAny);
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection1")), aAny2);
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn1")), aAny3);
+                            break;
+                        }
+                        case 1:
+                        {
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor2")), aAny);
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection2")), aAny2);
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn2")), aAny3);
+                            break;
+                        }
+                        case 2:
+                        {
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor3")), aAny);
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection3")), aAny2);
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn3")), aAny3);
+                            break;
+                        }
+                        case 3:
+                        {
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor4")), aAny);
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection4")), aAny2);
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn4")), aAny3);
+                            break;
+                        }
+                        case 4:
+                        {
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor5")), aAny);
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection5")), aAny2);
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn5")), aAny3);
+                            break;
+                        }
+                        case 5:
+                        {
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor6")), aAny);
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection6")), aAny2);
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn6")), aAny3);
+                            break;
+                        }
+                        case 6:
+                        {
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor7")), aAny);
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection7")), aAny2);
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn7")), aAny3);
+                            break;
+                        }
+                        case 7:
+                        {
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor8")), aAny);
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection8")), aAny2);
+                            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn8")), aAny3);
+                            break;
                         }
                     }
                 }
-
-                // CameraGeometry and camera settings
-                drawing::CameraGeometry aCamGeo;
-                aCamGeo.vrp.PositionX = maVRP.X();
-                aCamGeo.vrp.PositionY = maVRP.Y();
-                aCamGeo.vrp.PositionZ = maVRP.Z();
-                aCamGeo.vpn.DirectionX = maVPN.X();
-                aCamGeo.vpn.DirectionY = maVPN.Y();
-                aCamGeo.vpn.DirectionZ = maVPN.Z();
-                aCamGeo.vup.DirectionX = maVUP.X();
-                aCamGeo.vup.DirectionY = maVUP.Y();
-                aCamGeo.vup.DirectionZ = maVUP.Z();
-                aAny <<= aCamGeo;
-                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DCameraGeometry")), aAny);
             }
 
-            // call parent
-            SvXMLImportContext::EndElement();
+            // CameraGeometry and camera settings
+            drawing::CameraGeometry aCamGeo;
+            aCamGeo.vrp.PositionX = maVRP.X();
+            aCamGeo.vrp.PositionY = maVRP.Y();
+            aCamGeo.vrp.PositionZ = maVRP.Z();
+            aCamGeo.vpn.DirectionX = maVPN.X();
+            aCamGeo.vpn.DirectionY = maVPN.Y();
+            aCamGeo.vpn.DirectionZ = maVPN.Z();
+            aCamGeo.vup.DirectionX = maVUP.X();
+            aCamGeo.vup.DirectionY = maVUP.Y();
+            aCamGeo.vup.DirectionZ = maVUP.Z();
+            aAny <<= aCamGeo;
+            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DCameraGeometry")), aAny);
         }
+
+        // call parent
+        SdXMLShapeContext::EndElement();
     }
 }
 
@@ -497,7 +503,7 @@ SvXMLImportContext* SdXML3DSceneShapeContext::CreateChildContext( USHORT nPrefix
     if(!pContext)
     {
         pContext = GetImport().GetShapeImport()->Create3DSceneChildContext(
-            GetImport(), nPrefix, rLocalName, xAttrList, mxShapes);
+            GetImport(), nPrefix, rLocalName, xAttrList, mxChilds);
     }
 
     // call parent when no own context was created

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-11 07:44:37 $
+ *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,52 +276,22 @@ void XMLShapeExport::exportAutoStyles()
 
 /** creates a unique id for this shape, this id is saved and exported with this shape later
     with the exportShape method. Its ok to call this twice with the same shape */
-void XMLShapeExport::createShapeId( const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape )
+void XMLShapeExport::createShapeId( const uno::Reference < drawing::XShape >& xShape )
 {
-/*
-    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-    if( xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( msZIndex ) )
-    {
-        sal_Int32 nIndex = 0;
-        xPropSet->getPropertyValue( msZIndex ) >>= nIndex;
+    ShapeIdsMap::iterator aId( maShapeIds.find( xShape ) );
 
-        const std::vector<XMLShapeIdHint>::size_type nCount = maUsedShapeIds.size();
-        for( std::vector<XMLShapeIdHint>::size_type i = 0; i < nCount; i++ )
-        {
-            if( maUsedShapeIds[i].mnShapeIndex == nIndex )
-                return; // we already have an id for this shape;
-        }
-
-        XMLShapeIdHint aNewHint;
-        aNewHint.mnShapeIndex = nIndex;
-        aNewHint.mnShapeId = mnNextUniqueShapeId++;
-        maUsedShapeIds.push_back( aNewHint );
-    }
-    else
-    {
-        DBG_ERROR( "createShapeId failed!" );
-    }
-*/
+    if( aId == maShapeIds.end() )
+        maShapeIds[xShape] = mnNextUniqueShapeId++;
 }
 
 /** returns the unique id for this shape. It returns -1 if the was no createShapeId call
     for this shape yet. */
-sal_Int32 XMLShapeExport::getShapeId( const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape )
+sal_Int32 XMLShapeExport::getShapeId( const uno::Reference < drawing::XShape >& xShape )
 {
-/*
-    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-    if( xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( msZIndex ) )
-    {
-        sal_Int32 nIndex = 0;
-        xPropSet->getPropertyValue( msZIndex ) >>= nIndex;
+    ShapeIdsMap::iterator aId( maShapeIds.find( xShape ) );
 
-        const std::vector<XMLShapeIdHint>::size_type nCount = maUsedShapeIds.size();
-        for( std::vector<XMLShapeIdHint>::size_type i = 0; i < nCount; i++ )
-        {
-            if( maUsedShapeIds[i].mnShapeIndex == nIndex )
-                return maUsedShapeIds[i].mnShapeId;
-        }
-    }
-*/
+    if( aId != maShapeIds.end() )
+        return (*aId).second;
+
     return -1;
 }

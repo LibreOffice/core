@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-11 08:00:05 $
+ *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,14 +74,14 @@
 #include "nmspmap.hxx"
 #endif
 
-#ifndef _XIMPGROUP_HXX
-#include "ximpgrp.hxx"
+#ifndef _XIMPPAGE_HXX
+#include "ximppage.hxx"
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
 // draw:page context
 
-class SdXMLDrawPageContext : public SdXMLGroupShapeContext
+class SdXMLDrawPageContext : public SdXMLGenericPageContext
 {
     rtl::OUString               maName;
     rtl::OUString               maStyleName;

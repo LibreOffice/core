@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpgrp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 23:25:41 $
+ *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@
 class SdXMLGroupShapeContext : public SdXMLShapeContext
 {
     // the shape group this group is working on
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > mxShapes;
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > mxChilds;
 
 protected:
     void SetLocalShapesContext(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rNew)
@@ -109,6 +109,7 @@ public:
     virtual SvXMLImportContext *CreateChildContext(
         USHORT nPrefix, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
+    virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
     virtual void EndElement();
 
     const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& GetLocalShapesContext() const

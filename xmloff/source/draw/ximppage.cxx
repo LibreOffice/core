@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: ximpnote.cxx,v $
+ *  $RCSfile: ximppage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
+ *  last change: $Author: cl $ $Date: 2000-12-13 19:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,12 @@
 
 #pragma hdrstop
 
-#ifndef _XIMPNOTES_HXX
-#include "ximpnote.hxx"
+#ifndef _XIMPPAGE_HXX
+#include "ximppage.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_PRESENTATION_XPRESENTATIONPAGE_HPP_
-#include <com/sun/star/presentation/XPresentationPage.hpp>
+#ifndef _XIMPSHAPE_HXX
+#include "ximpshap.hxx"
 #endif
 
 using namespace ::rtl;
@@ -74,92 +74,50 @@ using namespace ::com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
-SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
+TYPEINIT1( SdXMLGenericPageContext, SvXMLImportContext );
+
+SdXMLGenericPageContext::SdXMLGenericPageContext(
+    SvXMLImport& rImport,
     USHORT nPrfx, const OUString& rLocalName,
-    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+    const uno::Reference< xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXMLGenericPageContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
-    mbNotesMode(FALSE)
+:   SvXMLImportContext( rImport, nPrfx, rLocalName ),
+    mxShapes( rShapes )
 {
-    if(GetSdImport().IsImpress())
-    {
-        // get notes page
-        uno::Reference< presentation::XPresentationPage > xPresPage(rShapes, uno::UNO_QUERY);
-        if(xPresPage.is())
-        {
-            uno::Reference< drawing::XDrawPage > xNotesDrawPage(xPresPage->getNotesPage(), uno::UNO_QUERY);
-            if(xNotesDrawPage.is())
-            {
-                uno::Reference< drawing::XShapes > xNewShapes(xNotesDrawPage, uno::UNO_QUERY);
-                if(xNewShapes.is())
-                {
-                    // now delete all up-to-now contained shapes from this notes page
-                    while(xNewShapes->getCount())
-                    {
-                        uno::Reference< drawing::XShape > xShape;
-                        uno::Any aAny(xNewShapes->getByIndex(0L));
-
-                        aAny >>= xShape;
-
-                        if(xShape.is())
-                        {
-                            xNewShapes->remove(xShape);
-                        }
-                    }
-
-                    // set new local shapes context to notes page
-                    SetLocalShapesContext(xNewShapes);
-                    mbNotesMode = TRUE;
-                }
-            }
-        }
-    }
+    GetImport().GetShapeImport()->pushGroupForSorting( rShapes );
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
-SdXMLNotesContext::~SdXMLNotesContext()
+SdXMLGenericPageContext::~SdXMLGenericPageContext()
 {
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
-SvXMLImportContext *SdXMLNotesContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext* SdXMLGenericPageContext::CreateChildContext( USHORT nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
-    if(mbNotesMode)
-    {
-        // OK, notes page is set on base class, objects can be imported on notes page
-        SvXMLImportContext *pContext = 0L;
+    SvXMLImportContext* pContext = 0L;
 
-        // some special objects inside presentation:notes context
-        // ...
+    // call GroupChildContext function at common ShapeImport
+    pContext = GetImport().GetShapeImport()->CreateGroupChildContext(
+        GetImport(), nPrefix, rLocalName, xAttrList, mxShapes);
 
+    // call parent when no own context was created
+    if(!pContext)
+        pContext = SvXMLImportContext::CreateChildContext(
+        nPrefix, rLocalName, xAttrList);
 
-
-
-
-
-
-        // call parent when no own context was created
-        if(!pContext)
-            pContext = SdXMLGenericPageContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
-
-        return pContext;
-    }
-    else
-    {
-        // do not import this content, the notes page could not be accessed
-        return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
-    }
+    return pContext;
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLNotesContext::EndElement()
+void SdXMLGenericPageContext::EndElement()
 {
-    SdXMLGenericPageContext::EndElement();
+    GetImport().GetShapeImport()->popGroupAndSort();
 }
 
 
