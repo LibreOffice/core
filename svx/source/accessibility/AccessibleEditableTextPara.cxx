@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:24 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,27 +373,28 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
+        int nClientId( getNotifierClientId() );
+
+        // #108212# drop all references before notifying dispose
+        mxParent = NULL;
+        mnNotifierClientId = -1;
+        mpEditSource = NULL;
+
         // notify listeners
-        if( getNotifierClientId() != -1 )
+        if( nClientId != -1 )
         {
             try
             {
                 uno::Reference < XAccessibleContext > xThis = getAccessibleContext();
 
                 // #106234# Delegate to EventNotifier
-                ::comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( getNotifierClientId(),
-                                                                                    xThis );
+                ::comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nClientId, xThis );
 #ifdef DBG_UTIL
-                OSL_TRACE( "Disposed ID: %d\n", mnNotifierClientId );
+                OSL_TRACE( "Disposed ID: %d\n", nClientId );
 #endif
             }
             catch( const uno::Exception& ) {}
         }
-
-        // drop all references
-        mxParent = NULL;
-        mnNotifierClientId = -1;
-        mpEditSource = NULL;
     }
 
     void AccessibleEditableTextPara::SetEditSource( SvxEditSourceAdapter* pEditSource )
@@ -1729,6 +1730,7 @@ namespace accessibility
         try
         {
             // #102710# Request edit view when doing changes
+            // AccessibleEmptyEditSource relies on this behaviour
             SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
@@ -1761,6 +1763,7 @@ namespace accessibility
         try
         {
             // #102710# Request edit view when doing changes
+            // AccessibleEmptyEditSource relies on this behaviour
             SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
@@ -1795,6 +1798,7 @@ namespace accessibility
         try
         {
             // #102710# Request edit view when doing changes
+            // AccessibleEmptyEditSource relies on this behaviour
             SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
@@ -1829,6 +1833,7 @@ namespace accessibility
         try
         {
             // #102710# Request edit view when doing changes
+            // AccessibleEmptyEditSource relies on this behaviour
             SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
             USHORT nPara = static_cast< USHORT >( GetParagraphIndex() );
