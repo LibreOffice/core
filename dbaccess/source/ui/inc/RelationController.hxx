@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:53:37 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,7 @@ namespace dbaui
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId);
-        virtual ToolBox* CreateToolBox(Window* pParent);
+        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         ORelationDesignView*    getRelationView() { return static_cast<ORelationDesignView*>(m_pView); }
         void loadData();
