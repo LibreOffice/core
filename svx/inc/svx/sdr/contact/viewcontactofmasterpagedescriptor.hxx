@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofmasterpagedescriptor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:04:27 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 class SfxItemSet;
+class Bitmap;
+class MapMode;
 
 namespace sdr
 {
@@ -139,6 +141,17 @@ namespace sdr
             // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
             virtual sal_Bool PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC);
             virtual ViewContact* GetParentContact() const;
+
+            // React on changes of the object of this ViewContact
+            virtual void ActionChanged();
+
+            // Interface method for receiving buffered MasterPage render data from
+            // VOCOfMasterPageDescriptor. Called from instances of VOCOfMasterPageDescriptor.
+            void OfferBufferedData(const Bitmap& rBitmap, const MapMode& rMapMode);
+
+            // Interface method for VOCOfMasterPageDescriptor to ask for buffered data. If
+            // the page is the sane and the MapMode is the same, return the Bitmap.
+            Bitmap RequestBufferedData(const MapMode& rMapMode);
         };
     } // end of namespace contact
 } // end of namespace sdr
