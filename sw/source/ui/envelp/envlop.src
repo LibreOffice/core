@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:16:20 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ TabDialog DLG_ENV
                 Text[ czech ] = "Obálka";
                 Text[ hebrew ] = "‮מעטפה‬";
                 Text[ hindi ] = "लिफाफा";
+                Text[ slovak ] = "Obálka";
             };
             PageItem
             {
@@ -150,6 +151,7 @@ TabDialog DLG_ENV
                 Text[ czech ] = "Formát";
                 Text[ hebrew ] = "‮עיצוב‬";
                 Text[ hindi ] = "रचना";
+                Text[ slovak ] = "Formát";
             };
             PageItem
             {
@@ -183,6 +185,7 @@ TabDialog DLG_ENV
                 Text[ czech ] = "Tiskárna";
                 Text[ hebrew ] = "‮מדפסת‬";
                 Text[ hindi ] = "मुद्रक";
+                Text[ slovak ] = "Tlačiareň";
             };
         };
     };
@@ -218,6 +221,7 @@ TabDialog DLG_ENV
         Text[ czech ] = "Vložit";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
+        Text[ slovak ] = "~Vložiť";
     };
     String ST_CHANGE
     {
@@ -251,6 +255,7 @@ TabDialog DLG_ENV
         Text[ czech ] = "Upravit";
         Text[ hebrew ] = "‮שינוי‬";
         Text[ hindi ] = "~सुधारो";
+        Text[ slovak ] = "U~praviť";
     };
     Text[ chinese_simplified ] = "信封";
     Text[ russian ] = "�������";
@@ -267,6 +272,7 @@ TabDialog DLG_ENV
     Text[ czech ] = "Obálka";
     Text[ hebrew ] = "‮מעטפה‬";
     Text[ hindi ] = "लिफाफा";
+    Text[ slovak ] = "Obálka";
 };
  // TP_ENV_ENV ---------------------------------------------------------------
 TabPage TP_ENV_ENV
@@ -308,6 +314,7 @@ TabPage TP_ENV_ENV
         Text[ czech ] = "Adresát";
         Text[ hebrew ] = "~Empfänger";
         Text[ hindi ] = "लेने~वाला";
+        Text[ slovak ] = "Adr~esát";
     };
     MultiLineEdit EDT_ADDR
     {
@@ -352,6 +359,7 @@ TabPage TP_ENV_ENV
         Text[ czech ] = "Databáze";
         Text[ hebrew ] = "~Datenbank";
         Text[ hindi ] = "लेखासंचय";
+        Text[ slovak ] = "Databáza";
     };
     ListBox LB_DATABASE
     {
@@ -392,6 +400,7 @@ TabPage TP_ENV_ENV
         Text[ czech ] = "Tabulka";
         Text[ hebrew ] = "‮טבלה‬";
         Text[ hindi ] = "सारणी";
+        Text[ slovak ] = "Tabuľka";
     };
     ListBox LB_TABLE
     {
@@ -440,6 +449,7 @@ TabPage TP_ENV_ENV
         Text[ czech ] = "Pole databáze";
         Text[ hebrew ] = "Datenbank~feld";
         Text[ hindi ] = "~लेखासंचय क्षेत्र";
+        Text[ slovak ] = "Pole ~databázy";
     };
     ListBox LB_DBFIELD
     {
@@ -482,6 +492,7 @@ TabPage TP_ENV_ENV
         Text[ czech ] = "Odesilatel";
         Text[ hebrew ] = "~Absender";
         Text[ hindi ] = "~भेजनेवाला";
+        Text[ slovak ] = "Odo~sielateľ";
     };
     MultiLineEdit EDT_SEND
     {
@@ -532,7 +543,10 @@ String STR_DOC_TITLE
     Text[ czech ] = "Obálka";
     Text[ hebrew ] = "‮מעטפה‬";
     Text[ hindi ] = "लिफाफा";
+    Text[ slovak ] = "Obálka";
 };
+
+
 
 
 
