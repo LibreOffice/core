@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAppletImpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:57:25 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,9 +116,10 @@ public:
     SwApplet_Impl( SfxItemSet& rSet ): aItemSet ( rSet) {}
     ~SwApplet_Impl();
     void CreateApplet( const String& rCode, const String& rName,
-                       BOOL bMayScript, const String& rCodeBase );
+                       BOOL bMayScript, const String& rCodeBase,
+                       const String& rBaseURL );
 #ifdef SOLAR_JAVA
-    sal_Bool CreateApplet();
+    sal_Bool CreateApplet( const String& rBaseURL );
     void AppendParam( const String& rName, const String& rValue );
 #endif
     void FinishApplet();
