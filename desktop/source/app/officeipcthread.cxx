@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-11 14:38:47 $
+ *  last change: $Author: lo $ $Date: 2002-10-17 10:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -745,9 +745,10 @@ void SAL_CALL OfficeIPCThread::run()
 
             sal_Bool bDocRequestSent = sal_False;
             ProcessDocumentsRequest* pRequest = new ProcessDocumentsRequest;
+            /*
             ::osl::Condition cProcessed;
             pRequest->pcProcessed = & cProcessed;
-
+            */
             // Print requests are not dependent on the -invisible cmdline argument as they are
             // loaded with the "hidden" flag! So they are always checked.
             bDocRequestSent |= aCmdLineArgs.GetPrintList( pRequest->aPrintList );
@@ -759,9 +760,11 @@ void SAL_CALL OfficeIPCThread::run()
                 // Read cmdline args that can open/create documents. As they would open a window
                 // they are only allowed if the "-invisible" is currently not used!
                 bDocRequestSent |= aCmdLineArgs.GetOpenList( pRequest->aOpenList );
+                bDocRequestSent |= aCmdLineArgs.GetViewList( pRequest->aViewList );
                 bDocRequestSent |= aCmdLineArgs.GetForceOpenList( pRequest->aForceOpenList );
                 bDocRequestSent |= aCmdLineArgs.GetForceNewList( pRequest->aForceNewList );
             }
+
 
             if ( bDocRequestSent )
              {
@@ -773,8 +776,7 @@ void SAL_CALL OfficeIPCThread::run()
             {
                 // delete not used request again
                 delete pRequest;
-                // don't wait for processing
-                cProcessed.set();
+                pRequest = NULL;
             }
 
             if (( aArguments.CompareTo( sc_aShowSequence, sc_nShSeqLength ) == COMPARE_EQUAL ) ||
@@ -785,13 +787,14 @@ void SAL_CALL OfficeIPCThread::run()
                     new ApplicationEvent( aEmpty, aEmpty,
                                             "APPEAR", aEmpty );
                 ImplPostForeignAppEvent( pAppEvent );
-                cProcessed.set();
+                pRequest->cProcessed.set();
             }
 
             // we don't need the mutex any longer...
             aGuard.clear();
             // wait for processing to finish
-            cProcessed.wait();
+            if (pRequest != NULL)
+                pRequest->cProcessed.wait();
             // processing finished, inform the requesting end
             nBytes = 0;
             while (
@@ -834,13 +837,14 @@ void AddToDispatchList(
     }
 }
 
-void OfficeIPCThread::ExecuteCmdLineRequests( const ProcessDocumentsRequest& aRequest )
+void OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest )
 {
     ::rtl::OUString                 aEmpty;
     DispatchWatcher::DispatchList   aDispatchList;
 
     // Create dispatch list for dispatch watcher
     AddToDispatchList( aDispatchList, aRequest.aOpenList, DispatchWatcher::REQUEST_OPEN, aEmpty );
+    AddToDispatchList( aDispatchList, aRequest.aViewList, DispatchWatcher::REQUEST_VIEW, aEmpty );
     AddToDispatchList( aDispatchList, aRequest.aPrintList, DispatchWatcher::REQUEST_PRINT, aEmpty );
     AddToDispatchList( aDispatchList, aRequest.aPrintToList, DispatchWatcher::REQUEST_PRINTTO, aRequest.aPrinterName );
     AddToDispatchList( aDispatchList, aRequest.aForceOpenList, DispatchWatcher::REQUEST_FORCEOPEN, aEmpty );
@@ -862,7 +866,7 @@ void OfficeIPCThread::ExecuteCmdLineRequests( const ProcessDocumentsRequest& aRe
         // Execute dispatch requests
         pGlobalOfficeIPCThread->mpDispatchWatcher->executeDispatchRequests( aDispatchList );
         // after execution, set condition in request
-        aRequest.pcProcessed->set();
+        aRequest.cProcessed.set();
     }
 }
 

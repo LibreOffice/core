@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-17 14:22:38 $
+ *  last change: $Author: lo $ $Date: 2002-10-17 10:46:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,15 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                     aArgs[nIndex].Value <<= sal_True;
                 else
                     aArgs[nIndex].Value <<= sal_False;
+            }
+
+            // if we are called in viewmode, open document read-only
+            // #95425#
+            if(aDispatchRequest.aRequestType == REQUEST_VIEW) {
+                sal_Int32 nIndex = aArgs.getLength();
+                aArgs.realloc(nIndex+1);
+                aArgs[nIndex].Name = OUString::createFromAscii("ReadOnly");
+                aArgs[nIndex].Value <<= sal_True;
             }
 
             // This is a synchron loading of a component so we don't have to deal with our statusChanged listener mechanism.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-11 14:16:55 $
+ *  last change: $Author: lo $ $Date: 2002-10-17 10:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1841,6 +1841,7 @@ void Desktop::OpenClients()
         ProcessDocumentsRequest aRequest;
 
         pArgs->GetOpenList( aRequest.aOpenList );
+        pArgs->GetViewList( aRequest.aViewList );
         pArgs->GetPrintList( aRequest.aPrintList );
         pArgs->GetPrintToList( aRequest.aPrintToList );
         pArgs->GetPrinterName( aRequest.aPrinterName );
@@ -1848,6 +1849,7 @@ void Desktop::OpenClients()
         pArgs->GetForceNewList( aRequest.aForceNewList );
 
         if ( aRequest.aOpenList.getLength() > 0 ||
+             aRequest.aViewList.getLength() > 0 ||
              aRequest.aPrintList.getLength() > 0 ||
              aRequest.aForceOpenList.getLength() > 0 ||
              aRequest.aForceNewList.getLength() > 0 ||

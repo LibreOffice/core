@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-15 08:12:30 $
+ *  last change: $Author: lo $ $Date: 2002-10-17 10:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,12 +133,14 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
     // parse command line arguments
     sal_Bool    bPrintEvent     = sal_False;
     sal_Bool    bOpenEvent      = sal_True;
+    sal_Bool    bViewEvent      = sal_False;
     sal_Bool    bPrintToEvent   = sal_False;
     sal_Bool    bPrinterName    = sal_False;
     sal_Bool    bForceOpenEvent = sal_False;
     sal_Bool    bForceNewEvent  = sal_False;
 
     sal_Int32 nIndex = 0;
+
     do
     {
         ::rtl::OUString aArg    = aCmdLineString.getToken( 0, '|', nIndex );
@@ -188,6 +190,17 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
                         bForceNewEvent  = sal_False;
                         bForceOpenEvent = sal_False;
                     }
+                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-view" ))
+                    {
+                        // Print to default printer
+                        bOpenEvent      = sal_False;
+                        bViewEvent      = sal_True;
+                        bPrintEvent     = sal_False;
+                        bPrintToEvent   = sal_False;
+                        bForceNewEvent  = sal_False;
+                        bForceOpenEvent = sal_False;
+                    }
+
                 }
                 else
                 {
@@ -210,6 +223,8 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
                             AddStringListParam_Impl( CMD_STRINGPARAM_FORCENEWLIST, aArgStr );
                         else if ( bForceOpenEvent )
                             AddStringListParam_Impl( CMD_STRINGPARAM_FORCEOPENLIST, aArgStr );
+                        else if ( bViewEvent )
+                            AddStringListParam_Impl( CMD_STRINGPARAM_VIEWLIST, aArgStr );
                     }
                 }
             }
@@ -322,7 +337,8 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
 
 void CommandLineArgs::ResetParamValues()
 {
-    for ( int i = 0; i < CMD_BOOLPARAM_COUNT; i++ )
+    int i;
+    for ( i = 0; i < CMD_BOOLPARAM_COUNT; i++ )
         m_aBoolParams[i] = sal_False;
     for ( i = 0; i < CMD_STRINGPARAM_COUNT; i++ )
         m_aStrSetParams[i] = sal_False;
@@ -466,6 +482,13 @@ sal_Bool CommandLineArgs::GetForceOpenList( ::rtl::OUString& rPara) const
     osl::MutexGuard  aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_FORCEOPENLIST ];
     return m_aStrSetParams[ CMD_STRINGPARAM_FORCEOPENLIST ];
+}
+
+sal_Bool CommandLineArgs::GetViewList( ::rtl::OUString& rPara) const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    rPara = m_aStrParams[ CMD_STRINGPARAM_VIEWLIST ];
+    return m_aStrSetParams[ CMD_STRINGPARAM_VIEWLIST ];
 }
 
 sal_Bool CommandLineArgs::GetForceNewList( ::rtl::OUString& rPara) const

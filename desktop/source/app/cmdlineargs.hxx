@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cd $ $Date: 2002-09-23 12:43:59 $
+ *  last change: $Author: lo $ $Date: 2002-10-17 10:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ class CommandLineArgs
             CMD_STRINGPARAM_CLIENTDISPLAY,
             CMD_STRINGPARAM_OPENLIST,
             CMD_STRINGPARAM_FORCEOPENLIST,
+            CMD_STRINGPARAM_VIEWLIST,
             CMD_STRINGPARAM_FORCENEWLIST,
             CMD_STRINGPARAM_PRINTLIST,
             CMD_STRINGPARAM_VERSION,
@@ -142,6 +143,7 @@ class CommandLineArgs
         sal_Bool                GetForceOpenList( ::rtl::OUString& rPara) const;
         sal_Bool                GetForceNewList( ::rtl::OUString& rPara) const;
         sal_Bool                GetPrintList( ::rtl::OUString& rPara) const;
+        sal_Bool                GetViewList( ::rtl::OUString& rPara) const;
         sal_Bool                GetVersionString( ::rtl::OUString& rPara) const;
         sal_Bool                GetPrintToList( ::rtl::OUString& rPara ) const;
         sal_Bool                GetPrinterName( ::rtl::OUString& rPara ) const;

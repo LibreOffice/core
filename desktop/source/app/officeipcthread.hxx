@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-11 14:11:21 $
+ *  last change: $Author: lo $ $Date: 2002-10-17 10:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,12 +106,13 @@ class SalMainPipeExchangeSignalHandler : public vos::OSignalHandler
 struct ProcessDocumentsRequest
 {
     ::rtl::OUString aOpenList;      // Documents that should be opened in the default way
+    ::rtl::OUString aViewList;      // Documents that should be opened in viewmode
     ::rtl::OUString aPrintList;     // Documents that should be printed on default printer
     ::rtl::OUString aForceOpenList; // Documents that should be forced to open for editing (even templates)
     ::rtl::OUString aForceNewList;  // Documents that should be forced to create a new document
     ::rtl::OUString aPrinterName;   // The printer name that should be used for printing
     ::rtl::OUString aPrintToList;   // Documents that should be printed on the given printer
-    ::osl::Condition *pcProcessed;  // pointer to a condition to be set when the request has been processed
+    ::osl::Condition cProcessed;    // condition to be set when the request has been processed
 
 };
 
@@ -163,7 +164,7 @@ class OfficeIPCThread : public vos::OThread
     static void                 BlockAllRequests();
     static sal_Bool             AreRequestsPending();
     static void                 RequestsCompleted( int n = 1 );
-    static void                 ExecuteCmdLineRequests( const ProcessDocumentsRequest& );
+    static void                 ExecuteCmdLineRequests( ProcessDocumentsRequest& );
 
     // return FALSE if second office
 #ifdef SOLARIS
