@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestComponent.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-04 07:05:17 $
+ *  last change: $Author: dbo $ $Date: 2002-11-27 10:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 
 package com.sun.star.comp.bridge;
 
-
 import com.sun.star.comp.loader.FactoryHelper;
 
 import com.sun.star.lang.XServiceInfo;
@@ -82,6 +81,7 @@ import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.registry.XRegistryKey;
 
 import com.sun.star.uno.Type;
+
 
 
 public class TestComponent {
@@ -429,6 +429,9 @@ public class TestComponent {
             _any              = io_any[0];
             _testElements     = io_testElements[0];
             _testDataElements = io_testDataElements[0];
+
+            io_testElements[ 0 ] =
+                new TestElement [] { io_testElements[ 0 ][ 1 ], io_testElements[ 0 ][ 0 ] };
 
             return _testDataElements;
         }

@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: kr $ $Date: 2001-05-04 07:05:17 $
-#*    $Revision: 1.1 $
+#*    last change   $Author: dbo $ $Date: 2002-11-27 10:06:09 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile: $
 #*
@@ -349,6 +349,11 @@ TestData Test_Impl::setValues2( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& n
             bBool, cChar, nByte, nShort, nUShort, nLong, nULong, nHyper, nUHyper, fFloat, fDouble,
             eEnum, rStr, xTest, rAny, rSequence );
     _aStructData = rStruct;
+
+    TestElement elem = rSequence[ 0 ];
+    rSequence[ 0 ] = rSequence[ 1 ];
+    rSequence[ 1 ] = elem;
+
     return _aStructData;
 }
 //__________________________________________________________________________________________________
@@ -516,6 +521,9 @@ void * SAL_CALL component_getFactory(
 
 /**************************************************************************
     $Log: not supported by cvs2svn $
+    Revision 1.1  2001/05/04 07:05:17  kr
+    moved from grande to openoffice
+
     Revision 1.5  2001/03/14 09:55:11  jl
     #include <osl/time.h> added
 

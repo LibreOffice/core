@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: dbo $ $Date: 2002-10-29 10:48:02 $
-#*    $Revision: 1.4 $
+#*    last change   $Author: dbo $ $Date: 2002-11-27 10:06:09 $
+#*    $Revision: 1.5 $
 #*
 #*    $Logfile: $
 #*
@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <osl/diagnose.h>
+#include <osl/time.h>
 
 #include <uno/dispatcher.h>
 #include <uno/mapping.hxx>
@@ -40,6 +41,9 @@ using namespace com::sun::star::test::bridge;
 
 #define SERVICENAME     "com.sun.star.test.bridge.BridgeTest"
 #define IMPLNAME        "com.sun.star.comp.bridge.BridgeTest"
+
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
+#define STRING_TEST_CONSTANT "\" paco\' chorizo\\\' \"\'"
 
 namespace bridge_test
 {
@@ -207,6 +211,7 @@ static sal_Bool performAnyTest( const Reference< XBridgeTest > &xLBT, const Test
     bReturn = testAny( data.Short,xLBT ) && bReturn;
     bReturn = testAny( data.UShort,xLBT ) && bReturn;
     bReturn = testAny( data.Long,xLBT ) && bReturn;
+    bReturn = testAny( data.ULong,xLBT ) && bReturn;
     bReturn = testAny( data.Hyper,xLBT ) && bReturn;
     bReturn = testAny( data.UHyper,xLBT ) && bReturn;
     bReturn = testAny( data.Float,xLBT ) && bReturn;
@@ -332,13 +337,16 @@ static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
                 sal_True, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
                 0x123456789abcdef0, 0xfedcba9876543210,
                 (float)17.0815, 3.1415926359, TestEnum_LOLA,
-                OUString::createFromAscii("dum dum dum ich tanz im kreis herum..."), xI,
+                OUSTR(STRING_TEST_CONSTANT), xI,
                 Any( &xI, ::getCppuType( (const Reference<XInterface > *)0 ) ) );
 
         bRet = check( aData.Any == xI, "### unexpected any!" ) && bRet;
         bRet = check( !(aData.Any != xI), "### unexpected any!" ) && bRet;
 
-        aData.Sequence = Sequence<TestElement >( (const TestElement *)&aData, 1 );
+        aData.Sequence.realloc( 2 );
+        aData.Sequence[ 0 ] = *(const TestElement *)&aData;
+        // aData.Sequence[ 1 ] is empty
+
         // aData complete
         //================================================================================
 
@@ -351,7 +359,9 @@ static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
                 aData.Enum, aData.String, xI,
                 Any( &xI, ::getCppuType( (const Reference<XInterface > *)0 ) ) );
 
-        aSetData.Sequence = Sequence<TestElement >( (const TestElement *)&aSetData, 1 );
+        aSetData.Sequence.realloc( 2 );
+        aSetData.Sequence[ 0 ] = *(const TestElement *)&aSetData;
+        // aSetData.Sequence[ 1 ] is empty
 
         xLBT->setValues(
             aSetData.Bool, aSetData.Char, aSetData.Byte, aSetData.Short, aSetData.UShort,
@@ -373,7 +383,13 @@ static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
             aRet.Long, aRet.ULong, aRet.Hyper, aRet.UHyper, aRet.Float, aRet.Double,
             aRet.Enum, aRet.String, aRet.Interface, aRet.Any, aRet.Sequence, aRet2 );
 
-        bRet = check( equals( aData, aSV2ret ) && equals( aData, aRet2 ) , "getValues2 test") && bRet;
+        bRet = check(
+            equals( aData, aSV2ret ) && equals( aData, aRet2 ) , "getValues2 test") && bRet;
+
+        // check inout sequence order => inout sequence parameter was switched by test objects
+        bRet = check(
+            equals( aRet.Sequence[ 0 ], aData.Sequence[ 1 ] ) &&
+            equals( aRet.Sequence[ 1 ], aData.Sequence[ 0 ] ), "sequence order test" );
         }
         {
         TestData aRet, aRet2;
@@ -442,7 +458,7 @@ static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
 static sal_Bool raiseOnewayException( const Reference < XBridgeTest > & xLBT )
 {
     sal_Bool bReturn = sal_True;
-    OUString sCompare = OUString( RTL_CONSTASCII_USTRINGPARAM("dum dum dum ich tanz im kreis herum...") );
+    OUString sCompare = OUSTR(STRING_TEST_CONSTANT);
     try
     {
         // Note : the exception may fly or not (e.g. remote scenario).
@@ -468,14 +484,14 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
             {
                 TestData aRet, aRet2;
                 xLBT->raiseException(
-                    5, OUString( RTL_CONSTASCII_USTRINGPARAM("dum dum dum ich tanz im kreis herum...") ),
+                    5, OUSTR(STRING_TEST_CONSTANT),
                     xLBT->getInterface() );
             }
             catch (IllegalArgumentException aExc)
             {
                 if (aExc.ArgumentPosition == 5 &&
                     aExc.Context == xLBT->getInterface() &&
-                    aExc.Message.compareToAscii( "dum dum dum ich tanz im kreis herum..." ) == 0)
+                    aExc.Message.compareToAscii( STRING_TEST_CONSTANT ) == 0)
                 {
                     ++nCount;
                 }
@@ -491,7 +507,7 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
         catch (const RuntimeException & rExc)
         {
             if (rExc.Context == xLBT->getInterface() &&
-                rExc.Message.compareToAscii( "dum dum dum ich tanz im kreis herum..." ) == 0)
+                rExc.Message.compareToAscii( STRING_TEST_CONSTANT ) == 0)
             {
                 ++nCount;
             }
@@ -507,7 +523,7 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
     catch (Exception & rExc)
     {
         if (rExc.Context == xLBT->getInterface() &&
-            rExc.Message.compareToAscii( "dum dum dum ich tanz im kreis herum..." ) == 0)
+            rExc.Message.compareToAscii( STRING_TEST_CONSTANT ) == 0)
         {
             ++nCount;
         }
@@ -598,11 +614,19 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
         }
 
         Reference<XBridgeTest > xLBT;
-        sal_Bool bRet = check( makeSurrogate( xLBT, xTest ), "makeSurrogate" );
+        sal_Bool bRet;
+        bRet = check( makeSurrogate( xLBT, xTest ), "makeSurrogate" );
         bRet = check( performTest( xLBT ), "standard test" ) && bRet;
         bRet = check( raiseException( xLBT ) , "exception test" )&& bRet;
         bRet = check( raiseOnewayException( xLBT ), "oneway exception test" ) && bRet;
         bRet = performQueryForUnknownType( xLBT ) && bRet;
+        if (! bRet)
+        {
+            throw RuntimeException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("error: test failed!") ),
+                Reference< XInterface >() );
+        }
+
         if( bRet )
         {
             printf( "> dynamic invocation test succeeded!\n" );
@@ -717,6 +741,9 @@ void * SAL_CALL component_getFactory(
 
 /**************************************************************************
     $Log: not supported by cvs2svn $
+    Revision 1.4  2002/10/29 10:48:02  dbo
+    #104312# minor fixes
+
     Revision 1.3  2002/09/17 15:08:40  jbu
     #98508# added bridgetest_javaserver batch, tests work now also in .pro builds
 
