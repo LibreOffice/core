@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-17 10:23:39 $
+ *  last change: $Author: jp $ $Date: 2001-10-31 20:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,24 +356,50 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
                     // Sonderbehandlung fuer die Felder!
                     if( pHts && pHts->Count() )
                     {
-                        SwTxtFld* pTxtFld;
+                        const SwTxtAttr* pAttr;
                         int bToUndo = &pDestDoc->GetNodes() != &rNds;
                         for( USHORT i = pHts->Count(); i; )
-                            if( RES_TXTATR_FIELD == ( pTxtFld =
-                                    (SwTxtFld*)(*pHts)[ --i ])->Which() )
+                        {
+                            USHORT nDelMsg = 0;
+                            switch( (pAttr = (*pHts)[ --i ])->Which() )
                             {
-                                rNds.GetDoc()->InsDelFldInFldLst( !bToUndo,
-                                                            *pTxtFld );
-                                const SwFieldType* pTyp = pTxtFld->GetFld().
-                                                        GetFld()->GetTyp();
-                                if( RES_DDEFLD == pTyp->Which() )
+                            case RES_TXTATR_FIELD:
                                 {
-                                    if( bToUndo )
-                                        ((SwDDEFieldType*)pTyp)->DecRefCnt();
-                                    else
-                                        ((SwDDEFieldType*)pTyp)->IncRefCnt();
+                                    SwTxtFld* pTxtFld = (SwTxtFld*)pAttr;
+                                    rNds.GetDoc()->InsDelFldInFldLst( !bToUndo,
+                                                                *pTxtFld );
+                                    const SwFieldType* pTyp = pTxtFld->GetFld().
+                                                            GetFld()->GetTyp();
+                                    if( RES_DDEFLD == pTyp->Which() )
+                                    {
+                                        if( bToUndo )
+                                            ((SwDDEFieldType*)pTyp)->DecRefCnt();
+                                        else
+                                            ((SwDDEFieldType*)pTyp)->IncRefCnt();
+                                    }
+                                    nDelMsg = RES_FIELD_DELETED;
                                 }
+                                break;
+                            case RES_TXTATR_FTN:
+                                nDelMsg = RES_FOOTNOTE_DELETED;
+                                break;
+
+                            case RES_TXTATR_TOXMARK:
+                                nDelMsg = RES_TOXMARK_DELETED;
+                                break;
+
+                            case RES_TXTATR_REFMARK:
+                                nDelMsg = RES_REFMARK_DELETED;
+                                break;
                             }
+                            if( nDelMsg && bToUndo )
+                            {
+                                SwPtrMsgPoolItem aMsgHint( nDelMsg,
+                                                    (void*)&pAttr->GetAttr() );
+                                rNds.GetDoc()->GetUnoCallBack()->
+                                            Modify( &aMsgHint, &aMsgHint );
+                            }
+                        }
                     }
 //FEATURE::CONDCOLL
                     if( RES_CONDTXTFMTCOLL == pTxtNd->GetTxtColl()->Which() )
