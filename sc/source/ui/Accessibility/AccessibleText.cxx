@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-10 15:06:44 $
+ *  last change: $Author: sab $ $Date: 2002-06-11 06:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,9 @@
 #include "unoguard.hxx"
 #endif
 #include "patattr.hxx"
-
+#ifndef SC_INPUTWIN_HXX
+#include "inputwin.hxx"
+#endif
 
 #ifndef _SVX_UNOFORED_HXX
 #include <svx/unofored.hxx>
@@ -744,6 +746,78 @@ IMPL_LINK(ScAccessibleEditObjectTextData, NotifyHdl, EENotify*, aNotify)
     }
 
     return 0;
+}
+
+ScAccessibleEditLineTextData::ScAccessibleEditLineTextData(EditView* pEditView, Window* pWin)
+    :
+    ScAccessibleEditObjectTextData(pEditView, pWin),
+    mbEditEngineCreated(sal_False)
+{
+}
+
+ScAccessibleEditLineTextData::~ScAccessibleEditLineTextData()
+{
+    if (mbEditEngineCreated && mpEditEngine)
+    {
+        mpEditEngine->SetNotifyHdl(Link());
+        DELETEZ(mpEditEngine);
+    }
+}
+
+ScAccessibleTextData* ScAccessibleEditLineTextData::Clone() const
+{
+    return new ScAccessibleEditLineTextData(mpEditView, mpWindow);
+}
+
+SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
+{
+    ScTextWnd* pTxtWnd = (ScTextWnd*)mpWindow;
+
+    if (pTxtWnd)
+    {
+        mpEditView = pTxtWnd->GetEditView();
+        if (mpEditView)
+        {
+            if (mbEditEngineCreated && mpEditEngine)
+            {
+                mpEditEngine->SetNotifyHdl(Link());
+                DELETEZ(mpEditEngine);
+            }
+            mbEditEngineCreated = sal_False;
+
+            mpEditView = pTxtWnd->GetEditView();
+            ScAccessibleEditObjectTextData::GetTextForwarder(); // fill the mpForwarder
+        }
+        else
+        {
+            if (!mpEditEngine)
+            {
+                SfxItemPool* pEnginePool = EditEngine::CreatePool();
+                pEnginePool->FreezeIdRanges();
+                mpEditEngine = new ScFieldEditEngine( pEnginePool, NULL, TRUE );
+                mbEditEngineCreated = sal_True;
+#if SUPD > 600
+                //  currently, GetPortions doesn't work if UpdateMode is FALSE,
+                //  this will be fixed (in EditEngine) by src600
+        //      pEditEngine->SetUpdateMode( FALSE );
+#endif
+                mpEditEngine->EnableUndo( FALSE );
+                mpEditEngine->SetRefMapMode( MAP_100TH_MM );
+                mpForwarder = new SvxEditEngineForwarder(*mpEditEngine);
+
+                mpEditEngine->SetText(pTxtWnd->GetTextString());
+
+                Size aSize(pTxtWnd->GetSizePixel());
+
+                aSize = pTxtWnd->PixelToLogic(aSize, mpEditEngine->GetRefMapMode());
+
+                mpEditEngine->SetPaperSize(aSize);
+
+                mpEditEngine->SetNotifyHdl( LINK(this, ScAccessibleEditObjectTextData, NotifyHdl) );
+            }
+        }
+    }
+    return mpForwarder;
 }
 
 //  ScAccessiblePreviewCellTextData: shared data between sub objects of a accessible cell text object

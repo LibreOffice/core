@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-10 15:05:54 $
+ *  last change: $Author: sab $ $Date: 2002-06-11 06:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,13 +176,26 @@ public:
     virtual sal_Bool            IsDirty() const { return sal_False; }
 
     DECL_LINK( NotifyHdl, EENotify* );
-private:
+protected:
     ScEditObjectViewForwarder* mpViewForwarder;
     ScEditViewForwarder* mpEditViewForwarder;
     EditView* mpEditView;
     EditEngine* mpEditEngine;
     SvxEditEngineForwarder* mpForwarder;
     Window* mpWindow;
+};
+
+class ScAccessibleEditLineTextData : public ScAccessibleEditObjectTextData
+{
+public:
+                        ScAccessibleEditLineTextData(EditView* pEditView, Window* pWin);
+    virtual             ~ScAccessibleEditLineTextData();
+
+    virtual ScAccessibleTextData* Clone() const;
+
+    virtual SvxTextForwarder* GetTextForwarder();
+private:
+    sal_Bool mbEditEngineCreated;
 };
 
 class ScAccessiblePreviewCellTextData : public ScAccessibleCellBaseTextData
