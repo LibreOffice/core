@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpsum.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:35:54 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 11:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,6 +474,8 @@ int main( int nArgCount, char* ppArgs[] )
 {
     ::std::vector< String > aArgs;
     BmpSum                  aBmpSum;
+
+    InitVCL( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >() );
 
     for( int i = 1; i < nArgCount; i++ )
         aArgs.push_back( String( ppArgs[ i ], RTL_TEXTENCODING_ASCII_US ) );
