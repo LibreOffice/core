@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 08:19:21 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,6 +585,36 @@ bool SwAnchoredObject::ConsiderObjWrapInfluenceOnObjPos() const
     return bRet;
 }
 
+/** method to determine, if other anchored objects, also attached at
+    to the anchor frame, have to consider its wrap influence.
+
+    // --> OD 2005-02-22 #i43255#
+
+    @author OD
+*/
+bool SwAnchoredObject::ConsiderObjWrapInfluenceOfOtherObjs() const
+{
+    bool bRet( false );
+
+    const SwSortedObjs* pObjs = GetAnchorFrm()->GetDrawObjs();
+    if ( pObjs->Count() > 1 )
+    {
+        sal_uInt32 i = 0;
+        for ( ; i < pObjs->Count(); ++i )
+        {
+            SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
+            if ( pAnchoredObj != this &&
+                 pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() )
+            {
+                bRet = true;
+                break;
+            }
+        }
+    }
+
+    return bRet;
+}
+
 // =============================================================================
 // --> OD 2004-06-29 #i28701# - accessors to booleans for layout process
 // =============================================================================
@@ -647,10 +677,15 @@ bool SwAnchoredObject::HasClearedEnvironment() const
 {
     bool bHasClearedEnvironment( false );
 
-    if ( GetAnchorFrm()->IsTxtFrm() &&
+    // --> OD 2005-03-03 #i43913# - layout frame, vertical position is orient at, has to be set.
+    ASSERT( GetVertPosOrientFrm(),
+            "<SwAnchoredObject::HasClearedEnvironment()> - layout frame missing, at which the vertical position is oriented at." );
+    if ( GetVertPosOrientFrm() &&
+         GetAnchorFrm()->IsTxtFrm() &&
          !static_cast<const SwTxtFrm*>(GetAnchorFrm())->IsFollow() &&
          static_cast<const SwTxtFrm*>(GetAnchorFrm())->FindPageFrm()->GetPhyPageNum() >=
                 GetPageFrm()->GetPhyPageNum() )
+    // <--
     {
         const SwFrm* pTmpFrm = GetVertPosOrientFrm()->Lower();
         while ( pTmpFrm && pTmpFrm->IsLayoutFrm() && !pTmpFrm->IsTabFrm() )
