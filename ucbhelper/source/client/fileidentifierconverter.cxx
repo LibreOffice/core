@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileidentifierconverter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-15 08:27:28 $
+ *  last change: $Author: sb $ $Date: 2001-06-06 07:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,14 +78,14 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
-#ifndef _VOS_DIAGNOSE_H_
-#include <vos/diagnose.hxx>
 #endif
 
 using namespace com::sun;
@@ -102,8 +102,9 @@ namespace ucb {
 rtl::OUString
 getLocalFileURL(
     uno::Reference< star::ucb::XContentProviderManager > const & rManager)
+    SAL_THROW((com::sun::star::uno::RuntimeException))
 {
-    VOS_ASSERT(rManager.is());
+    OSL_ASSERT(rManager.is());
 
     static sal_Char const * const aBaseURLs[]
         = { "file:///", "vnd.sun.star.wfs:///" };
@@ -140,8 +141,9 @@ getFileURLFromSystemPath(
     uno::Reference< star::ucb::XContentProviderManager > const & rManager,
     rtl::OUString const & rBaseURL,
     rtl::OUString const & rSystemPath)
+    SAL_THROW((com::sun::star::uno::RuntimeException))
 {
-    VOS_ASSERT(rManager.is());
+    OSL_ASSERT(rManager.is());
 
     uno::Reference< star::ucb::XFileIdentifierConverter >
         xConverter(rManager->queryContentProvider(rBaseURL), uno::UNO_QUERY);
@@ -161,8 +163,9 @@ rtl::OUString
 getSystemPathFromFileURL(
     uno::Reference< star::ucb::XContentProviderManager > const & rManager,
     rtl::OUString const & rURL)
+    SAL_THROW((com::sun::star::uno::RuntimeException))
 {
-    VOS_ASSERT(rManager.is());
+    OSL_ASSERT(rManager.is());
 
     uno::Reference< star::ucb::XFileIdentifierConverter >
         xConverter(rManager->queryContentProvider(rURL), uno::UNO_QUERY);
