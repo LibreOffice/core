@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:14:04 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:55:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,7 +619,7 @@ TabPage RID_SCPAGE_CALC
         QuickHelpText [ spanish ] = "El valor 0 corresponde al 30.12.1899" ;
         Text[ chinese_simplified ] = "30.12.1899 ±Í◊º(~S)";
         Text[ russian ] = "30.12.1899 ( ~ÒÚ‡Ì‰‡Ú )";
-        Text[ polish ] = "30.12.1899 ( Standard )";
+        Text[ polish ] = "30.12.1899 ( Domyúlnie )";
         Text[ japanese ] = "12/30/1899 (ïWèÄ)(~S)";
         Text[ chinese_traditional ] = "30.12.1899 º–∑«(~S)";
         Text[ arabic ] = "12/30/1899 (ﬁÌ«”Ì)";
@@ -2522,10 +2522,10 @@ TabPage RID_SCPAGE_INPUT
     };
     StringList [ japanese ] =
     {
-            < "â∫" ; Default ; > ;
-        < "âE" ; Default ; > ;
-        < "è„" ; Default ; > ;
-        < "ç∂" ; Default ; > ;
+            < "â∫Ç÷" ; Default ; > ;
+        < "âEÇ÷" ; Default ; > ;
+        < "è„Ç÷" ; Default ; > ;
+        < "ç∂Ç÷" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
     {
