@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleParaManager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-23 12:44:04 $
+ *  last change: $Author: thb $ $Date: 2002-05-29 16:09:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,10 @@ namespace accessibility
             The total number of paragraphs the EditEngine currently
             has (_not_ the number of currently visible children)
          */
-        void SetNum( sal_Int32 nNumParas );
+        void SetNum( sal_uInt32 nNumParas );
+
+        /** Get the number of paragraphs currently possible */
+        sal_uInt32 GetNum() const;
 
         // iterators
         VectorOfChildren::iterator begin();
@@ -216,31 +219,31 @@ namespace accessibility
         VectorOfChildren::const_iterator end() const;
 
         // dealing with single paragraphs (release reference, return reference etc)
-        void Release( sal_Int32 nPara );
-        void FireEvent( sal_Int32 nPara,
+        void Release( sal_uInt32 nPara );
+        void FireEvent( sal_uInt32 nPara,
                         const sal_Int16 nEventId,
                         const ::com::sun::star::uno::Any& rNewValue = ::com::sun::star::uno::Any(),
                         const ::com::sun::star::uno::Any& rOldValue = ::com::sun::star::uno::Any() ) const;
 
         static sal_Bool IsReferencable( WeakPara::HardRefType aChild );
-        sal_Bool IsReferencable( sal_Int32 nChild ) const;
+        sal_Bool IsReferencable( sal_uInt32 nChild ) const;
         static void ShutdownPara( const WeakChild& rChild );
 
         Child CreateChild( sal_Int32                                                                                        nChild,
                            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& xFrontEnd,
                            SvxEditSourceAdapter&                                                                            rEditSource,
-                           sal_Int32                                                                                        nParagraphIndex );
+                           sal_uInt32                                                                                       nParagraphIndex );
 
-        WeakChild GetChild( sal_Int32 nParagraphIndex );
+        WeakChild GetChild( sal_uInt32 nParagraphIndex );
 
         // forwarder to all paragraphs
         void SetEEOffset        ( const Point& rOffset );
         void SetEditSource      ( SvxEditSourceAdapter* pEditSource );
 
         // forwarder to given paragraphs
-        void Release( sal_Int32 nStartPara, sal_Int32 nEndPara );
-        void FireEvent( sal_Int32 nStartPara,
-                        sal_Int32 nEndPara,
+        void Release( sal_uInt32 nStartPara, sal_uInt32 nEndPara );
+        void FireEvent( sal_uInt32 nStartPara,
+                        sal_uInt32 nEndPara,
                         const sal_Int16 nEventId,
                         const ::com::sun::star::uno::Any& rNewValue = ::com::sun::star::uno::Any(),
                         const ::com::sun::star::uno::Any& rOldValue = ::com::sun::star::uno::Any() ) const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleParaManager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-23 12:44:04 $
+ *  last change: $Author: thb $ $Date: 2002-05-29 16:09:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,9 +112,14 @@ namespace accessibility
         // owner is responsible for possible child defuncs
     }
 
-    void AccessibleParaManager::SetNum( sal_Int32 nNumParas )
+    void AccessibleParaManager::SetNum( sal_uInt32 nNumParas )
     {
         maChildren.resize( nNumParas );
+    }
+
+    sal_uInt32 AccessibleParaManager::GetNum() const
+    {
+        return maChildren.size();
     }
 
     AccessibleParaManager::VectorOfChildren::iterator AccessibleParaManager::begin()
@@ -137,19 +142,23 @@ namespace accessibility
         return maChildren.end();
     }
 
-    void AccessibleParaManager::Release( sal_Int32 nPara )
+    void AccessibleParaManager::Release( sal_uInt32 nPara )
     {
+        DBG_ASSERT( maChildren.size() > nPara, "AccessibleParaManager::Release: invalid index" );
+
         ShutdownPara( maChildren[ nPara ] );
 
         // clear reference and rect
         maChildren[ nPara ] = WeakChild();
     }
 
-    void AccessibleParaManager::FireEvent( sal_Int32 nPara,
+    void AccessibleParaManager::FireEvent( sal_uInt32 nPara,
                                            const sal_Int16 nEventId,
                                            const uno::Any& rNewValue,
                                            const uno::Any& rOldValue ) const
     {
+        DBG_ASSERT( maChildren.size() > nPara, "AccessibleParaManager::FireEvent: invalid index" );
+
         WeakPara::HardRefType maChild( maChildren[ nPara  ].first.get() );
         if( maChild.is() )
             maChild->FireEvent( nEventId, rNewValue, rOldValue );
@@ -160,22 +169,27 @@ namespace accessibility
         return aChild.is();
     }
 
-    sal_Bool AccessibleParaManager::IsReferencable( sal_Int32 nChild ) const
+    sal_Bool AccessibleParaManager::IsReferencable( sal_uInt32 nChild ) const
     {
+        DBG_ASSERT( maChildren.size() > nChild, "AccessibleParaManager::IsReferencable: invalid index" );
+
         // retrieve hard reference from weak one
         return IsReferencable( maChildren[ nChild ].first.get() );
     }
 
-    AccessibleParaManager::WeakChild AccessibleParaManager::GetChild( sal_Int32 nParagraphIndex )
+    AccessibleParaManager::WeakChild AccessibleParaManager::GetChild( sal_uInt32 nParagraphIndex )
     {
+        DBG_ASSERT( maChildren.size() > nParagraphIndex, "AccessibleParaManager::GetChild: invalid index" );
         return maChildren[ nParagraphIndex ];
     }
 
-    AccessibleParaManager::Child AccessibleParaManager::CreateChild( sal_Int32                          nChild,
+    AccessibleParaManager::Child AccessibleParaManager::CreateChild( sal_Int32                              nChild,
                                                                      const uno::Reference< XAccessible >&   xFrontEnd,
-                                                                     SvxEditSourceAdapter&              rEditSource,
-                                                                     sal_Int32                          nParagraphIndex )
+                                                                     SvxEditSourceAdapter&                  rEditSource,
+                                                                     sal_uInt32                             nParagraphIndex )
     {
+        DBG_ASSERT( maChildren.size() > nParagraphIndex, "AccessibleParaManager::CreateChild: invalid index" );
+
         // retrieve hard reference from weak one
         WeakPara::HardRefType aChild( maChildren[ nParagraphIndex ].first.get() );
 
@@ -234,12 +248,15 @@ namespace accessibility
         const uno::Any& mrOldValue;
     };
 
-    void AccessibleParaManager::FireEvent( sal_Int32 nStartPara,
-                                           sal_Int32 nEndPara,
+    void AccessibleParaManager::FireEvent( sal_uInt32 nStartPara,
+                                           sal_uInt32 nEndPara,
                                            const sal_Int16 nEventId,
                                            const uno::Any& rNewValue,
                                            const uno::Any& rOldValue ) const
     {
+        DBG_ASSERT( maChildren.size() > nStartPara &&
+                    maChildren.size() > nEndPara , "AccessibleParaManager::FireEvent: invalid index" );
+
         VectorOfChildren::const_iterator front = maChildren.begin();
         VectorOfChildren::const_iterator back = front;
 
@@ -263,8 +280,11 @@ namespace accessibility
         }
     };
 
-    void AccessibleParaManager::Release( sal_Int32 nStartPara, sal_Int32 nEndPara )
+    void AccessibleParaManager::Release( sal_uInt32 nStartPara, sal_uInt32 nEndPara )
     {
+        DBG_ASSERT( maChildren.size() > nStartPara &&
+                    maChildren.size() > nEndPara, "AccessibleParaManager::Release: invalid index" );
+
         VectorOfChildren::iterator front = maChildren.begin();
         VectorOfChildren::iterator back = front;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-27 16:41:01 $
+ *  last change: $Author: thb $ $Date: 2002-05-29 16:09:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,16 +506,16 @@ namespace accessibility
                                      maLastSelection.nEndPara,
                                      AccessibleEventId::ACCESSIBLE_SELECTION_EVENT );
 
-            maParaManager.FireEvent( maLastSelection.nStartPara,
-                                     maLastSelection.nStartPara,
+            maParaManager.FireEvent( maLastSelection.nEndPara,
+                                     maLastSelection.nEndPara,
                                      AccessibleEventId::ACCESSIBLE_CARET_EVENT );
 
             maParaManager.FireEvent( rSelection.nStartPara,
                                      rSelection.nEndPara,
                                      AccessibleEventId::ACCESSIBLE_SELECTION_EVENT );
 
-            maParaManager.FireEvent( rSelection.nStartPara,
-                                     rSelection.nStartPara,
+            maParaManager.FireEvent( rSelection.nEndPara,
+                                     rSelection.nEndPara,
                                      AccessibleEventId::ACCESSIBLE_CARET_EVENT );
 
             maLastSelection = rSelection;
@@ -638,14 +638,17 @@ namespace accessibility
 
                     mnLastVisibleChild = nCurrPara;
 
-                    GotPropertyEvent( uno::makeAny( getAccessibleChild(nCurrPara) ), AccessibleEventId::ACCESSIBLE_CHILD_EVENT );
+                    GotPropertyEvent( uno::makeAny( maParaManager.CreateChild( nCurrPara - mnFirstVisibleChild,
+                                                                               mxFrontEnd, GetEditSource(), nCurrPara ).first ),
+                                      AccessibleEventId::ACCESSIBLE_CHILD_EVENT );
                 }
                 else
                 {
                     // not or no longer visible
                     if( maParaManager.IsReferencable( nCurrPara ) )
                     {
-                        LostPropertyEvent( uno::makeAny( getAccessibleChild(nCurrPara) ), AccessibleEventId::ACCESSIBLE_CHILD_EVENT );
+                        LostPropertyEvent( uno::makeAny( maParaManager.GetChild( nCurrPara ).first.get().getRef() ),
+                                           AccessibleEventId::ACCESSIBLE_CHILD_EVENT );
 
                         // clear reference
                         maParaManager.Release( nCurrPara );
@@ -688,12 +691,12 @@ namespace accessibility
                     aNewRect.Width != aOldRect.Width ||
                     aNewRect.Height != aOldRect.Height )
                 {
-                    // visible data changed
-                    aHardRef->FireEvent( AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT );
-
                     // update bounds
                     return accessibility::AccessibleParaManager::WeakChild( rChild.first, aNewRect );
                 }
+
+                // visible data changed
+                aHardRef->FireEvent( AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT );
             }
 
             // identity transform
@@ -708,7 +711,7 @@ namespace accessibility
     {
         // send CHILD_EVENT to affected children
         AccessibleTextHelper_UpdateChildBounds aFunctor( *this );
-        ::std::for_each( maParaManager.begin(), maParaManager.end(), aFunctor );
+        ::std::transform( maParaManager.begin(), maParaManager.end(), maParaManager.begin(), aFunctor );
     }
 
 #ifdef DBG_UTIL
@@ -769,6 +772,9 @@ namespace accessibility
                                     "AccessibleTextHelper_Impl::NotifyHdl: Invalid notification");
 
                         const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
+
+                        DBG_ASSERT( nParas == maParaManager.GetNum(), "AccessibleTextHelper_Impl::NotifyHdl: event PARASMOVED and paragraph number mismatch");
+
                         sal_Int32 nFirst, nMiddle, nLast;
 
                         /* rotate paragraphs
@@ -830,8 +836,6 @@ namespace accessibility
 
                             // maParaManager.Rotate( nFirst, nMiddle, nLast );
 
-                            maParaManager.Release(nFirst, nLast);
-
                             // send CHILD_EVENT to affected children
                             ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
                             ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
@@ -842,6 +846,9 @@ namespace accessibility
                             AccessibleTextHelper_LostChildEvent aFunctor( *this );
 
                             ::std::for_each( begin, end, aFunctor );
+
+                            maParaManager.Release(nFirst, nLast);
+                            // should be no need for UpdateVisibleData, since all affected children are cleared.
                         }
 #ifdef DBG_UTIL
                         else
@@ -872,14 +879,12 @@ namespace accessibility
             }
             else if( pTextHint )
             {
-                sal_Bool bUpdateVisibleData = sal_False;
-
                 switch( pTextHint->GetId() )
                 {
                     case TEXT_HINT_MODIFIED:
                         // notify listeners
                         if( pTextHint->GetValue() == EE_PARA_ALL )
-                            maParaManager.FireEvent( 0, GetTextForwarder().GetParagraphCount(), AccessibleEventId::ACCESSIBLE_TEXT_EVENT );
+                            maParaManager.FireEvent( 0, GetTextForwarder().GetParagraphCount()-1, AccessibleEventId::ACCESSIBLE_TEXT_EVENT );
                         else
                             maParaManager.FireEvent( pTextHint->GetValue(), AccessibleEventId::ACCESSIBLE_TEXT_EVENT );
                         break;
@@ -891,7 +896,7 @@ namespace accessibility
 
                         maParaManager.SetNum( nParas );
 
-                        sal_Int32 nFirst(pTextHint->GetValue()), nLast(nParas);
+                        sal_Int32 nFirst(pTextHint->GetValue()), nLast(nParas-1);
 
                         if( pTextHint->GetValue() == EE_PARA_ALL )
                             nFirst = 0; // all paragraphs
@@ -923,7 +928,7 @@ namespace accessibility
                     {
                         const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
 
-                        sal_Int32 nFirst(pTextHint->GetValue()), nLast(nParas);
+                        sal_Int32 nFirst(pTextHint->GetValue()), nLast(nParas-1);
 
                         if( pTextHint->GetValue() == EE_PARA_ALL )
                             nFirst = 0; // all paragraphs
@@ -955,19 +960,15 @@ namespace accessibility
                     }
 
                     case TEXT_HINT_TEXTHEIGHTCHANGED:
-                        bUpdateVisibleData = sal_True;
                         break;
 
                     case TEXT_HINT_VIEWSCROLLED:
-                        bUpdateVisibleData = sal_True;
                         break;
                 }
 
                 // in all cases, check visibility afterwards.
                 UpdateVisibleChildren();
-
-                if( bUpdateVisibleData )
-                    UpdateVisibleData();
+                UpdateVisibleData();
             }
             else if( pViewHint )
             {
@@ -975,8 +976,8 @@ namespace accessibility
                 {
                     case SVX_HINT_VIEWCHANGED:
                         // just check visibility
-                        UpdateVisibleData();
                         UpdateVisibleChildren();
+                        UpdateVisibleData();
                         break;
                 }
             }
