@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpathes.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-10 11:12:18 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,50 @@ namespace utl
     using ::rtl::OUStringBuffer;
 
 //----------------------------------------------------------------------------
+
+static
+void lcl_resolveCharEntities(OUString & aLocalString)
+{
+    sal_Int32 nEscapePos=aLocalString.indexOf('&');
+    if (nEscapePos < 0) return;
+
+    OUStringBuffer aResult;
+    sal_Int32 nStart = 0;
+
+    do
+    {
+        sal_Unicode ch = 0;
+        if (aLocalString.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("&amp;"),nEscapePos))
+            ch = '&';
+
+        else if (aLocalString.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("&apos;"),nEscapePos))
+            ch = '\'';
+
+        else if (aLocalString.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("&quot;"),nEscapePos))
+            ch = '"';
+
+        OSL_ENSURE(ch,"Configuration path contains '&' that is not part of a valid character escape");
+        if (ch)
+        {
+            aResult.append(aLocalString.copy(nStart,nEscapePos-nStart)).append(ch);
+
+            sal_Int32 nEscapeEnd=aLocalString.indexOf(';',nEscapePos);
+            nStart = nEscapeEnd+1;
+            nEscapePos=aLocalString.indexOf('&',nStart);
+        }
+        else
+        {
+            nEscapePos=aLocalString.indexOf('&',nEscapePos+1);
+        }
+    }
+    while ( nEscapePos > 0);
+
+    aResult.append(aLocalString.copy(nStart));
+
+    aLocalString = aResult.makeStringAndClear();
+}
+
+//----------------------------------------------------------------------------
 sal_Bool splitLastFromConfigurationPath(OUString const& _sInPath,
                                         OUString& _rsOutPath,
                                         OUString& _rsLocalName)
@@ -143,6 +187,7 @@ sal_Bool splitLastFromConfigurationPath(OUString const& _sInPath,
 
     _rsLocalName = _sInPath.copy(nStart, nEnd-nStart);
     _rsOutPath = (nPos > 0) ? _sInPath.copy(0,nPos) : OUString();
+    lcl_resolveCharEntities(_rsLocalName);
 
     return nPos >= 0;
 }
@@ -181,7 +226,7 @@ OUString extractFirstFromConfigurationPath(OUString const& _sInPath)
     }
 
     OUString sResult = (nEnd >= 0) ? _sInPath.copy(nStart, nEnd-nStart) : _sInPath;
-
+    lcl_resolveCharEntities(sResult);
     return sResult;
 }
 
