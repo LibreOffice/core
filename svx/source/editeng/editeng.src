@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:13 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 20:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,14 +303,14 @@ Menu RID_MENU_SPELL
             Text [ danish ] = "Stavekont~rol" ;
             Text [ portuguese ] = "Or~tografia" ;
             Text [ portuguese_brazilian ] = "~Rechtschreibung" ;
-            Text [ chinese_simplified ] = "Õı×Ö·¨(~S)";
+            Text [ chinese_simplified ] = "Æ´Ğ´¼ì²é(~S)";
             Text[ russian ] = "~Ïğàâîïèñàíèå";
             Text[ polish ] = "~Pisownia";
             Text[ japanese ] = "•¶ÍZ³(~S)";
             Text[ chinese_traditional ] = "«÷¦r(~S)";
             Text[ arabic ] = "ÊÏ~ŞíŞ ÅãáÇÆí";
             Text[ dutch ] = "~Spellingcontrole";
-            Text[ chinese_simplified ] = "Õı×Ö·¨(~S)";
+            Text[ chinese_simplified ] = "Æ´Ğ´¼ì²é(~S)";
             Text[ greek ] = "Ï~ñèïãñáößá";
             Text[ korean ] = "¸ÂÃã¹ı(~S)";
             Text[ turkish ] = "~Yazım kılavuzu";
