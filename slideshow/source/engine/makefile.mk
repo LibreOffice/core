@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: thb $ $Date: 2004-03-18 10:44:32 $
+#   last change: $Author: rt $ $Date: 2004-11-26 18:54:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,24 +77,53 @@ ENABLE_EXCEPTIONS=TRUE
 CDEFS+= -DVERBOSE
 .ENDIF
 
-SLOFILES =	$(SLO)$/engine.obj \
-            $(SLO)$/shapeimporter.obj \
-            $(SLO)$/contentpainter.obj \
-            $(SLO)$/contentproducer.obj \
+.IF "$(debug)"!="" || "$(DEBUG)"!=""
+CDEFS+= -DBOOST_SP_ENABLE_DEBUG_HOOKS
+.ENDIF
+
+# Disable optimization for SunCC (funny loops
+# when parsing e.g. "x+width/2")
+.IF "$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
+NOOPTFILES= $(SLO)$/smilfunctionparser.obj
+.ENDIF
+
+SLOFILES =	$(SLO)$/activitiesfactory.obj \
             $(SLO)$/activitiesqueue.obj \
+            $(SLO)$/animatedsprite.obj \
+            $(SLO)$/animationfactory.obj \
+            $(SLO)$/animationnodefactory.obj \
+            $(SLO)$/attributemap.obj \
+            $(SLO)$/backgroundshape.obj \
+            $(SLO)$/color.obj \
+            $(SLO)$/doctreenode.obj \
+            $(SLO)$/drawshape.obj \
+            $(SLO)$/eventmultiplexer.obj \
             $(SLO)$/eventqueue.obj \
-            $(SLO)$/slidebitmap.obj \
-            $(SLO)$/animationactivity.obj \
-            $(SLO)$/animationstartevent.obj \
-            $(SLO)$/shapeanimator.obj \
-            $(SLO)$/slidechanger.obj \
-            $(SLO)$/effectfactory.obj \
-            $(SLO)$/effectclassificator.obj \
-            $(SLO)$/booleancondition.obj \
-            $(SLO)$/andcondition.obj \
-            $(SLO)$/orcondition.obj \
+            $(SLO)$/expressionnodefactory.obj \
+            $(SLO)$/gdimtftools.obj \
+            $(SLO)$/intrinsicanimationactivity.obj \
+            $(SLO)$/layer.obj \
+            $(SLO)$/layermanager.obj \
+            $(SLO)$/mediashape.obj \
+            $(SLO)$/presentation.obj \
+            $(SLO)$/shapeattributelayer.obj \
+            $(SLO)$/shapeeventbroadcaster.obj \
+            $(SLO)$/shapeimporter.obj \
+            $(SLO)$/shapesubset.obj \
             $(SLO)$/slide.obj \
-            $(SLO)$/shaperenderer.obj
+            $(SLO)$/slideanimations.obj \
+            $(SLO)$/slidebitmap.obj \
+            $(SLO)$/smilfunctionparser.obj \
+            $(SLO)$/soundplayer.obj \
+            $(SLO)$/tools.obj \
+            $(SLO)$/unoviewcontainer.obj \
+            $(SLO)$/usereventqueue.obj \
+            $(SLO)$/userpaintoverlay.obj \
+            $(SLO)$/viewbackgroundshape.obj \
+            $(SLO)$/viewmediashape.obj \
+            $(SLO)$/viewshape.obj \
+            $(SLO)$/wakeupevent.obj
+
 
 # ==========================================================================
 
