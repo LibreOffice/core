@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: th $ $Date: 2001-06-15 15:55:48 $
+ *  last change: $Author: kz $ $Date: 2001-06-21 11:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1547,11 +1547,16 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     maSoundSettings( rData.maSoundSettings ),
     maNotificationSettings( rData.maNotificationSettings ),
     maHelpSettings( rData.maHelpSettings ),
-    maInternational( rData.maInternational )
+    maInternational( rData.maInternational ),
+    maLocale( rData.maLocale ),
+    maUILocale( rData.maUILocale )
+
 {
     mnRefCount                  = 1;
     mnSystemUpdate              = rData.mnSystemUpdate;
     mnWindowUpdate              = rData.mnWindowUpdate;
+    meLanguage                  = rData.meLanguage;
+    meUILanguage                = rData.meUILanguage;
 }
 
 // -----------------------------------------------------------------------
