@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-23 12:17:53 $
+ *  last change: $Author: mtg $ $Date: 2001-10-23 17:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,9 @@
 #include <SwStyleNameMapper.hxx>
 #endif
 #include <float.h> // for DBL_MIN
+#ifndef _FRMATR_HXX
+#include <frmatr.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -2004,6 +2007,7 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         0
         );
     uno::Any* pRepHead;
+    const SwFrmFmt &rFrmFmt = *rTbl.GetFrmFmt();
     if(GetProperty(UNO_NAME_REPEAT_HEADLINE, pRepHead ))
     {
         sal_Bool bVal = *(sal_Bool*)pRepHead->getValue();
@@ -2023,7 +2027,7 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
 
     if(pBackColor||pBackTrans||pGrURL||pGrFilter||pGrLoc)
     {
-        SvxBrushItem aBrush(RES_BACKGROUND);
+        SvxBrushItem aBrush ( rFrmFmt.GetBackground() );
         if(pBackColor)
             aBrush.PutValue(*pBackColor, MID_BACK_COLOR);
         if(pBackTrans)
@@ -2068,21 +2072,21 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     uno::Any* pBreak;
     if(bPutBreak && GetProperty(UNO_NAME_BREAK_TYPE, pBreak))
     {
-        SvxFmtBreakItem aBreak;
+        SvxFmtBreakItem aBreak ( rFrmFmt.GetBreak() );
         aBreak.PutValue(*pBreak, 0);
         aSet.Put(aBreak);
     }
     uno::Any* pShadow;
     if(GetProperty(UNO_NAME_SHADOW_FORMAT, pShadow))
     {
-        SvxShadowItem aShd(RES_SHADOW);
+        SvxShadowItem aShd ( rFrmFmt.GetShadow() );
         aShd.PutValue(*pShadow, CONVERT_TWIPS);
         aSet.Put(aShd);
     }
     uno::Any* pKeep;
     if(GetProperty(UNO_NAME_KEEP_TOGETHER, pKeep))
     {
-        SvxFmtKeepItem aKeep(RES_KEEP);
+        SvxFmtKeepItem aKeep( rFrmFmt.GetKeep() );
         aKeep.PutValue(*pKeep, 0);
         aSet.Put(aKeep);
     }
@@ -2091,7 +2095,7 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     uno::Any* pHOrient;
     if(GetProperty(UNO_NAME_HORI_ORIENT, pHOrient))
     {
-        SwFmtHoriOrient aOrient;
+        SwFmtHoriOrient aOrient ( rFrmFmt.GetHoriOrient() );
         ((SfxPoolItem&)aOrient).PutValue(*pHOrient, MID_HORIORIENT_ORIENT|CONVERT_TWIPS);
         bFullAlign = (aOrient.GetHoriOrient() == HORI_FULL);
         aSet.Put(aOrient);
@@ -2130,7 +2134,7 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     GetProperty(UNO_NAME_RIGHT_MARGIN, pR);
     if(pL||pR)
     {
-        SvxLRSpaceItem aLR(RES_LR_SPACE);
+        SvxLRSpaceItem aLR ( rFrmFmt.GetLRSpace() );
         if(pL)
             ((SfxPoolItem&)aLR).PutValue(*pL, MID_L_MARGIN|CONVERT_TWIPS);
         if(pR)
@@ -2143,7 +2147,7 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     GetProperty(UNO_NAME_BOTTOM_MARGIN, pLo);
     if(pU||pLo)
     {
-        SvxULSpaceItem aUL(RES_UL_SPACE);
+        SvxULSpaceItem aUL ( rFrmFmt.GetULSpace() );
         if(pU)
             ((SfxPoolItem&)aUL).PutValue(*pU, MID_UP_MARGIN|CONVERT_TWIPS);
         if(pLo)
