@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 14:44:26 $
+ *  last change: $Author: oj $ $Date: 2000-11-27 09:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,8 @@ java_sql_Driver::java_sql_Driver(const Reference< ::com::sun::star::lang::XMulti
 {
     SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
     // this object is not the right one
-    t.pEnv->DeleteGlobalRef( object );
+    if(t.pEnv)
+        t.pEnv->DeleteGlobalRef( object );
     object = 0;
 }
 // --------------------------------------------------------------------------------
