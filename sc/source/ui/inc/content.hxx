@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-19 15:16:30 $
+ *  last change: $Author: dr $ $Date: 2002-10-16 12:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,8 @@ class ScAreaLink;
 #define SC_CONTENT_DRAWING      8
 #define SC_CONTENT_COUNT        9
 
+const ULONG SC_CONTENT_NOCHILD  = ~0UL;
+
 //
 //  TreeListBox fuer Inhalte
 //
@@ -131,8 +133,17 @@ class ScContentTree : public SvTreeListBox
     ScAddress GetNotePos( ULONG nIndex );
     const ScAreaLink* GetLink( ULONG nIndex );
 
-    USHORT  GetCurrentContent( String& rValue );
-    ULONG   GetCurrentIndex( SvLBoxEntry* pCurrent = NULL );
+    /** Returns the indexes of the specified listbox entry.
+        @param rnRootIndex  Root index of specified entry is returned.
+        @param rnChildIndex  Index of the entry inside its root is returned (or SC_CONTENT_NOCHILD if entry is root).
+        @param pEntry  The entry to examine. */
+    void    GetEntryIndexes( USHORT& rnRootIndex, ULONG& rnChildIndex, SvLBoxEntry* pEntry ) const;
+
+    /** Returns the child index of the specified listbox entry.
+        @param pEntry  The entry to examine or NULL for the selected entry.
+        @return  Index of the entry inside its root or SC_CONTENT_NOCHILD if entry is root. */
+    ULONG   GetChildIndex( SvLBoxEntry* pEntry ) const;
+
     void    DoDrag();
     void    AdjustTitle();
 
@@ -176,8 +187,10 @@ public:
 
     const String& GetHiddenTitle() const    { return aHiddenTitle; }
 
-    void    ApplySettings();
-    void    StoreSettings();
+    /** Applies the navigator settings to the listbox. */
+    void                        ApplySettings();
+    /** Stores the current listbox state in the navigator settings. */
+    void                        StoreSettings() const;
 
     static BOOL IsInDrag()  { return bIsInDrag; }
 };

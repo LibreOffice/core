@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navsett.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-02 14:15:44 $
+ *  last change: $Author: dr $ $Date: 2002-10-16 12:12:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,27 +66,28 @@
 #include <tools/solar.h>
 #endif
 
+#include <vector>
+
 /** Contains settings of the navigator listbox. This includes the expand state
     of each listbox entry and the index of the selected entry and sub entry. */
 class ScNavigatorSettings
 {
 private:
-    BOOL*                       pExpanded;          /// Array of BOOL for expand state.
-    ULONG                       nSelected;          /// Index of selected entry.
-    ULONG                       nSubSelected;       /// Index of selected sub entry.
+    ::std::vector< BOOL >       maExpandedVec;      /// Array of Booleans for expand state.
+    USHORT                      mnRootSelected;     /// Index of selected root entry.
+    ULONG                       mnChildSelected;    /// Index of selected child entry.
 
 public:
                                 ScNavigatorSettings();
-                                ~ScNavigatorSettings();
 
-    inline void                 SetExpanded( ULONG nIndex, BOOL bExpand )   { pExpanded[ nIndex ] = bExpand; }
-    inline BOOL                 IsExpanded( ULONG nIndex ) const            { return pExpanded[ nIndex ]; }
+    inline void                 SetExpanded( USHORT nIndex, BOOL bExpand ) { maExpandedVec[ nIndex ] = bExpand; }
+    inline BOOL                 IsExpanded( USHORT nIndex ) const { return maExpandedVec[ nIndex ]; }
 
-    inline void                 SetSelected( ULONG nIndex )                 { nSelected = nIndex; }
-    inline ULONG                GetSelected() const                         { return nSelected; }
+    inline void                 SetRootSelected( USHORT nIndex ) { mnRootSelected = nIndex; }
+    inline USHORT               GetRootSelected() const { return mnRootSelected; }
 
-    inline void                 SetSubSelected( ULONG nIndex )              { nSubSelected = nIndex; }
-    inline ULONG                GetSubSelected() const                      { return nSubSelected; }
+    inline void                 SetChildSelected( ULONG nIndex ) { mnChildSelected = nIndex; }
+    inline ULONG                GetChildSelected() const { return mnChildSelected; }
 };
 
 

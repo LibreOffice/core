@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-03 09:55:40 $
+ *  last change: $Author: dr $ $Date: 2002-10-16 12:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,17 +601,10 @@ void CommandToolBox::DataChanged( const DataChangedEvent& rDCEvt )
 //==================================================================
 
 ScNavigatorSettings::ScNavigatorSettings() :
-    pExpanded( new BOOL[ SC_CONTENT_COUNT ] ),
-    nSelected( 0 ),
-    nSubSelected( 0 )
+    maExpandedVec( SC_CONTENT_COUNT, FALSE ),
+    mnRootSelected( SC_CONTENT_ROOT ),
+    mnChildSelected( SC_CONTENT_NOCHILD )
 {
-    for( USHORT nI = 0; nI < SC_CONTENT_COUNT; ++nI )
-        pExpanded[ nI ] = FALSE;
-}
-
-ScNavigatorSettings::~ScNavigatorSettings()
-{
-    delete[] pExpanded;
 }
 
 //==================================================================

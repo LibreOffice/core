@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-19 15:14:29 $
+ *  last change: $Author: dr $ $Date: 2002-10-16 12:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,67 +251,53 @@ void ScContentTree::InsertContent( USHORT nType, const String& rValue )
         DBG_ERROR("InsertContent ohne Parent");
 }
 
-USHORT ScContentTree::GetCurrentContent( String& rValue )
+void ScContentTree::GetEntryIndexes( USHORT& rnRootIndex, ULONG& rnChildIndex, SvLBoxEntry* pEntry ) const
 {
-    SvLBoxEntry* pEntry = GetCurEntry();
-    if (!pEntry)
+    rnRootIndex = SC_CONTENT_ROOT;
+    rnChildIndex = SC_CONTENT_NOCHILD;
+
+    if( !pEntry )
+        return;
+
+    SvLBoxEntry* pParent = GetParent( pEntry );
+    bool bFound = false;
+    for( USHORT nRoot = 1; !bFound && (nRoot < SC_CONTENT_COUNT); ++nRoot )
     {
-        DBG_ERROR("kein aktueller Eintrag!");
-        rValue.Erase();
-        return 0;
-    }
-    SvLBoxEntry* pParent = GetParent(pEntry);   // kann 0 sein, wenn umgeschaltet ist
-
-    USHORT nType = 0;
-    BOOL bRoot = FALSE;
-    for (USHORT i=1; i<SC_CONTENT_COUNT; i++)
-    {
-        if ( pEntry == pRootNodes[i] )
+        if( pEntry == pRootNodes[ nRoot ] )
         {
-            bRoot = TRUE;
-            rValue = GetEntryText(pEntry);
+            rnRootIndex = nRoot;
+            rnChildIndex = ~0UL;
+            bFound = true;
         }
-        else if ( pParent && pParent == pRootNodes[i] )
+        else if( pParent && (pParent == pRootNodes[ nRoot ]) )
         {
-            nType = i;
-            rValue = GetEntryText(pEntry);
+            rnRootIndex = nRoot;
+
+            // search the entry in all child entries of the parent
+            ULONG nEntry = 0;
+            SvLBoxEntry* pIterEntry = FirstChild( pParent );
+            while( !bFound && pIterEntry )
+            {
+                if ( pEntry == pIterEntry )
+                {
+                    rnChildIndex = nEntry;
+                    bFound = true;  // exit the while loop
+                }
+                pIterEntry = NextSibling( pIterEntry );
+                ++nEntry;
+            }
+
+            bFound = true;  // exit the for loop
         }
     }
-
-    DBG_ASSERT( bRoot || nType, "ScContentTree: unbekannter Eintrag" );
-
-    return nType;
 }
 
-ULONG ScContentTree::GetCurrentIndex( SvLBoxEntry* pCurrent )
+ULONG ScContentTree::GetChildIndex( SvLBoxEntry* pEntry ) const
 {
-    if (!pCurrent)
-        pCurrent = GetCurEntry();
-    if (!pCurrent)
-    {
-        DBG_ERROR("kein aktueller Eintrag!");
-        return 0;
-    }
-    SvLBoxEntry* pParent = GetParent(pCurrent);
-    if (!pParent)
-    {
-        DBG_ERROR("kein Parent!");
-        return 0;
-    }
-
-    ULONG nIndex = 0;
-    SvLBoxEntry* pEntry = FirstChild( pParent );
-    while (pEntry)
-    {
-        if ( pEntry == pCurrent )
-            return nIndex;
-
-        pEntry = NextSibling( pEntry );
-        ++nIndex;
-    }
-
-    DBG_ERROR("Eintrag nicht gefunden");
-    return 0;
+    USHORT nRoot;
+    ULONG nChild;
+    GetEntryIndexes( nRoot, nChild, pEntry );
+    return nChild;
 }
 
 String lcl_GetDBAreaRange( ScDocument* pDoc, const String& rDBName )
@@ -338,12 +324,17 @@ String lcl_GetDBAreaRange( ScDocument* pDoc, const String& rDBName )
 
 IMPL_LINK( ScContentTree, DoubleClickHdl, ScContentTree *, EMPTYARG )
 {
-    String aText;
-    USHORT nType = GetCurrentContent( aText );
-    if ( nType )
+    USHORT nType;
+    ULONG nChild;
+    SvLBoxEntry* pEntry = GetCurEntry();
+    GetEntryIndexes( nType, nChild, pEntry );
+
+    if( pEntry && (nType != SC_CONTENT_ROOT) && (nChild != SC_CONTENT_NOCHILD) )
     {
         if ( bHiddenDoc )
             return 0;               //! spaeter...
+
+        String aText( GetEntryText( pEntry ) );
 
         if ( aManualDoc.Len() )
             pParentWindow->SetCurrentDoc( aManualDoc );
@@ -352,47 +343,50 @@ IMPL_LINK( ScContentTree, DoubleClickHdl, ScContentTree *, EMPTYARG )
         {
             case SC_CONTENT_TABLE:
                 pParentWindow->SetCurrentTableStr( aText );
-                break;
+            break;
+
             case SC_CONTENT_RANGENAME:
                 pParentWindow->SetCurrentCellStr( aText );
-                break;
-            case SC_CONTENT_DBAREA:
-                {
-                    //  #47905# Wenn gleiche Bereichs- und DB-Namen existieren, wird
-                    //  bei SID_CURRENTCELL der Bereichsname genommen.
-                    //  DB-Bereiche darum direkt ueber die Adresse anspringen.
+            break;
 
-                    String aRangeStr = lcl_GetDBAreaRange( GetSourceDocument(), aText );
-                    if (aRangeStr.Len())
-                        pParentWindow->SetCurrentCellStr( aRangeStr );
-                }
-                break;
+            case SC_CONTENT_DBAREA:
+            {
+                //  #47905# Wenn gleiche Bereichs- und DB-Namen existieren, wird
+                //  bei SID_CURRENTCELL der Bereichsname genommen.
+                //  DB-Bereiche darum direkt ueber die Adresse anspringen.
+
+                String aRangeStr = lcl_GetDBAreaRange( GetSourceDocument(), aText );
+                if (aRangeStr.Len())
+                    pParentWindow->SetCurrentCellStr( aRangeStr );
+            }
+            break;
+
             case SC_CONTENT_OLEOBJECT:
             case SC_CONTENT_GRAPHIC:
             case SC_CONTENT_DRAWING:
                 pParentWindow->SetCurrentObject( aText );
-                break;
+            break;
+
             case SC_CONTENT_NOTE:
-                {
-                    ULONG nIndex = GetCurrentIndex();
-                    ScAddress aPos = GetNotePos(nIndex);
-                    pParentWindow->SetCurrentTable( aPos.Tab() );
-                    pParentWindow->SetCurrentCell( aPos.Col(), aPos.Row() );
-                }
-                break;
+            {
+                ScAddress aPos = GetNotePos( nChild );
+                pParentWindow->SetCurrentTable( aPos.Tab() );
+                pParentWindow->SetCurrentCell( aPos.Col(), aPos.Row() );
+            }
+            break;
+
             case SC_CONTENT_AREALINK:
+            {
+                const ScAreaLink* pLink = GetLink( nChild );
+                if( pLink )
                 {
-                    ULONG nIndex = GetCurrentIndex();
-                    const ScAreaLink* pLink = GetLink(nIndex);
-                    if (pLink)
-                    {
-                        ScRange aRange = pLink->GetDestArea();
-                        String aRangeStr;
-                        aRange.Format( aRangeStr, SCR_ABS_3D, GetSourceDocument() );
-                        pParentWindow->SetCurrentCellStr( aRangeStr );
-                    }
+                    ScRange aRange = pLink->GetDestArea();
+                    String aRangeStr;
+                    aRange.Format( aRangeStr, SCR_ABS_3D, GetSourceDocument() );
+                    pParentWindow->SetCurrentCellStr( aRangeStr );
                 }
-                break;
+            }
+            break;
         }
 
         ScNavigatorDlg::ReleaseFocus();     // set focus into document
@@ -421,25 +415,29 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
                 bUsed = TRUE;
                 break;
             case 0:
+            {
+                SvLBoxEntry* pEntry = GetCurEntry();
+                if( pEntry )
                 {
-                    String aText;
-                    USHORT nType = GetCurrentContent( aText );
-                    if ( nType == SC_CONTENT_ROOT )
+                    USHORT nType;
+                    ULONG nChild;
+                    GetEntryIndexes( nType, nChild, pEntry );
+
+                    if( (nType != SC_CONTENT_ROOT) && (nChild == SC_CONTENT_NOCHILD) )
                     {
-                        SvLBoxEntry* pEntry = GetCurEntry();
-                        if ( pEntry )
-                        {
-                            if ( IsExpanded(pEntry) )
-                                Collapse(pEntry);
-                            else
-                                Expand(pEntry);
-                        }
+                        String aText( GetEntryText( pEntry ) );
+                        if ( IsExpanded( pEntry ) )
+                            Collapse( pEntry );
+                        else
+                            Expand( pEntry );
                     }
                     else
                         DoubleClickHdl(0);      // select content as if double clicked
-                    bUsed = TRUE;
                 }
-                break;
+
+                bUsed = TRUE;
+            }
+            break;
         }
     }
     StoreSettings();
@@ -598,12 +596,15 @@ void __EXPORT ScContentTree::RequestHelp( const HelpEvent& rHEvt )
             }
             else if ( pParent == pRootNodes[SC_CONTENT_AREALINK] )
             {
-                ULONG nIndex = GetCurrentIndex(pEntry);
-                const ScAreaLink* pLink = GetLink(nIndex);
-                if (pLink)
+                ULONG nIndex = GetChildIndex(pEntry);
+                if( nIndex != SC_CONTENT_NOCHILD )
                 {
-                    aHelpText = pLink->GetFile();           // Source-Datei als Help-Text
-                    bRet = TRUE;
+                    const ScAreaLink* pLink = GetLink(nIndex);
+                    if (pLink)
+                    {
+                        aHelpText = pLink->GetFile();           // Source-Datei als Help-Text
+                        bRet = TRUE;
+                    }
                 }
             }
 
@@ -1151,11 +1152,19 @@ void ScContentTree::DoDrag()
 
     ScModule* pScMod = SC_MOD();
 
-    String aText;
-    USHORT nType = GetCurrentContent( aText );
-    if ( nType && nType != SC_CONTENT_NOTE
-               && nType != SC_CONTENT_AREALINK )        // Notizen und AreaLinks gar nicht
+    USHORT nType;
+    ULONG nChild;
+    SvLBoxEntry* pEntry = GetCurEntry();
+    GetEntryIndexes( nType, nChild, pEntry );
+
+    if( pEntry &&
+        (nChild != SC_CONTENT_NOCHILD) &&
+        (nType != SC_CONTENT_ROOT) &&
+        (nType != SC_CONTENT_NOTE) &&
+        (nType != SC_CONTENT_AREALINK) )
     {
+        String aText( GetEntryText( pEntry ) );
+
         ScDocument* pLocalDoc = NULL;                   // fuer URL-Drop
         String aDocName;
         if (bHiddenDoc)
@@ -1479,39 +1488,51 @@ void ScContentTree::ApplySettings()
     const ScNavigatorSettings* pSettings = pParentWindow->GetSettings();
     if( pSettings )
     {
-        for( USHORT nEntry = 1; nEntry < SC_CONTENT_COUNT; nEntry++ )
+        USHORT nRootSel = pSettings->GetRootSelected();
+        ULONG nChildSel = pSettings->GetChildSelected();
+
+        for( USHORT nEntry = 1; nEntry < SC_CONTENT_COUNT; ++nEntry )
         {
             if( pRootNodes[ nEntry ] )
             {
-                if( pSettings->IsExpanded( nEntry ) != IsExpanded( pRootNodes[ nEntry ] ) )
+                // expand
+                BOOL bExp = pSettings->IsExpanded( nEntry );
+                if( bExp != IsExpanded( pRootNodes[ nEntry ] ) )
                 {
-                    if( pSettings->IsExpanded( nEntry ) )
+                    if( bExp )
                         Expand( pRootNodes[ nEntry ] );
                     else
                         Collapse( pRootNodes[ nEntry ] );
                 }
-                Select( pRootNodes[ nEntry ], (pSettings->GetSelected() == nEntry) );
+
+                // select
+                if( nRootSel == nEntry )
+                {
+                    SvLBoxEntry* pEntry = NULL;
+                    if( bExp && (nChildSel != SC_CONTENT_NOCHILD) )
+                        pEntry = GetEntry( pRootNodes[ nEntry ], nChildSel );
+                    Select( pEntry ? pEntry : pRootNodes[ nEntry ] );
+                }
             }
         }
     }
 }
 
-void ScContentTree::StoreSettings()
+void ScContentTree::StoreSettings() const
 {
     ScNavigatorSettings* pSettings = pParentWindow->GetSettings();
     if( pSettings )
     {
-        for( USHORT nEntry = 1; nEntry < SC_CONTENT_COUNT; nEntry++ )
+        for( USHORT nEntry = 1; nEntry < SC_CONTENT_COUNT; ++nEntry )
         {
-            if( pRootNodes[ nEntry ] )
-            {
-                pSettings->SetExpanded( nEntry, IsExpanded( pRootNodes[ nEntry ] ) );
-                if( IsSelected( pRootNodes[ nEntry ] ) )
-                    pSettings->SetSelected( nEntry );
-            }
-            else
-                pSettings->SetExpanded( nEntry, FALSE );
+            BOOL bExp = pRootNodes[ nEntry ] && IsExpanded( pRootNodes[ nEntry ] );
+            pSettings->SetExpanded( nEntry, bExp );
         }
+        USHORT nRoot;
+        ULONG nChild;
+        GetEntryIndexes( nRoot, nChild, GetCurEntry() );
+        pSettings->SetRootSelected( nRoot );
+        pSettings->SetChildSelected( nChild );
     }
 }
 
