@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-03 15:50:53 $
+ *  last change: $Author: sb $ $Date: 2002-07-09 08:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <memory>
 
 #include <ide_pch.hxx>
 
@@ -903,12 +904,13 @@ void ObjectPage::NewModule()
         if ( pBasMgr )
         {
             SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-            NewObjectDialog* pNewDlg = new NewObjectDialog( this, NEWOBJECTMODE_MOD );
-            pNewDlg->SetObjectName( BasicIDE::CreateModuleName( pShell, aLibName ) );
+            std::auto_ptr< NewObjectDialog > xNewDlg(
+                new NewObjectDialog(this, NEWOBJECTMODE_MOD, true));
+            xNewDlg->SetObjectName( BasicIDE::CreateModuleName( pShell, aLibName ) );
 
-            if ( pNewDlg->Execute() )
+            if (xNewDlg->Execute() != 0)
             {
-                String aModName( pNewDlg->GetObjectName() );
+                String aModName( xNewDlg->GetObjectName() );
 
                 if ( aModName.Len() == 0 )
                     aModName = BasicIDE::CreateModuleName( pShell, aLibName );
@@ -946,7 +948,6 @@ void ObjectPage::NewModule()
                     DBG_ERROR( aBStr.GetBuffer() );
                 }
             }
-            delete pNewDlg;
         }
     }
 }
@@ -962,12 +963,15 @@ void ObjectPage::NewDialog()
         if ( pBasMgr )
         {
             SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-            NewObjectDialog* pNewDlg = new NewObjectDialog( this, NEWOBJECTMODE_DLG );
-            pNewDlg->SetObjectName( BasicIDE::CreateDialogName( pShell, aLibName ) );
+            std::auto_ptr< NewObjectDialog > xNewDlg(
+                new NewObjectDialog(this, NEWOBJECTMODE_DLG, true));
+            xNewDlg->SetObjectName( BasicIDE::CreateDialogName( pShell, aLibName ) );
 
-            if ( pNewDlg->Execute() )
+            if (xNewDlg->Execute() != 0)
             {
-                String aDlgName( pNewDlg->GetObjectName() );
+                String aDlgName( xNewDlg->GetObjectName() );
+                if (aDlgName.Len() == 0)
+                    aDlgName = BasicIDE::CreateDialogName(pShell, aLibName);
 
                 try
                 {
@@ -1002,7 +1006,6 @@ void ObjectPage::NewDialog()
                     DBG_ERROR( aBStr.GetBuffer() );
                 }
             }
-            delete pNewDlg;
         }
     }
 }

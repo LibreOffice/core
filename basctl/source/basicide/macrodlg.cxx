@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-24 08:25:53 $
+ *  last change: $Author: sb $ $Date: 2002-07-09 08:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <memory>
 
 #include <ide_pch.hxx>
 
@@ -440,11 +441,12 @@ SbMethod* MacroChooser::CreateMacro()
 
     if ( !pModule )
     {
-        NewObjectDialog* pNewDlg = new NewObjectDialog( this, NEWOBJECTMODE_MOD );
-        pNewDlg->SetObjectName( aModName );
-        if ( pNewDlg->Execute() )
+        std::auto_ptr< NewObjectDialog > xNewDlg(
+            new NewObjectDialog(this, NEWOBJECTMODE_MOD, true));
+        xNewDlg->SetObjectName(aModName);
+        if (xNewDlg->Execute() != 0)
         {
-            aModName = pNewDlg->GetObjectName();
+            aModName = xNewDlg->GetObjectName();
 
             if ( aModName.Len() == 0 )
                 aModName = BasicIDE::CreateModuleName( pShell, aLibName );
@@ -466,7 +468,6 @@ SbMethod* MacroChooser::CreateMacro()
                 DBG_ERROR( aBStr.GetBuffer() );
             }
         }
-        delete pNewDlg;
     }
 
     DBG_ASSERT( !pModule || !pModule->GetMethods()->Find( aSubName, SbxCLASS_METHOD ), "Macro existiert schon!" );

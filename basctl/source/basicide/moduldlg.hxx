@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-03 15:50:51 $
+ *  last change: $Author: sb $ $Date: 2002-07-09 08:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,8 +111,10 @@ private:
     OKButton        aOKButton;
     CancelButton    aCancelButton;
 
+    DECL_LINK(OkButtonHandler, Button *);
+
 public:
-                NewObjectDialog( Window* pParent, USHORT nMode );
+    NewObjectDialog(Window * pParent, USHORT nMode, bool bCheckName = false);
                 ~NewObjectDialog();
 
     String      GetObjectName() const { return aEdit.GetText(); }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-05 10:27:37 $
+ *  last change: $Author: sb $ $Date: 2002-07-09 08:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,7 +474,21 @@ BOOL __EXPORT BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNe
 // NewObjectDialog
 //----------------------------------------------------------------------------
 
-NewObjectDialog::NewObjectDialog( Window* pParent, USHORT nMode )
+IMPL_LINK(NewObjectDialog, OkButtonHandler, Button *, EMPTYARG)
+{
+    if (BasicIDE::IsValidSbxName(aEdit.GetText()))
+        EndDialog(1);
+    else
+    {
+        ErrorBox(this, WB_OK | WB_DEF_OK,
+                 String(IDEResId(RID_STR_BADSBXNAME))).Execute();
+        aEdit.GrabFocus();
+    }
+    return 0;
+}
+
+NewObjectDialog::NewObjectDialog(Window * pParent, USHORT nMode,
+                                 bool bCheckName)
     : ModalDialog( pParent, IDEResId( RID_DLG_NEWLIB ) ),
         aText( this, IDEResId( RID_FT_NEWLIB ) ),
         aEdit( this, IDEResId( RID_ED_LIBNAME ) ),
@@ -496,6 +510,9 @@ NewObjectDialog::NewObjectDialog( Window* pParent, USHORT nMode )
     {
         SetText( String( IDEResId( RID_STR_NEWDLG ) ) );
     }
+
+    if (bCheckName)
+        aOKButton.SetClickHdl(LINK(this, NewObjectDialog, OkButtonHandler));
 }
 
 //----------------------------------------------------------------------------
