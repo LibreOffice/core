@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:00:04 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:48:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #include <com/sun/star/form/XLoadable.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
+#include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #endif
@@ -140,6 +143,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #endif
 #ifndef _SVX_FMMODEL_HXX
 #include <fmmodel.hxx>
@@ -194,6 +200,7 @@
 
 #include <algorithm>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -204,6 +211,8 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::style;
 using namespace ::comphelper;
 using namespace ::svxform;
 using namespace ::svx;
@@ -247,7 +256,7 @@ public:
 //========================================================================
 DBG_NAME(FmXPageViewWinRec);
 //------------------------------------------------------------------------
-FmXPageViewWinRec::FmXPageViewWinRec(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&    _xORB,
+FmXPageViewWinRec::FmXPageViewWinRec(const Reference< XMultiServiceFactory >&   _xORB,
     //const SdrPageViewWinRec* pWinRec,
     const SdrPageViewWindow& rWindow,
     FmXFormView* _pViewImpl)
@@ -286,20 +295,20 @@ FmXPageViewWinRec::~FmXPageViewWinRec()
 //------------------------------------------------------------------
 void FmXPageViewWinRec::dispose()
 {
-    for (vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > >::const_iterator i = m_aControllerList.begin();
+    for (vector< Reference< XFormController > >::const_iterator i = m_aControllerList.begin();
             i != m_aControllerList.end(); i++)
     {
         // detaching the events
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >  xChild((*i)->getModel(), ::com::sun::star::uno::UNO_QUERY);
+        Reference< XChild >  xChild((*i)->getModel(), UNO_QUERY);
         if (xChild.is())
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager >  xEventManager(xChild->getParent(), ::com::sun::star::uno::UNO_QUERY);
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xIfc(*i, ::com::sun::star::uno::UNO_QUERY);
+            Reference< XEventAttacherManager >  xEventManager(xChild->getParent(), UNO_QUERY);
+            Reference< XInterface >  xIfc(*i, UNO_QUERY);
             xEventManager->detach( i - m_aControllerList.begin(), xIfc );
         }
 
         // dispose the formcontroller
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >  xComp(*i, ::com::sun::star::uno::UNO_QUERY);
+        Reference< XComponent >  xComp(*i, UNO_QUERY);
         xComp->dispose();
     }
     m_aControllerList.clear(); // this call deletes the formcontrollers
@@ -308,96 +317,96 @@ void FmXPageViewWinRec::dispose()
 
 
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL FmXPageViewWinRec::hasElements(void) throw( ::com::sun::star::uno::RuntimeException )
+sal_Bool SAL_CALL FmXPageViewWinRec::hasElements(void) throw( RuntimeException )
 {
     return getCount() != 0;
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Type SAL_CALL  FmXPageViewWinRec::getElementType(void) throw( ::com::sun::star::uno::RuntimeException )
+Type SAL_CALL  FmXPageViewWinRec::getElementType(void) throw( RuntimeException )
 {
-    return ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>*)0);
+    return ::getCppuType((const Reference< XFormController>*)0);
 }
 
-// ::com::sun::star::container::XEnumerationAccess
+// XEnumerationAccess
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >  SAL_CALL FmXPageViewWinRec::createEnumeration(void) throw( ::com::sun::star::uno::RuntimeException )
+Reference< XEnumeration >  SAL_CALL FmXPageViewWinRec::createEnumeration(void) throw( RuntimeException )
 {
     return new ::comphelper::OEnumerationByIndex(this);
 }
 
-// ::com::sun::star::container::XIndexAccess
+// XIndexAccess
 //------------------------------------------------------------------------------
-sal_Int32 SAL_CALL FmXPageViewWinRec::getCount(void) throw( ::com::sun::star::uno::RuntimeException )
+sal_Int32 SAL_CALL FmXPageViewWinRec::getCount(void) throw( RuntimeException )
 {
     return m_aControllerList.size();
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Any SAL_CALL FmXPageViewWinRec::getByIndex(sal_Int32 nIndex) throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException )
+Any SAL_CALL FmXPageViewWinRec::getByIndex(sal_Int32 nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
     if (nIndex < 0 ||
         nIndex >= getCount())
-        throw ::com::sun::star::lang::IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException();
 
-    ::com::sun::star::uno::Any aElement;
+    Any aElement;
     aElement <<= m_aControllerList[nIndex];
     return aElement;
 }
 
 //------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  getControllerSearchChilds( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel > & xModel)
+Reference< XFormController >  getControllerSearchChilds( const Reference< XIndexAccess > & xIndex, const Reference< XTabControllerModel > & xModel)
 {
     if (xIndex.is() && xIndex->getCount())
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  xController;
+        Reference< XFormController >  xController;
 
         for (sal_Int32 n = xIndex->getCount(); n-- && !xController.is(); )
         {
             xIndex->getByIndex(n) >>= xController;
-            if ((::com::sun::star::awt::XTabControllerModel*)xModel.get() == (::com::sun::star::awt::XTabControllerModel*)xController->getModel().get())
+            if ((XTabControllerModel*)xModel.get() == (XTabControllerModel*)xController->getModel().get())
                 return xController;
             else
             {
-                xController = getControllerSearchChilds(::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > (xController, ::com::sun::star::uno::UNO_QUERY), xModel);
+                xController = getControllerSearchChilds(Reference< XIndexAccess > (xController, UNO_QUERY), xModel);
                 if ( xController.is() )
                     return xController;
             }
         }
     }
-    return ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > ();
+    return Reference< XFormController > ();
 }
 
 // Search the according controller
 //------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  FmXPageViewWinRec::getController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > & xForm )
+Reference< XFormController >  FmXPageViewWinRec::getController( const Reference< XForm > & xForm )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >  xModel(xForm, ::com::sun::star::uno::UNO_QUERY);
-    for (::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > >::const_iterator i = m_aControllerList.begin();
+    Reference< XTabControllerModel >  xModel(xForm, UNO_QUERY);
+    for (::std::vector< Reference< XFormController > >::const_iterator i = m_aControllerList.begin();
          i != m_aControllerList.end(); i++)
     {
-        if ((::com::sun::star::awt::XTabControllerModel*)(*i)->getModel().get() == (::com::sun::star::awt::XTabControllerModel*)xModel.get())
+        if ((XTabControllerModel*)(*i)->getModel().get() == (XTabControllerModel*)xModel.get())
             return *i;
 
         // the current-round controller isn't the right one. perhaps one of it's children ?
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  xChildSearch = getControllerSearchChilds(::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > (*i, ::com::sun::star::uno::UNO_QUERY), xModel);
+        Reference< XFormController >  xChildSearch = getControllerSearchChilds(Reference< XIndexAccess > (*i, UNO_QUERY), xModel);
         if (xChildSearch.is())
             return xChildSearch;
     }
-    return ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > ();
+    return Reference< XFormController > ();
 }
 
 //------------------------------------------------------------------------
-void FmXPageViewWinRec::setController(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > & xForm,
-                                     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > & xCC,
+void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,
+                                     const Reference< XControlContainer > & xCC,
                                      FmXFormController* pParent)
 {
     DBG_ASSERT(xForm.is(), "Kein Formular angegeben");
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xFormCps(xForm, ::com::sun::star::uno::UNO_QUERY);
+    Reference< XIndexAccess >  xFormCps(xForm, UNO_QUERY);
     if (!xFormCps.is())
         return;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >  xTabOrder(xForm, ::com::sun::star::uno::UNO_QUERY);
+    Reference< XTabControllerModel >  xTabOrder(xForm, UNO_QUERY);
 
     // Anlegen des Tabcontrollers
     FmXFormController* pController = new FmXFormController( m_xORB,m_pViewImpl->getView(), m_pWindow );
@@ -412,22 +421,22 @@ void FmXPageViewWinRec::setController(const ::com::sun::star::uno::Reference< ::
         pParent->addChild(pController);
     else
     {
-        //  ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  xController(pController);
+        //  Reference< XFormController >  xController(pController);
         m_aControllerList.push_back(xController);
 
         pController->setParent(*this);
 
         // attaching the events
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager >  xEventManager(xForm->getParent(), ::com::sun::star::uno::UNO_QUERY);
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xIfc(xController, ::com::sun::star::uno::UNO_QUERY);
-        xEventManager->attach(m_aControllerList.size() - 1, xIfc, ::com::sun::star::uno::makeAny(xController) );
+        Reference< XEventAttacherManager >  xEventManager(xForm->getParent(), UNO_QUERY);
+        Reference< XInterface >  xIfc(xController, UNO_QUERY);
+        xEventManager->attach(m_aControllerList.size() - 1, xIfc, makeAny(xController) );
     }
 
 
 
     // jetzt die Subforms durchgehen
     sal_uInt32 nLength = xFormCps->getCount();
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xSubForm;
+    Reference< XForm >  xSubForm;
     for (sal_uInt32 i = 0; i < nLength; i++)
     {
         xFormCps->getByIndex(i) >>= xSubForm;
@@ -437,20 +446,20 @@ void FmXPageViewWinRec::setController(const ::com::sun::star::uno::Reference< ::
 }
 
 //------------------------------------------------------------------------
-void FmXPageViewWinRec::updateTabOrder( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > & xControl,
-                                       const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > & xCC )
+void FmXPageViewWinRec::updateTabOrder( const Reference< XControl > & xControl,
+                                       const Reference< XControlContainer > & xCC )
 {
     // Das TabControllerModel der ::com::sun::star::form ermitteln, in der das Control
     // enthalten ist ...
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xFormComp(xControl->getModel(), ::com::sun::star::uno::UNO_QUERY);
+    Reference< XFormComponent >  xFormComp(xControl->getModel(), UNO_QUERY);
     if (!xFormComp.is())
         return;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xForm(xFormComp->getParent(), ::com::sun::star::uno::UNO_QUERY);
+    Reference< XForm >  xForm(xFormComp->getParent(), UNO_QUERY);
     if (!xForm.is())
         return;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController >  xTabCtrl(getController( xForm ), ::com::sun::star::uno::UNO_QUERY);
+    Reference< XTabController >  xTabCtrl(getController( xForm ), UNO_QUERY);
     // Wenn es fuer dieses Formular noch keinen Tabcontroller gibt,
     // dann einen neuen anlegen
     if (!xTabCtrl.is())
@@ -458,15 +467,15 @@ void FmXPageViewWinRec::updateTabOrder( const ::com::sun::star::uno::Reference< 
         // ist es ein Unterformular?
         // dann muss ein Tabcontroller fuer den Parent existieren
         // wichtig da ein hierarchischer Aufbau vorliegt
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xParentForm(::com::sun::star::uno::Reference< ::com::sun::star::container::XChild > (xForm, ::com::sun::star::uno::UNO_QUERY)->getParent(), ::com::sun::star::uno::UNO_QUERY);
+        Reference< XForm >  xParentForm(Reference< XChild > (xForm, UNO_QUERY)->getParent(), UNO_QUERY);
         FmXFormController* pFormController = NULL;
         // zugehoerigen controller suchen
         if (xParentForm.is())
-            xTabCtrl = ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController >(getController(xParentForm), ::com::sun::star::uno::UNO_QUERY);
+            xTabCtrl = Reference< XTabController >(getController(xParentForm), UNO_QUERY);
 
         if (xTabCtrl.is())
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(xTabCtrl,::com::sun::star::uno::UNO_QUERY);
+            Reference< XUnoTunnel > xTunnel(xTabCtrl,UNO_QUERY);
             DBG_ASSERT(xTunnel.is(), "FmPropController::ChangeFormatProperty : xTunnel is invalid!");
             if(xTunnel.is())
             {
@@ -482,16 +491,16 @@ void FmXPageViewWinRec::updateTabOrder( const ::com::sun::star::uno::Reference< 
 }
 
 //------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >  FmXPageViewWinRec::getControlContainer() const
+Reference< XControlContainer >  FmXPageViewWinRec::getControlContainer() const
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >  xCC;
+    Reference< XControlContainer >  xCC;
     if (m_aControllerList.size())
         xCC = m_aControllerList[0]->getContainer();
     return xCC;
 }
 
 //------------------------------------------------------------------------
-FmXFormView::FmXFormView(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&    _xORB,
+FmXFormView::FmXFormView(const Reference< XMultiServiceFactory >&   _xORB,
             FmFormView* _pView)
     :m_pView(_pView)
     ,m_xORB( _xORB )
@@ -547,44 +556,39 @@ FmXFormView::~FmXFormView()
 
 //      EventListener
 //------------------------------------------------------------------------------
-void SAL_CALL FmXFormView::disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL FmXFormView::disposing(const EventObject& Source) throw( RuntimeException )
 {
     if ( m_xWindow.is() && Source.Source == m_xWindow )
         removeGridWindowListening();
 }
 
-// ::com::sun::star::form::XFormControllerListener
+// XFormControllerListener
 //------------------------------------------------------------------------------
-void SAL_CALL FmXFormView::formActivated(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL FmXFormView::formActivated(const EventObject& rEvent) throw( RuntimeException )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  xController(rEvent.Source, ::com::sun::star::uno::UNO_QUERY);
-    // benachrichtigung der Shell
-    if (m_pView && m_pView->GetFormShell())
-    {
-        FmXFormShell* pShImpl =  m_pView->GetFormShell()->GetImpl();
-        if (pShImpl)
-            pShImpl->setActiveController(xController);
-    }
+    if ( m_pView && m_pView->GetFormShell() && m_pView->GetFormShell()->GetImpl() )
+        m_pView->GetFormShell()->GetImpl()->formActivated( rEvent );
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXFormView::formDeactivated(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL FmXFormView::formDeactivated(const EventObject& rEvent) throw( RuntimeException )
 {
-    // deaktivierung wird nicht registriert
+    if ( m_pView && m_pView->GetFormShell() && m_pView->GetFormShell()->GetImpl() )
+        m_pView->GetFormShell()->GetImpl()->formDeactivated( rEvent );
 }
 
-// ::com::sun::star::container::XContainerListener
+// XContainerListener
 //------------------------------------------------------------------------------
-void SAL_CALL FmXFormView::elementInserted(const ::com::sun::star::container::ContainerEvent& evt) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL FmXFormView::elementInserted(const ContainerEvent& evt) throw( RuntimeException )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >  xCC(evt.Source, ::com::sun::star::uno::UNO_QUERY);
+    Reference< XControlContainer >  xCC(evt.Source, UNO_QUERY);
     if( xCC.is() )
     {
         FmWinRecList::iterator i = findWindow( xCC );
 
         if ( i != m_aWinList.end() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  xControl;
+            Reference< XControl >  xControl;
             evt.Element >>= xControl;
             if( xControl.is() )
                 (*i)->updateTabOrder( xControl, xCC );
@@ -593,18 +597,18 @@ void SAL_CALL FmXFormView::elementInserted(const ::com::sun::star::container::Co
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXFormView::elementReplaced(const ::com::sun::star::container::ContainerEvent& evt) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL FmXFormView::elementReplaced(const ContainerEvent& evt) throw( RuntimeException )
 {
     elementInserted(evt);
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXFormView::elementRemoved(const ::com::sun::star::container::ContainerEvent& evt) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL FmXFormView::elementRemoved(const ContainerEvent& evt) throw( RuntimeException )
 {
 }
 
 //------------------------------------------------------------------------------
-FmWinRecList::const_iterator FmXFormView::findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > & rCC )  const
+FmWinRecList::const_iterator FmXFormView::findWindow( const Reference< XControlContainer > & rCC )  const
 {
     for (FmWinRecList::const_iterator i = m_aWinList.begin();
             i != m_aWinList.end(); i++)
@@ -616,7 +620,7 @@ FmWinRecList::const_iterator FmXFormView::findWindow( const ::com::sun::star::un
 }
 
 //------------------------------------------------------------------------------
-FmWinRecList::iterator FmXFormView::findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > & rCC )
+FmWinRecList::iterator FmXFormView::findWindow( const Reference< XControlContainer > & rCC )
 {
     for (FmWinRecList::iterator i = m_aWinList.begin();
             i != m_aWinList.end(); i++)
@@ -642,7 +646,7 @@ void FmXFormView::addWindow(const SdrPageViewWindow& rWindow)
     // Tab-Order einzustellen ...
     if( rWindow.GetOutputDevice().GetOutDevType() == OUTDEV_WINDOW  )
     {
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > & rCC = rWindow.GetControlContainerRef();
+        const Reference< XControlContainer > & rCC = rWindow.GetControlContainerRef();
         if ( rCC.is() && findWindow( rCC ) == m_aWinList.end())
         {
             FmXPageViewWinRec *pFmRec = new FmXPageViewWinRec(m_xORB, rWindow, this);
@@ -651,7 +655,7 @@ void FmXFormView::addWindow(const SdrPageViewWindow& rWindow)
             m_aWinList.push_back(pFmRec);
 
             // Am ControlContainer horchen um Aenderungen mitzbekommen
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >  xContainer(rCC, ::com::sun::star::uno::UNO_QUERY);
+            Reference< XContainer >  xContainer(rCC, UNO_QUERY);
             if (xContainer.is())
                 xContainer->addContainerListener(this);
         }
@@ -659,7 +663,7 @@ void FmXFormView::addWindow(const SdrPageViewWindow& rWindow)
 }
 
 //------------------------------------------------------------------------------
-void FmXFormView::removeWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > & rCC )
+void FmXFormView::removeWindow( const Reference< XControlContainer > & rCC )
 {
     // Wird gerufen, wenn
     // - in den Design-Modus geschaltet wird
@@ -670,7 +674,7 @@ void FmXFormView::removeWindow( const ::com::sun::star::uno::Reference< ::com::s
     if (i != m_aWinList.end())
     {
         // Am ControlContainer horchen um Aenderungen mitzbekommen
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >  xContainer(rCC, ::com::sun::star::uno::UNO_QUERY);
+        Reference< XContainer >  xContainer(rCC, UNO_QUERY);
         if (xContainer.is())
             xContainer->removeContainerListener(this);
 
@@ -794,13 +798,13 @@ void FmXFormView::Deactivate(BOOL bDeactivateController)
 }
 
 //------------------------------------------------------------------------------
-void FmXFormView::AttachControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > & rControl, sal_Bool bDetach )
+void FmXFormView::AttachControl( const Reference< XControl > & rControl, sal_Bool bDetach )
 {
     /* wird im fmctrler gemacht */
 }
 
 //------------------------------------------------------------------------------
-void FmXFormView::AttachControls( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > & rCtrlContainer,
+void FmXFormView::AttachControls( const Reference< XControlContainer > & rCtrlContainer,
                                   sal_Bool bDetach )
 {
 }
@@ -889,7 +893,7 @@ IMPL_LINK(FmXFormView, OnAutoFocus, void*, EMPTYTAG)
         {
             // go for the tab controller of the first form
             sal_Int32 nObjects = xForms->getCount();
-            ::com::sun::star::uno::Reference< XForm > xForm;
+            Reference< XForm > xForm;
             if (nObjects)
                 ::cppu::extractInterface(xForm, xForms->getByIndex(0));
 
@@ -909,7 +913,7 @@ IMPL_LINK(FmXFormView, OnAutoFocus, void*, EMPTYTAG)
             if (xControlWindow.is() && m_pView->GetActualOutDev() && (OUTDEV_WINDOW == m_pView->GetActualOutDev()->GetOutDevType()))
             {
                 const Window* pWindow = static_cast<const Window*>(m_pView->GetActualOutDev());
-                ::com::sun::star::awt::Rectangle aRect = xControlWindow->getPosSize();
+                awt::Rectangle aRect = xControlWindow->getPosSize();
                 ::Rectangle aNonUnoRect(aRect.X, aRect.Y, aRect.X + aRect.Width, aRect.Y + aRect.Height);
                 m_pView->MakeVisible(pWindow->PixelToLogic(aNonUnoRect), *const_cast<Window*>(pWindow));
             }
@@ -920,6 +924,300 @@ IMPL_LINK(FmXFormView, OnAutoFocus, void*, EMPTYTAG)
         }
     }
     return 0L;
+}
+
+// -----------------------------------------------------------------------------
+namespace
+{
+    //....................................................................
+    template< class TYPE >
+    Reference< TYPE > getTypedModelNode( const Reference< XInterface >& _rxModelNode )
+    {
+        Reference< TYPE > xTypedNode( _rxModelNode, UNO_QUERY );
+        if ( xTypedNode.is() )
+            return xTypedNode;
+        else
+        {
+            Reference< XChild > xChild( _rxModelNode, UNO_QUERY );
+            if ( xChild.is() )
+                return getTypedModelNode< TYPE >( xChild->getParent() );
+            else
+                return NULL;
+        }
+    }
+
+    //....................................................................
+    static bool lcl_getDocumentDefaultStyleAndFamily( const Reference< XInterface >& _rxDocument, ::rtl::OUString& _rFamilyName, ::rtl::OUString& _rStyleName ) SAL_THROW(( Exception ))
+    {
+        bool bSuccess = true;
+        Reference< XServiceInfo > xDocumentSI( _rxDocument, UNO_QUERY );
+        if ( xDocumentSI.is() )
+        {
+            if (  xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ) )
+               || xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.WebDocument" ) ) )
+               )
+            {
+                _rFamilyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParagraphStyles" ) );
+                _rStyleName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+            }
+            else if ( xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ) ) )
+            {
+                _rFamilyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CellStyles" ) );
+                _rStyleName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Default" ) );
+            }
+            else if (  xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) )
+                    || xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) )
+                    )
+            {
+                _rFamilyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "graphics" ) );
+                _rStyleName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "standard" ) );
+            }
+            else
+                bSuccess = false;
+        }
+        return bSuccess;
+    }
+
+    static const sal_Char* aCharacterAndParagraphProperties[] =
+    {
+        "CharFontName",
+        "CharFontStyleName",
+        "CharFontFamily",
+        "CharFontCharSet",
+        "CharFontPitch",
+        "CharColor",
+        "CharEscapement",
+        "CharHeight",
+        "CharUnderline",
+        "CharWeight",
+        "CharPosture",
+        "CharAutoKerning",
+        "CharBackColor",
+        "CharBackTransparent",
+        "CharCaseMap",
+        "CharCrossedOut",
+        "CharFlash",
+        "CharStrikeout",
+        "CharWordMode",
+        "CharKerning",
+        "CharLocale",
+        "CharKeepTogether",
+        "CharNoLineBreak",
+        "CharShadowed",
+        "CharFontType",
+        "CharStyleName",
+        "CharContoured",
+        "CharCombineIsOn",
+        "CharCombinePrefix",
+        "CharCombineSuffix",
+        "CharEmphasize",
+        "CharRelief",
+        "RubyText",
+        "RubyAdjust",
+        "RubyCharStyleName",
+        "RubyIsAbove",
+        "CharRotation",
+        "CharRotationIsFitToLine",
+        "CharScaleWidth",
+        "HyperLinkURL",
+        "HyperLinkTarget",
+        "HyperLinkName",
+        "VisitedCharStyleName",
+        "UnvisitedCharStyleName",
+        "CharEscapementHeight",
+        "CharNoHyphenation",
+        "CharUnderlineColor",
+        "CharUnderlineHasColor",
+        "CharStyleNames",
+        "CharHeightAsian",
+        "CharWeightAsian",
+        "CharFontNameAsian",
+        "CharFontStyleNameAsian",
+        "CharFontFamilyAsian",
+        "CharFontCharSetAsian",
+        "CharFontPitchAsian",
+        "CharPostureAsian",
+        "CharLocaleAsian",
+        "ParaIsCharacterDistance",
+        "ParaIsForbiddenRules",
+        "ParaIsHangingPunctuation",
+        "CharHeightComplex",
+        "CharWeightComplex",
+        "CharFontNameComplex",
+        "CharFontStyleNameComplex",
+        "CharFontFamilyComplex",
+        "CharFontCharSetComplex",
+        "CharFontPitchComplex",
+        "CharPostureComplex",
+        "CharLocaleComplex",
+        "ParaAdjust",
+        "ParaLineSpacing",
+        "ParaBackColor",
+        "ParaBackTransparent",
+        "ParaBackGraphicURL",
+        "ParaBackGraphicFilter",
+        "ParaBackGraphicLocation",
+        "ParaLastLineAdjust",
+        "ParaExpandSingleWord",
+        "ParaLeftMargin",
+        "ParaRightMargin",
+        "ParaTopMargin",
+        "ParaBottomMargin",
+        "ParaLineNumberCount",
+        "ParaLineNumberStartValue",
+        "PageDescName",
+        "PageNumberOffset",
+        "ParaRegisterModeActive",
+        "ParaTabStops",
+        "ParaStyleName",
+        "DropCapFormat",
+        "DropCapWholeWord",
+        "ParaKeepTogether",
+        "Setting",
+        "ParaSplit",
+        "Setting",
+        "NumberingLevel",
+        "NumberingRules",
+        "NumberingStartValue",
+        "ParaIsNumberingRestart",
+        "NumberingStyleName",
+        "ParaOrphans",
+        "ParaWidows",
+        "ParaShadowFormat",
+        "LeftBorder",
+        "RightBorder",
+        "TopBorder",
+        "BottomBorder",
+        "BorderDistance",
+        "LeftBorderDistance",
+        "RightBorderDistance",
+        "TopBorderDistance",
+        "BottomBorderDistance",
+        "BreakType",
+        "DropCapCharStyleName",
+        "ParaFirstLineIndent",
+        "ParaIsAutoFirstLineIndent",
+        "ParaIsHyphenation",
+        "ParaHyphenationMaxHyphens",
+        "ParaHyphenationMaxLeadingChars",
+        "ParaHyphenationMaxTrailingChars",
+        "ParaVertAlignment",
+        "ParaUserDefinedAttributes",
+        "NumberingIsNumber",
+        "ParaIsConnectBorder",
+        NULL
+    };
+
+    //....................................................................
+    static void lcl_initializeCharacterAttributes( const Reference< XPropertySet >& _rxModel )
+    {
+        // need to initialize the attributes from the "Default" style of the document we live in
+
+        try
+        {
+            // the style family collection
+            Reference< XStyleFamiliesSupplier > xSuppStyleFamilies = getTypedModelNode< XStyleFamiliesSupplier >( _rxModel.get() );
+            Reference< XNameAccess > xStyleFamilies;
+            if ( xSuppStyleFamilies.is() )
+                xStyleFamilies = xSuppStyleFamilies->getStyleFamilies();
+            OSL_ENSURE( xStyleFamilies.is(), "lcl_initializeCharacterAttributes: could not obtain the style families!" );
+            if ( !xStyleFamilies.is() )
+                return;
+
+            // the names of the family, and the style - depends on the document type we live in
+            ::rtl::OUString sFamilyName, sStyleName;
+            bool bKnownDocumentType = lcl_getDocumentDefaultStyleAndFamily( xSuppStyleFamilies.get(), sFamilyName, sStyleName );
+            OSL_ENSURE( bKnownDocumentType, "lcl_initializeCharacterAttributes: Huh? What document type is this?" );
+            if ( !bKnownDocumentType )
+                return;
+
+            // the concrete style
+            Reference< XNameAccess > xStyleFamily( xStyleFamilies->getByName( sFamilyName ), UNO_QUERY );
+            Reference< XPropertySet > xStyle;
+            if ( xStyleFamily.is() )
+                xStyleFamily->getByName( sStyleName ) >>= xStyle;
+            OSL_ENSURE( xStyle.is(), "lcl_initializeCharacterAttributes: could not retrieve the style!" );
+            if ( !xStyle.is() )
+                return;
+
+            // transfer all properties which are described by the com.sun.star.style.
+            Reference< XPropertySetInfo > xSourcePropInfo( xStyle->getPropertySetInfo() );
+            Reference< XPropertySetInfo > xDestPropInfo( _rxModel->getPropertySetInfo() );
+            OSL_ENSURE( xSourcePropInfo.is() && xDestPropInfo.is(), "lcl_initializeCharacterAttributes: no property set info!" );
+            if ( !xSourcePropInfo.is() || !xDestPropInfo.is() )
+                return;
+
+            ::rtl::OUString sPropertyName;
+            const sal_Char** pCharacterProperty = aCharacterAndParagraphProperties;
+            while ( *pCharacterProperty )
+            {
+                sPropertyName = ::rtl::OUString::createFromAscii( *pCharacterProperty );
+
+                if ( xSourcePropInfo->hasPropertyByName( sPropertyName ) && xDestPropInfo->hasPropertyByName( sPropertyName ) )
+                    _rxModel->setPropertyValue( sPropertyName, xStyle->getPropertyValue( sPropertyName ) );
+
+                ++pCharacterProperty;
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "lcl_initializeCharacterAttributes: caught an exception!" );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+sal_Int16 FmXFormView::implInitializeNewControlModel( const Reference< XPropertySet >& _rxModel, const SdrObject* _pObject ) const
+{
+    OSL_ENSURE( _rxModel.is() && _pObject, "FmXFormView::implInitializeNewControlModel: invalid model!" );
+
+    sal_Int16 nClassId = FormComponentType::CONTROL;
+    if ( !_rxModel.is() || !_pObject )
+        return nClassId;
+
+    try
+    {
+        _rxModel->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId;
+
+        switch ( nClassId )
+        {
+            case FormComponentType::SCROLLBAR:
+            case FormComponentType::SPINBUTTON:
+            {
+                const ::Rectangle& rBoundRect = _pObject->GetCurrentBoundRect();
+                sal_Int32 eOrientation = ScrollBarOrientation::HORIZONTAL;
+                if ( rBoundRect.GetWidth() < rBoundRect.GetHeight() )
+                    eOrientation = ScrollBarOrientation::VERTICAL;
+                _rxModel->setPropertyValue( FM_PROP_ORIENTATION, makeAny( eOrientation ) );
+            }
+            break;
+
+            case FormComponentType::LISTBOX:
+            case FormComponentType::COMBOBOX:
+            {
+                const ::Rectangle& rBoundRect = _pObject->GetCurrentBoundRect();
+                sal_Bool bDropDown = ( rBoundRect.GetWidth() >= 3 * rBoundRect.GetHeight() );
+                _rxModel->setPropertyValue( FM_PROP_DROPDOWN, makeAny( (sal_Bool)bDropDown ) );
+            }
+            break;
+
+            case FormComponentType::TEXTFIELD:
+            {
+                lcl_initializeCharacterAttributes( _rxModel );
+                const ::Rectangle& rBoundRect = _pObject->GetCurrentBoundRect();
+                if ( !( rBoundRect.GetWidth() > 4 * rBoundRect.GetHeight() ) )  // heuristics
+                {
+                    _rxModel->setPropertyValue( FM_PROP_MULTILINE, makeAny( (sal_Bool)sal_True ) );
+                }
+            }
+            break;
+        }
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "FmXFormView::implInitializeNewControlModel: caught an exception!" );
+    }
+    return nClassId;
 }
 
 // -----------------------------------------------------------------------------
@@ -1113,18 +1411,19 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         }
 
         //////////////////////////////////////////////////////////////////////
-        // Feststellen ob eine ::com::sun::star::form erzeugt werden muss
+        // Feststellen ob eine form erzeugt werden muss
         // Dieses erledigt die Page fuer uns bzw. die PageImpl
         Reference< XFormComponent >  xContent(pLabel->GetUnoControlModel(), UNO_QUERY);
         Reference< XIndexContainer >  xContainer(rPage.GetImpl()->SetDefaults(xContent, xDataSource, sDataSource, sCommand, nCommandType), UNO_QUERY);
         if (xContainer.is())
             xContainer->insertByIndex(xContainer->getCount(), makeAny(xContent));
+        implInitializeNewControlModel( Reference< XPropertySet >( xContent, UNO_QUERY ), pLabel );
 
         xContent = Reference< XFormComponent > (pControl->GetUnoControlModel(), UNO_QUERY);
-        xContainer = Reference< XIndexContainer > (rPage.GetImpl()->SetDefaults(xContent, xDataSource,
-            sDataSource, sCommand, nCommandType), UNO_QUERY);
+        xContainer = Reference< XIndexContainer > (rPage.GetImpl()->SetDefaults(xContent, xDataSource, sDataSource, sCommand, nCommandType), UNO_QUERY);
         if (xContainer.is())
             xContainer->insertByIndex(xContainer->getCount(), makeAny(xContent));
+        implInitializeNewControlModel( Reference< XPropertySet >( xContent, UNO_QUERY ), pControl );
 
         //////////////////////////////////////////////////////////////////////
         // Objekte gruppieren
@@ -1180,7 +1479,7 @@ void FmXFormView::createControlLabelPair(OutputDevice* _pOutDev, sal_Int32 _nYOf
 
     // das Label
     _rpLabel = (FmFormObj*)SdrObjFactory::MakeNewObject( FmFormInventor, OBJ_FM_FIXEDTEXT, NULL, NULL );
-    Reference< ::com::sun::star::beans::XPropertySet >  xLabelSet(_rpLabel->GetUnoControlModel(), UNO_QUERY);
+    Reference< XPropertySet > xLabelSet(_rpLabel->GetUnoControlModel(), UNO_QUERY);
     xLabelSet->setPropertyValue(FM_PROP_LABEL, makeAny(sFieldName + _rFieldPostfix));
 
     // positionieren unter Beachtung der Einstellungen des Ziel-Output-Devices
@@ -1212,6 +1511,7 @@ void FmXFormView::createControlLabelPair(OutputDevice* _pOutDev, sal_Int32 _nYOf
 
     // jetzt das Control
     _rpControl = static_cast<FmFormObj*>(SdrObjFactory::MakeNewObject( FmFormInventor, _nObjID, NULL, NULL ));
+    Reference< XPropertySet > xControlSet = Reference< XPropertySet > ( _rpControl->GetUnoControlModel(), UNO_QUERY );
 
     // positionieren
     ::Size szControlSize;
@@ -1231,7 +1531,6 @@ void FmXFormView::createControlLabelPair(OutputDevice* _pOutDev, sal_Int32 _nYOf
         ));
 
     // ein paar initiale Einstellungen am ControlModel
-    Reference< ::com::sun::star::beans::XPropertySet >  xControlSet = Reference< ::com::sun::star::beans::XPropertySet > (_rpControl->GetUnoControlModel(), UNO_QUERY);
     if (xControlSet.is())
     {
         // ein paar numersiche Eigenschaften durchschleifen
@@ -1526,9 +1825,9 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
 //
 //              // Ist das aktuelle Object ein Element eines SelectionSuppliers?
 //              Reference< XChild> xChild(m_xCurControl,UNO_QUERY);
-//              Reference< ::com::sun::star::view::XSelectionSupplier> xSelectionSupplier;
+//              Reference< XSelectionSupplier> xSelectionSupplier;
 //              if (xChild.is())
-//                  xSelectionSupplier = Reference< ::com::sun::star::view::XSelectionSupplier>(xChild->getParent(), UNO_QUERY);
+//                  xSelectionSupplier = Reference< XSelectionSupplier>(xChild->getParent(), UNO_QUERY);
 //              if (xSelectionSupplier.is())
 //              {
 //                  // suchen der Zugehoreigen Form
@@ -1581,7 +1880,7 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
     }
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL FmXFormView::focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL FmXFormView::focusGained( const FocusEvent& e ) throw (RuntimeException)
 {
     if ( m_xWindow.is() && m_pView )
     {
@@ -1590,7 +1889,7 @@ void SAL_CALL FmXFormView::focusGained( const ::com::sun::star::awt::FocusEvent&
     }
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL FmXFormView::focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL FmXFormView::focusLost( const FocusEvent& e ) throw (RuntimeException)
 {
     // when switch the focus outside the office the mark didn't change
     // so we can not remove us as focus listener
