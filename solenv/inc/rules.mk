@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-21 13:04:19 $
+#   last change: $Author: hjs $ $Date: 2002-09-13 14:30:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -580,6 +580,7 @@ $(MISC)$/%.dpz :
     @+-$(RM) $@ >& $(NULLDEV)
     +dmake $(MFLAGS) $(CALLMACROS) make_zip_deps=true ZIPALLTARGET -u
     $(TYPE) $(MISC)$/$(TARGET).$(PWD:f).*.dpzz | grep -v "CVS" >> $@
+    +echo zipdep_langs=$(alllangext) >> $@
     @+-$(RM) $(MISC)$/$(TARGET).$(PWD:f).*.dpzz >& $(NULLDEV)
 .ENDIF			# "$(nodep)"==""
 

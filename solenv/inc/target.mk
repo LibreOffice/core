@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.125 $
+#   $Revision: 1.126 $
 #
-#   last change: $Author: hjs $ $Date: 2002-09-09 11:55:17 $
+#   last change: $Author: hjs $ $Date: 2002-09-13 14:30:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2397,6 +2397,11 @@ $(MISC)$/$(TARGET)_xxl_%.done : %.xxl
 .IF "$(ZIP1TARGET)" != "" || "$(ZIP2TARGET)" != "" || "$(ZIP3TARGET)" != ""
 .IF "$(nodep)"==""
 .INCLUDE : $(MISC)$/$(TARGET).dpz
+missing_zipdep_langs=$(alllangext)
+some_dummy_var:=$(foreach,i,$(zipdep_langs) $(assign missing_zipdep_langs:=$(strip $(subst,$i, $(missing_zipdep_langs)))))
+.IF "$(missing_zipdep_langs)"!=""
+ZIPDEPPHONY=.PHONY
+.ENDIF			# "$(missing_zipdep_langs)"!=""
 .ENDIF			# "$(nodep)"==""
 .ENDIF
 .ENDIF
@@ -2875,7 +2880,7 @@ $(MISC)$/$(TARGET).dpr : $(SRCFILES) $(SRC1FILES) $(SRC2FILES) $(SRC3FILES)
 .ENDIF
 
 .IF "$(make_zip_deps)"==""
-$(MISC)$/$(TARGET).dpz : $(ZIP1TARGETN) $(ZIP2TARGETN) $(ZIP3TARGETN) $(ZIP4TARGETN) $(ZIP5TARGETN) $(ZIP6TARGETN) $(ZIP7TARGETN) $(ZIP8TARGETN) $(ZIP9TARGETN)
+$(MISC)$/$(TARGET).dpz $(ZIPDEPPHONY) : $(ZIP1TARGETN) $(ZIP2TARGETN) $(ZIP3TARGETN) $(ZIP4TARGETN) $(ZIP5TARGETN) $(ZIP6TARGETN) $(ZIP7TARGETN) $(ZIP8TARGETN) $(ZIP9TARGETN)
 .ENDIF
 
 $(INCCOM)$/_version.h : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
