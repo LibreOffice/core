@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscyacc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2002-03-06 13:30:51 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:51:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ RSCINST GetVarInst( const RSCINST & rInst, char * pVarName )
     return( aInst );
 }
 
-void SetNumber( const RSCINST & rInst, char * pVarName, long lValue )
+void SetNumber( const RSCINST & rInst, char * pVarName, INT32 lValue )
 {
     RSCINST aInst;
 
@@ -130,7 +130,7 @@ void SetNumber( const RSCINST & rInst, char * pVarName, long lValue )
 }
 
 void SetConst( const RSCINST & rInst, char * pVarName,
-               HASHID nValueId, long nVal )
+               HASHID nValueId, INT32 nVal )
 {
     RSCINST aInst;
 
@@ -162,11 +162,11 @@ void SetString( const RSCINST & rInst, char * pVarName, char * pStr )
 RscId MakeRscId( RscExpType aExpType )
 {
     if( !aExpType.IsNothing() ){
-        long        lValue;
+        INT32       lValue;
 
         if( !aExpType.Evaluate( &lValue ) )
             pTC->pEH->Error( ERR_ZERODIVISION, NULL, RscId() );
-        if( lValue < 1 || lValue > (long)0x7FFF )
+        if( lValue < 1 || lValue > (INT32)0x7FFF )
         {
             pTC->pEH->Error( ERR_IDRANGE, NULL, RscId(),
                              ByteString::CreateFromInt32( lValue ).GetBuffer() );
@@ -228,7 +228,7 @@ BOOL DoClassHeader( RSCHEADER * pHeader, BOOL bMember )
     {
         if( S.IsEmpty() )
         {
-            if( (long)aName1 < 256 )
+            if( (INT32)aName1 < 256 )
                 pTC->pEH->Error( WRN_GLOBALID, pHeader->pClass, aName1 );
 
             if( aCopyInst.IsInst() )
@@ -250,7 +250,7 @@ BOOL DoClassHeader( RSCHEADER * pHeader, BOOL bMember )
             RSCINST aTmpI;
             ERRTYPE aError;
 
-            if( (long)aName1 >= 256 && aName1.IsId() )
+            if( (INT32)aName1 >= 256 && aName1.IsId() )
                 pTC->pEH->Error( WRN_LOCALID, pHeader->pClass, aName1 );
             aError = S.Top().pClass->GetElement( S.Top(), aName1,
                                                  pHeader->pClass, aCopyInst, &aTmpI );
