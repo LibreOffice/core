@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-27 10:46:10 $
+ *  last change: $Author: sab $ $Date: 2001-02-21 09:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,12 @@
 #include "editutil.hxx"
 #include "scextopt.hxx"
 
+#ifndef _SC_VIEWSETTINGSSEQUENCEDEFINES_HXX
+#include "ViewSettingsSequenceDefines.hxx"
+#endif
+
+using namespace com::sun::star;
+
 // STATIC DATA -----------------------------------------------------------
 
 #define TAG_TABBARWIDTH "tw:"
@@ -161,6 +167,69 @@ ScViewDataTable::ScViewDataTable( const ScViewDataTable& rDataTable ) :
 
 ScViewDataTable::~ScViewDataTable()
 {
+}
+
+void ScViewDataTable::WriteUserDataInAny(uno::Any& aAny)
+{
+    uno::Sequence <uno::Any> aSettings(SC_TABLE_VIEWSETTINGS_COUNT);
+    aSettings[SC_CURSOR_X] <<= sal_uInt16(nCurX);
+    aSettings[SC_CURSOR_Y] <<= sal_uInt16(nCurY);
+    aSettings[SC_HORIZONTAL_SPLIT_MODE] <<= sal_uInt8(eHSplitMode);
+    aSettings[SC_VERTICAL_SPLIT_MODE] <<= sal_uInt8(eVSplitMode);
+    if (eHSplitMode == SC_SPLIT_FIX)
+        aSettings[SC_HORIZONTAL_SPLIT_POSITION] <<= sal_Int32(nFixPosY);
+    else
+        aSettings[SC_HORIZONTAL_SPLIT_POSITION] <<= sal_Int32(nHSplitPos);
+    if (eVSplitMode == SC_SPLIT_FIX)
+        aSettings[SC_VERTICAL_SPLIT_POSITION] <<= sal_Int32(nFixPosX);
+    else
+        aSettings[SC_VERTICAL_SPLIT_POSITION] <<= sal_Int32(nVSplitPos);
+    aSettings[SC_ACTIVE_SPLIT_RANGE] <<= sal_uInt8(eWhichActive);
+    aSettings[SC_POSITION_LEFT] <<= sal_uInt16(nPosX[SC_SPLIT_LEFT]);
+    aSettings[SC_POSITION_RIGHT] <<= sal_uInt16(nPosX[SC_SPLIT_RIGHT]);
+    aSettings[SC_POSITION_TOP] <<= sal_uInt16(nPosY[SC_SPLIT_TOP]);
+    aSettings[SC_POSITION_BOTTOM] <<= sal_uInt16(nPosY[SC_SPLIT_BOTTOM]);
+    aAny <<= aSettings;
+}
+
+void ScViewDataTable::ReadUserDataFromAny(const uno::Any& aAny)
+{
+    uno::Sequence <uno::Any> aSettings;
+    if (aAny >>= aSettings)
+    {
+        DBG_ASSERT(aSettings.getLength() == SC_TABLE_VIEWSETTINGS_COUNT, " wrong Table View Settings count");
+        aSettings[SC_CURSOR_X] >>= nCurX;
+        aSettings[SC_CURSOR_Y] >>= nCurY;
+        sal_uInt8 nHSplitMode;
+        aSettings[SC_HORIZONTAL_SPLIT_MODE] >>= nHSplitMode;
+        eHSplitMode = ScSplitMode(nHSplitMode);
+        sal_uInt8 nVSplitMode;
+        aSettings[SC_VERTICAL_SPLIT_MODE] >>= nVSplitMode;
+        eVSplitMode = ScSplitMode(nVSplitMode);
+        if (eHSplitMode == SC_SPLIT_FIX)
+        {
+            sal_Int32 nTempFixPosY;
+            aSettings[SC_HORIZONTAL_SPLIT_POSITION] >>= nTempFixPosY;
+            nFixPosY = sal_uInt16(nTempFixPosY);
+        }
+        else
+            aSettings[SC_HORIZONTAL_SPLIT_POSITION] >>= nHSplitPos;
+        if (eVSplitMode == SC_SPLIT_FIX)
+        {
+            sal_Int32 nTempFixPosX;
+            aSettings[SC_VERTICAL_SPLIT_POSITION] >>= nTempFixPosX;
+            nFixPosX = sal_uInt16(nTempFixPosX);
+        }
+        else
+            aSettings[SC_VERTICAL_SPLIT_POSITION] >>= nVSplitPos;
+        sal_uInt8 nWhichActive;
+        aSettings[SC_ACTIVE_SPLIT_RANGE] >>= nWhichActive;
+        eWhichActive = ScSplitPos(nWhichActive);
+        aSettings[SC_POSITION_LEFT] >>= nPosX[SC_SPLIT_LEFT];
+        aSettings[SC_POSITION_RIGHT] >>= nPosX[SC_SPLIT_RIGHT];
+        aSettings[SC_POSITION_TOP] >>= nPosY[SC_SPLIT_TOP];
+        aSettings[SC_POSITION_BOTTOM] >>= nPosY[SC_SPLIT_BOTTOM];
+    }
 }
 
 //==================================================================
@@ -1967,6 +2036,61 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rOpt )
     SetTabNo( rOpt.nActTab );
 
     // RecalcPixPos oder so - auch nMPos - auch bei ReadUserData ??!?!
+}
+
+void ScViewData::WriteUserDataInAny(uno::Any& aAny)
+{
+    uno::Sequence <uno::Any> aViewSettings(SC_VIEWSETTINGS_COUNT);
+    USHORT nTabCount (pDoc->GetTableCount());
+    uno::Sequence <uno::Any> aTableViewSettings(nTabCount);
+    for (USHORT nTab=0; nTab<nTabCount; nTab++)
+        pTabData[nTab]->WriteUserDataInAny(aTableViewSettings[nTab]);
+    aViewSettings[SC_TABLE_VIEWSETTINGS] <<= aTableViewSettings;
+    aViewSettings[SC_ACTIVE_TABLE] <<= sal_uInt16(nTabNo);
+    aViewSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH] <<= sal_Int32(pView->GetTabBarWidth());
+    aViewSettings[SC_ZOOM_TYPE] <<= sal_uInt8(pView->GetZoomType());
+    sal_Int32 nZoomValue ((aZoomY.GetNumerator() * 100) / aZoomY.GetDenominator());
+    aViewSettings[SC_ZOOM_VALUE] <<= nZoomValue;
+    sal_Int32 nPageZoomValue ((aPageZoomY.GetNumerator() * 100) / aZoomY.GetDenominator());
+    aViewSettings[SC_PAGE_VIEW_ZOOM_VALUE] <<= nPageZoomValue;
+    aAny <<= aViewSettings;
+}
+
+void ScViewData::ReadUserDataFromAny(const uno::Any& aAny)
+{
+    uno::Sequence <uno::Any> aViewSettings;
+    if (aAny >>= aViewSettings)
+    {
+        uno::Sequence <uno::Any> aTableViewSettings;
+        if (aViewSettings[SC_TABLE_VIEWSETTINGS] >>= aTableViewSettings)
+        {
+            USHORT nTabCount (pDoc->GetTableCount());
+            DBG_ASSERT(sal_Int32 (nTabCount) == aTableViewSettings.getLength(), "wrong table view count");
+            for (USHORT nTab=0; nTab<nTabCount; nTab++)
+                pTabData[nTab]->ReadUserDataFromAny(aTableViewSettings[nTab]);
+        }
+        aViewSettings[SC_ACTIVE_TABLE] >>= nTabNo;
+        sal_Int32 nTabBarWidth;
+        if (aViewSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH] >>= nTabBarWidth)
+            pView->SetTabBarWidth(nTabBarWidth);
+        sal_uInt8 nZoomType;
+        if (aViewSettings[SC_ZOOM_TYPE] >>= nZoomType)
+            pView->SetZoomType(SvxZoomType(nZoomType));
+        sal_Int32 nZoomValue;
+        if (aViewSettings[SC_ZOOM_VALUE] >>= nZoomValue)
+        {
+            Fraction aZoom(nZoomValue, 100);
+            aZoomX = aZoomY = aZoom;
+        }
+        sal_Int32 nPageZoomValue;
+        if (aViewSettings[SC_PAGE_VIEW_ZOOM_VALUE] >>= nPageZoomValue)
+        {
+            Fraction aZoom(nZoomValue, 100);
+            aPageZoomX = aPageZoomY = aZoom;
+        }
+
+        RecalcPixPos();
+    }
 }
 
 void ScViewData::SetOptions( const ScViewOptions& rOpt )
