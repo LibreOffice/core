@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclfactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:52:49 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:22:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,11 +102,11 @@ namespace rtl
 {
     class OUString;
 }
-namespace drafts { namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering
 {
     class  XBitmapCanvas;
     class  XSpriteCanvas;
-} } } } }
+} } } }
 
 /* Definition of VCLFactory class */
 
@@ -127,11 +127,11 @@ namespace cppcanvas
 
         BitmapCanvasSharedPtr   createCanvas( const ::Window& rVCLWindow );
         BitmapCanvasSharedPtr   createCanvas( const ::com::sun::star::uno::Reference<
-                                                          ::drafts::com::sun::star::rendering::XBitmapCanvas >& xCanvas );
+                                                          ::com::sun::star::rendering::XBitmapCanvas >& xCanvas );
 
         SpriteCanvasSharedPtr   createSpriteCanvas( const ::Window& rVCLWindow ) const;
         SpriteCanvasSharedPtr   createSpriteCanvas( const ::com::sun::star::uno::Reference<
-                                                               ::drafts::com::sun::star::rendering::XSpriteCanvas >& xCanvas ) const;
+                                                               ::com::sun::star::rendering::XSpriteCanvas >& xCanvas ) const;
         SpriteCanvasSharedPtr   createFullscreenSpriteCanvas( const ::Window& rVCLWindow, const Size& rFullscreenSize ) const;
 
         /** Create a polygon from a tools::Polygon
