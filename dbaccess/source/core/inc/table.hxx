@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
+ *  last change: $Author: hr $ $Date: 2001-10-31 18:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,8 +180,8 @@ namespace dbaccess
         static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
     // com::sun::star::uno::XInterface
-        virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL acquire() throw();
+        virtual void SAL_CALL release() throw();
 
     // OComponentHelper
         virtual void SAL_CALL disposing(void);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 12:01:30 $
+ *  last change: $Author: hr $ $Date: 2001-10-31 18:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,8 +187,8 @@ namespace dbaccess
         virtual void SAL_CALL disposing();
 
         // XInterface
-        virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL acquire() throw();
+        virtual void SAL_CALL release() throw();
     // ::com::sun::star::lang::XServiceInfo
         DECLARE_SERVICE_INFO();
 
