@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-17 15:18:14 $
+ *  last change: $Author: sab $ $Date: 2001-06-07 09:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,6 +267,7 @@ private:
     ScLinkListener*         pValueListener;
     ScPatternAttr*          pCurrentFlat;
     ScPatternAttr*          pCurrentDeep;
+    SfxItemSet*             pCurrentDataSet;
     ScRangeList             aRanges;
     BOOL                    bChartColAsHdr;
     BOOL                    bChartRowAsHdr;
@@ -284,6 +285,7 @@ private:
 
     const ScPatternAttr*    GetCurrentAttrsFlat();
     const ScPatternAttr*    GetCurrentAttrsDeep();
+    SfxItemSet*             GetCurrentDataSet();
     void                    ForgetCurrentAttrs();
 
     com::sun::star::uno::Reference<com::sun::star::sheet::XSheetCellRanges>
@@ -299,7 +301,8 @@ protected:
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
     virtual ::com::sun::star::beans::PropertyState GetOnePropertyState(
                                 USHORT nItemWhich, const SfxItemPropertyMap* pMap );
-    virtual ::com::sun::star::uno::Any GetOnePropertyValue( const SfxItemPropertyMap* pMap )
+    virtual void GetOnePropertyValue( const SfxItemPropertyMap* pMap,
+                                ::com::sun::star::uno::Any& )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual void            SetOnePropertyValue( const SfxItemPropertyMap* pMap,
                                                 const ::com::sun::star::uno::Any& aValue )
@@ -649,7 +652,8 @@ private:
 protected:
     const ScRange&          GetRange() const    { return aRange; }
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
-    virtual ::com::sun::star::uno::Any GetOnePropertyValue( const SfxItemPropertyMap* pMap )
+    virtual void GetOnePropertyValue( const SfxItemPropertyMap* pMap,
+                                ::com::sun::star::uno::Any& )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual void            SetOnePropertyValue( const SfxItemPropertyMap* pMap,
                                                 const ::com::sun::star::uno::Any& aValue )
@@ -830,7 +834,8 @@ private:
 
 protected:
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
-    virtual ::com::sun::star::uno::Any GetOnePropertyValue( const SfxItemPropertyMap* pMap )
+    virtual void GetOnePropertyValue( const SfxItemPropertyMap* pMap,
+                                ::com::sun::star::uno::Any& )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual void            SetOnePropertyValue( const SfxItemPropertyMap* pMap,
                                                 const ::com::sun::star::uno::Any& aValue )
@@ -981,7 +986,8 @@ private:
 
 protected:
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
-    virtual ::com::sun::star::uno::Any GetOnePropertyValue( const SfxItemPropertyMap* pMap )
+    virtual void GetOnePropertyValue( const SfxItemPropertyMap* pMap,
+                                ::com::sun::star::uno::Any& )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual void            SetOnePropertyValue( const SfxItemPropertyMap* pMap,
                                                 const ::com::sun::star::uno::Any& aValue )
@@ -1199,7 +1205,8 @@ private:
 
 protected:
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
-    virtual ::com::sun::star::uno::Any GetOnePropertyValue( const SfxItemPropertyMap* pMap )
+    virtual void GetOnePropertyValue( const SfxItemPropertyMap* pMap,
+                                ::com::sun::star::uno::Any& )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual void            SetOnePropertyValue( const SfxItemPropertyMap* pMap,
                                                 const ::com::sun::star::uno::Any& aValue )
@@ -1249,7 +1256,8 @@ private:
 
 protected:
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
-    virtual ::com::sun::star::uno::Any GetOnePropertyValue( const SfxItemPropertyMap* pMap )
+    virtual void GetOnePropertyValue( const SfxItemPropertyMap* pMap,
+                                ::com::sun::star::uno::Any& )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual void            SetOnePropertyValue( const SfxItemPropertyMap* pMap,
                                                 const ::com::sun::star::uno::Any& aValue )
