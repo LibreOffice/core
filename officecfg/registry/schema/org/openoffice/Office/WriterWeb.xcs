@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WriterWeb.xcs,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:59:01 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 12:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3384,7 +3384,7 @@
 						<label xml:lang="hu">Number recognition</label>
 						<label xml:lang="sl">Number recognition</label>
 					</info>
-					<value>true</value>
+                    <value>false</value>
 				</prop>
 				<prop oor:name="NumberFormatRecognition" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Insert/IntoTables -->
