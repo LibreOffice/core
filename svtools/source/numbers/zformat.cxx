@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:32:53 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 23:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,7 @@ void ImpSvNumberformatInfo::Load(SvStream& rStream, USHORT nAnz)
 BYTE SvNumberNatNum::MapDBNumToNatNum( BYTE nDBNum, LanguageType eLang, BOOL bDate )
 {
     BYTE nNatNum = 0;
+    eLang = SvNumberFormatter::GetProperLanguage( eLang );  // resolve SYSTEM etc.
     eLang &= 0x03FF;    // 10 bit primary language
     if ( bDate )
     {
@@ -284,6 +285,7 @@ BYTE SvNumberNatNum::MapDBNumToNatNum( BYTE nDBNum, LanguageType eLang, BOOL bDa
 BYTE SvNumberNatNum::MapNatNumToDBNum( BYTE nNatNum, LanguageType eLang, BOOL bDate )
 {
     BYTE nDBNum = 0;
+    eLang = SvNumberFormatter::GetProperLanguage( eLang );  // resolve SYSTEM etc.
     eLang &= 0x03FF;    // 10 bit primary language
     if ( bDate )
     {
