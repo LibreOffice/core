@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:44:25 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _PptEscherEx_HXX
 #include "escherex.hxx"
 #endif
-#ifndef _SV_POLY_HXX
-#include <vcl/poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _SV_BMPACC_HXX
 #include <vcl/bmpacc.hxx>
