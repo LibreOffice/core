@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pngread.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-24 10:16:51 $
+ *  last change: $Author: hr $ $Date: 2004-06-24 11:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include "bmpacc.hxx"
 #include "svapp.hxx"
 #include "alpha.hxx"
+
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 
 // -----------
 // - Defines -
