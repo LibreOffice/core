@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:11:10 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@
 
 // =======================================================================
 
+// -----------------------------------------------------------------------
+
 class ImplDockFloatWin : public FloatingWindow
 {
 private:
@@ -127,7 +129,6 @@ public:
     ULONG GetLastTicks() const { return mnLastTicks; }
 };
 
-// -----------------------------------------------------------------------
 
 ImplDockFloatWin::ImplDockFloatWin( Window* pParent, WinBits nWinBits,
                                     DockingWindow* pDockingWin ) :
@@ -169,20 +170,15 @@ IMPL_LINK( ImplDockFloatWin, DockTimerHdl, ImplDockFloatWin*, pWin )
     DBG_ASSERT( mpDockWin->IsFloatingMode(), "docktimer called but not floating" );
 
     maDockTimer.Stop();
-    ULONG nModes = GetCurrentModButtons();
-    if( ! ( nModes & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) )
+    PointerState aState = GetPointerState();
+    if( ! ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) )
     {
-        BOOL bFloatMode = ! ( nModes & KEY_MOD1 );
         mpDockWin->GetParent()->ImplGetFrameWindow()->HideTracking();
-        mpDockWin->EndDocking( maDockRect, bFloatMode );
+        mpDockWin->EndDocking( maDockRect, FALSE );
     }
     else
     {
-        if( !(nModes & KEY_MOD1) )
-            mpDockWin->GetParent()->ImplGetFrameWindow()->HideTracking();
-        else
-            mpDockWin->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, SHOWTRACK_BIG | SHOWTRACK_WINDOW );
-
+        mpDockWin->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, SHOWTRACK_BIG | SHOWTRACK_WINDOW );
         maDockTimer.Start();
     }
 
@@ -191,21 +187,27 @@ IMPL_LINK( ImplDockFloatWin, DockTimerHdl, ImplDockFloatWin*, pWin )
 
 IMPL_LINK( ImplDockFloatWin, DockingHdl, ImplDockFloatWin*, pWindow )
 {
+    PointerState aState = mpDockWin->GetParent()->GetPointerState();
+
     mnLastUserEvent = 0;
     if( mpDockWin->IsDockable()                             &&
-        Time::GetSystemTicks() - mnLastTicks > 500          &&
-        (GetCurrentModButtons() & KEY_MOD1)
-        )
+        (Time::GetSystemTicks() - mnLastTicks > 500)        &&
+        ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) )
     {
-        maDockPos = Point( mpDockWin->GetParent()->AbsoluteScreenToOutputPixel( OutputToAbsoluteScreenPixel( GetPosPixel() ) ) );
+        maDockPos = Point( mpDockWin->GetParent()->AbsoluteScreenToOutputPixel( OutputToAbsoluteScreenPixel( Point() ) ) );
+        maDockPos = mpDockWin->GetParent()->OutputToScreenPixel( maDockPos );  // sfx expects screen coordinates
 
         if( ! mpDockWin->IsDocking() )
             mpDockWin->StartDocking();
         maDockRect = Rectangle( maDockPos, mpDockWin->GetSizePixel() );
-        BOOL bFloatMode = mpDockWin->Docking( maDockPos, maDockRect );
+
+        // mouse pos also in screen pixels
+        Point aMousePos = mpDockWin->GetParent()->OutputToScreenPixel( aState.maPos );
+
+        BOOL bFloatMode = mpDockWin->Docking( aMousePos, maDockRect );
         if( ! bFloatMode )
         {
-            mpDockWin->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, SHOWTRACK_BIG | SHOWTRACK_WINDOW );
+            mpDockWin->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, SHOWTRACK_OBJECT | SHOWTRACK_WINDOW );
             DockTimerHdl( this );
         }
         else
@@ -230,8 +232,8 @@ void ImplDockFloatWin::Move()
     mpDockWin->Move();
 
     /*
-     *  note: the window should only dock if KEY_MOD1 is pressed
-     *  and the user releases all mouse buttons. The real problem here
+     *  note: the window should only dock if
+     *  the user releases all mouse buttons. The real problem here
      *  is that we don't get mouse events (at least not on X)
      *  if the mouse is on the decoration. So we have to start an
      *  awkward timer based process that polls the modifier/buttons
@@ -497,6 +499,9 @@ DockingWindow::~DockingWindow()
 
 void DockingWindow::Tracking( const TrackingEvent& rTEvt )
 {
+    if( GetDockingManager()->IsDockable( this ) )   // new docking interface
+        return Window::Tracking( rTEvt );
+
     if ( mbDocking )
     {
         if ( rTEvt.IsTrackingEnded() )
@@ -549,8 +554,6 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
             aPos.Y()    += maMouseOff.Y();
             if ( mbDragFull )
                 StartDocking();
-            if ( !rTEvt.GetMouseEvent().IsMod1() )
-                mbDockPrevented = TRUE;
             BOOL bFloatMode = Docking( aPos, aTrackRect );
             mbDockPrevented = FALSE;
             mbFloatPrevented = FALSE;
@@ -595,7 +598,7 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
                 if ( bFloatMode )
                     nTrackStyle = SHOWTRACK_BIG;
                 else
-                    nTrackStyle = SHOWTRACK_SMALL;
+                    nTrackStyle = SHOWTRACK_OBJECT;
                 Rectangle aShowTrackRect = aTrackRect;
                 aShowTrackRect.SetPos( ImplFrameToOutput( aShowTrackRect.TopLeft() ) );
                 ShowTracking( aShowTrackRect, nTrackStyle );
@@ -618,6 +621,9 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
 
 long DockingWindow::Notify( NotifyEvent& rNEvt )
 {
+    if( GetDockingManager()->IsDockable( this ) )   // new docking interface
+        return Window::Notify( rNEvt );
+
     if ( mbDockable )
     {
         if ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
@@ -627,12 +633,14 @@ long DockingWindow::Notify( NotifyEvent& rNEvt )
             {
                 if ( pMEvt->GetClicks() == 2 )
                 {
-                    if ( pMEvt->IsMod1() )
-                        SetFloatingMode( !IsFloatingMode() );
+                    SetFloatingMode( !IsFloatingMode() );
                     return TRUE;
                 }
                 else if ( pMEvt->GetClicks() == 1 )
                 {
+                    // check if window is floating standalone (IsFloating())
+                    // or only partially floating and still docked with one border
+                    // ( !mbFrame)
                     if( ! IsFloatingMode() || ! mpFloatWin->mbFrame )
                     {
                         Point   aPos = pMEvt->GetPosPixel();
@@ -642,8 +650,7 @@ long DockingWindow::Notify( NotifyEvent& rNEvt )
                             aPos = pWindow->OutputToScreenPixel( aPos );
                             aPos = ScreenToOutputPixel( aPos );
                         }
-                        if ( IsFloatingMode() || pMEvt->IsMod1() )
-                            ImplStartDocking( aPos );
+                        ImplStartDocking( aPos );
                     }
                     return TRUE;
                 }
@@ -828,6 +835,12 @@ BOOL DockingWindow::IsTitleButtonVisible( USHORT nButton ) const
 
 void DockingWindow::SetFloatingMode( BOOL bFloatMode )
 {
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
+    if( pWrapper )
+    {
+        pWrapper->SetFloatingMode( bFloatMode );
+        return;
+    }
     if ( IsFloatingMode() != bFloatMode )
     {
         if ( PrepareToggleFloatingMode() )
@@ -923,6 +936,13 @@ void DockingWindow::SetFloatingMode( BOOL bFloatMode )
 
 void DockingWindow::SetFloatStyle( WinBits nStyle )
 {
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
+    if( pWrapper )
+    {
+        pWrapper->SetFloatStyle( nStyle );
+        return;
+    }
+
     mnFloatBits = nStyle;
 }
 
@@ -930,6 +950,12 @@ void DockingWindow::SetFloatStyle( WinBits nStyle )
 
 WinBits DockingWindow::GetFloatStyle() const
 {
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
+    if( pWrapper )
+    {
+        return pWrapper->GetFloatStyle();
+    }
+
     return mnFloatBits;
 }
 
@@ -937,6 +963,13 @@ WinBits DockingWindow::GetFloatStyle() const
 
 void DockingWindow::SetTabStop()
 {
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
+    if( pWrapper )
+    {
+        pWrapper->SetTabStop();
+        return;
+    }
+
     mnStyle |= WB_GROUP | WB_TABSTOP;
 }
 
@@ -946,6 +979,16 @@ void DockingWindow::SetPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
                                      USHORT nFlags )
 {
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
+    if( pWrapper )
+    {
+        if ( pWrapper->mpFloatWin )
+            pWrapper->mpFloatWin->SetPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
+        else
+            Window::SetPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
+        return;
+    }
+
     if ( mpFloatWin )
         mpFloatWin->SetPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
     else
@@ -956,6 +999,15 @@ void DockingWindow::SetPosSizePixel( long nX, long nY,
 
 Point DockingWindow::GetPosPixel() const
 {
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
+    if( pWrapper )
+    {
+        if ( pWrapper->mpFloatWin )
+            return pWrapper->mpFloatWin->GetPosPixel();
+        else
+            return Window::GetPosPixel();
+    }
+
     if ( mpFloatWin )
         return mpFloatWin->GetPosPixel();
     else
@@ -966,6 +1018,15 @@ Point DockingWindow::GetPosPixel() const
 
 Size DockingWindow::GetSizePixel() const
 {
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
+    if( pWrapper )
+    {
+        if ( pWrapper->mpFloatWin )
+            return pWrapper->mpFloatWin->GetSizePixel();
+        else
+            return Window::GetSizePixel();
+    }
+
     if ( mpFloatWin )
         return mpFloatWin->GetSizePixel();
     else
@@ -976,6 +1037,16 @@ Size DockingWindow::GetSizePixel() const
 
 void DockingWindow::SetOutputSizePixel( const Size& rNewSize )
 {
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
+    if( pWrapper )
+    {
+        if ( pWrapper->mpFloatWin )
+            pWrapper->mpFloatWin->SetOutputSizePixel( rNewSize );
+        else
+            Window::SetOutputSizePixel( rNewSize );
+        return;
+    }
+
     if ( mpFloatWin )
         mpFloatWin->SetOutputSizePixel( rNewSize );
     else
@@ -986,6 +1057,15 @@ void DockingWindow::SetOutputSizePixel( const Size& rNewSize )
 
 Size DockingWindow::GetOutputSizePixel() const
 {
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
+    if( pWrapper )
+    {
+        if ( pWrapper->mpFloatWin )
+            return pWrapper->mpFloatWin->GetOutputSizePixel();
+        else
+            return Window::GetOutputSizePixel();
+    }
+
     if ( mpFloatWin )
         return mpFloatWin->GetOutputSizePixel();
     else
@@ -994,9 +1074,24 @@ Size DockingWindow::GetOutputSizePixel() const
 
 Point DockingWindow::GetFloatingPos() const
 {
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
+    if( pWrapper )
+    {
+        if ( pWrapper->mpFloatWin )
+        {
+            WindowStateData aData;
+            aData.SetMask( WINDOWSTATE_MASK_POS );
+            pWrapper->mpFloatWin->GetWindowStateData( aData );
+            Point aPos( aData.GetX(), aData.GetY() );
+            aPos = pWrapper->mpFloatWin->GetParent()->ImplGetFrameWindow()->AbsoluteScreenToOutputPixel( aPos );
+            return aPos;
+        }
+        else
+            return maFloatPos;
+    }
+
     if ( mpFloatWin )
     {
-        //Rectangle aRect = mpFloatWin->GetWindow( WINDOW_CLIENT)->GetWindowExtentsRelative( mpFloatWin->GetParent() );
         WindowStateData aData;
         aData.SetMask( WINDOWSTATE_MASK_POS );
         mpFloatWin->GetWindowStateData( aData );
@@ -1006,4 +1101,13 @@ Point DockingWindow::GetFloatingPos() const
     }
     else
         return maFloatPos;
+}
+
+BOOL DockingWindow::IsFloatingMode() const
+{
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
+    if( pWrapper )
+        return pWrapper->IsFloatingMode();
+    else
+        return (mpFloatWin != NULL);
 }
