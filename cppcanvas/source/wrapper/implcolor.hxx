@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implcolor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:59:51 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #include <boost/shared_ptr.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XGRAPHICDEVICE_HPP__
-#include <drafts/com/sun/star/rendering/XGraphicDevice.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XGRAPHICDEVICE_HPP__
+#include <com/sun/star/rendering/XGraphicDevice.hpp>
 #endif
 
 #ifndef _CPPCANVAS_COLOR_HXX
@@ -89,14 +89,14 @@ namespace cppcanvas
         {
         public:
             ImplColor( const ::com::sun::star::uno::Reference<
-                               ::drafts::com::sun::star::rendering::XGraphicDevice >& rDevice );
+                               ::com::sun::star::rendering::XGraphicDevice >& rDevice );
             virtual ~ImplColor();
 
             virtual IntSRGBA                                    getIntSRGBA( ::com::sun::star::uno::Sequence< double >& rDeviceColor ) const;
             virtual ::com::sun::star::uno::Sequence< double >   getDeviceColor( IntSRGBA aSRGBA ) const;
 
         private:
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XGraphicDevice > mxDevice;
+            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice > mxDevice;
         };
 
     }
