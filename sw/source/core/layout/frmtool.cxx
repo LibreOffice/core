@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:16:52 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:21:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3415,3 +3415,30 @@ FASTBOOL IsExtraData( const SwDoc *pDoc )
             pDoc->GetRedlineTbl().Count());
 }
 
+// OD 22.09.2003 #110978#
+const SwRect SwPageFrm::PrtWithoutHeaderAndFooter() const
+{
+    SwRect aPrtWithoutHeaderFooter( Prt() );
+    aPrtWithoutHeaderFooter.Pos() += Frm().Pos();
+
+    const SwFrm* pLowerFrm = Lower();
+    while ( pLowerFrm )
+    {
+        // Note: independent on text direction page header and page footer are
+        //       always at top respectively at bottom of the page frame.
+        if ( pLowerFrm->IsHeaderFrm() )
+        {
+            aPrtWithoutHeaderFooter.Top( aPrtWithoutHeaderFooter.Top() +
+                                         pLowerFrm->Frm().Height() );
+        }
+        if ( pLowerFrm->IsFooterFrm() )
+        {
+            aPrtWithoutHeaderFooter.Bottom( aPrtWithoutHeaderFooter.Bottom() -
+                                            pLowerFrm->Frm().Height() );
+        }
+
+        pLowerFrm = pLowerFrm->GetNext();
+    }
+
+    return aPrtWithoutHeaderFooter;
+}
