@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-04 18:48:30 $
+ *  last change: $Author: rt $ $Date: 2001-12-14 18:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_simplified ] = "ζ­£ζ–‡θΎΉη•(~X)";
         Text[ russian ] = "Γπΰνθφϋ ςεκρςΰ";
         Text[ polish ] = "Granice tekstu";
-        Text[ japanese ] = "οΎƒο½·ο½½οΎ„γ®εΆƒη•(~X)";
+        Text[ japanese ] = "γƒ†γ‚­γ‚Ήγƒγ®εΆƒη•(~X)";
         Text[ chinese_traditional ] = "ε…§ζ–‡ι‚η•(~X)";
         Text[ arabic ] = "ΝΟζΟ ΗαδΥ";
         Text[ greek ] = "Όρια κειμένου";
@@ -242,7 +242,7 @@ TabPage TP_CONTENT_OPT
         Text[ swedish ] = "~Enkla handtag";
         Text[ polish ] = "Proste uchwyty";
         Text[ portuguese_brazilian ] = "Simple control points";
-        Text[ japanese ] = "ο½ΌοΎοΎοΎοΎ™γªοΎοΎοΎ„οΎοΎ™(~P)";
+        Text[ japanese ] = "γ‚·γƒ³γƒ—γƒ«γªγƒγƒ³γƒ‰γƒ«(~P)";
         Text[ korean ] = "λ‹¨μΌ ν•Έλ“¤(~P)";
         Text[ chinese_simplified ] = "ζ ‡ε‡†ζ§η‚Ή(~P)";
         Text[ chinese_traditional ] = "ζ¨™ζΊ–ζ§ι»(~P)";
@@ -269,7 +269,7 @@ TabPage TP_CONTENT_OPT
         Text[ swedish ] = "Sto~ra handtag";
         Text[ polish ] = "DuΏe uchwyty";
         Text[ portuguese_brazilian ] = "Large control points";
-        Text[ japanese ] = "ε¤§γγ„οΎοΎοΎ„οΎοΎ™";
+        Text[ japanese ] = "ε¤§γγ„γƒγƒ³γƒ‰γƒ«";
         Text[ korean ] = "λ€ν• ν•Έλ“¤";
         Text[ chinese_simplified ] = "ε¤§ζ§η‚Ή";
         Text[ chinese_traditional ] = "ε¤§ζ§ι»";
@@ -324,7 +324,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_simplified ] = "ζ°΄εΉ³ζ»ε¨ζ΅(~O)";
         Text[ russian ] = "Γξπθηξνςΰλόνΰÿ οξλξρΰ οπξκπσςκθ";
         Text[ polish ] = "Poziomy pa~sek przewijania obrazu";
-        Text[ japanese ] = "ζ°΄εΉ³ο½½ο½ΈοΎ›ο½°οΎ™οΎοΎο½°(~O)";
+        Text[ japanese ] = "ζ°΄εΉ³γ‚Ήγ‚―γƒ­γƒΌγƒ«γƒγƒΌ(~O)";
         Text[ chinese_traditional ] = "ζ°΄εΉ³ε‘ζ²θ»Έ(~O)";
         Text[ arabic ] = "ΤΡνΨ ΚΝΡνί ΗαΥέΝΙ ΓέήνΗπ";
         Text[ greek ] = "Οριζόντια γραμμή κύλισης";
@@ -352,7 +352,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_simplified ] = "ε‚η›΄ζ»ε¨ζ΅(~V)";
         Text[ russian ] = "Βεπςθκΰλόνΰÿ οξλξρΰ οπξκπσςκθ";
         Text[ polish ] = "Piono~wy pasek przewijania obrazu";
-        Text[ japanese ] = "ε‚η›΄ο½½ο½ΈοΎ›ο½°οΎ™οΎοΎο½°(~V)";
+        Text[ japanese ] = "ε‚η›΄γ‚Ήγ‚―γƒ­γƒΌγƒ«γƒγƒΌ(~V)";
         Text[ chinese_traditional ] = "ε‚η›΄εΌζ²θ»Έ(~V)";
         Text[ arabic ] = "ΤΡνΨ ΚΝΡνί ΗαΥέΝΙ ΡΓΣνΗπ";
         Text[ greek ] = "Κατακόρυ~φη γραμμή κύλισης";
@@ -382,7 +382,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_simplified ] = "ζ°΄εΉ³ζ ‡ε°Ί(~Z)";
         Text[ russian ] = "Γξπθηξνςΰλόνΰÿ λθνεικΰ";
         Text[ polish ] = "Linijka pozioma";
-        Text[ japanese ] = "ζ°΄εΉ³οΎ™ο½°οΎ—(~Z)";
+        Text[ japanese ] = "ζ°΄εΉ³γƒ«γƒΌγƒ©(~Z)";
         Text[ chinese_traditional ] = "ζ°΄εΉ³ζ¨™ε°Ί(~Z)";
         Text[ arabic ] = "ΗαγΣΨΡΙ ΗαΓέήνΙ";
         Text[ greek ] = "Οριζόντιος χάρακας";
@@ -417,7 +417,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_simplified ] = "ε‚η›΄ζ ‡ε°Ί(~C)";
         Text[ russian ] = "Βεπςθκΰλόνΰÿ λθνεικΰ";
         Text[ polish ] = "Linij~ka pionowa";
-        Text[ japanese ] = "ε‚η›΄οΎ™ο½°οΎ—(~C)";
+        Text[ japanese ] = "ε‚η›΄γƒ«γƒΌγƒ©(~C)";
         Text[ chinese_traditional ] = "ε‚η›΄εΌζ¨™ε°Ί(~C)";
         Text[ arabic ] = "ΗαγΣΨΡΙ ΗαΡΓΣνΙ";
         Text[ greek ] = "Κ~ατακόρυφος χάρακας";
@@ -450,7 +450,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_simplified ] = "εΉ³ζ»‘ζ»ε¨(~M)";
         Text[ russian ] = "Μÿγκΰÿ οπξκπσςκΰ";
         Text[ polish ] = "Miκkkie przewijanie";
-        Text[ japanese ] = "ζ»‘γ‚‰γ‹γªο½½ο½ΈοΎ›ο½°οΎ™(~M)";
+        Text[ japanese ] = "ζ»‘γ‚‰γ‹γªγ‚Ήγ‚―γƒ­γƒΌγƒ«(~M)";
         Text[ chinese_traditional ] = "εΉ³ζ»‘ζ²ε‹•(~M)";
         Text[ arabic ] = "ΗαΚΝΡνί ΗαγΨΗζΪ";
         Text[ greek ] = "Απαλή κύλιση";
@@ -512,7 +512,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_simplified ] = "ε›Ύε½Άε’ε―Ήθ±΅(~G)";
         Text[ russian ] = "Πθρσνκθ θ ξαϊεκςϋ";
         Text[ polish ] = "Gr~afiki i obiekty";
-        Text[ japanese ] = "ε›³γ¨ο½µοΎοΎο½ΌοΎο½ªο½ΈοΎ„(~G)";
+        Text[ japanese ] = "ε›³γ¨γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒ(~G)";
         Text[ chinese_traditional ] = "ε–ε½Άε’η‰©δ»¶(~G)";
         Text[ arabic ] = "ΥζΡ ζίΗΖδΗΚ";
         Text[ greek ] = "Γραφικά και αντικείμενα";
@@ -570,8 +570,8 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_simplified ] = "η»ε›Ύε’ζ§ε¶(~W)";
         Text[ russian ] = "Πθρσνκθ θ ύλεμενςϋ σοπΰβλενθÿ";
         Text[ polish ] = "Rysunki i pola kontrolne";
-        Text[ japanese ] = "ε›³ε½Άζη”»γ¨ο½ΊοΎοΎ„οΎ›ο½°οΎ™(~W)";
-        Text[ chinese_traditional ] = "ηΉªε–ε’ζ§θ£½ι …(~W)";
+        Text[ japanese ] = "ε›³ε½Άζη”»γ¨γ‚³γƒ³γƒγƒ­γƒΌγƒ«(~W)";
+        Text[ chinese_traditional ] = "ηΉªε–ε’ζ§ε¶ι …(~W)";
         Text[ arabic ] = "ΡΣζγΗΚ ζΪδΗΥΡ ΚΝίγ";
         Text[ greek ] = "Σχέδια ~και Πεδία ελέγχου";
         Text[ korean ] = "κ·Έλ¦¬κΈ°μ™€ μ»¨νΈλ΅¤(~W)";
@@ -597,7 +597,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_simplified ] = "ε­—ζ®µεη§°(~F)";
         Text[ russian ] = "Θμενΰ οξλÿ";
         Text[ polish ] = "Nazwy pσl";
-        Text[ japanese ] = "οΎο½¨ο½°οΎ™οΎ„οΎε(~F)";
+        Text[ japanese ] = "γƒ•γ‚£γƒΌγƒ«γƒ‰ε(~F)";
         Text[ chinese_traditional ] = "ζ¬„δ½εη¨±(~F)";
         Text[ arabic ] = "ΓΣγΗΑ ΗαΝήα";
         Text[ greek ] = "Ονόματα πεδίων";
@@ -625,7 +625,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_simplified ] = "ε¤‡ζ³¨(~N)";
         Text[ russian ] = "Οπθμεχΰνθÿ";
         Text[ polish ] = "No~tatki";
-        Text[ japanese ] = "ο½ΊοΎ’οΎοΎ„(~N)";
+        Text[ japanese ] = "γ‚³γƒ΅γƒ³γƒ(~N)";
         Text[ chinese_traditional ] = "ε‚™θ¨»(~N)";
         Text[ arabic ] = "γαΗΝΩΗΚ";
         Text[ greek ] = "Σημειώσεις";
@@ -656,7 +656,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_simplified ] = "η°θ‰²θƒζ™―ζ ‡θ®°";
         Text[ russian ] = "Τξν ςεκρςΰ";
         Text[ polish ] = "T³o znakσw";
-        Text[ japanese ] = "η°θ‰²γ®οΎοΎο½―ο½Έγ§εΌ·θªΏ";
+        Text[ japanese ] = "η°θ‰²γ®γƒγƒƒγ‚―γ§εΌ·θªΏ";
         Text[ chinese_traditional ] = "η°θ‰²θƒζ™―ζ¨™θ¨";
         Text[ arabic ] = "ΗαΚΩανα";
         Text[ language_user1 ] = " ";
@@ -712,7 +712,7 @@ TabPage TP_CONTENT_OPT
         Text[ swedish ] = "Fφrteckn~ingar";
         Text[ polish ] = "Indeksy";
         Text[ portuguese_brazilian ] = "Entradas do ?ndice";
-        Text[ japanese ] = "οΎƒοΎο½¨οΎο½ΈοΎ„οΎ(~D)";
+        Text[ japanese ] = "γƒ‡γ‚£γƒ¬γ‚―γƒγƒª(~D)";
         Text[ korean ] = "μƒ‰μΈ(~D)";
         Text[ chinese_simplified ] = "η›®ε½•(~D)";
         Text[ chinese_traditional ] = "η›®ι„(~D)";
@@ -768,7 +768,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_simplified ] = "ε­—ζ®µ(~L)";
         Text[ russian ] = "Οξλÿ";
         Text[ polish ] = "P~ola";
-        Text[ japanese ] = "οΎο½¨ο½°οΎ™οΎ„οΎ(~L)";
+        Text[ japanese ] = "γƒ•γ‚£γƒΌγƒ«γƒ‰(~L)";
         Text[ chinese_traditional ] = "ζ¬„δ½(~L)";
         Text[ arabic ] = "ΗαΝήζα";
         Text[ greek ] = "Πεδία";
@@ -994,8 +994,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ chinese_simplified ] = "ζ§ε¶(~S)";
         Text[ russian ] = "έλεμενςϋ σοπΰβλενθÿ";
         Text[ polish ] = "Pola kon~trolne";
-        Text[ japanese ] = "ο½ΊοΎοΎ„οΎ›-οΎ™(~S)";
-        Text[ chinese_traditional ] = "ζ§θ£½ι …(~S)";
+        Text[ japanese ] = "γ‚³γƒ³γƒγƒ­-γƒ«(~S)";
+        Text[ chinese_traditional ] = "ζ§ε¶ι …(~S)";
         Text[ arabic ] = "ΪδΗΥΡ ΚΝίγ";
         Text[ greek ] = "Πεδία ελέγχου";
         Text[ korean ] = "μ»¨νΈλ΅¤(~S)";
@@ -1086,7 +1086,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ chinese_simplified ] = "ι΅µ";
         Text[ russian ] = "Ρςπΰνθφϋ";
         Text[ polish ] = "Strony";
-        Text[ japanese ] = "οΎοΎο½°ο½ΌοΎ";
+        Text[ japanese ] = "γƒγƒΌγ‚Έ";
         Text[ chinese_traditional ] = "ι ";
         Text[ arabic ] = "ΗαΥέΝΗΚ";
         Text[ greek ] = "Σελίδες";
@@ -1117,7 +1117,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ chinese_simplified ] = "ε·¦ι΅µ(~L)";
         Text[ russian ] = "Λεβϋε ρςπΰνθφϋ";
         Text[ polish ] = "~Lewe strony";
-        Text[ japanese ] = "ε·¦οΎοΎο½°ο½ΌοΎ(~L)";
+        Text[ japanese ] = "ε·¦γƒγƒΌγ‚Έ(~L)";
         Text[ chinese_traditional ] = "ε·¦ι (~L)";
         Text[ arabic ] = "ΗαΥέΝΗΚ ΗανΣΡμ";
         Text[ greek ] = "Αριστερές σελίδες";
@@ -1146,7 +1146,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ chinese_simplified ] = "ε³ι΅µ(~R)";
         Text[ russian ] = "Οπΰβϋε ρςπΰνθφϋ";
         Text[ polish ] = "Prawe ~strony";
-        Text[ japanese ] = "ε³οΎοΎο½°ο½ΌοΎ(~R)";
+        Text[ japanese ] = "ε³γƒγƒΌγ‚Έ(~R)";
         Text[ chinese_traditional ] = "ε³ι (~R)";
         Text[ arabic ] = "ΗαΥέΝΗΚ Ηανγδμ";
         Text[ greek ] = "Δεξιές σελίδες";
@@ -1202,7 +1202,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ chinese_simplified ] = "ε°ζ‰‹ε†(~U)";
         Text[ russian ] = "Απξψώπΰ";
         Text[ polish ] = "Brosz~ura";
-        Text[ japanese ] = "οΎοΎοΎοΎοΎο½―οΎ„(~U)";
+        Text[ japanese ] = "γƒ‘γƒ³γƒ•γƒ¬γƒƒγƒ(~U)";
         Text[ chinese_traditional ] = "ε°ζ‰‹ε†(~U)";
         Text[ arabic ] = "δΤΡΙ";
         Text[ greek ] = "Προσπέκτους";
@@ -1263,7 +1263,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ chinese_simplified ] = "εªζ―ε¤‡ζ³¨(~O)";
         Text[ russian ] = "Òξλόκξ οπθμεχΰνθÿ";
         Text[ polish ] = "Tylko notatki";
-        Text[ japanese ] = "ο½ΊοΎ’οΎοΎ„γ®γΏ(~O)";
+        Text[ japanese ] = "γ‚³γƒ΅γƒ³γƒγ®γΏ(~O)";
         Text[ chinese_traditional ] = "εƒ…ζ―ε‚™θ¨»(~O)";
         Text[ arabic ] = "γαΗΝΩΗΚ έήΨ";
         Text[ greek ] = "Μόνο σημειώσεις";
@@ -1292,7 +1292,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ chinese_simplified ] = "ζ–‡ζ΅£η„η»“ζδ½η½®(~M)";
         Text[ russian ] = "Β κξνφε δξκσμενςΰ";
         Text[ polish ] = "Koniec dokumentu";
-        Text[ japanese ] = "οΎ„οΎο½·ο½­οΎ’οΎοΎ„ζ«(~M)";
+        Text[ japanese ] = "γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒζ«(~M)";
         Text[ chinese_traditional ] = "ζ–‡δ»¶η„ηµζδ½η½®(~M)";
         Text[ arabic ] = "δεΗνΙ ΗαγΣΚδΟ";
         Text[ greek ] = "Τέλος κειμένου";
@@ -1321,7 +1321,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ chinese_simplified ] = "ι΅µη„η»“ζδ½η½®(~E)";
         Text[ russian ] = "Β κξνφε ρςπΰνθφϋ";
         Text[ polish ] = "Konie~c strony";
-        Text[ japanese ] = "οΎοΎο½°ο½ΌοΎζ«(~E)";
+        Text[ japanese ] = "γƒγƒΌγ‚Έζ«(~E)";
         Text[ chinese_traditional ] = "ι η„ηµζδ½η½®(~E)";
         Text[ arabic ] = "δεΗνΙ ΗαΥέΝΙ";
         Text[ greek ] = "Τέλος σελίδας";
@@ -1357,7 +1357,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ chinese_simplified ] = "ε¤‡ζ³¨";
         Text[ russian ] = "Οπθμεχΰνθÿ";
         Text[ polish ] = "Notatki";
-        Text[ japanese ] = "ο½ΊοΎ’οΎοΎ„";
+        Text[ japanese ] = "γ‚³γƒ΅γƒ³γƒ";
         Text[ chinese_traditional ] = "ε‚™θ¨»";
         Text[ arabic ] = "ΗαγαΗΝΩΗΚ";
         Text[ greek ] = "Σημειώσεις";
@@ -1413,7 +1413,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ chinese_simplified ] = "η”ζε•δΈªζ‰“ε°δ»»ε΅(~I)";
         Text[ russian ] = "Ρξηδΰςό ξςδελόνϋε ηΰδΰνθÿ οεχΰςθ";
         Text[ polish ] = "Utwσrz pojedyncze zadania wydruku";
-        Text[ japanese ] = "ε€‹ε¥ε°ε·ο½ΌοΎο½®οΎοΎγ®δ½ζ(~I)";
+        Text[ japanese ] = "ε€‹ε¥ε°ε·γ‚Έγƒ§γƒ–γ®δ½ζ(~I)";
         Text[ chinese_traditional ] = "η”Άη”ε–®ε€‹ε—ε°δ»»ε‹™(~I)";
         Text[ arabic ] = "ΕδΤΗΑ ζΩΗΖέ ΨΘΗΪΙ έΡΟνΙ";
         Text[ greek ] = "Δημιουργία μεμονωμένων εργασιών εκτύπωσης";
@@ -1442,7 +1442,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ swedish ] = "Pappersmagasin frεn ~skrivarinstδllning";
         Text[ polish ] = "Zasobnik papieru z ustaw~ieρ drukarki";
         Text[ portuguese_brazilian ] = "da impressora ~setup";
-        Text[ japanese ] = "οΎοΎοΎοΎοΎ€θ¨­ε®γ®η”¨η΄™οΎ„οΎο½²γ‚’δ½Ώη”¨γ™γ‚‹(~P)";
+        Text[ japanese ] = "γƒ—γƒªγƒ³γ‚Ώθ¨­ε®γ®η”¨η΄™γƒγƒ¬γ‚¤γ‚’δ½Ώη”¨γ™γ‚‹(~P)";
         Text[ korean ] = "ν”„λ¦°ν„° μ„¤μ •μ— λ”°λ¥Έ μ©μ§€ κ³µκΈ‰(~P)";
         Text[ chinese_simplified ] = "ι‡‡η”¨ζ‰“ε°ζΊθ®Ύε®η„ηΊΈεΌ ζ¥ζΊ(~P)";
         Text[ chinese_traditional ] = "ζ΅η”¨ε°θ΅¨ζ©θ¨­ε®η„η΄™εΌµδΎ†ζΊ(~P)";
@@ -1544,7 +1544,7 @@ TabPage TP_STD_FONT
         Text[ swedish ] = "Standardteckensnitt (%1)";
         Text[ polish ] = "Czcionki podstawowe (%1)";
         Text[ portuguese_brazilian ] = "Fontes padrao";
-        Text[ japanese ] = "ζ—Άε®γ®οΎο½«οΎοΎ„(%1)";
+        Text[ japanese ] = "ζ—Άε®γ®γƒ•γ‚©γƒ³γƒ(%1)";
         Text[ korean ] = "κΈ°λ³Έ κΈ€κΌ΄";
         Text[ chinese_simplified ] = "ζ ‡ε‡†ε­—δ½“ (%1)";
         Text[ chinese_traditional ] = "ζ¨™ζΊ–ε­—ε‹ (%1)";
@@ -1632,7 +1632,7 @@ TabPage TP_STD_FONT
         Text[ chinese_simplified ] = "ε—ε•(~L)";
         Text[ russian ] = "Ροθρξκ";
         Text[ polish ] = "Lista";
-        Text[ japanese ] = "οΎο½½οΎ„(~L)";
+        Text[ japanese ] = "γƒªγ‚Ήγƒ(~L)";
         Text[ chinese_traditional ] = "ζΈ…ε–®(~L)";
         Text[ arabic ] = "ΗαήΗΖγΙ";
         Text[ greek ] = "Λίστα";
@@ -1759,8 +1759,8 @@ TabPage TP_STD_FONT
         Text[ chinese_simplified ] = "εªη”¨δΊε½“ε‰η„ζ–‡ζ΅£(~U)";
         Text[ russian ] = "Òξλόκξ δλÿ ςεκσωεγξ δξκσμενςΰ";
         Text[ polish ] = "Tylko w bieΏΉcym dokumencie";
-        Text[ japanese ] = "ηΎε¨γ®οΎ„οΎο½·ο½­οΎ’οΎοΎ„γ®γΏ(~U)";
-        Text[ chinese_traditional ] = "εƒ…ι©η”¨ζ–Όη•¶ε‰η„ζ–‡δ»¶(~U)";
+        Text[ japanese ] = "ηΎε¨γ®γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ®γΏ(~U)";
+        Text[ chinese_traditional ] = "εƒ…ι©η”¨ζ–Όδ½Ώη”¨δΈ­η„ζ–‡δ»¶(~U)";
         Text[ arabic ] = "ααγΣΚδΟ ΗαΝΗαν έήΨ";
         Text[ greek ] = "Μόνο για το τρέχων έγγραφο";
         Text[ korean ] = "ν„μ¬ λ¬Έμ„ λ§(~U)";
@@ -1814,7 +1814,7 @@ TabPage TP_STD_FONT
         Text[ swedish ] = "Asiatiskt";
         Text[ polish ] = "Azjatyckie";
         Text[ portuguese_brazilian ] = "Asian";
-        Text[ japanese ] = "ο½±ο½ΌοΎο½±θ«Έε›½θª";
+        Text[ japanese ] = "γ‚Άγ‚Έγ‚Άθ«Έε›½θª";
         Text[ korean ] = "μ•„μ‹μ•„";
         Text[ chinese_simplified ] = "δΈ­ζ—¥ι©";
         Text[ chinese_traditional ] = "δΈ­ζ—¥ι“";
@@ -1933,7 +1933,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ chinese_simplified ] = "ε¨ζ―ι΅µδΈι‡ε¤ζΎη¤Ί(~P)";
         Text[ russian ] = "Οξβςξπ νΰ κΰζδξι ρςπΰνθφε";
         Text[ polish ] = "Powt~σrz na kaΏdej stronie";
-        Text[ japanese ] = "ε„οΎοΎο½°ο½ΌοΎγ§ηΉ°γ‚θΏ”γ—(~P)";
+        Text[ japanese ] = "ε„γƒγƒΌγ‚Έγ§ηΉ°γ‚θΏ”γ—(~P)";
         Text[ chinese_traditional ] = "ε¨ζ―ι δΈι‡θ¤‡ι΅―η¤Ί(~P)";
         Text[ arabic ] = "ΚίΡΗΡ έν ία ΥέΝΙ";
         Text[ greek ] = "Επανάλη~ψη σε κάθε σελίδα";
@@ -2053,7 +2053,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ swedish ] = "Talig~enkδnning";
         Text[ polish ] = "Rozpoznawanie liczb";
         Text[ portuguese_brazilian ] = "Automatic number recognition";
-        Text[ japanese ] = "ζ•°ε­—γ®θªθ­(~N)";
+        Text[ japanese ] = "ζ•°ε­—γ®θªθ­";
         Text[ chinese_simplified ] = "θ―†ε«ζ•°ε­—";
         Text[ chinese_traditional ] = "θ‡ªε®θ­ε¥ζ•Έε­—";
         Text[ arabic ] = "ΚΪΡνέ ΗαΓΡήΗγ";
@@ -2140,7 +2140,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ swedish ] = "Anvδndning av tangentbordet";
         Text[ polish ] = "Obs³uga klawiatury";
         Text[ portuguese_brazilian ] = "Keyboard handling";
-        Text[ japanese ] = "ο½·ο½°οΎοΎο½°οΎ„οΎζ“δ½";
+        Text[ japanese ] = "γ‚­γƒΌγƒγƒΌγƒ‰ζ“δ½";
         Text[ korean ] = "ν‚¤λ³΄λ“ μ΅°μ‘";
         Text[ chinese_simplified ] = "ι”®η›ζ“δ½";
         Text[ chinese_traditional ] = "δ½Ώη”¨ιµη›¤";
@@ -2168,7 +2168,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ swedish ] = "Flytta celler";
         Text[ polish ] = "Przesuρ komσrki";
         Text[ portuguese_brazilian ] = "Shift and arrow key pressed";
-        Text[ japanese ] = "ο½ΎοΎ™γ®η§»ε‹•";
+        Text[ japanese ] = "γ‚»γƒ«γ®η§»ε‹•";
         Text[ korean ] = "ν–‰ μ΄λ™";
         Text[ chinese_simplified ] = "η§»ε¨ε•ε…ƒζ Ό";
         Text[ chinese_traditional ] = "η§»ε‹•ε„²ε­ζ Ό";
@@ -2283,7 +2283,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ swedish ] = "Infoga cell";
         Text[ polish ] = "Wstaw wiersz";
         Text[ portuguese_brazilian ] = "Insert";
-        Text[ japanese ] = "ο½ΎοΎ™γ®ζΏε…¥";
+        Text[ japanese ] = "γ‚»γƒ«γ®ζΏε…¥";
         Text[ korean ] = "μ‚½μ…";
         Text[ chinese_simplified ] = "ζ’ε…¥ε•ε…ƒζ Ό";
         Text[ chinese_traditional ] = "ζ’ε…¥ε„²ε­ζ Ό";
@@ -2397,7 +2397,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ swedish ] = "Effekt av δndringar";
         Text[ polish ] = "Efekt przesuwania";
         Text[ portuguese_brazilian ] = "Behaviour while moving";
-        Text[ japanese ] = "ο½»ο½²ο½½οΎε¤‰ζ›΄ζ™‚γ®δ½η”¨";
+        Text[ japanese ] = "γ‚µγ‚¤γ‚Ίε¤‰ζ›΄ζ™‚γ®δ½η”¨";
         Text[ korean ] = "μ΄λ™μ‹μ— μ›€μ§μ„";
         Text[ chinese_simplified ] = "η§»ε¨ζ—¶ζ‰§θ΅η„ζ“δ½";
         Text[ chinese_traditional ] = "η§»ε‹•ζ™‚ε·θ΅η„ε‹•δ½";
@@ -2538,7 +2538,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ chinese_simplified ] = "ε―ε(~V)";
         Text[ russian ] = "Θημ.";
         Text[ polish ] = "Zmie~nny";
-        Text[ japanese ] = "οΎοΎο½―ο½Έο½½(~V)";
+        Text[ japanese ] = "γƒ•γƒ¬γƒƒγ‚―γ‚Ή(~V)";
         Text[ chinese_traditional ] = "ε―θ®(~V)";
         Text[ arabic ] = "γΚΫνΡ";
         Text[ greek ] = "Μεταβλητή";
@@ -2569,7 +2569,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ swedish ] = "Δndringar pεverkar tabellstorleken";
         Text[ polish ] = "Zmiany majΉ wp³yw na rozmiar tabeli.";
         Text[ portuguese_brazilian ] = "Ver?nderungen einer Zeile bzw. Spalte wirken sich auf die Tabellengr?e aus";
-        Text[ japanese ] = "ε¤‰ζ›΄γ―θ΅¨γ®ο½»ο½²ο½½οΎγ«δ½η”¨γ—γΎγ™";
+        Text[ japanese ] = "ε¤‰ζ›΄γ―θ΅¨γ®γ‚µγ‚¤γ‚Ίγ«δ½η”¨γ—γΎγ™";
         Text[ korean ] = "λ³€κ²½ μ‚¬ν•­μ΄ μ‹νΈ ν¬κΈ°μ— μ μ©λ©λ‹λ‹¤.";
         Text[ chinese_simplified ] = "δΈ€θ΅ε’ε—η„ζ›΄ζ”ΉδΌε½±ε“θ΅¨ζ Όη„ε¤§ε°γ€‚";
         Text[ chinese_traditional ] = "δΈ€ε€‹ζ¬„ε—η„θ®ζ›΄ζƒε½±ιΏθ΅¨ζ Όη„ε¤§ε°";
@@ -2670,7 +2670,7 @@ TabPage TP_OPTSRCVIEW
         Text[ chinese_simplified ] = "ζ³¨θ§£(~C)";
         Text[ russian ] = "Κξμμενςΰπθι";
         Text[ polish ] = "Komentarz";
-        Text[ japanese ] = "ο½ΊοΎ’οΎοΎ„(~C)";
+        Text[ japanese ] = "γ‚³γƒ΅γƒ³γƒ(~C)";
         Text[ chinese_traditional ] = "θ¨»θ§£(~C)";
         Text[ arabic ] = "ΚΪανή";
         Text[ greek ] = "Σχόλιο";
@@ -2705,7 +2705,7 @@ TabPage TP_OPTSRCVIEW
         Text[ chinese_simplified ] = "ε…³ι”®ε­—(~K)";
         Text[ russian ] = "Κλώχεβξε ρλξβξ";
         Text[ polish ] = "S³owo kluczowe";
-        Text[ japanese ] = "ο½·ο½°οΎο½°οΎ„οΎ(~K)";
+        Text[ japanese ] = "γ‚­γƒΌγƒ―γƒΌγƒ‰(~K)";
         Text[ chinese_traditional ] = "ι—ιµε­—(~K)";
         Text[ arabic ] = "ίαγΙ ΓΣΗΣνΙ";
         Text[ greek ] = "Λέξη-κλειδί";
@@ -2849,7 +2849,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_simplified ] = "θ‡ªε®η„θΏε­—η¬¦(~Y)";
         Text[ russian ] = "Οεπενξρϋ οξλόηξβΰςελÿ";
         Text[ polish ] = "Indywidualne znaki podzia³u";
-        Text[ japanese ] = "οΎ•ο½°ο½»οΎο½°ε®ηΎ©γ®οΎο½²οΎοΎ(~Y)";
+        Text[ japanese ] = "γƒ¦γƒΌγ‚¶γƒΌε®ηΎ©γ®γƒγ‚¤γƒ•γƒ³(~Y)";
         Text[ chinese_traditional ] = "θ‡ªθ¨‚η„ι€£ε­—η¬¦(~Y)";
         Text[ arabic ] = "ζΗΥαΙ ΗΞΚνΗΡνΙ";
         Text[ greek ] = "Ή~πια διαχωριστικά";
@@ -2878,7 +2878,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_simplified ] = "η©Ίζ Όε­—η¬¦(~E)";
         Text[ russian ] = "Οπξαελϋ";
         Text[ polish ] = "Spa~cje";
-        Text[ japanese ] = "ο½½οΎοΎο½°ο½½(~E)";
+        Text[ japanese ] = "γ‚ΉγƒγƒΌγ‚Ή(~E)";
         Text[ chinese_traditional ] = "η©Ίζ Όε­—ε…ƒ(~E)";
         Text[ arabic ] = "ΓΝΡέ γΣΗέΙ";
         Text[ greek ] = "Χα~ρακτήρας κενού";
@@ -2907,7 +2907,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_simplified ] = "ε—δΏζ¤η„η©Ίζ Όε­—η¬¦(~P)";
         Text[ russian ] = "Ηΰωθωεννϋε οπξαελϋ";
         Text[ polish ] = "Spacje bez podzia³u";
-        Text[ japanese ] = "δΏθ­·ο½½οΎοΎο½°ο½½(~P)";
+        Text[ japanese ] = "δΏθ­·γ—γη©Ίη™½γ®γ‚ΉγƒγƒΌγ‚Ή(~P)";
         Text[ chinese_traditional ] = "ε—δΏθ­·η„η©Ίζ Όε­—ε…ƒ(~P)";
         Text[ arabic ] = "ΓΝΡέ γΣΗέΙ γΝγνΙ";
         Text[ greek ] = "Προ~στατευόμενοι χαρακτήρες κενών";
@@ -2936,7 +2936,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_simplified ] = "ε¶θ΅¨η¬¦";
         Text[ russian ] = "Òΰασλÿςξπϋ";
         Text[ polish ] = "Tabulatory";
-        Text[ japanese ] = "οΎ€οΎοΎ";
+        Text[ japanese ] = "γ‚Ώγƒ–";
         Text[ chinese_traditional ] = "ε®δ½ιµ";
         Text[ arabic ] = "ΪαΗγΗΚ ΗαΜΟζαΙ";
         Text[ greek ] = "Στηλοθέτες";
@@ -2994,7 +2994,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_simplified ] = "ιε…¥η„ζ–‡ε­—(~X)";
         Text[ russian ] = "Ρκπϋςϋι ςεκρς";
         Text[ polish ] = "Ukryty tek~st";
-        Text[ japanese ] = "ι γ—οΎƒο½·ο½½οΎ„(~X)";
+        Text[ japanese ] = "ι γ—γƒ†γ‚­γ‚Ήγƒ(~X)";
         Text[ chinese_traditional ] = "ι±ε…¥η„ζ–‡ε­—(~X)";
         Text[ arabic ] = "δΥ γΞέν";
         Text[ greek ] = "Κρ~υφό κείμενο";
@@ -3055,7 +3055,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_simplified ] = "η›΄ζ¥ε®δ½ε…‰ζ ‡";
         Text[ russian ] = "Ρβξαξδνϋι κσπρξπ";
         Text[ polish ] = "Kursor bezporedni";
-        Text[ japanese ] = "οΎ€οΎο½²οΎο½ΈοΎ„ο½¶ο½°ο½ΏοΎ™";
+        Text[ japanese ] = "γƒ€γ‚¤γƒ¬γ‚―γƒγ‚«γƒΌγ‚½γƒ«";
         Text[ chinese_traditional ] = "η›΄ζ¥ε®δ½ε…‰ζ¨™";
         Text[ arabic ] = "γΔΤΡ γΘΗΤΡ";
         Text[ greek ] = "Άμεσος δρομέας";
@@ -3085,7 +3085,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_simplified ] = "η›΄ζ¥ε®δ½ε…‰ζ ‡(~D)";
         Text[ russian ] = "Ρβξαξδνϋι κσπρξπ";
         Text[ polish ] = "Kursor bezporedni";
-        Text[ japanese ] = "οΎ€οΎο½²οΎο½ΈοΎ„ο½¶ο½°ο½ΏοΎ™(~D)";
+        Text[ japanese ] = "γƒ€γ‚¤γƒ¬γ‚―γƒγ‚«γƒΌγ‚½γƒ«(~D)";
         Text[ chinese_traditional ] = "η›΄ζ¥ε®δ½ε…‰ζ¨™(~D)";
         Text[ arabic ] = "γΔΤΡ γΘΗΤΡ";
         Text[ greek ] = "Άμεσος δρομέας";
@@ -3200,7 +3200,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_simplified ] = "ε¶θ΅¨η¬¦(~T)";
         Text[ russian ] = "Òΰασλÿςξπϋ";
         Text[ polish ] = "Tabulator";
-        Text[ japanese ] = "οΎ€οΎοΎ(~T)";
+        Text[ japanese ] = "γ‚Ώγƒ–(~T)";
         Text[ chinese_traditional ] = "ε®δ½ιµ(~T)";
         Text[ arabic ] = "ΪαΗγΙ ΜΟζαΙ";
         Text[ greek ] = "Στηλοθέτης";
@@ -3228,7 +3228,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_simplified ] = "ε¶θ΅¨η¬¦ε’η©Ίζ Ό(~N)";
         Text[ russian ] = "Òΰασλÿςξπϋ θ οπξαελϋ";
         Text[ polish ] = "Tabulator i ~spacja";
-        Text[ japanese ] = "οΎ€οΎοΎγ¨ο½½οΎοΎο½°ο½½(~N)";
+        Text[ japanese ] = "γ‚Ώγƒ–γ¨γ‚ΉγƒγƒΌγ‚Ή(~N)";
         Text[ chinese_traditional ] = "ε®δ½ιµε’η©Ίζ Ό(~N)";
         Text[ arabic ] = "ΪαΗγΗΚ ΜΟζαΙ ζΓΝΡέ γΣΗέΙ";
         Text[ greek ] = "Στηλοθέτες και κενά";
@@ -3291,7 +3291,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ swedish ] = "Markφr i skyddade omrεden";
         Text[ polish ] = "Kursor w chronionych obszarach";
         Text[ portuguese_brazilian ] = "Cursor in protected areas";
-        Text[ japanese ] = "δΏθ­·η―„ε›²γΈγ®ο½¶ο½°ο½ΏοΎ™ι€²ε…¥";
+        Text[ japanese ] = "δΏθ­·η―„ε›²γΈγ®γ‚«γƒΌγ‚½γƒ«ι€²ε…¥";
         Text[ korean ] = "λ³΄νΈλ μμ—­μ μ»¤μ„";
         Text[ chinese_simplified ] = "ε…‰ζ ‡ε®δ½ε¨δΏζ¤εΊε";
         Text[ chinese_traditional ] = "ε…‰ζ¨™ε¨δΏθ­·ε€εδΉ‹δΈ­";
@@ -3331,6 +3331,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
     };
 };
+
 
 
 
