@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:37:23 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 09:53:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,14 +116,9 @@
 #include <svx/svdopage.hxx>
 #endif
 
-#pragma hdrstop
+#include <sfx2/sfxdlg.hxx>
 
-#ifndef _OFF_OFAIDS_HRC
-#include <offmgr/ofaids.hrc>
-#endif
-#ifndef _OFFAPP_INTERNATIONALOPTIONS_HXX_
-#include <offmgr/internationaloptions.hxx>
-#endif
+#pragma hdrstop
 
 #define _SD_DLL                 // fuer SD_MOD()
 #include "sdmod.hxx"
@@ -279,11 +274,9 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                 // #110023#
                 // since the view from the SdOutlineViewShell can be zero during SdOutlineViewShell c'tor
                 // we have to check this here
-                ::sd::OutlineView* pSdView = NULL;
-                if (pViewSh->ISA (::sd::OutlineViewShell))
-                    pSdView = static_cast< ::sd::OutlineView*>(
-                        static_cast< ::sd::OutlineViewShell*>(pViewSh)
-                        ->GetView());
+                ::sd::SdOutlineView* pSdView = NULL;
+                if (pViewSh->ISA (::sd::SdOutlineViewShell))
+                    pSdView = static_cast< ::sd::SdOutlineView*> (static_cast< ::sd::SdOutlineViewShell*>(pViewSh)->GetView());
                 if (pSdView != NULL
                     && (pInfo->GetOutliner() ==  pSdView->GetOutliner()))
                 {
@@ -755,6 +748,7 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
     if( pViewShell && pViewShell->GetViewFrame() )
         pViewShell->GetViewFrame()->GetBindings().InvalidateAll( TRUE );
 }
+
 SfxTabPage* SdModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )
 {
     SfxTabPage* pRet = NULL;
@@ -784,8 +778,17 @@ SfxTabPage* SdModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemS
         break;
         case RID_OFA_TP_INTERNATIONAL_SD:
         case RID_OFA_TP_INTERNATIONAL_IMPR:
-            pRet = ::offapp::InternationalOptionsPage::CreateSd( pParent, rSet );
-            break;
+        case RID_SVXPAGE_TEXTANIMATION :
+        {
+            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+            if ( pFact )
+            {
+                ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( nId );
+                if ( fnCreatePage )
+                    pRet = (*fnCreatePage)( pParent, rSet );
+            }
+        }
+        break;
     }
 
     DBG_ASSERT( pRet, "SdModule::CreateTabPage(): no valid ID for TabPage!" );
