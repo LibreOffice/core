@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slotadd.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-30 14:56:18 $
+ *  last change: $Author: tl $ $Date: 2001-04-09 07:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,7 @@
 #include "cfgitems.hxx"
 #include "grfatr.hxx"
 #include <svx/clipfmtitem.hxx>
+#include <svtools/slstitm.hxx>
 
 #ifndef PROFILE
 // Code zum Initialisieren von Statics im eigenen Code-Segment
@@ -320,6 +321,9 @@
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/30 14:56:18  tl
+    include for clipfmtitem.hxx added
+
     Revision 1.5  2000/12/02 15:23:54  jp
     Task #80752#: integrate the grafik filter
 
