@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insfnote.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:36:30 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #ifndef _INSFNOTE_HRC
 #include <insfnote.hrc>
 #endif
+
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 static BOOL bFootnote = TRUE;
 
@@ -228,7 +231,11 @@ IMPL_LINK( SwInsFootNoteDlg, NumberExtCharHdl, Button *, EMPTYARG )
     rSh.GetAttr( aSet );
     const SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
 
-    SvxCharacterMap* pDlg = new SvxCharacterMap(this, FALSE);
+    //CHINA001 SvxCharacterMap* pDlg = new SvxCharacterMap(this, FALSE);
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+    AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( this,  ResId(RID_SVXDLG_CHARMAP), FALSE );
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
     Font aDlgFont( pDlg->GetCharFont() );
     aDlgFont.SetName( rFont.GetFamilyName() );
