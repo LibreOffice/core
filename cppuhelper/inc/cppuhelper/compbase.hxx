@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compbase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-16 12:12:59 $
+ *  last change: $Author: dbo $ $Date: 2001-05-21 09:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,139 +73,155 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 
+namespace cppu
+{
+
+class SAL_NO_VTABLE WeakComponentImplHelperBase
+    : public ::cppu::OWeakObject
+    , public ::com::sun::star::lang::XComponent
+{
+protected:
+    ::cppu::OBroadcastHelper rBHelper;
+
+    /** Is called upon disposing the component.
+    */
+    virtual void SAL_CALL disposing();
+
+    WeakComponentImplHelperBase( ::osl::Mutex & rMutex ) SAL_THROW( () );
+public:
+    virtual ~WeakComponentImplHelperBase() SAL_THROW( () );
+
+    // these are here to force memory de/allocation to sal lib.
+    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+        { return ::rtl_allocateMemory( nSize ); }
+    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+        { ::rtl_freeMemory( pMem ); }
+    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
+        { return pMem; }
+    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
+        {}
+
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
+        ::com::sun::star::uno::Type const & rType )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire()
+        throw ();
+    virtual void SAL_CALL release()
+        throw ();
+    virtual void SAL_CALL dispose()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener(
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > const & xListener )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener(
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > const & xListener )
+        throw (::com::sun::star::uno::RuntimeException);
+};
+
+class SAL_NO_VTABLE WeakAggComponentImplHelperBase
+    : public ::cppu::OWeakAggObject
+    , public ::com::sun::star::lang::XComponent
+{
+protected:
+    ::cppu::OBroadcastHelper rBHelper;
+
+    /** Is called upon disposing the component.
+    */
+    virtual void SAL_CALL disposing();
+
+    WeakAggComponentImplHelperBase( ::osl::Mutex & rMutex ) SAL_THROW( () );
+public:
+    virtual ~WeakAggComponentImplHelperBase() SAL_THROW( () );
+
+    // these are here to force memory de/allocation to sal lib.
+    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+        { return ::rtl_allocateMemory( nSize ); }
+    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+        { ::rtl_freeMemory( pMem ); }
+    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
+        { return pMem; }
+    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
+        {}
+
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
+        ::com::sun::star::uno::Type const & rType )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(
+        ::com::sun::star::uno::Type const & rType )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire()
+        throw ();
+    virtual void SAL_CALL release()
+        throw ();
+    virtual void SAL_CALL dispose()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener(
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > const & xListener )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener(
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > const & xListener )
+        throw (::com::sun::star::uno::RuntimeException);
+};
+
+}
 
 //==================================================================================================
 #define __DEF_COMPIMPLHELPER_A( N ) \
 namespace cppu \
 { \
 template< __CLASS_IFC##N > \
-class WeakComponentImplHelper##N \
-    : public ::cppu::OWeakObject \
-    , public ::com::sun::star::lang::XComponent \
+class SAL_NO_VTABLE WeakComponentImplHelper##N \
+    : public ::cppu::WeakComponentImplHelperBase \
     , public ImplHelperBase##N< __IFC##N > \
 { \
     static ClassData##N s_aCD; \
-protected: \
-    ::cppu::OBroadcastHelper rBHelper; \
-    virtual void SAL_CALL disposing() \
-        {} \
 public: \
     WeakComponentImplHelper##N( ::osl::Mutex & rMutex ) SAL_THROW( () ) \
-        : rBHelper( rMutex ) \
+        : WeakComponentImplHelperBase( rMutex ) \
         {} \
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException) \
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException) \
     { \
         ::com::sun::star::uno::Any aRet( getClassData( s_aCD ).query( rType, (ImplHelperBase##N< __IFC##N > *)this ) ); \
         if (aRet.hasValue()) \
             return aRet; \
-        if (rType == ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > *)0 )) \
-        { \
-            void * p = static_cast< ::com::sun::star::lang::XComponent * >( this ); \
-            return ::com::sun::star::uno::Any( &p, rType ); \
-        } \
-        return OWeakObject::queryInterface( rType ); \
+        return WeakComponentImplHelperBase::queryInterface( rType ); \
     } \
     virtual void SAL_CALL acquire() throw () \
-        { OWeakObject::acquire(); } \
+        { WeakComponentImplHelperBase::::acquire(); } \
     virtual void SAL_CALL release() throw () \
-    { \
-        if (1 == m_refCount && !rBHelper.bDisposed) \
-        { \
-            dispose(); \
-        } \
-        OWeakObject::release(); \
-    } \
+        { WeakComponentImplHelperBase::::release(); } \
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException) \
         { return getClassData( s_aCD ).getTypes(); } \
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException) \
         { return getClassData( s_aCD ).getImplementationId(); } \
-    virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException) \
-    { \
-        ::osl::ClearableMutexGuard aGuard( rBHelper.rMutex ); \
-        if (!rBHelper.bDisposed && !rBHelper.bInDispose) \
-        { \
-            rBHelper.bInDispose = sal_True; \
-            aGuard.clear(); \
-            ::com::sun::star::lang::EventObject aEvt( static_cast< ::cppu::OWeakObject * >( this ) ); \
-            rBHelper.aLC.disposeAndClear( aEvt ); \
-            disposing(); \
-            rBHelper.bDisposed = sal_True; \
-            rBHelper.bInDispose = sal_False; \
-        } \
-    } \
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener ) throw (::com::sun::star::uno::RuntimeException) \
-    { \
-        rBHelper.addListener( ::getCppuType( &xListener ), xListener ); \
-    } \
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener ) throw (::com::sun::star::uno::RuntimeException) \
-    { \
-        rBHelper.removeListener( ::getCppuType( &xListener ), xListener ); \
-    } \
 }; \
 template< __CLASS_IFC##N > \
-class WeakAggComponentImplHelper##N \
-    : public ::cppu::OWeakAggObject \
-    , public ::com::sun::star::lang::XComponent \
+class SAL_NO_VTABLE WeakAggComponentImplHelper##N \
+    : public ::cppu::WeakAggComponentImplHelperBase \
     , public ImplHelperBase##N< __IFC##N > \
 { \
     static ClassData##N s_aCD; \
-protected: \
-    ::cppu::OBroadcastHelper rBHelper; \
-    virtual void SAL_CALL disposing() \
-        {} \
 public: \
     WeakAggComponentImplHelper##N( ::osl::Mutex & rMutex ) SAL_THROW( () ) \
-        : rBHelper( rMutex ) \
+        : WeakAggComponentImplHelperBase( rMutex ) \
         {} \
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException) \
-        { return OWeakAggObject::queryInterface( rType ); } \
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException) \
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException) \
+        { return WeakAggComponentImplHelperBase::queryInterface( rType ); } \
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException) \
     { \
         ::com::sun::star::uno::Any aRet( getClassData( s_aCD ).query( rType, (ImplHelperBase##N< __IFC##N > *)this ) ); \
         if (aRet.hasValue()) \
             return aRet; \
-        if (rType == ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > *)0 )) \
-        { \
-            void * p = static_cast< ::com::sun::star::lang::XComponent * >( this ); \
-            return ::com::sun::star::uno::Any( &p, rType ); \
-        } \
-        return OWeakAggObject::queryAggregation( rType ); \
+        return WeakAggComponentImplHelperBase::queryAggregation( rType ); \
     } \
     virtual void SAL_CALL acquire() throw () \
-        { OWeakAggObject::acquire(); } \
+        { WeakAggComponentImplHelperBase::acquire(); } \
     virtual void SAL_CALL release() throw () \
-    { \
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > x( xDelegator ); \
-        if (!x.is() && 1 == m_refCount && !rBHelper.bDisposed) \
-            dispose(); \
-        OWeakAggObject::release(); \
-    } \
+        { WeakAggComponentImplHelperBase::release(); } \
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException) \
         { return getClassData( s_aCD ).getTypes(); } \
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException) \
         { return getClassData( s_aCD ).getImplementationId(); } \
-    virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException) \
-    { \
-        ::osl::ClearableMutexGuard aGuard( rBHelper.rMutex ); \
-        if (!rBHelper.bDisposed && !rBHelper.bInDispose) \
-        { \
-            rBHelper.bInDispose = sal_True; \
-            aGuard.clear(); \
-            ::com::sun::star::lang::EventObject aEvt( static_cast< ::cppu::OWeakObject * >( this ) ); \
-            rBHelper.aLC.disposeAndClear( aEvt ); \
-            disposing(); \
-            rBHelper.bDisposed = sal_True; \
-            rBHelper.bInDispose = sal_False; \
-        } \
-    } \
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener ) throw (::com::sun::star::uno::RuntimeException) \
-    { \
-        rBHelper.addListener( ::getCppuType( &xListener ), xListener ); \
-    } \
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener ) throw (::com::sun::star::uno::RuntimeException) \
-    { \
-        rBHelper.removeListener( ::getCppuType( &xListener ), xListener ); \
-    } \
 };
 
 //==================================================================================================

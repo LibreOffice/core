@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 13:39:32 $
+ *  last change: $Author: dbo $ $Date: 2001-05-21 09:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _CPPUHELPER_IMPLBASE_HXX_
 #include <cppuhelper/implbase.hxx>
 #endif
+#ifndef _CPPUHELPER_COMPBASE_HXX_
+#include <cppuhelper/compbase.hxx>
+#endif
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -72,10 +75,10 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 
-using namespace osl;
-using namespace rtl;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
+using namespace ::osl;
+using namespace ::rtl;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 namespace cppu
 {
@@ -169,17 +172,17 @@ void ClassData::initTypeProvider() SAL_THROW( () )
             pTypeAr[nPos] = ((typelib_TypeDescription *)arType2Offset[nPos].pTD)->pWeakRef;
 
         // XTypeProvider
-        pTypeAr[nType2Offset] = ::getCppuType( (const Reference< XTypeProvider > *)0 );
+        pTypeAr[nType2Offset] = ::getCppuType( (const Reference< lang::XTypeProvider > *)0 );
 
         // class code extra types: [[XComponent,] XWeak[, XAggregation]]
         switch (nClassCode)
         {
         case 4:
-            pTypeAr[nType2Offset +2] = ::getCppuType( (const Reference< XComponent > *)0 );
+            pTypeAr[nType2Offset +2] = ::getCppuType( (const Reference< lang::XComponent > *)0 );
             pTypeAr[nType2Offset +1] = ::getCppuType( (const Reference< XWeak > *)0 );
             break;
         case 3:
-            pTypeAr[nType2Offset +3] = ::getCppuType( (const Reference< XComponent > *)0 );
+            pTypeAr[nType2Offset +3] = ::getCppuType( (const Reference< lang::XComponent > *)0 );
         case 2:
             pTypeAr[nType2Offset +2] = ::getCppuType( (const Reference< XAggregation > *)0 );
         case 1:
@@ -214,7 +217,7 @@ static inline sal_Bool td_equals(
              rtl_ustr_compare( pTD->pTypeName->buffer, pType->pTypeName->buffer ) == 0));
 }
 //__________________________________________________________________________________________________
-Any ClassData::query( const Type & rType, XTypeProvider * pBase ) SAL_THROW( () )
+Any ClassData::query( const Type & rType, lang::XTypeProvider * pBase ) SAL_THROW( () )
 {
     if (rType == ::getCppuType( (const Reference< XInterface > *)0 ))
         return Any( &pBase, ::getCppuType( (const Reference< XInterface > *)0 ) );
@@ -233,11 +236,169 @@ Any ClassData::query( const Type & rType, XTypeProvider * pBase ) SAL_THROW( () 
             pTD = pTD->pBaseTypeDescription;
         }
     }
-    if (rType == ::getCppuType( (const Reference< XTypeProvider > *)0 ))
-        return Any( &pBase, ::getCppuType( (const Reference< XTypeProvider > *)0 ) );
+    if (rType == ::getCppuType( (const Reference< lang::XTypeProvider > *)0 ))
+        return Any( &pBase, ::getCppuType( (const Reference< lang::XTypeProvider > *)0 ) );
 
     return Any();
 }
 
+//##################################################################################################
+//##################################################################################################
+//##################################################################################################
+
+// WeakComponentImplHelperBase
+//__________________________________________________________________________________________________
+WeakComponentImplHelperBase::WeakComponentImplHelperBase( Mutex & rMutex )
+    SAL_THROW( () )
+    : rBHelper( rMutex )
+{
+}
+//__________________________________________________________________________________________________
+WeakComponentImplHelperBase::~WeakComponentImplHelperBase()
+    SAL_THROW( () )
+{
+}
+//__________________________________________________________________________________________________
+void WeakComponentImplHelperBase::disposing()
+{
+}
+//__________________________________________________________________________________________________
+Any WeakComponentImplHelperBase::queryInterface( Type const & rType )
+    throw (RuntimeException)
+{
+    if (rType == ::getCppuType( (Reference< lang::XComponent > const *)0 ))
+    {
+        void * p = static_cast< lang::XComponent * >( this );
+        return Any( &p, rType );
+    }
+    return OWeakObject::queryInterface( rType );
+}
+//__________________________________________________________________________________________________
+void WeakComponentImplHelperBase::acquire()
+    throw ()
+{
+    OWeakObject::acquire();
+}
+//__________________________________________________________________________________________________
+void WeakComponentImplHelperBase::release()
+    throw ()
+{
+    if (1 == m_refCount && !rBHelper.bDisposed)
+    {
+        dispose();
+    }
+    OWeakObject::release();
+}
+//__________________________________________________________________________________________________
+void WeakComponentImplHelperBase::dispose()
+    throw (RuntimeException)
+{
+    ClearableMutexGuard aGuard( rBHelper.rMutex );
+    if (!rBHelper.bDisposed && !rBHelper.bInDispose)
+    {
+        rBHelper.bInDispose = sal_True;
+        aGuard.clear();
+        lang::EventObject aEvt( static_cast< OWeakObject * >( this ) );
+        rBHelper.aLC.disposeAndClear( aEvt );
+        disposing();
+        rBHelper.bDisposed = sal_True;
+        rBHelper.bInDispose = sal_False;
+    }
+}
+//__________________________________________________________________________________________________
+void WeakComponentImplHelperBase::addEventListener(
+    Reference< lang::XEventListener > const & xListener )
+    throw (RuntimeException)
+{
+    rBHelper.addListener( ::getCppuType( &xListener ), xListener );
+}
+//__________________________________________________________________________________________________
+void WeakComponentImplHelperBase::removeEventListener(
+    Reference< lang::XEventListener > const & xListener )
+    throw (RuntimeException)
+{
+    rBHelper.removeListener( ::getCppuType( &xListener ), xListener );
 }
 
+// WeakAggComponentImplHelperBase
+//__________________________________________________________________________________________________
+WeakAggComponentImplHelperBase::WeakAggComponentImplHelperBase( Mutex & rMutex )
+    SAL_THROW( () )
+    : rBHelper( rMutex )
+{
+}
+//__________________________________________________________________________________________________
+WeakAggComponentImplHelperBase::~WeakAggComponentImplHelperBase()
+    SAL_THROW( () )
+{
+}
+//__________________________________________________________________________________________________
+void WeakAggComponentImplHelperBase::disposing()
+{
+}
+//__________________________________________________________________________________________________
+Any WeakAggComponentImplHelperBase::queryInterface( Type const & rType )
+    throw (RuntimeException)
+{
+    return OWeakAggObject::queryInterface( rType );
+}
+//__________________________________________________________________________________________________
+Any WeakAggComponentImplHelperBase::queryAggregation( Type const & rType )
+    throw (RuntimeException)
+{
+    if (rType == ::getCppuType( (Reference< lang::XComponent > const *)0 ))
+    {
+        void * p = static_cast< lang::XComponent * >( this );
+        return Any( &p, rType );
+    }
+    return OWeakAggObject::queryAggregation( rType );
+}
+//__________________________________________________________________________________________________
+void WeakAggComponentImplHelperBase::acquire()
+    throw ()
+{
+    OWeakAggObject::acquire();
+}
+//__________________________________________________________________________________________________
+void WeakAggComponentImplHelperBase::release()
+    throw ()
+{
+    Reference< XInterface > x( xDelegator );
+    if (!x.is() && 1 == m_refCount && !rBHelper.bDisposed)
+    {
+        dispose();
+    }
+    OWeakAggObject::release();
+}
+//__________________________________________________________________________________________________
+void WeakAggComponentImplHelperBase::dispose()
+    throw (RuntimeException)
+{
+    ClearableMutexGuard aGuard( rBHelper.rMutex );
+    if (!rBHelper.bDisposed && !rBHelper.bInDispose)
+    {
+        rBHelper.bInDispose = sal_True;
+        aGuard.clear();
+        lang::EventObject aEvt( static_cast< OWeakObject * >( this ) );
+        rBHelper.aLC.disposeAndClear( aEvt );
+        disposing();
+        rBHelper.bDisposed = sal_True;
+        rBHelper.bInDispose = sal_False;
+    }
+}
+//__________________________________________________________________________________________________
+void WeakAggComponentImplHelperBase::addEventListener(
+    Reference< lang::XEventListener > const & xListener )
+    throw (RuntimeException)
+{
+    rBHelper.addListener( ::getCppuType( &xListener ), xListener );
+}
+//__________________________________________________________________________________________________
+void WeakAggComponentImplHelperBase::removeEventListener(
+    Reference< lang::XEventListener > const & xListener )
+    throw (RuntimeException)
+{
+    rBHelper.removeListener( ::getCppuType( &xListener ), xListener );
+}
+
+}

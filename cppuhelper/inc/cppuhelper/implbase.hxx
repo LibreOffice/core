@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-16 12:12:59 $
+ *  last change: $Author: dbo $ $Date: 2001-05-21 09:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ struct ClassData##N : public ClassDataBase \
         {} \
 }; \
 template< __CLASS_IFC##N > \
-class ImplHelperBase##N \
+class SAL_NO_VTABLE ImplHelperBase##N \
     : public ::com::sun::star::lang::XTypeProvider \
     , __PUBLIC_IFC##N \
 { \
@@ -160,7 +160,7 @@ protected: \
     } \
 }; \
 template< __CLASS_IFC##N > \
-class ImplHelper##N \
+class SAL_NO_VTABLE ImplHelper##N \
     : public ImplHelperBase##N< __IFC##N > \
 { \
     static ClassData##N s_aCD; \
@@ -173,7 +173,7 @@ public: \
         { return getClassData( s_aCD ).getImplementationId(); } \
 }; \
 template< __CLASS_IFC##N > \
-class WeakImplHelper##N \
+class SAL_NO_VTABLE WeakImplHelper##N \
     : public ::cppu::OWeakObject \
     , public ImplHelperBase##N< __IFC##N > \
 { \
@@ -194,7 +194,7 @@ public: \
         { return getClassData( s_aCD ).getImplementationId(); } \
 }; \
 template< __CLASS_IFC##N > \
-class WeakAggImplHelper##N \
+class SAL_NO_VTABLE WeakAggImplHelper##N \
     : public ::cppu::OWeakAggObject \
     , public ImplHelperBase##N< __IFC##N > \
 { \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase4.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-14 11:58:06 $
+ *  last change: $Author: dbo $ $Date: 2001-05-21 09:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ namespace cppu
                WeakAggComponentImplHelperN<>.
     */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4 >
-    class ImplHelperBase4
+    class SAL_NO_VTABLE ImplHelperBase4
         : public ::com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4
     {
@@ -131,7 +131,7 @@ namespace cppu
         class MyImpl : public ::cppu::ImplHelperN<> { ... };
     */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4 >
-    class ImplHelper4
+    class SAL_NO_VTABLE ImplHelper4
         : public ImplHelperBase4< Ifc1, Ifc2, Ifc3, Ifc4 >
     {
         static ClassData4 s_aCD;
@@ -153,7 +153,7 @@ namespace cppu
         class MyImpl : public ::cppu::WeakImplHelperN<> { ... };
     */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4 >
-    class WeakImplHelper4
+    class SAL_NO_VTABLE WeakImplHelper4
         : public ::cppu::OWeakObject
         , public ImplHelperBase4< Ifc1, Ifc2, Ifc3, Ifc4 >
     {
@@ -183,7 +183,7 @@ namespace cppu
         class MyImpl : public ::cppu::WeakAggImplHelperN<> { ... };
     */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4 >
-    class WeakAggImplHelper4
+    class SAL_NO_VTABLE WeakAggImplHelper4
         : public ::cppu::OWeakAggObject
         , public ImplHelperBase4< Ifc1, Ifc2, Ifc3, Ifc4 >
     {

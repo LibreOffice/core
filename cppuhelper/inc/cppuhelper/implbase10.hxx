@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase10.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-14 11:58:06 $
+ *  last change: $Author: dbo $ $Date: 2001-05-21 09:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ namespace cppu
                WeakAggComponentImplHelperN<>.
     */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9, class Ifc10 >
-    class ImplHelperBase10
+    class SAL_NO_VTABLE ImplHelperBase10
         : public ::com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8, public Ifc9, public Ifc10
     {
@@ -145,7 +145,7 @@ namespace cppu
         class MyImpl : public ::cppu::ImplHelperN<> { ... };
     */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9, class Ifc10 >
-    class ImplHelper10
+    class SAL_NO_VTABLE ImplHelper10
         : public ImplHelperBase10< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10 >
     {
         static ClassData10 s_aCD;
@@ -167,7 +167,7 @@ namespace cppu
         class MyImpl : public ::cppu::WeakImplHelperN<> { ... };
     */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9, class Ifc10 >
-    class WeakImplHelper10
+    class SAL_NO_VTABLE WeakImplHelper10
         : public ::cppu::OWeakObject
         , public ImplHelperBase10< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10 >
     {
@@ -197,7 +197,7 @@ namespace cppu
         class MyImpl : public ::cppu::WeakAggImplHelperN<> { ... };
     */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9, class Ifc10 >
-    class WeakAggImplHelper10
+    class SAL_NO_VTABLE WeakAggImplHelper10
         : public ::cppu::OWeakAggObject
         , public ImplHelperBase10< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10 >
     {

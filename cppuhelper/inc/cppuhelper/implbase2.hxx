@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase2.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-14 11:58:06 $
+ *  last change: $Author: dbo $ $Date: 2001-05-21 09:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ namespace cppu
                WeakAggComponentImplHelperN<>.
     */
     template< class Ifc1, class Ifc2 >
-    class ImplHelperBase2
+    class SAL_NO_VTABLE ImplHelperBase2
         : public ::com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2
     {
@@ -128,7 +128,7 @@ namespace cppu
         class MyImpl : public ::cppu::ImplHelperN<> { ... };
     */
     template< class Ifc1, class Ifc2 >
-    class ImplHelper2
+    class SAL_NO_VTABLE ImplHelper2
         : public ImplHelperBase2< Ifc1, Ifc2 >
     {
         static ClassData2 s_aCD;
@@ -150,7 +150,7 @@ namespace cppu
         class MyImpl : public ::cppu::WeakImplHelperN<> { ... };
     */
     template< class Ifc1, class Ifc2 >
-    class WeakImplHelper2
+    class SAL_NO_VTABLE WeakImplHelper2
         : public ::cppu::OWeakObject
         , public ImplHelperBase2< Ifc1, Ifc2 >
     {
@@ -180,7 +180,7 @@ namespace cppu
         class MyImpl : public ::cppu::WeakAggImplHelperN<> { ... };
     */
     template< class Ifc1, class Ifc2 >
-    class WeakAggImplHelper2
+    class SAL_NO_VTABLE WeakAggImplHelper2
         : public ::cppu::OWeakAggObject
     , public ImplHelperBase2< Ifc1, Ifc2 >
     {
