@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 15:28:39 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -155,6 +154,10 @@
 #endif
 #ifndef _OUTLINE_HRC
 #include <outline.hrc>
+#endif
+
+#ifndef _PARATR_HXX
+#include <paratr.hxx>
 #endif
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
@@ -480,7 +483,21 @@ short SwOutlineTabDialog::Ok()
     {
         SwTxtFmtColl &rTxtColl = rWrtSh.GetTxtFmtColl(i);
         if( !rTxtColl.IsDefault() )
+        {
+            const SwNumRule * pOutlineRule = rWrtSh.GetOutlineNumRule();
+
             rTxtColl.SetOutlineLevel( (BYTE)GetLevel(rTxtColl.GetName()));
+
+            if ((BYTE)GetLevel(rTxtColl.GetName()) == NO_NUMBERING)
+            {
+                rTxtColl.ResetAttr(RES_PARATR_NUMRULE);
+            }
+            else
+            {
+                SwNumRuleItem aItem(pOutlineRule->GetName());
+                rTxtColl.SetAttr(aItem);
+            }
+        }
     }
 
     for( i = 0; i < MAXLEVEL; ++i )
