@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:12:41 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,7 +523,7 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
         case SCDRAWTRANS_TYPE_DRAWMODEL:
             {
                 SdrModel* pDrawModel = (SdrModel*)pUserObject;
-                pDrawModel->SetStreamingSdrModel(TRUE);
+//BFS04                pDrawModel->SetStreamingSdrModel(TRUE);
                 rxOStm->SetBufferSize( 0xff00 );
 
                 // #108584#
@@ -557,7 +557,7 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                     if( SvxDrawingLayerExport( pDrawModel, xDocOut ) )
                         rxOStm->Commit();
                 }
-                pDrawModel->SetStreamingSdrModel(FALSE);
+//BFS04             pDrawModel->SetStreamingSdrModel(FALSE);
                 bRet = ( rxOStm->GetError() == ERRCODE_NONE );
             }
             break;
