@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ab $ $Date: 2002-04-23 14:52:00 $
+ *  last change: $Author: ab $ $Date: 2002-04-29 11:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,7 +585,7 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
 }
 
 // Deklaration Konvertierung von Sbx nach Uno mit bekannter Zielklasse
-Any sbxToUnoValue( SbxVariable* pVar, const Reference< XIdlClass >& xIdlTargetClass );
+Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty = NULL );
 
 // Konvertierung von Sbx nach Uno ohne bekannte Zielklasse fuer TypeClass_ANY
 Any sbxToUnoValue( SbxVariable* pVar )
@@ -646,21 +646,29 @@ Any sbxToUnoValue( SbxVariable* pVar )
         }
     }
 
-    return sbxToUnoValue( pVar, TypeToIdlClass( aType ) );
+    return sbxToUnoValue( pVar, aType );
 }
 
 // Konvertierung von Sbx nach Uno mit bekannter Zielklasse
-Any sbxToUnoValue( SbxVariable* pVar, const Reference< XIdlClass >& xIdlTargetClass )
+Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty )
 {
     Any aRetVal;
-    //aRetVal.setVoid();
 
-    TypeClass eType = xIdlTargetClass->getTypeClass();
+    // #94560 No conversion of empty/void for MAYBE_VOID properties
+    if( pUnoProperty && pUnoProperty->Attributes & PropertyAttribute::MAYBEVOID )
+    {
+        if( pVar->IsEmpty() )
+            return aRetVal;
+    }
+
+    TypeClass eType = rType.getTypeClass();
     switch( eType )
     {
         case TypeClass_INTERFACE:
         case TypeClass_STRUCT:
         {
+            Reference< XIdlClass > xIdlTargetClass = TypeToIdlClass( rType );
+
             // Null-Referenz?
             if( pVar->IsNull() && eType == TypeClass_INTERFACE )
             {
@@ -691,9 +699,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Reference< XIdlClass >& xIdlTargetCl
         // Array -> Sequence
         case TypeClass_ENUM:
         {
-            OUString aClassName = xIdlTargetClass->getName();
-            Type aEnumType( xIdlTargetClass->getTypeClass(), aClassName.getStr() );
-            aRetVal = int2enum( pVar->GetLong(), aEnumType );
+            aRetVal = int2enum( pVar->GetLong(), rType );
         }
         break;
 
@@ -706,6 +712,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Reference< XIdlClass >& xIdlTargetCl
                 SbxDimArray* pArray = (SbxDimArray*)pObj;
 
                 // Instanz der geforderten Sequence erzeugen
+                Reference< XIdlClass > xIdlTargetClass = TypeToIdlClass( rType );
                 xIdlTargetClass->createObject( aRetVal );
 
                 // es muss ein eindimensionales Array sein
@@ -729,7 +736,6 @@ Any sbxToUnoValue( SbxVariable* pVar, const Reference< XIdlClass >& xIdlTargetCl
                         ((typelib_IndirectTypeDescription *)pSeqTD)->pType;
                     Type aElemType( pElementTD->pWeakRef );
 #endif
-                    Reference< XIdlClass > xElementClass = TypeToIdlClass( aElemType );
 
                     // Alle Array-Member umwandeln und eintragen
                     short nIdx = nLower;
@@ -738,7 +744,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Reference< XIdlClass >& xIdlTargetCl
                         SbxVariableRef xVar = pArray->Get( &nIdx );
 
                         // Wert von Sbx nach Uno wandeln
-                        Any aAnyValue = sbxToUnoValue( (SbxVariable*)xVar, xElementClass );
+                        Any aAnyValue = sbxToUnoValue( (SbxVariable*)xVar, aElemType );
 
                         try
                         {
@@ -1013,7 +1019,7 @@ String Impl_DumpProperties( const String& rName, SbUnoObject* pUnoObj )
                 // damit nicht immer nur SbxEMPTY ausgegben wird.
                 if( rProp.Attributes & PropertyAttribute::MAYBEVOID )
                 {
-                    eType = unoToSbxType( TypeToIdlClass( rProp.Type ) );
+                    eType = unoToSbxType( rProp.Type.getTypeClass() );
                     bMaybeVoid = TRUE;
                 }
                 if( eType == SbxOBJECT )
@@ -1236,7 +1242,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                     }
 
                     // Wert von Uno nach Sbx uebernehmen
-                    Any aAnyValue = sbxToUnoValue( pVar, TypeToIdlClass( pProp->aUnoProp.Type ) );
+                    Any aAnyValue = sbxToUnoValue( pVar, pProp->aUnoProp.Type, &pProp->aUnoProp );
                     try
                     {
                         // Wert setzen
@@ -1320,8 +1326,11 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                             const Reference< XIdlClass >& rxClass = rInfo.aType;
                             //const XIdlClassRef& rxClass = pUnoParams[i];
 
+
+                            com::sun::star::uno::Type aType( rxClass->getTypeClass(), rxClass->getName() );
+
                             // ACHTUNG: Bei den Sbx-Parametern den Offset nicht vergessen!
-                            pAnyArgs[i] = sbxToUnoValue( pParams->Get( (USHORT)(i+1) ), rxClass );
+                            pAnyArgs[i] = sbxToUnoValue( pParams->Get( (USHORT)(i+1) ), aType );
 
                             // Wenn es nicht schon feststeht pruefen, ob Out-Parameter vorliegen
                             if( !bOutParams )
@@ -1734,7 +1743,7 @@ SbxVariable* SbUnoObject::Find( const XubString& rName, SbxClassType t )
                     if( rProp.Attributes & PropertyAttribute::MAYBEVOID )
                         eSbxType = SbxVARIANT;
                     else
-                        eSbxType = unoToSbxType( TypeToIdlClass( rProp.Type ) );
+                        eSbxType = unoToSbxType( rProp.Type.getTypeClass() );
 
                     // Property anlegen und reinbraten
                     SbxVariableRef xVarRef = new SbUnoProperty( rProp.Name, eSbxType, rProp, 0 );
@@ -1888,7 +1897,7 @@ void SbUnoObject::implCreateAll( void )
         if( rProp.Attributes & PropertyAttribute::MAYBEVOID )
             eSbxType = SbxVARIANT;
         else
-            eSbxType = unoToSbxType( TypeToIdlClass( rProp.Type ) );
+            eSbxType = unoToSbxType( rProp.Type.getTypeClass() );
 
         // Property anlegen und reinbraten
         SbxVariableRef xVarRef = new SbUnoProperty( rProp.Name, eSbxType, rProp, i );
