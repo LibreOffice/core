@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhtml.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:07:13 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:48:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,10 +104,6 @@
 #endif
 #ifndef _INETTYPE_HXX
 #include <svtools/inettype.hxx>
-#endif
-
-#ifndef _INETBND_HXX
-#include <so3/inetbnd.hxx>
 #endif
 
 #ifndef _RTL_TENCINFO_H
