@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 14:11:52 $
+ *  last change: $Author: khz $ $Date: 2000-11-23 13:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,6 +648,7 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     bTableInApo     = pRdr->bTableInApo;
     bAnl            = pRdr->bAnl;
     nAktColl        = pRdr->nAktColl;
+    nNoAttrScan     = pRdr->pSBase->GetNoAttrScan();
 
                                     // Tracking beginnt neu
     pRdr->bHdFtFtnEdn = TRUE;
@@ -673,6 +674,7 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     if (nStartCp != -1)
         pRdr->pPlcxMan = new WW8PLCFMan( pRdr->pSBase,
             pOldPlcxMan->GetManType(), nStartCp );
+    pRdr->pSBase->SetNoAttrScan( 0 );
 }
 
 void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
@@ -691,6 +693,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->bTableInApo   = bTableInApo;
     pRdr->bAnl          = bAnl;
     pRdr->nAktColl      = nAktColl;
+    pRdr->pSBase->SetNoAttrScan( nNoAttrScan );
 
     // schliesse alle Attribute, da sonst Attribute
     // entstehen koennen, die aus dem Fly rausragen
@@ -731,6 +734,7 @@ void SwWW8ImplReader::Read_HdFtFtnText( const SwNodeIndex* pSttIdx, long nStartC
     aSave.Restore( this );
     DeleteCtrlStk();
     pCtrlStck = pOldStck;
+    pSBase->SetNoAttrScan( 0 );
 #else
     aSave.Restore( this );
 #endif
@@ -1646,6 +1650,22 @@ void SwWW8ImplReader::ProcessAktCollChange( WW8PLCFManResult& rRes,
         if( bReSync )
             *pStartAttr = pPlcxMan->Get( &rRes ); // hole Attribut-Pos neu
     }
+
+
+/*
+SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult & {...}, unsigned char * 0x0012d6d8, unsigned char 0x01) line 1643
+SwWW8ImplReader::ReadTextAttr(long & 0x00000000, unsigned char & 0x00) line 1679
+SwWW8ImplReader::ReadAttrs(long & 0x00000000, long & 0x00000000, unsigned char & 0x00) line 1762 + 16 bytes
+SwWW8ImplReader::ReadText(long 0x00000000, long 0x00000267, short 0x0000) line 1860
+SwWW8ImplReader::LoadDoc1(SwPaM & {...}, WW8Glossary * 0x00000000) line 2270
+SwWW8ImplReader::LoadDoc(SwPaM & {...}, WW8Glossary * 0x00000000) line 2609 + 16 bytes
+WW8Reader::Read(SwDoc & {...}, SwPaM & {...}, const String & {???}) line 2675 + 14 bytes
+SW612MI! SwReader::Read(class Reader const &) + 779 bytes
+SW612MI! SwDocShell::ConvertFrom(class SfxMedium &) + 245 bytes
+SFX612MI! SfxObjectShell::DoLoad(class SfxMedium *) + 3576 bytes
+*/
+
+
     if( !bTabRowEnd )
     {
         SetTxtFmtCollAndListLevel( *pPaM, pCollA[ nAktColl ]);
@@ -2890,11 +2910,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.3 2000-11-20 14:11:52 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.4 2000-11-23 13:37:53 khz Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/11/20 14:11:52  jp
+      Read_FieldIniFlags removed
+
       Revision 1.2  2000/11/15 14:31:46  jp
       GetFilterFlags: don't insert SW-Objects
 

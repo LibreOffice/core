@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-24 14:26:55 $
+ *  last change: $Author: khz $ $Date: 2000-11-23 13:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1867,16 +1867,16 @@ BOOL WW8PLCFx_Fc_FKP::NewFkp()
         DELETEZ( pFkp );
         pFkp = new WW8Fkp( GetVersion(), pFKPStrm, pDataStrm, nPo,
                             pFkpSizeTab[ ePLCF ],
-                            ePLCF, nStartFc );
+                            ePLCF, GetStartFc() );
     }
     else // khz test1 //
     {
 //      pFkp->SetIdx( 0 );
-//      if( nStartFc >= 0 )
-//          pFkp->SeekPos( nStartFc );
+//      if( GetStartFc() >= 0 )
+//          pFkp->SeekPos( GetStartFc() );
     }
 
-//  nStartFc = -1;                                  // Nur das erste Mal
+//  SetStartFc( -1 );                                   // Nur das erste Mal
     return TRUE;
 }
 
@@ -1889,22 +1889,22 @@ WW8PLCFx_Fc_FKP::WW8PLCFx_Fc_FKP(SvStream* pSt, SvStream* pTblSt,
     pDataStrm( pDataSt ),
     ePLCF( ePl ),
     pFkp( 0 ),
-    nStartFc( nStartFcL ),
     pPCDAttrs( pPLCFx_PCDAttrs_)
 {
+    SetStartFc( nStartFcL );
     long nLenStruct = (8 > rFib.nVersion) ? 2 : 4;
     if( ePl == CHP )
         pPLCF = new WW8PLCF( pTblSt, rFib.fcPlcfbteChpx,
                         rFib.lcbPlcfbteChpx,
                         nLenStruct,
-                        nStartFc,
+                        GetStartFc(),
                         rFib.pnChpFirst,
                         rFib.cpnBteChp );
     else
         pPLCF = new WW8PLCF( pTblSt, rFib.fcPlcfbtePapx,
                         rFib.lcbPlcfbtePapx,
                         nLenStruct,
-                        nStartFc,
+                        GetStartFc(),
                         rFib.pnPapFirst,
                         rFib.cpnBtePap );
 }
@@ -1945,7 +1945,7 @@ void WW8PLCFx_Fc_FKP::SetIdx( ULONG nIdx )
 BOOL WW8PLCFx_Fc_FKP::SeekPos( WW8_FC nFcPos )
 {
     // StartPos for next Where()
-    nStartFc = nFcPos;
+    SetStartFc( nFcPos );
 
     // find StartPos for next pPLCF->Get()
     BOOL bRet = pPLCF->SeekPos( nFcPos );
@@ -3710,12 +3710,14 @@ void WW8PLCFx::Save( WW8PLCFxSave1& rSave ) const
      rSave.nPLCFxPos    = GetIdx();
     rSave.nPLCFxPos2   = GetIdx2();
     rSave.nPLCFxMemOfs = 0;
+    rSave.nStartFC     = GetStartFc();
 }
 
 void WW8PLCFx::Restore( const WW8PLCFxSave1& rSave )
 {
-    SetIdx(  rSave.nPLCFxPos  );
-    SetIdx2( rSave.nPLCFxPos2 );
+    SetIdx(     rSave.nPLCFxPos  );
+    SetIdx2(    rSave.nPLCFxPos2 );
+    SetStartFc( rSave.nStartFC   );
 }
 
 
@@ -5996,11 +5998,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.3 2000-10-24 14:26:55 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.4 2000-11-23 13:37:53 khz Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/10/24 14:26:55  jp
+      move some code out of the dump define
+
       Revision 1.2  2000/10/20 11:19:29  khz
       #78761# don't reset nStartFc when calling WW8PLCFx_Fc_FKP::NewFkp()
 

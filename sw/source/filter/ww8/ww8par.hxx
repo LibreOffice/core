@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 14:09:17 $
+ *  last change: $Author: khz $ $Date: 2000-11-23 13:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,6 +354,7 @@ class WW8ReaderSave
     WW8SwFlyPara* pSFlyPara;
     WW8TabDesc* pTableDesc;
     USHORT nAktColl;
+    USHORT nNoAttrScan;
     sal_Unicode cSymbol;
     BOOL bIgnoreText    : 1;
     BOOL bDontCreateSep : 1;
@@ -1115,11 +1116,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.5 2000-11-20 14:09:17 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.6 2000-11-23 13:37:53 khz Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/11/20 14:09:17  jp
+      Read_FieldIniFlags removed
+
       Revision 1.4  2000/11/01 12:12:16  jp
       optimize: use the same code to read MAC-Pict
 

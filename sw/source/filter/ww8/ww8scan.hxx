@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khz $ $Date: 2000-11-21 11:23:57 $
+ *  last change: $Author: khz $ $Date: 2000-11-23 13:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ struct WW8PLCFxSave1
     ULONG nPLCFxPos;
     ULONG nPLCFxPos2;       // fuer PLCF_Cp_Fkp: PieceIter-Pos
     long nPLCFxMemOfs;
+    WW8_FC nStartFC;
     WW8_CP nAttrStart;
     WW8_CP nAttrEnd;
     BOOL   bLineEnd;
@@ -330,6 +331,7 @@ class WW8PLCFx              // virtueller Iterator fuer Piece Table Exceptions
 {
     BYTE nVersion;              // Versionsnummer des FIB
     BOOL bIsSprm;               // PLCF von Sprms oder von anderem ( Footnote, ... )
+    WW8_FC nStartFc;
 
 public:
     WW8PLCFx( BYTE nFibVersion, BOOL bSprm )
@@ -351,6 +353,8 @@ public:
     virtual void Save(          WW8PLCFxSave1& rSave ) const;
     virtual void Restore( const WW8PLCFxSave1& rSave );
     BYTE GetVersion() const { return nVersion; }
+    void    SetStartFc( WW8_FC nFc ) { nStartFc = nFc; }
+    WW8_FC  GetStartFc(      ) const { return nStartFc; }
 };
 
 enum eCutT { CUT_NONE = 0, CUT_START, CUT_END, CUT_BOTH };
@@ -475,7 +479,6 @@ class WW8PLCFx_Fc_FKP : public WW8PLCFx     // Iterator fuer Piece Table Excepti
     SvStream* pDataStrm;        // Input-File
     WW8PLCF* pPLCF;
     WW8Fkp* pFkp;
-    WW8_FC nStartFc;
 
     BOOL NewFkp();
 
@@ -837,6 +840,7 @@ public:
     WW8_FC WW8Cp2Fc( WW8_CP nCpPos, BOOL* pIsUnicode = 0,
                      WW8_CP* pNextPieceCp = 0, BOOL* pTestFlag = 0 ) const;
     void SetNoAttrScan( USHORT nValue ) { nNoAttrScan = nValue; };
+    USHORT GetNoAttrScan(){ return nNoAttrScan; }
 
     USHORT WW8ReadString( SvStream& rStrm, String& rStr,
                             WW8_CP nAktStartCp, long nTotalLen,
@@ -1536,12 +1540,15 @@ public:
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.2 2000-11-21 11:23:57 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.3 2000-11-23 13:37:53 khz Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/11/21 11:23:57  khz
+      added comments
+
       Revision 1.1.1.1  2000/09/18 17:14:59  hr
       initial import
 
