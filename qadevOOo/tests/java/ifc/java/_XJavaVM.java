@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XJavaVM.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:52 $
+ *  last change:$Date: 2003-09-08 10:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,11 @@
 
 package ifc.java;
 
-import com.sun.star.java.XJavaVM;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
+
+import com.sun.star.java.XJavaVM;
 
 /**
 * Testing <code>com.sun.star.java.XJavaVM</code>
