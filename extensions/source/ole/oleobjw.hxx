@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleobjw.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-19 11:00:15 $
+ *  last change: $Author: jl $ $Date: 2000-10-20 11:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 
 #include <tools/presys.h>
 #define _WIN32_WINNT 0x0400
-#define _WIN32_DCOM
 #include <atlbase.h>
 #include <vector>
 #include <hash_map>
