@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-05-21 14:47:26 $
+ *  last change: $Author: kz $ $Date: 2002-05-27 20:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text[ polish ] = "Color scheme";
         Text[ portuguese_brazilian ] = "Color scheme";
         Text[ japanese ] = "Color scheme";
-        Text[ korean ] = "Color scheme";
+        Text[ korean ] = "색 도표";
         Text[ chinese_simplified ] = "Color scheme";
-        Text[ chinese_traditional ] = "Color scheme";
+        Text[ chinese_traditional ] = "顔色圖案";
         Text[ turkish ] = "Color scheme";
         Text[ arabic ] = "Color scheme";
         Text[ catalan ] = "Color scheme";
@@ -120,9 +120,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text[ polish ] = "Scheme";
         Text[ portuguese_brazilian ] = "Scheme";
         Text[ japanese ] = "Scheme";
-        Text[ korean ] = "Scheme";
+        Text[ korean ] = "도표";
         Text[ chinese_simplified ] = "Scheme";
-        Text[ chinese_traditional ] = "Scheme";
+        Text[ chinese_traditional ] = "顔色圖案";
         Text[ turkish ] = "Scheme";
         Text[ arabic ] = "Scheme";
         Text[ catalan ] = "Scheme";
@@ -156,9 +156,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text[ polish ] = "Save...";
         Text[ portuguese_brazilian ] = "Save...";
         Text[ japanese ] = "Save...";
-        Text[ korean ] = "Save...";
+        Text[ korean ] = "저장...";
         Text[ chinese_simplified ] = "Save...";
-        Text[ chinese_traditional ] = "Save...";
+        Text[ chinese_traditional ] = "儲存...";
         Text[ turkish ] = "Save...";
         Text[ arabic ] = "Save...";
         Text[ catalan ] = "Save...";
@@ -184,9 +184,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text[ polish ] = "Delete";
         Text[ portuguese_brazilian ] = "Delete";
         Text[ japanese ] = "Delete";
-        Text[ korean ] = "Delete";
+        Text[ korean ] = "삭제";
         Text[ chinese_simplified ] = "Delete";
-        Text[ chinese_traditional ] = "Delete";
+        Text[ chinese_traditional ] = "刪除";
         Text[ turkish ] = "Delete";
         Text[ arabic ] = "Delete";
         Text[ catalan ] = "Delete";
@@ -213,9 +213,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text[ polish ] = "Scheme";
         Text[ portuguese_brazilian ] = "Scheme";
         Text[ japanese ] = "Scheme";
-        Text[ korean ] = "Scheme";
+        Text[ korean ] = "도표";
         Text[ chinese_simplified ] = "Scheme";
-        Text[ chinese_traditional ] = "Scheme";
+        Text[ chinese_traditional ] = "顔色圖案";
         Text[ turkish ] = "Scheme";
         Text[ arabic ] = "Scheme";
         Text[ catalan ] = "Scheme";
@@ -254,7 +254,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
             Text[ japanese ] = "On";
             Text[ korean ] = "On";
             Text[ chinese_simplified ] = "On";
-            Text[ chinese_traditional ] = "On";
+            Text[ chinese_traditional ] = "啟動";
             Text[ turkish ] = "On";
             Text[ arabic ] = "On";
             Text[ catalan ] = "On";
@@ -278,9 +278,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
             Text[ polish ] = "User interface elements";
             Text[ portuguese_brazilian ] = "User interface elements";
             Text[ japanese ] = "User interface elements";
-            Text[ korean ] = "User interface elements";
+            Text[ korean ] = "사용자 인터페이스 구성 요소";
             Text[ chinese_simplified ] = "User interface elements";
-            Text[ chinese_traditional ] = "User interface elements";
+            Text[ chinese_traditional ] = "使用者介面的元件";
             Text[ turkish ] = "User interface elements";
             Text[ arabic ] = "User interface elements";
             Text[ catalan ] = "User interface elements";
@@ -304,9 +304,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
             Text[ polish ] = "Color setting";
             Text[ portuguese_brazilian ] = "Color setting";
             Text[ japanese ] = "Color setting";
-            Text[ korean ] = "Color setting";
+            Text[ korean ] = "색 설정";
             Text[ chinese_simplified ] = "Color setting";
-            Text[ chinese_traditional ] = "Color setting";
+            Text[ chinese_traditional ] = "顔色的設定";
             Text[ turkish ] = "Color setting";
             Text[ arabic ] = "Color setting";
             Text[ catalan ] = "Color setting";
@@ -330,9 +330,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
             Text[ polish ] = "Preview";
             Text[ portuguese_brazilian ] = "Preview";
             Text[ japanese ] = "Preview";
-            Text[ korean ] = "Preview";
+            Text[ korean ] = "미리 보기";
             Text[ chinese_simplified ] = "Preview";
-            Text[ chinese_traditional ] = "Preview";
+            Text[ chinese_traditional ] = "預覽";
             Text[ turkish ] = "Preview";
             Text[ arabic ] = "Preview";
             Text[ catalan ] = "Preview";
@@ -506,9 +506,9 @@ QueryBox RID_SVXQB_DELETE_COLOR_CONFIG
     Message[ polish ] = "Do you really want to delete the color scheme?";
     Message[ portuguese_brazilian ] = "Do you really want to delete the color scheme?";
     Message[ japanese ] = "Do you really want to delete the color scheme?";
-    Message[ korean ] = "Do you really want to delete the color scheme?";
+    Message[ korean ] = "색도표를 정말로 삭제하시기를 원하십니까?";
     Message[ chinese_simplified ] = "Do you really want to delete the color scheme?";
-    Message[ chinese_traditional ] = "Do you really want to delete the color scheme?";
+    Message[ chinese_traditional ] = "真的要刪除這個顔色圖案？";
     Message[ turkish ] = "Do you really want to delete the color scheme?";
     Message[ arabic ] = "Do you really want to delete the color scheme?";
     Message[ catalan ] = "Do you really want to delete the color scheme?";
@@ -531,9 +531,9 @@ String RID_SVXSTR_COLOR_CONFIG_DELETE
     Text[ polish ] = "Color Scheme Deletion";
     Text[ portuguese_brazilian ] = "Color Scheme Deletion";
     Text[ japanese ] = "Color Scheme Deletion";
-    Text[ korean ] = "Color Scheme Deletion";
+    Text[ korean ] = "색도표 삭제 확인";
     Text[ chinese_simplified ] = "Color Scheme Deletion";
-    Text[ chinese_traditional ] = "Color Scheme Deletion";
+    Text[ chinese_traditional ] = "確認刪除顔色圖案";
     Text[ turkish ] = "Color Scheme Deletion";
     Text[ arabic ] = "Color Scheme Deletion";
     Text[ catalan ] = "Color Scheme Deletion";
@@ -556,9 +556,9 @@ String RID_SVXSTR_COLOR_CONFIG_SAVE1
     Text[ polish ] = "Save scheme";
     Text[ portuguese_brazilian ] = "Save scheme";
     Text[ japanese ] = "Save scheme";
-    Text[ korean ] = "Save scheme";
+    Text[ korean ] = "도표 저장";
     Text[ chinese_simplified ] = "Save scheme";
-    Text[ chinese_traditional ] = "Save scheme";
+    Text[ chinese_traditional ] = "儲存顔色圖案";
     Text[ turkish ] = "Save scheme";
     Text[ arabic ] = "Save scheme";
     Text[ catalan ] = "Save scheme";
@@ -581,9 +581,9 @@ String RID_SVXSTR_COLOR_CONFIG_SAVE2
     Text[ polish ] = "Name of color scheme";
     Text[ portuguese_brazilian ] = "Name of color scheme";
     Text[ japanese ] = "Name of color scheme";
-    Text[ korean ] = "Name of color scheme";
+    Text[ korean ] = "색도표 이름";
     Text[ chinese_simplified ] = "Name of color scheme";
-    Text[ chinese_traditional ] = "Name of color scheme";
+    Text[ chinese_traditional ] = "顔色圖案的名稱";
     Text[ turkish ] = "Name of color scheme";
     Text[ arabic ] = "Name of color scheme";
     Text[ catalan ] = "Name of color scheme";
