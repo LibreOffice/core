@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:56:42 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,11 +377,10 @@ public:
     }
 
     /**
-      Perform a comparison of a substring in this string.
+      Match against a substring appearing in this string.
 
-      The result is true if and only if second string
-      represents the same sequence of characters in the first string at
-      the given position.
+      The result is true if and only if the second string appears as a substring
+      of this string, at the given position.
       This function can't be used for language specific comparison.
 
       @param    str         the object (substring) to be compared.
@@ -399,11 +398,11 @@ public:
     }
 
     /**
-      Perform a ASCII lowercase comparison of a substring in this string.
+      Match against a substring appearing in this string, ignoring the case of
+      ASCII letters.
 
-      The result is true if and only if second string
-      represents the same sequence of characters in the first string at
-      the given position.
+      The result is true if and only if the second string appears as a substring
+      of this string, at the given position.
       Character values between 65 and 90 (ASCII A-Z) are interpreted as
       values between 97 and 122 (ASCII a-z).
       This function can't be used for language specific comparison.
@@ -591,11 +590,10 @@ public:
     }
 
     /**
-      Perform a comparison of a substring in this string.
+      Match against a substring appearing in this string.
 
-      The result is true if and only if second string
-      represents the same sequence of characters in the first string at
-      the given position.
+      The result is true if and only if the second string appears as a substring
+      of this string, at the given position.
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
       all ASCII characters are in the allowed range between 0 and
@@ -618,11 +616,11 @@ public:
     }
 
     /**
-      Perform a ASCII lowercase comparison of a substring in this string.
+      Match against a substring appearing in this string, ignoring the case of
+      ASCII letters.
 
-      The result is true if and only if second string
-      represents the same sequence of characters in the first string at
-      the given position.
+      The result is true if and only if the second string appears as a substring
+      of this string, at the given position.
       Character values between 65 and 90 (ASCII A-Z) are interpreted as
       values between 97 and 122 (ASCII a-z).
       Since this method is optimized for performance, the ASCII character
