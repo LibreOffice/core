@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.162 $
+ *  $Revision: 1.163 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:33:33 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:21:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,21 +65,13 @@
 
 #define _SV_OUTDEV_CXX
 
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
-#endif
 
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
 #endif
-#else
-#ifndef _SV_RMOUTDEV_HXX
-#include <rmoutdev.hxx>
-#endif
-#endif // REMOTE_APPSERVER
 
 #ifndef _SV_SALLAYOUT_HXX
 #include <sallayout.hxx>
@@ -299,11 +291,7 @@ void OutputDevice::ImplUpdateFontData( BOOL bNewFontLists )
         if ( bNewFontLists )
         {
             // we need a graphics
-#ifndef REMOTE_APPSERVER
             if ( ImplGetGraphics() )
-#else
-            if ( ImplGetServerGraphics() )
-#endif
             {
                 if( mpFontList && mpFontList != pSVData->maGDIData.mpScreenFontList )
                     mpFontList->Clear();
@@ -398,9 +386,7 @@ void OutputDevice::ImplUpdateAllFontData( BOOL bNewFontLists )
         pFrame = pSVData->maWinData.mpFirstFrame;
         if ( pFrame )
         {
-#ifndef REMOTE_APPSERVER
             if ( pFrame->ImplGetGraphics() )
-#endif
                 pFrame->mpGraphics->GetDevFontList( pFrame->mpFrameData->mpFontList );
         }
     }
@@ -2870,11 +2856,7 @@ void OutputDevice::ImplInitTextColor()
 
     if ( mbInitTextColor )
     {
-#ifndef REMOTE_APPSERVER
         mpGraphics->SetTextColor( ImplColorToSal( GetTextColor() ) );
-#else
-        mpGraphics->SetTextColor( GetTextColor() );
-#endif
         mbInitTextColor = FALSE;
     }
 }
@@ -2899,16 +2881,10 @@ int OutputDevice::ImplNewFont()
 
     mbNewFont = FALSE;
 
-#ifndef REMOTE_APPSERVER
     // we need a graphics
     if ( !mpGraphics && !ImplGetGraphics() )
         return FALSE;
     SalGraphics* pGraphics = mpGraphics;
-#else
-    // due to clipping we may get NULL, so don't use return value
-    ImplGetServerGraphics();
-    ImplServerGraphics* pGraphics = mpGraphics;
-#endif
     ImplInitFontList();
 
     // convert to pixel height
@@ -3006,16 +2982,7 @@ int OutputDevice::ImplNewFont()
                 mpPDFWriter->getFontMetric( &pFontEntry->maFontSelData, &(pFontEntry->maMetric) );
             else
             {
-#ifndef REMOTE_APPSERVER
                 pGraphics->GetFontMetric( &(pFontEntry->maMetric) );
-#else
-                long nFactor = 0;
-                pGraphics->GetFontMetric(
-                                         pFontEntry->maMetric, nFactor,
-                                         0x21, 0x20, NULL,
-                                         (maFont.GetKerning() & KERNING_FONTSPECIFIC) != 0,
-                                         &pKernPairs, nKernPairs );
-#endif
             }
 
             pFontEntry->mbFixedFont     = pFontEntry->maMetric.mePitch == PITCH_FIXED;
@@ -3174,7 +3141,6 @@ void OutputDevice::ImplInitKerningPairs( ImplKernPairData* pKernPairs, long nKer
             pFontEntry->mpKernPairs = NULL;
             return;
         }
-#ifndef REMOTE_APPSERVER
         pFontEntry->mnKernPairs = mpGraphics->GetKernPairs( 0, NULL );
         if ( pFontEntry->mnKernPairs )
         {
@@ -3183,12 +3149,6 @@ void OutputDevice::ImplInitKerningPairs( ImplKernPairData* pKernPairs, long nKer
             pFontEntry->mnKernPairs = mpGraphics->GetKernPairs( pFontEntry->mnKernPairs, pKernPairs );
             pFontEntry->mpKernPairs = pKernPairs;
         }
-#else
-        if ( !pKernPairs )
-            nKernPairs = mpGraphics->GetKernPairs( &pKernPairs );
-        if ( nKernPairs )
-            pFontEntry->mpKernPairs = pKernPairs;
-#endif
 
         // Sort Kerning Pairs
         if ( pFontEntry->mpKernPairs )
@@ -3256,21 +3216,12 @@ void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
             Rectangle aRect( Point( nX, nY ), Size( nWidth+1, nHeight+1 ) );
             Polygon   aPoly( aRect );
             aPoly.Rotate( Point( nBaseX, nBaseY ), mpFontEntry->mnOrientation );
-#ifndef REMOTE_APPSERVER
             ImplDrawPolygon( aPoly );
-#else
-            mpGraphics->DrawPolygon( aPoly );
-#endif
             return;
         }
     }
 
-#ifndef REMOTE_APPSERVER
     mpGraphics->DrawRect( nX, nY, nWidth, nHeight, this );
-#else
-    Rectangle aRect( Point( nX, nY ), Size( nWidth, nHeight ) );
-    mpGraphics->DrawRect( aRect );
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -3282,7 +3233,6 @@ void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
     long nX = aBase.X();
     long nY = aBase.Y();
 
-#ifndef REMOTE_APPSERVER
     if ( mbLineColor || mbInitLineColor )
     {
         mpGraphics->SetLineColor();
@@ -3294,21 +3244,6 @@ void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
     ImplDrawTextRect( nX, nY, nX, nY-mpFontEntry->maMetric.mnAscent-mnEmphasisAscent,
                       nWidth,
                       mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent );
-#else
-    Color aOldLineColor = GetLineColor();
-    Color aOldFillColor = GetFillColor();
-    SetLineColor();
-    SetFillColor( GetTextFillColor() );
-    if ( mbInitLineColor )
-        ImplInitLineColor();
-    if ( mbInitFillColor )
-        ImplInitFillColor();
-    ImplDrawTextRect( nX, nY, nX, nY-mpFontEntry->maMetric.mnAscent-mnEmphasisAscent,
-                      nWidth,
-                      mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent );
-    SetLineColor( aOldLineColor );
-    SetFillColor( aOldFillColor );
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -3541,11 +3476,7 @@ void OutputDevice::ImplInitAboveTextLineSize()
 static void ImplDrawWavePixel( long nOriginX, long nOriginY,
                                long nCurX, long nCurY,
                                short nOrientation,
-#ifndef REMOTE_APPSERVER
                                SalGraphics* pGraphics,
-#else
-                               ImplServerGraphics* pGraphics,
-#endif
                                OutputDevice* pOutDev,
                                BOOL bDrawPixAsRect,
 
@@ -3556,24 +3487,12 @@ static void ImplDrawWavePixel( long nOriginX, long nOriginY,
 
     if ( bDrawPixAsRect )
     {
-#ifndef REMOTE_APPSERVER
 
         pGraphics->DrawRect( nCurX, nCurY, nPixWidth, nPixHeight, pOutDev );
-#else
-        Point       aPos( nCurX, nCurY );
-        Size        aSize( nPixWidth, nPixHeight );
-        Rectangle   aRect( aPos, aSize );
-        pGraphics->DrawRect( aRect );
-#endif
     }
     else
     {
-#ifndef REMOTE_APPSERVER
         pGraphics->DrawPixel( nCurX, nCurY, pOutDev );
-#else
-        Point aPos( nCurX, nCurY );
-        pGraphics->DrawPixel( aPos );
-#endif
     }
 }
 
@@ -3591,15 +3510,8 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
     // Bei Hoehe von 1 Pixel reicht es, eine Linie auszugeben
     if ( (nLineWidth == 1) && (nHeight == 1) )
     {
-#ifndef REMOTE_APPSERVER
         mpGraphics->SetLineColor( ImplColorToSal( rColor ) );
         mbInitLineColor = TRUE;
-#else
-        Color aOldLineColor = GetLineColor();
-        SetLineColor( rColor );
-        if ( mbInitLineColor )
-            ImplInitLineColor();
-#endif
 
         long nEndX = nStartX+nWidth;
         long nEndY = nStartY;
@@ -3608,15 +3520,8 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
             ImplRotatePos( nBaseX, nBaseY, nStartX, nStartY, nOrientation );
             ImplRotatePos( nBaseX, nBaseY, nEndX, nEndY, nOrientation );
         }
-#ifndef REMOTE_APPSERVER
         mpGraphics->DrawLine( nStartX, nStartY, nEndX, nEndY, this );
-#else
-        mpGraphics->DrawLine( Point( nStartX, nStartY ), Point( nEndX, nEndY ) );
-#endif
 
-#ifdef REMOTE_APPSERVER
-        SetLineColor( aOldLineColor );
-#endif
     }
     else
     {
@@ -3631,15 +3536,9 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
         long    nPixWidth;
         long    nPixHeight;
         BOOL    bDrawPixAsRect;
-#ifdef REMOTE_APPSERVER
-        Color   aOldLineColor = GetLineColor();
-        Color   aOldFillColor = GetFillColor();
-
-#endif
         // Auf Druckern die Pixel per DrawRect() ausgeben
         if ( (GetOutDevType() == OUTDEV_PRINTER) || (nLineWidth > 1) )
         {
-#ifndef REMOTE_APPSERVER
             if ( mbLineColor || mbInitLineColor )
             {
                 mpGraphics->SetLineColor();
@@ -3647,29 +3546,14 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
             }
             mpGraphics->SetFillColor( ImplColorToSal( rColor ) );
             mbInitFillColor = TRUE;
-#else
-            SetLineColor();
-            SetFillColor( rColor );
-            if ( mbInitLineColor )
-                ImplInitLineColor();
-            if ( mbInitFillColor )
-                ImplInitFillColor();
-#endif
             bDrawPixAsRect  = TRUE;
             nPixWidth       = nLineWidth;
             nPixHeight      = ((nLineWidth*mnDPIX)+(mnDPIY/2))/mnDPIY;
         }
         else
         {
-#ifndef REMOTE_APPSERVER
             mpGraphics->SetLineColor( ImplColorToSal( rColor ) );
             mbInitLineColor = TRUE;
-#else
-            Color aOldLineColor = GetLineColor();
-            SetLineColor( rColor );
-            if ( mbInitLineColor )
-                ImplInitLineColor();
-#endif
             nPixWidth       = 1;
             nPixHeight      = 1;
             bDrawPixAsRect  = FALSE;
@@ -3731,10 +3615,6 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
             }
         }
 
-#ifdef REMOTE_APPSERVER
-        SetLineColor( aOldLineColor );
-        SetFillColor( aOldFillColor );
-#endif
     }
 }
 
@@ -3903,11 +3783,6 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
 
     if ( bNormalLines )
     {
-#ifdef REMOTE_APPSERVER
-        Color aOldLineColor = GetLineColor();
-        Color aOldFillColor = GetFillColor();
-#endif
-
         if ( eUnderline > UNDERLINE_LAST )
             eUnderline = UNDERLINE_SINGLE;
 
@@ -3980,7 +3855,6 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
 
         if ( nLineHeight )
         {
-#ifndef REMOTE_APPSERVER
             if ( mbLineColor || mbInitLineColor )
             {
                 mpGraphics->SetLineColor();
@@ -3988,14 +3862,6 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
             }
             mpGraphics->SetFillColor( ImplColorToSal( aUnderlineColor ) );
             mbInitFillColor = TRUE;
-#else
-            SetLineColor();
-            SetFillColor( aUnderlineColor );
-            if ( mbInitLineColor )
-                ImplInitLineColor();
-            if ( mbInitFillColor )
-                ImplInitFillColor();
-#endif
 
             nLeft = nX;
 
@@ -4172,7 +4038,6 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
 
         if ( nLineHeight )
         {
-#ifndef REMOTE_APPSERVER
             if ( mbLineColor || mbInitLineColor )
             {
                 mpGraphics->SetLineColor();
@@ -4180,14 +4045,6 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
             }
             mpGraphics->SetFillColor( ImplColorToSal( aStrikeoutColor ) );
             mbInitFillColor = TRUE;
-#else
-            SetLineColor();
-            SetFillColor( aStrikeoutColor );
-            if ( mbInitLineColor )
-                ImplInitLineColor();
-            if ( mbInitFillColor )
-                ImplInitFillColor();
-#endif
 
             nLeft = nX;
 
@@ -4201,10 +4058,6 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
             }
         }
 
-#ifdef REMOTE_APPSERVER
-        SetLineColor( aOldLineColor );
-        SetFillColor( aOldFillColor );
-#endif
     }
 }
 
@@ -5258,7 +5111,6 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
     if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
-#ifndef REMOTE_APPSERVER
     // we need a graphics
     if( !mpGraphics && !ImplGetGraphics() )
         return;
@@ -5266,10 +5118,6 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
         ImplInitClipRegion();
     if( mbOutputClipped )
         return;
-#else
-    if( !ImplGetServerGraphics() )
-        return;
-#endif
 
     // initialize font if needed to get text offsets
     // TODO: only needed for mnTextOff!=(0,0)
@@ -5303,7 +5151,6 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
     DBG_TRACE( "OutputDevice::DrawWaveLine()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-#ifndef REMOTE_APPSERVER
     if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
@@ -5361,19 +5208,6 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
      ImplDrawWaveLine( nStartX, nStartY, nStartX, nStartY,
                       nEndX-nStartX, nWaveHeight, 1,
                       nOrientation, GetLineColor() );
-#else
-    ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-    if ( pGraphics )
-    {
-        if ( mbInitLineColor )
-            ImplInitLineColor();
-
-        Point aPos1 = ImplLogicToDevicePixel( rStartPos );
-        Point aPos2 = ImplLogicToDevicePixel( rEndPos );
-        pGraphics->DrawWaveLine( aPos1, aPos2, nStyle );
-    }
-#endif
-
     if( mpAlphaVDev )
         mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos, nStyle );
 }
@@ -5719,15 +5553,10 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
 {
     SalLayout* pSalLayout = NULL;
 
-#ifndef REMOTE_APPSERVER
     // we need a graphics
     if( !mpGraphics )
         if( !ImplGetGraphics() )
             return NULL;
-#else
-    // due to clipping we may get NULL, so don't use return value
-    ImplGetServerGraphics();
-#endif
 
     // initialize font if needed
     if( mbNewFont )
@@ -6074,7 +5903,6 @@ void OutputDevice::DrawText( const Rectangle& rRect,
     if ( ( !IsDeviceOutputNecessary() && ! pVector ) || !rOrigStr.Len() || rRect.IsEmpty() )
         return;
 
-#ifndef REMOTE_APPSERVER
     // we need a graphics
     if( !mpGraphics && !ImplGetGraphics() )
         return;
@@ -6082,10 +5910,6 @@ void OutputDevice::DrawText( const Rectangle& rRect,
         ImplInitClipRegion();
     if( mbOutputClipped )
         return;
-#else
-    if( !ImplGetServerGraphics() )
-        return;
-#endif
 
     Color aOldTextColor;
     Color aOldTextFillColor;
@@ -6619,7 +6443,6 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
         return;
 
     // better get graphics here because ImplDrawMnemonicLine() will not
-#ifndef REMOTE_APPSERVER
     // we need a graphics
     if( !mpGraphics && !ImplGetGraphics() )
         return;
@@ -6627,10 +6450,6 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
         ImplInitClipRegion();
     if ( mbOutputClipped )
         return;
-#else
-    if( !ImplGetServerGraphics() )
-        return;
-#endif
 
     if( nIndex >= rStr.Len() )
         return;
@@ -7567,13 +7386,9 @@ BOOL OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
 {
     rFontCharMap.ImplSetDefaultRanges();
 
-#ifndef REMOTE_APPSERVER
     // we need a graphics
     if( !mpGraphics && !ImplGetGraphics() )
         return FALSE;
-#else
-    ImplGetServerGraphics();
-#endif
 
     if( mbNewFont )
         const_cast<OutputDevice&>(*this).ImplNewFont();
