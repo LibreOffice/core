@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:33:38 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 07:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,12 @@
 #include <rtl/math.hxx>
 #ifndef _TOOLS_INTN_HXX
 #include <tools/intn.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX //autogen
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
 #endif
 
 
@@ -199,8 +205,8 @@ BOOL SbiScanner::NextSym()
     // Zeile einlesen?
     if( !pLine )
     {
-        USHORT n = nBufPos;
-        USHORT nLen = aBuf.getLength();
+        INT32 n = nBufPos;
+        INT32 nLen = aBuf.getLength();
         if( nBufPos >= nLen )
             return FALSE;
         const sal_Unicode* p = aBuf.getStr();
@@ -231,7 +237,7 @@ BOOL SbiScanner::NextSym()
     if( *pLine == '#' ) pLine++, nCol++, bHash = TRUE;
 
     // Symbol? Dann Zeichen kopieren.
-    if( BasicSimpleCharClass::isAlpha( *pLine & 0xFF, bCompatible ) || *pLine == '_' )
+    if( BasicSimpleCharClass::isAlpha( *pLine, bCompatible ) || *pLine == '_' )
     {
         // Wenn nach '_' nichts kommt, ist es ein Zeilenabschluss!
         if( *pLine == '_' && !*(pLine+1) )
@@ -239,7 +245,7 @@ BOOL SbiScanner::NextSym()
             goto eoln;  }
         bSymbol = TRUE;
         short n = nCol;
-        for ( ; (BasicSimpleCharClass::isAlphaNumeric( *pLine & 0xFF, bCompatible ) || ( *pLine == '_' ) ); pLine++ )
+        for ( ; (BasicSimpleCharClass::isAlphaNumeric( *pLine, bCompatible ) || ( *pLine == '_' ) ); pLine++ )
             nCol++;
         aSym = aLine.copy( n, nCol - n );
         // Abschliessendes '_' durch Space ersetzen, wenn Zeilenende folgt
@@ -249,7 +255,7 @@ BOOL SbiScanner::NextSym()
         // Typkennung?
         // Das Ausrufezeichen bitte nicht testen, wenn
         // danach noch ein Symbol anschliesst
-        else if( *pLine != '!' || !BasicSimpleCharClass::isAlpha( pLine[ 1 ] & 0xFF, bCompatible ) )
+        else if( *pLine != '!' || !BasicSimpleCharClass::isAlpha( pLine[ 1 ], bCompatible ) )
         {
             SbxDataType t = GetSuffixType( *pLine );
             if( t != SbxVARIANT )
@@ -495,9 +501,9 @@ eoln:
     }
 }
 
-IsoLatinLetterTable BasicSimpleCharClass::aLetterTable;
+LetterTable BasicSimpleCharClass::aLetterTable;
 
-IsoLatinLetterTable::IsoLatinLetterTable( void )
+LetterTable::LetterTable( void )
 {
     for( int i = 0 ; i < 256 ; ++i )
         IsLetterTab[i] = false;
@@ -564,4 +570,14 @@ IsoLatinLetterTable::IsoLatinLetterTable( void )
     IsLetterTab[0xFD] = true;   // ý , SMALL LETTER Y WITH ACUTE ACCENT
     IsLetterTab[0xFE] = true;   // þ , SMALL LETTER THORN
     IsLetterTab[0xFF] = true;   // ÿ , SMALL LETTER Y WITH DIAERESIS
+}
+
+bool LetterTable::isLetterUnicode( sal_Unicode c )
+{
+    static CharClass* pCharClass = NULL;
+    if( pCharClass == NULL )
+        pCharClass = new CharClass( Application::GetSettings().GetLocale() );
+    String aStr( c );
+    bool bRet = pCharClass->isLetter( aStr, 0 );
+    return bRet;
 }
