@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:32:27 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XCHANGESLISTENER_HPP_
+#include <com/sun/star/util/XChangesListener.hpp>
+#endif
 
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
@@ -85,6 +88,10 @@
 
 #ifndef _UTL_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
+#endif
+
+#ifndef _SV_TIMER_HXX
+#include <vcl/timer.hxx>
 #endif
 
 #include <list>
@@ -321,7 +328,7 @@ public:
     EffectSequenceHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XTimeContainer >& xSequenceRoot );
     virtual ~EffectSequenceHelper();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getRootNode() const;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getRootNode();
 
     CustomAnimationEffectPtr append( const CustomAnimationPresetPtr& pDescriptor, const ::com::sun::star::uno::Any& rTarget, double fDuration = -1.0 );
     void append( const CustomAnimationEffectPtr& pEffect );
@@ -335,7 +342,7 @@ public:
     void processAfterEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
     void createEffects( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
 
-    virtual void disposeShape( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
+    virtual bool disposeShape( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
     virtual void insertTextRange( const com::sun::star::uno::Any& aTarget );
     virtual void disposeTextRange( const com::sun::star::uno::Any& aTarget );
     virtual bool hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
@@ -398,6 +405,7 @@ friend class MainSequence;
 public:
     InteractiveSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XTimeContainer >& xSequenceRoot, MainSequence* pMainSequence );
 
+    /** this method rebuilds the animation nodes */
     virtual void rebuild();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getTriggerShape() const { return mxEventSource; }
@@ -416,13 +424,21 @@ typedef std::list< InteractiveSequencePtr > InteractiveSequenceList;
 class MainSequence : public EffectSequenceHelper, public ISequenceListener
 {
     friend class UndoAnimation;
+    friend class MainSequenceRebuildGuard;
+
 public:
     MainSequence();
     MainSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xTimingRootNode );
+    ~MainSequence();
 
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getRootNode();
+
+    void reset( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xTimingRootNode );
+
+    /** this method rebuilds the animation nodes */
     virtual void rebuild();
 
-    virtual void disposeShape( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
+    virtual bool disposeShape( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
     virtual void insertTextRange( const com::sun::star::uno::Any& aTarget );
     virtual void disposeTextRange( const com::sun::star::uno::Any& aTarget );
     virtual bool hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
@@ -434,18 +450,52 @@ public:
 
     bool setTrigger( const CustomAnimationEffectPtr& pEffect, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xTriggerShape );
 
+    /** starts a timer that recreates the internal structure from the API core after 1 second */
+    void startRecreateTimer();
+
+    /** starts a timer that rebuilds the API core from the internal structure after 1 second */
+    void startRebuildTimer();
+
 protected:
+    /** permits rebuilds until unlockRebuilds() is called. All rebuild calls during a locked sequence are
+        process after unlockRebuilds() call. lockRebuilds() and unlockRebuilds() calls can be nested. */
+    void lockRebuilds();
+    void unlockRebuilds();
+
+    DECL_LINK( onTimerHdl, Timer * );
+
     virtual void implRebuild();
 
-    void init( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xTimingRootNode );
+    void init();
+
+    void create();
     virtual void reset();
 
     InteractiveSequencePtr createInteractiveSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape );
 
     InteractiveSequenceList maInteractiveSequenceList;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesListener > mxChangesListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::animations::XTimeContainer > mxTimingRootNode;
+    Timer maTimer;
+    bool mbTimerMode;
+    bool mbRebuilding;
+
+    long mnRebuildLockGuard;
+    bool mbPendingRebuildRequest;
 };
 
 typedef boost::shared_ptr< MainSequence > MainSequencePtr;
+
+class MainSequenceRebuildGuard
+{
+public:
+    MainSequenceRebuildGuard( const MainSequencePtr& pMainSequence );
+    ~MainSequenceRebuildGuard();
+
+private:
+    MainSequencePtr mpMainSequence;
+};
 
 }
 
