@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 22:22:15 $
+ *  last change: $Author: kz $ $Date: 2001-12-14 17:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ String STR_SVT_COLLATE_NORMAL
     Text[ swedish ] = "Normal";
     Text[ polish ] = "Standard";
     Text[ portuguese_brazilian ] = "Normal";
-    Text[ japanese ] = "通常ﾌｫﾝﾄ";
+    Text[ japanese ] = "通常フォント";
     Text[ korean ] = "정상";
     Text[ chinese_simplified ] = "一般";
     Text[ chinese_traditional ] = "一般";
@@ -238,7 +238,7 @@ String STR_SVT_COLLATE_PINYIN
     Text[ swedish ] = "Pinyin";
     Text[ polish ] = "Pinyin";
     Text[ portuguese_brazilian ] = "Pinyin";
-    Text[ japanese ] = "ﾋﾟﾝｲﾝ(中国語のﾛｰﾏ字表記法)";
+    Text[ japanese ] = "ピンイン(中国語のローマ字表記法)";
     Text[ korean ] = "Pinyin";
     Text[ chinese_simplified ] = "拼音";
     Text[ chinese_traditional ] = "拼音";
@@ -320,7 +320,7 @@ String STR_SVT_COLLATE_UNICODE
     Text[ swedish ] = "Unicode";
     Text[ polish ] = "Unicode";
     Text[ portuguese_brazilian ] = "Unicode";
-    Text[ japanese ] = "ﾕﾆｺｰﾄﾞ";
+    Text[ japanese ] = "ユニコード";
     Text[ korean ] = "유니코드";
     Text[ chinese_simplified ] = "统一码";
     Text[ chinese_traditional ] = "統一碼";
@@ -355,6 +355,7 @@ String STR_SVT_COLLATE_ZHUYIN
     Text[ catalan ] = "Zhuyin";
     Text[ finnish ] = "Zhuyin";
 };
+
 
 
 
