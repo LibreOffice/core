@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-01 14:06:47 $
+ *  last change: $Author: aw $ $Date: 2002-12-09 15:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1109,6 +1109,19 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
 
 BOOL SdrEditView::CombineMarkedObjects(BOOL bNoPolyPoly)
 {
+    // #105899# Start of Combine-Undo put to front, else ConvertMarkedToPolyObj would
+    // create a 2nd Undo-action and Undo-Comment.
+
+    // Undo-String will be set later
+    BegUndo(String(), String(),
+        bNoPolyPoly ? SDRREPFUNC_OBJ_COMBINE_ONEPOLY : SDRREPFUNC_OBJ_COMBINE_POLYPOLY);
+
+    // #105899# First, guarantee that all objects are converted to polyobjects,
+    // especially for SdrGrafObj with bitmap filling this is necessary to not
+    // loose the bitmap filling.
+    ConvertMarkedToPolyObj(TRUE);
+
+    // continue as before
     bCombineError = FALSE;
     XPolyPolygon aXPP;
     SdrObjList* pAktOL = NULL;
@@ -1116,10 +1129,6 @@ BOOL SdrEditView::CombineMarkedObjects(BOOL bNoPolyPoly)
     SdrMarkList aRemoveMerker;
 
     aMark.ForceSort();
-    // Der Comment wird spaeter zusammengebaut
-    BegUndo(String(), String(),
-        bNoPolyPoly ? SDRREPFUNC_OBJ_COMBINE_ONEPOLY : SDRREPFUNC_OBJ_COMBINE_POLYPOLY);
-
     ULONG nInsPos=0xFFFFFFFF;
     SdrObjList* pInsOL=NULL;
     SdrPageView* pInsPV=NULL;
