@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: dv $ $Date: 2001-04-06 14:20:04 $
+ *  last change: $Author: th $ $Date: 2001-05-11 11:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -745,7 +745,7 @@ String SfxDocumentTemplates::GetTemplatePath
 
         OUString aExtension = aURLObj.getExtension();
 
-        if ( ! aExtension.len() )
+        if ( ! aExtension.getLength() )
             aURLObj.setExtension( OUString( RTL_CONSTASCII_USTRINGPARAM( "vor" ) ) );
 
         return aURLObj.GetMainURL();
@@ -795,7 +795,7 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
 
         OUString aExtension = aURLObj.getExtension();
 
-        if ( ! aExtension.len() )
+        if ( ! aExtension.getLength() )
             aURLObj.setExtension( OUString( RTL_CONSTASCII_USTRINGPARAM( "vor" ) ) );
 
         return aURLObj.GetMainURL();
@@ -2332,7 +2332,7 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
                     OUString aFullTitle;
                     GetTitleFromURL( aId, aFullTitle );
 
-                    if ( aFullTitle.len() )
+                    if ( aFullTitle.getLength() )
                         aTitle = aFullTitle;
 
                     pRegion->AddEntry( aTitle, aId );
@@ -2447,7 +2447,7 @@ void SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL,
         catch ( Exception& ) {}
     }
 
-    if ( ! aTitle.len() )
+    if ( ! aTitle.getLength() )
     {
         INetURLObject aURL( rURL );
         aURL.CutExtension();

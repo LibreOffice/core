@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-22 14:35:18 $
+ *  last change: $Author: th $ $Date: 2001-05-11 11:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -828,7 +828,7 @@ void SfxEventConfiguration::PropagateEvents_Impl( SfxObjectShell *pDoc,
             nID = rTable.GetObjectKey( i );
             OUSTRING aEventName = GetEventName_Impl( nID );
 
-            if ( aEventName.len() )
+            if ( aEventName.getLength() )
             {
                 ANY aEventData = CreateEventData_Impl( pMacro );
                 try

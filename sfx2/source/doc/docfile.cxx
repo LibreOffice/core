@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: sb $ $Date: 2001-05-03 08:45:58 $
+ *  last change: $Author: th $ $Date: 2001-05-11 11:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,7 @@ void SAL_CALL  FileSource_Impl::initialize( const ::com::sun::star::uno::Sequenc
     const ::com::sun::star::uno::Any *pArr = Arguments.getConstArray();
     ::rtl::OUString aName ;
     pArr[0] >>= aName ;
-    if ( aName.len() )
+    if ( aName.getLength() )
     {
         pMedium = new SfxMedium( aName, STREAM_STD_READ, sal_True );
         pMedium->SetTransferPriority( SFX_TFPRIO_SYNCHRON );

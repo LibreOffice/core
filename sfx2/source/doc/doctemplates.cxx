@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dv $ $Date: 2001-04-05 14:30:41 $
+ *  last change: $Author: th $ $Date: 2001-05-11 11:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,7 +510,7 @@ OUString SfxDocTplService_Impl::getLongName( const OUString& rShortName )
             pPair = maNames.Next();
     }
 
-    if ( !aRet.len() )
+    if ( !aRet.getLength() )
         aRet = rShortName;
 
     return aRet;
@@ -578,12 +578,12 @@ void SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString& aTi
         catch ( Exception& ) {}
     }
 
-    if ( ! aType.len() && mxType.is() )
+    if ( ! aType.getLength() && mxType.is() )
     {
         aType = mxType->queryTypeByURL( rURL );
     }
 
-    if ( ! aTitle.len() )
+    if ( ! aTitle.getLength() )
     {
         INetURLObject aURL( rURL );
         aURL.CutExtension();
