@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-19 10:21:06 $
+ *  last change: $Author: rt $ $Date: 2001-03-21 20:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ String STR_WIZDLG_FINISH
     Text[ russian ] = "~Ãîòîâî";
     Text[ greek ] = "Äçìéïõñãßá";
     Text[ dutch ] = "~Finish";
-    Text[ french ] = "~Finish";
+    Text[ french ] = "~Créer";
     Text[ spanish ] = "~Crear";
     Text[ italian ] = "~Finish";
     Text[ danish ] = "~Finish";
@@ -98,7 +98,7 @@ String STR_WIZDLG_NEXT
     Text[ russian ] = "~Äàëåå >>";
     Text[ greek ] = "Åðüìåíï >>";
     Text[ dutch ] = "~Next >>";
-    Text[ french ] = "~Next >>";
+    Text[ french ] = "~Suivant >>";
     Text[ spanish ] = "~Siguiente >>";
     Text[ italian ] = "~Next >>";
     Text[ danish ] = "~Next >>";
@@ -123,7 +123,7 @@ String STR_WIZDLG_PREVIOUS
     Text[ russian ] = "<<~Íàçàä";
     Text[ greek ] = "<< Ðßóù";
     Text[ dutch ] = "<< ~Previous";
-    Text[ french ] = "<< ~Previous";
+    Text[ french ] = "<< ~Précédent";
     Text[ spanish ] = "<< ~Anterior";
     Text[ italian ] = "<< ~Previous";
     Text[ danish ] = "<< ~Previous";
@@ -141,6 +141,9 @@ String STR_WIZDLG_PREVIOUS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/03/19 10:21:06  kz
+ *  Merge SRC625: 19.03.01 - 11:20:39 (NoBranch)
+ *
  *  Revision 1.2  2001/03/09 20:17:24  kz
  *  Merge SRC624: 09.03.01 - 21:17:02 (NoBranch)
  *
