@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-04-05 13:22:59 $
+ *  last change: $Author: os $ $Date: 2001-04-10 09:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,6 @@ void SwXParagraph::setPropertyValues(
             if(pMap)
             {
                 if(pMap->nFlags & PropertyAttribute::READONLY)
-                    throw IllegalArgumentException();
                 {
                     IllegalArgumentException aArg;
                     aArg.Message = pPropertyNames[nProp];
