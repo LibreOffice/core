@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-13 13:01:23 $
+ *  last change: $Author: dl $ $Date: 2001-03-16 09:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3093,7 +3093,7 @@ void SdrObject::ReformatText()
     }
 }
 
-void SdrObject::BurnInStyleSheetAttributes()
+void SdrObject::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
 {
 }
 
