@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 18:26:11 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #endif
 #include <vector>
+#include <functional>
 
 // forward declarations
 namespace com
