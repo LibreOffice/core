@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+#   last change: $Author: th $ $Date: 2001-06-21 21:09:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,6 +122,7 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/outdev4.obj 	\
             $(SLO)$/outdev5.obj 	\
             $(SLO)$/outdev6.obj 	\
+            $(SLO)$/fontcvt.obj		\
             $(SLO)$/poly.obj		\
             $(SLO)$/poly2.obj		\
             $(SLO)$/print.obj		\
