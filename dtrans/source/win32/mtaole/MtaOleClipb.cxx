@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hro $ $Date: 2002-12-12 15:57:59 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,17 +74,6 @@
 
 #pragma warning( disable : 4786 ) // identifier was truncated to 'number'
                                    // characters in the debug information
-
-/*
-    Enable APIs that are only available for 98/Me/2K/XP.
-    Actually we need PM_QS_SENDMESSAGE
-*/
-#ifdef WINVER
-#if WINVER < 0x0500
-#undef WINVER
-#define WINVER 0x0500
-#endif
-#endif
 
 #define UNICODE
 
@@ -186,7 +175,7 @@ namespace /* private */
                                queue that's what we want, messages from the PostMessage
                                queue stay untouched */
                             MSG msg;
-                               PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE | PM_QS_SENDMESSAGE);
+                               PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
 
                             break;
                         }
