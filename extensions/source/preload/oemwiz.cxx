@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oemwiz.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:43:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:16:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,6 +425,10 @@ namespace preload
     //------------------------------------------------------------------------
     void OEMLicenseTabPage::EnableControls()
     {
+        if( !bEndReached &&
+            ( aLicenseML.IsEndReached() || !aLicenseML.GetText().Len() ) )
+            bEndReached = TRUE;
+
         if ( bEndReached )
         {
             Point aPos( 0, aInfo3_1FT.GetPosPixel().Y() );
