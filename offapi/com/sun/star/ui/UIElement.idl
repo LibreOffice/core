@@ -1,0 +1,113 @@
+#ifndef __com_sun_star_ui_UIElement_idl__
+#define __com_sun_star_ui_UIElement_idl__
+
+#ifndef __com_sun_star_frame_XFrame_idl__
+#include <com/sun/star/frame/XFrame.idl>
+#endif
+
+#ifndef __com_sun_star_ui_XUIElement_idl__
+#include <com//sun/star/ui/XUIElement.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_ui_UIElementType_idl__
+#include <com//sun/star/ui/UIElementType.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XInitialization_idl__
+#include <com/sun/star/lang/XInitialization.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+#ifndef __com_sun_star_util_XUpdatable_idl__
+#include <com/sun/star/util/XUpdatable.idl>
+#endif
+
+//=============================================================================
+
+/** specifies a user interface element.
+
+    <p>
+    A user interface element consists of a unique identifier and a type specifier. It
+    provides an interface to retrieve a special purpose interface which depends on
+    the specific user interface element type. Every user interface must be initialized
+    before it can be used.
+    </p>
+
+    @since OOo 2.0.0
+*/
+
+module com { module sun { module star { module ui {
+
+//=============================================================================
+
+service UIElement
+{
+    /** provides a function to retrieve a special purpose interface which depends on
+        the specific user interface element type.
+    */
+    interface ::com::sun::star::ui::XUIElement;
+
+    /** interface to initialize a user interface element instance.
+
+        A user interface element must be initialized using
+        <member scope=com::sun::star::lang>XInitialization::initialize</member> before
+        it can be used. The following property must be provided:
+        <ul>
+            <li><b>ResourceURL</b>specifies a string property which is the unique identifier of
+            the user interface element.</li>
+        </ul>
+
+        A user interface element factory creates and initializes every user interface element
+        correctly.
+
+        @see com::sun::star::ui::UIElementFactoryManager;
+        @see com::sun::star::ui::UIElementFactory
+    */
+    interface ::com::sun::star::lang::XInitialization;
+
+    /** used to notify an implementation that it needs to update its visual representation.
+
+        <p>
+        A user interface element implementation should check if it has to update its visual
+        representation. It is up to the implementation if it ignores notifications.
+        </p>
+    */
+    interface com::sun::star::util::XUpdatable;
+
+    /** controls the life-time of the object.
+    */
+    interface ::com::sun::star::lang::XComponent;
+
+    /** determines the frame to which this element is bound to.
+
+        <p>
+        The life time of a user interface element does not explicitly depend on the
+        frame itself but on the visible component attached to the frame. It is possible
+        to exchange the visible component of a frame and that will lead to the end of
+        life of all user interface elements.
+    */
+    [readonly, property] com::sun::star::frame::XFrame Frame;
+
+    /** a resource URL which is a unique identifier of a user interface element.
+    */
+    [readonly, property] string ResourceURL;
+
+    /** determines the real type of the user interface element.
+
+        @see UIElementType
+    */
+    [readonly, property] short  Type;
+};
+
+}; }; }; };
+
+//=============================================================================
+
+#endif
