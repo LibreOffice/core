@@ -2,6 +2,7 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\xml%_EXT%\uiconfig
 mkdir: %_DEST%\xml%_EXT%\uiconfig\smath
 mkdir: %_DEST%\xml%_EXT%\uiconfig\smath\menubar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\smath\toolbar
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
@@ -14,5 +15,6 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\smath\menubar
 mkdir: %_DEST%\inc%_EXT%\starmath
 
 ..\uiconfig\smath\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\smath\menubar\*.xml
+..\uiconfig\smath\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\smath\toolbar\*.xml
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
