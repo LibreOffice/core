@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cclass_unicode_parser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 16:59:03 $
+ *  last change: $Author: er $ $Date: 2002-08-05 16:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,12 +84,14 @@
 #ifndef _COM_SUN_STAR_I18N_XLOCALEDATA_HPP_
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #endif
+#include <drafts/com/sun/star/i18n/NativeNumberMode.hpp>
 
 #include <string.h>     // memcpy()
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
+using namespace ::drafts::com::sun::star::i18n;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -1008,9 +1010,37 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
     }
     else if ( r.TokenType & KParseType::UNI_NUMBER )
     {
-//!!!!!
-//!TODO: r.Value = implementation
-//!!!!!
+        if ( !xNatNumSup.is() )
+        {
+#define NATIVENUMBERSUPPLIER_SERVICENAME "com.sun.star.i18n.NativeNumberSupplier"
+            if ( xMSF.is() )
+            {
+                xNatNumSup = Reference< XNativeNumberSupplier > (
+                        xMSF->createInstance( OUString(
+                                RTL_CONSTASCII_USTRINGPARAM(
+                                    NATIVENUMBERSUPPLIER_SERVICENAME ) ) ),
+                        UNO_QUERY );
+            }
+            if ( !xNatNumSup.is() )
+            {
+                throw RuntimeException( OUString(
+#ifndef PRODUCT
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "cclass_Unicode::parseText: can't instanciate "
+                        NATIVENUMBERSUPPLIER_SERVICENAME )
+#endif
+                    ), *this );
+            }
+#undef NATIVENUMBERSUPPLIER_SERVICENAME
+        }
+        OUString aTmp( pStart + r.LeadingWhiteSpace, r.EndPos - nPos +
+                r.LeadingWhiteSpace );
+        // transliterate to ASCII
+        aTmp = xNatNumSup->getNativeNumberString( aTmp, aParserLocale,
+                NativeNumberMode::NATNUM0 );
+        int nErrno;
+        r.Value = SolarMath::StringToDouble( aTmp.getStr(), cGroupSep,
+                cDecimalSep, nErrno );
         if ( bMightBeWord )
             r.TokenType |= KParseType::IDENTNAME;
     }
