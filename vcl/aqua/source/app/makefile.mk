@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:05:26 $
+#   last change: $Author: ping.liao $ $Date: 2000-09-21 22:30:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,9 +82,6 @@ dummy:
 .ELSE		# "$(OS)"!="MACOSX"
 
 .IF "$(remote)"==""
-OBJFILES=\
-            $(OBJ)$/salmain.obj
-
 SLOFILES=   $(SLO)$/salshl.obj		\
             $(SLO)$/saldata.obj		\
             $(SLO)$/salinst.obj		\
@@ -93,14 +90,15 @@ SLOFILES=   $(SLO)$/salshl.obj		\
             $(SLO)$/salinfo.obj		\
             $(SLO)$/salsys.obj
 
-.ELSE
-SLOFILES=\
-            $(SLO)$/salmain.obj
 .ENDIF
+
+OBJFILES+=$(OBJ)$/salmain.obj
+SLOFILES+=$(SLO)$/salmain.obj
 
 .IF "$(remote)"!=""
 EXCEPTIONSFILES=$(SLO)$/salmain.obj	\
         $(OBJ)$/salmain.obj
+
 .ENDIF
 
 .ENDIF		# "$(OS)"!="MACOSX"
