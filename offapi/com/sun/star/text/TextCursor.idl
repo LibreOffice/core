@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextCursor.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@
 /** A <type>TextCursor</type> is a <type>TextRange</type> which can be moved
     within a <type scope="com::sun::star::drawing">Text</type> object.@see TextRange
  */
-service TextCursor
+published service TextCursor
 {
     // DocMerge: empty anyway
     service com::sun::star::text::TextRange;
