@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
+ *  last change: $Author: mib $ $Date: 2002-05-16 11:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2267,36 +2267,39 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
                         const SwTxtNode *pTxtNd =
                             pAttr->GetSttPara().GetNode().GetTxtNode();
                         ASSERT( pTxtNd, "No text node" );
-                        const String& rText = pTxtNd->GetTxt();
-                        sal_uInt16 nScriptTxt =
-                            pBreakIt->xBreak->getScriptType(
-                                        rText, pAttr->GetSttCnt() );
-                        xub_StrLen nScriptEnd = (xub_StrLen)pBreakIt->xBreak
-                                ->endOfScript( rText, nStt, nScriptTxt );
-                        while( nScriptEnd < nEndCnt )
+                        if( pTxtNd )
                         {
-                            if( nScriptItem == nScriptTxt )
+                            const String& rText = pTxtNd->GetTxt();
+                            sal_uInt16 nScriptTxt =
+                                pBreakIt->xBreak->getScriptType(
+                                            rText, pAttr->GetSttCnt() );
+                            xub_StrLen nScriptEnd = (xub_StrLen)pBreakIt->xBreak
+                                    ->endOfScript( rText, nStt, nScriptTxt );
+                            while( nScriptEnd < nEndCnt )
                             {
-                                _HTMLAttr *pSetAttr =
-                                    pAttr->Clone( rEndIdx, nScriptEnd );
-                                pSetAttr->nSttCntnt = nStt;
-                                pSetAttr->ClearPrev();
-                                if( !pNext || bWholePara )
+                                if( nScriptItem == nScriptTxt )
                                 {
-                                    USHORT nTmp = pSetAttr->bInsAtStart ? 0
-                                                    : aSetAttrTab.Count();
-                                    aSetAttrTab.Insert( pSetAttr, nTmp );
+                                    _HTMLAttr *pSetAttr =
+                                        pAttr->Clone( rEndIdx, nScriptEnd );
+                                    pSetAttr->nSttCntnt = nStt;
+                                    pSetAttr->ClearPrev();
+                                    if( !pNext || bWholePara )
+                                    {
+                                        USHORT nTmp = pSetAttr->bInsAtStart ? 0
+                                                        : aSetAttrTab.Count();
+                                        aSetAttrTab.Insert( pSetAttr, nTmp );
+                                    }
+                                    else
+                                        pNext->InsertPrev( pSetAttr );
                                 }
-                                else
-                                    pNext->InsertPrev( pSetAttr );
+                                nStt = nScriptEnd;
+                                nScriptTxt = pBreakIt->xBreak->getScriptType(
+                                                rText, nStt );
+                                nScriptEnd = (xub_StrLen)pBreakIt->xBreak
+                                    ->endOfScript( rText, nStt, nScriptTxt );
                             }
-                            nStt = nScriptEnd;
-                            nScriptTxt = pBreakIt->xBreak->getScriptType(
-                                            rText, nStt );
-                            nScriptEnd = (xub_StrLen)pBreakIt->xBreak
-                                ->endOfScript( rText, nStt, nScriptTxt );
+                            bInsert = nScriptItem == nScriptTxt;
                         }
-                        bInsert = nScriptItem == nScriptTxt;
                     }
                     if( bInsert )
                     {
