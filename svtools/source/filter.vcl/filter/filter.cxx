@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2000-09-21 15:45:25 $
+ *  last change: $Author: sj $ $Date: 2000-10-23 08:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,7 +727,7 @@ static BOOL ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtension, B
         {
             BYTE sBuf[4];
             sal_uInt32 nOffset; // in ms documents the pict format is used without the first 512 bytes
-            for ( nOffset = 10; nOffset <= 512; nOffset += 512 )
+            for ( nOffset = 10; nOffset <= 522; nOffset += 512 )
             {
                 rStream.Seek( nStreamPos + nOffset );
                 rStream.Read( sBuf,3 );
