@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-09-02 14:19:40 $
+ *  last change: $Author: mmi $ $Date: 2004-09-09 08:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,10 +234,13 @@ void SecurityEnvironment_MSCryptImpl :: setCryptoProvider( HCRYPTPROV aProv ) th
     }
 
     if( aProv != NULL ) {
+        /*- Replaced by direct adopt for WINNT support ----
         if( !CryptContextAddRef( aProv, NULL, NULL ) )
             throw Exception() ;
         else
             m_hProv = aProv ;
+        ----*/
+        m_hProv = aProv ;
     }
 }
 
@@ -293,8 +296,11 @@ void SecurityEnvironment_MSCryptImpl :: adoptSymKey( HCRYPTKEY aSymKey ) throw( 
         }
 
         //If we do not find the key in the list, add a new node
+        /*- Replaced with directly adopt for WINNT 4.0 support ----
         if( !CryptDuplicateKey( aSymKey, NULL, 0, &symkey ) )
             throw RuntimeException() ;
+        ----*/
+        symkey = aSymKey ;
 
         try {
             m_tSymKeyList.push_back( symkey ) ;
@@ -346,8 +352,11 @@ void SecurityEnvironment_MSCryptImpl :: adoptPubKey( HCRYPTKEY aPubKey ) throw( 
         }
 
         //If we do not find the key in the list, add a new node
+        /*- Replaced with directly adopt for WINNT 4.0 support ----
         if( !CryptDuplicateKey( aPubKey, NULL, 0, &pubkey ) )
             throw RuntimeException() ;
+        ----*/
+        pubkey = aPubKey ;
 
         try {
             m_tPubKeyList.push_back( pubkey ) ;
@@ -399,8 +408,11 @@ void SecurityEnvironment_MSCryptImpl :: adoptPriKey( HCRYPTKEY aPriKey ) throw( 
         }
 
         //If we do not find the key in the list, add a new node
+        /*- Replaced with directly adopt for WINNT 4.0 support ----
         if( !CryptDuplicateKey( aPriKey, NULL, 0, &prikey ) )
             throw RuntimeException() ;
+        ----*/
+        prikey = aPriKey ;
 
         try {
             m_tPriKeyList.push_back( prikey ) ;
