@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-27 14:24:22 $
+ *  last change: $Author: ka $ $Date: 2001-05-16 13:45:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,9 +332,10 @@ BOOL SdDrawDocument::InsertBookmark(
             /******************************************************************
             * Gibt es in der Bookmark-Liste einen Seitennamen?
             ******************************************************************/
-            String aBMPgName (*(String*) pBookmarkList->GetObject(nPos));
+            String  aBMPgName (*(String*) pBookmarkList->GetObject(nPos));
+            BOOL    bIsMasterPage;
 
-            if (pBookmarkDoc->GetPageByName(aBMPgName) != SDRPAGE_NOTFOUND)
+            if( pBookmarkDoc->GetPageByName( aBMPgName, bIsMasterPage ) != SDRPAGE_NOTFOUND )
             {
                 // Seite gefunden
                 bInsertPages = TRUE;
@@ -516,9 +517,10 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
             /******************************************************************
             * Namen der Bookmark-Seiten aus Liste holen
             ******************************************************************/
-            String aBMPgName (*(String*) pBookmarkList->GetObject(nPos));
+            String  aBMPgName (*(String*) pBookmarkList->GetObject(nPos));
+            BOOL    bIsMasterPage;
 
-            USHORT nBMPage = pBookmarkDoc->GetPageByName(aBMPgName);
+            USHORT nBMPage = pBookmarkDoc->GetPageByName( aBMPgName, bIsMasterPage );
 
             if (nBMPage != SDRPAGE_NOTFOUND)
             {
@@ -634,9 +636,11 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
             {
                 SdPage* pBMPage = pBookmarkDoc->GetSdPage(nBMSdPage, PK_STANDARD);
                 String* pName = new String(pBMPage->GetName());
+                BOOL    bIsMasterPage;
+
                 aNameList.Insert(pName, nBMSdPage);
 
-                if (GetPageByName(*(pName)) != SDRPAGE_NOTFOUND)
+                if( GetPageByName(*(pName), bIsMasterPage ) != SDRPAGE_NOTFOUND)
                 {
                     // Seitenname schon vorhanden -> Defaultname
                     // fuer Standard & Notizseite
@@ -693,9 +697,9 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
             /**************************************************************
             * Namen der Bookmark-Seiten aus Liste holen
             **************************************************************/
-            String aPgName(*(String*) pBookmarkList->GetObject(nPos));
-
-            USHORT nBMPage = pBookmarkDoc->GetPageByName(aPgName);
+            String  aPgName(*(String*) pBookmarkList->GetObject(nPos));
+            BOOL    bIsMasterPage;
+            USHORT  nBMPage = pBookmarkDoc->GetPageByName( aPgName, bIsMasterPage );
 
             if (nBMPage != SDRPAGE_NOTFOUND)
             {
@@ -711,7 +715,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                 /**************************************************************
                 * Es muss eine StandardSeite sein
                 **************************************************************/
-                if (GetPageByName(aPgName) != SDRPAGE_NOTFOUND)
+                if (GetPageByName(aPgName, bIsMasterPage) != SDRPAGE_NOTFOUND)
                 {
                     // Seitenname schon vorhanden -> Defaultname
                     // fuer Standard & Notizseite

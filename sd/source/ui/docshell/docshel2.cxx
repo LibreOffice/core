@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-16 13:32:49 $
+ *  last change: $Author: ka $ $Date: 2001-05-16 13:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,7 +512,9 @@ BOOL SdDrawDocShell::CheckPageName( Window* pWin, String& rName )
 
 
     // Ist der Seitenname schon vorhanden?
-    USHORT nPgNum = pDoc->GetPageByName( rName );
+    BOOL    bIsMasterPage;
+    USHORT  nPgNum = pDoc->GetPageByName( rName, bIsMasterPage );
+
     if( nPgNum != SDRPAGE_NOTFOUND )
     {
         String aDesc( SdResId( STR_WARN_PAGE_EXISTS ) );
@@ -529,7 +531,7 @@ BOOL SdDrawDocShell::CheckPageName( Window* pWin, String& rName )
         {
             pDlg->GetName( rName );
 
-            nPgNum = pDoc->GetPageByName( rName );
+            nPgNum = pDoc->GetPageByName( rName, bIsMasterPage );
             if( nPgNum == SDRPAGE_NOTFOUND )
             {
                 bUnique = TRUE;

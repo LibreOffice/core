@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-16 12:30:45 $
+ *  last change: $Author: ka $ $Date: 2001-05-16 13:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,8 +792,9 @@ BOOL SdDrawDocShell::GotoBookmark(const String& rBookmark)
             aBookmark = rBookmark.Copy( 1 );
 
         // Ist das Bookmark eine Seite?
-        USHORT nPgNum = pDoc->GetPageByName(aBookmark);
-        SdrObject* pObj = NULL;
+        BOOL        bIsMasterPage;
+        USHORT      nPgNum = pDoc->GetPageByName( aBookmark, bIsMasterPage );
+        SdrObject*  pObj = NULL;
 
         if (nPgNum == SDRPAGE_NOTFOUND)
         {
@@ -830,7 +831,7 @@ BOOL SdDrawDocShell::GotoBookmark(const String& rBookmark)
 
             EditMode eNewEditMode = EM_PAGE;
 
-            if (pPage->IsMasterPage())
+            if( bIsMasterPage )
             {
                 eNewEditMode = EM_MASTERPAGE;
             }

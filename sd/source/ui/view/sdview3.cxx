@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-09 15:34:42 $
+ *  last change: $Author: ka $ $Date: 2001-05-16 13:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,7 +678,7 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                 aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
             }
 
-            InsertGraphic( aGraphic, nAction, aDropPos, NULL, pImageMap );
+            InsertGraphic( aGraphic, nAction, aInsertPos, NULL, pImageMap );
             bReturn = TRUE;
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-26 14:34:01 $
+ *  last change: $Author: ka $ $Date: 2001-05-16 13:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,6 +645,10 @@ VirtualDevice* SdView::CreatePageVDev(USHORT nSdPage, PageKind ePageKind,
     DBG_ASSERT(!bAbort, "virt. Device nicht korrekt erzeugt");
 
     SdrView* pView = new SdrView(pDoc, pVDev);
+    pView->SetBordVisible( FALSE );
+    pView->SetGridVisible( FALSE );
+    pView->SetHlplVisible( FALSE );
+    pView->SetGlueVisible( FALSE );
     pView->ShowPage(pPage, Point(-pPage->GetLftBorder(), -pPage->GetUppBorder()));
     SdrPageView* pPageView  = pView->GetPageView(pPage);
     DBG_ASSERT(pViewShell, "ViewShell nicht gefunden");

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 17:11:08 $
+ *  last change: $Author: ka $ $Date: 2001-05-16 13:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,13 +241,15 @@ SdrObject* SdDrawDocument::GetObj(const String& rObjName) const
 |*
 \************************************************************************/
 
-USHORT SdDrawDocument::GetPageByName(const String& rPgName) const
+USHORT SdDrawDocument::GetPageByName(const String& rPgName, BOOL& rbIsMasterPage) const
 {
     SdPage* pPage = NULL;
     SdPage* pPageFound = NULL;
     USHORT nPage = 0;
     const USHORT nMaxPages = GetPageCount();
     USHORT nPageNum = SDRPAGE_NOTFOUND;
+
+    rbIsMasterPage = FALSE;
 
     /**************************************************************************
     * Zuerst alle Pages durchsuchen
@@ -277,6 +279,7 @@ USHORT SdDrawDocument::GetPageByName(const String& rPgName) const
         if (pPage && pPage->GetName() == rPgName)
         {
             nPageNum = nPage;
+            rbIsMasterPage = TRUE;
         }
 
         nPage++;
