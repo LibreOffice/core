@@ -79,12 +79,9 @@ public class ScrollBar extends Component implements SwingConstants, javax.access
         super(xAccessible, xAccessibleContext);
     }
 
-    /** Returns the AccessibleContext associated with this object */
-    public javax.accessibility.AccessibleContext getAccessibleContext() {
-        if (accessibleContext == null) {
-            accessibleContext = new AccessibleScrollBar();
-        }
-        return accessibleContext;
+    /** Creates the AccessibleContext associated with this object */
+    public javax.accessibility.AccessibleContext createAccessibleContext() {
+        return new AccessibleScrollBar();
     }
 
     protected class AccessibleScrollBar extends AccessibleUNOComponent implements
