@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-08 11:08:14 $
+ *  last change: $Author: cl $ $Date: 2001-08-22 14:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,17 +135,6 @@ SfxItemSet SvxOutlinerForwarder::GetParaAttribs( USHORT nPara ) const
 
     EditEngine& rEditEngine = (EditEngine&)rOutliner.GetEditEngine();
 
-    USHORT nWhich = EE_PARA_START;
-    while( nWhich <= EE_PARA_END )
-    {
-        if( aSet.GetItemState( nWhich, TRUE ) != SFX_ITEM_ON )
-        {
-            if( rEditEngine.HasParaAttrib( nPara, nWhich ) )
-                aSet.Put( rEditEngine.GetParaAttrib( nPara, nWhich ) );
-        }
-        nWhich++;
-    }
-
     SfxStyleSheet* pStyle = rEditEngine.GetStyleSheet( nPara );
     if( pStyle )
         aSet.SetParent( &(pStyle->GetItemSet() ) );
@@ -155,7 +144,14 @@ SfxItemSet SvxOutlinerForwarder::GetParaAttribs( USHORT nPara ) const
 
 void SvxOutlinerForwarder::SetParaAttribs( USHORT nPara, const SfxItemSet& rSet )
 {
+    const SfxItemSet* pOldParent = rSet.GetParent();
+    if( pOldParent )
+        ((SfxItemSet*)&rSet)->SetParent( NULL );
+
     rOutliner.SetParaAttribs( nPara, rSet );
+
+    if( pOldParent )
+        ((SfxItemSet*)&rSet)->SetParent( pOldParent );
 }
 
 SfxItemPool* SvxOutlinerForwarder::GetPool() const
