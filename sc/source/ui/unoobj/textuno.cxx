@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2001-09-13 12:19:03 $
+ *  last change: $Author: sab $ $Date: 2001-10-15 11:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #include <svx/unoprnms.hxx>
 #include <svx/unofored.hxx>
 #include <rtl/uuid.h>
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -990,39 +993,37 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
 //      pEditEngine->SetUpdateMode( FALSE );
 #endif
         pEditEngine->EnableUndo( FALSE );
-        pEditEngine->SetRefMapMode( MAP_100TH_MM );
+        if (pDocShell)
+            pEditEngine->SetRefDevice(pDocShell->GetVirtualDevice_100th_mm());
+        else
+            pEditEngine->SetRefMapMode( MAP_100TH_MM );
         pForwarder = new SvxEditEngineForwarder(*pEditEngine);
     }
 
     if (bDataValid)
         return pForwarder;
 
-    BOOL bEditCell = FALSE;
     String aText;
 
     if (pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
 
-        const ScBaseCell* pCell = pDoc->GetCell( aCellPos );
-        if ( pCell && pCell->GetCellType() == CELLTYPE_EDIT )
-        {
-            pEditEngine->SetText( *((const ScEditCell*)pCell)->GetData() );
-            bEditCell = TRUE;
-        }
-        else
-            pDoc->GetInputString( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aText );
-
         SfxItemSet aDefaults( pEditEngine->GetEmptyItemSet() );
         const ScPatternAttr* pPattern =
                 pDoc->GetPattern( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab() );
         pPattern->FillEditItemSet( &aDefaults );
         pPattern->FillEditParaItems( &aDefaults );  // including alignment etc. (for reading)
-        pEditEngine->SetDefaults( aDefaults );
-    }
 
-    if (!bEditCell)
-        pEditEngine->SetText( aText );
+        const ScBaseCell* pCell = pDoc->GetCell( aCellPos );
+        if ( pCell && pCell->GetCellType() == CELLTYPE_EDIT )
+            pEditEngine->SetTextNewDefaults( *((const ScEditCell*)pCell)->GetData(), aDefaults );
+        else
+        {
+            pDoc->GetInputString( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aText );
+            pEditEngine->SetTextNewDefaults( aText, aDefaults );
+        }
+    }
 
     bDataValid = TRUE;
     return pForwarder;
