@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexception.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-08 18:54:44 $
+ *  last change: $Author: fs $ $Date: 2001-03-01 17:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@ namespace dbtools
 //.........................................................................
 
     using namespace connectivity::dbtools;
+    using namespace ::com::sun::star::sdbc;
+    using namespace ::com::sun::star::sdb;
+
 //==============================================================================
 //= SQLExceptionInfo - encapsulating the type info of an SQLException-derived class
 //==============================================================================
@@ -125,6 +128,30 @@ SQLExceptionInfo::SQLExceptionInfo(const SQLExceptionInfo& _rCopySource)
     :m_aContent(_rCopySource.m_aContent)
     ,m_eType(_rCopySource.m_eType)
 {
+}
+
+//------------------------------------------------------------------------------
+const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdbc::SQLException& _rError)
+{
+    m_aContent <<= _rError;
+    implDetermineType();
+    return *this;
+}
+
+//------------------------------------------------------------------------------
+const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdbc::SQLWarning& _rError)
+{
+    m_aContent <<= _rError;
+    implDetermineType();
+    return *this;
+}
+
+//------------------------------------------------------------------------------
+const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdb::SQLContext& _rError)
+{
+    m_aContent <<= _rError;
+    implDetermineType();
+    return *this;
 }
 
 //------------------------------------------------------------------------------
@@ -210,6 +237,20 @@ SQLExceptionInfo::operator const ::com::sun::star::sdb::SQLContext*() const
 //==============================================================================
 
 //------------------------------------------------------------------------------
+SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(const SQLExceptionInfo& _rStart, NODES_INCLUDED _eMask)
+    :m_pCurrent(NULL)
+    ,m_eCurrentType(SQLExceptionInfo::UNDEFINED)
+        // no other chance without RTTI
+    ,m_eMask(_eMask)
+{
+    if (_rStart.isValid())
+    {
+        m_pCurrent = (const SQLException*)_rStart;
+        m_eCurrentType = _rStart.getType();
+    }
+}
+
+//------------------------------------------------------------------------------
 SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(const ::com::sun::star::sdbc::SQLException* _pStart, NODES_INCLUDED _eMask)
             :m_pCurrent(_pStart)
             ,m_eCurrentType(SQLExceptionInfo::SQL_EXCEPTION)
@@ -243,6 +284,27 @@ SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(const ::com::sun::star::s
     // initially check the start of the chain against the include mask
     if (m_pCurrent && (m_eMask > NI_CONTEXTINFOS))
         next();
+}
+
+//------------------------------------------------------------------------------
+void SQLExceptionIteratorHelper::next(SQLExceptionInfo& _rOutInfo)
+{
+    SQLExceptionInfo::TYPE eType = m_eCurrentType;
+    const SQLException* pNext = next();
+    switch (eType)
+    {
+        case SQLExceptionInfo::SQL_EXCEPTION:
+            _rOutInfo = *pNext;
+            break;
+        case SQLExceptionInfo::SQL_WARNING:
+            _rOutInfo = *static_cast<const SQLWarning*>(pNext);
+            break;
+        case SQLExceptionInfo::SQL_CONTEXT:
+            _rOutInfo = *static_cast<const SQLContext*>(pNext);
+            break;
+        default:
+            OSL_ENSHURE(sal_False, "SQLExceptionIteratorHelper::next: invalid type!");
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -329,6 +391,9 @@ FunctionSequenceException::FunctionSequenceException(const Reference< XInterface
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/11/08 18:54:44  fs
+ *  corrected the initial setting of the SQLExceptionInfo
+ *
  *  Revision 1.2  2000/10/24 15:00:32  oj
  *  make strings unique for lib's
  *

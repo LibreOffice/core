@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexception.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:19:40 $
+ *  last change: $Author: fs $ $Date: 2001-03-01 17:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,10 @@ public:
     SQLExceptionInfo(const ::com::sun::star::uno::Any& _rError);
             // use with the Reason member of an SQLErrorEvent or with NextElement of an SQLException
 
+    const SQLExceptionInfo& operator=(const ::com::sun::star::sdbc::SQLException& _rError);
+    const SQLExceptionInfo& operator=(const ::com::sun::star::sdbc::SQLWarning& _rError);
+    const SQLExceptionInfo& operator=(const ::com::sun::star::sdb::SQLContext& _rError);
+
     sal_Bool    isKindOf(TYPE _eType) const;
         // not just a simple comparisation ! e.g. getType() == SQL_CONTEXT implies isKindOf(SQL_EXCEPTION) == sal_True !
     sal_Bool    isValid() const { return m_eType != UNDEFINED; }
@@ -161,9 +165,11 @@ public:
     SQLExceptionIteratorHelper(const ::com::sun::star::sdbc::SQLWarning* _pStart, NODES_INCLUDED _eMask = NI_EXCEPTIONS);
     SQLExceptionIteratorHelper(const ::com::sun::star::sdb::SQLContext* _pStart, NODES_INCLUDED _eMask = NI_EXCEPTIONS);
         // same note as above for the SQLExceptionInfo ctors
+    SQLExceptionIteratorHelper(const SQLExceptionInfo& _rStart, NODES_INCLUDED _eMask = NI_EXCEPTIONS);
 
     sal_Bool                                    hasMoreElements() const { return (m_pCurrent != NULL); }
     const ::com::sun::star::sdbc::SQLException* next();
+    void                                        next(SQLExceptionInfo& _rOutInfo);
 };
 
 //==================================================================================
@@ -194,6 +200,9 @@ inline void throwGenericSQLException(const ::rtl::OUString& _rMsg, const ::com::
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/24 15:19:40  oj
+ *  make strings unique for lib's
+ *
  *  Revision 1.1  2000/10/05 08:56:37  fs
  *  moved the files from unotools to here
  *
