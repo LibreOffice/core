@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:29:02 $
+ *  last change: $Author: rt $ $Date: 2001-04-11 18:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,7 @@ Menu RID_SVXMNU_COLS
                         Text[ chinese_simplified ] = "Ê±¼ä×Ö¶Î";
                         Text[ russian ] = "Ïîëå âğåìåíè";
                         Text[ polish ] = "Pole czasu";
-                        Text[ japanese ] = "ŠÔÌ¨°ÙÄŞ";
+                        Text[ japanese ] = "Ì¨°ÙÄŞ";
                         Text[ chinese_traditional ] = "®É¶¡Äæ¦ì";
                         Text[ dutch ] = "Tijdveld";
                         Text[ chinese_simplified ] = "Ê±¼ä×Ö¶Î";
