@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-14 12:51:55 $
+ *  last change: $Author: hr $ $Date: 2002-08-27 13:14:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,8 @@
 #ifdef DEBUG
 #include <stdio.h>
 #endif
-#if !(defined FREEBSD || defined NETBSD)
+// [ed] 6/15/02 We don't have alloca.h on OS X either.
+#if !(defined FREEBSD || defined NETBSD || defined MACOSX)
 #include <alloca.h>
 #endif
 
