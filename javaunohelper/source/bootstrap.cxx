@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-21 15:30:33 $
+ *  last change: $Author: obo $ $Date: 2002-11-05 09:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#include <jni.h>
-
 #include <osl/diagnose.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
@@ -72,6 +70,8 @@
 #include <cppuhelper/bootstrap.hxx>
 
 #include <bridges/java/jvmcontext.hxx>
+
+#include <jni.h>
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
