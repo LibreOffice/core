@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:36 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ XclImpExtName::XclImpExtName( XclImpStream& rStrm )
     if( ::get_flag( nFlags, EXC_EXTN_BUILTIN ) || !::get_flag( nFlags, EXC_EXTN_OLE_OR_DDE ) )
     {
         meType = xlExtName;
-        maAddInName = rStrm.GetRoot().GetAddInNames().GetScName( maName );
+        maAddInName = rStrm.GetRoot().GetScAddInName( maName );
         ScfTools::ConvertToScDefinedName( maName );
     }
     else
