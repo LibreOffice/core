@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:45:34 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:52:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ ModalDialog DLG_INSERT_BOOKMARK
         TEXT[ japanese ] = "ν(~D)";
         TEXT[ chinese_traditional ] = "§R°£(~D)";
         TEXT[ greek ] = "Διαγραφή";
-        TEXT[ korean ] = "»θΑ¦";
+        TEXT[ korean ] = "»θΑ¦(~D)";
         TEXT[ arabic ] = "ΝΠέ";
         TEXT[ turkish ] = "~Sil";
     };
