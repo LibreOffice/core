@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2001-10-16 14:44:06 $
+ *  last change: $Author: nn $ $Date: 2001-10-26 18:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,6 +518,10 @@ IMPL_LINK_INLINE_END( ScViewFunc, SpellError, void *, nLang )
 
 BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
 {
+    INetURLObject aURL;
+    aURL.SetSmartURL( rFile );
+    String aStrURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
+
     if (!bLink)     // bei bLink nur Grafik oder URL
     {
         // 1. Kann ich die Datei oeffnen?
@@ -525,14 +529,14 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
 
         // nur nach eigenen Filtern suchen, ohne Auswahlbox (wie in ScDocumentLoader)
         SfxFilterMatcher aMatcher( ScDocShell::Factory().GetFilterContainer() );
-        SfxMedium aSfxMedium( rFile, (STREAM_READ | STREAM_SHARE_DENYNONE), FALSE );
+        SfxMedium aSfxMedium( aStrURL, (STREAM_READ | STREAM_SHARE_DENYNONE), FALSE );
         ErrCode nErr = aMatcher.GuessFilter( aSfxMedium, &pFlt );
 
         if ( pFlt && !nErr )
         {
             // Code aus dem SFX geklaut!
             SfxDispatcher &rDispatcher = GetViewData()->GetDispatcher();
-            SfxStringItem aFileNameItem( SID_FILE_NAME, rFile );
+            SfxStringItem aFileNameItem( SID_FILE_NAME, aStrURL );
             SfxStringItem aFilterItem( SID_FILTER_NAME, pFlt->GetName() );
 
             // Asynchron oeffnen, kann naemlich auch aus D&D heraus passieren
@@ -551,13 +555,11 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
 
 //      GraphicProgress aGraphicProgress(&aGraphicFilter);
 
-    INetURLObject aURL;
-    aURL.SetSmartURL( rFile );
     if (!pGraphicFilter->ImportGraphic(aGraphic, aURL,
             GRFILTER_FORMAT_DONTKNOW, &nFilterFormat ))
     {
         String aFltName = pGraphicFilter->GetImportFormatName(nFilterFormat);
-        return PasteGraphic( rPos, aGraphic, rFile, aFltName );
+        return PasteGraphic( rPos, aGraphic, aStrURL, aFltName );
     }
 
     if (bLink)                      // bei bLink alles, was nicht Grafik ist, als URL
@@ -568,7 +570,7 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
         USHORT nPosX = aRange.aStart.Col();
         USHORT nPosY = aRange.aStart.Row();
 
-        InsertBookmark( rFile, rFile, nPosX, nPosY );
+        InsertBookmark( aStrURL, aStrURL, nPosX, nPosY );
         return TRUE;
     }
     else
@@ -576,10 +578,9 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
         // 3. Kann die Datei als OLE eingefuegt werden?
         // auch nicht-Storages, z.B. Sounds (#38282#)
 
-//      BOOL bIsStg = SvStorage::IsStorageFile( rFile );
         SvStorageRef refStor = new SvStorage( EMPTY_STRING );
         SvObjectRef refOleObj =
-            ((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( rFile, refStor, bLink );
+            ((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( aStrURL, refStor, bLink );
         SvInPlaceObjectRef refObj( &refOleObj );
         if( refObj.Is() )
             return PasteObject( rPos, refObj );
