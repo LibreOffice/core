@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh5.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 10:52:25 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,119 +60,6 @@
  ************************************************************************/
 
 // System - Includes -----------------------------------------------------
-
-#define _BASEDLGS_HXX
-#define _BIGINT_HXX
-#define _CACHESTR_HXX
-//#define _CLIP_HXX
-#define _CONFIG_HXX
-#define _CURSOR_HXX
-//#define _COLOR_HXX
-//#define _CTRLBOX_HXX
-//#define _CTRLTOOL_HXX
-#define _DIALOGS_HXX
-#define _DLGCFG_HXX
-#define _DYNARR_HXX
-#define _EXTATTR_HXX
-//#define _FIELD_HXX
-#define _FILDLG_HXX
-//#define _FILTER_HXX
-#define _FONTDLG_HXX
-#define _FRM3D_HXX
-//#define _GRAPH_HXX
-//#define _GDIMTF_HXX
-#define _INTRO_HXX
-#define _ISETBWR_HXX
-#define _NO_SVRTF_PARSER_HXX
-//#define _MDIFRM_HXX
-#define _MACRODLG_HXX
-#define _MODALDLG_HXX
-#define _MOREBUTTON_HXX
-//#define _MAPMOD_HXX
-#define _OUTLINER_HXX
-//#define _PAL_HXX
-#define _PASSWD_HXX
-//#define _PRNDLG_HXX   //
-#define _POLY_HXX
-#define _PVRWIN_HXX
-#define _QUEUE_HXX
-#define _RULER_HXX
-#define _SCRWIN_HXX
-//#define _SELENG_HXX
-#define _SETBRW_HXX
-//#define _SOUND_HXX
-#define _STACK_HXX
-//#define _STATUS_HXX ***
-#define _STDMENU_HXX
-//#define _STDCTRL_HXX
-//#define _SYSDLG_HXX
-//#define _TAB_HXX
-#define _TABBAR_HXX
-//#define _TREELIST_HXX
-//#define _VALUESET_HXX
-#define _VCBRW_HXX
-#define _VCTRLS_HXX
-//#define _VCATTR_HXX
-#define _VCSBX_HXX
-#define _VCONT_HXX
-#define _VDRWOBJ_HXX
-//#define _VIEWFAC_HXX
-
-
-#define _SFX_PRNMON_HXX
-#define _SFX_RESMGR_HXX
-//#define _SFX_SAVEOPT_HXX
-#define _SFX_TEMPLDLG_HXX
-//#define _SFXAPP_HXX
-#define _SFXBASIC_HXX
-//#define _SFXCTRLITEM_HXX
-//#define _SFXDISPATCH_HXX
-#define _SFXFILEDLG_HXX
-#define _SFXIMGMGR_HXX
-#define _SFXMNUMGR_HXX
-//#define _SFXMSG_HXX
-#define _SFXMSGDESCR_HXX
-#define _SFXMSGPOOL_HXX
-//#define _SFXOBJFACE_HXX
-//#define _SFXREQUEST_HXX
-#define _SFXSTBITEM_HXX
-#define _SFXSTBMGR_HXX
-#define _SFXTBXCTRL_HXX
-#define _SFXTBXMGR_HXX
-#define _SFX_TEMPLDLG_HXX
-
-#define _SI_DLL_HXX
-#define _SIDLL_HXX
-#define _SI_NOITEMS
-#define _SI_NOOTHERFORMS
-#define _SI_NOSBXCONTROLS
-#define _SINOSBXCONTROLS
-#define _SI_NODRW
-#define _SI_NOCONTROL
-
-#define _SV_NOXSOUND
-#define _SVDATTR_HXX
-#define _SVDETC_HXX
-#define _SVDIO_HXX
-#define _SVDRAG_HXX
-#define _SVDLAYER_HXX
-#define _SVDXOUT_HXX
-
-#define _SVX_DAILDLL_HXX
-#define _SVX_HYPHEN_HXX
-#define _SVX_IMPGRF_HXX
-#define _SVX_OPTITEMS_HXX
-#define _SVX_OPTGERL_HXX
-#define _SVX_OPTSAVE_HXX
-#define _SVX_OPTSPELL_HXX
-#define _SVX_OPTPATH_HXX
-#define _SVX_OPTLINGU_HXX
-#define _SVX_RULER_HXX
-#define _SVX_RULRITEM_HXX
-#define _SVX_SPLWRAP_HXX
-#define _SVX_SPLDLG_HXX
-#define _SVX_THESDLG_HXX
-
 
 #ifdef PCH
 #include "ui_pch.hxx"
