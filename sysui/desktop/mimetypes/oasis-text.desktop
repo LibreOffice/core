@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=text
+Type=MimeType
+Patterns=*.oot
+MimeType=application/x-vnd.oasis.openoffice.text
+Comment=Open Office Text
