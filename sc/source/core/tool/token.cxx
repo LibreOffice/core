@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-14 11:10:02 $
+ *  last change: $Author: er $ $Date: 2001-02-16 19:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ inline BOOL lcl_IsReference( OpCode eOp, StackVar eType )
     return
         (eOp == ocPush && (eType == svSingleRef || eType == svDoubleRef))
         || (eOp == ocColRowNameAuto && eType == svDoubleRef)
+        || (eOp == ocColRowName && eType == svSingleRef)
         || (eOp == ocMatRef && eType == svSingleRef)
         ;
 }
