@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2001-04-22 14:25:20 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,13 +90,13 @@ TabPage TP_CONTENT_OPT
         Group = TRUE ;
         Text[ language_user1 ] = " ";
         Text[ english_us ] = "Guides";
-        Text[ portuguese ] = "Visual aids";
+        Text[ portuguese ] = "Guias";
         Text[ russian ] = "Íàïğàâëÿşùèå ëèíèè";
         Text[ greek ] = "Âïçèçôéêİò ãñáììİò";
-        Text[ dutch ] = "Visual aids";
+        Text[ dutch ] = "Hulplijnen";
         Text[ french ] = "Repères";
-        Text[ spanish ] = "Visual aids";
-        Text[ italian ] = "Visual aids";
+        Text[ spanish ] = "Guías";
+        Text[ italian ] = "Linee guida";
         Text[ danish ] = "Visual aids";
         Text[ swedish ] = "Hjälplinjer";
         Text[ polish ] = "Linie pomocnicze";
@@ -152,7 +152,7 @@ TabPage TP_CONTENT_OPT
         Text [ french ] = "~Bordures de tableau" ;
         Text [ swedish ] = "Tabellbegrä~nsningar" ;
         Text [ dutch ] = "~Tabelbegrenzingen" ;
-        Text [ spanish ] = "Límites de la t~abla" ;
+        Text [ spanish ] = "Límites de t~abla" ;
         Text [ english_us ] = "T~able limits" ;
         Text[ chinese_simplified ] = "±í¸ñ±ß½ç";
         Text[ russian ] = "Ãğàíèöû òàáëèöû";
@@ -174,7 +174,7 @@ TabPage TP_CONTENT_OPT
         Text[ english_us ] = "~Section limits";
         Text[ portuguese ] = "~Limites de área";
         Text[ russian ] = "Ãğàíèöû îáëàñòè";
-        Text[ dutch ] = "~Bereiksgrenzen";
+        Text[ dutch ] = "~Bereiksbegrenzingen";
         Text[ french ] = "~Limites de section";
         Text[ spanish ] = "~Límites de área";
         Text[ italian ] = "Limiti area";
@@ -198,13 +198,13 @@ TabPage TP_CONTENT_OPT
         Text = "H~ilfslinien beim ~Verschieben" ;
         Text [ ENGLISH ] = "Guides while moving" ;
         Text[ english_us ] = "Guides while moving";
-        Text[ portuguese ] = "Guides while moving";
+        Text[ portuguese ] = "Guias ao mover";
         Text[ russian ] = "Íàïğàâëÿşùèå ëèíèè ïğè ïåğåìåùåíèè";
         Text[ greek ] = "Âïçèçôéêİò ãñáììİò êáôÜ ôçí ìåôáêßíçóç";
-        Text[ dutch ] = "Guides while moving";
+        Text[ dutch ] = "~Hulplijnen bij ~verplaatsen";
         Text[ french ] = "~Repères lors du déplacement";
-        Text[ spanish ] = "Guides while moving";
-        Text[ italian ] = "Guides while moving";
+        Text[ spanish ] = "Guías al despla~zar";
+        Text[ italian ] = "Linee guida durante lo spostamento";
         Text[ danish ] = "Guides while moving";
         Text[ swedish ] = "Hjälpl~injer vid förflyttning";
         Text[ polish ] = "Linie pomocnicze przy przesuwaniu";
@@ -222,14 +222,14 @@ TabPage TP_CONTENT_OPT
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Einfache Griffe" ;
         Text [ ENGLISH ] = "Simple control points" ;
-        Text[ english_us ] = "Simple handles";
-        Text[ portuguese ] = "Simple control points";
+        Text[ english_us ] = "Sim~ple handles";
+        Text[ portuguese ] = "Guias ~simples";
         Text[ russian ] = "Îáû÷íûå óçëû";
         Text[ greek ] = "ÁğëÜ óçìåßá ~åëİã÷ïõ";
-        Text[ dutch ] = "Simple control points";
+        Text[ dutch ] = "~Eenvoudige handvatten";
         Text[ french ] = "Poignées ~simples";
-        Text[ spanish ] = "Simple control points";
-        Text[ italian ] = "Simple control points";
+        Text[ spanish ] = "Agarraderas se~ncillas";
+        Text[ italian ] = "Maniglie semplici";
         Text[ danish ] = "Simple control points";
         Text[ swedish ] = "~Enkla handtag";
         Text[ polish ] = "Proste uchwyty";
@@ -248,13 +248,13 @@ TabPage TP_CONTENT_OPT
         Text = "~Große Griffe" ;
         Text [ ENGLISH ] = "Large control points" ;
         Text[ english_us ] = "Large handles";
-        Text[ portuguese ] = "Large control points";
+        Text[ portuguese ] = "~Guias grandes";
         Text[ russian ] = "Êğóïíûå óçëû";
         Text[ greek ] = "Ìå~ãÜëá óçìåßá åëİã÷ïõ";
-        Text[ dutch ] = "Large control points";
+        Text[ dutch ] = "~Grote handvatten";
         Text[ french ] = "~Grandes poignées";
-        Text[ spanish ] = "Large control points";
-        Text[ italian ] = "Large control points";
+        Text[ spanish ] = "Agarrader~as grandes";
+        Text[ italian ] = "Maniglie ~grandi";
         Text[ danish ] = "Large control points";
         Text[ swedish ] = "~Stora handtag";
         Text[ polish ] = "Du¿e uchwyty";
@@ -274,13 +274,13 @@ TabPage TP_CONTENT_OPT
         Text[English] = "View";
         Group = TRUE ;
         Text[ english_us ] = "View";
-        Text[ portuguese ] = "View";
+        Text[ portuguese ] = "Ver";
         Text[ russian ] = "Âèä";
         Text[ greek ] = "ĞñïâïëŞ";
-        Text[ dutch ] = "View";
+        Text[ dutch ] = "Weergave";
         Text[ french ] = "Affichage";
-        Text[ spanish ] = "View";
-        Text[ italian ] = "View";
+        Text[ spanish ] = "Ver";
+        Text[ italian ] = "Vista";
         Text[ danish ] = "View";
         Text[ swedish ] = "Vy";
         Text[ polish ] = "Widok";
@@ -306,7 +306,7 @@ TabPage TP_CONTENT_OPT
         Text [ swedish ] = "Horisontell r~ullningslist" ;
         Text [ danish ] = "Vandret rullepanel" ;
         Text [ portuguese_brazilian ] = "Horizontale Bildla~ufleiste" ;
-        Text [ portuguese ] = "Barra de deslocação ~horizontal" ;
+        Text [ portuguese ] = "Barra de deslocamento ~horizontal" ;
         Text[ chinese_simplified ] = "Ë®Æ½¹ö¶¯Ìõ";
         Text[ russian ] = "Ãîğèçîíòàëüíàÿ ïîëîñà ïğîêğóòêè";
         Text[ polish ] = "Poziomy pa~sek przewijania obrazu";
@@ -394,7 +394,7 @@ TabPage TP_CONTENT_OPT
         Text [ swedish ] = "Verti~kal linjal" ;
         Text [ dutch ] = "Verticale l~iniaal" ;
         Text [ spanish ] = "Regla v~ertical" ;
-        Text [ english_us ] = "V~ertical ruler" ;
+        Text [ english_us ] = "Verti~cal ruler" ;
         Text[ chinese_simplified ] = "´¹Ö±±ê³ß";
         Text[ russian ] = "Âåğòèêàëüíàÿ ëèíåéêà";
         Text[ polish ] = "Linij~ka pionowa";
@@ -447,7 +447,7 @@ TabPage TP_CONTENT_OPT
         Text [ norwegian ] = "Display" ;
         Text [ italian ] = "Mostra" ;
         Text [ portuguese_brazilian ] = "Display" ;
-        Text [ portuguese ] = "Ver" ;
+        Text [ portuguese ] = "Mostrar" ;
         Text [ finnish ] = "Display" ;
         Text [ danish ] = "Vis" ;
         Text [ french ] = "Afficher" ;
@@ -614,7 +614,7 @@ TabPage TP_CONTENT_OPT
         Text [ norwegian ] = "Background" ;
         Text [ italian ] = "Sfondo" ;
         Text [ portuguese_brazilian ] = "Fundo" ;
-        Text [ portuguese ] = "Destaque" ;
+        Text [ portuguese ] = "Destacar" ;
         Text [ finnish ] = "Tausta" ;
         Text [ danish ] = "Underlægning" ;
         Text [ french ] = "Trame de fond" ;
@@ -668,7 +668,7 @@ TabPage TP_CONTENT_OPT
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Verzeichn~isse" ;
         Text [ ENGLISH ] = "Indexes" ;
-        Text[ english_us ] = "Inde~xes";
+        Text[ english_us ] = "In~dexes";
         Text[ portuguese ] = "~Índices";
         Text[ russian ] = "Óêàçàòåëè";
         Text[ greek ] = "ÅõñåôŞñéá";
@@ -706,7 +706,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_simplified ] = "×¢½Å(~E)";
         Text[ russian ] = "Ñíîñêè";
         Text[ polish ] = "Przypisy ~dolne";
-        Text[ japanese ] = "‹r’‹L†(~E)";
+        Text[ japanese ] = "‹r’”Ô†(~E)";
         Text[ chinese_traditional ] = "µù¸}(~E)";
         Text[ arabic ] = "ÇáÍæÇÔí ÇáÓİáíÉ";
         Text[ greek ] = "Õğïóçìåéşóåéò";
@@ -747,13 +747,13 @@ TabPage TP_CONTENT_OPT
         Text = "Einstellungen";
         Text [ ENGLISH ] = "Settings" ;
         Text[ english_us ] = "Settings";
-        Text[ portuguese ] = "Settings";
+        Text[ portuguese ] = "Definições";
         Text[ russian ] = "Íàñòğîéêè";
         Text[ greek ] = "Ñõèìßóåéò";
-        Text[ dutch ] = "Settings";
-        Text[ french ] = "Settings";
-        Text[ spanish ] = "Settings";
-        Text[ italian ] = "Settings";
+        Text[ dutch ] = "Instellingen";
+        Text[ french ] = "Paramètres";
+        Text[ spanish ] = "Configuración";
+        Text[ italian ] = "Impostazioni";
         Text[ danish ] = "Settings";
         Text[ swedish ] = "Inställningar";
         Text[ polish ] = "Ustawienia";
@@ -774,7 +774,7 @@ TabPage TP_CONTENT_OPT
         Text [ ENGLISH ] = "Measurement units" ;
         Text [ italian ] = "Unità di misura";
         Text [ portuguese_brazilian ] = "Unidades métricas";
-        Text [ portuguese ] = "Unidades métricas";
+        Text [ portuguese ] = "Unidade de medida";
         Text [ danish ] = "Måleenhed";
         Text [ french ] = "Unité de mesure";
         Text [ swedish ] = "Måttenhet";
@@ -865,7 +865,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ chinese_simplified ] = "Í¼ĞÎ(~G)";
         Text[ russian ] = "Ãğàôèêè";
         Text[ polish ] = "Grafiki";
-        Text[ japanese ] = "¸Ş×Ì¨¯¸(~G)";
+        Text[ japanese ] = "}(~G)";
         Text[ chinese_traditional ] = "¹Ï§Î(~G)";
         Text[ arabic ] = "ÕæÑ";
         Text[ greek ] = "ÃñáöéêÜ";
@@ -1131,7 +1131,7 @@ TabPage TP_OPTPRINT_PAGE
         Text = "Pr~ospekt" ;
         Text [ ENGLISH ] = "Pr~ospectus" ;
         Text [ dutch ] = "~Prospectus" ;
-        Text [ english_us ] = "Broc~hure" ;
+        Text [ english_us ] = "Broch~ure" ;
         Text [ italian ] = "Depliant" ;
         Text [ spanish ] = "~Prospecto" ;
         Text [ french ] = "Pr~ospectus" ;
@@ -1301,13 +1301,13 @@ TabPage TP_OPTPRINT_PAGE
         Text [ English ] = "Other" ;
         Group = TRUE ;
         Text[ english_us ] = "Other";
-        Text[ portuguese ] = "Other";
+        Text[ portuguese ] = "Outros";
         Text[ russian ] = "Ïğî÷åå";
         Text[ greek ] = "ÄéÜöïñá";
-        Text[ dutch ] = "Other";
+        Text[ dutch ] = "Overige";
         Text[ french ] = "Autres";
-        Text[ spanish ] = "Other";
-        Text[ italian ] = "Other";
+        Text[ spanish ] = "Otros";
+        Text[ italian ] = "Altro";
         Text[ danish ] = "Other";
         Text[ swedish ] = "Övrigt";
         Text[ polish ] = "Inne";
@@ -1353,19 +1353,19 @@ TabPage TP_OPTPRINT_PAGE
         Text = "Papierschacht aus ~Druckereinstellung" ;
         Text [ ENGLISH ] = "Paper tray from printer ~setup" ;
         Text [ norwegian ] = "Paper tray from printer ~setup" ;
-        Text[ english_us ] = "Paper tray from printer ~settings";
+        Text[ english_us ] = "~Paper tray from printer settings";
         Text[ portuguese ] = "Da configuração da ~impressora";
         Text[ russian ] = "Èç íàñòğîåê ïğèíòåğà";
         Text[ greek ] = "~Äßóêïò ÷áñôéïı áğü ôéò ñõèìŞóåéò ôïõ åêôõğùôŞ";
-        Text[ dutch ] = "~uit printerinstelling";
+        Text[ dutch ] = "Papierlade ~uit printerinstelling";
         Text[ french ] = "D'après les paramètres de l'~imprimante";
         Text[ spanish ] = "Bandeja según c~onfiguración de impresora";
-        Text[ italian ] = "Come da  imposta~zione stampante";
+        Text[ italian ] = "Cassetto come da  imposta~zione stampante";
         Text[ danish ] = "fra udskriftsindstillingerne";
         Text[ swedish ] = "Pappersmagasin från ~skrivarinställning";
         Text[ polish ] = "Zasobnik papieru z ustaw~ieñ drukarki";
         Text[ portuguese_brazilian ] = "da impressora ~setup";
-        Text[ japanese ] = "ÌßØİÀİ’è‚©‚ç‚Ì‹‹†•û–@(~S)";
+        Text[ japanese ] = "ÌßØİÀ‚Ìİ’è‚Ì—p†ÄÚ²‚ğ’Êíg—p(~S)";
         Text[ korean ] = "ÇÁ¸°ÅÍ ¼³Á¤À¸·Î ºÎÅÍ(~S)";
         Text[ chinese_simplified ] = "²ÉÓÃ´òÓ¡»úµÄÉè¶¨(~S)";
         Text[ chinese_traditional ] = "±Ä¥Î¦Lªí¾÷ªº³]©w(~S)";
@@ -1380,10 +1380,10 @@ TabPage TP_OPTPRINT_PAGE
         Text = "Fa~x" ;
         Text[English] = "Fax" ;
         Text[ english_us ] = "~Fax";
-        Text[ portuguese ] = "Fax";
+        Text[ portuguese ] = "Fa~x";
         Text[ russian ] = "Ôàêñ";
         Text[ greek ] = "Fa~x";
-        Text[ dutch ] = "Fax";
+        Text[ dutch ] = "~Fax";
         Text[ french ] = "Fa~x";
         Text[ spanish ] = "~Fax";
         Text[ italian ] = "Fax";
@@ -1411,6 +1411,24 @@ TabPage TP_OPTPRINT_PAGE
     {
         Text = "<Keiner>" ;
         Text[English] = "<None>" ;
+        Text[ english_us ] = "<None>";
+        Text[ portuguese ] = "<Nenhum(a)>";
+        Text[ russian ] = "<Áåç>";
+        Text[ greek ] = "<Káíİíá>";
+        Text[ dutch ] = "<Geen>";
+        Text[ french ] = "<Aucun(e)>";
+        Text[ spanish ] = "<Ninguno>";
+        Text[ italian ] = "<Nessuno>";
+        Text[ danish ] = "<None>";
+        Text[ swedish ] = "<Ingen>";
+        Text[ polish ] = "<Brak>";
+        Text[ portuguese_brazilian ] = "<None>";
+        Text[ japanese ] = "<‚È‚µ>";
+        Text[ korean ] = "<None>";
+        Text[ chinese_simplified ] = "<ÎŞ>";
+        Text[ chinese_traditional ] = "<µL>";
+        Text[ turkish ] = "<None>";
+        Text[ arabic ] = "<None>";
     };
 };
 /**************************************************************************/
@@ -1494,7 +1512,7 @@ TabPage TP_STD_FONT
         Text [ swedish ] = "~Överskrift" ;
         Text [ dutch ] = "~Kop" ;
         Text [ spanish ] = "~Encabezado" ;
-        Text [ english_us ] = "~Heading" ;
+        Text [ english_us ] = "Headin~g" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "±êÌâ(~H)";
         Text[ russian ] = "Çàãîëîâîê";
@@ -1651,7 +1669,7 @@ TabPage TP_STD_FONT
         Text [ portuguese_brazilian ] = "~Nur für das aktuelle Dokument" ;
         Text[ chinese_simplified ] = "Ö»ÓÃÓÚµ±Ç°µÄÎÄµµ(~U)";
         Text[ russian ] = "Òîëüêî äëÿ òåêóùåãî äîêóìåíòà";
-        Text[ polish ] = "Tylko dla aktualnego dokumentu";
+        Text[ polish ] = "Tylko w bie¿¹cym dokumencie";
         Text[ japanese ] = "Œ»İì‹Æ’†‚ÌÄŞ·­ÒİÄ‚Ì‚İ(~U)";
         Text[ chinese_traditional ] = "¶ÈÓì¥Î©ó·í«eªº¤å¥ó(~U)";
         Text[ arabic ] = "ááãÓÊäÏ ÇáÍÇáí İŞØ";
@@ -1704,13 +1722,13 @@ TabPage TP_OPTTABLE_PAGE
         Text = "Standard" ;
         Text [ English ] = "Defaults" ;
         Text[ english_us ] = "Default";
-        Text[ portuguese ] = "Defaults";
+        Text[ portuguese ] = "Padrão";
         Text[ russian ] = "Ïî óìîë÷àíèş";
         Text[ greek ] = "ĞñïåğéëïãŞ";
-        Text[ dutch ] = "Defaults";
+        Text[ dutch ] = "Standaard";
         Text[ french ] = "Par défaut";
-        Text[ spanish ] = "Defaults";
-        Text[ italian ] = "Defaults";
+        Text[ spanish ] = "Predeterminado";
+        Text[ italian ] = "Standard";
         Text[ danish ] = "Defaults";
         Text[ swedish ] = "Standard";
         Text[ polish ] = "Domyœlnie";
@@ -1756,7 +1774,7 @@ TabPage TP_OPTTABLE_PAGE
         Text = "Auf jeder Seite ~wiederholen" ;
         Text [ ENGLISH ] = "Repeat on every page" ;
         TabStop = TRUE ;
-        Text[ italian ] = "Ripeti intestazione";
+        Text[ italian ] = "Ripeti su ogni pagina";
         Text[ portuguese_brazilian ] = "Repeat Header";
         Text[ portuguese ] = "~Repetir em todas as páginas";
         Text[ danish ] = "Gentag på hver side";
@@ -1871,7 +1889,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ spanish ] = "~Reconocimiento de números";
         Text[ italian ] = "Riconoscimento numeri";
         Text[ danish ] = "Talgenkendelse";
-        Text[ swedish ] = "~Nummerigenkänning";
+        Text[ swedish ] = "Talig~enkänning";
         Text[ polish ] = "Rozpoznawanie liczb";
         Text[ portuguese_brazilian ] = "Automatic number recognition";
         Text[ japanese ] = "”š‚Ì”F¯(~N)";
@@ -1944,13 +1962,13 @@ TabPage TP_OPTTABLE_PAGE
         Text = "Tastaturbedienung" ;
         Text [ English ] = "Keyboard handling" ;
         Text[ english_us ] = "Keyboard handling";
-        Text[ portuguese ] = "Keyboard handling";
+        Text[ portuguese ] = "Utilização do teclado";
         Text[ russian ] = "Îáñëóæèâàíèå ñ êëàâèàòóğû";
         Text[ greek ] = "×åéñéóìüò ğëçêôñïëïãßïõ";
-        Text[ dutch ] = "Keyboard handling";
+        Text[ dutch ] = "Bediening toetsenbord";
         Text[ french ] = "Maniement du clavier";
-        Text[ spanish ] = "Keyboard handling";
-        Text[ italian ] = "Keyboard handling";
+        Text[ spanish ] = "Uso del teclado";
+        Text[ italian ] = "Uso della tastiera";
         Text[ danish ] = "Keyboard handling";
         Text[ swedish ] = "Tangentbordshantering";
         Text[ polish ] = "Obs³uga klawiatury";
@@ -1972,10 +1990,10 @@ TabPage TP_OPTTABLE_PAGE
         Text[ portuguese ] = "Shift and arrow key pressed";
         Text[ russian ] = "Íàæàòûå êëàâèøè (Shift) è ñî ñòğåëêîé";
         Text[ greek ] = "Ìå ğéåóìİíá ôá ğëŞêôñá \"Shift\" êáé \"Âİëïò\"";
-        Text[ dutch ] = "Shift and arrow key pressed";
+        Text[ dutch ] = "Shift- en pijltoets ingedrukt";
         Text[ french ] = "Touches Maj. et Flèche enfoncées";
-        Text[ spanish ] = "Shift and arrow key pressed";
-        Text[ italian ] = "Shift and arrow key pressed";
+        Text[ spanish ] = "Teclas Mayús y Flecha pulsadas";
+        Text[ italian ] = "Tasto (Ctrl) e (freccia) premuti";
         Text[ danish ] = "Shift and arrow key pressed";
         Text[ swedish ] = "Skift- och piltangent nertryckta";
         Text[ polish ] = "Naciœnij klawisz 'Shift' i klawisz ze strza³k¹";
@@ -2006,7 +2024,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ russian ] = "Ñòğîêà";
         Text[ polish ] = "Wiersz";
         Text[ japanese ] = "s(~R)";
-        Text[ chinese_traditional ] = "¦æ(~R)";
+        Text[ chinese_traditional ] = "¦C(~R)";
         Text[ arabic ] = "Õİ";
         Text[ greek ] = "ÃñáììŞ";
         Text[ korean ] = "Çà(~R)";
@@ -2078,13 +2096,13 @@ TabPage TP_OPTTABLE_PAGE
         Text = "Einfügen" ;
         Text [ English ] = "Insert" ;
         Text[ english_us ] = "Insert";
-        Text[ portuguese ] = "Insert";
+        Text[ portuguese ] = "Inserir";
         Text[ russian ] = "Âñòàâèòü";
         Text[ greek ] = "ÅéóáãùãŞ";
-        Text[ dutch ] = "Insert";
+        Text[ dutch ] = "Invoegen";
         Text[ french ] = "Insérer";
-        Text[ spanish ] = "Insert";
-        Text[ italian ] = "Insert";
+        Text[ spanish ] = "Insertar";
+        Text[ italian ] = "Inserisci";
         Text[ danish ] = "Insert";
         Text[ swedish ] = "Infoga";
         Text[ polish ] = "Wstaw";
@@ -2115,7 +2133,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ russian ] = "Ñòğîêà";
         Text[ polish ] = "Wiersz";
         Text[ japanese ] = "s(~W)";
-        Text[ chinese_traditional ] = "¦æ(~W)";
+        Text[ chinese_traditional ] = "¦C(~W)";
         Text[ arabic ] = "Õİ";
         Text[ greek ] = "ÃñáììŞ";
         Text[ korean ] = "Çà(~W)";
@@ -2190,10 +2208,10 @@ TabPage TP_OPTTABLE_PAGE
         Text[ portuguese ] = "Behaviour while moving";
         Text[ russian ] = "Ïîâåäåíèå âî âğåìÿ ïåğåìåùåíèÿ";
         Text[ greek ] = "ÓõìğåñéöïñÜ êáôÜ ôçí ìåôáêßíçóç";
-        Text[ dutch ] = "Behaviour while moving";
+        Text[ dutch ] = "Gedrag tijdens verplaatsing";
         Text[ french ] = "Comportement lors du déplacement";
-        Text[ spanish ] = "Behaviour while moving";
-        Text[ italian ] = "Behaviour while moving";
+        Text[ spanish ] = "Comportamiento durante el desplazamiento";
+        Text[ italian ] = "Comportamento durante lo spostamento";
         Text[ danish ] = "Behaviour while moving";
         Text[ swedish ] = "Behaviour while moving";
         Text[ polish ] = "Zachowanie podczas przesuwania";
@@ -2389,7 +2407,7 @@ TabPage TP_OPTSRCVIEW
         Text [ italian ] = "Correlazione colori per evidenziazione sintassi" ;
         Text [ spanish ] = "Colores para sintaxis-destacado" ;
         Text [ french ] = "Couleurs pour marquage de syntaxe" ;
-        Text [ dutch ] = "Kleuren voor Syntax - Highlighting" ;
+        Text [ dutch ] = "Kleuren voor Syntax - markering" ;
         Text [ portuguese ] = "Cores para destaques de sintaxe" ;
         Text[ chinese_simplified ] = "ÓÃ²ÊÉ«Í»³öÏÔÊ¾Óï·¨²¿·Ö";
         Text[ russian ] = "Öâåòà äëÿ âûäåëåíèÿ ñèíòàêñèñà";
@@ -2621,7 +2639,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ french ] = "Traits d'union ~conditionnels" ;
         Text [ swedish ] = "Mjuka bindestreck" ;
         Text [ dutch ] = "Tij~delijke afbreektekens" ;
-        Text [ spanish ] = "G~uiones opcionales" ;
+        Text [ spanish ] = "Separación ma~nual" ;
         Text [ english_us ] = "Optional h~yphens" ;
         Text[ chinese_simplified ] = "ÈíĞÔÁ¬×Ö·û";
         Text[ russian ] = "Ìÿãêèå ïåğåíîñû";
@@ -2643,14 +2661,14 @@ TabPage TP_OPTSHDWCRSR
         Text [ norwegian ] = "Spaces" ;
         Text [ italian ] = "Spazi" ;
         Text [ portuguese_brazilian ] = "Espaçamentos" ;
-        Text [ portuguese ] = "Espaçamentos" ;
+        Text [ portuguese ] = "Espaços" ;
         Text [ finnish ] = "Välilyönnit" ;
         Text [ danish ] = "Mellemrum" ;
         Text [ french ] = "Es~paces" ;
         Text [ swedish ] = "Bl~anksteg" ;
         Text [ dutch ] = "~Spaties" ;
         Text [ spanish ] = "Esp~acios" ;
-        Text [ english_us ] = "Spa~ces" ;
+        Text [ english_us ] = "Spac~es" ;
         Text[ chinese_simplified ] = "¿Õ°××Ö·û";
         Text[ russian ] = "Ïğîáåëû";
         Text[ polish ] = "Spa~cje";
@@ -2732,7 +2750,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ danish ] = "Skift" ;
         Text [ french ] = "~Sauts" ;
         Text [ swedish ] = "Br~ytningar" ;
-        Text [ dutch ] = "Ve~randeringen" ;
+        Text [ dutch ] = "Af~brekingen" ;
         Text [ spanish ] = "~Saltos" ;
         Text [ english_us ] = "Brea~ks" ;
         Text[ chinese_simplified ] = "»»ĞĞ·û";
@@ -2762,7 +2780,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ swedish ] = "Dold te~xt" ;
         Text [ dutch ] = "On~zichtbare tekst" ;
         Text [ spanish ] = "Te~xto oculto" ;
-        Text [ english_us ] = "Hidden text" ;
+        Text [ english_us ] = "Hidden te~xt" ;
         Text[ chinese_simplified ] = "ÒşÈëµÄÎÄ×Ö";
         Text[ russian ] = "Ñêğûòûé òåêñò";
         Text[ polish ] = "Ukryty tek~st";
@@ -2889,7 +2907,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ ENGLISH ] = "~Adjustment" ;
         TabStop = TRUE ;
         Group = TRUE ;
-        Text [ english_us ] = "~Paragraph alignment" ;
+        Text [ english_us ] = "Para~graph alignment" ;
         Text [ portuguese_brazilian ] = "~Absatzausrichtung" ;
         Text [ swedish ] = "St~yckejustering" ;
         Text [ danish ] = "Afsnitsjustering" ;
@@ -2967,7 +2985,7 @@ TabPage TP_OPTSHDWCRSR
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Tabulator und ~Leerzeichen" ;
         Text [ ENGLISH ] = "Tabs and ~space" ;
-        Text [ english_us ] = "Tabs and ~spaces" ;
+        Text [ english_us ] = "Tabs a~nd spaces" ;
         Text [ portuguese_brazilian ] = "Tabulator und ~Leerzeichen" ;
         Text [ swedish ] = "Tabulator och b~lanksteg" ;
         Text [ danish ] = "Tabulator og mellemrum" ;
@@ -2993,7 +3011,7 @@ TabPage TP_OPTSHDWCRSR
         Size = MAP_APPFONT ( 35 , 8 ) ;
         Text = "~Farbe" ;
         Text [ English ] = "~Color" ;
-        Text [ english_us ] = "~Color" ;
+        Text [ english_us ] = "Colo~r" ;
         Text [ portuguese_brazilian ] = "~Farbe" ;
         Text [ swedish ] = "~Färg" ;
         Text [ danish ] = "Farve" ;
@@ -3027,18 +3045,18 @@ TabPage TP_OPTSHDWCRSR
         Text = "~Cursor in geschützten Zonen" ;
         Text [ ENGLISH ] = "Cursor in protected areas" ;
         Text[ english_us ] = "Cursor in protected areas";
-        Text[ portuguese ] = "Cursor in protected areas";
+        Text[ portuguese ] = "~Permitir cursor em zonas protegidas";
         Text[ russian ] = "Êóğñîğ â çàùèùåííûõ îáëàñòÿõ";
         Text[ greek ] = "Íá åğéôñáğåß ç åéóáãùãŞ ôïõ äåßêôç óå ğñïóôáôåõüìåíåò ğåñéï÷İò";
-        Text[ dutch ] = "Cursor in protected areas";
+        Text[ dutch ] = "~Cursor in beveiligde zones";
         Text[ french ] = "~Curseur dans les zones protégées";
-        Text[ spanish ] = "Cursor in protected areas";
-        Text[ italian ] = "Cursor in protected areas";
+        Text[ spanish ] = "Cursor en ~zonas protegidas";
+        Text[ italian ] = "Cursore in aree protette";
         Text[ danish ] = "Cursor in protected areas";
         Text[ swedish ] = "Markör i skyddade områden";
         Text[ polish ] = "Kursor w chronionych obszarach";
         Text[ portuguese_brazilian ] = "Cursor in protected areas";
-        Text[ japanese ] = "•ÛŒì”ÍˆÍ‚Ö‚Ì¶°¿Ùi“ü";
+        Text[ japanese ] = "•ÛŒì”ÍˆÍ‚Ö‚Ì¶°¿Ù";
         Text[ korean ] = "Cursor in protected areas";
         Text[ chinese_simplified ] = "¹â±ê¶¨Î»ÔÚ±£»¤ÇøÓò";
         Text[ chinese_traditional ] = "¥ú¼Ğ¦b«OÅ@°Ï°ì¤§¤¤";
@@ -3054,13 +3072,13 @@ TabPage TP_OPTSHDWCRSR
         Text = "Zulassen" ;
         Text [ ENGLISH ] = "Enable" ;
         Text[ english_us ] = "Enable";
-        Text[ portuguese ] = "~Permitir cursor em zonas protegidas";
+        Text[ portuguese ] = "Permitir";
         Text[ russian ] = "Ğàçğåøèòü";
         Text[ greek ] = "Íá åğéôñáğåß";
-        Text[ dutch ] = "~Cursor in beveiligde zones toelaten";
+        Text[ dutch ] = "Toestaan";
         Text[ french ] = "Permettre";
-        Text[ spanish ] = "~Permitir cursor en zonas protegidas";
-        Text[ italian ] = "Permetti cursore in aree protette";
+        Text[ spanish ] = "Permitir";
+        Text[ italian ] = "Permetti";
         Text[ danish ] = "Tillad markør i beskyttede områder";
         Text[ swedish ] = "Tillåt";
         Text[ polish ] = "Dopuœæ";
