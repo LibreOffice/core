@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:46:16 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ Resource RID_SVXERRCTX
         Text[ russian ] = "$(ERR) ïğè ñîçäàíèè ñëîâàğÿ.";
         Text[ polish ] = "$(ERR) przy tworzeniu s³ownika.";
         Text[ japanese ] = "$(ERR)«‘ì¬‚ÌÛ‚É”­¶B";
-        Text[ chinese_traditional ] = "$(ERR)µo¥Í¦b¥Í¦¨¤@­Óµü¨å®É¡C";
+        Text[ chinese_traditional ] = "$(ERR)µo¥Í¦b²£¥Í¤@­Óµü¨å®É¡C";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ÅäÔÇÁ ŞÇãæÓ.";
         Text[ dutch ] = "$(ERR) bij het maken van een woordenboek";
         Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚ½¨Á¢Ò»¸ö´ÊµäÊ±¡£";
