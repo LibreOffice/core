@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:13:39 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:07:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1781,7 +1781,8 @@ const SwPageDesc& SwStyleBase_Impl::GetOldPageDesc()
         sal_uInt16 nPDescCount = rDoc.GetPageDescCnt();
         for(i = 0; i < nPDescCount; i++)
         {
-            const SwPageDesc& rDesc = rDoc.GetPageDesc( i );
+            const SwPageDesc& rDesc =
+                const_cast<const SwDoc &>(rDoc).GetPageDesc( i );
             if(rDesc.GetName() == rStyleName)
             {
                 pOldPageDesc = & rDesc;
@@ -1802,7 +1803,8 @@ const SwPageDesc& SwStyleBase_Impl::GetOldPageDesc()
             }
             for(i = 0; i < nPDescCount + 1; i++)
             {
-                const SwPageDesc& rDesc = rDoc.GetPageDesc( i );
+                const SwPageDesc& rDesc =
+                    const_cast<const SwDoc &>(rDoc).GetPageDesc( i );
                 if(rDesc.GetName() == rStyleName)
                 {
                     nPDescPos = i;
@@ -2856,7 +2858,9 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
                     pTargetFmt->ResetAllAttr();
 
                 if( USHRT_MAX != nPgDscPos )
-                    m_pDoc->ChgPageDesc( nPgDscPos, m_pDoc->GetPageDesc(nPgDscPos) );
+                    m_pDoc->ChgPageDesc( nPgDscPos,
+                                         const_cast<const SwDoc *>(m_pDoc)
+                                         ->GetPageDesc(nPgDscPos) );
             }
 
         }
@@ -3513,7 +3517,8 @@ const SwStartNode* SwXPageStyle::GetStartNode(sal_Bool bHeader, sal_Bool bLeft)
         sal_uInt16 nPDescCount = pDoc->GetPageDescCnt();
         for(sal_uInt16 i = 0; i < nPDescCount; i++)
         {
-            const SwPageDesc& rDesc = pDoc->GetPageDesc( i );
+            const SwPageDesc& rDesc = const_cast<const SwDoc *>(pDoc)
+                ->GetPageDesc( i );
             if(rDesc.GetName() == GetStyleName())
             {
                 const SwFrmFmt* pFrmFmt = 0;
