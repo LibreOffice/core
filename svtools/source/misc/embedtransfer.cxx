@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedtransfer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:15:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,8 +227,7 @@ void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObject
     rDesc.mnOle2Misc = xObj->getStatus( rDesc.mnViewAspect );
     awt::Size aSz = xObj->getVisualAreaSize( rDesc.mnViewAspect );
 
-    // TODO/LEAN: getMapUnit still needs running state
-    svt::EmbeddedObjectRef::TryRunningState( xObj );
+    // TODO/LEAN: getMapUnit can switch object to running state
     MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( rDesc.mnViewAspect ) );
     rDesc.maSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aMapUnit, MAP_100TH_MM );
     rDesc.maDragStartPos = Point();
