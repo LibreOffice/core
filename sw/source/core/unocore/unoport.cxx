@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-12-19 15:58:20 $
+ *  last change: $Author: dvo $ $Date: 2001-01-02 14:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,12 +379,14 @@ uno::Any SwXTextPortion::getPropertyValue(const OUString& rPropertyName) throw( 
             switch (ePortionType)
             {
                 case PORTION_REFMARK_START:
-                case PORTION_BOOKMARK_START :
+                case PORTION_BOOKMARK_START:
                 case PORTION_TOXMARK_START:
+                case PORTION_REDLINE_START:
                 break;
                 case PORTION_REFMARK_END:
                 case PORTION_TOXMARK_END:
-                case PORTION_BOOKMARK_END :  bStart = FALSE;
+                case PORTION_BOOKMARK_END:
+                case PORTION_REDLINE_END:   bStart = FALSE;
                 break;
                 default:
                     bPut = FALSE;
