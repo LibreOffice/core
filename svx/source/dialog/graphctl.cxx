@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:58:09 $
+ *  last change: $Author: hr $ $Date: 2003-06-26 11:10:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,12 @@
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
 #include "graphctl.hxx"
@@ -222,6 +228,8 @@ void GraphCtrl::SetWinStyle( WinBits nWinBits )
 
 void GraphCtrl::InitSdrModel()
 {
+    ::vos::OGuard aGuard (Application::GetSolarMutex());
+
     SdrPage* pPage;
 
     // alten Kram zerstoeren
@@ -254,6 +262,10 @@ void GraphCtrl::InitSdrModel()
     pView->SetFrameDragSingles( TRUE );
     pView->SetMarkedPointsSmooth( SDRPATHSMOOTH_SYMMETRIC );
     pView->SetEditMode( TRUE );
+
+    // Tell the accessibility object about the changes.
+    if (mpAccContext != NULL)
+        mpAccContext->setModelAndView (pModel, pView);
 }
 
 
