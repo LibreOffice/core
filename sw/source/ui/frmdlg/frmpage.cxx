@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 10:52:13 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,7 +596,7 @@ void lcl_InsertVectors(ListBox& rBox,
     const ::std::vector< String >& rPrev, const ::std::vector< String >& rThis,
     const ::std::vector< String >& rNext, const ::std::vector< String >& rRemain)
 {
-    ::std::vector< const String >::iterator aIt;
+    ::std::vector< String >::const_iterator aIt;
     USHORT nEntry = 0;
     for(aIt = rPrev.begin(); aIt != rPrev.end(); aIt++)
         nEntry = rBox.InsertEntry(*aIt);
