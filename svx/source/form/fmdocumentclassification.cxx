@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmdocumentclassification.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:53:13 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_XFORMS_XFORMSSUPPLIER_HPP_
+#include <com/sun/star/xforms/XFormsSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
@@ -119,6 +122,8 @@ namespace svxform
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::xforms;
+    using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::sdbc;
 
     //====================================================================
@@ -135,6 +140,16 @@ namespace svxform
 
         try
         {
+            // XForms
+            {
+                Reference< XNameContainer > xXForms;
+                Reference< XFormsSupplier > xSuppForms( _rxDocumentModel, UNO_QUERY );
+                xXForms = xSuppForms.is() ? xSuppForms->getXForms() : NULL;
+                if ( xXForms.is() )
+                    return eEnhancedForm;
+            }
+
+            // check for database forms before asking the service info
             if ( OStaticDataAccessTools().isEmbeddedInDatabase( _rxDocumentModel ) )
                 eType = eDatabaseForm;
             else
