@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interfacecontainer.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
+ *  last change: $Author: dbo $ $Date: 2002-08-05 09:26:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,19 +190,30 @@ public:
      **/
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > SAL_CALL getElements() const SAL_THROW( () );
 
-    /**
-      Insert an element in the container. The position is not specified.
-      @param rxIFace    the added interface. It is allowed to insert null or
-                         the same pointer more than once.
-      @return the new count of elements in the container.
-     */
+    /** Inserts an element into the container.  The position is not specified, thus it is not
+        specified in which order events are fired.
+
+        @attention
+        If you add the same interface more than once, then it will be added to the elements list
+        more than once and thus if you want to remove that interface from the list, you have to call
+        removeInterface() the same number of times.
+        In the latter case, you will also get events fired more than once (if the interface is a
+        listener interface).
+
+        @param rxIFace
+               interface to be added; it is allowed to insert null or
+               the same interface more than once
+        @return
+                the new count of elements in the container
+    */
     sal_Int32 SAL_CALL addInterface( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxIFace ) SAL_THROW( () );
-    /**
-      Remove an element from the container. It uses the equal definition of
-      uno objects to remove the interfaces.
-      @param rxIFace    the removed interface.
-      @return the new count of elements in the container.
-     */
+    /** Removes an element from the container.  It uses interface equality to remove the interface.
+
+        @param rxIFace
+               interface to be removed
+        @return
+                the new count of elements in the container
+    */
     sal_Int32 SAL_CALL removeInterface( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxIFace ) SAL_THROW( () );
     /**
       Call disposing on all object in the container that
@@ -287,25 +298,39 @@ public:
      */
     inline OInterfaceContainerHelper * SAL_CALL getContainer( const key & ) const SAL_THROW( () );
 
-    /**
-      Inserts an element in the container specified with the key. The position is not specified.
-      @param rKey       the id of the container.
-      @param rxIFace    the added interface. It is allowed, to insert null or
-                         the same pointer more than once.
-      @return the new count of elements in the container.
-     */
+    /** Inserts an element into the container with the specified key.
+        The position is not specified, thus it is not specified in which order events are fired.
+
+        @attention
+        If you add the same interface more than once, then it will be added to the elements list
+        more than once and thus if you want to remove that interface from the list, you have to call
+        removeInterface() the same number of times.
+        In the latter case, you will also get events fired more than once (if the interface is a
+        listener interface).
+
+        @param rKey
+               the id of the container
+        @param r
+               interface to be added; it is allowed, to insert null or
+               the same interface more than once
+        @return
+                the new count of elements in the container
+    */
     inline sal_Int32 SAL_CALL addInterface(
         const key & rKey,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & r )
         SAL_THROW( () );
 
-    /**
-      Removes an element from the container specified with the key.
-      It uses the equal definition of uno objects to remove the interfaces.
-      @param rKey       the id of the container.
-      @param rxIFace    the removed interface.
-      @return the new count of elements in the container.
-     */
+    /** Removes an element from the container with the specified key.
+        It uses interface equality to remove the interface.
+
+        @param rKey
+               the id of the container
+        @param rxIFace
+               interface to be removed
+        @return
+                the new count of elements in the container
+    */
     inline sal_Int32 SAL_CALL removeInterface(
         const key & rKey,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxIFace )
@@ -461,25 +486,39 @@ public:
      */
     OInterfaceContainerHelper * SAL_CALL getContainer( const ::com::sun::star::uno::Type & rKey ) const SAL_THROW( () );
 
-    /**
-      Insert an element in the container specified with the key. The position is not specified.
-      @param rKey       the id of the container.
-      @param rxIFace    the added interface. It is allowed to insert null or
-                         the same pointer more than once.
-      @return the new count of elements in the container.
-     */
+    /** Inserts an element into the container with the specified key.
+        The position is not specified, thus it is not specified in which order events are fired.
+
+        @attention
+        If you add the same interface more than once, then it will be added to the elements list
+        more than once and thus if you want to remove that interface from the list, you have to call
+        removeInterface() the same number of times.
+        In the latter case, you will also get events fired more than once (if the interface is a
+        listener interface).
+
+        @param rKey
+               the id of the container
+        @param r
+               interface to be added; it is allowed, to insert null or
+               the same interface more than once
+        @return
+                the new count of elements in the container
+    */
     sal_Int32 SAL_CALL addInterface(
         const ::com::sun::star::uno::Type & rKey,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & r )
         SAL_THROW( () );
 
-    /**
-      Remove an element from the container specified with the key.
-      It uses the equal definition of uno objects to remove the interfaces.
-      @param rKey       the id of the container.
-      @param rxIFace    the removed interface.
-      @return the new count of elements in the container.
-     */
+    /** Removes an element from the container with the specified key.
+        It uses interface equality to remove the interface.
+
+        @param rKey
+               the id of the container
+        @param rxIFace
+               interface to be removed
+        @return
+                the new count of elements in the container
+    */
     sal_Int32 SAL_CALL removeInterface(
         const ::com::sun::star::uno::Type & rKey,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxIFace )
