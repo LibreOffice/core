@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:14:27 $
+ *  last change: $Author: kz $ $Date: 2001-08-15 20:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3271,7 +3271,7 @@ TabPage RID_TP_GENERIC {
             Text = "Bereich";
             Text [ english_us ] = "Range";
             Text[ portuguese ] = "Área";
-        Text[ russian ] = "Range";
+        Text[ russian ] = "Îáëàñòü";
         Text[ greek ] = "Range";
         Text[ dutch ] = "Bereik";
         Text[ french ] = "Zone";
@@ -3358,7 +3358,7 @@ TabPage RID_TP_GENERIC {
             Text = "Einstellung";
             Text [ english_us ] = "Setting";
             Text[ portuguese ] = "Configuração";
-        Text[ russian ] = "Setting";
+        Text[ russian ] = "Íàñòğîéêà";
         Text[ greek ] = "Setting";
         Text[ dutch ] = "Instelling";
         Text[ french ] = "Paramétrage";
@@ -3451,7 +3451,7 @@ TabPage RID_TP_SPECIAL {
             Text = "Verzeichnisse";
             Text [ english_us ] = "Directories";
             Text[ portuguese ] = "Directórios";
-        Text[ russian ] = "Directories";
+        Text[ russian ] = "Êàòàëîãè";
         Text[ greek ] = "Directories";
         Text[ dutch ] = "Directory's";
         Text[ french ] = "Répertoires";
@@ -3647,7 +3647,7 @@ TabPage RID_TP_SPECIAL {
             Text = "Andere Einstellungen";
             Text [ english_us ] = "Other settings";
             Text[ portuguese ] = "Outras definições";
-        Text[ russian ] = "Other settings";
+        Text[ russian ] = "Äîïîëíèòåëüíûå íàñòğîéêè";
         Text[ greek ] = "Other settings";
         Text[ dutch ] = "Andere instellingen";
         Text[ french ] = "Paramètres supplémentaires";
@@ -4406,6 +4406,7 @@ FloatingWindow LOAD_CONF {
     Text[ catalan ] = "Leyendo archivos de configuración";
     Text[ finnish ] = "Luetaan kokoonpanotiedostoja";
 };
+
 
 
 
