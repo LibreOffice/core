@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showview.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:41 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,18 @@
  *
  ************************************************************************/
 
-#ifndef _SD_SHOWVIEW_HXX
-#define _SD_SHOWVIEW_HXX
+#ifndef SD_SHOW_VIEW_HXX
+#define SD_SHOW_VIEW_HXX
 
 #ifndef _SVX_FMVIEW_HXX
 #include <svx/fmview.hxx>
 #endif
 
 class SdDrawDocument;
-class SdViewShell;
+
+namespace sd {
+
+class ViewShell;
 
 /*************************************************************************
 |*
@@ -75,21 +78,19 @@ class SdViewShell;
 |*
 \************************************************************************/
 
-class ShowView : public FmFormView
+class ShowView
+    : public FmFormView
 {
-    SdDrawDocument* pDrDoc;
-    SdViewShell*    pViewSh;
-    Window*         pWindowForPlugIns;
-    USHORT          nAllowInvalidateSmph;
-    BOOL            bAllowMasterPageCaching;
-
- public:
+public:
                     // wenn waehrend des Zeichnens Plugins 'connected'
                     // werden sollen, muss pWWin ein Zeiger auf das Fenster
                     // sein, das das Plugin benutzen soll
-                    ShowView(SdDrawDocument* pDoc, OutputDevice* pOut,
-                             SdViewShell* pViewShell, Window* pWin = NULL);
-                    ~ShowView();
+    ShowView (
+        SdDrawDocument* pDoc,
+        OutputDevice* pOut,
+        ViewShell* pViewShell,
+        ::Window* pWin = NULL);
+    virtual ~ShowView (void);
 
     SdDrawDocument& GetDoc() const          { return *pDrDoc; }
 
@@ -102,13 +103,22 @@ class ShowView : public FmFormView
                     { return(bAllowMasterPageCaching); }
 
     virtual void    InitRedraw(OutputDevice* pOutDev, const Region& rReg);
-    virtual void    InvalidateOneWin(Window& rWin);
-    virtual void    InvalidateOneWin(Window& rWin, const Rectangle& rRect);
+    virtual void    InvalidateOneWin(::Window& rWin);
+    virtual void    InvalidateOneWin(::Window& rWin, const Rectangle& rRect);
 
     virtual void    DoConnect(SdrOle2Obj* pOleObj);
 
+private:
+    SdDrawDocument* pDrDoc;
+    ViewShell* pViewSh;
+    Window*         pWindowForPlugIns;
+    USHORT          nAllowInvalidateSmph;
+    BOOL            bAllowMasterPageCaching;
+
 };
 
-#endif      // _SD_SHOWVIEW_HXX
+} // end of namespace sd
+
+#endif
 
 
