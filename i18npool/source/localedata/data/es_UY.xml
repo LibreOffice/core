@@ -38,14 +38,14 @@
 <TimePM>p.m.</TimePM>
 <MeasurementSystem>Metric</MeasurementSystem>
 </LC_CTYPE>
-<LC_FORMAT ref="es_AR" replaceTo="[$$U-380A]"/>
+<LC_FORMAT ref="es_AR" replaceTo="[$$-380A]"/>
 <LC_COLLATION ref="en_US"/>
 <LC_SEARCH ref="en_US"/>
 <LC_CALENDAR ref="es_AR"/>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>$U</CurrencyID>
-<CurrencySymbol>$U</CurrencySymbol>
+<CurrencyID>$</CurrencyID>
+<CurrencySymbol>$</CurrencySymbol>
 <BankSymbol>UYU</BankSymbol>
 <CurrencyName>Peso Uruguayo</CurrencyName>
 <DecimalPlaces>2</DecimalPlaces>
