@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-21 21:24:37 $
+ *  last change: $Author: kz $ $Date: 2002-02-26 14:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2520,7 +2520,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ chinese_traditional ] = "ε·¥δ½ζ—¥(~W)";
         Text[ arabic ] = "νζγ ΓΣΘζΪ";
         Text[ greek ] = "Ημέρα εβδομάδας";
-        Text[ korean ] = "μ”μΌ(~W)";
+        Text[ korean ] = "ν‰μΌ(~W)";
         Text[ turkish ] = "~έώ gόnό";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Dia de la ~setmana";
