@@ -1,0 +1,213 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XBezierPolyPolygon2D.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2005-03-10 12:31:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_XBezierPolyPolygon2D_idl__
+#define __com_sun_star_rendering_XBezierPolyPolygon2D_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#endif
+#ifndef __com_sun_star_rendering_XPolyPolygon2D_idl__
+#include <com/sun/star/rendering/XPolyPolygon2D.idl>
+#endif
+#ifndef __com_sun_star_geometry_RealBezierSegment2D_idl__
+#include <com/sun/star/geometry/RealBezierSegment2D.idl>
+#endif
+
+module com { module sun { module star { module rendering {
+
+/** This is a specialized interface for a 2D poly-polygon containing
+     straight line and bezier segments.<p>
+
+    This poly-polygon can contain polygons consisting of a mixture of
+    cubic bezier curves and straight lines. As the straight line is a
+    special case of a cubic bezier curve (control points collinear
+    with the line through start and end point), this can be expressed
+    uniformly with a sequence of <type>RealBezierSegment2D</type>s.<p>
+
+    By convention, a <type>RealBezierSegment2D</type> is a straight
+    line segment, if all three contained points are strictly equal.<p>
+
+    @since #110496#
+ */
+interface XBezierPolyPolygon2D : XPolyPolygon2D
+{
+    /** Query subset of this poly-polygon.<p>
+
+        Query subset of this poly-polygon, starting at the given
+        polygon and the given point within that polygon, and
+        containing the specified number of polygons and points in the
+        last polygon.<p>
+
+        @param nPolygonIndex
+        The index of the polygon to start point retrieval with. This
+        index must be in the range [0,numPolygons-1].
+
+        @param nNumberOfPolygons
+        The number of polygons to extract. This value must not exceed
+        numPolygons-nPolygonIndex.
+
+        @param nPointIndex
+        The index of the first point in the first polygon to
+        extract. This value must not exceed the number of points in
+        this polygon minus one.
+
+        @param nNumberOfPoints
+        The number of points to extract from the last polygon. This
+        value must not exceed the number of points in this last
+        polygon minus one.
+
+        @returns the sequence of extracted points.
+
+        @throws com::sun::star::lang::IndexOutOfBoundsException
+        if one of the given values exceed the permissible range.
+     */
+    sequence< sequence < ::com::sun::star::geometry::RealBezierSegment2D > > getPoints( [in] long nPolygonIndex, [in] long nNumberOfPolygons, [in] long nPointIndex, [in] long nNumberOfPoints )
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
+
+    //-------------------------------------------------------------------------
+
+    /** Set the specified subset of points to the poly-polygon.<p>
+
+        The subset of poly-polygon points not included in this sequence
+        remains unchanged. Use
+        <member>XBezierPolyPolygon2D::getNumberOfPolygons()</member>
+        or
+        <member>XBezierPolyPolygon2D::getNumberOfPolygonPoints()</member>
+        to append points or polygons, respectively.<p>
+
+        @param points
+        A sequence of points to set at the poly-polygon.
+
+        @param nPolygonIndex
+        The index of the polygon to start point insertion with. This
+        index must be in the range [0,numPolygons].
+
+        @param nPointIndex
+        The index of the point in the polygon specified by
+        nPolygonIndex, <em>before<em> which insertion will take place.
+        This value must not exceed the number of points in this
+        polygon.
+
+        @throws com::sun::star::lang::IndexOutOfBoundsException
+        if one of the given values exceed the permissible range.
+     */
+    void                                                setPoints( [in] sequence< sequence< ::com::sun::star::geometry::RealBezierSegment2D > > points, [in] long nPolygonIndex, [in] long nPointIndex )
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
+
+    //-------------------------------------------------------------------------
+
+    /** Get a single point from the poly-polygon.
+
+        @param nPolygonIndex
+        The index of the polygon where the point to be extract is
+        contained within. This index must be in the range
+        [0,numPolygons-1].
+
+        @param nPointIndex
+        The index of the point in the polygon specified by
+        nPolygonIndex, which is to be retrieved.  This value must not
+        exceed the number of points in this polygon minus one.
+
+        @returns the requested point.
+
+        @throws com::sun::star::lang::IndexOutOfBoundsException
+        if one of the given values exceed the permissible range.
+
+     */
+    ::com::sun::star::geometry::RealBezierSegment2D getPoint( [in] long nPolygonIndex, [in] long nPointIndex )
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
+
+    //-------------------------------------------------------------------------
+
+    /** Set a single point on the poly-polygon.<p>
+
+        The remaining points of the poly-polygon will not be changed by
+        this method. Use
+        <member>XBezierPolyPolygon2D::getNumberOfPolygons()</member>
+        or
+        <member>XBezierPolyPolygon2D::getNumberOfPolygonPoints()</member>
+        to append points or polygons, respectively.<p>
+
+        @param point
+        The point to be set at the poly-polygon.
+
+        @param nPolygonIndex
+        The index of the polygon to insert the point in. This index
+        must be in the range [0,numPolygons].
+
+        @param nPointIndex
+        The index of the point in the polygon specified by
+        nPolygonIndex, which is to be set.  This value must not
+        exceed the number of points in this polygon.
+
+        @throws com::sun::star::lang::IndexOutOfBoundsException
+        if one of the given values exceed the permissible range.
+     */
+    void                                                setPoint( [in] ::com::sun::star::geometry::RealBezierSegment2D point, [in] long nPolygonIndex, [in] long nPointIndex )
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
+};
+
+}; }; }; };
+
+#endif
