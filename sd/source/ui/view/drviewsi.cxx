@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:12:20 $
+ *  last change: $Author: aw $ $Date: 2001-01-12 16:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,11 +135,6 @@ using namespace ::com::sun::star;
 #define ATTR_MISSING    0       // Attribut nicht verfuegbar
 #define ATTR_MIXED      1       // Attribut uneindeutig (bei Mehrfachselektion)
 #define ATTR_SET        2       // Attribut eindeutig
-
-// Kann (wohl) nach der 383 d raus !!!
-#ifndef SID_ATTR_3D_LIGHTDIRECTION_8
-#define SID_ATTR_3D_LIGHTDIRECTION_8 SID_ATTR_3D_LIGHTON_8 + 8
-#endif
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
@@ -1225,8 +1220,7 @@ void SdDrawViewShell::AssignFrom3DWindow()
             {
                 SfxItemSet aSet( pDoc->GetPool(),
                     SDRATTR_START,  SDRATTR_END,
-                    SID_ATTR_3D_START, SID_ATTR_3D_END,
-                    0 );
+                    0, 0);
                 p3DWin->GetAttr( aSet );
 
                 // Eigene UNDO-Klammerung auch um die Wandlung in 3D
