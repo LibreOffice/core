@@ -117,6 +117,7 @@ hedabu: ..\inc\rngitem.hxx %_DEST%\inc%_EXT%\svtools\rngitem.hxx
 hedabu: ..\inc\ruler.hxx %_DEST%\inc%_EXT%\svtools\ruler.hxx
 hedabu: ..\inc\scrwin.hxx %_DEST%\inc%_EXT%\svtools\scrwin.hxx
 hedabu: ..\inc\slstitm.hxx %_DEST%\inc%_EXT%\svtools\slstitm.hxx
+hedabu: ..\inc\ilstitem.hxx %_DEST%\inc%_EXT%\svtools\ilstitem.hxx
 hedabu: ..\inc\smplhint.hxx %_DEST%\inc%_EXT%\svtools\smplhint.hxx
 hedabu: ..\inc\cnclhint.hxx %_DEST%\inc%_EXT%\svtools\cnclhint.hxx
 hedabu: ..\inc\inettype.hxx %_DEST%\inc%_EXT%\svtools\inettype.hxx
