@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 17:02:20 $
+ *  last change: $Author: os $ $Date: 2002-01-28 13:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1025,6 +1025,10 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         25, 90,
     };
 
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const Color aBackColor = rStyleSettings.GetFieldColor();
+    const Color aTextColor = rStyleSettings.GetFieldTextColor();
+
     OutputDevice*  pDev = rUDEvt.GetDevice();
     Rectangle aRect = rUDEvt.GetRect();
     USHORT  nItemId = rUDEvt.GetItemId();
@@ -1034,7 +1038,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     Point aBLPos = aRect.TopLeft();
     Font aOldFont = pDev->GetFont();
     Color aOldColor = pDev->GetLineColor();
-    pDev->SetLineColor(aLineColor);
+    pDev->SetLineColor(aTextColor);
     Font aFont(OutputDevice::GetDefaultFont(
                 DEFAULTFONT_UI_SANS, ::GetSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE));
 
@@ -1043,10 +1047,16 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     Font aRuleFont( lcl_GetDefaultBulletFont() );
     aSize.Height() = nRectHeight/6;
     aRuleFont.SetSize(aSize);
+    aRuleFont.SetColor(aTextColor);
+    aRuleFont.SetFillColor(aBackColor);
     if(nPageType == NUM_PAGETYPE_BULLET)
         aFont = aRuleFont;
     else if(nPageType == NUM_PAGETYPE_NUM)
+    {
         aSize.Height() = nRectHeight/8;
+    }
+    aFont.SetColor(aTextColor);
+    aFont.SetFillColor(aBackColor);
     aFont.SetSize( aSize );
     pDev->SetFont(aFont);
 
@@ -1058,7 +1068,11 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         pVDev->SetMapMode(pDev->GetMapMode());
         pVDev->SetOutputSize( aRectSize );
         aOrgRect = aRect;
+        pVDev->SetFillColor( aBackColor );
+        pVDev->DrawRect(aOrgRect);
 
+        if(aBackColor == aLineColor)
+            aLineColor.Invert();
         pVDev->SetLineColor(aLineColor);
         // Linien nur einmalig Zeichnen
         if(nPageType != NUM_PAGETYPE_NUM)
@@ -1123,7 +1137,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     {
         // Outline numbering has to be painted into the virtual device
         // to get correct lines
-        pVDev->SetFillColor( Color( COL_WHITE ) );
+        // has to be made again
         pVDev->DrawRect(aOrgRect);
         long nStartX = aOrgRect.TopLeft().X();
         long nStartY = aOrgRect.TopLeft().Y();
@@ -3086,7 +3100,10 @@ USHORT lcl_DrawBullet(VirtualDevice* pVDev,
         aTmpSize.Height() = 1;
     aFont.SetSize(aTmpSize);
     aFont.SetTransparent(TRUE);
-    aFont.SetColor(rFmt.GetBulletColor());
+    Color aBulletColor = rFmt.GetBulletColor();
+    if(aBulletColor == pVDev->GetFillColor())
+        aBulletColor.Invert();
+    aFont.SetColor(aBulletColor);
     pVDev->SetFont( aFont );
     String aText(sal_Unicode(rFmt.GetBulletChar()));
     long nY = nYStart;
@@ -3105,13 +3122,19 @@ void    SvxNumberingPreview::Paint( const Rectangle& rRect )
     Size aSize(PixelToLogic(GetOutputSizePixel()));
     Rectangle aRect(Point(0,0), aSize);
 
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const Color aBackColor = rStyleSettings.GetFieldColor();
+    const Color aTextColor = rStyleSettings.GetFieldTextColor();
+
     VirtualDevice* pVDev = new VirtualDevice(*this);
     pVDev->SetMapMode(GetMapMode());
     pVDev->SetOutputSize( aSize );
 
-
-    pVDev->SetLineColor();
-    pVDev->SetFillColor( Color( COL_WHITE ) );
+    Color aLineColor(Color(COL_LIGHTGRAY));
+    if(aLineColor == aBackColor)
+        aLineColor.Invert();
+    pVDev->SetLineColor(aLineColor);
+    pVDev->SetFillColor( aBackColor );
     pVDev->DrawRect(aRect);
 
     if(pActNum)
@@ -3137,6 +3160,8 @@ void    SvxNumberingPreview::Paint( const Rectangle& rRect )
         USHORT nYStep = (aSize.Height() - 6)/ (pActNum->GetLevelCount() > 1 ? pActNum->GetLevelCount() : 5);
         aStdFont = OutputDevice::GetDefaultFont(
                 DEFAULTFONT_UI_SANS, ::GetSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE);
+        aStdFont.SetColor(aTextColor);
+        aStdFont.SetFillColor(aBackColor);
 
         //
         USHORT nFontHeight = nYStep * 6 / 10;
@@ -3196,7 +3221,10 @@ void    SvxNumberingPreview::Paint( const Rectangle& rRect )
                     String aText(pActNum->MakeNumString( aNum ));
                     Font aSaveFont = pVDev->GetFont();
                     Font aColorFont(aSaveFont);
-                    aColorFont.SetColor(rFmt.GetBulletColor());
+                    Color aTmpBulletColor = rFmt.GetBulletColor();
+                    if(aBackColor == aTmpBulletColor)
+                        aTmpBulletColor.Invert();
+                    aColorFont.SetColor(aTmpBulletColor);
                     pVDev->SetFont(aColorFont);
                     pVDev->DrawText( Point(nNumberXPos, nYStart), aText );
                     pVDev->SetFont(aSaveFont);
@@ -3211,7 +3239,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& rRect )
                     nTextXPos = nNumberXPos + nBulletWidth + nTextOffset;
 
                 Rectangle aRect1(Point(nTextXPos, nYStart + nFontHeight / 2), Size(aSize.Width() / 2, 2));
-                pVDev->SetFillColor( Color( COL_BLACK ) );
+                pVDev->SetFillColor( aBackColor );
                 pVDev->DrawRect( aRect1 );
 
                 Rectangle aRect2(Point(nXStart, nYStart + nLineHeight + nFontHeight / 2 ), Size(aSize.Width() / 2, 2));
@@ -3249,7 +3277,10 @@ void    SvxNumberingPreview::Paint( const Rectangle& rRect )
                 else
                 {
                     Font aColorFont(aStdFont);
-                    aColorFont.SetColor(rFmt.GetBulletColor());
+                    Color aTmpBulletColor = rFmt.GetBulletColor();
+                    if(aBackColor == aTmpBulletColor)
+                        aTmpBulletColor.Invert();
+                    aColorFont.SetColor(aTmpBulletColor);
                     pVDev->SetFont(aColorFont);
                     aNum.SetLevel( nLevel );
                     if(pActNum->IsContinuousNumbering())
