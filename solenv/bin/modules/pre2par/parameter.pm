@@ -2,9 +2,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 16:10:05 $
+#   last change: $Author: rt $ $Date: 2005-01-31 10:51:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,7 +103,7 @@ sub getparameter
 
         if ($param eq "-s") { $pre2par::globals::prefilename = shift(@ARGV); }
         elsif ($param eq "-o") { $pre2par::globals::parfilename = shift(@ARGV); }
-        elsif ($param eq "-l") { $pre2par::globals::ulffilename = shift(@ARGV); }
+        elsif ($param eq "-l") { $pre2par::globals::langfilename = shift(@ARGV); }
         else
         {
             print("\n*************************************\n");

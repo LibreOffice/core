@@ -2,9 +2,9 @@
 #
 #   $RCSfile: work.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 16:10:29 $
+#   last change: $Author: rt $ $Date: 2005-01-31 10:51:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,6 +63,7 @@
 
 package pre2par::work;
 
+use pre2par::exiter;
 use pre2par::remover;
 use pre2par::pathanalyzer;
 
@@ -258,34 +259,61 @@ sub formatter
     }
 }
 
+###################################################
+# Returning the language file name
+###################################################
 
-############################################
-# Creating ulf file name from corresponding
-# pre filename
-############################################
+sub getlangfilename
+{
+    return $pre2par::globals::langfilename;
+}
+
+###################################################
+# Creating the ulf file name from the
+# corresponding pre file name
+###################################################
 
 sub getulffilename
 {
-#   my ($prefilename) = @_;
+    my ($prefilename) = @_;
 
-    my $ulffilename = $pre2par::globals::ulffilename;
+    my $ulffilename = $prefilename;
+    $ulffilename =~ s/\.pre\s*$/\.ulf/;
+    pre2par::pathanalyzer::make_absolute_filename_to_relative_filename(\$ulffilename);
 
     return $ulffilename;
 }
 
 ############################################
-# Checking if the ulf file exists
+# Checking if a file exists
 ############################################
 
 sub fileexists
 {
-    my ($ulffilename) = @_;
+    my ($langfilename) = @_;
 
     my $fileexists = 0;
 
-    if( -f $ulffilename ) { $fileexists = 1; }
+    if( -f $langfilename ) { $fileexists = 1; }
 
     return $fileexists;
+}
+
+############################################
+# Checking the existence of ulf and
+# jlf/mlf files
+############################################
+
+sub check_existence_of_langfiles
+{
+    my ($langfilename, $ulffilename) = @_;
+
+    my $do_localize = 0;
+
+    if (( fileexists($ulffilename) ) && ( ! fileexists($langfilename) )) { pre2par::exiter::exit_program("Error: Did not find language file $langfilename", "check_existence_of_langfiles"); }
+    if (( fileexists($ulffilename) ) && ( fileexists($langfilename) )) { $do_localize = 1; }
+
+    return $do_localize;
 }
 
 1;
