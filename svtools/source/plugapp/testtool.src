@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:09:20 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ class FlagToolBoxState
             Text[ chinese_traditional ] = "Åã¥Ü ID";
             Text[ arabic ] = "ÅÙåÇÑ IDs";
             Text[ turkish ] = "ID'leri görüntüle";
+            Text[ catalan ] = "Mostrar IDs";
         };
     ToolBoxItem  {
             Type = TOOLBOXITEM_SEPARATOR;
@@ -132,6 +133,7 @@ class FlagToolBoxState
             Text[ chinese_traditional ] = "³o¬O¤@­Ó¤å¦r¿é¤J¤è¶ô";
             Text[ arabic ] = "åÐå åí äÇÝÐÉ ÇáÅÏÎÇá";
             Text[ turkish ] = "Giriþ penceresi";
+            Text[ catalan ] = "Esta es la ventana de entradas";
         };
     ToolBoxItem  {
             Type = TOOLBOXITEM_SEPARATOR;
@@ -160,6 +162,7 @@ class FlagToolBoxState
             Text[ chinese_traditional ] = "¶Ç»¼µ¹ TestTool";
             Text[ arabic ] = "äÞá Åáì TestTool";
             Text[ turkish ] = "TestTool'a aktar";
+            Text[ catalan ] = "Transmitir al TestTool";
         };
     ToolBoxItem  {
             Type = TOOLBOXITEM_SEPARATOR;
@@ -188,6 +191,7 @@ class FlagToolBoxState
             Text[ chinese_traditional ] = "Åã¥Ü©Ò¦³ªºµøµ¡";
             Text[ arabic ] = "ÅÙåÇÑ ßÇÝÉ ÇáäæÇÝÐ";
             Text[ turkish ] = "Tüm pencereleri görüntüle";
+            Text[ catalan ] = "Mostrar todas las ventanas";
         };
     ToolBoxItem  {
             Identifier = TT_KURZNAME;
@@ -213,6 +217,7 @@ class FlagToolBoxState
             Text[ chinese_traditional ] = "Åã¥Üµu¦WºÙ(¦pªG¦s¦b)";
             Text[ arabic ] = "ÅÙåÇÑ ÇáÇÓã ÇáãÎÊÕÑ (ÅÐÇ ßÇä ãæÌæÏÇð)";
             Text[ turkish ] = "(Varsa) kýsaltmayý görüntüle";
+            Text[ catalan ] = "Mostrar nombres abreviados (si existen)";
         };
     ToolBoxItem  {
             Identifier = TT_LANGNAME;
@@ -238,6 +243,7 @@ class FlagToolBoxState
             Text[ chinese_traditional ] = "Á`¬OÅã¥Üªø¦WºÙ";
             Text[ arabic ] = "ÅÙåÇÑ ÇáÇÓã ÇáØæíá ÏÇÆãÇð";
             Text[ turkish ] = "Tam adý daima görüntüle";
+            Text[ catalan ] = "Mostrar siempre los nombres largos";
         };
     };
     Text[ portuguese ] = "DisplayHID";
@@ -257,6 +263,7 @@ class FlagToolBoxState
     Text[ chinese_traditional ] = "DisplayHID";
     Text[ arabic ] = "DisplayHID";
     Text[ turkish ] = "DisplayHID";
+    Text[ catalan ] = "DisplayHID";
 };
 
 Bitmap TT_SHOW2 {
@@ -308,6 +315,7 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ korean ] = "¹ø¿ª";
         Text[ turkish ] = "Çeviri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Traducción";
     };
     Edit TT_E_NEW {
             Disable = TRUE;
@@ -336,6 +344,7 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ korean ] = "ÆíÁý(~E)";
         Text[ turkish ] = "~Düzenle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Editar";
     };
     FixedText TT_FT_OLD {
             Pos = MAP_APPFONT( 7, 33 );
@@ -361,6 +370,7 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ korean ] = "¿ø·¡ ÅØ½ºÆ®";
         Text[ turkish ] = "Asýl metin";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Texto original";
     };
     GroupBox TT_GB_COMMENT {
             Pos = MAP_APPFONT( 2, 52 );
@@ -385,6 +395,7 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ korean ] = "ÁÖ";
         Text[ turkish ] = "Açýklama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Comentario";
     };
     Edit TT_E_COMMENT {
             Disable = TRUE;
@@ -412,6 +423,7 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ korean ] = "ÁÖ(~C)";
         Text[ turkish ] = "~Açýklama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Comentario";
     };
     PushButton TT_PB_SELECT {
             Pos = MAP_APPFONT( Control_Border, 89 );
@@ -438,6 +450,7 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ korean ] = "¼±ÅÃ(~S)";
         Text[ turkish ] = "~Seç";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Seleccionar";
     };
     PushButton TT_PB_RESTORE {
             Disable = TRUE;
@@ -464,6 +477,7 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ chinese_traditional ] = "ÁÙ­ì(~R)";
         Text[ arabic ] = "ÇÓÊÚÇÏÉ";
         Text[ turkish ] = "~Geri yükle";
+        Text[ catalan ] = "~Restore";
     };
     PushButton TT_PB_ACCEPT {
             Disable = TRUE;
@@ -491,6 +505,7 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ korean ] = "µ¿ÀÇ(~A)";
         Text[ turkish ] = "~Kabul";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Aceptar";
     };
     PushButton TT_PB_NEXT {
             Pos = MAP_APPFONT( Control_Border + 3*(ButtonWidth + Button_Button), 89 );
@@ -517,6 +532,7 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ korean ] = "´ÙÀ½(~N)";
         Text[ turkish ] = "~Ýleri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Siguiente";
     };
     Text[ chinese_traditional ] = "Â½Ä¶¤u¨ã";
     Text[ arabic ] = "ÊÑÌãÉ ÌÏíÏÉ";
@@ -524,6 +540,7 @@ WorkWindow TT_INLINE_TRANSLATION {
     Text[ korean ] = "Á¦À§Ä¡¿¡¼­ ¹ø¿ª";
     Text[ turkish ] = "Inplace Translation";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Translation In Place";
 };
 
 MessBox TT_DISCARD_CHANGED_DATA {
@@ -549,6 +566,7 @@ MessBox TT_DISCARD_CHANGED_DATA {
     Message[ korean ] = "¹ø¿ªÀ» ÀÒ°Ô µË´Ï´Ù. °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Çevriri kaybolacak. Devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Se perderá la traducción. ¿Continuar?";
 };
 
 ErrorBox TT_NO_CONTROL {
@@ -574,6 +592,7 @@ ErrorBox TT_NO_CONTROL {
     Message[ korean ] = "ÄÁÆ®·ÑÀÌ ´õ ÀÌ»ó À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù. ¹ø¿ªÇÑ °ÍÀ» ÀúÀåÇÒ ¼ö ¾ø½À´Ï´Ù.";
     Message[ turkish ] = "Denetim artýk geçerli deðil. Çeviri kaydedilemiyor.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "La validez del control no durará mucho. No se puede guardar la traducción.";
 };
 
 String TT_GPF
@@ -597,6 +616,7 @@ String TT_GPF
     Text[ chinese_traditional ] = "µo¥X¿ù»~";
     Text[ arabic ] = "ÍÏË ÎØÃ GPF";
     Text[ turkish ] = "GKH oluþtu";
+    Text[ catalan ] = "Ha ocurrido un error";
 };
 
 String TT_ALTERNATE_CAPTION
@@ -620,4 +640,5 @@ String TT_ALTERNATE_CAPTION
     Text[ chinese_traditional ] = "HelpID does not match UniqueID: ";
     Text[ arabic ] = "HelpID ÛíÑ ãØÇÈÞ áÜ UniqueID: ";
     Text[ turkish ] = "HelpID ile UniqueID eþit deðil: ";
+    Text[ catalan ] = "HelpID difiere de UniqueID:";
 };
