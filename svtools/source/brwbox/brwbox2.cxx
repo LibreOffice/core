@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-08-07 11:48:11 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,11 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+
+#ifndef _SVX_BRWBOX_HXX
 #include "brwbox.hxx"
+#endif
+
 #ifndef _SFXDATWIN_HXX
 #include "datwin.hxx"
 #endif
@@ -266,6 +270,42 @@ void BrowseBox::Select()
 //-------------------------------------------------------------------
 
 void BrowseBox::DoubleClick( const BrowserMouseEvent & )
+{
+    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
+}
+
+//-------------------------------------------------------------------
+
+long BrowseBox::QueryMinimumRowHeight()
+{
+    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
+    return CalcZoom( 5 );
+}
+
+//-------------------------------------------------------------------
+
+void BrowseBox::ImplStartTracking()
+{
+    DBG_CHKTHIS( BrowseBox, BrowseBoxCheckInvariants );
+}
+
+//-------------------------------------------------------------------
+
+void BrowseBox::ImplTracking()
+{
+    DBG_CHKTHIS( BrowseBox, BrowseBoxCheckInvariants );
+}
+
+//-------------------------------------------------------------------
+
+void BrowseBox::ImplEndTracking()
+{
+    DBG_CHKTHIS( BrowseBox, BrowseBoxCheckInvariants );
+}
+
+//-------------------------------------------------------------------
+
+void BrowseBox::RowHeightChanged()
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 }
@@ -1550,6 +1590,7 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
 void BrowseBox::MouseMove( const MouseEvent& rEvt )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
+    DBG_TRACE( "BrowseBox::MouseMove( MouseEvent )" );
 
     Pointer aNewPointer;
 
@@ -1672,11 +1713,9 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
         if ( rEvt.GetClicks() == 1 )
         {
             // initialise flags
-            bDrag        = FALSE;
-            bHit         = FALSE;
-            bRubber      = FALSE;
-            a1stPoint    =
-            a2ndPoint    = PixelToLogic( rEvt.GetPosPixel() );
+            bHit            = FALSE;
+            a1stPoint       =
+            a2ndPoint       = PixelToLogic( rEvt.GetPosPixel() );
 
             // selection out of range?
             if ( rEvt.GetRow() >= nRowCount ||
