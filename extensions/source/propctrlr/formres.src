@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:24:41 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 07:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3141,7 +3141,7 @@ String RID_STR_EVT_BEFOREUPDATE
     Text [ portuguese ] = "Antes de actualizar" ;
     Text [ english_us ] = "Before updating" ;
     Text [ portuguese_brazilian ] = "Vor dem Aktualisieren" ;
-    Text [ swedish ] = "Innan uppdatering" ;
+    Text [ swedish ] = "Före uppdatering" ;
     Text [ danish ] = "Inden opdatering" ;
     Text [ italian ] = "Prima di aggiornare" ;
     Text [ spanish ] = "Antes de actualizar" ;
@@ -3171,7 +3171,7 @@ String RID_STR_EVT_APPROVEROWCHANGE
     Text[ spanish ] = "Antes de la modificación del registro de datos";
     Text[ italian ] = "Prima della modifica dei record di dati";
     Text[ danish ] = "Inden datapostændring";
-    Text[ swedish ] = "Innan datapoständring";
+    Text[ swedish ] = "Före datapoständring";
     Text[ polish ] = "Przed zmodyfikowaniem rekordów";
     Text[ portuguese_brazilian ] = "Before row change";
     Text[ japanese ] = "Úº°ÄŞ‚ğ•ÏX‚·‚é‘O";
@@ -3978,7 +3978,7 @@ TabDialog RID_TABDLG_FONTDIALOG
     Text [ danish ] = "Tegn" ;
     Text [ french ] = "Caractères" ;
     Text [ swedish ] = "Tecken" ;
-    Text [ dutch ] = "Teken" ;
+    Text [ dutch ] = "Tekens" ;
     Text [ spanish ] = "Caracteres" ;
     Text [ english_us ] = "Character" ;
     Moveable = TRUE ;
@@ -4031,7 +4031,7 @@ TabDialog RID_TABDLG_FONTDIALOG
                 Text [ danish ] = "Skrifteffekt" ;
                 Text [ french ] = "Effets de caractères" ;
                 Text [ swedish ] = "Teckensnittseffekt" ;
-                Text [ dutch ] = "Schrifteffecten" ;
+                Text [ dutch ] = "Schrifteffect" ;
                 Text [ spanish ] = "Efectos de fuente" ;
                 Text [ chinese_simplified ] = "×ÖÌåĞ§¹û";
                 Text [ russian ] = "İôôåêòû øğèôòà";
@@ -4039,7 +4039,7 @@ TabDialog RID_TABDLG_FONTDIALOG
                 Text [ japanese ] = "Ì«İÄŒø‰Ê";
                 Text [ chinese_traditional ] = "¦r«¬®ÄªG";
                 Text [ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
-                Text [ dutch ] = "Schrifteffecten";
+                Text [ dutch ] = "Schrifteffect";
                 Text [ chinese_simplified ] = "×ÖÌåĞ§¹û";
                 Text [ greek ] = "Åöİ ÷áñáêôŞñùí";
                 Text [ korean ] = "±Û²Ã È¿°ú";
@@ -4060,6 +4060,9 @@ TabDialog RID_TABDLG_FONTDIALOG
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/04/03 19:24:41  kz
+ *  Merge SRC627: 03.04.01 - 22:25:35
+ *
  *  Revision 1.10  2001/03/31 06:06:03  kz
  *  Merge SRC627: 31.03.01 - 08:05:26 (NoBranch)
  *
