@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:36:14 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4023,7 +4023,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                     SwXTextCursor::GetCrsrAttr(rSelCrsr, rSet);
                     SwXTextCursor::SetPropertyValue(
                         rSelCrsr, aPropSet, rPropertyName,
-                        aValue, pMap);
+                        aValue, pMap, CRSR_ATTR_MODE_TABLE);
                 }
             }
         }
