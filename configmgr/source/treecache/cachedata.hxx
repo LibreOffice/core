@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedata.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:41 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ namespace configmgr
         typedef CacheLine::Name     ModuleName;
     public:
         CacheData(memory::HeapManager & _rHeapManager);
-        ~CacheData();
+        virtual ~CacheData();
 
         /// retrieve the module tree name for the given path
         static ModuleName extractModuleName(Path const& _aPath);
