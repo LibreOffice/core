@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
+ *  last change: $Author: er $ $Date: 2001-05-15 18:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ const SfxItemPropertyMap* ScDocOptionsHelper::GetPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_NULLDATE),     0,  &getCppuType((util::Date*)0),                             0},
         {MAP_CHAR_LEN(SC_UNO_SPELLONLINE),  0,  &getBooleanCppuType(),                                    0},
         {MAP_CHAR_LEN(SC_UNO_STANDARDDEC),  0,  &getCppuType((sal_Int16*)0),                              0},
+        {MAP_CHAR_LEN(SC_UNO_REGEXENABLED), 0,  &getBooleanCppuType(),                  0},
         {0,0,0,0}
     };
     return aMap;
@@ -115,6 +116,8 @@ sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
         rOptions.SetIgnoreCase( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aString.EqualsAscii( SC_UNO_ITERENABLED ) )
         rOptions.SetIter( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aString.EqualsAscii( SC_UNO_REGEXENABLED ) )
+        rOptions.SetFormulaRegexEnabled( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aString.EqualsAscii( SC_UNO_LOOKUPLABELS ) )
         rOptions.SetLookUpColRowNames( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aString.EqualsAscii( SC_UNO_MATCHWHOLE ) )
@@ -172,6 +175,8 @@ uno::Any ScDocOptionsHelper::getPropertyValue(
         ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsIgnoreCase() );
     else if ( aString.EqualsAscii( SC_UNO_ITERENABLED ) )
         ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsIter() );
+    else if ( aString.EqualsAscii( SC_UNO_REGEXENABLED ) )
+        ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsFormulaRegexEnabled() );
     else if ( aString.EqualsAscii( SC_UNO_LOOKUPLABELS ) )
         ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsLookUpColRowNames() );
     else if ( aString.EqualsAscii( SC_UNO_MATCHWHOLE ) )
