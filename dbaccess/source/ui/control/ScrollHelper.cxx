@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScrollHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-26 09:20:24 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 09:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,20 +63,16 @@
 #include "ScrollHelper.hxx"
 #endif
 
-#define SCROLLING_TIMESPAN      500
-#define LISTBOX_SCROLLING_AREA  6
+#define LISTBOX_SCROLLING_AREA  12
 namespace dbaui
 {
     // -----------------------------------------------------------------------------
     OScrollHelper::OScrollHelper()
     {
-        m_aScrollTimer.SetTimeout( SCROLLING_TIMESPAN );
     }
     // -----------------------------------------------------------------------------
     OScrollHelper::~OScrollHelper()
     {
-        if( m_aScrollTimer.IsActive() )
-            m_aScrollTimer.Stop();
     }
     // -----------------------------------------------------------------------------
     void OScrollHelper::scroll(const Point& _rPoint, const Size& _rOutputSize)
@@ -95,17 +91,9 @@ namespace dbaui
             // if pointer in top area begin scroll
             if( aScrollArea.IsInside(_rPoint) )
                 aToCall = m_aDownScroll;
-            else if( m_aScrollTimer.IsActive() )
-                m_aScrollTimer.Stop();
         }
         if ( aToCall.IsSet() )
-        {
-            if( !m_aScrollTimer.IsActive() )
-            {
-                m_aScrollTimer.SetTimeoutHdl( aToCall );
-                aToCall.Call( NULL );
-            }
-        }
+            aToCall.Call( NULL );
     }
     // -----------------------------------------------------------------------------
 }

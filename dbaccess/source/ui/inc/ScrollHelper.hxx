@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScrollHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-26 09:18:27 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 09:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@ namespace dbaui
 {
     class OScrollHelper
     {
-        Timer   m_aScrollTimer;
         Link    m_aUpScroll;
         Link    m_aDownScroll;
     public:
