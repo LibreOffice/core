@@ -8799,3 +8799,5 @@ threadFunc
 ?DataChanged@SfxPreviewWin@@MAEXABVDataChangedEvent@@@Z
 ?UseHighContrastSetting@SfxPreviewWin@@MBE_NXZ
 ?lcl_translateBasic2Uno@?%O:\SRX643\src\sfx2\source\doc\objmisc.cxx111075349@@YAXABVSbxVariableRef@@PAX@Z
+?CreateLocalTempFile@SfxMedium@@QAEXXZ
+?lcl_translateBasic2Uno@?%O:\SRC663\src\sfx2\source\doc\objmisc.cxx807724407@@YAXABVSbxVariableRef@@PAX@Z
