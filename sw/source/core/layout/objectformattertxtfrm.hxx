@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:49:15 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,15 @@ class SwObjectFormatterTxtFrm : public SwObjectFormatter
         */
         bool _CheckMovedFwdCondition( const sal_uInt32 _nIdxOfCollected,
                                       sal_uInt32& _noToPageNum );
+
+        /** method to format the anchor frame for checking of the move forward condition
+
+            OD 2005-01-11 #i40141#
+
+            @author OD
+        */
+        void _FormatAnchorFrmForCheckMoveFwd();
+
     protected:
 
         virtual SwFrm& GetAnchorFrm();
@@ -173,7 +182,10 @@ class SwObjectFormatterTxtFrm : public SwObjectFormatter
     public:
         virtual ~SwObjectFormatterTxtFrm();
 
-        virtual bool DoFormatObj( SwAnchoredObject& _rAnchoredObj );
+        // --> OD 2005-01-10 #i40147# - add parameter <_bCheckForMovedFwd>.
+        virtual bool DoFormatObj( SwAnchoredObject& _rAnchoredObj,
+                                  const bool _bCheckForMovedFwd = false );
+        // <--
         virtual bool DoFormatObjs();
 
         /** method to create an instance of <SwObjectFormatterTxtFrm> is
