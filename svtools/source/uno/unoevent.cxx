@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-17 09:25:28 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-19 16:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,9 +143,9 @@ void SvBaseEventDescriptor::replaceByName(
 
     // error checking
     if (0 == nMacroID)
-        throw new NoSuchElementException();
+        throw NoSuchElementException();
     if (rElement.getValueType() != getElementType())
-        throw new IllegalArgumentException();
+        throw IllegalArgumentException();
 
     // get sequence
     Sequence<PropertyValue> aSequence;
@@ -168,7 +168,7 @@ Any SvBaseEventDescriptor::getByName(
 
     // error checking
     if (0 == nMacroID)
-        throw new NoSuchElementException();
+        throw NoSuchElementException();
 
     // perform get (in subclass)
     Any aAny;
@@ -407,14 +407,14 @@ void SvBaseEventDescriptor::getMacroFromAny(
             {
                 // we can't process type: abort
                 // TODO: JavaScript macros
-                throw new IllegalArgumentException();
+                throw IllegalArgumentException();
             }
         }
     }
     else
     {
         // no valid type: abort
-        throw new IllegalArgumentException();
+        throw IllegalArgumentException();
     }
 }
 
@@ -537,7 +537,7 @@ void SvDetachedEventDescriptor::replaceByName(
 {
     sal_Int16 nIndex = getIndex(nEvent);
     if (-1 == nIndex)
-        throw new IllegalArgumentException();
+        throw IllegalArgumentException();
 
     aMacros[nIndex] = new SvxMacro(rMacro.GetMacName(), rMacro.GetLibName(),
                                    rMacro.GetScriptType() );
@@ -554,7 +554,7 @@ void SvDetachedEventDescriptor::getByName(
 {
     sal_Int16 nIndex = getIndex(nEvent);
     if (-1 == nIndex )
-        throw new NoSuchElementException();
+        throw NoSuchElementException();
 
     if( aMacros[nIndex] )
         rMacro = (*aMacros[nIndex]);
@@ -566,7 +566,7 @@ const sal_Bool SvDetachedEventDescriptor::hasByName(
 {
     sal_Int16 nIndex = getIndex(nEvent);
     if (-1 == nIndex)
-        throw new IllegalArgumentException();
+        throw IllegalArgumentException();
 
     return (NULL == aMacros[nIndex]) ? sal_False : aMacros[nIndex]->HasMacro();
 }
