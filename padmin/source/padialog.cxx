@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:59:50 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,15 +284,27 @@ void PADialog::UpdateDefPrt()
 
 void PADialog::UpdateText()
 {
-    const PrinterInfo& rInfo = m_rPIManager.getPrinterInfo( getSelectedDevice() );
-    String aDriver( rInfo.m_aPrinterName );
-    aDriver.AppendAscii( " (" );
-    aDriver += String( rInfo.m_aDriverName );
-    aDriver.Append( ')' );
-    m_aDriver.SetText( aDriver );
-    m_aCommand.SetText( rInfo.m_aCommand );
-    m_aComment.SetText( rInfo.m_aComment );
-    m_aLocation.SetText( rInfo.m_aLocation );
+    OUString aDev( getSelectedDevice() );
+    if( aDev.getLength() )
+    {
+        const PrinterInfo& rInfo = m_rPIManager.getPrinterInfo( aDev );
+        String aDriver( rInfo.m_aPrinterName );
+        aDriver.AppendAscii( " (" );
+        aDriver += String( rInfo.m_aDriverName );
+        aDriver.Append( ')' );
+        m_aDriver.SetText( aDriver );
+        m_aCommand.SetText( rInfo.m_aCommand );
+        m_aComment.SetText( rInfo.m_aComment );
+        m_aLocation.SetText( rInfo.m_aLocation );
+    }
+    else // nothing selected
+    {
+        String aEmpty;
+        m_aDriver.SetText( aEmpty );
+        m_aCommand.SetText( aEmpty );
+        m_aComment.SetText( aEmpty );
+        m_aLocation.SetText( aEmpty );
+    }
 }
 
 static Point project( const Point& rPoint )
@@ -447,7 +459,7 @@ void PADialog::PrintTestPage()
             { NULL, RID_TXT_TESTPAGE_TIME }
         };
 
-    for( int i = 0; i < sizeof(aResIds)/sizeof(aResIds[0]); i++ )
+    for( unsigned int i = 0; i < sizeof(aResIds)/sizeof(aResIds[0]); i++ )
     {
         if( aResIds[i].pDirect )
             aToken = String::CreateFromAscii( aResIds[i].pDirect );
