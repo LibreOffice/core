@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-15 15:59:21 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,7 +581,7 @@ void OleComponent::Dispose()
 
     if ( m_pInterfaceContainer )
     {
-        lang::EventObject aEvent( ( embed::XEmbeddedObject* )this );
+        lang::EventObject aEvent( static_cast< ::cppu::OWeakObject* >( this ) );
         m_pInterfaceContainer->disposeAndClear( aEvent );
 
         delete m_pInterfaceContainer;
@@ -1035,7 +1035,7 @@ void OleComponent::CloseObject()
 }
 
 //----------------------------------------------
-uno::Sequence< embed::VerbDescr > OleComponent::GetVerbList()
+uno::Sequence< embed::VerbDescriptor > OleComponent::GetVerbList()
 {
     if ( !m_pNativeImpl->m_pOleObject )
         throw embed::WrongStateException(); // TODO: the object is in wrong state
