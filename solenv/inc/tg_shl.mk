@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.82 $
+#   $Revision: 1.83 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 09:18:27 $
+#   last change: $Author: rt $ $Date: 2004-09-20 08:36:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -142,9 +142,7 @@ SHL$(TNR)DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL$(TNR)DESC:b)$($(WINVERSIONNAMES)_MAJOR)
 
 .IF "$(VERSIONOBJ)"!=""
 SHL$(TNR)VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}$(VERSIONOBJ:f)
-.IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
-.ELSE			# "$(UPDATER)"=="YES"
 .IF "$(GUI)" == "UNX"
 SHL$(TNR)DEPN+=$(SHL$(TNR)VERSIONOBJ:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
@@ -153,7 +151,6 @@ SHL$(TNR)DEPN+=$(SHL$(TNR)VERSIONOBJ)
 $(MISC)$/$(SHL$(TNR)VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.c $@
 
-.ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
@@ -317,17 +314,13 @@ $(SHL$(TNR)TARGETN) : \
                     $(SHL$(TNR)LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL$(TNR)TARGETN)
-.IF "$(UPDATER)"=="YES"
         @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.obj 
-.ENDIF
 .IF "$(GUI)" == "WNT"
-.IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
             $(CXX) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ELSE
             $(CXX) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ENDIF			# "$(COM)"=="GCC"
-.ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(SHL$(TNR)DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL$(TNR)ICON)" != ""
@@ -443,7 +436,6 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
-.IF "$(UPDATER)"=="YES"
 .IF "$(OS)"=="SOLARIS"
 .IF "$(COM)"=="GCC"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -462,7 +454,6 @@ $(SHL$(TNR)TARGETN) : \
         @+if ( ! -e $(SOLARLIBDIR) ) mkdir $(SOLARLIBDIR)
         @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
 .ENDIF			# "$(OS)"=="IRIX"
-.ENDIF
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
