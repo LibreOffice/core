@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-28 10:30:17 $
+ *  last change: $Author: oj $ $Date: 2000-11-30 15:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,22 +804,31 @@ void ODatabaseMetaDataResultSet::openTypeInfo() throw(SQLException, RuntimeExcep
     aMap[SQL_SMALLINT]          = DataType::SMALLINT;
     aMap[SQL_INTEGER]           = DataType::INTEGER;
     aMap[SQL_FLOAT]             = DataType::FLOAT;
+    aMap[SQL_REAL]              = DataType::REAL;
     aMap[SQL_DOUBLE]            = DataType::DOUBLE;
     aMap[SQL_BIGINT]            = DataType::BIGINT;
-    aMap[SQL_TYPE_DATE]         = DataType::DATE;
+
     aMap[SQL_CHAR]              = DataType::CHAR;
     aMap[SQL_WCHAR]             = DataType::CHAR;
     aMap[SQL_VARCHAR]           = DataType::VARCHAR;
     aMap[SQL_WVARCHAR]          = DataType::VARCHAR;
-    aMap[SQL_TYPE_TIME]         = DataType::TIME;
-    aMap[SQL_REAL]              = DataType::REAL;
-    aMap[SQL_DECIMAL]           = DataType::DECIMAL;
-    aMap[SQL_NUMERIC]           = DataType::NUMERIC;
-    aMap[SQL_TYPE_TIMESTAMP]    = DataType::TIMESTAMP;
-    aMap[SQL_VARBINARY]         = DataType::VARBINARY;
-    aMap[SQL_LONGVARBINARY]     = DataType::LONGVARBINARY;
     aMap[SQL_LONGVARCHAR]       = DataType::LONGVARCHAR;
     aMap[SQL_WLONGVARCHAR]      = DataType::LONGVARCHAR;
+
+    aMap[SQL_TYPE_DATE]         = DataType::DATE;
+    aMap[SQL_DATE]              = DataType::DATE;
+    aMap[SQL_TYPE_TIME]         = DataType::TIME;
+    aMap[SQL_TIME]              = DataType::TIME;
+    aMap[SQL_TYPE_TIMESTAMP]    = DataType::TIMESTAMP;
+    aMap[SQL_TIMESTAMP]         = DataType::TIMESTAMP;
+
+    aMap[SQL_DECIMAL]           = DataType::DECIMAL;
+    aMap[SQL_NUMERIC]           = DataType::NUMERIC;
+
+    aMap[SQL_BINARY]            = DataType::BINARY;
+    aMap[SQL_VARBINARY]         = DataType::VARBINARY;
+    aMap[SQL_LONGVARBINARY]     = DataType::LONGVARBINARY;
+
 
     m_aValueRange[2] = aMap;
 
@@ -1000,22 +1009,30 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
     aMap[SQL_SMALLINT]          = DataType::SMALLINT;
     aMap[SQL_INTEGER]           = DataType::INTEGER;
     aMap[SQL_FLOAT]             = DataType::FLOAT;
+    aMap[SQL_REAL]              = DataType::REAL;
     aMap[SQL_DOUBLE]            = DataType::DOUBLE;
     aMap[SQL_BIGINT]            = DataType::BIGINT;
-    aMap[SQL_TYPE_DATE]         = DataType::DATE;
+
     aMap[SQL_CHAR]              = DataType::CHAR;
     aMap[SQL_WCHAR]             = DataType::CHAR;
     aMap[SQL_VARCHAR]           = DataType::VARCHAR;
     aMap[SQL_WVARCHAR]          = DataType::VARCHAR;
-    aMap[SQL_TYPE_TIME]         = DataType::TIME;
-    aMap[SQL_REAL]              = DataType::REAL;
-    aMap[SQL_DECIMAL]           = DataType::DECIMAL;
-    aMap[SQL_NUMERIC]           = DataType::NUMERIC;
-    aMap[SQL_TYPE_TIMESTAMP]    = DataType::TIMESTAMP;
-    aMap[SQL_VARBINARY]         = DataType::VARBINARY;
-    aMap[SQL_LONGVARBINARY]     = DataType::LONGVARBINARY;
     aMap[SQL_LONGVARCHAR]       = DataType::LONGVARCHAR;
     aMap[SQL_WLONGVARCHAR]      = DataType::LONGVARCHAR;
+
+    aMap[SQL_TYPE_DATE]         = DataType::DATE;
+    aMap[SQL_DATE]              = DataType::DATE;
+    aMap[SQL_TYPE_TIME]         = DataType::TIME;
+    aMap[SQL_TIME]              = DataType::TIME;
+    aMap[SQL_TYPE_TIMESTAMP]    = DataType::TIMESTAMP;
+    aMap[SQL_TIMESTAMP]         = DataType::TIMESTAMP;
+
+    aMap[SQL_DECIMAL]           = DataType::DECIMAL;
+    aMap[SQL_NUMERIC]           = DataType::NUMERIC;
+
+    aMap[SQL_BINARY]            = DataType::BINARY;
+    aMap[SQL_VARBINARY]         = DataType::VARBINARY;
+    aMap[SQL_LONGVARBINARY]     = DataType::LONGVARBINARY;
 
     m_aValueRange[5] = aMap;
 }
