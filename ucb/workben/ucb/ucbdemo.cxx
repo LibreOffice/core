@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbdemo.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:56:13 $
+ *  last change: $Author: sb $ $Date: 2000-10-18 10:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #endif
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
+#endif
+#ifndef _VOS_SOCKET_HXX_
+#include <vos/socket.hxx>
 #endif
 #ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
 #include <cppuhelper/servicefactory.hxx>
@@ -198,6 +201,10 @@
 
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
+#endif
+
+#ifndef _UCBHELPER_FILEIDENTIFIERCONVERTER_HXX_
+#include <ucbhelper/fileidentifierconverter.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -895,6 +902,13 @@ sal_Bool Ucb::install( Reference< XMultiServiceFactory >& rxFactory,
 #if 1
                 xConfig->addContentProviderService(
                     OUString::createFromAscii( ".*" ),
+                    OUString::createFromAscii(
+                            "com.sun.star.ucb.RemoteAccessContentProvider" ),
+                    getUnoURL(),
+                    sal_False );
+                xConfig->addContentProviderService(
+                    OUString::createFromAscii(
+                        "\"xfile:\"(.*)->\"file:\"\\1" ),
                     OUString::createFromAscii(
                             "com.sun.star.ucb.RemoteAccessContentProvider" ),
                     getUnoURL(),
@@ -2325,6 +2339,8 @@ void SAL_CALL UcbContent::propertiesChange(
 #define MYWIN_ITEMID_TIMING         18
 #define MYWIN_ITEMID_SORT           19
 #define MYWIN_ITEMID_FETCHSIZE      20
+#define MYWIN_ITEMID_UNC2URI        21
+#define MYWIN_ITEMID_URI2UNC        22
 
 //-------------------------------------------------------------------------
 class MyWin : public WorkWindow
@@ -2559,6 +2575,26 @@ MyWin::MyWin( Window *pParent, WinBits nWinStyle,
                           UniString::CreateFromAscii(
                               RTL_CONSTASCII_STRINGPARAM(
                                 "Set cached cursor fetch size to positive value" ) ) );
+
+    m_pTool->InsertSeparator();
+    m_pTool->InsertItem ( MYWIN_ITEMID_UNC2URI,
+                          UniString::CreateFromAscii(
+                              RTL_CONSTASCII_STRINGPARAM(
+                                "UNC>URI" ) ) );
+    m_pTool->SetHelpText( MYWIN_ITEMID_UNC2URI,
+                          UniString::CreateFromAscii(
+                              RTL_CONSTASCII_STRINGPARAM(
+                                "Translate 'Normalized File Path' to URI,"
+                                    " if possible" ) ) );
+    m_pTool->InsertItem ( MYWIN_ITEMID_URI2UNC,
+                          UniString::CreateFromAscii(
+                              RTL_CONSTASCII_STRINGPARAM(
+                                "URI>UNC" ) ) );
+    m_pTool->SetHelpText( MYWIN_ITEMID_URI2UNC,
+                          UniString::CreateFromAscii(
+                              RTL_CONSTASCII_STRINGPARAM(
+                                "Translate URI to 'Normalized File Path',"
+                                    " if possible" ) ) );
 
     m_pTool->SetSelectHdl( LINK( this, MyWin, ToolBarHandler ) );
     m_pTool->Show();
@@ -2878,6 +2914,32 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
             print(aText);
             break;
         }
+
+        case MYWIN_ITEMID_UNC2URI:
+        case MYWIN_ITEMID_URI2UNC:
+            {
+                Reference< XContentProviderManager >
+                    xManager(m_aUCB.getContentProvider(), UNO_QUERY);
+                DBG_ASSERT(
+                    xManager.is(),
+                    "MyWin::ToolBarHandler(): Service lacks interface");
+
+                OUString aHostName;
+                vos::OSocketAddr::getLocalHostname(aHostName);
+
+                String aText(RTL_CONSTASCII_USTRINGPARAM("Hostname: "));
+                aText += String(aHostName);
+                aText.AppendAscii("\nConversion: ");
+                aText += aCmdLine;
+                aText.AppendAscii(" to ");
+                aText += String(nItemId == MYWIN_ITEMID_UNC2URI ?
+                                    ucb::getFileURLFromNormalizedPath(
+                                        xManager, aHostName, aCmdLine) :
+                                    ucb::getNormalizedPathFromFileURL(
+                                        xManager, aHostName, aCmdLine));
+                print(aText);
+                break;
+            }
 
         default: // Ignored.
             break;
