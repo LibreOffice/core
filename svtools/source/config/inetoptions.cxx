@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-19 10:36:50 $
+ *  last change: $Author: sb $ $Date: 2001-06-20 12:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
 #ifndef _RTL_USTRING_H_
 #include <rtl/ustring.h>
 #endif
@@ -108,21 +111,14 @@
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
 #endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
-#ifndef _VOS_REFERNCE_HXX_
-#include <vos/refernce.hxx>
-#endif
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
+#ifndef _SALHELPER_REFOBJ_HXX_
+#include <salhelper/refobj.hxx>
 #endif
 
-
-namespace unnamed_svt_inetoptions {} using namespace unnamed_svt_inetoptions;
-    // unnamed namespaces don't work well yet...
-
-using namespace com::sun::star;
+using namespace com::sun;
 
 //============================================================================
 //
@@ -130,9 +126,9 @@ using namespace com::sun::star;
 //
 //============================================================================
 
-namespace unnamed_svt_inetoptions {
+namespace {
 
-template< typename T > inline T takeAny(uno::Any const & rAny)
+template< typename T > inline T takeAny(star::uno::Any const & rAny)
 {
     T aValue;
     rAny >>= aValue;
@@ -147,43 +143,46 @@ template< typename T > inline T takeAny(uno::Any const & rAny)
 //
 //============================================================================
 
-class SvtInetOptions::Impl: public vos::OReference, public utl::ConfigItem
+class SvtInetOptions::Impl: public salhelper::ReferenceObject,
+                            public utl::ConfigItem
 {
 public:
     enum Index
     {
-        INDEX_DNS_IP_ADDRESS,
-        INDEX_SMTP_SERVER_NAME,
-        INDEX_PROXY_NO_PROXY,
+        INDEX_DNS_SERVER,
+        INDEX_NO_PROXY,
         INDEX_PROXY_TYPE,
-        INDEX_PROXY_FTP_NAME,
-        INDEX_PROXY_FTP_PORT,
-        INDEX_PROXY_HTTP_NAME,
-        INDEX_PROXY_HTTP_PORT,
-        INDEX_PROXY_SOCKS_NAME,
-        INDEX_PROXY_SOCKS_PORT
+        INDEX_FTP_PROXY_NAME,
+        INDEX_FTP_PROXY_PORT,
+        INDEX_HTTP_PROXY_NAME,
+        INDEX_HTTP_PROXY_PORT,
+        INDEX_SOCKS_PROXY_NAME,
+        INDEX_SOCKS_PROXY_PORT
     };
 
     Impl();
 
-    uno::Any getProperty(Index nIndex);
+    star::uno::Any getProperty(Index nIndex);
 
-    void setProperty(Index nIndex, uno::Any const & rValue, bool bFlush);
+    void
+    setProperty(Index nIndex, star::uno::Any const & rValue, bool bFlush);
 
     inline void flush() { Commit(); }
 
     void
     addPropertiesChangeListener(
-        uno::Sequence< rtl::OUString > const & rPropertyNames,
-        uno::Reference< beans::XPropertiesChangeListener > const & rListener);
+        star::uno::Sequence< rtl::OUString > const & rPropertyNames,
+        star::uno::Reference< star::beans::XPropertiesChangeListener > const &
+            rListener);
 
     void
     removePropertiesChangeListener(
-        uno::Sequence< rtl::OUString > const & rPropertyNames,
-        uno::Reference< beans::XPropertiesChangeListener > const & rListener);
+        star::uno::Sequence< rtl::OUString > const & rPropertyNames,
+        star::uno::Reference< star::beans::XPropertiesChangeListener > const &
+            rListener);
 
 private:
-    enum { ENTRY_COUNT = INDEX_PROXY_SOCKS_PORT + 1 };
+    enum { ENTRY_COUNT = INDEX_SOCKS_PROXY_PORT + 1 };
 
     struct Entry
     {
@@ -192,43 +191,48 @@ private:
         inline Entry(): m_eState(UNKNOWN) {}
 
         rtl::OUString m_aName;
-        uno::Any m_aValue;
+        star::uno::Any m_aValue;
         State m_eState;
     };
 
     // MSVC has problems with the below Map type when
-    // uno::Reference< beans::XPropertiesChangeListener > is not wrapped in
-    // class Listener:
-    class Listener: public uno::Reference< beans::XPropertiesChangeListener >
+    // star::uno::Reference< star::beans::XPropertiesChangeListener > is not
+    // wrapped in class Listener:
+    class Listener:
+        public star::uno::Reference< star::beans::XPropertiesChangeListener >
     {
     public:
-        Listener(uno::Reference< beans::XPropertiesChangeListener > const &
+        Listener(star::uno::Reference<
+                         star::beans::XPropertiesChangeListener > const &
                      rListener):
-            uno::Reference< beans::XPropertiesChangeListener >(rListener) {}
+            star::uno::Reference< star::beans::XPropertiesChangeListener >(
+                rListener)
+        {}
     };
 
     typedef std::map< Listener, std::set< rtl::OUString > > Map;
 
-    vos::OMutex m_aMutex;
+    osl::Mutex m_aMutex;
     Entry m_aEntries[ENTRY_COUNT];
     Map m_aListeners;
 
     virtual inline ~Impl() { Commit(); }
 
-    virtual void Notify(uno::Sequence< rtl::OUString > const & rKeys);
+    virtual void Notify(star::uno::Sequence< rtl::OUString > const & rKeys);
 
     virtual void Commit();
 
-    void notifyListeners(uno::Sequence< rtl::OUString > const & rKeys);
+    void notifyListeners(star::uno::Sequence< rtl::OUString > const & rKeys);
 };
 
 //============================================================================
 // virtual
 void
-SvtInetOptions::Impl::Notify(uno::Sequence< rtl::OUString > const & rKeys)
+SvtInetOptions::Impl::Notify(star::uno::Sequence< rtl::OUString > const &
+                                 rKeys)
 {
     {
-        vos::OGuard aGuard(m_aMutex);
+        osl::MutexGuard aGuard(m_aMutex);
         for (sal_Int32 i = 0; i < rKeys.getLength(); ++i)
             for (sal_Int32 j = 0; j < ENTRY_COUNT; ++j)
                 if (rKeys[i] == m_aEntries[j].m_aName)
@@ -244,11 +248,11 @@ SvtInetOptions::Impl::Notify(uno::Sequence< rtl::OUString > const & rKeys)
 // virtual
 void SvtInetOptions::Impl::Commit()
 {
-    uno::Sequence< rtl::OUString > aKeys(ENTRY_COUNT);
-    uno::Sequence< uno::Any > aValues(ENTRY_COUNT);
+    star::uno::Sequence< rtl::OUString > aKeys(ENTRY_COUNT);
+    star::uno::Sequence< star::uno::Any > aValues(ENTRY_COUNT);
     sal_Int32 nCount = 0;
     {
-        vos::OGuard aGuard(m_aMutex);
+        osl::MutexGuard aGuard(m_aMutex);
         for (sal_Int32 i = 0; i < ENTRY_COUNT; ++i)
             if (m_aEntries[i].m_eState == Entry::MODIFIED)
             {
@@ -268,17 +272,18 @@ void SvtInetOptions::Impl::Commit()
 
 //============================================================================
 void
-SvtInetOptions::Impl::notifyListeners(uno::Sequence< rtl::OUString > const &
-                                          rKeys)
+SvtInetOptions::Impl::notifyListeners(
+    star::uno::Sequence< rtl::OUString > const & rKeys)
 {
-    typedef std::vector< std::pair< uno::Reference<
-                                        beans::XPropertiesChangeListener >,
-                                    uno::Sequence<
-                                        beans::PropertyChangeEvent > > >
-        List;
+    typedef
+        std::vector< std::pair< star::uno::Reference<
+                                    star::beans::XPropertiesChangeListener >,
+                                star::uno::Sequence<
+                                    star::beans::PropertyChangeEvent > > >
+    List;
     List aNotifications;
     {
-        vos::OGuard aGuard(m_aMutex);
+        osl::MutexGuard aGuard(m_aMutex);
         aNotifications.reserve(m_aListeners.size());
         Map::const_iterator aMapEnd(m_aListeners.end());
         for (Map::const_iterator aIt(m_aListeners.begin()); aIt != aMapEnd;
@@ -286,7 +291,7 @@ SvtInetOptions::Impl::notifyListeners(uno::Sequence< rtl::OUString > const &
         {
             Map::data_type const & rSet = aIt->second;
             Map::data_type::const_iterator aSetEnd(rSet.end());
-            uno::Sequence< beans::PropertyChangeEvent >
+            star::uno::Sequence< star::beans::PropertyChangeEvent >
                 aEvents(rKeys.getLength());
             sal_Int32 nCount = 0;
             for (sal_Int32 i = 0; i < rKeys.getLength(); ++i)
@@ -320,51 +325,49 @@ SvtInetOptions::Impl::notifyListeners(uno::Sequence< rtl::OUString > const &
 
 //============================================================================
 SvtInetOptions::Impl::Impl():
-    ConfigItem(rtl::OUString::createFromAscii("Inet"))
+    ConfigItem(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Inet")))
 {
-    m_aEntries[INDEX_DNS_IP_ADDRESS].m_aName
-        = rtl::OUString::createFromAscii("DNS/IP_Address");
-    m_aEntries[INDEX_SMTP_SERVER_NAME].m_aName
-        = rtl::OUString::createFromAscii("SMTP/ServerName");
-    m_aEntries[INDEX_PROXY_NO_PROXY].m_aName
-        = rtl::OUString::createFromAscii("Proxy/NoProxy");
+    m_aEntries[INDEX_DNS_SERVER].m_aName
+        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetDNSServer"));
+    m_aEntries[INDEX_NO_PROXY].m_aName
+        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetNoProxy"));
     m_aEntries[INDEX_PROXY_TYPE].m_aName
-        = rtl::OUString::createFromAscii("Proxy/Type");
-    m_aEntries[INDEX_PROXY_FTP_NAME].m_aName
-        = rtl::OUString::createFromAscii("Proxy/FTP/Name");
-    m_aEntries[INDEX_PROXY_FTP_PORT].m_aName
-        = rtl::OUString::createFromAscii("Proxy/FTP/Port");
-    m_aEntries[INDEX_PROXY_HTTP_NAME].m_aName
-        = rtl::OUString::createFromAscii("Proxy/HTTP/Name");
-    m_aEntries[INDEX_PROXY_HTTP_PORT].m_aName
-        = rtl::OUString::createFromAscii("Proxy/HTTP/Port");
-    m_aEntries[INDEX_PROXY_SOCKS_NAME].m_aName
-        = rtl::OUString::createFromAscii("Proxy/SOCKS/Name");
-    m_aEntries[INDEX_PROXY_SOCKS_PORT].m_aName
-        = rtl::OUString::createFromAscii("Proxy/SOCKS/Port");
-    uno::Sequence< rtl::OUString > aKeys(ENTRY_COUNT);
+        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetProxyType"));
+    m_aEntries[INDEX_FTP_PROXY_NAME].m_aName
+        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyName"));
+    m_aEntries[INDEX_FTP_PROXY_PORT].m_aName
+        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyPort"));
+    m_aEntries[INDEX_HTTP_PROXY_NAME].m_aName
+        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyName"));
+    m_aEntries[INDEX_HTTP_PROXY_PORT].m_aName
+        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyPort"));
+    m_aEntries[INDEX_SOCKS_PROXY_NAME].m_aName
+        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetSOCKSProxyName"));
+    m_aEntries[INDEX_SOCKS_PROXY_PORT].m_aName
+        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetSOCKSProxyPort"));
+    star::uno::Sequence< rtl::OUString > aKeys(ENTRY_COUNT);
     for (sal_Int32 i = 0; i < ENTRY_COUNT; ++i)
         aKeys[i] = m_aEntries[i].m_aName;
     if (!EnableNotification(aKeys))
-        VOS_ENSURE(false,
+        OSL_ENSURE(false,
                    "SvtInetOptions::Impl::Impl(): Bad EnableNotifications()");
 }
 
 //============================================================================
-uno::Any SvtInetOptions::Impl::getProperty(Index nIndex)
+star::uno::Any SvtInetOptions::Impl::getProperty(Index nIndex)
 {
     for (int nTryCount = 0; nTryCount < 10; ++nTryCount)
     {
         {
-            vos::OGuard aGuard(m_aMutex);
+            osl::MutexGuard aGuard(m_aMutex);
             if (m_aEntries[nIndex].m_eState != Entry::UNKNOWN)
                 return m_aEntries[nIndex].m_aValue;
         }
-        uno::Sequence< rtl::OUString > aKeys(ENTRY_COUNT);
+        star::uno::Sequence< rtl::OUString > aKeys(ENTRY_COUNT);
         int nIndices[ENTRY_COUNT];
         sal_Int32 nCount = 0;
         {
-            vos::OGuard aGuard(m_aMutex);
+            osl::MutexGuard aGuard(m_aMutex);
             for (int i = 0; i < ENTRY_COUNT; ++i)
                 if (m_aEntries[i].m_eState == Entry::UNKNOWN)
                 {
@@ -376,13 +379,14 @@ uno::Any SvtInetOptions::Impl::getProperty(Index nIndex)
         if (nCount > 0)
         {
             aKeys.realloc(nCount);
-            uno::Sequence< uno::Any > aValues(GetProperties(aKeys));
-            VOS_ENSURE(aValues.getLength() == nCount,
+            star::uno::Sequence< star::uno::Any >
+                aValues(GetProperties(aKeys));
+            OSL_ENSURE(aValues.getLength() == nCount,
                        "SvtInetOptions::Impl::getProperty():"
                            " Bad GetProperties() result");
             nCount = std::min(nCount, aValues.getLength());
             {
-                vos::OGuard aGuard(m_aMutex);
+                osl::MutexGuard aGuard(m_aMutex);
                 for (sal_Int32 i = 0; i < nCount; ++i)
                 {
                     int nIndex = nIndices[i];
@@ -395,30 +399,31 @@ uno::Any SvtInetOptions::Impl::getProperty(Index nIndex)
             }
         }
     }
-    VOS_ENSURE(false,
+    OSL_ENSURE(false,
                "SvtInetOptions::Impl::getProperty(): Possible life lock");
     {
-        vos::OGuard aGuard(m_aMutex);
+        osl::MutexGuard aGuard(m_aMutex);
         return m_aEntries[nIndex].m_aValue;
     }
 }
 
 //============================================================================
-void SvtInetOptions::Impl::setProperty(Index nIndex, uno::Any const & rValue,
+void SvtInetOptions::Impl::setProperty(Index nIndex,
+                                       star::uno::Any const & rValue,
                                        bool bFlush)
 {
     SetModified();
     {
-        vos::OGuard aGuard(m_aMutex);
+        osl::MutexGuard aGuard(m_aMutex);
         m_aEntries[nIndex].m_aValue = rValue;
         m_aEntries[nIndex].m_eState = bFlush ? Entry::KNOWN : Entry::MODIFIED;
     }
 
-    uno::Sequence< rtl::OUString > aKeys(1);
+    star::uno::Sequence< rtl::OUString > aKeys(1);
     aKeys[0] = m_aEntries[nIndex].m_aName;
     if (bFlush)
     {
-        uno::Sequence< uno::Any > aValues(1);
+        star::uno::Sequence< star::uno::Any > aValues(1);
         aValues[0] = rValue;
         PutProperties(aKeys, aValues);
     }
@@ -429,10 +434,11 @@ void SvtInetOptions::Impl::setProperty(Index nIndex, uno::Any const & rValue,
 //============================================================================
 void
 SvtInetOptions::Impl::addPropertiesChangeListener(
-    uno::Sequence< rtl::OUString > const & rPropertyNames,
-    uno::Reference< beans::XPropertiesChangeListener > const & rListener)
+    star::uno::Sequence< rtl::OUString > const & rPropertyNames,
+    star::uno::Reference< star::beans::XPropertiesChangeListener > const &
+        rListener)
 {
-    vos::OGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
     Map::data_type & rEntry = m_aListeners[rListener];
     for (sal_Int32 i = 0; i < rPropertyNames.getLength(); ++i)
         rEntry.insert(rPropertyNames[i]);
@@ -441,10 +447,11 @@ SvtInetOptions::Impl::addPropertiesChangeListener(
 //============================================================================
 void
 SvtInetOptions::Impl::removePropertiesChangeListener(
-    uno::Sequence< rtl::OUString > const & rPropertyNames,
-    uno::Reference< beans::XPropertiesChangeListener > const & rListener)
+    star::uno::Sequence< rtl::OUString > const & rPropertyNames,
+    star::uno::Reference< star::beans::XPropertiesChangeListener > const &
+        rListener)
 {
-    vos::OGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
     Map::iterator aIt(m_aListeners.find(rListener));
     if (aIt != m_aListeners.end())
     {
@@ -479,76 +486,78 @@ SvtInetOptions::SvtInetOptions()
     if ((m_pImpl->getProperty(Impl::INDEX_PROXY_TYPE) >>= nProxyType)
         && nProxyType == 1) // 1 means "Automatic"
     {
-        uno::Reference< com::sun::star::system::XProxySettings > xProxySettings;
-        uno::Reference< lang::XMultiServiceFactory >
+        star::uno::Reference< star::system::XProxySettings > xProxySettings;
+        star::uno::Reference< star::lang::XMultiServiceFactory >
             xServiceFactory(utl::getProcessServiceFactory());
         if (xServiceFactory.is())
             try
             {
                 xProxySettings
-                    = uno::Reference< com::sun::star::system::XProxySettings >(
+                    = star::uno::Reference< star::system::XProxySettings >(
                           xServiceFactory->
                               createInstance(
                                   rtl::OUString(
                                       RTL_CONSTASCII_USTRINGPARAM(
                                  "com.sun.star.system.SystemProxySettings"))),
-                          uno::UNO_QUERY);
+                          star::uno::UNO_QUERY);
             }
-            catch (uno::Exception &)
+            catch (star::uno::Exception &)
             {}
         try
         {
             if (xProxySettings.is() && xProxySettings->isProxyEnabled())
             {
                 m_pImpl->
-                    setProperty(Impl::INDEX_PROXY_HTTP_NAME,
-                                uno::makeAny(xProxySettings->
-                                                 getHttpProxyAddress()),
+                    setProperty(Impl::INDEX_HTTP_PROXY_NAME,
+                                star::uno::makeAny(xProxySettings->
+                                                       getHttpProxyAddress()),
                                 false);
                 m_pImpl->
-                    setProperty(Impl::INDEX_PROXY_HTTP_PORT,
-                                uno::makeAny(xProxySettings->
-                                                 getHttpProxyPort().
-                                                     toInt32()),
+                    setProperty(Impl::INDEX_HTTP_PROXY_PORT,
+                                star::uno::makeAny(xProxySettings->
+                                                       getHttpProxyPort().
+                                                           toInt32()),
                                 false);
                 m_pImpl->
-                    setProperty(Impl::INDEX_PROXY_FTP_NAME,
-                                uno::makeAny(xProxySettings->
-                                                 getFtpProxyAddress()),
+                    setProperty(Impl::INDEX_FTP_PROXY_NAME,
+                                star::uno::makeAny(xProxySettings->
+                                                       getFtpProxyAddress()),
                                 false);
                 m_pImpl->
-                    setProperty(Impl::INDEX_PROXY_FTP_PORT,
-                                uno::makeAny(xProxySettings->
-                                                 getFtpProxyPort().toInt32()),
+                    setProperty(Impl::INDEX_FTP_PROXY_PORT,
+                                star::uno::makeAny(xProxySettings->
+                                                       getFtpProxyPort().
+                                                           toInt32()),
                                 false);
                 m_pImpl->
-                    setProperty(Impl::INDEX_PROXY_SOCKS_NAME,
-                                uno::makeAny(xProxySettings->
-                                                 getSocksProxyAddress()),
+                    setProperty(Impl::INDEX_SOCKS_PROXY_NAME,
+                                star::uno::makeAny(
+                                    xProxySettings->getSocksProxyAddress()),
                                 false);
                 m_pImpl->
-                    setProperty(Impl::INDEX_PROXY_SOCKS_PORT,
-                                uno::makeAny(xProxySettings->
-                                                 getSocksProxyPort().
-                                                     toInt32()),
+                    setProperty(Impl::INDEX_SOCKS_PROXY_PORT,
+                                star::uno::makeAny(xProxySettings->
+                                                       getSocksProxyPort().
+                                                           toInt32()),
                                 false);
                 m_pImpl->
-                    setProperty(Impl::INDEX_PROXY_NO_PROXY,
-                                uno::makeAny(xProxySettings->
-                                                 getProxyBypassAddress()),
+                    setProperty(Impl::INDEX_NO_PROXY,
+                                star::uno::makeAny(
+                                    xProxySettings->getProxyBypassAddress()),
                                 false);
                 m_pImpl->
                     setProperty(Impl::INDEX_PROXY_TYPE,
-                                uno::makeAny(static_cast< sal_Int32 >(2)),
+                                star::uno::makeAny(static_cast< sal_Int32 >(
+                                                       2)),
                                 false); // 2 means "Manual"
                 m_pImpl->flush();
                 return;
             }
         }
-        catch (uno::RuntimeException &)
+        catch (star::uno::RuntimeException &)
         {}
         m_pImpl->setProperty(Impl::INDEX_PROXY_TYPE,
-                             uno::makeAny(static_cast< sal_Int32 >(0)),
+                             star::uno::makeAny(static_cast< sal_Int32 >(0)),
                              true); // 0 means "None"
     }
 }
@@ -565,24 +574,14 @@ SvtInetOptions::~SvtInetOptions()
 rtl::OUString SvtInetOptions::GetDnsIpAddress() const
 {
     return takeAny< rtl::OUString >(m_pImpl->
-                                        getProperty(
-                                            Impl::INDEX_DNS_IP_ADDRESS));
-}
-
-//============================================================================
-rtl::OUString SvtInetOptions::GetSmtpServerName() const
-{
-    return takeAny< rtl::OUString >(m_pImpl->
-                                        getProperty(
-                                            Impl::INDEX_SMTP_SERVER_NAME));
+                                        getProperty(Impl::INDEX_DNS_SERVER));
 }
 
 //============================================================================
 rtl::OUString SvtInetOptions::GetProxyNoProxy() const
 {
     return takeAny< rtl::OUString >(m_pImpl->
-                                        getProperty(
-                                            Impl::INDEX_PROXY_NO_PROXY));
+                                        getProperty(Impl::INDEX_NO_PROXY));
 }
 
 //============================================================================
@@ -597,14 +596,14 @@ rtl::OUString SvtInetOptions::GetProxyFtpName() const
 {
     return takeAny< rtl::OUString >(m_pImpl->
                                         getProperty(
-                                            Impl::INDEX_PROXY_FTP_NAME));
+                                            Impl::INDEX_FTP_PROXY_NAME));
 }
 
 //============================================================================
 sal_Int32 SvtInetOptions::GetProxyFtpPort() const
 {
     return takeAny< sal_Int32 >(m_pImpl->
-                                    getProperty(Impl::INDEX_PROXY_FTP_PORT));
+                                    getProperty(Impl::INDEX_FTP_PROXY_PORT));
 }
 
 //============================================================================
@@ -612,14 +611,14 @@ rtl::OUString SvtInetOptions::GetProxyHttpName() const
 {
     return takeAny< rtl::OUString >(m_pImpl->
                                         getProperty(
-                                            Impl::INDEX_PROXY_HTTP_NAME));
+                                            Impl::INDEX_HTTP_PROXY_NAME));
 }
 
 //============================================================================
 sal_Int32 SvtInetOptions::GetProxyHttpPort() const
 {
     return takeAny< sal_Int32 >(m_pImpl->
-                                    getProperty(Impl::INDEX_PROXY_HTTP_PORT));
+                                    getProperty(Impl::INDEX_HTTP_PROXY_PORT));
 }
 
 //============================================================================
@@ -627,7 +626,7 @@ rtl::OUString SvtInetOptions::GetProxySocksName() const
 {
     return takeAny< rtl::OUString >(m_pImpl->
                                         getProperty(
-                                            Impl::INDEX_PROXY_SOCKS_NAME));
+                                            Impl::INDEX_SOCKS_PROXY_NAME));
 }
 
 //============================================================================
@@ -635,24 +634,15 @@ sal_Int32 SvtInetOptions::GetProxySocksPort() const
 {
     return takeAny< sal_Int32 >(m_pImpl->
                                     getProperty(
-                                        Impl::INDEX_PROXY_SOCKS_PORT));
+                                        Impl::INDEX_SOCKS_PROXY_PORT));
 }
 
 //============================================================================
 void SvtInetOptions::SetDnsIpAddress(rtl::OUString const & rValue,
                                      bool bFlush)
 {
-    m_pImpl->setProperty(Impl::INDEX_DNS_IP_ADDRESS,
-                         uno::makeAny(rValue),
-                         bFlush);
-}
-
-//============================================================================
-void SvtInetOptions::SetSmtpServerName(rtl::OUString const & rValue,
-                                       bool bFlush)
-{
-    m_pImpl->setProperty(Impl::INDEX_SMTP_SERVER_NAME,
-                         uno::makeAny(rValue),
+    m_pImpl->setProperty(Impl::INDEX_DNS_SERVER,
+                         star::uno::makeAny(rValue),
                          bFlush);
 }
 
@@ -660,8 +650,8 @@ void SvtInetOptions::SetSmtpServerName(rtl::OUString const & rValue,
 void SvtInetOptions::SetProxyNoProxy(rtl::OUString const & rValue,
                                      bool bFlush)
 {
-    m_pImpl->setProperty(Impl::INDEX_PROXY_NO_PROXY,
-                         uno::makeAny(rValue),
+    m_pImpl->setProperty(Impl::INDEX_NO_PROXY,
+                         star::uno::makeAny(rValue),
                          bFlush);
 }
 
@@ -669,7 +659,7 @@ void SvtInetOptions::SetProxyNoProxy(rtl::OUString const & rValue,
 void SvtInetOptions::SetProxyType(ProxyType eValue, bool bFlush)
 {
     m_pImpl->setProperty(Impl::INDEX_PROXY_TYPE,
-                         uno::makeAny(sal_Int32(eValue)),
+                         star::uno::makeAny(sal_Int32(eValue)),
                          bFlush);
 }
 
@@ -677,16 +667,16 @@ void SvtInetOptions::SetProxyType(ProxyType eValue, bool bFlush)
 void SvtInetOptions::SetProxyFtpName(rtl::OUString const & rValue,
                                      bool bFlush)
 {
-    m_pImpl->setProperty(Impl::INDEX_PROXY_FTP_NAME,
-                         uno::makeAny(rValue),
+    m_pImpl->setProperty(Impl::INDEX_FTP_PROXY_NAME,
+                         star::uno::makeAny(rValue),
                          bFlush);
 }
 
 //============================================================================
 void SvtInetOptions::SetProxyFtpPort(sal_Int32 nValue, bool bFlush)
 {
-    m_pImpl->setProperty(Impl::INDEX_PROXY_FTP_PORT,
-                         uno::makeAny(nValue),
+    m_pImpl->setProperty(Impl::INDEX_FTP_PROXY_PORT,
+                         star::uno::makeAny(nValue),
                          bFlush);
 }
 
@@ -694,16 +684,16 @@ void SvtInetOptions::SetProxyFtpPort(sal_Int32 nValue, bool bFlush)
 void SvtInetOptions::SetProxyHttpName(rtl::OUString const & rValue,
                                       bool bFlush)
 {
-    m_pImpl->setProperty(Impl::INDEX_PROXY_HTTP_NAME,
-                         uno::makeAny(rValue),
+    m_pImpl->setProperty(Impl::INDEX_HTTP_PROXY_NAME,
+                         star::uno::makeAny(rValue),
                          bFlush);
 }
 
 //============================================================================
 void SvtInetOptions::SetProxyHttpPort(sal_Int32 nValue, bool bFlush)
 {
-    m_pImpl->setProperty(Impl::INDEX_PROXY_HTTP_PORT,
-                         uno::makeAny(nValue),
+    m_pImpl->setProperty(Impl::INDEX_HTTP_PROXY_PORT,
+                         star::uno::makeAny(nValue),
                          bFlush);
 }
 
@@ -711,16 +701,16 @@ void SvtInetOptions::SetProxyHttpPort(sal_Int32 nValue, bool bFlush)
 void SvtInetOptions::SetProxySocksName(rtl::OUString const & rValue,
                                        bool bFlush)
 {
-    m_pImpl->setProperty(Impl::INDEX_PROXY_SOCKS_NAME,
-                         uno::makeAny(rValue),
+    m_pImpl->setProperty(Impl::INDEX_SOCKS_PROXY_NAME,
+                         star::uno::makeAny(rValue),
                          bFlush);
 }
 
 //============================================================================
 void SvtInetOptions::SetProxySocksPort(sal_Int32 nValue, bool bFlush)
 {
-    m_pImpl->setProperty(Impl::INDEX_PROXY_SOCKS_PORT,
-                         uno::makeAny(nValue),
+    m_pImpl->setProperty(Impl::INDEX_SOCKS_PROXY_PORT,
+                         star::uno::makeAny(nValue),
                          bFlush);
 }
 
@@ -733,8 +723,9 @@ void SvtInetOptions::flush()
 //============================================================================
 void
 SvtInetOptions::addPropertiesChangeListener(
-    uno::Sequence< rtl::OUString > const & rPropertyNames,
-    uno::Reference< beans::XPropertiesChangeListener > const & rListener)
+    star::uno::Sequence< rtl::OUString > const & rPropertyNames,
+    star::uno::Reference< star::beans::XPropertiesChangeListener > const &
+        rListener)
 {
     m_pImpl->addPropertiesChangeListener(rPropertyNames, rListener);
 }
@@ -742,8 +733,9 @@ SvtInetOptions::addPropertiesChangeListener(
 //============================================================================
 void
 SvtInetOptions::removePropertiesChangeListener(
-    uno::Sequence< rtl::OUString > const & rPropertyNames,
-    uno::Reference< beans::XPropertiesChangeListener > const & rListener)
+    star::uno::Sequence< rtl::OUString > const & rPropertyNames,
+    star::uno::Reference< star::beans::XPropertiesChangeListener > const &
+        rListener)
 {
     m_pImpl->removePropertiesChangeListener(rPropertyNames, rListener);
 }
