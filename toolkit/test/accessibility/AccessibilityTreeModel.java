@@ -584,6 +584,14 @@ public class AccessibilityTreeModel
                     fireTreeNodesInserted( createEvent( aSource, aNew ) );
                 }
                 break;
+            case AccessibleEventId.ACCESSIBLE_TABLE_MODEL_CHANGED:
+                AccessibleTableModelChange aModelChange = (AccessibleTableModelChange)aEvent.NewValue;
+                System.out.println( "Range: StartRow " + aModelChange.FirstRow +
+                                    " StartColumn " + aModelChange.FirstColumn +
+                                    " EndRow " + aModelChange.LastRow +
+                                    " EndColumn " + aModelChange.LastColumn +
+                                    " Id " + aModelChange.Type);
+                break;
 
             case AccessibleEventId.ACCESSIBLE_VISIBLE_DATA_EVENT:
             case AccessibleEventId.ACCESSIBLE_ACTIVE_DESCENDANT_EVENT:
@@ -597,7 +605,6 @@ public class AccessibilityTreeModel
             case AccessibleEventId.ACCESSIBLE_TABLE_CAPTION_CHANGED:
             case AccessibleEventId.ACCESSIBLE_TABLE_COLUMN_DESCRIPTION_CHANGED:
             case AccessibleEventId.ACCESSIBLE_TABLE_COLUMN_HEADER_CHANGED:
-            case AccessibleEventId.ACCESSIBLE_TABLE_MODEL_CHANGED:
             case AccessibleEventId.ACCESSIBLE_TABLE_ROW_DESCRIPTION_CHANGED:
             case AccessibleEventId.ACCESSIBLE_TABLE_ROW_HEADER_CHANGED:
             case AccessibleEventId.ACCESSIBLE_TABLE_SUMMARY_CHANGED:
