@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-20 14:11:10 $
+ *  last change: $Author: mt $ $Date: 2001-11-05 13:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,21 +130,6 @@ using namespace ::com::sun::star;
 #define EDITMASK_ALLCHAR       'x'
 #define EDITMASK_UPPERALLCHAR  'X'
 
-const sal_Int32 nCharClassAlphaType =
-    ::com::sun::star::i18n::KCharacterType::UPPER |
-    ::com::sun::star::i18n::KCharacterType::LOWER |
-    ::com::sun::star::i18n::KCharacterType::TITLE_CASE;
-
-const sal_Int32 nCharClassAlphaTypeMask =
-    nCharClassAlphaType |
-    ::com::sun::star::i18n::KCharacterType::PRINTABLE |
-    ::com::sun::star::i18n::KCharacterType::BASE_FORM;
-
-inline sal_Bool isAlphaType( sal_Int32 nType )
-{
-    return ((nType & nCharClassAlphaType) != 0) && ((nType & ~(nCharClassAlphaTypeMask)) == 0);
-}
-
 uno::Reference< i18n::XCharacterClassification > ImplGetCharClass()
 {
     static uno::Reference< i18n::XCharacterClassification > xCharClass;
@@ -154,6 +139,90 @@ uno::Reference< i18n::XCharacterClassification > ImplGetCharClass()
     return xCharClass;
 }
 
+// -----------------------------------------------------------------------
+
+static sal_Unicode* ImplAddString( sal_Unicode* pBuf, const String& rStr )
+{
+    if ( rStr.Len() == 1 )
+        *pBuf++ = rStr.GetChar(0);
+    else if ( rStr.Len() == 0 )
+        ;
+    else
+    {
+        memcpy( pBuf, rStr.GetBuffer(), rStr.Len() * sizeof(sal_Unicode) );
+        pBuf += rStr.Len();
+    }
+    return pBuf;
+}
+
+// -----------------------------------------------------------------------
+
+static sal_Unicode* ImplAddNum( sal_Unicode* pBuf, ULONG nNumber, int nMinLen )
+{
+    // fill temp buffer with digits
+    sal_Unicode aTempBuf[30];
+    sal_Unicode* pTempBuf = aTempBuf;
+    do
+    {
+        *pTempBuf = (sal_Unicode)(nNumber % 10) + '0';
+        pTempBuf++;
+        nNumber /= 10;
+        if ( nMinLen )
+            nMinLen--;
+    }
+    while ( nNumber );
+
+    // fill with zeros up to the minimal length
+    while ( nMinLen > 0 )
+    {
+        *pBuf = '0';
+        pBuf++;
+        nMinLen--;
+    }
+
+    // copy temp buffer to real buffer
+    do
+    {
+        pTempBuf--;
+        *pBuf = *pTempBuf;
+        pBuf++;
+    }
+    while ( pTempBuf != aTempBuf );
+
+    return pBuf;
+}
+
+// -----------------------------------------------------------------------
+
+static USHORT ImplGetNum( const sal_Unicode*& rpBuf, BOOL& rbError )
+{
+    if ( !*rpBuf )
+    {
+        rbError = TRUE;
+        return 0;
+    }
+
+    USHORT nNumber = 0;
+    while( ( *rpBuf >= '0' ) && ( *rpBuf <= '9' ) )
+    {
+        nNumber *= 10;
+        nNumber += *rpBuf - '0';
+        rpBuf++;
+    }
+
+    return nNumber;
+}
+
+// -----------------------------------------------------------------------
+
+static void ImplSkipDelimiters( const sal_Unicode*& rpBuf )
+{
+    while( ( *rpBuf == ',' ) || ( *rpBuf == '.' ) || ( *rpBuf == ';' ) ||
+           ( *rpBuf == ':' ) || ( *rpBuf == '-' ) || ( *rpBuf == '/' ) )
+    {
+        rpBuf++;
+    }
+}
 
 // -----------------------------------------------------------------------
 
@@ -1107,36 +1176,15 @@ USHORT PatternBox::GetStringPos( const XubString& rStr ) const
 
 // =======================================================================
 
-static BOOL ImplNeed4DigitYear( USHORT nYear, const AllSettings& rSettings )
+static ExtDateFieldFormat ImplGetExtFormat( DateFormat eOld )
 {
-    USHORT nTwoDigitYearStart = rSettings.GetMiscSettings().GetTwoDigitYearStart();
-
-    // Wenn Jahr nicht im 2stelligen Grenzbereich liegt,
-    if ( (nYear < nTwoDigitYearStart) || (nYear >= nTwoDigitYearStart+100) )
-        return TRUE;
-    else
-        return FALSE;
-}
-
-// -----------------------------------------------------------------------
-
-static USHORT ImplCutDayFromString( XubString& rStr )
-{
-    // Nach Zahl suchen
-    while ( rStr.Len() && !(rStr.GetChar( 0 ) >= '0' && rStr.GetChar( 0 ) <= '9') )
-        rStr.Erase( 0, 1 );
-    if ( !rStr.Len() )
-        return 0;
-    XubString aNumStr;
-    while ( rStr.Len() && (rStr.GetChar( 0 ) >= '0' && rStr.GetChar( 0 ) <= '9') )
+    switch( eOld )
     {
-        aNumStr.Insert( rStr.GetChar( 0 ) );
-        rStr.Erase( 0, 1 );
+        case DMY:   return XTDATEF_SHORT_DDMMYY;
+        case MDY:   return XTDATEF_SHORT_MMDDYY;
+        case YMD:   return XTDATEF_SHORT_YYMMDD;
     }
-    return (USHORT)aNumStr.ToInt32();
 }
-
-// -----------------------------------------------------------------------
 
 static USHORT ImplCutMonthFromString( XubString& rStr, const CalendarWrapper& rCalendarWrapper )
 {
@@ -1145,7 +1193,7 @@ static USHORT ImplCutMonthFromString( XubString& rStr, const CalendarWrapper& rC
     //Nach Monatsnamen suchen
     for ( USHORT i=1; i <= 12; i++ )
     {
-        String aMonthName = rCalendarWrapper.getMonths()[i].FullName;
+        String aMonthName = rCalendarWrapper.getMonths()[i-1].FullName;
         // Voller Monatsname ?
         nPos = rStr.Search( aMonthName );
         if ( nPos != STRING_NOTFOUND )
@@ -1154,7 +1202,7 @@ static USHORT ImplCutMonthFromString( XubString& rStr, const CalendarWrapper& rC
             return i;
         }
         // Kurzer Monatsname ?
-        String aAbbrevMonthName = rCalendarWrapper.getMonths()[i].AbbrevName;
+        String aAbbrevMonthName = rCalendarWrapper.getMonths()[i-1].AbbrevName;
         nPos = rStr.Search( aAbbrevMonthName );
         if ( nPos != STRING_NOTFOUND )
         {
@@ -1179,7 +1227,7 @@ static USHORT ImplCutMonthFromString( XubString& rStr, const CalendarWrapper& rC
 
 // -----------------------------------------------------------------------
 
-static USHORT ImplCutYearFromString( XubString& rStr )
+static USHORT ImplCutNumberFromString( XubString& rStr )
 {
     // Nach Zahl suchen
     while ( rStr.Len() && !(rStr.GetChar( 0 ) >= '0' && rStr.GetChar( 0 ) <= '9') )
@@ -1190,170 +1238,146 @@ static USHORT ImplCutYearFromString( XubString& rStr )
     while ( rStr.Len() && (rStr.GetChar( 0 ) >= '0' && rStr.GetChar( 0 ) <= '9') )
     {
         aNumStr.Insert( rStr.GetChar( 0 ) );
-        aNumStr.Erase( 0, 1 );
+        rStr.Erase( 0, 1 );
     }
     return (USHORT)aNumStr.ToInt32();
 }
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplDateProcessKeyInput( Edit*, const KeyEvent& rKEvt,
-                                     BOOL bStrictFormat, BOOL bLongFormat,
+static String ImplGetDateSep( const LocaleDataWrapper& rLocaleDataWrapper, ExtDateFieldFormat eFormat )
+{
+    String aDateSep = rLocaleDataWrapper.getDateSep();
+
+    if ( ( eFormat == XTDATEF_SHORT_YYMMDD_DIN5008 ) || ( eFormat == XTDATEF_SHORT_YYYYMMDD_DIN5008 ) )
+        aDateSep = String( RTL_CONSTASCII_USTRINGPARAM( "-" ) );
+
+    return aDateSep;
+}
+
+static BOOL ImplDateProcessKeyInput( Edit*, const KeyEvent& rKEvt, ExtDateFieldFormat eFormat,
                                      const LocaleDataWrapper& rLocaleDataWrapper  )
 {
     xub_Unicode cChar = rKEvt.GetCharCode();
-
-    if ( !bStrictFormat || bLongFormat )
+    USHORT nGroup = rKEvt.GetKeyCode().GetGroup();
+    if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
+         (nGroup == KEYGROUP_MISC)||
+         ((cChar >= '0') && (cChar <= '9')) ||
+         (cChar == ImplGetDateSep( rLocaleDataWrapper, eFormat ).GetChar(0) ) )
         return FALSE;
     else
-    {
-        USHORT nGroup = rKEvt.GetKeyCode().GetGroup();
-        if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
-             (nGroup == KEYGROUP_MISC)||
-             ((cChar >= '0') && (cChar <= '9')) ||
-             (cChar == rLocaleDataWrapper.getDateSep()) )
-            return FALSE;
-        else
-            return TRUE;
-    }
+        return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplDateGetValue( const XubString& rStr, Date& rDate, BOOL bLongFormat,
+static BOOL ImplDateGetValue( const XubString& rStr, Date& rDate, ExtDateFieldFormat eDateFormat,
                               const LocaleDataWrapper& rLocaleDataWrapper, const CalendarWrapper& rCalendarWrapper,
                               const AllSettings& rSettings )
 {
-    XubString   aStr = rStr;
-    BOOL        bStrLongFormat = FALSE;
-    xub_StrLen  nSep1Pos;
-    xub_StrLen  nSep2Pos;
-    USHORT      mnFirst;
-    USHORT      nSecond;
-    USHORT      nThird;
-    Date        aDate( 0, 0, 0 );
-    DateFormat  eDateFormat;
+    USHORT nDay = 0;
+    USHORT nMonth = 0;
+    USHORT nYear = 0;
+    BOOL bYear = TRUE;
+    BOOL bError = FALSE;
+    String aStr( rStr );
 
-    if ( !rStr.Len() )
-        return FALSE;
-
-    if ( bLongFormat )
-        eDateFormat = rLocaleDataWrapper.getLongDateFormat();
-    else
-        eDateFormat = rLocaleDataWrapper.getDateFormat();
-
-    // Sind da Buchstaben drin ?
-
-    bStrLongFormat = isAlphaType( ImplGetCharClass()->getStringType( aStr, 0, aStr.Len(), rLocaleDataWrapper.getLocale() ) );
-
-    // Bei enthaltenen Buchstaben gehen wir davon aus, das ein langes
-    // Datumsformat eingegeben wurde
-    if ( bStrLongFormat )
+    if ( eDateFormat == XTDATEF_SYSTEM_LONG )
     {
-        switch( eDateFormat )
+        DateFormat eFormat = rLocaleDataWrapper.getLongDateFormat();
+        switch( eFormat )
         {
             case MDY:
-                mnFirst = ImplCutMonthFromString( aStr, rCalendarWrapper );
-                nSecond = ImplCutDayFromString( aStr );
-                nThird  = ImplCutYearFromString( aStr );
+                nMonth = ImplCutMonthFromString( aStr, rCalendarWrapper );
+                nDay = ImplCutNumberFromString( aStr );
+                nYear  = ImplCutNumberFromString( aStr );
                 break;
             case DMY:
-                mnFirst = ImplCutDayFromString( aStr );
-                nSecond = ImplCutMonthFromString( aStr, rCalendarWrapper );
-                nThird  = ImplCutYearFromString( aStr );
+                nDay = ImplCutNumberFromString( aStr );
+                nMonth = ImplCutMonthFromString( aStr, rCalendarWrapper );
+                nYear  = ImplCutNumberFromString( aStr );
                 break;
             case YMD:
             default:
-                mnFirst = ImplCutYearFromString( aStr );
-                nSecond = ImplCutMonthFromString( aStr, rCalendarWrapper );
-                nThird  = ImplCutDayFromString( aStr );
+                nYear = ImplCutNumberFromString( aStr );
+                nMonth = ImplCutMonthFromString( aStr, rCalendarWrapper );
+                nDay  = ImplCutNumberFromString( aStr );
                 break;
         }
     }
     else
     {
-        // Nach Separatoren suchen
-        if ( rLocaleDataWrapper.getDateSep().Len() )
-        {
-            XubString aSepStr( RTL_CONSTASCII_USTRINGPARAM( ",.;:-/" ) );
-
-            // Die obigen Zeichen durch das Separatorzeichen ersetzen
-            for ( xub_StrLen i = 0; i < aSepStr.Len(); i++ )
-            {
-                if ( aSepStr.GetChar( i ) == rLocaleDataWrapper.getDateSep() )
-                    continue;
-                for ( xub_StrLen j = 0; j < aStr.Len(); j++ )
-                {
-                    if ( aStr.GetChar( j ) == aSepStr.GetChar( i ) )
-                        aStr.SetChar( j, rLocaleDataWrapper.getDateSep().GetChar(0) );
-                }
-            }
-        }
-
-        nSep1Pos = aStr.Search( rLocaleDataWrapper.getDateSep() );
-        if ( nSep1Pos == STRING_NOTFOUND )
+        // Check if year is present:
+        String aDateSep = ImplGetDateSep( rLocaleDataWrapper, eDateFormat );
+        USHORT nSepPos = aStr.Search( aDateSep );
+        if ( nSepPos == STRING_NOTFOUND )
             return FALSE;
-        nSep2Pos = aStr.Search( rLocaleDataWrapper.getDateSep(), nSep1Pos+1 );
-
-        // Kein Jahr eingegeben ?
-        if ( nSep2Pos == STRING_NOTFOUND )
+        nSepPos = aStr.Search( aDateSep, nSepPos+1 );
+        if ( ( nSepPos == STRING_NOTFOUND ) || ( nSepPos == (aStr.Len()-1) ) )
         {
-            switch( eDateFormat )
-            {
-                case DMY:
-                case MDY:
-                    nSep2Pos = aStr.Len();
-                    aStr += rLocaleDataWrapper.getDateSep();
-                    aStr += aDate.GetYear();
-                    break;
-                default:
-                case YMD:
-                {
-                    nSep2Pos = nSep1Pos;
-                    XubString aYearStr( aDate.GetYear() );
-                    nSep2Pos = aYearStr.Len();
-                    aStr.Insert( rLocaleDataWrapper.getDateSep(), 0 );
-                    aStr.Insert( aYearStr, 0 );
-                }
-                break;
-            }
+            bYear = FALSE;
+            nYear = Date().GetYear();
         }
 
-        mnFirst = (USHORT)aStr.Copy( 0, nSep1Pos ).ToInt32();
-        aStr.Erase( 0, nSep1Pos+1 );
-        nSecond = (USHORT)aStr.Copy( 0, nSep2Pos-nSep1Pos-1 ).ToInt32();
-        aStr.Erase( 0, nSep2Pos-nSep1Pos-1+1 );
-        nThird  = (USHORT)aStr.ToInt32();
+        const sal_Unicode* pBuf = aStr.GetBuffer();
+        ImplSkipDelimiters( pBuf );
+
+        switch ( eDateFormat )
+        {
+            case XTDATEF_SHORT_DDMMYY:
+            case XTDATEF_SHORT_DDMMYYYY:
+            {
+                nDay = ImplGetNum( pBuf, bError );
+                ImplSkipDelimiters( pBuf );
+                nMonth = ImplGetNum( pBuf, bError );
+                ImplSkipDelimiters( pBuf );
+                if ( bYear )
+                    nYear = ImplGetNum( pBuf, bError );
+            }
+            break;
+            case XTDATEF_SHORT_MMDDYY:
+            case XTDATEF_SHORT_MMDDYYYY:
+            {
+                nMonth = ImplGetNum( pBuf, bError );
+                ImplSkipDelimiters( pBuf );
+                nDay = ImplGetNum( pBuf, bError );
+                ImplSkipDelimiters( pBuf );
+                if ( bYear )
+                    nYear = ImplGetNum( pBuf, bError );
+            }
+            break;
+            case XTDATEF_SHORT_YYMMDD:
+            case XTDATEF_SHORT_YYYYMMDD:
+            case XTDATEF_SHORT_YYMMDD_DIN5008:
+            case XTDATEF_SHORT_YYYYMMDD_DIN5008:
+            {
+                if ( bYear )
+                    nYear = ImplGetNum( pBuf, bError );
+                ImplSkipDelimiters( pBuf );
+                nMonth = ImplGetNum( pBuf, bError );
+                ImplSkipDelimiters( pBuf );
+                nDay = ImplGetNum( pBuf, bError );
+            }
+            break;
+
+            default:
+            {
+                DBG_ERROR( "DateFormat???" );
+            }
+        }
     }
 
-    switch ( eDateFormat )
+    if ( bError || !nDay || !nMonth )
+        return FALSE;
+
+    Date aNewDate( nDay, nMonth, nYear );
+    DateFormatter::ExpandCentury( aNewDate, rSettings.GetMiscSettings().GetTwoDigitYearStart() );
+    if ( aNewDate.IsValid() )
     {
-        case MDY:
-            if ( !nSecond || !mnFirst )
-                return FALSE;
-            aDate = Date( nSecond, mnFirst, nThird );
-            break;
-        case DMY:
-            if ( !mnFirst || !nSecond )
-                return FALSE;
-            aDate = Date( mnFirst, nSecond, nThird );
-            break;
-        default:
-        case YMD:
-            if ( !nSecond || !nThird )
-                return FALSE;
-            aDate = Date( nThird, nSecond, mnFirst );
-            break;
+        rDate = aNewDate;
+        return TRUE;
     }
-
-    DateFormatter::ExpandCentury( aDate, rSettings.GetMiscSettings().GetTwoDigitYearStart() );
-    if ( (aDate.GetDay() > 31) || (aDate.GetMonth() > 12) )
-        return FALSE;
-    if ( !aDate.IsValid() )
-        return FALSE;
-    rDate = aDate;
-
-    return TRUE;
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -1361,7 +1385,7 @@ static BOOL ImplDateGetValue( const XubString& rStr, Date& rDate, BOOL bLongForm
 BOOL DateFormatter::ImplDateReformat( const XubString& rStr, XubString& rOutStr, const AllSettings& rSettings )
 {
     Date aDate( 0, 0, 0 );
-    if ( !ImplDateGetValue( rStr, aDate, mbLongFormat, ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() ) )
+    if ( !ImplDateGetValue( rStr, aDate, GetExtDateFormat(TRUE), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() ) )
         return TRUE;
 
     Date aTempDate = aDate;
@@ -1392,22 +1416,95 @@ BOOL DateFormatter::ImplDateReformat( const XubString& rStr, XubString& rOutStr,
 XubString DateFormatter::ImplGetDateAsText( const Date& rDate,
                                             const AllSettings& rSettings ) const
 {
-    XubString aDateAsText;
-
-    BOOL bShowDateCentury = IsShowDateCentury();
-    if ( ImplNeed4DigitYear( rDate.GetYear(), rSettings ) )
-        bShowDateCentury = TRUE;
-
-    if ( mbLongFormat )
+    BOOL bShowCentury = FALSE;
+    switch ( GetExtDateFormat() )
     {
-        aDateAsText = ImplGetLocaleDataWrapper().getLongDate( rDate, GetCalendarWrapper(), 1, FALSE, 1, !bShowDateCentury );
-    }
-    else
-    {
-        aDateAsText = ImplGetLocaleDataWrapper().getDate( rDate );
+        case XTDATEF_SYSTEM_SHORT:
+        {
+            bShowCentury = FALSE;   // ??? DEFAULT ???
+        }
+        break;
+        case XTDATEF_SYSTEM_SHORT_YYYY:
+        case XTDATEF_SYSTEM_LONG:
+        case XTDATEF_SHORT_DDMMYYYY:
+        case XTDATEF_SHORT_MMDDYYYY:
+        case XTDATEF_SHORT_YYYYMMDD:
+        case XTDATEF_SHORT_YYYYMMDD_DIN5008:
+        {
+            bShowCentury = TRUE;
+        }
+        break;
     }
 
-    return aDateAsText;
+    if ( !bShowCentury )
+    {
+        // Check if I have to use force showing the century
+        USHORT nTwoDigitYearStart = rSettings.GetMiscSettings().GetTwoDigitYearStart();
+        USHORT nYear = rDate.GetYear();
+
+        // Wenn Jahr nicht im 2stelligen Grenzbereich liegt,
+        if ( (nYear < nTwoDigitYearStart) || (nYear >= nTwoDigitYearStart+100) )
+            bShowCentury = TRUE;
+    }
+
+    sal_Unicode aBuf[128];
+    sal_Unicode* pBuf = aBuf;
+
+    String aDateSep = ImplGetDateSep( ImplGetLocaleDataWrapper(), GetExtDateFormat( TRUE ) );
+    USHORT nDay = rDate.GetDay();
+    USHORT nMonth = rDate.GetMonth();
+    USHORT nYear = rDate.GetYear();
+    USHORT nYearLen = bShowCentury ? 4 : 2;
+
+    if ( !bShowCentury )
+        nYear %= 100;
+
+    switch ( GetExtDateFormat( TRUE ) )
+    {
+        case XTDATEF_SYSTEM_LONG:
+        {
+            return ImplGetLocaleDataWrapper().getLongDate( rDate, GetCalendarWrapper(), 1, FALSE, 1, !bShowCentury );
+        }
+        break;
+        case XTDATEF_SHORT_DDMMYY:
+        case XTDATEF_SHORT_DDMMYYYY:
+        {
+            pBuf = ImplAddNum( pBuf, nDay, 2 );
+            pBuf = ImplAddString( pBuf, aDateSep );
+            pBuf = ImplAddNum( pBuf, nMonth, 2 );
+            pBuf = ImplAddString( pBuf, aDateSep );
+            pBuf = ImplAddNum( pBuf, nYear, nYearLen );
+        }
+        break;
+        case XTDATEF_SHORT_MMDDYY:
+        case XTDATEF_SHORT_MMDDYYYY:
+        {
+            pBuf = ImplAddNum( pBuf, nMonth, 2 );
+            pBuf = ImplAddString( pBuf, aDateSep );
+            pBuf = ImplAddNum( pBuf, nDay, 2 );
+            pBuf = ImplAddString( pBuf, aDateSep );
+            pBuf = ImplAddNum( pBuf, nYear, nYearLen );
+        }
+        break;
+        case XTDATEF_SHORT_YYMMDD:
+        case XTDATEF_SHORT_YYYYMMDD:
+        case XTDATEF_SHORT_YYMMDD_DIN5008:
+        case XTDATEF_SHORT_YYYYMMDD_DIN5008:
+        {
+            pBuf = ImplAddNum( pBuf, nYear, nYearLen );
+            pBuf = ImplAddString( pBuf, aDateSep );
+            pBuf = ImplAddNum( pBuf, nMonth, 2 );
+            pBuf = ImplAddString( pBuf, aDateSep );
+            pBuf = ImplAddNum( pBuf, nDay, 2 );
+        }
+        break;
+        default:
+        {
+            DBG_ERROR( "DateFormat???" );
+        }
+    }
+
+    return String( aBuf, (xub_StrLen)(ULONG)(pBuf-aBuf) );
 }
 
 // -----------------------------------------------------------------------
@@ -1504,19 +1601,20 @@ void DateField::ImplDateSpinArea( BOOL bUp )
         {
             xub_StrLen nDateArea = 0;
 
-            DateFormat eFormat;
-            if ( IsLongFormat() )
-                eFormat = ImplGetLocaleDataWrapper().getLongDateFormat();
+            ExtDateFieldFormat eFormat = GetExtDateFormat( TRUE );
+            if ( eFormat == XTDATEF_SYSTEM_LONG )
+            {
+                eFormat = ImplGetExtFormat( ImplGetLocaleDataWrapper().getLongDateFormat() );
+                nDateArea = 1;
+            }
             else
-                eFormat = ImplGetLocaleDataWrapper().getDateFormat();
-
-            if ( !IsLongFormat() )
             {
                 // Area suchen
                 xub_StrLen nPos = 0;
+                String aDateSep = ImplGetDateSep( ImplGetLocaleDataWrapper(), eFormat );
                 for ( xub_StrLen i = 1; i <= 3; i++ )
                 {
-                    nPos = aText.Search( ImplGetLocaleDataWrapper().getDateSep(), nPos );
+                    nPos = aText.Search( aDateSep, nPos );
                     if ( nPos >= (USHORT)aSelection.Max() )
                     {
                         nDateArea = i;
@@ -1526,44 +1624,48 @@ void DateField::ImplDateSpinArea( BOOL bUp )
                         nPos++;
                 }
             }
-            else
-                nDateArea = 1;
+
 
             switch( eFormat )
             {
-                case MDY:
-                    switch( nDateArea )
-                    {
-                        case 1: ImplDateIncrementMonth( aDate, bUp );
-                                break;
-                        case 2: ImplDateIncrementDay( aDate, bUp );
-                                break;
-                        case 3: ImplDateIncrementYear( aDate, bUp );
-                                break;
-                    }
-                    break;
-                case DMY:
-                    switch( nDateArea )
-                    {
-                        case 1: ImplDateIncrementDay( aDate, bUp );
-                                break;
-                        case 2: ImplDateIncrementMonth( aDate, bUp );
-                                break;
-                        case 3: ImplDateIncrementYear( aDate, bUp );
-                                break;
-                    }
-                    break;
-                case YMD:
-                    switch( nDateArea )
-                    {
-                        case 1: ImplDateIncrementYear( aDate, bUp );
-                                break;
-                        case 2: ImplDateIncrementMonth( aDate, bUp );
-                                break;
-                        case 3: ImplDateIncrementDay( aDate, bUp );
-                                break;
-                    }
-                    break;
+                case XTDATEF_SHORT_MMDDYY:
+                case XTDATEF_SHORT_MMDDYYYY:
+                switch( nDateArea )
+                {
+                    case 1: ImplDateIncrementMonth( aDate, bUp );
+                            break;
+                    case 2: ImplDateIncrementDay( aDate, bUp );
+                            break;
+                    case 3: ImplDateIncrementYear( aDate, bUp );
+                            break;
+                }
+                break;
+                case XTDATEF_SHORT_DDMMYY:
+                case XTDATEF_SHORT_DDMMYYYY:
+                switch( nDateArea )
+                {
+                    case 1: ImplDateIncrementDay( aDate, bUp );
+                            break;
+                    case 2: ImplDateIncrementMonth( aDate, bUp );
+                            break;
+                    case 3: ImplDateIncrementYear( aDate, bUp );
+                            break;
+                }
+                break;
+                case XTDATEF_SHORT_YYMMDD:
+                case XTDATEF_SHORT_YYYYMMDD:
+                case XTDATEF_SHORT_YYMMDD_DIN5008:
+                case XTDATEF_SHORT_YYYYMMDD_DIN5008:
+                switch( nDateArea )
+                {
+                    case 1: ImplDateIncrementYear( aDate, bUp );
+                            break;
+                    case 2: ImplDateIncrementMonth( aDate, bUp );
+                            break;
+                    case 3: ImplDateIncrementDay( aDate, bUp );
+                            break;
+                }
+                break;
             }
         }
 
@@ -1579,6 +1681,7 @@ void DateFormatter::ImplInit()
     mbShowDateCentury   = TRUE;
     mpCalendarWrapper   = NULL;
     mnDateFormat        = 0xFFFF;
+    mnExtDateFormat     = XTDATEF_SYSTEM_SHORT;
 }
 
 // -----------------------------------------------------------------------
@@ -1664,10 +1767,13 @@ CalendarWrapper& DateFormatter::GetCalendarWrapper() const
     return *mpCalendarWrapper;
 }
 
+#if SUPD < 651
+
 // -----------------------------------------------------------------------
 
 void DateFormatter::SetDateFormat( DateFormat eFormat )
 {
+    DBG_ERROR( "Who is using DateFormatter::SetDateFormat?\nPlease report to Malte Timmermann" );
     mnDateFormat = eFormat;
 }
 
@@ -1675,7 +1781,41 @@ void DateFormatter::SetDateFormat( DateFormat eFormat )
 
 DateFormat DateFormatter::GetDateFormat() const
 {
+    DBG_ERROR( "Who is using DateFormatter::GetDateFormat?\nPlease report to Malte Timmermann" );
     return ( mnDateFormat != 0xFFFF ) ? (DateFormat)mnDateFormat : ImplGetLocaleDataWrapper().getDateFormat();
+}
+
+#endif
+
+// -----------------------------------------------------------------------
+
+void DateFormatter::SetExtDateFormat( ExtDateFieldFormat eFormat )
+{
+    mnExtDateFormat = eFormat;
+    ReformatAll();
+}
+
+// -----------------------------------------------------------------------
+
+ExtDateFieldFormat DateFormatter::GetExtDateFormat( BOOL bResolveSystemFormat ) const
+{
+    ExtDateFieldFormat eDateFormat = (ExtDateFieldFormat)mnExtDateFormat;
+
+    if ( bResolveSystemFormat && ( eDateFormat <= XTDATEF_SYSTEM_SHORT_YYYY ) )
+    {
+        BOOL bShowCentury = (eDateFormat == XTDATEF_SYSTEM_SHORT_YYYY);
+        switch ( ImplGetLocaleDataWrapper().getDateFormat() )
+        {
+            case DMY:   eDateFormat = bShowCentury ? XTDATEF_SHORT_DDMMYYYY : XTDATEF_SHORT_DDMMYY;
+                        break;
+            case MDY:   eDateFormat = bShowCentury ? XTDATEF_SHORT_MMDDYYYY : XTDATEF_SHORT_MMDDYY;
+                        break;
+            default:    eDateFormat = bShowCentury ? XTDATEF_SHORT_YYYYMMDD : XTDATEF_SHORT_YYMMDD;
+
+        }
+    }
+
+    return eDateFormat;
 }
 
 // -----------------------------------------------------------------------
@@ -1708,18 +1848,64 @@ void DateFormatter::SetMax( const Date& rNewMax )
 void DateFormatter::SetLongFormat( BOOL bLong )
 {
     mbLongFormat = bLong;
+
+    // #91913# Remove LongFormat and DateShowCentury - redundant
+    if ( bLong )
+    {
+        SetExtDateFormat( XTDATEF_SYSTEM_LONG );
+    }
+    else
+    {
+        if( mnExtDateFormat == XTDATEF_SYSTEM_LONG )
+            SetExtDateFormat( XTDATEF_SYSTEM_SHORT );
+    }
+
     ReformatAll();
 }
 
 // -----------------------------------------------------------------------
 
-void DateFormatter::SetShowDateCentury( BOOL bLong )
+void DateFormatter::SetShowDateCentury( BOOL bShowDateCentury )
 {
-    if ( mbShowDateCentury != bLong )
+    mbShowDateCentury = bShowDateCentury;
+
+    // #91913# Remove LongFormat and DateShowCentury - redundant
+    if ( bShowDateCentury )
     {
-        mbShowDateCentury = bLong;
-        ReformatAll();
+        switch ( GetExtDateFormat() )
+        {
+            case XTDATEF_SYSTEM_SHORT:
+            case XTDATEF_SYSTEM_SHORT_YY:
+                SetExtDateFormat( XTDATEF_SYSTEM_SHORT_YYYY );  break;
+            case XTDATEF_SHORT_DDMMYY:
+                SetExtDateFormat( XTDATEF_SHORT_DDMMYYYY );     break;
+            case XTDATEF_SHORT_MMDDYY:
+                SetExtDateFormat( XTDATEF_SHORT_MMDDYYYY );     break;
+            case XTDATEF_SHORT_YYMMDD:
+                SetExtDateFormat( XTDATEF_SHORT_YYYYMMDD );     break;
+            case XTDATEF_SHORT_YYMMDD_DIN5008:
+                SetExtDateFormat( XTDATEF_SHORT_YYYYMMDD_DIN5008 ); break;
+        }
     }
+    else
+    {
+        switch ( GetExtDateFormat() )
+        {
+            case XTDATEF_SYSTEM_SHORT:
+            case XTDATEF_SYSTEM_SHORT_YYYY:
+                SetExtDateFormat( XTDATEF_SYSTEM_SHORT_YY );    break;
+            case XTDATEF_SHORT_DDMMYYYY:
+                SetExtDateFormat( XTDATEF_SHORT_DDMMYY );       break;
+            case XTDATEF_SHORT_MMDDYYYY:
+                SetExtDateFormat( XTDATEF_SHORT_MMDDYY );       break;
+            case XTDATEF_SHORT_YYYYMMDD:
+                SetExtDateFormat( XTDATEF_SHORT_YYMMDD );       break;
+            case XTDATEF_SHORT_YYYYMMDD_DIN5008:
+                SetExtDateFormat( XTDATEF_SHORT_YYMMDD_DIN5008 );  break;
+        }
+    }
+
+    ReformatAll();
 }
 
 // -----------------------------------------------------------------------
@@ -1791,7 +1977,7 @@ Date DateFormatter::GetDate() const
 
     if ( GetField() )
     {
-        if ( ImplDateGetValue( GetField()->GetText(), aDate, mbLongFormat, ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() ) )
+        if ( ImplDateGetValue( GetField()->GetText(), aDate, GetExtDateFormat(TRUE), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() ) )
         {
             if ( aDate > maMax )
                 aDate = maMax;
@@ -1826,7 +2012,7 @@ Date DateFormatter::GetRealDate() const
 
     if ( GetField() )
     {
-        ImplDateGetValue( GetField()->GetText(), aDate, mbLongFormat, ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() );
+        ImplDateGetValue( GetField()->GetText(), aDate, GetExtDateFormat(TRUE), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() );
     }
 
     return aDate;
@@ -1854,7 +2040,7 @@ BOOL DateFormatter::IsEmptyDate() const
         else if ( !maLastDate.GetDate() )
         {
             Date aDate;
-            bEmpty = !ImplDateGetValue( GetField()->GetText(), aDate, mbLongFormat, ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() );
+            bEmpty = !ImplDateGetValue( GetField()->GetText(), aDate, GetExtDateFormat(TRUE), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() );
         }
     }
     return bEmpty;
@@ -1890,7 +2076,7 @@ void DateFormatter::Reformat()
     if ( aStr.Len() )
     {
         ImplSetText( aStr );
-        ImplDateGetValue( aStr, maLastDate, mbLongFormat, ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() );
+        ImplDateGetValue( aStr, maLastDate, GetExtDateFormat(TRUE), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() );
     }
     else
     {
@@ -1993,10 +2179,11 @@ DateField::~DateField()
 
 long DateField::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
+    if ( (rNEvt.GetType() == EVENT_KEYINPUT) && IsStrictFormat() &&
+         ( GetExtDateFormat() != XTDATEF_SYSTEM_LONG ) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
     {
-        if ( ImplDateProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsLongFormat(), ImplGetLocaleDataWrapper() ) )
+        if ( ImplDateProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), GetExtDateFormat( TRUE ), ImplGetLocaleDataWrapper() ) )
             return 1;
     }
 
@@ -2090,88 +2277,7 @@ void DateField::Last()
 
 void DateField::SetExtFormat( ExtDateFieldFormat eFormat )
 {
-    BOOL bLongFormat = FALSE;   // immer bis auf XTDATEF_SYSTEM_LONG
-
-    switch ( eFormat )
-    {
-        case XTDATEF_SYSTEM_SHORT:
-        {
-        }
-        break;
-        case XTDATEF_SYSTEM_SHORT_YY:
-        {
-            SetShowDateCentury( FALSE );
-        }
-        break;
-        case XTDATEF_SYSTEM_SHORT_YYYY:
-        {
-            SetShowDateCentury( TRUE );
-        }
-        break;
-        case XTDATEF_SYSTEM_LONG:
-        {
-            bLongFormat = TRUE;
-        }
-        break;
-        case XTDATEF_SHORT_DDMMYY:
-        {
-            SetShowDateCentury( FALSE );
-//          ImplGetLocaleDataWrapper().setDateFormat( DMY );
-        }
-        break;
-        case XTDATEF_SHORT_MMDDYY:
-        {
-            SetShowDateCentury( FALSE );
-//INTN      ImplGetLocaleDataWrapper().setDateFormat( MDY );
-        }
-        break;
-        case XTDATEF_SHORT_YYMMDD:
-        {
-            SetShowDateCentury( FALSE );
-//INTN      ImplGetLocaleDataWrapper().setDateFormat( YMD );
-        }
-        break;
-        case XTDATEF_SHORT_DDMMYYYY:
-        {
-            SetShowDateCentury( TRUE );
-//INTN      ImplGetLocaleDataWrapper().setDateFormat( DMY );
-        }
-        break;
-        case XTDATEF_SHORT_MMDDYYYY:
-        {
-            SetShowDateCentury( TRUE );
-//INTN      ImplGetLocaleDataWrapper().setDateFormat( MDY );
-        }
-        break;
-        case XTDATEF_SHORT_YYYYMMDD:
-        {
-            SetShowDateCentury( TRUE );
-//INTN      ImplGetLocaleDataWrapper().setDateFormat( YMD );
-        }
-        break;
-        case XTDATEF_SHORT_YYMMDD_DIN5008:
-        {
-            SetShowDateCentury( FALSE );
-//INTN      ImplGetLocaleDataWrapper().setDateSep( '-' );
-//INTN      ImplGetLocaleDataWrapper().setDateFormat( YMD );
-        }
-        break;
-        case XTDATEF_SHORT_YYYYMMDD_DIN5008:
-        {
-            SetShowDateCentury( TRUE );
-//INTN      ImplGetLocaleDataWrapper().setDateSep( '-' );
-//INTN      ImplGetLocaleDataWrapper().setDateFormat( YMD );
-        }
-        break;
-        default:    DBG_ERROR( "ExtDateFieldFormat unknown!" );
-    }
-
-    SetLongFormat( bLongFormat );
-    if ( GetField() && GetField()->GetText().Len() )
-    {
-        SetUserDate( GetDate() );
-    }
-    ReformatAll();
+    DateFormatter::SetExtDateFormat( eFormat );
 }
 
 // -----------------------------------------------------------------------
@@ -2212,10 +2318,11 @@ DateBox::~DateBox()
 
 long DateBox::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
+    if ( (rNEvt.GetType() == EVENT_KEYINPUT) && IsStrictFormat() &&
+         ( GetExtDateFormat() != XTDATEF_SYSTEM_LONG ) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
     {
-        if ( ImplDateProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsLongFormat(), ImplGetLocaleDataWrapper() ) )
+        if ( ImplDateProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), GetExtDateFormat( TRUE ), ImplGetLocaleDataWrapper() ) )
             return 1;
     }
 
@@ -2310,7 +2417,7 @@ void DateBox::RemoveDate( const Date& rDate )
 Date DateBox::GetDate( USHORT nPos ) const
 {
     Date aDate( 0, 0, 0 );
-    ImplDateGetValue( ComboBox::GetEntry( nPos ), aDate, IsLongFormat(), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetSettings() );
+    ImplDateGetValue( ComboBox::GetEntry( nPos ), aDate, GetExtDateFormat(TRUE), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetSettings() );
     return aDate;
 }
 
