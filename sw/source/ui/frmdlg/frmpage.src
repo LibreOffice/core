@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: pb $ $Date: 2002-04-15 09:40:23 $
+ *  last change: $Author: fs $ $Date: 2002-04-17 09:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2555,7 +2555,7 @@ TabPage TP_FRM_ADD
         {
             < "Links-nach-rechts (horizontal)" ; 0; > ;
 //          < "Rechts-nach-links (horizontal)" ; 1; > ;
-            < "Rechts nach links (vertikal)" ; 2; > ;
+            < "Rechts-nach-links (vertikal)" ; 2; > ;
 //          < "Links-nach-rechts (vertikal)" ; 3; > ;
             < "Einstellung des übergeordneten Objektes verwenden" ; 4; > ;
         };
