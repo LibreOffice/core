@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlccompile.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:47:20 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 13:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,15 +123,12 @@ OString convertToAbsoluteSystemPath(const OString& fileName)
     {
         OSL_VERIFY(FileBase::getSystemPathFromFileURL(uFileName, uSysFileName) == FileBase::E_None);
     } else
-    if ( fileName.indexOf('.') == 0 || fileName.indexOf(SEPARATOR) < 0)
     {
-        OUString uWorkingDir, uUrlFileName;
+        OUString uWorkingDir, uUrlFileName, uTmp;
         OSL_VERIFY( osl_getProcessWorkingDir(&uWorkingDir.pData) == osl_Process_E_None );
-        OSL_VERIFY( FileBase::getAbsoluteFileURL(uWorkingDir, uFileName, uUrlFileName) == FileBase::E_None );
+        OSL_VERIFY( FileBase::getFileURLFromSystemPath(uFileName, uTmp) == FileBase::E_None );
+        OSL_VERIFY( FileBase::getAbsoluteFileURL(uWorkingDir, uTmp, uUrlFileName) == FileBase::E_None );
         OSL_VERIFY( FileBase::getSystemPathFromFileURL(uUrlFileName, uSysFileName) == FileBase::E_None );
-    } else
-    {
-        return fileName;
     }
 
     return OUStringToOString(uSysFileName, osl_getThreadTextEncoding());
@@ -141,7 +138,8 @@ OString convertToFileUrl(const OString& fileName)
 {
     if ( !isFileUrl(fileName) )
     {
-        OUString uFileName(fileName.getStr(), fileName.getLength(), osl_getThreadTextEncoding());
+        OString tmp = convertToAbsoluteSystemPath(fileName);
+        OUString uFileName(tmp.getStr(), tmp.getLength(), osl_getThreadTextEncoding());
         OUString uUrlFileName;
         OSL_VERIFY(FileBase::getFileURLFromSystemPath(uFileName, uUrlFileName) == FileBase::E_None);
         return OUStringToOString(uUrlFileName, osl_getThreadTextEncoding());
@@ -262,7 +260,7 @@ sal_Bool copyFile(const OString* source, const OString& target)
 
 sal_Int32 compileFile(const OString * pathname)
 {
-    // preporcess input file
+    // preprocess input file
     OString tmpFile = makeTempName(OString("idli_"), OString(".idl"));
     OString preprocFile = makeTempName(OString("idlf_"), OString(".idl"));
 
