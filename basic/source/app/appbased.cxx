@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbased.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gh $ $Date: 2002-10-21 08:44:08 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,7 @@ void AppBasEd::PostLoad()
     pMod->SetName( GetText() );
     pMod->Clear();
     pMod->SetSource( pDataEdit->GetText() );
+    bCompiled = FALSE;  // because the code might have changed in the meantime
     AppEdit::PostLoad();
 
     pBreakpoints->LoadBreakpoints( GetText() );
@@ -260,6 +261,7 @@ void AppBasEd::LoadSource()
         ErrorBox( this, ResId( IDS_READERROR ) ).Execute();
     else
         UpdateFileInfo( HAS_BEEN_LOADED );
+    bCompiled = FALSE;  // because the code might have changed in the meantime
 }
 
 // mit neuem Namen speichern
