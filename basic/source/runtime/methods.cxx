@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ab $ $Date: 2000-10-12 14:45:38 $
+ *  last change: $Author: ab $ $Date: 2000-10-24 09:26:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,8 @@
 #endif
 #include <tools/urlobj.hxx>
 #include <osl/time.h>
+#include <unotools/charclass.hxx>
+#include <tools/isolang.hxx>
 
 #ifdef OS2
 #define INCL_WINWINDOWMGR
@@ -126,6 +128,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -1090,8 +1093,14 @@ RTLFUNC(LCase)
     else
     {
         const International& rInt = GetpApp()->GetAppInternational();
+        LanguageType eLang = rInt.GetLanguage();
+        String aLanguage, aCountry;
+        ConvertLanguageToIsoNames( (eLang == LANGUAGE_SYSTEM ? International::GetRealLanguage( eLang ) : eLang),
+            aLanguage, aCountry );
+        ::com::sun::star::lang::Locale aLocale( aLanguage, aCountry, OUString() );
+        CharClass aCharClass( aLocale );
         String aStr( rPar.Get(1)->GetString() );
-        rInt.ToLower( aStr );
+        aCharClass.toLower( aStr );
         rPar.Get(0)->PutString( aStr );
     }
 }
@@ -1370,8 +1379,14 @@ RTLFUNC(UCase)
     else
     {
         const International& rInt = GetpApp()->GetAppInternational();
+        LanguageType eLang = rInt.GetLanguage();
+        String aLanguage, aCountry;
+        ConvertLanguageToIsoNames( (eLang == LANGUAGE_SYSTEM ? International::GetRealLanguage( eLang ) : eLang),
+            aLanguage, aCountry );
+        ::com::sun::star::lang::Locale aLocale( aLanguage, aCountry, OUString() );
+        CharClass aCharClass( aLocale );
         String aStr( rPar.Get(1)->GetString() );
-        rInt.ToUpper( aStr );
+        aCharClass.toUpper( aStr );
         rPar.Get(0)->PutString( aStr );
     }
 }
