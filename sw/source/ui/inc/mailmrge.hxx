@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-06-06 06:20:21 $
+ *  last change: $Author: rt $ $Date: 2001-06-07 16:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ public:
 
     inline USHORT   GetMergeType() { return nMergeType; }
     const ::com::sun::star::uno::Sequence< sal_Int32 > GetSelection() const{return aSelection;}
-    ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XResultSet> GetResultSet();
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet();
 
 };
 
