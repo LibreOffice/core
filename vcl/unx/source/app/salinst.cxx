@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:37 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 14:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #include <salprn.h>
 #endif
 #endif
+#ifndef _VCL_SM_HXX
+#include <sm.hxx>
+#endif
 // -=-= C++ globals =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void SalAbort( const XubString& rErrorText )
@@ -177,6 +180,8 @@ void InitSalMain()
 
 void DeInitSalMain()
 {
+    // tell session manager that we're almost done
+    SessionManagerClient::shutdownDone();
 }
 
 void SetFilterCallback( void* pCallback, void* pInst )
