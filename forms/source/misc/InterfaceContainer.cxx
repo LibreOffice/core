@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:01:25 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 15:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,22 +176,26 @@ OInterfaceContainer::OInterfaceContainer(
         ,m_xServiceFactory(_rxFactory)
 {
     m_xEventAttacher = ::comphelper::createEventAttacherManager(m_xServiceFactory);
+    OSL_ENSURE( m_xEventAttacher.is(), "OInterfaceContainer::OInterfaceContainer: no event attacher manager! (corrupt installation?)" );
 }
 
 //------------------------------------------------------------------------------
 void OInterfaceContainer::disposing()
 {
-    // dispose aller elemente
+    // dispose all elements
     for (sal_Int32 i = m_aItems.size(); i > 0; --i)
     {
         Reference<XPropertySet>  xSet(m_aItems[i - 1], UNO_QUERY);
         if (xSet.is())
             xSet->removePropertyChangeListener(PROPERTY_NAME, this);
 
-        // Eventverknüpfungen aufheben
-        InterfaceRef  xIfc(xSet, UNO_QUERY);
-        m_xEventAttacher->detach(i - 1, xIfc);
-        m_xEventAttacher->removeEntry(i - 1);
+        // revoke event knittings
+        if ( m_xEventAttacher.is() )
+        {
+            Reference< XInterface > xIfc( xSet, UNO_QUERY );
+            m_xEventAttacher->detach( i - 1, xIfc );
+            m_xEventAttacher->removeEntry( i - 1 );
+        }
 
         Reference<XComponent>  xComponent(xSet, UNO_QUERY);
         if (xComponent.is())
@@ -248,6 +252,10 @@ namespace
     void lcl_saveEvents( ::std::vector< Sequence< ScriptEventDescriptor > >& _rSave,
         const Reference< XEventAttacherManager >& _rxManager, const sal_Int32 _nItemCount )
     {
+        OSL_ENSURE( _rxManager.is(), "lcl_saveEvents: invalid event attacher manager!" );
+        if ( !_rxManager.is() )
+            return;
+
         // reserve the space needed
         _rSave.reserve( _nItemCount );
 
@@ -264,6 +272,10 @@ namespace
     void lcl_restoreEvents( const ::std::vector< Sequence< ScriptEventDescriptor > >& _rSave,
         const Reference< XEventAttacherManager >& _rxManager )
     {
+        OSL_ENSURE( _rxManager.is(), "lcl_restoreEvents: invalid event attacher manager!" );
+        if ( !_rxManager.is() )
+            return;
+
         ::std::vector< Sequence< ScriptEventDescriptor > >::const_iterator aLoop = _rSave.begin();
         ::std::vector< Sequence< ScriptEventDescriptor > >::const_iterator aEnd = _rSave.end();
         for ( sal_Int32 i=0; aLoop != aEnd; ++aLoop, ++i )
@@ -281,7 +293,8 @@ void SAL_CALL OInterfaceContainer::writeEvents(const Reference<XObjectOutputStre
     // -> convert the events from the new runtime format to the format of the 5.2 files
     // but before, remember the current script events set for our children
     ::std::vector< Sequence< ScriptEventDescriptor > > aSave;
-    lcl_saveEvents( aSave, m_xEventAttacher, m_aItems.size() );
+    if ( m_xEventAttacher.is() )
+        lcl_saveEvents( aSave, m_xEventAttacher, m_aItems.size() );
 
     transformEvents( efVersionSO5x );
 
@@ -307,12 +320,14 @@ void SAL_CALL OInterfaceContainer::writeEvents(const Reference<XObjectOutputStre
     catch( const Exception& )
     {
         // restore the events
-        lcl_restoreEvents( aSave, m_xEventAttacher );
+        if ( m_xEventAttacher.is() )
+            lcl_restoreEvents( aSave, m_xEventAttacher );
         throw;
     }
 
     // restore the events
-    lcl_restoreEvents( aSave, m_xEventAttacher );
+    if ( m_xEventAttacher.is() )
+        lcl_restoreEvents( aSave, m_xEventAttacher );
 }
 
 //------------------------------------------------------------------------------
@@ -359,6 +374,10 @@ struct TransformEventTo60Format : public ::std::unary_function< ScriptEventDescr
 //------------------------------------------------------------------------------
 void OInterfaceContainer::transformEvents( const EventFormat _eTargetFormat )
 {
+    OSL_ENSURE( m_xEventAttacher.is(), "OInterfaceContainer::transformEvents: no event attacher manager!" );
+    if ( !m_xEventAttacher.is() )
+        return;
+
     try
     {
         // loop through all our children
@@ -416,13 +435,16 @@ void SAL_CALL OInterfaceContainer::readEvents(const Reference<XObjectInputStream
     }
 
     // Attachement lesen
-    OInterfaceArray::const_iterator aAttach = m_aItems.begin();
-    OInterfaceArray::const_iterator aAttachEnd = m_aItems.end();
-    for ( sal_Int32 i=0; aAttach != aAttachEnd; ++aAttach, ++i )
+    if ( m_xEventAttacher.is() )
     {
-        Reference< XInterface > xAsIFace( *aAttach, UNO_QUERY );    // important to normalize this ....
-        Reference< XPropertySet > xAsSet( xAsIFace, UNO_QUERY );
-        m_xEventAttacher->attach( i, xAsIFace, makeAny( xAsSet ) );
+        OInterfaceArray::const_iterator aAttach = m_aItems.begin();
+        OInterfaceArray::const_iterator aAttachEnd = m_aItems.end();
+        for ( sal_Int32 i=0; aAttach != aAttachEnd; ++aAttach, ++i )
+        {
+            Reference< XInterface > xAsIFace( *aAttach, UNO_QUERY );    // important to normalize this ....
+            Reference< XPropertySet > xAsSet( xAsIFace, UNO_QUERY );
+            m_xEventAttacher->attach( i, xAsIFace, makeAny( xAsSet ) );
+        }
     }
 }
 
@@ -562,7 +584,10 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
         readEvents(_rxInStream);
     }
     else
+    {
         m_xEventAttacher = ::comphelper::createEventAttacherManager( m_xServiceFactory );
+        OSL_ENSURE( m_xEventAttacher.is(), "OInterfaceContainer::read: could not create an event attacher manager!" );
+    }
 }
 
 // XContainer
@@ -802,7 +827,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     }
 
     // handle the events
-    if (_bEvents)
+    if ( _bEvents && m_xEventAttacher.is() )
     {
         m_xEventAttacher->insertEntry(_nIndex);
         m_xEventAttacher->attach( _nIndex, pElementMetaData->xInterface, makeAny( _rxElement ) );
@@ -880,9 +905,12 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
         ++j;
 
     // remove event knittings
-    InterfaceRef  xIfc(xOldElement, UNO_QUERY);// wichtig
-    m_xEventAttacher->detach(_nIndex, xIfc);
-    m_xEventAttacher->removeEntry(_nIndex);
+    if ( m_xEventAttacher.is() )
+    {
+        InterfaceRef xNormalized( xOldElement, UNO_QUERY );
+        m_xEventAttacher->detach( _nIndex, xNormalized );
+        m_xEventAttacher->removeEntry( _nIndex );
+    }
 
     // don't listen for property changes anymore
     Reference<XPropertySet>  xSet( xOldElement, UNO_QUERY );
@@ -910,8 +938,11 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
 
     aElementMetaData.get()->xChild->setParent(static_cast<XContainer*>(this));
 
-    m_xEventAttacher->insertEntry(_nIndex);
-    m_xEventAttacher->attach( _nIndex, aElementMetaData.get()->xInterface, makeAny( aElementMetaData.get()->xPropertySet ) );
+    if ( m_xEventAttacher.is() )
+    {
+        m_xEventAttacher->insertEntry( _nIndex );
+        m_xEventAttacher->attach( _nIndex, aElementMetaData.get()->xInterface, makeAny( aElementMetaData.get()->xPropertySet ) );
+    }
 
     implReplaced( xOldElement, aElementMetaData.get() );
 
@@ -957,10 +988,13 @@ void OInterfaceContainer::implRemoveByIndex( const sal_Int32 _nIndex, ::osl::Cle
     m_aItems.erase(i);
     m_aMap.erase(j);
 
-    // Eventverknüpfungen aufheben
-    InterfaceRef  xIfc(xElement, UNO_QUERY);// wichtig
-    m_xEventAttacher->detach(_nIndex, xIfc);
-    m_xEventAttacher->removeEntry(_nIndex);
+    // remove event knittings
+    if ( m_xEventAttacher.is() )
+    {
+        InterfaceRef xNormalized( xElement, UNO_QUERY );
+        m_xEventAttacher->detach( _nIndex, xNormalized );
+        m_xEventAttacher->removeEntry( _nIndex );
+    }
 
     Reference<XPropertySet>  xSet(xElement, UNO_QUERY);
     if (xSet.is())
@@ -1076,68 +1110,80 @@ void SAL_CALL OInterfaceContainer::removeByName(const ::rtl::OUString& Name) thr
 //------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::registerScriptEvent( sal_Int32 nIndex, const ScriptEventDescriptor& aScriptEvent ) throw(IllegalArgumentException, RuntimeException)
 {
-    m_xEventAttacher->registerScriptEvent(nIndex, aScriptEvent);
+    if ( m_xEventAttacher.is() )
+        m_xEventAttacher->registerScriptEvent( nIndex, aScriptEvent );
 }
 
 //------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::registerScriptEvents( sal_Int32 nIndex, const Sequence< ScriptEventDescriptor >& aScriptEvents ) throw(IllegalArgumentException, RuntimeException)
 {
-    m_xEventAttacher->registerScriptEvents(nIndex, aScriptEvents);
+    if ( m_xEventAttacher.is() )
+        m_xEventAttacher->registerScriptEvents( nIndex, aScriptEvents );
 }
 
 //------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::revokeScriptEvent( sal_Int32 nIndex, const ::rtl::OUString& aListenerType, const ::rtl::OUString& aEventMethod, const ::rtl::OUString& aRemoveListenerParam ) throw(IllegalArgumentException, RuntimeException)
 {
-    m_xEventAttacher->revokeScriptEvent(nIndex,
-                        aListenerType, aEventMethod, aRemoveListenerParam );
+    if ( m_xEventAttacher.is() )
+        m_xEventAttacher->revokeScriptEvent( nIndex, aListenerType, aEventMethod, aRemoveListenerParam );
 }
 
 //------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::revokeScriptEvents( sal_Int32 nIndex ) throw(IllegalArgumentException, RuntimeException)
 {
-    m_xEventAttacher->revokeScriptEvents(nIndex);
+    if ( m_xEventAttacher.is() )
+        m_xEventAttacher->revokeScriptEvents( nIndex );
 }
 
 //------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::insertEntry( sal_Int32 nIndex ) throw(IllegalArgumentException, RuntimeException)
 {
-    m_xEventAttacher->insertEntry(nIndex);
+    if ( m_xEventAttacher.is() )
+        m_xEventAttacher->insertEntry( nIndex );
 }
 
 //------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::removeEntry( sal_Int32 nIndex ) throw(IllegalArgumentException, RuntimeException)
 {
-    m_xEventAttacher->removeEntry(nIndex);
+    if ( m_xEventAttacher.is() )
+        m_xEventAttacher->removeEntry( nIndex );
 }
 
 //------------------------------------------------------------------------
 Sequence< ScriptEventDescriptor > SAL_CALL OInterfaceContainer::getScriptEvents( sal_Int32 nIndex ) throw(IllegalArgumentException, RuntimeException)
 {
-    return m_xEventAttacher->getScriptEvents(nIndex);
+    Sequence< ScriptEventDescriptor > aReturn;
+    if ( m_xEventAttacher.is() )
+        aReturn = m_xEventAttacher->getScriptEvents( nIndex );
+    return aReturn;
 }
 
 //------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::attach( sal_Int32 nIndex, const Reference< XInterface >& xObject, const Any& aHelper ) throw(IllegalArgumentException, ServiceNotRegisteredException, RuntimeException)
 {
-    m_xEventAttacher->attach(nIndex, xObject, aHelper);
+    if ( m_xEventAttacher.is() )
+        m_xEventAttacher->attach( nIndex, xObject, aHelper );
 }
 
 //------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::detach( sal_Int32 nIndex, const Reference< XInterface >& xObject ) throw(IllegalArgumentException, RuntimeException)
 {
-    m_xEventAttacher->detach(nIndex, xObject);
+    if ( m_xEventAttacher.is() )
+        m_xEventAttacher->detach( nIndex, xObject );
 }
 
 //------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::addScriptListener( const Reference< XScriptListener >& xListener ) throw(IllegalArgumentException, RuntimeException)
 {
-    m_xEventAttacher->addScriptListener(xListener);
+    if ( m_xEventAttacher.is() )
+        m_xEventAttacher->addScriptListener( xListener );
 }
 
 //------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::removeScriptListener( const Reference< XScriptListener >& xListener ) throw(IllegalArgumentException, RuntimeException)
 {
-    m_xEventAttacher->removeScriptListener(xListener);
+    if ( m_xEventAttacher.is() )
+        m_xEventAttacher->removeScriptListener( xListener );
 }
 
 //==================================================================
