@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-28 14:01:05 $
+ *  last change: $Author: ama $ $Date: 2002-06-12 07:31:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,10 @@ struct SwGetCurColNumPara
 #define SW_MOVE_DOWN    1
 #define SW_MOVE_LEFT    2
 #define SW_MOVE_RIGHT   3
+
+#define SW_TABCOL_NONE  0
+#define SW_TABCOL_HORI  1
+#define SW_TABCOL_VERT  2
 
 class SwFEShell : public SwEditShell
 {
@@ -595,7 +599,7 @@ public:
     void SetRowBackground( const SvxBrushItem &rNew );
     BOOL GetRowBackground( SvxBrushItem &rToFill ) const; //FALSE uneindeutig
 
-    BOOL IsMouseTabCol( const Point &rPt ) const;
+    BYTE WhichMouseTabCol( const Point &rPt ) const;
     void GetMouseTabCols( SwTabCols &ToFill, const Point &rPt ) const;
     void SetMouseTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
                           const Point &rPt );
