@@ -1,0 +1,355 @@
+/*************************************************************************
+ *
+ *  $RCSfile: headerfooterdlg.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:49:27 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <svtools/controldims.hrc>
+#include "dialogs.hrc"
+#include "headerfooterdlg.hrc"
+
+#define TAB_WIDTH   290
+#define TAB_HEIGHT  186
+
+#define DLG_WIDTH   TAB_WIDTH + 6
+#define DLG_HEIGHT  TAB_HEIGHT + 6
+
+TabDialog RID_SD_DLG_HEADERFOOTER
+{
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Size = MAP_APPFONT( DLG_WIDTH, DLG_HEIGHT );
+    Text = "Kopf- und Fußzeile";
+    Text [ english_us ] = "Header and Footer";
+    Moveable = TRUE;
+    Closeable = TRUE;
+
+    TabControl 1
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT( 3 , 3 );
+        Size = MAP_APPFONT( TAB_WIDTH , TAB_HEIGHT );
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_SD_TABPAGE_HEADERFOOTER_SLIDE;
+                PageResID = RID_SD_TABPAGE_HEADERFOOTER;
+                Text = "Folie";
+                Text [ english_us ] = "Slide";
+            };
+
+            PageItem
+            {
+                Identifier = RID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT;
+                PageResID = RID_SD_TABPAGE_HEADERFOOTER;
+                Text = "Notizblätter und Handzettel";
+                Text [ english_us ] = "Notes and Handouts";
+            };
+        };
+    };
+};
+
+#define SPACE_Y 3
+#define SPACE_X 3
+
+#define C1  (RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT)
+#define C2  (RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_CHK_TEXTINDENT)
+#define C3  (RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + 2 * RSC_SP_CHK_TEXTINDENT)
+#define W1  (TAB_WIDTH - PUSHBUTTON_WIDTH - 10 * SPACE_X)
+#define W2  (60)
+#define W3  (W1 - C2 - W2 - SPACE_X)
+#define W4  ((W1 - C3 - SPACE_X) / 2)
+
+#define C4  (C2 + W2 + SPACE_X)
+
+#define PUSHBUTTON_WIDTH    80
+
+TabPage RID_SD_TABPAGE_HEADERFOOTER
+{
+//  HelpID = SID_ANIMATION_EFFECTS ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( TAB_WIDTH , TAB_HEIGHT ) ;
+    Hide = TRUE;
+
+#define Y0  (RSC_SP_TBPG_INNERBORDER_TOP )
+
+    FixedLine FL_INCLUDE_ON_PAGE
+    {
+        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT, Y0 ) ;
+        Size = MAP_APPFONT ( W1 - RSC_SP_TBPG_INNERBORDER_LEFT , RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text = "Auf Folie zeigen";
+        Text [ english_us ] = "Include on slide";
+    };
+
+#define Y1  (Y0 + RSC_CD_FIXEDLINE_HEIGHT + SPACE_Y)
+
+    CheckBox CB_HEADER
+    {
+        Pos = MAP_APPFONT ( C1, Y1 );
+        Size = MAP_APPFONT ( W1 - C1, RSC_CD_CHECKBOX_HEIGHT );
+        TabStop = TRUE ;
+        Text = "Kopfzeile";
+        Text [ english_us ] = "Header";
+    };
+
+    FixedText FT_HEADER
+    {
+        Pos = MAP_APPFONT ( C2, Y1 + SPACE_Y + RSC_CD_CHECKBOX_HEIGHT + 1 );
+        Size = MAP_APPFONT ( W2, RSC_CD_FIXEDTEXT_HEIGHT );
+        TabStop = TRUE ;
+        Text = "Text für die Kopfzeile";
+        Text [ english_us ] = "Header text";
+    };
+
+    Edit TB_HEADER_FIXED
+    {
+        Pos = MAP_APPFONT ( C4, Y1 + SPACE_Y + RSC_CD_CHECKBOX_HEIGHT );
+        Size = MAP_APPFONT ( W3, RSC_CD_TEXTBOX_HEIGHT );
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+
+#define Y2 (Y1 + 2 * SPACE_Y + RSC_CD_CHECKBOX_HEIGHT + RSC_CD_TEXTBOX_HEIGHT)
+
+    FixedLine FL_DATETIME
+    {
+        Pos = MAP_APPFONT ( C1, Y2 );
+        Size = MAP_APPFONT ( W1 - C1, RSC_CD_FIXEDLINE_HEIGHT );
+    };
+
+    CheckBox CB_DATETIME
+    {
+        Pos = MAP_APPFONT ( C1, Y2 + SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT );
+        Size = MAP_APPFONT ( W1 - C1, RSC_CD_CHECKBOX_HEIGHT );
+        TabStop = TRUE ;
+        Text = "Datum und Uhrzeit";
+        Text [ english_us ] = "~Date and time";
+    };
+
+    RadioButton RB_DATETIME_FIXED
+    {
+        Pos = MAP_APPFONT ( C2, Y2 + 2 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT + 1 );
+        Size = MAP_APPFONT ( W2, RSC_CD_RADIOBUTTON_HEIGHT );
+        TabStop = TRUE ;
+        Text = "Fix";
+        Text [ english_us ] = "Fi~xed";
+    };
+
+    Edit TB_DATETIME_FIXED
+    {
+        Pos = MAP_APPFONT ( C4, Y2 + 2 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT );
+        Size = MAP_APPFONT ( W3, RSC_CD_TEXTBOX_HEIGHT );
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+
+    RadioButton RB_DATETIME_AUTOMATIC
+    {
+        Pos = MAP_APPFONT ( C2, Y2 + 3 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT + RSC_CD_TEXTBOX_HEIGHT );
+        Size = MAP_APPFONT ( 80, RSC_CD_RADIOBUTTON_HEIGHT );
+        TabStop = TRUE ;
+        Text = "Variabel";
+        Text [ english_us ] = "~Variable";
+    };
+
+    ListBox CB_DATETIME_FORMAT
+    {
+        Pos = MAP_APPFONT ( C3, Y2 + 4 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT + RSC_CD_TEXTBOX_HEIGHT + RSC_CD_RADIOBUTTON_HEIGHT  );
+        Size = MAP_APPFONT ( W4, 80 );
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    FixedText FT_DATETIME_LANGUAGE
+    {
+        Pos = MAP_APPFONT ( C3 + W4 + SPACE_X, Y2 + 3 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT + RSC_CD_TEXTBOX_HEIGHT + 1 );
+        Size = MAP_APPFONT ( W4, RSC_CD_FIXEDTEXT_HEIGHT );
+        TabStop = TRUE ;
+        Text = "Sprache:";
+        Text [ english_us ] = "~Language:";
+    };
+
+    ListBox CB_DATETIME_LANGUAGE
+    {
+        Pos = MAP_APPFONT ( C3 + W4 + SPACE_X, Y2 + 4 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT + RSC_CD_TEXTBOX_HEIGHT + RSC_CD_RADIOBUTTON_HEIGHT  );
+        Size = MAP_APPFONT ( W4, 80 );
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+
+#define Y3  (Y2 + 5 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT + RSC_CD_TEXTBOX_HEIGHT + RSC_CD_RADIOBUTTON_HEIGHT + RSC_CD_DROPDOWN_HEIGHT )
+
+    FixedLine FL_FOOTER
+    {
+        Pos = MAP_APPFONT ( C1, Y3 );
+        Size = MAP_APPFONT ( W1 - C1, RSC_CD_FIXEDLINE_HEIGHT );
+    };
+
+    CheckBox CB_FOOTER
+    {
+        Pos = MAP_APPFONT ( C1, Y3 + SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT );
+        Size = MAP_APPFONT ( W1 - C1, RSC_CD_CHECKBOX_HEIGHT );
+        TabStop = TRUE ;
+        Text = "Fußzeile";
+        Text [ english_us ] = "Footer";
+    };
+
+    FixedText FT_FOOTER
+    {
+        Pos = MAP_APPFONT ( C2, Y3 + 2 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT + 1 );
+        Size = MAP_APPFONT ( W2, RSC_CD_FIXEDTEXT_HEIGHT );
+        TabStop = TRUE ;
+        Text = "Text für die Fußzeile";
+        Text [ english_us ] = "Footer text";
+    };
+
+    Edit TB_FOOTER_FIXED
+    {
+        Pos = MAP_APPFONT ( C4, Y3 + 2 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT );
+        Size = MAP_APPFONT ( W3, RSC_CD_TEXTBOX_HEIGHT );
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+
+#define Y4  (Y3 + 3 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT + RSC_CD_TEXTBOX_HEIGHT )
+
+    FixedLine FL_SLIDENUMBER
+    {
+        Pos = MAP_APPFONT ( C1, Y4 );
+        Size = MAP_APPFONT ( W1 - C1, RSC_CD_FIXEDLINE_HEIGHT );
+    };
+
+    CheckBox CB_SLIDENUMBER
+    {
+        Pos = MAP_APPFONT ( C1, Y4 + SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT );
+        Size = MAP_APPFONT ( W1 - C1, RSC_CD_CHECKBOX_HEIGHT );
+        TabStop = TRUE ;
+        Text = "Foliennummer";
+        Text [ english_us ] = "Slide number";
+    };
+
+#define Y5  (Y4 + 2 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT )
+
+    FixedLine FL_NOTONTITLE
+    {
+        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT, Y5 ) ;
+        Size = MAP_APPFONT ( W1 - RSC_SP_TBPG_INNERBORDER_LEFT, RSC_CD_FIXEDLINE_HEIGHT );
+    };
+
+    CheckBox CB_NOTONTITLE
+    {
+        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT, Y5 + SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT );
+        Size = MAP_APPFONT ( W1 - RSC_SP_TBPG_INNERBORDER_LEFT, RSC_CD_CHECKBOX_HEIGHT );
+        TabStop = TRUE ;
+        Text = "Auf der ersten Folie nicht anzeigen";
+        Text [ english_us ] = "Do not show on first slide";
+    };
+
+    PushButton BT_APPLYTOALL
+    {
+        Pos = MAP_APPFONT ( TAB_WIDTH - 7 * SPACE_X - PUSHBUTTON_WIDTH, RSC_SP_TBPG_INNERBORDER_TOP );
+        Size = MAP_APPFONT ( PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        TabStop = TRUE ;
+        Text = "Für alle Übernehmen";
+        Text [ english_us ] = "Apply to All";
+    };
+
+    PushButton BT_APPLY
+    {
+        Pos = MAP_APPFONT ( TAB_WIDTH - 7 * SPACE_X - PUSHBUTTON_WIDTH, RSC_SP_TBPG_INNERBORDER_TOP + RSC_CD_PUSHBUTTON_HEIGHT + SPACE_Y );
+        Size = MAP_APPFONT ( PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        TabStop = TRUE ;
+        Text = "Übernehmen";
+        Text [ english_us ] = "Apply";
+    };
+
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( TAB_WIDTH - 7 * SPACE_X - PUSHBUTTON_WIDTH, RSC_SP_TBPG_INNERBORDER_TOP + 2 * RSC_CD_PUSHBUTTON_HEIGHT + 2 * SPACE_Y );
+        Size = MAP_APPFONT ( PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        TabStop = TRUE ;
+    };
+
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( TAB_WIDTH - 7 * SPACE_X - PUSHBUTTON_WIDTH, RSC_SP_TBPG_INNERBORDER_TOP + 3* RSC_CD_PUSHBUTTON_HEIGHT + 3 * SPACE_Y );
+        Size = MAP_APPFONT ( PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        TabStop = TRUE ;
+    };
+
+    Control CT_PREVIEW
+    {
+        Pos = MAP_APPFONT ( TAB_WIDTH - 7 * SPACE_X - PUSHBUTTON_WIDTH, TAB_HEIGHT - 6*SPACE_Y - PUSHBUTTON_WIDTH );
+        Size = MAP_APPFONT ( PUSHBUTTON_WIDTH, PUSHBUTTON_WIDTH );
+    };
+
+    String STR_PAGE_NUMBER
+    {
+        Text = "Seitenzahl";
+        Text [ english_us ] = "Page number";
+    };
+
+    String STR_INCLUDE_ON_PAGE
+    {
+        Text = "Auf Seite zeigen";
+        Text [ english_us ] = "Include on page";
+    };
+};
+
+
