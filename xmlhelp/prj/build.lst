@@ -2,3 +2,8 @@ xh	xmlhelp	:	XmlSearch external jut offuh unoil NULL
 xh	xmlhelp									usr1	-	all	xh_mkout NULL
 xh	xmlhelp\source\helpprovider				nmake	-	all	xh_helpprovider NULL
 xh	xmlhelp\source\com\sun\star\help		nmake	-	all	xh_help NULL
+xh	xmlhelp\source\cxxhelp\util				nmake	-	all	xh_cutil NULL
+xh	xmlhelp\source\cxxhelp\qe				nmake	-	all	xh_qe NULL
+xh	xmlhelp\source\cxxhelp\db				nmake	-	all	xh_db NULL
+xh	xmlhelp\source\cxxhelp\provider			nmake	-	all	xh_provider NULL
+xh	xmlhelp\util            				nmake	-	all	xh_util xh_cutil xh_qe xh_db xh_provider NULL
