@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmhelp.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:17:20 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,67 +188,6 @@
 #define HID_PROP_CURRSYM_POSITION               (HID_FORMS_START +  112)
 #define HID_PROP_ESCAPE_PROCESSING              (HID_FORMS_START +  113)
 #define HID_PROP_IMAGE_ALIGN                    (HID_FORMS_START +  114)
-
-
-// Events
-#define HID_EVT_START                           (HID_FORMS_START +  200)
-
-// insgesamt 100
-#define HID_EVT_ACTIONPERFORMED                 (HID_EVT_START +   0)
-#define HID_EVT_AFTERDELETE                     (HID_EVT_START +   1)
-#define HID_EVT_AFTERINSERT                     (HID_EVT_START +   2)
-#define HID_EVT_AFTERUPDATE                     (HID_EVT_START +   3)
-#define HID_EVT_BEFOREDELETE                    (HID_EVT_START +   4)
-#define HID_EVT_BEFOREINSERT                    (HID_EVT_START +   5)
-#define HID_EVT_BEFOREUPDATE                    (HID_EVT_START +   6)
-#define HID_EVT_COMPONENTHIDDEN                 (HID_EVT_START +   7)
-#define HID_EVT_COMPONENTMOVED                  (HID_EVT_START +   8)
-#define HID_EVT_COMPONENTPAINT                  (HID_EVT_START +   9)
-#define HID_EVT_COMPONENTRESIZED                (HID_EVT_START +  10)
-#define HID_EVT_COMPONENTSHOWN                  (HID_EVT_START +  11)
-#define HID_EVT_CONFIRMDELETE                   (HID_EVT_START +  12)
-#define HID_EVT_ELEMENTINSERTED                 (HID_EVT_START +  13)
-#define HID_EVT_ELEMENTREMOVED                  (HID_EVT_START +  14)
-#define HID_EVT_ELEMENTREPLACED                 (HID_EVT_START +  15)
-#define HID_EVT_ERROROCCURED                    (HID_EVT_START +  16)
-#define HID_EVT_FIRING                          (HID_EVT_START +  17)
-#define HID_EVT_FOCUSGAINED                     (HID_EVT_START +  18)
-#define HID_EVT_FOCUSLOST                       (HID_EVT_START +  19)
-#define HID_EVT_ITEMSTATECHANGED                (HID_EVT_START +  20)
-#define HID_EVT_KEYTYPED                        (HID_EVT_START +  21)
-#define HID_EVT_LOADED                          (HID_EVT_START +  22)
-#define HID_EVT_MOUSEDRAGGED                    (HID_EVT_START +  23)
-#define HID_EVT_MOUSEENTERED                    (HID_EVT_START +  24)
-#define HID_EVT_MOUSEEXITED                     (HID_EVT_START +  25)
-#define HID_EVT_MOUSEMOVED                      (HID_EVT_START +  26)
-#define HID_EVT_MOUSEPRESSED                    (HID_EVT_START +  27)
-#define HID_EVT_MOUSERELEASED                   (HID_EVT_START +  28)
-#define HID_EVT_POSITIONED                      (HID_EVT_START +  29)
-#define HID_EVT_PROPERTIESCHANGE                (HID_EVT_START +  30)
-#define HID_EVT_PROPERTYCHANGE                  (HID_EVT_START +  31)
-#define HID_EVT_PROPERTYSTATECHANGE             (HID_EVT_START +  32)
-#define HID_EVT_RESETTED                        (HID_EVT_START +  33)
-#define HID_EVT_SUBMITTED                       (HID_EVT_START +  34)
-#define HID_EVT_TEXTCHANGED                     (HID_EVT_START +  35)
-#define HID_EVT_UNLOADED                        (HID_EVT_START +  36)
-#define HID_EVT_UPDATECANCELED                  (HID_EVT_START +  37)
-#define HID_EVT_VETOABLECHANGE                  (HID_EVT_START +  38)
-#define HID_EVT_CHANGED                         (HID_EVT_START +  39)
-
-#define HID_EVT_APPROVEACTIONPERFORMED          (HID_EVT_START +  40)
-#define HID_EVT_APPROVERESETTED                 (HID_EVT_START +  41)
-#define HID_EVT_KEYUP                           (HID_EVT_START +  42)
-#define HID_EVT_APPROVEPARAMETER                (HID_EVT_START +  43)
-#define HID_EVT_POSITIONING                     (HID_EVT_START +  44)
-#define HID_EVT_RELOADED                        (HID_EVT_START +  45)
-#define HID_EVT_APPROVEROWCHANGE                (HID_EVT_START +  46)
-#define HID_EVT_ROWCHANGE                       (HID_EVT_START +  47)
-#define HID_EVT_RELOADING                       (HID_EVT_START +  48)
-#define HID_EVT_UNLOADING                       (HID_EVT_START +  49)
-#define HID_EVT_ADJUSTMENTVALUECHANGED          (HID_EVT_START +  50)
-
-// Fuer den Button "Makro zuweisen"- Dialog im Property-Editor
-#define UID_EVT_MACRODLG                        (HID_EVT_START +  99)
 
 #define HID_FM_OTHER_START                      (HID_FORMS_START + 300)
 #define HID_FORM_NAVIGATOR                      (HID_FM_OTHER_START +  0)
