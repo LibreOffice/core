@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DriverSettings.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:41:23 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,16 @@ namespace dbaui
 
             @return SfxTabPage*
         */
+        static  SfxTabPage* CreateDbase2( Window* _pParent, const SfxItemSet& _rAttrSet );
+
+        /** Creates the detail page for ado
+            @param  _pParent
+            @param  _rAttrSet
+
+            @return SfxTabPage*
+        */
+
+
         static  SfxTabPage* CreateDbase( Window* _pParent, const SfxItemSet& _rAttrSet );
 
         /** Creates the detail page for ado
