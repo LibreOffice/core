@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2000-11-06 21:05:37 $
+ *  last change: $Author: th $ $Date: 2000-11-06 22:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3688,40 +3688,48 @@ void Window::ImplGrabFocus( USHORT nFlags )
 
 void Window::ImplNewInputContext()
 {
-#ifndef REMOTE_APPSERVER
     ImplSVData* pSVData = ImplGetSVData();
     Window*     pFocusWin = pSVData->maWinData.mpFocusWin;
-    if ( pFocusWin )
-    {
-        SalInputContext         aNewContext;
-        const InputContext&     rInputContext = pFocusWin->GetInputContext();
-        const Font&             rFont = rInputContext.GetFont();
-        const XubString&        rFontName = rFont.GetName();
-        ImplFontEntry*          pFontEntry = NULL;
-        aNewContext.mpFont = NULL;
-        if ( rFontName.Len() )
-        {
-            Size aSize = pFocusWin->ImplLogicToDevicePixel( rFont.GetSize() );
-            if ( !aSize.Height() )
-            {
-                // Nur dann Defaultgroesse setzen, wenn Fonthoehe auch in logischen
-                // Koordinaaten 0 ist
-                if ( rFont.GetSize().Height() )
-                    aSize.Height() = 1;
-                else
-                    aSize.Height() = (12*pFocusWin->mnDPIY)/72;
-            }
-            pFontEntry = pFocusWin->mpFontCache->Get( pFocusWin->mpFontList, rFont, aSize );
-            if ( pFontEntry )
-                aNewContext.mpFont = &pFontEntry->maFontSelData;
-        }
-        aNewContext.meLanguage  = rFont.GetLanguage();
-        aNewContext.mnOptions   = rInputContext.GetOptions();
-        pFocusWin->ImplGetFrame()->SetInputContext( &aNewContext );
+    if ( !pFocusWin )
+        return;
 
+    // Is InputContext changed?
+    const InputContext& rInputContext = pFocusWin->GetInputContext();
+    if ( rInputContext == pFocusWin->mpFrameData->maOldInputContext )
+        return;
+
+    pFocusWin->mpFrameData->maOldInputContext = rInputContext;
+
+#ifndef REMOTE_APPSERVER
+    SalInputContext         aNewContext;
+    const Font&             rFont = rInputContext.GetFont();
+    const XubString&        rFontName = rFont.GetName();
+    ImplFontEntry*          pFontEntry = NULL;
+    aNewContext.mpFont = NULL;
+    if ( rFontName.Len() )
+    {
+        Size aSize = pFocusWin->ImplLogicToDevicePixel( rFont.GetSize() );
+        if ( !aSize.Height() )
+        {
+            // Nur dann Defaultgroesse setzen, wenn Fonthoehe auch in logischen
+            // Koordinaaten 0 ist
+            if ( rFont.GetSize().Height() )
+                aSize.Height() = 1;
+            else
+                aSize.Height() = (12*pFocusWin->mnDPIY)/72;
+        }
+        pFontEntry = pFocusWin->mpFontCache->Get( pFocusWin->mpFontList, rFont, aSize );
         if ( pFontEntry )
-            pFocusWin->mpFontCache->Release( pFontEntry );
+            aNewContext.mpFont = &pFontEntry->maFontSelData;
     }
+    aNewContext.meLanguage  = rFont.GetLanguage();
+    aNewContext.mnOptions   = rInputContext.GetOptions();
+    pFocusWin->ImplGetFrame()->SetInputContext( &aNewContext );
+
+    if ( pFontEntry )
+        pFocusWin->mpFontCache->Release( pFontEntry );
+#else
+    // !!!
 #endif
 }
 
