@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:12:18 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,8 +772,7 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
     if ( aSalShlData.mbWNT )
     {
         LOGFONTW aLogFont;
-        ImplGetLogFontFromFontSelect( maGraphicsData.mhDC, pFont, aLogFont,
-                                      true );
+        ImplGetLogFontFromFontSelect( maGraphicsData.mhDC, pFont, aLogFont, true );
 
         // Auf dem Bildschirm nehmen wir Courier New, wenn Courier nicht
         // skalierbar ist und wenn der Font skaliert oder rotiert werden
@@ -877,6 +876,9 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
         }
         maGraphicsData.mnFontKernPairCount = 0;
     }
+
+    if (maGraphicsData.mxTextLayoutCache.get() != 0)
+        maGraphicsData.mxTextLayoutCache->flush();
 
     // some printers have higher internal resolution, so their
     // text output would be different from what we calculated
@@ -1540,11 +1542,112 @@ void ImplReleaseTempFonts( SalData& rSalData )
 
 // -----------------------------------------------------------------------
 
+String ImplGetFontNameFromFile( SalData& rSalData, const String& rFontFileURL )
+{
+    int nRet = 0;
+    ::rtl::OUString aUSytemPath;
+    OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
+
+    String aFontName;
+
+    // Create temporary file name
+    char aFileName[] = "soAAT.fot";
+    char aResourceName[512];
+    int nMaxLen = sizeof(aResourceName)/sizeof(*aResourceName) - 16;
+    int nLen = ::GetTempPathA( nMaxLen, aResourceName );
+    ::strncpy( aResourceName + nLen, aFileName, std::max( 0, nMaxLen - nLen ));
+    ::DeleteFileA( aResourceName );
+
+    // Create font resource file (typically with a .fot file name extension).
+    rtl_TextEncoding theEncoding = osl_getThreadTextEncoding();
+    ::rtl::OString aCFileName = rtl::OUStringToOString( aUSytemPath, theEncoding );
+    ::CreateScalableFontResourceA( 0, aResourceName, aCFileName.getStr(), NULL );
+
+    // Open font resource file
+    rtl::OUString aFotFileName = rtl::OStringToOUString( aResourceName, osl_getThreadTextEncoding() );
+    osl::FileBase::getFileURLFromSystemPath( aFotFileName, aFotFileName );
+    osl::File aFotFile( aFotFileName );
+    osl::FileBase::RC aError = aFotFile.open( osl_File_OpenFlag_Read );
+    if ( aError == osl::FileBase::E_None )
+    {
+        static bool bInit = false;
+        static char aFontTag[] = "FONTRES:";
+        static char aSkip[256];
+        if ( !bInit )
+        {
+            // Initialize skipping array
+            memset( aSkip, strlen( aFontTag ), sizeof( aSkip ));
+            aSkip['F'] = 7;
+            aSkip['O'] = 6;
+            aSkip['N'] = 5;
+            aSkip['T'] = 4;
+            aSkip['R'] = 3;
+            aSkip['E'] = 2;
+            aSkip['S'] = 1;
+            aSkip[':'] = 0;
+        }
+
+        char        aBuffer[2048];
+        sal_Bool    bFound( sal_True );
+        sal_Bool    bEOF( sal_False );
+        sal_Int32   nPatternLen = strlen( aFontTag );
+        sal_uInt64  nBytesRead;
+        ByteString  fontName;
+
+        // Read .fot file header and retrieve font name
+        aFotFile.read( aBuffer, sizeof( aBuffer ), nBytesRead );
+        if ( nBytesRead > nPatternLen )
+        {
+            sal_Int32 i, j;
+            for ( i = nPatternLen-1, j = nPatternLen-1; j > 0; i--, j-- )
+            {
+                while ( aBuffer[i] != aFontTag[j] )
+                {
+                    sal_Int32 nSkip = aSkip[aBuffer[i]];
+                    i += ( nPatternLen-j > nSkip ) ? nPatternLen-j : nSkip;
+                    if ( i >= nBytesRead )
+                    {
+                        // Font tag not found
+                        aFotFile.close();
+                        ::DeleteFileA( aResourceName );
+                        return String();
+                    }
+                    else
+                        j = nPatternLen-1;
+                }
+            }
+
+            // Retrieve font name from position (add tag size)
+            i += nPatternLen;
+            while ( i < nBytesRead && aBuffer[i] != 0 )
+                fontName += aBuffer[i++];
+        }
+
+        // Convert byte string to unicode string
+        aFontName = String( fontName, osl_getThreadTextEncoding() );
+    }
+
+    // Clean up
+    aFotFile.close();
+    ::DeleteFileA( aResourceName );
+
+    return aFontName;
+}
+
+// -----------------------------------------------------------------------
+
 ImplFontData* SalGraphics::AddTempDevFont( const String& rFontFileURL, const String& rFontName )
 {
-    if( !rFontName.Len() )
+    String aFontName( rFontName );
+
+    // Retrieve font name from font resource
+     if( !aFontName.Len() )
+        aFontName = ImplGetFontNameFromFile( *GetSalData(), rFontFileURL );
+
+    if ( !aFontName.Len() )
         return NULL;
-    if( ::ImplIsFontAvailable( maGraphicsData.mhDC, rFontName ) )
+
+    if( ::ImplIsFontAvailable( maGraphicsData.mhDC, aFontName ) )
         return NULL;
 
     // remember temp font for cleanup later
@@ -1563,7 +1666,7 @@ ImplFontData* SalGraphics::AddTempDevFont( const String& rFontFileURL, const Str
 
     // create matching FontData struct
     ImplFontData* pFontData = new ImplFontData;
-    pFontData->maName       = rFontName;
+    pFontData->maName       = aFontName;
     pFontData->mnQuality    = 1000;
     pFontData->mbDevice     = TRUE;
     pFontData->mpSysData    = (void*)nPreferedCharSet;
@@ -1582,7 +1685,7 @@ ImplFontData* SalGraphics::AddTempDevFont( const String& rFontFileURL, const Str
 #if 0   // TODO: improve ImplFontData using "FONTRES:" from *.fot file
     pFontData->maSearchName = // using "FONTRES:" from file
     if( rFontName != pFontData->maName )
-        pFontData->maMapName = rFontName;
+        pFontData->maMapName = aFontName;
 #endif
 
     return pFontData;
@@ -1619,7 +1722,8 @@ void SalGraphics::GetDevFontList( ImplDevFontList* pList )
             {
                 osl::FileStatus aFileStatus( FileStatusMask_FileURL );
                 rcOSL = aDirItem.getFileStatus( aFileStatus );
-                AddTempDevFont( aFileStatus.getFileURL(), aEmptyString );
+                if ( rcOSL == osl::FileBase::E_None )
+                    AddTempDevFont( aFileStatus.getFileURL(), aEmptyString );
             }
         }
     }
@@ -1916,7 +2020,7 @@ public:
     ~ScopedFont();
 
 private:
-    SalGraphicsData m_rData;
+    SalGraphicsData & m_rData;
     HFONT m_hOrigFont;
 };
 
@@ -2044,14 +2148,19 @@ BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     for( i = 0; i < nGlyphs; ++i )
     {
         aTempEncs[i] = pEncoding[i];
-        int nGFlags = pGlyphIDs[i] & GF_FLAGMASK;
-        if( nGFlags & GF_ISCHAR )
-            aShortIDs[i] = MapChar( aSftTTF.get(), pGlyphIDs[i] & GF_IDXMASK, 1 );
-        else
-            aShortIDs[i] = static_cast<USHORT>(pGlyphIDs[i] & GF_IDXMASK);
-        // find NotDef glyph
-        if( !aShortIDs[i] )
-            nNotDef = i;
+        sal_uInt32 nGlyphIdx = pGlyphIDs[i] & GF_IDXMASK;
+        if( pGlyphIDs[i] & GF_ISCHAR )
+        {
+            // #i12824# emulate symbol aliasing U+FXXX <-> U+0XXX
+            if( SYMBOL_CHARSET == (BYTE)pFont->mpSysData )
+                if( (nGlyphIdx & 0xF000) == 0 )
+                    nGlyphIdx |= 0xF000;
+            nGlyphIdx = MapChar( aSftTTF.get(), nGlyphIdx, 1 );
+        }
+        aShortIDs[i] = static_cast<USHORT>( nGlyphIdx );
+        if( !nGlyphIdx )
+            if( nNotDef < 0 )
+                nNotDef = i; // first NotDef glyph found
     }
 
     if( nNotDef != 0 )
@@ -2105,4 +2214,12 @@ void SalGraphics::FreeEmbedFontData( const void* pData, long nLen )
 {
     // TODO: once GetEmbedFontData() above does something check implementation below
     free( (void*)pData );
+}
+
+const std::map< sal_Unicode, sal_Int32 >* SalGraphics::GetFontEncodingVector( ImplFontData* pFont, const std::map< sal_Unicode, rtl::OString >** pNonEncoded )
+{
+    // TODO: once GetEmbedFontData() above does something this needs implementation
+    if( pNonEncoded )
+        *pNonEncoded = NULL;
+    return NULL;
 }
