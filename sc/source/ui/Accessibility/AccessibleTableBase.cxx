@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:12:53 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 13:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,7 +469,7 @@ void SAL_CALL
 }
 
 void SAL_CALL
-        ScAccessibleTableBase::selectAllAccessible(  )
+        ScAccessibleTableBase::selectAllAccessibleChildren(  )
         throw (uno::RuntimeException)
 {
 }
