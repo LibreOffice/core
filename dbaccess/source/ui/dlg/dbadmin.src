@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 15:42:13 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 16:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,7 +578,7 @@ TabPage PAGE_GENERAL
     };
     FixedText FT_SPECIAL_MESSAGE
     {
-        Pos = MAP_APPFONT ( 6, 112 );
+        Pos = MAP_APPFONT ( 6, 162 );
         Size = MAP_APPFONT ( 248, 20 );
         WordBreak = TRUE;
         HelpId = HID_DSADMIN_SPECIAL_MESSAGE;
@@ -843,7 +843,7 @@ TabPage PAGE_ADO
     };
     FixedLine FL_SEPARATOR1
     {
-        Pos = MAP_APPFONT ( 6 , 24 ) ;
+        Pos = MAP_APPFONT ( 4 , 24 ) ;
         Size = MAP_APPFONT ( 252 , 8 ) ;
     };
     FixedText FT_USERNAME
@@ -1991,6 +1991,9 @@ ErrorBox ERR_CANTADMINQUERIES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.27  2001/02/05 15:42:13  fs
+ *  enlargen the tab pages -> some redesigns
+ *
  *  Revision 1.26  2001/02/05 13:59:26  fs
  *  #83430# +ERR_CANTADMINQUERIES / +WARN_SAVEFORQUERIES
  *
