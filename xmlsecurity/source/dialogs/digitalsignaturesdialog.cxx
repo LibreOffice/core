@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:05:03 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,10 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
     catch (NoPasswordException&)
     {
     }
+    catch ( uno::Exception& )
+    {
+        DBG_ERROR( "Exception while adding a signature!" );
+    }
 
     return 0;
 }
@@ -353,23 +357,30 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
 {
     if( maSignaturesLB.FirstSelected() )
     {
-        USHORT nSelected = (USHORT) (sal_Int32) maSignaturesLB.FirstSelected()->GetUserData();
-        maCurrentSignatureInformations.erase( maCurrentSignatureInformations.begin()+nSelected );
+        try
+        {
+            USHORT nSelected = (USHORT) (sal_Int32) maSignaturesLB.FirstSelected()->GetUserData();
+            maCurrentSignatureInformations.erase( maCurrentSignatureInformations.begin()+nSelected );
 
-        // Export all other signatures...
-        SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream( embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE );
-        uno::Reference< io::XOutputStream > xOutputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );
-        uno::Reference< com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler = maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
+            // Export all other signatures...
+            SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream( embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE );
+            uno::Reference< io::XOutputStream > xOutputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );
+            uno::Reference< com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler = maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
-        int nInfos = maCurrentSignatureInformations.size();
-        for( int n = 0 ; n < nInfos ; ++n )
-            maSignatureHelper.ExportSignature( xDocumentHandler, maCurrentSignatureInformations[ n ] );
+            int nInfos = maCurrentSignatureInformations.size();
+            for( int n = 0 ; n < nInfos ; ++n )
+                maSignatureHelper.ExportSignature( xDocumentHandler, maCurrentSignatureInformations[ n ] );
 
-        maSignatureHelper.CloseDocumentHandler( xDocumentHandler);
+            maSignatureHelper.CloseDocumentHandler( xDocumentHandler);
 
-        mbSignaturesChanged = true;
+            mbSignaturesChanged = true;
 
-        ImplFillSignaturesBox();
+            ImplFillSignaturesBox();
+        }
+        catch ( uno::Exception& )
+        {
+            DBG_ERROR( "Exception while removing a signature!" );
+        }
     }
 
     return 0;
@@ -418,7 +429,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 
             // New signatures are not verified, must be valid. Status is INIT.
             bool bValid = ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
-                || ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_STATUS_UNKNOWN );
+                || ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN );
             if ( bValid )
             {
                 // Can only be valid if ALL streams are signed, which means real stream count == signed stream count
@@ -507,7 +518,14 @@ SignatureStreamHelper DigitalSignaturesDialog::ImplOpenSignatureStream( sal_Int3
         {
             css::uno::Reference < css::io::XTruncate > xTruncate( mxSignatureStream, uno::UNO_QUERY );
             DBG_ASSERT( xTruncate.is(), "ImplOpenSignatureStream - Stream does not support xTruncate!" );
-            xTruncate->truncate();
+            try
+            {
+                xTruncate->truncate();
+            }
+            catch ( uno::RuntimeException& )
+            {
+                DBG_ERROR( "ImplOpenSignatureStream - Error while calling truncate!" );
+            }
         }
         else
         {
