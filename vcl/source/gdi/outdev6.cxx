@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:43:06 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,30 +573,17 @@ void OutputDevice::ImplDrawColorWallpaper( long nX, long nY,
                                            long nWidth, long nHeight,
                                            const Wallpaper& rWallpaper )
 {
-    // we need a graphics
-    if ( !mpGraphics )
-    {
-        if ( !ImplGetGraphics() )
-            return;
-    }
-
-    if ( mbInitClipRegion )
-        ImplInitClipRegion();
-    if ( mbOutputClipped )
-        return;
-
     // Wallpaper ohne Umrandung zeichnen
     Color aOldLineColor = GetLineColor();
     Color aOldFillColor = GetFillColor();
     SetLineColor();
     SetFillColor( rWallpaper.GetColor() );
-    if ( mbInitLineColor )
-        ImplInitLineColor();
-    if ( mbInitFillColor )
-        ImplInitFillColor();
-    mpGraphics->DrawRect( nX+mnOutOffX, nY+mnOutOffY, nWidth, nHeight, this );
+    BOOL bMap = mbMap;
+    EnableMapMode( FALSE );
+    DrawRect( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
     SetLineColor( aOldLineColor );
     SetFillColor( aOldFillColor );
+    EnableMapMode( bMap );
 }
 
 // -----------------------------------------------------------------------
