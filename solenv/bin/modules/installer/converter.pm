@@ -2,9 +2,9 @@
 #
 #   $RCSfile: converter.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-03-29 15:35:42 $
+#   last change: $Author: rt $ $Date: 2005-04-04 09:58:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ sub convert_array_to_hash
     {
         my $line = ${$arrayref}[$i];
 
-        if ( $line =~ /^\s*(\w+?)\s+(.*?)\s*$/ )
+        if ( $line =~ /^\s*([\w-]+?)\s+(.*?)\s*$/ )
         {
             my $key = $1;
             my $value = $2;
@@ -120,6 +120,33 @@ sub convert_stringlist_into_array
     my $last = ${$includestringref};
 
     while ( $last =~ /^\s*(.+?)\Q$listseparator\E(.+)\s*$/) # "$" for minimal matching
+    {
+        $first = $1;
+        $last = $2;
+        if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $first =~ s/\//\\/g; }
+        push(@newarray, "$first\n");
+    }
+
+    if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $last =~ s/\//\\/g; }
+    push(@newarray, "$last\n");
+
+    return \@newarray;
+}
+
+#############################################################################
+# Converting a string list with separator $listseparator
+# into an array
+#############################################################################
+
+sub convert_whitespace_stringlist_into_array
+{
+    my ( $includestringref ) = @_;
+
+    my @newarray = ();
+    my $first;
+    my $last = ${$includestringref};
+
+    while ( $last =~ /^\s*(\S+?)\s+(\S+)\s*$/)  # "$" for minimal matching
     {
         $first = $1;
         $last = $2;
