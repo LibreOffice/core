@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mkcreate.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-20 11:53:35 $
+ *  last change: $Author: nf $ $Date: 2001-05-21 14:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,7 +617,7 @@ USHORT SourceDirectory::GetOSType( const ByteString &sDependExt )
 
 /*****************************************************************************/
 SourceDirectory *SourceDirectory::CreateRootDirectory(
-    const ByteString &rRoot, const ByteString &rVersion )
+    const ByteString &rRoot, const ByteString &rVersion, BOOL bAll )
 /*****************************************************************************/
 {
     IniManager aIniManager;
@@ -684,7 +684,7 @@ SourceDirectory *SourceDirectory::CreateRootDirectory(
 
             for ( ULONG j = 0; j < pPrj->Count(); j++ ) {
                 CommandData *pData = pPrj->GetObject( j );
-                if ( pData->GetCommandType() == COMMAND_NMAKE ) {
+                if ( bAll || ( pData->GetCommandType() == COMMAND_NMAKE )) {
                     ByteString sDirPath( rRoot );
                     sDirPath += ByteString( PATH_SEPARATOR );
                     sDirPath += pData->GetPath();
@@ -800,9 +800,9 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
         "#\n"
         "#   $RCSfile: mkcreate.cxx,v $\n"
         "#\n"
-        "#   $Revision: 1.7 $\n"
+        "#   $Revision: 1.8 $\n"
         "#\n"
-        "#   last change: $Author: nf $ $Date: 2001-04-20 11:53:35 $\n"
+        "#   last change: $Author: nf $ $Date: 2001-05-21 14:52:23 $\n"
         "#\n"
         "#   The Contents of this file are made available subject to the terms of\n"
         "#   either of the following licenses\n"
