@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:06:39 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,32 +369,41 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
 //  Spelling Checker - Undo ok
 void ScViewFunc::DoSpellingChecker( BOOL bRecord )
 {
+    DoSheetConversion( SC_CONVERSION_SPELLCHECK, bRecord );
+}
+
+void ScViewFunc::DoHangulHanjaConversion( BOOL bRecord )
+{
+    DoSheetConversion( SC_CONVERSION_HANGULHANJA, bRecord );
+}
+
+void ScViewFunc::DoSheetConversion( ScConversionType eConvType, BOOL bRecord )
+{
     USHORT nCol, nRow, nTab;
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScViewData& rViewData = *GetViewData();
+    ScDocShell* pDocSh = rViewData.GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
-    ScMarkData& rMark = GetViewData()->GetMarkData();
-    ScSplitPos eWhich = GetViewData()->GetActivePart();
-    EESpellState eState;
+    ScMarkData& rMark = rViewData.GetMarkData();
+    ScSplitPos eWhich = rViewData.GetActivePart();
     EditView* pEditView = NULL;
     ESelection* pEditSel = NULL;
-    ScSpellingEngine* pSpellingEngine = NULL;
-    BOOL bIsEditMode = GetViewData()->HasEditView(eWhich);
+    BOOL bIsEditMode = rViewData.HasEditView(eWhich);
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
     if (bIsEditMode)                                            // Edit-Mode aktiv
     {
-        GetViewData()->GetEditView(eWhich, pEditView, nCol, nRow);
+        rViewData.GetEditView(eWhich, pEditView, nCol, nRow);
         pEditSel = new ESelection(pEditView->GetSelection());
         SC_MOD()->InputEnterHandler();
     }
     else
     {
-        nCol = GetViewData()->GetCurX();
-        nRow = GetViewData()->GetCurY();
+        nCol = rViewData.GetCurX();
+        nRow = rViewData.GetCurY();
 
         AlignToCursor( nCol, nRow, SC_FOLLOW_JUMP);
     }
-    nTab = GetViewData()->GetTabNo();
+    nTab = rViewData.GetTabNo();
 
     rMark.MarkToMulti();
     BOOL bMarked = rMark.IsMultiMarked();
@@ -430,58 +439,60 @@ void ScViewFunc::DoSpellingChecker( BOOL bRecord )
         }
     }
 
-    //! no way to set a spelling error handler
-    com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellChecker1>
-                                        xSpeller = LinguMgr::GetSpellChecker();
-
     //  ab hier kein return mehr
 
     BOOL bOldDis = pDoc->IsIdleDisabled();
-    pDoc->DisableIdle(TRUE);    // nicht mit Online-Spelling durcheinanderkommen (#42726#)
+    pDoc->DisableIdle( TRUE );   // #42726# stop online spelling
 
-    pSpellingEngine = new ScSpellingEngine( pDoc->GetEnginePool(),
-                                           GetViewData(), pUndoDoc, pRedoDoc,
-                                           nCol, nRow, nTab,
-                                           bMarked, LANGUAGE_ENGLISH_US, pEditSel);
-    pSpellingEngine->SetSpeller(xSpeller);
-    MakeEditView(pSpellingEngine, nCol, nRow );
-    pSpellingEngine->SetRefDevice(GetViewData()->GetActiveWin());
-                                        // dummy Zelle simulieren:
-    pEditView = GetViewData()->GetEditView(GetViewData()->GetActivePart());
-    GetViewData()->SetSpellingView(pEditView);
-    Rectangle aRect(Point(0,0), Point(0,0));
-    pEditView->SetOutputArea(aRect);
-    pSpellingEngine->SetControlWord( EE_CNTRL_USECHARATTRIBS );
-    pSpellingEngine->EnableUndo( FALSE );
-    pSpellingEngine->SetPaperSize( aRect.GetSize() );
-    pSpellingEngine->SetText(EMPTY_STRING);
+    // *** create and init the edit engine *** --------------------------------
 
-    pSpellingEngine->ClearModifyFlag();
-    BOOL bFound = pSpellingEngine->SpellNextDocument();     // erste Zelle holen
-
-    if (bFound)
-        eState = pEditView->StartSpeller( (BOOL) TRUE );
-    else
-        eState = EE_SPELL_OK;                               // Bereich war leer
-
-    DBG_ASSERT(eState != EE_SPELL_NOSPELLER, "No SpellChecker");
-    if (eState == EE_SPELL_NOLANGUAGE)
+    ScConversionEngineBase* pEngine = NULL;
+    switch( eConvType )
     {
-        ErrorMessage(STR_NOLANGERR);
+        case SC_CONVERSION_SPELLCHECK:
+            pEngine = new ScSpellingEngine(
+                pDoc->GetEnginePool(), rViewData, pUndoDoc, pRedoDoc, pEditSel,
+               nCol, nRow, nTab, bMarked, LinguMgr::GetSpellChecker() );
+        break;
+        case SC_CONVERSION_HANGULHANJA:
+            pEngine = new ScTextConversionEngine(
+                pDoc->GetEnginePool(), rViewData, pUndoDoc, pRedoDoc, pEditSel,
+                nCol, nRow, nTab, bMarked, LANGUAGE_KOREAN );
+        break;
+        default:
+            DBG_ERRORFILE( "ScViewFunc::DoSheetConversion - unknown conversion type" );
     }
-    if (pSpellingEngine->IsModifiedAtAll())
+
+    MakeEditView( pEngine, nCol, nRow );
+    pEngine->SetRefDevice( rViewData.GetActiveWin() );
+                                        // dummy Zelle simulieren:
+    pEditView = rViewData.GetEditView( rViewData.GetActivePart() );
+    rViewData.SetSpellingView( pEditView );
+    Rectangle aRect( Point( 0, 0 ), Point( 0, 0 ) );
+    pEditView->SetOutputArea( aRect );
+    pEngine->SetControlWord( EE_CNTRL_USECHARATTRIBS );
+    pEngine->EnableUndo( FALSE );
+    pEngine->SetPaperSize( aRect.GetSize() );
+    pEngine->SetText( EMPTY_STRING );
+
+    // *** do the conversion *** ----------------------------------------------
+
+    pEngine->ClearModifyFlag();
+    pEngine->ConvertAll( *pEditView );
+
+    // *** undo/redo *** ------------------------------------------------------
+
+    if( pEngine->IsAnyModified() )
     {
         if (bRecord)
         {
-            USHORT nNewCol = GetViewData()->GetCurX();
-            USHORT nNewRow = GetViewData()->GetCurY();
-            GetViewData()->GetDocShell()->GetUndoManager()->AddUndoAction(
-                new ScUndoSpelling( GetViewData()->GetDocShell(),
-                            rMark,
-                            nCol, nRow, nTab,
-                            pUndoDoc,
-                            nNewCol, nNewRow, nTab,
-                            pRedoDoc ) );
+            USHORT nNewCol = rViewData.GetCurX();
+            USHORT nNewRow = rViewData.GetCurY();
+            rViewData.GetDocShell()->GetUndoManager()->AddUndoAction(
+                new ScUndoConversion(
+                        rViewData.GetDocShell(), rMark,
+                        nCol, nRow, nTab, pUndoDoc,
+                        nNewCol, nNewRow, nTab, pRedoDoc, eConvType ) );
         }
         pDoc->SetDirty();
         pDocSh->SetDocumentModified();
@@ -491,14 +502,18 @@ void ScViewFunc::DoSpellingChecker( BOOL bRecord )
         delete pUndoDoc;
         delete pRedoDoc;
     }
-    GetViewData()->SetSpellingView( NULL );
+
+    // *** final cleanup *** --------------------------------------------------
+
+    rViewData.SetSpellingView( NULL );
     KillEditView(TRUE);
-    delete pSpellingEngine;
+    delete pEngine;
     delete pEditSel;
     pDocSh->PostPaintGridAll();
-    GetViewData()->GetViewShell()->UpdateInputHandler();
+    rViewData.GetViewShell()->UpdateInputHandler();
     pDoc->DisableIdle(bOldDis);
 }
+
 
 IMPL_LINK_INLINE_START( ScViewFunc, SpellError, void *, nLang )
 {
@@ -705,7 +720,5 @@ BOOL ScViewFunc::HasBookmarkAtCursor( SvxHyperlinkItem* pContent )
     }
     return FALSE;
 }
-
-
 
 
