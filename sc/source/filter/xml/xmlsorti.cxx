@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsorti.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-03 06:06:30 $
+ *  last change: $Author: sab $ $Date: 2001-04-10 09:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
                 sCountry = sValue;
             break;
             case XML_TOK_SORT_ATTR_ALGORITHM :
-                sCountry = sAlgorithm;
+                sAlgorithm = sValue;
             break;
         }
     }
