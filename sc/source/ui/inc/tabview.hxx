@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 10:13:50 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,12 +193,20 @@ private:
     BOOL                bBlockNeg;              // wird Markierung aufgehoben?
     BOOL                bBlockCols;             // werden ganze Spalten markiert?
     BOOL                bBlockRows;             // werden ganze Zeilen markiert?
+
     SCCOL               nBlockStartX;
+    SCCOL               nBlockStartXOrig;
     SCCOL               nBlockEndX;
+
     SCROW               nBlockStartY;
+    SCROW               nBlockStartYOrig;
     SCROW               nBlockEndY;
+
     SCTAB               nBlockStartZ;
     SCTAB               nBlockEndZ;
+
+    SCCOL               nOldCurX;
+    SCROW               nOldCurY;
 
     SvxZoomType         eZoomType;
     BOOL                bMinimized;
@@ -476,7 +484,7 @@ public:
     void            SelectAllTables();
 
     void            MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
-                                    BOOL bCols = FALSE, BOOL bRows = FALSE );
+                                BOOL bCols = FALSE, BOOL bRows = FALSE, BOOL bCellSelection = FALSE );
     void            InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                                     BOOL bTestNeg = FALSE,
                                     BOOL bCols = FALSE, BOOL bRows = FALSE );
