@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.79 $
+#   $Revision: 1.80 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-10-27 14:55:58 $
+#   last change: $Author: pjunck $ $Date: 2004-11-03 08:57:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@
 #
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.79 $$"
+LIBSMKREV!:="$$Revision: 1.80 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -78,7 +78,7 @@ I18NUTILLIB=-li18nutil$(COMID)
 .IF "$(WITH_GPC)"!="NO"
 GPC3RDLIB=-lgpc
 .ENDIF
-SALHELPERLIB=-lsalhelper$(COMID)
+SALHELPERLIB=-luno_salhelper$(COMID)
 XMLSCRIPTLIB =-lxcr$(OFFICEUPD)$(DLLPOSTFIX)
 .INCLUDE .IGNORE : comphelper$/version.mk
 COMPHELPERLIB=-lcomphelp$(COMPHLP_MAJOR)$(COMID)
@@ -94,8 +94,8 @@ TOOLSLIB=-ltl$(OFFICEUPD)$(DLLPOSTFIX)
 OSLLIB=
 RTLLIB=
 TECLIB=
-CPPULIB=-lcppu
-CPPUHELPERLIB=-lcppuhelper$(COMID)
+CPPULIB=-luno_cppu
+CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 .INCLUDE .IGNORE : ucbhelper$/version.mk
 UCBHELPERLIB=-lucbhelper$(UCBHELPER_MAJOR)$(COMID)
 REGLIB=-lreg
@@ -104,13 +104,11 @@ VOSLIB=-lvos$(VOS_MAJOR)$(COMID)
 XMLOFFLIB=-lxo$(OFFICEUPD)$(DLLPOSTFIX)
 XMLOFFLLIB=-lxol
 STORELIB=-lstore
-SALLIB=-lsal
+SALLIB=-luno_sal
 .INCLUDE .IGNORE : connectivity$/version.mk
 ODBCLIB=-lodbc$(ODBC_MAJOR)
 ODBCBASELIB=-lodbcbase$(ODBC_MAJOR)
 DBFILELIB=-lfile$(OFFICEUPD)$(DLLPOSTFIX)
-SALTLSLIB=-lsaltls$(UDK_MAJOR)
-SALZIPLIB=-lsalzip$(UDK_MAJOR)
 RMCXTLIB=-lrmcxt
 BTSTRPLIB=-lbtstrp
 TRANSEXLIB=-ltransex
@@ -310,8 +308,6 @@ CONNECTIVITYLIB=connectivity.lib
 LDAPBERLIB=ldapber.lib
 CPPULIB=$(LIBPRE) icppu.lib
 CPPUHELPERLIB=$(LIBPRE) icppuhelper.lib
-SALTLSLIB=isaltls.lib
-SALZIPLIB=isalzip.lib
 UCBHELPERLIB=$(LIBPRE) iucbhelper.lib
 ODBCLIB=$(LIBPRE) iodbc.lib
 ODBCBASELIB=$(LIBPRE) iodbcbase.lib
