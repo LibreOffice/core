@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: kr $ $Date: 2000-09-27 09:30:27 $
+#   last change: $Author: jsc $ $Date: 2000-11-08 12:54:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,14 +71,6 @@ TARGET  = com_sun_star_tools_uno
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-GENJAVAFILES = 															\
-    $(MISC)$/java$/com$/sun$/star$/registry$/XRegistryKey.java			\
-    $(MISC)$/java$/com$/sun$/star$/uno$/Exception.java					\
-    $(MISC)$/java$/com$/sun$/star$/uno$/RuntimeException.java			\
-    $(MISC)$/java$/com$/sun$/star$/uno$/TypeClass.java					\
-    $(MISC)$/java$/com$/sun$/star$/uno$/Uik.java						\
-    $(MISC)$/java$/com$/sun$/star$/uno$/XInterface.java
 
 JAVACLASSFILES= 											\
     $(CLASSDIR)$/$(PACKAGE)$/RegistryKey.class				\
