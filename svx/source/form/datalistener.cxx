@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datalistener.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:21:38 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include "datanavi.hxx"
 
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::dom::events;
@@ -98,6 +99,16 @@ namespace svxform
     void SAL_CALL DataListener::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException)
     {
         m_pNaviWin->NotifyChanges();
+    }
+
+    // XFrameActionListener
+    void SAL_CALL DataListener::frameAction( const FrameActionEvent& rActionEvt ) throw (RuntimeException)
+    {
+        if ( FrameAction_COMPONENT_ATTACHED == rActionEvt.Action ||
+             FrameAction_COMPONENT_REATTACHED == rActionEvt.Action )
+        {
+            m_pNaviWin->NotifyChanges( FrameAction_COMPONENT_REATTACHED == rActionEvt.Action );
+        }
     }
 
     // xml::dom::events::XEventListener
