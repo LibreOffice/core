@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BrowseNodeFactoryImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:09:35 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 
-#include <drafts/com/sun/star/script/provider/XScriptProviderFactory.hpp>
-#include <drafts/com/sun/star/script/browse/BrowseNodeFactoryViewType.hpp>
+#include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
 
 
 #include "BrowseNodeFactoryImpl.hxx"
@@ -85,7 +85,7 @@
 #include <algorithm>
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::script;
+using namespace ::com::sun::star::script;
 using namespace ::sf_misc;
 
 namespace browsenodefactory
@@ -407,7 +407,7 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
         {
         xFac.set(
                 xCtx->getValueByName(
-                    OUSTR("/singletons/drafts.com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY_THROW );
+                    OUSTR("/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY_THROW );
 
             locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString::createFromAscii("user") ) ), UNO_QUERY_THROW );
             locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString::createFromAscii("share") ) ), UNO_QUERY_THROW );
@@ -458,7 +458,7 @@ class DefaultBrowseNode :
 
 private:
     Reference< browse::XBrowseNode > m_xWrappedBrowseNode;
-    Reference< lang::XTypeProvider > m_xWrappedTypeProv;;
+    Reference< lang::XTypeProvider > m_xWrappedTypeProv;
     Reference< XAggregation >        m_xAggProxy;
     Reference< XComponentContext >   m_xCtx;
 
@@ -489,15 +489,27 @@ public:
 
         if ( m_xAggProxy.is() )
         {
-
             osl_incrementInterlockedCount( &m_refCount );
-            m_xAggProxy->setDelegator( static_cast< cppu::OWeakObject * >( this ) );
+
+            /* i35609 - Fix crash on Solaris. The setDelegator call needs
+               to be in its own block to ensure that all temporary Reference
+               instances that are acquired during the call are released
+               before m_refCount is decremented again */
+            {
+                m_xAggProxy->setDelegator(
+                    static_cast< cppu::OWeakObject * >( this ) );
+            }
+
             osl_decrementInterlockedCount( &m_refCount );
         }
     }
 
     ~DefaultBrowseNode()
     {
+        OSL_TRACE("DESTROYING DefaultBrowseNode: %s",
+            ::rtl::OUStringToOString( m_xWrappedBrowseNode->getName(),
+                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+
         if ( m_xAggProxy.is() )
         {
             m_xAggProxy->setDelegator( uno::Reference< uno::XInterface >() );
@@ -616,15 +628,20 @@ private:
 public:
     DefaultRootBrowseNode( const Reference< XComponentContext >& xCtx )
     {
+        OSL_TRACE("CREATING DefaultRootBrowseNode");
         Sequence < Reference< browse::XBrowseNode > > nodes =
             getAllBrowseNodes( xCtx );
+
         for ( sal_Int32 i=0; i<nodes.getLength(); i++ )
         {
             m_vNodes.push_back( new DefaultBrowseNode( xCtx, nodes[ i ] ) );
         }
         m_Name = ::rtl::OUString::createFromAscii( "Root" );
+    }
 
-        m_Name = ::rtl::OUString::createFromAscii( "Root" );
+    ~DefaultRootBrowseNode()
+    {
+        OSL_TRACE("DESTROYING DefaultRootBrowseNode");
     }
 
     virtual Sequence< Reference< browse::XBrowseNode > > SAL_CALL
@@ -747,14 +764,14 @@ BrowseNodeFactoryImpl::~BrowseNodeFactoryImpl()
  * language nodes removed.
  */
 Reference< browse::XBrowseNode > SAL_CALL
-BrowseNodeFactoryImpl::getView( sal_Int16 viewType )
+BrowseNodeFactoryImpl::createView( sal_Int16 viewType )
     throw (RuntimeException)
 {
     switch( viewType )
     {
-        case browse::BrowseNodeFactoryViewType::SCRIPTSELECTOR:
+        case browse::BrowseNodeFactoryViewTypes::MACROSELECTOR:
             return getSelectorHierarchy();
-        case browse::BrowseNodeFactoryViewType::SCRIPTORGANIZER:
+        case browse::BrowseNodeFactoryViewTypes::MACROORGANIZER:
             return getOrganizerHierarchy();
         default:
             throw RuntimeException( OUSTR("Unknown view type" ), Reference< XInterface >() );
@@ -793,7 +810,7 @@ bnf_getSupportedServiceNames( )
     SAL_THROW( () )
 {
     ::rtl::OUString str_name = ::rtl::OUString::createFromAscii(
-        "drafts.com.sun.star.script.browse.BrowseNodeFactory");
+        "com.sun.star.script.browse.BrowseNodeFactory");
 
     return Sequence< ::rtl::OUString >( &str_name, 1 );
 }
@@ -803,7 +820,7 @@ bnf_getImplementationName( )
     SAL_THROW( () )
 {
     return ::rtl::OUString::createFromAscii(
-        "drafts.com.sun.star.script.browse.BrowseNodeFactory" );
+        "com.sun.star.script.browse.BrowseNodeFactory" );
 }
 
 Reference< XInterface > SAL_CALL
