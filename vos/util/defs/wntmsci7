@@ -767,3 +767,5 @@
 ??0?$_List_iterator@V?$ORef@VIExecutable@vos@@@vos@@U?$_Nonconst_traits@V?$ORef@VIExecutable@vos@@@vos@@@_STL@@@_STL@@QAE@ABU01@@Z
 ?distance@_STL@@YAXU?$_List_iterator@V?$ORef@VIExecutable@vos@@@vos@@U?$_Const_traits@V?$ORef@VIExecutable@vos@@@vos@@@_STL@@@1@0AAI@Z
 ??0?$_List_iterator@PAUOReactorCallbackContext@vos@@U?$_Nonconst_traits@PAUOReactorCallbackContext@vos@@@_STL@@@_STL@@QAE@ABU01@@Z
+?uninitialized_fill_n@_STL@@YAPAPAXPAPAXIABQAX@Z
+?fill_n@_STL@@YAPAPAVOExecutableThread@vos@@PAPAV23@IABQAV23@@Z
