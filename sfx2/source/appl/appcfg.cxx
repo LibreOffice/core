@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-30 13:45:50 $
+ *  last change: $Author: os $ $Date: 2002-05-27 08:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,6 +413,11 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                                aHelpOptions.IsWelcomeScreen() ) ) )
                         bRet = TRUE;
                     break;
+                case SID_HELP_STYLESHEET :
+                    if(rSet.Put( SfxStringItem ( rPool.GetWhich( SID_HELP_STYLESHEET ),
+                               aHelpOptions.GetHelpStyleSheet() ) ) )
+                        bRet = TRUE;
+                break;
                 case SID_ATTR_UNDO_COUNT :
                     if(rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_ATTR_UNDO_COUNT ),
                                  (UINT16)aUndoOptions.GetUndoCount() ) ) )
@@ -833,6 +838,12 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         {
             DBG_ERROR( "Not implemented, may be EOL!" );
         }                                                   }
+
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_HELP_STYLESHEET ), TRUE, &pItem))
+    {
+        DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
+        aHelpOptions.SetHelpStyleSheet( ((const SfxStringItem *)pItem)->GetValue() );
+    }
 
     // SaveRelINet
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_SAVEREL_INET), TRUE, &pItem))
