@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mkfilt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:01 $
+ *  last change: $Author: oisin $ $Date: 2000-11-03 13:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 
 #include <stdio.h>
 
-#include <tools/string.hxx>
-#include <tools/list.hxx>
+#include <../../inc/string.hxx>
+#include <../../inc/list.hxx>
 
 class TextFilter
 {
