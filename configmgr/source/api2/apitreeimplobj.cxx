@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-10 09:32:23 $
+ *  last change: $Author: jb $ $Date: 2002-10-15 15:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,7 +480,7 @@ bool ApiTreeImpl::isAlive() const
 //-------------------------------------------------------------------------
 void ApiTreeImpl::checkAlive() const
 {
-    OSL_VERIFY( m_aNotifier->m_aListeners.checkAlive( getUnoInstance()) ); //, "Object is being disposed" );
+    m_aNotifier->m_aListeners.checkAlive( getUnoInstance() );
 }
 //-------------------------------------------------------------------------
 
