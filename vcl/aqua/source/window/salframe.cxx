@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-17 03:28:26 $
+ *  last change: $Author: pluby $ $Date: 2000-11-17 07:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,15 +125,14 @@ SalFrame::SalFrame()
 
 SalFrame::~SalFrame()
 {
+    ReleaseGraphics( maFrameData.mpGraphics );
+    VCLWindow_release( maFrameData.mhWnd );
 }
 
 // -----------------------------------------------------------------------
 
 SalGraphics* SalFrame::GetGraphics()
 {
-    if ( maFrameData.mbGraphics )
-        return NULL;
-
     if ( !maFrameData.mpGraphics )
     {
         VCLVIEW hView = VCLWindow_contentView( maFrameData.mhWnd );
@@ -147,11 +146,10 @@ SalGraphics* SalFrame::GetGraphics()
             maFrameData.mpGraphics->maGraphicsData.mbVirDev  = FALSE;
             maFrameData.mpGraphics->maGraphicsData.mbWindow  = TRUE;
             maFrameData.mpGraphics->maGraphicsData.mbScreen  = TRUE;
-            maFrameData.mbGraphics = TRUE;
         }
     }
-    else
-        maFrameData.mbGraphics = TRUE;
+
+    maFrameData.mbGraphics = TRUE;
 
     return maFrameData.mpGraphics;
 }
@@ -160,6 +158,8 @@ SalGraphics* SalFrame::GetGraphics()
 
 void SalFrame::ReleaseGraphics( SalGraphics* )
 {
+    if ( maFrameData.mpGraphics )
+        delete maFrameData.mpGraphics;
 }
 
 // -----------------------------------------------------------------------
