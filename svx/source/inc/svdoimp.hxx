@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoimp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-08 16:19:41 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,7 @@ class ImpLineStyleParameterPack
     BOOL                        bEndCentered;
     BOOL                        bForceNoArrowsLeft;
     BOOL                        bForceNoArrowsRight;
+    BOOL                        bForceHair;
 
 public:
     ImpLineStyleParameterPack(const SfxItemSet& rSet,
@@ -226,10 +227,13 @@ public:
 
     OutputDevice* GetOutDev() const { return mpOut; }
     INT32 GetLineWidth() const { return nLineWidth; }
+    INT32 GetDisplayLineWidth() const { return bForceHair ? 0 : nLineWidth; }
     XLineStyle GetLineStyle() const { return eLineStyle; }
 
     INT32 GetStartWidth() const { return nStartWidth; }
+    INT32 GetDisplayStartWidth() const { return bForceHair ? 0 : nStartWidth; }
     INT32 GetEndWidth() const { return nEndWidth; }
+    INT32 GetDisplayEndWidth() const { return bForceHair ? 0 : nEndWidth; }
 
     const XPolygon& GetStartPolygon() const { return rStartPolygon; }
     const XPolygon& GetEndPolygon() const { return rEndPolygon; }
