@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-07 12:49:49 $
+ *  last change: $Author: nn $ $Date: 2002-05-23 17:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
     {
         //  insert database field control
 
-        if ( ::svx::OColumnTransferable::canExtractColumnDescriptor( aDataHelper.GetDataFlavorExVector(), CTF_COLUMN_DESCRIPTOR ) )
+        if ( ::svx::OColumnTransferable::canExtractColumnDescriptor( aDataHelper.GetDataFlavorExVector(), CTF_COLUMN_DESCRIPTOR | CTF_CONTROL_EXCHANGE ) )
         {
             MakeDrawLayer();
             ScDrawView* pDrawView = GetScDrawView();

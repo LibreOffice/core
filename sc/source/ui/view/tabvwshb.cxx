@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-21 12:58:39 $
+ *  last change: $Author: nn $ $Date: 2002-05-23 17:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#include <svx/dataaccessdescriptor.hxx>
 #include <svx/pfiledlg.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdograf.hxx>
@@ -113,6 +114,7 @@ SO2_DECL_REF(SvStorage)
 #include "fuinsert.hxx"
 #include "docsh.hxx"
 #include "chartarr.hxx"
+#include "drawview.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -435,6 +437,43 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                 SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
                 rReq.Done();
             }
+            break;
+
+        // #98721#
+        case SID_FM_CREATE_FIELDCONTROL:
+            {
+                SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR, sal_False );
+                DBG_ASSERT( pDescriptorItem, "SID_FM_CREATE_FIELDCONTROL: invalid request args!" );
+
+                if(pDescriptorItem)
+                {
+                    //! merge with ScViewFunc::PasteDataFormat (SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE)?
+
+                    ScDrawView* pDrView = GetScDrawView();
+                    SdrPageView* pPageView = pDrView ? pDrView->GetPageViewPvNum(0) : NULL;
+                    if(pPageView)
+                    {
+                        ::svx::ODataAccessDescriptor aDescriptor(pDescriptorItem->GetValue());
+                        SdrObject* pNewDBField = pDrView->CreateFieldControl(aDescriptor);
+
+                        if(pNewDBField)
+                        {
+                            Rectangle aVisArea = pWin->PixelToLogic(Rectangle(Point(0,0), pWin->GetOutputSizePixel()));
+                            Point aObjPos(aVisArea.Center());
+                            Size aObjSize(pNewDBField->GetLogicRect().GetSize());
+                            aObjPos.X() -= aObjSize.Width() / 2;
+                            aObjPos.Y() -= aObjSize.Height() / 2;
+                            Rectangle aNewObjectRectangle(aObjPos, aObjSize);
+
+                            pNewDBField->SetLogicRect(aNewObjectRectangle);
+
+                            pView->InsertObject(pNewDBField, *pPageView, pView->IsSolidDraggingNow() ? SDRINSERT_NOBROADCAST : 0);
+                        }
+                    }
+                }
+                rReq.Done();
+            }
+            break;
     }
 }
 

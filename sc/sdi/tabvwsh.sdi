@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: dr $ $Date: 2002-05-22 07:07:06 $ $Revision: 1.8 $
+ // $Author: nn $ $Date: 2002-05-23 17:25:49 $ $Revision: 1.9 $
  // $Logfile:   T:/sc/sdi/tabvwsh.sdv  $ $Workfile:   tabvwsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -93,6 +93,7 @@ interface BaseSelection : Selection
     SID_LINKS               [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_DRAW_CHART          [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
     SID_OPENDLG_MODCHART    [ ExecMethod = Execute; StateMethod = GetDrawInsState; ]
+    SID_FM_CREATE_FIELDCONTROL [ ExecMethod = ExecDrawIns ; ]
 
     // } Einfuegen von Objekten
 
