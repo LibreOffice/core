@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-11 12:42:49 $
+ *  last change: $Author: cmc $ $Date: 2002-06-27 11:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #endif
 #ifndef __SGI_STL_FUNCTIONAL
 #include <functional>
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 
 #define _SVSTDARR_STRINGSSORTDTOR
@@ -479,8 +483,19 @@ void WW8WrtStyle::Set1StyleDefaults( const SwFmt& rFmt, BOOL bPap )
 
     const BOOL* pFlags = aFlags + ( nStt - RES_CHRATR_BEGIN );
     for( n = nStt; n < nEnd; ++n, ++pFlags )
+    {
         if( *pFlags && SFX_ITEM_SET != rFmt.GetItemState( n, FALSE ))
-            Out( aWW8AttrFnTab, rFmt.GetAttr( n, TRUE ), rWrt );
+        {
+            //If we are a character property then see if it is one of the
+            //western/asian ones that must be collapsed together for export to
+            //word. If so default to the western varient.
+            if ( !bPap && rWrt.CollapseScriptsforWordOk(
+                ::com::sun::star::i18n::ScriptType::LATIN, n) )
+            {
+                Out(aWW8AttrFnTab, rFmt.GetAttr(n, TRUE), rWrt);
+            }
+        }
+    }
 
     rWrt.SetCurItemSet( pOldI );
 }

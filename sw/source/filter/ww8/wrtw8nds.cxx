@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-25 09:43:11 $
+ *  last change: $Author: cmc $ $Date: 2002-06-27 11:07:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,7 @@ void WW8_SwAttrIter::OutAttr( xub_StrLen nSwPos )
             if( pEnd ? ( nSwPos >= *pHt->GetStart() && nSwPos < *pEnd )
                         : nSwPos == *pHt->GetStart() )
             {
-                if (SwWW8Writer::CollapseScriptsforWordOk(nScript,
+                if (rWrt.CollapseScriptsforWordOk(nScript,
                     pHt->GetAttr().Which()))
                 {
                     Out(aWW8AttrFnTab, pHt->GetAttr(), rWrt);

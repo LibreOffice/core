@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-13 14:19:04 $
+ *  last change: $Author: cmc $ $Date: 2002-06-27 11:07:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -824,7 +824,7 @@ void WW8_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
                 nWhich != nSlotId &&
                 0 != ( pOut = aWW8AttrFnTab[ nWhich - RES_CHRATR_BEGIN ] ) )
             {
-                if (SwWW8Writer::CollapseScriptsforWordOk(nScript,nWhich))
+                if (rWrt.CollapseScriptsforWordOk(nScript,nWhich))
                 {
                     // use always the SW-Which Id !
                     SfxPoolItem* pI = rHt.pAttr->Clone();
@@ -926,7 +926,7 @@ void WW8_SdrAttrIter::OutParaAttr( BOOL bCharAttr )
                     // use always the SW-Which Id !
                     SfxPoolItem* pI = pItem->Clone();
                     pI->SetWhich( nWhich );
-                    if (SwWW8Writer::CollapseScriptsforWordOk(nScript,nWhich))
+                    if (rWrt.CollapseScriptsforWordOk(nScript,nWhich))
                         (*pOut)( rWrt, *pI );
                     delete pI;
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-17 10:19:03 $
+ *  last change: $Author: cmc $ $Date: 2002-06-27 11:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,11 +373,13 @@ Sadly word does not have two different sizes for asian font size and western
 font size, it has to different fonts, but not sizes, so we have to use our
 guess as to the script used and disable the export of one type. The same
 occurs for font weight and posture (bold and italic)
+
+In addition WW7- has only one character language identifier while WW8+ has two
 */
 BOOL SwWW8Writer::CollapseScriptsforWordOk(USHORT nScript, USHORT nWhich)
 {
     BOOL bRet=TRUE;
-    if ( nScript != com::sun::star::i18n::ScriptType::ASIAN)
+    if (nScript != com::sun::star::i18n::ScriptType::ASIAN)
     {
         switch (nWhich)
         {
@@ -386,6 +388,9 @@ BOOL SwWW8Writer::CollapseScriptsforWordOk(USHORT nScript, USHORT nWhich)
             case RES_CHRATR_CJK_WEIGHT:
                 bRet = FALSE;
                 break;
+            case RES_CHRATR_CJK_LANGUAGE:
+                if (bWrtWW8 == 0)
+                    bRet = FALSE;
             default:
                 break;
         }
@@ -399,6 +404,9 @@ BOOL SwWW8Writer::CollapseScriptsforWordOk(USHORT nScript, USHORT nWhich)
             case RES_CHRATR_WEIGHT:
                 bRet = FALSE;
                 break;
+            case RES_CHRATR_LANGUAGE:
+                if (bWrtWW8 == 0)
+                    bRet = FALSE;
             default:
                 break;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-25 11:31:09 $
+ *  last change: $Author: cmc $ $Date: 2002-06-27 11:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,7 +574,7 @@ public:
     static void InsAsString16( WW8Bytes& rO, const String& );
     static void InsAsString8( WW8Bytes& rO, const String& rStr,
                                 rtl_TextEncoding eCodeSet );
-    static BOOL CollapseScriptsforWordOk(USHORT nScript, USHORT nWhich);
+    BOOL CollapseScriptsforWordOk(USHORT nScript, USHORT nWhich);
     USHORT DupNumRuleWithLvlStart(const SwNumRule *pRule,BYTE nLvl,USHORT nVal);
 
     void InsUInt16( UINT16 n )      { SwWW8Writer::InsUInt16( *pO, n ); }
