@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-06 13:54:31 $
+ *  last change: $Author: vg $ $Date: 2001-06-08 23:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,26 @@ ModalDialog RID_FONTIMPORT_DIALOG
     {
         Text = "Füge Schriften hinzu";
         Text[ English ] = "Adding fonts";
+        Text[ english_us ] = "Importing fonts";
+        Text[ portuguese ] = "Importar tipos de letra";
+        Text[ russian ] = "Èìïîğò øğèôòîâ";
+        Text[ greek ] = "ÅéóáãùãŞ ãñáììáôïóåéñşí";
+        Text[ dutch ] = "Lettertypen worden geïmporteerd";
+        Text[ french ] = "Import de polices";
+        Text[ spanish ] = "Fuentes importadas";
+        Text[ finnish ] = "Importing fonts";
+        Text[ italian ] = "Importa font";
+        Text[ danish ] = "Importing fonts";
+        Text[ swedish ] = "Importerar teckensnitt";
+        Text[ polish ] = "Importuj czcionki";
+        Text[ portuguese_brazilian ] = "Importing fonts";
+        Text[ japanese ] = "Ì«İÄ‚ğ²İÎß°Ä‚µ‚Ü‚·";
+        Text[ korean ] = "±Û²Ã¡¡°¡Á®¿À±â";
+        Text[ chinese_simplified ] = "ÊäÈë×ÖÌå";
+        Text[ chinese_traditional ] = "¿é¤J¦r«¬";
+        Text[ turkish ] = "Importing fonts";
+        Text[ arabic ] = "ÇÓÊíÑÇÏ ÎØæØ";
+        Text[ catalan ] = "Fuentes importadas";
     };
     String RID_FIMP_STR_QUERYOVERWRITE
     {
@@ -336,7 +356,47 @@ ModalDialog RID_FONTIMPORT_DIALOG
     {
         Text = "Es wurden %d neue Schriften hinzugefügt.";
         Text [ English ] = "%d new fonts were added.";
+        Text[ english_us ] = "%d new fonts were installed.";
+        Text[ portuguese ] = "Instalados %d novos tipos de letra.";
+        Text[ russian ] = "Èíñòàëëèğîâàíî %d íîâûõ øğèôòà(îâ).";
+        Text[ greek ] = "¸÷ïõí åãêáôáóôáèåß %d íİåò ãñáììáôïóåéñİò.";
+        Text[ dutch ] = "Er werden %d nieuwe lettertypen geïnstalleerd.";
+        Text[ french ] = "%d nouvelles polices installées.";
+        Text[ spanish ] = "Se instalaron %d nuevas fuentes.";
+        Text[ finnish ] = "%d new fonts were installed.";
+        Text[ italian ] = "Sono stati installati %d nuovi font.";
+        Text[ danish ] = "%d new fonts were installed.";
+        Text[ swedish ] = "%d nya teckensnitt har installerats.";
+        Text[ polish ] = "Zainstalowano %d nowych czionek.";
+        Text[ portuguese_brazilian ] = "%d new fonts were installed.";
+        Text[ japanese ] = "%d V‚µ‚¢Ì«İÄ‚ª²İ½Ä°Ù‚³‚ê‚Ü‚µ‚½B";
+        Text[ korean ] = "%d »õ¡¡±Û²ÃÀÌ¡¡¼³Ä¡µÇ¾ú½À´Ï´Ù.";
+        Text[ chinese_simplified ] = "ÒÑ¾­°²×° %d ĞÂµÄ×ÖÌå¡£";
+        Text[ chinese_traditional ] = "¤w¸g¦w¸Ë·s¦r«¬ %d ¡C";
+        Text[ turkish ] = "%d new fonts were installed.";
+        Text[ arabic ] = "Êã ÊËÈíÊ %d ÎØÇó (ÎØæØ) ÌÏíÏÇğ (ÌÏíÏÉ).";
+        Text[ catalan ] = "Se instalaron %d nuevas fuentes.";
     };
+    Text[ english_us ] = "Import Fonts";
+    Text[ portuguese ] = "Importar tipos de letra";
+    Text[ russian ] = "Èìïîğò øğèôòîâ";
+    Text[ greek ] = "ÅéóáãùãŞ ãñáììáôïóåéñşí";
+    Text[ dutch ] = "Lettertypen importeren";
+    Text[ french ] = "Import de polices";
+    Text[ spanish ] = "Importar fuentes";
+    Text[ finnish ] = "Import Fonts";
+    Text[ italian ] = "Importa font";
+    Text[ danish ] = "Import fonts";
+    Text[ swedish ] = "Importera teckensnitt";
+    Text[ polish ] = "Importuj czcionki";
+    Text[ portuguese_brazilian ] = "Import fonts";
+    Text[ japanese ] = "Ì«İÄ‚Ì²İÎß°Ä";
+    Text[ korean ] = "±Û²Ã¡¡°¡Á®¿À±â";
+    Text[ chinese_simplified ] = "ÊäÈë×ÖÌå";
+    Text[ chinese_traditional ] = "¿é¤J¦r«¬";
+    Text[ turkish ] = "Import fonts";
+    Text[ arabic ] = "ÇÓÊíÑÇÏ ÎØæØ";
+    Text[ catalan ] = "Importar fuentes";
 };
 
 ModalDialog RID_PADIALOG
@@ -356,26 +416,26 @@ ModalDialog RID_PADIALOG
         Size = MAP_APPFONT( 50, 15 );
         Text = "Schließen";
         Text [ english ] = "Close";
-        Text[ english_us ] = "Close";
-        Text[ portuguese ] = "Fechar";
-        Text[ russian ] = "Çàêğûòü";
+        Text[ english_us ] = "~Close";
+        Text[ portuguese ] = "~Fechar";
+        Text[ russian ] = "~Çàêğûòü";
         Text[ greek ] = "Êëåß~óéìï";
-        Text[ dutch ] = "Sluiten";
-        Text[ french ] = "Fermer";
-        Text[ spanish ] = "Cerrar";
-        Text[ italian ] = "Chiudi";
-        Text[ danish ] = "Close";
-        Text[ swedish ] = "Stäng";
-        Text[ polish ] = "Zamknij";
-        Text[ portuguese_brazilian ] = "Close";
-        Text[ japanese ] = "•Â‚¶‚é";
-        Text[ korean ] = "´İ±â";
-        Text[ chinese_simplified ] = "¹Ø±Õ";
-        Text[ chinese_traditional ] = "Ãö³¬";
-        Text[ turkish ] = "Close";
+        Text[ dutch ] = "~Sluiten";
+        Text[ french ] = "~Fermer";
+        Text[ spanish ] = "~Cerrar";
+        Text[ italian ] = "C~hiudi";
+        Text[ danish ] = "~Close";
+        Text[ swedish ] = "~Stäng";
+        Text[ polish ] = "~Zamknij";
+        Text[ portuguese_brazilian ] = "~Close";
+        Text[ japanese ] = "•Â‚¶‚é(~C)";
+        Text[ korean ] = "´İ±â(~C)";
+        Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
+        Text[ chinese_traditional ] = "Ãö³¬(~C)";
+        Text[ turkish ] = "~Close";
         Text[ arabic ] = "ÅÛáÇŞ";
-        Text[ finnish ] = "Close";
-        Text[ catalan ] = "Cerrar";
+        Text[ finnish ] = "~Close";
+        Text[ catalan ] = "~Cerrar";
     };
 
     GroupBox RID_PA_GROUP_INSTALL
@@ -1114,26 +1174,26 @@ ModalDialog RID_FONTNAMEDIALOG
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Entfernen..." ;
         Text [ English ] = "~Remove..." ;
-        Text[ english_us ] = "~Remove...";
-        Text[ portuguese ] = "~Remover...";
-        Text[ russian ] = "~Óáğàòü...";
-        Text[ greek ] = "ÄéáãñáöŞ...";
-        Text[ dutch ] = "~Verwijderen...";
-        Text[ french ] = "~Supprimer...";
-        Text[ spanish ] = "~Eliminar...";
-        Text[ italian ] = "Rimuo~vi...";
-        Text[ danish ] = "~Remove...";
-        Text[ swedish ] = "Ta b~ort...";
-        Text[ polish ] = "Usuñ...";
-        Text[ portuguese_brazilian ] = "~Remove...";
-        Text[ japanese ] = "íœ(~R)...";
-        Text[ korean ] = "Á¦°Å(~R)...";
-        Text[ chinese_simplified ] = "É¾³ı(~R)...";
-        Text[ chinese_traditional ] = "²¾°£(~R)...";
-        Text[ turkish ] = "~Remove...";
-        Text[ arabic ] = "ÅÒÇáÉ...";
-        Text[ finnish ] = "~Remove...";
-        Text[ catalan ] = "~Eliminar...";
+        Text[ english_us ] = "~Remove";
+        Text[ portuguese ] = "~Remover";
+        Text[ russian ] = "~Óáğàòü";
+        Text[ greek ] = "ÄéáãñáöŞ";
+        Text[ dutch ] = "~Verwijderen";
+        Text[ french ] = "~Supprimer";
+        Text[ spanish ] = "~Eliminar";
+        Text[ italian ] = "Rimuo~vi";
+        Text[ danish ] = "~Remove";
+        Text[ swedish ] = "Ta b~ort";
+        Text[ polish ] = "Usuñ";
+        Text[ portuguese_brazilian ] = "~Remove";
+        Text[ japanese ] = "íœ(~R)";
+        Text[ korean ] = "Á¦°Å(~R)";
+        Text[ chinese_simplified ] = "É¾³ı(~R)";
+        Text[ chinese_traditional ] = "²¾°£(~R)";
+        Text[ turkish ] = "~Remove";
+        Text[ arabic ] = "ÅÒÇáÉ";
+        Text[ finnish ] = "~Remove";
+        Text[ catalan ] = "~Eliminar";
     };
     PushButton RID_FNTNM_BTN_IMPORT
     {
@@ -1157,6 +1217,26 @@ ModalDialog RID_FONTNAMEDIALOG
         WordBreak = TRUE;
         Text = "Hinweis: Die Schriften sind nur für die Applikation verfügbar";
         Text [ English ] = "Hint: the fonts are avalable for the application only.";
+        Text[ english_us ] = "The Xwindow name of the font is constructed\nfrom the properties";
+        Text[ portuguese ] = "O nome Xwindow do tipo de letra constrói-se\na partir das propriedades.";
+        Text[ russian ] = "Èìÿ øğèôòà Xwindow îáğàçîâàíî\nèç ñâîéñòâ";
+        Text[ greek ] = "Ôï üíïìá Xwindow ôçò ãñáììáôïóåéñÜò äçìéïõñãåßôáé\náğü ôéò éäéüôçôİò ôçò.";
+        Text[ dutch ] = "De Xwindow-naam van het lettertype\nwordt samengesteld uit de eigenschappen";
+        Text[ french ] = "Le nom Xwindow de la police\nest généré à partir des propriétés";
+        Text[ spanish ] = "De las propiedades se construirá el nombre\nXwindow de la fuente.";
+        Text[ finnish ] = "The Xwindow name of the font is constructed\nfrom the properties";
+        Text[ italian ] = "Il nome Xwindow è determinato\ndalle caratteristiche";
+        Text[ danish ] = "The Xwindow name of the font is constructed\nfrom the properties";
+        Text[ swedish ] = "Xwindow-namnet på teckensnittet konstrueras\nutifrån egenskaperna";
+        Text[ polish ] = "Nazwa Xwindow czcionki utworzona\nzostanie z w³aœciwoœci.";
+        Text[ portuguese_brazilian ] = "The Xwindow name of the font is constructed\nfrom the properties";
+        Text[ japanese ] = "Ì«İÄ‚Ì X ³¨İÄŞ³–¼‚Í‘®«‚©‚ç\\¬‚³‚ê‚Ü‚·B";
+        Text[ korean ] = "µî·ÏÁ¤º¸·ÎºÎÅÍ¡¡±Û²ÃÀÇ XÀ©µµ¿ì¡¡ÀÌ¸§ÀÌ¡¡±¸¼ºµË´Ï´Ù";
+        Text[ chinese_simplified ] = "Xwindow Ãû³ÆÊÇÓÉ×ÖÌåÊôĞÔ¹¹³ÉµÄ";
+        Text[ chinese_traditional ] = "Xwindow ¦WºÙ¥Ñ¦r«¬Äİ©ÊÌÛ¦¨";
+        Text[ turkish ] = "The Xwindow name of the font is constructed\nfrom the properties";
+        Text[ arabic ] = "íÊÑßÈ ÇÓã ÎØXwindow   \n ãä ÇáÎÕÇÆÕ";
+        Text[ catalan ] = "De las propiedades se construirá el nombre\nXwindow de la fuente.";
     };
     Text[ english_us ] = "Fonts";
     Text[ portuguese ] = "Tipos de letra";
@@ -2607,10 +2687,10 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ russian ] = "~Óäàëèòü íîìåğ ôàêñà èç âûâîäà";
         Text[ greek ] = "~fax number will be removed from output";
         Text[ dutch ] = "~Faxnummer niet weergeven";
-        Text[ french ] = "~Supprimer le numéro de la sortie de fax";
+        Text[ french ] = "~Pas de numéro de fax pour la sortie";
         Text[ spanish ] = "~Eliminar número de fax en la salida";
         Text[ finnish ] = "~Faxnummer aus der Ausgabe entfernen";
-        Text[ italian ] = "~fax number will be removed from output";
+        Text[ italian ] = "Elimina il numero di fax dalla copia";
         Text[ danish ] = "~fax number will be removed from output";
         Text[ swedish ] = "Ta bort ~faxnummer från utmatningen";
         Text[ polish ] = "Usuñ z wyjœcia numer faksu";
@@ -3191,3 +3271,4 @@ String RID_TXT_FONT_REGULAR
     Text = "Standard";
     Text [english] = "Regular";
 };
+
