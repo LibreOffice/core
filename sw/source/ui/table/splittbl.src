@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splittbl.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:57:26 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text [ french ] = "Titre personnalisй, avec ~style" ;
         Text [ dutch ] = "~Eigen kop, met opmaakprofiel" ;
         Text[ chinese_simplified ] = "„‘ґ®±кћв£ђіш—щ љ(~S)";
-        Text[ russian ] = "«аголовок пользовател€ с шаблоном";
+        Text[ russian ] = "«аголовок пользовател€ со стилем";
         Text[ polish ] = "Tytu≥ uњytkownika, z szablonem";
         Text[ japanese ] = "љј≤ўХtВЂ’∞їё∞ТиЛ`ВћМ©ПoВµ(~S)";
         Text[ chinese_traditional ] = "¶џ≠qЉ–√D°A±aЉЋ¶°(~S)";
@@ -236,7 +236,7 @@ ModalDialog DLG_SPLIT_TABLE
     Text[ russian ] = "–азбить таблицу";
     Text[ polish ] = "Rozdziel tabelк";
     Text[ japanese ] = "Х\\ВћХ™КД";
-    Text[ chinese_traditional ] = "§јґ}јx¶sЃж";
+    Text[ chinese_traditional ] = "§јґ}™нЃж";
     Text[ arabic ] = "Ё’б «бћѕжб";
     Text[ greek ] = "ƒйбясеуз рянбкб";
     Text[ korean ] = "«• ≥™і©±в";
