@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:19:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,8 @@
 #define WID_SECT_IS_GLOBAL_DOC_SECTION 8010
 #define WID_SECT_PASSWORD    8011
 #define WID_SECT_CURRENTLY_VISIBLE 8012
+#define WID_SECT_EDIT_IN_READONLY 8013
+
 
 //Verzeichnisse
 #define WID_PRIMARY_KEY                         1000
