@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: bmahbod $ $Date: 2000-10-06 23:53:16 $
+#   last change: $Author: hr $ $Date: 2000-11-07 10:12:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,13 +80,9 @@ LIB1TARGET=$(SLB)$/untools.lib
 LIB1FILES=\
         $(SLB)$/i18n.lib \
         $(SLB)$/misc.lib \
-        $(SLB)$/property.lib \
         $(SLB)$/streaming.lib \
-        $(SLB)$/database.lib \
-        $(SLB)$/evtattmgr.lib \
         $(SLB)$/config.lib \
-        $(SLB)$/container.lib \
-                $(SLB)$/ucbhelp.lib \
+        $(SLB)$/ucbhelp.lib \
         $(SLB)$/procfact.lib
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
