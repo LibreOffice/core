@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-20 16:01:58 $
+ *  last change: $Author: os $ $Date: 2001-08-06 13:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,7 +557,7 @@ BOOL SvxSearchDialog::Close()
     //aOpt.SetMatchCase             ( aMatchCaseCB            .IsChecked() );
     aOpt.SetSearchForStyles         ( aLayoutBtn              .IsChecked() );
     aOpt.SetSimilaritySearch        ( aSimilarityBox          .IsChecked() );
-    //aOpt.SetMatchFullHalfWidthForms   ( aJapMatchFullHalfWidthCB.IsChecked() );
+    //aOpt.SetMatchFullHalfWidthForms   ( !aJapMatchFullHalfWidthCB.IsChecked() );
     aOpt.SetUseAsianOptions         ( aJapOptionsCB           .IsChecked() );
 
     NotifyApp( FID_SEARCH_OFF );
@@ -574,7 +574,7 @@ INT32 SvxSearchDialog::GetTransliterationFlags() const
         rFlags |=  TransliterationModules_IGNORE_CASE;
     else
         rFlags &= ~TransliterationModules_IGNORE_CASE;
-    if ( aJapMatchFullHalfWidthCB.IsChecked())
+    if ( !aJapMatchFullHalfWidthCB.IsChecked())
         rFlags |=  TransliterationModules_IGNORE_WIDTH;
     else
         rFlags &= ~TransliterationModules_IGNORE_WIDTH;
@@ -589,7 +589,7 @@ void SvxSearchDialog::ApplyTransliterationFlags_Impl( INT32 nSettings )
     BOOL bVal = 0 != (nSettings & TransliterationModules_IGNORE_CASE);
     aMatchCaseCB            .Check(!bVal );
     bVal = 0 != (nSettings & TransliterationModules_IGNORE_WIDTH);
-    aJapMatchFullHalfWidthCB.Check( bVal );
+    aJapMatchFullHalfWidthCB.Check( !bVal );
 }
 
 // -----------------------------------------------------------------------
@@ -601,7 +601,7 @@ void SvxSearchDialog::Activate()
     if (pSearchItem)
     {
         aMatchCaseCB            .Check( pSearchItem->GetExact() );
-        aJapMatchFullHalfWidthCB.Check( pSearchItem->IsMatchFullHalfWidthForms() );
+        aJapMatchFullHalfWidthCB.Check( !pSearchItem->IsMatchFullHalfWidthForms() );
     }
 }
 
