@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:58:09 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -999,7 +999,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeExc
 
     aRecordset.MoveFirst();
     OLEVariant  aValue;
-    ::rtl::OUString aRet,aComma = ::rtl::OUString::createFromAscii(",");;
+    ::rtl::OUString aRet,aComma = ::rtl::OUString::createFromAscii(",");
     while(!aRecordset.IsAtEOF())
     {
         WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(aRecordset.GetFields());
