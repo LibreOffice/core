@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-06-08 13:47:31 $
+ *  last change: $Author: mba $ $Date: 2002-07-01 09:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,8 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
     aHelpBtn        ( this, SW_RES( BTN_POST_HELP ) ),
 
     pSh(pWrtSh),
-    bNew(TRUE)
+    bNew(TRUE),
+    bIsUrl(FALSE)
 {
     // Handler installieren
     aPrevBtn.SetClickHdl( LINK( this, SwJavaEditDialog, PrevHdl ) );
@@ -308,33 +309,25 @@ void SwJavaEditDialog::SetFld()
     if( !aOKBtn.IsEnabled() )
         return ;
 
-    String sText;
-    String sType( aTypeED.GetText() );
-    BOOL bIsUrl = aUrlRB.IsChecked();
+    aType = aTypeED.GetText();
+    bIsUrl = aUrlRB.IsChecked();
 
     if( bIsUrl )
     {
-        sText = aUrlED.GetText();
-        if(sText.Len())
-            sText = URIHelper::SmartRelToAbs(sText);
+        aText = aUrlED.GetText();
+        if(aText.Len())
+            aText = URIHelper::SmartRelToAbs(aText);
     }
     else
-        sText = aEditED.GetText();
+        aText = aEditED.GetText();
 
-    if( !sType.Len() )
-        sType = String::CreateFromAscii("JavaScript");
+    if( !aType.Len() )
+        aType = String::CreateFromAscii("JavaScript");
+}
 
-    if( bNew )
-    {
-        SwInsertFld_Data aData(TYP_SCRIPTFLD, 0, sType, sText, bIsUrl);
-        pMgr->InsertFld(aData);
-    }
-    else if( bIsUrl != pFld->GetFormat() ||
-             pFld->GetPar2() != sType || pFld->GetPar1() != sText )
-    {
-        pMgr->UpdateCurFld( bIsUrl, sType, sText );
-        pSh->SetUndoNoResetModified();
-    }
+BOOL SwJavaEditDialog::IsUpdate()
+{
+    return bIsUrl != pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText;
 }
 
 /*------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-16 09:32:52 $
+ *  last change: $Author: mba $ $Date: 2002-07-01 09:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,10 +91,6 @@ class SwScriptField;
 
 class SwJavaEditDialog : public SvxStandardDialog
 {
-public:
-    SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh);
-    ~SwJavaEditDialog();
-
 private:
     FixedText           aTypeFT;
     Edit                aTypeED;
@@ -111,7 +107,11 @@ private:
     ImageButton         aNextBtn;
     HelpButton          aHelpBtn;
 
+    String              aText;
+    String              aType;
+
     BOOL                bNew;
+    BOOL                bIsUrl;
 
     SwScriptField*      pFld;
     SwFldMgr*           pMgr;
@@ -127,6 +127,16 @@ private:
 
     void            CheckTravel();
     void            SetFld();
+
+public:
+    SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh);
+    ~SwJavaEditDialog();
+
+    String              GetText() { return aText; }
+    String              GetType() { return aType; }
+    BOOL                IsUrl() { return bIsUrl; }
+    BOOL                IsNew() { return bNew; }
+    BOOL                IsUpdate();
 };
 
 
