@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atlwindow.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 14:05:41 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
