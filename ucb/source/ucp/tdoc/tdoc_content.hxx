@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_content.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 13:40:56 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 15:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,15 +265,24 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
     getInputStream( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
+                        ::com::sun::star::ucb::XCommandEnvironment > &
+                            xEnv ) const
         throw ( ::com::sun::star::ucb::CommandFailedException,
                 ::com::sun::star::task::DocumentPasswordRequest );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
-    getOutputStream( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
+    getTruncatedOutputStream(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::ucb::XCommandEnvironment > & xEnv ) const
         throw ( ::com::sun::star::ucb::CommandFailedException,
                 ::com::sun::star::task::DocumentPasswordRequest );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
+    getStream( const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::ucb::XCommandEnvironment > & xEnv ) const
+        throw ( ::com::sun::star::ucb::CommandFailedException,
+                ::com::sun::star::task::DocumentPasswordRequest );
+
 public:
     // Create existing content. Fail, if not already exists.
     static Content* create(
