@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-27 14:55:51 $
+ *  last change: $Author: pb $ $Date: 2000-11-30 05:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2435,7 +2435,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     ComboBox LB_WEST_NAME
     {
         Border = TRUE;
-        Pos = MAP_APPFONT( 6, 28 );
+        Pos = MAP_APPFONT( 6, 26 );
         Size = MAP_APPFONT( 65, 48 );
         TabStop = TRUE;
         DropDown = TRUE;
@@ -2450,7 +2450,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     ComboBox LB_WEST_STYLE
     {
         Border = TRUE;
-        Pos = MAP_APPFONT( 77, 28 );
+        Pos = MAP_APPFONT( 77, 26 );
         Size = MAP_APPFONT( 65, 48 );
         TabStop = TRUE;
         DropDown = TRUE;
@@ -2479,7 +2479,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     MetricBox LB_WEST_SIZE
     {
         Border = TRUE;
-        Pos = MAP_APPFONT( 148, 28 );
+        Pos = MAP_APPFONT( 148, 26 );
         Size = MAP_APPFONT( 40, 48 );
         TabStop = TRUE;
         DropDown = TRUE;
@@ -2494,7 +2494,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     ListBox LB_WEST_LANG
     {
         Border = TRUE;
-        Pos = MAP_APPFONT( 194, 28 );
+        Pos = MAP_APPFONT( 194, 26 );
         Size = MAP_APPFONT( 60, 48 );
         TabStop = TRUE;
         Sort = TRUE ;
@@ -2502,14 +2502,14 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     FixedLine FL_EAST
     {
-        Pos = MAP_APPFONT( 3, 45 );
+        Pos = MAP_APPFONT( 3, 43 );
         Size = MAP_APPFONT( 254, 10 );
         Text = "Schriftart für asiatischen Text";
         Text [ english_us ] = "Schriftart für asiatischen Text";
     };
     FixedText FT_EAST_NAME
     {
-        Pos = MAP_APPFONT( 6, 57 );
+        Pos = MAP_APPFONT( 6, 55 );
         Size = MAP_APPFONT( 65, 10 );
         Text = "Schr~iftart";
         Text [ english_us ] = "Font";
@@ -2517,14 +2517,14 @@ TabPage RID_SVXPAGE_CHAR_NAME
     ComboBox LB_EAST_NAME
     {
         Border = TRUE;
-        Pos = MAP_APPFONT( 6, 70 );
+        Pos = MAP_APPFONT( 6, 66 );
         Size = MAP_APPFONT( 65, 48 );
         TabStop = TRUE;
         DropDown = TRUE;
     };
     FixedText FT_EAST_STYLE
     {
-        Pos = MAP_APPFONT( 77, 57 );
+        Pos = MAP_APPFONT( 77, 55 );
         Size = MAP_APPFONT( 65, 10 );
         Text = "Schri~ftschnitt";
         Text [ english_us ] = "Type";
@@ -2532,7 +2532,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     ComboBox LB_EAST_STYLE
     {
         Border = TRUE;
-        Pos = MAP_APPFONT( 77, 70 );
+        Pos = MAP_APPFONT( 77, 66 );
         Size = MAP_APPFONT( 65, 48 );
         TabStop = TRUE;
         DropDown = TRUE;
@@ -2553,7 +2553,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     FixedText FT_EAST_SIZE
     {
-        Pos = MAP_APPFONT( 148, 57 );
+        Pos = MAP_APPFONT( 148, 55 );
         Size = MAP_APPFONT( 40, 10 );
         Text = "Schrif~tgrad";
         Text [ english_us ] = "Size";
@@ -2561,14 +2561,14 @@ TabPage RID_SVXPAGE_CHAR_NAME
     MetricBox LB_EAST_SIZE
     {
         Border = TRUE;
-        Pos = MAP_APPFONT( 148, 70 );
+        Pos = MAP_APPFONT( 148, 66 );
         Size = MAP_APPFONT( 40, 48 );
         TabStop = TRUE;
         DropDown = TRUE;
     };
     FixedText FT_EAST_LANG
     {
-        Pos = MAP_APPFONT( 194, 57 );
+        Pos = MAP_APPFONT( 194, 55 );
         Size = MAP_APPFONT( 60, 10 );
         Text = "Sprach~e";
         Text [ english_us ] = "Language";
@@ -2576,7 +2576,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     ListBox LB_EAST_LANG
     {
         Border = TRUE;
-        Pos = MAP_APPFONT( 194, 70 );
+        Pos = MAP_APPFONT( 194, 66 );
         Size = MAP_APPFONT( 60, 48 );
         TabStop = TRUE;
         Sort = TRUE ;
@@ -2585,7 +2585,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     FixedLine FL_CHAR_PREVIEW
     {
         Pos = MAP_APPFONT( 3, 87 );
-        Size = MAP_APPFONT( 188, 10 );
+        Size = MAP_APPFONT( 186, 10 );
         Text = "Vorschau";
         Text [ english_us ] = "Preview";
     };
@@ -2601,16 +2601,15 @@ TabPage RID_SVXPAGE_CHAR_NAME
     {
         Pos = MAP_APPFONT ( 6 , 124 ) ;
         Size = MAP_APPFONT ( 182 , 10 ) ;
-        Text = "01234567890123456789012345678901234567890123456789";
     };
     FixedLine FL_SEPARATE
     {
         Pos = MAP_APPFONT( 190, 93 );
-        Size = MAP_APPFONT( 4, 40 );
+        Size = MAP_APPFONT( 3, 40 );
     };
     FixedLine FL_COLOR2
     {
-        Pos = MAP_APPFONT( 192, 87 );
+        Pos = MAP_APPFONT( 194, 87 );
         Size = MAP_APPFONT( 65, 10 );
         Text = "Schriftfarbe";
         Text [ english_us ] = "Font color" ;
@@ -2618,7 +2617,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     ListBox LB_COLOR2
     {
         Border = TRUE;
-        Pos = MAP_APPFONT( 196, 104 );
+        Pos = MAP_APPFONT( 196, 99 );
         Size = MAP_APPFONT( 60, 48 );
         TabStop = TRUE;
         DropDown = TRUE;
@@ -2688,7 +2687,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     ListBox LB_UNDERLINE
     {
         Border = TRUE;
-        Pos = MAP_APPFONT( 6, 15 );
+        Pos = MAP_APPFONT( 6, 14 );
         Size = MAP_APPFONT( 68, 48 );
         TabStop = TRUE;
         DropDown = TRUE;
@@ -2743,14 +2742,14 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     ListBox LB_UNDERLINE_COLOR
     {
         Border = TRUE;
-        Pos = MAP_APPFONT( 80, 15 );
+        Pos = MAP_APPFONT( 80, 14 );
         Size = MAP_APPFONT( 68, 48 );
         TabStop = TRUE;
         DropDown = TRUE;
     };
     FixedText FT_STRIKEOUT
     {
-        Pos = MAP_APPFONT( 6, 31 );
+        Pos = MAP_APPFONT( 6, 30 );
         Size = MAP_APPFONT( 68, 10 );
         Text = "~Durchstreichung";
         Text [ english_us ] = "Strikethrough" ;
@@ -2758,7 +2757,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     ListBox LB_STRIKEOUT
     {
         Border = TRUE;
-        Pos = MAP_APPFONT( 6, 43 );
+        Pos = MAP_APPFONT( 6, 41 );
         Size = MAP_APPFONT( 68, 48 );
         TabStop = TRUE;
         DropDown = TRUE;
@@ -2783,7 +2782,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     CheckBox CB_INDIVIDUALWORDS
     {
-        Pos = MAP_APPFONT( 80, 44 );
+        Pos = MAP_APPFONT( 80, 42 );
         Size = MAP_APPFONT( 68, 10 );
         Text = "~Wortweise";
         Text [ english_us ] = "Individual words" ;
@@ -2791,7 +2790,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     FixedText FT_EMPHASIS
     {
-        Pos = MAP_APPFONT( 6, 59 );
+        Pos = MAP_APPFONT( 6, 57 );
         Size = MAP_APPFONT( 68, 10 );
         Text = "~Betonungszeichen";
         Text [ english_us ] = "Emphasis character" ;
@@ -2799,26 +2798,22 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     ListBox LB_EMPHASIS
     {
         Border = TRUE;
-        Pos = MAP_APPFONT( 6, 71 );
+        Pos = MAP_APPFONT( 6, 68 );
         Size = MAP_APPFONT( 68, 48 );
         TabStop = TRUE;
         DropDown = TRUE;
         StringList =
         {
-            < "(Ohne)" ; default ; > ;
-            < "°" ; default ; > ;
-            < "." ; default ; > ;
-        };
-        StringList [ english_us ] =
-        {
-            < "(Without)" ; default ; > ;
-            < "°" ; default ; > ;
-            < "." ; default ; > ;
+            < "(None)" ; default ; > ;
+            < "Dot" ; default ; > ;
+            < "Circle" ; default ; > ;
+            < "Disc" ; default ; > ;
+            < "Accent" ; default ; > ;
         };
     };
     FixedText FT_POSITION
     {
-        Pos = MAP_APPFONT( 80, 59 );
+        Pos = MAP_APPFONT( 80, 57 );
         Size = MAP_APPFONT( 68, 10 );
         Text = "~Position";
         Text [ english_us ] = "Position" ;
@@ -2826,7 +2821,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     ListBox LB_POSITION
     {
         Border = TRUE;
-        Pos = MAP_APPFONT( 80, 71 );
+        Pos = MAP_APPFONT( 80, 68 );
         Size = MAP_APPFONT( 68, 48 );
         TabStop = TRUE;
         DropDown = TRUE;
@@ -2852,14 +2847,14 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     {
         HelpId = HID_SVXPAGE_CHAR_EFFECTS_CTRL;
         Border = TRUE;
-        Pos = MAP_APPFONT( 154, 15 );
+        Pos = MAP_APPFONT( 154, 14 );
         Size = MAP_APPFONT( 100, 69 );
         TabStop = TRUE;
         Hide = TRUE;
     };
     ListBox LB_EFFECTS2
     {
-        Pos = MAP_APPFONT ( 154 , 15 ) ;
+        Pos = MAP_APPFONT ( 154 , 14 ) ;
         Size = MAP_APPFONT ( 100 , 56 ) ;
         DropDown = TRUE;
         StringList =
@@ -2912,12 +2907,13 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 99 ) ;
         Size = MAP_APPFONT ( 248 , 23 ) ;
+        Text = "Beispiel";
+        Text [ english_us ] = "Example";
     };
     FixedText FT_EFFECTS_FONTTYPE
     {
         Pos = MAP_APPFONT ( 6 , 124 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
-        Text = "01234567890123456789012345678901234567890123456789";
     };
     String STR_EFFECTS_TRANSPARENT
     {
@@ -3126,7 +3122,6 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     {
         Pos = MAP_APPFONT ( 6 , 124 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
-        Text = "01234567890123456789012345678901234567890123456789";
     };
 };
 
@@ -3241,7 +3236,6 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Pos = MAP_APPFONT ( 6 , 124 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
         Hide = TRUE;
-        Text = "01234567890123456789012345678901234567890123456789";
     };
 };
 
