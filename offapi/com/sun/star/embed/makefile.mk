@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 17:40:05 $
+#   last change: $Author: obo $ $Date: 2004-11-17 12:36:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,14 +74,17 @@ PACKAGE=com$/sun$/star$/embed
 
 IDLFILES=\
     Aspects.idl\
+    BaseStorage.idl\
     ElementModes.idl\
     EmbedStates.idl\
     EmbedVerbs.idl\
-    EmbedMisc.idl\
     EmbedMapUnits.idl\
+    EmbedMisc.idl\
     EmbedUpdateModes.idl\
     EmbeddedObjectDescriptor.idl\
     EntryInitModes.idl\
+    FileSystemStorage.idl\
+    FileSystemStorageFactory.idl\
     InsertedObjectInfo.idl\
     Storage.idl\
     StorageStream.idl\
