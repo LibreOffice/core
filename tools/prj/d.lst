@@ -51,7 +51,6 @@ hedabu: ..\bootstrp\listmacr.hxx %_DEST%\inc%_EXT%\bootstrp\listmacr.hxx
 hedabu: ..\bootstrp\prj.hxx %_DEST%\inc%_EXT%\bootstrp\prj.hxx
 hedabu: ..\bootstrp\revision.hxx %_DEST%\inc%_EXT%\bootstrp\revision.hxx
 hedabu: ..\bootstrp\sstring.hxx %_DEST%\inc%_EXT%\bootstrp\sstring.hxx
-hedabu: ..\bootstrp\static.mk %_DEST%\inc%_EXT%\static.mk
 hedabu: ..\bootstrp\uierr.hxx %_DEST%\inc%_EXT%\bootstrp\uierr.hxx
 hedabu: ..\bootstrp\updmake.hxx %_DEST%\inc%_EXT%\bootstrp\updmake.hxx
 hedabu: ..\bootstrp\vermap.hxx %_DEST%\inc%_EXT%\bootstrp\vermap.hxx
