@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexBibliographyConfigurationContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-25 11:35:25 $
+ *  last change: $Author: sab $ $Date: 2001-03-21 10:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,41 +285,57 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(
     Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),UNO_QUERY);
     if( xFactory.is() )
     {
-        Reference<XInterface> xIfc =
-            xFactory->createInstance(sFieldMaster_Bibliography);
-        if( xIfc.is() )
+        Sequence<rtl::OUString> aServices = xFactory->getAvailableServiceNames();
+        sal_Bool bFound(sal_False);
+        sal_Int32 i(0);
+        sal_Int32 nCount(aServices.getLength());
+        while (i < nCount && !bFound)
         {
-            Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );
-            Any aAny;
-
-            if (sSuffix.getLength() > 0)
-            {
-                aAny <<= sSuffix;
-                xPropSet->setPropertyValue(sBracketAfter, aAny);
-            }
-
-            if (sPrefix.getLength() > 0)
-            {
-                aAny <<= sPrefix;
-                xPropSet->setPropertyValue(sBracketBefore, aAny);
-            }
-
-            aAny.setValue(&bNumberedEntries, ::getBooleanCppuType());
-            xPropSet->setPropertyValue(sIsNumberEntries, aAny);
-
-            aAny.setValue(&bSortByPosition, ::getBooleanCppuType());
-            xPropSet->setPropertyValue(sIsSortByPosition, aAny);
-
-            sal_Int32 nCount = aSortKeys.size();
-            Sequence<Sequence<PropertyValue> > aKeysSeq(nCount);
-            for(sal_Int32 i = 0; i < nCount; i++)
-            {
-                aKeysSeq[i] = aSortKeys[i];
-            }
-            aAny <<= aKeysSeq;
-            xPropSet->setPropertyValue(sSortKeys, aAny);
+            if (aServices[i].equals(sFieldMaster_Bibliography))
+            // here we should use a methode which compares in reverse order if available
+            // #85282#
+                bFound = sal_True;
+            else
+                i++;
         }
-        // else: can't get FieldMaster -> ignore
+        if (bFound)
+        {
+            Reference<XInterface> xIfc =
+                xFactory->createInstance(sFieldMaster_Bibliography);
+            if( xIfc.is() )
+            {
+                Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );
+                Any aAny;
+
+                if (sSuffix.getLength() > 0)
+                {
+                    aAny <<= sSuffix;
+                    xPropSet->setPropertyValue(sBracketAfter, aAny);
+                }
+
+                if (sPrefix.getLength() > 0)
+                {
+                    aAny <<= sPrefix;
+                    xPropSet->setPropertyValue(sBracketBefore, aAny);
+                }
+
+                aAny.setValue(&bNumberedEntries, ::getBooleanCppuType());
+                xPropSet->setPropertyValue(sIsNumberEntries, aAny);
+
+                aAny.setValue(&bSortByPosition, ::getBooleanCppuType());
+                xPropSet->setPropertyValue(sIsSortByPosition, aAny);
+
+                sal_Int32 nCount = aSortKeys.size();
+                Sequence<Sequence<PropertyValue> > aKeysSeq(nCount);
+                for(sal_Int32 i = 0; i < nCount; i++)
+                {
+                    aKeysSeq[i] = aSortKeys[i];
+                }
+                aAny <<= aKeysSeq;
+                xPropSet->setPropertyValue(sSortKeys, aAny);
+            }
+            // else: can't get FieldMaster -> ignore
+        }
     }
     // else: can't even get Factory -> ignore
 }
