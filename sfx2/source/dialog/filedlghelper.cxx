@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-20 11:53:51 $
+ *  last change: $Author: dv $ $Date: 2001-08-22 08:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,7 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
     OUString                maSelectFilter;
     Timer                   maPreViewTimer;
     Graphic                 maGraphic;
+    FileDialogHelper*       mpParent;
 
     ErrCode                 mnError;
     sal_Bool                mbHasPassword   : 1;
@@ -263,6 +264,7 @@ private:
     void                    setDefaultValues();
 
     DECL_LINK( TimeOutHdl_Impl, Timer* );
+    DECL_LINK( HandleEvent, FileDialogHelper* );
 
 public:
     // XFilePickerListener methods
@@ -275,9 +277,18 @@ public:
     // XEventListener methods
     virtual void SAL_CALL       disposing( const EventObject& Source ) throw ( RuntimeException );
 
+    // handle XFilePickerListener events
+    void                    handleFileSelectionChanged( const FilePickerEvent& aEvent );
+    void                    handleDirectoryChanged( const FilePickerEvent& aEvent );
+    OUString                handleHelpRequested( const FilePickerEvent& aEvent );
+    void                    handleControlStateChanged( const FilePickerEvent& aEvent );
+    void                    handleDialogSizeChanged();
+
     // Own methods
-                                FileDialogHelper_Impl( const short nDialogType, sal_uInt32 nFlags );
-                               ~FileDialogHelper_Impl();
+                            FileDialogHelper_Impl( FileDialogHelper* pParent,
+                                                   const short nDialogType,
+                                                   sal_uInt32 nFlags );
+                           ~FileDialogHelper_Impl();
 
     ErrCode                 execute( SvStringsDtor*& rpURLList,
                                      SfxItemSet *&   rpSet,
@@ -303,6 +314,58 @@ public:
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::fileSelectionChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
+#if SUPD > 639
+    mpParent->FileSelectionChanged( aEvent );
+#else
+    handleFileSelectionChanged( aEvent );
+#endif
+}
+
+// ------------------------------------------------------------------------
+void SAL_CALL FileDialogHelper_Impl::directoryChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
+{
+#if SUPD > 639
+    mpParent->DirectoryChanged( aEvent );
+#else
+    handleDirectoryChanged( aEvent );
+#endif
+}
+
+// ------------------------------------------------------------------------
+OUString SAL_CALL FileDialogHelper_Impl::helpRequested( const FilePickerEvent& aEvent ) throw ( RuntimeException )
+{
+#if SUPD > 639
+    return mpParent->HelpRequested( aEvent );
+#else
+    return handleHelpRequested( aEvent );
+#endif
+}
+
+// ------------------------------------------------------------------------
+void SAL_CALL FileDialogHelper_Impl::controlStateChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
+{
+#if SUPD > 639
+    mpParent->ControlStateChanged( aEvent );
+#else
+    handleControlStateChanged( aEvent );
+#endif
+}
+
+// ------------------------------------------------------------------------
+void SAL_CALL FileDialogHelper_Impl::dialogSizeChanged() throw ( RuntimeException )
+{
+#if SUPD > 639
+    mpParent->DialogSizeChanged();
+#else
+    handleDialogSizeChanged();
+#endif
+}
+
+// ------------------------------------------------------------------------
+// handle XFilePickerListener events
+// ------------------------------------------------------------------------
+void FileDialogHelper_Impl::handleFileSelectionChanged( const FilePickerEvent& aEvent )
+{
     if ( mbHasVersions )
         updateVersions();
 
@@ -311,19 +374,19 @@ void SAL_CALL FileDialogHelper_Impl::fileSelectionChanged( const FilePickerEvent
 }
 
 // ------------------------------------------------------------------------
-void SAL_CALL FileDialogHelper_Impl::directoryChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
+void FileDialogHelper_Impl::handleDirectoryChanged( const FilePickerEvent& aEvent )
 {
     if ( mbShowPreview )
         TimeOutHdl_Impl( NULL );
 }
 
 // ------------------------------------------------------------------------
-OUString SAL_CALL FileDialogHelper_Impl::helpRequested( const FilePickerEvent& aEvent ) throw ( RuntimeException )
+OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEvent )
 {
     //!!! todo: cache the help strings (here or TRA)
 
     ULONG nHelpId = 0;
-    // mapping frrom element id -> help id
+    // mapping from element id -> help id
     switch ( aEvent.ElementId )
     {
         case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION :
@@ -382,7 +445,7 @@ OUString SAL_CALL FileDialogHelper_Impl::helpRequested( const FilePickerEvent& a
 }
 
 // ------------------------------------------------------------------------
-void SAL_CALL FileDialogHelper_Impl::controlStateChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
+void FileDialogHelper_Impl::handleControlStateChanged( const FilePickerEvent& aEvent )
 {
     if ( ( aEvent.ElementId == CommonFilePickerElementIds::LISTBOX_FILTER ) && mbHasPassword )
         enablePasswordBox();
@@ -410,7 +473,7 @@ void SAL_CALL FileDialogHelper_Impl::controlStateChanged( const FilePickerEvent&
 }
 
 // ------------------------------------------------------------------------
-void SAL_CALL FileDialogHelper_Impl::dialogSizeChanged() throw ( RuntimeException )
+void FileDialogHelper_Impl::handleDialogSizeChanged()
 {
     if ( mbShowPreview )
         TimeOutHdl_Impl( NULL );
@@ -687,7 +750,8 @@ ErrCode FileDialogHelper_Impl::getGraphic( Graphic& rGraphic ) const
 // -----------      FileDialogHelper_Impl       ---------------------------
 // ------------------------------------------------------------------------
 
-FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
+FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
+                                              const short nDialogType,
                                               sal_uInt32 nFlags )
 {
     OUString aService( RTL_CONSTASCII_USTRINGPARAM( FILE_OPEN_SERVICE_NAME ) );
@@ -697,6 +761,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
     // create the file open dialog
     // the flags can be SFXWB_INSERT or SFXWB_MULTISELECTION
 
+    mpParent        = pParent;
     mnError         = ERRCODE_NONE;
     mbHasAutoExt    = sal_False;
     mbHasPassword   = sal_False;
@@ -797,7 +862,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
     if ( mbHasLink )        // generate graphic filter only on demand
         addGraphicFilter();
 
-
     // the "insert file" dialog needs another title
     if ( mbInsert )
     {
@@ -848,10 +912,9 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
     // show the dialog
     sal_Int16 nRet = mxFileDlg->execute();
 
-    saveConfig();
-
     if ( nRet != ExecutableDialogResults::CANCEL )
     {
+        saveConfig();
 
         // create an itemset
         rpSet = new SfxAllItemSet( SFX_APP()->GetPool() );
@@ -971,12 +1034,13 @@ ErrCode FileDialogHelper_Impl::execute()
 
     maPath = mxFileDlg->getDisplayDirectory();
 
-    saveConfig();
-
     if ( nRet == ExecutableDialogResults::CANCEL )
         return ERRCODE_ABORT;
     else
+    {
+        saveConfig();
         return ERRCODE_NONE;
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -1475,7 +1539,7 @@ void FileDialogHelper_Impl::setDefaultValues()
 FileDialogHelper::FileDialogHelper( sal_uInt32 nFlags,
                                     const SfxObjectFactory& rFact )
 {
-    mpImp = new FileDialogHelper_Impl( getDialogType( nFlags ), nFlags );
+    mpImp = new FileDialogHelper_Impl( this, getDialogType( nFlags ), nFlags );
     mxImp = mpImp;
 
     // create the list of filters
@@ -1487,7 +1551,7 @@ FileDialogHelper::FileDialogHelper( sal_uInt32 nFlags )
 {
     const short nDialogType = getDialogType( nFlags );
 
-    mpImp = new FileDialogHelper_Impl( nDialogType, nFlags );
+    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags );
     mxImp = mpImp;
 }
 
@@ -1496,7 +1560,7 @@ FileDialogHelper::FileDialogHelper( const short nDialogType,
                                     sal_uInt32 nFlags,
                                     const SfxObjectFactory& rFact )
 {
-    mpImp = new FileDialogHelper_Impl( nDialogType, nFlags );
+    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags );
     mxImp = mpImp;
 
     // create the list of filters
@@ -1507,7 +1571,7 @@ FileDialogHelper::FileDialogHelper( const short nDialogType,
 FileDialogHelper::FileDialogHelper( const short nDialogType,
                                     sal_uInt32 nFlags )
 {
-    mpImp = new FileDialogHelper_Impl( nDialogType, nFlags );
+    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags );
     mxImp = mpImp;
 }
 
@@ -1665,6 +1729,40 @@ const short FileDialogHelper::getDialogType( sal_uInt32 nFlags ) const
 
     return nDialogType;
 }
+
+#if SUPD > 639
+// ------------------------------------------------------------------------
+// XFilePickerListener Methods
+// ------------------------------------------------------------------------
+void SAL_CALL FileDialogHelper::FileSelectionChanged( const FilePickerEvent& aEvent )
+{
+    mpImp->handleFileSelectionChanged( aEvent );
+}
+
+// ------------------------------------------------------------------------
+void SAL_CALL FileDialogHelper::DirectoryChanged( const FilePickerEvent& aEvent )
+{
+    mpImp->handleDirectoryChanged( aEvent );
+}
+
+// ------------------------------------------------------------------------
+OUString SAL_CALL FileDialogHelper::HelpRequested( const FilePickerEvent& aEvent )
+{
+    return mpImp->handleHelpRequested( aEvent );
+}
+
+// ------------------------------------------------------------------------
+void SAL_CALL FileDialogHelper::ControlStateChanged( const FilePickerEvent& aEvent )
+{
+    mpImp->handleControlStateChanged( aEvent );
+}
+
+// ------------------------------------------------------------------------
+void SAL_CALL FileDialogHelper::DialogSizeChanged()
+{
+    mpImp->handleDialogSizeChanged();
+}
+#endif
 
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
