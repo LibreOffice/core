@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-12 12:22:35 $
+ *  last change: $Author: dr $ $Date: 2001-01-17 13:07:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,29 +527,38 @@ public:
 
 //------------------------------------------------------ class ExcBundlesheet -
 
-class ExcBundlesheet : public ExcRecord, ExcRoot
+class ExcBundlesheetBase : public ExcRecord
 {
-private:
-    UINT32                  nStrPos;
-    const String            aName;
-    void                    SaveCont( SvStream& );
 protected:
+    UINT32                  nStrPos;
     UINT32                  nOwnPos;    // Position NACH # und Len
+    UINT16                  nGrbit;
+
+                            ExcBundlesheetBase();
+
 public:
-                            ExcBundlesheet( RootData*, const String& rNewName );
+                            ExcBundlesheetBase( RootData& rRootData, UINT16 nTab );
 
-    inline void             SetStreamPos( const UINT32 nNewStrPos );
-    void                    UpdateStreamPos( SvStream& );
+    inline void             SetStreamPos( UINT32 nNewStrPos ) { nStrPos = nNewStrPos; }
+    void                    UpdateStreamPos( SvStream& rOut );
 
-    virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
+    virtual UINT16          GetNum() const;
 };
 
 
-inline void ExcBundlesheet::SetStreamPos( const UINT32 nNewStrPos )
+class ExcBundlesheet : public ExcBundlesheetBase
 {
-    nStrPos = nNewStrPos;
-}
+private:
+    ByteString              aName;
+
+    void                    SaveCont( SvStream& rStrm );
+
+public:
+                            ExcBundlesheet( RootData& rRootData, UINT16 nTab );
+    virtual UINT16          GetLen() const;
+};
+
+
 
 
 //--------------------------------------------------------- class ExcDummy_02 -

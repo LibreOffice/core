@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-12 12:22:35 $
+ *  last change: $Author: dr $ $Date: 2001-01-17 13:07:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -833,17 +833,17 @@ public:
 
 // --- class ExcBundlesheet8 -----------------------------------------
 
-class ExcBundlesheet8 : public ExcBundlesheet
+class ExcBundlesheet8 : public ExcBundlesheetBase
 {
 private:
-        const XclRawUnicodeString   aUnicodeName;
+    XclRawUnicodeString         aUnicodeName;
 
-    virtual void                SaveCont( SvStream& );
+    virtual void                SaveCont( SvStream& rStrm );
 
 public:
-                                ExcBundlesheet8( const String &rNewName );
+                                ExcBundlesheet8( RootData& rRootData, UINT16 nTab );
+                                ExcBundlesheet8( const String& rString );
 
-    virtual UINT16              GetNum() const;
     virtual UINT16              GetLen() const;
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-12 12:21:58 $
+ *  last change: $Author: dr $ $Date: 2001-01-17 13:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,12 +351,11 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         Add( pPalette2 );
 
         // Bundlesheet
-        ExcBundlesheet* pBS;
+        ExcBundlesheetBase* pBS;
         for( nC = 0 ; nC < nScTabCount ; nC++ )
             if( rTabBuffer.IsExportTable( nC ) )
             {
-                rDoc.GetName( nC, aTmpString );
-                pBS = new ExcBundlesheet( &rR, aTmpString );
+                pBS = new ExcBundlesheet( rR, nC );
                 Add( pBS );
                 rBSRecList.Append( pBS );
             }
@@ -407,12 +406,11 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         Add( new ExcDummy8_UsesElfs );
 
         // Bundlesheet
-        ExcBundlesheet* pBS;
+        ExcBundlesheetBase* pBS;
         for( nC = 0 ; nC < nScTabCount ; nC++ )
             if( rTabBuffer.IsExportTable( nC ) )
             {
-                rDoc.GetName( nC, aTmpString );
-                pBS = new ExcBundlesheet8( aTmpString );
+                pBS = new ExcBundlesheet8( rR, nC );
                 Add( pBS );
                 rBSRecList.Append( pBS );
             }
@@ -1208,29 +1206,29 @@ void ExcDocument::Write( SvStream& rOut )
         pExcRoot->pPalette2->ReduceColors();
 
         ExcTable*           pAktTab;
-        ExcBundlesheet*     pAktBS;
+        ExcBundlesheetBase* pAktBS;
 
         aHeader.Write( rOut );
 
         pAktTab = ( ExcTable* ) List::First();
-        pAktBS = ( ExcBundlesheet* ) aBundleSheetRecList.First();
+        pAktBS = ( ExcBundlesheetBase* ) aBundleSheetRecList.First();
         while( pAktTab )
         {
             DBG_ASSERT( pAktBS, "-ExcDocument::Write(): BundleSheetRecs und Tabs passen nicht zusammen!" );
             pAktBS->SetStreamPos( rOut.Tell() );
             pAktTab->Write( rOut );
             pAktTab = ( ExcTable* ) List::Next();
-            pAktBS = ( ExcBundlesheet* ) aBundleSheetRecList.Next();
+            pAktBS = ( ExcBundlesheetBase* ) aBundleSheetRecList.Next();
         }
 
         DBG_ASSERT( !pAktBS, "+ExcDocument::Write(): mehr BundleSheetRecs als Tabs!" );
 
         // BundleSheetRecs anpassen
-        pAktBS = ( ExcBundlesheet* ) aBundleSheetRecList.First();
+        pAktBS = ( ExcBundlesheetBase* ) aBundleSheetRecList.First();
         while( pAktBS )
         {
             pAktBS->UpdateStreamPos( rOut );
-            pAktBS = ( ExcBundlesheet* ) aBundleSheetRecList.Next();
+            pAktBS = ( ExcBundlesheetBase* ) aBundleSheetRecList.Next();
         }
 
     }

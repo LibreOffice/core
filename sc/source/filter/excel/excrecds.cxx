@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2001-01-15 11:20:28 $
+ *  last change: $Author: dr $ $Date: 2001-01-17 13:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1051,42 +1051,61 @@ const BYTE* ExcDummy_Style::GetData( void ) const
 
 
 
-ExcBundlesheet::ExcBundlesheet( RootData* p, const String& rNewName ) : aName( rNewName ), ExcRoot( p )
+ExcBundlesheetBase::ExcBundlesheetBase( RootData& rRootData, UINT16 nTab ) :
+    nGrbit( rRootData.pDoc->IsVisible( nTab ) ? 0x0000 : 0x0001 ),
+    nOwnPos( 0xFFFFFFFF ),
+    nStrPos( 0xFFFFFFFF )
 {
-    DBG_ASSERT( rNewName.Len() < 256, "*ExcBundlesheet::Ctor: Tabellenname laenger als 255 Zeichen!" );
-
-    nOwnPos = nStrPos = 0xFFFFFFFF;
 }
 
 
-void ExcBundlesheet::SaveCont( SvStream& rStr )
+ExcBundlesheetBase::ExcBundlesheetBase() :
+    nGrbit( 0x0000 ),
+    nOwnPos( 0xFFFFFFFF ),
+    nStrPos( 0xFFFFFFFF )
 {
-    nOwnPos = rStr.Tell();
-    ByteString  aStr( aName, *pExcRoot->pCharset );
-    BYTE        nNameLen = ( BYTE ) aStr.Len();                 // max. 255 Zeichen langer Name
-    rStr << ( UINT32 ) 0x00000000 << nIgnore << nNameLen;       // Position ist nur Dummy
-                    //  '-> Worksheet visible
-
-    rStr.Write( aStr.GetBuffer(), nNameLen );
 }
 
 
-void ExcBundlesheet::UpdateStreamPos( SvStream& rOut )
+void ExcBundlesheetBase::UpdateStreamPos( SvStream& rOut )
 {
     rOut.Seek( nOwnPos );
     rOut << nStrPos;
 }
 
 
-UINT16 ExcBundlesheet::GetNum( void ) const
+UINT16 ExcBundlesheetBase::GetNum( void ) const
 {
     return 0x0085;
 }
 
 
-UINT16 ExcBundlesheet::GetLen( void ) const
+
+
+ExcBundlesheet::ExcBundlesheet( RootData& rRootData, UINT16 nTab ) :
+    ExcBundlesheetBase( rRootData, nTab )
 {
-    return 7 + ( UINT16 ) aName.Len();
+    String sTabName;
+    rRootData.pDoc->GetName( nTab, sTabName );
+    DBG_ASSERT( sTabName.Len() < 256, "*ExcBundlesheet::Ctor: Tabellenname laenger als 255 Zeichen!" );
+    aName = ByteString( sTabName, *rRootData.pCharset );
+}
+
+
+void ExcBundlesheet::SaveCont( SvStream& rStrm )
+{
+    nOwnPos = rStrm.Tell();
+    BYTE nNameLen = (BYTE) aName.Len();         // max. 255 Zeichen langer Name
+    rStrm   << (UINT32) 0x00000000              // Position ist nur Dummy
+            << nGrbit
+            << nNameLen;
+    rStrm.Write( aName.GetBuffer(), nNameLen );
+}
+
+
+UINT16 ExcBundlesheet::GetLen() const
+{
+    return 7 + (UINT16) aName.Len();
 }
 
 

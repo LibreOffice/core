@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-16 14:07:44 $
+ *  last change: $Author: dr $ $Date: 2001-01-17 13:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -942,31 +942,30 @@ void ExcXf8::SaveCont( SvStream& rStrm )
 
 // --- class ExcBundlesheet8 -----------------------------------------
 
-ExcBundlesheet8::ExcBundlesheet8( const String &rNewName )
-        :
-        ExcBundlesheet( NULL, rNewName ),   // no pExcRoot needed
-        aUnicodeName( rNewName, 255 )
+ExcBundlesheet8::ExcBundlesheet8( RootData& rRootData, UINT16 nTab ) :
+    ExcBundlesheetBase( rRootData, nTab )
+{
+    String sTabName;
+    rRootData.pDoc->GetName( nTab, sTabName );
+    aUnicodeName.Assign( sTabName, 255 );
+}
+
+
+ExcBundlesheet8::ExcBundlesheet8( const String& rString ) :
+    ExcBundlesheetBase(),
+    aUnicodeName( rString, 255 )
 {
 }
 
 
-void ExcBundlesheet8::SaveCont( SvStream &rStrm )
+void ExcBundlesheet8::SaveCont( SvStream& rStrm )
 {
-    XclContinue aCont( rStrm, 0, GetLen() );
     nOwnPos = rStrm.Tell();
-    UINT8 nGrbit = aUnicodeName.HasHighByte() ? 0x01 : 0x00;
-    // Position ist nur Dummy
-    rStrm << ( UINT32 ) 0x00000000 << nIgnore
-                                    //  `-> Worksheet visible
-        << (UINT8) aUnicodeName.GetLen() << nGrbit;
-            // `-> max 255 chars, done in Unicode ctor
-    aUnicodeName.Write( aCont );
-}
-
-
-UINT16 ExcBundlesheet8::GetNum() const
-{
-    return 0x0085;
+    rStrm   << (UINT32) 0x00000000          // Position ist nur Dummy
+            << nGrbit
+            << (UINT8)  aUnicodeName.GetLen()
+            << (UINT8)  aUnicodeName.GetGrbit();
+    aUnicodeName.WriteToStream( rStrm );    // -> max 255 chars
 }
 
 
