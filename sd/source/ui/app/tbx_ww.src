@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbx_ww.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:38:23 $
+ *  last change: $Author: vg $ $Date: 2001-05-17 08:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1198,7 +1198,7 @@ FloatingWindow RID_INSERT
     Text [ french ] = "Insérer" ;
     Text [ swedish ] = "Infoga" ;
     Text [ danish ] = "Indsæt" ;
-    Text [ portuguese_brazilian ] = "Einfügen" ;
+    Text [ portuguese_brazilian ] = "Einf?en" ;
     Text [ portuguese ] = "Inserir" ;
     ToolBox RID_INSERT_TBX
     {
