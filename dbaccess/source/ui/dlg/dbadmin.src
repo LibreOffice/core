@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:28:54 $
+ *  last change: $Author: oj $ $Date: 2001-07-19 09:22:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -677,28 +677,10 @@ TabPage PAGE_GENERAL
         Pos = MAP_APPFONT ( 241 , 49 ) ;
         Size = MAP_APPFONT ( 12 , 14 ) ;
         HelpId = HID_DSADMIN_BROWSECONN;
-        Text = "..." ;
-        Text [ english ] = "..." ;
-        Text [ english_us ] = "..." ;
-        Text [ portuguese ] = "...";
-        Text [ russian ] = "...";
-        Text [ greek ] = "...";
-        Text [ dutch ] = "...";
-        Text [ french ] = "...";
-        Text [ spanish ] = "...";
-        Text [ italian ] = "...";
-        Text [ danish ] = "Gennemse...";
-        Text [ swedish ] = "...";
-        Text [ polish ] = "...";
-        Text [ portuguese_brazilian ] = "Durchsuchen...";
-        Text [ japanese ] = "...";
-        Text [ korean ] = "...";
-        Text [ chinese_simplified ] = "...";
-        Text [ chinese_traditional ] = "...";
-        Text [ turkish ] = "Tara...";
-        Text [ arabic ] = "...";
-        Text[ finnish ] = "...";
-        Text[ catalan ] = "...";
+        Text = "~..." ;
+        Text [ english ] = "~..." ;
+        Text [ english_us ] = "~..." ;
+        Text [ portuguese ] = "~...";
     };
     FixedText FT_LOGINTIMEOUT
     {
@@ -3278,6 +3260,9 @@ String STR_ADDRESSBOOK_LDAP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.63  2001/07/17 20:28:54  kz
+ *  Merge SRC638: 17.07.01 - 22:31:16
+ *
  *  Revision 1.62  2001/07/13 21:00:57  kz
  *  Merge SRC638: 13.07.01 - 23:00:20
  *
