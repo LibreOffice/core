@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-16 13:08:57 $
+ *  last change: $Author: mib $ $Date: 2002-05-24 12:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -838,13 +838,20 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, BOOL bUsed )
 // /Feature: PrintExt
 
 
+    // The text body style has to be exported always (if it is changed compared
+    // to the template), because it is used as reference for any style
+    // that maps to <P>, and that's especially the standard style
+      pDoc->GetTxtCollFromPool( RES_POOLCOLL_TEXT );
+
     // das Default-TextStyle wir nicht mit ausgegeben !!
     // das 0-Style ist das Default, wird nie ausgegeben !!
     USHORT nArrLen = pDoc->GetTxtFmtColls()->Count();
     for( USHORT i=1; i<nArrLen; i++ )
     {
         const SwTxtFmtColl* pColl = (*pDoc->GetTxtFmtColls())[i];
-        if( !bUsed || pDoc->IsUsed( *pColl ) )
+        USHORT nPoolId = pColl->GetPoolFmtId();
+        if( !bUsed || nPoolId == RES_POOLCOLL_TEXT ||
+            pDoc->IsUsed( *pColl ) )
             OutCSS1_SwFmt( *this, *pColl, pDoc, pTemplate );
     }
 
@@ -1952,7 +1959,12 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         if( bCharFmt )
             rHTMLWrt.aScriptTextStyles.Insert( new String( rFmt.GetName() ) );
         else
+        {
+            if( nPoolFmtId==RES_POOLCOLL_TEXT )
+                rHTMLWrt.aScriptParaStyles.Insert(
+                        new String( pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD )->GetName() ) );
             rHTMLWrt.aScriptParaStyles.Insert( new String( rFmt.GetName() ) );
+        }
         bHasScriptDependencies = sal_True;
     }
 
@@ -3917,6 +3929,9 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.15  2002/05/16 13:08:57  mib
+      #97334#: Process non positive margin correctly in HTML export
+
       Revision 1.14  2002/03/13 14:20:19  mib
       #97558#: Don't store LANGUAGE_DEFAULT
 
