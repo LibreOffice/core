@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iderdll.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 14:13:15 $
+ *  last change: $Author: tbe $ $Date: 2000-11-14 16:06:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,9 @@
 #pragma hdrstop
 
 #include <svtools/solar.hrc>
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
+#endif
 #include <iderdll.hxx>
 #include <iderdll2.hxx>
 #include <iderid.hxx>
