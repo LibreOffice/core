@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-05 10:33:10 $
+ *  last change: $Author: sab $ $Date: 2001-02-05 13:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,7 @@ XML_CONSTASCII_ACTION( sXML_change_end, "change-end" );
 XML_CONSTASCII_ACTION( sXML_change_id, "change-id" );
 XML_CONSTASCII_ACTION( sXML_change_info, "change-info" );
 XML_CONSTASCII_ACTION( sXML_change_start, "change-start" );
+XML_CONSTASCII_ACTION( sXML_change_track_table_cell, "change-track-table-cell" );
 XML_CONSTASCII_ACTION( sXML_changed_region, "changed-region" );
 XML_CONSTASCII_ACTION( sXML_chapter, "chapter");
 XML_CONSTASCII_ACTION( sXML_char, "char" );
@@ -961,6 +962,7 @@ XML_CONSTASCII_ACTION( sXML_mastersthesis, "mastersthesis" );
 XML_CONSTASCII_ACTION( sXML_match, "match");
 XML_CONSTASCII_ACTION( sXML_math, "math");
 XML_CONSTASCII_ACTION( sXML_matrix, "matrix");
+XML_CONSTASCII_ACTION( sXML_matrix_covered, "matrix-covered");
 XML_CONSTASCII_ACTION( sXML_matrixrow, "matrixrow");
 XML_CONSTASCII_ACTION( sXML_max, "max" );
 XML_CONSTASCII_ACTION( sXML_max_edge, "max-edge");
