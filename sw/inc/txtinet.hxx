@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtinet.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-15 15:48:26 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@ class SwTxtINetFmt : public SwTxtAttrEnd, public SwClient
     BOOL bVisited       : 1; // Besuchter Link?
     BOOL bValidVis      : 1; // Ist das bVisited-Flag gueltig?
     BOOL bColor         : 1;
+
+    // forbidden and not implemented.
+    SwTxtINetFmt();
 
 public:
     SwTxtINetFmt( const SwFmtINetFmt& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
