@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:41:20 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,14 +605,14 @@ namespace sfx2
     }
 
     //--------------------------------------------------------------------
-    typedef ::std::vector< ::std::pair< FilterGroupEntryReferrer::data_type, FilterGroup::iterator > >
+    typedef ::std::vector< ::std::pair< FilterGroupEntryReferrer::mapped_type, FilterGroup::iterator > >
             MapGroupEntry2GroupEntry;
             // this is not really a map - it's just called this way because it is used as a map
 
     struct FindGroupEntry : public ::std::unary_function< MapGroupEntry2GroupEntry::value_type, sal_Bool >
     {
-        FilterGroupEntryReferrer::data_type aLookingFor;
-        FindGroupEntry( FilterGroupEntryReferrer::data_type _rLookingFor ) : aLookingFor( _rLookingFor ) { }
+        FilterGroupEntryReferrer::mapped_type aLookingFor;
+        FindGroupEntry( FilterGroupEntryReferrer::mapped_type _rLookingFor ) : aLookingFor( _rLookingFor ) { }
 
         sal_Bool operator() ( const MapGroupEntry2GroupEntry::value_type& _rMapEntry )
         {
@@ -664,7 +664,7 @@ namespace sfx2
         // (this assumes that both numbers are the same, which, speaking strictly, must not hold - but it does, as we know ...)
         sal_Int32 nGlobalClasses = aGlobalClasses.size();
         while ( nGlobalClasses-- )
-            _rAllFilters.push_back( );
+            _rAllFilters.push_back( FilterGroup() );
 
         // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
         // for the local classes:
@@ -715,14 +715,13 @@ namespace sfx2
                     "sfx2::lcl_GroupAndClassify: invalid all-filters array here!" );
                     // the loop below will work on invalid objects else ...
                 ++aGroupPos;
-                const ::rtl::OUString* pGlobalClassNames = aGlobalClassNames.begin();
+                StringArray::iterator aGlobalIter = aGlobalClassNames.begin();
                 while   (   ( aGroupPos != _rAllFilters.end() )
-                        // #100545# ++pGlobalClassNames may exceed aGlobalClassNames.end()
-                        &&  ( pGlobalClassNames != aGlobalClassNames.end() )
-                        &&  ( *pGlobalClassNames != sDocServName )
+                        &&  ( aGlobalIter != aGlobalClassNames.end() )
+                        &&  ( *aGlobalIter != sDocServName )
                         )
                 {
-                    ++pGlobalClassNames;
+                    ++aGlobalIter;
                     ++aGroupPos;
                 }
                 if ( aGroupPos != _rAllFilters.end() )
@@ -731,7 +730,7 @@ namespace sfx2
                     aCurrentGroup = aGroupPos;
                 else
                     // insert a new entry in our overall-list
-                    aCurrentGroup = _rAllFilters.insert( _rAllFilters.end() );
+                    aCurrentGroup = _rAllFilters.insert( _rAllFilters.end(), FilterGroup() );
 
                 // remember the container to properly detect the next group
                 aCurrentServiceName = aServiceName;
