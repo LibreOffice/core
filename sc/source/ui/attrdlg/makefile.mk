@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+#   last change: $Author: hr $ $Date: 2004-05-10 15:55:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sc
 TARGET=attrdlg
-
+LIBTARGET=no
 PROJECTPCH4DLL=TRUE
 PROJECTPCH=ui_pch
 PDBTARGET=ui_pch
@@ -87,9 +87,31 @@ CXXFILES =  attrdlg.cxx		\
 
 SLOFILES =  $(SLO)$/attrdlg.obj	\
             $(SLO)$/tabpages.obj	\
-            $(SLO)$/condfrmt.obj
+            $(SLO)$/condfrmt.obj	\
+            $(SLO)$/scabstdlg.obj	\
+        $(SLO)$/scuiexp.obj		\
+        $(SLO)$/scdlgfact.obj
 
+LIB1TARGET = $(SLB)$/$(TARGET).lib
+
+LIB1OBJFILES =  \
+        $(SLO)$/condfrmt.obj	\
+               $(SLO)$/scabstdlg.obj
+
+                
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
+$(INCCOM)$/scuilib.hxx: makefile.mk
+.IF "$(GUI)"=="UNX"
+    $(RM) $@
+    +echo \#define DLL_NAME \"libscui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+.ELSE
+.IF "$(USE_SHELL)"!="4nt"
+    +echo \#define DLL_NAME \"scui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+.ELSE          # "$(USE_SHELL)"!="4nt"
+    +echo #define DLL_NAME "scui$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
+.ENDIF          # "$(USE_SHELL)"!="4nt"
+.ENDIF
 
+$(SLO)$/scabstdlg.obj : $(INCCOM)$/scuilib.hxx
