@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:15:26 $
+ *  last change: $Author: kz $ $Date: 2001-06-16 21:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -622,5 +622,6 @@ TabPage TP_FRM_WRAP
         IdCount = { 11 ; };
     };
 };
+
 
 
