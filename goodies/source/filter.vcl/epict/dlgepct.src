@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepct.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:47:06 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ czech ] = "Velikost";
         Text[ hebrew ] = "‮גודל‬";
         Text[ hindi ] = "परिमाण";
+        Text[ slovak ] = "Veľkosť";
     };
     FixedText FT_SIZEX
     {
@@ -180,6 +181,7 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ czech ] = "Šířka";
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "चौड़ाई";
+        Text[ slovak ] = "Šírka";
     };
     FixedText FT_SIZEY
     {
@@ -214,6 +216,7 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ czech ] = "Výška";
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "ऊँचाई";
+        Text[ slovak ] = "Výška";
     };
     OKButton BTN_OK
     {
@@ -268,6 +271,7 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ czech ] = "Původní";
         Text[ hebrew ] = "‮מקורי‬";
         Text[ hindi ] = "~यथार्थ";
+        Text[ slovak ] = "Pô~vodný";
     };
     RadioButton RB_SIZE
     {
@@ -303,6 +307,7 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ czech ] = "Velikost";
         Text[ hebrew ] = "‮גודל‬";
         Text[ hindi ] = "~परिमाण";
+        Text[ slovak ] = "Veľko~sť";
     };
     FixedLine GRP_MODE
     {
@@ -337,6 +342,7 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ czech ] = "Režim";
         Text[ hebrew ] = "‮מצב עבודה‬";
         Text[ hindi ] = "प्रकार";
+        Text[ slovak ] = "Režim";
     };
     Text[ chinese_simplified ] = "PICT 选项";
     Text[ russian ] = "��������� PICT";
@@ -356,7 +362,10 @@ ModalDialog DLG_EXPORT_EPCT
     Text[ czech ] = "Volby pro formát PICT";
     Text[ hebrew ] = "‮אפשריות PICT‬";
     Text[ hindi ] = "PICT विकल्प";
+    Text[ slovak ] = "Nastavenia pre formát PICT";
 };
+
+
 
 
 
