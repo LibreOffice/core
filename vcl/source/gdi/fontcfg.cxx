@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:49:50 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,6 +598,7 @@ static const char* const aImplKillTrailingList[] =
     "amt",
     "ms",
     "mt",
+    "clm",
     // Scripts, for compatibility with older versions
     "we",
     "cyr",
