@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:57:11 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ TabPage TP_FRM_WRAP
         Text[ english_us ] = "Settings";
         Text[ portuguese ] = "Predefinições";
         Text[ russian ] = "Íàñòğîéêè";
-        Text[ greek ] = "Presets";
+        Text[ greek ] = "Ñõèìßóåéò";
         Text[ dutch ] = "Standaard";
         Text[ french ] = "Définitions";
         Text[ spanish ] = "Predeterminaciones";
@@ -123,7 +123,7 @@ TabPage TP_FRM_WRAP
         Text[ russian ] = "Íåò";
         Text[ polish ] = "~Brak";
         Text[ japanese ] = "ä¸Šä¸‹(~N)";
-        Text[ language_user1 ] = "Íåò";
+        Text[ language_user1 ] = "; Íåò";
         Text[ chinese_traditional ] = "ç„¡(~N)";
         Text[ arabic ] = "ÈÏæä";
         Text[ greek ] = "Êáíİíá";
@@ -295,7 +295,7 @@ TabPage TP_FRM_WRAP
         Text[ japanese ] = "å·¦å³å‹•çš„(~O)";
         Text[ chinese_traditional ] = "æœ€é©(~O)";
         Text[ arabic ] = "ÏíäÇãíßí";
-        Text[ greek ] = "ÄõíáìéêÜ";
+        Text[ greek ] = "Âİëôéóôï";
         Text[ korean ] = "ìµœì (~O)";
         Text[ turkish ] = "D~inamik";
         Text[ catalan ] = "Dinà~mic";
@@ -597,7 +597,7 @@ TabPage TP_FRM_WRAP
         Text[ japanese ] = "ä¸Š(~T)";
         Text[ chinese_traditional ] = "ä¸Š(~T)";
         Text[ arabic ] = "ÃÚáì";
-        Text[ greek ] = "ĞÜíù";
+        Text[ greek ] = "~ĞÜíù";
         Text[ korean ] = "ìœ„(~T)";
         Text[ turkish ] = "~Yukarı";
         Text[ catalan ] = "Part s~uperior";
@@ -734,6 +734,7 @@ TabPage TP_FRM_WRAP
     };
 
 };
+
 
 
 
