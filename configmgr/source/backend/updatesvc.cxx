@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatesvc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:49 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,18 @@
 #include "emptylayer.hxx"
 #endif
 
-#include <drafts/com/sun/star/configuration/backend/XUpdatableLayer.hpp>
-#include <drafts/com/sun/star/configuration/backend/XLayerHandler.hpp>
-#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XUPDATABLELAYER_HPP_
+#include <com/sun/star/configuration/backend/XUpdatableLayer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERHANDLER_HPP_
+#include <com/sun/star/configuration/backend/XLayerHandler.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#endif
 
 // -----------------------------------------------------------------------------
 
@@ -84,7 +92,7 @@ namespace configmgr
         namespace uno   = ::com::sun::star::uno;
         namespace lang  = ::com::sun::star::lang;
         namespace beans = ::com::sun::star::beans;
-        namespace backenduno = drafts::com::sun::star::configuration::backend;
+        namespace backenduno = ::com::sun::star::configuration::backend;
 // -----------------------------------------------------------------------------
 
 AsciiServiceName const aUpdateMergerServices[] =
