@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:32 $
+ *  last change: $Author: cmc $ $Date: 2001-07-18 12:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1479,15 +1479,13 @@ sal_Bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
     if( rStyleInfo.pFmt && rStyleInfo.bColl )
     {
         bRes = rDoc.SetTxtFmtColl(rRg, (SwTxtFmtColl*)rStyleInfo.pFmt);
+        SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode();
+        ASSERT( pTxtNode, "No Text-Node at PaM-Position" );
+        if( !IsInvalidOrToBeMergedTabCell() )
+            pTxtNode->SwCntntNode::ResetAttr( RES_PARATR_NUMRULE );
 
         if( !rStyleInfo.pOutlineNumrule )
         {
-            SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode();
-            ASSERT( pTxtNode, "Kein Text-Node an PaM-Position" );
-
-            if( !IsInvalidOrToBeMergedTabCell() )
-                pTxtNode->SwCntntNode::ResetAttr( RES_PARATR_NUMRULE );
-
             if(    (USHRT_MAX        > rStyleInfo.nLFOIndex )
                 && (nWW8MaxListLevel > rStyleInfo.nListLevel) )
                 RegisterNumFmtOnTxtNode( rStyleInfo.nLFOIndex,
@@ -2138,12 +2136,15 @@ BOOL SwMSConvertControls::InsertControl(
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par3.cxx,v 1.7 2001-06-06 12:46:32 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par3.cxx,v 1.8 2001-07-18 12:34:22 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/06/06 12:46:32  cmc
+      #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
+
       Revision 1.6  2001/02/23 12:45:26  os
       Complete use of DefaultNumbering component
 
