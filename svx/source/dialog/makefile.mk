@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-30 10:47:48 $
+#   last change: $Author: hjs $ $Date: 2004-06-30 13:35:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -386,7 +386,6 @@ LIB1OBJFILES= \
     $(SLO)$/frmdirlbox.obj \
     $(SLO)$/commonlingui.obj \
     $(SLO)$/dialmgr.obj \
-    $(SLO)$/svxgrahicitem.obj \
     $(SLO)$/swframeexample.obj \
     $(SLO)$/swframeposstrings.obj \
     $(SLO)$/svxbmpnumvalueset.obj \
