@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoregisterhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-21 13:19:17 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ AutomaticRegisterHelper::AutomaticRegisterHelper(rtl::OUString const& _sDLLName,
     }
 }
 
-void AutomaticRegisterHelper::CallAll(hTestResult _hResult)
+void AutomaticRegisterHelper::CallAll(hTestResult _hResult) const
 {
     for (FunctionList::const_iterator it = m_aFunctionList.begin();
          it != m_aFunctionList.end();
