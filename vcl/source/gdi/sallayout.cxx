@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:20:59 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,15 +291,16 @@ inline bool IsControlChar( sal_Unicode cChar )
 
 bool ImplLayoutRuns::AddPos( int nCharPos, bool bRTL )
 {
-    // when charpos overlaps with current run
+    // check if charpos could extend current run
     int nIndex = maRuns.size();
     if( nIndex >= 2 )
     {
         int nRunPos0 = maRuns[ nIndex-2 ];
         int nRunPos1 = maRuns[ nIndex-1 ];
-        // merge into current run when it would just extend
-        if( nCharPos == nRunPos1 )
+        if( ((nCharPos + bRTL) == nRunPos1)
+    &&  ((nRunPos0 > nRunPos1) == bRTL) )
         {
+            // extend current run by new charpos
             maRuns[ nIndex-1 ] = nCharPos + !bRTL;
             return false;
         }
@@ -310,7 +311,7 @@ bool ImplLayoutRuns::AddPos( int nCharPos, bool bRTL )
             return false;
     }
 
-    // append new run
+    // else append a new run consisting of the new charpos
     maRuns.push_back( nCharPos + (bRTL ? 1 : 0) );
     maRuns.push_back( nCharPos + (bRTL ? 0 : 1) );
     return true;
@@ -815,9 +816,10 @@ bool GenericSalLayout::GetCharWidths( sal_Int32* pCharWidths ) const
                 nXPosMax = nXPos;
         }
 
-        // rightmost cluster edge is leftmost edge of next cluster
+        // when the current cluster overlaps with the next one assume
+        // rightmost cluster edge is the leftmost edge of next cluster
         if( (i > 0) && (nXPosMax > pG[1].maLinearPos.X()) )
-            nXPosMax = pG->maLinearPos.X();
+            nXPosMax = pG[1].maLinearPos.X();
 
         // character width is sum of glyph cluster widths
         pCharWidths[n] += nXPosMax - nXPosMin;
