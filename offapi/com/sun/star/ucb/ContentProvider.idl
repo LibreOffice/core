@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProvider.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-31 08:59:27 $
+ *  last change: $Author: kso $ $Date: 2001-02-07 12:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,8 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** A <type>ContentProvider</type> provides access to a set of contents.
+/** A <type>ContentProvider</type> provides access to a set of
+ *  <type>Content</type>s.
 */
 service ContentProvider
 {
@@ -105,11 +106,11 @@ service ContentProvider
     /** allows a <type>ContentProvider</type> to adjust itself to special
         needs.
 
-        <p>Whenever a <type>ContentProvider</type> that supports this
-        interface is registered at a <type>XContentProviderManager</type>, the
-        method <member>XParameterizedContentProvider::registerInstance</member>
+        <p>Whenever a ContentProvider that supports this interface is
+        registered at a <type>XContentProviderManager</type>, the method
+        <member>XParameterizedContentProvider::registerInstance</member>
         should first be called, using the returned <type>XContentProvider</type>
-        to register at the <type>XContentProviderManager</type>.
+        to register at the XContentProviderManager.
      */
     [optional] interface com::sun::star::ucb::XParameterizedContentProvider;
 
@@ -124,7 +125,7 @@ service ContentProvider
 
         <p><b>It is highly recommended to support this interface.</b>
 
-        @see <type>ContentProviderProxy</type>
+        @see ContentProviderProxy
      */
     [optional] interface com::sun::star::ucb::XContentProviderSupplier;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Content.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-23 11:18:26 $
+ *  last change: $Author: kso $ $Date: 2001-02-07 12:31:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,13 +117,15 @@ service Content
     /** provides access to the identitity and the type of the content and
         allows the registration of listeners for <type>ContentEvent</type>s.
 
-        This interface is required.
+        <p>This interface is required.
      */
     interface com::sun::star::ucb::XContent;
 
     //-------------------------------------------------------------------------
     /** must be implemented to make it possible to resolve cyclic object
-        references. Those references i.e. may occure if there are listeners
+        references.
+
+        <p>Those references i.e. may occure if there are listeners
         registered at the content ( the content holds the listeners ) and
         the implementation of the listener interface holds a reference on
         the content. If the content shall be released,
@@ -131,10 +133,10 @@ service Content
         The implementation of this method must call
         <member>XEventListener::disposing</member> on the registered
         listeners and release the appropriate object references. At the other
-        hand, the implementation of <member>XEventListener::disposing</member>
-        must release its appropriate references.
+        hand, the implementation of XEventListener::disposing must release
+        its appropriate references.
 
-        This interface is required.
+        <p>This interface is required.
      */
     interface com::sun::star::lang::XComponent;
 
@@ -585,49 +587,55 @@ service Content
     /** notifies changes of property values to listeners registered for
         those properties.
 
-        This interface is required.
+        <p>This interface is required.
      */
     interface com::sun::star::beans::XPropertiesChangeNotifier;
 
     //-------------------------------------------------------------------------
     /** can be used to add new properties to the content and to remove
-        properties from the content dynamically. Note that the dynamic
-        properties must be kept persistent. The service UCB persistence
-        service <type>Store</type> may be used to implement this.
+        properties from the content dynamically.
+     *
+        <p>Note that the dynamic properties must be kept persistent. The
+        service UCB persistence service <type>Store</type> may be used to
+        implement this.
 
-        It is recommended to implement this interface.
+        <p>It is recommended to implement this interface.
      */
     interface com::sun::star::beans::XPropertyContainer;
 
     //-------------------------------------------------------------------------
     /** can be used to notify properties removed from or added to the
         content's property set.
-        This interface must be implemented, if the implementation can
+
+        <p>This interface must be implemented, if the implementation can
         dynamically change it's property set ( e.g. because it implements
         the interface <type>XPropertyContainer</type>. )
 
-        It is recommended to implement this interface.
+        <p>It is recommended to implement this interface.
      */
     interface com::sun::star::beans::XPropertySetInfoChangeNotifier;
 
     //-------------------------------------------------------------------------
     /** can be used to notify commands removed from or added to the
         content's command set.
-        This interface must be implemented, if the implementation can
+
+        <p>This interface must be implemented, if the implementation can
         dynamically change it's command set ( e.g. because the set of
         available commands depends on the value of a property of the
         content ).
 
-        This interface is optional.
+        <p>This interface is optional.
      */
     [optional] interface com::sun::star::ucb::XCommandInfoChangeNotifier;
 
     //-------------------------------------------------------------------------
     /** creates new contents (i.e. creates a new folder in another folder
-        somewhere in the local file system). A content is "new", if it
-        does not physically exist before creating it using this interface.
+        somewhere in the local file system).
+     *
+        <p>A content is "new", if it does not physically exist before creating
+        it using this interface.
 
-        This interface is optional. It should be implemented by contents
+        <p>This interface is optional. It should be implemented by contents
         which shall be able to create new objects.
      */
     [optional] interface com::sun::star::ucb::XContentCreator;
@@ -635,12 +643,12 @@ service Content
     //-------------------------------------------------------------------------
     /** provides access to the parent content of this content.
 
-        The object returned by the implementation of the method
+        <p>The object returned by the implementation of the method
         <member>com::sun::star::container::XChild::getParent()</member> must
         implement the service <type>Content</type>. If the content is a root
         object, an empty interface may be returned.
 
-        This interface must be implemented by a content which is a (logical)
+        <p>This interface must be implemented by a content which is a (logical)
         child of a content.
      */
     interface com::sun::star::container::XChild;
