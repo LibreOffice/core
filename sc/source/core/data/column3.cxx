@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:42:58 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,7 +821,7 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, USHORT nFlags,
     {
         case CELLTYPE_NOTE:
             if (nFlags & IDF_NOTE)
-                pNew = new ScNoteCell(*(ScNoteCell*)pSource);
+                pNew = new ScNoteCell(*(ScNoteCell*)pSource, pDestDoc);
             break;
         case CELLTYPE_EDIT:
             if (nFlags & IDF_STRING)
@@ -829,7 +829,7 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, USHORT nFlags,
             break;
         case CELLTYPE_STRING:
             if (nFlags & IDF_STRING)
-                pNew = new ScStringCell(*(ScStringCell*)pSource);
+                pNew = new ScStringCell(*(ScStringCell*)pSource, pDestDoc);
             break;
         case CELLTYPE_VALUE:
             {
@@ -848,7 +848,7 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, USHORT nFlags,
                         bDoIns = (nFlags & IDF_VALUE)!=0;
                 }
                 if (bDoIns)
-                    pNew = new ScValueCell(*(ScValueCell*)pSource);
+                    pNew = new ScValueCell(*(ScValueCell*)pSource, pDestDoc);
             }
             break;
         case CELLTYPE_FORMULA:
@@ -1646,7 +1646,7 @@ void ScColumn::SetNote( SCROW nRow, const ScPostIt& rNote)
     else
     {
         if (!bEmpty)
-            Insert(nRow, new ScNoteCell(rNote));
+            Insert(nRow, new ScNoteCell(rNote, pDocument));
     }
 }
 
