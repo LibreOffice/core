@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: obo $ $Date: 2004-02-20 10:25:30 $
+*  last change: $Author: hr $ $Date: 2004-03-09 10:13:12 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1689,6 +1689,13 @@ STD_UNO_LIB_FILE( gid_File_Lib_Xo , xo)
 SPECIAL_UNO_LIB_FILE(gid_File_Lib_Xstor,xstor)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Xsltdlg, xsltdlg )
+STD_UNO_LIB_FILE( gid_File_Lib_Xsltfilter, xsltfilter )
+STD_UNO_LIB_FILE( gid_File_Lib_Xmlfa, xmlfa )
+STD_UNO_LIB_FILE( gid_File_Lib_Xmlfd, xmlfd )
+
+STD_JAR_FILE( gid_File_Jar_Xsltfilter, XSLTFilter )
+STD_JAR_FILE( gid_File_Jar_Xsltvalidate, XSLTValidate )
+ 
 
 #ifdef UNX
 
