@@ -1,4 +1,4 @@
-sa	sal	:	xml2cmp NULL 
+sa	sal	:	xml2cmp stlport NULL 
 sa	sal										usr1	-	all	sa_mkout NULL
 sa	sal\typesconfig						nmake	-	u	sa_tc NULL
 sa	sal\cpprt								nmake	-	u	sa_cpprt sa_util NULL
