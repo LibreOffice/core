@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-14 11:38:26 $
+ *  last change: $Author: fme $ $Date: 2001-11-20 16:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,17 +542,30 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
                 SwTwips nReal = Grow( nChgHght PHEIGHT, sal_True );
                 if( nReal < nChgHght )
                 {
+#ifdef VERTICAL_LAYOUT
+                    SwTwips nBot = (*fnRect->fnYInc)( (Frm().*fnRect->fnGetBottom)(),
+                                                      nChgHght - nReal );
+#else
                     SwTwips nBot = Frm().Top() + Frm().Height() + nChgHght
                                    - nReal;
+#endif
                     SwFrm* pCont = FindFtnFrm()->GetUpper();
+
+#ifdef VERTICAL_LAYOUT
+                    if( (pCont->Frm().*fnRect->fnCheckLimit)( nBot ) < 0 )
+#else
                     if( nBot > pCont->Frm().Top() + pCont->Frm().Height() )
+#endif
                     {
+#ifdef VERTICAL_LAYOUT
+                        (Frm().*fnRect->fnAddBottom)( nChgHght );
+#else
                         Frm().SSize().Height() += nChgHght;
+#endif
                         Prt().SSize().Height() += nChgHght;
 #ifdef VERTICAL_LAYOUT
                         UNDO_SWAP( this )
 #endif
-
                         return;
                     }
                 }
@@ -613,8 +626,14 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
         //durch eine vertikale Ausrichtung auch oben noch Raum sein kann.
         if ( IsInTab() )
         {
+#ifdef VERTICAL_LAYOUT
+            long nAdd = (*fnRect->fnYDiff)( (GetUpper()->Lower()->Frm().*fnRect->fnGetTop)(),
+                                            (GetUpper()->*fnRect->fnGetPrtTop)() );
+            ASSERT( nAdd >= 0, "Ey" );
+#else
             long nAdd = GetUpper()->Lower()->Frm().Top() -
                             (GetUpper()->Frm().Top() + GetUpper()->Prt().Top());
+#endif
             nRstHeight += nAdd;
         }
 
@@ -693,7 +712,11 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
 
 #endif
     }
+#ifdef VERTICAL_LAYOUT
+    else
+#else
     else if ( nChgHght )
+#endif
         Shrink( -nChgHght PHEIGHT );
 
 #ifdef VERTICAL_LAYOUT
@@ -1048,13 +1071,8 @@ sal_Bool SwTxtFrm::CalcPreps()
 #endif
 
                 // 6792: Rrand < LRand und Repaint
-#ifdef VERTICAL_LAYOUT
-                if( 0 >= (rRepaint.*fnRect->fnGetWidth)() )
-                    (rRepaint.*fnRect->fnSetWidth)( 1 );
-#else
                 if( 0 >= rRepaint.Width() )
                     rRepaint.Width(1);
-#endif
             }
             bRet = sal_True;
         }
@@ -1185,7 +1203,7 @@ sal_Bool SwTxtFrm::CalcPreps()
             MoveFlyInCnt( pFrm, nNew, STRING_LEN );\
     }
 
-void            SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
+void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
                              WidowsAndOrphans &rFrmBreak,
                              const xub_StrLen nStrLen, const sal_Bool bDummy )
 {
@@ -1218,7 +1236,14 @@ void            SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
         SplitFrm( nEnd );
 
     const SwFrm *pBodyFrm = (const SwFrm*)(FindBodyFrm());
+
+#ifdef VERTICAL_LAYOUT
+    const long nBodyHeight = pBodyFrm ? ( IsVertical() ?
+                                          pBodyFrm->Frm().Width() :
+                                          pBodyFrm->Frm().Height() ) : 0;
+#else
     const long nBodyHeight = pBodyFrm ? pBodyFrm->Frm().Height() : 0;
+#endif
 
     // Wenn die aktuellen Werte berechnet wurden, anzeigen, dass
     // sie jetzt gueltig sind.
@@ -1270,7 +1295,14 @@ void            SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
         }
         // Wenn sich die Resthoehe geaendert hat, z.B. durch RemoveFtn()
         // dann muessen wir auffuellen, um Oszillationen zu vermeiden!
+#ifdef VERTICAL_LAYOUT
+        if( bDummy && pBodyFrm &&
+           nBodyHeight < ( IsVertical() ?
+                           pBodyFrm->Frm().Width() :
+                           pBodyFrm->Frm().Height() ) )
+#else
         if( bDummy && pBodyFrm && nBodyHeight < pBodyFrm->Frm().Height() )
+#endif
             rLine.MakeDummyLine();
     }
 
@@ -1973,12 +2005,17 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
 #endif
 
     MSHORT nRepeat = 0;
+
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( this )
+#endif
+
     do
     {
         // Vom Berichtsautopiloten oder ueber die BASIC-Schnittstelle kommen
         // gelegentlich TxtFrms mit einer Breite <=0.
 #ifdef VERTICAL_LAYOUT
-        if( Prt().Width() <= 0 && ! IsVertical() )
+        if( (Prt().*fnRect->fnGetWidth)() <= 0 )
 #else
         if( Prt().Width() <= 0 )
 #endif
@@ -1987,6 +2024,27 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
             // des Uppers, ansonsten nehmen wir einfach eine Standardgroesse
             // von 12 Pt. ein (240 Twip).
             SwTxtLineAccess aAccess( this );
+#ifdef VERTICAL_LAYOUT
+            long nFrmHeight = (Frm().*fnRect->fnGetHeight)();
+            if( aAccess.GetPara()->IsPrepMustFit() )
+            {
+                const SwTwips nLimit = (GetUpper()->*fnRect->fnGetLimit)();
+                const SwTwips nDiff = (Frm().*fnRect->fnCheckLimit)( nLimit );
+                if( nDiff > 0 )
+                    Shrink( nDiff );
+            }
+            else if( 240 < nFrmHeight )
+                Shrink( nFrmHeight - 240 );
+            else if( 240 > nFrmHeight )
+                Grow( 240 - nFrmHeight );
+            nFrmHeight = (Frm().*fnRect->fnGetHeight)();
+
+            long nTop = (this->*fnRect->fnGetTopMargin)();
+            if( nTop > nFrmHeight )
+                (this->*fnRect->fnSetYMargins)( nFrmHeight, 0 );
+            else if( (Prt().*fnRect->fnGetHeight)() < 0 )
+                (Prt().*fnRect->fnSetHeight)( 0 );
+#else
             if( aAccess.GetPara()->IsPrepMustFit() )
             {
                 const SwTwips nMust = GetUpper()->Frm().Top()
@@ -2003,6 +2061,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                 Prt().Top( Frm().Height() );
             if( Prt().Height() < 0 )
                 Prt().Height( 0 );
+#endif
             return;
         }
 
@@ -2035,16 +2094,21 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
 
             // 8708: Vorsicht, das Format() kann auch durch GetFormatted()
             // angestossen werden.
-#ifdef VERTICAL_LAYOUT
-            if( IsHiddenNow() && ! IsVertical() )
-#else
             if( IsHiddenNow() )
-#endif
             {
+#ifdef VERTICAL_LAYOUT
+                long nPrtHeight = (Prt().*fnRect->fnGetHeight)();
+                if( nPrtHeight )
+#else
                 if( Prt().Height() )
+#endif
                 {
                     HideHidden();
+#ifdef VERTICAL_LAYOUT
+                    Shrink( nPrtHeight );
+#else
                     Shrink( Prt().Height() PHEIGHT );
+#endif
                 }
                 ChgThisLines();
                 return;
@@ -2074,6 +2138,13 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                 ASSERT( pMaster, "SwTxtFrm::Format: homeless follow" );
                 if( pMaster )
                     pMaster->Prepare( PREP_FOLLOW_FOLLOWS );
+#ifdef VERTICAL_LAYOUT
+                SwTwips nMaxY = (GetUpper()->*fnRect->fnGetLimit)();
+                if( (Frm().*fnRect->fnOverStep)( nMaxY  ) )
+                    (this->*fnRect->fnSetLimit)( nMaxY );
+                else if( (Frm().*fnRect->fnCheckLimit)( nMaxY  ) > 0 )
+                    (Frm().*fnRect->fnAddBottom)( -(Frm().*fnRect->fnGetHeight)() );
+#else
                 SwTwips nMaxY = GetUpper()->Frm().Top() +GetUpper()->Prt().Top()
                                 + GetUpper()->Prt().Height();
                 if( Frm().Top() + Frm().Height() > nMaxY )
@@ -2083,6 +2154,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                     else
                         Frm().Height( nMaxY - Frm().Top() );
                 }
+#endif
             }
             else
             {
@@ -2092,7 +2164,11 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                 if( pFtnBoss )
                 {
                     const SwFtnContFrm* pCont = pFtnBoss->FindFtnCont();
+#ifdef VERTICAL_LAYOUT
+                    nFtnHeight = pCont ? (pCont->Frm().*fnRect->fnGetHeight)() : 0;
+#else
                     nFtnHeight = pCont ? pCont->Frm().Height() : 0;
+#endif
                 }
                 do
                 {
@@ -2100,7 +2176,11 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                     if( pFtnBoss && nFtnHeight )
                     {
                         const SwFtnContFrm* pCont = pFtnBoss->FindFtnCont();
+#ifdef VERTICAL_LAYOUT
+                        SwTwips nNewHeight = pCont ? (pCont->Frm().*fnRect->fnGetHeight)() : 0;
+#else
                         SwTwips nNewHeight = pCont ? pCont->Frm().Height() : 0;
+#endif
                         // If we lost some footnotes, we may have more space
                         // for our main text, so we have to format again ...
                         if( nNewHeight < nFtnHeight )
@@ -2150,10 +2230,18 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                                 ((SwFlyAtCntFrm*)pFly)->CheckCharRect();
                                 if( !pFly->IsValid() )
                                 {
+#ifdef VERTICAL_LAYOUT
+                                    SwTwips nOldTop = (pFly->Frm().*fnRect->fnGetTop)();
+#else
                                     SwTwips nOldTop = pFly->Frm().Top();
+#endif
                                     pFly->Calc();
                                     bRepeat = sal_True;
+#ifdef VERTICAL_LAYOUT
+                                    if( !nRepAdd && nOldTop >= (pFly->Frm().*fnRect->fnGetTop)() )
+#else
                                     if( !nRepAdd && nOldTop >= pFly->Frm().Top() )
+#endif
                                         nRepAdd = 1;
                                 }
                             }
