@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implreg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jbu $ $Date: 2002-04-30 16:11:04 $
+ *  last change: $Author: dbo $ $Date: 2002-07-30 12:53:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,44 +199,6 @@ static OUString impreg_getImplementationName()
     return spool().sImplementationName;
 }
 
-static OUString getTempName()
-{
-    OUString    uTmpPath;
-    OString     tmpPath;
-    sal_Char    *pTmpName = NULL;
-
-    const StringPool & pool = spool();
-    if ( osl_getEnvironment(pool.TMP.pData, &uTmpPath.pData) != osl_Process_E_None )
-    {
-        if ( osl_getEnvironment(pool.TEMP.pData, &uTmpPath.pData) != osl_Process_E_None )
-        {
-#if defined(SAL_W32) || defined(SAL_OS2)
-            tmpPath = OString("c:\\temp");
-#else
-            tmpPath = OString("/tmp");
-#endif
-        }
-    }
-
-    if ( ! tmpPath.getLength())
-    {
-        tmpPath = OUStringToOString(uTmpPath, osl_getThreadTextEncoding());
-    }
-
-    {
-        OStringBuffer buf;
-        buf.append( tmpPath );
-        if( tmpPath.getLength() && tmpPath.getStr()[ tmpPath.getLength() -1 ] != SAL_PATHDELIMITER )
-        {
-            buf.append( (sal_Char) SAL_PATHDELIMITER );
-        }
-        buf.append( RTL_CONSTASCII_STRINGPARAM( "reg_XXXXXX" ) );
-        tmpPath = buf.makeStringAndClear();
-    }
-    // I am the only one to own tmpPath here, so the cast is tolerateable.
-    OSL_VERIFY( tmpPath.getStr() == mktemp( (sal_Char * ) tmpPath.getStr() ) );
-    return OStringToOUString( tmpPath, osl_getThreadTextEncoding());
-}
 
 //*************************************************************************
 //  static deleteAllLinkReferences()
@@ -1557,9 +1519,7 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
             {
                 try
                 {
-                    OUString aTempName = getTempName();
-
-                    xReg->open(aTempName, sal_False, sal_True);
+                    xReg->open(OUString() /* in mem */, sal_False, sal_True);
                     Reference < XRegistryKey > xImpl;
 
                     { // only necessary for deleting the temporary variable of rootkey
@@ -1587,18 +1547,12 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
                             }
 
                             xImpl->closeKey();
-                            // close and reopen is necessary for java
-                            xReg->close();
-                            xReg->open(aTempName, sal_False, sal_True);
                             xReg->destroy();
                             return seqImpl;
                         }
                     }
 
                     xImpl->closeKey();
-                    // close and reopen is necessary for java
-                    xReg->close();
-                    xReg->open(aTempName, sal_False, sal_True);
                     xReg->destroy();
                 }
                 catch(MergeConflictException&)
@@ -1687,10 +1641,9 @@ void ImplementationRegistration::doRegister(
 
     if (xAct.is() && xReg.is() && xDest.is())
     {
-        OUString aTempName = getTempName();
         try
         {
-            xReg->open(aTempName, sal_False, sal_True);
+            xReg->open(OUString() /* in mem */, sal_False, sal_True);
 
             { // only necessary for deleting the temporary variable of rootkey
                 xSourceKey = xReg->getRootKey()->createKey( spool().slash_IMPLEMENTATIONS );
@@ -1709,8 +1662,6 @@ void ImplementationRegistration::doRegister(
                 mergeKeys( xDestKey, xSourceKey );
                 xDestKey->closeKey();
                 xSourceKey->closeKey();
-
-                xReg->close();
             }
             else
             {
@@ -1724,11 +1675,6 @@ void ImplementationRegistration::doRegister(
                 xSourceKey->closeKey();
             if ( xReg->isValid() )
                 xReg->destroy();
-            else
-            {
-                xReg->open( aTempName, sal_False, sal_True );
-                xReg->destroy();
-            }
         }
         catch(CannotRegisterImplementationException&)
         {
@@ -1737,11 +1683,6 @@ void ImplementationRegistration::doRegister(
                 xSourceKey->closeKey();
             if ( xReg->isValid() )
                 xReg->destroy();
-            else
-            {
-                xReg->open( aTempName, sal_False, sal_True );
-                xReg->destroy();
-            }
             // and throw again
             throw;
         }
