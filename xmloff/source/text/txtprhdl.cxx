@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:43:36 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,11 @@
 #ifndef _XMLOFF_TXTPRHDL_HXX
 #include "txtprhdl.hxx"
 #endif
+// OD 2004-05-05 #i28701#
+#ifndef _COM_SUN_STAR_TEXT_WRAPINFLUENCEONPOSITION_HPP_
+#include <com/sun/star/text/WrapInfluenceOnPosition.hpp>
+#endif
+
 
 using namespace ::rtl;
 //using namespace ::com::sun::star;
@@ -324,6 +329,14 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_VerticalAlign_Enum[] =
     { XML_BASELINE,     1   },
     { XML_AUTO,         0   },
 #endif
+    { XML_TOKEN_INVALID, 0 }
+};
+
+// OD 2004-05-05 #i28701#
+SvXMLEnumMapEntry __READONLY_DATA pXML_WrapInfluenceOnPosition_Enum[] =
+{
+    { XML_NONE_SUCCESSIVE_POSITIONED, WrapInfluenceOnPosition::NONE_SUCCESSIVE_POSITIONED },
+    { XML_NONE_CONCURRENT_POSITIONED, WrapInfluenceOnPosition::NONE_CONCURRENT_POSITIONED },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -1430,6 +1443,14 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         pHdl = new XMLNamedBoolPropertyHdl( ::xmloff::token::XML_ABOVE,
                                             ::xmloff::token::XML_BELOW );
         break;
+    // OD 2004-05-05 #i28701#
+    case XML_TYPE_WRAP_INFLUENCE_ON_POSITION:
+    {
+        pHdl = new XMLConstantsPropertyHandler( pXML_WrapInfluenceOnPosition_Enum,
+                                                XML_TOKEN_INVALID );
+    }
+    break;
+    }
     case XML_TYPE_BORDER_MODEL:
         pHdl = new XMLNamedBoolPropertyHdl( xmloff::token::XML_COLLAPSING,
                                             xmloff::token::XML_SEPARATING );
