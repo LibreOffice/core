@@ -2,9 +2,9 @@
  *
  *  $RCSfile: btntext.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 19:04:43 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ String SV_BUTTONTEXT_OK
     TEXT[ turkish ] = "Tamam";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Aceptar";
+    TEXT[ finnish ] = "OK";
 };
 
 String SV_BUTTONTEXT_CANCEL
@@ -119,6 +120,7 @@ String SV_BUTTONTEXT_CANCEL
     TEXT[ turkish ] = "Ýptal";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Cancelar";
+    TEXT[ finnish ] = "Peruuta";
 };
 
 String SV_BUTTONTEXT_YES
@@ -147,6 +149,7 @@ String SV_BUTTONTEXT_YES
     TEXT[ turkish ] = "~Evet";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "~Sí";
+    TEXT[ finnish ] = "~Kyllä";
 };
 
 String SV_BUTTONTEXT_NO
@@ -175,6 +178,7 @@ String SV_BUTTONTEXT_NO
     TEXT[ turkish ] = "~Hayýr";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "~No";
+    TEXT[ finnish ] = "~Ei";
 };
 
 String SV_BUTTONTEXT_RETRY
@@ -203,6 +207,7 @@ String SV_BUTTONTEXT_RETRY
     TEXT[ turkish ] = "Y~inele";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "~Reintentar";
+    TEXT[ finnish ] = "~Yritä uudelleen";
 };
 
 String SV_BUTTONTEXT_HELP
@@ -231,6 +236,7 @@ String SV_BUTTONTEXT_HELP
     TEXT[ turkish ] = "~Yardým";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Ay~uda";
+    TEXT[ finnish ] = "~Ohje";
 };
 
 String SV_BUTTONTEXT_MORE
@@ -259,6 +265,7 @@ String SV_BUTTONTEXT_MORE
     TEXT[ turkish ] = "A~yrýntýlar";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "~Opciones";
+    TEXT[ finnish ] = "~Lisää";
 };
 
 /* HelpTexte, die wir derzeit nicht mehr verwenden:
