@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 21:04:10 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:50:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ ModalDialog DLG_INSERT_TABLE
     Text [ italian ] = "Inserisci tabella" ;
     Text [ portuguese_brazilian ] = "Insere uma tabela" ;
     Text [ portuguese ] = "Inserir tabela" ;
-    Text [ finnish ] = "Lisää taulukon" ;
+    Text [ finnish ] = "Lisää taulukko" ;
     Text [ danish ] = "Indsæt tabel" ;
     Text [ french ] = "Insérer un tableau" ;
     Text [ swedish ] = "Infoga tabell" ;
@@ -117,6 +117,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nombre";
+        Text[ finnish ] = "Nimi";
     };
     FixedText FT_COL
     {
@@ -264,6 +265,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ turkish ] = "Baþlýk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Encabezado";
+        Text[ finnish ] = "Yläotsikko";
     };
     CheckBox CB_REPEAT_HEADER
     {
@@ -292,6 +294,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ turkish ] = "Ýlk satýrý her sayfada yi~nele";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Repetir en cada página";
+        Text[ finnish ] = "~Toista yläotsikko";
     };
     CheckBox CB_DONT_SPLIT
     {
@@ -320,6 +323,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ turkish ] = "Tabloyu tek sayfaya  ~sýðdýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~No dividir tabla";
+        Text[ finnish ] = "Älä jaa taulukkoa";
     };
     CheckBox CB_BORDER
     {
@@ -348,6 +352,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ turkish ] = "~Kenarlýk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Borde";
+        Text[ finnish ] = "Reuna";
     };
     GroupBox GB_OPTIONS
     {
@@ -375,6 +380,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ turkish ] = "Seçenekler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opciones";
+        Text[ finnish ] = "Asetukset";
     };
     OKButton BT_OK
     {
@@ -406,7 +412,7 @@ ModalDialog DLG_INSERT_TABLE
         Text [ italian ] = "~Formatt. auto..." ;
         Text [ portuguese_brazilian ] = "Formatação Automática..." ;
         Text [ portuguese ] = "~AutoFormato..." ;
-        Text [ finnish ] = "Automaattimuoto..." ;
+        Text [ finnish ] = "~Automaattinen muotoilu" ;
         Text [ danish ] = "AutoFormat..." ;
         Text [ french ] = "~AutoFormat..." ;
         Text [ swedish ] = "~Autoformat..." ;
