@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Shape.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-24 13:44:56 $
+ *  last change: $Author: cl $ $Date: 2001-10-16 09:47:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 
 #ifndef __com_sun_star_drawing_XGluePointsSupplier_idl__
 #include <com/sun/star/drawing/XGluePointsSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_container_XNameContainer_idl__
+#include <com/sun/star/container/XNameContainer.idl>
 #endif
 
 //=============================================================================
@@ -192,6 +196,15 @@ service Shape
         for this shape.
      */
     [optional, property] com::sun::star::drawing::HomogenMatrix3 Transformation;
+
+    //-------------------------------------------------------------------------
+
+    /** this property stores xml attributes.
+        They will be saved to and restored from automatic styles inside xml files.
+
+        @see com::sun::star::xml::AttributeContainer
+    */
+    [optional, property] com::sun::star::container::XNameContainer ShapeUserDefinedAttributes;
 };
 
 //=============================================================================
