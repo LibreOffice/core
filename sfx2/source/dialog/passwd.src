@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:31:27 $
+ *  last change: $Author: dv $ $Date: 2001-05-17 12:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ ModalDialog DLG_PASSWD
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT( 200, 68 );
-    Text = "Passwort eingeben" ;
+    Text = "Kennwort eingeben" ;
     Text [ ENGLISH ] = "Enter password" ;
     Text [ norwegian ] = "Skriv inn passord" ;
     Text [ italian ] = "Digita password" ;
@@ -131,7 +131,7 @@ ModalDialog DLG_PASSWD
     {
         Pos = MAP_APPFONT( 12, 30 );
         Size = MAP_APPFONT( 42, 10 );
-        Text = "~Passwort";
+        Text = "~Kennwort";
         Text[English] = "Password";
         Text[ english_us ] = "~Password";
         Text[ portuguese ] = "~Senha";
@@ -200,7 +200,7 @@ ModalDialog DLG_PASSWD
     {
         Pos = MAP_APPFONT( 6, 3 );
         Size = MAP_APPFONT( 132, 59 );
-        Text = "Passwort" ;
+        Text = "Kennwort" ;
         Text [ ENGLISH ] = "Password" ;
         Text [ norwegian ] = "Passord" ;
         Text [ italian ] = "Password" ;
@@ -244,7 +244,7 @@ ModalDialog DLG_PASSWD
     };
     String STR_PASSWD_CONFIRM
     {
-        Text = "Passwort bestätigen" ;
+        Text = "Kennwort bestätigen" ;
         Text [ ENGLISH ] = "Confirm password" ;
         Text [ norwegian ] = "Bekrefte passord" ;
         Text [ italian ] = "Conferma password" ;
