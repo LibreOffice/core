@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-22 12:20:31 $
+ *  last change: $Author: sab $ $Date: 2001-05-29 15:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ class ScXMLExport : public SvXMLExport
     ScMyDetectiveObjContainer*  pDetectiveObjContainer;
     ScMyNotEmptyCellsIterator*  pCellsItr;
     ScChangeTrackingExportHelper*   pChangeTrackingExportHelper;
+    const rtl::OUString         sLayerID;
     sal_Int32                   nOpenRow;
     sal_uInt16                  nCurrentTable;
     sal_Bool                    bHasRowHeader : 1;

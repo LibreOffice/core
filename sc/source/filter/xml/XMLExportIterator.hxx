@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-21 10:16:41 $
+ *  last change: $Author: sab $ $Date: 2001-05-29 15:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ struct ScMyShape
     ScAddress   aAddress;
     ScAddress   aEndAddress;
     sal_Int32   nIndex;
+    sal_Int16   nLayerID;
 
     sal_Bool operator<(const ScMyShape& aShape);
 };

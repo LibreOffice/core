@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-23 09:53:43 $
+ *  last change: $Author: sab $ $Date: 2001-05-29 15:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,16 @@ sal_Bool ScMyValidation::IsEqual(const ScMyValidation& aVal) const
 
 ScMyValidationsContainer::ScMyValidationsContainer()
     : aValidationVec(),
-    sEmptyString()
+    sEmptyString(),
+    sERRALSTY(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRALSTY)),
+    sIGNOREBL(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_IGNOREBL)),
+    sTYPE(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)),
+    sSHOWINP(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWINP)),
+    sSHOWERR(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWERR)),
+    sINPTITLE(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPTITLE)),
+    sINPMESS(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPMESS)),
+    sERRTITLE(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRTITLE)),
+    sERRMESS(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRMESS))
 {
 }
 
@@ -168,25 +177,25 @@ sal_Bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
     uno::Reference<beans::XPropertySet> xPropertySet;
     if (aTempAny >>= xPropertySet)
     {
-        uno::Any aAny = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRMESS)));
+        uno::Any aAny = xPropertySet->getPropertyValue(sERRMESS);
         rtl::OUString sErrorMessage;
         aAny >>= sErrorMessage;
-        aAny = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRTITLE)));
+        aAny = xPropertySet->getPropertyValue(sERRTITLE);
         rtl::OUString sErrorTitle;
         aAny >>= sErrorTitle;
-        aAny = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPMESS)));
+        aAny = xPropertySet->getPropertyValue(sINPMESS);
         rtl::OUString sImputMessage;
         aAny >>= sImputMessage;
-        aAny = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPTITLE)));
+        aAny = xPropertySet->getPropertyValue(sINPTITLE);
         rtl::OUString sImputTitle;
         aAny >>= sImputTitle;
-        aAny = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWERR)));
+        aAny = xPropertySet->getPropertyValue(sSHOWERR);
         sal_Bool bShowErrorMessage;
         aAny >>= bShowErrorMessage;
-        aAny = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWINP)));
+        aAny = xPropertySet->getPropertyValue(sSHOWINP);
         sal_Bool bShowImputMessage;
         aAny >>= bShowImputMessage;
-        aAny = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)));
+        aAny = xPropertySet->getPropertyValue(sTYPE);
         sheet::ValidationType aValidationType;
         aAny >>= aValidationType;
         if (bShowErrorMessage || bShowImputMessage || aValidationType != sheet::ValidationType_ANY ||
@@ -200,11 +209,11 @@ sal_Bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
             aValidation.bShowErrorMessage = bShowErrorMessage;
             aValidation.bShowImputMessage = bShowImputMessage;
             aValidation.aValidationType = aValidationType;
-            aAny = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_IGNOREBL)));
+            aAny = xPropertySet->getPropertyValue(sIGNOREBL);
             sal_Bool bIgnoreBlanks(sal_False);
             aAny >>= bIgnoreBlanks;
             aValidation.bIgnoreBlanks = bIgnoreBlanks;
-            aAny = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRALSTY)));
+            aAny = xPropertySet->getPropertyValue(sERRALSTY);
             aAny >>= aValidation.aAlertStyle;
             uno::Reference<sheet::XSheetCondition> xCondition(xPropertySet, uno::UNO_QUERY);
             if (xCondition.is())

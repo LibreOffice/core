@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-21 10:16:41 $
+ *  last change: $Author: sab $ $Date: 2001-05-29 15:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,7 +689,7 @@ void ScMyNotEmptyCellsIterator::SetCurrentTable(const sal_Int32 nTable)
     DBG_ASSERT(aAnnotations.empty(), "not all Annotations saved");
     aLastAddress.Row = 0;
     aLastAddress.Column = 0;
-    aLastAddress.Sheet = nTable;
+    aLastAddress.Sheet = static_cast<sal_Int16>(nTable);
     if (nCurrentTable != nTable)
     {
         nCurrentTable = static_cast<sal_Int16>(nTable);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-18 08:35:44 $
+ *  last change: $Author: sab $ $Date: 2001-05-29 15:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,16 @@ class ScMyValidationsContainer
 {
 private:
     ScMyValidationVec           aValidationVec;
-    rtl::OUString               sEmptyString;
-protected:
+    const rtl::OUString         sEmptyString;
+    const rtl::OUString         sERRALSTY;
+    const rtl::OUString         sIGNOREBL;
+    const rtl::OUString         sTYPE;
+    const rtl::OUString         sSHOWINP;
+    const rtl::OUString         sSHOWERR;
+    const rtl::OUString         sINPTITLE;
+    const rtl::OUString         sINPMESS;
+    const rtl::OUString         sERRTITLE;
+    const rtl::OUString         sERRMESS;
 public:
                                 ScMyValidationsContainer();
                                 ~ScMyValidationsContainer();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-23 13:17:06 $
+ *  last change: $Author: sab $ $Date: 2001-05-29 15:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     { "CellBackColor", XML_NAMESPACE_FO, sXML_background_color, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 },
     { "CellProtection", XML_NAMESPACE_STYLE, sXML_cell_protect, XML_SC_TYPE_CELLPROTECTION|MID_FLAG_MERGE_PROPERTY, 0 },
     { "CellProtection", XML_NAMESPACE_STYLE, sXML_print_content, XML_SC_TYPE_PRINTCONTENT|MID_FLAG_MERGE_PROPERTY, 0 },
-    { "CellStyle", XML_NAMESPACE_STYLE, sXML_style, XML_TYPE_STRING|MID_FLAG_NO_PROPERTY_EXPORT, CTF_SC_CELLSTYLE },
+    { "CellStyle", XML_NAMESPACE_STYLE, sXML_style, XML_TYPE_STRING, CTF_SC_CELLSTYLE },
     { "ConditionalFormat", XML_NAMESPACE_STYLE, sXML_map, XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_SC_IMPORT_MAP },
     { "ConditionalFormatXML", XML_NAMESPACE_STYLE, sXML_map, XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_SC_MAP },
     { "HoriJustify", XML_NAMESPACE_FO, sXML_text_align, XML_SC_TYPE_HORIJUSTIFY|MID_FLAG_MERGE_PROPERTY, 0 },
@@ -155,44 +155,11 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     { "RotateAngle", XML_NAMESPACE_STYLE, sXML_rotation_angle, XML_SC_TYPE_ROTATEANGLE, 0 },
     { "RotateReference", XML_NAMESPACE_STYLE, sXML_rotation_align, XML_SC_TYPE_ROTATEREFERENCE, 0},
     { "ShadowFormat", XML_NAMESPACE_STYLE, sXML_shadow, XML_TYPE_TEXT_SHADOW, 0 },
+    { "StandardDecimals", XML_NAMESPACE_STYLE, sXML_decimal_places, XML_TYPE_NUMBER16, 0 },
     { "TopBorder", XML_NAMESPACE_FO, sXML_border_top, XML_TYPE_BORDER, CTF_SC_TOPBORDER },
     { "TopBorder", XML_NAMESPACE_STYLE, sXML_border_line_width_top, XML_TYPE_BORDER_WIDTH, CTF_SC_TOPBORDERWIDTH },
+//  { "ValidationXML", XML_NAMESPACE_TABLE, sXML_content_validation, XML_TYPE_BUILDIN_CMP_ONLY, CTF_SC_VALIDATION },
     { "VertJustify", XML_NAMESPACE_FO, sXML_vertical_align, XML_SC_TYPE_VERTJUSTIFY, 0},
-    { "StandardDecimals", XML_NAMESPACE_STYLE, sXML_decimal_places, XML_TYPE_NUMBER16, 0 },
-
-
-// CharacterProperties
-/*  { "CharAutoKerning", XML_NAMESPACE_STYLE, sXML_letter_kerning, XML_TYPE_BOOL, 0 },
-    ( "CharBackColor", XML_NAMESPACE_STYLE, text_background_color, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
-    ( "CharBackTransparent", XML_NAMESPACE_STYLE, text_background_color, XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
-    ( "CharBackColor", XML_NAMESPACE_FO, text_background_color, XML_TYPE_COLOR|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_OLDTEXTBACKGROUND ),
-    { "CharCaseMap", XML_NAMESPACE_FO, sXML_font_variant, XML_TYPE_TEXT_CASEMAP_VAR, 0 },
-    { "CharCaseMap", XML_NAMESPACE_FO, sXML_text_transform, XML_TYPE_TEXT_CASEMAP, 0 },
-    { "CharColor", XML_NAMESPACE_FO, sXML_color, XML_TYPE_COLOR, 0 },
-    { "CharContoured", XML_NAMESPACE_STYLE, sXML_text_outline, XML_TYPE_BOOL, 0 },
-    { "CharCrossedOut", XML_NAMESPACE_STYLE, sXML_text_crossing_out, XML_TYPE_TEXT_BOOLCROSSEDOUT, 0 },
-//  { "CharEscapement", XML_NAMESPACE_STYLE, sXML_text_position, XML_TYPE_TEXT_ESCAPEMENT|MID_FLAG_MERGE_ATTRIBUTE, 0 },
-//  { "CharEscapementHeight", XML_NAMESPACE_STYLE, sXML_text_position, XML_TYPE_TEXT_ESCAPEMENT_HEIGHT|MID_FLAG_MERGE_ATTRIBUTE, 0 },
-    { "CharFlash", XML_NAMESPACE_STYLE, sXML_text_blinking, XML_TYPE_BOOL, 0},
-    { "CharFontName",XML_NAMESPACE_FO, sXML_font_family, XML_TYPE_TEXT_FONTFAMILYNAME, 0 },
-//  { "CharFontType", ...},
-    { "CharFontStyleName", XML_NAMESPACE_STYLE, sXML_font_style_name, XML_TYPE_STRING, 0 },
-    { "CharFontFamily", XML_NAMESPACE_STYLE, sXML_font_family_generic, XML_TYPE_TEXT_FONTFAMILY, 0 },
-    { "CharFontPitch", XML_NAMESPACE_STYLE, sXML_font_pitch, XML_TYPE_TEXT_FONTPITCH, 0 },
-    { "CharFontCharSet", XML_NAMESPACE_STYLE, sXML_font_charset, XML_TYPE_TEXT_FONTENCODING, 0 },
-    { "CharHeight", XML_NAMESPACE_FO, sXML_font_size, XML_TYPE_CHAR_HEIGHT, 0 },
-    { "CharKeepTogether", XML_NAMESPACE_FO, sXML_keep_with_next, XML_TYPE_BOOL, 0 },
-    { "CharKerning", XML_NAMESPACE_FO, sXML_letter_spacing, XML_TYPE_TEXT_KERNING, 0 },
-    { "CharLocale", XML_NAMESPACE_FO, sXML_language, XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 },
-    { "CharLocale", XML_NAMESPACE_FO, sXML_country, XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 },
-//  { "CharNoLineBreak, ...},
-    { "CharPosture",XML_NAMESPACE_FO, sXML_font_style, XML_TYPE_TEXT_POSTURE, 0 },
-    { "CharShadowed",XML_NAMESPACE_FO, sXML_text_shadow, XML_TYPE_TEXT_SHADOWED, 0 },
-//  { "CharStyle", ... },
-    { "CharBackTransparent", XML_NAMESPACE_FO, sXML_text_background_color, XML_TYPE_ISTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 },
-    { "CharUnderline", XML_NAMESPACE_STYLE, sXML_text_underline, XML_TYPE_TEXT_UNDERLINE, 0 },
-    { "CharWeight", XML_NAMESPACE_FO, sXML_font_weight, XML_TYPE_TEXT_WEIGHT, 0 },
-    { "CharWordMode", XML_NAMESPACE_STYLE, sXML_score_spaces, XML_TYPE_NBOOL, 0 },*/
     { 0L }
 };
 
@@ -218,12 +185,6 @@ const XMLPropertyMapEntry aXMLScTableStylesProperties[] =
     { "PageStyle", XML_NAMESPACE_STYLE, sXML_master_page_name, XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_SC_MASTERPAGENAME },
     { 0L }
 };
-
-/*const XMLPropertyMapEntry aXMLScShapeStylesProperties[] =
-{
-    { "LayerID", XML_NAMESPACE_STYLE, sXML_run_through, XML_SC_TYPE_LAYER, 0 },
-    { 0L }
-};*/
 
 ScXMLCellExportPropertyMapper::ScXMLCellExportPropertyMapper(
             const UniReference< XMLPropertySetMapper >& rMapper )
@@ -709,11 +670,6 @@ const XMLPropertyHandler* XMLScPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
     {
         switch(nType)
         {
-            /*case XML_SC_TYPE_LAYER :
-            {
-                pHdl = new XmlScPropHdl_LayerID;
-            }
-            break;*/
             case XML_SC_TYPE_CELLPROTECTION :
             {
                 pHdl = new XmlScPropHdl_CellProtection;
@@ -724,14 +680,6 @@ const XMLPropertyHandler* XMLScPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XmlScPropHdl_PrintContent;
             }
             break;
-  /*            case XML_SC_TYPE_NUMBERFORMAT :
-            {
-                if (bIsExport)
-                    pHdl = new XmlScPropHdl_NumberFormat(pScXMLExport);
-                else
-                    pHdl = new XmlScPropHdl_NumberFormat(pScXMLImport);
-            }
-            break;*/
             case XML_SC_TYPE_HORIJUSTIFY :
             {
                 pHdl = new XmlScPropHdl_HoriJustify;
@@ -780,51 +728,6 @@ const XMLPropertyHandler* XMLScPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
 
     return pHdl;
 }
-
-/*XmlScPropHdl_LayerID::~XmlScPropHdl_LayerID()
-{
-}
-
-sal_Bool XmlScPropHdl_LayerID::importXML(
-    const ::rtl::OUString& rStrImpValue,
-    ::com::sun::star::uno::Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
-{
-    sal_Bool bRetval(sal_True);
-
-    sal_Int16 nLayer;
-    if (rStrImpValue.compareToAscii (sXML_foreground) == 0)
-        nLayer = SC_LAYER_FRONT;
-    else if (rStrImpValue.compareToAscii (sXML_background) == 0)
-        nLayer = SC_LAYER_BACK;
-    else
-        bRetval = sal_False;
-    rValue <<= nLayer;
-
-    return bRetval;
-}
-
-sal_Bool XmlScPropHdl_LayerID::exportXML(
-    ::rtl::OUString& rStrExpValue,
-    const ::com::sun::star::uno::Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
-{
-    sal_Bool bRetval(sal_False);
-
-    sal_Int16 nLayer;
-    if (rValue >>= nLayer)
-    {
-        bRetval = sal_True;
-        if (nLayer == SC_LAYER_FRONT)
-            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_foreground));
-        else if (nLayer == SC_LAYER_BACK)
-            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_background));
-        else
-            bRetval = sal_False;
-    }
-
-    return bRetval;
-}*/
 
 XmlScPropHdl_CellProtection::~XmlScPropHdl_CellProtection()
 {
@@ -1034,69 +937,6 @@ sal_Bool XmlScPropHdl_PrintContent::exportXML(
 
     return bRetval;
 }
-
-/*XmlScPropHdl_NumberFormat::XmlScPropHdl_NumberFormat(const ScXMLExport* pScTempXMLExport)
-{
-    pScXMLExport = pScTempXMLExport;
-}
-
-XmlScPropHdl_NumberFormat::XmlScPropHdl_NumberFormat(const ScXMLImport* pScTempXMLImport)
-{
-    pScXMLImport = pScTempXMLImport;
-}
-
-XmlScPropHdl_NumberFormat::~XmlScPropHdl_NumberFormat()
-{
-}
-
-sal_Bool XmlScPropHdl_NumberFormat::equals(
-    const ::com::sun::star::uno::Any& r1,
-    const ::com::sun::star::uno::Any& r2 ) const
-{
-    sal_Int32 aNumberFormat1, aNumberFormat2;
-
-    if((r1 >>= aNumberFormat1) && (r2 >>= aNumberFormat2))
-    {
-        return (aNumberFormat1 == aNumberFormat2);
-    }
-    return sal_False;
-}
-
-sal_Bool XmlScPropHdl_NumberFormat::importXML(
-    const ::rtl::OUString& rStrImpValue,
-    ::com::sun::star::uno::Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
-{
-    sal_Bool bRetval(sal_False);
-
-    sal_Int32 nNumberFormat = pScXMLImport->GetNumImport()->GetKeyForName(rStrImpValue);
-    if (nNumberFormat >= 0)
-    {
-        rValue <<= nNumberFormat;
-        bRetval = sal_True;
-    }
-    else
-        bRetval = sal_False;
-
-    return bRetval;
-}
-
-sal_Bool XmlScPropHdl_NumberFormat::exportXML(
-    ::rtl::OUString& rStrExpValue,
-    const ::com::sun::star::uno::Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
-{
-    sal_Bool bRetval(sal_False);
-
-    sal_Int32 nNumberFormat;
-    if (rValue >>= nNumberFormat)
-    {
-        rStrExpValue = pScXMLExport->GetNumExport()->GetStyleName(nNumberFormat);
-        bRetval = sal_True;
-    }
-
-    return bRetval;
-}*/
 
 XmlScPropHdl_HoriJustify::~XmlScPropHdl_HoriJustify()
 {

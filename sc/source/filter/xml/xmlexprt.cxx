@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-23 11:43:09 $
+ *  last change: $Author: sab $ $Date: 2001-05-29 15:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,8 @@ ScXMLExport::ScXMLExport(const sal_uInt16 nExportFlag) :
     pChangeTrackingExportHelper(NULL),
     aXShapesVec(),
     pDefaults(NULL),
-    pNumberFormatAttributesExportHelper(NULL)
+    pNumberFormatAttributesExportHelper(NULL),
+    sLayerID(RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ))
 {
     pGroupColumns = new ScMyOpenCloseColumnRowGroup(*this, XML_TABLE_COLUMN_GROUP);
     pGroupRows = new ScMyOpenCloseColumnRowGroup(*this, XML_TABLE_ROW_GROUP);
@@ -538,8 +539,7 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
                                     uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
                                     if( xShapeProp.is() )
                                     {
-                                        uno::Any aPropAny = xShapeProp->getPropertyValue(
-                                            OUString( RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ) ) );
+                                        uno::Any aPropAny = xShapeProp->getPropertyValue(sLayerID);
                                         sal_Int16 nLayerID;
                                         if( (aPropAny >>= nLayerID) && (nLayerID != SC_LAYER_INTERN) )
                                             nShapesCount++;
@@ -591,8 +591,7 @@ void ScXMLExport::CollectShapesAutoStyles(uno::Reference<sheet::XSpreadsheet>& x
                     uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
                     if( xShapeProp.is() )
                     {
-                        uno::Any aPropAny = xShapeProp->getPropertyValue(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ) ) );
+                        uno::Any aPropAny = xShapeProp->getPropertyValue(sLayerID);
                         sal_Int16 nLayerID;
                         if( aPropAny >>= nLayerID )
                         {
@@ -619,6 +618,7 @@ void ScXMLExport::CollectShapesAutoStyles(uno::Reference<sheet::XSpreadsheet>& x
                                                 aMyShape.aAddress = aRange.aStart;
                                                 aMyShape.aEndAddress = aRange.aEnd;
                                                 aMyShape.nIndex = nShape;
+                                                aMyShape.nLayerID = nLayerID;
                                                 pSharedData->AddNewShape(aMyShape);
                                                 pSharedData->SetLastColumn(nTable, aRange.aStart.Col());
                                                 pSharedData->SetLastRow(nTable, aRange.aStart.Row());
@@ -1516,13 +1516,14 @@ void ScXMLExport::_ExportStyles( sal_Bool bUsed )
             if (aStyleFamily >>= aCellStyles)
             {
                 sal_Int32 nCount = aCellStyles->getCount();
+                rtl::OUString sNumberFormat(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT));
                 for (sal_Int32 i = 0; i < nCount; i++)
                 {
                     uno::Any aCellStyle = aCellStyles->getByIndex(i);
                     uno::Reference <beans::XPropertySet> xCellProperties;
                     if (aCellStyle >>= xCellProperties)
                     {
-                        uno::Any aNumberFormat = xCellProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)));
+                        uno::Any aNumberFormat = xCellProperties->getPropertyValue(sNumberFormat);
                         sal_Int32 nNumberFormat;
                         if (aNumberFormat >>= nNumberFormat)
                             addDataStyle(nNumberFormat);
@@ -1578,9 +1579,8 @@ void ScXMLExport::_ExportAutoStyles()
                             if(xPropStates.size())
                             {
                                 rtl::OUString sParent;
-                                rtl::OUString sName = GetAutoStylePool()->Find(XML_STYLE_FAMILY_TABLE_TABLE, sParent, xPropStates);
-                                if (!sName.getLength())
-                                    sName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_TABLE, sParent, xPropStates);
+                                rtl::OUString sName;
+                                GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_TABLE, sParent, xPropStates);
                                 aTableStyles.push_back(sName);
                             }
                         }
@@ -1604,31 +1604,74 @@ void ScXMLExport::_ExportAutoStyles()
                                             uno::Reference <sheet::XCellRangeAddressable> xCellRangeAddressable(xCellRange, uno::UNO_QUERY);
                                             if (xCellRangeAddressable.is())
                                             {
-                                                table::CellRangeAddress aRangeAddress = xCellRangeAddressable->getRangeAddress();
-                                                uno::Any aValidation = xProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIXML)));
-                                                sal_Int32 nValidationIndex(-1);
-                                                if (pValidationsContainer->AddValidation(aValidation, aRangeAddress, nValidationIndex))
-                                                {
-                                                    pSharedData->SetLastColumn(nTable, aRangeAddress.EndColumn);
-                                                    pSharedData->SetLastRow(nTable, aRangeAddress.EndRow);
-                                                }
-                                                uno::Any aNumberFormat = xProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)));
-                                                sal_Int32 nNumberFormat;
-                                                if (aNumberFormat >>= nNumberFormat)
-                                                    addDataStyle(nNumberFormat);
-                                                uno::Any aStyle = xProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)));
                                                 rtl::OUString sStyleName;
-                                                if (aStyle >>= sStyleName)
+                                                sal_Int32 nNumberFormat;
+                                                sal_Int32 nValidationIndex(-1);
+                                                table::CellRangeAddress aRangeAddress = xCellRangeAddressable->getRangeAddress();
+                                                std::vector< XMLPropertyState > xPropStates = xCellStylesExportPropertySetMapper->Filter( xProperties );
+                                                std::vector< XMLPropertyState >::iterator aItr = xPropStates.begin();
+                                                sal_Int32 nCount(0);
+                                                while (aItr != xPropStates.end())
                                                 {
-                                                    std::vector< XMLPropertyState > xPropStates = xCellStylesExportPropertySetMapper->Filter( xProperties );
+                                                    if (aItr->mnIndex != -1)
+                                                    {
+                                                        switch (xCellStylesPropertySetMapper->GetEntryContextId(aItr->mnIndex))
+                                                        {
+                                                            case CTF_SC_VALIDATION :
+                                                            {
+                                                                if (pValidationsContainer->AddValidation(aItr->maValue, aRangeAddress, nValidationIndex))
+                                                                {
+                                                                    pSharedData->SetLastColumn(nTable, aRangeAddress.EndColumn);
+                                                                    pSharedData->SetLastRow(nTable, aRangeAddress.EndRow);
+                                                                }
+                                                                // this is not very slow, because it is most the last property or
+                                                                // if it is not the last property it is the property before the last property,
+                                                                // so in the worst case only one property has to be copied, but in the best case no
+                                                                // property has to be copied
+                                                                aItr = xPropStates.erase(aItr);
+                                                            }
+                                                            break;
+                                                            case CTF_SC_CELLSTYLE :
+                                                            {
+                                                                aItr->maValue >>= sStyleName;
+                                                                aItr->mnIndex = -1;
+                                                                aItr++;
+                                                                nCount++;
+                                                            }
+                                                            break;
+                                                            case CTF_SC_NUMBERFORMAT :
+                                                            {
+                                                                if (aItr->maValue >>= nNumberFormat)
+                                                                    addDataStyle(nNumberFormat);
+                                                                aItr++;
+                                                                nCount++;
+                                                            }
+                                                            break;
+                                                            default:
+                                                            {
+                                                                aItr++;
+                                                                nCount++;
+                                                            }
+                                                            break;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        aItr++;
+                                                        nCount++;
+                                                    }
+                                                }
+                                                if (nCount == 1) // this is the CellStyle and should be removed if alone
+                                                    xPropStates.clear();
+                                                if (sStyleName.getLength())
+                                                {
                                                     if (xPropStates.size())
                                                     {
                                                         sal_Int32 nIndex;
-                                                        rtl::OUString sName = GetAutoStylePool()->Find(XML_STYLE_FAMILY_TABLE_CELL, sStyleName, xPropStates);
+                                                        rtl::OUString sName;
                                                         sal_Bool bIsAutoStyle = sal_True;
-                                                        if (!sName.getLength())
+                                                        if (GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_CELL, sStyleName, xPropStates))
                                                         {
-                                                            sName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_CELL, sStyleName, xPropStates);
                                                             rtl::OUString* pTemp = new rtl::OUString(sName);
                                                             nIndex = pCellStyles->AddStyleName(pTemp);
                                                         }
@@ -1694,10 +1737,9 @@ void ScXMLExport::_ExportAutoStyles()
                                                 if(xPropStates.size())
                                                 {
                                                     rtl::OUString sParent;
-                                                    rtl::OUString sName = GetAutoStylePool()->Find(XML_STYLE_FAMILY_TABLE_COLUMN, sParent, xPropStates);
-                                                    if (!sName.getLength())
+                                                    rtl::OUString sName;
+                                                    if (GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_COLUMN, sParent, xPropStates))
                                                     {
-                                                        sName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_COLUMN, sParent, xPropStates);
                                                         rtl::OUString* pTemp = new rtl::OUString(sName);
                                                         nIndex = pColumnStyles->AddStyleName(pTemp);
                                                     }
@@ -1751,10 +1793,9 @@ void ScXMLExport::_ExportAutoStyles()
                                                 if(xPropStates.size())
                                                 {
                                                     rtl::OUString sParent;
-                                                    rtl::OUString sName = GetAutoStylePool()->Find(XML_STYLE_FAMILY_TABLE_ROW, sParent, xPropStates);
-                                                    if (!sName.getLength())
+                                                    rtl::OUString sName;
+                                                    if (GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_ROW, sParent, xPropStates))
                                                     {
-                                                        sName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_ROW, sParent, xPropStates);
                                                         rtl::OUString* pTemp = new rtl::OUString(sName);
                                                         nIndex = pRowStyles->AddStyleName(pTemp);
                                                     }
@@ -2249,10 +2290,7 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                 uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
                 if( xShapeProp.is() )
                 {
-                    uno::Any aPropAny = xShapeProp->getPropertyValue(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ) ) );
-                    sal_Int16 nLayerID;
-                    if( (aPropAny >>= nLayerID) && (nLayerID == SC_LAYER_BACK) )
+                    if(aItr->nLayerID == SC_LAYER_BACK)
                         AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_BACKGROUND, XML_TRUE);
                 }
                 ExportShape(xShape, pPoint);
@@ -2279,8 +2317,7 @@ void ScXMLExport::WriteTableShapes()
                 uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
                 if( xShapeProp.is() )
                 {
-                    uno::Any aPropAny = xShapeProp->getPropertyValue(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ) ) );
+                    uno::Any aPropAny = xShapeProp->getPropertyValue(sLayerID);
                     sal_Int16 nLayerID;
                     if( (aPropAny >>= nLayerID) && (nLayerID == SC_LAYER_BACK) )
                         AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_BACKGROUND, XML_TRUE);

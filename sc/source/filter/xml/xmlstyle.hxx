@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 07:43:40 $
+ *  last change: $Author: sab $ $Date: 2001-05-29 15:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,6 @@ extern const XMLPropertyMapEntry aXMLScCellStylesProperties[];
 extern const XMLPropertyMapEntry aXMLScColumnStylesProperties[];
 extern const XMLPropertyMapEntry aXMLScRowStylesProperties[];
 extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
-//extern const XMLPropertyMapEntry aXMLScShapeStylesProperties[];
 
 //CellStyles
 #define XML_SC_TYPE_CELLPROTECTION                  (XML_SC_TYPES_START +  1)
@@ -133,6 +132,7 @@ extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 #define CTF_SC_OLDTEXTBACKGROUND                    (XML_SC_CTF_START + 21)
 #define CTF_SC_IMPORT_MAP                           (XML_SC_CTF_START + 22)
 #define CTF_SC_CELLSTYLE                            (XML_SC_CTF_START + 23)
+#define CTF_SC_VALIDATION                           (XML_SC_CTF_START + 24)
 
 #define CTF_SC_ROWHEIGHT                            (XML_SC_CTF_START + 50)
 #define CTF_SC_ROWOPTIMALHEIGHT                     (XML_SC_CTF_START + 51)
@@ -142,8 +142,6 @@ extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 
 //ColumnStyles
 #define XML_SC_TYPE_BREAKBEFORE                     (XML_SC_TYPES_START + 50)
-//ShapeStyles
-//#define XML_SC_TYPE_LAYER                         (XML_SC_TYPES_START + 51)
 
 class ScXMLExport;
 class ScXMLImport;
@@ -252,14 +250,6 @@ public:
     virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const;
 };
 
-/*class XmlScPropHdl_LayerID : public XMLPropertyHandler
-{
-public:
-    virtual ~XmlScPropHdl_LayerID();
-    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
-    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
-};*/
-
 class XmlScPropHdl_CellProtection : public XMLPropertyHandler
 {
 public:
@@ -277,19 +267,6 @@ public:
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
-
-/*class XmlScPropHdl_NumberFormat : public XMLPropertyHandler
-{
-    const ScXMLExport* pScXMLExport;
-    const ScXMLImport* pScXMLImport;
-public:
-    XmlScPropHdl_NumberFormat(const ScXMLExport* pScXMLExport);
-    XmlScPropHdl_NumberFormat(const ScXMLImport* pScXMLImport);
-    virtual ~XmlScPropHdl_NumberFormat();
-    virtual sal_Bool equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const;
-    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
-    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
-};*/
 
 class XmlScPropHdl_HoriJustify : public XMLPropertyHandler
 {
