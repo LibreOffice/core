@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRC32.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-16 11:55:52 $
+ *  last change: $Author: mtg $ $Date: 2000-11-24 10:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,11 +75,13 @@ CRC32::CRC32()
 CRC32::~CRC32()
 {
 }
-void CRC32::reset()
+void SAL_CALL CRC32::reset()
+    throw(uno::RuntimeException)
 {
     nCRC=0;
 }
-sal_Int32 CRC32::getValue()
+sal_Int32 SAL_CALL CRC32::getValue()
+    throw(uno::RuntimeException)
 {
     return nCRC & 0xFFFFFFFFL;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-23 14:15:52 $
+ *  last change: $Author: mtg $ $Date: 2000-11-24 10:34:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,9 +195,9 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ZipPackageFolder::getProperty
 void SAL_CALL ZipPackageFolder::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue )
         throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    if (aPropertyName == L"MediaType")
+    if (aPropertyName == OUString::createFromAscii("MediaType"))
         aValue >>= sMediaType;
-    else if (aPropertyName == L"Size")
+    else if (aPropertyName == OUString::createFromAscii("Size"))
         aValue >>= aEntry.nSize;
     else
         throw beans::UnknownPropertyException();
@@ -205,13 +205,13 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const ::rtl::OUString& aProper
 uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const ::rtl::OUString& PropertyName )
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    if (PropertyName == L"MediaType")
+    if (PropertyName == OUString::createFromAscii("MediaType"))
     {
         uno::Any aAny;
         aAny <<= sMediaType;
         return aAny;
     }
-    else if (PropertyName == L"Size")
+    else if (PropertyName == OUString::createFromAscii("Size"))
     {
         uno::Any aAny;
         aAny <<= aEntry.nSize;
@@ -268,7 +268,7 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath)
         if (bIsFolder)
         {
             time_t nTime = 0;
-            pFolder->aEntry.sName = rPath + pFolder->getName() + L"/";
+            pFolder->aEntry.sName = rPath + pFolder->getName() + OUString::createFromAscii("/");
 #ifdef _DEBUG_RECURSION_
             /*pFolder->aEntry.nMethod = STORED;*/
             ByteString sByte(String(pFolder->aEntry.sName),RTL_TEXTENCODING_ASCII_US);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-23 14:15:51 $
+ *  last change: $Author: mtg $ $Date: 2000-11-24 10:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,26 +89,6 @@ ZipFile::ZipFile (uno::Reference < io::XInputStream > &xInput)
     readCEN();
 }
 
-/*
-ZipFile::ZipFile( void )
-:pEntries(NULL)
-, pTable(NULL)
-, nTotal(0)
-, nTableLen(0)
-{
-}
-void SAL_CALL ZipFile::setInputStream( const uno::Reference< io::XInputStream >& xInput )
-    throw(io::IOException, package::ZipException, uno::RuntimeException)
-{
-    xStream = uno::Reference <io::XInputStream> (xInput);
-    aGrabber.setInputStream ( xInput );
-    readCEN();
-}
-*/
-
-//ZipFile::ZipFile (const uno::Reference < lang::XMultiServiceFactory > &xFactory)
-//{
-//}
 ZipFile::~ZipFile()
 {
     if (pEntries != NULL)
@@ -128,11 +108,13 @@ ZipFile::~ZipFile()
     }
 
 }
-void ZipFile::close()
+void SAL_CALL ZipFile::close(  )
+    throw(io::IOException, uno::RuntimeException)
 {
 }
 
-uno::Reference<container::XEnumeration> ZipFile::entries()
+uno::Reference< container::XEnumeration > SAL_CALL ZipFile::entries(  )
+        throw(uno::RuntimeException)
 {
     uno::Reference< container::XEnumeration> xEnumRef;
     xEnumRef= new ZipEnumeration( uno::Sequence < package::ZipEntry > (pEntries, nTotal) );
@@ -140,32 +122,37 @@ uno::Reference<container::XEnumeration> ZipFile::entries()
 //  xEnumRef = uno::Reference < container::XEnumeration>( static_cast < container::XEnumeration *> (pEnum), uno::UNO_QUERY );
     return xEnumRef;
 }
-::rtl::OUString ZipFile::getName()
+::rtl::OUString SAL_CALL ZipFile::getName(  )
+    throw(uno::RuntimeException)
 {
     return sName;
 }
-sal_Int32 ZipFile::getSize()
+sal_Int32 SAL_CALL ZipFile::getSize(  )
+    throw(uno::RuntimeException)
 {
     return nTotal;
 }
 
-uno::Type ZipFile::getElementType()
+uno::Type SAL_CALL ZipFile::getElementType(  )
+    throw(uno::RuntimeException)
 {
     return ::getCppuType((package::ZipEntry *) 0);
 }
-sal_Bool ZipFile::hasElements()
+sal_Bool SAL_CALL ZipFile::hasElements(  )
+    throw(uno::RuntimeException)
 {
     return (nTotal>0);
 }
 
-uno::Any ZipFile::getByName(const ::rtl::OUString& rName)
+uno::Any SAL_CALL ZipFile::getByName( const ::rtl::OUString& aName )
+        throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aAny;
-    sal_Int32 nHash = abs(rName.hashCode() % nTableLen);
+    sal_Int32 nHash = abs(aName.hashCode() % nTableLen);
        ZipEntryImpl * pEntry = pTable[nHash];
     while (pEntry != NULL)
     {
-        if (rName == pEntry->getName())
+        if (aName == pEntry->getName())
         {
             //uno::Reference < package::ZepEntry > xEntry = pEntry;
             aAny <<= *(pEntry->pEntry);
@@ -176,26 +163,29 @@ uno::Any ZipFile::getByName(const ::rtl::OUString& rName)
     throw container::NoSuchElementException();
      return aAny;
 }
-uno::Sequence<rtl::OUString> ZipFile::getElementNames()
+uno::Sequence< ::rtl::OUString > SAL_CALL ZipFile::getElementNames(  )
+        throw(uno::RuntimeException)
 {
     OUString *pNames = new OUString[nTotal];
     for (int i = 0; i < nTotal; i++)
         pNames[i] = pEntries[i].sName;
     return uno::Sequence<OUString> (pNames, nTotal);
 }
-sal_Bool ZipFile::hasByName(const ::rtl::OUString& rName)
+sal_Bool SAL_CALL ZipFile::hasByName( const ::rtl::OUString& aName )
+        throw(uno::RuntimeException)
 {
-    sal_Int32 nHash = abs(rName.hashCode() % nTableLen);
+    sal_Int32 nHash = abs(aName.hashCode() % nTableLen);
        ZipEntryImpl * pEntry = pTable[nHash];
        while (pEntry != NULL)
     {
-        if (rName == pEntry->getName())
+        if (aName == pEntry->getName())
             return sal_True;
         pEntry = pEntry->pNext;
     }
      return sal_False;
 }
-uno::Reference< io::XInputStream> ZipFile::getInputStream(const package::ZipEntry& rEntry)
+uno::Reference< io::XInputStream > SAL_CALL ZipFile::getInputStream( const package::ZipEntry& rEntry )
+        throw(io::IOException, package::ZipException, uno::RuntimeException)
 {
     sal_Int64 nEnd = rEntry.nCompressedSize == 0 ? rEntry.nSize : rEntry.nCompressedSize;
     if (rEntry.nOffset <= 0)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-23 14:15:52 $
+ *  last change: $Author: mtg $ $Date: 2000-11-24 10:34:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,9 +155,9 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ZipPackageStream::getProperty
 void SAL_CALL ZipPackageStream::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue )
         throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    if (aPropertyName == L"MediaType")
+    if (aPropertyName == ::rtl::OUString::createFromAscii("MediaType"))
         aValue >>= aEntry.sComment;
-    else if (aPropertyName == L"Size")
+    else if (aPropertyName == ::rtl::OUString::createFromAscii("Size"))
         aValue >>= aEntry.nSize;
     else
         throw beans::UnknownPropertyException();
@@ -165,13 +165,13 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const ::rtl::OUString& aProper
 uno::Any SAL_CALL ZipPackageStream::getPropertyValue( const ::rtl::OUString& PropertyName )
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    if (PropertyName == L"MediaType")
+    if (PropertyName == ::rtl::OUString::createFromAscii("MediaType"))
     {
         uno::Any aAny;
         aAny <<= aEntry.sComment;
         return aAny;
     }
-    else if (PropertyName == L"Size")
+    else if (PropertyName == ::rtl::OUString::createFromAscii("Size"))
     {
         uno::Any aAny;
         aAny <<= aEntry.nSize;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 12:07:58 $
+ *  last change: $Author: mtg $ $Date: 2000-11-24 10:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,6 @@ private:
     ByteGrabber     aGrabber;
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
 public:
-    //ZipFile( void );
     ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput);
     virtual ~ZipFile();
 

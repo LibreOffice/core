@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 12:07:58 $
+ *  last change: $Author: mtg $ $Date: 2000-11-24 10:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ private:
     CRC32               aCRC;
     sal_Bool            bFinished;
     ByteChucker         aChucker;
-    ::std::vector <::com::sun::star::package::ZipEntry>         aZipList;
+    ::std::vector < ::com::sun::star::package::ZipEntry >           aZipList;
 
 public:
     ZipOutputStream( com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > &xOStream, sal_Int32 nNewBufferSize);
