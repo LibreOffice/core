@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_th.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-03 19:07:33 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,4 +185,20 @@ void SAL_CALL BreakIterator_th::makeIndex(const OUString& Text, sal_Int32 nStart
     }
 }
 
+icu::BreakIterator* SAL_CALL BreakIterator_th::loadICUWordBreakIterator(const OUString& Text, sal_Int32 nStartPos, const lang::Locale& rLocale,
+        sal_Int16 rWordType) throw(RuntimeException)
+{
+    sal_Bool newBreak = sal_False;
+    if (!editWordBreak) {
+        newBreak = sal_True;
+        editWordBreak = loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR);
+    }
+    if (newBreak || !editWordText.equals(Text)) {
+        editWordText = Text;
+        editWordBreak->setText(UnicodeString(Text.getStr(), Text.getLength()));
+        if (nStartPos != 0)
+        editWordBreak->following(0);
+    }
+    return editWordBreak;
+}
 } } } }
