@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 16:48:19 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ dutch ] = "~Nieuw..";
         Text[ finnish ] = "~Uusi";
         Text[ czech ] = "Nový...";
-        Text[ danish ] = "Ny...";
+        Text[ danish ] = "~Ny(t)...";
         Text[ polish ] = "Nowy...";
         Text[ portuguese_brazilian ] = "~Novo...";
         Text[ turkish ] = "~Yeni...";
@@ -121,6 +121,8 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ thai ] = "ใ~หม่...";
         Text[ slovak ] = "~Nový...";
         Text[ hindi ] = "~नया...";
+        Text[ hungarian ] = "Ú~j...";
+        Text[ slovenian ] = "~Nov...";
     };
 
     PushButton PB_XML_FILTER_EDIT
@@ -145,7 +147,7 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ dutch ] = "~Bewerken";
         Text[ finnish ] = "~Muokkaa";
         Text[ czech ] = "Upravit...";
-        Text[ danish ] = "Rediger...";
+        Text[ danish ] = "~Rediger...";
         Text[ polish ] = "~Edytuj...";
         Text[ portuguese_brazilian ] = "~Editar...";
         Text[ turkish ] = "D~�zenle...";
@@ -155,6 +157,8 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ slovak ] = "~Upraviť...";
         Text[ catalan ] = "~Edit...";
         Text[ hindi ] = "~संपादन...";
+        Text[ hungarian ] = "S~zerkesztés...";
+        Text[ slovenian ] = "~Uredi...";
     };
 
     PushButton PB_XML_FILTER_TEST
@@ -176,7 +180,7 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ slovak ] = "~Testovacie XSLT-y...";
         Text[ portuguese_brazilian ] = "~Testar XSLTs...";
         Text[ greek ] = "~Test XSLTs...";
-        Text[ dutch ] = "~Test XSLTs...";
+        Text[ dutch ] = "XSLTs ~Testen...";
         Text[ finnish ] = "~Test XSLTs...";
         Text[ czech ] = "Ověřit XSLT...";
         Text[ danish ] = "~Test XSLTs...";
@@ -189,6 +193,8 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ polish ] = "~Test XSLTs...";
         Text[ turkish ] = "~Test XSLTs...";
         Text[ thai ] = "~Test XSLTs...";
+        Text[ hungarian ] = "XSLT-k ~ellenőrzése...";
+        Text[ slovenian ] = "~Preizkusi XSLT...";
     };
 
     PushButton PB_XML_FILTER_DELETE
@@ -213,7 +219,7 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ dutch ] = "~Wissen...";
         Text[ finnish ] = "~Poista";
         Text[ czech ] = "Smazat...";
-        Text[ danish ] = "Slet...";
+        Text[ danish ] = "~Slet...";
         Text[ polish ] = "Usu�...";
         Text[ portuguese_brazilian ] = "E~xcluir...";
         Text[ turkish ] = "~Sil...";
@@ -223,6 +229,8 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ thai ] = "~ลบ...";
         Text[ slovak ] = "~Zmazať...";
         Text[ hindi ] = "~मिटाओ...";
+        Text[ hungarian ] = "~Törlés...";
+        Text[ slovenian ] = "~Izbriši...";
     };
 
     PushButton PB_XML_FILTER_SAVE
@@ -244,10 +252,10 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ slovak ] = "~Uložiť ako balík...";
         Text[ portuguese_brazilian ] = "~Salvar como pacote... ";
         Text[ greek ] = "~Save as Package...";
-        Text[ dutch ] = "~Save as Package...";
+        Text[ dutch ] = "~Opslaan als Pakket...";
         Text[ finnish ] = "~Save as Package...";
         Text[ czech ] = "Uložit jako balík...";
-        Text[ danish ] = "~Save as Package...";
+        Text[ danish ] = "~Gem som pakke...";
         Text[ arabic ] = "~Save as Package...";
         Text[ hebrew ] = "~Save as Package...";
         Text[ catalan ] = "~Save as Package...";
@@ -257,6 +265,8 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ polish ] = "~Save as Package...";
         Text[ turkish ] = "~Save as Package...";
         Text[ thai ] = "~Save as Package...";
+        Text[ hungarian ] = "~Mentés csomagként...";
+        Text[ slovenian ] = "~Shrani kot paket...";
     };
 
     PushButton PB_XML_FILTER_OPEN
@@ -280,10 +290,10 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ slovak ] = "~Otvoriť balík...";
         Text[ portuguese_brazilian ] = "~Abrir pacote";
         Text[ greek ] = "~Open Package...";
-        Text[ dutch ] = "~Open Package...";
+        Text[ dutch ] = "~Open Pakket...";
         Text[ finnish ] = "~Open Package...";
         Text[ czech ] = "Otevřít balík...";
-        Text[ danish ] = "~Open Package...";
+        Text[ danish ] = "�~ben pakke...";
         Text[ arabic ] = "~Open Package...";
         Text[ hebrew ] = "~Open Package...";
         Text[ catalan ] = "~Open Package...";
@@ -293,6 +303,8 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ polish ] = "~Open Package...";
         Text[ turkish ] = "~Open Package...";
         Text[ thai ] = "~Open Package...";
+        Text[ hungarian ] = "~Csomag megnyitása...";
+        Text[ slovenian ] = "~Odpri paket...";
     };
 
     HelpButton BTN_XML_FILTER_HELP
@@ -323,7 +335,7 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ dutch ] = "~Sluiten";
         Text[ finnish ] = "~Sulje";
         Text[ czech ] = "Zavřít";
-        Text[ danish ] = "Luk";
+        Text[ danish ] = "~Luk";
         Text[ polish ] = "Zamknij";
         Text[ portuguese_brazilian ] = "~Fechar";
         Text[ turkish ] = "~Kapat";
@@ -333,6 +345,8 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ thai ] = "~ปิด";
         Text[ slovak ] = "~Zavrieť";
         Text[ hindi ] = "~बन्द करो";
+        Text[ hungarian ] = "~Bezárás";
+        Text[ slovenian ] = "~Zapri";
     };
 
     Text[ french ] = "Param�tres du filtre XML";
@@ -345,11 +359,11 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
     Text[ chinese_traditional ] = "XML 篩選器設定";
     Text[ slovak ] = "Nastavenia XML filtra";
     Text[ portuguese_brazilian ] = "Configura��o dos filtros XSLT";
-    Text[ greek ] = "XML Filter Settings";
-    Text[ dutch ] = "XML Filter Settings";
+    Text[ greek ] = "��������� ������� XML";
+    Text[ dutch ] = "XML-filter Instellingen";
     Text[ finnish ] = "XML Filter Settings";
     Text[ czech ] = "Nastavení XML filtrů";
-    Text[ danish ] = "XML Filter Settings";
+    Text[ danish ] = "Indstillinger for XML-filter";
     Text[ arabic ] = "XML Filter Settings";
     Text[ hebrew ] = "XML Filter Settings";
     Text[ catalan ] = "XML Filter Settings";
@@ -359,7 +373,10 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
     Text[ polish ] = "XML Filter Settings";
     Text[ turkish ] = "XML Filter Settings";
     Text[ thai ] = "XML Filter Settings";
+    Text[ hungarian ] = "XML-szűrőbeállítások";
+    Text[ slovenian ] = "Nastavitve XML filtra";
 };
+
 
 
 
