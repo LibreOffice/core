@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:27:59 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,8 @@
     Text[ greek ] = "ÁðïèÞêåõ~óç...";   \
     Text[ korean ] = "ÀúÀå(~S)..."; \
     Text[ turkish ] = "~Kaydet..."; \
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = " ";   \
+    Text[ catalan ] = "~Guardar...";
 
 #define PUSHBUTTON_TEXT_RESET \
     Text = "Zur~ücksetzen" ; \
@@ -108,7 +109,8 @@
     Text[ greek ] = "Åðáíáö~ïñÜ";   \
     Text[ korean ] = "¿ø·¡´ë·Î(~E)";    \
     Text[ turkish ] = "Baþa al";    \
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = " ";   \
+    Text[ catalan ] = "~Restablecer";
 
 #define PUSHBUTTON_TEXT_LOAD \
 /* ### ACHTUNG: Neuer Text in Resource? La~den... : ~Laden... */\
@@ -132,7 +134,8 @@
     Text[ greek ] = "Öüñ~ôùóç...";  \
     Text[ korean ] = "·Îµå(~L)..."; \
     Text[ turkish ] = "Yükle...";   \
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = " ";   \
+    Text[ catalan ] = "~Cargar...";
 
 #define PUSHBUTTON_TEXT_REMOVE \
 /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */\
@@ -158,7 +161,8 @@
     Text[ greek ] = "~ÄéáãñáöÞ";    \
     Text[ korean ] = "»èÁ¦(~D)";    \
     Text[ turkish ] = "Sil";    \
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = " ";   \
+    Text[ catalan ] = "~Eliminar";
 
 #define PUSHBUTTON_TEXT_CHANGE \
 /* ### ACHTUNG: Neuer Text in Resource? ~Ändern : ~Žndern */\
@@ -184,7 +188,8 @@
     Text[ greek ] = "~Ôñïðïðïßçóç"; \
     Text[ korean ] = "º¯°æ(~M)";    \
     Text[ turkish ] = "Deðiþtir";   \
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = " ";   \
+    Text[ catalan ] = "~Modificar";
 
 #define PUSHBUTTON_TEXT_NEW \
     Text = "~Neu" ; \
@@ -209,7 +214,8 @@
     Text[ greek ] = "Äç~ìéïõñãßá";  \
     Text[ korean ] = "»õ·Î(~N)";    \
     Text[ turkish ] = "~Yeni";  \
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = " ";   \
+    Text[ catalan ] = "~Nuevo";
 
 #define FIXEDTEXT_TEXT_GROUP \
     Text = "~Bereich" ; \
@@ -234,7 +240,8 @@
     Text[ greek ] = "~Êáôçãïñßá";   \
     Text[ korean ] = "¿µ¿ª(~C)";    \
     Text[ turkish ] = "Ka~tegori";  \
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = " ";   \
+    Text[ catalan ] = "~Área";
 
 #define FIXEDTEXT_TEXT_FUNCTION \
     Text = "~Funktion" ; \
@@ -259,7 +266,8 @@
     Text[ greek ] = "~ÓõíÜñôçóç";   \
     Text[ korean ] = "±â´É";    \
     Text[ turkish ] = "Ýþlev";  \
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = " ";   \
+    Text[ catalan ] = "~Función";
 
 #define GROUPBOX_TEXT_FUNCTIONS \
     Text = "Funktionen" ; \
@@ -284,7 +292,8 @@
     Text[ greek ] = "Ëåéôïõñãßåò";  \
     Text[ korean ] = "±â´Éµé";  \
     Text[ turkish ] = "Fonksiyon";  \
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = " ";   \
+    Text[ catalan ] = "Funciones";
 
  // TP_CONFIG_MENU --------------------------------------------------------
 TabPage TP_CONFIG_MENU
@@ -318,6 +327,7 @@ TabPage TP_CONFIG_MENU
         Text[ korean ] = "»õ·Î(~N)";
         Text[ turkish ] = "~Yeni";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Nuevo";
     };
     PushButton BTN_MN_NEWPOPUP
     {
@@ -346,6 +356,7 @@ TabPage TP_CONFIG_MENU
         Text[ korean ] = "»õ ¸Þ´º(~U)";
         Text[ turkish ] = "Yeni mönü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nue~vo menú";
     };
     PushButton BTN_MN_CHANGE
     {
@@ -375,6 +386,7 @@ TabPage TP_CONFIG_MENU
         Text[ korean ] = "º¯°æ(~M)";
         Text[ turkish ] = "Deðiþtir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Personalizar";
     };
     PushButton BTN_MN_REMOVE
     {
@@ -405,6 +417,7 @@ TabPage TP_CONFIG_MENU
         Text[ korean ] = "»èÁ¦(~D)";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eliminar";
     };
     ImageButton BTN_MN_UP
     {
@@ -450,6 +463,7 @@ TabPage TP_CONFIG_MENU
         Text[ korean ] = "¿ø·¡´ë·Î(~E)";
         Text[ turkish ] = "Baþa al";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Res~tablecer";
     };
     PushButton BTN_LOAD
     {
@@ -479,6 +493,7 @@ TabPage TP_CONFIG_MENU
         Text[ korean ] = "·Îµå(~L)";
         Text[ turkish ] = "Yükle...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "C~argar...";
     };
     PushButton BTN_SAVE
     {
@@ -507,6 +522,7 @@ TabPage TP_CONFIG_MENU
         Text[ korean ] = "ÀúÀå(~S)...";
         Text[ turkish ] = "Kaydet...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Guardar...";
     };
     Control BOX_MN_ENTRIES
     {
@@ -546,6 +562,7 @@ TabPage TP_CONFIG_MENU
         Text[ korean ] = "¸Þ´º";
         Text[ turkish ] = "Mönü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Menú";
     };
     FixedText TXT_MN_GROUP
     {
@@ -574,6 +591,7 @@ TabPage TP_CONFIG_MENU
         Text[ korean ] = "¿µ¿ª(~A)";
         Text[ turkish ] = "Ka~tegori";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Área";
     };
     Control BOX_MN_GROUP
     {
@@ -609,6 +627,7 @@ TabPage TP_CONFIG_MENU
         Text[ korean ] = "¸í·É(~F)";
         Text[ turkish ] = "Ýþlev";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Función";
     };
     Control BOX_MN_FUNCTION
     {
@@ -644,6 +663,7 @@ TabPage TP_CONFIG_MENU
         Text[ korean ] = "±â´Éµé";
         Text[ turkish ] = "Ýþlevler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Funciones";
     };
 };
  // TP_CONFIG_ACCEL -------------------------------------------------------
@@ -680,6 +700,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ korean ] = "º¯°æ(~A)";
         Text[ turkish ] = "Deðiþtir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Modificar";
     };
     PushButton BTN_ACC_REMOVE
     {
@@ -710,6 +731,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ korean ] = "»èÁ¦(~D)";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eliminar";
     };
     Control BOX_ACC_ENTRIES
     {
@@ -748,6 +770,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ korean ] = "Å°º¸µå";
         Text[ turkish ] = "Klavye";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Teclado";
     };
     FixedText TXT_ACC_GROUP
     {
@@ -776,6 +799,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ korean ] = "¿µ¿ª(~C)";
         Text[ turkish ] = "Ka~tegori";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Área";
     };
     Control BOX_ACC_GROUP
     {
@@ -811,6 +835,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ korean ] = "¸í·É(~F)";
         Text[ turkish ] = "Ýþlev";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Función";
     };
     Control BOX_ACC_FUNCTION
     {
@@ -848,6 +873,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ korean ] = "Å°(~K)";
         Text[ turkish ] = "T~uþlar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Teclas";
     };
     ListBox BOX_ACC_KEY
     {
@@ -882,6 +908,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ korean ] = "±â´Éµé";
         Text[ turkish ] = "Ýþlevler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Funciones";
     };
     PushButton BTN_RESET
     {
@@ -913,6 +940,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ korean ] = "¿ø·¡´ë·Î(~E)";
         Text[ turkish ] = "Baþa al";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Restablecer";
     };
     PushButton BTN_LOAD
     {
@@ -942,6 +970,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ korean ] = "·Îµå(~L)...";
         Text[ turkish ] = "Yükle...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "C~argar...";
     };
     PushButton BTN_SAVE
     {
@@ -970,6 +999,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ korean ] = "ÀúÀå(~S)...";
         Text[ turkish ] = "Kaydet...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Guardar...";
     };
 };
  // TP_CONFIG_STATBAR -----------------------------------------------------
@@ -1015,6 +1045,7 @@ TabPage TP_CONFIG_STATBAR
         Text[ korean ] = "»óÅÂÇ¥½ÃÁÙ ";
         Text[ turkish ] = "Durum çubuðu ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Barra de estado  ";
     };
     PushButton BTN_RESET
     {
@@ -1046,6 +1077,7 @@ TabPage TP_CONFIG_STATBAR
         Text[ korean ] = "¿ø·¡´ë·Î(~E)";
         Text[ turkish ] = "Baþa al";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Restablecer";
     };
     PushButton BTN_LOAD
     {
@@ -1075,6 +1107,7 @@ TabPage TP_CONFIG_STATBAR
         Text[ korean ] = "·Îµå(~L)...";
         Text[ turkish ] = "Yükle...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "C~argar...";
     };
     PushButton BTN_SAVE
     {
@@ -1103,6 +1136,7 @@ TabPage TP_CONFIG_STATBAR
         Text[ korean ] = "ÀúÀå(~S)...";
         Text[ turkish ] = "Kaydet...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Guardar...";
     };
     Bitmap CHKBTN_UNCHECKED { File = "chkun.bmp" ; };
     Bitmap CHKBTN_CHECKED { File = "chkch.bmp" ; };
@@ -1162,6 +1196,7 @@ TabDialog DLG_CONFIG
                 Text[ korean ] = "¸Þ´º";
                 Text[ turkish ] = "Mönü";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Menú";
             };
             PageItem
             {
@@ -1190,6 +1225,7 @@ TabDialog DLG_CONFIG
                 Text[ korean ] = "Å°º¸µå";
                 Text[ turkish ] = "Klavye";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Teclado";
             };
             PageItem
             {
@@ -1218,6 +1254,7 @@ TabDialog DLG_CONFIG
                 Text[ korean ] = "»óÅÂ¸ðÀ½";
                 Text[ turkish ] = "Durum çubuðu";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Barra de estado";
             };
             PageItem
             {
@@ -1246,6 +1283,7 @@ TabDialog DLG_CONFIG
                 Text[ korean ] = "µµ±¸¸ðÀ½";
                 Text[ turkish ] = "Araç çubuklarý";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Barras de símbolos";
             };
             PageItem
             {
@@ -1274,6 +1312,7 @@ TabDialog DLG_CONFIG
                 Text[ korean ] = "ÀÌº¥Æ®";
                 Text[ turkish ] = "Ýþlemler";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Acontecimientos";
             };
         };
     };
@@ -1287,6 +1326,7 @@ TabDialog DLG_CONFIG
     Text[ korean ] = "±¸¼º";
     Text[ turkish ] = "Özelleþtir";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Configurar";
 };
  // Strings ---------------------------------------------------------------
 String STR_NEW
@@ -1314,6 +1354,7 @@ String STR_NEW
     Text[ korean ] = "»õ·Î";
     Text[ turkish ] = "Yeni";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nuevo";
 };
 String STR_OPEN
 {
@@ -1342,6 +1383,7 @@ String STR_OPEN
     Text[ korean ] = "¿­±â";
     Text[ turkish ] = "Aç";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Abrir";
 };
 String STR_SAVE
 {
@@ -1368,6 +1410,7 @@ String STR_SAVE
     Text[ korean ] = "ÀúÀå";
     Text[ turkish ] = "Kaydet";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Guardar";
 };
 String STR_SAVEAS
 {
@@ -1394,6 +1437,7 @@ String STR_SAVEAS
     Text[ korean ] = "´Ù¸¥ ÀÌ¸§À¸·Î ÀúÀå";
     Text[ turkish ] = "Farklý kaydet";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Guardar como";
 };
 String STR_PRINT
 {
@@ -1420,6 +1464,7 @@ String STR_PRINT
     Text[ korean ] = "ÀÎ¼â";
     Text[ turkish ] = "Yazdýr";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imprimir";
 };
 String STR_QUIT
 {
@@ -1446,6 +1491,7 @@ String STR_QUIT
     Text[ korean ] = "Á¾·á";
     Text[ turkish ] = "Kapat";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Terminar";
 };
 String STR_CUT
 {
@@ -1472,6 +1518,7 @@ String STR_CUT
     Text[ korean ] = "Àß¶ó³»±â";
     Text[ turkish ] = "Kes";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cortar";
 };
 String STR_COPY
 {
@@ -1498,6 +1545,7 @@ String STR_COPY
     Text[ korean ] = "º¹»ç";
     Text[ turkish ] = "Kopyala";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Copiar";
 };
 String STR_PASTE
 {
@@ -1526,6 +1574,7 @@ String STR_PASTE
     Text[ korean ] = "ºÙ¿© ³Ö±â";
     Text[ turkish ] = "Yapýþtýr";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Pegar";
 };
 String STR_DELETE
 {
@@ -1554,6 +1603,7 @@ String STR_DELETE
     Text[ korean ] = "»èÁ¦";
     Text[ turkish ] = "Sil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Eliminar";
 };
 String STR_FIND
 {
@@ -1580,6 +1630,7 @@ String STR_FIND
     Text[ korean ] = "Ã£±â";
     Text[ turkish ] = "Ara";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Buscar";
 };
 String STR_FINDBACKWARD
 {
@@ -1608,6 +1659,7 @@ String STR_FINDBACKWARD
     Text[ korean ] = "µÚ·Î Ã£±â";
     Text[ turkish ] = "Geriye doðru ara";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Buscar hacia atrás";
 };
 String STR_PROPERTIES
 {
@@ -1634,6 +1686,7 @@ String STR_PROPERTIES
     Text[ korean ] = "µî·ÏÁ¤º¸";
     Text[ turkish ] = "Özellikler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Propiedades";
 };
 String STR_FRONT
 {
@@ -1660,6 +1713,7 @@ String STR_FRONT
     Text[ korean ] = "¾ÕÀ¸·Î";
     Text[ turkish ] = "Ýleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Primer plano";
 };
  // MessageBoxes ----------------------------------------------------------
 QueryBox QBX_MNUCFG_UNDEFINED_FUNCTIONS
@@ -1691,6 +1745,7 @@ QueryBox QBX_MNUCFG_UNDEFINED_FUNCTIONS
     Message[ korean ] = "Á¤ÀÇµÇÁö ¾ÊÀº ±â´ÉµéÀÌ ¾ÆÁ÷ ÀÖ½À´Ï´Ù. (???).\n\n±×·¡µµ ÀÌ ±¸¼ºÀ» Àû¿ëÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Hala tanýmlanmamýþ iþlevler mevcut (???).\n\nBu konfigürasyonu yine de kabul etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Todavía hay funciones no definidas (???).\n\n¿Desea de todas formas aceptar esta configuración?";
 };
 QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
 {
@@ -1721,6 +1776,7 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     Message[ korean ] = "ÆË¾÷¿¡¸¸ ÁöÁ¤µÉ ¼ö ÀÖ´Â ±â´ÉµéÀ» °¡Áø Ç×¸ñµéÀÌ ¾ÆÁ÷ ÀÖ½À´Ï´Ù. \n\n±×·¡µµ ÀÌ ±¸¼ºÀ» Àû¿ëÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Yalnýzca açýlan mönülere atanabilen iþlevleri olan giriþler mevcut.\n\nBu konfigürasyon ile devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Todavía hay entradas con funciones que solo pueden ser asignadas a emergentes.\n\n¿Desea continuar de todos modos?";
 };
 InfoBox IBX_MNUCFG_ALREADY_INCLUDED
 {
@@ -1747,6 +1803,7 @@ InfoBox IBX_MNUCFG_ALREADY_INCLUDED
     Message[ korean ] = "±â´ÉÀÌ ÀÌ¹Ì ÀÌ ÆË¾÷¿¡ Æ÷ÇÔµÇ¾î ÀÖ½À´Ï´Ù.";
     Message[ turkish ] = "Ýþlev zaten bu açýlan mönüde mevcut.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "La función ya está incluida en este emergente.";
 };
 String STR_LOADMENUCONFIG
 {
@@ -1773,6 +1830,7 @@ String STR_LOADMENUCONFIG
     Text[ korean ] = "¸Þ´º ±¸¼º ·Îµå";
     Text[ turkish ] = "Mönü konfigürasyonunu yükle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cargar configuración del menú";
 };
 String STR_SAVEMENUCONFIG
 {
@@ -1796,6 +1854,7 @@ String STR_SAVEMENUCONFIG
     Text[ greek ] = "ÁðïèÞêåõóç äéáìüñöùóçò ìåíïý";
     Text[ korean ] = "¸Þ´º±¸¼º ÀúÀå";
     Text[ turkish ] = "Mönü konfigürasyonunu kaydet";
+    Text[ catalan ] = "Guardar configuración del menú";
 };
 String STR_LOADACCELCONFIG
 {
@@ -1820,6 +1879,7 @@ String STR_LOADACCELCONFIG
     Text[ korean ] = "Å°º¸µå ±¸¼º ·Îµå";
     Text[ turkish ] = "Klavye konfigürasyonunu yükle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cargar configuración del teclado";
 };
 String STR_SAVEACCELCONFIG
 {
@@ -1843,6 +1903,7 @@ String STR_SAVEACCELCONFIG
     Text[ greek ] = "ÁðïèÞêåõóç äéáìüñöùóçò ðëçêôñïëïãßïõ";
     Text[ korean ] = "Å°º¸µå±¸¼º ÀúÀå";
     Text[ turkish ] = "Klavye konfigürasyonunu kaydet";
+    Text[ catalan ] = "Guardar configuración del teclado";
 };
 String STR_LOADSTATBARCONFIG
 {
@@ -1867,6 +1928,7 @@ String STR_LOADSTATBARCONFIG
     Text[ korean ] = "»óÅÂ¸ðÀ½ ±¸¼º ·Îµå";
     Text[ turkish ] = "Durum çubuðu konfigürasyonunu yükle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cargar configuración de la barra de estado";
 };
 String STR_SAVESTATBARCONFIG
 {
@@ -1890,6 +1952,7 @@ String STR_SAVESTATBARCONFIG
     Text[ greek ] = "ÁðïèÞêåõóç äéáìüñöùóçò ãñáììÞò êáôÜóôáóçò";
     Text[ korean ] = "»óÅÂ¸ðÀ½ ±¸¼º ÀúÀå";
     Text[ turkish ] = "Durum çubuðu konfigürasyonunu kaydet";
+    Text[ catalan ] = "Guardar configuración de la barra de estado";
 };
 String STR_MENU
 {
@@ -1914,5 +1977,6 @@ String STR_MENU
     Text[ korean ] = "¸Þ´º";
     Text[ turkish ] = "Mönü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Menú";
 };
  // ********************************************************************** EOF
