@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 08:13:59 $
+ *  last change: $Author: rt $ $Date: 2000-11-29 10:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,7 @@ String STR_BEZIER_TOOLBOX
     Text[ polish ] = "Pasek obiektσw Bιziera";
     Text[ japanese ] = "ΝήΌήª‹ΘόµΜήΌήªΈΔΚή°";
     Text[ greek ] = "Γραμμή αντικειμένων καμπύλης";
-    Text[ korean ] = "Ί£ΑφΎξ°³ΓΌ Έπΐ½";
+    Text[ korean ] = "Ί£ΑφΏ΅ °³ΓΌ Έπΐ½";
     Text[ chinese_traditional ] = "¦±½uª«¥σ¦C";
     Text[ arabic ] = "ΤΡνΨ ίΗΖδΗΚ Bιzier";
     Text[ turkish ] = "Bιzier nesne ηubuπu";
@@ -5763,7 +5763,7 @@ String STR_END_SPELLING
     Text[ polish ] = "Sprawdzanie pisowni dla tego dokumentu zosta³o zakoρczone!";
     Text[ japanese ] = "‚±‚ΜΔή·­ÒέΔ‚Μ½ΝίΩ Αª―Έ‚ΝI—Ή‚µ‚ά‚µ‚½!";
     Text[ greek ] = "Ο έλεγχος ορθογραφίας για ολόκληρο το έγγραφο ολοκληρώθηκε!";
-    Text[ korean ] = "ΐΜ Ή®Ό­ΐΗ ΈΒΓγΉύ°Λ»ηΈ¦ Έ¶ΓΖ½ΐ΄Ο΄Ω!";
+    Text[ korean ] = "ΐΜ Ή®Ό­ΐΗ ΈΒΓγΉύ °Λ»ηΈ¦ ΏΟ·αΗΟΏ΄½ΐ΄Ο΄Ω!";
     Text[ chinese_traditional ] = "¤wΈg§Ή¦¨¤ε¥σªΊ«χ¦rΐΛ¬d΅I";
     Text[ arabic ] = "Κγ ΗαΗδΚεΗΑ γδ ΗαΚΟήνή ΗαΕγαΗΖν αεΠΗ ΗαγΣΚδΟ!";
     Text[ turkish ] = "Bu belge iηin yazύm denetimi tamamlandύ!";
@@ -5787,7 +5787,7 @@ String STR_END_SPELLING_OBJ
     Text[ polish ] = "Sprawdzanie pisowni dla wybranych obiektσw zosta³o zakoρczone!";
     Text[ japanese ] = "‘I‘π‚µ‚½µΜήΌήªΈΔ‚Μ½ΝίΩΑª―Έ‚ΝI—Ή‚µ‚ά‚µ‚½B";
     Text[ greek ] = "Ο ορθογραφικός έλεγχος για τα επιλεγμένα αντικείμενα ολοκληρώθηκε!";
-    Text[ korean ] = "Ό±ΕΓµΘ °³ΓΌΐΗ ΈΒΓγΉύ°Λ»ηΈ¦ Έ¶ΓΖ½ΐ΄Ο΄Ω!";
+    Text[ korean ] = "Ό±ΕΓµΘ °³ΓΌΐΗ ΈΒΓγΉύ °Λ»ηΈ¦ ΏΟ·αΗΟΏ΄½ΐ΄Ο΄Ω!";
     Text[ chinese_traditional ] = "¤wΈg§Ή¦¨Ώο¨ϊ­S³ςªΊ«χ¦rΐΛ¬d΅I";
     Text[ arabic ] = "Κγ ΗαΗδΚεΗΑ γδ ΗαΚΟήνή ΗαΕγαΗΖν ααίΗΖδΗΚ ΗαγΝΟΟΙ!";
     Text[ turkish ] = "Seηilen nesnelere iliώkin yazύm denetimi tamamlandύ!";
