@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sci_impl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:34 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 13:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ class SCI_Vector : public StdConstIterator<ELEM>
 {
   public:
     typedef std::vector<ELEM>       source;
-    typedef source::const_iterator  source_iterator;
+    typedef typename source::const_iterator source_iterator;
 
                         SCI_Vector(
                             const source &      i_rSource  );
@@ -105,11 +105,11 @@ class SCI_Vector : public StdConstIterator<ELEM>
 //*************************     SCI_Map      **********************************//
 
 template <class KEY, class VALUE>
-class SCI_Map : public StdConstIterator< std::map<KEY,VALUE>::value_type >
+class SCI_Map : public StdConstIterator< typename std::map<KEY,VALUE>::value_type >
 {
   public:
     typedef std::map<KEY,VALUE>     source;
-    typedef source::const_iterator  source_iterator;
+    typedef typename source::const_iterator source_iterator;
 
                         SCI_Map(
                             const source &      i_rSource  );
@@ -118,7 +118,7 @@ class SCI_Map : public StdConstIterator< std::map<KEY,VALUE>::value_type >
   private:
     // Interface StdConstIterator<>:
     virtual void        do_Advance();
-    virtual const std::map<KEY,VALUE>::value_type *
+    virtual const typename std::map<KEY,VALUE>::value_type *
                         inq_CurElement() const;
     virtual bool        inq_IsSorted() const;
 
@@ -131,11 +131,11 @@ class SCI_Map : public StdConstIterator< std::map<KEY,VALUE>::value_type >
 //*************************     SCI_MultiMap      **********************************//
 
 template <class KEY, class VALUE>
-class SCI_MultiMap : public StdConstIterator< std::multimap<KEY,VALUE>::value_type >
+class SCI_MultiMap : public StdConstIterator< typename std::multimap<KEY,VALUE>::value_type >
 {
   public:
     typedef std::multimap<KEY,VALUE>    source;
-    typedef source::const_iterator      source_iterator;
+    typedef typename source::const_iterator      source_iterator;
 
                         SCI_MultiMap(
                             const source &      i_rSource  );
@@ -147,7 +147,7 @@ class SCI_MultiMap : public StdConstIterator< std::multimap<KEY,VALUE>::value_ty
   private:
     // Interface StdConstIterator<>:
     virtual void        do_Advance();
-    virtual const std::multimap<KEY,VALUE>::value_type *
+    virtual const typename std::multimap<KEY,VALUE>::value_type *
                         inq_CurElement() const;
     virtual bool        inq_IsSorted() const;
 
@@ -168,7 +168,7 @@ class SCI_Set : public StdConstIterator<typename TYPES::element_type>
     typedef typename TYPES::element_type    element;
     typedef typename TYPES::sort_type       sorter;
     typedef std::set<element, sorter>       source;
-    typedef source::const_iterator          source_iterator;
+    typedef typename source::const_iterator source_iterator;
 
                         SCI_Set(
                             const source &      i_rSource  );
@@ -193,7 +193,7 @@ class SCI_DataInMap : public StdConstIterator<VALUE>
 {
   public:
     typedef std::map<KEY,VALUE>     source;
-    typedef source::const_iterator  source_iterator;
+    typedef typename source::const_iterator  source_iterator;
 
                         SCI_DataInMap(
                             const source &      i_rSource  );
@@ -281,7 +281,7 @@ SCI_Map<KEY,VALUE>::do_Advance()
 }
 
 template <class KEY, class VALUE>
-const std::map<KEY,VALUE>::value_type *
+const typename std::map<KEY,VALUE>::value_type *
 SCI_Map<KEY,VALUE>::inq_CurElement() const
 {
     if (itRun != itEnd)
@@ -332,7 +332,7 @@ SCI_MultiMap<KEY,VALUE>::do_Advance()
 }
 
 template <class KEY, class VALUE>
-const std::multimap<KEY,VALUE>::value_type *
+const typename std::multimap<KEY,VALUE>::value_type *
 SCI_MultiMap<KEY,VALUE>::inq_CurElement() const
 {
     if (itRun != itEnd)
