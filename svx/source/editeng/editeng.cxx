@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-29 11:48:51 $
+ *  last change: $Author: kz $ $Date: 2001-02-07 10:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1736,14 +1736,14 @@ void EditEngine::SetHyphenator( Reference< XHyphenator > & xHyph )
 
 void EditEngine::SetDefaultLanguage( LanguageType eLang )
 {
-#if SUPD >= 620
+#if SUPD >= 630
     DBG_ERROR( "DefaultLanguage not longer supported" );
 #endif
 }
 
 LanguageType EditEngine::GetDefaultLanguage() const
 {
-#if SUPD >= 620
+#if SUPD >= 630
     DBG_ERROR( "DefaultLanguage not longer supported" );
 #endif
     return pImpEditEngine->GetLanguage( EditPaM( pImpEditEngine->GetEditDoc().SaveGetObject( 0 ), 0 ) );
@@ -1757,7 +1757,7 @@ sal_Bool __EXPORT EditEngine::SpellNextDocument()
 
 EESpellState EditEngine::HasSpellErrors( LanguageType eLang )
 {
-#if SUPD >= 620
+#if SUPD >= 630
     DBG_ERROR( "DefaultLanguage not longer supported" );
 #endif
     return HasSpellErrors();
