@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:53:03 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,12 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveIOException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_IOERRORCODE_HPP_
+#include <com/sun/star/ucb/IOErrorCode.hpp>
+#endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
@@ -172,6 +178,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_FONTWIDTH_HPP_
 #include <com/sun/star/awt/FontWidth.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
 #endif
 #ifndef DBAUI_SBATTRDLG_HRC
 #include "dlgattr.hrc"
@@ -318,6 +327,10 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::svt;
+using ::com::sun::star::ucb::InteractiveIOException;
+using ::com::sun::star::ucb::IOErrorCode_NO_FILE;
+using ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING;
+using ::com::sun::star::frame::XModel;
 
 // -----------------------------------------------------------------------------
 SQLExceptionInfo createConnection(  const ::rtl::OUString& _rsDataSourceName,
@@ -407,11 +420,68 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     return aInfo;
 }
 // -----------------------------------------------------------------------------
+Reference< XModel > getDataSourceByName_displayError( const Reference< XNameAccess >& _rxDBContext,
+    const ::rtl::OUString& _rDataSourceName, Window* _pErrorMessageParent, Reference< XMultiServiceFactory > _rxORB,
+    bool _bDisplayError )
+{
+    OSL_PRECOND( _rxDBContext.is() && _rxORB.is(), "getDataSourceByName_displayError: invalid service factory!" );
+
+    Reference< XDataSource > xDatasource;
+    Any aError;
+    SQLExceptionInfo aSQLError;
+    try
+    {
+        _rxDBContext->getByName( _rDataSourceName ) >>= xDatasource;
+    }
+    catch(const WrappedTargetException& e)
+    {
+        InteractiveIOException aIOException;
+        if  (   ( e.TargetException >>= aIOException )
+            &&  (   ( aIOException.Code == IOErrorCode_NO_FILE )
+                ||  ( aIOException.Code == IOErrorCode_NOT_EXISTING )
+                )
+            )
+        {
+            String sErrorMessage = String( ModuleRes( STR_FILE_DOES_NOT_EXIST ) );
+            OFileNotation aTransformer( e.Message );
+            sErrorMessage.SearchAndReplaceAscii( "$file$", aTransformer.get( OFileNotation::N_SYSTEM ) );
+            aSQLError = SQLExceptionInfo( sErrorMessage ).get();
+        }
+        else
+        {
+            aSQLError = SQLExceptionInfo( e.TargetException );
+            if ( !aSQLError.isValid() )
+                aError = e.TargetException;
+        }
+    }
+    catch(const Exception&)
+    {
+        DBG_ERROR( "getDataSourceByName_displayError: caught an unexpected exception!" );
+    }
+
+    if ( xDatasource.is() )
+        return Reference< XModel >( xDatasource, UNO_QUERY );
+
+    if ( _bDisplayError )
+    {
+        if ( aSQLError.isValid() )
+            showError( aSQLError, _pErrorMessageParent, _rxORB );
+        else
+        {
+            DBG_ERROR( "getDataSourceByName_displayError: not yet implemented!" );
+            // by spec, we must pass this to an interaction handler ...
+        }
+    }
+    return Reference< XModel >();
+}
+
+// -----------------------------------------------------------------------------
 void showError(const SQLExceptionInfo& _rInfo,Window* _pParent,const Reference< XMultiServiceFactory >& _xFactory)
 {
     OSL_ENSURE(_pParent,"showError: Parent window must be NOT NULL!");
     ::dbtools::showError(_rInfo,VCLUnoHelper::GetInterface(_pParent),_xFactory);
 }
+
 // -----------------------------------------------------------------------------
 ::std::vector< Reference<XNameAccess> > getKeyColumns(const Reference<XPropertySet >& _rxTable,
                                                       sal_Int32 _nKeyType)
@@ -1748,6 +1818,33 @@ sal_Bool insertHierachyElement(Window* _pParent
     }
     return sal_True;
 }
+// -----------------------------------------------------------------------------
+Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >& _rxConnection,const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rMF )
+{
+    // ---------------------------------------------------------------
+    // create a formatter working with the connections format supplier
+    Reference< XNumberFormatter > xFormatter;
+
+    try
+    {
+        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(_rxConnection, sal_True,_rMF));
+
+        if ( xSupplier.is() )
+        {
+            // create a new formatter
+            xFormatter = Reference< ::com::sun::star::util::XNumberFormatter > (
+                _rMF->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
+            if ( xFormatter.is() )
+                xFormatter->attachNumberFormatsSupplier(xSupplier);
+        }
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(0,"Exception catched!");
+    }
+    return xFormatter;
+}
+
 
 // .........................................................................
 } // dbaui
