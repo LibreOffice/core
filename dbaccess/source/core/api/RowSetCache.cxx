@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_XKEYSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #endif
@@ -110,11 +113,11 @@ using namespace ::osl;
 
 // -------------------------------------------------------------------------
 ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
-                           const OSQLParseTreeIterator* _pIterator,
-                           const ::rtl::OUString& _rUpdateTableName)
+                           const Reference< XSQLQueryComposer >& _xComposer,
+                           const ::rtl::OUString& _rUpdateTableName,
+                           sal_Bool&    _bModified,
+                           sal_Bool&    _bNew)
     : m_xSet(_xRs)
-//  ,m_aMatrixIter(m_pMatrix->begin())
-//  ,m_aMatrixEnd(m_pMatrix->end())
     ,m_nStartPos(0)
     ,m_nEndPos(0)
     ,m_nPosition(0)
@@ -129,26 +132,26 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     ,m_bUpdated(sal_False)
     ,m_xMetaData(Reference< XResultSetMetaDataSupplier >(_xRs,UNO_QUERY)->getMetaData())
     ,m_nFetchSize(50)
-    ,m_bNew(sal_False)
-    ,m_bModified(sal_False)
+    ,m_bNew(_bNew)
+    ,m_bModified(_bModified)
     ,m_pMatrix(NULL)
     ,m_pInsertMatrix(NULL)
 {
     // check if all keys of the updateable table are fetched
     sal_Bool bAllKeysFound = sal_False;
-    const OSQLTables& rTables = _pIterator->getTables();
 
-    OSQLTables::const_iterator aIter;
+    Reference<XTablesSupplier> xTabSup(_xComposer,UNO_QUERY);
+    OSL_ENSHURE(xTabSup.is(),"ORowSet::execute composer isn't a tablesupplier!");
+    Reference<XNameAccess> xTables = xTabSup->getTables();
+
     if(_rUpdateTableName.getLength())
-        aIter = rTables.find(_rUpdateTableName);
+        xTables->getByName(_rUpdateTableName) >>= m_aUpdateTable;
     else
-        aIter = rTables.begin();
+        xTables->getByName(xTables->getElementNames()[0]) >>= m_aUpdateTable;
 
-    if(aIter != rTables.end())
+    if(m_aUpdateTable.is())
     {
-        m_aUpdateTable = aIter->second;
-
-        Reference<XKeysSupplier> xKeys(aIter->second,UNO_QUERY);
+        Reference<XKeysSupplier> xKeys(m_aUpdateTable,UNO_QUERY);
         if(xKeys.is())
         {
             Reference< XIndexAccess> xKeyIndex = xKeys->getKeys();
@@ -163,27 +166,23 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 Sequence< ::rtl::OUString> aNames(xColumns->getElementNames());
                 const ::rtl::OUString* pBegin = aNames.getConstArray();
                 const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
-                ::vos::ORef<OSQLColumns> rColumns = _pIterator->getSelectColumns();
 
-                ::comphelper::UStringMixEqual aCase(_pIterator->isCaseSensitive());
+                Reference<XColumnsSupplier> xColSup(_xComposer,UNO_QUERY);
+                Reference<XNameAccess> xSelColumns = xColSup->getColumns();
                 for(;pBegin != pEnd ;++pBegin)
                 {
-                    OSQLColumns::const_iterator aFind = findRealName(rColumns->begin(),rColumns->end(),*pBegin,aCase);
-                    if(bAllKeysFound = aFind != rColumns->end()) // found a column which is not refetched
+                    if(bAllKeysFound = xSelColumns->hasByName(*pBegin)) // found a column which is not refetched
                         break;
                 }
             }
         }
     }
-    else
-        aIter = rTables.begin();
-
     Reference< XPropertySet> xProp(_xRs,UNO_QUERY);
 
     // first check if resultset is bookmarkable
     if(xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISBOOKMARKABLE) && any2bool(xProp->getPropertyValue(PROPERTY_ISBOOKMARKABLE)))
     {
-        m_pCacheSet = new OBookmarkSet(_xRs,_pIterator);
+        m_pCacheSet = new OBookmarkSet(_xRs);
 
         // check privileges
         m_nPrivileges = Privilege::SELECT;
@@ -194,12 +193,12 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     {
         if(!bAllKeysFound)
         {
-            m_pCacheSet = new OStaticSet(_xRs,_pIterator);
+            m_pCacheSet = new OStaticSet(_xRs);
             m_nPrivileges = Privilege::SELECT;
         }
         else
         {
-            m_pCacheSet = new OKeySet(_xRs,_pIterator);
+            m_pCacheSet = new OKeySet(_xRs);
             // check privileges
             m_nPrivileges = Privilege::SELECT;
             if(Reference<XResultSetUpdate>(_xRs,UNO_QUERY).is())
@@ -522,8 +521,6 @@ sal_Bool SAL_CALL ORowSetCache::moveToBookmark( const Any& bookmark ) throw(SQLE
             m_aInsertRow = m_aMatrixIter;
     }
 
-    DBG_TRACE1("Position: ",m_nPosition);
-
     return m_aMatrixIter != m_pMatrix->end() && (*m_aMatrixIter).isValid();
 }
 // -------------------------------------------------------------------------
@@ -538,8 +535,6 @@ sal_Bool SAL_CALL ORowSetCache::moveRelativeToBookmark( const Any& bookmark, sal
 
         bRet = m_aMatrixIter != m_pMatrix->end() && (*m_aMatrixIter).isValid();
     }
-
-    DBG_TRACE1("Position: ",m_nPosition);
 
     return bRet;
 }
@@ -761,8 +756,6 @@ sal_Bool SAL_CALL ORowSetCache::next(  ) throw(SQLException, RuntimeException)
         if(m_bAfterLast)
             m_nPosition = 0;//m_nRowCount;
     }
-
-    DBG_TRACE1("Position: ",m_nPosition);
 
     return !m_bAfterLast;
 }
@@ -1064,7 +1057,6 @@ sal_Bool SAL_CALL ORowSetCache::first(  ) throw(SQLException, RuntimeException)
         if(!m_bNew)
             m_aInsertRow = m_aMatrixIter;
     }
-    DBG_TRACE1("Position: ",m_nPosition);
     return bRet;
 }
 // -------------------------------------------------------------------------
@@ -1103,7 +1095,6 @@ sal_Bool SAL_CALL ORowSetCache::last(  ) throw(SQLException, RuntimeException)
         OSL_ENSHURE((*m_aMatrixIter).isValid(),"ORowSetCache::last: Row not valid!");
     }
 #endif
-    DBG_TRACE1("Position: ",m_nPosition);
 
     return bRet;
 }
@@ -1176,7 +1167,6 @@ sal_Bool SAL_CALL ORowSetCache::absolute( sal_Int32 row ) throw(SQLException, Ru
 
     if(!m_bNew)
         m_aInsertRow = m_aMatrixIter;
-    DBG_TRACE1("Position: ",m_nPosition);
 
     return !(m_bAfterLast || m_bBeforeFirst);
 }
@@ -1230,7 +1220,6 @@ sal_Bool SAL_CALL ORowSetCache::previous(  ) throw(SQLException, RuntimeExceptio
         return sal_False;
     }
 
-    DBG_TRACE1("Position: ",m_nPosition);
 
     if(!m_bNew)
         m_aInsertRow = m_aMatrixIter;
@@ -1427,6 +1416,9 @@ void SAL_CALL ORowSetCache::clearWarnings(  ) throw(SQLException, RuntimeExcepti
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/10/11 11:18:11  fs
+    replace unotools with comphelper
+
     Revision 1.4  2000/10/05 14:52:16  oj
     last changed
 

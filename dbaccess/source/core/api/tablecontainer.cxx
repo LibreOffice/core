@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:12 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,14 @@
 #ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
+#endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
 #endif
 
 using namespace dbaccess;
@@ -97,6 +103,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::osl;
 using namespace ::comphelper;
@@ -107,10 +114,11 @@ using namespace ::cppu;
 //==========================================================================
 DBG_NAME(OTableContainer)
 //------------------------------------------------------------------------------
-OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex)
+OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon)
     :m_rParent(_rParent)
     ,m_rMutex(_rMutex)
     ,m_bConstructed(sal_False)
+    ,m_xConnection(_xCon)
 {
     DBG_CTOR(OTableContainer, NULL);
 }
@@ -203,7 +211,7 @@ void OTableContainer::construct(const Reference< XNameAccess >& _rxMasterContain
     m_bConstructed = sal_True;
 }
 //------------------------------------------------------------------------------
-void OTableContainer::construct(const Reference< XConnection >& _xConnection, const Sequence< ::rtl::OUString >& _rTableFilter, const Sequence< ::rtl::OUString >& _rTableTypeFilter)
+void OTableContainer::construct(const Sequence< ::rtl::OUString >& _rTableFilter, const Sequence< ::rtl::OUString >& _rTableTypeFilter)
 {
     // build sorted versions of the filter sequences, so the visibility decision is faster
     Sequence< ::rtl::OUString > aTableFilter(_rTableFilter);
@@ -243,7 +251,7 @@ void OTableContainer::construct(const Reference< XConnection >& _xConnection, co
 
     try
     {
-        Reference< XDatabaseMetaData > xMetaData = _xConnection.is() ? _xConnection->getMetaData() : Reference< XDatabaseMetaData >();
+        Reference< XDatabaseMetaData > xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : Reference< XDatabaseMetaData >();
         if (xMetaData.is())
         {
             const ::rtl::OUString sAll = ::rtl::OUString::createFromAscii("%");
@@ -300,14 +308,12 @@ void OTableContainer::construct(const Reference< XConnection >& _xConnection, co
                 // dispose the tables result set, in case the connection can handle only one concurrent statement
                 // (the table object creation will need it's own statements)
                 disposeComponent(xTables);
-                //
-                sal_Bool bCaseSensitive = xMetaData->storesMixedCaseQuotedIdentifiers();
                 for (sal_Int32 i=0; i<aCatalogs.size(); ++i)
                 {
                     Reference<XPropertySet> xTable;
                     try
                     {   // the ctor is allowed to throw an exception
-                        xTable = new ODBTable(_xConnection, aCatalogs[i], aSchemas[i], aNames[i], aTypes[i], aDescs[i], bCaseSensitive);
+                        xTable = new ODBTable(m_xConnection, NULL,aCatalogs[i], aSchemas[i], aNames[i], aTypes[i], aDescs[i]);
                     }
                     catch(SQLException&)
                     {
@@ -390,7 +396,17 @@ Any OTableContainer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsExcept
     if(!xReturn.is()) // special case
     {
         OSL_ENSHURE(m_xMasterTables.is(),"getByIndex: m_xMasterTables must be set!");
-        return m_xMasterTables->getByName(m_aTablesIndexed[_nIndex]->first);
+        Reference<XPropertySet> xProp;
+        m_xMasterTables->getByName(m_aTablesIndexed[_nIndex]->first) >>= xProp;
+        Reference<XColumnsSupplier > xSup(xProp,UNO_QUERY);
+
+        xReturn = new ODBTable(m_xConnection,
+                            xSup,
+                            comphelper::getString(xProp->getPropertyValue(PROPERTY_CATALOGNAME)),
+                            comphelper::getString(xProp->getPropertyValue(PROPERTY_SCHEMANAME)),
+                            comphelper::getString(xProp->getPropertyValue(PROPERTY_NAME)),
+                            comphelper::getString(xProp->getPropertyValue(PROPERTY_TYPE)),
+                            comphelper::getString(xProp->getPropertyValue(PROPERTY_DESCRIPTION)));
     }
     return makeAny(xReturn);
 }
@@ -406,8 +422,18 @@ Any OTableContainer::getByName(const rtl::OUString& _rName) throw( NoSuchElement
     Reference< XPropertySet > xReturn = aPos->second;
     if(!xReturn.is()) // special case
     {
-        OSL_ENSHURE(m_xMasterTables.is(),"getByIndex: m_xMasterTables must be set!");
-        return m_xMasterTables->getByName(_rName);
+        OSL_ENSHURE(m_xMasterTables.is(),"getByName: m_xMasterTables must be set!");
+        Reference<XPropertySet> xProp;
+        m_xMasterTables->getByName(_rName) >>= xProp;
+        Reference<XColumnsSupplier > xSup(xProp,UNO_QUERY);
+
+        xReturn = new ODBTable(m_xConnection,
+                            xSup,
+                            comphelper::getString(xProp->getPropertyValue(PROPERTY_CATALOGNAME)),
+                            comphelper::getString(xProp->getPropertyValue(PROPERTY_SCHEMANAME)),
+                            comphelper::getString(xProp->getPropertyValue(PROPERTY_NAME)),
+                            comphelper::getString(xProp->getPropertyValue(PROPERTY_TYPE)),
+                            comphelper::getString(xProp->getPropertyValue(PROPERTY_DESCRIPTION)));
     }
     return makeAny(xReturn);
 }

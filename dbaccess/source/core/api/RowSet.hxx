@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,9 +144,6 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns; // the columns from a table or query
 
         connectivity::OWeakRefArray                 m_aClones;
-        connectivity::OSQLParser                    m_aParser;
-        connectivity::OSQLParseNode*                m_pParseTree;
-
         connectivity::ORowVector< ORowSetValue >    m_aParameterRow; // hold all parameters
 
         rtl::OUString                               m_aCommand;
@@ -422,6 +419,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/11 11:18:11  fs
+    replace unotools with comphelper
+
     Revision 1.2  2000/09/29 15:20:51  oj
     rowset impl
 

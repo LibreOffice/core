@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:10 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,9 +104,8 @@ using namespace ::com::sun::star::util;
 //  using namespace ::cppu;
 using namespace ::osl;
 // -------------------------------------------------------------------------
-OKeySet::OKeySet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,
-                 const connectivity::OSQLParseTreeIterator* _pIterator)
-            : OCacheSet(_xDriverSet,_pIterator)
+OKeySet::OKeySet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet)
+            : OCacheSet(_xDriverSet)
 {
 }
 // -------------------------------------------------------------------------
@@ -280,6 +279,9 @@ void SAL_CALL OKeySet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/11 11:18:10  fs
+    replace unotools with comphelper
+
     Revision 1.1.1.1  2000/09/19 00:15:38  hr
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,9 +136,6 @@
 #ifndef DBACCESS_CORE_API_ROWSETROW_HXX
 #include "RowSetRow.hxx"
 #endif
-#ifndef _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
-#include <connectivity/sqliterator.hxx>
-#endif
 
 namespace dbaccess
 {
@@ -215,11 +212,11 @@ namespace dbaccess
         sal_Bool                    m_bUpdated ;
         sal_Bool                    m_bOwnsResultRow ;
         sal_Bool                    m_bRowObsolete ;
-        sal_Bool                    m_bModified ;
+        sal_Bool&                   m_bModified ;           // points to the rowset member m_bModified
         sal_Bool                    m_bCanceled ;
         sal_Bool                    m_bRebuildConnOnExecute ;
         sal_Bool                    m_bIsBookmarable ;
-        sal_Bool                    m_bNew ;
+        sal_Bool&                   m_bNew ;                // points to the rowset member m_bNew
 
         sal_Bool fillMatrix(sal_Int32 _nNewStartPos,sal_Int32 _nNewEndPos);
         sal_Bool moveWindow();
@@ -233,8 +230,10 @@ namespace dbaccess
         void cancelInsert();
     public:
         ORowSetCache(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >&,
-                     const connectivity::OSQLParseTreeIterator* _pIterator,
-                     const ::rtl::OUString& _rUpdateTableName);
+                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >& _xComposer,
+                     const ::rtl::OUString& _rUpdateTableName,
+                     sal_Bool&  _bModified,
+                     sal_Bool&  _bNew);
         ~ORowSetCache();
 
 
@@ -355,6 +354,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/10/11 11:18:11  fs
+    replace unotools with comphelper
+
     Revision 1.3  2000/10/05 09:33:39  fs
     using comphelper::OPropertyContainer instead of connectivity::OSimplePropertyContainer
 

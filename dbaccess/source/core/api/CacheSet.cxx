@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:10 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,6 +423,7 @@ void OCacheSet::setParameter(sal_Int32 nPos,Reference< XParameters > _xParameter
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
+            case DataType::LONGVARCHAR:
                 _xParameter->setBytes(nPos,_rValue);
                 break;
 
@@ -435,7 +436,9 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow)
     connectivity::ORowVector< ORowSetValue >::iterator aIter = _rRow->begin() + 1;
     for(sal_Int32 i=1;aIter != _rRow->end();++aIter,++i)
     {
-        switch(m_xSetMetaData->getColumnType(i))
+        sal_Int32 nType = m_xSetMetaData->getColumnType(i);
+        aIter->setTypeKind(nType);
+        switch(nType)
         {
         case DataType::CHAR:
         case DataType::VARCHAR:
@@ -481,6 +484,9 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/11 11:18:10  fs
+    replace unotools with comphelper
+
     Revision 1.2  2000/09/29 15:20:51  oj
     rowset impl
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #endif
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include <connectivity/sdbcx/VColumn.hxx>
+#endif
+#ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
+#include "definitioncolumn.hxx"
 #endif
 
 using namespace dbaccess;
@@ -501,17 +504,28 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent,
                    sal_Bool _bCaseSensitive,const ::std::vector< ::rtl::OUString> &_rVector,
                    sal_Bool _bAddColumn,sal_Bool _bDropColumn)
                    : connectivity::sdbcx::OCollection(_rParent,_bCaseSensitive,_rMutex,_rVector)
-                   ,m_pTable(NULL)
-//  :m_rParent(_rParent)
-//  ,m_rMutex(_rMutex)
+    ,m_pTable(NULL)
     ,m_bInitialized(sal_False)
     ,m_bAddColumn(_bAddColumn)
     ,m_bDropColumn(_bDropColumn)
 {
-    //  m_pColMap = new OColumnMap(17, ::comphelper::UStringMixHash(_bCaseSensitive), ::comphelper::UStringMixEqual(_bCaseSensitive));
+    //  m_pColMap = new OColumnMap(17, ::utl::UStringMixHash(_bCaseSensitive), ::utl::UStringMixEqual(_bCaseSensitive));
     DBG_CTOR(OColumns, NULL);
 }
-
+// -------------------------------------------------------------------------
+OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxDrvColumns,
+        sal_Bool _bCaseSensitive,const ::std::vector< ::rtl::OUString> &_rVector,
+        sal_Bool _bAddColumn,sal_Bool _bDropColumn)
+       : connectivity::sdbcx::OCollection(_rParent,_bCaseSensitive,_rMutex,_rVector)
+    ,m_pTable(NULL)
+    ,m_bInitialized(sal_False)
+    ,m_bAddColumn(_bAddColumn)
+    ,m_bDropColumn(_bDropColumn)
+    ,m_xDrvColumns(_rxDrvColumns)
+{
+    DBG_CTOR(OColumns, NULL);
+}
 //--------------------------------------------------------------------------
 OColumns::~OColumns()
 {
@@ -782,49 +796,76 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
     if(!m_pTable)
         return Reference< XNamed >();
 
-    ::rtl::OUString aSchema,aTable;
-    m_pTable->getPropertyValue(PROPERTY_SCHEMANAME) >>= aSchema;
-    m_pTable->getPropertyValue(PROPERTY_NAME)       >>= aTable;
-
-    Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getColumns(m_pTable->getPropertyValue(PROPERTY_CATALOGNAME),
-            aSchema,aTable,_rName);
-
     Reference< XNamed > xRet = NULL;
-    if(xResult.is())
+    if(m_xDrvColumns.is())
     {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        while(xResult->next())
+        Reference<XPropertySet> xProp;
+        m_xDrvColumns->getByName(_rName) >>= xProp;
+        Reference<XColumnLocate> xColumnLocate(xProp,UNO_QUERY);
+        sal_Int32 nPos = -1;
+        if(xColumnLocate.is())
+            nPos = xColumnLocate->findColumn(_rName);
+        else
         {
-            if(xRow->getString(4) == _rName)
+            Sequence< ::rtl::OUString> aNames = m_xDrvColumns->getElementNames();
+            const ::rtl::OUString* pBegin   = aNames.getConstArray();
+            const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
+            for(nPos = 0;pBegin != pEnd;++pBegin,++nPos)
+                if(*pBegin == _rName)
+                    break;
+        }
+
+        OTableColumnWrapper* pColumn = new OTableColumnWrapper(xProp,nPos);
+        xRet = pColumn;
+    }
+    else
+    {
+        ::rtl::OUString aSchema,aTable;
+        m_pTable->getPropertyValue(PROPERTY_SCHEMANAME) >>= aSchema;
+        m_pTable->getPropertyValue(PROPERTY_NAME)       >>= aTable;
+
+        Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getColumns(m_pTable->getPropertyValue(PROPERTY_CATALOGNAME),
+                aSchema,aTable,_rName);
+
+        if(xResult.is())
+        {
+            Reference< XRow > xRow(xResult,UNO_QUERY);
+            while(xResult->next())
             {
-                sal_Int32       nField5 = xRow->getInt(5);
-                ::rtl::OUString aField6 = xRow->getString(6);
-                sal_Int32       nField7 = xRow->getInt(7)
-                            ,   nField9 = xRow->getInt(9)
-                            ,   nField11= xRow->getInt(11);
+                if(xRow->getString(4) == _rName)
+                {
+                    sal_Int32       nField5 = xRow->getInt(5);
+                    ::rtl::OUString aField6 = xRow->getString(6);
+                    sal_Int32       nField7 = xRow->getInt(7)
+                                ,   nField9 = xRow->getInt(9)
+                                ,   nField11= xRow->getInt(11);
 
 
-                connectivity::sdbcx::OColumn* pRet = new connectivity::sdbcx::OColumn(_rName,
-                                            aField6,
-                                            xRow->getString(13),
-                                            nField11,
-                                            nField7,
-                                            nField9,
-                                            nField5,
-                                            sal_False,sal_False,sal_False,sal_True);
-                xRet = pRet;
-                break;
+                    connectivity::sdbcx::OColumn* pRet = new connectivity::sdbcx::OColumn(_rName,
+                                                aField6,
+                                                xRow->getString(13),
+                                                nField11,
+                                                nField7,
+                                                nField9,
+                                                nField5,
+                                                sal_False,sal_False,sal_False,sal_True);
+
+                    Reference<XPropertySet> xProp = pRet;
+                    OTableColumnWrapper* pColumn = new OTableColumnWrapper(xProp,xRow->getInt(17));
+                    xRet = pColumn;
+                    break;
+                }
             }
         }
     }
-
     return xRet;
 }
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OColumns::createEmptyObject()
 {
     OSL_ASSERT("Are not filled this way!");
-    connectivity::sdbcx::OColumn* pRet = new connectivity::sdbcx::OColumn(isCaseSensitive());
+    //  connectivity::sdbcx::OColumn* pRet = new OTableColumnDescriptor(isCaseSensitive());
+    OTableColumnDescriptor* pRet = new OTableColumnDescriptor();
     Reference< XPropertySet > xRet = pRet;
     return xRet;
 }

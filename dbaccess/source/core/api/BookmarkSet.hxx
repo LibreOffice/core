@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BookmarkSet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:10 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 10:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,8 @@ namespace dbaccess
 
         void updateColumn(sal_Int32 nPos,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate > _xParameter,const ORowSetValue& _rValue);
     public:
-        OBookmarkSet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,
-                    const connectivity::OSQLParseTreeIterator*  _pIterator)
-            : OCacheSet(_xDriverSet,_pIterator)
+        OBookmarkSet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet)
+            : OCacheSet(_xDriverSet)
             ,m_xRowLocate(_xDriverSet,::com::sun::star::uno::UNO_QUERY)
         {}
 
@@ -139,6 +138,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/11 11:18:10  fs
+    replace unotools with comphelper
+
     Revision 1.1.1.1  2000/09/19 00:15:37  hr
     initial import
 

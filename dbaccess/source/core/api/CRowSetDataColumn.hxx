@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:10 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,14 @@ namespace dbaccess
         ORowSetMatrix::iterator&    m_rColumnValue;
         ORowSetMatrix::iterator&    m_rEnd;             // end of the matrix to when we reach the end
         ::com::sun::star::uno::Any  m_aOldValue;
+
+        ::rtl::OUString             m_aDescription;     // description
     public:
         ORowSetDataColumn(const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData >& _xMetaData,
                           const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRow >& _xRow,
                           const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRowUpdate >& _xRowUpdate,
                           sal_Int32 _nPos,
+                          const ::rtl::OUString& _rDescription,
                           ORowSetMatrix::iterator& _rColumnValue,
                           ORowSetMatrix::iterator& _rEnd);
 

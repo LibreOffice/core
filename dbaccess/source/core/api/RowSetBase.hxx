@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,6 @@ namespace dbaccess
         ORowSetMatrix::iterator                 m_aCurrentRow;      // contains the actual fetched row
 
         ::cppu::OWeakObject*                    m_pMySelf;          // set by derived classes
-
-        connectivity::OSQLParseTreeIterator*    m_pIterator;
         ORowSetCache*                           m_pCache;           // the cache is used by the rowset and his clone (shared)
         ORowSetDataColumns*                     m_pColumns;         // represent the select columns
         ::cppu::OBroadcastHelper&               m_rBHelper;         // must be set from the derived classes

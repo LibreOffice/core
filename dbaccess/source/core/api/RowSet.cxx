@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:10 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,8 @@
 #ifndef DBACCESS_CORE_API_CROWSETCOLUMN_HXX
 #include "CRowSetColumn.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
 #ifndef _COMPHELPER_SEQSTREAM_HXX
 #include <comphelper/seqstream.hxx>
 #endif
@@ -179,7 +181,7 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     : ORowSet_BASE1(m_aMutex)
     , ORowSetBase(ORowSet_BASE1::rBHelper)
     , m_xServiceManager(_xFac)
-    ,m_pParseTree(NULL)
+    //  ,m_pParseTree(NULL)
     ,m_nFetchDirection(FetchDirection::FORWARD)
     ,m_nFetchSize(1)
     ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
@@ -219,7 +221,7 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     registerProperty(PROPERTY_DATASOURCENAME,       PROPERTY_ID_DATASOURCENAME,         PropertyAttribute::BOUND,       &m_aDataSourceName,     ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_COMMAND,              PROPERTY_ID_COMMAND,                PropertyAttribute::BOUND,       &m_aCommand,            ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_COMMANDTYPE,          PROPERTY_ID_COMMANDTYPE,            PropertyAttribute::BOUND,       &m_nCommandType,        ::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
-    registerProperty(PROPERTY_ACTIVECOMMAND,        PROPERTY_ID_ACTIVECOMMAND,          nRBT,                           &m_aCommand,            ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(PROPERTY_ACTIVECOMMAND,        PROPERTY_ID_ACTIVECOMMAND,          nRBT,                           &m_aActiveCommand,      ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_IGNORERESULT,         PROPERTY_ID_IGNORERESULT,           PropertyAttribute::BOUND,       &m_bIgnoreResult,       ::getBooleanCppuType());
     registerProperty(PROPERTY_FILTER,               PROPERTY_ID_FILTER,                 PropertyAttribute::BOUND,       &m_aFilter,             ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_APPLYFILTER,          PROPERTY_ID_APPLYFILTER,            PropertyAttribute::BOUND,       &m_bApplyFilter,        ::getBooleanCppuType());
@@ -260,7 +262,7 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
     switch(nHandle)
     {
         case PROPERTY_ID_ISMODIFIED:
-            m_pCache->m_bModified = cppu::any2bool(rValue);
+            m_bModified = cppu::any2bool(rValue);
             break;
         default:
             OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle,rValue);
@@ -271,6 +273,7 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
         case PROPERTY_ID_ACTIVECONNECTION:
             m_bCreateStatement = sal_True;
             m_bRebuildConnOnExecute = sal_False;
+            m_aActiveConnection >>= m_xActiveConnection;
             break;
         case PROPERTY_ID_APPLYFILTER:
             m_bCreateStatement = sal_True;
@@ -298,6 +301,9 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
         case PROPERTY_ID_USER:
             m_bCreateStatement = sal_True;
             break;
+        case PROPERTY_ID_TYPEMAP:
+            m_aTypeMap >>= m_xTypeMap;
+            break;
         default:
             ;
     };
@@ -310,20 +316,38 @@ void SAL_CALL ORowSet::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
         switch(nHandle)
         {
         case PROPERTY_ID_ISMODIFIED:
-            rValue.setValue(&m_pCache->m_bModified,::getCppuBooleanType());
+            rValue.setValue(&m_bModified,::getCppuBooleanType());
             break;
         case PROPERTY_ID_ISNEW:
-            rValue.setValue(&m_pCache->m_bNew,::getCppuBooleanType());
+            rValue.setValue(&m_bNew,::getCppuBooleanType());
             break;
         case PROPERTY_ID_PRIVILEGES:
             rValue <<= m_pCache->m_nPrivileges;
+            break;
+        case PROPERTY_ID_ACTIVECONNECTION:
+            rValue <<= m_xActiveConnection;
+            break;
+        case PROPERTY_ID_TYPEMAP:
+            rValue <<= m_xTypeMap;
             break;
         default:
             ORowSetBase::getFastPropertyValue(rValue,nHandle);
         };
     }
     else
-        ORowSetBase::getFastPropertyValue(rValue,nHandle);
+    {
+        switch(nHandle)
+        {
+            case PROPERTY_ID_ACTIVECONNECTION:
+                rValue <<= m_xActiveConnection;
+                break;
+            case PROPERTY_ID_TYPEMAP:
+                rValue <<= m_xTypeMap;
+                break;
+            default:
+                ORowSetBase::getFastPropertyValue(rValue,nHandle);
+        }
+    }
 }
 // -------------------------------------------------------------------------
 // com::sun::star::lang::XTypeProvider
@@ -444,9 +468,6 @@ void SAL_CALL ORowSet::disposing(void)
     m_bCreateStatement = sal_True;
     freeResources();
 
-    delete m_pParseTree;
-    m_pParseTree = NULL;
-
     ORowSetBase::disposing();
 }
 // -------------------------------------------------------------------------
@@ -466,10 +487,6 @@ void ORowSet::freeResources()
     {
         delete m_pCache;
         m_pCache = NULL;
-        if(m_pIterator)
-            DELETEZ(m_pIterator);
-        if(m_pParseTree)
-            DELETEZ(m_pParseTree);
 
         if(m_pColumns)
         {
@@ -480,6 +497,8 @@ void ORowSet::freeResources()
         m_bBeforeFirst  = sal_True;
         m_bAfterLast    = sal_False;
         m_bRowCountFinal= sal_False;
+        m_bNew          = sal_False;
+        m_bModified     = sal_False;
         m_nRowCount     = 0;
     }
 }
@@ -836,10 +855,10 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
 
-    if(m_pCache->m_bModified)
+    if(m_bModified)
     {
         // remember old value for fire
-        sal_Bool bOld = m_pCache->m_bNew;
+        sal_Bool bOld = m_bNew;
 
         RowChangeEvent aEvt(*this,RowChangeAction::INSERT,1);
         notifyAllListenersRowBeforeChange(aEvt);
@@ -849,11 +868,11 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
         notifyAllListenersRowChanged(aEvt);
 
         // fire PROPERTY_ID_ISNEW
-        if(m_pCache->m_bNew != bOld)
-            fireProperty(PROPERTY_ID_ISNEW,m_pCache->m_bNew,bOld);
+        if(m_bNew != bOld)
+            fireProperty(PROPERTY_ID_ISNEW,m_bNew,bOld);
 
         // fire property modified
-        if(!m_pCache->m_bModified)
+        if(!m_bModified)
             fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
         fireRowcount();
     }
@@ -882,7 +901,7 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
 
-    if(m_pCache->m_bModified)
+    if(m_bModified)
     {
         RowChangeEvent aEvt(*this,RowChangeAction::UPDATE,1);
         notifyAllListenersRowBeforeChange(aEvt);
@@ -892,7 +911,7 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
         notifyAllListenersRowChanged(aEvt);
 
         // fire property modified
-        if(!m_pCache->m_bModified)
+        if(!m_bModified)
             fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
     }
 }
@@ -1029,7 +1048,7 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
 
     ORowSetMatrix::iterator aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
 
-    sal_Bool bOld = m_pCache->m_bNew;
+    sal_Bool bOld = m_bNew;
 
     notifyAllListenersCursorBeforeMove();
     m_pCache->moveToInsertRow();
@@ -1038,8 +1057,8 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
     ORowSetBase::firePropertyChange(aOldValues);
 
     // fire PROPERTY_ID_ISNEW
-    if(m_pCache->m_bNew != bOld)
-        fireProperty(PROPERTY_ID_ISNEW,m_pCache->m_bNew,bOld);
+    if(m_bNew != bOld)
+        fireProperty(PROPERTY_ID_ISNEW,m_bNew,bOld);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException)
@@ -1395,8 +1414,8 @@ void SAL_CALL ORowSet::execute(  ) throw(SQLException, RuntimeException)
             xProp->setPropertyValue(PROPERTY_FETCHDIRECTION,makeAny((sal_Int32)m_nFetchDirection));
 
             String aErr;
-            m_pParseTree = m_aParser.parseTree(aErr,aSql);
-            if(m_pParseTree)
+            //  m_pParseTree = m_aParser.parseTree(aErr,aSql);
+            //  if(m_pParseTree)
             {
                 Reference<XNameAccess> xTables;
 
@@ -1407,15 +1426,15 @@ void SAL_CALL ORowSet::execute(  ) throw(SQLException, RuntimeException)
                     xTables = xMasterTables->getTables();
                 else
                 {
-                    OTableContainer* pTables = new OTableContainer(*this,m_aMutex);
+                    OTableContainer* pTables = new OTableContainer(*this,m_aMutex,m_xActiveConnection);
                     Sequence< ::rtl::OUString > a;
-                    pTables->construct(m_xActiveConnection,a,a);
+                    pTables->construct(a,a);
                     xTables = pTables;
                 }
 
                 {
-                    m_pIterator = new OSQLParseTreeIterator(xTables,m_xActiveConnection->getMetaData(),m_pParseTree);
-                    m_pIterator->traverseAll();
+                    //  m_pIterator = new OSQLParseTreeIterator(xTables,m_xActiveConnection->getMetaData(),m_pParseTree);
+                    //  m_pIterator->traverseAll();
                     //  m_aColumns = m_pIterator->getSelectColumns();
 
                     Reference<XParameters> xParam(m_xStatement,UNO_QUERY);
@@ -1470,50 +1489,58 @@ void SAL_CALL ORowSet::execute(  ) throw(SQLException, RuntimeException)
                         }
                     }
                     Reference< XResultSet> xRs = m_xStatement->executeQuery();
-                    m_pCache = new ORowSetCache(xRs,m_pIterator,m_aUpdateTableName);
+                    m_pCache = new ORowSetCache(xRs,m_xComposer,m_aUpdateTableName,m_bModified,m_bNew);
 
                     if(!m_xColumns.is())
                     {
-                        ::vos::ORef<OSQLColumns> rColumns = m_pIterator->getSelectColumns();
-                        if(rColumns.isValid())
-                        {
-                            ORowSetDataColumns_COLLECTION aColumns;
-                            ::std::vector< ::rtl::OUString> aNames;
-                            sal_Int32 i=1;
-                            m_aCurrentRow = m_pCache->getIterator();
-                            for(OSQLColumns::const_iterator aIter = rColumns->begin();aIter != rColumns->end();++aIter,++i)
-                            {
-                                ORowSetDataColumn* pColumn = new ORowSetDataColumn(getMetaData(),this,this,i,m_aCurrentRow,m_pCache->getEnd());
-                                aColumns.push_back(pColumn);
-                                pColumn->setName(getMetaData()->getColumnName(i));
-                                aNames.push_back(pColumn->getName());
-                            }
-                            m_pColumns = new ORowSetDataColumns(m_xActiveConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers(),
-                                                                aColumns,*this,m_aColumnsMutex,aNames);
-                        }
+                        OSL_ENSHURE(0,"HELLO!");
+//                      Reference<XColumnsSupplier> xColSup(_xComposer,UNO_QUERY);
+//                      Reference<XNameAccess> xSelColumns = xColSup->getColumns();
+//                      ::vos::ORef<OSQLColumns> rColumns = m_pIterator->getSelectColumns();
+//                      if(rColumns.isValid())
+//                      {
+//                          ORowSetDataColumns_COLLECTION aColumns;
+//                          ::std::vector< ::rtl::OUString> aNames;
+//                          sal_Int32 i=1;
+//                          m_aCurrentRow = m_pCache->getIterator();
+//                          for(OSQLColumns::const_iterator aIter = rColumns->begin();aIter != rColumns->end();++aIter,++i)
+//                          {
+//                              ORowSetDataColumn* pColumn = new ORowSetDataColumn(getMetaData(),this,this,i,m_aCurrentRow,m_pCache->getEnd());
+//                              aColumns.push_back(pColumn);
+//                              pColumn->setName(getMetaData()->getColumnName(i));
+//                              aNames.push_back(pColumn->getName());
+//                          }
+//                          m_pColumns = new ORowSetDataColumns(m_xActiveConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers(),
+//                                                              aColumns,*this,m_aColumnsMutex,aNames);
+//                      }
                     }
                     else
                     {
                         ORowSetDataColumns_COLLECTION aColumns;
                         ::std::vector< ::rtl::OUString> aNames;
 
+                        ::rtl::OUString aDescription;
                         Sequence< ::rtl::OUString> aSeq = m_xColumns->getElementNames();
                         const ::rtl::OUString* pBegin   = aSeq.getConstArray();
                         const ::rtl::OUString* pEnd     = pBegin + aSeq.getLength();
                         for(sal_Int32 i=1;pBegin != pEnd ;++pBegin,++i)
                         {
+                            Reference<XPropertySet> xColumn;
+                            m_xColumns->getByName(*pBegin) >>= xColumn;
+                            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
+                                aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
+
                             ORowSetDataColumn* pColumn = new ORowSetDataColumn( getMetaData(),
                                                                                 this,
                                                                                 this,
                                                                                 i,
+                                                                                aDescription,
                                                                                 m_pCache->getIterator(),
                                                                                 m_pCache->getEnd());
                             aColumns.push_back(pColumn);
                             pColumn->setName(*pBegin);
                             aNames.push_back(*pBegin);
 
-                            Reference<XPropertySet> xColumn;
-                            m_xColumns->getByName(*pBegin) >>= xColumn;
                             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
                             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
                             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
@@ -2191,7 +2218,7 @@ ORowSetClone::ORowSetClone(ORowSet& rParent)
 
     m_bBeforeFirst  = rParent.m_bBeforeFirst;
     m_bAfterLast    = rParent.m_bAfterLast;
-    m_pIterator     = rParent.m_pIterator;
+    //  m_pIterator     = rParent.m_pIterator;
     m_pCache        = rParent.m_pCache;
     m_aBookmark     = rParent.m_aBookmark;
 
@@ -2200,22 +2227,28 @@ ORowSetClone::ORowSetClone(ORowSet& rParent)
     ORowSetDataColumns_COLLECTION aColumns;
     ::std::vector< ::rtl::OUString> aNames;
 
+    ::rtl::OUString aDescription;
+
     Sequence< ::rtl::OUString> aSeq = rParent.m_pColumns->getElementNames();
     const ::rtl::OUString* pBegin   = aSeq.getConstArray();
     const ::rtl::OUString* pEnd     = pBegin + aSeq.getLength();
     for(sal_Int32 i=1;pBegin != pEnd ;++pBegin,++i)
     {
+        Reference<XPropertySet> xColumn;
+        rParent.m_pColumns->getByName(*pBegin) >>= xColumn;
+        if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
+            aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
+
         ORowSetColumn* pColumn = new ORowSetColumn( rParent.getMetaData(),
                                                             this,
                                                             i,
+                                                            aDescription,
                                                             m_pCache->getIterator(),
                                                             m_pCache->getEnd());
         aColumns.push_back(pColumn);
         pColumn->setName(*pBegin);
         aNames.push_back(*pBegin);
 
-        Reference<XPropertySet> xColumn;
-        rParent.m_pColumns->getByName(*pBegin) >>= xColumn;
         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
@@ -2357,6 +2390,9 @@ sal_Int64 SAL_CALL ORowSetClone::getSomething( const Sequence< sal_Int8 >& rId )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/10/11 11:18:10  fs
+    replace unotools with comphelper
+
     Revision 1.5  2000/10/05 14:52:16  oj
     last changed
 

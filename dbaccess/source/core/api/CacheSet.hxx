@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:10 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,25 +106,32 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
 
         ORowSetRow                                  m_aInsertRow;
-        const connectivity::OSQLParseTreeIterator*  m_pIterator; // the parseiterator from RowSet
+        //  const connectivity::OSQLParseTreeIterator*  m_pIterator; // the parseiterator from RowSet
         ::rtl::OUString                             m_aComposedTableName;
         sal_Bool                                    m_bInserted;
         sal_Bool                                    m_bUpdated;
         sal_Bool                                    m_bDeleted;
 
-        OCacheSet(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,
-                    const connectivity::OSQLParseTreeIterator*  _pIterator)
+        OCacheSet(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet
+                    )
             : m_xDriverSet(_xDriverSet)
             ,m_xDriverRow(m_xDriverSet,::com::sun::star::uno::UNO_QUERY)
             ,m_xSetMetaData(
                     ::com::sun::star::uno::Reference<
                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier>(_xDriverSet,::com::sun::star::uno::UNO_QUERY)->getMetaData())
-            ,m_xConnection( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement>(m_xDriverSet->getStatement(),::com::sun::star::uno::UNO_QUERY)->getConnection())
-            ,m_pIterator(_pIterator)
+
             ,m_bInserted(sal_False)
             ,m_bUpdated(sal_False)
             ,m_bDeleted(sal_False)
         {
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement> xStmt(m_xDriverSet->getStatement(),::com::sun::star::uno::UNO_QUERY);
+            if(xStmt.is())
+                m_xConnection = xStmt->getConnection();
+            else
+            {
+                ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement> xPrepStmt(m_xDriverSet->getStatement(),::com::sun::star::uno::UNO_QUERY);
+                m_xConnection = xPrepStmt->getConnection();
+            }
         }
 
         void setParameter(sal_Int32 nPos,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters > _xParameter,const ORowSetValue& _rValue) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -346,6 +353,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/11 11:18:10  fs
+    replace unotools with comphelper
+
     Revision 1.1.1.1  2000/09/19 00:15:38  hr
     initial import
 

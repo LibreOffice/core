@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:12 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,23 +128,19 @@ typedef ::std::map <sal_Int32, OTableColumn*, std::less <sal_Int32> > OColMap;
 DBG_NAME(ODBTable)
 //--------------------------------------------------------------------------
 ODBTable::ODBTable(const Reference< XConnection >& _rxConn,
-               const ::rtl::OUString& _rCatalog,
-               const ::rtl::OUString& _rSchema,
-               const ::rtl::OUString& _rName,
-               const ::rtl::OUString& _rType,
-               const ::rtl::OUString& _rDesc,
-               sal_Bool _bCaseSensitive) throw(::com::sun::star::sdbc::SQLException)
-               : connectivity::sdbcx::OTable(_bCaseSensitive,_rName,_rType,_rDesc,_rSchema,_rCatalog)
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable,
+        const ::rtl::OUString& _rCatalog,
+        const ::rtl::OUString& _rSchema,
+        const ::rtl::OUString& _rName,
+        const ::rtl::OUString& _rType,
+        const ::rtl::OUString& _rDesc) throw(::com::sun::star::sdbc::SQLException)
+        : connectivity::sdbcx::OTable(_rxConn->getMetaData()->storesMixedCaseQuotedIdentifiers(),_rName,_rType,_rDesc,_rSchema,_rCatalog)
         ,m_aConnection(_rxConn)
         ,m_nPrivileges(0)
-//      ,m_aColumns(*this, m_aMutex, _bCaseSensitive)
-//      ,m_sCatalogName(_rCatalog)
-//      ,m_sSchemaName(_rSchema)
-//      ,m_sName(_rName)
-//      ,m_sType(_rType)
-//      ,m_sDescription(_rDesc)
+        ,m_xTable(_rxTable)
 {
     DBG_CTOR(ODBTable, NULL);
+    osl_incrementInterlockedCount( &m_refCount );
     DBG_ASSERT(_rxConn.is(), "ODBTable::ODBTable : invalid conn !");
     DBG_ASSERT(_rName.getLength(), "ODBTable::ODBTable : name !");
     // register our properties
@@ -156,14 +152,14 @@ ODBTable::ODBTable(const Reference< XConnection >& _rxConn,
     // we don't collect the privileges here, this is potentially expensive. Instead we determine them on request.
     // (see getFastPropertyValue)
     m_nPrivileges = -1;
+    osl_decrementInterlockedCount( &m_refCount );
 
     // TODO : think about collecting the privileges here, as we can't ensure that in getFastPropertyValue, where
     // we do this at the moment, the statement needed can be supplied by the connection (for example the SQL-Server
     // ODBC driver does not allow more than one statement per connection, and in getFastPropertyValue it's more
     // likely that it's already used up than it's here.)
 }
-
-//--------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 ODBTable::~ODBTable()
 {
     DBG_DTOR(ODBTable, NULL);
@@ -193,6 +189,7 @@ void ODBTable::disposing()
     MutexGuard aGuard(m_aMutex);
     //  m_aColumns.disposing();
     m_aConnection = Reference< XConnection > ();
+    m_xTable = NULL;
 }
 
 //------------------------------------------------------------------------------
@@ -352,26 +349,42 @@ void SAL_CALL ODBTable::alterColumnByIndex( sal_Int32 _nIndex, const Reference< 
 void ODBTable::refreshColumns()
 {
     ::std::vector< ::rtl::OUString> aVector;
-    Any aVal;
-    if(m_CatalogName.getLength())
-        aVal <<= m_CatalogName;
-    Reference< XResultSet > xResult = Reference<XConnection>(m_aConnection)->getMetaData()->getColumns(aVal,
-                                    m_SchemaName,m_Name,::rtl::OUString::createFromAscii("%"));
-
-    if(xResult.is())
+    Reference<XNameAccess> xNames;
+    if(m_xTable.is())
     {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        while(xResult->next())
-            aVector.push_back(xRow->getString(4));
+        xNames = m_xTable->getColumns();
+        Sequence< ::rtl::OUString> aNames = xNames->getElementNames();
+        const ::rtl::OUString* pBegin   = aNames.getConstArray();
+        const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
+        for(;pBegin != pEnd;++pBegin)
+            aVector.push_back(*pBegin);
     }
+    else
+    {
+        Any aVal;
+        if(m_CatalogName.getLength())
+            aVal <<= m_CatalogName;
+        Reference< XResultSet > xResult = Reference<XConnection>(m_aConnection)->getMetaData()->getColumns(aVal,
+                                        m_SchemaName,m_Name,::rtl::OUString::createFromAscii("%"));
+
+        if(xResult.is())
+        {
+            Reference< XRow > xRow(xResult,UNO_QUERY);
+            while(xResult->next())
+                aVector.push_back(xRow->getString(4));
+        }
+
+
+    }
+
+    OColumns* pCol = new OColumns(*this,m_aMutex,xNames,isCaseSensitive(),aVector,
+                                getConnection()->getMetaData()->supportsAlterTableWithAddColumn(),
+                                getConnection()->getMetaData()->supportsAlterTableWithDropColumn());
+    pCol->setParent(this);
 
     if(m_pColumns)
         delete m_pColumns;
 
-    OColumns* pCol = new OColumns(*this,m_aMutex,isCaseSensitive(),aVector,
-                            getConnection()->getMetaData()->supportsAlterTableWithAddColumn(),
-                            getConnection()->getMetaData()->supportsAlterTableWithDropColumn());
-    pCol->setParent(this);
     m_pColumns  = pCol;
 }
 // -------------------------------------------------------------------------
