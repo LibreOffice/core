@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DriverSettings.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:41:12 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,7 @@ void ODriversSettings::fillDetailIds(DATASOURCE_TYPE _eType,::std::vector< sal_I
             break;
 
         case DST_MOZILLA:
+        case DST_THUNDERBIRD:
             _rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
         case DST_EVOLUTION:
