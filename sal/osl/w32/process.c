@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dic $ $Date: 2001-02-12 18:12:11 $
+ *  last change: $Author: hro $ $Date: 2001-02-20 13:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,10 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *strImageName,
         (osl_searchNormalizedPath( strImageName, NULL, &strPath) != osl_Process_E_None))
     {
         rtl_uString_newFromString( &strPath, strImageName);
+        osl_getSystemPathFromNormalizedPath( strPath, &strPath );
     }
+    else
+        return osl_Process_E_NotFound;
 
     n = rtl_uString_getLength(strPath) + 1;
 
