@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: armin $ $Date: 2002-07-24 12:03:56 $
+#   last change: $Author: hjs $ $Date: 2002-08-08 14:54:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -145,6 +145,15 @@ OUT2LIB= \
 .INCLUDE :	tg_ext.mk
 
 .IF "$(GUI)"=="WNT"
+
+$(MISC)$/$(TARFILE_ROOTDIR) : avoid_win32_patches
+avoid_win32_patches :
+    @+$(ECHONL)
+    @+echo ERROR! this module can't use automated patch creation 
+    @+echo on windows.
+    @+$(ECHONL)
+    force_dmake_to_error
+    
 $(PACKAGE_DIR)$/so_custom_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
 .IF "$(USE_SHELL)"=="4nt"
     +win32_custom.bat $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
@@ -153,5 +162,17 @@ $(PACKAGE_DIR)$/so_custom_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
     
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_custom_patch
-.ENDIF          # "$(GUI)"=="WNT"
 
+ooo: $(PACKAGE_DIR)$/win32_sdk_patch 
+
+.IF "$(USE_NEW_SDK)"!=""
+$(PACKAGE_DIR)$/win32_sdk_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
+.IF "$(USE_SHELL)"=="4nt"
+    +win32_sdk.bat $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +win32_sdk.sh $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+    
+$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/win32_sdk_patch
+.ENDIF			# "$(USE_NEW_SDK)"!=""
+.ENDIF          # "$(GUI)"=="WNT"
