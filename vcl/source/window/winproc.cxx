@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:21:57 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:24:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1691,15 +1691,23 @@ IMPL_LINK( Window, ImplAsyncFocusHdl, void*, EMPTYARG )
 
         if ( mpFrameData->mpFocusWin )
         {
-            if ( mpFrameData->mpFocusWin->IsEnabled() && mpFrameData->mpFocusWin->IsInputEnabled() )
-                mpFrameData->mpFocusWin->GrabFocus();
-            else if( mpFrameData->mpFocusWin->ImplHasDlgCtrl() )
+            BOOL bHandled = FALSE;
+            if ( mpFrameData->mpFocusWin->IsInputEnabled() )
             {
+                if ( mpFrameData->mpFocusWin->IsEnabled() )
+                {
+                    mpFrameData->mpFocusWin->GrabFocus();
+                    bHandled = TRUE;
+                }
+                else if( mpFrameData->mpFocusWin->ImplHasDlgCtrl() )
+                {
                 // #109094# if the focus is restored to a disabled dialog control (was disabled meanwhile)
                 // try to move it to the next control
-                mpFrameData->mpFocusWin->ImplDlgCtrlNextWindow();
+                    mpFrameData->mpFocusWin->ImplDlgCtrlNextWindow();
+                    bHandled = TRUE;
+                }
             }
-            else
+            if ( !bHandled )
             {
                 ImplSVData* pSVData = ImplGetSVData();
                 Window*     pTopLevelWindow = mpFrameData->mpFocusWin->ImplGetFirstOverlapWindow();
