@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 11:03:54 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_LINEENDFORMAT_HPP_
+#include <com/sun/star/awt/LineEndFormat.hpp>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -195,7 +198,9 @@ Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::Windo
 //  ----------------------------------------------------
 //  class VCLXMultiLineEdit
 //  ----------------------------------------------------
-VCLXMultiLineEdit::VCLXMultiLineEdit() : maTextListeners( *this )
+VCLXMultiLineEdit::VCLXMultiLineEdit()
+    :maTextListeners( *this )
+    ,meLineEndType( LINEEND_LF )    // default behavior before introducing this property: LF (unix-like)
 {
 }
 
@@ -270,7 +275,7 @@ void VCLXMultiLineEdit::insertText( const ::com::sun::star::awt::Selection& rSel
     ::rtl::OUString aText;
     MultiLineEdit* pEdit = (MultiLineEdit*)GetWindow();
     if ( pEdit )
-        aText = pEdit->GetText();
+        aText = pEdit->GetText( meLineEndType );
     return aText;
 }
 
@@ -281,7 +286,7 @@ void VCLXMultiLineEdit::insertText( const ::com::sun::star::awt::Selection& rSel
     ::rtl::OUString aText;
     MultiLineEdit* pMultiLineEdit = (MultiLineEdit*) GetWindow();
     if ( pMultiLineEdit)
-        aText = pMultiLineEdit->GetSelected();
+        aText = pMultiLineEdit->GetSelected( meLineEndType );
     return aText;
 
 }
@@ -352,7 +357,7 @@ sal_Int16 VCLXMultiLineEdit::getMaxTextLen() throw(::com::sun::star::uno::Runtim
     ::rtl::OUString aText;
     MultiLineEdit* pEdit = (MultiLineEdit*)GetWindow();
     if ( pEdit )
-        aText = pEdit->GetTextLines();
+        aText = pEdit->GetTextLines( meLineEndType );
     return aText;
 }
 
@@ -441,6 +446,20 @@ void VCLXMultiLineEdit::setProperty( const ::rtl::OUString& PropertyName, const 
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_LINE_END_FORMAT:
+            {
+                sal_Int16 nLineEndType = ::com::sun::star::awt::LineEndFormat::LINE_FEED;
+                OSL_VERIFY( Value >>= nLineEndType );
+                switch ( nLineEndType )
+                {
+                case ::com::sun::star::awt::LineEndFormat::CARRIAGE_RETURN:           meLineEndType = LINEEND_CR; break;
+                case ::com::sun::star::awt::LineEndFormat::LINE_FEED:                 meLineEndType = LINEEND_LF; break;
+                case ::com::sun::star::awt::LineEndFormat::CARRIAGE_RETURN_LINE_FEED: meLineEndType = LINEEND_CRLF; break;
+                default: DBG_ERROR( "VCLXMultiLineEdit::setProperty: invalid line end value!" ); break;
+                }
+            }
+            break;
+
             case BASEPROPERTY_READONLY:
             {
                 sal_Bool b;
@@ -481,6 +500,20 @@ void VCLXMultiLineEdit::setProperty( const ::rtl::OUString& PropertyName, const 
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_LINE_END_FORMAT:
+            {
+                sal_Int16 nLineEndType = ::com::sun::star::awt::LineEndFormat::LINE_FEED;
+                switch ( meLineEndType )
+                {
+                case LINEEND_CR:   nLineEndType = ::com::sun::star::awt::LineEndFormat::CARRIAGE_RETURN; break;
+                case LINEEND_LF:   nLineEndType = ::com::sun::star::awt::LineEndFormat::LINE_FEED; break;
+                case LINEEND_CRLF: nLineEndType = ::com::sun::star::awt::LineEndFormat::CARRIAGE_RETURN_LINE_FEED; break;
+                default: DBG_ERROR( "VCLXMultiLineEdit::getProperty: invalid line end value!" ); break;
+                }
+                aProp <<= nLineEndType;
+            }
+            break;
+
             case BASEPROPERTY_READONLY:
             {
                 aProp <<= pMultiLineEdit->IsReadOnly();
