@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlButtonModel.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 13:03:40 $
+ *  last change:$Date: 2004-01-05 20:43:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,20 +60,21 @@
  ************************************************************************/
 package mod._toolkit;
 
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
+
 import java.io.PrintWriter;
 
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
+
 import util.WriterTools;
 import util.utils;
-
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.util.XCloseable;
 
 
 public class UnoControlButtonModel extends TestCase {
@@ -84,7 +85,8 @@ public class UnoControlButtonModel extends TestCase {
     */
     protected void initialize(TestParameters tParam, PrintWriter log) {
         log.println("creating a textdocument");
-        xTextDoc = WriterTools.createTextDoc( (XMultiServiceFactory) tParam.getMSF());
+        xTextDoc = WriterTools.createTextDoc(
+                           (XMultiServiceFactory) tParam.getMSF());
     }
 
     /**
@@ -93,15 +95,7 @@ public class UnoControlButtonModel extends TestCase {
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
 
-        try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                        XCloseable.class, xTextDoc);
-            closer.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("couldn't close document");
-        } catch (com.sun.star.lang.DisposedException e) {
-            log.println("couldn't close document");
-        }
+        util.DesktopTools.closeDoc(xTextDoc);
     }
 
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
@@ -109,8 +103,8 @@ public class UnoControlButtonModel extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) ( (XMultiServiceFactory) Param.getMSF())
-                                     .createInstance("com.sun.star.awt.UnoControlButtonModel");
+            oObj = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
+                           "com.sun.star.awt.UnoControlButtonModel");
         } catch (Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create object", e);
