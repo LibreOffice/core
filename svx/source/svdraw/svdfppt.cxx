@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-09 15:59:52 $
+ *  last change: $Author: sj $ $Date: 2001-05-10 13:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1151,6 +1151,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             if ( !pRet )
                 ((SdrEscherImport*)this)->ApplyAttributes( rSt, aSet, pTObj );
 
+            sal_uInt32 nTextFlags = aTextObj.GetTextFlags();
             sal_Bool  bVerticalText = aTextObj.GetVertical();
             sal_Int32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 92076 );
             sal_Int32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 92076 );
@@ -1164,11 +1165,15 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             sal_Int32   nMinFrameWidth = 0;
             sal_Int32   nMinFrameHeight = 0;
             sal_Bool    bAutoGrowWidth, bAutoGrowHeight;
-            SdrTextVertAdjust eTVA = SDRTEXTVERTADJUST_CENTER;
-            SdrTextHorzAdjust eTHA = SDRTEXTHORZADJUST_CENTER;
+
+            SdrTextVertAdjust eTVA;
+            SdrTextHorzAdjust eTHA;
 
             if ( bVerticalText )
             {
+                SdrTextVertAdjust eTVA = SDRTEXTVERTADJUST_BLOCK;
+                SdrTextHorzAdjust eTHA = SDRTEXTHORZADJUST_CENTER;
+
                 sal_Int32 nMod = ( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ) ? 1 : 0;
                 nMod += ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) ? 2 : 0;
                 switch ( nMod )
@@ -1209,24 +1214,17 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         eTHA = SDRTEXTHORZADJUST_LEFT;
                     break;
                 }
-                switch( eTextAnchor )
+
+                switch ( eTextAnchor )
                 {
-                    case mso_anchorTop :
-                    case mso_anchorMiddle :
-                    case mso_anchorBottom :
+                    case mso_anchorTopCentered :
+                    case mso_anchorMiddleCentered :
+                    case mso_anchorBottomCentered :
                     {
-                        eTVA = SDRTEXTVERTADJUST_CENTER;
-                        PPTParagraphObj* pPara = aTextObj.First();
-                        if ( pPara )
-                        {
-                            UINT32 nParaAdjust = 0;
-                            pPara->GetAttrib( PPT_ParaAttr_Adjust, nParaAdjust, aTextObj.GetInstance() );
-                            switch ( nParaAdjust )
-                            {
-                                case 0 : eTVA = SDRTEXTVERTADJUST_TOP; break;
-                                case 2 : eTVA = SDRTEXTVERTADJUST_BOTTOM; break;
-                            }
-                        }
+                        // check if it is sensible to use the centered alignment
+                        sal_uInt32 nMask = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT;
+                        if ( ( nTextFlags & nMask ) != nMask )  // if the textobject has left and also right aligned pararagraphs
+                            eTVA = SDRTEXTVERTADJUST_CENTER;    // the text has to be displayed using the full width;
                     }
                     break;
                 }
@@ -1234,6 +1232,9 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             }
             else
             {
+                eTVA = SDRTEXTVERTADJUST_CENTER;
+                eTHA = SDRTEXTHORZADJUST_BLOCK;
+
                 sal_Int32 nMod = ( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ) ? 1 : 0;
                 nMod += ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) ? 2 : 0;
                 switch ( nMod )
@@ -1254,21 +1255,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     }
                     break;
                 }
-    /*
-                switch ( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) )
-                {
-                    case mso_wrapNone :
-                    {
-                        if ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 )  // be sure this is FitShapeToText
-                            aSet.Put( SdrTextAutoGrowWidthItem( TRUE ) );
-                    }
-                    break;
-
-                    case mso_wrapByPoints :
-                        aSet.Put( SdrTextContourFrameItem( TRUE ) );
-                    break;
-                }
-    */
 
                 // Textverankerung lesen
                 MSO_Anchor eTextAnchor = (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
@@ -1297,24 +1283,16 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     break;
     */
                 }
-                switch( eTextAnchor )
+                switch ( eTextAnchor )
                 {
-                    case mso_anchorTop :
-                    case mso_anchorMiddle :
-                    case mso_anchorBottom :
+                    case mso_anchorTopCentered :
+                    case mso_anchorMiddleCentered :
+                    case mso_anchorBottomCentered :
                     {
-                        eTHA = SDRTEXTHORZADJUST_BLOCK;
-                        PPTParagraphObj* pPara = aTextObj.First();
-                        if ( pPara )
-                        {
-                            UINT32 nParaAdjust = 0;
-                            pPara->GetAttrib( PPT_ParaAttr_Adjust, nParaAdjust, aTextObj.GetInstance() );
-                            switch ( nParaAdjust )
-                            {
-                                case 0 : eTHA = SDRTEXTHORZADJUST_LEFT; break;
-                                case 2 : eTHA = SDRTEXTHORZADJUST_RIGHT; break;
-                            }
-                        }
+                        // check if it is sensible to use the centered alignment
+                        sal_uInt32 nMask = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT;
+                        if ( ( nTextFlags & nMask ) != nMask )  // if the textobject has left and also right aligned pararagraphs
+                            eTHA = SDRTEXTHORZADJUST_CENTER;    // the text has to be displayed using the full width;
                     }
                     break;
                 }
@@ -6299,7 +6277,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
     mpImplTextObj->mnCurrentObject = 0;
     mpImplTextObj->mnParagraphCount = 0;
     mpImplTextObj->mpParagraphList = NULL;
-    mpImplTextObj->mbVertical = sal_False;
+    mpImplTextObj->mnTextFlags = 0;
     mpImplTextObj->meShapeType = ( pObjData && pObjData->bShapeType ) ? pObjData->eShapeType : mso_sptMin;
 
     DffRecordHeader aExtParaHd;
@@ -6818,7 +6796,20 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                         pPtr;
                                         pPtr = aStyleTextPropReader.aParaPropList.Next() )
                             {
-                                mpImplTextObj->mpParagraphList[ nCount++ ] = new PPTParagraphObj( aStyleTextPropReader, *rSdrPowerPointImport.pPPTStyleSheet, nInstance, aTextRulerInterpreter );
+                                PPTParagraphObj* pPara = new PPTParagraphObj( aStyleTextPropReader, *rSdrPowerPointImport.pPPTStyleSheet, nInstance, aTextRulerInterpreter );
+                                mpImplTextObj->mpParagraphList[ nCount++ ] = pPara;
+
+                                sal_uInt32 nParaAdjust, nFlags = 0;
+                                pPara->GetAttrib( PPT_ParaAttr_Adjust, nParaAdjust, GetInstance() );
+
+                                switch ( nParaAdjust )
+                                {
+                                    case 0 : nFlags = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT;   break;
+                                    case 1 : nFlags = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER; break;
+                                    case 2 : nFlags = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT;  break;
+                                    case 3 : nFlags = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK;  break;
+                                }
+                                mpImplTextObj->mnTextFlags |= nFlags;
                             }
                         }
                     }
