@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
+ *  last change: $Author: fs $ $Date: 2001-02-28 16:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,7 +599,7 @@ Menu RID_QUERYFUNCTION_POPUPMENU
             HelpID = HID_QUERY_TABLENAME ;
             Text = "Tabellenname" ;
             Text [ ENGLISH ] = "Table name" ;
-            Text[ english_us ] = "Table Name";
+            Text[ english_us ] = "Table name";
             Text[ portuguese ] = "Nome da tabela";
             Text[ russian ] = "Имя таблицы";
             Text[ dutch ] = "Tabelnaam";
@@ -1264,7 +1264,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             HelpId = ID_BROWSER_QUERY_VIEW_TABLES ;
             Text = "Tabellenname" ;
             Text [ ENGLISH ] = "Table name" ;
-            Text[ english_us ] = "Table Name";
+            Text[ english_us ] = "Table name";
             Text[ portuguese ] = "Nome da tabela";
             Text[ russian ] = "Имя таблицы";
             Text[ dutch ] = "Tabelnaam";
