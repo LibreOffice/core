@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-29 12:19:43 $
+ *  last change: $Author: fs $ $Date: 2001-04-17 07:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1418,12 +1418,17 @@ namespace xmloff
             {
                 FormSubmitEncoding_URL, FormSubmitMethod_GET, CommandType::COMMAND, NavigationBarMode_CURRENT, TabulatorCycle_RECORDS
             };
+            static sal_Bool nEnumPropertyAttrDefaultFlags[] =
+            {
+                sal_False, sal_False, sal_False, sal_False, sal_True
+            };
             sal_Int32 nIdCount = sizeof(eEnumPropertyIds) / sizeof(eEnumPropertyIds[0]);
         #ifdef DBG_UTIL
             sal_Int32 nNameCount = sizeof(pEnumPropertyNames) / sizeof(pEnumPropertyNames[0]);
             sal_Int32 nDefaultCount = sizeof(nEnumPropertyAttrDefaults) / sizeof(nEnumPropertyAttrDefaults[0]);
+            sal_Int32 nDefaultFlagCount = sizeof(nEnumPropertyAttrDefaultFlags) / sizeof(nEnumPropertyAttrDefaultFlags[0]);
             sal_Int32 nMapCount = sizeof(eEnumPropertyMaps) / sizeof(eEnumPropertyMaps[0]);
-            OSL_ENSURE((nIdCount == nNameCount) && (nNameCount == nDefaultCount) && (nDefaultCount == nMapCount),
+            OSL_ENSURE((nIdCount == nNameCount) && (nNameCount == nDefaultCount) && (nDefaultCount == nDefaultFlagCount) && (nDefaultFlagCount == nMapCount),
                 "OFormExport::exportAttributes: somebody tampered with the maps (3)!");
         #endif
             for (i=0; i<nIdCount; ++i)
@@ -1432,7 +1437,9 @@ namespace xmloff
                     getFormAttributeName(eEnumPropertyIds[i]),
                     pEnumPropertyNames[i],
                     OEnumMapper::getEnumMap(eEnumPropertyMaps[i]),
-                    nEnumPropertyAttrDefaults[i]);
+                    nEnumPropertyAttrDefaults[i],
+                    nEnumPropertyAttrDefaultFlags[i]
+                    );
         }
 
         // the service name
@@ -1459,6 +1466,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/03/29 12:19:43  fs
+ *  #85097# changed the signature of exportBooleanPropertyAttribute
+ *
  *  Revision 1.13  2001/03/28 13:06:55  fs
  *  #85427# corrected the default for NavigationBarMode
  *
