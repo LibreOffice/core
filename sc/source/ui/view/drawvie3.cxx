@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawvie3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:59:58 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:30:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,9 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScDocument* pDocument, SCTAB nTable 
 void ScDrawView::SetAnchor( ScAnchorType eType )
 {
     SdrObject* pObj = NULL;
-    if( HasMarkedObj() )
+    if( AreObjectsMarked() )
     {
-        const SdrMarkList* pMark = &GetMarkList();
+        const SdrMarkList* pMark = &GetMarkedObjectList();
         ULONG nCount = pMark->GetMarkCount();
         for( ULONG i=0; i<nCount; i++ )
         {
@@ -140,9 +140,9 @@ ScAnchorType ScDrawView::GetAnchor() const
     BOOL bPage = FALSE;
     BOOL bCell = FALSE;
     const SdrObject* pObj = NULL;
-    if( HasMarkedObj() )
+    if( AreObjectsMarked() )
     {
-        const SdrMarkList* pMark = &GetMarkList();
+        const SdrMarkList* pMark = &GetMarkedObjectList();
         ULONG nCount = pMark->GetMarkCount();
         Point p0;
         for( ULONG i=0; i<nCount; i++ )
