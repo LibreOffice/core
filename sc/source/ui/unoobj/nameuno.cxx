@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nameuno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:45:52 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,11 @@ using namespace ::com::sun::star;
 #include "docsh.hxx"
 #include "docfunc.hxx"
 #include "rangenam.hxx"
-#include "namecrea.hxx"     // NAME_TOP etc.
+//CHINA001 #include "namecrea.hxx"      // NAME_TOP etc.
 #include "unoguard.hxx"
 #include "unonames.hxx"
+
+#include "scui_def.hxx" //CHINA001
 
 //------------------------------------------------------------------------
 
