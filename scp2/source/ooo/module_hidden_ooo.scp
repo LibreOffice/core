@@ -2,9 +2,9 @@
 *
 *  $RCSfile: module_hidden_ooo.scp,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: rt $ $Date: 2005-01-31 11:01:15 $
+*  last change: $Author: vg $ $Date: 2005-02-24 16:29:25 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -95,7 +95,6 @@ Module gid_Module_Root_Files_2
 	gid_File_Lib_Cpld,
 	gid_File_Lib_Cppu,
 	gid_File_Lib_Cppuhelper,
-	gid_File_Lib_Gnomevfs,
 	gid_File_Lib_Ctl,
 	gid_File_Lib_Cui,
 	gid_File_Lib_Curl,
@@ -281,7 +280,6 @@ Module gid_Module_Root_Files_5
     Default = YES;
     Styles = (HIDDEN_ROOT);
     Files = (gid_File_Lib_Sw,
-	gid_File_Lib_Swui,
 	gid_File_Lib_Sysdtrans,
 	gid_File_Lib_Syssh,
 	gid_File_Lib_Localebe,
@@ -788,7 +786,6 @@ Module gid_Module_Root_Files_8
 	gid_File_Res_Sd,
 	gid_File_Res_Sfx,
 	gid_File_Res_Spa,
-	gid_File_Res_Stt,
 	gid_File_Res_Svs,
 	gid_File_Res_Svt,
 	gid_File_Res_Svx,
