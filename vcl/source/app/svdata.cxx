@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:51:00 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,12 +290,8 @@ ResMgr* ImplGetResMgr()
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->mpResMgr )
     {
-        //pSVData->mpResMgr = ResMgr::CreateResMgr( VCL_CREATERESMGR_NAME( vcl ) );
-        if ( !pSVData->mpResMgr )
-        {
-            ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
-            pSVData->mpResMgr = ResMgr::SearchCreateResMgr( VCL_CREATERESMGR_NAME( vcl ), aLocale );
-        }
+        ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+        pSVData->mpResMgr = ResMgr::SearchCreateResMgr( VCL_CREATERESMGR_NAME( vcl ), aLocale );
     }
     return pSVData->mpResMgr;
 }
