@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
 
- *  last change: $Author: hr $ $Date: 2004-03-08 12:26:35 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,10 @@
 #endif
 #ifndef _SCRIPTINFO_HXX
 #include <scriptinfo.hxx>
+#endif
+
+#ifndef _SVX_LRSPITEM_HXX
+#include <svx/lrspitem.hxx>
 #endif
 
 #include <unicode/ubidi.h>
@@ -612,9 +616,21 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
     if( rInf.IsNumDone() )
     {
 //        SetAscent( rInf.GetAscent() );
-        ASSERT( Height() && nAscent, "NumberPortions without Height | Ascent" )
+        ASSERT( Height() && nAscent, "NumberPortions without Height | Ascent" );
 
-        long nDiff = rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
+        long nDiff;
+        if (! rInf.GetVsh()->IsOldNumbering())
+        {
+            nDiff = rInf.Left()
+                + rInf.GetTxtFrm()->GetTxtNode()->
+                GetSwAttrSet().GetLRSpace().GetTxtFirstLineOfst()
+                - rInf.First()
+                + rInf.ForcedLeftMargin();
+        }
+        else
+        {
+            nDiff = rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
+        }
         // Ein Vorschlag von Juergen und Volkmar:
         // Der Textteil hinter der Numerierung sollte immer
         // mindestens beim linken Rand beginnen.
