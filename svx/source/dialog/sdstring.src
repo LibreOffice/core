@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:38:58 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6197,6 +6197,14 @@ String RID_SVXSTR_TRASNGR0
 };
 
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
 
 
 
