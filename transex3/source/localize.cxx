@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nf $ $Date: 2002-04-30 13:55:58 $
+ *  last change: $Author: nf $ $Date: 2002-06-03 14:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ const char *ExeTable[][5] = {
     { "xxl", "xmlex", "-UTF8 -e", "negative", "iso" },
     { "xgf", "xmlex", "-UTF8 -e -t:xgf", "negative", "iso" },
     { "xcd", "cfgex", "-UTF8 -e", "negative", "iso" },
+    { "xcu", "cfgex", "-UTF8 -e", "negative", "iso" },
     { "xrm", "xrmex", "-UTF8 -e", "negative", "iso" },
     { "NULL", "NULL", "NULL", "NULL", "NULL" }
 };
@@ -87,6 +88,8 @@ const char *NegativeList[] = {
     "officecfg/data/org.openoffice.Office.Labels.xcd",
     "officecfg/data/org/openoffice/Office/Labels.xcd",
     "officecfg/data/org/openoffice/Office/SFX.xcd",
+    "officecfg/registry/data/org/openoffice/Office/Labels.xcu",
+    "officecfg/registry/data/org/openoffice/Office/SFX.xcu",
     "hidother.src",
     "NULL"
 };
