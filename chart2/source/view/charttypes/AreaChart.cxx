@@ -11,6 +11,10 @@
 #include "Clipping.hxx"
 #include "Splines.hxx"
 
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOLPROPERTIES_HPP_
+#include <drafts/com/sun/star/chart2/SymbolProperties.hpp>
+#endif
+
 #ifndef _SV_GEN_HXX
 #include <vcl/gen.hxx>
 #endif
@@ -349,7 +353,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
         {
             drawing::PolyPolygonShape3D aBorderPoly = createBorderPolygon(
                 aPoly, m_pPosHelper->getTransformedDepth() );
-            LineProperties aLineProperties;
+            VLineProperties aLineProperties;
             aLineProperties.initFromPropertySet( pSeries->getPropertiesOfSeries(), true );
             uno::Reference< drawing::XShape > xBorder =
                 m_pShapeFactory->createLine3D( xSeriesGroupShape_Shapes
@@ -361,7 +365,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     else //m_nDimension!=3
     {
         xShape = m_pShapeFactory->createLine2D( xSeriesGroupShape_Shapes
-                , PolyToPointSequence( aPoly ), LineProperties() );
+                , PolyToPointSequence( aPoly ), VLineProperties() );
         this->setMappedProperties( xShape
                 , pSeries->getPropertiesOfSeries()
                 , PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
@@ -635,15 +639,24 @@ void AreaChart::createShapes()
                     {
                         if(m_nDimension==3)
                         {
+                            /* //no symbols for 3D
                             m_pShapeFactory->createSymbol3D( xPointGroupShape_Shapes
                                     , aTransformedGeom.m_aPosition, aTransformedGeom.m_aSize
                                     , (*aSeriesIter)->getSymbolTypeOfPoint( nIndex ) );
+                                    */
                         }
                         else //m_nDimension!=3
                         {
-                            m_pShapeFactory->createSymbol2D( xPointGroupShape_Shapes
-                                    , aTransformedGeom.m_aPosition, aTransformedGeom.m_aSize
-                                    , (*aSeriesIter)->getSymbolTypeOfPoint( nIndex ) );
+                            SymbolProperties* pSymbolProperties = (*aSeriesIter)->getSymbolProperties( nIndex );
+                            if( pSymbolProperties )
+                            {
+                                if( pSymbolProperties->aStyle == SymbolStyle_STANDARD )
+                                {
+                                    m_pShapeFactory->createSymbol2D( xPointGroupShape_Shapes
+                                            , aTransformedGeom.m_aPosition, aTransformedGeom.m_aSize
+                                            , SymbolType(pSymbolProperties->nStandardSymbol) );
+                                }
+                            }
                         }
                     }
                 }
