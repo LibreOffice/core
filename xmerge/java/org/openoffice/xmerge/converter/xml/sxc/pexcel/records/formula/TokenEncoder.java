@@ -76,9 +76,9 @@ import org.openoffice.xmerge.util.EndianConverter;
  */
 public class TokenEncoder {
 
-    FunctionLookup fl;
-    String parseString;
-    int index;
+    private FunctionLookup fl;
+    private String parseString;
+    private int index;
 
     /**
      * Default Constructor
@@ -102,7 +102,8 @@ public class TokenEncoder {
 
         Vector tmpByteArray = null;     // we use this cause we don't know till after
                                         // the encoding takes place how big the byte [] will be
-
+           index=0;                         // This class is declared static in
+                                        // FormulaHelper so better make sure our index is 0
         if(t.getTokenType()==ParseToken.TOKEN_OPERATOR) {
             tmpByteArray = OperatorEncoder(t);
         } else if (t.getTokenType()==ParseToken.TOKEN_FUNCTION_VARIABLE || t.getTokenType()==ParseToken.TOKEN_FUNCTION_FIXED){
@@ -268,6 +269,7 @@ public class TokenEncoder {
         return Integer.parseInt(rowStr)-1;  // Pexcel uses a 0 based index
     }
 
+
     /**
      * A Cell Reference Encoder. It supports absolute and relative addressing
      * but not sheetnames.
@@ -279,7 +281,6 @@ public class TokenEncoder {
         Vector tmpByteArray = new Vector();
         int col = 0, row = 0;
         int addressing = 0xC000;
-        boolean colAbs = false, rowAbs = false;
 
         parseString = t.getValue();
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
@@ -297,7 +298,6 @@ public class TokenEncoder {
         tmpByteArray.add(new Byte((byte)row));
         tmpByteArray.add(new Byte((byte)(row>>8)));
         tmpByteArray.add(new Byte((byte)col));
-        index = 0;
         return tmpByteArray;
     }
 
@@ -310,17 +310,21 @@ public class TokenEncoder {
     private Vector AreaRefEncoder(Token t) {
         Vector tmpByteArray = new Vector();
         int row = 0, col1 = 0, col2 = 0;
-        boolean rowAbs = false, colAbs = false;
+        int addressing = 0xC000;
 
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
         parseString = t.getValue();
         if(parseString.charAt(index)=='$') {
-            colAbs = true;
+            addressing &= 0x8000;
             index++;
         }
         col1 =  column();
+        if(parseString.charAt(index)=='$') {
+            addressing &= 0x4000;
+            index++;
+        }
         row = row();
-        row |= 0xC000;
+        row |= addressing;
         tmpByteArray.add(new Byte((byte)row));
         tmpByteArray.add(new Byte((byte)(row>>8)));
         if(parseString.charAt(index)==':') {
@@ -328,15 +332,23 @@ public class TokenEncoder {
         } else {
             Debug.log(Debug.ERROR, "Invalid Cell Range, could not find :");
         }
+        addressing = 0xC000;
+        if(parseString.charAt(index)=='$') {
+            addressing &= 0x8000;
+            index++;
+        }
         col2 = column();
+        if(parseString.charAt(index)=='$') {
+            addressing &= 0x4000;
+            index++;
+        }
         row = row();
-        row |= 0xC000;
+        row |= addressing;
         tmpByteArray.add(new Byte((byte)row));
         tmpByteArray.add(new Byte((byte)(row>>8)));
 
         tmpByteArray.add(new Byte((byte)col1));
         tmpByteArray.add(new Byte((byte)col2));
-        index = 0;
         return tmpByteArray;
     }
 
