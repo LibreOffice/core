@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:59:13 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 17:03:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1203,18 +1203,20 @@ double GetDuration( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, doub
     fYield /= nFreq;
     fYield += 1.0;
 
+    double nDiff = fYearfrac * nFreq - fNumOfCoups;
+
     double          t;
 
     for( t = 1.0 ; t < fNumOfCoups ; t++ )
-        fDur += t * ( fCoup ) / pow( fYield, t );
+        fDur += ( t + nDiff ) * ( fCoup ) / pow( fYield, t + nDiff );
 
-    fDur += fNumOfCoups * ( fCoup + f100 ) / pow( fYield, fNumOfCoups );
+    fDur += ( fNumOfCoups + nDiff ) * ( fCoup + f100 ) / pow( fYield, fNumOfCoups + nDiff );
 
     double          p = 0.0;
     for( t = 1.0 ; t < fNumOfCoups ; t++ )
-        p += fCoup / pow( fYield, t );
+        p += fCoup / pow( fYield, t + nDiff );
 
-    p += ( fCoup + f100 ) / pow( fYield, fNumOfCoups );
+    p += ( fCoup + f100 ) / pow( fYield, fNumOfCoups + nDiff );
 
     fDur /= p;
     fDur /= double( nFreq );
