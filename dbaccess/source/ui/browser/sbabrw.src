@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:29:58 $
+ *  last change: $Author: oj $ $Date: 2000-11-15 14:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -868,6 +868,32 @@ QueryBox QUERY_BRW_SAVEMODIFIED
     Message[ language_user1 ] = " ";
 };
 
+QueryBox QUERY_BRW_DELETE_ROWS
+{
+    Buttons = WB_YES_NO ;
+    /* ### ACHTUNG: Neuer Text in Resource? Sollen die selektierten Daten gelöscht werden? : Sollen die selektierten Daten gel÷scht werden? */
+    Message = "Sollen die selektierten Daten gelöscht werden?" ;
+    Message [ English ] = "Delete selected row(s)." ;
+    Message [ portuguese ] = "Deseja eliminar os dados seleccionados?" ;
+    Message [ english_us ] = "Do you want to delete the selected data?" ;
+    Message [ portuguese_brazilian ] = "Sollen die selektierten Daten gelöscht werden?" ;
+    Message [ swedish ] = "Skall markerade data raderas?" ;
+    Message [ danish ] = "Skal de udvalgte data slettes?" ;
+    Message [ italian ] = "Eliminare i dati selezionati?" ;
+    Message [ spanish ] = "¿Desea eliminar los datos seleccionados?" ;
+    Message [ french ] = "Voulez-vous supprimer les données sélectionnées ?" ;
+    Message [ dutch ] = "Wilt u de geselecteerde gegevens verwijderen?" ;
+    Message[ chinese_simplified ] = "ÄúÒªÉ¾³ıÑ¡ÖĞµÄÊı¾İÂğ£¿";
+    Message[ russian ] = "Óäàëèòü âûäåëåííûå äàííûå?";
+    Message[ polish ] = "Czy usun¹æ zaznaczone dane?";
+    Message[ japanese ] = "‘I‘ğ‚µ‚½ÃŞ°À‚ğíœ‚µ‚Ü‚·‚©B";
+    Message[ chinese_traditional ] = "±z­n§R°£¿ï¤¤ªº¸ê®Æ¡S";
+    Message[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáÈíÇäÇÊ ÇáãÍÏÏÉ¿";
+    Message[ greek ] = "Èİëåôå íá äéáãñáöïıí ôá åğéëåãìİíá äåäïìİíá;";
+    Message[ korean ] = "¼±ÅÃµÈ µ¥ÀÌÅ¸¸¦ »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ turkish ] = "Seçilen veriler silinsin mi?";
+    Message[ language_user1 ] = " ";
+};
 
 String RID_STR_DATABROWSER_FILTERED
 {
