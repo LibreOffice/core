@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 11:48:46 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:18:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,6 +367,10 @@
 #ifndef _FMTROWSPLT_HXX //autogen
 #include <fmtrowsplt.hxx>
 #endif
+#ifndef _REDLINE_HXX
+#include <redline.hxx>
+#endif
+
 
 #ifndef SW_MS_MSFILTER_HXX
 #include <msfilter.hxx>
@@ -1330,7 +1334,7 @@ static Writer& OutRTF_SwTxtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-void HandleHyperlinks(Writer& rWrt, const SwpHints* pTxtAttrs, xub_StrLen nPos)
+void HandleHyperlinks(Writer& rWrt, const SwpHints* pTxtAttrs, xub_StrLen nPos )
 {
     USHORT nCount = pTxtAttrs ? pTxtAttrs->Count() : 0;
     for(USHORT i = 0; i < nCount; ++i )
@@ -1580,6 +1584,8 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             rRTFWrt.Strm() << ' ';
 
         rRTFWrt.OutBookmarks( nStrPos );
+
+        rRTFWrt.OutRedline( nStrPos);
 
         if (nStrPos != nEnde)
         {
