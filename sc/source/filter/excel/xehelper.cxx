@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:28:45 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef _SVX_FLSTITEM_HXX
 #include <svx/flstitem.hxx>
+#endif
+#ifndef _SVX_COLRITEM_HXX
+#include <svx/colritem.hxx>
 #endif
 #ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
@@ -613,12 +616,9 @@ XclExpStringRef lclCreateFormattedString(
 
                 // add escapement
                 aFont.SetEscapement( nEsc );
-                // modify font for hyperlinks (TODO: correct font attributes?)
-                if( bIsHyperlink )
-                {
+                // modify automatic font color for hyperlinks
+                if( bIsHyperlink && (GETITEM( aItemSet, SvxColorItem, ATTR_FONT_COLOR ).GetValue().GetColor() == COL_AUTO) )
                     aFont.SetColor( Color( COL_LIGHTBLUE ) );
-                    aFont.SetUnderline( UNDERLINE_SINGLE );
-                }
 
                 // insert font into buffer
                 sal_uInt16 nXclFont = rFontBuffer.Insert( aFont );
