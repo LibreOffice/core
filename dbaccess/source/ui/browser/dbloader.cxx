@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-31 12:44:37 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,8 +238,10 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     sal_Bool bSuccess = sal_True;
     if(aParser.GetMainURL().EqualsAscii(".component:DB/FormGridView"))
         xController = Reference< XController >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.dbaccess.OFormGridView")),UNO_QUERY);
-    else // construct the control
+    else if(aParser.GetMainURL().EqualsAscii(".component:DB/DatasourceBrowser"))// construct the control
         xController = Reference< XController >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.dbaccess.ODatabaseBrowser")),UNO_QUERY);
+    else
+        OSL_ENSHURE(0,"wrong dispatch url!");
 
     if(bSuccess = xController.is())
     {
