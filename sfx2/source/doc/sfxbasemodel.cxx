@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-12 16:12:30 $
+ *  last change: $Author: mba $ $Date: 2001-09-27 10:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,77 +271,6 @@ struct IMPL_SfxBaseModel_DataContainer
 
 } ;
 
-/* ASDBG
-//________________________________________________________________________________________________________
-//  methods for bridging smart<->uno3
-//  Please don't use! Will be deleted in ... days :-)
-//________________________________________________________________________________________________________
-
-REFERENCE< XMODEL > impl_Smart2Uno3_XModel( XModel* pSmart )
-{
-    MAPPING aConverter( "smart" , CPPU_CURRENT_LANGUAGE_BINDING_NAME ) ;
-
-    XMODEL*             pUno3   =   SAL_STATIC_CAST(XMODEL*,(aConverter.mapInterface( pSmart, ::getCppuType((const REFERENCE< XMODEL >*)0) )))  ;
-    REFERENCE< XMODEL > xUno3   =   pUno3                                                                                                       ;
-
-    xUno3->release() ;
-
-    return xUno3 ;
-}
-
-REFERENCE< XCONTROLLER > impl_Smart2Uno3_XController( XController* pSmart )
-{
-    MAPPING aConverter( "smart" , CPPU_CURRENT_LANGUAGE_BINDING_NAME ) ;
-
-    XCONTROLLER*                pUno3   =   SAL_STATIC_CAST(XCONTROLLER*,(aConverter.mapInterface( pSmart, ::getCppuType((const REFERENCE< XCONTROLLER >*)0) )))    ;
-    REFERENCE< XCONTROLLER >    xUno3   =   pUno3                                                                                                                   ;
-
-    xUno3->release() ;
-
-    return xUno3 ;
-}
-
-REFERENCE< XDOCUMENTINFO > impl_Smart2Uno3_XDocumentInfo( XDocumentInfo* pSmart )
-{
-    MAPPING aConverter( "smart" , CPPU_CURRENT_LANGUAGE_BINDING_NAME ) ;
-
-    XDOCUMENTINFO*              pUno3   =   SAL_STATIC_CAST(XDOCUMENTINFO*,(aConverter.mapInterface( pSmart, ::getCppuType((const REFERENCE< XDOCUMENTINFO >*)0) )))    ;
-    REFERENCE< XDOCUMENTINFO >  xUno3   =   pUno3                                                                                                                       ;
-
-    xUno3->release() ;
-
-    return xUno3 ;
-}
-
-SEQUENCE< PROPERTYVALUE > impl_Smart2Uno3_seqPropertyValue( const Sequence< PropertyValue >& seqSmart )
-{
-    sal_Int32               nCount          =   seqSmart.getLen()           ;
-    const PropertyValue*    pSmartProperty  =   seqSmart.getConstArray()    ;
-    sal_Int32               nPosition       =   0                           ;
-
-    SEQUENCE< PROPERTYVALUE > seqUno3 ( nCount ) ;
-    PROPERTYVALUE* pUno3Property = seqUno3.getArray() ;
-
-    for ( nPosition=0; nPosition<nCount; nPosition++ )
-    {
-        pUno3Property[nPosition].Name   =   pSmartProperty[nPosition].Name      ;
-        pUno3Property[nPosition].Handle =   pSmartProperty[nPosition].Handle    ;
-        switch ( pSmartProperty[nPosition].State )
-        {
-            case PropertyState_DIRECT_VALUE     :   pUno3Property[nPosition].State  =   ::com::sun::star::beans::PropertyState_DIRECT_VALUE     ;
-                                                    break;
-            case PropertyState_DEFAULT_VALUE    :   pUno3Property[nPosition].State  =   ::com::sun::star::beans::PropertyState_DEFAULT_VALUE    ;
-                                                    break;
-            case PropertyState_AMBIGUOUS_VALUE  :   pUno3Property[nPosition].State  =   ::com::sun::star::beans::PropertyState_AMBIGUOUS_VALUE  ;
-                                                    break;
-            default: DBG_ASSERT ( sal_False, "SfxBaseModel::impl_Smart2Uno3_sePropertyValue()\nPropertyState unknown!\n" ) ;
-        }
-        ::usr::convertUsr2UnoAny( pUno3Property[nPosition].Value, pSmartProperty[nPosition].Value ) ;
-    }
-
-    return seqUno3 ;
-}
-*/
 SIZE impl_Size_Object2Struct( const Size& aSize )
 {
     SIZE aReturnValue;
@@ -678,8 +607,6 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
 
     ::osl::MutexGuard aGuard( m_aMutex );
     m_pData->m_xCurrent = REFERENCE< XCONTROLLER > ();
-//ASDBG for ( sal_uInt32 n = m_pData->m_seqControllers.getLength(); n; --n )
-//ASDBG     SEQUENCERemoveElementAt( m_pData->m_seqControllers, n-1 );
     m_pData->m_seqControllers = SEQUENCE< REFERENCE< XCONTROLLER > > () ;
 }
 
@@ -740,17 +667,15 @@ void SAL_CALL SfxBaseModel::disposing( const EVENTOBJECT& aObject )
 {
     REFERENCE< XMODIFYLISTENER >  xMod( aObject.Source, UNO_QUERY );
     REFERENCE< XEVENTLISTENER >  xListener( aObject.Source, UNO_QUERY );
-#if SUPD>614
     REFERENCE< XDOCEVENTLISTENER >  xDocListener( aObject.Source, UNO_QUERY );
-#endif
+
     if ( xMod.is() )
         m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XMODIFYLISTENER >*)0), xMod );
     else if ( xListener.is() )
         m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XEVENTLISTENER >*)0), xListener );
-#if SUPD>614
     else if ( xDocListener.is() )
         m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XDOCEVENTLISTENER >*)0), xListener );
-#endif
+/*
     ::osl::MutexGuard aGuard( m_aMutex );
     sal_uInt32 nCount = m_pData->m_seqControllers.getLength();
     for ( sal_uInt32 n = 0; n < nCount; n++ )
@@ -760,15 +685,11 @@ void SAL_CALL SfxBaseModel::disposing( const EVENTOBJECT& aObject )
             m_pData->m_seqControllers.getArray()[n] = REFERENCE< XCONTROLLER > () ;
             break;
         }
-//ASDBG     if( m_pData->m_seqControllers.getConstArray()[n] == aObject.Source )
-//ASDBG     {
-//ASDBG         SequenceRemoveElementAt( m_pData->m_seqControllers, n );
-//ASDBG         break;
-//ASDBG     }
     }
 
     if ( m_pData->m_xCurrent.is() && m_pData->m_xCurrent == aObject.Source )
         m_pData->m_xCurrent = REFERENCE< XCONTROLLER > ();
+*/
 }
 
 //________________________________________________________________________________________________________
@@ -831,17 +752,20 @@ void SAL_CALL SfxBaseModel::disconnectController( const REFERENCE< XCONTROLLER >
     sal_uInt32 nOldCount = m_pData->m_seqControllers.getLength();
     if ( !nOldCount )
     {
-        DBG_ERROR("Somebody forgot to call connectController!");
+        DBG_ERROR("Disconnecting unknown controller!");
         return;
     }
 
     SEQUENCE< REFERENCE< XCONTROLLER > > aNewSeq( nOldCount - 1 );
     for ( sal_uInt32 nOld = 0, nNew = 0; nOld < nOldCount; ++nOld )
+    {
         if ( xController != m_pData->m_seqControllers.getConstArray()[nOld] )
         {
             aNewSeq.getArray()[nNew] = m_pData->m_seqControllers.getConstArray()[nOld];
             ++nNew;
         }
+    }
+
     m_pData->m_seqControllers = aNewSeq;
 
     if ( xController == m_pData->m_xCurrent )

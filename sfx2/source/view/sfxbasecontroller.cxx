@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-12 16:50:42 $
+ *  last change: $Author: mba $ $Date: 2001-09-27 10:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,11 +711,7 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
             SfxObjectShell* pDoc = pFrame->GetObjectShell() ;
             REFERENCE< XMODEL > xModel = pDoc->GetModel();
             if ( xModel.is() )
-            {
-                REFERENCE< XEVENTLISTENER > xRef( xModel, UNOQUERY );
-                if ( xRef.is() )
-                    xRef->disposing( aObject );
-            }
+                xModel->disconnectController( this );
 
             m_pData->m_xListener->disposing( aObject );
             SfxViewShell *pShell = m_pData->m_pViewShell;
@@ -750,7 +746,14 @@ void SAL_CALL SfxBaseController::removeEventListener( const REFERENCE< XEVENTLIS
 void SfxBaseController::ReleaseShell_Impl()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    m_pData->m_pViewShell = 0;
+    if ( m_pData->m_pViewShell )
+    {
+        SfxObjectShell* pDoc = m_pData->m_pViewShell->GetObjectShell() ;
+        REFERENCE< XMODEL > xModel = pDoc->GetModel();
+        if ( xModel.is() )
+            xModel->disconnectController( this );
+        m_pData->m_pViewShell = 0;
+    }
 }
 
 SfxViewShell* SfxBaseController::GetViewShell_Impl() const
