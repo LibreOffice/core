@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:54:17 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:29:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _SFX_CHILDWIN_HXX
 #include <sfx2/childwin.hxx>
 #endif
+#ifndef _SVX_FMTOOLS_HXX
+#include "fmtools.hxx"
+#endif
 
 //========================================================================
 class FmPropBrwMgr : public SfxChildWindow
@@ -120,8 +123,7 @@ protected:
 
     DECL_LINK( OnAsyncGetFocus, void* );
 
-    void implSetNewObject(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
+    void implSetNewSelection( const InterfaceBag& _rSelection );
     void implDetachController();
     ::rtl::OUString getCurrentPage() const;
 
