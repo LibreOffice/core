@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-29 09:21:07 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 20:38:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -868,6 +868,7 @@ ModalDialog RID_DLG_NEWLIB
         Text[ finnish ] = "~Luo erillinen tiedosto";
     };
 };
+
 
 
 
