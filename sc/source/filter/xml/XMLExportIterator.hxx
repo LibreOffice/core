@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-16 07:01:29 $
+ *  last change: $Author: sab $ $Date: 2001-05-16 10:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TABLE_XCELL_HPP_
 #include <com/sun/star/table/XCell.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
+#include <com/sun/star/text/XText.hpp>
 #endif
 
 #ifndef SC_SCGLOB_HXX
@@ -310,9 +313,12 @@ public:
 struct ScMyCell
 {
     com::sun::star::uno::Reference<com::sun::star::table::XCell> xCell;
+    com::sun::star::uno::Reference<com::sun::star::text::XText> xText;
     com::sun::star::table::CellAddress      aCellAddress;
     com::sun::star::table::CellRangeAddress aMergeRange;
     com::sun::star::table::CellRangeAddress aMatrixRange;
+
+    rtl::OUString               sStringValue;
 
     ScMyAreaLink                aAreaLink;
     ScMyShapeVec                aShapeVec;
@@ -332,6 +338,10 @@ struct ScMyCell
     sal_Bool                    bHasEmptyDatabase : 1;
     sal_Bool                    bHasDetectiveObj : 1;
     sal_Bool                    bHasDetectiveOp : 1;
+
+    sal_Bool                    bIsEditCell : 1;
+    sal_Bool                    bKnowWhetherIsEditCell : 1;
+    sal_Bool                    bHasStringValue : 1;
 
     sal_Bool                    bIsMatrixBase : 1;
     sal_Bool                    bIsMatrixCovered : 1;

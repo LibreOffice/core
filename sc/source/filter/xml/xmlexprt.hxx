@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-14 10:28:06 $
+ *  last change: $Author: sab $ $Date: 2001-05-16 10:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ struct ScMyCell;
 class ScDocument;
 class ScMySharedData;
 class ScMyDefaultStyles;
+class XMLNumberFormatAttributesExportHelper;
 
 typedef std::vector< com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > > ScMyXShapesVec;
 
@@ -117,6 +118,7 @@ class ScXMLExport : public SvXMLExport
     UniReference < SvXMLExportPropertyMapper >  xColumnStylesExportPropertySetMapper;
     UniReference < SvXMLExportPropertyMapper >  xRowStylesExportPropertySetMapper;
     UniReference < SvXMLExportPropertyMapper >  xTableStylesExportPropertySetMapper;
+    XMLNumberFormatAttributesExportHelper* pNumberFormatAttributesExportHelper;
     ScMySharedData*                     pSharedData;
     ScColumnRowStyles*                  pColumnStyles;
     ScColumnRowStyles*                  pRowStyles;
@@ -192,6 +194,7 @@ class ScXMLExport : public SvXMLExport
 
     sal_Bool GetCellText (const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell,
         rtl::OUString& sOUTemp) const;
+    sal_Bool GetCellText (ScMyCell& rMyCell) const;
     sal_Int16 GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard);
     sal_Int32 GetCellNumberFormat(const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell) const;
 //  sal_Bool GetCellStyleNameIndex(const ScMyCell& aCell, sal_Int32& nStyleNameIndex, sal_Bool& bIsAutoStyle,
@@ -199,7 +202,7 @@ class ScXMLExport : public SvXMLExport
 
     rtl::OUString GetPrintRanges();
 
-    void WriteCell (const ScMyCell& aCell);
+    void WriteCell (ScMyCell& aCell);
     void WriteAreaLink(const ScMyCell& rMyCell);
     void WriteAnnotation(const ScMyCell& rMyCell);
     void WriteDetective(const ScMyCell& rMyCell);
@@ -210,9 +213,10 @@ class ScXMLExport : public SvXMLExport
 
     sal_Bool IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell2) const;
     sal_Bool IsEditCell(const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell) const;
+    sal_Bool IsEditCell(ScMyCell& rCell) const;
     sal_Bool IsAnnotationEqual(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell1,
                                 const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell2);
-    sal_Bool IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell2);
+    sal_Bool IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2);
 
     void WriteCalculationSettings(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc);
     void WriteTableSource();

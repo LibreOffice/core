@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-14 10:27:28 $
+ *  last change: $Author: sab $ $Date: 2001-05-16 10:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,7 +422,8 @@ ScXMLExport::ScXMLExport(const sal_uInt16 nExportFlag) :
     pDetectiveObjContainer(NULL),
     pChangeTrackingExportHelper(NULL),
     aXShapesVec(),
-    pDefaults(NULL)
+    pDefaults(NULL),
+    pNumberFormatAttributesExportHelper(NULL)
 {
     pGroupColumns = new ScMyOpenCloseColumnRowGroup(*this, sXML_table_column_group);
     pGroupRows = new ScMyOpenCloseColumnRowGroup(*this, sXML_table_row_group);
@@ -435,6 +436,7 @@ ScXMLExport::ScXMLExport(const sal_uInt16 nExportFlag) :
     pDetectiveObjContainer = new ScMyDetectiveObjContainer();
     pCellsItr = new ScMyNotEmptyCellsIterator(*this);
     pDefaults = new ScMyDefaultStyles();
+    pNumberFormatAttributesExportHelper = new XMLNumberFormatAttributesExportHelper(*this);
 
     // document is not set here - create ScChangeTrackingExportHelper later
 
@@ -1654,7 +1656,6 @@ void ScXMLExport::_ExportAutoStyles()
                                 }
                             }
                         }
-                        uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery (xTable, uno::UNO_QUERY);
                         uno::Reference<table::XColumnRowRange> xColumnRowRange (xTable, uno::UNO_QUERY);
                         if (xColumnRowRange.is())
                         {
@@ -1776,10 +1777,12 @@ void ScXMLExport::_ExportAutoStyles()
                                 }
                             }
                         }
+                        uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery (xTable, uno::UNO_QUERY);
                         if (xCellRangesQuery.is())
                         {
                             uno::Reference<sheet::XSheetCellRanges> xSheetCellRanges = xCellRangesQuery->queryContentCells(sheet::CellFlags::STRING);
-                            if (xSheetCellRanges.is())
+                            uno::Reference<container::XIndexAccess> xIndexAccess(xSheetCellRanges, uno::UNO_QUERY);
+                            if (xSheetCellRanges.is() && xIndexAccess.is())
                             {
                                 uno::Reference<container::XEnumerationAccess> xCellsAccess = xSheetCellRanges->getCells();
                                 if (xCellsAccess.is())
@@ -1798,6 +1801,7 @@ void ScXMLExport::_ExportAutoStyles()
                                                     uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY);
                                                     if (xText.is())
                                                         GetTextParagraphExport()->collectTextAutoStyles(xText, sal_False, sal_False);
+                                                    GetProgressBarHelper()->SetValue(++pSharedData->nProgressValue);
                                                 }
                                             }
                                         }
@@ -1989,6 +1993,24 @@ sal_Bool ScXMLExport::GetCellText (const com::sun::star::uno::Reference <com::su
     return sal_False;
 }
 
+sal_Bool ScXMLExport::GetCellText (ScMyCell& rMyCell) const
+{
+    if (rMyCell.bHasStringValue)
+        return sal_True;
+    else
+    {
+        if (!rMyCell.xText.is())
+            rMyCell.xText = uno::Reference <text::XText>(rMyCell.xCell, uno::UNO_QUERY);
+        if (rMyCell.xText.is())
+        {
+            rMyCell.sStringValue = rMyCell.xText->getString();
+            rMyCell.bHasStringValue = sal_True;
+            return sal_True;
+        }
+    }
+    return sal_False;
+}
+
 sal_Int16 ScXMLExport::GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard)
 {
     uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier = GetNumberFormatsSupplier();
@@ -2054,7 +2076,7 @@ OUString ScXMLExport::GetPrintRanges()
     return sPrintRanges;
 }
 
-void ScXMLExport::WriteCell (const ScMyCell& aCell)
+void ScXMLExport::WriteCell (ScMyCell& aCell)
 {
     if (aCell.nStyleIndex != -1)
         AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *pCellStyles->GetStyleNameByIndex(aCell.nStyleIndex, aCell.bIsAutoStyle));
@@ -2084,16 +2106,15 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
         break;
     case table::CellContentType_VALUE :
         {
-            XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
-                *this, aCell.nNumberFormat, aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
+            pNumberFormatAttributesExportHelper->SetNumberFormatAttributes(
+                aCell.nNumberFormat, aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
         }
         break;
     case table::CellContentType_TEXT :
         {
-            rtl::OUString sValue;
-            if (GetCellText(aCell.xCell, sValue))
-                XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
-                    *this, aCell.xCell->getFormula(), sValue, XML_NAMESPACE_TABLE);
+            if (GetCellText(aCell))
+                pNumberFormatAttributesExportHelper->SetNumberFormatAttributes(
+                    aCell.xCell->getFormula(), aCell.sStringValue, XML_NAMESPACE_TABLE, sal_True, sal_False);
         }
         break;
     case table::CellContentType_FORMULA :
@@ -2130,22 +2151,21 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
                                 if (pDoc)
                                 {
                                     pFormulaCell->GetStandardFormat(*pDoc->GetFormatTable(), 0);
-                                    XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
-                                        *this, pFormulaCell->GetStandardFormat(*pDoc->GetFormatTable(), 0),
+                                    pNumberFormatAttributesExportHelper->SetNumberFormatAttributes(
+                                        pFormulaCell->GetStandardFormat(*pDoc->GetFormatTable(), 0),
                                         aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
                                 }
                             }
                         }
                         else
-                            XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(*this,
+                            pNumberFormatAttributesExportHelper->SetNumberFormatAttributes(
                                 aCell.nNumberFormat, aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
                     }
                     else
                     {
                         AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_value_type, sXML_string);
-                        rtl::OUString sValue;
-                        if (GetCellText(aCell.xCell, sValue))
-                            AddAttribute(XML_NAMESPACE_TABLE, sXML_string_value, sValue);
+                        if (GetCellText(aCell))
+                            AddAttribute(XML_NAMESPACE_TABLE, sXML_string_value, aCell.sStringValue);
                     }
                 }
             }
@@ -2177,19 +2197,19 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
     WriteDetective(aCell);
     if (!bIsEmpty)
     {
-        if (IsEditCell(aCell.xCell))
+        if ((xCellType == table::CellContentType_TEXT) && IsEditCell(aCell))
         {
-            uno::Reference<text::XText> xText(aCell.xCell, uno::UNO_QUERY);
-            if ( xText.is())
-                GetTextParagraphExport()->exportText(xText, sal_False, sal_False);
+            if (!aCell.xText.is())
+                aCell.xText = uno::Reference<text::XText>(aCell.xCell, uno::UNO_QUERY);
+            if ( aCell.xText.is())
+                GetTextParagraphExport()->exportText(aCell.xText, sal_False, sal_False);
         }
         else
         {
             SvXMLElementExport aElemC(*this, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
-            rtl::OUString sOUText;
             sal_Bool bPrevCharWasSpace(sal_True);
-              if (GetCellText(aCell.xCell, sOUText))
-                GetTextParagraphExport()->exportText(sOUText, bPrevCharWasSpace);
+              if (GetCellText(aCell))
+                GetTextParagraphExport()->exportText(aCell.sStringValue, bPrevCharWasSpace);
         }
     }
     WriteShapes(aCell);
@@ -2478,14 +2498,21 @@ sal_Bool ScXMLExport::IsEditCell(const com::sun::star::uno::Reference <com::sun:
     {
         ScBaseCell* pBaseCell = pCellObj->GetDocument()->GetCell(pCellObj->GetPosition());
         if (pBaseCell)
-        {
-            if (pBaseCell->GetCellType() == CELLTYPE_EDIT)
-                return sal_True;
-            else
-                return sal_False;
-        }
+            return (pBaseCell->GetCellType() == CELLTYPE_EDIT);
     }
-    return sal_True;
+    return sal_False;
+}
+
+sal_Bool ScXMLExport::IsEditCell(ScMyCell& rCell) const
+{
+    if (rCell.bKnowWhetherIsEditCell)
+        return rCell.bIsEditCell;
+    else
+    {
+        rCell.bIsEditCell = IsEditCell(rCell.xCell);
+        rCell.bKnowWhetherIsEditCell = sal_True;
+        return rCell.bIsEditCell;
+    }
 }
 
 sal_Bool ScXMLExport::IsAnnotationEqual(const uno::Reference<table::XCell>& xCell1,
@@ -2524,7 +2551,7 @@ sal_Bool ScXMLExport::IsAnnotationEqual(const uno::Reference<table::XCell>& xCel
     return sal_False;
 }
 
-sal_Bool ScXMLExport::IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell2)
+sal_Bool ScXMLExport::IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2)
 {
     sal_Bool bIsEqual = sal_False;
     if( !aCell1.bIsMergedBase && !aCell2.bIsMergedBase &&
@@ -2566,14 +2593,13 @@ sal_Bool ScXMLExport::IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell
                         break;
                     case table::CellContentType_TEXT :
                         {
-                            if (IsEditCell(aCell1.xCell) || IsEditCell(aCell2.xCell))
+                            if (IsEditCell(aCell1) || IsEditCell(aCell2))
                                 bIsEqual = sal_False;
                             else
                             {
-                                OUString sOUCell1, sOUCell2;
-                                if (GetCellText(aCell1.xCell, sOUCell1) && GetCellText(aCell2.xCell, sOUCell2))
+                                if (GetCellText(aCell1) && GetCellText(aCell2))
                                 {
-                                    bIsEqual = (sOUCell1 == sOUCell2);
+                                    bIsEqual = (aCell1.sStringValue == aCell2.sStringValue);
                                 }
                                 else
                                     bIsEqual = sal_False;

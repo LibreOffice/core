@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-16 07:01:29 $
+ *  last change: $Author: sab $ $Date: 2001-05-16 10:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,7 +571,11 @@ ScMyCell::ScMyCell() :
     bHasDetectiveOp( sal_False ),
     bIsMatrixBase( sal_False ),
     bIsMatrixCovered( sal_False ),
-    bHasAnnotation( sal_False )
+    bHasAnnotation( sal_False ),
+    bIsAutoStyle( sal_False ),
+    bIsEditCell( sal_False ),
+    bKnowWhetherIsEditCell( sal_False ),
+    bHasStringValue( sal_False )
 {
 }
 
