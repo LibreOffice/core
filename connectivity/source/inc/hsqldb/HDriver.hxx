@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HDriver.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:15:44 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,8 @@ namespace connectivity
 
             // XEventListener
             virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+
+            void shutdownConnections();
         protected:
             /// dtor
             virtual ~ODriverDelegator();
