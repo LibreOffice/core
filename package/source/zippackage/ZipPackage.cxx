@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-30 10:34:23 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,23 +97,29 @@
 #ifndef _COM_SUN_STAR_PACKAGES_MANIFEST_XMANIFESTWRITER_HPP_
 #include <com/sun/star/packages/manifest/XManifestWriter.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEAUGMENTEDIOEXCEPTION_HPP_
-#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
+#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
+#include <com/sun/star/io/XStream.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEWRONGMEDIUMEXCEPTION_HPP_
-#include <com/sun/star/ucb/InteractiveWrongMediumException.hpp>
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_IOERRORCODE_HPP
-#include <com/sun/star/ucb/IOErrorCode.hpp>
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
+#include <com/sun/star/io/XOutputStream.hpp>
 #endif
 #ifndef _COM_SUN_STAR_IO_XTRUNCATE_HPP_
 #include <com/sun/star/io/XTruncate.hpp>
 #endif
-#ifndef _RTL_USTRBUF_HXX_
-#include <rtl/ustrbuf.hxx>
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
 #endif
-#ifndef _INTERACTION_REQUEST_HXX_
-#include <InteractionRequest.hxx>
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_IOERRORCODE_HPP_
+#include <com/sun/star/ucb/IOErrorCode.hpp>
 #endif
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
@@ -130,16 +136,44 @@
 #ifndef _CONTENT_INFO_HXX_
 #include <ContentInfo.hxx>
 #endif
-#ifndef _RTL_LOGFILE_HXX_
-#include <rtl/logfile.hxx>
-#endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
 #ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
 #endif
+#ifndef _RTL_RANDOM_H_
+#include <rtl/random.h>
+#endif
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
+#endif
 #include <memory>
+#include <vector>
+
+// pack'n'go headers
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+#ifndef _INTERACTION_REQUEST_HXX_
+#include <InteractionRequest.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEAUGMENTEDIOEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEWRONGMEDIUMEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveWrongMediumException.hpp>
+#endif
+
 
 using namespace rtl;
 using namespace ucb;
@@ -158,6 +192,7 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::manifest;
 using namespace com::sun::star::packages::zip::ZipConstants;
+
 
 #define LOGFILE_AUTHOR "mg115289"
 
@@ -220,14 +255,12 @@ char * ImplGetChars( const OUString & rString )
     return pChar;
 }
 #endif
-
 ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 : pZipFile( NULL )
 , pRootFolder( NULL )
 , xFactory( xNewFactory )
 , bHasEncryptedEntries ( sal_False )
 , eMode ( e_IMode_None )
-, nSegmentSize ( 0 )
 {
     xRootFolder = pRootFolder = new ZipPackageFolder();
 }
@@ -357,14 +390,14 @@ void ZipPackage::getZipFileContents()
                         Reference < XUnoTunnel > xTunnel;
                         aAny >>= xTunnel;
                         sal_Int64 nTest=0;
-                        if ((nTest = xTunnel->getSomething(ZipPackageFolder::getUnoTunnelImplementationId())) != 0)
+                        if ((nTest = xTunnel->getSomething(ZipPackageFolder::static_getImplementationId())) != 0)
                         {
                             pFolder = reinterpret_cast < ZipPackageFolder* > ( nTest );
                             pFolder->SetMediaType ( sMediaType );
                         }
                         else
                         {
-                            pStream = reinterpret_cast < ZipPackageStream* > ( xTunnel->getSomething(ZipPackageStream::getUnoTunnelImplementationId()));
+                            pStream = reinterpret_cast < ZipPackageStream* > ( xTunnel->getSomething(ZipPackageStream::static_getImplementationId()));
                             pStream->SetMediaType ( sMediaType );
 
                             if (pSalt && pVector && pCount && pSize)
@@ -392,7 +425,9 @@ void ZipPackage::getZipFileContents()
                                 }
 
                                 pStream->SetToBeEncrypted ( sal_True );
-                                bHasEncryptedEntries = sal_True;
+                                pStream->SetIsEncrypted ( sal_True );
+                                if ( !bHasEncryptedEntries && pStream->getName().compareToAscii ( "content.xml" ) == 0 )
+                                    bHasEncryptedEntries = sal_True;
                             }
                         }
                     }
@@ -411,18 +446,65 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
     RTL_LOGFILE_TRACE_AUTHOR ( "package", LOGFILE_AUTHOR, "{ ZipPackage::initialize" );
     sal_Bool bBadZipFile = sal_False, bHaveZipFile = sal_True, bSpanned = sal_False;
 
-    if ( (aArguments[0] >>= sURL))
+    if ( aArguments.getLength() )
     {
-        eMode = e_IMode_URL;
-#ifdef MTG_DEBUG
-        fprintf ( stderr, "MTG: initialise called on %s\n", ImplGetChars ( sURL ) );
-#endif
+        if ( (aArguments[0] >>= sURL))
+        {
+            eMode = e_IMode_URL;
+            try
+            {
+                Content aContent (sURL, Reference < XCommandEnvironment >() );
+                Reference < XActiveDataSink > xSink = new ZipPackageSink;
+                if (aContent.openStream ( xSink ) )
+                    xContentStream = xSink->getInputStream();
+            }
+            catch (com::sun::star::uno::Exception&)
+            {
+                // Exception derived from uno::Exception thrown. This probably
+                // means the file doesn't exist...we'll create it at
+                // commitChanges time
+                bHaveZipFile = sal_False;
+            }
+        }
+        else if ( (aArguments[0] >>= xContentStream) )
+        {
+            eMode = e_IMode_XInputStream;
+        }
+        else if ( (aArguments[0] >>= xStream ) )
+        {
+            eMode = e_IMode_XStream;
+            xContentStream = xStream->getInputStream();
+        }
+        else
+            // The URL is not acceptable
+            throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Bad URL." ) ),
+                static_cast < ::cppu::OWeakObject * > ( this ) );
+
         try
         {
-            Content aContent (sURL, Reference < XCommandEnvironment >() );
-            Reference < XActiveDataSink > xSink = new ZipPackageSink;
-            if (aContent.openStream ( xSink ) )
-                xContentStream = xSink->getInputStream();
+            if (xContentStream.is())
+            {
+                xContentSeek = Reference < XSeekable > ( xContentStream, UNO_QUERY );
+                if ( ! xContentSeek.is() )
+                    throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "The package component _requires_ an XSeekable interface!" ) ),
+                        static_cast < ::cppu::OWeakObject * > ( this ) );
+                if ( eMode == e_IMode_URL) // spanned files only supported if initialised with a URL
+                {
+                    Sequence < sal_Int8 > aSequence ( 4 );
+                    if ( 4 == xContentStream->readBytes( aSequence, 4 ) )
+                    {
+                        xContentSeek->seek ( 0 );
+                        const sal_Int8 *pSeq = aSequence.getConstArray();
+                        if (pSeq[0] == 'P' &&
+                            pSeq[1] == 'K' &&
+                            pSeq[2] == 7 &&
+                            pSeq[3] == 8 )
+                            bSpanned = sal_True;
+                    }
+                }
+            }
+            else
+                bHaveZipFile = sal_False;
         }
         catch (com::sun::star::uno::Exception&)
         {
@@ -431,86 +513,32 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
             // commitChanges time
             bHaveZipFile = sal_False;
         }
-    }
-    else if ( (aArguments[0] >>= xContentStream) )
-    {
-        eMode = e_IMode_XInputStream;
-#ifdef MTG_DEBUG
-        fprintf ( stderr, "MTG: initialise called with an XInputStream\n" );
-#endif
-    }
-    else if ( (aArguments[0] >>= xStream ) )
-    {
-        eMode = e_IMode_XStream;
-        xContentStream = xStream->getInputStream();
-#ifdef MTG_DEBUG
-        fprintf ( stderr, "MTG: initialise called with an XInputStream\n" );
-#endif
-    }
-    else
-        // The URL is not acceptable
-        throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Bad URL." ) ),
-            static_cast < ::cppu::OWeakObject * > ( this ) );
-
-    try
-    {
-        if (xContentStream.is())
+        if ( bHaveZipFile )
         {
-            xContentSeek = Reference < XSeekable > ( xContentStream, UNO_QUERY );
-            if ( ! xContentSeek.is() )
-                throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "The package component _requires_ an XSeekable interface!" ) ),
-                    static_cast < ::cppu::OWeakObject * > ( this ) );
-
-            if ( eMode == e_IMode_URL) // spanned files only supported if initialised with a URL
+            try
             {
-                Sequence < sal_Int8 > aSequence ( 4 );
-                if ( 4 == xContentStream->readBytes( aSequence, 4 ) )
-                {
-                    xContentSeek->seek ( 0 );
-                    const sal_Int8 *pSeq = aSequence.getConstArray();
-                    if (pSeq[0] == 'P' &&
-                        pSeq[1] == 'K' &&
-                        pSeq[2] == 7 &&
-                        pSeq[3] == 8 )
-                        bSpanned = sal_True;
-                }
+                if ( bSpanned )
+                    // after unSpanFile, xContentStream will refer to the tempfile containing
+                    // the unspanned file
+                    unSpanFile ();
+                pZipFile = new ZipFile ( xContentStream, xFactory, sal_True );
+                getZipFileContents();
             }
-        }
-        else
-            bHaveZipFile = sal_False;
-    }
-    catch (com::sun::star::uno::Exception&)
-    {
-        // Exception derived from uno::Exception thrown. This probably
-        // means the file doesn't exist...we'll create it at
-        // commitChanges time
-        bHaveZipFile = sal_False;
-    }
-    if ( bHaveZipFile )
-    {
-        try
-        {
-            if ( bSpanned )
-                // after unSpanFile, xContentStream will refer to the tempfile containing
-                // the unspanned file
-                unSpanFile ();
-            pZipFile = new ZipFile ( xContentStream, xFactory, sal_True );
-            getZipFileContents();
-        }
-        catch ( IOException & )
-        {
-            bBadZipFile = sal_True;
-        }
-        catch ( ZipException & )
-        {
-            bBadZipFile = sal_True;
-        }
-        if ( bBadZipFile )
-        {
-            // clean up the memory, and tell the UCB about the error
-            delete pZipFile; pZipFile = NULL;
-            throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Bad Zip File." ) ),
-                static_cast < ::cppu::OWeakObject * > ( this ) );
+            catch ( IOException & )
+            {
+                bBadZipFile = sal_True;
+            }
+            catch ( ZipException & )
+            {
+                bBadZipFile = sal_True;
+            }
+            if ( bBadZipFile )
+            {
+                // clean up the memory, and tell the UCB about the error
+                delete pZipFile; pZipFile = NULL;
+                throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Bad Zip File." ) ),
+                    static_cast < ::cppu::OWeakObject * > ( this ) );
+            }
         }
     }
     RTL_LOGFILE_TRACE_AUTHOR ( "package", LOGFILE_AUTHOR, "} ZipPackage::initialize" );
@@ -700,10 +728,6 @@ void ZipPackage::writeTempFile()
     // First, create a temporary file to write to:
     const OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
     Reference < XOutputStream > xTempOut = Reference < XOutputStream > ( xFactory->createInstance ( sServiceName ), UNO_QUERY );
-
-#ifdef MTG_DEBUG
-    fprintf(stderr, "We have a %s tempfile!\n", xTempOut.is() ? "good" : "bad" );
-#endif
 
     // Hand it to the ZipOutputStream:
     ZipOutputStream aZipOut ( xTempOut, nSegmentSize != 0);
@@ -998,12 +1022,392 @@ void SAL_CALL ZipPackage::commitChanges(  )
             while ( eRet != e_Finished );
         }
     }
-#ifdef MTG_DEBUG
-    fprintf ( stderr, "MTG: ZipPackage Commit finished\n");
-#endif
     RTL_LOGFILE_TRACE_AUTHOR ( "package", LOGFILE_AUTHOR, "} ZipPackage::commitChanges" );
 }
 
+sal_Bool SAL_CALL ZipPackage::hasPendingChanges(  )
+        throw(RuntimeException)
+{
+    return sal_False;
+}
+Sequence< ElementChange > SAL_CALL ZipPackage::getPendingChanges(  )
+        throw(RuntimeException)
+{
+    return Sequence < ElementChange > ();
+}
+
+/**
+ * Function to create a new component instance; is needed by factory helper implementation.
+ * @param xMgr service manager to if the components needs other component instances
+ */
+Reference < XInterface >SAL_CALL ZipPackage_createInstance(
+    const Reference< XMultiServiceFactory > & xMgr )
+{
+    return Reference< XInterface >( *new ZipPackage(xMgr) );
+}
+
+OUString ZipPackage::static_getImplementationName()
+{
+#if SUPD>625
+    return OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.comp.ZipPackage" ) );
+#else
+    return OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.package.Package" ) );
+#endif
+}
+
+Sequence< OUString > ZipPackage::static_getSupportedServiceNames()
+{
+    Sequence< OUString > aNames(1);
+    aNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.Package" ) );
+    return aNames;
+}
+sal_Bool SAL_CALL ZipPackage::static_supportsService( OUString const & rServiceName )
+{
+    return rServiceName == getSupportedServiceNames()[0];
+}
+
+OUString ZipPackage::getImplementationName()
+    throw (RuntimeException)
+{
+    return static_getImplementationName();
+}
+
+Sequence< OUString > ZipPackage::getSupportedServiceNames()
+    throw (RuntimeException)
+{
+    return static_getSupportedServiceNames();
+}
+sal_Bool SAL_CALL ZipPackage::supportsService( OUString const & rServiceName )
+    throw (RuntimeException)
+{
+    return static_supportsService ( rServiceName );
+}
+Reference < XSingleServiceFactory > ZipPackage::createServiceFactory( Reference < XMultiServiceFactory > const & rServiceFactory )
+{
+    return cppu::createSingleFactory (rServiceFactory,
+                                           static_getImplementationName(),
+                                           ZipPackage_createInstance,
+                                           static_getSupportedServiceNames());
+}
+
+// XUnoTunnel
+Sequence< sal_Int8 > ZipPackage::getUnoTunnelImplementationId( void )
+    throw (RuntimeException)
+{
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
+}
+
+sal_Int64 SAL_CALL ZipPackage::getSomething( const Sequence< sal_Int8 >& aIdentifier )
+    throw(RuntimeException)
+{
+    if (aIdentifier.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) )
+        return reinterpret_cast < sal_Int64 > ( this );
+    return 0;
+}
+
+Reference< XPropertySetInfo > SAL_CALL ZipPackage::getPropertySetInfo(  )
+        throw(RuntimeException)
+{
+    return Reference < XPropertySetInfo > (NULL);
+}
+void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
+        throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+{
+    if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HasEncryptedEntries") ) )
+        throw IllegalArgumentException (); // This property is read-only
+    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EncryptionKey") ) )
+    {
+        if (!( aValue >>= aEncryptionKey ) )
+            throw IllegalArgumentException();
+    }
+    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SegmentSize") ) )
+    {
+        if (!( aValue >>= nSegmentSize ) )
+            throw IllegalArgumentException();
+    }
+    else
+        throw UnknownPropertyException();
+}
+Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+    Any aAny;
+    if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "EncryptionKey" ) ) )
+    {
+        aAny <<= aEncryptionKey;
+        return aAny;
+    }
+    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "HasEncryptedEntries" ) ) )
+    {
+        aAny <<= bHasEncryptedEntries;
+        return aAny;
+    }
+    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "SegmentSize" ) ) )
+    {
+        aAny <<= nSegmentSize;
+        return aAny;
+    }
+    else
+        throw UnknownPropertyException();
+}
+void SAL_CALL ZipPackage::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+}
+void SAL_CALL ZipPackage::removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+}
+void SAL_CALL ZipPackage::addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+}
+void SAL_CALL ZipPackage::removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+}
+
+void ZipPackage::getInteractionHandler()
+{
+    if ( ! xInteractionHandler.is() )
+    {
+        OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.task.InteractionHandler" ) );
+        xInteractionHandler = Reference < XInteractionHandler > ( xFactory->createInstance ( sServiceName ), UNO_QUERY );
+    }
+}
+
+IOErrorCode Impl_OSLFileErrorToUCBIoErrorCode ( oslFileError aRC )
+{
+    IOErrorCode eReturn = IOErrorCode_UNKNOWN;
+    switch ( aRC )
+    {
+        // open
+        case osl_File_E_NOMEM://        not enough memory for allocating structures <br>
+            eReturn = IOErrorCode_OUT_OF_MEMORY;
+        break;
+        case osl_File_E_NAMETOOLONG://  pathname was too long<br>
+            eReturn = IOErrorCode_NAME_TOO_LONG;
+        break;
+        case osl_File_E_NOENT://        No such file or directory<br>
+            eReturn = IOErrorCode_NOT_EXISTING;
+        break;
+        case osl_File_E_ACCES://        permission denied<P>
+            eReturn = IOErrorCode_ACCESS_DENIED;
+        break;
+        case osl_File_E_ISDIR://        Is a directory<p>
+            eReturn = IOErrorCode_INVALID_ACCESS;
+        break;
+        case osl_File_E_NOTDIR://       Not a directory<br>
+            eReturn = IOErrorCode_NO_DIRECTORY;
+        break;
+        case osl_File_E_NXIO://         No such device or address<br>
+            eReturn = IOErrorCode_INVALID_DEVICE;
+        break;
+        case osl_File_E_NODEV://        No such device<br>
+            eReturn = IOErrorCode_INVALID_DEVICE;
+        break;
+        case osl_File_E_ROFS://         Read-only file system<br>
+            eReturn = IOErrorCode_ACCESS_DENIED;
+        break;
+        case osl_File_E_FAULT://        Bad address<br>
+            eReturn = IOErrorCode_INVALID_DEVICE;
+        break;
+        case osl_File_E_LOOP://         Too many symbolic links encountered<br>
+        break;
+        case osl_File_E_MFILE://        too many open files used by the process<br>
+        break;
+        case osl_File_E_NFILE://        too many open files in the system<br>
+        break;
+        case osl_File_E_EXIST://        File exists<br>
+            eReturn = IOErrorCode_CANT_CREATE;
+        break;
+        case osl_File_E_MULTIHOP://     Multihop attempted<br>
+        break;
+        case osl_File_E_FBIG://         File too large<br>
+            eReturn = IOErrorCode_INVALID_LENGTH;
+        break;
+
+        // write
+        case osl_File_E_AGAIN://        Operation would block<br>
+        break;
+        case osl_File_E_NOLCK://        No record locks available<br>
+        break;
+        case osl_File_E_NOSPC://        No space left on device<br>
+            eReturn = IOErrorCode_OUT_OF_DISK_SPACE;
+        break;
+        case osl_File_E_INVAL://        the format of the parameters was not valid<p>
+            eReturn = IOErrorCode_INVALID_PARAMETER;
+        break;
+
+        // close
+        case osl_File_E_BADF://         Bad file<br>
+            eReturn = IOErrorCode_NO_FILE;
+        break;
+        case osl_File_E_INTR://         function call was interrupted<br>
+            eReturn = IOErrorCode_ABORT;
+        break;
+        case osl_File_E_NOLINK://       Link has been severed<br>
+        break;
+        case osl_File_E_IO://           I/O error<p>
+            eReturn = IOErrorCode_GENERAL;
+        break;
+    }
+    return eReturn;
+}
+
+sal_Bool ZipPackage::HandleError ( Any &rAny, sal_uInt16 eContinuations )
+{
+    InteractionRequest* pRequest;
+    Reference < XInteractionRequest > xRequest ( pRequest = new InteractionRequest ( rAny, eContinuations ));
+    xInteractionHandler->handle ( xRequest );
+    const sal_uInt16 nSelection = pRequest->getSelection();
+    return nSelection == EC_YES || nSelection == EC_RETRY;
+}
+
+sal_Bool ZipPackage::HandleError ( oslFileError aRC, sal_uInt16 eContinuations, const OUString &rFileName )
+{
+    Any aAny;
+    InteractiveAugmentedIOException aException;
+    aException.Code = Impl_OSLFileErrorToUCBIoErrorCode ( aRC );
+    aException.Arguments.realloc ( 1 );
+    PropertyValue aProperty;
+    aProperty.Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Uri" ) );
+    aProperty.Handle = static_cast < sal_Int32 > ( -1 );
+    aProperty.Value <<= rFileName;
+    aException.Arguments[0] <<= aProperty;
+    aAny <<= aException;
+    return HandleError (aAny, eContinuations );
+}
+
+void ZipPackage::unSpanFile ( )
+{
+    const OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
+    Reference < XInputStream > xTempIn = Reference < XInputStream > ( xFactory->createInstance ( sServiceName ), UNO_QUERY );
+    Reference < XOutputStream > xTempOut = Reference < XOutputStream > ( xTempIn, UNO_QUERY );
+    Reference < XSeekable > xTempSeek = Reference < XSeekable > ( xTempIn, UNO_QUERY );
+
+#ifdef MTG_DEBUG
+    fprintf ( stderr, "MTG: unspanning %s\n", ImplGetChars ( sURL ) );
+#endif
+    Sequence < sal_Int8 > aBuffer;
+    sal_Int64 nRead;
+    xContentSeek->seek ( 0 );
+    do
+    {
+        nRead = xContentStream->readBytes ( aBuffer, n_ConstBufferSize );
+        xTempOut->writeBytes ( aBuffer );
+    }
+    while ( nRead == n_ConstBufferSize );
+
+    // Clear the references to the first segment so that we can unmount the disk
+    xContentStream = xTempIn;
+    xContentSeek = xTempSeek;
+
+    // Check if the buffer just read is the last one
+    if ( checkEnd ( aBuffer ) )
+        return;
+
+    sal_Int16 nDiskNum = 1;
+    VolumeInfo aInfo ( osl_VolumeInfo_Mask_FreeSpace | osl_VolumeInfo_Mask_DeviceHandle | osl_VolumeInfo_Mask_Attributes );
+    FileBase::RC aRC = Directory::getVolumeInfo ( sURL, aInfo );
+#ifdef MTG_DEBUG
+    fprintf ( stderr, "GetVolumeInfo returned %d\n", aRC );
+#endif
+    VolumeDevice aDevice = aInfo.getDeviceHandle();
+    sal_Bool bIsRemovable = aInfo.getRemoveableFlag();
+#ifdef MTG_DEBUG
+    fprintf ( stderr, "isRemovable is %d\n", bIsRemovable );
+#endif
+
+    sal_Int32 nLastSlash = sURL.lastIndexOf ( '/' );
+    OUString sFileName, sMountPath = aDevice.getMountPath();
+#ifdef MTG_DEBUG
+    fprintf ( stderr, "mountpath is %s\n", ImplGetChars ( sMountPath ) );
+#endif
+    const OUString sFilePrefix = sURL.copy ( 1 + nLastSlash,  sURL.lastIndexOf ( '.' ) - nLastSlash );
+    SegmentEnum eRet = e_Finished;
+    SuffixGenerator aGenerator;
+    do
+    {
+        //pBuffer->nextSegment( ++nDiskNum);
+        nDiskNum++;
+        aGenerator.generateFileName ( sFileName, sFilePrefix, nDiskNum );
+        if ( bIsRemovable )
+        {
+            // We need an interaction handler to request disks
+            getInteractionHandler();
+            if ( RequestDisk( sMountPath, nDiskNum ) < 0 )
+                return;
+#ifdef MTG_DEBUG
+    fprintf ( stderr, "unSpanFile calling readSegment on disk number %d (mount path is %s )\n", nDiskNum, ImplGetChars ( sMountPath ) );
+#endif
+            eRet = readSegment ( sFileName, sMountPath, xTempOut, nDiskNum );
+            if (eRet == e_Aborted)
+                return;
+        }
+        else
+        {
+            OUString sFullPath = sURL.copy ( 0, nLastSlash + 1 ) + sFileName;
+            Reference < XInputStream > xStream;
+            Content aContent (sFullPath, Reference < XCommandEnvironment >() );
+            Reference < XActiveDataSink > xSink = new ZipPackageSink;
+            try
+            {
+                if (aContent.openStream ( xSink ) )
+                    xStream = xSink->getInputStream();
+                if ( xStream.is() )
+                {
+                    do
+                    {
+                        nRead = xStream->readBytes ( aBuffer, n_ConstBufferSize );
+                        xTempOut->writeBytes ( aBuffer );
+                    }
+                    while ( nRead == n_ConstBufferSize );
+                    eRet = checkEnd ( aBuffer ) ? e_Finished : e_Success;
+                }
+            }
+            catch (com::sun::star::uno::Exception&)
+            {
+                // bad juju
+                //
+            }
+        }
+    }
+    while ( eRet != e_Finished );
+}
+
+sal_Bool ZipPackage::checkEnd ( Sequence < sal_Int8 > &rSequence )
+{
+    sal_Int32 nLength, nPos, nEnd;
+
+    nLength = static_cast <sal_Int32 > (rSequence.getLength());
+    // Start at what should be the beginning of the end header
+    if ( nLength == 0 || nLength < ENDHDR )
+        return sal_False;
+    nPos = nLength - ENDHDR - ZIP_MAXNAMELEN;
+    // We'll only look for the END signature within a sane range (ZIP_MAXNAMELEN)
+    nEnd = nPos >= 0 ? nPos : 0;
+
+    const sal_Int8 *pBuffer = rSequence.getConstArray();
+    nPos = nLength - ENDHDR;
+    while ( nPos >= nEnd )
+    {
+        if (pBuffer[nPos] == 'P' && pBuffer[nPos+1] == 'K' && pBuffer[nPos+2] == 5 && pBuffer[nPos+3] == 6 )
+            return sal_True;
+        nPos--;
+    }
+    return sal_False;
+}
 sal_Int32 ZipPackage::RequestDisk ( OUString &rMountPath, sal_Int16 nDiskNum)
 {
     VolumeInfo aInfo ( osl_VolumeInfo_Mask_FreeSpace | osl_VolumeInfo_Mask_DeviceHandle | osl_VolumeInfo_Mask_Attributes );
@@ -1329,374 +1733,4 @@ SegmentEnum ZipPackage::readSegment ( const OUString &rFileName, OUString &rMoun
     aRC = pFile->close ();
     delete pFile;
     return eRet;
-}
-
-sal_Bool SAL_CALL ZipPackage::hasPendingChanges(  )
-        throw(RuntimeException)
-{
-    return sal_False;
-}
-Sequence< ElementChange > SAL_CALL ZipPackage::getPendingChanges(  )
-        throw(RuntimeException)
-{
-    return Sequence < ElementChange > ( NULL, 0 );
-}
-
-/**
- * Function to create a new component instance; is needed by factory helper implementation.
- * @param xMgr service manager to if the components needs other component instances
- */
-Reference < XInterface >SAL_CALL ZipPackage_createInstance(
-    const Reference< XMultiServiceFactory > & xMgr )
-{
-    return Reference< XInterface >( *new ZipPackage(xMgr) );
-}
-
-OUString ZipPackage::getImplementationName()
-{
-#if SUPD>625
-    return OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.comp.ZipPackage" ) );
-#else
-    return OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.package.Package" ) );
-#endif
-}
-
-Sequence< OUString > ZipPackage::getSupportedServiceNames()
-{
-    Sequence< OUString > aNames(1);
-#if SUPD>625
-    aNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.comp.ZipPackage" ) );
-#else
-    aNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.package.Package" ) );
-#endif
-    return aNames;
-}
-sal_Bool SAL_CALL ZipPackage::supportsService( OUString const & rServiceName )
-    throw (RuntimeException)
-{
-    return rServiceName == getSupportedServiceNames()[0];
-}
-Reference < XSingleServiceFactory > ZipPackage::createServiceFactory( Reference < XMultiServiceFactory > const & rServiceFactory )
-{
-    return cppu::createSingleFactory (rServiceFactory,
-                                           getImplementationName(),
-                                           ZipPackage_createInstance,
-                                           getSupportedServiceNames());
-}
-
-// XUnoTunnel
-Sequence< sal_Int8 > ZipPackage::getUnoTunnelImplementationId( void )
-    throw (RuntimeException)
-{
-    static ::cppu::OImplementationId * pId = 0;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
-
-sal_Int64 SAL_CALL ZipPackage::getSomething( const Sequence< sal_Int8 >& aIdentifier )
-    throw(RuntimeException)
-{
-    if (aIdentifier.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) )
-        return reinterpret_cast < sal_Int64 > ( this );
-    return 0;
-}
-
-Reference< XPropertySetInfo > SAL_CALL ZipPackage::getPropertySetInfo(  )
-        throw(RuntimeException)
-{
-    return Reference < XPropertySetInfo > (NULL);
-}
-void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
-        throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
-{
-    if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HasEncryptedEntries") ) )
-        throw IllegalArgumentException (); // This property is read-only
-    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EncryptionKey") ) )
-    {
-        if (!( aValue >>= aEncryptionKey ) )
-            throw IllegalArgumentException();
-    }
-    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SegmentSize") ) )
-    {
-        if (!( aValue >>= nSegmentSize ) )
-            throw IllegalArgumentException();
-    }
-    else
-        throw UnknownPropertyException();
-}
-Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
-{
-    Any aAny;
-    if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "EncryptionKey" ) ) )
-    {
-        aAny <<= aEncryptionKey;
-        return aAny;
-    }
-    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "SegmentSize" ) ) )
-    {
-        aAny <<= nSegmentSize;
-        return aAny;
-    }
-    if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "HasEncryptedEntries" ) ) )
-    {
-        aAny <<= bHasEncryptedEntries;
-        return aAny;
-    }
-    throw UnknownPropertyException();
-}
-void SAL_CALL ZipPackage::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
-{
-}
-void SAL_CALL ZipPackage::removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
-{
-}
-void SAL_CALL ZipPackage::addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
-{
-}
-void SAL_CALL ZipPackage::removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
-{
-}
-void ZipPackage::getInteractionHandler()
-{
-    if ( ! xInteractionHandler.is() )
-    {
-        OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.task.InteractionHandler" ) );
-        xInteractionHandler = Reference < XInteractionHandler > ( xFactory->createInstance ( sServiceName ), UNO_QUERY );
-    }
-}
-
-IOErrorCode Impl_OSLFileErrorToUCBIoErrorCode ( oslFileError aRC )
-{
-    IOErrorCode eReturn = IOErrorCode_UNKNOWN;
-    switch ( aRC )
-    {
-        // open
-        case osl_File_E_NOMEM://        not enough memory for allocating structures <br>
-            eReturn = IOErrorCode_OUT_OF_MEMORY;
-        break;
-        case osl_File_E_NAMETOOLONG://  pathname was too long<br>
-            eReturn = IOErrorCode_NAME_TOO_LONG;
-        break;
-        case osl_File_E_NOENT://        No such file or directory<br>
-            eReturn = IOErrorCode_NOT_EXISTING;
-        break;
-        case osl_File_E_ACCES://        permission denied<P>
-            eReturn = IOErrorCode_ACCESS_DENIED;
-        break;
-        case osl_File_E_ISDIR://        Is a directory<p>
-            eReturn = IOErrorCode_INVALID_ACCESS;
-        break;
-        case osl_File_E_NOTDIR://       Not a directory<br>
-            eReturn = IOErrorCode_NO_DIRECTORY;
-        break;
-        case osl_File_E_NXIO://         No such device or address<br>
-            eReturn = IOErrorCode_INVALID_DEVICE;
-        break;
-        case osl_File_E_NODEV://        No such device<br>
-            eReturn = IOErrorCode_INVALID_DEVICE;
-        break;
-        case osl_File_E_ROFS://         Read-only file system<br>
-            eReturn = IOErrorCode_ACCESS_DENIED;
-        break;
-        case osl_File_E_FAULT://        Bad address<br>
-            eReturn = IOErrorCode_INVALID_DEVICE;
-        break;
-        case osl_File_E_LOOP://         Too many symbolic links encountered<br>
-        break;
-        case osl_File_E_MFILE://        too many open files used by the process<br>
-        break;
-        case osl_File_E_NFILE://        too many open files in the system<br>
-        break;
-        case osl_File_E_EXIST://        File exists<br>
-            eReturn = IOErrorCode_CANT_CREATE;
-        break;
-        case osl_File_E_MULTIHOP://     Multihop attempted<br>
-        break;
-        case osl_File_E_FBIG://         File too large<br>
-            eReturn = IOErrorCode_INVALID_LENGTH;
-        break;
-
-        // write
-        case osl_File_E_AGAIN://        Operation would block<br>
-        break;
-        case osl_File_E_NOLCK://        No record locks available<br>
-        break;
-        case osl_File_E_NOSPC://        No space left on device<br>
-            eReturn = IOErrorCode_OUT_OF_DISK_SPACE;
-        break;
-        case osl_File_E_INVAL://        the format of the parameters was not valid<p>
-            eReturn = IOErrorCode_INVALID_PARAMETER;
-        break;
-
-        // close
-        case osl_File_E_BADF://         Bad file<br>
-            eReturn = IOErrorCode_NO_FILE;
-        break;
-        case osl_File_E_INTR://         function call was interrupted<br>
-            eReturn = IOErrorCode_ABORT;
-        break;
-        case osl_File_E_NOLINK://       Link has been severed<br>
-        break;
-        case osl_File_E_IO://           I/O error<p>
-            eReturn = IOErrorCode_GENERAL;
-        break;
-    }
-    return eReturn;
-}
-
-sal_Bool ZipPackage::HandleError ( Any &rAny, sal_uInt16 eContinuations )
-{
-    InteractionRequest* pRequest;
-    Reference < XInteractionRequest > xRequest ( pRequest = new InteractionRequest ( rAny, eContinuations ));
-    xInteractionHandler->handle ( xRequest );
-    const sal_uInt16 nSelection = pRequest->getSelection();
-    return nSelection == EC_YES || nSelection == EC_RETRY;
-}
-
-sal_Bool ZipPackage::HandleError ( oslFileError aRC, sal_uInt16 eContinuations, const OUString &rFileName )
-{
-    Any aAny;
-    InteractiveAugmentedIOException aException;
-    aException.Code = Impl_OSLFileErrorToUCBIoErrorCode ( aRC );
-    aException.Arguments.realloc ( 1 );
-    PropertyValue aProperty;
-    aProperty.Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Uri" ) );
-    aProperty.Handle = static_cast < sal_Int32 > ( -1 );
-    aProperty.Value <<= rFileName;
-    aException.Arguments[0] <<= aProperty;
-    aAny <<= aException;
-    return HandleError (aAny, eContinuations );
-}
-
-void ZipPackage::unSpanFile ( )
-{
-    const OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
-    Reference < XInputStream > xTempIn = Reference < XInputStream > ( xFactory->createInstance ( sServiceName ), UNO_QUERY );
-    Reference < XOutputStream > xTempOut = Reference < XOutputStream > ( xTempIn, UNO_QUERY );
-    Reference < XSeekable > xTempSeek = Reference < XSeekable > ( xTempIn, UNO_QUERY );
-
-#ifdef MTG_DEBUG
-    fprintf ( stderr, "MTG: unspanning %s\n", ImplGetChars ( sURL ) );
-#endif
-    Sequence < sal_Int8 > aBuffer;
-    sal_Int64 nRead;
-    xContentSeek->seek ( 0 );
-    do
-    {
-        nRead = xContentStream->readBytes ( aBuffer, n_ConstBufferSize );
-        xTempOut->writeBytes ( aBuffer );
-    }
-    while ( nRead == n_ConstBufferSize );
-
-    // Clear the references to the first segment so that we can unmount the disk
-    xContentStream = xTempIn;
-    xContentSeek = xTempSeek;
-
-    // Check if the buffer just read is the last one
-    if ( checkEnd ( aBuffer ) )
-        return;
-
-    sal_Int16 nDiskNum = 1;
-    VolumeInfo aInfo ( osl_VolumeInfo_Mask_FreeSpace | osl_VolumeInfo_Mask_DeviceHandle | osl_VolumeInfo_Mask_Attributes );
-    FileBase::RC aRC = Directory::getVolumeInfo ( sURL, aInfo );
-#ifdef MTG_DEBUG
-    fprintf ( stderr, "GetVolumeInfo returned %d\n", aRC );
-#endif
-    VolumeDevice aDevice = aInfo.getDeviceHandle();
-    sal_Bool bIsRemovable = aInfo.getRemoveableFlag();
-#ifdef MTG_DEBUG
-    fprintf ( stderr, "isRemovable is %d\n", bIsRemovable );
-#endif
-
-    sal_Int32 nLastSlash = sURL.lastIndexOf ( '/' );
-    OUString sFileName, sMountPath = aDevice.getMountPath();
-#ifdef MTG_DEBUG
-    fprintf ( stderr, "mountpath is %s\n", ImplGetChars ( sMountPath ) );
-#endif
-    const OUString sFilePrefix = sURL.copy ( 1 + nLastSlash,  sURL.lastIndexOf ( '.' ) - nLastSlash );
-    SegmentEnum eRet = e_Finished;
-    SuffixGenerator aGenerator;
-    do
-    {
-        //pBuffer->nextSegment( ++nDiskNum);
-        nDiskNum++;
-        aGenerator.generateFileName ( sFileName, sFilePrefix, nDiskNum );
-        if ( bIsRemovable )
-        {
-            // We need an interaction handler to request disks
-            getInteractionHandler();
-            if ( RequestDisk( sMountPath, nDiskNum ) < 0 )
-                return;
-#ifdef MTG_DEBUG
-    fprintf ( stderr, "unSpanFile calling readSegment on disk number %d (mount path is %s )\n", nDiskNum, ImplGetChars ( sMountPath ) );
-#endif
-            eRet = readSegment ( sFileName, sMountPath, xTempOut, nDiskNum );
-            if (eRet == e_Aborted)
-                return;
-        }
-        else
-        {
-            OUString sFullPath = sURL.copy ( 0, nLastSlash + 1 ) + sFileName;
-            Reference < XInputStream > xStream;
-            Content aContent (sFullPath, Reference < XCommandEnvironment >() );
-            Reference < XActiveDataSink > xSink = new ZipPackageSink;
-            try
-            {
-                if (aContent.openStream ( xSink ) )
-                    xStream = xSink->getInputStream();
-                if ( xStream.is() )
-                {
-                    do
-                    {
-                        nRead = xStream->readBytes ( aBuffer, n_ConstBufferSize );
-                        xTempOut->writeBytes ( aBuffer );
-                    }
-                    while ( nRead == n_ConstBufferSize );
-                    eRet = checkEnd ( aBuffer ) ? e_Finished : e_Success;
-                }
-            }
-            catch (com::sun::star::uno::Exception&)
-            {
-                // bad juju
-                //
-            }
-        }
-    }
-    while ( eRet != e_Finished );
-}
-
-sal_Bool ZipPackage::checkEnd ( Sequence < sal_Int8 > &rSequence )
-{
-    sal_Int32 nLength, nPos, nEnd;
-
-    nLength = static_cast <sal_Int32 > (rSequence.getLength());
-    // Start at what should be the beginning of the end header
-    if ( nLength == 0 || nLength < ENDHDR )
-        return sal_False;
-    nPos = nLength - ENDHDR - ZIP_MAXNAMELEN;
-    // We'll only look for the END signature within a sane range (ZIP_MAXNAMELEN)
-    nEnd = nPos >= 0 ? nPos : 0;
-
-    const sal_Int8 *pBuffer = rSequence.getConstArray();
-    nPos = nLength - ENDHDR;
-    while ( nPos >= nEnd )
-    {
-        if (pBuffer[nPos] == 'P' && pBuffer[nPos+1] == 'K' && pBuffer[nPos+2] == 5 && pBuffer[nPos+3] == 6 )
-            return sal_True;
-        nPos--;
-    }
-    return sal_False;
 }
