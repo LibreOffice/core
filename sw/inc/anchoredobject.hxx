@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:26:23 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,6 +533,8 @@ class SwAnchoredObject
             Usage: Needed layout information for WW8 export
 
             @author OD
+
+            @return Point - determined relative position
         */
         Point GetRelPosToAnchorFrm() const;
 
@@ -541,10 +543,26 @@ class SwAnchoredObject
 
             OD 2005-01-06 #i30669#
             Usage: Needed layout information for WW8 export
+            OD 2005-01-27 #i33818# - add parameters <_bFollowTextFlow> and
+            <_obRelToTableCell>
+            If <_bFollowTextFlow> is set and object is anchored inside table,
+            the position relative to the table cell is determined. Output
+            parameter <_obRelToTableCell> reflects this situation
 
             @author OD
+
+            @param _bFollowTextFlow
+            input parameter - boolean indicating, if the anchored object has to
+            follow the text flow.
+
+            @param _obRelToTableCell
+            output parameter - boolean indicating, the determine position is
+            relative to the table cell
+
+            @return Point - determined relative position
         */
-        Point GetRelPosToPageFrm() const;
+        Point GetRelPosToPageFrm( const bool _bFollowTextFlow,
+                                  bool& _obRelToTableCell ) const;
 
         /** method to determine position of anchored object relative to
             anchor character
@@ -553,6 +571,8 @@ class SwAnchoredObject
             Usage: Needed layout information for WW8 export
 
             @author OD
+
+            @return Point - determined relative position
         */
         Point GetRelPosToChar() const;
 
@@ -563,6 +583,8 @@ class SwAnchoredObject
             Usage: Needed layout information for WW8 export
 
             @author OD
+
+            @return Point - determined relative position
         */
         Point GetRelPosToLine() const;
 };
