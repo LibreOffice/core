@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-05-15 21:06:49 $
+ *  last change: $Author: er $ $Date: 2001-07-12 21:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,6 +347,7 @@ void ScAnd();
 void ScOr();
 void ScNot();
 void ScNeg();
+void ScPercentSign();
 void ScIntersect();
 void ScPi();
 void ScRandom();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-27 12:49:33 $
+ *  last change: $Author: er $ $Date: 2001-07-12 21:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,9 +378,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                 aPool >> aStack;
                 break;
             case 0x14: // Percent Sign                          [312 264]
-                // <Stack> + '/' + '100'
-                nMerk0 = aPool.Store( 100.0 );
-                aPool << ocOpen << aStack << ocDiv << nMerk0 << ocClose;
+                aPool << aStack << ocPercentSign;
                 aPool >> aStack;
                 break;
             case 0x15: // Parenthesis                           [326 278]

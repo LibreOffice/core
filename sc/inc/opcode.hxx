@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opcode.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-13 15:26:09 $
+ *  last change: $Author: er $ $Date: 2001-07-12 21:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@ enum OpCodeEnum
         ocMacro             = SC_OPCODE_MACRO,
         ocColRowName        = SC_OPCODE_COL_ROW_NAME,
         ocColRowNameAuto    = SC_OPCODE_COL_ROW_NAME_AUTO,
+    // Percent operator _follows_ value
+        ocPercentSign       = SC_OPCODE_PERCENT_SIGN,
+    // EndOfDiverse
         ocEndDiv            = SC_OPCODE_END_DIV,
     // Binaere Operatoren
         ocAdd               = SC_OPCODE_ADD,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-02-26 13:05:55 $
+ *  last change: $Author: er $ $Date: 2001-07-12 21:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,7 +413,7 @@ BOOL ScToken::IsFunction() const
 BYTE ScToken::GetParamCount() const
 {
     if ( eOp <= ocEndDiv && eOp != ocExternal && eOp != ocMacro &&
-            eOp != ocIf && eOp != ocChose )
+            eOp != ocIf && eOp != ocChose && eOp != ocPercentSign )
         return 0;       // parameters and specials
                         // ocIf and ocChose not for FAP, have cByte then
 //2do: BOOL parameter whether FAP or not?
@@ -421,7 +421,7 @@ BYTE ScToken::GetParamCount() const
         return GetByte();   // all functions, also ocExternal and ocMacro
     else if ( ocEndDiv < eOp && eOp <= ocEndBinOp )
         return 2;           // binary
-    else if ( ocEndBinOp < eOp && eOp <= ocEndUnOp )
+    else if ( (ocEndBinOp < eOp && eOp <= ocEndUnOp) || eOp == ocPercentSign )
         return 1;           // unary
     else if ( ocEndUnOp < eOp && eOp <= ocEndNoPar )
         return 0;           // no parameter

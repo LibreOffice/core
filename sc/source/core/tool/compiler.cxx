@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:28:50 $
+ *  last change: $Author: er $ $Date: 2001-07-12 21:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,7 @@ short lcl_GetRetFormat( OpCode eOpCode )
         case ocZGZ:
         case ocEffektiv:
         case ocNominal:
+        case ocPercentSign:
             return NUMBERFORMAT_PERCENT;
 //      case ocSum:
 //      case ocSumSQ:
@@ -2557,7 +2558,14 @@ void ScCompiler::Unary()
         PutCode( p );
     }
     else
+    {
         Factor();
+        while ( pToken->GetOpCode() == ocPercentSign )
+        {   // this operator _follows_ its operand
+            PutCode( pToken );
+            NextToken();
+        }
+    }
 }
 
 void ScCompiler::PowLine()

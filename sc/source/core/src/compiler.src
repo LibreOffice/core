@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:15:03 $
+ *  last change: $Author: er $ $Date: 2001-07-12 21:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ Resource RID_SC_FUNCTION_NAMES
     String SC_OPCODE_OPEN { Text = "(" ; };
     String SC_OPCODE_CLOSE { Text = ")" ; };
     String SC_OPCODE_SEP { Text = ";" ; };
+    String SC_OPCODE_PERCENT_SIGN { Text = "%" ; };
     String SC_OPCODE_ADD { Text = "+" ; };
     String SC_OPCODE_SUB { Text = "-" ; };
     String SC_OPCODE_MUL { Text = "*" ; };
@@ -7510,6 +7511,7 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_OPEN { Text = "(" ; };
     String SC_OPCODE_CLOSE { Text = ")" ; };
     String SC_OPCODE_SEP { Text = ";" ; };
+    String SC_OPCODE_PERCENT_SIGN { Text = "%" ; };
     String SC_OPCODE_ADD { Text = "+" ; };
     String SC_OPCODE_SUB { Text = "-" ; };
     String SC_OPCODE_MUL { Text = "*" ; };

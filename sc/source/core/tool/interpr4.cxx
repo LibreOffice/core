@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: er $ $Date: 2001-05-29 18:40:38 $
+ *  last change: $Author: er $ $Date: 2001-07-12 21:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,11 +853,11 @@ void ScInterpreter::PushTempToken( const ScToken& r )
 //! no RefCount was set!
 void ScInterpreter::PushTempToken( ScToken* p )
 {
-    ((ScToken*)p)->IncRef();
+    p->IncRef();
     if ( sp >= MAXSTACK )
     {
         SetError( errStackOverflow );
-        ((ScToken*)p)->DecRef();
+        p->DecRef();
     }
     else
     {
@@ -865,7 +865,7 @@ void ScInterpreter::PushTempToken( ScToken* p )
             maxsp = sp + 1;
         else
             pStack[ sp ]->DecRef();
-        pStack[ sp ] = (ScToken*) p;
+        pStack[ sp ] = p;
         pErrorStack[ sp ] = nGlobalError;
         ++sp;
     }
@@ -3064,6 +3064,7 @@ StackVar ScInterpreter::Interpret()
                     case ocNot              : ScNot();                      break;
                     case ocNegSub           :
                     case ocNeg              : ScNeg();                      break;
+                    case ocPercentSign      : ScPercentSign();              break;
                     case ocPi               : ScPi();                       break;
 //                  case ocDefPar           : ScDefPar();                   break;
                     case ocRandom           : ScRandom();                   break;

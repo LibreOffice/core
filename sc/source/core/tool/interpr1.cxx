@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:28:50 $
+ *  last change: $Author: er $ $Date: 2001-07-12 21:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -794,6 +794,21 @@ void ScInterpreter::ScNeg()
         default:
             PushDouble( -GetDouble() );
     }
+}
+
+
+void ScInterpreter::ScPercentSign()
+{
+    nFuncFmtType = NUMBERFORMAT_PERCENT;
+    const ScToken* pSaveCur = pCur;
+    BYTE nSavePar = cPar;
+    PushInt( 100 );
+    cPar = 2;
+    ScByteToken aDivOp( ocDiv, cPar );
+    pCur = &aDivOp;
+    ScDiv();
+    pCur = pSaveCur;
+    cPar = nSavePar;
 }
 
 

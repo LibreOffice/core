@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-04-27 22:44:26 $
+ *  last change: $Author: er $ $Date: 2001-07-12 21:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1576,6 +1576,7 @@ void ScInterpreter::ScAdd()
     nFmt1 = nFmt2 = NUMBERFORMAT_UNDEFINED;
     short nFmtCurrencyType = nCurFmtType;
     ULONG nFmtCurrencyIndex = nCurFmtIndex;
+    short nFmtPercentType = nCurFmtType;
     MatrixDoubleRefToMatrix();
     if ( GetStackType() == svMatrix )
         pMat2 = GetMatrix(nMatInd2);
@@ -1592,6 +1593,9 @@ void ScInterpreter::ScAdd()
             case NUMBERFORMAT_CURRENCY :
                 nFmtCurrencyType = nCurFmtType;
                 nFmtCurrencyIndex = nCurFmtIndex;
+            break;
+            case NUMBERFORMAT_PERCENT :
+                nFmtPercentType = NUMBERFORMAT_PERCENT;
             break;
         }
     }
@@ -1611,6 +1615,9 @@ void ScInterpreter::ScAdd()
             case NUMBERFORMAT_CURRENCY :
                 nFmtCurrencyType = nCurFmtType;
                 nFmtCurrencyIndex = nCurFmtIndex;
+            break;
+            case NUMBERFORMAT_PERCENT :
+                nFmtPercentType = NUMBERFORMAT_PERCENT;
             break;
         }
     }
@@ -1661,7 +1668,11 @@ void ScInterpreter::ScAdd()
         nFuncFmtIndex = nFmtCurrencyIndex;
     }
     else
+    {
         lcl_GetDiffDateTimeFmtType( nFuncFmtType, nFmt1, nFmt2 );
+        if ( nFmtPercentType == NUMBERFORMAT_PERCENT && nFuncFmtType == NUMBERFORMAT_NUMBER )
+            nFuncFmtType = NUMBERFORMAT_PERCENT;
+    }
 }
 
 void ScInterpreter::ScAmpersand()
@@ -1759,6 +1770,7 @@ void ScInterpreter::ScSub()
     nFmt1 = nFmt2 = NUMBERFORMAT_UNDEFINED;
     short nFmtCurrencyType = nCurFmtType;
     ULONG nFmtCurrencyIndex = nCurFmtIndex;
+    short nFmtPercentType = nCurFmtType;
     MatrixDoubleRefToMatrix();
     if ( GetStackType() == svMatrix )
         pMat2 = GetMatrix(nMatInd2);
@@ -1775,6 +1787,9 @@ void ScInterpreter::ScSub()
             case NUMBERFORMAT_CURRENCY :
                 nFmtCurrencyType = nCurFmtType;
                 nFmtCurrencyIndex = nCurFmtIndex;
+            break;
+            case NUMBERFORMAT_PERCENT :
+                nFmtPercentType = NUMBERFORMAT_PERCENT;
             break;
         }
     }
@@ -1794,6 +1809,9 @@ void ScInterpreter::ScSub()
             case NUMBERFORMAT_CURRENCY :
                 nFmtCurrencyType = nCurFmtType;
                 nFmtCurrencyIndex = nCurFmtIndex;
+            break;
+            case NUMBERFORMAT_PERCENT :
+                nFmtPercentType = NUMBERFORMAT_PERCENT;
             break;
         }
     }
@@ -1858,7 +1876,11 @@ void ScInterpreter::ScSub()
         nFuncFmtIndex = nFmtCurrencyIndex;
     }
     else
+    {
         lcl_GetDiffDateTimeFmtType( nFuncFmtType, nFmt1, nFmt2 );
+        if ( nFmtPercentType == NUMBERFORMAT_PERCENT && nFuncFmtType == NUMBERFORMAT_NUMBER )
+            nFuncFmtType = NUMBERFORMAT_PERCENT;
+    }
 }
 
 void ScInterpreter::ScMul()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-13 15:26:09 $
+ *  last change: $Author: er $ $Date: 2001-07-12 21:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #define SC_OPCODE_MACRO              15
 #define SC_OPCODE_COL_ROW_NAME       16
 #define SC_OPCODE_COL_ROW_NAME_AUTO  17
+#define SC_OPCODE_PERCENT_SIGN            18     /* operator _follows_ value */
 #define SC_OPCODE_END_DIV            20
 
 /*** Binaere Operatoren ***/
