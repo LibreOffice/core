@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdbg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-20 11:42:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@
 #include <editdoc.hxx>
 #include <editdbg.hxx>
 
-#if defined( DBG_UTIL ) || defined( DEBUG )
+#if defined( DBG_UTIL ) || ( OSL_DEBUG_LEVEL > 1 )
 
 ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
 {
