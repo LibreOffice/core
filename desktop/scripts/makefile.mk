@@ -68,20 +68,13 @@ TARGET=scripts
 # --- Targets -------------------------------------------------------------
 
 UNIXTEXT= \
-    $(MISC)$/fromTemplate.sh \
-    $(MISC)$/sagenda.sh \
     $(MISC)$/sbase.sh \
     $(MISC)$/soffice.sh \
     $(MISC)$/scalc.sh \
     $(MISC)$/sdraw.sh \
-    $(MISC)$/sfax.sh \
     $(MISC)$/simpress.sh \
-    $(MISC)$/slabel.sh \
-    $(MISC)$/sletter.sh \
     $(MISC)$/smaster.sh \
     $(MISC)$/smath.sh \
-    $(MISC)$/smemo.sh \
-    $(MISC)$/svcard.sh \
     $(MISC)$/sweb.sh \
     $(MISC)$/swriter.sh \
     $(MISC)$/mozwrapper.sh \
