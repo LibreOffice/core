@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldoctp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pw $ $Date: 2000-11-22 13:38:19 $
+ *  last change: $Author: cl $ $Date: 2000-12-14 18:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,16 @@
 
 #include "hyperdlg.hxx"
 
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
+#endif
+
 #include "hldoctp.hxx"
 #include "hyperdlg.hrc"
 
-sal_Char __READONLY_DATA sHash[]         = "#";
-sal_Char __READONLY_DATA sFileScheme[]    = INET_FILE_SCHEME;
+sal_Char __READONLY_DATA sHash[]                = "#";
+sal_Char __READONLY_DATA sFileScheme[]          = INET_FILE_SCHEME;
+sal_Char __READONLY_DATA sPortalFileScheme[]    = "vnd.sun.star.wfs://";
 sal_Char __READONLY_DATA sNewsSRVScheme[] = INET_NEWS_SRV_SCHEME;
 sal_Char __READONLY_DATA sHTTPScheme[]    = INET_HTTP_SCHEME;
 
@@ -96,6 +101,8 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemS
     maCbbPath.SetPosSizePixel ( LogicToPixel( Point( 54, 15 ), MAP_APPFONT ),
                                 LogicToPixel( Size ( 176, 60), MAP_APPFONT ) );
     maCbbPath.Show();
+    String aFileScheme( INET_FILE_SCHEME, RTL_TEXTENCODING_ASCII_US );
+    maCbbPath.SetBaseURL(aFileScheme);
     maCbbPath.SetHelpId( HID_HYPERDLG_DOC_PATH );
 
     SetExchangeSupport ();
@@ -131,6 +138,7 @@ void SvxHyperlinkDocTp::FillDlgFields ( String& aStrURL )
     switch ( aProtocol )
     {
         case INET_PROT_FILE :
+        case INET_PROT_VND_SUN_STAR_WFS :
             aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM ( sFileScheme ) );
             break;
         case INET_PROT_POP3 :
@@ -181,27 +189,24 @@ void SvxHyperlinkDocTp::FillDlgFields ( String& aStrURL )
 String SvxHyperlinkDocTp::GetCurrentURL ()
 {
     // get data from dialog-controls
-    String aStrURL ( maCbbPath.GetText() );
+    String aStrURL;
+    String aStrPath ( maCbbPath.GetText() );
+    const String aBaseURL ( maCbbPath.GetBaseURL() );
     String aStrMark( maEdTarget.GetText() );
 
-    if ( aStrURL != aEmptyStr )
+    if ( aStrPath != aEmptyStr )
     {
+        // create a real URL-String
+        utl::LocalFileHelper::ConvertSystemPathToURL( aStrPath, aBaseURL, aStrURL );
+
         if ( aStrMark != aEmptyStr )
         {
             aStrURL.AppendAscii( "#" );
             aStrURL += aStrMark;
         }
 
-        // create a real URL-String
-        INetURLObject aURL;
-        if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
-            aURL.SetSmartProtocol( INET_PROT_FILE );
-
-        aURL.SetSmartURL( aStrURL );
-
         // if there is a empty string, the url will be the html-scheme
         // but its better to show only the file-scheme
-        aStrURL = aURL.GetMainURL();
 
         if ( aStrURL.SearchAscii( sHTTPScheme ) == 0 )
         {
@@ -235,7 +240,8 @@ void SvxHyperlinkDocTp::GetCurentItemData ( String& aStrURL, String& aStrName,
     // get data from standard-fields
     aStrURL = GetCurrentURL();
 
-    if( aStrURL.EqualsIgnoreCaseAscii( sFileScheme ) )
+    if( aStrURL.EqualsIgnoreCaseAscii( sFileScheme ) ||
+        aStrURL.EqualsIgnoreCaseAscii( sPortalFileScheme ) )
          aStrURL=aEmptyStr;
 
     aStrIntName = mpEdText->GetText();
@@ -385,30 +391,26 @@ IMPL_LINK ( SvxHyperlinkDocTp, ClickFileopenHdl_Impl, void *, EMPTYARG )
     // Open Fileopen-Dialog
     SfxFileDialog* pFileDlg = SFX_APP()->CreateDocFileDialog( ( WB_3DLOOK | WB_STDMODAL | WB_OPEN ),
                                                                 *(SfxObjectFactory*)NULL );
-    INetURLObject aOldURL( GetCurrentURL(), INET_PROT_FILE );
-    if( !aOldURL.GetMainURL().EqualsIgnoreCaseAscii( sFileScheme ) )
+    String aOldURL( GetCurrentURL() );
+    if( aOldURL.EqualsIgnoreCaseAscii( sFileScheme, 0, sizeof( sFileScheme ) - 1 ) ||
+        aOldURL.EqualsIgnoreCaseAscii( sPortalFileScheme, 0, sizeof( sFileScheme ) - 1 ) )
     {
-        pFileDlg->SetPathURL( aOldURL.GetMainURL() );
+        pFileDlg->SetPathURL( aOldURL );
     }
 
     if( pFileDlg )
     {
         if ( pFileDlg->Execute() == RET_OK )
         {
-            String aStrFilename( pFileDlg->GetPath() );
-            aStrFilename = aStrFilename.EraseLeadingChars();
+            String aURL( pFileDlg->GetPath() );
+            String aPath;
 
-            sal_Char const sFile[] = "file";
-            if ( aStrFilename.SearchAscii( sFile ) == 0)
-            {
-                INetURLObject aURL;
-                aURL.SetSmartProtocol( INET_PROT_FILE );
-                aURL.SetSmartURL( aStrFilename );
+            utl::LocalFileHelper::ConvertURLToSystemPath( aURL, aPath );
 
-                maCbbPath.SetText( aURL.GetFull() );
-            }
+            maCbbPath.SetBaseURL( aURL );
+            maCbbPath.SetText( aPath );
 
-            if ( aOldURL.GetMainURL() != GetCurrentURL() )
+            if ( aOldURL != GetCurrentURL() )
                 ModifiedPathHdl_Impl (NULL);
         }
 
@@ -429,13 +431,15 @@ IMPL_LINK ( SvxHyperlinkDocTp, ClickTargetHdl_Impl, void *, EMPTYARG )
     if ( GetPathType ( maStrURL ) == Type_ExistsFile  ||
          maStrURL == aEmptyStr                        ||
          maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) ||
+         maStrURL.EqualsIgnoreCaseAscii( sPortalFileScheme ) ||
          maStrURL.SearchAscii( sHash ) == 0 )
     {
         mpMarkWnd->SetError( LERR_NOERROR );
 
         EnterWait();
 
-        if ( maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) )
+        if ( maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) ||
+             maStrURL.EqualsIgnoreCaseAscii( sPortalFileScheme ) )
             mpMarkWnd->RefreshTree ( aEmptyStr );
         else
             mpMarkWnd->RefreshTree ( maStrURL );
@@ -465,7 +469,8 @@ IMPL_LINK ( SvxHyperlinkDocTp, ModifiedPathHdl_Impl, void *, EMPTYARG )
 
     maFtFullURL.SetText( maStrURL );
 
-    if ( mbNewName && !maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) )
+    if ( mbNewName && !maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) &&
+                      !maStrURL.EqualsIgnoreCaseAscii( sPortalFileScheme ) )
         mpEdIndication->SetText( maFtFullURL.GetText() );
 
     return( 0L );
@@ -485,7 +490,8 @@ IMPL_LINK ( SvxHyperlinkDocTp, TimeoutHdl_Impl, Timer *, EMPTYARG )
     {
         EnterWait();
 
-        if ( maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) )
+        if ( maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) ||
+             maStrURL.EqualsIgnoreCaseAscii( sPortalFileScheme ) )
             mpMarkWnd->RefreshTree ( aEmptyStr );
         else
             mpMarkWnd->RefreshTree ( maStrURL );
@@ -511,7 +517,8 @@ IMPL_LINK ( SvxHyperlinkDocTp, ModifiedTargetHdl_Impl, void *, EMPTYARG )
 
     maFtFullURL.SetText( maStrURL );
 
-    if ( mbNewName && !maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) )
+    if ( mbNewName && !maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) &&
+                      !maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) )
         mpEdIndication->SetText ( maFtFullURL.GetText() );
 
     return( 0L );
@@ -529,7 +536,8 @@ IMPL_LINK ( SvxHyperlinkDocTp, LostFocusPathHdl_Impl, void *, EMPTYARG )
 
     maFtFullURL.SetText(maStrURL);
 
-    if ( mbNewName && !maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) )
+    if ( mbNewName && !maStrURL.EqualsIgnoreCaseAscii( sFileScheme )  &&
+                      !maStrURL.EqualsIgnoreCaseAscii( sPortalFileScheme ))
         mpEdIndication->SetText ( maFtFullURL.GetText() );
 
     return (0L);
