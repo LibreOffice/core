@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 11:52:06 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@
 #include <sfx2/minfitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/tbxmgr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/miscopt.hxx>
@@ -1705,7 +1704,11 @@ void SvxConfigPage::Reset( const SfxItemSet& )
                     "drafts.com.sun.star.frame.ModuleManager" ) ) ),
             uno::UNO_QUERY );
 
-        OUString aModuleId = xModuleManager->identify( m_xFrame );
+        OUString aModuleId;
+        try{
+            aModuleId = xModuleManager->identify( m_xFrame );
+        } catch(const uno::Exception&)
+            { aModuleId = ::rtl::OUString(); }
 
         // replace %MODULENAME in the label with the correct module name
         OUString aModuleName = GetModuleName( aModuleId );
@@ -1841,7 +1844,13 @@ void SvxConfigPage::Reset( const SfxItemSet& )
 
             if ( xf.is() && xf != m_xFrame )
             {
-                if ( aModuleId.equals( xModuleManager->identify( xf ) ) )
+                OUString aCheckId;
+                try{
+                    aCheckId = xModuleManager->identify( xf );
+                } catch(const uno::Exception&)
+                    { aCheckId = ::rtl::OUString(); }
+
+                if ( aModuleId.equals( aCheckId ) )
                 {
                     // try to get the document based ui configuration manager
                     OUString aTitle2;
