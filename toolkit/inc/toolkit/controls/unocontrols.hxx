@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-06 16:00:28 $
+ *  last change: $Author: fs $ $Date: 2002-01-08 13:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,9 @@ public:
     // ::com::sun::star::io::XPersistObject
     ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
+    // XComponent
+    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
+
     // XServiceInfo
     DECLIMPL_SERVICEINFO( UnoControlDialogModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDialogModel ) )
 };
@@ -293,6 +296,10 @@ public:
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO( UnoDialogControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDialog ) )
+
+protected:
+    virtual void removingControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
+    virtual void addingControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
 };
 
 
