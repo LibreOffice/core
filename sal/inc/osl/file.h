@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hro $ $Date: 2001-12-04 15:06:58 $
+ *  last change: $Author: hro $ $Date: 2002-07-09 13:16:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1117,9 +1117,9 @@ oslFileError SAL_CALL osl_setFileAttributes( rtl_uString *filePath, sal_uInt64 u
 
 */
 
-oslFileError SAL_CALL osl_setFileTime( rtl_uString *filePath,   TimeValue *aCreationTime,
-                                                                TimeValue *aLastAccessTime,
-                                                                TimeValue *aLastWriteTime);
+oslFileError SAL_CALL osl_setFileTime( rtl_uString *filePath,   const TimeValue *aCreationTime,
+                                                                const TimeValue *aLastAccessTime,
+                                                                const TimeValue *aLastWriteTime);
 
 #ifdef __cplusplus
 }
