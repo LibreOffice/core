@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-27 21:30:24 $
+ *  last change: $Author: kz $ $Date: 2001-10-12 22:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,22 +529,22 @@ TabPage RID_SVXPAGE_POSITION
         Text[ english_us ] = "~Position";
         Text[ portuguese ] = "~PosiÁ„o";
         Text[ russian ] = "~œÓÁËˆËˇ";
-        Text[ greek ] = "~Position";
-        Text[ dutch ] = "~Position";
+        Text[ greek ] = "»›ÛÁ";
+        Text[ dutch ] = "~Positie";
         Text[ french ] = "~Position";
         Text[ spanish ] = "~PosiciÛn";
-        Text[ finnish ] = "~Position";
+        Text[ finnish ] = "~Sijainti";
         Text[ italian ] = "~Posizione";
-        Text[ danish ] = "~Position";
+        Text[ danish ] = "Placering";
         Text[ swedish ] = "~Position";
         Text[ polish ] = "~Pozycja";
         Text[ portuguese_brazilian ] = "~Position";
-        Text[ japanese ] = "‰ΩçÁΩÆ";
-        Text[ korean ] = "~Position";
-        Text[ chinese_simplified ] = "‰ΩçÁΩÆ";
+        Text[ japanese ] = "‰ΩçÁΩÆ(~P)";
+        Text[ korean ] = "ÏúÑÏπò(~P)";
+        Text[ chinese_simplified ] = "‰ΩçÁΩÆ(~P)";
         Text[ chinese_traditional ] = "‰ΩçÁΩÆ(~P)";
-        Text[ turkish ] = "~Position";
-        Text[ arabic ] = "~Position";
+        Text[ turkish ] = "O~rtala";
+        Text[ arabic ] = "«·„Ê÷⁄";
         Text[ catalan ] = "~Position";
     };
     ListBox LB_ORIENT
@@ -1159,7 +1159,7 @@ TabPage RID_SVXPAGE_SIZE
         Text [ dutch ] = "Br~eedte aan tekst aanpassen" ;
         Text [ italian ] = "~Adatta la larghezza al testo" ;
         Text [ spanish ] = "Ajustar ~ancho al texto" ;
-        Text [ french ] = "Adapter lar~geur au texte" ;
+        Text [ french ] = "Adapter la lar~geur au texte" ;
         Text [ swedish ] = "Anpassa br~edd till text" ;
         Text [ danish ] = "Tilpas bredde til tekst" ;
         Text [ portuguese ] = "Ajustar ~largura ao texto" ;
@@ -1932,6 +1932,7 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text[ catalan ] = "PosiciÛn y tamaÒo";
 };
  // ********************************************************************** EOF
+
 
 
 
