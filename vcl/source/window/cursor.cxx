@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cursor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:32:38 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_CURSOR_CXX
-
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
 #endif
@@ -76,8 +74,8 @@
 #ifndef _SV_WINDOW_H
 #include <window.h>
 #endif
-#ifndef _SV_POLY_HXX
-#include <poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _SV_CURSOR_HXX
 #include <cursor.hxx>
@@ -322,8 +320,8 @@ Cursor::Cursor()
 // -----------------------------------------------------------------------
 
 Cursor::Cursor( const Cursor& rCursor ) :
-    maPos( rCursor.maPos ),
-    maSize( rCursor.maSize )
+    maSize( rCursor.maSize ),
+    maPos( rCursor.maPos )
 {
     mpData          = NULL;
     mpWindow        = NULL;
