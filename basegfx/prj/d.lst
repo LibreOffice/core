@@ -2,7 +2,7 @@
 
 ..\%__SRC%\bin\basegfx?????.dll %_DEST%\bin%_EXT%\basegfx?????.dll
 
-..\%__SRC%\lib\libbasegfx*.* %_DEST%\lib%_EXT%\libbasegfx*.*
+..\%__SRC%\lib\libbasegfx?????.* %_DEST%\lib%_EXT%\libbasegfx?????.*
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
@@ -38,7 +38,6 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\range
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\vector
 ..\inc\basegfx\vector\b2dvector.hxx %_DEST%\inc%_EXT%\basegfx\vector\b2dvector.hxx
-..\inc\basegfx\vector\b2enums.hxx %_DEST%\inc%_EXT%\basegfx\vector\b2enums.hxx
 ..\inc\basegfx\vector\b2dsize.hxx %_DEST%\inc%_EXT%\basegfx\vector\b2dsize.hxx
 ..\inc\basegfx\vector\b3dvector.hxx %_DEST%\inc%_EXT%\basegfx\vector\b3dvector.hxx
 ..\inc\basegfx\vector\b3dsize.hxx %_DEST%\inc%_EXT%\basegfx\vector\b3dsize.hxx
@@ -62,6 +61,8 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\polygon
 ..\inc\basegfx\polygon\b2dpolypolygontools.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolypolygontools.hxx
 ..\inc\basegfx\polygon\b2dpolypolygonrasterconverter.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolypolygonrasterconverter.hxx
 ..\inc\basegfx\polygon\b2dlinegeometry.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dlinegeometry.hxx
+..\inc\basegfx\polygon\b2dpolygontriangulator.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolygontriangulator.hxx
+..\inc\basegfx\polygon\b2dpolygoncutandtouch.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolygoncutandtouch.hxx
 ..\inc\basegfx\polygon\b3dpolygon.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolygon.hxx
 ..\inc\basegfx\polygon\b3dpolypolygon.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolypolygon.hxx
 ..\inc\basegfx\polygon\b3dpolygontools.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolygontools.hxx
