@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-09-08 13:55:39 $
+#   last change: $Author: pjunck $ $Date: 2004-10-27 12:16:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,8 +82,10 @@ XCUFILES= \
     Security.xcu \
     Scripting.xcu \
     SFX.xcu \
+    TableWizard.xcu \
     UI.xcu \
     WebWizard.xcu \
+    FormWizard.xcu \
     Writer.xcu
 
 MODULEFILES= \
@@ -99,14 +101,16 @@ MODULEFILES= \
     Common-cjk.xcu   \
     Common-ctl.xcu   \
     Common-korea.xcu   \
-    Writer-cjk.xcu 
+    Writer-cjk.xcu
 
 LOCALIZEDFILES= \
     Common.xcu \
     SFX.xcu \
     DataAccess.xcu \
+    TableWizard.xcu \
     UI.xcu \
     WebWizard.xcu \
+    FormWizard.xcu \
     Writer.xcu 
 
 .INCLUDE :  target.mk
