@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:02 $
+ *  last change: $Author: bm $ $Date: 2000-11-24 15:08:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,6 @@
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
-#include <com/sun/star/text/XTextRange.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CHART_CHARTLEGENDPOSITION_HPP_
 #include <com/sun/star/chart/ChartLegendPosition.hpp>
 #endif
@@ -122,7 +119,8 @@ enum SchXMLChartType
     XML_CHART_CLASS_RADAR,
     XML_CHART_CLASS_BAR,
     XML_CHART_CLASS_STOCK,
-    XML_CHART_CLASS_BUBBLE  // not yet implemented
+    XML_CHART_CLASS_BUBBLE, // not yet implemented
+    XML_CHART_CLASS_ADDIN
 };
 
 // ----------------------------------------
@@ -187,6 +185,8 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
     rtl::OUString aValue;
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetChartAttrTokenMap();
 
+    rtl::OUString aServiceName;
+
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
@@ -199,7 +199,6 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
             case XML_TOK_CHART_CLASS:
                 {
                     USHORT nEnumVal;
-                    rtl::OUString aServiceName;
                     if( GetImport().GetMM100UnitConverter().convertEnum( nEnumVal, aValue, aXMLChartClassMap ))
                     {
                         switch( nEnumVal )
@@ -239,20 +238,9 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
                             case XML_CHART_CLASS_BUBBLE:
                                 DBG_ERROR( "Bubble chart not supported yet" );
                                 break;
-                        }
-                    }
-                    if( aServiceName.getLength())
-                    {
-                        uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
-                        if( xDoc.is())
-                        {
-                            uno::Reference< lang::XMultiServiceFactory > xFact( xDoc, uno::UNO_QUERY );
-                            if( xFact.is())
-                            {
-                                uno::Reference< chart::XDiagram > xDia( xFact->createInstance( aServiceName ), uno::UNO_QUERY );
-                                if( xDia.is())
-                                    xDoc->setDiagram( xDia );
-                            }
+                            case XML_CHART_CLASS_ADDIN:
+                                // service is taken from add-in-name attribute
+                                break;
                         }
                     }
                 }
@@ -269,6 +257,24 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
             case XML_TOK_CHART_STYLE_NAME:
                 msAutoStyleName = aValue;
                 break;
+
+            case XML_TOK_CHART_ADDIN_NAME:
+                aServiceName = aValue;
+        }
+    }
+
+    if( aServiceName.getLength())
+    {
+        uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
+        if( xDoc.is())
+        {
+            uno::Reference< lang::XMultiServiceFactory > xFact( xDoc, uno::UNO_QUERY );
+            if( xFact.is())
+            {
+                uno::Reference< chart::XDiagram > xDia( xFact->createInstance( aServiceName ), uno::UNO_QUERY );
+                if( xDia.is())
+                    xDoc->setDiagram( xDia );
+            }
         }
     }
 }
@@ -292,9 +298,21 @@ void SchXMLChartContext::EndElement()
             {
                 DBG_ERROR1( "Couldn't set property %s on document", "HasMainTitle" );
             }
-            uno::Reference< text::XTextRange > xRange( xDoc->getTitle(), uno::UNO_QUERY );
-            if( xRange.is())
-                xRange->setString( maMainTitle );
+
+            uno::Reference< beans::XPropertySet > xTitleProp( xDoc->getTitle(), uno::UNO_QUERY );
+            if( xTitleProp.is())
+            {
+                try
+                {
+                    uno::Any aAny;
+                    aAny <<= maMainTitle;
+                    xTitleProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
+                }
+                catch( beans::UnknownPropertyException )
+                {
+                    DBG_ERROR( "Property String for Title not available" );
+                }
+            }
         }
         if( maSubTitle.getLength())
         {
@@ -306,10 +324,21 @@ void SchXMLChartContext::EndElement()
             {
                 DBG_ERROR1( "Couldn't set property %s on document", "HasSubTitle" );
             }
-            uno::Reference< text::XTextRange > xRange( xDoc->getSubTitle(), uno::UNO_QUERY );
-            if( xRange.is())
-                xRange->setString( maSubTitle );
 
+            uno::Reference< beans::XPropertySet > xTitleProp( xDoc->getSubTitle(), uno::UNO_QUERY );
+            if( xTitleProp.is())
+            {
+                try
+                {
+                    uno::Any aAny;
+                    aAny <<= maSubTitle;
+                    xTitleProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
+                }
+                catch( beans::UnknownPropertyException )
+                {
+                    DBG_ERROR( "Property String for Title not available" );
+                }
+            }
         }
     }
 

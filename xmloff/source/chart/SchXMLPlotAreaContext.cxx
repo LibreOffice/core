@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: bm $ $Date: 2000-11-24 15:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,6 @@
 #endif
 #ifndef _COM_SUN_STAR_CHART_XAXISZSUPPLIER_HPP_
 #include <com/sun/star/chart/XAxisZSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
-#include <com/sun/star/text/XTextRange.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XSTRINGMAPPING_HPP_
 #include <com/sun/star/util/XStringMapping.hpp>
@@ -391,9 +388,20 @@ void SchXMLAxisContext::EndElement()
                     xProp = xSuppl->getXAxis();
                     if( bHasTitle )
                     {
-                        uno::Reference< text::XTextRange > xRange( xSuppl->getXAxisTitle(), uno::UNO_QUERY );
-                        if( xRange.is())
-                            xRange->setString( maCurrentAxis.aTitle );
+                        uno::Reference< beans::XPropertySet > xTitleProp( xSuppl->getXAxisTitle(), uno::UNO_QUERY );
+                        if( xTitleProp.is())
+                        {
+                            try
+                            {
+                                uno::Any aAny;
+                                aAny <<= maCurrentAxis.aTitle;
+                                xTitleProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
+                            }
+                            catch( beans::UnknownPropertyException )
+                            {
+                                DBG_ERROR( "Property String for Title not available" );
+                            }
+                        }
                     }
                 }
             }
@@ -435,9 +443,20 @@ void SchXMLAxisContext::EndElement()
                     xProp = xSuppl->getYAxis();
                     if( bHasTitle )
                     {
-                        uno::Reference< text::XTextRange > xRange( xSuppl->getYAxisTitle(), uno::UNO_QUERY );
-                        if( xRange.is())
-                            xRange->setString( maCurrentAxis.aTitle );
+                        uno::Reference< beans::XPropertySet > xTitleProp( xSuppl->getYAxisTitle(), uno::UNO_QUERY );
+                        if( xTitleProp.is())
+                        {
+                            try
+                            {
+                                uno::Any aAny;
+                                aAny <<= maCurrentAxis.aTitle;
+                                xTitleProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
+                            }
+                            catch( beans::UnknownPropertyException )
+                            {
+                                DBG_ERROR( "Property String for Title not available" );
+                            }
+                        }
                     }
                 }
             }
@@ -478,9 +497,20 @@ void SchXMLAxisContext::EndElement()
                     xProp = xSuppl->getZAxis();
                     if( bHasTitle )
                     {
-                        uno::Reference< text::XTextRange > xRange( xSuppl->getZAxisTitle(), uno::UNO_QUERY );
-                        if( xRange.is())
-                            xRange->setString( maCurrentAxis.aTitle );
+                        uno::Reference< beans::XPropertySet > xTitleProp( xSuppl->getZAxisTitle(), uno::UNO_QUERY );
+                        if( xTitleProp.is())
+                        {
+                            try
+                            {
+                                uno::Any aAny;
+                                aAny <<= maCurrentAxis.aTitle;
+                                xTitleProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
+                            }
+                            catch( beans::UnknownPropertyException )
+                            {
+                                DBG_ERROR( "Property String for Title not available" );
+                            }
+                        }
                     }
                 }
             }
