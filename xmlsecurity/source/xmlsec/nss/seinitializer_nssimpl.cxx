@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seinitializer_nssimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-19 10:09:14 $
+ *  last change: $Author: mt $ $Date: 2004-07-21 14:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@ static NS_DEFINE_CID(kProfileCID, NS_PROFILE_CID);
 
 char* getCurrentProfilePath( )
 {
+/*
         nsCOMPtr<nsILocalFile> binDir;
 
         // Note: if getenv() returns NULL, mozilla will default to using MOZILLA_FIVE_HOME in the NS_InitXPCOM2()
@@ -191,6 +192,7 @@ char* getCurrentProfilePath( )
     //      one program
     //NS_RELEASE(sServiceManager);
     //NS_ShutdownXPCOM(sServiceManager);
+    */
 
     return NULL;
 }

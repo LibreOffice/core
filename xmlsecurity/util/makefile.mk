@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: mmi $ $Date: 2004-07-20 00:22:39 $
+#   last change: $Author: mt $ $Date: 2004-07-21 14:34:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,10 +131,10 @@ SHL2STDLIBS +=			\
 .IF "$(CRYPTO_ENGINE)" == "mscrypto"
 SHL2STDLIBS+= "ixml2.lib" "xmlsec.lib" "xmlsec-mscrypto.lib" "crypt32.lib" "advapi32.lib"
 .ELSE
-SHL2STDLIBS+= "ixml2.lib" "nss3.lib" "nspr4.lib" "plc4.lib" "xmlsec.lib" "xmlsec-nss.lib" "xpcom.lib"
+SHL2STDLIBS+= "ixml2.lib" "nss3.lib" "nspr4.lib" "plc4.lib" "xmlsec.lib" "xmlsec-nss.lib"
 .ENDIF
 .ELSE
-SHL2STDLIBS+= "-lxml2" "-lnss3" "-lnspr4" "-lplc4" "-lxmlsec" "-lxmlsec-nss" "-lxpcom" "-lxpcomglue"
+SHL2STDLIBS+= "-lxml2" "-lnss3" "-lnspr4" "-lplc4" "-lxmlsec" "-lxmlsec-nss"  
 .ENDIF
     
 SHL2IMPLIB = $(SHL2TARGET)

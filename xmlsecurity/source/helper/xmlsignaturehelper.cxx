@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-19 07:36:27 $
+ *  last change: $Author: mt $ $Date: 2004-07-21 14:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,9 +111,11 @@ bool XMLSignatureHelper::Init( const rtl::OUString& rTokenPath )
 
     ImplCreateSEInitializer();
 
+    rtl::OUString aTokenPath = rTokenPath;
+
+
     //MM : search for the default profile
     /*
-    rtl::OUString tokenPath = rTokenPath;
 
     if( tokenPath.getLength() == 0 )
     {
@@ -151,15 +153,15 @@ bool XMLSignatureHelper::Init( const rtl::OUString& rTokenPath )
             }
         }
     }
+    */
 
 #ifndef WNT
     // MT: HACK for testing
-    if ( !tokenPath.getLength() )
-        tokenPath = rtl::OUString::createFromAscii("/tmp/nss");
+    if ( !aTokenPath.getLength() )
+        aTokenPath = rtl::OUString::createFromAscii("/tmp/nss");
 #endif
-    */
 
-    mxSecurityContext = mxSEInitializer->createSecurityContext( rTokenPath );
+    mxSecurityContext = mxSEInitializer->createSecurityContext( aTokenPath );
 
     return mxSecurityContext.is();
 }
