@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParagraphProperties.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:42 $
+ *  last change: $Author: os $ $Date: 2001-02-14 13:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,7 +386,19 @@ service ParagraphProperties
      @see com.sun.star.table.ShadowFormat
      */
     [optional, property] com::sun::star::table::ShadowFormat ParaShadowFormat;
-
+    //-------------------------------------------------------------------------
+    /** determins if hanging punctuation is allowed.
+     */
+    [optional, property] boolean IsHangingPunctuation;
+    //-------------------------------------------------------------------------
+    /** determins if a distance between asian text, western text or complex text is set.
+     */
+    [optional, property] boolean IsCharacterDistance;
+    //-------------------------------------------------------------------------
+    /** determins if the the rules for forbidden characters at the start or end
+         of text lines are considered.
+     */
+    [optional, property] boolean IsForbiddenRules;
 };
 
 //=============================================================================

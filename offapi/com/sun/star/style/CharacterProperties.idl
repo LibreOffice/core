@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharacterProperties.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-23 10:08:40 $
+ *  last change: $Author: os $ $Date: 2001-02-14 13:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,65 +306,38 @@ service CharacterProperties
     [optional, property] string CharStyleName;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharContoured
     /** specifies if the characters are formatted and
         displayed with a contour effect.
 
         @optional
      */
     [optional, property] boolean CharContoured;
-
+    //-------------------------------------------------------------------------
+    /** determins whether text is formatted in two lines.
+     <p>It is linked to the properties CharCombinePrefix and CharCombineSuffix.</p>
+        @optional
+     */
+    [optional, property] boolean CharCombineIsOn;
+    //-------------------------------------------------------------------------
+    /** contains the prefix (usually parenthesis) before text that is formatted in two lines.
+     <p>It is linked to the properties CharCombineIsOn and CharCombineSuffix.</p>
+        @optional
+     */
+    [optional, property] string CharCombinePrefix;
+    //-------------------------------------------------------------------------
+    /** contains the suffix (usually parenthesis) after text that is formatted in two lines.
+     <p>It is linked to the properties CharCombineIsOn and CharCombinePrefix.</p>
+        @optional
+     */
+    [optional, property] string CharCombineSuffix;
+    //-------------------------------------------------------------------------
+    /** contains the font emphasis value as <type scope="com::sun::star::text">FontEmphasis</type>.
+        @optional
+     */
+    [optional, property] short CharEmphasize;
 };
 
 //=============================================================================
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2000/12/21 08:35:18  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.4  2000/12/14 12:53:42  mi
-    <true></true> -> <TRUE/> and same with FALSE
-
-    Revision 1.3  2000/11/08 12:44:12  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:25:01  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:54  hjs
-    initial import
-
-    Revision 1.10  2000/09/11 11:52:55  mi
-    documentation merged from XML
-
-    Revision 1.8  2000/08/25 08:44:15  os
-    property CharStrikeout
-
-    Revision 1.7  2000/08/17 11:41:20  bm
-    some properties are optional (settings got lost by merge). I set them according to old docu
-
-    Revision 1.6  2000/07/19 07:56:26  os
-    ...Style -> ...StyleName
-
-    Revision 1.5  2000/06/29 12:27:06  os
-    TransparentBackground -> ~BackTransparent
-
-    Revision 1.4  2000/06/28 15:41:11  os
-    new properties: CharFontStyleName/Family/CharSet/Pitch
-
-    Revision 1.3  2000/02/21 16:18:09  mi
-    string documentation from stardiv...*.idl-files
-
-    Revision 1.2  2000/01/28 16:32:18  mi
-    #72210# Locale instead of Language in NumberFormatter
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
