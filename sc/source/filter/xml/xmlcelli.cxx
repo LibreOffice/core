@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-26 13:50:57 $
+ *  last change: $Author: sab $ $Date: 2000-11-01 14:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,28 +526,35 @@ void ScXMLTableRowCellContext::SetType(const uno::Reference<table::XCellRange>& 
                             sal_Bool bIsStandard;
                             if (nCellType != (GetCellType(nKey, bIsStandard) & ~util::NumberFormat::DEFINED))
                             {
-                                uno::Reference < beans::XPropertySet> xNumberFormatProperties = xNumberFormats->getByKey(nKey);
-                                if (xNumberFormatProperties.is())
+                                try
                                 {
-                                    if (nCellType != util::NumberFormat::CURRENCY)
+                                    uno::Reference < beans::XPropertySet> xNumberFormatProperties = xNumberFormats->getByKey(nKey);
+                                    if (xNumberFormatProperties.is())
                                     {
-                                        uno::Any aNumberLocale = xNumberFormatProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_LOCALE)));
-                                        lang::Locale aLocale;
-                                        if ( aNumberLocale >>= aLocale )
+                                        if (nCellType != util::NumberFormat::CURRENCY)
                                         {
-                                            sal_Int32 nNumberFormatPropertyKey = xNumberFormatTypes->getStandardFormat(nCellType, aLocale);
-                                            uno::Any aNumberFormatPropertyKey;
-                                            aNumberFormatPropertyKey <<= nNumberFormatPropertyKey;
-                                            xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aNumberFormatPropertyKey );
+                                            uno::Any aNumberLocale = xNumberFormatProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_LOCALE)));
+                                            lang::Locale aLocale;
+                                            if ( aNumberLocale >>= aLocale )
+                                            {
+                                                sal_Int32 nNumberFormatPropertyKey = xNumberFormatTypes->getStandardFormat(nCellType, aLocale);
+                                                uno::Any aNumberFormatPropertyKey;
+                                                aNumberFormatPropertyKey <<= nNumberFormatPropertyKey;
+                                                xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aNumberFormatPropertyKey );
+                                            }
+                                        }
+                                        else
+                                        {
+                                            nKey = SetCurrencySymbol(nKey);
+                                            uno::Any aAny;
+                                            aAny <<= nKey;
+                                            xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aAny);
                                         }
                                     }
-                                    else
-                                    {
-                                        nKey = SetCurrencySymbol(nKey);
-                                        uno::Any aAny;
-                                        aAny <<= nKey;
-                                        xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aAny);
-                                    }
+                                }
+                                catch ( uno::Exception& )
+                                {
+                                    DBG_ERROR("Numberformat not found");
                                 }
                             }
                             else
@@ -596,28 +603,35 @@ void ScXMLTableRowCellContext::SetType(const uno::Reference<table::XCell>& xCell
                         sal_Bool bIsStandard;
                         if (nCellType != (GetCellType(nKey, bIsStandard) & ~util::NumberFormat::DEFINED))
                         {
-                            uno::Reference < beans::XPropertySet> xNumberFormatProperties = xNumberFormats->getByKey(nKey);
-                            if (xNumberFormatProperties.is())
+                            try
                             {
-                                if (nCellType != util::NumberFormat::CURRENCY)
+                                uno::Reference < beans::XPropertySet> xNumberFormatProperties = xNumberFormats->getByKey(nKey);
+                                if (xNumberFormatProperties.is())
                                 {
-                                    uno::Any aNumberLocale = xNumberFormatProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_LOCALE)));
-                                    lang::Locale aLocale;
-                                    if ( aNumberLocale >>= aLocale )
+                                    if (nCellType != util::NumberFormat::CURRENCY)
                                     {
-                                        sal_Int32 nNumberFormatPropertyKey = xNumberFormatTypes->getStandardFormat(nCellType, aLocale);
-                                        uno::Any aNumberFormatPropertyKey;
-                                        aNumberFormatPropertyKey <<= nNumberFormatPropertyKey;
-                                        xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aNumberFormatPropertyKey );
+                                        uno::Any aNumberLocale = xNumberFormatProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_LOCALE)));
+                                        lang::Locale aLocale;
+                                        if ( aNumberLocale >>= aLocale )
+                                        {
+                                            sal_Int32 nNumberFormatPropertyKey = xNumberFormatTypes->getStandardFormat(nCellType, aLocale);
+                                            uno::Any aNumberFormatPropertyKey;
+                                            aNumberFormatPropertyKey <<= nNumberFormatPropertyKey;
+                                            xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aNumberFormatPropertyKey );
+                                        }
+                                    }
+                                    else
+                                    {
+                                        nKey = SetCurrencySymbol(nKey);
+                                        uno::Any aAny;
+                                        aAny <<= nKey;
+                                        xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aAny);
                                     }
                                 }
-                                else
-                                {
-                                    nKey = SetCurrencySymbol(nKey);
-                                    uno::Any aAny;
-                                    aAny <<= nKey;
-                                    xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aAny);
-                                }
+                            }
+                            catch ( uno::Exception& )
+                            {
+                                DBG_ERROR("Numberformat not found");
                             }
                         }
                         else
@@ -654,27 +668,34 @@ sal_Int32 ScXMLTableRowCellContext::SetCurrencySymbol(const sal_Int32 nKey)
             uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
             if (xNumberFormats.is())
             {
-                uno::Reference <beans::XPropertySet> xProperties = xNumberFormats->getByKey(nKey);
-                if (xProperties.is())
+                try
                 {
-                    uno::Any aAny = xProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_LOCALE)));
-                    lang::Locale aLocale;
-                    if (aAny >>= aLocale)
+                    uno::Reference <beans::XPropertySet> xProperties = xNumberFormats->getByKey(nKey);
+                    if (xProperties.is())
                     {
-                        LanguageType aLanguageType = ConvertIsoNamesToLanguage(aLocale.Language, aLocale.Country);
-                        International aInt(aLanguageType);
-                        sal_Unicode aDecimalSep = aInt.GetNumDecimalSep();
-                        sal_Unicode aThousandSep = aInt.GetNumThousandSep();
-                        rtl::OUStringBuffer aBuffer(15);
-                        aBuffer.appendAscii("#");
-                        aBuffer.append(aThousandSep);
-                        aBuffer.appendAscii("##0");
-                        aBuffer.append(aDecimalSep);
-                        aBuffer.appendAscii("00 [$");
-                        aBuffer.append(sCurrencySymbol);
-                        aBuffer.appendAscii("]");
-                        return xNumberFormats->addNew(aBuffer.makeStringAndClear(), aLocale);
+                        uno::Any aAny = xProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_LOCALE)));
+                        lang::Locale aLocale;
+                        if (aAny >>= aLocale)
+                        {
+                            LanguageType aLanguageType = ConvertIsoNamesToLanguage(aLocale.Language, aLocale.Country);
+                            International aInt(aLanguageType);
+                            sal_Unicode aDecimalSep = aInt.GetNumDecimalSep();
+                            sal_Unicode aThousandSep = aInt.GetNumThousandSep();
+                            rtl::OUStringBuffer aBuffer(15);
+                            aBuffer.appendAscii("#");
+                            aBuffer.append(aThousandSep);
+                            aBuffer.appendAscii("##0");
+                            aBuffer.append(aDecimalSep);
+                            aBuffer.appendAscii("00 [$");
+                            aBuffer.append(sCurrencySymbol);
+                            aBuffer.appendAscii("]");
+                            return xNumberFormats->addNew(aBuffer.makeStringAndClear(), aLocale);
+                        }
                     }
+                }
+                catch ( uno::Exception& )
+                {
+                    DBG_ERROR("Numberformat not found");
                 }
             }
         }
