@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docundo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:27 $
+ *  last change: $Author: tl $ $Date: 2001-04-09 07:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,7 @@
 
 USHORT SwDoc::nUndoActions = UNDO_ACTION_COUNT;     // anzahl von Undo-Action
 
-//MA: Zur Zeit nicht verwendet.
-//SV_IMPL_VARARR( SwUndoIds, USHORT )
+SV_IMPL_PTRARR( SwUndoIds, SwUndoIdAndNamePtr )
 
 //#define _SHOW_UNDORANGE
 #ifdef _SHOW_UNDORANGE
@@ -545,25 +544,42 @@ USHORT SwDoc::GetUndoIds( String* pStr, SwUndoIds *pUndoIds) const
 
     USHORT nId;
     SwUndo* pUndo;
-    while( UNDO_END == (nId = (pUndo = (*pUndos)[nSize])->GetId()) && nSize
-        && UNDO_END == (nId = ((SwUndoEnd*)pUndo)->GetUserId()) )
-        nSize--;
+    String sTmp;
+    if( pUndoIds )
+        pStr = &sTmp;
 
-    switch( pUndo->GetId() )
-    {
-    case UNDO_START:
-        nId = ((SwUndoStart*)pUndo)->GetUserId();
-        break;
-    case UNDO_REDLINE:
-        nId = ((SwUndoRedline*)pUndo)->GetUserId();
-        break;
-    case UNDO_DRAWUNDO:
-        if( pStr )
-            *pStr = ((SwSdrUndo*)pUndo)->GetComment();
-        break;
-    }
+    do {
+        while( UNDO_END == (nId = (pUndo = (*pUndos)[nSize])->GetId()) && nSize
+            && UNDO_END == (nId = ((SwUndoEnd*)pUndo)->GetUserId()) )
+            nSize--;
 
-    return ( !nSize && UNDO_END == nId ? 0 : nId );
+        switch( pUndo->GetId() )
+        {
+        case UNDO_START:
+            nId = ((SwUndoStart*)pUndo)->GetUserId();
+            break;
+        case UNDO_REDLINE:
+            nId = ((SwUndoRedline*)pUndo)->GetUserId();
+            break;
+        case UNDO_DRAWUNDO:
+            if( pStr )
+                *pStr = ((SwSdrUndo*)pUndo)->GetComment();
+            break;
+        }
+
+        if( !nSize && UNDO_END == nId )
+            nId = 0;
+        else if( pUndoIds )
+        {
+            SwUndoIdAndName* pNew = new SwUndoIdAndName( nId, pStr );
+            pUndoIds->Insert( pNew, pUndoIds->Count() );
+            if( UNDO_END == pUndo->GetId() )
+                nSize -= ((SwUndoEnd*)pUndo)->GetSttOffset();
+            if( !nSize-- )
+                break;
+        }
+    } while( pUndoIds );
+    return nId;
 }
 
 #ifdef COMPACT
@@ -700,31 +716,52 @@ USHORT SwDoc::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
         return 0;
 
     SwUndo* pUndo;
-    if( UNDO_START != ( nId = ( pUndo = (*pUndos)[nSize] )->GetId() ) ||
-        UNDO_START != ( nId = ((SwUndoStart*)pUndo)->GetUserId() ) )
-    {
-        if( UNDO_REDLINE == nId )
-            nId = ((SwUndoRedline*)pUndo)->GetUserId();
-        else if( pStr && UNDO_DRAWUNDO == nId )
-            *pStr = ((SwSdrUndo*)pUndo)->GetComment();
-        return nId;
-    }
+    String sTmp;
+    if( pRedoIds )
+        pStr = &sTmp;
 
-    ASSERT( UNDO_END != nId, "falsches Ende der Undoklammerung!");
+    do {
+        if( UNDO_START != ( nId = ( pUndo = (*pUndos)[nSize] )->GetId() ) ||
+            UNDO_START != ( nId = ((SwUndoStart*)pUndo)->GetUserId() ) )
+        {
+            if( UNDO_REDLINE == nId )
+                nId = ((SwUndoRedline*)pUndo)->GetUserId();
+            else if( pStr && UNDO_DRAWUNDO == nId )
+                *pStr = ((SwSdrUndo*)pUndo)->GetComment();
+        }
+        else
+        {
+            ASSERT( UNDO_END != nId, "falsches Ende der Undoklammerung!");
 
-    // auf den vorm Ende der Klammerung
-    nSize += ((SwUndoStart*)pUndo)->GetEndOffset();
-    while( nSize &&
-            UNDO_END == ( nId = ( pUndo = (*pUndos)[ --nSize ] )->GetId()) &&
-            UNDO_END == ( nId = ((SwUndoEnd*)pUndo)->GetUserId() ) )
-        ;
+            // auf den vorm Ende der Klammerung
+            USHORT nOld = nSize;
+            nSize += ((SwUndoStart*)pUndo)->GetEndOffset();
+            while( nSize &&
+                    UNDO_END == ( nId = ( pUndo = (*pUndos)[ --nSize ] )->GetId()) &&
+                    UNDO_END == ( nId = ((SwUndoEnd*)pUndo)->GetUserId() ) )
+                ;
 
-    if( !nSize )
-        nId = 0;
-    else if( pStr && UNDO_DRAWUNDO == nId )
-        *pStr = ((SwSdrUndo*)pUndo)->GetComment();
-    else if( UNDO_REDLINE == nId )
-        nId = ((SwUndoRedline*)pUndo)->GetUserId();
+            if( !nSize )
+                nId = 0;
+            else if( pStr && UNDO_DRAWUNDO == nId )
+                *pStr = ((SwSdrUndo*)pUndo)->GetComment();
+            else if( UNDO_REDLINE == nId )
+                nId = ((SwUndoRedline*)pUndo)->GetUserId();
+
+            nSize = nOld;
+        }
+
+        if( pRedoIds )
+        {
+            SwUndoIdAndName* pNew = new SwUndoIdAndName( nId, pStr );
+            pRedoIds->Insert( pNew, pRedoIds->Count() );
+            if( UNDO_START == pUndo->GetId() )
+                nSize += ((SwUndoStart*)pUndo)->GetEndOffset();
+            if( ++nSize >= pUndos->Count() )
+                break;
+        }
+
+    } while( pRedoIds && nSize < pUndos->Count() );
 
     return nId;
 }
@@ -801,6 +838,16 @@ SwUndo* SwDoc::RemoveLastUndo( USHORT nUndoId )
         ASSERT( !this, "falsches Undo-Object" );
     }
     return pUndo;
+}
+
+SwUndoIdAndName::SwUndoIdAndName( USHORT nId, const String* pStr )
+    : nUndoId( nId ), pUndoStr( pStr ? new String( *pStr ) : 0 )
+{
+}
+
+SwUndoIdAndName::~SwUndoIdAndName()
+{
+    delete pUndoStr;
 }
 
 
