@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:52:59 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,6 +588,11 @@
 #define SC_UNONAME_UIREPR           "UserInterfaceRepresentation"
 #define SC_UNONAME_PERSREPR         "PersistentRepresentation"
 #define SC_UNONAME_REFSHEET         "ReferenceSheet"
+
+
+// --> PB 2004-08-23 #i33095# Security Options
+#define SC_UNO_LOADREADONLY         "LoadReadonly"
+// <--
 
 #endif
 
