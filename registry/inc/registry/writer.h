@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writer.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:34:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@ extern "C" {
 
    @param typeClass the type class of the created type writer
 
+   @param published whether the created type writer is published; for a type
+   class that cannot be published, this should be false
+
    @param typeName the type name of the created type writer; must not be null
 
    @param superTypeCount the number of super types of the created type writer
@@ -104,7 +107,7 @@ extern "C" {
  */
 void * SAL_CALL typereg_writer_create(
     typereg_Version version, rtl_uString const * documentation,
-    rtl_uString const * fileName, RTTypeClass typeClass,
+    rtl_uString const * fileName, RTTypeClass typeClass, sal_Bool published,
     rtl_uString const * typeName, sal_uInt16 superTypeCount,
     sal_uInt16 fieldCount, sal_uInt16 methodCount, sal_uInt16 referenceCount)
     SAL_THROW_EXTERN_C();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:34:25 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@ public:
 
        @param typeClass the type class of the created type writer
 
+       @param published whether the created type writer is published; for a type
+       class that cannot be published, this should be false
+
        @param typeName the type name of the created type writer
 
        @param superTypeCount the number of super types of the created type
@@ -112,15 +115,15 @@ public:
      */
     Writer(
         typereg_Version version, rtl::OUString const & documentation,
-        rtl::OUString const & fileName, RTTypeClass typeClass,
+        rtl::OUString const & fileName, RTTypeClass typeClass, bool published,
         rtl::OUString const & typeName, sal_uInt16 superTypeCount,
         sal_uInt16 fieldCount, sal_uInt16 methodCount,
         sal_uInt16 referenceCount):
         m_handle(
             typereg_writer_create(
                 version, documentation.pData, fileName.pData, typeClass,
-                typeName.pData, superTypeCount, fieldCount, methodCount,
-                referenceCount))
+                published, typeName.pData, superTypeCount, fieldCount,
+                methodCount, referenceCount))
     {
         if (m_handle == 0) {
             throw std::bad_alloc();
