@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APIDescGetter.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2004-03-19 14:28:48 $
+ *  last change:$Date: 2004-05-03 08:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.StringTokenizer;
 
 import share.DescEntry;
@@ -86,6 +87,7 @@ public class APIDescGetter extends DescGetter {
      */
     public DescEntry[] getDescriptionFor(String job, String descPath,
                                          boolean debug) {
+
         if (job.startsWith("-o")) {
             job = job.substring(3, job.length()).trim();
 
@@ -113,7 +115,8 @@ public class APIDescGetter extends DescGetter {
                     for (int i = 0; i < entry.SubEntryCount; i++) {
                         String subEntry = entry.SubEntries[i].longName;
                         int cpLength = entry.longName.length();
-                        subEntry = subEntry.substring(cpLength+2,subEntry.length());
+                        subEntry = subEntry.substring(cpLength + 2,
+                                                      subEntry.length());
 
                         if (subs.contains(subEntry)) {
                             entry.SubEntries[i].isToTest = true;
@@ -125,6 +128,25 @@ public class APIDescGetter extends DescGetter {
                     return null;
                 }
             }
+        }
+
+        if (job.startsWith("-p")) {
+            job = job.substring(3, job.length()).trim();
+
+            String[] scenario = createScenario(descPath, job, debug);
+            if (scenario == null) {
+                return null;
+            }
+            DescEntry[] entries = new DescEntry[scenario.length];
+            for (int i=0;i<scenario.length;i++) {
+                entries[i] = getDescriptionForSingleJob(
+                                    scenario[i].substring(3).trim(), descPath, debug);
+            }
+            if (job.equals("listall")) {
+                util.dbg.printArray(scenario);
+                System.exit(0);
+            }
+            return entries;
         }
 
         if (job.startsWith("-sce")) {
@@ -527,7 +549,7 @@ public class APIDescGetter extends DescGetter {
         String found = "none";
 
         for (int i = 0; i < files.length; i++) {
-            if (files[i].endsWith(shortName + ".csv")) {
+            if (files[i].endsWith("." + shortName + ".csv")) {
                 found = files[i];
 
                 break;
@@ -570,5 +592,180 @@ public class APIDescGetter extends DescGetter {
         }
 
         return namesList;
+    }
+
+    protected String[] createScenario(String descPath, String job,
+                                      boolean debug) {
+        String[] scenario = null;
+
+        if (descPath != null) {
+            if (debug) {
+                System.out.println("## reading from File " + descPath);
+            }
+
+            scenario = getScenarioFromDirectory(descPath, job, debug);
+        } else {
+            if (debug) {
+                System.out.println("## reading from jar");
+            }
+
+            scenario = getScenarioFromClassPath(job, debug);
+        }
+
+        return scenario;
+    }
+
+    protected String[] getScenarioFromDirectory(String descPath, String job,
+                                                boolean debug) {
+        String[] modules = null;
+        ArrayList componentList = new ArrayList();
+
+        if (!job.equals("unknown") && !job.equals("listall")) {
+            modules = new String[] { job };
+        } else {
+            File dirs = new File(descPath);
+
+            if (!dirs.exists()) {
+                modules = null;
+            } else {
+                modules = dirs.list();
+            }
+        }
+
+        for (int i=0;i<modules.length;i++) {
+            if (! isUnusedModule(modules[i])) {
+                File moduleDir = new File(descPath+System.getProperty("file.separator")+modules[i]);
+                String[] components = moduleDir.list();
+                for (int j=0;j<components.length;j++) {
+                    if (components[j].endsWith(".csv")) {
+                        String toAdd = getComponentForString(components[j], modules[i]);
+                        toAdd = "-o "+modules[i]+"."+toAdd;
+                        componentList.add(toAdd);
+                    }
+                }
+            }
+        }
+
+        String[] scenario = new String[componentList.size()];
+        Collections.sort(componentList);
+
+        for (int i = 0; i < componentList.size(); i++) {
+            scenario[i] = (String) componentList.get(i);
+        }
+
+        return scenario;
+
+    }
+
+    protected String[] getScenarioFromClassPath(String job, boolean debug) {
+        String subdir = "/";
+
+        if (!job.equals("unknown") && !job.equals("listall")) {
+            subdir += job;
+        }
+
+        java.net.URL url = this.getClass().getResource("/objdsc" + subdir);
+
+        if (url == null) {
+            return null;
+        }
+
+        ArrayList scenarioList = new ArrayList();
+
+        try {
+            java.net.URLConnection con = url.openConnection();
+
+            if (con instanceof java.net.JarURLConnection) {
+                // get Jar file from connection
+                java.util.jar.JarFile f = ((java.net.JarURLConnection) con).getJarFile();
+
+                // Enumerate over all entries
+                java.util.Enumeration e = f.entries();
+
+                while (e.hasMoreElements()) {
+                    String entry = e.nextElement().toString();
+
+                    if (entry.startsWith("objdsc" + subdir) &&
+                            (entry.indexOf("CVS") < 0) &&
+                            !entry.endsWith("/")) {
+                        int startMod = entry.indexOf("/");
+                        int endMod = entry.lastIndexOf("/");
+                        String module = entry.substring(startMod + 1, endMod);
+                        String component = getComponentForString(
+                                                   entry.substring(endMod + 1,
+                                                                   entry.length()),
+                                                   module);
+
+                        if (!isUnusedModule(module)) {
+                            scenarioList.add("-o " + module + "." +
+                                             component);
+                        }
+                    }
+                }
+            }
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+
+        String[] scenario = new String[scenarioList.size()];
+        Collections.sort(scenarioList);
+
+        for (int i = 0; i < scenarioList.size(); i++) {
+            scenario[i] = (String) scenarioList.get(i);
+        }
+
+        return scenario;
+    }
+
+    protected String getComponentForString(String full, String module) {
+        String component = "";
+
+
+        //cutting .csv
+        full = full.substring(0, full.length() - 4);
+
+        //cutting component
+        int lastdot = full.lastIndexOf(".");
+        component = full.substring(lastdot + 1, full.length());
+
+        if (module.equals("file") || module.equals("xmloff")) {
+            String withoutComponent = full.substring(0, lastdot);
+            int preLastDot = withoutComponent.lastIndexOf(".");
+            component = withoutComponent.substring(preLastDot + 1,
+                                                   withoutComponent.length()) +
+                        "." + component;
+        }
+
+        return component;
+    }
+
+    protected boolean isUnusedModule(String moduleName) {
+        ArrayList removed = new ArrayList();
+        removed.add("acceptor");
+        removed.add("brdgfctr");
+        removed.add("connectr");
+        removed.add("corefl");
+        removed.add("cpld");
+        removed.add("defreg");
+        removed.add("dynamicloader");
+        removed.add("impreg");
+        removed.add("insp");
+        removed.add("inv");
+        removed.add("invadp");
+        removed.add("javaloader");
+        removed.add("jen");
+        removed.add("namingservice");
+        removed.add("proxyfac");
+        removed.add("rdbtdp");
+        removed.add("remotebridge");
+        removed.add("simreg");
+        removed.add("smgr");
+        removed.add("stm");
+        removed.add("tcv");
+        removed.add("tdmgr");
+        removed.add("ucprmt");
+        removed.add("uuresolver");
+
+        return removed.contains(moduleName);
     }
 }
