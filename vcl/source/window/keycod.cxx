@@ -2,9 +2,9 @@
  *
  *  $RCSfile: keycod.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:12:50 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,9 +144,9 @@ KeyCode::KeyCode( const ResId& rResId )
     {
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
-        USHORT nKeyCode     = pResMgr->ReadShort();
-        USHORT nModifier    = pResMgr->ReadShort();
-        USHORT nKeyFunc     = pResMgr->ReadShort();
+        ULONG nKeyCode  = pResMgr->ReadLong();
+        ULONG nModifier = pResMgr->ReadLong();
+        ULONG nKeyFunc  = pResMgr->ReadLong();
 
         eFunc = (KeyFuncType)nKeyFunc;
         if ( eFunc != KEYFUNC_DONTKNOW )
