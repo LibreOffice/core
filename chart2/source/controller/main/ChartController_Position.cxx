@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Position.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:12:07 $
+ *  last change: $Author: bm $ $Date: 2004-02-10 10:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #include "ChartController.hxx"
 
-#include "dlg_PositionAndSize.hxx"
 #include "dlg_RotateDiagram.hxx"
 #include "macros.hxx"
 #include "ChartWindow.hxx"
@@ -80,6 +79,13 @@
 
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
+#endif
+
+#ifndef _SVX_DIALOG_HXX
+#include <svx/svxdlg.hxx>
+#endif
+#ifndef _SVX_DIALOGS_HRC
+#include <svx/dialogs.hrc>
 #endif
 
 //.............................................................................
@@ -120,6 +126,7 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize( const ::rtl::OUS
         return;
 
     bool bChanged = false;
+    SfxAbstractTabDialog * pDlg = NULL;
     try
     {
         SfxItemSet aItemSet = m_pDrawViewWrapper->getPositionAndSizeItemSetFromMarkedObject();
@@ -128,10 +135,16 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize( const ::rtl::OUS
         Window* pParent( NULL );
         SdrView* pSdrView = m_pDrawViewWrapper;
         bool bResizePossible=true;
-        PositionAndSizeDialog aDlg( pParent, &aItemSet, pSdrView, bResizePossible );
-        if( aDlg.Execute() == RET_OK )
+
+        SvxAbstractDialogFactory * pFact = SvxAbstractDialogFactory::Create();
+        DBG_ASSERT( pFact, "No dialog factory" );
+        pDlg = pFact->CreateSchTransformTabDialog(
+            NULL, &aItemSet, pSdrView, ResId( RID_SCH_TransformTabDLG_SVXPAGE_ANGLE ), bResizePossible );
+        DBG_ASSERT( pDlg, "Couldn't create SchTransformTabDialog" );
+
+        if( pDlg->Execute() == RET_OK )
         {
-            const SfxItemSet* pOutItemSet = aDlg.GetOutputItemSet();
+            const SfxItemSet* pOutItemSet = pDlg->GetOutputItemSet();
             if(pOutItemSet)
             {
                 Rectangle aObjectRect;
@@ -146,9 +159,11 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize( const ::rtl::OUS
                             );
             }
         }
+        delete pDlg;
     }
-    catch( uno::RuntimeException& e)
+    catch( uno::Exception& e)
     {
+        delete pDlg;
         ASSERT_EXCEPTION( e );
     }
     //make sure that all objects using  m_pChartView are already deleted

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:11:52 $
+ *  last change: $Author: bm $ $Date: 2004-02-10 10:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,31 @@
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #endif
 
+#ifndef _SFXINTITEM_HXX
+#include <svtools/intitem.hxx>
+#endif
+
+#ifndef _SVX_SVXIDS_HRC
+#include <svx/svxids.hrc>
+#endif
+
+#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
+#define ITEMID_GRADIENT_LIST    SID_GRADIENT_LIST
+#define ITEMID_HATCH_LIST       SID_HATCH_LIST
+#define ITEMID_BITMAP_LIST      SID_BITMAP_LIST
+#define ITEMID_DASH_LIST        SID_DASH_LIST
+#define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
+
+#ifndef _SVX_DRAWITEM_HXX
+#include <svx/drawitem.hxx>
+#endif
+
+#ifndef _OFF_OFAITEM_HXX
+#include <svx/ofaitem.hxx>
+#endif
+#ifndef _SVX_GRAPHICITEM_HXX
+#include <svx/svxgrahicitem.hxx>
+#endif
 
 #ifndef _SVX_CHARDLG_HXX
 #include <svx/chardlg.hxx>
@@ -347,18 +372,18 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
     switch (eObjectType)
     {
         case OBJECTTYPE_TITLE://ATTR_TITLE:
-            AddTabPage(RID_SVXPAGE_LINE, SvxLineTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_AREA, SvxAreaTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_TRANSPARENCE, SvxTransparenceTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_AREA); //, SvxAreaTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_TRANSPARENCE); //, SvxTransparenceTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
             AddTabPage(TP_ALIGNMENT, SchAlignmentTabPage::Create, NULL);
             break;
 
         case OBJECTTYPE_LEGEND://ATTR_LEGEND:
-            AddTabPage(RID_SVXPAGE_LINE, SvxLineTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_AREA, SvxAreaTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_TRANSPARENCE, SvxTransparenceTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_AREA); //, SvxAreaTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_TRANSPARENCE); //, SvxTransparenceTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
             AddTabPage(TP_LEGEND_POS, SchLegendPosTabPage::Create, NULL);
@@ -368,9 +393,9 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
         case OBJECTTYPE_DATA_POINT://ATTR_DATA_POINT:
         case OBJECTTYPE_DATA_LABEL:
         case OBJECTTYPE_DATA_LABELS:
-            AddTabPage(RID_SVXPAGE_LINE, SvxLineTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_AREA, SvxAreaTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_TRANSPARENCE, SvxTransparenceTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_AREA); //, SvxAreaTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_TRANSPARENCE); //, SvxTransparenceTabPage::Create, NULL);
             if(!m_pParameter->HasAreaProperties())
             {
                 RemoveTabPage(RID_SVXPAGE_AREA);
@@ -394,7 +419,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             /*
         case OBJECTTYPE_DATA_SERIES://ATTR_DATA_LINE:
 
-            AddTabPage(RID_SVXPAGE_LINE, SvxLineTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
             AddTabPage(TP_DATA_DESCR, SchDataDescrTabPage::Create, NULL);
@@ -411,7 +436,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
 
         /*
         case OBJECTTYPE_AXIS://ATTR_AXIS:
-            AddTabPage(RID_SVXPAGE_LINE, SvxLineTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
             AddTabPage(TP_AXIS_LABEL, SchAxisLabelTabPage::Create, NULL);
@@ -421,7 +446,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
         */
         case OBJECTTYPE_AXIS:
         {
-            AddTabPage(RID_SVXPAGE_LINE, SvxLineTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
             AddTabPage(TP_AXIS_LABEL, SchAxisLabelTabPage::Create, NULL);
@@ -443,7 +468,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
         /*
         case ATTR_Y_AXIS_2D:
         case ATTR_Y_AXIS_3D:
-            AddTabPage(RID_SVXPAGE_LINE, SvxLineTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
             AddTabPage(TP_SCALE_Y, SchScaleYAxisTabPage::Create, NULL);
@@ -456,7 +481,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             break;
 
         case ATTR_Z_AXIS:
-            AddTabPage(RID_SVXPAGE_LINE, SvxLineTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, NULL);
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, NULL);
             AddTabPage(TP_AXIS_LABEL, SchAxisLabelTabPage::Create, NULL);
@@ -473,7 +498,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
         case OBJECTTYPE_DATA_ERRORS_Z:
         case OBJECTTYPE_DATA_CURVE:
         case OBJECTTYPE_DATA_STOCK_RANGE://ATTR_LINE
-            AddTabPage(RID_SVXPAGE_LINE, SvxLineTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
             break;
 
         case OBJECTTYPE_DATA_STOCK_LOSS://ATTR_DIAGRAM_STOCK_LOSS:
@@ -482,9 +507,9 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
         case OBJECTTYPE_DIAGRAM_FLOOR://ATTR_DIAGRAM_FLOOR:
         case OBJECTTYPE_DIAGRAM_WALL://ATTR_DIAGRAM_WALL:
         case OBJECTTYPE_DIAGRAM://ATTR_DIAGRAM_WALL: //@todo
-            AddTabPage(RID_SVXPAGE_LINE, SvxLineTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_AREA, SvxAreaTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_TRANSPARENCE, SvxTransparenceTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_LINE); //, SvxLineTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_AREA); //, SvxAreaTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_TRANSPARENCE); //, SvxTransparenceTabPage::Create, NULL);
             break;
 
         case OBJECTTYPE_LEGEND_ENTRY:
@@ -503,48 +528,72 @@ SchAttribTabDlg::~SchAttribTabDlg()
 
 void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
 {
+    SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     switch (nId)
     {
         case TP_LAYOUT:
         break;
         case RID_SVXPAGE_LINE:
-            ((SvxLineTabPage&)rPage).SetColorTable(m_pViewElementListProvider->GetColorTable());
-            ((SvxLineTabPage&)rPage).SetDashList(m_pViewElementListProvider->GetDashList());
-            ((SvxLineTabPage&)rPage).SetLineEndList(m_pViewElementListProvider->GetLineEndList());
-            ((SvxLineTabPage&)rPage).SetPageType(&nPageType);
-            ((SvxLineTabPage&)rPage).SetDlgType(&nDlgType);
-            ((SvxLineTabPage&)rPage).Construct();
-            ((SvxLineTabPage&)rPage).ActivatePage(*GetInputSetImpl());
+//          ((SvxLineTabPage&)rPage).SetColorTable(m_pViewElementListProvider->GetColorTable());
+//          ((SvxLineTabPage&)rPage).SetDashList(m_pViewElementListProvider->GetDashList());
+//          ((SvxLineTabPage&)rPage).SetLineEndList(m_pViewElementListProvider->GetLineEndList());
+//          ((SvxLineTabPage&)rPage).SetPageType(&nPageType);
+//          ((SvxLineTabPage&)rPage).SetDlgType(&nDlgType);
+//          ((SvxLineTabPage&)rPage).Construct();
+//          ((SvxLineTabPage&)rPage).ActivatePage(*GetInputSetImpl());
+            aSet.Put (SvxColorTableItem(m_pViewElementListProvider->GetColorTable(),SID_COLOR_TABLE));
+            aSet.Put (SvxDashListItem(m_pViewElementListProvider->GetDashList(),SID_DASH_LIST));
+            aSet.Put (SvxLineEndListItem(m_pViewElementListProvider->GetLineEndList(),SID_LINEEND_LIST));
+            aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
+            aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
+
             if( m_pParameter->HasSymbolProperties() )
             {
-                ((SvxLineTabPage&)rPage).ShowSymbolControls(TRUE);
-                ((SvxLineTabPage&)rPage).SetSymbolList(m_pViewElementListProvider->GetSymbolList());
+                aSet.Put(OfaPtrItem(SID_OBJECT_LIST,m_pViewElementListProvider->GetSymbolList()));
                 if( m_pSymbolShapeProperties )
-                    ((SvxLineTabPage&)rPage).SetSymbolAttr(m_pSymbolShapeProperties);
+                    aSet.Put(SfxTabDialogItem(SID_ATTR_SET,*m_pSymbolShapeProperties));
                 if( m_pAutoSymbolGraphic )
-                    ((SvxLineTabPage&)rPage).SetAutoSymbolGraphic(m_pAutoSymbolGraphic);
+                    aSet.Put(SvxGraphicItem(SID_GRAPHIC,*m_pAutoSymbolGraphic));
+//              ((SvxLineTabPage&)rPage).ShowSymbolControls(TRUE);
+//              ((SvxLineTabPage&)rPage).SetSymbolList();
+//                 if( m_pSymbolShapeProperties )
+//                  ((SvxLineTabPage&)rPage).SetSymbolAttr(m_pSymbolShapeProperties);
+//                 if( m_pAutoSymbolGraphic )
+//                  ((SvxLineTabPage&)rPage).SetAutoSymbolGraphic(m_pAutoSymbolGraphic);
             }
+            rPage.PageCreated(aSet);
             break;
 
         case RID_SVXPAGE_AREA:
-            ((SvxAreaTabPage&)rPage).SetColorTable(m_pViewElementListProvider->GetColorTable());
-            ((SvxAreaTabPage&)rPage).SetGradientList(m_pViewElementListProvider->GetGradientList());
-            ((SvxAreaTabPage&)rPage).SetHatchingList(m_pViewElementListProvider->GetHatchList());
-            ((SvxAreaTabPage&)rPage).SetBitmapList(m_pViewElementListProvider->GetBitmapList());
-            ((SvxAreaTabPage&)rPage).SetPageType(&nPageType);
-            ((SvxAreaTabPage&)rPage).SetDlgType(&nDlgType);
-            ((SvxAreaTabPage&)rPage).SetGrdChgd(&nGradientListState);
-            ((SvxAreaTabPage&)rPage).SetHtchChgd(&nHatchingListState);
-            ((SvxAreaTabPage&)rPage).SetBmpChgd(&nBitmapListState);
-            ((SvxAreaTabPage&)rPage).SetColorChgd(&nColorTableState);
-            ((SvxAreaTabPage&)rPage).Construct();
-            ((SvxAreaTabPage&)rPage).ActivatePage(*GetInputSetImpl());
+//          ((SvxAreaTabPage&)rPage).SetColorTable(m_pViewElementListProvider->GetColorTable());
+//          ((SvxAreaTabPage&)rPage).SetGradientList(m_pViewElementListProvider->GetGradientList());
+//          ((SvxAreaTabPage&)rPage).SetHatchingList(m_pViewElementListProvider->GetHatchList());
+//          ((SvxAreaTabPage&)rPage).SetBitmapList(m_pViewElementListProvider->GetBitmapList());
+//          ((SvxAreaTabPage&)rPage).SetPageType(&nPageType);
+//          ((SvxAreaTabPage&)rPage).SetDlgType(&nDlgType);
+//          ((SvxAreaTabPage&)rPage).SetGrdChgd(&nGradientListState);
+//          ((SvxAreaTabPage&)rPage).SetHtchChgd(&nHatchingListState);
+//          ((SvxAreaTabPage&)rPage).SetBmpChgd(&nBitmapListState);
+//          ((SvxAreaTabPage&)rPage).SetColorChgd(&nColorTableState);
+//          ((SvxAreaTabPage&)rPage).Construct();
+//          ((SvxAreaTabPage&)rPage).ActivatePage(*GetInputSetImpl());
+            aSet.Put(SvxColorTableItem(m_pViewElementListProvider->GetColorTable(),SID_COLOR_TABLE));
+            aSet.Put(SvxGradientListItem(m_pViewElementListProvider->GetGradientList(),SID_GRADIENT_LIST));
+            aSet.Put(SvxHatchListItem(m_pViewElementListProvider->GetHatchList(),SID_HATCH_LIST));
+            aSet.Put(SvxBitmapListItem(m_pViewElementListProvider->GetBitmapList(),SID_BITMAP_LIST));
+            aSet.Put(SfxUInt16Item(SID_PAGE_TYPE,nPageType));
+            aSet.Put(SfxUInt16Item(SID_DLG_TYPE,nDlgType));
+            rPage.PageCreated(aSet);
+            rPage.ActivatePage(*GetInputSetImpl());
             break;
 
         case RID_SVXPAGE_TRANSPARENCE:
-            ( (SvxTransparenceTabPage&) rPage ).SetPageType( &nPageType );
-            ( (SvxTransparenceTabPage&) rPage ).SetDlgType( &nDlgType );
-            ( (SvxTransparenceTabPage&) rPage ).Construct();
+//          ( (SvxTransparenceTabPage&) rPage ).SetPageType( &nPageType );
+//          ( (SvxTransparenceTabPage&) rPage ).SetDlgType( &nDlgType );
+//          ( (SvxTransparenceTabPage&) rPage ).Construct();
+            aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
+            aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
+            rPage.PageCreated(aSet);
             break;
 
         case RID_SVXPAGE_CHAR_NAME:

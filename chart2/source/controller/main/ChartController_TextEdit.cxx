@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_TextEdit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:12:08 $
+ *  last change: $Author: bm $ $Date: 2004-02-10 10:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,13 @@
 // header for class SdrOutliner
 #ifndef _SVDOUTL_HXX
 #include <svx/svdoutl.hxx>
+#endif
+
+#ifndef _SVX_DIALOG_HXX
+#include <svx/svxdlg.hxx>
+#endif
+#ifndef _SVX_DIALOGS_HRC
+#include <svx/dialogs.hrc>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
@@ -181,14 +188,18 @@ bool ChartController::EndTextEdit()
 
 void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
 {
-    SvxCharacterMap aDlg( NULL, FALSE );
-    //set fixed current font
-    aDlg.SetFont( m_pDrawViewWrapper->getOutliner()->GetRefDevice()->GetFont() );
-    aDlg.DisableFontSelection(); //maybe not necessary in future
+    SvxAbstractDialogFactory * pFact = SvxAbstractDialogFactory::Create();
+    DBG_ASSERT( pFact, "No dialog factory" );
+    AbstractSvxCharacterMap * pDlg = pFact->CreateSvxCharacterMap( NULL,  ResId( RID_SVXDLG_CHARMAP ), FALSE );
+    DBG_ASSERT( pDlg, "Couldn't create SvxCharacterMap dialog" );
 
-    if( aDlg.Execute() == RET_OK )
+    //set fixed current font
+    pDlg->SetFont( m_pDrawViewWrapper->getOutliner()->GetRefDevice()->GetFont() );
+    pDlg->DisableFontSelection(); //maybe not necessary in future
+
+    if( pDlg->Execute() == RET_OK )
     {
-        String aString( aDlg.GetCharacters() );
+        String aString( pDlg->GetCharacters() );
 
         OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
         SdrOutliner*  pOutliner = m_pDrawViewWrapper->getOutliner();
@@ -221,6 +232,8 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
         pOutliner->SetUpdateMode(TRUE);
         pOutlinerView->ShowCursor();
     }
+
+    delete pDlg;
 }
 
 //.............................................................................
