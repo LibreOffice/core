@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcu,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:45:01 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 10:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,6 +323,9 @@
                 <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
                     <value >GenericCategories</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryUIName">
+                    <value >Relation Design</value>
+                </prop>
             </node>
             <node oor:name="com.sun.star.sdb.QueryDesign" oor:op="replace">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
@@ -339,6 +342,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
                     <value >GenericCategories</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryUIName">
+                    <value >Query Design</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.sdb.TableDesign" oor:op="replace">
@@ -357,6 +363,9 @@
                 <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
                     <value >GenericCategories</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryUIName">
+                    <value >Table Design</value>
+                </prop>
             </node>
             <node oor:name="com.sun.star.sdb.DataSourceBrowser" oor:op="replace">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
@@ -373,6 +382,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
                     <value >GenericCategories</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryUIName">
+                    <value >Data Source Browser</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.frame.Bibliography" oor:op="replace">
@@ -482,6 +494,9 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
                     <value >GenericCategories</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryUIName">
+                    <value>Database</value>
                 </prop>
             </node>
         </node>
