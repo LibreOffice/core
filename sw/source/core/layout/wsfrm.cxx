@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:09:24 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,9 @@
 #ifndef _BODYFRM_HXX
 #include <bodyfrm.hxx>
 #endif
+#ifndef _CELLFRM_HXX //autogen
+#include <cellfrm.hxx>
+#endif
 #ifndef _DBG_LAY_HXX
 #include <dbg_lay.hxx>
 #endif
@@ -333,6 +336,18 @@ void SwTabFrm::CheckDirection( BOOL bVert )
     if( pFmt )
         CheckDir(((SvxFrameDirectionItem&)pFmt->GetAttr(RES_FRAMEDIR)).GetValue(),
                     bVert, sal_True, pFmt->GetDoc()->IsBrowseMode() );
+    else
+        SwFrm::CheckDirection( bVert );
+}
+
+void SwCellFrm::CheckDirection( BOOL bVert )
+{
+    const SwFrmFmt* pFmt = GetFmt();
+    if( pFmt )
+    {
+        CheckDir(((SvxFrameDirectionItem&)pFmt->GetAttr(RES_FRAMEDIR)).GetValue(),
+                    bVert, sal_False, pFmt->GetDoc()->IsBrowseMode() );
+    }
     else
         SwFrm::CheckDirection( bVert );
 }
@@ -1348,6 +1363,13 @@ SwTwips SwFrm::Grow( SwTwips nDist, BOOL bTst, BOOL bInfo )
             return ((SwSectionFrm*)this)->_Grow( nDist, bTst );
         else
         {
+            if ( IsCellFrm() )
+            {
+                SwTabFrm* pTab = FindTabFrm();
+                if ( ( 0 != pTab->IsVertical() ) != ( 0 != IsVertical() ) )
+                    return 0;;
+            }
+
             const SwTwips nReal = GrowFrm( nDist, bTst, bInfo );
             if( !bTst )
             {
@@ -1383,6 +1405,13 @@ SwTwips SwFrm::Shrink( SwTwips nDist, BOOL bTst, BOOL bInfo )
             return ((SwSectionFrm*)this)->_Shrink( nDist, bTst );
         else
         {
+            if ( IsCellFrm() )
+            {
+                SwTabFrm* pTab = FindTabFrm();
+                if ( ( 0 != pTab->IsVertical() ) != ( 0 != IsVertical() ) )
+                    return 0;;
+            }
+
             SWRECTFN( this )
             SwTwips nReal = (Frm().*fnRect->fnGetHeight)();
             ShrinkFrm( nDist, bTst, bInfo );
