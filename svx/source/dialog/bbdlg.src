@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bbdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:06 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,11 +146,11 @@ TabDialog RID_SVXDLG_BBDLG
             };
         };
     };
-    Text[ chinese_simplified ] = "±ß¿ò/±³¾°";
+    Text[ chinese_simplified ] = "±ß¿òºÍ±³¾°";
     Text[ russian ] = "Îáğàìëåíèå / Ôîí";
     Text[ polish ] = "Obramowanie / T³o";
     Text[ japanese ] = "ŠO˜g/”wŒi";
-    Text[ chinese_traditional ] = "Ãä®Ø/­I´º";
+    Text[ chinese_traditional ] = "Ãä®Ø©M­I´º";
     Text[ arabic ] = "ÇáÍÏæÏ / ÇáÎáİíÉ";
     Text[ greek ] = "Ğëáßóéï / Öüíôï";
     Text[ korean ] = "Å×µÎ¸® / ¹è°æ";
