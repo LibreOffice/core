@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-15 20:08:10 $
+ *  last change: $Author: cmc $ $Date: 2001-02-21 13:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1093,6 +1093,7 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_DBField( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_DBNext( WW8FieldDesc*, String& );
     eF_ResT Read_F_DBNum( WW8FieldDesc*, String& );
+    eF_ResT Read_F_Equation( WW8FieldDesc*, String& );
     eF_ResT Read_F_IncludePicture( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_IncludeText(    WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_Seq( WW8FieldDesc*, String& rStr );
@@ -1143,11 +1144,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.12 2001-02-15 20:08:10 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.13 2001-02-21 13:49:03 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.12  2001/02/15 20:08:10  jp
+      im-/export the Rotate-/ScaleWidth-Character attribut
+
       Revision 1.11  2001/02/06 17:28:21  cmc
       #83581# CJK Two Lines in One {Im|Ex}port for Word
 

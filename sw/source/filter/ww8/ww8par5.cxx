@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:45:25 $
+ *  last change: $Author: cmc $ $Date: 2001-02-21 13:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,7 +805,7 @@ static FNReadField aWW8FieldTab[93] = {
 0,
 0,
 0,
-0,
+&SwWW8ImplReader::Read_F_Equation,          // 49
 0,
 &SwWW8ImplReader::Read_F_Macro,             // 51
 &SwWW8ImplReader::Read_F_ANumber,           // 52
@@ -2022,10 +2022,15 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc*, String& rStr )
             else if( !aBook.Len() )
                 aBook = aReadParam.GetResult();
             break;
+        case '*':
+            //Skip over MERGEFORMAT
+            nRet = aReadParam.SkipToNextToken();
+            break;
         }
     }
     ConvertFFileName( aPara, aPara );
-    aPara = INetURLObject::RelToAbs( aPara );
+    //aPara = INetURLObject::RelToAbs( aPara );
+    aPara = URIHelper::SmartRelToAbs( aPara );
 
     if( aBook.Len() && aBook.GetChar( 0 ) != '\\' )
     {
@@ -2092,6 +2097,62 @@ eF_ResT SwWW8ImplReader::Read_F_DBNum( WW8FieldDesc*, String& )
     return F_OK;
 }
 
+/*
+    EQ , only the usage for Combined Characters supported, must be exactly
+    in the form that word only accepts as combined charactersm, i.e.
+    eq \o(\s\up Y(XXX),\s\do Y(XXX))
+*/
+eF_ResT SwWW8ImplReader::Read_F_Equation( WW8FieldDesc* pF, String& rStr )
+{
+    String sCombinedCharacters;
+    _ReadFieldParams aReadParam( rStr );
+    if ('o' == aReadParam.SkipToNextToken())
+    {
+        if ((-2 == aReadParam.SkipToNextToken()) &&
+            aReadParam.GetResult().EqualsIgnoreCaseAscii('(', 1, 0))
+        {
+            for (int i=0;i<2;i++)
+            {
+                if ('s' == aReadParam.SkipToNextToken())
+                {
+                    long cChar = aReadParam.SkipToNextToken();
+                    if (-2 != aReadParam.SkipToNextToken())
+                        break;
+                    String sF= aReadParam.GetResult();
+                    if ((('u' == cChar) && sF.EqualsIgnoreCaseAscii('p', 1, 0))
+                    || (('d' == cChar) && sF.EqualsIgnoreCaseAscii('o', 1, 0)))
+                    {
+                        if (-2 == aReadParam.SkipToNextToken())
+                        {
+                            String sPart = aReadParam.GetResult();
+                            xub_StrLen nBegin = sPart.Search('(');
+
+                            //Word disallows brackets in this field, which
+                            //aids figuring out the case of an end of )) vs )
+                            xub_StrLen nEnd = sPart.Search(')');
+
+                            if ((nBegin != STRING_NOTFOUND) &&
+                                (nEnd != STRING_NOTFOUND))
+                            {
+                                sCombinedCharacters +=
+                                    sPart.Copy(nBegin+1,nEnd-nBegin-1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (sCombinedCharacters.Len())
+    {
+        SwCombinedCharField aFld((SwCombinedCharFieldType*)
+            rDoc.GetSysFldType(RES_COMBINED_CHARS),sCombinedCharacters);
+        rDoc.Insert(*pPaM,SwFmtFld(aFld));
+    }
+    return F_OK;
+}
+
 //-----------------------------------------
 //        Verzeichnis-Felder
 //-----------------------------------------
@@ -2142,7 +2203,7 @@ void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader,
             }
             else while( STRING_NOTFOUND != nIndex )
             {
-                xub_StrLen nLevel = sParams.GetToken(0, ';', nIndex).ToInt32();
+                sal_Int32 nLevel = sParams.GetToken(0, ';', nIndex).ToInt32();
 
                 if( (0 < nLevel) && (MAXLEVEL >= nLevel) )
                 {
@@ -2884,12 +2945,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.9 2001-02-21 12:45:25 os Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.10 2001-02-21 13:49:03 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/02/21 12:45:25  os
+      use database struct instead of a combined string
+
       Revision 1.8  2001/01/31 14:32:46  cmc
       #83156# Hush ASSERT on nested hyperlink import
 
