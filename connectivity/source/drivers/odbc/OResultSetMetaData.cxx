@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:35:14 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:42:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ OResultSetMetaData::~OResultSetMetaData()
         column = m_vMapping[_column];
 
     SQLSMALLINT BUFFER_LEN = 128;
-    char *pName = new char[BUFFER_LEN];
+    char *pName = new char[BUFFER_LEN+1];
     SQLSMALLINT nRealLen=0;
     SQLRETURN nRet = N3SQLColAttribute(m_aStatementHandle,
                                     (SQLUSMALLINT)column,
@@ -100,7 +100,7 @@ OResultSetMetaData::~OResultSetMetaData()
     OTools::ThrowException(m_pConnection,nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     if(nRealLen > BUFFER_LEN)
     {
-        pName = new char[nRealLen];
+        pName = new char[nRealLen+1];
         nRet = N3SQLColAttribute(m_aStatementHandle,
                                     (SQLUSMALLINT)column,
                                     (SQLUSMALLINT)ident,
