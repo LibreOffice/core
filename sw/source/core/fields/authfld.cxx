@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-01 10:57:46 $
+ *  last change: $Author: dvo $ $Date: 2000-12-02 20:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,25 +651,25 @@ BOOL    SwAuthorityFieldType::PutValue( const Any& rVal, const String& rProperty
         bRet = rVal >>= aSeq;
         if(bRet)
         {
+            m_pSortKeyArr->DeleteAndDestroy(0, m_pSortKeyArr->Count());
             const PropertyValues* pValues = aSeq.getConstArray();
             for(sal_Int32 i = 0; i < aSeq.getLength() && i < USHRT_MAX / 4; i++)
             {
-                m_pSortKeyArr->DeleteAndDestroy(0, m_pSortKeyArr->Count());
                 const PropertyValue* pValue = pValues[i].getConstArray();
                 SwTOXSortKey* pSortKey = new SwTOXSortKey;
-                for(sal_Int32 j = 0; j < pValues[i].getLength(); i++)
+                for(sal_Int32 j = 0; j < pValues[i].getLength(); j++)
                 {
-                    if(pValue[i].Name.equalsAsciiL(UNO_NAME_SORT_KEY.pName, UNO_NAME_SORT_KEY.nNameLen))
+                    if(pValue[j].Name.equalsAsciiL(UNO_NAME_SORT_KEY.pName, UNO_NAME_SORT_KEY.nNameLen))
                     {
-                        sal_Int16 nVal = -1; pValue[i].Value >>= nVal;
+                        sal_Int16 nVal = -1; pValue[j].Value >>= nVal;
                         if(nVal >= 0 && nVal < AUTH_FIELD_END)
                             pSortKey->eField = (ToxAuthorityField) nVal;
                         else
                             bRet = FALSE;
                     }
-                    else if(pValue[i].Name.equalsAsciiL(UNO_NAME_IS_SORT_ASCENDING.pName, UNO_NAME_IS_SORT_ASCENDING.nNameLen))
+                    else if(pValue[j].Name.equalsAsciiL(UNO_NAME_IS_SORT_ASCENDING.pName, UNO_NAME_IS_SORT_ASCENDING.nNameLen))
                     {
-                        pSortKey->bSortAscending = *(sal_Bool*)pValue[i].Value.getValue();
+                        pSortKey->bSortAscending = *(sal_Bool*)pValue[j].Value.getValue();
                     }
                 }
                 m_pSortKeyArr->Insert(pSortKey, m_pSortKeyArr->Count());
