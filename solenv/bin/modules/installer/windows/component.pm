@@ -2,9 +2,9 @@
 #
 #   $RCSfile: component.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:18:38 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:21:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,6 +118,15 @@ sub get_file_component_directory
     if ( $localstyles =~ /\bFONT\b/ )   # special handling for font files
     {
         return $installer::globals::fontsfolder;
+    }
+
+    my $destdir = "";
+
+    if ( $onefile->{'Dir'} ) { $destdir = $onefile->{'Dir'}; }
+
+    if ( $destdir =~ /\bPREDEFINED_OSSHELLNEWDIR\b/ )   # special handling for shellnew files
+    {
+        return $installer::globals::templatefolder;
     }
 
     my $destination = $onefile->{'destination'};

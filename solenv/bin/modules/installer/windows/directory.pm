@@ -2,9 +2,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:19:04 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:21:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -207,6 +207,9 @@ sub add_root_directories
         # push(@{$directorytableref}, $oneline);
 
         $oneline = "$installer::globals::startupfolder\tTARGETDIR\t.\n";
+        push(@{$directorytableref}, $oneline);
+
+        $oneline = "$installer::globals::templatefolder\tTARGETDIR\t.\n";
         push(@{$directorytableref}, $oneline);
 
         $oneline = "$installer::globals::fontsfolder\tTARGETDIR\t$installer::globals::fontsfoldername\n";
