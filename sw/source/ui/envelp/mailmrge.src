@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:09:34 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 21:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,7 +413,7 @@ ModalDialog DLG_MAILMERGE
         Text [ ENGLISH ] = "Database field" ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        Text [ portuguese ] = "Campo de base de dados" ;
+        Text [ portuguese ] = "Campo da base de dados" ;
         Text [ english_us ] = "Database field" ;
         Text [ portuguese_brazilian ] = "Datenbankfeld" ;
         Text [ swedish ] = "Databasfält" ;
