@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtypes.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:03:43 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:40:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,8 @@ struct KeyEventHashCode
     size_t operator()( const css::awt::KeyEvent& aEvent ) const
     {
         return (size_t)(aEvent.KeyCode  +
-                        aEvent.KeyChar  +
-                        aEvent.KeyFunc  +
+                        //aEvent.KeyChar  +
+                        //aEvent.KeyFunc  +
                         aEvent.Modifiers);
     }
 };
@@ -144,8 +144,8 @@ struct KeyEventEqualsFunc
     {
         return (
                 (aKey1.KeyCode   == aKey2.KeyCode  ) &&
-                (aKey1.KeyChar   == aKey2.KeyChar  ) &&
-                (aKey1.KeyFunc   == aKey2.KeyFunc  ) &&
+                //(aKey1.KeyChar   == aKey2.KeyChar  ) &&
+                //(aKey1.KeyFunc   == aKey2.KeyFunc  ) &&
                 (aKey1.Modifiers == aKey2.Modifiers)
                );
     }
