@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-13 11:54:00 $
+ *  last change: $Author: thb $ $Date: 2002-08-23 17:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,9 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
 
+#ifndef _VCL_UNOHELP_HXX
+#include <vcl/unohelp.hxx>
+#endif
 
 //------------------------------------------------------------------------
 //
@@ -1234,6 +1237,10 @@ namespace accessibility
         // Further locking, actually, might lead to deadlocks, since we're calling out of this object
         aGuard.clear();
         // -- until here --
+
+        // #102261# Call global queue for focus events
+        if( rEvent.EventId == AccessibleStateType::FOCUSED )
+            vcl::unohelper::NotifyAccessibleStateEventGlobally( rEvent );
 
         while( aIter.hasMoreElements() )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-22 09:37:49 $
+ *  last change: $Author: thb $ $Date: 2002-08-23 17:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,10 @@
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
+#endif
+
+#ifndef _VCL_UNOHELP_HXX
+#include <vcl/unohelp.hxx>
 #endif
 
 //------------------------------------------------------------------------
@@ -614,6 +618,10 @@ namespace accessibility
         uno::Reference < XAccessibleContext > xThis( const_cast< AccessibleEditableTextPara* > (this)->getAccessibleContext() );
 
         AccessibleEventObject aEvent(xThis, nEventId, rNewValue, rOldValue);
+
+        // #102261# Call global queue for focus events
+        if( nEventId == AccessibleStateType::FOCUSED )
+            vcl::unohelper::NotifyAccessibleStateEventGlobally( aEvent );
 
         // no locking necessary, OInterfaceIteratorHelper copies listeners if someone removes/adds in between
         ::cppu::OInterfaceIteratorHelper aIter( const_cast< AccessibleEditableTextPara* >(this)->maStateListeners );
