@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgolbul.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:02:44 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ polish ] = "Typ numeracji";
                 Text[ japanese ] = "ç•ªå·ä»˜ã‘ã®ç¨®é¡";
                 Text[ chinese_traditional ] = "ç·¨è™Ÿé¡å‹";
-                Text[ language_user1 ] = "MS Word, KeyID23276";
+                Text[ language_user1 ] = "; MS Word, KeyID23276";
                 Text[ arabic ] = "ØÑíŞÉ ÇáÊÑŞíã";
                 Text[ greek ] = "Óôõë áñßèìçóçò";
                 Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸° ìœ í˜•";
@@ -263,6 +263,7 @@ TabDialog TAB_OUTLINEBULLET
     Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾/à¤¬à¥à¤²à¥à¤²à¥‡à¤Ÿà¥à¤¸";
     Text[ slovak ] = "ÄŒÃ­slovanie/odrÃ¡Å¾ky";
 };
+
 
 
 
