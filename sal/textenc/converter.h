@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converter.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-17 14:35:30 $
+ *  last change: $Author: sb $ $Date: 2001-11-19 17:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,10 @@ ImplHandleBadInputUnicodeToTextConversion(sal_Bool bUndefined,
                                           sal_uInt32 nFlags,
                                           sal_Char ** pDestBufPtr,
                                           sal_Char * pDestBufEnd,
-                                          sal_uInt32 * pInfo)
+                                          sal_uInt32 * pInfo,
+                                          sal_Char const * pPrefix,
+                                          sal_Size nPrefixLen,
+                                          sal_Bool * pPrefixWritten)
     SAL_THROW_EXTERN_C();
 
 #if defined __cplusplus

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converteuctw.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-17 14:28:23 $
+ *  last change: $Author: sb $ $Date: 2001-11-19 17:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,7 +441,10 @@ sal_Size ImplConvertUnicodeToEucTw(ImplTextConverterData const * pData,
                                                           nFlags,
                                                           &pDestBufPtr,
                                                           pDestBufEnd,
-                                                          &nInfo))
+                                                          &nInfo,
+                                                          NULL,
+                                                          0,
+                                                          NULL))
         {
         case IMPL_BAD_INPUT_STOP:
             nHighSurrogate = 0;
@@ -474,7 +477,10 @@ sal_Size ImplConvertUnicodeToEucTw(ImplTextConverterData const * pData,
                                                               nFlags,
                                                               &pDestBufPtr,
                                                               pDestBufEnd,
-                                                              &nInfo))
+                                                              &nInfo,
+                                                              NULL,
+                                                              0,
+                                                              NULL))
             {
             case IMPL_BAD_INPUT_STOP:
             case IMPL_BAD_INPUT_CONTINUE:

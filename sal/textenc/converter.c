@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converter.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-17 14:35:30 $
+ *  last change: $Author: sb $ $Date: 2001-11-19 17:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,10 +116,15 @@ ImplHandleBadInputUnicodeToTextConversion(sal_Bool bUndefined,
                                           sal_uInt32 nFlags,
                                           sal_Char ** pDestBufPtr,
                                           sal_Char * pDestBufEnd,
-                                          sal_uInt32 * pInfo)
+                                          sal_uInt32 * pInfo,
+                                          sal_Char const * pPrefix,
+                                          sal_Size nPrefixLen,
+                                          sal_Bool * pPrefixWritten)
 {
     /* TODO! RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE
              RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR */
+
+    sal_Char cReplace;
 
     if (bUndefined)
         if (ImplIsControlOrFormat(nUtf32))
@@ -151,38 +156,36 @@ ImplHandleBadInputUnicodeToTextConversion(sal_Bool bUndefined,
 
     case RTL_UNICODETOTEXT_FLAGS_UNDEFINED_IGNORE:
     case RTL_UNICODETOTEXT_FLAGS_INVALID_IGNORE:
+        if (pPrefixWritten)
+            *pPrefixWritten = sal_False;
         return IMPL_BAD_INPUT_CONTINUE;
 
     case RTL_UNICODETOTEXT_FLAGS_UNDEFINED_0:
     case RTL_UNICODETOTEXT_FLAGS_INVALID_0:
-        if (*pDestBufPtr != pDestBufEnd)
-        {
-            *(*pDestBufPtr)++ = 0;
-            return IMPL_BAD_INPUT_CONTINUE;
-        }
-        else
-            return IMPL_BAD_INPUT_NO_OUTPUT;
+        cReplace = 0;
+        break;
 
     case RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK:
     case RTL_UNICODETOTEXT_FLAGS_INVALID_QUESTIONMARK:
     default: /* RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT,
                 RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT */
-        if (*pDestBufPtr != pDestBufEnd)
-        {
-            *(*pDestBufPtr)++ = '?';
-            return IMPL_BAD_INPUT_CONTINUE;
-        }
-        else
-            return IMPL_BAD_INPUT_NO_OUTPUT;
+        cReplace = '?';
+        break;
 
     case RTL_UNICODETOTEXT_FLAGS_UNDEFINED_UNDERLINE:
     case RTL_UNICODETOTEXT_FLAGS_INVALID_UNDERLINE:
-        if (*pDestBufPtr != pDestBufEnd)
-        {
-            *(*pDestBufPtr)++ = '_';
-            return IMPL_BAD_INPUT_CONTINUE;
-        }
-        else
-            return IMPL_BAD_INPUT_NO_OUTPUT;
+        cReplace = '_';
+        break;
     }
+    if ((sal_Size) (pDestBufEnd - *pDestBufPtr) > nPrefixLen)
+    {
+        while (nPrefixLen-- > 0)
+            *(*pDestBufPtr)++ = *pPrefix++;
+        *(*pDestBufPtr)++ = cReplace;
+        if (pPrefixWritten)
+            *pPrefixWritten = sal_True;
+        return IMPL_BAD_INPUT_CONTINUE;
+    }
+    else
+        return IMPL_BAD_INPUT_NO_OUTPUT;
 }
