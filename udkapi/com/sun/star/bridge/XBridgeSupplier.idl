@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBridgeSupplier.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:33 $
+ *  last change: $Author: jl $ $Date: 2002-01-22 09:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::bridge::XBridgeSupplier
+
 /** defines the interface for creating bridges to other object models.
 
     <p>Because bridges sometimes can not be generated in an address space,
@@ -117,12 +117,11 @@
     when the method is called with itself as the first parameter. </p>
 
     @see com::sun::star::bridge::OleBridgeSupplier
+    @deprecated
  */
 interface XBridgeSupplier: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::bridge::XBridgeSupplier::createBridge
     /** creates a bridge to provide an object of one object model with another.
      */
     any createBridge( [in] any modelDepObject,
@@ -134,13 +133,14 @@ interface XBridgeSupplier: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
-
 }; }; }; };
 
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 15:10:33  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2000/12/11 16:09:40  mi
     documentation syntax fixed and some minor semantic documentation fixes
 
