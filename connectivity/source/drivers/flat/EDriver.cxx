@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EDriver.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-01 07:15:40 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 13:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, 
        throw DisposedException();
 
     if ( ! acceptsURL(url) )
-        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+        return NULL;
 
     OFlatConnection* pCon = new OFlatConnection(this);
     pCon->construct(url,info);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CDriver.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-01 08:44:59 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 13:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url,
         throw DisposedException();
 
     if ( ! acceptsURL(url) )
-        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+        return NULL;
 
     OCalcConnection* pCon = new OCalcConnection(this);
     pCon->construct(url,info);
