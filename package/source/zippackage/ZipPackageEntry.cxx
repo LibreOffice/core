@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 20:36:27 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 10:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
 Reference< XInterface > SAL_CALL ZipPackageEntry::getParent(  )
         throw(RuntimeException)
 {
-    return xParent;
+    return Reference< XInterface >( xParent, UNO_QUERY );
 }
 
 void ZipPackageEntry::doSetParent ( ZipPackageFolder * pNewParent, sal_Bool bInsert )
