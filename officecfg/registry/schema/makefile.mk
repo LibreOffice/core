@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kz $ $Date: 2004-02-25 16:40:19 $
+#   last change: $Author: kz $ $Date: 2004-05-19 13:48:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,6 +107,7 @@ XCSFILES= \
     org$/openoffice$/Office$/UI$/StartModuleCommands.xcs \
     org$/openoffice$/Office$/UI$/WriterCommands.xcs \
     org$/openoffice$/Office$/TypeDetection.xcs \
+    org$/openoffice$/Office$/WebWizard.xcs \
     org$/openoffice$/Setup.xcs \
     org$/openoffice$/UserProfile.xcs \
     org$/openoffice$/VCL.xcs \
