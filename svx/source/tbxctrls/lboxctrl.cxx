@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-25 09:39:00 $
+ *  last change: $Author: tl $ $Date: 2001-04-25 12:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ public:
     PopupListBox( SvxPopupWindowListBox &rParent, const ResId &rResId );
     virtual ~PopupListBox();
 
-    virtual long        Notify( NotifyEvent &rEvt );
+//    virtual long        Notify( NotifyEvent &rEvt );
 };
 
 
@@ -182,7 +182,7 @@ PopupListBox::~PopupListBox()
 {
 }
 
-
+#ifdef NEVER
 long PopupListBox::Notify( NotifyEvent &rEvt )
 {
     long nHandled = 0;
@@ -209,6 +209,7 @@ long PopupListBox::Notify( NotifyEvent &rEvt )
 
     return nHandled;
 }
+#endif
 
 /////////////////////////////////////////////////////////////////
 
@@ -330,10 +331,21 @@ IMPL_LINK( SvxListBoxControl, SelectHdl, void *, EMPTYARG )
 {
     if (pPopupWin)
     {
-        USHORT nCount = pPopupWin->GetListBox().GetSelectEntryCount();
-        String aText( aActionStr );
-        aText.SearchAndReplaceAll( A2S("$(ARG1)"), String::CreateFromInt32( nCount ) );
-        pPopupWin->GetInfo().SetText( aText );
+        //pPopupWin->SetUserSelected( FALSE );
+
+        ListBox &rListBox = pPopupWin->GetListBox();
+        if (rListBox.IsTravelSelect())
+        {
+            USHORT nCount = rListBox.GetSelectEntryCount();
+            String aText( aActionStr );
+            aText.SearchAndReplaceAll( A2S("$(ARG1)"), String::CreateFromInt32( nCount ) );
+            pPopupWin->GetInfo().SetText( aText );
+        }
+        else
+        {
+            pPopupWin->SetUserSelected( TRUE );
+            pPopupWin->EndPopupMode( 0 );
+        }
     }
     return 0;
 }
