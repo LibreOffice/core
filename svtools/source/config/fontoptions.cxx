@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:06:39 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 17:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+
+#include <rtl/logfile.hxx>
+#include "itemholder1.hxx"
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -450,7 +453,11 @@ SvtFontOptions::SvtFontOptions()
     // ... and initialize ouer data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
+        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtFontOptions_Impl::ctor()");
         m_pDataContainer = new SvtFontOptions_Impl;
+
+        ItemHolder1* pHolder = ItemHolder1::getGlobalItemHolder();
+        pHolder->holdConfigItem(E_FONTOPTIONS);
     }
 }
 
