@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.24 2000-12-20 16:35:08 cl Exp $
+	$Id: drawing.mod,v 1.25 2001-01-03 11:09:57 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -68,6 +68,7 @@
 <!ENTITY % distance "CDATA">
 <!ENTITY % rectanglePoint "(top-left|top|top-right|left|center|right|bottom-left|bottom|bottom-right)">
 <!ENTITY % vector3D "CDATA">
+<!ENTITY % text-anchor "text:anchor-type %anchorType; #IMPLIED text:anchor-page-number %positiveInteger; #IMPLIED">
 
 <!-- commont presentation shape attributes -->
 <!ENTITY % presentation-style-name "presentation:style-name %styleName; #IMPLIED">
@@ -88,6 +89,7 @@
 <!ATTLIST draw:rect draw:corner-radius %nonNegativeLength; #IMPLIED>
 <!ATTLIST draw:rect %zindex;>
 <!ATTLIST draw:rect draw:id %shapeId;>
+<!ATTLIST draw:rect %text-anchor;>
 
 <!ELEMENT draw:line %draw-text;>
 <!ATTLIST draw:line svg:x1 %length; #REQUIRED>
@@ -99,6 +101,7 @@
 <!ATTLIST draw:line %zindex;>
 <!ATTLIST draw:line %draw-end-position; >
 <!ATTLIST draw:line draw:id %shapeId;>
+<!ATTLIST draw:line %text-anchor;>
 
 <!ELEMENT draw:polyline %draw-text; >
 <!ATTLIST draw:polyline %draw-position; >
@@ -110,6 +113,7 @@
 <!ATTLIST draw:polyline %zindex;>
 <!ATTLIST draw:polyline %draw-end-position; >
 <!ATTLIST draw:polyline draw:id %shapeId;>
+<!ATTLIST draw:polyline %text-anchor;>
 
 <!ELEMENT draw:polygon %draw-text; >
 <!ATTLIST draw:polygon %draw-position; >
@@ -121,6 +125,7 @@
 <!ATTLIST draw:polygon %draw-transform; >
 <!ATTLIST draw:polygon %zindex;>
 <!ATTLIST draw:polygon draw:id %shapeId;>
+<!ATTLIST draw:polygon %text-anchor;>
 
 <!ELEMENT draw:path %draw-text; >
 <!ATTLIST draw:path %draw-position;>
@@ -132,6 +137,7 @@
 <!ATTLIST draw:path %draw-transform; >
 <!ATTLIST draw:path %zindex;>
 <!ATTLIST draw:path draw:id %shapeId;>
+<!ATTLIST draw:path %text-anchor;>
 
 <!ELEMENT draw:circle %draw-text; >
 <!ATTLIST draw:circle svg:cx %length; #REQUIRED >
@@ -145,6 +151,7 @@
 <!ATTLIST draw:circle draw:kind (full|section|cut|arc) "full">
 <!ATTLIST draw:circle draw:start-angle %nonNegativeInteger; #IMPLIED>
 <!ATTLIST draw:circle draw:end-angle %nonNegativeInteger; #IMPLIED>
+<!ATTLIST draw:circle %text-anchor;>
 
 <!ELEMENT draw:ellipse %draw-text; >
 <!ATTLIST draw:ellipse svg:cx %length; #REQUIRED >
@@ -159,6 +166,7 @@
 <!ATTLIST draw:ellipse draw:kind (full|section|cut|arc) "full">
 <!ATTLIST draw:ellipse draw:start-angle %nonNegativeInteger; #IMPLIED>
 <!ATTLIST draw:ellipse draw:end-angle %nonNegativeInteger; #IMPLIED>
+<!ATTLIST draw:ellipse  %text-anchor;>
 
 <!ELEMENT draw:connector %draw-text;>
 <!ATTLIST draw:connector draw:type (standard|lines|line|curve) "standard">
@@ -175,12 +183,14 @@
 <!ATTLIST draw:connector %zindex;>
 <!ATTLIST draw:connector %draw-end-position; >
 <!ATTLIST draw:connector draw:id %shapeId;>
+<!ATTLIST draw:connector %text-anchor;>
 
 <!ELEMENT draw:g (%shapes;)* >
 <!ATTLIST draw:g %draw-transform; >
 <!ATTLIST draw:g %zindex;>
 <!ATTLIST draw:g %draw-end-position; >
 <!ATTLIST draw:g draw:id %shapeId;>
+<!ATTLIST draw:g %text-anchor;>
 
 <!ELEMENT draw:page-thumbnail EMPTY>
 <!ATTLIST draw:page-thumbnail %draw-position; >
@@ -190,6 +200,7 @@
 <!ATTLIST draw:page-thumbnail %zindex;>
 <!ATTLIST draw:page-thumbnail %draw-end-position; >
 <!ATTLIST draw:page-thumbnail draw:id %shapeId;>
+<!ATTLIST draw:page-thumbnail %text-anchor;>
 
 <!ELEMENT draw:caption %draw-text;>
 <!ATTLIST draw:caption %draw-position; >
@@ -201,6 +212,7 @@
 <!ATTLIST draw:caption draw:caption-point-y %coordinate; #IMPLIED>
 <!ATTLIST draw:caption %zindex;>
 <!ATTLIST draw:caption draw:id %shapeId;>
+<!ATTLIST draw:caption  %text-anchor;>
 
 <!ELEMENT draw:measure %draw-text;>
 <!ATTLIST draw:measure svg:x1 %coordinate; #REQUIRED>
@@ -212,6 +224,7 @@
 <!ATTLIST draw:measure %draw-transform; >
 <!ATTLIST draw:measure %zindex;>
 <!ATTLIST draw:measure draw:id %shapeId;>
+<!ATTLIST draw:measure %text-anchor;>
 
 <!-- graphic style elements -->
 <!ELEMENT draw:gradient EMPTY >
@@ -232,6 +245,7 @@
 <!ATTLIST draw:hatch draw:color %color; #IMPLIED>
 <!ATTLIST draw:hatch draw:distance %length; #IMPLIED>
 <!ATTLIST draw:hatch draw:rotation %integer; #IMPLIED>
+
 
 <!ELEMENT draw:fill-image EMPTY >
 <!ATTLIST draw:fill-image draw:name %styleName; #REQUIRED>
@@ -414,8 +428,7 @@
 <!ATTLIST draw:text-box draw:name %string; #IMPLIED>
 <!ATTLIST draw:text-box draw:chain-next-name %string; #IMPLIED>
 
-<!ATTLIST draw:text-box text:anchor-type %anchorType; #IMPLIED>
-<!ATTLIST draw:text-box text:anchor-page-number %positiveInteger; #IMPLIED>
+<!ATTLIST draw:text-box %text-anchor;>
 <!ATTLIST draw:text-box %draw-position;>
 <!ATTLIST draw:text-box %draw-end-position; >
 <!ATTLIST draw:text-box svg:width %lengthOrPercentage; #IMPLIED>
@@ -435,8 +448,7 @@
 <!ATTLIST draw:image xlink:show (embed) "embed">
 <!ATTLIST draw:image xlink:actuate (onLoad) "onLoad">
 <!ATTLIST draw:image draw:filter-name %string; #IMPLIED>
-<!ATTLIST draw:image text:anchor-type %anchorType; #IMPLIED>
-<!ATTLIST draw:image text:anchor-page-number %positiveInteger; #IMPLIED>
+<!ATTLIST draw:image %text-anchor;>
 <!ATTLIST draw:image %draw-position;>
 <!ATTLIST draw:image %draw-end-position; >
 <!ATTLIST draw:image svg:width %lengthOrPercentage; #IMPLIED>
