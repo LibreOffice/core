@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexpit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:42 $
+ *  last change: $Author: mib $ $Date: 2001-08-14 07:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,7 +504,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
             const SvxLRSpaceItem* pLRSpace = PTR_CAST(SvxLRSpaceItem, &rItem);
             DBG_ASSERT( pLRSpace != NULL, "Wrong Which-ID!" );
 
-            sal_Bool bOk = sal_True;
+            bOk = sal_True;
             switch( nMemberId )
             {
                 case  MID_L_MARGIN:
