@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:55:34 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #ifndef _SFX_WHITER_HXX
 #include <svtools/whiter.hxx>
 #endif
+
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/objface.hxx>
 
 #ifndef _SD_STLSHEET_HXX
 #include "stlsheet.hxx"
