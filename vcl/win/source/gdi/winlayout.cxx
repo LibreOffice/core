@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-31 09:11:06 $
+ *  last change: $Author: hdu $ $Date: 2002-05-31 14:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,7 +607,7 @@ bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
             nItemCapacity, NULL, &aScriptState, mpScriptItems, &mnItemCount );
         if( !nRC )
             break;
-        if( (nRC != E_OUTOFMEMORY) || (nItemCapacity >= rArgs.mnLength) )
+        if( (nRC != E_OUTOFMEMORY) || (nItemCapacity > rArgs.mnLength) )
             return false;
         delete[] mpScriptItems;
         mpScriptItems = NULL;
