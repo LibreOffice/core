@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.15 $
+#*  $Revision: 1.16 $
 #*
-#*  last change: $Author: mt $ $Date: 2001-03-15 11:45:56 $
+#*  last change: $Author: kz $ $Date: 2001-05-09 14:58:27 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -171,6 +171,7 @@ RESLIB1SRSFILES=$(SRS)$/filter.srs		\
         $(SRS)$/items.srs		\
         $(SRS)$/dialogs.srs \
         $(SRS)$/plugapp.srs \
+        $(SRS)$/svcontnr.srs \
         $(SRS)$/uno.srs
 RESLIB2NAME=	$(RESTARGETSIMPLE)
 RESLIB2SRSFILES=\
