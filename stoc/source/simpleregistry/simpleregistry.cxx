@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleregistry.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:01 $
+ *  last change: $Author: jsc $ $Date: 2001-08-29 10:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1187,6 +1187,8 @@ void SAL_CALL SimpleRegistryImpl::mergeKey( const OUString& aKeyName, const OUSt
             RegError ret;
             if (ret = m_registry.mergeKey(rootKey, aKeyName, aUrl, sal_False, sal_False))
             {
+                if ( ret == REG_MERGE_CONFLICT )
+                    return;
                 if ( ret == REG_MERGE_ERROR )
                     throw MergeConflictException();
                 else
