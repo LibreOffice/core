@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:28:30 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3075,6 +3075,7 @@ sal_Bool SfxObjectShell::SaveAsChildren( const uno::Reference< embed::XStorage >
             OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
             if ( xObj.is() )
             {
+                sal_Bool bSwitchBackToLoaded = sal_False;
                 uno::Reference< embed::XLinkageSupport > xLink( xObj, uno::UNO_QUERY );
                 if ( bOasis || xLink.is() && xLink->isLink() )
                 {
@@ -3083,29 +3084,25 @@ sal_Bool SfxObjectShell::SaveAsChildren( const uno::Reference< embed::XStorage >
                     uno::Reference < io::XInputStream > xStream = GetEmbeddedObjectContainer().GetGraphicStream( xObj, &aMediaType );
                     if ( !xStream.is() )
                     {
-                        // the image must be regenerated
-                        uno::Reference< embed::XEmbeddedObject > xEmbObj =
-                                                            GetEmbeddedObjectContainer().GetEmbeddedObject( aNames[n] );
-                        OSL_ENSURE( xEmbObj.is(), "The object must be in the container!\n" );
-                        if ( xEmbObj.is() )
+                        try
                         {
-                            try
+                            // object must be running to get a new visual representation
+                            if ( xObj->getCurrentState() == embed::EmbedStates::LOADED )
                             {
-                                // object must be running
-                                svt::EmbeddedObjectRef::TryRunningState( xEmbObj );
-
-                                // TODO/LATER: another aspect could be used
-                                embed::VisualRepresentation aRep =
-                                                xEmbObj->getPreferredVisualRepresentation( embed::Aspects::MSOLE_CONTENT );
-                                aMediaType = aRep.Flavor.MimeType;
-
-                                uno::Sequence < sal_Int8 > aSeq;
-                                aRep.Data >>= aSeq;
-                                xStream = new ::comphelper::SequenceInputStream( aSeq );
+                                xObj->changeState( embed::EmbedStates::RUNNING );
+                                bSwitchBackToLoaded = sal_True;
                             }
-                            catch ( uno::Exception& )
-                            {
-                            }
+
+                            // TODO/LATER: another aspect could be used
+                            embed::VisualRepresentation aRep =
+                                            xObj->getPreferredVisualRepresentation( embed::Aspects::MSOLE_CONTENT );
+                            aMediaType = aRep.Flavor.MimeType;
+                            uno::Sequence < sal_Int8 > aSeq;
+                            aRep.Data >>= aSeq;
+                            xStream = new ::comphelper::SequenceInputStream( aSeq );
+                        }
+                        catch ( uno::Exception& )
+                        {
                         }
                     }
 
@@ -3132,6 +3129,10 @@ sal_Bool SfxObjectShell::SaveAsChildren( const uno::Reference< embed::XStorage >
                                             uno::Sequence< beans::PropertyValue >(),
                                             aArgs );
                 }
+
+                if ( bSwitchBackToLoaded )
+                    // switch back to loaded state; that way we have a minimum cache confusion
+                    xObj->changeState( embed::EmbedStates::LOADED );
             }
         }
     }
@@ -3216,7 +3217,6 @@ sal_Bool SfxObjectShell::SwitchChildrenPersistance( const uno::Reference< embed:
             {
                 try
                 {
-                    svt::EmbeddedObjectRef::TryRunningState( xObj );
                     xPersist->setPersistentEntry( xStorage,
                                                   aNames[n],
                                                   embed::EntryInitModes::NO_INIT,
