@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storbase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mhu $ $Date: 2001-08-09 16:12:28 $
+ *  last change: $Author: mhu $ $Date: 2001-11-26 21:14:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _STORE_STORBASE_CXX_ "$Revision: 1.3 $"
+#define _STORE_STORBASE_CXX_ "$Revision: 1.4 $"
 
 #ifndef __ALGORITHM__
 #include <algorithm>
@@ -424,7 +424,7 @@ struct OStoreSuperBlock
         nMagic = OSL_SWAPDWORD(nMagic);
 #endif /* OSL_BIGENDIAN */
         if (nMagic != STORE_MAGIC_SUPERBLOCK)
-            store_E_WrongFormat;
+            return store_E_WrongFormat;
 
         sal_uInt32 nCRC32 = 0;
         nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
