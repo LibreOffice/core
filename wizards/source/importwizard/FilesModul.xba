@@ -320,7 +320,7 @@ Dim sPrevMimeTypeorExtension as String
 			sViewPath = ConvertFromUrl(sSourceUrl) 	&apos; CutPathView(sSourceUrl, 70)
 			ImportDialog.LabelCurDocument.Label = Str(i+1) &amp; &quot;/&quot; &amp; MaxFileIndex + 1 &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
 			Select Case lcase(sExtension)
-				Case &quot;oot&quot;, &quot;oos&quot;, &quot;oop&quot;, &quot;ood&quot;, &quot;oom&quot;, &quot;oof&quot; 
+				Case &quot;odt&quot;, &quot;ods&quot;, &quot;odp&quot;, &quot;odd&quot;, &quot;odm&quot;, &quot;odf&quot; 
 					SourceStemDir = RTrimStr(Applications(ApplIndex,SBDOCSOURCE), &quot;/&quot;)
 					TargetStemDir = RTrimStr(Applications(ApplIndex,SBDOCTARGET), &quot;/&quot;)
 				Case Else 								&apos; Templates and Helper-Applications remain
