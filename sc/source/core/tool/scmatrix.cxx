@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmatrix.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:19 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,8 @@
 
 #include "scmatrix.hxx"
 #include "global.hxx"
+#include "errorcodes.hxx"
+#include "interpre.hxx"
 
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
@@ -84,6 +86,7 @@
 
 void ScMatrix::CreateMatrix(USHORT nC, USHORT nR)       // nur fuer ctor
 {
+    pErrorInterpreter = NULL;
     nAnzCol = nC;
     nAnzRow = nR;
     ULONG nCount = (ULONG) nAnzCol * nAnzRow;
@@ -92,6 +95,7 @@ void ScMatrix::CreateMatrix(USHORT nC, USHORT nR)       // nur fuer ctor
         DBG_ERRORFILE("ScMatrix::CreateMatrix: dimension error");
         nAnzCol = nAnzRow = 1;
         pMat = new MatValue[1];
+        pMat[0].fVal = CreateDoubleError( errStackOverflow);
     }
     else
         pMat = new MatValue[nCount];
@@ -108,7 +112,14 @@ ScMatrix* ScMatrix::Clone() const
 {
     ScMatrix* pScMat = new ScMatrix(nAnzCol, nAnzRow);
     MatCopy(*pScMat);
+    pScMat->SetErrorInterpreter( pErrorInterpreter);    // TODO: really?
     return pScMat;
+}
+
+void ScMatrix::SetErrorAtInterpreter( USHORT nError ) const
+{
+    if ( pErrorInterpreter )
+        pErrorInterpreter->SetError( nError);
 }
 
 //
@@ -117,6 +128,8 @@ ScMatrix* ScMatrix::Clone() const
 //
 
 ScMatrix::ScMatrix(SvStream& rStream)
+        : pErrorInterpreter( NULL)
+        , nRefCnt(0)
 {
     USHORT nC, nR;
 
@@ -310,7 +323,7 @@ void ScMatrix::PutEmpty(USHORT nC, USHORT nR)
     if (nC < nAnzCol && nR < nAnzRow)
         PutEmpty( (ULONG) nC * nAnzRow + nR );
     else
-        DBG_ERRORFILE("ScMatrix::PutString: dimension error");
+        DBG_ERRORFILE("ScMatrix::PutEmpty: dimension error");
 }
 
 void ScMatrix::PutEmpty(ULONG nIndex)
@@ -322,6 +335,36 @@ void ScMatrix::PutEmpty(ULONG nIndex)
     bIsString[nIndex] = SC_MATVAL_EMPTY;
     pMat[nIndex].pS = NULL;
     pMat[nIndex].fVal = 0.0;
+}
+
+void ScMatrix::PutEmptyPath(USHORT nC, USHORT nR)
+{
+    if (nC < nAnzCol && nR < nAnzRow)
+        PutEmptyPath( (ULONG) nC * nAnzRow + nR );
+    else
+        DBG_ERRORFILE("ScMatrix::PutEmptyPath: dimension error");
+}
+
+void ScMatrix::PutEmptyPath(ULONG nIndex)
+{
+    if (bIsString == NULL)
+        ResetIsString();
+    if ( bIsString[nIndex] && pMat[nIndex].pS )
+        delete pMat[nIndex].pS;
+    bIsString[nIndex] = SC_MATVAL_EMPTYPATH;
+    pMat[nIndex].pS = NULL;
+    pMat[nIndex].fVal = 0.0;
+}
+
+USHORT ScMatrix::GetError( USHORT nC, USHORT nR) const
+{
+    if (nC < nAnzCol && nR < nAnzRow)
+        return GetError( (ULONG) nC * nAnzRow + nR );
+    else
+    {
+        DBG_ERRORFILE("ScMatrix::GetError: dimension error");
+        return 0;   // TODO: do we want an error instead?
+    }
 }
 
 double ScMatrix::GetDouble(USHORT nC, USHORT nR) const
@@ -527,12 +570,14 @@ void ScMatrix::CompareEqual()
     {
         for ( ULONG j=0; j<n; j++ )
             if ( !bIsString[j])     // else: #WERT!
-                pMat[j].fVal = (pMat[j].fVal == 0.0);
+                if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
+                    pMat[j].fVal = (pMat[j].fVal == 0.0);
     }
     else
     {
         for ( ULONG j=0; j<n; j++ )
-            pMat[j].fVal = (pMat[j].fVal == 0.0);
+            if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
+                pMat[j].fVal = (pMat[j].fVal == 0.0);
     }
 }
 
@@ -543,12 +588,14 @@ void ScMatrix::CompareNotEqual()
     {
         for ( ULONG j=0; j<n; j++ )
             if ( !bIsString[j])     // else: #WERT!
-                pMat[j].fVal = (pMat[j].fVal != 0.0);
+                if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
+                    pMat[j].fVal = (pMat[j].fVal != 0.0);
     }
     else
     {
         for ( ULONG j=0; j<n; j++ )
-            pMat[j].fVal = (pMat[j].fVal != 0.0);
+            if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
+                pMat[j].fVal = (pMat[j].fVal != 0.0);
     }
 }
 
@@ -559,12 +606,14 @@ void ScMatrix::CompareLess()
     {
         for ( ULONG j=0; j<n; j++ )
             if ( !bIsString[j])     // else: #WERT!
-                pMat[j].fVal = (pMat[j].fVal < 0.0);
+                if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
+                    pMat[j].fVal = (pMat[j].fVal < 0.0);
     }
     else
     {
         for ( ULONG j=0; j<n; j++ )
-            pMat[j].fVal = (pMat[j].fVal < 0.0);
+            if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
+                pMat[j].fVal = (pMat[j].fVal < 0.0);
     }
 }
 
@@ -575,12 +624,14 @@ void ScMatrix::CompareGreater()
     {
         for ( ULONG j=0; j<n; j++ )
             if ( !bIsString[j])     // else: #WERT!
-                pMat[j].fVal = (pMat[j].fVal > 0.0);
+                if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
+                    pMat[j].fVal = (pMat[j].fVal > 0.0);
     }
     else
     {
         for ( ULONG j=0; j<n; j++ )
-            pMat[j].fVal = (pMat[j].fVal > 0.0);
+            if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
+                pMat[j].fVal = (pMat[j].fVal > 0.0);
     }
 }
 
@@ -591,12 +642,14 @@ void ScMatrix::CompareLessEqual()
     {
         for ( ULONG j=0; j<n; j++ )
             if ( !bIsString[j])     // else: #WERT!
-                pMat[j].fVal = (pMat[j].fVal <= 0.0);
+                if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
+                    pMat[j].fVal = (pMat[j].fVal <= 0.0);
     }
     else
     {
         for ( ULONG j=0; j<n; j++ )
-            pMat[j].fVal = (pMat[j].fVal <= 0.0);
+            if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
+                pMat[j].fVal = (pMat[j].fVal <= 0.0);
     }
 }
 
@@ -607,49 +660,71 @@ void ScMatrix::CompareGreaterEqual()
     {
         for ( ULONG j=0; j<n; j++ )
             if ( !bIsString[j])     // else: #WERT!
-                pMat[j].fVal = (pMat[j].fVal >= 0.0);
+                if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
+                    pMat[j].fVal = (pMat[j].fVal >= 0.0);
     }
     else
     {
         for ( ULONG j=0; j<n; j++ )
-            pMat[j].fVal = (pMat[j].fVal >= 0.0);
+            if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
+                pMat[j].fVal = (pMat[j].fVal >= 0.0);
     }
 }
 
-BOOL ScMatrix::And()
+double ScMatrix::And()
 {
     ULONG n = (ULONG) nAnzCol * nAnzRow;
-    BOOL bAnd = TRUE;
+    bool bAnd = true;
     if ( bIsString )
     {
         for ( ULONG j=0; bAnd && j<n; j++ )
+        {
             if ( bIsString[j] )
-                bAnd = FALSE;       // we're assuming a CompareMat
-            else
+            {   // assuming a CompareMat this is an error
+                return CreateDoubleError( errIllegalArgument );
+            }
+            else if ( ::rtl::math::isFinite( pMat[j].fVal))
                 bAnd = (pMat[j].fVal != 0.0);
+            else
+                return pMat[j].fVal;    // DoubleError
+        }
     }
     else
     {
         for ( ULONG j=0; bAnd && j<n; j++ )
-            bAnd = (pMat[j].fVal != 0.0);
+        {
+            if ( ::rtl::math::isFinite( pMat[j].fVal))
+                bAnd = (pMat[j].fVal != 0.0);
+            else
+                return pMat[j].fVal;    // DoubleError
+        }
     }
     return bAnd;
 }
 
-BOOL ScMatrix::Or()
+double ScMatrix::Or()
 {
     ULONG n = (ULONG) nAnzCol * nAnzRow;
-    BOOL bOr = FALSE;
+    bool bOr = false;
     if ( bIsString )
     {
         for ( ULONG j=0; !bOr && j<n; j++ )
-            if ( !bIsString[j] )
+            if ( bIsString[j] )
+            {   // assuming a CompareMat this is an error
+                return CreateDoubleError( errIllegalArgument );
+            }
+            else if ( ::rtl::math::isFinite( pMat[j].fVal))
                 bOr = (pMat[j].fVal != 0.0);
+            else
+                return pMat[j].fVal;    // DoubleError
     }
     else
     {
         for ( ULONG j=0; !bOr && j<n; j++ )
-            bOr = (pMat[j].fVal != 0.0);
+            if ( ::rtl::math::isFinite( pMat[j].fVal))
+                bOr = (pMat[j].fVal != 0.0);
+            else
+                return pMat[j].fVal;    // DoubleError
     }
     return bOr;
 }
