@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-14 10:21:25 $
+ *  last change: $Author: ssa $ $Date: 2002-06-18 13:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6965,11 +6965,9 @@ void Window::SetText( const XubString& rStr )
     if ( mpBorderWindow )
         mpBorderWindow->SetText( rStr );
     else if ( mbFrame )
-    {
         mpFrame->SetTitle( rStr );
-        ImplCallEventListeners( VCLEVENT_WINDOW_FRAMETITLECHANGED, &oldTitle );
-    }
 
+    ImplCallEventListeners( VCLEVENT_WINDOW_FRAMETITLECHANGED, &oldTitle );
     StateChanged( STATE_CHANGE_TEXT );
 }
 
