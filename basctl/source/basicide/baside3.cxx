@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 18:19:40 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
         if ( pDispatcher )
         {
             SdrView* pView = GetView();
-            if( !rCEvt.IsMouseEvent() && pView->HasMarked() )
+            if( !rCEvt.IsMouseEvent() && pView->AreObjectsMarked() )
             {
                 Rectangle aMarkedRect( pView->GetMarkedRect() );
                 Point MarkedCenter( aMarkedRect.Center() );
@@ -347,7 +347,7 @@ void __EXPORT DialogWindow::GetState( SfxItemSet& rSet )
             case SID_COPY:
             {
                 // any object selected?
-                if ( !pEditor->GetView()->HasMarkedObj() )
+                if ( !pEditor->GetView()->AreObjectsMarked() )
                     rSet.DisableItem( nWh );
             }
             break;
@@ -356,7 +356,7 @@ void __EXPORT DialogWindow::GetState( SfxItemSet& rSet )
             case SID_BACKSPACE:
             {
                 // any object selected?
-                if ( !pEditor->GetView()->HasMarkedObj() )
+                if ( !pEditor->GetView()->AreObjectsMarked() )
                     rSet.DisableItem( nWh );
 
                 if ( IsReadOnly() )
@@ -441,7 +441,7 @@ void __EXPORT DialogWindow::GetState( SfxItemSet& rSet )
             {
                 BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
                 SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-                if ( pViewFrame && !pViewFrame->HasChildWindow( SID_SHOW_PROPERTYBROWSER ) && !pEditor->GetView()->HasMarkedObj() )
+                if ( pViewFrame && !pViewFrame->HasChildWindow( SID_SHOW_PROPERTYBROWSER ) && !pEditor->GetView()->AreObjectsMarked() )
                     rSet.DisableItem( nWh );
 
                 if ( IsReadOnly() )
