@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:48:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,9 +217,9 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
         }
         else
         {
-            if (pDrView->GetMarkList().GetMarkCount() > 0)
+            if (pDrView->GetMarkedObjectList().GetMarkCount() > 0)
             {
-                SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pDrView->GetMarkList().GetMark(0)->GetObj());
+                SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pDrView->GetMarkedObjectList().GetMark(0)->GetObj());
 
                 if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
                 {
@@ -423,7 +423,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SfxStyleSheet* pStyleSheet = pDrView->GetStyleSheet();
                 if( pStyleSheet )
                 {
-                    if( nSlotId != SID_STYLE_APPLY && !pDrView->HasMarkedObj() )
+                    if( nSlotId != SID_STYLE_APPLY && !pDrView->AreObjectsMarked() )
                     {
                         SfxTemplateItem aTmpItem( nWhich, String() );
                         aAllSet.Put( aTmpItem, aTmpItem.Which()  );
@@ -463,7 +463,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_SET_DEFAULT:
             {
-                if( !pDrView->GetMarkList().GetMarkCount() ||
+                if( !pDrView->GetMarkedObjectList().GetMarkCount() ||
                     ( !pDrView->IsTextEdit() && !pDrView->GetStyleSheet() )
                   )
                     rSet.DisableItem( nWhich );
@@ -512,7 +512,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                     }
                     else if (pTemplCommon->GetActualFamily() == SFX_STYLE_FAMILY_PARA)
                     {
-                        if (!pDrView->HasMarkedObj())
+                        if (!pDrView->AreObjectsMarked())
                         {
                             rSet.DisableItem(nWhich);
                         }
@@ -523,7 +523,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 // kann nicht beruecksichtigt werden
                 else
                 {
-                    if (!pDrView->HasMarkedObj())
+                    if (!pDrView->AreObjectsMarked())
                     {
                         rSet.DisableItem(nWhich);
                     }
@@ -534,7 +534,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_STYLE_UPDATE_BY_EXAMPLE:
             {
-                if (!pDrView->HasMarkedObj())
+                if (!pDrView->AreObjectsMarked())
                 {
                     rSet.DisableItem(nWhich);
                 }
@@ -560,7 +560,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
     {
         // Wenn die View selektierte Objekte besitzt, muessen entspr. Items
         // von SFX_ITEM_DEFAULT (_ON) auf SFX_ITEM_DISABLED geaendert werden
-        if( pDrView->HasMarkedObj() )
+        if( pDrView->AreObjectsMarked() )
         {
             SfxWhichIter aNewIter( *pSet, XATTR_LINE_FIRST, XATTR_FILL_LAST );
             nWhich = aNewIter.FirstWhich();
@@ -577,7 +577,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
         delete pSet;
     }
 
-//    const SdrMarkList& rMarkList = pDrView->GetMarkList();
+//    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
 //    ULONG nMarkCount = rMarkList.GetMarkCount();
 //    BOOL bDisabled = FALSE;
 //
@@ -647,7 +647,7 @@ BOOL DrawViewShell::HasSelection(BOOL bText) const
             bReturn = TRUE;
         }
     }
-    else if (pDrView->GetMarkList().GetMarkCount() != 0)
+    else if (pDrView->GetMarkedObjectList().GetMarkCount() != 0)
     {
         bReturn = TRUE;
     }
