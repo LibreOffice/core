@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-19 09:03:18 $
+#   last change: $Author: obo $ $Date: 2004-09-08 14:43:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ TARGET=templateswizardfax
 
 ZIP1TARGET      = $(TEMPLATE_WIZARD_FAX_TARGET)
 
-ZIP1LIST	= $(LANGDIR)$/*
+ZIP1LIST	= $(LANGDIR)$/*.ott
 
 
 
