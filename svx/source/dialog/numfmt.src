@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:28:48 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         StringList [ polish ] =
         {
                 < "Wszystkie" ; Default ; > ;
-            < "Zdefin. przez u¿ytk." ; Default ; > ;
+            < "Ustawienia indywidualne" ; Default ; > ;
             < "Liczba" ; Default ; > ;
             < "Procent" ; Default ; > ;
             < "Waluta" ; Default ; > ;
@@ -661,11 +661,11 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ dutch ] = "~Aantal decimalen" ;
         Text [ spanish ] = "~Decimales" ;
         Text [ english_us ] = "~Decimal places" ;
-        Text[ chinese_simplified ] = "Ğ¡ÊıµãºóµÄÎ»Êı(~D)";
+        Text[ chinese_simplified ] = "Ğ¡ÊıµãÎ»Êı(~D)";
         Text[ russian ] = "Äğîáíàÿ ÷àñòü";
         Text[ polish ] = "Miejsca po przecinku";
         Text[ japanese ] = "¬”“_ˆÈ‰º‚ÌŒ…(~D)";
-        Text[ chinese_traditional ] = "¤p¼ÆÂI¤§«áªº¦ì¼Æ(~D)";
+        Text[ chinese_traditional ] = "¤p¼ÆÂI¦ì¼Æ(~D)";
         Text[ arabic ] = "ÇáãäÇÒá ÇáÚÔÑíÉ";
         Text[ greek ] = "Äåê~áäéêÜ øçößá";
         Text[ korean ] = "¼Ò¼öÁ¡ ÀÌÇÏ ÀÚ¸®(~D)";
@@ -872,10 +872,10 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ swedish ] = "Kä~llformat";
         Text[ polish ] = "Format Ÿród³owy";
         Text[ portuguese_brazilian ] = "So~urce format";
-        Text[ japanese ] = "¿°½‘®";
-        Text[ korean ] = "So~urce format";
-        Text[ chinese_simplified ] = "Ô­Ê¼¸ñÊ½";
-        Text[ chinese_traditional ] = "­ì©l®æ¦¡";
+        Text[ japanese ] = "¿°½‘®(~U)";
+        Text[ korean ] = "¼Ò½º Æ÷¸Ë(~U)";
+        Text[ chinese_simplified ] = "Ô­Ê¼¸ñÊ½(~U)";
+        Text[ chinese_traditional ] = "­ì©l®æ¦¡(~U)";
         Text[ turkish ] = "So~urce format";
         Text[ arabic ] = "So~urce format";
         Text[ catalan ] = "So~urce format";
@@ -1041,6 +1041,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     Text[ catalan ] = "Formato numérico";
 };
  // ********************************************************************** EOF
+
 
 
 
