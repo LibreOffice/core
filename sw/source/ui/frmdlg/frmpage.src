@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:56:51 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:08:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,7 +356,7 @@ TabDialog DLG_FRM_STD
     Text[ japanese ] = "ζ ";
     Text[ chinese_traditional ] = "ζ–‡ε­—ζ–Ήε΅";
     Text[ arabic ] = "ίΗΟΡ";
-    Text[ greek ] = "Περίγραμμα";
+    Text[ greek ] = "Πλαίσιο";
     Text[ korean ] = "ν”„λ μ„";
     Text[ turkish ] = "Ηerηeve";
     Text[ catalan ] = "Marc";
@@ -1066,7 +1066,7 @@ TabPage TP_FRM_STD
         Text[ japanese ] = "ε‰²ε(~I)";
         Text[ chinese_traditional ] = "η›Έε°η„(~I)";
         Text[ arabic ] = "δΣΘν";
-        Text[ greek ] = "Σχετικά";
+        Text[ greek ] = "~Σχετικό";
         Text[ korean ] = "λΉ„λ΅€ν•μ—¬(~I)";
         Text[ turkish ] = "Baπύl";
         Text[ catalan ] = "Relat~iu";
@@ -1101,7 +1101,7 @@ TabPage TP_FRM_STD
         Text[ japanese ] = "ι«γ•(~E)";
         Text[ chinese_traditional ] = "ι«εΊ¦(~E)";
         Text[ arabic ] = "ΗαΗΡΚέΗΪ";
-        Text[ greek ] = "Ύψος";
+        Text[ greek ] = "Ύ~ψος";
         Text[ korean ] = "λ†’μ΄(~E)";
         Text[ turkish ] = "Yόkseklik";
         Text[ catalan ] = "A~lηada";
@@ -1183,7 +1183,7 @@ TabPage TP_FRM_STD
         Text[ japanese ] = "ζ―”η‡γ‚’δΏγ¤(~K)";
         Text[ chinese_traditional ] = "εζ­¥ε–(~K)";
         Text[ arabic ] = "ΚÒΗγδ";
-        Text[ greek ] = "Προσαρμογή αναλογικά";
+        Text[ greek ] = "~Διατήρηση αναλογίας";
         Text[ korean ] = "λΉ„μ¨μ„ κ· λ“±ν•κ² μ΅°μ •(~K)";
         Text[ turkish ] = "~Oranύ koru";
         Text[ language_user1 ] = " ";
@@ -1205,11 +1205,11 @@ TabPage TP_FRM_STD
         Text[ swedish ] = "Au~tomatisk storlek";
         Text[ japanese ] = "γ‚µγ‚¤γ‚Ίθ‡ªε‹•θªΏζ•΄";
         Text[ korean ] = "ν¬κΈ° μλ™ μ΅°μ ";
-        Text[ chinese_simplified ] = "θ‡ªε¨θ°ƒζ•΄ε¤§ε°(~G)";
+        Text[ chinese_simplified ] = "θ‡ªε¨θ°ƒζ•΄ε¤§ε°(~A)";
         Text[ chinese_traditional ] = "θ‡ªε‹•θªΏζ•΄ε¤§ε°";
         Text[ portuguese ] = "Alt~ura automαtica";
         Text[ russian ] = "ΐβςξοξδαξπ";
-        Text[ greek ] = "Αυτόματο ύψος";
+        Text[ greek ] = "Α~υτόματο ύψος";
         Text[ dutch ] = "Automatische h~oogte";
         Text[ french ] = "Hauteur automatique";
         Text[ spanish ] = "~Tamaρo automαtico";
@@ -1252,7 +1252,7 @@ TabPage TP_FRM_STD
         Text[ japanese ] = "εε―Έε¤§(~O)";
         Text[ chinese_traditional ] = "εδ»¶ε¤§ε°(~O)";
         Text[ arabic ] = "ΗαΝΜγ ΗαΓΥαν";
-        Text[ greek ] = "Αρχικό μέγεθος";
+        Text[ greek ] = "Αρχικό μέ~γεθος";
         Text[ korean ] = "μ›λ ν¬κΈ°(~O)";
         Text[ turkish ] = "~Orjinal Boyutu";
         Text[ catalan ] = "Mida original";
@@ -1310,7 +1310,7 @@ TabPage TP_FRM_STD
         Text[ english_us ] = "To ~page";
         Text[ portuguese ] = "Na ~pαgina";
         Text[ russian ] = "Κ ρςπΰνθφε";
-        Text[ greek ] = "Στη σελίδα";
+        Text[ greek ] = "Σε ~σελίδα";
         Text[ dutch ] = "Aan ~pagina";
         Text[ french ] = "ΐ la page";
         Text[ spanish ] = "A la pα~gina";
@@ -1342,7 +1342,7 @@ TabPage TP_FRM_STD
         Text[ english_us ] = "To paragrap~h";
         Text[ portuguese ] = "No pa~rαgrafo";
         Text[ russian ] = "Κ ΰαηΰφσ";
-        Text[ greek ] = "~Στη παράγραφο";
+        Text[ greek ] = "Σε πα~ράγραφο";
         Text[ dutch ] = "Aan ~alinea";
         Text[ french ] = "Au paragraphe";
         Text[ spanish ] = "Al pαrrafo";
@@ -1374,7 +1374,7 @@ TabPage TP_FRM_STD
         Text[ english_us ] = "To cha~racter";
         Text[ portuguese ] = "No ~carαcter";
         Text[ russian ] = "Κ ρθμβξλσ";
-        Text[ greek ] = "Στο~ν χαρακτήρα";
+        Text[ greek ] = "Σε ~χαρακτήρα";
         Text[ dutch ] = "Aan ~teken";
         Text[ french ] = "Au caractθre";
         Text[ spanish ] = "Al carαcter";
@@ -1416,10 +1416,10 @@ TabPage TP_FRM_STD
         Text[ russian ] = "Κΰκ ρθμβξλ";
         Text[ polish ] = "~Jako znak";
         Text[ japanese ] = "ζ–‡ε­—γ¨γ—γ¦(~A)";
-        Text[ language_user1 ] = "θλθ: ρθμβξλ; θλθ πθρσνξκ - θλE ρθEόJ; θλEπθρσϋM";
+        Text[ language_user1 ] = "; θλθ: ρθμβξλ; θλθ πθρσνξκ - θλE ρθEόJ; θλEπθρσϋM";
         Text[ chinese_traditional ] = "η•¶δ½ε­—ε…ƒ(~A)";
         Text[ arabic ] = "ίΝΡέ";
-        Text[ greek ] = "Ως χαρακτήρας";
+        Text[ greek ] = "~Ως χαρακτήρας";
         Text[ korean ] = "λ¬Έμλ΅(~A)";
         Text[ turkish ] = "~Karakter olarak";
         Text[ catalan ] = "Com ~carΰcter";
@@ -1439,7 +1439,7 @@ TabPage TP_FRM_STD
         Text[ english_us ] = "To ~frame";
         Text[ portuguese ] = "Na m~oldura";
         Text[ russian ] = "Κ πΰμκε";
-        Text[ greek ] = "Στο πλ~αίσιο";
+        Text[ greek ] = "Σε ~πλαίσιο";
         Text[ dutch ] = "Aan ~kader";
         Text[ french ] = "Au cadre";
         Text[ spanish ] = "~Al marco";
@@ -1524,7 +1524,7 @@ TabPage TP_FRM_STD
         Text[ japanese ] = "ζ¨ª(~Z)";
         Text[ chinese_traditional ] = "ζ°΄εΉ³ζ–Ήε‘(~Z)";
         Text[ arabic ] = "Γέήν";
-        Text[ greek ] = "Οριζόντια";
+        Text[ greek ] = "~Οριζόντια";
         Text[ korean ] = "μν‰(~Z)";
         Text[ turkish ] = "Yatay";
         Text[ catalan ] = "Horit~zontal";
@@ -1565,7 +1565,7 @@ TabPage TP_FRM_STD
         Text[ japanese ] = "ι–“ι”(~Y)";
         Text[ chinese_traditional ] = "ι–“ι”(~Y)";
         Text[ arabic ] = "ΘγήΟΗΡ";
-        Text[ greek ] = "α~νά";
+        Text[ greek ] = "κ~ατά";
         Text[ korean ] = "κ°„κ²©(~Y)";
         Text[ turkish ] = "tarafύndan";
         Text[ catalan ] = "per";
@@ -1614,10 +1614,10 @@ TabPage TP_FRM_STD
         Text[ japanese ] = "εΊζΊ–(~T)";
         Text[ chinese_traditional ] = "θ‡³(~T)";
         Text[ arabic ] = "Εαμ";
-        Text[ greek ] = "προς";
+        Text[ greek ] = "~σε";
         Text[ korean ] = "κΈ°μ¤€(~T)";
         Text[ turkish ] = "~a";
-        Text[ language_user1 ] = "\"zu\" muss ich hier weglassen weils es als Suffix im letzten Satzelement (Listbox) schon vorkommt.";
+        Text[ language_user1 ] = "; \"zu\" muss ich hier weglassen weils es als Suffix im letzten Satzelement (Listbox) schon vorkommt.";
         Text[ catalan ] = "a";
         Text[ finnish ] = "kohde";
         Text[ thai ] = "~ΰΈ–ΰΈ¶ΰΈ‡";
@@ -1655,7 +1655,7 @@ TabPage TP_FRM_STD
         Text[ japanese ] = "ε¶ζ•°γƒγƒΌγ‚Έγ«εθ»Ά(~M)";
         Text[ chinese_traditional ] = "ηΏ»θ½‰ε°ε¶ζ•Έι ιΆ(~M)";
         Text[ arabic ] = "ΗδΪίΗΣ Ϊαμ ΗαΥέΝΗΚ ΗαÒζΜνΙ";
-        Text[ greek ] = "Καθρε~πτισμός στις άρτιες σελίδες";
+        Text[ greek ] = "Κατοπτρ~ισμός σε άρτιες σελίδες";
         Text[ korean ] = "μ§μ νμ΄μ§€ λ§μ£Όλ³΄κΈ°(~M)";
         Text[ turkish ] = "~Mirror on even pages";
         Text[ catalan ] = "Reflexa en ~pΰgines parelles";
@@ -1690,7 +1690,7 @@ TabPage TP_FRM_STD
         Text[ japanese ] = "ηΈ¦(~V)";
         Text[ chinese_traditional ] = "ε‚η›΄ζ–Ήε‘(~V)";
         Text[ arabic ] = "ΡΓΣν";
-        Text[ greek ] = "Κατακόρυφα";
+        Text[ greek ] = "~Κατακόρυφα";
         Text[ korean ] = "μμ§(~V)";
         Text[ turkish ] = "Di~key";
         Text[ catalan ] = "~Vertical";
@@ -1780,10 +1780,10 @@ TabPage TP_FRM_STD
         Text[ japanese ] = "εΊζΊ–(~O)";
         Text[ chinese_traditional ] = "θ‡³(~O)";
         Text[ arabic ] = "Εαμ";
-        Text[ greek ] = "προς";
+        Text[ greek ] = "σ~ε";
         Text[ korean ] = "κΈ°μ¤€(~O)";
         Text[ turkish ] = "a";
-        Text[ language_user1 ] = "\"zu\" muss ich hier weglassen weils es als Suffix im letzten Satzelement (Listbox) schon vorkommt.";
+        Text[ language_user1 ] = "; \"zu\" muss ich hier weglassen weils es als Suffix im letzten Satzelement (Listbox) schon vorkommt.";
         Text[ catalan ] = "a";
         Text[ finnish ] = "kohde";
         Text[ thai ] = "ΰΈ–ΰΈ¶~ΰΈ‡";
@@ -1933,7 +1933,7 @@ TabPage TP_GRF_EXT
         Text[ russian ] = "[Νες]";
         Text[ polish ] = "[brak]";
         Text[ japanese ] = "[γªγ—]";
-        Text[ language_user1 ] = "?";
+        Text[ language_user1 ] = "; ?";
         Text[ chinese_traditional ] = "[η„΅]";
         Text[ arabic ] = "[ΘΟζδ]";
         Text[ greek ] = "[Κανένα]";
@@ -2246,7 +2246,7 @@ TabPage TP_FRM_URL
         Text[ japanese ] = "~URL";
         Text[ chinese_traditional ] = "~URL";
         Text[ arabic ] = "U~RL";
-        Text[ greek ] = "URL";
+        Text[ greek ] = "~URL";
         Text[ korean ] = "~URL";
         Text[ turkish ] = "~URL";
         Text[ catalan ] = "~URL";
@@ -2367,7 +2367,7 @@ TabPage TP_FRM_URL
         Text[ japanese ] = "ιΈζ(~B)...";
         Text[ chinese_traditional ] = "ιΈζ“‡(~B)...";
         Text[ arabic ] = "ΗΣΚΪΡΗΦ...";
-        Text[ greek ] = "Επιλογή...";
+        Text[ greek ] = "~Αναζήτηση...";
         Text[ korean ] = "μ„ νƒ(~B)...";
         Text[ turkish ] = "~Tara";
         Text[ catalan ] = "Na~vega...";
@@ -2419,7 +2419,7 @@ TabPage TP_FRM_URL
         Text[ english_us ] = "~Server-side image map";
         Text[ portuguese ] = "~Server Site Image Map";
         Text[ russian ] = "Ρεπβεπνξε ρενρξπνξε θηξαπΰζενθε";
-        Text[ greek ] = "Διακομιστής";
+        Text[ greek ] = "Χάρτης εικόνας του ~διακομιστή";
         Text[ dutch ] = "~Server-side Image Map";
         Text[ french ] = "Image Map cτtι serveur";
         Text[ spanish ] = "Mapa de imαgenes en la parte del ~servidor";
@@ -2430,7 +2430,7 @@ TabPage TP_FRM_URL
         Text[ polish ] = "Mapa o~brazkowa po stronie serwera";
         Text[ portuguese_brazilian ] = "~Mapa de imagens do lado do servidor";
         Text[ japanese ] = "γ‚µγƒΌγƒγƒΌγ‚µγ‚¤γƒ γ‚¤γƒ΅γƒΌγ‚Έγƒγƒƒγƒ—(~S)";
-        Text[ korean ] = "μ„λ²„ μ‚¬μ΄λ“ μ΄λ―Έμ§€ λ§µ(~S)";
+        Text[ korean ] = "μ„λ²„ μª½ μ΄λ―Έμ§€ λ§µ(~S)";
         Text[ chinese_simplified ] = "ζε΅ε™¨η«―ι΅µιΆε›Ύεƒζ ε°„(~S)";
         Text[ chinese_traditional ] = "δΌΊζε™¨ι ιΆε½±εƒζ ε°„(~S)";
         Text[ turkish ] = "~Sunucu taraflύ resim haritasύ";
@@ -2451,7 +2451,7 @@ TabPage TP_FRM_URL
         Text[ english_us ] = "~Client-side image map";
         Text[ portuguese ] = "~Client Site Image Map";
         Text[ russian ] = "Κλθενςρκξε ρενρξπνξε θηξαπΰζενθε";
-        Text[ greek ] = "Πελάτης Site Image Map";
+        Text[ greek ] = "Χάρτης εικόνας του ~προγράμματος πελάτη";
         Text[ dutch ] = "~Client-side Image Map";
         Text[ french ] = "Image Map cτtι client";
         Text[ spanish ] = "Mapa de imαgenes en la parte ~cliente";
@@ -2462,7 +2462,7 @@ TabPage TP_FRM_URL
         Text[ polish ] = "Mapa ~obrazkowa po stronie klienta";
         Text[ portuguese_brazilian ] = "~Mapa de imagens do lado do cliente";
         Text[ japanese ] = "γ‚―γƒ©γ‚¤γ‚Άγƒ³γƒγ‚µγ‚¤γƒ γ‚¤γƒ΅γƒΌγ‚Έγƒγƒƒγƒ—(~C)";
-        Text[ korean ] = "ν΄λΌμ΄μ–ΈνΈ μ‚¬μ΄λ“ μ΄λ―Έμ§€ λ§µ(~C)";
+        Text[ korean ] = "ν΄λΌμ΄μ–ΈνΈ μª½ μ΄λ―Έμ§€ λ§µ(~C)";
         Text[ chinese_simplified ] = "ε®Άζ·η«―ι΅µιΆε›Ύεƒζ ε°„(~C)";
         Text[ chinese_traditional ] = "ε®Άζ¶η«―ι ιΆε½±εƒζ ε°„(~C)";
         Text[ turkish ] = "~έstemci tarafύnda resim eώlem";
@@ -2495,7 +2495,7 @@ TabPage TP_FRM_URL
         Text[ japanese ] = "γ‚¤γƒ΅γƒΌγ‚Έγƒγƒƒγƒ—";
         Text[ chinese_traditional ] = "ε½±εƒζ ε°„";
         Text[ arabic ] = "Image map";
-        Text[ greek ] = "Image map";
+        Text[ greek ] = "Χάρτης εικόνας";
         Text[ korean ] = "μ΄λ―Έμ§€ λ§µ";
         Text[ turkish ] = "Resim haritasύ";
         Text[ catalan ] = "Imatge Map";
@@ -2641,7 +2641,7 @@ TabPage TP_FRM_ADD
         };
     StringList [ language_user1 ] =
     {
-         < "<Keiner>" ; > ;
+         < "; <Keiner>" ; > ;
     };
     StringList [ portuguese ] =
     {
@@ -2789,7 +2789,7 @@ TabPage TP_FRM_ADD
         };
     StringList [ language_user1 ] =
     {
-         < "<Keiner>" ; > ;
+         < "; <Keiner>" ; > ;
     };
     StringList [ portuguese ] =
     {
@@ -3171,11 +3171,11 @@ TabPage TP_FRM_ADD
         Text[ danish ] = "~Text flow";
         Text[ swedish ] = "~Textriktning";
         Text[ polish ] = "~Text flow";
-        Text[ portuguese_brazilian ] = "~Text direction";
-        Text[ japanese ] = "ζ–‡ε­—ζ–Ήε‘";
-        Text[ korean ] = "ν…μ¤νΈ λ°©ν–¥";
-        Text[ chinese_simplified ] = "ζ–‡ε­—ζ–Ήε‘";
-        Text[ chinese_traditional ] = "ζ–‡ε­—ζ–Ήε‘";
+        Text[ portuguese_brazilian ] = "Orientaηγo do texto";
+        Text[ japanese ] = "ζ–‡ε­—ζ–Ήε‘(~T)";
+        Text[ korean ] = "ν…μ¤νΈ λ°©ν–¥(~T)";
+        Text[ chinese_simplified ] = "ζ–‡ε­—ζ–Ήε‘(~T)";
+        Text[ chinese_traditional ] = "ζ–‡ε­—ζ–Ήε‘(~T)";
         Text[ turkish ] = "Metin ~yφnό";
         Text[ arabic ] = "~Text flow";
         Text[ catalan ] = "~Text direction";
@@ -3280,10 +3280,10 @@ TabPage TP_FRM_ADD
     };
     StringList [ language_user1 ] =
     {
-         < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts-nach-links (horizontal)" ; 1; > ;
-        < "Rechts-nach-links (vertikal)" ; 2; > ;
-        < "Einstellung des όbergeordneten Objektes verwenden" ; 4; > ;
+         < "; Links-nach-rechts (horizontal)" ; 0; > ;
+        < "; Rechts-nach-links (horizontal)" ; 1; > ;
+        < "; Rechts-nach-links (vertikal)" ; 2; > ;
+        < "; Einstellung des όbergeordneten Objektes verwenden" ; 4; > ;
     };
     StringList [ turkish ] =
     {
@@ -3364,10 +3364,10 @@ TabPage TP_FRM_ADD
     };
     StringList [ portuguese_brazilian ] =
     {
-         < "Left-to-right (horizontal)" ; 0; > ;
-        < "Right-to-left (horizontal)" ; 1; > ;
-        < "Right-to-left (vertical)" ; 2; > ;
-        < "Use superordinate object settings" ; 4; > ;
+         < "Da esquerda para a direita (horizontal)" ; 0; > ;
+        < "Da direita para a esquerda (horizontal)" ; 1; > ;
+        < "Da direita para a esquerda (vertical)" ; 2; > ;
+        < "Usar as propriedades do objeto superior" ; 4; > ;
     };
     StringList [ thai ] =
     {
@@ -3392,6 +3392,7 @@ TabPage TP_FRM_ADD
     };
     };
 };
+
 
 
 
