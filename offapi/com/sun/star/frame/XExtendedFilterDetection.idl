@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XExtendedFilterDetection.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 /** use <type scope="com::sun::star::document">XExtendedFilterDetection</type> instead of this
     @deprecated
  */
-interface XExtendedFilterDetection: com::sun::star::uno::XInterface
+published interface XExtendedFilterDetection: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** use <member scope="com::sun::star::document">XExtendedFilterDetection::detect()</member> instead of this
