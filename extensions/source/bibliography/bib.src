@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bib.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ String RID_MAP_QUESTION
     Text[ swedish ] = "Vill Du redigera kolumntilldelningen?";
     Text[ polish ] = "Chcesz edytowaæ przyporz¹dkowanie kolumn?";
     Text[ portuguese_brazilian ] = "Dow you want to edit the column arrangement";
-    Text[ japanese ] = "—ñ‚Ì•ª—Ş‚ğ•ÒW‚µ‚Ü‚·‚©?";
+    Text[ japanese ] = "—ñ‚Ì•ª—Ş‚ğ•ÒW‚µ‚Ü‚·‚©B";
     Text[ korean ] = "¿­ ¹è¿­À» ÆíÁıÇÏ½Ã°Ú½À´Ï±î?";
     Text[ chinese_simplified ] = "ÄúÒª±à¼­ÁĞµÄÅÅÁĞË³Ğò£¿";
     Text[ chinese_traditional ] = "±z­n½s±ÆÄæ¡H";
