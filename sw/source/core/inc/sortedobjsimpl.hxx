@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortedobjsimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:06:58 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,6 @@
 
 #ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
-#endif
-#ifndef _FMTWRAPINFLUENCEONOBJPOS_HXX
-#include <fmtwrapinfluenceonobjpos.hxx>
 #endif
 
 class SwAnchoredObject;
