@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_migration.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:08:14 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,10 +138,9 @@ MigrationImpl::MigrationImpl(
 {
     for ( sal_Int32 pos = args.getLength(); pos--; )
     {
-        const beans::NamedValue nv(
-            extract_throw<beans::NamedValue>( args[pos] ) );
+        const beans::NamedValue nv( args[pos].get<beans::NamedValue>() );
         if (nv.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("OldUserDir") ))
-            extract_throw( &m_oldUserDir, nv.Value );
+            m_oldUserDir = nv.Value.get<OUString>();
     }
     if (m_oldUserDir.getLength() == 0)
         throw lang::IllegalArgumentException( OUSTR("missing OldUserDir!"), 0,
