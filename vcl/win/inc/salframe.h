@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:03:05 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ public:
     virtual void                UpdateSettings( AllSettings& rSettings );
     virtual void                Beep( SoundType eSoundType );
     virtual const SystemEnvData*    GetSystemData() const;
-    virtual ULONG               GetCurrentModButtons();
+    virtual SalPointerState     GetPointerState();
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
 };
