@@ -168,7 +168,7 @@ IPropertyArrayHelper & SdUnoPresView::getInfoHelper()
 
 //----------------------------------------------------------------------
 
-Reference < beans::XPropertySetInfo >  SdUnoPresView::getPropertySetInfo()
+Reference < beans::XPropertySetInfo >  SdUnoPresView::getPropertySetInfo() throw ( ::com::sun::star::uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
