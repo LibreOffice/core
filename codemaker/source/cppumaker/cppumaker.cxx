@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppumaker.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 16:19:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:28:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,16 @@ void failed(rtl::OString const & typeName, CppuOptions * options) {
 }
 
 void produce(
+    RegistryKey& rTypeKey, bool bIsExtraType, TypeManager const & typeMgr,
+    codemaker::GeneratedTypeSet & generated, CppuOptions * options)
+{
+    if (!produceType(rTypeKey, bIsExtraType, typeMgr, generated, options)) {
+        OString typeName = typeMgr.getTypeName(rTypeKey);
+        failed(typeName, options);
+    }
+}
+
+void produce(
     rtl::OString const & typeName, TypeManager const & typeMgr,
     codemaker::GeneratedTypeSet & generated, CppuOptions * options)
 {
@@ -90,35 +100,82 @@ void produce(
     }
 }
 
-void produceAllTypes(
-    rtl::OString const & typeName, TypeManager const & typeMgr,
-    codemaker::GeneratedTypeSet & generated, CppuOptions * pOptions,
-    bool fullScope)
+void produceAllTypes(RegistryKey& rTypeKey, bool bIsExtraType,
+                         TypeManager const & typeMgr,
+                         codemaker::GeneratedTypeSet & generated,
+                         CppuOptions* pOptions,
+                         sal_Bool bFullScope)
+    throw( CannotDumpException )
+{
+    OString typeName = typeMgr.getTypeName(rTypeKey);
+
+    produce(rTypeKey, bIsExtraType, typeMgr, generated, pOptions);
+
+    RegistryKeyList typeKeys = typeMgr.getTypeKeys(typeName);
+    RegistryKeyList::const_iterator iter = typeKeys.begin();
+    RegistryKey key, subKey;
+    RegistryKeyArray subKeys;
+
+    while (iter != typeKeys.end())
+    {
+        key = (*iter).first;
+
+        if (!(*iter).second  && !key.openSubKeys(OUString(), subKeys))
+        {
+            for (sal_uInt32 i = 0; i < subKeys.getLength(); i++)
+            {
+                subKey = subKeys.getElement(i);
+                if (bFullScope)
+                {
+                    produceAllTypes(subKey, (*iter).second, typeMgr,
+                                    generated, pOptions, true);
+                } else
+                {
+                    produce(subKey, (*iter).second,
+                            typeMgr, generated, pOptions);
+                }
+            }
+        }
+
+        ++iter;
+    }
+}
+
+void produceAllTypes(const OString& typeName,
+                     TypeManager const & typeMgr,
+                     codemaker::GeneratedTypeSet & generated,
+                     CppuOptions* pOptions,
+                     sal_Bool bFullScope)
+    throw( CannotDumpException )
 {
     produce(typeName, typeMgr, generated, pOptions);
 
-    RegistryKey typeKey = typeMgr.getTypeKey(typeName);
-    RegistryKeyNames subKeys;
+    RegistryKeyList typeKeys = typeMgr.getTypeKeys(typeName);
+    RegistryKeyList::const_iterator iter = typeKeys.begin();
+    RegistryKey key, subKey;
+    RegistryKeyArray subKeys;
 
-    if (typeKey.getKeyNames(OUString(), subKeys)) {
-        failed(typeName, pOptions);
-    }
-
-    OString tmpName;
-    for (sal_uInt32 i=0; i < subKeys.getLength(); i++)
+    while (iter != typeKeys.end())
     {
-        tmpName = OUStringToOString(subKeys.getElement(i), RTL_TEXTENCODING_UTF8);
-
-        if (pOptions->isValid("-B"))
-            tmpName = tmpName.copy(tmpName.indexOf('/', 1) + 1);
-        else
-            tmpName = tmpName.copy(1);
-
-        if (fullScope) {
-            produceAllTypes(tmpName, typeMgr, generated, pOptions, true);
-        } else {
-            produce(tmpName, typeMgr, generated, pOptions);
+        key = (*iter).first;
+        if (!(*iter).second  && !key.openSubKeys(OUString(), subKeys))
+        {
+            for (sal_uInt32 i = 0; i < subKeys.getLength(); i++)
+            {
+                subKey = subKeys.getElement(i);
+                if (bFullScope)
+                {
+                    produceAllTypes(subKey, (*iter).second, typeMgr,
+                                    generated, pOptions, true);
+                } else
+                {
+                    produce(subKey, (*iter).second,
+                            typeMgr, generated, pOptions);
+                }
+            }
         }
+
+        ++iter;
     }
 }
 
@@ -171,7 +228,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 tmpName = typeName.copy( nPos != -1 ? nPos+1 : 0 );
                 if (tmpName == "*")
                 {
-                    // produce this type and his scope, but the scope is not recursively  generated.
+                    // produce this type and his scope
                     if (typeName.equals("*"))
                     {
                         tmpName = "/";
@@ -183,14 +240,15 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                         else
                             tmpName.replace('.', '/');
                     }
+                    // related to task #116780# the scope is recursively
+                    // generated.  bFullScope = true
                     produceAllTypes(
-                        tmpName, typeMgr, generated, &options, false);
+                        tmpName, typeMgr, generated, &options, true);
                 } else
                 {
                     // produce only this type
                     produce(
-                        typeName.replace('.', '/'), typeMgr, generated,
-                        &options);
+                        typeName.replace('.', '/'), typeMgr, generated, &options);
                 }
             } while( nIndex != -1 );
         } else
@@ -201,8 +259,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         // C++ header files generated for the following UNO types are included
         // in header files in cppu/inc/com/sun/star/uno (Any.hxx, Reference.hxx,
         // Type.h), so it seems best to always generate those C++ header files:
-        produce(
-            "com/sun/star/uno/RuntimeException", typeMgr, generated, &options);
+        produce("com/sun/star/uno/RuntimeException", typeMgr, generated, &options);
         produce("com/sun/star/uno/TypeClass", typeMgr, generated, &options);
         produce("com/sun/star/uno/XInterface", typeMgr, generated, &options);
     }
