@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:21:37 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 14:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,6 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     aHelpButton   (this, SW_RES(BTN_HELP    )),
     aAutoCaptionButton(this, SW_RES(BTN_AUTOCAPTION)),
     aOptionButton (this, SW_RES(BTN_OPTION  )),
-//  aSampleText   (this, SW_RES(TXT_SAMPLE  )),
     aCategoryText (this, SW_RES(TXT_CATEGORY)),
     aCategoryBox  (this, SW_RES(BOX_CATEGORY)),
     aFormatText   (this, SW_RES(TXT_FORMAT  )),
@@ -214,20 +213,12 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     aPosBox       (this, SW_RES(BOX_POS     )),
     aPrevWin      (this, SW_RES(WIN_SAMPLE  )),
     sNone(      ResId( STR_CATEGORY_NONE )),
-//  aCopyAttributesCB(this, SW_RES(CB_COPY_ATTR    )),
-//  aObjectNameFT(this, SW_RES(FT_OBJECT_NAME )),
-//  aObjectNameED(this, SW_RES(ED_OBJECT_NAME )),
     aSettingsFL  (this, SW_RES(FL_SETTINGS)),
     rView( rV ),
     bCopyAttributes( FALSE ),
     pMgr( new SwFldMgr(rView.GetWrtShellPtr()) )
 
 {
-/*  Wallpaper   aBack( GetSettings().GetStyleSettings().GetWindowColor() );
-    aPrevWin.SetBackground( aBack );
-    aPrevWin.SetFillColor( aBack.GetColor() );
-    aPrevWin.SetLineColor( aBack.GetColor() );*/
-
     SwWrtShell &rSh = rView.GetWrtShell();
      uno::Reference< frame::XModel >  xModel = rView.GetDocShell()->GetBaseModel();
 
@@ -248,10 +239,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     aLk = LINK(this, SwCaptionDialog, SelectHdl);
     aCategoryBox.SetSelectHdl( aLk );
     aFormatBox  .SetSelectHdl( aLk );
-//  aPosBox     .SetSelectHdl( aLk );
-
     aOptionButton.SetClickHdl( LINK( this, SwCaptionDialog, OptionHdl ) );
-
     aAutoCaptionButton.SetClickHdl(LINK(this, SwCaptionDialog, CaptionHdl));
 
     aCategoryBox.InsertEntry( sNone );
@@ -270,8 +258,6 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     {
         nPoolId = RES_POOLCOLL_LABEL_ABB;
         pString = ::GetOldGrfCat(); //CHINA001 pString = pOldGrfCat;
-//      aCopyAttributesCB.Show();
-//      aCopyAttributesCB.Check(sal_True);
         bCopyAttributes = TRUE;
         sObjectName = rSh.GetFlyName();
         //if not OLE
@@ -302,15 +288,11 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     {
         nPoolId = RES_POOLCOLL_LABEL_FRAME;
         pString = ::GetOldFrmCat(); //CHINA001 pString = pOldFrmCat;
-//      aObjectNameED.Show(sal_False);
-//      aObjectNameFT.Show(sal_False);
     }
     else if( eType & SwWrtShell::SEL_DRW )
     {
         nPoolId = RES_POOLCOLL_LABEL_DRAWING;
         pString = ::GetOldDrwCat(); //CHINA001 pString = pOldDrwCat;
-//      aObjectNameED.Show(sal_False);
-//      aObjectNameFT.Show(sal_False);
     }
     if( nPoolId )
     {
@@ -320,38 +302,6 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
             aCategoryBox.SetText(
                     SwStyleNameMapper::GetUIName( nPoolId, aEmptyStr ));
     }
-
-    //
-/*  if(aObjectNameED.IsVisible())
-    {
-        if(!aCopyAttributesCB.IsVisible())
-        {
-            long nHeightDiff = aObjectNameFT.GetPosPixel().Y() - aObjectNameED.GetPosPixel().Y();
-             Point aPos(aCopyAttributesCB.GetPosPixel());
-            aObjectNameFT.SetPosPixel(aPos);
-            aPos.X() = aObjectNameED.GetPosPixel().X();
-            aPos.Y() -= nHeightDiff;
-            aObjectNameED.SetPosPixel(aPos);
-        }
-        if(xNameAccess.is())
-        {
-            try
-            {
-                uno::Any aObj = xNameAccess->getByName(sObjectName);
-                uno::Reference< uno::XInterface >  xTmp;
-                aObj >>= xTmp;
-                xNamed = uno::Reference< container::XNamed >(xTmp, uno::UNO_QUERY);
-            }
-            catch( const uno::Exception& rEx )
-            {
-                rEx;
-                DBG_ERROR("exception caught SwCaptionDialog::SwCaptionDialog()")
-            }
-        }
-        aObjectNameED.SetText(sObjectName);
-        aObjectNameED.SetForbiddenChars(String::CreateFromAscii(" .<>"));
-        aObjectNameED.SetModifyHdl(LINK(this, SwCaptionDialog, ModifyHdl));
-    }*/
 
     // aFormatBox
     sal_uInt16 nSelFmt = SVX_NUM_ARABIC;
@@ -397,46 +347,42 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     }
     aPosBox.SelectEntryPos(1);
     if (eType & (SwWrtShell::SEL_GRF|SwWrtShell::SEL_DRW))
+    {
+        aPosText.Enable( sal_False );
         aPosBox.Enable( sal_False );
+    }
 
     aCategoryBox.GetModifyHdl().Call(&aCategoryBox);
 
     FreeResource();
-    aTextEdit.GrabFocus();
 
+    CheckButtonWidth();
+    aTextEdit.GrabFocus();
     DrawSample();
 }
-
-
 
 void SwCaptionDialog::Apply()
 {
     InsCaptionOpt aOpt;
-
     aOpt.UseCaption() = sal_True;
     String aName( aCategoryBox.GetText() );
-    if(aName == sNone)
-        aOpt.SetCategory(aEmptyStr);
+    if ( aName == sNone )
+        aOpt.SetCategory( aEmptyStr );
     else
     {
-        aName.EraseLeadingChars (' ');
-        aName.EraseTrailingChars(' ');
-        aOpt.SetCategory(aName);
+        aName.EraseLeadingChars( ' ' );
+        aName.EraseTrailingChars( ' ' );
+        aOpt.SetCategory( aName );
     }
-    aOpt.SetNumType((sal_uInt16)(sal_uInt32)aFormatBox.GetEntryData(aFormatBox.GetSelectEntryPos()));
-    String  aCapt;
-    if(aSepEdit.IsEnabled())
-        aCapt = aSepEdit.GetText();
-    aCapt += aTextEdit.GetText();
-    aOpt.SetCaption(aCapt);
-    aOpt.SetPos(aPosBox.GetSelectEntryPos());
+    aOpt.SetNumType( (sal_uInt16)(sal_uInt32)aFormatBox.GetEntryData( aFormatBox.GetSelectEntryPos() ) );
+    aOpt.SetSeparator( aSepEdit.IsEnabled() ? aSepEdit.GetText() : String() );
+    aOpt.SetCaption( aTextEdit.GetText() );
+    aOpt.SetPos( aPosBox.GetSelectEntryPos() );
     aOpt.IgnoreSeqOpts() = sal_True;
     aOpt.CopyAttributes() = bCopyAttributes;
     aOpt.SetCharacterStyle( sCharacterStyle );
-    rView.InsertCaption(&aOpt);
+    rView.InsertCaption( &aOpt );
 }
-
-
 
 IMPL_LINK_INLINE_START( SwCaptionDialog, OptionHdl, Button*, pButton )
 {
@@ -547,13 +493,40 @@ void SwCaptionDialog::DrawSample()
     aStr += aTextEdit.GetText();
 
     // do preview!
-//  aSampleText.SetText(aStr);
-//  aPrevWin.DrawRect( Rectangle( Point( 0, 0 ), aPrevWin.GetSizePixel() ) );
-//  aPrevWin.DrawText( Point( 4, 6 ), aStr );
     aPrevWin.SetPreviewText( aStr );
 }
 
-
+void SwCaptionDialog::CheckButtonWidth()
+{
+    // check if the text of the AutoCaption button is to wide
+    const long nOffset = 10;
+    String sText = aAutoCaptionButton.GetText();
+    long nTxtW = aAutoCaptionButton.GetTextWidth( sText );
+    if ( sText.Search( '~' ) == STRING_NOTFOUND )
+        nTxtW += nOffset;
+    long nBtnW = aAutoCaptionButton.GetSizePixel().Width();
+    if ( nTxtW > nBtnW )
+    {
+        // then broaden all buttons
+        Size aNewSize;
+        long nDelta = Max( ( nTxtW - nBtnW ), nOffset );
+        Button* pBtns[] =
+        {
+            &aOKButton, &aCancelButton, &aHelpButton, &aAutoCaptionButton, &aOptionButton
+        };
+        Button** pCurrent = pBtns;
+        for ( sal_Int32 i = 0; i < sizeof( pBtns ) / sizeof( pBtns[ 0 ] ); ++i, ++pCurrent )
+        {
+            aNewSize = (*pCurrent)->GetSizePixel();
+            aNewSize.Width() += nDelta;
+            (*pCurrent)->SetSizePixel( aNewSize );
+        }
+        // and the dialog
+        aNewSize = GetOutputSizePixel();
+        aNewSize.Width() += nDelta;
+        SetOutputSizePixel( aNewSize );
+    }
+}
 
 SwCaptionDialog::~SwCaptionDialog()
 {
