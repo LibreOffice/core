@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:25 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,19 +178,20 @@ using namespace ::svxform;
 
 ::rtl::OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
 {
-    ::rtl::OUString aClassName;
-    switch (nClassId)
+    sal_uInt16 nClassNameResourceId = 0;
+
+    switch ( nClassId )
     {
         case FormComponentType::TEXTFIELD:
         {
             Reference< XInterface >  xIFace;
             aUnoObj >>= xIFace;
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_EDIT));
+            nClassNameResourceId = RID_STR_PROPTITLE_EDIT;
             if (xIFace.is())
             {   // we have a chance to check if it's a formatted field model
                 Reference< XServiceInfo >  xInfo(xIFace, UNO_QUERY);
                 if (xInfo.is() && (xInfo->supportsService(FM_SUN_COMPONENT_FORMATTEDFIELD)))
-                    aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_FORMATTED));
+                    nClassNameResourceId = RID_STR_PROPTITLE_FORMATTED;
                 else if (!xInfo.is())
                 {
                     // couldn't distinguish between formatted and edit with the service name, so try with the properties
@@ -199,7 +200,7 @@ using namespace ::svxform;
                     {
                         Reference< XPropertySetInfo >  xPropsInfo = xProps->getPropertySetInfo();
                         if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(FM_PROP_FORMATSSUPPLIER))
-                            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_FORMATTED));
+                            nClassNameResourceId = RID_STR_PROPTITLE_FORMATTED;
                     }
                 }
             }
@@ -207,46 +208,53 @@ using namespace ::svxform;
         break;
 
         case FormComponentType::COMMANDBUTTON:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_PUSHBUTTON)); break;
+            nClassNameResourceId = RID_STR_PROPTITLE_PUSHBUTTON; break;
         case FormComponentType::RADIOBUTTON:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_RADIOBUTTON)); break;
+            nClassNameResourceId = RID_STR_PROPTITLE_RADIOBUTTON; break;
         case FormComponentType::CHECKBOX:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_CHECKBOX)); break;
+            nClassNameResourceId = RID_STR_PROPTITLE_CHECKBOX; break;
         case FormComponentType::LISTBOX:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_LISTBOX)); break;
+            nClassNameResourceId = RID_STR_PROPTITLE_LISTBOX; break;
         case FormComponentType::COMBOBOX:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_COMBOBOX)); break;
+            nClassNameResourceId = RID_STR_PROPTITLE_COMBOBOX; break;
         case FormComponentType::GROUPBOX:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_GROUPBOX)); break;
+            nClassNameResourceId = RID_STR_PROPTITLE_GROUPBOX; break;
         case FormComponentType::IMAGEBUTTON:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_IMAGEBUTTON)); break;
+            nClassNameResourceId = RID_STR_PROPTITLE_IMAGEBUTTON; break;
         case FormComponentType::FIXEDTEXT:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_FIXEDTEXT)); break;
+            nClassNameResourceId = RID_STR_PROPTITLE_FIXEDTEXT; break;
         case FormComponentType::GRIDCONTROL:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_DBGRID)); break;
+            nClassNameResourceId = RID_STR_PROPTITLE_DBGRID; break;
         case FormComponentType::FILECONTROL:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_FILECONTROL)); break;
+            nClassNameResourceId = RID_STR_PROPTITLE_FILECONTROL; break;
         case FormComponentType::DATEFIELD:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_DATEFIELD)); break;
+            nClassNameResourceId = RID_STR_PROPTITLE_DATEFIELD; break;
         case FormComponentType::TIMEFIELD:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_TIMEFIELD)); break;
+            nClassNameResourceId = RID_STR_PROPTITLE_TIMEFIELD; break;
         case FormComponentType::NUMERICFIELD:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_NUMERICFIELD)); break;
+            nClassNameResourceId = RID_STR_PROPTITLE_NUMERICFIELD; break;
         case FormComponentType::CURRENCYFIELD:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_CURRENCYFIELD)); break;
+            nClassNameResourceId = RID_STR_PROPTITLE_CURRENCYFIELD; break;
         case FormComponentType::PATTERNFIELD:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_PATTERNFIELD)); break;
+            nClassNameResourceId = RID_STR_PROPTITLE_PATTERNFIELD; break;
         case FormComponentType::IMAGECONTROL:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_PROPTITLE_IMAGECONTROL)); break;
+            nClassNameResourceId = RID_STR_PROPTITLE_IMAGECONTROL; break;
         case FormComponentType::HIDDENCONTROL:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_HIDDEN_CLASSNAME)); break;
+            nClassNameResourceId = RID_STR_HIDDEN_CLASSNAME; break;
+        case FormComponentType::SCROLLBAR:
+            nClassNameResourceId = RID_STR_PROPTITLE_SCROLLBAR; break;
+        case FormComponentType::SPINBUTTON:
+            nClassNameResourceId = RID_STR_PROPTITLE_SPINBUTTON; break;
 
         case FormComponentType::CONTROL:
         default:
-            aClassName = ::rtl::OUString(SVX_RES(RID_STR_CONTROL_CLASSNAME)); break;
+            nClassNameResourceId = RID_STR_CONTROL_CLASSNAME; break;
     }
 
-    return aClassName;
+    if ( !nClassNameResourceId )
+        return ::rtl::OUString();
+
+    return ::rtl::OUString( SVX_RES( nClassNameResourceId ) );
 }
 
 //========================================================================
