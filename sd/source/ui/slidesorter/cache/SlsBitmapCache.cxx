@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsBitmapCache.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:09:18 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,11 @@ const BitmapEx& BitmapCache::GetBitmap (const CacheKey& rKey)
     CacheBitmapContainer::iterator aIterator (maBitmapContainer.find(rKey));
     if (aIterator == maBitmapContainer.end())
     {
+        // Create an empty bitmap for the given key that acts as placeholder
+        // until we are given the real one.  Mark it as not being up to date.
         SetBitmap (rKey, BitmapEx(), false);
         aIterator = maBitmapContainer.find(rKey);
+        aIterator->second.mbIsUpToDate = false;
     }
     else
         aIterator->second.mnLastAccessTime = mnCurrentAccessTime++;
