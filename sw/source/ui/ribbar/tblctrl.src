@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblctrl.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:16 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ FloatingWindow RID_TBL_OPT_CTRL
     Text [ dutch ] = "Optimaliseren" ;
     Text [ swedish ] = "Optimera" ;
     Text [ danish ] = "Optimer" ;
-    Text [ portuguese_brazilian ] = "Optimieren" ;
+    Text [ portuguese_brazilian ] = "Otimizar" ;
     Text [ portuguese ] = "Optimizar" ;
     Text[ chinese_simplified ] = "æœ€ä½³åŒ–";
     Text[ russian ] = "Îïòèìèçèğîâàòü";
@@ -117,12 +117,24 @@ FloatingWindow RID_TBL_OPT_CTRL
     Text[ arabic ] = "ÇáÔßá ÇáÃãËá";
     Text[ greek ] = "Âåëôéóôïğïßçóç";
     Text[ korean ] = "ìµœì í™”";
-    Text[ turkish ] = "Optimize et";
+    Text[ turkish ] = "İyileştir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Optimitza";
     Text[ finnish ] = "Optimoi";
     Text[ thai ] = "à¸—à¸³à¹ƒà¸«à¹‰à¹€à¸«à¸¡à¸²à¸°à¸—à¸µà¹ˆà¸ªà¸¸à¸”";
+    Text[ czech ] = "Optimalizovat";
+    Text[ hebrew ] = "â€®×¡×™×“×•×¨ ××™×˜×‘×™â€¬";
+    Text[ hindi ] = "à¤¯à¥‹à¤—à¥à¤¯ à¤•à¤°à¤¨à¤¾";
 };
+
+
+
+
+
+
+
+
+
 
 
 
