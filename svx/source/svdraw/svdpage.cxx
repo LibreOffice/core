@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:49:09 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2492,6 +2492,17 @@ Color SdrPage::GetBackgroundColor( SdrPageView* pView ) const
 Color SdrPage::GetBackgroundColor() const
 {
     return GetBackgroundColor( NULL );
+}
+
+/** this method returns true if the object from the SdrPaintProcRec should
+    be visible on this page while rendering.
+    bEdit selects if visibility test is for an editing view or a final render,
+    like printing.
+*/
+bool SdrPage::checkVisibility( SdrPaintProcRec* pRecord, bool bEdit )
+{
+    // this will be handled in the application if needed
+    return true;
 }
 
 // #110094# DrawContact support: Methods for handling Page changes
