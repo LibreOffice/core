@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pythonautotest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:20:26 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,16 +507,16 @@ int __LOADONCALLAPI main (int argc, char **argv)
 
     // check exception handling !
     {
-        TRY {
+        try {
             xInvoke->invoke( L"foo" , Sequence<UsrAny>(1) , Sequence<INT16>(), Sequence<UsrAny> () );
             // wrong number of arguments
             assert( 0 );
         }
-        CATCH ( IllegalArgumentException , e ) {
+        catch ( IllegalArgumentException& e ) {
         }
-        CATCH ( InvocationTargetException , e ) {
+        catch ( InvocationTargetException& e ) {
         }
-        CATCH ( CannotConvertException , e ) {
+        catch ( CannotConvertException& e ) {
             // empty any cannot be converted
         }
     }

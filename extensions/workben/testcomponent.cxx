@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcomponent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:20:48 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ int __LOADONCALLAPI main (int argc, char **argv)
     XImplementationRegistrationRef xReg;
     XSimpleRegistryRef xSimpleReg;
 
-    TRY {
+    try {
         // Create registration service
         XInterfaceRef x = xSMgr->createInstance(
             UString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ) );
@@ -133,16 +133,15 @@ int __LOADONCALLAPI main (int argc, char **argv)
         assert( xSimpleReg.is() );
         xSimpleReg->open( L"testcomp.rdb" , FALSE , TRUE );
 */  }
-    CATCH( Exception ,e ) {
+    catch( Exception& e ) {
         printf( "%s\n" , OWStringToOString( e.getName() , CHARSET_SYSTEM ).getStr() );
         exit(1);
     }
-    END_CATCH;
 
     sal_Char szBuf[1024];
     OString sTestName;
 
-    TRY {
+    try {
         // Load dll for the tested component
         for( int n = 2 ; n <argc ; n ++ ) {
             ORealDynamicLoader::computeModuleName( argv[n] , szBuf, 1024 );
@@ -154,16 +153,15 @@ int __LOADONCALLAPI main (int argc, char **argv)
                 xSimpleReg );
         }
     }
-    CATCH( Exception, e ) {
+    catch( Exception& e ) {
         printf( "Couldn't reach dll %s\n" , szBuf );
         printf( "%s\n" , OWStringToOString( e.getName() , CHARSET_SYSTEM ).getStr() );
 
         exit(1);
     }
-    END_CATCH;
 
 
-    TRY {
+    try {
         // Load dll for the test component
         sTestName = "test";
         sTestName += argv[2];
@@ -175,12 +173,11 @@ int __LOADONCALLAPI main (int argc, char **argv)
             aDllName,
             xSimpleReg );
     }
-    CATCH( Exception , e ) {
+    catch( Exception& e ) {
         printf( "Couldn't reach dll %s\n" , szBuf );
         printf( "%s\n" , OWStringToOString( e.getName() , CHARSET_SYSTEM ).getStr() );
         exit(1);
     }
-    END_CATCH;
 
 
     // Instantiate test service
@@ -212,19 +209,18 @@ int __LOADONCALLAPI main (int argc, char **argv)
         }
 
         // do the test
-        TRY {
+        try {
             nNewHandle = xTest->test( OStringToOWString( argv[1] , CHARSET_SYSTEM ) , x , nHandle );
         }
-        CATCH ( Exception , e ) {
+        catch ( Exception& e ) {
             printf( "testcomponent : uncaught exception %s\n" ,
                         OWStringToOString( e.getName(), CHARSET_SYSTEM ).getStr() );
             exit(1);
         }
-        AND_CATCH_ALL() {
+        catch(...) {
             printf( "testcomponent : uncaught unknown exception\n"  );
             exit(1);
         }
-        END_CATCH;
 
 
         // print errors and warning

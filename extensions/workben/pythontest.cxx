@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pythontest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:20:37 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,14 +332,14 @@ void CmdDebugger::cmdLine()
 
             }
             else if( ! strncmp( pcLine , "idv" , 3) ) {
-                TRY {
+                try {
                     UsrAny any = (*m_pInvokationRef)->getValue( PCHAR_TO_USTRING( &(pcLine[4]) ) );
                     dumpVarToStream( &(pcLine[4]) , any , stderr );
                 }
-                CATCH(UnknownPropertyException,e) {
+                catch(UnknownPropertyException& e ) {
                     fprintf( stderr, "UnknownPropertyException\n" );
                 }
-                CATCH(IllegalArgumentException,e) {
+                catch(IllegalArgumentException& e ) {
                     fprintf( stderr, "IllegalArgumentException\n" );
                 }
             }
