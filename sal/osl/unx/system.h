@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: svesik $ $Date: 2001-04-26 15:36:14 $
+ *  last change: $Author: svesik $ $Date: 2001-04-26 15:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,9 +158,11 @@
 
 #ifdef NETBSD
 #   define  ETIME ETIMEDOUT
+#   define _POSIX_THREAD_SYSCALL_SOFT 1
 #   include <pthread.h>
 #   include <netdb.h>
 #   include <sys/sem.h>
+#   include <sys/exec.h>
 #   include <sys/filio.h>
 #   include <sys/ioctl.h>
 #   include <sys/time.h>
@@ -169,11 +171,11 @@
 #   include <dlfcn.h>
 #   include <machine/endian.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
+#       define _LITTLE_ENDIAN_OO
 #   elif BYTE_ORDER == BIG_ENDIAN
-#       define _BIG_ENDIAN
+#       define _BIG_ENDIAN_OO
 #   elif BYTE_ORDER == PDP_ENDIAN
-#       define _PDP_ENDIAN
+#       define _PDP_ENDIAN_OO
 #   endif
 #   define  PTR_SIZE_T(s)               ((size_t *)&(s))
 #   define  IORESOURCE_TRANSFER_BSD
@@ -181,8 +183,13 @@
 #   define  pthread_testcancel()
 #   define  NO_PTHREAD_PRIORITY
 #   define  NO_PTHREAD_RTL
-#   define  CMD_ARG_PROC_STREAM
-#   define  CMD_ARG_PROC_NAME           "/proc/%u/cmdline"
+/* __progname isn't sufficient here. We need the full path as well
+ * for e.g. setup and __progname only points to the binary name.
+ */
+extern struct ps_strings *__ps_strings;
+#   define  CMD_ARG_PRG         *(__ps_strings->ps_argvstr)
+#   define  CMD_ARG_PRG_IS_DEFINED
+#   define  CMD_ARG_ENV         environ
 #   define  PTHREAD_SIGACTION           pthread_sigaction
 #endif
 
@@ -413,12 +420,22 @@ extern char *strdup(const char *);
 #   error "Target plattform not specified !"
 #endif
 
+#if defined(NETBSD)
+#if defined _LITTLE_ENDIAN_OO
+#   define _OSL_BIGENDIAN
+#elif defined _BIG_ENDIAN_OO
+#   define _OSL_LITENDIAN
+#else
+#   error undetermined endianess
+#endif
+#else
 #if defined _LITTLE_ENDIAN
 #   define _OSL_BIGENDIAN
 #elif defined _BIG_ENDIAN
 #   define _OSL_LITENDIAN
 #else
 #   error undetermined endianess
+#endif
 #endif
 
 #ifndef CMD_ARG_MAX
