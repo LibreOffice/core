@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cd $ $Date: 2002-07-11 10:18:54 $
+ *  last change: $Author: cd $ $Date: 2002-07-17 10:26:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,24 +132,27 @@ OSecurity           OfficeIPCThread::maSecurity;
 
 String CreateMD5FromString( const OUString& aMsg )
 {
+    // PRE: aStr "file"
+    // BACK: Str "ababab....0f" Hexcode String
+
     rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
     if ( handle > 0 )
     {
         const sal_uInt8* pData = (const sal_uInt8*)aMsg.getStr();
         sal_uInt32       nSize = ( aMsg.getLength() * sizeof( sal_Unicode ));
         sal_uInt32       nMD5KeyLen = rtl_digest_queryLength( handle );
-        sal_uInt8*       pMD5KeyBuffer = new sal_uInt8[ nSize ];
+        sal_uInt8*       pMD5KeyBuffer = new sal_uInt8[ nMD5KeyLen ];
 
         rtl_digest_init( handle, pData, nSize );
         rtl_digest_get( handle, pMD5KeyBuffer, nMD5KeyLen );
         rtl_digest_destroy( handle );
 
         // Create hex-value string from the MD5 value to keep the string size minimal
-        OUStringBuffer aBuffer(( nMD5KeyLen * 2 ) + 1 );
+        OUStringBuffer aBuffer( nMD5KeyLen * 2 + 1 );
         for ( sal_uInt32 i = 0; i < nMD5KeyLen; i++ )
             aBuffer.append( (sal_Int32)pMD5KeyBuffer[i], 16 );
 
-        delete []pMD5KeyBuffer;
+        delete [] pMD5KeyBuffer;
         return aBuffer.makeStringAndClear();
     }
 
