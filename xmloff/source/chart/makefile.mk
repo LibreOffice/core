@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+#   last change: $Author: bm $ $Date: 2000-12-15 17:46:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,8 @@ SLOFILES =	$(SLO)$/SchXMLExport.obj \
             $(SLO)$/SchXMLPlotAreaContext.obj \
             $(SLO)$/SchXMLParagraphContext.obj \
             $(SLO)$/PropertyMaps.obj \
-            $(SLO)$/XMLChartStyleContext.obj
+            $(SLO)$/XMLChartStyleContext.obj \
+            $(SLO)$/XMLErrorIndicatorPropertyHdl.obj
 
 # --- Targets --------------------------------------------------------------
 
