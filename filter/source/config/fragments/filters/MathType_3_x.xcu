@@ -7,7 +7,7 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">MathType3.x</value>
+            <value>MathType3.x</value>
         </prop>
         <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN NOTINFILEDIALOG NOTINCHOOSER</value></prop>
     </node>
