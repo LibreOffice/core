@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jl $ $Date: 2000-10-19 10:54:04 $
+#   last change: $Author: kz $ $Date: 2001-10-23 15:35:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,9 +87,6 @@ USE_DEFFILE=YES
 USE_DEFFILE=TRUE
 INCPRE+= -I$(SOLARINCDIR)$/external$/atl
 
-.IF "$(PRODUCT)"=="" || "$(debug)"!=""
-LIBCMT=msvcrtd.lib
-.ENDIF
 # --- Settings -----------------------------------------------------
 
 ENABLE_EXCEPTIONS=TRUE
