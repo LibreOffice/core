@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:25:59 $
+ *  last change: $Author: rt $ $Date: 2001-04-12 07:31:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,7 +563,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_simplified ] = "ÏÔÊ¾µÄ´ó¸Ù¼¶";
                 Text[ russian ] = "Ïîêàç óğîâíåé çàãîëîâêîâ";
                 Text[ polish ] = "Wyœwietlone poziomy konspektu";
-                Text[ japanese ] = "±³Ä×²İÚÍŞÙ";
+                Text[ japanese ] = "Œ©o‚µÚÍŞÙ";
                 Text[ chinese_traditional ] = "Åã¥Üªº¤jºõ¯Å";
                 Text[ arabic ] = "ãÓÊæíÇÊ ÇáÚäÇæíä ÇáÙÇåÑÉ";
                 Text[ greek ] = "Åìöáíéæüìåíá åğßğåäá åğéêåöáëßäùí";
@@ -915,7 +915,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_simplified ] = "ÍÏÒ·Ä£Ê½";
         Text[ russian ] = "Ğåæèì ïåğåòàñêèâàíèÿ";
         Text[ polish ] = "Tryb przeci¹gania";
-        Text[ japanese ] = "ÄŞ×¯¸Ş Ó°ÄŞ";
+        Text[ japanese ] = "ÄŞ×¯¸ŞÓ°ÄŞ";
         Text[ chinese_traditional ] = "©ì¦²¼Ò¦¡";
         Text[ arabic ] = "ØÑíŞÉ ÇáÓÍÈ";
         Text[ greek ] = "ÊáôÜóôáóç óõñìïı";
@@ -1221,7 +1221,7 @@ Window DLG_NAVIGATION_PI
         Text[ swedish ] = "~Förteckning";
         Text[ polish ] = "Indeks";
         Text[ portuguese_brazilian ] = "Ín~ice";
-        Text[ japanese ] = "õˆø(~I)";
+        Text[ japanese ] = "–ÚŸ¥õˆø";
         Text[ korean ] = "»öÀÎ(~I)";
         Text[ chinese_simplified ] = "Ä¿Â¼(~I)";
         Text[ chinese_traditional ] = "¯Á¤Ş(~I)";
@@ -1457,7 +1457,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_simplified ] = "É¾³ıÄ¿Â¼(~R)";
         Text[ russian ] = "Óáğàòü óêàçàòåëü";
         Text[ polish ] = "Usuñ indeks";
-        Text[ japanese ] = "õˆø‚Ì‰ğœ(~R)";
+        Text[ japanese ] = "‰ğœ(~R)";
         Text[ chinese_traditional ] = "¨ú®ø¥Ø¿ı(~R)";
         Text[ arabic ] = "ÅÒÇáÉ ÇáİåÑÓ";
         Text[ greek ] = "ÊáôÜñãçóç åõñåôçñßïõ";
