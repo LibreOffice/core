@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTemplateContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,7 +447,7 @@ const SvXMLEnumMapEntry aLevelNameTOCMap[] =
     { XML_8, 8 },
     { XML_9, 9 },
     { XML_10, 10 },
-    { XML_TOKEN_INVALID, NULL }
+    { XML_TOKEN_INVALID, 0 }
 };
 
 const sal_Char* aLevelStylePropNameTOCMap[] =
