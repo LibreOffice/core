@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-30 11:43:31 $
+ *  last change: $Author: mba $ $Date: 2002-08-23 11:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1414,7 +1414,7 @@ sal_Bool SfxViewFrame::Close()
 {
     DBG_CHKTHIS(SfxViewFrame, 0);
 
-    DBG_ASSERT( GetFrame()->IsClosing_Impl(), "Niemals den ViewFrame vor dem Frame closen!" );
+    DBG_ASSERT( GetFrame()->IsClosing_Impl() || !GetFrame()->GetFrameInterface().is(), "ViewFrame closed too early!" );
 
     // Wenn bis jetzt noch nicht gespeichert wurde, sollen eingebettete Objekte
     // auch nicht mehr automatisch gespeichert werden!
