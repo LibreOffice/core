@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-28 14:15:53 $
+ *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ struct WW8TabBandDesc
 
 class WW8TabDesc
 {
-    SvStringsDtor aNumRuleNames;
+    ::std::vector<String> aNumRuleNames;
 
     SwWW8ImplReader* pIo;
 
@@ -2864,30 +2864,11 @@ void WW8TabDesc::TableCellEnd()
         // SwWW8ImplReader::ProcessSpecial()
 
         USHORT iCol = GetLogicalWWCol();
-        if( iCol < aNumRuleNames.Count() )
-            aNumRuleNames.DeleteAndDestroy( iCol, aNumRuleNames.Count()-iCol );
-#if 0
-        /*Hang on, we can have character runs that contain for example...
-        <bold>
-        text
-            Table
-        text
-        </bold>
-
-        This invalidates all attributes causing in our bold example the
-        incorrect...
-
-        <bold>
-        text
-            Table
-        </bold>
-        text
-
-        If this code is truly necessary it needs to be done a different way,
-        cmc 18/04/2001
-        */
-        pIo->pCtrlStck->SetAttr( *pIo->pPaM->GetPoint(), 0, FALSE );
-#endif
+        if (iCol < aNumRuleNames.size())
+        {
+            aNumRuleNames.erase(aNumRuleNames.begin() + iCol,
+                aNumRuleNames.end());
+        }
 
         nAktCol = 0;
         nAktRow++;
@@ -2981,28 +2962,22 @@ USHORT WW8TabDesc::GetLogicalWWCol() const // returns number of col as INDICATED
     return nCol;
 }
 
-const String& WW8TabDesc::GetNumRuleName() const // find name of numrule valid for current WW-COL
+// find name of numrule valid for current WW-COL
+const String& WW8TabDesc::GetNumRuleName() const
 {
     USHORT nCol = GetLogicalWWCol();
-    const String*   pName =   aNumRuleNames.Count()  > nCol
-                            ? aNumRuleNames.GetObject( nCol )
-                            : 0;
-    return pName ? *pName : aEmptyStr;
+    if (nCol < aNumRuleNames.size())
+        return aNumRuleNames[nCol];
+    else
+        return aEmptyStr;
 }
 
 void WW8TabDesc::SetNumRuleName( const String& rName )
 {
     USHORT nCol = GetLogicalWWCol();
-    String* pName = 0;
-    while( aNumRuleNames.Count() <= nCol )
-    {
-        aNumRuleNames.Insert( pName, aNumRuleNames.Count() );
-    }
-    String* pOldName = aNumRuleNames.GetObject( nCol );
-    pName = new String( rName );
-    aNumRuleNames.Replace( pName, nCol );
-    if( pOldName )
-        delete pOldName;
+    for (USHORT nSize = aNumRuleNames.size(); nSize <= nCol; ++nSize)
+        aNumRuleNames.push_back(aEmptyStr);
+    aNumRuleNames[nCol] = rName;
 }
 
 BOOL SwWW8ImplReader::StartTable(WW8_CP nStartCp)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8glsy.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:55 $
+ *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,6 @@
 #include <tools/urlobj.hxx>
 #endif
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
-#endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
@@ -150,9 +146,9 @@ bool WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc,SwNodeIndex &rIdx)
     return bRet;
 }
 
-bool WW8Glossary::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks,
-                                bool bSaveRelFile, SvStrings& rStrings,
-                                SvStrings& rExtra )
+bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
+    bool bSaveRelFile, const ::std::vector<String>& rStrings,
+    const ::std::vector<String>& rExtra)
 {
     // this code will be called after reading all text into the
     // empty sections
@@ -217,13 +213,13 @@ bool WW8Glossary::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks,
             // entry (== -1) otherwise the group indicates the group in the
             // sttbfglsystyle list that this entry belongs to. Unused at the
             // moment
-            INT16 group = rExtra[nGlosEntry]->ToInt32() + 2;
+            INT16 group = rExtra[nGlosEntry].ToInt32() + 2;
             if (group != -1)
             {
                 rBlocks.ClearDoc();
-                String sLNm( *rStrings[nGlosEntry] );
-                if( rBlocks.BeginPutDoc( rBlocks.GetValidShortCut(sLNm,true),
-                    sLNm ))
+                const String &rLNm = rStrings[nGlosEntry];
+                if( rBlocks.BeginPutDoc( rBlocks.GetValidShortCut(rLNm,true),
+                    rLNm ))
                 {
                     SwDoc* pGlDoc = rBlocks.GetDoc();
                     SwNodeIndex aIdx( pGlDoc->GetNodes().GetEndOfContent(),
@@ -255,7 +251,8 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
     if( pGlossary->IsGlossaryFib() && rBlocks.StartPutMuchBlockEntries() )
     {
         //read the names of the autotext entries
-        SvStrings aStrings( 0, 64 ), aExtra( 0, 64 );
+        ::std::vector<String> aStrings;
+        ::std::vector<String> aExtra;
 
         rtl_TextEncoding eStructCharSet =
             WW8Fib::GetFIBCharset(pGlossary->chseTables);
@@ -265,7 +262,7 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
 
         rStrm->Seek(0);
 
-        if (nStrings = aStrings.Count())
+        if (nStrings = aStrings.size())
         {
             SfxObjectShellRef xDocSh(new SwDocShell(SFX_CREATE_MODE_INTERNAL));
             if (xDocSh->DoInitNew(0))
@@ -292,9 +289,6 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
             }
             xDocSh->DoClose();
             rBlocks.EndPutMuchBlockEntries();
-
-            aStrings.DeleteAndDestroy( 0, nStrings );
-            aExtra.DeleteAndDestroy( 0, aExtra.Count() );
         }
     }
     return bRet;

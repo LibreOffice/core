@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:56 $
+ *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,14 +522,15 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
 void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
     INT32 nTblPos, INT32 nTblSiz, SwDoc& rDocOut )
 {
-    SvStrings aAuthorNames( 0, 16 );
+    ::std::vector<String> aAuthorNames;
     WW8ReadSTTBF( !bVer67, rStrm, nTblPos, nTblSiz, bVer67 ? 2 : 0,
         eStructCharSet, aAuthorNames );
 
-    for( USHORT nAuthor = 0; nAuthor < aAuthorNames.Count(); ++nAuthor )
+    USHORT nCount = aAuthorNames.size();
+    for( USHORT nAuthor = 0; nAuthor < nCount; ++nAuthor )
     {
         // Store author in doc
-        USHORT nSWId = rDocOut.InsertRedlineAuthor( *aAuthorNames[ nAuthor ] );
+        USHORT nSWId = rDocOut.InsertRedlineAuthor(aAuthorNames[nAuthor]);
         // Store matchpair
         if( !pAuthorInfos )
             pAuthorInfos = new WW8AuthorInfos;
@@ -537,8 +538,6 @@ void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
         if( 0 == pAuthorInfos->Insert( pAutorInfo ) )
             delete pAutorInfo;
     }
-
-    aAuthorNames.DeleteAndDestroy( 0, aAuthorNames.Count() );
 }
 
 /*

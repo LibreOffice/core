@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-27 16:04:18 $
+ *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -991,12 +991,8 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
             while( STRING_NOTFOUND != aString.SearchAndReplace( 0xb, ' ' ))
                 ;   // HardNewline kann EE noch nicht in der EE-Core
 
-        if( !pDrawEditEngine )
-#if SUPD>601
+        if (!pDrawEditEngine)
             pDrawEditEngine = new EditEngine(0);
-#else
-            pDrawEditEngine = new EditEngine;
-#endif
         if( pObjSiz )
             pDrawEditEngine->SetPaperSize( *pObjSiz );
     }
@@ -2307,7 +2303,6 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
     }
 }
 
-#pragma optimize("",off)
 SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 {
     if( nIniFlags & WW8FL_NO_GRAFLAYER )
@@ -2902,7 +2897,6 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
     }
     return pRetFrmFmt;
 }
-#pragma optimize("",on)
 
 void SwWW8ImplReader::GrafikCtor()  // Fuer SVDraw und VCControls und Escher
 {

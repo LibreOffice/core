@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-27 11:07:39 $
+ *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,6 @@
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
-
-#define _SVSTDARR_STRINGSSORTDTOR
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -872,11 +870,10 @@ void wwFontHelper::WriteFontTable(SvStream *pTableStream, WW8Fib& rFib)
      */
     ::std::vector<const wwFont *> aFontList(maFonts.size());
 
-    for(::std::map<wwFont, USHORT>::iterator aIter = maFonts.begin();
-        aIter != maFonts.end(); ++aIter)
-    {
+    typedef ::std::map<wwFont, USHORT>::iterator myiter;
+    myiter aEnd = maFonts.end();
+    for(myiter aIter = maFonts.begin(); aIter != aEnd; ++aIter)
         aFontList[aIter->second] = &aIter->first;
-    }
 
     /*
      * Write them all to pTableStream
@@ -1774,13 +1771,15 @@ BOOL WW8_WrPlcSubDoc::WriteGenericTxt( SwWW8Writer& rWrt, BYTE nTTyp,
 void WW8_WrPlcSubDoc::WriteGenericPlc( SwWW8Writer& rWrt, BYTE nTTyp,
     long& rTxtStart, long& rTxtCount, long& rRefStart, long& rRefCount ) const
 {
+    typedef ::std::vector<String>::iterator myiter;
+
     ULONG nFcStart = rWrt.pTableStrm->Tell();
     USHORT nLen = aCps.Count();
     if( nLen )
     {
         ASSERT( aCps.Count() + 2 == pTxtPos->Count(), "WritePlc: DeSync" );
 
-        SvStringsSortDtor aStrArr( 0, 4 );
+        ::std::vector<String> aStrArr;
         WW8Fib& rFib = *rWrt.pFib;              // n+1-te CP-Pos nach Handbuch
         USHORT i;
         BOOL bWriteCP = TRUE;
@@ -1788,37 +1787,45 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( SwWW8Writer& rWrt, BYTE nTTyp,
         switch( nTTyp )
         {
         case TXT_ATN:
-            // then write first the GrpXstAtnOwners
-            for( i = 0; i < nLen; ++i )
             {
-                const SwPostItField& rPFld = *(SwPostItField*)aCntnt[ i ];
-                String* p = new String( rPFld.GetPar1() );
-                if( !aStrArr.Insert( p ))
-                    delete p;
+                // then write first the GrpXstAtnOwners
+                for( i = 0; i < nLen; ++i )
+                {
+                    const SwPostItField& rPFld = *(SwPostItField*)aCntnt[ i ];
+                    aStrArr.push_back(rPFld.GetPar1());
+                }
+
+                //sort and remove duplicates
+                ::std::sort(aStrArr.begin(), aStrArr.end());
+                myiter aIter = ::std::unique(aStrArr.begin(), aStrArr.end());
+                aStrArr.erase(aIter, aStrArr.end());
+
+                if( rWrt.bWrtWW8 )
+                {
+                    for( i = 0; i < aStrArr.size(); ++i )
+                    {
+                        const String& rStr = aStrArr[i];
+                        SwWW8Writer::WriteShort(*rWrt.pTableStrm, rStr.Len());
+                        SwWW8Writer::WriteString16(*rWrt.pTableStrm, rStr,
+                            FALSE);
+                    }
+                }
+                else
+                {
+                    for( i = 0; i < aStrArr.size(); ++i )
+                    {
+                        const String& rStr = aStrArr[i];
+                        *rWrt.pTableStrm << (BYTE)rStr.Len();
+                        SwWW8Writer::WriteString8(*rWrt.pTableStrm, rStr, FALSE,
+                            RTL_TEXTENCODING_MS_1252);
+                    }
+                }
+
+                rFib.fcGrpStAtnOwners = nFcStart;
+                nFcStart = rWrt.pTableStrm->Tell();
+                rFib.lcbGrpStAtnOwners = nFcStart - rFib.fcGrpStAtnOwners;
             }
-
-
-            if( rWrt.bWrtWW8 )
-                for( i = 0; i < aStrArr.Count(); ++i )
-                {
-                    const String& rStr = *aStrArr[ i ];
-                    SwWW8Writer::WriteShort( *rWrt.pTableStrm, rStr.Len() );
-                    SwWW8Writer::WriteString16( *rWrt.pTableStrm, rStr, FALSE );
-                }
-            else
-                for( i = 0; i < aStrArr.Count(); ++i )
-                {
-                    const String& rStr = *aStrArr[ i ];
-                    *rWrt.pTableStrm << (BYTE)rStr.Len();
-                    SwWW8Writer::WriteString8( *rWrt.pTableStrm, rStr, FALSE,
-                                                RTL_TEXTENCODING_MS_1252 );
-                }
-
-            rFib.fcGrpStAtnOwners = nFcStart;
-            nFcStart = rWrt.pTableStrm->Tell();
-            rFib.lcbGrpStAtnOwners = nFcStart - rFib.fcGrpStAtnOwners;
             break;
-
         case TXT_TXTBOX:
         case TXT_HFTXTBOX:
             {
@@ -1875,20 +1882,25 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( SwWW8Writer& rWrt, BYTE nTTyp,
 
             // n+1-te CP-Pos nach Handbuch
             SwWW8Writer::WriteLong( *rWrt.pTableStrm,
-                                            rFib.ccpText + rFib.ccpFtn +
-                                            rFib.ccpHdr + rFib.ccpEdn +
-                                            rFib.ccpTxbx + rFib.ccpHdrTxbx + 1 );
+                rFib.ccpText + rFib.ccpFtn + rFib.ccpHdr + rFib.ccpEdn +
+                rFib.ccpTxbx + rFib.ccpHdrTxbx + 1 );
 
             if( TXT_ATN == nTTyp )
             {
-                USHORT nFndPos;
                 for( i = 0; i < nLen; ++i )
                 {
                     const SwPostItField& rPFld = *(SwPostItField*)aCntnt[ i ];
-                    String sAuthor( rPFld.GetPar1() );
-                    aStrArr.Seek_Entry( &sAuthor, &nFndPos );
+
+                    //aStrArr is sorted
+                    myiter aIter = ::std::lower_bound(aStrArr.begin(),
+                        aStrArr.end(), rPFld.GetPar1());
+                    ASSERT(aIter != aStrArr.end() && *aIter == rPFld.GetPar1(),
+                        "Impossible");
+                    sal_uInt16 nFndPos = aIter - aStrArr.begin();
+
+                    String sAuthor(*aIter);
                     BYTE nNameLen = (BYTE)sAuthor.Len();
-                    if( nNameLen > 9 )
+                    if (nNameLen > 9)
                     {
                         sAuthor.Erase( 9 );
                         nNameLen = 9;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-28 09:50:24 $
+ *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,6 @@
 #include "ww8glsy.hxx"
 #endif
 
-class SvStringsDtor;
 class SwDoc;
 class SwPaM;
 class SfxPoolItem;
@@ -669,7 +668,7 @@ friend class WW8FormulaControl;
 
     SwMSDffManager* pMSDffManager;
 
-    SvStringsDtor* pAtnNames;
+    ::std::vector<String>* mpAtnNames;
 
     WW8AuthorInfos* pAuthorInfos;
     WW8OleMaps* pOleMap;
@@ -1086,7 +1085,7 @@ friend class WW8FormulaControl;
 
 // spaeter zu ersetzen durch Aufruf in entsprechend erweiterten SvxMSDffManager
 
-    const String* GetAnnotationAuthor( short nId );
+    const String* GetAnnotationAuthor(sal_uInt16 nIdx);
 
     // Schnittstellen fuer die Toggle-Attribute
     void SetToggleAttr( BYTE nAttrId, BOOL bOn );

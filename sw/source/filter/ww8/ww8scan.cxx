@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-28 14:17:55 $
+ *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,8 @@
 
 #include <string.h>         // memset()
 
-#define _SVSTDARR_SHORTS
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
-#define _SVSTDARR_SVSTRINGS
 #include <svtools/svstdarr.hxx>
 
 #ifndef _RTL_TENCINFO_H
@@ -3567,13 +3565,11 @@ BOOL WW8PLCFx_FLD::GetPara( long nIdx, WW8FieldDesc& rF )
 
 /*  to be optimized like this:    */
 void WW8ReadSTTBF(BOOL bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
-    USHORT nExtraLen, rtl_TextEncoding eCS, SvStrings &rArray,
-    SvStrings* pExtraArray)
+    USHORT nExtraLen, rtl_TextEncoding eCS, ::std::vector<String> &rArray,
+    ::std::vector<String>* pExtraArray)
 {
     ULONG nOldPos = rStrm.Tell();
     rStrm.Seek( nStart );
-
-    String* pWork;
 
     UINT16 nLen2;
     rStrm >> nLen2; // bVer67: total length of structure
@@ -3593,27 +3589,24 @@ void WW8ReadSTTBF(BOOL bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
         for( USHORT i=0; i < nStrings; i++ )
         {
             if( bUnicode )
-                pWork = new String( WW8Read_xstz( rStrm, 0, FALSE ));
+                rArray.push_back(WW8Read_xstz(rStrm, 0, FALSE));
             else
             {
                 BYTE nBChar;
                 rStrm >> nBChar;
                 ByteString aTmp;
                 SafeReadString(aTmp,nBChar,rStrm);
-                pWork = new String( aTmp, eCS );
+                rArray.push_back(String(aTmp, eCS));
             }
-
-            rArray.Insert( pWork, rArray.Count() );
 
             // Skip the extra data
             if( nExtraLen )
             {
-                if( pExtraArray )
+                if (pExtraArray)
                 {
                     ByteString aTmp;
                     SafeReadString(aTmp,nExtraLen,rStrm);
-                    pWork = new String( aTmp, eCS );
-                    pExtraArray->Insert( pWork, pExtraArray->Count() );
+                    pExtraArray->push_back(String(aTmp, eCS));
                 }
                 else
                     rStrm.SeekRel( nExtraLen );
@@ -3636,27 +3629,24 @@ void WW8ReadSTTBF(BOOL bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
         for( nLen2 -= 2; nRead < nLen2;  )
         {
             rStrm >> nBChar; ++nRead;
-            if( nBChar )
+            if (nBChar)
             {
                 ByteString aTmp;
                 nRead += SafeReadString(aTmp,nBChar,rStrm);
-                pWork = new String( aTmp, eCS );
+                rArray.push_back(String(aTmp, eCS));
             }
             else
-                pWork = new String;
-
-            rArray.Insert( pWork, rArray.Count() );
+                rArray.push_back(aEmptyStr);
 
             // #89125# Skip the extra data (for bVer67 versions this must come
             // from external knowledge)
-            if( nExtraLen )
+            if (nExtraLen)
             {
-                if( pExtraArray )
+                if (pExtraArray)
                 {
                     ByteString aTmp;
                     SafeReadString(aTmp,nExtraLen,rStrm);
-                    pWork = new String( aTmp, eCS );
-                    pExtraArray->Insert( pWork, pExtraArray->Count() );
+                    pExtraArray->push_back(String(aTmp, eCS));
                 }
                 else
                     rStrm.SeekRel( nExtraLen );
@@ -3688,7 +3678,7 @@ WW8PLCFx_Book::WW8PLCFx_Book(SvStream* pTblSt, const WW8Fib& rFib)
         WW8ReadSTTBF( (7 < rFib.nVersion), *pTblSt, rFib.fcSttbfbkmk,
             rFib.lcbSttbfbkmk, 0, eStructChrSet, aBookNames );
 
-        nIMax = aBookNames.Count();
+        nIMax = aBookNames.size();
 
         if( pBook[0]->GetIMax() < nIMax )   // Count of Bookmarks
             nIMax = pBook[0]->GetIMax();
@@ -3702,7 +3692,6 @@ WW8PLCFx_Book::WW8PLCFx_Book(SvStream* pTblSt, const WW8Fib& rFib)
 WW8PLCFx_Book::~WW8PLCFx_Book()
 {
     delete[] pStatus;
-    aBookNames.DeleteAndDestroy( 0, aBookNames.Count() );
     delete pBook[1];
     delete pBook[0];
 }
@@ -3878,7 +3867,7 @@ String WW8PLCFx_Book::GetBookmark(long nStart,long nEnd, USHORT &nIndex)
         }
         while (i < pBook[0]->GetIMax());
     }
-    return bFound ? *aBookNames[i] : aEmptyStr;
+    return bFound ? aBookNames[i] : aEmptyStr;
 }
 
 BOOL WW8PLCFx_Book::MapName(String& rName)
@@ -3902,9 +3891,9 @@ BOOL WW8PLCFx_Book::MapName(String& rName)
             nEndIdx = i;
         }
         nEndAkt = pBook[1]->GetPos( nEndIdx );
-        if (COMPARE_EQUAL == rName.CompareIgnoreCaseToAscii(*aBookNames[i]))
+        if (COMPARE_EQUAL == rName.CompareIgnoreCaseToAscii(aBookNames[i]))
         {
-            rName = *aBookNames[i];
+            rName = aBookNames[i];
             bFound = TRUE;
         }
         ++i;
@@ -3912,6 +3901,15 @@ BOOL WW8PLCFx_Book::MapName(String& rName)
     while (!bFound && i < pBook[0]->GetIMax());
     return bFound;
 }
+
+const String* WW8PLCFx_Book::GetName() const
+{
+    const String *pRet = 0;
+    if (!nIsEnd && (pBook[0]->GetIdx() < nIMax))
+        pRet = &(aBookNames[pBook[0]->GetIdx()]);
+    return pRet;
+}
+
 //-----------------------------------------
 //          WW8PLCFMan
 //-----------------------------------------

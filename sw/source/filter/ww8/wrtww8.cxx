@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-25 11:31:09 $
+ *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,13 +64,15 @@
 #pragma hdrstop
 #endif
 
+#ifndef __SGI_STL_ALGORITHM
+#include <algorithm>
+#endif
+
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
-
-#include <string.h>             // memcpy()
-
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
+#include <string.h>             // memcpy()
 #ifndef _SWDOCSH_HXX
 #include <docsh.hxx>
 #endif
@@ -275,7 +277,7 @@ class WW8_WrtBookmarks
 private:
     SvULongs aSttCps, aEndCps;      // Array of Start- and End CPs
     SvBools aFieldBookmarks;       // If the bookmark is in a field result
-    SvStringsDtor aSwBkmkNms;       // Array of Sw - Bookmarknames
+    ::std::vector<String> maSwBkmkNms;  // Array of Sw - Bookmarknames
 
     USHORT GetPos( const String& rNm );
 
@@ -296,7 +298,7 @@ public:
 class WW8_WrtRedlineAuthor
 {
 private:
-    SvStringsDtor aAuthors;             // Array of Sw - Bookmarknames
+    ::std::vector<String> maAuthors;            // Array of Sw - Bookmarknames
 
     USHORT GetPos( const String& rNm );
 
@@ -304,7 +306,7 @@ private:
     WW8_WrtRedlineAuthor(const WW8_WrtRedlineAuthor&);
     WW8_WrtRedlineAuthor& operator=(const WW8_WrtRedlineAuthor&);
 public:
-    WW8_WrtRedlineAuthor() : aAuthors( 0, 4 ) {}
+    WW8_WrtRedlineAuthor() {}
 
     USHORT AddName( const String& rNm );
     void Write( SwWW8Writer& rWrt );
@@ -1275,9 +1277,7 @@ ULONG WW8_WrPct::Fc2Cp( ULONG nFc ) const
 /*  */
 
 WW8_WrtBookmarks::WW8_WrtBookmarks()
-    : aSttCps( 0, 16 ), aEndCps( 0, 16 ),
-    aSwBkmkNms( 0, 16 )
-// JP 24.06.99: not used at time    ,aWWBkmkNms( 0, 16 ),
+    : aSttCps( 0, 16 ), aEndCps( 0, 16 )
 {
 }
 
@@ -1300,11 +1300,7 @@ void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const String& rNm )
         aSttCps.Insert( nStartCp, nPos );
         aEndCps.Insert( nStartCp, nPos );
         aFieldBookmarks.Insert( BOOL(FALSE), nPos );
-        String* p = new String( rNm );
-        aSwBkmkNms.Insert( p, nPos );
-// JP 24.06.99: not used at time
-//      p = new String( GetWWBkmkName(rNm ));
-//      aWWBkmkNms.Insert( p, nPos );
+        maSwBkmkNms.push_back(rNm);
     }
     else
     {
@@ -1340,9 +1336,8 @@ void WW8_WrtBookmarks::Write( SwWW8Writer& rWrt )
 
         // we have some bookmarks found in the document -> write them
         // first the Bookmark Name Stringtable
-        rWrt.WriteAsStringTable( (SvStrings&)aSwBkmkNms,
-                                    rWrt.pFib->fcSttbfbkmk,
-                                    rWrt.pFib->lcbSttbfbkmk );
+        rWrt.WriteAsStringTable(maSwBkmkNms, rWrt.pFib->fcSttbfbkmk,
+            rWrt.pFib->lcbSttbfbkmk);
 
         // second the Bookmark start positions as pcf of longs
         SvStream& rStrm = rWrt.bWrtWW8 ? *rWrt.pTableStrm : rWrt.Strm();
@@ -1376,19 +1371,11 @@ void WW8_WrtBookmarks::Write( SwWW8Writer& rWrt )
     }
 }
 
-// JP 24.06.99: not used at time
-/*String WW8_WrtBookmarks::GetWWBkmkName( const String& rName ) const
-{
-    // replace all characters that will WinWord not understand
-    return rName;
-}
-*/
-
 USHORT WW8_WrtBookmarks::GetPos( const String& rNm )
 {
     USHORT nRet = USHRT_MAX, n;
-    for( n = 0; n < aSttCps.Count(); ++n )
-        if( rNm == *aSwBkmkNms.GetObject( n ))
+    for (n = 0; n < aSttCps.Count(); ++n)
+        if (rNm == maSwBkmkNms[n])
         {
             nRet = n;
             break;
@@ -1468,21 +1455,17 @@ void SwWW8Writer::AppendBookmark( const String& rName, USHORT nOffset )
 
 USHORT WW8_WrtRedlineAuthor::AddName( const String& rNm )
 {
-    for( USHORT n = 0, nCnt = aAuthors.Count(); n < nCnt; ++n )
-        if( *aAuthors[ n ] == rNm )
-            return n;
-
-    String* pNew = new String( rNm );
-    aAuthors.Insert( pNew, n );
-    return n;
+    typedef ::std::vector<String>::iterator myiter;
+    myiter aIter = ::std::find(maAuthors.begin(), maAuthors.end(), rNm);
+    if (aIter == maAuthors.end())
+        maAuthors.push_back(rNm);
+    return aIter - maAuthors.begin();
 }
 
 void WW8_WrtRedlineAuthor::Write( SwWW8Writer& rWrt )
 {
-    rWrt.WriteAsStringTable( (SvStrings&)aAuthors,
-                                rWrt.pFib->fcSttbfRMark,
-                                rWrt.pFib->lcbSttbfRMark,
-                                rWrt.bWrtWW8 ? 0 : 2 );
+    rWrt.WriteAsStringTable(maAuthors, rWrt.pFib->fcSttbfRMark,
+        rWrt.pFib->lcbSttbfRMark, rWrt.bWrtWW8 ? 0 : 2);
 }
 
 USHORT SwWW8Writer::AddRedlineAuthor( USHORT nId )
@@ -1498,11 +1481,10 @@ USHORT SwWW8Writer::AddRedlineAuthor( USHORT nId )
 //--------------------------------------------------------------------------
 /*  */
 
-void SwWW8Writer::WriteAsStringTable( const SvStrings& rStrings,
-                                        INT32& rfcSttbf, INT32& rlcbSttbf,
-                                        USHORT nExtraLen )
+void SwWW8Writer::WriteAsStringTable(const ::std::vector<String>& rStrings,
+    INT32& rfcSttbf, INT32& rlcbSttbf, USHORT nExtraLen)
 {
-    USHORT n, nCount = rStrings.Count();
+    USHORT n, nCount = rStrings.size();
     if( nCount )
     {
         // we have some Redlines found in the document -> the
@@ -1515,7 +1497,7 @@ void SwWW8Writer::WriteAsStringTable( const SvStrings& rStrings,
             SwWW8Writer::WriteLong( rStrm, nCount );
             for( n = 0; n < nCount; ++n )
             {
-                const String& rNm = *rStrings[ n ];
+                const String& rNm = rStrings[n];
                 SwWW8Writer::WriteShort( rStrm, rNm.Len() );
                 SwWW8Writer::WriteString16( rStrm, rNm, FALSE );
                 if( nExtraLen )
@@ -1527,7 +1509,7 @@ void SwWW8Writer::WriteAsStringTable( const SvStrings& rStrings,
             SwWW8Writer::WriteShort( rStrm, 0 );
             for( n = 0; n < nCount; ++n )
             {
-                const String aNm( rStrings[ n ]->Copy(0, 255 ));
+                const String aNm(rStrings[n].Copy(0, 255));
                 rStrm << (BYTE)aNm.Len();
                 SwWW8Writer::WriteString8( rStrm, aNm, FALSE,
                                                 RTL_TEXTENCODING_MS_1252 );

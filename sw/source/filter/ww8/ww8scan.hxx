@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-28 14:17:55 $
+ *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef __SGI_STLSTACK
 #include <stack>
 #endif
+#ifndef __SGI_STL_VECTOR
+#include <vector>
+#endif
 
 #ifndef _SOLAR_H
 #include <tools/solar.h>        // UINTXX
@@ -81,9 +84,6 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
-
-#define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
 
 #ifndef WW8STRUC_HXX
 #include "ww8struc.hxx"         // FIB, STSHI, STD...
@@ -176,8 +176,8 @@ String WW8Read_xstz(SvStream& rStrm, USHORT nChars, BOOL bAtEndSeekRel1);
  attention: the *extra data* of each string are SKIPPED and ignored
  */
 void WW8ReadSTTBF( BOOL bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
-    USHORT nExtraLen, rtl_TextEncoding eCS, SvStrings &rArray,
-    SvStrings* pExtraArray = 0 );
+    USHORT nExtraLen, rtl_TextEncoding eCS, ::std::vector<String> &rArray,
+    ::std::vector<String>* pExtraArray = 0 );
 
 struct WW8FieldDesc
 {
@@ -681,7 +681,7 @@ class WW8PLCFx_Book : public WW8PLCFx
 {
 private:
     WW8PLCFspecial* pBook[2];           // Start and End Position
-    SvStrings aBookNames;               // Name
+    ::std::vector<String> aBookNames;   // Name
     eBookStatus* pStatus;
     long nIMax;                         // Number of Booknotes
     USHORT nIsEnd;
@@ -701,12 +701,7 @@ public:
     virtual long Where();
     virtual long GetNoSprms( long& rStart, long& rEnd, long& rLen );
     virtual WW8PLCFx& operator ++( int );
-    const String* GetName() const
-    {
-        return ( !nIsEnd && ( (long)(pBook[0]->GetIdx()) < nIMax ) )
-            ? aBookNames[ (USHORT)pBook[0]->GetIdx() ]
-            : 0;
-    }
+    const String* GetName() const;
     WW8_CP GetStartPos() const
         { return ( nIsEnd ) ? LONG_MAX : pBook[0]->Where(); }
     long GetLen() const;

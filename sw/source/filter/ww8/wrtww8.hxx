@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-27 11:07:40 $
+ *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef _WRTWW8_HXX
 #define _WRTWW8_HXX
 
+#ifndef __SGI_STL_VECTOR
+#include <vector>
+#endif
+
 #ifndef _SOLAR_H
 #include <tools/solar.h>        // UINTXX
 #endif
@@ -71,8 +75,6 @@
 #define _SVSTDARR_BOOLS
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
-#define _SVSTDARR_STRINGS
-#define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 #endif
 
@@ -511,8 +513,8 @@ public:
     void MoveFieldBookmarks(ULONG nFrom, ULONG nTo);
     BOOL HasRefToObject( USHORT nTyp, const String* pNm, USHORT nSeqNo );
 
-    void WriteAsStringTable( const SvStrings&, INT32& rfcSttbf,
-                                INT32& rlcbSttbf, USHORT nExtraLen = 0 );
+    void WriteAsStringTable(const ::std::vector<String>&, INT32& rfcSttbf,
+        INT32& rlcbSttbf, USHORT nExtraLen = 0);
     void WriteText();
     void WriteCR();
     void WriteChar( sal_Unicode c );

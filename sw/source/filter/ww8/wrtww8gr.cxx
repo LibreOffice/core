@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 09:50:28 $
+ *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,9 @@
 #endif
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
+#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
+#endif
 
 #ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>

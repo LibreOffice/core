@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-28 09:54:38 $
+ *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
-#define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 #endif
 
@@ -954,12 +953,7 @@ void SwWW8ImplReader::Read_HdFtFtnText( const SwNodeIndex* pSttIdx,
     aSave.Restore( this );
 }
 
-// JP 03.12.98 - Anmerkungen einlesen
-// - Als default wird erstmal das Initial als Author benutzt. Im Writer wird
-//  auch immer das Initial benutzt!
-#undef AUTHOR_AS_AUTHOR
-#define INITIAL_AS_AUTHOR
-
+//Use authornames, if not available fall back to initials.
 long SwWW8ImplReader::Read_And( WW8PLCFManResult* pRes, BOOL )
 {
     WW8PLCFx_SubDoc* pSD = pPlcxMan->GetAtn();
@@ -969,33 +963,27 @@ long SwWW8ImplReader::Read_And( WW8PLCFManResult* pRes, BOOL )
     String sAuthor;
     if( bVer67 )
     {
-        const WW67_ATRD* pDescri = (WW67_ATRD*)pSD->GetData();
-#ifdef AUTHOR_AS_AUTHOR
-        const String* pA = GetAnnotationAuthor(SVBT16ToShort( pDescri->ibst ));
-        if( pA )
+        const WW67_ATRD* pDescri = (const WW67_ATRD*)pSD->GetData();
+        const String* pA = GetAnnotationAuthor(SVBT16ToShort(pDescri->ibst));
+        if (pA)
             sAuthor = *pA;
-#endif
-
-#ifdef INITIAL_AS_AUTHOR
-        sAuthor = String( pDescri->xstUsrInitl + 1, pDescri->xstUsrInitl[0],
-            RTL_TEXTENCODING_MS_1252);
-#endif
+        else
+            sAuthor = String(pDescri->xstUsrInitl + 1, pDescri->xstUsrInitl[0],
+                RTL_TEXTENCODING_MS_1252);
     }
     else
     {
         const WW8_ATRD* pDescri = (const WW8_ATRD*)pSD->GetData();
 
-#ifdef AUTHOR_AS_AUTHOR
-        const String* pA = GetAnnotationAuthor(SVBT16ToShort( pDescri->ibst ));
+        const String* pA = GetAnnotationAuthor(SVBT16ToShort(pDescri->ibst));
         if( pA )
             sAuthor = *pA;
-#endif
-
-#ifdef INITIAL_AS_AUTHOR
-        short nLen = SVBT16ToShort( pDescri->xstUsrInitl[0] );
-        for( BYTE nIdx = 1; nIdx <= nLen; ++nIdx)
-            sAuthor += SVBT16ToShort( pDescri->xstUsrInitl[ nIdx ] );
-#endif
+        else
+        {
+            sal_uInt16 nLen = SVBT16ToShort(pDescri->xstUsrInitl[0]);
+            for(sal_uInt16 nIdx = 1; nIdx <= nLen; ++nIdx)
+                sAuthor += SVBT16ToShort(pDescri->xstUsrInitl[nIdx]);
+        }
     }
 
     SwNodeIndex aNdIdx( rDoc.GetNodes().GetEndOfExtras() );
@@ -2184,7 +2172,7 @@ BOOL SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
 SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     SvStream* pSt, SwDoc& rD, bool bNewDoc )
     : pStg( pStorage ), rDoc( rD ), pStrm( pSt ), mbNewDoc(bNewDoc),
-    pMSDffManager( 0 ), pAtnNames( 0 ), pAuthorInfos( 0 ), pOleMap(0),
+    pMSDffManager( 0 ), mpAtnNames( 0 ), pAuthorInfos( 0 ), pOleMap(0),
     pTabNode(0), pLastPgDeskIdx( 0 ), pDataStream( 0 ), pTableStream( 0 ),
     aGrfNameGenerator(bNewDoc,String('G'))
 {
@@ -2750,7 +2738,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
             DELETEZ( pSBase );
             DELETEZ( pWDop );
             DELETEZ( pFonts );
-            DELETEZ( pAtnNames );
+            delete mpAtnNames;
             DELETEZ( pAuthorInfos );
             DELETEZ( pOleMap );
             DELETEZ( pTabNode );
@@ -2812,41 +2800,40 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
     return nErrRet;
 }
 
-const String* SwWW8ImplReader::GetAnnotationAuthor( short nIdx )
+const String* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
 {
-    if( !pAtnNames && pWwFib->lcbGrpStAtnOwners )
+    if (!mpAtnNames && pWwFib->lcbGrpStAtnOwners)
     {
         // Authoren bestimmen: steht im TableStream
-        pAtnNames = new SvStringsDtor( 4, 4 );
+        mpAtnNames = new ::std::vector<String>;
         SvStream& rStrm = *pTableStream;
 
         long nOldPos = rStrm.Tell();
         rStrm.Seek( pWwFib->fcGrpStAtnOwners );
 
         long nRead = 0, nCount = pWwFib->lcbGrpStAtnOwners;
-        String* pAutName;
-        while( nRead < nCount )
+        while (nRead < nCount)
         {
             if( bVer67 )
             {
-                pAutName = new String( WW8ReadPString( rStrm, FALSE ) );
-                nRead += pAutName->Len() + 1;   // Laenge + BYTE Count
+                mpAtnNames->push_back(WW8ReadPString(rStrm, FALSE));
+                nRead += mpAtnNames->rend()->Len() + 1; // Laenge + BYTE Count
             }
             else
             {
-                pAutName = new String( WW8Read_xstz( rStrm, 0, FALSE ) );
-                nRead += pAutName->Len() * 2 + 2;// UNICode: doppelte Laenge + USHORT Count
+                mpAtnNames->push_back(WW8Read_xstz(rStrm, 0, FALSE));
+                // UNICode: doppelte Laenge + USHORT Count
+                nRead += mpAtnNames->rend()->Len() * 2 + 2;
             }
-            pAtnNames->Insert( pAutName, pAtnNames->Count() );
         }
         rStrm.Seek( nOldPos );
     }
 
-    return pAtnNames && nIdx < pAtnNames->Count() ? (*pAtnNames)[ nIdx ] : 0;
+    const String *pRet = 0;
+    if (mpAtnNames && nIdx < mpAtnNames->size())
+        pRet = &((*mpAtnNames)[nIdx]);
+    return pRet;
 }
-
-
-#pragma optimize( "", off )
 
 ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
 {
@@ -2864,11 +2851,7 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
             "WinWord/WWFB0", "WinWord/WWFB1", "WinWord/WWFB2"
         };
         sal_uInt32 aVal[ 12 ];
-#if SUPD>612
         SwFilterOptions aOpt( 12, aNames, aVal );
-#else
-        memset( &aVal, 0, sizeof( aVal ) );
-#endif
 
         nIniFlags = aVal[ 0 ];
         nIniFlags1= aVal[ 1 ];
@@ -3025,25 +3008,21 @@ BOOL WW8Reader::HasGlossaries() const
 }
 
 
-BOOL WW8Reader::ReadGlossaries( SwTextBlocks& rBlocks, BOOL bSaveRelFiles ) const
+BOOL WW8Reader::ReadGlossaries(SwTextBlocks& rBlocks, BOOL bSaveRelFiles) const
 {
-    BOOL bRet=FALSE;
+    bool bRet=false;
+
+    WW8Reader *pThis = const_cast<WW8Reader *>(this);
+
     USHORT nOldBuffSize = 32768;
     SvStorageStreamRef refStrm;
-
-    WW8Reader *pThis = (WW8Reader *)this;
-    ULONG nRet = pThis->OpenMainStream( refStrm, nOldBuffSize );
-
-    if( !nRet )
+    if (!pThis->OpenMainStream(refStrm, nOldBuffSize))
     {
         WW8Glossary aGloss( refStrm, 8, pStg );
-        bRet = aGloss.Load( rBlocks, bSaveRelFiles );
+        bRet = aGloss.Load( rBlocks, bSaveRelFiles ? true : false);
     }
-    return bRet;
+    return bRet ? TRUE : FALSE;
 }
-
-#pragma optimize( "", off )
-
 
 BOOL SwMSDffManager::GetOLEStorageName( long nOLEId, String& rStorageName,
                                         SvStorageRef& rSrcStorage,
