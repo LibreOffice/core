@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 15:53:16 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:57:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,8 +64,6 @@ PRJ=..$/..$/..
 
 PRJNAME=sw
 TARGET=unoidl
-
-AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
