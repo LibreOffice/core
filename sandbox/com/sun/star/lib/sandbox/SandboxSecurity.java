@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SandboxSecurity.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-27 14:34:37 $
+ *  last change: $Author: jl $ $Date: 2002-10-16 10:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,7 +444,20 @@ public class SandboxSecurity extends SecurityManager //implements SecurityManage
                 try {
                     // If the file url contains spaces (i.e. %20) then URL.getFile() still contains %20
                     // File.getCanonicalPath does not replace %20
-                    String sWithSpaces= base.getFile().replaceAll("%20"," ");
+                    // create a string with real spaces instead of %20
+                    StringBuffer buf= new StringBuffer(256);
+                    String sSpace= "%20";
+                    String sFile= base.getFile();
+                    int begin= 0;
+                    int end= 0;
+                    while((end= sFile.indexOf(sSpace, begin)) != -1) {
+                        buf.append( sFile.substring(begin, end));
+                        buf.append(" ");
+                        begin= end + sSpace.length();
+                    }
+                    buf.append(sFile.substring(begin));
+
+                    String sWithSpaces= buf.toString();
                     dir = (new File(sWithSpaces).getCanonicalPath());
                 } catch (IOException e) { // shouldn't happen
                     throw(new SandboxSecurityException("checkread.exception2", e.toString()));
