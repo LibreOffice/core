@@ -2,9 +2,9 @@
  *
  *  $RCSfile: context.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ typedef hash_map
 >
 ContextMap;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 struct MyCounter
 {
     MyCounter( sal_Char *pName ) :
@@ -372,7 +372,7 @@ remote_ContextImpl::remote_ContextImpl( remote_Connection *pConnection ,
     addDisposingListener = thisAddDisposingListener;
     removeDisposingListener = thisRemoveDisposingListener;
     dispose = thisDispose;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     thisCounter.acquire();
 #endif
 }
@@ -385,7 +385,7 @@ remote_ContextImpl::~remote_ContextImpl()
     rtl_uString_release( m_pName );
     rtl_uString_release( m_pDescription );
     rtl_uString_release( m_pProtocol );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     thisCounter.release();
 #endif
 
