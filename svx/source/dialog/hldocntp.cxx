@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-01 15:53:56 $
+ *  last change: $Author: cl $ $Date: 2001-02-12 15:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
 #include <com/sun/star/uno/Exception.hpp>
 #endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
+#endif
 #ifndef _SV_CONFIG_HXX
 #include <vcl/config.hxx>
 #endif
@@ -137,7 +140,7 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& 
     maRbtEditNow    ( this, ResId (RB_EDITNOW) ),
     maRbtEditLater  ( this, ResId (RB_EDITLATER) ),
     maFtPath        ( this, ResId (FT_PATH_NEWDOC) ),
-    maEdPath        ( this, ResId (ED_PATH_NEWDOC) ),
+    maCbbPath       ( this, INET_PROT_FILE ),
     maFtDocTypes    ( this, ResId (FT_DOCUMENT_TYPES) ),
     maLbDocTypes    ( this, ResId (LB_DOCUMENT_TYPES) ),
     maBtCreate      ( this, ResId (BTN_CREATE) ),
@@ -149,13 +152,21 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& 
 
     SetExchangeSupport ();
 
+    maCbbPath.SetPosSizePixel ( LogicToPixel( Point( 54 , 25 ), MAP_APPFONT ),
+                                LogicToPixel( Size ( 176, 60), MAP_APPFONT ) );
+    maCbbPath.Show();
+    maCbbPath.SetBaseURL(SvtPathOptions().GetWorkPath());
+//  maCbbPath.SetHelpId( HID_HYPERDLG_DOC_PATH );
+
     // set defaults
     maRbtEditNow.Check();
 
     maBtCreate.SetClickHdl        ( LINK ( this, SvxHyperlinkNewDocTp, ClickNewHdl_Impl ) );
-    maEdPath.SetLoseFocusHdl      ( LINK ( this, SvxHyperlinkNewDocTp, LostFocusTargetHdl_Impl ) );
-    maEdPath.SetModifyHdl         ( LINK ( this, SvxHyperlinkNewDocTp, ModifiedPathHdl_Impl ) );
+    maCbbPath.SetLoseFocusHdl      ( LINK ( this, SvxHyperlinkNewDocTp, LostFocusTargetHdl_Impl ) );
+    maCbbPath.SetModifyHdl        ( LINK ( this, SvxHyperlinkNewDocTp, ModifiedPathHdl_Impl ) );
     maLbDocTypes.SetDoubleClickHdl( LINK ( this, SvxHyperlinkNewDocTp, DClickDocTypeHdl_Impl ) );
+    maLbDocTypes.SetSelectHdl( LINK ( this, SvxHyperlinkNewDocTp, SelectDocTypeHdl_Impl ) );
+
 
     FillDocumentList ();
 }
@@ -224,7 +235,8 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
     EnterWait();
     SvtPathOptions aPathOpt;
     String aStrDirName( aPathOpt.GetNewMenuPath() );
-    INetURLObject aFolderObj( aStrDirName, INET_PROT_FILE );
+    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aStrDirName, aStrDirName );
+    INetURLObject aFolderObj( aStrDirName );
     try
     {
         ::ucb::Content aCnt( aFolderObj.GetMainURL(), uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
@@ -249,19 +261,15 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
             {
                 while ( xResultSet->next() )
                 {
-#if SUPD>611
-                    OUString aFileURL = xContentAccess->queryContentIdentifierString();
-#else
-                    OUString aFileURL = xContentAccess->queryContentIdentfierString();
-#endif
-                    INetURLObject aObj( aFileURL );
+                    String aFileURL = xContentAccess->queryContentIdentifierString();
 
                     String aTitle;
                     String aURL;
                     BOOL bShowAsFolder;
                     sal_Int32 nIconId;
 
-                    ReadURLFile( aObj.PathToFileName(), aTitle, aURL, nIconId, &bShowAsFolder);//, nImageId );
+                    ::utl::LocalFileHelper::ConvertURLToPhysicalName( aFileURL, aFileURL );
+                    ReadURLFile( aFileURL, aTitle, aURL, nIconId, &bShowAsFolder);//, nImageId );
 
                     if( aURL.Len() && aTitle.Len() && !aURL.EqualsAscii("private:separator") &&
                         aURL.SearchAscii( "slot" ) == STRING_NOTFOUND && aURL.SearchAscii( "?" ) == STRING_NOTFOUND )
@@ -297,13 +305,13 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
                     }
                 }
             }
-            catch ( ... )
+            catch ( uno::Exception )
             {
                 DBG_ERRORFILE( "Hyperlink-dialog:'New Document':Retrieve fileinfos failed!" );
             }
         }
     }
-    catch( ... )
+    catch( uno::Exception )
     {
         DBG_ERRORFILE( "Hyperlink-dialog:'New Document':Fill listfield failed!" );
     }
@@ -324,12 +332,24 @@ void SvxHyperlinkNewDocTp::GetCurentItemData ( String& aStrURL, String& aStrName
                                                SvxLinkInsertMode& eMode )
 {
     // get data from dialog-controls
-    aStrURL = maEdPath.GetText();
+    aStrURL = maCbbPath.GetText();
+    if( aStrURL.Len() )
+    {
+        utl::LocalFileHelper::ConvertSystemPathToURL( aStrURL, maCbbPath.GetBaseURL(), aStrURL );
+        if( aStrURL.Len() == 0 )
+        {
+            INetURLObject aTmpURL( SvtPathOptions().GetWorkPath(), INET_PROT_FILE );
+            if( !aTmpURL.hasFinalSlash() )
+                aTmpURL.setFinalSlash();
+            aTmpURL.Append( maCbbPath.GetText() );
+            aStrURL = aTmpURL.GetMainURL();
+        }
+    }
 
     // does the filename have got a valid extension ?
-    INetURLObject aURL( aStrURL, INET_PROT_FILE );
+    INetURLObject aURL( aStrURL );
 
-    if ( aStrURL != aEmptyStr &&
+    if ( GetName( aStrURL ) != aEmptyStr &&
          maLbDocTypes.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
     {
         // get private-url
@@ -448,7 +468,7 @@ BOOL SvxHyperlinkNewDocTp::FillItemSet( SfxItemSet& rOut)
 
 void SvxHyperlinkNewDocTp::SetInitFocus()
 {
-    maEdPath.GrabFocus();
+    maCbbPath.GrabFocus();
 }
 
 /*************************************************************************
@@ -459,7 +479,7 @@ void SvxHyperlinkNewDocTp::SetInitFocus()
 
 BOOL SvxHyperlinkNewDocTp::AskApply ()
 {
-    if( GetName( maEdPath.GetText() ) != aEmptyStr )
+    if( GetName( maCbbPath.GetText() ) != aEmptyStr )
         return TRUE;
 
     WarningBox aWarning( this, WB_OK, SVX_RESSTR(RID_SVXSTR_HYPDLG_NOVALIDFILENAME) );
@@ -479,14 +499,31 @@ void SvxHyperlinkNewDocTp::DoApply ()
     EnterWait();
 
     // get data from dialog-controls
-    String aStrNewName = maEdPath.GetText();
+    String aStrNewName = maCbbPath.GetText();
 
     if ( aStrNewName == aEmptyStr )
         aStrNewName = maStrInitURL;
 
     ///////////////////////////////////////////////////////
     // create a real URL-String
-    INetURLObject aURL( aStrNewName, INET_PROT_FILE );
+
+    if( aStrNewName.Len() )
+    {
+        String aTempName;
+        utl::LocalFileHelper::ConvertSystemPathToURL( aStrNewName, maBaseURL, aTempName );
+        if( aTempName.Len() == 0 )
+        {
+            INetURLObject aTmpURL( SvtPathOptions().GetWorkPath() );
+            if( !aTmpURL.hasFinalSlash() )
+                aTmpURL.setFinalSlash();
+            aTmpURL.Append( aStrNewName );
+            aTempName = aTmpURL.GetMainURL();
+        }
+
+        aStrNewName = aTempName;
+    }
+
+    INetURLObject aURL( aStrNewName );
 
     int nPos = maLbDocTypes.GetSelectEntryPos();
     if( nPos == LISTBOX_ENTRY_NOTFOUND )
@@ -494,18 +531,15 @@ void SvxHyperlinkNewDocTp::DoApply ()
     aURL.setExtension ( ( ( DocumentTypeData* )
                              maLbDocTypes.GetEntryData( nPos ) )->aStrExt );
 
-    sal_Char const sSep[] = ".";
-
     if( aURL.getFSysPath( INetURLObject::FSYS_DETECT ).Len() - aURL.getName().Len() <= 1 ||
         aURL.getFSysPath( INetURLObject::FSYS_DETECT ).Search( '.' ) == 0 )
     {
-        INetURLObject aTmpURL( SvtPathOptions().GetWorkPath(), INET_PROT_FILE );
+        INetURLObject aTmpURL( SvtPathOptions().GetWorkPath() );
         if( !aTmpURL.hasFinalSlash() )
             aTmpURL.setFinalSlash();
         aTmpURL.Append( aURL.getName() );
         aURL = aTmpURL;
     }
-
     ///////////////////////////////////////////////////////
     // create Document
     aStrNewName = aURL.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );//INetURLObject::FSYS_DETECT );
@@ -513,60 +547,68 @@ void SvxHyperlinkNewDocTp::DoApply ()
     if( aStrNewName.SearchAscii( sSlash ) == 0 )
         aStrNewName.Erase( 0, 1 );
 
-    // current document
-    SfxViewFrame* pCurrentDocFrame = SFX_APP()->GetViewFrame();
-
-    if ( aStrNewName != aEmptyStr )
+    SfxViewFrame *pViewFrame = NULL;
+    try
     {
-        // get private-url
-        int nPos = maLbDocTypes.GetSelectEntryPos();
-        if( nPos == LISTBOX_ENTRY_NOTFOUND )
-            nPos=0;
-        String aStrDocName ( ( ( DocumentTypeData* )
-                             maLbDocTypes.GetEntryData( nPos ) )->aStrURL );
+        // current document
+        SfxViewFrame* pCurrentDocFrame = SFX_APP()->GetViewFrame();
 
-        // create items
-        SfxStringItem aName( SID_FILE_NAME, aStrDocName );
-        SfxStringItem aReferer( SID_REFERER, UniString::CreateFromAscii(
-                                    RTL_CONSTASCII_STRINGPARAM( "private:user" ) ) );
-        SfxStringItem aFrame( SID_TARGETNAME, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_blank" ) ) );
-        //SfxBoolItem aFrame( SID_OPEN_NEW_VIEW, TRUE );
-
-        String aStrFlags ( sal_Unicode('S') );
-        if ( maRbtEditLater.IsChecked() )
+        if ( aStrNewName != aEmptyStr )
         {
-            aStrFlags += sal_Unicode('H');
-        }
-        SfxStringItem aFlags (SID_OPTIONS, aStrFlags);
+            // get private-url
+            int nPos = maLbDocTypes.GetSelectEntryPos();
+            if( nPos == LISTBOX_ENTRY_NOTFOUND )
+                nPos=0;
+            String aStrDocName ( ( ( DocumentTypeData* )
+                                 maLbDocTypes.GetEntryData( nPos ) )->aStrURL );
 
-        // open url
-        const SfxPoolItem* pReturn = GetDispatcher()->Execute( SID_OPENDOC,
-                                                               SFX_CALLMODE_SYNCHRON,
-                                                               &aName, &aFlags,
-                                                               &aFrame, &aReferer, 0L );
+            // create items
+            SfxStringItem aName( SID_FILE_NAME, aStrDocName );
+            SfxStringItem aReferer( SID_REFERER, UniString::CreateFromAscii(
+                                        RTL_CONSTASCII_STRINGPARAM( "private:user" ) ) );
+            SfxStringItem aFrame( SID_TARGETNAME, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_blank" ) ) );
+            //SfxBoolItem aFrame( SID_OPEN_NEW_VIEW, TRUE );
 
-        // save new doc
-        const SfxViewFrameItem *pItem = PTR_CAST( SfxViewFrameItem, pReturn );
-        SfxViewFrame *pViewFrame = pItem->GetFrame();
-        if (pViewFrame)
-        {
-            //SfxViewFrame *pViewFrame = pFrame->GetCurrentViewFrame();
-            SfxStringItem aNewName( SID_FILE_NAME, aURL.GetMainURL() );
-
-            pViewFrame->GetDispatcher()->Execute( SID_SAVEASDOC,
-                                                  SFX_CALLMODE_SYNCHRON,
-                                                  &aNewName, 0L );
-
+            String aStrFlags ( sal_Unicode('S') );
             if ( maRbtEditLater.IsChecked() )
             {
-                BOOL bResult = pViewFrame->GetObjectShell()->DoClose();
+                aStrFlags += sal_Unicode('H');
+            }
+            SfxStringItem aFlags (SID_OPTIONS, aStrFlags);
+
+            // open url
+            const SfxPoolItem* pReturn = GetDispatcher()->Execute( SID_OPENDOC,
+                                                                   SFX_CALLMODE_SYNCHRON,
+                                                                   &aName, &aFlags,
+                                                                   &aFrame, &aReferer, 0L );
+
+            // save new doc
+            const SfxViewFrameItem *pItem = PTR_CAST( SfxViewFrameItem, pReturn );
+            pViewFrame = pItem->GetFrame();
+            if (pViewFrame)
+            {
+                //SfxViewFrame *pViewFrame = pFrame->GetCurrentViewFrame();
+                SfxStringItem aNewName( SID_FILE_NAME, aURL.GetMainURL() );
+
+                pViewFrame->GetDispatcher()->Execute( SID_SAVEASDOC,
+                                                      SFX_CALLMODE_SYNCHRON,
+                                                      &aNewName, 0L );
+
             }
         }
+
+        if ( maRbtEditNow.IsChecked() )
+        {
+            pCurrentDocFrame->ToTop();
+        }
+    }
+    catch( uno::Exception )
+    {
     }
 
-    if ( maRbtEditNow.IsChecked() )
+    if ( pViewFrame && maRbtEditLater.IsChecked() )
     {
-        pCurrentDocFrame->ToTop();
+        BOOL bResult = pViewFrame->GetObjectShell()->DoClose();
     }
 
     LeaveWait();
@@ -597,6 +639,7 @@ void SvxHyperlinkNewDocTp::Reset( const SfxItemSet& rItemSet)
 
         // Store initial URL
         maStrInitURL = pHyperlinkItem->GetURL();
+        maBaseURL = pHyperlinkItem->GetURL();
 
         mbNewName = ( pHyperlinkItem->GetName() == aEmptyStr );
     }
@@ -613,8 +656,11 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
     SfxFileDialog aDlg( SFX_APP()->GetTopWindow(), WB_3DLOOK | WB_OPEN |
                         SFXWB_PATHDIALOG );
 
-    String aStrPath = GetPath ( maEdPath.GetText() );
-    String aStrName = GetName ( maEdPath.GetText() );
+    String aStrURL( maCbbPath.GetText() );
+    utl::LocalFileHelper::ConvertSystemPathToURL( aStrURL, maCbbPath.GetBaseURL(), aStrURL );
+
+    String aStrPath = GetPath ( aStrURL );
+    String aStrName = GetName ( aStrURL );
 
     if ( aStrPath == aEmptyStr )
         aStrPath = SvtPathOptions().GetWorkPath();
@@ -623,9 +669,16 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
 
     if ( aDlg.Execute() == RET_OK )
     {
+        sal_Char const sSlash[] = "/";
+
+        maCbbPath.SetBaseURL( aDlg.GetPath() );
         String aStrTmp( aDlg.GetPath() );
+
+        if( aStrTmp.GetChar( aStrTmp.Len() - 1 ) != sSlash[0] )
+            aStrTmp.AppendAscii( sSlash );
+
         aStrTmp += aStrName;
-        INetURLObject aNewURL( aStrTmp, INET_PROT_FILE );
+        INetURLObject aNewURL( aStrTmp );
 
         if ( aStrName != aEmptyStr && aNewURL.getExtension() != aEmptyStr &&
              maLbDocTypes.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
@@ -637,11 +690,10 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
         }
 
         aStrTmp = aNewURL.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
-        sal_Char const sSlash[] = "/";
         if( aStrTmp.SearchAscii( sSlash ) == 0 )
             aStrTmp.Erase( 0, 1 );
 
-        maEdPath.SetText ( aStrTmp );
+        maCbbPath.SetText ( aStrTmp );
     }
 
     return( 0L );
@@ -656,7 +708,7 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
 IMPL_LINK ( SvxHyperlinkNewDocTp, ModifiedPathHdl_Impl, void *, EMPTYARG )
 {
     if ( mbNewName )
-        mpEdIndication->SetText ( maEdPath.GetText() );
+        mpEdIndication->SetText ( maCbbPath.GetText() );
 
     return( 0L );
 }
@@ -669,27 +721,7 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ModifiedPathHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK ( SvxHyperlinkNewDocTp, LostFocusTargetHdl_Impl, void *, EMPTYARG )
 {
-    String aStrURL ( maEdPath.GetText() );
-
-    // Extension
-    if ( GetName ( aStrURL ) != aEmptyStr &&
-         maLbDocTypes.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
-    {
-        INetURLObject aURL( aStrURL, INET_PROT_FILE );
-
-        // get private-url
-        int nPos = maLbDocTypes.GetSelectEntryPos();
-        aURL.setExtension ( ( ( DocumentTypeData* )
-                                 maLbDocTypes.GetEntryData( nPos ) )->aStrExt );
-
-        String aStrTmp( aURL.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ) );
-        sal_Char const sSlash[] = "/";
-        if( aStrTmp.SearchAscii( sSlash ) == 0 )
-            aStrTmp.Erase( 0, 1 );
-        maEdPath.SetText ( aStrTmp );
-    }
-
-    ModifiedPathHdl_Impl ( NULL );
+    UpdateExtension();
 
     return (0L);
 }
@@ -702,10 +734,73 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, LostFocusTargetHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK ( SvxHyperlinkNewDocTp, DClickDocTypeHdl_Impl, void *, EMPTYARG )
 {
-    if (maEdPath.GetText().Len() )
+    if (maCbbPath.GetText().Len() )
         LostFocusTargetHdl_Impl (NULL);
 
     return (0L);
+}
+
+IMPL_LINK ( SvxHyperlinkNewDocTp, SelectDocTypeHdl_Impl, void *, EMPTYARG )
+{
+
+    UpdateExtension();
+
+    return (0L);
+}
+
+/*************************************************************************
+|*
+|* Sets the extension according to the selected doc type
+|*
+|************************************************************************/
+void SvxHyperlinkNewDocTp::UpdateExtension()
+{
+    String aStrURL( maCbbPath.GetText() );
+
+    const int nDocTypePos = maLbDocTypes.GetSelectEntryPos();
+
+    // no file? no doctype? no extension!
+    if( aStrURL.Len() == 0 || nDocTypePos == LISTBOX_ENTRY_NOTFOUND )
+        return;
+
+    utl::LocalFileHelper::ConvertSystemPathToURL( aStrURL, maCbbPath.GetBaseURL(), aStrURL );
+
+    // if we have a valid url, use the INetURLObject way
+    if( aStrURL.Len() )
+    {
+        // check for file name
+        if ( GetName ( aStrURL ) != aEmptyStr )
+        {
+            INetURLObject aURL( aStrURL );
+
+            // get private-url
+            aURL.setExtension(((DocumentTypeData*)maLbDocTypes.GetEntryData( nDocTypePos ) )->aStrExt);
+
+            String aStrTmp( aURL.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ) );
+            sal_Char const sSlash[] = "/";
+            if( aStrTmp.SearchAscii( sSlash ) == 0 )
+                aStrTmp.Erase( 0, 1 );
+            maCbbPath.SetText ( aStrTmp );
+
+            ModifiedPathHdl_Impl ( NULL );
+        }
+    }
+    else
+    {
+        aStrURL = maCbbPath.GetText();
+        // since we have no valid url yet, maybe just a file name
+        // we must add the extensions ourselfs
+
+        xub_StrLen nIndex = aStrURL.SearchBackward( sal_Unicode('.') );
+        if( nIndex != -1 )
+            aStrURL = aStrURL.Copy( 0, nIndex );
+
+        aStrURL += sal_Unicode( '.' );
+        aStrURL += ((DocumentTypeData*)maLbDocTypes.GetEntryData( nDocTypePos ) )->aStrExt;
+        maCbbPath.SetText( aStrURL );
+
+        ModifiedPathHdl_Impl ( NULL );
+    }
 }
 
 /*************************************************************************
@@ -714,7 +809,7 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, DClickDocTypeHdl_Impl, void *, EMPTYARG )
 |*
 |************************************************************************/
 
-String SvxHyperlinkNewDocTp::GetPath ( String& aStrFull )
+String SvxHyperlinkNewDocTp::GetPath ( const String& aStrFull ) const
 {
     String aStrPath;
     aStrPath = aStrFull;
@@ -727,7 +822,7 @@ String SvxHyperlinkNewDocTp::GetPath ( String& aStrFull )
 |*
 |************************************************************************/
 
-String SvxHyperlinkNewDocTp::GetName ( String& aStrFull )
+String SvxHyperlinkNewDocTp::GetName ( const String& aStrFull ) const
 {
     String aStrName;
     INetURLObject aURL( aStrFull, INET_PROT_FILE );
