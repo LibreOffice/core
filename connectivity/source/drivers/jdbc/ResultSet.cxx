@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:46:01 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ jclass java_sql_ResultSet::getMyClass()
 
 void java_sql_ResultSet::saveClassRef( jclass pClass )
 {
-    if( SDBThreadAttach::IsJavaErrorOccured() || pClass==0  )
+    if( pClass==0  )
         return;
     // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
     theClass = pClass;
