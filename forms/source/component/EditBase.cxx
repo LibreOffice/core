@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EditBase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:30 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,8 +106,8 @@ const sal_uInt16 FILTERPROPOSAL  =  0x0004;
 DBG_NAME( OEditBaseModel )
 //------------------------------------------------------------------
 OEditBaseModel::OEditBaseModel( const Reference< XMultiServiceFactory >& _rxFactory, const ::rtl::OUString& rUnoControlModelName,
-        const ::rtl::OUString& rDefault, const sal_Bool _bSetDelegator )
-    :OBoundControlModel( _rxFactory, rUnoControlModelName, rDefault, sal_True, _bSetDelegator )
+        const ::rtl::OUString& rDefault, const sal_Bool _bSupportExternalBinding )
+    :OBoundControlModel( _rxFactory, rUnoControlModelName, rDefault, sal_True, _bSupportExternalBinding )
     ,m_bFilterProposal(sal_False)
     ,m_bEmptyIsNull(sal_True)
     ,m_nLastReadVersion(0)
@@ -116,8 +116,8 @@ OEditBaseModel::OEditBaseModel( const Reference< XMultiServiceFactory >& _rxFact
 }
 
 //------------------------------------------------------------------
-OEditBaseModel::OEditBaseModel( const OEditBaseModel* _pOriginal, const Reference< XMultiServiceFactory >& _rxFactory, const sal_Bool _bSetDelegator )
-     :OBoundControlModel( _pOriginal, _rxFactory, sal_True, _bSetDelegator )
+OEditBaseModel::OEditBaseModel( const OEditBaseModel* _pOriginal, const Reference< XMultiServiceFactory >& _rxFactory )
+     :OBoundControlModel( _pOriginal, _rxFactory )
      ,m_nLastReadVersion(0)
 {
     DBG_CTOR( OEditBaseModel, NULL );
@@ -238,7 +238,7 @@ void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream) thro
     // Nach dem Lesen die Defaultwerte anzeigen
     if (m_aControlSource.getLength())
         // (not if we don't have a control source - the "State" property acts like it is persistent, then)
-        _reset();
+        resetNoBroadcast();
 };
 
 //------------------------------------------------------------------------------
@@ -366,13 +366,13 @@ void OEditBaseModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const 
         case PROPERTY_ID_DEFAULT_TEXT:
             DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_STRING, "invalid type" );
             rValue >>= m_aDefaultText;
-            _reset();
+            resetNoBroadcast();
             break;
         case PROPERTY_ID_DEFAULT_VALUE:
         case PROPERTY_ID_DEFAULT_DATE:
         case PROPERTY_ID_DEFAULT_TIME:
             m_aDefault = rValue;
-            _reset();
+            resetNoBroadcast();
             break;
         default:
             OBoundControlModel::setFastPropertyValue_NoBroadcast(nHandle, rValue );
