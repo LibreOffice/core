@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:19:03 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,11 +245,6 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
 
         String aName( aDispatchRequest.aURL );
         ::rtl::OUString aTarget( RTL_CONSTASCII_USTRINGPARAM("_default") );
-
-        if (aName.CompareToAscii("vnd.sun.star.script"  , 19) != COMPARE_EQUAL)
-        {
-            aName = GetURL_Impl(aName);
-        }
 
         if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
              aDispatchRequest.aRequestType == REQUEST_PRINTTO )
