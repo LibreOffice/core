@@ -2,9 +2,9 @@
 *
 *  $RCSfile: xmltoken.cxx,v $
 *
-*  $Revision: 1.77 $
+*  $Revision: 1.78 $
 *
-*  last change: $Author: obo $ $Date: 2004-11-23 09:39:48 $
+*  last change: $Author: rt $ $Date: 2004-11-25 16:47:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2565,7 +2565,6 @@ namespace xmloff { namespace token {
         TOKEN( "omit-xml-declaration",             XML_OMIT_XML_DECLARATION ),
         TOKEN( "standalone",                       XML_STANDALONE ),
         TOKEN( "cdata-section-elements",           XML_CDATA_SECTION_ELEMENTS ),
-        TOKEN( "readonly",                         XML_READONLY ),
         TOKEN( "required",                         XML_REQUIRED ),
         TOKEN( "relevant",                         XML_RELEVANT ),
         TOKEN( "calculate",                        XML_CALCULATE ),
