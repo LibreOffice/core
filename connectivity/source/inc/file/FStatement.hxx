@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 08:07:50 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,8 +158,9 @@ namespace connectivity
             ::std::vector<sal_Int32>*                   m_pEvaluationKeySet;
 
             OFileTable*                                 m_pTable;       // the current table
-            OValueRow                                   m_aRow;
-            OValueRow                                   m_aEvaluateRow; // contains all values of a row
+            OValueRefRow                                m_aSelectRow;
+            OValueRefRow                                m_aRow;
+            OValueRefRow                                m_aEvaluateRow; // contains all values of a row
             ORefAssignValues                            m_aAssignValues; // needed for insert,update and parameters
                                                                     // to compare with the restrictions
 
