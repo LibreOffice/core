@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:53:32 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ TabPage TP_ENV_PRT
         Text[ spanish ] = "Orientaci�n del sobre";
         Text[ finnish ] = "Kirjekuorisuunta";
         Text[ italian ] = "Caricamento busta";
-        Text[ danish ] = "Konvolutindryk";
+        Text[ danish ] = "Konvolutretning";
         Text[ swedish ] = "Kuvertmatning";
         Text[ polish ] = "Orientacja koperty";
         Text[ portuguese_brazilian ] = "Orienta��o do envelope";
@@ -100,6 +100,8 @@ TabPage TP_ENV_PRT
         Text[ hebrew ] = "Umschlageinzug";
         Text[ hindi ] = "लिफाफा का अनुस्थापन";
         Text[ slovak ] = "Orientácia obálky";
+        Text[ hungarian ] = "Boríték tájolása";
+        Text[ slovenian ] = "Usmerjenost ovojnice";
     };
     ToolBox BOX_ALIGN
     {
@@ -145,7 +147,7 @@ TabPage TP_ENV_PRT
         Text = "Von ~oben bedrucken" ;
         Text [ ENGLISH ] = "Print upper side" ;
         Text [ NORWEGIAN ] = "Print upper side" ;
-        Text [ DANISH ] = "Forsiden opad" ;
+        Text [ DANISH ] = "~Udskriv f�rste side f�rst" ;
         Text [ ENGLISH_US ] = "~Print from top" ;
         Text [ SPANISH ] = "Imprimir r~everso" ;
         Text [ FINNISH ] = "Tulosta ~alusta" ;
@@ -174,6 +176,8 @@ TabPage TP_ENV_PRT
         Text[ hebrew ] = "Von ~oben bedrucken";
         Text[ hindi ] = "~ऊपर से छपाई";
         Text[ slovak ] = "~Tlač od horného okraja";
+        Text[ hungarian ] = "Nyomtatás a ~tetejétől";
+        Text[ slovenian ] = "~Natisni z vrha";
     };
     RadioButton BTN_BOTTOM
     {
@@ -182,7 +186,7 @@ TabPage TP_ENV_PRT
         Text = "Von ~unten bedrucken" ;
         Text [ ENGLISH ] = "Print lower side" ;
         Text [ NORWEGIAN ] = "Print lower side" ;
-        Text [ DANISH ] = "Forsiden nedad" ;
+        Text [ DANISH ] = "Udskriv ~sidste side f�rst" ;
         Text [ ENGLISH_US ] = "Print from ~bottom" ;
         Text [ SPANISH ] = "Imprimir ~anverso" ;
         Text [ FINNISH ] = "Tulosta ~lopusta" ;
@@ -209,6 +213,8 @@ TabPage TP_ENV_PRT
         Text[ hebrew ] = "Von ~unten bedrucken";
         Text[ hindi ] = "~नीचे से छपाई";
         Text[ slovak ] = "Tlač od ~spodného okraja";
+        Text[ hungarian ] = "Ny~omtatás az aljától";
+        Text[ slovenian ] = "N~atisni z dna";
     };
     FixedText TXT_RIGHT
     {
@@ -217,7 +223,7 @@ TabPage TP_ENV_PRT
         Text = "Nach ~rechts" ;
         Text [ ENGLISH ] = "Shift right" ;
         Text [ NORWEGIAN ] = "Shift right" ;
-        Text [ DANISH ] = "Mod h�jre" ;
+        Text [ DANISH ] = "~Mod h�jre" ;
         Text [ ENGLISH_US ] = "~Shift right" ;
         Text [ SPANISH ] = "Hacia la ~derecha" ;
         Text [ FINNISH ] = "Siirr� ~oikealle" ;
@@ -244,6 +250,8 @@ TabPage TP_ENV_PRT
         Text[ hebrew ] = "Nach ~rechts";
         Text[ hindi ] = "~दाहिनी ओर स्थान बदलो";
         Text[ slovak ] = "Po~sunúť doprava";
+        Text[ hungarian ] = "~Csúsztatás jobbra";
+        Text[ slovenian ] = "~Premakni na desno";
     };
     MetricField FLD_RIGHT
     {
@@ -269,7 +277,7 @@ TabPage TP_ENV_PRT
         Text = "~Nach unten" ;
         Text [ ENGLISH ] = "Shift down" ;
         Text [ NORWEGIAN ] = "Shift down" ;
-        Text [ DANISH ] = "Nedad" ;
+        Text [ DANISH ] = "~Nedad" ;
         Text [ ENGLISH_US ] = "Shift ~down" ;
         Text [ SPANISH ] = "Hacia a~bajo" ;
         Text [ FINNISH ] = "Siirr� ~alas" ;
@@ -296,6 +304,8 @@ TabPage TP_ENV_PRT
         Text[ hebrew ] = "~Nach unten";
         Text[ hindi ] = "~नीचे की ओर स्थान बदलो";
         Text[ slovak ] = "Posunúť ~dolu";
+        Text[ hungarian ] = "Csúsztatás ~lefelé";
+        Text[ slovenian ] = "Premakni navzd~ol";
     };
     MetricField FLD_DOWN
     {
@@ -345,6 +355,8 @@ TabPage TP_ENV_PRT
         Text[ hebrew ] = "Aktueller Drucker";
         Text[ hindi ] = "वर्तमान मुद्रक";
         Text[ slovak ] = "Aktuálna tlačiareň";
+        Text[ hungarian ] = "Aktuális nyomtató";
+        Text[ slovenian ] = "Trenutni tiskalnik";
     };
     FixedText TXT_PRINTER
     {
@@ -380,6 +392,8 @@ TabPage TP_ENV_PRT
         Text[ hebrew ] = "- Kein Drucker installiert -";
         Text[ hindi ] = "- कोई मुद्रक प्रतिष्ठापित नहीं -";
         Text[ slovak ] = "- Tlačiareň nie je nainštalovaná -";
+        Text[ hungarian ] = "- Nincs telepített nyomtató -";
+        Text[ slovenian ] = "- Noben tiskalnik ni nameščen -";
     };
     PushButton BTN_PRTSETUP
     {
@@ -394,7 +408,7 @@ TabPage TP_ENV_PRT
         Text [ french ] = "Param�trer..." ;
         Text [ dutch ] = "~Configureren..." ;
         Text [ swedish ] = "St�ll ~in..." ;
-        Text [ danish ] = "In~dstil..." ;
+        Text [ danish ] = "Indstil..." ;
         Text [ portuguese_brazilian ] = "Configurar..." ;
         Text [ portuguese ] = "~Configurar..." ;
         Text[ chinese_simplified ] = "设置...";
@@ -414,6 +428,8 @@ TabPage TP_ENV_PRT
         Text[ hebrew ] = "~Einrichten...";
         Text[ hindi ] = "सेटप...";
         Text[ slovak ] = "Nastavenie...";
+        Text[ hungarian ] = "Beállítás...";
+        Text[ slovenian ] = "Nastavi...";
     };
 };
  // Bitmaps ******************************************************************
@@ -514,6 +530,7 @@ Bitmap BMP_VER_RGHT_UPPER_H
 {
     File = "envvr_u_h.bmp" ;
 };
+
 
 
 
