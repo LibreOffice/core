@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 08:45:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5735,9 +5735,9 @@ short SwWW8ImplReader::ImportSprm(const BYTE* pPos,USHORT nId)
     if (!nId)
         nId = mpSprmParser->GetSprmId(pPos);
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ASSERT( nId != 0xff, "Sprm FF !!!!" );
-#endif //DEBUG
+#endif
 
     SprmReadInfo& rSprm = WW8GetSprmReadInfo(nId);
 
