@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 13:06:59 $
+ *  last change: $Author: jp $ $Date: 2002-03-18 14:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,8 +694,9 @@ String SwEditShell::Calculate()
                                                   pStart->nContent.GetIndex() );
                             bValidFlds = TRUE;
                         }
-                        aFormel += aCalc.GetStrResult( aCalc.VarLook(
-                                                               sVar )->nValue );
+                        (( aFormel += '(' ) +=
+                                aCalc.GetStrResult( aCalc.VarLook( sVar )
+                                                        ->nValue )) += ')';
                     }
                     else
                         aFormel += sVar;
