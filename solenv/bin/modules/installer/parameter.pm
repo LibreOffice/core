@@ -2,9 +2,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:16:30 $
+#   last change: $Author: rt $ $Date: 2004-06-17 11:38:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -268,7 +268,7 @@ sub setglobalvariables
         $installer::globals::packageformat = "rpm";
     }
 
-    if ( $installer::globals::compiler =~ /unxsols/ )
+    if (( $installer::globals::compiler =~ /unxsols/ ) || ( $installer::globals::compiler =~ /unxsoli/ ))
     {
         $installer::globals::issolarisbuild = 1;
         $installer::globals::packageformat = "pkg";
