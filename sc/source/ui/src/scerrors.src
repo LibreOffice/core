@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:44:49 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,7 +455,7 @@ Resource RID_ERRHDLSC
         TEXT[ english_us ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ portuguese ] = "Erro de formato no sub-documento $(ARG1) do ficheiro, na posiηγo $(ARG2)(linha,coluna)";
         TEXT[ russian ] = "Ξψθακΰ τξπμΰςΰ τΰιλΰ β οξδδξκσμενςε $(ARG1) β οξηθφθθ $(ARG2)(ρςπξκΰ,ρςξλαεφ).";
-        TEXT[ greek ] = "Εντοπίστηκε ένα σφάλμα μορφοποίησης του αρχείου στο τμήμα κειμένου $(ARG1) στη θέση $(ARG2)(γραμμή, στήλη)";
+        TEXT[ greek ] = "Εντοπίστηκε σφάλμα μορφοποίησης στο αρχείο μέσα στο δευτερεύον έγγραφο $(ARG1) στο $(ARG2)(γραμμή,στήλη)";
         TEXT[ dutch ] = "Indelingsfout in subdocument $(ARG1) op positie $(ARG2)(rij,kolom)";
         TEXT[ french ] = "Erreur de format dans le sous-document $(ARG1) du fichier, position $(ARG2)(ligne,colonne).";
         TEXT[ spanish ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posiciσn $(ARG2)(fila,columna)";
@@ -472,7 +472,7 @@ Resource RID_ERRHDLSC
         TEXT[ arabic ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ catalan ] = "Error en el format del subdocument $(ARG1) a $(ARG2)(fila,columna)";
         TEXT[ finnish ] = "Tiedoston aliasiakirjan $(ARG1) kohdassa $(ARG2)(rivi,sarake) havaittiin muotoiluvirhe.";
-        Text[ language_user1 ] = "shou; should be the same text like in the writer";
+        Text[ language_user1 ] = "; shou; should be the same text like in the writer";
         Text[ thai ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
         Text[ czech ] = "V souboru nalezena chyba formΓ΅tu v dokumentu $(ARG1) na $(ARG2)(row,col)";
         Text[ hebrew ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
@@ -498,12 +498,12 @@ Resource RID_ERRHDLSC
         Text[ japanese ] = "γƒ•γ‚΅γ‚¤γƒ«γ® $(ARG1)(θ΅γ€ε—)γ«ζ›ΈεΌγ‚¨γƒ©γƒΌγθ¦‹γ¤γ‹γ‚γΎγ—γγ€‚";
         Text[ chinese_traditional ] = "ζª”ζ΅ε«ζ‰ζ ΌεΌι―θª¤οΌδ½η½®ε¨ $(ARG1)(θ΅οΌζ¬„)";
         Text[ arabic ] = "Κγ ΗίΚΤΗέ ΞΨΓ έν ΗαγζΦΪ $(ARG1)(ΣΨΡ΅ΪγζΟ) έν Ηαγαέ";
-        Text[ greek ] = "Βρέθηκε σφάλμα μορφοποίησης στη θέση $(ARG1)(γραμμή,στήλη) του αρχείο";
+        Text[ greek ] = "Βρέθηκε σφάλμα μορφοποίησης αρχείου στο $(ARG1)(γραμμή,στήλη) ";
         Text[ korean ] = "$(ARG1)(ν–‰,μ—΄)μ—μ„ νμΌ ν•μ‹ μ¤λ¥λ¥Ό λ°κ²¬ν–μµλ‹λ‹¤.";
         Text[ turkish ] = "$(ARG1)(row,col) 'de dosya biηimi hatasύ bulundu";
         Text[ catalan ] = "Error en el format del fitxer a la posiciσ $(ARG1)(fila,columna)";
         Text[ finnish ] = "Tiedostomuotovirhe ilmeni kohteessa $(ARG1)(rivi,sarake).";
-        Text[ language_user1 ] = "shou; should be the same text like in the writer";
+        Text[ language_user1 ] = "; shou; should be the same text like in the writer";
         Text[ thai ] = "File format error found at $(ARG1)(row,col)";
         Text[ czech ] = "Nalezena chyba formΓ΅tu na $(ARG1)(row,col)";
         Text[ hebrew ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt";
@@ -596,7 +596,7 @@ Resource RID_ERRHDLSC
         Text[ japanese ] = "ηΎε¨γ®θ΅¨γ®γΏγδΏε­γ•γ‚γΎγ—γγ€‚";
         Text[ chinese_traditional ] = "εªθƒ½ε„²ε­η›®ε‰η„ε·¥δ½θ΅¨γ€‚";
         Text[ arabic ] = "Κγ ΝέΩ ΗαΜΟζα ΗαΝΗαν έήΨ.";
-        Text[ greek ] = "Αποθηκεύτηκε μόνο ο τρέχων πίνακας.";
+        Text[ greek ] = "Αποθηκεύτηκε μόνο το τρέχον φύλλο.";
         Text[ korean ] = "ν™μ„±ν™”λ μ‹νΈλ§μ΄ μ €μ¥λμ—μµλ‹λ‹¤.";
         Text[ turkish ] = "Yalnύzca yόrόrlόkteki tablo kaydedildi.";
         Text[ language_user1 ] = " ";
@@ -651,7 +651,7 @@ Resource RID_ERRHDLSC
         Text[ italian ] = "Impossibile caricare completamente i dati in quanto il numero di colonne supera il massimo consentito.";
         Text[ swedish ] = "Det gick inte att ladda data fullstδndigt eftersom det maximala antalet rader per tabell har φverskridits.";
         Text[ polish ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
-        Text[ portuguese_brazilian ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
+        Text[ portuguese_brazilian ] = "Nγo foi possνvel carregar completamente os dados porque o nϊmero mαximo de linhas por planilha foi excedido.";
         Text[ japanese ] = "γ‚·γƒΌγƒε†…γ®θ΅ζ•°γζ€ε¤§ζ•°γ‚’θ¶…γγγγ‚γ€γƒ‡γƒΌγ‚Ώγ®δΈ€ιƒ¨γ‚’θª­γΏθΎΌγ‚€γ“γ¨γγ§γγΎγ›γ‚“γ§γ—γγ€‚";
         Text[ korean ] = "ν• μ‹νΈ λ‹Ή ν–‰μ μµλ€μΉκ°€ μ΄κ³Όλμ—κΈ° λ•λ¬Έμ— λ°μ΄ν„°λ¥Ό μ™„μ „ν•κ² λ΅λ”©ν•  μ μ—†μµλ‹λ‹¤.";
         Text[ turkish ] = "Veri tam olarak yόklenemeyecek, ηόnkό her ώablona ait azami satύr sayύsύ aώύldύ.";
@@ -681,7 +681,7 @@ Resource RID_ERRHDLSC
         Text[ italian ] = "Impossibile caricare completamente i dati in quanto il numero delle colonne per pagina supera il massimo consentito.";
         Text[ swedish ] = "Det gick inte att ladda data fullstδndigt eftersom det maximala antalet kolumner per tabell har φverskridits.";
         Text[ polish ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
-        Text[ portuguese_brazilian ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
+        Text[ portuguese_brazilian ] = "Nγo foi possνvel carregar completamente os dados porque o nϊmero mαximo de colunas por planilha foi excedido.";
         Text[ japanese ] = "γ‚·γƒΌγƒε†…γ®ε—ζ•°γζ€ε¤§ζ•°γ‚’θ¶…γγγγ‚γ€γƒ‡γƒΌγ‚Ώγ®δΈ€ιƒ¨γ‚’θª­γΏθΎΌγ‚€γ“γ¨γγ§γγΎγ›γ‚“γ§γ—γγ€‚";
         Text[ korean ] = "ν• μ‹νΈ λ‹Ή μ—΄μ μµλ€μΉκ°€ μ΄κ³Όλμ—κΈ° λ•λ¬Έμ— λ°μ΄ν„°λ¥Ό μ™„μ „ν•κ² λ΅λ”©ν•  μ μ—†μµλ‹λ‹¤.";
         Text[ turkish ] = "Veri tam olarak yόklenemiyor, ηόnkό sayfa baώύna sutόn sayύsύ aώύldύ.";
@@ -711,7 +711,7 @@ Resource RID_ERRHDLSC
         Text[ italian ] = "Impossibile caricare tutte le tabelle in quanto superano il numero massimo consentito.";
         Text[ swedish ] = "Det gick inte att ladda en del tabeller eftersom det maximala antalet tabeller har φverskridits.";
         Text[ polish ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
-        Text[ portuguese_brazilian ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
+        Text[ portuguese_brazilian ] = "Nγo foi possνvel carregar algumas planilhas por que o nϊmero mαximo de planilhas foi excedido.";
         Text[ japanese ] = "γ‚·γƒΌγƒγ®ζ•°γζ€ε¤§ζ•°γ‚’θ¶…γγγγ‚γ€γ„γγ¤γ‹γ®γ‚·γƒΌγƒγ‚’θª­γΏθΎΌγ‚€γ“γ¨γγ§γγΎγ›γ‚“γ§γ—γγ€‚";
         Text[ korean ] = "μ‹νΈμ μµλ€μΉκ°€ μ΄κ³Όλμ—κΈ° λ•λ¬Έμ— μ‹νΈ μ¤‘ λª‡κ°€μ§€λ”λ΅λ”©ν•  μ μ—†μµλ‹λ‹¤.";
         Text[ turkish ] = "Bazύ sayfalar, azami sayfa sύnύrύ aώύldύπύndan yόklenemeyecektir.";
@@ -775,7 +775,7 @@ Resource RID_ERRHDLSC
         Text [ swedish ] = "Fel i den tillhφrande FM3-filens filstruktur." ;
         Text [ danish ] = "Fejl i den tilhψrende FM3-fils filstruktur." ;
         Text [ portuguese ] = "Erro na estrutura do ficheiro FM3 correspondente." ;
-        Text [ portuguese_brazilian ] = "Erro na estrutura do arquivo FM3 correspondente." ;
+        Text [ portuguese_brazilian ] = "Ocorreu um erro na estrutura do arquivo FM3 correspondente." ;
         Text[ chinese_simplified ] = "δ»ε±η„ FM3-ζ–‡δ»¶η„ζ–‡δ»¶η»“ζ„ε«ζ‰ι”™θ――γ€‚";
         Text[ russian ] = "Ξψθακΰ ρςπσκςσπϋ ρξξςβεςρςβσώωεγξ τΰιλΰ FM3.";
         Text[ polish ] = "B³Ήd w strukturze pokrewnego pliku FM3.";
@@ -878,7 +878,7 @@ Resource RID_ERRHDLSC
         Text[ japanese ] = "γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ«γ―γ“γ®γƒ—γƒ­γ‚°γƒ©γƒ γ®γƒγƒΌγ‚Έγƒ§γƒ³γ§γ―θªη¥γ§γγªγ„ζƒ…ε ±γε«γΎγ‚γ¦γ„γΎγ™γ€‚\nδΏε­γ—γªγγ™γ¨γ€γ“γ®ζƒ…ε ±γ―ε¤±γ‚γ‚γΎγ™γ€‚";
         Text[ chinese_traditional ] = "ι€™ε€‹η¨‹εΊη„΅ζ³•θ™•η†ι€™ε€‹ζ–‡δ»¶δΈ­δΈζη„θ³‡θ¨γ€‚\nε¨ι‡ζ–°ε„²ε­ζ™‚ι€™δΊ›θ³‡θ¨ζƒζµε¤±οΌ";
         Text[ arabic ] = "νΝΚζν ΗαγΣΚδΟ Ϊαμ γΪαζγΗΚ ΫΡνΘΙ Ϊαμ ΕΥΟΗΡ ΗαΘΡδΗγΜ εΠΗ.\nεΠε ΗαΘνΗδΗΚ Σζέ ΚΦνΪ ΪδΟ ΕΪΗΟΙ ΝέΩ ΗαγΣΚδΟ!";
-        Text[ greek ] = "Το έγγραφο περιέχει πληροφορίες οι οποίες είναι άγνωστες για αυτή τη έκδοση του \nπρογράμματος. Οι πληροφορίες αυτές θα χαθούν αν επαναλαμβ ";
+        Text[ greek ] = "Το έγγραφο περιέχει πληροφορίες που δεν αναγνωρίζονται από αυτή την έκδοση του προγράμματος.\nΑν αποθηκεύσετε το έγγραφο ξανά, θα διαγραφούν αυτές οι πληροφορίες!";
         Text[ korean ] = "λ¬Έμ„μ—λ” μ΄ ν”„λ΅κ·Έλ¨μ λ²„μ „μΌλ΅ μΈμ‹λμ§€ μ•λ” μ •λ³΄κ°€ ν¬ν•¨λμ–΄ μμµλ‹λ‹¤.\nλ‹¤μ‹ μ €μ¥ μ‹μ— μ΄ μ •λ³΄λ” μƒμ‹¤λ©λ‹λ‹¤.";
         Text[ turkish ] = "Belgede, bu program sόrόmόnde bilinmeyen bilgiler mevcut.\nBu bilgiler, yeniden kayύtta kaybolacak!";
         Text[ language_user1 ] = " ";
@@ -928,7 +928,7 @@ Resource RID_ERRHDLSC
         Text[ENGLISH_US] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
         Text[ portuguese ] = "Foi impossνvel converter os seguintes caracteres para o conjunto de caracteres seleccionado;\nestes foram escritos como caracteres polivalentes &#1234:\n\n$(ARG1)";
         Text[ russian ] = "Νεβξημξζνξ οπεξαπΰηξβΰςό ρλεδσώωθε ρθμβξλϋ β βϋαπΰννσώ κξδθπξβκσ.\nΞνθ οπεδρςΰβλενϋ κΰκ &#1234:\n\n$(ARG1)";
-        Text[ greek ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
+        Text[ greek ] = "Δεν ήταν δυνατή η μετατροπή των ακόλουθων χαρακτήρων στο επιλεγμένο\nσύνολο χαρακτήρων και γράφτηκαν ως &#1234;υποκατάστατα:\n\n$(ARG1)";
         Text[ dutch ] = "De volgende tekens kunnen niet worden geconverteerd naar de geselecteerde tekenset\nen worden geschreven als ? vervangende weergave:\n\n$(ARG1)";
         Text[ french ] = "Impossible de convertir les caractθres suivants dans le jeu choisi ;\nils ont ιtι ιcrits comme substitution &#1234; :\n\n$(ARG1)";
         Text[ spanish ] = "No se pudieron convertir los siguientes caracteres en los juegos de caracteres seleccionados,\npor lo que se guardaron en la representaciσn sustitutoria:\n\n$(ARG1)";
@@ -958,7 +958,7 @@ Resource RID_ERRHDLSC
         TEXT[ english_us ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ portuguese ] = "Erro de formato no sub-documento $(ARG1) do ficheiro, na posiηγo(ARG2)(linha,coluna)";
         TEXT[ russian ] = "Ξψθακΰ τξπμΰςΰ τΰιλΰ β οξδδξκσμενςε $(ARG1) β οξηθφθθ $(ARG2)(ρςπξκΰ,ρςξλαεφ).";
-        TEXT[ greek ] = "Εντοπίστηκε σφάλμα μορφοποίησης στο αρχείο στο τμήμα κειμένου $(ARG1) στη θέση $(ARG2)(γραμμή,στήλη)";
+        TEXT[ greek ] = "Εντοπίστηκε σφάλμα μορφοποίησης στο αρχείο μέσα στο δευτερεύον έγγραφο $(ARG1) στο $(ARG2)(γραμμή,στήλη)";
         TEXT[ dutch ] = "Indelingsfout in subdocument $(ARG1) op positie $(ARG2)(rij,kolom)";
         TEXT[ french ] = "Erreur de format dans le sous-document $(ARG1) du fichier, position $(ARG2)(ligne,colonne).";
         TEXT[ spanish ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posiciσn $(ARG2)(fila,columna)";
@@ -975,7 +975,7 @@ Resource RID_ERRHDLSC
         TEXT[ arabic ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ catalan ] = "Error de format en el document $(ARG1) a $(ARG2)(fila,columna)";
         TEXT[ finnish ] = "Tiedoston aliasiakirjan $(ARG1) kohdassa $(ARG2)(rivi,sarake) havaittiin muotoiluvirhe.";
-        Text[ language_user1 ] = "shou; should be the same text like in the writer";
+        Text[ language_user1 ] = "; shou; should be the same text like in the writer";
         Text[ thai ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
         Text[ czech ] = "V souboru nalezena chyba formΓ΅tu v dokumentu $(ARG1) na $(ARG2)(Ε™Γ΅d,slo)";
         Text[ hebrew ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
@@ -983,6 +983,7 @@ Resource RID_ERRHDLSC
         Text[ slovak ] = "ChybnΓ½ formΓ΅t sΓΊboru v sub-dokumente $(ARG1) na pozΓ­cii $(ARG2)(riadok,stΔΊpec)";
     };
 };
+
 
 
 
