@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:40 $
+ *  last change: $Author: cl $ $Date: 2002-05-21 14:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,4 +67,11 @@
 #define TBI_NEXT 5
 #define TBI_LAST 6
 #define TBI_DRAGTYPE 7
+#define TBI_EMBEDDED 8
+#define TBI_LINK 9
+#define TBI_HYPERLINK 10
+
 #define LB_DOCS 1
+
+#define IL_NAVIGATR 1
+#define ILH_NAVIGATR 2

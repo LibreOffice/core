@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-16 23:26:42 $
+ *  last change: $Author: cl $ $Date: 2002-05-21 14:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,11 +92,6 @@ Window FLT_NAVIGATOR
                 AutoCheck = TRUE ;
                 Identifier = TBI_LIVE ;
                 HelpId = HID_SD_NAVIGATOR_TBI_LIVE ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "live.bmp" ; };
-                    MaskColor = IMAGE_MASK_STDCOLOR ;
-                };
                 Text = "Livemodus" ;
                 Text [ ENGLISH ] = "Live mode" ;
                 Text [ english_us ] = "Live Mode" ;
@@ -126,11 +121,6 @@ Window FLT_NAVIGATOR
                 AutoCheck = TRUE ;
                 Identifier = TBI_PEN ;
                 HelpId = HID_SD_NAVIGATOR_TBI_PEN ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "pen.bmp" ; };
-                    MaskColor = IMAGE_MASK_STDCOLOR ;
-                };
                 Text = "Stift" ;
                 Text [ ENGLISH ] = "Pen" ;
                 Text [ dutch ] = "Pen" ;
@@ -163,12 +153,6 @@ Window FLT_NAVIGATOR
             {
                 Identifier = TBI_FIRST ;
                 HelpId = HID_SD_NAVIGATOR_TBI_FIRST ;
-                 //Symbol = IMAGEBUTTON_FIRST ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "first.bmp" ; };
-                    MaskColor = IMAGE_MASK_STDCOLOR ;
-                };
                 Text = "Erste Seite" ;
                 Text [ ENGLISH ] = "First page" ;
                 Text [ english_us ] = "First Slide" ;
@@ -197,12 +181,6 @@ Window FLT_NAVIGATOR
             {
                 Identifier = TBI_PREVIOUS ;
                 HelpId = HID_SD_NAVIGATOR_TBI_PREV ;
-                 //Symbol = IMAGEBUTTON_PREV ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "prev.bmp" ; };
-                    MaskColor = IMAGE_MASK_STDCOLOR ;
-                };
                 Text = "vorherige Seite" ;
                 Text [ ENGLISH ] = "Previous page" ;
                 Text [ dutch ] = "Vorige pagina" ;
@@ -231,16 +209,8 @@ Window FLT_NAVIGATOR
             {
                 Identifier = TBI_NEXT ;
                 HelpId = HID_SD_NAVIGATOR_TBI_NEXT ;
-                 //Symbol = IMAGEBUTTON_NEXT ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "next.bmp" ; };
-                    MaskColor = IMAGE_MASK_STDCOLOR ;
-                };
-                /* ### ACHTUNG: Neuer Text in Resource? N‰chste Seite : Nıchste Seite */
                 Text = "N‰chste Seite" ;
                 Text [ ENGLISH ] = "Next page" ;
-                /* ### ACHTUNG: Neuer Text in Resource? Zur n‰chsten Seite springen : Zur nıchsten Seite springen */
                 Text [ dutch ] = "Volgende pagina" ;
                 Text [ english_us ] = "Next Slide" ;
                 Text [ italian ] = "Pagina successiva" ;
@@ -267,12 +237,6 @@ Window FLT_NAVIGATOR
             {
                 Identifier = TBI_LAST ;
                 HelpId = HID_SD_NAVIGATOR_TBI_LAST ;
-                 //Symbol = IMAGEBUTTON_LAST ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "last.bmp" ; };
-                    MaskColor = IMAGE_MASK_STDCOLOR ;
-                };
                 Text = "Letzte Seite" ;
                 Text [ ENGLISH ] = "Last page" ;
                 Text [ dutch ] = "Laatste pagina" ;
@@ -306,10 +270,8 @@ Window FLT_NAVIGATOR
                 Identifier = TBI_DRAGTYPE ;
                 HelpId = HID_SD_NAVIGATOR_TBI_DRAGTYPE ;
                 DropDown = TRUE ;
-                 //Left = FALSE;
                 Text = "Dragmodus" ;
                 Text [ English ] = "Drag Mode" ;
-                /* ### ACHTUNG: Neuer Text in Resource? Modus f¸r Drag & Drop ausw‰hlen : Modus f≥r Drag & Drop auswıhlen */
                 Text [ english_us ] = "Drag Mode" ;
                 Text [ italian ] = "Modo drag" ;
                 Text [ spanish ] = "Modo Arrastrar" ;
@@ -352,9 +314,8 @@ Window FLT_NAVIGATOR
         QuickHelpText [ danish ] = "Dokumenter" ;
         QuickHelpText [ portuguese ] = "Documentos" ;
         QuickHelpText [ portuguese_brazilian ] = "Dokumente" ;
-        /* ### ACHTUNG: Neuer Text in Resource? Geˆffnete Dokumente : Ge˜ffnete Dokumente */
         QuickHelpText [ swedish ] = "Dokument" ;
-    QuickHelpText[ russian ] = "ƒÓÍÛÏÂÌÚ˚";
+        QuickHelpText[ russian ] = "ƒÓÍÛÏÂÌÚ˚";
         QuickHelpText[ polish ] = "Dokumenty";
         QuickHelpText[ japanese ] = "ÔæÑÔæûÔΩ∑ÔΩ≠ÔæíÔæùÔæÑ";
         QuickHelpText[ chinese_simplified ] = "ÊñáÊ°£";
@@ -369,6 +330,37 @@ Window FLT_NAVIGATOR
         QuickHelpText[ turkish ] = "Dokumente";
         QuickHelpText[ catalan ] = "Documentos";
         QuickHelpText[ finnish ] = "Asiakirjat!";
+    };
+
+
+#define NAVIGATR_IDLIST \
+        IdList =            \
+        {                   \
+            TBI_LIVE ;  \
+            TBI_PEN ;   \
+            TBI_FIRST ; \
+            TBI_PREVIOUS ;  \
+            TBI_NEXT ;  \
+            TBI_LAST ;  \
+            TBI_EMBEDDED ;  \
+            TBI_LINK ; \
+            TBI_HYPERLINK ; \
+        };                 \
+        IdCount = { 9 ; };
+
+    #define IMAGE_STDBTN_COLOR Color { Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
+
+    ImageList IL_NAVIGATR
+    {
+        ImageBitmap = Bitmap { File = "nv_imagelist.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+        NAVIGATR_IDLIST
+    };
+    ImageList ILH_NAVIGATR
+    {
+        ImageBitmap = Bitmap { File = "nvh_imagelist.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+        NAVIGATR_IDLIST
     };
 };
 

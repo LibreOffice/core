@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-04 16:37:40 $
+ *  last change: $Author: cl $ $Date: 2002-05-21 14:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,9 @@ private:
     SdNavigatorControllerItem*  pNavigatorCtrlItem;
     SdPageNameControllerItem*   pPageNameCtrlItem;
 
+    ImageList                   maImageList;
+    ImageList                   maImageListH;
+
     USHORT                      GetDragTypeSdResId( NavigatorDragType eDT, BOOL bImage = FALSE );
     NavDocInfo*                 GetDocInfo();
 
@@ -167,6 +170,10 @@ private:
                                 DECL_LINK( ClickObjectHdl, void * );
                                 DECL_LINK( SelectDocumentHdl, void * );
                                 DECL_LINK( MenuSelectHdl, Menu * );
+
+    virtual void                DataChanged( const DataChangedEvent& rDCEvt );
+    void                        SetDragImage();
+    void                        ApplyImageList();
 
 protected:
 

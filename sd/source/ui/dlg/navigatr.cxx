@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-30 09:16:31 $
+ *  last change: $Author: cl $ $Date: 2002-05-21 14:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,8 @@ SdNavigatorWin::SdNavigatorWin( Window* pParent,
         aLbDocs         ( this, SdResId( LB_DOCS ) ),
         pBindings       ( pInBindings ),
         pChildWinContext( pChWinCtxt ),
+        maImageList     ( SdResId( IL_NAVIGATR ) ),
+        maImageListH    ( SdResId( ILH_NAVIGATR ) ),
         // Bei Aenderung des DragTypes: SelectionMode der TLB anpassen!
         eDragType       ( NAVIGATOR_DRAGTYPE_EMBEDDED ),
         bDocImported    ( FALSE )
@@ -149,9 +151,6 @@ SdNavigatorWin::SdNavigatorWin( Window* pParent,
     aMinSize = aSize;
     aMinSize.Height() -= 40;
     ((SfxDockingWindow*)GetParent())->SetMinOutputSizePixel( aMinSize );
-
-    // DragType-Button initialisieren
-    aToolbox.SetItemImage( TBI_DRAGTYPE, SdResId( GetDragTypeSdResId( eDragType, TRUE ) ) );
 
     // ToolBox (Groesse anpassen funktioniert sowieso nicht!)
     Size aTbxSize( aToolbox.CalcWindowSizePixel() );
@@ -449,7 +448,7 @@ IMPL_LINK( SdNavigatorWin, SelectDocumentHdl, void *, p )
         eDragType != NAVIGATOR_DRAGTYPE_EMBEDDED )
     {
         eDragType = NAVIGATOR_DRAGTYPE_EMBEDDED;
-        aToolbox.SetItemImage( TBI_DRAGTYPE, SdResId( GetDragTypeSdResId( eDragType, TRUE ) ) );
+        SetDragImage();
     }
 
     return( 0L );
@@ -476,7 +475,7 @@ IMPL_LINK( SdNavigatorWin, MenuSelectHdl, Menu *, pMenu )
         if( eDragType != eDT )
         {
             eDragType = eDT;
-            aToolbox.SetItemImage( TBI_DRAGTYPE, SdResId( GetDragTypeSdResId( eDragType, TRUE ) ) );
+            SetDragImage();
 
             if( eDragType == NAVIGATOR_DRAGTYPE_URL )
             {
@@ -697,11 +696,11 @@ USHORT SdNavigatorWin::GetDragTypeSdResId( NavigatorDragType eDT, BOOL bImage )
         case NAVIGATOR_DRAGTYPE_NONE:
                 return( bImage ? 0 : STR_NONE );
         case NAVIGATOR_DRAGTYPE_URL:
-                return( bImage ? IMG_HYPERLINK : STR_DRAGTYPE_URL );
+                return( bImage ? TBI_HYPERLINK : STR_DRAGTYPE_URL );
         case NAVIGATOR_DRAGTYPE_EMBEDDED:
-                return( bImage ? IMG_EMBEDDED : STR_DRAGTYPE_EMBEDDED );
+                return( bImage ? TBI_EMBEDDED : STR_DRAGTYPE_EMBEDDED );
         case NAVIGATOR_DRAGTYPE_LINK:
-                return( bImage ? IMG_LINK : STR_DRAGTYPE_LINK );
+                return( bImage ? TBI_LINK : STR_DRAGTYPE_LINK );
         default: DBG_ERROR( "Keine Resource fuer DragType vorhanden!" );
     }
     return( 0 );
@@ -801,6 +800,28 @@ void SdNavigatorWin::KeyInput( const KeyEvent& rKEvt )
     {
         Window::KeyInput(rKEvt);
     }
+}
+
+void SdNavigatorWin::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+            ApplyImageList();
+
+    Window::DataChanged( rDCEvt );
+}
+
+void SdNavigatorWin::SetDragImage()
+{
+    aToolbox.SetItemImage( TBI_DRAGTYPE, aToolbox.GetImageList().GetImage( GetDragTypeSdResId( eDragType, TRUE ) ) );
+}
+
+void SdNavigatorWin::ApplyImageList()
+{
+    const bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+
+    aToolbox.SetImageList( bHighContrast ? maImageListH : maImageList );
+
+    SetDragImage();
 }
 
 
