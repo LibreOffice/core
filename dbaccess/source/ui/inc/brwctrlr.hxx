@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:07:25 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,6 +296,8 @@ namespace dbaui
         virtual void SelectionChanged();
         virtual void CellActivated();
         virtual void CellDeactivated();
+        virtual void BeforeDrop();
+        virtual void AfterDrop();
 
     protected:
         virtual ~SbaXDataBrowserController();
