@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 11:23:40 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:02:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1490,8 +1490,7 @@ public:
     void UpdateNumRule( const String& rName, sal_uInt32 nUpdPos );
     void UpdateNumRule();   // alle invaliden Updaten
     /* -> #111955# */
-    void UpdateNumRule( SwNumRule & rRule, ULONG nUpdatePos,
-                        BOOL bOutline = FALSE);
+    void UpdateNumRule( SwNumRule & rRule, ULONG nUpdatePos); // #115901#
     void UpdateNumRuleOld( SwNumRule & rRule, ULONG nUpdatePos);
     /* <- #111955# */
     void ChgNumRuleFmts( const SwNumRule& rRule );
@@ -1504,6 +1503,13 @@ public:
     sal_Bool GotoPrevNum( SwPosition&, sal_Bool bOverUpper = sal_True,
                         sal_uInt8* pUpper = 0, sal_uInt8* pLower = 0 );
 
+    // #i23731#
+    const SwNumRule * SearchNumRule(SwPosition & rPos,
+                                    BOOL bForward,
+                                    BOOL bNum,
+                                    BOOL bOutline,
+                                    int nNonEmptyAllowed);
+
         // Absaetze ohne Numerierung, aber mit Einzuegen
     sal_Bool NoNum( const SwPaM& );
         // Loeschen, Splitten der Aufzaehlungsliste
@@ -1513,9 +1519,8 @@ public:
         // Bewegt selektierte Absaetze (nicht nur Numerierungen)
         // entsprechend des Offsets. (negativ: zum Doc-Anf.)
     sal_Bool MoveParagraph( const SwPaM&, long nOffset = 1, sal_Bool bIsOutlMv = sal_False );
-        // No-/Numerierung ueber Delete/Backspace ein/abschalten
-    sal_Bool NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel = sal_False,
-                    sal_Bool bOutline = sal_False );
+        // No-/Numerierung ueber Delete/Backspace ein/abschalten #115901#
+    sal_Bool NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel = sal_False);
         // Animation der Grafiken stoppen
     void StopNumRuleAnimations( OutputDevice* );
 
