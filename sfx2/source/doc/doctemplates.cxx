@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-29 09:28:52 $
+ *  last change: $Author: dv $ $Date: 2001-04-02 09:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
 
+#ifndef  _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
+#endif
 #ifndef  _COM_SUN_STAR_UCB_NAMECLASH_HPP_
 #include <com/sun/star/ucb/NameClash.hpp>
 #endif
@@ -136,7 +139,7 @@
 
 //-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
+//=============================================================================
 
 #define TEMPLATE_SERVICE_NAME               "com.sun.star.frame.DocumentTemplates"
 #define TEMPLATE_IMPLEMENTATION_NAME        "com.sun.star.comp.sfx2.DocumentTemplates"
@@ -169,7 +172,7 @@
 
 #define C_DELIM                 ';'
 
-//-----------------------------------------------------------------------------
+//=============================================================================
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
@@ -181,7 +184,8 @@ using namespace ::com::sun::star::uno;
 using namespace rtl;
 using namespace ucb;
 
-//-----------------------------------------------------------------------------
+//=============================================================================
+
 class WaitWindow_Impl : public WorkWindow
 {
     Rectangle   _aRect;
@@ -197,7 +201,8 @@ class WaitWindow_Impl : public WorkWindow
 #define X_OFFSET 15
 #define Y_OFFSET 15
 
-//-----------------------------------------------------------------------------
+//=============================================================================
+
 struct NamePair_Impl
 {
     OUString maShortName;
@@ -207,8 +212,12 @@ struct NamePair_Impl
 DECLARE_LIST( NameList_Impl, NamePair_Impl* );
 
 class Updater_Impl;
+class GroupList_Impl;
+class EntryData_Impl;
+class GroupData_Impl;
 
-//-----------------------------------------------------------------------------
+//=============================================================================
+
 class SfxDocTplService_Impl
 {
     Reference< XMultiServiceFactory >   mxFactory;
@@ -258,6 +267,21 @@ class SfxDocTplService_Impl
                                              const OUString& rPropName,
                                              Any& rPropValue );
 
+    void                        createFromContent( GroupList_Impl& rList,
+                                                   Content &rContent,
+                                                   sal_Bool bHierarchy );
+    void                        addHierGroup( GroupList_Impl& rList,
+                                              const OUString& rTitle,
+                                              const OUString& rOwnURL );
+    void                        addFsysGroup( GroupList_Impl& rList,
+                                              const OUString& rTitle,
+                                              const OUString& rOwnURL );
+    void                        removeFromHierarchy( EntryData_Impl *pData );
+    void                        addToHierarchy( GroupData_Impl *pGroup,
+                                                EntryData_Impl *pData );
+
+    void                        removeFromHierarchy( GroupData_Impl *pGroup );
+    void                        addGroupToHierarchy( GroupData_Impl *pGroup );
 public:
                                  SfxDocTplService_Impl( Reference< XMultiServiceFactory > xFactory );
                                 ~SfxDocTplService_Impl();
@@ -287,7 +311,8 @@ public:
     void                        finished() { mpUpdater = NULL; }
 };
 
-//------------------------------------------------------------------------
+//=============================================================================
+
 class Updater_Impl : public ::vos::OThread
 {
 private:
@@ -301,6 +326,106 @@ public:
     virtual void SAL_CALL   onTerminated();
 };
 
+//=============================================================================
+
+class EntryData_Impl
+{
+    OUString            maTitle;
+    OUString            maType;
+    OUString            maTargetURL;
+    OUString            maHierarchyURL;
+
+    sal_Bool            mbInHierarchy   : 1;
+    sal_Bool            mbInUse         : 1;
+    sal_Bool            mbUpdateType    : 1;
+    sal_Bool            mbUpdateLink    : 1;
+
+public:
+                        EntryData_Impl( const OUString& rTitle );
+
+    void                setInUse() { mbInUse = sal_True; }
+    void                setHierarchy( sal_Bool bInHierarchy ) { mbInHierarchy = bInHierarchy; }
+    void                setUpdateLink( sal_Bool bUpdateLink ) { mbUpdateLink = bUpdateLink; }
+    void                setUpdateType( sal_Bool bUpdateType ) { mbUpdateType = bUpdateType; }
+
+    sal_Bool            getInUse() const { return mbInUse; }
+    sal_Bool            getInHierarchy() const { return mbInHierarchy; }
+    sal_Bool            getUpdateLink() const { return mbUpdateLink; }
+    sal_Bool            getUpdateType() const { return mbUpdateType; }
+
+    const OUString&     getHierarchyURL() const { return maHierarchyURL; }
+    const OUString&     getTargetURL() const { return maTargetURL; }
+    const OUString&     getTitle() const { return maTitle; }
+    const OUString&     getType() const { return maType; }
+
+    void                setHierarchyURL( const OUString& rURL ) { maHierarchyURL = rURL; }
+    void                setTargetURL( const OUString& rURL ) { maTargetURL = rURL; }
+    void                setType( const OUString& rType ) { maType = rType; }
+
+    int                 Compare( const OUString& rTitle ) const;
+};
+
+DECLARE_LIST( EntryList_Impl, EntryData_Impl* );
+
+//=============================================================================
+
+class GroupData_Impl
+{
+    EntryList_Impl      maEntries;
+    OUString            maTitle;
+    OUString            maHierarchyURL;
+    OUString            maTargetURL;
+    sal_Bool            mbInUse         : 1;
+    sal_Bool            mbInHierarchy   : 1;
+
+public:
+                        GroupData_Impl( const OUString& rTitle );
+                        ~GroupData_Impl();
+
+    void                setInUse() { mbInUse = sal_True; }
+    void                setHierarchy( sal_Bool bInHierarchy ) { mbInHierarchy = bInHierarchy; }
+    void                setHierarchyURL( const OUString& rURL ) { maHierarchyURL = rURL; }
+    void                setTargetURL( const OUString& rURL ) { maTargetURL = rURL; }
+
+    sal_Bool            getInUse() { return mbInUse; }
+    sal_Bool            getInHierarchy() { return mbInHierarchy; }
+    const OUString&     getHierarchyURL() const { return maHierarchyURL; }
+    const OUString&     getTargetURL() const { return maTargetURL; }
+    const OUString&     getTitle() const { return maTitle; }
+
+    EntryData_Impl*     addEntry( const OUString& rTitle,
+                                  const OUString& rTargetURL,
+                                  const OUString& rType,
+                                  const OUString& rHierURL );
+    ULONG               count() { return maEntries.Count(); }
+    EntryData_Impl*     getEntry( ULONG nPos ) { return maEntries.GetObject( nPos ); }
+
+
+
+
+
+    EntryData_Impl*     GetEntry( ULONG nIndex ) const;
+    EntryData_Impl*     GetEntry( const OUString& rName ) const;
+    EntryData_Impl*     GetByTargetURL( const OUString& rName ) const;
+
+
+    ULONG               GetCount() const;
+
+    void                SetTitle( const OUString& rTitle ) { maTitle = rTitle; }
+
+
+    void                DeleteEntry( ULONG nIndex );
+
+    int                 Compare( const OUString& rTitle ) const
+                            { return maTitle.compareTo( rTitle ); }
+    int                 Compare( GroupData_Impl* pCompareWith ) const;
+};
+
+DECLARE_LIST( GroupList_Impl, GroupData_Impl* );
+
+//=============================================================================
+//=============================================================================
+//=============================================================================
 
 //-----------------------------------------------------------------------------
 // private SfxDocTplService_Impl
@@ -321,9 +446,6 @@ void SfxDocTplService_Impl::init_Impl()
     // entry if necessary
 
     sal_Bool    bRootExists = sal_False;
-
-    Reference < XCommandEnvironment > aCmdEnv;
-    maCmdEnv = aCmdEnv;
 
     maRootURL = OUString( RTL_CONSTASCII_USTRINGPARAM( TEMPLATE_ROOT_URL ) );
     maRootURL += OUString( '/' );
@@ -452,7 +574,6 @@ void SfxDocTplService_Impl::getDirList()
 }
 
 // -----------------------------------------------------------------------
-
 void SfxDocTplService_Impl::getFolders( Content& rRoot,
                                         Content& rFolder )
 {
@@ -479,10 +600,6 @@ void SfxDocTplService_Impl::getFolders( Content& rRoot,
         Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
         Reference< XRow > xRow( xResultSet, UNO_QUERY );
 
-        OUString aFolderURL = rFolder.get()->getIdentifier()->getContentIdentifier();
-        OUString aRootURL( maRootURL );
-        aRootURL += OUString( '/' );
-
         Content aFolder;
         OUString aAdditionalProp( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
 
@@ -500,7 +617,7 @@ void SfxDocTplService_Impl::getFolders( Content& rRoot,
 
                 aTitle = getLongName( aTitle );
 
-                INetURLObject aNewFolderObj( aRootURL );
+                INetURLObject aNewFolderObj( maRootURL );
                 aNewFolderObj.insertName( aTitle, false,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
@@ -577,7 +694,6 @@ void SfxDocTplService_Impl::getTemplates( Content& rTargetFolder,
 }
 
 // -----------------------------------------------------------------------
-
 void SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString& aTitle, OUString& aType )
 {
     if ( mxInfo.is() )
@@ -926,6 +1042,12 @@ void SfxDocTplService_Impl::doUpdate()
 {
     ::osl::MutexGuard aGuard( maMutex );
 
+    GroupList_Impl  aGroupList;
+
+    // get the entries from the hierarchy
+    createFromContent( aGroupList, maRootContent, sal_True );
+
+    // get the entries from the template directories
     sal_Int32   nCount = maTemplateDirs.getLength();
     OUString*   pDirs = maTemplateDirs.getArray();
     Content     aDirContent;
@@ -934,7 +1056,43 @@ void SfxDocTplService_Impl::doUpdate()
     {
         nCount--;
         if ( Content::create( pDirs[ nCount ], maCmdEnv, aDirContent ) )
-            getFolders( maRootContent, aDirContent );
+        {
+            createFromContent( aGroupList, aDirContent, sal_False );
+//          getFolders( maRootContent, aDirContent );
+        }
+    }
+
+    // now check the list
+    GroupData_Impl *pGroup = aGroupList.First();
+    while ( pGroup )
+    {
+        if ( pGroup->getInUse() )
+        {
+            if ( pGroup->getInHierarchy() )
+            {
+                ULONG nCount = pGroup->count();
+                for ( ULONG i=0; i<nCount; i++ )
+                {
+                    EntryData_Impl *pData = pGroup->getEntry( i );
+                    if ( ! pData->getInUse() )
+                    {
+                        if ( pData->getInHierarchy() )
+                            removeFromHierarchy( pData ); // delete entry in hierarchy
+                        else
+                            addToHierarchy( pGroup, pData ); // add entry to hierarchy
+                    }
+                }
+            }
+            else
+            {
+                addGroupToHierarchy( pGroup ); // add group to hierarchy
+            }
+        }
+        else
+            removeFromHierarchy( pGroup ); // delete group from hierarchy
+
+        delete pGroup;
+        pGroup = aGroupList.Next();
     }
 }
 
@@ -1520,6 +1678,8 @@ void SAL_CALL Updater_Impl::onTerminated()
 }
 
 //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 WaitWindow_Impl::WaitWindow_Impl()
     : WorkWindow( NULL, WB_BORDER | WB_3DLOOK )
 {
@@ -1549,3 +1709,337 @@ void WaitWindow_Impl::Paint( const Rectangle& rRect )
     DrawText( _aRect, _aText, _nTextStyle );
 }
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
+                                          const OUString& rTitle,
+                                          const OUString& rOwnURL )
+{
+    // now get the content of the Group
+    Content                 aContent;
+    Reference< XResultSet > xResultSet;
+    Sequence< OUString >    aProps(3);
+
+    OUString* pProps = aProps.getArray();
+    pProps[0] = OUString::createFromAscii( TITLE );
+    pProps[1] = OUString::createFromAscii( TARGET_URL );
+    pProps[2] = OUString::createFromAscii( PROPERTY_TYPE );
+
+    try
+    {
+        aContent = Content( rOwnURL, maCmdEnv );
+        ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
+        xResultSet = aContent.createCursor( aProps, eInclude );
+    }
+    catch ( ContentCreationException& )
+    {
+        DBG_ERRORFILE( "addHierGroup: ContentCreationException" );
+    }
+    catch( CommandAbortedException& )
+    {
+        DBG_ERRORFILE( "addHierGroup: CommandAbortedException" );
+    }
+    catch ( Exception& ) {}
+
+    if ( xResultSet.is() )
+    {
+        GroupData_Impl *pGroup = new GroupData_Impl( rTitle );
+        pGroup->setHierarchy( sal_True );
+        pGroup->setHierarchyURL( rOwnURL );
+        rList.Insert( pGroup );
+
+        Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+        Reference< XRow > xRow( xResultSet, UNO_QUERY );
+
+        try
+        {
+            while ( xResultSet->next() )
+            {
+                BOOL             bUpdateType = sal_False;
+                EntryData_Impl  *pData;
+
+                OUString aTitle( xRow->getString( 1 ) );
+                OUString aTargetDir( xRow->getString( 2 ) );
+                OUString aType( xRow->getString( 3 ) );
+                OUString aHierURL = xContentAccess->queryContentIdentifierString();
+
+                if ( !aType.getLength() )
+                {
+                    OUString aTmpTitle;
+                    getTitleFromURL( aTargetDir, aTmpTitle, aType );
+                    if ( aType.getLength() )
+                        bUpdateType = sal_True;
+                }
+
+                pData = pGroup->addEntry( aTitle, aTargetDir, aType, aHierURL );
+                pData->setUpdateType( bUpdateType );
+            }
+        }
+        catch( CommandAbortedException& )
+        {
+            DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
+        }
+        catch ( Exception& ) {}
+    }
+}
+
+//-----------------------------------------------------------------------------
+void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
+                                          const OUString& rTitle,
+                                          const OUString& rOwnURL )
+{
+    if ( rTitle.compareToAscii( "wizard" ) == 0 )
+        return;
+    else if ( rTitle.compareToAscii( "internal" ) == 0 )
+        return;
+
+    // First, get the long name of the group
+    OUString        aTitle = getLongName( rTitle );
+    GroupData_Impl *pGroup = rList.First();
+
+    while ( pGroup && pGroup->getTitle() != aTitle )
+        pGroup = rList.Next();
+
+    if ( !pGroup )
+    {
+        pGroup = new GroupData_Impl( aTitle );
+        pGroup->setTargetURL( rOwnURL );
+        rList.Insert( pGroup );
+    }
+
+    pGroup->setInUse();
+
+    // now get the content of the Group
+    Content                 aContent;
+    Reference< XResultSet > xResultSet;
+    Sequence< OUString >    aProps(1);
+    OUString* pProps = aProps.getArray();
+    pProps[0] = OUString::createFromAscii( TITLE );
+
+    try
+    {
+        aContent = Content( rOwnURL, maCmdEnv );
+        ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
+        xResultSet = aContent.createCursor( aProps, eInclude );
+    }
+    catch( CommandAbortedException& )
+    {
+        DBG_ERRORFILE( "createCursor: CommandAbortedException" );
+    }
+    catch ( Exception& ) {}
+
+    if ( xResultSet.is() )
+    {
+        Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+        Reference< XRow > xRow( xResultSet, UNO_QUERY );
+
+        try
+        {
+            while ( xResultSet->next() )
+            {
+                OUString aTitle( xRow->getString( 1 ) );
+                OUString aTargetURL = xContentAccess->queryContentIdentifierString();
+                OUString aType;
+                OUString aHierURL;
+
+                getTitleFromURL( aTargetURL, aTitle, aType );
+
+                pGroup->addEntry( aTitle, aTargetURL, aType, aHierURL );
+            }
+        }
+        catch( CommandAbortedException& )
+        {
+            DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
+        }
+        catch ( Exception& ) {}
+    }
+}
+
+// -----------------------------------------------------------------------
+void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
+                                               Content &rContent,
+                                               sal_Bool bHierarchy )
+{
+    // when scanning the file system, we have to add the 'standard' group, too
+    if ( ! bHierarchy )
+    {
+        OUString aStdTitle = getLongName( OUString( RTL_CONSTASCII_USTRINGPARAM( STANDARD_FOLDER ) ) );
+        OUString aTargetURL = rContent.get()->getIdentifier()->getContentIdentifier();
+        addFsysGroup( rList, aStdTitle, aTargetURL );
+    }
+
+    Reference< XResultSet > xResultSet;
+    Sequence< OUString > aProps(1);
+    OUString* pProps = aProps.getArray();
+    pProps[0] = OUString::createFromAscii( TITLE );
+
+    try
+    {
+        ResultSetInclude eInclude = INCLUDE_FOLDERS_ONLY;
+        xResultSet = rContent.createCursor( aProps, eInclude );
+    }
+    catch( CommandAbortedException& )
+    {
+        DBG_ERRORFILE( "createCursor: CommandAbortedException" );
+    }
+    catch ( Exception& ) {}
+
+    if ( xResultSet.is() )
+    {
+        Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+        Reference< XRow > xRow( xResultSet, UNO_QUERY );
+
+        try
+        {
+            while ( xResultSet->next() )
+            {
+                OUString aTitle( xRow->getString( 1 ) );
+                OUString aTargetURL( xContentAccess->queryContentIdentifierString() );
+
+                if ( bHierarchy )
+                    addHierGroup( rList, aTitle, aTargetURL );
+                else
+                    addFsysGroup( rList, aTitle, aTargetURL );
+            }
+        }
+        catch( CommandAbortedException& )
+        {
+            DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
+        }
+        catch ( Exception& ) {}
+    }
+}
+
+//-----------------------------------------------------------------------------
+void SfxDocTplService_Impl::removeFromHierarchy( EntryData_Impl *pData )
+{
+    Content aTemplate;
+
+    if ( Content::create( pData->getHierarchyURL(), maCmdEnv, aTemplate ) )
+    {
+        removeContent( aTemplate );
+    }
+}
+
+//-----------------------------------------------------------------------------
+void SfxDocTplService_Impl::addToHierarchy( GroupData_Impl *pGroup,
+                                            EntryData_Impl *pData )
+{
+    Content aGroup, aTemplate;
+
+    if ( ! Content::create( pGroup->getHierarchyURL(), maCmdEnv, aGroup ) )
+        return;
+
+    // Check, if there's a template with the given name in this group
+    // Return if there is already a template
+    INetURLObject aGroupObj( pGroup->getHierarchyURL() );
+
+    aGroupObj.insertName( pData->getTitle(), false,
+                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::ENCODE_ALL );
+
+    OUString aTemplateURL = aGroupObj.GetMainURL();
+
+    if ( Content::create( aTemplateURL, maCmdEnv, aTemplate ) )
+        return;
+
+    addEntry( aGroup, pData->getTitle(),
+              pData->getTargetURL(),
+              pData->getType() );
+}
+
+//-----------------------------------------------------------------------------
+void SfxDocTplService_Impl::addGroupToHierarchy( GroupData_Impl *pGroup )
+{
+    OUString aAdditionalProp( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
+    Content aGroup;
+
+    INetURLObject aNewFolderObj( maRootURL );
+    aNewFolderObj.insertName( pGroup->getTitle(), false,
+          INetURLObject::LAST_SEGMENT, true,
+          INetURLObject::ENCODE_ALL );
+
+    OUString aNewFolderURL = aNewFolderObj.GetMainURL();
+
+    if ( createFolder( aNewFolderURL, sal_False, sal_False, aGroup ) )
+    {
+        setProperty( aGroup, aAdditionalProp, makeAny( pGroup->getTargetURL() ) );
+        Content aTargetDir;
+        if ( Content::create( pGroup->getTargetURL(), maCmdEnv, aTargetDir ) )
+            getTemplates( aTargetDir, aGroup );
+    }
+}
+
+//-----------------------------------------------------------------------------
+void SfxDocTplService_Impl::removeFromHierarchy( GroupData_Impl *pGroup )
+{
+    Content aGroup;
+
+    if ( Content::create( pGroup->getHierarchyURL(), maCmdEnv, aGroup ) )
+    {
+        removeContent( aGroup );
+    }
+}
+
+// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
+GroupData_Impl::GroupData_Impl( const OUString& rTitle )
+{
+    maTitle = rTitle;
+    mbInUse = sal_False;
+    mbInHierarchy = sal_False;
+}
+
+// -----------------------------------------------------------------------
+GroupData_Impl::~GroupData_Impl()
+{
+    EntryData_Impl *pData = maEntries.First();
+    while ( pData )
+    {
+        delete pData;
+        pData = maEntries.Next();
+    }
+}
+
+// -----------------------------------------------------------------------
+EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
+                                          const OUString& rTargetURL,
+                                          const OUString& rType,
+                                          const OUString& rHierURL )
+{
+    EntryData_Impl *pData = maEntries.First();
+
+    while ( pData && pData->getTitle() != rTitle )
+        pData = maEntries.Next();
+
+    if ( !pData )
+    {
+        pData = new EntryData_Impl( rTitle );
+        pData->setTargetURL( rTargetURL );
+        pData->setType( rType );
+        if ( rHierURL.getLength() )
+        {
+            pData->setHierarchyURL( rHierURL );
+            pData->setHierarchy( sal_True );
+        }
+        maEntries.Insert( pData );
+    }
+    else
+    {
+        pData->setInUse();
+    }
+
+    return pData;
+}
+
+// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
+EntryData_Impl::EntryData_Impl( const OUString& rTitle )
+{
+    maTitle = rTitle;
+    mbInUse = sal_False;
+    mbInHierarchy = sal_False;
+}
