@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreviewRenderer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:36:40 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include <vcl/virdev.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/eeitem.hxx>
 #include <tools/link.hxx>
 
 
@@ -187,18 +188,24 @@ bool PreviewRenderer::Initialize (
 
         // Tell the view to show the given page.
         SdPage* pNonConstPage = const_cast<SdPage*>(pPage);
-        mpView->ShowPage (pNonConstPage, Point(0,0));
+        if (pPage->IsMasterPage())
+            mpView->ShowMasterPagePgNum(pPage->GetPageNum(), Point(0, 0));
+        else
+            mpView->ShowPage (pNonConstPage, Point(0,0));
 
         // Make sure that a page view exists.
         SdrPageView* pPageView = mpView->GetPageView (pPage);
         if (pPageView == NULL)
             break;
         // Set background color of page view and outliner.
+        svtools::ColorConfig aColorConfig;
         pPageView->SetApplicationBackgroundColor(
             pPage->GetBackgroundColor(pPageView));
         SdrOutliner& rOutliner (pDocument->GetDrawOutliner(NULL));
-        rOutliner.SetBackgroundColor (
-            pPage->GetBackgroundColor(pPageView));
+        rOutliner.SetBackgroundColor(pPage->GetBackgroundColor(pPageView));
+        rOutliner.SetDefaultLanguage(pDocument->GetLanguage(EE_CHAR_LANGUAGE));
+        mpView->SetApplicationBackgroundColor(
+            Color(aColorConfig.GetColorValue(svtools::APPBACKGROUND).nColor));
 
         bSuccess = true;
     }
@@ -328,8 +335,9 @@ void PreviewRenderer::ProvideView (DrawDocShell* pDocShell)
     {
         mpView.reset (new DrawView (pDocShell, mpPreviewDevice.get(), NULL));
     }
-    mpView->SetBordVisible (FALSE);
-    mpView->SetPageVisible (FALSE);
+    mpView->SetBordVisible(FALSE);
+    mpView->SetPageBorderVisible(FALSE);
+    mpView->SetPageVisible(TRUE);
 }
 
 
