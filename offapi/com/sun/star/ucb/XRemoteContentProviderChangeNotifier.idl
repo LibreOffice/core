@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRemoteContentProviderChangeNotifier.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:30 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #endif
 
 module com { module sun { module star { module ucb {
-    interface XRemoteContentProviderChangeListener;
+     published interface XRemoteContentProviderChangeListener;
 }; }; }; };
 
 module com { module sun { module star { module ucb {
@@ -78,7 +78,7 @@ module com { module sun { module star { module ucb {
     @version 1.0
     @author Stephan Bergmann
  */
-interface XRemoteContentProviderChangeNotifier:
+published interface XRemoteContentProviderChangeNotifier:
     com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
