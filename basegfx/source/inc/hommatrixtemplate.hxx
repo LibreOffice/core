@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hommatrixtemplate.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2003-08-20 16:56:48 $
+ *  last change: $Author: thb $ $Date: 2003-09-26 07:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,97 +598,24 @@ public:
         // create a copy as source for the original values
         const ImplHomMatrixTemplate aCopy(*this);
 
-        if(rMat.mpLine)
+        // TODO: maybe optimize cases where last line is [0 0 1].
+
+        double fValue(0.0);
+
+        for(sal_uInt16 a(0); a < RowSize; ++a)
         {
-            // complex first lines
-            for(sal_uInt16 a(0); a < (RowSize - 1); a++)
+            for(sal_uInt16 b(0); b < RowSize; ++b)
             {
-                for(sal_uInt16 b(0); b < RowSize; b++)
-                {
-                    double fValue(0.0);
+                fValue = 0.0;
 
-                    for(sal_uInt16 c(0); c < RowSize; c++)
-                    {
-                        fValue += aCopy.get(c, b) * rMat.get(a, c);
-                    }
+                for(sal_uInt16 c(0); c < RowSize; ++c)
+                    fValue += aCopy.get(c, b) * rMat.get(a, c);
 
-                    set(a, b, fValue);
-                }
-            }
-
-            if(mpLine)
-            {
-                // complex last line
-                for(sal_uInt16 b(0); b < RowSize; b++)
-                {
-                    double fValue(0.0);
-
-                    for(sal_uInt16 c(0); c < RowSize; c++)
-                    {
-                        fValue += aCopy.get(c, b) * rMat.get((RowSize - 1), c);
-                    }
-
-                    set((RowSize - 1), b, fValue);
-                }
-
-                testLastLine();
-            }
-            else
-            {
-                // last line is rMat line, copy
-                mpLine = new ImplMatLine< RowSize >((RowSize - 1), rMat.mpLine);
+                set(a, b, fValue);
             }
         }
-        else
-        {
-            // simplified first lines
-            for(sal_uInt16 a(0); a < (RowSize - 1); a++)
-            {
-                for(sal_uInt16 b(0); b < RowSize; b++)
-                {
-                    double fValue(0.0);
 
-                    for(sal_uInt16 c(0); c < (RowSize - 1); c++)
-                    {
-                        fValue += aCopy.get(c, b) * rMat.get(a, c);
-                    }
-
-                    if(b == (RowSize -1))
-                    {
-                        fValue += aCopy.get(a, (RowSize - 1));
-                    }
-
-                    set(a, b, fValue);
-                }
-            }
-
-            if(mpLine)
-            {
-                // simplified last line
-                for(sal_uInt16 b(0); b < RowSize; b++)
-                {
-                    double fValue(0.0);
-
-                    for(sal_uInt16 c(0); c < (RowSize - 1); c++)
-                    {
-                        fValue += aCopy.get(c, b) * rMat.get((RowSize - 1), c);
-                    }
-
-                    if(b == (RowSize -1))
-                    {
-                        fValue += aCopy.get((RowSize - 1), (RowSize - 1));
-                    }
-
-                    set((RowSize - 1), b, fValue);
-                }
-
-                testLastLine();
-            }
-            else
-            {
-                // no last line
-            }
-        }
+        testLastLine();
     }
 
     bool isEqual(const ImplHomMatrixTemplate& rMat)
