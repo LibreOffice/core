@@ -11,7 +11,7 @@ st	svtools\os2\inc					get	-	all	st_oinc NULL
 st	svtools\mac\inc					get	-	all	st_minc NULL
 st	svtools\unx\inc					get	-	all	st_uinc NULL
 st	svtools\bmpmaker				nmake	-	all	st_bmp NULL
-st	svtools\source\Accessibility			nmake	-	all	st_accessibility NULL
+st	svtools\source\Accessibility			nmake	-	all	st_accessibility st__brw NULL
 st	svtools\source\cmdparse				nmake	-	all	st_cmdparse NULL
 st	svtools\source\memtools				nmake	-	all	st_mem NULL
 st	svtools\source\numbers				nmake	-	all	st_num NULL
