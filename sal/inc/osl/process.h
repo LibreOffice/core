@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:45:37 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 14:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@ typedef struct {
 #endif
 
 /** Process handle
+
     @see osl_executeProcess
     @see osl_terminateProcess
     @see osl_freeProcessHandle
@@ -172,71 +173,164 @@ typedef struct {
 typedef void* oslProcess;
 
 /** Execute a process.
-    @param strImageName [in] denotes the name of the executable to be started.
-    @param strArguments [in] is an array of argument strings.
-    @param nArgument [in] the number of arguments provided.
-    @param Options [in] is a combination of int-constants to describe the mode of execution.
-    @param Security [in] describes a the user and his rights for wich the process is started.
-    @param strDirectory [in] denotes the name of the startup directory.
-    @param strEnviroments [in] is an array of strings wich describes the enviroment to set.
-    Each string has the form "variable=value".
-    @param nEnvironmentVars [in] the number of environment vars to set.
-    @param pProcess [out] points to a oslProcess variable, in wich the processhandle is returned.
-    @return osl_Process_E_None if the executable could be started, otherwise an error-code.
+
+    Executes the program image provided in strImageName in a new process.
+
+    @param ustrImageName
+    [in] The file URL of the executable to be started.
+    Can be NULL in this case the file URL of the executable must be the first element
+    in ustrArguments.
+
+    @param ustrArguments
+    [in] An array of argument strings. Can be NULL if strImageName is not NULL.
+    If strImageName is NULL it is expected that the first element contains
+    the file URL of the executable to start.
+
+    @param nArguments
+    [in] The number of arguments provided. If this number is 0 strArguments will be ignored.
+
+    @param Options
+    [in] A combination of int-constants to describe the mode of execution.
+
+    @param Security
+    [in] The user and his rights for which the process is started. May be NULL in which case
+    the process will be started in the context of the current user.
+
+    @param ustrDirectory
+    [in] The file URL of the working directory of the new proces. If the specified directory
+    does not exist or is inaccessible the working directory of the newly created process
+    is undefined. If this parameter is NULL or the caller provides an empty string the
+    new process will have the same current working directory as the calling process.
+
+    @param ustrEnviroments
+    [in] An array of strings describing environment variables that should be merged into the
+    environment of the new process. Each string has to be in the form "variable=value".
+    This parameter can be NULL in which case the new process gets the same environment
+    as the parent process.
+
+    @param nEnvironmentVars
+    [in] The number of environment variables to set.
+
+    @param pProcess
+    [out] Pointer to a oslProcess variable, wich receives the handle of the newly created process.
+    This parameter must not be NULL.
+
+    @return
+    <dl>
+    <dt>osl_Process_E_None</dt>
+    <dd>on success</dd>
+    <dt>osl_Process_E_NotFound</dt>
+    <dd>if the specified executable could not be found</dd>
+    <dt>osl_Process_E_InvalidError</dt>
+    <dd>if invalid parameters will be detected</dd>
+    <dt>osl_Process_E_Unknown</dt>
+    <dd>if arbitrary other errors occur</dd>
+    </dl>
+
+    @see oslProcessOption
     @see osl_executeProcess_WithRedirectedIO
     @see osl_freeProcessHandle
     @see osl_loginUser
 */
-oslProcessError SAL_CALL osl_executeProcess(rtl_uString *strImageName,
-                                            rtl_uString *strArguments[],
-                                            sal_uInt32   nArguments,
-                                            oslProcessOption Options,
-                                            oslSecurity Security,
-                                            rtl_uString *strWorkDir,
-                                            rtl_uString *strEnvironment[],
-                                            sal_uInt32   nEnvironmentVars,
-                                            oslProcess *pProcess);
+oslProcessError SAL_CALL osl_executeProcess(
+    rtl_uString* ustrImageName,
+    rtl_uString* ustrArguments[],
+    sal_uInt32  nArguments,
+    oslProcessOption Options,
+    oslSecurity Security,
+    rtl_uString* ustrDirectory,
+    rtl_uString* ustrEnvironments[],
+    sal_uInt32 nEnvironmentVars,
+    oslProcess* pProcess);
 
 
-/** Execute a process and redirected child process standard IO
-    @param strImageName [in] denotes the name of the executable to be started.
-    @param strArguments [in] is an array of argument strings.
-    @param nArgument [in] the number of arguments provided.
-    @param Options [in] is a combination of int-constants to describe the mode of execution.
-    @param Security [in] describes a the user and his rights for wich the process is started.
-    @param strDirectory [in] denotes the name of the startup directory.
-    @param strEnviroments [in] is an array of strings wich describes the enviroment to set.
-    Each string has the form "variable=value".
-    @param nEnvironmentVars [in] the number of environment vars to set.
-    @param pResource [in] is a NULL terminated array of resources to transmit to the client process.
-    @param pProcess [out] points to a oslProcess variable, in wich the processhandle is returned.
-    @param pChildInputWrite [out] points to a oslFileHandle variable that receives the handle which can
-    be used to write to child process standard input device. Handle has to be closed with osl_closeFile
-    if no longer used.
-    @param pChildOutputRead [out] points to a oslFileHandle variable that receives the handle which can
-    be used to read from child process standard output device. Handle has to be closed with osl_closeFile
-    if no longer used.
-    @param pChildErrorRead [out] points to a oslFileHandle variable that receives the handle which can
-    be used to read from child process standard error device. Handle has to be closed with osl_closeFile
-    if no longer used.
-    @return osl_Process_E_None if the executable could be started, otherwise an error-code.
+/** Execute a process and redirect child process standard IO.
+
+    @param ustrImageName
+    [in] The file URL of the executable to be started.
+    Can be NULL in this case the file URL of the executable must be the first element
+    in ustrArguments.
+
+    @param ustrArguments
+    [in] An array of argument strings. Can be NULL if strImageName is not NULL.
+    If strImageName is NULL it is expected that the first element contains
+    the file URL of the executable to start.
+
+    @param nArguments
+    [in] The number of arguments provided. If this number is 0 strArguments will be ignored.
+
+    @param Options
+    [in] A combination of int-constants to describe the mode of execution.
+
+    @param Security
+    [in] The user and his rights for which the process is started. May be NULL in which case
+    the process will be started in the context of the current user.
+
+    @param ustrDirectory
+    [in] The file URL of the working directory of the new proces. If the specified directory
+    does not exist or is inaccessible the working directory of the newly created process
+    is undefined. If this parameter is NULL or the caller provides an empty string the
+    new process will have the same current working directory as the calling process.
+
+    @param ustrEnviroments
+    [in] An array of strings describing environment variables that should be merged into the
+    environment of the new process. Each string has to be in the form "variable=value".
+    This parameter can be NULL in which case the new process gets the same environment
+    as the parent process.
+
+    @param nEnvironmentVars
+    [in] The number of environment variables to set.
+
+    @param pProcess
+    [out] Pointer to a oslProcess variable, wich receives the handle of the newly created process.
+    This parameter must not be NULL.
+
+    @param pChildInputWrite
+    [in] Pointer to a oslFileHandle variable that receives the handle which can be used to write
+    to the child process standard input device. The returned handle is not random accessible.
+    The handle has to be closed with osl_closeFile if no longer used. This parameter can be NULL.
+
+    @param pChildOutputRead
+    [in] Pointer to a oslFileHandle variable that receives the handle which can be used to read from
+    the child process standard output device. The returned handle is not random accessible.
+    The Handle has to be closed with osl_closeFile if no longer used. This parameter can be NULL.
+
+    @param pChildErrorRead
+    [in] Pointer to a oslFileHandle variable that receives the handle which can be used to read from
+    the child process standard error device. The returned handle is not random accessible.
+    The Handle has to be closed with osl_closeFile if no longer used. This parameter can be NULL.
+
+    @return
+    <dl>
+    <dt>osl_Process_E_None</dt>
+    <dd>on success</dd>
+    <dt>osl_Process_E_NotFound</dt>
+    <dd>if the specified executable could not be found</dd>
+    <dt>osl_Process_E_InvalidError</dt>
+    <dd>if invalid parameters will be detected</dd>
+    <dt>osl_Process_E_Unknown</dt>
+    <dd>if arbitrary other errors occur</dd>
+    </dl>
+
+    @see oslProcessOption
     @see osl_executeProcess
     @see osl_freeProcessHandle
     @see osl_loginUser
     @see osl_closeFile
 */
-oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(rtl_uString *strImageName,
-                                            rtl_uString *strArguments[],
-                                            sal_uInt32   nArguments,
-                                            oslProcessOption Options,
-                                            oslSecurity Security,
-                                            rtl_uString *strWorkDir,
-                                            rtl_uString *strEnvironment[],
-                                            sal_uInt32   nEnvironmentVars,
-                                            oslProcess *pProcess,
-                                            oslFileHandle *pChildInputWrite,
-                                            oslFileHandle *pChildOutputRead,
-                                            oslFileHandle *pChildErrorRead);
+oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
+    rtl_uString* strImageName,
+    rtl_uString* ustrArguments[],
+    sal_uInt32 nArguments,
+    oslProcessOption Options,
+    oslSecurity Security,
+    rtl_uString* ustrDirectory,
+    rtl_uString* ustrEnvironments[],
+    sal_uInt32 nEnvironmentVars,
+    oslProcess* pProcess,
+    oslFileHandle* pChildInputWrite,
+    oslFileHandle* pChildOutputRead,
+    oslFileHandle* pChildErrorRead);
 
 /** Terminate a process
     @param Process [in] the handle of the process to be terminated
