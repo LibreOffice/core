@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-10 08:04:05 $
+#   last change: $Author: kz $ $Date: 2004-02-25 17:11:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,17 +85,21 @@ SHL1OBJS= \
         $(SLO)$/ed_ipersiststr.obj \
         $(SLO)$/ed_idataobj.obj \
         $(SLO)$/ed_ioleobject.obj \
+        $(SLO)$/ed_iinplace.obj \
+        $(SLO)$/iipaobj.obj \
         $(SLO)$/guid.obj \
         $(SLO)$/esdll.obj \
-        $(SLO)$/intercept.obj
+        $(SLO)$/intercept.obj \
+        $(SLO)$/syswinwrapper.obj \
+        $(SLO)$/tracker.obj
 
 SHL1STDLIBS=\
-    $(SALLIB) 	\
-    $(CPPULIB)	\
+    $(SALLIB) 	        \
+    $(CPPULIB)	        \
     $(CPPUHELPERLIB)	\
-    ole32.lib 	\
-    gdi32.lib 	\
-    uuid.lib 	\
+    ole32.lib 	        \
+    gdi32.lib 	        \
+    uuid.lib 	        \
     oleaut32.lib
 
 .IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
