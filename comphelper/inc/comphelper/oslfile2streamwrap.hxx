@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oslfile2streamwrap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 11:03:18 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #include <osl/file.hxx>
 #endif
 
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 namespace comphelper
 {
@@ -90,9 +93,10 @@ namespace comphelper
 // FmUnoIOStream,
 // stream zum schreiben un lesen von Daten, basieren  auf File
 //==================================================================
-typedef ::cppu::WeakImplHelper1<stario::XInputStream> InputStreamWrapper_Base;
-    // needed for some compilers
-class OSLInputStreamWrapper : public InputStreamWrapper_Base
+struct InputStreamWrapper_Base : public ::cppu::WeakImplHelper1<stario::XInputStream>
+{};
+
+class COMPHELPER_DLLPUBLIC OSLInputStreamWrapper : public InputStreamWrapper_Base
 {
     ::osl::Mutex    m_aMutex;
     ::osl::File*    m_pFile;
@@ -123,9 +127,10 @@ public:
 // FmUnoOutStream,
 // Datensenke fuer Files
 //==================================================================
-typedef ::cppu::WeakImplHelper1<stario::XOutputStream> OutputStreamWrapper_Base;
-    // needed for some compilers
-class OSLOutputStreamWrapper : public OutputStreamWrapper_Base
+struct OutputStreamWrapper_Base : public ::cppu::WeakImplHelper1<stario::XOutputStream>
+{};
+
+class COMPHELPER_DLLPUBLIC OSLOutputStreamWrapper : public OutputStreamWrapper_Base
 {
     ::osl::File&        rFile;
 
