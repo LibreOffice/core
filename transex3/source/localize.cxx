@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-18 08:17:15 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,8 @@ const char *NegativeList[] = {
     "officecfg/data/org.openoffice.Office.Labels.xcd",
     "officecfg/data/org/openoffice/Office/Labels.xcd",
     "officecfg/data/org/openoffice/Office/SFX.xcd",
-    "officecfg/registry/data/org/openoffice/Office/Labels.xcu",
-    "officecfg/registry/data/org/openoffice/Office/SFX.xcu",
+//  "officecfg/registry/data/org/openoffice/Office/Labels.xcu",
+//  "officecfg/registry/data/org/openoffice/Office/SFX.xcu",
     "hidother.src",
     "NULL"
 };
@@ -110,13 +110,13 @@ const char *PositiveList[] = {
     "offmgr/inc/offmenu_tmpl.hrc",
     "offmgr/source/offapp/intro/intro_tmpl.hrc",
     "dbaccess/source/ui/inc/toolbox_tmpl.hrc",
-    "svx/inc/globlmn.hrc",
-    "sw/source/ui/inc/swmn.hrc",
-    "sw/source/ui/inc/swacc.hrc",
-    "sw/source/ui/inc/toolbox.hrc",
-    "offmgr/inc/offmenu.hrc",
-    "offmgr/source/offapp/intro/intro.hrc",
-    "dbaccess/source/ui/inc/toolbox.hrc",
+    "svx/source/intro/intro_tmpl.hrc",
+    "dbaccess/source/ui/dlg/AutoControls_tmpl.hrc",
+    "svx/source/unodialogs/textconversiondlgs/chinese_direction_tmpl.hrc",
+    "chart2/source/controller/dialogs/res_DataLabel_tmplhrc",
+    "chart2/source/controller/dialogs/res_LegendPosition_tmpl.hrc",
+    "chart2/source/controller/dialogs/res_Statistic_tmpl.hrc",
+    "chart2/source/controller/menu/MenuItems_tmpl.hrc",
     "NULL"
 };
 
@@ -874,14 +874,14 @@ void Help()
     fprintf( stdout,
         "As part of the L10N framework, localize extracts and merges translations\n"
         "out of and into the whole source tree.\n\n"
-        "Syntax: localize -e|-m -i ISO-Code -l l1[=f1][,l2[=f2]][...] -f FileName\n"
+        "Syntax: localize -e|-m -l l1[=f1][,l2[=f2]][...] -f FileName [-QQ]\n"
         "Parameter:\n"
         "\t-e: Extract mode\n"
         "\t-m: Merge mode\n"
         "\tFileName: Output file when extract mode, input file when merge mode\n"
         "\tl1...ln: supported languages (\"all\" for all languages).\n"
         "\tf1...fn: fallback languages for supported languages\n"
-        "\tISO-Code: The full qualified ISO language code for language 99 (en-US, de, ...)"
+        "\tQQ: quiet output)"
     );
 
     fprintf( stdout,
@@ -903,15 +903,14 @@ void Help()
     fprintf( stdout,
         "\nExample 1:\n"
         "==========\n"
-        "localize -e -i de-CH -l 01,99=35 -f MyFile\n\n"
-        "All strings will be extracted for language 01 and language 99.\n"
-        "If 99 is empty, language 35 will be fallback.\n"
+        "localize -e -l en-US,de -f MyFile\n\n"
+        "All strings will be extracted for language de and language en-US.\n"
     );
     fprintf( stdout,
         "\nExample 2:\n"
         "==========\n"
-        "localize -m -i de-CH -l 99 -f MyFile\n\n"
-        "All strings in MyFile will be merged into language 99 in the\n"
+        "localize -m -l es -f MyFile\n\n"
+        "All strings in MyFile will be merged into language es in the\n"
         "source code.\n"
     );
 }
