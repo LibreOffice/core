@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:28:55 $
+#   last change: $Author: svesik $ $Date: 2004-04-21 13:41:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 PRJ=..$/..$/..
 
 PRJNAME=bridges
@@ -78,11 +77,12 @@ NO_BSYMBOLIC=TRUE
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCLINUXS"
 
-.IF "$(bridges_debug)" != ""
-CFLAGS += -DBRIDGES_DEBUG
+.IF "$(cppu_no_leak)" == ""
+CFLAGS += -DLEAK_STATIC_DATA
 .ENDIF
 
 CFLAGSNOOPT=-O0
+
 NOOPTFILES = \
     $(SLO)$/uno2cpp.obj	\
     $(SLO)$/cpp2uno.obj
@@ -92,16 +92,15 @@ SLOFILES= \
     $(SLO)$/cpp2uno.obj		\
     $(SLO)$/uno2cpp.obj
 
-SHL1TARGET= $(TARGET)
 
-SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-SHL1IMPLIB= i$(TARGET)
+SHL1TARGET=$(TARGET)
+
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+SHL1IMPLIB=i$(TARGET)
 SHL1VERSIONMAP=..$/..$/bridge_exports.map
 
-SHL1OBJS= \
-    $(SLO)$/except.obj		\
-    $(SLO)$/cpp2uno.obj		\
-    $(SLO)$/uno2cpp.obj
+SHL1OBJS= $(SLOFILES)
+SHL1LIBS =$(SLB)$/cpp_uno_shared.lib
 
 SHL1STDLIBS= \
     $(CPPULIB) \
