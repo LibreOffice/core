@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrhghdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-24 07:40:39 $
+ *  last change: $Author: bm $ $Date: 2001-05-21 11:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 #include "xmluconv.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLEHELP_HXX
+#include "xmlehelp.hxx"
+#endif
+
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -104,13 +108,14 @@ XMLCharHeightHdl::~XMLCharHeightHdl()
 
 sal_Bool XMLCharHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Int32 nAbs = 0;
+    double fSize;
 
     if( rStrImpValue.indexOf( sal_Unicode('%') ) == -1 )
     {
-        if( SvXMLUnitConverter::convertMeasure( nAbs, rStrImpValue, MAP_POINT ) )
+        MapUnit eSrcUnit = SvXMLExportHelper::GetUnitFromString( rStrImpValue, MAP_POINT );
+        if( SvXMLUnitConverter::convertDouble( fSize, rStrImpValue, eSrcUnit, MAP_POINT ))
         {
-            rValue <<= (float)nAbs;
+            rValue <<= (float)fSize;
             return sal_True;
         }
     }
@@ -122,10 +127,12 @@ sal_Bool XMLCharHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
 {
     OUStringBuffer aOut;
 
-    float nAbs = 0;
-    if( rValue >>= nAbs )
+    float fSize = 0;
+    if( rValue >>= fSize )
     {
-        SvXMLUnitConverter::convertMeasure( aOut, nAbs, MAP_POINT, MAP_POINT );
+        SvXMLUnitConverter::convertDouble( aOut, (double)fSize, TRUE, MAP_POINT, MAP_POINT );
+        aOut.append( sal_Unicode('p'));
+        aOut.append( sal_Unicode('t'));
     }
 
     rStrExpValue = aOut.makeStringAndClear();
