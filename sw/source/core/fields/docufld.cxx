@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-07-17 10:32:55 $
+ *  last change: $Author: jp $ $Date: 2001-08-20 10:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1459,25 +1459,21 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
 
             if( pMgr)
             {
-                if (pMgr->IsInMerge())
+                String sDBName( GetDBName( sTmpName, pDoc ));
+                String sDataSource(sDBName.GetToken(0, DB_DELIM));
+                String sDataTableOrQuery(sDBName.GetToken(1, DB_DELIM));
+                if( pMgr->IsInMerge() && sDBName.Len() &&
+                    pMgr->IsDataSourceOpen( sDataSource,
+                                                sDataTableOrQuery, sal_False))
                 {
-                    String sDBName;
-                    sDBName = GetDBName( sTmpName, pDoc );
-                    if(sDBName.Len())
-                    {
-                        String sDataSource(sDBName.GetToken(0, DB_DELIM));
-                        String sDataTableOrQuery(sDBName.GetToken(1, DB_DELIM));
-                        if(pMgr && pMgr->IsDataSourceOpen(sDataSource, sDataTableOrQuery, sal_False))
-                        {
-                            double fNumber;
-                            sal_uInt32 nFormat;
-                            pMgr->GetMergeColumnCnt(GetColumnName( sTmpName ),
-                                            GetLanguage(), aContent, &fNumber, &nFormat );
-                            bValid = sal_True;
-                        }
-                    }
+                    double fNumber;
+                    sal_uInt32 nFormat;
+                    pMgr->GetMergeColumnCnt(GetColumnName( sTmpName ),
+                                    GetLanguage(), aContent, &fNumber, &nFormat );
+                    bValid = sal_True;
                 }
-                else
+                else if( sDBName.Len() && sDataSource.Len() &&
+                         sDataTableOrQuery.Len() )
                     bValid = sal_True;
             }
         }
