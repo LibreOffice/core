@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mav $ $Date: 2001-05-17 14:13:50 $
+#   last change: $Author: mav $ $Date: 2001-12-19 12:06:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ IDLFILES=\
     XPluginInstance.idl \
     XPluginInstanceNotifySink.idl \
     XPluginInstancePeer.idl \
+    XPluginInstanceSyncPeer.idl \
     XPluginWindowPeer.idl \
     XCloseSessionListener.idl \
     XRemoteServiceManagerProvider.idl
