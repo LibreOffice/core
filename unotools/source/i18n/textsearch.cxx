@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-07-17 14:25:12 $
+ *  last change: $Author: fme $ $Date: 2002-08-02 09:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,28 @@ void TextSearch::Init( const SearchParam & rParam,
         DBG_ERRORFILE( "TextSearch ctor: Exception caught!" );
     }
 }
+
+void TextSearch::SetLocale( const ::com::sun::star::util::SearchOptions& rOptions,
+                            const ::com::sun::star::lang::Locale& rLocale )
+{
+    // convert SearchParam to the UNO SearchOptions
+    SearchOptions aSOpt( rOptions );
+    aSOpt.Locale = rLocale;
+
+    try
+    {
+        Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+        xTextSearch = Reference< XTextSearch > ( xMSF->createInstance(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.util.TextSearch" ) ) ), UNO_QUERY );
+        xTextSearch->setOptions( aSOpt );
+    }
+    catch ( Exception& )
+    {
+        DBG_ERRORFILE( "TextSearch ctor: Exception caught!" );
+    }
+}
+
 
 TextSearch::~TextSearch()
 {

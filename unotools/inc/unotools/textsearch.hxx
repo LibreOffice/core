@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsearch.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-01 20:29:36 $
+ *  last change: $Author: fme $ $Date: 2002-08-02 09:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,9 @@ public:
     int SearchBkwrd( const String &rStr,
                     xub_StrLen* pStart, xub_StrLen* pEnde,
                     ::com::sun::star::util::SearchResult* pSrchResult = 0 );
+
+    void SetLocale( const ::com::sun::star::util::SearchOptions& rOpt,
+                    const ::com::sun::star::lang::Locale& rLocale );
 };
 
 // ............................................................................
