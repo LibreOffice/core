@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:45:36 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 11:09:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,7 @@ TabPage RID_PAGE_SELECTABTYPE
     {
         Pos     = MAP_APPFONT ( 15, 68 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
+        Group = TRUE;
 
         Text = "Mozilla / Netscape";
         Text [ english ] = "Mozilla / Netscape";
@@ -227,7 +228,6 @@ TabPage RID_PAGE_SELECTABTYPE
         Text = "Evolution";
         Text [ english ] = "Evolution";
         Text [ english_us ] = "Evolution";
-        Group = TRUE;
         Text[ portuguese ] = "Evolution";
         Text[ russian ] = "Evolution";
         Text[ greek ] = "Evolution";
