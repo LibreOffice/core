@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:55:00 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2011,7 +2011,8 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
         {
             // dann besorge mal die Seitenbreite ohne Raender !!
             const SwFrmFmt* pFmt = rRTFWrt.pFlyFmt ? rRTFWrt.pFlyFmt :
-                rWrt.pDoc->GetPageDesc(0).GetPageFmtOfNode(rNode, false);
+                const_cast<const SwDoc *>(rWrt.pDoc)
+                ->GetPageDesc(0).GetPageFmtOfNode(rNode, false);
 
             aRect = pFmt->FindLayoutRect( TRUE );
             if( 0 == ( nPageSize = aRect.Width() ))
@@ -4011,7 +4012,8 @@ static Writer& OutRTF_SwFmtCol( Writer& rWrt, const SfxPoolItem& rHt )
         else if( rRTFWrt.pAktPageDesc )
             pFmt = &rRTFWrt.pAktPageDesc->GetMaster();
         else
-            pFmt = &rWrt.pDoc->GetPageDesc(0).GetMaster();
+            pFmt = &const_cast<const SwDoc *>(rWrt.pDoc)
+                ->GetPageDesc(0).GetMaster();
 
         const SvxLRSpaceItem& rLR = pFmt->GetLRSpace();
 
