@@ -2,9 +2,9 @@
  *
  *  $RCSfile: endian.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2001-04-08 20:10:54 $
+ *  last change: $Author: svesik $ $Date: 2001-04-26 15:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,11 +147,14 @@ extern "C" {
 #ifdef IRIX
 #   include <sys/endian.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
+#   undef _BIG_ENDIAN
+#   undef _PDP_ENDIAN
 #   elif BYTE_ORDER == BIG_ENDIAN
-#       define _BIG_ENDIAN
+#   undef _LITTLE_ENDIAN
+#   undef _PDP_ENDIAN
 #   elif BYTE_ORDER == PDP_ENDIAN
-#       define _PDP_ENDIAN
+#   undef _LITTLE_ENDIAN
+#   undef _BIG_ENDIAN
 #   endif
 #endif
 
