@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: bc $ $Date: 2002-09-13 15:57:05 $
+ *  last change: $Author: bc $ $Date: 2002-09-23 12:58:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,6 +258,7 @@ public class ReportWizard {
      String DefaultName;
      java.util.Vector GroupFieldVector;
      String TemplatePath;
+     String[] SavePath = new String[2];
 
      static String sMsgWizardName;
      static String scmdReady;
@@ -416,12 +417,15 @@ public class ReportWizard {
             int iKey  =  CurUNODialog.getControlKey(EventObject.Source, CurUNODialog.ControlList);
             switch (iKey) {
         case SOTXTFIRSTSAVEPATH:
-                CurUNODialog.assignPropertyToDialogControl("cmdGoOn", "Enabled", new Boolean(xSaveTextBox[0].getText().length() > 0));
+            SavePath[0] = xSaveTextBox[0].getText();
+                CurUNODialog.assignPropertyToDialogControl("cmdGoOn", "Enabled", new Boolean(SavePath[0].length() > 0));
             baskbeforeOverwrite[0] = (bmodifiedbySaveAsDialog[0] == false);
             bmodifiedbySaveAsDialog[0] = false;
             break;
+
         case SOTXTSECSAVEPATH:
-                CurUNODialog.assignPropertyToDialogControl("cmdGoOn", "Enabled", new Boolean(xSaveTextBox[1].getText().length() > 0));
+            SavePath[1] = xSaveTextBox[1].getText();
+                CurUNODialog.assignPropertyToDialogControl("cmdGoOn", "Enabled", new Boolean(SavePath[1].length() > 0));
             baskbeforeOverwrite[1] = (bmodifiedbySaveAsDialog[1] == false);
             bmodifiedbySaveAsDialog[1] = false;
             break;
@@ -514,8 +518,10 @@ public class ReportWizard {
             break;
            }
         }
-        catch( Exception exception ){
-               exception.printStackTrace(System.out);
+        catch(Exception exception){
+            exception.printStackTrace(System.out);
+        // make sure the dialog does not block the component
+        tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(true));
         }
      }
 
@@ -566,9 +572,8 @@ public class ReportWizard {
                         break;
 
                     case SOGROUPLST:
-                       bGoOn = CurReportDocument.addGroupNametoDocument(xGlobalMSF, CurUNODialog,
-                                     xGroupListBox, xSelGroupListBox, GroupFieldVector,
-                                     CurReportPaths.ReportPath, sMsgTableNotExisting + (char) 13 + sMsgEndAutopilot);
+                       bGoOn = CurReportDocument.addGroupNametoDocument(xGlobalMSF, CurUNODialog, xGroupListBox, xSelGroupListBox, GroupFieldVector,
+                                    CurReportPaths.ReportPath, sMsgTableNotExisting + (char) 13 + sMsgEndAutopilot);
                        break;
 
                     case SOSELGROUPLST:
@@ -955,7 +960,6 @@ public class ReportWizard {
     baskbeforeOverwrite[1] = true;
     bmodifiedbySaveAsDialog[1] = false;
     }
-
 
 
     public void fillFifthStep(XMultiServiceFactory xMSF){
@@ -1416,18 +1420,18 @@ public class ReportWizard {
         if (CurReportDocument.CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot)){
         CurDataimport.insertDatabaseDatatoReportDocument(xMSF, CurReportDocument, CurUNOProgressDialog);
         }
-        CurUNOProgressDialog.xComponent.dispose();
         if (bcreateTemplate == false){
         boolean bDocisStored = tools.storeDocument(xMSF, CurReportDocument.Component, StorePath, "StarOffice XML (Writer)",
                             false, sMsgSavingImpossible + (char)13 + sMsgLinkCreationImpossible);
         if (bcreateLink && bDocisStored)
             CurReportDocument.CurDBMetaData.createDBLink(CurReportDocument.CurDBMetaData.DataSource, StorePath);
         }
+        CurUNOProgressDialog.xComponent.dispose();
     }
     catch (ThreadDeath td){
         System.out.println("could not stop thread");
+        CurUNOProgressDialog.xComponent.dispose();
     }
-    CurUNOProgressDialog.xComponent.dispose();
     }
         });
     ProgressThread.start();

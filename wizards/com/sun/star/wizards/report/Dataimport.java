@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: bc $ $Date: 2002-09-13 16:28:10 $
+ *  last change: $Author: bc $ $Date: 2002-09-23 12:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,6 @@ public class Dataimport extends ReportWizard{
 
         CurUNOProgressDialog.xWindow.setVisible(true);
 
-
     return CurUNOProgressDialog;
     }
     catch(com.sun.star.uno.Exception exception)
@@ -259,11 +258,12 @@ public class Dataimport extends ReportWizard{
         CurUNOProgressDialog.modifyFontWeight("lblProgressDataImport", com.sun.star.awt.FontWeight.BOLD);
         insertDatabaseDatatoReportDocument(xMSF, CurReportDocument, CurUNOProgressDialog);
         }
+        CurUNOProgressDialog.xComponent.dispose();
     }
     catch (ThreadDeath td){
         System.out.println("could not stop thread");
+        CurUNOProgressDialog.xComponent.dispose();
     }
-    CurUNOProgressDialog.xComponent.dispose();
     }
         });
 
