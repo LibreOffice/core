@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectformatterlayfrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:48:36 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,11 @@ SwFrm& SwObjectFormatterLayFrm::GetAnchorFrm()
     return mrAnchorLayFrm;
 }
 
-bool SwObjectFormatterLayFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj )
+// --> OD 2005-01-10 #i40147# - add parameter <_bCheckForMovedFwd>.
+// Not relevant for objects anchored at layout frame.
+bool SwObjectFormatterLayFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
+                                           const bool _bCheckForMovedFwd )
+// <--
 {
     _FormatObj( _rAnchoredObj );
 
