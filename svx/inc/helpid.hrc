@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: iha $ $Date: 2002-04-15 19:52:59 $
+ *  last change: $Author: ka $ $Date: 2002-04-26 09:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,6 +465,8 @@
 
 #define HID_SVXPAGE_PARA_ASIAN                  (HID_SVX_START + 406)
 
+#define HID_GRFFILTER_EMBOSS_LIGHT              (HID_SVX_START + 408)
+
 #define HID_GALLERY_NEWTHEME                    (HID_SVX_START + 410)
 #define HID_GALLERY_THEMELIST                   (HID_SVX_START + 411)
 
@@ -495,11 +497,12 @@
 #define HID_OPTIONS_COLORCONFIG                 (HID_SVX_START + 429)
 #define HID_OPTIONS_COLORCONFIG_SAVE_SCHEME     (HID_SVX_START + 430)
 #define HID_OPTIONS_ACCESSIBILITYCONFIG         (HID_SVX_START + 431)
+
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
 // -----------------------------------------------------------------------
 
-#define ACT_SVX_HID_END HID_OPTIONS_COLORCONFIG
+#define ACT_SVX_HID_END HID_OPTIONS_ACCESSIBILITYCONFIG
 
 #if ACT_SVX_HID_END > HID_SVX_END
 #error Resource-Ueberlauf in #line, #file
