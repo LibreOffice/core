@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grviewsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:50:36 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,15 @@
  ************************************************************************/
 
 #include "GraphicViewShell.hxx"
+#include "LayerTabBar.hxx"
+#include "FrameView.hxx"
+#include <sfx2/viewfrm.hxx>
+#include <vcl/scrbar.hxx>
 
 
 namespace sd {
+
+static const int TABCONTROL_INITIAL_SIZE = 350;
 
 /*************************************************************************
 |*
@@ -73,11 +79,16 @@ namespace sd {
 GraphicViewShell::GraphicViewShell (
     SfxViewFrame* pFrame,
     ViewShellBase& rViewShellBase,
+    ::Window* pParentWindow,
     FrameView* pFrameView)
-    : DrawViewShell (pFrame, rViewShellBase, PK_STANDARD, pFrameView)
+    : DrawViewShell (
+        pFrame,
+        rViewShellBase,
+        pParentWindow,
+        PK_STANDARD,
+        pFrameView)
 {
-    //Construct( pDocSh );
-    meShellType = ST_DRAW;
+    Construct ();
 }
 
 /*************************************************************************
@@ -86,44 +97,105 @@ GraphicViewShell::GraphicViewShell (
 |*
 \************************************************************************/
 
-GraphicViewShell::GraphicViewShell(SfxViewFrame* pFrame,
-                                 const DrawViewShell& rShell) :
-    DrawViewShell( pFrame, rShell )
+GraphicViewShell::GraphicViewShell (
+    SfxViewFrame* pFrame,
+    ::Window* pParentWindow,
+    const DrawViewShell& rShell)
+    : DrawViewShell (pFrame, pParentWindow, rShell)
 {
-    //Construct( pDocSh );
+    Construct ();
+}
+
+
+
+
+GraphicViewShell::~GraphicViewShell (void)
+{
+}
+
+
+
+
+void GraphicViewShell::Construct (void)
+{
     meShellType = ST_DRAW;
+
+    mpLayerTabBar.reset (new LayerTabBar(this,GetParentWindow()));
+    mpLayerTabBar->SetSplitHdl(LINK(this,GraphicViewShell,TabBarSplitHandler));
+    mpLayerTabBar->Show();
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
-GraphicViewShell::~GraphicViewShell()
+
+
+void GraphicViewShell::ChangeEditMode (
+    EditMode eMode,
+    bool bIsLayerModeActive)
 {
+    // There is no page tab that could be shown instead of the layer tab.
+    // Therefore we have it allways visible regardless of what the caller
+    // said. (We have to change the callers behaviour, of course.)
+    DrawViewShell::ChangeEditMode (eMode, true);
 }
 
-/*************************************************************************
-|*
-|* gemeinsamer Initialisierungsanteil der beiden Konstruktoren
-|*
-\************************************************************************/
 
-void GraphicViewShell::Construct()
+
+
+void GraphicViewShell::ArrangeGUIElements (void)
 {
-    // Shells fuer Object Bars erzeugen
-    //SfxShell* pObjBarShell = new SdDrawStdObjectBar(this, pDrView);
-    //aShellTable.Insert(RID_DRAW_OBJ_TOOLBOX, pObjBarShell);
+    if (mpLayerTabBar.get()!=NULL && mpLayerTabBar->IsVisible())
+    {
+        Size aSize = mpLayerTabBar->GetSizePixel();
+        const Size aFrameSize (
+            GetViewFrame()->GetWindow().GetOutputSizePixel());
 
-    // ObjectBar einschalten
-    //SwitchObjectBar(RID_DRAW_OBJ_TOOLBOX);
+        if (aSize.Width() == 0)
+        {
+            if (pFrameView->GetTabCtrlPercent() == 0.0)
+                aSize.Width() = TABCONTROL_INITIAL_SIZE;
+            else
+                aSize.Width() = FRound(aFrameSize.Width()
+                    * pFrameView->GetTabCtrlPercent());
+        }
+        aSize.Height() = GetParentWindow()->GetSettings().GetStyleSettings()
+            .GetScrollBarSize();
+
+        Point aPos (0, aViewSize.Height() - aSize.Height());
+
+        mpLayerTabBar->SetPosSizePixel (aPos, aSize);
+
+        if (aFrameSize.Width() > 0)
+            pFrameView->SetTabCtrlPercent (
+                (double) aTabControl.GetSizePixel().Width()
+                / aFrameSize.Width());
+        else
+            pFrameView->SetTabCtrlPercent( 0.0 );
+    }
+
+    DrawViewShell::ArrangeGUIElements();
+}
 
 
-    aPageBtn.Hide();
-    aMasterPageBtn.Hide();
-    aLayerBtn.Hide();
 
+
+IMPL_LINK(GraphicViewShell, TabBarSplitHandler, TabBar*, pTabBar)
+{
+    const long int nMax = aViewSize.Width()
+        - aScrBarWH.Width()
+        - pTabBar->GetPosPixel().X();
+
+    Size aTabSize = pTabBar->GetSizePixel();
+    aTabSize.Width() = Min(pTabBar->GetSplitSize(), (long)(nMax-1));
+
+    pTabBar->SetSizePixel (aTabSize);
+
+    Point aPos = pTabBar->GetPosPixel();
+    aPos.X() += aTabSize.Width();
+
+    Size aScrSize (nMax - aTabSize.Width(), aScrBarWH.Height());
+    mpHorizontalScrollBar->SetPosSizePixel(aPos, aScrSize);
+
+    return 0;
 }
 
 } // end of namespace sd
