@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2003-08-13 17:21:06 $
+#   last change: $Author: kz $ $Date: 2004-03-25 14:58:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,7 +71,9 @@ JAVATESTFILES := \
     Bug107753_Test.java \
     Bug108825_Test.java \
     Bug110892_Test.java \
-    Bug111153_Test.java
+    Bug111153_Test.java \
+    Bug114133_Test.java \
+    MethodIdTest.java
 JARFILES := juh.jar jurt.jar ridl.jar sandbox.jar
 
 .INCLUDE: javaunittest.mk
