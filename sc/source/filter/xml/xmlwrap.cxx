@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 13:53:57 $
+ *  last change: $Author: nn $ $Date: 2000-12-02 16:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #endif
 #include <vos/xception.hxx>
 #include <comphelper/processfactory.hxx>
+#include <unotools/streamwrap.hxx>
 #include <xmloff/xmlkywd.hxx>
 
 #include <com/sun/star/xml/sax/XErrorHandler.hpp>
@@ -111,39 +112,48 @@ sal_Bool ScXMLImportWrapper::Import()
         return sal_False;
 
     // Get data source ...
-    uno::Reference<io::XActiveDataSource> xSource = rMedium.GetDataSource();
-    DBG_ASSERT( xSource.is(), "got no data source from medium" );
 
-    if( !xSource.is() )
+    uno::Reference< io::XActiveDataSource > xSource;
+    uno::Reference< uno::XInterface > xPipe;
+
+    xml::sax::InputSource aParserInput;
+    aParserInput.sSystemId = OUString(rMedium.GetName());
+
+    SvStorageStreamRef xDocStream;
+    SvStorage *pStorage = rMedium.GetStorage();
+    if( pStorage )
     {
-//      // If we didn't get a data source from a medium, we have to create
-//      // one.
-//      uno::Reference<uno::XInterface> xFactory =
-//          xServiceFactory->createInstance(
-//                          L"com.sun.star.frame.DataSourceFactory" );
-//      if( xFactory.is() )
-//      {
-//          XMultiServiceFactoryRef xMFactory( xFactory, uno::UNO_QUERY );
-//          if( xMFactory.is() )
-//          {
-//              UString sURL( mrMedium.GetName() );
-//              Sequence<UsrAny> aArgs(1);
-//              UsrAny* pArgs = aArgs.getArray();
-//              pArgs->setString( sURL );
-//
-//              uno::Reference<uno::XInterface> xSrc = xMFactory->createInstanceWithArguments(
-//                                      sURL, aArgs );
-//              if( xSrc.is() )
-//                  xSrc->queryInterface( XActiveDataSource::getSmartUik(),
-//                                        xSource );
-//          }
-//      }
+        OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content" ) );
+        xDocStream = pStorage->OpenStream( sDocName,
+                                  STREAM_READ | STREAM_NOCREATE );
+        xDocStream->SetBufferSize( 16*1024 );
+        aParserInput.aInputStream = new utl::OInputStreamWrapper( *xDocStream );
     }
+    else
+    {
+        // if there is a medium and if this medium has a load environment,
+        // we get an active data source from the medium.
+        rMedium.GetInStream()->Seek( 0 );
+        xSource = rMedium.GetDataSource();
+        DBG_ASSERT( xSource.is(), "got no data source from medium" );
+        if( !xSource.is() )
+            return sal_False;
 
-    // get data source
-    DBG_ASSERT( xSource.is(), "data source missing" );
-    if( !xSource.is() )
-        return sal_False;
+        // get a pipe for connecting the data source to the parser
+        xPipe = xServiceFactory->createInstance(
+                OUString::createFromAscii("com.sun.star.io.Pipe") );
+        DBG_ASSERT( xPipe.is(),
+                "XMLReader::Read: com.sun.star.io.Pipe service missing" );
+        if( !xPipe.is() )
+            return sal_False;
+
+        // connect pipe's output stream to the data source
+        uno::Reference<io::XOutputStream> xPipeOutput( xPipe, uno::UNO_QUERY );
+        xSource->setOutputStream( xPipeOutput );
+
+        aParserInput.aInputStream =
+            uno::Reference< io::XInputStream >( xPipe, uno::UNO_QUERY );
+    }
 
     // get parser
     uno::Reference<uno::XInterface> xXMLParser =
@@ -153,13 +163,6 @@ sal_Bool ScXMLImportWrapper::Import()
     if( !xXMLParser.is() )
         return sal_False;
 
-    // get a pipe for connecting the data source to the parser
-    uno::Reference<uno::XInterface> xPipe =
-        xServiceFactory->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.Pipe" )) );
-    DBG_ASSERT( xPipe.is(), "com.sun.star.io.Pipe service missing" );
-    if( !xPipe.is() )
-        return sal_False;
 
     sal_uInt16 nStyleFamilyMask(0);
 //  USHORT nStyleFamilyMask = SFX_STYLE_FAMILY_ALL;
@@ -196,23 +199,17 @@ sal_Bool ScXMLImportWrapper::Import()
         uno::Reference<xml::sax::XDocumentHandler> xFilter = new ScXMLImport(
             xModel, bLoadDoc, nStyleFamilyMask);
 
-        // connect pipe's output stream to the data source
-        uno::Reference<io::XOutputStream> xPipeOutput( xPipe, uno::UNO_QUERY );
-        xSource->setOutputStream( xPipeOutput );
-
-        // connect pipe's input stream to the parser
-        xml::sax::InputSource aParserInput;
-        uno::Reference<io::XInputStream> xPipeInput( xPipe, uno::UNO_QUERY );
-        aParserInput.aInputStream = xPipeInput;
-        aParserInput.sSystemId = OUString(rMedium.GetName());
-
         // connect parser and filter
         uno::Reference<xml::sax::XParser> xParser( xXMLParser, uno::UNO_QUERY );
         xParser->setDocumentHandler( xFilter );
 
         // parse
-        uno::Reference<io::XActiveDataControl> xSourceControl( xSource, uno::UNO_QUERY );
-        xSourceControl->start();
+        if( xSource.is() )
+        {
+            uno::Reference<io::XActiveDataControl> xSourceControl( xSource, uno::UNO_QUERY );
+            if( xSourceControl.is() )
+                xSourceControl->start();
+        }
         sal_Bool bRetval(sal_True);
 
         try
@@ -252,7 +249,22 @@ sal_Bool ScXMLImportWrapper::Export()
     if(!xWriter.is())
         return sal_False;
 
-    uno::Reference<io::XOutputStream> xOut = rMedium.GetDataSink();
+    uno::Reference<io::XOutputStream> xOut;
+    SvStorageStreamRef xDocStream;
+    SvStorage *pStorage = rMedium.GetStorage();
+    if( pStorage )
+    {
+        OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content" ) );
+        xDocStream = pStorage->OpenStream( sDocName,
+                                  STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+        xDocStream->SetBufferSize( 16*1024 );
+        xOut = new utl::OOutputStreamWrapper( *xDocStream );
+    }
+    else
+    {
+        xOut = rMedium.GetDataSink();
+    }
+
     uno::Reference<io::XActiveDataSource> xSrc( xWriter, uno::UNO_QUERY );
     xSrc->setOutputStream( xOut );
 
