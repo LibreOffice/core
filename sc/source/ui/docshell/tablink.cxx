@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:49:42 $
+ *  last change: $Author: er $ $Date: 2001-03-14 16:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <svx/linkmgr.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/collatorwrapper.hxx>
 
 #include "tablink.hxx"
 
@@ -285,9 +286,9 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
             {
                 String aName;
                 pDoc->GetName( nTab, aName );
-                if ( ScGlobal::pScInternational->CompareEqual(
-                        ScGlobal::GetDocTabName( aFileName, aTabName ), aName,
-                        INTN_COMPARE_IGNORECASE ) )
+                if ( ScGlobal::pCollator->compareString(
+                        ScGlobal::GetDocTabName( aFileName, aTabName ), aName )
+                        == COMPARE_EQUAL )
                 {
                     pDoc->RenameTab( nTab,
                         ScGlobal::GetDocTabName( aNewUrl, aTabName ),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-02-27 10:49:33 $
+ *  last change: $Author: er $ $Date: 2001-03-14 16:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
+#include <unotools/collatorwrapper.hxx>
 
 
 //------------------------------------------------------------------------
@@ -499,8 +500,8 @@ sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const String& rList )
     {
         xub_StrLen nCount = rList.GetTokenCount('\t');
         for ( xub_StrLen i=0; i<nCount; i+=2 )
-            if ( ScGlobal::pScInternational->CompareEqual(
-                    aStr, rList.GetToken(i,'\t'), INTN_COMPARE_IGNORECASE ) )
+            if ( ScGlobal::pCollator->compareString(
+                    aStr, rList.GetToken(i,'\t') ) == COMPARE_EQUAL )
             {
                 c = (sal_Unicode)rList.GetToken(i+1,'\t').ToInt32();
             }
