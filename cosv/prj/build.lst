@@ -10,6 +10,7 @@ cs	cosv\source\inc						get		-	all	cs_src_inc NULL
 cs	cosv\source\service					nmake	-	all	cs_serv NULL
 cs	cosv\source\storage					nmake	-	all	cs_store NULL
 cs	cosv\source\strings					nmake	-	all	cs_string NULL
-cs	cosv\util						    nmake	-	all	cs_util cs_serv cs_store cs_string NULL
+cs	cosv\source\comphelp					nmake	-	all	cs_badcast NULL
+cs	cosv\util						    nmake	-	all	cs_util cs_serv cs_store cs_string cs_badcast NULL
 #==============================================================================================
 

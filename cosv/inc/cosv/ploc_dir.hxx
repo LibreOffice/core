@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ploc_dir.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-02 12:35:10 $
+ *  last change: $Author: np $ $Date: 2002-05-14 08:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ploc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:25:39 $
+ *  last change: $Author: np $ $Date: 2002-05-14 08:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,8 +115,10 @@ class Path
     bool                IsDirectory() const     { return sFile.length() == 0; }
     bool                IsFile() const          { return sFile.length() > 0; }
 
+    /// Directories have a delimiter at the end, files not.
     virtual void        Get(
                             ostream &           o_rPath ) const;
+    /// Directories have a delimiter at the end, files not.
     virtual void        Get(
                             bostream &          o_rPath ) const;
     // ACCESS
@@ -136,6 +138,7 @@ class Path
 
 
 
+/// Directories produce a delimiter at the end, files not.
 inline csv::ostream &
 operator<<( csv::ostream &           o_rOut,
             const csv::ploc::Path &  i_rPath )
@@ -144,6 +147,7 @@ operator<<( csv::ostream &           o_rOut,
     return o_rOut;
 }
 
+/// Directories produce a delimiter at the end, files not.
 inline csv::bostream &
 operator<<( csv::bostream &         o_rOut,
             const csv::ploc::Path & i_rPath )

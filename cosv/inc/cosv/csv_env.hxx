@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csv_env.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:25:38 $
+ *  last change: $Author: np $ $Date: 2002-05-14 08:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 // BEGIN Compiler dependent defines regarding standard compliance,
 //   subject to changes:
 // #define CSV_NO_BOOL_TYPE       // States that no system type 'bool' exists
-#define CSV_NO_MUTABLE          // No keyword mutable
+// #define CSV_NO_MUTABLE           // No keyword mutable
 #define CSV_NO_EXPLICIT         // No keyword explicit
 // #define CSV_NO_IOSTREAMS       // No iostreams
 // END Compiler dependent defines, subject to changes
@@ -158,22 +158,27 @@ void                PerformAssertion(
 //   Subject to change to more sophisticated handling
 #define precond(x)      csv_assert(x)
 #define postcond(x)     csv_assert(x)
-#define csv_assert(x)       ( (x) ? (void)(0) : csv::PerformAssertion( #x, __FILE__, __LINE__) )
-#define csv_noimpl(x)       csv::PerformAssertion( "Functon " #x " is not yet implemented.", __FILE__, __LINE__)
-#define csv_exception       csv::PerformAssertion( "Exception to be raised.", __FILE__, __LINE__)
+
+#ifdef CSV_USE_CSV_ASSERTIONS
+#define csv_assert(x)       ( (x) ? (void)(0) : ::csv::PerformAssertion( #x, __FILE__, __LINE__) )
+#define csv_noimpl(x)       ::csv::PerformAssertion( "Functon " #x " is not yet implemented.", __FILE__, __LINE__)
+#define csv_exception       ::csv::PerformAssertion( "Exception to be raised.", __FILE__, __LINE__)
 #else
+#include <assert.h>
+#define csv_assert(x)       assert(x);
+#define csv_noimpl(x)       assert(x);
+#define csv_exception       assert(x);
+#endif
+
+#else // #ifndef CSV_NO_ASSERTIONS else
+
 #define precond(x)
 #define postcond(x)
 #define csv_assert(x)
 #define csv_noimpl(x)
 #define csv_exception
-#endif  // end ifndef NDEBUG else
 
-
-
-
-
-
+#endif  // end ifndef CSV_NO_ASSERTIONS else
 
 
 

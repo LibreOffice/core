@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: ploc.cxx,v $
+ *  $RCSfile: badcast.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: np $ $Date: 2002-05-14 08:08:46 $
  *
@@ -59,128 +59,21 @@
  *
  ************************************************************************/
 
-#include <precomp.h>
-#include <cosv/ploc.hxx>
-
-// NOT FULLY DECLARED SERVICES
-#include <cosv/bstream.hxx>
-// #include <ctype.h>
 
 
-namespace csv
-{
-namespace ploc
-{
+/* Include this for instantiating bad-cast,
+   due to problems with WNT-STL-headers.
+*/
 
+#ifdef WNT
 
-Path::Path( const char *        i_sPath,
-            bool                i_bPathIsAlwaysDir,
-            const char *        i_sDelimiter        )
-    :   pRoot(0)
-        // aPath,
-        // sFile
-{
-    Set(i_sPath, i_bPathIsAlwaysDir, i_sDelimiter );
-}
+#define _NTSDK
+#include<typeinfo>
 
-Path::Path( const Path & i_rPath )
-    :   pRoot(i_rPath.pRoot->CreateCopy()),
-        aPath(i_rPath.aPath),
-        sFile(i_rPath.sFile)
-{
-}
-
-Path::~Path()
-{
-}
-
-Path &
-Path::operator=( const Path & i_rPath )
-{
-    pRoot = i_rPath.pRoot->CreateCopy();
-    aPath = i_rPath.aPath;
-    sFile = i_rPath.sFile;
-    return *this;
-}
-
-
-void
-Path::Set( const char *        i_sPath,
-           bool                i_bPathIsAlwaysDir,
-           const char *        i_sDelimiter        )
-{
-    if ( *i_sDelimiter != '\\' AND *i_sDelimiter != '/' )
-        return;
-
-    const char * pRestPath = 0;
-    pRoot = Root::Create_( pRestPath, i_sPath, i_sDelimiter );
-    if (pRestPath == 0)
-        return;
-
-    aPath.Set(pRestPath, i_bPathIsAlwaysDir, i_sDelimiter);
-
-    if (NOT i_bPathIsAlwaysDir)
-    {
-        const char * pFile = strrchr( pRestPath, *i_sDelimiter );
-        if (pFile == 0)
-            pFile = pRestPath;
-        else
-            pFile++;
-        sFile = pFile;
-    }
-}
-
-void
-Path::SetFile( const String & i_sName )
-{
-    sFile = i_sName;
-}
-
-const char *
-Path::FileEnding() const
-{
-    const char * pEnd = strrchr(sFile, '.');
-    if (pEnd != 0)
-        ++pEnd;
-    else
-        pEnd = "";
-    return pEnd;
-}
-
-bool
-Path::IsValid() const         { return RootDir().OwnDelimiter() != 0; }
-
-void
-Path::Get( ostream & o_rPath ) const
-{
-    if (NOT IsValid())
-        return;
-
-    pRoot->Get( o_rPath );
-    aPath.Get( o_rPath, pRoot->OwnDelimiter() );
-
-    if ( sFile.length() > 0 )
-        o_rPath << sFile;
-
-}
-
-void
-Path::Get( bostream & o_rPath ) const
-{
-    if (NOT IsValid())
-        return;
-
-    pRoot->Get( o_rPath );
-    aPath.Get( o_rPath, pRoot->OwnDelimiter() );
-
-    if ( sFile.length() > 0 )
-        o_rPath.write( sFile );
-}
-
-
-
-} // namespace ploc
-} // namespace csv
+_STD_BEGIN
+bad_cast G_Dummy_Inst_bad_cast;
+_STD_END
+#endif // WNT
 
 
 

@@ -2,7 +2,7 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.1 $
 #
 #   last change: $Author: np $ $Date: 2002-05-14 08:08:46 $
 #
@@ -60,34 +60,31 @@
 #
 #*************************************************************************
 
-PRJ=..
+PRJ=..$/..
 
 PRJNAME=cosv
-TARGET=cosv
-
-ENABLE_EXCEPTIONS=true
-
+TARGET=cosv_badcast_wnt
+TARGETTYPE=CUI
 
 # --- Settings -----------------------------------------------------
+
+ENABLE_EXCEPTIONS=true
 
 .INCLUDE :  settings.mk
 
 
+
 # --- Files --------------------------------------------------------
 
-LIB1FILES= 	\
-        $(LB)$/cosv_service.lib		\
-        $(LB)$/cosv_storage.lib     	\
-        $(LB)$/cosv_strings.lib		\
-        $(LB)$/cosv_badcast_wnt.lib
+OBJFILES= \
+    $(OBJ)$/badcast.obj
+
 
 
 # --- Targets ------------------------------------------------------
 
-LIB1TARGET= 	$(LB)$/$(TARGET).lib
-LIB1ARCHIV= 	$(LB)$/lib$(TARGET).a
-
 
 .INCLUDE :  target.mk
+
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csv_precomp.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:25:38 $
+ *  last change: $Author: np $ $Date: 2002-05-14 08:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,9 @@
 #define __CSV_PRECOMP_H_06071998__
 
 
+#define CSV_USE_CSV_ASSERTIONS
 #include <cosv/csv_env.hxx>
+
 #include <cosv/comfunc.hxx>
 #include <cosv/string.hxx>
 #include <cosv/streamstr.hxx>

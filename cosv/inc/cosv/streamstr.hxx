@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamstr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:25:39 $
+ *  last change: $Author: np $ $Date: 2002-05-14 08:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,11 @@
 namespace csv
 {
 
+class String;
 
 void c_str();   // Dummy needed for StreamStr::operator<<(StreamStr::F_CSTR);
+
+
 
 /** Diese Klasse hat alle Funktionalitaet von strstream.
     Der Buffer braucht jedoch weder uebergeben noch
@@ -127,13 +130,13 @@ class StreamStr : public bostream
                             const char *        str1,   // [!= 0]
                             const char *        str2,   // [!= 0]
                             ...                 );      // Has to end with NIL .
-    /// Copies also inssert_mode and current position.
+    /// Copies also insert_mode and current position.
                         StreamStr(
                             const self &        i_rOther );
                         ~StreamStr();
 
     // OPERATORS
-    /// Copies also inssert_mode and current position.
+    /// Copies also insert_mode and current position.
     self &              operator=(
                             const self &        i_rOther );
 
@@ -186,6 +189,7 @@ class StreamStr : public bostream
     self &              seekp(
                             seek_type           i_nCount,
                             seek_dir            i_eDirection = ::csv::beg );
+    self &              reset()                 { return seekp(0); }
     /** Sets the insertion mode of all and only the operator<<() calls.
 
         str::overwrite: seekp() always sets the cur end of the string.
@@ -211,6 +215,22 @@ class StreamStr : public bostream
                             size_type           i_nCount );
     void                pop_back(
                             size_type           i_nCount );
+
+    /// Works like operator<<()
+    self &              operator_join(
+                            std::vector<String>::const_iterator
+                                                i_rBegin,
+                            std::vector<String>::const_iterator
+                                                i_rEnd,
+                            const char *        i_sLink );
+    /// Works like operator<<()
+    self &              operator_add_substr(
+                            const char *        i_sText,
+                            size_type           i_nLength );
+    /// Works like operator<<()
+    self &              operator_add_token(
+                            const char *        i_sText,
+                            char                i_cDelimiter );
 
 //***********   Not yet implemented    *********************//
     void                strip_front(

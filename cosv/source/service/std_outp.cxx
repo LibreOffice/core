@@ -2,9 +2,9 @@
  *
  *  $RCSfile: std_outp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-02 12:35:10 $
+ *  last change: $Author: np $ $Date: 2002-05-14 08:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include <cosv/std_outp.hxx>
 
 // NOT FULLY DECLARED SERVICES
-#include <stdlib.h>
+#include "stdlib.h"
 
 
 namespace csv

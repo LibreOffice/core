@@ -2,9 +2,9 @@
  *
  *  $RCSfile: openclose.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:25:38 $
+ *  last change: $Author: np $ $Date: 2002-05-14 08:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ OpenCloseGuard::OpenCloseGuard( OpenClose & i_rOpenClose,
     { rOpenClose.open(i_nOpenModeInfo); }
 inline
 OpenCloseGuard::~OpenCloseGuard()
-    { rOpenClose.close(); }
+    { if (rOpenClose.is_open()) rOpenClose.close(); }
 inline
 OpenCloseGuard::operator bool() const
     { return rOpenClose.is_open(); }

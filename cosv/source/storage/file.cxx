@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:25:39 $
+ *  last change: $Author: np $ $Date: 2002-05-14 08:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ File::File( const String &  i_sLocation,
 
 File::~File()
 {
-    if (is_open() )
+    if ( inq_is_open() )
         close();
 }
 
@@ -147,7 +147,7 @@ uintt
 File::do_read( void *          out_pDest,
                uintt           i_nNrofBytes )
 {
-    if ( NOT is_open() )
+    if ( NOT inq_is_open() )
         return 0;
 
     if ( eLastIO == io_write )
@@ -163,7 +163,7 @@ File::do_read( void *          out_pDest,
 bool
 File::inq_eod() const
 {
-    if ( NOT is_open() )
+    if ( NOT inq_is_open() )
         return true;
     return feof(pStream) != 0;
 }
@@ -172,7 +172,7 @@ uintt
 File::do_write( const void *    i_pSrc,
                 uintt           i_nNrofBytes )
 {
-    if ( NOT is_open() )
+    if ( NOT inq_is_open() )
         return 0;
 
     if ( eLastIO == io_write )
@@ -189,6 +189,9 @@ uintt
 File::do_seek( intt     i_nDistance,
                seek_dir i_eStartPoint )
 {
+    if ( NOT inq_is_open() )
+        return uintt(-1);
+
     static int eSearchDir[3] = { SEEK_SET, SEEK_CUR, SEEK_END };
 
     ::fseek( pStream,
@@ -200,12 +203,22 @@ File::do_seek( intt     i_nDistance,
 uintt
 File::inq_position() const
 {
-    return uintt( ::ftell(pStream) );
+    if ( inq_is_open() )
+        return uintt( ::ftell(pStream) );
+    else
+        return uintt(-1);
 }
 
 bool
 File::do_open( uintt i_nOpenMode )
 {
+    if ( inq_is_open() )
+    {
+        if ( i_nOpenMode == 0 OR i_nOpenMode == nMode )
+            return true;
+        close();
+    }
+
     if ( i_nOpenMode != 0 )
         nMode = i_nOpenMode;
 
@@ -235,8 +248,11 @@ File::do_open( uintt i_nOpenMode )
 void
 File::do_close()
 {
-    ::fclose(pStream);
-    pStream = 0;
+    if ( inq_is_open() )
+    {
+        ::fclose(pStream);
+        pStream = 0;
+    }
     eLastIO = io_none;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamstr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-03-22 13:32:37 $
+ *  last change: $Author: np $ $Date: 2002-05-14 08:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,6 +474,49 @@ StreamStr::pop_back( size_type i_nCount )
     *pEnd = '\0';
 }
 
+StreamStr &
+StreamStr::operator_join( std::vector<String>::const_iterator i_rBegin,
+                          std::vector<String>::const_iterator i_rEnd,
+                          const char *                        i_sLink )
+{
+    std::vector<String>::const_iterator it = i_rBegin;
+    if ( it != i_rEnd )
+    {
+        operator<<(*it);
+        for ( ++it; it != i_rEnd; ++it )
+        {
+            operator<<(i_sLink);
+            operator<<(*it);
+        }
+    }
+    return *this;
+}
+
+StreamStr &
+StreamStr::operator_add_substr( const char *        i_sText,
+                                size_type           i_nLength )
+{
+    size_type nLength = csv::min<size_type>(i_nLength, strlen(i_sText));
+
+    ProvideAddingSize( nLength );
+    memcpy( pCur, i_sText, nLength );
+    Advance(nLength);
+
+    return *this;
+}
+
+StreamStr &
+StreamStr::operator_add_token( const char *        i_sText,
+                               char                i_cDelimiter )
+{
+    const char * pTokenEnd = strchr(i_sText, i_cDelimiter);
+    if (pTokenEnd == 0)
+        operator<<(i_sText);
+    else
+        operator_add_substr(i_sText, pTokenEnd-i_sText);
+    return *this;
+}
+
 void
 StreamStr::replace( position_type       i_nStart,
                     size_type           i_nSize,
@@ -494,9 +537,13 @@ StreamStr::replace( position_type       i_nStart,
    }
    else if ( i_nSize > i_aReplacement.nLength )
    {
-        MoveData( dpData + i_nStart,
+        seek_type nMove = seek_type(i_nSize - i_aReplacement.nLength);
+
+        MoveData( dpData + i_nStart + i_nSize,
                   pEnd,
-                  - seek_type(i_nSize - i_aReplacement.nLength) );
+                  -nMove );
+        pEnd -= nMove;
+        *pEnd = '\0';
    }
 
    memcpy( dpData + i_nStart, i_aReplacement.sStr, i_aReplacement.nLength );
@@ -523,11 +570,11 @@ StreamStr::replace_all( Area                i_aStrToSearch,
     position_type p =0;
     const char *  pSearch = i_aStrToSearch.sStr;
     size_type     nSearch = i_aStrToSearch.nLength;
-    size_type      nStop = length();
+    size_type     nStop = length();
     if (nStop > nSearch)
         nStop -= nSearch;
 
-    while ( p <= nStop )
+    while ( p < length() )
     {
         if ( strncmp(dpData+p, pSearch, nSearch) == 0 )
         {
