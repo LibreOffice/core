@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pages.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:49:56 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ private:
         OEM_NONE, OEM_NORMAL, OEM_EXTENDED
     };
     OEMType checkOEM();
+    bool checkEval();
 
 public:
     WelcomePage( svt::OWizardMachine* parent, const ResId& resid);
