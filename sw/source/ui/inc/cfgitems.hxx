@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitems.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-09-20 12:09:59 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,9 @@ Item fuer Einstellungsdialog - Dokumentanzeige
 --------------------------------------------------------- */
 class SwDocDisplayItem : public SfxPoolItem
 {
-    friend SwWriterApp;
-    friend SwShdwCrsrOptionsTabPage;
-    friend SwModule;
+    friend class SwWriterApp;
+    friend class SwShdwCrsrOptionsTabPage;
+    friend class SwModule;
 
     BOOL bParagraphEnd      :1;
     BOOL bTab               :1;
@@ -148,7 +148,7 @@ class SwElemItem : public SfxPoolItem
     BOOL bFieldName         :1;
     BOOL bNotes             :1;
 
-    friend SwContentOptPage;
+    friend class SwContentOptPage;
 
 public:
                             TYPEINFO();
@@ -170,7 +170,7 @@ Item fuer Einstellungsdialog - Drucker/Zusaetze
 
 class SwAddPrinterItem : public SfxPoolItem, public SwPrintData
 {
-    friend  SwAddPrinterTabPage;
+    friend class SwAddPrinterTabPage;
 
 public:
     TYPEINFO();
@@ -237,10 +237,10 @@ Item fuer Einstellungsdialog - Testeinstellungen
 --------------------------------------------------------- */
 class SwTestItem : public SfxPoolItem
 {
-    friend SwModule;
-    friend SwWriterApp;
-    friend SwTestTabPage;
-    friend SwDocEditDialog;
+    friend class SwModule;
+    friend class SwWriterApp;
+    friend class SwTestTabPage;
+    friend class SwDocEditDialog;
 
     BOOL    bTest1:1;
     BOOL    bTest2:1;
