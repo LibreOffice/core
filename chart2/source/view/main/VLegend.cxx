@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-28 13:38:06 $
+ *  last change: $Author: iha $ $Date: 2003-10-30 16:08:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "VLegendSymbolFactory.hxx"
 #include "chartview/ObjectIdentifier.hxx"
 #include "LayoutHelper.hxx"
+#include "ShapeFactory.hxx"
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
 #include <com/sun/star/text/XTextRange.hpp>
@@ -608,6 +609,9 @@ void VLegend::createShapes(
                 PropertyMapper::setMultiProperties(
                     aLineFillProperties.first, aLineFillProperties.second,
                     uno::Reference< beans::XPropertySet >( xBorder, uno::UNO_QUERY ));
+
+                //because of this name this border will be used for marking the legend
+                ShapeFactory(m_xShapeFactory).setShapeName( xBorder, C2U("MarkHandles") );
             }
 
             // create entries
