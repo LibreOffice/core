@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 20:02:00 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2223,7 +2223,10 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
                         pMedium->GetItemSet()->Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
                         pMedium->GetItemSet()->Put( SfxStringItem( SID_DOCINFO_TITLE, aDocName ) );
 
-                        m_pData->m_pObjectShell->ResetError();
+                        // the error must be reset and the storage must be reopened in new mode
+                        pMedium->ResetError();
+                        pMedium->CloseStorage();
+                        m_pData->m_pObjectShell->PrepareSecondTryLoad_Impl();
                         if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
                             nError=ERRCODE_IO_GENERAL;
                         nError = m_pData->m_pObjectShell->GetErrorCode();
