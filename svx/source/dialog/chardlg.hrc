@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-05 08:43:03 $
+ *  last change: $Author: os $ $Date: 2001-03-12 16:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,8 @@
 #define CB_OUTLINE              223
 #define CB_SHADOW               224
 #define CB_BLINKING             225
+#define FT_RELIEF               226
+#define LB_RELIEF               227
 
 #define FL_EFFECTS_PREVIEW      230
 #define WIN_EFFECTS_PREVIEW     231

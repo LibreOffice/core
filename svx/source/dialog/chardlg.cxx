@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-06 10:59:56 $
+ *  last change: $Author: os $ $Date: 2001-03-12 16:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@
 #define ITEMID_TWOLINES         SID_ATTR_CHAR_TWO_LINES
 #define ITEMID_CHARROTATE       SID_ATTR_CHAR_ROTATED
 #define ITEMID_CHARSCALE_W      SID_ATTR_CHAR_SCALEWIDTH
+#define ITEMID_CHARRELIEF       SID_ATTR_CHAR_RELIEF
 
 #include "xtable.hxx"       // XColorTable
 #include "chardlg.hxx"
@@ -151,6 +152,7 @@
 #include "charmap.hxx"
 #include "chardlg.h"
 #include "emphitem.hxx"
+#include <charreliefitem.hxx>
 #include "twolinesitem.hxx"
 
 #ifndef _SVX_CHARSCALEITEM_HXX
@@ -3897,6 +3899,10 @@ SvxCharEffectsPage::SvxCharEffectsPage( Window* pParent, const SfxItemSet& rInSe
     m_aEffectsLB            ( this, ResId( LB_EFFECTS ) ),
 
     m_aEffects2LB           ( this, ResId( LB_EFFECTS2 ) ),
+
+    m_aReliefFT             ( this, ResId( FT_RELIEF ) ),
+    m_aReliefLB             ( this, ResId( LB_RELIEF ) ),
+
     m_aOutlineBtn           ( this, ResId( CB_OUTLINE ) ),
     m_aShadowBtn            ( this, ResId( CB_SHADOW ) ),
     m_aBlinkingBtn          ( this, ResId( CB_BLINKING ) ),
@@ -3986,6 +3992,7 @@ void SvxCharEffectsPage::Initialize()
     m_aEmphasisLB.SetSelectHdl( aLink );
     m_aPositionLB.SetSelectHdl( aLink );
     m_aEffects2LB.SetSelectHdl( aLink );
+    m_aReliefLB.SetSelectHdl( aLink );
 
     m_aUnderlineLB.SelectEntryPos( 0 );
     m_aStrikeoutLB.SelectEntryPos( 0 );
@@ -4017,6 +4024,8 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     FontEmphasisMark eMark = (FontEmphasisMark)m_aEmphasisLB.GetSelectEntryPos();
     eMark |= bUnder ? EMPHASISMARK_POS_BELOW : EMPHASISMARK_POS_ABOVE;
     rFont.SetEmphasisMark( eMark );
+    short nRelief = m_aReliefLB.GetSelectEntryPos();
+    rFont.SetRelief( (FontRelief)nRelief );
     rFont.SetOutline( StateToAttr( m_aOutlineBtn.GetState() ) );
     rFont.SetShadow( StateToAttr( m_aShadowBtn.GetState() ) );
     USHORT nCapsPos = m_aEffects2LB.GetSelectEntryPos();
@@ -4050,6 +4059,12 @@ IMPL_LINK( SvxCharEffectsPage, SelectHdl_Impl, ListBox*, pBox )
         m_aPositionFT.Enable( bEnable );
         m_aPositionLB.Enable( bEnable );
     }
+    else if( &m_aReliefLB == pBox)
+    {
+        BOOL bEnable = ( pBox->GetSelectEntryPos() == 0 );
+        m_aOutlineBtn.Enable(bEnable);
+        m_aShadowBtn.Enable(bEnable);
+    }
     else if ( &m_aPositionLB != pBox )
     {
         BOOL bEnable = ( ( m_aUnderlineLB.GetSelectEntryPos() > 0 ) |
@@ -4058,7 +4073,6 @@ IMPL_LINK( SvxCharEffectsPage, SelectHdl_Impl, ListBox*, pBox )
         m_aColorLB.Enable( bEnable );
         m_aIndividualWordsBtn.Enable( bEnable );
     }
-
     UpdatePreview_Impl();
     return 0;
 }
@@ -4283,6 +4297,15 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
     }
     SetCaseMap_Impl( eCaseMap );
 
+    //Relief
+    nWhich = GetWhich(SID_ATTR_CHAR_RELIEF);
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxCharReliefItem& rItem = (const SvxCharReliefItem&)rSet.Get( nWhich );
+        m_aReliefLB.SelectEntryPos(rItem.GetValue());
+        SelectHdl_Impl(&m_aReliefLB);
+    }
+
     // Outline
     nWhich = GetWhich( SID_ATTR_CHAR_CONTOUR );
     eState = rSet.GetItemState( nWhich );
@@ -4361,6 +4384,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
     m_aEmphasisLB.SaveValue();
     m_aPositionLB.SaveValue();
     m_aEffects2LB.SaveValue();
+    m_aReliefLB.SaveValue();
     m_aOutlineBtn.SaveValue();
     m_aShadowBtn.SaveValue();
     m_aBlinkingBtn.SaveValue();
@@ -4511,6 +4535,14 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
         rSet.ClearItem( nWhich );
 
     bChanged = TRUE;
+
+    //Relief
+    nWhich = GetWhich(SID_ATTR_CHAR_RELIEF);
+    if(m_aReliefLB.GetSelectEntryPos() != m_aReliefLB.GetSavedValue())
+    {
+        SvxCharReliefItem aRelief((FontRelief)m_aReliefLB.GetSelectEntryPos(), nWhich);
+        rSet.Put(aRelief);
+    }
 
     // Outline
     const SfxItemSet* pExampleSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : NULL;
