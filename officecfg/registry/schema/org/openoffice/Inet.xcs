@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Inet.xcs,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:34:13 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,11 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Inet" oor:package="org.openoffice" xml:lang="en-US"> <info>
-		<author>SB</author>
 		<desc >Contains Internet-related configurations (proxies, search engines, etc.).</desc>
 	</info>
 	<templates>
 		<info>
-			<author>OS / TV</author>
+			<author>OS/TV</author>
 		</info>
 		<group oor:name="SearchEngine">
 			<info>
@@ -211,7 +210,7 @@
 				<!-- UIHints: Tools - Options - Internet - Protocol -->
 				<info>
 					<deprecated/>
-					<author>ABI/SB/MHU</author>
+					<author>KSO</author>
 					<desc>Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
 				</info>
 				<value/>
@@ -222,7 +221,7 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
-					<author>ABI/SB/MHU</author>
+					<author>KSO</author>
 					<desc>Enumerates the names of servers that do not require any proxies.</desc>
 				</info>
 				<value/>
@@ -233,7 +232,7 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
-					<author>ABI/SB/MHU</author>
+					<author>KSO</author>
 					<desc>Specifies the type of proxy selection.</desc>
 				</info>
 				<constraints>
@@ -259,7 +258,7 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
-					<author>ABI/SB/MHU</author>
+					<author>KSO</author>
 					<desc>Specifies the name of the FTP proxy server.</desc>
 				</info>
 				<value/>
@@ -270,7 +269,7 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
-					<author>ABI/SB/MHU</author>
+					<author>KSO</author>
 					<desc>Specifies the port of the FTP proxy server.</desc>
 				</info>
 				<constraints>
@@ -291,7 +290,7 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
-					<author>ABI/SB/MHU</author>
+					<author>KSO</author>
 					<desc>Specifies the name of the HTTP proxy server.</desc>
 				</info>
 				<value/>
@@ -302,7 +301,7 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
-					<author>ABI/SB/MHU</author>
+					<author>KSO</author>
 					<desc>Specifies the port of the HTTP proxy server.</desc>
 				</info>
 				<constraints>
@@ -324,7 +323,7 @@
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
 					<deprecated/>
-					<author>ABI/SB/MHU</author>
+					<author>KSO</author>
 					<desc>Specifies the name of the Socks proxy server.</desc>
 				</info>
 				<value/>
@@ -336,7 +335,7 @@
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
 					<deprecated/>
-					<author>ABI/SB/MHU</author>
+					<author>KSO</author>
 					<desc>Specifies the port of the Socks proxy server.</desc>
 				</info>
 				<constraints>
