@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-30 16:07:38 $
+ *  last change: $Author: pl $ $Date: 2001-11-01 12:19:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1151,29 +1151,32 @@ SalFrame::SetWindowState( const SalFrameState *pState )
             aPosSize.setHeight (nHeight);
         }
 
-        // ignore request if frame is larger than screen
         const Size& rScreenSize( maFrameData.pDisplay_->GetScreenSize() );
-        if( aPosSize.GetWidth() < rScreenSize.Width() &&
-            aPosSize.GetHeight() < rScreenSize.Height() )
+        const WMAdaptor *pWM = _GetDisplay()->getWMAdaptor();
+        int nGravity = pWM->getPositionWinGravity();
+        bool bAdjusted = false;
+        if( pState->mnMask & ( SAL_FRAMESTATE_MASK_HEIGHT | SAL_FRAMESTATE_MASK_WIDTH )
+            && aPosSize.GetWidth() <= rScreenSize.Width()
+            && aPosSize.GetHeight() <= rScreenSize.Height() )
         {
-            const WMAdaptor *pWM = _GetDisplay()->getWMAdaptor();
-            int nGravity = pWM->getPositionWinGravity();
-
             // adjust position so that frame fits onto screen
             if( aPosSize.Right()+maGeometry.nRightDecoration >= rScreenSize.Width() )
             {
                 aPosSize.Move( (long)rScreenSize.Width() - (long)aPosSize.Right() - (long)maGeometry.nRightDecoration, 0 );
                 nGravity = EastGravity;
+                bAdjusted = true;
             }
             if( aPosSize.Bottom()+maGeometry.nBottomDecoration >= rScreenSize.Height() )
             {
                 aPosSize.Move( 0, (long)rScreenSize.Height() - (long)aPosSize.Bottom() - (long)maGeometry.nBottomDecoration );
                 nGravity = nGravity == EastGravity ? SouthEastGravity : SouthGravity;
+                bAdjusted = true;
             }
             if( aPosSize.Left() < maGeometry.nLeftDecoration )
             {
                 aPosSize.Move( (long)maGeometry.nLeftDecoration - (long)aPosSize.Left(), 0 );
                 nGravity = ( nGravity == SouthGravity || nGravity == SouthEastGravity ) ? SouthWestGravity : WestGravity;
+                bAdjusted = true;
             }
             if( aPosSize.Top() < maGeometry.nTopDecoration )
             {
@@ -1181,34 +1184,36 @@ SalFrame::SetWindowState( const SalFrameState *pState )
                 nGravity =
                     ( nGravity == SouthEastGravity || nGravity == EastGravity ) ? NorthEastGravity :
                     ( ( nGravity == SouthWestGravity || nGravity == WestGravity ) ? NorthWestGravity : NorthGravity );
+                bAdjusted = true;
             }
-
-            // demand correct positioning from the WM
-            XSizeHints* pHints = XAllocSizeHints();
-            long nSuppliedFlag;
-            Display*    pDisplay = _GetXDisplay();
-            XLIB_Window hWindow  = maFrameData.GetShellWindow();
-            XGetWMNormalHints(pDisplay, hWindow, pHints, &nSuppliedFlag);
-            pHints->flags       |= PWinGravity | PPosition | PSize;
-            pHints->win_gravity = nGravity;
-            pHints->x           = aPosSize.getX();
-            pHints->y           = aPosSize.getY();
-
-            XSetWMNormalHints (pDisplay, hWindow, pHints);
-            XSync (pDisplay, False);
-            XFree (pHints);
-
-            // resize with new args
-            if (pWM->supportsICCCMPos())
-            {
-                if( maFrameData.mpParent )
-                    aPosSize.Move( -maFrameData.mpParent->maGeometry.nX,
-                                   -maFrameData.mpParent->maGeometry.nY );
-                maFrameData.SetPosSize( aPosSize );
-            }
-            else
-                SetPosSize( 0, 0, aPosSize.GetWidth(), aPosSize.GetHeight(), SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
         }
+
+         // demand correct positioning from the WM
+         XSizeHints* pHints = XAllocSizeHints();
+         long nSuppliedFlag;
+         Display*    pDisplay = _GetXDisplay();
+         XLIB_Window hWindow  = maFrameData.GetShellWindow();
+         XGetWMNormalHints(pDisplay, hWindow, pHints, &nSuppliedFlag);
+         pHints->flags       |= PWinGravity | PPosition | PSize;
+         pHints->win_gravity = nGravity;
+         pHints->x           = aPosSize.getX();
+         pHints->y           = aPosSize.getY();
+
+         XSetWMNormalHints (pDisplay, hWindow, pHints);
+         XSync (pDisplay, False);
+         XFree (pHints);
+
+         // resize with new args
+         if (pWM->supportsICCCMPos())
+         {
+             if( maFrameData.mpParent && ! bAdjusted )
+                 aPosSize.Move( -maFrameData.mpParent->maGeometry.nX,
+                                -maFrameData.mpParent->maGeometry.nY );
+             maFrameData.SetPosSize( aPosSize );
+             maFrameData.bDefaultPosition_ = False;
+         }
+         else
+             SetPosSize( 0, 0, aPosSize.GetWidth(), aPosSize.GetHeight(), SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
     }
 
     // request for status change
@@ -2775,8 +2780,12 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
                   &xp, &yp, &wp, &hp, &bw, &d );
     pFrame_->maGeometry.nRightDecoration    = wp - w - pFrame_->maGeometry.nLeftDecoration;
     pFrame_->maGeometry.nBottomDecoration   = hp - h - pFrame_->maGeometry.nTopDecoration;
+    /*
+     *  note: this works because hWM_Parent is direct child of root,
+     *  not necessarily parent of GetShellWindow()
+     */
     pFrame_->maGeometry.nX      = xp + pFrame_->maGeometry.nLeftDecoration;
-    pFrame_->maGeometry.nY      = xp + pFrame_->maGeometry.nTopDecoration;
+    pFrame_->maGeometry.nY      = yp + pFrame_->maGeometry.nTopDecoration;
     bool bResized = w != pFrame_->maGeometry.nWidth || h != pFrame_->maGeometry.nHeight;
     pFrame_->maGeometry.nWidth  = w;
     pFrame_->maGeometry.nHeight = h;
