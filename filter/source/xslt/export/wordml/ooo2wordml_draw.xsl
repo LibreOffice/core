@@ -51,9 +51,11 @@
    Contributor(s): _______________________________________
    
  -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:svg="http://www.w3.org/2000/svg" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:text="http://openoffice.org/2000/text" xmlns:style="http://openoffice.org/2000/style" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:office="http://openoffice.org/2000/office" exclude-result-prefixes="draw svg style office fo text">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:openoffice:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:openoffice:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:openoffice:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:openoffice:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:openoffice:xmlns:drawing:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:openoffice:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:openoffice:xmlns:datastyle:1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="urn:oasis:names:tc:openoffice:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:openoffice:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:openoffice:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:openoffice:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:openoffice:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="office table style text draw svg  fo dc config xlink meta oooc dom ooo chart math dr3d form script ooow draw">
+    <xsl:include href="ooo2wordml_custom_draw.xsl"/>
     <xsl:key name="stroke-dash-style" match="draw:stroke-dash" use="@draw:name"/>
     <xsl:key name="fill-image" match="draw:fill-image" use="@draw:name"/>
+    <xsl:key name="draw-gradient" match="draw:gradient " use="@draw:name"/>
     <xsl:template name="PageLevelGraphic">
         <xsl:for-each select="//draw:*[@text:anchor-type='page']">
             <xsl:apply-templates select="."/>
@@ -73,12 +75,12 @@
             </xsl:choose>
         </xsl:variable>
         <xsl:choose>
-            <!-- 
-            deal with captions and frames first. draw:text-box is a powerfull element in OOo, its GUI name is frame. And OOo use it to contain Captions 
-             Since there is not a corresponding object in word, so we draw the text-box itself and its children separately. If it look like a Caption only frame 
-             we'll adjust the text-box position to make it look pretty 
+            <!--
+                          deal with captions and frames first. draw:text-box is a powerfull element in OOo, its GUI name is frame. And OOo use it to contain Captions
+                          Since there is not a corresponding object in word, so we draw the text-box itself and its children separately. If it look like a Caption only frame
+                          we'll adjust the text-box position to make it look pretty
              -->
-            <!-- skip all not force draw text-box children , must be first case -->
+            <!-- skip all not force draw      children , must be first case -->
             <xsl:when test="ancestor::draw:text-box and $force-draw='false' "/>
             <xsl:when test="name() = 'draw:text-box'">
                 <!-- draw the text-box itself -->
@@ -86,7 +88,7 @@
                     <w:pict>
                         <xsl:variable name="text-y-adjust">
                             <xsl:choose>
-                                <xsl:when test="count(text:p/draw:*) = 1 and (not(text:p/draw:*[position()=1]/@svg:x) or text:p/draw:*[position()=1]/@svg:x = '0inch') and  (not(text:p/draw:*[position()=1]/@svg:y) or  text:p/draw:*[position()=1]/@svg:y = '0inch') ">
+                                <xsl:when test="count(text:p/draw:*) = 1 and (string-length(text:p/draw:*[position()=1]/@svg:x) =0 or number(concat('0',translate(text:p/draw:*[position()=1]/@svg:x,'abcdefghijklmnopqrstuvwxyz','') ))=0) and  (string-length(text:p/draw:*[position()=1]/@svg:y)=0 or  number(concat('0',translate(text:p/draw:*[position()=1]/@svg:x,'abcdefghijklmnopqrstuvwxyz','') ))=0 ) ">
                                     <xsl:variable name="pic-height">
                                         <xsl:choose>
                                             <xsl:when test="name(text:p/draw:*[position()=1]) = 'draw:g' or name(text:p/draw:*[position()=1]) = 'draw:a'">
@@ -97,18 +99,21 @@
                                                         <xsl:with-param name="y-adjust" select="$y-adjust"/>
                                                     </xsl:call-template>
                                                 </xsl:variable>
-                                                <xsl:value-of select="substring-after($BigestWindow,'y2:')  - substring-after(substring-before($BigestWindow,';x2'), 'y1:') + $y-adjust"/>
+                                                <xsl:value-of select="substring-after($BigestWindow,'y2:')  - substring-after(substring-before($BigestWindow,';x2'), 'y1:') + number(concat('0',translate($y-adjust,'abcdefghijklmnopqrstuvwxyz','')))"/>
                                             </xsl:when>
                                             <xsl:when test="text:p/draw:*[position()=1]/@svg:height">
-                                                <xsl:value-of select="$y-adjust + substring-before(text:p/draw:*[position()=1]/@svg:height,'inch')"/>
+                                                <xsl:value-of select="number(concat('0',translate($y-adjust,'abcdefghijklmnopqrstuvwxyz','') ))+  number(concat('0',translate(text:p/draw:*[position()=1]/@svg:height,'abcdefghijklmnopqrstuvwxyz','') ))"/>
                                             </xsl:when>
                                             <xsl:when test="text:p/draw:*[position()=1]/@fo:min-height">
-                                                <xsl:value-of select="$y-adjust + substring-before(text:p/draw:*[position()=1]/@fo:min-height,'inch')"/>
+                                                <xsl:value-of select="number(concat('0',translate($y-adjust,'abcdefghijklmnopqrstuvwxyz','') ))+ number(concat('0',translate(text:p/draw:*[position()=1]/@fo:min-height,'abcdefghijklmnopqrstuvwxyz','')))"/>
+                                            </xsl:when>
+                                            <xsl:when test="ancestor::draw:frame">
+                                                <xsl:value-of select="number(concat('0',translate($y-adjust,'abcdefghijklmnopqrstuvwxyz','') ))+ number(concat('0',translate(ancestor::draw:frame/@svg:height,'abcdefghijklmnopqrstuvwxyz','')))"/>
                                             </xsl:when>
                                         </xsl:choose>
                                     </xsl:variable>
                                     <xsl:choose>
-                                        <xsl:when test="substring-before(@fo:min-height,'inch') - $pic-height &lt; 0.001">
+                                        <xsl:when test="number(concat('0',translate(@fo:min-height,'abcdefghijklmnopqrstuvwxyz','') ))- $pic-height &lt; 0.001">
                                             <!-- If control goes here, it much like that this text-box is used for containt graphic caption only -->
                                             <xsl:value-of select="$pic-height - 0.1"/>
                                         </xsl:when>
@@ -123,9 +128,11 @@
                             </xsl:choose>
                         </xsl:variable>
                         <xsl:variable name="shape-type">
-                            <xsl:if test="$text-y-adjust = 0">
-                                <xsl:value-of select="'#_x0000_t202'"/>
-                            </xsl:if>
+                            <xsl:choose>
+                                <xsl:when test="$text-y-adjust = 0">
+                                    <xsl:value-of select="'#_x0000_t202'"/>
+                                </xsl:when>
+                            </xsl:choose>
                         </xsl:variable>
                         <xsl:call-template name="DrawElements">
                             <xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
@@ -140,46 +147,72 @@
                 <xsl:if test="./text:p/draw:*">
                     <xsl:apply-templates select="./text:p/draw:*">
                         <xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
-                        <xsl:with-param name="x-adjust" select="substring-before(@svg:x,'inch') + $x-adjust"/>
-                        <xsl:with-param name="y-adjust" select="substring-before(@svg:y,'inch') + $y-adjust"/>
+                        <xsl:with-param name="x-adjust" select="number(concat('0',translate(@svg:x,'abcdefghijklmnopqrstuvwxyz','') ))+ number(concat('0',translate($x-adjust,'abcdefghijklmnopqrstuvwxyz','') ))"/>
+                        <xsl:with-param name="y-adjust" select="number(concat('0',translate(@svg:y,'abcdefghijklmnopqrstuvwxyz','') ))+ number(concat('0',translate($y-adjust,'abcdefghijklmnopqrstuvwxyz','') ))"/>
                         <xsl:with-param name="force-draw" select="'true'"/>
                     </xsl:apply-templates>
                 </xsl:if>
             </xsl:when>
             <!-- end deal with captions and frames -->
+            <xsl:when test=" name() = 'draw:frame' ">
+                <xsl:variable name="BigestWindow">
+                    <xsl:call-template name="GetWindowSize">
+                        <xsl:with-param name="nodeSet" select="."/>
+                        <xsl:with-param name="x-adjust" select="$x-adjust"/>
+                        <xsl:with-param name="y-adjust" select="$y-adjust"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:apply-templates select="draw:* ">
+                    <xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
+                    <xsl:with-param name="x-adjust" select="concat(substring-after(substring-before($BigestWindow,';y1'), 'x1:'), 'in')"/>
+                    <xsl:with-param name="y-adjust" select="concat(substring-after(substring-before($BigestWindow,';x2'), 'y1:') , 'in')"/>
+                    <xsl:with-param name="force-draw" select="$force-draw"/>
+                </xsl:apply-templates>
+            </xsl:when>
             <xsl:when test="name() = 'draw:g'">
                 <w:r>
                     <w:pict>
                         <xsl:element name="v:group">
                             <xsl:variable name="BigestWindow">
-                                <xsl:call-template name="GetWindowSize">
-                                    <xsl:with-param name="nodeSet" select="draw:*"/>
-                                    <xsl:with-param name="x-adjust" select="$x-adjust"/>
-                                    <xsl:with-param name="y-adjust" select="$y-adjust"/>
-                                </xsl:call-template>
+                                <xsl:choose>
+                                    <xsl:when test="name() = 'draw:g'">
+                                        <xsl:call-template name="GetWindowSize">
+                                            <xsl:with-param name="nodeSet" select="draw:*"/>
+                                            <xsl:with-param name="x-adjust" select="$x-adjust"/>
+                                            <xsl:with-param name="y-adjust" select="$y-adjust"/>
+                                        </xsl:call-template>
+                                    </xsl:when>
+                                    <xsl:when test="name() = 'draw:frame'">
+                                        <xsl:call-template name="GetWindowSize">
+                                            <xsl:with-param name="nodeSet" select="."/>
+                                            <xsl:with-param name="x-adjust" select="$x-adjust"/>
+                                            <xsl:with-param name="y-adjust" select="$y-adjust"/>
+                                        </xsl:call-template>
+                                    </xsl:when>
+                                </xsl:choose>
                             </xsl:variable>
                             <xsl:variable name="x">
                                 <xsl:call-template name="ConvertMeasure">
                                     <xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
-                                    <xsl:with-param name="value" select="concat(substring-after(substring-before($BigestWindow,';y1'), 'x1:'), 'inch')"/>
+                                    <xsl:with-param name="value" select="concat(substring-after(substring-before($BigestWindow,';y1'), 'x1:'), 'in')"/>
                                 </xsl:call-template>
                             </xsl:variable>
                             <xsl:variable name="y">
                                 <xsl:call-template name="ConvertMeasure">
                                     <xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
-                                    <xsl:with-param name="value" select="concat(substring-after(substring-before($BigestWindow,';x2'), 'y1:') , 'inch')"/>
+                                    <xsl:with-param name="value" select="concat(substring-after(substring-before($BigestWindow,';x2'), 'y1:') , 'in')"/>
                                 </xsl:call-template>
                             </xsl:variable>
                             <xsl:variable name="width">
                                 <xsl:call-template name="ConvertMeasure">
                                     <xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
-                                    <xsl:with-param name="value" select="concat(substring-after(substring-before($BigestWindow,';y2'), 'x2:')  -  substring-after(substring-before($BigestWindow,';y1'), 'x1:') , 'inch')"/>
+                                    <xsl:with-param name="value" select="concat(substring-after(substring-before($BigestWindow,';y2'), 'x2:')  -  substring-after(substring-before($BigestWindow,';y1'), 'x1:') , 'in')"/>
                                 </xsl:call-template>
                             </xsl:variable>
                             <xsl:variable name="height">
                                 <xsl:call-template name="ConvertMeasure">
                                     <xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
-                                    <xsl:with-param name="value" select="concat(substring-after($BigestWindow,'y2:')  - substring-after(substring-before($BigestWindow,';x2'), 'y1:'), 'inch')"/>
+                                    <xsl:with-param name="value" select="concat(substring-after($BigestWindow,'y2:')  - substring-after(substring-before($BigestWindow,';x2'), 'y1:'), 'in')"/>
                                 </xsl:call-template>
                             </xsl:variable>
                             <xsl:attribute name="id">
@@ -200,7 +233,15 @@
                                     <xsl:value-of select="concat('margin-left:',$x ,$MeasureMark,';margin-top:', $y,$MeasureMark ,';width:', $width ,$MeasureMark , ';height:', $height,$MeasureMark)"/>
                                 </xsl:attribute>
                                 <xsl:attribute name="coordorigin">
-                                    <xsl:value-of select="concat(round($x * 20), ',' , round($y * 20))"/>
+                                    <xsl:choose>
+                                        <!-- if we are in a text-box then oo will use comparative positions on us-->
+                                        <xsl:when test="name() = 'draw:frame' ">
+                                            <xsl:value-of select=" '0 0' "/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:value-of select="concat(round($x * 20), ',' , round($y * 20))"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
                                 </xsl:attribute>
                                 <xsl:attribute name="coordsize">
                                     <xsl:value-of select="concat(round($width * 20),',', round($height * 20) )"/>
@@ -211,10 +252,18 @@
                                     <xsl:if test="string-length($absolute) &gt; 0">
                                         <xsl:value-of select="concat($absolute, ';')"/>
                                     </xsl:if>
-                                    <xsl:value-of select="concat('eft:',$x ,$MeasureMark,';top:', $y,$MeasureMark ,';width:', $width ,$MeasureMark , ';height:', $height,$MeasureMark)"/>
+                                    <xsl:value-of select="concat('left:',$x ,$MeasureMark,';top:', $y,$MeasureMark ,';width:', $width ,$MeasureMark , ';height:', $height,$MeasureMark)"/>
                                 </xsl:attribute>
                                 <xsl:attribute name="coordorigin">
-                                    <xsl:value-of select="concat($x , ',' , $y)"/>
+                                    <xsl:choose>
+                                        <!-- if we are in a text-box then oo will use comparative positions on us-->
+                                        <xsl:when test="name() = 'draw:frame' ">
+                                            <xsl:value-of select=" '0 0' "/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:value-of select="concat($x , ',' , $y)"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
                                 </xsl:attribute>
                                 <xsl:attribute name="coordsize">
                                     <xsl:value-of select="concat($width,',', $height )"/>
@@ -225,8 +274,8 @@
                                 <xsl:when test="ancestor::draw:text-box">
                                     <xsl:apply-templates select="draw:*">
                                         <xsl:with-param name="TargetMeasure" select="'twip'"/>
-                                        <xsl:with-param name="x-adjust" select="concat(substring-after(substring-before($BigestWindow,';y1'), 'x1:'), 'inch')"/>
-                                        <xsl:with-param name="y-adjust" select="concat(substring-after(substring-before($BigestWindow,';x2'), 'y1:') , 'inch')"/>
+                                        <xsl:with-param name="x-adjust" select="concat(substring-after(substring-before($BigestWindow,';y1'), 'x1:'), 'in')"/>
+                                        <xsl:with-param name="y-adjust" select="concat(substring-after(substring-before($BigestWindow,';x2'), 'y1:') , 'in')"/>
                                         <xsl:with-param name="force-draw" select="$force-draw"/>
                                     </xsl:apply-templates>
                                 </xsl:when>
@@ -316,16 +365,16 @@
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:variable name="x" select="substring-before($CurrNode/@svg:x,'inch') + $x-adjust"/>
-                <xsl:variable name="y" select="substring-before($CurrNode/@svg:y,'inch') + $y-adjust"/>
-                <xsl:variable name="width" select="substring-before($CurrNode/@svg:width,'inch')"/>
+                <xsl:variable name="x" select="number(concat('0',translate($CurrNode/@svg:x,'abcdefghijklmnopqrstuvwxyz','') ))+ number(concat('0',translate($x-adjust,'abcdefghijklmnopqrstuvwxyz','')))"/>
+                <xsl:variable name="y" select="number(concat('0',translate($CurrNode/@svg:y,'abcdefghijklmnopqrstuvwxyz','') ))+ number(concat('0',translate($y-adjust,'abcdefghijklmnopqrstuvwxyz','')))"/>
+                <xsl:variable name="width" select="number(concat('0',translate($CurrNode/@svg:width,'abcdefghijklmnopqrstuvwxyz','')))"/>
                 <xsl:variable name="height">
                     <xsl:choose>
                         <xsl:when test="$CurrNode/@svg:height">
-                            <xsl:value-of select="substring-before($CurrNode/@svg:height,'inch')"/>
+                            <xsl:value-of select="number(concat('0',translate($CurrNode/@svg:height,'abcdefghijklmnopqrstuvwxyz','')))"/>
                         </xsl:when>
                         <xsl:when test="$CurrNode/@fo:min-height">
-                            <xsl:value-of select="substring-before($CurrNode/@fo:min-height,'inch')"/>
+                            <xsl:value-of select="number(concat('0',translate($CurrNode/@fo:min-height,'abcdefghijklmnopqrstuvwxyz','')))"/>
                         </xsl:when>
                     </xsl:choose>
                 </xsl:variable>
@@ -398,11 +447,11 @@
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="$TargetMeasure = 'twip'">
-                <xsl:call-template name="convert2dxa">
+                <xsl:call-template name="convert2twip">
                     <xsl:with-param name="value" select="$value"/>
                 </xsl:call-template>
             </xsl:when>
-            <xsl:when test="$TargetMeasure = 'inch'">
+            <xsl:when test="$TargetMeasure = 'in'">
                 <xsl:call-template name="convert2in">
                     <xsl:with-param name="value" select="$value"/>
                 </xsl:call-template>
@@ -545,7 +594,7 @@
     <xsl:template name="get_dashstyle">
         <xsl:param name="stroke-width" select="0.1"/>
         <xsl:param name="style-name" select="@draw:style-name"/>
-        <xsl:variable name="graph-style" select="key('graphics-style', $style-name)/style:properties"/>
+        <xsl:variable name="graph-style" select="key('graphics-style', $style-name)/style:graphic-properties"/>
         <xsl:variable name="dash-style" select="key('stroke-dash-style', $graph-style/@draw:stroke-dash)"/>
         <xsl:variable name="stroke">
             <xsl:choose>
@@ -627,8 +676,8 @@
                             </xsl:variable>
                             <xsl:value-of select="round($dots-percent)"/>
                         </xsl:when>
-                        <xsl:when test="contains($dots1-length , 'inch' ) and $stroke-width &gt; 0">
-                            <xsl:value-of select="round( substring-before ($dots1-length,'inch' ) div $stroke-width )"/>
+                        <xsl:when test="contains($dots1-length , 'in' ) and $stroke-width &gt; 0">
+                            <xsl:value-of select="round( substring-before ($dots1-length,'in' ) div $stroke-width )"/>
                         </xsl:when>
                         <xsl:otherwise>0</xsl:otherwise>
                     </xsl:choose>
@@ -643,8 +692,8 @@
                             </xsl:variable>
                             <xsl:value-of select="round($dots-percent)"/>
                         </xsl:when>
-                        <xsl:when test="contains($dots2-length,'inch') and $stroke-width &gt; 0">
-                            <xsl:value-of select="round(substring-before($dots2-length,'inch') div $stroke-width)"/>
+                        <xsl:when test="contains($dots2-length,'in') and $stroke-width &gt; 0">
+                            <xsl:value-of select="round(substring-before($dots2-length,'in') div $stroke-width)"/>
                         </xsl:when>
                         <xsl:otherwise>0</xsl:otherwise>
                     </xsl:choose>
@@ -660,7 +709,7 @@
                             <xsl:value-of select="round($dots-percent)"/>
                         </xsl:when>
                         <xsl:when test="contains($distance,'in') and $stroke-width &gt; 0">
-                            <xsl:value-of select="round(substring-before($distance,'inch') div $stroke-width)"/>
+                            <xsl:value-of select="round(substring-before($distance,'in') div $stroke-width)"/>
                         </xsl:when>
                         <xsl:otherwise>1</xsl:otherwise>
                     </xsl:choose>
@@ -774,9 +823,30 @@
         </xsl:variable>
         <xsl:variable name="drawtextstyle" select="@draw:text-style-name"/>
         <xsl:variable name="org-z-index" select="number(concat('0',@draw-z-intex))"/>
-        <xsl:variable name="run-though" select="key('graphics-style', @draw:style-name)/style:properties/@style:run-through"/>
-        <xsl:variable name="org-wrap" select="key('graphics-style', @draw:style-name)/style:properties/@style:wrap"/>
-        <xsl:variable name="draw-name" select="translate(@draw:name, ':/',  '__')"/>
+        <xsl:variable name="run-though" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@style:run-through"/>
+        <xsl:variable name="org-wrap" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@style:wrap"/>
+        <xsl:variable name="draw-name">
+            <xsl:choose>
+                <xsl:when test="string-length(@draw:name) = 0">
+                    <xsl:value-of select="translate(ancestor::draw:frame/@draw:name, ':/',  '__')"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="translate(@draw:name, ':/',  '__')"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="draw-fill-type" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:fill"/>
+        <xsl:variable name="draw-gradient-name" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:fill-gradient-name"/>
+        <xsl:variable name="fill-image-name" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:fill-image-name"/>
+        <xsl:if test="$draw-fill-type = 'bitmap' ">
+            <xsl:element name="w:binData">
+                <xsl:attribute name="w:name">
+                    <xsl:value-of select="concat( 'wordml://', $fill-image-name)"/>
+                </xsl:attribute>
+                <xsl:value-of select="translate(key('fill-image',$fill-image-name)/office:binary-data/text(),'&#9;&#10;&#13;&#32;','' ) "/>
+                <!-- xsl:value-of select="office:binary-data/text()"/ -->
+            </xsl:element>
+        </xsl:if>
         <xsl:variable name="z-index">
             <xsl:choose>
                 <xsl:when test="$run-though='foreground'">
@@ -808,16 +878,51 @@
                 <xsl:when test="$org-wrap='parallel'">square</xsl:when>
             </xsl:choose>
         </xsl:variable>
+        <xsl:variable name="ooshapename" select="substring-after(name(),':')"/>
+        <xsl:variable name="element-name">
+            <xsl:choose>
+                <xsl:when test="$ooshapename='rect'">v:rect</xsl:when>
+                <xsl:when test="$ooshapename='ellipse' and not(string-length(@draw:kind) &gt; 0)">v:oval</xsl:when>
+                <xsl:when test="$ooshapename='ellipse' and string-length(@draw:kind) &gt; 0">v:arc</xsl:when>
+                <xsl:when test="$ooshapename='circle' and string-length(@draw:kind) &gt; 0">v:arc</xsl:when>
+                <xsl:when test="$ooshapename='line'">v:line</xsl:when>
+                <xsl:when test="$ooshapename='polyline'">v:polyline</xsl:when>
+                <xsl:when test="$ooshapename='polygon'">v:polyline</xsl:when>
+                <xsl:when test="$ooshapename='text-box'">v:shape</xsl:when>
+                <xsl:when test="$ooshapename='image'">v:shape</xsl:when>
+                <xsl:when test="$ooshapename='frame'">v:shape</xsl:when>
+                <xsl:when test="$ooshapename='path'">v:shape</xsl:when>
+                <!-- This caption is not the "Caption", it's GUI name is Callouts-->
+                <xsl:when test="$ooshapename='caption'">v:shape</xsl:when>
+                <xsl:when test="$ooshapename='custom-shape' and draw:enhanced-geometry[1]/@draw:predefined-type = 'non-primitive' ">v:shape</xsl:when>
+                <xsl:when test="$ooshapename='custom-shape' and draw:enhanced-geometry[1]/@draw:predefined-type = 'round-rectangle' ">v:roundrect</xsl:when>
+                <xsl:when test="$ooshapename='custom-shape' and draw:enhanced-geometry[1]/@draw:predefined-type = 'rectangle' ">v:rect</xsl:when>
+                <xsl:when test="$ooshapename='custom-shape' and draw:enhanced-geometry[1]/@draw:predefined-type = 'ellipse' ">v:oval</xsl:when>
+                <xsl:when test="$ooshapename='custom-shape'">v:shape</xsl:when>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="ms-shape-type">
+            <xsl:choose>
+                <xsl:when test="string-length($shape-type) &gt; 0">
+                    <xsl:value-of select="$shape-type"/>
+                </xsl:when>
+                <xsl:when test="$ooshapename='custom-shape' ">
+                    <xsl:call-template name="ooo_custom_draw2ms_word_draw_map">
+                        <xsl:with-param name="ooo_predefined_type" select="draw:enhanced-geometry[1]/@draw:predefined-type"/>
+                    </xsl:call-template>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:variable name="real-x-adjust">
             <xsl:call-template name="ConvertMeasure">
                 <xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
-                <xsl:with-param name="value" select="concat($x-adjust,'inch')"/>
+                <xsl:with-param name="value" select="concat($x-adjust,'in')"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="real-y-adjust">
             <xsl:call-template name="ConvertMeasure">
                 <xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
-                <xsl:with-param name="value" select="concat($y-adjust,'inch')"/>
+                <xsl:with-param name="value" select="concat($y-adjust,'in')"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="org-x">
@@ -832,17 +937,17 @@
                 <xsl:with-param name="value" select="@svg:y"/>
             </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="pagemaster" select="key('master-page','Standard')/@style:page-master-name"/>
+        <xsl:variable name="pagemaster" select="key('master-page','Standard')/@style:page-layout-name"/>
         <xsl:variable name="leftmargin-pt">
             <xsl:call-template name="ConvertMeasure">
                 <xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
-                <xsl:with-param name="value" select="key('page-master',$pagemaster)/style:properties/@fo:margin-left"/>
+                <xsl:with-param name="value" select="key('page-layout',$pagemaster)/page-layout-properties/@fo:margin-left"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="topmargin-pt">
             <xsl:call-template name="ConvertMeasure">
                 <xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
-                <xsl:with-param name="value" select="key('page-master',$pagemaster)/style:properties/@fo:margin-top"/>
+                <xsl:with-param name="value" select="key('page-layout',$pagemaster)/page-layout-properties/@fo:margin-top"/>
             </xsl:call-template>
         </xsl:variable>
         <!-- addjust the x and y values of the page archored objects-->
@@ -867,9 +972,19 @@
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="width">
+            <xsl:variable name="width-tmp">
+                <xsl:choose>
+                    <xsl:when test="string-length(@svg:width) = 0 and ancestor::draw:frame">
+                        <xsl:value-of select="ancestor::draw:frame/@svg:width"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="@svg:width"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
             <xsl:call-template name="ConvertMeasure">
                 <xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
-                <xsl:with-param name="value" select="@svg:width"/>
+                <xsl:with-param name="value" select="$width-tmp"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="height">
@@ -890,11 +1005,11 @@
         </xsl:variable>
         <xsl:variable name="borderstyle">
             <xsl:call-template name="get_borderstyle">
-                <xsl:with-param name="border" select="key('graphics-style', @draw:style-name)/style:properties/@fo:border"/>
-                <xsl:with-param name="border-line-width" select="key('graphics-style', @draw:style-name)/style:properties/@style:border-line-width"/>
+                <xsl:with-param name="border" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@fo:border"/>
+                <xsl:with-param name="border-line-width" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@style:border-line-width"/>
             </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="stroke-weight-in-inch" select="substring-before( key('graphics-style', @draw:style-name)/style:properties/@svg:stroke-width , 'inch') "/>
+        <xsl:variable name="stroke-weight-in-inch" select="number(concat('0',translate(key('graphics-style', @draw:style-name)/style:graphic-properties/@svg:stroke-width ,'abcdefghijklmnopqrstuvwxyz','') ))"/>
         <xsl:variable name="stroke-weight">
             <xsl:choose>
                 <xsl:when test="contains($borderstyle , 'strokeweight')">
@@ -906,7 +1021,7 @@
                 <xsl:otherwise>
                     <xsl:call-template name="ConvertMeasure">
                         <xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
-                        <xsl:with-param name="value" select="key('graphics-style', @draw:style-name)/style:properties/@svg:stroke-width"/>
+                        <xsl:with-param name="value" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@svg:stroke-width"/>
                     </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
@@ -917,7 +1032,7 @@
             </xsl:if>
         </xsl:variable>
         <xsl:variable name="stroked">
-            <xsl:if test="key('graphics-style', @draw:style-name)/style:properties/@draw:stroke = 'none'">
+            <xsl:if test="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:stroke = 'none'">
                 <xsl:value-of select="'f'"/>
             </xsl:if>
         </xsl:variable>
@@ -929,90 +1044,92 @@
         </xsl:variable>
         <xsl:variable name="start-arrow">
             <xsl:choose>
-                <xsl:when test="key('graphics-style', @draw:style-name)/style:properties/@draw:marker-end">
+                <xsl:when test="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:marker-end">
                     <xsl:call-template name="MapArrowStyle">
-                        <xsl:with-param name="arrow-name" select="key('graphics-style', @draw:style-name)/style:properties/@draw:marker-end"/>
+                        <xsl:with-param name="arrow-name" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:marker-end"/>
                     </xsl:call-template>
                 </xsl:when>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="end-arrow">
             <xsl:choose>
-                <xsl:when test="key('graphics-style', @draw:style-name)/style:properties/@draw:marker-start">
+                <xsl:when test="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:marker-start">
                     <xsl:call-template name="MapArrowStyle">
-                        <xsl:with-param name="arrow-name" select="key('graphics-style', @draw:style-name)/style:properties/@draw:marker-start"/>
+                        <xsl:with-param name="arrow-name" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:marker-start"/>
                     </xsl:call-template>
                 </xsl:when>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="start-arrow-length">
             <xsl:choose>
-                <xsl:when test="key('graphics-style', @draw:style-name)/style:properties/@draw:marker-end">
+                <xsl:when test="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:marker-end">
                     <xsl:call-template name="GetArrowLength">
-                        <xsl:with-param name="arrow-name" select="key('graphics-style', @draw:style-name)/style:properties/@draw:marker-end"/>
-                        <xsl:with-param name="arrow-width" select="key('graphics-style', @draw:style-name)/style:properties/@draw:marker-end-width"/>
+                        <xsl:with-param name="arrow-name" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:marker-end"/>
+                        <xsl:with-param name="arrow-width" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:marker-end-width"/>
                     </xsl:call-template>
                 </xsl:when>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="start-arrow-width">
             <xsl:choose>
-                <xsl:when test="key('graphics-style', @draw:style-name)/style:properties/@draw:marker-end">
+                <xsl:when test="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:marker-end">
                     <xsl:call-template name="GetArrowWidth">
-                        <xsl:with-param name="arrow-name" select="key('graphics-style', @draw:style-name)/style:properties/@draw:marker-end"/>
-                        <xsl:with-param name="arrow-width" select="key('graphics-style', @draw:style-name)/style:properties/@draw:marker-end-width"/>
+                        <xsl:with-param name="arrow-name" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:marker-end"/>
+                        <xsl:with-param name="arrow-width" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:marker-end-width"/>
                     </xsl:call-template>
                 </xsl:when>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="end-arrow-length">
             <xsl:choose>
-                <xsl:when test="key('graphics-style', @draw:style-name)/style:properties/@draw:marker-start">
+                <xsl:when test="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:marker-start">
                     <xsl:call-template name="GetArrowLength">
-                        <xsl:with-param name="arrow-name" select="key('graphics-style', @draw:style-name)/style:properties/@draw:marker-start"/>
-                        <xsl:with-param name="arrow-width" select="key('graphics-style', @draw:style-name)/style:properties/@draw:marker-start-width"/>
+                        <xsl:with-param name="arrow-name" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:marker-start"/>
+                        <xsl:with-param name="arrow-width" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:marker-start-width"/>
                     </xsl:call-template>
                 </xsl:when>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="end-arrow-width">
             <xsl:choose>
-                <xsl:when test="key('graphics-style', @draw:style-name)/style:properties/@draw:marker-start">
+                <xsl:when test="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:marker-start">
                     <xsl:call-template name="GetArrowWidth">
-                        <xsl:with-param name="arrow-name" select="key('graphics-style', @draw:style-name)/style:properties/@draw:marker-start"/>
-                        <xsl:with-param name="arrow-width" select="key('graphics-style', @draw:style-name)/style:properties/@draw:marker-start-width"/>
+                        <xsl:with-param name="arrow-name" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:marker-start"/>
+                        <xsl:with-param name="arrow-width" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:marker-start-width"/>
                     </xsl:call-template>
                 </xsl:when>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="stroke-color">
             <xsl:choose>
-                <xsl:when test="key('graphics-style', @draw:style-name)/style:properties/@svg:stroke-color">
-                    <xsl:value-of select="key('graphics-style', @draw:style-name)/style:properties/@svg:stroke-color"/>
+                <xsl:when test="key('graphics-style', @draw:style-name)/style:graphic-properties/@svg:stroke-color">
+                    <xsl:value-of select="key('graphics-style', @draw:style-name)/style:graphic-properties/@svg:stroke-color"/>
                 </xsl:when>
-                <xsl:when test="contains(key('graphics-style', @draw:style-name)/style:properties/@fo:border, '#')">
-                    <xsl:value-of select="concat('#',  substring-after(key('graphics-style', @draw:style-name)/style:properties/@fo:border, '#') )"/>
+                <xsl:when test="contains(key('graphics-style', @draw:style-name)/style:graphic-properties/@fo:border, '#')">
+                    <xsl:value-of select="concat('#',  substring-after(key('graphics-style', @draw:style-name)/style:graphic-properties/@fo:border, '#') )"/>
                 </xsl:when>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="stroke-opacity">
             <xsl:call-template name="ValueOfPercent">
-                <xsl:with-param name="value" select="key('graphics-style', @draw:style-name)/style:properties/@svg:stroke-opacity"/>
+                <xsl:with-param name="value" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@svg:stroke-opacity"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="fill-color">
             <xsl:choose>
-                <xsl:when test="key('graphics-style', @draw:style-name)/style:properties/@draw:fill-color">
-                    <xsl:value-of select="key('graphics-style', @draw:style-name)/style:properties/@draw:fill-color"/>
+                <xsl:when test="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:fill-color">
+                    <xsl:value-of select="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:fill-color"/>
                 </xsl:when>
-                <xsl:when test="key('graphics-style', @draw:style-name)/style:properties/@draw:fontwork-style">black</xsl:when>
-                <xsl:when test="key('graphics-style', @draw:style-name)/style:properties/@draw:fill = 'none'"/>
+                <xsl:when test="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:fontwork-style">black</xsl:when>
+                <xsl:when test="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:fill = 'none'"/>
+                <xsl:when test="$draw-fill-type = 'gradient' ">
+                    <xsl:value-of select="key('draw-gradient',$draw-gradient-name)/@draw:end-color "/>
+                </xsl:when>
                 <!-- for these need fill, set the default color we used in oo-->
-                <xsl:when test="name()='draw:rect' or (name() = 'draw:ellipse' and not(  @draw:kind='arc') )">#00B8FF</xsl:when>
+                <xsl:when test="name()='draw:polygon' or name()='draw:custom-shape'  or name() = 'draw:rect' or (name() = 'draw:ellipse' and not(  @draw:kind='arc') )">#00B8FF</xsl:when>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="position" select="concat('left:', $x ,$MeasureMark ,  ';top:' , $y ,$MeasureMark  , ';width:', $width ,$MeasureMark , ';height:', $height ,$MeasureMark  )"/>
-        <xsl:variable name="ooshapename" select="substring-after(name(),':')"/>
         <xsl:variable name="flip">
             <xsl:choose>
                 <xsl:when test="@text:anchor-type='as-char' and $ooshapename='line'"/>
@@ -1020,6 +1137,7 @@
                 <xsl:when test="$ooshapename='path'"/>
                 <xsl:when test="$ooshapename='caption'"/>
                 <xsl:when test="@draw:kind = 'arc' or @draw:kind = 'cut' or @draw:kind = 'section'"/>
+                <xsl:when test="$ooshapename='custom-shape'"/>
                 <xsl:otherwise>flip:x</xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -1113,31 +1231,6 @@
                 <xsl:value-of select="concat($position,';')"/>
             </xsl:if>
         </xsl:variable>
-        <xsl:variable name="element-name">
-            <xsl:choose>
-                <xsl:when test="$ooshapename='rect'">v:rect</xsl:when>
-                <xsl:when test="$ooshapename='ellipse' and not(string-length(@draw:kind) &gt; 0)">v:oval</xsl:when>
-                <xsl:when test="$ooshapename='ellipse' and string-length(@draw:kind) &gt; 0">v:arc</xsl:when>
-                <xsl:when test="$ooshapename='circle' and string-length(@draw:kind) &gt; 0">v:arc</xsl:when>
-                <xsl:when test="$ooshapename='line'">v:line</xsl:when>
-                <xsl:when test="$ooshapename='polyline'">v:polyline</xsl:when>
-                <xsl:when test="$ooshapename='text-box'">v:shape</xsl:when>
-                <xsl:when test="$ooshapename='image'">v:shape</xsl:when>
-                <xsl:when test="$ooshapename='path'">v:shape</xsl:when>
-                <!-- This caption is not the "Caption", it's GUI name is Callouts-->
-                <xsl:when test="$ooshapename='caption'">v:shape</xsl:when>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:variable name="id">
-            <xsl:choose>
-                <xsl:when test="$ooshapename='line'">
-                    <xsl:value-of select="concat('_x',$x1 , '_' ,$y1, '_' , $x2, '_' ,$y2 )"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="concat('_x',$x , '_' ,$y, '_' , $width, '_' ,$height )"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
         <!-- image special: convert oo base64 binary data (77char/line) to word base64 binary data(73char/line) , a workthrough is removing all line breaks -->
         <xsl:if test="$ooshapename = 'image'">
             <xsl:element name="w:binData">
@@ -1149,13 +1242,23 @@
             </xsl:element>
         </xsl:if>
         <!-- all element goes here -->
+        <xsl:variable name="id">
+            <xsl:choose>
+                <xsl:when test="$ooshapename='line'">
+                    <xsl:value-of select="concat('_x',$x1 , '_' ,$y1, '_' , $x2, '_' ,$y2 )"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="concat('_x',$x , '_' ,$y, '_' , $width, '_' ,$height )"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:element name="{$element-name}">
             <xsl:attribute name="id">
                 <xsl:value-of select="$id"/>
             </xsl:attribute>
-            <xsl:if test="string-length($shape-type) &gt; 0">
+            <xsl:if test="string-length($ms-shape-type) &gt; 0">
                 <xsl:attribute name="type">
-                    <xsl:value-of select="$shape-type"/>
+                    <xsl:value-of select="$ms-shape-type"/>
                 </xsl:attribute>
             </xsl:if>
             <xsl:attribute name="style">
@@ -1233,8 +1336,8 @@
                 </xsl:attribute>
             </xsl:if>
             <!-- end line special attribute-->
-            <!-- polyline special attribute-->
-            <xsl:if test="$ooshapename='polyline'">
+            <!-- polyline and polygon special attribute-->
+            <xsl:if test="$ooshapename='polyline' or $ooshapename='polygon' ">
                 <!-- translate ' '  to in '  tranclate ',' to 'in,' -->
                 <xsl:variable name="points">
                     <xsl:call-template name="points2points">
@@ -1252,7 +1355,7 @@
                     <xsl:value-of select="$points"/>
                 </xsl:attribute>
             </xsl:if>
-            <!-- end polyline special attribute-->
+            <!-- end polyline and polygon special attribute-->
             <!-- callouts special attribute-->
             <xsl:if test="$ooshapename='caption'">
                 <xsl:variable name="caption-point-x">
@@ -1277,17 +1380,37 @@
             </xsl:if>
             <!-- end callouts special attribute-->
             <!-- path special attribute-->
-            <xsl:if test="$ooshapename='path' or string-length(@svg:d) &gt; 0">
+            <xsl:if test="$ooshapename='path' or string-length(@svg:d) &gt; 0 or ( $ooshapename='custom-shape' and draw:enhanced-geometry[1]/@draw:predefined-type = 'non-primitive') ">
                 <xsl:variable name="path">
-                    <xsl:call-template name="svgpath2vmlpath">
-                        <xsl:with-param name="svg-path" select="@svg:d"/>
-                    </xsl:call-template>
+                    <xsl:choose>
+                        <xsl:when test="$ooshapename='path' or string-length(@svg:d) &gt; 0 ">
+                            <xsl:call-template name="svgpath2vmlpath">
+                                <xsl:with-param name="svg-path" select="@svg:d"/>
+                            </xsl:call-template>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:call-template name="svgpath2vmlpath">
+                                <xsl:with-param name="svg-path" select="draw:enhanced-geometry[1]/@draw:enhanced-path"/>
+                            </xsl:call-template>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:variable>
                 <xsl:attribute name="coordorigin">
                     <xsl:value-of select=" '0 0' "/>
                 </xsl:attribute>
                 <xsl:attribute name="coordsize">
-                    <xsl:value-of select="substring-after(@svg:viewBox,'0 0 ')"/>
+                    <xsl:choose>
+                        <xsl:when test="string-length(@svg:viewBox) &gt; 0 ">
+                            <xsl:value-of select="substring-after(@svg:viewBox,'0 0 ')"/>
+                        </xsl:when>
+                        <xsl:when test="string-length(draw:enhanced-geometry[1]/@svg:viewBox) &gt; 0 ">
+                            <xsl:value-of select="substring-after(draw:enhanced-geometry[1]/@svg:viewBox,'0 0 ')"/>
+                        </xsl:when>
+                        <!-- for custom shape use a default viewbox. right? -->
+                        <xsl:otherwise>
+                            <xsl:value-of select=" '21600 21600' "/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:attribute>
                 <xsl:attribute name="path">
                     <xsl:value-of select="$path"/>
@@ -1361,6 +1484,39 @@
                 </xsl:element>
             </xsl:if>
             <!-- end wrap type -->
+            <!-- start fill image -->
+            <xsl:if test="string-length($draw-fill-type ) &gt; 0">
+                <xsl:element name="v:fill">
+                    <xsl:choose>
+                        <xsl:when test="$draw-fill-type = 'bitmap'">
+                            <xsl:attribute name="src">
+                                <xsl:value-of select="concat( 'wordml://', $fill-image-name)"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="o:titile">
+                                <xsl:value-of select="$fill-image-name"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="recolor">
+                                <xsl:value-of select=" 'true' "/>
+                            </xsl:attribute>
+                            <xsl:attribute name="rotate">
+                                <xsl:value-of select=" 'true' "/>
+                            </xsl:attribute>
+                            <xsl:attribute name="type">
+                                <xsl:value-of select=" 'frame' "/>
+                            </xsl:attribute>
+                        </xsl:when>
+                        <xsl:when test="$draw-fill-type = 'gradient'">
+                            <xsl:attribute name="type">
+                                <xsl:value-of select=" 'gradient' "/>
+                            </xsl:attribute>
+                            <xsl:attribute name="color2">
+                                <xsl:value-of select="key('draw-gradient',$draw-gradient-name)/@draw:start-color "/>
+                            </xsl:attribute>
+                        </xsl:when>
+                    </xsl:choose>
+                </xsl:element>
+            </xsl:if>
+            <!-- end fill image -->
             <!-- only draw:g can have child graphic -->
             <xsl:choose>
                 <xsl:when test="name() = 'draw:g'">
@@ -1371,12 +1527,12 @@
                         <xsl:with-param name="force-draw" select="$force-draw"/>
                     </xsl:apply-templates>
                 </xsl:when>
-                <xsl:when test="key('graphics-style', @draw:style-name)/style:properties/@draw:fontwork-style">
+                <xsl:when test="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:fontwork-style">
                     <xsl:call-template name="FontWork"/>
                 </xsl:when>
-                <xsl:when test="text() | text:*">
+                <xsl:when test="text:*/* | text:*/text()">
                     <xsl:element name="v:textbox">
-                        <xsl:if test="key('graphics-style', @draw:style-name)/style:properties/@draw:writing-mode = 'tb-rl'">
+                        <xsl:if test="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:writing-mode = 'tb-rl'">
                             <xsl:attribute name="style">
                                 <xsl:value-of select="'layout-flow:vertical'"/>
                             </xsl:attribute>
@@ -1393,20 +1549,20 @@
         <xsl:element name="v:path">
             <xsl:attribute name="textpathok">true</xsl:attribute>
         </xsl:element>
-        <xsl:if test="not(key('graphics-style', @draw:style-name)/style:properties/@draw:fontwork-shadow) or not(key('graphics-style', @draw:style-name)/style:properties/@draw:fontwork-shadow = 'normal')">
+        <xsl:if test="not(key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:fontwork-shadow) or not(key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:fontwork-shadow = 'normal')">
             <xsl:element name="v:shadow">
                 <xsl:attribute name="on">true</xsl:attribute>
                 <xsl:attribute name="type">perspective</xsl:attribute>
                 <xsl:attribute name="color">
-                    <xsl:value-of select="key('graphics-style', @draw:style-name)/style:properties/@draw:fontwork-shadow-color"/>
+                    <xsl:value-of select="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:fontwork-shadow-color"/>
                 </xsl:attribute>
                 <xsl:variable name="offset-x">
                     <xsl:call-template name="ConvertMeasure">
                         <xsl:with-param name="TargetMeasure" select="'twip'"/>
-                        <xsl:with-param name="value" select="key('graphics-style', @draw:style-name)/style:properties/@draw:fontwork-shadow-offset-x"/>
+                        <xsl:with-param name="value" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:fontwork-shadow-offset-x"/>
                     </xsl:call-template>
                 </xsl:variable>
-                <xsl:variable name="offset-y" select="substring-before(key('graphics-style', @draw:style-name)/style:properties/@draw:fontwork-shadow-offset-y, 'in')"/>
+                <xsl:variable name="offset-y" select="substring-before(key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:fontwork-shadow-offset-y, 'in')"/>
                 <xsl:attribute name="matrix">
                     <xsl:value-of select="concat(',,,' , round($offset-y div 0.000693) div 100, ',,')"/>
                 </xsl:attribute>
@@ -1419,11 +1575,11 @@
             <xsl:attribute name="fitshape">true</xsl:attribute>
             <xsl:attribute name="style">
                 <xsl:choose>
-                    <xsl:when test="key('paragraph-style', text:p[1]/@text:style-name )/style:properties/@fo:font-family">
-                        <xsl:value-of select="concat('font-family:&quot;' , key('paragraph-style', text:p[1]/@text:style-name )/style:properties/@fo:font-family ,  '&quot;') "/>
+                    <xsl:when test="key('paragraph-style', text:p[1]/@text:style-name )/style:graphic-properties/@svg:font-family">
+                        <xsl:value-of select="concat('font-family:&quot;' , key('paragraph-style', text:p[1]/@text:style-name )/style:graphic-properties/@svg:font-family ,  '&quot;') "/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:variable name="default-graphics-properties" select="/office:document/office:styles/style:default-style[@style:family = 'graphics']/style:properties"/>
+                        <xsl:variable name="default-graphics-properties" select="/office:document/office:styles/style:default-style[@style:family = 'graphics']/style:graphic-properties"/>
                         <xsl:value-of select="concat('font-family:&quot;' , $default-graphics-properties/@style:font-name ,  '&quot;') "/>
                     </xsl:otherwise>
                 </xsl:choose>
