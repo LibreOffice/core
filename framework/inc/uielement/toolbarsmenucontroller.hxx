@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarsmenucontroller.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:53:34 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,11 +162,20 @@ namespace framework
             // XEventListener
             virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
 
+            struct ExecuteInfo
+            {
+                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >     xDispatch;
+                ::com::sun::star::util::URL                                                aTargetURL;
+                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
+            };
+
+            DECL_STATIC_LINK( ToolbarsMenuController, ExecuteHdl_Impl, ExecuteInfo* );
+
         private:
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
             rtl::OUString getUINameFromCommand( const rtl::OUString& rCommandURL );
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > getDispatchFromCommandURL( const rtl::OUString& rCommandURL );
-            void addCommand( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu, const rtl::OUString& rCommandURL );
+            void addCommand( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu, const rtl::OUString& rCommandURL, USHORT nHelpId );
 
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >                m_xPersistentWindowState;
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >                 m_xURLTransformer;
