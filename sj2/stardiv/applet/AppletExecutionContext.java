@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppletExecutionContext.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-23 16:10:08 $
+ *  last change: $Author: kr $ $Date: 2001-03-09 11:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,12 +91,6 @@ import com.sun.star.lib.sandbox.JarEntry;
 import com.sun.star.lib.sandbox.ResourceProxy;
 
 import com.sun.star.lib.sandbox.CodeSource;
-//import com.sun.star.lib.sandbox.PermissionCollection;
-//import com.sun.star.lib.sandbox.ProtectionDomain;
-//import com.sun.star.lib.sandbox.RuntimePermission;
-//import com.sun.star.lib.sandbox.FilePermission;
-//import com.sun.star.lib.sandbox.SocketPermission;
-
 
 public final class AppletExecutionContext extends ExecutionContext
         implements AppletStub, LiveConnectable
@@ -114,9 +108,6 @@ public final class AppletExecutionContext extends ExecutionContext
 
     private URL _documentURL = null;
     private URL _baseURL = null;
-
-//      private ProtectionDomain _protectionDomain;
-//      private PermissionCollection _permissionCollection;
 
     private Toolkit _toolkit;
 
@@ -202,21 +193,7 @@ public final class AppletExecutionContext extends ExecutionContext
 
           _documentProxy.addExecutionContext(this, _className);
 
-//          _permissionCollection = new PermissionCollection();
-//          _protectionDomain = new ProtectionDomain(new CodeSource(_baseURL, null), _permissionCollection);
-
         super.init(nm, ClassContextProxy.create(_baseURL, null, null));
-//          super.init(nm, ClassContextProxy.create(_baseURL, _protectionDomain, null));
-
-//          _permissionCollection.add(new RuntimePermission("modifyThreadGroup", getThreadGroup()));
-//          _permissionCollection.add(new SocketPermission(SocketPermission.NETWORK_APPLET, _baseURL.getHost()));
-
-//          try {
-//              if(_baseURL.getProtocol().equals("file")) // allow read acces for applet directory
-//                  _permissionCollection.add(new FilePermission(new File(_baseURL.getFile()).getCanonicalPath(), "read"));
-//          }
-//          catch(IOException eio) {
-//          }
     }
 
     void sDispose(long timeout) {
