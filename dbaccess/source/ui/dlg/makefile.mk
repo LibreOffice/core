@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.2 $
+ #  $Revision: 1.3 $
  #
- #  last change: $Author: fs $ $Date: 2000-10-09 12:39:29 $
+ #  last change: $Author: fs $ $Date: 2000-10-24 13:03:00 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -77,6 +77,7 @@ ENABLE_EXCEPTIONS=TRUE
 BMP_IN=$(PRJ)$/res
 
 SRCFILES =	\
+        dsselect.src	\
         dbadmin.src	\
         dbfindex.src	\
         sqlmessage.src
@@ -84,6 +85,8 @@ SRCFILES =	\
 # ... object files ............................
 
 SLOFILES=	\
+        $(SLO)$/odbcconfig.obj	\
+        $(SLO)$/dsselect.obj	\
         $(SLO)$/dbadmin.obj	\
         $(SLO)$/adminpages.obj	\
         $(SLO)$/genericunodialog.obj	\
@@ -100,6 +103,9 @@ SLOFILES=	\
  #########################################################################
  # history:
  #	$Log: not supported by cvs2svn $
+ #	Revision 1.2  2000/10/09 12:39:29  fs
+ #	some (a lot of) new imlpementations - still under development
+ #	
  #	Revision 1.1  2000/10/05 10:06:31  fs
  #	initial checkin
  #	
