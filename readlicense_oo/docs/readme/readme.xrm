@@ -148,10 +148,7 @@
 			<Text id="a" xml:lang="he">Sehr geehrte Anwenderin, sehr geehrter Anwender,</Text>
 			<Text id="a" xml:lang="ca">Dear User</Text>
 			<Text id="a" xml:lang="hi-IN">Dear User</Text>
-		<Text id="empty" xml:lang="en-US"/>
-		</Paragraph>
-		<Paragraph id="A6">
-			<Text id="a" xml:lang="en-US">This file contains important information about this program. Please read this information very carefully before starting work.</Text>
+		<Text id="empty" xml:lang="en-US"/><Text id="a" xml:lang="en-US">This file contains important information about this program. Please read this information very carefully before starting work.</Text>
 			<Text id="a" xml:lang="cs">This file contains important information about this program. Please read this information very carefully before starting work.</Text>
 			<Text id="a" xml:lang="sk">This file contains important information about this program. Please read this information very carefully before starting work.</Text>
 			<Text id="a" xml:lang="el">Αυτό το αρχείο περιέχει σημαντικές πληροφορίες σχετικά με το πρόγραμμα. Διαβάστε αυτές τις πληροφορίες πολύ προσεκτικά πριν χρησιμοποιήσετε το πρόγραμμα.</Text>
@@ -186,7 +183,7 @@
 			<Text id="a" xml:lang="fr" url="ahead">The OpenOffice.org community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the OpenOffice.org site with helpful user information at</Text>
 			<Text id="a" xml:lang="fi" url="ahead">The OpenOffice.org community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the OpenOffice.org site with helpful user information at</Text>
 			<Text id="a" xml:lang="da" url="ahead">The OpenOffice.org community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the OpenOffice.org site with helpful user information at</Text>
-			<Text id="a" xml:lang="zh-CN" url="ahead">The OpenOffice.org community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the OpenOffice.org site with helpful user information at</Text>
+			<Text id="a" xml:lang="zh-CN" url="ahead">The OpenOffice.org community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the OpenOffice.org site with helpful user information at </Text>
 			<Text id="a" xml:lang="zh-TW" url="ahead">The OpenOffice.org community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the OpenOffice.org site with helpful user information at</Text>
 			<Text id="a" xml:lang="ar" url="ahead">The OpenOffice.org community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the OpenOffice.org site with helpful user information at</Text>
 			<Text id="a" xml:lang="he" url="ahead">The OpenOffice.org community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the OpenOffice.org site with helpful user information at</Text>
@@ -211,7 +208,7 @@
 			<Text id="b" xml:lang="fr" url="true" path="url">www.openoffice.org/about_us/introduction.html</Text>
 			<Text id="b" xml:lang="fi" url="true" path="url">www.openoffice.org/about_us/introduction.html</Text>
 			<Text id="b" xml:lang="da" url="true" path="url">www.openoffice.org/about_us/introduction.html</Text>
-			<Text id="b" xml:lang="zh-CN" url="true" path="url">www.openoffice.org/about_us/introduction.html</Text>
+			<Text id="b" xml:lang="zh-CN" url="true" path="url">www.openoffice.org/about_us/introduction.html </Text>
 			<Text id="b" xml:lang="zh-TW" url="true" path="url">www.openoffice.org/about_us/introduction.html</Text>
 			<Text id="b" xml:lang="ar" url="true" path="url">www.openoffice.org/about_us/introduction.html</Text>
 			<Text id="b" xml:lang="he" url="true" path="url">www.openoffice.org/about_us/introduction.html</Text>
@@ -236,7 +233,7 @@
 			<Text id="c" xml:lang="fr">Also read the sections below of getting involved the OpenOffice.org project.</Text>
 			<Text id="c" xml:lang="fi">Also read the sections below of getting involved the OpenOffice.org project.</Text>
 			<Text id="c" xml:lang="da">Also read the sections below of getting involved the OpenOffice.org project.</Text>
-			<Text id="c" xml:lang="zh-CN">Also read the sections below of getting involved the OpenOffice.org project.</Text>
+			<Text id="c" xml:lang="zh-CN">Also read the sections below of getting involved the OpenOffice.org project. </Text>
 			<Text id="c" xml:lang="zh-TW">Also read the sections below of getting involved the OpenOffice.org project.</Text>
 			<Text id="c" xml:lang="ar">Also read the sections below of getting involved the OpenOffice.org project.</Text>
 			<Text id="c" xml:lang="he">Also read the sections below of getting involved the OpenOffice.org project.</Text>
@@ -3096,7 +3093,7 @@
 			<Text id="a" xml:lang="fr">Getting Involved</Text>
 			<Text id="a" xml:lang="fi">Getting Involved</Text>
 			<Text id="a" xml:lang="da">Getting Involved</Text>
-			<Text id="a" xml:lang="zh-CN">Getting Involved</Text>
+			<Text id="a" xml:lang="zh-CN">Getting Involved </Text>
 			<Text id="a" xml:lang="zh-TW">Getting Involved</Text>
 			<Text id="a" xml:lang="ar">Getting Involved</Text>
 			<Text id="a" xml:lang="he">Getting Involved</Text>
@@ -3150,7 +3147,7 @@
 			<Text id="a" xml:lang="fr" url="ahead">As a User, you are already a valuable part of the suite&apos;s development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the Community. Please join and checkout the user page at:</Text>
 			<Text id="a" xml:lang="fi" url="ahead">As a User, you are already a valuable part of the suite&apos;s development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the Community. Please join and checkout the user page at:</Text>
 			<Text id="a" xml:lang="da" url="ahead">As a User, you are already a valuable part of the suite&apos;s development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the Community. Please join and checkout the user page at:</Text>
-			<Text id="a" xml:lang="zh-CN" url="ahead">As a User, you are already a valuable part of the suite&apos;s development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the Community. Please join and checkout the user page at:</Text>
+			<Text id="a" xml:lang="zh-CN" url="ahead">As a User, you are already a valuable part of the suite&apos;s development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the Community. Please join and checkout the user page at: </Text>
 			<Text id="a" xml:lang="zh-TW" url="ahead">As a User, you are already a valuable part of the suite&apos;s development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the Community. Please join and checkout the user page at:</Text>
 			<Text id="a" xml:lang="ar" url="ahead">As a User, you are already a valuable part of the suite&apos;s development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the Community. Please join and checkout the user page at:</Text>
 			<Text id="a" xml:lang="he" url="ahead">As a User, you are already a valuable part of the suite&apos;s development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the Community. Please join and checkout the user page at:</Text>
@@ -3175,7 +3172,7 @@
 			<Text id="b" xml:lang="fr" url="true" path="url">www.openoffice.org</Text>
 			<Text id="b" xml:lang="fi" url="true" path="url">www.openoffice.org</Text>
 			<Text id="b" xml:lang="da" url="true" path="url">www.openoffice.org</Text>
-			<Text id="b" xml:lang="zh-CN" url="true" path="url">www.openoffice.org</Text>
+			<Text id="b" xml:lang="zh-CN" url="true" path="url">www.openoffice.org </Text>
 			<Text id="b" xml:lang="zh-TW" url="true" path="url">www.openoffice.org</Text>
 			<Text id="b" xml:lang="ar" url="true" path="url">www.openoffice.org</Text>
 			<Text id="b" xml:lang="he" url="true" path="url">www.openoffice.org</Text>
@@ -3205,7 +3202,7 @@
 			<Text id="a" xml:lang="fr">Registration</Text>
 			<Text id="a" xml:lang="fi">Registration</Text>
 			<Text id="a" xml:lang="da">Registration</Text>
-			<Text id="a" xml:lang="zh-CN">Registration</Text>
+			<Text id="a" xml:lang="zh-CN">Registration </Text>
 			<Text id="a" xml:lang="zh-TW">Registration</Text>
 			<Text id="a" xml:lang="ar">Registration</Text>
 			<Text id="a" xml:lang="he">Registration</Text>
@@ -3232,7 +3229,7 @@
 			<Text id="a" xml:lang="fr" url="ahead">Please take a little time to complete the minimal Product Registration process when you install the software. While registration is optional, we encourage you to register, since the information enables the Community to make an even better software suite and address User needs directly. Through its Privacy Policy, the OpenOffice.org Community takes every precaution to safeguard your personal data. If you missed the registration at installation, you can return and register at any time at</Text>
 			<Text id="a" xml:lang="fi" url="ahead">Please take a little time to complete the minimal Product Registration process when you install the software. While registration is optional, we encourage you to register, since the information enables the Community to make an even better software suite and address User needs directly. Through its Privacy Policy, the OpenOffice.org Community takes every precaution to safeguard your personal data. If you missed the registration at installation, you can return and register at any time at</Text>
 			<Text id="a" xml:lang="da" url="ahead">Please take a little time to complete the minimal Product Registration process when you install the software. While registration is optional, we encourage you to register, since the information enables the Community to make an even better software suite and address User needs directly. Through its Privacy Policy, the OpenOffice.org Community takes every precaution to safeguard your personal data. If you missed the registration at installation, you can return and register at any time at</Text>
-			<Text id="a" xml:lang="zh-CN" url="ahead">Please take a little time to complete the minimal Product Registration process when you install the software. While registration is optional, we encourage you to register, since the information enables the Community to make an even better software suite and address User needs directly. Through its Privacy Policy, the OpenOffice.org Community takes every precaution to safeguard your personal data. If you missed the registration at installation, you can return and register at any time at</Text>
+			<Text id="a" xml:lang="zh-CN" url="ahead">Please take a little time to complete the minimal Product Registration process when you install the software. While registration is optional, we encourage you to register, since the information enables the Community to make an even better software suite an</Text>
 			<Text id="a" xml:lang="zh-TW" url="ahead">Please take a little time to complete the minimal Product Registration process when you install the software. While registration is optional, we encourage you to register, since the information enables the Community to make an even better software suite and address User needs directly. Through its Privacy Policy, the OpenOffice.org Community takes every precaution to safeguard your personal data. If you missed the registration at installation, you can return and register at any time at</Text>
 			<Text id="a" xml:lang="ar" url="ahead">Please take a little time to complete the minimal Product Registration process when you install the software. While registration is optional, we encourage you to register, since the information enables the Community to make an even better software suite and address User needs directly. Through its Privacy Policy, the OpenOffice.org Community takes every precaution to safeguard your personal data. If you missed the registration at installation, you can return and register at any time at</Text>
 			<Text id="a" xml:lang="he" url="ahead">Please take a little time to complete the minimal Product Registration process when you install the software. While registration is optional, we encourage you to register, since the information enables the Community to make an even better software suite and address User needs directly. Through its Privacy Policy, the OpenOffice.org Community takes every precaution to safeguard your personal data. If you missed the registration at installation, you can return and register at any time at</Text>
@@ -3257,7 +3254,7 @@
 			<Text id="b" xml:lang="fr" url="true" path="url">www.openoffice.org/welcome/registration-site.html</Text>
 			<Text id="b" xml:lang="fi" url="true" path="url">www.openoffice.org/welcome/registration-site.html</Text>
 			<Text id="b" xml:lang="da" url="true" path="url">www.openoffice.org/welcome/registration-site.html</Text>
-			<Text id="b" xml:lang="zh-CN" url="true" path="url">www.openoffice.org/welcome/registration-site.html</Text>
+			<Text id="b" xml:lang="zh-CN" url="true" path="url">www.openoffice.org/welcome/registration-site.html </Text>
 			<Text id="b" xml:lang="zh-TW" url="true" path="url">www.openoffice.org/welcome/registration-site.html</Text>
 			<Text id="b" xml:lang="ar" url="true" path="url">www.openoffice.org/welcome/registration-site.html</Text>
 			<Text id="b" xml:lang="he" url="true" path="url">www.openoffice.org/welcome/registration-site.html</Text>
@@ -3286,7 +3283,7 @@
 			<Text id="a" xml:lang="fr">User Survey</Text>
 			<Text id="a" xml:lang="fi">User Survey</Text>
 			<Text id="a" xml:lang="da">User Survey</Text>
-			<Text id="a" xml:lang="zh-CN">User Survey</Text>
+			<Text id="a" xml:lang="zh-CN">User Survey </Text>
 			<Text id="a" xml:lang="zh-TW">User Survey</Text>
 			<Text id="a" xml:lang="ar">User Survey</Text>
 			<Text id="a" xml:lang="he">User Survey</Text>
@@ -3342,7 +3339,7 @@
 			<Text id="a" xml:lang="fr">Report Bugs &amp; Issues</Text>
 			<Text id="a" xml:lang="fi">Report Bugs &amp; Issues</Text>
 			<Text id="a" xml:lang="da">Report Bugs &amp; Issues</Text>
-			<Text id="a" xml:lang="zh-CN">Report Bugs &amp; Issues</Text>
+			<Text id="a" xml:lang="zh-CN">Report Bugs &amp; Issues </Text>
 			<Text id="a" xml:lang="zh-TW">Report Bugs &amp; Issues</Text>
 			<Text id="a" xml:lang="ar">Report Bugs &amp; Issues</Text>
 			<Text id="a" xml:lang="he">Report Bugs &amp; Issues</Text>
@@ -3369,7 +3366,7 @@
 			<Text id="a" xml:lang="fr">The OpenOffice.org Web site hosts IssueZilla, our mechanism for reporting, tracking and solving bugs and issues. We encourage all Users to feel entitled and welcome to report issues that may arise on your particular platform. Energetic reporting of issues is one of the most important contributions that the User Community can make to the ongoing development and improvement of the suite.</Text>
 			<Text id="a" xml:lang="fi">The OpenOffice.org Web site hosts IssueZilla, our mechanism for reporting, tracking and solving bugs and issues. We encourage all Users to feel entitled and welcome to report issues that may arise on your particular platform. Energetic reporting of issues is one of the most important contributions that the User Community can make to the ongoing development and improvement of the suite.</Text>
 			<Text id="a" xml:lang="da">The OpenOffice.org Web site hosts IssueZilla, our mechanism for reporting, tracking and solving bugs and issues. We encourage all Users to feel entitled and welcome to report issues that may arise on your particular platform. Energetic reporting of issues is one of the most important contributions that the User Community can make to the ongoing development and improvement of the suite.</Text>
-			<Text id="a" xml:lang="zh-CN">The OpenOffice.org Web site hosts IssueZilla, our mechanism for reporting, tracking and solving bugs and issues. We encourage all Users to feel entitled and welcome to report issues that may arise on your particular platform. Energetic reporting of issues is one of the most important contributions that the User Community can make to the ongoing development and improvement of the suite.</Text>
+			<Text id="a" xml:lang="zh-CN">The OpenOffice.org Web site hosts IssueZilla, our mechanism for reporting, tracking and solving bugs and issues. We encourage all Users to feel entitled and welcome to report issues that may arise on your particular platform. Energetic reporting of issues </Text>
 			<Text id="a" xml:lang="zh-TW">The OpenOffice.org Web site hosts IssueZilla, our mechanism for reporting, tracking and solving bugs and issues. We encourage all Users to feel entitled and welcome to report issues that may arise on your particular platform. Energetic reporting of issues is one of the most important contributions that the User Community can make to the ongoing development and improvement of the suite.</Text>
 			<Text id="a" xml:lang="ar">The OpenOffice.org Web site hosts IssueZilla, our mechanism for reporting, tracking and solving bugs and issues. We encourage all Users to feel entitled and welcome to report issues that may arise on your particular platform. Energetic reporting of issues is one of the most important contributions that the User Community can make to the ongoing development and improvement of the suite.</Text>
 			<Text id="a" xml:lang="he">The OpenOffice.org Web site hosts IssueZilla, our mechanism for reporting, tracking and solving bugs and issues. We encourage all Users to feel entitled and welcome to report issues that may arise on your particular platform. Energetic reporting of issues is one of the most important contributions that the User Community can make to the ongoing development and improvement of the suite.</Text>
@@ -3425,7 +3422,7 @@
 			<Text id="a" xml:lang="fr" url="ahead">Here are a few of the Project mailing lists to which you can subscribe at</Text>
 			<Text id="a" xml:lang="fi" url="ahead">Here are a few of the Project mailing lists to which you can subscribe at</Text>
 			<Text id="a" xml:lang="da" url="ahead">Here are a few of the Project mailing lists to which you can subscribe at</Text>
-			<Text id="a" xml:lang="zh-CN" url="ahead">Here are a few of the Project mailing lists to which you can subscribe at</Text>
+			<Text id="a" xml:lang="zh-CN" url="ahead">Here are a few of the Project mailing lists to which you can subscribe at </Text>
 			<Text id="a" xml:lang="zh-TW" url="ahead">Here are a few of the Project mailing lists to which you can subscribe at</Text>
 			<Text id="a" xml:lang="ar" url="ahead">Here are a few of the Project mailing lists to which you can subscribe at</Text>
 			<Text id="a" xml:lang="he" url="ahead">Here are a few of the Project mailing lists to which you can subscribe at</Text>
@@ -3503,7 +3500,7 @@
 			<Text id="b" xml:lang="fr">User support: users@openoffice.org *recommended to new users* (moderate traffic)</Text>
 			<Text id="b" xml:lang="fi">User support: users@openoffice.org *recommended to new users* (moderate traffic)</Text>
 			<Text id="b" xml:lang="da">User support: users@openoffice.org *recommended to new users* (moderate traffic)</Text>
-			<Text id="b" xml:lang="zh-CN">User support: users@openoffice.org *recommended to new users* (moderate traffic)</Text>
+			<Text id="b" xml:lang="zh-CN">User support: users@openoffice.org *recommended to new users* (moderate traffic) </Text>
 			<Text id="b" xml:lang="zh-TW">User support: users@openoffice.org *recommended to new users* (moderate traffic)</Text>
 			<Text id="b" xml:lang="ar">User support: users@openoffice.org *recommended to new users* (moderate traffic)</Text>
 			<Text id="b" xml:lang="he">User support: users@openoffice.org *recommended to new users* (moderate traffic)</Text>
@@ -3528,7 +3525,7 @@
 			<Text id="c" xml:lang="fr">Main user forum: discuss@openoffice.org *Easy way to lurk on discussions* (heavy)</Text>
 			<Text id="c" xml:lang="fi">Main user forum: discuss@openoffice.org *Easy way to lurk on discussions* (heavy)</Text>
 			<Text id="c" xml:lang="da">Main user forum: discuss@openoffice.org *Easy way to lurk on discussions* (heavy)</Text>
-			<Text id="c" xml:lang="zh-CN">Main user forum: discuss@openoffice.org *Easy way to lurk on discussions* (heavy)</Text>
+			<Text id="c" xml:lang="zh-CN">Main user forum: discuss@openoffice.org *Easy way to lurk on discussions* (heavy) </Text>
 			<Text id="c" xml:lang="zh-TW">Main user forum: discuss@openoffice.org *Easy way to lurk on discussions* (heavy)</Text>
 			<Text id="c" xml:lang="ar">Main user forum: discuss@openoffice.org *Easy way to lurk on discussions* (heavy)</Text>
 			<Text id="c" xml:lang="he">Main user forum: discuss@openoffice.org *Easy way to lurk on discussions* (heavy)</Text>
@@ -3553,7 +3550,7 @@
 			<Text id="d" xml:lang="fr">Marketing project: dev@marketing.openoffice.org*beyond development* (getting heavy)</Text>
 			<Text id="d" xml:lang="fi">Marketing project: dev@marketing.openoffice.org*beyond development* (getting heavy)</Text>
 			<Text id="d" xml:lang="da">Marketing project: dev@marketing.openoffice.org*beyond development* (getting heavy)</Text>
-			<Text id="d" xml:lang="zh-CN">Marketing project: dev@marketing.openoffice.org*beyond development* (getting heavy)</Text>
+			<Text id="d" xml:lang="zh-CN">Marketing project: dev@marketing.openoffice.org*beyond development* (getting heavy) </Text>
 			<Text id="d" xml:lang="zh-TW">Marketing project: dev@marketing.openoffice.org*beyond development* (getting heavy)</Text>
 			<Text id="d" xml:lang="ar">Marketing project: dev@marketing.openoffice.org*beyond development* (getting heavy)</Text>
 			<Text id="d" xml:lang="he">Marketing project: dev@marketing.openoffice.org*beyond development* (getting heavy)</Text>
@@ -3578,7 +3575,7 @@
 			<Text id="e" xml:lang="fr">General code contributor list: dev@openoffice.org (moderate/heavy)</Text>
 			<Text id="e" xml:lang="fi">General code contributor list: dev@openoffice.org (moderate/heavy)</Text>
 			<Text id="e" xml:lang="da">General code contributor list: dev@openoffice.org (moderate/heavy)</Text>
-			<Text id="e" xml:lang="zh-CN">General code contributor list: dev@openoffice.org (moderate/heavy)</Text>
+			<Text id="e" xml:lang="zh-CN">General code contributor list: dev@openoffice.org (moderate/heavy) </Text>
 			<Text id="e" xml:lang="zh-TW">General code contributor list: dev@openoffice.org (moderate/heavy)</Text>
 			<Text id="e" xml:lang="ar">General code contributor list: dev@openoffice.org (moderate/heavy)</Text>
 			<Text id="e" xml:lang="he">General code contributor list: dev@openoffice.org (moderate/heavy)</Text>
@@ -3603,7 +3600,7 @@
 			<Text id="f" xml:lang="fr">Groupware: groupware@whiteboard.openoffice.org (moderate)</Text>
 			<Text id="f" xml:lang="fi">Groupware: groupware@whiteboard.openoffice.org (moderate)</Text>
 			<Text id="f" xml:lang="da">Groupware: groupware@whiteboard.openoffice.org (moderate)</Text>
-			<Text id="f" xml:lang="zh-CN">Groupware: groupware@whiteboard.openoffice.org (moderate)</Text>
+			<Text id="f" xml:lang="zh-CN">Groupware: groupware@whiteboard.openoffice.org (moderate) </Text>
 			<Text id="f" xml:lang="zh-TW">Groupware: groupware@whiteboard.openoffice.org (moderate)</Text>
 			<Text id="f" xml:lang="ar">Groupware: groupware@whiteboard.openoffice.org (moderate)</Text>
 			<Text id="f" xml:lang="he">Groupware: groupware@whiteboard.openoffice.org (moderate)</Text>
@@ -3693,7 +3690,7 @@
 			<Text id="a" xml:lang="fr">you will find projects ranging from Localization, Porting and Groupware to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The OpenOffice.org Marketing Project is applying both guerrilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just be spreading the word and telling a friend about this office suite.</Text>
 			<Text id="a" xml:lang="fi">you will find projects ranging from Localization, Porting and Groupware to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The OpenOffice.org Marketing Project is applying both guerrilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just be spreading the word and telling a friend about this office suite.</Text>
 			<Text id="a" xml:lang="da">you will find projects ranging from Localization, Porting and Groupware to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The OpenOffice.org Marketing Project is applying both guerrilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just be spreading the word and telling a friend about this office suite.</Text>
-			<Text id="a" xml:lang="zh-CN">you will find projects ranging from Localization, Porting and Groupware to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The OpenOffice.org Marketing Project is applying both guerrilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just be spreading the word and telling a friend about this office suite.</Text>
+			<Text id="a" xml:lang="zh-CN"> you will find projects ranging from Localization, Porting and Groupware to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The OpenOffice.org Marketing Project is applying both guerrilla and trad</Text>
 			<Text id="a" xml:lang="zh-TW">you will find projects ranging from Localization, Porting and Groupware to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The OpenOffice.org Marketing Project is applying both guerrilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just be spreading the word and telling a friend about this office suite.</Text>
 			<Text id="a" xml:lang="ar">you will find projects ranging from Localization, Porting and Groupware to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The OpenOffice.org Marketing Project is applying both guerrilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just be spreading the word and telling a friend about this office suite.</Text>
 			<Text id="a" xml:lang="he">you will find projects ranging from Localization, Porting and Groupware to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The OpenOffice.org Marketing Project is applying both guerrilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just be spreading the word and telling a friend about this office suite.</Text>
@@ -3720,7 +3717,7 @@
 			<Text id="a" xml:lang="fr" url="ahead">You can help by joining the Marketing Communications &amp; Information Network here:</Text>
 			<Text id="a" xml:lang="fi" url="ahead">You can help by joining the Marketing Communications &amp; Information Network here:</Text>
 			<Text id="a" xml:lang="da" url="ahead">You can help by joining the Marketing Communications &amp; Information Network here:</Text>
-			<Text id="a" xml:lang="zh-CN" url="ahead">You can help by joining the Marketing Communications &amp; Information Network here:</Text>
+			<Text id="a" xml:lang="zh-CN" url="ahead">You can help by joining the Marketing Communications &amp; Information Network here: </Text>
 			<Text id="a" xml:lang="zh-TW" url="ahead">You can help by joining the Marketing Communications &amp; Information Network here:</Text>
 			<Text id="a" xml:lang="ar" url="ahead">You can help by joining the Marketing Communications &amp; Information Network here:</Text>
 			<Text id="a" xml:lang="he" url="ahead">You can help by joining the Marketing Communications &amp; Information Network here:</Text>
@@ -3745,7 +3742,7 @@
 			<Text id="b" xml:lang="fr" url="true">http://marketing.openoffice.org/contacts.html</Text>
 			<Text id="b" xml:lang="fi" url="true">http://marketing.openoffice.org/contacts.html</Text>
 			<Text id="b" xml:lang="da" url="true">http://marketing.openoffice.org/contacts.html</Text>
-			<Text id="b" xml:lang="zh-CN" url="true">http://marketing.openoffice.org/contacts.html</Text>
+			<Text id="b" xml:lang="zh-CN" url="true">http://marketing.openoffice.org/contacts.html </Text>
 			<Text id="b" xml:lang="zh-TW" url="true">http://marketing.openoffice.org/contacts.html</Text>
 			<Text id="b" xml:lang="ar" url="true">http://marketing.openoffice.org/contacts.html</Text>
 			<Text id="b" xml:lang="he" url="true">http://marketing.openoffice.org/contacts.html</Text>
@@ -3770,7 +3767,7 @@
 			<Text id="c" xml:lang="fr">where you can provide point communication contact with press, media, government agencies, consultants, schools, Linux Users Groups and developers in your country and local community.</Text>
 			<Text id="c" xml:lang="fi">where you can provide point communication contact with press, media, government agencies, consultants, schools, Linux Users Groups and developers in your country and local community.</Text>
 			<Text id="c" xml:lang="da">where you can provide point communication contact with press, media, government agencies, consultants, schools, Linux Users Groups and developers in your country and local community.</Text>
-			<Text id="c" xml:lang="zh-CN">where you can provide point communication contact with press, media, government agencies, consultants, schools, Linux Users Groups and developers in your country and local community.</Text>
+			<Text id="c" xml:lang="zh-CN"> where you can provide point communication contact with press, media, government agencies, consultants, schools, Linux Users Groups and developers in your country and local community.</Text>
 			<Text id="c" xml:lang="zh-TW">where you can provide point communication contact with press, media, government agencies, consultants, schools, Linux Users Groups and developers in your country and local community.</Text>
 			<Text id="c" xml:lang="ar">where you can provide point communication contact with press, media, government agencies, consultants, schools, Linux Users Groups and developers in your country and local community.</Text>
 			<Text id="c" xml:lang="he">where you can provide point communication contact with press, media, government agencies, consultants, schools, Linux Users Groups and developers in your country and local community.</Text>
@@ -3826,7 +3823,7 @@
 			<Text id="a" xml:lang="fr" url="ahead">For help with the OpenOffice.org 1.x office suite, take a look at the archieves to questions already answered on the &apos;users@openoffice.org&apos; mailing list at</Text>
 			<Text id="a" xml:lang="fi" url="ahead">For help with the OpenOffice.org 1.x office suite, take a look at the archieves to questions already answered on the &apos;users@openoffice.org&apos; mailing list at</Text>
 			<Text id="a" xml:lang="da" url="ahead">For help with the OpenOffice.org 1.x office suite, take a look at the archieves to questions already answered on the &apos;users@openoffice.org&apos; mailing list at</Text>
-			<Text id="a" xml:lang="zh-CN" url="ahead">For help with the OpenOffice.org 1.x office suite, take a look at the archieves to questions already answered on the &apos;users@openoffice.org&apos; mailing list at</Text>
+			<Text id="a" xml:lang="zh-CN" url="ahead">For help with the OpenOffice.org 1.x office suite, take a look at the archieves to questions already answered on the &apos;users@openoffice.org&apos; mailing list at </Text>
 			<Text id="a" xml:lang="zh-TW" url="ahead">For help with the OpenOffice.org 1.x office suite, take a look at the archieves to questions already answered on the &apos;users@openoffice.org&apos; mailing list at</Text>
 			<Text id="a" xml:lang="ar" url="ahead">For help with the OpenOffice.org 1.x office suite, take a look at the archieves to questions already answered on the &apos;users@openoffice.org&apos; mailing list at</Text>
 			<Text id="a" xml:lang="he" url="ahead">For help with the OpenOffice.org 1.x office suite, take a look at the archieves to questions already answered on the &apos;users@openoffice.org&apos; mailing list at</Text>
@@ -3959,7 +3956,7 @@
 			<Text id="a" xml:lang="fr" url="ahead">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the OpenOffice.org source code was released back in October 2000. When you&apos;re comfortable, all you need to do is make an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at</Text>
 			<Text id="a" xml:lang="fi" url="ahead">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the OpenOffice.org source code was released back in October 2000. When you&apos;re comfortable, all you need to do is make an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at</Text>
 			<Text id="a" xml:lang="da" url="ahead">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the OpenOffice.org source code was released back in October 2000. When you&apos;re comfortable, all you need to do is make an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at</Text>
-			<Text id="a" xml:lang="zh-CN" url="ahead">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the OpenOffice.org source code was released back in October 2000. When you&apos;re comfortable, all you need to do is make an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at</Text>
+			<Text id="a" xml:lang="zh-CN" url="ahead">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the OpenOffice.org source code was released back in </Text>
 			<Text id="a" xml:lang="zh-TW" url="ahead">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the OpenOffice.org source code was released back in October 2000. When you&apos;re comfortable, all you need to do is make an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at</Text>
 			<Text id="a" xml:lang="ar" url="ahead">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the OpenOffice.org source code was released back in October 2000. When you&apos;re comfortable, all you need to do is make an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at</Text>
 			<Text id="a" xml:lang="he" url="ahead">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the OpenOffice.org source code was released back in October 2000. When you&apos;re comfortable, all you need to do is make an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at</Text>
