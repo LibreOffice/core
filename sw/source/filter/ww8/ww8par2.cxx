@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:26 $
+ *  last change: $Author: cmc $ $Date: 2001-03-12 12:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1351,8 +1351,22 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass )
         BOOL bStartApo, bStopApo, bNowStyleApo;
         pIoClass->TestApo( bStartApo, bStopApo,
                            bNowStyleApo, TRUE, FALSE, TRUE );
-        if( bStopApo )  // Wenn Apo-Ende oder Apo-Wechsel, dann
-            break;      // hoert die Tabelle hier auf
+
+        // Wenn Apo-Ende oder Apo-Wechsel, dann hoert die Tabelle hier auf
+#if 0
+        if( bStopApo )
+            break;
+#else
+        /*
+        ##513##, #79474#
+        If this is not sufficent, then we should look at sprmPD{y|x}aAbs as
+        our indicator that the following set of rows is not part of this
+        table, but instead is an absolutely positioned table outside of this
+        one
+        */
+        if( bStartApo || bStopApo )
+            break;
+#endif
 
     }while( 1 );
 
@@ -3003,11 +3017,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.4 2001-02-23 12:45:26 os Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.5 2001-03-12 12:07:19 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/02/23 12:45:26  os
+      Complete use of DefaultNumbering component
+
       Revision 1.3  2000/12/01 11:22:52  jp
       Task #81077#: im-/export of CJK documents
 
