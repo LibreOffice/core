@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-05-18 14:06:14 $
+ *  last change: $Author: jp $ $Date: 2001-06-19 16:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,7 @@ static const sal_Char cParentNumbering[] = "ParentNumbering";
 static const sal_Char cPrefix[] = "Prefix";
 static const sal_Char cSuffix[] = "Suffix";
 static const sal_Char cBulletChar[] = "BulletChar";
+static const sal_Char cBulletFontName[] = "BulletFontName";
 /* -----------------------------31.01.01 10:23--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -232,6 +233,8 @@ SvxNumSettings_ImplPtr lcl_CreateNumSettingsPtr(const Sequence<PropertyValue>& r
             pValues[j].Value >>= pNew->nParentNumbering;
         else if(pValues[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cBulletChar)))
             pValues[j].Value >>= pNew->sBulletChar;
+        else if(pValues[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cBulletFontName)))
+            pValues[j].Value >>= pNew->sBulletFont;
     }
     return pNew;
 }
@@ -755,8 +758,11 @@ SvxNumPickTabPage::SvxNumPickTabPage(Window* pParent,
             aOutlineAccess = xDefNum->getDefaultOutlineNumberings( aLocale );
 
             for(sal_Int32 nItem = 0;
-                nItem < aOutlineAccess.getLength() && nItem < NUM_VALUSET_COUNT; nItem++)
+                nItem < aOutlineAccess.getLength() && nItem < NUM_VALUSET_COUNT;
+                nItem++ )
             {
+                SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[ nItem ];
+
                 Reference<XIndexAccess> xLevel = aOutlineAccess.getConstArray()[nItem];
                 for(sal_Int32 nLevel = 0; nLevel < xLevel->getCount() && nLevel < 5; nLevel++)
                 {
@@ -764,7 +770,7 @@ SvxNumPickTabPage::SvxNumPickTabPage(Window* pParent,
                     Sequence<PropertyValue> aLevelProps;
                     aValueAny >>= aLevelProps;
                     SvxNumSettings_ImplPtr pNew = lcl_CreateNumSettingsPtr(aLevelProps);
-                    aNumSettingsArrays[nItem].Insert(pNew, aNumSettingsArrays[nItem].Count());
+                    rItemArr.Insert( pNew, rItemArr.Count() );
                 }
             }
         }
@@ -914,9 +920,27 @@ IMPL_LINK(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
             USHORT nUpperLevelOrChar = (USHORT)pLevelSettings->nParentNumbering;
             if(aFmt.GetNumberingType() == SVX_NUM_CHAR_SPECIAL)
             {
-                aFmt.SetBulletFont(&rActBulletFont);
-                aFmt.SetBulletChar(pLevelSettings->sBulletChar.getLength() ? pLevelSettings->sBulletChar.getStr()[0] : 0);
-                aFmt.SetCharFmtName(sBulletCharFmtName);
+                Font* pF;
+                if( pLevelSettings->sBulletFont.getLength() &&
+                    pLevelSettings->sBulletFont.compareTo(
+                            rActBulletFont.GetName()))
+                {
+                    pF = new Font( pLevelSettings->sBulletFont,
+                                            String(), Size( 0, 14 ) );
+                    pF->SetCharSet( RTL_TEXTENCODING_DONTKNOW );
+                    pF->SetFamily( FAMILY_DONTKNOW );
+                    pF->SetPitch( PITCH_DONTKNOW );
+                    pF->SetWeight( WEIGHT_DONTKNOW );
+                    pF->SetTransparent( TRUE );
+                }
+                else
+                    pF = &rActBulletFont;
+                aFmt.SetBulletFont( pF );
+
+                aFmt.SetBulletChar( pLevelSettings->sBulletChar.getLength()
+                                        ? pLevelSettings->sBulletChar.getStr()[0]
+                                        : 0 );
+                aFmt.SetCharFmtName( sBulletCharFmtName );
             }
             else
             {
@@ -1090,7 +1114,6 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                         DBG_ERROR("Exception in DefaultNumberingProvider::makeNumberingString")
                     }
 
-                    static const sal_Char cBulletFontName[] = "BulletFontName";
                     if(!sText.Len())
                     {
                         OUString sFontName;
