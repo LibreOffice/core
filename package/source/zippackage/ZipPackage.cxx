@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-02 22:10:51 $
+ *  last change: $Author: mtg $ $Date: 2001-10-10 16:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -857,7 +857,8 @@ void SAL_CALL ZipPackage::commitChanges(  )
         if (!nSegmentSize )
         {
             Reference < XPropertySet > xPropSet ( xContentStream, UNO_QUERY );
-            Content aContent ( sURL, Reference < XCommandEnvironment > () );
+            OUString sTargetFolder = sURL.copy ( 0, sURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) );
+            Content aContent ( sTargetFolder, Reference < XCommandEnvironment > () );
             if ( xPropSet.is() )
             {
                 OUString sTempURL;
