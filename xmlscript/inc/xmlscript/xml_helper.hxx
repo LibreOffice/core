@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml_helper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-24 11:16:36 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HPP_
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
+#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #endif
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
@@ -137,13 +137,13 @@ public:
         @param xOut document handler to be written to
     */
     void SAL_CALL dump(
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut );
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > const & xOut );
     /** Dumps out sub elements (and all further sub elements).
 
         @param xOut document handler to be written to
     */
     void SAL_CALL dumpSubElements(
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut );
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > const & xOut );
 
     // XAttributeList
     virtual sal_Int16 SAL_CALL getLength()
