@@ -277,11 +277,11 @@ NOSAVING:
 		oStoreDialog.dispose()
 		Resume NOERROR
 		NOERROR:
-	End If	
+	End If
 End Function
 
 
-Sub AddFiltersToDialog(FilterNames() as String, oDialog as Object)	
+Sub AddFiltersToDialog(FilterNames() as String, oDialog as Object)
 Dim i as Integer
 Dim MaxIndex as Integer
 Dim ViewFiltername as String
@@ -291,7 +291,7 @@ Dim sProdName as String
 	sProdName = oProdNameAccess.getByName(&quot;ooName&quot;)
 	MaxIndex = Ubound(FilterNames(), 1)
 	For i = 0 To MaxIndex
-		Filternames(i,0) = ReplaceString(Filternames(i,0), sProdName,&quot;%productname%&quot;)		
+		Filternames(i,0) = ReplaceString(Filternames(i,0), sProdName,&quot;%productname%&quot;)
 		oDialog.AppendFilter(FilterNames(i,0), FilterNames(i,1))
 	Next i
 	oDialog.SetCurrentFilter(FilterNames(0,0)
@@ -321,9 +321,9 @@ Dim OverwriteModel as Object
 	If InitResources(&quot;&quot;, &quot;com&quot;) Then
 		QueryString = GetResText(1007)
 		QueryString = ReplaceString(QueryString, ConvertFromUrl(FilePath), &quot;&lt;PATH&gt;&quot;)
-		If Len(QueryString) &gt; 130 Then
+		If Len(QueryString) &gt; 190 Then
 			QueryString = DeleteStr(QueryString, &quot;.&lt;BR&gt;&quot;)
-		End If			
+		End If
 		QueryString = ReplaceString(QueryString, chr(13), &quot;&lt;BR&gt;&quot;)
 		lblYes = GetResText(1008)
 		lblYesToAll = GetResText(1009)
@@ -338,7 +338,7 @@ Dim OverwriteModel as Object
 		OverwriteModel.cmdCancel.Label = lblCancel
 		OverwriteModel.lblQueryforSave.Label = QueryString
 		OverwriteModel.cmdNo.DefaultButton = True
-		DlgOverwrite.GetControl(&quot;cmdNo&quot;).SetFocus()		
+		DlgOverwrite.GetControl(&quot;cmdNo&quot;).SetFocus()
 		LocRetValue = DlgOverwrite.execute()
 		If LocRetValue = 0 Then
 			iGeneralOverwrite = SBOVERWRITECANCEL
