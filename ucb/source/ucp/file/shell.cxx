@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-01 08:32:03 $
+ *  last change: $Author: abi $ $Date: 2001-06-26 14:23:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1998,7 +1998,6 @@ shell::setv( sal_Int32 CommandId,
 
 
 
-
 uno::Reference< sdbc::XRow > SAL_CALL
 shell::getv( sal_Int32 CommandId,
          const rtl::OUString& aUnqPath,
@@ -3017,9 +3016,9 @@ sal_Bool SAL_CALL shell::getUrlFromUnq( const rtl::OUString& Unq,rtl::OUString& 
 void SAL_CALL shell::getMaskFromProperties( sal_Int32& n_Mask, const uno::Sequence< beans::Property >& seq )
 {
 #ifdef TF_FILEURL
-    n_Mask = FileStatusMask_FileURL;
+    n_Mask = FileStatusMask_FileURL | FileStatusMask_LinkTargetURL | FileStatusMask_Type;
 #else
-    n_Mask = FileStatusMask_FilePath;
+    n_Mask = FileStatusMask_FilePath  | FileStatusMask_Type;
 #endif
 
     rtl::OUString PropertyName;
@@ -3076,33 +3075,65 @@ shell::commit( const shell::ContentMap::iterator& it,
 
         it1 = properties.find( MyProperty( Title ) );
         if( it1 != properties.end() )
-        {
+          {
             it1->setValue( aAny );
         }
     }
 
     if( aFileStatus.isValid( FileStatusMask_Type ) )
-    {
-        sal_Bool dummy =
-            osl::FileStatus::Volume == aFileStatus.getFileType()
-            ||
-            osl::FileStatus::Directory == aFileStatus.getFileType();
+      {
+        sal_Bool isDirectory,isFile;
 
-        aAny <<= dummy;
+        if( osl::FileStatus::Link == aFileStatus.getFileType() &&
+        aFileStatus.isValid( FileStatusMask_LinkTargetURL ) )
+          {
+        osl::DirectoryItem aDirItem;
+        osl::FileStatus aFileStatus2( FileStatusMask_Type );
+        if( osl::FileBase::E_None == osl::DirectoryItem::get( aFileStatus.getLinkTargetURL(),aDirItem ) &&
+            osl::FileBase::E_None == aDirItem.getFileStatus( aFileStatus2 )    &&
+            aFileStatus2.isValid( FileStatusMask_Type ) )
+          {
+            isDirectory =
+              osl::FileStatus::Volume == aFileStatus2.getFileType() ||
+              osl::FileStatus::Directory == aFileStatus2.getFileType();
+            isFile =
+              osl::FileStatus::Regular == aFileStatus2.getFileType();
+          }
+        else
+          { // extremly ugly, but otherwise default construction of aDirItem and aFileStatus2
+            // before the preciding if
+            isDirectory =
+              osl::FileStatus::Volume == aFileStatus.getFileType() ||
+              osl::FileStatus::Directory == aFileStatus.getFileType();
+            isFile =
+              osl::FileStatus::Regular == aFileStatus.getFileType();
+          }
+          }
+        else
+          {
+        isDirectory =
+          osl::FileStatus::Volume == aFileStatus.getFileType() ||
+          osl::FileStatus::Directory == aFileStatus.getFileType();
+        isFile =
+          osl::FileStatus::Regular == aFileStatus.getFileType();
+          }
+
+
+        aAny <<= isDirectory;
         it1 = properties.find( MyProperty( IsFolder ) );
         if( it1 != properties.end() )
-        {
-            it1->setValue( aAny );
-        }
+          {
+        it1->setValue( aAny );
+          }
 
-        dummy = osl::FileStatus::Regular == aFileStatus.getFileType();
-        aAny <<= dummy;
+        aAny <<= isFile;
         it1 = properties.find( MyProperty( IsDocument ) );
         if( it1 != properties.end() )
-        {
-            it1->setValue( aAny );
-        }
-    }
+          {
+        it1->setValue( aAny );
+          }
+      }
+
 
 #ifdef TF_FILEURL
     if( m_bFaked && it->first.compareToAscii( "file:///" ) == 0 )
@@ -3236,7 +3267,6 @@ shell::getv(
 
     sal_Int32 n_Mask;
     getMaskFromProperties( n_Mask,properties );
-    n_Mask |= FileStatusMask_Type;
 
     osl::FileStatus aFileStatus( n_Mask );
     aDirItem.getFileStatus( aFileStatus );
