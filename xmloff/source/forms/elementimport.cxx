@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:09:27 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@
 /** === end UNO includes === **/
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef _TOOLS_TIME_HXX
+#include <tools/time.hxx>
 #endif
 
 #include <algorithm>
@@ -630,6 +633,19 @@ namespace xmloff
                 aProp.Handle = nHandle;
                 aProp.Value <<= _rValue;
                 m_aValueProperties.push_back(aProp);
+            }
+            else if ( _rLocalName.equalsAscii( OAttributeMetaData::getSpecialAttributeName( SCA_REPEAT_DELAY ) ) )
+            {
+                ::Time aTime;
+                sal_Int32 nFractions = 0;
+                if ( SvXMLUnitConverter::convertTimeDuration( _rValue, aTime, &nFractions ) )
+                {
+                    PropertyValue aProp;
+                    aProp.Name = PROPERTY_REPEAT_DELAY;
+                    aProp.Value <<= (sal_Int32)( ( ( aTime.GetMSFromTime() / 1000 ) * 1000 ) + nFractions );
+
+                    implPushBackPropertyValue(aProp);
+                }
             }
             else
                 OElementImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
@@ -1750,52 +1766,6 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    OControlImport* OControlWrapperImport::implCreateChildContext(
-            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-            OControlElement::ElementType _eType)
-    {
-        switch (_eType)
-        {
-            case OControlElement::TEXT:
-            case OControlElement::TEXT_AREA:
-            case OControlElement::FORMATTED_TEXT:
-                return new OTextLikeImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
-
-            case OControlElement::BUTTON:
-            case OControlElement::IMAGE:
-                return new OButtonImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
-
-            case OControlElement::IMAGE_FRAME:
-                return new OURLReferenceImport( m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType );
-
-            case OControlElement::COMBOBOX:
-            case OControlElement::LISTBOX:
-                return new OListAndComboImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
-
-            case OControlElement::RADIO:
-                return new ORadioImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
-
-            case OControlElement::CHECKBOX:
-                return new OImagePositionImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
-
-            case OControlElement::PASSWORD:
-                return new OPasswordImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
-
-            case OControlElement::FRAME:
-            case OControlElement::FIXED_TEXT:
-                return new OReferredControlImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
-
-            case OControlElement::GRID:
-                return new OGridImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
-
-            case OControlElement::VALUERANGE:
-                return new OValueRangeImport( m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType );
-
-            default:
-                return new OControlImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
-        }
-    }
-    //---------------------------------------------------------------------
     OControlImport* OColumnWrapperImport::implCreateChildContext(
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
             OControlElement::ElementType _eType)
@@ -2038,6 +2008,9 @@ namespace xmloff
 
             case OControlElement::RADIO:
                 return new ORadioImport(m_rFormImport, *this, _nPrefix, _rLocalName, m_xMeAsContainer, _eType);
+
+            case OControlElement::CHECKBOX:
+                return new OImagePositionImport(m_rFormImport, *this, _nPrefix, _rLocalName, m_xMeAsContainer, _eType);
 
             case OControlElement::PASSWORD:
                 return new OPasswordImport(m_rFormImport, *this, _nPrefix, _rLocalName, m_xMeAsContainer, _eType);
