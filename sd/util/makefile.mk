@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 15:52:30 $
+#   last change: $Author: kz $ $Date: 2004-05-19 00:46:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ GEN_HID_OTHER=TRUE
 # --- Resources ----------------------------------------------------
 
 RESLIB1NAME=sd
+RESLIB1IMAGES=$(PRJ)$/res/imagelst $(PRJ)$/res 
 RESLIB1SRSFILES=\
      $(SRS)$/app.srs $(SRS)$/dlg.srs $(SRS)$/core.srs $(SRS)$/html.srs $(SRS)$/sdslots.srs \
      $(SRS)$/accessibility.srs $(SOLARRESDIR)$/sfx.srs
