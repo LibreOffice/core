@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyinfohelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,11 +90,12 @@ beans::Property helperMakeProperty(configuration::Name const& aName,
     namespace PropertyAttribute = com::sun::star::beans::PropertyAttribute;
 
     sal_Int16 nPropAttributes = 0;
-    if (!aAttributes.bWritable)     nPropAttributes |= PropertyAttribute::READONLY;
-    if ( aAttributes.bNullable)     nPropAttributes |= PropertyAttribute::MAYBEVOID;
+    if (aAttributes.isReadonly())       nPropAttributes |= PropertyAttribute::READONLY;
+    if (aAttributes.isNullable())       nPropAttributes |= PropertyAttribute::MAYBEVOID;
     /*if ( aAttributes.bNotified)*/ nPropAttributes |= PropertyAttribute::BOUND;
     /*if ( aAttributes.bConstrained)nPropAttributes |= PropertyAttribute::CONSTRAINED;*/
 
+    if ( aAttributes.isRemovable())     nPropAttributes |= PropertyAttribute::REMOVABLE;
     if ( bDefaultable)  nPropAttributes |= PropertyAttribute::MAYBEDEFAULT;
 
     return beans::Property(aName.toString(), -1, aType, nPropAttributes);
