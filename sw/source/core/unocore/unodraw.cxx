@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-04 13:12:27 $
+ *  last change: $Author: os $ $Date: 2001-05-21 12:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@
 #include <comphelper/stl_types.hxx>
 #endif
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -459,7 +460,7 @@ Sequence< Type > SwXDrawPage::getTypes(  ) throw(RuntimeException)
     Sequence< uno::Type > aSvxTypes = GetSvxPage()->getTypes();
 
     long nIndex = aPageTypes.getLength();
-    aPageTypes.realloc(aPageTypes.getLength() + aSvxTypes.getLength() + 1);
+    aPageTypes.realloc(aPageTypes.getLength() + aSvxTypes.getLength());
 
     uno::Type* pPageTypes = aPageTypes.getArray();
     const uno::Type* pSvxTypes = aSvxTypes.getConstArray();
@@ -468,7 +469,6 @@ Sequence< Type > SwXDrawPage::getTypes(  ) throw(RuntimeException)
     {
         pPageTypes[nIndex++] = pSvxTypes[nPos];
     }
-    pPageTypes[nIndex] = ::getCppuType((Reference< ::com::sun::star::form::XFormsSupplier>*)0);
     return aPageTypes;
 }
 /*-- 22.01.99 11:33:44---------------------------------------------------
@@ -739,7 +739,22 @@ void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & xShapeG
         pPage->RemovePageView();
     }
 }
+/* -----------------------------21.05.01 13:47--------------------------------
 
+ ---------------------------------------------------------------------------*/
+Reference< XNameContainer > SwXDrawPage::getForms(  ) throw (RuntimeException)
+{
+    vos::OGuard  aGuard(Application::GetSolarMutex());
+    if(!pDoc)
+        throw uno::RuntimeException();
+    if(!pDoc->GetDrawModel())
+        return Reference< XNameContainer > ();
+    else
+    {
+        ((SwXDrawPage*)this)->GetSvxPage();
+        return pDrawPage->getForms();
+    }
+}
 /* -----------------05.05.98 17:05-------------------
  *
  * --------------------------------------------------*/
