@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_c_std.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:39:02 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:22:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ DYN TextToken * TCF_Bigger(const char *) { return new Tok_Greater; }
 DYN TextToken * TCF_Stern(const char *) { return new Tok_Asterix; }
 DYN TextToken * TCF_Ampersand(const char *) { return new Tok_AmpersAnd; }
 DYN TextToken * TCF_Ellipse(const char *) { return new Tok_Ellipse; }
+DYN TextToken * TCF_typename(const char *) { return new Tok_typename; }
 
     // Operators
 DYN TextToken * TCF_Operator(const char * text) { return new Tok_Operator(text); }
@@ -477,6 +478,7 @@ Context_CppStd::SetupStateMachine()
     aStateMachine.AddToken("*",TCF_Stern,A_nOperatorDefStatus,finKeyword);
     aStateMachine.AddToken("&",TCF_Ampersand,A_nOperatorDefStatus,finKeyword);
     aStateMachine.AddToken("...",TCF_Ellipse,A_nOperatorDefStatus,finKeyword);
+    aStateMachine.AddToken("typename",TCF_typename,A_nOperatorDefStatus,finKeyword);
 
     // Operators
     aStateMachine.AddToken("==",TCF_Operator,A_nOperatorDefStatus,finPunctuation);
@@ -528,7 +530,6 @@ Context_CppStd::SetupStateMachine()
 
     // To ignore
     aStateMachine.AddToken("auto",      0,  A_nBezDefStatus,    finIgnore);
-    aStateMachine.AddToken("typename",  0,  A_nBezDefStatus,    finIgnore);
     aStateMachine.AddToken("_cdecl",    0,  A_nBezDefStatus,    finIgnore);
     aStateMachine.AddToken("__cdecl",   0,  A_nBezDefStatus,    finIgnore);
     aStateMachine.AddToken("__stdcall", 0,  A_nBezDefStatus,    finIgnore);
@@ -559,7 +560,3 @@ Context_CppStd::SetupStateMachine()
 
 
 }   // namespace cpp
-
-
-
-
