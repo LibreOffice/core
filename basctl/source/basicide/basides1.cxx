@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:12:14 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,13 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
         break;
         case SID_BASICIDE_MODULEDLG:
         {
-            BasicIDE::Organize();
+            if ( rReq.GetArgs() )
+            {
+                const SfxUInt16Item &rTabId = (const SfxUInt16Item&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_TABID );
+                BasicIDE::Organize( rTabId.GetValue() );
+            }
+            else
+                BasicIDE::Organize( 0 );
         }
         break;
         case SID_BASICIDE_CHOOSEMACRO:
