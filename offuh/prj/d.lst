@@ -14,6 +14,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\document
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\drawing
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\form
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\frame
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\i18n
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\installation
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\io
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\java
@@ -78,6 +79,8 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\mozilla
 ..\%__SRC%\inc\com\sun\star\form\*.hpp %_DEST%\inc%_EXT%\com\sun\star\form\*.hpp
 ..\%__SRC%\inc\com\sun\star\frame\*.hdl %_DEST%\inc%_EXT%\com\sun\star\frame\*.hdl
 ..\%__SRC%\inc\com\sun\star\frame\*.hpp %_DEST%\inc%_EXT%\com\sun\star\frame\*.hpp
+..\%__SRC%\inc\com\sun\star\i18n\*.hdl %_DEST%\inc%_EXT%\com\sun\star\i18n\*.hdl
+..\%__SRC%\inc\com\sun\star\i18n\*.hpp %_DEST%\inc%_EXT%\com\sun\star\i18n\*.hpp
 ..\%__SRC%\inc\com\sun\star\installation\*.hdl %_DEST%\inc%_EXT%\com\sun\star\installation\*.hdl
 ..\%__SRC%\inc\com\sun\star\installation\*.hpp %_DEST%\inc%_EXT%\com\sun\star\installation\*.hpp
 ..\%__SRC%\inc\com\sun\star\io\*.hdl %_DEST%\inc%_EXT%\com\sun\star\io\*.hdl
