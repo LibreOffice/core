@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-25 09:32:30 $
+#   last change: $Author: obo $ $Date: 2005-03-15 11:30:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,6 +101,7 @@ IDLFILES=\
     XClassifiedObject.idl\
     XInplaceObject.idl\
     XEmbeddedClient.idl\
+    XEmbedObjectClipboardCreator.idl\
     XEmbedObjectCreator.idl\
     XEmbedObjectFactory.idl\
     XLinkCreator.idl\
@@ -126,6 +127,7 @@ IDLFILES=\
     UseBackupException.idl\
     StateChangeInProgressException.idl\
     WrongStateException.idl\
+    NoVisualAreaSizeException.idl\
     ObjectSaveVetoException.idl\
     InvalidStorageException.idl\
     LinkageMisuseException.idl\
