@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:29:28 $
+ *  last change: $Author: dr $ $Date: 2004-08-03 11:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1566,7 +1566,6 @@ FloatingWindow RID_TBXCTL_INSOBJ
         SID_ATTR_GRAF_CROP;\
         SID_ENABLE_HYPHENATION;         /* 26087    */  \
         SID_ATTR_ZOOM; \
-        SID_PRINTPREVIEW;   \
         SID_EXTRUSION_TOOGLE;\
         SID_EXTRUSION_TILT_DOWN;\
         SID_EXTRUSION_TILT_UP;\
