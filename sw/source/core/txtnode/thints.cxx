@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:35:58 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,10 @@
 #endif
 #ifndef _SWFONT_HXX
 #include <swfont.hxx>
+#endif
+// OD 26.06.2003 #108784#
+#ifndef _DCONTACT_HXX
+#include <dcontact.hxx>
 #endif
 
 #include <algorithm>
@@ -460,33 +464,41 @@ BOOL SwTxtNode::Insert( SwTxtAttr *pAttr, USHORT nMode )
                 pFmt = pAttr->GetFlyCnt().GetFrmFmt();
                 SwDoc *pDoc = pFmt->GetDoc();
 
+                // OD 26.06.2003 #108784# - allow drawing objects in header/footer.
+                // But don't allow control objects in header/footer
                 if( RES_DRAWFRMFMT == pFmt->Which() &&
-                    pDoc->IsInHeaderFooter(
-                        pFmt->GetAnchor().GetCntntAnchor()->nNode ) )
+                    pDoc->IsInHeaderFooter( pFmt->GetAnchor().GetCntntAnchor()->nNode ) )
                 {
-                    // das soll nicht meoglich sein; hier verhindern
-                    // Der Dtor des TxtHints loescht nicht das Zeichen.
-                    // Wenn ein CH_TXTATR_.. vorliegt, dann muss man
-                    // dieses explizit loeschen
-                    if( SETATTR_NOTXTATRCHR & nInsMode )
+                    SwDrawContact* pDrawContact =
+                        static_cast<SwDrawContact*>(pFmt->FindContactObj());
+                    if ( pDrawContact &&
+                         pDrawContact->GetMaster() &&
+                         ::CheckControlLayer( pDrawContact->GetMaster() ) )
                     {
-                        // loesche das Zeichen aus dem String !
-                        ASSERT( ( CH_TXTATR_BREAKWORD ==
-                                        aText.GetChar(*pAttr->GetStart() ) ||
-                                  CH_TXTATR_INWORD ==
-                                          aText.GetChar(*pAttr->GetStart())),
-                                "where is my attribu character" );
-                        aText.Erase( *pAttr->GetStart(), 1 );
-                        // Indizies Updaten
-                        SwIndex aTmpIdx( this, *pAttr->GetStart() );
-                        Update( aTmpIdx, 1, TRUE );
+                        // das soll nicht meoglich sein; hier verhindern
+                        // Der Dtor des TxtHints loescht nicht das Zeichen.
+                        // Wenn ein CH_TXTATR_.. vorliegt, dann muss man
+                        // dieses explizit loeschen
+                        if( SETATTR_NOTXTATRCHR & nInsMode )
+                        {
+                            // loesche das Zeichen aus dem String !
+                            ASSERT( ( CH_TXTATR_BREAKWORD ==
+                                            aText.GetChar(*pAttr->GetStart() ) ||
+                                      CH_TXTATR_INWORD ==
+                                            aText.GetChar(*pAttr->GetStart())),
+                                    "where is my attribu character" );
+                            aText.Erase( *pAttr->GetStart(), 1 );
+                            // Indizies Updaten
+                            SwIndex aTmpIdx( this, *pAttr->GetStart() );
+                            Update( aTmpIdx, 1, TRUE );
+                        }
+                        // Format loeschen nicht ins Undo aufnehmen!!
+                        BOOL bUndo = pDoc->DoesUndo();
+                        pDoc->DoUndo( FALSE );
+                        DestroyAttr( pAttr );
+                        pDoc->DoUndo( bUndo );
+                        return FALSE;
                     }
-                    // Format loeschen nicht ins Undo aufnehmen!!
-                    BOOL bUndo = pDoc->DoesUndo();
-                    pDoc->DoUndo( FALSE );
-                    DestroyAttr( pAttr );
-                    pDoc->DoUndo( bUndo );
-                    return FALSE;
                 }
                 break;
             }
