@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-30 12:08:42 $
+ *  last change: $Author: aw $ $Date: 2001-08-30 16:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1150,12 +1150,8 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
                             if(IsVerticalWriting())
                             {
                                 // #91744# for vertical writing the fix #82826#
-                                // needs to be done vertically. I tested the preview,
-                                // the fix for vertical is indeed necessary.
-                                if(aPaintRect.Left() <= aAnchorRect.Left())
-                                    rOutliner.Draw(pOutDev, aPaintRect);
-                                else
-                                    rOutliner.Draw(pOutDev, aAnchorRect);
+                                // needs to be taken out.
+                                rOutliner.Draw(pOutDev, aPaintRect);
                             }
                             else
                             {
