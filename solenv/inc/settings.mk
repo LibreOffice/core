@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.101 $
+#   $Revision: 1.102 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-21 19:24:05 $
+#   last change: $Author: hjs $ $Date: 2002-03-26 13:04:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,12 @@ dmake_test_version:
 .ENDIF
 
 # --- common tool makros --------------------------------------
+
+# moved temporary wrapper here as it is used in unitools.mk
+.IF "$(USE_SHELL)"!=""
+use_shell*=$(USE_SHELL)
+.ENDIF
+
 .INCLUDE : unitools.mk
 
 #have SCRIPTEXT already defined in product.mk but available for all
@@ -413,10 +419,6 @@ rsc_once*=$(RSC_ONCE)
 
 .IF "$(COMMON_BUILD)"!=""
 common_build*=$(COMMON_BUILD)
-.ENDIF
-
-.IF "$(USE_SHELL)"!=""
-use_shell*=$(USE_SHELL)
 .ENDIF
 
 .IF "$(USE_SHL_VERSIONS)"!=""
