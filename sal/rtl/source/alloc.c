@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alloc.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:45:47 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ typedef pthread_mutex_t mutex_type;
 #define RTL_MUTEX_ACQUIRE(a)  pthread_mutex_lock((a))
 #define RTL_MUTEX_RELEASE(a)  pthread_mutex_unlock((a))
 
-#if   defined(FREEBSD) || defined(NETBSD)
+#if   defined(FREEBSD) || defined(NETBSD) || defined(MACOSX)
 static sal_uInt32 __rtl_memory_vmpagesize (void)
 {
     /* xBSD */
@@ -127,7 +127,7 @@ static sal_uInt32 __rtl_memory_vmpagesize (void)
     /* other */
     return (sal_uInt32)(0x2000);
 }
-#endif /* FREEBSD || NETBSD || IRIX || LINUX || SOLARIS */
+#endif /* FREEBSD || NETBSD || MACOSX || IRIX || LINUX || SOLARIS */
 
 #ifndef PROT_HEAP
 #define PROT_HEAP (PROT_READ | PROT_WRITE | PROT_EXEC)
