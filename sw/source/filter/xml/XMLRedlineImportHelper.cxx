@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-19 19:58:53 $
+ *  last change: $Author: dvo $ $Date: 2001-01-24 11:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> & rRange )
 class XTextRangeOrNodeIndexPosition
 {
     Reference<XTextRange> xRange;
-    SwNodeIndex* pIndex;
+    SwNodeIndex* pIndex;    /// pIndex will point to the *previous* node
 
 public:
     XTextRangeOrNodeIndexPosition();
@@ -179,7 +179,7 @@ public:
     void Set( SwNodeIndex& rIndex );
     void SetAsNodeIndex( Reference<XTextRange> & rRange );
 
-    void GetPosition(SwPosition& rPos);
+    void CopyPositionInto(SwPosition& rPos);
     SwDoc* GetDoc();
 
     sal_Bool IsValid();
@@ -198,7 +198,7 @@ XTextRangeOrNodeIndexPosition::~XTextRangeOrNodeIndexPosition()
 
 void XTextRangeOrNodeIndexPosition::Set( Reference<XTextRange> & rRange )
 {
-    xRange = rRange;
+    xRange = rRange->getStart();    // set bookmark
     if (NULL != pIndex)
     {
         delete pIndex;
@@ -212,6 +212,7 @@ void XTextRangeOrNodeIndexPosition::Set( SwNodeIndex& rIndex )
         delete pIndex;
 
     pIndex = new SwNodeIndex(rIndex);
+    (*pIndex)-- ;   // previous node!!!
     xRange = NULL;
 }
 
@@ -230,7 +231,7 @@ void XTextRangeOrNodeIndexPosition::SetAsNodeIndex(
     Set(aPaM.GetPoint()->nNode);
 }
 
-void XTextRangeOrNodeIndexPosition::GetPosition(SwPosition& rPos)
+void XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos)
 {
     DBG_ASSERT(IsValid(), "Can't get Position");
 
@@ -246,6 +247,7 @@ void XTextRangeOrNodeIndexPosition::GetPosition(SwPosition& rPos)
     else
     {
         rPos.nNode = *pIndex;
+        rPos.nNode++;           // pIndex points to previous index !!!
         rPos.nContent.Assign( rPos.nNode.GetNode().GetCntntNode(), 0 );
     }
 }
@@ -593,9 +595,15 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
 
     // now create the PaM for the redline
     SwPaM aPaM(pDoc->GetNodes().GetEndOfContent());
-    pRedlineInfo->aAnchorStart.GetPosition(*aPaM.GetPoint());
+    pRedlineInfo->aAnchorStart.CopyPositionInto(*aPaM.GetPoint());
     aPaM.SetMark();
-    pRedlineInfo->aAnchorEnd.GetPosition(*aPaM.GetPoint());
+    pRedlineInfo->aAnchorEnd.CopyPositionInto(*aPaM.GetPoint());
+
+    // collapse PaM if (start == end)
+    if (*aPaM.GetPoint() == *aPaM.GetMark())
+    {
+        aPaM.DeleteMark();
+    }
 
     // check for:
     // a) bIgnoreRedline (e.g. insert mode)
@@ -627,7 +635,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
             pRedline->SetContentIdx(pRedlineInfo->pContentIndex);
         }
 
-        // set redline mode (withou doing the associated book-keeping)
+        // set redline mode (without doing the associated book-keeping)
         pDoc->SetRedlineMode_intern(REDLINE_ON);
         pDoc->AppendRedline(pRedline);
         pDoc->SetRedlineMode_intern(REDLINE_NONE);
