@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dr $ $Date: 2001-09-26 09:51:58 $
+ *  last change: $Author: dr $ $Date: 2001-09-26 13:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1556,6 +1556,8 @@ double GetOddfprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
     sal_Int32 nFirstCoup, double fRate, double fYield, double fRedemp, sal_Int32 nFreq,
     sal_Int32 nBase ) THROWDEF_RTE_IAE
 {
+    THROW_RTE;  // #87380#
+/*
     double      fN = GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase ) - 1.0;
     double      fNq = GetCoupnum( nNullDate, nSettle, nFirstCoup, nFreq, nBase ) - 1.0;
     double      fDSC = GetCoupdaysnc( nNullDate, nSettle, nFirstCoup, nFreq, nBase );
@@ -1619,6 +1621,7 @@ double GetOddfprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
     }
 
     return fT1 + fT2 + fT3 - fT4;
+*/
 }
 
 
@@ -1701,6 +1704,8 @@ double GetOddfyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
     sal_Int32 nFirstCoup, double fRate, double fPrice, double fRedemp, sal_Int32 nFreq,
     sal_Int32 nBase ) THROWDEF_RTE_IAE
 {
+    THROW_RTE;  // #87380#
+/*
     //GetOddfprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
     //sal_Int32 nFirstCoup, double fRate, double fYield, double fRedemp, sal_Int32 nFreq,
     //sal_Int32 nBase )
@@ -1749,6 +1754,7 @@ double GetOddfyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
         THROW_IAE;      // result not precise enough
 
     return fYieldN;
+*/
 }
 
 
