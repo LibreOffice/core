@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2001-06-05 09:21:58 $
+ *  last change: $Author: dg $ $Date: 2001-06-22 09:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,8 +418,13 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
     switch(eProp)
     {
         case INSTALLPATH:
+#ifdef TF_CFGDATA
+        case USERINSTALLURL:    sPath += C2U("Setup/Office"); break;
+        case LOCALE:            sPath += C2U("Setup/L10N"); break;
+#else
         case USERINSTALLURL:    sPath += C2U("UserProfile/Office"); break;
         case LOCALE:            sPath += C2U("UserProfile/International"); break;
+#endif
         case PRODUCTNAME:
         case PRODUCTVERSION:
         case PRODUCTEXTENSION:  sPath += C2U("Setup/Product"); break;
@@ -446,6 +451,16 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         OUString sProperty;
         switch(eProp)
         {
+#ifdef TF_CFGDATA
+            case USERINSTALLURL:    sProperty = C2U("ooSetupInstallURL"); break;
+            case INSTALLPATH:       sProperty = C2U("ooSetupInstallPath"); break;
+            case LOCALE:            sProperty = C2U("ooLocale"); break;
+            case PRODUCTNAME:       sProperty = C2U("ooName"); break;
+            case PRODUCTVERSION:    sProperty = C2U("ooSetupVersion"); break;
+            case PRODUCTEXTENSION:  sProperty = C2U("ooSetupExtension"); break;
+            case OFFICEINSTALL:     sProperty = C2U("OfficeInstall"); break;
+            case OFFICEINSTALLURL:  sProperty = C2U("OfficeInstallURL"); break;
+#else
             case INSTALLPATH:       sProperty = C2U("InstallPath"); break;
             case LOCALE:            sProperty = C2U("Locale"); break;
             case PRODUCTNAME:       sProperty = C2U("Name"); break;
@@ -454,6 +469,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
             case OFFICEINSTALL:     sProperty = C2U("OfficeInstall"); break;
             case USERINSTALLURL:    sProperty = C2U("InstallURL"); break;
             case OFFICEINSTALLURL:  sProperty = C2U("OfficeInstallURL"); break;
+#endif
         }
         try
         {
