@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 17:19:58 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:31:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,14 +126,6 @@ SfxModule_Impl::~SfxModule_Impl()
 
 ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, BOOL bBig, BOOL bHiContrast )
 {
-    // #i21242# MT: For B&W we need the HC Image and must transform.
-    // bHiContrast is TRUE for all dark backgrounds, but we need HC Images for HC White also,
-    // so we can't rely on bHighContrast.
-
-    BOOL bBlackAndWhite = Application::GetSettings().GetStyleSettings().IsHighContrastBlackAndWhite();
-    if ( bBlackAndWhite )
-        bHiContrast = TRUE;
-
     ImageList*& rpList = bBig ? ( bHiContrast ? pImgListHiBig: pImgListBig ) :
                                 ( bHiContrast ? pImgListHiSmall : pImgListSmall );
     if ( !rpList )
@@ -148,21 +140,9 @@ ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, BOOL bBig, BOOL bHiCon
             rpList = new ImageList( aResId );
         else
             rpList = new ImageList();
-
-        if ( bBlackAndWhite )
-        {
-            // First invert the Image, because it's designed for black background, structures are bright
-            rpList->Invert();
-            // Now make monochrome...
-            ImageColorTransform eTrans = IMAGECOLORTRANSFORM_MONOCHROME_WHITE;
-            if ( Application::GetSettings().GetStyleSettings().GetFaceColor().GetColor() == COL_WHITE )
-                eTrans = IMAGECOLORTRANSFORM_MONOCHROME_BLACK;
-            *rpList = rpList->GetColorTransformedImageList( eTrans );
-        }
     }
 
-    return rpList;
-}
+    return rpList; }
 
 TYPEINIT1(SfxModule, SfxShell);
 
