@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.4 $
+#*  $Revision: 1.5 $
 #*
-#*  last change: $Author: rt $ $Date: 2003-04-08 16:05:37 $
+#*  last change: $Author: hr $ $Date: 2003-07-16 17:43:39 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -113,7 +113,7 @@ SLOFILES=   \
                         $(SLO)$/texttonum.obj
 
 # MACOSX: manually initialization some static data members
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 SLOFILES+=$(SLO)$/staticmbtransliteration.obj
 .ENDIF
 
