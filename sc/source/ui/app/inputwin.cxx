@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-19 15:06:11 $
+ *  last change: $Author: nn $ $Date: 2002-11-21 15:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1068,7 +1068,15 @@ void ScTextWnd::StartEditEngine()
 IMPL_LINK(ScTextWnd, NotifyHdl, EENotify*, aNotify)
 {
     if (pEditView && !bInputMode)
-        SC_MOD()->InputChanged(pEditView);
+    {
+        ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+
+        //  #105354# Use the InputHandler's InOwnChange flag to prevent calling InputChanged
+        //  while an InputHandler method is modifying the EditEngine content
+
+        if ( pHdl && !pHdl->IsInOwnChange() )
+            pHdl->InputChanged( pEditView );
+    }
 
     return 0;
 }
