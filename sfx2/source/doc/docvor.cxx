@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-07 07:08:37 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:05:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1688,11 +1688,10 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl(USHORT nId)
             USHORT nRegion = 0, nIndex = 0;
             GetIndices_Impl( pFocusBox, pEntry, nRegion, nIndex );
             const SfxStringItem aName( SID_FILE_NAME, aMgr.GetTemplates()->GetPath( nRegion, nIndex ) );
-            const SfxStringItem aLongName( SID_FILE_LONGNAME, pFocusBox->GetEntryText( pEntry ) );
             const SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE( "private:user" ) );
 
             SFX_APP()->GetAppDispatcher_Impl()->Execute( SID_OPENTEMPLATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
-                                      &aName, &aLongName, &aReferer, 0L );
+                                      &aName, &aReferer, 0L );
             pDialog->EndDialog( RET_EDIT_STYLE );
             break;
         }
