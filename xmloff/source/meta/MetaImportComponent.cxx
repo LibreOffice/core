@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MetaImportComponent.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:36:01 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ uno::Sequence< rtl::OUString > SAL_CALL
         throw()
 {
     const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.document.XMLMetaImporter" ) );
+        "com.sun.star.document.XMLOasisMetaImporter" ) );
     const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
