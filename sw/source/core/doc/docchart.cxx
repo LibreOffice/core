@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docchart.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-15 07:50:55 $
+ *  last change: $Author: jp $ $Date: 2001-05-15 07:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,8 +147,6 @@ SchMemChart *SwTable::UpdateData( SchMemChart* pData,
         SchDLL::ConvertChartRangeForWriter( *pData, FALSE );
         sSelection = pData->SomeData1();
         sRowColInfo = pData->SomeData2();
-        pData->SomeData1() = aEmptyStr;
-        pData->SomeData2() = aEmptyStr;
         bSetChartRange = FALSE;
     }
     else if( pSelection )
@@ -294,6 +292,8 @@ SchMemChart *SwTable::UpdateData( SchMemChart* pData,
         if( pData->GetRowCount() )
             SchDLL::MemChartRemoveRows( *pData, 0, pData->GetRowCount() );
     }
+    else
+        bSetChartRange = FALSE;
 
     if( bSetChartRange )
     {
