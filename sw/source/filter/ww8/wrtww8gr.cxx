@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:18:48 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 #ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
 #endif
+
+#include <svtools/embedhlp.hxx>
 
 #ifndef _VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
@@ -815,6 +817,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
             ASSERT( pOleNd, " Wer hat den OleNode versteckt ?" );
             SwOLEObj&                   rSObj= pOleNd->GetOLEObj();
 
+            // TODO/LATER: do we need to load object?
             Graphic* pGr = SdrOle2Obj::GetGraphicFromObject( pOleNd->GetDoc()->GetDocStorage(), rObj );
 
             //TODO/LATER: do we really want to use GDIMetafile?!
