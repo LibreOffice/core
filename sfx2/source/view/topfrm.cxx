@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-06 07:54:59 $
+ *  last change: $Author: mba $ $Date: 2001-09-07 14:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,13 +660,11 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
 
     if ( !pImp->bHidden )
     {
-#if SUPD>=640
-        const SfxFilter* pFilter = pDoc->GetMedium()->GetFilter();
-        if ( pFilter && pFilter->GetFilterName().CompareToAscii("writer_web_HTML_help") == COMPARE_EQUAL )
+        if ( pDoc->IsHelpDocument() )
             pFrame->GetDispatcher()->HideUI( TRUE );
         else
             pFrame->GetDispatcher()->HideUI( FALSE );
-#endif
+
         pFrame->Show();
         GetWindow().Show();
         pFrame->MakeActive_Impl( TRUE );

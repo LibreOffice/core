@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-04 10:31:55 $
+ *  last change: $Author: mba $ $Date: 2001-09-07 14:04:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1887,11 +1887,14 @@ SfxToolBoxConfig* SfxObjectShell::GetToolBoxConfig_Impl()
     {
         pImp->pTbxConfig = new SfxToolBoxConfig(
             GetConfigManager() ? pImp->pCfgMgr : SFX_APP()->GetConfigManager_Impl() );
-
-        const SfxFilter* pFilter = GetMedium()->GetFilter();
-        if ( pFilter && pFilter->GetFilterName().CompareToAscii("writer_web_HTML_help") == COMPARE_EQUAL )
-            pImp->pTbxConfig->SetStatusBarVisible( FALSE );
     }
 
     return pImp->pTbxConfig;
+}
+
+
+sal_Bool SfxObjectShell::IsHelpDocument() const
+{
+    const SfxFilter* pFilter = GetMedium()->GetFilter();
+    return ( pFilter && pFilter->GetFilterName().CompareToAscii("writer_web_HTML_help") == COMPARE_EQUAL );
 }
