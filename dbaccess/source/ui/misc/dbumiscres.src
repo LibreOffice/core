@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-04 11:21:03 $
+ *  last change: $Author: oj $ $Date: 2001-01-11 09:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,9 +169,19 @@ String STR_GENERAL_SDB_ERROR
     Text[ arabic ] = "Œÿ√ √À‰«¡ «·« ’«· »„’œ— «·»Ì«‰« ";
 };
 
+String STR_OBJECT_ALREADY_EXSISTS
+{
+    Text = "Fehler beim Erzeugen!";
+    Text [ english ] = "Error while creating!";
+    Text [ english_us ] = "Error while creating!";
+};
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/01/04 11:21:03  fs
+ *  #81485# added dsn type ADO
+ *
  *  Revision 1.7  2000/12/14 11:22:34  nf
  *  Replacement of StarPortal: Sun Webtop
  *

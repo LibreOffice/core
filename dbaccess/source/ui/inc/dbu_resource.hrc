@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 16:03:40 $
+ *  last change: $Author: oj $ $Date: 2001-01-11 09:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,7 @@
 #define RID_STR_TOMUCHTABLES                RID_STRING_START + 35
 #define RID_STR_QUERIES_CONTAINER           RID_STRING_START + 36
 #define RID_STR_TABLES_CONTAINER            RID_STRING_START + 37
+#define STR_OBJECT_ALREADY_EXSISTS          RID_STRING_START + 38
 
 //========================================================================
 // untyped resources
@@ -223,6 +224,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2001/01/09 16:03:40  oj
+ *  #81232#
+ *
  *  Revision 1.16  2001/01/04 11:19:55  fs
  *  #81485# +PAGE_ADO
  *
