@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obr $ $Date: 2002-03-12 07:52:27 $
+ *  last change: $Author: mt $ $Date: 2002-03-13 12:17:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclSimpleEvent*, pEvent
     DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
     if ( pEvent && pEvent->ISA( VclWindowEvent ) )
     {
-        DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow() && GetWindow(), "Window???" );
+        DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "Window???" );
         ProcessWindowEvent( *(VclWindowEvent*)pEvent );
     }
     return 0;
@@ -119,30 +119,68 @@ IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclSimpleEvent*, pEvent
 
 void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
+    uno::Any aOldValue, aNewValue;
+
+    Window* pWindow = rVclWindowEvent.GetWindow();
+    DBG_ASSERT( pWindow, "VCLXAccessibleComponent::ProcessWindowEvent - Window?" );
+
     switch ( rVclWindowEvent.GetId() )
     {
         case VCLEVENT_WINDOW_SHOW:
+        {
+            aNewValue <<= accessibility::AccessibleStateType::VISIBLE;
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+
+            aNewValue <<= accessibility::AccessibleStateType::SHOWING;
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+
+            aNewValue.clear();
+            aOldValue <<= accessibility::AccessibleStateType::INVALID;
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+        }
+        break;
         case VCLEVENT_WINDOW_HIDE:
+        {
+            aOldValue <<= accessibility::AccessibleStateType::VISIBLE;
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+
+            aOldValue <<= accessibility::AccessibleStateType::SHOWING;
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+
+            aOldValue.clear();
+            aNewValue <<= accessibility::AccessibleStateType::INVALID;
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+        }
+        break;
         case VCLEVENT_WINDOW_ACTIVATE:
+        {
+            aNewValue <<= accessibility::AccessibleStateType::ACTIVE;
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+        }
+        break;
         case VCLEVENT_WINDOW_DEACTIVATE:
-        case VCLEVENT_WINDOW_CLOSE:
+        {
+            aOldValue <<= accessibility::AccessibleStateType::ACTIVE;
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+        }
+        break;
         case VCLEVENT_WINDOW_GETFOCUS:
-        case VCLEVENT_WINDOW_LOSEFOCUS:
-        case VCLEVENT_WINDOW_MINIMIZE:
-        case VCLEVENT_WINDOW_NORMALIZE:
         case VCLEVENT_CONTROL_GETFOCUS:
+        {
+            aNewValue <<= accessibility::AccessibleStateType::FOCUSED;
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+        }
+        break;
+        case VCLEVENT_WINDOW_LOSEFOCUS:
         case VCLEVENT_CONTROL_LOSEFOCUS:
         {
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, uno::Any(), uno::Any() );
+            aOldValue <<= accessibility::AccessibleStateType::FOCUSED;
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
         }
         break;
-        case VCLEVENT_WINDOW_MOVE:
-        case VCLEVENT_WINDOW_RESIZE:
-        {
-            // ???
-        }
-        break;
-   }
+
+        // MT: Missing event for enabled !!!
+    }
 }
 
 void VCLXAccessibleComponent::disposing()
