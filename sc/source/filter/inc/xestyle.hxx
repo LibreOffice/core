@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:38:35 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 15:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,7 @@ struct XclExpCellProt : public XclCellProt
     /** Fills the protection attributes from the passed item set.
         @descr  Fills only the attributes exported in the passed BIFF version.
         @return  true = At least one protection item is set. */
-    bool                        FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff );
+    bool                        FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff, bool bStyle = false );
 
 #if 0
     /** Fills the data to the passed fields of a BIFF2 XF record. */
@@ -442,7 +442,9 @@ struct XclExpCellAlign : public XclCellAlign
         @descr  Fills only the attributes exported in the passed BIFF version.
         @param bForceWrapped  true = Set text wrap flag unconditionally.
         @return  true = At least one alignment item is set. */
-    bool                        FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff, bool bForceWrapped = false );
+    bool                        FillFromItemSet(
+                                    const SfxItemSet& rItemSet, XclBiff eBiff,
+                                    bool bForceWrapped = false, bool bStyle = false );
 
 #if 0
     /** Fills the data to the passed fields of a BIFF2 XF record. */
@@ -475,7 +477,9 @@ struct XclExpCellBorder : public XclCellBorder
     /** Fills the border attributes from the passed item set.
         @descr  Fills only the attributes exported in the passed BIFF version.
         @return  true = At least one border item is set. */
-    bool                        FillFromItemSet( const SfxItemSet& rItemSet, XclExpPalette& rPalette, XclBiff eBiff );
+    bool                        FillFromItemSet(
+                                    const SfxItemSet& rItemSet, XclExpPalette& rPalette,
+                                    XclBiff eBiff, bool bStyle = false );
     /** Fills the mn***Color base members from the mn***ColorId members. */
     void                        SetFinalColors( const XclExpPalette& rPalette );
 
@@ -509,7 +513,9 @@ struct XclExpCellArea : public XclCellArea
     /** Fills the area attributes from the passed item set.
         @descr  Fills only the attributes exported in the passed BIFF version.
         @return  true = At least one area item is set. */
-    bool                        FillFromItemSet( const SfxItemSet& rItemSet, XclExpPalette& rPalette, XclBiff eBiff );
+    bool                        FillFromItemSet(
+                                    const SfxItemSet& rItemSet, XclExpPalette& rPalette,
+                                    XclBiff eBiff, bool bStyle = false );
     /** Fills the mn***Color base members from the mn***ColorId members. */
     void                        SetFinalColors( const XclExpPalette& rPalette );
 
