@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_display.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:52 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,17 @@
 
 
 // NOT FULLY DEFINED SERVICES
+#include <cosv/file.hxx>
 #include <ary/idl/i_ce.hxx>
 #include <ary/idl/i_module.hxx>
 #include <toolkit/out_tree.hxx>
+#include <cfrstd.hxx>
 #include "hi_ary.hxx"
 #include "hi_env.hxx"
 #include "hi_main.hxx"
+
+
+extern const String C_sCssFilename_Idl;
 
 
 inline bool
@@ -106,6 +111,7 @@ HtmlDisplay_Idl::do_Run( const char *                       i_sOutputDirectory,
     SetRunData( i_sOutputDirectory, i_rAryGate, i_rLayout );
 
     Create_StartFile();
+    Create_CssFile();
     Create_FilesInNameTree();
     Create_IndexFiles();
     Create_FilesInProjectTree();
@@ -205,4 +211,30 @@ HtmlDisplay_Idl::Create_HelpFile()
 {
 }
 
+void
+HtmlDisplay_Idl::Create_CssFile()
+{
+    Cout() << "\nCreate css file ..." << Endl();
 
+    pCurPageEnv->Goto_Directory( pCurPageEnv->OutputTree().Root(), true );
+    pCurPageEnv->Set_CurFile( C_sCssFilename_Idl );
+
+    StreamLock
+        slCurFilePath(700);
+    pCurPageEnv->Get_CurFilePath(slCurFilePath());
+
+    csv::File
+        aCssFile(slCurFilePath().c_str(), csv::CFM_CREATE);
+    csv::OpenCloseGuard
+        aOpenGuard(aCssFile);
+    if (NOT aOpenGuard)
+    {
+        Cerr() << "Can't create file " << slCurFilePath().c_str() << "." << Endl();
+        return;
+    }
+
+    aCssFile.write("/*      Autodoc css file for IDL documentation      */\n\n\n");
+    aCssFile.write(pCurPageEnv->Layout().CssStyle());
+    aCssFile.write("\n\n\n");
+    aCssFile.write(pCurPageEnv->Layout().CssStylesExplanation());
+}
