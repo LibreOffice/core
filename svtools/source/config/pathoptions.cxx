@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:01:18 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 15:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,7 +568,8 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
 
     // Create mapping between internal enum (SvtPathOptions::Pathes) and property handle
     sal_Int32 nCount = sizeof( aPropNames ) / sizeof( PropertyStruct );
-    for ( sal_Int32 i = 0; i < nCount; i++ )
+    sal_Int32 i;
+    for ( i = 0; i < nCount; i++ )
     {
         NameToHandleMap::const_iterator pIter =
             aTempHashMap.find( rtl::OUString::createFromAscii( aPropNames[i].pPropName ));
