@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Unmarshal.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-28 11:43:18 $
+ *  last change: $Author: kr $ $Date: 2000-09-28 16:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,10 +174,10 @@ class Unmarshal implements IUnmarshal {
     }
 
     Enum readEnum(Class zClass) throws Exception {
-        int index = readCompressedInt();
+        Integer index = readInteger();
 
         Method fromInt = zClass.getMethod("fromInt", new Class[] {int.class});
-        Enum result = (Enum)fromInt.invoke(null, new Object[]{new Integer(index)});
+        Enum result = (Enum)fromInt.invoke(null, new Object[]{index});
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readEnum:" + result);
 
@@ -433,12 +433,20 @@ class Unmarshal implements IUnmarshal {
     ThreadID readThreadID() throws Exception {
         Marshal.M_ThreadId m_threadId = (Marshal.M_ThreadId)readObject(Marshal.M_ThreadId.class);
 
-        if( m_threadId.full.length != 0 )
-            _threadIdCache[m_threadId.cache] = new ThreadID(m_threadId.full);
+        ThreadID threadId = null;
+
+        if(m_threadId.cache != (short)0xffff) { // is the cache entry valid?
+            if(m_threadId.full.length != 0)
+                _threadIdCache[m_threadId.cache] = new ThreadID(m_threadId.full);
+
+            threadId = _threadIdCache[m_threadId.cache];
+        }
+        else if(m_threadId.full.length != 0)
+            threadId = new ThreadID(m_threadId.full);
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readThreadID:" + _threadIdCache[m_threadId.cache]);
 
-        return _threadIdCache[m_threadId.cache];
+        return threadId;
     }
 
     Type readType() throws Exception {
@@ -449,13 +457,18 @@ class Unmarshal implements IUnmarshal {
 
         if(Type.isTypeClassSimple(typeClass)) // is it a simple type?
             type = new Type(typeClass);
+
         else {
             short index = _dataInput.readShort(); // the cache index
 
-            if((typeClassValue & 0x80) != 0) // update the cache?
-                _typeCache[index] = new Type(typeClass, readString());
+            if(index != (short)0xffff) { // shall we update the cache?
+                if((typeClassValue & 0x80) != 0) // update the cache?
+                    _typeCache[index] = new Type(typeClass, readString());
 
-            type = _typeCache[index];
+                type = _typeCache[index];
+            }
+            else
+                type = new Type(typeClass, readString());
         }
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readType:" + type);

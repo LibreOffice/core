@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Marshal.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-28 11:43:18 $
+ *  last change: $Author: kr $ $Date: 2000-09-28 16:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ class Marshal implements IMarshal {
     private Cache                 _objectCache;
     private Cache                 _typeCache;
     private Cache                 _threadIdCache;
+    private boolean               _useCaches = false;
 
     Marshal(IBridge iBridge, short cacheSize) {
         _iBridge = iBridge;
@@ -209,7 +210,7 @@ class Marshal implements IMarshal {
     void writeEnum(Enum enum) throws Exception {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeEnum:" + enum + " " + enum.getValue());
 
-        writeCompressedInt(enum.getValue());
+        writeint(enum.getValue());
     }
 
     void writeThrowable(Class zClass, Throwable throwable) throws Exception {
@@ -329,7 +330,11 @@ class Marshal implements IMarshal {
             m_InterfaceReference = null_M_InterfaceReference;
         else {
             boolean found[] = new boolean[1];
-            short index = _objectCache.add(found, oid);
+            short index;
+            if(_useCaches)
+                index = _objectCache.add(found, oid);
+            else
+                index = (short)0xffff;
 
             m_InterfaceReference = new M_InterfaceReference(found[0] ? "" : oid, index);
         }
@@ -429,7 +434,11 @@ class Marshal implements IMarshal {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeThreadID:" + threadID);
 
         boolean found[] = new boolean[1];
-        short index = _threadIdCache.add(found, threadID.getBytes());
+        short index;
+        if(_useCaches)
+            index = _threadIdCache.add(found, threadID.getBytes());
+        else
+            index = (short)0xffff;
 
         M_ThreadId m_ThreadId = new M_ThreadId(found[0] ? null : threadID.getBytes(), index);
 
@@ -443,7 +452,12 @@ class Marshal implements IMarshal {
             _dataOutput.writeByte((byte)typeClass.getValue()); // write the typeclass value
         else {
             boolean found[] = new boolean[1];
-            short index = _typeCache.add(found, type.getTypeName());
+            short index;
+
+            if(_useCaches)
+                index = _typeCache.add(found, type.getTypeName());
+            else
+                index = (short)0xffff;
 
             _dataOutput.writeByte((byte)(typeClass.getValue() | (found[0] ? 0x0 : 0x80))); // write the typeclass value
 
