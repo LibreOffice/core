@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vectdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 21:42:57 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 07:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ ModalDialog DLG_VECTORIZE
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Previsualización";
+        Text[ finnish ] = "Esikatselu";
     };
 
     GroupBox GRP_SETTINGS
@@ -159,6 +160,7 @@ ModalDialog DLG_VECTORIZE
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Configuración";
+        Text[ finnish ] = "Asetukset";
     };
 
     FixedText FT_LAYERS
@@ -187,6 +189,7 @@ ModalDialog DLG_VECTORIZE
         Text[ turkish ] = "Renk sayýsý:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cantidad de colores:";
+        Text[ finnish ] = "Värien määrä:";
     };
 
     NumericField NM_LAYERS
@@ -231,6 +234,7 @@ ModalDialog DLG_VECTORIZE
         Text[ turkish ] = "Nokta azaltma:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Reducción de puntos:";
+        Text[ finnish ] = "Pisteen pienennys:";
     };
 
     MetricField MT_REDUCE
@@ -278,6 +282,7 @@ ModalDialog DLG_VECTORIZE
         Text[ turkish ] = "Boþluklarý doldur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Rellenar agujeros";
+        Text[ finnish ] = "~Täytä kolot:";
     };
 
     FixedText FT_FILLHOLES
@@ -306,6 +311,7 @@ ModalDialog DLG_VECTORIZE
         Text[ turkish ] = "Döþeme taþý boyutu:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tamaño de azulejo:";
+        Text[ finnish ] = "Vierekkäisten lohkojen koko:";
     };
 
     MetricField MT_FILLHOLES
@@ -352,6 +358,7 @@ ModalDialog DLG_VECTORIZE
         Text[ turkish ] = "Asýl resim:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Imagen original:";
+        Text[ finnish ] = "Lähdekuva:";
     };
 
     Control CTL_BMP
@@ -388,6 +395,7 @@ ModalDialog DLG_VECTORIZE
         Text[ turkish ] = "Vektör tabanlý resim:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Imagen vectorizada:";
+        Text[ finnish ] = "Vektorikuva:";
     };
 
     Control CTL_WMF
@@ -407,7 +415,7 @@ ModalDialog DLG_VECTORIZE
         Text [ english_us ] = "Progress";
         Text[ italian ] = "Progresso";
         Text[ portuguese_brazilian ] = "Progress";
-        Text[ portuguese ] = "Progresso";
+        Text[ portuguese ] = "Progressão";
         Text[ danish ] = "Fremgang";
         Text[ french ] = "Progression";
         Text[ swedish ] = "Framsteg";
@@ -424,6 +432,7 @@ ModalDialog DLG_VECTORIZE
         Text[ turkish ] = "Artýþ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Progreso";
+        Text[ finnish ] = "Tilanne";
     };
 
     Window WND_PRGS
@@ -452,5 +461,6 @@ ModalDialog DLG_VECTORIZE
     Text[ turkish ] = "Çokgene dönüþtür";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Convertir en polígono";
+    Text[ finnish ] = "Muunna monikulmioksi";
 };
 
