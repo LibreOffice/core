@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:16:42 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -715,11 +715,11 @@ NavDocInfo* SdNavigatorWin::GetDocInfo()
 
 /*************************************************************************
 |*
-|* PreParentNotify
+|* PreNotify
 |*
 \************************************************************************/
 
-long SdNavigatorWin::ParentNotify(NotifyEvent& rNEvt)
+long SdNavigatorWin::Notify(NotifyEvent& rNEvt)
 {
     const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
     long            nOK = FALSE;
