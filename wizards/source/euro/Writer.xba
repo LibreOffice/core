@@ -57,12 +57,12 @@ Dim MaxIndex as Integer
 			If CheckFormatType(oTextField) Then
 				If oTextField.PropertySetInfo.HasPropertybyName(&quot;Value&quot;) Then
 					If Not oTextField.SupportsService(&quot;com.sun.star.text.TextField.GetExpression&quot;) Then
-						oTextField.Content = Str(oTextField.Value/CurrFactor)
+						oTextField.Content = CStr(Round(oTextField.Value/CurrFactor,2))
 					End If
 				ElseIf oTextField.TextFieldMaster.PropertySetInfo.HasPropertyByName(&quot;Value&quot;) Then
 					CurInstanceName = oTextField.TextFieldMaster.InstanceName
 					If Not FieldinArray(InstanceNames(), MaxIndex, CurInstanceName) Then
-						oTextField.TextFieldMaster.Content = Str(oTextField.TextFieldMaster.Value/CurrFactor)
+						oTextField.TextFieldMaster.Content = CStr(Round(oTextField.TextFieldMaster.Value/CurrFactor,2))
 						InstanceNames(MaxIndex) = CurInstanceName
 						MaxIndex = MaxIndex + 1
 					End If
