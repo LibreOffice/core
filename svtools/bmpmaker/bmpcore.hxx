@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpcore.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-10 13:56:14 $
+ *  last change: $Author: ka $ $Date: 2002-03-22 16:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ private:
     ULONG           nTotCount;
     USHORT          nPos;
 
-    void            ImplCreate( SvStream& rStm, DirEntry&, DirEntry&, String&, String&, const LangInfo& rLang );
+    void            ImplCreate( SvStream& rStm, const DirEntry& rIn, const DirEntry& rOut, const String& rName, const LangInfo& rLang );
 
 protected:
 

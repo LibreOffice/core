@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpcore.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-28 09:40:27 $
+ *  last change: $Author: ka $ $Date: 2002-03-22 16:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #include <vcl/bmpacc.hxx>
 #include "bmpcore.hxx"
 
+#include <vector>
+#include <algorithm>
+
 #define FILETEST(FileEntry) ((FileEntry).Exists())
 
 // --------------
@@ -87,40 +90,36 @@ void BmpCreator::Message( const String& rText, BYTE cExitCode )
 
 // -----------------------------------------------------------------------
 
-void BmpCreator::ImplCreate( SvStream& rStm, DirEntry& rIn, DirEntry& rOut, String& rPrefix,
-                             String& rName, const LangInfo& rLang )
+void BmpCreator::ImplCreate( SvStream& rStm, const DirEntry& rIn, const DirEntry& rOut, const String& rName, const LangInfo& rLang )
 {
-       const char* pCollectPath = getenv( "BMP_COLLECT_PATH" );
-    const char* pResPath = getenv( "SOLARSRC" );
+       const char*         pCollectPath = getenv( "BMP_COLLECT_PATH" );
+    const char*         pResPath = getenv( "SOLARSRC" );
+    const sal_uInt32    nOldPos = pSRS->Tell();
 
     if( pResPath && *pResPath )
     {
-        String              aString( String::CreateFromAscii( ByteString( pResPath ).GetBuffer() ) );
-        String              aResPath( ( DirEntry( aString ) += DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "res" ) ) ) ).GetFull() );
-        SvFileStream        aOutStream;
-        Bitmap              aTotalBmp;
-        Bitmap              aBmp;
-        Size                aSize;
-        String              aText;
-        String              aName( rName );
-        String              aFileName;
-        ULONG               nSRSPos;
-        long                nBmpPos = 0L;
-        USHORT              nId;
-        USHORT              nN = 1;
-        DirEntry            aOutFile( rOut );
-        DirEntry            aLocalPath( rIn + DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "x.bmp" ) ) ) );
-        DirEntry            aLocalCollectPath;
-        DirEntry            aGlobalPath( aResPath );
-        DirEntry            aGlobalLangPath( aResPath );
-        DirEntry            aGlobalCollectPath;
-        String              aDefaultName( rPrefix ); aDefaultName.Append( String( RTL_CONSTASCII_USTRINGPARAM( "00000.bmp" ) ) );
-        BOOL                bInserted = FALSE;
-        BOOL                bFirst = TRUE;
+        String                  aLine, aFileName, aInfo, aPrefix, aName( rName );
+        String                  aString( String::CreateFromAscii( ByteString( pResPath ).GetBuffer() ) );
+        const String            aResPath( ( DirEntry( aString ) += DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "res" ) ) ) ).GetFull() );
+        SvFileStream            aOutStream;
+        Bitmap                  aTotalBmp;
+        DirEntry                aOutFile( rOut );
+        DirEntry                aLocalPath( rIn + DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "x.bmp" ) ) ) );
+        DirEntry                aLocalCollectPath;
+        DirEntry                aGlobalPath( aResPath );
+        DirEntry                aGlobalLangPath( aResPath );
+        DirEntry                aGlobalCollectPath;
+        ::std::vector< String > aNameVector;
 
-        // Falls nicht deutsch, noch die Vorwahlnummer hintenran
+        // get prefix for files
+        if( ( aName.Len() >= 3 ) && ( aName.GetChar( 2 ) != '_' ) )
+            aPrefix = String( aName, 0, 3 );
+        else
+            aPrefix = String( aName, 0, 2 );
+
         if( rLang.mnLangNum != 49 )
         {
+            // add country id, if not german
             String aNumStr( String::CreateFromInt32( rLang.mnLangNum ) );
 
             if( aNumStr.Len() == 1 )
@@ -132,118 +131,118 @@ void BmpCreator::ImplCreate( SvStream& rStm, DirEntry& rIn, DirEntry& rOut, Stri
             aGlobalLangPath += DirEntry( ::rtl::OUString::createFromAscii( rLang.maLangDir ) );
         }
 
+        // create output file name
         aOutFile += DirEntry( aName );
 
-        // Die Namen werden spaeter ersetzt
+        // names are replaced later
         aGlobalLangPath += DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "x.bmp" ) ) );
         aGlobalPath += DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "x.bmp" ) ) );
 
-        // Anzahl der Bitmaps bestimmen
-        for ( nTotCount = 0UL, nSRSPos = pSRS->Tell(); aText.Search( '}' ) == STRING_NOTFOUND; )
+        // get number of bitmaps
+        while( aLine.Search( '}' ) == STRING_NOTFOUND )
         {
             ByteString aTmp;
 
-            if ( !pSRS->ReadLine( aTmp ) )
+            if( !pSRS->ReadLine( aTmp ) )
                 break;
 
-            aText.Assign( String::CreateFromAscii( aTmp.GetBuffer() ) );
-            aText.EraseLeadingChars( ' ' );
-            aText.EraseLeadingChars( '\t' );
-            aText.EraseAllChars( ';' );
-
-            if ( ByteString( aText, RTL_TEXTENCODING_UTF8 ).IsNumericAscii() )
-                nTotCount++;
-        }
-
-        if( !nTotCount )
-            Message( String( RTL_CONSTASCII_USTRINGPARAM( "WARNING: No imagelist resource found: " ) ).Append( aString ), EXIT_MISSING_RESOURCE );
-
-        // Wieder an Anfang und los gehts
-        aText = String();
-        pSRS->Seek( nSRSPos );
-
-        // write info
-        String aInfo( RTL_CONSTASCII_USTRINGPARAM( "CREATING ImageList for language: " ) );
-        aInfo += String( ::rtl::OUString::createFromAscii( rLang.maLangDir ) );
-        aInfo += String( RTL_CONSTASCII_USTRINGPARAM( " [ " ) );
-        aInfo += aLocalPath.GetPath().GetFull();
-        aInfo += String( RTL_CONSTASCII_USTRINGPARAM( "; " ) );
-        aInfo += aGlobalLangPath.GetPath().GetFull();
-
-        if( aGlobalPath != aGlobalLangPath )
-        {
-            aInfo += String( RTL_CONSTASCII_USTRINGPARAM( "; " ) );
-            aInfo += aGlobalPath.GetPath().GetFull();
-        }
-
-        aInfo += String( RTL_CONSTASCII_USTRINGPARAM( " ]" ) );
-        Message( aInfo );
-
-        if( pCollectPath )
-        {
-            String aLocalStr( aLocalPath.GetPath().GetFull() );
-            aLocalStr.EraseLeadingChars( '/' );
-            aLocalStr.SearchAndReplace( ':', '_' );
-            aLocalCollectPath = DirEntry( String( pCollectPath, RTL_TEXTENCODING_ASCII_US ) );
-            aLocalCollectPath += DirEntry( aLocalStr );
-            aLocalCollectPath.MakeDir();
-
-            String aGlobalStr( aGlobalPath.GetPath().GetFull() );
-            aGlobalStr.EraseLeadingChars( '/' );
-            aGlobalStr.SearchAndReplace( ':', '_' );
-            aGlobalCollectPath = DirEntry( String( pCollectPath, RTL_TEXTENCODING_ASCII_US ) );
-            aGlobalCollectPath += DirEntry( aGlobalStr );
-            aGlobalCollectPath.MakeDir();
-
-            if( !aLocalCollectPath.Exists() || !aGlobalCollectPath.Exists() )
-            {
-                pCollectPath = NULL;
-                Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: couldn't create collect path" ) ), 0 );
-            }
-        }
-
-        for( ; aText.Search( '}' ) == STRING_NOTFOUND; )
-        {
-            ByteString aTmp;
-
-            if ( !pSRS->ReadLine( aTmp ) )
-                break;
-
-            aText.Assign( String::CreateFromAscii( aTmp.GetBuffer() ) );
-            aText.EraseLeadingChars( ' ' );
-            aText.EraseLeadingChars( '\t' );
-            aText.EraseAllChars( ';' );
-
-            aTmp = ByteString( aText, RTL_TEXTENCODING_UTF8 );
+            aTmp.EraseLeadingChars( ' ' );
+            aTmp.EraseLeadingChars( '\t' );
+            aTmp.EraseAllChars( ';' );
 
             if( aTmp.IsNumericAscii() )
             {
-                nId = atoi( aTmp.GetBuffer() );
+                aString = aPrefix;
 
-                if ( nId < 10000 )
-                {
-                    const String aTmp( aText );
+                if( atoi( aTmp.GetBuffer() ) < 10000 )
+                    aString += String::CreateFromInt32( 0 );
 
-                    aText.Assign( String::CreateFromInt32( 0 ) );
-                    aText.Append( aTmp );
-                }
+                aString += String( aTmp.GetBuffer(), RTL_TEXTENCODING_UTF8 );
+                aString += String( RTL_CONSTASCII_USTRINGPARAM( ".bmp" ) );
 
-                aString.Assign( rPrefix );
-                aString.Append( aText );
-                aString.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".bmp" ) ) );
-                aLocalPath.SetName( aString );
+                aNameVector.push_back( aString );
             }
-            else
-                continue;
+        }
 
-            if( !FILETEST( aLocalPath ) )
+        if( !aNameVector.size() )
+            Message( String( RTL_CONSTASCII_USTRINGPARAM( "WARNING: No imagelist resource found: " ) ).Append( aString ), EXIT_MISSING_RESOURCE );
+        else
+        {
+            // write info
+            aInfo = String( RTL_CONSTASCII_USTRINGPARAM( "CREATING ImageList for language: " ) );
+            aInfo += String( ::rtl::OUString::createFromAscii( rLang.maLangDir ) );
+            aInfo += String( RTL_CONSTASCII_USTRINGPARAM( " [ " ) );
+            aInfo += aLocalPath.GetPath().GetFull();
+            aInfo += String( RTL_CONSTASCII_USTRINGPARAM( "; " ) );
+            aInfo += aGlobalLangPath.GetPath().GetFull();
+
+            if( aGlobalPath != aGlobalLangPath )
             {
-                // Falls nicht deutsch, suchen wir zuerst im jeweiligen Sprach-Unterverz.
-                if( rLang.mnLangNum != 49 )
-                {
-                    aGlobalLangPath.SetName( aString );
+                aInfo += String( RTL_CONSTASCII_USTRINGPARAM( "; " ) );
+                aInfo += aGlobalPath.GetPath().GetFull();
+            }
 
-                    if ( !FILETEST( aGlobalLangPath ) )
+            aInfo += String( RTL_CONSTASCII_USTRINGPARAM( " ]" ) );
+            Message( aInfo );
+
+            if( pCollectPath )
+            {
+                String aLocalStr( aLocalPath.GetPath().GetFull() );
+                aLocalStr.EraseLeadingChars( '/' );
+                aLocalStr.SearchAndReplace( ':', '_' );
+                aLocalCollectPath = DirEntry( String( pCollectPath, RTL_TEXTENCODING_ASCII_US ) );
+                aLocalCollectPath += DirEntry( aLocalStr );
+                aLocalCollectPath.MakeDir();
+
+                String aGlobalStr( aGlobalPath.GetPath().GetFull() );
+                aGlobalStr.EraseLeadingChars( '/' );
+                aGlobalStr.SearchAndReplace( ':', '_' );
+                aGlobalCollectPath = DirEntry( String( pCollectPath, RTL_TEXTENCODING_ASCII_US ) );
+                aGlobalCollectPath += DirEntry( aGlobalStr );
+                aGlobalCollectPath.MakeDir();
+
+                if( !aLocalCollectPath.Exists() || !aGlobalCollectPath.Exists() )
+                {
+                    pCollectPath = NULL;
+                    Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: couldn't create collect path" ) ), 0 );
+                }
+            }
+
+            // create bit vector to hold flags for valid bitmaps
+            ::std::bit_vector aValidBmpBitVector( aNameVector.size(), false );
+
+            for( sal_uInt32 n = 0; n < aNameVector.size(); n++ )
+            {
+                Bitmap aBmp;
+
+                aLocalPath.SetName( aString = aNameVector[ n ] );
+
+                if( !FILETEST( aLocalPath ) )
+                {
+                    // Falls nicht deutsch, suchen wir zuerst im jeweiligen Sprach-Unterverz.
+                    if( rLang.mnLangNum != 49 )
+                    {
+                        aGlobalLangPath.SetName( aString );
+
+                        if ( !FILETEST( aGlobalLangPath ) )
+                        {
+                            aGlobalPath.SetName( aString );
+
+                            if( !FILETEST( aGlobalPath ) )
+                                aBmp = Bitmap();
+                            else
+                            {
+                                SvFileStream aIStm( aFileName = aGlobalPath.GetFull(), STREAM_READ );
+                                aIStm >> aBmp;
+                            }
+                        }
+                        else
+                        {
+                            SvFileStream aIStm( aFileName = aGlobalLangPath.GetFull(), STREAM_READ );
+                            aIStm >> aBmp;
+                        }
+                    }
+                    else
                     {
                         aGlobalPath.SetName( aString );
 
@@ -255,131 +254,116 @@ void BmpCreator::ImplCreate( SvStream& rStm, DirEntry& rIn, DirEntry& rOut, Stri
                             aIStm >> aBmp;
                         }
                     }
-                    else
+
+                    if( pCollectPath && !aBmp.IsEmpty() )
                     {
-                        SvFileStream aIStm( aFileName = aGlobalLangPath.GetFull(), STREAM_READ );
-                        aIStm >> aBmp;
+                        DirEntry aSrcPath( aFileName ), aDstPath( aGlobalCollectPath );
+                        aSrcPath.CopyTo( aDstPath += aSrcPath.GetName(), FSYS_ACTION_COPYFILE );
                     }
                 }
                 else
                 {
-                    aGlobalPath.SetName( aString );
+                    SvFileStream aIStm( aFileName = aLocalPath.GetFull(), STREAM_READ );
+                    aIStm >> aBmp;
+                    aIStm.Close();
 
-                    if( !FILETEST( aGlobalPath ) )
-                        aBmp = Bitmap();
-                    else
+                    if( pCollectPath && !aBmp.IsEmpty() )
                     {
-                        SvFileStream aIStm( aFileName = aGlobalPath.GetFull(), STREAM_READ );
-                        aIStm >> aBmp;
+                        DirEntry aSrcPath( aFileName ), aDstPath( aLocalCollectPath );
+                        aSrcPath.CopyTo( aDstPath += aSrcPath.GetName(), FSYS_ACTION_COPYFILE );
                     }
                 }
 
-                if( pCollectPath && !aBmp.IsEmpty() )
+                const Size aSize( aBmp.GetSizePixel() );
+
+                if( !aSize.Width() || !aSize.Height() )
+                    Message( String( RTL_CONSTASCII_USTRINGPARAM( "WARNING: Bitmap is missing: " ) ).Append( aString ), EXIT_MISSING_BITMAP );
+                else
                 {
-                    DirEntry aSrcPath( aFileName ), aDstPath( aGlobalCollectPath );
-                    aSrcPath.CopyTo( aDstPath += aSrcPath.GetName(), FSYS_ACTION_COPYFILE );
+                    if( aTotalBmp.IsEmpty() )
+                    {
+                        // first bitmap determines metrics of total bitmap
+                        Size aTotalSize( aOneSize = aSize );
+                        aTotalSize.Width() *= aNameVector.size();
+                        aTotalBmp = Bitmap( aTotalSize, aBmp.GetBitCount() );
+                    }
+
+                    if( ( aSize.Width() > aOneSize.Width() ) || ( aSize.Height() > aOneSize.Height() ) )
+                         Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Different dimensions in file: " ) ).Append( aString ), EXIT_DIMENSIONERROR );
+                    else if( aBmp.GetBitCount() != aTotalBmp.GetBitCount() )
+                         Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Different color depth in file: ") ).Append( aString ), EXIT_COLORDEPTHERROR );
+                    else
+                    {
+                        Point           aPoint;
+                        const Rectangle aDst( Point( aOneSize.Width() * n, 0L ), aSize );
+                        const Rectangle aSrc( aPoint, aSize );
+
+                        if( !aTotalBmp.IsEmpty() && !aBmp.IsEmpty() && !aDst.IsEmpty() && !aSrc.IsEmpty() )
+                        {
+                            aTotalBmp.CopyPixel( aDst, aSrc, &aBmp );
+                            aValidBmpBitVector[ n ] = true;
+                        }
+                    }
                 }
             }
-            else
+
+            if( !aTotalBmp.IsEmpty() )
             {
-                SvFileStream aIStm( aFileName = aLocalPath.GetFull(), STREAM_READ );
-                aIStm >> aBmp;
-                aIStm.Close();
-
-                if( pCollectPath && !aBmp.IsEmpty() )
+                // do we have invalid bitmaps?
+                if( ::std::find( aValidBmpBitVector.begin(), aValidBmpBitVector.end(), false ) != aValidBmpBitVector.end() )
                 {
-                    DirEntry aSrcPath( aFileName ), aDstPath( aLocalCollectPath );
-                    aSrcPath.CopyTo( aDstPath += aSrcPath.GetName(), FSYS_ACTION_COPYFILE );
-                }
-            }
-
-            aSize = aBmp.GetSizePixel();
-
-            // falls Bitmap defekt ist, malen wir ein rotes Kreuz
-            if( !aSize.Width() || !aSize.Height() )
-            {
-                Message( String( RTL_CONSTASCII_USTRINGPARAM( "WARNING: Bitmap is missing: " ) ).Append( aString ), EXIT_MISSING_BITMAP );
-
-                aSize = aOneSize;
-
-                if( aSize.Width() && aSize.Height() )
-                {
-                    aBmp = Bitmap( aSize, !!aTotalBmp ? aTotalBmp.GetBitCount() : 4 );
-                    aBmp.Erase( COL_WHITE );
-
-                    BitmapWriteAccess* pAcc = aBmp.AcquireWriteAccess();
+                    // replace invalid entries with a red cross
+                    BitmapWriteAccess* pAcc = aTotalBmp.AcquireWriteAccess();
 
                     if( pAcc )
                     {
-                        Point aPoint;
-                        const Rectangle aRect( aPoint, aOneSize );
+                        pAcc->SetLineColor( Color( COL_LIGHTGREEN ) );
 
-                        pAcc->SetLineColor( Color( COL_LIGHTRED ) );
-                        pAcc->DrawRect( aRect );
-                        pAcc->DrawLine( aRect.TopLeft(), aRect.BottomRight() );
-                        pAcc->DrawLine( aRect.TopRight(), aRect.BottomLeft() );
-                        aBmp.ReleaseAccess( pAcc );
+                        for( sal_uInt32 n = 0; n < aValidBmpBitVector.size(); n++ )
+                        {
+                            if( !aValidBmpBitVector[ n ] )
+                            {
+                                const Rectangle aDst( Point( aOneSize.Width() * n, 0L ), aOneSize );
+
+                                pAcc->DrawRect( aDst );
+                                pAcc->DrawLine( aDst.TopLeft(), aDst.BottomRight() );
+                                pAcc->DrawLine( aDst.TopRight(), aDst.BottomLeft() );
+                            }
+                        }
+
+                        aTotalBmp.ReleaseAccess( pAcc );
                     }
                 }
-            }
 
-            // Beim ersten Mal Zugriffs-Bitmap mit der
-            // richtigen Groesse, 4Bit und der Standardpalette anlegen
-            if( bFirst && aSize.Width() && aSize.Height() )
-            {
-                aTotSize = aOneSize = aSize;
-                aTotSize.Width() *= nTotCount;
-                aTotalBmp = Bitmap( aTotSize, 4 );
-                bFirst = FALSE;
-            }
+                // write output file
+                const String aFile( aOutFile.GetFull() );
 
-            if( ( aSize.Width() > aOneSize.Width() ) || ( aSize.Height() > aOneSize.Height() ) )
-                 Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Different dimensions in file: " ) ).Append( aString ), EXIT_DIMENSIONERROR );
-            else if( aBmp.GetBitCount() != aTotalBmp.GetBitCount() )
-                 Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Different color depth in file: ") ).Append( aString ), EXIT_COLORDEPTHERROR );
-            else
-            {
-                const Rectangle aDst( Point( nBmpPos * aOneSize.Width(), 0L ), aSize );
-                Point aPoint;
-                const Rectangle aSrc( aPoint, aSize );
+                aOutStream.Open( aFile, STREAM_WRITE | STREAM_TRUNC );
 
-                if( !!aTotalBmp && !!aBmp && !aDst.IsEmpty() && !aSrc.IsEmpty() )
-                    aTotalBmp.CopyPixel( aDst, aSrc, &aBmp );
-            }
-
-            nBmpPos++;
-        }
-
-        if ( !!aTotalBmp && aTotSize.Width() && aTotSize.Height() )
-        {
-            const String aFile( aOutFile.GetFull() );
-
-            aOutStream.Open( aFile, STREAM_WRITE | STREAM_TRUNC );
-
-            if( !aOutStream.IsOpen() )
-                Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Could not open output file: " ) ).Append( aFile ), EXIT_IOERROR );
-            else
-            {
-                aOutStream << aTotalBmp;
-
-                if( aOutStream.GetError() )
-                    Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Could not write to output file: " ) ).Append( aFile ), EXIT_IOERROR );
+                if( !aOutStream.IsOpen() )
+                    Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Could not open output file: " ) ).Append( aFile ), EXIT_IOERROR );
                 else
-                    Message( String( RTL_CONSTASCII_USTRINGPARAM( "Successfully generated ImageList " ) ).Append( aFile ) );
+                {
+                    aOutStream << aTotalBmp;
 
-                aOutStream.Close();
+                    if( aOutStream.GetError() )
+                        Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Could not write to output file: " ) ).Append( aFile ), EXIT_IOERROR );
+                    else
+                        Message( String( RTL_CONSTASCII_USTRINGPARAM( "Successfully generated ImageList " ) ).Append( aFile ) );
+
+                    aOutStream.Close();
+                }
             }
-        }
-        else
-            Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Could not generate  " ) ).Append( aOutFile.GetFull() ), EXIT_COMMONERROR );
+            else
+                Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Could not generate  " ) ).Append( aOutFile.GetFull() ), EXIT_COMMONERROR );
 
-        Message( ' ' );
+            Message( ' ' );
+        }
     }
     else
-    {
         Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: SOLARSRC environment variable not set!" ) ), EXIT_MISSING_SOLARSRC_ENV );
-        return;
-    }
+
+    pSRS->Seek( nOldPos );
 }
 
 // -----------------------------------------------------------------------------
@@ -387,9 +371,7 @@ void BmpCreator::ImplCreate( SvStream& rStm, DirEntry& rIn, DirEntry& rOut, Stri
 void BmpCreator::Create( const String& rSRSName, const String& rInName,
                          const String& rOutName, const LangInfo& rLang )
 {
-    DirEntry    aFileName( rSRSName );
-    DirEntry    aInDir( rInName );
-    DirEntry    aOutDir( rOutName );
+    DirEntry    aFileName( rSRSName ), aInDir( rInName ), aOutDir( rOutName );
     BOOL        bDone = FALSE;
 
     aFileName.ToAbs();
@@ -423,10 +405,7 @@ void BmpCreator::Create( const String& rSRSName, const String& rInName,
             while ( aByteText.Search( "File" ) == STRING_NOTFOUND );
             aText = String::CreateFromAscii( aByteText.GetBuffer() );
 
-            USHORT nStart = aText.Search('"') + 1;
-            USHORT nEnd = aText.Search( '"', nStart+1 );
-            String aName( aText, nStart, nEnd-nStart );
-            String aPrefix( aName, 0, 2 );
+            const String aName( aText.GetToken( 1, '"' ) );
 
             do
             {
@@ -444,12 +423,11 @@ void BmpCreator::Create( const String& rSRSName, const String& rInName,
             while (aByteText.Search( "IdList" ) == STRING_NOTFOUND );
             aText = String::CreateFromAscii( aByteText.GetBuffer() );
 
-            // if image list is not language dependent,
-            // don't do anything for languages except german
+            // if image list is not language dependent, don't do anything for languages except german
             if( aText.Len() )
             {
                 bDone = TRUE;
-                ImplCreate( *pSRS, aInDir, aOutDir, aPrefix, aName, rLang );
+                 ImplCreate( *pSRS, aInDir, aOutDir, aName, rLang );
             }
             else if( ( rLang.mnLangNum != 49 ) && !bLangDep )
             {
