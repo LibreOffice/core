@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MColumnAlias.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:37:35 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ void OColumnAlias::setAlias(const ::com::sun::star::uno::Reference<
     {
         try
         {
-            //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+            //.............................................................
             Reference< XNameAccess > xAliasesNode;
             xDriverNode->getPropertyValue( ::rtl::OUString::createFromAscii("ColumnAliases") ) >>= xAliasesNode;
             OSL_ENSURE( xAliasesNode.is(), "OColumnAlias::setAlias: missing the aliases node!" );
@@ -167,7 +167,7 @@ void OColumnAlias::setAlias(const ::com::sun::star::uno::Reference<
             if ( xAliasesNode.is() )
                 aColumnProgrammaticNames = xAliasesNode->getElementNames();
 
-            //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+            //.............................................................
             // travel through all the set elements
             const ::rtl::OUString* pProgrammaticNames = aColumnProgrammaticNames.getConstArray();
             const ::rtl::OUString* pProgrammaticNamesEnd = pProgrammaticNames + aColumnProgrammaticNames.getLength();
@@ -191,7 +191,7 @@ void OColumnAlias::setAlias(const ::com::sun::star::uno::Reference<
                 if ( 0 == sAssignedAlias.getLength() )
                       sAssignedAlias = *pProgrammaticNames;
 
-                //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+                //.............................................................
                 // check the value
                 // look up the programmatic indicated by pProgrammaticNames in the known programmatics
                 const ::rtl::OUString* pProgrammatic = sProgrammaticNames + FIRSTNAME;
