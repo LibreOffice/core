@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:14:28 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ TabDialog DLG_LAB
         Text[ italian ] = "Impostazioni";
         Text[ danish ] = "Medium";
         Text[ swedish ] = "Medium";
-        Text[ polish ] = "Noúnik danych";
+        Text[ polish ] = "No?nik danych";
         Text[ portuguese_brazilian ] = "Media";
         Text[ japanese ] = "î}ëÃ";
         Text[ korean ] = "∏≈√º";
@@ -324,7 +324,7 @@ TabPage TP_LAB_LAB
         Text [ English ] = "Address" ;
         Text [ norwegian ] = "Adresse" ;
         Text [ italian ] = "Indirizzo" ;
-        Text [ portuguese_brazilian ] = "EndereÁo" ;
+        Text [ portuguese_brazilian ] = "Endere?o" ;
         Text [ portuguese ] = "EndereÁo" ;
         Text [ finnish ] = "Osoite" ;
         Text [ danish ] = "Adresse" ;
@@ -513,7 +513,7 @@ TabPage TP_LAB_LAB
         Text [ English ] = "Continuous" ;
         Text [ norwegian ] = "Continuous" ;
         Text [ italian ] = "~Continuo" ;
-        Text [ portuguese_brazilian ] = "~ContÌnuo" ;
+        Text [ portuguese_brazilian ] = "~Cont?nuo" ;
         Text [ portuguese ] = "~ContÌnuo" ;
         Text [ finnish ] = "~Jatkuva" ;
         Text [ danish ] = "Endel¯s" ;
@@ -839,7 +839,7 @@ TabPage TP_VISITING_CARDS
         Text[ italian ] = "Contenuto";
         Text[ danish ] = "Indhold";
         Text[ swedish ] = "InnehÂll";
-        Text[ polish ] = "ZawartoúÊ";
+        Text[ polish ] = "Zawarto?Ê";
         Text[ portuguese_brazilian ] = "Content";
         Text[ japanese ] = "ì‡óe";
         Text[ korean ] = "≥ªøÎ";
@@ -1062,7 +1062,7 @@ TabPage TP_PRIVATE_DATA
         Text[ italian ] = "C.A.P./Localit‡";
         Text[ danish ] = "Postnr./By";
         Text[ swedish ] = "~Postnr/Ort";
-        Text[ polish ] = "Kod pocztowy/MiejscowoúÊ";
+        Text[ polish ] = "Kod pocztowy/Miejscowo?Ê";
         Text[ portuguese_brazilian ] = "Zip/City";
         Text[ japanese ] = "óXï÷î‘çÜ/ìsìπï{åßñº(~Y)";
         Text[ korean ] = "øÏ∆Ìπ¯»£/µµΩ√(~Y)";
@@ -1465,7 +1465,7 @@ TabPage TP_BUSINESS_DATA
         Text[ italian ] = "C.A.P./Localit‡";
         Text[ danish ] = "Postnr./By";
         Text[ swedish ] = "Postnr/Or~t";
-        Text[ polish ] = "Kod pocztowy/MiejscowoúÊ";
+        Text[ polish ] = "Kod pocztowy/Miejscowo?Ê";
         Text[ portuguese_brazilian ] = "ZIP/City";
         Text[ japanese ] = "óXï÷î‘çÜ/ìsìπï{åßñº";
         Text[ korean ] = "øÏ∆Ìπ¯»£/µµΩ√";
