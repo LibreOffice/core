@@ -1,0 +1,19 @@
+*** misc/boost-1.30.2/boost/function/function_template.hpp	2003-02-07 15:03:36.000000000 +0100
+--- misc/build/boost-1.30.2/boost/function/function_template.hpp	2005-04-01 15:40:45.820816441 +0200
+***************
+*** 395,401 ****
+        invoker = 0;
+      }
+  
+! #if (defined __SUNPRO_CC) && (__SUNPRO_CC <= 0x530) && !(defined BOOST_NO_COMPILER_CONFIG)
+      // Sun C++ 5.3 can't handle the safe_bool idiom, so don't use it
+      operator bool () const { return !this->empty(); }
+  #else
+--- 395,401 ----
+        invoker = 0;
+      }
+  
+! #if (defined __SUNPRO_CC) // workaround opt bug when compiling with -xO3
+      // Sun C++ 5.3 can't handle the safe_bool idiom, so don't use it
+      operator bool () const { return !this->empty(); }
+  #else
