@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-23 15:08:44 $
+ *  last change: $Author: dv $ $Date: 2001-03-28 08:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,6 +328,7 @@ class SfxDocTemplate_Impl : public SvRefBase
 
     ::osl::Mutex        maMutex;
     OUString            maRootURL;
+    OUString            maStandardGroup;
     RegionList_Impl     maRegions;
     sal_Bool            mbConstructed;
 
@@ -338,7 +339,7 @@ public:
                         SfxDocTemplate_Impl();
                         ~SfxDocTemplate_Impl();
 
-    void                Construct();
+    sal_Bool            Construct();
     void                CreateFromHierarchy( Content &rTemplRoot );
     void                AddRegion( const OUString& rTitle,
                                    Content& rContent );
@@ -379,7 +380,6 @@ SV_IMPL_REF(SfxDocTemplate_Impl)
 // ------------------------------------------------------------------------
 
 SfxDocTemplate_Impl *gpTemplateData = 0;
-String  gaEmptyString;
 
 // -----------------------------------------------------------------------
 
@@ -406,19 +406,21 @@ String SfxDocumentTemplates::GetFullRegionName
 */
 
 {
-    pImp->Construct();
-
     // First: find the RegionData for the index
     String aName;
 
-    RegionData_Impl *pData1 = pImp->GetRegion( nIdx );
+    if ( pImp->Construct() )
+    {
+        RegionData_Impl *pData1 = pImp->GetRegion( nIdx );
 
-    if ( pData1 )
-        aName = pData1->GetTitle();
+        if ( pData1 )
+            aName = pData1->GetTitle();
 
-    // --**-- here was some code which appended the path to the
-    //      group if there was more than one with the same name.
-    //      this should not happen anymore
+        // --**-- here was some code which appended the path to the
+        //      group if there was more than one with the same name.
+        //      this should not happen anymore
+    }
+
     return aName;
 }
 
@@ -442,12 +444,15 @@ const String& SfxDocumentTemplates::GetRegionName
 {
     static String maTmpString;
 
-    pImp->Construct();
+    if ( pImp->Construct() )
+    {
+        RegionData_Impl *pData = pImp->GetRegion( nIdx );
 
-    RegionData_Impl *pData = pImp->GetRegion( nIdx );
-
-    if ( pData )
-        maTmpString = pData->GetTitle();
+        if ( pData )
+            maTmpString = pData->GetTitle();
+        else
+            maTmpString.Erase();
+    }
     else
         maTmpString.Erase();
 
@@ -473,7 +478,8 @@ USHORT SfxDocumentTemplates::GetRegionNo
 
 */
 {
-    pImp->Construct();
+    if ( !pImp->Construct() )
+        return USHRT_MAX;
 
     sal_Bool    bFound;
     ULONG       nIndex = pImp->GetRegionPos( rRegion, bFound );
@@ -500,7 +506,8 @@ USHORT SfxDocumentTemplates::GetRegionCount() const
 
 */
 {
-    pImp->Construct();
+    if ( !pImp->Construct() )
+        return 0;
 
     ULONG nCount = pImp->GetRegionCount();
 
@@ -511,7 +518,8 @@ USHORT SfxDocumentTemplates::GetRegionCount() const
 
 BOOL SfxDocumentTemplates::IsRegionLoaded( USHORT nIdx ) const
 {
-    pImp->Construct();
+    if ( !pImp->Construct() )
+        return FALSE;
 
     RegionData_Impl *pData = pImp->GetRegion( nIdx );
 
@@ -542,7 +550,8 @@ USHORT SfxDocumentTemplates::GetCount
 */
 
 {
-    pImp->Construct();
+    if ( !pImp->Construct() )
+        return 0;
 
     RegionData_Impl *pData = pImp->GetRegion( rName );
     ULONG            nCount = 0;
@@ -572,7 +581,8 @@ USHORT SfxDocumentTemplates::GetCount
 */
 
 {
-    pImp->Construct();
+    if ( !pImp->Construct() )
+        return 0;
 
     RegionData_Impl *pData = pImp->GetRegion( nRegion );
     ULONG            nCount = 0;
@@ -603,18 +613,21 @@ const String& SfxDocumentTemplates::GetName
 */
 
 {
-    pImp->Construct();
-
     static String maTmpString;
 
-    EntryData_Impl  *pEntry = NULL;
-    RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
+    if ( pImp->Construct() )
+    {
+        EntryData_Impl  *pEntry = NULL;
+        RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
 
-    if ( pRegion )
-        pEntry = pRegion->GetEntry( nIdx );
+        if ( pRegion )
+            pEntry = pRegion->GetEntry( nIdx );
 
-    if ( pEntry )
-        maTmpString = pEntry->GetTitle();
+        if ( pEntry )
+            maTmpString = pEntry->GetTitle();
+        else
+            maTmpString.Erase();
+    }
     else
         maTmpString.Erase();
 
@@ -637,7 +650,8 @@ String SfxDocumentTemplates::GetFileName
 
 */
 {
-    pImp->Construct();
+    if ( !pImp->Construct() )
+        return String();
 
     EntryData_Impl  *pEntry = NULL;
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
@@ -675,7 +689,8 @@ String SfxDocumentTemplates::GetPath
 
 */
 {
-    pImp->Construct();
+    if ( !pImp->Construct() )
+        return String();
 
     EntryData_Impl  *pEntry = NULL;
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
@@ -709,7 +724,8 @@ String SfxDocumentTemplates::GetTemplatePath
 
 */
 {
-    pImp->Construct();
+    if ( !pImp->Construct() )
+        return String();
 
     EntryData_Impl  *pEntry = NULL;
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
@@ -758,7 +774,8 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
 
 */
 {
-    pImp->Construct();
+    if ( ! pImp->Construct() )
+        return String();
 
     // the first region in the list should always be the standard
     // group
@@ -855,7 +872,8 @@ void SfxDocumentTemplates::NewTemplate
 */
 
 {
-    pImp->Construct();
+    if ( ! pImp->Construct() )
+        return;
 
     EntryData_Impl  *pEntry;
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
@@ -915,7 +933,8 @@ BOOL SfxDocumentTemplates::CopyOrMove
        ...
     */
 
-    pImp->Construct();
+    if ( !pImp->Construct() )
+        return FALSE;
 
     // Don't copy or move any folders
     if( nSourceIdx == USHRT_MAX )
@@ -1091,7 +1110,8 @@ BOOL SfxDocumentTemplates::CopyTo
 */
 
 {
-    pImp->Construct();
+    if ( ! pImp->Construct() )
+        return FALSE;
 
     RegionData_Impl *pSourceRgn = pImp->GetRegion( nRegion );
     if ( !pSourceRgn )
@@ -1169,7 +1189,8 @@ BOOL SfxDocumentTemplates::CopyFrom
 */
 
 {
-    pImp->Construct();
+    if ( ! pImp->Construct() )
+        return FALSE;
 
     RegionData_Impl *pTargetRgn = pImp->GetRegion( nRegion );
 
@@ -1231,12 +1252,13 @@ BOOL SfxDocumentTemplates::Delete
        template folder by sending a delete command to the content.
        Then remove the data from the lists
     */
-    pImp->Construct();
+    if ( ! pImp->Construct() )
+        return FALSE;
 
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
 
     if ( !pRegion )
-        return sal_False;
+        return FALSE;
 
     sal_Bool bRet;
     Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
@@ -1252,7 +1274,7 @@ BOOL SfxDocumentTemplates::Delete
         EntryData_Impl *pEntry = pRegion->GetEntry( nIdx );
 
         if ( !pEntry )
-            return sal_False;
+            return FALSE;
 
         bRet = xTemplates->removeTemplate( pRegion->GetTitle(),
                                            pEntry->GetTitle() );
@@ -1290,7 +1312,8 @@ BOOL SfxDocumentTemplates::InsertDir
     <SfxDocumentTemplates::SaveDir(SfxTemplateDir&)>
 */
 {
-    pImp->Construct();
+    if ( ! pImp->Construct() )
+        return sal_False;
 
     RegionData_Impl *pRegion = pImp->GetRegion( rText );
 
@@ -1340,7 +1363,8 @@ BOOL SfxDocumentTemplates::SetName
 */
 
 {
-    pImp->Construct();
+    if ( ! pImp->Construct() )
+        return FALSE;
 
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
     EntryData_Impl *pEntry = NULL;
@@ -1413,7 +1437,9 @@ BOOL SfxDocumentTemplates::Rescan()
     <SfxTemplateDir::Freshen(const SfxTemplateDir &rNew)>
 */
 {
-    pImp->Construct();
+    if ( ! pImp->Construct() )
+        return FALSE;
+
     pImp->Rescan();
 
     return sal_True;
@@ -1444,7 +1470,8 @@ SfxObjectShellRef SfxDocumentTemplates::CreateObjectShell
 */
 
 {
-    pImp->Construct();
+    if ( !pImp->Construct() )
+        return NULL;
 
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
     EntryData_Impl *pEntry = NULL;
@@ -1486,7 +1513,8 @@ BOOL SfxDocumentTemplates::DeleteObjectShell
 */
 
 {
-    pImp->Construct();
+    if ( ! pImp->Construct() )
+        return TRUE;
 
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
     EntryData_Impl *pEntry = NULL;
@@ -1530,7 +1558,8 @@ BOOL SfxDocumentTemplates::GetFull
 */
 
 {
-    pImp->Construct();
+    if ( ! pImp->Construct() )
+        return FALSE;
 
     EntryData_Impl* pEntry = NULL;
     const USHORT nCount = GetRegionCount();
@@ -1594,7 +1623,8 @@ BOOL SfxDocumentTemplates::GetLogicNames
 */
 
 {
-    pImp->Construct();
+    if ( ! pImp->Construct() )
+        return FALSE;
 
     INetURLObject aFullPath;
 
@@ -2216,12 +2246,12 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
 }
 
 // ------------------------------------------------------------------------
-void SfxDocTemplate_Impl::Construct()
+sal_Bool SfxDocTemplate_Impl::Construct()
 {
     ::osl::MutexGuard aGuard( maMutex );
 
     if ( mbConstructed )
-        return;
+        return sal_True;
 
     Reference< XMultiServiceFactory >   xFactory;
     xFactory = ::comphelper::getProcessServiceFactory();
@@ -2232,22 +2262,37 @@ void SfxDocTemplate_Impl::Construct()
 
     aService = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_DOCTEMPLATES ) );
     Reference< XDocumentTemplates > xTemplates( xFactory->createInstance( aService ), UNO_QUERY );
-    Reference< XLocalizable > xLocalizable( xTemplates, UNO_QUERY );
-    mxTemplates = xTemplates;
+
+    if ( xTemplates.is() )
+        mxTemplates = xTemplates;
+    else
+        return sal_False;
 
     AllSettings aSettings;
     Locale      aLocale = aSettings.GetLocale();
+
+    Reference< XLocalizable > xLocalizable( xTemplates, UNO_QUERY );
 
     xLocalizable->setLocale( aLocale );
 
     Reference < XContent > aRootContent = xTemplates->getContent();
     Reference < XCommandEnvironment > aCmdEnv;
 
+    if ( ! aRootContent.is() )
+        return sal_False;
+
     mbConstructed = sal_True;
     maRootURL = aRootContent->getIdentifier()->getContentIdentifier();
 
+    ResStringArray  aLongNames( SfxResId( TEMPLATE_LONG_NAMES_ARY ) );
+
+    if ( aLongNames.Count() )
+        maStandardGroup = aLongNames.GetString( 0 );
+
     Content aTemplRoot( aRootContent, aCmdEnv );
     CreateFromHierarchy( aTemplRoot );
+
+    return sal_True;
 }
 
 
@@ -2373,13 +2418,13 @@ sal_Bool SfxDocTemplate_Impl::InsertRegion( RegionData_Impl *pNew,
         bFound = sal_False;
         pNew->SetInUse( sal_True );
 
-        // --**--   get the name of the standard group here to insert it
-        //          first
+        // compare with the name of the standard group here to insert it
+        // first
 
-/*      if ( pNew->GetTitle() == GetStandardGroupName() )
+        if ( pNew->GetTitle() == maStandardGroup )
             maRegions.Insert( pNew, (ULONG) 0 );
         else
-*/          maRegions.Insert( pNew, nPos );
+            maRegions.Insert( pNew, nPos );
     }
 
     return ! bFound;
