@@ -155,31 +155,12 @@ public class Tree extends DescendantManager implements javax.accessibility.Acces
         return new AccessibleTreeListener();
     }
 
-    /** Returns the AccessibleContext associated with this object */
-    public javax.accessibility.AccessibleContext getAccessibleContext() {
-        if (accessibleContext == null) {
-            try {
-                unoAccessibleContext = unoAccessible.getAccessibleContext();
-                unoAccessibleSelection = (XAccessibleSelection) UnoRuntime.queryInterface(
-                    XAccessibleSelection.class, unoAccessibleContext);
-                if (unoAccessibleSelection != null) {
-                    accessibleContext = new AccessibleTree();
-                }
-            } catch (java.lang.NullPointerException e) {
-            } catch (com.sun.star.uno.RuntimeException e) {
-            }
-        }
-        return accessibleContext;
+    /** Creates the AccessibleContext associated with this object */
+    public javax.accessibility.AccessibleContext createAccessibleContext() {
+        return new AccessibleTree();
     }
 
     protected class AccessibleTree extends AccessibleDescendantManager {
-
-        /**
-        * Though the class is abstract, this should be called by all sub-classes
-        */
-        protected AccessibleTree() {
-            super();
-        }
 
         /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
         protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(XAccessibleStateSet unoAS) {
@@ -290,7 +271,11 @@ public class Tree extends DescendantManager implements javax.accessibility.Acces
                 try {
                     XAccessibleContext xAccessibleContext = unoAccessible.getAccessibleContext();
                     if (xAccessibleContext != null) {
-                        accessibleContext = new AccessibleTreeItem(xAccessibleContext);
+                                            javax.accessibility.AccessibleContext ac = new AccessibleTreeItem(xAccessibleContext);
+                                            if (ac != null) {
+                                                ac.setAccessibleParent(Tree.this);
+                                                accessibleContext = ac;
+                                            }
                     }
                 } catch (com.sun.star.uno.RuntimeException e) {
                 }
