@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:07:18 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,23 @@ public:
         @author OD
     */
     SwTwips CalcLowerSpace( const SwBorderAttrs* _pAttrs = 0L ) const;
+
+    /** calculation of the additional space to be considered, if flow frame
+        is the last inside a table cell
+
+        OD 2004-07-16 #i26250
+
+        @author OD
+
+        @param _pAttrs
+        optional input parameter - border attributes of the flow frame.
+        Used for optimization, if caller has already determined the border
+        attributes.
+
+        @return SwTwips
+    */
+    SwTwips CalcAddLowerSpaceAsLastInTableCell(
+                                    const SwBorderAttrs* _pAttrs = 0L ) const;
 
     void CheckKeep();
 
