@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-02 19:02:06 $
+ *  last change: $Author: pl $ $Date: 2001-02-05 13:08:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,6 +314,13 @@ namespace x11 {
         time_t                      m_nDropTimeout;
         bool                        m_bWaitingForPrimaryConversion;
 
+        // drag cursors
+        Cursor                      m_aMoveCursor;
+        Cursor                      m_aCopyCursor;
+        Cursor                      m_aLinkCursor;
+        Cursor                      m_aNoneCursor;
+        Cursor                      m_aCurrentCursor;
+
 
         // drag and drop
 
@@ -383,6 +390,7 @@ namespace x11 {
         void sendDropPosition( bool bForce, Time eventTime );
         bool updateDragAction( int modifierState );
         int getXdndVersion( Window aWindow, Window& rProxy );
+        Cursor createCursor( const char* pPointerData, const char* pMaskData, int width, int height, int hotX, int hotY );
         // coordinates on root window
         void updateDragWindow( int nX, int nY, Window aRoot );
 

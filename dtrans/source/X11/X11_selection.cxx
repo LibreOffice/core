@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-02 19:02:06 $
+ *  last change: $Author: pl $ $Date: 2001-02-05 13:08:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,16 @@
 #include <X11_clipboard.hxx>
 #include <X11_transferable.hxx>
 
+// pointer bitmaps
+#include <copydata_curs.h>
+#include <copydata_mask.h>
+#include <movedata_curs.h>
+#include <movedata_mask.h>
+#include <linkdata_curs.h>
+#include <linkdata_mask.h>
+#include <nodrop_curs.h>
+#include <nodrop_mask.h>
+
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_DNDCONSTANTS_HPP_
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #endif
@@ -91,6 +101,12 @@
 
 #define INCR_MIN_SIZE   1024
 #define INCR_TIMEOUT        5
+
+#define DRAG_EVENT_MASK ButtonPressMask         |\
+                              ButtonReleaseMask     |\
+                              PointerMotionMask     |\
+                              EnterWindowMask           |\
+                              LeaveWindowMask
 
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::dnd;
@@ -233,10 +249,52 @@ SelectionManager::SelectionManager() :
     m_nNoPosHeight( 0 ),
     m_bDropSent( false ),
     m_bWaitingForPrimaryConversion( false ),
-    m_bDropSuccess( false )
+    m_bDropSuccess( false ),
+    m_aMoveCursor( None ),
+    m_aCopyCursor( None ),
+    m_aLinkCursor( None ),
+    m_aNoneCursor( None ),
+    m_aCurrentCursor( None )
 {
     m_aDropEnterEvent.data.l[0] = None;
     m_bDropEnterSent            = true;
+}
+
+Cursor SelectionManager::createCursor( const char* pPointerData, const char* pMaskData, int width, int height, int hotX, int hotY )
+{
+    Pixmap aPointer;
+    Pixmap aMask;
+    XColor aBlack, aWhite;
+
+    aBlack.pixel = BlackPixel( m_pDisplay, 0 );
+    aBlack.red = aBlack.green = aBlack.blue = 0;
+    aBlack.flags = DoRed | DoGreen | DoBlue;
+
+    aWhite.pixel = WhitePixel( m_pDisplay, 0 );
+    aWhite.red = aWhite.green = aWhite.blue = 0xffff;
+    aWhite.flags = DoRed | DoGreen | DoBlue;
+
+    aPointer =
+        XCreateBitmapFromData( m_pDisplay,
+                               m_aWindow,
+                               pPointerData,
+                               width,
+                               height );
+    aMask
+        = XCreateBitmapFromData( m_pDisplay,
+                                 m_aWindow,
+                                 pMaskData,
+                                 width,
+                                 height );
+    Cursor aCursor =
+        XCreatePixmapCursor( m_pDisplay, aPointer, aMask,
+                             &aBlack, &aWhite,
+                             hotX,
+                             hotY );
+    XFreePixmap( m_pDisplay, aPointer );
+    XFreePixmap( m_pDisplay, aMask );
+
+    return aCursor;
 }
 
 void SelectionManager::initialize( const Sequence< Any >& arguments )
@@ -338,6 +396,35 @@ void SelectionManager::initialize( const Sequence< Any >& arguments )
 
             if( m_aWindow )
             {
+                // initialize default cursors
+                m_aMoveCursor = createCursor( movedata_curs_bits,
+                                              movedata_mask_bits,
+                                              movedata_curs_width,
+                                              movedata_curs_height,
+                                              movedata_curs_x_hot,
+                                              movedata_curs_y_hot );
+                m_aCopyCursor = createCursor( copydata_curs_bits,
+                                              copydata_mask_bits,
+                                              copydata_curs_width,
+                                              copydata_curs_height,
+                                              copydata_curs_x_hot,
+                                              copydata_curs_y_hot );
+                m_aLinkCursor = createCursor( linkdata_curs_bits,
+                                              linkdata_mask_bits,
+                                              linkdata_curs_width,
+                                              linkdata_curs_height,
+                                              linkdata_curs_x_hot,
+                                              linkdata_curs_y_hot );
+                m_aNoneCursor = createCursor( nodrop_curs_bits,
+                                              nodrop_mask_bits,
+                                              nodrop_curs_width,
+                                              nodrop_curs_height,
+                                              nodrop_curs_x_hot,
+                                              nodrop_curs_y_hot );
+
+
+
+
                 // just interested in SelectionClear/Notify/Request and PropertyChange
                 XSelectInput( m_pDisplay, m_aWindow, PropertyChangeMask );
                 // create the transferable for Drag operations
@@ -946,6 +1033,7 @@ void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
         m_xDragSourceListener.is() )
     {
         DragSourceDropEvent dsde;
+        dsde.Source                 = static_cast< OWeakObject* >(this);
         dsde.DragSourceContext      = static_cast< XDragSourceContext* >(this);
         dsde.DragSource             = static_cast< XDragSource* >(this);
         if( aNotify.xselection.property != None )
@@ -1270,9 +1358,11 @@ void SelectionManager::dropComplete( sal_Bool bSuccess )
     if( m_xDragSourceListener.is() )
     {
         DragSourceDropEvent dsde;
-        dsde.Source         = static_cast< OWeakObject* >(this);
-        dsde.DropAction     = m_nUserDragAction;
-        dsde.DropSuccess    = bSuccess;
+        dsde.Source             = static_cast< OWeakObject* >(this);
+        dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
+        dsde.DragSource         = static_cast< XDragSource* >(this);
+        dsde.DropAction         = m_nUserDragAction;
+        dsde.DropSuccess        = bSuccess;
         m_xDragSourceListener->dragDropEnd( dsde );
         m_xDragSourceListener.clear();
     }
@@ -1315,9 +1405,11 @@ void SelectionManager::sendDragStatus( Atom nDropAction )
     if( m_xDragSourceListener.is() )
     {
         DragSourceDragEvent dsde;
-        dsde.Source     = static_cast< OWeakObject* >(this);
-        dsde.DropAction = m_nSourceActions;
-        dsde.UserAction = m_nUserDragAction;
+        dsde.Source             = static_cast< OWeakObject* >(this);
+        dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
+        dsde.DragSource         = static_cast< XDragSource* >(this);
+        dsde.DropAction         = m_nSourceActions;
+        dsde.UserAction         = m_nUserDragAction;
         m_xDragSourceListener->dragOver( dsde );
     }
     else if( m_aDropEnterEvent.data.l[0] && m_aCurrentDropWindow )
@@ -1372,6 +1464,7 @@ bool SelectionManager::updateDragAction( int modifierState )
         m_nUserDragAction = nNewDropAction & m_nSourceActions;
 
         DragSourceDragEvent dsde;
+        dsde.Source             = static_cast< OWeakObject* >(this);
         dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
         dsde.DragSource         = static_cast< XDragSource* >(this);
         dsde.DropAction         = m_nUserDragAction;
@@ -1480,6 +1573,7 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
         if( rMessage.xclient.message_type == m_nXdndStatus && rMessage.xclient.data.l[0] == m_aDropWindow )
         {
             DragSourceDragEvent dsde;
+            dsde.Source                 = static_cast< OWeakObject* >(this);
             dsde.DragSourceContext      = static_cast< XDragSourceContext* >( this );
             dsde.DragSource             = static_cast< XDragSource* >( this );
             dsde.DropAction = DNDConstants::ACTION_NONE;
@@ -1516,6 +1610,7 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
         {
             // notify the listener
             DragSourceDropEvent dsde;
+            dsde.Source             = static_cast< OWeakObject* >(this);
             dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
             dsde.DragSource         = static_cast< XDragSource* >(this);
             dsde.DropAction         = m_nUserDragAction;
@@ -1567,6 +1662,7 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
             }
             // notify the listener
             DragSourceDropEvent dsde;
+            dsde.Source             = static_cast< OWeakObject* >(this);
             dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
             dsde.DragSource         = static_cast< XDragSource* >(this);
             dsde.DropAction         = DNDConstants::ACTION_NONE;
@@ -1670,6 +1766,7 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
         {
             // cancel drag
             DragSourceDropEvent dsde;
+            dsde.Source             = static_cast< OWeakObject* >(this);
             dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
             dsde.DragSource         = static_cast< XDragSource* >(this);
             dsde.DropAction         = DNDConstants::ACTION_NONE;
@@ -1747,7 +1844,14 @@ sal_Bool SelectionManager::isDragImageSupported()
 
 sal_Int32 SelectionManager::getDefaultCursor( sal_Int8 dragAction )
 {
-    return 0;
+    Cursor aCursor = m_aNoneCursor;
+    if( dragAction & DNDConstants::ACTION_MOVE )
+        aCursor = m_aMoveCursor;
+    else if( dragAction & DNDConstants::ACTION_COPY )
+        aCursor = m_aCopyCursor;
+    else if( dragAction & DNDConstants::ACTION_LINK )
+        aCursor = m_aLinkCursor;
+    return aCursor;
 }
 
 // ------------------------------------------------------------------------
@@ -1862,6 +1966,7 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
 
 
     DragSourceDragEvent dsde;
+    dsde.Source             = static_cast< OWeakObject* >(this);
     dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
     dsde.DragSource         = static_cast< XDragSource* >(this);
     dsde.DropAction         = nNewProtocolVersion >= 0 ? DNDConstants::ACTION_MOVE : DNDConstants::ACTION_COPY;
@@ -2000,11 +2105,7 @@ void SelectionManager::executeDrag(
 #endif
         int nPointerGrabSuccess =
             XGrabPointer( m_pDisplay, it->second.m_aRootWindow, True,
-                          ButtonPressMask       |
-                          ButtonReleaseMask     |
-                          PointerMotionMask     |
-                          EnterWindowMask       |
-                          LeaveWindowMask,
+                          DRAG_EVENT_MASK,
                           GrabModeAsync, GrabModeAsync,
                           None,
                           None,
@@ -2042,6 +2143,7 @@ void SelectionManager::executeDrag(
         m_xDragSourceTransferable   = transferable;
         m_xDragSourceListener       = listener;
         m_aDragFlavors              = transferable->getTransferDataFlavors();
+        m_aCurrentCursor            = None;
 
         requestOwnership( m_nXdndSelection );
 
@@ -2092,6 +2194,7 @@ void SelectionManager::executeDrag(
         if( m_xDragSourceListener.is() )
         {
             DragSourceDropEvent dsde;
+            dsde.Source             = static_cast< OWeakObject* >(this);
             dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
             dsde.DragSource         = static_cast< XDragSource* >(this);
             dsde.DropAction         = DNDConstants::ACTION_NONE;
@@ -2115,6 +2218,7 @@ void SelectionManager::executeDrag(
         m_nNoPosY                           = 0;
         m_nNoPosWidth                       = 0;
         m_nNoPosHeight                      = 0;
+        m_aCurrentCursor                    = None;
 
         m_xDragSourceTransferable.clear();
         XUngrabPointer( m_pDisplay, CurrentTime );
@@ -2128,13 +2232,15 @@ void SelectionManager::executeDrag(
 
 sal_Int32 SelectionManager::getCurrentCursor()
 {
-    return 0;
+    return m_aCurrentCursor;
 }
 
 // ------------------------------------------------------------------------
 
 void SelectionManager::setCursor( sal_Int32 cursor )
 {
+    if( m_xDragSourceListener.is() && ! m_bDropSent )
+        XChangeActivePointerGrab( m_pDisplay, DRAG_EVENT_MASK, cursor, CurrentTime );
 }
 
 // ------------------------------------------------------------------------
