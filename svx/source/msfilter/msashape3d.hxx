@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape3d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:41 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #include <poly3d.hxx>
 #include <goodies/point3d.hxx>
 
-class SvxMSDffAutoShape3D
+class SvxMSDffCustomShape3D
 {
     class Transformation2D
     {
