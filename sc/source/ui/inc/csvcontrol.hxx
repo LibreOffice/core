@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvcontrol.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:31:25 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #include <vcl/ctrl.hxx>
 #endif
 
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
@@ -299,7 +302,7 @@ inline void ScCsvCmd::Set( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nPar
 // ============================================================================
 
 /** Base class for the CSV ruler and the data grid control. Implements command handling. */
-class ScCsvControl : public Control
+class SC_DLLPUBLIC ScCsvControl : public Control
 {
 protected:
     typedef ::std::vector< String >     StringVec;
