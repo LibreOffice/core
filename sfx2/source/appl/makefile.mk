@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-11 14:56:31 $
+#   last change: $Author: kz $ $Date: 2005-01-18 16:03:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -126,7 +126,6 @@ SLOFILES =  \
     $(SLO)$/sfxpicklist.obj \
     $(SLO)$/helpdispatch.obj \
     $(SLO)$/imestatuswindow.obj \
-    $(SLO)$/accelinfo.obj\
     $(SLO)$/xpackcreator.obj\
     $(SLO)$/linksrc.obj\
     $(SLO)$/linkmgr2.obj\
