@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unobtabl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-18 09:20:10 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #include "impgrf.hxx"
 #include "unomid.hxx"
 #include "unoprnms.hxx"
+#include "unofill.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
