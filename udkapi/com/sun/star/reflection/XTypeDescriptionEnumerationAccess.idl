@@ -1,0 +1,177 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XTypeDescriptionEnumerationAccess.idl,v $
+ *
+ *  $Revision: 1.4 $
+ *
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:36:26 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_reflection_XTypeDescriptionEnumerationAccess_idl__
+#define __com_sun_star_reflection_XTypeDescriptionEnumerationAccess_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_uno_TypeClass_idl__
+#include <com/sun/star/uno/TypeClass.idl>
+#endif
+#ifndef __com_sun_star_reflection_XTypeDescriptionEnumeration_idl__
+#include <com/sun/star/reflection/XTypeDescriptionEnumeration.idl>
+#endif
+#ifndef __com_sun_star_reflection_TypeDescriptionSearchDepth_idl__
+#include <com/sun/star/reflection/TypeDescriptionSearchDepth.idl>
+#endif
+#ifndef __com_sun_star_reflection_NoSuchTypeNameException_idl__
+#include <com/sun/star/reflection/NoSuchTypeNameException.idl>
+#endif
+#ifndef __com_sun_star_reflection_InvalidTypeNameException_idl__
+#include <com/sun/star/reflection/InvalidTypeNameException.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module reflection {
+
+//=============================================================================
+
+/** Defines an interface for creating enumerations for type descriptions.
+
+  */
+interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XInterface
+{
+    /** Creates an enumeration for type descriptions.
+
+        <p>An enumeration is always created for an UNOIDL module. The
+        enumeration contents can be restricted by specifying type classes.
+        Only types that match one of the supplied type classes will be part of
+        the collection. Additionally, it is possible to specify the depth
+        for the search within the underlying type description tree.
+
+        @param moduleName
+            contains the name of an UNOIDL module. Modules are seperated by a
+            single '.' (i.e., "com.sun.star.reflection"). The root of the module
+            hierarchy is specified with an empty string. Module names are always
+            absolute, never relative.
+
+        @param types
+            restricts the contents of the enumeration. It will only contain
+            type descriptions that match one of the supplied type classes. An
+            empty sequence specifies that the enumeration shall contain all
+            type descriptions.
+
+            <p>Valid types classes are:
+            <ul>
+            <li><member scope="com::sun::star::uno">TypeClass::MODULE</member>
+            <li><member scope="com::sun::star::uno">TypeClass::INTERFACE</member>
+            <li><member scope="com::sun::star::uno">TypeClass::SERVICE</member>
+            <li><member scope="com::sun::star::uno">TypeClass::STRUCT</member>
+            <li><member scope="com::sun::star::uno">TypeClass::ENUM</member>
+            <li><member scope="com::sun::star::uno">TypeClass::EXCEPTION</member>
+            <li><member scope="com::sun::star::uno">TypeClass::TYPEDEF</member>
+            <li><member scope="com::sun::star::uno">TypeClass::CONSTANT</member>
+            <li><member scope="com::sun::star::uno">TypeClass::CONSTANTS</member>
+            <li><member scope="com::sun::star::uno">TypeClass::SINGLETON</member>
+            </ul>
+
+        @param depth
+            specifies the depth of search in the underlying tree of type
+            descriptions. Clients should be aware of the fact that specifiying
+            <member>TypeDescriptionSearchDepth::INFINITE</member> can lead to
+            larger delays when constructing or using the
+            <type>XTypeDescriptionEnumeration</type> instance.
+
+        @returns
+            an enumeration of type descriptions.
+
+            <p>The enumeration returns implementations of
+            <type>XTypeDescription</type>. Following concrete UNOIDL parts
+            represented by specialized interfaces derived from
+            <type>XTypeDescription</type> can be returned by the enumerator:
+
+            <table border=1>
+            <th>IDL       </th><th>interface</th>
+            <td>module    </td><td><type>XModuleTypeDescription</td></type>
+            <td>interface </td><td><type>XInterfaceTypeDescription</td></type>
+            <td>service   </td><td><type>XServiceTypeDescription</td></type>
+            <td>struct    </td><td><type>XCompoundTypeDescription</td></type>
+            <td>enum      </td><td><type>XEnumTypeDescription</td></type>
+            <td>exception </td><td><type>XCompoundTypeDescription</td></type>
+            <td>typedef   </td><td><type>XIndirectTypeDescription</td></type>
+            <td>constant  </td><td><type>XConstantTypeDescription</td></type>
+            <td>constants </td><td><type>XConstantsTypeDescription</td></type>
+            <td>singleton </td><td><type>XSingletonTypeDescription</td></type>
+            </table>
+
+        @throws NoSuchTypeNameException
+            in case that the given type name does not exist.
+
+        @throws InvalidTypeNameException
+            in case that the given type name does exist, but does not specify
+            an UNOIDL module.
+      */
+    XTypeDescriptionEnumeration
+    createTypeDescriptionEnumeration(
+            [in] string moduleName,
+            [in] sequence< com::sun::star::uno::TypeClass > types,
+            [in] TypeDescriptionSearchDepth depth )
+        raises( NoSuchTypeNameException, InvalidTypeNameException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

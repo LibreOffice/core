@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: mi $ $Date: 2003-01-21 13:17:35 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:37:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,8 @@ TARGET=udkapi
 # ------------------------------------------------------------------
 
 UNOIDLDBFILES= \
+    $(UCR)$/css.db \
+    $(UCR)$/cssutil.db \
     $(UCR)$/cssbeans.db \
     $(UCR)$/cssbridge.db \
     $(UCR)$/cssconnection.db\
@@ -83,6 +85,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssio.db \
     $(UCR)$/cssjava.db \
     $(UCR)$/csslang.db \
+    $(UCR)$/csssec.db \
     $(UCR)$/cssloader.db \
     $(UCR)$/cssreflection.db \
     $(UCR)$/cssregistry.db \
@@ -91,10 +94,12 @@ UNOIDLDBFILES= \
     $(UCR)$/cssperftest.db \
     $(UCR)$/cssbridgetest.db \
     $(UCR)$/cssuno.db \
+    $(UCR)$/cssulog.db \
     $(UCR)$/csscorba.db \
     $(UCR)$/cssiop.db \
     $(UCR)$/cssiiop.db \
-    $(UCR)$/cssgiop.db 
+    $(UCR)$/cssgiop.db \
+    $(UCR)$/csstask.db
 
 # --- Targets ------------------------------------------------------
 

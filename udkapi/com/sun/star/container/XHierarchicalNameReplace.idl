@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XHierarchicalNameReplace.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:16:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,11 +109,6 @@ interface XHierarchicalNameReplace : com::sun::star::container::XHierarchicalNam
 }; }; }; };
 
 /*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1  2001/09/12 11:26:25  bei
-    #80424#, #91373#
-
 
 =============================================================================*/
 #endif

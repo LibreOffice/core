@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertyContainer.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:16:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ module com {  module sun {  module star {  module beans {
 /** makes it possible to add and remove properties to or from an object.
 
     <p>Some scripting engines cannot access properties directly when the
-    property set is changed.  Please use <member>XPropertySet::getPropertyValue</type>
+    property set is changed.  Please use <member>XPropertySet::getPropertyValue</member>
     etc. in this case. </p>
  */
 interface XPropertyContainer: com::sun::star::uno::XInterface

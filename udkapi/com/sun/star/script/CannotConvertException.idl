@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CannotConvertException.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:17:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,23 +101,6 @@ exception CannotConvertException: com::sun::star::uno::Exception
 }; }; }; };
 
 /*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2002/01/23 08:52:21  dbo
-    #96711# IDL documentation review
-
-    Revision 1.4  2000/11/08 12:28:52  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:35  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:38  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
 
 =============================================================================*/
 #endif

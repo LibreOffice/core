@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2003-01-21 13:17:34 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:37:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ INCLUDES= \
     com$/sun$/star$/beans$/makefile.mk \
     com$/sun$/star$/lang$/makefile.mk \
     com$/sun$/star$/uno$/makefile.mk \
+    com$/sun$/star$/uno$/util$/logging$/makefile.mk \
     com$/sun$/star$/corba$/makefile.mk			\
     com$/sun$/star$/corba$/iop$/makefile.mk 	\
     com$/sun$/star$/corba$/giop$/makefile.mk 	\

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: mi $ $Date: 2003-01-21 13:16:59 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:36:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,15 +75,20 @@ PACKAGE=com$/sun$/star$/reflection
 IDLFILES=\
     CoreReflection.idl\
     FieldAccessMode.idl\
+    InvalidTypeNameException.idl\
     InvocationTargetException.idl\
     MethodMode.idl\
+    NoSuchTypeNameException.idl\
     ParamInfo.idl\
     ParamMode.idl\
     ProxyFactory.idl\
     TypeDescriptionManager.idl\
     TypeDescriptionProvider.idl\
+    TypeDescriptionSearchDepth.idl\
     XArrayTypeDescription.idl\
     XCompoundTypeDescription.idl\
+    XConstantTypeDescription.idl\
+    XConstantsTypeDescription.idl\
     XUnionTypeDescription.idl\
     XEnumTypeDescription.idl\
     XIdlArray.idl\
@@ -100,8 +105,14 @@ IDLFILES=\
     XInterfaceMethodTypeDescription.idl\
     XInterfaceTypeDescription.idl\
     XMethodParameter.idl\
+    XModuleTypeDescription.idl\
+    XPropertyTypeDescription.idl\
     XProxyFactory.idl\
+    XServiceTypeDescription.idl\
+    XSingletonTypeDescription.idl\
     XTypeDescription.idl\
+    XTypeDescriptionEnumeration.idl\
+    XTypeDescriptionEnumerationAccess.idl
 
 # ------------------------------------------------------------------
 

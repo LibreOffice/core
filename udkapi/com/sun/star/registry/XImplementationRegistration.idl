@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XImplementationRegistration.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:17:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:36:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,9 @@ interface XImplementationRegistration: com::sun::star::uno::XInterface
             specifies the location of the component with the URL.
 
         @param xReg
-            specifies the registry where the component should be installed. If it is a NULL interface
-            the component will be installed in the system registry.
+            specifies the registry where the component should be installed.
+            If it is a NULL interface, then the component will be installed
+            in the system registry (if this feature is supported).
      */
     void registerImplementation( [in] string aImplementationLoader,
              [in] string aLocation,
@@ -112,8 +113,9 @@ interface XImplementationRegistration: com::sun::star::uno::XInterface
             specifies the location of the component with the URL.
 
         @param xReg
-            specifies the registry where the component should be installed. If it is a NULL interface
-            the component will be revoked from the system registry.
+            specifies the registry where the component should be installed.
+            If it is a NULL interface, then the component will be revoked
+            from the system registry (if this feature is supported).
      */
     boolean revokeImplementation( [in] string aLocation,
              [in] com::sun::star::registry::XSimpleRegistry xReg );
@@ -155,41 +157,6 @@ interface XImplementationRegistration: com::sun::star::uno::XInterface
 }; }; }; };
 
 /*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.7  2002/10/03 12:44:10  mi
-    #94968# IDL reviews merged
-
-    Revision 1.6.2.1  2002/03/26 14:24:17  jsc
-    #98365# reviewed
-
-    Revision 1.6  2001/11/16 15:05:59  mi
-    proofing by Richard Holt
-
-    Revision 1.5  2001/03/16 15:10:39  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.4  2000/11/08 12:28:50  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:32  hjs
-    initial import
-
-    Revision 1.6  2000/09/11 11:52:37  mi
-    documentation merged from XML
-
-    Revision 1.4  2000/03/09 13:28:37  jsc
-    #74029# insert misssing or change documentation
-
-    Revision 1.3  2000/02/07 11:24:45  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.2  1999/11/25 16:03:32  mi
-    welforming HTML for XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:44  jsc
-    new
-
 
 =============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OleBridgeSupplierVar1.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:16:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 /** maps UNO types to COM types and vice versa. It is optimized for use in a
      remote szenario. <p>
 The functionality is basically the same as
-<type scope="com::sun::star::bridge">com::sun::star::bridge::OleBridgeSupplier2</type>.
+<type scope="com::sun::star::bridge">OleBridgeSupplier2</type>.
 However, the implementation should be optimized for remote access. For example, it could
 try to reduce the calls into the remote process. Also it could create components on its own behalf in the remote process, if this increases performance.
 */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NamingService.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:17:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,29 +85,6 @@ service NamingService
 /*=============================================================================
 
       Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.6  2002/10/03 12:44:30  mi
-      #94968# IDL reviews merged
-
-      Revision 1.5.2.1  2002/06/05 16:38:42  jbu
-      documentation reviewed
-
-      Revision 1.5  2001/11/20 10:20:42  mi
-      proofing by Richard Holt
-
-      Revision 1.4  2000/11/08 12:29:00  mi
-      moved from api
-
-      Revision 1.1.1.1  2000/09/18 23:36:18  hjs
-      initial import
-
-      Revision 1.3  2000/09/11 11:53:04  mi
-      documentation merged from XML
-
-      Revision 1.1  1999/11/12 15:03:55  mm
-      naming service
-
 
 =============================================================================*/
 #endif

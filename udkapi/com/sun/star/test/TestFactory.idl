@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestFactory.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:17:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:37:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ module com { module sun { module star { module test {
 /** describes a factory of services with interfaces for testing purposes.
 
     <p>It create instances that support the interface
-    <type>com::sun::star::test::XSimpleTest</type>.
+    <type scope="com::sun::star::test">XSimpleTest</type>.
 
     <p>The services are accessed through interface, service or object
     names.  The name test service must begin with "test." followed by the

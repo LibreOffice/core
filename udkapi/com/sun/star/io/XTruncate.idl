@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTruncate.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:16:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,14 +96,6 @@ interface XTruncate: com::sun::star::uno::XInterface
 }; }; }; };
 
 /*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2001/03/16 15:10:36  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.1  2001/02/02 16:20:03  mi
-    new interface XTruncate
-
 
 =============================================================================*/
 #endif

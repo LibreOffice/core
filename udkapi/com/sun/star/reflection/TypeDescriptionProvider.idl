@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescriptionProvider.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:16:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #include <com/sun/star/lang/XComponent.idl>
 #endif
 
+#ifndef __com_sun_star_reflection_XTypeDescriptionEnumerationAccess_idl__
+#include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.idl>
+#endif
 
 //=============================================================================
 
@@ -94,12 +97,18 @@ service TypeDescriptionProvider
         The returned values are of interface type <type>XTypeDescription</type>.
     */
     interface com::sun::star::container::XHierarchicalNameAccess;
+
     /** Interface to signal shutdown to the provider.<br>
         This has to be done manually, because usually each provider references
         its manager (which may implement type caching) for late resolution of
         partial types (e.g. parameter types).
     */
     interface com::sun::star::lang::XComponent;
+
+    /** Interface for creating enumerations for type descriptions supported
+        by this <type>TypeDescriptionProvider</type>
+    */
+    [optional] interface XTypeDescriptionEnumerationAccess;
 };
 
 //=============================================================================
@@ -107,38 +116,6 @@ service TypeDescriptionProvider
 }; }; }; };
 
 /*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.8  2002/11/06 10:26:47  dbo
-    #104560# docu
-
-    Revision 1.7  2002/10/29 14:32:33  dbo
-    #104560# docu
-
-    Revision 1.6  2002/03/08 17:19:13  dbo
-    #96711# reviewed reflection API documentation
-
-    Revision 1.5  2001/11/16 15:02:57  mi
-    proofing by Richard Holt
-
-    Revision 1.4  2000/11/08 12:28:46  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:31  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:36  mi
-    documentation merged from XML
-
-    Revision 1.3  1999/11/18 11:49:58  mi
-    XComponent now in module lang
-
-    Revision 1.2  1999/11/15 16:05:40  dbo
-    doc added
-
-    Revision 1.1.1.1  1999/11/11 09:48:44  jsc
-    new
-
 
 =============================================================================*/
 #endif

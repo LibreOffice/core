@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OleApplicationRegistration.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:16:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:34:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,32 +103,6 @@ service OleApplicationRegistration
 }; }; }; };
 
 /*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.7  2002/01/22 09:22:29  jl
-    #96764# documentation review
-
-    Revision 1.6  2001/11/16 14:24:19  mi
-    proofing by Richard Holt
-
-    Revision 1.5  2000/12/11 16:09:40  mi
-    documentation syntax fixed and some minor semantic documentation fixes
-
-    Revision 1.4  2000/11/08 12:28:26  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:56  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:52:14  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/01/03 12:03:19  mi
-    reference manual
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
 
 =============================================================================*/
 #endif
