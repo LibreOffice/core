@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 11:12:36 $
+ *  last change: $Author: vg $ $Date: 2003-07-28 12:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1022,6 +1022,10 @@ SvGlobalName Storage::GetClassName()
     if( aCompObj.Load() )
         return SvGlobalName( (const CLSID&) aCompObj.GetClsId() );
     pIo->ResetError();
+
+    if ( pEntry )
+        return SvGlobalName( (const CLSID&) pEntry->aEntry.GetClassId() );
+
     return SvGlobalName();
 }
 
