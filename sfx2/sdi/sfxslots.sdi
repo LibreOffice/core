@@ -2,7 +2,7 @@
     module StarApplicationFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: mba $ $Date: 2002-06-17 11:24:44 $ $Revision: 1.9 $
+    $Author: mba $ $Date: 2002-06-27 07:33:11 $ $Revision: 1.10 $
     $Logfile:   T:/sfx2/sdi/sfxslots.sdv  $ $Workfile:   SFXSLOTS.SDI  $
 =========================================================================*/
 
@@ -102,6 +102,7 @@ TypeLibFile( "sfxslots.tlb" )
         INT32       DeletedChars    MID_SEARCH_DELETEDCHARS;
         INT32       InsertedChars   MID_SEARCH_INSERTEDCHARS;
         INT32       TransliterateFlags MID_SEARCH_TRANSLITERATEFLAGS;
+        INT16       Command         MID_SEARCH_COMMAND;
     };
     item SvxSearch SvxSearchItem;
 
