@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-08 15:05:01 $
+ *  last change: $Author: fs $ $Date: 2002-10-23 12:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,8 +216,12 @@ using namespace ::com::sun::star::util;
     #define XResetListener ::com::sun::star::form::XResetListener
     #define XLoadable ::com::sun::star::form::XLoadable
     #define XColumnsSupplier ::com::sun::star::sdbcx::XColumnsSupplier
+    #define XDispatchProviderInterceptor ::com::sun::star::frame::XDispatchProviderInterceptor
+    #define XDispatchProvider ::com::sun::star::frame::XDispatchProvider
 #else
     using ::com::sun::star::sdbcx::XColumnsSupplier;
+    using ::com::sun::star::frame::XDispatchProviderInterceptor;
+    using ::com::sun::star::frame::XDispatchProvider;
 #endif
 
 
@@ -2152,6 +2156,24 @@ void FmXGridPeer::dispose() throw( RuntimeException )
     m_aUpdateListeners.disposeAndClear(aEvt);
     m_aContainerListeners.disposeAndClear(aEvt);
     VCLXWindow::dispose();
+
+    // release all interceptors
+    // discovered during #100312# - 2002-10-23 - fs@openoffice.org
+    Reference< XDispatchProviderInterceptor > xInterceptor( m_xFirstDispatchInterceptor );
+    m_xFirstDispatchInterceptor.clear();
+    while ( xInterceptor.is() )
+    {
+        // tell the interceptor it has a new (means no) predecessor
+        xInterceptor->setMasterDispatchProvider( NULL );
+
+        // ask for it's successor
+        Reference< XDispatchProvider > xSlave = xInterceptor->getSlaveDispatchProvider();
+        // and give it the new (means no) successoert
+        xInterceptor->setSlaveDispatchProvider( NULL );
+
+        // start over with the next chain element
+        xInterceptor = xInterceptor.query( xSlave );
+    }
 
     DisConnectFromDispatcher();
     setRowSet(Reference< XRowSet > ());
