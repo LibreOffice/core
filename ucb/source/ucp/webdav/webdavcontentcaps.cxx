@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontentcaps.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-10-27 08:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ const ::ucb::PropertyInfoTableEntry
         ///////////////////////////////////////////////////////////////
         // Required properties
         ///////////////////////////////////////////////////////////////
+
         {
             "ContentType",
             -1,
@@ -172,8 +173,13 @@ const ::ucb::PropertyInfoTableEntry
             "Title",
             -1,
             &getCppuType( static_cast< const OUString * >( 0 ) ),
-            PropertyAttribute::BOUND | PropertyAttribute::READONLY
+            PropertyAttribute::BOUND
         },
+
+        ///////////////////////////////////////////////////////////////
+        // Optional standard properties
+        ///////////////////////////////////////////////////////////////
+
         {
             "Size",
             -1,
@@ -192,6 +198,17 @@ const ::ucb::PropertyInfoTableEntry
             &getCppuType( static_cast< const DateTime * >( 0 ) ),
             PropertyAttribute::BOUND | PropertyAttribute::READONLY
         },
+        {
+            "MediaType",
+            -1,
+            &getCppuType( static_cast< const OUString * >( 0 ) ),
+            PropertyAttribute::BOUND | PropertyAttribute::READONLY
+        },
+
+        ///////////////////////////////////////////////////////////////
+        // New properties
+        ///////////////////////////////////////////////////////////////
+
         {
             *new OString(OUStringToOString(DAVProperties::CREATIONDATE,RTL_TEXTENCODING_ASCII_US)),
             -1,
@@ -259,13 +276,6 @@ const ::ucb::PropertyInfoTableEntry
             PropertyAttribute::BOUND | PropertyAttribute::READONLY
         },
 
-
-        ///////////////////////////////////////////////////////////////
-        // Optional standard properties
-        ///////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////
-        // New properties
-        ///////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////
         // EOT
         ///////////////////////////////////////////////////////////////
@@ -298,6 +308,7 @@ const ::ucb::CommandInfoTableEntry& Content::getCommandInfoTable()
         ///////////////////////////////////////////////////////////////
         // Required commands
         ///////////////////////////////////////////////////////////////
+
         {
             "getCommandInfo",
             -1,
@@ -318,9 +329,11 @@ const ::ucb::CommandInfoTableEntry& Content::getCommandInfoTable()
             -1,
             &getCppuType( static_cast< Sequence< PropertyValue > * >( 0 ) )
         },
+
         ///////////////////////////////////////////////////////////////
         // Optional standard commands
         ///////////////////////////////////////////////////////////////
+
         {
             "delete",
             -1,
@@ -336,13 +349,16 @@ const ::ucb::CommandInfoTableEntry& Content::getCommandInfoTable()
             -1,
             &getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
         },
-        /*
         {
             "transfer",
             -1,
             &getCppuType( static_cast< TransferInfo * >( 0 ) )
         },
-        */
+
+        ///////////////////////////////////////////////////////////////
+        // New commands
+        ///////////////////////////////////////////////////////////////
+
         /*
         {
             "COPY",
@@ -355,9 +371,7 @@ const ::ucb::CommandInfoTableEntry& Content::getCommandInfoTable()
             &getCppuType( static_cast< const OUString * >( 0 ) ),
         },
         */
-        ///////////////////////////////////////////////////////////////
-        // New commands
-        ///////////////////////////////////////////////////////////////
+
         ///////////////////////////////////////////////////////////////
         // EOT
         ///////////////////////////////////////////////////////////////

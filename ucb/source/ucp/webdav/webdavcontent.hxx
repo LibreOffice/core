@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-10-27 08:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,12 +180,17 @@ private:
              ::com::sun::star::beans::Property >& rProperties );
   void setPropertyValues(
              const ::com::sun::star::uno::Sequence<
-             ::com::sun::star::beans::PropertyValue >& rValues);
+             ::com::sun::star::beans::PropertyValue >& rValues,
+                const ::com::sun::star::uno::Reference<
+                ::com::sun::star::ucb::XCommandEnvironment >& Environment );
 
   typedef vos::ORef< Content > ContentRef;
   typedef std::list< ContentRef > ContentRefList;
   void queryChildren( ContentRefList& rChildren);
 
+  sal_Bool exchangeIdentity(
+                const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::ucb::XContentIdentifier >& xNewId );
 
   // Command "insert"
   void insert(com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xInputStream,
