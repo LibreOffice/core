@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:35:55 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 17:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1081,7 +1081,7 @@ void ScHTMLExport::WriteCell( USHORT nCol, USHORT nRow, USHORT nTab )
     BOOL bBold          = ( WEIGHT_BOLD     <= rWeightItem.GetWeight() );
     BOOL bItalic        = ( ITALIC_NONE     != rPostureItem.GetPosture() );
     BOOL bUnderline     = ( UNDERLINE_NONE  != rUnderlineItem.GetUnderline() );
-    BOOL bSetFontColor  = ( COL_BLACK       != rColorItem.GetValue().GetColor() );
+    BOOL bSetFontColor  = ( COL_AUTO        != rColorItem.GetValue().GetColor() );  // #97650# default is AUTO now
 #if 0
 // keine StyleSheet-Fontangaben: hart fuer jede Zelle
     BOOL bSetFontName   = TRUE;
