@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:12:31 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,111 +71,29 @@ ModelessDialog RID_SVXDLG_RUBY
     HelpId = HID_RUBY_DIALOG;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 227 , 195 ) ;
-    Text = "Ruby" ;
-    Text [ ENGLISH ] = "Ruby" ;
+    Text [ de ] = "Ruby" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     CheckBox CB_AUTO_DETECT
     {
         Pos = MAP_APPFONT ( 6, 6 ) ;
         Size = MAP_APPFONT ( 186 , 12 ) ;
-        Text = "Automatische Erkennung" ;
-        Text [ ENGLISH ] = "Auto detection" ;
-        Text[ english_us ] = "Automatic detection";
-        Text[ portuguese ] = "Reconhecimento automático";
-        Text[ russian ] = "Àâòîìàòè÷åñêîå ğàñïîçíàâàíèå";
-        Text[ greek ] = "Áõôüìáôïò åíôïğéóìüò";
-        Text[ dutch ] = "Automatische herkenning";
-        Text[ french ] = "Détection automatique";
-        Text[ spanish ] = "Reconocimiento automático";
-        Text[ italian ] = "Riconoscimento automatico";
-        Text[ danish ] = "Automatisk genkendelse";
-        Text[ swedish ] = "Automatisk igenkänning";
-        Text[ polish ] = "Automatyczne wykrywanie";
-        Text[ portuguese_brazilian ] = "Detecção automática";
-        Text[ japanese ] = "è‡ªå‹•èªè­˜";
-        Text[ korean ] = "ìë™ ì¸ì‹";
-        Text[ chinese_simplified ] = "è‡ªåŠ¨è¯†åˆ«";
-        Text[ chinese_traditional ] = "è‡ªå‹•è­˜åˆ¥";
-        Text[ turkish ] = "Otomatik Algılama";
-        Text[ arabic ] = "ßÔİ ÊáŞÇÆí";
-        Text[ catalan ] = "Reconeixement automàtic";
-        Text[ finnish ] = "Automaattinen havainnointi";
-        Text[ thai ] = "à¸•à¸£à¸§à¸ˆà¸«à¸²à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-        Text[ czech ] = "AutomatickÃ¡ detekce";
-        Text[ hebrew ] = "â€®×’×™×œ×•×™ ××•×˜×•××˜×™â€¬";
-        Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤–à¥‹à¤œ";
-        Text[ slovak ] = "AutomatickÃ¡ detekcia";
-        Text[ hungarian ] = "Automatikus felismerÃ©s";
-        Text[ slovenian ] = "Samodejno zaznavanje";
+        Text [ de ] = "Automatische Erkennung" ;
+        Text [ en-US ] = "Automatic detection";
     };
     FixedText FT_LEFT
     {
         Pos = MAP_APPFONT ( 6 , 17 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "~Basistext";
-        Text [English] = "Basis text";
-        Text[ english_us ] = "Base text";
-        Text[ portuguese ] = "Te~xto-base";
-        Text[ russian ] = "Îñíîâíîé òåêñò";
-        Text[ greek ] = "Êåßìåíï âÜóçò";
-        Text[ dutch ] = "~Basistekst";
-        Text[ french ] = "Texte de ~base";
-        Text[ spanish ] = "~Texto de base";
-        Text[ italian ] = "Testo base";
-        Text[ danish ] = "Basistekst";
-        Text[ swedish ] = "~Bastext";
-        Text[ polish ] = "Tekst podstawowy";
-        Text[ portuguese_brazilian ] = "Texto base";
-        Text[ japanese ] = "å¯¾è±¡æ–‡å­—åˆ—";
-        Text[ korean ] = "ëŒ€ìƒ ë¬¸ìì—´";
-        Text[ chinese_simplified ] = "ä¸»æ–‡å­—";
-        Text[ chinese_traditional ] = "ä¸»æ–‡å­—";
-        Text[ turkish ] = "Temel Metin";
-        Text[ arabic ] = "ÇáäÕ ÇáÃÓÇÓí";
-        Text[ catalan ] = "Text base";
-        Text[ finnish ] = "Perusteksti";
-        Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸à¸²à¸™";
-        Text[ czech ] = "ZÃ¡kladnÃ­ text";
-        Text[ hebrew ] = "â€®×˜×§×¡×˜ ×‘×¡×™×¡×™â€¬";
-        Text[ hindi ] = "à¤†à¤§à¤¾à¤° à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥";
-        Text[ slovak ] = "ZÃ¡kladnÃ½ text";
-        Text[ hungarian ] = "AlapszÃ¶veg";
-        Text[ slovenian ] = "Osnovno besedilo";
+        Text [ de ] = "~Basistext";
+        Text [ en-US ] = "Base text";
     };
     FixedText FT_RIGHT
     {
         Pos = MAP_APPFONT ( 109 , 17 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "~Ruby-Text";
-        Text [English] = "Ruby text";
-        Text[ english_us ] = "Ruby text";
-        Text[ portuguese ] = "Texto ~Ruby";
-        Text[ russian ] = "Òåêñò òğàíñêğèïöèè";
-        Text[ greek ] = "Êåßìåíï öùíçôéêŞò ãñáöŞò";
-        Text[ dutch ] = "~Ruby-tekst";
-        Text[ french ] = "Texte ~Ruby";
-        Text[ spanish ] = "~Texto Ruby";
-        Text[ italian ] = "Testo Ruby";
-        Text[ danish ] = "Fonetisk tekst";
-        Text[ swedish ] = "~Ruby-text";
-        Text[ polish ] = "Dopisek fonetyczny";
-        Text[ portuguese_brazilian ] = "Texto ruby";
-        Text[ japanese ] = "ãƒ«ãƒ“æ–‡å­—";
-        Text[ korean ] = "ë§ë§ ë¬¸ì";
-        Text[ chinese_simplified ] = "æ‹¼éŸ³æˆ–æ³¨éŸ³ç¬¦å·";
-        Text[ chinese_traditional ] = "æ³¨éŸ³å­—å…ƒ";
-        Text[ turkish ] = "Ruby Metni";
-        Text[ arabic ] = "äÕ \"ÑæÈí\"";
-        Text[ catalan ] = "Text ruby";
-        Text[ finnish ] = "Ruby-teksti";
-        Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¸‚à¸™à¸²à¸”à¹€à¸¥à¹‡à¸";
-        Text[ czech ] = "Ruby text";
-        Text[ hebrew ] = "â€®×˜×§×¡×˜ × ×•×¡×£ '×¨×•×‘×™'â€¬";
-        Text[ hindi ] = "à¤°à¥‚à¤¬à¥€ à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥";
-        Text[ slovak ] = "Ruby text";
-        Text[ hungarian ] = "Fonetikus Ã¡tirat szÃ¶vege";
-        Text[ slovenian ] = "FonetiÄni zapis";
+        Text [ de ] = "~Ruby-Text";
+        Text [ en-US ] = "Ruby text";
     };
     Edit ED_LEFT_1
     {
@@ -237,35 +155,8 @@ ModelessDialog RID_SVXDLG_RUBY
     {
         Pos = MAP_APPFONT ( 6 , 82 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text = "~Ausrichtung" ;
-        Text [ ENGLISH ] = "Adjust" ;
-        Text[ english_us ] = "Alignment";
-        Text[ portuguese ] = "~Alinhamento";
-        Text[ russian ] = "Âûğàâíèâàí.";
-        Text[ greek ] = "Óôïß÷éóç";
-        Text[ dutch ] = "~Uitlijning";
-        Text[ french ] = "Alignement";
-        Text[ spanish ] = "Alineación";
-        Text[ italian ] = "Allineamento";
-        Text[ danish ] = "Justering";
-        Text[ swedish ] = "~Justering";
-        Text[ polish ] = "Wyrównanie";
-        Text[ portuguese_brazilian ] = "Alinhamento";
-        Text[ japanese ] = "é…ç½®";
-        Text[ korean ] = "ë§ì¶¤";
-        Text[ chinese_simplified ] = "å¯¹é½";
-        Text[ chinese_traditional ] = "å°é½Š";
-        Text[ turkish ] = "Ayarlama";
-        Text[ arabic ] = "ÇáãÍÇĞÇÉ";
-        Text[ catalan ] = "Alineament";
-        Text[ finnish ] = "Tasaus";
-        Text[ thai ] = "à¸ˆà¸±à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
-        Text[ czech ] = "ZarovnÃ¡nÃ­";
-        Text[ hebrew ] = "â€®×™×™×©×•×¨â€¬";
-        Text[ hindi ] = "à¤ªà¤‚à¤•à¥à¤¤à¤¿à¤•à¤°à¤£";
-        Text[ slovak ] = "Zarovnanie";
-        Text[ hungarian ] = "IgazÃ­tÃ¡s";
-        Text[ slovenian ] = "Poravnava";
+        Text [ de ] = "~Ausrichtung" ;
+        Text [ en-US ] = "Alignment";
     };
     ListBox LB_ADJUST
     {
@@ -273,7 +164,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Size = MAP_APPFONT ( 35 , 60 ) ;
         DropDown = TRUE;
         Border = TRUE;
-        StringList =
+        StringList [ de ] =
         {
             "Links" ;
             "Zentriert" ;
@@ -281,15 +172,7 @@ ModelessDialog RID_SVXDLG_RUBY
             "0 1 0" ;
             "1 2 1" ;
         };
-        StringList [English] =
-        {
-            "Left" ;
-            "Center" ;
-            "Right" ;
-            "0 1 0" ;
-            "1 2 1" ;
-        };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             "; Links" ;
             "; Zentriert" ;
@@ -297,7 +180,7 @@ ModelessDialog RID_SVXDLG_RUBY
             "; 0 1 0" ;
             "; 1 2 1" ;
     };
-    StringList [ english_us ] =
+    StringList [ en-US ] =
     {
             "Left" ;
             "Center" ;
@@ -305,248 +188,13 @@ ModelessDialog RID_SVXDLG_RUBY
             "0 1 0" ;
             "1 2 1" ;
     };
-    StringList [ portuguese ] =
-    {
-            "Esquerda" ;
-            "Centrado" ;
-            "Direita" ;
-            "0 1 0" ;
-            "1 2 1" ;
-    };
-    StringList [ russian ] =
-    {
-            "Ñëåâà" ;
-            "Ïî öåíòğó" ;
-            "Ñïğàâà" ;
-            "0 1 0" ;
-            "1 2 1" ;
-    };
-    StringList [ greek ] =
-    {
-            "ÁñéóôåñÜ" ;
-            "Êİíôñï" ;
-            "ÄåîéÜ" ;
-            "0 1 0" ;
-            "1 2 1" ;
-    };
-    StringList [ dutch ] =
-    {
-            "Links" ;
-            "Gecentreerd" ;
-            "Rechts" ;
-            "0 1 0" ;
-            "1 2 1" ;
-    };
-    StringList [ french ] =
-    {
-            "À gauche" ;
-            "Centré" ;
-            "À droite" ;
-            "0 1 0" ;
-            "1 2 1" ;
-    };
-    StringList [ spanish ] =
-    {
-            "Izquierda" ;
-            "Centrado" ;
-            "Derecha" ;
-            "0 1 0" ;
-            "1 2 1" ;
-    };
-    StringList [ italian ] =
-    {
-            "A sinistra" ;
-            "Al centro" ;
-            "A destra" ;
-            "0 1 0" ;
-            "1 2 1" ;
-    };
-    StringList [ danish ] =
-    {
-            "Venstre" ;
-            "Centreret" ;
-            "Højre" ;
-            "0 1 0" ;
-            "1 2 1" ;
-    };
-    StringList [ swedish ] =
-    {
-            "Till vänster" ;
-            "Centrerat" ;
-            "Till höger" ;
-            "0 1 0" ;
-            "1 2 1" ;
-    };
-    StringList [ polish ] =
-    {
-            "Do lewej" ;
-            "Do œrodka" ;
-            "Do prawej" ;
-            "0 1 0" ;
-            "1 2 1" ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
-            "Esquerda" ;
-            "Centro" ;
-            "Direita" ;
-            "0 1 0" ;
-            "1 2 1" ;
-    };
-    StringList [ japanese ] =
-    {
-            "å·¦æƒãˆ" ;
-            "ä¸­å¤®æƒãˆ" ;
-            "å³æƒãˆ" ;
-            "0 1 0" ;
-            "1 2 1" ;
-    };
-    StringList [ korean ] =
-    {
-            "ì™¼ìª½" ;
-            "ê°€ìš´ë°" ;
-            "ì˜¤ë¥¸ìª½" ;
-            "0 1 0" ;
-            "1 2 1" ;
-    };
-    StringList [ chinese_simplified ] =
-    {
-            "å‘å·¦" ;
-            "å±…ä¸­" ;
-            "å‘å³" ;
-            "0 1 0" ;
-            "1 2 1" ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            "å‘å·¦" ;
-            "ç½®ä¸­" ;
-            "å‘å³" ;
-            "0 1 0" ;
-            "1 2 1" ;
-    };
-    StringList [ turkish ] =
-    {
-            "Sol" ;
-            "Merkez" ;
-            "Sağ" ;
-            "0 1 0" ;
-            "1 2 1" ;
-    };
-    StringList [ arabic ] =
-    {
-            "íÓÇÑ" ;
-            "ÊæÓíØ" ;
-            "íãíä" ;
-            "0 1 0" ;
-            "1 2 1" ;
-    };
-    StringList [ catalan ] =
-    {
-         "Esquerra" ;
-         "Centre" ;
-         "Dreta" ;
-         "0 1 0" ;
-         "1 2 1" ;
-    };
-    StringList [ finnish ] =
-    {
-         "Vasen" ;
-         "Keskellä" ;
-         "Oikea" ;
-         "0 1 0" ;
-         "1 2 1" ;
-    };
-    StringList [ thai ] =
-    {
-        "à¸‹à¹‰à¸²à¸¢" ;
-        "à¸•à¸£à¸‡à¸à¸¥à¸²à¸‡" ;
-        "à¸‚à¸§à¸²" ;
-        "0 1 0" ;
-        "1 2 1" ;
-    };
-    StringList [ czech ] =
-    {
-        "Vlevo" ;
-        "Na stÅ™ed" ;
-        "Vpravo" ;
-        "0 1 0" ;
-        "1 2 1" ;
-    };
-    StringList [ hebrew ] =
-    {
-        "â€®×©×××œâ€¬" ;
-        "â€®××¨×›×–â€¬" ;
-        "â€®×™××™×Ÿâ€¬" ;
-        "â€®0 1 0â€¬" ;
-        "â€®1 2 1â€¬" ;
-    };
-    StringList [ hindi ] =
-    {
-        "à¤¬à¤¾à¤¯à¤¾à¤" ;
-        "à¤®à¤§à¥à¤¯à¤­à¤¾à¤—" ;
-        "à¤¦à¤¾à¤¹à¤¿à¤¨à¤¾" ;
-        "0 1 0" ;
-        "1 2 1" ;
-    };
-    StringList [ slovak ] =
-    {
-        "VÄ¾avo" ;
-        "Na stred" ;
-        "Vpravo" ;
-        "0 1 0" ;
-        "1 2 1" ;
-    };
-    StringList [ hungarian ] =
-    {
-        "Bal" ;
-        "kÃ¶zÃ©p" ;
-        "Jobb" ;
-        "0 1 0 " ;
-        "1 2 1" ;
-    };
-    StringList [ slovenian ] =
-    {
-        "Levo" ;
-        "Sredina" ;
-        "Desno" ;
-        "0 1 0" ;
-        "1 2 1" ;
-    };
     };
     FixedText FT_POSITION
     {
         Pos = MAP_APPFONT ( 43 , 82 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text = "~Position" ;
-        Text [ ENGLISH ] = "Position" ;
-        Text[ english_us ] = "Position";
-        Text[ portuguese ] = "~Posição";
-        Text[ russian ] = "Ïîëîæåíèå";
-        Text[ greek ] = "Èİóç";
-        Text[ dutch ] = "~Positie";
-        Text[ french ] = "Position";
-        Text[ spanish ] = "Posición";
-        Text[ finnish ] = "Sijainti";
-        Text[ italian ] = "Posizione";
-        Text[ danish ] = "Placering";
-        Text[ swedish ] = "~Position";
-        Text[ polish ] = "Pozycja";
-        Text[ portuguese_brazilian ] = "Posição";
-        Text[ japanese ] = "ä½ç½®";
-        Text[ korean ] = "ìœ„ì¹˜";
-        Text[ chinese_simplified ] = "ä½ç½®";
-        Text[ chinese_traditional ] = "ä½ç½®";
-        Text[ turkish ] = "Pozisyon";
-        Text[ arabic ] = "ÇáæÖÚ";
-        Text[ catalan ] = "Posició";
-        Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
-        Text[ czech ] = "UmÃ­stÄ›nÃ­";
-        Text[ hebrew ] = "â€®××™×§×•×â€¬";
-        Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨";
-        Text[ slovak ] = "Umiestnenie";
-        Text[ hungarian ] = "PozÃ­ciÃ³";
-        Text[ slovenian ] = "PoloÅ¾aj";
+        Text [ de ] = "~Position" ;
+        Text [ en-US ] = "Position";
     };
     ListBox LB_POSITION
     {
@@ -554,190 +202,28 @@ ModelessDialog RID_SVXDLG_RUBY
         Size = MAP_APPFONT ( 35 , 60 ) ;
         DropDown = TRUE;
         Border = TRUE;
-        StringList =
+        StringList [ de ] =
         {
             "Oben" ;
             "Unten" ;
         };
-        StringList [English] =
-        {
-            "Top" ;
-            "Bottom" ;
-        };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
         "; Oben" ;
         "; Unten" ;
     };
-    StringList [ english_us ] =
+    StringList [ en-US ] =
     {
         "Top" ;
         "Bottom" ;
-    };
-    StringList [ portuguese ] =
-    {
-        "Topo" ;
-        "Base" ;
-    };
-    StringList [ russian ] =
-    {
-        "Ñâåğõó" ;
-        "Ñíèçó" ;
-    };
-    StringList [ greek ] =
-    {
-        "ĞÜíù" ;
-        "ÊÜôù" ;
-    };
-    StringList [ dutch ] =
-    {
-        "Boven" ;
-        "Onder" ;
-    };
-    StringList [ french ] =
-    {
-        "En haut" ;
-        "En bas" ;
-    };
-    StringList [ spanish ] =
-    {
-        "Arriba" ;
-        "Abajo" ;
-    };
-    StringList [ finnish ] =
-    {
-        "Yläreuna" ;
-        "Alareuna" ;
-    };
-    StringList [ italian ] =
-    {
-        "In alto" ;
-        "In basso" ;
-    };
-    StringList [ danish ] =
-    {
-        "Top" ;
-        "Bund" ;
-    };
-    StringList [ swedish ] =
-    {
-        "Uppe" ;
-        "Nere" ;
-    };
-    StringList [ polish ] =
-    {
-        "U góry" ;
-        "U do³u" ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
-        "Em cima" ;
-        "Em baixo" ;
-    };
-    StringList [ japanese ] =
-    {
-        "ä¸Š" ;
-        "ä¸‹" ;
-    };
-    StringList [ korean ] =
-    {
-        "ìœ„" ;
-        "ì•„ë˜" ;
-    };
-    StringList [ chinese_simplified ] =
-    {
-        "å‘ä¸Š" ;
-        "å‘ä¸‹" ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-        "å‘ä¸Š" ;
-        "å‘ä¸‹" ;
-    };
-    StringList [ turkish ] =
-    {
-        "Üst" ;
-        "Alt" ;
-    };
-    StringList [ arabic ] =
-    {
-        "ÃÚáì" ;
-        "ÃÓİá" ;
-    };
-    StringList [ catalan ] =
-    {
-        "Superior" ;
-        "Inferior" ;
-    };
-    StringList [ thai ] =
-    {
-        "à¸”à¹‰à¸²à¸™à¸šà¸™" ;
-        "à¸”à¹‰à¸²à¸™à¸¥à¹ˆà¸²à¸‡" ;
-    };
-    StringList [ czech ] =
-    {
-        "NahoÅ™e" ;
-        "Dole" ;
-    };
-    StringList [ hebrew ] =
-    {
-        "â€®×¢×œ×™×•×Ÿâ€¬" ;
-        "â€®×ª×—×ª×•×Ÿâ€¬" ;
-    };
-    StringList [ hindi ] =
-    {
-        "à¤Šà¤ªà¤°" ;
-        "à¤¨à¥€à¤šà¥‡" ;
-    };
-    StringList [ slovak ] =
-    {
-        "Navrchu" ;
-        "Dole" ;
-    };
-    StringList [ hungarian ] =
-    {
-        "FelÃ¼l" ;
-        "Alul" ;
-    };
-    StringList [ slovenian ] =
-    {
-        "Zgoraj" ;
-        "Spodaj" ;
     };
     };
     FixedText FT_CHAR_STYLE
     {
         Pos = MAP_APPFONT ( 80 , 82 ) ;
         Size = MAP_APPFONT ( 89 , 8 ) ;
-        Text = "~Zeichenvorlage für Ruby-Text" ;
-        Text [ ENGLISH ] = "Character style for ruby text" ;
-        Text[ english_us ] = "Character Style for ruby text";
-        Text[ portuguese ] = "Estilo de ~caracteres para texto Ruby";
-        Text[ russian ] = "Ñòèëü ñèìâîëîâ òğàíñêğèïöèè";
-        Text[ greek ] = "Óôõë ÷áñáêôŞñùí ãéá êåßìåíï öùíçôéêŞò ãñáöŞò";
-        Text[ dutch ] = "~Tekensjabloon voor Ruby-text";
-        Text[ french ] = "Style de ~caractères pour le texte Ruby";
-        Text[ spanish ] = "~Estilo de carácter para el texto Ruby";
-        Text[ italian ] = "Stile del carattere per testo Ruby";
-        Text[ danish ] = "Tegntypografi for fonetisk tekst";
-        Text[ swedish ] = "~Teckenformatmall för ruby-text";
-        Text[ polish ] = "Styl znaku dopisku fonetycznego";
-        Text[ portuguese_brazilian ] = "Estilo de Caracter para texto ruby";
-        Text[ japanese ] = "ãƒ«ãƒ“ç”¨æ–‡å­—ã‚¹ã‚¿ã‚¤ãƒ«";
-        Text[ korean ] = "ë§ë§ ë¬¸ììš© ìŠ¤íƒ€ì¼";
-        Text[ chinese_simplified ] = "æ‹¼éŸ³æˆ–æ³¨éŸ³ç¬¦å·çš„å­—ç¬¦æ ·å¼";
-        Text[ chinese_traditional ] = "æ³¨éŸ³å­—å…ƒçš„æ¨£å¼";
-        Text[ turkish ] = "Ruby Metni için Karakter Sitili";
-        Text[ arabic ] = "äãØ ÇáÃÍÑİ áäÕ \"ÑæÈí\"";
-        Text[ catalan ] = "Estil de caràcter per text ruby";
-        Text[ finnish ] = "Ruby-tekstin merkkityyli";
-        Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸ªà¸³à¸«à¸£à¸±à¸šà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¸‚à¸™à¸²à¸”à¹€à¸¥à¹‡à¸";
-        Text[ czech ] = "ZnakovÃ½ styl pro Ruby text";
-        Text[ hebrew ] = "â€®×¡×’× ×•×Ÿ ×ª×• ×œ×˜×§×¡×˜ × ×•×¡×£ '×¨×•×‘×™'â€¬";
-        Text[ hindi ] = "à¤°à¥‚à¤¬à¥€ à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤•à¥‡à¤²à¤¿à¤ à¤…à¤•à¥à¤·à¤° à¤¶à¥ˆà¤²à¥€";
-        Text[ slovak ] = "ZnakovÃ½ Å¡tÃ½l pre Ruby text";
-        Text[ hungarian ] = "Fonetikus Ã¡tirat karakterstÃ­lusa";
-        Text[ slovenian ] = "Slog znakov za fonetiÄni zapis";
+        Text [ de ] = "~Zeichenvorlage für Ruby-Text" ;
+        Text [ en-US ] = "Character Style for ruby text";
     };
     ListBox LB_CHAR_STYLE
     {
@@ -751,69 +237,15 @@ ModelessDialog RID_SVXDLG_RUBY
     {
         Pos = MAP_APPFONT ( 171 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Stylist" ;
-        Text [ ENGLISH ] = "Stylist" ;
-        Text[ english_us ] = "Stylist";
-        Text[ portuguese ] = "E~stilista";
-        Text[ russian ] = "Ìàñòåğ ñòèëåé";
-        Text[ greek ] = "Óôõëßóôáò";
-        Text[ dutch ] = "~Stylist";
-        Text[ french ] = "St~yliste";
-        Text[ spanish ] = "Estilista";
-        Text[ italian ] = "Stilista";
-        Text[ danish ] = "Stylist";
-        Text[ swedish ] = "~Stylist";
-        Text[ polish ] = "Sty~lista";
-        Text[ portuguese_brazilian ] = "Estilista";
-        Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒªã‚¹ãƒˆ";
-        Text[ korean ] = "ìŠ¤íƒ€ì¼ë¦¬ìŠ¤íŠ¸";
-        Text[ chinese_simplified ] = "å„ç±»æ ·å¼";
-        Text[ chinese_traditional ] = "å„é¡æ¨£å¼";
-        Text[ turkish ] = "Stil listesi  ";
-        Text[ arabic ] = "ÇáãõÕãã";
-        Text[ catalan ] = "Estilista";
-        Text[ finnish ] = "Tyylityökalu";
-        Text[ thai ] = "à¸•à¸±à¸§à¸­à¸­à¸à¹à¸šà¸š";
-        Text[ czech ] = "Stylista";
-        Text[ hebrew ] = "â€®×”××¡×’× ×Ÿâ€¬";
-        Text[ hindi ] = "à¤¸à¥à¤Ÿà¤‡à¤²à¤¿à¤¸à¥à¤Ÿà¥";
-        Text[ slovak ] = "Å tylista";
-        Text[ hungarian ] = "StÃ­lussegÃ©d";
-        Text[ slovenian ] = "Slogovnik";
+        Text [ de ] = "~Stylist" ;
+        Text [ en-US ] = "Stylist";
     };
     FixedText FT_PREVIEW
     {
         Pos = MAP_APPFONT ( 6, 110 ) ;
         Size = MAP_APPFONT ( 195 , 8 ) ;
-        Text = "Vorschau:" ;
-        Text [ ENGLISH ] = "Preview:" ;
-        Text[ english_us ] = "Preview:";
-        Text[ portuguese ] = "Visualizar:";
-        Text[ russian ] = "Ïğåäâàğèòåëüíûé ïğîñìîòğ:";
-        Text[ greek ] = "Ğñïåğéóêüğçóç:";
-        Text[ dutch ] = "Voorbeeld:";
-        Text[ french ] = "Aperçu :";
-        Text[ spanish ] = "Previsualización:";
-        Text[ italian ] = "Anteprima:";
-        Text[ danish ] = "Eksempel:";
-        Text[ swedish ] = "Förhandsvisning:";
-        Text[ polish ] = "Podgl¹d:";
-        Text[ portuguese_brazilian ] = "Visualizar:";
-        Text[ japanese ] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼:";
-        Text[ korean ] = "ë¯¸ë¦¬ ë³´ê¸°:";
-        Text[ chinese_simplified ] = "é¢„è§ˆï¼š";
-        Text[ chinese_traditional ] = "é è¦½ï¼š";
-        Text[ turkish ] = "Önizleme:";
-        Text[ arabic ] = "ãÚÇíäÉ:";
-        Text[ catalan ] = "Previsualització:";
-        Text[ finnish ] = "Esikatselu:";
-        Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡:";
-        Text[ czech ] = "NÃ¡hled:";
-        Text[ hebrew ] = "â€®×ª×¦×•×’×” ××§×“×™××”:â€¬";
-        Text[ hindi ] = "à¤ªà¥‚à¤°à¥à¤µà¤¦à¥ƒà¤¶à¥à¤¯:";
-        Text[ slovak ] = "NÃ¡hÄ¾ad:";
-        Text[ hungarian ] = "ElÅ‘nÃ©zet";
-        Text[ slovenian ] = "Predogled:";
+        Text [ de ] = "Vorschau:" ;
+        Text [ en-US ] = "Preview:";
     };
     Window WIN_PREVIEW
     {
@@ -826,102 +258,22 @@ ModelessDialog RID_SVXDLG_RUBY
         DefButton = TRUE;
         Pos = MAP_APPFONT ( 65 , 175 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Übernehmen" ;
-        Text [ ENGLISH ] = "Apply" ;
-        Text[ english_us ] = "~Apply";
-        Text[ portuguese ] = "Ap~licar";
-        Text[ russian ] = "Ïğèìåíèòü";
-        Text[ greek ] = "~ÅöáñìïãŞ";
-        Text[ dutch ] = "~Overnemen";
-        Text[ french ] = "Appliquer";
-        Text[ spanish ] = "~Aplicar";
-        Text[ italian ] = "Applica";
-        Text[ danish ] = "~Anvend";
-        Text[ swedish ] = "~Använd";
-        Text[ polish ] = "Zastos~uj";
-        Text[ portuguese_brazilian ] = "Ap~licar";
-        Text[ japanese ] = "é©ç”¨(~A)";
-        Text[ korean ] = "ì ìš©(~A)";
-        Text[ chinese_simplified ] = "é‡‡ç”¨(~A)";
-        Text[ chinese_traditional ] = "æ¡ç”¨(~A)";
-        Text[ turkish ] = "Uygula";
-        Text[ arabic ] = "ÊØÈíŞ";
-        Text[ catalan ] = "Aplica";
-        Text[ finnish ] = "Kä~ytä";
-        Text[ thai ] = "à¹ƒ~à¸Šà¹‰";
-        Text[ czech ] = "PouÅ¾Ã­t";
-        Text[ hebrew ] = "â€®×™×™×©×•×â€¬";
-        Text[ hindi ] = "~à¤²à¤¾à¤—à¥‚ à¤•à¤°à¥‹";
-        Text[ slovak ] = "~PouÅ¾iÅ¥";
-        Text[ hungarian ] = "~Alkalmaz";
-        Text[ slovenian ] = "~Uporabi";
+        Text [ de ] = "~Übernehmen" ;
+        Text [ en-US ] = "~Apply";
     };
     PushButton PB_CLOSE
     {
         Pos = MAP_APPFONT (  118, 175 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "Sch~ließen" ;
-        Text [ ENGLISH ] = "Close" ;
-        Text[ english_us ] = "~Close";
-        Text[ portuguese ] = "~Fechar";
-        Text[ russian ] = "Çàêğûòü";
-        Text[ greek ] = "~Êëåßóéìï";
-        Text[ dutch ] = "S~luiten";
-        Text[ french ] = "Fermer";
-        Text[ spanish ] = "Cerrar";
-        Text[ italian ] = "C~hiudi";
-        Text[ danish ] = "~Luk";
-        Text[ swedish ] = "Stä~ng";
-        Text[ polish ] = "~Zamknij";
-        Text[ portuguese_brazilian ] = "~Fechar";
-        Text[ japanese ] = "é–‰ã˜ã‚‹(~C)";
-        Text[ korean ] = "ë‹«ê¸°(~C)";
-        Text[ chinese_simplified ] = "å…³é—­(~C)";
-        Text[ chinese_traditional ] = "é—œé–‰(~C)";
-        Text[ turkish ] = "Kapat";
-        Text[ arabic ] = "ÅÛáÇŞ";
-        Text[ catalan ] = "Tanca";
-        Text[ finnish ] = "~Sulje";
-        Text[ thai ] = "~à¸›à¸´à¸”";
-        Text[ czech ] = "ZavÅ™Ã­t";
-        Text[ hebrew ] = "â€®×¡×’×™×¨×”â€¬";
-        Text[ hindi ] = "~à¤¬à¤¨à¥à¤¦ à¤•à¤°à¥‹";
-        Text[ slovak ] = "~ZavrieÅ¥";
-        Text[ hungarian ] = "~BezÃ¡rÃ¡s";
-        Text[ slovenian ] = "~Zapri";
+        Text [ de ] = "Sch~ließen" ;
+        Text [ en-US ] = "~Close";
     };
     HelpButton PB_HELP
     {
         Pos = MAP_APPFONT ( 171 , 175 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text[ english_us ] = "Ruby";
-    Text[ portuguese ] = "Ruby";
-    Text[ russian ] = "Òğàíñêğèïöèÿ";
-    Text[ greek ] = "ÖùíçôéêŞ ãñáöŞ";
-    Text[ dutch ] = "Ruby";
-    Text[ french ] = "Ruby";
-    Text[ spanish ] = "Ruby";
-    Text[ italian ] = "Testo Ruby";
-    Text[ danish ] = "Fonetisk tekst";
-    Text[ swedish ] = "Ruby";
-    Text[ polish ] = "Dopisek fonetyczny";
-    Text[ portuguese_brazilian ] = "Ruby";
-    Text[ japanese ] = "ãƒ«ãƒ“";
-    Text[ korean ] = "ë§ë§ ë„£ê¸°";
-    Text[ chinese_simplified ] = "æ‹¼éŸ³å’Œæ³¨éŸ³ç¬¦å·";
-    Text[ chinese_traditional ] = "æ³¨éŸ³";
-    Text[ turkish ] = "Ruby";
-    Text[ arabic ] = "Ïáíá ÕæÊí";
-    Text[ catalan ] = "Caràcter fonètic guia";
-    Text[ finnish ] = "Ruby-teksti";
-    Text[ thai ] = "à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¸‚à¸™à¸²à¸”à¹€à¸¥à¹‡à¸";
-    Text[ czech ] = "Ruby";
-    Text[ hebrew ] = "â€®×¨×•×‘×™â€¬";
-    Text[ hindi ] = "à¤°à¥‚à¤¬à¥€";
-    Text[ slovak ] = "Ruby";
-    Text[ hungarian ] = "Fonetikus Ã¡tirat";
-    Text[ slovenian ] = "FonetiÄni zapis";
+    Text [ en-US ] = "Ruby";
 };
 
 
