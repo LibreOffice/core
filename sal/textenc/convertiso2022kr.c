@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convertiso2022kr.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:51:46 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,11 +256,9 @@ sal_Size ImplConvertIso2022KrToUnicode(ImplTextConverterData const * pData,
         continue;
 
     bad_input:
-        switch (ImplHandleBadInputMbTextToUnicodeConversion(bUndefined,
-                                                            nFlags,
-                                                            &pDestBufPtr,
-                                                            pDestBufEnd,
-                                                            &nInfo))
+        switch (ImplHandleBadInputTextToUnicodeConversion(
+                    bUndefined, sal_True, 0, nFlags, &pDestBufPtr, pDestBufEnd,
+                    &nInfo))
         {
         case IMPL_BAD_INPUT_STOP:
             eState = IMPL_ISO_2022_KR_TO_UNICODE_STATE_ASCII;
@@ -288,11 +286,9 @@ sal_Size ImplConvertIso2022KrToUnicode(ImplTextConverterData const * pData,
         if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0)
             nInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
     else
-        switch (ImplHandleBadInputMbTextToUnicodeConversion(sal_False,
-                                                            nFlags,
-                                                            &pDestBufPtr,
-                                                            pDestBufEnd,
-                                                            &nInfo))
+        switch (ImplHandleBadInputTextToUnicodeConversion(
+                    sal_False, sal_True, 0, nFlags, &pDestBufPtr, pDestBufEnd,
+                    &nInfo))
         {
         case IMPL_BAD_INPUT_STOP:
         case IMPL_BAD_INPUT_CONTINUE:
