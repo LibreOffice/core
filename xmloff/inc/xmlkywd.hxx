@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-16 18:17:45 $
+ *  last change: $Author: dvo $ $Date: 2000-11-17 18:54:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,7 @@ XML_CONSTASCII_ACTION( sXML_columnsplit_avoid, "avoid" );
 XML_CONSTASCII_ACTION( sXML_combine_entries, "combine-entries" );
 XML_CONSTASCII_ACTION( sXML_combine_entries_with_dash, "combine-entries-with-dash" );
 XML_CONSTASCII_ACTION( sXML_combine_entries_with_pp, "combine-entries-with-pp" );
+XML_CONSTASCII_ACTION( sXML_comma_separated, "comma-separated" );
 XML_CONSTASCII_ACTION( sXML_command, "command" );
 XML_CONSTASCII_ACTION( sXML_comment, "comment" );
 XML_CONSTASCII_ACTION( sXML_compose, "compose" );

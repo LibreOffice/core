@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-17 15:41:29 $
+ *  last change: $Author: dvo $ $Date: 2000-11-17 18:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,7 +630,8 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sDocumentIndex(RTL_CONSTASCII_USTRINGPARAM("DocumentIndex")),
     sDocumentIndexMark(RTL_CONSTASCII_USTRINGPARAM("DocumentIndexMark")),
     sActualSize(RTL_CONSTASCII_USTRINGPARAM("ActualSize")),
-    sContourPolyPolygon(RTL_CONSTASCII_USTRINGPARAM("ContourPolyPolygon"))
+    sContourPolyPolygon(RTL_CONSTASCII_USTRINGPARAM("ContourPolyPolygon")),
+    sAnchorCharStyleName(RTL_CONSTASCII_USTRINGPARAM("AnchorCharStyleName"))
 {
     UniReference < XMLPropertySetMapper > xPropMapper =
         new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA );

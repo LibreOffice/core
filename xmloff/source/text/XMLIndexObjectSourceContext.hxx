@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexObjectSourceContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: dvo $ $Date: 2000-11-17 18:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,14 +86,12 @@ class XMLIndexObjectSourceContext : public XMLIndexSourceBaseContext
     const ::rtl::OUString sCreateFromStarCalc;
     const ::rtl::OUString sCreateFromStarChart;
     const ::rtl::OUString sCreateFromStarDraw;
-    const ::rtl::OUString sCreateFromStarImage;
     const ::rtl::OUString sCreateFromStarMath;
     const ::rtl::OUString sCreateFromOtherEmbeddedObjects;
 
     sal_Bool bUseCalc;
     sal_Bool bUseChart;
     sal_Bool bUseDraw;
-    sal_Bool bUseImage;
     sal_Bool bUseMath;
     sal_Bool bUseOtherObjects;
 

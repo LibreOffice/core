@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftne.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-25 08:49:58 $
+ *  last change: $Author: dvo $ $Date: 2000-11-17 18:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,40 +270,54 @@ void XMLTextParagraphExport::exportTextFootnoteConfiguration()
 }
 
 
+void lcl_exportString(
+    SvXMLExport& rExport,
+    const Reference<XPropertySet> & rPropSet,
+    const OUString& sProperty,
+    const sal_Char* pElementName,
+    sal_Bool bOmitIfEmpty = sal_True)
+{
+    DBG_ASSERT(NULL != pElementName, "need element name");
+
+    Any aAny = rPropSet->getPropertyValue(sProperty);
+    OUString sTmp;
+    aAny >>= sTmp;
+    if (!bOmitIfEmpty || (sTmp.getLength() > 0))
+    {
+        rExport.AddAttribute(XML_NAMESPACE_TEXT, pElementName, sTmp);
+    }
+}
+
 void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     const Reference<XPropertySet> & rFootnoteConfig,
     sal_Bool bIsEndnote)
 {
-    Any aAny;
-    OUString sTmp;
-
     // prefix
-    aAny = rFootnoteConfig->getPropertyValue(sPrefix);
-    aAny >>= sTmp;
-    GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_num_prefix, sTmp);
+    lcl_exportString( GetExport(), rFootnoteConfig,
+                      sPrefix, sXML_num_prefix, sal_True);
 
     // suffix
-    aAny = rFootnoteConfig->getPropertyValue(sSuffix);
-    aAny >>= sTmp;
-    GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_num_suffix, sTmp);
+    lcl_exportString( GetExport(), rFootnoteConfig,
+                      sSuffix, sXML_num_suffix, sal_True);
 
-    // citation style ???
-    aAny = rFootnoteConfig->getPropertyValue(sCharStyleName);
-    aAny >>= sTmp;
-    GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_citation_style_name,
-                             sTmp);
+    // citation style
+    lcl_exportString( GetExport(), rFootnoteConfig,
+                      sCharStyleName, sXML_citation_style_name, sal_True);
+
+    // citation body style
+    lcl_exportString( GetExport(), rFootnoteConfig, sAnchorCharStyleName,
+                      sXML_citation_body_style_name, sal_True);
 
     // default/paragraph style
-    aAny = rFootnoteConfig->getPropertyValue(sParaStyleName);
-    aAny >>= sTmp;
-    GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_default_style_name,
-                             sTmp);
+    lcl_exportString( GetExport(), rFootnoteConfig,
+                      sParaStyleName, sXML_default_style_name, sal_True);
 
     // page style
-    aAny = rFootnoteConfig->getPropertyValue(sPageStyleName);
-    aAny >>= sTmp;
-    GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_master_page_name,
-                             sTmp);
+    lcl_exportString( GetExport(), rFootnoteConfig,
+                      sPageStyleName, sXML_master_page_name, sal_True);
+
+
+    Any aAny;
 
     // numbering style
     aAny = rFootnoteConfig->getPropertyValue(sNumberingType);
@@ -373,29 +387,30 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     // two element for footnote content
     if (!bIsEndnote)
     {
+        OUString sTmp;
+
+        // end notice / quo vadis
+        aAny = rFootnoteConfig->getPropertyValue(sEndNotice);
+        aAny >>= sTmp;
+
+        if (sTmp.getLength() > 0)
         {
-            // end notice / quo vadis
-            aAny = rFootnoteConfig->getPropertyValue(
-                sEndNotice);
-            aAny >>= sTmp;
-            SvXMLElementExport aElem(GetExport(),
-                                     XML_NAMESPACE_TEXT,
+            SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_TEXT,
                                      sXML_footnote_continuation_notice_forward,
                                      sal_True, sal_False);
             GetExport().GetDocHandler()->characters(sTmp);
         }
 
+        // begin notice / ergo sum
+        aAny = rFootnoteConfig->getPropertyValue(sBeginNotice);
+        aAny >>= sTmp;
+
+        if (sTmp.getLength() > 0)
         {
-            // begin notice / ergo sum
-            aAny = rFootnoteConfig->getPropertyValue(
-                sBeginNotice);
-            aAny >>= sTmp;
-            SvXMLElementExport aElem(GetExport(),
-                                     XML_NAMESPACE_TEXT,
+            SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_TEXT,
                                     sXML_footnote_continuation_notice_backward,
                                      sal_True, sal_False);
             GetExport().GetDocHandler()->characters(sTmp);
         }
     }
 }
-

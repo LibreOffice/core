@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-17 15:41:29 $
+ *  last change: $Author: dvo $ $Date: 2000-11-17 18:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,7 @@ XMLSectionExport::XMLSectionExport(
         sCreateFromTables(RTL_CONSTASCII_USTRINGPARAM("CreateFromTables")),
         sCreateFromTextFrames(RTL_CONSTASCII_USTRINGPARAM("CreateFromTextFrames")),
         sUseLevelFromSource(RTL_CONSTASCII_USTRINGPARAM("UseLevelFromSource")),
+        sIsCommaSeparated(RTL_CONSTASCII_USTRINGPARAM("IsCommaSeparated")),
         sTableOfContent(RTL_CONSTASCII_USTRINGPARAM(sXML_table_of_content)),
         sIllustrationIndex(RTL_CONSTASCII_USTRINGPARAM(sXML_illustration_index)),
         sAlphabeticalIndex(RTL_CONSTASCII_USTRINGPARAM(sXML_alphabetical_index)),
@@ -279,7 +280,7 @@ void XMLSectionExport::ExportIndexStart(
     sal_Bool bAutoStyles)
 {
     // HACK: disable index export until all problems have been resolved:
-    return;
+//  return;
 
     // get PropertySet
     Reference<XPropertySet> xPropertySet(rIndex, UNO_QUERY);
@@ -366,7 +367,7 @@ void XMLSectionExport::ExportIndexEnd(
     sal_Bool bAutoStyles)
 {
     // HACK: disable index export until all problems have been resolved:
-    return;
+//  return;
 
     if (! bAutoStyles)
     {
@@ -611,9 +612,6 @@ void XMLSectionExport::ExportObjectIndexStart(
                       sXML_use_chart_objects, sal_False);
         ExportBoolean(rPropertySet, sCreateFromStarDraw,
                       sXML_use_draw_objects,sal_False);
-// TODO: wait for API
-//      ExportBoolean(rPropertySet, sCreateFromStarImage,
-//                    sXML_use_image_objects, sal_False);
         ExportBoolean(rPropertySet, sCreateFromStarMath,
                       sXML_use_math_objects, sal_False);
 
@@ -692,6 +690,8 @@ void XMLSectionExport::ExportAlphabeticalIndexStart(
         ExportBoolean(rPropertySet, sUsePP, sXML_combine_entries_with_pp,
                       sal_True);
         ExportBoolean(rPropertySet, sUseUpperCase, sXML_capitalize_entries,
+                      sal_False);
+        ExportBoolean(rPropertySet, sIsCommaSeparated, sXML_comma_separated,
                       sal_False);
 
         ExportBaseIndexSource(TEXT_SECTION_TYPE_ALPHABETICAL, rPropertySet);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexObjectSourceContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: dvo $ $Date: 2000-11-17 18:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,8 +151,6 @@ XMLIndexObjectSourceContext::XMLIndexObjectSourceContext(
             sAPI_CreateFromStarChart)),
         sCreateFromStarDraw(RTL_CONSTASCII_USTRINGPARAM(
             sAPI_CreateFromStarDraw)),
-        sCreateFromStarImage(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_CreateFromStarImage)),
         sCreateFromStarMath(RTL_CONSTASCII_USTRINGPARAM(
             sAPI_CreateFromStarMath)),
         sCreateFromOtherEmbeddedObjects(RTL_CONSTASCII_USTRINGPARAM(
@@ -160,7 +158,6 @@ XMLIndexObjectSourceContext::XMLIndexObjectSourceContext(
         bUseCalc(sal_False),
         bUseChart(sal_False),
         bUseDraw(sal_False),
-        bUseImage(sal_False),
         bUseMath(sal_False),
         bUseOtherObjects(sal_False)
 {
@@ -206,13 +203,6 @@ void XMLIndexObjectSourceContext::ProcessAttribute(
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_USE_IMAGE:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
-            {
-                bUseImage = bTmp;
-            }
-            break;
-
         case XML_TOK_INDEXSOURCE_USE_MATH:
             if (SvXMLUnitConverter::convertBool(bTmp, rValue))
             {
@@ -238,10 +228,6 @@ void XMLIndexObjectSourceContext::EndElement()
 
     aAny.setValue(&bUseDraw, ::getBooleanCppuType());
     rIndexPropertySet->setPropertyValue(sCreateFromStarDraw, aAny);
-
-    aAny.setValue(&bUseImage, ::getBooleanCppuType());
-// TODO: wait for API
-//  rIndexPropertySet->setPropertyValue(sCreateFromStarImage, aAny);
 
     aAny.setValue(&bUseMath, ::getBooleanCppuType());
     rIndexPropertySet->setPropertyValue(sCreateFromStarMath, aAny);

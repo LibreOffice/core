@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteConfigurationImportContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-25 08:49:58 $
+ *  last change: $Author: dvo $ $Date: 2000-11-17 18:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,8 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
         nNumbering(FootnoteNumbering::PER_PAGE),
         bPosition(sal_False),
         sPropertyCharStyleName(RTL_CONSTASCII_USTRINGPARAM("CharStyleName")),
+        sPropertyAnchorCharStyleName(
+            RTL_CONSTASCII_USTRINGPARAM("AnchorCharStyleName")),
         sPropertyNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType")),
         sPropertyPageStyleName(RTL_CONSTASCII_USTRINGPARAM("PageStyleName")),
         sPropertyParagraphStyleName(
@@ -265,8 +267,8 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, sXML_citation_style_name,
           XML_TOK_FTNCONFIG_CITATION_STYLENAME },
-//  { XML_NAMESPACE_TEXT, sXML_anchor_style_name,
-//        XML_TOK_FTNCONFIG_ANCHOR_STYLENAME },
+    { XML_NAMESPACE_TEXT, sXML_citation_body_style_name,
+          XML_TOK_FTNCONFIG_ANCHOR_STYLENAME },
     { XML_NAMESPACE_TEXT, sXML_default_style_name,
           XML_TOK_FTNCONFIG_DEFAULT_STYLENAME },
     { XML_NAMESPACE_TEXT, sXML_master_page_name,
@@ -447,6 +449,12 @@ void XMLFootnoteConfigurationImportContext::ProcessSettings(
     {
         aAny <<= sCitationStyle;
         rConfig->setPropertyValue(sPropertyCharStyleName, aAny);
+    }
+
+    if (sAnchorStyle.getLength() > 0)
+    {
+        aAny <<= sAnchorStyle;
+        rConfig->setPropertyValue(sPropertyAnchorCharStyleName, aAny);
     }
 
     if (sPageStyle.getLength() > 0)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteConfigurationImportContext.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:01 $
+ *  last change: $Author: dvo $ $Date: 2000-11-17 18:54:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ class SvXMLImport;
 /// import footnote and endnote configuration elements
 class XMLFootnoteConfigurationImportContext : public SvXMLStyleContext
 {
+    const ::rtl::OUString sPropertyAnchorCharStyleName;
     const ::rtl::OUString sPropertyCharStyleName;
     const ::rtl::OUString sPropertyNumberingType;
     const ::rtl::OUString sPropertyPageStyleName;
