@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-23 12:32:28 $
+ *  last change: $Author: tl $ $Date: 2002-10-24 07:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,9 +460,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
         if(pPam)
         {
             rSh.EnterStdMode();
-            rSh.SttSelect();
             rSh.SetSelection(*pPam);
-            rSh.EndSelect();
             while( pPam->GetNext() != pPam )
                 delete pPam->GetNext();
             delete pPam;
@@ -515,9 +513,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                     SwPaM aPam(aPos);
                     aPam.Move(fnMoveForward, fnGoNode);
                     rSh.EnterStdMode();
-                    rSh.SttSelect();
                     rSh.SetSelection(aPam);
-                    rSh.EndSelect();
                     return sal_True;
                 }
             }
@@ -530,9 +526,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
            if(pUnoCrsr)
            {
                 rSh.EnterStdMode();
-                rSh.SttSelect();
                 rSh.SetSelection(*pUnoCrsr);
-                rSh.EndSelect();
                 return sal_True;
            }
         }
@@ -1144,9 +1138,7 @@ void SwXTextViewCursor::collapseToStart(void) throw( uno::RuntimeException )
                 pShellCrsr->Exchange();
             pShellCrsr->DeleteMark();
             rSh.EnterStdMode();
-            rSh.SttSelect();
             rSh.SetSelection(*pShellCrsr);
-            rSh.EndSelect();
         }
     }
     else
@@ -1168,9 +1160,7 @@ void SwXTextViewCursor::collapseToEnd(void) throw( uno::RuntimeException )
                 pShellCrsr->Exchange();
             pShellCrsr->DeleteMark();
             rSh.EnterStdMode();
-            rSh.SttSelect();
             rSh.SetSelection(*pShellCrsr);
-            rSh.EndSelect();
         }
     }
     else
@@ -1330,9 +1320,7 @@ void SwXTextViewCursor::gotoRange(
             else
                 aOwnPaM.DeleteMark();
         }
-        rSh.SttSelect();
         rSh.SetSelection(aOwnPaM);
-        rSh.EndSelect();
     }
     else
         throw uno::RuntimeException();
