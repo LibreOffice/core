@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicparser.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:19:31 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef CONFIGMGR_STACK_HXX_
 #include "stack.hxx"
 #endif
+#ifndef CONFIGMGR_LOGGER_HXX_
+#include "logger.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -121,9 +124,9 @@ namespace configmgr
 #endif // OSL_DEBUG_LEVEL
 
         public:
-            typedef uno::Reference< lang::XMultiServiceFactory > ServiceFactory;
+            typedef uno::Reference< uno::XComponentContext > Context;
 
-            explicit BasicParser(ServiceFactory const & _xSvcFactory);
+            explicit BasicParser(Context const & _xContext);
             virtual ~BasicParser();
 
         // XDocumentHandler
@@ -153,6 +156,8 @@ namespace configmgr
 
         protected:
             ElementParser const & getDataParser() const { return m_aDataParser; }
+
+            Logger const & getLogger() { return m_aDataParser.logger(); }
 
             /// start an node
             void startNode( ElementInfo const & aInfo, const uno::Reference< sax::XAttributeList >& xAttribs );
