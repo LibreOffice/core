@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-06 11:44:20 $
+ *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,6 +695,7 @@ private:
 
     SvxFont         aDefFont;           //schneller, als jedesmal vom Pool!
     USHORT          nDefTab;
+    BOOL            bIsVertical;
 
     BOOL            bOwnerOfPool;
     BOOL            bModified;
@@ -711,6 +712,9 @@ public:
 
     void            SetDefTab( USHORT nTab )    { nDefTab = nTab ? nTab : DEFTAB; }
     USHORT          GetDefTab() const           { return nDefTab; }
+
+    void            SetVertical( BOOL bVertical )   { bIsVertical = bVertical; }
+    BOOL            IsVertical() const              { return bIsVertical; }
 
     void            DestroyContents();
     EditPaM         Clear();

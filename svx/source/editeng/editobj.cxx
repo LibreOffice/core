@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-02 15:25:36 $
+ *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,6 +424,14 @@ void EditTextObject::SetObjectSettings( ULONG n )
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
 
+BOOL EditTextObject::IsVertical() const
+{
+#if  SUPD >= 614
+    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+#endif
+    return FALSE;
+}
+
 BOOL EditTextObject::Store( SvStream& rOStream ) const
 {
     if ( rOStream.GetError() )
@@ -562,6 +570,7 @@ BinTextObject::BinTextObject( SfxItemPool* pP ) :
         pPool = EditEngine::CreatePool();
         bOwnerOfPool =  TRUE;
     }
+    bVertical = FALSE;
 }
 
 BinTextObject::BinTextObject( const BinTextObject& r ) :
@@ -634,6 +643,15 @@ void BinTextObject::SetObjectSettings( ULONG n )
     nObjSettings = n;
 }
 
+BOOL BinTextObject::IsVertical() const
+{
+    return bVertical;
+}
+
+void BinTextObject::SetVertical( BOOL b )
+{
+    bVertical = b;
+}
 
 void BinTextObject::DeleteContents()
 {
@@ -1014,7 +1032,7 @@ void __EXPORT BinTextObject::ChangeStyleSheetName( SfxStyleFamily eFamily,
 
 void __EXPORT BinTextObject::StoreData( SvStream& rOStream ) const
 {
-    USHORT nVer = 600;
+    USHORT nVer = 601;
     rOStream << nVer;
 
     rOStream << bOwnerOfPool;
@@ -1079,6 +1097,9 @@ void __EXPORT BinTextObject::StoreData( SvStream& rOStream ) const
     // Ab 600
     rOStream << nUserType;
     rOStream << nObjSettings;
+
+    // Ab 601
+    rOStream << bVertical;
 }
 
 void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
@@ -1195,6 +1216,11 @@ void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
     {
         rIStream >> nUserType;
         rIStream >> nObjSettings;
+    }
+
+    if ( nVersion >= 601 )
+    {
+        rIStream >> bVertical;
     }
 
     // Ab 500 werden die Tabs anders interpretiert: TabPos + LI, vorher nur TabPos.

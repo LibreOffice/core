@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editobj2.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:13 $
+ *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,8 @@ private:
     USHORT                  nVersion;
     USHORT                  nUserType;
 
+    BOOL                    bVertical;
+
 protected:
     void                    DeleteContents();
     virtual void            StoreData( SvStream& rOStream ) const;
@@ -216,6 +218,9 @@ public:
 
     ULONG                   GetObjectSettings() const;
     void                    SetObjectSettings( ULONG n );
+
+    BOOL                    IsVertical() const;
+    void                    SetVertical( BOOL b );
 
     USHORT                  GetVersion() const; // Solange der Outliner keine Recordlaenge speichert
     void                    SetLRSpaceItemFlags( BOOL bOutlineMode );

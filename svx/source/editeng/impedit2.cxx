@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
+ *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -976,11 +976,32 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
 
     BOOL bCtrl = rKeyEvent.GetKeyCode().IsMod1() ? TRUE : FALSE;
 
-    switch ( rKeyEvent.GetKeyCode().GetCode() )
+    USHORT nCode = rKeyEvent.GetKeyCode().GetCode();
+
+    if ( IsVertical() )
+    {
+        switch ( nCode )
+        {
+            case KEY_UP:    nCode = KEY_LEFT;
+                            break;
+            case KEY_DOWN:  nCode = KEY_RIGHT;
+                            break;
+            case KEY_LEFT:  nCode = KEY_DOWN;
+                            break;
+            case KEY_RIGHT: nCode = KEY_UP;
+                            break;
+        }
+    }
+
+    switch ( nCode )
     {
         case KEY_UP:        aPaM = CursorUp( aPaM, pEditView );
                             break;
         case KEY_DOWN:      aPaM = CursorDown( aPaM, pEditView );
+                            break;
+        case KEY_LEFT:      aPaM = bCtrl ? WordLeft( aPaM ) : CursorLeft( aPaM );
+                            break;
+        case KEY_RIGHT:     aPaM = bCtrl ? WordRight( aPaM ) : CursorRight( aPaM );
                             break;
         case KEY_HOME:      aPaM = bCtrl ? CursorStartOfDoc() : CursorStartOfLine( aPaM );
                             break;
@@ -989,10 +1010,6 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
         case KEY_PAGEUP:    aPaM = bCtrl ? CursorStartOfDoc() : PageUp( aPaM, pEditView );
                             break;
         case KEY_PAGEDOWN:  aPaM = bCtrl ? CursorEndOfDoc() : PageDown( aPaM, pEditView );
-                            break;
-        case KEY_LEFT:      aPaM = bCtrl ? WordLeft( aPaM ) : CursorLeft( aPaM );
-                            break;
-        case KEY_RIGHT:     aPaM = bCtrl ? WordRight( aPaM ) : CursorRight( aPaM );
                             break;
     }
 

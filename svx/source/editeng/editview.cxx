@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
+ *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,13 +277,13 @@ Window* EditView::GetWindow() const
 void EditView::SetVisArea( const Rectangle& rRec )
 {
     DBG_CHKTHIS( EditView, 0 );
-    pImpEditView->SetVisArea( rRec );
+    pImpEditView->SetVisDocStartPos( rRec.TopLeft() );
 }
 
 const Rectangle& EditView::GetVisArea() const
 {
     DBG_CHKTHIS( EditView, 0 );
-    return pImpEditView->GetVisArea();
+    return pImpEditView->GetVisDocArea();
 }
 
 void EditView::SetOutputArea( const Rectangle& rRec )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eerdll.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-08 17:43:21 $
+ *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,8 +160,8 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[26] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CJK );
         ppDefItems[27] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CTL );
 #ifdef DEBUG
-        ppDefItems[28] = new SvxFontItem( FAMILY_DONTKNOW, String( RTL_CONSTASCII_USTRINGPARAM( "Tahoma" ) ), String(), PITCH_DONTKNOW, RTL_TEXTENCODING_UNICODE, EE_CHAR_FONTINFO_CJK );
-        ppDefItems[29] = new SvxFontItem( FAMILY_DONTKNOW, String( RTL_CONSTASCII_USTRINGPARAM( "Tahoma" ) ), String(), PITCH_DONTKNOW, RTL_TEXTENCODING_UNICODE, EE_CHAR_FONTINFO_CTL );
+        ppDefItems[28] = new SvxFontItem( FAMILY_DONTKNOW, String( RTL_CONSTASCII_USTRINGPARAM( "MS Mincho" ) ), String(), PITCH_DONTKNOW, RTL_TEXTENCODING_UNICODE, EE_CHAR_FONTINFO_CJK );
+        ppDefItems[29] = new SvxFontItem( FAMILY_DONTKNOW, String( RTL_CONSTASCII_USTRINGPARAM( "MS Mincho" ) ), String(), PITCH_DONTKNOW, RTL_TEXTENCODING_UNICODE, EE_CHAR_FONTINFO_CTL );
         ppDefItems[30] = new SvxFontHeightItem( 560, 100, EE_CHAR_FONTHEIGHT_CJK );
         ppDefItems[31] = new SvxFontHeightItem( 560, 100, EE_CHAR_FONTHEIGHT_CTL );
 #else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
+ *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ private:
 
     Point               aAnchorPoint;
     Rectangle           aOutArea;
-    Rectangle           aVisArea;
+    Point               aVisDocStartPos;
     EESelectionMode     eSelectionMode;
     EditSelection       aEditSelection;
     EVAnchorMode        eAnchorMode;
@@ -246,16 +246,24 @@ public:
     sal_uInt16      GetScrollDiffX() const          { return nScrollDiffX; }
     void            SetScrollDiffX( sal_uInt16 n )  { nScrollDiffX = n; }
 
-    inline Point    GetDocPos( const Point& rWindowPos ) const;
-    inline Point    GetWindowPos( const Point& rDocPos ) const;
-    inline Rectangle GetWindowPos( const Rectangle& rDocPos ) const;
+    Point           GetDocPos( const Point& rWindowPos ) const;
+    Point           GetWindowPos( const Point& rDocPos ) const;
+    Rectangle       GetWindowPos( const Rectangle& rDocPos ) const;
 
     void                SetOutputArea( const Rectangle& rRec );
     void                ResetOutputArea( const Rectangle& rRec );
     const Rectangle&    GetOutputArea() const   { return aOutArea; }
 
-    void                SetVisArea( const Rectangle& rRec );
-    const Rectangle&    GetVisArea() const      { return aVisArea; }
+    BOOL            IsVertical() const;
+
+    void            SetVisDocStartPos( const Point& rPos ) { aVisDocStartPos = rPos; }
+    const Point&    GetVisDocStartPos() const { return aVisDocStartPos; }
+
+    long            GetVisDocLeft() const { return aVisDocStartPos.X(); }
+    long            GetVisDocTop() const { return aVisDocStartPos.Y(); }
+    long            GetVisDocRight() const { return aVisDocStartPos.X() + ( !IsVertical() ? aOutArea.GetWidth() : aOutArea.GetHeight() ); }
+    long            GetVisDocBottom() const { return aVisDocStartPos.Y() + ( !IsVertical() ? aOutArea.GetHeight() : aOutArea.GetWidth() ); }
+    Rectangle       GetVisDocArea() const { return Rectangle( GetVisDocLeft(), GetVisDocTop(), GetVisDocRight(), GetVisDocBottom() ); }
 
     EditSelection&  GetEditSelection()          { return aEditSelection; }
     void            SetEditSelection( const EditSelection& rEditSelection )
@@ -395,15 +403,15 @@ private:
 
     InternalEditStatus  aStatus;
 
-    sal_Bool            bIsFormatting   : 1;    // Semaphore wegen der Hook's
-    sal_Bool            bFormatted      : 1;
-    sal_Bool            bInSelection    : 1;
-    sal_Bool            bIsInUndo       : 1;
-    sal_Bool            bUpdate         : 1;
-    sal_Bool            bUndoEnabled    : 1;
-    sal_Bool            bOwnerOfRefDev  : 1;
-    sal_Bool            bDowning        : 1;
-    sal_Bool            bCallParaInsertedOrDeleted  : 1;
+    sal_Bool            bIsFormatting;
+    sal_Bool            bFormatted;
+    sal_Bool            bInSelection;
+    sal_Bool            bIsInUndo;
+    sal_Bool            bUpdate;
+    sal_Bool            bUndoEnabled;
+    sal_Bool            bOwnerOfRefDev;
+    sal_Bool            bDowning;
+    sal_Bool            bCallParaInsertedOrDeleted;
 
     // Fuer Formatierung / Update....
     DeletedNodesList    aDeletedNodes;
@@ -561,6 +569,7 @@ private:
     ::com::sun::star::uno::Reference < ::com::sun::star::text::XBreakIterator > ImplGetBreakIterator();
 
 
+
 protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
@@ -584,8 +593,11 @@ public:
     const Size&             GetPaperSize() const                    { return aPaperSize; }
     void                    SetPaperSize( const Size& rSz )         { aPaperSize = rSz; }
 
+    void                    SetVertical( BOOL bVertical );
+    BOOL                    IsVertical() const                      { return GetEditDoc().IsVertical(); }
+
     void                    SetTextRanger( TextRanger* pRanger );
-    TextRanger*             GetTextRanger() const                   { return pTextRanger; }
+    TextRanger*             GetTextRanger( BOOL bUseInVerticalMode = FALSE ) const { return (!IsVertical()||bUseInVerticalMode) ? pTextRanger : NULL; }
 
     const Size&             GetMinAutoPaperSize() const             { return aMinAutoPaperSize; }
     void                    SetMinAutoPaperSize( const Size& rSz )  { aMinAutoPaperSize = rSz; }
@@ -961,52 +973,6 @@ inline Cursor* ImpEditView::GetCursor()
     if ( !pCursor )
         pCursor = new Cursor;
     return pCursor;
-}
-
-inline Point ImpEditView::GetDocPos( const Point& rWindowPos ) const
-{
-    // Fensterposition => Dokumentposition
-    Point aPoint( rWindowPos );
-
-    aPoint.Y() -= aOutArea.Top();
-    aPoint.X() -= aOutArea.Left();
-
-    aPoint.Y() += aVisArea.Top();
-    aPoint.X() += aVisArea.Left();
-
-    return aPoint;
-}
-
-inline Point ImpEditView::GetWindowPos( const Point& rDocPos ) const
-{
-    // Dokumentposition => Fensterposition
-    Point aPoint( rDocPos );
-
-    aPoint.Y() -= aVisArea.Top();
-    aPoint.X() -= aVisArea.Left();
-
-    aPoint.Y() += aOutArea.Top();
-    aPoint.X() += aOutArea.Left();
-
-    return aPoint;
-}
-
-inline Rectangle ImpEditView::GetWindowPos( const Rectangle& rDocPos ) const
-{
-    // Dokumentposition => Fensterposition
-    Rectangle aRect( rDocPos );
-
-    aRect.Top() -= aVisArea.Top();
-    aRect.Bottom() -= aVisArea.Top();
-    aRect.Left() -= aVisArea.Left();
-    aRect.Right() -= aVisArea.Left();
-
-    aRect.Top() += aOutArea.Top();
-    aRect.Bottom() += aOutArea.Top();
-    aRect.Left() += aOutArea.Left();
-    aRect.Right() += aOutArea.Left();
-
-    return aRect;
 }
 
 void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit );

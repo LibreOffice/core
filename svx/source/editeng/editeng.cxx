@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-19 11:29:36 $
+ *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,6 +483,19 @@ const Size& EditEngine::GetPaperSize() const
     return pImpEditEngine->GetPaperSize();
 }
 
+void EditEngine::SetVertical( BOOL bVertical )
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    pImpEditEngine->SetVertical( bVertical );
+}
+
+BOOL EditEngine::IsVertical() const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    return pImpEditEngine->IsVertical();
+}
+
+
 void EditEngine::SetPolygon( const XPolyPolygon& rPoly )
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -519,7 +532,7 @@ void EditEngine::ClearPolygon()
 const PolyPolygon* EditEngine::GetPolygon()
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->GetTextRanger() ?
+    return pImpEditEngine->GetTextRanger( FALSE ) ?
         &pImpEditEngine->GetTextRanger()->GetPolyPolygon() : 0;
 }
 
@@ -564,12 +577,6 @@ sal_uInt32 EditEngine::GetTextLen() const
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->GetEditDoc().GetTextLen();
-}
-
-sal_uInt32 EditEngine::CalcTextWidth()
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->CalcTextWidth();
 }
 
 sal_uInt16 EditEngine::GetParagraphCount() const
@@ -850,6 +857,14 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
             break;
             default:
             {
+                #ifdef DBG_UTIL
+                    if ( ( rKeyEvent.GetKeyCode().GetCode() == KEY_V ) && rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
+                    {
+                        SetVertical( !IsVertical() );
+                        pEditView->pImpEditView->SetVisDocStartPos( Point() );
+                        pEditView->GetWindow()->Invalidate();
+                    }
+                #endif
                 if ( !bReadOnly && IsSimpleCharInput( rKeyEvent ) )
                 {
                     xub_Unicode nCharCode = rKeyEvent.GetCharCode();
@@ -932,7 +947,8 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
     pEditView->pImpEditView->SetEditSelection( aCurSel );
     pImpEditEngine->UpdateSelections();
 
-    if ( ( nCode != KEY_UP ) && ( nCode != KEY_DOWN ) )
+    if ( ( !IsVertical() && ( nCode != KEY_UP ) && ( nCode != KEY_DOWN ) ) ||
+         ( IsVertical() && ( nCode != KEY_LEFT ) && ( nCode != KEY_RIGHT ) ))
         pEditView->pImpEditView->nTravelXPos = TRAVEL_X_DONTKNOW;
 
     if ( bModified )
@@ -964,8 +980,19 @@ sal_uInt32 EditEngine::GetTextHeight() const
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatDoc();
 
-    sal_uInt32 nHeight = pImpEditEngine->GetTextHeight();
+    sal_uInt32 nHeight = !IsVertical() ? pImpEditEngine->GetTextHeight() : pImpEditEngine->CalcTextWidth();
     return nHeight;
+}
+
+sal_uInt32 EditEngine::CalcTextWidth()
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+
+    if ( !pImpEditEngine->IsFormatted() )
+        pImpEditEngine->FormatDoc();
+
+    sal_uInt32 nWidth = !IsVertical() ? pImpEditEngine->CalcTextWidth() : pImpEditEngine->GetTextHeight();
+     return nWidth;
 }
 
 void EditEngine::SetUpdateMode( sal_Bool bUpdate )

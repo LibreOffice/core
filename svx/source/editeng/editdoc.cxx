@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
+ *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1150,6 +1150,7 @@ EditDoc::EditDoc( SfxItemPool* pPool )
     }
 
     nDefTab = DEFTAB;
+    bIsVertical = FALSE;
 
     // Don't create a empty node, Clear() will be called in EditEngine-CTOR
 
@@ -1261,14 +1262,14 @@ void EditDoc::CreateDefFont( BOOL bUseStyles )
 {
     SfxItemSet aTmpSet( GetItemPool(), EE_PARA_START, EE_CHAR_END );
     CreateFont( aDefFont, aTmpSet );
+    aDefFont.SetVertical( IsVertical() );
+    aDefFont.SetOrientation( IsVertical() ? 2700 : 0 );
 
     for ( USHORT nNode = 0; nNode < Count(); nNode++ )
     {
         ContentNode* pNode = GetObject( nNode );
-        // Nur wenn keine Absatzattribute gesetzt sind:
-        if ( !bUseStyles )
-            pNode->GetCharAttribs().GetDefFont() = aDefFont;
-        else
+        pNode->GetCharAttribs().GetDefFont() = aDefFont;
+        if ( bUseStyles )
             pNode->CreateDefFont();
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
+ *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,7 @@ inline void lcl_AllignToPixel( Point& rPoint, OutputDevice* pOutDev, short nDiff
 //  class ImpEditView
 //  ----------------------------------------------------------------------
 ImpEditView::ImpEditView( EditEngine* pEng, Window* pWindow ) :
-    aOutArea( Point(), pEng->GetPaperSize() ),
-    aVisArea( Point(), pEng->GetPaperSize() )
+    aOutArea( Point(), pEng->GetPaperSize() )
 {
     pEditEngine         = pEng;
     pOutWin             = pWindow;
@@ -218,9 +217,9 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
             continue;
 
         long nParaStart = pEditEngine->pImpEditEngine->GetParaPortions().GetYOffset( pTmpPortion );
-        if ( ( nParaStart + pTmpPortion->GetHeight() ) < aVisArea.Top() )
+        if ( ( nParaStart + pTmpPortion->GetHeight() ) < GetVisDocTop() )
             continue;
-        if ( nParaStart > aVisArea.Bottom() )
+        if ( nParaStart > GetVisDocBottom() )
             break;
 
         sal_uInt16 nStartLine = 0;
@@ -256,10 +255,10 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
             aBottomRight.X() = pTmpPortion->GetXPos( pLine, nEndIndex );
 
             // Nur Painten, wenn im sichtbaren Bereich...
-            if ( aTopLeft.Y() > aVisArea.Bottom() )
+            if ( aTopLeft.Y() > GetVisDocBottom() )
                 break;
 
-            if ( ( aTopLeft.X() != aBottomRight.X() ) && ( aBottomRight.Y() >= aVisArea.Top() ) )
+            if ( ( aTopLeft.X() != aBottomRight.X() ) && ( aBottomRight.Y() >= GetVisDocTop() ) )
             {
                 Point aPnt1( GetWindowPos( aTopLeft ) );
                 Point aPnt2( GetWindowPos( aBottomRight ) );
@@ -325,6 +324,68 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
 
 }
 
+BOOL ImpEditView::IsVertical() const
+{
+    return pEditEngine->pImpEditEngine->IsVertical();
+}
+
+Point ImpEditView::GetDocPos( const Point& rWindowPos ) const
+{
+    // Fensterposition => Dokumentposition
+    Point aPoint;
+
+    if ( !pEditEngine->pImpEditEngine->IsVertical() )
+    {
+        aPoint.X() = rWindowPos.X() - aOutArea.Left() + GetVisDocLeft();
+        aPoint.Y() = rWindowPos.Y() - aOutArea.Top() + GetVisDocTop();
+    }
+    else
+    {
+        aPoint.X() = rWindowPos.Y() - aOutArea.Top() + GetVisDocLeft();
+        aPoint.Y() = aOutArea.Right() - rWindowPos.X() + GetVisDocTop();
+    }
+
+    return aPoint;
+}
+
+Point ImpEditView::GetWindowPos( const Point& rDocPos ) const
+{
+    // Dokumentposition => Fensterposition
+    Point aPoint;
+
+    if ( !pEditEngine->pImpEditEngine->IsVertical() )
+    {
+        aPoint.X() = rDocPos.X() + aOutArea.Left() - GetVisDocLeft();
+        aPoint.Y() = rDocPos.Y() + aOutArea.Top() - GetVisDocTop();
+    }
+    else
+    {
+        aPoint.X() = aOutArea.Right() - rDocPos.Y() + GetVisDocTop();
+        aPoint.Y() = rDocPos.X() + aOutArea.Top() - GetVisDocLeft();
+    }
+
+    return aPoint;
+}
+
+Rectangle ImpEditView::GetWindowPos( const Rectangle& rDocRect ) const
+{
+    // Dokumentposition => Fensterposition
+    Point aPos( GetWindowPos( rDocRect.TopLeft() ) );
+    Size aSz = rDocRect.GetSize();
+    Rectangle aRect;
+    if ( !pEditEngine->pImpEditEngine->IsVertical() )
+    {
+        aRect = Rectangle( aPos, aSz );
+    }
+    else
+    {
+        Point aNewPos( aPos.X()-aSz.Height(), aPos.Y() );
+        aRect = Rectangle( aNewPos, Size( aSz.Height(), aSz.Width() ) );
+    }
+    return aRect;
+}
+
+
 Region* ImpEditView::CalcSelectedRegion()
 {
     Region* pRegion = new Region;
@@ -352,9 +413,6 @@ void ImpEditView::SetOutputArea( const Rectangle& rRec )
         aOutArea.Right() = aOutArea.Left();
     if ( aOutArea.Bottom() < aOutArea.Top() )
         aOutArea.Bottom() = aOutArea.Top();
-
-    // Groesse der VisArea anpassen:
-    aVisArea.SetSize( aOutArea.GetSize() );
 
     if ( DoBigScroll() )
         SetScrollDiffX( (sal_uInt16)aOutArea.GetWidth() * 3 / 10 );
@@ -424,29 +482,6 @@ void ImpEditView::ResetOutputArea( const Rectangle& rRec )
 
             GetWindow()->Invalidate( aRect );
         }
-    }
-}
-
-void ImpEditView::SetVisArea( const Rectangle& rRec )
-{
-    // VisArea nicht auf Pixel align, da rel. zur OutputArea.
-    // Sonst wird z.B. auf TopLeft = (0,0) ein (23,23)...
-    // Rectangle aNewRec( pOutWin->LogicToPixel( rRec ) );
-    // aNewRec = pOutWin->PixelToLogic( aNewRec );
-    // aVisArea = aNewRec;
-
-    aVisArea = rRec;
-    if ( aVisArea.Right() < aVisArea.Left() )
-        aVisArea.Right() = aVisArea.Left();
-    if ( aVisArea.Bottom() < aVisArea.Top() )
-        aVisArea.Bottom() = aVisArea.Top();
-
-    // Groesse der OutputArea anpassen:
-    if ( aOutArea.GetSize() != aVisArea.GetSize() )
-    {
-        Rectangle aOutputRec( aOutArea );
-        aOutputRec.SetSize( aVisArea.GetSize() );
-        SetOutputArea( aOutputRec );
     }
 }
 
@@ -627,56 +662,58 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
                 pOutWin->SetFont( aOldFont );
         }
     }
-    if ( aEditCursor.GetHeight() > aOutArea.GetHeight() )
+    long nMaxHeight = !IsVertical() ? aOutArea.GetHeight() : aOutArea.GetWidth();
+    if ( aEditCursor.GetHeight() > nMaxHeight )
     {
-        aEditCursor.Bottom() = aEditCursor.Top() + aOutArea.GetHeight() - 1;
+        aEditCursor.Bottom() = aEditCursor.Top() + nMaxHeight - 1;
     }
     if ( bGotoCursor  ) // && (!pEditEngine->pImpEditEngine->GetStatus().AutoPageSize() ) )
     {
         // pruefen, ob scrollen notwendig...
         // wenn scrollen, dann Update() und Scroll() !
-        long nDiffX = 0;
-        long nDiffY = 0;
+        long nDocDiffX = 0;
+        long nDocDiffY = 0;
 
-        Rectangle aTmpVisArea( aVisArea );
+        Rectangle aTmpVisArea( GetVisDocArea() );
         // aTmpOutArea: Falls OutputArea > Papierbreite und
         // Text > Papierbreite ( uebergrosse Felder )
-        if ( aTmpVisArea.GetWidth() > pEditEngine->pImpEditEngine->GetPaperSize().Width() )
-            aTmpVisArea.Right() = aTmpVisArea.Left() + pEditEngine->pImpEditEngine->GetPaperSize().Width();
+        long nMaxTextWidth = !IsVertical() ? pEditEngine->pImpEditEngine->GetPaperSize().Width() : pEditEngine->pImpEditEngine->GetPaperSize().Height();
+        if ( aTmpVisArea.GetWidth() > nMaxTextWidth )
+            aTmpVisArea.Right() = aTmpVisArea.Left() + nMaxTextWidth;
 
         if ( aEditCursor.Bottom() > aTmpVisArea.Bottom() )
         {   // hochscrollen, hier positiv
-            nDiffY = aEditCursor.Bottom() - aTmpVisArea.Bottom();
+            nDocDiffY = aEditCursor.Bottom() - aTmpVisArea.Bottom();
         }
         else if ( aEditCursor.Top() < aTmpVisArea.Top() )
         {   // runterscrollen, negativ
-            nDiffY = aEditCursor.Top() - aTmpVisArea.Top();
+            nDocDiffY = aEditCursor.Top() - aTmpVisArea.Top();
         }
 
         if ( aEditCursor.Right() > aTmpVisArea.Right() )
         {
             // linksscrollen, positiv
-            nDiffX = aEditCursor.Right() - aTmpVisArea.Right();
+            nDocDiffX = aEditCursor.Right() - aTmpVisArea.Right();
             // Darfs ein bischen mehr sein?
-            if ( aEditCursor.Right() < ( pEditEngine->GetPaperSize().Width() - GetScrollDiffX() ) )
-                nDiffX += GetScrollDiffX();
+            if ( aEditCursor.Right() < ( nMaxTextWidth - GetScrollDiffX() ) )
+                nDocDiffX += GetScrollDiffX();
             else
             {
-                long n = pEditEngine->GetPaperSize().Width() - aEditCursor.Right();
+                long n = nMaxTextWidth - aEditCursor.Right();
                 // Bei einem MapMode != RefMapMode kann der EditCursor auch mal ueber
                 // die Papierbreite Wandern!
-                nDiffX += ( n > 0 ? n : -n );
+                nDocDiffX += ( n > 0 ? n : -n );
             }
         }
         else if ( aEditCursor.Left() < aTmpVisArea.Left() )
         {   // rechtsscrollen
             // negativ:
-            nDiffX = aEditCursor.Left() - aTmpVisArea.Left();
+            nDocDiffX = aEditCursor.Left() - aTmpVisArea.Left();
             // Darfs ein bischen mehr sein?
             if ( aEditCursor.Left() > ( - (long)GetScrollDiffX() ) )
-                nDiffX -= GetScrollDiffX();
+                nDocDiffX -= GetScrollDiffX();
             else
-                nDiffX -= aEditCursor.Left();
+                nDocDiffX -= aEditCursor.Left();
         }
         if ( aPaM.GetIndex() == 0 )     // braucht Olli fuer den Outliner
         {
@@ -684,12 +721,15 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
             // sichtbaren bereich verlaesst!
             if ( aEditCursor.Left() < aTmpVisArea.GetWidth() )
             {
-                nDiffX = -aTmpVisArea.Left();
+                nDocDiffX = -aTmpVisArea.Left();
             }
         }
 
-        if ( nDiffX | nDiffY )
+        if ( nDocDiffX | nDocDiffY )
         {
+            long nDiffX = !IsVertical() ? nDocDiffX : -nDocDiffY;
+            long nDiffY = !IsVertical() ? nDocDiffY : nDocDiffX;
+
             // Negativ: Zum Anfang bzw. linken Rand
             if ( ( Abs( nDiffY ) > pEditEngine->pImpEditEngine->nOnePixelInRef ) && DoBigScroll() )
             {
@@ -725,26 +765,39 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
     }
 
     // Cursor evtl. etwas stutzen...
-    if ( ( aEditCursor.Bottom() > aVisArea.Top() ) &&
-         ( aEditCursor.Top() < aVisArea.Bottom() ) )
+    if ( ( aEditCursor.Bottom() > GetVisDocTop() ) &&
+         ( aEditCursor.Top() < GetVisDocBottom() ) )
     {
-        if ( aEditCursor.Bottom() > aVisArea.Bottom() )
-            aEditCursor.Bottom() = aVisArea.Bottom();
-        if ( aEditCursor.Top() < aVisArea.Top() )
-            aEditCursor.Top() = aVisArea.Top();
+        if ( aEditCursor.Bottom() > GetVisDocBottom() )
+            aEditCursor.Bottom() = GetVisDocBottom();
+        if ( aEditCursor.Top() < GetVisDocTop() )
+            aEditCursor.Top() = GetVisDocTop();
     }
 
     long nOnePixel = pOutWin->PixelToLogic( Size( 1, 0 ) ).Width();
 
     if ( /* pEditEngine->pImpEditEngine->GetStatus().AutoPageSize() || */
-         ( ( aEditCursor.Top() + nOnePixel >= aVisArea.Top() ) &&
-         ( aEditCursor.Bottom() - nOnePixel <= aVisArea.Bottom() ) &&
-         ( aEditCursor.Left() + nOnePixel >= aVisArea.Left() ) &&
-         ( aEditCursor.Right() - nOnePixel <= aVisArea.Right() ) ) )
+         ( ( aEditCursor.Top() + nOnePixel >= GetVisDocTop() ) &&
+         ( aEditCursor.Bottom() - nOnePixel <= GetVisDocBottom() ) &&
+         ( aEditCursor.Left() + nOnePixel >= GetVisDocLeft() ) &&
+         ( aEditCursor.Right() - nOnePixel <= GetVisDocRight() ) ) )
     {
-        Point aPoint( GetWindowPos( aEditCursor.TopLeft() ) );
-        GetCursor()->SetPos( aPoint );
-        GetCursor()->SetSize( aEditCursor.GetSize() );
+        Rectangle aCursorRect = GetWindowPos( aEditCursor );
+        GetCursor()->SetPos( aCursorRect.TopLeft() );
+        Size aCursorSz( aCursorRect.GetSize() );
+        // Rectangle is inclusive
+        aCursorSz.Width()--;
+        aCursorSz.Height()--;
+        if ( !aCursorSz.Width() || !aCursorSz.Height() )
+        {
+            long nCursorSz = pOutWin->GetSettings().GetStyleSettings().GetCursorSize();
+            nCursorSz = pOutWin->PixelToLogic( Size( nCursorSz, 0 ) ).Width();
+            if ( !aCursorSz.Width() )
+                aCursorSz.Width() = nCursorSz;
+            if ( !aCursorSz.Height() )
+                aCursorSz.Height() = nCursorSz;
+        }
+        GetCursor()->SetSize( aCursorSz );
         if ( bForceVisCursor )
             GetCursor()->Show();
 
@@ -778,12 +831,20 @@ Pair ImpEditView::Scroll( long ndX, long ndY, BYTE nRangeCheck )
     DBG_ASSERT( aR == aOutArea, "OutArea vor Scroll nicht aligned" );
 #endif
 
-    Rectangle aNewVisArea( aVisArea );
+    Rectangle aNewVisArea( GetVisDocArea() );
     Size aPaperSz( pEditEngine->pImpEditEngine->GetPaperSize() );
 
     // Vertical:
-    aNewVisArea.Top() -= ndY;
-    aNewVisArea.Bottom() -= ndY;
+    if ( !IsVertical() )
+    {
+        aNewVisArea.Top() -= ndY;
+        aNewVisArea.Bottom() -= ndY;
+    }
+    else
+    {
+        aNewVisArea.Top() += ndX;
+        aNewVisArea.Bottom() += ndX;
+    }
     if ( ( nRangeCheck == RGCHK_PAPERSZ1 ) && ( aNewVisArea.Bottom() > (long)pEditEngine->pImpEditEngine->GetTextHeight() ) )
     {
         // GetTextHeight noch optimieren!
@@ -794,20 +855,27 @@ Pair ImpEditView::Scroll( long ndX, long ndY, BYTE nRangeCheck )
         aNewVisArea.Move( 0, -aNewVisArea.Top() );
 
     // Horizontal:
-    aNewVisArea.Left() -= ndX;
-    aNewVisArea.Right() -= ndX;
-    if ( ( nRangeCheck == RGCHK_PAPERSZ1 ) && ( aNewVisArea.Right() > aPaperSz.Width() ) )
+    if ( !IsVertical() )
     {
-        long nDiff = aPaperSz.Width() - aNewVisArea.Right();    // negativ
+        aNewVisArea.Left() -= ndX;
+        aNewVisArea.Right() -= ndX;
+    }
+    else
+    {
+        aNewVisArea.Left() -= ndY;
+        aNewVisArea.Right() -= ndY;
+    }
+    if ( ( nRangeCheck == RGCHK_PAPERSZ1 ) && ( aNewVisArea.Right() > pEditEngine->pImpEditEngine->CalcTextWidth() ) )
+    {
+        long nDiff = pEditEngine->pImpEditEngine->CalcTextWidth() - aNewVisArea.Right();    // negativ
         aNewVisArea.Move( nDiff, 0 );   // koennte im neg. Bereich landen...
     }
     if ( ( aNewVisArea.Left() < 0 ) && ( nRangeCheck != RGCHK_NONE ) )
         aNewVisArea.Move( -aNewVisArea.Left(), 0 );
 
     // Die Differenz muss auf Pixel alignt sein (wegen Scroll!)
-    Rectangle aOldVisArea( aVisArea );
-    long nDiffX = aOldVisArea.Left() - aNewVisArea.Left();
-    long nDiffY = aOldVisArea.Top() - aNewVisArea.Top();
+    long nDiffX = !IsVertical() ? ( GetVisDocLeft() - aNewVisArea.Left() ) : -( GetVisDocTop() - aNewVisArea.Top() );
+    long nDiffY = !IsVertical() ? ( GetVisDocTop() - aNewVisArea.Top() ) : ( GetVisDocLeft() - aNewVisArea.Left() );
 
     Size aDiffs( nDiffX, nDiffY );
     aDiffs = pOutWin->LogicToPixel( aDiffs );
@@ -823,11 +891,15 @@ Pair ImpEditView::Scroll( long ndX, long ndY, BYTE nRangeCheck )
         sal_Bool bVisCursor = pCrsr->IsVisible();
         pCrsr->Hide();
         pOutWin->Update();
-        aVisArea.Move( -nRealDiffX, -nRealDiffY );
+        if ( !IsVertical() )
+            aVisDocStartPos.Move( -nRealDiffX, -nRealDiffY );
+        else
+            aVisDocStartPos.Move( -nRealDiffY, nRealDiffX );
         // Das Move um den allignten Wert ergibt nicht unbedingt ein
         // alligntes Rechteck...
-        aVisArea = pOutWin->LogicToPixel( aVisArea );
-        aVisArea = pOutWin->PixelToLogic( aVisArea );
+        // MT 11/00: Align VisArea???
+        aVisDocStartPos = pOutWin->LogicToPixel( aVisDocStartPos );
+        aVisDocStartPos = pOutWin->PixelToLogic( aVisDocStartPos );
         Rectangle aRec( aOutArea );
         pOutWin->Scroll( nRealDiffX, nRealDiffY, aRec, sal_True );
         pOutWin->Update();
