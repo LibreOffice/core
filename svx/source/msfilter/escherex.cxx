@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-07 16:55:42 $
+ *  last change: $Author: sj $ $Date: 2000-12-08 16:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,6 +419,35 @@ EscherBlibEntry::EscherBlibEntry( SvMemoryStream& rStream, ESCHER_BlibType eBlib
 
 // ---------------------------------------------------------------------------------------------
 
+void EscherBlibEntry::WriteBlibEntry( SvStream& rSt, sal_Bool bWritePictureOffset )
+{
+    sal_uInt8   nBlibType = meBlibType;
+    sal_uInt32  nPictureOffset = ( bWritePictureOffset ) ? mnPictureOffset : 0;
+
+    rSt << (sal_uInt32)( ( ESCHER_BSE << 16 ) | ( ( (sal_uInt16)meBlibType << 4 ) | 2 ) )
+        << (sal_uInt32)36
+        << (sal_uInt8)meBlibType;
+
+    switch ( meBlibType )
+    {
+        case EMF :
+        case WMF :  // EMF/WMF auf OS2 zu Pict Konvertieren
+            rSt << (sal_uInt8)PICT;
+        break;
+        default:
+            rSt << (sal_uInt8)meBlibType;
+    };
+
+    rSt.Write( &mnIdentifier[ 0 ], 16 );
+    rSt << (sal_uInt16)0
+        << (sal_uInt32)( mnSize + mnSizeExtra )
+        << mnRefCount
+        << nPictureOffset
+        << (sal_uInt32)0;
+}
+
+// ---------------------------------------------------------------------------------------------
+
 EscherBlibEntry::~EscherBlibEntry()
 {
 };
@@ -479,7 +508,74 @@ UINT32 EscherGraphicProvider::ImplInsertBlib( EscherBlibEntry* p_EscherBlibEntry
     return mnBlibEntrys;
 }
 
-// ---------------------------------------------------------------------------------------------
+sal_uInt32 EscherGraphicProvider::GetBlibStoreContainerSize( SvStream* pMergePicStreamBSE ) const
+{
+    sal_uInt32 nSize = 44 * mnBlibEntrys + 8;
+    if ( pMergePicStreamBSE )
+    {
+        for ( sal_uInt32 i = 0; i < mnBlibEntrys; i++ )
+            nSize += mpBlibEntrys[ i ]->mnSize + mpBlibEntrys[ i ]->mnSizeExtra;
+    }
+    return nSize;
+}
+
+void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pMergePicStreamBSE )
+{
+    sal_uInt32  nSize = GetBlibStoreContainerSize( pMergePicStreamBSE );
+    if ( nSize )
+    {
+        rSt << (sal_uInt32)( ( ESCHER_BstoreContainer << 16 ) | 0x1f )
+            << (sal_uInt32)( nSize - 8 );
+
+        if ( pMergePicStreamBSE )
+        {
+            sal_uInt32 i, nBlipSize, nOldPos = pMergePicStreamBSE->Tell();
+            const nBuf = 0x40000;   // 256KB buffer
+            sal_uInt8* pBuf = new sal_uInt8[ nBuf ];
+
+            for ( i = 0; i < mnBlibEntrys; i++ )
+            {
+                EscherBlibEntry* pBlibEntry = mpBlibEntrys[ i ];
+
+                sal_uInt8 nBlibType = pBlibEntry->meBlibType;
+                nBlipSize = pBlibEntry->mnSize + pBlibEntry->mnSizeExtra;
+                pBlibEntry->WriteBlibEntry( rSt, sal_False );
+
+                // BLIP
+                pMergePicStreamBSE->Seek( pBlibEntry->mnPictureOffset );
+                UINT16 n16;
+                // record version and instance
+                *pMergePicStreamBSE >> n16;
+                rSt << n16;
+                // record type
+                *pMergePicStreamBSE >> n16;
+                rSt << UINT16( ESCHER_BlipFirst + nBlibType );
+                DBG_ASSERT( n16 == ESCHER_BlipFirst + nBlibType , "EscherEx::Flush: BLIP record types differ" );
+                UINT32 n32;
+                // record size
+                *pMergePicStreamBSE >> n32;
+                nBlipSize -= 8;
+                rSt << nBlipSize;
+                DBG_ASSERT( nBlipSize == n32, "EscherEx::Flush: BLIP sizes differ" );
+                // record
+                while ( nBlipSize )
+                {
+                    UINT32 nBytes = ( nBlipSize > nBuf ? nBuf : nBlipSize );
+                    pMergePicStreamBSE->Read( pBuf, nBytes );
+                    rSt.Write( pBuf, nBytes );
+                    nBlipSize -= nBytes;
+                }
+            }
+            delete [] pBuf;
+            pMergePicStreamBSE->Seek( nOldPos );
+        }
+        else
+        {
+            for ( sal_uInt32 i = 0; i < mnBlibEntrys; i++ )
+                mpBlibEntrys[ i ]->WriteBlibEntry( rSt, sal_True );
+        }
+    }
+}
 
 sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteString& rId,
                                                 const Rectangle& rBoundRect, const GraphicAttr* pGraphicAttr )
@@ -700,95 +796,12 @@ void EscherEx::Flush( SvStream* pPicStreamMergeBSE /* = NULL */ )
         {
             if ( ImplSeek( ESCHER_Persist_BlibStoreContainer ) )            // ESCHER_BlibStoreContainer schreiben
             {
-                UINT32 nAddBytes = 44 * mnBlibEntrys;
-                if ( pPicStreamMergeBSE )
+                sal_uInt32 nAddBytes = GetBlibStoreContainerSize( pPicStreamMergeBSE );
+                if ( nAddBytes )
                 {
-                    for ( UINT32 i = 0; i < mnBlibEntrys; i++ )
-                    {
-                        nAddBytes += mpBlibEntrys[ i ]->mnSize + mpBlibEntrys[ i ]->mnSizeExtra;
-                    }
+                    InsertAtCurrentPos( nAddBytes, TRUE );                  // platz schaffen fuer Blib Container samt seinen Blib Atomen
+                    WriteBlibStoreContainer( *mpOutStrm, pPicStreamMergeBSE );
                 }
-                InsertAtCurrentPos( 8 + nAddBytes, TRUE );          // platz schaffen fuer Blib Container samt seinen Blib Atomen
-                OpenContainer( ESCHER_BstoreContainer, 1 );
-                if ( pPicStreamMergeBSE )
-                {
-                    ULONG nOldPos = pPicStreamMergeBSE->Tell();
-                    const nBuf = 0x40000;   // 256KB buffer
-                    BYTE* pBuf = new BYTE[ nBuf ];
-                    for ( UINT32 i = 0; i < mnBlibEntrys; i++ )
-                    {
-                        EscherBlibEntry* pBlibEntry = mpBlibEntrys[ i ];
-                        BYTE nBlibType = pBlibEntry->meBlibType;
-                        UINT32 nBlipSize = pBlibEntry->mnSize + pBlibEntry->mnSizeExtra;
-                        AddAtom( 36 + nBlipSize, ESCHER_BSE, 2, nBlibType );
-                        // FBSE
-                        *mpOutStrm << nBlibType;
-                        switch ( nBlibType )
-                        {
-                            case EMF :
-                            case WMF :  // EMF/WMF auf OS2 zu Pict Konvertieren
-                                *mpOutStrm << BYTE(PICT);
-                            break;
-                            default:
-                                *mpOutStrm << nBlibType;
-                        }
-                        mpOutStrm->Write( &pBlibEntry->mnIdentifier[ 0 ], 16 );
-                        *mpOutStrm
-                            << (UINT16)0
-                            << nBlipSize
-                            << pBlibEntry->mnRefCount
-                            << (UINT32)0    // yes, the offset is always zero
-                            << (UINT32)0;
-                        // BLIP
-                        pPicStreamMergeBSE->Seek( pBlibEntry->mnPictureOffset );
-                        UINT16 n16;
-                        // record version and instance
-                        *pPicStreamMergeBSE >> n16;
-                        *mpOutStrm << n16;
-                        // record type
-                        *pPicStreamMergeBSE >> n16;
-                        *mpOutStrm << UINT16( ESCHER_BlipFirst + nBlibType );
-                        DBG_ASSERT( n16 == ESCHER_BlipFirst + nBlibType , "EscherEx::Flush: BLIP record types differ" );
-                        UINT32 n32;
-                        // record size
-                        *pPicStreamMergeBSE >> n32;
-                        nBlipSize -= 8;
-                        *mpOutStrm << nBlipSize;
-                        DBG_ASSERT( nBlipSize == n32, "EscherEx::Flush: BLIP sizes differ" );
-                        // record
-                        while ( nBlipSize )
-                        {
-                            UINT32 nBytes = ( nBlipSize > nBuf ? nBuf : nBlipSize );
-                            pPicStreamMergeBSE->Read( pBuf, nBytes );
-                            mpOutStrm->Write( pBuf, nBytes );
-                            nBlipSize -= nBytes;
-                        }
-                    }
-                    delete [] pBuf;
-                    pPicStreamMergeBSE->Seek( nOldPos );
-                }
-                else
-                {
-                    for ( UINT32 i = 0; i < mnBlibEntrys; i++ )
-                    {
-                        EscherBlibEntry* pBlibEntry = mpBlibEntrys[ i ];
-                        BYTE nBlibType = pBlibEntry->meBlibType;
-                        AddAtom( 36, ESCHER_BSE, 2, nBlibType );
-                        *mpOutStrm << nBlibType;
-                        if ( nBlibType == 3 )
-                            *mpOutStrm << (BYTE)4;  // WMF auf OS2 zu Pict Konvertieren
-                        else
-                            *mpOutStrm << nBlibType;
-                        mpOutStrm->Write( &pBlibEntry->mnIdentifier[ 0 ], 16 );
-                        *mpOutStrm
-                            << (UINT16)0
-                            << UINT32( pBlibEntry->mnSize + pBlibEntry->mnSizeExtra )
-                            << pBlibEntry->mnRefCount
-                            << pBlibEntry->mnPictureOffset
-                            << (UINT32)0;
-                    }
-                }
-                CloseContainer();   // ESCHER_BlibStoreContainer
             }
         }
         mpOutStrm->Seek( PtGetOffsetByID( ESCHER_Persist_CurrentPosition ) );
