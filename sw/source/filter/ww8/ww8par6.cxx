@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-27 12:10:15 $
+ *  last change: $Author: cmc $ $Date: 2002-12-02 17:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2450,7 +2450,6 @@ bool WW8FlyPara::ReadFull(const BYTE* pSprm29, SwWW8ImplReader* pIo)
 bool WW8FlyPara::Read(const BYTE* pSprm29, WW8RStyle* pStyle)
 {
     sal_uInt8 nOrigSp29 = 0;
-
     if (pSprm29)
         nOrigSp29 = *pSprm29;                           // PPC ( Bindung )
 
@@ -2487,10 +2486,6 @@ bool WW8FlyPara::Read(const BYTE* pSprm29, WW8RStyle* pStyle)
             nSp37 = *pS;
     }
 
-    // alles 0 heisst
-    if (!nOrigSp29 && !nSp27 && !nLeMgn && !nRiMgn && !nSp37)
-        return false;                               // Apo ist nicht vorhanden
-
     if (::lcl_ReadBorders(bVer67, brc, 0, pStyle))      // Umrandung
         bBorderLines = ::lcl_IsBorder(bVer67, brc);
 
@@ -2506,6 +2501,9 @@ bool WW8FlyPara::Read(const BYTE* pSprm29, WW8RStyle* pStyle)
     else
         nSp29 = nOrigSp29;
 
+    WW8FlyPara aEmpty(bVer67);
+    if (aEmpty == *this)
+        return false;
     return true;
 }
 
@@ -5169,17 +5167,13 @@ void SwWW8ImplReader::Read_BreakBefore( USHORT, const BYTE* pData, short nLen )
 
 void SwWW8ImplReader::Read_ApoPPC( USHORT, const BYTE* pData, short )
 {
-    if( pAktColl ){                 // nur fuer Styledef, sonst anders geloest
+    if (pAktColl) // only for Styledef, sonst anders geloest
+    {
         SwWW8StyInf& rSI = pCollA[nAktColl];
-        WW8FlyPara* pFly = rSI.pWWFly;
-        if( !pFly ){
-            pFly = ( rSI.nBase >= nColls ) ?
-                        new WW8FlyPara( bVer67 )                                                        // !based on
-                    : new WW8FlyPara( bVer67, pCollA[rSI.nBase].pWWFly );   // based on
-            pCollA[nAktColl].pWWFly = pFly;
-            if( !pFly->Read( pData, pStyles ) )     // Lese Style-Apo-Parameter
-                DELETEZ( pCollA[nAktColl].pWWFly );
-        }
+        WW8FlyPara* pFly = rSI.pWWFly ? rSI.pWWFly : new WW8FlyPara(bVer67);
+        pCollA[nAktColl].pWWFly = pFly;
+        if (!pFly->Read(pData, pStyles))        // Lese Style-Apo-Parameter
+            delete pCollA[nAktColl].pWWFly, pCollA[nAktColl].pWWFly = 0;
     }
 }
 

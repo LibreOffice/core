@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-26 14:00:29 $
+ *  last change: $Author: cmc $ $Date: 2002-12-02 17:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3463,9 +3463,10 @@ const wwSprmSequence* WW8PLCFx_SEPX::GetWW8IgnoredSprms()
 {
     static sal_uInt16 aSprmIds[] =
     {
-        0x3005, 0x3006, 0x3009, 0x300E, 0x3013, 0x3019, 0x3228,
-        0x3229, 0x500B, 0x5015, 0x501B, 0x5026, 0x703A, 0x900C,
-        0x9016, 0x9023, 0x9024, 0xB017, 0xB018, 0xF203, 0xF204
+        0x3005, 0x3006, 0x3009, 0x300E, 0x3013, 0x3019, 0x301A,
+        0x3228, 0x3229, 0x500B, 0x5015, 0x501B, 0x5026, 0x703A,
+        0x900C, 0x9016, 0x9023, 0x9024, 0xB017, 0xB018, 0xF203,
+        0xF204
     };
 
     static wwSprmSequence aWWSprmIds(aSprmIds,

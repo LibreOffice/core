@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-08 12:43:03 $
+ *  last change: $Author: cmc $ $Date: 2002-12-02 17:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PRECOMPILED
 #include "filt_pch.hxx"
@@ -526,15 +529,11 @@ const BYTE* SwWW8ImplReader::TestApo(bool& rbStartApo, bool& rbStopApo,
 {
     const BYTE* pSprm37;
     const BYTE* pSprm29;
-    // Frame in Style Definition (word appears to ignore them if
-    // inside an text autoshape, e.g. #94418#)
+    // Frame in Style Definition (word appears to ignore them if inside an
+    // text autoshape, e.g. #94418#)
     rpNowStyleApo = 0;
     if (!bTxbxFlySection)
-    {
-        USHORT nIstd = nAktColl;
-        while (nIstd < nColls && !(rpNowStyleApo = pCollA[nIstd].pWWFly))
-            nIstd = pCollA[nIstd].nBase;
-    }
+        rpNowStyleApo = pCollA[nAktColl].pWWFly;
 
     rbStartApo = rbStopApo  = false;
 
@@ -3593,7 +3592,7 @@ void WW8RStyle::Import1Style( USHORT nNr )
     if (j != nNr && j < cstd )
     {
         SwWW8StyInf* pj = &pIo->pCollA[j];
-        if ( pSI->pFmt && pj->pFmt && pSI->bColl == pj->bColl )
+        if (pSI->pFmt && pj->pFmt && pSI->bColl == pj->bColl)
         {
             pSI->pFmt->SetDerivedFrom( pj->pFmt );  // ok, Based on eintragen
             pSI->eFontSrcCharSet = pj->eFontSrcCharSet; // CharSet als Default
@@ -3601,6 +3600,9 @@ void WW8RStyle::Import1Style( USHORT nNr )
             pSI->nTxtFirstLineOfst = pj->nTxtFirstLineOfst;
             pSI->n81Flags = pj->n81Flags;
             pSI->n81BiDiFlags = pj->n81BiDiFlags;
+
+            if (pj->pWWFly)
+                pSI->pWWFly = new WW8FlyPara(pIo->bVer67, pj->pWWFly);
         }
     }
     else if( pIo->mbNewDoc && bStyExist )
