@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:25:15 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
-
+#include "SpellDialogChildWindow.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -216,7 +216,8 @@ Outliner::Outliner( SdDrawDocument* pDoc, USHORT nMode )
       mpParaObj(NULL),
       mpSearchItem(NULL),
       mbPrepareSpellingPending(true),
-      mbViewShellValid(true)
+      mbViewShellValid(true),
+      mbWholeDocumentProcessed(false)
 {
     SetStyleSheetPool((SfxStyleSheetPool*) mpDrawDocument->GetStyleSheetPool());
     SetEditTextObjectPool( &pDoc->GetItemPool() );
@@ -229,8 +230,8 @@ Outliner::Outliner( SdDrawDocument* pDoc, USHORT nMode )
     nCntrl |= EE_CNTRL_MARKFIELDS;
     nCntrl |= EE_CNTRL_AUTOCORRECT;
 
-    BOOL bHideSpell = TRUE;
-    BOOL bOnlineSpell = FALSE;
+    BOOL bHideSpell = true;
+    BOOL bOnlineSpell = false;
 
     DrawDocShell* pDocSh = mpDrawDocument->GetDocSh();
 
@@ -241,8 +242,8 @@ Outliner::Outliner( SdDrawDocument* pDoc, USHORT nMode )
     }
     else
     {
-        bHideSpell = sal_True;
-        bOnlineSpell = sal_False;
+        bHideSpell = true;
+        bOnlineSpell = false;
 
         try
         {
@@ -334,6 +335,7 @@ void Outliner::PrepareSpelling (void)
         {
             mbStringFound = FALSE;
 
+            mbWholeDocumentProcessed = false;
             // Supposed that we are not located at the very beginning/end of
             // the document then there may be a match in the document
             // prior/after the current position.
@@ -354,77 +356,14 @@ void Outliner::PrepareSpelling (void)
 
 
 
-/*************************************************************************
-|*
-|* Spelling: Pruefung starten
-|*
-\************************************************************************/
 
 void Outliner::StartSpelling (void)
 {
-    BOOL bMultiDoc = FALSE;
+    BOOL bMultiDoc = false;
     meMode = SPELL;
     mbDirectionIsForward = true;
     mpSearchItem = NULL;
-
-    if (mbViewShellValid)
-    {
-        //    InitPage (mnStartPageIndex);
-
-        if (mpViewShell->ISA(DrawViewShell))
-            bMultiDoc = TRUE;
-
-        EESpellState eState = mpOutlineView->StartSpeller( bMultiDoc );
-
-        if (bMultiDoc)
-        {
-            // At this point we have to be carfull when re-setting the
-            // selection.  The outline view may (very likely) have been
-            // removed from the view stack of the edit engine by previous
-            // BegTextEdit() and EndTextEdit() calls.  Without it setting
-            // the selection may lead to a crash.  To prevent this we push
-            // the view temporarily on the stack and only then set the
-            // selection.
-            ESelection aSelection;
-            bool bPutViewOnStack = false;
-            if (GetView(0) == NULL)
-            {
-                bPutViewOnStack = true;
-                InsertView (mpOutlineView);
-            }
-            mpOutlineView->SetSelection(aSelection);
-            if (bPutViewOnStack)
-                RemoveView (ULONG(0));
-
-            mpView->UnmarkAllObj (mpView->GetPageViewPvNum(0));
-            mpView->EndTextEdit();
-        }
-
-        // Restore the start position before displaying a dialog.
-        RestoreStartPosition ();
-
-        if (eState == EE_SPELL_NOLANGUAGE)
-        {
-            ErrorBox aErrorBox (NULL, WB_OK, String(SdResId(STR_NOLANGUAGE)));
-            ShowModalMessageBox (aErrorBox);
-        }
-        else
-        {
-            if (mpView->AreObjectsMarked())
-            {
-                InfoBox aInfoBox (NULL, String(SdResId(STR_END_SPELLING_OBJ)));
-                ShowModalMessageBox (aInfoBox);
-            }
-            else
-            {
-                InfoBox aInfoBox(NULL, String(SdResId(STR_END_SPELLING)));
-                ShowModalMessageBox (aInfoBox);
-            }
-        }
-    }
 }
-
-
 
 
 /** Free all resources acquired during the search/spell check.  After a
@@ -455,6 +394,12 @@ void Outliner::EndSpelling (void)
                 SID_OBJECT_SELECT,
                 SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
 
+            // Remove and, if previously created by us, delete the outline
+            // view.
+            RemoveView (mpOutlineView);
+            if (mbOwnOutlineView)
+                delete mpOutlineView;
+
             SetUpdateMode(TRUE);
         }
 
@@ -483,7 +428,34 @@ void Outliner::EndSpelling (void)
 }
 
 
+BOOL Outliner::SpellNextDocument (void)
+{
+    if (mpViewShell->ISA(OutlineViewShell))
+    {
+        // When doing a spell check in the outline view then there is
+        // only one document.
+        mbEndOfSearch = true;
+        EndOfSearch ();
+    }
+    else
+    {
+        if (mpView->ISA(OutlineView))
+            ((OutlineView*)mpView)->PrepareClose(FALSE);
+        mpDrawDocument->GetDocSh()->SetWaitCursor( TRUE );
 
+        Initialize (true);
+
+        mpWindow = mpViewShell->GetActiveWindow();
+        mpOutlineView->SetWindow(mpWindow);
+        ProvideNextTextObject ();
+
+        mpDrawDocument->GetDocSh()->SetWaitCursor( FALSE );
+        ClearModifyFlag();
+    }
+
+    return mbEndOfSearch ? FALSE : TRUE;
+
+}
 
 void Outliner::HandleOutsideChange (ChangeHint eHint)
 {
@@ -509,30 +481,44 @@ void Outliner::HandleOutsideChange (ChangeHint eHint)
 |*
 \************************************************************************/
 
-BOOL Outliner::SpellNextDocument (void)
+::svx::SpellPortions Outliner::GetNextSpellSentence (void)
 {
-    mpDrawDocument->GetDocSh()->SetWaitCursor( TRUE );
+    ::svx::SpellPortions aResult;
 
-    // Extract the search direction.
-    BOOL bBackwards = FALSE;
-    Reference<beans::XPropertySet>  xProperties (SvxGetLinguPropertySet());
-    if (xProperties.is())
+    DetectChange();
+    // Iterate over sentences and text shapes until a sentence with a
+    // spelling error has been found.  If no such sentence can be
+    // found the loop is left through a break.
+    // It is the responsibility of the sd outliner object to correctly
+    // iterate over all text shapes, i.e. switch between views, wrap
+    // arround at the end of the document, stop when all text shapes
+    // have been examined exactly once.
+    bool bFoundNextSentence = false;
+    while ( ! bFoundNextSentence)
     {
-        Any aValue = xProperties->getPropertyValue(OUString(
-            RTL_CONSTASCII_USTRINGPARAM(UPN_IS_WRAP_REVERSE)));
-        aValue >>= bBackwards;
+        ESelection aCurrentSelection (GetView(0)->GetSelection());
+        if ( ! mbMatchMayExist
+            && maStartSelection.IsLess(aCurrentSelection))
+            EndOfSearch();
+
+        // Advance to the next sentence.
+        OutlinerView* pOutlinerView = GetView(0);
+        if (pOutlinerView != NULL)
+            bFoundNextSentence = SpellSentence (
+                pOutlinerView->GetEditView(),
+                aResult);
+
+        // When no sentence with spelling errors has been found in the
+        // currently selected text shape or there is no selected text
+        // shape then advance to the next text shape.
+        if ( ! bFoundNextSentence)
+            if ( ! SpellNextDocument())
+                // All text objects have been processed so exit the
+                // loop and return an empty portions list.
+                break;
     }
 
-    Initialize ( ! bBackwards);
-
-    mpWindow = mpViewShell->GetActiveWindow();
-    mpOutlineView->SetWindow(mpWindow);
-    ProvideNextTextObject ();
-
-    mpDrawDocument->GetDocSh()->SetWaitCursor( FALSE );
-    ClearModifyFlag();
-
-    return !mbEndOfSearch;
+    return aResult;
 }
 
 
@@ -540,7 +526,7 @@ BOOL Outliner::SpellNextDocument (void)
 
 /** Go to next match.
 */
-BOOL Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
+bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
 {
     BOOL bEndOfSearch = TRUE;
 
@@ -661,7 +647,7 @@ void Outliner::Initialize (bool bDirectionIsForward)
 
 
 
-BOOL Outliner::SearchAndReplaceAll (void)
+bool Outliner::SearchAndReplaceAll (void)
 {
     // Save the current position to be restored after having replaced all
     // matches.
@@ -698,13 +684,13 @@ BOOL Outliner::SearchAndReplaceAll (void)
 
     RestoreStartPosition ();
 
-    return TRUE;
+    return true;
 }
 
 
 
 
-BOOL Outliner::SearchAndReplaceOnce (void)
+bool Outliner::SearchAndReplaceOnce (void)
 {
     DetectChange ();
 
@@ -1001,8 +987,8 @@ void Outliner::RestoreStartPosition (void)
 */
 void Outliner::ProvideNextTextObject (void)
 {
-    mbEndOfSearch = FALSE;
-    mbFoundObject = FALSE;
+    mbEndOfSearch = false;
+    mbFoundObject = false;
 
     mpView->UnmarkAllObj (mpView->GetPageViewPvNum(0));
     try
@@ -1073,7 +1059,8 @@ void Outliner::EndOfSearch (void)
     // Before we display a dialog we first jump to where the last valid text
     // object was found.  All page and view mode switching since then was
     // temporary and should not be visible to the user.
-    SetObject (maLastValidPosition);
+    if ( ! mpViewShell->ISA(OutlineViewShell))
+        SetObject (maLastValidPosition);
 
     if (mbRestrictSearchToSelection)
         ShowEndOfSearchDialog ();
@@ -1090,13 +1077,18 @@ void Outliner::EndOfSearch (void)
         else if (meMode==TEXT_CONVERSION || ShowWrapArroundDialog ())
         {
             mbMatchMayExist = false;
+            // Everything back to beginning (or end?) of the document.
             maObjectIterator = ::sd::outliner::OutlinerContainer(this).begin();
-            mbEndOfSearch = FALSE;
+            if (mpViewShell->ISA(OutlineViewShell))
+                // Set cursor to first character of the document.
+                mpOutlineView->SetSelection (GetSearchStartPosition ());
+
+            mbEndOfSearch = false;
         }
         else
         {
             // No wrap arround.
-            mbEndOfSearch = TRUE;
+            mbEndOfSearch = true;
         }
     }
 }
@@ -1118,20 +1110,28 @@ void Outliner::InitPage (USHORT nPageIndex)
 
 void Outliner::ShowEndOfSearchDialog (void)
 {
+    String aString;
     if (meMode == SEARCH)
     {
-        String aString;
-
         if (mbStringFound)
             aString = String( SdResId(STR_END_SEARCHING) );
         else
             aString = String( SdResId(STR_STRING_NOTFOUND) );
-
-        // Show the message in an info box that is modal with respect to the
-        // whole application.
-        InfoBox aInfoBox (NULL, aString);
-        ShowModalMessageBox (aInfoBox);
     }
+    else
+    {
+        if (mpView->HasMarkedObj())
+            aString = String(SdResId(STR_END_SPELLING_OBJ));
+        else
+            aString = String(SdResId(STR_END_SPELLING));
+    }
+
+    // Show the message in an info box that is modal with respect to the
+    // whole application.
+    InfoBox aInfoBox (NULL, aString);
+    ShowModalMessageBox (aInfoBox);
+
+    mbWholeDocumentProcessed = true;
 }
 
 
@@ -1250,7 +1250,7 @@ void Outliner::PrepareSpellCheck (void)
                 maSearchStartPosition = maObjectIterator;
             else if (maSearchStartPosition == maObjectIterator)
             {
-                mbEndOfSearch = TRUE;
+                mbEndOfSearch = true;
             }
 
 
@@ -1266,8 +1266,8 @@ void Outliner::PrepareSearchAndReplace (void)
     ULONG nMatchCount = 0;
     if (HasText( *mpSearchItem ))
     {
-        mbStringFound = TRUE;
-        mbMatchMayExist = TRUE;
+        mbStringFound = true;
+        mbMatchMayExist = true;
 
         EnterEditMode ();
 
@@ -1393,7 +1393,7 @@ void Outliner::EnterEditMode (void)
 
 IMPL_LINK_INLINE_START( Outliner, SpellError, void *, nLang )
 {
-    mbError = TRUE;
+    mbError = true;
     String aError( ::GetLanguageString( (LanguageType)(ULONG)nLang ) );
     ErrorHandler::HandleError(* new StringErrorInfo(
                                 ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aError) );
@@ -1690,11 +1690,27 @@ USHORT Outliner::ShowModalMessageBox (Dialog& rMessageBox)
     // account that we are called during a spell check and the search dialog
     // is not available.
     ::Window* pSearchDialog = NULL;
-    SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
-        SvxSearchDialogWrapper::GetChildWindowId());
+    SfxChildWindow* pChildWindow = NULL;
+    switch (meMode)
+    {
+        case SEARCH:
+            pChildWindow = SfxViewFrame::Current()->GetChildWindow(
+                SvxSearchDialogWrapper::GetChildWindowId());
+            break;
+
+        case SPELL:
+            pChildWindow = SfxViewFrame::Current()->GetChildWindow(
+                SpellDialogChildWindow::GetChildWindowId());
+            break;
+
+        case HANGUL_HANJA_CONVERSION:
+            // There should no messages boxes be displayed while doing the
+            // hangul hanja conversion.
+            break;
+    }
+
     if (pChildWindow != NULL)
-        pSearchDialog = static_cast<SvxSearchDialog*>(
-            pChildWindow->GetWindow());
+        pSearchDialog = pChildWindow->GetWindow();
     if (pSearchDialog != NULL)
         pSearchDialog->EnableInput(FALSE,TRUE);
 
