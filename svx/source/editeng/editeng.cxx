@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-19 09:21:09 $
+ *  last change: $Author: mt $ $Date: 2002-07-24 13:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1685,7 +1685,6 @@ Point EditEngine::GetDocPos( const Point& rPaperPos ) const
     return aDocPos;
 }
 
-
 Point EditEngine::GetDocPosTopLeft( sal_uInt16 nParagraph )
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -1712,6 +1711,12 @@ Point EditEngine::GetDocPosTopLeft( sal_uInt16 nParagraph )
         aPoint.Y() = pImpEditEngine->GetParaPortions().GetYOffset( pPPortion );
     }
     return aPoint;
+}
+
+BOOL EditEngine::IsRightToLeft( USHORT nPara ) const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    return pImpEditEngine->IsRightToLeft( nPara );
 }
 
 sal_Bool EditEngine::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
