@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 10:47:05 $
+ *  last change: $Author: vg $ $Date: 2003-07-24 11:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,9 +289,19 @@ sal_uInt16 XclTools::GetTwipsFromInch( double fInches )
         ::std::min( ::std::max( (fInches * EXC_TWIPS_PER_INCH + 0.5), 0.0 ), 65535.0 ) );
 }
 
+sal_uInt16 XclTools::GetTwipsFromHmm( sal_Int32 nHmm )
+{
+    return GetTwipsFromInch( nHmm / 1000.0 / CM_PER_INCH );
+}
+
 double XclTools::GetInchFromTwips( sal_uInt16 nTwips )
 {
     return static_cast< double >( nTwips ) / EXC_TWIPS_PER_INCH;
+}
+
+sal_Int32 XclTools::GetHmmFromTwips( sal_uInt16 nTwips )
+{
+    return static_cast< sal_Int32 >( GetInchFromTwips( nTwips ) * CM_PER_INCH * 1000 );
 }
 
 sal_uInt16 XclTools::GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth )
@@ -601,6 +611,64 @@ bool XclTools::IsCondFormatStyleName( const String& rStyleName, xub_StrLen* pnNe
     {
         if( pnNextChar ) *pnNextChar = nPrefixLen;
         return true;
+    }
+    return false;
+}
+
+
+// form control tag for linked range address ----------------------------------
+
+const String XclTools::maCtrlCellLinkPrefix( RTL_CONSTASCII_USTRINGPARAM( "Excel_Cell_Link=" ) );
+const String XclTools::maCtrlSrcRangePrefix( RTL_CONSTASCII_USTRINGPARAM( "Excel_Source_Data=" ) );
+
+String XclTools::GetCtrlLinkTag( ScDocument& rDoc, const ScAddress* pCellLink, const ScRange* pSrcRange )
+{
+    String aTag;
+    if( pCellLink )
+    {
+        String aCellTag;
+        pCellLink->Format( aCellTag, SCA_VALID | SCA_TAB_3D, &rDoc );
+        aCellTag.Insert( maCtrlCellLinkPrefix, 0 );
+        ScfTools::AddToken( aTag, aCellTag, ';' );
+    }
+    if( pSrcRange )
+    {
+        String aRangeTag;
+        pSrcRange->Format( aRangeTag, SCA_VALID | SCA_TAB_3D, &rDoc );
+        aRangeTag.Insert( maCtrlSrcRangePrefix, 0 );
+        ScfTools::AddToken( aTag, aRangeTag, ';' );
+    }
+    return aTag;
+}
+
+bool XclTools::GetCtrlCellLinkFromTag( ScAddress& rCellLink, ScDocument& rDoc, const String& rTag )
+{
+    xub_StrLen nPrefixLen = maCtrlCellLinkPrefix.Len();
+    xub_StrLen nTokenCnt = rTag.GetTokenCount( ';' );
+    for( xub_StrLen nToken = 0, nStringIx = 0; nToken < nTokenCnt; ++nToken )
+    {
+        String aToken( rTag.GetToken( 0, ';', nStringIx ) );
+        if( aToken.EqualsIgnoreCaseAscii( maCtrlCellLinkPrefix, 0, nPrefixLen ) )
+        {
+            USHORT nRefFlags = rCellLink.Parse( aToken.Copy( nPrefixLen ), &rDoc );
+            return (nRefFlags & SCA_VALID) != 0;
+        }
+    }
+    return false;
+}
+
+bool XclTools::GetCtrlSrcRangeFromTag( ScRange& rSrcRange, ScDocument& rDoc, const String& rTag )
+{
+    xub_StrLen nPrefixLen = maCtrlSrcRangePrefix.Len();
+    xub_StrLen nTokenCnt = rTag.GetTokenCount( ';' );
+    for( xub_StrLen nToken = 0, nStringIx = 0; nToken < nTokenCnt; ++nToken )
+    {
+        String aToken( rTag.GetToken( 0, ';', nStringIx ) );
+        if( aToken.EqualsIgnoreCaseAscii( maCtrlSrcRangePrefix, 0, nPrefixLen ) )
+        {
+            USHORT nRefFlags = rSrcRange.ParseAny( aToken.Copy( nPrefixLen ), &rDoc );
+            return (nRefFlags & SCA_VALID) != 0;
+        }
     }
     return false;
 }
