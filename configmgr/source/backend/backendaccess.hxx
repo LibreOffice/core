@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 12:53:51 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 15:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,8 @@ namespace backenduno = css::configuration::backend ;
   Implementation of IMergedDataProvider handling the access
   to the configuration data.
   */
-class BackendAccess : public IMergedDataProvider {
+class BackendAccess : public IMergedDataProvider
+{
     public :
         /**
           Constructor using an XBackend implementation and a
@@ -192,8 +193,10 @@ class BackendAccess : public IMergedDataProvider {
             CFG_UNO_THROW_ALL();
 
     private :
-        /** Factory used for service invocation */
-        uno::Reference<lang::XMultiServiceFactory> mFactory ;
+        /** Get the factory used for service invocation */
+        uno::Reference<lang::XMultiServiceFactory> getServiceFactory() const;
+        /** UNO context to which this backend belongs */
+        uno::Reference<uno::XComponentContext> mContext ;
         /** Backend being accessed */
         uno::Reference<backenduno::XBackend> mBackend ;
         /** Binary cache of default data */
