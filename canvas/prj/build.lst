@@ -1,4 +1,4 @@
-uc	canvas	:	comphelper cppuhelper offuh unoil tools vcl basegfx NULL
+uc	canvas	:	javaunohelper comphelper cppuhelper offuh unoil tools vcl basegfx NULL
 uc	canvas									usr1	-	all	uc_mkout NULL
 uc	canvas\source\tools						nmake	-	all	uc_tools NULL
 uc	canvas\source\win						nmake	-	all	uc_win uc_tools NULL
