@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vdraw.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:46:32 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
         //#110094#-3
         //Link aLnk( LINK( this, SwViewImp, PaintDispatcher ) );
         pOutDev->Push( PUSH_LINECOLOR ); // #114231#
-        GetPageView()->InitRedraw( _nLayerID, _rRect.SVRect(),
+        GetPageView()->DrawLayer( _nLayerID, _rRect.SVRect(),
                         pOutDev,
                         GetShell()->IsPreView() ? SDRPAINTMODE_ANILIKEPRN : 0);
         pOutDev->Pop();
@@ -381,7 +381,7 @@ BOOL SwViewImp::IsDragPossible( const Point &rPoint )
     if ( !HasDrawView() )
         return FALSE;
 
-    const SdrMarkList &rMrkList = GetDrawView()->GetMarkList();
+    const SdrMarkList &rMrkList = GetDrawView()->GetMarkedObjectList();
 
     if( !rMrkList.GetMarkCount() )
         return FALSE;
