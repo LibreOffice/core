@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:17:29 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,45 +467,6 @@ BOOL ScDocument::HasLink( const String& rDoc,
     return FALSE;
 }
 
-BOOL ScDocument::LinkEmptyTab( USHORT& rTab, const String& aDocTab,
-        const String& aFileName, const String& aTabName )
-{
-    if ( IsClipboard() )
-    {
-        DBG_ERRORFILE( "LinkExternalTab in Clipboard" );
-        return FALSE;
-    }
-    rTab = 0;
-    String  aFilterName;    // wird vom Loader gefuellt
-    String  aOptions;       // Filter-Optionen
-    ScDocumentLoader::GetFilterName( aFileName, aFilterName, aOptions );
-
-    if ( !InsertTab( SC_TAB_APPEND, aDocTab, TRUE ) )
-    {
-        DBG_ERRORFILE("can't insert external document table");
-        return FALSE;
-    }
-    rTab = GetTableCount() - 1;
-
-    ULONG nRefreshDelay = 0;
-
-    BOOL bWasThere = HasLink( aFileName, aFilterName, aOptions );
-    SetLink( rTab, SC_LINK_VALUE, aFileName, aFilterName, aOptions, aTabName, nRefreshDelay );
-    if ( !bWasThere )       // Link pro Quelldokument nur einmal eintragen
-    {
-        ScTableLink* pLink = new ScTableLink( pShell, aFileName, aFilterName, aOptions, nRefreshDelay );
-        pLink->SetInCreate( TRUE );
-        pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName,
-                                        &aFilterName );
-        pLink->Update();
-        pLink->SetInCreate( FALSE );
-        SfxBindings* pBindings = GetViewBindings();
-        if (pBindings)
-            pBindings->Invalidate( SID_LINKS );
-    }
-    return TRUE;
-}
-
 BOOL ScDocument::LinkExternalTab( USHORT& rTab, const String& aDocTab,
         const String& aFileName, const String& aTabName )
 {
@@ -553,6 +514,35 @@ BOOL ScDocument::LinkExternalTab( USHORT& rTab, const String& aDocTab,
         pLink->SetInCreate( FALSE );
         SfxBindings* pBindings = GetViewBindings();
         if (pBindings)
+            pBindings->Invalidate( SID_LINKS );
+    }
+    return TRUE;
+}
+
+BOOL ScDocument::InsertLinkedEmptyTab( USHORT& rnTab, const String& rFileName,
+        const String& rFilterName, const String& rFilterOpt, const String& rTabName )
+{
+    DBG_ASSERT( !IsClipboard(), "ScDocument::InsertLinkedEmptyTab - not allowed in clipboard" );
+    if( IsClipboard() )
+        return FALSE;
+
+    String aOwnTabName( ScGlobal::GetDocTabName( rFileName, rTabName ) );
+    if( !InsertTab( SC_TAB_APPEND, aOwnTabName, TRUE ) )
+        return FALSE;
+
+    rnTab = GetTableCount() - 1;
+
+    ULONG nRefreshDelay = 0;
+    BOOL bWasThere = HasLink( rFileName, rFilterName, rFilterOpt );
+    SetLink( rnTab, SC_LINK_VALUE, rFileName, rFilterName, rFilterOpt, rTabName, nRefreshDelay );
+    if( !bWasThere )    // insert link into link manager only once per external document
+    {
+        ScTableLink* pLink = new ScTableLink( pShell, rFileName, rFilterName, rFilterOpt, nRefreshDelay );
+        pLink->SetInCreate( TRUE );
+        pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, rFileName, &rFilterName );
+        pLink->Update();
+        pLink->SetInCreate( FALSE );
+        if( SfxBindings* pBindings = GetViewBindings() )
             pBindings->Invalidate( SID_LINKS );
     }
     return TRUE;
