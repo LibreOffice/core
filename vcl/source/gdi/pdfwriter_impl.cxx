@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-24 18:21:11 $
+ *  last change: $Author: pl $ $Date: 2002-07-29 12:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,11 +356,18 @@ void PDFWriterImpl::PDFPage::appendPolyPolygon( const PolyPolygon& rPolyPoly, OS
 
 void PDFWriterImpl::PDFPage::appendMappedLength( sal_Int32 nLength, OStringBuffer& rBuffer, bool bVertical )
 {
+    if ( nLength < 0 )
+    {
+        rBuffer.append( '-' );
+        nLength = -nLength;
+    }
+
     Size aSize = OutputDevice::LogicToLogic( Size( nLength, nLength ),
                                              m_pWriter->m_aGraphicsStack.front().m_aMapMode,
                                              m_pWriter->m_aMapMode );
     sal_Int32 nInt      = ( bVertical ? aSize.Height() : aSize.Width() ) / 10;
     sal_Int32 nDecimal  = ( bVertical ? aSize.Height() : aSize.Width() ) % 10;
+
     rBuffer.append( nInt );
     if( nDecimal )
     {
@@ -395,6 +402,45 @@ void PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
         appendMappedLength( rInfo.GetWidth(), rBuffer );
         rBuffer.append( " w\r\n" );
     }
+}
+
+void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal_Int32 nDelta, OStringBuffer& rBuffer )
+{
+    if( nWidth <= 0 )
+        return;
+    if( nDelta < 1 )
+        nDelta = 1;
+
+    rBuffer.append( "0 " );
+    appendMappedLength( nY, rBuffer, true );
+    rBuffer.append( " m\r\n" );
+    for( sal_Int32 n = 0; n < nWidth; )
+    {
+        n += nDelta;
+        appendMappedLength( n, rBuffer, false );
+        rBuffer.append( ' ' );
+        appendMappedLength( nDelta+nY, rBuffer, true );
+        rBuffer.append( ' ' );
+        n += nDelta;
+        appendMappedLength( n, rBuffer, false );
+        rBuffer.append( ' ' );
+        appendMappedLength( nY, rBuffer, true );
+        rBuffer.append( " v " );
+        if( n < nWidth )
+        {
+            n += nDelta;
+            appendMappedLength( n, rBuffer, false );
+            rBuffer.append( ' ' );
+            appendMappedLength( nY-nDelta, rBuffer, true );
+            rBuffer.append( ' ' );
+            n += nDelta;
+            appendMappedLength( n, rBuffer, false );
+            rBuffer.append( ' ' );
+            appendMappedLength( nY, rBuffer, true );
+            rBuffer.append( " v\r\n" );
+        }
+    }
+    rBuffer.append( "S\r\n" );
 }
 
 /*
@@ -497,6 +543,7 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
         VirtualDevice* pVDev = new VirtualDevice( 0 );
         m_pReferenceDevice = pVDev;
         pVDev->SetOutputSizePixel( Size( 640, 480 ) );
+        pVDev->SetMapMode( MAP_MM );
         m_pReferenceDevice->mpPDFWriter = this;
         m_pReferenceDevice->ImplUpdateFontData( TRUE );
     }
@@ -526,7 +573,7 @@ ImplDevFontList* PDFWriterImpl::filterDevFontList( ImplDevFontList* pFontList )
         }
         pData = pFontList->Next();
     }
-    // first the 14 PDF builtin fonts
+    // append the 14 PDF builtin fonts
     for( unsigned int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
     {
         ImplFontData* pNewData = new ImplFontData();
@@ -570,7 +617,7 @@ void PDFWriterImpl::getFontMetric( ImplFontSelectData* pSelect, ImplFontMetricDa
     {
         if( pSelect->mpFontData->mpSysData == (void*)&m_aBuiltinFonts[i] )
         {
-            pMetric->mnWidth        = pSelect->mnWidth;
+            pMetric->mnWidth        = pSelect->mnHeight;
             pMetric->mnAscent       = ( pSelect->mnHeight * m_aBuiltinFonts[i].m_nAscent + 500 ) / 1000;
             pMetric->mnDescent      = ( pSelect->mnHeight * (-m_aBuiltinFonts[i].m_nDescent) + 500 ) / 1000;
             pMetric->mnLeading      = 0;
@@ -601,9 +648,9 @@ SalLayout* PDFWriterImpl::createSalLayout( ImplFontSelectData* pSelect, ImplLayo
 
             bool bRightToLeft = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL));
 
-            sal_Int32 nTextWidth = pSelect->mnWidth ? pSelect->mnWidth : pSelect->mnHeight;
+            long nTextWidth = pSelect->mnWidth ? pSelect->mnWidth : pSelect->mnHeight;
 
-            Point aNewPos( 0, 0);
+            Point aNewPos( 0, 0 );
             for( int i = 0; i < nGlyphCount; ++i )
             {
                 int nLogicalIndex = bRightToLeft ? (rArgs.mnEndCharIndex-1-i) : (rArgs.mnFirstCharIndex+i);
@@ -611,10 +658,10 @@ SalLayout* PDFWriterImpl::createSalLayout( ImplFontSelectData* pSelect, ImplLayo
                 if( m_aBuiltinFonts[n].m_eCharSet == RTL_TEXTENCODING_SYMBOL && cChar >= 0xf000 )
                     cChar -= 0xf000;
                 DBG_ASSERT( cChar < 256, "invalid character index requested for builtin font" );
-                if( cChar > 255 ) // not so good
+                if( cChar & 0xff00 ) // not so good
                     cChar = 0;
 
-                long nGlyphWidth = cChar < 256 ? (m_aBuiltinFonts[n].m_aWidths[cChar] * nTextWidth + 500 ) / 1000 : 0;
+                long nGlyphWidth = (long)m_aBuiltinFonts[n].m_aWidths[cChar] * nTextWidth;
                 long nGlyphFlags = (nGlyphWidth > 0) ? GlyphItem::CLUSTER_START : 0;
                 pGlyphBuffer[i] = GlyphItem( nLogicalIndex, cChar, aNewPos,
                                              nGlyphFlags, nGlyphWidth );
@@ -623,8 +670,15 @@ SalLayout* PDFWriterImpl::createSalLayout( ImplFontSelectData* pSelect, ImplLayo
             }
             pLayout = new GenericSalLayout( rArgs );
             pLayout->SetGlyphItems( pGlyphBuffer, nGlyphCount );
-            pLayout->SetOrientation( 0 );
+            pLayout->SetUnitsPerPixel( 1000 );
+            pLayout->SetOrientation( pSelect->mnOrientation );
             pLayout->SetWantFallback( false );
+            if( rArgs.mpDXArray )
+                pLayout->ApplyDXArray( rArgs.mpDXArray );
+            if( rArgs.mnLayoutWidth )
+                pLayout->Justify( rArgs.mnLayoutWidth );
+
+            break;
         }
     }
 
@@ -976,8 +1030,6 @@ sal_Int32 PDFWriterImpl::emitEmbeddedFont( ImplFontData* pFont )
     sal_Int32 nStreamObject = 0;
     sal_Int32 nFontDescriptor = 0;
 
-#ifndef REMOTE_APPSERVER
-    // TODO: REMOTE_APPSERVER case
     FontSubsetInfo aInfo;
     sal_Int32 pWidths[256];
     const unsigned char* pFontData = NULL;
@@ -1306,7 +1358,6 @@ sal_Int32 PDFWriterImpl::emitEmbeddedFont( ImplFontData* pFont )
   streamend:
     if( pFontData )
         m_pReferenceDevice->mpGraphics->FreeEmbedFontData( pFontData, nFontLen );
-#endif
 
     return nFontObject;
 }
@@ -1383,8 +1434,6 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding, sal_Unicode*
 
 sal_Int32 PDFWriterImpl::emitFontDescriptor( ImplFontData* pFont, FontSubsetInfo& rInfo, sal_Int32 nSubsetID, sal_Int32 nFontStream )
 {
-#ifndef REMOTE_APPSERVER
-// TODO: REMOTE_APPSERVER case
     OStringBuffer aLine( 1024 );
     // get font flags, see PDF reference 1.4 p. 358
     // possibly characters outside Adobe standard encoding
@@ -1449,9 +1498,6 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( ImplFontData* pFont, FontSubsetInfo
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
     return nFontDescriptor;
-#else
-    return 0;
-#endif
 }
 
 sal_Int32 PDFWriterImpl::emitFonts()
@@ -1502,8 +1548,6 @@ sal_Int32 PDFWriterImpl::emitFonts()
                 nGlyphs++;
             }
             // TODO: when is osl_getTempFile available ?
-#ifndef REMOTE_APPSERVER
-            // TODO: REMOTE_APPSERVER case
             FontSubsetInfo aSubsetInfo;
             if( m_pReferenceDevice->mpGraphics->CreateFontSubset( aTmpName, it->first, pGlyphIDs, pEncoding, pWidths, nGlyphs, aSubsetInfo ) )
             {
@@ -1581,7 +1625,6 @@ sal_Int32 PDFWriterImpl::emitFonts()
 
                 aFontIDToObject[ lit->m_nFontID ] = nFontObject;
             }
-#endif
             osl_removeFile( aTmpName.pData );
         }
     }
@@ -1936,8 +1979,6 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs, long* pGlyphs, sal_Unicode* pUn
 
 void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
 {
-    // TODO: rText should come from SalLayout as soon as possible
-
     OStringBuffer aLine( 512 );
 
     // setup text colors (if necessary)
@@ -1955,6 +1996,8 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
 
     const int nMaxGlyphs = 256;
 
+    // note: the layout calculates in outdevs device pixel !!
+
     long pGlyphs[nMaxGlyphs];
     sal_uInt8 pMappedGlyphs[nMaxGlyphs];
     sal_Int32 pMappedFontObjects[nMaxGlyphs];
@@ -1966,6 +2009,9 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
     bool bFirst = true;
     int nMinCharIndex = 0, nMaxCharIndex = rText.Len()-1;
     double fXScale = 1.0;
+    sal_Int32 nFontHeight = m_pReferenceDevice->mpFontEntry->maFontSelData.mnHeight;
+    // transform font height back to current units
+    nFontHeight = m_pReferenceDevice->ImplDevicePixelToLogicWidth( nFontHeight );
     if( m_aCurrentPDFState.m_aFont.GetWidth() )
     {
         Font aFont( m_aCurrentPDFState.m_aFont );
@@ -1977,15 +2023,21 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
                 (double)m_aCurrentPDFState.m_aFont.GetWidth() /
                 (double)aMetric.GetWidth();
         }
-        // force state befor GetFontMetric
+        // force state before GetFontMetric
         m_pReferenceDevice->ImplNewFont();
     }
+    double fAngle = (double)m_aCurrentPDFState.m_aFont.GetOrientation() * M_PI / 1800.0;
+    double fSin = sin( fAngle );
+    double fCos = cos( fAngle );
     while( (nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, pGlyphs, aPos, nIndex, NULL, pCharIndices )) )
     {
         // add ascent since PDF calculates relative to baseline, VCL to upper left corner
         aPos.Y() += m_pReferenceDevice->mpFontEntry->maMetric.mnAscent;
+
+        // back transformation to current coordinate system
+        aPos = m_pReferenceDevice->PixelToLogic( aPos );
         // optimize use of Td vs. Tm
-        if( bFirst && fXScale == 1.0 )
+        if( bFirst && fXScale == 1.0 && fCos == 1.0 && fSin == 0.0 )
         {
             m_aPages.back().appendPoint( aPos, aLine );
             aLine.append( " Td " );
@@ -1993,10 +2045,16 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
         }
         else
         {
-            appendDouble( fXScale, aLine );
-            aLine.append( " 0 0 1 " );
+            appendDouble( fXScale*fCos, aLine );
+            aLine.append( ' ' );
+            appendDouble( fSin*fXScale, aLine );
+            aLine.append( ' ' );
+            appendDouble( -fSin, aLine );
+            aLine.append( ' ' );
+            appendDouble( fCos, aLine );
+            aLine.append( ' ' );
             m_aPages.back().appendPoint( aPos, aLine );
-            aLine.append( " Tm " );
+            aLine.append( " Tm\r\n" );
         }
         for( int i = 0; i < nGlyphs; i++ )
         {
@@ -2019,7 +2077,7 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
             aLine.append( "/F" );
             aLine.append( pMappedFontObjects[nLast] );
             aLine.append( ' ' );
-            m_aPages.back().appendMappedLength( m_aCurrentPDFState.m_aFont.GetHeight(), aLine, true );
+            m_aPages.back().appendMappedLength( nFontHeight, aLine, true );
             aLine.append( " Tf [ <" );
             for( int i = nLast; i < nNext; i++ )
             {
@@ -2047,13 +2105,7 @@ void PDFWriterImpl::drawText( const Point& rPos, const String& rText, xub_StrLen
 
     updateGraphicsState();
 
-    // get a sal layout
-    getReferenceDevice();
-    // set font on reference device
-    m_pReferenceDevice->SetFont( m_aCurrentPDFState.m_aFont );
-    m_pReferenceDevice->SetLayoutMode( m_aCurrentPDFState.m_nLayoutMode );
-
-    // get the layout from the OuputDevice's SalGraphics
+    // get a layout from the OuputDevice's SalGraphics
     // this also enforces font substitution and sets the font on SalGraphics
     SalLayout* pLayout = m_pReferenceDevice->ImplLayout( rText, nIndex, nLen, rPos );
     if( pLayout )
@@ -2069,13 +2121,7 @@ void PDFWriterImpl::drawTextArray( const Point& rPos, const String& rText, const
 
     updateGraphicsState();
 
-    // get a sal layout
-    getReferenceDevice();
-    // set font on reference device
-    m_pReferenceDevice->SetFont( m_aCurrentPDFState.m_aFont );
-    m_pReferenceDevice->SetLayoutMode( m_aCurrentPDFState.m_nLayoutMode );
-
-    // get the layout from the OuputDevice's SalGraphics
+    // get a layout from the OuputDevice's SalGraphics
     // this also enforces font substitution and sets the font on SalGraphics
     SalLayout* pLayout = m_pReferenceDevice->ImplLayout( rText, nIndex, nLen, rPos, 0, pDXArray );
     if( pLayout )
@@ -2087,17 +2133,11 @@ void PDFWriterImpl::drawTextArray( const Point& rPos, const String& rText, const
 
 void PDFWriterImpl::drawStretchText( const Point& rPos, ULONG nWidth, const String& rText, xub_StrLen nIndex, xub_StrLen nLen )
 {
-    MARK( "drawText with array" );
+    MARK( "drawStretchText" );
 
     updateGraphicsState();
 
-    // get a sal layout
-    getReferenceDevice();
-    // set font on reference device
-    m_pReferenceDevice->SetFont( m_aCurrentPDFState.m_aFont );
-    m_pReferenceDevice->SetLayoutMode( m_aCurrentPDFState.m_nLayoutMode );
-
-    // get the layout from the OuputDevice's SalGraphics
+    // get a layout from the OuputDevice's SalGraphics
     // this also enforces font substitution and sets the font on SalGraphics
     SalLayout* pLayout = m_pReferenceDevice->ImplLayout( rText, nIndex, nLen, rPos, nWidth );
     if( pLayout )
@@ -2105,6 +2145,158 @@ void PDFWriterImpl::drawStretchText( const Point& rPos, ULONG nWidth, const Stri
         drawLayout( *pLayout, rText.Copy( nIndex, nLen ) );
         pLayout->Release();
     }
+}
+
+void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, USHORT nStyle )
+{
+    long        nWidth          = rRect.GetWidth();
+    long        nHeight         = rRect.GetHeight();
+
+    if ( nWidth <= 0 || nHeight <= 0 )
+        return;
+
+    MARK( "drawText with rectangle" );
+
+    updateGraphicsState();
+
+    // clip with rectangle
+    OStringBuffer aLine;
+    aLine.append( "q " );
+    m_aPages.back().appendRect( rRect, aLine );
+    aLine.append( " W* n\r\n" );
+    writeBuffer( aLine.getStr(), aLine.getLength() );
+
+    // if disabled text is needed, put in here
+
+    Point       aPos            = rRect.TopLeft();
+
+    long        nTextHeight     = m_pReferenceDevice->GetTextHeight();
+    TextAlign   eAlign          = m_pReferenceDevice->GetTextAlign();
+    xub_StrLen  nMnemonicPos    = STRING_NOTFOUND;
+
+    String aStr = rOrigStr;
+    if ( nStyle & TEXT_DRAW_MNEMONIC )
+        aStr = m_pReferenceDevice->GetNonMnemonicString( aStr, nMnemonicPos );
+
+    // multiline text
+    if ( nStyle & TEXT_DRAW_MULTILINE )
+    {
+        XubString               aLastLine;
+        ImplMultiTextLineInfo   aMultiLineInfo;
+        ImplTextLineInfo*       pLineInfo;
+        long                    nMaxTextWidth;
+        xub_StrLen              i;
+        xub_StrLen              nLines;
+        xub_StrLen              nFormatLines;
+
+        if ( nTextHeight )
+        {
+            nMaxTextWidth = m_pReferenceDevice->ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle );
+            nLines = (xub_StrLen)(nHeight/nTextHeight);
+            nFormatLines = aMultiLineInfo.Count();
+            if ( !nLines )
+                nLines = 1;
+            if ( nFormatLines > nLines )
+            {
+                if ( nStyle & TEXT_DRAW_ENDELLIPSIS )
+                {
+                    // handle last line
+                    nFormatLines = nLines-1;
+
+                    pLineInfo = aMultiLineInfo.GetLine( nFormatLines );
+                    aLastLine = aStr.Copy( pLineInfo->GetIndex() );
+                    aLastLine.ConvertLineEnd( LINEEND_LF );
+                    // replace line feed by space
+                    xub_StrLen nLastLineLen = aLastLine.Len();
+                    for ( i = 0; i < nLastLineLen; i++ )
+                    {
+                        if ( aLastLine.GetChar( i ) == _LF )
+                            aLastLine.SetChar( i, ' ' );
+                    }
+                    aLastLine = m_pReferenceDevice->GetEllipsisString( aLastLine, nWidth, nStyle );
+                    nStyle &= ~(TEXT_DRAW_VCENTER | TEXT_DRAW_BOTTOM);
+                    nStyle |= TEXT_DRAW_TOP;
+                }
+            }
+
+            // vertical alignment
+            if ( nStyle & TEXT_DRAW_BOTTOM )
+                aPos.Y() += nHeight-(nFormatLines*nTextHeight);
+            else if ( nStyle & TEXT_DRAW_VCENTER )
+                aPos.Y() += (nHeight-(nFormatLines*nTextHeight))/2;
+
+            // font alignment
+            if ( eAlign == ALIGN_BOTTOM )
+                aPos.Y() += nTextHeight;
+            else if ( eAlign == ALIGN_BASELINE )
+                aPos.Y() += m_pReferenceDevice->GetFontMetric().GetAscent();
+
+            // draw all lines excluding the last
+            for ( i = 0; i < nFormatLines; i++ )
+            {
+                pLineInfo = aMultiLineInfo.GetLine( i );
+                if ( nStyle & TEXT_DRAW_RIGHT )
+                    aPos.X() += nWidth-pLineInfo->GetWidth();
+                else if ( nStyle & TEXT_DRAW_CENTER )
+                    aPos.X() += (nWidth-pLineInfo->GetWidth())/2;
+                xub_StrLen nIndex   = pLineInfo->GetIndex();
+                xub_StrLen nLineLen = pLineInfo->GetLen();
+                drawText( aPos, aStr, nIndex, nLineLen );
+                // mnemonics should not appear in documents,
+                // if the need arises, put them in here
+                aPos.Y() += nTextHeight;
+                aPos.X() = rRect.Left();
+            }
+
+
+            // output last line left adjusted since it was shortened
+            if ( aLastLine.Len() )
+                drawText( aPos, aLastLine, 0, STRING_LEN );
+        }
+    }
+    else
+    {
+        long nTextWidth = m_pReferenceDevice->GetTextWidth( aStr );
+
+        // Evt. Text kuerzen
+        if ( nTextWidth > nWidth )
+        {
+            if ( nStyle & (TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_PATHELLIPSIS | TEXT_DRAW_NEWSELLIPSIS) )
+            {
+                aStr = m_pReferenceDevice->GetEllipsisString( aStr, nWidth, nStyle );
+                nStyle &= ~(TEXT_DRAW_CENTER | TEXT_DRAW_RIGHT);
+                nStyle |= TEXT_DRAW_LEFT;
+                nTextWidth = m_pReferenceDevice->GetTextWidth( aStr );
+            }
+        }
+
+        // vertical alignment
+        if ( nStyle & TEXT_DRAW_RIGHT )
+            aPos.X() += nWidth-nTextWidth;
+        else if ( nStyle & TEXT_DRAW_CENTER )
+            aPos.X() += (nWidth-nTextWidth)/2;
+
+        // font alignment
+        if ( eAlign == ALIGN_BOTTOM )
+            aPos.Y() += nTextHeight;
+        else if ( eAlign == ALIGN_BASELINE )
+            aPos.Y() += m_pReferenceDevice->GetFontMetric().GetAscent();
+
+        if ( nStyle & TEXT_DRAW_BOTTOM )
+            aPos.Y() += nHeight-nTextHeight;
+        else if ( nStyle & TEXT_DRAW_VCENTER )
+            aPos.Y() += (nHeight-nTextHeight)/2;
+
+        // mnemonics should be inserted here if the need arises
+
+        // draw the actual text
+        drawText( aPos, aStr, 0, STRING_LEN );
+    }
+
+    // reset clip region to original value
+    aLine.setLength( 0 );
+    aLine.append( "Q\r\n" );
+    writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
 void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop )
@@ -2125,7 +2317,6 @@ void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop )
 void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop, const LineInfo& rInfo )
 {
     MARK( "drawLine with LineInfo" );
-
     updateGraphicsState();
 
 #if 1
@@ -2166,6 +2357,398 @@ void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop, const Lin
             drawLine( (*pPoly)[0], (*pPoly)[1] );
     }
 #endif
+}
+
+void PDFWriterImpl::drawWaveLine( const Point& rStart, const Point& rStop, sal_Int32 nDelta, sal_Int32 nLineWidth )
+{
+    Point aDiff( rStop-rStart );
+    double fLen = sqrt( (double)(aDiff.X()*aDiff.X() + aDiff.Y()*aDiff.Y()) );
+    if( fLen < 1.0 )
+        return;
+
+    MARK( "drawWaveLine" );
+    updateGraphicsState();
+
+    OStringBuffer aLine( 512 );
+    aLine.append( "q " );
+    m_aPages.back().appendMappedLength( nLineWidth, aLine, true );
+    aLine.append( " w " );
+
+    appendDouble( (double)aDiff.X()/fLen, aLine );
+    aLine.append( ' ' );
+    appendDouble( -(double)aDiff.Y()/fLen, aLine );
+    aLine.append( ' ' );
+    appendDouble( (double)aDiff.Y()/fLen, aLine );
+    aLine.append( ' ' );
+    appendDouble( (double)aDiff.X()/fLen, aLine );
+    aLine.append( ' ' );
+    m_aPages.back().appendPoint( rStart, aLine );
+    aLine.append( " cm " );
+    m_aPages.back().appendWaveLine( (sal_Int32)fLen, 0, nDelta, aLine );
+    aLine.append( "Q\r\n" );
+    writeBuffer( aLine.getStr(), aLine.getLength() );
+}
+
+#define WCONV( x ) m_pReferenceDevice->ImplDevicePixelToLogicWidth( x )
+#define HCONV( x ) m_pReferenceDevice->ImplDevicePixelToLogicHeight( x )
+
+void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, bool bUnderlineAbove )
+{
+    if ( !nWidth ||
+         ( ((eStrikeout == STRIKEOUT_NONE)||(eStrikeout == STRIKEOUT_DONTKNOW)) &&
+           ((eUnderline == UNDERLINE_NONE)||(eUnderline == UNDERLINE_DONTKNOW)) ) )
+        return;
+
+    MARK( "drawTextLine" );
+    updateGraphicsState();
+
+    // note: units in pFontEntry are ref device pixel
+    ImplFontEntry*  pFontEntry = m_pReferenceDevice->mpFontEntry;
+    Color           aUnderlineColor = m_aCurrentPDFState.m_aTextLineColor;
+    Color           aStrikeoutColor = m_aCurrentPDFState.m_aFont.GetColor();
+    long            nLineHeight = 0;
+    long            nLinePos = 0;
+    long            nLinePos2 = 0;
+    bool            bNormalLines = true;
+
+    if ( bNormalLines &&
+         ((eStrikeout == STRIKEOUT_SLASH) || (eStrikeout == STRIKEOUT_X)) )
+    {
+        String aStrikeout = String::CreateFromAscii( eStrikeout == STRIKEOUT_SLASH ? "/" : "X" );
+        while( m_pReferenceDevice->GetTextWidth( aStrikeout ) < nWidth )
+            aStrikeout.Append( aStrikeout );
+
+        // do not get broader than nWidth
+        while( m_pReferenceDevice->GetTextWidth( aStrikeout ) > nWidth )
+            aStrikeout.Erase( 0, 1 );
+        drawText( rPos, aStrikeout );
+
+        switch( eUnderline )
+        {
+            case UNDERLINE_NONE:
+            case UNDERLINE_DONTKNOW:
+            case UNDERLINE_SMALLWAVE:
+            case UNDERLINE_WAVE:
+            case UNDERLINE_DOUBLEWAVE:
+            case UNDERLINE_BOLDWAVE:
+                bNormalLines = false;
+        }
+    }
+
+    Point aPos( rPos );
+    aPos += Point( 0, HCONV( pFontEntry->maMetric.mnAscent ) );
+
+    OStringBuffer aLine( 512 );
+    // save GS
+    aLine.append( "q " );
+
+    // rotate and translate matrix
+    double fAngle = (double)m_aCurrentPDFState.m_aFont.GetOrientation() * M_PI / 1800.0;
+    double fSin = sin( fAngle );
+    double fCos = cos( fAngle );
+    appendDouble( fCos, aLine );
+    aLine.append( ' ' );
+    appendDouble( fSin, aLine );
+    aLine.append( ' ' );
+    appendDouble( -fSin, aLine );
+    aLine.append( ' ' );
+    appendDouble( fCos, aLine );
+    aLine.append( ' ' );
+    m_aPages.back().appendPoint( aPos, aLine );
+    aLine.append( " cm\r\n" );
+
+    if ( aUnderlineColor == Color( COL_TRANSPARENT ) )
+        aUnderlineColor = aStrikeoutColor;
+
+    if ( (eUnderline == UNDERLINE_SMALLWAVE) ||
+         (eUnderline == UNDERLINE_WAVE) ||
+         (eUnderline == UNDERLINE_DOUBLEWAVE) ||
+         (eUnderline == UNDERLINE_BOLDWAVE) )
+    {
+        appendStrokingColor( aUnderlineColor, aLine );
+        aLine.append( "\r\n" );
+
+        if ( bUnderlineAbove )
+        {
+            if ( !pFontEntry->maMetric.mnAboveWUnderlineSize )
+                m_pReferenceDevice->ImplInitAboveTextLineSize();
+            nLinePos = HCONV( pFontEntry->maMetric.mnAboveWUnderlineOffset );
+            nLineHeight = HCONV( pFontEntry->maMetric.mnAboveWUnderlineSize );
+        }
+        else
+        {
+            if ( !pFontEntry->maMetric.mnWUnderlineSize )
+                m_pReferenceDevice->ImplInitTextLineSize();
+            nLinePos = HCONV( pFontEntry->maMetric.mnWUnderlineOffset );
+            nLineHeight = HCONV( pFontEntry->maMetric.mnWUnderlineSize );
+
+        }
+        if ( (eUnderline == UNDERLINE_SMALLWAVE) &&
+             (nLineHeight > 3) )
+            nLineHeight = 3;
+
+        long nLineWidth = 1;
+
+        if ( eUnderline == UNDERLINE_BOLDWAVE )
+            nLineWidth *= 2;
+
+        long nLineWidthHeight = nLineWidth;
+        if ( eUnderline == UNDERLINE_DOUBLEWAVE )
+        {
+            long nOrgLineHeight = nLineHeight;
+            nLineHeight /= 3;
+            if ( nLineHeight < 2 )
+            {
+                if ( nOrgLineHeight > 1 )
+                    nLineHeight = 2;
+                else
+                    nLineHeight = 1;
+            }
+            long nLineDY = nOrgLineHeight-(nLineHeight*2);
+            if ( nLineDY < nLineWidthHeight )
+                nLineDY = nLineWidthHeight;
+            long nLineDY2 = nLineDY/2;
+            if ( !nLineDY2 )
+                nLineDY2 = 1;
+
+            nLinePos -= nLineWidthHeight-nLineDY2;
+
+            aLine.append( nLineWidth );
+            aLine.append( " w " );
+            m_aPages.back().appendWaveLine( nWidth, -nLinePos, nLineHeight, aLine );
+
+            nLinePos += nLineWidthHeight+nLineDY;
+            m_aPages.back().appendWaveLine( nWidth, -nLinePos, nLineHeight, aLine );
+        }
+        else
+        {
+            nLinePos -= nLineWidthHeight/2;
+            m_aPages.back().appendWaveLine( nWidth, -nLinePos, nLineHeight/2, aLine );
+        }
+
+        if ( (eStrikeout == STRIKEOUT_NONE) ||
+             (eStrikeout == STRIKEOUT_DONTKNOW) )
+            bNormalLines = false;
+    }
+
+    if ( bNormalLines )
+    {
+        if ( eUnderline > UNDERLINE_BOLDWAVE )
+            eUnderline = UNDERLINE_SINGLE;
+
+        if ( (eUnderline == UNDERLINE_SINGLE) ||
+             (eUnderline == UNDERLINE_DOTTED) ||
+             (eUnderline == UNDERLINE_DASH) ||
+             (eUnderline == UNDERLINE_LONGDASH) ||
+             (eUnderline == UNDERLINE_DASHDOT) ||
+             (eUnderline == UNDERLINE_DASHDOTDOT) )
+        {
+            if ( bUnderlineAbove )
+            {
+                if ( !pFontEntry->maMetric.mnAboveUnderlineSize )
+                    m_pReferenceDevice->ImplInitAboveTextLineSize();
+                nLineHeight = HCONV( pFontEntry->maMetric.mnAboveUnderlineSize );
+                nLinePos    = HCONV( pFontEntry->maMetric.mnAboveUnderlineOffset );
+            }
+            else
+            {
+                if ( !pFontEntry->maMetric.mnUnderlineSize )
+                    m_pReferenceDevice->ImplInitTextLineSize();
+                nLineHeight = HCONV( pFontEntry->maMetric.mnUnderlineSize );
+                nLinePos    = HCONV( pFontEntry->maMetric.mnUnderlineOffset );
+            }
+        }
+        else if ( (eUnderline == UNDERLINE_BOLD) ||
+                  (eUnderline == UNDERLINE_BOLDDOTTED) ||
+                  (eUnderline == UNDERLINE_BOLDDASH) ||
+
+                  (eUnderline == UNDERLINE_BOLDLONGDASH) ||
+                  (eUnderline == UNDERLINE_BOLDDASHDOT) ||
+                  (eUnderline == UNDERLINE_BOLDDASHDOTDOT) )
+        {
+            if ( bUnderlineAbove )
+            {
+                if ( !pFontEntry->maMetric.mnAboveBUnderlineSize )
+                    m_pReferenceDevice->ImplInitAboveTextLineSize();
+                nLineHeight = HCONV( pFontEntry->maMetric.mnAboveBUnderlineSize );
+                nLinePos    = HCONV( pFontEntry->maMetric.mnAboveBUnderlineOffset );
+            }
+            else
+            {
+                if ( !pFontEntry->maMetric.mnBUnderlineSize )
+                    m_pReferenceDevice->ImplInitTextLineSize();
+                nLineHeight = HCONV( pFontEntry->maMetric.mnBUnderlineSize );
+                nLinePos    = HCONV( pFontEntry->maMetric.mnBUnderlineOffset );
+            }
+        }
+        else if ( eUnderline == UNDERLINE_DOUBLE )
+        {
+            if ( bUnderlineAbove )
+            {
+                if ( !pFontEntry->maMetric.mnAboveDUnderlineSize )
+                    m_pReferenceDevice->ImplInitAboveTextLineSize();
+                nLineHeight = HCONV( pFontEntry->maMetric.mnAboveDUnderlineSize );
+                nLinePos    = HCONV( pFontEntry->maMetric.mnAboveDUnderlineOffset1 );
+                nLinePos2   = HCONV( pFontEntry->maMetric.mnAboveDUnderlineOffset2 );
+            }
+            else
+            {
+                if ( !pFontEntry->maMetric.mnDUnderlineSize )
+                    m_pReferenceDevice->ImplInitTextLineSize();
+                nLineHeight = HCONV( pFontEntry->maMetric.mnDUnderlineSize );
+                nLinePos    = HCONV( pFontEntry->maMetric.mnDUnderlineOffset1 );
+                nLinePos2   = HCONV( pFontEntry->maMetric.mnDUnderlineOffset2 );
+            }
+        }
+        else
+            nLineHeight = 0;
+
+        if ( nLineHeight )
+        {
+            m_aPages.back().appendMappedLength( nLineHeight, aLine, true );
+            aLine.append( " w " );
+            appendStrokingColor( aUnderlineColor, aLine );
+            aLine.append( "\r\n" );
+
+            if ( (eUnderline == UNDERLINE_DOTTED) ||
+                 (eUnderline == UNDERLINE_BOLDDOTTED) )
+            {
+                aLine.append( "[ " );
+                m_aPages.back().appendMappedLength( nLineHeight, aLine, false );
+                aLine.append( " ] 0 d\r\n" );
+            }
+            else if ( (eUnderline == UNDERLINE_DASH) ||
+                      (eUnderline == UNDERLINE_LONGDASH) ||
+                      (eUnderline == UNDERLINE_BOLDDASH) ||
+                      (eUnderline == UNDERLINE_BOLDLONGDASH) )
+            {
+                sal_Int32 nDashLength = 4*nLineHeight;
+                sal_Int32 nVoidLength = 2*nLineHeight;
+                switch( eUnderline )
+                {
+                    case UNDERLINE_LONGDASH:
+                    case UNDERLINE_BOLDLONGDASH:
+                        nDashLength = 8*nLineHeight;
+                }
+
+                aLine.append( "[ " );
+                m_aPages.back().appendMappedLength( nDashLength, aLine, false );
+                aLine.append( ' ' );
+                m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
+                aLine.append( " ] 0 d\r\n" );
+            }
+            else if ( (eUnderline == UNDERLINE_DASHDOT) ||
+                      (eUnderline == UNDERLINE_BOLDDASHDOT) )
+            {
+                sal_Int32 nDashLength = 4*nLineHeight;
+                sal_Int32 nVoidLength = 2*nLineHeight;
+                aLine.append( "[ " );
+                m_aPages.back().appendMappedLength( nDashLength, aLine, false );
+                aLine.append( ' ' );
+                m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
+                aLine.append( ' ' );
+                m_aPages.back().appendMappedLength( nLineHeight, aLine, false );
+                aLine.append( ' ' );
+                m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
+                aLine.append( " ] 0 d\r\n" );
+            }
+            else if ( (eUnderline == UNDERLINE_DASHDOTDOT) ||
+
+                      (eUnderline == UNDERLINE_BOLDDASHDOTDOT) )
+            {
+                sal_Int32 nDashLength = 4*nLineHeight;
+                sal_Int32 nVoidLength = 2*nLineHeight;
+                aLine.append( "[ " );
+                m_aPages.back().appendMappedLength( nDashLength, aLine, false );
+                aLine.append( ' ' );
+                m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
+                aLine.append( ' ' );
+                m_aPages.back().appendMappedLength( nLineHeight, aLine, false );
+                aLine.append( ' ' );
+                m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
+                aLine.append( ' ' );
+                m_aPages.back().appendMappedLength( nLineHeight, aLine, false );
+                aLine.append( ' ' );
+                m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
+                aLine.append( " ] 0 d\r\n" );
+            }
+
+            aLine.append( "0 " );
+            m_aPages.back().appendMappedLength( -nLinePos, aLine, true );
+            aLine.append( " m " );
+            m_aPages.back().appendMappedLength( nWidth, aLine, false );
+            aLine.append( ' ' );
+            m_aPages.back().appendMappedLength( -nLinePos, aLine, true );
+            aLine.append( " l S\r\n" );
+            if ( eUnderline == UNDERLINE_DOUBLE )
+            {
+                aLine.append( "0 " );
+                m_aPages.back().appendMappedLength( -nLinePos2, aLine, true );
+                aLine.append( " m " );
+                m_aPages.back().appendMappedLength( nWidth, aLine, false );
+                aLine.append( ' ' );
+                m_aPages.back().appendMappedLength( -nLinePos2, aLine, true );
+                aLine.append( " l S\r\n" );
+            }
+        }
+
+        if ( eStrikeout > STRIKEOUT_X )
+            eStrikeout = STRIKEOUT_SINGLE;
+
+        if ( eStrikeout == STRIKEOUT_SINGLE )
+        {
+            if ( !pFontEntry->maMetric.mnStrikeoutSize )
+                m_pReferenceDevice->ImplInitTextLineSize();
+            nLineHeight = HCONV( pFontEntry->maMetric.mnStrikeoutSize );
+            nLinePos    = HCONV( pFontEntry->maMetric.mnStrikeoutOffset );
+        }
+        else if ( eStrikeout == STRIKEOUT_BOLD )
+        {
+            if ( !pFontEntry->maMetric.mnBStrikeoutSize )
+                m_pReferenceDevice->ImplInitTextLineSize();
+            nLineHeight = HCONV( pFontEntry->maMetric.mnBStrikeoutSize );
+            nLinePos    = HCONV( pFontEntry->maMetric.mnBStrikeoutOffset );
+
+        }
+        else if ( eStrikeout == STRIKEOUT_DOUBLE )
+        {
+            if ( !pFontEntry->maMetric.mnDStrikeoutSize )
+                m_pReferenceDevice->ImplInitTextLineSize();
+            nLineHeight = HCONV( pFontEntry->maMetric.mnDStrikeoutSize );
+            nLinePos    = HCONV( pFontEntry->maMetric.mnDStrikeoutOffset1 );
+            nLinePos2   = HCONV( pFontEntry->maMetric.mnDStrikeoutOffset2 );
+        }
+        else
+            nLineHeight = 0;
+
+        if ( nLineHeight )
+        {
+            appendStrokingColor( aStrikeoutColor, aLine );
+            aLine.append( "\r\n" );
+
+            aLine.append( "0 " );
+            m_aPages.back().appendMappedLength( -nLinePos, aLine, true );
+            aLine.append( " m " );
+            m_aPages.back().appendMappedLength( nWidth, aLine, true );
+            aLine.append( ' ' );
+            m_aPages.back().appendMappedLength( -nLinePos, aLine, true );
+            aLine.append( " l S\r\n" );
+
+            if ( eStrikeout == STRIKEOUT_DOUBLE )
+            {
+                aLine.append( "0 " );
+                m_aPages.back().appendMappedLength( -nLinePos2, aLine, true );
+                aLine.append( " m " );
+                m_aPages.back().appendMappedLength( nWidth, aLine, true );
+                aLine.append( ' ' );
+                m_aPages.back().appendMappedLength( -nLinePos2, aLine, true );
+                aLine.append( " l S\r\n" );
+
+            }
+        }
+    }
+    aLine.append( "Q\r\n" );
+    writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
 void PDFWriterImpl::drawPolygon( const Polygon& rPoly )
@@ -2659,6 +3242,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     CHECK_RETURN( updateObject( nFunctionObject ) );
 
     OutputDevice* pRefDevice = getReferenceDevice();
+    pRefDevice->Push( PUSH_ALL );
     if( rObject.m_aSize.Width() > pRefDevice->GetOutputSizePixel().Width() )
         rObject.m_aSize.Width() = pRefDevice->GetOutputSizePixel().Width();
     if( rObject.m_aSize.Height() > pRefDevice->GetOutputSizePixel().Height() )
@@ -2713,6 +3297,9 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     aLine.append( nFunctionObject );
     aLine.append( " 0 R\r\n  >>\r\nendobj\r\n\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+
+    pRefDevice->Pop();
+
     return true;
 }
 
@@ -3328,6 +3915,22 @@ void PDFWriterImpl::updateGraphicsState()
                 aLine.append( "W* n\r\n" );
             }
         }
+    }
+
+    if( m_aCurrentPDFState.m_aFont != rNewState.m_aFont )
+    {
+        getReferenceDevice()->SetFont( rNewState.m_aFont );
+        getReferenceDevice()->ImplNewFont();
+    }
+
+    if( m_aCurrentPDFState.m_nLayoutMode != rNewState.m_nLayoutMode )
+    {
+        getReferenceDevice()->SetLayoutMode( rNewState.m_nLayoutMode );
+    }
+
+    if( m_aCurrentPDFState.m_aMapMode != rNewState.m_aMapMode )
+    {
+        getReferenceDevice()->SetMapMode( rNewState.m_aMapMode );
     }
 
     if( m_aCurrentPDFState.m_aLineColor != rNewState.m_aLineColor &&

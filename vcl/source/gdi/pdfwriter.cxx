@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-20 15:54:28 $
+ *  last change: $Author: pl $ $Date: 2002-07-29 12:47:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ void PDFWriter::DrawTextLine(
                              FontUnderline eUnderline,
                              BOOL bUnderlineAbove )
 {
-    // TODO
+    ((PDFWriterImpl*)pImplementation)->drawTextLine( rPos, nWidth, eStrikeout, eUnderline, bUnderlineAbove );
 }
 
 void PDFWriter::DrawTextArray(
@@ -141,8 +141,7 @@ void PDFWriter::DrawText(
                          const XubString& rStr,
                          USHORT nStyle )
 {
-    // TODO
-    DrawText( rRect.TopLeft(), rStr );
+    ((PDFWriterImpl*)pImplementation)->drawText( rRect, rStr, nStyle );
 }
 
 void PDFWriter::DrawLine( const Point& rStart, const Point& rStop )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-24 16:09:45 $
+ *  last change: $Author: pl $ $Date: 2002-07-29 12:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,8 @@ public:
         void appendMappedLength( sal_Int32 nLength, rtl::OStringBuffer& rBuffer, bool bVertical = true );
         // appends LineInfo
         void appendLineInfo( const LineInfo& rInfo, rtl::OStringBuffer& rBuffer );
+        // appends a horizontal waveline with vertical offset (helper for drawWaveLine)
+        void appendWaveLine( sal_Int32 nLength, sal_Int32 nYOffset, sal_Int32 nDelta, rtl::OStringBuffer& rBuffer );
     };
 
     friend struct PDFPage;
@@ -489,6 +491,8 @@ public:
     void drawTextArray( const Point& rPos, const String& rText, const long* pDXArray = NULL, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN );
     void drawStretchText( const Point& rPos, ULONG nWidth, const String& rText,
                           xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN );
+    void drawText( const Rectangle& rRect, const String& rOrigStr, USHORT nStyle );
+    void drawTextLine( const Point& rPos, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, bool bUnderlineAbove );
 
     void drawLine( const Point& rStart, const Point& rStop );
     void drawLine( const Point& rStart, const Point& rStop, const LineInfo& rInfo );
@@ -496,6 +500,7 @@ public:
     void drawPolyPolygon( const PolyPolygon& rPolyPoly );
     void drawPolyLine( const Polygon& rPoly );
     void drawPolyLine( const Polygon& rPoly, const LineInfo& rInfo );
+    void drawWaveLine( const Point& rStart, const Point& rStop, sal_Int32 nDelta, sal_Int32 nLineWidth );
 
     void drawPixel( const Point& rPt, const Color& rColor );
     void drawPixel( const Polygon& rPts, const Color* pColors = NULL );

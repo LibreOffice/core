@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-20 15:54:27 $
+ *  last change: $Author: pl $ $Date: 2002-07-29 12:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2489,52 +2489,6 @@ void ImplFontCache::Clear()
 
 // =======================================================================
 
-class ImplTextLineInfo
-{
-private:
-    long        mnWidth;
-    xub_StrLen  mnIndex;
-    xub_StrLen  mnLen;
-
-public:
-                ImplTextLineInfo( long nWidth, xub_StrLen nIndex, xub_StrLen nLen )
-                {
-                    mnWidth = nWidth;
-                    mnIndex = nIndex;
-                    mnLen   = nLen;
-                }
-
-    long        GetWidth() const { return mnWidth; }
-    xub_StrLen  GetIndex() const { return mnIndex; }
-    xub_StrLen  GetLen() const { return mnLen; }
-};
-
-#define MULTITEXTLINEINFO_RESIZE    16
-typedef ImplTextLineInfo* PImplTextLineInfo;
-
-class ImplMultiTextLineInfo
-{
-private:
-    PImplTextLineInfo*  mpLines;
-    xub_StrLen          mnLines;
-    xub_StrLen          mnSize;
-
-public:
-                        ImplMultiTextLineInfo();
-                        ~ImplMultiTextLineInfo();
-
-    void                AddLine( ImplTextLineInfo* pLine );
-    void                Clear();
-
-    ImplTextLineInfo*   GetLine( USHORT nLine ) const
-                            { return mpLines[nLine]; }
-    xub_StrLen          Count() const { return mnLines; }
-
-private:
-                            ImplMultiTextLineInfo( const ImplMultiTextLineInfo& );
-    ImplMultiTextLineInfo&  operator=( const ImplMultiTextLineInfo& );
-};
-
 ImplMultiTextLineInfo::ImplMultiTextLineInfo()
 {
     mpLines         = new PImplTextLineInfo[MULTITEXTLINEINFO_RESIZE];
@@ -2641,18 +2595,18 @@ void OutputDevice::ImplInitFont()
 
     if ( mbInitFont )
     {
+        if ( meOutDevType != OUTDEV_PRINTER )
+        {
+            // decide if antialiasing is appropriate
+            BOOL bNonAntialiased = (GetAntialiasing() & ANTIALIASING_DISABLE_TEXT) != 0;
+            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+            bNonAntialiased |= (rStyleSettings.GetDisplayOptions() & DISPLAY_OPTION_AA_DISABLE) != 0;
+            bNonAntialiased |= (rStyleSettings.GetAntialiasingMinPixelHeight() > mpFontEntry->maFontSelData.mnHeight);
+            mpFontEntry->maFontSelData.mbNonAntialiased = bNonAntialiased;
+        }
+
         if( !mpPDFWriter || !mpPDFWriter->isBuiltinFont( mpFontEntry->maFontSelData.mpFontData ) )
         {
-            if ( meOutDevType != OUTDEV_PRINTER )
-            {
-                // decide if antialiasing is appropriate
-                BOOL bNonAntialiased = (GetAntialiasing() & ANTIALIASING_DISABLE_TEXT) != 0;
-                const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-                bNonAntialiased |= (rStyleSettings.GetDisplayOptions() & DISPLAY_OPTION_AA_DISABLE) != 0;
-                bNonAntialiased |= (rStyleSettings.GetAntialiasingMinPixelHeight() > mpFontEntry->maFontSelData.mnHeight);
-                mpFontEntry->maFontSelData.mbNonAntialiased = bNonAntialiased;
-            }
-
             // Select Font
             mpFontEntry->mnSetFontFlags = mpGraphics->SetFont( &(mpFontEntry->maFontSelData) );
         }
