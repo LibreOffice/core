@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resourcemanager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-27 07:57:11 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,13 @@ namespace XmlSec
 
     String GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT )
     {
-        return GetInternational()->GetDate( GetDateTime( _rDT ) );
+        // --> PB 2004-10-12 #i20172# String with date and time information
+        DateTime aDT( GetDateTime( _rDT ) );
+        International* pInter = GetInternational();
+        String sRet( pInter->GetDate( aDT ) );
+        sRet += ' ';
+        sRet += pInter->GetTime( aDT );
+        return sRet;
     }
 
     String GetDateTimeString( const rtl::OUString& _rDate, const rtl::OUString& _rTime )
@@ -228,7 +234,7 @@ namespace XmlSec
         const sal_Int8*         pSerNumSeq = _rSeq.getConstArray();
         int                     nCnt = _rSeq.getLength();
         String                  aStr;
-        const char              pHexDigs[ 17 ] = "0123456789ABCEDF";
+        const char              pHexDigs[ 17 ] = "0123456789ABCDEF";
         char                    pBuffer[ 3 ] = "  ";
         UINT8                   nNum;
         UINT16                  nBreakStart = _nLineBreak? _nLineBreak : 1;
@@ -236,9 +242,11 @@ namespace XmlSec
         for( int i = 0 ; i < nCnt ; ++i )
         {
             nNum = UINT8( pSerNumSeq[ i ] );
-            pBuffer[ 0 ] = pHexDigs[ nNum & 0x0F ];
+
+            //MM : exchange the buffer[0] and buffer[1], which make it consistent with Mozilla and Windows
+            pBuffer[ 1 ] = pHexDigs[ nNum & 0x0F ];
             nNum >>= 4;
-            pBuffer[ 1 ] = pHexDigs[ nNum ];
+            pBuffer[ 0 ] = pHexDigs[ nNum ];
             aStr.AppendAscii( pBuffer );
 
             --nBreak;
