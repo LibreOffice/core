@@ -60,8 +60,8 @@
 
 
 /*Java Uno Helper Classes*/
-import com.sun.star.lib.uno.adapters.XInputStreamToInputStreamAdapter;
-import com.sun.star.lib.uno.adapters.XOutputStreamToOutputStreamAdapter;
+import com.sun.star.lib.uno.adapter.XInputStreamToInputStreamAdapter;
+import com.sun.star.lib.uno.adapter.XOutputStreamToOutputStreamAdapter;
 
 /*StarOffice/Uno Classes*/
 import com.sun.star.lang.XMultiServiceFactory;
@@ -194,7 +194,7 @@ public class XMergeBridge {
     public boolean importer(com.sun.star.beans.PropertyValue[] aSourceData,
                 com.sun.star.xml.sax.XDocumentHandler xDocHandler,
                 java.lang.String[] msUserData) throws com.sun.star.uno.RuntimeException {
-                    /*
+                /*
         System.out.println("\nFound the Importer!\n");
 
         System.out.println("\n"+msUserData[0]);
@@ -338,6 +338,7 @@ public class XMergeBridge {
         if (sURL==null){
         sURL="";
         }
+
          try{
 
          Object xCfgMgrObj=xMSF.createInstance("com.sun.star.config.SpecialConfigManager");
@@ -358,19 +359,22 @@ public class XMergeBridge {
         System.out.println("Exception "+e);
           return false;
         }
+
         return true;
        }
 
 
 
        public void  startDocument ()    {
-
+       //System.out.println("\nStart Document!");
        }
 
     public void endDocument()
     {
         try{
+
         convert (xInStream,xos,true,udJarPath,sURL,offMime,sdMime);
+
         }
         catch (IOException e){
         System.out.println("Exception "+e);
@@ -423,7 +427,62 @@ public class XMergeBridge {
     }
     public void characters(String str){
         //System.out.println(str);
-        String tmp=str;
+        String tmp="";
+        int index=str.indexOf("&");
+        if(index !=-1){
+        while (index !=-1){
+           String first =str.substring(0,index);
+           first=first.concat("&amp;");
+           tmp=tmp.concat(first);
+           str=str.substring(index+1,str.length());
+           index=str.indexOf("&");
+           if(index==-1) {
+               tmp=tmp.concat(str);
+           }
+
+        }
+        }else{
+        tmp=str;
+        }
+        str=tmp;
+         tmp="";
+        index=str.indexOf("<");
+        if(index !=-1){
+        while (index !=-1){
+           String first =str.substring(0,index);
+           first=first.concat("&lt;");
+           tmp=tmp.concat(first);
+           str=str.substring(index+1,str.length());
+           index=str.indexOf("&");
+           if(index==-1) {
+               tmp=tmp.concat(str);
+           }
+
+        }
+        }else{
+        tmp=str;
+        }
+         str=tmp;
+         tmp="";
+        index=str.indexOf(">");
+        if(index !=-1){
+        while (index !=-1){
+           String first =str.substring(0,index);
+           first=first.concat("&gt;");
+           tmp=tmp.concat(first);
+           str=str.substring(index+1,str.length());
+           index=str.indexOf("&");
+           if(index==-1) {
+               tmp=tmp.concat(str);
+           }
+
+        }
+        }else{
+        tmp=str;
+        }
+
+        /*
+        //System.out.println(tmp);
         if (tmp.indexOf("<")!=-1){
         str=tmp.substring(0,tmp.indexOf("<"));
         str=str.concat("&lt;");
@@ -435,7 +494,7 @@ public class XMergeBridge {
         str=str.concat("&gt;");
         str=str.concat(tmp.substring(tmp.indexOf(">")+1,tmp.length()));
         tmp=str;
-        }
+        }*/
         try{
          xOutStream.writeBytes(tmp.getBytes("UTF-8"));
         }
