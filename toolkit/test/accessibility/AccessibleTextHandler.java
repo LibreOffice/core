@@ -51,7 +51,7 @@ class AccessibleTextHandler extends NodeHandler
     public AccessibleTextHandler (XAccessibleText xText)
     {
         if (xText != null)
-            maChildList.setSize (13);
+            maChildList.setSize (8);
     }
 
     public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
@@ -87,39 +87,43 @@ class AccessibleTextHandler extends NodeHandler
                         aChild = new StringNode ("getCaretPosition: " + xText.getCaretPosition(), aParent);
                         break;
                     case 5:
-                        aChild = textAtIndexNode( xText, "Character",
-                            AccessibleTextType.CHARACTER,
-                            aParent);
-                        break;
+                    {
+                        VectorNode aVec = new VectorNode("portions", aParent);
+                        aChild = aVec;
+                        aVec.addChild(
+                             textAtIndexNode( xText, "Character",
+                                              AccessibleTextType.CHARACTER,
+                                              aParent ) );
+                        aVec.addChild(
+                            textAtIndexNode( xText, "Word",
+                                             AccessibleTextType.WORD,
+                                             aParent ) );
+                        aVec.addChild(
+                            textAtIndexNode( xText, "Sentence",
+                                             AccessibleTextType.SENTENCE,
+                                             aParent ) );
+                        aVec.addChild(
+                            textAtIndexNode( xText, "Paragraph",
+                                             AccessibleTextType.PARAGRAPH,
+                                             aParent ) );
+                        aVec.addChild(
+                            textAtIndexNode( xText, "Line",
+                                             AccessibleTextType.LINE,
+                                             aParent ) );
+                        aVec.addChild(
+                            textAtIndexNode( xText, "Attribute",
+                                             AccessibleTextType.ATTRIBUTE_RUN,
+                                             aParent ) );
+                        aVec.addChild(
+                            textAtIndexNode( xText, "Glyph",
+                                             AccessibleTextType.GLYPH,
+                                             aParent ) );
+                    }
+                    break;
                     case 6:
-                        aChild = textAtIndexNode( xText, "Word",
-                            AccessibleTextType.WORD,
-                            aParent);
-                        break;
-                    case 7:
-                        aChild = textAtIndexNode( xText, "Sentence",
-                            AccessibleTextType.SENTENCE,
-                            aParent);
-                        break;
-                    case 8:
-                        aChild = textAtIndexNode( xText, "Paragraph",
-                            AccessibleTextType.PARAGRAPH,
-                            aParent);
-                        break;
-                    case 9:
-                        aChild = textAtIndexNode( xText, "Line",
-                            AccessibleTextType.LINE,
-                            aParent);
-                        break;
-                    case 10:
-                        aChild = textAtIndexNode( xText, "Attribute",
-                            (short)6/*AccessibleTextType.ATTRIBUTE*/,
-                            aParent);
-                        break;
-                    case 11:
                         aChild = new StringNode (bounds( xText ), aParent);
                         break;
-                    case 12:
+                    case 7:
                         aChild = getAttributes( xText, aParent );
                         break;
                     default:
