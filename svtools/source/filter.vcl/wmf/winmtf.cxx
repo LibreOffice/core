@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-15 14:36:04 $
+ *  last change: $Author: sj $ $Date: 2001-03-22 14:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,25 +65,79 @@
 
 // ------------------------------------------------------------------------
 
-void WinMtfRegion::IntersectClipRect( const Rectangle& rRect )
+void WinMtfClipPath::ImpUpdateType()
 {
-    bNeedsUpdate = sal_True;
-    if ( ((Region*)this)->IsEmpty() )
-        (*((Region*)this)) = rRect;
+    if ( !aPolyPoly.Count() )
+        eType = EMPTY;
+    else if ( aPolyPoly.IsRect() )
+        eType = RECTANGLE;
     else
-        ((Region*)this)->Intersect( rRect );
+        eType = COMPLEX;
+
+    bNeedsUpdate = sal_True;
 }
 
-void WinMtfRegion::ExcludeClipRect( const Rectangle& rRect )
+void WinMtfClipPath::IntersectClipRect( const Rectangle& rRect )
 {
-    bNeedsUpdate = sal_True;
-    ((Region*)this)->Exclude( rRect );
+    if ( !aPolyPoly.Count() )
+        aPolyPoly = Polygon( rRect );
+    else
+    {
+        Polygon aPolygon( rRect );
+        PolyPolygon aIntersection;
+        PolyPolygon aPolyPolyRect( aPolygon );
+        aPolyPoly.GetIntersection( aPolyPolyRect, aIntersection );
+        aPolyPoly = aIntersection;
+    }
+    ImpUpdateType();
 }
 
-void WinMtfRegion::MoveClipRegion( const Size& rSize )
+void WinMtfClipPath::ExcludeClipRect( const Rectangle& rRect )
 {
+    if ( aPolyPoly.Count() )
+    {
+        Polygon aPolygon( rRect );
+        PolyPolygon aPolyPolyRect( aPolygon );
+        PolyPolygon aDifference;
+        aPolyPoly.GetDifference( aPolyPolyRect, aDifference );
+        aPolyPoly = aDifference;
+    }
+    ImpUpdateType();
+}
+
+void WinMtfClipPath::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode )
+{
+    if ( rPolyPolygon.Count() )
+    {
+        PolyPolygon aNewClipPath;
+
+        switch ( nClippingMode )
+        {
+            case RGN_OR :
+                aPolyPoly.GetUnion( rPolyPolygon, aNewClipPath );
+            break;
+            case RGN_XOR :
+                aPolyPoly.GetXOR( rPolyPolygon, aNewClipPath );
+            break;
+            case RGN_DIFF :
+                aPolyPoly.GetDifference( rPolyPolygon, aNewClipPath );
+            break;
+            case RGN_AND :
+                aPolyPoly.GetIntersection( rPolyPolygon, aNewClipPath );
+            break;
+            case RGN_COPY :
+                aNewClipPath = rPolyPolygon;
+            break;
+        }
+        aPolyPoly = aNewClipPath;
+    }
+    ImpUpdateType();
+}
+
+void WinMtfClipPath::MoveClipRegion( const Size& rSize )
+{
+    aPolyPoly.Move( rSize.Width(), rSize.Height() );
     bNeedsUpdate = sal_True;
-    ((Region*)this)->Move( rSize.Width(), rSize.Height() );
 }
 
 // ------------------------------------------------------------------------
@@ -279,40 +333,6 @@ Color WinMtf::ReadColor()
 //-----------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------
 
-WinMtfOutput::WinMtfOutput() :
-    mnActTextAlign      ( TA_LEFT | TA_TOP | TA_NOUPDATECP ),
-    mnBkMode            ( OPAQUE ),
-    maBkColor           ( COL_WHITE ),
-    mbNopMode           ( FALSE ),
-    mbFontChanged       ( FALSE ),
-    maActPos            ( Point() ),
-    meRasterOp          ( ROP_OVERPAINT ),
-    mnEntrys            ( 16 )
-{
-    maFont.SetCharSet( gsl_getSystemTextEncoding() );
-    mpGDIObj = new GDIObj*[ mnEntrys ];
-    for ( UINT32 i = 0; i < mnEntrys; i++ )
-    {
-        mpGDIObj[ i ] = NULL;
-    }
-};
-
-//-----------------------------------------------------------------------------------
-
-WinMtfOutput::~WinMtfOutput()
-{
-    while( maSaveStack.Count() )
-        delete maSaveStack.Pop();
-
-    for ( UINT32 i = 0; i < mnEntrys; i++ )
-    {
-        delete mpGDIObj[ i ];
-    }
-    delete mpGDIObj;
-};
-
-//-----------------------------------------------------------------------------------
-
 Point WinMtfOutput::ImplMap( const Point& rPt )
 {
     if( mnWinExtX && mnWinExtY )
@@ -491,75 +511,6 @@ void WinMtfOutput::SelectObject( INT32 nIndex )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::Push( BOOL bWinExtSet )
-{
-    SaveStruct* pSave = new SaveStruct;
-    pSave->aActPos = maActPos;
-    pSave->nActTextAlign = mnActTextAlign;
-    pSave->nBkMode = mnBkMode;
-    pSave->aBkColor = maBkColor;
-    pSave->bWinExtSet = bWinExtSet;
-    pSave->aLineStyle = maLineStyle;
-    pSave->aFillStyle = maFillStyle;
-    pSave->aTextColor = maTextColor;
-    pSave->aFont = maFont;
-    pSave->bFontChanged = mbFontChanged;
-
-    if ( bWinExtSet )
-    {
-        pSave->nWinOrgX = mnWinOrgX;
-        pSave->nWinOrgY = mnWinOrgY;
-        pSave->nWinExtX = mnWinExtX;
-        pSave->nWinExtY = mnWinExtY;
-        pSave->nDevOrgX = mnDevOrgX;
-        pSave->nDevOrgY = mnDevOrgY;
-        pSave->nDevWidth = mnDevWidth;
-        pSave->nDevHeight = mnDevHeight;
-    }
-    pSave->aPathObj = aPathObj;
-    pSave->aRegionObj = aRegionObj;
-    maSaveStack.Push( pSave );
-}
-
-//-----------------------------------------------------------------------------------
-
-void WinMtfOutput::Pop()
-{
-    // Die aktuellen Daten vom Stack holen
-    if( maSaveStack.Count() )
-    {
-        // Die aktuelle Daten auf dem Stack sichern
-        SaveStruct* pSave = maSaveStack.Pop();
-
-        mnBkMode = pSave->nBkMode;
-        maBkColor = pSave->aBkColor;
-        maActPos = pSave->aActPos;
-        mnActTextAlign = pSave->nActTextAlign;
-        maLineStyle = pSave->aLineStyle;
-        maFillStyle = pSave->aFillStyle;
-        maTextColor = pSave->aTextColor;
-        maFont = pSave->aFont;
-        mbFontChanged = pSave->bFontChanged;
-
-        if ( pSave->bWinExtSet )
-        {
-            mnWinOrgX = pSave->nWinOrgX;
-            mnWinOrgY = pSave->nWinOrgY;
-            mnWinExtX = pSave->nWinExtX;
-            mnWinExtY = pSave->nWinExtY;
-            mnDevOrgX = pSave->nDevOrgX;
-            mnDevOrgY = pSave->nDevOrgY;
-            mnDevWidth = pSave->nDevWidth;
-            mnDevHeight = pSave->nDevHeight;
-        }
-        aPathObj = pSave->aPathObj;
-        aRegionObj = pSave->aRegionObj;
-        delete pSave;
-    }
-}
-
-//-----------------------------------------------------------------------------------
-
 void WinMtfOutput::SetBkMode( UINT32 nMode )
 {
     maFont.SetTransparent( ( mnBkMode = nMode ) == TRANSPARENT );
@@ -604,56 +555,6 @@ void WinMtfOutput::SetTextAlign( UINT32 nAlign )
 
 //-----------------------------------------------------------------------------------
 
-UINT32 WinMtfOutput::SetRasterOp( UINT32 nROP2 )
-{
-    UINT32 nRetROP = mnRop;
-    if ( nROP2 != mnRop )
-    {
-        mnRop = nROP2;
-        static WinMtfFillStyle aNopFillStyle;
-        static WinMtfLineStyle aNopLineStyle;
-
-        if ( mbNopMode && ( nROP2 != R2_NOP ) )
-        {   // beim uebergang von R2_NOP auf anderen Modus
-            // gesetzten Pen und Brush aktivieren
-            maFillStyle = aNopFillStyle;
-            maLineStyle = aNopLineStyle;
-            mbNopMode = FALSE;
-        }
-        switch( nROP2 )
-        {
-            case R2_NOT:
-                meRasterOp = ROP_INVERT;
-            break;
-
-            case R2_XORPEN:
-                meRasterOp = ROP_XOR;
-            break;
-
-            case R2_NOP:
-            {
-                meRasterOp = ROP_OVERPAINT;
-                if( mbNopMode = FALSE  )
-                {
-                    aNopFillStyle = maFillStyle;
-                    aNopLineStyle = maLineStyle;
-                    maFillStyle = WinMtfFillStyle( Color( COL_TRANSPARENT ), TRUE );
-                    maLineStyle = WinMtfLineStyle( Color( COL_TRANSPARENT ), TRUE );
-                    mbNopMode = TRUE;
-                }
-            }
-            break;
-
-            default:
-                meRasterOp = ROP_OVERPAINT;
-            break;
-        }
-    }
-    return nRetROP;
-}
-
-//-----------------------------------------------------------------------------------
-
 void WinMtfOutput::ImplResizeObjectArry( UINT32 nNewEntrys )
 {
     GDIObj** pGDIObj = new GDIObj*[ mnEntrys << 1 ];
@@ -663,6 +564,38 @@ void WinMtfOutput::ImplResizeObjectArry( UINT32 nNewEntrys )
     for ( mnEntrys = nNewEntrys; nIndex < mnEntrys; pGDIObj[ nIndex++ ] = NULL );
     delete mpGDIObj, mpGDIObj = pGDIObj;
 }
+
+//-----------------------------------------------------------------------------------
+
+void WinMtfOutput::ImplDrawClippedPolyPolygon( const PolyPolygon& rPolyPoly )
+{
+    if ( rPolyPoly.Count() )
+    {
+        ImplSetNonPersistentLineColorTransparenz();
+        if ( rPolyPoly.Count() == 1 )
+        {
+            if ( rPolyPoly.IsRect() )
+                mpGDIMetaFile->AddAction( new MetaRectAction( rPolyPoly.GetBoundRect() ) );
+            else
+            {
+                Polygon aPoly( rPolyPoly[ 0 ] );
+                sal_uInt16 nCount = aPoly.GetSize();
+                if ( nCount )
+                {
+                    if ( aPoly[ nCount - 1 ] != aPoly[ 0 ] )
+                    {
+                        Point aPoint( aPoly[ 0 ] );
+                        aPoly.Insert( nCount, aPoint );
+                    }
+                    mpGDIMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
+                }
+            }
+        }
+        else
+            mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( rPolyPoly ) );
+    }
+}
+
 
 //-----------------------------------------------------------------------------------
 
@@ -748,50 +681,50 @@ void WinMtfOutput::DeleteObject( INT32 nIndex )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::DrawText( Point& rPosition, String& rText, INT32* pDXArry, sal_Bool bRecordPath )
-{
-    rPosition = ImplMap( rPosition );
-
-    if ( pDXArry )
-    {
-        INT32 i, nSum, nLen = rText.Len();
-
-        for( i = 0, nSum = 0; i < nLen; i++ )
-        {
-            INT32 nTemp = ImplMap( Size( pDXArry[ i ], 0 ) ).Width();
-            nSum += nTemp;
-            pDXArry[ i ] = nSum;
-        }
-    }
-}
-
-//-----------------------------------------------------------------------------------
-
 void WinMtfOutput::IntersectClipRect( const Rectangle& rRect )
 {
-    aRegionObj.IntersectClipRect( ImplMap( rRect ) );
+    aClipPath.IntersectClipRect( ImplMap( rRect ) );
 }
 
 //-----------------------------------------------------------------------------------
 
 void WinMtfOutput::ExcludeClipRect( const Rectangle& rRect )
 {
-    aRegionObj.ExcludeClipRect( ImplMap( rRect ) );
+    aClipPath.ExcludeClipRect( ImplMap( rRect ) );
 }
 
 //-----------------------------------------------------------------------------------
 
 void WinMtfOutput::MoveClipRegion( const Size& rSize )
 {
-    aRegionObj.MoveClipRegion( ImplMap( rSize ) );
+    aClipPath.MoveClipRegion( ImplMap( rSize ) );
+}
+
+void WinMtfOutput::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode )
+{
+    aClipPath.SetClipPath( rPolyPolygon, nClippingMode );
 }
 
 //-----------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------
 
-WinMtfMetaOutput::WinMtfMetaOutput( GDIMetaFile& rGDIMetaFile ) : WinMtfOutput()
+WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
+    mnActTextAlign      ( TA_LEFT | TA_TOP | TA_NOUPDATECP ),
+    mnBkMode            ( OPAQUE ),
+    maBkColor           ( COL_WHITE ),
+    mbNopMode           ( FALSE ),
+    mbFontChanged       ( FALSE ),
+    maActPos            ( Point() ),
+    meRasterOp          ( ROP_OVERPAINT ),
+    mnEntrys            ( 16 )
 {
+    maFont.SetCharSet( gsl_getSystemTextEncoding() );
+    mpGDIObj = new GDIObj*[ mnEntrys ];
+    for ( UINT32 i = 0; i < mnEntrys; i++ )
+    {
+        mpGDIObj[ i ] = NULL;
+    }
     maLatestLineStyle.aLineColor = Color( 0x12, 0x34, 0x56 );
     maLatestFillStyle.aFillColor = Color( 0x12, 0x34, 0x56 );
     mpGDIMetaFile = &rGDIMetaFile;
@@ -803,7 +736,7 @@ WinMtfMetaOutput::WinMtfMetaOutput( GDIMetaFile& rGDIMetaFile ) : WinMtfOutput()
 
 //-----------------------------------------------------------------------------------
 
-WinMtfMetaOutput::~WinMtfMetaOutput()
+WinMtfOutput::~WinMtfOutput()
 {
     while( mnPushPopCount > 0 )
     {
@@ -812,25 +745,65 @@ WinMtfMetaOutput::~WinMtfMetaOutput()
     }
     mpGDIMetaFile->SetPrefMapMode( MAP_100TH_MM );
     mpGDIMetaFile->SetPrefSize( Size( mnDevWidth, mnDevHeight ) );
+
+    while( maSaveStack.Count() )
+        delete maSaveStack.Pop();
+
+    for ( UINT32 i = 0; i < mnEntrys; i++ )
+    {
+        delete mpGDIObj[ i ];
+    }
+    delete mpGDIObj;
 };
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::UpdateClipRegion( const Region& rRegion )
+void WinMtfOutput::UpdateClipRegion()
 {
-    if ( !rRegion.IsEmpty() )
+    if ( aClipPath.bNeedsUpdate )
     {
-        sal_uInt32 nRectCount = rRegion.GetRectCount();
-        if ( nRectCount == 1 )
-            mpGDIMetaFile->AddAction( new MetaISectRectClipRegionAction( rRegion.GetBoundRect() ) );
-        else
-            mpGDIMetaFile->AddAction( new MetaISectRegionClipRegionAction( rRegion ) );
+        aClipPath.bNeedsUpdate = sal_False;
+        switch ( aClipPath.GetType() )
+        {
+            case RECTANGLE :
+            {
+                Rectangle aClipRect( aClipPath.GetClipPath().GetBoundRect() );
+                mpGDIMetaFile->AddAction( new MetaISectRectClipRegionAction( aClipRect ) );
+            }
+            break;
+
+            case COMPLEX :
+            {
+//              we will not generate a RegionClipRegion Action, because this action
+//              cannot be saved to the wmf format - saving to wmf always happens
+//              if the placeholder graphic for ole objects is generated. (SJ)
+
+//              Region aClipRegion( aClipPath.GetClipPath() );
+//              mpGDIMetaFile->AddAction( new MetaISectRegionClipRegionAction( aClipRegion ) );
+
+                Rectangle aClipRect( aClipPath.GetClipPath().GetBoundRect() );
+                mpGDIMetaFile->AddAction( new MetaISectRectClipRegionAction( aClipRect ) );
+            }
+            break;
+        }
     }
 }
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::UpdateLineStyle()
+void WinMtfOutput::ImplSetNonPersistentLineColorTransparenz()
+{
+    WinMtfLineStyle aTransparentLine( Color( COL_TRANSPARENT ), TRUE );
+    if ( ! ( maLatestLineStyle == aTransparentLine ) )
+    {
+        maLatestLineStyle = aTransparentLine;
+        mpGDIMetaFile->AddAction( new MetaLineColorAction( aTransparentLine.aLineColor, !aTransparentLine.bTransparent ) );
+    }
+}
+
+//-----------------------------------------------------------------------------------
+
+void WinMtfOutput::UpdateLineStyle()
 {
     if (!( maLatestLineStyle == maLineStyle ) )
     {
@@ -841,7 +814,7 @@ void WinMtfMetaOutput::UpdateLineStyle()
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::UpdateFillStyle()
+void WinMtfOutput::UpdateFillStyle()
 {
     if (!( maLatestFillStyle == maFillStyle ) )
     {
@@ -852,9 +825,51 @@ void WinMtfMetaOutput::UpdateFillStyle()
 
 //-----------------------------------------------------------------------------------
 
-UINT32 WinMtfMetaOutput::SetRasterOp( UINT32 nRasterOp )
+sal_uInt32 WinMtfOutput::SetRasterOp( UINT32 nRasterOp )
 {
-    UINT32 nRetROP = WinMtfOutput::SetRasterOp( nRasterOp );
+    sal_uInt32 nRetROP = mnRop;
+    if ( nRasterOp != mnRop )
+    {
+        mnRop = nRasterOp;
+        static WinMtfFillStyle aNopFillStyle;
+        static WinMtfLineStyle aNopLineStyle;
+
+        if ( mbNopMode && ( nRasterOp != R2_NOP ) )
+        {   // beim uebergang von R2_NOP auf anderen Modus
+            // gesetzten Pen und Brush aktivieren
+            maFillStyle = aNopFillStyle;
+            maLineStyle = aNopLineStyle;
+            mbNopMode = FALSE;
+        }
+        switch( nRasterOp )
+        {
+            case R2_NOT:
+                meRasterOp = ROP_INVERT;
+            break;
+
+            case R2_XORPEN:
+                meRasterOp = ROP_XOR;
+            break;
+
+            case R2_NOP:
+            {
+                meRasterOp = ROP_OVERPAINT;
+                if( mbNopMode = FALSE  )
+                {
+                    aNopFillStyle = maFillStyle;
+                    aNopLineStyle = maLineStyle;
+                    maFillStyle = WinMtfFillStyle( Color( COL_TRANSPARENT ), TRUE );
+                    maLineStyle = WinMtfLineStyle( Color( COL_TRANSPARENT ), TRUE );
+                    mbNopMode = TRUE;
+                }
+            }
+            break;
+
+            default:
+                meRasterOp = ROP_OVERPAINT;
+            break;
+        }
+    }
     if ( nRetROP != nRasterOp )
         mpGDIMetaFile->AddAction( new MetaRasterOpAction( meRasterOp ) );
     return nRetROP;
@@ -862,13 +877,11 @@ UINT32 WinMtfMetaOutput::SetRasterOp( UINT32 nRasterOp )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::StrokeAndFillPath( sal_Bool bStroke, sal_Bool bFill )
+void WinMtfOutput::StrokeAndFillPath( sal_Bool bStroke, sal_Bool bFill )
 {
     if ( aPathObj.Count() )
     {
-        if ( aRegionObj.NeedsUpdate() )
-            UpdateClipRegion( aRegionObj.GetRegion() );
-
+        UpdateClipRegion();
         ClosePath();
         UpdateLineStyle();
         UpdateFillStyle();
@@ -897,37 +910,16 @@ void WinMtfMetaOutput::StrokeAndFillPath( sal_Bool bStroke, sal_Bool bFill )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::SelectClipPath( sal_Int32 nClippingMode )
-{
-    switch ( nClippingMode )
-    {
-        case RGN_OR :
-        case RGN_XOR :
-        case RGN_DIFF :
-        break;
-        case RGN_AND :
-        case RGN_COPY :
-        {
-            Region aRegion( aPathObj );
-            mpGDIMetaFile->AddAction( new MetaISectRegionClipRegionAction( aRegion ) );
-        }
-        break;
-    }
-}
-
-//-----------------------------------------------------------------------------------
-
-void WinMtfMetaOutput::DrawPixel( const Point& rSource, const Color& rColor )
+void WinMtfOutput::DrawPixel( const Point& rSource, const Color& rColor )
 {
     mpGDIMetaFile->AddAction( new MetaPixelAction( ImplMap( rSource), rColor ) );
 }
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::LineTo( const Point& rPoint, sal_Bool bRecordPath )
+void WinMtfOutput::LineTo( const Point& rPoint, sal_Bool bRecordPath )
 {
-    if ( aRegionObj.NeedsUpdate() )
-        UpdateClipRegion( aRegionObj.GetRegion() );
+    UpdateClipRegion();
 
     Point aDest( ImplMap( rPoint ) );
     if ( bRecordPath )
@@ -942,53 +934,58 @@ void WinMtfMetaOutput::LineTo( const Point& rPoint, sal_Bool bRecordPath )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::DrawLine( const Point& rSource, const Point& rDest )
+void WinMtfOutput::DrawLine( const Point& rSource, const Point& rDest )
 {
-    if ( aRegionObj.NeedsUpdate() )
-        UpdateClipRegion( aRegionObj.GetRegion() );
+    UpdateClipRegion();
     UpdateLineStyle();
     mpGDIMetaFile->AddAction( new MetaLineAction( ImplMap( rSource), ImplMap( rDest ), maLineStyle.aLineInfo ) );
 }
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::DrawRect( const Rectangle& rRect, BOOL bEdge )
+void WinMtfOutput::DrawRect( const Rectangle& rRect, BOOL bEdge )
 {
-    if ( aRegionObj.NeedsUpdate() )
-        UpdateClipRegion( aRegionObj.GetRegion() );
+    UpdateClipRegion();
     UpdateFillStyle();
-    if ( bEdge )
+
+    if ( aClipPath.GetType() == COMPLEX )
     {
-        if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LINE_DASH ) )
-        {
-            mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
-            mpGDIMetaFile->AddAction( new MetaLineColorAction( maLineStyle.aLineColor, FALSE ) );
-            mpGDIMetaFile->AddAction( new MetaRectAction( ImplMap( rRect ) ) );
-            mpGDIMetaFile->AddAction( new MetaLineColorAction( maLineStyle.aLineColor, !maLineStyle.bTransparent ) );
-            mpGDIMetaFile->AddAction( new MetaPolyLineAction( Polygon( ImplMap( rRect ) ),maLineStyle.aLineInfo ) );
-            mpGDIMetaFile->AddAction( new MetaPopAction() );
-        }
-        else
-        {
-            UpdateLineStyle();
-            mpGDIMetaFile->AddAction( new MetaRectAction( ImplMap( rRect ) ) );
-        }
+        Polygon aPoly( ImplMap( rRect ) );
+        PolyPolygon aPolyPolyRect( aPoly );
+        PolyPolygon aDest;
+        aClipPath.GetClipPath().GetIntersection( aPolyPolyRect, aDest );
+        ImplDrawClippedPolyPolygon( aDest );
     }
     else
     {
-        mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
-        mpGDIMetaFile->AddAction( new MetaLineColorAction( Color(), FALSE ) );
-        mpGDIMetaFile->AddAction( new MetaRectAction( ImplMap( rRect ) ) );
-        mpGDIMetaFile->AddAction( new MetaPopAction() );
+        if ( bEdge )
+        {
+            if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LINE_DASH ) )
+            {
+                ImplSetNonPersistentLineColorTransparenz();
+                mpGDIMetaFile->AddAction( new MetaRectAction( ImplMap( rRect ) ) );
+                UpdateLineStyle();
+                mpGDIMetaFile->AddAction( new MetaPolyLineAction( Polygon( ImplMap( rRect ) ),maLineStyle.aLineInfo ) );
+            }
+            else
+            {
+                UpdateLineStyle();
+                mpGDIMetaFile->AddAction( new MetaRectAction( ImplMap( rRect ) ) );
+            }
+        }
+        else
+        {
+            ImplSetNonPersistentLineColorTransparenz();
+            mpGDIMetaFile->AddAction( new MetaRectAction( ImplMap( rRect ) ) );
+        }
     }
 }
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::DrawRoundRect( const Rectangle& rRect, const Size& rSize )
+void WinMtfOutput::DrawRoundRect( const Rectangle& rRect, const Size& rSize )
 {
-    if ( aRegionObj.NeedsUpdate() )
-        UpdateClipRegion( aRegionObj.GetRegion() );
+    UpdateClipRegion();
     UpdateLineStyle();
     UpdateFillStyle();
     mpGDIMetaFile->AddAction( new MetaRoundRectAction( ImplMap( rRect ), labs( ImplMap( rSize ).Width() ), labs( ImplMap( rSize ).Height() ) ) );
@@ -996,10 +993,9 @@ void WinMtfMetaOutput::DrawRoundRect( const Rectangle& rRect, const Size& rSize 
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::DrawEllipse( const Rectangle& rRect )
+void WinMtfOutput::DrawEllipse( const Rectangle& rRect )
 {
-    if ( aRegionObj.NeedsUpdate() )
-        UpdateClipRegion( aRegionObj.GetRegion() );
+    UpdateClipRegion();
     UpdateFillStyle();
 
     if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LINE_DASH ) )
@@ -1007,12 +1003,10 @@ void WinMtfMetaOutput::DrawEllipse( const Rectangle& rRect )
         Point aCenter( ImplMap( rRect.Center() ) );
         Size  aRad( ImplMap( Size( rRect.GetWidth() / 2, rRect.GetHeight() / 2 ) ) );
 
-        mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
-        mpGDIMetaFile->AddAction( new MetaLineColorAction( maLineStyle.aLineColor, FALSE ) );
+        ImplSetNonPersistentLineColorTransparenz();
         mpGDIMetaFile->AddAction( new MetaEllipseAction( ImplMap( rRect ) ) );
-        mpGDIMetaFile->AddAction( new MetaLineColorAction( maLineStyle.aLineColor, !maLineStyle.bTransparent ) );
+        UpdateLineStyle();
         mpGDIMetaFile->AddAction( new MetaPolyLineAction( Polygon( aCenter, aRad.Width(), aRad.Height() ), maLineStyle.aLineInfo ) );
-        mpGDIMetaFile->AddAction( new MetaPopAction() );
     }
     else
     {
@@ -1023,10 +1017,9 @@ void WinMtfMetaOutput::DrawEllipse( const Rectangle& rRect )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::DrawArc( const Rectangle& rRect, const Point& rStart, const Point& rEnd, BOOL bTo )
+void WinMtfOutput::DrawArc( const Rectangle& rRect, const Point& rStart, const Point& rEnd, BOOL bTo )
 {
-    if ( aRegionObj.NeedsUpdate() )
-        UpdateClipRegion( aRegionObj.GetRegion() );
+    UpdateClipRegion();
     UpdateLineStyle();
     UpdateFillStyle();
 
@@ -1045,10 +1038,9 @@ void WinMtfMetaOutput::DrawArc( const Rectangle& rRect, const Point& rStart, con
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::DrawPie( const Rectangle& rRect, const Point& rStart, const Point& rEnd )
+void WinMtfOutput::DrawPie( const Rectangle& rRect, const Point& rStart, const Point& rEnd )
 {
-    if ( aRegionObj.NeedsUpdate() )
-        UpdateClipRegion( aRegionObj.GetRegion() );
+    UpdateClipRegion();
     UpdateFillStyle();
 
     Rectangle   aRect( ImplMap( rRect ) );
@@ -1057,12 +1049,10 @@ void WinMtfMetaOutput::DrawPie( const Rectangle& rRect, const Point& rStart, con
 
     if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LINE_DASH ) )
     {
-        mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
-        mpGDIMetaFile->AddAction( new MetaLineColorAction( maLineStyle.aLineColor, FALSE ) );
+        ImplSetNonPersistentLineColorTransparenz();
         mpGDIMetaFile->AddAction( new MetaPieAction( aRect, aStart, aEnd ) );
-        mpGDIMetaFile->AddAction( new MetaLineColorAction( maLineStyle.aLineColor, !maLineStyle.bTransparent ) );
+        UpdateLineStyle();
         mpGDIMetaFile->AddAction( new MetaPolyLineAction( Polygon( aRect, aStart, aEnd, POLY_PIE ), maLineStyle.aLineInfo ) );
-        mpGDIMetaFile->AddAction( new MetaPopAction() );
     }
     else
     {
@@ -1073,10 +1063,9 @@ void WinMtfMetaOutput::DrawPie( const Rectangle& rRect, const Point& rStart, con
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::DrawChord( const Rectangle& rRect, const Point& rStart, const Point& rEnd )
+void WinMtfOutput::DrawChord( const Rectangle& rRect, const Point& rStart, const Point& rEnd )
 {
-    if ( aRegionObj.NeedsUpdate() )
-        UpdateClipRegion( aRegionObj.GetRegion() );
+    UpdateClipRegion();
     UpdateFillStyle();
 
     Rectangle   aRect( ImplMap( rRect ) );
@@ -1085,12 +1074,10 @@ void WinMtfMetaOutput::DrawChord( const Rectangle& rRect, const Point& rStart, c
 
     if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LINE_DASH ) )
     {
-        mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
-        mpGDIMetaFile->AddAction( new MetaLineColorAction( maLineStyle.aLineColor, FALSE ) );
+        ImplSetNonPersistentLineColorTransparenz();
         mpGDIMetaFile->AddAction( new MetaChordAction( aRect, aStart, aEnd ) );
-        mpGDIMetaFile->AddAction( new MetaLineColorAction( maLineStyle.aLineColor, !maLineStyle.bTransparent ) );
+        UpdateLineStyle();
         mpGDIMetaFile->AddAction( new MetaPolyLineAction( Polygon( aRect, aStart, aEnd, POLY_CHORD ), maLineStyle.aLineInfo ) );
-        mpGDIMetaFile->AddAction( new MetaPopAction() );
     }
     else
     {
@@ -1101,66 +1088,83 @@ void WinMtfMetaOutput::DrawChord( const Rectangle& rRect, const Point& rStart, c
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::DrawPolygon( Polygon& rPolygon, sal_Bool bRecordPath )
+void WinMtfOutput::DrawPolygon( Polygon& rPolygon, sal_Bool bRecordPath )
 {
-    if ( aRegionObj.NeedsUpdate() )
-        UpdateClipRegion( aRegionObj.GetRegion() );
-
+    UpdateClipRegion();
     ImplMap( rPolygon );
     if ( bRecordPath )
         aPathObj.AddPolygon( rPolygon );
     else
     {
         UpdateFillStyle();
-        if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LINE_DASH ) )
+
+        if ( aClipPath.GetType() == COMPLEX )
         {
-            USHORT nCount = rPolygon.GetSize();
-            if ( nCount )
-            {
-                if ( rPolygon[ nCount - 1 ] != rPolygon[ 0 ] )
-                {
-                    Point aPoint( rPolygon[ 0 ] );
-                    rPolygon.Insert( nCount, aPoint );
-                }
-            }
-            mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
-            mpGDIMetaFile->AddAction( new MetaLineColorAction( maLineStyle.aLineColor, FALSE ) );
-            mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
-            mpGDIMetaFile->AddAction( new MetaLineColorAction( maLineStyle.aLineColor, !maLineStyle.bTransparent ) );
-            mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
-            mpGDIMetaFile->AddAction( new MetaPopAction() );
+            PolyPolygon aPolyPoly( rPolygon );
+            PolyPolygon aDest;
+            aClipPath.GetClipPath().GetIntersection( aPolyPoly, aDest );
+            ImplDrawClippedPolyPolygon( aDest );
         }
         else
         {
-            UpdateLineStyle();
-            mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
+            if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LINE_DASH ) )
+            {
+                USHORT nCount = rPolygon.GetSize();
+                if ( nCount )
+                {
+                    if ( rPolygon[ nCount - 1 ] != rPolygon[ 0 ] )
+                    {
+                        Point aPoint( rPolygon[ 0 ] );
+                        rPolygon.Insert( nCount, aPoint );
+                    }
+                }
+                ImplSetNonPersistentLineColorTransparenz();
+                mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
+                UpdateLineStyle();
+                mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
+            }
+            else
+            {
+                UpdateLineStyle();
+                mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
+            }
         }
     }
 }
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::DrawPolyPolygon( PolyPolygon& rPolyPolygon, sal_Bool bRecordPath )
+void WinMtfOutput::DrawPolyPolygon( PolyPolygon& rPolyPolygon, sal_Bool bRecordPath )
 {
-    if ( aRegionObj.NeedsUpdate() )
-        UpdateClipRegion( aRegionObj.GetRegion() );
+    UpdateClipRegion();
+
+    ImplMap( rPolyPolygon );
 
     if ( bRecordPath )
         aPathObj.AddPolyPolygon( rPolyPolygon );
     else
     {
-        UpdateLineStyle();
         UpdateFillStyle();
-        mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( ImplMap( rPolyPolygon ) ) );
+
+        if ( aClipPath.GetType() == COMPLEX )
+        {
+            PolyPolygon aDest;
+            aClipPath.GetClipPath().GetIntersection( rPolyPolygon, aDest );
+            ImplDrawClippedPolyPolygon( aDest );
+        }
+        else
+        {
+            UpdateLineStyle();
+            mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( rPolyPolygon ) );
+        }
     }
 }
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::DrawPolyLine( Polygon& rPolygon, sal_Bool bTo, sal_Bool bRecordPath )
+void WinMtfOutput::DrawPolyLine( Polygon& rPolygon, sal_Bool bTo, sal_Bool bRecordPath )
 {
-    if ( aRegionObj.NeedsUpdate() )
-        UpdateClipRegion( aRegionObj.GetRegion() );
+    UpdateClipRegion();
 
     ImplMap( rPolygon );
     if ( bTo )
@@ -1179,10 +1183,9 @@ void WinMtfMetaOutput::DrawPolyLine( Polygon& rPolygon, sal_Bool bTo, sal_Bool b
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::DrawPolyBezier( Polygon& rPolygon, sal_Bool bTo, sal_Bool bRecordPath )
+void WinMtfOutput::DrawPolyBezier( Polygon& rPolygon, sal_Bool bTo, sal_Bool bRecordPath )
 {
-    if ( aRegionObj.NeedsUpdate() )
-        UpdateClipRegion( aRegionObj.GetRegion() );
+    UpdateClipRegion();
 
     UINT16 nPoints = rPolygon.GetSize();
     if ( ( nPoints >= 4 ) && ( ( ( nPoints - 4 ) % 3 ) == 0 ) )
@@ -1222,13 +1225,23 @@ void WinMtfMetaOutput::DrawPolyBezier( Polygon& rPolygon, sal_Bool bTo, sal_Bool
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::DrawText( Point& rPosition, String& rText, INT32* pDXArry, sal_Bool bRecordPath )
+void WinMtfOutput::DrawText( Point& rPosition, String& rText, INT32* pDXArry, sal_Bool bRecordPath )
 {
-    if ( aRegionObj.NeedsUpdate() )
-        UpdateClipRegion( aRegionObj.GetRegion() );
+    UpdateClipRegion();
 
-    WinMtfOutput::DrawText( rPosition, rText, pDXArry );
+    rPosition = ImplMap( rPosition );
 
+    if ( pDXArry )
+    {
+        INT32 i, nSum, nLen = rText.Len();
+
+        for( i = 0, nSum = 0; i < nLen; i++ )
+        {
+            INT32 nTemp = ImplMap( Size( pDXArry[ i ], 0 ) ).Width();
+            nSum += nTemp;
+            pDXArry[ i ] = nSum;
+        }
+    }
     if( mbFontChanged )
     {
         mpGDIMetaFile->AddAction( new MetaFontAction( maFont ) );
@@ -1249,7 +1262,7 @@ void WinMtfMetaOutput::DrawText( Point& rPosition, String& rText, INT32* pDXArry
         if( pDXArry )
         {
             UINT32 nLen = rText.Len();
-            nTextWidth = aVDev.GetTextWidth( rText.GetChar( nLen - 1 ) );
+            nTextWidth = aVDev.GetTextWidth( rText.GetChar( (sal_uInt16)( nLen - 1 ) ) );
             if( nLen > 1 )
                 nTextWidth += pDXArry[ nLen - 2 ];
         }
@@ -1280,10 +1293,9 @@ void WinMtfMetaOutput::DrawText( Point& rPosition, String& rText, INT32* pDXArry
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::ResolveBitmapActions( List& rSaveList )
+void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
 {
-    if ( aRegionObj.NeedsUpdate() )
-        UpdateClipRegion( aRegionObj.GetRegion() );
+    UpdateClipRegion();
 
     sal_uInt32 nObjects     = rSaveList.Count();
     sal_uInt32 nObjectsLeft = nObjects;
@@ -1485,7 +1497,7 @@ void WinMtfMetaOutput::ResolveBitmapActions( List& rSaveList )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::SetDevOrg( const Point& rPoint )
+void WinMtfOutput::SetDevOrg( const Point& rPoint )
 {
     mnDevOrgX = rPoint.X();
     mnDevOrgY = rPoint.Y();
@@ -1493,7 +1505,7 @@ void WinMtfMetaOutput::SetDevOrg( const Point& rPoint )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::SetDevOrgOffset( INT32 nXAdd, INT32 nYAdd )
+void WinMtfOutput::SetDevOrgOffset( INT32 nXAdd, INT32 nYAdd )
 {
     mnDevOrgX += nXAdd;
     mnDevOrgY += nYAdd;
@@ -1501,7 +1513,7 @@ void WinMtfMetaOutput::SetDevOrgOffset( INT32 nXAdd, INT32 nYAdd )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::SetDevExt( const Size& rSize )
+void WinMtfOutput::SetDevExt( const Size& rSize )
 {
     mnDevWidth = rSize.Width();
     mnDevHeight = rSize.Height();
@@ -1509,7 +1521,7 @@ void WinMtfMetaOutput::SetDevExt( const Size& rSize )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::ScaleDevExt( double fX, double fY )
+void WinMtfOutput::ScaleDevExt( double fX, double fY )
 {
     mnDevWidth = FRound( mnDevWidth * fX );
     mnDevHeight = FRound( mnDevHeight * fY );
@@ -1517,7 +1529,7 @@ void WinMtfMetaOutput::ScaleDevExt( double fX, double fY )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::SetWinOrg( const Point& rPoint )
+void WinMtfOutput::SetWinOrg( const Point& rPoint )
 {
     mnWinOrgX = rPoint.X();
     mnWinOrgY = rPoint.Y();
@@ -1525,7 +1537,7 @@ void WinMtfMetaOutput::SetWinOrg( const Point& rPoint )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::SetWinOrgOffset( INT32 nXAdd, INT32 nYAdd )
+void WinMtfOutput::SetWinOrgOffset( INT32 nXAdd, INT32 nYAdd )
 {
     mnWinOrgX += nXAdd;
     mnWinOrgY += nYAdd;
@@ -1533,7 +1545,7 @@ void WinMtfMetaOutput::SetWinOrgOffset( INT32 nXAdd, INT32 nYAdd )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::SetWinExt( const Size& rSize )
+void WinMtfOutput::SetWinExt( const Size& rSize )
 {
     mnWinExtX = rSize.Width();
     mnWinExtY = rSize.Height();
@@ -1541,7 +1553,7 @@ void WinMtfMetaOutput::SetWinExt( const Size& rSize )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::ScaleWinExt( double fX, double fY )
+void WinMtfOutput::ScaleWinExt( double fX, double fY )
 {
     mnWinExtX = FRound( mnWinExtX * fX );
     mnWinExtY = FRound( mnWinExtY * fY );
@@ -1549,7 +1561,7 @@ void WinMtfMetaOutput::ScaleWinExt( double fX, double fY )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::SetWorldTransform( const XForm& rXForm )
+void WinMtfOutput::SetWorldTransform( const XForm& rXForm )
 {
     maXForm.eM11 = rXForm.eM11;
     maXForm.eM12 = rXForm.eM12;
@@ -1561,7 +1573,7 @@ void WinMtfMetaOutput::SetWorldTransform( const XForm& rXForm )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::ModifyWorldTransform( const XForm& rXForm, UINT32 nMode )
+void WinMtfOutput::ModifyWorldTransform( const XForm& rXForm, UINT32 nMode )
 {
     switch( nMode )
     {
@@ -1580,9 +1592,37 @@ void WinMtfMetaOutput::ModifyWorldTransform( const XForm& rXForm, UINT32 nMode )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::Push( BOOL bExtSet )
+void WinMtfOutput::Push( BOOL bExtSet )
 {
-    WinMtfOutput::Push( bExtSet );
+    UpdateClipRegion();
+
+    SaveStruct* pSave = new SaveStruct;
+    pSave->aActPos = maActPos;
+    pSave->nActTextAlign = mnActTextAlign;
+    pSave->nBkMode = mnBkMode;
+    pSave->aBkColor = maBkColor;
+    pSave->bWinExtSet = bExtSet;
+    pSave->aLineStyle = maLineStyle;
+    pSave->aFillStyle = maFillStyle;
+    pSave->aTextColor = maTextColor;
+    pSave->aFont = maFont;
+    pSave->bFontChanged = mbFontChanged;
+
+    if ( bExtSet )
+    {
+        pSave->nWinOrgX = mnWinOrgX;
+        pSave->nWinOrgY = mnWinOrgY;
+        pSave->nWinExtX = mnWinExtX;
+        pSave->nWinExtY = mnWinExtY;
+        pSave->nDevOrgX = mnDevOrgX;
+        pSave->nDevOrgY = mnDevOrgY;
+        pSave->nDevWidth = mnDevWidth;
+        pSave->nDevHeight = mnDevHeight;
+    }
+    pSave->aPathObj = aPathObj;
+    pSave->aClipPath = aClipPath;
+    maSaveStack.Push( pSave );
+
     // bei SaveDC muessen wir die verzoegerte Selektion
     // von Objekten umgehen, damit beim RestoreDC wieder
     // die richtigen Objekte selektiert werden
@@ -1602,9 +1642,39 @@ void WinMtfMetaOutput::Push( BOOL bExtSet )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::Pop()
+void WinMtfOutput::Pop()
 {
-    WinMtfOutput::Pop();
+    // Die aktuellen Daten vom Stack holen
+    if( maSaveStack.Count() )
+    {
+        // Die aktuelle Daten auf dem Stack sichern
+        SaveStruct* pSave = maSaveStack.Pop();
+
+        mnBkMode = pSave->nBkMode;
+        maBkColor = pSave->aBkColor;
+        maActPos = pSave->aActPos;
+        mnActTextAlign = pSave->nActTextAlign;
+        maLineStyle = pSave->aLineStyle;
+        maFillStyle = pSave->aFillStyle;
+        maTextColor = pSave->aTextColor;
+        maFont = pSave->aFont;
+        mbFontChanged = pSave->bFontChanged;
+
+        if ( pSave->bWinExtSet )
+        {
+            mnWinOrgX = pSave->nWinOrgX;
+            mnWinOrgY = pSave->nWinOrgY;
+            mnWinExtX = pSave->nWinExtX;
+            mnWinExtY = pSave->nWinExtY;
+            mnDevOrgX = pSave->nDevOrgX;
+            mnDevOrgY = pSave->nDevOrgY;
+            mnDevWidth = pSave->nDevWidth;
+            mnDevHeight = pSave->nDevHeight;
+        }
+        aPathObj = pSave->aPathObj;
+        aClipPath = pSave->aClipPath;
+        delete pSave;
+    }
     maLatestLineStyle = maLineStyle;
     maLatestFillStyle = maFillStyle;
     if( mnPushPopCount > 0 )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-15 14:36:15 $
+ *  last change: $Author: sj $ $Date: 2001-03-22 14:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,25 +291,28 @@ struct LOGFONTW
 
 //============================ WMFReader ==================================
 
-// -----------------------------------------------------------------------------
+enum WinMtfClipPathType{ EMPTY, RECTANGLE, COMPLEX };
 
-class WinMtfRegion : public Region
+class WinMtfClipPath
 {
-        sal_Bool    bNeedsUpdate;
+        PolyPolygon         aPolyPoly;
+        WinMtfClipPathType  eType;
+
+        void        ImpUpdateType();
 
     public :
 
-                    WinMtfRegion() : bNeedsUpdate( sal_False ) {};
+        sal_Bool    bNeedsUpdate;
 
+                    WinMtfClipPath() : bNeedsUpdate( sal_False ), eType( EMPTY ) {};
+
+        void        SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode );
         void        IntersectClipRect( const Rectangle& rRect );
         void        ExcludeClipRect( const Rectangle& rRect );
         void        MoveClipRegion( const Size& rSize );
 
-        sal_Bool    NeedsUpdate( sal_Bool bNewStatus = sal_False )
-                        { sal_Bool bRetValue = bNeedsUpdate;
-                            bNeedsUpdate = bNewStatus;
-                                return bRetValue; };
-        const Region& GetRegion() const { return (Region&)*this; };
+        WinMtfClipPathType GetType() const { return eType; };
+        const PolyPolygon& GetClipPath() const { return aPolyPoly; };
 };
 
 class WinMtfPathObj : public PolyPolygon
@@ -416,7 +419,7 @@ struct SaveStruct
     UINT32              nActTextAlign;
     sal_Bool            bRecordPath;
     WinMtfPathObj       aPathObj;
-    WinMtfRegion        aRegionObj;
+    WinMtfClipPath      aClipPath;
 };
 
 DECLARE_STACK( SaveStack, SaveStruct* );
@@ -502,10 +505,11 @@ struct XForm
 
 class WinMtfOutput
 {
-    protected:
 
         WinMtfPathObj       aPathObj;
-        WinMtfRegion        aRegionObj;
+        WinMtfClipPath      aClipPath;
+        WinMtfLineStyle     maLatestLineStyle;
+        WinMtfFillStyle     maLatestFillStyle;
 
         GDIObj**            mpGDIObj;
         UINT32              mnEntrys;
@@ -534,6 +538,12 @@ class WinMtfOutput
         long                mnWinOrgX, mnWinOrgY;       // aktuelles Window-Origin
         long                mnWinExtX, mnWinExtY;       // aktuelles Window-Extent
 
+        UINT32              mnPushPopCount;             // hoehe des Stapels
+        GDIMetaFile*        mpGDIMetaFile;
+
+        void                UpdateLineStyle();
+        void                UpdateFillStyle();
+
         Point               ImplMap( const Point& rPt );
         Size                ImplMap( const Size& rSz );
         Rectangle           ImplMap( const Rectangle& rRectangle );
@@ -541,30 +551,34 @@ class WinMtfOutput
         Polygon&            ImplMap( Polygon& rPolygon );
         PolyPolygon&        ImplMap( PolyPolygon& rPolyPolygon );
         void                ImplResizeObjectArry( UINT32 nNewEntry );
+        void                ImplSetNonPersistentLineColorTransparenz();
+        void                ImplDrawClippedPolyPolygon( const PolyPolygon& rPolyPoly );
 
     public:
 
-        virtual void        SetDevOrg( const Point& rPoint ) {};
-        virtual void        SetDevOrgOffset( INT32 nXAdd, INT32 nYAdd ){};
-        virtual void        SetDevExt( const Size& rSize ){};
-        virtual void        ScaleDevExt( double fX, double fY ){};
+        void                SetDevOrg( const Point& rPoint );
+        void                SetDevOrgOffset( INT32 nXAdd, INT32 nYAdd );
+        void                SetDevExt( const Size& rSize );
+        void                ScaleDevExt( double fX, double fY );
 
-        virtual void        SetWinOrg( const Point& rPoint ){};
-        virtual void        SetWinOrgOffset( INT32 nX, INT32 nY ){};
-        virtual void        SetWinExt( const Size& rSize ){};
-        virtual void        ScaleWinExt( double fX, double fY ){};
+        void                SetWinOrg( const Point& rPoint );
+        void                SetWinOrgOffset( INT32 nX, INT32 nY );
+        void                SetWinExt( const Size& rSize );
+        void                ScaleWinExt( double fX, double fY );
 
-        virtual void        SetWorldTransform( const XForm& rXForm ){};
-        virtual void        ModifyWorldTransform( const XForm& rXForm, UINT32 nMode ){};
+        void                SetWorldTransform( const XForm& rXForm );
+        void                ModifyWorldTransform( const XForm& rXForm, UINT32 nMode );
 
-        virtual void        Push( BOOL bWinExtSet = TRUE );
-        virtual void        Pop();
+        void                Push( BOOL bWinExtSet = TRUE );
+        void                Pop();
+
+        UINT32              SetRasterOp( UINT32 nRasterOp );
+        void                StrokeAndFillPath( sal_Bool bStroke, sal_Bool bFill );
 
         void                SetBkMode( UINT32 nMode );
         void                SetBkColor( const Color& rColor );
         void                SetTextColor( const Color& rColor );
         void                SetTextAlign( UINT32 nAlign );
-        virtual UINT32      SetRasterOp( UINT32 nRasterOp );
         void                CreateObject( GDIObjectType, void* pStyle = NULL );
         void                CreateObject( INT32 nIndex, GDIObjectType, void* pStyle = NULL );
         void                DeleteObject( INT32 nIndex );
@@ -573,88 +587,33 @@ class WinMtfOutput
 
         void                ClearPath(){ aPathObj.Clear(); };
         void                ClosePath(){ aPathObj.ClosePath(); };
-        virtual void        StrokeAndFillPath( sal_Bool bStroke, sal_Bool bFill ){};
-        virtual void        SelectClipPath( sal_Int32 nClipMode ){};
+        const PolyPolygon&  GetPathObj(){ return aPathObj; };
 
-        virtual void        DrawPixel( const Point& rSource, const Color& rColor ){};
         void                MoveTo( const Point& rPoint ) { maActPos = ImplMap( rPoint ); };
-        virtual void        LineTo( const Point& rPoint, sal_Bool bRecordPath = sal_False ){};
-        virtual void        DrawLine( const Point& rSource, const Point& rDest ){};
-        virtual void        DrawRect( const Rectangle& rRect, BOOL bEdge = TRUE ){};
-        virtual void        DrawRoundRect( const Rectangle& rRect, const Size& rSize ){};
-        virtual void        DrawEllipse( const Rectangle& rRect ){};
-        virtual void        DrawArc( const Rectangle& rRect, const Point& rStartAngle, const Point& rEndAngle, BOOL bDrawTo = FALSE ){};
-        virtual void        DrawPie( const Rectangle& rRect, const Point& rStartAngle, const Point& rEndAngle ){};
-        virtual void        DrawChord( const Rectangle& rRect, const Point& rStartAngle, const Point& rEndAngle ){};
-        virtual void        DrawPolygon( Polygon& rPolygon, sal_Bool bRecordPath = sal_False ){};
-        virtual void        DrawPolyPolygon( PolyPolygon& rPolyPolygon, sal_Bool bRecordPath = sal_False ){};
-        virtual void        DrawPolyLine( Polygon& rPolygon, sal_Bool bDrawTo = sal_False, sal_Bool bRecordPath = sal_False ){};
-        virtual void        DrawPolyBezier( Polygon& rPolygin, sal_Bool bDrawTo = sal_False, sal_Bool bRecordPath = sal_False ){};
-        virtual void        DrawText( Point& rPosition, String& rString, INT32* pDXArry = NULL, sal_Bool bRecordPath = sal_False );
-        virtual void        ResolveBitmapActions( List& rSaveList ){};
+        void                LineTo( const Point& rPoint, sal_Bool bRecordPath = sal_False );
+        void                DrawPixel( const Point& rSource, const Color& rColor );
+        void                DrawLine( const Point& rSource, const Point& rDest );
+        void                DrawRect( const Rectangle& rRect, BOOL bEdge = TRUE );
+        void                DrawRoundRect( const Rectangle& rRect, const Size& rSize );
+        void                DrawEllipse( const Rectangle& rRect );
+        void                DrawArc( const Rectangle& rRect, const Point& rStartAngle, const Point& rEndAngle, BOOL bDrawTo = FALSE );
+        void                DrawPie( const Rectangle& rRect, const Point& rStartAngle, const Point& rEndAngle );
+        void                DrawChord( const Rectangle& rRect, const Point& rStartAngle, const Point& rEndAngle );
+        void                DrawPolygon( Polygon& rPolygon, sal_Bool bRecordPath = sal_False );
+        void                DrawPolyPolygon( PolyPolygon& rPolyPolygon, sal_Bool bRecordPath = sal_False );
+        void                DrawPolyLine( Polygon& rPolygon, sal_Bool bDrawTo = sal_False, sal_Bool bRecordPath = sal_False );
+        void                DrawPolyBezier( Polygon& rPolygin, sal_Bool bDrawTo = sal_False, sal_Bool bRecordPath = sal_False );
+        void                DrawText( Point& rPosition, String& rString, INT32* pDXArry = NULL, sal_Bool bRecordPath = sal_False );
+        void                ResolveBitmapActions( List& rSaveList );
 
         void                IntersectClipRect( const Rectangle& rRect );
         void                ExcludeClipRect( const Rectangle& rRect );
         void                MoveClipRegion( const Size& rSize );
+        void                SetClipPath( const PolyPolygon& rPolyPoly, sal_Int32 nClippingMode );
+        void                UpdateClipRegion();
 
-                            WinMtfOutput();
+                            WinMtfOutput( GDIMetaFile& rGDIMetaFile );
         virtual             ~WinMtfOutput();
-};
-
-// -----------------------------------------------------------------------------
-
-class WinMtfMetaOutput : public WinMtfOutput
-{
-        UINT32              mnPushPopCount;             // hoehe des Stapels
-        GDIMetaFile*        mpGDIMetaFile;
-        WinMtfLineStyle     maLatestLineStyle;
-        WinMtfFillStyle     maLatestFillStyle;
-
-        void                UpdateLineStyle();
-        void                UpdateFillStyle();
-
-    public:
-
-        virtual void        SetDevOrg( const Point& rPoint );
-        virtual void        SetDevOrgOffset( INT32 nXAdd, INT32 nYAdd );
-        virtual void        SetDevExt( const Size& rSize );
-        virtual void        ScaleDevExt( double fX, double fY );
-
-        virtual void        SetWinOrg( const Point& rPoint );
-        virtual void        SetWinOrgOffset( INT32 nX, INT32 nY );
-        virtual void        SetWinExt( const Size& rSize );
-        virtual void        ScaleWinExt( double fX, double fY );
-
-        virtual void        SetWorldTransform( const XForm& rXForm );
-        virtual void        ModifyWorldTransform( const XForm& rXForm, UINT32 nMode );
-
-        virtual void        Push( BOOL bWinExtSet = TRUE );
-        virtual void        Pop();
-
-        virtual UINT32      SetRasterOp( UINT32 nRasterOp );
-        virtual void        StrokeAndFillPath( sal_Bool bStroke, sal_Bool bFill );
-        virtual void        SelectClipPath( sal_Int32 nClipMode );
-
-        virtual void        LineTo( const Point& rPoint, sal_Bool bRecordPath = sal_False );
-        virtual void        DrawPixel( const Point& rSource, const Color& rColor );
-        virtual void        DrawLine( const Point& rSource, const Point& rDest );
-        virtual void        DrawRect( const Rectangle& rRect, BOOL bEdge = TRUE );
-        virtual void        DrawRoundRect( const Rectangle& rRect, const Size& rSize );
-        virtual void        DrawEllipse( const Rectangle& rRect );
-        virtual void        DrawArc( const Rectangle& rRect, const Point& rStartAngle, const Point& rEndAngle, BOOL bDrawTo = FALSE );
-        virtual void        DrawPie( const Rectangle& rRect, const Point& rStartAngle, const Point& rEndAngle );
-        virtual void        DrawChord( const Rectangle& rRect, const Point& rStartAngle, const Point& rEndAngle );
-        virtual void        DrawPolygon( Polygon& rPolygon, sal_Bool bRecordPath = sal_False );
-        virtual void        DrawPolyPolygon( PolyPolygon& rPolyPolygon, sal_Bool bRecordPath = sal_False );
-        virtual void        DrawPolyLine( Polygon& rPolygon, sal_Bool bDrawTo = sal_False, sal_Bool bRecordPath = sal_False );
-        virtual void        DrawPolyBezier( Polygon& rPolygin, sal_Bool bDrawTo = sal_False, sal_Bool bRecordPath = sal_False );
-        virtual void        DrawText( Point& rPosition, String& rString, INT32* pDXArry = NULL, sal_Bool bRecordPath = sal_False );
-        virtual void        ResolveBitmapActions( List& rSaveList );
-
-        void                UpdateClipRegion( const Region& rRegion );
-
-                            WinMtfMetaOutput( GDIMetaFile& rGDIMetaFile );
-        virtual             ~WinMtfMetaOutput();
 };
 
 // -----------------------------------------------------------------------------
@@ -664,21 +623,21 @@ class WinMtf
     protected:
 
     WinMtfOutput*   pOut;                   //
-    SvStream*       pWMF;                   // Die einzulesende WMF/EMF-Datei
+    SvStream*           pWMF;                   // Die einzulesende WMF/EMF-Datei
 
-    UINT32          nStartPos, nEndPos;
-    List            aBmpSaveList;
+    UINT32              nStartPos, nEndPos;
+    List                aBmpSaveList;
 
-    PFilterCallback pCallback;
-    void*           pCallerData;
+    PFilterCallback     pCallback;
+    void*               pCallerData;
 
     // Sorgt dafuer, das aSampledBrush der aktuelle Brush des GDIMetaFiles ist.
 
-    Color           ReadColor();
-    BOOL            Callback( USHORT nPercent );
+    Color               ReadColor();
+    BOOL                Callback( USHORT nPercent );
 
-                    WinMtf( WinMtfOutput* pOut, SvStream& rStreamWMF, PFilterCallback pcallback, void * pcallerdata );
-                    ~WinMtf();
+                        WinMtf( WinMtfOutput* pOut, SvStream& rStreamWMF, PFilterCallback pcallback, void * pcallerdata );
+                        ~WinMtf();
 
     public:
 
@@ -700,7 +659,7 @@ private:
 
 public:
                     EnhWMFReader( SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile,
-                                    PFilterCallback pcallback, void * pcallerdata ) : WinMtf( new WinMtfMetaOutput( rGDIMetaFile ), rStreamWMF,
+                                    PFilterCallback pcallback, void * pcallerdata ) : WinMtf( new WinMtfOutput( rGDIMetaFile ), rStreamWMF,
                                                                                         pcallback, pcallerdata ),
                                                                                             bRecordPath( sal_False ) {};
                     ~EnhWMFReader();
@@ -732,7 +691,7 @@ private:
 public:
 
                     WMFReader( SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile,
-                                PFilterCallback pcallback, void * pcallerdata ) : WinMtf( new WinMtfMetaOutput( rGDIMetaFile ), rStreamWMF,
+                                PFilterCallback pcallback, void * pcallerdata ) : WinMtf( new WinMtfOutput( rGDIMetaFile ), rStreamWMF,
                                                                                     pcallback, pcallerdata ) {};
 
     // Liesst aus dem Stream eine WMF-Datei und fuellt das GDIMetaFile

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-15 14:31:46 $
+ *  last change: $Author: sj $ $Date: 2001-03-22 14:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -699,7 +699,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             {
                 sal_Int32 nClippingMode;
                 *pWMF >> nClippingMode;
-                pOut->SelectClipPath( nClippingMode );
+                pOut->SetClipPath( pOut->GetPathObj(), nClippingMode );
             }
             break;
 
