@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:08:56 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,9 +200,10 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     CheckBox CB_CASE
     {
         Pos = MAP_APPFONT( 12, 171 );
-        Size = MAP_APPFONT( 90, 10 );
+        Size = MAP_APPFONT( 90, 20 );
         Text [ de ] = "E~xakte Suche";
         TabStop = TRUE;
+        WordBreak = TRUE;
         HelpId = HID_SEARCH_CASE;
         Text [ en-US ] = "Match case";
         Text [ x-comment ] = " ";
@@ -250,9 +251,10 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     CheckBox CB_APPROX
     {
         Pos = MAP_APPFONT( 190, 184 );
-        Size = MAP_APPFONT( 84, 10 );
+        Size = MAP_APPFONT( 84, 20 );
         Text [ de ] = "~Ähnlichkeitssuche";
         TabStop = TRUE;
+        WordBreak = TRUE;
         HelpId = HID_SEARCH_APPROX;
         Text [ en-US ] = "Similarity Search";
         Text [ x-comment ] = " ";
@@ -269,7 +271,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     };
     CheckBox CB_HALFFULLFORMS
     {
-        Pos = MAP_APPFONT( 105, 201 );
+        Pos = MAP_APPFONT( 105, 209 );
         Size = MAP_APPFONT( 85, 10 );
         TabStop = TRUE ;
         Text [ de ] = "Zeichenbreite berücksichtigen" ;
@@ -277,7 +279,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     };
     CheckBox CB_SOUNDSLIKECJK
     {
-        Pos = MAP_APPFONT( 190, 201 );
+        Pos = MAP_APPFONT( 190, 209 );
         Size = MAP_APPFONT( 84, 10 );
         TabStop = TRUE ;
         Text [ de ] = "Ähnl. Schreibweise (Jap.)" ;
@@ -285,7 +287,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     };
     PushButton PB_SOUNDSLIKESETTINGS
     {
-        Pos = MAP_APPFONT( 275, 199 );
+        Pos = MAP_APPFONT( 275, 207 );
         Size = MAP_APPFONT( 14, 14 );
         TabStop = TRUE ;
         Text [ de ] = "..." ;
