@@ -2,9 +2,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:21:30 $
+#   last change: $Author: obo $ $Date: 2004-11-18 08:42:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,10 +72,27 @@ BEGIN
 
     $packlistname = "pack.lst";
     $compiler = "";
+    $ignoreerrors = 0;
 
     $logging = 0;
     $logfilename = "packager_logfile.log";  # the default logfile name for global errors
     @logfileinfo = ();
+
+    $plat = $^O;
+
+    if (( $plat =~ /MSWin/i ) || (( $plat =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} eq "4nt" )))
+    {
+        $separator = "\\";
+        $iswin = 1;
+        $isunix = 0;
+    }
+    else
+    {
+        $separator = "/";
+        $iswin = 0;
+        $isunix = 1;
+    }
+
 }
 
 1;

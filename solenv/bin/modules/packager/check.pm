@@ -2,9 +2,9 @@
 #
 #   $RCSfile: check.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:20:45 $
+#   last change: $Author: obo $ $Date: 2004-11-18 08:41:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,6 +62,7 @@
 
 package packager::check;
 
+use packager::exiter;
 use packager::globals;
 
 ##############################################
@@ -70,9 +71,13 @@ use packager::globals;
 
 sub check_packlist
 {
+    my $projectdir = $ENV{'PRJ'};
+    $projectdir =~ s/$packager::globals::separator\s*$//;
+    $packager::globals::packlistname = $projectdir . $packager::globals::separator . "util" . $packager::globals::separator . $packager::globals::packlistname;
+
     if ( ! -f $packager::globals::packlistname )
     {
-        print "\nERROR: Cannot find pack list: $packager::globals::packlistname\n";
+        packager::exiter::exit_program("ERROR: Package list not found: $packager::globals::packlistname", "check_packlist");
     }
 }
 
@@ -84,7 +89,34 @@ sub check_environment
 {
     if ( ! $ENV{'OUTPATH'} )
     {
-        print "\nERROR: Environment variable OUTPATH must be set\n";
+        packager::exiter::exit_program("ERROR: Environment variable OUTPATH not set!", "check_environment");
+    }
+
+    if ( ! $ENV{'PRJ'} )
+    {
+        packager::exiter::exit_program("ERROR: Environment variable PRJ not set!", "check_environment");
+    }
+}
+
+#############################################################
+# Check 3: Checking the parameter. Only "-i" is valid
+#############################################################
+
+sub check_parameter
+{
+    while ( $#ARGV >= 0 )
+    {
+        my $param = shift(@ARGV);
+
+        if ($param eq "-i") { $packager::globals::ignoreerrors = 1; }
+        else
+        {
+            print("\n*************************************\n");
+            print("Sorry, unknown parameter: $param");
+            print("\n*************************************\n");
+            usage();
+            exit(-1);
+        }
     }
 }
 
