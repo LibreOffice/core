@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-12 18:05:06 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 10:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,37 +206,6 @@ void ShapeFactory::setShapeName( const uno::Reference< drawing::XShape >& xShape
             ASSERT_EXCEPTION( e );
         }
     }
-}
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-// set appearance properties at a shape
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
-//static
-void ShapeFactory::setShapeAppearance(
-                    const ShapeAppearance& rAppearance
-                    , const uno::Reference< beans::XPropertySet >& xProp
-                    , sal_Bool bNoLines )
-                    throw (beans::UnknownPropertyException
-                        , beans::PropertyVetoException
-                        , lang::IllegalArgumentException
-                        , lang::WrappedTargetException
-                        , uno::RuntimeException)
-{
-    //LineStyle
-    if(bNoLines)
-    {
-        xProp->setPropertyValue( C2U( UNO_NAME_LINESTYLE )
-            , uno::makeAny(drawing::LineStyle_NONE) );
-    }
-    //FillColor
-    xProp->setPropertyValue( C2U( UNO_NAME_FILLCOLOR )
-        , uno::makeAny(rAppearance.m_nColorData) );
-    //Transparency
-    xProp->setPropertyValue( C2U( UNO_NAME_FILL_TRANSPARENCE )
-        , uno::makeAny( (sal_Int16)rAppearance.m_nTransparency ) );
 }
 
 //-----------------------------------------------------------------------------
@@ -607,7 +576,6 @@ uno::Reference<drawing::XShape>
         ShapeFactory::impl_createCube(
               const uno::Reference<drawing::XShapes>& xTarget
             , const DataPointGeometry& rGeometry
-            //, const ShapeAppearance& rAppearance
             , sal_Bool bRounded )
 {
     //create shape
@@ -761,8 +729,6 @@ uno::Reference<drawing::XShape>
                 , uno::makeAny(CHART_3DOBJECT_SEGMENTCOUNT) );
             xProp->setPropertyValue( C2U( UNO_NAME_3D_HORZ_SEGS )
                 , uno::makeAny(nSegments) );
-
-////            ShapeFactory::setShapeAppearance( rAppearance, xProp );
         }
         catch( uno::Exception& e )
         {
@@ -952,7 +918,6 @@ uno::Reference< drawing::XShape >
         ShapeFactory::createPieSegment2D(
                     const uno::Reference< drawing::XShapes >& xTarget
                     , const DataPointGeometry& rGeometry )
-//                    , const ShapeAppearance& rAppearance )
 {
     /*
     DataPointGeometry aLogicGeom( drawing::Position3D(0.0,0.0,0.0)
@@ -1094,8 +1059,6 @@ UNO_NAME_POLYPOLYGONBEZIER "PolyPolygonBezier" drawing::PolyPolygonBezierCoords*
             xProp->setPropertyValue( C2U( UNO_NAME_CIRCENDANGLE )
                 , uno::makeAny((sal_Int32)((fStartAngleDegree+fWidthAngleDegree)*factor)) );
                 */
-
-//            ShapeFactory::setShapeAppearance( rAppearance, xProp, sal_False );
         }
         catch( uno::Exception& e )
         {
@@ -1142,8 +1105,6 @@ UNO_NAME_POLYPOLYGONBEZIER "PolyPolygonBezier" drawing::PolyPolygonBezierCoords*
             //UNO_NAME_CIRCENDANGLE sal_Int32
             xProp->setPropertyValue( C2U( UNO_NAME_CIRCENDANGLE )
                 , uno::makeAny((sal_Int32)((fStartAngleDegree+fWidthAngleDegree)*factor)) );
-
-            ShapeFactory::setShapeAppearance( rAppearance, xProp );
         }
         catch( uno::Exception& e )
         {
@@ -1170,7 +1131,6 @@ uno::Reference< drawing::XShape >
         ShapeFactory::createPieSegment(
                     const uno::Reference< drawing::XShapes >& xTarget
                     , const DataPointGeometry& rGeometry )
-//                    , const ShapeAppearance& rAppearance )
 {
     double fInnerXRadius      = rGeometry.m_aSize2.DirectionX/2.0;
     double fXWidthRadius      = rGeometry.m_aSize.DirectionX/2.0 - fInnerXRadius;
@@ -1233,8 +1193,6 @@ uno::Reference< drawing::XShape >
                 , uno::makeAny(CHART_3DOBJECT_SEGMENTCOUNT) );
             xProp->setPropertyValue( C2U( UNO_NAME_3D_HORZ_SEGS )
                 , uno::makeAny(CHART_3DOBJECT_SEGMENTCOUNT) );
-
-//            ShapeFactory::setShapeAppearance( rAppearance, xProp );
         }
         catch( uno::Exception& e )
         {
@@ -1724,7 +1682,7 @@ uno::Reference< drawing::XShapes >
 uno::Reference< drawing::XShape >
         ShapeFactory::createLine3D( const uno::Reference< drawing::XShapes >& xTarget
                     , const drawing::PolyPolygonShape3D& rPoints
-                    , const LineProperties& rLineProperties )
+                    , const VLineProperties& rLineProperties )
 {
     if(!rPoints.SequenceX.getLength())
         return NULL;
@@ -1782,7 +1740,7 @@ uno::Reference< drawing::XShape >
 uno::Reference< drawing::XShape >
         ShapeFactory::createLine2D( const uno::Reference< drawing::XShapes >& xTarget
                     , const drawing::PointSequenceSequence& rPoints
-                    , const LineProperties& rLineProperties )
+                    , const VLineProperties& rLineProperties )
 {
     if(!rPoints.getLength())
         return NULL;
@@ -1893,7 +1851,7 @@ uno::Reference< drawing::XShape >
     //create 3D anchor shape
     uno::Reference< drawing::XShape > xShape3DAnchor = createCube( xTarget3D
             , DataPointGeometry( rGeometry.m_aPosition,drawing::Direction3D(1000,1000,1000) )
-            , ShapeAppearance( Color(COL_YELLOW).GetColor() ) );
+            , ...);
     //get 2D position from xShape3DAnchor
     //the 2D position of the 3D Shape is not correct initially this is a bug in draw @todo
     //awt::Point aPosition2D( xShape3DAnchor->getPosition() );
