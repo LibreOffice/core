@@ -2,9 +2,9 @@
  *
  *  $RCSfile: closedispatcher.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:19:11 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,10 @@
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHINFORMATIONPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
 #endif
@@ -156,8 +160,9 @@ namespace framework{
                     be used.
  */
 class CloseDispatcher : public css::lang::XTypeProvider
-                      , public css::frame::XNotifyingDispatch   // => XDispatch
-                      , public css::frame::XStatusListener      // => XEventListener
+                      , public css::frame::XNotifyingDispatch             // => XDispatch
+                      , public css::frame::XStatusListener                // => XEventListener
+                      , public css::frame::XDispatchInformationProvider
                         // baseclasses ... order is neccessary for right initialization!
                       , private ThreadHelpBase
                       , public  ::cppu::OWeakObject
@@ -265,6 +270,11 @@ class CloseDispatcher : public css::lang::XTypeProvider
                                                     const css::util::URL&                                     aURL      ) throw(css::uno::RuntimeException);
         virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
                                                     const css::util::URL&                                     aURL      ) throw(css::uno::RuntimeException);
+
+        //---------------------------------------
+        // XDispatchInformationProvider
+        virtual css::uno::Sequence< sal_Int16 >                       SAL_CALL getSupportedCommandGroups         (                         ) throw (css::uno::RuntimeException);
+        virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 nCommandGroup ) throw (css::uno::RuntimeException);
 
         //---------------------------------------
         // XStatusListener
