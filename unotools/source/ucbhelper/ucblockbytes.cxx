@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-02 10:24:49 $
+ *  last change: $Author: mba $ $Date: 2000-11-03 12:13:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,8 @@ public:
     virtual void SAL_CALL   onTerminated();
     virtual void SAL_CALL   run();
     void                    Cancel();
-    void                    DoIt( sal_Bool bHandle = sal_True );
+    sal_Bool                DoIt();
+    void                    Notify( sal_Bool bError );
 };
 
 //----------------------------------------------------------------------------
@@ -375,12 +376,12 @@ void CommandThread_Impl::run()
     m_bRunning = sal_True;
 
     if( !m_bCanceled && schedule() )
-        DoIt();
+        Notify( DoIt() );
 
     m_bRunning = sal_False;
 }
 
-void CommandThread_Impl::DoIt( sal_Bool bHandle )
+sal_Bool CommandThread_Impl::DoIt()
 {
     // create content and execute command
     Any aParam;
@@ -404,10 +405,14 @@ void CommandThread_Impl::DoIt( sal_Bool bHandle )
         bException = true;
     }
 
-    Reference < XActiveDataControl > xControl( m_aArgument.Sink, UNO_QUERY );
-    if ( bAborted || bException )
+    return ( bAborted || bException );
+}
+
+void CommandThread_Impl::Notify( sal_Bool bError )
+{
+    if ( bError )
     {
-        if( bHandle && m_xHandler.Is() )
+        if( m_xHandler.Is() )
             m_xHandler->Handle( UcbLockBytesHandler::CANCEL, m_xLockBytes );
 
         Reference < XActiveDataSink > xSink( m_aArgument.Sink, UNO_QUERY );
@@ -417,11 +422,10 @@ void CommandThread_Impl::DoIt( sal_Bool bHandle )
         Reference < XActiveDataStreamer > xStreamer( m_aArgument.Sink, UNO_QUERY );
         if ( xStreamer.is() )
             xStreamer->setStream( Reference < XStream >() );
-
-        if ( bHandle && xControl.is() )
-            xControl->terminate();
     }
-    else if ( xControl.is() )
+
+    Reference < XActiveDataControl > xControl( m_aArgument.Sink, UNO_QUERY );
+    if ( xControl.is() )
         xControl->terminate();
 }
 
@@ -756,17 +760,11 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent > xCon
     if ( eOpenMode & STREAM_WRITE )
     {
         // first try read/write mode
-        pThread->DoIt( sal_False );
+        sal_Bool bSuccess = pThread->DoIt();
+        if ( !bSuccess )
+            xLockBytes->SetError( ERRCODE_IO_NOTEXISTS );
         delete pThread;
-        if ( !xLockBytes->getInputStream_Impl().is() )
-        {
-            // no success: try readonly mode
-            xSink = (XActiveDataControl*) new UcbDataSink_Impl( xLockBytes );
-            aArgument.Sink = xSink;
-            pThread = new CommandThread_Impl( xLockBytes, xContent, aArgument, xInteractionHandler, xProgressHdl, pHandler );
-        }
-        else
-            return xLockBytes;
+        return xLockBytes;
     }
 
     if ( pHandler )
