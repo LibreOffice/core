@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-12 15:44:26 $
+ *  last change: $Author: mtg $ $Date: 2001-06-12 16:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,7 @@ void SwXMLExport::_ExportFontDecls()
     SvXMLExport::_ExportFontDecls();
 }
 
-#define NUM_EXPORTED_VIEW_SETTINGS 9
+#define NUM_EXPORTED_VIEW_SETTINGS 11
 void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps)
 {
     Reference< XMultiServiceFactory > xServiceFactory =
@@ -533,7 +533,6 @@ void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaHeight") );
     pValue[nIndex++].Value <<= rRect.GetHeight();
 
-
     sal_Bool bShowRedlineChanges = IsShowChanges ( pDoc->GetRedlineMode() );
 
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowRedlineChanges") );
@@ -543,10 +542,13 @@ void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowHeaderWhileBrowsing") );
     pValue[nIndex++].Value.setValue( &bShowHead, ::getBooleanCppuType() );
 
-
     sal_Bool bShowFoot =  pDoc->IsFootInBrowse();
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowFooterWhileBrowsing") );
     pValue[nIndex++].Value.setValue( &bShowFoot, ::getBooleanCppuType() );
+
+    sal_Bool bInBrowse =  pDoc->IsBrowseMode();
+    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "InBrowseMode") );
+    pValue[nIndex++].Value.setValue( &bInBrowse, ::getBooleanCppuType() );
 
     if ( nIndex < NUM_EXPORTED_VIEW_SETTINGS )
         aProps.realloc(nIndex);
