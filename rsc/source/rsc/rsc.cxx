@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-08 16:36:33 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@
 
 #include <tools/fsys.hxx>
 #include <tools/intn.hxx>
+#include <tools/isolang.hxx>
 #include <tools/stream.hxx>
 
 #ifndef _RSCERROR_H
@@ -117,6 +118,9 @@
 #endif
 #ifndef _RSCRSC_HXX
 #include <rscrsc.hxx>
+#endif
+#ifndef _RSCHASH_HXX
+#include <rschash.hxx>
 #endif
 
 #include <osl/file.h>
@@ -344,76 +348,17 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "CHARSET_", 8 ) )
             {
-                CharSet nSourceCharSet = RTL_TEXTENCODING_ASCII_US;
-                if( !rsc_stricmp( (*ppStr) + 9, "ANSI" ) )
-                     nSourceCharSet = RTL_TEXTENCODING_MS_1252;
-                else if( !rsc_stricmp( (*ppStr) + 9, "MAC" ) )
-                     nSourceCharSet = RTL_TEXTENCODING_APPLE_ROMAN;
-                else if( !rsc_stricmp( (*ppStr) + 9, "IBMPC_437" ) )
-                     nSourceCharSet = RTL_TEXTENCODING_IBM_437;
-                else if( !rsc_stricmp( (*ppStr) + 9, "IBMPC_850" ) )
-                     nSourceCharSet = RTL_TEXTENCODING_IBM_850;
-                else if( !rsc_stricmp( (*ppStr) + 9, "IBMPC_860" ) )
-                     nSourceCharSet = RTL_TEXTENCODING_IBM_860;
-                else if( !rsc_stricmp( (*ppStr) + 9, "IBMPC_861" ) )
-                     nSourceCharSet = RTL_TEXTENCODING_IBM_861;
-                else if( !rsc_stricmp( (*ppStr) + 9, "IBMPC_863" ) )
-                     nSourceCharSet = RTL_TEXTENCODING_IBM_863;
-                else if( !rsc_stricmp( (*ppStr) + 9, "IBMPC_865" ) )
-                     nSourceCharSet = RTL_TEXTENCODING_IBM_865;
-                else if( !rsc_stricmp( (*ppStr) + 9, "IBMPC" ) )
-                     nSourceCharSet = RTL_TEXTENCODING_IBM_850;
-                else if( !rsc_stricmp( (*ppStr) + 9, "DONTKNOW" ) )
-                     nSourceCharSet = RTL_TEXTENCODING_DONTKNOW;
-                else if( !rsc_stricmp( (*ppStr) + 9, "UTF8" ) )
-                     nSourceCharSet = RTL_TEXTENCODING_UTF8;
-                else
-                {
-                    nSourceCharSet = rtl_getTextEncodingFromUnixCharset( (*ppStr) + 9 );
-                    if( nSourceCharSet == 0 )
-                    {
-                        nSourceCharSet = RTL_TEXTENCODING_MS_1252;
-                        pEH->FatalError( ERR_UNKNOWNSW, RscId(), *ppStr );
-                        break;
-                    }
-                }
-                if( m_aOutputFiles.back().nSourceCharSet != RTL_TEXTENCODING_ASCII_US )
-                    m_aOutputFiles.push_back( OutputFile() );
-                m_aOutputFiles.back().nSourceCharSet = nSourceCharSet;
+                // ignore (was an option once)
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "lg" ) )
             {
-                m_aOutputFiles.back().nLangTypeId = LANGUAGE_DONTKNOW;
+                m_aOutputFiles.back().aLangName = ByteString();
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "lg", 2 ) )
             {
-#define LT(Name)                                                                    \
-                if( !rsc_stricmp( (*ppStr) + 3, #Name ) )                           \
-                {                                                                   \
-                    if( m_aOutputFiles.back().nLangTypeId != LANGUAGE_DONTKNOW )    \
-                        m_aOutputFiles.push_back( OutputFile() );                   \
-                    m_aOutputFiles.back().nLangTypeId = LANGUAGE_##Name ;           \
-                    m_aOutputFiles.back().aLangName = ByteString( (*ppStr)+3 ).ToLowerAscii(); \
-                }
-                LT( SYSTEM              );
-#include <rsclang.c>
-                LT( USER1               );
-                LT( USER2               );
-                LT( USER3               );
-                LT( USER4               );
-                LT( USER5               );
-                LT( USER6               );
-                LT( USER7               );
-                LT( USER8               );
-                LT( USER9               );
-                if( !rsc_stricmp( (*ppStr) + 3, "EXTERN" ) )
-                {
-                    if( m_aOutputFiles.back().nLangTypeId != LANGUAGE_DONTKNOW )
-                        m_aOutputFiles.push_back( OutputFile() );
-                    m_aOutputFiles.back().nLangTypeId = LANGUAGE_USER9;
-                }
-                if( m_aOutputFiles.back().nLangTypeId == LANGUAGE_DONTKNOW )
-                    pEH->FatalError( ERR_UNKNOWNSW, RscId(), *ppStr );
+                if( m_aOutputFiles.back().aLangName.Len() )
+                    m_aOutputFiles.push_back( OutputFile() );
+                m_aOutputFiles.back().aLangName = ByteString( (*ppStr)+3 );
             }
             else
                 pEH->FatalError( ERR_UNKNOWNSW, RscId(), *ppStr );
@@ -1023,12 +968,15 @@ ERRTYPE RscCompiler::Link()
 
             pTC->pEH->StdOut( "Generating .rc file\n" );
 
+            rtl_TextEncoding aEnc = RTL_TEXTENCODING_UTF8;
+            if( it->aLangName.CompareIgnoreCaseToAscii( "de", 2 ) == COMPARE_EQUAL )
+                aEnc = RTL_TEXTENCODING_MS_1252;
+
             // Schreibe Datei
             sal_Char cSearchDelim = ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US ).GetChar( 0 );
             sal_Char cAccessDelim = ByteString( DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US ).GetChar( 0 );
-            pTC->ChangeLanguage( it->nLangTypeId );
-            pTC->ChangeDefLanguage( International::GetNeutralLanguage( it->nLangTypeId ) );
-            pTC->SetSourceCharSet( it->nSourceCharSet );
+            pTC->ChangeLanguage( it->aLangName );
+            pTC->SetSourceCharSet( aEnc );
             pTC->ClearSysNames();
             ByteString aSysSearchPath( it->aLangSearchPath );
             xub_StrLen nIndex = 0;
