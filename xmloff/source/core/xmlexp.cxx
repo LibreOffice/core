@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:58:12 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,12 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
+
+// #110680#
+//#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+//#include <comphelper/processfactory.hxx>
+//#endif
+
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
@@ -361,11 +364,21 @@ void SvXMLExport::_InitCtor()
     }
 }
 
-SvXMLExport::SvXMLExport( MapUnit eDfltUnit, const enum XMLTokenEnum eClass, sal_uInt16 nExportFlags ) :
-    pImpl( 0 ), meClass( eClass ),
+// #110680#
+SvXMLExport::SvXMLExport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    MapUnit eDfltUnit, const enum XMLTokenEnum eClass, sal_uInt16 nExportFlags )
+:   pImpl( 0 ),
+    // #110680#
+    mxServiceFactory(xServiceFactory),
+    meClass( eClass ),
     sWS( GetXMLToken(XML_WS) ),
     pNamespaceMap( new SvXMLNamespaceMap ),
-    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit ) ),
+
+    // #110680#
+    // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit ) ),
+    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit, getServiceFactory() ) ),
+
     pAttrList( new SvXMLAttributeList ),
     bExtended( sal_False ),
     pNumExport(0L),
@@ -378,18 +391,28 @@ SvXMLExport::SvXMLExport( MapUnit eDfltUnit, const enum XMLTokenEnum eClass, sal
     mnExportFlags( nExportFlags ),
     mnErrorFlags( ERROR_NO )
 {
+    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
 }
 
+// #110680#
 SvXMLExport::SvXMLExport(
-        const OUString &rFileName,
-        const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
-        MapUnit eDfltUnit   ) :
-    pImpl( 0 ), meClass( XML_TOKEN_INVALID ),
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    const OUString &rFileName,
+    const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
+    MapUnit eDfltUnit   )
+:   pImpl( 0 ),
+    // #110680#
+    mxServiceFactory(xServiceFactory),
+    meClass( XML_TOKEN_INVALID ),
     sWS( GetXMLToken(XML_WS) ),
     sOrigFileName( rFileName ),
     pNamespaceMap( new SvXMLNamespaceMap ),
-    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit ) ),
+
+    // #110680#
+    // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit ) ),
+    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit, getServiceFactory() ) ),
+
     pAttrList( new SvXMLAttributeList ),
     bExtended( sal_False ),
     xHandler( rHandler ),
@@ -404,22 +427,32 @@ SvXMLExport::SvXMLExport(
     mnExportFlags( EXPORT_ALL ),
     mnErrorFlags( ERROR_NO )
 {
+    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
 
     if (xNumberFormatsSupplier.is())
         pNumExport = new SvXMLNumFmtExport(*this, xNumberFormatsSupplier);
 }
 
+// #110680#
 SvXMLExport::SvXMLExport(
-        const OUString &rFileName,
-        const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
-        const Reference< XModel >& rModel,
-        sal_Int16 eDfltUnit ) :
-    pImpl( 0 ), meClass( XML_TOKEN_INVALID ),
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    const OUString &rFileName,
+    const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
+    const Reference< XModel >& rModel,
+    sal_Int16 eDfltUnit )
+:   pImpl( 0 ),
+    // #110680#
+    mxServiceFactory(xServiceFactory),
+    meClass( XML_TOKEN_INVALID ),
     sWS( GetXMLToken(XML_WS) ),
     sOrigFileName( rFileName ),
     pNamespaceMap( new SvXMLNamespaceMap ),
-    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, SvXMLUnitConverter::GetMapUnit(eDfltUnit) ) ),
+
+    // #110680#
+    // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, SvXMLUnitConverter::GetMapUnit(eDfltUnit) ) ),
+    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, SvXMLUnitConverter::GetMapUnit(eDfltUnit), getServiceFactory() ) ),
+
     pAttrList( new SvXMLAttributeList ),
     bExtended( sal_False ),
     xHandler( rHandler ),
@@ -436,23 +469,33 @@ SvXMLExport::SvXMLExport(
     mnExportFlags( EXPORT_ALL ),
     mnErrorFlags( ERROR_NO )
 {
+    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
 
     if (xNumberFormatsSupplier.is())
         pNumExport = new SvXMLNumFmtExport(*this, xNumberFormatsSupplier);
 }
 
+// #110680#
 SvXMLExport::SvXMLExport(
-        const OUString &rFileName,
-        const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
-        const Reference< XModel >& rModel,
-        const Reference< document::XGraphicObjectResolver >& rEmbeddedGraphicObjects,
-        sal_Int16 eDfltUnit ) :
-    pImpl( 0 ), meClass( XML_TOKEN_INVALID ),
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    const OUString &rFileName,
+    const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
+    const Reference< XModel >& rModel,
+    const Reference< document::XGraphicObjectResolver >& rEmbeddedGraphicObjects,
+    sal_Int16 eDfltUnit )
+:   pImpl( 0 ),
+    // #110680#
+    mxServiceFactory(xServiceFactory),
+    meClass( XML_TOKEN_INVALID ),
     sWS( GetXMLToken(XML_WS) ),
     sOrigFileName( rFileName ),
     pNamespaceMap( new SvXMLNamespaceMap ),
-    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, SvXMLUnitConverter::GetMapUnit(eDfltUnit) ) ),
+
+    // #110680#
+    // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, SvXMLUnitConverter::GetMapUnit(eDfltUnit) ) ),
+    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, SvXMLUnitConverter::GetMapUnit(eDfltUnit), getServiceFactory() ) ),
+
     pAttrList( new SvXMLAttributeList ),
     bExtended( sal_False ),
     xHandler( rHandler ),
@@ -470,6 +513,7 @@ SvXMLExport::SvXMLExport(
     mnExportFlags( EXPORT_ALL ),
     mnErrorFlags( ERROR_NO )
 {
+    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
 
     if (xNumberFormatsSupplier.is())
@@ -1698,8 +1742,10 @@ sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
     Sequence < Any > aArgs( 1 );
     aArgs[0] <<= xHdl;
 
-    Reference< lang::XMultiServiceFactory > xServiceFactory =
-            comphelper::getProcessServiceFactory();
+    // #110680#
+    // Reference< lang::XMultiServiceFactory > xServiceFactory = comphelper::getProcessServiceFactory();
+    Reference< lang::XMultiServiceFactory > xServiceFactory = getServiceFactory();
+
     Reference< document::XExporter > xExporter(
         xServiceFactory->createInstanceWithArguments( sFilterService, aArgs),
                                                UNO_QUERY);
@@ -1873,6 +1919,13 @@ void SvXMLExport::DisposingModel()
 {
     xModel = 0;
     pEventListener = NULL;
+}
+
+// #110680#
+::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SvXMLExport::getServiceFactory()
+{
+    // #110680#
+    return mxServiceFactory;
 }
 
 //=============================================================================
