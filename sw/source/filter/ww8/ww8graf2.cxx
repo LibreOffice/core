@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 09:42:28 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 13:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,32 +233,30 @@ BOOL SwWW8ImplReader::GetPictGrafFromStream( Graphic& rGraphic,
     String sExt(WW8_ASCII2STR(".pct"));
     utl::TempFile aTempFile( aEmptyStr, &sExt );
     aTempFile.EnableKillingFile();
+
+    SvStream* pOut = aTempFile.GetStream(
+                                STREAM_READ | STREAM_WRITE | STREAM_TRUNC );
+    BYTE* pBuf = new BYTE[ ULONG_MAX != nLen ? 4096 : 512 ];
+    memset( pBuf, 0, 512 );
+    pOut->Write( pBuf, 512 );       // Anfang Pict: 512 Byte Muell
+    if( ULONG_MAX != nLen )
     {
-        SvFileStream aOut( aTempFile.GetFileName(),
-                            STREAM_READ | STREAM_WRITE | STREAM_TRUNC );
-        BYTE* pBuf = new BYTE[ ULONG_MAX != nLen ? 4096 : 512 ];
-        memset( pBuf, 0, 512 );
-        aOut.Write( pBuf, 512 );        // Anfang Pict: 512 Byte Muell
-        if( ULONG_MAX != nLen )
-        {
-            UINT16 nToRead = 4096;
-            do {
-                if( nToRead > nLen )
-                    nToRead = (UINT16)nLen;
-                rSrc.Read( pBuf, nToRead );
-                aOut.Write( pBuf, nToRead );
-                nLen -= nToRead;
-            } while( nLen );
-        }
-        else
-            aOut << rSrc;
-
-        delete( pBuf );
+        UINT16 nToRead = 4096;
+        do {
+            if( nToRead > nLen )
+                nToRead = (UINT16)nLen;
+            rSrc.Read( pBuf, nToRead );
+            pOut->Write( pBuf, nToRead );
+            nLen -= nToRead;
+        } while( nLen );
     }
+    else
+        *pOut << rSrc;
 
-    return 0 == ::GetGrfFilter()->ImportGraphic( rGraphic,
-                            INetURLObject( aTempFile.GetFileName() ),
-                            GRFILTER_FORMAT_DONTKNOW );
+    delete( pBuf );
+
+    return 0 == ::GetGrfFilter()->ImportGraphic( rGraphic, aEmptyStr, *pOut,
+                                                GRFILTER_FORMAT_DONTKNOW );
 }
 
 
@@ -1169,11 +1167,14 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.3 2000-11-06 09:42:28 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.4 2000-11-13 13:31:12 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/11/06 09:42:28  jp
+      must changes: tempfile
+
       Revision 1.2  2000/11/01 12:12:16  jp
       optimize: use the same code to read MAC-Pict
 
