@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:49:52 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 19:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,7 @@ ModalDialog DLG_FILTERCRIT
         Text [ english_us ] = "Value" ;
         Text[ chinese_simplified ] = "ÊýÖµ";
         Text[ russian ] = "Çíà÷åíèå";
-        Text[ polish ] = "Warto?æ";
+        Text[ polish ] = "Wartoœæ";
         Text[ japanese ] = "’l";
         Text[ chinese_traditional ] = "¼Æ­È";
         Text[ arabic ] = "ÇáÞíãÉ";
