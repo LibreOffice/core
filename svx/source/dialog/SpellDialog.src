@@ -1,0 +1,242 @@
+/*************************************************************************
+ *
+ *  $RCSfile: SpellDialog.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:13:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "dialogs.hrc"
+#include "helpid.hrc"
+#include "SpellDialog.hrc"
+ // pragma ----------------------------------------------------------------
+
+// RID_SVXDLG_SPELLCHECK -------------------------------------------------
+
+#define STD_MASKCOLOR Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; }
+
+ModelessDialog RID_SVXDLG_SPELLCHECK
+{
+    HelpId = HID_SPELLCHECK ;
+    Size = MAP_APPFONT( 270, 168 );
+    OutputSize = TRUE;
+    Closeable = TRUE ;
+    SVLook = TRUE;
+    Text [ de ] = "Rechtschreibprüfung: " ;
+    Text [ en-US ] = "Spellcheck: " ;
+
+    Moveable = TRUE ;
+
+    FixedText FT_NOTINDICT
+    {
+        Pos = MAP_APPFONT(  6, 6 );
+        Size = MAP_APPFONT( 120, 8 );
+        Text [de] = "~Nicht im Wörterbuch" ;
+        Text [ en-US ] = "~Not in dictionary" ;
+    };
+
+    MultiLineEdit ED_NEWWORD
+    {
+        Pos = MAP_APPFONT( 6, 17 );
+        Size = MAP_APPFONT( 197, 48 );
+        Border = TRUE;
+        VScroll = TRUE;
+        IgnoreTab = TRUE;
+    };
+
+    FixedText FT_SUGGESTION
+    {
+        Pos = MAP_APPFONT( 6, 68 );
+        Size = MAP_APPFONT( 120, 8 );
+        Text [de] = "~Vorschläge" ;
+        Text [ en-US ] = "~Suggestions" ;
+    };
+    ListBox LB_SUGGESTION
+    {
+        Pos = MAP_APPFONT( 6, 79 );
+        Size = MAP_APPFONT( 197, 48 );
+        Border = TRUE;
+    };
+
+    FixedText FT_LANGUAGE
+    {
+        Pos = MAP_APPFONT(  6, 133 );
+        Size = MAP_APPFONT( 100, 8 );
+        Text [de] = "~Sprache des Wörterbuchs" ;
+        Text [ en-US ] = "Dictionary languag~e" ;
+    };
+
+    ListBox LB_LANGUAGE
+    {
+        Pos = MAP_APPFONT( 110, 131 );
+        Size = MAP_APPFONT( 93, 55 );
+        Border = TRUE;
+        Sort = TRUE;
+        DropDown = TRUE;
+    };
+    PushButton PB_IGNORE
+    {
+        Pos = MAP_APPFONT( 209, 17 );
+        Size = MAP_APPFONT( 55, 14 );
+        Text [de] = "~Einmal ignorieren" ;
+        Text [ en-US ] = "~Ignore Once" ;
+    };
+
+    PushButton PB_IGNOREALL
+    {
+        Pos = MAP_APPFONT( 209, 34 );
+        Size = MAP_APPFONT( 55, 14 );
+        Text [de] = "~Alle ignorieren" ;
+        Text [ en-US ] = "I~gnore All" ;
+    };
+    MenuButton MB_ADDTODICT
+    {
+        Pos = MAP_APPFONT( 209, 51 );
+        Size = MAP_APPFONT( 55, 14 );
+        Text [de] = "Hin~zufügen" ;
+        Text [ en-US ] = "~Add" ;
+    };
+
+    PushButton PB_CHANGE
+    {
+        Pos = MAP_APPFONT( 209, 79 );
+        Size = MAP_APPFONT( 55, 14 );
+        Text [de] = "~Ändern" ;
+        Text [ en-US ] = "~Change" ;
+        DefButton = TRUE ;
+    };
+
+    PushButton PB_CHANGEALL
+    {
+        Pos = MAP_APPFONT( 209, 97 );
+        Size = MAP_APPFONT( 55, 14 );
+        Text [de] = "A~lle ändern" ;
+        Text [ en-US ] = "Change A~ll" ;
+    };
+    PushButton PB_AUTOCORR
+    {
+        Pos = MAP_APPFONT( 209, 114 );
+        Size = MAP_APPFONT( 55, 14 );
+        Text [de] = "Auto~korrektur" ;
+        Text [ en-US ] = "AutoCor~rect" ;
+    };
+
+    GroupBox GB_BACKGROUND
+    {
+        Pos = MAP_APPFONT( 1, 1 );
+        Size = MAP_APPFONT( 268, 146 );
+        Hide=TRUE;
+    };
+
+    PushButton PB_OPTIONS
+    {
+        Pos = MAP_APPFONT( 6, 150 );
+        Size = MAP_APPFONT( 55, 14 );
+        Text [de] = "~Optionen..." ;
+        Text [ en-US ] = "O~ptions..." ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT( 87, 150 );
+        Size = MAP_APPFONT( 55, 14 );
+    };
+    PushButton PB_UNDO
+    {
+        Pos = MAP_APPFONT( 148, 150 );
+        Size = MAP_APPFONT( 55, 14 );
+        Text [de] = "~Rückgängig" ;
+        Text [ en-US ] = "~Undo" ;
+    };
+
+    PushButton PB_CLOSE
+    {
+        Pos = MAP_APPFONT ( 209 , 150 ) ;
+        Size = MAP_APPFONT ( 55 , 14 ) ;
+        TabStop = TRUE ;
+        Text [de] = "S~chließen" ;
+        Text [ en-US ] = "Cl~ose" ;
+    };
+    String ST_RESUME
+    {
+        Text [de] = "~Fortsetzen" ;
+        Text[ en-US ] = "Resu~me";
+    };
+    String ST_NOSUGGESTIONS
+    {
+        Text [de] = "(keine Vorschläge)";
+        Text [en-US] = "(no suggestions)";
+    };
+};
+ // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
