@@ -7,5 +7,5 @@
  <toolbar:toolbaritem xlink:href=".uno:ThesaurusDialog" toolbar:helpid="20603"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Graphic" toolbar:helpid="20213"/>
- <toolbar:toolbaritem xlink:href=".uno:ImageMapDialog" toolbar:text="ImageMap Editor" toolbar:helpid="10371"/>
+ <toolbar:toolbaritem xlink:href=".uno:ImageMapDialog" toolbar:helpid="10371"/>
 </toolbar:toolbar>
