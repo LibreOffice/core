@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-07 13:24:37 $
+ *  last change: $Author: tl $ $Date: 2001-05-09 08:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ class SmMathConfig
                         const rtl::OUString &rSymbolName,
                         const rtl::OUString &rBaseNode ) const;
 
-    SetOtherIfNotEqual( BOOL &rbItem, BOOL bNewVal );
+    void            SetOtherIfNotEqual( BOOL &rbItem, BOOL bNewVal );
 
     DECL_LINK( TimeOut, Timer * );
 

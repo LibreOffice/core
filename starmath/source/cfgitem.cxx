@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-07 13:24:31 $
+ *  last change: $Author: tl $ $Date: 2001-05-09 08:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1127,7 +1127,7 @@ void SmMathConfig::SetPrintZoomFactor( USHORT nVal )
 }
 
 
-SmMathConfig::SetOtherIfNotEqual( BOOL &rbItem, BOOL bNewVal )
+void SmMathConfig::SetOtherIfNotEqual( BOOL &rbItem, BOOL bNewVal )
 {
     if (bNewVal != rbItem)
     {
