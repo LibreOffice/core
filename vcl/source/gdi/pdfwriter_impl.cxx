@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 13:54:09 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 10:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -921,7 +921,8 @@ void PDFWriterImpl::getFontMetric( ImplFontSelectData* pSelect, ImplFontMetricDa
             pMetric->mnWidth        = pSelect->mnHeight;
             pMetric->mnAscent       = ( pSelect->mnHeight * m_aBuiltinFonts[i].m_nAscent + 500 ) / 1000;
             pMetric->mnDescent      = ( pSelect->mnHeight * (-m_aBuiltinFonts[i].m_nDescent) + 500 ) / 1000;
-            pMetric->mnLeading      = 0;
+            pMetric->mnIntLeading   = 0;
+            pMetric->mnExtLeading   = 0;
             pMetric->mnSlant        = 0;
             pMetric->mnFirstChar    = 32;
             pMetric->mnLastChar     = 255;
