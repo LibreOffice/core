@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:50:39 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,11 @@
 #pragma warning( disable : 4290 )
 #endif
 
+#include "sal/config.h"
+
 #include "appuno.hxx"
+
+#include "sfx2/dllapi.h"
 
 #include <svtools/sbx.hxx>
 #include <svtools/itempool.hxx>
@@ -2064,13 +2068,13 @@ SFX_IMPL_SINGLEFACTORY( TestMouseClickHandler );
 
 extern "C" {
 
-void SAL_CALL component_getImplementationEnvironment(   const   sal_Char**          ppEnvironmentTypeName   ,
+SFX2_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(    const   sal_Char**          ppEnvironmentTypeName   ,
                                                                 uno_Environment**   ppEnvironment           )
 {
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
-sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
+SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(   void*   pServiceManager ,
                                         void*   pRegistryKey    )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >        xKey( reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >( pRegistryKey ) )   ;
@@ -2225,7 +2229,7 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     return sal_True;
 }
 
-void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName ,
+SFX2_DLLPUBLIC void* SAL_CALL component_getFactory( const   sal_Char*   pImplementationName ,
                                                 void*       pServiceManager     ,
                                                 void*       pRegistryKey        )
 {
