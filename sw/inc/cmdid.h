@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 09:42:16 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -749,7 +749,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_GENERATE_DIR_DLG         (FN_EXTRA + 18)   /* Verzeichnis */
 #define FN_GLOSSARY_DLG             (FN_EXTRA + 20)   /* Textbausteine */
 #define FN_MACRO_CHOOSER            (FN_EXTRA + 21)   /* Makro aufnehmen */
-#define FN_SPELLING_DLG             (FN_EXTRA + 22)   /* Rechtschreibung */
+
 
 #define FN_PLAY_MACRO               (FN_EXTRA + 23)   /* Makro abspielen */
 #define FN_LAUNCH_BASIC             (FN_EXTRA + 25)   /* Makro abspielen */
