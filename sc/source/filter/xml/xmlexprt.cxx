@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-23 14:58:06 $
+ *  last change: $Author: sab $ $Date: 2000-11-28 16:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,6 +356,7 @@ void ScXMLExport::_ExportMeta()
     sal_Int32 nTableCount(0);
     sal_Int32 nShapesCount(0);
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY );
+    GetAutoStylePool()->ClearEntries();
     if ( xSpreadDoc.is() )
     {
         uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
@@ -1227,7 +1228,6 @@ void ScXMLExport::_ExportAutoStyles()
     rtl::OUString SC_SROWPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX));
     rtl::OUString SC_SCELLPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX));
     GetChartExport()->setTableAddressMapper(xChartExportMapper);
-    GetAutoStylePool()->ClearEntries();
 
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY );
     if ( xSpreadDoc.is() )
@@ -1389,8 +1389,10 @@ void ScXMLExport::_ExportAutoStyles()
                                     aColumnStyles.AddNewTable(nTable, ++nColumns);
                                 else
                                     aColumnStyles.AddNewTable(nTable, nColumns);
-                                for (sal_Int32 nColumn = 0; nColumn <= nColumns; nColumn++)
+                                sal_Int32 nColumn = 0;
+                                while (nColumn <= nColumns && nColumn != MAXCOL)
                                 {
+                                    sal_Int32 nIndex;
                                     uno::Any aColumn = xTableColumns->getByIndex(nColumn);
                                     uno::Reference<table::XCellRange> xTableColumn;
                                     if (aColumn >>= xTableColumn)
@@ -1401,7 +1403,6 @@ void ScXMLExport::_ExportAutoStyles()
                                             std::vector<XMLPropertyState> xPropStates = xColumnStylesExportPropertySetMapper->Filter(xColumnProperties);
                                             if(xPropStates.size())
                                             {
-                                                sal_Int32 nIndex;
                                                 rtl::OUString sParent;
                                                 rtl::OUString sName = GetAutoStylePool()->Find(XML_STYLE_FAMILY_TABLE_COLUMN, sParent, xPropStates);
                                                 if (!sName.len())
@@ -1416,6 +1417,12 @@ void ScXMLExport::_ExportAutoStyles()
                                             }
                                         }
                                     }
+                                    sal_Int32 nOld = nColumn;
+                                    nColumn = pDoc->GetNextDifferentFlaggedCol(nTable, nColumn);
+                                    if (nColumn == MAXCOL)
+                                        nColumn++;
+                                    for (sal_Int32 i = nOld + 1; (i < nColumn) && (i <= nColumns) ; i++)
+                                        aColumnStyles.AddFieldStyleName(nTable, i, nIndex);
                                 }
                                 if (aCellAddress.EndColumn > nColumns)
                                 {
@@ -1439,8 +1446,10 @@ void ScXMLExport::_ExportAutoStyles()
                                     aRowStyles.AddNewTable(nTable, ++nRows);
                                 else
                                     aRowStyles.AddNewTable(nTable, nRows);
-                                for (sal_Int32 nRow = 0; nRow <= nRows; nRow++)
+                                sal_Int32 nRow = 0;
+                                while ( nRow <= nRows && nRow != MAXROW)
                                 {
+                                    sal_Int32 nIndex;
                                     uno::Any aRow = xTableRows->getByIndex(nRow);
                                     uno::Reference<table::XCellRange> xTableRow;
                                     if (aRow >>= xTableRow)
@@ -1451,7 +1460,6 @@ void ScXMLExport::_ExportAutoStyles()
                                             std::vector<XMLPropertyState> xPropStates = xRowStylesExportPropertySetMapper->Filter(xRowProperties);
                                             if(xPropStates.size())
                                             {
-                                                sal_Int32 nIndex;
                                                 rtl::OUString sParent;
                                                 rtl::OUString sName = GetAutoStylePool()->Find(XML_STYLE_FAMILY_TABLE_ROW, sParent, xPropStates);
                                                 if (!sName.len())
@@ -1466,6 +1474,12 @@ void ScXMLExport::_ExportAutoStyles()
                                             }
                                         }
                                     }
+                                    sal_Int32 nOld = nRow;
+                                    nRow = pDoc->GetNextDifferentFlaggedRow(nTable, nRow);
+                                    if (nRow == MAXROW)
+                                        nRow++;
+                                    for (sal_Int32 i = nOld + 1; (i < nRow) && (i <= nRows) ; i++)
+                                        aRowStyles.AddFieldStyleName(nTable, i, nIndex);
                                 }
                                 if (aCellAddress.EndRow > nRows)
                                 {
@@ -2454,3 +2468,11 @@ XMLPageExport* ScXMLExport::CreatePageExport()
 {
     return new XMLTableMasterPageExport( *this );
 }
+
+XMLShapeExport* ScXMLExport::CreateShapeExport()
+{
+/*  UniReference < XMLPropertySetMapper > xShapeStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScShapeStylesProperties, xScPropHdlFactory);
+    SvXMLExportPropertyMapper *pShapeStylesExportPropertySetMapper = new SvXMLExportPropertyMapper(xShapeStylesPropertySetMapper);*/
+    return new XMLShapeExport(*this/*, pShapeStylesExportPropertySetMapper*/);
+}
+
