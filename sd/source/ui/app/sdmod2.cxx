@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:34 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -717,8 +717,8 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
         }
     }
 
-    ( ( pViewShell && pViewShell->GetViewFrame() ) ? pViewShell->GetViewFrame() : SfxViewFrame::Current() )->
-        GetBindings().InvalidateAll( TRUE );
+    if( pViewShell && pViewShell->GetViewFrame() )
+        pViewShell->GetViewFrame()->GetBindings().InvalidateAll( TRUE );
 }
 SfxTabPage* SdModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )
 {
