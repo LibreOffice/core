@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistentwindowstate.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:28:38 $
+ *  last change: $Author: kz $ $Date: 2004-12-03 14:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,9 @@ class PersistentWindowState :   // interfaces
 
         /// reference to the frame which was created by the office himself
         css::uno::WeakReference< css::frame::XFrame > m_xFrame;
+
+        /// we call SetWindowState one times only for the same frame!
+        sal_Bool m_bWindowStateAlreadySet;
 
     //________________________________
     // interface
