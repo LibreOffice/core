@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-15 08:10:52 $
+ *  last change: $Author: fme $ $Date: 2002-05-16 10:34:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -748,7 +748,7 @@ void SwTxtFrm::CalcLineSpace()
     { \
         if( GetTxtNode()->GetWrong() ) \
             GetTxtNode()->GetWrong()->fnFunc( nPos, nCnt ); \
-        else \
+        else if ( ! GetTxtNode()->IsWrongDirty() ) \
         { \
             GetTxtNode()->SetWrong( new SwWrongList() ); \
             GetTxtNode()->GetWrong()->SetInvalid( nPos, nPos + ( nCnt > 0 ? nCnt : 1 ) ); \
