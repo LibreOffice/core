@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 13:51:19 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 14:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,8 @@ class SalMainPipeExchangeSignalHandler : public vos::OSignalHandler
 struct ProcessDocumentsRequest
 {
     ::rtl::OUString aOpenList;      // Documents that should be opened in the default way
-    ::rtl::OUString aViewList;              // Documents that should be opened in viewmode
+    ::rtl::OUString aViewList;      // Documents that should be opened in viewmode
+    ::rtl::OUString aStartList;     // Documents/Presentations that should be started
     ::rtl::OUString aPrintList;     // Documents that should be printed on default printer
     ::rtl::OUString aForceOpenList; // Documents that should be forced to open for editing (even templates)
     ::rtl::OUString aForceNewList;  // Documents that should be forced to create a new document
