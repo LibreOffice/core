@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditObject.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-08 09:40:36 $
+ *  last change: $Author: sab $ $Date: 2002-08-06 11:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,20 +313,6 @@ void SAL_CALL
         throw (uno::RuntimeException)
 {
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("ScAccessibleEditObject"));
-}
-
-uno::Sequence< ::rtl::OUString> SAL_CALL
-    ScAccessibleEditObject::getSupportedServiceNames(void)
-        throw (uno::RuntimeException)
-{
-    uno::Sequence< ::rtl::OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
-    sal_Int32 nOldSize(aSequence.getLength());
-    aSequence.realloc(nOldSize + 1);
-    ::rtl::OUString* pNames = aSequence.getArray();
-
-    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.AccessibleCell"));
-
-    return aSequence;
 }
 
 //=====  XTypeProvider  =======================================================
