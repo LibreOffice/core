@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-02 16:06:14 $
+ *  last change: $Author: cmc $ $Date: 2001-08-24 08:20:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,6 +603,9 @@ void SwWW8Writer::Out_SwFmt( const SwFmt& rFmt, BOOL bPapFmt, BOOL bChpFmt,
             {
                 aSet.Put( SwFmtVertOrient( pFlyOffset->Y() ));
                 aSet.Put( SwFmtHoriOrient( pFlyOffset->X() ));
+                SwFmtAnchor aAnchor(pFlyFmt->GetAnchor());
+                aAnchor.SetType(eNewAnchorType);
+                aSet.Put( aAnchor );
             }
 
             if( SFX_ITEM_SET != aSet.GetItemState( RES_SURROUND ))
@@ -3765,6 +3768,9 @@ SwAttrFnTab aWW8AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.15  2001/06/02 16:06:14  cmc
+      #68662# ##989## parent frame of a fly in fly exported as a table
+
       Revision 1.14  2001/04/24 10:26:11  cmc
       CJK Vertical Text Alignment {im|ex}port
 

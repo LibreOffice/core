@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-08 10:26:17 $
+ *  last change: $Author: cmc $ $Date: 2001-08-24 08:20:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1651,6 +1651,7 @@ WW8SaveData::WW8SaveData( SwWW8Writer& rWriter, ULONG nStt, ULONG nEnd )
 
 {
     pOldFlyOffset = rWrt.pFlyOffset;
+    eOldAnchorType = rWrt.eNewAnchorType;
     if( rWrt.pO->Count() )
     {
         pOOld = rWrt.pO;
@@ -1705,6 +1706,7 @@ WW8SaveData::~WW8SaveData()
         delete rWrt.pO;
         rWrt.pO = pOOld;
     }
+    rWrt.eNewAnchorType = eOldAnchorType;
     rWrt.pFlyOffset = pOldFlyOffset;
 }
 
@@ -1959,6 +1961,7 @@ ULONG SwWW8Writer::StoreDoc()
 
     pFlyFmt = 0;
     pFlyOffset = 0;
+    eNewAnchorType = FLY_PAGE;
     nTxtTyp = TXT_MAINTEXT;
     nFlyWidth = nFlyHeight = 0;
     nStyleBeforeFly = nLastFmtId = 0;
@@ -2304,11 +2307,14 @@ void GetWW8Writer( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.17 2001-08-08 10:26:17 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.18 2001-08-24 08:20:29 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.17  2001/08/08 10:26:17  cmc
+      #90737# init pointer
+
       Revision 1.16  2001/07/23 13:47:02  cmc
       #90095# If initial node is a section don't loose section settings by using page default
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-02 16:06:13 $
+ *  last change: $Author: cmc $ $Date: 2001-08-24 08:20:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1792,6 +1792,7 @@ void SwWW8Writer::OutWW8FlyFrmsInCntnt( const SwTxtNode& rNd )
                         // wird in Out_SwFmt() ausgewertet
                         pFlyOffset = &aOffset;
                         pFlyFmt = (SwFlyFrmFmt*)&rFlyFrmFmt;
+                        eNewAnchorType = pFlyFmt->GetAnchor().GetAnchorId();
                         // Ok, rausschreiben:
                         WriteText();
                     }
@@ -1853,9 +1854,24 @@ void SwWW8Writer::OutWW8FlyFrm( const SwFrmFmt& rFrmFmt,
             nFlyWidth  = rS.GetWidth();  // Fuer Anpassung Graphic-Groesse
             nFlyHeight = rS.GetHeight();
 
-            ASSERT( !pFlyFmt, "+pFlyFmt ist vor einem Rahmen nicht 0 ( Rahmen in Rahmen ? )" );
             {
                 WW8SaveData aSaveData( *this, nStt, nEnd );
+
+                Point aOffset;
+                if( pFlyFmt )
+                {
+                    /*
+                    #90804#
+                    Munge flys in fly into absolutely positioned elements for
+                    word 6
+                    */
+                    aOffset = rFrmFmt.FindLayoutRect().Pos();
+                    aOffset.X()-=DOCUMENTBORDER;
+                    aOffset.Y()-=DOCUMENTBORDER;
+                    pFlyOffset = &aOffset;
+                    eNewAnchorType = FLY_PAGE;
+                }
+
                 pFlyFmt = (SwFlyFrmFmt*)&rFrmFmt;
                 if( pFlyFmt )
                 {
@@ -2022,11 +2038,14 @@ SwNodeFnTab aWW8NodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8nds.cxx,v 1.7 2001-06-02 16:06:13 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8nds.cxx,v 1.8 2001-08-24 08:20:29 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/06/02 16:06:13  cmc
+      #68662# ##989## parent frame of a fly in fly exported as a table
+
       Revision 1.6  2001/05/21 15:45:50  cmc
       ##897## #87014# #75277# Better inline (FLY_IN_CNTNT) graphics and ole2 object exporting (sideeffects add ole2 support to WW6 export)
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-02 16:06:14 $
+ *  last change: $Author: cmc $ $Date: 2001-08-24 08:20:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,8 +353,9 @@ public:
     SwFlyFrmFmt* pFlyFmt;           // liegt der Node in einem FlyFrame, ist
                                     // das Format gesetzt, sonst 0
 
-    Point* pFlyOffset;              // zur Justierung eines im Writer als Zeichen
-                                    // gebundenen Flys, der im WW Absatzgebunden wird.
+    Point* pFlyOffset;              // zur Justierung eines im Writer als
+    RndStdIds eNewAnchorType;       // Zeichen gebundenen Flys, der im WW
+                                    // Absatzgebunden wird.
 
     WW8_WrPlcFld* pFldMain;         // Felder im Haupttext
     WW8_WrPlcFld* pFldHdFt;         // Felder in Header/Footer
@@ -748,6 +749,7 @@ struct WW8SaveData
 {
     SwWW8Writer& rWrt;
     Point* pOldFlyOffset;
+    RndStdIds eOldAnchorType;
     WW8Bytes* pOOld;
     SwPaM* pOldPam, *pOldEnd;
     SwFlyFrmFmt* pOldFlyFmt;
