@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-27 15:19:05 $
+ *  last change: $Author: kso $ $Date: 2001-04-30 10:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1183,6 +1183,7 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
 
         // Assemble new content identifier...
         OUString aNewURL = m_aUri.getParentUri();
+        aNewURL += OUString::createFromAscii( "/" );
         aNewURL += m_aProps.aTitle;
         Reference< XContentIdentifier > xNewId
                         = new ::ucb::ContentIdentifier( m_xSMgr, aNewURL );
