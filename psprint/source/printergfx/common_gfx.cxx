@@ -2,9 +2,9 @@
  *
  *  $RCSfile: common_gfx.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:52:13 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -719,14 +719,16 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
     {
         sal_uInt32 nPoints = pPoints[i];
         // #112689# sanity check
-        if( nPoints == 0 )
+        if( nPoints == 0 || pPtAry[i] == NULL )
             continue;
 
         snprintf(pString, nBezString, "%li %li moveto\n", pPtAry[i][0].X(), pPtAry[i][0].Y()); //Move to the starting point
         WritePS(mpPageBody, pString);
         for (unsigned int j=1; j < nPoints;)
         {
-            if (pFlgAry[i][j] != POLY_CONTROL)
+            // if no flag array exists for this polygon, then it must be a regular
+            // polygon without beziers
+            if ( ! pFlgAry[i] || pFlgAry[i][j] != POLY_CONTROL)
             {
                 snprintf(pString, nBezString, "%li %li lineto\n", pPtAry[i][j].X(), pPtAry[i][j].Y());
                 WritePS(mpPageBody, pString);
