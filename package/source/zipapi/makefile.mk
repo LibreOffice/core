@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: mtg $ $Date: 2001-04-27 14:56:06 $
+#   last change: $Author: mtg $ $Date: 2001-05-31 10:21:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,8 +93,8 @@ CPPUMAKERFLAGS=
 UNOUCROUT=$(OUT)$/inc
 INCPRE+=$(UNOUCROUT)
 
-UNOUCRDEP=  $(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=  $(SOLARBINDIR)$/applicat.rdb
+UNOUCRDEP=  $(SOLARBINDIR)$/offapi.rdb
+UNOUCRRDB=  $(SOLARBINDIR)$/offapi.rdb
 
 UNOTYPES=\
     com.sun.star.packages.ZipEntry \
