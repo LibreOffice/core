@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TIndexes.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 09:56:54 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
-
 using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::uno;
@@ -129,8 +128,8 @@ sdbcx::ObjectType OIndexesHelper::createObject(const ::rtl::OUString& _rName)
     m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= aSchema;
     m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
 
-
-    Reference< XResultSet > xResult = m_pTable->getMetaData()->getIndexInfo(m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)),aSchema,aTable,sal_False,sal_False);
+    Any aCatalog = m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME));
+    Reference< XResultSet > xResult = m_pTable->getMetaData()->getIndexInfo(aCatalog,aSchema,aTable,sal_False,sal_False);
 
     if ( xResult.is() )
     {
@@ -140,9 +139,26 @@ sdbcx::ObjectType OIndexesHelper::createObject(const ::rtl::OUString& _rName)
             sal_Bool bUnique = !xRow->getBoolean(4);
             if((!aQualifier.getLength() || xRow->getString(5) == aQualifier ) && xRow->getString(6) == aName)
             {
+                sal_Int32 nClustered = xRow->getShort(7);
+                sal_Bool bPrimarKeyIndex = sal_False;
+                xRow = NULL;
+                xResult = NULL;
+                try
+                {
+                    xResult = m_pTable->getMetaData()->getPrimaryKeys(aCatalog,aSchema,aTable);
+                    xRow.set(xResult,UNO_QUERY);
+
+                    if ( xRow.is() && xResult->next() ) // there can be only one primary key
+                    {
+                        bPrimarKeyIndex = xRow->getString(6) == aName;
+                    }
+                }
+                catch(Exception)
+                {
+                }
                 OIndexHelper* pRet = new OIndexHelper(m_pTable,aName,aQualifier,bUnique,
-                    sal_False,
-                    xRow->getShort(7) == IndexType::CLUSTERED);
+                    bPrimarKeyIndex,
+                    nClustered == IndexType::CLUSTERED);
                 xRet = pRet;
                 break;
             }
