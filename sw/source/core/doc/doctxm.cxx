@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:02:31 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 14:59:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1033,7 +1033,8 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         if ( !pDefaultPageDesc )
         {
             // determine default page description
-            pDefaultPageDesc = &pDoc->GetPageDesc( 0 );
+            pDefaultPageDesc =
+                &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
         }
     }
 
