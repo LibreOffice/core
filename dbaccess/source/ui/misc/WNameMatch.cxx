@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WNameMatch.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-08 08:24:54 $
+ *  last change: $Author: oj $ $Date: 2001-12-07 13:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #endif
 #ifndef DBAUI_WIZ_COPYTABLEDIALOG_HXX
 #include "WCopyTable.hxx"
+#endif
+#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
+#include <com/sun/star/sdbc/DataType.hpp>
 #endif
 
 using namespace ::dbaui;
@@ -216,7 +219,11 @@ sal_Bool OWizNameMatching::LeavePage()
                     break;
 
             m_pParent->m_vColumnPos[nPos]   = pDestColumns->end() - aDestIter;
-            m_pParent->m_vColumnTypes[nPos] = pDestField->GetType();
+            const OTypeInfo* pTypeInfo = m_pParent->convertType((*aDestIter)->second->getTypeInfo());
+            sal_Int32 nType = ::com::sun::star::sdbc::DataType::VARCHAR;
+            if(pTypeInfo)
+                nType = pTypeInfo->nType;
+            m_pParent->m_vColumnTypes[nPos] = nType;
         }
         else
             m_pParent->m_vColumnPos[nPos] = CONTAINER_ENTRY_NOTFOUND;

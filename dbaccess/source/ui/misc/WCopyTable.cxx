@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-05 09:03:01 $
+ *  last change: $Author: oj $ $Date: 2001-12-07 13:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,21 +389,15 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
     if(bFinish)
     {
         WaitObject aWait(this);
-        sal_Bool bWasEmpty = !m_vDestColumns.size();
-        if(getCreateStyle() != WIZARD_DEF_VIEW && getCreateStyle() != WIZARD_APPEND_DATA )
-            CheckColumns();
-
         switch(getCreateStyle())
         {
-            case WIZARD_APPEND_DATA:
-            {
-                break;
-            }
             case WIZARD_DEF_DATA:
             case WIZARD_DEF:
             {
+                CheckColumns();
                 break;
             }
+            case WIZARD_APPEND_DATA:
             case WIZARD_DEF_VIEW:
                 break;
             default:

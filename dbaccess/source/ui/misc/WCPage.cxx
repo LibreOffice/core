@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-06 12:50:08 $
+ *  last change: $Author: oj $ $Date: 2001-12-07 13:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,26 +288,8 @@ sal_Bool OCopyTable::LeavePage()
     { // table exists and name has changed
         if(m_pParent->getCreateStyle() == OCopyTableWizard::WIZARD_APPEND_DATA)
         {
-            m_pParent->clearDestColumns();
-            //  m_pParent->m_xSourceObject = NULL;
-            m_pParent->m_xDestObject = NULL;
-            Reference<XTablesSupplier > xSup(m_pParent->m_xConnection,UNO_QUERY);
-            Reference<XNameAccess> xTables;
-            if(xSup.is())
-                xTables = xSup->getTables();
-            if(xTables.is() && xTables->hasByName(m_edTableName.GetText()))
-            {
-                // set new destination
-                xTables->getByName(m_edTableName.GetText()) >>= m_pParent->m_xDestObject;
-                m_pParent->loadData(m_pParent->m_xDestObject,m_pParent->m_vDestColumns,m_pParent->m_aDestVec);
-                // #90027#
-                //  m_pParent->CheckColumns();
-            }
-            if(!m_pParent->m_xDestObject.is())
-            {
-                ErrorBox(this, ModuleRes(ERROR_INVALID_TABLE_NAME)).Execute();
+            if(!checkAppendData())
                 return sal_False;
-            }
         }
         else if(m_eOldStyle == OCopyTableWizard::WIZARD_APPEND_DATA)
         {
@@ -322,28 +304,8 @@ sal_Bool OCopyTable::LeavePage()
         {
             case OCopyTableWizard::WIZARD_APPEND_DATA:
             {
-                m_pParent->clearDestColumns();
-                //  m_pParent->m_xSourceObject = NULL;
-                m_pParent->m_xDestObject = NULL;
-                Reference<XTablesSupplier > xSup(m_pParent->m_xConnection,UNO_QUERY);
-                Reference<XNameAccess> xTables;
-                if(xSup.is())
-                    xTables = xSup->getTables();
-                if(xTables.is() && xTables->hasByName(m_edTableName.GetText()))
-                {
-                    xTables->getByName(m_edTableName.GetText()) >>= m_pParent->m_xDestObject;
-                    m_pParent->loadData(m_pParent->m_xDestObject,m_pParent->m_vDestColumns,m_pParent->m_aDestVec);
-                    //  m_pParent->loadData();
-                    // #90027#
-                    //  m_pParent->CheckColumns();
-                }
-
-                if(!m_pParent->m_xDestObject.is())
-                {
-                    ErrorBox(this, ModuleRes(ERROR_INVALID_TABLE_NAME)).Execute();
-                    m_edTableName.GrabFocus();
+                if(!checkAppendData())
                     return sal_False;
-                }
                 break;
             }
             case OCopyTableWizard::WIZARD_DEF_DATA:
@@ -402,3 +364,39 @@ void OCopyTable::Reset()
     m_edTableName.SaveValue();
 }
 //------------------------------------------------------------------------
+sal_Bool OCopyTable::checkAppendData()
+{
+    m_pParent->clearDestColumns();
+    m_pParent->m_xDestObject = NULL;
+    Reference<XTablesSupplier > xSup(m_pParent->m_xConnection,UNO_QUERY);
+    Reference<XNameAccess> xTables;
+    if(xSup.is())
+        xTables = xSup->getTables();
+    if(xTables.is() && xTables->hasByName(m_edTableName.GetText()))
+    {
+        // set new destination
+        xTables->getByName(m_edTableName.GetText()) >>= m_pParent->m_xDestObject;
+        m_pParent->loadData(m_pParent->m_xDestObject,m_pParent->m_vDestColumns,m_pParent->m_aDestVec);
+        // #90027#
+        const ODatabaseExport::TColumnVector* pDestColumns          = m_pParent->getDestVector();
+        ODatabaseExport::TColumnVector::const_iterator aDestIter    = pDestColumns->begin();
+        m_pParent->m_vColumnPos.reserve(pDestColumns->size()+1);
+        m_pParent->m_vColumnTypes.reserve(pDestColumns->size()+1);
+        for(sal_Int32 nPos = 1;aDestIter != pDestColumns->end();++aDestIter,++nPos)
+        {
+            m_pParent->m_vColumnPos.push_back(nPos);
+            const OTypeInfo* pTypeInfo = m_pParent->convertType((*aDestIter)->second->getTypeInfo());
+            if(pTypeInfo)
+                m_pParent->m_vColumnTypes.push_back(pTypeInfo->nType);
+            else
+                m_pParent->m_vColumnTypes.push_back(DataType::VARCHAR);
+        }
+    }
+    if(!m_pParent->m_xDestObject.is())
+    {
+        ErrorBox(this, ModuleRes(ERROR_INVALID_TABLE_NAME)).Execute();
+        return sal_False;
+    }
+    return sal_True;
+}
+// -----------------------------------------------------------------------------
