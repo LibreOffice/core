@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-17 09:11:33 $
+ *  last change: $Author: ama $ $Date: 2001-09-10 09:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,14 +487,33 @@ sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const XubString &rT
     while( nIdx < nEnd )
     {
         xub_StrLen nStop = nIdx;
-        while( nStop < nEnd && CH_BLANK != rTxt.GetChar( nStop ) )
-            ++nStop;
-        sal_Bool bClear = nStop == nIdx;
-        if ( bClear )
+        sal_Bool bClear;
+        LanguageType eLang = pFnt->GetLanguage();
+        if( pBreakIt->xBreak.is() )
         {
-            rArg.NewWord();
-            while( nStop < nEnd && CH_BLANK == rTxt.GetChar( nStop ) )
+            bClear = CH_BLANK == rTxt.GetChar( nStop );
+            Boundary aBndry( pBreakIt->xBreak->getWordBoundary( rTxt, nIdx,
+                             pBreakIt->GetLocale( eLang ),
+                             WordType::ANY_WORD, TRUE ) );
+            nStop = aBndry.endPos;
+            if ( nIdx <= aBndry.startPos )
+                rArg.NewWord();
+            if( nStop == nIdx )
                 ++nStop;
+            if( nStop > nEnd )
+                nStop = nEnd;
+        }
+        else
+        {
+            while( nStop < nEnd && CH_BLANK != rTxt.GetChar( nStop ) )
+                ++nStop;
+            bClear = nStop == nIdx;
+            if ( bClear )
+            {
+                rArg.NewWord();
+                while( nStop < nEnd && CH_BLANK == rTxt.GetChar( nStop ) )
+                    ++nStop;
+            }
         }
 
         SwDrawTextInfo aDrawInf( 0, *rArg.pOut, 0, rTxt, nIdx, nStop - nIdx );
