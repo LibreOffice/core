@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nfuncs.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:13:58 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <list>
 
 #include <plugin/impl.hxx>
+#include <vcl/svapp.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <osl/thread.h>
@@ -74,7 +75,7 @@ static FILE * s_file = 0;
 void TRACE( char const * s )
 {
     if (! s_file)
-        s_file = stderr;//fopen( "f:\\pluginlog.txt", "w" );
+        s_file = stderr;
     if (s_file)
     {
         oslThreadIdentifier t = osl_getThreadIdentifier(0);
@@ -85,7 +86,7 @@ void TRACE( char const * s )
 void TRACEN( char const * s, long n )
 {
     if (! s_file)
-        s_file = stderr;//fopen( "f:\\pluginlog.txt", "w" );
+        s_file = stderr;
     if (s_file)
     {
         oslThreadIdentifier t = osl_getThreadIdentifier(0);
@@ -93,11 +94,25 @@ void TRACEN( char const * s, long n )
         fflush( s_file );
     }
 }
+void TRACES( char const* s, char const* s2 )
+{
+    if (! s_file)
+        s_file = stderr;
+    if (s_file)
+    {
+        oslThreadIdentifier t = osl_getThreadIdentifier(0);
+        fprintf( s_file, "log [t_id=%d]: %s %s\n", t, s, s2 );
+        fflush( s_file );
+    }
+}
 #else
 #define TRACE(x)
 #define TRACEN(x,n)
+#define TRACES(x,s)
 #endif
 
+using namespace rtl;
+using namespace com::sun::star::lang;
 
 NPNetscapeFuncs aNPNFuncs =
 {
@@ -160,6 +175,40 @@ static ::rtl::OString normalizeURL( XPlugin_Impl* plugin, const ::rtl::OString& 
     return aLoadURL;
 }
 
+struct AsynchronousGetURL
+{
+    OUString                        aUrl;
+    OUString                        aTarget;
+    Reference< XEventListener >     xListener;
+
+    DECL_LINK( getURL, XPlugin_Impl* );
+};
+
+IMPL_LINK( AsynchronousGetURL, getURL, XPlugin_Impl*, pImpl )
+{
+    try
+    {
+        pImpl->enterPluginCallback();
+        if( xListener.is() )
+            pImpl->getPluginContext()->
+                getURLNotify( pImpl,
+                              aUrl,
+                              aTarget,
+                              xListener );
+        else
+            pImpl->getPluginContext()->
+                getURL( pImpl,
+                        aUrl,
+                        aTarget );
+    }
+    catch( ::com::sun::star::plugin::PluginException& e )
+    {
+    }
+    pImpl->leavePluginCallback();
+    delete this;
+    return 0;
+}
+
 
 extern "C" {
 
@@ -211,43 +260,35 @@ extern "C" {
 
     NPError SAL_CALL NP_LOADDS  NPN_GetURL( NPP instance, const char* url, const char* window )
     {
-        TRACE( "NPN_GetURL" );
+        TRACES( "NPN_GetURL", url );
         XPlugin_Impl* pImpl = XPluginManager_Impl::getXPluginFromNPP( instance );
         if( ! pImpl )
             return NPERR_INVALID_INSTANCE_ERROR;
 
-        ::rtl::OString aLoadURL = normalizeURL( pImpl, url );
-        try
-        {
-            pImpl->enterPluginCallback();
-            pImpl->getPluginContext()->
-                getURL( pImpl,
-                        ::rtl::OStringToOUString( aLoadURL, pImpl->getTextEncoding() ),
-                        ::rtl::OStringToOUString( window, pImpl->getTextEncoding() )
-                        );
-            pImpl->leavePluginCallback();
-        }
-        catch( ::com::sun::star::plugin::PluginException& e )
-        {
-            pImpl->leavePluginCallback();
-            return e.ErrorCode;
-        }
+        AsynchronousGetURL* pAsync = new AsynchronousGetURL();
 
+        OString aLoadURL = normalizeURL( pImpl, url );
+        TRACES( "NPN_GetURL", aLoadURL.getStr() );
+        pAsync->aUrl = OStringToOUString( aLoadURL, pImpl->getTextEncoding() );
+        pAsync->aTarget = OStringToOUString( window, pImpl->getTextEncoding() );
+        pImpl->setLastGetUrl( aLoadURL );
+        Application::PostUserEvent( LINK( pAsync, AsynchronousGetURL, getURL ), pImpl );
         return NPERR_NO_ERROR;
     }
 
     NPError SAL_CALL NP_LOADDS  NPN_GetURLNotify( NPP instance, const char* url, const char* target,
                           void* notifyData )
     {
-        TRACE( "NPN_GetURLNotify" );
+        TRACES( "NPN_GetURLNotify", url );
         XPlugin_Impl* pImpl = XPluginManager_Impl::getXPluginFromNPP( instance );
         if( ! pImpl )
             return NPERR_INVALID_INSTANCE_ERROR;
 
-        ::rtl::OString aLoadURL = normalizeURL( pImpl, url );
+        OString aLoadURL = normalizeURL( pImpl, url );
         if( !aLoadURL.getLength() )
             return NPERR_INVALID_URL;
 
+        AsynchronousGetURL* pAsync = new AsynchronousGetURL();
         PluginEventListener* pListener =
             new PluginEventListener( pImpl, url, aLoadURL.getStr(), notifyData );
         if( ! target || ! *target )
@@ -257,22 +298,11 @@ extern "C" {
             pImpl->addPluginEventListener( pListener );
             pListener = NULL;
         }
-
-        try
-        {
-            pImpl->enterPluginCallback();
-            pImpl->getPluginContext()->
-                getURLNotify( pImpl,
-                              ::rtl::OStringToOUString( aLoadURL, pImpl->getTextEncoding() ),
-                              ::rtl::OStringToOUString( target, pImpl->getTextEncoding() ),
-                              ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > ( pListener ) );
-            pImpl->leavePluginCallback();
-        }
-        catch( ::com::sun::star::plugin::PluginException& e )
-        {
-            pImpl->leavePluginCallback();
-            return e.ErrorCode;
-        }
+        pAsync->aUrl        = OStringToOUString( aLoadURL, pImpl->getTextEncoding() );
+        pAsync->aTarget     = OStringToOUString( target, pImpl->getTextEncoding() );
+        pAsync->xListener   = pListener;
+        pImpl->setLastGetUrl( aLoadURL );
+        Application::PostUserEvent( LINK( pAsync, AsynchronousGetURL, getURL ), pImpl );
 
         return NPERR_NO_ERROR;
     }
@@ -411,8 +441,8 @@ extern "C" {
         {
             if( pBytes && nBytes < (int)rangeList->length )
             {
-                delete pBytes;
-            pBytes = NULL;
+                delete [] pBytes;
+                pBytes = NULL;
             }
             if( ! pBytes )
                 pBytes = new sal_Int8[ nBytes = rangeList->length ];
