@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.34 $
-# Date:        $Date: 2005-01-18 14:35:28 $
+# Version:     $Revision: 1.35 $
+# Date:        $Date: 2005-01-18 14:55:37 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -216,33 +216,51 @@ $comment4nt           = "rem";         # Windows 4nt script comment character
 if ( $platform eq "$Solaris" ) 
 {     print "Setting Solaris specific values... ";
    if ($machine_type eq "i86pc")
-   {  $outfile        = "SolarisIntelEnv.Set";
+   {  
+      if ( $CC =~ "gcc") {
+         $outfile        = "SolarisIntelGccEnv.Set";
+         $DLLSUFFIX      = "sogi";
+         $OUTPATH        = "unxsogi";
+      } else {
+         $outfile        = "SolarisIntelEnv.Set";
+         $DLLSUFFIX      = "si";
+         $OUTPATH        = "unxsoli4";
+      }
       $CPU            = "I";
       $CPUNAME        = "INTEL";
-      $DLLSUFFIX      = "si";
-      $OUTPATH        = "unxsoli4";
-      $COMEX          = 4;
 	  $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
 	  $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."motif21";
 	  $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
 
    }
    else
-   {  $outfile        = "SolarisSparcEnv.Set"; 
+   {
+      if ( $CC =~ "gcc") {
+         $outfile        = "SolarisSparcGccEnv.Set"; 
+         $DLLSUFFIX      = "sogs";
+         $OUTPATH        = "unxsogs";
+      } else {
+         $outfile        = "SolarisSparcEnv.Set"; 
+         $DLLSUFFIX      = "ss";
+         $OUTPATH        = "unxsols4";
+      }
       $CPU            = "S";
-      $COMEX            = 4;
       $CPUNAME        = "SPARC";
-      $DLLSUFFIX      = "ss";
-      $OUTPATH        = "unxsols4";
-	  $COMEX          = 4;
 	  $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc";
 	  $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."motif21";
 	  $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
    }
+
+   if ( $CC =~ "gcc") {
+       $COM            = "GCC";
+       $CVER           = "C300";
+   } else {
+       $COM            = "C52";
+       $CVER           = "C52";
+       $COMEX          = 4;
+   }
    $BIG_SVX        = "TRUE";
-   $COM            = "C52";
    $COMPATH        = '@COMPATH@'; 
-   $CVER           = "C52";
    $GUI            = "UNX";
    $GUIBASE        = "unx";
    $GUIENV         = "sal";
@@ -1131,8 +1149,13 @@ if ($platform eq "$Solaris")
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB."solaris.2.6".
                         $L.$LIB.
-                        $L.$USR_LIB.
-                        $L.$USR_LOCAL.$LIB.
+                        $L.$USR_LIB;
+   if ( $CC =~ "gcc" ) {
+      my $temp = $COMPATH;
+      $temp =~ s:/bin$::;
+      $SOLARLIB      .= $L.$temp.$LIB;
+   }
+   $SOLARLIB         .= $L.$USR_LOCAL.$LIB.
                         $L.$USR_DT.$LIB.
                         $L.$USR_OPENWIN.$LIB.
                         $L.'$JAVA_HOME'.$LIB.
@@ -1190,7 +1213,7 @@ if ($platform eq "$Linux" || $platform eq "$FreeBSD" || $platform eq "$NetBSD")
 # This simply adds an include path, so even cases that break the FHS work
 $SOLARINC            .= $STLPORT_inc_stlport;
 }
-if ($platform eq "$Solaris")
+if ($platform eq "$Solaris" && $CC !=~ "gcc")
 {
 $SOLARINC            .= '/SC5 ';
 }
