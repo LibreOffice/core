@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-16 15:54:11 $
+ *  last change: $Author: mba $ $Date: 2001-06-25 10:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,8 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bSaveDocWins,
                                         bSaveDocView,
                                         bSaveRelINet,
-                                        bSaveRelFSys;
+                                        bSaveRelFSys,
+                                        bSaveUnpacked;
 public:
                             SvtSaveOptions_Impl();
 
@@ -129,6 +130,8 @@ public:
     BOOL                    IsSaveRelINet() const               { return bSaveRelINet; }
     void                    SetSaveRelFSys( BOOL b )            { bSaveRelFSys = b; SetModified();}
     BOOL                    IsSaveRelFSys() const               { return bSaveRelFSys; }
+    void                    SetSaveUnpacked( BOOL b )           { bSaveUnpacked = b; SetModified();}
+    BOOL                    IsSaveUnpacked() const              { return bSaveUnpacked; }
 };
 
 #define FORMAT 0
@@ -140,9 +143,10 @@ public:
 #define EDITPROPERTY 6
 #define SAVEDOCWINS 7
 #define SAVEVIEWINFO 8
-#define FILESYSTEM 9
-#define INTERNET 10
-#define SAVEWORKINGSET 11
+#define UNPACKED 9
+#define FILESYSTEM 10
+#define INTERNET 11
+#define SAVEWORKINGSET 12
 
 Sequence< OUString > GetPropertyNames()
 {
@@ -157,6 +161,7 @@ Sequence< OUString > GetPropertyNames()
         "Document/EditProperty",
         "Document/DocumentWindows",
         "Document/ViewInfo",
+        "Document/Unpacked",
         "URL/FileSystem",
         "URL/Internet",
         "WorkingSet"
@@ -187,6 +192,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bSaveDocView( sal_False )
     , bSaveRelINet( sal_False )
     , bSaveRelFSys( sal_False )
+    , bSaveUnpacked( sal_False )
 {
     Sequence< OUString > aNames = GetPropertyNames();
     Sequence< Any > aValues = GetProperties( aNames );
@@ -254,6 +260,9 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                                 case INTERNET :
                                     bSaveRelINet = bTemp;
                                     break;
+                                case UNPACKED :
+                                    bSaveUnpacked = bTemp;
+                                    break;
 
                                 default :
                                     DBG_ERRORFILE( "invalid index to load a path" );
@@ -314,6 +323,9 @@ void SvtSaveOptions_Impl::Commit()
                 break;
             case INTERNET :
                 pValues[nProp] <<= bSaveRelINet;
+                break;
+            case UNPACKED :
+                pValues[nProp] <<= bSaveUnpacked;
                 break;
             default:
                 DBG_ERRORFILE( "invalid index to save a path" );
@@ -464,6 +476,15 @@ sal_Bool SvtSaveOptions::IsSaveRelFSys() const
     return pImp->IsSaveRelFSys();
 }
 
+void SvtSaveOptions::SetSaveUnpacked( sal_Bool b )
+{
+    pImp->SetSaveUnpacked( b );
+}
+
+sal_Bool SvtSaveOptions::IsSaveUnpacked() const
+{
+    return pImp->IsSaveUnpacked();
+}
 SvtSaveOptions::SaveGraphicsMode SvtSaveOptions::GetSaveGraphicsMode() const
 {
     return pImp->GetSaveGraphicsMode();
