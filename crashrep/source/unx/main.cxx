@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hro $ $Date: 2003-06-11 16:44:16 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,11 +58,10 @@
  *
  *
  ************************************************************************/
-
 #include <interface.hxx>
 #include <cstdio>
 #include <sys/utsname.h>
-#include <_version.h>
+#include <vcl/_version.h>
 #include <errno.h>
 #include <string>
 #include <string.h>
@@ -94,7 +93,7 @@ const char *basename( const char *filename )
 
 using namespace std;
 
-static g_bDebugMode = false;
+static bool g_bDebugMode = false;
 static int  g_signal = 0;
 
 static string g_strReportServer;
@@ -111,7 +110,6 @@ static char g_szReportFile[2048] = "";
 
 #define SO_CRASHREPORT_MAIL "so-report@sun.com"
 #define PSTACK_CMD          "pstack %d"
-#define PSTACKBIN_CMD       "pstack.bin %d"
 
 #ifdef LINUX
 #define PMAP_CMD            "cat /proc/%d/maps"
@@ -247,23 +245,6 @@ bool write_stack( long pid )
                     }
                     pclose( fin );
 
-                }
-
-                if ( !bSuccess )
-                {
-                    snprintf(cmdbuf, 1024, PSTACKBIN_CMD, pid);
-                    fin = popen(cmdbuf, "r");
-
-                    if ( fin )
-                    {
-                        while (fgets(buf, 1024, fin) != NULL)
-                        {
-                            bSuccess = true;
-                            fputs(buf, fout);
-                        }
-                        pclose( fin );
-
-                    }
                 }
 
             }
