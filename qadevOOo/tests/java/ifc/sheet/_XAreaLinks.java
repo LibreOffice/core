@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAreaLinks.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:32 $
+ *  last change:$Date: 2003-09-08 10:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.sheet;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.sheet.XAreaLinks;
 import com.sun.star.table.CellAddress;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.sheet.XAreaLinks</code>

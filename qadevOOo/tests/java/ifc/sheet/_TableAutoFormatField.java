@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _TableAutoFormatField.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:34 $
+ *  last change:$Date: 2003-09-08 10:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,9 @@
 
 package ifc.sheet;
 
-import com.sun.star.lang.Locale;
 import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
+
+import com.sun.star.lang.Locale;
 
 /**
 * Testing <code>com.sun.star.sheet.TableAutoFormatField</code>
