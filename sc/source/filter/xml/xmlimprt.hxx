@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:32:03 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,8 @@ enum ScXMLTableScenarioAttrTokens
     XML_TOK_TABLE_SCENARIO_ATTR_COPY_FORMULAS,
     XML_TOK_TABLE_SCENARIO_ATTR_IS_ACTIVE,
     XML_TOK_TABLE_SCENARIO_ATTR_SCENARIO_RANGES,
-    XML_TOK_TABLE_SCENARIO_ATTR_COMMENT
+    XML_TOK_TABLE_SCENARIO_ATTR_COMMENT,
+    XML_TOK_TABLE_SCENARIO_ATTR_PROTECTED
 };
 
 enum ScXMLTableColAttrTokens
