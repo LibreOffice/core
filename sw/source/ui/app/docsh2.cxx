@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: os $ $Date: 2001-10-31 12:30:58 $
+ *  last change: $Author: jp $ $Date: 2002-02-13 16:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,6 +258,9 @@
 #endif
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
+#endif
+#ifndef _SWWAIT_HXX
+#include <swwait.hxx>
 #endif
 
 #ifndef _CMDID_H
@@ -1062,7 +1065,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SfxObjectShellRef xDocSh( new SwDocShell( pDoc, SFX_CREATE_MODE_STANDARD));
                 xDocSh->DoInitNew( 0 );
                 BOOL bImpress = FN_ABSTRACT_STARIMPRESS == nWhich;
-                pWrtShell->Summary( pDoc, nLevel, nPara, bImpress );
+                pDoc->Summary( pDoc, nLevel, nPara, bImpress );
                 if( bImpress )
                 {
                     WriterRef xWrt;
@@ -1292,7 +1295,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 }
 
                 Reference<XFilePickerControlAccess> xCtrlAcc(xFP, UNO_QUERY);
-                const USHORT nCount = pWrtShell->GetTxtFmtCollCount();
+                const USHORT nCount = pDoc->GetTxtFmtColls()->Count();
                 Sequence<OUString> aListBoxEntries(nCount);
                 OUString* pEntries = aListBoxEntries.getArray();
                 sal_Int32 nIdx = 0;
@@ -1301,7 +1304,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SwTxtFmtColl *pFnd = 0, *pAny = 0;
                 for(USHORT i = 0; i < nCount; ++i)
                 {
-                    SwTxtFmtColl &rTxtColl = pWrtShell->GetTxtFmtColl(i);
+                    SwTxtFmtColl &rTxtColl =
+                                    *pDoc->GetTxtFmtColls()->GetObject( i );
                     if( !rTxtColl.IsDefault() && rTxtColl.IsAtDocNodeSet() )
                     {
                         if( MAXLEVEL >= rTxtColl.GetOutlineLevel() && ( !pFnd ||
@@ -1355,40 +1359,43 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 if( aFileName.Len() )
                 {
-                    if( PrepareClose( FALSE ) &&
-                        ( bCreateHtml
-                            ? pWrtShell->GenerateHTMLDoc( aFileName, pSplitColl )
-                            : pWrtShell->GenerateGlobalDoc( aFileName, pSplitColl )) )
+                    if( PrepareClose( FALSE ) )
                     {
-                        bDone = TRUE;
+                        SwWait aWait( *this, TRUE );
+                        bDone = bCreateHtml
+                            ? pDoc->GenerateHTMLDoc( aFileName, pSplitColl )
+                            : pDoc->GenerateGlobalDoc( aFileName, pSplitColl );
 
-                        SfxStringItem aName( SID_FILE_NAME, aFileName );
-                        SfxStringItem aReferer( SID_REFERER, aEmptyStr );
-                        SfxFrameItem* pFrameItem = 0;
-
-                        SfxViewShell* pViewShell;
-                        if( GetView() )
+                        if( bDone )
                         {
-                            pViewShell = (SfxViewShell*)GetView();
-                            pFrameItem = new SfxFrameItem( SID_DOCFRAME,
-                                                pViewShell->GetViewFrame() );
+                            SfxStringItem aName( SID_FILE_NAME, aFileName );
+                            SfxStringItem aReferer( SID_REFERER, aEmptyStr );
+                            SfxFrameItem* pFrameItem = 0;
+
+                            SfxViewShell* pViewShell;
+                            if( GetView() )
+                            {
+                                pViewShell = (SfxViewShell*)GetView();
+                                pFrameItem = new SfxFrameItem( SID_DOCFRAME,
+                                                    pViewShell->GetViewFrame() );
+                            }
+                            else
+                                pViewShell = SfxViewShell::Current();
+
+                            pViewShell->GetDispatcher()->Execute(
+                                    SID_OPENDOC,
+                                    SFX_CALLMODE_ASYNCHRON,
+                                    &aName,
+                                    &aReferer,
+                                    pFrameItem, 0L );
+
+                            if( pFrameItem )
+                                delete pFrameItem;
+                            else
+                                DoClose();
                         }
-                        else
-                            pViewShell = SfxViewShell::Current();
-
-                        pViewShell->GetDispatcher()->Execute(
-                                SID_OPENDOC,
-                                SFX_CALLMODE_ASYNCHRON,
-                                &aName,
-                                &aReferer,
-                                pFrameItem, 0L );
-
-                        if( pFrameItem )
-                            delete pFrameItem;
-                        else
-                            DoClose();
                     }
-                    else if( !rReq.IsAPI() )
+                    if( !bDone && !rReq.IsAPI() )
                     {
                         InfoBox( 0, SW_RESSTR( STR_CANTCREATE )).Execute();
                     }
@@ -1396,6 +1403,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             }
             rReq.SetReturnValue(SfxBoolItem( nWhich, bDone ));
             break;
+
         case SID_ATTR_YEAR2000:
             if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich , FALSE, &pItem ))
             {
