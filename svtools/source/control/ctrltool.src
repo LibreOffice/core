@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:08:46 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ String STR_SVT_STYLE_BOLD
     Text[ chinese_simplified ] = "粗体";
     Text[ chinese_traditional ] = "粗體";
     Text[ arabic ] = "����";
-    Text[ greek ] = "������";
+    Text[ greek ] = "������";
     Text[ korean ] = "굵게";
     Text[ turkish ] = "Kal�n";
     Text[ language_user1 ] = " ";
@@ -399,7 +399,7 @@ String STR_SVT_FONTMAP_SCREENONLY
     TEXT [ English ] = "This is a screen font. The printer image may not exactly match." ;
     TEXT [ norwegian ] = "This is a screen font. The printer image may not exactly match." ;
     TEXT [ italian ] = "Questo � un carattere per lo schermo. La stampa pu� essere leggermente diversa." ;
-    TEXT [ portuguese_brazilian ] = "Esta � uma fonte de tela. A imagem impressa pode ser diferente." ;
+    TEXT [ portuguese_brazilian ] = "Esta � uma fonte de tela. O resultado impresso pode ser diferente." ;
     TEXT [ portuguese ] = "Letra de ecr�. A letra impressa pode apresentar um pequeno desvio." ;
     TEXT [ finnish ] = "T�m� on n�ytt�fontti. Tulostinkuva saattaa olla erilainen." ;
     TEXT [ danish ] = "Dette er en sk�rmskrifttype. Udskriften kan muligvis afvige lidt." ;
@@ -440,7 +440,7 @@ String STR_SVT_FONTMAP_SIZENOTAVAILABLE
     TEXT[ danish ] = "Denne skriftst�rrelse er ikke installeret. Den tilg�ngelige st�rrelse, som passer bedst, vil blive brugt i stedet.";
     TEXT[ swedish ] = "Den h�r teckenstorleken �r inte installerad. Den tillg�ngliga storlek som passar b�st anv�nds.";
     TEXT[ polish ] = "Ten rozmiar czcionki nie jest zainstalowany. Zostanie u�yty dost�pny, najbardziej zbli�ony rozmiar.";
-    TEXT[ portuguese_brazilian ] = "Este tamanho de fonte n�o foi instalado. Ser� utilizado o tamanho dispon�vel mais parecido.";
+    TEXT[ portuguese_brazilian ] = "Este tamanho de fonte n�o foi instalado. Ser� utilizado um tamanho dispon�vel mais parecido.";
     TEXT[ japanese ] = "このフォントサイズはインストールされていません。最も適切なサイズが選ばれます。";
     TEXT[ korean ] = "이 글꼴의 크기는 설치되지 않았습니다. 기존의 가장 적합한 크기가 사용됩니다.";
     TEXT[ chinese_simplified ] = "没有安装这种字体大小。使用的是现有的最接近的字体大小。";
@@ -471,7 +471,7 @@ String STR_SVT_FONTMAP_STYLENOTAVAILABLE
     TEXT[ danish ] = "Denne skrifttype bliver reproduceret eller den type, som passer bedst, vil blive brugt istedet.";
     TEXT[ swedish ] = "Det h�r teckensnittet efterbildas eller n�rmast motsvarande teckensnitt anv�nds.";
     TEXT[ polish ] = "Ten styl czcionki b�dzie symulowany lub zostanie u�yty styl najbardziej podobny.";
-    TEXT[ portuguese_brazilian ] = "Este estilo de fonte ser� simulado ou ser� utilizado o estilo dispon�vel mais parecido.";
+    TEXT[ portuguese_brazilian ] = "Este estilo de fonte ser� simulado ou ser� utilizado um estilo dispon�vel mais parecido.";
     TEXT[ japanese ] = "このフォントスタイルは修正されるか、または最も適切なスタイルが使用されます。";
     TEXT[ korean ] = "이 글꼴 스타일을 모의하거나 가장 적합한 글꼴 스타일이 사용됩니다.";
     TEXT[ chinese_simplified ] = "生成这种字体或使用最接近的字体。";
@@ -503,7 +503,7 @@ String STR_SVT_FONTMAP_NOTAVAILABLE
     TEXT[ danish ] = "Denne skrifttype er ikke installeret. Den tilg�ngelige skrifttype, som passer bedst, vil blive brugt i stedet.";
     TEXT[ swedish ] = "Det h�r teckensnittet �r inte installerat. Det tillg�ngliga teckensnitt som passar b�st anv�nds.";
     TEXT[ polish ] = "Ta czcionka nie jest zainstalowana. Zostanie u�yta dost�pna, najbardziej podobna czcionka.";
-    TEXT[ portuguese_brazilian ] = "Esta fonte n�o foi instalada. Ser� utilizada a fonte dispon�vel mais parecida.";
+    TEXT[ portuguese_brazilian ] = "Esta fonte n�o foi instalada. Ser� utilizada uma fonte dispon�vel mais parecida.";
     TEXT[ japanese ] = "このフォントはインストールされていません。最も適切なフォントが選ばれます。";
     TEXT[ korean ] = "이 글꼴은 설치되지 않았습니다. 기존의 가장 적합한 글꼴이 사용됩니다.";
     TEXT[ chinese_simplified ] = "没有安装这种字体。使用的是现有的最接近的字体。";
@@ -518,6 +518,7 @@ String STR_SVT_FONTMAP_NOTAVAILABLE
     TEXT[ hindi ] = "This font has not been installed. The closest available font will be used.";
     TEXT[ slovak ] = "Toto písmo nebolo nainštalované. Bude použité najbližšie dostupné písmo.";
 };
+
 
 
 
