@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 14:05:44 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 12:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -915,7 +915,7 @@ void ObjectPage::NewModule()
             SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
             String aModName;
             createModImpl( static_cast<Window*>( this ), pShell,
-                           pLib, aBasicBox, aLibName, aModName );
+                           pLib, aBasicBox, aLibName, aModName, true );
         }
     }
 }
@@ -1062,7 +1062,7 @@ void LibDialog::SetStorageName( const String& rName )
 
 // Helper function
 SbModule* createModImpl( Window* pWin, SfxObjectShell* pShell, StarBASIC* pLib,
-    BasicTreeListBox& rBasicBox, const String& aLibName, String aModName )
+    BasicTreeListBox& rBasicBox, const String& aLibName, String aModName, bool bMain )
 {
     SbModule* pModule = NULL;
 
@@ -1079,7 +1079,7 @@ SbModule* createModImpl( Window* pWin, SfxObjectShell* pShell, StarBASIC* pLib,
 
         try
         {
-            ::rtl::OUString aModule = BasicIDE::CreateModule( pShell, aLibName, aModName, TRUE );
+            ::rtl::OUString aModule = BasicIDE::CreateModule( pShell, aLibName, aModName, bMain );
             pModule = pLib->FindModule( aModName );
 
             SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, pShell, aLibName, aModName, BASICIDE_TYPE_MODULE );
