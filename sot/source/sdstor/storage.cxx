@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mav $ $Date: 2002-03-05 12:46:59 $
+ *  last change: $Author: mav $ $Date: 2002-04-26 14:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,15 +150,18 @@ SotStorageStream::SotStorageStream( const String & rName, StreamMode nMode,
 }
 
 SotStorageStream::SotStorageStream( BaseStorageStream * pStm )
+    : pOwnStm( pStm )
 {
-    if( STREAM_WRITE & pStm->GetMode() )
+    if( !pStm || STREAM_WRITE & pStm->GetMode() )
         bIsWritable = TRUE;
     else
         bIsWritable = FALSE;
 
-    pOwnStm = pStm;
-    SetError( pStm->GetError() );
-    pStm->ResetError();
+    if( pStm )
+    {
+        SetError( pStm->GetError() );
+        pStm->ResetError();
+    }
 }
 
 SotStorageStream::SotStorageStream()
@@ -998,6 +1001,12 @@ SotStorageStream * SotStorage::OpenEncryptedSotStream( const String & rEleName, 
                                              StreamMode nMode,
                                              StorageMode nStorageMode )
 {
+    if( !rEleName.Len() )
+    {
+        SetError( SVSTREAM_INVALID_PARAMETER );
+        return NULL;
+    }
+
     DBG_ASSERT( !nStorageMode, "StorageModes ignored" )
     SotStorageStream * pStm = NULL;
     DBG_ASSERT( Owner(), "must be owner" )
@@ -1024,6 +1033,12 @@ SotStorageStream * SotStorage::OpenSotStream( const String & rEleName,
                                              StreamMode nMode,
                                              StorageMode nStorageMode )
 {
+    if( !rEleName.Len() )
+    {
+        SetError( SVSTREAM_INVALID_PARAMETER );
+        return NULL;
+    }
+
     DBG_ASSERT( !nStorageMode, "StorageModes ignored" )
     SotStorageStream * pStm = NULL;
     DBG_ASSERT( Owner(), "must be owner" )
@@ -1055,6 +1070,12 @@ SotStorage * SotStorage::OpenSotStorage( const String & rEleName,
                                         StreamMode nMode,
                                         StorageMode nStorageMode )
 {
+    if( !rEleName.Len() )
+    {
+        SetError( SVSTREAM_INVALID_PARAMETER );
+        return NULL;
+    }
+
     SotStorage * pStor = NULL;
     DBG_ASSERT( Owner(), "must be owner" )
     if( pOwnStg )
@@ -1082,6 +1103,12 @@ SotStorage * SotStorage::OpenUCBStorage( const String & rEleName,
                                         StreamMode nMode,
                                         StorageMode nStorageMode )
 {
+    if( !rEleName.Len() )
+    {
+        SetError( SVSTREAM_INVALID_PARAMETER );
+        return NULL;
+    }
+
     SotStorage * pStor = NULL;
     DBG_ASSERT( Owner(), "must be owner" )
     if( pOwnStg )
@@ -1103,6 +1130,12 @@ SotStorage * SotStorage::OpenOLEStorage( const String & rEleName,
                                         StreamMode nMode,
                                         StorageMode nStorageMode )
 {
+    if( !rEleName.Len() )
+    {
+        SetError( SVSTREAM_INVALID_PARAMETER );
+        return NULL;
+    }
+
     SotStorage * pStor = NULL;
     DBG_ASSERT( Owner(), "must be owner" )
     if( pOwnStg )
