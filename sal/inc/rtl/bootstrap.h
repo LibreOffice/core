@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-24 10:51:08 $
+ *  last change: $Author: dbo $ $Date: 2002-04-26 15:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,21 @@ sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(rtlBootstrapHandle handle, rtl_u
 */
 void SAL_CALL rtl_bootstrap_get_iniName_from_handle(rtlBootstrapHandle handle, rtl_uString ** ppIniName);
 
+/** Expands a macro using bootstrap variables.
+
+    @param handle   [in]     The handle got by <code>rtl_bootstrap_args_open()</code>
+    @param macro    [inout]  The macro to be expanded
+*/
+void SAL_CALL rtl_bootstrap_expandMacros_from_handle(
+    rtlBootstrapHandle handle, rtl_uString ** macro )
+    SAL_THROW_EXTERN_C();
+/** Expands a macro using default bootstrap variables.
+
+    @param macro    [inout]  The macro to be expanded
+*/
+void SAL_CALL rtl_bootstrap_expandMacros(
+    rtl_uString ** macro )
+    SAL_THROW_EXTERN_C();
 
 #ifdef __cplusplus
 }
