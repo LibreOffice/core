@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:20:12 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText [ italian ] = "Riga" ;
         QuickHelpText [ portuguese_brazilian ] = "Fileira" ;
         QuickHelpText [ portuguese ] = "Linha" ;
-        QuickHelpText [ finnish ] = "Rivi" ;
+        QuickHelpText [ finnish ] = "Rivi!" ;
         QuickHelpText [ danish ] = "Række" ;
         QuickHelpText [ french ] = "Ligne" ;
         QuickHelpText [ swedish ] = "Rad" ;
@@ -180,7 +180,7 @@ Window RID_SCDLG_NAVIGATOR
         Text [ italian ] = "Colonna" ;
         Text [ portuguese_brazilian ] = "Coluna" ;
         Text [ portuguese ] = "Coluna" ;
-        Text [ finnish ] = "Sarake" ;
+        Text [ finnish ] = "Sarake " ;
         Text [ danish ] = "Kolonne" ;
         Text [ french ] = "Colonne" ;
         Text [ swedish ] = "Kolumn" ;
@@ -216,7 +216,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText [ italian ] = "Colonna" ;
         QuickHelpText [ portuguese_brazilian ] = "Coluna" ;
         QuickHelpText [ portuguese ] = "Coluna" ;
-        QuickHelpText [ finnish ] = "Sarake" ;
+        QuickHelpText [ finnish ] = "Sarake!" ;
         QuickHelpText [ danish ] = "Kolonne" ;
         QuickHelpText [ french ] = "Colonne" ;
         QuickHelpText [ swedish ] = "Kolumn" ;
@@ -286,6 +286,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Dokument";
         QuickHelpText[ catalan ] = "Documento";
+        QuickHelpText[ finnish ] = "Asiakirja!";
     };
     ToolBox TBX_CMD
     {
@@ -322,7 +323,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ italian ] = "Area dati" ;
                 Text [ portuguese_brazilian ] = "Data Area" ;
                 Text [ portuguese ] = "Área de dados" ;
-                Text [ finnish ] = "Data Area" ;
+                Text [ finnish ] = "Tietoalue" ;
                 Text [ danish ] = "Dataområde" ;
                 Text [ french ] = "Plage de données" ;
                 Text [ swedish ] = "Dataområde" ;
@@ -353,7 +354,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ italian ] = "Inizio" ;
                 Text [ portuguese_brazilian ] = "Início" ;
                 Text [ portuguese ] = "Início" ;
-                Text [ finnish ] = "Alku" ;
+                Text [ finnish ] = "Aloita" ;
                 Text [ danish ] = "Begyndelse" ;
                 Text [ french ] = "Début" ;
                 Text [ swedish ] = "Början" ;
@@ -384,7 +385,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ italian ] = "Fine" ;
                 Text [ portuguese_brazilian ] = "Final" ;
                 Text [ portuguese ] = "Fim" ;
-                Text [ finnish ] = "Loppu" ;
+                Text [ finnish ] = "Lopeta" ;
                 Text [ danish ] = "Slut" ;
                 Text [ french ] = "Fin" ;
                 Text [ swedish ] = "Slut" ;
@@ -439,6 +440,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ turkish ] = "Ýçerikler";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Contenidos";
+                Text[ finnish ] = "Sisältö";
             };
             ToolBoxItem
             {
@@ -468,6 +470,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ turkish ] = "Deðiþtir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Conmutar";
+                Text[ finnish ] = "Vaihda";
             };
             ToolBoxItem
             {
@@ -497,6 +500,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ turkish ] = "Senaryo";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Escenarios";
+                Text[ finnish ] = "Skenaariot";
             };
             ToolBoxItem
             {
@@ -527,6 +531,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ turkish ] = "Sürükleme kipi";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Modo Arrastrar";
+                Text[ finnish ] = "Vetotila";
             };
         };
     };
@@ -556,6 +561,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ turkish ] = "Sürükleme kipi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Modo Arrastrar";
+        Text[ finnish ] = "Vetotila";
     };
     String STR_DISPLAY
     {
@@ -583,6 +589,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ turkish ] = "Görüntü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Visualización";
+        Text[ finnish ] = "Näytä";
     };
     String STR_ACTIVE
     {
@@ -610,6 +617,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ turkish ] = "Etkin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "activo";
+        Text[ finnish ] = "aktiivinen";
     };
     String STR_NOTACTIVE
     {
@@ -637,6 +645,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ turkish ] = "Etkin deðil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "inactivo";
+        Text[ finnish ] = "ei käytössä";
     };
     String STR_HIDDEN
     {
@@ -664,6 +673,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ turkish ] = "Gizli";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "oculto";
+        Text[ finnish ] = "piilotettu";
     };
     String STR_ACTIVEWIN
     {
@@ -691,6 +701,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ turkish ] = "Etkin pencere";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ventana activa";
+        Text[ finnish ] = "Aktiivinen ikkuna";
     };
 
     String STR_QHLP_SCEN_LISTBOX
@@ -719,6 +730,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ turkish ] = "Senaryo adý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nombre del escenario";
+        Text[ finnish ] = "Skenaarion nimi";
     };
 
     String STR_QHLP_SCEN_COMMENT
@@ -747,6 +759,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ turkish ] = "Açýklama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comentario";
+        Text[ finnish ] = "Kommentti";
     };
 
     Text[ chinese_simplified ] = "ÖúÊÖ";
@@ -832,6 +845,7 @@ String SCSTR_CONTENT_ROOT
     Text[ turkish ] = "Ýçerikler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Contenidos";
+    Text[ finnish ] = "Sisältö";
 };
 String SCSTR_CONTENT_TABLE
 {
@@ -859,6 +873,7 @@ String SCSTR_CONTENT_TABLE
     Text[ turkish ] = "Tablolar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Hojas";
+    Text[ finnish ] = "Lomakkeet";
 };
 String SCSTR_CONTENT_RANGENAME
 {
@@ -886,6 +901,7 @@ String SCSTR_CONTENT_RANGENAME
     Text[ turkish ] = "Alan adlarý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nombres de las áreas";
+    Text[ finnish ] = "Alueiden nimet";
 };
 String SCSTR_CONTENT_DBAREA
 {
@@ -913,6 +929,7 @@ String SCSTR_CONTENT_DBAREA
     Text[ turkish ] = "Veritabaný alanlarý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Áreas de base de datos";
+    Text[ finnish ] = "Tietokanta-alueet";
 };
 String SCSTR_CONTENT_GRAPHIC
 {
@@ -940,6 +957,7 @@ String SCSTR_CONTENT_GRAPHIC
     Text[ turkish ] = "Grafikler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Imágenes";
+    Text[ finnish ] = "Kuvat";
 };
 String SCSTR_CONTENT_OLEOBJECT
 {
@@ -967,6 +985,7 @@ String SCSTR_CONTENT_OLEOBJECT
     Text[ turkish ] = "OLE nesneleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objetos OLE";
+    Text[ finnish ] = "OLE-objektit";
 };
 String SCSTR_CONTENT_NOTE
 {
@@ -994,6 +1013,7 @@ String SCSTR_CONTENT_NOTE
     Text[ turkish ] = "Notlar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Notas";
+    Text[ finnish ] = "Huomautukset";
 };
 String SCSTR_CONTENT_AREALINK
 {
@@ -1022,6 +1042,7 @@ String SCSTR_CONTENT_AREALINK
     Text[ turkish ] = "Baðlantýlý alanlar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Áreas vinculadas";
+    Text[ finnish ] = "Linkitetyt alueet";
 };
  // PopupMenu -------------------------------------------------------------
 Menu RID_POPUP_DROPMODE
@@ -1057,6 +1078,7 @@ Menu RID_POPUP_DROPMODE
             Text[ turkish ] = "Hyperlink olarak ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Insertar como hiperenlace";
+            Text[ finnish ] = "Lisää hyperlinkkinä";
         };
         MenuItem
         {
@@ -1088,6 +1110,7 @@ Menu RID_POPUP_DROPMODE
             Text[ turkish ] = "Baðlantý olarak ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Insertar como vínculo";
+            Text[ finnish ] = "Lisää linkkinä";
         };
         MenuItem
         {
@@ -1118,6 +1141,7 @@ Menu RID_POPUP_DROPMODE
             Text[ turkish ] = "Kopya olarak ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Insertar como copia";
+            Text[ finnish ] = "Lisää kopiona";
         };
     };
 };
@@ -1153,6 +1177,7 @@ Menu RID_POPUP_NAVIPI_SCENARIO
             Text[ turkish ] = "Sil";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Eliminar";
+            Text[ finnish ] = "Poista";
         };
         MenuItem
         {
@@ -1182,6 +1207,7 @@ Menu RID_POPUP_NAVIPI_SCENARIO
             Text[ turkish ] = "Özellikler...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Propiedades...";
+            Text[ finnish ] = "Ominaisuudet";
         };
     };
 };
