@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-04 18:14:13 $
+ *  last change: $Author: jp $ $Date: 2001-09-11 15:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ SV_IMPL_PTRARR(SwGetINetAttrs, SwGetINetAttr*)
  ******************************************************************************/
 
 
-void SwEditShell::Insert( sal_Unicode c )
+void SwEditShell::Insert( sal_Unicode c, BOOL bOnlyCurrCrsr )
 {
     StartAllAction();
     FOREACHPAM_START(this)
@@ -187,6 +187,8 @@ void SwEditShell::Insert( sal_Unicode c )
             ASSERT( FALSE, "Doc->Insert(c) failed." );
 
         SaveTblBoxCntnt( PCURCRSR->GetPoint() );
+        if( bOnlyCurrCrsr )
+            break;
 
     FOREACHPAM_END()
 

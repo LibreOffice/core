@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-12-12 10:26:00 $
+ *  last change: $Author: jp $ $Date: 2001-09-11 15:08:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,9 @@
 #endif
 #ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
+#endif
+#ifndef _SWDTFLVR_HXX
+#include <swdtflvr.hxx>
 #endif
 
 #ifndef _HELPID_H
@@ -780,6 +783,12 @@ SwFrameShell::SwFrameShell(SwView &rView) :
 {
     SetName(String::CreateFromAscii("Frame"));
     SetHelpId(SW_FRAMESHELL);
+    SwTransferable::CreateSelection( rView.GetWrtShell() );
+}
+
+SwFrameShell::~SwFrameShell()
+{
+    SwTransferable::ClearSelection( GetShell() );
 }
 
 /*--------------------------------------------------------------------
@@ -1036,6 +1045,9 @@ void  SwFrameShell::StateInsert(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/12/12 10:26:00  os
+    #80119# enable chain buttons for text frames only
+
     Revision 1.2  2000/10/06 13:36:37  jp
     should changes: don't use IniManager
 

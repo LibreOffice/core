@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-16 09:18:20 $
+ *  last change: $Author: jp $ $Date: 2001-09-11 15:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,7 +465,7 @@ BOOL lcl_SetAnchor( const SwPosition& rPos, const SwNode& rNd, SwFlyFrm* pFly,
 }
 
 BOOL SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
-                                const Point& rInsPt, BOOL bIsMove )
+                    const Point& rInsPt, BOOL bIsMove, BOOL bSelectInsert )
 {
     BOOL bRet = TRUE;
 
@@ -473,11 +473,11 @@ BOOL SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
     //selektiert werden.
     const SdrMarkList aMrkList( Imp()->GetDrawView()->GetMarkList() );
     ULONG nMarkCount = aMrkList.GetMarkCount();
-    if( pDestShell->Imp()->GetDrawView() )
-        pDestShell->Imp()->GetDrawView()->UnmarkAll();
-    else
+    if( !pDestShell->Imp()->GetDrawView() )
         // sollte mal eine erzeugt werden
         pDestShell->MakeDrawView();
+    else if( bSelectInsert )
+        pDestShell->Imp()->GetDrawView()->UnmarkAll();
 
     SdrPageView *pDestPgView = pDestShell->Imp()->GetPageView(),
                 *pSrcPgView = Imp()->GetPageView();
@@ -584,7 +584,8 @@ BOOL SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                         pNew->ImpSetAnchorPos( aNewAnch );
                         pNew->SetRelativePos( aPos );
                     }
-                    pDestDrwView->MarkObj( pNew, pDestPgView );
+                    if( bSelectInsert )
+                        pDestDrwView->MarkObj( pNew, pDestPgView );
                 }
             }
         }
@@ -615,14 +616,11 @@ BOOL SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
             DelSelectedObj();
     }
 
-//  if( this != pDestShell )
-//      pDestDrwView->SetMarkHdlHidden( TRUE );
-
     return bRet;
 }
 
 BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
-                        const Point& rInsPt, BOOL bIsMove )
+                    const Point& rInsPt, BOOL bIsMove, BOOL bSelectInsert )
 {
     BOOL bRet = FALSE;
 
@@ -673,13 +671,13 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 SwCrsrMoveState aState( MV_SETONLYTEXT );
                 GetLayout()->GetCrsrOfst( &aPos, aPt, &aState );
                 const SwNode *pNd;
-                if( (pNd = GetDoc()->GetNodes()[ aPos.nNode ])->IsNoTxtNode() )
+                if( (pNd = &aPos.nNode.GetNode())->IsNoTxtNode() )
                     bRet = FALSE;
                 else
                 {   //Nicht in sich selbst kopieren
                     const SwNodeIndex *pTmp = pFlyFmt->GetCntnt().GetCntntIdx();
                     if ( aPos.nNode > *pTmp && aPos.nNode <
-                        GetDoc()->GetNodes()[*pTmp]->EndOfSectionIndex() )
+                        pTmp->GetNode().EndOfSectionIndex() )
                     {
                         bRet = FALSE;
                     }
@@ -729,12 +727,15 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
 
             // nur selektieren wenn es in der gleichen Shell verschoben/
             //  kopiert wird
-            SwFlyFrm* pFlyFrm = ((SwFlyFrmFmt*)pFlyFmt)->GetFrm( &aPt, FALSE );
-            if( pFlyFrm )
+            if( bSelectInsert )
             {
-                //JP 12.05.98: sollte das nicht im SelectFlyFrm stehen???
-                pDestShell->Imp()->GetDrawView()->UnmarkAll();
-                pDestShell->SelectFlyFrm( *pFlyFrm, TRUE );
+                SwFlyFrm* pFlyFrm = ((SwFlyFrmFmt*)pFlyFmt)->GetFrm( &aPt, FALSE );
+                if( pFlyFrm )
+                {
+                    //JP 12.05.98: sollte das nicht im SelectFlyFrm stehen???
+                    pDestShell->Imp()->GetDrawView()->UnmarkAll();
+                    pDestShell->SelectFlyFrm( *pFlyFrm, TRUE );
+                }
             }
 
             if( this != pDestShell && !pDestShell->HasShFcs() )
@@ -742,7 +743,7 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
         }
     }
     else if ( IsObjSelected() )
-        bRet = CopyDrawSel( pDestShell, rSttPt, rInsPt, bIsMove );
+        bRet = CopyDrawSel( pDestShell, rSttPt, rInsPt, bIsMove, bSelectInsert );
     else if( IsTableMode() )
     {
         // kopiere Teile aus einer Tabelle: lege eine Tabelle mit der Breite
@@ -764,7 +765,7 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 pDstPos = new SwPosition( *GetCrsr()->GetPoint() );
                 Point aPt( rInsPt );
                 GetLayout()->GetCrsrOfst( pDstPos, aPt );
-                if( !GetDoc()->GetNodes()[ pDstPos->nNode ]->IsNoTxtNode() )
+                if( !pDstPos->nNode.GetNode().IsNoTxtNode() )
                     bRet = TRUE;
             }
             else if( !pDestShell->GetCrsr()->GetNode()->IsNoTxtNode() )
@@ -809,16 +810,13 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             SwPosition aPos( *GetCrsr()->GetPoint() );
             Point aPt( rInsPt );
             GetLayout()->GetCrsrOfst( &aPos, aPt );
-            bRet = !GetDoc()->GetNodes()[ aPos.nNode ]->IsNoTxtNode();
+            bRet = !aPos.nNode.GetNode().IsNoTxtNode();
         }
         else if( pDestShell->GetCrsr()->GetNode()->IsNoTxtNode() )
             bRet = FALSE;
 
         if( bRet )
-        {
-
             bRet = 0 != SwEditShell::Copy( pDestShell );
-        }
     }
 
     pDestShell->GetDoc()->SetRedlineMode_intern( eOldRedlMode );
@@ -1032,8 +1030,8 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc )
             }
 
             SwPosition& rInsPos = *PCURCRSR->GetPoint();
-            const SwStartNode* pBoxNd = GetDoc()->GetNodes()[
-                                rInsPos.nNode ]->FindTableBoxStartNode();
+            const SwStartNode* pBoxNd = rInsPos.nNode.GetNode().
+                                                    FindTableBoxStartNode();
             if( pBoxNd && 2 == pBoxNd->EndOfSectionIndex() -
                                 pBoxNd->GetIndex() &&
                 aCpyPam.GetPoint()->nNode != aCpyPam.GetMark()->nNode )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-13 22:02:14 $
+ *  last change: $Author: jp $ $Date: 2001-09-11 15:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,80 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
 }
 
 
+USHORT SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppObj )
+{
+    SwWrtShell &rSh = rView.GetWrtShell();
+    const Point aDocPt( PixelToLogic( rPixPnt ) );
+    if( rSh.ChgCurrPam( aDocPt ) || rSh.IsOverReadOnlyPos( aDocPt ) )
+        return 0;
+
+    SdrObject *pObj = NULL;
+    const ObjCntType eType = rSh.GetObjCntType( aDocPt, pObj );
+
+    //Drop auf OutlinerView (TextEdit im Drawing) soll diese selbst entscheiden!
+    if( pObj )
+    {
+        OutlinerView* pOLV = rSh.GetDrawView()->GetTextEditOutlinerView();
+        if ( pOLV )
+        {
+            Rectangle aRect( pOLV->GetOutputArea() );
+            aRect.Union( pObj->GetLogicRect() );
+            const Point aPos = pOLV->GetWindow()->PixelToLogic( rPixPnt );
+            if( aRect.IsInside( aPos ) )
+                return 0;
+        }
+    }
+
+    //Auf was wollen wir denn gerade droppen?
+    USHORT nDropDestination = 0;
+
+    //Sonst etwas aus der DrawingEngine getroffen?
+    if( OBJCNT_NONE != eType )
+    {
+        switch ( eType )
+        {
+        case OBJCNT_GRF:
+            {
+                BOOL bLink,
+                    bIMap = 0 != rSh.GetFmtFromObj( aDocPt )->GetURL().GetMap();
+                String aDummy;
+                rSh.GetGrfAtPos( aDocPt, aDummy, bLink );
+                if ( bLink && bIMap )
+                    nDropDestination = EXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP;
+                else if ( bLink )
+                    nDropDestination = EXCHG_DEST_DOC_LNKD_GRAPHOBJ;
+                else if ( bIMap )
+                    nDropDestination = EXCHG_DEST_DOC_GRAPH_W_IMAP;
+                else
+                    nDropDestination = EXCHG_DEST_DOC_GRAPHOBJ;
+            }
+            break;
+        case OBJCNT_FLY:
+            if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
+                nDropDestination = EXCHG_DEST_DOC_TEXTFRAME_WEB;
+            else
+                nDropDestination = EXCHG_DEST_DOC_TEXTFRAME;
+            break;
+        case OBJCNT_OLE:        nDropDestination = EXCHG_DEST_DOC_OLEOBJ; break;
+        case OBJCNT_CONTROL:    /* no Action avail */
+        case OBJCNT_SIMPLE:     nDropDestination = EXCHG_DEST_DOC_DRAWOBJ; break;
+        case OBJCNT_URLBUTTON:  nDropDestination = EXCHG_DEST_DOC_URLBUTTON; break;
+        case OBJCNT_GROUPOBJ:   nDropDestination = EXCHG_DEST_DOC_GROUPOBJ;     break;
+
+        default: ASSERT( !this, "new ObjectType?" );
+        }
+    }
+    if ( !nDropDestination )
+    {
+        if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
+            nDropDestination = EXCHG_DEST_SWDOC_FREE_AREA_WEB;
+        else
+            nDropDestination = EXCHG_DEST_SWDOC_FREE_AREA;
+    }
+    if( ppObj )
+        *ppObj = pObj;
+    return nDropDestination;
+}
 
 sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 {
@@ -369,89 +443,10 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
         bOldIdleSet = FALSE;
     }
 
-    //Drop auf Selektion ist nicht statthaft.
-    //JP 19.01.99: Drop in geschuetzte Bereiche ist nicht statthaft
-    const Point aDocPt( PixelToLogic( aPixPt ) );
-    if( rSh.ChgCurrPam( aDocPt ) || rSh.IsOverReadOnlyPos( aDocPt ) )
-        return DND_ACTION_NONE;
-
-    //Auf was wollen wir denn gerade droppen?
-    nDropDestination = 0;
-
-    BOOL bDropCursor = TRUE;    //UserMarker oder DropCursor anzeigen.
-
     SdrObject *pObj = NULL;
-    const ObjCntType eType = rSh.GetObjCntType( aDocPt, pObj );
-
-    //Drop auf OutlinerView (TextEdit im Drawing) soll diese selbst entscheiden!
-    if ( pObj )
-    {
-        OutlinerView* pOLV = rSh.GetDrawView()->GetTextEditOutlinerView();
-        if ( pOLV )
-        {
-            Rectangle aRect( pOLV->GetOutputArea() );
-            aRect.Union( pObj->GetLogicRect() );
-            const Point aPos = pOLV->GetWindow()->PixelToLogic(aPixPt);
-            if( aRect.IsInside( aPos ) )
-//!!                return pOLV->AcceptDrop( rEvt );
-                return rEvt.mnAction;
-        }
-    }
-
-    //Sonst etwas aus der DrawingEngine getroffen?
-    if ( OBJCNT_NONE != eType )
-    {
-        switch ( eType )
-        {
-            case OBJCNT_GRF:
-                {
-                    BOOL bLink,
-                         bIMap = 0 != rSh.GetFmtFromObj( aDocPt )->GetURL().GetMap();
-                    String aDummy;
-                    rSh.GetGrfAtPos( aDocPt, aDummy, bLink );
-                    if ( bLink && bIMap )
-                        nDropDestination = EXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP;
-                    else if ( bLink )
-                        nDropDestination = EXCHG_DEST_DOC_LNKD_GRAPHOBJ;
-                    else if ( bIMap )
-                        nDropDestination = EXCHG_DEST_DOC_GRAPH_W_IMAP;
-                    else
-                        nDropDestination = EXCHG_DEST_DOC_GRAPHOBJ;
-                }
-                break;
-            case OBJCNT_FLY:
-                if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
-                    nDropDestination = EXCHG_DEST_DOC_TEXTFRAME_WEB;
-                else
-                    nDropDestination = EXCHG_DEST_DOC_TEXTFRAME;
-                break;
-            case OBJCNT_OLE:        nDropDestination = EXCHG_DEST_DOC_OLEOBJ; break;
-            case OBJCNT_CONTROL:    /* no Action avail */
-            case OBJCNT_SIMPLE:     nDropDestination = EXCHG_DEST_DOC_DRAWOBJ; break;
-            case OBJCNT_URLBUTTON:  nDropDestination = EXCHG_DEST_DOC_URLBUTTON; break;
-            case OBJCNT_GROUPOBJ:   nDropDestination = EXCHG_DEST_DOC_GROUPOBJ;     break;
-
-            default: ASSERT( !this, "new ObjectType?" );
-        }
-    }
-    if ( !nDropDestination )
-    {
-/*
-JP 13.07.98: Bug 52637: es wird ein URL-Feld erkannt also werden nur die
-                        Inhalte zugelassen. Das ist aber bestimmt nicht das
-                        gewollte.
-        SwContentAtPos aCntntAtPos( SwContentAtPos::SW_INETATTR );
-        if ( rSh.GetContentAtPos( aDocPt, aCntntAtPos, FALSE ) )
-            nDropDestination = EXCHG_DEST_DOC_URLFIELD;
-        else
-*/
-        if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
-            nDropDestination = EXCHG_DEST_SWDOC_FREE_AREA_WEB;
-        else
-            nDropDestination = EXCHG_DEST_SWDOC_FREE_AREA;
-    }
-    else
-        bDropCursor = FALSE;
+    nDropDestination = GetDropDestination( aPixPt, &pObj );
+    if( !nDropDestination )
+        return DND_ACTION_NONE;
 
     USHORT nEventAction;
     sal_Int8 nUserOpt = rEvt.mbDefault ? EXCHG_IN_ACTION_DEFAULT
@@ -466,12 +461,15 @@ JP 13.07.98: Bug 52637: es wird ein URL-Feld erkannt also werden nur die
 
     if( EXCHG_INOUT_ACTION_NONE != nDropAction )
     {
+        const Point aDocPt( PixelToLogic( aPixPt ) );
+
         //Bei den default Aktionen wollen wir noch ein bischen mitreden.
         SwModule *pMod = SW_MOD();
         if( pMod->pDragDrop )
         {
             BOOL bCleanup = FALSE;
             //Zeichenobjekte in Kopf-/Fusszeilen sind nicht erlaubt
+
             SwWrtShell *pSrcSh = pMod->pDragDrop->GetShell();
             if( (pSrcSh->GetSelFrmType() == FRMTYPE_DRAWOBJ) &&
                  (rSh.GetFrmType( &aDocPt, FALSE ) & (FRMTYPE_HEADER|FRMTYPE_FOOTER)) )
@@ -519,7 +517,9 @@ JP 13.07.98: Bug 52637: es wird ein URL-Feld erkannt also werden nur die
         if ( EXCHG_IN_ACTION_DEFAULT != nEventAction )
             nUserOpt = nEventAction;
 
-        if ( bDropCursor )
+        // show DropCursor or UserMarker ?
+        if( EXCHG_DEST_SWDOC_FREE_AREA_WEB == nDropDestination ||
+            EXCHG_DEST_SWDOC_FREE_AREA == nDropDestination )
         {
             CleanupDropUserMarker();
             rSh.SwCrsrShell::SetVisCrsr( aDocPt );
@@ -570,6 +570,9 @@ IMPL_LINK( SwEditWin, DDHandler, Timer *, EMPTYARG )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/08/13 22:02:14  jp
+    Bug #86173#: ask for the default flag on the event
+
     Revision 1.6  2001/08/09 05:36:54  os
     #89714# default drag and drop of the navigator works again
 

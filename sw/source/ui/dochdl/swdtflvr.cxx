@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-07 11:23:49 $
+ *  last change: $Author: jp $ $Date: 2001-09-11 15:16:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,64 +375,6 @@ SwTransferable::SwTransferable( SwWrtShell& rSh )
     }
 }
 
-
-// -----------------------------------------------------------------------
-#if 0
-// used this anybody or is it used for the CreateTransferableSnapshot?
-SwTransferable::SwTransferable( SwDoc& rDoc )
-    : pWrtShell( 0 ),
-    eBufferType( TRNSFR_NONE ),
-    pClpDocFac( 0 ),
-    pClpGraphic( 0 ),
-    pClpBitmap( 0 ),
-    pOrigGrf( 0 ),
-    pBkmk( 0 ),
-    pImageMap( 0 ),
-    pTargetURL( 0 )
-{
-    // interface for CreateSnapShot
-    BOOL bIsModified = rDoc.IsModified();
-
-    //#52960#/#66044#
-    SfxObjectShell* pDShell = rDoc.GetDocShell();
-    if( pDShell && pDShell->GetMedium() )
-    {
-        const INetURLObject& rURLObj = pDShell->GetMedium()->GetURLObject();
-        aObjDesc.maDisplayName = URIHelper::removePassword(
-                                rURLObj.GetMainURL( INetURLObject::NO_DECODE ),
-                                INetURLObject::WAS_ENCODED,
-                                   INetURLObject::DECODE_UNAMBIGUOUS );
-    }
-
-    SvStorageRef aStg( new SvStorage( aEmptyStr ));
-    rDoc.GetDocShell()->DoSaveAs( aStg );
-    rDoc.GetDocShell()->DoSaveCompleted();
-
-    if( bIsModified )
-        rDoc.SetModified();
-
-    SwDocShell* pNewDocSh = new SwDocShell( SFX_CREATE_MODE_INTERNAL );
-    aDocShellRef = pNewDocSh;
-    pNewDocSh->DoLoad( aStg );
-
-    SwDoc* pDoc = pNewDocSh->GetDoc();
-
-    pClpDocFac = new SwDocFac( pDoc );
-
-    AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-    AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
-    AddFormat( FORMAT_GDIMETAFILE );
-    AddFormat( FORMAT_RTF );
-    AddFormat( FORMAT_STRING );
-
-    pNewDocSh->SetVisArea( rDoc.GetDocShell()->GetVisArea( ASPECT_CONTENT ) );
-
-    //ObjectDescriptor wurde bereits aus der alten DocShell gefuellt.
-    //Jetzt noch anpassen. Dadurch kann im GetData die erste Anfrage
-    //auch noch mit delayed rendering beantwortet werden.
-    aObjDesc.mbCanLink = FALSE;
-}
-#endif
 // -----------------------------------------------------------------------
 
 SwTransferable::~SwTransferable()
@@ -462,8 +404,10 @@ SwTransferable::~SwTransferable()
     SwModule* pMod = SW_MOD();
     if ( pMod->pClipboard == this )
         pMod->pClipboard = 0;
-    if ( pMod->pDragDrop == this )
+    else if ( pMod->pDragDrop == this )
         pMod->pDragDrop = 0;
+    else if ( pMod->pXSelection == this )
+        pMod->pXSelection = 0;
 
     delete pClpGraphic;
     delete pClpBitmap;
@@ -482,15 +426,22 @@ void SwTransferable::ObjectReleased()
     SwModule *pMod = SW_MOD();
     if( this == pMod->pClipboard )
         pMod->pClipboard = 0;
-    if( this == pMod->pDragDrop )
+    else if( this == pMod->pDragDrop )
         pMod->pDragDrop = 0;
+    else if( this == pMod->pXSelection )
+        pMod->pXSelection = 0;
 }
 
 // -----------------------------------------------------------------------
 
 void SwTransferable::AddSupportedFormats()
 {
-    // we have add all formats!
+    // only need if we are the current XSelection Object
+    SwModule *pMod = SW_MOD();
+    if( this == pMod->pXSelection )
+    {
+        SetDataForDragAndDrop( Point( 0,0) );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1171,7 +1122,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
     if( pPt )
     {
         // external Drop
-        if( !pMod->pDragDrop )
+        if( !pMod->pDragDrop && !pMod->pXSelection )
         {
             switch( nDestination )
             {
@@ -1221,17 +1172,19 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
             pAction = new SwTrnsfrActionAndUndo( &rSh, UNDO_INSERT, TRUE );
     }
 
-    if( pPt && pMod->pDragDrop )
+    SwTransferable* pTrans;
+    if( pPt && (0 != ( pTrans = pMod->pDragDrop) ||
+                0 != ( pTrans = pMod->pXSelection )))
     {
-        // dann internes Drag & Drop
-        nRet = pMod->pDragDrop->PrivateDrop( rSh, *pPt,
-                                        DND_ACTION_MOVE == nDropAction );
+        // then internal Drag & Drop or XSelection
+        nRet = pTrans->PrivateDrop( rSh, *pPt, DND_ACTION_MOVE == nDropAction,
+                                    pTrans == pMod->pXSelection );
     }
-    else if( !pPt && pMod->pClipboard &&
+    else if( !pPt && 0 != ( pTrans = pMod->pClipboard ) &&
             EXCHG_OUT_ACTION_INSERT_PRIVATE == nAction )
     {
-        // dann internes Pasten
-        nRet = pMod->pClipboard->PrivatePaste( rSh );
+        // then internal paste
+        nRet = pTrans->PrivatePaste( rSh );
     }
     else if( EXCHG_INOUT_ACTION_NONE != nAction )
     {
@@ -1481,7 +1434,7 @@ ASSERT( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
         }
     }
 
-    if( rSh.IsFrmSelected() )
+    if( !pMod->pXSelection && rSh.IsFrmSelected() )
         rSh.EnterSelFrmMode();
 
     if( pAction )
@@ -3105,7 +3058,7 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
 }
 
 int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
-                                BOOL bMove )
+                                BOOL bMove, BOOL bIsXSelection )
 {
     int cWord    = 0;
     BOOL bInWrd  = FALSE;
@@ -3255,26 +3208,30 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         aSttPt -= aSttPt - rSrcSh.GetObjRect().Pos();
     }
 
-    BOOL bRet = rSrcSh.SwFEShell::Copy( &rSh, aSttPt, rDragPt, bMove );
+    BOOL bRet = rSrcSh.SwFEShell::Copy( &rSh, aSttPt, rDragPt, bMove,
+                                            !bIsXSelection );
 
-    rSrcSh.Push();
-    if ( bRet && bMove && !bFrmSel )
+    if( !bIsXSelection )
     {
-        if ( bTblSel )
-            rSrcSh.DeleteTblSel();
-        else
+        rSrcSh.Push();
+        if ( bRet && bMove && !bFrmSel )
         {
-            //SmartCut, eines der Blank mitnehmen.
-            rSh.SwCrsrShell::DestroyCrsr();
-            if ( cWord == SwWrtShell::WORD_SPACE_BEFORE )
-                rSh.ExtendSelection( FALSE );
-            else if ( cWord == SwWrtShell::WORD_SPACE_AFTER )
-                rSh.ExtendSelection();
-            rSrcSh.DelRight();
+            if ( bTblSel )
+                rSrcSh.DeleteTblSel();
+            else
+            {
+                //SmartCut, eines der Blank mitnehmen.
+                rSh.SwCrsrShell::DestroyCrsr();
+                if ( cWord == SwWrtShell::WORD_SPACE_BEFORE )
+                    rSh.ExtendSelection( FALSE );
+                else if ( cWord == SwWrtShell::WORD_SPACE_AFTER )
+                    rSh.ExtendSelection();
+                rSrcSh.DelRight();
+            }
         }
+        rSrcSh.KillPams();
+        rSrcSh.Pop( FALSE );
     }
-    rSrcSh.KillPams();
-    rSrcSh.Pop( FALSE );
 
     if( bRet && !bTblSel && !bFrmSel )
     {
@@ -3283,23 +3240,39 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                 cWord == SwWrtShell::WORD_SPACE_BEFORE) )
         {
             if ( bSttWrd || bInWrd )
-                rSh.SwEditShell::Insert(' ');
+                rSh.SwEditShell::Insert(' ', bIsXSelection);
             if ( !bSttWrd || (bInWrd && !bSttPara) )
             {
                 rSh.SwapPam();
                 if ( !bSttWrd )
-                    rSh.SwEditShell::Insert(' ');
+                    rSh.SwEditShell::Insert(' ', bIsXSelection);
                 rSh.SwapPam();
             }
         }
 
-        if( rSh.IsAddMode() )
-            rSh.SwCrsrShell::CreateCrsr();
+        if( bIsXSelection )
+        {
+            if( &rSrcSh == &rSh && !rSh.IsAddMode() )
+            {
+                rSh.SwCrsrShell::DestroyCrsr();
+                rSh.GoPrevCrsr();
+            }
+            else
+            {
+                rSh.SwapPam();
+                rSh.SwCrsrShell::ClearMark();
+            }
+        }
         else
         {
-            // Selektionsmodus einschalten
-            rSh.SttSelect();
-            rSh.EndSelect();
+            if( rSh.IsAddMode() )
+                rSh.SwCrsrShell::CreateCrsr();
+            else
+            {
+                // Selektionsmodus einschalten
+                rSh.SttSelect();
+                rSh.EndSelect();
+            }
         }
     }
 
@@ -3319,6 +3292,25 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
     return 1;
 }
 
+// Interfaces for Selection
+void SwTransferable::CreateSelection( SwWrtShell& rSh )
+{
+    SwModule *pMod = SW_MOD();
+    SwTransferable* pNew = new SwTransferable( rSh );
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::datatransfer::XTransferable > xRef( pNew );
+    pMod->pXSelection = pNew;
+    pNew->CopyToSelection( rSh.GetWin() );
+}
+
+void SwTransferable::ClearSelection( SwWrtShell& rSh )
+{
+    SwModule *pMod = SW_MOD();
+    if( pMod->pXSelection && pMod->pXSelection->pWrtShell == &rSh )
+    {
+        TransferableHelper::ClearSelection( rSh.GetWin() );
+    }
+}
 
 /*  */
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-08-09 05:37:43 $
+ *  last change: $Author: jp $ $Date: 2001-09-11 15:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,8 @@ class SwTransferable : public TransferableHelper
     static int _PasteFileList( TransferableDataHelper& rData,
                             SwWrtShell& rSh, const Point* pPt, BOOL bMsg );
 
-    int PrivateDrop( SwWrtShell& rSh, const Point& rDragPt, BOOL bMove );
+    int PrivateDrop( SwWrtShell& rSh, const Point& rDragPt, BOOL bMove,
+                        BOOL bIsXSelection );
     int PrivatePaste( SwWrtShell& rShell );
 
     void SetDataForDragAndDrop( const Point& rSttPos );
@@ -229,6 +230,11 @@ public:
     void StartDrag( Window* pWin, const Point& rPos );
     SwWrtShell* GetShell()              { return pWrtShell; }
     void SetCleanUp( BOOL bFlag )       { bCleanUp = bFlag; }
+
+    // Interfaces for Selection
+    static void CreateSelection( SwWrtShell& rSh );
+    static void ClearSelection( SwWrtShell& rSh );
+
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-23 15:39:59 $
+ *  last change: $Author: jp $ $Date: 2001-09-11 15:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,8 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     //Hilfsfunktionen fuer D&D
     void            DropCleanup();
     void            CleanupDropUserMarker();
-
+    USHORT          GetDropDestination( const Point& rPixPnt,
+                                        SdrObject ** ppObj = 0 );
 
     /*
      * Handler fuer das Weiterscrollen, wenn der Mauspointer innerhalb eines

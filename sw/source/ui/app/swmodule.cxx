@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-14 11:41:46 $
+ *  last change: $Author: jp $ $Date: 2001-09-11 15:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,6 +396,7 @@ SwModule::SwModule( SvFactory* pFact,
     pDBConfig(0),
     pClipboard(0),
     pDragDrop(0),
+    pXSelection(0),
     pAttrPool(0),
     bAuthorInitialised(sal_False)
 {

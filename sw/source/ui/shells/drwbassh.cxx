@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-21 12:09:18 $
+ *  last change: $Author: jp $ $Date: 2001-09-11 15:08:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 
 #pragma hdrstop
 
-#include "hintids.hxx"
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
 
 #ifndef _SFXOBJFACE_HXX //autogen
 #include <sfx2/objface.hxx>
@@ -113,21 +115,50 @@
 #ifndef _FMTORNT_HXX
 #include <fmtornt.hxx>
 #endif
-#include "cmdid.h"
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#include "wrtsh.hxx"
-#include "wview.hxx"
-#include "edtwin.hxx"
-#include "viewopt.hxx"
-#include "dcontact.hxx"
-#include "frmfmt.hxx"
-#include "wrap.hxx"
-#include "drawbase.hxx"
-#include "drwbassh.hxx"
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _WVIEW_HXX
+#include <wview.hxx>
+#endif
+#ifndef _EDTWIN_HXX
+#include <edtwin.hxx>
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
+#endif
+#ifndef _DCONTACT_HXX
+#include <dcontact.hxx>
+#endif
+#ifndef _FRMFMT_HXX
+#include <frmfmt.hxx>
+#endif
+#ifndef _WRAP_HXX
+#include <wrap.hxx>
+#endif
+#ifndef _DRAWBASE_HXX
+#include <drawbase.hxx>
+#endif
+#ifndef _DRWBASSH_HXX
+#include <drwbassh.hxx>
+#endif
+#ifndef _SWDTFLVR_HXX
+#include <swdtflvr.hxx>
+#endif
 
 #define SwDrawBaseShell
-#include "itemdef.hxx"
-#include "swslots.hxx"
+#ifndef _ITEMDEF_HXX
+#include <itemdef.hxx>
+#endif
+#ifndef _SWSLOTS_HXX
+#include <swslots.hxx>
+#endif
 
 SFX_IMPL_INTERFACE(SwDrawBaseShell, SwBaseShell, SW_RES(0))
 {
@@ -151,6 +182,8 @@ SwDrawBaseShell::SwDrawBaseShell(SwView &rView):
 
     if ( !rView.GetDrawFuncPtr() )
         rView.GetEditWin().StdDrawMode(SID_OBJECT_SELECT);
+
+    SwTransferable::CreateSelection( GetShell() );
 }
 
 /*--------------------------------------------------------------------
@@ -158,10 +191,11 @@ SwDrawBaseShell::SwDrawBaseShell(SwView &rView):
  --------------------------------------------------------------------*/
 
 
-__EXPORT SwDrawBaseShell::~SwDrawBaseShell()
+SwDrawBaseShell::~SwDrawBaseShell()
 {
     GetView().ExitDraw();
     GetShell().Edit();
+    SwTransferable::ClearSelection( GetShell() );
 }
 
 /*--------------------------------------------------------------------

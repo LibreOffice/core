@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-08 19:13:33 $
+ *  last change: $Author: jp $ $Date: 2001-09-11 15:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,9 @@
 #ifndef _FCHRFMT_HXX //autogen
 #include <fchrfmt.hxx>
 #endif
+#ifndef _FMTURL_HXX //autogen
+#include <fmturl.hxx>
+#endif
 #ifndef _ROMENU_HXX
 #include <romenu.hxx>
 #endif
@@ -280,6 +283,12 @@
 #endif
 #ifndef _SWCALWRP_HXX
 #include <swcalwrp.hxx>
+#endif
+#ifndef _SWDTFLVR_HXX
+#include <swdtflvr.hxx>
+#endif
+#ifndef _SWWDOCSH_HXX //autogen
+#include <wdocsh.hxx>
 #endif
 
 #ifndef _HELPID_H
@@ -3670,6 +3679,35 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         // will be handled by the base class
         break;
 
+    case COMMAND_PASTESELECTION:
+        if( !rView.GetDocShell()->IsReadOnly() )
+        {
+            TransferableDataHelper aDataHelper(
+                        TransferableDataHelper::CreateFromSelection( this ));
+            if( !aDataHelper.GetXTransferable().is() )
+                break;
+
+            ULONG nDropFormat;
+            USHORT nEventAction, nDropAction, nDropDestination;
+            nDropDestination = GetDropDestination( rCEvt.GetMousePosPixel() );
+            if( !nDropDestination )
+                break;
+
+            nDropAction = SotExchange::GetExchangeAction(
+                                aDataHelper.GetDataFlavorExVector(),
+                                nDropDestination, EXCHG_IN_ACTION_COPY,
+                                EXCHG_IN_ACTION_COPY, nDropFormat,
+                                nEventAction );
+            if( EXCHG_INOUT_ACTION_NONE != nDropAction )
+            {
+                const Point aDocPt( PixelToLogic( rCEvt.GetMousePosPixel() ) );
+                SwTransferable::PasteData( aDataHelper, rSh, nDropAction,
+                                    nDropFormat, nDropDestination, FALSE,
+                                    FALSE, &aDocPt, EXCHG_IN_ACTION_COPY );
+            }
+        }
+        break;
+
 #ifdef DBG_UTIL
         default:
             ASSERT( !this, "unknown command." );
@@ -3898,6 +3936,9 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
 /***********************************************************************
 
         $Log: not supported by cvs2svn $
+        Revision 1.9  2001/05/08 19:13:33  jp
+        Bug #86635#: download filter avaiable
+
         Revision 1.8  2001/04/18 07:49:09  ama
         Fix #78807#: Anchor dragging with page scrolling
 
