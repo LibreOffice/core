@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:23:08 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
     Text [ portuguese_brazilian ] = "Formato do Texto" ;
     Text [ portuguese ] = "Atributos do texto" ;
     Text [ finnish ] = "Tekstin muotoilu" ;
-    Text [ danish ] = "Tekstattributter" ;
+    Text [ danish ] = "Tekstformat" ;
     Text [ french ] = "Attributs de texte" ;
     Text [ swedish ] = "Textattribut" ;
     Text [ dutch ] = "Tekstattributen" ;
@@ -116,6 +116,8 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "फ़ॉन्ट्";
                 Text[ slovak ] = "Písmo";
+                Text[ hungarian ] = "Betűkészlet";
+                Text[ slovenian ] = "Pisava";
             };
             PageItem
             {
@@ -129,7 +131,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ french ] = "Effets de caract�res";
                 Text[ spanish ] = "Efectos de fuente";
                 Text[ italian ] = "Effetto caratteri";
-                Text[ danish ] = "Skrifteffekt";
+                Text[ danish ] = "Skrifteffekter";
                 Text[ swedish ] = "Teckeneffekt";
                 Text[ polish ] = "Efekty czcionki";
                 Text[ portuguese_brazilian ] = "Efeitos da Fonte";
@@ -146,6 +148,8 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ hebrew ] = "‮פעלולי גופנים‬";
                 Text[ hindi ] = "फ़ॉन्ट् प्रभाव";
                 Text[ slovak ] = "Efekty pre písmo";
+                Text[ hungarian ] = "Betűhatások";
+                Text[ slovenian ] = "Učinki pisave";
             };
             PageItem
             {
@@ -176,6 +180,8 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ hebrew ] = "‮מיקום‬";
                 Text[ hindi ] = "स्थान";
                 Text[ slovak ] = "Umiestnenie";
+                Text[ hungarian ] = "Pozíció";
+                Text[ slovenian ] = "Položaj";
             };
             PageItem
             {
@@ -185,7 +191,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ portuguese ] = "Configura��o asi�tica";
                 Text[ russian ] = "��������� ��������";
                 Text[ greek ] = "�������� �������";
-                Text[ dutch ] = "Aziatisch lay-out";
+                Text[ dutch ] = "Aziatische lay-out";
                 Text[ french ] = "Mise en page asiatique";
                 Text[ spanish ] = "Dise�o asi�tico";
                 Text[ italian ] = "Layout asiatico";
@@ -206,6 +212,8 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ hebrew ] = "‮עיצוב דף של המזרח הרחוק‬";
                 Text[ hindi ] = "ऐशियन अभिन्यास";
                 Text[ slovak ] = "Ázijské rozloženie";
+                Text[ hungarian ] = "Ázsiai tördelés";
+                Text[ slovenian ] = "Azijska postavitev";
             };
             PageItem
             {
@@ -217,7 +225,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text [ portuguese_brazilian ] = "Recuo & Afastamento" ;
                 Text [ portuguese ] = "Avan�os e espa�amento" ;
                 Text [ finnish ] = "Sisennykset ja v�lit" ;
-                Text [ danish ] = "Indrykning og mellemrum" ;
+                Text [ danish ] = "Indrykning og afstand" ;
                 Text [ french ] = "Retraits et �carts" ;
                 Text [ swedish ] = "Indrag och avst�nd" ;
                 Text [ dutch ] = "Inspringingen en afstanden" ;
@@ -239,6 +247,8 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ hebrew ] = "‮שוליים ורווחים‬";
                 Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
                 Text[ slovak ] = "Odsadenie a medzery";
+                Text[ hungarian ] = "Behúzás és térköz";
+                Text[ slovenian ] = "Zamiki in razmiki";
             };
             PageItem
             {
@@ -271,6 +281,8 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ hebrew ] = "‮יישור‬";
                 Text[ hindi ] = "पंक्तिकरण";
                 Text[ slovak ] = "Zarovnanie";
+                Text[ hungarian ] = "Igazítás";
+                Text[ slovenian ] = "Poravnava";
             };
             PageItem
             {
@@ -282,7 +294,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text [ portuguese_brazilian ] = "Fluxo do Texto" ;
                 Text [ portuguese ] = "Fluxo de texto" ;
                 Text [ finnish ] = "Tekstin rivitys" ;
-                Text [ danish ] = "Tekstretning" ;
+                Text [ danish ] = "Tekstforl�b" ;
                 Text [ french ] = "Encha�nements" ;
                 Text [ swedish ] = "Textfl�de" ;
                 Text [ dutch ] = "Tekstverloop" ;
@@ -304,6 +316,8 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ hebrew ] = "‮זרימת טקסט‬";
                 Text[ hindi ] = "टेक्स्ट् धारा";
                 Text[ slovak ] = "Tok textu";
+                Text[ hungarian ] = "Szövegbeosztás";
+                Text[ slovenian ] = "Potek besedila";
             };
             PageItem
             {
@@ -335,6 +349,8 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ hebrew ] = "‮עיצוב גופן מזרח הרחוק‬";
                 Text[ hindi ] = "ऐशियन टइपोग्रफी";
                 Text[ slovak ] = "Ázijská typografia";
+                Text[ hungarian ] = "Ázsiai tipográfia";
+                Text[ slovenian ] = "Azijska tipografija";
             };
             PageItem
             {
@@ -368,6 +384,8 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
                 Text[ slovak ] = "Pozadie";
+                Text[ hungarian ] = "Háttér";
+                Text[ slovenian ] = "Ozadje";
             };
         };
     };
@@ -387,6 +405,8 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
     Text[ hebrew ] = "‮עיצוב טקסט‬";
     Text[ hindi ] = "टेक्स्ट् रचना";
     Text[ slovak ] = "Formát textu";
+    Text[ hungarian ] = "Szövegformátum ";
+    Text[ slovenian ] = "Oblika besedila";
 };
  // RID_SVXDLG_SEARCHATTRIBUTE --------------------------------------------
 ModalDialog RID_SVXDLG_SEARCHATTR
@@ -429,7 +449,7 @@ ModalDialog RID_SVXDLG_SEARCHATTR
         Text [ portuguese_brazilian ] = "Escolha" ;
         Text [ portuguese ] = "Selec��o" ;
         Text [ finnish ] = "Asetukset" ;
-        Text [ danish ] = "Udvalg" ;
+        Text [ danish ] = "~Indstillinger" ;
         Text [ french ] = "S�lection" ;
         Text [ swedish ] = "~Urval" ;
         Text [ dutch ] = "Selectie" ;
@@ -451,6 +471,8 @@ ModalDialog RID_SVXDLG_SEARCHATTR
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "चु~नाव";
         Text[ slovak ] = "V~oľby";
+        Text[ hungarian ] = "~Beállítások";
+        Text[ slovenian ] = "~Možnosti";
     };
     OKButton BTN_ATTR_OK
     {
@@ -484,6 +506,8 @@ ModalDialog RID_SVXDLG_SEARCHATTR
     Text[ hebrew ] = "‮תכונות‬";
     Text[ hindi ] = "ऐट्रिब्यूट्स";
     Text[ slovak ] = "Atribúty";
+    Text[ hungarian ] = "Jellemzők";
+    Text[ slovenian ] = "Atributi";
 };
  // RID_SVXDLG_SEARCHSIMILARITY -------------------------------------------
 ModalDialog RID_SVXDLG_SEARCHSIMILARITY
@@ -512,7 +536,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text [ french ] = "�change de caract�res" ;
         Text [ dutch ] = "Tekens ~vervangen" ;
         Text [ swedish ] = "~Byt ut tecken" ;
-        Text [ danish ] = "Udskift tegn" ;
+        Text [ danish ] = "~Ombyt tegn" ;
         Text [ portuguese_brazilian ] = "~Trocar caracteres" ;
         Text [ portuguese ] = "~Substituir caracteres" ;
         Text[ chinese_simplified ] = "替换字符(~E)";
@@ -532,6 +556,8 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ hebrew ] = "‮ החלפת תווים‬";
         Text[ hindi ] = "अक्षरों की ~विनिमय";
         Text[ slovak ] = "Zam~eniť znaky";
+        Text[ hungarian ] = "~Cserélhető karakterek";
+        Text[ slovenian ] = "~Izmenjaj znake";
     };
     NumericField NF_OTHER
     {
@@ -560,7 +586,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text [ french ] = "Caract�res en ~plus" ;
         Text [ dutch ] = "Tekens ~toevoegen" ;
         Text [ swedish ] = "L�gg till t~ecken" ;
-        Text [ danish ] = "Tilf�j tegn" ;
+        Text [ danish ] = "~Tilf�j tegn" ;
         Text [ portuguese_brazilian ] = "~Adicionar caracteres" ;
         Text [ portuguese ] = "Inserir ~caracteres" ;
         Text[ chinese_simplified ] = "新增字符(~A)";
@@ -580,6 +606,8 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ hebrew ] = "‮הוספת תווים‬";
         Text[ hindi ] = "अक्षरों को ~जोड़ो";
         Text[ slovak ] = "Prid~ať znaky";
+        Text[ hungarian ] = "~Karakterek hozzáadása";
+        Text[ slovenian ] = "~Dodaj znake";
     };
     NumericField NF_LONGER
     {
@@ -608,7 +636,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text [ french ] = "Caract�res en ~moins" ;
         Text [ dutch ] = "Tekens ver~wijderen" ;
         Text [ swedish ] = "~Ta bort tecken" ;
-        Text [ danish ] = "Fjern tegn" ;
+        Text [ danish ] = "~Fjern tegn" ;
         Text [ portuguese_brazilian ] = "~Remover caracteres" ;
         Text [ portuguese ] = "Elimina~r caracteres" ;
         Text[ chinese_simplified ] = "删除字符(~R)";
@@ -628,6 +656,8 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ hebrew ] = "‮הסרת תווים‬";
         Text[ hindi ] = "अक्षरों को ~हटाओ";
         Text[ slovak ] = "Odst~rániť znaky";
+        Text[ hungarian ] = "K~arakterek eltávolítása";
+        Text[ slovenian ] = "Odst~rani znake";
     };
     NumericField NF_SHORTER
     {
@@ -657,7 +687,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text [ dutch ] = "~Combineren" ;
         TabStop = TRUE ;
         Text [ swedish ] = "~Kombinera" ;
-        Text [ danish ] = "Kombiner" ;
+        Text [ danish ] = "~Kombiner" ;
         Text [ portuguese_brazilian ] = "~Combinar" ;
         Text [ portuguese ] = "~Combinar" ;
         Text[ chinese_simplified ] = "合并(~C)";
@@ -677,6 +707,8 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ hebrew ] = "‮שילוב‬";
         Text[ hindi ] = "~मिलाओ";
         Text[ slovak ] = "S~kombinovať";
+        Text[ hungarian ] = "Össze~vonás";
+        Text[ slovenian ] = "~Sestavi";
     };
     FixedLine FL_SIMILARITY
     {
@@ -710,6 +742,8 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ hebrew ] = "‮קביעות‬";
         Text[ hindi ] = "निर्धारण";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Nastavitve";
     };
     OKButton BTN_ATTR_OK
     {
@@ -750,8 +784,16 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     Text[ hebrew ] = "‮חיפוש דברים דומים‬";
     Text[ hindi ] = "तुल्यता खोज";
     Text[ slovak ] = "Hľadanie synoným";
+    Text[ hungarian ] = "Hasonló hangzásúak is";
+    Text[ slovenian ] = "Iskanje podobnosti";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
 
 
 
