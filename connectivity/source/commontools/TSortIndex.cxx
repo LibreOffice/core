@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TSortIndex.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:17:02 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 14:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 #include "TSortIndex.hxx"
+#include <algorithm>
+#include <functional>
 
 using namespace connectivity;
 //------------------------------------------------------------------
