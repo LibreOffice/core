@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uri.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-05 16:22:48 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 
 #include "osl/diagnose.h"
 #include "rtl/textenc.h"
+#include "rtl/textcvt.h"
 #include "rtl/uri.h"
 #include "rtl/ustrbuf.h"
 #include "rtl/ustrbuf.hxx"
@@ -265,23 +266,23 @@ void writeEscapeOctet(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
     writeUnicode(pBuffer, pCapacity, aHex[nOctet & 15]);
 }
 
-void writeEscapeChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
+bool writeEscapeChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
                      sal_uInt32 nUtf32, rtl_TextEncoding eCharset)
 {
+    OSL_ENSURE(nUtf32 <= 0x10FFFF, "bad UTF-32 char");
     switch (eCharset)
     {
     case RTL_TEXTENCODING_ASCII_US:
     case RTL_TEXTENCODING_ISO_8859_1:
+        // FIXME  return false instead of OSL_ENSURE
         OSL_ENSURE(nUtf32 <= (eCharset == RTL_TEXTENCODING_ASCII_US ? 0x7FU :
                                                                      0xFFU),
                    "bad ASCII or ISO 8859-1 char");
         writeEscapeOctet(pBuffer, pCapacity, nUtf32);
-        break;
+        return true;
 
-    default:
-        OSL_ENSURE(false, "unsupported eCharset"); // FIXME
     case RTL_TEXTENCODING_UTF8:
-        OSL_ENSURE(nUtf32 <= 0x7FFFFFFF, "bad UCS-4 char");
+        // FIXME  only handle nUtf32 <= 0x10FFFF
         if (nUtf32 < 0x80)
             writeEscapeOctet(pBuffer, pCapacity, nUtf32);
         else if (nUtf32 < 0x800)
@@ -319,7 +320,46 @@ void writeEscapeChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
             writeEscapeOctet(pBuffer, pCapacity, nUtf32 >> 6 & 0x3F | 0x80);
             writeEscapeOctet(pBuffer, pCapacity, nUtf32 & 0x3F | 0x80);
         }
-        break;
+        return true;
+
+    default:
+        {
+            rtl_UnicodeToTextConverter aConverter
+                = rtl_createUnicodeToTextConverter(eCharset);
+            sal_Unicode aSrc[2];
+            sal_Size nSrcSize;
+            if (nUtf32 <= 0xFFFF)
+            {
+                aSrc[0] = static_cast< sal_Unicode >(nUtf32);
+                nSrcSize = 1;
+            }
+            else
+            {
+                aSrc[0] = static_cast< sal_Unicode >(
+                    ((nUtf32 - 0x10000) >> 10) | 0xD800);
+                aSrc[1] = static_cast< sal_Unicode >(
+                    ((nUtf32 - 0x10000) & 0x3FF) | 0xDC00);
+                nSrcSize = 2;
+            }
+            sal_Char aDst[32]; // FIXME  random value
+            sal_uInt32 nInfo;
+            sal_Size nConverted;
+            sal_Size nDstSize = rtl_convertUnicodeToText(
+                aConverter, 0, aSrc, nSrcSize, aDst, sizeof aDst,
+                RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+                | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR
+                | RTL_UNICODETOTEXT_FLAGS_FLUSH,
+                &nInfo, &nConverted);
+            rtl_destroyUnicodeToTextConverter(aConverter);
+            if (nInfo != 0)
+                return false;
+            OSL_ENSURE(nConverted == nSrcSize, "bad rtl_convertUnicodeToText");
+            for (sal_Size i = 0; i < nDstSize; ++i)
+                writeEscapeOctet(pBuffer, pCapacity,
+                                 static_cast< unsigned char >(aDst[i]));
+                    // FIXME  all octets are escaped, even if there is no need
+            return true;
+        }
     }
 }
 
@@ -573,8 +613,14 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
             if (isValid(pCharClass, nUtf32)) // implies nUtf32 <= 0x7F
                 writeUnicode(pResult, &nCapacity,
                              static_cast< sal_Unicode >(nUtf32));
-            else
-                writeEscapeChar(pResult, &nCapacity, nUtf32, eCharset);
+            else if (!writeEscapeChar(pResult, &nCapacity, nUtf32, eCharset))
+            {
+                // Return an empty string if nUtf32 cannot be represented in
+                // eCharset (currently only for some charsets).
+                // FIXME  clean this up
+                rtl_uString_new(pResult);
+                return;
+            }
             break;
 
         case EscapeChar:
@@ -582,8 +628,14 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
                 && isValid(pCharClass, nUtf32)) // implies nUtf32 <= 0x7F
                 writeUnicode(pResult, &nCapacity,
                              static_cast< sal_Unicode >(nUtf32));
-            else
-                writeEscapeChar(pResult, &nCapacity, nUtf32, eCharset);
+            else if (!writeEscapeChar(pResult, &nCapacity, nUtf32, eCharset))
+            {
+                // Return an empty string if nUtf32 cannot be represented in
+                // eCharset (currently only for some charsets).
+                // FIXME  clean this up
+                rtl_uString_new(pResult);
+                return;
+            }
             break;
 
         case EscapeOctet:
@@ -632,6 +684,7 @@ void SAL_CALL rtl_uriDecode(rtl_uString * pText,
                         writeSurrogates(pResult, &nCapacity, nUtf32);
                     else
                         writeEscapeChar(pResult, &nCapacity, nUtf32, eCharset);
+                            // FIXME  check return value
                     break;
 
                 case EscapeOctet:
