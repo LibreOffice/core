@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jmrice $ $Date: 2002-09-30 12:56:39 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-10 16:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,10 +100,12 @@ ScriptNameResolverImpl::ScriptNameResolverImpl(
         osl::Guard< osl::Mutex > aGuard( m_mutex );
         if(!m_pSearchIDs)
         {
+            scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
+                scripting_constants::ScriptingConstantsPool::instance();
             m_pSearchIDs = new ::std::vector< sal_uInt16 >();
-            m_pSearchIDs->push_back( ::scripting_constants::DOC_STORAGE_ID_NOT_SET );
-            m_pSearchIDs->push_back( ::scripting_constants::USER_STORAGE_ID );
-            m_pSearchIDs->push_back( ::scripting_constants::SHARED_STORAGE_ID );
+            m_pSearchIDs->push_back( scriptingConstantsPool.DOC_STORAGE_ID_NOT_SET );
+            m_pSearchIDs->push_back( scriptingConstantsPool.USER_STORAGE_ID );
+            m_pSearchIDs->push_back( scriptingConstantsPool.SHARED_STORAGE_ID );
         }
     }
 
@@ -139,7 +141,10 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
     sal_uInt16 docSid;
     try
     {
-        any = xPropSetScriptingContext->getPropertyValue( scripting_constants::DOC_URI );
+        scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
+            scripting_constants::ScriptingConstantsPool::instance();
+        any = xPropSetScriptingContext->getPropertyValue(
+            scriptingConstantsPool.DOC_URI );
         OSL_TRACE( "ScriptNameResolverImpl::resolve: in resolve - got anyUri" );
         if ( sal_False == ( any >>= docUri ) )
         {
@@ -147,7 +152,8 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
             "ScriptNameResolverImpl::resolve : unable to get doc Uri from xPropSetScriptingContext" ),
                 Reference< XInterface > () );
         }
-        any = xPropSetScriptingContext->getPropertyValue( scripting_constants::DOC_STORAGE_ID );
+        any = xPropSetScriptingContext->getPropertyValue(
+            scriptingConstantsPool.DOC_STORAGE_ID );
         if ( sal_False == ( any >>= docSid ) )
         {
             throw RuntimeException( OUSTR(
@@ -270,7 +276,9 @@ SAL_THROW ( ( lang::IllegalArgumentException, RuntimeException ) )
 #endif
 
     Reference< scripturi::XScriptURI > resolvedName;
-    if ( sid == ::scripting_constants::DOC_STORAGE_ID_NOT_SET )
+    scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
+        scripting_constants::ScriptingConstantsPool::instance();
+    if ( sid == scriptingConstantsPool.DOC_STORAGE_ID_NOT_SET )
     {
         OSL_TRACE( "@@@@ **** ScriptNameResolverImpl::resolve DOC_STORAGE_ID_NOT_SET" );
         return resolvedName;

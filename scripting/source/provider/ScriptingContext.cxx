@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptingContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:25 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-10 16:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,10 +88,12 @@ ScriptingContext::ScriptingContext( const Reference< XComponentContext > & xCont
     //Setup internal hash map
     Any nullAny;
 
-    m_propertyMap[ scripting_constants::DOC_REF ] = nullAny;
-    m_propertyMap[ scripting_constants::DOC_STORAGE_ID ] = nullAny;
-    m_propertyMap[ scripting_constants::DOC_URI ] = nullAny;
-    m_propertyMap[ scripting_constants::RESOLVED_STORAGE_ID ] = nullAny;
+    scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
+        scripting_constants::ScriptingConstantsPool::instance();
+    m_propertyMap[ scriptingConstantsPool.DOC_REF ] = nullAny;
+    m_propertyMap[ scriptingConstantsPool.DOC_STORAGE_ID ] = nullAny;
+    m_propertyMap[ scriptingConstantsPool.DOC_URI ] = nullAny;
+    m_propertyMap[ scriptingConstantsPool.RESOLVED_STORAGE_ID ] = nullAny;
 }
 
 //*************************************************************************
