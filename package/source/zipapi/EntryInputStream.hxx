@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EntryInputStream.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-30 18:17:44 $
+ *  last change: $Author: mtg $ $Date: 2001-05-08 13:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,12 +85,12 @@
 class EntryInputStream : public cppu::WeakImplHelper2< com::sun::star::io::XInputStream,
                                                        com::sun::star::io::XSeekable >
 {
-private:
+protected:
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xStream;
     com::sun::star::uno::Reference< com::sun::star::io::XSeekable > xSeek;
     sal_Int64 nEnd, nCurrent, nUncompressedSize;
     sal_Bool bRawStream, bHaveInMemory, bEncrypted;
-    com::sun::star::uno::Sequence < sal_Int8 > aSequence, aBuffer;
+    com::sun::star::uno::Sequence < sal_Int8 > aBuffer;
     const vos::ORef < EncryptionData > xEncryptionData;
     const com::sun::star::packages::ZipEntry & rEntry;
     Inflater aInflater;
