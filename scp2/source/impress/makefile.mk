@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-04 14:09:15 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:20:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,11 +85,11 @@ PARFILES += \
         folderitem_impress.par
 .ENDIF
 
-LNGFILES= \
-        module_impress.lng              \
-        registryitem_impress.lng        \
-        folderitem_impress.lng          \
-        configurationitem_impress.lng
+ULFFILES= \
+        module_impress.ulf              \
+        registryitem_impress.ulf        \
+        folderitem_impress.ulf          \
+        configurationitem_impress.ulf
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk

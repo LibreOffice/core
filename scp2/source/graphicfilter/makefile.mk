@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-04 14:09:03 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:19:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,8 +78,8 @@ PARFILES= \
         module_graphicfilter.par            \
         file_graphicfilter.par
 
-LNGFILES= \
-        module_graphicfilter.lng
+ULFFILES= \
+        module_graphicfilter.ulf
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk
