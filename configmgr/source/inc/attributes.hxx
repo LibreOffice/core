@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attributes.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:32:03 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,9 +93,9 @@ namespace configmgr
         struct Attributes
         {
             Attributes()
-            : bReadonly(false)
+            : state_(node::isMerged)
+            , bReadonly(false)
             , bFinalized(false)
-            , state_(node::isMerged)
             , bNullable(true)
             , bLocalized(false)
             , bMandatory(false)
