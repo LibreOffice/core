@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:39:58 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:20:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,7 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     aAutoSaveBtn        ( this, ResId( BTN_AUTOSAVE ) ),
     aAutoSaveEdit       ( this, ResId( ED_AUTOSAVE ) ),
     aMinuteText         ( this, ResId( FT_MINUTE ) ),
-    aAutoSavePromptBtn  ( this, ResId( BTN_AUTOSAVEPROMPT ) ),
+//  aAutoSavePromptBtn  ( this, ResId( BTN_AUTOSAVEPROMPT ) ),
     aRelBox             ( this, ResId( GB_RELATIVE ) ),
     aRelFsysBtn         ( this, ResId( BTN_RELATIVE_FSYS ) ),
     aRelInetBtn         ( this, ResId( BTN_RELATIVE_INET ) ),
@@ -301,13 +301,13 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     pImpl->m_pNoPrettyPrinting = new CheckBox( this, ResId( BTN_NOPRETTYPRINTING ) );
 
     FreeResource();
-
+/*
     // correct the z-order for the no-pretty-printing checkbox
     Window* pNewPrev = &aAutoSavePromptBtn;
     Window* pNewNext = pNewPrev->GetWindow( WINDOW_NEXT );
     pImpl->m_pNoPrettyPrinting->SetZOrder( pNewNext, WINDOW_ZORDER_BEFOR );
     pNewPrev->SetZOrder( pImpl->m_pNoPrettyPrinting, WINDOW_ZORDER_BEFOR );
-
+*/
     Link aLink = LINK( this, SfxSaveTabPage, AutoClickHdl_Impl );
     aAutoSaveBtn.SetClickHdl( aLink );
     aAutoSaveEdit.SetMaxTextLen( 2 );
@@ -459,14 +459,14 @@ BOOL SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
                                aAutoSaveBtn.IsChecked() ) );
         bModified |= TRUE;
     }
-
+/*
     if ( aAutoSavePromptBtn.IsChecked() != aAutoSavePromptBtn.GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_AUTOSAVEPROMPT ),
                                aAutoSavePromptBtn.IsChecked() ) );
         bModified |= TRUE;
     }
-
+*/
     if ( aAutoSaveEdit.GetText() != aAutoSaveEdit.GetSavedValue() )
     {
         rSet.Put( SfxUInt16Item( GetWhich( SID_ATTR_AUTOSAVEMINUTE ),
@@ -611,7 +611,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& rSet )
     aAutoSaveBtn.Check(aSaveOpt.IsAutoSave());
 //    aAutoSaveBtn.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_AUTOSAVE));
 
-    aAutoSavePromptBtn.Check(aSaveOpt.IsAutoSavePrompt());
+//    aAutoSavePromptBtn.Check(aSaveOpt.IsAutoSavePrompt());
 //    aAutoSavePromptBtn.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_AUTOSAVEPROMPT));
 
     // the pretty printing
@@ -636,7 +636,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& rSet )
     pImpl->m_pNoPrettyPrinting->SaveValue();
     aAutoSaveBtn.SaveValue();
     aAutoSaveEdit.SaveValue();
-    aAutoSavePromptBtn.SaveValue();
+//  aAutoSavePromptBtn.SaveValue();
 
     aRelFsysBtn.SaveValue();
     aRelInetBtn.SaveValue();
@@ -652,14 +652,14 @@ IMPL_LINK( SfxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
         {
             aAutoSaveEdit.Enable();
             aMinuteText.Enable();
-            aAutoSavePromptBtn.Enable();
+//          aAutoSavePromptBtn.Enable();
             aAutoSaveEdit.GrabFocus();
         }
         else
         {
             aAutoSaveEdit.Disable();
             aMinuteText.Disable();
-            aAutoSavePromptBtn.Disable();
+//          aAutoSavePromptBtn.Disable();
         }
     }
     return 0;
