@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-11 16:06:22 $
+ *  last change: $Author: obo $ $Date: 2005-01-11 11:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,18 +405,22 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
           case AIU_FULLWIDTH_JA:
               table = table_AIUFullWidth_ja_JP;
               tableSize = sizeof(table_AIUFullWidth_ja_JP) / sizeof(sal_Unicode);
+              recycleSymbol = sal_True;
               break;
           case AIU_HALFWIDTH_JA:
               table = table_AIUHalfWidth_ja_JP;
               tableSize = sizeof(table_AIUHalfWidth_ja_JP) / sizeof(sal_Unicode);
+              recycleSymbol = sal_True;
               break;
           case IROHA_FULLWIDTH_JA:
               table = table_IROHAFullWidth_ja_JP;
               tableSize = sizeof(table_IROHAFullWidth_ja_JP) / sizeof(sal_Unicode);
+              recycleSymbol = sal_True;
               break;
           case IROHA_HALFWIDTH_JA:
               table = table_IROHAHalfWidth_ja_JP;
               tableSize = sizeof(table_IROHAHalfWidth_ja_JP) / sizeof(sal_Unicode);
+              recycleSymbol = sal_True;
               break;
           case HANGUL_JAMO_KO:
               table = table_HangulJamo_ko;
