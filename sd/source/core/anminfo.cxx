@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anminfo.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:25 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:52:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ using namespace ::com::sun::star;
 
 SdAnimationInfo::SdAnimationInfo(SdDrawDocument* pTheDoc)
                : SdrObjUserData(SdUDInventor, SD_ANIMATIONINFO_ID, 0),
-                 pPolygon                   (NULL),
+//BFS02              pPolygon                   (NULL),
                  eEffect                    (presentation::AnimationEffect_NONE),
                  eTextEffect                (presentation::AnimationEffect_NONE),
                  eSpeed                     (presentation::AnimationSpeed_SLOW),
@@ -106,7 +106,7 @@ SdAnimationInfo::SdAnimationInfo(SdDrawDocument* pTheDoc)
                  bDimHide                   (FALSE),
                  bSoundOn                   (FALSE),
                  bPlayFull                  (FALSE),
-                 pPathSuro                  (NULL),
+//BFS02              pPathSuro                  (NULL),
                  pPathObj                   (NULL),
                  eClickAction               (presentation::ClickAction_NONE),
                  eSecondEffect              (presentation::AnimationEffect_NONE),
@@ -135,7 +135,7 @@ SdAnimationInfo::SdAnimationInfo(SdDrawDocument* pTheDoc)
 
 SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo)
                : SdrObjUserData             (rAnmInfo),
-                 pPolygon                   (NULL),
+//BFS02              pPolygon                   (NULL),
                  aStart                     (rAnmInfo.aStart),
                  aEnd                       (rAnmInfo.aEnd),
                  eEffect                    (rAnmInfo.eEffect),
@@ -151,7 +151,7 @@ SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo)
                  bSoundOn                   (rAnmInfo.bSoundOn),
                  bPlayFull                  (rAnmInfo.bPlayFull),
                  pPathObj                   (NULL),
-                 pPathSuro                  (NULL),
+//BFS02              pPathSuro                  (NULL),
                  eClickAction               (rAnmInfo.eClickAction),
                  eSecondEffect              (rAnmInfo.eSecondEffect),
                  eSecondSpeed               (rAnmInfo.eSecondSpeed),
@@ -167,8 +167,8 @@ SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo)
                  bDimmed                    (rAnmInfo.bDimmed),
                  nPresOrder                 (LIST_APPEND)
 {
-    if (pPolygon)
-        pPolygon = new Polygon(*(rAnmInfo.pPolygon));
+//BFS02 if (pPolygon)
+//BFS02     pPolygon = new Polygon(*(rAnmInfo.pPolygon));
 
     // kann nicht uebertragen werden
     if (eEffect == presentation::AnimationEffect_PATH)
@@ -183,8 +183,8 @@ SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo)
 
 SdAnimationInfo::~SdAnimationInfo()
 {
-    delete pPathSuro;
-    delete pPolygon;
+//BFS02 delete pPathSuro;
+//BFS02 delete pPolygon;
 }
 
 /*************************************************************************
@@ -205,82 +205,82 @@ SdrObjUserData* SdAnimationInfo::Clone(SdrObject* pObj) const
 |*
 \************************************************************************/
 
-void SdAnimationInfo::WriteData(SvStream& rOut)
-{
-    SdrObjUserData::WriteData(rOut);
-
-            // letzter Parameter ist die aktuelle Versionsnummer des Codes
-    SdIOCompat aIO(rOut, STREAM_WRITE, 9);
-
-    if(pPolygon)
-    {
-        rOut << (UINT16)1;  // es folgt ein Polygon
-        rOut << *pPolygon;
-    }
-    else
-        rOut << (UINT16)0;  // kein Polygon
-
-    rOut << aStart;
-    rOut << aEnd;
-    rOut << (UINT16)eEffect;
-    rOut << (UINT16)eSpeed;
-
-    rOut << (UINT16)bActive;
-    rOut << (UINT16)bDimPrevious;
-    rOut << (UINT16)bIsMovie;
-
-    rOut << aBlueScreen;
-    rOut << aDimColor;
-
-    // #90477# rtl_TextEncoding eSysEnc = ::GetStoreCharSet( gsl_getSystemTextEncoding() );
-    rtl_TextEncoding eSysEnc = GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rOut.GetVersion());
-
-    rOut << (INT16) eSysEnc;
-
-    rOut.WriteByteString( INetURLObject::AbsToRel( aSoundFile,
-                                                   INetURLObject::WAS_ENCODED,
-                                                   INetURLObject::DECODE_UNAMBIGUOUS), eSysEnc );
-
-    rOut << bSoundOn;
-    rOut << bPlayFull;
-
-
-    if (pPathObj && pPathObj->IsInserted())
-    {
-         rOut << (USHORT)1;
-         SdrObjSurrogate aSuro(pPathObj);
-         rOut << aSuro;
-    }
-    else
-        rOut << (USHORT)0;
-
-    rOut << (UINT16)eClickAction;
-    rOut << (UINT16)eSecondEffect;
-    rOut << (UINT16)eSecondSpeed;
-
-    if (eClickAction == presentation::ClickAction_DOCUMENT || eClickAction == presentation::ClickAction_PROGRAM  ||
-        eClickAction == presentation::ClickAction_VANISH   || eClickAction == presentation::ClickAction_SOUND)
-    {
-        rOut.WriteByteString( INetURLObject::AbsToRel( aBookmark,
-                                                       INetURLObject::WAS_ENCODED,
-                                                       INetURLObject::DECODE_UNAMBIGUOUS), eSysEnc );
-    }
-    else
-        rOut.WriteByteString( aBookmark, eSysEnc );
-
-    rOut.WriteByteString( INetURLObject::AbsToRel(aSecondSoundFile,
-                                                  INetURLObject::WAS_ENCODED,
-                                                  INetURLObject::DECODE_UNAMBIGUOUS), eSysEnc );
-    rOut << (UINT16)bInvisibleInPresentation;
-    rOut << (UINT16)nVerb;
-
-    rOut << bSecondSoundOn;
-    rOut << bSecondPlayFull;
-
-    rOut << bDimHide;
-    rOut << (UINT16)eTextEffect;
-    rOut << (UINT32)nPresOrder;
-}
+//BFS02void SdAnimationInfo::WriteData(SvStream& rOut)
+//BFS02{
+//BFS02 SdrObjUserData::WriteData(rOut);
+//BFS02
+//BFS02         // letzter Parameter ist die aktuelle Versionsnummer des Codes
+//BFS02 SdIOCompat aIO(rOut, STREAM_WRITE, 9);
+//BFS02
+//BFS02 if(pPolygon)
+//BFS02 {
+//BFS02     rOut << (UINT16)1;  // es folgt ein Polygon
+//BFS02     rOut << *pPolygon;
+//BFS02 }
+//BFS02 else
+//BFS02     rOut << (UINT16)0;  // kein Polygon
+//BFS02
+//BFS02 rOut << aStart;
+//BFS02 rOut << aEnd;
+//BFS02 rOut << (UINT16)eEffect;
+//BFS02 rOut << (UINT16)eSpeed;
+//BFS02
+//BFS02 rOut << (UINT16)bActive;
+//BFS02 rOut << (UINT16)bDimPrevious;
+//BFS02 rOut << (UINT16)bIsMovie;
+//BFS02
+//BFS02 rOut << aBlueScreen;
+//BFS02 rOut << aDimColor;
+//BFS02
+//BFS02 // #90477# rtl_TextEncoding eSysEnc = ::GetStoreCharSet( gsl_getSystemTextEncoding() );
+//BFS02 rtl_TextEncoding eSysEnc = GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rOut.GetVersion());
+//BFS02
+//BFS02 rOut << (INT16) eSysEnc;
+//BFS02
+//BFS02 rOut.WriteByteString( INetURLObject::AbsToRel( aSoundFile,
+//BFS02                                                INetURLObject::WAS_ENCODED,
+//BFS02                                                INetURLObject::DECODE_UNAMBIGUOUS), eSysEnc );
+//BFS02
+//BFS02 rOut << bSoundOn;
+//BFS02 rOut << bPlayFull;
+//BFS02
+//BFS02
+//BFS02 if (pPathObj && pPathObj->IsInserted())
+//BFS02 {
+//BFS02      rOut << (USHORT)1;
+//BFS02      SdrObjSurrogate aSuro(pPathObj);
+//BFS02      rOut << aSuro;
+//BFS02 }
+//BFS02 else
+//BFS02     rOut << (USHORT)0;
+//BFS02
+//BFS02 rOut << (UINT16)eClickAction;
+//BFS02 rOut << (UINT16)eSecondEffect;
+//BFS02 rOut << (UINT16)eSecondSpeed;
+//BFS02
+//BFS02 if (eClickAction == presentation::ClickAction_DOCUMENT || eClickAction == presentation::ClickAction_PROGRAM  ||
+//BFS02     eClickAction == presentation::ClickAction_VANISH   || eClickAction == presentation::ClickAction_SOUND)
+//BFS02 {
+//BFS02     rOut.WriteByteString( INetURLObject::AbsToRel( aBookmark,
+//BFS02                                                    INetURLObject::WAS_ENCODED,
+//BFS02                                                    INetURLObject::DECODE_UNAMBIGUOUS), eSysEnc );
+//BFS02 }
+//BFS02 else
+//BFS02     rOut.WriteByteString( aBookmark, eSysEnc );
+//BFS02
+//BFS02 rOut.WriteByteString( INetURLObject::AbsToRel(aSecondSoundFile,
+//BFS02                                               INetURLObject::WAS_ENCODED,
+//BFS02                                               INetURLObject::DECODE_UNAMBIGUOUS), eSysEnc );
+//BFS02 rOut << (UINT16)bInvisibleInPresentation;
+//BFS02 rOut << (UINT16)nVerb;
+//BFS02
+//BFS02 rOut << bSecondSoundOn;
+//BFS02 rOut << bSecondPlayFull;
+//BFS02
+//BFS02 rOut << bDimHide;
+//BFS02 rOut << (UINT16)eTextEffect;
+//BFS02 rOut << (UINT32)nPresOrder;
+//BFS02}
 
 
 /*************************************************************************
@@ -289,132 +289,132 @@ void SdAnimationInfo::WriteData(SvStream& rOut)
 |*
 \************************************************************************/
 
-void SdAnimationInfo::ReadData(SvStream& rIn)
-{
-    SdrObjUserData::ReadData(rIn);
-
-    SdIOCompat  aIO(rIn, STREAM_READ);
-    UINT32      nTemp32;
-    UINT16      nTemp;
-
-    rIn >> nTemp;
-    if (nTemp)
-    {
-        pPolygon = new Polygon;
-        rIn >> *pPolygon;
-    }
-
-    rIn >> aStart;
-    rIn >> aEnd;
-
-    rIn >> nTemp; eEffect = (presentation::AnimationEffect)nTemp;
-    rIn >> nTemp; eSpeed = (presentation::AnimationSpeed)nTemp;
-
-    rIn >> nTemp; bActive = (BOOL)nTemp;
-    rIn >> nTemp; bDimPrevious = (BOOL)nTemp;
-    rIn >> nTemp; bIsMovie = (BOOL)nTemp;
-
-    rIn >> aBlueScreen;
-    rIn >> aDimColor;
-
-    rtl_TextEncoding eTextEnc;
-
-    // ab hier werden Daten der Versionen > 0 eingelesen
-    if (aIO.GetVersion() > 0)
-    {
-        INT16 nCharSet;
-        rIn >> nCharSet;
-
-        // #unicode# eTextEnc = (rtl_TextEncoding)nCharSet;
-        eTextEnc = (rtl_TextEncoding)GetSOLoadTextEncoding((rtl_TextEncoding)nCharSet, (sal_uInt16)rIn.GetVersion());
-
-        String aSoundFileRel;
-        rIn.ReadByteString( aSoundFileRel, eTextEnc );
-        if( aSoundFileRel.Len() )
-        {
-            INetURLObject aURLObj(::URIHelper::SmartRel2Abs( INetURLObject(INetURLObject::GetBaseURL()), aSoundFileRel, ::URIHelper::GetMaybeFileHdl(), false, false, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8, false, INetURLObject::FSYS_DETECT ));
-            aSoundFile = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
-        }
-    }
-
-    // ab hier werden Daten der Versionen > 1 eingelesen
-    if (aIO.GetVersion() > 1)
-        rIn >> bSoundOn;
-
-    // ab hier werden Daten der Versionen > 2 eingelesen
-    if (aIO.GetVersion() > 2)
-        rIn >> bPlayFull;
-
-    // ab hier werden Daten der Versionen > 3 eingelesen
-    if (aIO.GetVersion() > 3)
-    {
-        USHORT nFlag;
-        rIn >> nFlag;
-        if (nFlag == 1)
-        {
-            DBG_ASSERT(pDoc, "kein Doc");
-            pPathSuro = new SdrObjSurrogate(*pDoc, rIn);
-        }
-    }
-
-    // ab hier werden Daten der Versionen > 4 eingelesen
-    if (aIO.GetVersion() > 4)
-    {
-        rIn >> nTemp; eClickAction  = (presentation::ClickAction)nTemp;
-        rIn >> nTemp; eSecondEffect = (presentation::AnimationEffect)nTemp;
-        rIn >> nTemp; eSecondSpeed  = (presentation::AnimationSpeed)nTemp;
-
-        if (eClickAction == presentation::ClickAction_DOCUMENT ||
-            eClickAction == presentation::ClickAction_PROGRAM  ||
-            eClickAction == presentation::ClickAction_VANISH   ||
-            eClickAction == presentation::ClickAction_SOUND)
-        {
-            String aBookmarkRel;
-            rIn.ReadByteString( aBookmarkRel, eTextEnc );
-            INetURLObject aURLObj(::URIHelper::SmartRelToAbs(aBookmarkRel, FALSE,
-                                                             INetURLObject::WAS_ENCODED,
-                                                             INetURLObject::DECODE_UNAMBIGUOUS));
-            aBookmark = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
-        }
-        else
-            rIn.ReadByteString( aBookmark, eTextEnc );
-
-        String aSecondSoundFileRel;
-        rIn.ReadByteString( aSecondSoundFileRel, eTextEnc );
-        if( aSecondSoundFileRel.Len() )
-        {
-            INetURLObject aURLObj(::URIHelper::SmartRel2Abs( INetURLObject(INetURLObject::GetBaseURL()), aSecondSoundFileRel, ::URIHelper::GetMaybeFileHdl(), false, false, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8, false, INetURLObject::FSYS_DETECT ));
-            aSecondSoundFile = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
-        }
-
-        rIn >> nTemp; bInvisibleInPresentation = (BOOL)nTemp;
-        rIn >> nTemp; nVerb = (USHORT)nTemp;
-    }
-
-    // ab hier werden Daten der Versionen > 5 eingelesen
-    if (aIO.GetVersion() > 5)
-    {
-        rIn >> bSecondSoundOn;
-        rIn >> bSecondPlayFull;
-    }
-
-    // ab hier werden Daten der Versionen > 6 eingelesen
-    if (aIO.GetVersion() > 6)
-        rIn >> bDimHide;
-
-    // ab hier werden Daten der Versionen > 7 eingelesen
-    if (aIO.GetVersion() > 7)
-    {
-        rIn >> nTemp;
-        eTextEffect = (presentation::AnimationEffect)nTemp;
-    }
-
-    if (aIO.GetVersion() > 8)
-    {
-        rIn >> nTemp32;
-        nPresOrder = nTemp32;
-    }
-}
+//BFS02void SdAnimationInfo::ReadData(SvStream& rIn)
+//BFS02{
+//BFS02 SdrObjUserData::ReadData(rIn);
+//BFS02
+//BFS02 SdIOCompat  aIO(rIn, STREAM_READ);
+//BFS02 UINT32      nTemp32;
+//BFS02 UINT16      nTemp;
+//BFS02
+//BFS02 rIn >> nTemp;
+//BFS02 if (nTemp)
+//BFS02 {
+//BFS02     pPolygon = new Polygon;
+//BFS02     rIn >> *pPolygon;
+//BFS02 }
+//BFS02
+//BFS02 rIn >> aStart;
+//BFS02 rIn >> aEnd;
+//BFS02
+//BFS02 rIn >> nTemp; eEffect = (presentation::AnimationEffect)nTemp;
+//BFS02 rIn >> nTemp; eSpeed = (presentation::AnimationSpeed)nTemp;
+//BFS02
+//BFS02 rIn >> nTemp; bActive = (BOOL)nTemp;
+//BFS02 rIn >> nTemp; bDimPrevious = (BOOL)nTemp;
+//BFS02 rIn >> nTemp; bIsMovie = (BOOL)nTemp;
+//BFS02
+//BFS02 rIn >> aBlueScreen;
+//BFS02 rIn >> aDimColor;
+//BFS02
+//BFS02 rtl_TextEncoding eTextEnc;
+//BFS02
+//BFS02 // ab hier werden Daten der Versionen > 0 eingelesen
+//BFS02 if (aIO.GetVersion() > 0)
+//BFS02 {
+//BFS02     INT16 nCharSet;
+//BFS02     rIn >> nCharSet;
+//BFS02
+//BFS02     // #unicode# eTextEnc = (rtl_TextEncoding)nCharSet;
+//BFS02     eTextEnc = (rtl_TextEncoding)GetSOLoadTextEncoding((rtl_TextEncoding)nCharSet, (sal_uInt16)rIn.GetVersion());
+//BFS02
+//BFS02     String aSoundFileRel;
+//BFS02     rIn.ReadByteString( aSoundFileRel, eTextEnc );
+//BFS02     if( aSoundFileRel.Len() )
+//BFS02     {
+//BFS02         INetURLObject aURLObj(::URIHelper::SmartRel2Abs( INetURLObject(INetURLObject::GetBaseURL()), aSoundFileRel, ::URIHelper::GetMaybeFileHdl(), false, false, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8, false, INetURLObject::FSYS_DETECT ));
+//BFS02         aSoundFile = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
+//BFS02     }
+//BFS02 }
+//BFS02
+//BFS02 // ab hier werden Daten der Versionen > 1 eingelesen
+//BFS02 if (aIO.GetVersion() > 1)
+//BFS02     rIn >> bSoundOn;
+//BFS02
+//BFS02 // ab hier werden Daten der Versionen > 2 eingelesen
+//BFS02 if (aIO.GetVersion() > 2)
+//BFS02     rIn >> bPlayFull;
+//BFS02
+//BFS02 // ab hier werden Daten der Versionen > 3 eingelesen
+//BFS02 if (aIO.GetVersion() > 3)
+//BFS02 {
+//BFS02     USHORT nFlag;
+//BFS02     rIn >> nFlag;
+//BFS02     if (nFlag == 1)
+//BFS02     {
+//BFS02         DBG_ASSERT(pDoc, "kein Doc");
+//BFS02         pPathSuro = new SdrObjSurrogate(*pDoc, rIn);
+//BFS02     }
+//BFS02 }
+//BFS02
+//BFS02 // ab hier werden Daten der Versionen > 4 eingelesen
+//BFS02 if (aIO.GetVersion() > 4)
+//BFS02 {
+//BFS02     rIn >> nTemp; eClickAction  = (presentation::ClickAction)nTemp;
+//BFS02     rIn >> nTemp; eSecondEffect = (presentation::AnimationEffect)nTemp;
+//BFS02     rIn >> nTemp; eSecondSpeed  = (presentation::AnimationSpeed)nTemp;
+//BFS02
+//BFS02     if (eClickAction == presentation::ClickAction_DOCUMENT ||
+//BFS02         eClickAction == presentation::ClickAction_PROGRAM  ||
+//BFS02         eClickAction == presentation::ClickAction_VANISH   ||
+//BFS02         eClickAction == presentation::ClickAction_SOUND)
+//BFS02     {
+//BFS02         String aBookmarkRel;
+//BFS02         rIn.ReadByteString( aBookmarkRel, eTextEnc );
+//BFS02         INetURLObject aURLObj(::URIHelper::SmartRelToAbs(aBookmarkRel, FALSE,
+//BFS02                                                          INetURLObject::WAS_ENCODED,
+//BFS02                                                          INetURLObject::DECODE_UNAMBIGUOUS));
+//BFS02         aBookmark = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
+//BFS02     }
+//BFS02     else
+//BFS02         rIn.ReadByteString( aBookmark, eTextEnc );
+//BFS02
+//BFS02     String aSecondSoundFileRel;
+//BFS02     rIn.ReadByteString( aSecondSoundFileRel, eTextEnc );
+//BFS02     if( aSecondSoundFileRel.Len() )
+//BFS02     {
+//BFS02         INetURLObject aURLObj(::URIHelper::SmartRel2Abs( INetURLObject(INetURLObject::GetBaseURL()), aSecondSoundFileRel, ::URIHelper::GetMaybeFileHdl(), false, false, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8, false, INetURLObject::FSYS_DETECT ));
+//BFS02         aSecondSoundFile = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
+//BFS02     }
+//BFS02
+//BFS02     rIn >> nTemp; bInvisibleInPresentation = (BOOL)nTemp;
+//BFS02     rIn >> nTemp; nVerb = (USHORT)nTemp;
+//BFS02 }
+//BFS02
+//BFS02 // ab hier werden Daten der Versionen > 5 eingelesen
+//BFS02 if (aIO.GetVersion() > 5)
+//BFS02 {
+//BFS02     rIn >> bSecondSoundOn;
+//BFS02     rIn >> bSecondPlayFull;
+//BFS02 }
+//BFS02
+//BFS02 // ab hier werden Daten der Versionen > 6 eingelesen
+//BFS02 if (aIO.GetVersion() > 6)
+//BFS02     rIn >> bDimHide;
+//BFS02
+//BFS02 // ab hier werden Daten der Versionen > 7 eingelesen
+//BFS02 if (aIO.GetVersion() > 7)
+//BFS02 {
+//BFS02     rIn >> nTemp;
+//BFS02     eTextEffect = (presentation::AnimationEffect)nTemp;
+//BFS02 }
+//BFS02
+//BFS02 if (aIO.GetVersion() > 8)
+//BFS02 {
+//BFS02     rIn >> nTemp32;
+//BFS02     nPresOrder = nTemp32;
+//BFS02 }
+//BFS02}
 
 /*************************************************************************
 |*
@@ -480,14 +480,14 @@ void SdAnimationInfo::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, con
 |*
 \************************************************************************/
 
-void SdAnimationInfo::AfterRead()
-{
-    if (pPathSuro)
-    {
-        pPathObj = (SdrPathObj*)pPathSuro->GetObject();
-        DBG_ASSERT(pPathObj, "Surrogat kann nicht aufgeloest werden");
-    }
-}
+//BFS02void SdAnimationInfo::AfterRead()
+//BFS02{
+//BFS02 if (pPathSuro)
+//BFS02 {
+//BFS02     pPathObj = (SdrPathObj*)pPathSuro->GetObject();
+//BFS02     DBG_ASSERT(pPathObj, "Surrogat kann nicht aufgeloest werden");
+//BFS02 }
+//BFS02}
 
 
 
