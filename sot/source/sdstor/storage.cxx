@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-13 10:31:51 $
+ *  last change: $Author: mav $ $Date: 2001-12-10 09:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,6 +430,22 @@ BOOL SotStorageStream::GetProperty( const String& rName, ::com::sun::star::uno::
         return FALSE;
     }
 }
+
+::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SotStorageStream::GetXInputStream() const
+{
+    UCBStorageStream* pStg = PTR_CAST( UCBStorageStream, pOwnStm );
+    if ( pStg )
+    {
+        return pStg->GetXInputStream();
+    }
+    else
+    {
+        DBG_ERROR("Not implemented!")
+        return ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >();
+    }
+}
+
+
 
 /************** class SotStorage ******************************************
 *************************************************************************/

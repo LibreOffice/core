@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-27 11:05:54 $
+ *  last change: $Author: mav $ $Date: 2001-12-10 09:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,9 @@ TYPEINIT1( UCBStorage, BaseStorage );
 #define COMMIT_RESULT_NOTHING_TO_DO     1
 #define COMMIT_RESULT_SUCCESS           2
 
+#define min( x, y ) (( x < y ) ? x : y)
+#define max( x, y ) (( x > y ) ? x : y)
+
 sal_Int32 GetFormatId_Impl( SvGlobalName aName )
 {
     if ( aName == SvGlobalName( SO3_SW_CLASSID_60 ) )
@@ -207,6 +210,12 @@ SvGlobalName GetClassId_Impl( sal_Int32 nFormat )
 // All storage and streams are refcounted internally; outside of this classes they are only accessible through a handle
 // class, that uses the refcounted object as impl-class.
 
+enum RepresentModes {
+        nonset,
+        svstream,
+        xinputstream
+};
+
 class UCBStorageStream_Impl : public SvRefBase, public SvStream
 {
                                 ~UCBStorageStream_Impl();
@@ -228,11 +237,13 @@ public:
     String                      m_aOriginalContentType;
     ::ucb::Content*             m_pContent;     // the content that provides the data
     ::utl::TempFile*            m_pTempFile;    // temporary file for transacted mode
-    SvStream*                   m_pSource;      // the stream covering the original data of the content
-    SvStream*                   m_pStream;      // the stream worked on; for readonly streams it is the same as m_pSource,
-                                                // for read/write streams it's a copy
+    Reference<XInputStream>     m_rSource;      // the stream covering the original data of the content
+    SvStream*                   m_pStream;      // the stream worked on,
+                                                // for read/write streams it's created in case of writing
+    RepresentModes              m_nRepresentMode; // should it be used as XInputStream or as SvStream
     long                        m_nError;
     StreamMode                  m_nMode;        // open mode ( read/write/trunc/nocreate/sharing )
+    BOOL                        m_bSourceRead;  // Source still contains useful information
     BOOL                        m_bModified;    // only modified streams will be sent to the original content
     BOOL                        m_bCommited;    // sending the streams is coordinated by the root storage of the package
     BOOL                        m_bDirect;      // the storage and its streams are opened in direct mode; for UCBStorages
@@ -248,6 +259,21 @@ public:
     BaseStorage*                CreateStorage();// create an OLE Storage on the UCBStorageStream
     ULONG                       GetSize();
     void                        SwitchToWritable( StreamMode, BOOL );
+    BOOL                        CheckTmpStream();                          // create temporary stream if there is no
+    ULONG                       ReadSourceWriteTemporary( ULONG aLength ); // read aLength from source and copy to temporary,
+                                                                           // no seeking is produced
+    ULONG                       ReadSourceWriteTemporary();                // read source till the end and copy to temporary,
+                                                                           // no seeking is produced
+    ULONG                       CopySourceToTemporary( ULONG aLength ); // same as ReadSourceWriteToTemporary( aLength )
+                                                                        // but the writing is done at the end of temporary
+                                                                        // pointer position is not changed
+    ULONG                       CopySourceToTemporary();                // same as ReadSourceWriteToTemporary()
+                                                                        // but the writing is done at the end of temporary
+                                                                        // pointer position is not changed
+    Reference<XInputStream>     GetXInputStream();                      // return XInputStream, after that
+                                                                        // this class is close to be unusable
+                                                                        // since it can not read and write
+
     void                        SetError( long nError )
                                 {
                                     if ( !m_nError )
@@ -423,18 +449,19 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
     , m_bCommited( FALSE )
     , m_bIsOLEStorage( FALSE )
     , m_bDirect( bDirect )
+    , m_bSourceRead( FALSE )
     , m_aURL( rName )
     , m_nError( 0 )
     , m_nMode( nMode )
     , m_pContent( NULL )
-    , m_pSource( NULL )
     , m_pStream( NULL )
     , m_pTempFile( NULL )
+    , m_nRepresentMode( nonset )
 {
     // name is last segment in URL
     INetURLObject aObj( rName );
     m_aName = m_aOriginalName = aObj.GetLastName();
-    BOOL bFailure = FALSE;
+
     try
     {
         // create the content
@@ -455,129 +482,355 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
             }
         }
 
-        // open it using ( readonly, because writing is never done directly into the original stream )
-        m_pSource = ::utl::UcbStreamHelper::CreateStream( rName, STREAM_STD_READ );
+        // open it
+        m_rSource = m_pContent->openStream();
 
-        // create a temporary Stream for transacted access ( only neccessary for write access )
-        if ( nMode & STREAM_WRITE )
+
+        if( m_rSource.is() )
         {
-            m_pTempFile = new ::utl::TempFile;
-            m_pTempFile->EnableKillingFile( TRUE );
-            m_pStream = m_pTempFile->GetStream( nMode );
-
-            // copy the original stream into the temporary stream ( only transacted mode is supported )
-            if ( m_pSource->GetError() == ERRCODE_IO_NOTEXISTS || m_pSource->GetError() == ERRCODE_IO_CANTREAD ||
-                    m_pSource->GetError() == ERRCODE_IO_ACCESSDENIED )
-                m_pSource->ResetError();
-            else
-            {
-                *m_pSource >> *m_pStream;
-                m_pStream->Flush();
-            }
+            if( !( nMode & STREAM_TRUNC ) )
+                m_bSourceRead = TRUE;
         }
         else
-        {
-            // use original stream if only read access is desired
-            m_pStream = m_pSource;
-        }
-
-        m_pSource->Seek(0);
-        m_pStream->Seek(0);
-        SetError( m_pSource->GetError() );
+            SetError( SVSTREAM_CANNOT_MAKE );
     }
     catch ( ContentCreationException& )
     {
-        // content could not be created
-        bFailure = TRUE;
-        SetError( SVSTREAM_CANNOT_MAKE );
+        SetError( ERRCODE_IO_GENERAL );
     }
     catch ( RuntimeException& )
     {
-        // any other error - not specified
         SetError( ERRCODE_IO_GENERAL );
     }
-
-    if ( bFailure )
+    catch ( Exception& e )
     {
-        // creation of content failed, make sure that this does not lead to a crash
-        m_pTempFile = new ::utl::TempFile;
-        m_pTempFile->EnableKillingFile( TRUE );
-        m_pStream = m_pTempFile->GetStream( nMode );
-        m_pStream->Seek(0);
-        SetError( ERRCODE_IO_GENERAL );
     }
 }
 
 UCBStorageStream_Impl::~UCBStorageStream_Impl()
 {
+    if( m_rSource.is() )
+        m_rSource = Reference< XInputStream >();
+
     // deleting the TempFile also kills the stream m_pStream ( TempFile is owner )
-    delete m_pTempFile;
-    delete m_pSource;
-    delete m_pContent;
+    if( m_pTempFile )
+        delete m_pTempFile;
+
+    if( m_pContent )
+        delete m_pContent;
 }
 
 void UCBStorageStream_Impl::SwitchToWritable( StreamMode nMode, BOOL bDirect )
 {
+    DBG_ASSERT( m_rSource.is() || !m_bSourceRead, "Suspicious Mode!" );
+    m_nMode = nMode;
+/*
     if ( !(m_nMode & STREAM_WRITE) )
     {
+
         // actually this stream is opened readonly
-        if ( !m_pSource )
+        if ( !m_rSource.is() )
         {
-            // stream has been opened for writing earlier and m_pSource was released on last Commit - just get it
-            DBG_ASSERT( m_pTempFile && m_pStream, "Suspicious Mode!" );
-            m_pSource = ::utl::UcbStreamHelper::CreateStream( m_aURL, STREAM_STD_READ );
+            // stream has been opened for writing earlier and m_rSource was released on last Commit - just get it
+            DBG_ASSERT( m_pTempFile && m_pStream && !m_bSourceRead, "Suspicious Mode!" );
+            m_rSource = m_pContent->openStream();
+
+            if( m_rSource.is() )
+                SetError( SVSTREAM_CANNOT_MAKE );
         }
         else
         {
-            // stream has never been opened for writing - so make a copy of then stream
-            DBG_ASSERT( !m_pTempFile && m_pSource == m_pStream, "Suspicious Mode!" );
-            m_pTempFile = new ::utl::TempFile;
-            m_pTempFile->EnableKillingFile( TRUE );
-            m_pStream = m_pTempFile->GetStream( nMode );
+            // stream has never been opened for writing
+            DBG_ASSERT( !m_pTempFile && !m_pStream, "Suspicious Mode!" );
+        }
+    }
+    m_nMode = nMode;
+*/
+}
 
-            // copy the original stream into the temporary stream ( only transacted mode is supported )
-            if ( m_pSource->GetError() == ERRCODE_IO_NOTEXISTS || m_pSource->GetError() == ERRCODE_IO_CANTREAD ||
-                    m_pSource->GetError() == ERRCODE_IO_ACCESSDENIED )
-                m_pSource->ResetError();
-            else
-            {
-                m_pSource->Seek(0);
-                *m_pSource >> *m_pStream;
-                m_pStream->Flush();
-            }
+Reference<XInputStream> UCBStorageStream_Impl::GetXInputStream()
+{
+    if( m_nRepresentMode != nonset )
+    {
+        DBG_ERROR( "Misuse of the XInputstream!" );
+        SetError( ERRCODE_IO_ACCESSDENIED );
+        return Reference<XInputStream>();
+    }
+
+    m_nRepresentMode = xinputstream;
+    return m_rSource;
+}
+
+
+
+BOOL UCBStorageStream_Impl::CheckTmpStream()
+{
+    if( m_nRepresentMode == xinputstream )
+    {
+        DBG_ERROR( "XInputStream misuse!" );
+        SetError( ERRCODE_IO_ACCESSDENIED );
+        return FALSE;
+    }
+
+    if( !m_pStream )
+    {
+        // no temporary stream was created
+        // create one
+        DBG_ASSERT( !m_pTempFile, "Suspicious temporary stream creation!" );
+
+        m_nRepresentMode = svstream; // can not be used as XInputStream
+
+           m_pTempFile = new ::utl::TempFile;
+           m_pTempFile->EnableKillingFile( TRUE );
+           m_pStream = m_pTempFile->GetStream( m_nMode | STREAM_WRITE );
+
+        if( !m_pStream )
+        {
+            DBG_ERROR( "Suspicious temporary stream creation!" );
+            SetError( SVSTREAM_CANNOT_MAKE );
+            return FALSE;
         }
     }
 
-    m_nMode = nMode;
+    return sal_True;
+}
+
+ULONG UCBStorageStream_Impl::ReadSourceWriteTemporary()
+{
+    // read source stream till the end and copy all the data to
+    // the current position of the temporary stream
+
+    ULONG aResult = 0;
+
+    if( m_bSourceRead )
+    {
+        Sequence<sal_Int8> aData(32000);
+
+        try
+        {
+            ULONG aReaded;
+            do
+            {
+                aReaded = m_rSource->readBytes( aData, 32000 );
+                aResult += m_pStream->Write( aData.getArray(), aReaded );
+            } while( aReaded == 32000 );
+        }
+#ifdef DEBUG
+        catch( Exception & e )
+        {
+            DBG_ASSERT( FALSE, e.Message.getStr() );
+#else
+        catch( Exception & )
+        {
+#endif
+        }
+    }
+
+    m_bSourceRead = FALSE;
+
+    return aResult;
+
+}
+
+ULONG UCBStorageStream_Impl::ReadSourceWriteTemporary( ULONG aLength )
+{
+    // read aLength bite from the source stream and copy them to the current
+    // position of the temporary stream
+
+    ULONG aResult = 0;
+
+    if( m_bSourceRead )
+    {
+        Sequence<sal_Int8> aData(32000);
+
+        try
+        {
+
+            ULONG aReaded = 32000;
+
+            for( ULONG pInd = 0; pInd < aLength && aReaded == 32000 ; pInd += 32000 )
+            {
+                ULONG aToCopy = min( aLength - pInd, 32000 );
+                aReaded = m_rSource->readBytes( aData, aToCopy );
+                aResult += m_pStream->Write( aData.getArray(), aReaded );
+            }
+
+            if( aResult < aLength )
+                m_bSourceRead = FALSE;
+        }
+#ifdef DEBUG
+        catch( Exception & e )
+        {
+            DBG_ASSERT( FALSE, e.Message.getStr() );
+#else
+        catch( Exception & )
+        {
+#endif
+        }
+    }
+
+    return aResult;
+}
+
+ULONG UCBStorageStream_Impl::CopySourceToTemporary()
+{
+    // current position of the temporary stream is not changed
+    ULONG aResult = 0;
+
+    if( m_bSourceRead )
+    {
+        ULONG aPos = m_pStream->Tell();
+        m_pStream->Seek( STREAM_SEEK_TO_END );
+        aResult = ReadSourceWriteTemporary();
+        m_pStream->Seek( aPos );
+    }
+
+    return aResult;
+
+}
+
+ULONG UCBStorageStream_Impl::CopySourceToTemporary( ULONG aLength )
+{
+    // current position of the temporary stream is not changed
+    ULONG aResult = 0;
+
+    if( m_bSourceRead )
+    {
+        ULONG aPos = m_pStream->Tell();
+        m_pStream->Seek( STREAM_SEEK_TO_END );
+        aResult = ReadSourceWriteTemporary( aLength );
+        m_pStream->Seek( aPos );
+    }
+
+    return aResult;
+
 }
 
 // UCBStorageStream_Impl must have a SvStream interface, because it then can be used as underlying stream
 // of an OLEStorage; so every write access caused by storage operations marks the UCBStorageStream as modified
 ULONG UCBStorageStream_Impl::GetData( void* pData, ULONG nSize )
 {
-    return m_pStream->Read( pData, nSize );
+    ULONG aResult = 0;
+
+    DBG_ASSERT( m_rSource.is() || !m_bSourceRead, "Suspicious GetData!" );
+
+    if( !CheckTmpStream() )
+        return 0;
+
+    ULONG aStartPos = m_pStream->Tell();
+
+    // read data that is in temporary stream
+    aResult = m_pStream->Read( pData, nSize );
+    if( m_bSourceRead && aResult < nSize )
+    {
+        // read the tail of the data from original stream
+        // copy this tail to the temporary stream
+
+        ULONG aToRead = nSize - aResult;
+        pData = (void*)( (char*)pData + aResult );
+
+        try
+        {
+            Sequence<sal_Int8> aData( aToRead );
+            ULONG aReaded = m_rSource->readBytes( aData, aToRead );
+            aResult += m_pStream->Write( (void*)aData.getArray(), aReaded );
+            int p = m_pStream->GetError();
+            memcpy( pData, aData.getArray(), aReaded );
+        }
+#ifdef DEBUG
+        catch( Exception & e )
+        {
+            DBG_ASSERT( FALSE, e.Message.getStr() );
+#else
+        catch( Exception & )
+        {
+#endif
+        }
+
+        if( aResult < nSize )
+            m_bSourceRead = FALSE;
+    }
+
+    return aResult;
 }
 
 ULONG UCBStorageStream_Impl::PutData( const void* pData, ULONG nSize )
 {
-    m_bModified = TRUE;
-    return m_pStream->Write( pData, nSize );
+    DBG_ASSERT( m_rSource.is() || !m_bSourceRead, "Suspicious PutData!" );
+
+    if ( !(m_nMode & STREAM_WRITE) )
+    {
+        SetError( ERRCODE_IO_ACCESSDENIED );
+        return 0; // ?mav?
+    }
+
+    if( !nSize || !CheckTmpStream() )
+        return 0;
+
+    ULONG aResult = m_pStream->Write( pData, nSize );
+
+    m_bModified = aResult > 0;
+
+    return aResult;
+
 }
 
 ULONG UCBStorageStream_Impl::SeekPos( ULONG nPos )
 {
-    return m_pStream->Seek( nPos );
+    DBG_ASSERT( m_rSource.is() || !m_bSourceRead, "Suspicious SeekPos!" );
+
+    if( !CheckTmpStream() )
+        return 0;
+
+    ULONG aResult = m_pStream->Seek( nPos );
+
+    if( m_bSourceRead && aResult < nPos )
+    {
+        ULONG aCopied = ReadSourceWriteTemporary( nPos - aResult );
+        if( aCopied < nPos - aResult )
+            m_bSourceRead = FALSE;
+    }
+
+    return aResult;
 }
 
 void  UCBStorageStream_Impl::SetSize( ULONG nSize )
 {
+    DBG_ASSERT( m_rSource.is() || !m_bSourceRead, "Suspicious SetSize!" );
+
+    if ( !(m_nMode & STREAM_WRITE) )
+    {
+        SetError( ERRCODE_IO_ACCESSDENIED );
+        return;
+    }
+
+    if( !CheckTmpStream() )
+        return;
+
+
     m_bModified = TRUE;
+
+    if( m_bSourceRead )
+    {
+        ULONG aPos = m_pStream->Tell();
+        m_pStream->Seek( STREAM_SEEK_TO_END );
+        if( m_pStream->Tell() < nSize )
+            ReadSourceWriteTemporary( nSize - m_pStream->Tell() );
+        m_pStream->Seek( aPos );
+    }
+
     m_pStream->SetStreamSize( nSize );
+    m_bSourceRead = FALSE;
 }
 
 void  UCBStorageStream_Impl::FlushData()
 {
-    m_pStream->Flush();
+    if( m_pStream )
+    {
+        CopySourceToTemporary();
+        m_pStream->Flush();
+    }
+
     m_bCommited = TRUE;
 }
 
@@ -592,8 +845,10 @@ ULONG UCBStorageStream_Impl::GetSize()
 {
     ULONG nPos = m_pStream->Tell();
     m_pStream->Seek( STREAM_SEEK_TO_END );
+    ReadSourceWriteTemporary();
     ULONG nRet = m_pStream->Tell();
     m_pStream->Seek( nPos );
+
     return nRet;
 }
 
@@ -610,7 +865,7 @@ sal_Int16 UCBStorageStream_Impl::Commit()
 {
     // send stream to the original content
     // the  parent storage is responsible for the correct handling of deleted contents
-    DBG_ASSERT( m_pStream, "Suspicious Commit!" );
+    DBG_ASSERT( m_pStream || !m_bSourceRead, "Suspicious Commit!" );
     if ( m_bCommited || m_bIsOLEStorage || m_bDirect )
     {
         // modified streams with OLEStorages on it have autocommit; it is assumed that the OLEStorage
@@ -619,11 +874,14 @@ sal_Int16 UCBStorageStream_Impl::Commit()
         {
             try
             {
-                // First a "HandsOff" : release object before commiting new data to it
-                DELETEZ( m_pSource );
+                CopySourceToTemporary();
 
-                // better create new LockBytes, because streams are not refcounted
+                // First a "HandsOff" : release object before commiting new data to it
+                m_rSource = Reference<XInputStream>();
+
+                // better create new LockBytes, because streams are not refcounte
                 Reference < XInputStream > xStream = new ::utl::OInputStreamHelper( new SvLockBytes( m_pStream ), 8192 );
+
                 Any aAny;
                 InsertCommandArgument aArg;
                 aArg.Data = xStream;
@@ -635,6 +893,13 @@ sal_Int16 UCBStorageStream_Impl::Commit()
                 INetURLObject aObj( m_aURL );
                 aObj.SetName( m_aName );
                 m_aURL = aObj.GetMainURL();
+
+                m_bSourceRead = FALSE;
+                m_nMode &= ~STREAM_TRUNC;
+                m_rSource = m_pContent->openStream();
+
+                if( m_rSource.is() )
+                    SetError( SVSTREAM_CANNOT_MAKE );
             }
             catch ( CommandAbortedException& )
             {
@@ -666,7 +931,7 @@ sal_Int16 UCBStorageStream_Impl::Commit()
 BOOL UCBStorageStream_Impl::Revert()
 {
     // if an OLEStorage is created on this stream, no "revert" is neccessary because OLEStorages do nothing on "Revert" !
-    DBG_ASSERT( m_pStream && m_pSource != m_pStream, "Suspicious Revert!" );
+    DBG_ASSERT( m_pStream || !m_bSourceRead, "Suspicious Revert!" );
     if ( m_bCommited )
     {
         DBG_ERROR("Revert while commit is in progress!" )
@@ -676,16 +941,35 @@ BOOL UCBStorageStream_Impl::Revert()
     // discard all changes, get the original stream data
     if ( m_bModified )
     {
-        if ( !m_pSource )
-            // SourceStream was released on last Commit
-            m_pSource = ::utl::UcbStreamHelper::CreateStream( m_aURL, STREAM_STD_READ );
-        else
-            m_pSource->Seek(0);
+        m_rSource = Reference<XInputStream>();
+        m_bSourceRead = FALSE;
+        try
+        {
+            m_rSource = m_pContent->openStream();
 
-        m_pStream->Seek(0);
-        *m_pSource >> *m_pStream;
-        m_pStream->Seek(0);
-        m_pSource->Seek(0);
+            if( m_rSource.is() )
+            {
+                if( !( m_nMode & STREAM_TRUNC ) )
+                    m_bSourceRead = TRUE;
+            }
+            else
+                SetError( SVSTREAM_CANNOT_MAKE );
+        }
+        catch ( ContentCreationException& )
+        {
+            SetError( ERRCODE_IO_GENERAL );
+        }
+        catch ( RuntimeException& )
+        {
+            SetError( ERRCODE_IO_GENERAL );
+        }
+        catch ( Exception& e )
+        {
+        }
+
+        CheckTmpStream();
+        m_pStream->SetStreamSize(0);
+        m_bSourceRead = TRUE;
         m_bModified = FALSE;
     }
 
@@ -699,7 +983,17 @@ BOOL UCBStorageStream_Impl::Clear()
     BOOL bRet = ( m_pAntiImpl == NULL );
     DBG_ASSERT( bRet, "Removing used stream!" );
     if( bRet )
-        DELETEZ( m_pSource );
+    {
+        if( m_bSourceRead )
+        {
+            m_pStream->Seek( STREAM_SEEK_TO_END );
+            ReadSourceWriteTemporary();
+            m_pStream->Seek(0);
+        }
+
+        m_rSource = Reference< XInputStream >();
+    }
+
     return bRet;
 }
 
@@ -731,7 +1025,8 @@ UCBStorageStream::~UCBStorageStream()
 
 ULONG UCBStorageStream::Read( void * pData, ULONG nSize )
 {
-    return pImp->m_pStream->Read( pData, nSize );
+    //return pImp->m_pStream->Read( pData, nSize );
+    return pImp->GetData( pData, nSize );
 }
 
 ULONG UCBStorageStream::Write( const void* pData, ULONG nSize )
@@ -745,16 +1040,20 @@ ULONG UCBStorageStream::Write( const void* pData, ULONG nSize )
     }
 */
     pImp->m_bModified = TRUE;
-    return pImp->m_pStream->Write( pData, nSize );
+    //return pImp->m_pStream->Write( pData, nSize );
+    return pImp->PutData( pData, nSize );
 }
 
 ULONG UCBStorageStream::Seek( ULONG nPos )
 {
-    return pImp->m_pStream->Seek( nPos );
+    //return pImp->m_pStream->Seek( nPos );
+    return pImp->Seek( nPos );
 }
 
 ULONG UCBStorageStream::Tell()
 {
+    if( !pImp->CheckTmpStream() )
+        return 0;
     return pImp->m_pStream->Tell();
 }
 
@@ -774,7 +1073,9 @@ BOOL UCBStorageStream::SetSize( ULONG nNewSize )
     }
 */
     pImp->m_bModified = TRUE;
-    return pImp->m_pStream->SetStreamSize( nNewSize );
+    //return pImp->m_pStream->SetStreamSize( nNewSize );
+    pImp->SetSize( nNewSize );
+    return !pImp->GetError();
 }
 
 BOOL UCBStorageStream::Validate( BOOL bWrite ) const
@@ -812,7 +1113,16 @@ BOOL UCBStorageStream::ValidateMode( StreamMode m ) const
 
 const SvStream* UCBStorageStream::GetSvStream() const
 {
-    return pImp->m_pStream;
+    if( !pImp->CheckTmpStream() )
+        return NULL;
+
+    pImp->CopySourceToTemporary();
+    return pImp->m_pStream; // should not live longer then pImp!!!
+}
+
+Reference< XInputStream > UCBStorageStream::GetXInputStream() const
+{
+    return pImp->GetXInputStream();
 }
 
 BOOL  UCBStorageStream::Equals( const BaseStorageStream& rStream ) const
@@ -835,6 +1145,9 @@ BOOL UCBStorageStream::Revert()
 
 BOOL UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
 {
+    if( !pImp->CheckTmpStream() )
+        return FALSE;
+
     UCBStorageStream* pStg = PTR_CAST( UCBStorageStream, pDestStm );
     if ( pStg )
         pStg->pImp->m_aContentType = pImp->m_aContentType;
@@ -1461,14 +1774,14 @@ BOOL UCBStorage_Impl::Insert( ::ucb::Content *pContent )
     BOOL bRet = FALSE;
     Reference< XContentCreator > xCreator = Reference< XContentCreator >( pContent->get(), UNO_QUERY );
     if ( !xCreator.is() )
-        return sal_False;
+        return FALSE;
 
     try
     {
         Sequence< ContentInfo > aInfo = xCreator->queryCreatableContentsInfo();
         sal_Int32 nCount = aInfo.getLength();
         if ( nCount == 0 )
-            return sal_False;
+            return FALSE;
 
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {

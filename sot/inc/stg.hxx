@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-13 10:28:28 $
+ *  last change: $Author: mav $ $Date: 2001-12-10 09:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,14 @@
 
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
+
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_H_
+#include <com/sun/star/io/XInputStream.hpp>
 #endif
 
 #ifndef _RTTI_HXX //autogen
@@ -304,6 +312,9 @@ public:
     virtual BOOL                Equals( const BaseStorageStream& rStream ) const;
     BOOL                        SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
     BOOL                        GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+                                GetXInputStream() const;
 };
 
 namespace ucb
@@ -376,6 +387,7 @@ public:
     virtual BOOL                Equals( const BaseStorage& rStream ) const;
     BOOL                        SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
     BOOL                        GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
+                                GetXInputStream();
 
 #if _SOLAR__PRIVATE
     UCBStorageElement_Impl*     FindElement_Impl( const String& rName ) const;
