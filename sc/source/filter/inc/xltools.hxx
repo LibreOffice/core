@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:20:56 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,33 +265,12 @@ public:
         @param pnNextChar  If not 0, the index of the char after the evaluated substring will be returned here. */
     static bool                 IsCondFormatStyleName( const String& rStyleName, xub_StrLen* pnNextChar = NULL );
 
-// form control tag for linked range address ----------------------------------
-
-    /** Returns the tag for a form control that is linked to the document.
-        @descr  This is used to restore a linked ranges on export of form controls.
-        @param rCellLink  The address of the cell linked with the form control.
-        @param pSrcRange  The source data cell range linked with the form control (i.e. list box). */
-    static String               GetCtrlLinkTag(
-                                    ScDocument& rDoc, const ScAddress* pCellLink, const ScRange* pSrcRange );
-    /** Returns true, if the passed string contains the address of a linked cell of a form control.
-        @param rCellLink  (out-param) The cell address is returned here, if found.
-        @param rnRefFlags  (out-param) The reference flags are returned here (SCA_*, see global.hxx). */
-    static bool                 GetCtrlCellLinkFromTag(
-                                    ScAddress& rCellLink, ScDocument& rDoc, const String& rTag );
-    /** Returns true, if the passed string contains the address of a source data range of a form control.
-        @param rSrcRange  (out-param) The range address is returned here, if found.
-        @param rnRefFlags  (out-param) The reference flags are returned here (SCA_*, see global.hxx). */
-    static bool                 GetCtrlSrcRangeFromTag(
-                                    ScRange& rSrcRange, ScDocument& rDoc, const String& rTag );
-
 // ----------------------------------------------------------------------------
 
 private:
     static const String         maDefNamePrefix;        /// Prefix for built-in defined names.
     static const String         maStyleNamePrefix;      /// Prefix for built-in cell style names.
     static const String         maCFStyleNamePrefix;    /// Prefix for cond. formatting style names.
-    static const String         maCtrlCellLinkPrefix;   /// Prefix for form controls tag "Linked cell".
-    static const String         maCtrlSrcRangePrefix;   /// Prefix for form controls tag "Source range".
 };
 
 
