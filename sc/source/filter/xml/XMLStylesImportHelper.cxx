@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 12:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange, const rtl::OUStrin
     ScMyCurrencyStylesSet::iterator aItr = pCurrencyList->find(aStyle);
     if (aItr == pCurrencyList->end())
     {
-        std::pair<ScMyCurrencyStylesSet::iterator, sal_Bool> aPair = pCurrencyList->insert(aStyle);
+        std::pair<ScMyCurrencyStylesSet::iterator, bool> aPair = pCurrencyList->insert(aStyle);
         if (aPair.second)
         {
             aItr = aPair.first;
@@ -297,7 +297,7 @@ ScMyStylesSet::iterator ScMyStylesImportHelper::GetIterator(const rtl::OUString&
     ScMyStylesSet::iterator aItr = aCellStyles.find(aStyle);
     if (aItr == aCellStyles.end())
     {
-        std::pair<ScMyStylesSet::iterator, sal_Bool> aPair = aCellStyles.insert(aStyle);
+        std::pair<ScMyStylesSet::iterator, bool> aPair = aCellStyles.insert(aStyle);
         if (aPair.second)
             aItr = aPair.first;
         else
