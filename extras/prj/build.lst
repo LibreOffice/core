@@ -31,8 +31,3 @@ er      extras\source\templates\wizard\web\lang                 nmake   -       
 er	extras\source\wordbook					nmake	-	all	er_wrdb NULL
 er	extras\source\wordbook\lang				nmake	-	all	er_wrdbl NULL
 er	extras\unx\source\bitmaps				nmake	-	all	er_bmpu NULL
-er      extras\unx\source\kde\applnk                            nmake   -       all     er_kdau NULL
-er	extras\unx\source\kde\icons				nmake	-	all	er_kdiu NULL
-er      extras\unx\source\kde\icons\mini                        nmake   -       all     er_kdimu NULL
-er      extras\unx\source\kde\mimelnk\application               nmake   -       all     er_kdmau NULL
-er      extras\unx\source\kde\mimelnk\text                      nmake   -       all     er_kdmtu NULL
