@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-08 10:48:20 $
+ *  last change: $Author: fme $ $Date: 2002-03-19 08:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
            rInf.GetTxtFrm()->GetTxtNode()->GetLang( rInf.GetIdx(), 1, nScript ) ) )
     {
         const SwLinePortion* pPor = rPor.GetPortion();
-        if ( pPor->IsKernPortion() )
+        if ( pPor && pPor->IsKernPortion() )
             pPor = pPor->GetPortion();
 
         nCnt += nEnd - nPos;
@@ -189,7 +189,7 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
     {
         BYTE nScript = 0;
         const SwLinePortion* pPor = rPor.GetPortion();
-        if ( pPor->IsKernPortion() )
+        if ( pPor && pPor->IsKernPortion() )
             pPor = pPor->GetPortion();
 
         if ( ! pBreakIt->xBreak.is() || ! pPor || pPor->InFixMargGrp() )
