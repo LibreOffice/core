@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_draw.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:12:41 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 18:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,12 +86,14 @@ File gid_File_Exe_Sdraw
 End
 
 // new user interface configuration files
+/*
 File gid_File_Share_Config_Sofficecfg_Draw_Menubar_Xml
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Share_Config_Sofficecfg_Sdraw_Menubar;
     Name = "/uiconfig/sdraw/menubar/menubar.xml";
 End
+*/
 
 File gid_File_Registry_Spool_Oo_Common_Draw_Xcu
     TXT_FILE_BODY;
@@ -105,5 +107,19 @@ File gid_File_Registry_Spool_Oo_Setup_Draw_Xcu
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Spool;
     Name = "/registry/spool/org.openoffice.Setup-draw.xcu";
+End
+
+File gid_File_Oo_Office_Ui_Drawwindowstate_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/DrawWindowState.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Drawwindowstate_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+    Name = "/registry/data/org/openoffice/Office/UI/DrawWindowState.xcu";
 End
 
