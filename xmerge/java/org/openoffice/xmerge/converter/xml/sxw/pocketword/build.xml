@@ -143,6 +143,8 @@
                         <include name="${package}/PluginFactoryImpl.java"/>
                         <include name="${package}/PocketWordConstants.java"/>
                         <include name="${package}/PocketWordDocument.java"/>
+            <include name="${package}/DocumentMergerImpl.java"/>
+            <include name="${package}/ConverterCapabilitiesImpl.java"/>
         </javac>
     </target>
 
