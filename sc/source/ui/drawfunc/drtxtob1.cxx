@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2000-12-07 10:03:57 $
+ *  last change: $Author: nn $ $Date: 2001-04-23 16:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include <so3/pastedlg.hxx>
 #include <sot/exchange.hxx>
 #include <vcl/msgbox.hxx>
+#include <svtools/transfer.hxx>
 
 #include "sc.hrc"
 #include "drtxtob.hxx"
@@ -153,45 +154,24 @@ BOOL ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
 
 void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest &rReq )
 {
-    SvDataObjectRef pClipObj = SvDataObject::PasteClipboard();
-    if (pClipObj.Is())
-    {
-        SdrView* pView = pViewData->GetScDrawView();
-        OutlinerView* pOutView = pView->GetTextEditOutlinerView();
-        SvPasteObjectDialog* pDlg = new SvPasteObjectDialog;
+    SdrView* pView = pViewData->GetScDrawView();
+    OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+    SvPasteObjectDialog* pDlg = new SvPasteObjectDialog;
 
-        pDlg->Insert( FORMAT_STRING,        ScResId( SCSTR_CLIP_STRING ) );
-        pDlg->Insert( FORMAT_RTF,           ScResId( SCSTR_CLIP_RTF ) );
+    pDlg->Insert( SOT_FORMAT_STRING, ScResId( SCSTR_CLIP_STRING ) );
+    pDlg->Insert( SOT_FORMAT_RTF,    ScResId( SCSTR_CLIP_RTF ) );
 
-        ULONG nFormat = pDlg->Execute( pViewData->GetDialogParent(), pClipObj );
+    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
 
-        //! test if outliner view is still valid
+    ULONG nFormat = pDlg->Execute( pViewData->GetDialogParent(), aDataHelper.GetTransferable() );
 
-        if (nFormat == FORMAT_STRING)
-            pOutView->Paste();
-        else
-            pOutView->PasteSpecial();
-        delete pDlg;
-    }
+    //! test if outliner view is still valid
+
+    if (nFormat == SOT_FORMAT_STRING)
+        pOutView->Paste();
+    else
+        pOutView->PasteSpecial();
+    delete pDlg;
 }
-
-BOOL ScDrawTextObjectBar::HasPasteContents()
-{
-    BOOL    bResult = FALSE;
-
-    SvDataObjectRef pClipObj = SvDataObject::PasteClipboard();
-    if (pClipObj.Is())
-    {
-        const SvDataTypeList& rTypeLst = pClipObj->GetTypeList();
-
-        if( rTypeLst.Get( FORMAT_STRING ) || rTypeLst.Get( FORMAT_RTF ) )
-            bResult = TRUE;
-    }
-
-    return bResult;
-}
-
-
-
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-26 19:26:30 $
+ *  last change: $Author: nn $ $Date: 2001-04-23 16:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,7 @@
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
 #include <svx/adjitem.hxx>
+#include <svx/clipfmtitem.hxx>
 #include <svx/cntritem.hxx>
 #include <svx/crsditem.hxx>
 #include <svx/editeng.hxx>
@@ -195,6 +196,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svtools/transfer.hxx>
 #include <svtools/whiter.hxx>
 #include <vcl/msgbox.hxx>
 
@@ -290,25 +292,29 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             pOutView->PasteSpecial();
             break;
 
-        case FID_PASTE_CONTENTS:
+        case SID_CLIPBOARD_FORMAT_ITEMS:
             {
-                ExecutePasteContents( rReq );
-/*
-                SvDataObjectRef pClipObj = SvDataObject::PasteClipboard();
-                if (pClipObj.Is())
+                ULONG nFormat = 0;
+                const SfxPoolItem* pItem;
+                if ( pReqArgs &&
+                     pReqArgs->GetItemState(nSlot, TRUE, &pItem) == SFX_ITEM_SET &&
+                     pItem->ISA(SfxUInt32Item) )
                 {
-                    SvPasteObjectDialog* pDlg = new SvPasteObjectDialog;
-                    pDlg->Insert( FORMAT_STRING,        ResId( SCSTR_CLIP_STRING ) );
-                    pDlg->Insert( FORMAT_RTF,           ResId( SCSTR_CLIP_RTF ) );
-                    ULONG nFormat = pDlg->Execute( Application::GetAppWindow(), pClipObj );
-                    if (nFormat == FORMAT_STRING)
+                    nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
+                }
+
+                if ( nFormat )
+                {
+                    if (nFormat == SOT_FORMAT_STRING)
                         pOutView->Paste();
                     else
                         pOutView->PasteSpecial();
-                    delete pDlg;
                 }
-*/
             }
+            break;
+
+        case FID_PASTE_CONTENTS:
+            ExecutePasteContents( rReq );
             break;
 
         case SID_SELECTALL:
@@ -473,18 +479,8 @@ void __EXPORT ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
         return;
     }
 
-    BOOL bPaste = HasPasteContents();
-/*
-    BOOL bPaste = FALSE;
-    SvDataObjectRef pClipObj = SvDataObject::PasteClipboard();
-    if (pClipObj.Is())
-    {
-        const SvDataTypeList& rTypeLst = pClipObj->GetTypeList();
-
-        if( rTypeLst.Get( FORMAT_STRING ) || rTypeLst.Get( FORMAT_RTF ) )
-            bPaste = TRUE;
-    }
-*/
+    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+    BOOL bPaste = ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) || aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
 
     SfxWhichIter aIter( rSet );
     USHORT nWhich = aIter.FirstWhich();
@@ -495,6 +491,21 @@ void __EXPORT ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
             case SID_PASTE:
             case FID_PASTE_CONTENTS:
                 if( !bPaste )
+                    rSet.DisableItem( nWhich );
+                break;
+            case SID_CLIPBOARD_FORMAT_ITEMS:
+                if ( bPaste )
+                {
+                    SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
+
+                    if ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) )
+                        aFormats.AddClipbrdFormat( SOT_FORMAT_STRING, String( ScResId( SCSTR_CLIP_STRING ) ) );
+                    if ( aDataHelper.HasFormat( SOT_FORMAT_RTF ) )
+                        aFormats.AddClipbrdFormat( SOT_FORMAT_RTF, String( ScResId( SCSTR_CLIP_RTF ) ) );
+
+                    rSet.Put( aFormats );
+                }
+                else
                     rSet.DisableItem( nWhich );
                 break;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-09 19:47:42 $
+ *  last change: $Author: nn $ $Date: 2001-04-23 16:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,6 +354,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sot/formats.hxx>
+#include <svtools/whiter.hxx>
 
 #include "sc.hrc"
 #include "drtxtob.hxx"
@@ -402,8 +403,13 @@ void __EXPORT ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
 
         case SID_PASTE:
         case FID_PASTE_CONTENTS:
+        case SID_CLIPBOARD_FORMAT_ITEMS:
         case SID_HYPERLINK_SETLINK:
-            pViewData->GetViewShell()->ExecuteSlot( rReq );
+            {
+                //  cell methods are at cell shell, which is not available if
+                //  ScDrawTextObjectBar is active
+                //! move paste etc. to view shell?
+            }
             break;
 
         case SID_SELECTALL:
@@ -430,60 +436,17 @@ void __EXPORT ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
 
 void ScDrawTextObjectBar::GetGlobalClipState( SfxItemSet& rSet )
 {
-    //pViewData->GetViewShell()->GetClipState( rSet );
+    //  cell methods are at cell shell, which is not available if
+    //  ScDrawTextObjectBar is active -> disable everything
+    //! move paste etc. to view shell?
 
-    ScTabViewShell* pTabViewShell   = pViewData->GetViewShell();
-
-    BOOL bDisable = TRUE;
-
-// SID_PASTE
-// FID_PASTE_CONTENTS
-
-    if ( ScTransferObj::GetOwnClipboard() || ScDrawTransferObj::GetOwnClipboard() )
-        bDisable = FALSE;
-    else
+    SfxWhichIter aIter(rSet);
+    USHORT nWhich = aIter.FirstWhich();
+    while (nWhich)
     {
-        SvDataObjectRef pClipObj = SvDataObject::PasteClipboard();
-        if (pClipObj.Is())
-        {
-            const SvDataTypeList& rTypeLst = pClipObj->GetTypeList();
-
-            if( rTypeLst.Get( FORMAT_BITMAP ) ||
-                rTypeLst.Get( FORMAT_GDIMETAFILE ) ||
-                rTypeLst.Get( SOT_FORMATSTR_ID_SVXB ) ||
-                rTypeLst.Get( FORMAT_PRIVATE ) ||
-                rTypeLst.Get( FORMAT_RTF ) ||
-                rTypeLst.Get( SOT_FORMATSTR_ID_EMBED_SOURCE ) ||
-                rTypeLst.Get( SOT_FORMATSTR_ID_LINK_SOURCE ) ||
-                rTypeLst.Get( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) ||
-                rTypeLst.Get( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ) ||
-                ScImportExport::IsFormatSupported( pClipObj ) )
-                bDisable = FALSE;
-        }
+        rSet.DisableItem( nWhich );
+        nWhich = aIter.NextWhich();
     }
-
-    //  Zellschutz / Multiselektion
-
-    if (!bDisable)
-    {
-        USHORT nCol = pViewData->GetCurX();
-        USHORT nRow = pViewData->GetCurY();
-        USHORT nTab = pViewData->GetTabNo();
-        ScDocument* pDoc = pViewData->GetDocShell()->GetDocument();
-        if (!pDoc->IsBlockEditable( nTab, nCol,nRow, nCol,nRow ))
-            bDisable = TRUE;
-        ScMarkData& rMark = pViewData->GetMarkData();
-        if (rMark.IsMultiMarked())
-            bDisable = TRUE;
-    }
-
-    if (bDisable)
-    {
-        rSet.DisableItem( SID_PASTE );
-        rSet.DisableItem( FID_PASTE_CONTENTS );
-    }
-
-    return;
 }
 
 void __EXPORT ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
