@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:01:06 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 
 class SalYieldMutex : public NAMESPACE_VOS(OMutex)
 {
+protected:
     ULONG                                       mnCount;
     NAMESPACE_VOS(OThread)::TThreadIdentifier   mnThreadId;
 
@@ -95,11 +96,15 @@ public:
 // -=-= SalInstanceData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class X11SalInstance : public SalInstance
 {
+protected:
     SalYieldMutex*                  mpSalYieldMutex;
     bool                            mbPrinterInit;
 
 public:
-    X11SalInstance();
+    X11SalInstance( SalYieldMutex* pMutex )
+            : mpSalYieldMutex( pMutex ),
+              mbPrinterInit( false )
+    {}
     virtual ~X11SalInstance();
 
     virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, ULONG nStyle );
