@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:13 $
+ *  last change: $Author: mtg $ $Date: 2001-09-05 19:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,17 +79,21 @@
 #ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETEXCEPTION_HPP_
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 #ifndef _VOS_REF_H_
 #include <vos/ref.hxx>
 #endif
 /*
- * We impose  arbitrary but reasonable limit on ZIP files.
+ * We impose arbitrary but reasonable limit on ZIP files.
  */
 
 #define ZIP_MAXNAMELEN 512
 #define ZIP_MAXEXTRA 256
 #define ZIP_MAXENTRIES (0x10000 - 2)
 
+typedef void* rtlCipher;
 class ZipEnumeration;
 class EncryptionData;
 
@@ -98,40 +102,39 @@ class ZipFile
 protected:
     ::rtl::OUString sName;          /* zip file name */
     ::rtl::OUString sComment;       /* zip file comment */
-    ::rtl::OUString sURL;
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
     Inflater        aInflater;
-    sal_Bool        bSpanned;
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
+    const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xFactory;
 
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createMemoryStream(
             com::sun::star::packages::zip::ZipEntry & rEntry,
             const vos::ORef < EncryptionData > &rData,
-            sal_Bool bRawStream,
-            sal_Int32 nUncompressedSize,
-            sal_Int32 nEnd);
+            sal_Bool bRawStream );
 
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createFileStream(
             com::sun::star::packages::zip::ZipEntry & rEntry,
             const vos::ORef < EncryptionData > &rData,
-            sal_Bool bRawStream,
-            sal_Int32 nUncompressedSize,
-            sal_Int32 nEnd);
+            sal_Bool bRawStream );
 public:
-    ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput, sal_Bool bInitialise)
+    ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput,
+             const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory,
+             sal_Bool bInitialise)
         throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
-    ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput, ::rtl::OUString &rURL )
-        throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
+
+    ~ZipFile();
+
     void setInputStream ( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewStream );
     sal_uInt32 SAL_CALL getHeader(const ::com::sun::star::packages::zip::ZipEntry& rEntry)
         throw(::com::sun::star::io::IOException, ::com::sun::star::packages::zip::ZipException, ::com::sun::star::uno::RuntimeException);
-    ~ZipFile();
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawStream(
             ::com::sun::star::packages::zip::ZipEntry& rEntry,
             const vos::ORef < EncryptionData > &rData)
         throw(::com::sun::star::io::IOException, ::com::sun::star::packages::zip::ZipException, ::com::sun::star::uno::RuntimeException);
+
+    static void StaticGetCipher ( const vos::ORef < EncryptionData > & xEncryptionData, rtlCipher &rCipher );
 
     // XElementAccess
     ::com::sun::star::uno::Type SAL_CALL getElementType(  )
