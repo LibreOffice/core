@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:05:04 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,11 @@
 #include "dp_gui.h"
 #include "dp_ucb.h"
 #include "cppuhelper/exc_hlp.hxx"
+#include "comphelper/anytostring.hxx"
 #include "ucbhelper/content.hxx"
 #include "vos/mutex.hxx"
 #include "vcl/help.hxx"
+#include "vcl/waitobj.hxx"
 #include "tools/urlobj.hxx"
 #include "svtools/imagemgr.hxx"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
@@ -86,12 +88,14 @@ namespace dp_gui
 {
 
 //------------------------------------------------------------------------------
-PackageState getPackageState( Reference<deployment::XPackage> const & xPackage )
+PackageState getPackageState(
+    Reference<deployment::XPackage> const & xPackage,
+    Reference<XCommandEnvironment> const & xCmdEnv )
 {
     try {
         beans::Optional< beans::Ambiguous<sal_Bool> > option(
             xPackage->isRegistered( Reference<task::XAbortChannel>(),
-                                    Reference<XCommandEnvironment>() ) );
+                                    xCmdEnv ) );
         if (option.IsPresent)
         {
             beans::Ambiguous<sal_Bool> const & reg = option.Value;
@@ -106,7 +110,10 @@ PackageState getPackageState( Reference<deployment::XPackage> const & xPackage )
     catch (RuntimeException &) {
         throw;
     }
-    catch (Exception &) {
+    catch (Exception & exc) {
+        (void) exc;
+        OSL_ENSURE( 0, ::rtl::OUStringToOString(
+                        exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         return NOT_AVAILABLE;
     }
 }
@@ -119,7 +126,7 @@ struct NodeImpl : public ::cppu::WeakImplHelper1<util::XModifyListener>
     SvLBoxEntry * m_lbEntry;
     DialogImpl::TreeListBoxImpl::t_nodeList::iterator m_it;
 
-    OUString m_factoryURL;
+    const OUString m_factoryURL;
     Reference<deployment::XPackageManager> m_xPackageManager;
     Reference<deployment::XPackage> m_xPackage;
 
@@ -142,11 +149,13 @@ struct NodeImpl : public ::cppu::WeakImplHelper1<util::XModifyListener>
 
     static inline NodeImpl * get( SvLBoxEntry * entry );
 
+    void modified( Reference<XCommandEnvironment> const & xCmdEnv );
+
     // XEventListener
     virtual void SAL_CALL disposing( lang::EventObject const & evt )
         throw (RuntimeException);
     // XModifyListener
-    virtual void SAL_CALL modified( lang::EventObject const & evt )
+    virtual void SAL_CALL modified( lang::EventObject const & )
         throw (RuntimeException);
 };
 
@@ -173,9 +182,12 @@ Image NodeImpl::getIcon() const
     Image ret;
     if (m_xPackage.is())
     {
+        const Reference<deployment::XPackageTypeInfo> xPackageType(
+            m_xPackage->getPackageType() );
         sal_uInt16 id;
-        if (m_xPackage->getIcon(
-                m_treelb->m_hiContrastMode, true /* small */ ) >>= id)
+        if (xPackageType.is() &&
+            (xPackageType->getIcon(
+                m_treelb->m_hiContrastMode, true /* small */ ) >>= id))
         {
             // opt most common package bundle icon:
             if (id == RID_IMG_DEF_PACKAGE_BUNDLE)
@@ -236,7 +248,7 @@ Image NodeImpl::getIcon() const
 void NodeImpl::disposing( lang::EventObject const & evt )
     throw (RuntimeException)
 {
-    ::vos::OGuard guard( Application::GetSolarMutex() );
+    const ::vos::OGuard guard( Application::GetSolarMutex() );
 
     OSL_ASSERT( m_lbEntry != 0 );
     if (m_lbEntry != 0)
@@ -270,75 +282,76 @@ void NodeImpl::disposing( lang::EventObject const & evt )
         m_treelb->m_dialog->updateButtonStates();
 }
 
-struct iface_hash
-{
-    ::std::size_t operator ()( Reference<deployment::XPackage> const x ) const {
+struct iface_hash {
+    ::std::size_t operator () (Reference<deployment::XPackage> const &x) const {
         return reinterpret_cast< ::std::size_t >(
             Reference<XInterface>(x, UNO_QUERY_THROW).get() );
     }
 };
 
+//______________________________________________________________________________
+void NodeImpl::modified( Reference<XCommandEnvironment> const & xCmdEnv )
+{
+    const ::vos::OGuard guard( Application::GetSolarMutex() );
+
+    if (m_xPackage.is())
+    {
+        switch (getPackageState( m_xPackage, xCmdEnv ))
+        {
+        case REGISTERED:
+            m_treelb->SetEntryText( m_treelb->m_strEnabled, m_lbEntry, 1 );
+            break;
+        case NOT_REGISTERED:
+            m_treelb->SetEntryText( m_treelb->m_strDisabled, m_lbEntry, 1 );
+            break;
+        case AMBIGUOUS:
+            m_treelb->SetEntryText( m_treelb->m_strUnknown, m_lbEntry, 1 );
+            break;
+        case NOT_AVAILABLE:
+            m_treelb->SetEntryText( String(), m_lbEntry, 1 );
+            break;
+        }
+
+        if (m_treelb->m_dialog != 0)
+            m_treelb->m_dialog->updateButtonStates( xCmdEnv );
+    }
+    else
+    {
+        typedef ::std::hash_set<
+            Reference<deployment::XPackage>, iface_hash > t_set;
+        t_set tlboxPackages;
+        sal_Int32 count = m_treelb->GetLevelChildCount(m_lbEntry);
+        sal_Int32 pos = 0;
+        for ( ; pos < count; ++pos ) {
+            tlboxPackages.insert(
+                NodeImpl::get(
+                    m_treelb->GetEntry(m_lbEntry, pos) )->m_xPackage );
+        }
+
+        const Sequence< Reference<deployment::XPackage> > packages(
+            m_xPackageManager->getDeployedPackages(
+                Reference<task::XAbortChannel>(), xCmdEnv ) );
+        t_set::const_iterator const iEnd( tlboxPackages.end() );
+        for ( pos = packages.getLength(); pos--; )
+        {
+            t_set::iterator iFind( tlboxPackages.find( packages[ pos ] ) );
+            if (iFind == iEnd) {
+                m_treelb->addPackageNode(
+                    m_lbEntry, packages[ pos ], xCmdEnv );
+            }
+        }
+    }
+}
+
 // XModifyListener
 //______________________________________________________________________________
-void NodeImpl::modified( lang::EventObject const & evt )
+void NodeImpl::modified( lang::EventObject const & )
     throw (RuntimeException)
 {
-    ::vos::OGuard guard( Application::GetSolarMutex() );
-
     try {
-        if (m_xPackage.is())
-        {
-            switch (getPackageState( m_xPackage )) {
-            case REGISTERED:
-                m_treelb->SetEntryText( m_treelb->m_strEnabled, m_lbEntry, 1 );
-                break;
-            case NOT_REGISTERED:
-                m_treelb->SetEntryText( m_treelb->m_strDisabled, m_lbEntry, 1 );
-                break;
-            case AMBIGUOUS:
-                m_treelb->SetEntryText( m_treelb->m_strUnknown, m_lbEntry, 1 );
-                break;
-            case NOT_AVAILABLE:
-                m_treelb->SetEntryText( String(), m_lbEntry, 1 );
-                break;
-            }
-
-            if (m_treelb->m_dialog != 0)
-                m_treelb->m_dialog->updateButtonStates();
-        }
-        else
-        {
-            typedef ::std::hash_set<
-                Reference<deployment::XPackage>, iface_hash > t_set;
-            t_set tlboxPackages;
-            sal_Int32 count = m_treelb->GetLevelChildCount(m_lbEntry);
-            sal_Int32 pos = 0;
-            for ( ; pos < count; ++pos ) {
-                tlboxPackages.insert(
-                    NodeImpl::get(
-                        m_treelb->GetEntry(m_lbEntry, pos) )->m_xPackage );
-            }
-
-            ::rtl::Reference<ProgressCommandEnv> cmdEnv(
-                new ProgressCommandEnv( m_treelb->m_dialog, String() ) );
-            Sequence< Reference<deployment::XPackage> > packages(
-                m_xPackageManager->getDeployedPackages(
-                    Reference<task::XAbortChannel>(), cmdEnv.get() ) );
-
-            Reference<deployment::XPackage> const * ppackages =
-                packages.getConstArray();
-            t_set::const_iterator const iEnd( tlboxPackages.end() );
-            for ( pos = packages.getLength(); pos--; )
-            {
-                t_set::iterator iFind( tlboxPackages.find( ppackages[ pos ] ) );
-                if (iFind == iEnd)
-                    m_treelb->addPackageNode( m_lbEntry, ppackages[ pos ] );
-#if OSL_DEBUG_LEVEL > 0
-                else
-                    tlboxPackages.erase( iFind );
-#endif
-            }
-        }
+        const Reference<XCommandEnvironment> xCmdEnv(
+            new ProgressCommandEnv( m_treelb->m_dialog, String() ) );
+        modified( xCmdEnv );
     }
     catch (RuntimeException &) {
         throw;
@@ -348,17 +361,17 @@ void NodeImpl::modified( lang::EventObject const & evt )
     }
     catch (Exception &) {
         Any exc( ::cppu::getCaughtException() );
-        m_treelb->m_dialog->errbox( exc );
+        m_treelb->m_dialog->errbox( ::comphelper::anyToString(exc) );
     }
 }
 
 //______________________________________________________________________________
 DialogImpl::TreeListBoxImpl::~TreeListBoxImpl()
 {
-    ::vos::OGuard guard( Application::GetSolarMutex() );
+    const ::vos::OGuard guard( Application::GetSolarMutex() );
     m_dialog = 0; // in deinit
 
-    lang::EventObject evt;
+    const lang::EventObject evt;
     SvLBoxEntry * entry = First();
     while (entry != 0) {
         // remove all contexts:
@@ -419,6 +432,7 @@ SvLBoxEntry * DialogImpl::TreeListBoxImpl::addNode(
     OUString const & factoryURL,
     Reference<deployment::XPackageManager> const & xPackageManager,
     Reference<deployment::XPackage> const & xPackage,
+    Reference<XCommandEnvironment> const & xCmdEnv,
     bool sortIn )
 {
     NodeImpl * node = new NodeImpl(
@@ -462,7 +476,7 @@ SvLBoxEntry * DialogImpl::TreeListBoxImpl::addNode(
                                        imgIcon, imgIcon,
                                        parentNode, pos, 0xffff, node );
         // update status:
-        node->modified( lang::EventObject() );
+        node->modified( xCmdEnv );
         node->m_xPackage->addModifyListener( xListener );
     }
 
@@ -484,12 +498,13 @@ SvLBoxEntry * DialogImpl::TreeListBoxImpl::addNode(
 //______________________________________________________________________________
 SvLBoxEntry * DialogImpl::TreeListBoxImpl::addPackageNode(
     SvLBoxEntry * parentNode,
-    Reference<deployment::XPackage> const & xPackage )
+    Reference<deployment::XPackage> const & xPackage,
+    Reference<XCommandEnvironment> const & xCmdEnv )
 {
     return addNode( parentNode, xPackage->getDisplayName(),
                     OUString() /* no factory URL */,
                     NodeImpl::get(parentNode)->m_xPackageManager,
-                    xPackage );
+                    xPackage, xCmdEnv );
 }
 
 //______________________________________________________________________________
@@ -606,24 +621,31 @@ IMPL_LINK( DialogImpl::TreeListBoxImpl, TimerHandler, Timer *, timer )
     {
         NodeImpl * node = NodeImpl::get(currentEntry);
         String balloon;
-        if (node->m_xPackage.is())
-        {
+        if (node->m_xPackage.is()) {
             ::rtl::OUStringBuffer buf;
             buf.append( node->m_xPackage->getDescription() );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\n(") );
-            buf.append( node->m_xPackage->getMediaType() );
-            buf.append( static_cast<sal_Unicode>(')') );
-            balloon = buf.makeStringAndClear();
+            const Reference<deployment::XPackageTypeInfo> xPackageType(
+                node->m_xPackage->getPackageType() );
+            if (xPackageType.is()) {
+                if (buf.getLength() > 0)
+                    buf.append( static_cast<sal_Unicode>('\n') );
+                buf.append( static_cast<sal_Unicode>('(') );
+                buf.append( xPackageType->getMediaType() );
+#if OSL_DEBUG_LEVEL > 1
+                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(",\n") );
+                buf.append( node->m_xPackage->getURL() );
+#endif
+                buf.append( static_cast<sal_Unicode>(')') );
+                balloon = buf.makeStringAndClear();
+            }
         }
-        else if (node->m_factoryURL.getLength() > 0)
-        {
+        else if (node->m_factoryURL.getLength() > 0) {
             balloon = SvFileInformationManager::GetDescription(
                 INetURLObject(node->m_factoryURL) );
         }
 
         if (balloon.Len() > 0)
-            Help::ShowBalloon(
-                this, OutputToScreenPixel( pos ), balloon );
+            Help::ShowBalloon( this, OutputToScreenPixel( pos ), balloon );
     }
     return 0;
 }
@@ -666,25 +688,29 @@ void DialogImpl::TreeListBoxImpl::RequestingChilds( SvLBoxEntry * pParent )
         if (GetChildCount( pParent ) > 0)
             return;
 
+        WaitObject wo(this); // clock...
+
         Sequence< Reference<deployment::XPackage> > packages;
         NodeImpl * parentNode = NodeImpl::get(pParent);
 
-        ::rtl::Reference<ProgressCommandEnv> cmdEnv(
+        const Reference<XCommandEnvironment> xCmdEnv(
             new ProgressCommandEnv( m_dialog, String() ) );
         if (parentNode->m_xPackage.is()) {
             packages = parentNode->m_xPackage->getBundle(
-                Reference<task::XAbortChannel>(), cmdEnv.get() );
+                Reference<task::XAbortChannel>(), xCmdEnv );
         }
         else { // is context
             packages = parentNode->m_xPackageManager->getDeployedPackages(
-                Reference<task::XAbortChannel>(), cmdEnv.get() );
+                Reference<task::XAbortChannel>(), xCmdEnv );
         }
         if (packages.getLength() > 0) {
             Reference<deployment::XPackage> const * ppackages =
                 packages.getConstArray();
             SetUpdateMode(FALSE);
-            for ( sal_Int32 pos = packages.getLength(); pos--; )
-                addPackageNode( parentNode->m_lbEntry, ppackages[ pos ] );
+            for ( sal_Int32 pos = packages.getLength(); pos--; ) {
+                addPackageNode(
+                    parentNode->m_lbEntry, ppackages[ pos ], xCmdEnv );
+            }
             SetUpdateMode(TRUE);
         }
     }
@@ -693,7 +719,7 @@ void DialogImpl::TreeListBoxImpl::RequestingChilds( SvLBoxEntry * pParent )
     }
     catch (Exception &) {
         Any exc( ::cppu::getCaughtException() );
-        m_dialog->errbox( exc );
+        m_dialog->errbox( ::comphelper::anyToString(exc) );
     }
 }
 
@@ -756,7 +782,7 @@ void DialogImpl::TreeListBoxImpl::DataChanged( DataChangedEvent const & evt )
 //______________________________________________________________________________
 IMPL_STATIC_LINK( DialogImpl, destroyDialog, void *, p )
 {
-    if (s_dialog.get() != 0)
+    if (s_dialog.is())
     {
         ::rtl::Reference<DialogImpl> dialog( s_dialog );
         s_dialog.clear();
@@ -787,11 +813,11 @@ BOOL DialogImpl::Close()
 void DialogImpl::disposing( lang::EventObject const & evt )
     throw (RuntimeException)
 {
-    lang::EventObject evt_( static_cast<OWeakObject *>(this) );
+    const lang::EventObject evt_( static_cast<OWeakObject *>(this) );
     {
         bool shutDown = (evt.Source == m_xDesktop);
         {
-            ::vos::OGuard guard( Application::GetSolarMutex() );
+            const ::vos::OGuard guard( Application::GetSolarMutex() );
             // remove contexts:
             SvLBoxEntry * entry = m_treelb->First();
             while (entry != 0)
@@ -822,7 +848,7 @@ void DialogImpl::disposing( lang::EventObject const & evt )
 
 // XTerminateListener
 //______________________________________________________________________________
-void DialogImpl::queryTermination( lang::EventObject const & evt )
+void DialogImpl::queryTermination( lang::EventObject const & )
     throw (frame::TerminationVetoException, RuntimeException)
 {
 }
@@ -839,7 +865,7 @@ void DialogImpl::notifyTermination( lang::EventObject const & evt )
 void DialogImpl::contentEvent( ContentEvent const & evt )
     throw (RuntimeException)
 {
-    ::vos::OGuard guard( Application::GetSolarMutex() );
+    const ::vos::OGuard guard( Application::GetSolarMutex() );
 
     OSL_ASSERT( evt.Id == m_xTdocRoot->getIdentifier() );
     try {
@@ -887,14 +913,15 @@ void DialogImpl::contentEvent( ContentEvent const & evt )
                                              OUSTR("Title") ) ),
                 factoryURL,
                 m_xPkgMgrFac->getPackageManager(
-                    make_url( ucbContent.getURL(), OUSTR("uno_packages") ) ),
-                Reference<deployment::XPackage>() );
+                    makeURL( ucbContent.getURL(), OUSTR("uno_packages") ) ),
+                Reference<deployment::XPackage>(),
+                Reference<XCommandEnvironment>() );
             break;
         }
         case ContentAction::REMOVED: {
-            ::ucb::Content ucb_content( evt.Content, 0 );
+            ::ucb::Content ucbContent( evt.Content, 0 );
             OUString context(
-                make_url( ucb_content.getURL(), OUSTR("uno_packages") ) );
+                makeURL( ucbContent.getURL(), OUSTR("uno_packages") ) );
 
             // find tdoc context and remove:
             SvLBoxEntry * entry = m_treelb->First();
@@ -902,8 +929,7 @@ void DialogImpl::contentEvent( ContentEvent const & evt )
             {
                 ::rtl::Reference<NodeImpl> node( NodeImpl::get(entry) );
                 entry = m_treelb->NextSibling(entry);
-                if (node->m_xPackageManager->getContext().equals( context ))
-                {
+                if (node->m_xPackageManager->getContext().equals( context )) {
                     node->disposing( lang::EventObject(
                                          static_cast<OWeakObject *>(this) ) );
                     break;
