@@ -2,9 +2,9 @@
  *
  *  $RCSfile: region.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:42:24 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ ImplRegion::ImplRegion( const ImplRegion& rImplRegion )
 
     // insert band(s) into the list
     ImplRegionBand* pNewBand;
-    ImplRegionBand* pPrevBand;
+    ImplRegionBand* pPrevBand = 0;
     ImplRegionBand* pBand = rImplRegion.mpFirstBand;
     while ( pBand )
     {
@@ -710,7 +710,7 @@ BOOL ImplRegion::OptimizeBandList()
 
     mnRectCount = 0;
 
-    ImplRegionBand* pPrevBand;
+    ImplRegionBand* pPrevBand = 0;
     ImplRegionBand* pBand = mpFirstBand;
     while ( pBand )
     {
@@ -1187,7 +1187,7 @@ BOOL Region::Intersect( const Rectangle& rRect )
     mpImplRegion->InsertBands( nTop, nBottom );
 
     // process intersections
-    ImplRegionBand* pPrevBand;
+    ImplRegionBand* pPrevBand = 0;
     ImplRegionBand* pBand = mpImplRegion->mpFirstBand;
     while ( pBand )
     {
@@ -1460,7 +1460,7 @@ BOOL Region::Intersect( const Region& rRegion )
         }
 
         // remove all untouched bands if bands allready left
-        ImplRegionBand* pPrevBand;
+        ImplRegionBand* pPrevBand = 0;
         pBand = mpImplRegion->mpFirstBand;
         while ( pBand )
         {
