@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-08 14:54:14 $
+#   last change: $Author: hr $ $Date: 2002-08-16 10:57:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,7 +109,12 @@ BUILD_FLAGS=-f vc7.mak
 .IF "$(COMID)"=="gcc3"
 BUILD_FLAGS=-f gcc-3.0.mak
 .ELSE # "$(COMID)"=="gcc3"
-BUILD_FLAGS=-f gcc.mak
+# MacOS X/Darwin need a special makefile
+.IF "$(OS)"=="MACOSX"
+    BUILD_FLAGS=-f gcc-apple-macosx.mak
+.ELSE # "$(OS)"=="MACOSX"
+    BUILD_FLAGS=-f gcc.mak
+.ENDIF # "$(OS)"=="MACOSX"
 .ENDIF # "$(COMID)"=="gcc3"
 BUILD_ACTION=make
 .ENDIF
