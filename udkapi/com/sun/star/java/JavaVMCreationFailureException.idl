@@ -1,10 +1,11 @@
+
 /*************************************************************************
  *
  *  $RCSfile: JavaVMCreationFailureException.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2002-07-18 13:52:56 $
+ *  last change: $Author: jl $ $Date: 2002-07-19 13:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,21 +71,21 @@ module com { module sun { module star { module java {
 
 
 /** indicates that the Java Virtual Machine could not be created <p>
-    This exception can be thrown when the JNI_CreateJavaVM function,
-    which is exported by the Java runtime library, failed.
+    This exception can be thrown when the creation of the Java Virtual
+    Machine failed, even if the runtime library could be loaded.
+    Possible reasons for a failure are that JNI_CreateJavaVM returns
+    an error code that reflects a failure, JNI_CreateJavaVM does not
+    return because it tries to quit the process ( _exit), the shared
+    library is corrupted, so that the symbols for JNI_GetDefaultVMInitArgs
+    or JNI_CreateJavaVM cannot be found, etc.
  */
 exception JavaVMCreationFailureException: JavaInitializationException
 {
     /** contains an error code that reflects the returned error code of
-        JNI_CreateJavaVM or other errors.
-        <ul>
-        <li>negative values: the return value of JNI_CreateJavaVM </li>
-        <li>1: JNI_CreateJavaVM did not return, instead it tried to exit
-               the process. If JNI_CreateJavaVM calls an abort handler
-               prior to an exit, than the exit  can be prevented by using
-               a longjmp in the handler.</li>
-        </ul>
-     */
+        JNI_CreateJavaVM or other errors. A negative value represents
+        the returned error code of JNI_CreateJavaVM. All other values
+        indicate a different cause.
+    */
     long ErrorCode;
 };
 
