@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCStylesContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-07 11:30:56 $
+ *  last change: $Author: svesik $ $Date: 2000-11-22 18:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #endif
 
 #ifndef __SGI_STL_VECTOR
-#include <stl/vector>
+#include <vector>
 #endif
 
 

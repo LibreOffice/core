@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLPropertyBackpatcher.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-09-28 18:27:14 $
+ *  last change: $Author: svesik $ $Date: 2000-11-22 18:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,11 @@
 #define _XMLOFF_XMLPROPERTYBACKPATCHER_HXX
 
 #ifndef __SGI_STL_MAP
-#include <stl/map>
+#include <map>
 #endif
 
 #ifndef __SGI_STL_VECTOR
-#include <stl/vector>
+#include <vector>
 #endif
 
 #ifndef _XMLOFF_FUNCTIONAL_HXX
