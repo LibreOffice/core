@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitems.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 08:47:33 $
+ *  last change: $Author: os $ $Date: 2002-03-07 08:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,7 @@ SwElemItem::SwElemItem( USHORT nWhich ) :
     bVertScrollbar =
     bHorzRuler     =
     bVertRuler     =
+    bVertRulerRight=
     bTableBounds   =
     bSectionBounds =
     bCrosshair     =
@@ -244,6 +245,7 @@ SwElemItem::SwElemItem(const SwViewOption& rVOpt, USHORT nWhich) :
     bVertScrollbar  = rVOpt.IsViewVScrollBar();
     bHorzRuler      = rVOpt.IsViewTabwin();
     bVertRuler      = rVOpt.IsViewVLin();
+    bVertRulerRight = rVOpt.IsVRulerRight();
     bTableBounds    = rVOpt.IsSubsTable();
     bSectionBounds  = rVOpt.IsSectionBounds();
     bCrosshair      = rVOpt.IsCrossHair();
@@ -286,6 +288,7 @@ int SwElemItem::operator==( const SfxPoolItem& rAttr ) const
                 bVertScrollbar  == rItem.bVertScrollbar &&
                 bHorzRuler      == rItem.bHorzRuler     &&
                 bVertRuler      == rItem.bVertRuler     &&
+                bVertRulerRight == rItem.bVertRulerRight&&
                 bTableBounds    == rItem.bTableBounds   &&
                 bSectionBounds  == rItem.bSectionBounds &&
                 bCrosshair      == rItem.bCrosshair     &&
@@ -315,6 +318,7 @@ void  SwElemItem::operator=( const SwElemItem& rElemItem)
     bVertScrollbar  = rElemItem.  bVertScrollbar    ;
     bHorzRuler      = rElemItem.  bHorzRuler        ;
     bVertRuler      = rElemItem.  bVertRuler        ;
+    bVertRulerRight = rElemItem.  bVertRulerRight   ;
     bTableBounds    = rElemItem.  bTableBounds      ;
     bSectionBounds  = rElemItem.  bSectionBounds    ;
     bCrosshair      = rElemItem.  bCrosshair        ;
@@ -343,6 +347,7 @@ void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetViewVScrollBar(bVertScrollbar );
     rVOpt.SetViewTabwin(bHorzRuler    );
     rVOpt.SetViewVLin(bVertRuler      );
+    rVOpt.SetVRulerRight(bVertRulerRight );
     rVOpt.SetSubsTable(bTableBounds   );
     rVOpt.SetSectionBounds(bSectionBounds);
     rVOpt.SetCrossHair(bCrosshair     );
@@ -519,6 +524,9 @@ int SwTestItem::operator==( const SfxPoolItem& rAttr ) const
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/05/10 08:47:33  os
+    store print options at the document
+
     Revision 1.2  2001/03/22 09:28:06  os
     options dialog changes
 

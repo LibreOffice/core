@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 08:48:50 $
+ *  last change: $Author: os $ $Date: 2002-03-07 08:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,8 @@ void ViewResizePixel( const Window &rRef,
                     SvxRuler* pVLineal = 0,
                     SvxRuler* pHLineal = 0,
                     BOOL bIgnoreVisibility = FALSE,
-                    BOOL bWebView = FALSE );
+                    BOOL bWebView = FALSE,
+                    BOOL bVRulerRight = FALSE );
 
 
 #endif

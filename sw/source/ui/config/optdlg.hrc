@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:39:39 $
+ *  last change: $Author: os $ $Date: 2002-03-07 08:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #define CB_FLDBACK              21
 #define FL_LINE                 22
 #define CB_POSTIT               23
+#define CB_VRULER_RIGHT         24
 #define CB_BIGHANDLE                  25
 
 #define FL_SETTINGS             26

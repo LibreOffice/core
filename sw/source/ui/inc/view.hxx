@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-07-12 13:10:25 $
+ *  last change: $Author: os $ $Date: 2002-03-07 08:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,8 +250,8 @@ class SwView: public SfxViewShell
                                         // unteren Ecke, wenn beide Scrollbars
                                         // aktiv sind
 
-    SvxRuler            *pHLineal,
-                        *pVLineal;
+    SvxRuler            *pHRuler,
+                        *pVRuler;
     ImageButton         *pTogglePageBtn;
 
     SwHlpImageButton    *pPageUpBtn,
@@ -496,15 +496,15 @@ public:
 
     inline int      CreateVLineal();
     inline int      KillVLineal();
-    int             StatVLineal() const { return pVLineal != 0; }
+    int             StatVLineal() const { return ((Window*)pVRuler)->IsVisible(); }
     void            ChangeVLinealMetric(FieldUnit eUnit);
     BOOL            GetVLinealMetric(FieldUnit& rToFill) const;
 
     inline int      CreateTab();
     inline int      KillTab();
-    int             StatTab() const { return ((Window*)pHLineal)->IsVisible(); }
-    SvxRuler       *GetHLineal()    { return pHLineal; }
-    SvxRuler       *GetVLineal()    { return pVLineal; }
+    int             StatTab() const { return ((Window*)pHRuler)->IsVisible(); }
+    SvxRuler&       GetHLineal()    { return *pHRuler; }
+    SvxRuler&       GetVLineal()    { return *pVRuler; }
     void            InvalidateRulerPos();
     void            ChangeTabMetric(FieldUnit eUnit);
     BOOL            GetHLinealMetric(FieldUnit& rToFill) const;

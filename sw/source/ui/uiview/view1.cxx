@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-15 15:01:02 $
+ *  last change: $Author: os $ $Date: 2002-03-07 08:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,9 +139,8 @@ void SwView::Activate(BOOL bMDIActivate)
     if(!bDocSzUpdated)
         DocSzChgd(aDocSz);
 
-    pHLineal->SetActive( TRUE );
-    if(pVLineal)
-        pVLineal->SetActive( TRUE );
+    pHRuler->SetActive( TRUE );
+    pVRuler->SetActive( TRUE );
 
     if ( bMDIActivate )
     {
@@ -211,9 +210,8 @@ void SwView::Deactivate(BOOL bMDIActivate)
     {
         pWrtShell->ShLooseFcs();    // Selektionen unsichtbar
 
-        pHLineal->SetActive( FALSE );
-        if(pVLineal)
-            pVLineal->SetActive( FALSE );
+        pHRuler->SetActive( FALSE );
+        pVRuler->SetActive( FALSE );
     }
     SfxViewShell::Deactivate(bMDIActivate);
 }
@@ -228,51 +226,5 @@ void SwView::MarginChanged()
 }
 
 
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2001/09/11 15:09:47  jp
-    Task #91678#: 'selection clipbord' implemented
-
-    Revision 1.1.1.1  2000/09/18 17:14:49  hr
-    initial import
-
-    Revision 1.79  2000/09/18 16:06:12  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.78  2000/09/08 08:12:53  os
-    Change: Set/Toggle/Has/Knows/Show/GetChildWindow
-
-    Revision 1.77  2000/08/15 14:08:20  jp
-    Task #77422#: PrintPreView in the same window
-
-    Revision 1.76  1999/09/15 14:13:05  os
-    dialog for authorities
-
-    Revision 1.75  1999/09/07 13:56:53  os
-    Insert/EditIndexEntry as FloatingWindow
-
-    Revision 1.74  1999/01/25 12:49:14  JP
-    Task #58677#: Crsr in Readonly Bereichen zulassen
-
-
-      Rev 1.73   25 Jan 1999 13:49:14   JP
-   Task #58677#: Crsr in Readonly Bereichen zulassen
-
-      Rev 1.72   19 Jun 1998 08:54:14   OS
-   VC-Sbx-Reste auch noch raus
-
-      Rev 1.71   19 Jun 1998 07:58:34   MH
-   GetSBxForm entfallen (OS)
-
-      Rev 1.70   09 Jun 1998 15:32:52   OM
-   VC-Controls entfernt
-
-      Rev 1.69   31 Mar 1998 15:31:52   OS
-   SetReadonlyUI von IsAllProtect abhaengig #49077#
-
-      Rev 1.68   27 Mar 1998 14:15:16   OM
-   ChildWindows im Modified-Hdl updaten
-
-------------------------------------------------------------------------*/
 
 

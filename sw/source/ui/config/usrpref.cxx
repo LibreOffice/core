@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-10-29 13:48:02 $
+ *  last change: $Author: os $ $Date: 2002-03-07 08:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,9 +309,10 @@ Sequence<OUString> SwLayoutViewConfig::GetPropertyNames()
         "Zoom/Value",                       //13
         "Zoom/Type",                        //14
         "Other/MeasureUnit",                //15
-        "Other/TabStop"                     //16
+        "Other/TabStop",                    //16
+        "Window/IsVerticalRulerRight"       //17
     };
-    const int nCount = bWeb ? 16 : 17;
+    const int nCount = bWeb ? 16 : 18;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -375,6 +376,7 @@ void SwLayoutViewConfig::Commit()
             case 14: pValues[nProp] <<= (sal_Int32)rParent.GetZoomType(); break;// "Zoom/Type",
             case 15: pValues[nProp] <<= (sal_Int32)rParent.GetMetric(); break;// "Other/MeasureUnit",
             case 16: pValues[nProp] <<= rParent.GetDefTab(); break;// "Other/TabStop",
+            case 17: bSet = rParent.IsVRulerRight(); break;// "Window/IsVerticalRulerRight",
         }
         if(nProp < 10 || nProp == 12)
             pValues[nProp].setValue(&bSet, ::getBooleanCppuType());
@@ -448,6 +450,7 @@ void SwLayoutViewConfig::Load()
                         rParent.SetDefTab(nTab, TRUE);
                     }
                     break;// "Other/TabStop",
+                    case 17: rParent.SetVRulerRight(bSet); break;// "Window/IsVerticalRulerRight",
                 }
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-03-06 07:34:13 $
+ *  last change: $Author: os $ $Date: 2002-03-07 08:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,10 @@
 
 //Das SetVisArea der DocShell darf nicht vom InnerResizePixel gerufen werden.
 //Unsere Einstellungen muessen aber stattfinden.
-#if SUPD<631
-#define SVX_ZOOM_PAGEWIDTH_NOBORDER 4
+#if SUPD<653
+#ifndef WB_RIGHT_ALIGNED
+#define WB_RIGHT_ALIGNED    ((WinBits)0x00008000)
+#endif
 #endif
 
 static BOOL bProtectDocShellVisArea = FALSE;
@@ -208,10 +210,9 @@ void SwView::InvalidateRulerPos()
 
     GetViewFrame()->GetBindings().Invalidate(aInval);
 
-    DBG_ASSERT(pHLineal, "warum ist das Lineal nicht da?")
-    pHLineal->ForceUpdate();
-    if( pVLineal )
-        pVLineal->ForceUpdate();
+    DBG_ASSERT(pHRuler, "warum ist das Lineal nicht da?")
+    pHRuler->ForceUpdate();
+    pVRuler->ForceUpdate();
 }
 
 /*--------------------------------------------------------------------
@@ -924,18 +925,29 @@ void SwView::CalcVisArea( const Size &rOutPixel )
 
 void SwView::CalcAndSetBorderPixel( SvBorder &rToFill, FASTBOOL bInner )
 {
-    if ( pVLineal )
-        rToFill.Left() = pVLineal->GetSizePixel().Width();
+    BOOL bRightVRuler = pWrtShell->GetViewOptions()->IsVRulerRight();
+    if ( pVRuler->IsVisible() )
+    {
+        long nWidth = pVRuler->GetSizePixel().Width();
+        if(bRightVRuler)
+            rToFill.Right() = nWidth;
+        else
+            rToFill.Left() = nWidth;
+    }
 
-    DBG_ASSERT(pHLineal, "warum ist das Lineal nicht da?")
-    if ( pHLineal->IsVisible() )
-        rToFill.Top() = pHLineal->GetSizePixel().Height();
+    DBG_ASSERT(pHRuler, "warum ist das Lineal nicht da?")
+    if ( pHRuler->IsVisible() )
+        rToFill.Top() = pHRuler->GetSizePixel().Height();
 
     const StyleSettings &rSet = GetEditWin().GetSettings().GetStyleSettings();
     const long nTmp = rSet.GetScrollBarSize();
     if ( pVScrollbar && (pVScrollbar->IsVisible() || !pVScrollbar->IsAuto()) )
-        rToFill.Right()  = nTmp;
-
+    {
+        if(bRightVRuler)
+            rToFill.Left() = nTmp;
+        else
+            rToFill.Right()  = nTmp;
+    }
     if ( pHScrollbar && (pHScrollbar->IsVisible() || !pHScrollbar->IsAuto()) )
         rToFill.Bottom() = nTmp;
 
@@ -957,14 +969,16 @@ void ViewResizePixel( const Window &rRef,
                     SvxRuler* pVLineal,
                     SvxRuler* pHLineal,
                     BOOL bIgnoreVisibility,
-                    BOOL bWebView )
+                    BOOL bWebView,
+                    BOOL bVRulerRight )
 {
 // ViewResizePixel wird auch von der PreView benutzt!!!
 
     const BOOL bHLineal = pHLineal && pHLineal->IsVisible();
     const long nHLinSzHeight = bHLineal ?
                         pHLineal->GetSizePixel().Height() : 0;
-    const long nVLinSzWidth = pVLineal ?
+    const BOOL bVLineal = pVLineal && pVLineal->IsVisible();
+    const long nVLinSzWidth = bVLineal ?
                         pVLineal->GetSizePixel().Width() : 0;
     long nHBSzHeight2= pHScrollbar && (pHScrollbar->IsVisible() || !pHScrollbar->IsAuto()) ?
                        rRef.GetSettings().GetStyleSettings().GetScrollBarSize() : 0;
@@ -973,18 +987,25 @@ void ViewResizePixel( const Window &rRef,
     long nVBSzWidth = pVScrollbar && (pVScrollbar->IsVisible() || !pVScrollbar->IsAuto()) ? rRef.GetSettings().GetStyleSettings().GetScrollBarSize() : 0;
 
     // Lineale anordnen
-    if ( pVLineal )
+    if ( bVLineal )
     {
+        WinBits nStyle = pVLineal->GetStyle()&~WB_RIGHT_ALIGNED;
         Point aPos( rOfst.X(), rOfst.Y()+nHLinSzHeight );
+        if(bVRulerRight)
+        {
+            aPos.X() += rSize.Width() - nVLinSzWidth;
+            nStyle |= WB_RIGHT_ALIGNED;
+        }
         Size  aSize( nVLinSzWidth, rEditSz.Height() );
+        pVLineal->SetStyle(nStyle);
         pVLineal->SetPosSizePixel( aPos, aSize );
     }
 //  Lineal braucht ein Resize, sonst funktioniert es nicht im unischtbaren Zustand
 //  if ( bHLineal )
-    if ( pHLineal )     //MA: In der Seitenansicht gibt es das Lineal nicht!
+    if ( bHLineal )     //MA: In der Seitenansicht gibt es das Lineal nicht!
     {
         Size aSize( rSize.Width(), nHLinSzHeight );
-        if ( nVBSzWidth )
+        if ( nVBSzWidth && !bVRulerRight)
             aSize.Width() -= nVBSzWidth;
         if(!aSize.Height())
             aSize.Height() = pHLineal->GetSizePixel().Height();
@@ -1001,6 +1022,11 @@ void ViewResizePixel( const Window &rRef,
     {
         Point aPos( rOfst.X(),
                     rOfst.Y()+rSize.Height()-nHBSzHeight );
+        if(bVRulerRight)
+        {
+            aPos.X() += nVBSzWidth;
+        }
+
         Size  aSize( rSize.Width(), nHBSzHeight2 );
         if ( nVBSzWidth )
             aSize.Width() -= nVBSzWidth;
@@ -1012,6 +1038,16 @@ void ViewResizePixel( const Window &rRef,
         Point aPos( rOfst.X()+rSize.Width()-nVBSzWidth,
                     rOfst.Y() );
         Size  aSize( nVBSzWidth, rSize.Height() );
+        if(bVRulerRight)
+        {
+            aPos.X() = rOfst.X();
+            if(bHLineal)
+            {
+                aPos.Y() += nHLinSzHeight;
+                aSize.Height() -= nHLinSzHeight;
+            }
+        }
+
         Size  aImgSz( nVBSzWidth, nVBSzWidth );
 
         //#55949#  wenn der Platz fuer Scrollbar und Page-Buttons zu klein wird, dann
@@ -1044,6 +1080,7 @@ void ViewResizePixel( const Window &rRef,
         if( pHScrollbar )
         {
             aScrollFillPos.X() = aPos.X();
+
             pScrollBarBox->SetPosSizePixel( aScrollFillPos,
                                          Size( nHBSzHeight, nVBSzWidth) );
         }
@@ -1055,11 +1092,8 @@ void SwView::ShowAtResize()
 {
     const FASTBOOL bBrowse = pWrtShell->IsBrowseMode();
     bShowAtResize = FALSE;
-    if ( pVLineal )
-        pVLineal->Show();
-    DBG_ASSERT(pHLineal, "warum ist das Lineal nicht da?")
     if ( pWrtShell->GetViewOptions()->IsViewTabwin() )
-        pHLineal->Show();
+        pHRuler->Show();
     if ( pHScrollbar && (!bBrowse ||
                          GetDocShell()->GetProtocol().IsInPlaceActive()) )
         pHScrollbar->Show();
@@ -1091,23 +1125,21 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
     ViewResizePixel( GetEditWin(), rOfst, aSz, aEditSz, TRUE, pVScrollbar,
                             pHScrollbar, pPageUpBtn, pPageDownBtn,
                             pNaviBtn,
-                            pScrollFill, pVLineal, pHLineal,
+                            pScrollFill, pVRuler, pHRuler,
                             (!bBrowse || GetDocShell()->GetProtocol().IsInPlaceActive()),
-                            0 != PTR_CAST(SwWebView, this));
+                            0 != PTR_CAST(SwWebView, this),
+                            pWrtShell->GetViewOptions()->IsVRulerRight());
     if ( bShowAtResize )
         ShowAtResize();
 
-    if( pHLineal->IsVisible() || pVLineal )
+    if( pHRuler->IsVisible() || pVRuler->IsVisible() )
     {
         const Fraction& rFrac = GetEditWin().GetMapMode().GetScaleX();
         USHORT nZoom = USHORT(rFrac.GetNumerator() * 100L / rFrac.GetDenominator());
 
         const Fraction aFrac( nZoom, 100 );
-        if ( pVLineal )
-            pVLineal->SetZoom( aFrac );
-        DBG_ASSERT(pHLineal, "warum ist das Lineal nicht da?")
-        if ( pHLineal->IsVisible() )
-            pHLineal->SetZoom( aFrac );
+        pVRuler->SetZoom( aFrac );
+        pHRuler->SetZoom( aFrac );
         InvalidateRulerPos();   //Inhalt invalidieren.
     }
     //CursorStack zuruecksetzen, da die Cursorpositionen fuer PageUp/-Down
@@ -1198,12 +1230,13 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
         ViewResizePixel( GetEditWin(), rOfst, rSize, aEditSz, FALSE, pVScrollbar,
                                 pHScrollbar, pPageUpBtn, pPageDownBtn,
                                 pNaviBtn,
-                                pScrollFill, pVLineal, pHLineal, !bBrowse,
-                                0 != PTR_CAST(SwWebView, this) );
+                                pScrollFill, pVRuler, pHRuler, !bBrowse,
+                                0 != PTR_CAST(SwWebView, this),
+                                pWrtShell->GetViewOptions()->IsVRulerRight() );
         if ( bShowAtResize )
             ShowAtResize();
 
-        if( pHLineal->IsVisible() || pVLineal )
+        if( pHRuler->IsVisible() || pVRuler->IsVisible() )
             InvalidateRulerPos();   //Inhalt invalidieren.
 
         //CursorStack zuruecksetzen, da die Cursorpositionen fuer PageUp/-Down

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewmdi.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-02-27 09:06:00 $
+ *  last change: $Author: os $ $Date: 2002-03-07 08:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,16 +271,10 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     }
 
     const Fraction aFrac( nFac, 100 );
-    if ( pVLineal )
-    {
-        pVLineal->SetZoom( aFrac );
-        pVLineal->ForceUpdate();
-    }
-    if ( pHLineal )
-    {
-        pHLineal->SetZoom( aFrac );
-        pHLineal->ForceUpdate();
-    }
+    pVRuler->SetZoom( aFrac );
+    pVRuler->ForceUpdate();
+    pHRuler->SetZoom( aFrac );
+    pHRuler->ForceUpdate();
     ((SwViewOption*)pWrtShell->GetViewOptions())->SetZoomType((BYTE)eZoomType);
     }
     pWrtShell->UnlockPaint();
@@ -551,9 +545,9 @@ int SwView::_CreateTab()
 {
     ASSERT( !StatTab(), "vorher abpruefen!" )
 
-    pHLineal->SetActive(GetFrame() && IsActive());
+    pHRuler->SetActive(GetFrame() && IsActive());
 
-    pHLineal->Show();
+    pHRuler->Show();
     InvalidateBorder();
     return 1;
 }
@@ -572,33 +566,27 @@ int SwView::_KillTab()
 {
     ASSERT( StatTab(), "vorher abpruefen!" )
 
-    pHLineal->Hide();
-//  DELETEZ(pHLineal);
+    pHRuler->Hide();
+//  DELETEZ(pHRuler);
     InvalidateBorder();
     return 1;
 }
 
 void SwView::ChangeTabMetric( FieldUnit eUnit )
 {
-    if ( pHLineal )
+    if(pHRuler->GetUnit() != eUnit )
     {
-        if(pHLineal->GetUnit() != eUnit )
-        {
-            pHLineal->SetUnit( eUnit );
-            pHLineal->Invalidate();
-        }
+        pHRuler->SetUnit( eUnit );
+        pHRuler->Invalidate();
     }
 }
 
 void SwView::ChangeVLinealMetric( FieldUnit eUnit )
 {
-    if ( pVLineal )
+    if(pVRuler->GetUnit() != eUnit)
     {
-        if(pVLineal->GetUnit() != eUnit)
-        {
-            pVLineal->SetUnit( eUnit );
-            pVLineal->Invalidate();
-        }
+        pVRuler->SetUnit( eUnit );
+        pVRuler->Invalidate();
     }
 }
 /* -----------------------------07.04.01 17:09--------------------------------
@@ -606,18 +594,16 @@ void SwView::ChangeVLinealMetric( FieldUnit eUnit )
  ---------------------------------------------------------------------------*/
 BOOL SwView::GetVLinealMetric(FieldUnit& eToFill) const
 {
-    if(pVLineal)
-        eToFill = pVLineal->GetUnit();
-    return pVLineal != 0;
+    eToFill = pVRuler->GetUnit();
+    return pVRuler != 0;
 }
 /* -----------------------------07.04.01 17:09--------------------------------
 
  ---------------------------------------------------------------------------*/
 BOOL SwView::GetHLinealMetric(FieldUnit& eToFill) const
 {
-    if(pHLineal)
-        eToFill = pHLineal->GetUnit();
-    return pHLineal != 0;
+    eToFill = pHRuler->GetUnit();
+    return pHRuler != 0;
 }
 /*************************************************************************
 |*
@@ -625,7 +611,6 @@ BOOL SwView::GetHLinealMetric(FieldUnit& eToFill) const
 |*
 |*  Beschreibung
 |*  Ersterstellung  VB 29.05.91
-|*  Letzte Aenderung  VB 19.05.92
 |*
 *************************************************************************/
 
@@ -633,29 +618,12 @@ int SwView::_CreateVLineal()
 {
     ASSERT( !StatVLineal(), "vorher abpruefen!" )
 
-    Window *pMDI = &GetViewFrame()->GetWindow();
+    pHRuler->SetBorderPos( pVRuler->GetSizePixel().Width()-1 );
 
-    pVLineal = new SvxRuler(pMDI, pEditWin,
-                            SVXRULER_SUPPORT_TABS | SVXRULER_SUPPORT_PARAGRAPH_MARGINS_VERTICAL|
-                                SVXRULER_SUPPORT_BORDERS,
-                            GetViewFrame()->GetBindings(),
-                            WB_VSCROLL |  WB_3DLOOK | WB_BORDER );
-    if( pVLineal && pHLineal )
-        pHLineal->SetBorderPos( pVLineal->GetSizePixel().Width()-1 );
-
-    pVLineal->SetActive(GetFrame() && IsActive());
+    pVRuler->SetActive(GetFrame() && IsActive());
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
-    pVLineal->SetZoom(Fraction(pOpt->GetZoom(), 100));
-    SwDocShell* pDocSh = PTR_CAST( SwDocShell, GetViewFrame()->GetObjectShell() );
-    SwWebDocShell* pWebDShell = PTR_CAST( SwWebDocShell, pDocSh );
-    BOOL bWeb = 0 != PTR_CAST( SwWebDocShell, pDocSh );
-    const SwMasterUsrPref *pUsrPref = SW_MOD()->GetUsrPref(bWeb);
-    FieldUnit eMetric = pUsrPref->GetVScrollMetric();
-    pVLineal->SetUnit(eMetric);
-
+    pVRuler->Show();
     InvalidateBorder();
-    if ( !bShowAtResize )
-        pVLineal->Show();
     return 1;
 }
 
@@ -665,20 +633,14 @@ int SwView::_CreateVLineal()
 |*
 |*  Beschreibung
 |*  Ersterstellung  VB 29.05.91
-|*  Letzte Aenderung  VB 29.05.91
 |*
 *************************************************************************/
 
 int SwView::_KillVLineal()
 {
     ASSERT( StatVLineal(), "vorher abpruefen!" )
-
-    pVLineal->Hide();
-
-    if ( pHLineal )
-        pHLineal->SetBorderPos( 0 );
-
-    DELETEZ(pVLineal);
+    pVRuler->Hide();
+    pHRuler->SetBorderPos( 0 );
     InvalidateBorder();
     return 1;
 }
@@ -768,202 +730,4 @@ void SwView::SetImageButtonColor(Color& rColor)
     }
 }
 
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2001/12/13 16:06:40  os
-    #95871# OuterResizePixel mustn't initiate a change of global view options
-
-    Revision 1.5  2001/10/10 18:26:41  jp
-    Bug #91228#: _SetZoom - don't move the cursor into the visible area
-
-    Revision 1.4  2001/04/27 10:49:32  os
-    new zoom type for preview added
-
-    Revision 1.3  2001/04/09 09:46:35  os
-    #85859# some option dialog errors fixed
-
-    Revision 1.2  2000/09/28 15:24:06  os
-    use of configuration service in view options
-
-    Revision 1.1.1.1  2000/09/18 17:14:49  hr
-    initial import
-
-    Revision 1.126  2000/09/18 16:06:13  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.125  2000/09/07 15:59:33  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.124  2000/05/24 13:13:57  hr
-    conflict between STLPORT and Workshop header
-
-    Revision 1.123  2000/05/10 11:53:20  os
-    Basic API removed
-
-    Revision 1.122  2000/03/03 15:17:04  os
-    StarView remainders removed
-
-    Revision 1.121  1999/07/20 07:44:28  OS
-    #67585# ZoomValue/ZoomType :SetZoom changed
-
-
-      Rev 1.120   20 Jul 1999 09:44:28   OS
-   #67585# ZoomValue/ZoomType :SetZoom changed
-
-      Rev 1.119   14 Jan 1999 14:19:54   JP
-   Bug #60794#: Fehlererkennung beim Tabellenrechnen und anspringen von Formeln
-
-      Rev 1.118   03 Dec 1998 10:26:18   OS
-   #59441# Verzeichniseintrag in der Navigation
-
-      Rev 1.117   22 Sep 1998 11:36:28   MA
-   #56856# Kontext besser
-
-      Rev 1.116   22 Sep 1998 11:28:16   MA
-   #56856# Paint locken fuer Anderung vom Zoom
-
-      Rev 1.115   08 Sep 1998 17:05:12   OS
-   #56134# Metric fuer Text und HTML getrennt
-
-      Rev 1.114   14 Jun 1998 16:13:52   MA
-   chg: Navi-Tool auch fuer Browse-View
-
-      Rev 1.113   20 Mar 1998 13:23:54   MA
-   OleVis2Page durch BrowseMode ersetzt
-
-      Rev 1.112   24 Feb 1998 18:06:38   OS
-   includes, SwapPam
-
-      Rev 1.111   24 Feb 1998 12:02:02   OS
-   Navigationstool erweitert
-
-      Rev 1.110   07 Feb 1998 10:39:36   OS
-   GrabFocus nach Navigations-Move #47160#
-
-      Rev 1.109   21 Nov 1997 15:00:20   MA
-   includes
-
-      Rev 1.108   03 Nov 1997 13:58:30   MA
-   precomp entfernt
-
-      Rev 1.107   04 Sep 1997 17:14:42   MA
-   includes
-
-      Rev 1.106   01 Sep 1997 13:13:50   OS
-   DLL-Umstellung
-
-      Rev 1.105   23 Aug 1997 10:12:02   OS
-   Zoom ganze Seite: Factor nicht zusaetzlich mit den ViewOpt-Einstellungen multiplizieren #43052#
-
-      Rev 1.104   12 Aug 1997 15:57:26   OS
-   frmitems/textitem/paraitem aufgeteilt
-
-      Rev 1.103   08 Aug 1997 17:25:56   OM
-   Headerfile-Umstellung
-
-      Rev 1.102   07 Aug 1997 14:58:56   OM
-   Headerfile-Umstellung
-
-      Rev 1.101   16 Jul 1997 17:25:54   AMA
-   Fix: Rundungsfehler minimieren durch PixelToLogic mit 100%-MapMode
-
-      Rev 1.100   20 Jun 1997 13:55:36   OS
-   neu: MoveNavigation
-
-      Rev 1.99   09 Jun 1997 14:28:06   MA
-   chg: Browse-Flag nur noch am Doc
-
-      Rev 1.98   08 Apr 1997 10:22:46   MA
-   includes
-
-      Rev 1.97   24 Mar 1997 15:57:54   OS
-   SetZoomType vor CalcVisArea
-
-      Rev 1.96   15 Mar 1997 11:27:24   OS
-   PageUp/Down-Buttons faerben
-
-      Rev 1.95   04 Mar 1997 19:11:42   OS
-   Spruenge im Text: zunaechst EnterStdMode
-
-      Rev 1.94   22 Feb 1997 20:15:48   OS
-   eigenes Image fuer Button
-
-      Rev 1.93   21 Feb 1997 17:03:00   OS
-   ImageButtons veraendert; Handler erweitert
-
-      Rev 1.92   20 Feb 1997 16:46:16   OS
-   Navigation funktioniert
-
-      Rev 1.91   19 Feb 1997 16:55:54   OS
-   dritter Button/Navigation
-
-      Rev 1.90   05 Feb 1997 08:29:14   MA
-   chg: unn?tzes label entfernt
-
-      Rev 1.89   30 Jan 1997 11:03:10   OS
-   UsrPrefs verdoppelt
-
-      Rev 1.88   11 Dec 1996 08:42:18   OS
-   ClickType am Ruler auswerten -> gfs. Einzuege-TabPage statt Tabulator
-
-      Rev 1.87   10 Dec 1996 19:07:06   MA
-   VertScrollbar
-
-      Rev 1.86   11 Nov 1996 11:10:52   MA
-   ResMgr
-
-      Rev 1.85   14 Oct 1996 09:02:02   OS
-   Readonly an den ViewOptions vor ApplyViewOptions einstellen
-
-      Rev 1.84   07 Oct 1996 09:58:08   OS
-   Aktivierung der Lineale im _Create abhaengig von der Aktivierung der View
-
-      Rev 1.83   23 Sep 1996 15:37:34   MA
-   fix: Zoomtype und Browser
-
-      Rev 1.82   12 Sep 1996 17:00:32   OS
-   GetAnyCurRect() ersetzt GetCur*Rect
-
-      Rev 1.81   28 Aug 1996 14:19:18   JP
-   ScrollBarBox: im FrameSet-Doc nicht das Sizeable-Flag setzen
-
-      Rev 1.80   14 Aug 1996 15:15:30   OS
-   SetAuto fuer BrowseMode nicht nur fuer HScrollbar
-
-      Rev 1.79   29 Jul 1996 15:47:14   MA
-   includes
-
-      Rev 1.78   12 Jul 1996 14:44:22   OS
-   vert. Scrollbar geht auch im BrowseMode zum ScrollHdl
-
-      Rev 1.77   05 Jul 1996 14:55:38   OS
-   Anzeige der akt. Seitennummer w„hrend des Scrollens in der nicht-Browse-View
-
-      Rev 1.76   26 Jun 1996 15:02:04   OS
-   Aufruf von Dispatcher.Execute an 324 angepasst
-
-      Rev 1.75   19 Jun 1996 12:30:04   OM
-   Umstellung auf 323
-
-      Rev 1.74   10 Jun 1996 17:55:50   MA
-   Breite+HScroll fuer Browser
-
-      Rev 1.73   31 May 1996 07:52:04   OS
-   _CreateScrollbar: nach InvalidateBorder Pointer nochmal testen
-
-      Rev 1.72   24 May 1996 09:20:20   OS
-   neu: CreatePageButtons
-
-      Rev 1.71   09 May 1996 15:18:58   OS
-   HLineal ist immer existent und wird nur noch versteckt
-
-      Rev 1.70   06 May 1996 17:00:36   MA
-   chg: Scrollbars fuer browse und ole richtig
-
-      Rev 1.69   24 Apr 1996 15:02:12   OS
-   Umstellung UsrPref/ViewOption
-
-------------------------------------------------------------------------*/
 

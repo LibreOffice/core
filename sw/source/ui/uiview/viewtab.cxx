@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-02-27 09:06:00 $
+ *  last change: $Author: os $ $Date: 2002-03-07 08:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -937,6 +937,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         USHORT nWhich = GetPool().GetWhich(nSlot);
         SvxTabStopItem aTabStops( (const SvxTabStopItem&)rReq.GetArgs()->
                                                     Get( nWhich ));
+        aTabStops.SetWhich(RES_PARATR_TABSTOP);
         DEBUGTABSTOPS(aTabStops);
         const SvxTabStopItem& rDefTabs =
                     (const SvxTabStopItem&)rSh.GetDefault(RES_PARATR_TABSTOP);
@@ -1226,14 +1227,14 @@ void SwView::StateTabWin(SfxItemSet& rSet)
     const BOOL  bFrmSelection = rSh.IsFrmSelected();
 
     BOOL bBrowse = rSh.IsBrowseMode();
-    WinBits nStyle = pHLineal->GetStyle();
+    WinBits nStyle = pHRuler->GetStyle();
     if(!(nStyle&WB_EXTRAFIELD) != bBrowse)
     {
         if(bBrowse)
             nStyle &= ~WB_EXTRAFIELD;
         else
             nStyle |= WB_EXTRAFIELD;
-        pHLineal->SetStyle(nStyle);
+        pHRuler->SetStyle(nStyle);
     }
 
     // PageOffset/Begrenzer
@@ -1246,6 +1247,13 @@ void SwView::StateTabWin(SfxItemSet& rSet)
     const SvxFrameDirectionItem& rFrameDir = rDesc.GetMaster().GetFrmDir();
     const BOOL bVerticalWriting = !bBrowse && (rFrameDir.GetValue() == FRMDIR_VERT_TOP_RIGHT ||
                                     rFrameDir.GetValue() == FRMDIR_VERT_TOP_LEFT);
+    //enable tab stop display on the rulers depending on the writing direction
+    WinBits nRulerStyle = pHRuler->GetStyle() & ~WB_EXTRAFIELD;
+    pHRuler->SetStyle(bVerticalWriting ? nRulerStyle : nRulerStyle|WB_EXTRAFIELD);
+    nRulerStyle = pVRuler->GetStyle() & ~WB_EXTRAFIELD;
+    pVRuler->SetStyle(bVerticalWriting ? nRulerStyle|WB_EXTRAFIELD : nRulerStyle);
+
+
     SvxLRSpaceItem aPageLRSpace( rDesc.GetMaster().GetLRSpace() );
     SwapPageMargin( rDesc, aPageLRSpace );
 
@@ -1380,11 +1388,10 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 const SvxTabStopItem& rDefTabs = (const SvxTabStopItem&)
                                             rSh.GetDefault(RES_PARATR_TABSTOP);
 
-                DBG_ASSERT(pHLineal, "warum ist das Lineal nicht da?")
+                DBG_ASSERT(pHRuler, "warum ist das Lineal nicht da?")
                 long nDefTabDist = ::GetTabDist(rDefTabs);
-                pHLineal->SetDefTabDist( nDefTabDist );
-                if(pVLineal)
-                    pVLineal->SetDefTabDist( nDefTabDist );
+                pHRuler->SetDefTabDist( nDefTabDist );
+                pVRuler->SetDefTabDist( nDefTabDist );
                 ::lcl_EraseDefTabs(aTabStops);
                 DEBUGTABSTOPS(aTabStops);
                 rSet.Put(aTabStops, nWhich);

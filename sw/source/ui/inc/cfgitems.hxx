@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitems.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 08:48:32 $
+ *  last change: $Author: os $ $Date: 2002-03-07 08:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ class SwElemItem : public SfxPoolItem
     BOOL bVertScrollbar :1;
     BOOL bHorzRuler     :1;
     BOOL bVertRuler     :1;
+    BOOL bVertRulerRight:1;
     BOOL bSmoothScroll  :1;
     //visual aids
     BOOL bTableBounds   :1;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-09-20 12:43:57 $
+ *  last change: $Author: os $ $Date: 2002-03-07 08:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ class SwDocShell;
 #define VIEWOPT_2_RESERVED4         0x00400000L
 #define VIEWOPT_2_PRTFORMAT         0x00800000L
 #define VIEWOPT_2_SHADOWCRSR        0x01000000L
+#define VIEWOPT_2_VLIN_RIGHT        0x02000000L
 
 //Tabellenhintergrund
 #define TBL_DEST_CELL   0
@@ -546,6 +547,12 @@ public:
         { return nUIOptions & VIEWOPT_2_SHADOWCRSR ? TRUE : FALSE;   }
     void   SetShadowCursor(BOOL b)
         { b ? (nUIOptions |= VIEWOPT_2_SHADOWCRSR ) : ( nUIOptions &= ~VIEWOPT_2_SHADOWCRSR); }
+
+    //move vertical ruler to the right
+    BOOL    IsVRulerRight()    const
+        { return nUIOptions & VIEWOPT_2_VLIN_RIGHT ? TRUE : FALSE;   }
+    void   SetVRulerRight(BOOL b)
+        { b ? (nUIOptions |= VIEWOPT_2_VLIN_RIGHT ) : ( nUIOptions &= ~VIEWOPT_2_VLIN_RIGHT); }
 
     BOOL            IsStarOneSetting() const {return bStarOneSetting; }
     void            SetStarOneSetting(BOOL bSet) {bStarOneSetting = bSet; }

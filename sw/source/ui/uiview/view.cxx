@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: tl $ $Date: 2002-02-19 13:32:01 $
+ *  last change: $Author: os $ $Date: 2002-03-07 08:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,14 +790,18 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     pHScrollbar(0),
     pVScrollbar(0),
     pScrollFill(0),
-    pHLineal( new SvxRuler(&GetViewFrame()->GetWindow(), pEditWin,
+    pHRuler( new SvxRuler(&GetViewFrame()->GetWindow(), pEditWin,
                     SVXRULER_SUPPORT_TABS |
                     SVXRULER_SUPPORT_PARAGRAPH_MARGINS |
                     SVXRULER_SUPPORT_BORDERS |
                     SVXRULER_SUPPORT_NEGATIVE_MARGINS,
                     GetViewFrame()->GetBindings(),
                     WB_STDRULER | WB_EXTRAFIELD | WB_3DLOOK | WB_BORDER)),
-    pVLineal(0),
+    pVRuler(new SvxRuler(&GetViewFrame()->GetWindow(), pEditWin,
+                            SVXRULER_SUPPORT_TABS | SVXRULER_SUPPORT_PARAGRAPH_MARGINS_VERTICAL|
+                                SVXRULER_SUPPORT_BORDERS,
+                            GetViewFrame()->GetBindings(),
+                            WB_VSCROLL |  WB_3DLOOK | WB_EXTRAFIELD | WB_BORDER )),
     pTogglePageBtn(0),
     pPageUpBtn(0),
     pPageDownBtn(0),
@@ -909,7 +913,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     sal_Bool bOld = bNoInterrupt;
     bNoInterrupt = sal_True;
 
-    pHLineal->SetActive( sal_True );
+    pHRuler->SetActive( sal_True );
 
     SfxViewFrame* pViewFrame = GetViewFrame();
     if( pViewFrame->GetFrame()->GetParentFrame())
@@ -922,10 +926,10 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     StartListening( *pDocSh );
 
     // Vom HLineal den ZOOM-Faktor einstellen
-    pHLineal->SetZoom( Fraction( aUsrPref.GetZoom(), 100 ) );
-    pHLineal->SetDoubleClickHdl(LINK( this, SwView, ExecRulerClick ));
+    pHRuler->SetZoom( Fraction( aUsrPref.GetZoom(), 100 ) );
+    pHRuler->SetDoubleClickHdl(LINK( this, SwView, ExecRulerClick ));
     FieldUnit eMetric = pUsrPref->GetHScrollMetric();
-    pHLineal->SetUnit( eMetric );
+    pHRuler->SetUnit( eMetric );
 
     // DocShell setzen
     pDocSh->SetView( this );
@@ -1073,8 +1077,8 @@ SwView::~SwView()
     pShell = 0;
     delete pHScrollbar;
     delete pVScrollbar;
-    delete pHLineal;
-    delete pVLineal;
+    delete pHRuler;
+    delete pVRuler;
     delete pTogglePageBtn;
     delete pPageUpBtn;
     delete pNaviBtn;
@@ -1486,10 +1490,8 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 {
                     // Modalmodus-Umschaltung?
                     sal_Bool bModal = GetDocShell()->IsInModalMode();
-                    if(pHLineal)
-                        pHLineal->SetActive( !bModal );
-                    if(pVLineal)
-                        pVLineal->SetActive( !bModal );
+                    pHRuler->SetActive( !bModal );
+                    pVRuler->SetActive( !bModal );
                 }
 
                 /* kein break hier */

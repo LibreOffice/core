@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-12 14:20:21 $
+ *  last change: $Author: os $ $Date: 2002-03-07 08:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
+#endif
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
 #endif
 
 #ifndef _SFXENUMITEM_HXX //autogen
@@ -226,6 +229,7 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
     aHRulerCBox   ( this,   SW_RES( CB_HRULER   ) ),
     aHMetric      ( this,   SW_RES( LB_HMETRIC    ) ),
     aVRulerCBox   ( this,   SW_RES( CB_VRULER    ) ),
+    aVRulerRightCBox( this, SW_RES( CB_VRULER_RIGHT    ) ),
     aVMetric      ( this,   SW_RES( LB_VMETRIC    ) ),
     aSmoothCBox   ( this,   SW_RES( CB_SMOOTH_SCROLL    ) ),
     aDispFL      ( this,   SW_RES( FL_DISP     ) ),
@@ -256,6 +260,16 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
         aSettingsFL.Show();
         aMetricFT.Show();
     }
+    SvtCJKOptions aCJKOptions;
+    if(aCJKOptions.IsVerticalTextEnabled() )
+    {
+        Point aSmoothPos(aSmoothCBox.GetPosPixel());
+        aSmoothPos.Y() += aSmoothPos.Y() - aVRulerCBox.GetPosPixel().Y();
+        aSmoothCBox.SetPosPixel(aSmoothPos);
+    }
+    else
+        aVRulerRightCBox.Hide();
+    aVRulerCBox.SetClickHdl(LINK(this, SwContentOptPage, VertRulerHdl ));
 
     SvxStringArray aMetricArr( SW_RES( STR_ARR_METRIC ) );
     for ( USHORT i = 0; i < aMetricArr.Count(); ++i )
@@ -348,6 +362,7 @@ void SwContentOptPage::Reset(const SfxItemSet& rSet)
         aVScrollBox.Check( pElemAttr->bVertScrollbar     );
         aHRulerCBox.Check( pElemAttr->bHorzRuler         );
         aVRulerCBox.Check( pElemAttr->bVertRuler         );
+        aVRulerRightCBox.Check(pElemAttr->bVertRulerRight);
         aSmoothCBox.Check( pElemAttr->bSmoothScroll      );
 //                                            bHtmlMode
     }
@@ -355,13 +370,12 @@ void SwContentOptPage::Reset(const SfxItemSet& rSet)
     lcl_SelectMetricLB(aMetricLB, SID_ATTR_METRIC, rSet);
     lcl_SelectMetricLB(aHMetric, FN_HSCROLL_METRIC, rSet);
     lcl_SelectMetricLB(aVMetric, FN_VSCROLL_METRIC, rSet);
+    VertRulerHdl(&aVRulerCBox);
 }
 
 /*-----------------31.08.96 13.58-------------------
 
 --------------------------------------------------*/
-
-
 BOOL SwContentOptPage::FillItemSet(SfxItemSet& rSet)
 {
     const SwElemItem*   pOldAttr = (const SwElemItem*)
@@ -389,6 +403,7 @@ BOOL SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     aElem.bVertScrollbar = aVScrollBox.IsChecked();
     aElem.bHorzRuler     = aHRulerCBox.IsChecked();
     aElem.bVertRuler     = aVRulerCBox.IsChecked();
+    aElem.bVertRulerRight= aVRulerRightCBox.IsChecked();
     aElem.bSmoothScroll  = aSmoothCBox.IsChecked();
 
 
@@ -421,6 +436,14 @@ BOOL SwContentOptPage::FillItemSet(SfxItemSet& rSet)
         bRet = TRUE;
     }
     return bRet;
+}
+/* -----------------------------05.03.2002 15:07------------------------------
+
+ ---------------------------------------------------------------------------*/
+IMPL_LINK(SwContentOptPage, VertRulerHdl, CheckBox*, pBox)
+{
+    aVRulerRightCBox.Enable(pBox->IsChecked());
+    return 0;
 }
 /*----------------- OS 27.01.95  -----------------------
  TabPage Drucker Zusatzeinstellungen

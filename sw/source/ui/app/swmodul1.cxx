@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 13:50:52 $
+ *  last change: $Author: os $ $Date: 2002-03-07 08:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,10 +287,10 @@ void lcl_SetUIPrefs(const SwViewOption* pPref, SwView* pView, ViewShell* pSh )
 {
     // in FrameSets kann die tatsaechliche Sichtbarkeit von der Einstellung der ViewOptions abweichen
     sal_Bool bVScrollChanged = pPref->IsViewVScrollBar() != pSh->GetViewOptions()->IsViewVScrollBar();
-    sal_Bool bHScrollChanged = pPref->IsViewHScrollBar() != pSh->GetViewOptions()->IsViewHScrollBar();;
+    sal_Bool bHScrollChanged = pPref->IsViewHScrollBar() != pSh->GetViewOptions()->IsViewHScrollBar();
+    sal_Bool bVAlignChanged = pPref->IsVRulerRight() != pSh->GetViewOptions()->IsVRulerRight();
 
     pSh->SetUIOptions(*pPref);
-
     const SwViewOption* pNewPref = pSh->GetViewOptions();
 
     // Scrollbars an / aus
@@ -308,6 +308,9 @@ void lcl_SetUIPrefs(const SwViewOption* pPref, SwView* pView, ViewShell* pSh )
         else
             pView->KillHScrollbar();
     }
+    //if only the position of the vertical ruler has been changed initiate an update
+    if(bVAlignChanged && !bHScrollChanged && !bVScrollChanged)
+        pView->InvalidateBorder();
 
     // Lineale an / aus
     if(pNewPref->IsViewVLin())
