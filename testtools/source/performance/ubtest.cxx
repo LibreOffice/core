@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: hr $ $Date: 2003-03-27 16:49:18 $
-#*    $Revision: 1.3 $
+#*    last change   $Author: vg $ $Date: 2003-04-15 16:42:43 $
+#*    $Revision: 1.4 $
 #*
 #*    $Logfile: $
 #*
@@ -1171,8 +1171,8 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
         // dump out tables
 
         out( "\nTimes( ratio to direct in process )", stream );
-#ifdef DEBUG
-        out ("; compiled with DEBUG", stream );
+#if OSL_DEBUG_LEVEL > 1
+        out ("; compiled with OSL_DEBUG_LEVEL > 1", stream );
 #endif
         out( ":", stream );
 
@@ -1322,6 +1322,15 @@ void * SAL_CALL component_getFactory(
 
 /**************************************************************************
     $Log: not supported by cvs2svn $
+    Revision 1.2.20.1.14.2  2003/04/10 16:34:30  kso
+    RESYNC: (1.2.20.1-1.3); FILE MERGED
+
+    Revision 1.2.20.1.14.1  2003/04/10 09:20:16  kso
+    #108413# - debug macro unification.
+
+    Revision 1.3  2003/03/27 16:49:18  hr
+    MWS_SRX644: migrate branch mws_srx644 -> HEAD
+
     Revision 1.2.20.1  2003/02/18 12:28:35  vg
     INTEGRATION: CWS kso6 (1.2.30); FILE MERGED
     2003/02/10 16:01:14 kso 1.2.30.1: #105906# - Checked/removed sprintf, strcpy, strcat
