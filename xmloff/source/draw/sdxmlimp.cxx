@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-17 15:51:30 $
+ *  last change: $Author: cl $ $Date: 2002-07-15 13:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,10 @@
 
 #ifndef _XMLOFF_XMLEXPPR_HXX
 #include "xmlexppr.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLERROR_HXX
+#include "xmlerror.hxx"
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -951,7 +955,15 @@ void SdXMLImport::SetViewSettings(const com::sun::star::uno::Sequence<com::sun::
         pValues++;
     }
 
-    xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ), uno::makeAny( aVisArea )  );
+    try
+    {
+        xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ), uno::makeAny( aVisArea )  );
+    }
+    catch( com::sun::star::uno::Exception e )
+    {
+        uno::Sequence<OUString> aSeq(0);
+        SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, NULL );
+    }
 }
 
 void SdXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps)
@@ -980,7 +992,7 @@ void SdXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<c
                 xProps->setPropertyValue( pValues->Name, pValues->Value );
             }
         }
-        catch( uno::Exception& e )
+        catch( uno::Exception& )
         {
             OSL_TRACE( "#SdXMLImport::SetConfigurationSettings: Exception!" );
         }
