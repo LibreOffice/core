@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumns.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:32:42 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,17 +168,17 @@ void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
                 aAddedColumn.put_RelatedColumn(aColumn.get_RelatedColumn());
             }
         }
-        ADOS::ThrowException(*m_pConnection->getConnection(),*this);
+        ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
     }
     else
-        throw SQLException(::rtl::OUString::createFromAscii("Could not append column!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Could not append column!"),static_cast<XTypeProvider*>(this),OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
 }
 // -------------------------------------------------------------------------
 // XDrop
 void OColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
     if(!m_aCollection.Delete(_sElementName))
-        ADOS::ThrowException(*m_pConnection->getConnection(),*this);
+        ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
 }
 // -----------------------------------------------------------------------------
 Reference< XNamed > OColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
