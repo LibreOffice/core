@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: lla $ $Date: 2001-05-14 12:06:26 $
+ *  last change: $Author: jb $ $Date: 2001-07-30 10:12:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,12 +86,9 @@ namespace configmgr
     rtl::OUString FileHelper::convertFilenameToFileURL(rtl::OUString const& _sFilename)
     {
         rtl::OUString sURL;
-#ifdef TF_FILEURL
+
         osl::FileBase::getFileURLFromSystemPath( _sFilename, sURL );
-#else
-        osl::File aConvert(ASCII(""));
-        aConvert.normalizePath(_sFilename, sURL);
-#endif
+
         return sURL;
     }
 

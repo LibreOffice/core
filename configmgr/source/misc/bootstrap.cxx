@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2001-07-06 08:12:59 $
+ *  last change: $Author: jb $ $Date: 2001-07-30 10:12:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -623,7 +623,6 @@ namespace configmgr
     {
         OUString sFileURL;
 
-#ifdef TF_FILEURL
         bool bOK = _sSystemPath.getLength() &&  oslOK(osl::File::getFileURLFromSystemPath(_sSystemPath, sFileURL));
 
         if (!bOK)
@@ -632,9 +631,6 @@ namespace configmgr
             if (bOK)
                 sFileURL = _sSystemPath;
         }
-#else
-        bool bOK = oslOK(osl_normalizePath(_sSystemPath.pData, &sFileURL.pData));
-#endif
         if (bOK)
         {
             putSetting(_pSetting, Settings::Setting(sFileURL, _eOrigin));
@@ -660,16 +656,12 @@ namespace configmgr
             OUString sRawPath = aSetting.toString();
             OUString sNormalized;
 
-        #ifdef TF_FILEURL
             bOK = oslOK(osl::File::getFileURLFromSystemPath(sRawPath, sNormalized));
-        #else
-            bOK = oslOK(osl_normalizePath(sRawPath.pData, &sNormalized.pData));
-        #endif
             if (bOK)
             {
                 putSetting(_pSetting, Settings::Setting(sNormalized,aSetting.origin()) );
             }
-            else
+            else if (!isValidFileURL(sRawPath))
             {
                 CFG_TRACE_WARNING_NI("provider bootstrapping: could not normalize a given path (setting: %s, value: %s)", _pSetting.getStr(), OUSTRING2ASCII(sRawPath));
                 //clearSetting(_pSetting);
@@ -1215,7 +1207,7 @@ namespace configmgr
 
         rtl::OUStringBuffer sConnect = _rSettings.getSessionType();
 
-        if (_rSettings.isServiceRequired())
+        if (_rSettings.isServiceRequired() && _rSettings.hasService())
         {
             sConnect.append(sal_Unicode(':'));
             sConnect.append(_rSettings.getService());
@@ -1345,7 +1337,6 @@ namespace {
             }
         }
 
-    #ifdef TF_FILEURL
         if ( !bIsNormalized)
         {
             OUString sOther;
@@ -1361,16 +1352,6 @@ namespace {
                 return false;
         }
 
-    #else // ! TF_FILEURL
-        OUString sNormalized;
-        if ( oslOK(osl_normalizePath(_rPath.pData, &sNormalized.pData)) )
-        {
-            _rPath = sNormalized;
-        }
-        else
-            return false;
-
-    #endif // TF_FILEURL
 
         #ifdef _DEBUG
         OUString sSystemPathCheck; // check that this has become a file url for a local path
@@ -1522,11 +1503,7 @@ namespace {
                 // normalize the path
                 OUString sNormalized;
                 // normalize the user directory path
-    #ifdef TF_FILEURL
                 if (!oslOK(osl::File::getFileURLFromSystemPath(sUserPath, sNormalized)))
-    #else
-                if (!oslOK(osl_normalizePath(sUserPath.pData, &sNormalized.pData)))
-    #endif
                 {
                     CFG_TRACE_ERROR_NI("provider bootstrapping: could not normalize the user path from the product version file");
 
