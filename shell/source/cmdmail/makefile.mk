@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:46:28 $
+#   last change: $Author: rt $ $Date: 2004-06-17 15:41:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,13 +74,15 @@ COMPRDB=$(SOLARBINDIR)$/types.rdb
 
 # --- Files --------------------------------------------------------
 
+DLLPRE=
+
 SLOFILES= \
     $(SLO)$/cmdmailsuppl.obj \
     $(SLO)$/cmdmailmsg.obj \
     $(SLO)$/cmdmailentry.obj
 SHL1OBJS=$(SLOFILES) 
             
-SHL1TARGET=$(TARGET)
+SHL1TARGET=$(TARGET).uno
 SHL1IMPLIB=i$(TARGET)
 
 SHL1STDLIBS=$(CPPULIB)\
