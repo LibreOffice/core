@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDocumentInfoSupplier.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ module com {   module sun {   module star {   module document {
     @see DocumentInfo
     @see StandaloneDocumentInfo
  */
-interface XDocumentInfoSupplier: com::sun::star::uno::XInterface
+published interface XDocumentInfoSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** provides the document information object
