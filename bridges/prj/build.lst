@@ -22,6 +22,5 @@ br	bridges\source\cpp_uno\gcc2_netbsd_intel	nmake	-	u	br_gccni br_unotypes NULL
 br	bridges\source\cpp_uno\gcc2_netbsd_sparc	nmake	-	u	br_gccns br_unotypes NULL
 br	bridges\source\cpp_uno\gcc2_netbsd_powerpc	nmake	-	u	br_gccnp br_unotypes NULL
 br	bridges\source\prot_uno					nmake	-	all	br_pruno br_unotypes NULL
-#br	bridges\source\java_uno					nmake	-	all	br_java_uno br_rcon NULL
 br	bridges\source\jni_uno					nmake	-	all	br_jni_uno br_unotypes NULL
 br	bridges\source\jni_uno\java\com\sun\star\bridges\jni_uno				nmake	-	all	br_jni_uno_java br_unotypes NULL
