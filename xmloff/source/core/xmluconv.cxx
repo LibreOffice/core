@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-07 12:06:43 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1100,7 +1100,7 @@ void SvXMLUnitConverter::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
     fValue -= nValue;
     double fCount;
     if (nValue > 0)
-         fCount = ::rtl::math::approxFloor (log10((double) nValue)) + 1;
+         fCount = ::rtl::math::approxFloor (log10((double)nValue)) + 1;
     else if (nValue < 0)
          fCount = ::rtl::math::approxFloor (log10((double)(nValue * -1))) + 1;
     else
