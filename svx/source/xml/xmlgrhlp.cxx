@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $
+ *  last change: $Author: rt $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,13 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/gfxlink.hxx>
 
+#ifndef _ZCODEC_HXX
+#include <tools/zcodec.hxx>
+#endif
+
 #include "impgrf.hxx"
 #include "xmlgrhlp.hxx"
+
 
 // -----------
 // - Defines -
@@ -340,10 +345,61 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
         Graphic aGraphic;
 
         mpOStm->Seek( 0 );
-        GetGrfFilter()->ImportGraphic( aGraphic, String(), *mpOStm );
+        USHORT nFormat = GRFILTER_FORMAT_DONTKNOW;
+        USHORT pDeterminedFormat = GRFILTER_FORMAT_DONTKNOW;
+        GetGrfFilter()->ImportGraphic( aGraphic, String(), *mpOStm ,nFormat,&pDeterminedFormat );
+
+        if (pDeterminedFormat == GRFILTER_FORMAT_DONTKNOW)
+        {
+            //Read the first two byte to check whether it is a gzipped stream, is so it may be in wmz or emz format
+            //unzip them and try again
+
+            BYTE    sFirstBytes[ 2 ];
+
+            mpOStm->Seek( STREAM_SEEK_TO_END );
+            ULONG nStreamLen = mpOStm->Tell();
+            mpOStm->Seek( 0 );
+
+            if ( !nStreamLen )
+            {
+                SvLockBytes* pLockBytes = mpOStm->GetLockBytes();
+                if ( pLockBytes  )
+                    pLockBytes->SetSynchronMode( TRUE );
+
+                mpOStm->Seek( STREAM_SEEK_TO_END );
+                nStreamLen = mpOStm->Tell();
+                mpOStm->Seek( 0 );
+            }
+            if( nStreamLen >= 2 )
+            {
+                //read two byte
+                mpOStm->Read( sFirstBytes, 2 );
+
+                if( sFirstBytes[0] == 0x1f && sFirstBytes[1] == 0x8b )
+                {
+                    SvMemoryStream* pDest = new SvMemoryStream;
+                    ZCodec aZCodec( 0x8000, 0x8000 );
+                    aZCodec.BeginCompression(ZCODEC_GZ_LIB);
+                    mpOStm->Seek( 0 );
+                    aZCodec.Decompress( *mpOStm, *pDest );
+                    BOOL bRetValue = FALSE;
+
+                    if (aZCodec.EndCompression() && pDest )
+                    {
+                        pDest->Seek( STREAM_SEEK_TO_END );
+                        ULONG nStreamLen = pDest->Tell();
+                        if (nStreamLen)
+                        {
+                            pDest->Seek(0L);
+                            GetGrfFilter()->ImportGraphic( aGraphic, String(), *pDest ,nFormat,&pDeterminedFormat );
+                        }
+                    }
+                    delete pDest;
+                }
+            }
+        }
 
         maGrfObj = aGraphic;
-
         if( maGrfObj.GetType() != GRAPHIC_NONE )
         {
             delete mpOStm, mpOStm = NULL;
