@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:59:55 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ japanese ] = "ζ€ι«γ―γƒγƒΌγ‚Έγ®ι«γ•(~N)";
         Text[ chinese_traditional ] = "ζ€ι«δΈθ¶…ιι ι«(~N)";
         Text[ arabic ] = "ανΣ ΓίΘΡ γδ δΨΗή ΗαΥέΝΙ";
-        Text[ greek ] = "Όχι μεγαλύτερο ύψος από την περιοχή σελίδας";
+        Text[ greek ] = "Όχι ~μεγαλύτ. ύψος από την περιοχή σελίδας";
         Text[ korean ] = "νμ΄μ§€ μμ—­ λ³΄λ‹¤ λ†’μ§€ μ•κ²(~N)";
         Text[ turkish ] = "~Sayfa  alanύndan bόyόk deπil";
         Text[ language_user1 ] = " ";
@@ -401,7 +401,7 @@ TabPage TP_FOOTNOTE_PAGE
         StringList [ greek ] =
         {
             < "Αριστερά" ; Default ; > ;
-            < "Κεντραρισμένα" ; Default ; > ;
+            < "Στο κέντρο" ; Default ; > ;
             < "Δεξιά" ; Default ; > ;
         };
         StringList [ korean ] =
@@ -579,7 +579,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ chinese_traditional ] = "θ‡³θ¨»θ…³ζ–‡η„ι–“ι”(~S)";
         Text[ arabic ] = "ΗαγΣΗέΙ ΝΚμ γΝΚζνΗΚ ΗαΝΗΤνΙ ΗαΣέανΙ";
         Text[ language_user1 ] = " ";
-        Text[ greek ] = "Απόσ~ταση από το περιεχόμενο υποσημείωσης";
+        Text[ greek ] = "Απόσ~ταση από περιεχόμ. υποσημείωσης";
         Text[ korean ] = "κ°μ£Ό λ‚΄μ©κ³Όμ κ°„κ²©(~S)";
         Text[ turkish ] = "~Dipnot iηeriπine uzaklύk";
         Text[ catalan ] = "~Espaiat continguts de la nota al peu";
@@ -641,6 +641,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ slovak ] = "OddeΔΎovacia Δiara";
     };
 };
+
 
 
 
