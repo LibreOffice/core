@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbui.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:02:12 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 #define DLG_MM_SAVEWARNING            (RC_DBUI_BEGIN + 27)
 #define DLG_MM_QUERY                  (RC_DBUI_BEGIN + 28)
 #define DLG_MM_SENDWARNING            (RC_DBUI_BEGIN + 29)
+#define DLG_MM_CREATIONMONITOR        (RC_DBUI_BEGIN + 30)
 // Strings ------------------------------------------------------------------
 
 #define STR_DB_EMAIL            (RC_DBUI_BEGIN)
@@ -130,6 +131,10 @@
 #define PB_CANCELPRNMON     9
 #define FT_SENDING          10
 #define STR_EMAILMON        11
+#define FT_STATUS           12
+#define FT_CREATEDOCUMENTS  13
+#define FT_PROGRESS         14
+#define FT_COUNTING         15
 
 #define MM_PART_TITLE                   0
 #define MM_PART_FIRSTNAME               1
