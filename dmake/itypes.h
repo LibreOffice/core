@@ -1,4 +1,4 @@
-/* RCS  $Id: itypes.h,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: itypes.h,v 1.2 2003-03-25 14:02:12 hr Exp $
 --
 -- SYNOPSIS
 --      Type declarations for common types
@@ -27,20 +27,25 @@
 #ifndef ITYPES_h
 #define ITYPES_h
 
-#if defined(M_I86) || defined(MC68000)
-typedef char  int8;               /* typedefs for right size ints */
-typedef int   int16;
-typedef long  int32;
-typedef unsigned char  uint8;
-typedef unsigned int   uint16;
-typedef unsigned long  uint32;
-#else
-typedef char  int8;               /* typedefs for right size ints */
-typedef short int16;
-typedef long  int32;
-typedef unsigned char  uint8;
+typedef unsigned char uint8;
+typedef signed char int8;
+#if SIZEOF_SHORT == 2
 typedef unsigned short uint16;
-typedef unsigned long  uint32;
+typedef short int16;
+#elif SIZEOF_INT == 2
+typedef unsigned int uint16;
+typedef int int16;
+#else
+#error "No 2 byte type, you lose."
+#endif
+#if SIZEOF_INT == 4
+typedef unsigned int uint32;
+typedef int int32;
+#elif SIZEOF_LONG == 4
+typedef unsigned long uint32;
+typedef long int32;
+#else
+#error "No 4 byte type, you lose."
 #endif
 
 #endif

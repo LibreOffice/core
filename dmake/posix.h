@@ -1,4 +1,4 @@
-/* RCS  $Id: posix.h,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: posix.h,v 1.2 2003-03-25 14:02:13 hr Exp $
 --
 -- SYNOPSIS
 --      Definition for POSIX conforming defines in dmake.
@@ -51,4 +51,15 @@
 
 #ifndef CHILD_MAX
 #define CHILD_MAX _POSIX_CHILD_MAX
+#endif
+
+/* now fix these since some values are all wet */
+#if NAME_MAX < 255
+#undef NAME_MAX
+#define NAME_MAX 255
+#endif
+
+#if PATH_MAX < 1024
+#undef PATH_MAX
+#define PATH_MAX 1024
 #endif

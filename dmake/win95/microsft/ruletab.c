@@ -1,4 +1,4 @@
-/* RCS  $Id: ruletab.c,v 1.1.1.1 2000-09-22 15:33:36 hr Exp $
+/* RCS  $Id: ruletab.c,v 1.2 2003-03-25 14:02:53 hr Exp $
 --
 -- SYNOPSIS
 --      Default initial configuration of dmake.
@@ -39,6 +39,9 @@ static char *_rules[] = {
     ".MAKEFILES : makefile.mk makefile",
     ".SOURCE    : .NULL",
 #include "startup.h"
+#if __MINGW32__
+#   include "dmakeroot.h"
+#endif
     (char *)NULL };
 
 char **Rule_tab = _rules; /* for sundry reasons in Get_environment() */

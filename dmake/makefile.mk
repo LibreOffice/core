@@ -20,6 +20,9 @@ first : all ;
 # Define $(PUBLIC)
 _osenv   := $(OSENVIRONMENT)$/
 _osre    := $(OSRELEASE)$/$(!null,$(OSENVIRONMENT) $(_osenv))
+.IF "$(OS)"=="LINUX"
+OS=linux
+.ENDIF
 ENVDIR    = $(OS)$/$(!null,$(OSRELEASE) $(_osre))
 PUBLIC    = $(ENVDIR)public.h
 MKCONFIG := startup/config.mk

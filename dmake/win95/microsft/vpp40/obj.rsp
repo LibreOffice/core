@@ -23,7 +23,6 @@ objects\switchar.obj
 objects\dstrlwr.obj
 objects\arlib.obj
 objects\dirbrk.obj
-objects\tempnam.obj
 objects\ruletab.obj
 objects\runargv.obj
 objects\rmprq.obj

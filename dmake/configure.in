@@ -1,6 +1,6 @@
 
 dnl Process this file with autoconf to produce a configure script.
-AC_PREREQ(2.13)
+AC_PREREQ(2.50)
 AC_INIT
 
 dnl set the DMAKEROOT
@@ -31,13 +31,16 @@ dnl Initialize libtool
 dnl Checks for header files.
 AC_HEADER_DIRENT
 AC_HEADER_STDC
-AC_CHECK_HEADERS(fcntl.h limits.h strings.h sys/types.h sys/stat.h unistd.h errno.h utime.h spawn.h wait.h)
+AC_CHECK_HEADERS(fcntl.h limits.h strings.h sys/types.h sys/stat.h unistd.h errno.h utime.h spawn.h wait.h sys/wait.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
 AC_HEADER_TIME
+AC_CHECK_SIZEOF(short, 2)
+AC_CHECK_SIZEOF(int, 4)
+AC_CHECK_SIZEOF(long, 4)
 
 dnl Checks for library functions.
 AC_FUNC_MEMCMP
@@ -52,9 +55,20 @@ AC_MSG_CHECKING([the operating system])
 _os=`uname`
 
 if test `echo $_os | $AWK -F_ '{ print $1 }'` = "CYGWIN"; then
-   _os="WINNT"
+   if test "$GCC" = "yes"; then
+      if test `$CC -dumpmachine | $AWK -F- '{ print $3 }'` = "mingw32"; then
+         _os="MINGW"
+      else
+         _os="CYGWIN"
+      fi
+   else
+      _os="MSVC6"
+   fi
 fi
 
+
+## At the moment all except mingw builds are OS_TYPE unix
+OS_TYPE=unix
 
 ## The following allows like systems to share settings this is not meant to
 ## Imply that these OS are the same thing.
@@ -65,8 +79,16 @@ case "$_os" in
 	"Linux")
 	  OS_VERSION=linux
 	  ;;
-	"WINNT")
+	"CYGWIN")
 	  OS_VERSION=cygwin
+	  ;;
+	"MINGW")
+	  OS_VERSION=mingw
+	  OS_TYPE=winnt
+	  ;;
+	"MSVC6")
+	  OS_VERSION=msvc6
+	  OS_TYPE=winnt
 	  ;;
 	"Darwin")
 	  OS_VERSION=macosx
@@ -96,21 +118,34 @@ esac
 
 AC_MSG_RESULT([checked ($_os)])
 
+if test x$OS_TYPE = xunix; then
+  OS_SUBDIRS=["unix startup"]
+  OS_LIBRARY=unix/libunix.a
+else
+  OS_SUBDIRS=["win95 msdos startup"]
+  OS_LIBRARY=["win95/libwin95.a msdos/libmsdos.a win95/microsft/libmsft.a"]
+fi
 
+AC_SUBST(OS_TYPE)
 AC_SUBST(OS_VERSION)
+AC_SUBST(OS_SUBDIRS)
+AC_SUBST(OS_LIBRARY)
 
 AM_CONFIG_HEADER(config.h)
 
-AC_OUTPUT(Makefile unix/Makefile startup/Makefile startup/unix/Makefile \
+AC_CONFIG_FILES(Makefile unix/Makefile startup/Makefile startup/unix/Makefile \
 		startup/unix/linux/Makefile startup/unix/solaris/Makefile \
 		startup/unix/macosx/Makefile startup/unix/sysvr4/Makefile \
-		startup/unix/cygwin/Makefile dmakeroot.h )
+		startup/unix/cygwin/Makefile \
+		startup/winnt/Makefile startup/winnt/mingw/Makefile \
+		startup/winnt/msvc6/Makefile \
+		msdos/Makefile win95/Makefile win95/microsft/Makefile )
 
 dnl ******************************
 dnl *** output the whole stuff ***
 dnl ******************************
 
-AC_OUTPUT_COMMANDS([
+AC_CONFIG_COMMANDS_POST([
 
 
 ## Generate `dmakeroot.h' in two cases
@@ -137,21 +172,23 @@ fi
 _______EOF
 
 if test x$prefix != x; then
+   if test x$OS_TYPE = xunix; then
        echo '"DMAKEROOT := '$prefix'/share/startup",' >> $outfile
-       echo '"OS := '${OS_VERSION}'",' >> $outfile
+   fi
+   echo '"OS := '${OS_VERSION}'",' >> $outfile
 fi
 if cmp -s $outfile dmakeroot.h; then
     echo dmakeroot.h is unchanged
     rm -f $outfile
 else
     mv $outfile dmakeroot.h
-fi 
-],[
-OS_VERSION=$OS_VERSION
+fi
 ])
 							  
 				   
 dnl set the DMAKEROOT
 AC_SET_DMAKEROOT
 
+dnl *** output to disk ***
+AC_OUTPUT
 

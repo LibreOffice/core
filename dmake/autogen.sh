@@ -20,9 +20,9 @@ DIE=0
     DIE=1
 }
 
-(autoconf --version | grep '2.13' ) < /dev/null > /dev/null 2>&1 || {
+(autoconf --version ) < /dev/null > /dev/null 2>&1 || {
     echo
-    echo "You must have autoconf version 2.13 installed to compile $PROJECT."
+    echo "You must have autoconf installed to compile $PROJECT."
     echo "Get ftp://ftp.gnu.org/gnu/gettext/autoconf/autoconf-2.13.tar.gz"
     DIE=1
 }
@@ -83,4 +83,4 @@ cd $ORIGDIR
 $srcdir/configure --enable-maintainer-mode  --prefix=/usr/local "$@"
 
 echo
-echo "Now exucute GNU make to compile $PROJECT."
+echo "Now execute GNU make to compile $PROJECT."

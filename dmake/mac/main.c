@@ -1,4 +1,4 @@
-/* RCS  $Id: main.c,v 1.2 2003-01-13 14:27:58 waratah Exp $
+/* RCS  $Id: main.c,v 1.3 2003-03-25 14:02:21 hr Exp $
 --
 -- SYNOPSIS
 --      The real main function
@@ -37,7 +37,7 @@
  * Put envp in environ and call dmake's main().
  */
 #undef main
-int main(int argc, char **argv, char **envp) {
+void main(int argc, char **argv, char **envp) {
     environ = envp;
     dmakemain (argc, argv);
-} /* int main () */
+} /* void main () */

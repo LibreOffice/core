@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Makefile.am,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: waratah $ $Date: 2002-10-02 13:42:11 $
+#   last change: $Author: hr $ $Date: 2003-03-25 14:02:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,8 +60,8 @@
 #
 #*************************************************************************
 
-# require automake 1.4
-AUTOMAKE_OPTIONS = 1.4 foreign
+# require "new" automake >= 1.5
+AUTOMAKE_OPTIONS = 1.5 foreign
 
 
 
@@ -70,14 +70,17 @@ dmake_SOURCES = \
 	infer.c make.c stat.c expand.c dmstring.c hash.c dag.c dmake.c\
 	path.c imacs.c sysintf.c parse.c getinp.c quit.c state.c\
 	dmdump.c macparse.c rulparse.c percent.c function.c
-dmake_LDADD   = unix/libunix.a
 
-SUBDIRS = unix startup
+#dmake_LDADD   = unix/libunix.a
+#dmake_LDADD   = win95/libwin95.a msdos/libmsdos.a win95/microsft/libmsft.a
+dmake_LDADD   = $(OS_LIBRARY)
+
+DIST_SUBDIRS = unix startup win95 msdos
+SUBDIRS = $(OS_SUBDIRS)
 
 EXTRA_DIST = make.c 
 
 # set the include path found by configure
-INCLUDES = -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/unix/@OS_VERSION@ -I$(top_srcdir)/unix -I$(top_srcdir)/unix/@OS_VERSION@/gnu 
+INCLUDES = -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@ -I$(top_srcdir)/@OS_TYPE@ -I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@/gnu 
 
 CFLAGS = -O
-                                                                                
