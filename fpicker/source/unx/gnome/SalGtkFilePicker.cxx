@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:07:16 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1036,6 +1036,7 @@ uno::Sequence<sal_Int16> SAL_CALL SalGtkFilePicker::getSupportedImageFormats() t
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     // TODO return m_pImpl->getSupportedImageFormats();
+    return 0;
 }
 
 sal_Int32 SAL_CALL SalGtkFilePicker::getTargetColorDepth() throw( uno::RuntimeException )
@@ -1044,6 +1045,7 @@ sal_Int32 SAL_CALL SalGtkFilePicker::getTargetColorDepth() throw( uno::RuntimeEx
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     // TODO return m_pImpl->getTargetColorDepth();
+    return 0;
 }
 
 sal_Int32 SAL_CALL SalGtkFilePicker::getAvailableWidth() throw( uno::RuntimeException )
