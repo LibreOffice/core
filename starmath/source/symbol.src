@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2001-12-14 17:57:47 $
+ *  last change: $Author: rt $ $Date: 2001-12-19 18:03:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1518,27 +1518,27 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ korean ] =
     {
-        < "알파" ; > ;
+        < "alpha" ; > ;
         < "ALPHA" ; > ;
-        < "베타" ; > ;
+        < "beta" ; > ;
         < "BETA" ; > ;
-        < "감마" ; > ;
+        < "gamma" ; > ;
         < "GAMMA" ; > ;
-        < "델타" ; > ;
+        < "delta" ; > ;
         < "DELTA" ; > ;
-        < "엡실론" ; > ;
+        < "epsilon" ; > ;
         < "EPSILON" ; > ;
-        < "제타" ; > ;
+        < "zeta" ; > ;
         < "ZETA" ; > ;
-        < "에타" ; > ;
+        < "eta" ; > ;
         < "ETA" ; > ;
-        < "쎄타" ; > ;
+        < "theta" ; > ;
         < "THETA" ; > ;
-        < "호타" ; > ;
+        < "iota" ; > ;
         < "IOTA" ; > ;
-        < "카파" ; > ;
+        < "kappa" ; > ;
         < "KAPPA" ; > ;
-        < "람다" ; > ;
+        < "lambda" ; > ;
         < "LAMBDA" ; > ;
         < "mu" ; > ;
         < "MY" ; > ;
@@ -1546,25 +1546,25 @@ Resource RID_LOCALIZED_NAMES
         < "NU" ; > ;
         < "xi" ; > ;
         < "XI" ; > ;
-        < "omikron" ; > ;
+        < "omicron" ; > ;
         < "OMIKRON" ; > ;
         < "pi" ; > ;
         < "PI" ; > ;
         < "rho" ; > ;
         < "RHO" ; > ;
-        < "시그마" ; > ;
+        < "sigma" ; > ;
         < "SIGMA" ; > ;
         < "tau" ; > ;
         < "TAU" ; > ;
-        < "입실론" ; > ;
+        < "upsilon" ; > ;
         < "UPSILON" ; > ;
-        < "파이" ; > ;
+        < "phi" ; > ;
         < "PHI" ; > ;
         < "chi" ; > ;
         < "CHI" ; > ;
-        < "사이" ; > ;
+        < "psi" ; > ;
         < "PSI" ; > ;
-        < "오메가" ; > ;
+        < "omega" ; > ;
         < "OMEGA" ; > ;
         < "varepsilon" ; > ;
         < "vartheta" ; > ;
@@ -1603,20 +1603,20 @@ Resource RID_LOCALIZED_NAMES
         < "ETA" ; > ;
         < "theta" ; > ;
         < "THETA" ; > ;
-        < "jota" ; > ;
-        < "JOTA" ; > ;
+        < "iota" ; > ;
+        < "IOTA" ; > ;
         < "kappa" ; > ;
         < "KAPPA" ; > ;
         < "lambda" ; > ;
         < "LAMBDA" ; > ;
-        < "my" ; > ;
-        < "MY" ; > ;
-        < "ny" ; > ;
-        < "NY" ; > ;
+        < "mu" ; > ;
+        < "MU" ; > ;
+        < "nu" ; > ;
+        < "NU" ; > ;
         < "xi" ; > ;
         < "XI" ; > ;
-        < "omikron" ; > ;
-        < "OMIKRON" ; > ;
+        < "omicron" ; > ;
+        < "OMICRON" ; > ;
         < "pi" ; > ;
         < "PI" ; > ;
         < "rho" ; > ;
@@ -1625,8 +1625,8 @@ Resource RID_LOCALIZED_NAMES
         < "SIGMA" ; > ;
         < "tau" ; > ;
         < "TAU" ; > ;
-        < "ypsilon" ; > ;
-        < "YPSILON" ; > ;
+        < "upsilon" ; > ;
+        < "UPSILON" ; > ;
         < "phi" ; > ;
         < "PHI" ; > ;
         < "chi" ; > ;
@@ -1672,20 +1672,20 @@ Resource RID_LOCALIZED_NAMES
         < "ETA" ; > ;
         < "theta" ; > ;
         < "THETA" ; > ;
-        < "jota" ; > ;
-        < "JOTA" ; > ;
+        < "iota" ; > ;
+        < "IOTA" ; > ;
         < "kappa" ; > ;
         < "KAPPA" ; > ;
         < "lambda" ; > ;
         < "LAMBDA" ; > ;
-        < "my" ; > ;
-        < "MY" ; > ;
-        < "ny" ; > ;
-        < "NY" ; > ;
+        < "mu" ; > ;
+        < "MU" ; > ;
+        < "nu" ; > ;
+        < "NU" ; > ;
         < "xi" ; > ;
         < "XI" ; > ;
-        < "omikron" ; > ;
-        < "OMIKRON" ; > ;
+        < "omicron" ; > ;
+        < "OMICRON" ; > ;
         < "pi" ; > ;
         < "PI" ; > ;
         < "rho" ; > ;
@@ -1694,8 +1694,8 @@ Resource RID_LOCALIZED_NAMES
         < "SIGMA" ; > ;
         < "tau" ; > ;
         < "TAU" ; > ;
-        < "ypsilon" ; > ;
-        < "YPSILON" ; > ;
+        < "upsilon" ; > ;
+        < "UPSILON" ; > ;
         < "phi" ; > ;
         < "PHI" ; > ;
         < "chi" ; > ;
@@ -2001,6 +2001,7 @@ Resource RID_LOCALIZED_NAMES
     };
     };
 };
+
 
 
 
