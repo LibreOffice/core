@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-20 18:43:31 $
+ *  last change: $Author: nn $ $Date: 2002-10-10 08:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1749,6 +1749,8 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                 bFromDoc = TRUE;
                             }
                             pCell = pInfo->pCell;
+                            if ( bFromDoc && !pCell )
+                                pDoc->GetCell( nX, nY, nTab, pCell );
 
                             bVisChanged = !pRowInfo[nArrY-1].bChanged;
                             if (bVisChanged)
