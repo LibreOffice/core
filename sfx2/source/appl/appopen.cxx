@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-12 10:54:38 $
+ *  last change: $Author: as $ $Date: 2002-09-13 06:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1026,6 +1026,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         }
     }
 
+    BOOL bHyperlinkUsed = FALSE;
+
     if ( SID_OPENURL == nSID )
     {
         // SID_OPENURL does the same as SID_OPENDOC!
@@ -1036,15 +1038,29 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     {
         rReq.AppendItem( SfxBoolItem( SID_TEMPLATE, FALSE ) );
     }
+    // pass URL to OS by using ShellExecuter or open it internal
+    // if it seams to be an own format.
+    /* Attention!
+            There exist two possibilities to open hyperlinks:
+            a) using SID_OPENHYPERLINK (new)
+            b) using SID_BROWSE        (old)
+     */
+    else if ( nSID == SID_OPENHYPERLINK )
+    {
+        rReq.SetSlot( SID_OPENDOC );
+        nSID = SID_OPENDOC;
+        bHyperlinkUsed = TRUE;
+    }
 
-    // pass URL to OS by using ShellExecuter
-    BOOL bHyperlinkUsed = FALSE;
-    SFX_REQUEST_ARG(rReq, pHyperLinkUsedItem, SfxBoolItem, SID_BROWSE, FALSE);
-    if ( pHyperLinkUsedItem )
-        bHyperlinkUsed = pHyperLinkUsedItem->GetValue();
-
-    // no "official" item, so remove it from ItemSet before using UNO-API
-    rReq.RemoveItem( SID_BROWSE );
+    // no else here! It's optional ...
+    if (!bHyperlinkUsed)
+    {
+        SFX_REQUEST_ARG(rReq, pHyperLinkUsedItem, SfxBoolItem, SID_BROWSE, FALSE);
+        if ( pHyperLinkUsedItem )
+            bHyperlinkUsed = pHyperLinkUsedItem->GetValue();
+        // no "official" item, so remove it from ItemSet before using UNO-API
+        rReq.RemoveItem( SID_BROWSE );
+    }
 
     SFX_REQUEST_ARG( rReq, pFileName, SfxStringItem, SID_FILE_NAME, FALSE );
     String aFileName = pFileName->GetValue();
