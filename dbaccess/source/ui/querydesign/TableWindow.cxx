@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-26 12:44:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,11 +100,11 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 #ifndef DBAUI_QUERYCONTROLLER_HXX
 #include "querycontroller.hxx"
@@ -139,7 +139,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 #define TABWIN_SIZING_AREA      4
 #define LISTBOX_SCROLLING_AREA  6
@@ -450,7 +450,7 @@ void OTableWindow::SetTitle( const ::rtl::OUString& rTit )
     ::rtl::OUString sOldTitle = m_aTitle.GetText();
     m_aTitle.SetText( rTit );
     if ( m_pAccessible )
-        m_pAccessible->notifyAccessibleEvent(AccessibleEventId::ACCESSIBLE_NAME_EVENT ,makeAny(sOldTitle),makeAny(rTit));
+        m_pAccessible->notifyAccessibleEvent(AccessibleEventId::NAME_CHANGED ,makeAny(sOldTitle),makeAny(rTit));
 }
 
 //------------------------------------------------------------------------------
