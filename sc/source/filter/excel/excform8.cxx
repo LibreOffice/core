@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-17 11:39:31 $
+ *  last change: $Author: dr $ $Date: 2002-07-09 12:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
             case 0x10: // Union                                 [314 265]
                 // ocSep behelfsweise statt 'ocUnion'
                 aStack >> nMerk0;
-                aPool << ocOpen << aStack << ocSep << nMerk0 << ocClose;
+//#100928#      aPool << ocOpen << aStack << ocSep << nMerk0 << ocClose;
+                aPool << aStack << ocSep << nMerk0;
                     // doesn't fit exactly, but is more Excel-like
                 aPool >> aStack;
                 break;
