@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WindowAttribute.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:45 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 10:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 
 // DocMerge from idl: constants com::sun::star::awt::WindowAttribute
 /** These values are used to specify the decorations of a window.
+
+    <p><b>IMPORTANT:</b> These constands have to be disjunct with
+    constants in <type>VclWindowPeerAttribute</type>.</p>
  */
 constants WindowAttribute
 {
@@ -154,6 +157,9 @@ constants WindowAttribute
 
                 @see XSystemDependentWindowPeer
                 @see com::sun::star::lang::SystemDependent
+
+                @deprecated
+                    conflicts with <type>VclWindowPeerAttribute::HSCROLL</type>
      */
     const long SYSTEMDEPENDENT = 256;
 
