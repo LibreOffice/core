@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salsys.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:38 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ String GetSalSummarySystemInfos( ULONG nFlags )
     if( nFlags & SALSYSTEM_GETSYSTEMINFO_GRAPHICSSYSTEM )
         aRet += aPostMortem.getGraphicsSystem();
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "SalSystem::GetSummarySystemInfos() =\n%s", aRet.GetBuffer() );
 #endif
     return String( aRet, RTL_TEXTENCODING_ISO_8859_1 );
