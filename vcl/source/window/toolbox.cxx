@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: ssa $ $Date: 2002-12-04 17:36:56 $
+ *  last change: $Author: ssa $ $Date: 2002-12-06 12:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4164,8 +4164,10 @@ long ToolBox::Notify( NotifyEvent& rNEvt )
         {
             case KEY_TAB:
                 {
-                // TAB cycling only if parent is not a dialog
-                BOOL bNoTabCycling = ( ( ImplGetParent()->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL) ) == WB_DIALOGCONTROL );
+                // internal TAB cycling only if parent is not a dialog or if we are the ony child
+                // otherwise the dialog control will take over
+                BOOL bNoTabCycling = ( ( ImplGetParent()->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL) ) == WB_DIALOGCONTROL &&
+                    ImplGetParent()->GetChildCount() != 1 );
 
                 if( bNoTabCycling )
                     return DockingWindow::Notify( rNEvt );
