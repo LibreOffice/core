@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cli_cs_bridgetest.cs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:02:10 $
+ *  last change: $Author: obo $ $Date: 2004-09-15 10:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,16 +88,16 @@ namespace cs_testobj
                 {
                     nToCall --;
                     xCall.callRecursivly(this, nToCall);
-                }    
+                }
             }
         }
     };
-        
+
 class Constants
 {
    public const string STRING_TEST_CONSTANT = "\" paco\' chorizo\\\' \"\'";
 }
-    
+
 public class BridgeTest : WeakBase, XMain
 {
 	static bool compareData(Object val1, Object val2)
@@ -107,7 +107,7 @@ public class BridgeTest : WeakBase, XMain
 		if ((val1 == null && val2 != null) ||
 			(val1 != null && val2 == null) || val1.GetType() != val2.GetType())
 			return false;
-					
+
 		bool ret = false;
 		Type t1  = val1.GetType();
 			//Sequence
@@ -123,9 +123,9 @@ public class BridgeTest : WeakBase, XMain
 			// Interface implementation
 		else if (t1.GetInterfaces().Length > 0 && ! t1.IsValueType)
 		{
-			ret = val1 == val2;						
-		}		
-			// Struct	
+			ret = val1 == val2;
+		}
+			// Struct
 		else if ( ! t1.IsValueType)
 		{
 			ret = compareStruct(val1, val2);
@@ -144,7 +144,7 @@ public class BridgeTest : WeakBase, XMain
 		else
 		{
 			Debug.Assert(false);
-		}		
+		}
 		return ret;
 	}
 
@@ -154,8 +154,8 @@ public class BridgeTest : WeakBase, XMain
 		Debug.Assert(ar1 != null && ar2 != null);
 		Type t1 = ar1.GetType();
 		Type t2 = ar2.GetType();
-		
-		if (!(ar1.Rank == 1 && ar2.Rank == 1 
+
+		if (!(ar1.Rank == 1 && ar2.Rank == 1
 			&& ar1.Length == ar2.Length && t1.GetElementType() == t2.GetElementType()))
 			return false;
 
@@ -221,7 +221,7 @@ public class BridgeTest : WeakBase, XMain
         check( rData1.String == rData2.String, "### string does not match!" );
         check( rData1.Interface == rData2.Interface, "### interface does not match!" );
         check( compareData(rData1.Any, rData2.Any), "### any does not match!" );
-        
+
         return (rData1.Bool == rData2.Bool &&
                 rData1.Char == rData2.Char &&
                 rData1.Byte == rData2.Byte &&
@@ -332,7 +332,7 @@ static bool performAnyTest(XBridgeTest xLBT,  TestDataElements data)
 		Any a2 = xLBT.transportAny(a1);
 		bReturn = compareData(a2, a1) && bReturn;
 	}
-	return bReturn; 
+	return bReturn;
 }
 
 static bool performSequenceOfCallTest(XBridgeTest xLBT)
@@ -369,7 +369,7 @@ static bool performRecursiveCallTest(XBridgeTest  xLBT)
 static bool performQueryForUnknownType(XBridgeTest xLBT)
 {
     bool bRet = false;
-    // test queryInterface for an unknown type 
+    // test queryInterface for an unknown type
     try
     {
         foo.MyInterface a = (foo.MyInterface) xLBT;
@@ -389,12 +389,12 @@ static bool performTest(XBridgeTest xLBT)
     bool bRet = true;
 	if (xLBT == null)
         return false;
-    
+
     // this data is never ever granted access to by calls other than equals(), assign()!
     TestDataElements aData = new TestDataElements(); // test against this data
-    
+
     Object xI= new WeakBase();
-    
+
     Any aAny = new Any( typeof(Object), xI);
     assign( (TestElement)aData,
             true, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
@@ -402,19 +402,19 @@ static bool performTest(XBridgeTest xLBT)
             17.0815f, 3.1415926359, TestEnum.LOLA,
             Constants.STRING_TEST_CONSTANT, xI,
             aAny);
-    
+
     bRet = check( aData.Any.Value == xI, "### unexpected any!" ) && bRet;
     bRet = check( !(aData.Any.Value != xI), "### unexpected any!" ) && bRet;
-    
+
     aData.Sequence = new TestElement[2];
     aData.Sequence[0] = new TestElement(
         aData.Bool, aData.Char, aData.Byte, aData.Short,
-        aData.UShort, aData.Long, aData.ULong, 
-        aData.Hyper, aData.UHyper, aData.Float, 
-        aData.Double, aData.Enum, aData.String, 
+        aData.UShort, aData.Long, aData.ULong,
+        aData.Hyper, aData.UHyper, aData.Float,
+        aData.Double, aData.Enum, aData.String,
         aData.Interface, aData.Any); //(TestElement) aData;
     aData.Sequence[1] = new TestElement(); //is empty
-    
+
     // aData complete
     //
     // this is a manually copy of aData for first setting...
@@ -425,21 +425,21 @@ static bool performTest(XBridgeTest xLBT)
             aData.Long, aData.ULong, aData.Hyper, aData.UHyper, aData.Float, aData.Double,
             aData.Enum, aData.String, xI,
             aAnySet);
-    
+
     aSetData.Sequence = new TestElement[2];
     aSetData.Sequence[0] = new TestElement(
         aSetData.Bool, aSetData.Char, aSetData.Byte, aSetData.Short,
-        aSetData.UShort, aSetData.Long, aSetData.ULong, 
-        aSetData.Hyper, aSetData.UHyper, aSetData.Float, 
-        aSetData.Double, aSetData.Enum, aSetData.String, 
+        aSetData.UShort, aSetData.Long, aSetData.ULong,
+        aSetData.Hyper, aSetData.UHyper, aSetData.Float,
+        aSetData.Double, aSetData.Enum, aSetData.String,
         aSetData.Interface, aSetData.Any); //TestElement) aSetData;
     aSetData.Sequence[1] = new TestElement(); // empty struct
-    
+
     xLBT.setValues(
         aSetData.Bool, aSetData.Char, aSetData.Byte, aSetData.Short, aSetData.UShort,
         aSetData.Long, aSetData.ULong, aSetData.Hyper, aSetData.UHyper, aSetData.Float, aSetData.Double,
         aSetData.Enum, aSetData.String, aSetData.Interface, aSetData.Any, aSetData.Sequence, aSetData );
-    
+
     {
 		TestDataElements aRet = new TestDataElements();
         TestDataElements aRet2 = new TestDataElements();
@@ -448,22 +448,22 @@ static bool performTest(XBridgeTest xLBT)
 			out aRet.Long, out aRet.ULong, out aRet.Hyper, out aRet.UHyper,
             out aRet.Float, out aRet.Double, out aRet.Enum, out aRet.String,
             out aRet.Interface, out aRet.Any, out aRet.Sequence, out aRet2 );
-		
+
 		bRet = check( compareData( aData, aRet ) && compareData( aData, aRet2 ) , "getValues test") && bRet;
-        
+
 		// set last retrieved values
 		TestDataElements aSV2ret = xLBT.setValues2(
 			ref aRet.Bool, ref aRet.Char, ref aRet.Byte, ref aRet.Short, ref aRet.UShort,
 			ref aRet.Long, ref aRet.ULong, ref aRet.Hyper, ref aRet.UHyper, ref aRet.Float,
             ref aRet.Double, ref aRet.Enum, ref aRet.String, ref aRet.Interface, ref aRet.Any,
             ref aRet.Sequence, ref aRet2 );
-		
+
         // check inout sequence order
         // => inout sequence parameter was switched by test objects
 		TestElement temp = aRet.Sequence[ 0 ];
         aRet.Sequence[ 0 ] = aRet.Sequence[ 1 ];
         aRet.Sequence[ 1 ] = temp;
-        
+
 		bRet = check(
             compareData( aData, aSV2ret ) && compareData( aData, aRet2 ),
             "getValues2 test") && bRet;
@@ -477,9 +477,9 @@ static bool performTest(XBridgeTest xLBT)
             out aRet.UHyper, out aRet.Float, out aRet.Double, out aRet.Enum,
             out aRet.String, out aRet.Interface, out aRet.Any, out aRet.Sequence,
             out aRet2 );
-		
+
 		bRet = check( compareData( aData, aRet ) && compareData( aData, aRet2 ) && compareData( aData, aGVret ), "getValues test" ) && bRet;
-		
+
 		// set last retrieved values
 		xLBT.Bool = aRet.Bool;
 		xLBT.Char = aRet.Char;
@@ -519,27 +519,27 @@ static bool performTest(XBridgeTest xLBT)
 		aRet.Any = xLBT.Any;
 		aRet.Sequence = xLBT.Sequence;
 		aRet2 = xLBT.Struct;
-		
+
 		bRet = check( compareData( aData, aRet ) && compareData( aData, aRet2 ) , "struct comparison test") && bRet;
-        
+
 		bRet = check(performSequenceTest(xLBT), "sequence test") && bRet;
-        
+
 		// any test
 		bRet = check( performAnyTest( xLBT , aData ) , "any test" ) && bRet;
-        
+
 		// sequence of call test
 		bRet = check( performSequenceOfCallTest( xLBT ) , "sequence of call test" ) && bRet;
-        
+
 		// recursive call test
 		bRet = check( performRecursiveCallTest( xLBT ) , "recursive test" ) && bRet;
-		
+
 		bRet = (compareData( aData, aRet ) && compareData( aData, aRet2 )) && bRet ;
-        
+
         // check setting of null reference
         xLBT.Interface = null;
         aRet.Interface = xLBT.Interface;
         bRet = (aRet.Interface == null) && bRet;
-        
+
     }
         // Test extended attributes that raise exceptions:
     try {
@@ -565,7 +565,7 @@ static bool performTest(XBridgeTest xLBT)
     } catch (System.Exception) {
         bRet &= check(false, "getRaiseAttr2 threw wrong type");
     }
-    
+
        // Test instantiated polymorphic struct types:
     {
         TestPolyStruct poly = new TestPolyStruct(true);
@@ -573,8 +573,8 @@ static bool performTest(XBridgeTest xLBT)
             (bool) xLBT.transportPolyBoolean(poly).member,
             "transportPolyBoolean");
         poly = new TestPolyStruct(12345UL);
-        xLBT.transportPolyUnsignedHyper(ref poly);
-        bRet &= check((ulong)poly.member == 12345UL, "transportPolyUnsignedHyper");
+        xLBT.transportPolyHyper(ref poly);
+        bRet &= check((long)poly.member == 12345L, "transportPolyUnsignedHyper");
 
         Any[] seq = {  new Any(33), new Any("ABC")};
         poly = new TestPolyStruct(seq);
@@ -598,7 +598,7 @@ static bool performTest(XBridgeTest xLBT)
             bRet &= check(false, "transportPolySequence");
         }
 
-        
+
         try {
             //When the test object is a cli object then them member is null
             //otherwise the bridge has provided a default value.
@@ -636,12 +636,12 @@ static bool performTest(XBridgeTest xLBT)
                               "getNullPolyStruct");
             s = (TestPolyStruct) xLBT.getNullPolyInterface();
                 bRet &= check(s.member == null, "getNullPolyInterface");
-            
+
         } catch(InvalidCastException)
         {
             bRet &= check(false, "getNullPolyXXX, InvalidCastException");
         }
-        
+
         }
 
 
@@ -688,7 +688,7 @@ static bool performSequenceTest(XBridgeTest xBT)
             TestEnum.CHECK, Constants.STRING_TEST_CONSTANT, arObject[2],
             new Any( typeof(Object), arObject[2] ) );
 
-    
+
     int[][][] arLong3 = new int[][][]{
         new int[][]{new int[]{1,2,3},new int[]{4,5,6}, new int[]{7,8,9} },
         new int [][]{new int[]{1,2,3},new int[]{4,5,6}, new int[]{7,8,9}},
@@ -755,7 +755,7 @@ static bool performSequenceTest(XBridgeTest xBT)
         new int[][]{new int[]{1,2,3},new int[]{4,5,6}, new int[]{7,8,9} },
         new int [][]{new int[]{1,2,3},new int[]{4,5,6}, new int[]{7,8,9}},
         new int[][]{new int[]{1,2,3},new int[]{4,5,6}, new int[]{7,8,9}}};
-    
+
     xBT2.setSequencesInOut(ref arBoolTemp, ref arCharTemp, ref arByteTemp,
                            ref arShortTemp, ref arUShortTemp, ref arLongTemp,
                            ref arULongTemp,ref arHyperTemp, ref arUHyperTemp,
@@ -780,7 +780,7 @@ static bool performSequenceTest(XBridgeTest xBT)
         compareData(arAnyTemp , arAny) &&
         compareData(arLong2Temp , arLong3[0]) &&
         compareData(arLong3Temp , arLong3), "sequence test") && bRet;
-    
+
     bool[] arBoolOut;
     char[] arCharOut;
     byte[] arByteOut;
@@ -880,7 +880,7 @@ static bool performSequenceTest(XBridgeTest xBT)
     TestElement[] _arStruct = new TestElement[0];
     TestElement[] seqStructRet = xBT2.setSequenceStruct(_arStruct);
     bRet = check( compareData(seqStructRet, _arStruct), "sequence test") && bRet;
-    
+
     }
 
 
@@ -957,7 +957,7 @@ static bool raiseException(XBridgeTest xLBT )
 				{
 					check( false, "### unexpected exception content!" );
 				}
-				
+
 				/** it is certain, that the RuntimeException testing will fail,
                     if no */
 				xLBT.RuntimeException = 0;
@@ -973,7 +973,7 @@ static bool raiseException(XBridgeTest xLBT )
 			{
 				check( false, "### unexpected exception content!" );
 			}
-			
+
 			/** it is certain, that the RuntimeException testing will fail, if no */
             unchecked
              {
@@ -1015,9 +1015,9 @@ static bool raiseException(XBridgeTest xLBT )
     {
         m_xContext = xContext;
     }
-    
+
     private XComponentContext m_xContext;
-    
+
     public int run( String [] args )
     {
         try
@@ -1030,7 +1030,7 @@ static bool raiseException(XBridgeTest xLBT )
             Object test_obj =
                 m_xContext.getServiceManager().createInstanceWithContext(
                     args[ 0 ], m_xContext );
-            
+
             Console.WriteLine(
                 "cli target bridgetest obj: {0}", test_obj.ToString() );
             XBridgeTest xTest = (XBridgeTest) test_obj ;

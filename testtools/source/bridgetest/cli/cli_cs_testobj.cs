@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cli_cs_testobj.cs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:02:36 $
+ *  last change: $Author: obo $ $Date: 2004-09-15 10:12:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ namespace cs_testobj
 public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
 {
     private XComponentContext m_xContext;
-    
+
     public BridgeTestObject( XComponentContext xContext )
     {
         m_xContext = xContext;
@@ -83,16 +83,16 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
     public BridgeTestObject()
     {
     }
-    
+
     private bool  _bool;
     private char     _char;
     private byte     _byte;
     private short    _short;
-    private ushort    _ushort;   
-    private int      _long;   
-    private uint      _ulong;    
-    private long     _hyper;    
-    private ulong     _uhyper;   
+    private ushort    _ushort;
+    private int      _long;
+    private uint      _ulong;
+    private long     _hyper;
+    private ulong     _uhyper;
     private float    _float;
     private double   _double;
     private String   _string;
@@ -125,20 +125,20 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
 
 //    private int _raiseAttr1;
 
-    
+
     public void setValues(
-        bool          bBool, 
-        char             cChar, 
+        bool          bBool,
+        char             cChar,
         byte             nByte,
-        short            nShort, 
+        short            nShort,
         ushort            nUShort,
-        int              nLong, 
+        int              nLong,
         uint              nULong,
-        long             nHyper, 
+        long             nHyper,
         ulong             nUHyper,
-        float            fFloat, 
+        float            fFloat,
         double           fDouble,
-        TestEnum         testEnum, 
+        TestEnum         testEnum,
         String           str,
         Object           xInterface,
         Any              any,
@@ -167,31 +167,31 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         _testElements     = testElements;
         _testDataElements = testDataElements;
     }
-    
+
     public TestDataElements setValues2(
-        /*INOUT*/ref bool          io_bool, 
-        /*INOUT*/ref char             io_char, 
-        /*INOUT*/ref byte             io_byte, 
-        /*INOUT*/ref short            io_short, 
-        /*INOUT*/ref ushort            io_ushort, 
-        /*INOUT*/ref int              io_long, 
-        /*INOUT*/ref uint              io_ulong, 
-        /*INOUT*/ref long             io_hyper, 
-        /*INOUT*/ref ulong             io_uhyper, 
-        /*INOUT*/ref float            io_float, 
-        /*INOUT*/ref double           io_double, 
-        /*INOUT*/ref TestEnum         io_testEnum, 
-        /*INOUT*/ref String           io_string, 
-        /*INOUT*/ref Object           io_xInterface, 
-        /*INOUT*/ref Any           io_any, 
-        /*INOUT*/ref TestElement[]    io_testElements, 
+        /*INOUT*/ref bool          io_bool,
+        /*INOUT*/ref char             io_char,
+        /*INOUT*/ref byte             io_byte,
+        /*INOUT*/ref short            io_short,
+        /*INOUT*/ref ushort            io_ushort,
+        /*INOUT*/ref int              io_long,
+        /*INOUT*/ref uint              io_ulong,
+        /*INOUT*/ref long             io_hyper,
+        /*INOUT*/ref ulong             io_uhyper,
+        /*INOUT*/ref float            io_float,
+        /*INOUT*/ref double           io_double,
+        /*INOUT*/ref TestEnum         io_testEnum,
+        /*INOUT*/ref String           io_string,
+        /*INOUT*/ref Object           io_xInterface,
+        /*INOUT*/ref Any           io_any,
+        /*INOUT*/ref TestElement[]    io_testElements,
         /*INOUT*/ref TestDataElements io_testDataElements )
     {
 #if DEBUG
 //         Debug.WriteLine( "##### " + GetType().FullName + ".setValues2:" + io_any );
         Console.WriteLine( "##### " + GetType().FullName + ".setValues2:" + io_any );
 #endif
-        
+
         _bool             = io_bool;
         _char             = io_char;
         _byte             = io_byte;
@@ -209,38 +209,38 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         _any              = io_any;
         _testElements     = (TestElement[]) io_testElements.Clone();
         _testDataElements = io_testDataElements;
-        
+
         TestElement temp = io_testElements[ 0 ];
         io_testElements[ 0 ] = io_testElements[ 1 ];
         io_testElements[ 1 ] = temp;
-        
+
         return _testDataElements;
     }
-    
+
     public TestDataElements getValues(
-        /*OUT*/out bool          o_bool, 
-        /*OUT*/out char             o_char, 
-        /*OUT*/out byte             o_byte, 
-        /*OUT*/out short            o_short, 
-        /*OUT*/out ushort            o_ushort, 
-        /*OUT*/out int              o_long, 
-        /*OUT*/out uint              o_ulong, 
-        /*OUT*/out long             o_hyper, 
-        /*OUT*/out ulong             o_uhyper, 
-        /*OUT*/out float            o_float, 
-        /*OUT*/out double           o_double, 
-        /*OUT*/out TestEnum         o_testEnum, 
-        /*OUT*/out String           o_string, 
-        /*OUT*/out Object           o_xInterface, 
-        /*OUT*/out Any           o_any, 
-        /*OUT*/out TestElement[]    o_testElements, 
+        /*OUT*/out bool          o_bool,
+        /*OUT*/out char             o_char,
+        /*OUT*/out byte             o_byte,
+        /*OUT*/out short            o_short,
+        /*OUT*/out ushort            o_ushort,
+        /*OUT*/out int              o_long,
+        /*OUT*/out uint              o_ulong,
+        /*OUT*/out long             o_hyper,
+        /*OUT*/out ulong             o_uhyper,
+        /*OUT*/out float            o_float,
+        /*OUT*/out double           o_double,
+        /*OUT*/out TestEnum         o_testEnum,
+        /*OUT*/out String           o_string,
+        /*OUT*/out Object           o_xInterface,
+        /*OUT*/out Any           o_any,
+        /*OUT*/out TestElement[]    o_testElements,
         /*OUT*/out TestDataElements o_testDataElements )
     {
 #if DEBUG
 //         Debug.WriteLine( "##### " + GetType().FullName + ".getValues" );
         Console.WriteLine( "##### " + GetType().FullName + ".getValues" );
 #endif
-        
+
         o_bool             = _bool;
         o_char             = _char;
         o_byte             = _byte;
@@ -258,10 +258,10 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         o_any              = _any;
         o_testElements     = _testElements;
         o_testDataElements = _testDataElements;
-        
+
         return _testDataElements;
     }
-    
+
     // Attributes
     public bool Bool
     {
@@ -367,19 +367,19 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
     public void call(int nCallId , int nWaitMUSEC)
     {
         Thread.Sleep(nWaitMUSEC / 10000);
-        
+
         if(_bFirstCall)
             _bFirstCall = false;
-        
+
         else
             _bSequenceOfCallTestPassed = _bSequenceOfCallTestPassed && (nCallId > _nLastCallId);
-        
+
         _nLastCallId = nCallId;
     }
     public void callOneway( int nCallId , int nWaitMUSEC )
     {
         Thread.Sleep(nWaitMUSEC / 10000);
-        
+
         _bSequenceOfCallTestPassed = _bSequenceOfCallTestPassed && (nCallId > _nLastCallId);
         _nLastCallId = nCallId;
     }
@@ -411,10 +411,10 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
             }
         }
     }
-    
+
     // XBridgeTest
     public TestDataElements raiseException(
-        short nArgumentPos, String rMsg, Object xContext ) 
+        short nArgumentPos, String rMsg, Object xContext )
     {
         throw new IllegalArgumentException(rMsg, xContext, nArgumentPos);
     }
@@ -442,7 +442,7 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         }
         set { throw new RuntimeException(_string, _xInterface); }
     }
-    
+
     // XBridgeTest2
     public int[][] setDim2(int[][] val)
     {
@@ -551,7 +551,7 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         _testElements = val;
         return val;
     }
-    
+
     public void setSequencesInOut(ref bool[] aSeqBoolean,
                                ref char[] aSeqChar,
                                ref byte[] aSeqByte,
@@ -624,16 +624,20 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         aSeqAny = _arAny;
         aSeqDim2 = _arLong2;
         aSeqDim3 = _arLong3;
-            
+
     }
 
-    
+    public TestPolyStruct getNullPolyBadEnum()
+{
+    return new TestPolyStruct();
+}
+
     public TestPolyStruct transportPolyBoolean(/*[in]*/TestPolyStruct arg)
     {
         return arg;
     }
-  
-    public  void  transportPolyUnsignedHyper(/*[in][out]*/ ref TestPolyStruct arg)
+
+    public  void  transportPolyHyper(/*[in][out]*/ ref TestPolyStruct arg)
     {
     }
 
