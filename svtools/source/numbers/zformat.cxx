@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2000-11-18 21:46:43 $
+ *  last change: $Author: er $ $Date: 2000-11-23 13:00:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,8 @@ void ImpSvNumberformatInfo::Save(SvStream& rStream, USHORT nAnz) const
     for (USHORT i = 0; i < nAnz; i++)
     {
         rStream.WriteByteString( sStrArray[i], rStream.GetStreamCharSet() );
-        switch ( nTypeArray[i] )
+        short nType = nTypeArray[i];
+        switch ( nType )
         {   // der Krampf fuer Versionen vor SV_NUMBERFORMATTER_VERSION_NEW_CURR
             case SYMBOLTYPE_CURRENCY :
                 rStream << short( SYMBOLTYPE_STRING );
@@ -196,7 +197,10 @@ void ImpSvNumberformatInfo::Save(SvStream& rStream, USHORT nAnz) const
                 rStream << short(0);        // werden ignoriert (hoffentlich..)
             break;
             default:
-                rStream << nTypeArray[i];
+                if ( nType > NF_KEY_LASTKEYWORD_SO5 )
+                    rStream << short( SYMBOLTYPE_STRING );  // all new keywords are string
+                else
+                    rStream << nType;
         }
 
     }
@@ -2235,7 +2239,7 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             break;
             case NF_KEY_JJ:                 // JJ
             {
-                //! TODO: what about negative values? abs and era?
+//! TODO: what about negative values? abs and append era?
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
                 if ( 99 < nVal )
                     nVal %= 100;
@@ -2245,11 +2249,28 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             }
             break;
             case NF_KEY_JJJJ:               // JJJJ
-                //! TODO: what about negative values? abs and era?
+//! TODO: what about negative values? abs and append era?
                 OutString += String::CreateFromInt32( rCal.getValue(
                     CalendarFieldIndex::YEAR ) );
             break;
+            case NF_KEY_EC:                 // E
+            {
+//! TODO: what about negative values? abs and append era?
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
+                OutString += String::CreateFromInt32( nVal );
+            }
+            break;
+            case NF_KEY_EEC:                // EE
+            {
+//! TODO: what about negative values? abs and append era?
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
+                if ( nVal < 10 )
+                    OutString += '0';
+                OutString += String::CreateFromInt32( nVal );
+            }
+            break;
             case NF_KEY_NN:                 // NN
+            case NF_KEY_AAA:                // AAA
             {
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
                 OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
@@ -2257,6 +2278,7 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             }
             break;
             case NF_KEY_NNN:                // NNN
+            case NF_KEY_AAAA:               // AAAA
             {
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
                 OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
@@ -2274,6 +2296,38 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             case NF_KEY_WW :                // WW
                 OutString += String::CreateFromInt32( rCal.getValue(
                     CalendarFieldIndex::WEEK_OF_YEAR ) );
+            break;
+            case NF_KEY_G:                  // G
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
+//! TODO: is this right? what if the calendar is not Japanese?
+                sal_Unicode cEra;
+                switch ( nVal )
+                {
+                    case 0 :    cEra = 'M'; break;
+                    case 1 :    cEra = 'T'; break;
+                    case 2 :    cEra = 'S'; break;
+                    case 3 :    cEra = 'H'; break;
+                    default:
+                        cEra = '?';
+                        DBG_ERRORFILE( "SvNumberformat::ImpGetDateOutput: which era is it?" );
+                }
+                OutString += cEra;
+            }
+            break;
+            case NF_KEY_GG:                 // GG
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::ERA,
+                    nVal, 0 );
+            }
+            break;
+            case NF_KEY_GGG:                // GGG
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::ERA,
+                    nVal, 1 );
+            }
             break;
             default:
             break;

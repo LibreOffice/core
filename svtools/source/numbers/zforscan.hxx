@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2000-11-18 21:46:43 $
+ *  last change: $Author: er $ $Date: 2000-11-23 13:00:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,8 +235,15 @@ private:                            // ---- privater Teil
                                                 // mehr bis zum '/'
     void Reset();                               // Reset aller Variablen
                                                 // vor Analysestart
-    USHORT GetKeyWord(const String& sSymbol); // Vergleicht mit den Keywords
-                                                // return 0 <=> nicht gefunden
+    short GetKeyWord( const String& sSymbol,    // determine keyword at nPos
+        xub_StrLen nPos );                      // return 0 <=> not found
+
+    inline BOOL IsAmbiguousE( short nKey )      // whether nKey is ambiguous E of NF_KEY_E/NF_KEY_EC
+        {
+            return (nKey == NF_KEY_EC || nKey == NF_KEY_E) &&
+                (sKeyword[NF_KEY_EC] == sKeyword[NF_KEY_E]);
+        }
+
     short Next_Symbol(const String& rStr,
                         xub_StrLen& nPos,
                       String& sSymbol);       // Naechstes Symbol

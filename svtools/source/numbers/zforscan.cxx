@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2000-11-18 21:46:43 $
+ *  last change: $Author: er $ $Date: 2000-11-23 13:00:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,15 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     sNameStandardFormat = aFormat.Code;
     sKeyword[NF_KEY_GENERAL] = pCharClass->upper( sNameStandardFormat );
 
+    // preset new calendar keywords
+    sKeyword[NF_KEY_AAA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "AAA" ) );
+    sKeyword[NF_KEY_AAAA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(  "AAAA" ) );
+    sKeyword[NF_KEY_EC].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "E" ) );
+    sKeyword[NF_KEY_EEC].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "EE" ) );
+    sKeyword[NF_KEY_G].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "G" ) );
+    sKeyword[NF_KEY_GG].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "GG" ) );
+    sKeyword[NF_KEY_GGG].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "GGG" ) );
+
     switch ( eLang )
     {
         case LANGUAGE_GERMAN:
@@ -197,7 +206,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         break;
         default:
         {
-            // Tag
+            // day
             switch ( eLang )
             {
                 case LANGUAGE_ITALIAN       :
@@ -206,6 +215,10 @@ void ImpSvNumberformatScan::SetDependentKeywords()
                     sKeyword[NF_KEY_TT].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "GG" ) );
                     sKeyword[NF_KEY_TTT].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "GGG" ) );
                     sKeyword[NF_KEY_TTTT].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "GGGG" ) );
+                    // must exchange the era code, same as Xcl
+                    sKeyword[NF_KEY_G].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "X" ) );
+                    sKeyword[NF_KEY_GG].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "XX" ) );
+                    sKeyword[NF_KEY_GGG].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "XXX" ) );
                 break;
                 case LANGUAGE_FRENCH            :
                 case LANGUAGE_FRENCH_BELGIAN    :
@@ -230,7 +243,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
                     sKeyword[NF_KEY_TTT].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DDD" ) );
                     sKeyword[NF_KEY_TTTT].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DDDD" ) );
             }
-            // Monat
+            // month
             switch ( eLang )
             {
                 case LANGUAGE_FINNISH :
@@ -245,7 +258,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
                     sKeyword[NF_KEY_MMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "MMM" ) );
                     sKeyword[NF_KEY_MMMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "MMMM" ) );
             }
-            // Jahr
+            // year
             switch ( eLang )
             {
                 case LANGUAGE_ITALIAN       :
@@ -280,6 +293,9 @@ void ImpSvNumberformatScan::SetDependentKeywords()
                 case LANGUAGE_SPANISH_PUERTO_RICO :
                     sKeyword[NF_KEY_JJ].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "AA" ) );
                     sKeyword[NF_KEY_JJJJ].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "AAAA" ) );
+                    // must exchange the day of week name code, same as Xcl
+                    sKeyword[NF_KEY_AAA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "OOO" ) );
+                    sKeyword[NF_KEY_AAAA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(  "OOOO" ) );
                 break;
                 case LANGUAGE_DUTCH         :
                 case LANGUAGE_DUTCH_BELGIAN :
@@ -294,7 +310,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
                     sKeyword[NF_KEY_JJ].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "YY" ) );
                     sKeyword[NF_KEY_JJJJ].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "YYYY" ) );
             }
-            // Stunde
+            // hour
             switch ( eLang )
             {
                 case LANGUAGE_DUTCH         :
@@ -316,9 +332,9 @@ void ImpSvNumberformatScan::SetDependentKeywords()
                     sKeyword[NF_KEY_H].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "H" ) );
                     sKeyword[NF_KEY_HH].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "HH" ) );
             }
-            // Logisch
+            // boolean
             sKeyword[NF_KEY_BOOLEAN].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "BOOLEAN" ) );
-            // Farbe
+            // colours
             sKeyword[NF_KEY_COLOR].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "COLOR" ) );
             sKeyword[NF_KEY_BLACK].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "BLACK" ) );
             sKeyword[NF_KEY_BLUE].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "BLUE" ) );
@@ -436,22 +452,35 @@ void ImpSvNumberformatScan::ChangeIntl()
     SetDependentKeywords();
 }
 
-USHORT ImpSvNumberformatScan::GetKeyWord(const String& sSymbol)
+
+short ImpSvNumberformatScan::GetKeyWord( const String& sSymbol, xub_StrLen nPos )
 {
-    USHORT i = NF_KEY_LASTKEYWORD;          // unbedingt rueckwaerts!!
-    String sString = pFormatter->GetCharClass()->upper(sSymbol);
-    while (i > 0 && sString.Search(sKeyword[i]) != 0)
-        i--;                                    // unbedingt rueckwaerts!!
-    if ( i > NF_KEY_LASTOLDKEYWORD && sString != sKeyword[i] )
-    {   // vielleicht doch noch was anderes?
-        // z.B. wird neues NNN in NNNN gefunden, NNNN muss also weitersuchen
-        USHORT j = i - 1;
-        while (j > 0 && sString.Search(sKeyword[j]) != 0)
-            j--;                                // unbedingt rueckwaerts!!
-        if ( j )
-            return j;
+    String sString = pFormatter->GetCharClass()->toUpper( sSymbol, nPos, sSymbol.Len() - nPos );
+    // #77026# for the Xcl perverts: the GENERAL keyword is recognized anywhere
+    if ( sString.Search( sKeyword[NF_KEY_GENERAL] ) == 0 )
+        return NF_KEY_GENERAL;
+    //! MUST be a reverse search to find longer strings first
+    short i = NF_KEYWORD_ENTRIES_COUNT-1;
+    BOOL bFound;
+    while ( i > NF_KEY_LASTKEYWORD_SO5 && !(bFound = (sString.Search(sKeyword[i]) == 0)) )
+        i--;
+    // new keywords take precedence over old keywords
+    if ( !bFound )
+    {   // skip the gap of colors et al between new and old keywords and search on
+        i = NF_KEY_LASTKEYWORD;
+        while ( i > 0 && sString.Search(sKeyword[i]) != 0 )
+            i--;
+        if ( i > NF_KEY_LASTOLDKEYWORD && sString != sKeyword[i] )
+        {   // maybe something else?
+            // e.g. new NNN is found in NNNN, NNNN must search on
+            short j = i - 1;
+            while ( j > 0 && sString.Search(sKeyword[j]) != 0 )
+                j--;
+            if ( j )
+                return j;
+        }
     }
-    return i;                                   // 0 => nicht gefunden
+    return i;       // 0 => not found
 }
 
 //---------------------------------------------------------------------------
@@ -586,13 +615,46 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
                     default :
                     {
                         if ( pChrCls->isLetter( rStr, nPos-1 ) )
-                            eState = SsGetWord;
+                        {
+                            short nTmpType = GetKeyWord( rStr, nPos-1 );
+                            if ( nTmpType )
+                            {
+                                eType = nTmpType;
+                                xub_StrLen nLen = sKeyword[eType].Len();
+                                sSymbol = rStr.Copy( nPos-1, nLen );
+                                if ( eType == NF_KEY_E || IsAmbiguousE( eType ) )
+                                {
+                                    sal_Unicode cNext = rStr.GetChar(nPos);
+                                    switch ( cNext )
+                                    {
+                                        case '+' :
+                                        case '-' :  // E+ E- combine to one symbol
+                                            sSymbol += cNext;
+                                            eType = NF_KEY_E;
+                                            nPos++;
+                                        break;
+                                        case '0' :
+                                        case '#' :  // scientific E without sign
+                                            eType = NF_KEY_E;
+                                        break;
+                                    }
+                                }
+                                nPos--;
+                                nPos += nLen;
+                                eState = SsStop;
+                            }
+                            else
+                            {
+                                eState = SsGetWord;
+                                sSymbol += cToken;
+                            }
+                        }
                         else
                         {
                             eType = SYMBOLTYPE_STRING;
                             eState = SsStop;
+                            sSymbol += cToken;
                         }
-                        sSymbol += cToken;
                     }
                     break;
                 }
@@ -608,31 +670,29 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
             {
                 if (cToken == '"')
                     eState = SsStop;
-//              else
-                    sSymbol += cToken;
+                sSymbol += cToken;
             }
             break;
             case SsGetWord:
             {
                 if ( pChrCls->isLetter( rStr, nPos-1 ) )
-                    sSymbol += cToken;
+                {
+                    short nTmpType = GetKeyWord( rStr, nPos-1 );
+                    if ( nTmpType )
+                    {   // beginning of keyword, stop scan and put back
+                        eType = SYMBOLTYPE_STRING;
+                        eState = SsStop;
+                        nPos--;
+                    }
+                    else
+                        sSymbol += cToken;
+                }
                 else
                 {
                     BOOL bDontStop = FALSE;
                     switch (cToken)
                     {
-                        case '+':
-                        case '-':                       // E+ E-
-                        {
-                            eType = GetKeyWord(sSymbol);
-                            if (eType == NF_KEY_E)
-                            {
-                                sSymbol += cToken;
-                                eState = SsStop;
-                            }
-                        }
-                        break;
-                        case '.':                       // Sf. Waehrung
+                        case '.':                       // Sf. currency
                         {
                             String TestStr = pChrCls->upper(sSymbol);
                             TestStr += cToken;
@@ -668,18 +728,7 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
                     {
                         eState = SsStop;
                         nPos--;
-                        eType = GetKeyWord(sSymbol);
-                        if (!eType)
-                            eType = SYMBOLTYPE_STRING;
-                        else
-                        {
-                            xub_StrLen nLen = sKeyword[eType].Len();
-                            if ( nPos > nStart + nLen )
-                            {
-                                nPos = nStart + nLen;
-                                sSymbol.Erase( nLen );
-                            }
-                        }
+                        eType = SYMBOLTYPE_STRING;
                     }
                 }
             }
@@ -688,7 +737,7 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
             {
                 eState = SsStop;
                 sSymbol += cToken;
-                nRepPos = (nPos - nStart) - 1;  // immer > 0!!
+                nRepPos = (nPos - nStart) - 1;  // everytime > 0!!
             }
             break;
             case SsGetBlank:
@@ -702,34 +751,7 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
         }                                   // of switch
     }                                       // of while
     if (eState == SsGetWord)
-    {
-        eType = GetKeyWord(sSymbol);
-        if ( eType )
-        {
-            xub_StrLen nLen = sKeyword[eType].Len();
-            if ( nPos > nStart + nLen )
-            {
-                nPos = nStart + nLen;
-                sSymbol.Erase( nLen );
-            }
-        }
-        else
-        {
-            eType = SYMBOLTYPE_STRING;
-            // #77026# And now for the Xcl perverts: a word containing the
-            // GENERAL keyword somewhere must be splitted.
-            if ( sSymbol.Len() > sKeyword[NF_KEY_GENERAL].Len() )
-            {
-                String aUp( pFormatter->GetCharClass()->upper( sSymbol ) );
-                xub_StrLen nFound = aUp.Search( sKeyword[NF_KEY_GENERAL], 1 );
-                if ( nFound != STRING_NOTFOUND )
-                {
-                    nPos = nStart + nFound;
-                    sSymbol.Erase( nFound );
-                }
-            }
-        }
-    }
+        eType = SYMBOLTYPE_STRING;
     return eType;
 }
 
@@ -1013,6 +1035,13 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
                 case NF_KEY_NNN:                // NNN
                 case NF_KEY_NNNN:               // NNNN
                 case NF_KEY_WW :                // WW
+                case NF_KEY_AAA :               // AA
+                case NF_KEY_AAAA :              // AAA
+                case NF_KEY_EC :                // E
+                case NF_KEY_EEC :               // EE
+                case NF_KEY_G :                 // G
+                case NF_KEY_GG :                // GG
+                case NF_KEY_GGG :               // GGG
                     eNewType = NUMBERFORMAT_DATE;
                 break;
                 case NF_KEY_CCC:                // CCC
@@ -1933,6 +1962,13 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     case NF_KEY_NNN:                        // NNN
                     case NF_KEY_NNNN:                       // NNNN
                     case NF_KEY_WW :                        // WW
+                    case NF_KEY_AAA :                       // AA
+                    case NF_KEY_AAAA :                      // AAA
+                    case NF_KEY_EC :                        // E
+                    case NF_KEY_EEC :                       // EE
+                    case NF_KEY_G :                         // G
+                    case NF_KEY_GG :                        // GG
+                    case NF_KEY_GGG :                       // GGG
                         sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
                     break;
                     default:                            // andere Keywords
@@ -2146,6 +2182,13 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     case NF_KEY_NNN:                        // NNN
                     case NF_KEY_NNNN:                       // NNNN
                     case NF_KEY_WW :                        // WW
+                    case NF_KEY_AAA :                       // AA
+                    case NF_KEY_AAAA :                      // AAA
+                    case NF_KEY_EC :                        // E
+                    case NF_KEY_EEC :                       // EE
+                    case NF_KEY_G :                         // G
+                    case NF_KEY_GG :                        // GG
+                    case NF_KEY_GGG :                       // GGG
                         sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
                     break;
                     default:                            // andere Keywords
