@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-24 07:42:20 $
+ *  last change: $Author: hr $ $Date: 2003-06-26 11:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #include <vcl/metaact.hxx>
 #ifndef _SV_METRIC_HXX
 #include <vcl/metric.hxx>
+#endif
+#ifndef _RTL_TENCINFO_H
+#include <rtl/tencinfo.h>
 #endif
 
 // ------------------------------------------------------------------------
@@ -190,34 +193,12 @@ void WinMtfPathObj::ClosePath()
 WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
 {
     CharSet eCharSet;
-    switch ( rFont.lfCharSet )
-    {
-        case ANSI_CHARSET:
-            eCharSet = RTL_TEXTENCODING_MS_1252;
-        break;
-
-        case SYMBOL_CHARSET:
-            eCharSet = RTL_TEXTENCODING_SYMBOL;
-        break;
-
-        case SHIFTJIS_CHARSET:
-            eCharSet = RTL_TEXTENCODING_SHIFT_JIS;
-        break;
-
-        case CHINESEBIG5_CHARSET:
-            eCharSet = RTL_TEXTENCODING_BIG5;
-        break;
-
-        case HANGEUL_CHARSET :
-            eCharSet = RTL_TEXTENCODING_MS_949;
-        break;
-
-        case OEM_CHARSET:
-        case DEFAULT_CHARSET:
-        default:
-            eCharSet = gsl_getSystemTextEncoding();
-        break;
-    }
+    if ( ( rFont.lfCharSet == OEM_CHARSET ) || ( rFont.lfCharSet == DEFAULT_CHARSET ) )
+        eCharSet = gsl_getSystemTextEncoding();
+    else
+        eCharSet = rtl_getTextEncodingFromWindowsCharset( rFont.lfCharSet );
+    if ( eCharSet == RTL_TEXTENCODING_DONTKNOW )
+        eCharSet = gsl_getSystemTextEncoding();
     aFont.SetCharSet( eCharSet );
     CharSet eFontNameEncoding = eCharSet == RTL_TEXTENCODING_SYMBOL ?
         RTL_TEXTENCODING_MS_1252 : eCharSet;
