@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:36:10 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 09:47:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,14 +81,14 @@ Image RID_SVX_RELOAD_SPECIAL
 };
 ImageList RID_SVXIL_FRAME
 {
-    ImageBitmap = Bitmap { File = "fr_ames.bmp" ; };
+    Prefix = "fr";
     IdList = { 1 ; 2 ; 3 ; 4 ; 5 ; 6 ; 7 ; 8 ; 9 ; 10 ; 11 ; 12 ; };
     IdCount = { 12 ; };
     MASKCOLOR
 };
 ImageList RID_SVXIL_FRAME_HC
 {
-    ImageBitmap = Bitmap { File = "frh_frames.bmp" ; };
+    Prefix = "frh";
     IdList = { 1 ; 2 ; 3 ; 4 ; 5 ; 6 ; 7 ; 8 ; 9 ; 10 ; 11 ; 12 ; };
     IdCount = { 12 ; };
     MASKCOLOR
