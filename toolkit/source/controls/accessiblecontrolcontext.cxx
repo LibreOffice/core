@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontrolcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-17 15:29:11 $
+ *  last change: $Author: fs $ $Date: 2002-06-12 13:16:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ namespace toolkit
         if ( xControl.is() )
             m_xControlModel = m_xControlModel.query( xControl->getModel() );
         OSL_ENSURE( m_xControlModel.is(), "OAccessibleControlContext::Init: invalid creator (no control, or control without model!" );
-        if ( m_xControlModel.is() )
+        if ( !m_xControlModel.is() )
             throw DisposedException();  // caught by the caller (the create method)
 
         // start listening at the model
@@ -370,6 +370,9 @@ namespace toolkit
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2002/05/17 15:29:11  tbe
+ *  #97222# removed isShowing, isVisible, isFocusTraversable, addFocusListener, removeFocusListener
+ *
  *  Revision 1.1  2002/04/26 14:31:31  fs
  *  initial checkin - fallback AccessibleContext for uno controls
  *
