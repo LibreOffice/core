@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrintSettings.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:44 $
+ *  last change: $Author: mtg $ $Date: 2001-04-03 14:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,14 +103,14 @@ service PrintSettings
     // DocMerge from xml: property com::sun::star::text::PrintSettings::PrintLeftPage
     /** determines if left pages are printed.
      */
-    [property] boolean PrintLeftPage;
+    [property] boolean PrintLeftPages;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PrintSettings::PrintRightPage
     /** determines if right pages are printed.
      */
-    [property] boolean PrintRightPage;
+    [property] boolean PrintRightPages;
 
     //-------------------------------------------------------------------------
 
@@ -124,7 +124,7 @@ service PrintSettings
     // DocMerge from xml: property com::sun::star::text::PrintSettings::PrintReverse
     /** determines if the pages are printed in the reverse order starting with the last page.
      */
-    [property] boolean PrintReverse;
+    [property] boolean PrintReversed;
 
     //-------------------------------------------------------------------------
 
@@ -137,21 +137,21 @@ service PrintSettings
         <p>If <member scope="com::sun::star::view">PrintSettings::PaperFromSetup</member> is <FALSE/>,
         then the paper tray selection of the page styles is used.</p>
      */
-    [property] boolean PaperFromSetup;
+    [property] boolean PrintPaperFromSetup;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PrintSettings::FaxName
     /** contains the name of the fax.
      */
-    [property] string FaxName;
+    [property] string PrintFaxName;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PrintSettings::PrintNotes
     /** determines how notes are printed.@see NotePrintMode
      */
-    [property] com::sun::star::text::NotePrintMode PrintNotes;
+    [property] com::sun::star::text::NotePrintMode PrintAnnotationMode;
 
     //-------------------------------------------------------------------------
 
@@ -165,14 +165,14 @@ service PrintSettings
     // DocMerge from xml: property com::sun::star::text::PrintSettings::PrintBackground
     /** determines if the background color / background graphic of pages is printed.
      */
-    [property] boolean PrintBackground;
+    [property] boolean PrintPageBackground;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::PrintSettings::PrintBlackFont
     /** determines if characters are always printed in black.
      */
-    [property] boolean PrintBlackFont;
+    [property] boolean PrintBlackFonts;
 
 };
 
@@ -183,6 +183,9 @@ service PrintSettings
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:44  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:44:26  mi
     moved from api
 
