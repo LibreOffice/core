@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:11:15 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:40:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,10 @@ ModalDialog DLG_FILTER_SELECT
     Text[ hebrew ] = "‮בחירת מסנן‬";
     Text[ hindi ] = "Filter Selection";
     Text[ slovak ] = "Výber filtra";
+    Text[ hungarian ] = "Szűrő kiválasztása";
+    Text[ slovenian ] = "Izberi filter";
 };
+
 
 
 
