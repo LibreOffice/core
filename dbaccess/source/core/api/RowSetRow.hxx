@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetRow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 11:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef DBACCESS_CORE_API_ROWSETVALUE_HXX
 #include "RowSetValue.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
 namespace dbaccess
 {
@@ -89,7 +92,7 @@ namespace dbaccess
                 case ::com::sun::star::sdbc::DataType::TINYINT:
                 case ::com::sun::star::sdbc::DataType::SMALLINT:
                 case ::com::sun::star::sdbc::DataType::INTEGER:
-                    return connectivity::getINT32(m_rAny) == (sal_Int32)(*_rRH)[0];
+                    return comphelper::getINT32(m_rAny) == (sal_Int32)(*_rRH)[0];
                     break;
                 default:
                 {
@@ -105,6 +108,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/11 11:18:11  fs
+    replace unotools with comphelper
+
     Revision 1.1.1.1  2000/09/19 00:15:38  hr
     initial import
 

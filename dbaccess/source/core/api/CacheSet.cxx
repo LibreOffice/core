@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-03 07:15:56 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 11:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,11 @@
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+
+using namespace comphelper;
 
 using namespace dbaccess;
 using namespace dbtools;
@@ -145,9 +150,9 @@ void OCacheSet::fillTableName(const Reference<XPropertySet>& _xTable)  throw(SQL
     {
         Reference<XDatabaseMetaData> xMeta(m_xConnection->getMetaData());
         composeTableName(xMeta
-                        ,connectivity::getString(_xTable->getPropertyValue(PROPERTY_CATALOGNAME))
-                        ,connectivity::getString(_xTable->getPropertyValue(PROPERTY_SCHEMANAME))
-                        ,connectivity::getString(_xTable->getPropertyValue(PROPERTY_NAME))
+                        ,comphelper::getString(_xTable->getPropertyValue(PROPERTY_CATALOGNAME))
+                        ,comphelper::getString(_xTable->getPropertyValue(PROPERTY_SCHEMANAME))
+                        ,comphelper::getString(_xTable->getPropertyValue(PROPERTY_NAME))
                         ,m_aComposedTableName
                         ,sal_True);
     }
@@ -271,8 +276,8 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     {
         ::cppu::extractInterface(xIndexColsSup,xIndexes->getByIndex(j));
         if( xIndexColsSup.is()
-            && connectivity::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISUNIQUE))
-            && !connectivity::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISPRIMARYKEYINDEX))
+            && comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISUNIQUE))
+            && !comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISPRIMARYKEYINDEX))
           )
             aAllIndexColumns.push_back(Reference<XColumnsSupplier>(xIndexColsSup,UNO_QUERY)->getColumns());
     }
@@ -404,8 +409,8 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
         {
             ::cppu::extractInterface(xIndexColsSup,xIndexes->getByIndex(j));
             if( xIndexColsSup.is()
-                && connectivity::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISUNIQUE))
-                && !connectivity::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISPRIMARYKEYINDEX))
+                && comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISUNIQUE))
+                && !comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISPRIMARYKEYINDEX))
               )
                 aAllIndexColumns.push_back(Reference<XColumnsSupplier>(xIndexColsSup,UNO_QUERY)->getColumns());
         }
@@ -586,6 +591,9 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.20  2001/05/03 07:15:56  oj
+    #86526# fetch decimal and numeric as string
+
     Revision 1.19  2001/04/02 11:24:49  oj
     changes for character stream
 
