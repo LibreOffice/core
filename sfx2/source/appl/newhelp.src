@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-17 06:56:27 $
+ *  last change: $Author: kz $ $Date: 2001-08-17 20:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,7 @@ Window WIN_HELP_INDEX
                 Text[ arabic ] = "ИНЛ";
                 Text[ catalan ] = "Buscar";
                 Text[ finnish ] = "Etsi";
+                Text[ language_user1 ] = "pb: the correct english text here must be 'Search' (said VK and FPE)";
             };
             PageItem
             {
@@ -574,7 +575,7 @@ String STR_HELP_WINDOW_TITLE
 String STR_HELP_BUTTON_INDEX_ON
 {
     Text = "Navigationsbereich anzeigen";
-    Text [ english_us ] = "Show navigation area";
+    Text [ english_us ] = "Show Navigation Area";
     Text[ portuguese ] = "Mostrar бrea de navegaзгo";
     Text[ russian ] = "Показать область навигации";
     Text[ greek ] = "ЕхсефЮсйп";
@@ -598,9 +599,9 @@ String STR_HELP_BUTTON_INDEX_ON
 String STR_HELP_BUTTON_INDEX_OFF
 {
     Text = "Navigationsbereich ausschalten";
-    Text [ english_us ] = "Hide navigation area";
+    Text [ english_us ] = "Hide Navigation Area";
     Text[ portuguese ] = "Desactivar бrea de navegaзгo";
-    Text[ russian ] = "Спрятать модус навигации";
+    Text[ russian ] = "Спрятать область навигации";
     Text[ greek ] = "Hide navigation area";
     Text[ dutch ] = "Navigatiebereik uitschakelen";
     Text[ french ] = "Masquer l'espace de navigation";
@@ -694,7 +695,7 @@ String STR_HELP_BUTTON_NEXT
 String STR_HELP_BUTTON_PRINT
 {
     Text = "Drucken...";
-    Text [ english_us ] = "Print...";
+    Text [ english_us ] = "Print";
     Text[ portuguese ] = "Imprimir";
     Text[ russian ] = "Печать";
     Text[ greek ] = "Екфэрщуз";
@@ -718,7 +719,7 @@ String STR_HELP_BUTTON_PRINT
 String STR_HELP_BUTTON_ADDBOOKMARK
 {
     Text = "Lesezeichen hinzufьgen...";
-    Text [ english_us ] = "Add to Bookmarks...";
+    Text [ english_us ] = "Add to Bookmarks";
     Text[ portuguese ] = "Adicionar marcador";
     Text[ russian ] = "Добавить закладку";
     Text[ greek ] = "Add to bookmarks";
@@ -1010,25 +1011,26 @@ InfoBox RID_INFO_NOSEARCHRESULTS
     DEFBUTTON = WB_DEF_OK ;
     MESSAGE = "Keine Themen gefunden." ;
     MESSAGE [ English ] = "No themes found." ;
-    MESSAGE[ english_us ] = "No themes found.";
+    MESSAGE[ english_us ] = "No topics found.";
     MESSAGE[ portuguese ] = "Nгo foram encontrados temas.";
-    MESSAGE[ russian ] = "No themes found.";
+    MESSAGE[ russian ] = "Темы не найдены.";
     MESSAGE[ greek ] = "No themes found.";
     MESSAGE[ dutch ] = "No themes found.";
     MESSAGE[ french ] = "Aucun rйsultat de recherche.";
     MESSAGE[ spanish ] = "No se han encontrado temas";
     MESSAGE[ finnish ] = "No themes found.";
-    MESSAGE[ italian ] = "No themes found.";
+    MESSAGE[ italian ] = "Nessun tema trovato";
     MESSAGE[ danish ] = "No themes found.";
     MESSAGE[ swedish ] = "No themes found.";
     MESSAGE[ polish ] = "No themes found.";
     MESSAGE[ portuguese_brazilian ] = "No themes found.";
     MESSAGE[ japanese ] = "пѕѓпЅ°пѕЏгЃЇи¦‹гЃ¤гЃ‹г‚ЉгЃѕгЃ›г‚“гЂ‚";
     MESSAGE[ korean ] = "No themes found.";
-    MESSAGE[ chinese_simplified ] = "No themes found.";
+    MESSAGE[ chinese_simplified ] = "жІЎжњ‰ж‰ѕе€°дё»йўгЂ‚";
     MESSAGE[ chinese_traditional ] = "жІ’жњ‰ж‰ѕе€°дё»йЎЊгЂ‚";
     MESSAGE[ turkish ] = "No themes found.";
     MESSAGE[ arabic ] = "No themes found.";
     MESSAGE[ catalan ] = "No themes found.";
 };
+
 
