@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dociter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-17 00:39:51 $
+ *  last change: $Author: er $ $Date: 2001-09-05 09:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,8 +218,18 @@ class ScQueryCellIterator           // alle nichtleeren Zellen in einem Bereich
 {                                   // durchgehen
     enum StopOnMismatchBits
     {
-        nStopOnMismatchEnabled = 0x01,
-        nStopOnMismatchOccured = 0x02
+        nStopOnMismatchDisabled = 0x00,
+        nStopOnMismatchEnabled  = 0x01,
+        nStopOnMismatchOccured  = 0x02,
+        nStopOnMismatchExecuted = nStopOnMismatchEnabled | nStopOnMismatchOccured
+    };
+
+    enum TestEqualConditionBits
+    {
+        nTestEqualConditionDisabled = 0x00,
+        nTestEqualConditionEnabled  = 0x01,
+        nTestEqualConditionMatched  = 0x02,
+        nTestEqualConditionFulfilled = nTestEqualConditionEnabled | nTestEqualConditionMatched
     };
 
 private:
@@ -233,6 +243,7 @@ private:
     USHORT          nColRow;
     USHORT          nAttrEndRow;
     BYTE            nStopOnMismatch;
+    BYTE            nTestEqualCondition;
     BOOL            bAdvanceQuery;
 
     ScBaseCell*     GetThis();
@@ -255,7 +266,7 @@ public:
 
                     /** If set, iterator stops on first non-matching cell
                         content. May be used in SC_LESS_EQUAL queries where a
-                        cell range is assumed to be sorted, stops on first
+                        cell range is assumed to be sorted; stops on first
                         value being greater than the queried value and
                         GetFirst()/GetNext() return NULL. StoppedOnMismatch()
                         returns TRUE then.
@@ -264,9 +275,39 @@ public:
                         the non-matching cell, further GetNext() calls may be
                         executed. */
     void            SetStopOnMismatch( BOOL bVal )
-                        { nStopOnMismatch = (bVal ? nStopOnMismatchEnabled : 0); }
+                        {
+                            nStopOnMismatch = (bVal ? nStopOnMismatchEnabled :
+                                nStopOnMismatchDisabled);
+                        }
     BOOL            StoppedOnMismatch() const
-                        { return (nStopOnMismatch & nStopOnMismatchOccured) != 0; }
+                        { return nStopOnMismatch == nStopOnMismatchExecuted; }
+
+                    /** If set, an additional test for SC_EQUAL condition is
+                        executed in ScTable::ValidQuery() if SC_LESS_EQUAL or
+                        SC_GREATER_EQUAL conditions are to be tested. May be
+                        used where a cell range is assumed to be sorted to stop
+                        if an equal match is found. */
+    void            SetTestEqualCondition( BOOL bVal )
+                        {
+                            nTestEqualCondition = (bVal ?
+                                nTestEqualConditionEnabled :
+                                nTestEqualConditionDisabled);
+                        }
+    BOOL            IsEqualConditionFulfilled() const
+                        { return nTestEqualCondition == nTestEqualConditionFulfilled; }
+
+                    /** In a range assumed to be sorted find either the first
+                        equal entry or the last being less than (or greater
+                        than) the queried value. Continues searching for an
+                        equal entry even if the last entry matching the range
+                        is found, in case the data is not sorted. Used by the
+                        interpreter for LOOKUP() and similar. Column and row
+                        position of the found entry are returned, otherwise
+                        invalid.
+                        @ATTENTION! StopOnMismatch, TestEqualCondition and
+                        the internal query params are in an undefined state
+                        upon return! */
+    BOOL            FindEqualOrSortedLastInRange( USHORT& nFoundCol, USHORT& nFoundRow );
 };
 
 class ScDocAttrIterator             // alle Attribut-Bereiche

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dociter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-07-12 11:09:11 $
+ *  last change: $Author: er $ $Date: 2001-09-05 09:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -806,7 +806,8 @@ ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, USHORT nTable,
     pDoc( pDocument ),
     nTab( nTable),
     aParam (rParam),
-    nStopOnMismatch( 0 ),
+    nStopOnMismatch( nStopOnMismatchDisabled ),
+    nTestEqualCondition( nTestEqualConditionDisabled ),
     bAdvanceQuery( FALSE )
 {
     nCol = aParam.nCol1;
@@ -863,14 +864,25 @@ ScBaseCell* ScQueryCellIterator::GetThis()
                 nRow++;
             else
             {
+                BOOL bTestEqualCondition;
                 nRow = pCol->pItems[nColRow].nRow;
                 ScBaseCell* pCell = pCol->pItems[nColRow].pCell;
                 if ( (pDoc->pTab[nTab])->ValidQuery( nRow, aParam, NULL,
-                        (nCol == nFirstQueryField ? pCell : NULL) ) )
+                        (nCol == nFirstQueryField ? pCell : NULL),
+                        (nTestEqualCondition ? &bTestEqualCondition : NULL) ) )
+                {
+                    if ( nTestEqualCondition && bTestEqualCondition )
+                        nTestEqualCondition |= nTestEqualConditionMatched;
                     return pCell;     // found
+                }
                 else if ( nStopOnMismatch )
                 {
                     nStopOnMismatch |= nStopOnMismatchOccured;
+                    // Yes, even a mismatch may have a fulfilled equal
+                    // condition if regular expressions were involved and
+                    // SC_LESS_EQUAL or SC_GREATER_EQUAL were queried.
+                    if ( nTestEqualCondition && bTestEqualCondition )
+                        nTestEqualCondition |= nTestEqualConditionMatched;
                     return NULL;
                 }
                 else
@@ -899,6 +911,8 @@ ScBaseCell* ScQueryCellIterator::GetNext()
     ++nRow;
     if ( nStopOnMismatch )
         nStopOnMismatch = nStopOnMismatchEnabled;
+    if ( nTestEqualCondition )
+        nTestEqualCondition = nTestEqualConditionEnabled;
     return GetThis();
 }
 
@@ -934,6 +948,59 @@ void ScQueryCellIterator::AdvanceQueryParamEntryField()
             break;  // for
     }
 }
+
+
+BOOL ScQueryCellIterator::FindEqualOrSortedLastInRange( USHORT& nFoundCol, USHORT& nFoundRow )
+{
+    nFoundCol = MAXCOL+1;
+    nFoundRow = MAXROW+1;
+    SetStopOnMismatch( TRUE );      // assume sorted keys
+    SetTestEqualCondition( TRUE );
+    if ( GetFirst() )
+    {
+        do
+        {
+            nFoundCol = GetCol();
+            nFoundRow = GetRow();
+        } while ( !IsEqualConditionFulfilled() && GetNext() );
+    }
+    if ( IsEqualConditionFulfilled() )
+    {
+        nFoundCol = GetCol();
+        nFoundRow = GetRow();
+        return TRUE;
+    }
+    if ( StoppedOnMismatch() )
+    {   // Assume found entry to be the last value less than or equal to query.
+        // But keep on searching for an equal match.
+        SetStopOnMismatch( FALSE );
+        SetTestEqualCondition( FALSE );
+        USHORT nEntries = aParam.GetEntryCount();
+        for ( USHORT j = 0; j < nEntries; j++  )
+        {
+            ScQueryEntry& rEntry = aParam.GetEntry( j );
+            if ( rEntry.bDoQuery )
+            {
+                switch ( rEntry.eOp )
+                {
+                    case SC_LESS_EQUAL :
+                    case SC_GREATER_EQUAL :
+                        rEntry.eOp = SC_EQUAL;
+                    break;
+                }
+            }
+            else
+                break;  // for
+        }
+        if ( GetNext() )
+        {
+            nFoundCol = GetCol();
+            nFoundRow = GetRow();
+        }
+    }
+    return (nFoundCol <= MAXCOL) && (nFoundRow <= MAXROW);
+}
+
 
 //-------------------------------------------------------------------------------
 
