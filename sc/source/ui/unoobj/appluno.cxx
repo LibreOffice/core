@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appluno.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:49:59 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,32 +59,62 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "ui_pch.hxx"
+#include "appluno.hxx"
+
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+#ifndef _CPPUHELPER_FACTORY_HXX_
+#include <cppuhelper/factory.hxx>
 #endif
 
-#pragma hdrstop
-
-#include <tools/shl.hxx>
-#include <cppuhelper/factory.hxx>
-#include <osl/diagnose.h>
+#ifndef _SFX_APP_HXX
 #include <sfx2/app.hxx>
+#endif
 
-#include "appluno.hxx"
+#ifndef SC_AFMTUNO_HXX
 #include "afmtuno.hxx"
+#endif
+#ifndef SC_FUNCUNO_HXX
 #include "funcuno.hxx"
+#endif
+#ifndef SC_FILTUNO_HXX
 #include "filtuno.hxx"
+#endif
+#ifndef SC_MISCUNO_HXX
 #include "miscuno.hxx"
+#endif
+#ifndef SC_SCMOD_HXX
 #include "scmod.hxx"
+#endif
+#ifndef SC_APPOPTIO_HXX
 #include "appoptio.hxx"
+#endif
+#ifndef SC_INPUTOPT_HXX
 #include "inputopt.hxx"
+#endif
+#ifndef SC_PRINTOPT_HXX
 #include "printopt.hxx"
+#endif
+#ifndef SC_USERLIST_HXX
 #include "userlist.hxx"
+#endif
+#ifndef SC_SC_HRC
 #include "sc.hrc"           // VAR_ARGS
+#endif
+#ifndef SC_UNOGUARD_HXX
 #include "unoguard.hxx"
+#endif
+#ifndef SC_UNONAMES_HXX
 #include "unonames.hxx"
+#endif
 
+#ifndef _COM_SUN_STAR_SHEET_FUNCTIONARGUMENT_HPP_
 #include <com/sun/star/sheet/FunctionArgument.hpp>
+#endif
 
 using namespace com::sun::star;
 
@@ -181,7 +211,7 @@ extern uno::Reference< uno::XInterface > SAL_CALL ScXMLOasisExport_Settings_crea
 
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
 
-const SfxItemPropertyMap* lcl_GetSettingsPropertyMap()
+static const SfxItemPropertyMap* lcl_GetSettingsPropertyMap()
 {
     static SfxItemPropertyMap aSettingsPropertyMap_Impl[] =
     {
@@ -220,7 +250,7 @@ SC_SIMPLE_SERVICE_INFO( ScSpreadsheetSettings, "ScSpreadsheetSettings", SCSPREAD
 
 //------------------------------------------------------------------------
 
-void lcl_WriteInfo( registry::XRegistryKey* pRegistryKey,
+static void lcl_WriteInfo( registry::XRegistryKey* pRegistryKey,
                         const rtl::OUString& rImplementationName,
                         const uno::Sequence< rtl::OUString >& rServices )
                     throw( registry::InvalidRegistryException )
@@ -237,13 +267,13 @@ void lcl_WriteInfo( registry::XRegistryKey* pRegistryKey,
 
 extern "C" {
 
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-sal_Bool SAL_CALL component_writeInfo(
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, registry::XRegistryKey * pRegistryKey )
 {
     if (pRegistryKey)
@@ -348,7 +378,7 @@ sal_Bool SAL_CALL component_writeInfo(
     return sal_False;
 }
 
-void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     if (!pServiceManager)
@@ -897,7 +927,7 @@ uno::Sequence<rtl::OUString> ScFunctionListObj::getSupportedServiceNames_Static(
 }
 
 
-void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, const ScFuncDesc& rDesc )
+static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, const ScFuncDesc& rDesc )
 {
     DBG_ASSERT( rSequence.getLength() == SC_FUNCDESC_PROPCOUNT, "Falscher Count" );
 
