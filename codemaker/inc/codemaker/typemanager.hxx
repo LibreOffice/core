@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemanager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:51:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:09:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,21 +122,21 @@ public:
         return *this;
     }
 
-    virtual sal_Bool isValidType(const ::rtl::OString& name)
+    virtual sal_Bool isValidType(const ::rtl::OString& name) const
         { return sal_False; }
 
     virtual RegistryKey getTypeKey(
-        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 )
+        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const
         { return RegistryKey(); }
     virtual typereg::Reader getTypeReader(
-        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) = 0;
-    virtual RTTypeClass getTypeClass(const ::rtl::OString& name)
+        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const = 0;
+    virtual RTTypeClass getTypeClass(const ::rtl::OString& name) const
         { return RT_TYPE_INVALID; }
 
     virtual void setBase(const ::rtl::OString& base) {}
-    virtual ::rtl::OString getBase() { return ::rtl::OString(); }
+    virtual ::rtl::OString getBase() const { return ::rtl::OString(); }
 
-    virtual sal_Int32 getSize() { return 0; }
+    virtual sal_Int32 getSize() const { return 0; }
 
     static sal_Bool isBaseType(const ::rtl::OString& name);
 protected:
@@ -174,22 +174,22 @@ public:
 
     sal_Bool init(const StringVector& regFiles, const StringVector& extraFiles = StringVector() );
 
-    sal_Bool    isValidType(const ::rtl::OString& name)
+    sal_Bool    isValidType(const ::rtl::OString& name) const
         { return searchTypeKey(name, 0).isValid(); }
     RegistryKey getTypeKey(
-        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 )
+        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const
         { return searchTypeKey(name, pIsExtraType); }
     typereg::Reader getTypeReader(
-        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 );
-    RTTypeClass getTypeClass(const ::rtl::OString& name);
+        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const;
+    RTTypeClass getTypeClass(const ::rtl::OString& name) const;
 
     void setBase(const ::rtl::OString& base);
-    ::rtl::OString getBase() { return m_pImpl->m_base; }
+    ::rtl::OString getBase() const { return m_pImpl->m_base; }
 
-    sal_Int32 getSize() { return m_pImpl->m_t2TypeClass.size(); }
+    sal_Int32 getSize() const { return m_pImpl->m_t2TypeClass.size(); }
 protected:
     RegistryKey searchTypeKey(
-        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 );
+        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const;
     void        freeRegistries();
 
     void acquire();
