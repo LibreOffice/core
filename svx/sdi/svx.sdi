@@ -11485,3 +11485,28 @@ SfxBoolItem TextRTL SID_RULER_TEXT_RIGHT_TO_LEFT
     GroupId = GID_CONTROLS;
 ]
 
+//--------------------------------------------------------------------------
+SfxVoidItem OpenHyperlink SID_OPEN_HYPERLINK
+()
+[
+        /* flags: */
+        AutoUpdate = FALSE,
+        Cachable = Cachable,
+        FastCall = FALSE,
+        HasCoreId = FALSE,
+        HasDialog = FALSE,
+        ReadOnlyDoc = TRUE,
+        Toggle = FALSE,
+        Container = FALSE,
+        RecordAbsolute = FALSE,
+        RecordPerSet;
+        Synchron;
+
+        /* config: */
+        AccelConfig = TRUE,
+        MenuConfig = TRUE,
+        StatusBarConfig = FALSE,
+        ToolBoxConfig = TRUE,
+        GroupId = GID_EDIT;
+]
+
