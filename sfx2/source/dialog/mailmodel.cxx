@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-21 14:09:23 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 14:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,46 +320,7 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocument( String& rFileName
         delete pExt;
 
         rFileName = aTempFile.GetURL();
-        // save document to temp file
-        SfxStringItem aFileName( SID_FILE_NAME, rFileName );
-        SfxBoolItem aPicklist( SID_PICKLIST, FALSE );
-        SfxBoolItem aSaveTo( SID_SAVETO, TRUE );
 
-        SfxStringItem* pFilterName = NULL;
-        if ( pFilter && bHasFilter )
-            pFilterName = new SfxStringItem( SID_FILTER_NAME, pFilter->GetFilterName() );
-
-        SfxStringItem* pPassItem = NULL;
-        String aPasswd;
-        if ( GetPasswd_Impl( xDocShell->GetMedium()->GetItemSet(), aPasswd ) )
-            pPassItem = new SfxStringItem( SID_PASSWORD, aPasswd );
-
-        const SfxBoolItem *pRet = (const SfxBoolItem*)pDisp->Execute( SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, &aFileName, &aPicklist, &aSaveTo,
-                                                                        pFilterName ? pFilterName : pPassItem,
-                                                                        pFilterName ? pPassItem : 0L, 0L );
-
-        // #i30432# notify that export is finished - the Writer may want to restore removed content
-        pDisp->Execute( SID_MAIL_EXPORT_FINISHED, SFX_CALLMODE_SYNCHRON );
-
-        BOOL bRet = pRet ? pRet->GetValue() : FALSE;
-
-        delete pFilterName;
-        if ( pFilter )
-        {
-            // detect content type and expand with the file name
-            rType = pFilter->GetMimeType();
-            rType += DEFINE_CONST_UNICODE("; name =\"");
-            INetURLObject aFileObj = xDocShell->GetMedium()->GetURLObject();
-            rType += String(aFileObj.getName( INetURLObject::LAST_SEGMENT,
-                true, INetURLObject::DECODE_WITH_CHARSET ));
-            rType += '\"';
-        }
-        // restore old settings
-        if ( !bModified && xDocShell->IsEnableSetModified() )
-            xDocShell->SetModified( FALSE );
-        eRet = bRet ? SAVE_SUCCESSFULL : SAVE_ERROR;
-    }
-=======
         if ( bModified || !xDocShell->HasName() )
         {
             // prepare for mail export
@@ -456,7 +417,6 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocument( String& rFileName
             }
         }
     }
->>>>>>> 1.29.2.2
 
     return eRet;
 }
