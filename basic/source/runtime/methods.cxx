@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:37 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
@@ -299,15 +299,15 @@ String implGetCurDir( void )
 }
 
 // TODO: -> SbiGlobals
-static Reference< XSimpleFileAccess > getFileAccess( void )
+static Reference< XSimpleFileAccess3 > getFileAccess( void )
 {
-    static Reference< XSimpleFileAccess > xSFI;
+    static Reference< XSimpleFileAccess3 > xSFI;
     if( !xSFI.is() )
     {
         Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
         if( xSMgr.is() )
         {
-            xSFI = Reference< XSimpleFileAccess >( xSMgr->createInstance
+            xSFI = Reference< XSimpleFileAccess3 >( xSMgr->createInstance
                 ( OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
         }
     }
@@ -671,7 +671,7 @@ RTLFUNC(ChDrive) // JSM
 // Implementation of StepRENAME with UCB
 void implStepRenameUCB( const String& aSource, const String& aDest )
 {
-    Reference< XSimpleFileAccess > xSFI = getFileAccess();
+    Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
     if( xSFI.is() )
     {
         try
@@ -705,7 +705,7 @@ RTLFUNC(FileCopy) // JSM
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess > xSFI = getFileAccess();
+            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -753,7 +753,7 @@ RTLFUNC(Kill) // JSM
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess > xSFI = getFileAccess();
+            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -791,7 +791,7 @@ RTLFUNC(MkDir) // JSM
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess > xSFI = getFileAccess();
+            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -889,7 +889,7 @@ RTLFUNC(RmDir) // JSM
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess > xSFI = getFileAccess();
+            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -950,7 +950,7 @@ RTLFUNC(FileLen)
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess > xSFI = getFileAccess();
+            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -2288,7 +2288,7 @@ RTLFUNC(Dir)
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess > xSFI = getFileAccess();
+            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 if ( nParCount >= 2 )
@@ -2613,7 +2613,7 @@ RTLFUNC(GetAttr)
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess > xSFI = getFileAccess();
+            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -2629,9 +2629,12 @@ RTLFUNC(GetAttr)
                     }
 
                     sal_Bool bReadOnly = xSFI->isReadOnly( aPath );
+                    sal_Bool bHidden = xSFI->isHidden( aPath );
                     sal_Bool bDirectory = xSFI->isFolder( aPath );
                     if( bReadOnly )
                         nFlags |= 0x0001; // ATTR_READONLY
+                    if( bHidden )
+                        nFlags |= 0x0002; // ATTR_HIDDEN
                     if( bDirectory )
                         nFlags |= 0x0010; // ATTR_DIRECTORY
                 }
@@ -2724,7 +2727,7 @@ RTLFUNC(FileDateTime)
         Date aDate;
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess > xSFI = getFileAccess();
+            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -3759,13 +3762,15 @@ RTLFUNC(SetAttr) // JSM
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess > xSFI = getFileAccess();
+            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
                 {
                     sal_Bool bReadOnly = (nFlags & 0x0001) != 0; // ATTR_READONLY
                     xSFI->setReadOnly( aStr, bReadOnly );
+                    sal_Bool bHidden   = (nFlags & 0x0002) != 0; // ATTR_HIDDEN
+                    xSFI->setHidden( aStr, bHidden );
                 }
                 catch( Exception & )
                 {
@@ -3863,7 +3868,7 @@ RTLFUNC(FileExists)
         // <-- UCB
         if( hasUno() )
         {
-            Reference< XSimpleFileAccess > xSFI = getFileAccess();
+            Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -3898,13 +3903,13 @@ RTLFUNC(FileExists)
 // For debugging only
 void dbg_SaveDisassembly( SbModule* pModule )
 {
-    Reference< XSimpleFileAccess > xSFI;
+    Reference< XSimpleFileAccess3 > xSFI;
     Reference< XTextOutputStream > xTextOut;
     Reference< XOutputStream > xOut;
     Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
     if( xSMgr.is() )
     {
-        Reference< XSimpleFileAccess > xSFI = Reference< XSimpleFileAccess >( xSMgr->createInstance
+        Reference< XSimpleFileAccess3 > xSFI = Reference< XSimpleFileAccess3 >( xSMgr->createInstance
             ( OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
         if( xSFI.is() )
         {
