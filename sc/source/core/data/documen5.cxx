@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: nn $ $Date: 2000-12-10 14:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -669,7 +669,14 @@ void ScDocument::UpdateChartListenerCollection()
                                     //  about the external data in a freshly loaded document.
                                     //  #73642# only if the chart really has external data
                                     if ( aArray.IsValid() )
+                                    {
                                         pChartData->SetReadOnly( TRUE );
+
+                                        //  #81525# re-create series ranges from old extra string
+                                        //  if not set (after loading)
+                                        if ( pChartData->GetSeriesAddresses().getLength() == 0 )
+                                            aArray.SetExtraStrings( *pChartData );
+                                    }
 
 #if 1
 // #74046# initially loaded charts need the number formatter standard precision
