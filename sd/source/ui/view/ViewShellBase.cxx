@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 14:45:24 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,55 +61,73 @@
 
 #include "ViewShellBase.hxx"
 
-#ifndef SD_DRAW_DOC_SHELL_HXX
-#include "DrawDocShell.hxx"
-#endif
-#ifndef SD_VIEW_SHELL_HXX
-#include "ViewShell.hxx"
-#endif
-#ifndef SD_SUB_SHELL_MANAGER_HXX
-#include "SubShellManager.hxx"
-#endif
-#ifndef SD_OBJECT_BAR_MANAGER_HXX
-#include "ObjectBarManager.hxx"
-#endif
+#include "ShellFactory.hxx"
 #ifndef SD_RESID_HXX
 #include "sdresid.hxx"
 #endif
-#include "strings.hrc"
-#ifndef _SFXREQUEST_HXX
-#include <sfx2/request.hxx>
-#endif
 #include "app.hrc"
-#ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
-#endif
-#ifndef _DRAWDOC_HXX
-#include "drawdoc.hxx"
+#include "strings.hrc"
+#include "glob.hrc"
+#include <svx/svxids.hrc>
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
 #endif
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
-#include "glob.hrc"
-#ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
+#ifndef SD_PANE_CHILD_WINDOWS_HXX
+#include "PaneChildWindows.hxx"
 #endif
-#ifndef _SFXDISPATCH_HXX
-#include <sfx2/dispatch.hxx>
+#ifndef SD_NOTES_CHILD_WINDOW_HXX
+#include "NotesChildWindow.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_MANAGER_HXX
+#include "ViewShellManager.hxx"
+#endif
+#include "PaneManager.hxx"
+#include "ViewTabBar.hxx"
+#ifndef SD_DRAW_CONTROLLER_HXX
+#include "DrawController.hxx"
 #endif
 #ifndef _SFXEVENT_HXX
 #include <sfx2/event.hxx>
 #endif
-#include <svx/svxids.hrc>
-#ifndef SD_DRAW_CONTROLLER_HXX
-#include "DrawController.hxx"
+#ifndef _DRAWDOC_HXX
+#include "drawdoc.hxx"
+#endif
+#ifndef _SFXDISPATCH_HXX
+#include <sfx2/dispatch.hxx>
+#endif
+#ifndef _SFXREQUEST_HXX
+#include <sfx2/request.hxx>
 #endif
 #ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
 #endif
-#ifndef SD_DRAW_VIEW_HXX
-#include "drawview.hxx"
+#ifndef SD_GRAPHIC_VIEW_SHELL_HXX
+#include "GraphicViewShell.hxx"
 #endif
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
+#ifndef SD_SLIDE_VIEW_SHELL_HXX
+#include "SlideViewShell.hxx"
+#endif
+#ifndef SD_SLIDE_SORTER_VIEW_SHELL_HXX
+#include "SlideSorterViewShell.hxx"
+#endif
+#ifndef SD_PREVIEW_SORTER_VIEW_SHELL_HXX
+#include "PreviewViewShell.hxx"
+#endif
+#ifndef SD_PRESENTATION_SORTER_VIEW_SHELL_HXX
+#include "PresentationViewShell.hxx"
+#endif
+#ifndef SD_TOOLPANEL_TASK_PANE_VIEW_SHELL_HXX
+#include "TaskPaneViewShell.hxx"
+#endif
+#include "FormShellManager.hxx"
+#include "Window.hxx"
+#include <sfx2/msg.hxx>
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
@@ -123,177 +141,225 @@
 #include <com/sun/star/frame/XModel.hpp>
 #endif
 
-using namespace sd;
 #define ViewShellBase
+using namespace sd;
 #include "sdslots.hxx"
+
+namespace {
+class ViewShellFactory
+    : public ::sd::ShellFactory< ::sd::ViewShell>
+{
+public:
+    ViewShellFactory (::sd::ViewShellBase& rBase, SfxViewFrame* pViewFrame);
+    virtual ::sd::ViewShell* CreateShell (::sd::ShellId nId,
+        ::Window* pParentWindow,
+        ::sd::FrameView* pFrameView);
+    virtual void ReleaseShell (::sd::ViewShell* pShell);
+private:
+    ::sd::ViewShellBase& mrBase;
+    SfxViewFrame* mpViewFrame;
+};
+
+
+} // end of anonymous namespace
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+
 namespace sd {
+
+
+
+//===== ViewShellBase =========================================================
 
 TYPEINIT1(ViewShellBase, SfxViewShell);
 
+// We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
+// new ViewShellBase object has been constructed.
+
+/*
 SFX_IMPL_VIEWFACTORY(ViewShellBase, SdResId(STR_DEFAULTVIEW))
 {
     SFX_VIEW_REGISTRATION(DrawDocShell);
 }
-
-SFX_IMPL_INTERFACE(ViewShellBase, SfxViewShell, SdResId(STR_DRAWVIEWSHELL))
+*/
+SfxViewFactory* ViewShellBase::pFactory;
+SfxViewShell* __EXPORT ViewShellBase::CreateInstance (
+    SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
+    ViewShellBase* pBase = new ViewShellBase(pFrame, pOldView);
+    pBase->LateInit();
+    return pBase;
 }
+void ViewShellBase::RegisterFactory( USHORT nPrio )
+{
+    pFactory = new SfxViewFactory(
+        &CreateInstance,&InitFactory,nPrio,SdResId(STR_DEFAULTVIEW));
+    InitFactory();
+}
+void ViewShellBase::InitFactory()
+{
+    SFX_VIEW_REGISTRATION(DrawDocShell);
+}
+
+
+
+SFX_IMPL_INTERFACE(ViewShellBase, SfxViewShell, SdResId(STR_VIEWSHELLBASE))
+{
+    SFX_CHILDWINDOW_REGISTRATION(
+        ::sd::LeftPaneChildWindow::GetChildWindowId());
+    SFX_CHILDWINDOW_REGISTRATION(
+        ::sd::RightPaneChildWindow::GetChildWindowId());
+    SFX_CHILDWINDOW_REGISTRATION(
+        ::sd::notes::NotesChildWindow::GetChildWindowId());
+}
+
+
+
 
 ViewShellBase::ViewShellBase (
     SfxViewFrame* pFrame,
     SfxViewShell* pOldShell,
     ViewShell::ShellType eDefaultSubShell)
     : SfxViewShell (pFrame,
-        SFX_VIEW_MAXIMIZE_FIRST   |
-        SFX_VIEW_OPTIMIZE_EACH    |
-        SFX_VIEW_DISABLE_ACCELS   |
-        SFX_VIEW_OBJECTSIZE_EMBEDDED |
-        SFX_VIEW_CAN_PRINT           |
-        SFX_VIEW_HAS_PRINTOPTIONS),
-      mpDocShell (static_cast<DrawDocShell*>(
-        GetViewFrame()->GetObjectShell())),
-      mpDocument (mpDocShell->GetDoc()),
-      mpController (NULL),
-      maPrintManager (*this)
+        SFX_VIEW_MAXIMIZE_FIRST
+        | SFX_VIEW_OPTIMIZE_EACH
+        | SFX_VIEW_DISABLE_ACCELS
+        | SFX_VIEW_OBJECTSIZE_EMBEDDED
+        | SFX_VIEW_CAN_PRINT
+        | SFX_VIEW_HAS_PRINTOPTIONS),
+      maMutex(),
+      mpViewTabBar (NULL),
+      mpViewShellManager (NULL),
+      mpPaneManager (NULL),
+      mpDocShell (NULL),
+      mpDocument (NULL),
+      maPrintManager (*this),
+      mpFormShellManager(NULL)
 {
-    Construct (eDefaultSubShell);
+    // Set up the members in the correct order.
+    if (GetViewFrame()->GetObjectShell()->ISA(DrawDocShell))
+        mpDocShell = static_cast<DrawDocShell*>(
+            GetViewFrame()->GetObjectShell());
+    if (mpDocShell != NULL)
+        mpDocument = mpDocShell->GetDoc();
+    mpViewShellManager.reset (new ViewShellManager (*this));
+    mpPaneManager.reset (new PaneManager(*this));
+
+    SetWindow (&pFrame->GetWindow());
+
+    // Now that this new object has (almost) finished its construction
+    // we can pass it as argument to the SubShellManager constructor.
+    GetViewShellManager().RegisterDefaultFactory (
+        ::std::auto_ptr<ViewShellManager::ViewShellFactory>(
+            new ViewShellFactory(*this, pFrame)));
+
+    // Tell the pane manager what shell to put into the center pane.
+    // Setting the window later will create that shell.
+    mpPaneManager->RequestMainViewShellChange (
+        eDefaultSubShell);
 }
 
 
 
 
-void ViewShellBase::Construct (
-    ViewShell::ShellType eDefaultSubShell)
+/** Call reset() on some of the auto pointers to destroy the pointed-to
+    objects in the correct order.
+*/
+ViewShellBase::~ViewShellBase (void)
 {
-    // Now that this new object has (almost) finished its construction
-    // we can pass it as argument to the SubShellManager constructor.
-    mpSubShellManager = ::std::auto_ptr<SubShellManager>(
-        new SubShellManager(*this));
-    GetSubShellManager().SetMainSubShellType (eDefaultSubShell);
+    // We have to hide the main window to prevent SFX complaining after a
+    // reload about it being already visible.
+    ViewShell* pShell = GetMainViewShell();
+    if (pShell!=NULL
+        && pShell->GetActiveWindow()!=NULL
+        && pShell->GetActiveWindow()->GetParent()!=NULL)
+    {
+        pShell->GetActiveWindow()->GetParent()->Hide();
+    }
 
+    mpPaneManager->Shutdown();
+
+    mpViewTabBar.reset();
+    mpFormShellManager.reset();
+
+    EndListening(*GetViewFrame());
+    EndListening(*GetDocShell());
+
+    mpViewShellManager.reset();
+    mpPaneManager.reset();
+
+    SetWindow(NULL);
+}
+
+
+
+
+void ViewShellBase::LateInit (void)
+{
     StartListening(*GetViewFrame());
     StartListening(*GetDocShell());
+
+    mpViewTabBar.reset (new ViewTabBar(*this, &GetFrame()->GetWindow()));
+    mpViewTabBar->Show();
+
+    // Try to init the panes for which the windows are already present.
+    // This usually includes the center pane but not the panes inside
+    // dockable child windows.
+    mpPaneManager->LateInit();
+
+    mpFormShellManager = ::std::auto_ptr<FormShellManager>(
+        new FormShellManager (*this));
 
     // Make sure that an instance of the controller exists.  We don't have
     // to call UpdateController() here because the registration at the frame
     // is called automatically.
-    mpController = GetSubShellManager().GetMainSubShell()->GetController();
+    //    GetMainViewShell()->GetController();
 }
 
 
 
 
-ViewShellBase::~ViewShellBase (void)
+ViewShellManager& ViewShellBase::GetViewShellManager (void) const
 {
-    EndListening(*GetViewFrame());
-    EndListening(*GetDocShell());
-    mpSubShellManager.reset();
+    return *mpViewShellManager.get();
 }
 
 
 
 
-SubShellManager& ViewShellBase::GetSubShellManager (void) const
+ViewShell* ViewShellBase::GetMainViewShell (void) const
 {
-    return *mpSubShellManager.get();
+    return mpPaneManager->GetViewShell(PaneManager::PT_CENTER);
 }
 
 
 
 
-ObjectBarManager& ViewShellBase::GetObjectBarManager (void) const
+PaneManager& ViewShellBase::GetPaneManager (void)
 {
-    return mpSubShellManager->GetObjectBarManager();
+    return *mpPaneManager.get();
 }
 
 
 
 
-ViewShell* ViewShellBase::GetMainViewShell (SfxViewFrame* pViewFrame)
+ViewShellBase* ViewShellBase::GetViewShellBase (SfxViewFrame* pViewFrame)
 {
-    ViewShell* pViewShell = NULL;
+    ViewShellBase* pBase = NULL;
 
     if (pViewFrame != NULL)
     {
         // Get the view shell for the frame and cast it to
         // sd::ViewShellBase.
         SfxViewShell* pSfxViewShell = pViewFrame->GetViewShell();
-        if (pSfxViewShell->ISA(::sd::ViewShellBase))
-        {
-            ViewShellBase* pSdViewShellBase =
-                PTR_CAST(::sd::ViewShellBase, pSfxViewShell);
-            if (pSdViewShellBase != NULL)
-            {
-                // Use the main sub shell manager to obtain the
-                // desired view shell.
-                pViewShell =
-                    pSdViewShellBase->GetSubShellManager().GetMainSubShell();
-            }
-        }
+        if (pSfxViewShell!=NULL && pSfxViewShell->ISA(::sd::ViewShellBase))
+            pBase = static_cast<ViewShellBase*>(pSfxViewShell);
     }
 
-    return pViewShell;
-}
-
-
-
-
-void ViewShellBase::ExecuteModeChange (SfxRequest& rRequest)
-{
-    bool bIsActive = true;
-    ViewShell::ShellType eType = ViewShell::ST_NONE;
-
-    switch (rRequest.GetSlot())
-    {
-        case SID_SWITCH_SHELL:
-        {
-            SFX_REQUEST_ARG(rRequest, pMode, SfxInt32Item,
-                SID_SWITCH_SHELL, FALSE);
-            eType = static_cast<ViewShell::ShellType>(
-                pMode->GetValue());
-            switch (eType)
-            {
-                case ViewShell::ST_IMPRESS:
-                case ViewShell::ST_HANDOUT:
-                case ViewShell::ST_NOTES:
-                case ViewShell::ST_SLIDE:
-                case ViewShell::ST_OUTLINE:
-                {
-                    // Turn off effects.
-                    ViewShell* pShell = GetSubShellManager().GetMainSubShell();
-                    /*af the current shell will be destroyed in a short time
-                         so calling SetAnimationMode() should not be
-                         necessary.
-
-                    if (pShell != NULL)
-                        if (pShell->ISA(DrawViewShell))
-                            static_cast<DrawView*>(pShell->GetDrawView())
-                                ->SetAnimationMode(FALSE);
-                        */
-                    // AutoLayouts have to be ready.
-                    GetDocument()->StopWorkStartupDelay();
-                    GetSubShellManager().SetMainSubShellType (eType);
-                    //          Invalidate ();
-                    rRequest.Ignore ();
-                }
-                break;
-
-                case ViewShell::ST_NONE:
-                case ViewShell::ST_PRESENTATION:
-                    GetSubShellManager().SetMainSubShellType (eType);
-                    rRequest.Done ();
-                    break;
-
-                case ViewShell::ST_DRAW:
-                case ViewShell::ST_PREVIEW:
-                    break;
-            }
-        }
-    }
+    return pBase;
 }
 
 
@@ -309,27 +375,31 @@ void ViewShellBase::GetMenuState (SfxItemSet& rSet)
 void ViewShellBase::UpdateController (void)
 {
     ::osl::MutexGuard aGuard (maMutex);
-    ViewShell* pViewShell = GetSubShellManager().GetMainSubShell();
-    DrawController* pController = pViewShell->GetController();
+    ViewShell* pViewShell = GetMainViewShell();
+    SfxBaseController* pController = pViewShell->GetController();
 
+    if (pController == NULL)
+        pController = new SfxBaseController (this);
     if (pController != NULL)
-        SetController (pController);
-    Reference <frame::XController> xController (pController);
-    Reference <awt::XWindow> xWindow(
-        GetFrame()->GetFrame()->GetWindow().GetComponentInterface(),
-        UNO_QUERY );
-    Reference <frame::XFrame> xFrame (
-        GetFrame()->GetFrame()->GetFrameInterface());
-    SfxObjectShell* pObjectShellold = GetObjectShell();
-    xFrame->setComponent (xWindow, xController);
-    xController->attachFrame (xFrame);
-    SfxObjectShell* pObjectShell = GetObjectShell();
-    Reference <frame::XModel> xModel (pObjectShell->GetModel());
-    if (xModel.is())
     {
-        xController->attachModel (xModel);
-        xModel->connectController (xController);
-        xModel->setCurrentController (xController);
+        SetController (pController);
+        Reference <frame::XController> xController (pController);
+        Reference <awt::XWindow> xWindow(
+            GetFrame()->GetFrame()->GetWindow().GetComponentInterface(),
+            UNO_QUERY );
+        Reference <frame::XFrame> xFrame (
+            GetFrame()->GetFrame()->GetFrameInterface());
+        SfxObjectShell* pObjectShellold = GetObjectShell();
+        xFrame->setComponent (xWindow, xController);
+        xController->attachFrame (xFrame);
+        SfxObjectShell* pObjectShell = GetObjectShell();
+        Reference <frame::XModel> xModel (pObjectShell->GetModel());
+        if (xModel.is())
+        {
+            xController->attachModel (xModel);
+            xModel->connectController (xController);
+            xModel->setCurrentController (xController);
+        }
     }
 }
 
@@ -360,17 +430,54 @@ void ViewShellBase::SFX_NOTIFY(SfxBroadcaster& rBC,
 
     if (rHint.IsA(TYPE(SfxEventHint)))
     {
-        if( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_OPENDOC )
+        OSL_TRACE ("ViewShellBase::SFX_NOTIFY: %p %d",
+            this,
+            static_cast<const SfxEventHint&>(rHint).GetEventId());
+        switch (static_cast<const SfxEventHint&>(rHint).GetEventId())
         {
-            if( GetDocument() && GetDocument()->IsStartWithPresentation() )
-            {
-                if( GetViewFrame() )
+            case SFX_EVENT_OPENDOC:
+                if( GetDocument() && GetDocument()->IsStartWithPresentation() )
                 {
-                    GetDocument()->SetStartWithPresentation( false );
-                    GetViewFrame()->GetDispatcher()->Execute(
-                        SID_PRESENTATION, SFX_CALLMODE_ASYNCHRON );
+                    if( GetViewFrame() )
+                    {
+                        GetDocument()->SetStartWithPresentation( false );
+                        GetViewFrame()->GetDispatcher()->Execute(
+                            SID_PRESENTATION, SFX_CALLMODE_ASYNCHRON );
+                    }
                 }
-            }
+                else
+                {
+                    mpPaneManager->InitPanes();
+                }
+                break;
+
+            case SFX_EVENT_CREATEDOC:
+                mpPaneManager->InitPanes();
+                break;
+
+            case SFX_EVENT_ACTIVATEDOC:
+                break;
+
+            case SFX_EVENT_STARTAPP:
+            case SFX_EVENT_CLOSEAPP:
+            case SFX_EVENT_CLOSEDOC:
+            case SFX_EVENT_SAVEDOC:
+            case SFX_EVENT_SAVEASDOC:
+            case SFX_EVENT_DEACTIVATEDOC:
+            case SFX_EVENT_PRINTDOC:
+            case SFX_EVENT_ONERROR:
+            case SFX_EVENT_LOADFINISHED:
+            case SFX_EVENT_SAVEFINISHED:
+            case SFX_EVENT_MODIFYCHANGED:
+            case SFX_EVENT_PREPARECLOSEDOC:
+            case SFX_EVENT_NEWMESSAGE:
+            case SFX_EVENT_TOGGLEFULLSCREENMODE:
+            case SFX_EVENT_SAVEDOCDONE:
+            case SFX_EVENT_SAVEASDOCDONE:
+            case SFX_EVENT_MOUSEOVER_OBJECT:
+            case SFX_EVENT_MOUSECLICK_OBJECT:
+            case SFX_EVENT_MOUSEOUT_OBJECT:
+                break;
         }
     }
 }
@@ -378,21 +485,58 @@ void ViewShellBase::SFX_NOTIFY(SfxBroadcaster& rBC,
 
 
 
-void ViewShellBase::InnerResizePixel(const Point &rPos, const Size &rSize)
+void ViewShellBase::InnerResizePixel (const Point& rOrigin, const Size &rSize)
 {
-    ViewShell* pMainViewShell = GetSubShellManager().GetMainSubShell();
-    if (pMainViewShell != NULL)
-        pMainViewShell->InnerResizePixel (rPos, rSize);
+    ResizePixel (rOrigin, rSize, false);
 }
 
 
 
 
-void ViewShellBase::OuterResizePixel(const Point &rPos, const Size &rSize)
+void ViewShellBase::OuterResizePixel (const Point& rOrigin, const Size &rSize)
 {
-    ViewShell* pMainViewShell = GetSubShellManager().GetMainSubShell();
+    ResizePixel (rOrigin, rSize, true);
+}
+
+
+
+
+void ViewShellBase::ResizePixel (
+    const Point& rOrigin,
+    const Size &rSize,
+    bool bOuterResize)
+{
+    // Forward the call to both the base class and the main stacked sub
+    // shell only when main sub shell exists.
+    ViewShell* pMainViewShell
+        = mpPaneManager->GetViewShell(PaneManager::PT_CENTER);
     if (pMainViewShell != NULL)
-        pMainViewShell->OuterResizePixel (rPos, rSize);
+    {
+        Rectangle aModelRectangle (GetWindow()->PixelToLogic(
+            Rectangle(rOrigin, rSize)));
+        SetWindow (pMainViewShell->GetActiveWindow());
+        /*        if (bOuterResize)
+            SfxViewShell::OuterResizePixel (rOrigin, rSize);
+        else
+            SfxViewShell::InnerResizePixel (rOrigin, rSize);
+        */
+        if (mpViewTabBar.get()!=NULL && mpViewTabBar->IsVisible())
+            mpViewTabBar->SetPosSizePixel (rOrigin, rSize);
+        SvBorder aBorder (pMainViewShell->GetBorder(bOuterResize));
+        aBorder += GetBorder(bOuterResize);
+        SetBorderPixel (aBorder);
+
+        SvBorder aBaseBorder (ArrangeGUIElements(rOrigin, rSize));
+        pMainViewShell->Resize (
+            Point (rOrigin.X()+aBaseBorder.Left(),
+                rOrigin.Y()+aBaseBorder.Top()),
+            Size (rSize.Width() - aBaseBorder.Left() - aBaseBorder.Right(),
+                rSize.Height() - aBaseBorder.Top() - aBaseBorder.Bottom()));
+    }
+    else
+        // We have to set a border at all times so when the main view shell
+        // is not yet ready we simply set an empty border.
+        SetBorderPixel (SvBorder());
 }
 
 
@@ -402,7 +546,8 @@ ErrCode ViewShellBase::DoVerb (long nVerb)
 {
     ErrCode aResult = ERRCODE_NONE;
 
-    ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+    ::sd::ViewShell* pShell
+          = mpPaneManager->GetViewShell(PaneManager::PT_CENTER);
     if (pShell != NULL)
         aResult = pShell->DoVerb (nVerb);
 
@@ -489,13 +634,80 @@ void ViewShellBase::PreparePrint (PrintDialog* pPrintDialog)
 
 
 
+SvBorder ViewShellBase::GetBorder (bool bOuterResize)
+{
+    int nTop = 0;
+    if (mpViewTabBar.get()!=NULL && mpViewTabBar->IsVisible())
+        nTop = mpViewTabBar->GetHeight();
+    return SvBorder(0,nTop,0,0);
+}
+
+
+
+
+SvBorder ViewShellBase::ArrangeGUIElements (
+    const Point& rOrigin,
+    const Size& rSize)
+{
+    int nTop =  0;
+    if (mpViewTabBar.get()!=NULL && mpViewTabBar->IsVisible())
+    {
+        nTop =  mpViewTabBar->GetHeight();
+        mpViewTabBar->SetPosSizePixel (rOrigin, Size(rSize.Width(),nTop));
+    }
+
+    return SvBorder(0,nTop,0,0);
+}
+
+
+
+
+void ViewShellBase::Execute (SfxRequest& rRequest)
+{
+    USHORT nSlotId = rRequest.GetSlot();
+    switch (nSlotId)
+    {
+        case SID_SWITCH_SHELL:
+            mpPaneManager->ExecuteModeChange (rRequest);
+            break;
+
+        case SID_LEFT_PANE:
+        case SID_RIGHT_PANE:
+        case SID_NOTES_WINDOW:
+        case SID_NORMAL_MULTI_PANE_GUI:
+        case SID_SLIDE_SORTER_MULTI_PANE_GUI:
+        case SID_DRAWINGMODE:
+        case SID_DIAMODE:
+        case SID_OUTLINEMODE:
+        case SID_NOTESMODE:
+        case SID_HANDOUTMODE:
+            mpPaneManager->ExecuteSlot (rRequest);
+            break;
+
+        default:
+            // Ignore any other slot.
+            rRequest.Ignore ();
+            break;
+    }
+}
+
+
+
+
+void ViewShellBase::GetState (SfxItemSet& rSet)
+{
+    mpPaneManager->GetSlotState (rSet);
+}
+
+
+
 void ViewShellBase::WriteUserDataSequence (
     ::com::sun::star::uno::Sequence <
     ::com::sun::star::beans::PropertyValue >& rSequence,
     sal_Bool bBrowse)
 {
     // Forward call to main sub shell.
-    ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+    ViewShell* pShell = GetMainViewShell();
     if (pShell != NULL)
         pShell->WriteUserDataSequence (rSequence, bBrowse);
 }
@@ -509,9 +721,24 @@ void ViewShellBase::ReadUserDataSequence (
     sal_Bool bBrowse)
 {
     // Forward call to main sub shell.
-    ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+    ViewShell* pShell = GetMainViewShell();
     if (pShell != NULL)
         pShell->ReadUserDataSequence (rSequence, bBrowse);
+}
+
+
+
+
+void ViewShellBase::Activate (BOOL IsMDIActivate)
+{
+    GetPaneManager().InitPanes ();
+}
+
+
+
+
+void ViewShellBase::Deactivate (BOOL IsMDIActivate)
+{
 }
 
 
@@ -520,7 +747,7 @@ void ViewShellBase::ReadUserDataSequence (
 void ViewShellBase::UIActivate (SvInPlaceObject *pIPObj)
 {
     // Forward call to main sub shell.
-    ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+    ViewShell* pShell = GetMainViewShell();
     if (pShell != NULL)
         pShell->UIActivate (pIPObj);
 }
@@ -531,7 +758,7 @@ void ViewShellBase::UIActivate (SvInPlaceObject *pIPObj)
 void ViewShellBase::UIDeactivate (SvInPlaceObject *pIPObj)
 {
     // Forward call to main sub shell.
-    ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+    ViewShell* pShell = GetMainViewShell();
     if (pShell != NULL)
         pShell->UIDeactivate (pIPObj);
 }
@@ -545,7 +772,7 @@ void ViewShellBase::SetZoomFactor (
 {
     SfxViewShell::SetZoomFactor (rZoomX, rZoomY);
     // Forward call to main sub shell.
-    ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+    ViewShell* pShell = GetMainViewShell();
     if (pShell != NULL)
         pShell->SetZoomFactor (rZoomX, rZoomY);
 }
@@ -560,7 +787,7 @@ USHORT ViewShellBase::PrepareClose (BOOL bUI, BOOL bForBrowsing)
     if (nResult == TRUE)
     {
         // Forward call to main sub shell.
-        ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+        ViewShell* pShell = GetMainViewShell();
         if (pShell != NULL)
             nResult = pShell->PrepareClose (bUI, bForBrowsing);
     }
@@ -576,7 +803,7 @@ void ViewShellBase::WriteUserData (String& rString, BOOL bBrowse)
     SfxViewShell::WriteUserData (rString, bBrowse);
 
     // Forward call to main sub shell.
-    ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+    ViewShell* pShell = GetMainViewShell();
     if (pShell != NULL)
         pShell->WriteUserData (rString);
 }
@@ -589,7 +816,7 @@ void ViewShellBase::ReadUserData (const String& rString, BOOL bBrowse)
     SfxViewShell::ReadUserData (rString, bBrowse);
 
     // Forward call to main sub shell.
-    ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+    ViewShell* pShell = GetMainViewShell();
     if (pShell != NULL)
         pShell->ReadUserData (rString);
 }
@@ -600,7 +827,7 @@ void ViewShellBase::ReadUserData (const String& rString, BOOL bBrowse)
 SdrView* ViewShellBase::GetDrawView (void) const
 {
     // Forward call to main sub shell.
-    ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+    ViewShell* pShell = GetMainViewShell();
     if (pShell != NULL)
         return pShell->GetDrawView ();
     else
@@ -614,12 +841,155 @@ void ViewShellBase::AdjustPosSizePixel (const Point &rOfs, const Size &rSize)
 {
     SfxViewShell::AdjustPosSizePixel (rOfs, rSize);
 
+    // AdjustPostSizePixel of the view shells has been replaced by Resize.
+    /*
     // Forward call to main sub shell.
-    ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+    ViewShell* pShell = GetMainViewShell();
     if (pShell != NULL)
         pShell->AdjustPosSizePixel (rOfs, rSize);
+    */
 }
 
 
 
+
+void ViewShellBase::SetBusyState (bool bBusy)
+{
+    if (GetDocShell() != NULL)
+        GetDocShell()->SetWaitCursor (bBusy);
+}
+
+
 } // end of namespace sd
+
+
+
+
+//===== ViewShellFactory ======================================================
+
+namespace {
+using namespace sd;
+
+ViewShellFactory::ViewShellFactory (
+    ::sd::ViewShellBase& rBase,
+    SfxViewFrame* pViewFrame)
+    : mrBase (rBase),
+      mpViewFrame(pViewFrame)
+{}
+
+
+
+
+::sd::ViewShell* ViewShellFactory::CreateShell (
+    ::sd::ShellId nId,
+    ::Window* pParentWindow,
+    ::sd::FrameView* pFrameView)
+{
+    ViewShell::ShellType eShellType = static_cast<ViewShell::ShellType>(nId);
+
+    ViewShell* pNewShell = NULL;
+
+    switch (eShellType)
+    {
+        case ViewShell::ST_IMPRESS:
+            pNewShell = new DrawViewShell (
+                mpViewFrame,
+                mrBase,
+                pParentWindow,
+                PK_STANDARD,
+                pFrameView);
+            break;
+
+        case ViewShell::ST_NOTES:
+            pNewShell = new DrawViewShell (
+                mpViewFrame,
+                mrBase,
+                pParentWindow,
+                PK_NOTES,
+                pFrameView);
+            break;
+
+        case ViewShell::ST_HANDOUT:
+            pNewShell = new DrawViewShell (
+                mpViewFrame,
+                mrBase,
+                pParentWindow,
+                PK_HANDOUT,
+                pFrameView);
+            break;
+
+        case ViewShell::ST_DRAW:
+            pNewShell = new GraphicViewShell (
+                mpViewFrame,
+                mrBase,
+                pParentWindow,
+                pFrameView);
+            break;
+
+        case ViewShell::ST_OUTLINE:
+            pNewShell = new OutlineViewShell (
+                mpViewFrame,
+                mrBase,
+                pParentWindow,
+                pFrameView);
+            break;
+
+        case ViewShell::ST_SLIDE:
+            pNewShell = new SlideViewShell (
+                mpViewFrame,
+                mrBase,
+                pParentWindow,
+                pFrameView);
+            break;
+
+        case ViewShell::ST_SLIDE_SORTER:
+            pNewShell = new ::sd::slidesorter::SlideSorterViewShell (
+                mpViewFrame,
+                mrBase,
+                pParentWindow,
+                pFrameView);
+            break;
+
+        case ViewShell::ST_PREVIEW:
+            pNewShell = new PreviewViewShell (
+                mpViewFrame,
+                mrBase,
+                pParentWindow,
+                pFrameView);
+            break;
+
+        case ViewShell::ST_PRESENTATION:
+            pNewShell = new PresentationViewShell (
+                mpViewFrame,
+                mrBase,
+                pParentWindow,
+                pFrameView);
+            break;
+
+        case ViewShell::ST_TASK_PANE:
+            pNewShell = new ::sd::toolpanel::TaskPaneViewShell (
+                mpViewFrame,
+                mrBase,
+                pParentWindow,
+                pFrameView);
+            break;
+
+        default:
+            // mpMainSubShell will be reset by using pNewShell with is
+            // default NULL value.
+            break;
+    }
+    return pNewShell;
+}
+
+
+
+
+void ViewShellFactory::ReleaseShell (::sd::ViewShell* pShell)
+{
+    delete pShell;
+}
+
+
+
+} // end of anonymouse namespace
