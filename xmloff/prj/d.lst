@@ -113,6 +113,7 @@ hedabu: ..\inc\xformsexport.hxx %_DEST%\inc%_EXT%\xmloff\xformsexport.hxx
 hedabu: ..\inc\controlpropertyhdl.hxx %_DEST%\inc%_EXT%\xmloff\controlpropertyhdl.hxx
 hedabu: ..\inc\ControlBorderHandler.hxx %_DEST%\inc%_EXT%\xmloff\ControlBorderHandler.hxx
 hedabu: ..\inc\XMLConstantsPropertyHandler.hxx %_DEST%\inc%_EXT%\xmloff\XMLConstantsPropertyHandler.hxx
+hedabu: ..\inc\XMLStringVector.hxx %_DEST%\inc%_EXT%\xmloff\XMLStringVector.hxx
 
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
