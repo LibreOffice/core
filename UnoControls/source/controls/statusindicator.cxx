@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicator.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-10-12 10:30:38 $
+ *  last change: $Author: as $ $Date: 2001-08-10 12:04:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,8 @@ void SAL_CALL StatusIndicator::start( const OUString& sText, sal_Int32 nRange ) 
     // Initialize status controls with given values.
     m_xText->setText( sText );
     m_xProgressBar->setRange( 0, nRange );
-    setVisible( sal_True );
+    // force repaint ... fixedtext has changed !
+    impl_recalcLayout ( WindowEvent(static_cast< OWeakObject* >(this),0,0,impl_getWidth(),impl_getHeight(),0,0,0,0) ) ;
 }
 
 //____________________________________________________________________________________________________________
@@ -352,15 +353,8 @@ Size SAL_CALL StatusIndicator::getPreferredSize () throw( RuntimeException )
     aGuard.clear () ;
 
     // calc preferred size of status indicator
-    sal_Int32   nWidth  =   0 ;
-    sal_Int32   nHeight =   0 ;
-
-    nWidth   =  (2*FREEBORDER)      ;
-    nWidth  +=  aTextSize.Width     ;
-
-    nHeight  =  (3*FREEBORDER)      ;
-    nHeight +=  aTextSize.Height    ;
-    nHeight +=  15                  ;
+    sal_Int32 nWidth  = impl_getWidth()                 ;
+    sal_Int32 nHeight = (2*FREEBORDER)+aTextSize.Height ;
 
     // norm to minimum
     if ( nWidth<DEFAULT_WIDTH )
@@ -510,9 +504,6 @@ WindowDescriptor* StatusIndicator::impl_getWindowDescriptor( const Reference< XW
     pDescriptor->ParentIndex        =   -1                                              ;
     pDescriptor->Parent             =   xParentPeer                                     ;
     pDescriptor->Bounds             =   getPosSize ()                                   ;
-//  pDescriptor->WindowAttributes   =   WindowAttribute::BORDER                         |
-    pDescriptor->WindowAttributes   =   WindowAttribute::MOVEABLE                       |
-                                        WindowAttribute::SIZEABLE                       ;
 
     return pDescriptor ;
 }
@@ -529,19 +520,30 @@ void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< 
     {
         MutexGuard  aGuard (m_aMutex) ;
 
-        // Clear background
-        rGraphics->setFillColor ( TRGB_COLORDATA( 0x00, 0xE0, 0xE0, 0xE0 )  ) ;
-        rGraphics->setLineColor ( TRGB_COLORDATA( 0x00, 0xE0, 0xE0, 0xE0 )  ) ;
-        rGraphics->drawRect     ( nX, nY, impl_getWidth(), impl_getHeight() ) ;
+        // background = gray
+        Reference< XWindowPeer > xPeer( impl_getPeerWindow(), UNO_QUERY );
+        if( xPeer.is() == sal_True )
+            xPeer->setBackground( BACKGROUNDCOLOR );
 
-        // Paint shadow border around the progressbar
-        rGraphics->setLineColor ( LINECOLOR_SHADOW                          ) ;
-        rGraphics->drawLine     ( nX, nY, impl_getWidth(), nY               ) ;
-        rGraphics->drawLine     ( nX, nY, nX             , impl_getHeight() ) ;
+        // FixedText background = gray
+        Reference< XControl > xTextControl( m_xText, UNO_QUERY );
+        xPeer = xTextControl->getPeer();
+        if( xPeer.is() == sal_True )
+            xPeer->setBackground( BACKGROUNDCOLOR );
 
-        rGraphics->setLineColor ( LINECOLOR_BRIGHT                                                              ) ;
-        rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, impl_getWidth()-1, nY                  ) ;
-        rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, nX               , impl_getHeight()-1  ) ;
+        // Progress background = gray
+        xPeer = Reference< XWindowPeer >( m_xProgressBar, UNO_QUERY );
+        if( xPeer.is() == sal_True )
+            xPeer->setBackground( BACKGROUNDCOLOR );
+
+        // paint shadow border
+        rGraphics->setLineColor ( LINECOLOR_BRIGHT                          );
+        rGraphics->drawLine     ( nX, nY, impl_getWidth(), nY               );
+        rGraphics->drawLine     ( nX, nY, nX             , impl_getHeight() );
+
+        rGraphics->setLineColor ( LINECOLOR_SHADOW                                                              );
+        rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, impl_getWidth()-1, nY                  );
+        rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, nX               , impl_getHeight()-1  );
     }
 }
 
@@ -578,15 +580,15 @@ void StatusIndicator::impl_recalcLayout ( const WindowEvent& aEvent )
     }
 
     // calc position and size of child controls
-    nX_Text             = FREEBORDER                                                            ;
-    nY_Text             = FREEBORDER                                                            ;
-    nWidth_Text         = aWindowSize.Width-(2*FREEBORDER)-aEvent.RightInset-aEvent.LeftInset   ;
-    nHeight_Text        = aTextSize.Height                                                      ;
+    nX_Text             = FREEBORDER                                    ;
+    nY_Text             = FREEBORDER                                    ;
+    nWidth_Text         = aTextSize.Width                               ;
+    nHeight_Text        = aTextSize.Height                              ;
 
-    nX_ProgressBar      = nX_Text                                                           ;
-    nY_ProgressBar      = nY_Text+nHeight_Text+FREEBORDER                                   ;
-    nWidth_ProgressBar  = nWidth_Text                                                       ;
-    nHeight_ProgressBar = aWindowSize.Height-(3*FREEBORDER)-nHeight_Text-aEvent.BottomInset-aEvent.TopInset ;
+    nX_ProgressBar      = nX_Text+nWidth_Text+FREEBORDER                ;
+    nY_ProgressBar      = nY_Text                                       ;
+    nWidth_ProgressBar  = aWindowSize.Width-nWidth_Text-(3*FREEBORDER)  ;
+    nHeight_ProgressBar = nHeight_Text                                  ;
 
     // Set new position and size on all controls
     Reference< XWindow >  xTextWindow       ( m_xText       , UNO_QUERY );

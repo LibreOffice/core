@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicator.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-10-12 10:30:21 $
+ *  last change: $Author: as $ $Date: 2001-08-10 12:04:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ namespace unocontrols{
 #undef  DEFAULT_WIDTH
 #undef  DEFAULT_HEIGHT
 #define DEFAULT_WIDTH                                   300
-#define DEFAULT_HEIGHT                                  60
+#define DEFAULT_HEIGHT                                   25
 
 //____________________________________________________________________________________________________________
 //  structs, types
