@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:24:53 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ ModalDialog DLG_BIB_BASE
         Text[ chinese_traditional ] = "Ά}±Ò·sΐΙ(~N)";
         Text[ arabic ] = "ΜΟνΟ";
         Text[ greek ] = "Δημιουργία";
-        Text[ korean ] = "»υ·Ξ(~N)";
+        Text[ korean ] = "»υ·Ξ";
         Text[ turkish ] = "~Yeni";
         Text[ language_user1 ] = " ";
     };
@@ -137,7 +137,7 @@ ModalDialog DLG_BIB_BASE
         Text[ chinese_traditional ] = "§R°£(~D)";
         Text[ arabic ] = "ΝΠέ";
         Text[ greek ] = "Διαγραφή";
-        Text[ korean ] = "»θΑ¦(~D)";
+        Text[ korean ] = "»θΑ¦";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
     };
@@ -165,7 +165,7 @@ ModalDialog DLG_BIB_BASE
         Text[ chinese_traditional ] = "­«·s©R¦W(~R)";
         Text[ arabic ] = "ΕΪΗΟΙ ΗαΚΣγνΙ";
         Text[ greek ] = "Μετονομασία";
-        Text[ korean ] = "ΐΜΈ§ ΉΩ²Ω±β(~R)";
+        Text[ korean ] = "ΐΜΈ§ ΉΩ²Ω±β";
         Text[ turkish ] = "Y~eniden adlandύr";
         Text[ language_user1 ] = " ";
     };
@@ -193,7 +193,7 @@ ModalDialog DLG_BIB_BASE
         Text[ chinese_traditional ] = "°Ο°μ";
         Text[ arabic ] = "έΖΙ";
         Text[ greek ] = "Κατηγορία";
-        Text[ korean ] = "ΗΧΈρ ΊΠ·ω";
+        Text[ korean ] = "±ΈΏͺ";
         Text[ turkish ] = "Kategori";
         Text[ language_user1 ] = " ";
     };
@@ -259,7 +259,7 @@ ModalDialog DLG_BIB_BASE
     Text[ chinese_traditional ] = "½sΏθ°Ο°μ";
     Text[ arabic ] = "ΚΝΡνΡ ΗαέΖΗΚ";
     Text[ greek ] = "Επεξεργασία κατηγοριών";
-    Text[ korean ] = "ΊΠ·ω ΗΧΈρ ΖνΑύ";
+    Text[ korean ] = "±ΈΏͺ ΖνΑύ";
     Text[ turkish ] = "Kategorileri dόzenle";
     Text[ language_user1 ] = " ";
 };
