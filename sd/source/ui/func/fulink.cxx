@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fulink.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:58:41 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #pragma hdrstop
 
+#include "fulink.hxx"
+
 #ifndef _INSDLG_HXX //autogen
 #include <so3/insdlg.hxx>
 #endif
@@ -75,16 +77,19 @@
 #include <sfx2/viewfrm.hxx>
 #endif
 
-#include "fulink.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_WINDOW_SHELL_HXX
+#include "Window.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "viewshel.hxx"
-
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "app.hrc"
 
-class SdView;
+
 class SfxRequest;
 
+namespace sd {
 
 TYPEINIT1( FuLink, FuPoor );
 
@@ -94,9 +99,13 @@ TYPEINIT1( FuLink, FuPoor );
 |*
 \************************************************************************/
 
-FuLink::FuLink( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                SdDrawDocument* pDoc, SfxRequest& rReq )
-       : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+FuLink::FuLink (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq )
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
     ::so3::SvBaseLinksDialog aLinkDlg( NULL, pLinkManager );
@@ -105,4 +114,4 @@ FuLink::FuLink( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 }
 
 
-
+} // end of namespace sd
