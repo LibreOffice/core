@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2000-11-03 15:10:35 $
+ *  last change: $Author: pl $ $Date: 2000-11-14 12:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,12 +97,14 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 
+#ifndef USE_PSPRINT
 #ifndef PRINTER_DUMMY
 #define Font XLIB_Font
 #define Region XLIB_Region
 #include <xprinter/xp.h>
 #undef Font
 #undef Region
+#endif
 #endif
 
 #ifndef ANSI1252_HXX_
@@ -160,7 +162,9 @@ FaxPhoneComment( Display* pDisplay, const sal_Unicode* pStr, USHORT nLen )
             aPhone = "PhoneNumber(";
             aPhone += aPhoneNumber;
             aPhone += ")\n";
+#ifndef USE_PSPRINT
             XpPSComment( pDisplay, aPhone.GetBuffer() );
+#endif
             aPhoneNumber = ByteString();
         }
     }
@@ -614,12 +618,14 @@ XPrinterDrawText16( Display* pDisplay, Drawable nDrawable, GC nGC,
         {
             // XXX FIXME this is broken, because nX and nY is not sufficiently updated
             XSetFont( pDisplay, nGC, pTextItem[ nItem ].font );
+#ifndef USE_PSPRINT
             if ( XSalCanDrawRotString(pDisplay, nGC) )
             {
                 XSalDrawRotString( pDisplay, nDrawable, nGC, nX, nY,
                     pTextItem[ nCurItem ].chars, pTextItem[ nCurItem ].nchars, nAngle );
             }
             else
+#endif
             {
                 XDrawString( pDisplay, nDrawable, nGC, nX, nY,
                     pTextItem[ nCurItem ].chars, pTextItem[ nCurItem ].nchars );
@@ -809,11 +815,15 @@ DrawString( Display *pDisplay, Drawable nDrawable, GC nGC,
         }
         else
         {
+#ifndef USE_PSPRINT
             if ( XSalIsDisplay( pDisplay ) )
                 XDrawText16( pDisplay, nDrawable, nGC, nX, nY, pTextItem, nItem );
             else
                 XPrinterDrawText16( pDisplay, nDrawable, nGC, nX, nY, nAngle,
                         pTextItem, nItem );
+#else
+                XDrawText16( pDisplay, nDrawable, nGC, nX, nY, pTextItem, nItem );
+#endif
         }
     }
 }
@@ -1034,8 +1044,10 @@ SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
     {
         pFont->ToImplFontMetricData( pMetric );
 
+#ifndef USE_PSPRINT
         if( XSalCanDrawRotString( maGraphicsData.GetXDisplay(), None ) )
             pMetric->mnOrientation = maGraphicsData.nFontOrientation_;
+#endif
         if ( maGraphicsData.bFontVertical_ )
             pMetric->mnOrientation = 2700;
 
@@ -1128,7 +1140,9 @@ SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData *pKernPairs )
 {
     if( ! _IsPrinter() )
         return 0;
-
+#ifdef USE_PSPRINT
+    return 0;
+#else
     // get pair kerning table ( internal data from xprinter )
     int i, nCurPair=0;
 
@@ -1162,6 +1176,7 @@ SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData *pKernPairs )
     }
 
     return nCurPair;
+#endif
 }
 
 // ---------------------------------------------------------------------------
