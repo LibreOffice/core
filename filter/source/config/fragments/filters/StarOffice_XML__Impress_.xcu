@@ -1,0 +1,42 @@
+    <node oor:name="StarOffice XML (Impress)" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>6200</value></prop>
+        <prop oor:name="Type"><value>impress_StarOffice_XML_Impress</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"><value>XML</value></prop>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="pl">%productname% %formatversion% - Prezentacja</value>
+            <value xml:lang="hu">%productname% %formatversion%-bemutató</value>
+            <value xml:lang="ja">%productname% %formatversion% プレゼンテーション</value>
+            <value xml:lang="es">%productname% %formatversion% - Presentación</value>
+            <value xml:lang="tr">%productname% %formatversion% Sunumu</value>
+            <value xml:lang="ru">%productname% %formatversion% Презентация</value>
+            <value xml:lang="th">%productname% %formatversion% Presentation</value>
+            <value xml:lang="x-comment">%productname% %formatversion% Präsentation</value>
+            <value xml:lang="ca">%productname% %formatversion% Presentation</value>
+            <value xml:lang="el">Παρουσίαση %productname% %formatversion%</value>
+            <value xml:lang="zh-CN">%productname% %formatversion% 演示文稿</value>
+            <value xml:lang="pt">%productname% %formatversion% Apresentação</value>
+            <value xml:lang="cs">Prezentace %productname% %formatversion%</value>
+            <value xml:lang="fr">%productname% %formatversion% Présentation</value>
+            <value xml:lang="ar">%productname% %formatversion% Prنsentation</value>
+            <value xml:lang="zh-TW">%productname% %formatversion% 簡報</value>
+            <value xml:lang="sl">%productname% %formatversion% Predstavitev</value>
+            <value xml:lang="fi">%productname% %formatversion% Presentation</value>
+            <value xml:lang="hi-IN">%productname% %formatversion% Presentation</value>
+            <value xml:lang="en-US">%productname% %formatversion% Presentation</value>
+            <value xml:lang="sk">Prezentácia %productname% %formatversion%</value>
+            <value xml:lang="he">‮מצגת %productname% %formatversion%‬</value>
+            <value xml:lang="sv">%productname% %formatversion% presentation</value>
+            <value xml:lang="da">%productname% %formatversion%-præsentation</value>
+            <value xml:lang="de">%productname% %formatversion% Präsentation</value>
+            <value xml:lang="ko">%productname% %formatversion% 프레젠테이션</value>
+            <value xml:lang="nl">%productname% %formatversion% Presentatie</value>
+            <value xml:lang="pt-BR">Apresentação %productname% %formatversion% </value>
+            <value xml:lang="it">%productname% %formatversion% Presentazione</value>
+            <value xml:lang="x-translate">%productname% %formatversion% Präsentation</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN DEFAULT PREFERRED</value></prop>
+    </node>
