@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIdlArray.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:08:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
     Although the name of this interface denotes arrays,
     sequences are meant. Don't be obfuscated, arrays are not supported by UNO!
 */
-interface XIdlArray: com::sun::star::uno::XInterface
+published interface XIdlArray: com::sun::star::uno::XInterface
 {
     /** Rellocates the length of the sequence instance.
 
