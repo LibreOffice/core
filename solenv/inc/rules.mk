@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.53 $
+#   $Revision: 1.54 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 16:12:09 $
+#   last change: $Author: hjs $ $Date: 2004-07-05 13:12:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -557,7 +557,7 @@ $(MISC)$/%.dpz :
 .ELSE			# "$(USE_SHELL)"!="4nt"
     +$(TYPE) $(mktmp $(ZIPDEPFILES:s/\/\\/)) | xargs -n 20 dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) make_zip_deps=true
 .ENDIF			# "$(USE_SHELL)"!="4nt"
-    +$(TYPE) $(ZIPDEPFILES) | grep -v "CVS" >> $@
+    $(TYPE) $(ZIPDEPFILES) $(mktmp $(NULL)) | grep -v "CVS" >> $@
     +echo zipdep_langs=$(alllangiso) >> $@
     @+-$(RM) $(ZIPDEPFILES) >& $(NULLDEV)
 .ENDIF			# "$(nodep)"==""
