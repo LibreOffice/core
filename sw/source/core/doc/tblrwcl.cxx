@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblrwcl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-21 13:12:30 $
+ *  last change: $Author: fme $ $Date: 2002-11-15 09:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,6 +568,16 @@ void lcl_InsCol( _FndLine* pFndLn, _CpyPara& rCpyPara, USHORT nCpyCnt,
     }
 }
 
+SwRowFrm* GetRowFrm( SwTableLine& rLine )
+{
+    SwClientIter aIter( *rLine.GetFrmFmt() );
+    for( SwClient* pFrm = aIter.First( TYPE( SwRowFrm )); pFrm;
+            pFrm = aIter.Next() )
+        if( ((SwRowFrm*)pFrm)->GetTabLine() == &rLine )
+            return (SwRowFrm*)pFrm;
+    return 0;
+}
+
 
 BOOL SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                         USHORT nCnt, BOOL bBehind )
@@ -1092,7 +1102,8 @@ BOOL SwTable::DeleteSel( SwDoc* pDoc, const SwSelBoxes& rBoxes, SwUndo* pUndo,
 
 // ---------------------------------------------------------------
 
-BOOL SwTable::SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt )
+BOOL SwTable::SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
+                        BOOL bSameHeight )
 {
     ASSERT( pDoc && rBoxes.Count() && nCnt, "keine gueltigen Werte" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
@@ -1100,6 +1111,22 @@ BOOL SwTable::SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt )
         return FALSE;
 
     SetHTMLTableLayout( 0 );    // MIB 9.7.97: HTML-Layout loeschen
+
+    // If the rows should get the same (min) height, we first have
+    // to store the old row heights before deleting the frames
+    long* pRowHeights = 0;
+    if ( bSameHeight )
+    {
+        pRowHeights = new long[ rBoxes.Count() ];
+        for( USHORT n = 0; n < rBoxes.Count(); ++n )
+        {
+            SwTableBox* pSelBox = *( rBoxes.GetData() + n );
+            const SwRowFrm* pRow = GetRowFrm( *pSelBox->GetUpper() );
+            ASSERT( pRow, "wo ist der Frm von der SwTableLine?" )
+            SWRECTFN( pRow )
+            pRowHeights[ n ] = (pRow->Frm().*fnRect->fnGetHeight)();
+        }
+    }
 
     //Lines fuer das Layout-Update herausuchen.
     _FndBox aFndBox( 0, 0 );
@@ -1118,9 +1145,13 @@ BOOL SwTable::SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt )
 
         // Hoehe der Line beachten, gegebenenfalls neu setzen
         SwFmtFrmSize aFSz( pInsLine->GetFrmFmt()->GetFrmSize() );
-        BOOL bChgLineSz = 0 != aFSz.GetHeight();
-        if( bChgLineSz )
-            aFSz.SetHeight( aFSz.GetHeight() / (nCnt + 1) );
+        if ( bSameHeight && ATT_VAR_SIZE == aFSz.GetSizeType() )
+            aFSz.SetSizeType( ATT_MIN_SIZE );
+
+        BOOL bChgLineSz = 0 != aFSz.GetHeight() || bSameHeight;
+        if ( bChgLineSz )
+            aFSz.SetHeight( ( bSameHeight ? pRowHeights[ n ] : aFSz.GetHeight() ) /
+                             (nCnt + 1) );
 
         SwTableBox* pNewBox = new SwTableBox( pFrmFmt, nCnt, pInsLine );
         USHORT nBoxPos = pInsLine->GetTabBoxes().C40_GETPOS( SwTableBox, pSelBox );
@@ -1199,6 +1230,8 @@ BOOL SwTable::SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt )
         pFrmFmt->ResetAttr( RES_LR_SPACE, RES_FRMATR_END - 1 );
         pFrmFmt->ResetAttr( RES_BOXATR_BEGIN, RES_BOXATR_END - 1 );
     }
+
+    delete[] pRowHeights;
 
     //Layout updaten
     aFndBox.MakeFrms( *this );
@@ -3766,16 +3799,6 @@ BOOL SwTable::SetColWidth( SwTableBox& rAktBox, USHORT eType,
 #pragma optimize( "", on )
 
 /*  */
-
-SwRowFrm* GetRowFrm( SwTableLine& rLine )
-{
-    SwClientIter aIter( *rLine.GetFrmFmt() );
-    for( SwClient* pFrm = aIter.First( TYPE( SwRowFrm )); pFrm;
-            pFrm = aIter.Next() )
-        if( ((SwRowFrm*)pFrm)->GetTabLine() == &rLine )
-            return (SwRowFrm*)pFrm;
-    return 0;
-}
 
 _FndBox* lcl_SaveInsDelData( CR_SetLineHeight& rParam, SwUndo** ppUndo,
                                 SwTableSortBoxes& rTmpLst )
