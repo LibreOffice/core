@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autorecovery.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:54:54 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,8 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
@@ -235,10 +235,6 @@
 
 #ifndef css
 namespace css = ::com::sun::star;
-#endif
-
-#ifndef dcss
-namespace dcss = ::drafts::com::sun::star;
 #endif
 
 namespace fpf = ::framework::pattern::frame;
@@ -981,7 +977,7 @@ void AutoRecovery::implts_specifyAppModuleAndFactoryURL(AutoRecovery::TDocumentI
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< dcss::frame::XModuleManager > xManager     (xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::frame::XModuleManager > xManager     (xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::container::XNameAccess > xModuleConfig(xManager                                        , css::uno::UNO_QUERY_THROW);
 
     if (!rInfo.AppModule.getLength())
