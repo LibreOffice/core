@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-24 09:32:38 $
+ *  last change: $Author: os $ $Date: 2002-09-12 10:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1965,6 +1965,11 @@ SwTableNode::SwTableNode( const SwNodeIndex& rIdx )
 
 SwTableNode::~SwTableNode()
 {
+    //don't forget to notify uno wrappers
+    SwFrmFmt* pTblFmt = GetTable().GetFrmFmt();
+    SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
+                                pTblFmt );
+    pTblFmt->Modify( &aMsgHint, &aMsgHint );
     DelFrms();
     delete pTable;
 }
