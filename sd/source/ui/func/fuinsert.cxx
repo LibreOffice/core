@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-14 10:55:18 $
+ *  last change: $Author: thb $ $Date: 2001-06-22 17:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef _SVX_OPENGRF_HXX
+#include <svx/opengrf.hxx>
+#endif
 
 #include "app.hrc"
 #include "misc.hxx"
@@ -169,39 +172,16 @@ FuInsertGraphic::FuInsertGraphic(SdViewShell* pViewSh, SdWindow* pWin, SdView* p
                  SdDrawDocument* pDoc, SfxRequest& rReq)
        : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
-    SvxImportGraphicDialog* pDlg = new SvxImportGraphicDialog( NULL,
-                                       String( SdResId(STR_INSERTGRAPHIC) ),
-                                       ENABLE_STD_AND_LINK );
+    SvxOpenGraphicDialog    aDlg(String( SdResId(STR_INSERTGRAPHIC)));
 
-    USHORT nResult = pDlg->Execute();
-
-    switch (nResult)
+    if( aDlg.Execute() == GRFILTER_OK )
     {
-        case RET_OK:
+        USHORT      nError = 0;
+        Graphic     aGraphic;
+
+        if( (nError=aDlg.GetGraphic(aGraphic)) == GRFILTER_OK )
         {
-            USHORT      nError = 0;
-            Graphic     aGraphic;
-            Graphic*    pGraphic = pDlg->GetGraphic();
-            String      aPath( pDlg->GetPath() );
-
-            if( pGraphic )
-            {
-                aGraphic = *pGraphic;
-            }
-            else
-            {
-                GraphicFilter&  rFilter = pDlg->GetFilter();
-                FilterProgress  aFilterProgress( &rFilter, pViewSh->GetDocSh() );
-                SvStream*       pIStm = ::utl::UcbStreamHelper::CreateStream( aPath, STREAM_READ | STREAM_SHARE_DENYNONE );
-
-                if( pIStm )
-                {
-                    nError = rFilter.ImportGraphic( aGraphic, aPath, *pIStm );
-                    delete pIStm;
-                }
-            }
-
-            if ( nError == 0 && pViewSh->ISA(SdDrawViewShell) )
+            if( pViewSh->ISA(SdDrawViewShell) )
             {
                 sal_Int8    nAction = DND_ACTION_COPY;
                 SdrGrafObj* pEmptyGrafObj = NULL;
@@ -209,7 +189,7 @@ FuInsertGraphic::FuInsertGraphic(SdViewShell* pViewSh, SdWindow* pWin, SdView* p
                 if ( pView->HasMarkedObj() )
                 {
                     /**********************************************************
-                    * Ist ein leeres Graphik-Objekt vorhanden?
+                    * Is an empty graphic object available?
                     **********************************************************/
                     const SdrMarkList& rMarkList = pView->GetMarkList();
 
@@ -233,23 +213,20 @@ FuInsertGraphic::FuInsertGraphic(SdViewShell* pViewSh, SdWindow* pWin, SdView* p
                 aPos = pWindow->PixelToLogic(aPos);
                 SdrGrafObj* pGrafObj = pView->InsertGraphic(aGraphic, nAction, aPos, pEmptyGrafObj, NULL);
 
-                if (pGrafObj && pDlg->AsLink())
+                if(pGrafObj && aDlg.IsAsLink())
                 {
-                    // Soll nur ein Link benutzt werden?
-                    String aFltName = pDlg->GetCurFilter();
+                    // store link only?
+                    String aFltName(aDlg.GetCurrentFilter());
+                    String aPath(aDlg.GetPath());
                     pGrafObj->SetGraphicLink(aPath, aFltName);
                 }
             }
-            else if ( nError )
-                SdGRFFilter::HandleGraphicFilterError( nError, GetGrfFilter()->GetLastError().nStreamError );
         }
-        break;
-
-        default:
-        break;
+        else
+        {
+            SdGRFFilter::HandleGraphicFilterError( nError, GetGrfFilter()->GetLastError().nStreamError );
+        }
     }
-
-    delete pDlg;
 }
 
 #ifdef WNT
