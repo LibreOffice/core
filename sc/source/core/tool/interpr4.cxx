@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-31 14:31:06 $
+ *  last change: $Author: hr $ $Date: 2000-10-31 15:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2681,7 +2681,6 @@ void ScInterpreter::ScSpewFunc()
 // zum testen Environment-Variable SC_INVADER_GPF=xxx setzen
 // 08.10.98: wenn PB optpath.cxx gefixt hat geht's wieder
 
-#if 0
 extern void StartInvader( Window* pParent );    // StarWars, Wrapper in SVX options/optpath.cxx
 extern void Game();                     // Froggie
 void ScInterpreter::ScGame()
@@ -2840,7 +2839,7 @@ int main()
 #ifdef SC_INVADER_GPF
                         if ( getenv( "SC_INVADER_GPF" ) )
 #endif
-                            StartInvader( Application::GetDefDialogParent() );
+//                          StartInvader( Application::GetDefDialogParent() );
                     break;
                     case SC_GAME_FROGGER :
                         //Game();
@@ -2857,8 +2856,6 @@ int main()
     else
         PushStringObject( aResult );
 }
-#endif
-
 
 void ScInterpreter::ScTTT()
 {   // Temporaerer Test-Tanz, zum auspropieren von Funktionen etc.
