@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-22 12:05:15 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -977,26 +977,77 @@ sal_Bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemb
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
-    if( nMemberId == MID_NAME )
+
+    switch ( nMemberId )
     {
-        rtl::OUString aApiName;
-        SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
-        rVal <<= aApiName;
-    }
-    else
-    {
-        const XDash& rXD = GetValue();
+        case MID_NAME:
+        {
+            rtl::OUString aApiName;
+            SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+            rVal <<= aApiName;
+            break;
+        }
 
-        ::com::sun::star::drawing::LineDash aLineDash;
+        case MID_LINEDASH:
+        {
+            const XDash& rXD = GetValue();
 
-        aLineDash.Style = (::com::sun::star::drawing::DashStyle)((UINT16)rXD.GetDashStyle());
-        aLineDash.Dots = rXD.GetDots();
-        aLineDash.DotLen = rXD.GetDotLen();
-        aLineDash.Dashes = rXD.GetDashes();
-        aLineDash.DashLen = rXD.GetDashLen();
-        aLineDash.Distance = rXD.GetDistance();
+            ::com::sun::star::drawing::LineDash aLineDash;
 
-        rVal <<= aLineDash;
+            aLineDash.Style = (::com::sun::star::drawing::DashStyle)((UINT16)rXD.GetDashStyle());
+            aLineDash.Dots = rXD.GetDots();
+            aLineDash.DotLen = rXD.GetDotLen();
+            aLineDash.Dashes = rXD.GetDashes();
+            aLineDash.DashLen = rXD.GetDashLen();
+            aLineDash.Distance = rXD.GetDistance();
+
+            rVal <<= aLineDash;
+            break;
+        }
+
+        case MID_LINEDASH_STYLE:
+        {
+            const XDash& rXD = GetValue();
+            rVal <<= (::com::sun::star::drawing::DashStyle)((sal_Int16)rXD.GetDashStyle());
+            break;
+        }
+
+        case MID_LINEDASH_DOTS:
+        {
+            const XDash& rXD = GetValue();
+            rVal <<= rXD.GetDots();
+            break;
+        }
+
+        case MID_LINEDASH_DOTLEN:
+        {
+            const XDash& rXD = GetValue();
+            rVal <<= rXD.GetDotLen();
+            break;
+        }
+
+        case MID_LINEDASH_DASHES:
+        {
+            const XDash& rXD = GetValue();
+            rVal <<= rXD.GetDashes();
+            break;
+        }
+
+        case MID_LINEDASH_DASHLEN:
+        {
+            const XDash& rXD = GetValue();
+            rVal <<= rXD.GetDashLen();
+            break;
+        }
+
+        case MID_LINEDASH_DISTANCE:
+        {
+            const XDash& rXD = GetValue();
+            rVal <<= rXD.GetDistance();
+            break;
+        }
+
+        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
     }
 
     return sal_True;
@@ -1006,31 +1057,99 @@ sal_Bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE n
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
-    if( nMemberId == MID_NAME )
+
+    switch ( nMemberId )
     {
-        rtl::OUString aName;
-        rVal >>= aName;
-        SetName( aName );
-    }
-    else
-    {
-        ::com::sun::star::drawing::LineDash aLineDash;
-        if(!(rVal >>= aLineDash))
-            return sal_False;
+        case MID_NAME:
+        {
+            rtl::OUString aName;
+            if (!(rVal >>= aName))
+                return sal_False;
+            SetName( aName );
+            break;
+        }
 
-        XDash aXDash;
+        case MID_LINEDASH:
+        {
+            ::com::sun::star::drawing::LineDash aLineDash;
+            if(!(rVal >>= aLineDash))
+                return sal_False;
 
-        aXDash.SetDashStyle((XDashStyle)((UINT16)(aLineDash.Style)));
-        aXDash.SetDots(aLineDash.Dots);
-        aXDash.SetDotLen(aLineDash.DotLen);
-        aXDash.SetDashes(aLineDash.Dashes);
-        aXDash.SetDashLen(aLineDash.DashLen);
-        aXDash.SetDistance(aLineDash.Distance);
+            XDash aXDash;
 
-        if((0 == aXDash.GetDots()) && (0 == aXDash.GetDashes()))
-            aXDash.SetDots(1);
+            aXDash.SetDashStyle((XDashStyle)((UINT16)(aLineDash.Style)));
+            aXDash.SetDots(aLineDash.Dots);
+            aXDash.SetDotLen(aLineDash.DotLen);
+            aXDash.SetDashes(aLineDash.Dashes);
+            aXDash.SetDashLen(aLineDash.DashLen);
+            aXDash.SetDistance(aLineDash.Distance);
 
-        SetValue( aXDash );
+            if((0 == aXDash.GetDots()) && (0 == aXDash.GetDashes()))
+                aXDash.SetDots(1);
+
+            SetValue( aXDash );
+            break;
+        }
+
+        case MID_LINEDASH_STYLE:
+        {
+            sal_Int16 nVal;
+            if(!(rVal >>= nVal))
+                return sal_False;
+
+            XDash aXDash = GetValue();
+            aXDash.SetDashStyle((XDashStyle)((UINT16)(nVal)));
+
+            if((0 == aXDash.GetDots()) && (0 == aXDash.GetDashes()))
+                aXDash.SetDots(1);
+
+            SetValue( aXDash );
+
+            break;
+        }
+
+        case MID_LINEDASH_DOTS:
+        case MID_LINEDASH_DASHES:
+        {
+            sal_Int16 nVal;
+            if(!(rVal >>= nVal))
+                return sal_False;
+
+            XDash aXDash = GetValue();
+            if ( nMemberId == MID_LINEDASH_DOTS )
+                aXDash.SetDots( nVal );
+            else
+                aXDash.SetDashes( nVal );
+
+            if((0 == aXDash.GetDots()) && (0 == aXDash.GetDashes()))
+                aXDash.SetDots(1);
+
+            SetValue( aXDash );
+            break;
+        }
+
+        case MID_LINEDASH_DOTLEN:
+        case MID_LINEDASH_DASHLEN:
+        case MID_LINEDASH_DISTANCE:
+        {
+            sal_Int32 nVal;
+            if(!(rVal >>= nVal))
+                return sal_False;
+
+            XDash aXDash = GetValue();
+            if ( nMemberId == MID_LINEDASH_DOTLEN )
+                aXDash.SetDotLen( nVal );
+            else if ( nMemberId == MID_LINEDASH_DASHLEN )
+                aXDash.SetDashLen( nVal );
+            else
+                aXDash.SetDistance( nVal );
+
+            if((0 == aXDash.GetDots()) && (0 == aXDash.GetDashes()))
+                aXDash.SetDots(1);
+
+            SetValue( aXDash );
+            break;
+        }
     }
 
     return sal_True;
@@ -3285,29 +3404,47 @@ sal_Bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE n
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
-    if( nMemberId == MID_NAME )
+    switch ( nMemberId )
     {
-        rtl::OUString aApiName;
-        SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
-        rVal <<= aApiName;
-    }
-    else
-    {
-        const XGradient& aXGradient = GetValue();
-        ::com::sun::star::awt::Gradient aGradient;
+        case MID_FILLGRADIENT:
+        {
+            const XGradient& aXGradient = GetValue();
+            ::com::sun::star::awt::Gradient aGradient;
 
-        aGradient.Style = (::com::sun::star::awt::GradientStyle) aXGradient.GetGradientStyle();
-        aGradient.StartColor = (INT32)aXGradient.GetStartColor().GetColor();
-        aGradient.EndColor = (INT32)aXGradient.GetEndColor().GetColor();
-        aGradient.Angle = (short)aXGradient.GetAngle();
-        aGradient.Border = aXGradient.GetBorder();
-        aGradient.XOffset = aXGradient.GetXOffset();
-        aGradient.YOffset = aXGradient.GetYOffset();
-        aGradient.StartIntensity = aXGradient.GetStartIntens();
-        aGradient.EndIntensity = aXGradient.GetEndIntens();
-        aGradient.StepCount = aXGradient.GetSteps();
+            aGradient.Style = (::com::sun::star::awt::GradientStyle) aXGradient.GetGradientStyle();
+            aGradient.StartColor = (INT32)aXGradient.GetStartColor().GetColor();
+            aGradient.EndColor = (INT32)aXGradient.GetEndColor().GetColor();
+            aGradient.Angle = (short)aXGradient.GetAngle();
+            aGradient.Border = aXGradient.GetBorder();
+            aGradient.XOffset = aXGradient.GetXOffset();
+            aGradient.YOffset = aXGradient.GetYOffset();
+            aGradient.StartIntensity = aXGradient.GetStartIntens();
+            aGradient.EndIntensity = aXGradient.GetEndIntens();
+            aGradient.StepCount = aXGradient.GetSteps();
 
-        rVal <<= aGradient;
+            rVal <<= aGradient;
+        }
+
+        case MID_NAME:
+        {
+            rtl::OUString aApiName;
+            SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+            rVal <<= aApiName;
+            break;
+        }
+
+        case MID_GRADIENT_STYLE: rVal <<= (sal_Int16)GetValue().GetGradientStyle(); break;
+        case MID_GRADIENT_STARTCOLOR: rVal <<= (sal_Int32)GetValue().GetStartColor().GetColor(); break;
+        case MID_GRADIENT_ENDCOLOR: rVal <<= (sal_Int32)GetValue().GetEndColor().GetColor(); break;
+        case MID_GRADIENT_ANGLE: rVal <<= (sal_Int16)GetValue().GetAngle(); break;
+        case MID_GRADIENT_BORDER: rVal <<= GetValue().GetBorder(); break;
+        case MID_GRADIENT_XOFFSET: rVal <<= GetValue().GetXOffset(); break;
+        case MID_GRADIENT_YOFFSET: rVal <<= GetValue().GetYOffset(); break;
+        case MID_GRADIENT_STARTINTENSITY: rVal <<= GetValue().GetStartIntens(); break;
+        case MID_GRADIENT_ENDINTENSITY: rVal <<= GetValue().GetEndIntens(); break;
+        case MID_GRADIENT_STEPCOUNT: rVal <<= GetValue().GetSteps(); break;
+
+        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
     }
 
     return sal_True;
@@ -3318,24 +3455,97 @@ sal_Bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, BY
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
-    ::com::sun::star::awt::Gradient aGradient;
-    if(!(rVal >>= aGradient))
-        return sal_False;
 
-    XGradient aXGradient;
+    switch ( nMemberId )
+    {
+        case MID_NAME:
+        {
+            rtl::OUString aName;
+            if (!(rVal >>= aName ))
+                return sal_False;
+            SetName( aName );
+            break;
+        }
 
-    aXGradient.SetGradientStyle( (XGradientStyle) aGradient.Style );
-    aXGradient.SetStartColor( aGradient.StartColor );
-    aXGradient.SetEndColor( aGradient.EndColor );
-    aXGradient.SetAngle( aGradient.Angle );
-    aXGradient.SetBorder( aGradient.Border );
-    aXGradient.SetXOffset( aGradient.XOffset );
-    aXGradient.SetYOffset( aGradient.YOffset );
-    aXGradient.SetStartIntens( aGradient.StartIntensity );
-    aXGradient.SetEndIntens( aGradient.EndIntensity );
-    aXGradient.SetSteps( aGradient.StepCount );
+        case MID_FILLGRADIENT:
+        {
+            ::com::sun::star::awt::Gradient aGradient;
+            if(!(rVal >>= aGradient))
+                return sal_False;
 
-    SetValue( aXGradient );
+            XGradient aXGradient;
+
+            aXGradient.SetGradientStyle( (XGradientStyle) aGradient.Style );
+            aXGradient.SetStartColor( aGradient.StartColor );
+            aXGradient.SetEndColor( aGradient.EndColor );
+            aXGradient.SetAngle( aGradient.Angle );
+            aXGradient.SetBorder( aGradient.Border );
+            aXGradient.SetXOffset( aGradient.XOffset );
+            aXGradient.SetYOffset( aGradient.YOffset );
+            aXGradient.SetStartIntens( aGradient.StartIntensity );
+            aXGradient.SetEndIntens( aGradient.EndIntensity );
+            aXGradient.SetSteps( aGradient.StepCount );
+
+            SetValue( aXGradient );
+            break;
+        }
+
+        case MID_GRADIENT_STARTCOLOR:
+        case MID_GRADIENT_ENDCOLOR:
+        {
+            sal_Int32 nVal;
+            if(!(rVal >>= nVal ))
+                return sal_False;
+
+            XGradient aXGradient = GetValue();
+
+            if ( nMemberId == MID_GRADIENT_STARTCOLOR )
+                aXGradient.SetStartColor( nVal );
+            else
+                aXGradient.SetEndColor( nVal );
+            SetValue( aXGradient );
+            break;
+        }
+
+        case MID_GRADIENT_STYLE:
+        case MID_GRADIENT_ANGLE:
+        case MID_GRADIENT_BORDER:
+        case MID_GRADIENT_STARTINTENSITY:
+        case MID_GRADIENT_ENDINTENSITY:
+        case MID_GRADIENT_STEPCOUNT:
+        case MID_GRADIENT_XOFFSET:
+        case MID_GRADIENT_YOFFSET:
+        {
+            sal_Int16 nVal;
+            if(!(rVal >>= nVal ))
+                return sal_False;
+
+            XGradient aXGradient = GetValue();
+
+            switch ( nMemberId )
+            {
+                case MID_GRADIENT_STYLE:
+                    aXGradient.SetGradientStyle( (XGradientStyle)nVal ); break;
+                case MID_GRADIENT_ANGLE:
+                    aXGradient.SetAngle( nVal ); break;
+                case MID_GRADIENT_BORDER:
+                    aXGradient.SetBorder( nVal ); break;
+                case MID_GRADIENT_STARTINTENSITY:
+                    aXGradient.SetStartIntens( nVal ); break;
+                case MID_GRADIENT_ENDINTENSITY:
+                    aXGradient.SetEndIntens( nVal ); break;
+                case MID_GRADIENT_STEPCOUNT:
+                    aXGradient.SetSteps( nVal ); break;
+                case MID_GRADIENT_XOFFSET:
+                    aXGradient.SetXOffset( nVal ); break;
+                case MID_GRADIENT_YOFFSET:
+                    aXGradient.SetYOffset( nVal ); break;
+            }
+
+            SetValue( aXGradient );
+            break;
+        }
+    }
 
     return sal_True;
 }
@@ -3824,21 +4034,39 @@ sal_Bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
-    if( nMemberId == MID_NAME )
-    {
-        rtl::OUString aApiName;
-        SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
-        rVal <<= aApiName;
-    }
-    else
-    {
-        ::com::sun::star::drawing::Hatch aUnoHatch;
 
-        aUnoHatch.Style = (::com::sun::star::drawing::HatchStyle)aHatch.GetHatchStyle();
-        aUnoHatch.Color = aHatch.GetColor().GetColor();
-        aUnoHatch.Distance = aHatch.GetDistance();
-        aUnoHatch.Angle = aHatch.GetAngle();
-        rVal <<= aUnoHatch;
+    switch ( nMemberId )
+    {
+        case MID_FILLHATCH:
+        {
+            ::com::sun::star::drawing::Hatch aUnoHatch;
+
+            aUnoHatch.Style = (::com::sun::star::drawing::HatchStyle)aHatch.GetHatchStyle();
+            aUnoHatch.Color = aHatch.GetColor().GetColor();
+            aUnoHatch.Distance = aHatch.GetDistance();
+            aUnoHatch.Angle = aHatch.GetAngle();
+            rVal <<= aUnoHatch;
+            break;
+        }
+
+        case MID_NAME:
+        {
+            rtl::OUString aApiName;
+            SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+            rVal <<= aApiName;
+            break;
+        }
+
+        case MID_HATCH_STYLE:
+            rVal <<= (::com::sun::star::drawing::HatchStyle)aHatch.GetHatchStyle(); break;
+        case MID_HATCH_COLOR:
+            rVal <<= (sal_Int32)aHatch.GetColor().GetColor(); break;
+        case MID_HATCH_DISTANCE:
+            rVal <<= aHatch.GetDistance(); break;
+        case MID_HATCH_ANGLE:
+            rVal <<= aHatch.GetAngle(); break;
+
+        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
     }
 
     return sal_True;
@@ -3849,14 +4077,60 @@ sal_Bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
-    ::com::sun::star::drawing::Hatch aUnoHatch;
-    if(!(rVal >>= aUnoHatch))
-        return sal_False;
 
-    aHatch.SetHatchStyle( (XHatchStyle)aUnoHatch.Style );
-    aHatch.SetColor( aUnoHatch.Color );
-    aHatch.SetDistance( aUnoHatch.Distance );
-    aHatch.SetAngle( aUnoHatch.Angle );
+    switch ( nMemberId )
+    {
+        case MID_FILLHATCH:
+        {
+            ::com::sun::star::drawing::Hatch aUnoHatch;
+            if(!(rVal >>= aUnoHatch))
+                return sal_False;
+
+            aHatch.SetHatchStyle( (XHatchStyle)aUnoHatch.Style );
+            aHatch.SetColor( aUnoHatch.Color );
+            aHatch.SetDistance( aUnoHatch.Distance );
+            aHatch.SetAngle( aUnoHatch.Angle );
+            break;
+        }
+
+        case MID_NAME:
+        {
+            rtl::OUString aName;
+            if (!(rVal >>= aName ))
+                return sal_False;
+            SetName( aName );
+            break;
+        }
+
+        case MID_HATCH_STYLE:
+        {
+            sal_Int16 nVal;
+            if (!(rVal >>= nVal ))
+                return sal_False;
+            aHatch.SetHatchStyle( (XHatchStyle)nVal );
+            break;
+        }
+
+        case MID_HATCH_COLOR:
+        case MID_HATCH_DISTANCE:
+        case MID_HATCH_ANGLE:
+        {
+            sal_Int32 nVal;
+            if (!(rVal >>= nVal ))
+                return sal_False;
+
+            if ( nMemberId == MID_HATCH_COLOR )
+                aHatch.SetColor( nVal );
+            else if ( nMemberId == MID_HATCH_DISTANCE )
+                aHatch.SetDistance( nVal );
+            else
+                aHatch.SetAngle( nVal );
+            break;
+        }
+
+        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+    }
+
     return sal_True;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-22 12:03:49 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:27:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1871,17 +1871,26 @@ sal_Bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
     sal_uInt16 nDist;
     sal_Bool bDistMember = sal_False;
     nMemberId &= ~CONVERT_TWIPS;
+    sal_Bool bSerialize = sal_False;
     switch(nMemberId)
     {
+        case MID_LEFT_BORDER:
+            bSerialize = sal_True;      // intentionally no break!
         case LEFT_BORDER:
             aRetLine = lcl_SvxLineToLine(GetLeft(), bConvert);
             break;
+        case MID_RIGHT_BORDER:
+            bSerialize = sal_True;      // intentionally no break!
         case RIGHT_BORDER:
             aRetLine = lcl_SvxLineToLine(GetRight(), bConvert);
             break;
+        case MID_BOTTOM_BORDER:
+            bSerialize = sal_True;      // intentionally no break!
         case BOTTOM_BORDER:
             aRetLine = lcl_SvxLineToLine(GetBottom(), bConvert);
             break;
+        case MID_TOP_BORDER:
+            bSerialize = sal_True;      // intentionally no break!
         case TOP_BORDER:
             aRetLine = lcl_SvxLineToLine(GetTop(), bConvert);
             break;
@@ -1910,7 +1919,19 @@ sal_Bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
     if( bDistMember )
         rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100(nDist) : nDist);
     else
-        rVal <<= aRetLine;
+    {
+        if ( bSerialize )
+        {
+            ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any > aSeq(4);
+            aSeq[0] <<= aRetLine.Color;
+            aSeq[1] <<= aRetLine.InnerLineWidth;
+            aSeq[2] <<= aRetLine.OuterLineWidth;
+            aSeq[3] <<= aRetLine.LineDistance;
+            rVal <<= aSeq;
+        }
+        else
+            rVal <<= aRetLine;
+    }
 
     return sal_True;
 }
@@ -1939,21 +1960,25 @@ sal_Bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case LEFT_BORDER_DISTANCE:
             bDistMember = sal_True;
         case LEFT_BORDER:
+        case MID_LEFT_BORDER:
             nLine = BOX_LINE_LEFT;
             break;
         case RIGHT_BORDER_DISTANCE:
             bDistMember = sal_True;
         case RIGHT_BORDER:
+        case MID_RIGHT_BORDER:
             nLine = BOX_LINE_RIGHT;
             break;
         case BOTTOM_BORDER_DISTANCE:
             bDistMember = sal_True;
         case BOTTOM_BORDER:
+        case MID_BOTTOM_BORDER:
             nLine = BOX_LINE_BOTTOM;
             break;
         case TOP_BORDER_DISTANCE:
             bDistMember = sal_True;
         case TOP_BORDER:
+        case MID_TOP_BORDER:
             nLine = BOX_LINE_TOP;
             break;
     }
@@ -1977,11 +2002,38 @@ sal_Bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     else
     {
         SvxBorderLine aLine;
-        if( !rVal.hasValue() || rVal.getValueType() != ::getCppuType((const ::com::sun::star::table::BorderLine*)0) )
+        if( !rVal.hasValue() )
             return sal_False;
 
-        table::BorderLine* pLine = (table::BorderLine*)rVal.getValue();
-        sal_Bool bSet = lcl_LineToSvxLine(*pLine, aLine, bConvert);
+        table::BorderLine aBorderLine;
+        if( rVal >>= aBorderLine )
+        {
+            // usual struct
+        }
+        else if (rVal.getValueType() != ::getCppuType((const ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any >*)0) )
+        {
+            // serialization for basic macro recording
+            ::com::sun::star::uno::Sequence < com::sun::star::uno::Any > aSeq;
+            rVal >>= aSeq;
+            if ( aSeq.getLength() == 4 )
+            {
+                sal_Int32 nVal;
+                if ( aSeq[0] >>= nVal )
+                    aBorderLine.Color = nVal;
+                if ( aSeq[1] >>= nVal )
+                    aBorderLine.InnerLineWidth = (sal_Int16) nVal;
+                if ( aSeq[2] >>= nVal )
+                    aBorderLine.OuterLineWidth = (sal_Int16) nVal;
+                if ( aSeq[3] >>= nVal )
+                    aBorderLine.LineDistance = (sal_Int16) nVal;
+            }
+            else
+                return sal_False;
+        }
+        else
+            return sal_False;
+
+        sal_Bool bSet = lcl_LineToSvxLine(aBorderLine, aLine, bConvert);
         SetLine(bSet ? &aLine : 0, nLine);
     }
 
@@ -2659,6 +2711,154 @@ SfxPoolItem* SvxBoxInfoItem::Create( SvStream& rStrm, sal_uInt16 ) const
 void SvxBoxInfoItem::ResetFlags()
 {
     nValidFlags = 0x7F; // alles g"ultig au/ser Disable
+}
+
+sal_Bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
+{
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    table::BorderLine aRetLine;
+    sal_Int16 nVal=0;
+    sal_Bool bIntMember = sal_False;
+    nMemberId &= ~CONVERT_TWIPS;
+    sal_Bool bSerialize = sal_False;
+    switch(nMemberId)
+    {
+        case MID_HORIZONTAL:
+            bSerialize = sal_True;
+            aRetLine = lcl_SvxLineToLine( pHori, bConvert);
+            break;
+        case MID_VERTICAL:
+            bSerialize = sal_True;
+            aRetLine = lcl_SvxLineToLine( pVert, bConvert);
+            break;
+        case MID_FLAGS:
+            bIntMember = sal_True;
+            if ( IsTable() )
+                nVal |= 0x01;
+            if ( IsDist() )
+                nVal |= 0x02;
+            if ( IsMinDist() )
+                nVal |= 0x04;
+            rVal <<= nVal;
+            break;
+        case MID_VALIDFLAGS:
+            bIntMember = sal_True;
+            nVal = nValidFlags;
+            rVal <<= nVal;
+            break;
+        case MID_DISTANCE:
+            bIntMember = sal_True;
+            rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100(GetDefDist()) : GetDefDist());
+            break;
+        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+    }
+
+    if( !bIntMember )
+    {
+        if ( bSerialize )
+        {
+            ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any > aSeq(4);
+            aSeq[0] <<= aRetLine.Color;
+            aSeq[1] <<= aRetLine.InnerLineWidth;
+            aSeq[2] <<= aRetLine.OuterLineWidth;
+            aSeq[3] <<= aRetLine.LineDistance;
+            rVal <<= aSeq;
+        }
+        else
+            rVal <<= aRetLine;
+    }
+
+    return sal_True;
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+{
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    sal_uInt16 nLine = BOX_LINE_TOP;
+    sal_Bool bDistMember = sal_False;
+    nMemberId &= ~CONVERT_TWIPS;
+    sal_Bool bRet;
+    switch(nMemberId)
+    {
+        case MID_HORIZONTAL:
+        case MID_VERTICAL:
+        {
+            if( !rVal.hasValue() )
+                return sal_False;
+
+            table::BorderLine aBorderLine;
+            if( rVal >>= aBorderLine )
+            {
+                // usual struct
+            }
+            else if (rVal.getValueType() != ::getCppuType((const ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any >*)0) )
+            {
+                // serialization for basic macro recording
+                ::com::sun::star::uno::Sequence < com::sun::star::uno::Any > aSeq;
+                rVal >>= aSeq;
+                if ( aSeq.getLength() == 4 )
+                {
+                    sal_Int32 nVal;
+                    if ( aSeq[0] >>= nVal )
+                        aBorderLine.Color = nVal;
+                    if ( aSeq[1] >>= nVal )
+                        aBorderLine.InnerLineWidth = (sal_Int16) nVal;
+                    if ( aSeq[2] >>= nVal )
+                        aBorderLine.OuterLineWidth = (sal_Int16) nVal;
+                    if ( aSeq[3] >>= nVal )
+                        aBorderLine.LineDistance = (sal_Int16) nVal;
+                }
+                else
+                    return sal_False;
+            }
+            else
+                return sal_False;
+
+            SvxBorderLine aLine;
+            sal_Bool bSet = lcl_LineToSvxLine(aBorderLine, aLine, bConvert);
+            if ( bSet )
+                SetLine( &aLine, nMemberId == MID_HORIZONTAL ? BOXINFO_LINE_HORI : BOXINFO_LINE_VERT );
+            break;
+        }
+        case MID_FLAGS:
+        {
+            sal_Int16 nFlags;
+            bRet = (rVal >>= nFlags);
+            if ( bRet )
+            {
+                SetTable  ( ( nFlags & 0x01 ) != 0 );
+                SetDist   ( ( nFlags & 0x02 ) != 0 );
+                SetMinDist( ( nFlags & 0x04 ) != 0 );
+            }
+
+            break;
+        }
+        case MID_VALIDFLAGS:
+        {
+            sal_Int16 nFlags;
+            bRet = (rVal >>= nFlags);
+            if ( bRet )
+                nValidFlags = nFlags;
+            break;
+        }
+        case MID_DISTANCE:
+        {
+            sal_Int32 nVal;
+            bRet = (rVal >>= nVal);
+            if ( bRet && nVal>=0 )
+            {
+                if( bConvert )
+                    nVal = MM100_TO_TWIP(nVal);
+                SetDist( nVal );
+            }
+            break;
+        }
+        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+    }
+
+    return sal_True;
 }
 
 // class SvxFmtBreakItem -------------------------------------------------

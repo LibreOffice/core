@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rulritem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-22 11:45:46 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,6 +537,51 @@ long SvxColumnItem::GetVisibleRight() const
     return (*this)[nIdx].nEnd;
 }
 
+sal_Bool SvxColumnItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+{
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
+    switch ( nMemberId )
+    {
+        case MID_COLUMNARRAY:
+        {
+            return sal_False;
+            break;
+        }
+        case MID_RIGHT: rVal <<= nRight; break;
+        case MID_LEFT: rVal <<= nLeft; break;
+        case MID_ORTHO: rVal <<= (sal_Bool) bOrtho; break;
+        case MID_ACTUAL: rVal <<= (sal_Int32) nActColumn; break;
+        case MID_TABLE: rVal <<= (sal_Bool) bTable; break;
+        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+    }
+
+    return sal_True;
+}
+
+sal_Bool SvxColumnItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+{
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
+    sal_Int32 nVal;
+    switch ( nMemberId )
+    {
+        case MID_COLUMNARRAY:
+        {
+            return sal_False;
+            break;
+        }
+        case MID_RIGHT: rVal >>= nRight; break;
+        case MID_LEFT: rVal >>= nLeft; break;
+        case MID_ORTHO: rVal >>= nVal; bOrtho = (BOOL) nVal; break;
+        case MID_ACTUAL: rVal >>= nVal; nActColumn = (USHORT) nVal; break;
+        case MID_TABLE: rVal >>= nVal; bTable = (BOOL) nVal; break;
+        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+    }
+
+    return sal_True;
+}
+
 //------------------------------------------------------------------------
 
 int SvxObjectItem::operator==( const SfxPoolItem& rCmp ) const
@@ -607,4 +652,41 @@ SvxObjectItem::SvxObjectItem( const SvxObjectItem& rCopy ) :
 {
 }
 
+sal_Bool SvxObjectItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+{
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
+    sal_Int32 nVal = 0;
+    switch ( nMemberId )
+    {
+        case MID_START_X : rVal <<= nStartX; break;
+        case MID_START_Y : rVal <<= nStartY; break;
+        case MID_END_X : rVal <<= nEndX; break;
+        case MID_END_Y : rVal <<= nEndY; break;
+        case MID_LIMIT : rVal <<= bLimits; break;
+        default:
+            DBG_ERROR( "Wrong MemberId" );
+            return sal_False;
+    }
+
+    return TRUE;
+}
+
+sal_Bool SvxObjectItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+{
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
+    BOOL bRet=FALSE;
+    switch ( nMemberId )
+    {
+        case MID_START_X : bRet = (rVal >>= nStartX); break;
+        case MID_START_Y : bRet = (rVal >>= nStartY); break;
+        case MID_END_X : bRet = (rVal >>= nEndX); break;
+        case MID_END_Y : bRet = (rVal >>= nEndY); break;
+        case MID_LIMIT : bRet = (rVal >>= bLimits); break;
+        default: DBG_ERROR( "Wrong MemberId" );
+    }
+
+    return bRet;
+}
 

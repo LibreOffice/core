@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoomitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:21 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:27:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,4 +148,36 @@ int SvxZoomItem::operator==( const SfxPoolItem& rAttr ) const
              eType      == rItem.GetType()          );
 }
 
+sal_Bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+{
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
+    switch ( nMemberId )
+    {
+        case MID_VALUE: rVal <<= (sal_Int32) GetValue(); break;
+        case MID_VALUESET: rVal <<= (sal_Int16) nValueSet; break;
+        case MID_TYPE: rVal <<= (sal_Int16) eType; break;
+        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+    }
 
+    return sal_True;
+}
+
+sal_Bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+{
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
+    sal_Int32 nVal;
+    if ( rVal >>= nVal )
+    {
+        switch ( nMemberId )
+        {
+            case MID_VALUE: SetValue( nVal ); break;
+            case MID_VALUESET: nValueSet = (sal_Int16) nVal; break;
+            case MID_TYPE: eType = SvxZoomType( (sal_Int16) nVal ); break;
+            default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        }
+    }
+
+    return sal_True;
+}

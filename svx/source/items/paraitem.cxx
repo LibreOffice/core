@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-22 12:03:50 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:27:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1372,6 +1372,37 @@ SfxPoolItem* SvxPageModelItem::Clone( SfxItemPool* ) const
 }
 
 //------------------------------------------------------------------------
+
+sal_Bool SvxPageModelItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+{
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
+
+    switch ( nMemberId )
+    {
+        case MID_AUTO: rVal <<= (sal_Bool) bAuto; break;
+        case MID_NAME: rVal <<= ::rtl::OUString( GetValue() ); break;
+        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+    }
+
+    return sal_True;
+}
+
+sal_Bool SvxPageModelItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+{
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
+    sal_Bool bRet;
+    ::rtl::OUString aStr;
+    switch ( nMemberId )
+    {
+        case MID_AUTO: bRet = ( rVal >>= bAuto ); break;
+        case MID_NAME: bRet = ( rVal >>= aStr ); if ( bRet ) SetValue(aStr); break;
+        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+    }
+
+    return bRet;
+}
 
 SfxItemPresentation SvxPageModelItem::GetPresentation
 (
