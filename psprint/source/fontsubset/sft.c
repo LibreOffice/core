@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hdu $ $Date: 2001-09-19 11:33:24 $
+ *  last change: $Author: hdu $ $Date: 2001-11-30 12:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.c,v 1.9 2001-09-19 11:33:24 hdu Exp $
+/* $Id: sft.c,v 1.10 2001-11-30 12:07:22 hdu Exp $
  * Sun Font Tools
  *
  * Author: Alexander Gelfenbain
@@ -1052,6 +1052,7 @@ static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **pat
             continue;
         }
 
+
         if (cp == EndContour) {
             cp = StartContour;
             ecflag = true;
@@ -1235,6 +1236,7 @@ typedef struct _subHeader2 {
 static uint16 getGlyph2(const byte *cmap, uint16 c) {
     uint16 *CMAP2 = (uint16 *) cmap;
     byte theHighByte;
+
     byte theLowByte;
     subHeader2* subHeader2s;
     uint16* subHeader2Keys;
@@ -2375,6 +2377,7 @@ uint16 MapChar(TrueTypeFont *ttf, uint16 ch, int bvertical)
 {
     switch (ttf->cmapType) {
         case CMAP_MS_Symbol:
+
             if( ttf->mapper == getGlyph0 && ( ch & 0xf000 ) == 0xf000 )
                 ch &= 0x00ff;
             return ttf->mapper(ttf->cmap, ch );
@@ -2392,6 +2395,15 @@ uint16 MapChar(TrueTypeFont *ttf, uint16 ch, int bvertical)
         ch = UseGSUB(ttf,ch,bvertical);
     return ch;
 }
+
+int DoesVerticalSubstitution( TrueTypeFont *ttf, int bvertical)
+{
+    int nRet = 0;
+    if( bvertical)
+        nRet = HasVerticalGSUB( ttf);
+    return nRet;
+}
+
 #endif
 
 TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, uint16 *glyphArray, int nGlyphs, int mode)
@@ -2421,6 +2433,7 @@ TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, uint16 *glyphAr
         glyphID = glyphArray[i];
 
         if (glyphID < n) {
+
             res[i].adv = XUnits(UPEm, GetUInt16(table, 4 * glyphID, 1));
             res[i].sb  = XUnits(UPEm, GetInt16(table, 4 * glyphID + 2, 1));
         } else {
@@ -3035,6 +3048,7 @@ int main(int ac, char **av)
 
     CreateTTFromTTGlyphs(fnt, "subfont.ttf", glyphArray, encoding, 15, 0, 0, TTCF_AutoName | TTCF_IncludeOS2);
 
+
     CloseTTFont(fnt);
 
     return 0;
@@ -3074,6 +3088,7 @@ int main(int ac, char **av)
     TrueTypeFont *fnt;
     int r, i;
     list glyphlist = listNewEmpty();
+
 
     if ((r = OpenTTFont(av[1], 0, &fnt)) != SF_OK) {
         fprintf(stderr, "Error %d opening font file: `%s`.\n", r, av[1]);

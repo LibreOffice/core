@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: svesik $ $Date: 2001-07-13 22:19:49 $
+ *  last change: $Author: hdu $ $Date: 2001-11-30 12:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,10 @@
  *
  ************************************************************************/
 
-/* $Id: sft.h,v 1.5 2001-07-13 22:19:49 svesik Exp $ */
+/* $Id: sft.h,v 1.6 2001-11-30 12:07:22 hdu Exp $ */
 
 /**
+
  *
  * @file sft.h
  * @brief Sun Font Tools
@@ -592,6 +593,14 @@ extern "C" {
  * @ingroup sft
  */
     uint16 MapChar(TrueTypeFont *ttf, uint16 ch, int bvertical);
+
+/**
+ * Returns 0 when the font does not substitute vertical glyphs
+ *
+ * @param ttf         pointer to the TrueTypeFont structure
+ */
+    int DoesVerticalSubstitution( TrueTypeFont *ttf, int bvertical);
+
 #endif
 
 /**
