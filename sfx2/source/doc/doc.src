@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: er $ $Date: 2001-07-25 18:50:59 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,14 +113,14 @@ QueryBox MSG_CONFIRM_OVERWRITE_TEMPLATE
     Message [ dutch ] = "Er bestaat reeds een sjabloon met deze naam.\nOverschrijven?" ;
     Message [ spanish ] = "Ya existe una plantilla con este nombre.\n¿Desea sobrescribirla?" ;
     Message [ english_us ] = "Name already in use.\nDo you want to overwrite document template?" ;
-    Message[ chinese_simplified ] = "Ò»¸öÍ¬ÃûµÄÑùÊ½ÒÑ¾­´æÔÚ¡£\nÄúÒª¸²Ğ´ËüÂğ£¿";
+    Message[ chinese_simplified ] = "Ò»¸öÍ¬ÃûµÄÑùÊ½ÒÑ¾­´æÔÚ¡£\nÒª¸ÄĞ´Ëü£¿";
     Message[ russian ] = "Óæå ñóùåñòâóåò øàáëîí ñ òàêèì èìåíåì.\nÇàìåíèòü?";
     Message[ polish ] = "Ju¿ istnieje szablon o tej nazwie.\nCzy go zast¹piæ innym?";
     Message[ japanese ] = "‚·‚Å‚É‚±‚Ì–¼‘O‚ÌÃİÌßÚ°Ä‚ª‚ ‚è‚Ü‚·B\nã‘‚«‚µ‚Ä‚à‚æ‚ë‚µ‚¢‚Å‚·‚©?";
     Message[ chinese_traditional ] = "¤@­Ó¦P¦Wªº¼Ë¦¡¤w¸g¦s¦b¡C\n±z­nÂĞ¼g¥¦¡H";
     Message[ arabic ] = "íæÌÏ ÈÇáİÚá ŞÇáÈ ÈåĞÇ ÇáÇÓã.\nåá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
     Message[ dutch ] = "Er bestaat reeds een sjabloon met deze naam.\nOverschrijven?";
-    Message[ chinese_simplified ] = "Ò»¸öÍ¬ÃûµÄÑùÊ½ÒÑ¾­´æÔÚ¡£\nÄúÒª¸²Ğ´ËüÂğ£¿";
+    Message[ chinese_simplified ] = "Ò»¸öÍ¬ÃûµÄÑùÊ½ÒÑ¾­´æÔÚ¡£\nÒª¸ÄĞ´Ëü£¿";
     Message[ greek ] = "ÕğÜñ÷åé Şäç İíá ğñüôõğï ìå áõôü ôï üíïìá.\nÈİëåôå íá ôï áíôéêáôáóôŞóåôå;";
     Message[ korean ] = "ÀÌ ÀÌ¸§À» °¡Áø ¼­½Ä ÆÄÀÏÀÌ ÀÌ¹Ì ÀÖ½À´Ï´Ù.\nµ¤¾î¾º¿ì½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Aynı adı taşıyan bir şablon zaten mevcut.\nBu şablonun üzerine yazılsın mı?";
@@ -147,11 +147,11 @@ QueryBox MSG_QUERY_LOAD_TEMPLATE
     MESSAGE[ polish ] = "Style u¿yte w tym dokumencie nie zgadzaj¹ siê z aktualnymi stylami.\nCzy zastosowaæ w dokumencie aktualne style?";
     MESSAGE[ portuguese_brazilian ] = "O modelo do documento foi modificado.\nDeseja atualizar o modelo no documento?";
     MESSAGE[ japanese ] = "‚±‚ÌÄŞ·­ÒİÄ‚Ì‘®½À²Ù‚ÍŒ»İ‚Ì½À²Ù‚Æˆê’v‚µ‚Ü‚¹‚ñB\nŒ»İ‚Ì½À²Ù‚ğ‚±‚ÌÄŞ·­ÒİÄ‚É“K—p‚µ‚Ü‚·‚©B";
-    MESSAGE[ chinese_simplified ] = "Õâ¸öÎÄµµµÄ¸ñÊ½ÑùÊ½ÒÑ¾­±»¸ü¸Ä¡£\nÄúÒªÓÃµ±Ç°µÄĞÂÑùÊ½À´¸²Ğ´Õâ¸öÎÄµµÂğ£¿";
+    MESSAGE[ chinese_simplified ] = "Õâ¸öÎÄµµµÄ¸ñÊ½ÑùÊ½ÒÑ¾­±»¸ü¸Ä¡£\nÒªÓÃµ±Ç°µÄĞÂÑùÊ½À´¸ÄĞ´Õâ¸öÎÄµµ£¿";
     MESSAGE[ chinese_traditional ] = "³o­ÓÀÉ®×¼Ë¦¡¤w¸gÅÜ§ó¡C\n±z­n§ó·s³o­Ó¼Ë¦¡¡H";
     MESSAGE[ arabic ] = "áÇ ÊÊØÇÈŞ ÃäãÇØ ÊäÓíŞ åĞÇ ÇáãÓÊäÏ ãÚ ÇáÃäãÇØ ÇáÍÇáíÉ ÇáÎÇÕÉ Èß. åá ÊÑíÏ ÊØÈíŞ ÇáÃäãÇØ ÇáÍÇáíÉ ÇáÎÇÕÉ Èß Úáì åĞÇ ÇáãÓÊäÏ¿";
     MESSAGE[ dutch ] = "De sjablonen bij dit document komen niet overeen met uw actuele sjablonen. Wilt u dat uw actuele sjablonen op dit documentworden toegepast?";
-    MESSAGE[ chinese_simplified ] = "Õâ¸öÎÄµµµÄ¸ñÊ½ÑùÊ½ÒÑ¾­±»¸ü¸Ä¡£\nÄúÒªÓÃµ±Ç°µÄĞÂÑùÊ½À´¸²Ğ´Õâ¸öÎÄµµÂğ£¿";
+    MESSAGE[ chinese_simplified ] = "Õâ¸öÎÄµµµÄ¸ñÊ½ÑùÊ½ÒÑ¾­±»¸ü¸Ä¡£\nÒªÓÃµ±Ç°µÄĞÂÑùÊ½À´¸ÄĞ´Õâ¸öÎÄµµ£¿";
     MESSAGE[ greek ] = "Ôá ğñüôõğá ìïñöïğïßçóçò áõôïı ôïõ åããñÜöïõ äåí óõìğßğôïõí ìå ôá ôñİ÷ïíôá ğñüôõğá. Íá åöáñìïóôïıí ôá ğñüôõğá áõôÜ óôï İããñáöï;";
     MESSAGE[ korean ] = "ÀÌ ¹®¼­ÀÇ ¼­½Ä À¯ÇüÀº ÇöÀç À¯Çü°ú ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù. ÇöÀç À¯ÇüÀ» ÀÌ ¹®¼­¿¡ Àû¿ëÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ turkish ] = "Bu belgenin biçimleri, yürürlükteki biçimlerle örtüşmüyor. Yürürlükteki biçimler bu belgenize uygulansın mı?";
@@ -1757,14 +1757,14 @@ String STR_TEMPL_RESET
     Text [ french ] = "Le modèle $(TEMPLATE) est introuvable. Devra-t-il être recherché à la prochaine ouverture du document ?" ;
     Text [ dutch ] = "De sjabloon \"$(TEMPLATE)\" werd niet gevonden. Wilt u dat er ook in de toekomst naar wordt gezocht?" ;
     Text [ portuguese ] = "O modelo \"$(TEMPLATE)\" não foi encontrado. Deseja continuar a procura quando abrir o documento novamente?" ;
-    Text[ chinese_simplified ] = "ÎŞ·¨ÕÒµ½ÑùÊ½¡°$(TEMPLATE)¡±¡£Äú½ñºóÒª¼ÌĞøÑ°ÕÒËüÂğ£¿";
+    Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½ÑùÊ½\"$(TEMPLATE)\"¡£ÏÂÒ»´Î»¹ÒªËÑÑ°Ëü£¿";
     Text[ russian ] = "Øàáëîí \"$(TEMPLATE)\" íå íàéäåí. Èñêàòü åãî â áóäóùåì?";
     Text[ polish ] = "Szablonu \"$(TEMPLATE)\" nie znaleziono. Czy szukaæ go nadal?";
     Text[ japanese ] = "ÃİÌßÚ°Ä\"$(TEMPLATE)\"‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B‚±‚ê‚©‚ç‚à‘±‚¯‚ÄŒŸõ‚µ‚Ü‚·‚©?";
-    Text[ chinese_traditional ] = "µLªk§ä¨ì³o­Ó¼Ë¦¡ $(TEMPLATE) ¡C¤µ«á­nÄ~Äò·j´M¥¦¡H";
+    Text[ chinese_traditional ] = "¨S¦³§ä¨ì³o­Ó¼Ë¦¡ $(TEMPLATE)¡C¤µ«áÁÙ­nÄ~Äò·j´M¥¦¡H";
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáŞÇáÈ \"$(TEMPLATE)\". åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË Úäå İí ÇáãÓÊŞÈá¿";
     Text[ dutch ] = "De sjabloon \"$(TEMPLATE)\" werd niet gevonden. Wilt u dat er ook in de toekomst naar wordt gezocht?";
-    Text[ chinese_simplified ] = "ÎŞ·¨ÕÒµ½ÑùÊ½¡°$(TEMPLATE)¡±¡£Äú½ñºóÒª¼ÌĞøÑ°ÕÒËüÂğ£¿";
+    Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½ÑùÊ½\"$(TEMPLATE)\"¡£ÏÂÒ»´Î»¹ÒªËÑÑ°Ëü£¿";
     Text[ greek ] = "Ôï ğñüôõğï $(TEMPLATE) äåí âñİèçêå. Èİëåôå íá ãßíåé êáé ìåëëïíôéêÜ áíáæŞôçóç áõôïı ôïõ ğñïôığïõ;";
     Text[ korean ] = "¼­½Ä ÆÄÀÏ$(TEMPLATE)À» Ã£Áö ¸øÇß½À´Ï´Ù. ¾ÕÀ¸·Îµµ °è¼Ó ÀÌ ÆÄÀÏÀ» Ã£À¸½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "\"$(TEMPLATE)\" şablonu bulunamadı. Bu şablon gelecekte de aransın mı?";
@@ -2094,6 +2094,7 @@ String STR_OBJECT
 };
 
 // ******************************************************************* EOF
+
 
 
 
