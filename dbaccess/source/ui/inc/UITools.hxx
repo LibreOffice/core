@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:05:29 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ class Window;
 class ToolBox;
 class Font;
 class SvNumberFormatter;
+class SfxFilter;
 class SvLBoxEntry;
 
 // .........................................................................
@@ -433,6 +434,12 @@ namespace dbaui
             The new converted URL.
     */
     String convertURLtoUI(sal_Bool _bPrefix,ODsnTypeCollection* _pCollection,const ::rtl::OUString& _sURL);
+
+    /** returns the standard database filter
+        @retrun
+            the filter
+    */
+    const SfxFilter* getStandardDatabaseFilter();
 
     /** fills the tree list box with the elements from the given container and sub elements.
         @param  _xContainer
