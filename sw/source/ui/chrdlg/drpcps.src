@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-16 23:04:40 $
+ *  last change: $Author: os $ $Date: 2001-12-18 14:19:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ TabDialog DLG_DROPCAPS
                 Text[ chinese_simplified ] = "å­—é¦–å¤§å†™";
                 Text[ russian ] = "Áóêâèöà";
                 Text[ polish ] = "Inicja³y";
-                Text[ japanese ] = "ï¾„ï¾ï¾›ï½¯ï¾Œï¾Ÿï½·ï½¬ï½¯ï¾Œï¾Ÿ";
+                Text[ japanese ] = "ãƒ‰ãƒ­ãƒƒãƒ—ã‚­ãƒ£ãƒƒãƒ—";
                 Text[ chinese_traditional ] = "å­—é¦–å¤§å¯«";
                 Text[ arabic ] = "ÇáÃÍÑİ ÇáÇÓÊåáÇáíÉ";
                 Text[ greek ] = "Áñ÷éãñÜììáôá";
@@ -122,7 +122,7 @@ TabDialog DLG_DROPCAPS
     Text[ chinese_simplified ] = "å­—é¦–å¤§å†™";
     Text[ russian ] = "Áóêâèöà";
     Text[ polish ] = "Inicja³y";
-    Text[ japanese ] = "ï¾„ï¾ï¾›ï½¯ï¾Œï¾Ÿï½·ï½¬ï½¯ï¾Œï¾Ÿ";
+    Text[ japanese ] = "ãƒ‰ãƒ­ãƒƒãƒ—ã‚­ãƒ£ãƒƒãƒ—";
     Text[ chinese_traditional ] = "å­—é¦–å¤§å¯«";
     Text[ arabic ] = "ÇáÃÍÑİ ÇáÇÓÊåáÇáíÉ";
     Text[ greek ] = "Áñ÷éãñÜììáôá";
@@ -155,11 +155,11 @@ TabPage TP_DROPCAPS
         Text[ chinese_simplified ] = "æ˜¾ç¤ºå­—é¦–å¤§å†™";
         Text[ russian ] = "Ïîêàçàòü áóêâèöó";
         Text[ polish ] = "Po~ka¿ inicja³y";
-        Text[ japanese ] = "ï¾„ï¾ï¾›ï½¯ï¾Œï¾Ÿï½·ï½¬ï½¯ï¾Œï¾Ÿã®è¡¨ç¤º";
+        Text[ japanese ] = "ãƒ‰ãƒ­ãƒƒãƒ—ã‚­ãƒ£ãƒƒãƒ—ã®è¡¨ç¤º";
         Text[ chinese_traditional ] = "é¡¯ç¤ºå­—é¦–å¤§å¯«";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÃÍÑİ ÇáÇÓÊåáÇáíÉ";
         Text[ greek ] = "ÅìöÜ~íéóç áñ÷éãñáììÜôùí";
-        Text[ korean ] = "ë‹¨ë½ ì²«ë¬¸ì ì¥ì‹ í‘œì‹œ(~O)";
+        Text[ korean ] = "ë‹¨ë½ ì²«ë¬¸ì ì¥ì‹ í‘œì‹œ";
         Text[ turkish ] = "Baş harfleri vurgula";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mostrar iniciales";
@@ -297,14 +297,14 @@ TabPage TP_DROPCAPS
         Text [ dutch ] = "A~fstand tot tekst" ;
         Text [ spanish ] = "~Distancia hasta el texto" ;
         Text [ english_us ] = "Space to text" ;
-        Text[ chinese_simplified ] = "è‡³æ–‡å­—çš„è·ç¦»(~D)";
+        Text[ chinese_simplified ] = "è‡³æ–‡å­—çš„è·ç¦»";
         Text[ russian ] = "Ğàññòîÿíèå îò òåêñòà";
         Text[ polish ] = "Odstêp od tekstu";
-        Text[ japanese ] = "ï¾ƒï½·ï½½ï¾„ã¾ã§ã®é–“éš”(~D)";
-        Text[ chinese_traditional ] = "è‡³æ–‡å­—çš„è·ç¦»(~D)";
+        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã¾ã§ã®é–“éš”";
+        Text[ chinese_traditional ] = "è‡³æ–‡å­—çš„è·ç¦»";
         Text[ arabic ] = "ÇáãÓÇİÉ ÍÊì ÇáäÕ";
         Text[ greek ] = "Á~ğüóôáóç áğü ôï êåßìåíï";
-        Text[ korean ] = "í…ìŠ¤íŠ¸ì—ã€€ëŒ€í•œã€€ê°„ê²©";
+        Text[ korean ] = "í…ìŠ¤íŠ¸ì— ëŒ€í•œ ê°„ê²©";
         Text[ turkish ] = "Metne uzaklık";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Distancia hasta el texto";
@@ -365,7 +365,7 @@ TabPage TP_DROPCAPS
     {
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 102 ) ;
-        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Size = MAP_APPFONT ( 125 , 8 ) ;
         Text = "Initialen~text" ;
         Text [ English ] = "~Text" ;
         Text [ norwegian ] = "~Text" ;
@@ -382,7 +382,7 @@ TabPage TP_DROPCAPS
         Text[ chinese_simplified ] = "å­—é¦–å¤§å†™(~T)";
         Text[ russian ] = "Òåêñò";
         Text[ polish ] = "Tekst z inicja³ami";
-        Text[ japanese ] = "ï¾„ï¾ï¾›ï½¯ï¾Œï¾Ÿï½·ï½¬ï½¯ï¾Œï¾Ÿã®ï¾ƒï½·ï½½ï¾„(~T)";
+        Text[ japanese ] = "ãƒ‰ãƒ­ãƒƒãƒ—ã‚­ãƒ£ãƒƒãƒ—ã®ãƒ†ã‚­ã‚¹ãƒˆ(~T)";
         Text[ chinese_traditional ] = "å¤§å¯«å­—(~T)";
         Text[ arabic ] = "ÇáäÕ";
         Text[ greek ] = "Êåßìåíï";
@@ -404,7 +404,7 @@ TabPage TP_DROPCAPS
     {
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 118 ) ;
-        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Size = MAP_APPFONT ( 125 , 8 ) ;
         Text = "Zeichen~vorlage" ;
         Text [ English ] = "Character st~yle" ;
         Text [ norwegian ] = "M~al" ;
@@ -421,11 +421,11 @@ TabPage TP_DROPCAPS
         Text[ chinese_simplified ] = "å­—ç¬¦æ ·å¼(~Y)";
         Text[ russian ] = "~Ñòèëü çíàêîâ";
         Text[ polish ] = "Styl znaku";
-        Text[ japanese ] = "æ–‡å­—ï½½ï¾€ï½²ï¾™(~Y)";
+        Text[ japanese ] = "æ–‡å­—ã‚¹ã‚¿ã‚¤ãƒ«(~Y)";
         Text[ chinese_traditional ] = "å­—å…ƒæ¨£å¼(~Y)";
         Text[ arabic ] = "äãØ ÇáÃÍÑİ";
         Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
-        Text[ korean ] = "ë¬¸ì ìœ í˜•(~Y)";
+        Text[ korean ] = "ë¬¸ì í…œí”Œë¦¿(~Y)";
         Text[ turkish ] = "Karakter ~biçimi";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
         Text[ catalan ] = "E~stilo de carácter";
@@ -468,17 +468,5 @@ TabPage TP_DROPCAPS
     };
 };
  // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
 
 
