@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datatyperepository.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:50:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:35:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,12 @@
 #endif
 #ifndef _FRM_RESOURCE_HXX_
 #include "frm_resource.hxx"
+#endif
+#ifndef FRM_STRINGS_HXX
+#include "frm_strings.hxx"
+#endif
+#ifndef _FRM_PROPERTY_HRC_
+#include "property.hrc"
 #endif
 
 /** === begin UNO includes === **/
@@ -146,10 +152,10 @@ namespace xforms
         m_aRepository[ sName ] = new OShortIntegerType( sName, ::com::sun::star::xsd::DataTypeClass::gYear );
 
         sName = FRM_RES_STRING( RID_STR_DATATYPE_MONTH );
-        m_aRepository[ sName ] = new OByteIntegerType( sName, ::com::sun::star::xsd::DataTypeClass::gMonth );
+        m_aRepository[ sName ] = new OShortIntegerType( sName, ::com::sun::star::xsd::DataTypeClass::gMonth );
 
         sName = FRM_RES_STRING( RID_STR_DATATYPE_DAY );
-        m_aRepository[ sName ] = new OByteIntegerType( sName, ::com::sun::star::xsd::DataTypeClass::gDay );
+        m_aRepository[ sName ] = new OShortIntegerType( sName, ::com::sun::star::xsd::DataTypeClass::gDay );
     }
 
     //--------------------------------------------------------------------
@@ -271,6 +277,64 @@ namespace xforms
         return !m_aRepository.empty();
     }
 
+    //--------------------------------------------------------------------
+    // type specific implementation of registerProperties, using explicit
+    // template instantiations
+
+    template<>
+    void OValueLimitedType<com::sun::star::util::Date>::registerProperties()
+    {
+        OValueLimitedType_Base::registerProperties();
+
+        REGISTER_VOID_PROP( XSD_MAX_INCLUSIVE_DATE, m_aMaxInclusive, ValueType );
+        REGISTER_VOID_PROP( XSD_MAX_EXCLUSIVE_DATE, m_aMaxExclusive, ValueType );
+        REGISTER_VOID_PROP( XSD_MIN_INCLUSIVE_DATE, m_aMinInclusive, ValueType );
+        REGISTER_VOID_PROP( XSD_MIN_EXCLUSIVE_DATE, m_aMinExclusive, ValueType );
+    }
+
+    template<>
+    void OValueLimitedType<com::sun::star::util::Time>::registerProperties()
+    {
+        OValueLimitedType_Base::registerProperties();
+
+        REGISTER_VOID_PROP( XSD_MAX_INCLUSIVE_TIME, m_aMaxInclusive, ValueType );
+        REGISTER_VOID_PROP( XSD_MAX_EXCLUSIVE_TIME, m_aMaxExclusive, ValueType );
+        REGISTER_VOID_PROP( XSD_MIN_INCLUSIVE_TIME, m_aMinInclusive, ValueType );
+        REGISTER_VOID_PROP( XSD_MIN_EXCLUSIVE_TIME, m_aMinExclusive, ValueType );
+    }
+
+    template<>
+    void OValueLimitedType<com::sun::star::util::DateTime>::registerProperties()
+    {
+        OValueLimitedType_Base::registerProperties();
+
+        REGISTER_VOID_PROP( XSD_MAX_INCLUSIVE_DATE_TIME, m_aMaxInclusive, ValueType );
+        REGISTER_VOID_PROP( XSD_MAX_EXCLUSIVE_DATE_TIME, m_aMaxExclusive, ValueType );
+        REGISTER_VOID_PROP( XSD_MIN_INCLUSIVE_DATE_TIME, m_aMinInclusive, ValueType );
+        REGISTER_VOID_PROP( XSD_MIN_EXCLUSIVE_DATE_TIME, m_aMinExclusive, ValueType );
+    }
+
+    template<>
+    void OValueLimitedType<double>::registerProperties()
+    {
+        OValueLimitedType_Base::registerProperties();
+
+        REGISTER_VOID_PROP( XSD_MAX_INCLUSIVE_DOUBLE, m_aMaxInclusive, ValueType );
+        REGISTER_VOID_PROP( XSD_MAX_EXCLUSIVE_DOUBLE, m_aMaxExclusive, ValueType );
+        REGISTER_VOID_PROP( XSD_MIN_INCLUSIVE_DOUBLE, m_aMinInclusive, ValueType );
+        REGISTER_VOID_PROP( XSD_MIN_EXCLUSIVE_DOUBLE, m_aMinExclusive, ValueType );
+    }
+
+    template<>
+    void OValueLimitedType<sal_Int16>::registerProperties()
+    {
+        OValueLimitedType_Base::registerProperties();
+
+        REGISTER_VOID_PROP( XSD_MAX_INCLUSIVE_INT, m_aMaxInclusive, ValueType );
+        REGISTER_VOID_PROP( XSD_MAX_EXCLUSIVE_INT, m_aMaxExclusive, ValueType );
+        REGISTER_VOID_PROP( XSD_MIN_INCLUSIVE_INT, m_aMinInclusive, ValueType );
+        REGISTER_VOID_PROP( XSD_MIN_EXCLUSIVE_INT, m_aMinExclusive, ValueType );
+    }
 //........................................................................
 } // namespace xforms
 //........................................................................
