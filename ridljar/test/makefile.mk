@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-08-07 14:37:43 $
+#   last change: $Author: rt $ $Date: 2004-03-30 16:38:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,4 +66,5 @@
 
 all .PHONY:
     cd com/sun/star/lib/uno/typedesc && dmake
+    cd com/sun/star/lib/util && dmake
     cd com/sun/star/uno && dmake
