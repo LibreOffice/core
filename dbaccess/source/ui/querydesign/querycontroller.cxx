@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-08 08:42:26 $
+ *  last change: $Author: fs $ $Date: 2001-06-12 13:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,7 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
             if (!(*pBegin >>= aValue))
                 continue;
 
-            if (aValue.Name == PROPERTY_ACTIVECONNECTION)
+            if (0 == aValue.Name.compareToAscii(PROPERTY_ACTIVECONNECTION))
             {
                 ::cppu::extractInterface(m_xConnection,aValue.Value);
                 // be notified when connection is in disposing
@@ -538,19 +538,19 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
                     xComponent->addEventListener(xEvtL);
                 }
             }
-            else if(aValue.Name == PROPERTY_DATASOURCENAME)
+            else if(0 == aValue.Name.compareToAscii(PROPERTY_DATASOURCENAME))
             {
                 aValue.Value >>= m_sDataSourceName;
             }
-            else if(aValue.Name == PROPERTY_CURRENTQUERY)
+            else if(0 == aValue.Name.compareToAscii(PROPERTY_CURRENTQUERY))
             {
                 aValue.Value >>= m_sName;
             }
-            else if(aValue.Name == PROPERTY_QUERYDESIGNVIEW)
+            else if(0 == aValue.Name.compareToAscii(PROPERTY_QUERYDESIGNVIEW))
             {
                 m_bDesign = ::cppu::any2bool(aValue.Value);
             }
-            else if(aValue.Name == PROPERTY_CREATEVIEW)
+            else if(0 == aValue.Name.compareToAscii(PROPERTY_CREATEVIEW))
             {
                 m_bCreateView = ::cppu::any2bool(aValue.Value);
             }
