@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtopt.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-29 14:56:08 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 14:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,6 @@ using namespace com::sun::star::uno;
 #define SCFILTOPT_WK3           2
 #define SCFILTOPT_COUNT         3
 
-//! expand options for bBreakShared
-//! (former "EXCELBREAKSHAREDFORMULA" in ini file)
-
 Sequence<OUString> ScFilterOptions::GetPropertyNames()
 {
     static const char* aPropNames[] =
@@ -110,7 +107,6 @@ Sequence<OUString> ScFilterOptions::GetPropertyNames()
 ScFilterOptions::ScFilterOptions() :
     ConfigItem( OUString::createFromAscii( CFGPATH_FILTER ) ),
     bWK3Flag( FALSE ),
-    bBreakShared( TRUE ),
     fExcelColScale( 0 ),
     fExcelRowScale( 0 )
 {
