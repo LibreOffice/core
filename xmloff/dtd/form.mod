@@ -1,5 +1,5 @@
 <!--
-	$Id: form.mod,v 1.17 2004-07-05 16:05:04 obo Exp $
+	$Id: form.mod,v 1.18 2004-08-02 14:09:36 hr Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -85,6 +85,7 @@
 <!ENTITY % tab-index "form:tab-index CDATA #IMPLIED">
 <!ENTITY % target-frame "office:target-frame CDATA '_blank'">
 <!ENTITY % target-location "xlink:href %url; #IMPLIED">
+<!ENTITY % database-location "xlink:href %url; #IMPLIED">
 <!ENTITY % tab-stop "form:tab-stop %boolean; 'true'">
 <!ENTITY % title "form:title CDATA #IMPLIED">
 <!ENTITY % default-value "form:default-value CDATA #IMPLIED">
@@ -101,14 +102,19 @@
 <!ENTITY % list-source-types "(table|query|sql|sql-pass-through|value-list|table-fields)">
 <!ENTITY % list-source-type "form:list-source-type %list-source-types; #IMPLIED">
 <!ENTITY % column-style-name "form:column-style-name %styleName; #IMPLIED">
-
+<!ENTITY % min-value "form:min-value %float; #IMPLIED">
+<!ENTITY % max-value "form:max-value %float; #IMPLIED">
+<!ENTITY % step-size "form:step-size %positiveInteger; '1'">
+<!ENTITY % page-step-size "form:page-step-size %positiveInteger; #IMPLIED">
+<!ENTITY % delay-for-repeat "form:delay-for-repeat %positiveInteger; #IMPLIED">
+<!ENTITY % orientation "form:orientation (horizontal|vertical) #IMPLIED">
 
 <!ELEMENT form:control (%controls;)+>
 <!ATTLIST form:control %name;
                        %service-name;
                        %control-id;>
 
-<!ELEMENT form:form (form:properties?, office:events?, (form:control|form:form)*)>
+<!ELEMENT form:form (form:properties?, office:events?, (form:control|form:form)*, form:datasource?)>
 <!ATTLIST form:form %name; %service-name;>
 <!ATTLIST form:form xlink:href %url; #IMPLIED>
 <!ATTLIST form:form form:enctype CDATA "application/x-www-form-urlencoded">
@@ -129,6 +135,10 @@
 <!ATTLIST form:form form:navigation-mode %navigation; #IMPLIED>
 <!ATTLIST form:form form:order CDATA #IMPLIED>
 <!ATTLIST form:form form:tab-cycle %cycles; #IMPLIED>
+
+<!ATTLIST form:datasource %database-location;
+                          connection-resource %string; #IMPLIED
+>
 
 <!ELEMENT office:forms (form:form*)>
 <!ATTLIST office:forms form:automatic-focus %boolean; "false">
@@ -375,13 +385,6 @@
                            %page-step-size;
                            %delay-for-repeat;
                            %orientation;>
-
-<!ENTITY % min-value "form:min-value %float; #IMPLIED">
-<!ENTITY % max-value "form:max-value %float; #IMPLIED">
-<!ENTITY % step-size "form:step-size %positiveInteger; '1'">
-<!ENTITY % page-step-size "form:page-step-size %positiveInteger; #IMPLIED">
-<!ENTITY % delay-for-repeat "form:delay-for-repeat %positiveInteger; #IMPLIED">
-<!ENTITY % orientation "form:orientation (horizontal|vertical) #IMPLIED">
 
 <!ELEMENT form:properties (form:property+)>
 <!ELEMENT form:property (form:property-value*)>
