@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:39:17 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,7 +399,7 @@ ModalDialog DLG_SORTING
     CheckBox CB_CASE
     {
         Pos = MAP_APPFONT ( 113 , 159 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Size = MAP_APPFONT ( 147 , 10 ) ;
         TabStop = TRUE ;
         Text [ de ] = "Exakter Vergleich" ;
         Text [ en-US ] = "Match case";
