@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeppm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-08 10:25:00 $
+ *  last change: $Author: sj $ $Date: 2002-07-16 09:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,14 +81,15 @@ DlgExportEPPM::DlgExportEPPM( FltCallDialogParameter& rPara ) :
                 aBtnOK              ( this, ResId( BTN_OK ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
                 aBtnHelp            ( this, ResId( BTN_HELP ) ),
-                pMgr                ( rPara.pResMgr )
+                pMgr                ( rPara.pResMgr ),
+                rFltCallPara        ( rPara )
 {
     FreeResource();
 
     // Config-Parameter lesen
 
     String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/PPM" ) );
-    pConfigItem = new FilterConfigItem( aFilterConfigPath );
+    pConfigItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
     sal_Int32   nFormat = pConfigItem->ReadInt32( String( ResId( KEY_FORMAT, pMgr ) ), 0 );
 
     BOOL bCheck = FALSE;
@@ -119,6 +120,7 @@ IMPL_LINK( DlgExportEPPM, OK, void *, EMPTYARG )
     if ( aRBASCII.IsChecked() )
         nFormat++;
     pConfigItem->WriteInt32( String( ResId( KEY_FORMAT, pMgr ) ), nFormat );
+    rFltCallPara.aFilterData = pConfigItem->GetFilterData();
     EndDialog( RET_OK );
 
     return 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jpeg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-12-21 10:21:39 $
+ *  last change: $Author: sj $ $Date: 2002-07-16 09:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,21 +499,24 @@ void* JPEGWriter::GetScanline( long nY )
 
 // ------------------------------------------------------------------------
 
-BOOL JPEGWriter::Write( const Graphic& rGraphic, sal_Bool bIgnoreOptions )
+BOOL JPEGWriter::Write( const Graphic& rGraphic,
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData )
 {
-    BOOL bRet;
+    BOOL bRet = FALSE;
 
-    aBmp = rGraphic.GetBitmap();
+    Bitmap aBmp( rGraphic.GetBitmap() );
+    FilterConfigItem aConfigItem( (::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >*)pFilterData );
+    const sal_Bool bGreys = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "ColorMode" ) ), 0 ) != 0;
+    if ( bGreys )
+    {
+        if ( !aBmp.Convert( BMP_CONVERSION_8BIT_GREYS ) )
+            aBmp = rGraphic.GetBitmap();
+    }
+    sal_Int32 nQuality = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ), 75 );
+
     pAcc = aBmp.AcquireReadAccess();
-
     if( pAcc )
     {
-        sal_Int32 nQuality = 75;
-        if ( !bIgnoreOptions )
-        {
-            FilterConfigItem aConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/JPG" ) ) );
-            nQuality = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ), 75 );
-        }
         bNative = ( pAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_BGR );
 
         if( !bNative )
@@ -521,12 +524,12 @@ BOOL JPEGWriter::Write( const Graphic& rGraphic, sal_Bool bIgnoreOptions )
 
         bRet = (BOOL) WriteJPEG( this, &rOStm, pAcc->Width(), pAcc->Height(), nQuality, NULL );
 
-//      MyCallbackHandler   aCbH;
-//      aCbH.pCallback = pCallback;
-//      aCbH.pCallerData = pCallerData;
-//      aCbH.nMinPercent = 0;
-//      aCbH.nMaxPercent = 99;
-//      bRet = (BOOL) WriteJPEG( this, &rOStm, pAcc->Width(), pAcc->Height(), nQuality, &aCbH );
+    //      MyCallbackHandler   aCbH;
+    //      aCbH.pCallback = pCallback;
+    //      aCbH.pCallerData = pCallerData;
+    //      aCbH.nMinPercent = 0;
+    //      aCbH.nMaxPercent = 99;
+    //      bRet = (BOOL) WriteJPEG( this, &rOStm, pAcc->Width(), pAcc->Height(), nQuality, &aCbH );
 
         delete[] pBuffer;
         pBuffer = NULL;
@@ -534,9 +537,6 @@ BOOL JPEGWriter::Write( const Graphic& rGraphic, sal_Bool bIgnoreOptions )
         aBmp.ReleaseAccess( pAcc );
         pAcc = NULL;
     }
-    else
-        bRet = FALSE;
-
     return bRet;
 }
 
@@ -574,8 +574,9 @@ BOOL ImportJPEG( SvStream& rStm, Graphic& rGraphic, void* pCallerData, sal_Int32
 // --------------
 
 BOOL ExportJPEG( SvStream& rOStm, const Graphic& rGraphic,
-                    PFilterCallback pCallback, void* pCallerData, sal_Bool bIgnoreOptions )
+                PFilterCallback pCallback, void* pCallerData,
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData )
 {
     JPEGWriter aJPEGWriter( rOStm, pCallback, pCallerData );
-    return aJPEGWriter.Write( rGraphic, bIgnoreOptions );
+    return aJPEGWriter.Write( rGraphic, pFilterData );
 }

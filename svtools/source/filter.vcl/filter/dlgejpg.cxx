@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgejpg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-07 19:57:06 $
+ *  last change: $Author: sj $ $Date: 2002-07-16 09:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,11 +86,12 @@ DlgExportEJPG::DlgExportEJPG( FltCallDialogParameter& rPara ) :
                 aGrpColors          ( this, ResId( GRP_COLORS ) ),
                 aBtnOK              ( this, ResId( BTN_OK ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
-                aBtnHelp            ( this, ResId( BTN_HELP ) )
+                aBtnHelp            ( this, ResId( BTN_HELP ) ),
+                rFltCallPara        ( rPara )
 {
     FreeResource();
     String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/JPG" ) );
-    pConfigItem = new FilterConfigItem( aFilterConfigPath );
+    pConfigItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
 
     // reading filter options
     sal_Int32 nQuality = pConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( KEY_QUALITY ) ), 75 );
@@ -117,6 +118,7 @@ IMPL_LINK( DlgExportEJPG, OK, void *, EMPTYARG )
     // Config-Parameter schreiben
     pConfigItem->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( KEY_QUALITY ) ), (sal_Int32)aNumFldQuality.GetValue() );
     pConfigItem->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( KEY_GRAYSCALES ) ), aRbGray.IsChecked() ? 1 : 0 );
+    rFltCallPara.aFilterData = pConfigItem->GetFilterData();
     EndDialog( RET_OK );
     return 0;
 }

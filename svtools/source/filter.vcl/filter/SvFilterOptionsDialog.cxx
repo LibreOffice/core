@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvFilterOptionsDialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2002-06-18 15:10:13 $
+ *  last change: $Author: sj $ $Date: 2002-07-16 09:27:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,9 @@ sal_Int16 SvFilterOptionsDialog::execute()
         }
         if ( nFormat < nFilterCount )
         {
+            FltCallDialogParameter aFltCallDlgPara( Application::GetDefDialogParent(), NULL, eFieldUnit );
+            aFltCallDlgPara.aFilterData = aFilterDataSequence;
+
             String  aFilterName( aGraphicFilter.pConfig->GetExportFilterName( nFormat ) );
             if ( aGraphicFilter.pConfig->IsExportInternalFilter( nFormat ) )
             {
@@ -287,25 +290,24 @@ sal_Int16 SvFilterOptionsDialog::execute()
 
                     aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
                     pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
-
-                    FltCallDialogParameter aFltCallDlgPara( Application::GetDefDialogParent(), pResMgr, eFieldUnit );
-
+                    aFltCallDlgPara.pResMgr = pResMgr;
                     // JPEG-Dialog
                     if( aFilterName.EqualsIgnoreCaseAscii( EXP_JPEG ) )
                     {
                         if ( DlgExportEJPG( aFltCallDlgPara ).Execute() == RET_OK )
                             nRet = ui::dialogs::ExecutableDialogResults::OK;
                     }
-                    else if( !aFilterName.EqualsIgnoreCaseAscii( EXP_BMP ) )
+                    else if( aFilterName.EqualsIgnoreCaseAscii( EXP_BMP ) )
                     {
+                        // Fuer Vektorformate nehmen wir den Vektor-Dialog
                         aFltCallDlgPara.aFilterExt = aGraphicFilter.pConfig->GetExportFormatShortName( nFormat );
-                        if ( DlgExportVec( aFltCallDlgPara ).Execute() == RET_OK )
+                        if ( DlgExportPix( aFltCallDlgPara ).Execute() == RET_OK )
                             nRet = ui::dialogs::ExecutableDialogResults::OK;
                     }
                     else
-                    {   // Fuer Vektorformate nehmen wir den Vektor-Dialog
+                    {
                         aFltCallDlgPara.aFilterExt = aGraphicFilter.pConfig->GetExportFormatShortName( nFormat );
-                        if ( DlgExportPix( aFltCallDlgPara ).Execute() == RET_OK )
+                        if ( DlgExportVec( aFltCallDlgPara ).Execute() == RET_OK )
                             nRet = ui::dialogs::ExecutableDialogResults::OK;
                     }
                     delete pResMgr;
@@ -331,12 +333,13 @@ sal_Int16 SvFilterOptionsDialog::execute()
                     // Dialog in DLL ausfuehren
                     if( pFunc )
                     {
-                        FltCallDialogParameter aFltCallDlgPara( Application::GetDefDialogParent(), NULL, eFieldUnit );
                         if ( (*pFunc)( aFltCallDlgPara ) )
                             nRet = ui::dialogs::ExecutableDialogResults::OK;
                     }
                 }
             }
+            // taking the out parameter from the dialog
+            aFilterDataSequence = aFltCallDlgPara.aFilterData;
         }
     }
     return nRet;

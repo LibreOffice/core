@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgexpor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-15 11:40:53 $
+ *  last change: $Author: sj $ $Date: 2002-07-16 09:34:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@ class FilterConfigItem;
 class DlgExportPix : public ModalDialog
 {
 private:
+
+    FltCallDialogParameter& rFltCallPara;
+
     OKButton            aBtnOK;
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;
@@ -123,6 +126,9 @@ public:
 class DlgExportVec : public ModalDialog
 {
 private:
+
+    FltCallDialogParameter& rFltCallPara;
+
     OKButton            aBtnOK;
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;

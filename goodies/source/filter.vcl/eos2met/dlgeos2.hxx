@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeos2.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-15 13:45:24 $
+ *  last change: $Author: sj $ $Date: 2002-07-16 09:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@ class ResMgr;
 class DlgExportEMET : public ModalDialog
 {
 private:
+
+    FltCallDialogParameter& rFltCallPara;
+
     OKButton            aBtnOK;
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgexpor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-05 20:43:07 $
+ *  last change: $Author: sj $ $Date: 2002-07-16 09:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,12 +95,13 @@ DlgExportPix::DlgExportPix( FltCallDialogParameter& rPara ) :
                 aLbColors           ( this, ResId( LB_COLORS ) ),
                 aCbxRLE             ( this, ResId( CBX_RLE ) ),
                 pMgr                ( rPara.pResMgr ),
-                aExt                ( rPara.aFilterExt )
+                aExt                ( rPara.aFilterExt ),
+                rFltCallPara        ( rPara )
 {
     aExt.ToUpperAscii();
     String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/" ) );
     aFilterConfigPath.Append( aExt );
-    pConfigItem = new FilterConfigItem( aFilterConfigPath );
+    pConfigItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
 
     String  aTitle( aExt );
     FreeResource();
@@ -221,7 +222,7 @@ IMPL_LINK( DlgExportPix, OK, void *, EMPTYARG )
     pConfigItem->WriteSize( String( ResId( KEY_SIZE, pMgr ) ), aSize );
     pConfigItem->WriteInt32( String( ResId( KEY_COLORS, pMgr ) ), (sal_Int32)aLbColors.GetSelectEntryPos() );
     pConfigItem->WriteBool( String( ResId( KEY_RLE_CODING, pMgr ) ), aCbxRLE.IsChecked() );
-
+    rFltCallPara.aFilterData = pConfigItem->GetFilterData();
     EndDialog( RET_OK );
 
     return 0;
@@ -326,13 +327,13 @@ DlgExportVec::DlgExportVec( FltCallDialogParameter& rPara ) :
                 aMtfSizeY           ( this, ResId( MTF_SIZEY_VEC ) ),
                 aGrpSize            ( this, ResId( GRP_SIZE_VEC ) ),
                 pMgr                ( rPara.pResMgr ),
-                aExt                ( rPara.aFilterExt )
-
+                aExt                ( rPara.aFilterExt ),
+                rFltCallPara        ( rPara )
 {
     aExt.ToUpperAscii();
     String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/" ) );
     aFilterConfigPath.Append( aExt );
-    pConfigItem = new FilterConfigItem( aFilterConfigPath );
+    pConfigItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
 
     String  aTitle( aExt );
     FreeResource();
@@ -424,6 +425,7 @@ IMPL_LINK( DlgExportVec, OK, void *, EMPTYARG )
 
     pConfigItem->WriteInt32( String( ResId( KEY_MODE, pMgr ) ), nMode );
     pConfigItem->WriteSize( String( ResId( KEY_SIZE, pMgr ) ), aSize );
+    rFltCallPara.aFilterData = pConfigItem->GetFilterData();
     EndDialog( RET_OK );
 
     return 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jpeg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-20 11:57:42 $
+ *  last change: $Author: sj $ $Date: 2002-07-16 09:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,12 @@
 #endif
 #ifndef _FLTCALL_HXX
 #include "fltcall.hxx"
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
 #ifdef _JPEGPRIVATE
@@ -140,7 +146,8 @@ public:
                         JPEGWriter( SvStream& rOStm, PFilterCallback pCallback, void* pCallData );
                         ~JPEGWriter() {};
 
-    BOOL                Write( const Graphic& rGraphic, sal_Bool bIgnoreOptions );
+    BOOL                Write( const Graphic& rGraphic, const
+                        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData );
 };
 
 #endif // _JPEGPRIVATE
@@ -152,6 +159,7 @@ public:
 BOOL ImportJPEG( SvStream& rStream, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags );
 
 BOOL ExportJPEG( SvStream& rStream, const Graphic& rGraphic,
-                 PFilterCallback pCallback, void* pCallerData, sal_Bool bIgnoreOptions );
+                 PFilterCallback pCallback, void* pCallerData,
+                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData );
 
 #endif // _JPEG_HXX

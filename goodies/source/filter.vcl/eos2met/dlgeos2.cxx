@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeos2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:19:45 $
+ *  last change: $Author: sj $ $Date: 2002-07-16 09:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,13 +88,13 @@ DlgExportEMET::DlgExportEMET( FltCallDialogParameter& rPara ) :
                 aFtSizeY            ( this, ResId( FT_SIZEY ) ),
                 aMtfSizeY           ( this, ResId( MTF_SIZEY ) ),
                 aGrpSize            ( this, ResId( GRP_SIZE ) ),
-                pMgr                ( rPara.pResMgr )
-
+                pMgr                ( rPara.pResMgr ),
+                rFltCallPara        ( rPara )
 {
     FreeResource();
 
     String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/MET" ) );
-    pConfigItem = new FilterConfigItem( aFilterConfigPath );
+    pConfigItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
 
     aBtnOK.SetClickHdl( LINK( this, DlgExportEMET, OK ) );
     aRbOriginal.SetClickHdl( LINK( this, DlgExportEMET, ClickRbOriginal ) );
@@ -167,6 +167,7 @@ IMPL_LINK( DlgExportEMET, OK, void *, EMPTYARG )
 
     pConfigItem->WriteInt32( String( ResId( KEY_MODE, pMgr ) ), nStrMode );
     pConfigItem->WriteSize( String( ResId( KEY_SIZE, pMgr ) ), aSize );
+    rFltCallPara.aFilterData = pConfigItem->GetFilterData();
     EndDialog( RET_OK );
 
     return 0;

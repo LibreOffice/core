@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: sj $ $Date: 2002-06-21 14:11:23 $
+ *  last change: $Author: sj $ $Date: 2002-07-16 09:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,31 +786,6 @@ sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const String& rPath, SvStream& rS
 {
     sal_uInt16 n = pConfig->GetImportFormatCount();
 
-/*
-#ifdef MAC
-    // ggf. Filter anhand der Mac-Typen raussuchen:
-    if( *pFormat == GRFILTER_FORMAT_DONTKNOW )
-    {
-        String aFormType;
-        String aType;
-        SvEaMgr aFile( rPath );
-
-        aFile.GetFileType( aType );
-        aType.Cut( 4 );
-
-        for( USHORT i = 0; i < n; i++ )
-        {
-            aFormType=ImpGetMacType(rConfig.ReadKey(i));
-            aFormType.Cut( 4 );
-            if( aFormType == aType && aFormType != "????" )
-            {
-                *pFormat = i;
-                break;
-            }
-        }
-    }
-#endif
-*/
     // ggf. Filter bzw. Format durch anlesen ermitteln,
     // oder durch anlesen zusichern, dass das Format stimmt:
     if( rFormat == GRFILTER_FORMAT_DONTKNOW )
@@ -1708,27 +1683,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
 
 // ------------------------------------------------------------------------
 
-static sal_Bool ImplGetInt32( const uno::Sequence< beans::PropertyValue >* pFilterData,
-                                            const String& rName, sal_Int32& nValue )
-{
-    sal_Bool bHasFilterData = sal_False;
-    if ( pFilterData )
-    {
-        sal_Int32 i, nCount;
-        for ( i = 0, nCount = pFilterData->getLength(); i < nCount; i++ )
-        {
-            if ( (*pFilterData)[ i ].Name.equals( rName ) )
-            {
-                if ( (*pFilterData)[ i ].Value >>= nValue )
-                    bHasFilterData = sal_True;
-                break;
-            }
-        }
-    }
-    return bHasFilterData;
-}
-
-//--------------------------------------------------------------------------
+// SJ: bIgnoreOptions is not used anymore,
 
 USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
     sal_uInt16 nFormat, sal_Bool bIgnoreOptions,
@@ -1752,6 +1707,8 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObjec
 }
 
 // ------------------------------------------------------------------------
+
+// SJ: bIgnoreOptions is not used anymore
 
 USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPath,
     SvStream& rOStm, sal_uInt16 nFormat, sal_Bool bIgnoreOptions,
@@ -1779,7 +1736,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
     if( nFormat >= nFormatCount )
         return (USHORT) ImplSetError( GRFILTER_FORMATERROR );
 
-    FilterConfigItem* pConfigItem = NULL;
+    FilterConfigItem aConfigItem( (uno::Sequence< beans::PropertyValue >*)pFilterData );
     String aFilterName( pConfig->GetExportFilterName( nFormat ) );
 
     ImpFilterCallbackData aCallbackData;
@@ -1798,16 +1755,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
     GraphicType eType;
     Graphic     aGraphic( rGraphic );
 
-    if ( !bIgnoreOptions )
-    {
-        String aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/" ) );
-        String aFilterType( pConfig->GetExportFormatShortName( nFormat ) );
-        aFilterConfigPath.Append( aFilterType );
-        pConfigItem = new FilterConfigItem( aFilterConfigPath );
-
-        aGraphic = ImpGetScaledGraphic( rGraphic, *pConfigItem );
-    }
-
+    aGraphic = ImpGetScaledGraphic( rGraphic, aConfigItem );
     eType = aGraphic.GetType();
 
     if( pConfig->IsExportPixelFormat( nFormat ) )
@@ -1866,17 +1814,18 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
 
                 if( !rOStm.GetError() )
                 {
-                    Bitmap      aBmp( aGraphic.GetBitmap() );
-                    if ( pConfigItem )
+                    Bitmap aBmp( aGraphic.GetBitmap() );
+                    sal_Int32 nColorRes = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Colors" ) ), 0 );
+                    if ( nColorRes && ( nColorRes <= (USHORT)BMP_CONVERSION_24BIT) )
                     {
-                        ResMgr*     pResMgr = CREATERESMGR( svt );
-                        sal_Bool    bRleCoding = pConfigItem->ReadBool( String( ResId( KEY_RLE_CODING, pResMgr ) ), sal_True );
-                        // Wollen wir RLE-Kodiert speichern?
-                        aGraphic.GetBitmap().Write( rOStm, bRleCoding );
-                        delete pResMgr;
+                        if( !aBmp.Convert( (BmpConversion) nColorRes ) )
+                            aBmp = aGraphic.GetBitmap();
                     }
-                    else
-                        rOStm << aBmp;
+                    ResMgr*     pResMgr = CREATERESMGR( svt );
+                    sal_Bool    bRleCoding = aConfigItem.ReadBool( String( ResId( KEY_RLE_CODING, pResMgr ) ), sal_True );
+                    // Wollen wir RLE-Kodiert speichern?
+                    aBmp.Write( rOStm, bRleCoding );
+                    delete pResMgr;
                 }
                 nPercent = 90;
                 aUpdatePercentHdlLink.Call( this );
@@ -1888,8 +1837,8 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
             {
                 if( !rOStm.GetError() )
                 {
-                    sal_Int32 nVersion;
-                    if ( ImplGetInt32( pFilterData, String( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ), nVersion ) )
+                    sal_Int32 nVersion = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ), 0 ) ;
+                    if ( nVersion )
                         rOStm.SetVersion( nVersion );
                     GDIMetaFile aMTF;
 
@@ -1905,14 +1854,12 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
                         aMTF.SetPrefSize( aGraphic.GetPrefSize() );
                         aMTF.SetPrefMapMode( aGraphic.GetPrefMapMode() );
                     }
-
                     nPercent = 60;
                     aUpdatePercentHdlLink.Call( this );
                     rOStm << aMTF;
                     nPercent = 90;
                     aUpdatePercentHdlLink.Call( this );
                 }
-
                 if( rOStm.GetError() )
                     nStatus = GRFILTER_IOERROR;
             }
@@ -1976,7 +1923,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
             {
                 if( !rOStm.GetError() )
                 {
-                    if( !ExportJPEG( rOStm, aGraphic, &ImpFilterCallback, &aCallbackData, bIgnoreOptions ) )
+                    if( !ExportJPEG( rOStm, aGraphic, &ImpFilterCallback, &aCallbackData, pFilterData ) )
                         nStatus = GRFILTER_FORMATERROR;
                 }
 
@@ -2043,7 +1990,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
                 {
                     if( !rOStm.GetError() )
                     {
-                        if ( !(*pFunc)( rOStm, aGraphic, &ImpFilterCallback, &aCallbackData, pConfigItem, sal_False ) )
+                        if ( !(*pFunc)( rOStm, aGraphic, &ImpFilterCallback, &aCallbackData, &aConfigItem, sal_False ) )
                             nStatus = GRFILTER_FORMATERROR;
                     }
                     else
@@ -2069,8 +2016,6 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
     }
 
     aEndFilterHdlLink.Call( this );
-    delete pConfigItem;
-
     return nStatus;
 }
 
@@ -2081,17 +2026,22 @@ BOOL GraphicFilter::Setup( USHORT nFormat )
     return FALSE;
 }
 
-// ------------------------------------------------------------------------
+/* ------------------------------------------------------------------------
+    No Import filter has a dialog, so
+   the following two methods are obsolete */
 
 BOOL GraphicFilter::HasImportDialog( USHORT nFormat )
 {
-    return pConfig->IsImportDialog( nFormat );
+    return sal_True;
+//  return pConfig->IsImportDialog( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
 BOOL GraphicFilter::DoImportDialog( Window* pWindow, USHORT nFormat )
 {
+    return sal_True;
+/*
     String  aFilterName( pConfig->GetImportFilterName( nFormat ) );
     BOOL    bRet = FALSE;
 
@@ -2129,8 +2079,8 @@ BOOL GraphicFilter::DoImportDialog( Window* pWindow, USHORT nFormat )
             }
         }
     }
-
     return bRet;
+*/
 }
 
 // ------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgegif.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-07 20:05:05 $
+ *  last change: $Author: sj $ $Date: 2002-07-16 09:36:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,13 @@ DlgExportEGIF::DlgExportEGIF( FltCallDialogParameter& rPara ) :
                 aBtnOK              ( this, ResId( BTN_OK ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
                 aBtnHelp            ( this, ResId( BTN_HELP ) ),
-                pMgr                ( rPara.pResMgr )
+                pMgr                ( rPara.pResMgr ),
+                rFltCallPara        ( rPara )
 {
     FreeResource();
 
     String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/GIF" ) );
-    pConfigItem = new FilterConfigItem( aFilterConfigPath );
+    pConfigItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
 
     String aInterlaceStr( ResId( KEY_INTER, pMgr ) );
     String aTranslucentStr( ResId( KEY_TRANS, pMgr ) );
@@ -128,6 +129,7 @@ IMPL_LINK( DlgExportEGIF, OK, void *, EMPTYARG )
     if ( aCbxTranslucent.IsChecked() )
         nValue++;
     pConfigItem->WriteInt32( aTranslucentStr, nValue );
+    rFltCallPara.aFilterData = pConfigItem->GetFilterData();
     EndDialog( RET_OK );
 
     return 0;

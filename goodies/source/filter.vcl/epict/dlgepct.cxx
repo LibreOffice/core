@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepct.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-08 11:04:19 $
+ *  last change: $Author: sj $ $Date: 2002-07-16 09:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,13 +89,13 @@ DlgExportEPCT::DlgExportEPCT( FltCallDialogParameter& rPara ) :
                 aFtSizeY            ( this, ResId( FT_SIZEY ) ),
                 aMtfSizeY           ( this, ResId( MTF_SIZEY ) ),
                 aGrpSize            ( this, ResId( GRP_SIZE ) ),
-                pMgr                ( rPara.pResMgr )
-
+                pMgr                ( rPara.pResMgr ),
+                rFltCallPara        ( rPara )
 {
     FreeResource();
 
     String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/PCT" ) );
-    pConfigItem = new FilterConfigItem( aFilterConfigPath );
+    pConfigItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
 
     aBtnOK.SetClickHdl( LINK( this, DlgExportEPCT, OK ) );
     aRbOriginal.SetClickHdl( LINK( this, DlgExportEPCT, ClickRbOriginal ) );
@@ -170,6 +170,7 @@ IMPL_LINK( DlgExportEPCT, OK, void *, EMPTYARG )
 
     pConfigItem->WriteInt32( String( ResId( KEY_MODE, pMgr ) ), nStrMode );
     pConfigItem->WriteSize( String( ResId( KEY_SIZE, pMgr ) ), aSize );
+    rFltCallPara.aFilterData = pConfigItem->GetFilterData();
     EndDialog( RET_OK );
 
     return 0;
