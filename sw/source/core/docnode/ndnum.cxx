@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndnum.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: od $ $Date: 2002-11-29 15:00:25 $
+ *  last change: $Author: od $ $Date: 2002-12-09 10:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,13 +270,10 @@ BOOL _OutlinePara::UpdateOutline( SwTxtNode& rTxtNd )
 #endif
 
         // OD 21.11.2002 #100043# - determine, if level numbering has to be started.
-        bool bStartNumbering = false;
-        if ( nLevel != aNum.GetLevel() )
-        {
-            bStartNumbering = aStartLevel[ nLevel ];
-        }
-
-        if( bStartNumbering )
+        // OD 09.12.2002 #106070# - correct outline numbering, even for the
+        // first heading. Thus, state of <aStartLevel[]> always has to be
+        // consulted, not only on level change.
+        if( aStartLevel[ nLevel ] )
         {
             nSetValue= pOutlRule->Get( nLevel ).GetStart();
             // OD 21.11.2002 #100043# - reset <aStartLevel[nLevel]>
