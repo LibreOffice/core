@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-19 09:28:57 $
+ *  last change: $Author: mba $ $Date: 2002-09-19 09:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,20 +567,53 @@ SfxMedium* SfxApplication::InsertDocumentDialog
     const SfxObjectFactory& rFact
 )
 {
-    SfxMedium *pMedium;
-    while(1)
+    SfxMedium *pMedium=0;
+    SvStringsDtor* pURLList = NULL;
+    String aFilter;
+    SfxItemSet* pSet=0;
+    ErrCode nErr = sfx2::FileOpenDialog_Impl( nFlags | SFXWB_INSERT | WB_3DLOOK, rFact, pURLList, aFilter, pSet, String() );
+    DBG_ASSERT( pURLList, "invalid URLList" );
+    if( pURLList && !nErr )
     {
-        pMedium = 0;
-        SvStringsDtor* pURLList = NULL;
-        String aFilter;
-        SfxItemSet* pSet = NULL;
-        ErrCode nErr = sfx2::FileOpenDialog_Impl( nFlags | SFXWB_INSERT | WB_3DLOOK, rFact, pURLList, aFilter, pSet, String() );
-        if( !nErr )
+        DBG_ASSERT( pURLList->Count() == 1, "invalid URLList count" );
+        String aURL = *(pURLList->GetObject(0));
+        pMedium = new SfxMedium(
+                aURL, SFX_STREAM_READONLY, FALSE,
+                GetFilterMatcher().GetFilter( aFilter ), pSet );
+
+        LoadEnvironment_ImplRef xLoader = new LoadEnvironment_Impl( pMedium );
+        SfxFilterMatcher aMatcher( rFact.GetFilterContainer() );
+        xLoader->SetFilterMatcher( &aMatcher );
+        xLoader->Start();
+        while( xLoader->GetState() != LoadEnvironment_Impl::DONE  )
+            Application::Yield();
+        pMedium = xLoader->GetMedium();
+        if( pMedium && CheckPasswd_Impl( 0, SFX_APP()->GetPool(), pMedium ) == ERRCODE_ABORT )
+            pMedium = NULL;
+    }
+
+    delete pURLList;
+    return pMedium;
+}
+
+SfxMediumList* SfxApplication::InsertDocumentsDialog
+(
+    ULONG                   nFlags,
+    const SfxObjectFactory& rFact
+)
+{
+    SfxMediumList *pMediumList=new SfxMediumList;
+    SvStringsDtor* pURLList = NULL;
+    String aFilter;
+    SfxItemSet* pSet=0;
+    ErrCode nErr = sfx2::FileOpenDialog_Impl( nFlags | SFXWB_INSERT | SFXWB_MULTISELECTION | WB_3DLOOK, rFact, pURLList, aFilter, pSet, String() );
+    DBG_ASSERT( pURLList, "invalid URLList" );
+    if( pURLList && !nErr )
+    {
+        for ( USHORT n=0; n<pURLList->Count(); n++ )
         {
-            DBG_ASSERT( pURLList, "invalid URLList" );
-            DBG_ASSERT( pURLList->Count() == 1, "invalid URLList count" );
-            String aURL = *(pURLList->GetObject(0));
-            pMedium = new SfxMedium(
+            String aURL = *(pURLList->GetObject(n));
+            SfxMedium* pMedium = new SfxMedium(
                     aURL, SFX_STREAM_READONLY, FALSE,
                     GetFilterMatcher().GetFilter( aFilter ), pSet );
 
@@ -591,16 +624,17 @@ SfxMedium* SfxApplication::InsertDocumentDialog
             while( xLoader->GetState() != LoadEnvironment_Impl::DONE  )
                 Application::Yield();
             pMedium = xLoader->GetMedium();
-            if( pMedium && CheckPasswd_Impl( 0, SFX_APP()->GetPool(), pMedium ) == ERRCODE_ABORT )
-                pMedium = NULL;
-                //DELETEZ( pMedium );
+            if( pMedium && CheckPasswd_Impl( 0, GetPool(), pMedium ) != ERRCODE_ABORT )
+            {
+                pMediumList->Insert( pMedium );
+            }
+            else
+                delete pMedium;
         }
-
-        delete pURLList;
-        break;
     }
 
-    return pMedium;
+    delete pURLList;
+    return pMediumList;
 }
 
 
