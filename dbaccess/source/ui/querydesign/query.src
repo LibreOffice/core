@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 08:01:31 $
+ *  last change: $Author: oj $ $Date: 2002-08-30 07:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2455,7 +2455,7 @@ String STR_QRY_JOIN_COLUMN_COMPARE
 
 String STR_QRY_LIKE_LEFT_NO_COLUMN
 {
-    Text = "Links eines 'WIE' Ausdrucks darf nur ein Spaltenname stehen.";
+    Text = "Vor dem 'WIE' muss ein Spaltenname stehen.";
     Text [ ENGLISH ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
     Text[ english_us ] = "You must use a column name before 'LIKE'.";
     Text[ portuguese ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
