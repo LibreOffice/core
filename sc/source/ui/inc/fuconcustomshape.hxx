@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconcustomshape.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 17:58:10 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@ public:
 
     // #98185# Create default drawing objects via keyboard
     virtual SdrObject* CreateDefaultObject( const sal_uInt16 nID, const Rectangle& rRectangle );
+
+    // #i33136#
+    virtual bool doConstructOrthogonal() const;
 };
 
 #endif
