@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:01:02 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ ENGLISH ] = "Paper format" ;
         Text [ norwegian ] = "Papir format" ;
         Text [ italian ] = "Formato foglio" ;
-        Text [ portuguese_brazilian ] = "Formato de papel" ;
+        Text [ portuguese_brazilian ] = "Formato do papel" ;
         Text [ portuguese ] = "Formato do papel" ;
         Text [ finnish ] = "Paperikoko" ;
         Text [ danish ] = "Papirformat" ;
@@ -98,10 +98,13 @@ TabPage RID_SVXPAGE_PAGE
         Text[ arabic ] = "��� �����";
         Text[ greek ] = "������� �������";
         Text[ korean ] = "용지 형식";
-        Text[ turkish ] = "Ka��t format�";
+        Text[ turkish ] = "Sayfa bi�imi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Format del paper";
         Text[ thai ] = "รูปแบบกระดาษ";
+        Text[ czech ] = "Formát papíru";
+        Text[ hebrew ] = "‮גודל נייר‬";
+        Text[ hindi ] = "कागज रचना";
     };
     FixedText FT_PAPER_FORMAT
     {
@@ -120,16 +123,19 @@ TabPage RID_SVXPAGE_PAGE
         Text[ danish ] = "~Format";
         Text[ swedish ] = "~Format";
         Text[ polish ] = "~Format";
-        Text[ portuguese_brazilian ] = "~Format";
+        Text[ portuguese_brazilian ] = "~Formato";
         Text[ japanese ] = "書式(~F)";
         Text[ korean ] = "형식(~F)";
         Text[ chinese_simplified ] = "格式(~F)";
         Text[ chinese_traditional ] = "格式(~F)";
-        Text[ turkish ] = "Format";
+        Text[ turkish ] = "~Bi�im";
         Text[ arabic ] = "�������";
         Text[ catalan ] = "~Format";
         Text[ finnish ] = "~Paperikoko";
         Text[ thai ] = "~รูปแบบ";
+        Text[ czech ] = "Formát";
+        Text[ hebrew ] = "‮עיצוב‬";
+        Text[ hindi ] = "~रचना";
     };
     ListBox LB_PAPER_SIZE
     {
@@ -158,7 +164,7 @@ TabPage RID_SVXPAGE_PAGE
         Left = TRUE ;
         Text[ chinese_simplified ] = "宽度(~W)";
         Text[ russian ] = "������";
-        Text[ polish ] = "Szer.";
+        Text[ polish ] = "~Szeroko��";
         Text[ japanese ] = "幅(~W)";
         Text[ chinese_traditional ] = "寬度(~W)";
         Text[ arabic ] = "�����";
@@ -168,6 +174,9 @@ TabPage RID_SVXPAGE_PAGE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Amplada";
         Text[ thai ] = "ความ~กว้าง";
+        Text[ czech ] = "Šířka";
+        Text[ hebrew ] = "‮רוחב‬";
+        Text[ hindi ] = "~चौड़ाई";
     };
     MetricField ED_PAPER_WIDTH
     {
@@ -203,16 +212,19 @@ TabPage RID_SVXPAGE_PAGE
         Left = TRUE ;
         Text[ chinese_simplified ] = "高度(~H)";
         Text[ russian ] = "������";
-        Text[ polish ] = "Wys.";
+        Text[ polish ] = "~Wysoko��";
         Text[ japanese ] = "高さ(~H)";
         Text[ chinese_traditional ] = "高度(~H)";
         Text[ arabic ] = "��������";
         Text[ greek ] = "����";
         Text[ korean ] = "높이(~H)";
-        Text[ turkish ] = "Y�~k.";
+        Text[ turkish ] = "Y�kseklik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~l�ada";
         Text[ thai ] = "ความ~สูง";
+        Text[ czech ] = "Výška";
+        Text[ hebrew ] = "‮גובה‬";
+        Text[ hindi ] = "~ऊँचाई";
     };
     MetricField ED_PAPER_HEIGHT
     {
@@ -237,7 +249,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ english_us ] = "Orientation";
         Text[ portuguese ] = "Orienta��o";
         Text[ russian ] = "����������";
-        Text[ greek ] = "Orientation";
+        Text[ greek ] = "��������";
         Text[ dutch ] = "Uitlijning";
         Text[ french ] = "Orientation";
         Text[ spanish ] = "Orientaci�n";
@@ -246,15 +258,18 @@ TabPage RID_SVXPAGE_PAGE
         Text[ danish ] = "Justering";
         Text[ swedish ] = "Justering";
         Text[ polish ] = "Orientacja";
-        Text[ portuguese_brazilian ] = "Orientation";
+        Text[ portuguese_brazilian ] = "Orienta��o";
         Text[ japanese ] = "配置";
         Text[ korean ] = "방향";
         Text[ chinese_simplified ] = "对齐";
         Text[ chinese_traditional ] = "對齊";
-        Text[ turkish ] = "Orientation";
-        Text[ arabic ] = "Orientation";
+        Text[ turkish ] = "Metin Y�n�";
+        Text[ arabic ] = "��������";
         Text[ catalan ] = "Orientaci�";
         Text[ thai ] = "การวางแนว";
+        Text[ czech ] = "Orientace";
+        Text[ hebrew ] = "‮כיוון‬";
+        Text[ hindi ] = "अनुस्थापन";
     };
     RadioButton RB_PORTRAIT
     {
@@ -265,7 +280,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ ENGLISH ] = "~Portrait" ;
         Text [ norwegian ] = "~Portrett" ;
         Text [ italian ] = "Verticale" ;
-        Text [ portuguese_brazilian ] = "~Vertical" ;
+        Text [ portuguese_brazilian ] = "~Retrato" ;
         Text [ portuguese ] = "~Vertical" ;
         Text [ finnish ] = "Py~sty" ;
         Text [ danish ] = "St�~ende" ;
@@ -276,16 +291,19 @@ TabPage RID_SVXPAGE_PAGE
         Text [ english_us ] = "~Portrait" ;
         Text[ chinese_simplified ] = "纵向(~P)";
         Text[ russian ] = "�������";
-        Text[ polish ] = "Orienacja pionowa";
+        Text[ polish ] = "~Pionowa";
         Text[ japanese ] = "縦(~P)";
         Text[ chinese_traditional ] = "直向(~P)";
         Text[ arabic ] = "������";
         Text[ greek ] = "~����������";
         Text[ korean ] = "세로(~P)";
-        Text[ turkish ] = "Di~key";
+        Text[ turkish ] = "Dikey";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Vertical";
         Text[ thai ] = "แนว~ตั้ง";
+        Text[ czech ] = "Na výšku";
+        Text[ hebrew ] = "‮לאורך הדף‬";
+        Text[ hindi ] = "~पोर्टरैट्";
     };
     RadioButton RB_LANDSCAPE
     {
@@ -304,16 +322,19 @@ TabPage RID_SVXPAGE_PAGE
         Text[ italian ] = "Orizzontale";
         Text[ danish ] = "~Liggende";
         Text[ swedish ] = "L~iggande";
-        Text[ polish ] = "Orientacja pozioma";
-        Text[ portuguese_brazilian ] = "Pa?~s.";
+        Text[ polish ] = "P~ozioma";
+        Text[ portuguese_brazilian ] = "~Paisagem";
         Text[ japanese ] = "横(~A)";
         Text[ korean ] = "가로(~A)";
         Text[ chinese_simplified ] = "横向(~A)";
         Text[ chinese_traditional ] = "橫向(~A)";
-        Text[ turkish ] = "~Yatay";
+        Text[ turkish ] = "Y~atay";
         Text[ arabic ] = "������";
         Text[ catalan ] = "~Horitzontal";
         Text[ thai ] = "แนว~นอน";
+        Text[ czech ] = "Na šířku";
+        Text[ hebrew ] = "‮לרוחב הדף‬";
+        Text[ hindi ] = "~लान्डस्केप्";
     };
     Window WN_BSP
     {
@@ -340,16 +361,19 @@ TabPage RID_SVXPAGE_PAGE
         Text[ italian ] = "Testo";
         Text[ danish ] = "~Tekstretning";
         Text[ swedish ] = "Te~xtriktning";
-        Text[ polish ] = "~Text flow";
-        Text[ portuguese_brazilian ] = "~Text flow";
+        Text[ polish ] = "Kierunek ~tekstu";
+        Text[ portuguese_brazilian ] = "~Orienta��o do texto";
         Text[ japanese ] = "文字方向(~T)";
         Text[ korean ] = "텍스트 방향";
         Text[ chinese_simplified ] = "文字方向";
         Text[ chinese_traditional ] = "文字方向(~T)";
-        Text[ turkish ] = "~Text flow";
+        Text[ turkish ] = "~Metin y�n�";
         Text[ arabic ] = "~Text flow";
-        Text[ catalan ] = "~Text flow";
-        Text[ thai ] = "~Text flow";
+        Text[ catalan ] = "~Text direction";
+        Text[ thai ] = "~Text direction";
+        Text[ czech ] = "Směr textu";
+        Text[ hebrew ] = "‮כיוון הטקסט‬";
+        Text[ hindi ] = "~Text direction";
     };
     ListBox LB_TEXT_FLOW
     {
@@ -373,21 +397,24 @@ TabPage RID_SVXPAGE_PAGE
         Text[ greek ] = "��~���� �������";
         Text[ dutch ] = "~Papierlade";
         Text[ french ] = "Source du papier";
-        Text[ spanish ] = "~Bandeja de alimentaci�n";
+        Text[ spanish ] = "~Bandeja";
         Text[ finnish ] = "Paperi~lokero";
         Text[ italian ] = "Ca~ssetto";
         Text[ danish ] = "~Papirkilde";
         Text[ swedish ] = "~Pappersmatning";
-        Text[ polish ] = "Zasobnik papieru";
-        Text[ portuguese_brazilian ] = "~Bandeja";
+        Text[ polish ] = "Zaso~bnik papieru";
+        Text[ portuguese_brazilian ] = "~Bandeja de papel";
         Text[ japanese ] = "給紙方法(~T)";
         Text[ korean ] = "용지 공급(~T)";
         Text[ chinese_simplified ] = "纸张来源(~T)";
         Text[ chinese_traditional ] = "紙源(~T)";
-        Text[ turkish ] = "~Ka��t kayna��";
+        Text[ turkish ] = "Ka��t kayna��";
         Text[ arabic ] = "��� �����";
         Text[ catalan ] = "~Font del paper";
         Text[ thai ] = "~ถาดกระดาษ";
+        Text[ czech ] = "Zásobník papíru";
+        Text[ hebrew ] = "‮מגש נייר‬";
+        Text[ hindi ] = "कागज ~ट्रेए";
     };
     ListBox LB_PAPER_TRAY
     {
@@ -413,16 +440,19 @@ TabPage RID_SVXPAGE_PAGE
         Text[ italian ] = "Margini";
         Text[ danish ] = "Sidemargener";
         Text[ swedish ] = "Sidmarginaler";
-        Text[ polish ] = "Marginesy strony";
+        Text[ polish ] = "Marginesy";
         Text[ portuguese_brazilian ] = "Margens";
         Text[ japanese ] = "余白";
         Text[ korean ] = "페이지 여백";
         Text[ chinese_simplified ] = "边距";
         Text[ chinese_traditional ] = "頁面邊距";
-        Text[ turkish ] = "Marjlar";
+        Text[ turkish ] = "Kenarlar";
         Text[ arabic ] = "�������";
         Text[ catalan ] = "Marges";
         Text[ thai ] = "ระยะขอบ";
+        Text[ czech ] = "Okraje";
+        Text[ hebrew ] = "‮שוליים‬";
+        Text[ hindi ] = "पृष्ठ-प्रान्त";
     };
     FixedText FT_LEFT_MARGIN
     {
@@ -444,7 +474,7 @@ TabPage RID_SVXPAGE_PAGE
         Left = TRUE ;
         Text[ chinese_simplified ] = "左(~L)";
         Text[ russian ] = "�����";
-        Text[ polish ] = "Z lewej";
+        Text[ polish ] = "Z ~lewej";
         Text[ japanese ] = "左(~L)";
         Text[ chinese_traditional ] = "向左(~L)";
         Text[ arabic ] = "����";
@@ -454,6 +484,9 @@ TabPage RID_SVXPAGE_PAGE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Esquerra";
         Text[ thai ] = "~ซ้าย";
+        Text[ czech ] = "Vlevo";
+        Text[ hebrew ] = "‮שמאל‬";
+        Text[ hindi ] = "~बायाँ";
     };
     MetricField ED_LEFT_MARGIN
     {
@@ -489,7 +522,7 @@ TabPage RID_SVXPAGE_PAGE
         Left = TRUE ;
         Text[ chinese_simplified ] = "右(~R)";
         Text[ russian ] = "�~�����";
-        Text[ polish ] = "Z prawej";
+        Text[ polish ] = "~Z prawej";
         Text[ japanese ] = "右(~R)";
         Text[ chinese_traditional ] = "向右(~R)";
         Text[ arabic ] = "����";
@@ -499,6 +532,9 @@ TabPage RID_SVXPAGE_PAGE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Dreta";
         Text[ thai ] = "~ขวา";
+        Text[ czech ] = "Vpravo";
+        Text[ hebrew ] = "‮ימין‬";
+        Text[ hindi ] = "~दाहिना";
     };
     MetricField ED_RIGHT_MARGIN
     {
@@ -522,7 +558,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ ENGLISH ] = "T~op" ;
         Text [ norwegian ] = "T~opp" ;
         Text [ italian ] = "In alto" ;
-        Text [ portuguese_brazilian ] = "T~opo" ;
+        Text [ portuguese_brazilian ] = "~Superior" ;
         Text [ portuguese ] = "~Superior" ;
         Text [ finnish ] = "~Yl�" ;
         Text [ danish ] = "T~op" ;
@@ -534,7 +570,7 @@ TabPage RID_SVXPAGE_PAGE
         Left = TRUE ;
         Text[ chinese_simplified ] = "上(~T)";
         Text[ russian ] = "������";
-        Text[ polish ] = "~Na g�rze";
+        Text[ polish ] = "U ~g�ry";
         Text[ japanese ] = "上(~T)";
         Text[ chinese_traditional ] = "向上(~T)";
         Text[ arabic ] = "����";
@@ -544,6 +580,9 @@ TabPage RID_SVXPAGE_PAGE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Part ~superior";
         Text[ thai ] = "~บน";
+        Text[ czech ] = "Nahoře";
+        Text[ hebrew ] = "‮עליון‬";
+        Text[ hindi ] = "~ऊपर";
     };
     MetricField ED_TOP_MARGIN
     {
@@ -567,7 +606,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ ENGLISH ] = "~Bottom" ;
         Text [ norwegian ] = "~Bottom" ;
         Text [ italian ] = "In basso" ;
-        Text [ portuguese_brazilian ] = "~Base" ;
+        Text [ portuguese_brazilian ] = "~Inferior" ;
         Text [ portuguese ] = "~Inferior" ;
         Text [ finnish ] = "~Ala" ;
         Text [ danish ] = "Bund" ;
@@ -579,7 +618,7 @@ TabPage RID_SVXPAGE_PAGE
         Left = TRUE ;
         Text[ chinese_simplified ] = "下(~B)";
         Text[ russian ] = "�����";
-        Text[ polish ] = "~Na dole";
+        Text[ polish ] = "~U do�u";
         Text[ japanese ] = "下(~B)";
         Text[ chinese_traditional ] = "向下(~B)";
         Text[ arabic ] = "����";
@@ -589,6 +628,9 @@ TabPage RID_SVXPAGE_PAGE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Part ~inferior";
         Text[ thai ] = "~ล่าง";
+        Text[ czech ] = "Dole";
+        Text[ hebrew ] = "‮תחתון‬";
+        Text[ hindi ] = "~तल";
     };
     MetricField ED_BOTTOM_MARGIN
     {
@@ -628,15 +670,18 @@ TabPage RID_SVXPAGE_PAGE
         Text[ danish ] = "Layoutindstillinger";
         Text[ swedish ] = "Layoutinst�llningar";
         Text[ polish ] = "Ustawienia uk�adu";
-        Text[ portuguese_brazilian ] = "Layout settings";
+        Text[ portuguese_brazilian ] = "Configura��es do layout";
         Text[ japanese ] = "レイアウト設定";
         Text[ korean ] = "레이아웃 설정";
         Text[ chinese_simplified ] = "设定版式";
         Text[ chinese_traditional ] = "設定版式";
-        Text[ turkish ] = "Layout settings";
+        Text[ turkish ] = "Sayfa D�zeni ayarlar�";
         Text[ arabic ] = "Layout settings";
         Text[ catalan ] = "Par�metres de disseny";
         Text[ thai ] = "กำหนดเค้าโครง";
+        Text[ czech ] = "Nastavení rozvržení";
+        Text[ hebrew ] = "‮קביעות פריסה‬";
+        Text[ hindi ] = "अभिन्यास निर्धारण";
     };
     FixedText FT_PAGELAYOUT
     {
@@ -646,7 +691,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ ENGLISH ] = "Page la~yout" ;
         Text [ norwegian ] = "Side oppsett" ;
         Text [ italian ] = "Layout di pagina" ;
-        Text [ portuguese_brazilian ] = "Layout da p?gina" ;
+        Text [ portuguese_brazilian ] = "Layout da p�gina" ;
         Text [ portuguese ] = "~Configurar p�gina" ;
         Text [ finnish ] = "Sivun asettelu" ;
         Text [ danish ] = "~Sidelayout" ;
@@ -657,7 +702,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ english_us ] = "Page layout" ;
         Text[ chinese_simplified ] = "页面版式";
         Text[ russian ] = "�������� ��������";
-        Text[ polish ] = "Uk�ad strony";
+        Text[ polish ] = "U~k�ad strony";
         Text[ japanese ] = "ページレイアウト";
         Text[ chinese_traditional ] = "頁面版式";
         Text[ arabic ] = "����� ������";
@@ -667,6 +712,9 @@ TabPage RID_SVXPAGE_PAGE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Disseny de p�gina";
         Text[ thai ] = "เค้าโครงหน้า";
+        Text[ czech ] = "Vzhled stránky";
+        Text[ hebrew ] = "‮פריסת הדף‬";
+        Text[ hindi ] = "पृष्ठ अभिन्यास";
     };
     ListBox LB_LAYOUT
     {
@@ -704,10 +752,10 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Alle" ; Default ; > ;
-            < "Gespiegelt" ; Default ; > ;
-            < "Rechts" ; Default ; > ;
-            < "A Direita" ; Default ; > ;
+            < "Direita e esquerda" ; Default ; > ;
+            < "Refletido" ; Default ; > ;
+            < "Somente � direita" ; Default ; > ;
+            < "Somente � esquerda" ; Default ; > ;
         };
         StringList [ portuguese ] =
         {
@@ -823,10 +871,10 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ turkish ] =
         {
-            < "T�m�" ; Default ; > ;
+            < "Sa� ve Sol" ; Default ; > ;
             < "Yans�t" ; Default ; > ;
-            < "Sa�" ; Default ; > ;
-            < "Sol" ; Default ; > ;
+            < "Sadece Sa�" ; Default ; > ;
+            < "Sadece Sol" ; Default ; > ;
         };
         StringList [ language_user1 ] =
         {
@@ -849,6 +897,27 @@ TabPage RID_SVXPAGE_PAGE
         < "ขวาเท่านั้น" ; Default ; > ;
         < "ซ้ายเท่านั้น" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Vpravo a vlevo" ; Default ; > ;
+        < "Zrcadleně" ; Default ; > ;
+            < "Pouze vpravo" ; Default ; > ;
+            < "Pouze vlevo" ; Default ; > ;
+        };
+    StringList [ hebrew ] =
+    {
+         < "‮ימין ושמאל‬" ; Default ; > ;
+        < "‮הפוך‬" ; Default ; > ;
+            < "‮רק ימין‬" ; Default ; > ;
+            < "‮רק שמאל‬" ; Default ; > ;
+        };
+    StringList [ hindi ] =
+    {
+         < "दाहिना और बायाँ" ; Default ; > ;
+        < "प्रतिबिम्बित" ; Default ; > ;
+            < "केवल दाहिना" ; Default ; > ;
+            < "केवल बायाँ" ; Default ; > ;
+        };
     };
     FixedText FT_NUMBER_FORMAT
     {
@@ -866,17 +935,20 @@ TabPage RID_SVXPAGE_PAGE
         Text[ italian ] = "Formato";
         Text[ danish ] = "For~mat";
         Text[ swedish ] = "For~mat";
-        Text[ polish ] = "For~mat";
-        Text[ portuguese_brazilian ] = "For~mat";
+        Text[ polish ] = "Form~at";
+        Text[ portuguese_brazilian ] = "For~mato";
         Text[ japanese ] = "番号付け(~M)";
         Text[ korean ] = "번호 매기기(~M)";
         Text[ chinese_simplified ] = "格式(~M)";
         Text[ chinese_traditional ] = "格式(~M)";
-        Text[ turkish ] = "For~mats�z";
+        Text[ turkish ] = "Format";
         Text[ arabic ] = "�������";
         Text[ catalan ] = "For~mat";
         Text[ finnish ] = "~Numerointitapa";
         Text[ thai ] = "รูปแ~บบ";
+        Text[ czech ] = "Formát";
+        Text[ hebrew ] = "‮צורה‬";
+        Text[ hindi ] = "रच~ना";
     };
     ListBox LB_NUMBER_FORMAT
     {
@@ -1026,7 +1098,7 @@ TabPage RID_SVXPAGE_PAGE
             < "I, II, III, ..." ; Default ; > ;
             < "i, ii, iii, ..." ; Default ; > ;
             < "1, 2, 3, ..." ; Default ; > ;
-            < "Bez" ; Default ; > ;
+            < "Brak" ; Default ; > ;
         };
         StringList [ japanese ] =
         {
@@ -1109,6 +1181,33 @@ TabPage RID_SVXPAGE_PAGE
         < "1, 2, 3, ..." ; Default ; > ;
         < "ไม่มี" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "A, B, C, ..." ; Default ; > ;
+        < "a, b, c, ..." ; Default ; > ;
+            < "I, II, III, ..." ; Default ; > ;
+            < "i, ii, iii, ..." ; Default ; > ;
+            < "1, 2, 3, ..." ; Default ; > ;
+            < "Žádný" ; Default ; > ;
+        };
+    StringList [ hebrew ] =
+    {
+         < "‮A, B, C, ...‬" ; Default ; > ;
+        < "‮a, b, c, ...‬" ; Default ; > ;
+            < "‮I, II, III, ...‬" ; Default ; > ;
+            < "‮i, ii, iii, ...‬" ; Default ; > ;
+            < "‮1, 2, 3, ...‬" ; Default ; > ;
+            < "‮ללא‬" ; Default ; > ;
+        };
+    StringList [ hindi ] =
+    {
+         < "A, B, C, ..." ; Default ; > ;
+        < "a, b, c, ..." ; Default ; > ;
+            < "I, II, III, ..." ; Default ; > ;
+            < "i, ii, iii, ..." ; Default ; > ;
+            < "1, 2, 3, ..." ; Default ; > ;
+            < "कोई नहीं" ; Default ; > ;
+        };
     };
     FixedText FT_TBL_ALIGN
     {
@@ -1129,15 +1228,18 @@ TabPage RID_SVXPAGE_PAGE
         Text[ danish ] = "Tabeljustering";
         Text[ swedish ] = "Tabelljustering";
         Text[ polish ] = "Wyr�wnanie tabeli";
-        Text[ portuguese_brazilian ] = "Table alignment";
+        Text[ portuguese_brazilian ] = "Alinhamento da tabela";
         Text[ japanese ] = "表の配置";
         Text[ korean ] = "표 맞춤";
         Text[ chinese_simplified ] = "对齐表格";
         Text[ chinese_traditional ] = "表格對齊";
-        Text[ turkish ] = "Table alignment";
+        Text[ turkish ] = "Tablo hizalama";
         Text[ arabic ] = "Table alignment";
         Text[ catalan ] = "Alineament de la taula";
         Text[ thai ] = "จัดตำแหน่งตาราง";
+        Text[ czech ] = "Zarovnání tabulky";
+        Text[ hebrew ] = "‮יישור טבלאות‬";
+        Text[ hindi ] = "सारणी पंक्तिकरण";
     };
     CheckBox CB_HORZ
     {
@@ -1159,16 +1261,19 @@ TabPage RID_SVXPAGE_PAGE
         Text [ english_us ] = "Hori~zontal" ;
         Text[ chinese_simplified ] = "水平方向(~Z)";
         Text[ russian ] = "�������������";
-        Text[ polish ] = "Poziomo";
+        Text[ polish ] = "Poz~iomo";
         Text[ japanese ] = "横中央(~Z)";
         Text[ chinese_traditional ] = "水平方向(~Z)";
         Text[ arabic ] = "����";
         Text[ greek ] = "���������";
         Text[ korean ] = "가로(~Z)";
-        Text[ turkish ] = "Ya~tay";
+        Text[ turkish ] = "Yatay";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Horit~zontal";
         Text[ thai ] = "แนวน~อน";
+        Text[ czech ] = "Vodorovné";
+        Text[ hebrew ] = "‮אופקי‬";
+        Text[ hindi ] = "सम~तल";
     };
     CheckBox CB_VERT
     {
@@ -1190,16 +1295,19 @@ TabPage RID_SVXPAGE_PAGE
         Text [ english_us ] = "~Vertical" ;
         Text[ chinese_simplified ] = "垂直方向(~V)";
         Text[ russian ] = "�����������";
-        Text[ polish ] = "Pionowo";
+        Text[ polish ] = "Pio~nowo";
         Text[ japanese ] = "縦中央(~V)";
         Text[ chinese_traditional ] = "垂直方向(~V)";
         Text[ arabic ] = "����";
         Text[ greek ] = "����������";
         Text[ korean ] = "세로(~V)";
-        Text[ turkish ] = "~Dikey";
+        Text[ turkish ] = "Dikey";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Vertical";
         Text[ thai ] = "แนว~ตั้ง";
+        Text[ czech ] = "Svislé";
+        Text[ hebrew ] = "‮אנכי‬";
+        Text[ hindi ] = "~लम्ब";
     };
     CheckBox CB_ADAPT
     {
@@ -1220,16 +1328,19 @@ TabPage RID_SVXPAGE_PAGE
         Text[ italian ] = "Adatta l'oggetto al formato carta";
         Text[ danish ] = "Tilpas objekt til p~apirformat";
         Text[ swedish ] = "~Anpassa objekt till pappersformat";
-        Text[ polish ] = "Dopasuj obiekt do formatu papieru";
-        Text[ portuguese_brazilian ] = "~Fit to size";
+        Text[ polish ] = "~Dopasuj obiekt do formatu papieru";
+        Text[ portuguese_brazilian ] = "~Ajustar o objeto ao formato do papel";
         Text[ japanese ] = "オブジェクトを用紙サイズに合わせる(~F)";
         Text[ korean ] = "용지 형식에 개체 맞춤(~F)";
         Text[ chinese_simplified ] = "对象按页面格式作调整(~F)";
         Text[ chinese_traditional ] = "物件使用頁面格式(~F)";
-        Text[ turkish ] = "~Boya g�re ayarla";
+        Text[ turkish ] = "Sayfa format�na g�re nesneyi uydur";
         Text[ arabic ] = "������ �����";
         Text[ catalan ] = "~Ajusta a la mida";
         Text[ thai ] = "~จัดวัตถุพอดีกับรูปแบบหน้า";
+        Text[ czech ] = "Přizpůsobit objekt formátu papíru";
+        Text[ hebrew ] = "‮התאמת העצם למידות הדף‬";
+        Text[ hindi ] = "वस्तु को कागज रचना केलिए ~योग्य बनाओ";
     };
     /* Registerhaltigkeit (fuer SW) */
     CheckBox CB_REGISTER
@@ -1246,21 +1357,24 @@ TabPage RID_SVXPAGE_PAGE
         Text [ english_us ] = "Register-true" ;
         Text [ swedish ] = "~Register" ;
         Text [ danish ] = "Hold re~gister" ;
-        Text [ portuguese_brazilian ] = "Einsch~alten" ;
+        Text [ portuguese_brazilian ] = "Registro de Conformidade" ;
         Text [ portuguese ] = "~Registo" ;
         Text[ chinese_simplified ] = "正反页的行距相等";
         Text[ russian ] = "��������";
-        Text[ polish ] = "Jednakowa wysoko�� wierszy";
+        Text[ polish ] = "~Jednakowa wysoko�� wierszy";
         Text[ japanese ] = "印刷見当を合わせる";
         Text[ chinese_traditional ] = "正反頁的行距相等";
         Text[ arabic ] = "�����";
         Text[ greek ] = "~������������";
         Text[ korean ] = "인쇄할 때 가늠 맞춤 ";
-        Text[ turkish ] = "�al�~�t�r";
+        Text[ turkish ] = "�al��t�r";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Activa";
         Text[ finnish ] = "Rivirekisteri";
         Text[ thai ] = "ลงทะเบียน-จริง";
+        Text[ czech ] = "Registr";
+        Text[ hebrew ] = "‮יישור שורות טבלה‬";
+        Text[ hindi ] = "रजिस्टर-सही";
     };
     FixedText FT_REGISTER
     {
@@ -1276,21 +1390,24 @@ TabPage RID_SVXPAGE_PAGE
         Text [ swedish ] = "Referenss~tyckeformatmall" ;
         Text [ danish ] = "Reference-afsnitstypografi" ;
         Hide = TRUE ;
-        Text [ portuguese_brazilian ] = "Referenzabsa~tzvorlage" ;
+        Text [ portuguese_brazilian ] = "E~stilo de Refer�ncia" ;
         Text [ portuguese ] = "Estilo da refer�ncia" ;
         Text[ chinese_simplified ] = "说明文段落样式(~S)";
         Text[ russian ] = "����� ������";
-        Text[ polish ] = "Szablon akapitu odwo�ania";
+        Text[ polish ] = "St~yl odwo�ania";
         Text[ japanese ] = "適用段落スタイル(~S)";
         Text[ chinese_traditional ] = "參照文段落樣式(~S)";
         Text[ arabic ] = "��� ���� �����";
         Text[ greek ] = "���~���� ���������� ��������";
         Text[ korean ] = "참조 스타일(~S)";
-        Text[ turkish ] = "Referans par~agraf bi�imi";
+        Text[ turkish ] = "Referans paragraf bi�imi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estil de ~ref�rencia";
         Text[ finnish ] = "Viitteen ~tyyli";
         Text[ thai ] = "~ลักษณะการอ้างอิง";
+        Text[ czech ] = "Styl odkazu";
+        Text[ hebrew ] = "‮סגנון יחוס‬";
+        Text[ hindi ] = "रेफ़रेन्स ~शैली";
     };
     ListBox LB_REGISTER
     {
@@ -1313,21 +1430,24 @@ TabPage RID_SVXPAGE_PAGE
         Text [ dutch ] = "Bi~nnen" ;
         Text [ swedish ] = "I~nre" ;
         Text [ danish ] = "Indre" ;
-        Text [ portuguese_brazilian ] = "I~nnen" ;
+        Text [ portuguese_brazilian ] = "I~nterior" ;
         Text [ portuguese ] = "I~nterior" ;
         Text[ chinese_simplified ] = "向内(~N)";
         Text[ russian ] = "������";
-        Text[ polish ] = "Wewn�trz";
+        Text[ polish ] = "~Wewn�trz";
         Text[ japanese ] = "内側(~N)";
         Text[ chinese_traditional ] = "向內(~N)";
         Text[ arabic ] = "����";
         Text[ greek ] = "���������";
         Text[ korean ] = "내부(~N)";
-        Text[ turkish ] = "�~�";
+        Text[ turkish ] = "��";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "I~nterior";
         Text[ finnish ] = "~Sisempi";
         Text[ thai ] = "ภายใ~น";
+        Text[ czech ] = "Vnitřní";
+        Text[ hebrew ] = "‮פנימי‬";
+        Text[ hindi ] = "भी~तरी";
     };
     String STR_OUTSIDE
     {
@@ -1340,7 +1460,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ dutch ] = "B~uiten" ;
         Text [ swedish ] = "~Yttre" ;
         Text [ danish ] = "Ydre" ;
-        Text [ portuguese_brazilian ] = "Au~?en" ;
+        Text [ portuguese_brazilian ] = "E~xterior" ;
         Text [ portuguese ] = "E~xterior" ;
         Text[ chinese_simplified ] = "向外(~U)";
         Text[ russian ] = "�������";
@@ -1350,11 +1470,14 @@ TabPage RID_SVXPAGE_PAGE
         Text[ arabic ] = "����";
         Text[ greek ] = "���������";
         Text[ korean ] = "외부(~U)";
-        Text[ turkish ] = "D~��";
+        Text[ turkish ] = "D��";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "E~xterior";
         Text[ finnish ] = "~Ulompi";
         Text[ thai ] = "ภายน~อก";
+        Text[ czech ] = "Vnější";
+        Text[ hebrew ] = "‮חיצוני‬";
+        Text[ hindi ] = "बा~हरी";
     };
     String STR_QUERY_PRINTRANGE
     {
@@ -1369,19 +1492,22 @@ TabPage RID_SVXPAGE_PAGE
         Text[ italian ] = "Le impostazioni per i margini sono al di fuori dell'area di stampa.\n\nVolete applicare queste impostazioni lo stesso?";
         Text[ danish ] = "Dine margenindstillinger ligger udenfor udskriftsomr�det.\n\nVil du overtage disse indstillinger alligevel?";
         Text[ swedish ] = "Dina inst�llningar f�r mariginalerna ligger utanf�r utskriftsomr�det.\n\nVill du �nd� anv�nda inst�llningarna?";
-        Text[ polish ] = "Twoje ustawienia kraw�dzi znajduj� si� poza obszarem wydruku.\n\nCzy chcesz mimo to zastosowa� te ustawienia?";
-        Text[ portuguese_brazilian ] = "Ihre Einstellungen f? die R?nder liegen au?erhalb des Druckbereichs.\n\nWollen Sie trotzdem diese Einstellungen ?ernehmen?";
+        Text[ polish ] = "Ustawienia margines�w znajduj� si� poza obszarem wydruku.\n\nCzy mimo to zastosowa� te ustawienia?";
+        Text[ portuguese_brazilian ] = "As defini��es das margens encontram-se fora da �rea de impress�o.\n\nDeseja aplicar as configura��es mesmo assim?";
         Text[ japanese ] = "設定した余白は印刷範囲外です。\n\nそれでもこの設定を適用しますか。";
         Text[ chinese_simplified ] = "您的页边设定有误，页边不在打印范围之内。\n\n您还是要接受这个设定吗？";
         Text[ chinese_traditional ] = "您的頁邊設定有誤﹐頁邊不在列印範圍之內。\n\n您還是要接受這個設定？";
         Text[ arabic ] = "��� ������� ������� ���� ���� �������.\n\n�� ���� ����� ��� ��������� ��� ����� �� ��߿";
         Text[ greek ] = "�� ��������� ��� ���������� ����� ����� ��� �������� ���������.\n\n������ �� ����������� �� ��������� ������ ����;";
         Text[ korean ] = "여백 설정이 인쇄 범위를 벗어났습니다.\n\n그래도 이 설정을 적용하시겠습니까?";
-        Text[ turkish ] = "Marj ayarlar�n�z, yazd�rma aral���n�n d���nda.\n\nBu ayarlar� yine de uygulamak istiyor musunuz?";
+        Text[ turkish ] = "Sayfa kenar� ayarlar�n�z, yazd�rma aral���n�n d���nda.\n\nBu ayarlar� yine de uygulamak istiyor musunuz?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Amb aquesta definici�, els marges queden fora de l'�rea d'impressi�.\n\nVoleu aplicar aquesta definici� de marges?";
         Text[ finnish ] = "Reunukset ovat tulostusalueen ulkopuolella.\n\nHaluatko kuitenkin ottaa n�m� asetukset k�ytt��n?";
         Text[ thai ] = "กำหนดระยะขอบออกมาจากช่วงการพิมพ์\n\nคุณยังต้องการใช้การกำหนดเหล่านี้อยู่หรือไม่?";
+        Text[ czech ] = "Nastavené okraje jsou mimo tiskovou oblast.\n\nOpravdu chcete použít tato nastavení?";
+        Text[ hebrew ] = "‮השוליים מחוץ לגודל המדפסת.\n\nהאם אכן ליישם קביעות אלו?‬";
+        Text[ hindi ] = "पृष्ठ-प्रान्त का निर्धारण मुद्रण की फैलाव से बाहर है ।\n\nआप फ़िर भी इन निर्धारण को लागू करना चाहते है?";
     };
 };
  // App-spezifische Res
@@ -1391,7 +1517,7 @@ String RID_SVXSTR_WRITER_PAGE
     Text [ ENGLISH ] = "Next Page" ;
     Text [ norwegian ] = "Neste side" ;
     Text [ italian ] = "Pagina successiva" ;
-    Text [ portuguese_brazilian ] = "Pr?ima P?gina" ;
+    Text [ portuguese_brazilian ] = "P�gina de continua��o" ;
     Text [ portuguese ] = "P�gina seguinte" ;
     Text [ finnish ] = "Jatkosivu" ;
     Text [ danish ] = "N�ste side" ;
@@ -1412,6 +1538,9 @@ String RID_SVXSTR_WRITER_PAGE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "P�gina seg�ent";
     Text[ thai ] = "หน้าต่อเนื่อง";
+    Text[ czech ] = "Následující stránka";
+    Text[ hebrew ] = "‮דף המשך‬";
+    Text[ hindi ] = "गत पृष्ठ से आगे की पृष्ठ";
 };
  // Papierformate
 String RID_SVXSTR_PAPER_A0
@@ -1464,7 +1593,7 @@ String RID_SVXSTR_PAPER_USER
     Text [ English ] = "Custom" ;
     Text [ norwegian ] = "Tilpasse" ;
     Text [ italian ] = "Personalizzata" ;
-    Text [ portuguese_brazilian ] = "Pessoal" ;
+    Text [ portuguese_brazilian ] = "Definido pelo Usu�rio" ;
     Text [ portuguese ] = "Personalizar" ;
     Text [ finnish ] = "K�ytt�j�n m��ritt�m�" ;
     Text [ danish ] = "Bruger" ;
@@ -1481,10 +1610,13 @@ String RID_SVXSTR_PAPER_USER
     Text[ arabic ] = "��������";
     Text[ greek ] = "�������";
     Text[ korean ] = "사용자 정의";
-    Text[ turkish ] = "Kullan�c�";
+    Text[ turkish ] = "Kullan�c� Tan�ml�";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Definit per l'usuari";
     Text[ thai ] = "ระบุผู้ใช้";
+    Text[ czech ] = "Uživatelsky definované";
+    Text[ hebrew ] = "‮שדות בהגדרה אישית‬";
+    Text[ hindi ] = "उपभोक्ता से परिभाषित";
 };
 String RID_SVXSTR_PAPER_B6
 {
@@ -1541,6 +1673,9 @@ String RID_SVXSTR_PAPER_SCREEN
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Pantalla";
     Text[ thai ] = "จอภาพ";
+    Text[ czech ] = "Obrazovka";
+    Text[ hebrew ] = "‮מסך‬";
+    Text[ hindi ] = "परदा";
 };
 String RID_SVXSTR_PAPER_A
 {
@@ -2045,60 +2180,60 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
              < "A3" ; PAPERSIZE_A3 ; > ;
         < "A4" ; PAPERSIZE_A4 ; > ;
         < "A5" ; PAPERSIZE_A5 ; > ;
-        < "B4" ; PAPERSIZE_B4 ; > ;
-        < "B5" ; PAPERSIZE_B5 ; > ;
-        < "Letter" ; PAPERSIZE_B6 ; > ;
-        < "Legal" ; PAPERSIZE_B4_JIS ; > ;
-        < "Tabloid" ; PAPERSIZE_B5_JIS ; > ;
-        < "U�ytkownik" ; PAPERSIZE_B6_JIS ; > ;
-        < "B6" ; PAPERSIZE_LETTER ; > ;
-        < "C4" ; PAPERSIZE_LEGAL ; > ;
-        < "C5" ; PAPERSIZE_TABLOID ; > ;
-        < "C6" ; PAPERSIZE_USER ; > ;
-        < "C65" ; PAPERSIZE_C4 ; > ;
-        < "DL" ; PAPERSIZE_C5 ; > ;
-        < "Koperta #6?" ; PAPERSIZE_C6 ; > ;
-        < "Koperta Monarch" ; PAPERSIZE_C65 ; > ;
-        < "Koperta #9" ; PAPERSIZE_DL ; > ;
-        < "Koperta #10" ; PAPERSIZE_COM675; > ;
-        < "Koperta #11" ; PAPERSIZE_MONARCH; > ;
-        < "Koperta #12" ; PAPERSIZE_COM9; > ;
-        < "16 kai" ; PAPERSIZE_COM10; > ;
-        < "32 kai" ; PAPERSIZE_COM11; > ;
-        < "Wymiary: 32 kai" ; PAPERSIZE_COM12; > ;
+        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
+        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
+        < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
+        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
+        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
+        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "Letter" ; PAPERSIZE_LETTER ; > ;
+        < "Legal" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "U�ytkownik" ; PAPERSIZE_USER ; > ;
+        < "C4" ; PAPERSIZE_C4 ; > ;
+        < "C5" ; PAPERSIZE_C5 ; > ;
+        < "C6" ; PAPERSIZE_C6 ; > ;
+        < "C65" ; PAPERSIZE_C65 ; > ;
+        < "DL" ; PAPERSIZE_DL ; > ;
+        < "Koperta nr 6" ; PAPERSIZE_COM675; > ;
+        < "Koperta Monarch" ; PAPERSIZE_MONARCH; > ;
+        < "Koperta nr 9" ; PAPERSIZE_COM9; > ;
+        < "Koperta nr 10" ; PAPERSIZE_COM10; > ;
+        < "Koperta nr 11" ; PAPERSIZE_COM11; > ;
+        < "Koperta nr 12" ; PAPERSIZE_COM12; > ;
         < "16 kai" ; PAPERSIZE_KAI16; > ;
         < "32 kai" ; PAPERSIZE_KAI32; > ;
-        < "Wymiary: 32 kai" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 kai large" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ portuguese_brazilian ] =
     {
-             < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
-        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
-        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
-        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
-        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
-        < "Letter 8,5 x 11 in" ; PAPERSIZE_B6 ; > ;
-        < "Legal 8,5 x 14 in" ; PAPERSIZE_B4_JIS ; > ;
-        < "Tabloid" ; PAPERSIZE_B5_JIS ; > ;
-        < "Benutzer" ; PAPERSIZE_B6_JIS ; > ;
-        < "B6 125 x 176 mm" ; PAPERSIZE_LETTER ; > ;
-        < "C4 229 x 324 mm" ; PAPERSIZE_LEGAL ; > ;
-        < "C5 162 x 229 mm" ; PAPERSIZE_TABLOID ; > ;
-        < "C6 114 x 162 mm" ; PAPERSIZE_USER ; > ;
-        < "C65 114 x 227 mmm" ; PAPERSIZE_C4 ; > ;
-        < "DL 110 x 220 mm" ; PAPERSIZE_C5 ; > ;
-        < "Env. #6? 3,625 x 6,5 in" ; PAPERSIZE_C6 ; > ;
-        < "Env. Monarch 3,875 x 7,5 in" ; PAPERSIZE_C65 ; > ;
-        < "Env. #9 3,875 x 8,875 in" ; PAPERSIZE_DL ; > ;
-        < "Env. #10 4,125 x 9,5 in" ; PAPERSIZE_COM675; > ;
-        < "Env. #11 4,5 x 10,375 in" ; PAPERSIZE_MONARCH; > ;
-        < "Env. #12 4,75 x 11 in" ; PAPERSIZE_COM9; > ;
-        < "16 kai 184 x 260 mm" ; PAPERSIZE_COM10; > ;
-        < "32 kai 130 x 184 mm" ; PAPERSIZE_COM11; > ;
-        < "32 kai gro? 140 x 203 mm" ; PAPERSIZE_COM12; > ;
-        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
-        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
-        < "32 kai gro? 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+             < "A3" ; PAPERSIZE_A3 ; > ;
+        < "A4" ; PAPERSIZE_A4 ; > ;
+        < "A5" ; PAPERSIZE_A5 ; > ;
+        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
+        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
+        < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
+        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
+        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
+        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "Carta" ; PAPERSIZE_LETTER ; > ;
+        < "Legal" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabl�ide" ; PAPERSIZE_TABLOID ; > ;
+        < "Do usu�rio" ; PAPERSIZE_USER ; > ;
+        < "C4" ; PAPERSIZE_C4 ; > ;
+        < "C5" ; PAPERSIZE_C5 ; > ;
+        < "C6" ; PAPERSIZE_C6 ; > ;
+        < "C65" ; PAPERSIZE_C65 ; > ;
+        < "DL" ; PAPERSIZE_DL ; > ;
+        < "Env. #6?" ; PAPERSIZE_COM675; > ;
+        < "Env. Monarch" ; PAPERSIZE_MONARCH; > ;
+        < "Env. #9" ; PAPERSIZE_COM9; > ;
+        < "Env. #10" ; PAPERSIZE_COM10; > ;
+        < "Env. #11" ; PAPERSIZE_COM11; > ;
+        < "Env. #12" ; PAPERSIZE_COM12; > ;
+        < "16 kai" ; PAPERSIZE_KAI16; > ;
+        < "32 kai" ; PAPERSIZE_KAI32; > ;
+        < "32 kai grande" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ japanese ] =
     {
@@ -2222,33 +2357,33 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
     };
     ItemList [ turkish ] =
     {
-             < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
-        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
-        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
-        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
-        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
-        < "Letter 8,5 x 11 in" ; PAPERSIZE_B6 ; > ;
-        < "Legal 8,5 x 14 in" ; PAPERSIZE_B4_JIS ; > ;
-        < "Tabloid" ; PAPERSIZE_B5_JIS ; > ;
-        < "Kullan�c�" ; PAPERSIZE_B6_JIS ; > ;
-        < "B6 125 x 176 mm" ; PAPERSIZE_LETTER ; > ;
-        < "C4 229 x 324 mm" ; PAPERSIZE_LEGAL ; > ;
-        < "C5 162 x 229 mm" ; PAPERSIZE_TABLOID ; > ;
-        < "C6 114 x 162 mm" ; PAPERSIZE_USER ; > ;
-        < "C65 114 x 227 mm" ; PAPERSIZE_C4 ; > ;
-        < "DL 110 x 220 mm" ; PAPERSIZE_C5 ; > ;
-        < "Zarf #6� 3,625 x 6,5 in" ; PAPERSIZE_C6 ; > ;
-        < "Zarf Monarch 3,875 x 7,5 in" ; PAPERSIZE_C65 ; > ;
-        < "Zarf #9 3,875 x 8,875 in" ; PAPERSIZE_DL ; > ;
-        < "Zarf #10 4,125 x 9,5 in" ; PAPERSIZE_COM675; > ;
-        < "Zarf #11 4,5 x 10,375 in" ; PAPERSIZE_MONARCH; > ;
-        < "Zarf #12 4,75 x 11 in" ; PAPERSIZE_COM9; > ;
-        < "16 kai 184 x 260 mm" ; PAPERSIZE_COM10; > ;
-        < "32 kai 130 x 184 mm" ; PAPERSIZE_COM11; > ;
-        < "32 kai boyu 140 x 203 mm" ; PAPERSIZE_COM12; > ;
-        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
-        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
-        < "32 kai boyu 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+             < "A3" ; PAPERSIZE_A3 ; > ;
+        < "A4" ; PAPERSIZE_A4 ; > ;
+        < "A5" ; PAPERSIZE_A5 ; > ;
+        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
+        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
+        < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
+        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
+        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
+        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "Mektup" ; PAPERSIZE_LETTER ; > ;
+        < "Legal (�zel ka��t)" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Kullan�c�" ; PAPERSIZE_USER ; > ;
+        < "C4" ; PAPERSIZE_C4 ; > ;
+        < "C5" ; PAPERSIZE_C5 ; > ;
+        < "C6" ; PAPERSIZE_C6 ; > ;
+        < "C65" ; PAPERSIZE_C65 ; > ;
+        < "DL" ; PAPERSIZE_DL ; > ;
+        < "Ort. #6¾" ; PAPERSIZE_COM675; > ;
+        < "Zqarf #11 4,5 x 10,375 in" ; PAPERSIZE_MONARCH; > ;
+        < "Ort. #9" ; PAPERSIZE_COM9; > ;
+        < "Ort. #10" ; PAPERSIZE_COM10; > ;
+        < "Ort. #11" ; PAPERSIZE_COM11; > ;
+        < "Ort. #12" ; PAPERSIZE_COM12; > ;
+        < "16 kai" ; PAPERSIZE_KAI16; > ;
+        < "32 kai" ; PAPERSIZE_KAI32; > ;
+        < "32 kai b�y�k" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ arabic ] =
     {
@@ -2339,6 +2474,96 @@ ItemList [ thai ] =
         < "16 kai" ; PAPERSIZE_KAI16; > ;
         < "32 kai" ; PAPERSIZE_KAI32; > ;
         < "32 kai gro฿" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ czech ] =
+    {
+         < "A3" ; PAPERSIZE_A3 ; > ;
+        < "A4" ; PAPERSIZE_A4 ; > ;
+        < "A5" ; PAPERSIZE_A5 ; > ;
+        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
+        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
+        < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
+        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
+        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
+        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "Letter" ; PAPERSIZE_LETTER ; > ;
+        < "Legal" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Uživatelsky" ; PAPERSIZE_USER ; > ;
+        < "C4" ; PAPERSIZE_C4 ; > ;
+        < "C5" ; PAPERSIZE_C5 ; > ;
+        < "C6" ; PAPERSIZE_C6 ; > ;
+        < "C65" ; PAPERSIZE_C65 ; > ;
+        < "DL" ; PAPERSIZE_DL ; > ;
+        < "Obálka #6¾" ; PAPERSIZE_COM675; > ;
+        < "Obálka Monarch" ; PAPERSIZE_MONARCH; > ;
+        < "Obálka #9" ; PAPERSIZE_COM9; > ;
+        < "Obálka #10" ; PAPERSIZE_COM10; > ;
+        < "Obálka #11" ; PAPERSIZE_COM11; > ;
+        < "Obálka #12" ; PAPERSIZE_COM12; > ;
+        < "16 kai" ; PAPERSIZE_KAI16; > ;
+        < "32 kai" ; PAPERSIZE_KAI32; > ;
+        < "32 kai velké" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ hebrew ] =
+    {
+         < "‮A3‬" ; PAPERSIZE_A3 ; > ;
+        < "‮A4‬" ; PAPERSIZE_A4 ; > ;
+        < "‮A5‬" ; PAPERSIZE_A5 ; > ;
+        < "‮B4 (ISO)‬" ; PAPERSIZE_B4 ; > ;
+        < "‮B5 (ISO)‬" ; PAPERSIZE_B5 ; > ;
+        < "‮B6 (ISO)‬" ; PAPERSIZE_B6 ; > ;
+        < "‮B4 (JIS)‬" ; PAPERSIZE_B4_JIS ; > ;
+        < "‮B5 (JIS)‬" ; PAPERSIZE_B5_JIS ; > ;
+        < "‮B6 (JIS)‬" ; PAPERSIZE_B6_JIS ; > ;
+        < "‮מכתב‬" ; PAPERSIZE_LETTER ; > ;
+        < "‮דף ארוך (Legal)‬" ; PAPERSIZE_LEGAL ; > ;
+        < "‮פוליו‬" ; PAPERSIZE_TABLOID ; > ;
+        < "‮משתמש‬" ; PAPERSIZE_USER ; > ;
+        < "‮C4‬" ; PAPERSIZE_C4 ; > ;
+        < "‮C5‬" ; PAPERSIZE_C5 ; > ;
+        < "‮C6‬" ; PAPERSIZE_C6 ; > ;
+        < "‮C65‬" ; PAPERSIZE_C65 ; > ;
+        < "‮DL‬" ; PAPERSIZE_DL ; > ;
+        < "‮מעטפה #6¾‬" ; PAPERSIZE_COM675; > ;
+        < "‮מעטפת 'מונרך'‬" ; PAPERSIZE_MONARCH; > ;
+        < "‮מעטפה #9‬" ; PAPERSIZE_COM9; > ;
+        < "‮מעטפה #10‬" ; PAPERSIZE_COM10; > ;
+        < "‮מעטפה #11‬" ; PAPERSIZE_COM11; > ;
+        < "‮מעטפה #12‬" ; PAPERSIZE_COM12; > ;
+        < "‮קאי 16‬" ; PAPERSIZE_KAI16; > ;
+        < "‮קאי 32‬" ; PAPERSIZE_KAI32; > ;
+        < "‮קאי גדול 32‬" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ hindi ] =
+    {
+         < "A3" ; PAPERSIZE_A3 ; > ;
+        < "A4" ; PAPERSIZE_A4 ; > ;
+        < "A5" ; PAPERSIZE_A5 ; > ;
+        < "B4" ; PAPERSIZE_B4 ; > ;
+        < "B5" ; PAPERSIZE_B5 ; > ;
+        < "Letter" ; PAPERSIZE_B6 ; > ;
+        < "Legal" ; PAPERSIZE_B4_JIS ; > ;
+        < "Tabloid" ; PAPERSIZE_B5_JIS ; > ;
+        < "उपभोक्ता" ; PAPERSIZE_B6_JIS ; > ;
+        < "B6" ; PAPERSIZE_LETTER ; > ;
+        < "C4" ; PAPERSIZE_LEGAL ; > ;
+        < "C5" ; PAPERSIZE_TABLOID ; > ;
+        < "C6" ; PAPERSIZE_USER ; > ;
+        < "C65" ; PAPERSIZE_C4 ; > ;
+        < "DL" ; PAPERSIZE_C5 ; > ;
+        < "Env. #6ï¾¾" ; PAPERSIZE_C6 ; > ;
+        < "Env. Monarch" ; PAPERSIZE_C65 ; > ;
+        < "Env. #9" ; PAPERSIZE_DL ; > ;
+        < "Env. #10" ; PAPERSIZE_COM675; > ;
+        < "Env. #11" ; PAPERSIZE_MONARCH; > ;
+        < "Env. #12" ; PAPERSIZE_COM9; > ;
+        < "16 kai" ; PAPERSIZE_COM10; > ;
+        < "32 kai" ; PAPERSIZE_COM11; > ;
+        < "32 kai बड़ा" ; PAPERSIZE_COM12; > ;
+        < "16 kai" ; PAPERSIZE_KAI16; > ;
+        < "32 kai" ; PAPERSIZE_KAI32; > ;
+        < "32 kai large" ; PAPERSIZE_KAI32BIG; > ;
     };
     };
 StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
@@ -2757,55 +2982,55 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "A3" ; PAPERSIZE_A3 ; > ;
         < "A4" ; PAPERSIZE_A4 ; > ;
         < "A5" ; PAPERSIZE_A5 ; > ;
-        < "B4" ; PAPERSIZE_B4 ; > ;
-        < "B5" ; PAPERSIZE_B5 ; > ;
-        < "Letter" ; PAPERSIZE_B6 ; > ;
-        < "Legal" ; PAPERSIZE_B4_JIS ; > ;
-        < "Tabloid" ; PAPERSIZE_B5_JIS ; > ;
-        < "U�ytkownik" ; PAPERSIZE_B6_JIS ; > ;
-        < "B6" ; PAPERSIZE_LETTER ; > ;
-        < "C4" ; PAPERSIZE_LEGAL ; > ;
-        < "C5" ; PAPERSIZE_TABLOID ; > ;
-        < "C6" ; PAPERSIZE_USER ; > ;
-        < "C65" ; PAPERSIZE_C4 ; > ;
-        < "DL" ; PAPERSIZE_C5 ; > ;
-        < "Slajd" ; PAPERSIZE_C6 ; > ;
-        < "Ekran" ; PAPERSIZE_C65 ; > ;
-        < "16 kai" ; PAPERSIZE_DL ; > ;
-        < "32 kai" ; PAPERSIZE_DIA ; > ;
-        < "Wymiary: 32 kai" ; PAPERSIZE_SCREEN ; > ;
+        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
+        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
+        < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
+        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
+        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
+        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "Letter" ; PAPERSIZE_LETTER ; > ;
+        < "Legal" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "U�ytkownik" ; PAPERSIZE_USER ; > ;
+        < "C4" ; PAPERSIZE_C4 ; > ;
+        < "C5" ; PAPERSIZE_C5 ; > ;
+        < "C6" ; PAPERSIZE_C6 ; > ;
+        < "C65" ; PAPERSIZE_C65 ; > ;
+        < "DL" ; PAPERSIZE_DL ; > ;
+        < "Slajd" ; PAPERSIZE_DIA ; > ;
+        < "Ekran" ; PAPERSIZE_SCREEN ; > ;
         < "16 kai" ; PAPERSIZE_KAI16; > ;
         < "32 kai" ; PAPERSIZE_KAI32; > ;
-        < "Wymiary: 32 kai" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 kai large" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ portuguese_brazilian ] =
     {
-             < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
-        < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
-        < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
-        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
-        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
-        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
-        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
-        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
-        < "Letter 8,5 x 11 in" ; PAPERSIZE_B6 ; > ;
-        < "Legal 8,5 x 14 in" ; PAPERSIZE_B4_JIS ; > ;
-        < "Tabloid" ; PAPERSIZE_B5_JIS ; > ;
-        < "Benutzer" ; PAPERSIZE_B6_JIS ; > ;
-        < "B6 125 x 176 mm" ; PAPERSIZE_LETTER ; > ;
-        < "C4 229 x 324 mm" ; PAPERSIZE_LEGAL ; > ;
-        < "C5 162 x 229 mm" ; PAPERSIZE_TABLOID ; > ;
-        < "C6 114 x 162 mm" ; PAPERSIZE_USER ; > ;
-        < "C65 114 x 227 mmm" ; PAPERSIZE_C4 ; > ;
-        < "DL 110 x 220 mm" ; PAPERSIZE_C5 ; > ;
-        < "Dia" ; PAPERSIZE_C6 ; > ;
-        < "Bildschirm" ; PAPERSIZE_C65 ; > ;
-        < "16 kai 184 x 260 mm" ; PAPERSIZE_DL ; > ;
-        < "32 kai 130 x 184 mm" ; PAPERSIZE_DIA ; > ;
-        < "32 kai gro? 140 x 203 mm" ; PAPERSIZE_SCREEN ; > ;
-        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
-        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
-        < "32 kai gro? 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+             < "A0" ; PAPERSIZE_A0 ; > ;
+        < "A1" ; PAPERSIZE_A1 ; > ;
+        < "A2" ; PAPERSIZE_A2 ; > ;
+        < "A3" ; PAPERSIZE_A3 ; > ;
+        < "A4" ; PAPERSIZE_A4 ; > ;
+        < "A5" ; PAPERSIZE_A5 ; > ;
+        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
+        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
+        < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
+        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
+        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
+        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "Carta" ; PAPERSIZE_LETTER ; > ;
+        < "Legal" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabl�ide" ; PAPERSIZE_TABLOID ; > ;
+        < "Do usu�rio" ; PAPERSIZE_USER ; > ;
+        < "C4" ; PAPERSIZE_C4 ; > ;
+        < "C5" ; PAPERSIZE_C5 ; > ;
+        < "C6" ; PAPERSIZE_C6 ; > ;
+        < "C65" ; PAPERSIZE_C65 ; > ;
+        < "DL" ; PAPERSIZE_DL ; > ;
+        < "Slide" ; PAPERSIZE_DIA ; > ;
+        < "Tela" ; PAPERSIZE_SCREEN ; > ;
+        < "16 kai" ; PAPERSIZE_KAI16; > ;
+        < "32 kai" ; PAPERSIZE_KAI32; > ;
+        < "32 kai grande" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ japanese ] =
     {
@@ -2925,32 +3150,32 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
     };
     ItemList [ turkish ] =
     {
-             < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
-        < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
-        < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
-        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
-        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
-        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
-        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
-        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
-        < "Letter 8,5 x 11 in" ; PAPERSIZE_B6 ; > ;
-        < "Legal 8,5 x 14 in" ; PAPERSIZE_B4_JIS ; > ;
-        < "Tabloid" ; PAPERSIZE_B5_JIS ; > ;
-        < "Kullan�c�" ; PAPERSIZE_B6_JIS ; > ;
-        < "B6 125 x 176 mm" ; PAPERSIZE_LETTER ; > ;
-        < "C4 229 x 324 mm" ; PAPERSIZE_LEGAL ; > ;
-        < "C5 162 x 229 mm" ; PAPERSIZE_TABLOID ; > ;
-        < "C6 114 x 162 mm" ; PAPERSIZE_USER ; > ;
-        < "C65 114 x 227 mm" ; PAPERSIZE_C4 ; > ;
-        < "DL 110 x 220 mm" ; PAPERSIZE_C5 ; > ;
-        < "Slayt" ; PAPERSIZE_C6 ; > ;
-        < "Ekran" ; PAPERSIZE_C65 ; > ;
-        < "16 kai 184 x 260 mm" ; PAPERSIZE_DL ; > ;
-        < "32 kai 130 x 184 mm" ; PAPERSIZE_DIA ; > ;
-        < "32 kai boyu 140 x 203 mm" ; PAPERSIZE_SCREEN ; > ;
-        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
-        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
-        < "32 kai boyu 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+             < "A0" ; PAPERSIZE_A0 ; > ;
+        < "A1" ; PAPERSIZE_A1 ; > ;
+        < "A2" ; PAPERSIZE_A2 ; > ;
+        < "A3" ; PAPERSIZE_A3 ; > ;
+        < "A4" ; PAPERSIZE_A4 ; > ;
+        < "A5" ; PAPERSIZE_A5 ; > ;
+        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
+        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
+        < "Mektup 8,5 x 11 in�" ; PAPERSIZE_B6 ; > ;
+        < "Mektup 8,5 x 14 in�" ; PAPERSIZE_B4_JIS ; > ;
+        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
+        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "Mektup" ; PAPERSIZE_LETTER ; > ;
+        < "Legal (�zel ka��t)" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Kullan�c�" ; PAPERSIZE_USER ; > ;
+        < "C4" ; PAPERSIZE_C4 ; > ;
+        < "C5" ; PAPERSIZE_C5 ; > ;
+        < "C6" ; PAPERSIZE_C6 ; > ;
+        < "C65" ; PAPERSIZE_C65 ; > ;
+        < "DL" ; PAPERSIZE_DL ; > ;
+        < "Saydam" ; PAPERSIZE_DIA ; > ;
+        < "Ekran" ; PAPERSIZE_SCREEN ; > ;
+        < "16 kai" ; PAPERSIZE_KAI16; > ;
+        < "32 kai" ; PAPERSIZE_KAI32; > ;
+        < "32 kai b�y�k" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ arabic ] =
     {
@@ -3039,6 +3264,48 @@ ItemList [ thai ] =
         < "32 kai" ; PAPERSIZE_KAI32; > ;
         < "32 kai ใหญ่" ; PAPERSIZE_KAI32BIG; > ;
     };
+    ItemList [ czech ] =
+    {
+         < "A0" ; PAPERSIZE_A0 ; > ;
+        < "A1" ; PAPERSIZE_A1 ; > ;
+        < "A2" ; PAPERSIZE_A2 ; > ;
+        < "A3" ; PAPERSIZE_A3 ; > ;
+        < "A4" ; PAPERSIZE_A4 ; > ;
+        < "A5" ; PAPERSIZE_A5 ; > ;
+        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
+        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
+        < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
+        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
+        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
+    };
+    ItemList [ hebrew ] =
+    {
+         < "‮A0‬" ; PAPERSIZE_A0 ; > ;
+        < "‮A1‬" ; PAPERSIZE_A1 ; > ;
+        < "‮A2‬" ; PAPERSIZE_A2 ; > ;
+        < "‮A3‬" ; PAPERSIZE_A3 ; > ;
+        < "‮A4‬" ; PAPERSIZE_A4 ; > ;
+        < "‮A5‬" ; PAPERSIZE_A5 ; > ;
+        < "‮B4 (ISO)‬" ; PAPERSIZE_B4 ; > ;
+        < "‮B5 (ISO)‬" ; PAPERSIZE_B5 ; > ;
+        < "‮B6 (ISO)‬" ; PAPERSIZE_B6 ; > ;
+        < "‮B4 (JIS)‬" ; PAPERSIZE_B4_JIS ; > ;
+        < "‮B5 (JIS)‬" ; PAPERSIZE_B5_JIS ; > ;
+    };
+    ItemList [ hindi ] =
+    {
+         < "A0" ; PAPERSIZE_A0 ; > ;
+        < "A1" ; PAPERSIZE_A1 ; > ;
+        < "A2" ; PAPERSIZE_A2 ; > ;
+        < "A3" ; PAPERSIZE_A3 ; > ;
+        < "A4" ; PAPERSIZE_A4 ; > ;
+        < "A5" ; PAPERSIZE_A5 ; > ;
+        < "B4" ; PAPERSIZE_B4 ; > ;
+        < "B5" ; PAPERSIZE_B5 ; > ;
+        < "Letter" ; PAPERSIZE_B6 ; > ;
+        < "Legal" ; PAPERSIZE_B4_JIS ; > ;
+        < "Tabloid" ; PAPERSIZE_B5_JIS ; > ;
+    };
     };
 String RID_SVXSTR_PAPERBIN
 {
@@ -3046,7 +3313,7 @@ String RID_SVXSTR_PAPERBIN
     Text [ ENGLISH ] = "Tray" ;
     Text [ norwegian ] = "Skuff" ;
     Text [ italian ] = "Cassetto" ;
-    Text [ portuguese_brazilian ] = "Bandeja" ;
+    Text [ portuguese_brazilian ] = "Bandeja de papel" ;
     Text [ portuguese ] = "Origem do papel" ;
     Text [ finnish ] = "Paperilokero" ;
     Text [ danish ] = "Papirkilde" ;
@@ -3067,6 +3334,9 @@ String RID_SVXSTR_PAPERBIN
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Font del paper";
     Text[ thai ] = "ถาดกระดาษ";
+    Text[ czech ] = "Zásobník papíru";
+    Text[ hebrew ] = "‮מגש נייר‬";
+    Text[ hindi ] = "कागज ट्रेए";
 };
 String RID_SVXSTR_PAPERBIN_SETTINGS
 {
@@ -3074,7 +3344,7 @@ String RID_SVXSTR_PAPERBIN_SETTINGS
     Text [ ENGLISH ] = "[From printer settings]" ;
     Text [ english_us ] = "[From printer settings]" ;
     Text[ italian ] = "[Da impostazione stampante]";
-    Text[ portuguese_brazilian ] = "[From printer settings]";
+    Text[ portuguese_brazilian ] = "[das configura��es da impressora]";
     Text[ portuguese ] = "[da configura��o da impressora]";
     Text[ danish ] = "[Fra udskriftsindstillingerne]";
     Text[ french ] = "[D'apr�s les param�tres de l'imprimante]";
@@ -3083,7 +3353,7 @@ String RID_SVXSTR_PAPERBIN_SETTINGS
     Text[ spanish ] = "[De la configuraci�n de impresora]";
     Text[ chinese_simplified ] = "[采用打印机设定]";
     Text[ russian ] = "[�� �������� ��������]";
-    Text[ polish ] = "[Z ustawienia drukarki]";
+    Text[ polish ] = "[Z ustawie� drukarki]";
     Text[ japanese ] = "[プリンタの設定から]";
     Text[ greek ] = "[��� ��������� ��������]";
     Text[ korean ] = "[프린터 설정으로부터]";
@@ -3093,8 +3363,64 @@ String RID_SVXSTR_PAPERBIN_SETTINGS
     Text[ catalan ] = "[De la configuraci� d'impressora]";
     Text[ finnish ] = "[Tulostinasetuksien mukaan]";
     Text[ thai ] = "[จากการกำหนดค่าเครื่องพิมพ์]";
+    Text[ czech ] = "[Z nastavení tiskárny]";
+    Text[ hebrew ] = "‮[מהגדרות מדפסת]‬";
+    Text[ hindi ] = "[मुद्रक निर्धारण से]";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
