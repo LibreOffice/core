@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:38 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1011,9 +1011,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC ||
                      nSlotId == SID_SAVETO || nSlotId == SID_EXPORTDOCASPDF || nSlotId == SID_DIRECTEXPORTDOCASPDF )
                 {
-                    if ( nId == SID_SAVETO )
-                        // used only internally
-                        continue;
                     if ( nId == SID_DOCFRAME )
                         continue;
                     if ( nId == SID_PROGRESS_STATUSBAR_CONTROL )
@@ -1081,6 +1078,12 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_UPDATEDOCMODE )
                         continue;
                     if ( nId == SID_REPAIRPACKAGE )
+                        continue;
+
+                    // used only internally
+                    if ( nId == SID_SAVETO )
+                        continue;
+                    if ( nId == SID_VIEW )
                         continue;
                 }
 
