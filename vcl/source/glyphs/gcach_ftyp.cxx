@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.58 $
- *  last change: $Author: hdu $ $Date: 2001-10-11 15:07:40 $
+ *  $Revision: 1.59 $
+ *  last change: $Author: hdu $ $Date: 2001-10-29 10:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,7 +580,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
 
 bool FreetypeServerFont::TestFont() const
 {
-    return (maFaceFT != NULL) && (maFaceFT->num_glyphs >= 0);
+    return (maFaceFT != NULL) && (maFaceFT->num_glyphs > 0);
 }
 
 // -----------------------------------------------------------------------
