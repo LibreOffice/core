@@ -2,9 +2,9 @@
  *
  *  $RCSfile: delete.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-04 11:15:19 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:27:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,13 +289,21 @@ long SwWrtShell::DelRight(BOOL bDelFrm)
 
         pWasInTblNd = IsCrsrInTbl();
 
-        Push();
         if( SEL_TXT & nSelection && SwCrsrShell::IsSttPara() &&
-            SwCrsrShell::IsEndPara() &&
-            SwCrsrShell::Right(1,CRSR_SKIP_CHARS) )
+            SwCrsrShell::IsEndPara() )
         {
-            const SwTableNode * pCurrTblNd = IsCrsrInTbl();
-            const BOOL bDelFull = pCurrTblNd && pCurrTblNd != pWasInTblNd;
+            // save cursor
+            SwCrsrShell::Push();
+
+            bool bDelFull = false;
+            if ( SwCrsrShell::Right(1,CRSR_SKIP_CHARS) )
+            {
+                const SwTableNode * pCurrTblNd = IsCrsrInTbl();
+                bDelFull = pCurrTblNd && pCurrTblNd != pWasInTblNd;
+            }
+
+            // restore cursor
+            SwCrsrShell::Pop( FALSE );
 
             if( bDelFull )
             {
@@ -304,34 +312,47 @@ long SwWrtShell::DelRight(BOOL bDelFrm)
                 break;
             }
         }
-        Pop(FALSE);
 
-        Push();
         {
             /* #108049# Save the startnode of the current cell */
             const SwStartNode * pSNdOld;
             pSNdOld = GetSwCrsr()->GetNode()->
                 FindTableBoxStartNode();
 
-            if (SwCrsrShell::IsEndPara() &&
-                SwCrsrShell::Right(1, CRSR_SKIP_CHARS))
+            if ( SwCrsrShell::IsEndPara() )
             {
-                if (IsCrsrInTbl() || (pWasInTblNd != IsCrsrInTbl()))
-                {
-                    /* #108049# Save the startnode of the current
-                        cell. May be different to pSNdOld as we have
-                        moved. */
-                    const SwStartNode * pSNdNew = GetSwCrsr()
-                        ->GetNode()->FindTableBoxStartNode();
+                // --> FME 2005-01-28 #i41424# Introduced a couple of
+                // Push()-Pop() pairs here. The reason for this is thet a
+                // Right()-Left() combination does not make sure, that
+                // the cursor will be in its initial state, because there
+                // may be a numbering in front of the next paragraph.
+                SwCrsrShell::Push();
+                // <--
 
-                    /* #108049# Only move instead of deleting if we
-                        have moved to a different cell */
-                    if (pSNdOld != pSNdNew)
-                        break;
+                if ( SwCrsrShell::Right(1, CRSR_SKIP_CHARS) )
+                {
+                    if (IsCrsrInTbl() || (pWasInTblNd != IsCrsrInTbl()))
+                    {
+                        /* #108049# Save the startnode of the current
+                            cell. May be different to pSNdOld as we have
+                            moved. */
+                        const SwStartNode * pSNdNew = GetSwCrsr()
+                            ->GetNode()->FindTableBoxStartNode();
+
+                        /* #108049# Only move instead of deleting if we
+                            have moved to a different cell */
+                        if (pSNdOld != pSNdNew)
+                        {
+                            SwCrsrShell::Pop( TRUE );
+                            break;
+                        }
+                    }
                 }
+
+                // restore cursor
+                SwCrsrShell::Pop( FALSE );
             }
         }
-        Pop(FALSE);
 
         OpenMark();
         SwCrsrShell::Right(1,CRSR_SKIP_CELLS);
