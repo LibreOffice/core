@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:29:52 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,7 @@ Menu RID_LAYERTAB_POPUP
             Text[ korean ] = "°èÃþ »ðÀÔ(~Y)...";
             Text[ turkish ] = "Düzey ekle...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Insertar capa...";
         };
         MenuItem
         {
@@ -318,6 +319,7 @@ Menu RID_LAYERTAB_POPUP
             Text[ korean ] = "°èÃþ ¼öÁ¤(~Y)...";
             Text[ turkish ] = "Düzeyi deðiþtir...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Modificar capa...";
         };
         MenuItem
         {
@@ -347,6 +349,7 @@ Menu RID_LAYERTAB_POPUP
             Text[ korean ] = "°èÃþ »èÁ¦(~L)...";
             Text[ turkish ] = "Düzeyi sil...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Eliminar capa...";
         };
         MN_RENAME_LAYER
     };
