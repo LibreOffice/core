@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:01:58 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1456,7 +1456,7 @@ String SwDoc::GetUniqueSectionName( const String* pChkStr ) const
             }
 
     }
-    __DELETE( nFlagSize ) pSetFlags;
+    delete [] pSetFlags;
     if( pChkStr )
         return *pChkStr;
     return aName += String::CreateFromInt32( ++nNum );
