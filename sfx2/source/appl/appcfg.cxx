@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 13:04:32 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,14 +237,17 @@ SfxEventAsyncer_Impl::~SfxEventAsyncer_Impl()
 
 IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pTimer)
 {
+    SfxObjectShellRef xRef( aHint.GetObjShell() );
     pTimer->Stop();
+#ifdef DBG_UTIL
+    ::rtl::OUString aName = SfxEventConfiguration::GetEventName_Impl( aHint.GetEventId() );
+    ByteString aTmp( "SfxEvent: ");
+    aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
+    DBG_TRACE( aTmp.GetBuffer() );
+#endif
     SFX_APP()->Broadcast( aHint );
-    if ( aHint.GetObjShell() )
-    {
-        SfxObjectShellRef xRef( aHint.GetObjShell() );
-        aHint.GetObjShell()->Broadcast( aHint );
-    }
-
+    if ( xRef.Is() )
+        xRef->Broadcast( aHint );
     delete this;
     return 0L;
 }
@@ -1393,20 +1396,21 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSync
     DBG_ASSERT(pAppData_Impl->pEventConfig,"Keine Events angemeldet!");
 
     SfxObjectShell *pDoc = rEventHint.GetObjShell();
-    if ( pDoc )
-    {
-        if ( pDoc->IsPreview() )
-            return;
-        SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_HIDDEN, sal_False );
-        if ( pItem && pItem->GetValue() )
-            bSynchron = TRUE;
-    }
+    if ( pDoc && ( pDoc->IsPreview() || !pDoc->Get_Impl()->bInitialized ) )
+        return;
 
-    // load on demand
-//  pAppData_Impl->pEventConfig->GetAppEventConfig_Impl();
-
+<<<<<<< appcfg.cxx
     if ( bSynchron )
+=======
+    if ( bSynchron )
+>>>>>>> 1.58.76.1
     {
+#ifdef DBG_UTIL
+        ::rtl::OUString aName = SfxEventConfiguration::GetEventName_Impl( rEventHint.GetEventId() );
+        ByteString aTmp( "SfxEvent: ");
+        aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
+        DBG_TRACE( aTmp.GetBuffer() );
+#endif
         Broadcast(rEventHint);
         if ( pDoc )
             pDoc->Broadcast( rEventHint );
