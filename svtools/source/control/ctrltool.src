@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 18:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ String STR_SVT_FONTMAP_BOTH
     TEXT[ chinese_simplified ] = "ΖΑΔ»ΟΤΚΎΊΝ΄ςΣ΅ΚΉΣΓΝ¬Ò»ΦΦΧΦΜε΅£";
     TEXT[ russian ] = "Δλÿ οεχΰςθ θ βϋβξδΰ νΰ ύκπΰν θροξλόησεςρÿ ξδθν θ ςξς ζε ψπθτς";
     TEXT[ polish ] = "UΏyj tej samej czcionki dla wydruku i ekranu";
-    TEXT[ japanese ] = "σό‚Ζ‰ζ–Κ•\\¦‚Ι‚Ν“―‚¶Μ«έΔ‚Μν—ή‚ªg—p‚³‚κ‚Δ‚Ά‚ά‚·B";
+    TEXT[ japanese ] = "σό‚Ζ‰ζ–Κ•\\¦‚Ι‚Ν“―‚¶Μ«έΔ‚ªg—p‚³‚κ‚ά‚·B";
     TEXT[ chinese_traditional ] = "ΏΓΉυΕγ¥ά©M¦C¦L¨Ο¥Ξ²Ξ¤@ªΊ¦r«¬";
     TEXT[ arabic ] = "Σζέ νΚγ ΗΣΚΞΟΗγ δέΣ ΗαΞΨ ααΨΗΘΪΙ ζΗαΤΗΤΙ.";
     TEXT[ greek ] = "Η γραμματοσειρά αυτή θα χρησιμοποιηθεί για την οθόνη και για τον εκτυπωτή.";
