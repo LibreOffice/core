@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.192 $
+ *  $Revision: 1.193 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:43:37 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 17:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@
 #endif
 #ifndef _SV_HELPWIN_HXX
 #include <helpwin.hxx>
+#endif
+#ifndef _SV_DOCKWIN_HXX
+#include <dockwin.hxx>
 #endif
 #ifndef _SV_MENU_HXX
 #include <menu.hxx>
@@ -946,11 +949,12 @@ void Window::ImplSetFrameParent( const Window* pParent )
     Window* pFrameWindow = ImplGetSVData()->maWinData.mpFirstFrame;
     while( pFrameWindow )
     {
+        // search all frames that are children of this window
+        // and reparent them
         if( ImplIsRealParentPath( pFrameWindow ) )
         {
             DBG_ASSERT( mpFrame != pFrameWindow->mpFrame, "SetFrameParent to own" );
             DBG_ASSERT( mpFrame, "no frame" );
-
             SalFrame* pParentFrame = pParent ? pParent->mpFrame : NULL;
             pFrameWindow->mpFrame->SetParent( pParentFrame );
         }
@@ -1084,6 +1088,31 @@ void Window::ImplCallResize()
 void Window::ImplCallMove()
 {
     mbCallMove = FALSE;
+
+    if( mbFrame )
+    {
+        // update frame position
+        SalFrame *mpParentFrame = NULL;
+        Window *pParent = ImplGetParent();
+        while( pParent )
+        {
+            if( pParent->mpFrame != mpFrame )
+            {
+                mpParentFrame = pParent->mpFrame;
+                break;
+            }
+            pParent = pParent->GetParent();
+        }
+
+        SalFrameGeometry g = mpFrame->GetGeometry();
+        maPos = Point( g.nX, g.nY );
+        if( mpParentFrame )
+        {
+            g = mpParentFrame->GetGeometry();
+            maPos -= Point( g.nX, g.nY );
+        }
+    }
+
     Move();
 
     // Forward physical position to embedded java frame. As stated
@@ -4213,6 +4242,9 @@ Window::~Window()
         if ( ImplIsAccessibleCandidate() && GetAccessibleParentWindow() )
             GetAccessibleParentWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_CHILDDESTROYED, this );
 
+    // remove associated data structures from dockingmanager
+    ImplGetDockingManager()->RemoveWindow( this );
+
     // shutdown drag and drop
     ::com::sun::star::uno::Reference < ::com::sun::star::lang::XComponent > xComponent( mxDNDListenerContainer, ::com::sun::star::uno::UNO_QUERY );
 
@@ -4741,9 +4773,13 @@ void Window::Command( const CommandEvent& rCEvt )
 
 // -----------------------------------------------------------------------
 
-void Window::Tracking( const TrackingEvent& )
+void Window::Tracking( const TrackingEvent& rTEvt )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
+
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
+    if( pWrapper )
+        pWrapper->Tracking( rTEvt );
 }
 
 // -----------------------------------------------------------------------
@@ -4981,6 +5017,66 @@ long Window::Notify( NotifyEvent& rNEvt )
     }
 
     long nRet = FALSE;
+
+    // check for docking window
+    // but do nothing if window is docked and locked
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
+    if( pWrapper && !( !pWrapper->IsFloatingMode() && pWrapper->IsLocked() ) )
+    {
+        if ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
+        {
+            const MouseEvent* pMEvt = rNEvt.GetMouseEvent();
+            BOOL bHit = pWrapper->GetDragArea().IsInside( pMEvt->GetPosPixel() );
+            if ( pMEvt->IsLeft() )
+            {
+                if ( pMEvt->GetClicks() == 2 )
+                {
+                    // double click toggles floating mode
+                    pWrapper->SetFloatingMode( !pWrapper->IsFloatingMode() );
+                    return TRUE;
+                }
+                else if ( pMEvt->GetClicks() == 1 && bHit)
+                {
+                    // allow start docking during mouse move
+                    pWrapper->ImplEnableStartDocking();
+                    return TRUE;
+                }
+            }
+        }
+        else if ( rNEvt.GetType() == EVENT_MOUSEMOVE )
+        {
+            const MouseEvent* pMEvt = rNEvt.GetMouseEvent();
+            BOOL bHit = pWrapper->GetDragArea().IsInside( pMEvt->GetPosPixel() );
+            if ( pMEvt->IsLeft() )
+            {
+                // check if a single click initiated this sequence ( ImplStartDockingEnabled() )
+                // check if window is docked and
+                if( pWrapper->ImplStartDockingEnabled() && !pWrapper->IsFloatingMode() &&
+                    !pWrapper->IsDocking() && bHit )
+                {
+                    Point   aPos = pMEvt->GetPosPixel();
+                    Window* pWindow = rNEvt.GetWindow();
+                    if ( pWindow != this )
+                    {
+                        aPos = pWindow->OutputToScreenPixel( aPos );
+                        aPos = ScreenToOutputPixel( aPos );
+                    }
+                    pWrapper->ImplStartDocking( aPos );
+                }
+                return TRUE;
+            }
+        }
+        else if( rNEvt.GetType() == EVENT_KEYINPUT )
+        {
+            const KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
+            if( rKey.GetCode() == KEY_F10 && rKey.GetModifier() &&
+                rKey.IsShift() && rKey.IsMod1() )
+            {
+                pWrapper->SetFloatingMode( !pWrapper->IsFloatingMode() );
+                return TRUE;
+            }
+        }
+    }
 
     // Dialog-Steuerung
     if ( (GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) == WB_DIALOGCONTROL )
@@ -6612,6 +6708,9 @@ void Window::SetPosSizePixel( long nX, long nY,
 
     if ( pWindow->mbFrame )
     {
+        // Note: if we're positioning a frame, the coordinates are interpreted
+        // as being the top-left corner of the window's client area and NOT
+        // as the position of the border ! (due to limitations of several UNIX window managers)
         long nOldWidth  = pWindow->mnOutWidth;
 
         if ( !(nFlags & WINDOW_POSSIZE_WIDTH) )
@@ -7304,9 +7403,25 @@ void Window::ShowPointer( BOOL bVisible )
 
 // -----------------------------------------------------------------------
 
-ULONG Window::GetCurrentModButtons()
+Window::PointerState Window::GetPointerState()
 {
-    return mpFrame ? mpFrame->GetCurrentModButtons() : 0;
+    PointerState aState;
+    aState.mnState = 0;
+
+    if (mpFrame)
+    {
+        SalFrame::SalPointerState aSalPointerState;
+
+        aSalPointerState = mpFrame->GetPointerState();
+        if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
+        {
+            // --- RTL --- (re-mirror mouse pos at this window)
+            ImplReMirror( aSalPointerState.maPos );
+        }
+        aState.maPos = ImplFrameToOutput( aSalPointerState.maPos );
+        aState.mnState = aSalPointerState.mnState;
+    }
+    return aState;
 }
 
 // -----------------------------------------------------------------------
