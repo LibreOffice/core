@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:10:33 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@
 #endif
 #ifndef _SVTOOLS_LINGUCFG_HXX_
 #include <svtools/lingucfg.hxx>
+#endif
+#ifndef _SVTOOLS_CTLOPTIONS_HXX
+#include <svtools/ctloptions.hxx>
 #endif
 #ifndef _SVX_ADRITEM_HXX //autogen
 #include <svx/adritem.hxx>
@@ -1032,12 +1035,13 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         ULONG nHintId = ((SfxSimpleHint&)rHint).GetId();
         if(SFX_HINT_COLORS_CHANGED == nHintId ||
-            SFX_HINT_ACCESSIBILITY_CHANGED == nHintId)
+            SFX_HINT_ACCESSIBILITY_CHANGED == nHintId ||
+                SFX_HINT_CTL_SETTINGS_CHANGED == nHintId)
         {
             sal_Bool bAccessibility = sal_False;
             if(SFX_HINT_COLORS_CHANGED == nHintId)
                 SwViewOption::ApplyColorConfigValues(*pColorConfig);
-            else
+            else if(SFX_HINT_ACCESSIBILITY_CHANGED == nHintId)
                 bAccessibility = sal_True;
 
             //invalidate all edit windows
@@ -1084,6 +1088,8 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             DELETEZ(pColorConfig);
             EndListening(*pAccessibilityOptions);
             DELETEZ(pAccessibilityOptions);
+            EndListening(*pCTLOptions);
+            DELETEZ(pCTLOptions);
         }
     }
 }
@@ -1170,6 +1176,18 @@ SvtAccessibilityOptions& SwModule::GetAccessibilityOptions()
         StartListening(*pAccessibilityOptions);
     }
     return *pAccessibilityOptions;
+}
+/* -----------------06.05.2003 14:52-----------------
+
+ --------------------------------------------------*/
+SvtCTLOptions& SwModule::GetCTLOptions()
+{
+    if(!pCTLOptions)
+    {
+        pCTLOptions = new SvtCTLOptions;
+        StartListening(*pCTLOptions);
+    }
+    return *pCTLOptions;
 }
 /*-----------------30.01.97 08.30-------------------
 
