@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-29 09:17:27 $
+ *  last change: $Author: dr $ $Date: 2000-12-18 14:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 
 #ifndef _SC_XCLEXPPIVOTTABLES_HXX
 #include "XclExpPivotTables.hxx"
+#endif
+#ifndef _SC_XCLEXPCHANGETRACK_HXX
+#include "XclExpChangeTrack.hxx"
 #endif
 
 
@@ -258,7 +261,8 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         }
 
         Add( new ExcDummy8_00a );
-        Add( new ExcTabid8( Max( nExcTabCount, nCodenames ) ) );
+        rR.pTabId = new XclExpChTrTabId( Max( nExcTabCount, nCodenames ) );
+        Add( rR.pTabId );
         if( rR.bWriteVBAStorage )
         {
             Add( new XclObproj );
@@ -391,6 +395,13 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
 
         // Colors
         Add( pPalette2 );
+
+        // Change tracking
+        if( rDoc.GetChangeTrack() )
+        {
+            rR.pUserBViewList = new XclExpUserBViewList( *rDoc.GetChangeTrack() );
+            Add( rR.pUserBViewList );
+        }
 
         // Natural Language Formulas Flag
         Add( new ExcDummy8_UsesElfs );
@@ -707,6 +718,7 @@ void ExcTable::FillAsTable( void )
                 case CELLTYPE_VALUE:
                 {
                     double  fVal = ( ( ScValueCell * ) pAktScCell )->GetValue();
+                    INT32   nRKValue;
                     if ( pPatt && (fVal == 0.0 || fVal == 1.0) &&
                             rFormatter.GetType(
                             ((const SfxUInt32Item&)pPatt->GetItem(
@@ -715,53 +727,23 @@ void ExcTable::FillAsTable( void )
                         pLastRKMulRK = NULL;
                         pAktExcCell = new ExcBoolerr( aScPos, pPatt, UINT8(fVal), FALSE );
                     }
-                    else
+                    else if( GetExcRKValue( fVal, nRKValue ) )
                     {
-                        double  fFrac, fInt;
-                        INT32   nInt;
-                        fFrac = modf( fVal, &fInt );
-                        // 2^29 =  536870912
-                        if( fFrac == 0.0 && fInt >= -536870912.0 && fInt <= 536870911.0 )
+                        if( pLastRKMulRK )
                         {
-                            nInt = ( INT32 ) fInt;
-                            nInt <<= 2;
-                            nInt |= 0x02;
-                            if( pLastRKMulRK )
-                            {
-                                ExcRKMulRK* pNewRK = pLastRKMulRK->Extend( aScPos, pPatt, nInt );
-                                if( pNewRK )
-                                    pLastRKMulRK = pNewRK;
+                            ExcRKMulRK* pNewRK = pLastRKMulRK->Extend( aScPos, pPatt, nRKValue );
+                            if( pNewRK )
+                                pLastRKMulRK = pNewRK;
 
-                                pAktExcCell = pNewRK;
-                            }
-                            else
-                                pAktExcCell = pLastRKMulRK = new ExcRKMulRK( aScPos, pPatt, nInt );
+                            pAktExcCell = pNewRK;
                         }
                         else
-                        {
-                            fFrac = modf( fVal * 100.0, &fInt );
-                            if( fFrac == 0.0 && fInt >= -536870912.0 && fInt <= 536870911.0 )
-                            {
-                                nInt = ( INT32 ) fInt;
-                                nInt <<= 2;
-                                nInt |= 0x03;
-                                if( pLastRKMulRK )
-                                {
-                                    ExcRKMulRK* pNewRK = pLastRKMulRK->Extend( aScPos, pPatt, nInt );
-                                    if( pNewRK )
-                                        pLastRKMulRK = pNewRK;
-
-                                    pAktExcCell = pNewRK;
-                                }
-                                else
-                                    pAktExcCell = pLastRKMulRK = new ExcRKMulRK( aScPos, pPatt, nInt );
-                            }
-                            else
-                            {
-                                pAktExcCell = new ExcNumber( aScPos, pPatt, fVal );
-                                pLastRKMulRK = NULL;
-                            }
-                        }
+                            pAktExcCell = pLastRKMulRK = new ExcRKMulRK( aScPos, pPatt, nRKValue );
+                    }
+                    else
+                    {
+                        pAktExcCell = new ExcNumber( aScPos, pPatt, fVal );
+                        pLastRKMulRK = NULL;
                     }
                 }
                 break;
@@ -1034,6 +1016,16 @@ void ExcTable::FillAsTable( void )
 
     Add( pHlinks );
 
+    // change tracking
+    if( rR.pUserBViewList )
+    {
+        for( const XclExpUserBView* pBView = rR.pUserBViewList->First(); pBView; pBView = rR.pUserBViewList->Next() )
+        {
+            Add( new XclExpUsersViewBegin( pBView->GetGUID(), nExcTab ) );
+            Add( new XclExpUsersViewEnd );
+        }
+    }
+
     // EOF
     Add( new ExcEof );
 }
@@ -1108,7 +1100,10 @@ void ExcDocument::Clear( void )
 }
 
 
-ExcDocument::ExcDocument( RootData* pRD ) : ExcRoot( pRD ), aHeader( pRD )
+ExcDocument::ExcDocument( RootData* pRD ) :
+    ExcRoot( pRD ),
+    aHeader( pRD ),
+    pExpChangeTrack( NULL )
 {
     pTabNames = new NameBuffer( 0, 16 );
 
@@ -1132,6 +1127,9 @@ ExcDocument::~ExcDocument()
 
     delete pPrgrsBar;
     ExcCell::ClearPrgrsBar();
+
+    if( pExpChangeTrack )
+        delete pExpChangeTrack;
 }
 
 
@@ -1152,7 +1150,14 @@ void ExcDocument::ReadDoc( void )
     pExcRoot->pAktTab = NULL;
 
     if ( pExcRoot->eDateiTyp >= Biff8 )
-        pExcRoot->pEscher->GetEx()->EndDocument();  // complete temporary Escher stream
+    {
+        // complete temporary Escher stream
+        pExcRoot->pEscher->GetEx()->EndDocument();
+
+        // change tracking
+        if ( pExcRoot->pDoc->GetChangeTrack() )
+            pExpChangeTrack = new XclExpChangeTrack( pExcRoot );
+    }
 }
 
 
@@ -1202,8 +1207,10 @@ void ExcDocument::Write( SvStream& rOut )
             pAktBS = ( ExcBundlesheet* ) aBundleSheetRecList.Next();
         }
 
-        if( pExcRoot->pPivotCacheList )
-            pExcRoot->pPivotCacheList->Write();
     }
+    if( pExcRoot->pPivotCacheList )
+        pExcRoot->pPivotCacheList->Write();
+    if( pExpChangeTrack )
+        pExpChangeTrack->Write();
 }
 
