@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-27 15:56:00 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,9 @@ namespace dbtools
 {
 //.........................................................................
 
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::util;
 //==============================================================================
 //==============================================================================
 //------------------------------------------------------------------
@@ -283,8 +286,7 @@ Reference< XDataSource> getDataSource(
     // is it a favorite title ?
     Reference< XNameAccess> xNamingContext(
         _rxFactory->createInstance(
-            ::rtl::OUString::createFromAscii("com.sun.star.sdb.DatabaseContext")),
-        UNO_QUERY);
+            ::rtl::OUString::createFromAscii("com.sun.star.sdb.DatabaseContext")),UNO_QUERY);
 
     if (xNamingContext.is() && xNamingContext->hasByName(_rsTitleOrPath))
     {
@@ -1062,6 +1064,9 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/10/27 15:56:00  fs
+ *  modified some implementations, so that they work with the new sdb interfaces (DatabaseContext instead of DatabaseAccessContext, no DatabaseEnvironment anymore, ....)
+ *
  *  Revision 1.2  2000/10/24 15:00:32  oj
  *  make strings unique for lib's
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:00:32 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ namespace connectivity
 {
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
+    using namespace dbtools;
     //------------------------------------------------------------------------------
     sal_Int32 getINT32(const Any& _rAny)
     {
@@ -291,7 +292,7 @@ namespace connectivity
                                         const ::rtl::OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)
     {
-        while (__first != __last && !_rCase(getString((*__first)->getFastPropertyValue(PROPERTY_ID_NAME)),_rVal))
+        while (__first != __last && !_rCase(getString((*__first)->getPropertyValue(PROPERTY_NAME)),_rVal))
             ++__first;
         return __first;
     }
@@ -301,7 +302,7 @@ namespace connectivity
                                         const ::rtl::OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)
     {
-        while (__first != __last && !_rCase(getString((*__first)->getFastPropertyValue(PROPERTY_ID_REALNAME)),_rVal))
+        while (__first != __last && !_rCase(getString((*__first)->getPropertyValue(PROPERTY_REALNAME)),_rVal))
             ++__first;
         return __first;
     }

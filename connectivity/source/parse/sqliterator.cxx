@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:42:07 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:47:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #endif
 
 using namespace connectivity;
+using namespace dbtools;
 using namespace connectivity::parse;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
@@ -97,7 +98,6 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 
-DBG_NAME(OSQLParseTreeIterator);
 static ::rtl::OUString aEmptyString;
 
 class OPrivateColumns : public sdbcx::OCollection
@@ -193,7 +193,7 @@ Reference< XNameAccess > OSQLParseTreeIterator::getSelectAsNameAccess(::cppu::OW
 {
     ::std::vector< ::rtl::OUString> aNames;
     for(OSQLColumns::const_iterator aIter = m_aSelectColumns->begin(); aIter != m_aSelectColumns->end();++aIter)
-        aNames.push_back(getString((*aIter)->getFastPropertyValue(PROPERTY_ID_NAME)));
+        aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
     OPrivateColumns* pCols = new OPrivateColumns(*m_aSelectColumns,_rParent,_rMutex,aNames);
     return pCols;
 }
@@ -546,7 +546,7 @@ sal_Bool OSQLParseTreeIterator::getColumnTableRange(const OSQLParseNode* pNode, 
                     {
                         Reference< XNameAccess > xColumns = aIter->second->getColumns();
                         Any aColumn(xColumns->getByName(aColName));
-                        Reference< XFastPropertySet > xColumn;
+                        Reference< XPropertySet > xColumn;
 
                         if (aColumn >>= xColumn)
                         {
@@ -1162,13 +1162,13 @@ void OSQLParseTreeIterator::appendColumns(const OSQLTable& _rTable)
             aName = *pBegin + ::rtl::OUString::valueOf(i++);
             aIter = find(m_aSelectColumns->begin(),m_aSelectColumns->end(),aName,m_aCaseEqual);
         }
-        Reference< XFastPropertySet > xColumn;
+        Reference< XPropertySet > xColumn;
         if(xColumns->getByName(*pBegin) >>= xColumn)
         {
             OParseColumn* pColumn = new OParseColumn(xColumn,m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers());
             //  pColumn->setTableName(aIter->first);
             pColumn->setRealName(aName);
-            Reference< XFastPropertySet> xCol = pColumn;
+            Reference< XPropertySet> xCol = pColumn;
             m_aSelectColumns->push_back(xCol);
         }
     }
@@ -1207,7 +1207,7 @@ void OSQLParseTreeIterator::setSelectColumnName(const ::rtl::OUString & rColumnN
                 {
                     Reference<XNameAccess> xColumns = aIter->second->getColumns();
 
-                    Reference< XFastPropertySet > xColumn;
+                    Reference< XPropertySet > xColumn;
                     if(xColumns->getByName(rColumnName) >>= xColumn)
                     {
                         ::rtl::OUString aNewColName(getUniqueColumnName(rColumnAlias));
@@ -1217,7 +1217,7 @@ void OSQLParseTreeIterator::setSelectColumnName(const ::rtl::OUString & rColumnN
                         pColumn->setName(aNewColName);
                         pColumn->setRealName(rColumnName);
 
-                        Reference< XFastPropertySet> xCol = pColumn;
+                        Reference< XPropertySet> xCol = pColumn;
                         m_aSelectColumns->push_back(xCol);
                         continue; // diese Column darf nur einmal vorkommen
                     }
@@ -1240,7 +1240,7 @@ void OSQLParseTreeIterator::setSelectColumnName(const ::rtl::OUString & rColumnN
             pColumn->setFunction(bFkt);
             pColumn->setRealName(rColumnName);
 
-            Reference< XFastPropertySet> xCol = pColumn;
+            Reference< XPropertySet> xCol = pColumn;
             m_aSelectColumns->push_back(xCol);
         }
     }
@@ -1262,12 +1262,12 @@ void OSQLParseTreeIterator::setSelectColumnName(const ::rtl::OUString & rColumnN
                 pColumn->setRealName(rColumnName);
                 pColumn->setTableName(aFind->first);
 
-                Reference< XFastPropertySet> xCol = pColumn;
+                Reference< XPropertySet> xCol = pColumn;
                 m_aSelectColumns->push_back(xCol);
             }
             else
             {
-                Reference< XFastPropertySet > xColumn;
+                Reference< XPropertySet > xColumn;
                 if (aFind->second->getColumns()->getByName(rColumnName) >>= xColumn)
                 {
                     ::rtl::OUString aNewColName(getUniqueColumnName(rColumnAlias));
@@ -1277,7 +1277,7 @@ void OSQLParseTreeIterator::setSelectColumnName(const ::rtl::OUString & rColumnN
                     pColumn->setRealName(rColumnName);
                     pColumn->setTableName(aFind->first);
 
-                    Reference< XFastPropertySet> xCol = pColumn;
+                    Reference< XPropertySet> xCol = pColumn;
                     m_aSelectColumns->push_back(xCol);
                 }
                 else
@@ -1302,7 +1302,7 @@ void OSQLParseTreeIterator::setSelectColumnName(const ::rtl::OUString & rColumnN
             pColumn->setFunction(sal_True);
 
 
-            Reference< XFastPropertySet> xCol = pColumn;
+            Reference< XPropertySet> xCol = pColumn;
             m_aSelectColumns->push_back(xCol);
         }
     }

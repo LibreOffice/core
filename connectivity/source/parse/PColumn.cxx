@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PColumn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:42:07 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:47:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,17 +73,17 @@ using namespace connectivity::parse;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 // -------------------------------------------------------------------------
-OParseColumn::OParseColumn(const Reference<XFastPropertySet>& _xColumn,sal_Bool     _bCase)
-    : connectivity::sdbcx::OColumn( getString(_xColumn->getFastPropertyValue(PROPERTY_ID_NAME))
-                                ,   getString(_xColumn->getFastPropertyValue(PROPERTY_ID_TYPENAME))
-                                ,   getString(_xColumn->getFastPropertyValue(PROPERTY_ID_DEFAULTVALUE))
-                                ,   getINT32(_xColumn->getFastPropertyValue(PROPERTY_ID_ISNULLABLE))
-                                ,   getINT32(_xColumn->getFastPropertyValue(PROPERTY_ID_PRECISION))
-                                ,   getINT32(_xColumn->getFastPropertyValue(PROPERTY_ID_SCALE))
-                                ,   getINT32(_xColumn->getFastPropertyValue(PROPERTY_ID_TYPE))
-                                ,   getBOOL(_xColumn->getFastPropertyValue(PROPERTY_ID_ISAUTOINCREMENT))
+OParseColumn::OParseColumn(const Reference<XPropertySet>& _xColumn,sal_Bool     _bCase)
+    : connectivity::sdbcx::OColumn( getString(_xColumn->getPropertyValue(PROPERTY_NAME))
+                                ,   getString(_xColumn->getPropertyValue(PROPERTY_TYPENAME))
+                                ,   getString(_xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE))
+                                ,   getINT32(_xColumn->getPropertyValue(PROPERTY_ISNULLABLE))
+                                ,   getINT32(_xColumn->getPropertyValue(PROPERTY_PRECISION))
+                                ,   getINT32(_xColumn->getPropertyValue(PROPERTY_SCALE))
+                                ,   getINT32(_xColumn->getPropertyValue(PROPERTY_TYPE))
+                                ,   getBOOL(_xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT))
                                 ,   sal_False
-                                ,   getBOOL(_xColumn->getFastPropertyValue(PROPERTY_ID_ISCURRENCY))
+                                ,   getBOOL(_xColumn->getPropertyValue(PROPERTY_ISCURRENCY))
                                 ,   _bCase
                                 )
     , m_bFunction(sal_False)
