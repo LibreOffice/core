@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlsect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
+ *  last change: $Author: mib $ $Date: 2002-07-01 12:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,12 @@
 #ifndef _HTMLKYWD_H
 #include <svtools/htmlkywd.hxx>
 #endif
-
+#ifndef _LINKMGR_HXX //autogen
+#include <so3/linkmgr.hxx>
+#endif
+#ifndef _RTL_URI_HXX_
+#include <rtl/uri.hxx>
+#endif
 
 #ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
@@ -173,7 +178,7 @@ void SwHTMLParser::NewDivision( int nToken )
             aLang = pOption->GetString();
             break;
         case HTML_O_HREF:
-            aHRef =  INetURLObject::RelToAbs( pOption->GetString() );
+            aHRef =  pOption->GetString();
             break;
         case HTML_O_TYPE:
             {
@@ -352,6 +357,46 @@ void SwHTMLParser::NewDivision( int nToken )
 
         // Namen der Section eindeutig machen
         String aName( pDoc->GetUniqueSectionName( aId.Len() ? &aId : 0 ) );
+
+        if( aHRef.Len() )
+        {
+            sal_Unicode cDelim = 255U;
+            String aURL;
+            xub_StrLen nPos = aHRef.SearchBackward( cDelim );
+            xub_StrLen nPos2 = STRING_NOTFOUND;
+            if( STRING_NOTFOUND != nPos )
+            {
+                nPos2 = aHRef.SearchBackward( cDelim, nPos );
+                if( STRING_NOTFOUND != nPos2 )
+                {
+                    xub_StrLen nTmp = nPos;
+                    nPos = nPos2;
+                    nPos2 = nTmp;
+                }
+            }
+            if( STRING_NOTFOUND == nPos )
+            {
+                aURL = INetURLObject::RelToAbs( aHRef );
+            }
+            else
+            {
+                aURL = INetURLObject::RelToAbs( aHRef.Copy( 0, nPos ) );
+                aURL += so3::cTokenSeperator;
+                if( STRING_NOTFOUND == nPos2 )
+                {
+                    aURL += aHRef.Copy( nPos+1 );
+                }
+                else
+                {
+                    aURL += aHRef.Copy( nPos+1, nPos2 - (nPos+1) );
+                    aURL += so3::cTokenSeperator;
+                    aURL += String(rtl::Uri::decode( aHRef.Copy( nPos2+1 ),
+                                              rtl_UriDecodeWithCharset,
+                                              RTL_TEXTENCODING_ISO_8859_1 ));
+                }
+            }
+            aHRef = aURL;
+        }
 
         SwSection aSection( aHRef.Len() ? FILE_LINK_SECTION
                                         : CONTENT_SECTION, aName );

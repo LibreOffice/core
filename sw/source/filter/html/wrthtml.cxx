@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2001-12-03 09:52:53 $
+ *  last change: $Author: mib $ $Date: 2002-07-01 12:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,23 +735,40 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         String aFilter( aFName.GetToken(1,so3::cTokenSeperator) );
         String aSection( aFName.GetToken(2,so3::cTokenSeperator) );
 
-        HTMLOutFuncs::Out_String( rHTMLWrt.Strm(),
-                                  INetURLObject::AbsToRel(aURL,
+        String aEncURL( INetURLObject::AbsToRel(aURL,
                                           INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_UNAMBIGUOUS),
-                                  rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+                                        INetURLObject::DECODE_UNAMBIGUOUS ) );
+        sal_Unicode cDelim = 255U;
+        sal_Bool bURLContainsDelim =
+            (STRING_NOTFOUND != aEncURL.Search( cDelim ) );
+
+        HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aEncURL,
+                                  rHTMLWrt.eDestEnc,
+                                  &rHTMLWrt.aNonConvertableCharacters );
         const sal_Char *pDelim = "&#255;";
-        if( aFilter.Len() )
-        {
+        if( aFilter.Len() || aSection.Len() || bURLContainsDelim )
             rHTMLWrt.Strm() << pDelim;
+        if( aFilter.Len() )
             HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aFilter,
                                       rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-        }
+        if( aSection.Len() || bURLContainsDelim  )
+                rHTMLWrt.Strm() << pDelim;
         if( aSection.Len() )
         {
-            if( !aFilter.Len() )
-                rHTMLWrt.Strm() << pDelim;
-            rHTMLWrt.Strm() << pDelim;
+            xub_StrLen nPos = aSection.Search( '%' );
+            while( STRING_NOTFOUND != nPos )
+            {
+                aSection.Erase( nPos, 1 );
+                aSection.InsertAscii( "%25", nPos );
+                nPos = aSection.Search( '%', nPos+3 );
+            }
+            nPos = aSection.Search( cDelim );
+            while( STRING_NOTFOUND != nPos )
+            {
+                aSection.Erase( nPos, 1 );
+                aSection.InsertAscii( "%FF", nPos );
+                nPos = aSection.Search( cDelim, nPos+3 );
+            }
             HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aSection,
                                       rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         }
