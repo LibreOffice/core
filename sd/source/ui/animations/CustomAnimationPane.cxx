@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:55:07 $
+ *  last change: $Author: rt $ $Date: 2004-12-16 10:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,10 @@
 
 #ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
+#endif
+
+#ifndef SD_DRAW_CONTROLLER_HXX
+#include "DrawController.hxx"
 #endif
 
 #ifndef SD_RESID_HXX
@@ -425,9 +429,16 @@ IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
             break;
 
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
-            mxView = Reference< XDrawView >::query( mxModel->getCurrentController() );
-            onSelectionChanged();
-            onChangeCurrentPage();
+            // At this moment the controller may not yet been set at model
+            // or ViewShellBase.  Take it from the view shell passed with
+            // the event.
+            if (mrBase.GetMainViewShell() != NULL)
+            {
+                mxView = Reference< XDrawView >::query(
+                    static_cast<drawing::XDrawView*>(mrBase.GetMainViewShell()->GetController()));
+                onSelectionChanged();
+                onChangeCurrentPage();
+            }
             break;
 
         case tools::EventMultiplexerEvent::EID_DISPOSING:
@@ -959,9 +970,12 @@ void CustomAnimationPane::onSelectionChanged()
     if( mxView.is() ) try
     {
         Reference< XSelectionSupplier >  xSel( mxView, UNO_QUERY_THROW );
-        maViewSelection = xSel->getSelection();
-        mpCustomAnimationList->onSelectionChanged( maViewSelection );
-        updateControls();
+        if (xSel.is())
+        {
+            maViewSelection = xSel->getSelection();
+            mpCustomAnimationList->onSelectionChanged( maViewSelection );
+            updateControls();
+        }
     }
     catch( Exception& )
     {
