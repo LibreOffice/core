@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-19 10:48:56 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1866,8 +1866,9 @@ void SbaGridControl::DoRowDrag(sal_uInt16 nRowPos)
             aLinkPtr(POINTER_LINKDATA);
 
     // send the data to clipboard
-    ODataExchange* pDataExchange = new ODataExchange(aCopyData);
-    pDataExchange->ExecuteDrag( this, aMovePtr, aCopyPtr, aLinkPtr, DRAG_COPYABLE | DRAG_LINKABLE );
+    // TODO
+    // ODataExchange* pDataExchange = new ODataExchange(aCopyData);
+    // pDataExchange->ExecuteDrag( this, aMovePtr, aCopyPtr, aLinkPtr, DRAG_COPYABLE | DRAG_LINKABLE );
 
     return;
 }

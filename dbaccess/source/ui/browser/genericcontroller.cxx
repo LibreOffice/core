@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-19 12:07:30 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
 #endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/helper/vclunohelper.hxx>
-#endif
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
 #endif
@@ -84,9 +81,6 @@
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef _COM_SUN_STAR_UI_XEXECUTABLEDIALOG_HPP_
-#include <com/sun/star/ui/XExecutableDialog.hpp>
 #endif
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
@@ -106,15 +100,12 @@
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
-#include <com/sun/star/sdbc/SQLWarning.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
-#include <com/sun/star/sdb/SQLContext.hpp>
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
 #endif
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ui;
+//  using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
@@ -896,26 +887,9 @@ Reference<XConnection> OGenericUnoController::connect(const ::rtl::OUString& _rs
 // -----------------------------------------------------------------------------
 void OGenericUnoController::showError(const SQLExceptionInfo& _rInfo)
 {
-    if (_rInfo.isValid())
-    {
-        try
-        {
-            Sequence< Any > aArgs(2);
-            aArgs[0] <<= PropertyValue(PROPERTY_SQLEXCEPTION, 0, _rInfo.get(), PropertyState_DIRECT_VALUE);
-            aArgs[1] <<= PropertyValue(PROPERTY_PARENTWINDOW, 0, makeAny(VCLUnoHelper::GetInterface(getView())), PropertyState_DIRECT_VALUE);
-
-
-            Reference< XExecutableDialog > xErrorDialog(
-                m_xMultiServiceFacatory->createInstanceWithArguments(::rtl::OUString::createFromAscii("com.sun.star.sdb.ErrorMessageDialog"), aArgs), UNO_QUERY);
-            if (xErrorDialog.is())
-                xErrorDialog->execute();
-        }
-        catch(Exception&)
-        {
-            DBG_ERROR("SbaTableQueryBrowser::OnExpandEntry: could not display the error message!");
-        }
-    }
+    ::dbaui::showError(_rInfo,getView(),getORB());
 }
+// -----------------------------------------------------------------------------
 
 
 
