@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:19:29 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
 #ifndef _BINDING_HXX //autogen
-#include <sfx2/binding.hxx>
+#include <sfx2/bindings.hxx>
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
@@ -111,6 +111,8 @@
 #ifndef _SD_STLSHEET_HXX
 #include "stlsheet.hxx"
 #endif
+
+#include <sfx2/viewfrm.hxx>
 
 #include "app.hrc"
 #include "strings.hrc"
@@ -450,11 +452,8 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                     SdrOle2Obj*  pOle2=PTR_CAST(SdrOle2Obj,pObj);
                     if (pGraf!=NULL && pGraf->HasGDIMetaFile())
                         nCount += pGraf->GetGraphic().GetGDIMetaFile().GetActionCount();
-                    if(pOle2!=NULL && pOle2->HasGDIMetaFile())
-                    {
-                        const GDIMetaFile* pMtf=pOle2->GetGDIMetaFile();
-                        nCount += pMtf->GetActionCount();
-                    }
+                    if(pOle2!=NULL && pOle2->GetGraphic())
+                        nCount += pOle2->GetGraphic()->GetGDIMetaFile().GetActionCount();
                 }
 
                 // anhand der erm. Summe entscheiden ob mit
