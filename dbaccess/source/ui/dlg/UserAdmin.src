@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:19 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:21:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ danish ] = "Brugerudvalg";
         Text[ swedish ] = "Anv�ndarurval";
         Text[ polish ] = "Wyb�r u�ytkownika";
-        Text[ portuguese_brazilian ] = "User choise";
+        Text[ portuguese_brazilian ] = "Sele��o do usu�rio";
         Text[ japanese ] = "ユーザーの選択";
         Text[ korean ] = "사용자 선택";
         Text[ chinese_simplified ] = "使用者选择";
@@ -106,6 +106,9 @@ TabPage TAB_PAGE_USERADMIN
         Text[ finnish ] = "K�ytt�j�n valinta";
         Text[ catalan ] = "Selecci� de l'usuari";
         Text[ thai ] = "เลือกผู้ใช้";
+        Text[ czech ] = "Výběr uživatele";
+        Text[ hebrew ] = "Benutzerauswahl";
+        Text[ hindi ] = "उपभोक्ता चुनाव";
     };
 
     FixedText FT_USER
@@ -124,17 +127,20 @@ TabPage TAB_PAGE_USERADMIN
         Text[ italian ] = "Ut~ente:";
         Text[ danish ] = "Brug~er:";
         Text[ swedish ] = "Anv�ndar~e:";
-        Text[ polish ] = "U�ytkownik:";
-        Text[ portuguese_brazilian ] = "Us~er:";
+        Text[ polish ] = "~U�ytkownik:";
+        Text[ portuguese_brazilian ] = "Usu�ri~o:";
         Text[ japanese ] = "ユーザー(~E):";
         Text[ korean ] = "사용자(~E):";
         Text[ chinese_simplified ] = "使用者(~E)：";
         Text[ chinese_traditional ] = "使用者(~E)：";
         Text[ arabic ] = "��������:";
-        Text[ turkish ] = "Kullan�c�:";
+        Text[ turkish ] = "~Kullan�c�:";
         Text[ finnish ] = "K~�ytt�j�";
         Text[ catalan ] = "Us~uari:";
         Text[ thai ] = "ผู้ใ~ช้:";
+        Text[ czech ] = "Uživatel:";
+        Text[ hebrew ] = "B~enutzer:";
+        Text[ hindi ] = "~उपभोक्ता:";
     };
 
     ListBox LB_USER
@@ -170,16 +176,19 @@ TabPage TAB_PAGE_USERADMIN
         Text[ italian ] = "~Nuovo utente...";
         Text[ danish ] = "~Tilf�j bruger...";
         Text[ swedish ] = "L�gg till ~anv�ndare...";
-        Text[ polish ] = "Dodaj u�ytkownika...";
-        Text[ portuguese_brazilian ] = "~New user...";
+        Text[ polish ] = "~Dodaj u�ytkownika...";
+        Text[ portuguese_brazilian ] = "~Adicionar usu�rio...";
         Text[ japanese ] = "ユーザーの追加(~A)...";
         Text[ korean ] = "사용자 추가(~A)...";
         Text[ chinese_simplified ] = "新增使用者(~A)...";
         Text[ chinese_traditional ] = "新增使用者(~A)...";
-        Text[ turkish ] = "Yeni kullan�c�...";
+        Text[ turkish ] = "Kullan�c� ekle...";
         Text[ arabic ] = "������ ����...";
         Text[ catalan ] = "~Nou usuari...";
         Text[ thai ] = "เ~พิ่มผู้ใช้...";
+        Text[ czech ] = "Přidat uživatele...";
+        Text[ hebrew ] = "Benutzer ~hinzufügen...";
+        Text[ hindi ] = "~उपभोक्ता जोड़ो...";
     };
 
     PushButton PB_CHANGEPWD
@@ -201,17 +210,20 @@ TabPage TAB_PAGE_USERADMIN
         Text[ italian ] = "Cambia ~password...";
         Text[ danish ] = "Skift ~adgangskode...";
         Text[ swedish ] = "�ndra ~l�senord...";
-        Text[ polish ] = "Zmie� has�o...";
-        Text[ portuguese_brazilian ] = "Change ~password...";
+        Text[ polish ] = "Zmie� ~has�o...";
+        Text[ portuguese_brazilian ] = "~Alterar senha...";
         Text[ japanese ] = "パスワードの変更(~P)...";
         Text[ korean ] = "암호 변경(~P)...";
         Text[ chinese_simplified ] = "更改密码(~P)...";
         Text[ chinese_traditional ] = "變更密碼(~P)...";
         Text[ arabic ] = "����� ���� ����...";
-        Text[ turkish ] = "�ifreyi de�i�tir...";
+        Text[ turkish ] = "Parolay� ~De�i�tir...";
         Text[ finnish ] = "M~uuta salasana...";
         Text[ catalan ] = "Canvia la ~contrasenya...";
         Text[ thai ] = "เปลี่ยน~รหัสผ่าน...";
+        Text[ czech ] = "Změnit heslo...";
+        Text[ hebrew ] = "~Passwort ändern...";
+        Text[ hindi ] = "~कूटशब्द बदलो...";
     };
 
     PushButton PB_DELETEUSER
@@ -233,17 +245,20 @@ TabPage TAB_PAGE_USERADMIN
         Text[ italian ] = "Cancella utente...";
         Text[ danish ] = "Slet br~uger...";
         Text[ swedish ] = "Ra~dera anv�ndare...";
-        Text[ polish ] = "Usu� u�ytkownika...";
-        Text[ portuguese_brazilian ] = "~Delete user...";
+        Text[ polish ] = "U~su� u�ytkownika...";
+        Text[ portuguese_brazilian ] = "~Excluir usu�rio...";
         Text[ japanese ] = "ユーザーの削除(~D)...";
         Text[ korean ] = "사용자 삭제(~D)...";
         Text[ chinese_simplified ] = "删除使用者(~D)...";
         Text[ chinese_traditional ] = "刪除使用者(~D)...";
         Text[ arabic ] = "��� ��������...";
-        Text[ turkish ] = "Kullan�c�sy� sil...";
+        Text[ turkish ] = "Kullan�c�y� sil...";
         Text[ finnish ] = "P~oista k�ytt�j�...";
         Text[ catalan ] = "~Elimina l'usuari...";
         Text[ thai ] = "~ลบผู้ใช้...";
+        Text[ czech ] = "Smazat uživatele...";
+        Text[ hebrew ] = "Benut~zer löschen...";
+        Text[ hindi ] = "~उपभोक्ता को मिटाओ...";
     };
 
     FixedLine FL_TABLE_GRANTS
@@ -263,16 +278,19 @@ TabPage TAB_PAGE_USERADMIN
         Text[ danish ] = "Adgangsrettigheder for den udvalgte bruger";
         Text[ swedish ] = "�tkomstr�ttigheter f�r markerad anv�ndare";
         Text[ polish ] = "Prawa dost�pu dla wybranego u�ytkownika";
-        Text[ portuguese_brazilian ] = "User rights for choosen user";
+        Text[ portuguese_brazilian ] = "Direitos de acesso para o usu�rio selecionado";
         Text[ japanese ] = "選択したユーザーのアクセス権";
         Text[ korean ] = "선택된 사용자의 액세스 권한";
         Text[ chinese_simplified ] = "用于已经选中使用者的使用权限";
         Text[ chinese_traditional ] = "適用於已選取的使用者的使用權限";
         Text[ arabic ] = "���� ��������� �������� ��������";
-        Text[ turkish ] = "Se�ilen kullan�c� i�in eri�im haklar�";
+        Text[ turkish ] = "Se�ili kullan�c�lar i�in eri�im haklar�";
         Text[ finnish ] = "Valitun k�ytt�j�n k�ytt�oikeudet";
         Text[ catalan ] = "Drets d'acc�s per a l'usuari seleccionat";
         Text[ thai ] = "สิทธิ์การเข้าถึงสำหรับผู้ใช้ที่เลือก";
+        Text[ czech ] = "Přístupová práva pro vybraného uživatele";
+        Text[ hebrew ] = "Zugriffsrechte für ausgewählten Benutzer";
+        Text[ hindi ] = "चुने हुए उपभोक्ता केलिए प्रवेश अधिकार";
     };
 
     Control CTRL_TABLE_GRANTS
@@ -301,16 +319,19 @@ QueryBox QUERY_USERADMIN_DELETE_USER
     Message[ italian ] = "Volete davvero eliminare l'utente selezionato?";
     Message[ danish ] = "Skal brugeren virkelig slettes?";
     Message[ swedish ] = "Vill du verkligen radera anv�ndaren?";
-    Message[ polish ] = "Na pewno usun�� u�ytkownika?";
-    Message[ portuguese_brazilian ] = "Do you really want to delete the select user?";
+    Message[ polish ] = "Czy na pewno chcesz usun�� u�ytkownika?";
+    Message[ portuguese_brazilian ] = "Deseja realmente excluir o usu�rio?";
     Message[ japanese ] = "本当にユーザーを削除しますか。";
     Message[ korean ] = "사용자를 정말로 삭제하시겠습니까?";
     Message[ chinese_simplified ] = "您真的要删除这个使用者？";
     Message[ chinese_traditional ] = "真的要刪除這個使用者?";
-    Message[ turkish ] = "Do you really want to delete the select user?";
+    Message[ turkish ] = "Kullan�c�y� ger�ekten silmek istiyor musunuz?";
     Message[ arabic ] = "Do you really want to delete the select user?";
     Message[ catalan ] = "Realment voleu eliminar l'usuari seleccionat?";
     Message[ thai ] = "คุณต้องการลบผู้ใช้หรือไม่?";
+    Message[ czech ] = "Opravdu chcete smazat tohoto uživatele?";
+    Message[ hebrew ] = "Soll der Benutzer wirklich gelöscht werden?";
+    Message[ hindi ] = "आप सचमुच में उपभोक्ता को मिटाना चाहते है ?";
 };
 
 #define EDIT_SIZE_X     50
@@ -347,15 +368,18 @@ ModalDialog DLG_PASSWORD
         Text[ danish ] = "Bruger \"$Name: not supported by cvs2svn $\"";
         Text[ swedish ] = "Anv�ndare \"$name$:  $\"";
         Text[ polish ] = "U�ytkownik \"$Name: not supported by cvs2svn $\"";
-        Text[ portuguese_brazilian ] = "User \"$name$:  $\"";
+        Text[ portuguese_brazilian ] = "Usu�rio \"$Name: not supported by cvs2svn $\"";
         Text[ japanese ] = "ユーザー \"$Name: not supported by cvs2svn $\"";
         Text[ korean ] = "사용자 \"$name$:  $\"";
         Text[ chinese_simplified ] = "使用者 \"$Name: not supported by cvs2svn $\"";
         Text[ chinese_traditional ] = "使用者 \"$name$:  $\"";
-        Text[ turkish ] = "User \"$Name: not supported by cvs2svn $\"";
+        Text[ turkish ] = "Kullan�c� \"$name$: $\"";
         Text[ arabic ] = "User \"$Name: not supported by cvs2svn $\"";
         Text[ catalan ] = "Usuari \"$Name: not supported by cvs2svn $\"";
         Text[ thai ] = "ผู้ใช้ \"$ชื่อ: OpenOffice641C $\"";
+        Text[ czech ] = "Uživatel \"$Name: not supported by cvs2svn $\"";
+        Text[ hebrew ] = "Benutzer \"$name$:  $\"";
+        Text[ hindi ] = "उपभोक्ता \"$Name: not supported by cvs2svn $\"";
     };
 
     FixedText FT_OLDPASSWORD
@@ -367,7 +391,7 @@ ModalDialog DLG_PASSWORD
         Text[ english_us ] = "Old p~assword";
         Text[ portuguese ] = "Se~nha antiga";
         Text[ russian ] = "������ ������";
-        Text[ greek ] = "old p~assword";
+        Text[ greek ] = "Old p~assword";
         Text[ dutch ] = "Oud w~achtwoord";
         Text[ french ] = "Ancien mot de passe";
         Text[ spanish ] = "Contrase�a anterior";
@@ -375,16 +399,19 @@ ModalDialog DLG_PASSWORD
         Text[ italian ] = "Vecchia password";
         Text[ danish ] = "Gammel a~dgangskode";
         Text[ swedish ] = "Gammalt l�s~enord";
-        Text[ polish ] = "Stare has�o";
-        Text[ portuguese_brazilian ] = "old p~assword";
+        Text[ polish ] = "Stare h~as�o";
+        Text[ portuguese_brazilian ] = "Se~nha antiga";
         Text[ japanese ] = "旧パスワード(~A)";
         Text[ korean ] = "이전 암호(~A)";
         Text[ chinese_simplified ] = "旧密码(~A)";
         Text[ chinese_traditional ] = "舊密碼(~A)";
-        Text[ turkish ] = "old p~assword";
-        Text[ arabic ] = "old p~assword";
+        Text[ turkish ] = "Eski �ifre";
+        Text[ arabic ] = "Old p~assword";
         Text[ catalan ] = "contrasenya ~antiga";
         Text[ thai ] = "ร~หัสผ่านเก่า";
+        Text[ czech ] = "Staré heslo";
+        Text[ hebrew ] = "Altes K~ennwort";
+        Text[ hindi ] = "पुराना कू~टशब्द";
     };
     Edit ED_OLDPASSWORD
     {
@@ -411,16 +438,19 @@ ModalDialog DLG_PASSWORD
         Text[ italian ] = "~Password";
         Text[ danish ] = "~Adgangskode";
         Text[ swedish ] = "L�~senord";
-        Text[ polish ] = "Has�o";
-        Text[ portuguese_brazilian ] = " password";
+        Text[ polish ] = "~Has�o";
+        Text[ portuguese_brazilian ] = "~Senha";
         Text[ japanese ] = "パスワード(~P)";
         Text[ korean ] = "암호(~P)";
         Text[ chinese_simplified ] = "密码(~P)";
         Text[ chinese_traditional ] = "密碼(~P)";
-        Text[ turkish ] = " password";
+        Text[ turkish ] = " �ifre";
         Text[ arabic ] = " password";
         Text[ catalan ] = " contrasenya";
         Text[ thai ] = "~รหัสผ่าน";
+        Text[ czech ] = "Heslo";
+        Text[ hebrew ] = "‮סיסמה‬";
+        Text[ hindi ] = "~कूटशब्द";
     };
     Edit ED_PASSWORD
     {
@@ -446,16 +476,19 @@ ModalDialog DLG_PASSWORD
         Text[ italian ] = "~Conferma password";
         Text[ danish ] = "~Bekr�ft adgangskode";
         Text[ swedish ] = "~Bekr�fta l�senord";
-        Text[ polish ] = "Potwierd� has�o";
-        Text[ portuguese_brazilian ] = "~Confirm  password";
+        Text[ polish ] = "~Potwierd� has�o";
+        Text[ portuguese_brazilian ] = "~Confirmar senha";
         Text[ japanese ] = "パスワードの確認(~C)";
         Text[ korean ] = "암호 확인(~C)";
         Text[ chinese_simplified ] = "确认密码(~C)";
         Text[ chinese_traditional ] = "確認密碼(~C)";
-        Text[ turkish ] = "~Confirm  password";
+        Text[ turkish ] = "~�ifreyi Do�rula";
         Text[ arabic ] = "~Confirm  password";
         Text[ catalan ] = "~Verificaci� de la contrasenya";
         Text[ thai ] = "~ยืนยันรหัสผ่าน";
+        Text[ czech ] = "Potvrdit heslo";
+        Text[ hebrew ] = "Kennwort ~bestätigen";
+        Text[ hindi ] = "~कूटशब्द दृढ़ करो";
     };
     Edit ED_PASSWORD_REPEAT
     {
@@ -484,7 +517,7 @@ ModalDialog DLG_PASSWORD
     Text[ english_us ] = "Change Password";
     Text[ portuguese ] = "Modificar senha";
     Text[ russian ] = "�������� ������";
-    Text[ greek ] = "Change password";
+    Text[ greek ] = "Change Password";
     Text[ dutch ] = "Wachtwoord wijzigen";
     Text[ french ] = "Modification du mot de passe";
     Text[ spanish ] = "Cambiar contrase�a";
@@ -493,15 +526,18 @@ ModalDialog DLG_PASSWORD
     Text[ danish ] = "Skift adgangskode";
     Text[ swedish ] = "�ndra l�senord";
     Text[ polish ] = "Zmie� has�o";
-    Text[ portuguese_brazilian ] = "Change password";
+    Text[ portuguese_brazilian ] = "Alterar a senha";
     Text[ japanese ] = "パスワードの変更";
     Text[ korean ] = "암호 변경";
     Text[ chinese_simplified ] = "更改密码";
     Text[ chinese_traditional ] = "變更密碼";
-    Text[ turkish ] = "Change password";
-    Text[ arabic ] = "Change password";
+    Text[ turkish ] = "�ifre de�i�tir";
+    Text[ arabic ] = "Change Password";
     Text[ catalan ] = "Canvia la contrasenya";
     Text[ thai ] = "เปลี่ยนรหัสผ่าน";
+    Text[ czech ] = "Změnit heslo";
+    Text[ hebrew ] = "Kennwort ändern";
+    Text[ hindi ] = "कूटशब्द बदलो";
 };
 
 String STR_ERROR_PASSWORDS_NOT_IDENTICAL
@@ -519,17 +555,30 @@ String STR_ERROR_PASSWORDS_NOT_IDENTICAL
     Text[ italian ] = "Le due password non coincidono. Digitate di nuovo la password.";
     Text[ danish ] = "De to adgangskoder stemmer ikke overens, pr�v igen!";
     Text[ swedish ] = "De b�da l�senorden st�mmer inte �verens, mata in l�senordet igen.";
-    Text[ polish ] = "Podane has�a nie zgadzaj� si�! Nale�y wpisa� je ponownie.";
-    Text[ portuguese_brazilian ] = "Passwords are different, please enter again";
+    Text[ polish ] = "Podane has�a r�ni� si�. Wpisz ponownie has�o.";
+    Text[ portuguese_brazilian ] = "As senhas n�o s�o iguais. Por favor, redigite novamente.";
     Text[ japanese ] = "入力した２つのパスワードは一致しません。もう一度入力しなおしてください。";
     Text[ korean ] = "암호가 일치하지 않습니다. 다시 입력해주십시오.";
     Text[ chinese_simplified ] = "这两个密码不一致，请重新输入密码！";
     Text[ chinese_traditional ] = "這兩個密碼不一致，請重新輸入！";
-    Text[ turkish ] = "Passwords are different, please enter again";
+    Text[ turkish ] = "�ifreler birbirini tutmuyor, li�tfen yeniden girin.";
     Text[ arabic ] = "Passwords are different, please enter again";
     Text[ catalan ] = "Les contrasenyes s�n diferents, torneu-les a escriure";
     Text[ thai ] = "รหัสผ่านไม่ตรงกัน กรุณาใส่รหัสผ่านอีกครั้ง";
+    Text[ czech ] = "Hesla nejsou stejná. Zadejte, prosím, heslo znovu.";
+    Text[ hebrew ] = "Die beiden Kennwörter stimmen nicht überein, bitte noch einmal eingeben";
+    Text[ hindi ] = "कूटशब्द समान नहीं है । कृपया फ़िर से कूटशब्द को प्रविष्ट कीजिए ।";
 };
+
+
+
+
+
+
+
+
+
+
 
 
 
