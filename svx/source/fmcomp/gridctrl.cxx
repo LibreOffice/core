@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-16 09:30:51 $
+ *  last change: $Author: fs $ $Date: 2001-10-16 11:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2659,8 +2659,16 @@ void DbGridControl::PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu)
     bDelete = bDelete && !((m_nOptions & OPT_INSERT) && GetSelectRowCount() == 1 && IsRowSelected(GetRowCount() - 1));
 
     rMenu.EnableItem(SID_FM_DELETEROWS, bDelete);
-    rMenu.EnableItem(SID_FM_RECORD_UNDO, IsModified());
     rMenu.EnableItem(SID_FM_RECORD_SAVE, IsModified());
+
+    // the undo is more difficult
+    sal_Bool bCanUndo = IsModified();
+    long nState = -1;
+    if (m_aMasterStateProvider.IsSet())
+        nState = m_aMasterStateProvider.Call((void*)SID_FM_RECORD_UNDO);
+    bCanUndo &= ( 0 != nState );
+
+    rMenu.EnableItem(SID_FM_RECORD_UNDO, bCanUndo);
 }
 
 //------------------------------------------------------------------------------
