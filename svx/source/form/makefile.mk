@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: fs $ $Date: 2001-04-11 12:38:03 $
+#   last change: $Author: fs $ $Date: 2001-05-11 10:12:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,6 @@ SLOFILES = \
     $(SLO)$/dataaccessdescriptor.obj      \
     $(SLO)$/fmpage.obj      \
     $(SLO)$/fmPropBrw.obj			\
-    $(SLO)$/dialogservices.obj		\
     $(SLO)$/fmundo.obj  	\
     $(SLO)$/fmprop.obj      \
     $(SLO)$/fmmodel.obj		\

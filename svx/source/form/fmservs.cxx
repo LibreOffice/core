@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmservs.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-28 09:41:59 $
+ *  last change: $Author: fs $ $Date: 2001-05-11 10:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,8 +215,6 @@ namespace svxform
     IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_DATABASE_ACCESS_CONNECTION,"com.sun.star.sdb.DatabaseAccessConnection");
     IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_DATABASE_CONTEXT,"com.sun.star.sdb.DatabaseContext");
     IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_INTERACTION_HANDLER,"com.sun.star.sdb.InteractionHandler");
-
-    IMPLEMENT_CONSTASCII_USTRING(SRV_IMPORT_GRAPHICS_DIALOG, "com.sun.star.dialogs.ImportGraphicsDialog");
 }   // namespace svxform
 
 #define DECL_SERVICE(ImplName)                      \
@@ -235,8 +233,6 @@ namespace svxform
     DECL_SERVICE(FmXGridControl);
     DECL_SERVICE(FmXFormController);
 
-    DECL_SERVICE(OImportGraphicsDialog);
-
 namespace svxform
 {
 
@@ -254,8 +250,6 @@ namespace svxform
         ::rtl::OUString sString;
 
         REGISTER_SERVICE(FmXFormController, FM_FORM_CONTROLLER);
-
-        REGISTER_SERVICE(OImportGraphicsDialog, SRV_IMPORT_GRAPHICS_DIALOG);
 
         // DBGridControl
         // ------------------------------------------------------------------------
