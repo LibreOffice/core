@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:36 $
+ *  last change: $Author: pl $ $Date: 2000-09-25 14:21:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1493,6 +1493,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         // Font wieder ohne Attribute einstellen, wird jetzt im Repaint nicht
         // mehr neu initialisiert
         ImplInitSettings( TRUE, FALSE, FALSE );
+        ImplModified();
     }
     else if ( rCEvt.GetCommand() == COMMAND_EXTTEXTINPUT )
     {
