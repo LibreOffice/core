@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-10 08:10:23 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 07:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#include <bitset>
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -1746,7 +1747,7 @@ BOOL OResultSet::OpenImpl()
     #if DEBUG
                         INT32 nFound=0;
     #endif
-                        vector<BOOL> nWasAllwaysFound(nMaxRow,FALSE);
+                        ::std::vector<sal_Int16> nWasAllwaysFound(nMaxRow,0);
                         INT32 nPrev_i;
                         for(INT32 j= nMaxRow-1;j >= 0;j--)
                         {
@@ -1781,7 +1782,7 @@ BOOL OResultSet::OpenImpl()
                                             // und altes i merken
                                             nPrev_i = i;
                                             nPos = nKey; // auf naechste gültige Position setzen
-                                            nWasAllwaysFound[i] = TRUE;
+                                            nWasAllwaysFound[i] = 1;
                                         }
                                     }
                                 }
@@ -1791,13 +1792,11 @@ BOOL OResultSet::OpenImpl()
                                 nFound++;
     #endif
                         }
-                        vector<INT32>::iterator aIter = m_pFileSet->end()-1;
-                        while(aIter != m_pFileSet->begin())
-                        {
-                            if(!(*aIter))
-                                m_pFileSet->erase(aIter);
-                            aIter--;
-                        }
+
+                        m_pFileSet->erase(::std::remove_if(m_pFileSet->begin(),m_pFileSet->end(),
+                                                            ::std::bind2nd(::std::equal_to<sal_Int32>(),0))
+                                          ,m_pFileSet->end());
+
                         if (!bWasSorted)
                         {
                             m_nOrderbyColumnNumber[0] = SQL_COLUMN_NOTFOUND;
@@ -2433,6 +2432,8 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                         xTableColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;
                     aRowIter->setTypeKind(nType);
                 }
+                else
+                    aRowIter->setBound(sal_False);
             }
         }
         catch (Exception&)
