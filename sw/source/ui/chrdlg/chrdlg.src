@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:28:46 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,14 +75,14 @@ String STR_TEXTCOLL_HEADER
     TEXT [ dutch ] = "(Alinea-opmaakprofiel:  " ;
     TEXT [ spanish ] = "(Estilo de párrafo:  " ;
     TEXT [ english_us ] = "(Paragraph Style: " ;
-    TEXT[ chinese_simplified ] = "(¶ÎÂäÑùÊ½£º ";
+    TEXT[ chinese_simplified ] = "(æ®µè½æ ·å¼ï¼š ";
     TEXT[ russian ] = "(Ñòèëü àáçàöà:  ";
     TEXT[ polish ] = "(Styl akapitu:  ";
-    TEXT[ japanese ] = " (’i—½À²ÙF ";
-    TEXT[ chinese_traditional ] = "(¬q¸¨¼Ë¦¡¡G ";
+    TEXT[ japanese ] = " (æ®µè½ï½½ï¾€ï½²ï¾™ï¼š ";
+    TEXT[ chinese_traditional ] = "(æ®µè½æ¨£å¼ï¼š ";
     TEXT[ arabic ] = "(äãØ İŞÑÉ: ";
     TEXT[ greek ] = "(Ğñüôõğï ğáñáãñÜöïõ: ";
-    TEXT[ korean ] = "(´Ü¶ô À¯Çü: ";
+    TEXT[ korean ] = "(ë‹¨ë½ ìœ í˜•: ";
     TEXT[ turkish ] = "(Paragraf biçimi: ";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "(Estilo de párrafo:  ";
@@ -102,14 +102,14 @@ String STR_PAGEFMT_HEADER
     TEXT [ dutch ] = "(Pagina-opmaakprofiel:  " ;
     TEXT [ spanish ] = "(Estilo de página:  " ;
     TEXT [ english_us ] = "(Page Style: " ;
-    TEXT[ chinese_simplified ] = "(Ò³ÃæÑùÊ½£º ";
+    TEXT[ chinese_simplified ] = "(é¡µé¢æ ·å¼ï¼š ";
     TEXT[ russian ] = "(Ñòèëü ñòğàíèöû:  ";
     TEXT[ polish ] = "(Styl strony:  ";
-    TEXT[ japanese ] = " (Íß°¼Ş½À²ÙF ";
-    TEXT[ chinese_traditional ] = "(­¶­±¼Ë¦¡¡G ";
+    TEXT[ japanese ] = " (ï¾ï¾Ÿï½°ï½¼ï¾ï½½ï¾€ï½²ï¾™ï¼š ";
+    TEXT[ chinese_traditional ] = "(é é¢æ¨£å¼ï¼š ";
     TEXT[ arabic ] = "(ŞÇáÈ ÇáÕİÍÉ: ";
     TEXT[ greek ] = "(Ğñüôõğï óåëßäáò: ";
-    TEXT[ korean ] = " (ÂÊ À¯Çü: ";
+    TEXT[ korean ] = " (ìª½ ìœ í˜•: ";
     TEXT[ turkish ] = "(Sayfa biçimi: ";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "(Estilo de página:  ";
@@ -129,15 +129,15 @@ String SW_STR_NONE
     Text [ dutch ] = "[Geen]" ;
     Text [ spanish ] = "[Ninguno]" ;
     Text [ english_us ] = "[None]" ;
-    Text[ chinese_simplified ] = "[ÎŞ]";
+    Text[ chinese_simplified ] = "[æ— ]";
     Text[ russian ] = "[Áåç]";
     Text[ polish ] = "[brak]";
-    Text[ japanese ] = "[‚È‚µ]";
+    Text[ japanese ] = "[ãªã—]";
     Text[ language_user1 ] = "èë? áå";
-    Text[ chinese_traditional ] = "[µL]";
+    Text[ chinese_traditional ] = "[ç„¡]";
     Text[ arabic ] = "[ÈÏæä]";
     Text[ greek ] = "[Êáíİíá]";
-    Text[ korean ] = "[¾øÀ½]";
+    Text[ korean ] = "[ì—†ìŒ]";
     Text[ turkish ] = "[yok]";
     Text[ catalan ] = "[Ninguno]";
 };
@@ -159,18 +159,19 @@ InfoBox MSG_ILLEGAL_PAGENUM
     MESSAGE [ dutch ] = "Dit paginanummer kan niet aan de actiuele pagina worden toegewezen. Linkerpagina's krijgen even nummers, rechterpagina's oneven nummers." ;
     MESSAGE [ spanish ] = "El número de la página no se puede colocar. En páginas izquierdas se pueden utilizar solo números pares, en las derechas solo impares." ;
     MESSAGE [ english_us ] = "Page numbers cannot be applied to the current page.  Even numbers can be used on left pages, odd numbers on right pages." ;
-    MESSAGE[ chinese_simplified ] = "ÎŞ·¨Éè¶¨Ò³Âë¡£ÔÚ×óÒ³ÉÏÖ»ÔÊĞí²ÉÓÃÅ¼ÊıÒ³Âë£¬ÔÚÓÒÒ³ÉÏÖ»ÔÊĞí²ÉÓÃÆæÊıÒ³Âë¡£";
+    MESSAGE[ chinese_simplified ] = "æ— æ³•è®¾å®šé¡µç ã€‚åœ¨å·¦é¡µä¸Šåªå…è®¸é‡‡ç”¨å¶æ•°é¡µç ï¼Œåœ¨å³é¡µä¸Šåªå…è®¸é‡‡ç”¨å¥‡æ•°é¡µç ã€‚";
     MESSAGE[ russian ] = "Íîìåğà ñòğàíèö ïğîñòàâèòü íåâîçìîæíî. Ñ ëåâîé ñòîğîíû ìîãóò áûòü ïğîñòàâëåíû òîëüêî ÷åòíûå, ñ ïğàâîé - òîëüêî íå÷åòíûå öèôğû.";
     MESSAGE[ polish ] = "Nie mo¿na nanieœæ numeru stron. Na lewych stronach mo¿na nanieœæ tylko parzyste numery stron, na prawych tylko nieparzyste numery stron.";
-    MESSAGE[ japanese ] = "Íß°¼Ş”Ô†‚Í“K—p‚Å‚«‚Ü‚¹‚ñB¶Íß°¼Ş‚É‚Í‹ô”A‰EÍß°¼Ş‚É‚ÍŠï”‚ğg—p‚µ‚Ü‚·B";
-    MESSAGE[ chinese_traditional ] = "µLªk³]©w­¶½X¡C¦b¥ª­¶¥u¯à°÷³]©w°¸¼Æ¡A¦b¥k­¶¥u¯à³]©w©_¼Æ¡C";
+    MESSAGE[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾ç•ªå·ã¯é©ç”¨ã§ãã¾ã›ã‚“ã€‚å·¦ï¾ï¾Ÿï½°ï½¼ï¾ã«ã¯å¶æ•°ã€å³ï¾ï¾Ÿï½°ï½¼ï¾ã«ã¯å¥‡æ•°ã‚’ä½¿ç”¨ã—ã¾ã™ã€‚";
+    MESSAGE[ chinese_traditional ] = "ç„¡æ³•è¨­å®šé ç¢¼ã€‚åœ¨å·¦é åªèƒ½å¤ è¨­å®šå¶æ•¸ï¼Œåœ¨å³é åªèƒ½è¨­å®šå¥‡æ•¸ã€‚";
     MESSAGE[ arabic ] = "áÇ íãßä ÅÏÑÇÌ ÃÑŞÇã ÇáÕİÍÇÊ İí ÇáÕİÍÉ ÇáÍÇáíÉ. Úáì ÇáÕİÍÇÊ ÇáíÓÑì¡ íÓãÍ ÈÇÓÊÎÏÇã ÃÑŞÇã ÒæÌíÉ İŞØ¡ æÚáì ÇáÕİÍÇÊ Çáíãäì¡ ÃÑŞÇã İÑÏíÉ İŞØ.";
     MESSAGE[ greek ] = "Äåí åßíáé äõíáôüí íá ôïğïèåôçèåß ï áñéèìüò óåëßäáò. Óå áñéóôåñİò óåëßäåò åğéôñİğåôáé ç ôïğïèİôçóç ìüíï æõãşí áñéèìşí óåëßäáò, åíş óå äåîéİ? ";
-    MESSAGE[ korean ] = "ÂÊ ¹øÈ£´Â ¼³Á¤ÇÒ ¼ö ¾ø½À´Ï´Ù. Â¦¼ö ÂÊ ¹øÈ£´Â ¿ŞÂÊ ÂÊ¿¡¸¸ »ç¿ëµÇ°í, È¦¼ö ÂÊ ¹øÈ£´Â ¿À¸¥ÂÊ ÂÊ¿¡¸¸ »ç¿ëµË´Ï´Ù.";
+    MESSAGE[ korean ] = "ìª½ ë²ˆí˜¸ëŠ” ì„¤ì •í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. ì§ìˆ˜ ìª½ ë²ˆí˜¸ëŠ” ì™¼ìª½ ìª½ì—ë§Œ ì‚¬ìš©ë˜ê³ , í™€ìˆ˜ ìª½ ë²ˆí˜¸ëŠ” ì˜¤ë¥¸ìª½ ìª½ì—ë§Œ ì‚¬ìš©ë©ë‹ˆë‹¤.";
     MESSAGE[ turkish ] = "Sayfa numarası verilemiyor. Sol sayfalarda yalnızca çift sayfa numaraları, sağ sayfalarda ise yalnızca tek sayfa numaraları kullanılabilir.";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "El número de la página no se puede colocar. En páginas izquierdas se pueden utilizar solo números pares, en las derechas solo impares.";
 };
+
 
 
 
