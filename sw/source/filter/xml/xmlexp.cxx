@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-13 18:24:21 $
+ *  last change: $Author: mtg $ $Date: 2001-11-20 17:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,20 +601,23 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     }
 
     SwDoc *pDoc = pText->GetDoc();
-    const Rectangle &rRect =
+    const Rectangle rRect =
         pDoc->GetDocShell()->SfxInPlaceObject::GetVisArea();
+    sal_Bool bTwip = pDoc->GetDocShell()->SfxInPlaceObject::GetMapUnit ( ) == MAP_TWIP;
+
+    ASSERT ( bTwip, "Map unit for visible area is not in TWIPS!" );
 
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaTop") );
-    pValue[nIndex++].Value <<= rRect.Top();
+    pValue[nIndex++].Value <<= bTwip ? TWIP_TO_MM100 ( rRect.Top() ) : rRect.Top();
 
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaLeft") );
-    pValue[nIndex++].Value <<= rRect.Left();
+    pValue[nIndex++].Value <<= bTwip ? TWIP_TO_MM100 ( rRect.Left() ) : rRect.Left();
 
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaWidth") );
-    pValue[nIndex++].Value <<= rRect.GetWidth();
+    pValue[nIndex++].Value <<= bTwip ? TWIP_TO_MM100 ( rRect.GetWidth() ) : rRect.GetWidth();
 
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaHeight") );
-    pValue[nIndex++].Value <<= rRect.GetHeight();
+    pValue[nIndex++].Value <<= bTwip ? TWIP_TO_MM100 ( rRect.GetHeight() ) : rRect.GetHeight();
 
     // "show redline mode" cannot simply be read from the document
     // since it gets changed during execution. If it's in the info
