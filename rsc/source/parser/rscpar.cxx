@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscpar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:24:23 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ void RscFileInst::Init()
 {
     nLineNo = 0;
     nLineBufLen = 256;
-    pLine = (char *)RscMem::Malloc( nLineBufLen );
+    pLine = (char *)rtl_allocateMemory( nLineBufLen );
     *pLine = '\0';
     nScanPos = 0;
     cLastChar = '\0';
@@ -114,7 +114,7 @@ RscFileInst::RscFileInst( RscTypCont * pTC, ULONG lIndexSrc,
 
     //Status: Zeiger am Ende des Lesepuffers
     nInputPos = nInputEndPos = nInputBufLen = READBUFFER_MAX;
-    pInput    = (char *)RscMem::Malloc( nInputBufLen );
+    pInput    = (char *)rtl_allocateMemory( nInputBufLen );
 }
 
 RscFileInst::RscFileInst( RscTypCont * pTC, ULONG lIndexSrc,
@@ -130,7 +130,7 @@ RscFileInst::RscFileInst( RscTypCont * pTC, ULONG lIndexSrc,
 
     // Muss groesser sein wegen Eingabeende bei nInputBufLen < nInputEndPos
     nInputBufLen = nInputEndPos +1;
-    pInput       = (char *)RscMem::Malloc( nInputBufLen +100 );
+    pInput       = (char *)rtl_allocateMemory( nInputBufLen +100 );
     memcpy( pInput, rBuf.GetBuffer(), nInputEndPos );
 }
 
@@ -145,9 +145,9 @@ RscFileInst::RscFileInst( RscTypCont * pTC, ULONG lIndexSrc,
 *************************************************************************/
 RscFileInst::~RscFileInst(){
     if( pInput )
-        RscMem::Free( pInput );
+        rtl_freeMemory( pInput );
     if( pLine )
-        RscMem::Free( pLine );
+        rtl_freeMemory( pLine );
 }
 
 /*************************************************************************
@@ -191,7 +191,7 @@ void RscFileInst::GetNewLine()
     nScanPos = 0;
 
     //laeuft bis Dateiende
-    USHORT nLen = 0;
+    sal_uInt32 nLen = 0;
     while( (nInputPos < nInputEndPos) || (nInputEndPos == nInputBufLen) )
     {
         if( (nInputPos >= nInputEndPos) && fInputFile )
@@ -207,7 +207,7 @@ void RscFileInst::GetNewLine()
             {
                 nLineBufLen += 256;
                 // einen dazu fuer '\0'
-                pLine = RscMem::Realloc( pLine, nLineBufLen +1 );
+                pLine = (char*)rtl_reallocateMemory( pLine, nLineBufLen +1 );
             }
 
             // cr lf, lf cr, lf oder cr wird '\0'
@@ -250,7 +250,7 @@ END:
     if( pTypCont->pEH->GetListFile() ){
         char buf[ 10 ];
 
-        sprintf( buf, "%5d ", GetLineNo() );
+        sprintf( buf, "%5d ", (int)GetLineNo() );
         pTypCont->pEH->LstOut( buf );
         pTypCont->pEH->LstOut( GetLine() );
         pTypCont->pEH->LstOut( "\n" );
