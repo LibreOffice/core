@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexception.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-26 07:53:17 $
+ *  last change: $Author: fs $ $Date: 2001-11-08 12:48:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,13 @@ public:
 //= StandardExceptions
 //==================================================================================
 //----------------------------------------------------------------------------------
+void throwFunctionNotSupportedException(
+        const ::rtl::OUString& _rMsg,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
+        const ::com::sun::star::uno::Any& _Next
+    )   throw ( ::com::sun::star::sdbc::SQLException );
+
+//----------------------------------------------------------------------------------
 /** throw a function sequence exception
 */
 void throwFunctionSequenceException(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
@@ -212,6 +219,9 @@ void throwGenericSQLException(
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/06/26 07:53:17  fs
+ *  throwGenericSQLException version with additional NextException parameter
+ *
  *  Revision 1.5  2001/05/14 11:40:39  oj
  *  #86528# lower size need
  *
