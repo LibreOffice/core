@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-06 08:34:24 $
+ *  last change: $Author: vg $ $Date: 2001-11-20 14:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,7 +422,7 @@ const SwStartNode *SwXFootnote::GetStartNode() const
     return pSttNd;
 }
 
-uno::Reference< text::XTextCursor >   SwXFootnote::createCursor()
+uno::Reference< text::XTextCursor >   SwXFootnote::createCursor() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return createTextCursor();
 }
@@ -641,6 +641,9 @@ void SwXFootnote::removeVetoableChangeListener( const OUString& PropertyName,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.12  2001/11/06 08:34:24  jp
+    Bug #93914#: optimize the modify calls
+
     Revision 1.11  2001/06/20 08:59:51  os
     #88484# optimization
 

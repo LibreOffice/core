@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-11-15 15:48:44 $
+ *  last change: $Author: vg $ $Date: 2001-11-20 14:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ const SwStartNode *SwXText::GetStartNode() const
     return GetDoc()->GetNodes().GetEndOfContent().StartOfSectionNode();
 }
 
-uno::Reference< XTextCursor >   SwXText::createCursor()
+uno::Reference< XTextCursor >   SwXText::createCursor() throw ( ::com::sun::star::uno::RuntimeException)
 {
     uno::Reference< XTextCursor >  xRet;
     OUString sRet;

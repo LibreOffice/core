@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-01 13:52:20 $
+ *  last change: $Author: vg $ $Date: 2001-11-20 14:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -840,7 +840,7 @@ const SwStartNode *SwXCell::GetStartNode() const
     return pSttNd;
 }
 
-uno::Reference< XTextCursor >   SwXCell::createCursor()
+uno::Reference< XTextCursor >   SwXCell::createCursor() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return createTextCursor();
 }

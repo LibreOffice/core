@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: os $ $Date: 2001-11-15 15:48:44 $
+ *  last change: $Author: vg $ $Date: 2001-11-20 14:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2240,7 +2240,7 @@ const SwStartNode *SwXTextFrame::GetStartNode() const
     return pSttNd;
 }
 
-uno::Reference< XTextCursor >   SwXTextFrame::createCursor()
+uno::Reference< XTextCursor >   SwXTextFrame::createCursor() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return createTextCursor();
 }
