@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTypeProvider.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:55 $
+ *  last change:$Date: 2003-02-07 14:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ public class _XTypeProvider extends MultiMethodTest {
             int k = i+1;
             log.println(k+". Type is "+types[i].toString());
             if (types[i].toString().equals
-                    ("Type<com.sun.star.lang.XTypeProvider>")) {
+                    ("Type[com.sun.star.lang.XTypeProvider]")) {
                 result = true;
             }
         }
