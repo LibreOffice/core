@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:17:13 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 13:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,7 @@ public:
     SwReader( SvStream&, const String& rFilename, const String& rBaseURL, SwPaM& );
     //SwReader( SotStorage&, const String& rFilename, SwPaM& );
     SwReader( SfxMedium&, const String& rFilename, SwPaM& );
+    SwReader( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String& rFilename, SwPaM& );
 
     /*
      * Nur SwReader::Read(...) ist die Export-Schnittstelle!!!
