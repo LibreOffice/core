@@ -2,9 +2,9 @@
  *
  *  $RCSfile: start.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 15:54:28 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ static BOOL CallPrePro( const ByteString& rPrePro,
     RscPtrPtr       aNewCmdL;   // Kommandozeile
     RscPtrPtr       aRespCmdL;   // Kommandozeile
     RscPtrPtr *     pCmdL = &aNewCmdL;
-    short           i, nExit;
+    int             i, nExit;
     FILE*           fRspFile = NULL;
     ByteString      aRspFileName;
 
@@ -144,22 +144,21 @@ static BOOL CallPrePro( const ByteString& rPrePro,
     }
 
     if( !fRspFile )
-        aNewCmdL.Append( RscMem::Assignsw( rPrePro.GetBuffer(), 0 ) );
-    for( i = 1; i < (short)(pCmdLine->GetCount() -1); i++ ){
+        aNewCmdL.Append( rsc_strdup( rPrePro.GetBuffer() ) );
+    for( i = 1; i < int(pCmdLine->GetCount() -1); i++ ){
         if( !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-u", 2 )
           || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-i", 2 )
           || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-d", 2 ) )
         {
-            aNewCmdL.Append(
-                RscMem::Assignsw( (char *)pCmdLine->GetEntry( i ), 0 ) );
+            aNewCmdL.Append( rsc_strdup( (char *)pCmdLine->GetEntry( i ) ) );
         }
     };
-    aNewCmdL.Append( RscMem::Assignsw( rInput.GetBuffer(), 0 ) );
-    aNewCmdL.Append( RscMem::Assignsw( rOutput.GetBuffer(), 0 ) );
+    aNewCmdL.Append( rsc_strdup( rInput.GetBuffer() ) );
+    aNewCmdL.Append( rsc_strdup( rOutput.GetBuffer() ) );
     aNewCmdL.Append( (void *)0 );
 
     printf( "Preprocessor commandline: " );
-    for( i = 0; i < (short)(pCmdL->GetCount() -1); i++ )
+    for( i = 0; i < (int)(pCmdL->GetCount() -1); i++ )
     {
         printf( " " );
         printf( "%s", (const char *)pCmdL->GetEntry( i ) );
@@ -168,21 +167,21 @@ static BOOL CallPrePro( const ByteString& rPrePro,
 
     if( fRspFile )
     {
-        aRespCmdL.Append( RscMem::Assignsw( rPrePro.GetBuffer(), 0 ) );
+        aRespCmdL.Append( rsc_strdup( rPrePro.GetBuffer() ) );
         ByteString aTmpStr( '@' );
         aTmpStr += aRspFileName;
-        aRespCmdL.Append( RscMem::Assignsw( aTmpStr.GetBuffer(), 0 ) );
+        aRespCmdL.Append( rsc_strdup( aTmpStr.GetBuffer() ) );
         aRespCmdL.Append( (void *)0 );
 
         pCmdL = &aRespCmdL;
-        for( i = 0; i < (short)(aNewCmdL.GetCount() -1); i++ )
+        for( i = 0; i < (int)(aNewCmdL.GetCount() -1); i++ )
         {
             fprintf( fRspFile, "%s ", (const char *)aNewCmdL.GetEntry( i ) );
         }
         fclose( fRspFile );
 
         printf( "Preprocessor startline: " );
-        for( i = 0; i < (short)(pCmdL->GetCount() -1); i++ )
+        for( i = 0; i < (int)(pCmdL->GetCount() -1); i++ )
         {
             printf( " " );
             printf( "%s", (const char *)pCmdL->GetEntry( i ) );
@@ -203,7 +202,11 @@ static BOOL CallPrePro( const ByteString& rPrePro,
 #endif
 
     if ( fRspFile )
+        #if OSL_DEBUG_LEVEL > 5
+        fprintf( stderr, "leaving response file %s\n", aRspFileName.GetBuffer() );
+        #else
         unlink( aRspFileName.GetBuffer() );
+        #endif
     if ( nExit )
         return FALSE;
 
@@ -222,7 +225,7 @@ static BOOL CallRsc2( ByteString aRsc2Name,
                       RscPtrPtr * pCmdLine )
 {
     RscPtrPtr       aNewCmdL;       // Kommandozeile
-    short           i, nExit;
+    int             i, nExit;
     ByteString*     pString;
     ByteString      aRspFileName;   // Response-Datei
     FILE *          fRspFile;       // Response-Datei
@@ -231,19 +234,19 @@ static BOOL CallRsc2( ByteString aRsc2Name,
     fRspFile = fopen( aRspFileName.GetBuffer(), "w" );
 
     printf( "Rsc2 commandline: " );
-    aNewCmdL.Append( RscMem::Assignsw( aRsc2Name.GetBuffer(), 0 ) );
+    aNewCmdL.Append( rsc_strdup( aRsc2Name.GetBuffer() ) );
     printf( "%s", (const char *)aNewCmdL.GetEntry( aNewCmdL.GetCount() -1 ) );
     printf( " " );
     ByteString aTmpStr( '@' );
     aTmpStr += aRspFileName;
-    aNewCmdL.Append( RscMem::Assignsw( aTmpStr.GetBuffer(), 0 ) );
+    aNewCmdL.Append( rsc_strdup( aTmpStr.GetBuffer() ) );
     printf( "%s", (const char *)aNewCmdL.GetEntry( aNewCmdL.GetCount() -1 ) );
     aNewCmdL.Append( (void *)0 );
     printf( "\n" );
 
     if( fRspFile )
     {
-        for( i = 1; i < (short)(pCmdLine->GetCount() -1); i++ )
+        for( i = 1; i < (int)(pCmdLine->GetCount() -1); i++ )
         {
             if( !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ),  "-fp=", 4 )
               || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-fo=", 4 )
@@ -288,7 +291,11 @@ static BOOL CallRsc2( ByteString aRsc2Name,
 #endif
 
     if( fRspFile )
+        #if OSL_DEBUG_LEVEL > 5
+        fprintf( stderr, "leaving response file %s\n", aRspFileName.GetBuffer() );
+        #else
         unlink( aRspFileName.GetBuffer() );
+        #endif
     if( nExit )
         return( FALSE );
     return( TRUE );
@@ -325,7 +332,7 @@ int cdecl main ( int argc, char ** argv)
     char *          pStr;
     char **         ppStr;
     RscPtrPtr       aCmdLine;       // Kommandozeile
-    USHORT          i;
+    sal_uInt32      i;
     ByteString*     pString;
 
     printf( "VCL Resource Compiler 3.0\n" );
@@ -341,7 +348,7 @@ int cdecl main ( int argc, char ** argv)
     ppStr++;
     i = 1;
     BOOL bSetSrs = FALSE;
-    while( ppStr && i < (USHORT)(aCmdLine.GetCount() -1) )
+    while( ppStr && i < (aCmdLine.GetCount() -1) )
     {
         if( '-' == **ppStr )
         {
@@ -438,16 +445,20 @@ int cdecl main ( int argc, char ** argv)
     pString = aTmpList.First();
     while( pString )
     {
+        #if OSL_DEBUG_LEVEL > 5
+        fprintf( stderr, "leaving temp file %s\n", pString->GetBuffer() );
+        #else
         unlink( pString->GetBuffer() );
+        #endif
         pString = aTmpList.Next();
     };
 
     return( bError );
 }
 
-void RscExit( USHORT nExit )
+void RscExit( sal_uInt32 nExit )
 {
     if( nExit )
-        printf( "Program exit is %d\n", nExit );
+        printf( "Program exit is %d\n", (int)nExit );
     exit( nExit );
 }
