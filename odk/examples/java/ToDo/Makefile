@@ -3,49 +3,17 @@
 PRJ=..$(PS)..$(PS)..
 SETTINGS=../../../settings
 
-# Include settings makefile depending on platform/compiler
-ifeq "$(MAKECMDGOALS)" "win_microcxx"
-        -include $(SETTINGS)/win_microcxx_settings.mk
-ifndef PS
-$(error Platform/Compiler settings file not found)
-endif
-        SHAREDLIB_OUT=$(OUT_BIN)
-endif   
-ifeq "$(MAKECMDGOALS)" "solaris_workshopcxx"
-        -include $(SETTINGS)/solaris_workshopcxx_settings.mk
-ifndef PS
-$(error Platform/Compiler settings file not found)
-endif
-        SHAREDLIB_OUT=$(OUT_LIB)
-endif   
-ifeq "$(MAKECMDGOALS)" "linux_gcc"
-        -include $(SETTINGS)/linux_gcc_settings.mk
-ifndef PS
-$(error Platform/Compiler settings file not found)
-endif
-        SHAREDLIB_OUT=$(OUT_LIB)
-endif
-
-# Define non-platform/compiler specific settings
+include $(SETTINGS)/settings.mk
 
 include $(SETTINGS)/dk.mk
 include $(SETTINGS)/std.mk
 
 # Define non-platform/compiler specific settings
 
-
-# Targets
-.PHONY: ALL
-ALL :
-	@echo -------------------------------------------------------------
-	@echo You must supply a target where TARGET is one of the following:
-	@echo 
-	@echo win_microcxx        : Windows using Microsoft C++ compiler/linker
-	@echo solaris_workshopcxx : Solaris using Sun Workshop C++ compiler
-	@echo linux_gcc           : Linux using gcc
-	@echo -------------------------------------------------------------
-
-REGISTERFLAGFILE = $(OUT_MISC)$(PS)register_components_todo_is_ok.flag
+REGISTERFLAG = $(OUT_MISC)$(PS)todo_register_component.flag
+COMPONENTJARFLAG = $(OUT_MISC)$(PS)todo_create_component_jar.flag
+TYPEFLAG= $(OUT_MISC)$(PS)todo_type_generation.flag
+JAVAFLAG= $(OUT_MISC)$(PS)todo_javac.flag
 
 OUT_COMPONENT = $(OUT_CLASS)$(PS)todo
 COMPONENT_RDB = $(OUT_BIN)$(PS)ToDo.rdb
@@ -82,35 +50,38 @@ DK_CLASSPATH =	$(subst $(EMPTYSTRING) $(EMPTYSTRING),, \
 OFFICE_FILEURL = $(subst \,/,$(OFFICE_PROGRAM_PATH))
 OFFICE_CLASSPATH = $(subst $(CLASSES_DIR),$(OFFICE_PROGRAM_PATH)$(PS)classes, $(DK_CLASSPATH))
 
-win_microcxx : $(COMPONENT_JAR) $(REGISTERFLAGFILE)
 
-solaris_workshopcxx : $(COMPONENT_JAR) $(REGISTERFLAGFILE)
-
-linux_gcc : $(COMPONENT_JAR) $(REGISTERFLAGFILE)
+# Targets
+.PHONY: ALL
+ALL : register
 
 include $(SETTINGS)/stdtarget.mk
 
 $(OUT_COMPONENT) : $(OUT) $(OUT_CLASS)
-	$(MKDIR) $(OUT_COMPONENT)
+	$(MKDIR) $@
 
-$(GENJAVAFILES) : $(IDLFILES)
-	$(BIN_DIR)$(PS)idlc -I. -I$(IDL_DIR) -O$(OUT_MISC) $(IDLFILES)
+$(TYPEFLAG) : $(IDLFILES)
+	$(BIN_DIR)$(PS)idlc -I. -I$(IDL_DIR) -O$(OUT_MISC) $^
 	$(BIN_DIR)$(PS)regmerge $(COMPONENT_RDB) /UCR $(GENURDFILES)
 	$(BIN_DIR)$(PS)regmerge $(COMPONENT_RDB) / $(BIN_DIR)$(PS)$(DKREGISTRYNAME)
 	$(BIN_DIR)$(PS)javamaker -BUCR -Torg.OpenOffice.XToDo -O$(OUT_MISC) $(COMPONENT_RDB)
+	@echo bla > $@
 
-$(CLASSFILES) : $(OUT_COMPONENT) $(GENJAVAFILES) $(JAVAFILES)
+$(JAVAFLAG) : $(OUT_COMPONENT) $(TYPEFLAG) $(JAVAFILES)
 	javac -classpath $(DK_CLASSPATH) -d $(OUT_COMPONENT) $(GENJAVAFILES) $(JAVAFILES)
+	@echo bla > $@
 
-$(COMPONENT_JAR) : $(CLASSFILES) 
-	jar cvfm $(COMPONENT_JAR) Manifest -C $(OUT_COMPONENT) .
+$(COMPONENTJARFLAG) : $(JAVAFLAG)
+	jar cvfm $(COMPONENT_JAR) $(COMPONENT_MANIFESTFILE) -C $(OUT_COMPONENT) .
+	-$(DEL) $(REGISTERFLAG)
+	@echo bla > $@
 
-$(REGISTERFLAGFILE) : $(REGISTERFLAGFILE)
+$(REGISTERFLAG) : $(COMPONENTJARFLAG)
 ifneq "$(OFFICE_PROGRAM_PATH)" ""
 	$(BIN_DIR)$(PS)regmerge $(OFFICE_PROGRAM_PATH)$(PS)applicat.rdb /UCR $(GENURDFILES)
 	$(COPY) $(COMPONENT_JAR) $(OFFICE_PROGRAM_PATH)$(PS)classes
 	java -classpath $(OFFICE_CLASSPATH) com.sun.star.tools.uno.RegComp "$(URLPREFIX)$(OFFICE_FILEURL)/applicat.rdb" register "$(URLPREFIX)$(OFFICE_FILEURL)/classes/ToDo.jar" com.sun.star.loader.Java2
-	@echo bla > $(REGISTERFLAGFILE)
+	@echo bla > $@
 else
 	@echo --------------------------------------------------------------------------------
 	@echo  If you want to install your component automatically, please set an 
@@ -118,4 +89,4 @@ else
 	@echo --------------------------------------------------------------------------------
 endif
 
-
+register: $(REGISTERFLAG)
