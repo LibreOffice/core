@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPageContainer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:01:09 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "MasterPageContainer.hxx"
 
 #include "TemplateScanner.hxx"
@@ -201,8 +200,9 @@ public:
     SdPage* mpMasterPage;
     /// A slide that uses the master page.
     SdPage* mpSlide;
-    /// Preview of the master page.  May be empty.
-    Image maPreview;
+    /// Previews of the master page.  May be empty.
+    Image maPreview;            // original preview from file
+    Image maScaledPreview;      // scaled size for display
     ::sd::toolpanel::controls::MasterPageContainer::Token maToken;
 };
 
@@ -788,7 +788,9 @@ IMPL_LINK(MasterPageContainer::Implementation,
             String sURL (maContainer[aRequest.maToken].msURL);
             // Store bitmap in original size so that both preview sizes have
             // access to the full resolution.
-            maContainer[aRequest.maToken].maPreview = LoadPreviewFromURL (sURL);
+            // #i42576# read from file only if preview not avilable yet
+            if ( maContainer[aRequest.maToken].maPreview.GetSizePixel().Width() == 0 )
+                maContainer[aRequest.maToken].maPreview = LoadPreviewFromURL (sURL);
             aRequest.maCallback.Call (aRequest.mpUserData);
         }
     }
@@ -1188,14 +1190,18 @@ Image MasterPageContainer::Implementation::GetPreviewForToken (
 #endif
                 nWidth,
                 String::CreateFromAscii(""));
-            maContainer[aToken].maPreview = aPreview;
+            maContainer[aToken].maScaledPreview = aPreview;
         }
         else if (nWidth>0 && aPreview.GetSizePixel().Width()>0)
         {
-            // We already have a preview so we scale that to the desired size.
-            aPreview = maPreviewRenderer.ScaleBitmap (
-                aPreview.GetBitmapEx(),
-                nWidth);
+            // #i42576# scale preview only if required and cache it
+            if( maContainer[aToken].maScaledPreview.GetSizePixel().Width() != nWidth )
+            {
+                maContainer[aToken].maScaledPreview = maPreviewRenderer.ScaleBitmap (
+                    aPreview.GetBitmapEx(),
+                    nWidth);
+            }
+            aPreview = maContainer[aToken].maScaledPreview;
         }
         else if (maContainer[aToken].msURL.Len() > 0)
         {
@@ -1210,12 +1216,17 @@ Image MasterPageContainer::Implementation::GetPreviewForToken (
         {
             // All else failed so create an empty preview with a text that
             // tells the user that there is no preview available.
-            aPreview = maPreviewRenderer.RenderPage(
-                mpDocument->GetSdPage(0, PK_STANDARD),
-                nWidth,
-                SdResId(STR_TASKPANEL_NOT_AVAILABLE_SUBSTITUTION));
-
-            maContainer[aToken].maPreview = aPreview;
+            static Image sSubstPreview;
+            if( nWidth != sSubstPreview.GetSizePixel().Width() )
+            {
+                sSubstPreview = maPreviewRenderer.RenderPage(
+                    mpDocument->GetSdPage(0, PK_STANDARD),
+                    nWidth,
+                    SdResId(STR_TASKPANEL_NOT_AVAILABLE_SUBSTITUTION));
+            }
+            maContainer[aToken].maPreview = sSubstPreview;
+            maContainer[aToken].maScaledPreview = sSubstPreview;
+            aPreview = sSubstPreview;
         }
     }
 
@@ -1258,15 +1269,20 @@ Image MasterPageContainer::Implementation::GetPreviewForToken (
 #endif
                 nWidth,
                 String::CreateFromAscii(""));
-        maContainer[aToken].maPreview = aPreview;
+        maContainer[aToken].maScaledPreview = aPreview;
         bShowSubstitution = false;
     }
     else if (nWidth>0 && aPreview.GetSizePixel().Width()>0)
     {
         // We already have a preview so we scale that to the desired size.
-        aPreview = maPreviewRenderer.ScaleBitmap (
-            aPreview.GetBitmapEx(),
-            nWidth);
+        // #i42576# scale preview only if required and cache it
+        if( maContainer[aToken].maScaledPreview.GetSizePixel().Width() != nWidth )
+        {
+            maContainer[aToken].maScaledPreview = maPreviewRenderer.ScaleBitmap (
+                aPreview.GetBitmapEx(),
+                nWidth);
+        }
+        aPreview = maContainer[aToken].maScaledPreview;
         bShowSubstitution = false;
     }
     else
@@ -1283,10 +1299,16 @@ Image MasterPageContainer::Implementation::GetPreviewForToken (
 
     if (bShowSubstitution)
     {
-        aPreview = maPreviewRenderer.RenderPage(
-            mpDocument->GetSdPage(0, PK_STANDARD),
-            nWidth,
-            SdResId(STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION));
+        static Image sSubstPreview;
+        if( nWidth != sSubstPreview.GetSizePixel().Width() )
+        {
+            // #i42576# cache substitution bitmap
+            sSubstPreview = maPreviewRenderer.RenderPage(
+                mpDocument->GetSdPage(0, PK_STANDARD),
+                nWidth,
+                SdResId(STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION));
+        }
+        aPreview = sSubstPreview;
     }
 
     return aPreview;
