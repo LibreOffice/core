@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTextEmbeddedObjectsSupplier.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:10 $
+ *  last change:$Date: 2003-09-08 11:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.text;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.container.XNameAccess;
 import com.sun.star.text.XTextEmbeddedObjectsSupplier;
-import lib.MultiMethodTest;
 
 /**
  * Testing <code>com.sun.star.text.XTextEmbeddedObjectsSupplier</code>

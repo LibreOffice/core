@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTextField.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:09 $
+ *  last change:$Date: 2003-09-08 11:19:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,9 @@
 
 package ifc.text;
 
-import com.sun.star.text.XTextField;
 import lib.MultiMethodTest;
+
+import com.sun.star.text.XTextField;
 
 /**
  * Testing <code>com.sun.star.text.XTextField</code>
