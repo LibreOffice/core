@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basscript.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:08:03 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef SCRIPTING_BASSCRIPT_HXX
 #define SCRIPTING_BASSCRIPT_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPT_HPP_
-#include <drafts/com/sun/star/script/provider/XScript.hpp>
+#ifndef _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPT_HPP_
+#include <com/sun/star/script/provider/XScript.hpp>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
@@ -82,7 +82,7 @@ namespace basprov
     //  ----------------------------------------------------
 
     typedef ::cppu::WeakImplHelper1<
-        ::drafts::com::sun::star::script::provider::XScript > BasicScriptImpl_BASE;
+        ::com::sun::star::script::provider::XScript > BasicScriptImpl_BASE;
 
 
     class BasicScriptImpl : public BasicScriptImpl_BASE
@@ -100,7 +100,7 @@ namespace basprov
             ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam )
             throw (
-                    ::drafts::com::sun::star::script::provider::ScriptFrameworkErrorException,
+                    ::com::sun::star::script::provider::ScriptFrameworkErrorException,
                     ::com::sun::star::reflection::InvocationTargetException,
                     ::com::sun::star::uno::RuntimeException );
     };
