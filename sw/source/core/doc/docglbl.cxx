@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docglbl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-15 18:47:21 $
+ *  last change: $Author: mib $ $Date: 2001-02-26 08:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
     default:
 //  case SPLITDOC_TO_GLOBALDOC:
         pFilter = SwIoSystem::GetFilterOfFormat( String::CreateFromAscii(
-                                                    FILTER_SW5 ));
+                                                    FILTER_XML ));
         eDocType = SPLITDOC_TO_GLOBALDOC;
         break;
     }
@@ -243,7 +243,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
 
     String sExt( pFilter->GetSuffixes().GetToken(0, ',') );
     if( !sExt.Len() )
-        sExt.AssignAscii( "sdw" );
+        sExt.AssignAscii( "sxw" );
     if( '.' != sExt.GetChar( 0 ) )
         sExt.Insert( '.', 0 );
 
@@ -535,21 +535,9 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
 
     SfxMedium* pDstMed = new SfxMedium( rPath, STREAM_STD_READWRITE, TRUE );
     pDstMed->SetFilter( pFilter );
+    // MIB 01/21/01: The class name is now set correctly in SwDocShell::SaveAs
     GetDocShell()->DoSaveAs( *pDstMed );
     GetDocShell()->DoSaveCompleted( pDstMed );
-
-    // richtige Class setzen, es soll ja ein GlobalDocument sein!
-    if( SPLITDOC_TO_GLOBALDOC == eDocType &&
-        !GetDocShell()->GetError() )
-    {
-        SfxObjectShellRef xDocSh( new SwGlobalDocShell( SFX_CREATE_MODE_INTERNAL ));
-        SvGlobalName aClassName;
-        ULONG nClipFormat;
-        String aAppName, aLongUserName, aUserName;
-        xDocSh->FillClass( &aClassName, &nClipFormat, &aAppName, &aLongUserName,
-                        &aUserName );
-        pDstMed->GetStorage()->SetClass( aClassName, nClipFormat, aUserName );
-    }
 
     return !GetDocShell()->GetError();
 }

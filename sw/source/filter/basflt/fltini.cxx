@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-05 16:31:12 $
+ *  last change: $Author: mib $ $Date: 2001-02-26 08:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,8 +238,8 @@ void _InitFilter()
     _SetFltPtr( nCnt, new WW1Reader, sWW1 );
     _SetFltPtr( nCnt, pWW8Rd, sWW5 );
     _SetFltPtr( nCnt, ReadSwg, sSwg1 );
-    _SetFltPtr( nCnt, (ReadXML = new XMLReader), FILTER_CXML );
-    _SetFltPtr( nCnt, ReadXML, FILTER_XML );
+    _SetFltPtr( nCnt, (ReadXML = new XMLReader), FILTER_XML );
+    _SetFltPtr( nCnt, ReadXML, FILTER_XMLP );
 
 #ifdef NEW_WW97_EXPORT
     aReaderWriter[ 9 ].fnGetWriter =  &::GetWW8Writer;
@@ -1549,6 +1549,9 @@ Color ConvertBrushStyle(const Color& rCol, const Color& rFillCol, BYTE nStyle)
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/02/05 16:31:12  cmc
+      #83154# Negative Indent Number Style buglet
+
       Revision 1.6  2000/12/12 15:35:03  khz
       #80856# take into account negative indentation in SetNumLSpace()
 
