@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-12 08:03:14 $
+ *  last change: $Author: pb $ $Date: 2002-06-19 07:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -729,7 +729,7 @@ void SvTreeListBox::EnableCheckButton( SvLBoxButtonData* pData )
         nTreeFlags &= (~TREEFLAG_CHKBTN);
     else
     {
-        pCheckButtonData = pData;
+        SetCheckButtonData( pData );
         nTreeFlags |= TREEFLAG_CHKBTN;
         pData->SetLink( LINK(this, SvTreeListBox, CheckButtonClick));
     }
@@ -737,6 +737,13 @@ void SvTreeListBox::EnableCheckButton( SvLBoxButtonData* pData )
     SetTabs();
     if( IsUpdateMode() )
         Invalidate();
+}
+
+void SvTreeListBox::SetCheckButtonData( SvLBoxButtonData* pData )
+{
+    DBG_CHKTHIS(SvTreeListBox,0);
+    if ( pData )
+        pCheckButtonData = pData;
 }
 
 void SvTreeListBox::SetNodeBitmaps( const Image& rCollapsedNodeBmp, const Image& rExpandedNodeBmp, BmpColorMode _eMode )
