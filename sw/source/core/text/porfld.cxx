@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 16:27:07 $
+ *  last change: $Author: ama $ $Date: 2000-11-24 15:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ BYTE SwFldPortion::ScriptChange( const SwTxtSizeInfo &rInf, xub_StrLen& rFull )
             nScript = ScriptType::LATIN;
             if( nActual )
                 nScript = nActual==SW_CJK ? ScriptType::ASIAN : ScriptType::COMPLEX;
-            nChg = pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
+            nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
         }
         if( rFull > nChg )
         {
@@ -341,7 +341,7 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
             USHORT nCnt = 0;
             if( ScriptType::WEAK == nScript )
             {
-                nChg = pBreakIt->xBreak->endOfScript( aTxt, 0, nScript );
+                nChg =(xub_StrLen)pBreakIt->xBreak->endOfScript(aTxt,0,nScript);
                 if( nChg < aTxt.Len() )
                     nScript = pBreakIt->xBreak->getScriptType( aTxt, nChg );
             }
@@ -465,16 +465,9 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
                 nNextOffset += nNextOfst;
                 pFld->SetNextOffset( nNextOffset );
                 rInf.SetRest( pFld );
-                if( nScriptChg )
+                if( nScriptChg && rInf.HasScriptSpace() )
                 {
-                    const SwDoc *pDoc = rInf.GetTxtFrm()->GetTxtNode()->GetDoc();
-                    USHORT nDist;
-                    if( SW_CJK == nScriptChg )
-                        nDist = pDoc->GetLatin_CJK();
-                    else if( SW_CTL == nScriptChg )
-                        nDist = pDoc->GetLatin_CTL();
-                    else
-                        nDist = pDoc->GetCJK_CTL();
+                    USHORT nDist = pFld->GetFont()->GetHeight()/5;
                     if( nDist )
                         new SwKernPortion( *this, nDist );
                 }
@@ -800,7 +793,7 @@ SwGrfNumPortion::SwGrfNumPortion(
     Width( rGrfSize.Width() + 2 * GRFNUM_SECURE );
     nFixWidth = Width();
     nGrfHeight = rGrfSize.Height() + 2 * GRFNUM_SECURE;
-    Height( nGrfHeight );
+    Height( KSHORT(nGrfHeight) );
     bNoPaint = sal_False;
 }
 
@@ -830,7 +823,7 @@ sal_Bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
 
     if( bFull )
     {
-        Width( rInf.Width() - rInf.X() );
+        Width( rInf.Width() - (KSHORT)rInf.X() );
         if( bFly )
         {
             SetLen( 0 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 16:27:07 $
+ *  last change: $Author: ama $ $Date: 2000-11-24 15:43:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -718,33 +718,31 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         }
         else
             nNxtActual = rInf.GetFont()->GetActual();
-        if( rInf.GetLast() && rInf.GetLast()->InTxtGrp() &&
-            rInf.GetLast()->Width() && !rInf.GetLast()->InNumberGrp() )
+        if(rInf.HasScriptSpace() && rInf.GetLast() && rInf.GetLast()->InTxtGrp()
+            && rInf.GetLast()->Width() && !rInf.GetLast()->InNumberGrp() )
         {
             BYTE nLstActual;
+            USHORT nLstHeight;
             if( rInf.GetLast()->InFldGrp() &&
                 ((SwFldPortion*)rInf.GetLast())->GetFont() )
+            {
                 nLstActual = ((SwFldPortion*)rInf.GetLast())->GetFont()->
                              GetActual();
+                nLstHeight = KSHORT( ((SwFldPortion*)rInf.GetLast())->GetFont()
+                                     ->GetHeight() );
+            }
             else
+            {
                 nLstActual = rInf.GetFont()->GetActual();
+                nLstHeight = KSHORT( rInf.GetFont()->GetHeight() );
+            }
             if( nNxtActual != nLstActual )
             {
-                const SwDoc *pDoc = GetTxtFrm()->GetTxtNode()->GetDoc();
-                USHORT nDist;
-                if( SW_LATIN == nNxtActual || SW_LATIN == nLstActual )
-                {
-                    if( SW_CJK == nNxtActual || SW_CJK == nLstActual )
-                        nDist = pDoc->GetLatin_CJK();
-                    else
-                        nDist = pDoc->GetLatin_CTL();
-                }
-                else
-                    nDist = pDoc->GetCJK_CTL();
-                if( nDist )
+                nLstHeight /= 5;
+                if( nLstHeight )
                 {
                     SwKernPortion* pKrn =
-                        new SwKernPortion(*rInf.GetLast(), nDist);
+                        new SwKernPortion( *rInf.GetLast(), nLstHeight );
                     rInf.GetLast()->SetPortion( NULL );
                     InsertPortion( rInf, pKrn );
                 }
@@ -763,7 +761,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         // Vorsicht: ein Fly im Blocksatz, dann kann das Repaint nur komplett
         // hinter ihm oder vom Zeilenbeginn sein.
 #ifdef DEBUG
-        KSHORT nWhere = rInf.X();
+        SwTwips nWhere = rInf.X();
         long nLeft = GetLeftMargin();
         SwTwips nPaintOfs = rInf.GetPaintOfst();
 #endif
@@ -780,26 +778,15 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         if ( !bFull )
         {
             rInf.ClrUnderFlow();
-            if( pPor->InTxtGrp() && pPor->GetLen() && !pPor->InFldGrp() )
+            if( rInf.HasScriptSpace() && pPor->InTxtGrp() &&
+                pPor->GetLen() && !pPor->InFldGrp() )
             {
                 xub_StrLen nTmp = rInf.GetIdx() + pPor->GetLen();
-                // For the moment I insert a distance from 1/2 cm between
-                // two different scripts. This value must be replaced by
-                // the right document setting, perhaps depending on both scripts
+                // The distance between two different scripts is set
+                // to 20% of the fontheight.
                 if( nTmp == NextScriptChg( nTmp - 1 ) )
                 {
-                    const SwDoc *pDoc = GetTxtFrm()->GetTxtNode()->GetDoc();
-                    USHORT nDist;
-                    USHORT nScript = ScriptType( nTmp );
-                    if( SW_LATIN == nNxtActual || ScriptType::LATIN == nScript )
-                    {
-                        if( SW_CJK == nNxtActual || ScriptType::ASIAN==nScript )
-                            nDist = pDoc->GetLatin_CJK();
-                        else
-                            nDist = pDoc->GetLatin_CTL();
-                    }
-                    else
-                        nDist = pDoc->GetCJK_CTL();
+                    USHORT nDist = rInf.GetFont()->GetHeight()/5;
                     if( nDist )
                         new SwKernPortion( *pPor, nDist );
                 }
