@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 08:12:33 $
+ *  last change: $Author: ka $ $Date: 2001-04-10 10:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1024,7 +1024,7 @@ TransferableDataHelper::~TransferableDataHelper()
 
 void TransferableDataHelper::InitFormats()
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const sal_uInt32 nRef = Application::ReleaseSolarMutex();
 
     mpFormats->clear();
 
@@ -1060,6 +1060,8 @@ void TransferableDataHelper::InitFormats()
     catch( const ::com::sun::star::uno::Exception& )
     {
     }
+
+    Application::AcquireSolarMutex( nRef );
 }
 
 // -----------------------------------------------------------------------------
