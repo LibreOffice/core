@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockExport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:13:25 $
+ *  last change: $Author: mtg $ $Date: 2001-07-05 14:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ sal_uInt32 SwXMLBlockListExport::exportDoc(enum XMLTokenEnum eClass)
     GetDocHandler()->startDocument();
 
     sal_uInt16 nPos = _GetNamespaceMap().GetIndexByKey( XML_NAMESPACE_BLOCKLIST );
-    AddAttribute ( USHRT_MAX, _GetNamespaceMap().GetAttrNameByIndex ( nPos ),
+    AddAttribute ( XML_NAMESPACE_NONE, _GetNamespaceMap().GetAttrNameByIndex ( nPos ),
                               _GetNamespaceMap().GetNameByIndex ( nPos ) );
     AddAttribute( XML_NAMESPACE_BLOCKLIST, sXML_list_name,
                        OUString(rBlockList.GetName()));
@@ -128,10 +128,10 @@ sal_uInt32 SwXMLTextBlockExport::exportDoc(const String &rText)
     GetDocHandler()->startDocument();
 
     sal_uInt16 nPos = _GetNamespaceMap().GetIndexByKey( XML_NAMESPACE_OFFICE );
-    AddAttribute ( USHRT_MAX, _GetNamespaceMap().GetAttrNameByIndex ( nPos ),
+    AddAttribute ( XML_NAMESPACE_NONE, _GetNamespaceMap().GetAttrNameByIndex ( nPos ),
                               _GetNamespaceMap().GetNameByIndex ( nPos ) );
     nPos = _GetNamespaceMap().GetIndexByKey( XML_NAMESPACE_TEXT );
-    AddAttribute ( USHRT_MAX, _GetNamespaceMap().GetAttrNameByIndex ( nPos ),
+    AddAttribute ( XML_NAMESPACE_NONE, _GetNamespaceMap().GetAttrNameByIndex ( nPos ),
                               _GetNamespaceMap().GetNameByIndex ( nPos ) );
     {
         SvXMLElementExport aDocument (*this, XML_NAMESPACE_OFFICE, sXML_document, sal_True, sal_True);
