@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:56:30 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 13:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,7 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
     if (bSetMasterPage && !IsMasterPage())
     {
         SdPage* pMaster;
+        SdPage* pFoundMaster = 0;
         USHORT nMaster = 0;
         USHORT nMasterCount = pModel->GetMasterPageCount();
 
@@ -180,10 +181,10 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
         {
             for ( nMaster = 0; nMaster < nMasterCount; nMaster++ )
             {
-                pMaster = (SdPage*)pModel->GetMasterPage(nMaster);
-                if (pMaster->GetPageKind() == ePageKind &&
-                    pMaster->GetLayoutName() == aLayoutName)
+                pMaster = static_cast<SdPage*>(pModel->GetMasterPage(nMaster));
+                if (pMaster->GetPageKind() == ePageKind && pMaster->GetLayoutName() == aLayoutName)
                 {
+                    pFoundMaster = pMaster;
                     break;
                 }
             }
@@ -192,19 +193,23 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
         {
             for ( nMaster = nMasterCount; nMaster > 0; nMaster-- )
             {
-                pMaster = (SdPage*)pModel->GetMasterPage(nMaster - 1);
-                if (pMaster->GetPageKind() == ePageKind &&
-                    pMaster->GetLayoutName() == aLayoutName)
+                pMaster = static_cast<SdPage*>(pModel->GetMasterPage(nMaster - 1));
+                if (pMaster->GetPageKind() == ePageKind && pMaster->GetLayoutName() == aLayoutName)
                 {
+                    pFoundMaster = pMaster;
                     break;
                 }
             }
         }
 
-        DBG_ASSERT(nMaster < nMasterCount, "Masterpage nicht gefunden");
+        DBG_ASSERT(pFoundMaster, "Masterpage for presentation layout not found!");
 
-        // falls es eine oder mehrere Masterpages gibt: die 1. ersetzen
-        TRG_SetMasterPage(*pModel->GetMasterPage(nMaster));
+        // this should never happen, but we play failsafe here
+        if( pFoundMaster == 0 )
+            pFoundMaster = static_cast< SdDrawDocument *>(pModel)->GetSdPage( 0, ePageKind );
+
+        if( pFoundMaster )
+            TRG_SetMasterPage(*pFoundMaster);
     }
 
     /*********************************************************************
