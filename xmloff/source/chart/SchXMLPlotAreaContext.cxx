@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-27 17:37:52 $
+ *  last change: $Author: bm $ $Date: 2000-11-29 13:57:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,8 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
                 xProp->setPropertyValue(
                     rtl::OUString::createFromAscii( "HasXAxis" ), aFalseBool );
                 xProp->setPropertyValue(
+                    rtl::OUString::createFromAscii( "HasXAxisGrid" ), aFalseBool );
+                xProp->setPropertyValue(
                     rtl::OUString::createFromAscii( "HasXAxisDescription" ), aFalseBool );
             }
             if( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.chart.ChartTwoAxisXSupplier" )))
@@ -176,6 +178,8 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
             {
                 xProp->setPropertyValue(
                     rtl::OUString::createFromAscii( "HasYAxis" ), aFalseBool );
+                xProp->setPropertyValue(
+                    rtl::OUString::createFromAscii( "HasYAxisGrid" ), aFalseBool );
                 xProp->setPropertyValue(
                     rtl::OUString::createFromAscii( "HasYAxisDescription" ), aFalseBool );
             }
@@ -399,6 +403,108 @@ uno::Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
         xDoc->lockControllers();
 
     return xResult;
+}
+
+void SchXMLAxisContext::CreateGrid( ::rtl::OUString sAutoStyleName,
+                                    sal_Bool bIsMajor )
+{
+    uno::Reference< chart::XDiagram > xDia = mrImportHelper.GetChartDocument()->getDiagram();
+    uno::Reference< beans::XPropertySet > xGridProp;
+    ::rtl::OUString sPropertyName;
+    DBG_ASSERT( xDia.is(), "diagram object is invalid!" );
+
+    switch( maCurrentAxis.eClass )
+    {
+        case SCH_XML_AXIS_CATEGORY:
+        case SCH_XML_AXIS_DOMAIN:
+            {
+                uno::Reference< chart::XAxisXSupplier > xSuppl( xDia, uno::UNO_QUERY );
+                if( xSuppl.is())
+                {
+                    if( bIsMajor )
+                    {
+                        xGridProp = xSuppl->getXMainGrid();
+                        sPropertyName = ::rtl::OUString::createFromAscii( "HasXAxisGrid" );
+                    }
+                    else
+                    {
+                        xGridProp = xSuppl->getXHelpGrid();
+                        sPropertyName = ::rtl::OUString::createFromAscii( "HasXAxisHelpGrid" );
+                    }
+                }
+            }
+            break;
+        case SCH_XML_AXIS_VALUE:
+            {
+                uno::Reference< chart::XAxisYSupplier > xSuppl( xDia, uno::UNO_QUERY );
+                if( xSuppl.is())
+                {
+                    if( bIsMajor )
+                    {
+                        xGridProp = xSuppl->getYMainGrid();
+                        sPropertyName = ::rtl::OUString::createFromAscii( "HasYAxisGrid" );
+                    }
+                    else
+                    {
+                        xGridProp = xSuppl->getYHelpGrid();
+                        sPropertyName = ::rtl::OUString::createFromAscii( "HasYAxisHelpGrid" );
+                    }
+                }
+            }
+            break;
+        case SCH_XML_AXIS_SERIES:
+            {
+                uno::Reference< chart::XAxisZSupplier > xSuppl( xDia, uno::UNO_QUERY );
+                if( xSuppl.is())
+                {
+                    if( bIsMajor )
+                    {
+                        xGridProp = xSuppl->getZMainGrid();
+                        sPropertyName = ::rtl::OUString::createFromAscii( "HasZAxisGrid" );
+                    }
+                    else
+                    {
+                        xGridProp = xSuppl->getZHelpGrid();
+                        sPropertyName = ::rtl::OUString::createFromAscii( "HasZAxisHelpGrid" );
+                    }
+                }
+            }
+            break;
+    }
+
+    // enable grid
+    if( sPropertyName.getLength())
+    {
+        uno::Reference< beans::XPropertySet > xDiaProp( xDia, uno::UNO_QUERY );
+        uno::Any aTrueBool;
+        aTrueBool <<= (sal_Bool)(sal_True);
+        if( xDiaProp.is())
+        {
+            try
+            {
+                xDiaProp->setPropertyValue( sPropertyName, aTrueBool );
+            }
+            catch( beans::UnknownPropertyException )
+            {
+                DBG_ERROR( "Cannot enable grid due to missing property" );
+            }
+        }
+    }
+
+    // set properties
+    if( sAutoStyleName.getLength() &&
+        xGridProp.is())
+    {
+        const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
+        if( pStylesCtxt )
+        {
+            const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
+                mrImportHelper.GetChartFamilyID(), sAutoStyleName );
+
+            if( pStyle && pStyle->ISA( XMLPropStyleContext ))
+                (( XMLPropStyleContext* )pStyle )->FillPropertySet( xGridProp );
+        }
+    }
 }
 
 void SchXMLAxisContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
@@ -635,6 +741,31 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
         }
         else if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_grid )))
         {
+            sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
+            sal_Bool bIsMajor = sal_True;       // default value for class is "major"
+            rtl::OUString sAutoStyleName;
+
+            for( sal_Int16 i = 0; i < nAttrCount; i++ )
+            {
+                rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+                rtl::OUString aLocalName;
+                USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+
+                if( nPrefix == XML_NAMESPACE_CHART )
+                {
+                    if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_class )))
+                    {
+                        if( xAttrList->getValueByIndex( i ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_minor )))
+                            bIsMajor = sal_False;
+                    }
+                    else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_style_name )))
+                        sAutoStyleName = xAttrList->getValueByIndex( i );
+                }
+            }
+
+            CreateGrid( sAutoStyleName, bIsMajor );
+
+            // don't create a context => use default context. grid elements are empty
         }
     }
 
@@ -644,9 +775,7 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
     return pContext;
 }
 
-
 // ========================================
-
 
 SchXMLSeriesContext::SchXMLSeriesContext(
     SchXMLImportHelper& rImpHelper,
