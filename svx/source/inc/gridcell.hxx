@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-29 08:29:56 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 13:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,12 +104,14 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
-
 #ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
 #include <comphelper/propmultiplex.hxx>
 #endif
-#ifndef _CONNECTIVITY_SQLPARSE_HXX
-#include <connectivity/sqlparse.hxx>
+#ifndef SVX_SQLPARSERCLIENT_HXX
+#include "sqlparserclient.hxx"
+#endif
+#ifndef SVX_TYPECONVERSION_CLIENT_HXX
+#include "typeconversionclient.hxx"
 #endif
 
 class DbCellControl;
@@ -260,6 +262,8 @@ public:
 // benoetigt
 //==================================================================
 class DbCellControl
+        :public ::svxform::OTypeConversionClient
+        ,public ::svxform::OStaticDataAccessTools
 {
 protected:
     DbGridColumn&   m_rColumn;
@@ -476,10 +480,11 @@ public:
 };
 
 //==================================================================
-class DbFilterField : public DbCellControl
+class DbFilterField
+        :public DbCellControl
+        ,public ::svxform::OSQLParserClient
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aValueList;
-    connectivity::OSQLParser    m_aParser;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aValueList;
     XubString   m_aText;
     Link    m_aCommitLink;
     sal_Int16   m_nControlClass;

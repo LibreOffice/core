@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-05 10:12:39 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 13:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,9 @@
 #ifndef _SVX_FMEXCH_HXX
 #include "fmexch.hxx"
 #endif
+#ifndef SVX_SQLPARSERCLIENT_HXX
+#include "sqlparserclient.hxx"
+#endif
 
 class FmFormShell;
 
@@ -247,10 +250,10 @@ public:
 //========================================================================
 class FmFilterModel : public FmParentData
                      ,public SfxBroadcaster
+                     ,public ::svxform::OSQLParserClient
 {
     friend class FmFilterAdapter;
 
-    connectivity::OSQLParser    m_aParser;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >       m_xControllers;
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >         m_xController;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 16:04:52 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 13:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::awt;
@@ -600,17 +601,17 @@ IMPL_LINK(FmXFormView, OnActivate, void*, EMPTYTAG)
 
         if (pFmRec)
         {
-            for (vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > >::const_iterator i = pFmRec->GetList().begin();
+            for (vector< Reference< XFormController > >::const_iterator i = pFmRec->GetList().begin();
                 i != pFmRec->GetList().end(); i++)
             {
-                const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > & xController = *i;
+                const Reference< XFormController > & xController = *i;
                 if (xController.is())
                 {
                     // Nur bei Datenbankformularen erfolgt eine aktivierung
-                    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >  xForm(xController->getModel(), ::com::sun::star::uno::UNO_QUERY);
-                    if (xForm.is() && ::dbtools::getConnection(xForm).is())
+                    Reference< XRowSet >  xForm(xController->getModel(), UNO_QUERY);
+                    if (xForm.is() && getRowsetConnection(xForm).is())
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xFormSet(xForm, ::com::sun::star::uno::UNO_QUERY);
+                        Reference< XPropertySet >  xFormSet(xForm, UNO_QUERY);
                         if (xFormSet.is())
                         {
                             // wenn es eine Datenquelle gibt, dann als aktive ::com::sun::star::form setzen

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-22 13:36:47 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 13:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,9 @@
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
 #endif
-
+#ifndef SVX_DBTOOLSCLIENT_HXX
+#include "dbtoolsclient.hxx"
+#endif
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
 #endif
@@ -192,6 +194,9 @@
 #endif
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
+#endif
+#ifndef SVX_DBTOOLSCLIENT_HXX
+#include "dbtoolsclient.hxx"
 #endif
 
 SV_DECL_PTRARR(SdrObjArray, SdrObject*, 32, 16);
@@ -294,6 +299,7 @@ typedef ::utl::ConfigItem                   FmXFormShell_CFGBASE;
 class FmXFormShell  :public FmXFormShell_BASE
                     ,public FmXFormShell_CFGBASE
                     ,public FmDispatchInterceptor
+                    ,public ::svxform::OStaticDataAccessTools
 {
     friend class FmFormShell;
     friend class FmFormView;

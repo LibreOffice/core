@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: fs $ $Date: 2001-05-11 10:12:17 $
+#   last change: $Author: fs $ $Date: 2001-07-25 13:44:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,6 @@ BMP_IN=$(PRJ)$/win$/res
 
 SRS1NAME=form
 SRC1FILES= \
-    dbmsgbox.src 	\
     fmexpl.src 		\
     filtnav.src		\
     taborder.src 	\
@@ -91,6 +90,10 @@ SRC1FILES= \
 
 
 SLOFILES = \
+    $(SLO)$/typeconversionclient.obj      \
+    $(SLO)$/confirmdelete.obj      \
+    $(SLO)$/dbtoolsclient.obj      \
+    $(SLO)$/sqlparserclient.obj      \
     $(SLO)$/dataaccessdescriptor.obj      \
     $(SLO)$/fmpage.obj      \
     $(SLO)$/fmPropBrw.obj			\
@@ -120,7 +123,6 @@ SLOFILES = \
     $(SLO)$/fmimplids.obj   \
     $(SLO)$/fmtools.obj     \
     $(SLO)$/fmshimp.obj     \
-    $(SLO)$/dbmsgbox.obj    \
     $(SLO)$/fmshell.obj     \
     $(SLO)$/fmsearch.obj	\
     $(SLO)$/fmsrcimp.obj	\

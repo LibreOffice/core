@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-27 08:23:47 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 13:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,7 @@
     catch(::com::sun::star::sdbc::SQLException& e)                                                  \
     {                                                                       \
         ::com::sun::star::sdb::SQLContext eExtendedInfo =                                           \
-        ::dbtools::prependContextInfo(e, Reference< XInterface > (), context);              \
+        GetImpl()->prependContextInfo(e, Reference< XInterface > (), context, ::rtl::OUString());              \
         displayException(eExtendedInfo);                                    \
     }                                                                       \
     catch(Exception&)                                                           \
@@ -627,7 +627,7 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
                     }
 
                     if (bModified)
-                        nResult = (sal_uInt16)FmXFormShell::SaveModified(xController, sal_False);
+                        nResult = (sal_Bool)FmXFormShell::SaveModified(xController, sal_False);
                 }
             }
         }
@@ -1084,7 +1084,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                     xCursor->relative(bRight ? 1 : -1);
                 else
                 {
-                    sal_Bool bCanInsert = ::dbtools::canInsert(xSet);
+                    sal_Bool bCanInsert = canInsertRecords(xSet);
                     // kann noch ein Datensatz eingefuegt weden
                     try
                     {
@@ -1133,7 +1133,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 sal_Bool    bFinal      = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ROWCOUNTFINAL));
                 sal_Int32  nRecordCount= ::comphelper::getINT32(xSet->getPropertyValue(FM_PROP_ROWCOUNT));
 
-                if (bFinal && (sal_uInt32)nRecord >= nRecordCount)
+                if (bFinal && (sal_Int32)nRecord >= nRecordCount)
                 {
                     Sound::Beep();
                     rReq.Done();
@@ -1760,11 +1760,11 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             case SID_FM_RECORD_NEW:
             {
                 Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(GetImpl()->getActiveForm(), UNO_QUERY);
-                bEnable = ::dbtools::canInsert(xActiveSet);
+                bEnable = canInsertRecords(xActiveSet);
                 // if we are inserting we can move to the next row if the current record is modified
                 bEnable  = ::comphelper::getBOOL(xActiveSet->getPropertyValue(FM_PROP_ISNEW))
                     ? GetImpl()->isActiveModified() || ::comphelper::getBOOL(xActiveSet->getPropertyValue(FM_PROP_ISMODIFIED))
-                    : ::dbtools::canInsert(xActiveSet);
+                    : canInsertRecords(xActiveSet);
             }   break;
             case SID_FM_RECORD_DELETE:
             {
@@ -1775,7 +1775,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
                 {
                     Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(xCursor, UNO_QUERY);
                     // allowed to delete the row ?
-                    bEnable = !::comphelper::getBOOL(xActiveSet->getPropertyValue(FM_PROP_ISNEW)) && ::dbtools::canDelete(xActiveSet);
+                    bEnable = !::comphelper::getBOOL(xActiveSet->getPropertyValue(FM_PROP_ISNEW)) && canDeleteRecords(xActiveSet);
                 }
                 else
                     bEnable = sal_False;
@@ -1797,7 +1797,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
                         {
                             // Sonderfall, es koennen keine Datensaetze eingefuegt werden
                             // und es gibt keinen Datensatz -> dann
-                            if (nCount == 0 && !::dbtools::canInsert(xNavSet))
+                            if (nCount == 0 && !canInsertRecords(xNavSet))
                             {
                                 bEnable = sal_False;
                             }
@@ -1882,7 +1882,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             {
                 Reference< ::com::sun::star::sdbc::XRowSet >            xRowSet(GetImpl()->getActiveForm(), UNO_QUERY);
                 Reference< ::com::sun::star::beans::XPropertySet >      xSet(GetImpl()->getActiveForm(), UNO_QUERY);
-                bEnable = ::dbtools::getConnection(xRowSet).is() && ::comphelper::getString(xSet->getPropertyValue(FM_PROP_ACTIVECOMMAND)).getLength();
+                bEnable = getRowsetConnection(xRowSet).is() && ::comphelper::getString(xSet->getPropertyValue(FM_PROP_ACTIVECOMMAND)).getLength();
             }   break;
             case SID_FM_FORM_FILTERED:
             {

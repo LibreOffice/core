@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 11:11:04 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 13:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,9 @@
 #ifndef _SVX_FMTOOLS_HXX
 #include "fmtools.hxx"
 #endif
+#ifndef SVX_SQLPARSERCLIENT_HXX
+#include "sqlparserclient.hxx"
+#endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase2.hxx>
@@ -309,6 +312,7 @@ class FmXFormController     : public ::comphelper::OBaseMutex
                             ,public ::cppu::OPropertySetHelper
                             ,public FmDispatchInterceptor
                             ,public ::comphelper::OAggregationArrayUsageHelper< FmXFormController>
+                            ,public ::svxform::OSQLParserClient
 {
     friend class FmXPageViewWinRec;
 
@@ -337,7 +341,6 @@ class FmXFormController     : public ::comphelper::OBaseMutex
     ::form::OImplementationIdsRef   m_aHoldImplIdHelper;
 
     Timer                       m_aInsertTimer;
-    connectivity::OSQLParser    m_aParser;
 
     FmFormView*                 m_pView;
     Window*                     m_pWindow;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 09:46:49 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 13:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -830,19 +830,18 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
 
 
     ::rtl::OUString sDatabaseName = aDatabaseName;
-    SQLExceptionInfo aInfo;
+    SQLErrorEvent aError;
     try
     {
-        xDataSource = ::dbtools::getDataSource(sDatabaseName,pImpl->getORB());
-        ::rtl::OUString sEmpty;
-        xConnection = ::dbtools::getConnection_withFeedback(sDatabaseName, sEmpty, sEmpty, pImpl->getORB());
+        xDataSource = getDatasourceObject(sDatabaseName, pImpl->getORB());
+        xConnection = getDatasourceConnection(sDatabaseName, pImpl->getORB());
     }
-    catch(const SQLContext& e) { aInfo = e; }
-    catch(const SQLWarning& e) { aInfo = e; }
-    catch(const SQLException& e) { aInfo = e; }
-    if (aInfo.isValid())
+    catch(const SQLContext& e) { aError.Reason <<= e; }
+    catch(const SQLWarning& e) { aError.Reason <<= e; }
+    catch(const SQLException& e) { aError.Reason <<= e; }
+    if (aError.Reason.hasValue())
     {
-        showError(aInfo, Reference< ::com::sun::star::awt::XWindow >(), pImpl->getORB());
+        displayException(aError);
         return NULL;
     }
 
@@ -891,7 +890,7 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
         if (xFields.is() && xFields->hasByName(aFieldName))
             xFields->getByName(aFieldName) >>= xField;
 
-        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(xConnection, sal_False);
+        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = OStaticDataAccessTools().getNumberFormats(xConnection, sal_False);
         if (!xSupplier.is() || !xField.is())
             return NULL;
 

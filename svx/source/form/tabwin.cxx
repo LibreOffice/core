@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-05 10:15:13 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 13:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,9 +112,9 @@
 #include "fmshell.hxx"
 #endif
 
-//#ifndef _SVX_FMEXCH_HXX
-//#include "fmexch.hxx"
-//#endif
+#ifndef SVX_DBTOOLSCLIENT_HXX
+#include "dbtoolsclient.hxx"
+#endif
 
 #ifndef _SVX_FMPAGE_HXX
 #include "fmpage.hxx"
@@ -393,7 +393,10 @@ sal_Bool FmFieldWin::Update(const ::com::sun::star::uno::Reference< ::com::sun::
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xField;
     try
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >   xConnection = ::dbtools::calcConnection(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > (xForm, ::com::sun::star::uno::UNO_QUERY),::comphelper::getProcessServiceFactory());
+        // get the connection of the form
+        Reference< XConnection > xConnection;
+        OStaticDataAccessTools().calcConnection(Reference< XRowSet >(xForm, UNO_QUERY), ::comphelper::getProcessServiceFactory());
+
         if (!xConnection.is())
             return sal_True;
 

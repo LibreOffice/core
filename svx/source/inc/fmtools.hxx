@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-23 10:42:27 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 13:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_XROWLOCATE_HPP_
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
+#include <com/sun/star/sdbc/XDataSource.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -205,6 +207,9 @@
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+#include <com/sun/star/sdbc/XConnection.hpp>
+#endif
 #ifndef _COM_SUN_STAR_IO_XOBJECTINPUTSTREAM_HPP_
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #endif
@@ -257,28 +262,45 @@
 #endif
 
 
+class Window;
+
 //==================================================================
 // allgemeine Typen
 //==================================================================
 // displaying a database exception for the user
 // display info about a simple ::com::sun::star::sdbc::SQLException
-void displayException(const ::com::sun::star::sdbc::SQLException&, WinBits nStyle = WB_OK | WB_DEF_OK);
+void displayException(const ::com::sun::star::sdbc::SQLException&, Window* _pParent = NULL);
+void displayException(const ::com::sun::star::sdbc::SQLWarning&, Window* _pParent = NULL);
+void displayException(const ::com::sun::star::sdb::SQLContext&, Window* _pParent = NULL);
 // display info about chained SQLExceptions
-void displayException(const ::com::sun::star::sdb::SQLErrorEvent&, WinBits nStyle = WB_OK | WB_DEF_OK);
-
+void displayException(const ::com::sun::star::sdb::SQLErrorEvent&, Window* _pParent = NULL);
 
 // StringConversion
-#define U(x)                    \
-    ::rtl::OStringToOUString( x, RTL_TEXTENCODING_ASCII_US )
-#define S(aUniCode)             \
-    ::rtl::OUStringToOString(aUniCode, RTL_TEXTENCODING_ASCII_US)
-
 namespace svxform
 {
-
     // modes for the XModeSelector
     DECLARE_CONSTASCII_USTRING(DATA_MODE);
     DECLARE_CONSTASCII_USTRING(FILTER_MODE);
+
+    //------------------------------------------------------------------------------
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getRowsetConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxRowSet) throw (::com::sun::star::uno::RuntimeException);
+
+    //------------------------------------------------------------------------------
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getDatasourceConnection(
+        const ::rtl::OUString& _rDatasourceName, const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+
+    //------------------------------------------------------------------------------
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > getDatasourceObject(
+        const ::rtl::OUString& _rDatasourceName, const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+
+    //------------------------------------------------------------------------------
+    sal_Bool canInsertRecords(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet);
+
+    //------------------------------------------------------------------------------
+    sal_Bool canUpdateRecords(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet);
+
+    //------------------------------------------------------------------------------
+    sal_Bool canDeleteRecords(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet);
 
 }   // namespace svxform
 

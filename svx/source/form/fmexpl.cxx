@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-05 10:15:13 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 13:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,10 +98,6 @@
 
 #ifndef _SVX_TABORDER_HXX
 #include "taborder.hxx"
-#endif
-
-#ifndef _SVX_DBERRBOX_HXX
-#include "dbmsgbox.hxx"
 #endif
 
 #ifndef _SVX_FMMODEL_HXX
@@ -254,6 +250,8 @@
 
 using namespace ::svxform;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdb;
 
 //========================================================================
 
@@ -1563,9 +1561,12 @@ sal_Bool FmExplorerModel::CheckEntry( FmEntryData* pEntryData )
             &&  (pEntryData!=pChildData)
             )
         {
-            SvxDBMsgBox aErrorBox( GetpApp()->GetAppWindow(), SVX_RES(RID_ERR_CONTEXT_ADDFORM),
-                SVX_RES(RID_ERR_DUPLICATE_NAME), WB_OK | WB_DEF_OK, SvxDBMsgBox::Error );
-            aErrorBox.Execute();
+
+
+            SQLContext aError;
+            aError.Message = String(SVX_RES(RID_ERR_CONTEXT_ADDFORM));
+            aError.Details = String(SVX_RES(RID_ERR_DUPLICATE_NAME));
+            displayException(aError);
 
             return sal_False;
         }
@@ -1806,7 +1807,7 @@ void FmExplorer::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
         return;
 
     for (sal_Int32 i=0; i<m_arrCurrentSelection.Count(); ++i)
-        m_aControlExchange->addSelectedEntry(m_arrCurrentSelection[i]);
+        m_aControlExchange->addSelectedEntry(m_arrCurrentSelection[(sal_uInt16)i]);
 
     m_aControlExchange->setShellAndPage( GetExplModel()->GetFormShell(), GetExplModel()->GetFormPage() );
     m_aControlExchange->buildPathFormat(this, m_pRootEntry);
@@ -1816,7 +1817,7 @@ void FmExplorer::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
     sal_Bool bHasNonHidden = sal_False;
     for (i=0; i<m_arrCurrentSelection.Count(); i++)
     {
-        FmEntryData* pCurrent = (FmEntryData*)(m_arrCurrentSelection[i]->GetUserData());
+        FmEntryData* pCurrent = (FmEntryData*)(m_arrCurrentSelection[(sal_uInt16)i]->GetUserData());
         if (IsHiddenControl(pCurrent))
             continue;
         bHasNonHidden = sal_True;
@@ -1828,7 +1829,7 @@ void FmExplorer::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > seqIFaces(m_arrCurrentSelection.Count());
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > * pArray = seqIFaces.getArray();
         for (i=0; i<m_arrCurrentSelection.Count(); i++)
-            pArray[i] = ((FmEntryData*)(m_arrCurrentSelection[i]->GetUserData()))->GetElement();
+            pArray[i] = ((FmEntryData*)(m_arrCurrentSelection[(sal_uInt16)i]->GetUserData()))->GetElement();
 
         // und das neue Format
         m_aControlExchange->addHiddenControlsFormat(seqIFaces);

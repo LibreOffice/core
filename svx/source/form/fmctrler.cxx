@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 11:11:14 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 13:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _SVX_FMSHELL_HXX
 #include "fmshell.hxx"
 #endif
+#ifndef SVX_FORM_CONFIRMDELETE_HXX
+#include "confirmdelete.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_SDB_ROWCHANGEACTION_HPP_
 #include <com/sun/star/sdb/RowChangeAction.hpp>
@@ -146,10 +149,6 @@
 
 #ifndef _SVX_FMFILTER_HXX
 #include "fmfilter.hxx"
-#endif
-
-#ifndef _SVX_DBERRBOX_HXX
-#include "dbmsgbox.hxx"
 #endif
 
 #ifndef _SV_MSGBOX_HXX //autogen wg. RET_YES
@@ -246,8 +245,9 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::comphelper;
 using namespace ::dbtools;
-using namespace ::svxform;
 using namespace ::connectivity;
+using namespace ::svxform;
+using namespace ::connectivity::simple;
 
 extern sal_uInt16 AutoSlotMap[];
 
@@ -365,6 +365,7 @@ FmXFormController::FmXFormController(const Reference< ::com::sun::star::lang::XM
                                      FmFormView* _pView, Window* _pWindow, const UniString& _sDispatchPrefix)
                   :FmXFormController_BASE1(m_aMutex)
                   ,OPropertySetHelper(FmXFormController_BASE1::rBHelper)
+                  ,OSQLParserClient(_rxORB)
                   ,m_xORB(_rxORB)
                   ,m_aActivateListeners(m_aMutex)
                   ,m_aModifyListeners(m_aMutex)
@@ -392,7 +393,6 @@ FmXFormController::FmXFormController(const Reference< ::com::sun::star::lang::XM
                   ,m_sDispatchPrefix(_sDispatchPrefix)
                   ,m_nUpdateDispatcherEvent(0)
                   ,m_nToggleEvent(0)
-                  ,m_aParser(_rxORB)
 {
     ::comphelper::increment(m_refCount);
     {
@@ -593,11 +593,11 @@ void FmXFormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) c
         case FM_ATTR_FILTER_CRITERIA:
         {
             ::rtl::OUString aFilter;
-            Reference< ::com::sun::star::sdbc::XConnection> xConnection(::dbtools::getConnection(Reference< ::com::sun::star::sdbc::XRowSet>(m_xModelAsIndex, UNO_QUERY)));
+            Reference<XConnection> xConnection(getRowsetConnection(Reference< XRowSet>(m_xModelAsIndex, UNO_QUERY)));
             if (xConnection.is())
             {
                 Reference< ::com::sun::star::sdbc::XDatabaseMetaData> xMetaData(xConnection->getMetaData());
-                Reference< ::com::sun::star::util::XNumberFormatsSupplier> xFormatSupplier( ::dbtools::getNumberFormats(xConnection, sal_True));
+                Reference< ::com::sun::star::util::XNumberFormatsSupplier> xFormatSupplier( OStaticDataAccessTools().getNumberFormats(xConnection, sal_True));
                 Reference< ::com::sun::star::util::XNumberFormatter> xFormatter(m_xORB
                                 ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
                 xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
@@ -630,12 +630,11 @@ void FmXFormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) c
 
                             aTest = (const sal_Unicode*)(*j).second;
                             aErrorMsg = ::rtl::OUString();
-                            OSQLParseNode* pParseNode = const_cast<OSQLParser*>(&m_aParser)->predicateTree(aErrorMsg, aTest, xFormatter, xField);
-
-                            if (pParseNode)
+                            ::rtl::Reference< ISQLParseNode > xParseNode = predicateTree(aErrorMsg, aTest, xFormatter, xField);
+                            if (xParseNode.is())
                             {
                                 aCriteria = ::rtl::OUString();
-                                pParseNode->parseNodeToStr(aCriteria,xMetaData);
+                                xParseNode->parseNodeToStr(aCriteria, xMetaData);
                                 aFilter += aCriteria;
                             }
                         }
@@ -1952,7 +1951,7 @@ void FmXFormController::loaded(const ::com::sun::star::lang::EventObject& rEvent
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< ::com::sun::star::sdbc::XRowSet >  xForm(rEvent.Source, UNO_QUERY);
     // do we have a connected data source
-    if (xForm.is() && ::dbtools::getConnection(xForm).is())
+    if (xForm.is() && getRowsetConnection(xForm).is())
     {
         Reference< XPropertySet >  xSet(xForm, UNO_QUERY);
         if (xSet.is())
@@ -1961,8 +1960,8 @@ void FmXFormController::loaded(const ::com::sun::star::lang::EventObject& rEvent
             sal_Int32 aVal2;
             ::cppu::enum2int(aVal2,aVal);
             m_bCycle        = !aVal.hasValue() || aVal2 == ::com::sun::star::form::TabulatorCycle_RECORDS;
-            m_bCanUpdate    = ::dbtools::canUpdate(xSet);
-            m_bCanInsert    = ::dbtools::canInsert(xSet);
+            m_bCanUpdate    = canUpdateRecords(xSet);
+            m_bCanInsert    = canInsertRecords(xSet);
             m_bCurrentRecordModified = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISMODIFIED));
             m_bCurrentRecordNew      = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISNEW));
             if (m_bCanInsert || m_bCanUpdate)   // modificationen sind moeglich
@@ -2286,8 +2285,8 @@ void FmXFormController::setFilter(vector<FmFieldInfo>& rFieldInfos)
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     // create the composer
-    Reference< ::com::sun::star::sdbc::XRowSet >  xForm(m_xModelAsIndex, UNO_QUERY);
-    Reference< ::com::sun::star::sdbc::XConnection >  xConnection(::dbtools::getConnection(xForm));
+    Reference< XRowSet > xForm(m_xModelAsIndex, UNO_QUERY);
+    Reference< XConnection > xConnection(getRowsetConnection(xForm));
     if (xForm.is())
     {
         Reference< ::com::sun::star::sdb::XSQLQueryComposerFactory >  xFactory(xConnection, UNO_QUERY);
@@ -2386,7 +2385,7 @@ void FmXFormController::setFilter(vector<FmFieldInfo>& rFieldInfos)
                     if (!xField.is())
                         continue;
                 }
-                catch (...)
+                catch (const Exception&)
                 {
                     continue;
                 }
@@ -2403,7 +2402,7 @@ void FmXFormController::setFilter(vector<FmFieldInfo>& rFieldInfos)
                         {
                             ::rtl::OUString aCompText = aRow[(*iter).xText];
                             aCompText += ::rtl::OUString::createFromAscii(" ");
-                            ::rtl::OString aVal = m_aParser.getContext().getIntlKeywordAscii(OParseContext::KEY_AND);
+                            ::rtl::OString aVal = m_xParser->getContext().getIntlKeywordAscii(OParseContext::KEY_AND);
                             aCompText += ::rtl::OUString(aVal.getStr(),aVal.getLength(),RTL_TEXTENCODING_ASCII_US);
                             aCompText += ::rtl::OUString::createFromAscii(" ");
                             aCompText += ::comphelper::getString(pRefValues[j].Value);
@@ -2461,9 +2460,9 @@ void FmXFormController::startFiltering()
 
     // the control we have to activate after replacement
     Reference< ::com::sun::star::awt::XControl >  xNewActiveControl;
-    Reference< ::com::sun::star::sdbc::XConnection >  xConnection(::dbtools::getConnection(Reference< ::com::sun::star::sdbc::XRowSet > (m_xModelAsIndex, UNO_QUERY)));
+    Reference< ::com::sun::star::sdbc::XConnection >  xConnection(getRowsetConnection(Reference< ::com::sun::star::sdbc::XRowSet > (m_xModelAsIndex, UNO_QUERY)));
     Reference< ::com::sun::star::sdbc::XDatabaseMetaData >  xMetaData(xConnection->getMetaData());
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSupplier = ::dbtools::getNumberFormats(xConnection, sal_True);
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSupplier = OStaticDataAccessTools().getNumberFormats(xConnection, sal_True);
     Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter(m_xORB
                         ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
     xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
@@ -2888,15 +2887,14 @@ sal_Bool SAL_CALL FmXFormController::approveRowChange(const ::com::sun::star::sd
                     }
                 }
 
-                ::vos::OGuard aGuard(Application::GetSolarMutex());
-
-                UniString aTitle(SVX_RES(RID_STR_WRITEERROR));
-                UniString aMsg(SVX_RES(RID_ERR_FIELDREQUIRED));
+                String aMsg(SVX_RES(RID_ERR_FIELDREQUIRED));
                 aMsg.SearchAndReplace('#', aFieldName.getStr());
 
-                SvxDBMsgBox aDlg(getDialogParentWindow(), aTitle, aMsg, WB_OK | WB_DEF_OK,
-                                SvxDBMsgBox::Info);
-                aDlg.Execute();
+                SQLContext aError;
+                aError.Message = String(SVX_RES(RID_STR_WRITEERROR));
+                aError.Details = aMsg;
+                displayException(aError, getDialogParentWindow());
+
                 if ( i < nLength)
                 {
                     Reference< ::com::sun::star::awt::XWindow >  xWindow(pControls[i], UNO_QUERY);
@@ -3041,7 +3039,7 @@ sal_Bool SAL_CALL FmXFormController::approveParameter(const ::com::sun::star::fo
             // the request
             ParametersRequest aRequest;
             aRequest.Parameters = aEvent.Parameters;
-            aRequest.Connection = getConnection(Reference< XRowSet >(aEvent.Source, UNO_QUERY));
+            aRequest.Connection = getRowsetConnection(Reference< XRowSet >(aEvent.Source, UNO_QUERY));
             OInteractionRequest* pParamRequest = new OInteractionRequest(makeAny(aRequest));
             Reference< XInteractionRequest > xParamRequest(pParamRequest);
             // some knittings
@@ -3143,10 +3141,8 @@ sal_Bool SAL_CALL FmXFormController::confirmDelete(const ::com::sun::star::sdb::
         else
             aTitle = SVX_RES(RID_STR_DELETECONFIRM_RECORD);
 
-        SvxDBMsgBox aDlg(getDialogParentWindow(), aTitle,
-                         SVX_RES(RID_STR_DELETECONFIRM), WB_YES_NO | WB_DEF_NO, SvxDBMsgBox::Warning);
-
-        return aDlg.Execute() == RET_YES;
+        ConfirmDeleteDialog aDlg(getDialogParentWindow(), aTitle);
+        return RET_YES == aDlg.Execute();
     }
 }
 

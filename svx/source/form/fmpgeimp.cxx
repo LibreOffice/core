@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-05 10:48:53 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 13:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,7 +469,7 @@ Reference< XForm >  FmFormPageImpl::FindForm(
         if (0 == sFormDataSourceName.getLength())
         {
             // check if it has an active connection
-            Reference< XConnection > xFormConnection = dbtools::getConnection(xDBForm);
+            Reference< XConnection > xFormConnection = getRowsetConnection(xDBForm);
             if (xFormConnection.is())
             {
                 OSL_ENSURE(sal_False, "FmFormPageImpl::FindForm: a connection without data source name?");
