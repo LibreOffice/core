@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,7 @@ BOOL ScDocShell::LoadCalc( SvStorage* pStor )       // StarCalc 3, 4 or 5 file
     ULONG nDocErr  = aDocStm->GetError();
 
     ScProgress* pProgress = NULL;
+    SfxObjectCreateMode eShellMode = GetCreateMode();
     if ( eShellMode == SFX_CREATE_MODE_STANDARD && !nDocErr )
     {
         ULONG nCurPos = aDocStm->Tell();
@@ -453,6 +454,7 @@ BOOL ScDocShell::SaveCalc( SvStorage* pStor )           // Calc 3, 4 or 5 file
     BOOL bRet = TRUE;
 
     ScProgress* pProgress = NULL;
+    SfxObjectCreateMode eShellMode = GetCreateMode();
     if ( eShellMode == SFX_CREATE_MODE_STANDARD )
     {
         ULONG nRange = aDocument.GetWeightedCount() + 1;
@@ -534,7 +536,7 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
 
     ScXMLImportWrapper aImport( aDocument, pMedium, pStor );
     sal_Bool bRet(sal_False);
-    if (eShellMode != SFX_CREATE_MODE_ORGANIZER)
+    if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
     {
         ScColumn::bDoubleAlloc = sal_True;
         bRet = aImport.Import(sal_False);
@@ -621,7 +623,7 @@ BOOL ScDocShell::SaveXML( SfxMedium* pMedium, SvStorage* pStor )
 
     ScXMLImportWrapper aImport( aDocument, pMedium, pStor );
     sal_Bool bRet(sal_False);
-    if (eShellMode != SFX_CREATE_MODE_ORGANIZER)
+    if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
         bRet = aImport.Export(sal_False);
     else
         bRet = aImport.Export(sal_True);
@@ -1281,7 +1283,7 @@ BOOL __EXPORT ScDocShell::Save()
         pCharts->UpdateDirtyCharts();                   // Charts, die noch upgedated werden muessen
     if (pAutoStyleList)
         pAutoStyleList->ExecuteAllNow();                // Vorlagen-Timeouts jetzt ausfuehren
-    if (eShellMode == SFX_CREATE_MODE_STANDARD)
+    if (GetCreateMode()== SFX_CREATE_MODE_STANDARD)
         SvInPlaceObject::SetVisArea( Rectangle() );     // normal bearbeitet -> keine VisArea
 
     // #77577# save additionally XML in storage
@@ -1317,7 +1319,7 @@ BOOL __EXPORT ScDocShell::SaveAs( SvStorage* pStor )
         pCharts->UpdateDirtyCharts();                   // Charts, die noch upgedated werden muessen
     if (pAutoStyleList)
         pAutoStyleList->ExecuteAllNow();                // Vorlagen-Timeouts jetzt ausfuehren
-    if (eShellMode == SFX_CREATE_MODE_STANDARD)
+    if (GetCreateMode()== SFX_CREATE_MODE_STANDARD)
         SvInPlaceObject::SetVisArea( Rectangle() );     // normal bearbeitet -> keine VisArea
 
     // #77577# save additionally XML in storage
@@ -1759,9 +1761,8 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
 
     if (pAutoStyleList)
         pAutoStyleList->ExecuteAllNow();                // Vorlagen-Timeouts jetzt ausfuehren
-    if (eShellMode == SFX_CREATE_MODE_STANDARD)
+    if (GetCreateMode()== SFX_CREATE_MODE_STANDARD)
         SvInPlaceObject::SetVisArea( Rectangle() );     // normal bearbeitet -> keine VisArea
-
 
     DBG_ASSERT( rMed.GetFilter(), "Filter == 0" );
 
@@ -2159,7 +2160,6 @@ ScDocShell::ScDocShell( const ScDocShell& rShell )
     SetPool( &SC_MOD()->GetPool() );
 
     SetShell(this);
-    eShellMode = rShell.eShellMode;
     bIsInplace = rShell.bIsInplace;
 
     pDocFunc = new ScDocFunc(*this);
@@ -2191,8 +2191,7 @@ ScDocShell::ScDocShell( SfxObjectCreateMode eMode )
     SetPool( &SC_MOD()->GetPool() );
 
     SetShell(this);
-    eShellMode = eMode;
-    bIsInplace = (eShellMode == SFX_CREATE_MODE_EMBEDDED);
+    bIsInplace = (eMode == SFX_CREATE_MODE_EMBEDDED);
     //  wird zurueckgesetzt, wenn nicht inplace
 
     pDocFunc = new ScDocFunc(*this);
