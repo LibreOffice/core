@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:32:07 $
+ *  last change: $Author: fs $ $Date: 2000-10-12 16:20:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 // error boxes
 
 #define ERR_NOREGISTEREDDATASOURCES     1000
+#define ERR_COULDNOTRESTOREDS           1001
 
 //========================================================================
 // bitmaps
@@ -100,6 +101,7 @@
 #define BMP_DATABASE                    1008
 #define BMP_DATABASE_MODIFIED           1009
 #define BMP_DATABASE_NEW                1010
+#define BMP_DATABASE_DELETED            1011
 
 //========================================================================
 // images
@@ -118,6 +120,7 @@
 // menues
 
 #define MENU_TABLETREE_POPUP            256
+#define MENU_DATASOURCELIST_POPUP       257
 
 //========================================================================
 // strings
@@ -143,6 +146,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/10/11 11:32:07  fs
+ *  new bitmap ids for the admin dialog
+ *
  *  Revision 1.2  2000/10/09 12:41:10  fs
  *  some new strings
  *
