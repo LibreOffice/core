@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:28:21 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 21:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ TabPage TP_DROPCAPS
         Text [ portuguese ] = "~Palavra inteira" ;
         Text[ chinese_simplified ] = "Õû¸ö×Ö(~W)";
         Text[ russian ] = "Âñå ñëîâî";
-        Text[ polish ] = "Ca³e s³owo";
+        Text[ polish ] = "Ca³y wyraz";
         Text[ japanese ] = "ˆêŒê(~W)";
         Text[ chinese_traditional ] = "¾ã­Ó¦r(~W)";
         Text[ arabic ] = "ßáãÉ ßÇãáÉ";
@@ -299,7 +299,7 @@ TabPage TP_DROPCAPS
         Text [ english_us ] = "Space to text" ;
         Text[ chinese_simplified ] = "ÖÁÕıÎÄµÄ¾àÀë(~D)";
         Text[ russian ] = "Ğàññòîÿíèå îò òåêñòà";
-        Text[ polish ] = "Odstêp do tekstu";
+        Text[ polish ] = "Odstêp od tekstu";
         Text[ japanese ] = "Ã·½Ä‚Ü‚Å‚ÌŠÔŠu(~D)";
         Text[ chinese_traditional ] = "¦Ü¤º¤åªº¶ZÖÃ(~D)";
         Text[ arabic ] = "ÇáãÓÇİÉ ÍÊì ÇáäÕ";
