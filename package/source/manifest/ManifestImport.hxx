@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestImport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-05 19:26:06 $
+ *  last change: $Author: mtg $ $Date: 2001-10-02 22:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ protected:
     const ::rtl::OUString sWhiteSpace;
     const ::rtl::OUString sBlowfish;
     const ::rtl::OUString sPBKDF2;
-    const ::rtl::OUString sMD5;
+    const ::rtl::OUString sChecksumType;
 
 public:
     ManifestImport( std::vector < ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > & rNewVector );
