@@ -2,9 +2,9 @@
  *
  *  $RCSfile: list.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:45:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:14:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: list.c,v 1.1.1.1 2001-05-08 11:45:36 pl Exp $ */
+/* $Id: list.c,v 1.2 2003-04-15 16:14:04 vg Exp $ */
 
 /*[]---------------------------------------------------[]*/
 /*|                                                     |*/
@@ -70,7 +70,12 @@
 /*[]---------------------------------------------------[]*/
 
 #include <stdlib.h>
+
+#if OSL_DEBUG_LEVEL == 0
+#define NDEBUG
+#endif
 #include <assert.h>
+
 #ifdef MALLOC_TRACE
 #include <stdio.h>
 #include </usr/local/include/malloc.h>
