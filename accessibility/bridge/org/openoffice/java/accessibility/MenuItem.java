@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MenuItem.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 18:16:03 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 08:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,28 +58,23 @@
  *
  *
  ************************************************************************/
-
 package org.openoffice.java.accessibility;
 
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
 
-class MenuItem extends ToggleButton {
 
+class MenuItem extends ToggleButton {
     public MenuItem(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
         super(xAccessible, xAccessibleContext);
     }
 
-    /** Returns the AccessibleContext associated with this object */
-    public javax.accessibility.AccessibleContext getAccessibleContext() {
-        if (accessibleContext == null) {
-            accessibleContext = new AccessibleMenuItem();
-        }
-        return accessibleContext;
+    /** Creates the AccessibleContext associated with this object */
+    public javax.accessibility.AccessibleContext createAccessibleContext() {
+        return new AccessibleMenuItem();
     }
 
     protected class AccessibleMenuItem extends AccessibleToggleButton {
-
         /** Gets the role of this object */
         public javax.accessibility.AccessibleRole getAccessibleRole() {
             return javax.accessibility.AccessibleRole.MENU_ITEM;
@@ -95,4 +90,3 @@ class MenuItem extends ToggleButton {
         }
     }
 }
-
