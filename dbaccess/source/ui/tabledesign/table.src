@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:26:14 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,8 @@
     Text[ thai ] = "~ออกแบบดัชนี..."; \
     Text[ czech ] = "Návrh rejstříku...";    \
     Text[ hebrew ] = "I~ndexentwurf...";    \
-    Text[ hindi ] = "~अनुक्रमणिका डिसैन...";
+    Text[ hindi ] = "~अनुक्रमणिका डिसैन...";    \
+    Text[ slovak ] = "Návrh ~indexu...";
 
 
 String STR_TABLEDESIGN_DBFIELDTYPES
@@ -149,6 +150,7 @@ String STR_TABLEDESIGN_DBFIELDTYPES
     Text[ czech ] = "Neznámý;Text;Number;Date/Time;Date;Time;Yes/No;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Structure;Field;BLOB;CLOB;REF;OTHER";
     Text[ hebrew ] = "Unbekannt;Text;Zahl;Datum/Zeit;Datum;Zeit;Ja/Nein;Währung;Memo;Zähler;Bild;Text (fix);Dezimal;Binärfeld (fix);Binärfeld;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Objekt;Distinct;Struktur;Feld;BLOB;CLOB;REF;OTHER";
     Text[ hindi ] = "अज्ञात;टेक्स्ट्;संख्या;दिनांक/समय;दिनांक;समय;हाँ/नहीं;मुद्रा;स्मृतिपत्र;गिनती;चित्र;टेक्स्ट् (स्थिर);दशांश;बैनरी (स्थिर);बैनरी;BigInt;डबल;फ्लोट;रियल;पूर्णांक;छोटा पूर्णांक;बहुत छोटा पूर्णांक;SQL Null;वस्तु;अनोखा;बनावट;क्षेत्र;BLOB;CLOB;REF;OTHER";
+    Text[ slovak ] = "Neznámy;Text;Číslo;Dátum/Čas;Dátum;Čas;Áno/Nie;Mena;Memo;Počítadlo;Obrázok;Text (fix);Desatinné;Binárne (fix);Binárne;BigInt;Dvojité;Premenlivé;Reálne číslo;Celé číslo;Malé celé číslo;Najmenšie celé číslo;SQL Null;Objekt;Rozoznávací;Štruktúra;Pole;BLOB;CLOB;REF;OTHER";
 };
 
 String STR_TABLEDESIGN_UNDO_PRIMKEY
@@ -181,6 +183,7 @@ String STR_TABLEDESIGN_UNDO_PRIMKEY
     Text[ czech ] = "Vložit/odstranit primární klíč";
     Text[ hebrew ] = "Primärschlüssel einfügen/entfernen";
     Text[ hindi ] = "प्रैमरी की जोड़ो/हटाओ";
+    Text[ slovak ] = "Vložiť/odstrániť primárny kľúč";
 };
 
 String STR_VALUE_YES
@@ -214,6 +217,7 @@ String STR_VALUE_YES
     Text[ czech ] = "Ano";
     Text[ hebrew ] = "‮כן‬";
     Text[ hindi ] = "हाँ";
+    Text[ slovak ] = "Áno";
 };
 String STR_VALUE_NO
 {
@@ -246,6 +250,7 @@ String STR_VALUE_NO
     Text[ czech ] = "Ne";
     Text[ hebrew ] = "‮לא‬";
     Text[ hindi ] = "नहीं";
+    Text[ slovak ] = "Nie";
 };
 String STR_VALUE_ASC
 {
@@ -278,6 +283,7 @@ String STR_VALUE_ASC
     Text[ czech ] = "Vzestupně";
     Text[ hebrew ] = "Aufsteigend";
     Text[ hindi ] = "आरोहण क्रम";
+    Text[ slovak ] = "Vzostupne";
 };
 String STR_VALUE_DESC
 {
@@ -310,6 +316,7 @@ String STR_VALUE_DESC
     Text[ czech ] = "Sestupně";
     Text[ hebrew ] = "Absteigend";
     Text[ hindi ] = "अवरोहण क्रम";
+    Text[ slovak ] = "Zostupne";
 };
 String STR_VALUE_NONE
 {
@@ -343,6 +350,7 @@ String STR_VALUE_NONE
     Text[ czech ] = "<nic>";
     Text[ hebrew ] = "<keiner>";
     Text[ hindi ] = "<कोई नहीं>";
+    Text[ slovak ] = "<nič>";
 };
 
 String STR_TAB_FIELD_NAME
@@ -376,6 +384,7 @@ String STR_TAB_FIELD_NAME
     Text[ czech ] = "Název pole";
     Text[ hebrew ] = "Feldname";
     Text[ hindi ] = "क्षेत्र नाम";
+    Text[ slovak ] = "Názov poľa";
 };
 String STR_TAB_FIELD_DATATYPE
 {
@@ -408,6 +417,7 @@ String STR_TAB_FIELD_DATATYPE
     Text[ czech ] = "Typ pole";
     Text[ hebrew ] = "Feldtyp";
     Text[ hindi ] = "क्षेत्र वर्ग";
+    Text[ slovak ] = "Typ poľa";
 };
 String STR_TAB_FIELD_LENGTH
 {
@@ -440,6 +450,7 @@ String STR_TAB_FIELD_LENGTH
     Text[ czech ] = "Délka pole";
     Text[ hebrew ] = "Feldlänge";
     Text[ hindi ] = "क्षेत्र विस्तार";
+    Text[ slovak ] = "Dĺžka poľa";
 };
 String STR_TAB_FIELD_DESCR
 {
@@ -472,6 +483,7 @@ String STR_TAB_FIELD_DESCR
     Text[ czech ] = "Popis";
     Text[ hebrew ] = "‮תאור‬";
     Text[ hindi ] = "विवरण";
+    Text[ slovak ] = "Popis";
 };
 String STR_TAB_FIELD_NULLABLE
 {
@@ -504,6 +516,7 @@ String STR_TAB_FIELD_NULLABLE
     Text[ czech ] = "Požadován vstup";
     Text[ hebrew ] = "Eingabe erforderlich";
     Text[ hindi ] = "इनपुट् की आवश्यकता";
+    Text[ slovak ] = "Vstup požadovaný";
 };
 String STR_FIELD_AUTOINCREMENT
 {
@@ -536,6 +549,7 @@ String STR_FIELD_AUTOINCREMENT
     Text[ czech ] = "Automatická hodnota";
     Text[ hebrew ] = "~Auto-Wert";
     Text[ hindi ] = "~स्वचालित मूल्य";
+    Text[ slovak ] = "~Automatická hodnota";
 };
 String STR_TAB_PROPERTIES
 {
@@ -568,6 +582,7 @@ String STR_TAB_PROPERTIES
     Text[ czech ] = "Vlastnosti pole";
     Text[ hebrew ] = "Feldeigenschaften";
     Text[ hindi ] = "क्षेत्र विशेषतायें";
+    Text[ slovak ] = "Vlastnosti poľa";
 };
 String STR_TABPAGE_GENERAL
 {
@@ -600,6 +615,7 @@ String STR_TABPAGE_GENERAL
     Text[ czech ] = "Obecný";
     Text[ hebrew ] = "‮כללי‬";
     Text[ hindi ] = "सामान्य";
+    Text[ slovak ] = "Všeobecný";
 };
 String STR_TAB_TABLE_DESCRIPTION
 {
@@ -629,6 +645,7 @@ String STR_TAB_TABLE_DESCRIPTION
     Text[ czech ] = "Popis:";
     Text[ hebrew ] = "‮תאור:‬";
     Text[ hindi ] = "विवरण:";
+    Text[ slovak ] = "Popis:";
 };
 
 String STR_TAB_TABLE_PROPERTIES
@@ -660,6 +677,7 @@ String STR_TAB_TABLE_PROPERTIES
     Text[ czech ] = "Vlastnosti tabulky";
     Text[ hebrew ] = "Tabelleneigenschaften";
     Text[ hindi ] = "सारणी विशेषतायें";
+    Text[ slovak ] = "Vlastnosti tabuľky";
 };
 
 Control RID_DB_TAB_EDITOR
@@ -703,6 +721,7 @@ ErrorBox ERR_INVALID_LISTBOX_ENTRY
     Message[ czech ] = "Text, který byl zadán, není položkou seznamu. ";
     Message[ hebrew ] = "Der eingegebenen Text ist kein Element der Liste.";
     Message[ hindi ] = "आपसे प्रविष्ट की हुयी टेक्स्ट् सूची का एलिमेन्ट नहीं है ।";
+    Message[ slovak ] = "Text, ktorý ste vložili nieje prvkom zoznamu. ";
 };
 
 Menu RID_TABLEDESIGNROWPOPUPMENU
@@ -758,6 +777,7 @@ Menu RID_TABLEDESIGNROWPOPUPMENU
             Text[ czech ] = "Vložit řádky";
             Text[ hebrew ] = "Zeilen einfügen";
             Text[ hindi ] = "पंक्तियों को जोड़ो";
+            Text[ slovak ] = "Vložiť riadky";
         };
     MenuItem
     {
@@ -797,6 +817,7 @@ Menu RID_TABLEDESIGNROWPOPUPMENU
             Text[ czech ] = "Primární klíč";
             Text[ hebrew ] = "Primärschlüssel";
             Text[ hindi ] = "प्रैमरी की";
+            Text[ slovak ] = "Primárny kľúč";
         };
     };
 };
@@ -830,6 +851,7 @@ String STR_TABED_UNDO_CELLMODIFIED
     Text[ czech ] = "Upravit buňku";
     Text[ hebrew ] = "Zelle ändern";
     Text[ hindi ] = "कोष्ठ सुधारो";
+    Text[ slovak ] = "Upraviť bunku";
 };
 String STR_TABED_UNDO_ROWDELETED
 {
@@ -861,6 +883,7 @@ String STR_TABED_UNDO_ROWDELETED
     Text[ czech ] = "Odstranit řádek";
     Text[ hebrew ] = "Zeile löschen";
     Text[ hindi ] = "पंक्ति मिटाओ";
+    Text[ slovak ] = "Odstrániť riadok";
 };
 String STR_TABED_UNDO_TYPE_CHANGED
 {
@@ -893,6 +916,7 @@ String STR_TABED_UNDO_TYPE_CHANGED
     Text[ czech ] = "Změnit typ pole";
     Text[ hebrew ] = "Feldtype ändern";
     Text[ hindi ] = "क्षेत्र वर्ग सुधारो";
+    Text[ slovak ] = "Upraviť typ poľa";
 };
 String STR_TABED_UNDO_ROWINSERTED
 {
@@ -924,6 +948,7 @@ String STR_TABED_UNDO_ROWINSERTED
     Text[ czech ] = "Vložit řádek";
     Text[ hebrew ] = "Zeile einfügen";
     Text[ hindi ] = "पंक्ति जोड़ो";
+    Text[ slovak ] = "Vložiť riadok";
 };
 String STR_TABED_UNDO_NEWROWINSERTED
 {
@@ -955,6 +980,7 @@ String STR_TABED_UNDO_NEWROWINSERTED
     Text[ czech ] = "Vložit nový řádek";
     Text[ hebrew ] = "Neue Zeile einfügen";
     Text[ hindi ] = "नया पंक्ति जोड़ो";
+    Text[ slovak ] = "Vložiť nový riadok";
 };
 String STR_TABED_UNDO_PRIMKEY
 {
@@ -986,6 +1012,7 @@ String STR_TABED_UNDO_PRIMKEY
     Text[ czech ] = "Vložit/odstranit primární klíč";
     Text[ hebrew ] = "Primärschlüssel einfügen/entfernen";
     Text[ hindi ] = "प्रैमरी की जोड़ो/हटाओ";
+    Text[ slovak ] = "Vložiť/odstrániť primárny kľúč";
 };
 
 ToolBox RID_BRW_TABLEDESIGN_TOOLBOX
@@ -1032,6 +1059,7 @@ ToolBox RID_BRW_TABLEDESIGN_TOOLBOX
             Text[ czech ] = "Upravit";
             Text[ hebrew ] = "‮עריכה‬";
             Text[ hindi ] = "संपादन";
+            Text[ slovak ] = "Upraviť";
         };
         ToolBoxItem
         {
@@ -1067,6 +1095,7 @@ ToolBox RID_BRW_TABLEDESIGN_TOOLBOX
             Text[ czech ] = "Uložit";
             Text[ hebrew ] = "‮שמירה‬";
             Text[ hindi ] = "संचित करो";
+            Text[ slovak ] = "Uložiť";
         };
         ToolBoxItem
         {
@@ -1153,6 +1182,7 @@ ToolBox RID_BRW_TABLEDESIGN_TOOLBOX
             Text[ czech ] = "Žádné připojení";
             Text[ hebrew ] = "Keine Verbindung";
             Text[ hindi ] = "कोई कनेक्शन नहीं";
+            Text[ slovak ] = "Bez spojenia";
         };
     };
 };
@@ -1187,6 +1217,7 @@ String STR_DEFAULT_VALUE
     Text[ czech ] = "Výchozí hodnota";
     Text[ hebrew ] = "~Defaultwert";
     Text[ hindi ] = "~अनुपस्थिति मूल्य";
+    Text[ slovak ] = "Východzia ho~dnota";
 };
 String STR_FIELD_REQUIRED
 {
@@ -1219,6 +1250,7 @@ String STR_FIELD_REQUIRED
     Text[ czech ] = "Požadována položka";
     Text[ hebrew ] = "~Eingabe erforderlich";
     Text[ hindi ] = "~प्रविष्टि की आवश्यकता";
+    Text[ slovak ] = "Požadov~aná položka";
 };
 String STR_TEXT_LENGTH
 {
@@ -1251,6 +1283,7 @@ String STR_TEXT_LENGTH
     Text[ czech ] = "Délka";
     Text[ hebrew ] = "~Länge";
     Text[ hindi ] = "~विस्तार";
+    Text[ slovak ] = "~Dĺžka";
 };
 String STR_NUMERIC_TYPE
 {
@@ -1283,6 +1316,7 @@ String STR_NUMERIC_TYPE
     Text[ czech ] = "Typ";
     Text[ hebrew ] = "‮סוג‬";
     Text[ hindi ] = "~वर्ग";
+    Text[ slovak ] = "~Typ";
 };
 String STR_LENGTH
 {
@@ -1315,6 +1349,7 @@ String STR_LENGTH
     Text[ czech ] = "Délka";
     Text[ hebrew ] = "~Länge";
     Text[ hindi ] = "~विस्तार";
+    Text[ slovak ] = "~Dĺžka";
 };
 String STR_SCALE
 {
@@ -1347,6 +1382,7 @@ String STR_SCALE
     Text[ czech ] = "Míst za desetinnou čárkou";
     Text[ hebrew ] = "~Nachkommastellen";
     Text[ hindi ] = "~दशांश स्थान";
+    Text[ slovak ] = "Desatinné mies~ta";
 };
 String STR_FORMAT
 {
@@ -1379,6 +1415,7 @@ String STR_FORMAT
     Text[ czech ] = "Příklad formátu";
     Text[ hebrew ] = "Format-Beispiel";
     Text[ hindi ] = "रचना उदाहरण";
+    Text[ slovak ] = "Príklad formátu";
 };
 String STR_HELP_BOOL_DEFAULT
 {
@@ -1411,6 +1448,7 @@ String STR_HELP_BOOL_DEFAULT
     Text[ czech ] = "Vyberte hodnotu, která se má objevit ve všech nových záznamech jako výchozí.\nPokud pole nemá mít výchozí hodnotu, vyberte <nic>.";
     Text[ hebrew ] = "Wählen Sie einen Wert, der in jedem neu eingefügten Datensatz als Standard erscheinen soll.\nWählen Sie den leeren String, wenn das Feld keinen solchen Standardwert haben soll.";
     Text[ hindi ] = "एक मूल्य को चुनिए जो सभी नया अभिलेखों में अनुपस्थिति जैसे दिखेगा ।\nअगर क्षेत्र में अनुपस्थिति मूल्य नहीं हो सकता है तो, खाली स्ट्रिंग को चुनिए ।";
+    Text[ slovak ] = "Vyberte hodnotu, ktorá sa bude objavovať v nových záznamoch ako východzia.\nV prípade, že pole nemá mať východziu hodnotu, zadajte prázdny reťazec.";
 };
 String STR_HELP_DEFAULT_VALUE
 {
@@ -1443,6 +1481,7 @@ String STR_HELP_DEFAULT_VALUE
     Text[ czech ] = "Zadejte výchozí hodnotu pro toto pole.\n\nPokud budete později vkládat data do tabulky, bude tento řetězec použit v každém novém záznamu pro toto pole. Proto by měl odpovídat formátu buňky, který je třeba zadat níže.";
     Text[ hebrew ] = "Geben Sie hier einen Standardwert für das Feld an.\n\nWenn Sie später Daten in die Tabelle eingeben, wird in jedem neuen Datensatz diese Zeichenkette für das aktuelle Feld verwendet. Sie sollte deshalb der weiter unten einzugebenden Zellenformatierung genügen.";
     Text[ hindi ] = "इस क्षेत्र केलिए अनुपस्थिति मूल्य को प्रविष्ट कीजिए ।\n\nबाद में आप सारणी में ड़ॉटा प्रविष्ट करते है, तब हरेक नया अभिलेख में चुने हुए क्षेत्र केलिए इस स्ट्रिंग को उपयोग की जायेगा । यह, इसलिए, नीचे प्रविष्ट किये जानेवाला कोष्ट रचना को अनुरूप होना ज़रूरी है ।";
+    Text[ slovak ] = "Zadajte východziu hodnotu pre toto pole.\n\nKeď budete neskôr zadávať dáta do tabuľky, bude tento reťazec použitý v každom novom vybranom zázname. Preto by mal zodpovedať formátu bunky, ktorý musí byť zadaný nižšie.";
 };
 String STR_HELP_FIELD_REQUIRED
 {
@@ -1475,6 +1514,7 @@ String STR_HELP_FIELD_REQUIRED
     Text[ czech ] = "Aktivujte tuto volbu pokud pole nemá obsahovat prázdné hodnoty, tzn. uživatel musí vždy zadat data.";
     Text[ hebrew ] = "Aktivieren Sie diese Option, wenn in diesem Feld keine NULL-Werte erlaubt sind, der Benutzer also immer Daten eingeben muss.";
     Text[ hindi ] = "अगर क्षेत्र का मूल्य NULL नहीं है तो इस विकल्प को संचालित करो, उपभोक्ता को क्षेत्र में ड़ॉटा का प्रविष्टि करना ज़रूरी है ।";
+    Text[ slovak ] = "Aktivujete túto možnosť v prípade, keď pole nesmie obsahovať NULL hodnoty, resp. užívateľ musí vždy zadať dáta.";
 };
 String STR_HELP_TEXT_LENGTH
 {
@@ -1507,6 +1547,7 @@ String STR_HELP_TEXT_LENGTH
     Text[ czech ] = "Zadejte maximální povolenou délku textu.";
     Text[ hebrew ] = "Geben Sie die maximal zulässige Textlänge an.";
     Text[ hindi ] = "स्वीकृत अधिकतम टेक्स्ट् विस्तार को प्रविष्ट करो ।";
+    Text[ slovak ] = "Zadajte maximálnu povolenú dĺžku textu.";
 };
 String STR_HELP_NUMERIC_TYPE
 {
@@ -1539,6 +1580,7 @@ String STR_HELP_NUMERIC_TYPE
     Text[ czech ] = "Zadejte formát čísla.";
     Text[ hebrew ] = "Legen Sie hier fest, welchen Typ die Zahl haben soll.";
     Text[ hindi ] = "संख्या रचना को प्रविष्ट करो ।";
+    Text[ slovak ] = "Zadajte formát čísla.";
 };
 String STR_HELP_LENGTH
 {
@@ -1570,6 +1612,7 @@ String STR_HELP_LENGTH
     Text[ czech ] = "Určete délku dat v tomto poli.\n\nU číselných polí se jedná o maximální délku čísla, kterou bude možno zadat, u binárních polí se jedná o délku datového bloku.\nHodnota bude patřičně upravena, pokud překročí maximum pro tuto databázi.";
     Text[ hebrew ] = "Geben Sie die Länge für Daten in diesem Feld an.\n\nFür Dezimal-Felder ist das die maximale Länge der eingegebenen Zahl, für Binärfelder die Länge des Datenblockes.\nWenn der Wert größer ist als der maximal für diese Datenbank zulässige, wird er entsprechend korrigiert.";
     Text[ hindi ] = "इस क्षेत्र में ड़ॉटा का विस्तार को निश्चय कीजिए ।\n\nअगर दशांश क्षेत्र है, तो प्रविष्ट की जानेवाला का संख्या का अधिकतम विस्तार, अगर बैनरी क्षेत्र है, तो ड़ॉटा ब्लॉक का अधिकतम विस्तार ।\nजब इस लेखासंचय की सीमा से बाहर जायेगा, तब मूल्य को अनुरूप से ठीक किया जायेगा ।";
+    Text[ slovak ] = "Určte akú dĺžku môžu mať dáta v tomto poli.\n\nV prípade, že sa jedná o decimálne polia, maximálnu dĺžku zadávaného čísla, ak sa jedná o binárne polia maximálnu dĺžku dátového bloku.\nHodnota bude adekvátne upravená v prípade, že prekročí maximum pre túto databázu.";
 };
 String STR_HELP_SCALE
 {
@@ -1602,12 +1645,13 @@ String STR_HELP_SCALE
     Text[ czech ] = "Určete počet desetinných míst povolených v tomto poli.";
     Text[ hebrew ] = "Geben Sie an, wie viel Nachkommastellen die Zahlen in diesem Feld enthalten sollen.";
     Text[ hindi ] = "इस क्षेत्र में स्वीकृत दशांश स्थानों की संख्या को निर्दिष्ट करो ।";
+    Text[ slovak ] = "Zadajte počet desatinných miest povolených v tomto poli.";
 };
 String STR_HELP_FORMAT_CODE
 {
     Text = "Hier sehen Sie, wie die Daten der aktuellen Spalte mit dem aktuell eingestellten Format - das Sie mittels des nebenstehenden Buttons �ndern k�nnen - formatiert werden w�rden.";
     Text[ ENGLISH ] = "Hier sehen Sie, wie die Daten der aktuellen Spalte mit dem aktuell eingestellten Format - das Sie mittels des nebenstehenden Buttons �ndern k�nnen - formatiert werden w�rden.";
-    Text[ italian ] = "Qui vedete come � possibile formattare i dati dell'attuale colonna con il formato corrente che potete cambiare con il bottone che si trova qui a fianco.";
+    Text[ italian ] = "Qui vedete come verranno visualizzati i dati in base al formato prescelto (usate il pulsante a destra per modificare il formato).";
     Text[ portuguese_brazilian ] = "Aqui se pode ver como os dados seriam exibidos no formato definido (clique no bot�o ao lado para o modificar).";
     Text[ portuguese ] = "Aqui pode ver como os dados da coluna actual seriam formatados se utilizasse o formato definido. Para o modificar, clique no bot�o ao lado.";
     Text[ danish ] = "Her ser du, hvordan dataene i den aktuelle kolonne ville komme til at se ud med det aktuelle format - som du kan �ndre med knappen ved siden af.";
@@ -1634,6 +1678,7 @@ String STR_HELP_FORMAT_CODE
     Text[ czech ] = "Zde vidíte, jak by byla zobrazena data v současném formátu. (Použijte tlačítko vpravo, pokud jej chcete změnit.)";
     Text[ hebrew ] = "Hier sehen Sie, wie die Daten der aktuellen Spalte mit dem aktuell eingestellten Format - das Sie mittels des nebenstehenden Buttons ändern können - formatiert werden würden.";
     Text[ hindi ] = "यहाँ पर आप देख सकते है कि ड़ॉटा को वर्तमान रचना में किस तरह दिखाया जायेगा (दाहिनी ओर का बटन को रचना को सुधारने केलिए उपयोग कीजिए) ।";
+    Text[ slovak ] = "Tu môžete vidieť ako budú zobrazená dáta v súčasnom formáte (použite tlačítko vpravo ak chcete meniť formát).";
 };
 String STR_HELP_FORMAT_BUTTON
 {
@@ -1666,6 +1711,7 @@ String STR_HELP_FORMAT_BUTTON
     Text[ czech ] = "Zde určujete výstupní formát dat.";
     Text[ hebrew ] = "Hiermit können Sie festlegen, wie die Daten der Tabelle bei der Ausgabe formatiert werden sollen.";
     Text[ hindi ] = "यहाँ पर आप ड़ॉटा का औटपुट रचना को निश्चय कर सकते है ।";
+    Text[ slovak ] = "Tu môžete určiť výstupný formát dát.";
 };
 String STR_HELP_AUTOINCREMENT
 {
@@ -1697,6 +1743,7 @@ String STR_HELP_AUTOINCREMENT
     Text[ czech ] = "Vyberte, zda toto pole má obsahovat hodnoty s automatickým přírůstkem.\n\nDo polí tohoto typu nelze zadávat data. Do každého nového záznamu bude vložena hodnota automaticky (výsledek inkrementace předchozího záznamu).";
     Text[ hebrew ] = "Wählen Sie, ob dieses Feld Auto-Inkrement-Werte enthalten soll.\n\nSie können in ihm dann keine Daten direkt eingeben, sondern jeder neue Datensatz bekommt automatisch einen eigenen Wert (der sich durch Inkrementieren aus dem des vorigen Datensatzes ergibt) zugewiesen.";
     Text[ hindi ] = "स्वचालित ढंग से मूल्यों को बढ़ती करना चाहते है तो इस क्षेत्र को चुनिए ।\n\nआप इस वर्ग के क्षेत्रों में ड़ॉटा को प्रविष्ट नहीं कर सकते है । स्वचालित ढंग से हरेक नया अभिलेख केलिए एक भीतरी मूल्य को निर्दिष्ट किया जायेगा (पिछला अभिलेख का बढ़ती के नतीजे पर)।";
+    Text[ slovak ] = "Vyberte či toto pole bude obsahovať automaticky rastúce hodnoty.\n\nDo polí tohto typu nemôžete zadávať dáta. Pre každý nový záznam bude priradená automaticky hodnota vychádzajúca z nárastu predchádzajúceho poľa.";
 };
 PushButton PB_FORMAT
 {
@@ -1727,6 +1774,7 @@ PushButton PB_FORMAT
     Text[ czech ] = "...";
     Text[ hebrew ] = "~...";
     Text[ hindi ] = "~...";
+    Text[ slovak ] = "~...";
 };
 String STR_TABLEDESIGN_DUPLICATE_NAME
 {
@@ -1755,6 +1803,7 @@ String STR_TABLEDESIGN_DUPLICATE_NAME
     Text[ czech ] = "Tabulku nelze uložit, protože název sloupce \"$column$\" byl přiřazen dvakrát.";
     Text[ hebrew ] = "Die Tabelle kann nicht gespeichert werden, da der Spaltenname \"$column$\" doppelt vergeben wurde.";
     Text[ hindi ] = "स्तंभ नाम \"$column$\" को दो बार मूल्य निर्दिष्ट करने के कारण सारणी को संचित नहीं कर सकते है ।";
+    Text[ slovak ] = "Tabuľka nemôže byť uložená, pretože stĺpec s názvom \"$column$\" bol priradený dvakrát.";
 };
 String STR_TBL_COLUMN_IS_KEYCOLUMN
 {
@@ -1783,6 +1832,7 @@ String STR_TBL_COLUMN_IS_KEYCOLUMN
     Text[ czech ] = "Sloupec \"$column$\" patří do primárního klíče. Pokud bude zrušen, bude zrušen i primární klíč. Chcete opravdu pokračovat?";
     Text[ hebrew ] = "Die Spalten \"$column$\" gehört zum Primärschlüssel. Falls sie gelöscht wird, wird auch der Primärschlüssel gelöscht.Wollen Sie sie fortfahren?";
     Text[ hindi ] = "$column$ स्तंभ प्रैमरी की से मिला हुआ है । अगर स्तंभ को मिटाया, तो प्रैमरी की भी मिट जायेगा । आप सचमुच में जारी रखना चाहते है ?";
+    Text[ slovak ] = "Stĺpec \"$column$\" patrí do primárneho kľúča. V prípade, že bude zmazaný, bude zmazaný aj primárny kľúč. Určite chcete pokračovať?";
 };
 String STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE
 {
@@ -1811,6 +1861,7 @@ String STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE
     Text[ czech ] = "Primární klíč uplatněn";
     Text[ hebrew ] = "Primärschlüssel betroffen";
     Text[ hindi ] = "प्रैमरी की प्रभावित";
+    Text[ slovak ] = "Primárny kľúč zasiahnutý";
 };
 String STR_COLUMN_NAME
 {
@@ -1840,6 +1891,7 @@ String STR_COLUMN_NAME
     Text[ czech ] = "Sloupec";
     Text[ hebrew ] = "Spalte";
     Text[ hindi ] = "स्तंभ";
+    Text[ slovak ] = "Stĺpec";
 };
 String STR_QRY_CONTINUE
 {
@@ -1871,6 +1923,7 @@ String STR_QRY_CONTINUE
     Text[ czech ] = "Chcete přesto pokračovat?";
     Text[ hebrew ] = "Wollen Sie trotzdem fortfahren?";
     Text[ hindi ] = "किसी तरह जारी रखना है?";
+    Text[ slovak ] = "Napriek tomu pokračovať?";
 };
 String STR_STAT_WARNING
 {
@@ -1902,6 +1955,7 @@ String STR_STAT_WARNING
     Text[ czech ] = "Upozornění!";
     Text[ hebrew ] = "Warnung";
     Text[ hindi ] = "चेतावनी!";
+    Text[ slovak ] = "Upozornenie!";
 };
 QueryBox TABLE_DESIGN_SAVEMODIFIED
 {
@@ -1933,6 +1987,7 @@ QueryBox TABLE_DESIGN_SAVEMODIFIED
     Message[ czech ] = "Tabulka byla změněna.\nChcete změny uložit?";
     Message[ hebrew ] = "Die Tabelle wurde geändert.\nSollen die Änderungen gespeichert werden?";
     Message[ hindi ] = "सारणी को परिवर्तन किया है ।\nआप परिवर्तनों को संचित करना चाहते है ?";
+    Message[ slovak ] = "Tabuľka bola zmenená.\nChcete uložiť zmeny?";
 };
 QueryBox TABLE_QUERY_CONNECTION_LOST
 {
@@ -1963,6 +2018,7 @@ QueryBox TABLE_QUERY_CONNECTION_LOST
     Message[ czech ] = "Připojení k databázi bylo ztraceno! Návrh tabulky může být používán pouze s omezenou funkčností pokud neexistuje připojení.\nZnovu připojit?";
     Message[ hebrew ] = "Die Verbindung zur Datenbank wurde gelöscht! Ohne sie kann der Tabellenentwurf nur eingeschränkt benutzt werden.\nSoll die Verbindung zur Datenbank wieder aufgebaut werden?";
     Message[ hindi ] = "लेखासंचय से कनेक्शन नष्ट हुआ ! कनेक्शन के बिना सारणी डिसैन केवल सीमित कार्यों सहित उपयोग किया जायेगा ।\nपुनः कनेक्ट करना चाहते है ?";
+    Message[ slovak ] = "Spojenie s databázou bolo stratené! Návrh tabuľky môže byť používaný len limitovane bez spojenia.\nObnoviť spojenie?";
 };
 String STR_TABLEDESIGN_CONNECTION_MISSING
 {
@@ -1992,6 +2048,7 @@ String STR_TABLEDESIGN_CONNECTION_MISSING
     Text[ czech ] = "Tabulka nemohla být uložena z důvodu problémů při připojování k databázi.";
     Text[ hebrew ] = "Die Tabelle konnte nicht gespeichert werden, da keine Verbindung zur Datenbank hergestellt werden konnte.";
     Text[ hindi ] = "लेखासंचय को कनेक्ट करने में असफल होने के कारण सारणी को संचित नहीं कर सकते है ।";
+    Text[ slovak ] = "Tabuľka nemohla byť uložená kvôli problémom pri spojení s databázou.";
 };
 String STR_TABLEDESIGN_DATASOURCE_DELETED
 {
@@ -2021,6 +2078,7 @@ String STR_TABLEDESIGN_DATASOURCE_DELETED
     Text[ czech ] = "Filtr tabulky nemohl být upraven, protože datový zdroj byl zrušen.";
     Text[ hebrew ] = "Der Tabellenfilter konnte nicht angepasst werden, da die Datenquelle gelöscht wurde.";
     Text[ hindi ] = "सारणी फिल्टर को व्यवस्थित नहीं कर सकते है, क्यों कि ड़ॉटा मूल पहिले से ही मिटा है ।";
+    Text[ slovak ] = "Filter tabuliek nemohol byť upravený, pretože dátový zdroj bol zmazaný.";
 };
 
 FixedText FIXED_NO_CONNECTION
@@ -2053,6 +2111,7 @@ FixedText FIXED_NO_CONNECTION
     Text[ czech ] = "Bez připojení";
     Text[ hebrew ] = "Keine Verbindung";
     Text[ hindi ] = "कोई कनेक्शन नहीं";
+    Text[ slovak ] = "Bez spojenia";
 };
 QueryBox QUERY_SAVE_TABLE_EDIT_INDEXES
 {
@@ -2086,6 +2145,7 @@ QueryBox QUERY_SAVE_TABLE_EDIT_INDEXES
     Message[ czech ] = "Než budete moci upravovat rejstříky tabulky, musíte jí uložit.\nChcete uložit změny nyní?";
     Message[ hebrew ] = "Bevor Sie die Indizies einer Tabelle ändern können, muss diese gespeichert werden.\nWollen Sie Ihre Änderungen an der Tabellenstruktur jetzt speichern?";
     Message[ hindi ] = "सारणी का अनुक्रमणियों को संपादन करने से पहिले, उसको संचित करना चाहिए ।\nअभी आप परिवर्तनों को संचित करना चाहते है ?";
+    Message[ slovak ] = "Pred upravovaním indexov v tabuľke ju musíte uložiť.\nChcete uložiť zmeny teraz?";
 };
 String STR_TABLEDESIGN_NO_PRIM_KEY_HEAD
 {
@@ -2117,6 +2177,7 @@ String STR_TABLEDESIGN_NO_PRIM_KEY_HEAD
     Text[ czech ] = "Žádný primární klíč";
     Text[ hebrew ] = "Kein Primärschlüssel";
     Text[ hindi ] = "कोई प्रैमरी की नहीं";
+    Text[ slovak ] = "Nie je primárny kľúč";
 };
 String STR_TABLEDESIGN_NO_PRIM_KEY
 {
@@ -2148,6 +2209,7 @@ String STR_TABLEDESIGN_NO_PRIM_KEY
     Text[ czech ] = "Pro identifikaci datového záznamu v této databázi je nezbytný unikátní rejstřík nebo primární klíč.\nDo tabulky můžete vkládat data pouze tehdy, je li splněna alespoň jedna z těchto podmínek.\n\nMá být primární klíč vytvořen nyní?";
     Text[ hebrew ] = "In dieser Datenbank wird zur Datensatz-Identifizierung ein eindeutiger Index oder ein Primärschlüssel benötigt.\nSie werden erst dann Daten in die Tabelle eingeben können, wenn sie eine dieser beiden Struktur-Bedingungen erfüllt.\n\nSoll jetzt ein Primärschlüssel erzeugt werden ?";
     Text[ hindi ] = "लेखासंचय में ड़ॉटा अभिलेख को पहचानने केलिए एक अनोखा अनुक्रमणी अथवा प्रैमरी चाभी की आवश्यकता है ।\nजब किसी एक बनावटी शर्त समान है तबी आप इस सारणी में ड़ॉटा को प्रविष्ट कर सकते है ।\n\nअभी प्रैमरी चाभी को उत्पन्न करना चाहते है ?";
+    Text[ slovak ] = "Unikátny index alebo primárny kľúč je potrebný na identifikáciu záznamov Do tejto databázy môžete zadávať dáta až potom keď bude splnená jedna z týchto štrukturálnych podmienok.\n\nMá byť teraz vytvorený primárny kľúč?";
 };
 String STR_TABLEDESIGN_TITLE
 {
@@ -2177,6 +2239,7 @@ String STR_TABLEDESIGN_TITLE
     Text[ czech ] = "Návrh tabulky";
     Text[ hebrew ] = "Tabellen Entwurf";
     Text[ hindi ] = "सारणी डिसैन";
+    Text[ slovak ] = "Návrh tabuľky";
 };
 
 Menu RID_TABLE_DESIGN_MAIN_MENU
@@ -2281,6 +2344,7 @@ Menu RID_TABLE_DESIGN_MAIN_MENU
                         Text[ czech ] = "Zpět";
                         Text[ hebrew ] = "‮ביטול פעולה‬";
                         Text[ hindi ] = "अनावृत्ति";
+                        Text[ slovak ] = "Späť";
                     };
                 MenuItem
                 {
@@ -2313,6 +2377,7 @@ Menu RID_TABLE_DESIGN_MAIN_MENU
                         Text[ czech ] = "Znovu";
                         Text[ hebrew ] = "‮שחזור פעולה‬";
                         Text[ hindi ] = "फिर से करो";
+                        Text[ slovak ] = "Znovu";
                     };
                 MenuItem
                 {
@@ -2347,6 +2412,7 @@ Menu RID_TABLE_DESIGN_MAIN_MENU
             Text[ czech ] = "Ú~pravy";
             Text[ hebrew ] = "‮עריכה‬";
             Text[ hindi ] = "~संपादन";
+            Text[ slovak ] = "~Upraviť";
         };
 
     MenuItem
@@ -2406,6 +2472,7 @@ Menu RID_TABLE_DESIGN_MAIN_MENU
             Text[ czech ] = "Nástroje";
             Text[ hebrew ] = "‮כלים‬";
             Text[ hindi ] = "~औज़ार";
+            Text[ slovak ] = "Nás~troje";
         };
         GLOBLMN_WINMN
         {
@@ -2443,6 +2510,7 @@ String STR_TABLEDESIGN_ALTER_ERROR
     Text[ czech ] = "Sloupec \"$column$\" nemohl být změněn. Má být místo toho zrušen a přidán nový?";
     Text[ hebrew ] = "Die Spalte \"$column$\" konnte nicht geändert werden. Soll sie statt dessen gelöscht und das neue Format angehängt werden?";
     Text[ hindi ] = "\\$column\\$ स्तंभ को नहीं बदल सकते है । स्तंभ को मिटाकर और नया रचना को जोड़ना चाहते है ?";
+    Text[ slovak ] = "Stĺpec \"$column$\" nemohol byť zmenený. Má sa stĺpec zmazať a namiesto neho pripojiť nový formát?";
 };
 
 QueryBox TABLE_DESIGN_ALL_ROWS_DELETED
@@ -2475,6 +2543,7 @@ QueryBox TABLE_DESIGN_ALL_ROWS_DELETED
     Message[ portuguese_brazilian ] = "You are trying to delete all the columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
     Message[ thai ] = "You are trying to delete all the columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
     Message[ hindi ] = "You are trying to delete all the columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
+    Message[ slovak ] = "Pokúšate sa zmazať všetky stĺpce v tabuľke. Tabuľka nemôže existovať bez stĺpcov. Má byť tabuľka vymazaná z databázy? V prípade že nie, ostane tabuľka nezmenená.";
 };
 
 String STR_AUTOINCREMENT_VALUE
@@ -2505,6 +2574,7 @@ String STR_AUTOINCREMENT_VALUE
     Text[ czech ] = "Výraz pro automatický přírůstek";
     Text[ hebrew ] = "A~uto-Increment-Ausdruck";
     Text[ hindi ] = "A~uto-increment statement";
+    Text[ slovak ] = "A~utomaticky rastúca hodnota";
 };
 String STR_HELP_AUTOINCREMENT_VALUE
 {
@@ -2534,6 +2604,7 @@ String STR_HELP_AUTOINCREMENT_VALUE
     Text[ czech ] = "Zadejte SQL výraz pro políčko s automatickým přírůstkem.\n\nTento výraz bude přímo zanesen do databáze při vytvoření tabulky.";
     Text[ hebrew ] = "Geben Sie hier einen SQL Ausdruck für das Auto-Increment-Feld an.\n\nDieser Ausdruck wird beim Erzeugen der Tabelle direkt an die Datenbank übertragen.";
     Text[ hindi ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
+    Text[ slovak ] = "Zadajte SQL príkaz pre pole s automaticky rastúcou hodnotou.\n\nTento príkaz bude priamo transferovaný do databázy pri jej zápise.";
 };
 
 String STR_NO_TYPE_INFO_AVAILABLE
@@ -2564,7 +2635,10 @@ String STR_NO_TYPE_INFO_AVAILABLE
     Text[ czech ] = "Z databáze nebylo možné zjistit informace o typech polí.\nPro tento ovladač není k dispozici volba Návrh tabulky.";
     Text[ hebrew ] = "Es konnten keine Typinformationen von der Datenbank ermittelt werden.\nDer Tabellenentwurfmodus ist für diese Datenquelle nicht verfügbar.";
     Text[ hindi ] = "No type information could be retrieved from the database.\nThe table design mode is not available for this data source.";
+    Text[ slovak ] = "Z databázy nemohla byť získaná informácia o type.\nMód návrhu tabuľku nieje dostupný pre tento zdroj dát.";
 };
+
+
 
 
 
