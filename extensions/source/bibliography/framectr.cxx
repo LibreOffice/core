@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 10:26:14 $
+ *  last change: $Author: os $ $Date: 2001-05-22 11:10:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,23 @@ void BibFrameCtrl_Impl::frameAction(const FrameActionEvent& aEvent) throw( uno::
 
 void BibFrameCtrl_Impl::disposing( const lang::EventObject& Source )
 {
+    util::URL aURL;
+    aURL.Complete = C2U("0");
+    uno::Reference< XDispatchProvider >  xProv( pController->xFrame, UNO_QUERY );
+
+    if ( xProv.is() )
+    {
+        uno::Sequence<beans::PropertyValue> aArgs( 1 );
+        Any aValue;
+        aValue <<= C2U( "remove" );
+        aArgs[0].Value  = aValue;
+        aArgs[0].Name   = C2U( "command" );
+
+        uno::Reference< XDispatch >  aDisp = xProv->queryDispatch( aURL,  C2U("_menubar"), 0 );
+        if ( aDisp.is() )
+            aDisp->dispatch( aURL, aArgs );
+    }
+
     if ( pController )
         pController->getFrame()->removeFrameActionListener( this );
 }
@@ -252,24 +269,6 @@ uno::Reference< XModel >  BibFrameController_Impl::getModel()
 
 void BibFrameController_Impl::dispose()
 {
-    util::URL aURL;
-    aURL.Complete = C2U("0");
-    uno::Reference< XDispatchProvider >  xProv( xFrame, UNO_QUERY );
-
-    if ( xProv.is() )
-    {
-        uno::Sequence<beans::PropertyValue> aArgs( 1 );
-        Any aValue;
-        aValue <<= C2U( "remove" );
-        aArgs[0].Value  = aValue;
-        aArgs[0].Name   = C2U( "command" );
-
-        uno::Reference< XDispatch >  aDisp = xProv->queryDispatch( aURL,  C2U("_menubar"), 0 );
-        if ( aDisp.is() )
-            aDisp->dispatch( aURL, aArgs );
-    }
-
-
     delete pFieldWin;
     bDisposing = sal_True;
     lang::EventObject aObject;
@@ -277,7 +276,7 @@ void BibFrameController_Impl::dispose()
     pImp->aLC.disposeAndClear(aObject);
     xDatman = 0;
     pDatMan = 0;
-    aStatusListeners.DeleteAndDestroy( 0, aStatusListeners.Count() );
+     aStatusListeners.DeleteAndDestroy( 0, aStatusListeners.Count() );
  }
 
 void BibFrameController_Impl::addEventListener( const uno::Reference< lang::XEventListener > & aListener )
