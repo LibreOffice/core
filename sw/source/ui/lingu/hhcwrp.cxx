@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hhcwrp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:50:25 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:53:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,7 @@ void SwHHCWrapper::ReplaceUnit(
     OUString aNewTxt( rReplaceWith );
     SwFmtRuby *pRuby = 0;
     sal_Bool bRubyBelow = sal_False;
+    String  aNewOrigText;
     switch (eAction)
     {
         case eExchange :
@@ -290,26 +291,24 @@ void SwHHCWrapper::ReplaceUnit(
         case eReplacementAbove  :
         {
             pRuby = new SwFmtRuby( rReplaceWith );
-            pRuby->SetText( aOrigTxt );
         }
         break;
         case eOriginalAbove :
         {
             pRuby = new SwFmtRuby( aOrigTxt );
-            pRuby->SetText( rReplaceWith );
+            aNewOrigText = rReplaceWith;
         }
         break;
         case eReplacementBelow :
         {
             pRuby = new SwFmtRuby( rReplaceWith );
-            pRuby->SetText( aOrigTxt );
             bRubyBelow = sal_True;
         }
         break;
         case eOriginalBelow :
         {
             pRuby = new SwFmtRuby( aOrigTxt );
-            pRuby->SetText( rReplaceWith );
+            aNewOrigText = rReplaceWith;
             bRubyBelow = sal_True;
         }
         break;
@@ -321,12 +320,30 @@ void SwHHCWrapper::ReplaceUnit(
     if (pRuby)
     {
         rWrtShell.StartUndo( UNDO_SETRUBYATTR );
+        if (aNewOrigText.Len())
+        {
+            rWrtShell.Delete();
+            rWrtShell.Insert( aNewOrigText );
+
+            //!! since Delete, Insert do not set the WrtShells bInSelect flag
+            //!! back to false we do it now manually in order for the selection
+            //!! to be done properly in the following call to Left.
+            // We didn't fix it in Delete and Insert since it is currently
+            // unclear if someone depends on this incorrect behvaiour
+            // of the flag.
+            rWrtShell.EndSelect();
+
+            rWrtShell.Left( 0, TRUE, aNewOrigText.Len(), TRUE, TRUE );
+        }
+
         pRuby->SetPosition( bRubyBelow );
         pRuby->SetAdjustment( RubyAdjust_CENTER );
         //!! the following seem not to be needed
         //pRuby->SetCharFmtName( const String& rNm );
         //pRuby->SetCharFmtId( USHORT nNew );
+#ifdef DEBUG
         SwPaM *pPaM = rWrtShell.GetCrsr();
+#endif
         rWrtShell.SetAttr(*pRuby);
         delete pRuby;
         rWrtShell.EndUndo( UNDO_SETRUBYATTR );
