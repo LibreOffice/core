@@ -1,6 +1,6 @@
  //--------------------------------------------------------------------------
  //
- // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.29 2002-11-25 15:18:36 kz Exp $
+ // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.30 2002-12-05 10:36:43 kz Exp $
  //
  // (c) Copyright 1997 by Star Division GmbH, Hamburg.
  //
@@ -8,7 +8,7 @@
  //  AWO
  //
  // Letzte Aenderung:
- //  $Author: kz $ $Date: 2002-11-25 15:18:36 $ $Revision: 1.29 $
+ //  $Author: kz $ $Date: 2002-12-05 10:36:43 $ $Revision: 1.30 $
  //
  //--------------------------------------------------------------------------
 #ifndef DBAUI_RELATIONDIALOG_HRC
@@ -134,7 +134,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text [ italian ] = "Opzioni di aggiornamento" ;
         Text [ spanish ] = "Opciones de actualizaciÛn" ;
         Text [ french ] = "Options de mise ‡ jour" ;
-        Text [ dutch ] = "Update opties" ;
+        Text [ dutch ] = "Updateopties" ;
         Text [ portuguese ] = "Actualizar opÁıes" ;
         Text[ chinese_simplified ] = "Êõ¥Êñ∞ÈÄâÈ°π";
         Text[ russian ] = "œ‡‡ÏÂÚ˚ Ó·ÌÓ‚ÎÂÌËˇ";
@@ -147,7 +147,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ turkish ] = "G¸ncelleme seÁnekleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opcions d'actualitzaciÛ";
-        Text[ finnish ] = "Update Optionen";
+        Text[ finnish ] = "P‰ivit‰ asetukset";
         Text[ thai ] = "‡∏õ‡∏£‡∏±‡∏ö‡∏õ‡∏£‡∏∏‡∏á‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏∑‡∏≠‡∏Å";
     };
     RadioButton RB_NO_CASC_UPD
@@ -298,7 +298,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ turkish ] = "Silme seÁenekleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opcions d'eliminaciÛ";
-        Text[ finnish ] = "Lˆschoptionen";
+        Text[ finnish ] = "Poista asetukset";
         Text[ thai ] = "‡∏•‡∏ö‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏∑‡∏≠‡∏Å";
     };
     RadioButton RB_NO_CASC_DEL
@@ -463,7 +463,7 @@ ModalDialog DLG_REL_PROPERTIES
     Text[ turkish ] = "›li˛kiler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Relacions";
-    Text[ finnish ] = "Suhteet";
+    Text[ finnish ] = "Yhteydet";
     Text[ thai ] = "‡∏Ñ‡∏ß‡∏≤‡∏°‡∏™‡∏±‡∏°‡∏û‡∏±‡∏ô‡∏ò‡πå";
 };
 
