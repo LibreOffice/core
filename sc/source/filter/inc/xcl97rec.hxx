@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:48:54 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,8 +291,6 @@ private:
     virtual void                SaveCont( XclExpStream& rStrm );
 
 private:
-    typedef ::std::auto_ptr< XclExpString > XclExpStringPtr;
-
     XclExpStringPtr             mpString;       /// Text and formatting data.
     XclTxoHorAlign              meHorAlign;     /// Horizontal alignment.
     XclTxoVerAlign              meVerAlign;     /// Vertical alignment.
@@ -513,39 +511,42 @@ public:
                                 ExcBofC8();
 };
 
-// --- class ExcLabelSst ---------------------------------------------
+// ============================================================================
 
-class ExcLabelSst : public ExcCell
+/** Represents a LABELSST record for a formatted or unformatted text cell. */
+class XclExpLabelSst : public ExcCell
 {
-private:
-        UINT32              nIsst;      // Index in SST
+public:
+    explicit                    XclExpLabelSst(
+                                    const XclExpRoot& rRoot,
+                                    const ScAddress& rPos,
+                                    const String& rText,
+                                    const ScPatternAttr* pPattern );
+    explicit                    XclExpLabelSst(
+                                    const XclExpRoot& rRoot,
+                                    const ScAddress& rPos,
+                                    const ScEditCell& rEditCell,
+                                    const ScPatternAttr* pPattern );
 
+    virtual UINT16              GetNum() const;
+
+private:
     virtual void                SaveDiff( XclExpStream& rStrm );    // instead of SaveCont()
     virtual ULONG               GetDiffLen() const;
 
-public:
-                                ExcLabelSst(
-                                    const ScAddress&        rPos,
-                                    const ScPatternAttr*    pAttr,
-                                    RootData&               rRoot,
-                                    const String&           rText );
-                                ExcLabelSst(
-                                    const ScAddress&        rPos,
-                                    const ScPatternAttr*    pAttr,
-                                    RootData&               rRoot,
-                                    const ScEditCell&       rEdCell );
-    virtual                     ~ExcLabelSst();
-
-    virtual UINT16              GetNum() const;
+private:
+    sal_uInt32                  mnSstIndex;     /// Index to string in SST.
 };
 
+
+// ============================================================================
 
 // --- class ExcBundlesheet8 -----------------------------------------
 
 class ExcBundlesheet8 : public ExcBundlesheetBase
 {
 private:
-    XclExpUniString             aUnicodeName;
+    XclExpString                aUnicodeName;
 
     virtual void                SaveCont( XclExpStream& rStrm );
 
@@ -639,7 +640,7 @@ class XclDConRef : public ExcRecord
 {
 private:
     ScRange                 aSourceRange;
-    XclExpUniString*        pWorkbook;
+    XclExpString*           pWorkbook;
 
     virtual void            SaveCont( XclExpStream& rStrm );
 
@@ -707,7 +708,7 @@ inline BOOL XclExpCellMerging::FindMergeBaseXF( const ScAddress& rPos, sal_uInt3
 class XclCodename : public ExcRecord
 {
 private:
-    XclExpUniString             aName;
+    XclExpString                aName;
     virtual void                SaveCont( XclExpStream& rStrm );
 public:
                                 XclCodename( const String& );
@@ -727,7 +728,7 @@ class ExcEScenarioCell
 private:
     UINT16                      nCol;
     UINT16                      nRow;
-    XclExpUniString             sText;
+    XclExpString                sText;
 
 protected:
 public:
@@ -746,9 +747,9 @@ class ExcEScenario : public ExcRecord, private List
 {
 private:
     ULONG                       nRecLen;
-    XclExpUniString             sName;
-    XclExpUniString             sComment;
-    static XclExpUniString      sUsername;
+    XclExpString                sName;
+    XclExpString                sComment;
+    static XclExpString         sUsername;
 
     inline ExcEScenarioCell*    _First()    { return (ExcEScenarioCell*) List::First(); }
     inline ExcEScenarioCell*    _Next()     { return (ExcEScenarioCell*) List::Next(); }
