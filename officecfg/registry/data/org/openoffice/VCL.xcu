@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 10:02:01 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6610,7 +6610,7 @@
       </node>
       <node oor:name="verdana" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>albany;arial;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussansl;nimbussans</value>
+          <value>lucidasans;albany;arial;helvetica;lucida;geneva;helmet;sansserif;nimbussansl;nimbussans</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -7265,6 +7265,52 @@
           <value>Serif,Capitals</value>
         </prop>
       </node>
+
+      <node oor:name="charter" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>bitstreamcharter;georgia;timesnewroman</value>
+        </prop>
+        <prop oor:name="FontWeight">
+          <value>Normal</value>
+        </prop>
+        <prop oor:name="FontWidth">
+          <value>Normal</value>
+        </prop>
+        <prop oor:name="FontType">
+          <value>Serif</value>
+        </prop>
+      </node>
+
+      <node oor:name="bitstreamcharter" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>charter;georgia;timesnewroman</value>
+        </prop>
+        <prop oor:name="FontWeight">
+          <value>Normal</value>
+        </prop>
+        <prop oor:name="FontWidth">
+          <value>Normal</value>
+        </prop>
+        <prop oor:name="FontType">
+          <value>Serif</value>
+        </prop>
+      </node>
+
+      <node oor:name="georgia" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>bitstreamcharter;charter;timesnewroman</value>
+        </prop>
+        <prop oor:name="FontWeight">
+          <value>Normal</value>
+        </prop>
+        <prop oor:name="FontWidth">
+          <value>Normal</value>
+        </prop>
+        <prop oor:name="FontType">
+          <value>Serif</value>
+        </prop>
+      </node>
+
 
 
      </node>
