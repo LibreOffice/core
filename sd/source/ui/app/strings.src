@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:35:58 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2534,7 +2534,7 @@ String STR_OUTLINE_MODE
     Text [ dutch ] = "Overzichtmodus" ;
     Text [ spanish ] = "Modo Esquema" ;
     Text[ chinese_simplified ] = "´ó¸ÙÊÓÍ¼";
-    Text[ russian ] = "Âèä ñòğóêòóğû";
+    Text[ russian ] = "Ğåæèì ñòğóêòóğû";
     Text[ polish ] = "Tryb konspektu";
     Text[ japanese ] = "±³Ä×²İÓ°ÄŞ";
     Text[ greek ] = "ĞñïâïëŞ äéÜñèñùóçò";
@@ -3193,7 +3193,7 @@ String STR_AL_TITLE_VERT_OUTLINE
     Text[ polish ] = "Tytu³, tekst w pionie";
     Text[ portuguese_brazilian ] = "Title, vertical text";
     Text[ japanese ] = "À²ÄÙAc‘‚«Ã·½Ä";
-    Text[ korean ] = "Title, vertical text";
+    Text[ korean ] = "Á¦¸ñ, ¼öÁ÷ ÅØ½ºÆ®";
     Text[ chinese_simplified ] = "±êÌâ£¬Ö±Ê½ÎÄ×Ö";
     Text[ chinese_traditional ] = "¼ĞÃD¡Aª½¦¡¤å¦r";
     Text[ turkish ] = "Title, vertical text";
@@ -3218,7 +3218,7 @@ String STR_AL_TITLE_VERT_OUTLINE_CLIPART
     Text[ polish ] = "Tytu³, tekst w pionie, klipart";
     Text[ portuguese_brazilian ] = "Title, vertical text, clipart";
     Text[ japanese ] = "À²ÄÙAc‘‚«Ã·½ÄA¸Ø¯Ìß±°Ä";
-    Text[ korean ] = "Title, vertical text, clipart";
+    Text[ korean ] = "Á¦¸ñ, ¼öÁ÷ ÅØ½ºÆ®, Å¬¸³¾ÆÆ®";
     Text[ chinese_simplified ] = "±êÌâ£¬Ö±Ê½ÎÄ×Ö£¬ÃÀÊõÍ¼ĞÎ";
     Text[ chinese_traditional ] = "¼ĞÃD¡Aª½¦¡¤å¦r¡A¬ü³N¹Ï§Î";
     Text[ turkish ] = "Title, vertical text, clipart";
@@ -3243,7 +3243,7 @@ String STR_AL_VERT_TITLE_TEXT_CHART
     Text[ polish ] = "Pionowy tytu³, tekst, wykres";
     Text[ portuguese_brazilian ] = "Vertical title, text, chart";
     Text[ japanese ] = "c‘‚«À²ÄÙAÃ·½ÄA¸Ş×Ì";
-    Text[ korean ] = "Vertical title, text, chart";
+    Text[ korean ] = "¼öÁ÷ Á¦¸ñ, ÅØ½ºÆ®, Â÷Æ®";
     Text[ chinese_simplified ] = "Ö±Ê½±êÌâ£¬ÎÄ×Ö£¬Í¼±í";
     Text[ chinese_traditional ] = "ª½¦¡¼ĞÃD¡A¤å¦r¡A¹Ïªí";
     Text[ turkish ] = "Vertical title, text, chart";
@@ -3268,7 +3268,7 @@ String STR_AL_VERT_TITLE_VERT_OUTLINE
     Text[ polish ] = "Pionowy tytu³, tekst w pionie";
     Text[ portuguese_brazilian ] = "Vertical title, vertical text";
     Text[ japanese ] = "c‘‚«À²ÄÙAc‘‚«Ã·½Ä";
-    Text[ korean ] = "Vertical title, vertical text";
+    Text[ korean ] = "¼öÁ÷ Á¦¸ñ, ¼öÁ÷ ÅØ½ºÆ®";
     Text[ chinese_simplified ] = "Ö±Ê½±êÌâ£¬Ö±Ê½ÎÄ×Ö";
     Text[ chinese_traditional ] = "ª½¦¡¼ĞÃD¡Aª½¦¡¤å¦r";
     Text[ turkish ] = "Vertical title, vertical text";
@@ -4746,7 +4746,7 @@ String STR_BREAK_ACTION
     Text [ finnish ] = "Toiminto peruutettu" ;
     Text [ danish ] = "Handling afbrudt" ;
     Text [ french ] = "Action interrompue" ;
-    Text [ swedish ] = "Åtgärden avbruten" ;
+    Text [ swedish ] = "Åtgärd avbruten" ;
     Text [ dutch ] = "Activiteit gestopt" ;
     Text [ spanish ] = "Acción cancelada" ;
     Text [ english_us ] = "Action canceled" ;
@@ -5583,7 +5583,7 @@ String STR_SOUNDFILE2
     Text[ polish ] = "AIFF - Audio Interchange File Format";
     Text[ japanese ] = "AIFF - Audio Interchange File Format";
     Text[ greek ] = "AIFF - Audio Interchange File Format";
-    Text[ korean ] = "AIFF - ¿Àµğ³ë¡¡ÀÎÅÍÃ¼ÀÎÁö¡¡ÆÄÀÏ¡¡Æ÷¸Ë";
+    Text[ korean ] = "AIFF - ¿Àµğ¿À¡¡ÀÎÅÍÃ¼ÀÎÁö¡¡ÆÄÀÏ¡¡Æ÷¸Ë";
     Text[ chinese_traditional ] = "AIFF - ­µÀWÀÉ®×®æ¦¡";
     Text[ arabic ] = "AIFF - Audio Interchange File Format";
     Text[ turkish ] = "AIFF - Audio Interchange File Format";
@@ -7091,7 +7091,7 @@ String STR_CLICK_ACTION_VERB
     Text[ polish ] = "Uruchom akcjê obiektu";
     Text[ japanese ] = "µÌŞ¼Şª¸Ä±¸¼®İ‚ÌÀs";
     Text[ greek ] = "Åêôİëåóç åíİñãåéáò áíôéêåéìİíïõ";
-    Text[ korean ] = "°³Ã¼µ·ÀÛ ½ÇÇà";
+    Text[ korean ] = "°³Ã¼ µ¿ÀÛ ½ÇÇà";
     Text[ chinese_traditional ] = "°õ¦æª«¥ó°Ê§@";
     Text[ arabic ] = "ÊäİíĞ ÅÌÑÇÁ ßÇÆä";
     Text[ turkish ] = "Nesne işlemini yürüt";
@@ -13307,7 +13307,7 @@ String STR_UNDO_GRAFGAMMA
     Text[ russian ] = "Ãàììà";
     Text[ italian ] = "Gamma";
     Text[ danish ] = "Gamma";
-    Text[ polish ] = "Gama";
+    Text[ polish ] = "Gamma";
     Text[ portuguese_brazilian ] = "Gamma";
     Text[ japanese ] = "¶ŞİÏ";
     Text[ korean ] = "°¨¸¶";
