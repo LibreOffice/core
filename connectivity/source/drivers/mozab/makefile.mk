@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: fs $ $Date: 2001-10-23 17:46:21 $
+#   last change: $Author: rt $ $Date: 2001-12-07 14:07:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ all:
 
 #mozilla specific stuff.
 MOZ_LIB=$(SOLARVERSION)$/$(INPATH)$/lib$(UPDMINOREXT)
-MOZ_INC=$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)/$/mozilla
+MOZ_INC=$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla
 #.ENDIF
 
 .IF "$(OS)"=="WNT" 
