@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeprovider.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-26 07:53:36 $
+ *  last change: $Author: dg $ $Date: 2001-02-08 11:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,12 @@ namespace configmgr
             <p>If the locale is not set, the whole user has become invalid</p>
         */
         virtual void disposeData(const vos::ORef < OOptions >& _xOptions) throw () = 0;
+
+
+        /** initiates the fetch of a Subtree */
+        virtual void fetchSubtree(OUString const& aSubtreePath,
+                                  const vos::ORef < OOptions >& _xOptions,
+                                  sal_Int16 nMinLevels = ALL_LEVELS) throw() = 0;
     };
 
 
