@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _textsh.sdi,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:41:43 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 interface BaseText : Selection
 [
     Automation = FALSE;
@@ -1436,6 +1435,11 @@ interface BaseText : Selection
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
+    FN_WORDCOUNT_DIALOG
+    [
+        ExecMethod = Execute;
+    ]
+
 
 }  //ende interface text
 
