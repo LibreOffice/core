@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyincnt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:09:20 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:57:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,10 +240,14 @@ void SwFlyInCntFrm::MakeObjPos()
 {
     if ( !bValidPos )
     {
-        if ( !GetAnchorFrm()->IsTxtFrm() || !((SwTxtFrm*)GetAnchorFrm())->IsLocked() )
-            ::DeepCalc( GetAnchorFrm() );
-        if( GetAnchorFrm()->IsTxtFrm() )
-            ((SwTxtFrm*)GetAnchorFrm())->GetFormatted();
+        // --> OD 2004-08-12 #i32795# - calling methods <::DeepCalc(..)> and
+        // <GetAnchorFrm()->GetFormatted()> no longer needed due to the changed
+        // formatting of floating screen objects. It also causes layout loops.
+//        if ( !GetAnchorFrm()->IsTxtFrm() || !((SwTxtFrm*)GetAnchorFrm())->IsLocked() )
+//            ::DeepCalc( GetAnchorFrm() );
+//        if( GetAnchorFrm()->IsTxtFrm() )
+//            ((SwTxtFrm*)GetAnchorFrm())->GetFormatted();
+        // <--
         bValidPos = TRUE;
         SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
         const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
