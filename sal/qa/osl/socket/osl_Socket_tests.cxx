@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Socket_tests.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-05 21:23:33 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,9 @@ namespace osl_Socket
             gethostbyname_r ("longshot.PRC.Sun.COM", &aHostByName, pHostBuffer, sizeof(pHostBuffer), &pHostByName, &nErrorNo);
 
             if ( pQualifiedHostByName )
-                printf( "# getHostname_003: QualifiedHostByName!\n" );
+                t_print("# getHostname_003: QualifiedHostByName!\n" );
             if ( pHostByName )
-                printf( "# getHostname_003: HostByName!\n" );
+                t_print("# getHostname_003: HostByName!\n" );
         }
 #endif
 */
