@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:09:04 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 17:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1258,7 +1258,7 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
 
         if( pWindow != NULL && bisTop && m_xController.is() )
         {
-            Application::SetDefModalDialogParent( pWindow );
+            Application::SetDefDialogParent( pWindow );
         }
         aSolarGuard.clear();
 #endif // ENABLE_DEFMODALDIALOGPARENT
@@ -1465,11 +1465,11 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
     Window* pOldComponentWindow = VCLUnoHelper::GetWindow( xOldComponentWindow );
     if (
         ( pOldComponentWindow                    != NULL                )   &&
-        ( Application::GetDefModalDialogParent() == pOldComponentWindow ) &&
+        ( Application::GetDefDialogParent() == pOldComponentWindow ) &&
         isTop()
         )
     {
-        Application::SetDefModalDialogParent( pContainerWindow );
+        Application::SetDefDialogParent( pContainerWindow );
     }
 
     aGlobalSolarLock.clear();
@@ -1571,7 +1571,7 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
         ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
         Window* pWindow = VCLUnoHelper::GetWindow( xComponentWindow );
         if ( pWindow!=NULL && isTop() && xController.is() )
-            Application::SetDefModalDialogParent( pWindow );
+            Application::SetDefDialogParent( pWindow );
         aSolarGuard.clear();
         /* } SOLAR SAFE */
 #endif
@@ -2860,10 +2860,10 @@ void Frame::impl_disposeContainerWindow( css::uno::Reference< css::awt::XWindow 
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if  (
                 ( pWindow                                !=  NULL     )   &&
-                ( Application::GetDefModalDialogParent() ==  pWindow  )
+                ( Application::GetDefDialogParent() ==  pWindow  )
             )
         {
-            Application::SetDefModalDialogParent( NULL );
+            Application::SetDefDialogParent( NULL );
         }
         aSolarGuard.clear();
 #endif
