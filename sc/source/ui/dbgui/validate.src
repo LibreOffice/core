@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 15:44:51 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -837,7 +837,7 @@ TabPage TP_VALIDATION_INPUTHELP
         Text[ japanese ] = "ΎΩ‚Μ‘I‘π‚ΙÒ―Ύ°Όή‚π•\\¦‚·‚ι(~S)";
         Text[ chinese_traditional ] = "¦bΏο¨ϊΐx¦s®ζ®ΙΕγ¥άΏι¤J»΅©ϊ(~S)";
         Text[ arabic ] = "ΕΩεΗΡ γΣΗΪΟΙ ΗαΕΟΞΗα ΪδΟ ΚΝΟνΟ ΗαΞανΙ";
-        Text[ greek ] = "Εμφάνιση βοήθειας εισαγωγής κατά την επιλογή ενός κελιού";
+        Text[ greek ] = "Εμφάν~ιση βοήθειας εισαγωγής κατά την επιλογή ενός κελιού";
         Text[ korean ] = "ΌΏΐΜ Ό±ΕΓµΗΎξΑ³ΐ» ¶§ µµΏςΈ» »πΐΤ ΊΈ±β(~S)";
         Text[ turkish ] = "Hόcre se~ηildiπinde giriώ yardύmύ φner";
     };
@@ -912,7 +912,7 @@ TabPage TP_VALIDATION_INPUTHELP
         Text[ japanese ] = "“ό—ΝÒ―Ύ°Όή(~I)";
         Text[ chinese_traditional ] = "Ώι¤Jΐ°§U(~I)";
         Text[ arabic ] = "γΣΗΪΟΙ ΗαΕΟΞΗα";
-        Text[ greek ] = "Βοήθεια εισαγωγής";
+        Text[ greek ] = "Βοήθεια ~εισαγωγής";
         Text[ korean ] = "µµΏςΈ» »πΐΤ(~I)";
         Text[ turkish ] = "~Giriώ yardύmύ";
     };
@@ -989,7 +989,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ japanese ] = "–³ψ‚Θ’l‚ª“ό—Ν‚³‚κ‚½‚η΄Χ°Ò―Ύ°Όή‚π•\\¦‚·‚ι(~M)";
         Text[ chinese_traditional ] = "¦bΏι¤JµL®ΔΌΖ­Θ®ΙΕγ¥άΏω»~³ψ§i(~M)";
         Text[ arabic ] = "ΕΩεΗΡ ΡΣΗαΙ ΞΨΓ ΪδΟ ΕΟΞΗα ήνγ ΫνΡ ΥΗαΝΙ";
-        Text[ greek ] = "Εμφάνιση μηνύματος σφάλματος σε περίπτωση εισαγωγής μη έγκυρων τιμών";
+        Text[ greek ] = "Εμφάνιση μηνύματος σ~φάλματος σε περίπτωση εισαγωγής μη έγκυρων τιμών";
         Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ °ª ΐΤ·Β½Γ Ώΐ·ω ΈήΌΌΑφ ΊΈΐΜ±β(~M)";
         Text[ turkish ] = "~Geηersiz deπer girildiπinde hata iletisi gφrόntόle";
     };
