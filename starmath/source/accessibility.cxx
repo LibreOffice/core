@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-31 14:23:22 $
+ *  last change: $Author: tl $ $Date: 2002-06-07 10:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,7 +473,7 @@ sal_Int32 SAL_CALL SmAccessibility::getCaretPosition()
     throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return -1;
+    return 0;
 }
 
 sal_Unicode SAL_CALL SmAccessibility::getCharacter( sal_Int32 nIndex )
@@ -534,8 +534,10 @@ awt::Rectangle SAL_CALL SmAccessibility::getCharacterBounds( sal_Int32 nIndex )
                 // get appropriate rectangle
                 Point aOffset(pNode->GetTopLeft() - pTree->GetTopLeft());
                 Point aTLPos (pWin->GetFormulaDrawPos() + aOffset);
-                aTLPos.X() -= pNode->GetItalicLeftSpace();
-                Size  aSize (pNode->GetItalicSize());
+//                aTLPos.X() -= pNode->GetItalicLeftSpace();
+//                Size  aSize (pNode->GetItalicSize());
+                aTLPos.X() -= 0;
+                Size  aSize (pNode->GetSize());
 
                 long *pXAry = new long[ aNodeText.Len() ];
                 pWin->SetFont( pNode->GetFont() );
@@ -544,6 +546,10 @@ awt::Rectangle SAL_CALL SmAccessibility::getCharacterBounds( sal_Int32 nIndex )
                 aSize.Width()  = nNodeIndex > 0 ? pXAry[nNodeIndex] - pXAry[nNodeIndex - 1] : pXAry[nNodeIndex];
                 delete[] pXAry;
 
+#ifdef DEBUG
+    Point aLP00( pWin->LogicToPixel( Point(0,0)) );
+    Point aPL00( pWin->PixelToLogic( Point(0,0)) );
+#endif
                 aTLPos = pWin->LogicToPixel( aTLPos );
                 aSize  = pWin->LogicToPixel( aSize );
                 aRes.X = aTLPos.X();
@@ -592,23 +598,32 @@ sal_Int32 SAL_CALL SmAccessibility::getIndexAtPoint( const awt::Point& aPoint )
         {
             // get appropriate rectangle
             Point   aOffset( pNode->GetTopLeft() - pTree->GetTopLeft() );
-            Point   aTLPos ( pWin->GetFormulaDrawPos() + aOffset );
-            aTLPos.X() -= pNode->GetItalicLeftSpace();
-            Size  aSize( pNode->GetItalicSize() );
+            Point   aTLPos ( /*pWin->GetFormulaDrawPos() +*/ aOffset );
+//            aTLPos.X() -= pNode->GetItalicLeftSpace();
+//            Size  aSize( pNode->GetItalicSize() );
+            aTLPos.X() -= 0;
+            Size  aSize( pNode->GetSize() );
+#ifdef DEBUG
+    Point aLP00( pWin->LogicToPixel( Point(0,0)) );
+    Point aPL00( pWin->PixelToLogic( Point(0,0)) );
+#endif
 
             Rectangle aRect( aTLPos, aSize );
             if (aRect.IsInside( aPos ))
             {
                 DBG_ASSERT( pNode->IsVisible(), "node is not a leaf" );
-                String aTxt( GetAccessibleText_Impl() );
+                String aTxt;
+                pNode->GetAccessibleText( aTxt );
                 DBG_ASSERT( aTxt.Len(), "no accessible text available" );
+
+                long nNodeX = pNode->GetLeft();
 
                 long *pXAry = new long[ aTxt.Len() ];
                 pWin->SetFont( pNode->GetFont() );
                 pWin->GetTextArray( aTxt, pXAry, 0, aTxt.Len() );
-                for (sal_Int32 i = 0;  i < aTxt.Len() - 1  &&  nRes == -1;  ++i)
+                for (sal_Int32 i = 0;  i < aTxt.Len()  &&  nRes == -1;  ++i)
                 {
-                    if (pXAry[i] > aPos.X())
+                    if (pXAry[i] + nNodeX > aPos.X())
                         nRes = i;
                 }
                 delete[] pXAry;
