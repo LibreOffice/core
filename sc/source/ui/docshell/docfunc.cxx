@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-05 10:54:11 $
+ *  last change: $Author: nn $ $Date: 2000-10-09 10:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1989,7 +1989,7 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, USHORT nRangeCnt, USHORT* pRanges
     if (!nRangeCnt)
         return TRUE;
 
-    if ( rDocShell.IsReadOnly() )
+    if ( !rDocShell.IsEditable() )
     {
         if (!bApi)
             rDocShell.ErrorMessage(STR_PROTECTIONERR);      //! eigene Meldung?
