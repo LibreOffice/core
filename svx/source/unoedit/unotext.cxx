@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-01 09:08:33 $
+ *  last change: $Author: cl $ $Date: 2001-03-27 13:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1422,7 +1422,10 @@ void SAL_CALL SvxUnoText::insertControlCharacter( const uno::Reference< text::XT
         }
         case text::ControlCharacter::LINE_BREAK:
         {
-            pForwarder->QuickInsertLineBreak( aSelection );
+            const String aText( (char)10, 1 );  // '\r' geht auf'm Mac nicht
+            insertString( xRange, aText, bAbsorb );
+
+//          pForwarder->QuickInsertLineBreak( aSelection );
             return;
         }
         case text::ControlCharacter::APPEND_PARAGRAPH:
