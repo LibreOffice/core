@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTypeDescriptionEnumerationAccess.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-11 08:30:10 $
+ *  last change: $Author: kso $ $Date: 2002-11-14 10:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,23 @@ interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XInterface
 
         @param types
             restricts the contents of the enumeration. It will only contain
-            type descriptions that match one of the suppliedtype classes. An
+            type descriptions that match one of the supplied type classes. An
             empty sequence specifies that the enumeration shall contain all
             type descriptions.
+
+            <p>Valid types classes are:
+            <ul>
+            <li><type scope="com::sun::star::uno">TypeClass::MODULE</type>
+            <li><type scope="com::sun::star::uno">TypeClass::INTERFACE</type>
+            <li><type scope="com::sun::star::uno">TypeClass::SERVICE</type>
+            <li><type scope="com::sun::star::uno">TypeClass::STRUCT</type>
+            <li><type scope="com::sun::star::uno">TypeClass::ENUM</type>
+            <li><type scope="com::sun::star::uno">TypeClass::EXCEPTION</type>
+            <li><type scope="com::sun::star::uno">TypeClass::TYPEDEF</type>
+            <li><type scope="com::sun::star::uno">TypeClass::CONSTANT</type>
+            <li><type scope="com::sun::star::uno">TypeClass::CONSTANTS</type>
+            <li><type scope="com::sun::star::uno">TypeClass::SINGLETON</type>
+            </ul>
 
         @param depth
             specifies the depth of search in the underlying tree of type
@@ -121,6 +135,25 @@ interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XInterface
 
         @returns
             an enumeration of type descriptions.
+
+            <p>The enumeration returns implementations of
+            <type>XTypeDescription</type>. Following concrete UNOIDL parts
+            represented by specialized interfaces derived from
+            <type>XTypeDescription</type> can be returned by the enumerator:
+
+            <table border=1>
+            <th>IDL       </th><th>interface</th>
+            <td>module    </td><td><type>XModuleTypeDescription</td></type>
+            <td>interface </td><td><type>XInterfaceTypeDescription</td></type>
+            <td>service   </td><td><type>XServiceTypeDescription</td></type>
+            <td>struct    </td><td><type>XCompoundTypeDescription</td></type>
+            <td>enum      </td><td><type>XEnumTypeDescription</td></type>
+            <td>exception </td><td><type>XCompoundTypeDescription</td></type>
+            <td>typedef   </td><td><type>XIndirectTypeDescription</td></type>
+            <td>constant  </td><td><type>XConstantTypeDescription</td></type>
+            <td>constants </td><td><type>XConstantsTypeDescription</td></type>
+            <td>singleton </td><td><type>XSingletonTypeDescription</td></type>
+            </table>
 
         @throws NoSuchTypeNameException
             in case that the given type name does not exist.
