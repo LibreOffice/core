@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 07:43:18 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,10 +214,13 @@ BOOL SbiScanner::NextSym()
         while( ( n < nLen ) && ( *p != '\n' ) && ( *p != '\r' ) )
             p++, n++;
         aLine = aBuf.copy( nBufPos, n - nBufPos );
-        if( ( n < nLen ) && *p == '\r' && *( p+1 ) == '\n' )
-            n += 2;
-        else
-            n++;
+        if( n < nLen )
+        {
+            if( *p == '\r' && *( p+1 ) == '\n' )
+                n += 2;
+            else
+                n++;
+        }
         nBufPos = n;
         pLine = aLine.getStr();
         nOldLine = ++nLine;
