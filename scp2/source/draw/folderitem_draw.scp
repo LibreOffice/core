@@ -2,9 +2,9 @@
  *
  *  $RCSfile: folderitem_draw.scp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:15:12 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 08:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@ FolderItem gid_Folderitem_Sdraw
     FileID = gid_File_Exe_Sdraw;
     IconFile = gid_File_Exe_Sdraw;
     IconID = 0;
-    Parameter = "-draw";
+    WkDir = gid_Dir_Program;
+    Parameter = "";
     Styles = (NOWEB);
+    ALL_LANG(Tooltip, STR_FI_TOOLTIP_DRAW);
 End
