@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:25:28 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,15 @@
 #ifndef _DCONTACT_HXX //autogen
 #include <dcontact.hxx>
 #endif
+#ifndef _SW_REWRITER_HXX
+#include <SwRewriter.hxx>
+#endif
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
+
+#include <comcore.hrc> // #111827#
+#include <undo.hrc>
 
 class _UnReplaceData : private SwUndoSaveCntnt
 {
@@ -158,6 +167,9 @@ public:
     void Undo( SwUndoIter& rIter );
     void Redo( SwUndoIter& rIter );
     void SetEnd( const SwPaM& rPam );
+
+    const String & GetOld() const { return sOld; }
+    const String & GetIns() const { return sIns; }
 };
 
 
@@ -177,35 +189,57 @@ inline SwPosition* IterMk( SwUndoIter& rUIter )
 
 // INSERT
 
+String * SwUndoInsert::GetTxtFromDoc() const
+{
+    String * pResult = NULL;
+
+    SwNodeIndex aNd( pDoc->GetNodes(), nNode);
+    SwCntntNode* pCNd = aNd.GetNode().GetCntntNode();
+    SwPaM aPaM( *pCNd, nCntnt );
+
+    aPaM.SetMark();
+
+    if( pCNd->IsTxtNode() )
+    {
+        pResult = new String( ((SwTxtNode*)pCNd)->GetTxt().Copy(nCntnt-nLen,
+                                                             nLen ) );
+
+    }
+
+    return pResult;
+}
+
+void SwUndoInsert::Init(const SwNodeIndex & rNd)
+{
+    // Redline beachten
+    pDoc = rNd.GetNode().GetDoc();
+    if( pDoc->IsRedlineOn() )
+    {
+        pRedlData = new SwRedlineData( REDLINE_INSERT,
+                                       pDoc->GetRedlineAuthor() );
+        SetRedlineMode( pDoc->GetRedlineMode() );
+    }
+
+    pUndoTxt = GetTxtFromDoc();
+}
+
+// #111827#
 SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, xub_StrLen nCnt,
                             xub_StrLen nL, BOOL bWDelim )
-    : SwUndo(UNDO_INSERT), nNode( rNd.GetIndex() ), nCntnt(nCnt), nLen(nL),
+    : SwUndo(UNDO_TYPING), nNode( rNd.GetIndex() ), nCntnt(nCnt), nLen(nL),
         bIsWordDelim( bWDelim ), bIsAppend( FALSE ), pPos( 0 ), pTxt( 0 ),
         pRedlData( 0 )
 {
-    // Redline beachten
-    SwDoc& rDoc = *rNd.GetNode().GetDoc();
-    if( rDoc.IsRedlineOn() )
-    {
-        pRedlData = new SwRedlineData( REDLINE_INSERT,
-                                        rDoc.GetRedlineAuthor() );
-        SetRedlineMode( rDoc.GetRedlineMode() );
-    }
+    Init(rNd);
 }
 
+// #111827#
 SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
-    : SwUndo(UNDO_INSERT), nNode( rNd.GetIndex() ), nCntnt(0), nLen(1),
+    : SwUndo(UNDO_TYPING), nNode( rNd.GetIndex() ), nCntnt(0), nLen(1),
         bIsWordDelim( FALSE ), bIsAppend( TRUE ), pPos( 0 ), pTxt( 0 ),
         pRedlData( 0 )
 {
-    // Redline beachten
-    SwDoc& rDoc = *rNd.GetNode().GetDoc();
-    if( rDoc.IsRedlineOn() )
-    {
-        pRedlData = new SwRedlineData( REDLINE_INSERT,
-                                        rDoc.GetRedlineAuthor() );
-        SetRedlineMode( rDoc.GetRedlineMode() );
-    }
+    Init(rNd);
 }
 
 // stelle fest, ob das naechste Insert mit dem aktuellen zusammengefasst
@@ -234,6 +268,10 @@ BOOL SwUndoInsert::CanGrouping( sal_Unicode cIns )
     {
         nLen++;
         nCntnt++;
+
+        if (pUndoTxt)
+            pUndoTxt->Insert(cIns);
+
         return TRUE;
     }
     return FALSE;
@@ -378,6 +416,8 @@ void SwUndoInsert::Undo( SwUndoIter& rUndoIter )
                 IterPt(rUndoIter)->nNode ]->GetCntntNode(), nCnt );
         // SPoint und GetMark auf der gleichen Position
     }
+
+    DELETEZ(pUndoTxt);
 }
 
 
@@ -453,6 +493,8 @@ void SwUndoInsert::Redo( SwUndoIter& rUndoIter )
                 pDoc->SplitRedline( *rUndoIter.pAktPam );
         }
     }
+
+    pUndoTxt = GetTxtFromDoc();
 }
 
 
@@ -515,6 +557,40 @@ void SwUndoInsert::Repeat( SwUndoIter& rUndoIter )
     }
 }
 
+// #111827#
+SwRewriter SwUndoInsert::GetRewriter() const
+{
+    SwRewriter aResult;
+    String * pStr = NULL;
+    bool bDone = false;
+
+    if (pTxt)
+        pStr = pTxt;
+    else if (pUndoTxt)
+        pStr = pUndoTxt;
+
+    if (pStr)
+    {
+        String aString;
+
+        aString += String(SW_RES(STR_START_QUOTE));
+        aString += ShortenString(*pStr, nUndoStringLength,
+                                 String(SW_RES(STR_LDOTS)));
+        aString += String(SW_RES(STR_END_QUOTE));
+
+        aResult.AddRule(UNDO_ARG1, aString);
+
+        bDone = true;
+    }
+
+    if ( ! bDone )
+    {
+        aResult.AddRule(UNDO_ARG1, String("??", RTL_TEXTENCODING_ASCII_US));
+    }
+
+    return aResult;
+}
+
 
 /*  */
 
@@ -567,6 +643,47 @@ void SwUndoReplace::Redo( SwUndoIter& rUndoIter )
     }
 }
 
+// #111827#
+SwRewriter SwUndoReplace::GetRewriter() const
+{
+    SwRewriter aResult;
+
+    if (aArr.Count() > 1)
+    {
+        aResult.AddRule(UNDO_ARG1, String::CreateFromInt32(aArr.Count()));
+        aResult.AddRule(UNDO_ARG2, String(SW_RES(STR_OCCURRENCES_OF)));
+
+        String aTmpStr;
+        aTmpStr += String(SW_RES(STR_START_QUOTE));
+        aTmpStr += aArr[0]->GetOld();
+        aTmpStr += String(SW_RES(STR_END_QUOTE));
+        aResult.AddRule(UNDO_ARG3, aTmpStr);
+    }
+    else if (aArr.Count() == 1)
+    {
+        {
+            String aTmpStr;
+
+            aTmpStr += String(SW_RES(STR_START_QUOTE));
+            aTmpStr += aArr[0]->GetOld();
+            aTmpStr += String(SW_RES(STR_END_QUOTE));
+            aResult.AddRule(UNDO_ARG1, aTmpStr);
+        }
+
+        aResult.AddRule(UNDO_ARG2, String(SW_RES(STR_YIELDS)));
+
+        {
+            String aTmpStr;
+
+            aTmpStr += String(SW_RES(STR_START_QUOTE));
+            aTmpStr += aArr[0]->GetIns();
+            aTmpStr += String(SW_RES(STR_END_QUOTE));
+            aResult.AddRule(UNDO_ARG3, aTmpStr);
+        }
+    }
+
+    return aResult;
+}
 
 void SwUndoReplace::AddEntry( const SwPaM& rPam, const String& rInsert,
                                 BOOL bRegExp )
@@ -1008,6 +1125,22 @@ void SwUndoInsertLabel::Repeat( SwUndoIter& rIter )
     {
         rDoc.InsertLabel( eType, sText, bBefore, nFldId, nIdx, bCpyBrd );
     }
+}
+
+// #111827#
+SwRewriter SwUndoInsertLabel::GetRewriter() const
+{
+    SwRewriter aRewriter;
+
+    String aTmpStr;
+
+    aTmpStr += String(SW_RES(STR_START_QUOTE));
+    aTmpStr += ShortenString(sText, nUndoStringLength, String(STR_LDOTS));
+    aTmpStr += String(SW_RES(STR_END_QUOTE));
+
+    aRewriter.AddRule(UNDO_ARG1, aTmpStr);
+
+    return aRewriter;
 }
 
 void SwUndoInsertLabel::SetFlys( SwFrmFmt& rOldFly, SfxItemSet& rChgSet,
