@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-06 08:36:40 $
+ *  last change: $Author: rt $ $Date: 2001-08-07 14:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,16 +109,16 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text [ spanish ] = "~Añadir..." ;
         Text [ french ] = "A~jouter..." ;
         Text [ dutch ] = "Toe~voegen..." ;
-        Text[ chinese_simplified ] = "ĞÂÔö(~A)...";
+        Text[ chinese_simplified ] = "æ–°å¢(~A)...";
         Text[ russian ] = "Äîáàâèòü...";
         Text[ polish ] = "Dodaj...";
-        Text[ japanese ] = "’Ç‰Á(~A)...";
-        Text[ chinese_traditional ] = "·s¼W(~A)...";
+        Text[ japanese ] = "è¿½åŠ (~A)...";
+        Text[ chinese_traditional ] = "æ–°å¢(~A)...";
         Text[ arabic ] = "...ÅÖÇİÉ";
         Text[ dutch ] = "Toe~voegen...";
-        Text[ chinese_simplified ] = "ĞÂÔö(~A)...";
+        Text[ chinese_simplified ] = "æ–°å¢(~A)...";
         Text[ greek ] = "ĞñïóèŞêç...";
-        Text[ korean ] = "Ãß°¡(~A)...";
+        Text[ korean ] = "ì¶”ê°€(~A)...";
         Text[ turkish ] = "Ekle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Añadir...";
@@ -141,16 +141,16 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text [ spanish ] = "~Eliminar" ;
         Text [ french ] = "~Supprimer" ;
         Text [ dutch ] = "~Wissen" ;
-        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ russian ] = "Óäàëèòü";
         Text[ polish ] = "Usuñ";
-        Text[ japanese ] = "íœ(~D)";
-        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ japanese ] = "å‰Šé™¤(~D)";
+        Text[ chinese_traditional ] = "åˆªé™¤(~D)";
         Text[ arabic ] = "ÍĞİ";
         Text[ dutch ] = "~Wissen";
-        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ korean ] = "ì‚­ì œ(~D)";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
@@ -171,16 +171,16 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text [ french ] = "Chemins" ;
         Text [ dutch ] = "Paden" ;
         Text [ portuguese ] = "Atalhos" ;
-        Text[ chinese_simplified ] = "Â·¾¶";
+        Text[ chinese_simplified ] = "è·¯å¾„";
         Text[ russian ] = "Ïóòè";
         Text[ polish ] = "Œcie¿ki";
-        Text[ japanese ] = "Êß½";
-        Text[ chinese_traditional ] = "¸ô®|";
+        Text[ japanese ] = "ï¾Šï¾Ÿï½½";
+        Text[ chinese_traditional ] = "è·¯å¾‘";
         Text[ arabic ] = "ÇáãÓÇÑÇÊ";
         Text[ dutch ] = "Paden";
-        Text[ chinese_simplified ] = "Â·¾¶";
+        Text[ chinese_simplified ] = "è·¯å¾„";
         Text[ greek ] = "Äéáäñïìİò";
-        Text[ korean ] = "°æ·Î";
+        Text[ korean ] = "ê²½ë¡œ";
         Text[ turkish ] = "Veri yolları";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Rutas";
@@ -201,16 +201,16 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Pos = MAP_APPFONT ( 200 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text[ chinese_simplified ] = "Ñ¡ÔñÂ·¾¶";
+    Text[ chinese_simplified ] = "é€‰æ‹©è·¯å¾„";
     Text[ russian ] = "Âûáğàòü ïóòè";
     Text[ polish ] = "Wybierz œcie¿ki";
-    Text[ japanese ] = "Êß½‚Ì‘I‘ğ";
-    Text[ chinese_traditional ] = "¿ï¾Ü¸ô®|";
+    Text[ japanese ] = "ï¾Šï¾Ÿï½½ã®é¸æŠ";
+    Text[ chinese_traditional ] = "é¸æ“‡è·¯å¾‘";
     Text[ arabic ] = "ÊÍÏíÏ ÇáãÓÇÑÇÊ";
     Text[ dutch ] = "Paden selecteren";
-    Text[ chinese_simplified ] = "Ñ¡ÔñÂ·¾¶";
+    Text[ chinese_simplified ] = "é€‰æ‹©è·¯å¾„";
     Text[ greek ] = "ÅğéëïãŞ äéáäñïìşí";
-    Text[ korean ] = "°æ·Î ¼±ÅÃ";
+    Text[ korean ] = "ê²½ë¡œ ì„ íƒ";
     Text[ turkish ] = "Veri yollarını seç";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Seleccionar rutas";
@@ -229,16 +229,16 @@ String RID_MULTIPATH_DBL_ERR
     Text [ french ] = "Le chemin %1 existe déjà." ;
     Text [ dutch ] = "Pad %1 bestaat reeds." ;
     Text [ portuguese ] = "O atalho %1 já existe." ;
-    Text[ chinese_simplified ] = "Õâ¸öÂ·¾¶ %1 ÒÑ¾­´æÔÚ¡£";
+    Text[ chinese_simplified ] = "è¿™ä¸ªè·¯å¾„ %1 å·²ç»å­˜åœ¨ã€‚";
     Text[ russian ] = "Ïóòü %1 óæå èìååòñÿ.";
     Text[ polish ] = "Œcie¿ka %1 ju¿ istnieje.";
-    Text[ japanese ] = "%1‚ÌÊß½‚ÍŠù‚É‚ ‚è‚Ü‚·B";
-    Text[ chinese_traditional ] = "³o­Ó¸ô®| %1 ¤w¸g¦s¦b¡C";
+    Text[ japanese ] = "%1ã®ï¾Šï¾Ÿï½½ã¯æ—¢ã«ã‚ã‚Šã¾ã™ã€‚";
+    Text[ chinese_traditional ] = "é€™å€‹è·¯å¾‘ %1 å·²ç¶“å­˜åœ¨ã€‚";
     Text[ arabic ] = "ÇáãÓÇÑ %1 ãæÌæÏ ãÓÈŞÇğ.";
     Text[ dutch ] = "Pad %1 bestaat reeds.";
-    Text[ chinese_simplified ] = "Õâ¸öÂ·¾¶ %1 ÒÑ¾­´æÔÚ¡£";
+    Text[ chinese_simplified ] = "è¿™ä¸ªè·¯å¾„ %1 å·²ç»å­˜åœ¨ã€‚";
     Text[ greek ] = "Ç äéáäñïìŞ %1 õğÜñ÷åé Şäç.";
-    Text[ korean ] = "°æ·Î%1ÀÌ(°¡) ÀÌ¹Ì ÀÖ½À´Ï´Ù.";
+    Text[ korean ] = "ê²½ë¡œ%1ì´(ê°€) ì´ë¯¸ ìˆìŠµë‹ˆë‹¤.";
     Text[ turkish ] = "Veri yolu %1 mevcut durumda";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "La ruta %1 ya existe.";
@@ -257,16 +257,16 @@ String RID_SVXSTR_MULTIFILE_DBL_ERR
     Text [ spanish ] = "El archivo %1 ya existe." ;
     Text [ french ] = "Le fichier %1existe déjà." ;
     Text [ dutch ] = "Bestand %1 bestaat reeds" ;
-    Text[ chinese_simplified ] = "Õâ¸öÎÄ¼ş %1 ÒÑ¾­´æÔÚ¡£";
+    Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶ %1 å·²ç»å­˜åœ¨ã€‚";
     Text[ russian ] = "Ôàéë %1 óæå èìååòñÿ.";
     Text[ polish ] = "Plik %1 ju¿ istnieje.";
-    Text[ japanese ] = "%1‚ÌÌ§²Ù‚ÍŠù‚É‚ ‚è‚Ü‚·B";
-    Text[ chinese_traditional ] = "³o­ÓÀÉ®× %1 ¤w¸g¦s¦b¡C";
+    Text[ japanese ] = "%1ã®ï¾Œï½§ï½²ï¾™ã¯æ—¢ã«ã‚ã‚Šã¾ã™ã€‚";
+    Text[ chinese_traditional ] = "é€™å€‹æª”æ¡ˆ %1 å·²ç¶“å­˜åœ¨ã€‚";
     Text[ arabic ] = "Çáãáİ %1 ãæÌæÏ ãÓÈŞÇğ.";
     Text[ dutch ] = "Bestand %1 bestaat reeds";
-    Text[ chinese_simplified ] = "Õâ¸öÎÄ¼ş %1 ÒÑ¾­´æÔÚ¡£";
+    Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶ %1 å·²ç»å­˜åœ¨ã€‚";
     Text[ greek ] = "Ôï áñ÷åßï %1 õğÜñ÷åé Şäç.";
-    Text[ korean ] = "ÆÄÀÏ%1ÀÌ(°¡) ÀÌ¹Ì ÀÖ½À´Ï´Ù.";
+    Text[ korean ] = "íŒŒì¼%1ì´(ê°€) ì´ë¯¸ ìˆìŠµë‹ˆë‹¤.";
     Text[ turkish ] = "Dosya %1 mevcut durumda.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El archivo %1 ya existe.";
@@ -285,16 +285,16 @@ String RID_SVXSTR_FILE_TITLE
     Text [ spanish ] = "Seleccionar archivos" ;
     Text [ french ] = "Sélection des fichiers" ;
     Text [ dutch ] = "Bestanden selecteren" ;
-    Text[ chinese_simplified ] = "Ñ¡ÔñÎÄ¼ş";
+    Text[ chinese_simplified ] = "é€‰æ‹©æ–‡ä»¶";
     Text[ russian ] = "Âûáîğ ôàéëîâ";
     Text[ polish ] = "Wybierz pliki";
-    Text[ japanese ] = "Ì§²Ù‚Ì‘I‘ğ";
-    Text[ chinese_traditional ] = "¿ï¾ÜÀÉ®×";
+    Text[ japanese ] = "ï¾Œï½§ï½²ï¾™ã®é¸æŠ";
+    Text[ chinese_traditional ] = "é¸æ“‡æª”æ¡ˆ";
     Text[ arabic ] = "ÇÎÊíÇÑ ÇáãáİÇÊ";
     Text[ dutch ] = "Bestanden selecteren";
-    Text[ chinese_simplified ] = "Ñ¡ÔñÎÄ¼ş";
+    Text[ chinese_simplified ] = "é€‰æ‹©æ–‡ä»¶";
     Text[ greek ] = "ÅğéëïãŞ áñ÷åßùí";
-    Text[ korean ] = "ÆÄÀÏ ¼±ÅÃ";
+    Text[ korean ] = "íŒŒì¼ ì„ íƒ";
     Text[ turkish ] = "Dosyaları seç";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Seleccionar archivos";
@@ -313,22 +313,23 @@ String RID_SVXSTR_FILE_GB
     Text [ spanish ] = "Archivos" ;
     Text [ french ] = "Fichiers" ;
     Text [ dutch ] = "Bestanden" ;
-    Text[ chinese_simplified ] = "ÎÄ¼ş";
+    Text[ chinese_simplified ] = "æ–‡ä»¶";
     Text[ russian ] = "Ôàéëû";
     Text[ polish ] = "Pliki";
-    Text[ japanese ] = "Ì§²Ù";
-    Text[ chinese_traditional ] = "ÀÉ®×";
+    Text[ japanese ] = "ï¾Œï½§ï½²ï¾™";
+    Text[ chinese_traditional ] = "æª”æ¡ˆ";
     Text[ arabic ] = "ÇáãáİÇÊ";
     Text[ dutch ] = "Bestanden";
-    Text[ chinese_simplified ] = "ÎÄ¼ş";
+    Text[ chinese_simplified ] = "æ–‡ä»¶";
     Text[ greek ] = "Áñ÷åßá";
-    Text[ korean ] = "ÆÄÀÏ";
+    Text[ korean ] = "íŒŒì¼";
     Text[ turkish ] = "Dosyalar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Archivos";
     Text[ finnish ] = "Tiedostot";
 };
  // ******************************************************************* EOF
+
 
 
 
