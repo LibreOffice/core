@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 09:05:39 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ namespace dbaui
         // called when a table from tabeview was deleted
         void TableDeleted(const ::rtl::OUString& rAliasName);
 
-        BOOL getColWidth( const ::rtl::OUString& rAliasName, const ::rtl::OUString& rFieldName, ULONG& nWidth );
+        BOOL getColWidth( const ::rtl::OUString& rAliasName, const ::rtl::OUString& rFieldName, sal_uInt32& nWidth );
         void fillValidFields(const ::rtl::OUString& strTableName, ComboBox* pFieldList);
         void zoomTableView(const Fraction& _rFraction);
 
