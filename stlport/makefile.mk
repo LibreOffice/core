@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-16 17:13:47 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 14:59:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -191,7 +191,7 @@ all :
 
 $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(MISC)$/STLport-4.5.patch
 
-$(MISC)$/STLport-4.5.patch : STLport-4.5.patch $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
+$(MISC)$/STLport-4.5.patch : STLport-4.5.patch
     +$(SED)	-e 's#GXX_INCLUDE_PATH#$(GXX_INCLUDE_PATH)#g' < STLport-4.5.patch > $(MISC)$/STLport-4.5.patch
 
 .IF "$(GUI)"=="WNT"
