@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: mav $ $Date: 2002-05-29 16:08:25 $
+ *  last change: $Author: mba $ $Date: 2002-06-03 10:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,7 +343,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             }
 #endif
             // complex property; collect sub items from the parameter set and reconstruct complex item
-            BOOL bRet = TRUE;
+            USHORT nFound=0;
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
                 const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
@@ -359,8 +359,8 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         BYTE nSubId = (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID;
                         if ( bConvertTwips )
                             nSubId |= CONVERT_TWIPS;
-                        if ( !pItem->PutValue( rProp.Value, nSubId ) )
-                            bRet = FALSE;
+                        if ( pItem->PutValue( rProp.Value, nSubId ) )
+                            ++nFound;
                         break;
                     }
                 }
@@ -376,7 +376,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #endif
             }
 
-            if ( bRet )
+            if ( nFound == nSubCount )
                 // only use completely converted items
                 rSet.Put( *pItem );
 #ifdef DBG_UTIL
