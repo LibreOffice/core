@@ -72,12 +72,14 @@ import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.converter.xml.sxc.SxcDocumentDeserializer;
 import org.openoffice.xmerge.converter.xml.sxc.SpreadsheetDecoder;
 import org.openoffice.xmerge.converter.xml.sxc.Format;
+import org.openoffice.xmerge.converter.xml.sxc.NameDefinition;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Worksheet;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Formula;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.LabelCell;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.CellValue;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.FloatNumber;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.DefinedName;
 
 /**
  *  This class is used by {@link
@@ -138,11 +140,30 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
      *  @return  The number of sheets in the WorkBook.
      */
     public int getNumberOfSheets() {
+
         Vector v = wb.getWorksheetNames();
         Debug.log(Debug.TRACE,"Total Number of Sheets : " + v.size());
         return (v.size());
     }
 
+    /**
+     *  This method returns the number of spreadsheets
+     *  stored in the WorkBook.
+     *
+     *  @return  The number of sheets in the WorkBook.
+     */
+    public Enumeration getNameDefinitions() {
+
+        Enumeration e  = wb.getDefinedNames();
+        Vector nameDefinitionVector = new Vector();
+        while(e.hasMoreElements()) {
+            DefinedName dn = (DefinedName)e.nextElement();
+            NameDefinition nameDefinitionEntry = dn.getNameDefinition();
+            nameDefinitionVector.add(nameDefinitionEntry);
+        }
+        Debug.log(Debug.TRACE,"Getting " + nameDefinitionVector.size() + " DefinedName records");
+        return (nameDefinitionVector.elements());
+    }
 
     /**
      *  This method gets the requested WorkSheet from the
