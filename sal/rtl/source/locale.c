@@ -2,9 +2,9 @@
  *
  *  $RCSfile: locale.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:24 $
+ *  last change: $Author: obr $ $Date: 2001-07-03 13:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ void rtl_hashtable_init(RTL_HASHTABLE** table, sal_Int8 sizeIndex)
 
 sal_Int32 rtl_hashfunc(RTL_HASHTABLE* table, sal_Int32 key)
 {
-    return (key % table->Size);
+    return ( (sal_uInt32) key % table->Size);
 }
 
 sal_Bool rtl_hashtable_grow(RTL_HASHTABLE** table);
