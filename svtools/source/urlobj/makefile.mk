@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:59:06 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:45:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,21 +62,14 @@
 
 PRJ=..$/..
 
-PRJNAME=SVTOOLS
+PRJNAME=svtools
 TARGET=urlobj
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
-
-CXXFILES = \
-        urlbmk.cxx	\
-        inetimg.cxx
-
 
 SLOFILES =	\
         $(SLO)$/urlbmk.obj	\
