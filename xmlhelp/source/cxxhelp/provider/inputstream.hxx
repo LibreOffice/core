@@ -53,12 +53,12 @@ namespace chelp {
         virtual void SAL_CALL
         acquire(
             void )
-            throw( com::sun::star::uno::RuntimeException);
+            throw();
 
         virtual void SAL_CALL
         release(
             void )
-            throw( com::sun::star::uno::RuntimeException );
+            throw();
 
         virtual sal_Int32 SAL_CALL
         readBytes(
