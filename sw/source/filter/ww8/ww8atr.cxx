@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:54:09 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3752,6 +3752,17 @@ static Writer& OutWW8_SwFmtBox( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
+SwTwips SwWW8Writer::CurrentPageWidth(SwTwips &rLeft, SwTwips &rRight) const
+{
+    const SwFrmFmt* pFmt = pAktPageDesc ? &pAktPageDesc->GetMaster()
+        : &pDoc->GetPageDesc(0).GetMaster();
+
+    const SvxLRSpaceItem& rLR = pFmt->GetLRSpace();
+    SwTwips nPageSize = pFmt->GetFrmSize().GetWidth();
+    rLeft = rLR.GetLeft();
+    rRight = rLR.GetRight();
+    return nPageSize;
+}
 
 static Writer& OutWW8_SwFmtCol( Writer& rWrt, const SfxPoolItem& rHt )
 {
@@ -3764,18 +3775,9 @@ static Writer& OutWW8_SwFmtCol( Writer& rWrt, const SfxPoolItem& rHt )
         && !rWW8Wrt.bOutFlyFrmAttrs )       // mehrspaltige Rahmen kann WW nicht
     {
         // dann besorge mal die Seitenbreite ohne Raender !!
-        SwTwips nPageSize;
-        const SwFrmFmt* pFmt = rWW8Wrt.pAktPageDesc
-                                ? &rWW8Wrt.pAktPageDesc->GetMaster()
-                                : &rWW8Wrt.pDoc->GetPageDesc(0).GetMaster();
-
-        SwRect aRect( pFmt->FindLayoutRect(true));
-        if( 0 == ( nPageSize = aRect.Width() ))
-        {
-            const SvxLRSpaceItem& rLR = pFmt->GetLRSpace();
-            nPageSize = pFmt->GetFrmSize().GetWidth() -
-                            rLR.GetLeft() - rLR.GetRight();
-        }
+        SwTwips nLeft, nRight, nPageSize;
+        nPageSize = rWW8Wrt.CurrentPageWidth(nLeft, nRight);
+        nPageSize += (nLeft + nRight);
 
         // CColumns
         if( rWW8Wrt.bWrtWW8 )
