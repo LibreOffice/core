@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-08-20 10:21:03 $
+ *  last change: $Author: os $ $Date: 2002-08-30 10:40:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,13 +315,13 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
 
         aBspWin.EnableFrameDirection(sal_True);
 
-        sal_uInt32 nVal = FRMDIR_VERT_TOP_RIGHT;
+        sal_uInt32 nVal = FRMDIR_VERT_TOP_LEFT;
         USHORT nPos = aTextFlowBox.GetEntryPos( (void*) nVal );
         aTextFlowBox.RemoveEntry( nPos );
 
         if(!bCJK)
         {
-            nVal = FRMDIR_VERT_TOP_LEFT;
+            nVal = FRMDIR_VERT_TOP_RIGHT;
             nPos = aTextFlowBox.GetEntryPos( (void*) nVal );
             aTextFlowBox.RemoveEntry( nPos );
         }
