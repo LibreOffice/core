@@ -78,6 +78,9 @@
     <!-- path component for java package -->
     <property name="htmlsoff" value="org/openoffice/xmerge/converter/xml/xslt"/>
 
+    <!-- path component for java package -->
+    <property name="pocketword" value="org/openoffice/xmerge/converter/xml/sxw/pocketword"/>
+
     <!-- name of jar file created, without .jar extension -->
     <property name="jarname1" value="xmerge"/>
 
@@ -86,6 +89,10 @@
 
     <!-- name of jar file created, without .jar extension -->
     <property name="jarname3" value="aportisdoc"/>
+
+    <!-- name of jar file created, without .jar extension -->
+    <property name="jarname4" value="pocketword"/>
+
 
     <!-- ================================================================= -->
     <!--  solar build environment targets                                  -->
@@ -119,7 +126,8 @@
     <!-- ================================================================= -->
 
     <!-- the main target, called in recursive builds -->
-    <target name="main" depends="info,prepare,xmerge,htmlsoff,aportis"/>
+    <target name="main" depends="info,prepare,xmerge,htmlsoff,aportis,pocketword"/>
+
 
     <!-- prepare output directories -->
     <target name="prepare" depends="init" if="build.class">
@@ -133,7 +141,8 @@
              basedir="${build.class}"
              manifest="${jarname1}.mf">
             <include name="${package}/**"/>
-        <exclude name="${aportis}/**"/>
+            <exclude name="${aportis}/**"/>
+            <exclude name="${pocketword}/**"/>
         </jar>
     </target>
 
@@ -144,6 +153,16 @@
             <include name="htmltosoff.xsl"/>
         <include name="sofftohtml.xsl"/>
             <metainf dir="${java.dir}/${htmlsoff}" includes="converter.xml"/>
+        </jar>
+    </target>
+
+
+    <!-- create pocketword jar file -->
+    <target name="pocketword" depends="prepare,xmerge" if="build.class">
+        <jar jarfile="${build.class}/${jarname3}.jar"
+             basedir="${build.class}">
+            <include name="${pocketword}/**"/>
+            <metainf dir="${java.dir}/${pocketword}" includes="converter.xml"/>
         </jar>
     </target>
 
@@ -160,6 +179,7 @@
     <target name="clean" depends="prepare">
         <delete file="${build.class}/${jarname1}.jar"/>
         <delete file="${build.class}/${jarname2}.jar"/>
+        <delete file="${build.class}/${jarname3}.jar"/>
     </target>
 
 </project>
