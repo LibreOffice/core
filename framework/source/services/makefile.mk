@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: cd $ $Date: 2001-05-02 05:39:49 $
+#   last change: $Author: cd $ $Date: 2001-05-23 07:05:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,8 @@ SLOFILES=			\
                     $(SLO)$/documentproperties.obj					\
                     $(SLO)$/logindialog.obj							\
                     $(SLO)$/menudocumenthandler.obj					\
-                    $(SLO)$/attributelist.obj
+                    $(SLO)$/attributelist.obj					\
+                    $(SLO)$/saxnamespacefilter.obj
 
 SRCFILES=			logindialog.src
 
