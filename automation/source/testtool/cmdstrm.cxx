@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdstrm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:07:12 $
+ *  last change: $Author: rt $ $Date: 2004-12-10 17:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,13 +243,45 @@ void CmdStream::WriteSortedParams( SbxArray* rPar, BOOL IsKeyString )
                     else
                         SbxBase::SetError( SbxERR_WRONG_ARGS );
                     break;
-                case SbxOBJECT:     // außer bei Umschalten einer TabPage
-                    if ( nParams & PARAM_ULONG_1 )
-                        SbxBase::SetError( SbxERR_WRONG_ARGS );
-                    else
+                case SbxOBJECT:     // whenever a control is passed. TabPage, MenuBar
                     {
-                        nParams |= PARAM_ULONG_1;
-                        nLNr1 = rPar->Get( i )->GetULong();
+                        SbxProperty *pMember;
+                        if ( rPar->Get( i )->ISA( SbxObject ) && ( pMember = ((SbxObject*)rPar->Get( i ))->GetDfltProperty() ) )
+                        {
+                            if ( pMember->GetType() == SbxSTRING )
+                            {
+                                if ( nParams & PARAM_STR_1 )
+                                    if ( nParams & PARAM_STR_2 )
+                                        SbxBase::SetError( SbxERR_WRONG_ARGS );
+                                    else
+                                    {
+                                        nParams |= PARAM_STR_2;
+                                        aString2 = pMember->GetString();
+                                    }
+                                else
+                                {
+                                    nParams |= PARAM_STR_1;
+                                    aString1 = pMember->GetString();
+                                }
+                                break;
+                            }
+                            else if ( pMember->GetType() == SbxULONG )
+                            {
+                                if ( nParams & PARAM_ULONG_1 )
+                                    SbxBase::SetError( SbxERR_WRONG_ARGS );
+                                else
+                                {
+                                    nParams |= PARAM_ULONG_1;
+                                    nLNr1 = pMember->GetULong();
+                                }
+                            }
+                            else
+                                SbxBase::SetError( SbxERR_NAMED_NOT_FOUND );
+                        }
+                        else
+                        {
+                            SbxBase::SetError( SbxERR_NAMED_NOT_FOUND );
+                        }
                     }
                     break;
                 case SbxSTRING:
