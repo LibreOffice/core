@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:05:59 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 09:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ Reference< XContentIdentifier > SAL_CALL OContentHelper::getIdentifier(  ) throw
     {
         Reference<XPropertySet> xProp(xParent,UNO_QUERY);
         Reference<XChild> xChild(xParent,UNO_QUERY);
-        xParent.set(xChild.is() ? xChild->getParent() : NULL,UNO_QUERY);
+        xParent.set(xChild.is() ? xChild->getParent() : Reference< XInterface >(),UNO_QUERY);
         if ( xProp.is() && xParent.is() )
         {
             ::rtl::OUString sName;
