@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-31 15:41:16 $
+ *  last change: $Author: sab $ $Date: 2001-08-02 08:53:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,6 @@ class SvXMLExportPropertyMapper;
 class ScMyShapesContainer;
 class ScMyMergedRangesContainer;
 class ScMyValidationsContainer;
-class ScMyDetectiveObjContainer;
 class ScMyNotEmptyCellsIterator;
 class ScChangeTrackingExportHelper;
 class ScColumnRowStyles;
@@ -135,7 +134,6 @@ class ScXMLExport : public SvXMLExport
 
     ScMyMergedRangesContainer*  pMergedRangesContainer;
     ScMyValidationsContainer*   pValidationsContainer;
-    ScMyDetectiveObjContainer*  pDetectiveObjContainer;
     ScMyNotEmptyCellsIterator*  pCellsItr;
     ScChangeTrackingExportHelper*   pChangeTrackingExportHelper;
     const rtl::OUString         sLayerID;

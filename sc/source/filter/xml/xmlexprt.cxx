@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-01 12:09:07 $
+ *  last change: $Author: sab $ $Date: 2001-08-02 08:53:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,7 +417,6 @@ ScXMLExport::ScXMLExport(const sal_uInt16 nExportFlag) :
     pValidationsContainer(NULL),
     pRowFormatRanges(NULL),
     pCellsItr(NULL),
-    pDetectiveObjContainer(NULL),
     pChangeTrackingExportHelper(NULL),
     pDefaults(NULL),
     pNumberFormatAttributesExportHelper(NULL),
@@ -441,7 +440,6 @@ ScXMLExport::ScXMLExport(const sal_uInt16 nExportFlag) :
         pRowFormatRanges = new ScRowFormatRanges();
         pMergedRangesContainer = new ScMyMergedRangesContainer();
         pValidationsContainer = new ScMyValidationsContainer();
-        pDetectiveObjContainer = new ScMyDetectiveObjContainer();
         pCellsItr = new ScMyNotEmptyCellsIterator(*this);
         pDefaults = new ScMyDefaultStyles();
     }
@@ -489,8 +487,6 @@ ScXMLExport::~ScXMLExport()
         delete pMergedRangesContainer;
     if (pValidationsContainer)
         delete pValidationsContainer;
-    if (pDetectiveObjContainer)
-        delete pDetectiveObjContainer;
     if (pChangeTrackingExportHelper)
         delete pChangeTrackingExportHelper;
     if (pChartListener)
@@ -1367,7 +1363,7 @@ void ScXMLExport::_ExportContent()
 
             pCellStyles->Sort();
             pMergedRangesContainer->Sort();
-            pDetectiveObjContainer->Sort();
+            pSharedData->GetDetectiveObjContainer()->Sort();
 
             ScMyNotEmptyCellsIterator aCellsItr(*this);
             pCellsItr = &aCellsItr;
@@ -1375,7 +1371,7 @@ void ScXMLExport::_ExportContent()
             aCellsItr.SetMergedRanges( pMergedRangesContainer );
             aCellsItr.SetAreaLinks( &aAreaLinks );
             aCellsItr.SetEmptyDatabaseRanges( &aEmptyRanges );
-            aCellsItr.SetDetectiveObj( pDetectiveObjContainer );
+            aCellsItr.SetDetectiveObj( pSharedData->GetDetectiveObjContainer() );
             aCellsItr.SetDetectiveOp( &aDetectiveOpContainer );
 
             if (nTableCount > 0)
@@ -1947,7 +1943,7 @@ void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > xShape
             sal_Bool        bRedLine;
             ScDetectiveObjType eObjType = aDetFunc.GetDetectiveObjectType(
                 pObject, aPosition, aSourceRange, bRedLine );
-            pDetectiveObjContainer->AddObject( eObjType, aPosition, aSourceRange, bRedLine );
+            pSharedData->GetDetectiveObjContainer()->AddObject( eObjType, aPosition, aSourceRange, bRedLine );
         }
     }
 }

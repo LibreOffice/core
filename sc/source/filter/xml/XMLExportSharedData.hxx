@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportSharedData.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-01 10:35:10 $
+ *  last change: $Author: sab $ $Date: 2001-08-02 08:53:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ typedef std::vector<ScMyTableXShapes> ScMyTableShapes;
 typedef std::vector<ScMyDrawPage> ScMyDrawPages;
 
 class ScMyShapesContainer;
+class ScMyDetectiveObjContainer;
 struct ScMyShape;
 
 class ScMySharedData
@@ -95,6 +96,7 @@ class ScMySharedData
     ScMyTableShapes*            pTableShapes;
     ScMyDrawPages*              pDrawPages;
     ScMyShapesContainer*        pShapesContainer;
+    ScMyDetectiveObjContainer*  pDetectiveObjContainer;
     sal_Int32                   nTableCount;
 public:
     ScMySharedData(const sal_Int32 nTableCount);
@@ -115,6 +117,7 @@ public:
     sal_Bool HasShapes();
     void AddTableShape(const sal_Int32 nTable, const com::sun::star::uno::Reference<com::sun::star::drawing::XShape>& xShape);
     ScMyTableShapes* GetTableShapes() { return pTableShapes; }
+    ScMyDetectiveObjContainer* GetDetectiveObjContainer() { return pDetectiveObjContainer; }
 };
 
 #endif

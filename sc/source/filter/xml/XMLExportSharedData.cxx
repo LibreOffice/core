@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportSharedData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-27 10:44:22 $
+ *  last change: $Author: sab $ $Date: 2001-08-02 08:53:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,10 @@ ScMySharedData::ScMySharedData(const sal_Int32 nTempTableCount) :
     pTableShapes(NULL),
     pDrawPages(NULL),
     pShapesContainer(NULL),
+    pDetectiveObjContainer(NULL),
     nTableCount(nTempTableCount)
 {
+    pDetectiveObjContainer = new ScMyDetectiveObjContainer();
 }
 
 ScMySharedData::~ScMySharedData()
@@ -97,6 +99,8 @@ ScMySharedData::~ScMySharedData()
         delete pTableShapes;
     if (pDrawPages)
         delete pDrawPages;
+    if (pDetectiveObjContainer)
+        delete pDetectiveObjContainer;
 }
 
 void ScMySharedData::SetLastColumn(const sal_Int32 nTable, const sal_Int32 nCol)
