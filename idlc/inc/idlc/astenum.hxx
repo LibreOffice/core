@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astenum.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:23:01 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ public:
 
     AstConstant* checkValue(AstExpression* pExpr);
 
-    virtual sal_Bool dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader);
+    virtual sal_Bool dump(RegistryKey& rKey);
 
     virtual AstDeclaration* addDeclaration(AstDeclaration* pDecl);
 private:
