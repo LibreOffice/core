@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iderdll.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-14 16:06:20 $
+ *  last change: $Author: tbe $ $Date: 2001-07-10 09:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ BasicIDEDLL::BasicIDEDLL()
     ByteString aResMgrName( "basctl" );
     aResMgrName += ByteString::CreateFromInt32( SOLARUPD );
     pResMgr = ResMgr::CreateResMgr(
-        aResMgrName.GetBuffer(), Application::GetAppInternational().GetLanguage() );
+        aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
     pShell = 0;
     pExtraData = 0;
     GetExtraData(); // damit GlobalErrorHdl gesetzt wird.
