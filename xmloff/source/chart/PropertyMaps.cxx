@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,10 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
+#endif
+
 #define SCH_XML_SETFLAG( status, flag )     (status)|= (flag)
 #define SCH_XML_UNSETFLAG( status, flag )   (status) = ((status) | (flag)) - (flag)
 
@@ -195,6 +199,10 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
             case XML_SCH_TYPE_TEXT_ORIENTATION:
                 pHdl = new XMLTextOrientationHdl();
                 break;
+
+            case XML_SCH_TYPE_INTERPOLATION:
+                pHdl = new XMLEnumPropertyHdl( aXMLChartInterpolationTypeEnumMap,
+                                               ::getCppuType((const sal_Int32*)0) );
         }
         if( pHdl )
             PutHdlCache( nType, pHdl );
@@ -263,10 +271,7 @@ void XMLChartExportPropertyMapper::ContextFilter(
                 bCheckAuto = sal_True;
                 aAutoPropName = ::rtl::OUString::createFromAscii( "AutoStepMain" );
                 break;
-            case XML_SCH_CONTEXT_STEP_HELP:
-                bCheckAuto = sal_True;
-                aAutoPropName = ::rtl::OUString::createFromAscii( "AutoStepHelp" );
-                break;
+
             case XML_SCH_CONTEXT_ORIGIN:
                 bCheckAuto = sal_True;
                 aAutoPropName = ::rtl::OUString::createFromAscii( "AutoOrigin" );
@@ -276,6 +281,35 @@ void XMLChartExportPropertyMapper::ContextFilter(
             // elemet-item symbol-image is used now
             case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME:
                 property->mnIndex = -1;
+                break;
+
+            case XML_SCH_CONTEXT_SPECIAL_STEP_HELP:
+            {
+                // do auto-check directly
+                sal_Bool bAuto;
+                uno::Any aAny = rPropSet->getPropertyValue( ::rtl::OUString::createFromAscii( "AutoStepHelp" ) );
+                aAny >>= bAuto;
+                if( bAuto )
+                    property->mnIndex = -1;
+                else
+                {
+                    double fValue, fMainStep;
+                    (*property).maValue >>= fValue;
+                    sal_Int32 nDivisor = 0;
+                    if( rPropSet->getPropertyValue(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StepMain" ))) >>= fMainStep )
+                    {
+                        if( fValue <= fMainStep &&
+                            (fValue != 0.0) )
+                        {
+                            nDivisor = static_cast< sal_Int32 >(
+                                ::rtl::math::round( fMainStep / fValue ));
+                        }
+                    }
+                    (*property).maValue <<= nDivisor;
+                }
+            }
+            break;
         }
 
         if( bCheckAuto )
@@ -434,6 +468,14 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                     // just for import
                     break;
                 }
+
+            case XML_SCH_CONTEXT_SPECIAL_STEP_HELP:
+                {
+                    OSL_ENSURE( false, "Should not get here" );
+                    // handled in ContextFilter
+                    break;
+                }
+
             default:
                 bHandled = sal_False;
                 break;
@@ -573,6 +615,38 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
             case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME:
                 rProperty.maValue <<= mrImport.ResolveGraphicObjectURL( rValue, sal_False );
                 break;
+
+            case XML_SCH_CONTEXT_SPECIAL_STEP_HELP:
+            {
+                double fStepHelp = 0.0;
+                double fStepMain = 0.0;
+                sal_Int32 nDivisor = 0;
+                SvXMLUnitConverter::convertNumber( nDivisor, rValue );
+
+                if( nDivisor != 0 )
+                {
+                    for( ::std::vector< XMLPropertyState >::const_iterator aIt = rProperties.begin();
+                         aIt != rProperties.end();
+                         aIt++ )
+                    {
+                        if( (*aIt).mnIndex != -1 &&
+                            getPropertySetMapper()->GetEntryContextId( (*aIt).mnIndex ) ==
+                            XML_SCH_CONTEXT_STEP_MAIN )
+                        {
+                            (*aIt).maValue >>= fStepMain;
+                        }
+                    }
+
+                    if( fStepMain != 0.0 )
+                        fStepHelp = fStepMain / static_cast< double >( nDivisor );
+                }
+
+                if( fStepHelp == 0.0 )
+                    rProperty.mnIndex = -1;
+                else
+                    rProperty.maValue <<= fStepHelp;
+            }
+            break;
 
             default:
                 bRet = sal_False;
