@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergekeys.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-07 15:14:15 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/registry/MergeConflictException.hpp>
 
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
+
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
@@ -91,7 +93,16 @@ static void mergeKeys(
     t_links & links )
     SAL_THROW( (registry::InvalidRegistryException, registry::MergeConflictException) )
 {
-    OSL_ASSERT( xDest->isValid() && xSource->isValid() );
+    if (!xSource.is() || !xSource->isValid()) {
+        throw registry::InvalidRegistryException(
+            OUSTR("source key is null or invalid!"),
+            Reference<XInterface>() );
+    }
+    if (!xDest.is() || !xDest->isValid()) {
+        throw registry::InvalidRegistryException(
+            OUSTR("destination key is null or invalid!"),
+            Reference<XInterface>() );
+    }
 
     // write value
     switch (xSource->getValueType())
@@ -174,6 +185,11 @@ void SAL_CALL mergeKeys(
     Reference< registry::XRegistryKey > const & xSource )
     SAL_THROW( (registry::InvalidRegistryException, registry::MergeConflictException) )
 {
+    if (!xDest.is() || !xDest->isValid()) {
+        throw registry::InvalidRegistryException(
+            OUSTR("destination key is null or invalid!"),
+            Reference<XInterface>() );
+    }
     if (xDest->isReadOnly())
     {
         throw registry::InvalidRegistryException(
