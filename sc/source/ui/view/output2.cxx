@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-08 19:34:04 $
+ *  last change: $Author: nn $ $Date: 2001-05-09 19:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,11 +194,11 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
     //  pPattern auswerten
 
     OutputDevice* pDev = pOutput->pDev;
-    OutputDevice* pRefDevice = pOutput->pRefDevice;
+    OutputDevice* pFmtDevice = pOutput->pFmtDevice;
 
     //  Font
 
-    pPattern->GetFont( aFont, pRefDevice, &pOutput->aZoomY, pCondSet, nScript );
+    pPattern->GetFont( aFont, pFmtDevice, &pOutput->aZoomY, pCondSet, nScript );
     aFont.SetAlign(ALIGN_BASELINE);
 
     //  Orientierung
@@ -249,21 +249,21 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
         pOutput->SetSyntaxColor( &aFont, pCell );
 
     pDev->SetFont( aFont );
-    if ( pRefDevice != pDev )
-        pRefDevice->SetFont( aFont );
+    if ( pFmtDevice != pDev )
+        pFmtDevice->SetFont( aFont );
 
-    aMetric = pRefDevice->GetFontMetric();
+    aMetric = pFmtDevice->GetFontMetric();
 
     //
     //  Wenn auf dem Drucker das Leading 0 ist, gibt es Probleme
     //  -> Metric vom Bildschirm nehmen (wie EditEngine!)
     //
 
-    if ( pRefDevice->GetOutDevType() == OUTDEV_PRINTER && aMetric.GetLeading() == 0 )
+    if ( pFmtDevice->GetOutDevType() == OUTDEV_PRINTER && aMetric.GetLeading() == 0 )
     {
         OutputDevice* pDefaultDev = Application::GetDefaultDevice();
         MapMode aOld = pDefaultDev->GetMapMode();
-        pDefaultDev->SetMapMode( pRefDevice->GetMapMode() );
+        pDefaultDev->SetMapMode( pFmtDevice->GetMapMode() );
         aMetric = pDefaultDev->GetFontMetric( aFont );
         pDefaultDev->SetMapMode( aOld );
     }
@@ -405,8 +405,9 @@ BOOL ScDrawStringsVars::SetText( ScBaseCell* pCell )
             }
 
             OutputDevice* pRefDevice = pOutput->pRefDevice;
-            aTextSize.Width() = pRefDevice->GetTextWidth( aString );
-            aTextSize.Height() = pRefDevice->GetTextHeight();
+            OutputDevice* pFmtDevice = pOutput->pFmtDevice;
+            aTextSize.Width() = pFmtDevice->GetTextWidth( aString );
+            aTextSize.Height() = pFmtDevice->GetTextHeight();
 
             if ( !pRefDevice->GetConnectMetaFile() || pRefDevice->GetOutDevType() == OUTDEV_PRINTER )
             {
@@ -446,8 +447,9 @@ void ScDrawStringsVars::SetHashText()
     aString = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("###"));
 
     OutputDevice* pRefDevice = pOutput->pRefDevice;
-    aTextSize.Width() = pRefDevice->GetTextWidth( aString );
-    aTextSize.Height() = pRefDevice->GetTextHeight();
+    OutputDevice* pFmtDevice = pOutput->pFmtDevice;
+    aTextSize.Width() = pFmtDevice->GetTextWidth( aString );
+    aTextSize.Height() = pFmtDevice->GetTextHeight();
 
     if ( !pRefDevice->GetConnectMetaFile() || pRefDevice->GetOutDevType() == OUTDEV_PRINTER )
     {
@@ -732,7 +734,7 @@ inline BOOL IsAmbiguousScript( BYTE nScript )
              nScript != SCRIPTTYPE_COMPLEX );
 }
 
-void ScOutputData::DrawStrings()
+void ScOutputData::DrawStrings( BOOL bPixelToLogic )
 {
     DBG_ASSERT( pDev == pRefDevice ||
                 pDev->GetMapMode().GetMapUnit() == pRefDevice->GetMapMode().GetMapUnit(),
@@ -1410,6 +1412,7 @@ void ScOutputData::DrawStrings()
                             }
                             //! Test
 */
+
                             if (bMetaFile)
                             {
                                 pDev->Push();
@@ -1444,10 +1447,10 @@ void ScOutputData::DrawStrings()
                         //  aufgezeichnet werden (fuer nicht-proportionales Resize):
 
                         String aString = aVars.GetString();
-                        if (bMetaFile || pRefDevice != pDev || aZoomX != aZoomY)
+                        if (bMetaFile || pFmtDevice != pDev || aZoomX != aZoomY)
                         {
                             long* pDX = new long[aString.Len()];
-                            pRefDevice->GetTextArray( aString, pDX );
+                            pFmtDevice->GetTextArray( aString, pDX );
 
                             if ( !pRefDevice->GetConnectMetaFile() ||
                                     pRefDevice->GetOutDevType() == OUTDEV_PRINTER )
