@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsha.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:26:30 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,6 +585,7 @@ void ScTabViewShell::UpdateInputHandler( BOOL bForce /* = FALSE */, BOOL bStopEd
     SfxBindings& rBindings = GetViewFrame()->GetBindings();
     rBindings.Invalidate( SID_STATUS_SUM );         // immer zusammen mit Eingabezeile
     rBindings.Invalidate( SID_ATTR_SIZE );
+    rBindings.Invalidate( SID_TABLE_CELL );
 }
 
 //------------------------------------------------------------------
