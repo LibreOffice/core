@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:13:10 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,7 +391,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ dutch ] = "Inhoudsverandering";
         Text[ chinese_simplified ] = "ÄÚÈÝ¸ü¸Ä";
         Text[ greek ] = "ÁëëáãÝò ðåñéå÷ïìÝíùí";
-        Text[ korean ] = "³»¿ë¡¡º¯°æ";
+        Text[ korean ] = "³»¿ë º¯°æ";
         Text[ turkish ] = "Ýçerik deðiþikliði";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Modificación de contenido";
@@ -419,7 +419,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ dutch ] = "Inhoudsverandering";
         Text[ chinese_simplified ] = "ÄÚÈÝ¸ü¸Ä";
         Text[ greek ] = "ÁëëáãÝò ðåñéå÷ïìÝíùí";
-        Text[ korean ] = "³»¿ë¡¡º¯°æ";
+        Text[ korean ] = "³»¿ë º¯°æ";
         Text[ turkish ] = "Ýçerik deðiþikliði";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Modificación de contenido";
@@ -447,7 +447,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ dutch ] = "Wijziging in  ";
         Text[ chinese_simplified ] = "¸ü¸Ä³É ";
         Text[ greek ] = "ÁëëáãÞ ðñïò ";
-        Text[ korean ] = "ÀÇ º¯°æ. ";
+        Text[ korean ] = "·Î º¯°æ ";
         Text[ turkish ] = "Deðiþiklikler: ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cambiada a  ";
@@ -475,7 +475,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ dutch ] = "Origineel";
         Text[ chinese_simplified ] = "Ô­¼þ";
         Text[ greek ] = "Áñ÷éêü";
-        Text[ korean ] = "¿ø·¡ÀÇ";
+        Text[ korean ] = "¿øº»";
         Text[ turkish ] = "Özgün hali";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Original";
@@ -490,7 +490,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ portuguese_brazilian ] = "?nderung verworfen" ;
         Text [ swedish ] = "Ändring tillbakavisad" ;
         Text [ danish ] = "Ændring forkastet" ;
-        Text [ italian ] = "Modifiche rigettate" ;
+        Text [ italian ] = "Modifiche non salvate" ;
         Text [ spanish ] = "Modificación rechazada" ;
         Text [ french ] = "Modification refusée" ;
         Text [ dutch ] = "Wijziging verworpen" ;
@@ -531,7 +531,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ dutch ] = "Geaccepteerde";
         Text[ chinese_simplified ] = "½ÓÊÜµÄ";
         Text[ greek ] = "Áðïäå÷üìåíá";
-        Text[ korean ] = "¼ö¶ôµÈ";
+        Text[ korean ] = "Àû¿ëµÊ";
         Text[ turkish ] = "Kabul edilenler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aceptadas";
@@ -546,7 +546,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ portuguese_brazilian ] = "Abgelehnte" ;
         Text [ swedish ] = "Tillbakavisade" ;
         Text [ danish ] = "Forkastede" ;
-        Text [ italian ] = "Rigettate" ;
+        Text [ italian ] = "Non salvate" ;
         Text [ spanish ] = "Rechazadas" ;
         Text [ french ] = "Refusées" ;
         Text [ dutch ] = "Geweigerde" ;
@@ -587,7 +587,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ dutch ] = "Geen item";
         Text[ chinese_simplified ] = "ÎÞÌõÄ¿";
         Text[ greek ] = "Êáìßá êáôá÷þñéóç";
-        Text[ korean ] = "ÀÔ·Â¡¡¾øÀ½";
+        Text[ korean ] = "µî·ÏÀÌ ¾ÈµÇ¾ú½À´Ï´Ù";
         Text[ turkish ] = "Giriþ yok";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ninguna entrada";
@@ -889,6 +889,7 @@ Menu RID_POPUP_CHANGES
         };
     };
 };
+
 
 
 
