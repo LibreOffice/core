@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-13 15:02:52 $
+ *  last change: $Author: pl $ $Date: 2001-08-14 17:03:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,7 +491,12 @@ void WMAdaptor::setNetWMState( SalFrame* pFrame ) const
             && pFrame->maFrameData.meWindowType == windowType_ModalDialogue )
         {
             aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_MODAL ];
-            aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_SKIP_TASKBAR ];
+            /*
+             *  #90998# NET_WM_STATE_SKIP_TASKBAR set on a frame will
+             *  cause kwin not to give it the focus on map request
+             *  this seems to be a bug in kwin
+             *  aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_SKIP_TASKBAR ];
+             */
         }
         if( pFrame->maFrameData.mbMaximizedVert
             && m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_VERT ] )
@@ -690,10 +695,18 @@ void WMAdaptor::setFrameTypeAndDecoration( SalFrame* pFrame, WMWindowType eType,
     }
 
     // set transientFor hint
+    /*  #91030# dtwm will not map a dialogue if the transient
+     *  window is iconified. This is deemed undesireable because
+     *  message boxes do not get mapped, so use the root as transient
+     *  instead.
+     */
     if( pReferenceFrame )
         XSetTransientForHint( m_pDisplay,
                               pFrame->maFrameData.GetShellWindow(),
-                              pReferenceFrame->maFrameData.GetShellWindow() );
+                              pReferenceFrame->maFrameData.bMapped_ ?
+                              pReferenceFrame->maFrameData.GetShellWindow() :
+                              m_pSalDisplay->GetRootWindow()
+                              );
 }
 
 /*
