@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-16 10:08:12 $
+ *  last change: $Author: cmc $ $Date: 2001-04-20 14:53:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,11 +322,8 @@ public:
     void ReadFromMem(BYTE *&pData);
     void WriteToMem(BYTE *&pData) const;
 
-    //ULONG Read(SvStream &rSt);
-    //ULONG Write(SvStream &rSt);
-
     //Maps what I think is the language this is to affect to the OOo language
-    ULONG GetConvertedLang() const;
+    USHORT GetConvertedLang() const;
 
     UINT16 fKerningPunct  : 1;  // true if we're kerning punctuation
     UINT16 iJustification : 2;  // Kinsoku method of justification:
@@ -859,11 +856,14 @@ struct WW67_ATRD                // fuer die 6/7-Version
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8struc.hxx,v 1.3 2001-02-16 10:08:12 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8struc.hxx,v 1.4 2001-04-20 14:53:15 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/02/16 10:08:12  cmc
+      Normalize japanese doptypography variable names
+
       Revision 1.2  2001/01/30 20:11:06  cmc
       #83362# CJK Forbidden Character {Im|Ex}port
 
