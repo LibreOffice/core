@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.191 $
+ *  $Revision: 1.192 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:18:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:23:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2665,6 +2665,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     const Font& rFont, const Size& rSize, ImplFontSubstEntry* pDevSpecific )
 {
     String aSearchName = rFont.GetName();
+
     // TODO: also add device specific name caching
     if( !pDevSpecific )
     {
@@ -2672,7 +2673,8 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
         // if it is already known get its normalized search name
         FontNameList::const_iterator it_name = maFontNameList.find( aSearchName );
         if( it_name != maFontNameList.end() )
-            aSearchName = (*it_name).second;
+            if( !(*it_name).second.EqualsAscii( "hg", 0, 2) )
+                aSearchName = (*it_name).second;
     }
 
     // initialize internal font request object
@@ -2776,6 +2778,8 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
         if( (rFSD.meWeight > WEIGHT_MEDIUM)
         &&  aSearchName.EqualsAscii( "hg", 0, 2) )
         {
+            const FontWeight eWeight = rFSD.meWeight;
+            rFSD.meWeight = WEIGHT_DONTKNOW;    // prevent synthetic emboldening
             if( aSearchName.EqualsAscii( "hggothicb", 0, 9) )
                 aSearchName = String(RTL_CONSTASCII_USTRINGPARAM("hggothice"));
             else if( aSearchName.EqualsAscii( "hgpgothicb", 0, 10) )
@@ -2788,6 +2792,8 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
                 aSearchName = String(RTL_CONSTASCII_USTRINGPARAM("hgminchoe"));
             else if( aSearchName.EqualsAscii( "hgpminchob" ) )
                 aSearchName = String(RTL_CONSTASCII_USTRINGPARAM("hgpminchoe"));
+            else // restore font weight
+                rFSD.meWeight = eWeight;
         }
         ImplDevFontListData* pFoundData = ImplFindBySearchName( aSearchName );
         if( pFoundData )
