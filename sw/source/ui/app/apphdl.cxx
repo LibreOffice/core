@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-08-03 14:22:57 $
+ *  last change: $Author: tl $ $Date: 2001-09-18 11:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
+#endif
+#ifndef _SVTOOLS_LINGUCFG_HXX_
+#include <svtools/lingucfg.hxx>
 #endif
 #ifndef _SVX_ADRITEM_HXX //autogen
 #include <svx/adritem.hxx>
@@ -708,12 +711,13 @@ void SwModule::ExecViewOptions(SfxRequest &rReq)
                 bFlag = bSet = !pOpt->IsOnlineSpell();
 
             pOpt->SetOnlineSpell(bSet);
-            if (xLngProp.is())
             {
-                uno::Any aVal(&bSet, ::getCppuBooleanType());
-                xLngProp->setPropertyValue( C2S(UPN_IS_SPELL_AUTO), aVal );
+                uno::Any aVal( &bSet, ::getCppuBooleanType() );
+                String aPropName( C2S(UPN_IS_SPELL_AUTO) );
+                SvtLinguConfig().SetProperty( aPropName, aVal );
+                if (xLngProp.is())
+                    xLngProp->setPropertyValue( aPropName, aVal );
             }
-            //pOffApp->GetLinguConfig()->SetDefault( sal_False );
 
             if (!(STATE_TOGGLE == eState && bSet && ( pOpt->IsHideSpell() )))
                 break;
@@ -722,12 +726,13 @@ void SwModule::ExecViewOptions(SfxRequest &rReq)
                 bFlag = bSet = !pOpt->IsHideSpell();
 
             pOpt->SetHideSpell(bSet);
-            if (xLngProp.is())
             {
-                uno::Any aVal(&bSet, ::getCppuBooleanType());
-                xLngProp->setPropertyValue( C2S(UPN_IS_SPELL_HIDE), aVal );
+                uno::Any aVal( &bSet, ::getCppuBooleanType() );
+                String aPropName( C2S(UPN_IS_SPELL_HIDE) );
+                SvtLinguConfig().SetProperty( aPropName, aVal );
+                if (xLngProp.is())
+                    xLngProp->setPropertyValue( aPropName, aVal );
             }
-            //pOffApp->GetLinguConfig()->SetDefault( sal_False );
         break;
 
         case FN_SHADOWCURSOR:
