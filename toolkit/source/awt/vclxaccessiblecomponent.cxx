@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: tbe $ $Date: 2002-11-22 14:03:05 $
+ *  last change: $Author: tbe $ $Date: 2002-11-28 13:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,20 +374,28 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         case VCLEVENT_WINDOW_GETFOCUS:
         case VCLEVENT_CONTROL_GETFOCUS:
         {
-            // if multiple listeners were registered it is possible that the
-            // focus was changed during event processing (eg SfxTopWindow )
-            if( pWindow->HasFocus() )
+            if( (pWindow->IsCompoundControl() && rVclWindowEvent.GetId() == VCLEVENT_CONTROL_GETFOCUS) ||
+                (!pWindow->IsCompoundControl() && rVclWindowEvent.GetId() == VCLEVENT_WINDOW_GETFOCUS) )
             {
-                aNewValue <<= accessibility::AccessibleStateType::FOCUSED;
-                NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+                // if multiple listeners were registered it is possible that the
+                // focus was changed during event processing (eg SfxTopWindow )
+                if( pWindow->HasChildPathFocus() )
+                {
+                    aNewValue <<= accessibility::AccessibleStateType::FOCUSED;
+                    NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+                }
             }
         }
         break;
         case VCLEVENT_WINDOW_LOSEFOCUS:
         case VCLEVENT_CONTROL_LOSEFOCUS:
         {
-            aOldValue <<= accessibility::AccessibleStateType::FOCUSED;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            if( (pWindow->IsCompoundControl() && rVclWindowEvent.GetId() == VCLEVENT_CONTROL_LOSEFOCUS) ||
+                (!pWindow->IsCompoundControl() && rVclWindowEvent.GetId() == VCLEVENT_WINDOW_LOSEFOCUS) )
+            {
+                aOldValue <<= accessibility::AccessibleStateType::FOCUSED;
+                NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            }
         }
         break;
         case VCLEVENT_WINDOW_FRAMETITLECHANGED:
@@ -490,7 +498,9 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
         if ( pWindow->HasChildPathFocus() )
             rStateSet.AddState( accessibility::AccessibleStateType::ACTIVE );
 
-        if ( pWindow->HasFocus() )
+        Window* pChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
+        if ( ( !pWindow->IsCompoundControl() && pWindow->HasFocus() ) ||
+             ( pWindow->IsCompoundControl() && pChild && pChild->HasFocus() ) )
             rStateSet.AddState( accessibility::AccessibleStateType::FOCUSED );
 
         if ( pWindow->IsWait() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.156 $
+ *  $Revision: 1.157 $
  *
- *  last change: $Author: obr $ $Date: 2002-11-21 08:17:34 $
+ *  last change: $Author: tbe $ $Date: 2002-11-28 13:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7564,10 +7564,13 @@ void Window::ImplCallActivateListeners( Window *pOld )
     if ( !pOld || !ImplIsChild( pOld ) )
     {
         ImplCallEventListeners( VCLEVENT_WINDOW_ACTIVATE, pOld );
-        // #100759#, avoid walking the wrong frame's hierarchy
-        //           eg, undocked docking windows (ImplDockFloatWin)
-        if ( ImplGetParent() && mpFrameWindow == ImplGetParent()->mpFrameWindow )
-            ImplGetParent()->ImplCallActivateListeners( pOld );
+        if( !GetParent() || !GetParent()->IsCompoundControl() )
+        {
+            // #100759#, avoid walking the wrong frame's hierarchy
+            //           eg, undocked docking windows (ImplDockFloatWin)
+            if ( ImplGetParent() && mpFrameWindow == ImplGetParent()->mpFrameWindow )
+                ImplGetParent()->ImplCallActivateListeners( pOld );
+        }
     }
 }
 

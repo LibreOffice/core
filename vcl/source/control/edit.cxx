@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-08 10:19:07 $
+ *  last change: $Author: tbe $ $Date: 2002-11-28 13:19:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1621,7 +1621,10 @@ void Edit::GetFocus()
                 maSelection.Min() = 0;
                 maSelection.Max() = maText.Len();
             }
-            ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
+            if ( mbIsSubEdit )
+                ((Edit*)GetParent())->ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
+            else
+                ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
         }
 
         ImplShowCursor();
@@ -2190,8 +2193,10 @@ void Edit::ImplSetSelection( const Selection& rSelection, BOOL bPaint )
                 if ( bPaint && ( aOld.Len() || aNew.Len() ) )
                     ImplRepaint( 0, maText.Len() );
                 ImplShowCursor();
-
-                ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
+                if ( mbIsSubEdit )
+                    ((Edit*)GetParent())->ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
+                else
+                    ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
                 // #103511# notify combobox listeners of deselection
                 if( !maSelection && GetParent() && GetParent()->GetType() == WINDOW_COMBOBOX )
                     ((Edit*)GetParent())->ImplCallEventListeners( VCLEVENT_COMBOBOX_DESELECT );

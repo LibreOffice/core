@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: tbe $ $Date: 2002-11-18 14:41:25 $
+ *  last change: $Author: tbe $ $Date: 2002-11-28 13:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,6 @@
 #endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLESCROLLBAR_HXX_
 #include <toolkit/awt/vclxaccessiblescrollbar.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLESPINFIELD_HXX_
-#include <toolkit/awt/vclxaccessiblespinfield.hxx>
 #endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLETEXTCOMPONENT_HXX_
 #include <toolkit/awt/vclxaccessibletextcomponent.hxx>
@@ -1064,11 +1061,6 @@ IMPL_XTYPEPROVIDER_START( VCLXSpinField )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSpinField>* ) NULL ),
     VCLXEdit::getTypes()
 IMPL_XTYPEPROVIDER_END
-
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXSpinField::CreateAccessibleContext()
-{
-    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleSpinField( this );
-}
 
 void VCLXSpinField::addSpinListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSpinListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
