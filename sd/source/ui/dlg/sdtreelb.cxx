@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:23:10 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1131,7 +1131,7 @@ bool SdPageObjsTLB::PageBelongsToCurrentShow (const SdPage* pPage) const
     // is used.  The page does then belong to the standard show.
     bool bBelongsToShow = true;
 
-    if (pDoc->IsCustomShow())
+    if (pDoc->getPresentationSettings().mbCustomShow)
     {
         // Get the current custom show.
         SdCustomShow* pCustomShow = NULL;
