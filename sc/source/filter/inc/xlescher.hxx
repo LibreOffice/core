@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlescher.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:45:46 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 12:45:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,12 @@ const sal_uInt16 EXC_OBJ_LBS_SEL_SIMPLE     = 0x0000;   /// Simple selection.
 const sal_uInt16 EXC_OBJ_LBS_SEL_MULTI      = 0x0010;   /// Multi selection.
 const sal_uInt16 EXC_OBJ_LBS_SEL_EXT        = 0x0020;   /// Extended selection.
 const sal_uInt16 EXC_OBJ_LBS_3D             = 0x0008;
+
+// ftSbs: Spin button/scrollbar data
+const sal_uInt16 EXC_OBJ_SBS_HORIZONTAL     = 0x0001;
+const sal_uInt16 EXC_OBJ_SBS_3D             = 0x0008;
+const sal_Int16 EXC_OBJ_SBS_MINSCROLL       = 0;
+const sal_Int16 EXC_OBJ_SBS_MAXSCROLL       = 30000;
 
 /** Value binding mode for cells linked to form controls. */
 enum XclCtrlBindMode
