@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:19:52 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1757,8 +1757,8 @@ void XMLDatabaseNextImportContext::ProcessAttribute(
     if (XML_TOK_TEXTFIELD_CONDITION == nAttrToken)
     {
         OUString sTmp;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(
-                                    sAttrValue, &sTmp );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap()._GetKeyByAttrName(
+                                    sAttrValue, &sTmp, sal_False );
         if( XML_NAMESPACE_OOOW == nPrefix )
         {
             sCondition = sTmp;
@@ -2314,8 +2314,8 @@ void XMLHiddenParagraphImportContext::ProcessAttribute(
     if (XML_TOK_TEXTFIELD_CONDITION == nAttrToken)
     {
         OUString sTmp;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(
-                                    sAttrValue, &sTmp );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap()._GetKeyByAttrName(
+                                    sAttrValue, &sTmp, sal_False );
         if( XML_NAMESPACE_OOOW == nPrefix )
         {
             sCondition = sTmp;
@@ -2383,7 +2383,7 @@ void XMLConditionalTextImportContext::ProcessAttribute(
             {
                 OUString sTmp;
                 sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                        GetKeyByAttrName( sAttrValue, &sTmp );
+                        _GetKeyByAttrName( sAttrValue, &sTmp, sal_False );
                 if( XML_NAMESPACE_OOOW == nPrefix )
                 {
                     sCondition = sTmp;
@@ -2470,7 +2470,7 @@ void XMLHiddenTextImportContext::ProcessAttribute(
             {
                 OUString sTmp;
                 sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                                        GetKeyByAttrName( sAttrValue, &sTmp );
+                                        _GetKeyByAttrName( sAttrValue, &sTmp, sal_False );
                 if( XML_NAMESPACE_OOOW == nPrefix )
                 {
                     sCondition = sTmp;
