@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nf $ $Date: 2001-10-15 14:41:01 $
+ *  last change: $Author: nf $ $Date: 2001-10-15 14:46:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ void Export::QuotHTML( ByteString &rString )
 {
     ByteString sReturn;
     BOOL bBreak = FALSE;
-    for ( ULONG i = 0; i < rString.Len(); i++ ) {
+    for ( USHORT i = 0; i < rString.Len(); i++ ) {
         ByteString sTemp = rString.Copy( i );
         if ( sTemp.Search( "<Arg n=" ) == 0 ) {
             while ( i < rString.Len() && rString.GetChar( i ) != '>' ) {
@@ -434,7 +434,7 @@ BOOL Export::LanguageAllowed( USHORT nLanguage )
     if ( !sLanguages.Len() && ( nLanguage != 99 ))
         return TRUE;
 
-    for ( ULONG i = 0; i < sLanguages.GetTokenCount( ',' ); i++ )
+    for ( USHORT i = 0; i < sLanguages.GetTokenCount( ',' ); i++ )
         if ( nLanguage ==
             sLanguages.GetToken( i, ',' ).GetToken( 0, '=' ).ToInt32())
             return TRUE;
@@ -446,13 +446,13 @@ BOOL Export::LanguageAllowed( USHORT nLanguage )
 USHORT Export::GetFallbackLanguage( USHORT nLanguage )
 /*****************************************************************************/
 {
-    for ( ULONG i = 0; i < sLanguages.GetTokenCount( ',' ); i++ )
+    for ( USHORT i = 0; i < sLanguages.GetTokenCount( ',' ); i++ )
         if ( nLanguage ==
             sLanguages.GetToken( i, ',' ).GetToken( 0, '=' ).ToInt32())
         {
             if ( sLanguages.GetToken( i, ',' ).GetTokenCount( '=' ) > 1 )
                 return
-                    sLanguages.GetToken( i, ',' ).GetToken( 1, '=' ).ToInt32();
+                    (USHORT)( sLanguages.GetToken( i, ',' ).GetToken( 1, '=' ).ToInt32());
             else
                 return nLanguage;
         }
