@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIdlField2.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@
 /** Reflects an IDL interface attribute, enum or compound type
     (i.e. struct/exception) member.
 */
-interface XIdlField2: com::sun::star::reflection::XIdlMember
+published interface XIdlField2: com::sun::star::reflection::XIdlMember
 {
     /** Returns the type of the field.
 
@@ -113,6 +113,11 @@ interface XIdlField2: com::sun::star::reflection::XIdlMember
         For enums, the given object is ignored; the returned value
         reflects the constant enum 32-bit value.
 
+        <p>When setting an interface attribute raises a
+        non-<type scope="com::sun::star::uno">RuntimeException</type>, it is
+        wrapped in a <type
+        scope="com::sun::star::lang">WrappedTargetRuntimeException</type>.</p>
+
         @param obj
                object instance having member of reflected type
         @return
@@ -129,6 +134,11 @@ interface XIdlField2: com::sun::star::reflection::XIdlMember
 
     /** Sets the value of the reflected field of the given object,
         i.e. an interface or compound type (struct/exception).
+
+        <p>When setting an interface attribute raises a
+        non-<type scope="com::sun::star::uno">RuntimeException</type>, it is
+        wrapped in a <type
+        scope="com::sun::star::lang">WrappedTargetRuntimeException</type>.</p>
 
         @param obj
                object instance having member of reflected type
