@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmresids.hrc,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:30:40 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,15 +130,9 @@
 #define RID_SVXTBX_FORM_NAVIGATION                  (RID_FORMS_START +  1)
 #define RID_SVXTBX_FORM_FILTER                      (RID_FORMS_START +  2)
 #define RID_SVXTBX_TEXT_CONTROL_ATTRIBUTES          (RID_FORMS_START +  3)
-#define RID_SVXTBX_CONTROLS_DBFORMS                 (RID_FORMS_START +  4)
-#define RID_SVXTBX_CONTROLS_XFORMS                  (RID_FORMS_START +  5)
-#define RID_SVXTBX_CONTROLS_GENERIC                 (RID_FORMS_START +  6)
-#define RID_SVXTBX_MORECONTROLS_DBFORMS             (RID_FORMS_START +  7)
-#define RID_SVXTBX_MORECONTROLS_XFORMS              (RID_FORMS_START +  8)
-#define RID_SVXTBX_MORECONTROLS_GENERIC             (RID_FORMS_START +  9)
-#define RID_SVXTBX_FORMDESIGN_DBFORMS               (RID_FORMS_START + 10)
-#define RID_SVXTBX_FORMDESIGN_XFORMS                (RID_FORMS_START + 11)
-#define RID_SVXTBX_FORMDESIGN_GENERIC               (RID_FORMS_START + 12)
+#define RID_SVXTBX_CONTROLS                         (RID_FORMS_START +  4)
+#define RID_SVXTBX_MORECONTROLS                     (RID_FORMS_START +  5)
+#define RID_SVXTBX_FORMDESIGN                       (RID_FORMS_START +  6)
 
 // Menu-Id's -----------------------------------------------------------
 #define RID_FMEXPLORER_POPUPMENU                    (RID_FORMS_START + 0)
