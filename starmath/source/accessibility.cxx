@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2002-06-13 14:41:41 $
+ *  last change: $Author: tl $ $Date: 2002-06-20 11:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,7 @@ using namespace drafts::com::sun::star::accessibility;
 //////////////////////////////////////////////////////////////////////
 
 SmGraphicAccessible::SmGraphicAccessible( SmGraphicWindow *pGraphicWin ) :
+    aAccName            ( String(SmResId(RID_DOCUMENTSTR)) ),
     pWin                (pGraphicWin),
     aAccEventListeners  (aListenerMutex)
 {
@@ -161,6 +162,7 @@ SmGraphicAccessible::SmGraphicAccessible( SmGraphicWindow *pGraphicWin ) :
 
 
 SmGraphicAccessible::SmGraphicAccessible( const SmGraphicAccessible &rSmAcc ) :
+    aAccName            ( String(SmResId(RID_DOCUMENTSTR)) ),
     aAccEventListeners  (aListenerMutex)
 {
     //vos::OGuard aGuard(Application::GetSolarMutex());
@@ -409,7 +411,7 @@ OUString SAL_CALL SmGraphicAccessible::getAccessibleName()
     throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return String( SmResId(RID_DOCUMENTSTR) );
+    return aAccName;
 }
 
 Reference< XAccessibleRelationSet > SAL_CALL SmGraphicAccessible::getAccessibleRelationSet()
@@ -1412,6 +1414,7 @@ sal_Bool SmEditViewForwarder::Paste()
 //------------------------------------------------------------------------
 
 SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
+    aAccName            ( String(SmResId(STR_CMDBOXWINDOW)) ),
     pWin                (pEditWin),
     aAccEventListeners  (aListenerMutex),
     pTextHelper         (0)
@@ -1422,6 +1425,7 @@ SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
 
 
 SmEditAccessible::SmEditAccessible( const SmEditAccessible &rSmAcc ) :
+    aAccName            ( String(SmResId(STR_CMDBOXWINDOW)) ),
     aAccEventListeners  (aListenerMutex)
 {
     //vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1652,15 +1656,15 @@ rtl::OUString SAL_CALL SmEditAccessible::getAccessibleDescription(  )
     throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    SmDocShell *pDoc = GetDoc_Impl();
-    return pDoc ? OUString(pDoc->GetText()) : OUString();
+    return OUString();  // empty as agreed with product-management
 }
 
 rtl::OUString SAL_CALL SmEditAccessible::getAccessibleName(  )
     throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return String( SmResId(RID_DOCUMENTSTR) );
+    // same name as displayed by the window when not docked
+    return aAccName;
 }
 
 uno::Reference< XAccessibleRelationSet > SAL_CALL SmEditAccessible::getAccessibleRelationSet(  )
