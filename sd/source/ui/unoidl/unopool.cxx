@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopool.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-06 12:52:34 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:35:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,9 @@ void SdUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEnt
         {
             lang::Locale aLocale;
             if( rValue >>= aLocale )
-                mpDrawModel->SetLanguage( SdUnoGetLanguage( aLocale ), pEntry->mnHandle );
+                mpDrawModel->SetLanguage(
+                    SdUnoGetLanguage( aLocale ),
+                    (const USHORT)pEntry->mnHandle );
         }
     }
     SvxUnoDrawPool::putAny( pPool, pEntry, rValue );
