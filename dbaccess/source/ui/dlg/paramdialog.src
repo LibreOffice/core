@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:47:24 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 13:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,19 +94,20 @@ ModalDialog DLG_PARAMETERS
         Text[ french ] = "Paramètres";
         Text[ spanish ] = "~Parámetros";
         Text[ italian ] = "~Parametri";
-        Text[ danish ] = "Parametre";
+        Text[ danish ] = "~Parameter";
         Text[ swedish ] = "~Parametrar";
         Text[ polish ] = "Parametr";
         Text[ portuguese_brazilian ] = "~Parameters";
-        Text[ japanese ] = "ï¾Šï¾Ÿï¾—ï¾’ï½°ï¾€(~P)";
+        Text[ japanese ] = "ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿(~P)";
         Text[ korean ] = "íŒŒë¼ë¯¸í„°(~P)";
         Text[ chinese_simplified ] = "å‚æ•°(~P)";
         Text[ chinese_traditional ] = "åƒæ•¸(~P)";
         Text[ arabic ] = "ÇáãÚáãÇÊ";
         Text[ turkish ] = "Parametre";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Parámetros";
+        Text[ catalan ] = "~Paràmetres";
         Text[ finnish ] = "~Parametrit";
+        Text[ thai ] = "~à¸à¸²à¸£à¸²à¸¡à¸´à¹€à¸•à¸­à¸£à¹Œ";
     };
     ListBox LB_ALLPARAMS
     {
@@ -129,7 +130,7 @@ ModalDialog DLG_PARAMETERS
         Text[ french ] = "Valeur";
         Text[ spanish ] = "~Valor";
         Text[ italian ] = "~Valore";
-        Text[ danish ] = "Værdi";
+        Text[ danish ] = "~Værdi";
         Text[ swedish ] = "~Värde";
         Text[ polish ] = "Wartoœæ";
         Text[ portuguese_brazilian ] = "~Value";
@@ -142,6 +143,7 @@ ModalDialog DLG_PARAMETERS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Valor";
         Text[ finnish ] = "~Arvo";
+        Text[ thai ] = "~à¸„à¹ˆà¸²";
     };
     Edit ET_PARAM
     {
@@ -162,10 +164,10 @@ ModalDialog DLG_PARAMETERS
         Text[ russian ] = "~ñëåäóşùèé";
         Text[ greek ] = "åğüìå~íï";
         Text[ dutch ] = "~volgende";
-        Text[ french ] = "~suivant";
+        Text[ french ] = "Suivant";
         Text[ spanish ] = "~siguiente";
         Text[ italian ] = "Successi~vo";
-        Text[ danish ] = "næste";
+        Text[ danish ] = "~næste";
         Text[ swedish ] = "~nästa";
         Text[ polish ] = "~nastêpny";
         Text[ portuguese_brazilian ] = "~next";
@@ -175,8 +177,9 @@ ModalDialog DLG_PARAMETERS
         Text[ chinese_traditional ] = "ä¸‹ä¸€å€‹(~N)";
         Text[ arabic ] = "ÇáÊÇáí";
         Text[ turkish ] = "Sonraki";
-        Text[ catalan ] = "~siguiente";
-        Text[ finnish ] = "~seuraava";
+        Text[ catalan ] = "~Següent";
+        Text[ finnish ] = "~Seuraava";
+        Text[ thai ] = "~à¸–à¸±à¸”à¹„à¸›";
     };
     OKButton BT_OK
     {
@@ -204,7 +207,7 @@ ModalDialog DLG_PARAMETERS
     Text[ chinese_simplified ] = "è¾“å…¥å‚æ•°å€¼";
     Text[ russian ] = "Ââîä ïàğàìåòğà";
     Text[ polish ] = "Wpisanie parametru";
-    Text[ japanese ] = "ï¾Šï¾Ÿï¾—ï¾’ï½°ï¾€ã®å…¥åŠ›";
+    Text[ japanese ] = "ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å…¥åŠ›";
     Text[ chinese_traditional ] = "è¼¸å…¥åƒæ•¸å€¼";
     Text[ arabic ] = "ÅÏÎÇá ÇáãÚáãÉ";
     Text[ greek ] = "ÅéóáãùãŞ ğáñáìİôñùí";
@@ -223,26 +226,31 @@ ModalDialog DLG_PARAMETERS
         Text[ french ] = "Impossible de convertir la saisie en une valeur correcte pour la colonne \"$name$\".";
         Text[ spanish ] = "La entrada no se pudo convertir en un valor válido para la columna \"$name$\".";
         Text[ italian ] = "Impossibile convertire la voce in un valore valido per la colonna \"$name$\".";
-        Text[ danish ] = "Det var ikke muligt at konvertere inputtet til en gyldig værdi for kolonne \"$name$\".";
+        Text[ danish ] = "Indtastningen kunne ikke konverteres til en gyldig værdi for kolonnen \"$name$\"";
         Text[ swedish ] = "Inmatningen kunde inte omvandlas till ett giltigt värde för kolumnen \"$name$\".";
         Text[ polish ] = "Nie mo¿na by³o zamieniæ wpisu na wa¿n¹ wartoœæ kolumny \"$name$\".";
         Text[ portuguese_brazilian ] = "The given input could no be converted into a valid value for column \"$value$\".";
         Text[ japanese ] = "å…¥åŠ›å€¤ã¯ <$name$> åˆ—ã§æœ‰åŠ¹ãªå€¤ã«å¤‰æ›ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
-        Text[ korean ] = "ì…ë ¥ì€ ì—´\"$name$\"ì˜ ìœ íš¨í•œ ê°’ìœ¼ë¡œ ë³€í™˜ë  ìˆ˜ ì—†ì—ˆìŠµë‹ˆë‹¤.";
+        Text[ korean ] = "ì…ë ¥ì´ ì—´\"$name$\"ì˜ ìœ íš¨í•œ ê°’ìœ¼ë¡œ ë³€í™˜ë˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
         Text[ chinese_simplified ] = "è¾“å…¥çš„å†…å®¹æ— æ³•è½¬æ¢æˆä¸€ä¸ªç”¨äºåˆ—\"$name$\"çš„æœ‰æ•ˆæ•°å€¼ã€‚";
         Text[ chinese_traditional ] = "é€™å€‹è¼¸å…¥å€¼ç„¡æ³•è½‰æ›æˆæ¬„<$name$>çš„æœ‰æ•ˆå€¼ã€‚";
         Text[ arabic ] = "ÊÚĞÑ ÊÍæíá ÇáÅÏÎÇá Åáì ŞíãÉ ÕÇáÍÉ ááÚãæÏ \"$name$\".";
         Text[ turkish ] = "Giriş, \"$name$\" sütunu için geçerli bir değere dönüştürülemedi.";
-        Text[ catalan ] = "La entrada no se pudo convertir en un valor válido para la columna \"$name$\".";
+        Text[ catalan ] = "No s'ha pogut convertir l'entrada en un valor vàlid per a la columna \"$nom$\"";
         Text[ finnish ] = "Merkintää ei voitu muuttaa sarakkeen $name$ kelvolliseksi arvoksi";
+        Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹à¸›à¸¥à¸‡à¸£à¸²à¸¢à¸à¸²à¸£à¹€à¸›à¹‡à¸™à¸„à¹ˆà¸²à¸—à¸µà¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡à¸ªà¸³à¸«à¸£à¸±à¸šà¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ \"$name$\"à¹„à¸”à¹‰";
     };
-    Text[ catalan ] = "Entrada de parámetro";
+    Text[ catalan ] = "Entrada de paràmetres";
     Text[ finnish ] = "Parametrin syöttö";
+    Text[ thai ] = "à¹ƒà¸ªà¹ˆà¸à¸²à¸£à¸²à¸¡à¸´à¹€à¸•à¸­à¸£à¹Œ";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23  2002/08/19 07:47:24  oj
+ *  #99473# change string resource files
+ *
  *  Revision 1.22  2001/11/16 23:00:55  kz
  *  Merge SRC638: 16.11.01 - 22:59:20
  *
