@@ -31,23 +31,16 @@
 #include "Style.hxx"
 #include "WriterProperties.hxx"
 
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
-
-using com::sun::star::uno::Reference;
-using com::sun::star::xml::sax::XDocumentHandler;
-
 class FontStyle : public Style
 {
 public:
     FontStyle(const char *psName, const char *psFontFamily);
     ~FontStyle();
-    virtual void write(Reference < XDocumentHandler > &xHandler) const;
-    const UTF8String &getFontFamily() const { return msFontFamily; }
+    virtual void write(DocumentHandler &xHandler) const;
+    const WPXString &getFontFamily() const { return msFontFamily; }
 
 private:
-    UTF8String msFontFamily;
-    UTF8String msFontPitch;
+    WPXString msFontFamily;
+    WPXString msFontPitch;
 };
 #endif

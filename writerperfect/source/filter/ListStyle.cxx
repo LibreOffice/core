@@ -28,112 +28,77 @@
 #include "ListStyle.hxx"
 #include "DocumentElement.hxx"
 
-using namespace ::rtl;
-using rtl::OUString;
-
-OrderedListLevelStyle::OrderedListLevelStyle(const WPXNumberingType listType, const UCSString &sTextBeforeNumber,
-                         const UCSString &sTextAfterNumber, const float fSpaceBefore, const int iStartingNumber) :
-    mlistType(listType),
-    msTextBeforeNumber(sTextBeforeNumber),
-    msTextAfterNumber(sTextAfterNumber),
-    mfSpaceBefore(fSpaceBefore),
-    miStartingNumber(iStartingNumber)
+OrderedListLevelStyle::OrderedListLevelStyle(const WPXPropertyList &xPropList) :
+        mPropList(xPropList)
 {
 }
 
-void OrderedListStyle::updateListLevel(const int iLevel, const WPXNumberingType listType, const UCSString &sTextBeforeNumber, const UCSString &sTextAfterNumber, const int iStartingNumber)
+void OrderedListStyle::updateListLevel(const int iLevel, const WPXPropertyList &xPropList)
 {
     if (!isListLevelDefined(iLevel))
-        setListLevel(iLevel, new OrderedListLevelStyle(listType, sTextBeforeNumber, sTextAfterNumber, iLevel*0.5f, iStartingNumber));
+        setListLevel(iLevel, new OrderedListLevelStyle(xPropList));
 }
 
-void OrderedListLevelStyle::write(Reference < XDocumentHandler > &xHandler, int iLevel) const
+void OrderedListLevelStyle::write(DocumentHandler &xHandler, int iLevel) const
 {
-    // then convert from ucs4 to utf8 and write it
-    //char *sBulletUTF8 = ucs2ArrayToUTF8String(msBullet);
-
-    //if (mfSpaceBefore != 0.0f)
-    UTF8String sListTypeSymbol("1");
-    switch (mlistType)
-    {
-    case ARABIC:
-        sListTypeSymbol.sprintf("1");
-        break;
-    case LOWERCASE:
-        sListTypeSymbol.sprintf("a");
-        break;
-    case UPPERCASE:
-        sListTypeSymbol.sprintf("A");
-        break;
-     case LOWERCASE_ROMAN:
-        sListTypeSymbol.sprintf("i");
-        break;
-     case UPPERCASE_ROMAN:
-        sListTypeSymbol.sprintf("I");
-        break;
-    }
-
-    UTF8String sTextBeforeNumber(msTextBeforeNumber, true);
-    UTF8String sTextAfterNumber(msTextAfterNumber, true);
-    UTF8String sLevel;
+    WPXString sLevel;
     sLevel.sprintf("%i", (iLevel+1));
-    UTF8String sStartValue;
-    sStartValue.sprintf("%i", miStartingNumber);
 
     TagOpenElement listLevelStyleOpen("text:list-level-style-number");
-    listLevelStyleOpen.addAttribute("text:level", sLevel.getUTF8());
+    listLevelStyleOpen.addAttribute("text:level", sLevel);
     listLevelStyleOpen.addAttribute("text:style-name", "Numbering Symbols");
-    listLevelStyleOpen.addAttribute("style:num-prefix", sTextBeforeNumber.getUTF8());
-    listLevelStyleOpen.addAttribute("style:num-suffix", sTextAfterNumber.getUTF8());
-    listLevelStyleOpen.addAttribute("style:num-format", sListTypeSymbol.getUTF8());
-    listLevelStyleOpen.addAttribute("text:start-value", sStartValue.getUTF8());
+        if (mPropList["style:num-prefix"])
+                listLevelStyleOpen.addAttribute("style:num-prefix", mPropList["style:num-prefix"]->getStr());
+        if (mPropList["style:num-suffix"])
+                listLevelStyleOpen.addAttribute("style:num-suffix", mPropList["style:num-suffix"]->getStr());
+        if (mPropList["style:num-format"])
+                listLevelStyleOpen.addAttribute("style:num-format", mPropList["style:num-format"]->getStr());
+        if (mPropList["text:start-value"])
+                listLevelStyleOpen.addAttribute("text:start-value", mPropList["text:start-value"]->getStr());
     listLevelStyleOpen.write(xHandler);
 
-    UTF8String sSpaceBefore;
-    sSpaceBefore.sprintf("%fcm", mfSpaceBefore);
     TagOpenElement stylePropertiesOpen("style:properties");
-    stylePropertiesOpen.addAttribute("text:space-before", sSpaceBefore.getUTF8());
+        if (mPropList["text:space-before"])
+                stylePropertiesOpen.addAttribute("text:space-before", mPropList["text:space-before"]->getStr());
     stylePropertiesOpen.addAttribute("text:min-label-width", "0.499cm");
     stylePropertiesOpen.write(xHandler);
 
-    xHandler->endElement(OUString::createFromAscii("style:properties"));
-    xHandler->endElement(OUString::createFromAscii("text:list-level-style-number"));
+    xHandler.endElement("style:properties");
+    xHandler.endElement("text:list-level-style-number");
 }
 
-UnorderedListLevelStyle::UnorderedListLevelStyle(const UCSString &sBullet, const float fSpaceBefore)
-    : msBullet(sBullet),
-      mfSpaceBefore(fSpaceBefore)
+UnorderedListLevelStyle::UnorderedListLevelStyle(const WPXPropertyList &xPropList)
+    : mPropList(xPropList)
 {
 }
 
-void UnorderedListStyle::updateListLevel(const int iLevel, const UCSString &sBullet)
+void UnorderedListStyle::updateListLevel(const int iLevel, const WPXPropertyList &xPropList)
 {
     if (!isListLevelDefined(iLevel))
-        setListLevel(iLevel, new UnorderedListLevelStyle(sBullet, iLevel*0.5f));
+        setListLevel(iLevel, new UnorderedListLevelStyle(xPropList));
 }
 
-void UnorderedListLevelStyle::write(Reference < XDocumentHandler > &xHandler, int iLevel) const
+void UnorderedListLevelStyle::write(DocumentHandler &xHandler, int iLevel) const
 {
-    UTF8String sBulletUTF8(msBullet, true);
-    UTF8String sLevel;
+    WPXString sLevel;
     sLevel.sprintf("%i", (iLevel+1));
     TagOpenElement listLevelStyleOpen("text:list-level-style-bullet");
-    listLevelStyleOpen.addAttribute("text:level", sLevel.getUTF8());
+    listLevelStyleOpen.addAttribute("text:level", sLevel);
     listLevelStyleOpen.addAttribute("text:style-name", "Bullet Symbols");
     listLevelStyleOpen.addAttribute("style:num-suffice", ".");
-    listLevelStyleOpen.addAttribute("text:bullet-char", sBulletUTF8.getUTF8());
+        if (mPropList["text:bullet-char"])
+                listLevelStyleOpen.addAttribute("text:bullet-char", mPropList["text:bullet-char"]->getStr());
     listLevelStyleOpen.write(xHandler);
 
-    UTF8String sSpaceBefore;
-    sSpaceBefore.sprintf("%fcm", mfSpaceBefore);
     TagOpenElement stylePropertiesOpen("style:properties");
-    stylePropertiesOpen.addAttribute("text:space-before", sSpaceBefore.getUTF8());
+        if (mPropList["text:space-before"])
+                listLevelStyleOpen.addAttribute("text:space-before", mPropList["text:space-before"]->getStr());
     stylePropertiesOpen.addAttribute("text:min-label-width", "0.499cm");
     stylePropertiesOpen.addAttribute("style:font-name", "StarSymbol");
     stylePropertiesOpen.write(xHandler);
 
-    xHandler->endElement(OUString::createFromAscii("style:properties"));
-    xHandler->endElement(OUString::createFromAscii("text:list-level-style-bullet"));
+    xHandler.endElement("style:properties");
+    xHandler.endElement("text:list-level-style-bullet");
 }
 
 ListStyle::ListStyle(const char *psName, const int iListID) :
@@ -171,7 +136,7 @@ void ListStyle::setListLevel(int iLevel, ListLevelStyle *iListLevelStyle)
         mppListLevels[iLevel] = iListLevelStyle;
 }
 
-void ListStyle::write(Reference < XDocumentHandler > &xHandler) const
+void ListStyle::write(DocumentHandler &xHandler) const
 {
     TagOpenElement listStyleOpenElement("text:list-style");
     listStyleOpenElement.addAttribute("style:name", getName());
@@ -182,5 +147,5 @@ void ListStyle::write(Reference < XDocumentHandler > &xHandler) const
             mppListLevels[i]->write(xHandler, i);
     }
 
-    xHandler->endElement(OUString::createFromAscii("text:list-style"));
+    xHandler.endElement("text:list-style");
 }

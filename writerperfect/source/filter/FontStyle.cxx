@@ -25,14 +25,12 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 #include "FontStyle.hxx"
-#include "FontMap.hxx"
 #include "WriterProperties.hxx"
 #include "DocumentElement.hxx"
 
 FontStyle::FontStyle(const char *psName, const char *psFontFamily) : Style(psName),
     msFontFamily(psFontFamily),
     msFontPitch(IMP_DEFAULT_FONT_PITCH)
-
 {
 }
 
@@ -40,11 +38,11 @@ FontStyle::~FontStyle()
 {
 }
 
-void FontStyle::write(Reference < XDocumentHandler > &xHandler) const
+void FontStyle::write(DocumentHandler &xHandler) const
 {
     TagOpenElement styleOpen("style:font-decl");
-    styleOpen.addAttribute("style:name", mapFont(getName()));
-    styleOpen.addAttribute("fo:font-family", mapFont(msFontFamily));
+    styleOpen.addAttribute("style:name", getName());
+    styleOpen.addAttribute("fo:font-family", msFontFamily);
     styleOpen.addAttribute("style:font-pitch", msFontPitch);
     styleOpen.write(xHandler);
     TagCloseElement styleClose("style:font-decl");

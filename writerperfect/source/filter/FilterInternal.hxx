@@ -26,9 +26,10 @@
 #define WRITER_DEBUG_MSG(M)
 #endif
 
+#if 0
 #include <rtl/string.hxx>
-
 inline rtl::OString utf8_itoa(int i)
 {
     return rtl::OString::valueOf( (sal_Int32) i );
 }
+#endif
