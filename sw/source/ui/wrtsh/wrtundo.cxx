@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtundo.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:06:04 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,26 +157,23 @@ void SwWrtShell::Do( DoType eDoType, USHORT nCnt )
 
 String SwWrtShell::GetDoString( DoType eDoType ) const
 {
-    String aStr;
-    USHORT nId = 0, nResStr;
+    String aStr, aUndoStr;
+    USHORT nResStr;
     switch( eDoType )
     {
     case UNDO:
         nResStr = STR_UNDO;
-        nId = GetUndoIds( &aStr );
+        aUndoStr = GetUndoIdsStr();
         break;
     case REDO:
         nResStr = STR_REDO;
-        nId = GetRedoIds( &aStr );
+        aUndoStr = GetRedoIdsStr();
         break;
     }
 
-    if( UNDO_END < nId )
-    {
-        aStr.Insert( String(ResId( nResStr, SFX_APP()->GetSfxResManager() )), 0 );
-        if( UNDO_DRAWUNDO != nId )
-            aStr += SW_RESSTR( UNDO_BASE + nId );
-    }
+    aStr.Insert( String(ResId( nResStr, SFX_APP()->GetSfxResManager())), 0 );
+    aStr += aUndoStr;
+
     return aStr;
 }
 
@@ -197,9 +194,7 @@ USHORT SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) cons
     for( USHORT n = 0, nEnd = aIds.Count(); n < nEnd; ++n )
     {
         const SwUndoIdAndName& rIdNm = *aIds[ n ];
-        if( UNDO_DRAWUNDO != rIdNm.GetUndoId() )
-            sList += String( ResId( UNDO_BASE + rIdNm.GetUndoId(), pSwResMgr ));
-        else if( rIdNm.GetUndoStr() )
+        if( rIdNm.GetUndoStr() )
             sList += *rIdNm.GetUndoStr();
         else
         {
@@ -215,13 +210,14 @@ USHORT SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) cons
 String SwWrtShell::GetRepeatString() const
 {
     String aStr;
-    USHORT nId = GetRepeatIds( &aStr );
-    if( UNDO_END < nId )
+    String aUndoStr = GetRepeatIdsStr();
+
+    if (aUndoStr.Len() > 0)
     {
         aStr.Insert( ResId( STR_REPEAT, SFX_APP()->GetSfxResManager()), 0 );
-        if( UNDO_DRAWUNDO != nId )
-            aStr += SW_RESSTR( UNDO_BASE + nId );
+        aStr += aUndoStr;
     }
+
     return aStr;
 }
 
