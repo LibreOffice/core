@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-08 12:16:38 $
+#   last change: $Author: hjs $ $Date: 2002-01-08 12:36:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,10 +60,6 @@
 #
 #*************************************************************************
 
-PRJ=..
-
-PRJNAME=soltools
-TARGET=util
-
+# find makedepend in own output tree
 MAKEDEPEND=$(BIN)$/makedepend
 
