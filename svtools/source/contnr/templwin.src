@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-07 10:33:55 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 05:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,25 @@ String STR_SVT_NEWDOC
 {
     Text = "Neues Dokument";
     Text [ english_us ] = "New Document";
+    Text[ portuguese ] = "New Document";
+    Text[ russian ] = "New Document";
+    Text[ greek ] = "New Document";
+    Text[ dutch ] = "New Document";
+    Text[ french ] = "New Document";
+    Text[ spanish ] = "New Document";
+    Text[ finnish ] = "Neues Dokument";
+    Text[ italian ] = "New Document";
+    Text[ danish ] = "New Document";
+    Text[ swedish ] = "Nytt dokument";
+    Text[ polish ] = "New Document";
+    Text[ portuguese_brazilian ] = "New Document";
+    Text[ japanese ] = "New Document";
+    Text[ korean ] = "New Document";
+    Text[ chinese_simplified ] = "ÐÂ½¨ÎÄµµ";
+    Text[ chinese_traditional ] = "New Document";
+    Text[ turkish ] = "New Document";
+    Text[ arabic ] = "New Document";
+    Text[ catalan ] = "New Document";
 };
 
 Image IMG_SVT_NEWDOC
@@ -89,6 +108,25 @@ String STR_SVT_MYDOCS
 {
     Text = "Eigene Dateien";
     Text [ english_us ] = "My Documents";
+    Text[ portuguese ] = "My Documents";
+    Text[ russian ] = "My Documents";
+    Text[ greek ] = "My Documents";
+    Text[ dutch ] = "My Documents";
+    Text[ french ] = "My Documents";
+    Text[ spanish ] = "My Documents";
+    Text[ finnish ] = "Eigene Dateien";
+    Text[ italian ] = "My Documents";
+    Text[ danish ] = "My Documents";
+    Text[ swedish ] = "Mina dokument";
+    Text[ polish ] = "My Documents";
+    Text[ portuguese_brazilian ] = "My Documents";
+    Text[ japanese ] = "My Documents";
+    Text[ korean ] = "My Documents";
+    Text[ chinese_simplified ] = "ÎÒµÄÎÄ¼þ";
+    Text[ chinese_traditional ] = "My Documents";
+    Text[ turkish ] = "My Documents";
+    Text[ arabic ] = "My Documents";
+    Text[ catalan ] = "My Documents";
 };
 
 Image IMG_SVT_MYDOCS
@@ -101,6 +139,25 @@ String STR_SVT_TEMPLATES
 {
     Text = "Vorlagen";
     Text [ english_us ] = "Templates";
+    Text[ portuguese ] = "Templates";
+    Text[ russian ] = "Templates";
+    Text[ greek ] = "Templates";
+    Text[ dutch ] = "Templates";
+    Text[ french ] = "Templates";
+    Text[ spanish ] = "Templates";
+    Text[ finnish ] = "Vorlagen";
+    Text[ italian ] = "Templates";
+    Text[ danish ] = "Templates";
+    Text[ swedish ] = "Mallar";
+    Text[ polish ] = "Templates";
+    Text[ portuguese_brazilian ] = "Templates";
+    Text[ japanese ] = "Templates";
+    Text[ korean ] = "Templates";
+    Text[ chinese_simplified ] = "ÑùÊ½";
+    Text[ chinese_traditional ] = "Templates";
+    Text[ turkish ] = "Templates";
+    Text[ arabic ] = "Templates";
+    Text[ catalan ] = "Templates";
 };
 
 Image IMG_SVT_TEMPLATES
@@ -113,6 +170,24 @@ String STR_SVT_SAMPLES
 {
     Text = "Beispiele";
     Text [ english_us ] = "Samples";
+    Text[ portuguese ] = "Samples";
+    Text[ russian ] = "Samples";
+    Text[ greek ] = "Samples";
+    Text[ dutch ] = "Samples";
+    Text[ french ] = "Samples";
+    Text[ spanish ] = "Samples";
+    Text[ italian ] = "Samples";
+    Text[ danish ] = "Samples";
+    Text[ swedish ] = "Exempel";
+    Text[ polish ] = "Samples";
+    Text[ portuguese_brazilian ] = "Samples";
+    Text[ japanese ] = "Samples";
+    Text[ korean ] = "Samples";
+    Text[ chinese_simplified ] = "Ê¾ÀýÎÄµµ";
+    Text[ chinese_traditional ] = "Samples";
+    Text[ turkish ] = "Samples";
+    Text[ arabic ] = "Samples";
+    Text[ catalan ] = "Samples";
 };
 
 Image IMG_SVT_SAMPLES
@@ -134,6 +209,24 @@ ToolBox 1001
             Text = "Zurück" ;
             Text [ english_us ] = "Back" ;
             Text[ language_user1 ] = " ";
+            Text[ portuguese ] = "Back";
+            Text[ russian ] = "Back";
+            Text[ greek ] = "Back";
+            Text[ dutch ] = "Back";
+            Text[ french ] = "Back";
+            Text[ spanish ] = "Back";
+            Text[ italian ] = "Back";
+            Text[ danish ] = "Back";
+            Text[ swedish ] = "Tillbaka";
+            Text[ polish ] = "Back";
+            Text[ portuguese_brazilian ] = "Back";
+            Text[ japanese ] = "Back";
+            Text[ korean ] = "Back";
+            Text[ chinese_simplified ] = "·µ»Ø";
+            Text[ chinese_traditional ] = "Back";
+            Text[ turkish ] = "Back";
+            Text[ arabic ] = "Back";
+            Text[ catalan ] = "Back";
         };
         ToolBoxItem
         {
@@ -142,6 +235,24 @@ ToolBox 1001
             Text = "Eine Ebene höher" ;
             Text [ english_us ] = "Higher" ;
             Text[ language_user1 ] = " ";
+            Text[ portuguese ] = "Higher";
+            Text[ russian ] = "Higher";
+            Text[ greek ] = "Higher";
+            Text[ dutch ] = "Higher";
+            Text[ french ] = "Higher";
+            Text[ spanish ] = "Higher";
+            Text[ italian ] = "Higher";
+            Text[ danish ] = "Higher";
+            Text[ swedish ] = "En nivå upp";
+            Text[ polish ] = "Poziom wy¿ej";
+            Text[ portuguese_brazilian ] = "Higher";
+            Text[ japanese ] = "Higher";
+            Text[ korean ] = "Higher";
+            Text[ chinese_simplified ] = "ÏòÉÏÒ»²ã";
+            Text[ chinese_traditional ] = "Higher";
+            Text[ turkish ] = "Higher";
+            Text[ arabic ] = "Higher";
+            Text[ catalan ] = "Higher";
         };
         ToolBoxItem
         {
@@ -154,6 +265,24 @@ ToolBox 1001
             Text = "Drucken" ;
             Text [ english_us ] = "Print" ;
             Text[ language_user1 ] = " ";
+            Text[ portuguese ] = "Print";
+            Text[ russian ] = "Print";
+            Text[ greek ] = "Print";
+            Text[ dutch ] = "Print";
+            Text[ french ] = "Print";
+            Text[ spanish ] = "Print";
+            Text[ italian ] = "Print";
+            Text[ danish ] = "Print";
+            Text[ swedish ] = "Skriv ut";
+            Text[ polish ] = "Print";
+            Text[ portuguese_brazilian ] = "Print";
+            Text[ japanese ] = "Print";
+            Text[ korean ] = "Print";
+            Text[ chinese_simplified ] = "´òÓ¡";
+            Text[ chinese_traditional ] = "Print";
+            Text[ turkish ] = "Print";
+            Text[ arabic ] = "Print";
+            Text[ catalan ] = "Print";
         };
     };
 };
@@ -180,6 +309,24 @@ ModalDialog DLG_DOCTEMPLATE
         Size = MAP_APPFONT( 50, 14 );
         Text = "~Verwalten...";
         Text [ english_us ] = "Manage...";
+        Text[ portuguese ] = "Manage...";
+        Text[ russian ] = "Manage...";
+        Text[ greek ] = "Manage...";
+        Text[ dutch ] = "Manage...";
+        Text[ french ] = "Manage...";
+        Text[ spanish ] = "Manage...";
+        Text[ italian ] = "Manage...";
+        Text[ danish ] = "Manage...";
+        Text[ swedish ] = "~Administrera...";
+        Text[ polish ] = "Manage...";
+        Text[ portuguese_brazilian ] = "Manage...";
+        Text[ japanese ] = "Manage...";
+        Text[ korean ] = "Manage...";
+        Text[ chinese_simplified ] = "¹ÜÀí...";
+        Text[ chinese_traditional ] = "Manage...";
+        Text[ turkish ] = "Manage...";
+        Text[ arabic ] = "Manage...";
+        Text[ catalan ] = "Manage...";
     };
     PushButton BTN_DOCTEMPLATE_EDIT
     {
@@ -187,6 +334,24 @@ ModalDialog DLG_DOCTEMPLATE
         Size = MAP_APPFONT( 50, 14 );
         Text = "~Bearbeiten";
         Text [ english_us ] = "Edit";
+        Text[ portuguese ] = "Edit";
+        Text[ russian ] = "Edit";
+        Text[ greek ] = "Edit";
+        Text[ dutch ] = "Edit";
+        Text[ french ] = "Edit";
+        Text[ spanish ] = "Edit";
+        Text[ italian ] = "Edit";
+        Text[ danish ] = "Edit";
+        Text[ swedish ] = "~Redigera";
+        Text[ polish ] = "Edit";
+        Text[ portuguese_brazilian ] = "Edit";
+        Text[ japanese ] = "Edit";
+        Text[ korean ] = "Edit";
+        Text[ chinese_simplified ] = "±à¼­";
+        Text[ chinese_traditional ] = "Edit";
+        Text[ turkish ] = "Edit";
+        Text[ arabic ] = "Edit";
+        Text[ catalan ] = "Edit";
     };
     OKButton BTN_DOCTEMPLATE_OPEN
     {
@@ -195,6 +360,24 @@ ModalDialog DLG_DOCTEMPLATE
         DefButton = TRUE;
         Text = "Ö~ffnen";
         Text [ english_us ] = "Open";
+        Text[ portuguese ] = "Open";
+        Text[ russian ] = "Open";
+        Text[ greek ] = "Open";
+        Text[ dutch ] = "Open";
+        Text[ french ] = "Open";
+        Text[ spanish ] = "Open";
+        Text[ italian ] = "Open";
+        Text[ danish ] = "Open";
+        Text[ swedish ] = "Ö~ppna";
+        Text[ polish ] = "Open";
+        Text[ portuguese_brazilian ] = "Open";
+        Text[ japanese ] = "Open";
+        Text[ korean ] = "Open";
+        Text[ chinese_simplified ] = "´ò¿ª";
+        Text[ chinese_traditional ] = "Open";
+        Text[ turkish ] = "Open";
+        Text[ arabic ] = "Open";
+        Text[ catalan ] = "Open";
     };
     CancelButton BTN_DOCTEMPLATE_CANCEL
     {
@@ -206,5 +389,23 @@ ModalDialog DLG_DOCTEMPLATE
         Pos = MAP_APPFONT( 344, 225 );
         Size = MAP_APPFONT( 50, 14 );
     };
+    Text[ portuguese ] = "Templates and Documents";
+    Text[ russian ] = "Templates and Documents";
+    Text[ greek ] = "Templates and Documents";
+    Text[ dutch ] = "Templates and Documents";
+    Text[ french ] = "Templates and Documents";
+    Text[ spanish ] = "Templates and Documents";
+    Text[ italian ] = "Templates and Documents";
+    Text[ danish ] = "Templates and Documents";
+    Text[ swedish ] = "Mallar och dokument";
+    Text[ polish ] = "Templates and Documents";
+    Text[ portuguese_brazilian ] = "Templates and Documents";
+    Text[ japanese ] = "Templates and Documents";
+    Text[ korean ] = "Templates and Documents";
+    Text[ chinese_simplified ] = "ÑùÊ½ºÍÎÄµµ";
+    Text[ chinese_traditional ] = "Templates and Documents";
+    Text[ turkish ] = "Templates and Documents";
+    Text[ arabic ] = "Templates and Documents";
+    Text[ catalan ] = "Templates and Documents";
 };
 
