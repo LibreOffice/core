@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jl $ $Date: 2001-04-12 14:01:57 $
+#   last change: $Author: jl $ $Date: 2001-04-17 12:17:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,6 +108,8 @@ DEF1NAME=	$(SHL1TARGET)
 
 .IF "$(OS)"=="SOLARIS"
 SHL1VERSIONMAP=	sols.map
+.ELIF "$(OS)"=="LINUX"
+SHL1VERSIONMAP= lngi.map
 .ENDIF
 
 
