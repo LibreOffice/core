@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:58:25 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 22:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ chinese_simplified ] = "±ίΏς";
         Text[ russian ] = "Ξαπΰμλενθε";
         Text[ polish ] = "Obramowanie";
-        Text[ japanese ] = "Og";
+        Text[ japanese ] = "g";
         Text[ chinese_traditional ] = "Γδ®Ψ";
         Text[ arabic ] = "ΗαΝΟζΟ";
         Text[ greek ] = "Περίγραμμα";
