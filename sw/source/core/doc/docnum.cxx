@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:44:19 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -802,36 +802,27 @@ void SwDoc::SetOutlineLSpace( BYTE nLevel, short nFirstLnOfst, USHORT nLSpace )
 
 // --- Nummerierung -----------------------------------------
 
-SwTxtNodeTable SwNumRuleInfo::aDummyList;
-
-const SwTxtNodeTable & SwNumRuleInfo::GetList() const
-{
-    if (pDoc)
-    {
-        SwNumRule * pRule = pDoc->FindNumRulePtr(rName);
-
-        if (pRule && pRule->GetList())
-            return *pRule->GetList();
-    }
-
-    return aDummyList;
-}
-
 void SwNumRuleInfo::MakeList( SwDoc& rDoc, BOOL bOutline )
 {
-    SwNumRule * pRule = rDoc.FindNumRulePtr(rName);
+    SwNumRule* pRule = rDoc.FindNumRulePtr(rName);
 
-    pDoc = &rDoc;
+    // no rule, no fun.
+    if ( !pRule )
+        return;
 
-    if (pRule && pRule->GetList())
+    //
+    // 1. Case: Information already available at pRule:
+    //
+    if (pRule->GetList())
     {
+        // copy list to own pList pointer:
+        aList = *pRule->GetList();
         return;
     }
 
-    if (pList)
-        delete pList;
-
-    pList = new SwTxtNodeTable();
+    //
+    // 2. Case: Information has to be generated from scratch:
+    //
 
     // -> #111955#
     if (bOutline)
@@ -879,9 +870,11 @@ void SwNumRuleInfo::MakeList( SwDoc& rDoc, BOOL bOutline )
         }
     }
 
-    pRule->SetList(pList);
-
-    pList = 0;
+    // --> FME 2004-11-03 #i36571# The numrule and this info structure should
+    // have different instances of the list:
+    SwTxtNodeTable* pNewList = new SwTxtNodeTable( aList );
+    pRule->SetList(pNewList);
+    // <--
 }
 
 
@@ -1268,8 +1261,12 @@ BOOL SwDoc::DelNumRule( const String& rName, BOOL bBroadcast )
             BroadcastStyleOperation(rName, SFX_STYLE_FAMILY_PSEUDO,
                                     SFX_STYLESHEET_ERASED);
 
+        // --> FME 2004-11-02 #i34097# DeleteAndDestroy deletes rName if
+        // rName is directly taken from the numrule.
+        const String aTmpName( rName );
+        // <--
         pNumRuleTbl->DeleteAndDestroy( nPos );
-        aNumRuleMap.erase(rName);
+        aNumRuleMap.erase(aTmpName);
 
         SetModified();
         return TRUE;
@@ -2538,7 +2535,7 @@ void lcl_UpdateNumRuleRange( SwNumRule & rRule,
 
     /* Temporal numbering holding the values to be changed in the
        current node*/
-    SwNodeNum aNum(0);
+    SwNodeNum aNum(0), aOldNum(0);
     /* Array for initialized levels.
     bInitializedLevels[i] == true -> level i is initialized.
     */
@@ -2713,7 +2710,7 @@ void lcl_UpdateNumRuleRange( SwNumRule & rRule,
                     pTxtNode->UpdateNum(aTmpNum);
                 }
             }
-            else if (! pOldNum) // #i29560#
+            else if (! pOldNum)
             {
                 ASSERT(0, "No number!");
             }
@@ -2721,6 +2718,8 @@ void lcl_UpdateNumRuleRange( SwNumRule & rRule,
 
         nUpdatePos++;
     }
+
+    rRule.SetInvalidRule(FALSE);
 }
 
 /** helper function for SwDoc::UpdateNumRule: update rule rRule within
@@ -2820,7 +2819,12 @@ void SwDoc::UpdateNumRule( SwNumRule & rRule, ULONG nUpdatePos)
         nUpdatePos = 0;
     else /* nUpdatePos is still the position in the document. Convert
             to position in the list of found paragraphs. */
+    {
         aNumRuleInfo.GetList().SearchKey(nUpdatePos, &nUpdatePos);
+
+        if (nUpdatePos >= 0)
+            nUpdatePos--;
+    }
 
     // #115901#
     if (nUpdatePos >= aNumRuleInfo.GetList().Count())
