@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:11:46 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,14 @@ QueryBox DLG_MACROQUERY
     Message[ slovak ] = "Nastala udalosť, ku ktorej je priradené makro $(MACRO). $(TEXT)";
     Title[ slovak ] = "Spustiť makro";
 };
+
+
+
+
+
+
+
+
 
 
 
