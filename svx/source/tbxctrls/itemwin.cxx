@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemwin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-01-11 11:36:09 $
+ *  last change: $Author: cl $ $Date: 2002-03-01 09:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,7 +593,7 @@ long SvxMetricField::Notify( NotifyEvent& rNEvt )
 
 SvxFillTypeBox::SvxFillTypeBox( Window* pParent, WinBits nBits ) :
 
-    FillTypeLB( pParent, nBits ),
+    FillTypeLB( pParent, nBits | WB_TABSTOP ),
 
     nCurPos ( 0 ),
     bSelect ( FALSE ),
@@ -680,7 +680,7 @@ void SvxFillTypeBox::ReleaseFocus_Impl()
 
 SvxFillAttrBox::SvxFillAttrBox( Window* pParent, WinBits nBits ) :
 
-    FillAttrLB( pParent, nBits ),
+    FillAttrLB( pParent, nBits | WB_TABSTOP ),
 
     nCurPos( 0 ),
     bRelease( TRUE )
