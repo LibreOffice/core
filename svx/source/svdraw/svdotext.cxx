@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-16 13:09:43 $
+ *  last change: $Author: aw $ $Date: 2001-03-16 15:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1694,7 +1694,10 @@ void SdrTextObj::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
     pOutlinerParaObject=pTextObject;
 
     if( pOutlinerParaObject )
-        SetItem( SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, !pOutlinerParaObject->IsVertical() ) );
+    {
+        ImpForceItemSet();
+        mpObjectItemSet->Put( SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, !pOutlinerParaObject->IsVertical() ) );
+    }
 
     SetTextSizeDirty();
     bPortionInfoChecked=FALSE;
@@ -2108,19 +2111,23 @@ void SdrTextObj::SetVerticalWriting( BOOL bVertical )
     DBG_ASSERT( pOutlinerParaObject, "SdrTextObj::SetVerticalWriting() without OutlinerParaObject!" );
     if( pOutlinerParaObject )
     {
-        if( bVertical )
+        if(pOutlinerParaObject->IsVertical() != bVertical)
         {
-            SetItem( SdrTextAutoGrowWidthItem(TRUE) );
-            SetItem( SdrTextAutoGrowHeightItem(FALSE) );
-        }
-        else
-        {
-            SetItem( SdrTextAutoGrowWidthItem(FALSE) );
-            SetItem( SdrTextAutoGrowHeightItem(TRUE) );
-        }
+            // get item settings
+            sal_Bool bAutoGrowWidth =
+                ((SdrTextAutoGrowWidthItem&)GetItem(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue();
+            sal_Bool bAutoGrowHeight =
+                ((SdrTextAutoGrowHeightItem&)GetItem(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
 
-        pOutlinerParaObject->SetVertical( bVertical );
-        SetItem( SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, !bVertical ) );
+            // change ParaObject accordingly
+            pOutlinerParaObject->SetVertical( bVertical );
+
+            // exchange width and height settings
+            SetItem( SdrTextAutoGrowWidthItem(bAutoGrowHeight) );
+            SetItem( SdrTextAutoGrowHeightItem(bAutoGrowWidth) );
+
+            SetItem( SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, !bVertical ) );
+        }
     }
 }
 
