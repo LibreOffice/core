@@ -2,7 +2,7 @@
 // class SfxRequest
 //
 // (C) 1996 - 2000 StarDivision GmbH, Hamburg, Germany
-// $Author: mba $ $Date: 2002-05-27 13:52:19 $ $Revision: 1.6 $
+// $Author: mba $ $Date: 2002-06-07 08:42:29 $ $Revision: 1.7 $
 // $Logfile:   T:/sfx2/source/control/request.cxv  $ $Workfile:   REQUEST.CXX  $
 //------------------------------------------------------------------*/
 
@@ -193,11 +193,18 @@ SfxRequest::SfxRequest
     pImp->nCallMode = SFX_CALLMODE_SYNCHRON;
     pImp->bUseTarget = FALSE;
     pImp->pSlot = rShell.GetInterface()->GetSlot(nSlotId);
-    DBG_ASSERT( pImp->pSlot, "recording slot unsupported by shell" );
-    if ( pImp->pSlot ) // Hosentr"ager damit man besser testen kann
+    if ( pImp->pSlot )
         Record_Impl( rShell, *pImp->pSlot, SfxRequest::GetMacroRecorder() );
-    DBG_ASSERTWARNING( (SfxRequest::GetMacroRecorder().is()), "recording without recording macro is overfluous" );
+#ifdef DBG_UTIL
+    else
+    {
+        ByteString aStr( "Recording slot unsupported by shell: ");
+        aStr += ByteString::CreateFromInt32( nSlotId );
+        DBG_ERROR( aStr.GetBuffer() );
+    }
+#endif
 }
+
 //--------------------------------------------------------------------
 
 
@@ -868,6 +875,9 @@ void SfxRequest::SetTarget( const String &rTarget )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2002/05/27 13:52:19  mba
+    #98405#: more debugging code for macro recording
+
     Revision 1.5  2002/04/22 16:56:18  mba
     #98405#: new macro recording functionality
 
