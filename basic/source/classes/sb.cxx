@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2001-09-04 10:15:47 $
+ *  last change: $Author: pl $ $Date: 2001-09-04 17:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,8 @@
 
 #pragma hdrstop
 #include "sb.hxx"
-#ifdef VCL
 #include <vcl/rcid.h>
-#include <vcl/config.hxx>
-#endif
+#include <tools/config.hxx>
 
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>

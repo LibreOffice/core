@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ab $ $Date: 2001-08-20 08:01:44 $
+ *  last change: $Author: pl $ $Date: 2001-09-04 17:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,11 +110,7 @@
 #define CLK_TCK CLOCKS_PER_SEC
 #endif
 
-#ifdef VCL
 #include <vcl/jobset.hxx>
-#else
-#include <vcl/jobset.hxx>
-#endif
 
 #pragma hdrstop
 #include "sbintern.hxx"
