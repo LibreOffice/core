@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-23 11:09:58 $
+ *  last change: $Author: mba $ $Date: 2002-08-29 12:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -788,6 +788,7 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
 
     if ( m_pData->m_pViewShell )
     {
+        m_pData->m_pViewShell->DiscardClients_Impl();
         SfxViewFrame* pFrame = m_pData->m_pViewShell->GetViewFrame() ;
         m_pData->m_pViewShell->pImp->bControllerSet = sal_False ;
         if ( pFrame )
