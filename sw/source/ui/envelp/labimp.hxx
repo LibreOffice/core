@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labimp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
+ *  last change: $Author: os $ $Date: 2001-07-02 11:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,7 @@ class SwLabPage : public SfxTabPage
     ListBox       aMakeBox;
     FixedText     aTypeText;
     ListBox       aTypeBox;
+    ListBox       aHiddenSortTypeBox;
     FixedInfo     aFormatInfo;
     FixedLine     aFormatFL;
 
