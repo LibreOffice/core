@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inpdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:26 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ ModalDialog DLG_FLD_INPUT
         Text [ English ] = "Input" ;
         Text [ norwegian ] = "Input" ;
         Text [ italian ] = "Introduci" ;
-        Text [ portuguese_brazilian ] = "Inser??o" ;
+        Text [ portuguese_brazilian ] = "Entrada" ;
         Text [ portuguese ] = "Entrada" ;
         Text [ finnish ] = "Syˆt‰" ;
         Text [ danish ] = "Input" ;
@@ -125,6 +125,9 @@ ModalDialog DLG_FLD_INPUT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Entrada";
         Text[ thai ] = "‡∏õ‡πâ‡∏≠‡∏ô‡πÄ‡∏Ç‡πâ‡∏≤";
+        Text[ czech ] = "Vstup";
+        Text[ hebrew ] = "Eingabe";
+        Text[ hindi ] = "‡§á‡§®‡§™‡•Å‡§ü";
     };
     MultiLineEdit ED_EDIT
     {
@@ -159,10 +162,13 @@ ModalDialog DLG_FLD_INPUT
         Text[ arabic ] = " Õ—Ì—";
         Text[ greek ] = "≈ÂÓÂÒ„·Ûﬂ·";
         Text[ korean ] = "Ìé∏Ïßë";
-        Text[ turkish ] = "D¸zenle";
+        Text[ turkish ] = "D¸zelt";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Edita";
         Text[ thai ] = "‡πÅ‡∏Å‡πâ‡πÑ‡∏Ç";
+        Text[ czech ] = "Upravit";
+        Text[ hebrew ] = "‚ÄÆ◊¢◊®◊ô◊õ◊î‚Ä¨";
+        Text[ hindi ] = "‡§∏‡§Ç‡§™‡§æ‡§¶‡§®";
     };
     OKButton BT_OK
     {
@@ -193,7 +199,7 @@ ModalDialog DLG_FLD_INPUT
         Text [ swedish ] = "~N‰sta" ;
         Text [ danish ] = "NÊste" ;
         Text [ portuguese ] = "~Seguinte" ;
-        Text [ portuguese_brazilian ] = "~Weiter" ;
+        Text [ portuguese_brazilian ] = "~PrÛximo" ;
         Text[ chinese_simplified ] = "ÁªßÁª≠(~N)";
         Text[ russian ] = "ƒ‡ÎÂÂ";
         Text[ polish ] = "~Dalej";
@@ -202,11 +208,14 @@ ModalDialog DLG_FLD_INPUT
         Text[ arabic ] = "«· «·Ì";
         Text[ greek ] = "≈¸ÏÂÌÔ";
         Text[ korean ] = "Îã§Ïùå(~N)";
-        Text[ turkish ] = "›~leri";
+        Text[ turkish ] = "›leri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Seg¸ent";
         Text[ finnish ] = "~Seuraava";
         Text[ thai ] = "~‡∏ñ‡∏±‡∏î‡πÑ‡∏õ";
+        Text[ czech ] = "Dal≈°√≠";
+        Text[ hebrew ] = "‚ÄÆ◊î◊ë◊ê‚Ä¨";
+        Text[ hindi ] = "~‡§Ü‡§ó‡•á";
     };
     HelpButton PB_HELP
     {
@@ -214,7 +223,7 @@ ModalDialog DLG_FLD_INPUT
         Size = MAP_APPFONT ( 50 , 15 ) ;
         TabStop = TRUE ;
     };
-    Text [ portuguese_brazilian ] = "Eingabefeld" ;
+    Text [ portuguese_brazilian ] = "Campo de Entrada" ;
     Text [ swedish ] = "Inmatningsf‰lt" ;
     Text [ danish ] = "Inputfelt" ;
     Text [ italian ] = "Campo di digitazione" ;
@@ -235,7 +244,19 @@ ModalDialog DLG_FLD_INPUT
     Text[ catalan ] = "Camp d'entrada";
     Text[ finnish ] = "Syˆttˆkentt‰";
     Text[ thai ] = "‡πÉ‡∏™‡πà‡πÄ‡∏Ç‡∏ï‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
+    Text[ czech ] = "Vstupn√≠ pole";
+    Text[ hebrew ] = "Eingabefeld";
+    Text[ hindi ] = "‡§á‡§®‡§™‡•Å‡§ü‡•ç ‡§ï‡•ç‡§∑‡•á‡§§‡•ç‡§∞";
 };
+
+
+
+
+
+
+
+
+
 
 
 
