@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:00:03 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,11 @@ void SwRTFParser::ReadTable( int nToken )
 
 
     enum Limits {eMAXCELLS=64000};
+
+    SvBools aMergeBackup;
+    int nCount = aMergeBoxes.Count();
+    for (int i = 0; i < nCount; ++i)
+        aMergeBackup.Insert(aMergeBoxes[i], i);
 
     // kein TROWD aber ein TabellenToken -> zwischen TROWD und Tab.Token
     // waren andere Zeichen (siehe Bug 27445.rtf)
@@ -539,6 +544,9 @@ void SwRTFParser::ReadTable( int nToken )
     // es wurde keine einzige Box erkannt
     if( nAktBox == nBoxCnt || ( bReadNewCell && !pTableNode ))
     {
+        int nCount = aMergeBackup.Count();
+        for (int i = 0; i < nCount; ++i)
+            aMergeBoxes.Insert(aMergeBackup[i], i);
         SkipToken( -1 );            // zum Letzen gueltigen zurueck
         return;
     }
@@ -721,18 +729,18 @@ void SwRTFParser::ReadTable( int nToken )
         }
         else
         {
-            if( pPam->GetPoint()->nContent.GetIndex() )
-                InsertPara();
-
-            pDoc->InsertTable( *pPam->GetPoint(), 1, 1, eAdjust );
-            pTableNode = pDoc->GetNodes()[ pPam->GetPoint()->nNode.
-                            GetIndex() - 5 ]->GetTableNode();
-            ASSERT( pTableNode, "Wo ist mein TabellenNode?" );
-
+            const SwTable *pTable =
+                pDoc->InsertTable( *pPam->GetPoint(), 1, 1, eAdjust );
+            pTableNode = pTable ? pTable->GetTableNode() : 0;
             if (pTableNode)
             {
                 maSegments.PrependedInlineNode(*pPam->GetPoint(),
                     *pTableNode);
+            }
+            else
+            {
+                SkipToken( -1 );            // zum Letzen gueltigen zurueck
+                return;
             }
 
             SwTableLines& rLns = pTableNode->GetTable().GetTabLines();
@@ -816,22 +824,46 @@ void SwRTFParser::ReadTable( int nToken )
     }
 
     ULONG nOldPos = pPam->GetPoint()->nNode.GetIndex();
+    SwNodeIndex aOldIdx(pPam->GetPoint()->nNode);
+    SwNodeIdx aOldPos(aOldIdx);
+    SwPaM aRg(*pPam);
+
     SwTableBox* pBox = pNewLine->GetTabBoxes()[ nAktBox ];
     pPam->GetPoint()->nNode = *pBox->GetSttNd()->EndOfSectionNode();
     pPam->Move( fnMoveBackward, fnGoCntnt );
 
-    // alle Attribute, die schon auf den nachfolgen zeigen auf die neue
-    // Box umsetzen !!
-    SvxRTFItemStack& rAttrStk = GetAttrStack();
-    const SvxRTFItemStackType* pStk;
-    for( USHORT n = 0; n < rAttrStk.Count(); ++n )
-        if( ( pStk = rAttrStk[ n ])->GetSttNodeIdx() == ULONG(nOldPos) &&
-            !pStk->GetSttCnt() )
-            ((SvxRTFItemStackType*)pStk)->SetStartPos( SwxPosition( pPam ) );
+    //It might be that there was content at this point which is not already in
+    //a table, but which is being followed by properties to place it into the
+    //table. e.g. #109199#. If this is the case then move the para/char
+    //properties inside the table, and move any content of that paragraph into
+    //the table
+    bool bInTable = aRg.GetPoint()->nNode.GetNode().FindTableNode();
+    if (!bInTable)
+    {
+        SwNodeIndex aNewIdx(pPam->GetPoint()->nNode);
+        SwNodeIdx aNewPos(aNewIdx);
 
+        if (aRg.GetPoint()->nContent.GetIndex())
+        {
+            //If there is content in this node then move it entirely inside the
+            //table
+            aRg.SetMark();
+            aRg.GetMark()->nContent.Assign(aRg.GetCntntNode(), 0);
+            pDoc->Move(aRg, *pPam->GetPoint());
+        }
+
+        //Update the attribute stack entries to reflect that the properties
+        //which were intended to be inside the tablerow are now left outside
+        //the table after the row was placed before the current insertion point
+        SvxRTFItemStack& rAttrStk = GetAttrStack();
+        for (USHORT n = 0; n < rAttrStk.Count(); ++n)
+        {
+            SvxRTFItemStackType* pStk = rAttrStk[n];
+            pStk->MoveFullNode(aOldPos, aNewPos);
+        }
+    }
     SkipToken( -1 );            // zum Letzen gueltigen zurueck
 }
-
 
 // in die naechste Box dieser Line (opt.: falls es nicht die letzte ist)
 void SwRTFParser::GotoNextBox()
@@ -839,6 +871,9 @@ void SwRTFParser::GotoNextBox()
     nInsTblRow = USHRT_MAX;
 
     ASSERT( pTableNode, "Kein Tabellennode, dann auch keine Box" );
+
+    if (!pTableNode)
+        return;
 
     SwTableLines& rLns = pTableNode->GetTable().GetTabLines();
     SwTableLine* pLine = rLns[ rLns.Count()-1 ];
