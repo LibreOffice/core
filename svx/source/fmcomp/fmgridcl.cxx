@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-26 15:08:15 $
+ *  last change: $Author: fs $ $Date: 2001-04-11 12:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,7 @@ sal_Int8 FmGridHeader::AcceptDrop( const AcceptDropEvent& rEvt )
     // search for recognized formats
     const DataFlavorExVector& rFlavors = GetDataFlavorExVector();
     if (OColumnTransferable::canExtractColumnDescriptor(rFlavors, CTF_FIELD_DESCRIPTOR))
-        return DND_ACTION_COPY;
+        return (rEvt.mnAction & DND_ACTION_LINK) ? DND_ACTION_LINK : DND_ACTION_COPY;
 
     return DND_ACTION_NONE;
 }
