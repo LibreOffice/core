@@ -18,6 +18,7 @@ common
         *s:
 		*mkout
 		*deliver
+        *dmake
 		cvsmodules
         *copyprj
 		__mgrdir
@@ -109,6 +110,7 @@ common
 		PROEXT
 		PROFILE
 		profile
+        product
 		REMOTE_BUILD_FLAG
 		RES_ARAB
 		RES_CHINSIM
