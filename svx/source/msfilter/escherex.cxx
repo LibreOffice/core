@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2001-01-16 11:55:04 $
+ *  last change: $Author: sj $ $Date: 2001-01-17 18:14:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1762,9 +1762,11 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
                             << (UINT32)0;
                 nAtomSize = rPicOutStrm.Tell();
                  if ( eBlibType == PNG )
-                    rPicOutStrm << (UINT16)0x0606;
+                    rPicOutStrm << (sal_uInt16)0x0606;
                 else if ( eBlibType == WMF )
-                    rPicOutStrm << (UINT16)0x0403;
+                    rPicOutStrm << (sal_uInt16)0x0403;
+                else if ( eBlibType == PEG )
+                    rPicOutStrm << (sal_uInt16)0x0505;
             }
             if ( ( eBlibType == PEG ) || ( eBlibType == PNG ) )
             {
