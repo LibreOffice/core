@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cxt2ary.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:29 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:22:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@ class ContextForAry : public ary::cpp::InputContext,
                                                 i_rParameters );
     virtual DYN StringVector *
                         do_Get_CurTemplateParameters();
+    virtual void        do_Close_OpenTemplate();
     virtual void        do_Event_Class_FinishedBase(
                             const udmstri &     i_sBaseName );
 

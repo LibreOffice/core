@@ -2,9 +2,9 @@
  *
  *  $RCSfile: all_toks.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:29 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ DECL_TOKEN_CLASS(Greater,39);
 DECL_TOKEN_CLASS(Asterix,40);
 DECL_TOKEN_CLASS(AmpersAnd,41);
 DECL_TOKEN_CLASS(Ellipse,42);
+DECL_TOKEN_CLASS(typename,43);
 
 #undef DECL_TOKEN_CLASS
 
@@ -178,75 +179,22 @@ class Tok_##name : public cpp::Token \
 }; \
 const INT16 Tid_##name = tid
 
-DECL_TOKEN_CLASS_WITHTEXT(DefineName,43);
-DECL_TOKEN_CLASS_WITHTEXT(MacroName,44);
-DECL_TOKEN_CLASS_WITHTEXT(MacroParameter,45);
-DECL_TOKEN_CLASS_WITHTEXT(PreProDefinition,46);
 
 
+DECL_TOKEN_CLASS_WITHTEXT(DefineName,44);
+DECL_TOKEN_CLASS_WITHTEXT(MacroName,45);
+DECL_TOKEN_CLASS_WITHTEXT(MacroParameter,46);
+DECL_TOKEN_CLASS_WITHTEXT(PreProDefinition,47);
 
 /** char short int long float double wchar_t size_t
 */
-DECL_TOKEN_CLASS_WITHTEXT(BuiltInType, 47);
-/** signed unsigned
-*/
-DECL_TOKEN_CLASS_WITHTEXT(TypeSpecializer, 48);
-DECL_TOKEN_CLASS_WITHTEXT(Constant, 49);
-
-
-
-#if 0
-/** char short int long float double wchar_t size_t
-*/
-class Tok_BuiltInType : public cpp::Token
-{
-  public:
-                        Tok_BuiltInType(
-                            const char *        i_sText ) : sText(i_sText) {}
-    virtual void        Trigger(
-                            TokenInterpreter &  io_rInterpreter ) const;
-    virtual INT16       TypeId() const;
-    virtual const char *
-                        Text() const;
-  private:
-    udmstri             sText;
-};
-const INT16 Tid_BuiltInType = 47;
+DECL_TOKEN_CLASS_WITHTEXT(BuiltInType, 48);
 
 /** signed unsigned
 */
-class Tok_TypeSpecializer : public cpp::Token
-{
-  public:
-                        Tok_TypeSpecializer(
-                            const char *        i_sText ) : sText(i_sText) {}
-    virtual void        Trigger(
-                            TokenInterpreter &  io_rInterpreter ) const;
-    virtual INT16       TypeId() const;
-    virtual const char *
-                        Text() const;
-  private:
-    udmstri             sText;
-};
-const INT16 Tid_TypeSpecializer = 48;
+DECL_TOKEN_CLASS_WITHTEXT(TypeSpecializer, 49);
+DECL_TOKEN_CLASS_WITHTEXT(Constant, 50);
 
-
-class Tok_Constant : public cpp::Token
-{
-  public:
-                        Tok_Constant(
-                            const char *        i_sText ) : sText(i_sText) {}
-    virtual void        Trigger(
-                            TokenInterpreter &  io_rInterpreter ) const;
-    virtual INT16       TypeId() const;
-    virtual const char *
-                        Text() const;
-  private:
-    udmstri             sText;
-};
-const INT16 Tid_Constant = 49;
-
-#endif // 0
 
 
 /** This token does nothing in C++ code. It is added by the
@@ -265,47 +213,9 @@ class Tok_UnblockMacro : public ::TextToken
     virtual void        DealOut(
                             ::TokenDealer &     o_rDealer );
   private:
-    udmstri             sMacroName;
+    String              sMacroName;
 };
 
-
-
-
-#if 0   // These tokens will not be created, but just ignored.
-/// auto typename __cdecl __stdcall __fastcall
-class Tok_Ignore : public cpp::Token
-{
-  public:
-    virtual void        Trigger(
-                            TokenInterpreter &  io_rInterpreter ) const;
-    virtual const char *
-                        Text() const;
-};
-#endif // 0
-
-
-
-
-
-
-#if 0   // These tokens will not be created, but just ignored.
-///  /* // /** /// #
-class Tok_ContextChanger : public cpp::Token
-{
-  public:
-    enum E_Id { id_ml_comment,  id_sl_comment,  id_ml_docu, id_sl_docu, id_preprocessor };
-    typedef udm::Enum<E_Id> Ec_Id;
-
-    virtual void        Trigger(
-                            TokenInterpreter &  io_rInterpreter ) const;
-    virtual const char *
-                        Text() const;
-    Ec_Id               Id() const { return eId; }
-
-  private:
-    Ec_Id               eId;
-};
-#endif // 0
 
 
 #if 0 // just for viewing:
@@ -341,4 +251,3 @@ class Tok_ContextChanger : public cpp::Token
 }   // namespace cpp
 
 #endif
-
