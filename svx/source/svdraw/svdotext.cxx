@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-07 10:47:16 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,7 +319,7 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect):
     mbSupportTextIndentingOnLineWidthChange = sal_True;
 }
 
-SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, USHORT eFormat):
+SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, USHORT eFormat):
     aRect(rNewRect),
     eTextKind(eNewTextKind),
     pOutlinerParaObject(NULL),
@@ -335,7 +335,7 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStr
     bDisableAutoWidthOnDragging=FALSE;
     ImpJustifyRect(aRect);
 
-    NbcSetText(rInput,eFormat);
+    NbcSetText(rInput, rBaseURL, eFormat);
 
     // #101684#
     mbInEditMode = FALSE;
@@ -424,11 +424,11 @@ void SdrTextObj::SetText(const XubString& rStr)
     //}
 }
 
-void SdrTextObj::NbcSetText(SvStream& rInput, USHORT eFormat)
+void SdrTextObj::NbcSetText(SvStream& rInput, const String& rBaseURL, USHORT eFormat)
 {
     SdrOutliner& rOutliner=ImpGetDrawOutliner();
     rOutliner.SetStyleSheet( 0, GetStyleSheet());
-    rOutliner.Read(rInput,eFormat);
+    rOutliner.Read(rInput,rBaseURL,eFormat);
     OutlinerParaObject* pNewText=rOutliner.CreateParaObject();
     rOutliner.SetUpdateMode(TRUE);
     Size aSiz(rOutliner.CalcTextSize());
@@ -438,11 +438,11 @@ void SdrTextObj::NbcSetText(SvStream& rInput, USHORT eFormat)
     bTextSizeDirty=FALSE;
 }
 
-void SdrTextObj::SetText(SvStream& rInput, USHORT eFormat)
+void SdrTextObj::SetText(SvStream& rInput, const String& rBaseURL, USHORT eFormat)
 {
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
     // #110094#-14 SendRepaintBroadcast();
-    NbcSetText(rInput,eFormat);
+    NbcSetText(rInput,rBaseURL,eFormat);
     SetChanged();
     BroadcastObjectChange();
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
