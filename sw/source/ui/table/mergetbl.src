@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergetbl.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:03:34 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ ModalDialog DLG_MERGE_TABLE
         Text [ english_us ] = "Mode" ;
         Text [ portuguese_brazilian ] = "Modo" ;
         Text [ swedish ] = "L�ge" ;
-        Text [ danish ] = "Modus" ;
+        Text [ danish ] = "Tilstand" ;
         Text [ italian ] = "Modo" ;
         Text [ spanish ] = "Modo" ;
         Text [ french ] = "Mode" ;
@@ -123,6 +123,8 @@ ModalDialog DLG_MERGE_TABLE
         Text[ hebrew ] = "Modus";
         Text[ hindi ] = "प्रकार ";
         Text[ slovak ] = "Režim";
+        Text[ hungarian ] = "Mód";
+        Text[ slovenian ] = "Način";
     };
     RadioButton RB_MERGE_PREV
     {
@@ -158,6 +160,8 @@ ModalDialog DLG_MERGE_TABLE
         Text[ hebrew ] = "mit der ~vorherigen Tabelle verbinden";
         Text[ hindi ] = "~पिछले सारणी के साथ जोड़ो";
         Text[ slovak ] = "Spojiť s ~predchádzajúcou tabuľkou";
+        Text[ hungarian ] = "Egyesítés az ~előző táblázattal";
+        Text[ slovenian ] = "Združi s ~prejšnjo tabelo";
     };
     RadioButton RB_MERGE_NEXT
     {
@@ -191,6 +195,8 @@ ModalDialog DLG_MERGE_TABLE
         Text[ hebrew ] = "mit der ~nachfolgenden Tabelle verbinden";
         Text[ hindi ] = "~अगले सारणी के साथ जोड़ो";
         Text[ slovak ] = "Spojiť s ~nasledujúcou tabuľkou";
+        Text[ hungarian ] = "Egyesítés a ~következő táblázattal";
+        Text[ slovenian ] = "Združi z ~naslednjo tabelo";
     };
     Text[ english_us ] = "Merge Tables";
     Text[ portuguese ] = "Unir tabelas";
@@ -218,7 +224,10 @@ ModalDialog DLG_MERGE_TABLE
     Text[ hebrew ] = "Tabellen verbinden";
     Text[ hindi ] = "सारणियों को मिलाओ";
     Text[ slovak ] = "Zlúčiť tabuľky";
+    Text[ hungarian ] = "Táblázatok egyesítése";
+    Text[ slovenian ] = "Spoji tabele";
 };
+
 
 
 
