@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:48:58 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1476,15 +1476,20 @@ sal_Bool PPTWriter::ImplCreateSlide( sal_uInt32 nPageNum )
         bHasBackground = ( aAny >>= aXBackgroundPropSet );
 
     sal_uInt16 nMode = 7;   // Bit 1: Follow master objects, Bit 2: Follow master scheme, Bit 3: Follow master background
+    if ( bHasBackground )
+        nMode &=~4;
+
+/* sj: Don't know what's IsBackgroundVisible for, have to ask cl
     if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundVisible" ) ) ) )
     {
         sal_Bool bBackgroundVisible;
         if ( aAny >>= bBackgroundVisible )
         {
-            if ( !bBackgroundVisible )
+            if ( bBackgroundVisible )
                 nMode &= ~4;
         }
     }
+*/
     if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundObjectsVisible" ) ) ) )
     {
         sal_Bool bBackgroundObjectsVisible;
@@ -1859,7 +1864,7 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
                 nFillColor = mpPptEscherEx->GetColor( *((sal_uInt32*)mAny.getValue()) );
                 nFillBackColor = nFillColor ^ 0xffffff;
             }
-        }
+        }   // PASSTHROUGH INTENDED
         case ::com::sun::star::drawing::FillStyle_NONE :
         default:
             aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x120012 );
