@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2002-08-05 20:32:41 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 13:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -719,7 +719,7 @@ TabPage RID_HFBASE
         Text [ swedish ] = "~Vänster område" ;
         Text [ dutch ] = "~Linker bereik" ;
         Text [ spanish ] = "Área ~izquierda" ;
-        Text [ english_us ] = "~Left Area" ;
+        Text [ english_us ] = "~Left area" ;
         Text[ chinese_simplified ] = "å·¦è¾¹åŒºåŸŸ(~L)";
         Text[ russian ] = "Ëåâàÿ îáëàñòü";
         Text[ polish ] = "Lewy obszar";
@@ -760,7 +760,7 @@ TabPage RID_HFBASE
         Text [ swedish ] = "~Mittområde" ;
         Text [ dutch ] = "~Middelste bereik" ;
         Text [ spanish ] = "Área ~central" ;
-        Text [ english_us ] = "~Center Area" ;
+        Text [ english_us ] = "~Center area" ;
         Text[ chinese_simplified ] = "ä¸­é—´åŒºåŸŸ(~C)";
         Text[ russian ] = "Öåíòğàëüíàÿ îáëàñòü";
         Text[ polish ] = "Œrodkowy obszar";
@@ -801,7 +801,7 @@ TabPage RID_HFBASE
         Text [ swedish ] = "Höge~r område" ;
         Text [ dutch ] = "~Rechter bereik" ;
         Text [ spanish ] = "Área ~derecha" ;
-        Text [ english_us ] = "R~ight Area" ;
+        Text [ english_us ] = "R~ight area" ;
         Text[ chinese_simplified ] = "å³è¾¹åŒºåŸŸ(~I)";
         Text[ russian ] = "Ïğàâàÿ îáëàñòü";
         Text[ polish ] = "Prawy obszar";
