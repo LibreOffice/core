@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 09:33:13 $
+ *  last change: $Author: fs $ $Date: 2001-02-06 10:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,7 @@ namespace pcr
                 OPropertyInfoImpl(PROPERTY_TRISTATE,            PROPERTY_ID_TRISTATE    ,       sal_True,  String(ModuleRes(RID_STR_TRISTATE)),         nPos++, HID_PROP_TRISTATE ),
                 OPropertyInfoImpl(PROPERTY_MASTERFIELDS,        PROPERTY_ID_MASTERFIELDS,       sal_True,  String(ModuleRes(RID_STR_MASTERFIELDS)),     nPos++, HID_PROP_MASTERFIELDS) ,
                 OPropertyInfoImpl(PROPERTY_DETAILFIELDS,        PROPERTY_ID_DETAILFIELDS,       sal_True,  String(ModuleRes(RID_STR_SLAVEFIELDS)),      nPos++, HID_PROP_SLAVEFIELDS),
+                OPropertyInfoImpl(PROPERTY_HASNAVIGATION,       PROPERTY_ID_HASNAVIGATION,      sal_True,  String(ModuleRes(RID_STR_NAVIGATION)),       nPos++, HID_PROP_NAVIGATIONBAR) ,
                 OPropertyInfoImpl(PROPERTY_RECORDMARKER,        PROPERTY_ID_RECORDMARKER,       sal_True,  String(ModuleRes(RID_STR_RECORDMARKER)),     nPos++, HID_PROP_RECORDMARKER) ,
                 OPropertyInfoImpl(PROPERTY_FILTERPROPOSAL,      PROPERTY_ID_FILTERPROPOSAL,     sal_True,  String(ModuleRes(RID_STR_FILTERPROPOSAL)),   nPos++, HID_PROP_FILTERPROPOSAL) ,
                 OPropertyInfoImpl(PROPERTY_TAG,                 PROPERTY_ID_TAG,                sal_True,  String(ModuleRes(RID_STR_TAG)),              nPos++, HID_PROP_TAG ),
@@ -469,6 +470,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/02/05 09:33:13  fs
+ *  #83424# +RID_STR_ENUM_SUBMIT_TARGET
+ *
  *  Revision 1.2  2001/01/17 08:41:48  fs
  *  #82726# renamed the display text for the navigation bar
  *

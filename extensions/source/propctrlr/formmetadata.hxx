@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-17 08:42:10 $
+ *  last change: $Author: fs $ $Date: 2001-02-06 10:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,7 @@ namespace pcr
     #define PROPERTY_ID_TAG                  95
     #define PROPERTY_ID_HELPTEXT             96
     #define PROPERTY_ID_HELPURL              97
+    #define PROPERTY_ID_HASNAVIGATION        98
 
 //............................................................................
 } // namespace pcr
@@ -238,6 +239,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/01/17 08:42:10  fs
+ *  tightened the property id range
+ *
  *  Revision 1.1  2001/01/12 11:28:36  fs
  *  initial checkin - outsourced the form property browser
  *
