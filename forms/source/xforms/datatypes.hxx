@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datatypes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:51:24 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,28 +239,35 @@ namespace xforms
         &memberAny, ::getCppuType( static_cast< type* >( NULL ) ) );
 
     //====================================================================
-    //= OComparableType
+    //= OValueLimitedType_Base
     //====================================================================
-    template < typename VALUE_TYPE >
-    class OComparableType : public OXSDDataType
+    class OValueLimitedType_Base : public OXSDDataType
     {
-    protected:
-        typedef     VALUE_TYPE  ValueType;
-
     protected:
         ::com::sun::star::uno::Any m_aMaxInclusive;
         ::com::sun::star::uno::Any m_aMaxExclusive;
         ::com::sun::star::uno::Any m_aMinInclusive;
         ::com::sun::star::uno::Any m_aMinExclusive;
 
+        double  m_fCachedMaxInclusive;
+        double  m_fCachedMaxExclusive;
+        double  m_fCachedMinInclusive;
+        double  m_fCachedMinExclusive;
+
     protected:
-        OComparableType( const ::rtl::OUString& _rName, sal_Int16 _nTypeClass );
+        OValueLimitedType_Base( const ::rtl::OUString& _rName, sal_Int16 _nTypeClass );
 
         virtual void       initializeClone( const OXSDDataType& _rCloneSource );
-                void       initializeTypedClone( const OComparableType& _rCloneSource );
+                void       initializeTypedClone( const OValueLimitedType_Base& _rCloneSource );
+
+        // XPropertySet and friends
+        virtual void SAL_CALL       setFastPropertyValue_NoBroadcast(
+                                        sal_Int32 nHandle,
+                                        const ::com::sun::star::uno::Any& rValue
+                                    )
+                                    throw (::com::sun::star::uno::Exception);
 
         // OXSDDataType overridables
-        virtual void            registerProperties();
         virtual bool            _getValue( const ::rtl::OUString& value, double& fValue );
         virtual sal_uInt16      _validate( const ::rtl::OUString& value );
         virtual ::rtl::OUString _explainInvalid( sal_uInt16 nReason );
@@ -270,7 +277,39 @@ namespace xforms
 
             The value is guaranteed to be not <NULL/>, and is of type <member>ValueType</member>
         */
-        virtual ::rtl::OUString typedValueAsString( const ::com::sun::star::uno::Any& _rValue ) const = 0;
+        virtual ::rtl::OUString typedValueAsHumanReadableString( const ::com::sun::star::uno::Any& _rValue ) const = 0;
+
+        /** translates a <member>ValueType</member> value into a double value
+
+            The normalization must respect the "<" and "==" relations on the value
+            space. That is, if two values are equal, their normalizations must be equal, too.
+            Similarily, if <code>foo</code> is less than <code>bar</code>, the same
+            must hold for their normalizations.
+
+            @param _rValue
+                the value to translate. Guranteed to be not <NULL/>, and of type <member>ValueType</member>
+            @param _rDoubleValue
+                output parameter to hold the resulting double value
+        */
+        virtual void normalizeValue( const ::com::sun::star::uno::Any& _rValue, double& _rDoubleValue ) const = 0;
+    };
+
+    //====================================================================
+    //= OValueLimitedType
+    //====================================================================
+    template < typename VALUE_TYPE >
+    class OValueLimitedType : public OValueLimitedType_Base
+    {
+    protected:
+        typedef     VALUE_TYPE  ValueType;
+        inline const ::com::sun::star::uno::Type&
+            getCppuType() const { return ::getCppuType( static_cast< ValueType* >( NULL ) ); }
+
+    protected:
+        OValueLimitedType( const ::rtl::OUString& _rName, sal_Int16 _nTypeClass );
+
+        // OXSDDataType overridables
+        virtual void            registerProperties();
     };
 
     //====================================================================
@@ -346,7 +385,7 @@ namespace xforms
     //= ODecimalType
     //====================================================================
     class ODecimalType;
-    typedef ODerivedDataType< ODecimalType, OComparableType< double > > ODecimalType_Base;
+    typedef ODerivedDataType< ODecimalType, OValueLimitedType< double > > ODecimalType_Base;
     class ODecimalType : public ODecimalType_Base
     {
     protected:
@@ -364,8 +403,9 @@ namespace xforms
         virtual ::rtl::OUString _explainInvalid( sal_uInt16 nReason );
         virtual void            registerProperties();
 
-        // OComparableType overridables
-        virtual ::rtl::OUString typedValueAsString( const ::com::sun::star::uno::Any& _rValue ) const;
+        // OValueLimitedType overridables
+        virtual ::rtl::OUString typedValueAsHumanReadableString( const ::com::sun::star::uno::Any& _rValue ) const;
+        virtual void normalizeValue( const ::com::sun::star::uno::Any& _rValue, double& _rDoubleValue ) const;
     };
 
     //====================================================================
@@ -373,7 +413,7 @@ namespace xforms
     //====================================================================
 #define DEFAULT_DECLARE_SUBTYPE( classname, valuetype )         \
     class classname;                                            \
-    typedef ODerivedDataType< classname, OComparableType< valuetype > > classname##_Base;  \
+    typedef ODerivedDataType< classname, OValueLimitedType< valuetype > > classname##_Base;  \
     class classname : public classname##_Base                   \
     {                                                           \
     public:                                                     \
@@ -386,8 +426,9 @@ namespace xforms
         virtual sal_uInt16          _validate( const ::rtl::OUString& value );  \
         virtual bool                _getValue( const ::rtl::OUString& value, double& fValue );  \
                                                                 \
-        /* OComparableType overridables */                      \
-        virtual ::rtl::OUString     typedValueAsString( const ::com::sun::star::uno::Any& _rValue ) const;  \
+        /* OValueLimitedType overridables */                      \
+        virtual ::rtl::OUString     typedValueAsHumanReadableString( const ::com::sun::star::uno::Any& _rValue ) const;  \
+        virtual void normalizeValue( const ::com::sun::star::uno::Any& _rValue, double& _rDoubleValue ) const; \
     };
 
     //====================================================================
@@ -409,7 +450,7 @@ namespace xforms
     //= OShortIntegerType
     //====================================================================
     class OShortIntegerType;
-    typedef ODerivedDataType< OShortIntegerType, OComparableType< sal_Int16 > > OShortIntegerType_Base;
+    typedef ODerivedDataType< OShortIntegerType, OValueLimitedType< sal_Int16 > > OShortIntegerType_Base;
     class OShortIntegerType : public OShortIntegerType_Base
     {
     public:
@@ -421,28 +462,9 @@ namespace xforms
         // OXSDDataType overridables
         virtual bool            _getValue( const ::rtl::OUString& value, double& fValue );
 
-        // OComparableType overridables
-        virtual ::rtl::OUString typedValueAsString( const ::com::sun::star::uno::Any& _rValue ) const;
-    };
-
-    //====================================================================
-    //= OByteIntegerType
-    //====================================================================
-    class OByteIntegerType;
-    typedef ODerivedDataType< OByteIntegerType, OComparableType< sal_Int8 > > OByteIntegerType_Base;
-    class OByteIntegerType : public OByteIntegerType_Base
-    {
-    public:
-        OByteIntegerType( const ::rtl::OUString& _rName, sal_Int16 _nTypeClass );
-
-    protected:
-        DECLARE_DEFAULT_CLONING( OByteIntegerType )
-
-        // OXSDDataType overridables
-        virtual bool            _getValue( const ::rtl::OUString& value, double& fValue );
-
-        // OComparableType overridables
-        virtual ::rtl::OUString typedValueAsString( const ::com::sun::star::uno::Any& _rValue ) const;
+        // OValueLimitedType overridables
+        virtual ::rtl::OUString typedValueAsHumanReadableString( const ::com::sun::star::uno::Any& _rValue ) const;
+        virtual void normalizeValue( const ::com::sun::star::uno::Any& _rValue, double& _rDoubleValue ) const;
     };
 
 //........................................................................
