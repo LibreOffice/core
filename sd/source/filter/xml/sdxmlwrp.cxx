@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 15:11:32 $
+ *  last change: $Author: cl $ $Date: 2001-03-20 20:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,13 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XGRAPHICOBJECTRESOLVER_HXX_
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HXX_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
 #include <com/sun/star/xml/sax/XErrorHandler.hpp>
 #include <com/sun/star/xml/sax/XEntityResolver.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
@@ -117,10 +124,28 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 
+#ifndef _COMPHELPER_GENERICPROPERTYSET_HXX_
+#include <comphelper/genericpropertyset.hxx>
+#endif
+#ifndef _COMPHELPER_PROPERTSETINFO_HXX_
+#include <comphelper/propertysetinfo.hxx>
+#endif
+
 using namespace com::sun::star;
 using namespace rtl;
+using namespace comphelper;
 
 //////////////////////////////////////////////////////////////////////////////
+
+#ifndef SEQTYPE
+ #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
+  #define SEQTYPE(x) (new ::com::sun::star::uno::Type( x ))
+ #else
+  #define SEQTYPE(x) &(x)
+ #endif
+#endif
+
+#define MAP_LEN(x) x, sizeof(x) - 1
 
 #define XML_STRING(i, x) sal_Char __READONLY_DATA i[sizeof(x)] = x
 
@@ -152,6 +177,7 @@ struct XML_SERVICEMAP
     const sal_Char* mpService;
     const sal_Char* mpStream;
 };
+
 
 // ----------------
 // - SdXMLWrapper -
@@ -197,6 +223,15 @@ sal_Bool SdXMLFilter::Import()
     }
 
     mxModel->lockControllers();
+
+    /** property map for export info set */
+    PropertyMapEntry aImportInfoMap[] =
+    {
+        { MAP_LEN( "PageLayouts" ), 0, SEQTYPE(::getCppuType((const uno::Reference< container::XNameAccess >*)0)),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
+        { NULL, 0, 0, NULL, 0, 0 }
+    };
+
+    uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
 
     sal_Bool    bRet = sal_False;
 
@@ -326,7 +361,7 @@ sal_Bool SdXMLFilter::Import()
                 {
                     uno::Reference< xml::sax::XParser > xParser( xXMLParser, uno::UNO_QUERY );
 
-                    uno::Sequence< uno::Any > aArgs( ( mxStatusIndicator.is() ? 1 : 0 ) + ( xGrfResolver.is() ? 1 : 0 ) + ( xObjectResolver.is() ? 1 : 0 ) );
+                    uno::Sequence< uno::Any > aArgs( 1 + ( mxStatusIndicator.is() ? 1 : 0 ) + ( xGrfResolver.is() ? 1 : 0 ) + ( xObjectResolver.is() ? 1 : 0 ) );
                     uno::Any* pArgs = aArgs.getArray();
                     if( xGrfResolver.is() )
                         *pArgs++ <<= xGrfResolver;
@@ -335,7 +370,9 @@ sal_Bool SdXMLFilter::Import()
                         *pArgs++ <<= xObjectResolver;
 
                     if( mxStatusIndicator.is() )
-                        *pArgs   <<= mxStatusIndicator;
+                        *pArgs++ <<= mxStatusIndicator;
+
+                    *pArgs <<= xInfoSet;
 
                     uno::Reference< xml::sax::XDocumentHandler> xDocHandler( xServiceFactory->createInstanceWithArguments( OUString::createFromAscii( pServices->mpService ), aArgs), uno::UNO_QUERY );
 
@@ -417,6 +454,15 @@ sal_Bool SdXMLFilter::Export()
         }
 
         uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );
+
+        /** property map for export info set */
+        PropertyMapEntry aExportInfoMap[] =
+        {
+            { MAP_LEN( "PageLayoutNames" ), 0, SEQTYPE(::getCppuType((const OUString*)0)),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
+            { NULL, 0, 0, NULL, 0, 0 }
+        };
+
+        uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aExportInfoMap ) ) );
 
         SvStorage* pStorage = mrMedium.GetOutputStorage( sal_True );
 
@@ -501,12 +547,13 @@ sal_Bool SdXMLFilter::Export()
                 uno::Reference< io::XActiveDataSource > xDocSrc( xWriter, uno::UNO_QUERY );
                 xDocSrc->setOutputStream( xDocOut );
 
-                uno::Sequence< uno::Any > aArgs( 1 + ( mxStatusIndicator.is() ? 1 : 0 ) + ( xGrfResolver.is() ? 1 : 0 ) + ( xObjectResolver.is() ? 1 : 0 ) );
+                uno::Sequence< uno::Any > aArgs( 2 + ( mxStatusIndicator.is() ? 1 : 0 ) + ( xGrfResolver.is() ? 1 : 0 ) + ( xObjectResolver.is() ? 1 : 0 ) );
                 uno::Any* pArgs = aArgs.getArray();
                 if( xGrfResolver.is() )         *pArgs++ <<= xGrfResolver;
                 if( xObjectResolver.is() )      *pArgs++ <<= xObjectResolver;
                 if( mxStatusIndicator.is() )    *pArgs++ <<= mxStatusIndicator;
 
+                *pArgs++ <<= xInfoSet;
                 *pArgs   <<= xHandler;
 
                 uno::Reference< document::XFilter > xFilter( xServiceFactory->createInstanceWithArguments( OUString::createFromAscii( pServices->mpService ), aArgs ), uno::UNO_QUERY );
