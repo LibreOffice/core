@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-11 18:32:30 $
+ *  last change: $Author: bm $ $Date: 2001-05-17 13:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,13 +265,6 @@ void XMLChartExportPropertyMapper::ContextFilter(
                 bCheckAuto = sal_True;
                 aAutoPropName = ::rtl::OUString::createFromAscii( "AutoOrigin" );
                 break;
-            case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME:
-                {
-                    ::rtl::OUString aURLStr;
-                    property->maValue >>= aURLStr;
-                    property->maValue <<= mrExport.AddEmbeddedGraphicObject( aURLStr );
-                }
-                break;
         }
 
         if( bCheckAuto )
@@ -381,6 +374,14 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                                                    nContextId == XML_SCH_CONTEXT_SPECIAL_SYMBOL_WIDTH
                                                    ? aSize.Width
                                                    : aSize.Height );
+                }
+                break;
+
+            case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME:
+                {
+                    ::rtl::OUString aURLStr;
+                    rProperty.maValue >>= aURLStr;
+                    sValueBuffer.append( mrExport.AddEmbeddedGraphicObject( aURLStr ));
                 }
                 break;
         }
