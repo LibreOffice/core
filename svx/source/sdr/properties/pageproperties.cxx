@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pageproperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:52:05 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,11 @@ namespace sdr
         {
             // overloaded to legally return a 0L pointer here
             return 0L;
+        }
+
+        void PageProperties::ClearObjectItem(const sal_uInt16 nWhich)
+        {
+            // simply ignore item clearing on page objects
         }
     } // end of namespace properties
 } // end of namespace sdr
