@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:07:02 $
+ *  last change: $Author: sj $ $Date: 2002-07-24 11:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,7 @@ IMPL_LINK( SdStartPresentationDlg, ClickWindowPresentationHdl, void *, EMPTYARG 
 \************************************************************************/
 IMPL_LINK( SdStartPresentationDlg, ChangePauseHdl, void *, EMPTYARG )
 {
-    aCbxAutoLogo.Enable( aTmfPause.GetTime().GetMSFromTime() > 0UL );
+    aCbxAutoLogo.Enable( aRbtAuto.IsChecked() && ( aTmfPause.GetTime().GetMSFromTime() > 0UL ) );
     return( 0L );
 }
 
