@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:01 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,12 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
             // wieder hineinselektieren. Dass wir im const stehen, soll uns
             // daran nicht hindern:
             ((SwTxtPaintInfo&)rInf).SelectFont();
-            rInf.SelectOut();
+
+            // I want to know if this can really happen. So here comes a new
+            ASSERT( ! rInf.GetVsh() || rInf.GetVsh()->GetOut() == rInf.GetOut(),
+                    "SwFlyCntPortion::Paint: Outdev has changed" )
+            if( rInf.GetVsh() )
+                ((SwTxtPaintInfo&)rInf).SetOut( rInf.GetVsh()->GetOut() );
         }
     }
 }
