@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:05:10 $
+ *  last change: $Author: rt $ $Date: 2004-06-11 08:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -801,7 +801,7 @@ void SwTxtNode::NewAttrSet( SwAttrPool& rPool )
 // Ueberladen der virtuellen Update-Methode von SwIndexReg. Dadurch
 // benoetigen die Text-Attribute nur xub_StrLen statt SwIndizies!
 void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
-                        BOOL bNegativ )
+                        BOOL bNegativ, BOOL bDelete )
 {
     SetAutoCompleteWordDirty( TRUE );
 
@@ -949,7 +949,7 @@ void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
     }
 
     SwIndexReg aTmpIdxReg;
-    if( !bNegativ )
+    if( !bNegativ && !bDelete )
     {
         SwIndex* pIdx;
         const SwRedlineTbl& rTbl = GetDoc()->GetRedlineTbl();
@@ -960,6 +960,7 @@ void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
                 if( pRedl->HasMark() )
                 {
                     SwPosition* pEnd = pRedl->End();
+
                     if( this == &pEnd->nNode.GetNode() &&
                         *pRedl->GetPoint() != *pRedl->GetMark() &&
                         aPos.GetIndex() ==
@@ -1885,7 +1886,7 @@ void SwTxtNode::_Cut( SwTxtNode *pDest, const SwIndex& rDestStart,
 
         if( bUpdate )
             // Update aller Indizies
-            Update( rDestStart, nLen );
+            Update( rDestStart, nLen, FALSE, TRUE );
 #ifdef CUTNOEXPAND
         else
             // wird am Ende eingefuegt, nur die Attribut-Indizies verschieben
@@ -1904,7 +1905,7 @@ void SwTxtNode::_Cut( SwTxtNode *pDest, const SwIndex& rDestStart,
 #endif
         CHECK_SWPHINTS(this);
 
-        Update( rStart, nLen, TRUE );
+        Update( rStart, nLen, TRUE, TRUE );
 
         CHECK_SWPHINTS(this);
 
@@ -1936,7 +1937,7 @@ void SwTxtNode::_Cut( SwTxtNode *pDest, const SwIndex& rDestStart,
 
         if( bUpdate )
             // Update aller Indizies
-            pDest->Update( rDestStart, nLen);
+            pDest->Update( rDestStart, nLen, FALSE, TRUE);
 #ifdef CUTNOEXPAND
         else
             // wird am Ende eingefuegt, nur die Attribut-Indizies verschieben
@@ -2065,7 +2066,7 @@ void SwTxtNode::_Cut( SwTxtNode *pDest, const SwIndex& rDestStart,
                     --nAttrCnt;
                 }
             }
-            Update( rStart, nLen, TRUE );
+            Update( rStart, nLen, TRUE, TRUE );
 
             for( nAttrCnt = 0; nAttrCnt < aArr.Count(); ++nAttrCnt )
             {
@@ -2075,7 +2076,7 @@ void SwTxtNode::_Cut( SwTxtNode *pDest, const SwIndex& rDestStart,
             }
         }
         else
-            Update( rStart, nLen, TRUE );
+            Update( rStart, nLen, TRUE, TRUE );
 
         CHECK_SWPHINTS(this);
     }
