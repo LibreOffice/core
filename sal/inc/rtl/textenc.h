@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textenc.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:15 $
+ *  last change: $Author: th $ $Date: 2000-12-13 22:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,8 +151,9 @@ typedef sal_uInt16 rtl_TextEncoding;
 #define RTL_TEXTENCODING_JIS_X_0201             ((rtl_TextEncoding)81)
 #define RTL_TEXTENCODING_JIS_X_0208             ((rtl_TextEncoding)82)
 #define RTL_TEXTENCODING_JIS_X_0212             ((rtl_TextEncoding)83)
+#define RTL_TEXTENCODING_MS_1361                ((rtl_TextEncoding)84)
 
-#define RTL_TEXTENCODING_STD_COUNT              ((rtl_TextEncoding)84)
+#define RTL_TEXTENCODING_STD_COUNT              ((rtl_TextEncoding)85)
 
 #define RTL_TEXTENCODING_USER_START             ((rtl_TextEncoding)0x8000)
 #define RTL_TEXTENCODING_USER_END               ((rtl_TextEncoding)0xEFFF)
@@ -216,11 +217,12 @@ Korean (Apple Macintosh)                        RTL_TEXTENCODING_APPLE_KOREAN
 Korean (EUC-KR)                                 RTL_TEXTENCODING_EUC_KR
 # Korean (ISO-2022-KR)                            RTL_TEXTENCODING_ISO_2022_KR
 Korean (Windows-Wansung-949)                    RTL_TEXTENCODING_MS_949
+Korean (Windows-Johab-1361)                     RTL_TEXTENCODING_MS_1361
 
 Latin 3 (ISO-8859-3)                            RTL_TEXTENCODING_ISO_8859_3
 
 Japanese (Apple Macintosh)                      RTL_TEXTENCODING_APPLE_JAPANESE
-# Japanese (EUC-JP)                               RTL_TEXTENCODING_EUC_JP
+Japanese (EUC-JP)                               RTL_TEXTENCODING_EUC_JP
 # Japanese (ISO-2022-JP)                          RTL_TEXTENCODING_ISO_2022_JP
 Japanese (Shift-JIS)                            RTL_TEXTENCODING_SHIFT_JIS
 Japanese (Windows-932)                          RTL_TEXTENCODING_MS_932
