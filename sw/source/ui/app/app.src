@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:09:34 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 12:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,99 +349,27 @@ String STR_PAGE_COUNT_MACRO
 
 ImageList RID_DEFAULTIMAGELIST_SC
 {
-    ImageBitmap = Bitmap
-    {
-        File = "sc_out.bmp" ;
-        File [ english ] = "sc_out01.bmp" ;
-        File [ english_us ] = "sc_out01.bmp" ;
-        File [ dutch ] = "sc_out31.bmp" ;
-        File [ french ] = "sc_out33.bmp" ;
-        File [ spanish ] = "sc_out34.bmp" ;
-        File [ italian ] = "sc_out39.bmp" ;
-        File [ swedish ] = "sc_out46.bmp" ;
-        File [ danish ] = "sc_out45.bmp" ;
-        File [ russian ] = "sc_out07.bmp" ;
-        File [ polish ] = "sc_out48.bmp" ;
-        File [ greek ] = "sc_out30.bmp" ;
-        File [ japanese ] = "sc_out81.bmp" ;
-        File [ portuguese ] = "sc_out03.bmp" ;
-        File [ portuguese_brazilian ] = "sc_out55.bmp" ;
-        File [ korean ] = "sc_out82.bmp" ;
-    };
+    Prefix = "sc";
     MaskColor = IMAGE_MASK_COLOR ;
     IMAGELIST_AND_COUNT
 };
 ImageList RID_DEFAULTIMAGELIST_LC
 {
-    ImageBitmap = Bitmap
-    {
-        File = "lc_out.bmp" ;
-        File [ english ] = "lc_out01.bmp" ;
-        File [ english_us ] = "lc_out01.bmp" ;
-        File [ dutch ] = "lc_out31.bmp" ;
-        File [ french ] = "lc_out33.bmp" ;
-        File [ spanish ] = "lc_out34.bmp" ;
-        File [ italian ] = "lc_out39.bmp" ;
-        File [ swedish ] = "lc_out46.bmp" ;
-        File [ danish ] = "lc_out45.bmp" ;
-        File [ russian ] = "lc_out07.bmp" ;
-        File [ polish ] = "lc_out48.bmp" ;
-        File [ greek ] = "lc_out30.bmp" ;
-        File [ japanese ] = "lc_out81.bmp" ;
-        File [ portuguese ] = "lc_out03.bmp" ;
-        File [ portuguese_brazilian ] = "lc_out55.bmp" ;
-        File [ korean ] = "lc_out82.bmp" ;
-    };
+    Prefix = "lc";
     MaskColor = IMAGE_MASK_COLOR ;
     IMAGELIST_AND_COUNT
 };
 
 ImageList RID_DEFAULTIMAGELIST_SCH
 {
-    ImageBitmap = Bitmap
-    {
-        File = "sch_out.bmp" ;
-        File [ english ] = "sch_out01.bmp" ;
-        File [ english_us ] = "sch_out01.bmp" ;
-        File [ dutch ] = "sch_out31.bmp" ;
-        File [ french ] = "sch_out33.bmp" ;
-        File [ spanish ] = "sch_out34.bmp" ;
-        File [ italian ] = "sch_out39.bmp" ;
-        File [ swedish ] = "sch_out46.bmp" ;
-        File [ danish ] = "sch_out45.bmp" ;
-        File [ russian ] = "sch_out07.bmp" ;
-        File [ polish ] = "sch_out48.bmp" ;
-        File [ greek ] = "sch_out30.bmp" ;
-        File [ japanese ] = "sch_out81.bmp" ;
-        File [ portuguese ] = "sch_out03.bmp" ;
-        File [ portuguese_brazilian ] = "sch_out55.bmp" ;
-        File [ korean ] = "sch_out82.bmp" ;
-    };
-        MaskColor = IMAGE_MASK_COLOR ;
+    Prefix = "sch";
+    MaskColor = IMAGE_MASK_COLOR ;
     IMAGELIST_AND_COUNT
 };
 ImageList RID_DEFAULTIMAGELIST_LCH
 {
-    ImageBitmap = Bitmap
-    {
-        File = "lch_out.bmp" ;
-        File [ english ] = "lch_out01.bmp" ;
-        File [ english_us ] = "lch_out01.bmp" ;
-        File [ dutch ] = "lch_out31.bmp" ;
-        File [ french ] = "lch_out33.bmp" ;
-        File [ spanish ] = "lch_out34.bmp" ;
-        File [ italian ] = "lch_out39.bmp" ;
-        File [ swedish ] = "lch_out46.bmp" ;
-        File [ danish ] = "lch_out45.bmp" ;
-        File [ russian ] = "lch_out07.bmp" ;
-        File [ polish ] = "lch_out48.bmp" ;
-        File [ greek ] = "lch_out30.bmp" ;
-        File [ japanese ] = "lch_out81.bmp" ;
-        File [ portuguese ] = "lch_out03.bmp" ;
-        File [ portuguese_brazilian ] = "lch_out55.bmp" ;
-        File [ korean ] = "lch_out82.bmp" ;
-    };
-        MaskColor = IMAGE_MASK_COLOR ;
+    Prefix = "lch";
+    MaskColor = IMAGE_MASK_COLOR ;
     IMAGELIST_AND_COUNT
 };
 
@@ -1856,12 +1784,12 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
 
     ImageList 1 // == BMP_COLOR_NORMAL + 1
     {
-        ImageBitmap = Bitmap { File = "sf_out.bmp" ; };
+        Prefix = "sf";
         STYLE_IMAGE_LISTEF
     };
     ImageList 2 // == BMP_COLOR_HIGHCONTRAST + 1
     {
-        ImageBitmap = Bitmap { File = "sfh_out.bmp" ; };
+        Prefix = "sf";
         STYLE_IMAGE_LISTEF
     };
 };
