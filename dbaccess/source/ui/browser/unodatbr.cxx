@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:52:52 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 14:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3334,6 +3334,8 @@ void SbaTableQueryBrowser::implCreateObject( SvLBoxEntry* _pApplyTo, sal_uInt16 
                 break;
         }
         ::rtl::OUString aDSName = GetEntryText( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
+
+        xConnection = NULL; // #108325# OJ: the designs should use their own connection
 
         if (bEdit)
             pDispatcher->edit(aDSName, sCurrentObject, xConnection);
