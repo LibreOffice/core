@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.46 $
-# Date:        $Date: 2005-02-21 15:16:50 $
+# Version:     $Revision: 1.47 $
+# Date:        $Date: 2005-02-24 14:07:05 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -890,8 +890,9 @@ elsif ($platform eq "$Irix" || $platform eq "$Irix64")
                         $ps.$par_dir.$LIB.
                         $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB;
 }
-elsif ($platform eq $Macosx)
-{  $LD_LIBRARY_PATH   = '$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
+elsif ($platform eq "$Macosx")
+{  $LD_LIBRARY_PATH   = $cur_dir.
+                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
                         $ps_STLPORT_LIB;
 }
 elsif ($platform ne $Winnt )
@@ -1140,6 +1141,9 @@ elsif ($platform eq $Macosx)
                         $ps.$USR_LOCAL.$BIN.
                         $ps.$USR.$ds."X11R6".$BIN.
                         $ps.$USR_LOCAL.$ds."sbin";
+
+  # Append old PATH
+  $PATH             .= $ps.$oldPATH;
                         
   # PATHEXTRA variable for Macosx.
   $PATHEXTRA         = $USR_BIN.
