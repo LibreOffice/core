@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:00 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ private:
 
     BOOL            bAnchor;
     BOOL            bStarted;
-    ScTripel        aAnchorPos;
+    ScAddress       aAnchorPos;
 
     ScSplitPos      GetWhich();
 
@@ -104,7 +104,7 @@ public:
 
     void            SetSelectionEngine( ScViewSelectionEngine* pSelEngine );
 
-    void            SetAnchor( USHORT nPosX, USHORT nPosY );
+    void            SetAnchor( SCCOL nPosX, SCROW nPosY );
     void            SetAnchorFlag( BOOL bSet );
 
     virtual void    BeginDrag();
@@ -115,7 +115,7 @@ public:
     virtual void    DeselectAtPoint( const Point& rPointPixel );
     virtual void    DeselectAll();
 
-    BOOL            SetCursorAtCell( short nPosX, short nPosY, BOOL bScroll );
+    BOOL            SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScroll );
 };
 
 
@@ -130,7 +130,7 @@ private:
     ScSplitPos      eWhich;
 
     BOOL            bAnchor;
-    USHORT          nCursorPos;
+    SCCOLROW        nCursorPos;
 
 public:
                     ScHeaderFunctionSet( ScViewData* pNewViewData );
