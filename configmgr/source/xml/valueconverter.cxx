@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueconverter.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:20:09 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:49:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ static
 inline
 unsigned makeHexNibble(unsigned char ch) CFG_THROW1 ( script::CannotConvertException)
 {
-    unsigned nRet;
+    unsigned nRet = 0;
 
          if (charInRange(ch, '0', '9')) nRet = ch - unsigned('0');
 
