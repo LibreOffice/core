@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-11 09:46:55 $
+ *  last change: $Author: sab $ $Date: 2002-04-19 18:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,26 @@ void SAL_CALL ScAccessibleSpreadsheet::disposing()
     }
 
     ScAccessibleTableBase::disposing();
+}
+
+void ScAccessibleSpreadsheet::CompleteSelectionChanged(sal_Bool bNewState)
+{
+    if (mpMarkedRanges)
+        DELETEZ(mpMarkedRanges);
+    if (mpSortedMarkedCells)
+        DELETEZ(mpSortedMarkedCells);
+
+    mbHasSelection = bNewState;
+
+    AccessibleEventObject aEvent;
+    aEvent.EventId = AccessibleEventId::ACCESSIBLE_STATE_EVENT;
+    if (bNewState)
+        aEvent.NewValue = uno::makeAny(AccessibleStateType::SELECTED);
+    else
+        aEvent.OldValue = uno::makeAny(AccessibleStateType::SELECTED);
+    aEvent.Source = uno::Reference< XAccessible >(this);
+
+    CommitChange(aEvent);
 }
 
     //=====  SfxListener  =====================================================
