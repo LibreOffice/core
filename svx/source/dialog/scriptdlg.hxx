@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:37:59 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
 
 #include <hash_map>
 
@@ -199,7 +203,7 @@ public:
     void            setLoaded()                         { loaded=true; }
 };
 
-class SvxScriptOrgDialog : public SfxModalDialog
+class SVX_DLLPUBLIC SvxScriptOrgDialog : public SfxModalDialog
 {
 protected:
     FixedText               aScriptsTxt;
@@ -256,7 +260,7 @@ public:
     //DECL_LINK( ActivatePageHdl, TabControl * );
 };
 
-class SvxScriptErrorDialog : public VclAbstractDialog
+class SVX_DLLPUBLIC SvxScriptErrorDialog : public VclAbstractDialog
 {
 private:
 
