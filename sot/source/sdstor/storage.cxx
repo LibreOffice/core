@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-12 15:09:06 $
+ *  last change: $Author: mav $ $Date: 2002-09-18 12:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,6 +543,9 @@ SotStorage::SotStorage( const ::ucb::Content& rContent, const String & rName, St
 {
     aName = rName; // Namen merken
     pOwnStg = new UCBStorage( rContent, aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+
+    SetError( pOwnStg->GetError() );
+
     if ( IsOLEStorage() )
         nVersion = SOFFICE_FILEFORMAT_50;
 
@@ -656,8 +659,8 @@ void SotStorage::CreateStorage( BOOL bForceUCBStorage, StreamMode nMode, Storage
         aName = pOwnStg->GetName();
     }
 
-    ULONG nErr = pOwnStg->GetError();
-    SetError( nErr );
+    SetError( pOwnStg->GetError() );
+
     SignAsRoot( pOwnStg->IsRoot() );
 }
 
@@ -697,6 +700,9 @@ SotStorage::SotStorage( BOOL bUCBStorage, SvStream & rStm )
         pOwnStg = new UCBStorage( rStm, FALSE );
     else
         pOwnStg = new Storage( rStm, FALSE );
+
+    SetError( pOwnStg->GetError() );
+
     if ( IsOLEStorage() )
         nVersion = SOFFICE_FILEFORMAT_50;
 
@@ -713,6 +719,9 @@ SotStorage::SotStorage( SvStream & rStm )
         pOwnStg = new UCBStorage( rStm, FALSE );
     else
         pOwnStg = new Storage( rStm, FALSE );
+
+    SetError( pOwnStg->GetError() );
+
     if ( IsOLEStorage() )
         nVersion = SOFFICE_FILEFORMAT_50;
 
@@ -730,9 +739,7 @@ SotStorage::SotStorage( SvStream * pStm, BOOL bDelete )
     else
         pOwnStg = new Storage( *pStm, FALSE );
 
-    ULONG nError = pOwnStg->GetError();
-    if ( nError != SVSTREAM_OK )
-        SetError( nError );
+    SetError( pOwnStg->GetError() );
 
     pStorStm = pStm;
     bDelStm = bDelete;
