@@ -2,9 +2,9 @@
  *
  *  $RCSfile: g2g.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 13:41:23 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 11:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,45 +83,60 @@
 // - G2GApp -
 // ----------
 
-class G2GApp : public Application
+class G2GApp
 {
 private:
 
     BYTE            cExitCode;
 
     void            ShowUsage();
-    BOOL            GetCommandOption( const String& rSwitch, String& rSwitchParam );
+    BOOL            GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rParam );
     void            SetExitCode( BYTE cExit ) { if( ( EXIT_NOERROR == cExitCode ) || ( cExit != EXIT_NOERROR ) ) cExitCode = cExit; }
 
     virtual void    Message( const String& rText, BYTE cExitCode = EXIT_NOERROR );
 
 public:
 
-    void            Main();
+                    G2GApp();
+                    ~G2GApp();
+
+    int             Start( const ::std::vector< String >& rArgs );
 };
 
 // -----------------------------------------------------------------------
 
-BOOL G2GApp::GetCommandOption( const String& rSwitch, String& rFollowingParam )
+G2GApp::G2GApp()
+{
+}
+
+// -----------------------------------------------------------------------
+
+G2GApp::~G2GApp()
+{
+}
+
+// -----------------------------------------------------------------------
+
+BOOL G2GApp::GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rParam )
 {
     BOOL bRet = FALSE;
 
-    for( USHORT i = 0, nCount = GetCommandLineParamCount(); ( i < nCount ) && !bRet; i++ )
+    for( int i = 0, nCount = rArgs.size(); ( i < nCount ) && !bRet; i++ )
     {
         String  aTestStr( '-' );
 
-        for( long n = 0; ( n < 2 ) && !bRet; n++ )
+        for( int n = 0; ( n < 2 ) && !bRet; n++ )
         {
             aTestStr += rSwitch;
 
-            if( aTestStr.CompareIgnoreCaseToAscii( GetCommandLineParam( i ) ) == COMPARE_EQUAL )
+            if( aTestStr.CompareIgnoreCaseToAscii( rArgs[ i ] ) == COMPARE_EQUAL )
             {
                 bRet = TRUE;
 
                 if( i < ( nCount - 1 ) )
-                    rFollowingParam = GetCommandLineParam( i + 1 );
+                    rParam = rArgs[ i + 1 ];
                 else
-                    rFollowingParam = String();
+                    rParam = String();
             }
 
             if( 0 == n )
@@ -161,9 +176,9 @@ void G2GApp::ShowUsage()
 
 // -----------------------------------------------------------------------------
 
-void G2GApp::Main( )
+int G2GApp::Start( const ::std::vector< String >& rArgs )
 {
-    int     nCmdCount = GetCommandLineParamCount();
+    int     nCmdCount = rArgs.size();
     USHORT  nCurCmd = 0;
 
     cExitCode = EXIT_NOERROR;
@@ -173,11 +188,11 @@ void G2GApp::Main( )
         GraphicFilter   aFilter( sal_False );
         String          aInFile, aOutFile, aFilterStr, aFilterPath, aTransColStr;
 
-        aInFile = GetCommandLineParam( nCurCmd++ );
-        aOutFile = GetCommandLineParam( nCurCmd++ );
-        GetCommandOption( String( RTL_CONSTASCII_USTRINGPARAM( "format" ) ), aFilterStr );
-        GetCommandOption( String( RTL_CONSTASCII_USTRINGPARAM( "filterpath" ) ), aFilterPath );
-        GetCommandOption( '#', aTransColStr );
+        aInFile = rArgs[ nCurCmd++ ];
+        aOutFile = rArgs[ nCurCmd++ ];
+        GetCommandOption( rArgs, String( RTL_CONSTASCII_USTRINGPARAM( "format" ) ), aFilterStr );
+        GetCommandOption( rArgs, String( RTL_CONSTASCII_USTRINGPARAM( "filterpath" ) ), aFilterPath );
+        GetCommandOption( rArgs, '#', aTransColStr );
 
         aFilter.SetFilterPath( aFilterPath );
 
@@ -246,20 +261,22 @@ void G2GApp::Main( )
     else
         ShowUsage();
 
-    if( EXIT_NOERROR != cExitCode )
-        raise( SIGABRT );
+    return cExitCode;
 }
 
-// ---------------
-// - Application -
-// ---------------
+// --------
+// - Main -
+// --------
 
-G2GApp aApp;
-
-BOOL SVMain();
-
-SAL_IMPLEMENT_MAIN()
+int main( int nArgCount, char* ppArgs[] )
 {
-    SVMain();
-    return 0;
+    ::std::vector< String > aArgs;
+    G2GApp                  aG2GApp;
+
+    InitVCL( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >() );
+
+    for( int i = 1; i < nArgCount; i++ )
+        aArgs.push_back( String( ppArgs[ i ], RTL_TEXTENCODING_ASCII_US ) );
+
+    return aG2GApp.Start( aArgs );
 }
