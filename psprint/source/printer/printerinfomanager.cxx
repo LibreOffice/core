@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 15:05:03 $
+ *  last change: $Author: jbu $ $Date: 2001-05-14 09:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,14 +239,22 @@ void PrinterInfoManager::initialize()
 
         // check directory validity
         OUString aUniPath;
+#ifdef TF_FILEURL
+        FileBase::getFileURLFromSystemPath( aDir.PathToFileName(), aUniPath );
+#else
         FileBase::normalizePath( aDir.PathToFileName(), aUniPath );
+#endif
         Directory aDirectory( aUniPath );
         if( aDirectory.open() )
             continue;
         aDirectory.close();
 
 
+#ifdef TF_FILEURL
+        FileBase::getFileURLFromSystemPath( aFile.PathToFileName(), aUniPath );
+#else
         FileBase::normalizePath( aFile.PathToFileName(), aUniPath );
+#endif
         FileStatus aStatus( FileStatusMask_All );
         DirectoryItem aItem;
 
@@ -423,7 +431,11 @@ void PrinterInfoManager::initialize()
                 fillFontSubstitutions( aPrinter.m_aInfo );
 
                 // finally insert printer
+#ifdef TF_FILEURL
+                FileBase::getFileURLFromSystemPath( aFile.PathToFileName(), aPrinter.m_aFile );
+#else
                 FileBase::normalizePath( aFile.PathToFileName(), aPrinter.m_aFile );
+#endif
                 aPrinter.m_bModified    = false;
                 aPrinter.m_aGroup       = aConfig.GetGroupName( nGroup );
                 m_aPrinters[ aPrinterName ] = aPrinter;
