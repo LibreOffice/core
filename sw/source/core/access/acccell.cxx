@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccell.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:21 $
+ *  last change: $Author: dvo $ $Date: 2002-05-24 13:40:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,12 @@
 #ifndef _ACCFRMOBJSLIST_HXX
 #include <accfrmobjslist.hxx>
 #endif
+#ifndef _FRMFMT_HXX
+#include "frmfmt.hxx"
+#endif
+#ifndef _CELLATR_HXX
+#include "cellatr.hxx"
+#endif
 
 #ifndef _ACCMAP_HXX
 #include "accmap.hxx"
@@ -113,6 +119,8 @@
 #ifndef _ACCCELL_HXX
 #include <acccell.hxx>
 #endif
+
+#include <limits.h>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -324,4 +332,79 @@ void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
     if( xAccImpl.isValid() )
         xAccImpl->InvalidateChildPosOrSize( GetFrm(), rOldBox );
     SwAccessibleContext::InvalidatePosOrSize( rOldBox );
+}
+
+
+// =====  XAccessibleInterface  ===========================================
+
+Any SwAccessibleCell::queryInterface( const Type& rType )
+    throw( RuntimeException )
+{
+    if ( rType == ::getCppuType((Reference<XAccessibleValue> *)0) )
+    {
+        Reference<XAccessibleValue> xValue = this;
+        Any aRet;
+        aRet <<= xValue;
+        return aRet;
+    }
+    else
+    {
+        return SwAccessibleContext::queryInterface( rType );
+    }
+}
+
+
+// =====  XAccessibleValue  ===============================================
+
+SwFrmFmt* SwAccessibleCell::GetTblBoxFormat() const
+{
+    DBG_ASSERT( GetFrm() != NULL, "no frame?" );
+    DBG_ASSERT( GetFrm()->IsCellFrm(), "no cell frame?" );
+
+    const SwCellFrm* pCellFrm = static_cast<const SwCellFrm*>( GetFrm() );
+    return pCellFrm->GetTabBox()->GetFrmFmt();
+}
+
+
+Any SwAccessibleCell::getCurrentValue( )
+    throw( RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    CHECK_FOR_DEFUNC( XAccessibleValue );
+
+    Any aAny;
+    aAny <<= GetTblBoxFormat()->GetTblBoxValue().GetValue();
+    return aAny;
+}
+
+sal_Bool SwAccessibleCell::setCurrentValue( const Any& aNumber )
+    throw( RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    CHECK_FOR_DEFUNC( XAccessibleValue );
+
+    double fValue;
+    sal_Bool bValid = (aNumber >>= fValue);
+    if( bValid )
+    {
+        SwTblBoxValue aValue( fValue );
+        GetTblBoxFormat()->SetAttr( aValue );
+    }
+    return bValid;
+}
+
+Any SwAccessibleCell::getMaximumValue( )
+    throw( RuntimeException )
+{
+    Any aAny;
+    aAny <<= DBL_MAX;
+    return aAny;
+}
+
+Any SwAccessibleCell::getMinimumValue(  )
+    throw( RuntimeException )
+{
+    Any aAny;
+    aAny <<= DBL_MIN;
+    return aAny;
 }

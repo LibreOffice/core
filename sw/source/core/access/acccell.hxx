@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-17 14:07:39 $
+ *  last change: $Author: dvo $ $Date: 2002-05-24 13:40:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,15 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEVALUE_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleValue.hpp>
+#endif
+
 class SwCellFrm;
 
-class SwAccessibleCell : public SwAccessibleContext
+class SwAccessibleCell : public SwAccessibleContext,
+                  ::drafts::com::sun::star::accessibility::XAccessibleValue
+
 {
     sal_Bool    bIsSelected;    // protected by base class mutex
 
@@ -127,6 +133,41 @@ public:
     virtual void Dispose( sal_Bool bRecursive = sal_False );
 
     virtual void InvalidatePosOrSize( const SwRect& rFrm );
+
+    //=====  XInterface  ======================================================
+
+    // (XInterface methods need to be implemented to disambiguate
+    // between those inherited through SwAcessibleContext and
+    // XAccessibleValue).
+
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
+        const ::com::sun::star::uno::Type& aType )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL acquire(  ) throw ()
+        { SwAccessibleContext::acquire(); };
+
+    virtual void SAL_CALL release(  ) throw ()
+        { SwAccessibleContext::release(); };
+
+    //=====  XAccessibleValue  ================================================
+
+private:
+    SwFrmFmt* GetTblBoxFormat() const;
+
+public:
+    virtual ::com::sun::star::uno::Any SAL_CALL getCurrentValue( )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL setCurrentValue(
+        const ::com::sun::star::uno::Any& aNumber )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Any SAL_CALL getMaximumValue(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Any SAL_CALL getMinimumValue(  )
+        throw (::com::sun::star::uno::RuntimeException);
 };
 
 
