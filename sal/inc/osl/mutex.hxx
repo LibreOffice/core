@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hro $ $Date: 2002-10-15 13:32:34 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ namespace osl
 
         /** Acquires the object specified as parameter.
         */
-        Guard(T * pT) : pT(pT)
+        Guard(T * pT_) : pT(pT_)
         {
             pT->acquire();
         }
@@ -185,7 +185,7 @@ namespace osl
 
         /** Acquires the object specified as parameter.
         */
-        ClearableGuard(T * pT) : pT(pT)
+        ClearableGuard(T * pT_) : pT(pT_)
         {
             pT->acquire();
         }
