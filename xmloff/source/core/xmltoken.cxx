@@ -2,9 +2,9 @@
 *
 *  $RCSfile: xmltoken.cxx,v $
 *
-*  $Revision: 1.83 $
+*  $Revision: 1.84 $
 *
-*  last change: $Author: hr $ $Date: 2004-11-27 11:37:47 $
+*  last change: $Author: obo $ $Date: 2004-11-29 12:05:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2839,8 +2839,6 @@ namespace xmloff { namespace token {
         TOKEN( "main-sequence",     XML_MAIN_SEQUENCE ),
         TOKEN( "timing-root",           XML_TIMING_ROOT ),
         TOKEN( "interactive-sequence",XML_INTERACTIVE_SEQUENCE ),
-
-        TOKEN( "base",              XML_BASE ),
 
         TOKEN( "sub-item",          XML_SUB_ITEM ),
         TOKEN( "iterate-type",      XML_ITERATE_TYPE ),
