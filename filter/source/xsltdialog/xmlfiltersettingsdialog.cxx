@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-13 12:18:31 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 14:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,7 @@ IMPL_LINK(XMLFilterSettingsDialog, SelectionChangedHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK(XMLFilterSettingsDialog, DoubleClickHdl_Impl, void *, EMPTYARG )
 {
+    onEdit();
     return 0;
 }
 
@@ -460,7 +461,7 @@ OUString XMLFilterSettingsDialog::createUniqueInterfaceName( const OUString& rIn
                         // if yes, make sure we generate a unique name with a higher number
                         // this is dump but fast
                         sal_Int32 nNumber = aInterfaceName.copy( rInterfaceName.getLength() ).toInt32();
-                        if( nNumber > nDefaultNumber )
+                        if( nNumber >= nDefaultNumber )
                             nDefaultNumber = nNumber + 1;
                     }
                 }
