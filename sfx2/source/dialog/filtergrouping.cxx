@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:23:30 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -974,24 +974,48 @@ namespace sfx2
     //--------------------------------------------------------------------
     void appendFiltersForSave( SfxFilterMatcherIter& _rFilterMatcher,
                                const Reference< XFilterManager >& _rxFilterManager,
-                               ::rtl::OUString& _rFirstNonEmpty, FileDialogHelper_Impl& _rFileDlgImpl )
+                               ::rtl::OUString& _rFirstNonEmpty, FileDialogHelper_Impl& _rFileDlgImpl,
+                               const ::rtl::OUString& _rFactory )
     {
         DBG_ASSERT( _rxFilterManager.is(), "sfx2::appendFiltersForSave: invalid manager!" );
         if ( !_rxFilterManager.is() )
             return;
 
         ::rtl::OUString sUIName;
+        ::rtl::OUString sExtension;
+
+        // retrieve the default filter for this application module.
+        // It must be set as first of the generated filter list.
+        const SfxFilter* pDefaultFilter = SfxFilterContainer::GetDefaultFilter_Impl(_rFactory);
+        sExtension = pDefaultFilter->GetWildcard().GetWildCard();
+        sUIName = addExtension( pDefaultFilter->GetUIName(), sExtension, sal_False, _rFileDlgImpl );
+        try
+        {
+            _rxFilterManager->appendFilter( sUIName, sExtension );
+            if ( !_rFirstNonEmpty.getLength() )
+                _rFirstNonEmpty = sUIName;
+        }
+        catch( IllegalArgumentException )
+        {
+#ifdef DBG_UTIL
+            ByteString aMsg( "Could not append DefaultFilter" );
+            aMsg += ByteString( String( sUIName ), osl_getThreadTextEncoding() );
+            DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+        }
 
         for ( const SfxFilter* pFilter = _rFilterMatcher.First(); pFilter; pFilter = _rFilterMatcher.Next() )
         {
-            ::rtl::OUString sExtension = pFilter->GetWildcard().GetWildCard();
+            if (pFilter->GetName() == pDefaultFilter->GetName())
+                continue;
+
+            sExtension = pFilter->GetWildcard().GetWildCard();
             sUIName = addExtension( pFilter->GetUIName(), sExtension, sal_False, _rFileDlgImpl );
             try
             {
                 _rxFilterManager->appendFilter( sUIName, sExtension );
                 if ( !_rFirstNonEmpty.getLength() )
                     _rFirstNonEmpty = sUIName;
-
             }
             catch( IllegalArgumentException )
             {
