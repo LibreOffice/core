@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 22:10:35 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 16:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -583,7 +583,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
             if( nBullRelSize )
             {
                 GetExport().GetMM100UnitConverter().convertPercent( sTmp, nBullRelSize );
-                GetExport().AddAttribute( XML_NAMESPACE_FO, sXML_height,
+                GetExport().AddAttribute( XML_NAMESPACE_FO, sXML_font_size,
                               sTmp.makeStringAndClear() );
             }
         }

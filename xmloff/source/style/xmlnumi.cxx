@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 22:10:35 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 16:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,7 +592,8 @@ enum SvxXMLStyleAttributesAttrTokens
     XML_TOK_STYLE_ATTRIBUTES_ATTR_VERTICAL_REL,
     XML_TOK_STYLE_ATTRIBUTES_ATTR_WIDTH,
     XML_TOK_STYLE_ATTRIBUTES_ATTR_HEIGHT,
-    XML_TOK_TEXT_LEVEL_ATTR_BULLET_COLOR,
+    XML_TOK_STYLE_ATTRIBUTES_ATTR_COLOR,
+    XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_SIZE,
 
     XML_TOK_STYLE_ATTRIBUTES_ATTR_END=XML_TOK_UNKNOWN
 };
@@ -628,7 +629,9 @@ static __FAR_DATA SvXMLTokenMapEntry aStyleAttributesAttrTokenMap[] =
     { XML_NAMESPACE_FO, sXML_height,
             XML_TOK_STYLE_ATTRIBUTES_ATTR_HEIGHT },
     { XML_NAMESPACE_FO, sXML_color,
-            XML_TOK_TEXT_LEVEL_ATTR_BULLET_COLOR },
+            XML_TOK_STYLE_ATTRIBUTES_ATTR_COLOR },
+    { XML_NAMESPACE_FO, sXML_font_size,
+            XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_SIZE },
 
     XML_TOKEN_MAP_END
 };
@@ -714,15 +717,17 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_HEIGHT:
             if( aUnitConv.convertMeasure( nVal, rValue, 0, LONG_MAX ) )
                 rListLevel.SetImageHeight( nVal );
-            if(SvXMLUnitConverter::convertPercent( nVal, rValue ) )
-                rListLevel.SetRelSize( (sal_Int16)nVal );
             break;
-        case XML_TOK_TEXT_LEVEL_ATTR_BULLET_COLOR:
+        case XML_TOK_STYLE_ATTRIBUTES_ATTR_COLOR:
             {
                 Color aColor;
                 if( SvXMLUnitConverter::convertColor( aColor, rValue ) )
                     rListLevel.SetColor( (sal_Int32)aColor.GetColor() );
             }
+            break;
+        case XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_SIZE:
+            if(SvXMLUnitConverter::convertPercent( nVal, rValue ) )
+                rListLevel.SetRelSize( (sal_Int16)nVal );
             break;
         }
     }
