@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 16:49:17 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 17:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -721,4 +721,11 @@ SfxUndoArray::~SfxUndoArray()
         delete pAction;
     }
 }
+
+
+USHORT SfxLinkUndoAction::GetId() const
+{
+      return pAction ? pAction->GetId() : 0;
+}
+
 
