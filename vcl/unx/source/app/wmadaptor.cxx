@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-15 11:22:51 $
+ *  last change: $Author: pl $ $Date: 2001-11-22 16:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,6 +470,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                 && nItems == 4*m_nDesktops
                 )
             {
+                m_aWMWorkAreas = ::std::vector< Rectangle > ( m_nDesktops );
                 sal_uInt32* pValues = (sal_uInt32*)pProperty;
                 for( int i = 0; i < m_nDesktops; i++ )
                 {
