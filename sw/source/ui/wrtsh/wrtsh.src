@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:22:38 $
+ *  last change: $Author: kz $ $Date: 2001-06-16 21:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2507,7 +2507,7 @@ String STR_UNDO_SETRUBYATTR
     Text[ japanese ] = "ŸÀﬁê›íË";
     Text[ korean ] = "∑Á∫Ò";
     Text[ chinese_simplified ] = "º”…œ∆¥“ÙªÚ◊¢“Ù∑˚∫≈";
-    Text[ chinese_traditional ] = "•[§W™`≠µ≤≈∏π";
+    Text[ chinese_traditional ] = "•[§Wµ˘≠µ≤≈∏π";
     Text[ turkish ] = "Set phonetic Symbols";
     Text[ arabic ] = " ⁄ÌÌ‰ —„Ê“ ’Ê Ì…";
     Text[ catalan ] = "Aplicar sÌmbolos fonÈticos";
@@ -2789,5 +2789,6 @@ String STR_DDEERROR_LINK2
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "] no se puede establecer";
 };
+
 
 
