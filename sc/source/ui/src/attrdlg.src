@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 07:50:34 $
+ *  last change: $Author: dr $ $Date: 2001-05-17 12:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,11 +438,8 @@ TabPage RID_SCPAGE_PROTECTION
     FixedText FT_HINT
     {
         Pos = MAP_APPFONT ( 114 , 14 ) ;
-        Size = MAP_APPFONT ( 130 , 56 ) ;
+        Size = MAP_APPFONT ( 137 , 56 ) ;
         WordBreak = TRUE ;
-        /* ### ACHTUNG: Neuer Text in Resource? Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü 'Extras' den Befehl 'Dokument schützen' und dann den Befehl 'Tabelle'. : Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü ''Extras'' den Befehl ''Dokument schützen'' und dann den Befehl ''Tabelle''. */
-        /* ### ACHTUNG: Neuer Text in Resource? Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü 'Extras' den Befehl 'Dokument schützen' und dann den Befehl 'Tabelle'. : Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü ''Extras'' den Befehl ''Dokument schützen'' und dann den Befehl ''Tabelle''. */
-        /* ### ACHTUNG: Neuer Text in Resource? Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü 'Extras' den Befehl 'Dokument schützen' und dann den Befehl 'Tabelle'. : Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü ''Extras'' den Befehl ''Dokument schützen'' und dann den Befehl ''Tabelle''. */
         /* ### ACHTUNG: Neuer Text in Resource? Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü 'Extras' den Befehl 'Dokument schützen' und dann den Befehl 'Tabelle'. : Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü ''Extras'' den Befehl ''Dokument schützen'' und dann den Befehl ''Tabelle''. */
         Text = "Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü 'Extras' den Befehl 'Dokument schützen' und dann den Befehl 'Tabelle'." ;
         Text [ ENGLISH ] =
@@ -471,10 +468,10 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "La protección de celdas es efectiva solamente si la hoja activa está protegida.\n\nSeleccione en 'Herramientas' la instrucción 'Proteger documento' y luego 'Hoja'.";
     };
-    GroupBox GB_PROTECTION
+    FixedLine FL_PROTECTION
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 246 , 70 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Schutz" ;
         Text [ ENGLISH ] = "Protection" ;
         Text [ norwegian ] = "Protection" ;
@@ -533,7 +530,7 @@ TabPage RID_SCPAGE_PROTECTION
     FixedText FT_HINT2
     {
         Pos = MAP_APPFONT ( 114 , 87 ) ;
-        Size = MAP_APPFONT ( 131 , 24 ) ;
+        Size = MAP_APPFONT ( 137 , 24 ) ;
         WordBreak = TRUE ;
         Text = "Die Zellen der aktuellen Selektion werden beim Ausdruck nicht ausgegeben." ;
         Text [ ENGLISH ] = "Cells of current selection will be omitted for printing." ;
@@ -560,10 +557,10 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se imprimen las celdas de la selección actual.";
     };
-    GroupBox GB_PRINT
+    FixedLine FL_PRINT
     {
         Pos = MAP_APPFONT ( 6 , 76 ) ;
-        Size = MAP_APPFONT ( 246 , 38 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Ausdruck" ;
         Text [ ENGLISH ] = "Printing" ;
         Text [ norwegian ] = "Printing" ;

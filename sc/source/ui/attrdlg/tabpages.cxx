@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabpages.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+ *  last change: $Author: dr $ $Date: 2001-05-17 12:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,14 +100,14 @@ ScTabPageProtection::ScTabPageProtection( Window*           pParent,
                               ScResId( RID_SCPAGE_PROTECTION ),
                               rCoreAttrs ),
         //
+        aFlProtect          ( this, ScResId( FL_PROTECTION      ) ),
         aBtnProtect         ( this, ScResId( BTN_PROTECTED      ) ),
         aBtnHideCell        ( this, ScResId( BTN_HIDE_ALL       ) ),
         aBtnHideFormula     ( this, ScResId( BTN_HIDE_FORMULAR  ) ),
         aTxtHint            ( this, ScResId( FT_HINT            ) ),
-        aGbProtect          ( this, ScResId( GB_PROTECTION      ) ),
+        aFlPrint            ( this, ScResId( FL_PRINT           ) ),
         aBtnHidePrint       ( this, ScResId( BTN_HIDE_PRINT     ) ),
-        aTxtHint2           ( this, ScResId( FT_HINT2           ) ),
-        aGbPrint            ( this, ScResId( GB_PRINT           ) )
+        aTxtHint2           ( this, ScResId( FT_HINT2           ) )
 {
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
@@ -298,6 +298,9 @@ void ScTabPageProtection::UpdateButtons()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 16:44:53  hr
+    initial import
+
     Revision 1.73  2000/09/17 14:08:55  willem.vandorp
     OpenOffice header added.
 
