@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-06 17:49:49 $
+ *  last change: $Author: rt $ $Date: 2000-11-08 09:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_iXNUMBERFORMATTER_HPP_
+#include <com/sun/star/util/XNumberFormatter.hpp>
 #endif
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
@@ -211,9 +214,7 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
-#ifndef _UTL_DB_CONVERSION_HXX_
-#include <unotools/dbconversion.hxx>
-#endif
+#include <connectivity/dbconversion.hxx>
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -257,7 +258,7 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #endif
 #ifndef _UTL_UNO3_DB_TOOLS_HXX_
-#include <unotools/dbtools.hxx>
+#include <connectivity/dbtools.hxx>
 #endif
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
@@ -1284,7 +1285,7 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
                 }
             }
             else
-                nRet = utl::getDefaultNumberFormat(xColumnProp, xDocNumberFormatTypes,  aLocale);
+                nRet = dbtools::getDefaultNumberFormat(xColumnProp, xDocNumberFormatTypes,  aLocale);
         }
         else
             nRet = pNFmtr->GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM );
@@ -1427,16 +1428,16 @@ String SwNewDBMgr::GetDBField(Reference<XPropertySet> xColumnProps,
         case DataType::TIME:
         case DataType::TIMESTAMP:
         {
-            ::Date aTempDate(rDBFormatData.aNullDate.Day,
-                rDBFormatData.aNullDate.Month, rDBFormatData.aNullDate.Year);
+//          ::Date aTempDate(rDBFormatData.aNullDate.Day,
+//              rDBFormatData.aNullDate.Month, rDBFormatData.aNullDate.Year);
 
             try
             {
-                sRet = utl::DBTypeConversion::getValue(
+                sRet = dbtools::DBTypeConversion::getValue(
                     xColumnProps,
                     rDBFormatData.xFormatter,
                     rDBFormatData.aLocale,
-                    aTempDate);
+                    rDBFormatData.aNullDate);
                 double fVal = xColumn->getDouble();
                 if (pNumber)
                     *pNumber = fVal;
