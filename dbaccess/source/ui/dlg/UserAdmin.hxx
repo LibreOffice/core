@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 12:30:48 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,13 @@
 #ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
 #endif
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
+#endif
 
+FORWARD_DECLARE_INTERFACE(beans,XPropertySet)
+FORWARD_DECLARE_INTERFACE(sdbc,XConnection)
+FORWARD_DECLARE_INTERFACE(lang,XMultiServiceFactory)
 
 namespace dbaui
 {
@@ -108,7 +114,6 @@ protected:
     ::com::sun::star::uno::Sequence< ::rtl::OUString>                               m_aUserNames;
 
     String              m_UserName;
-    ODbAdminDialog*     m_pAdminDialog;
 
     // methods
     DECL_LINK( ListDblClickHdl, ListBox * );
@@ -120,19 +125,22 @@ protected:
 
     OUserAdmin( Window* pParent, const SfxItemSet& _rCoreAttrs);
 public:
-    void SetAdminDialog(ODbAdminDialog* _pDialog) { m_pAdminDialog = _pDialog; }
     void setServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _xORB) { m_xORB = _xORB; }
 
-    virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
-    virtual void        ActivatePage( const SfxItemSet& rCoreAttrs );
-
     static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
-    /// get the SfxPoolItem ids used by this tab page
-    static sal_Int32* getDetailIds();
 
     ~OUserAdmin();
     void NotifyCellChange();
     String GetUser();
+
+    // must be overloaded by subclasses, but it isn't pure virtual
+    virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
+
+    // <method>OGenericAdministrationPage::fillControls</method>
+    virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
+
+    // <method>OGenericAdministrationPage::fillWindows</method>
+    virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
 };
 }
 #endif // DBAUI_USERADMIN_HXX
