@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileHelper.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-05 14:27:09 $
+ *  last change: $Author: hr $ $Date: 2004-02-05 16:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ public class FileHelper
         throws java.io.IOException
     {
         System.out.println("TODO: must be adapted to java 1.3 and support cygwin shells :-(");
-        System,.exit(-1);
+        System.exit(-1);
 
         /*TODO_JAVA
         Solution I : using nio.channel locks doesnt exists for java 1.3  :-(
