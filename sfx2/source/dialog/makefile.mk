@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-16 11:00:32 $
+#   last change: $Author: rt $ $Date: 2004-01-05 11:39:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ EXCEPTIONSFILES=\
 
 SLOFILES =\
         $(EXCEPTIONSFILES)			\
+                $(SLO)$/sfxdlg.obj            \
         $(SLO)$/about.obj			\
         $(SLO)$/acccfg.obj			\
         $(SLO)$/basedlgs.obj		\
@@ -140,4 +141,18 @@ SRC1FILES =\
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+$(INCCOM)$/cuilib.hxx: makefile.mk
+.IF "$(GUI)"=="UNX"
+    $(RM) $@
+    +echo \#define DLL_NAME \"libcui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+.ELSE
+.IF "$(USE_SHELL)"!="4nt"
+    +echo \#define DLL_NAME \"cui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+.ELSE          # "$(USE_SHELL)"!="4nt"
+    +echo #define DLL_NAME "cui$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
+.ENDIF          # "$(USE_SHELL)"!="4nt"
+.ENDIF
+
+$(SLO)$/sfxdlg.obj : $(INCCOM)$/cuilib.hxx
 
