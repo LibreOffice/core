@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-10 09:28:40 $
+ *  last change: $Author: sj $ $Date: 2000-10-11 12:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2458,7 +2458,31 @@ SdrPage* SdrPowerPointImport::ImportPage()      // be sure not to import masterp
 
                                 case DFF_msofbtSpContainer :
                                 {
-                                    if ( ! ( rSlidePersist.aSlideAtom.nFlags & 4 ) )    // follow master background ?
+                                    SdrObject* pBackGroundObj = NULL;
+                                    if ( rSlidePersist.aSlideAtom.nFlags & 4 )          // follow master background ?
+                                    {
+                                        if ( ! ( rSlidePersist.aSlideAtom.nFlags & 2 ) )// do not follow master colorscheme ?
+                                        {
+                                            if ( HasMasterPage( nAktPageNum, eAktPageKind ) )
+                                            {
+                                                UINT16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
+                                                PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
+                                                if ( pPageList && ( nMasterNum < pPageList->Count() ) )
+                                                {
+                                                    PptSlidePersistEntry* pE = (*pPageList)[ nMasterNum ];
+                                                    if ( pE && pE->nBackgroundOffset )
+                                                    {
+                                                        sal_uInt32 nPos = rStCtrl.Tell();
+                                                        rStCtrl.Seek( pE->nBackgroundOffset );
+                                                        pBackGroundObj = ImportObj( rStCtrl, (void*)&aProcessData, NULL );
+                                                        rStCtrl.Seek( nPos );
+                                                    }
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
                                     {
                                         DffRecordHeader aShapeHd;
                                         rStCtrl >> aShapeHd;
@@ -2469,7 +2493,7 @@ SdrPage* SdrPowerPointImport::ImportPage()      // be sure not to import masterp
                                             if ( nSpFlags & SP_FBACKGROUND )
                                             {
                                                 aEscherObjListHd.SeekToBegOfRecord( rStCtrl );
-                                                SdrObject* pBackGroundObj = ImportObj( rStCtrl, (void*)&aProcessData, NULL );
+                                                pBackGroundObj = ImportObj( rStCtrl, (void*)&aProcessData, NULL );
                                                 if ( pBackGroundObj )
                                                 {
                                                     if ( rSlidePersist.ePageKind == PPT_SLIDEPAGE )
@@ -2495,10 +2519,11 @@ SdrPage* SdrPowerPointImport::ImportPage()      // be sure not to import masterp
                                                         }
                                                     }
                                                 }
-                                                pRet->SetBackgroundObj( pBackGroundObj );
                                             }
                                         }
                                     }
+                                    if ( pBackGroundObj )
+                                        pRet->SetBackgroundObj( pBackGroundObj );
                                 }
                                 break;
                             }
@@ -2742,7 +2767,7 @@ USHORT SdrPowerPointImport::GetNotesPageIndex( USHORT nPageNum, PptPageKind ePag
     return nIdx;
 }
 
-SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage, sal_Bool bForce )
+SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage, sal_uInt32& nBgFileOffset, sal_Bool bForce )
 {
     SdrObject* pRet = NULL;
     sal_Bool bCreateObj = bForce;
@@ -2763,6 +2788,7 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
                 DffRecordHeader aEscherObjectHd;
                 if ( SeekToRec( rStCtrl, DFF_msofbtSpContainer, nEscherF002End, &aEscherObjectHd ) )
                 {
+                    nBgFileOffset = aEscherObjectHd.GetRecBegFilePos();
                     ULONG nEscherObjectEnd = aEscherObjectHd.GetRecEndFilePos();
                     //DffRecordHeader aEscherPropertiesHd;
                     if ( SeekToRec( rStCtrl, DFF_msofbtOPT,nEscherF002End ) )
