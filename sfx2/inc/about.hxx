@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:16:50 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 13:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,10 +92,12 @@ private:
 
     FixedInfo       aVersionText;
     FixedInfo       aCopyrightText;
+    FixedInfo       aBuildData;
 
     ResStringArray  aDeveloperAry;
     String          aDevVersionStr;
     String          aAccelStr;
+    String          aVersionData;
 
     AccelList       aAccelList;
 
