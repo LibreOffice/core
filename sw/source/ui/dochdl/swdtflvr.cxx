@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-05 10:24:56 $
+ *  last change: $Author: jp $ $Date: 2001-09-07 11:23:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1116,7 +1116,7 @@ BOOL SwTransferable::IsPaste( const SwWrtShell& rSh,
                                 nSourceOptions,             /* ?? */
                                 EXCHG_IN_ACTION_DEFAULT,    /* ?? */
                                 nFormat, nEventAction, 0,
-                                &rData.GetTransferable() );
+                                &rData.GetXTransferable() );
 
     return EXCHG_INOUT_ACTION_NONE != nAction;
 }
@@ -1146,7 +1146,7 @@ int SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
                                     nSourceOptions,             /* ?? */
                                     EXCHG_IN_ACTION_DEFAULT,    /* ?? */
                                     nFormat, nEventAction, 0,
-                                    &rData.GetTransferable() );
+                                    &rData.GetXTransferable() );
     }
 
     return EXCHG_INOUT_ACTION_NONE != nAction &&
@@ -1589,24 +1589,23 @@ int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
     SotStorageStreamRef xStrm;
     SvStream* pStream = 0;
     SwRead pRead = 0;
+    rtl::OUString sData;
     switch( nFmt )
     {
     case SOT_FORMAT_STRING:
         {
-            String sData;
             pRead = ReadAscii;
             if( rData.GetString( nFmt, sData ) )
             {
-                xStrm = new SotStorageStream( aEmptyStr );
+//              xStrm = new SotStorageStream( aEmptyStr );
+                pStream = new SvMemoryStream( (void*)sData.getStr(),
+                    ULONG( sData.getLength() + 1 ) * sizeof( sal_Unicode ),
+                    STREAM_READ );
 #ifdef __BIGENDIAN
-                xStrm->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+                pStream->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 #else
-                xStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+                pStream->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 #endif
-                xStrm->Write( (void*)sData.GetBuffer(),
-                              ULONG( sData.Len() + 1 ) * sizeof( sal_Unicode ));
-                xStrm->Seek( 0 );
-                pStream = &xStrm;
 
                 SwAsciiOptions aAOpt;
                 aAOpt.SetCharSet( RTL_TEXTENCODING_UCS2 );
@@ -1657,6 +1656,10 @@ int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
     }
     else
         nResId = MSG_CLPBRD_FORMAT_ERROR;
+
+    // Exist a SvMemoryStream? (data in the OUString and xStrm is empty)
+    if( pStream && !xStrm.Is() )
+        delete pStream;
 
     if( bMsg && nResId )
     {
@@ -1741,7 +1744,7 @@ PASTEOLE_SETREADSW3:
         {
             xStore = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
             xIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())
-                        ->CreateAndInit(  rData.GetTransferable(), xStore);
+                        ->CreateAndInit(  rData.GetXTransferable(), xStore);
         }
         else
         {
@@ -2613,7 +2616,7 @@ ASSERT( !&rFileName, "how do we read today .URL - Files?" );
 BOOL SwTransferable::IsPasteSpecial( const SwWrtShell& rWrtShell,
                                      const TransferableDataHelper& rData )
 {
-    return rData.GetTransferable().is() &&
+    return rData.GetXTransferable().is() &&
         1 < rData.GetTransferable()->getTransferDataFlavors().getLength() &&
         IsPaste( rWrtShell, rData );
 }
@@ -2652,7 +2655,7 @@ int SwTransferable::PasteFormat( SwWrtShell& rSh,
                                     nSourceOptions,             /* ?? */
                                     EXCHG_IN_ACTION_DEFAULT,    /* ?? */
                                     nFormat, nEventAction, nFormat,
-                                    &rData.GetTransferable() );
+                                    &rData.GetXTransferable() );
 
         if( EXCHG_INOUT_ACTION_NONE != nAction )
             nRet = SwTransferable::PasteData( rData, rSh, nAction, nFormat,
@@ -2673,7 +2676,7 @@ int SwTransferable::_TestAllowedFormat( const TransferableDataHelper& rData,
                         nDestination, EXCHG_IN_ACTION_COPY,
                         EXCHG_IN_ACTION_COPY, nFormat,
                         nEventAction, nFormat,
-                        &rData.GetTransferable() );
+                        &rData.GetXTransferable() );
     return EXCHG_INOUT_ACTION_NONE != nAction;
 }
 
