@@ -2,7 +2,7 @@
 // class SfxRequest
 //
 // (C) 1996 - 2000 StarDivision GmbH, Hamburg, Germany
-// $Author: rt $ $Date: 2003-09-19 07:58:55 $ $Revision: 1.13 $
+// $Author: svesik $ $Date: 2004-04-21 13:09:46 $ $Revision: 1.14 $
 // $Logfile:   T:/sfx2/source/control/request.cxv  $ $Workfile:   REQUEST.CXX  $
 //------------------------------------------------------------------*/
 
@@ -48,7 +48,9 @@
 
 #include <comphelper/processfactory.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "request.hxx"
 #include "dispatch.hxx"
@@ -89,9 +91,14 @@ struct SfxRequest_Impl: public SfxListener
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
 
                         SfxRequest_Impl( SfxRequest *pOwner )
-                        : pAnti( pOwner), bCancelled(FALSE),
-                          nCallMode( SFX_CALLMODE_SYNCHRON ), nModifier(0),
-                          pPool(0), pInternalArgs( 0 ), bAllowRecording( FALSE ), pViewFrame(0)
+                        : pAnti( pOwner)
+                        , pPool(0)
+                        , nModifier(0)
+                        , bCancelled(FALSE)
+                        , nCallMode( SFX_CALLMODE_SYNCHRON )
+                        , pInternalArgs( 0 )
+                        , bAllowRecording( FALSE )
+                        , pViewFrame(0)
                         {}
     ~SfxRequest_Impl() { delete pInternalArgs; }
 
