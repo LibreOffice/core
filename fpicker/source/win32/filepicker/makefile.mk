@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tra $ $Date: 2001-08-03 14:08:39 $
+#   last change: $Author: tra $ $Date: 2001-08-10 12:25:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ COMPRDB=$(SOLARBINDIR)$/applicat.rdb
 
 .INCLUDE : ..$/..$/cppumaker.mk
 
-CFLAGS+=/GX /GR /D_WIN32_WINNT=0x0500 
+CFLAGS+=/GX /GR /D_WIN32_WINNT=0x0500
 
 # --- Resources ----------------------------------------------------
 
@@ -94,7 +94,9 @@ SLOFILES=$(SLO)$/FileOpenDlg.obj\
          $(SLO)$/FilterContainer.obj\
          $(SLO)$/controlaccess.obj\
          $(SLO)$/dibpreview.obj\
-         $(SLO)$/helppopupwindow.obj
+         $(SLO)$/helppopupwindow.obj\
+         $(SLO)$/controlcommand.obj\
+         $(SLO)$/filepickerstate.obj
                  
 
 # --- Targets ------------------------------------------------------
