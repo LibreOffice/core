@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:59 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,14 +225,14 @@ SvStream& __EXPORT ScPatternAttr::Store(SvStream& rStream, USHORT nItemVersion) 
     return rStream;
 }
 
-void ScPatternAttr::GetFont( Font& rFont, ScAutoFontColorMode eAutoMode,
-                                OutputDevice* pOutDev, const Fraction* pScale,
-                                const SfxItemSet* pCondSet, BYTE nScript,
-                                const Color* pBackConfigColor, const Color* pTextConfigColor ) const
+void ScPatternAttr::GetFont(
+        Font& rFont, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode,
+        OutputDevice* pOutDev, const Fraction* pScale,
+        const SfxItemSet* pCondSet, BYTE nScript,
+        const Color* pBackConfigColor, const Color* pTextConfigColor )
 {
     //  Items auslesen
 
-    const SfxItemSet& rMySet = GetItemSet();
     const SvxFontItem* pFontAttr;
     UINT32 nFontHeight;
     FontWeight eWeight;
@@ -274,78 +274,78 @@ void ScPatternAttr::GetFont( Font& rFont, ScAutoFontColorMode eAutoMode,
         const SfxPoolItem* pItem;
 
         if ( pCondSet->GetItemState( nFontId, TRUE, &pItem ) != SFX_ITEM_SET )
-            pItem = &rMySet.Get( nFontId );
+            pItem = &rItemSet.Get( nFontId );
         pFontAttr = (const SvxFontItem*) pItem;
 
         if ( pCondSet->GetItemState( nHeightId, TRUE, &pItem ) != SFX_ITEM_SET )
-            pItem = &rMySet.Get( nHeightId );
+            pItem = &rItemSet.Get( nHeightId );
         nFontHeight = ((const SvxFontHeightItem*)pItem)->GetHeight();
 
         if ( pCondSet->GetItemState( nWeightId, TRUE, &pItem ) != SFX_ITEM_SET )
-            pItem = &rMySet.Get( nWeightId );
+            pItem = &rItemSet.Get( nWeightId );
         eWeight = (FontWeight)((const SvxWeightItem*)pItem)->GetValue();
 
         if ( pCondSet->GetItemState( nPostureId, TRUE, &pItem ) != SFX_ITEM_SET )
-            pItem = &rMySet.Get( nPostureId );
+            pItem = &rItemSet.Get( nPostureId );
         eItalic = (FontItalic)((const SvxPostureItem*)pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_UNDERLINE, TRUE, &pItem ) != SFX_ITEM_SET )
-            pItem = &rMySet.Get( ATTR_FONT_UNDERLINE );
+            pItem = &rItemSet.Get( ATTR_FONT_UNDERLINE );
         eUnder = (FontUnderline)((const SvxUnderlineItem*)pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_WORDLINE, TRUE, &pItem ) != SFX_ITEM_SET )
-            pItem = &rMySet.Get( ATTR_FONT_WORDLINE );
+            pItem = &rItemSet.Get( ATTR_FONT_WORDLINE );
         bWordLine = ((const SvxWordLineModeItem*)pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_CROSSEDOUT, TRUE, &pItem ) != SFX_ITEM_SET )
-            pItem = &rMySet.Get( ATTR_FONT_CROSSEDOUT );
+            pItem = &rItemSet.Get( ATTR_FONT_CROSSEDOUT );
         eStrike = (FontStrikeout)((const SvxCrossedOutItem*)pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_CONTOUR, TRUE, &pItem ) != SFX_ITEM_SET )
-            pItem = &rMySet.Get( ATTR_FONT_CONTOUR );
+            pItem = &rItemSet.Get( ATTR_FONT_CONTOUR );
         bOutline = ((const SvxContourItem*)pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_SHADOWED, TRUE, &pItem ) != SFX_ITEM_SET )
-            pItem = &rMySet.Get( ATTR_FONT_SHADOWED );
+            pItem = &rItemSet.Get( ATTR_FONT_SHADOWED );
         bShadow = ((const SvxShadowedItem*)pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_EMPHASISMARK, TRUE, &pItem ) != SFX_ITEM_SET )
-            pItem = &rMySet.Get( ATTR_FONT_EMPHASISMARK );
+            pItem = &rItemSet.Get( ATTR_FONT_EMPHASISMARK );
         eEmphasis = ((const SvxEmphasisMarkItem*)pItem)->GetEmphasisMark();
 
         if ( pCondSet->GetItemState( ATTR_FONT_RELIEF, TRUE, &pItem ) != SFX_ITEM_SET )
-            pItem = &rMySet.Get( ATTR_FONT_RELIEF );
+            pItem = &rItemSet.Get( ATTR_FONT_RELIEF );
         eRelief = (FontRelief)((const SvxCharReliefItem*)pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_COLOR, TRUE, &pItem ) != SFX_ITEM_SET )
-            pItem = &rMySet.Get( ATTR_FONT_COLOR );
+            pItem = &rItemSet.Get( ATTR_FONT_COLOR );
         aColor = ((const SvxColorItem*)pItem)->GetValue();
     }
-    else    // alles aus rMySet
+    else    // alles aus rItemSet
     {
-        pFontAttr = &(const SvxFontItem&)rMySet.Get( nFontId );
+        pFontAttr = &(const SvxFontItem&)rItemSet.Get( nFontId );
         nFontHeight = ((const SvxFontHeightItem&)
-                        rMySet.Get( nHeightId )).GetHeight();
+                        rItemSet.Get( nHeightId )).GetHeight();
         eWeight = (FontWeight)((const SvxWeightItem&)
-                        rMySet.Get( nWeightId )).GetValue();
+                        rItemSet.Get( nWeightId )).GetValue();
         eItalic = (FontItalic)((const SvxPostureItem&)
-                        rMySet.Get( nPostureId )).GetValue();
+                        rItemSet.Get( nPostureId )).GetValue();
         eUnder = (FontUnderline)((const SvxUnderlineItem&)
-                        rMySet.Get( ATTR_FONT_UNDERLINE )).GetValue();
+                        rItemSet.Get( ATTR_FONT_UNDERLINE )).GetValue();
         bWordLine = ((const SvxWordLineModeItem&)
-                        rMySet.Get( ATTR_FONT_WORDLINE )).GetValue();
+                        rItemSet.Get( ATTR_FONT_WORDLINE )).GetValue();
         eStrike = (FontStrikeout)((const SvxCrossedOutItem&)
-                        rMySet.Get( ATTR_FONT_CROSSEDOUT )).GetValue();
+                        rItemSet.Get( ATTR_FONT_CROSSEDOUT )).GetValue();
         bOutline = ((const SvxContourItem&)
-                        rMySet.Get( ATTR_FONT_CONTOUR )).GetValue();
+                        rItemSet.Get( ATTR_FONT_CONTOUR )).GetValue();
         bShadow = ((const SvxShadowedItem&)
-                        rMySet.Get( ATTR_FONT_SHADOWED )).GetValue();
+                        rItemSet.Get( ATTR_FONT_SHADOWED )).GetValue();
         eEmphasis = ((const SvxEmphasisMarkItem&)
-                        rMySet.Get( ATTR_FONT_EMPHASISMARK )).GetEmphasisMark();
+                        rItemSet.Get( ATTR_FONT_EMPHASISMARK )).GetEmphasisMark();
         eRelief = (FontRelief)((const SvxCharReliefItem&)
-                        rMySet.Get( ATTR_FONT_RELIEF )).GetValue();
+                        rItemSet.Get( ATTR_FONT_RELIEF )).GetValue();
         aColor = ((const SvxColorItem&)
-                        rMySet.Get( ATTR_FONT_COLOR )).GetValue();
+                        rItemSet.Get( ATTR_FONT_COLOR )).GetValue();
     }
     DBG_ASSERT(pFontAttr,"nanu?");
 
@@ -406,11 +406,11 @@ void ScPatternAttr::GetFont( Font& rFont, ScAutoFontColorMode eAutoMode,
             {
                 const SfxPoolItem* pItem;
                 if ( pCondSet->GetItemState( ATTR_BACKGROUND, TRUE, &pItem ) != SFX_ITEM_SET )
-                    pItem = &rMySet.Get( ATTR_BACKGROUND );
+                    pItem = &rItemSet.Get( ATTR_BACKGROUND );
                 aBackColor = ((const SvxBrushItem*)pItem)->GetColor();
             }
             else
-                aBackColor = ((const SvxBrushItem&)rMySet.Get( ATTR_BACKGROUND )).GetColor();
+                aBackColor = ((const SvxBrushItem&)rItemSet.Get( ATTR_BACKGROUND )).GetColor();
 
             //  if background color attribute is transparent, use window color for brightness comparisons
             if ( aBackColor == COL_TRANSPARENT ||
@@ -483,6 +483,16 @@ void ScPatternAttr::GetFont( Font& rFont, ScAutoFontColorMode eAutoMode,
     if (!rFont.IsTransparent())
         rFont.SetTransparent( TRUE );
 }
+
+void ScPatternAttr::GetFont(
+        Font& rFont, ScAutoFontColorMode eAutoMode,
+        OutputDevice* pOutDev, const Fraction* pScale,
+        const SfxItemSet* pCondSet, BYTE nScript,
+        const Color* pBackConfigColor, const Color* pTextConfigColor ) const
+{
+    GetFont( rFont, GetItemSet(), eAutoMode, pOutDev, pScale, pCondSet, nScript, pBackConfigColor, pTextConfigColor );
+}
+
 
 void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCondSet ) const
 {
