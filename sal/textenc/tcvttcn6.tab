@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvttcn6.tab,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-04 13:37:06 $
+ *  last change: $Author: sb $ $Date: 2002-12-10 10:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -647,9 +647,7 @@ static ImplTextEncodingData const aImplBIG5TextEncodingData
         136,
         "euc-tw",
         "big5",
-        RTL_TEXTENCODING_INFO_ASCII
-            | RTL_TEXTENCODING_INFO_MULTIBYTE
-            | RTL_TEXTENCODING_INFO_MIME };
+        RTL_TEXTENCODING_INFO_MULTIBYTE | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_CHINESE_TRADITIONAL, pc code page 950, mac encoding 2 */
 
 /* ======================================================================= */
@@ -1205,7 +1203,7 @@ static ImplTextEncodingData const aImplMS950TextEncodingData
         136,
         "euc-tw",
         "big5",
-        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
+        RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* WIN/DOS/OS2, SCRIPT_CHINESE_TRADITIONAL, pc code page 950, mac encoding
        2 */
 
@@ -1762,5 +1760,5 @@ static ImplTextEncodingData const aImplAPPLECHINTRADTextEncodingData
         136,
         "euc-tw",
         "big5",
-        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
+        RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* MAC, SCRIPT_CHINESE_TRADITIONAL, pc code page 950, mac encoding 2 */

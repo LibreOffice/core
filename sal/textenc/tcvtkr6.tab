@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtkr6.tab,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-04 13:37:05 $
+ *  last change: $Author: sb $ $Date: 2002-12-10 10:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,6 +619,10 @@ static ImplDBCSConvertData const aImplKSC5601DBCSCvtData =
 
 /* ======================================================================= */
 
+// TODO  EUC-KR should only use two-byte characters in the range 0xA1--FE
+// 0xA1--FE, and thus should have the RTL_TEXTENCODING_INFO_ASCII property.  For
+// whatever reason, EUC-KR is treated like MS-949 that uses trail bytes starting
+// from 0x41.
 static ImplTextEncodingData const aImplEUCKRTextEncodingData
     = { { &aImplKSC5601DBCSCvtData,
           ImplDBCSToUnicode,
@@ -635,9 +639,7 @@ static ImplTextEncodingData const aImplEUCKRTextEncodingData
         129,
         "euc-kr",
         "euc-kr",
-        RTL_TEXTENCODING_INFO_ASCII
-            | RTL_TEXTENCODING_INFO_MULTIBYTE
-            | RTL_TEXTENCODING_INFO_MIME };
+        RTL_TEXTENCODING_INFO_MULTIBYTE | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_KOREAN, pc code page 934, mac encoding 3 */
 
 /* ======================================================================= */
@@ -658,7 +660,7 @@ static ImplTextEncodingData const aImplMS949TextEncodingData
         129,
         "euc-kr",
         "euc-kr",
-        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
+        RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* WIN/DOS/OS2, SCRIPT_KOREAN, pc code page 934, mac encoding 3 */
 
 /* ======================================================================= */
@@ -681,7 +683,7 @@ static ImplTextEncodingData const aImplAPPLEKOREANTextEncodingData
         129,
         "euc-kr",
         "euc-kr",
-        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
+        RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* MAC, SCRIPT_KOREAN, pc code page 934, mac encoding 3 */
 
 /* ======================================================================= */
@@ -1254,7 +1256,5 @@ static ImplTextEncodingData const aImplMS1361TextEncodingData
         130,
         "euc-kr",
         "euc-kr",
-        RTL_TEXTENCODING_INFO_ASCII
-            | RTL_TEXTENCODING_INFO_MULTIBYTE
-            | RTL_TEXTENCODING_INFO_MIME };
+        RTL_TEXTENCODING_INFO_MULTIBYTE | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_KOREAN, pc code page 1361, mac encoding 3 */

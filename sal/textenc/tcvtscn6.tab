@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtscn6.tab,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-04 13:37:06 $
+ *  last change: $Author: sb $ $Date: 2002-12-10 10:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1868,9 +1868,7 @@ static ImplTextEncodingData const aImplGBKTextEncodingData
         134,
         "euc-cn",
         "GBK",
-        RTL_TEXTENCODING_INFO_ASCII
-            | RTL_TEXTENCODING_INFO_MULTIBYTE
-            | RTL_TEXTENCODING_INFO_MIME };
+        RTL_TEXTENCODING_INFO_MULTIBYTE | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_CHINESE_SIMPLIFIED, pc code page 936, mac encoding 25 */
 
 /* ======================================================================= */
@@ -2426,7 +2424,7 @@ static ImplTextEncodingData const aImplMS936TextEncodingData
         134,
         "euc-cn",
         "gb2312",
-        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
+        RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* WIN/DOS/OS2, SCRIPT_CHINESE_SIMPLIFIED, pc code page 936, mac encoding
        25 */
 

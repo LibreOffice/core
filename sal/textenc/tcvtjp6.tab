@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtjp6.tab,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-13 11:34:12 $
+ *  last change: $Author: sb $ $Date: 2002-12-10 10:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,9 +632,7 @@ static ImplTextEncodingData const aImplSJISTextEncodingData
         128,
         "euc-jp",
         "shift_jis",
-        RTL_TEXTENCODING_INFO_ASCII
-            | RTL_TEXTENCODING_INFO_MULTIBYTE
-            | RTL_TEXTENCODING_INFO_MIME };
+        RTL_TEXTENCODING_INFO_MULTIBYTE | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_JAPANESE, pc code page 932, mac encoding 1 */
 
 /* ======================================================================= */
@@ -1190,7 +1188,7 @@ static ImplTextEncodingData const aImplMS932TextEncodingData
         128,
         "euc-jp",
         "shift_jis",
-        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
+        RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* WIN/DOS/OS2, SCRIPT_JAPANESE, pc code page 932, mac encoding 1 */
 
 /* ======================================================================= */
@@ -1746,7 +1744,7 @@ static ImplTextEncodingData const aImplAPPLEJAPANESETextEncodingData
         128,
         "euc-jp",
         "shift_jis",
-        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
+        RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* MAC, SCRIPT_JAPANESE, pc code page 932, mac encoding 1 */
 
 /* ======================================================================= */

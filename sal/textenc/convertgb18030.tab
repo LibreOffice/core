@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convertgb18030.tab,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-04 13:37:03 $
+ *  last change: $Author: sb $ $Date: 2002-12-10 10:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ static ImplTextEncodingData const aImplGb18030TextEncodingData
         134,
         "gbk-0",
         "GB18030",
-        RTL_TEXTENCODING_INFO_ASCII
+        RTL_TEXTENCODING_INFO_UNICODE
             | RTL_TEXTENCODING_INFO_MULTIBYTE
             | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_CHINESE_SIMPLIFIED */
