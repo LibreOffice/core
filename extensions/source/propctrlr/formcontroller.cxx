@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-20 08:49:56 $
+ *  last change: $Author: tbe $ $Date: 2001-02-22 09:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1698,6 +1698,15 @@ namespace pcr
             ::rtl::OUString aStrVal;
             PropertyState eState;
 
+            // check, if this is a dialog control
+            sal_Bool bIsDialogControl = sal_False;
+            Reference< XPropertySetInfo >  xPropInfo = m_xIntrospecteeAsProperty->getPropertySetInfo();
+            if ( xPropInfo->hasPropertyByName( PROPERTY_WIDTH ) &&
+                 xPropInfo->hasPropertyByName( PROPERTY_HEIGHT ) &&
+                 xPropInfo->hasPropertyByName( PROPERTY_POSITIONX ) &&
+                 xPropInfo->hasPropertyByName( PROPERTY_POSITIONY ) )
+                bIsDialogControl = sal_True;
+
             for (sal_uInt32 i=0; i<nPropCount; ++i, ++pProps)
             {
                 sal_Int32 nPropId = m_pPropertyInfo->getPropertyId(pProps->Name);
@@ -1922,16 +1931,22 @@ namespace pcr
                         }
                         else
                         {
-                            if (nPropId== PROPERTY_ID_HEIGHT || nPropId== PROPERTY_ID_WIDTH || nPropId== PROPERTY_ID_ROWHEIGHT)
+                            if ( (nPropId== PROPERTY_ID_HEIGHT || nPropId== PROPERTY_ID_WIDTH || nPropId== PROPERTY_ID_ROWHEIGHT)
+                                && !bIsDialogControl )
                                 pProperty->nDigits=1;
 
                             pProperty->eControlType = BCT_NUMFIELD;
                         }
                     }
                 }
+
+
+                if (bIsDialogControl)
+                    bFilter = sal_False;    // don't filter dialog controls
+
                 //////////////////////////////////////////////////////////////////////
                 // Filter
-                if (bFilter )
+                if (bFilter)
                 {
                     switch( eType )     // TypeClass Inspection
                     {
@@ -2527,6 +2542,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/02/20 08:49:56  fs
+ *  #84111# allow number formats to be removed
+ *
  *  Revision 1.8  2001/02/13 16:27:08  fs
  *  #83848# no multiline input for 'DefaultText' of FileControl / #83655# -1 as minimum for MaxTextLength
  *

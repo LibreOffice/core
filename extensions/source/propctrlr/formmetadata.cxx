@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-06 10:19:29 $
+ *  last change: $Author: tbe $ $Date: 2001-02-22 09:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,9 @@ namespace pcr
                 OPropertyInfoImpl(PROPERTY_CLASSID,             PROPERTY_ID_CLASSID,            sal_False, String(ModuleRes(RID_STR_CLASSID)),          nPos++, HID_PROP_CLASSID),
                 OPropertyInfoImpl(PROPERTY_HEIGHT,              PROPERTY_ID_HEIGHT,             sal_True,  String(ModuleRes(RID_STR_HEIGHT)),           nPos++, HID_PROP_HEIGHT),
                 OPropertyInfoImpl(PROPERTY_WIDTH,               PROPERTY_ID_WIDTH,              sal_True,  String(ModuleRes(RID_STR_WIDTH)),            nPos++, HID_PROP_WIDTH),
+                OPropertyInfoImpl(PROPERTY_POSITIONX,           PROPERTY_ID_POSITIONX,          sal_True,  String(ModuleRes(RID_STR_POSITIONX)),        nPos++, 0),
+                OPropertyInfoImpl(PROPERTY_POSITIONY,           PROPERTY_ID_POSITIONY,          sal_True,  String(ModuleRes(RID_STR_POSITIONY)),        nPos++, 0),
+
                 OPropertyInfoImpl(PROPERTY_BOUNDCOLUMN,         PROPERTY_ID_BOUNDCOLUMN,        sal_True,  String(ModuleRes(RID_STR_BOUNDCOLUMN)),      nPos++, HID_PROP_BOUNDCOLUMN),
                 OPropertyInfoImpl(PROPERTY_LISTSOURCETYPE,      PROPERTY_ID_LISTSOURCETYPE,     sal_True,  String(ModuleRes(RID_STR_LISTSOURCETYPE)),   nPos++, HID_PROP_LISTSOURCETYPE),
                 OPropertyInfoImpl(PROPERTY_LISTSOURCE,          PROPERTY_ID_LISTSOURCE,         sal_True,  String(ModuleRes(RID_STR_LISTSOURCE)),       nPos++, HID_PROP_LISTSOURCE),
@@ -470,6 +473,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/02/06 10:19:29  fs
+ *  #83479# reintroduced the HasNavigationBar property
+ *
  *  Revision 1.3  2001/02/05 09:33:13  fs
  *  #83424# +RID_STR_ENUM_SUBMIT_TARGET
  *

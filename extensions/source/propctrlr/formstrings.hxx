@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-06 10:18:10 $
+ *  last change: $Author: tbe $ $Date: 2001-02-22 09:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,8 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_LISTINDEX,              "ListIndex");
     PCR_CONSTASCII_STRING( PROPERTY_HEIGHT,                 "Height");
     PCR_CONSTASCII_STRING( PROPERTY_HASNAVIGATION,          "HasNavigationBar");
+    PCR_CONSTASCII_STRING( PROPERTY_POSITIONX,              "PositionX");
+    PCR_CONSTASCII_STRING( PROPERTY_POSITIONY,              "PositionY");
 
     // services
     PCR_CONSTASCII_STRING( SERVICE_COMPONENT_GROUPBOX,      "com.sun.star.form.component.GroupBox");
@@ -254,6 +256,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/02/06 10:18:10  fs
+ *  #83479# reintroduced the HasNavigationBar property
+ *
  *  Revision 1.2  2001/01/17 08:44:07  fs
  *  #82726# removed an obsolete string
  *

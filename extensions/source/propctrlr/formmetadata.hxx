@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-06 10:18:10 $
+ *  last change: $Author: tbe $ $Date: 2001-02-22 09:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,8 @@ namespace pcr
     #define PROPERTY_ID_HELPTEXT             96
     #define PROPERTY_ID_HELPURL              97
     #define PROPERTY_ID_HASNAVIGATION        98
+    #define PROPERTY_ID_POSITIONX            99
+    #define PROPERTY_ID_POSITIONY            100
 
 //............................................................................
 } // namespace pcr
@@ -239,6 +241,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/02/06 10:18:10  fs
+ *  #83479# reintroduced the HasNavigationBar property
+ *
  *  Revision 1.2  2001/01/17 08:42:10  fs
  *  tightened the property id range
  *
