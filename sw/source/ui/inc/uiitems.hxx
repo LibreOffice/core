@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiitems.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:08:44 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,18 +61,27 @@
 #ifndef _UIITEMS_HXX
 #define _UIITEMS_HXX
 
-#include "pagedesc.hxx"
-#include "cmdid.h"
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
 #endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+#ifndef INCLUDED_SW_CMDID_H
+#include "cmdid.h"
+#endif
+#ifndef _PAGEDESC_HXX
+#include "pagedesc.hxx"
+#endif
+
 class SwNumRule;
 class IntlWrapper;
 
 /*--------------------------------------------------------------------
     Beschreibung: Container fuer FootNote
  --------------------------------------------------------------------*/
-class SwPageFtnInfoItem : public SfxPoolItem
+class SW_DLLPUBLIC SwPageFtnInfoItem : public SfxPoolItem
 {
     SwPageFtnInfo aFtnInfo;
 
@@ -100,7 +109,7 @@ public:
 
 /*******************************************************************/
 
-class SwPtrItem : public SfxPoolItem
+class SW_DLLPUBLIC SwPtrItem : public SfxPoolItem
 {
     void* pMisc;
 
@@ -117,7 +126,7 @@ public:
 
 /*******************************************************************/
 
-class SwUINumRuleItem : public SfxPoolItem
+class SW_DLLPUBLIC SwUINumRuleItem : public SfxPoolItem
 {
     SwNumRule* pRule;
 
