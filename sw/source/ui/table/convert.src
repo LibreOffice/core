@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 21:00:47 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT [ italian ] = "~Tabulazione" ;
         TEXT [ portuguese_brazilian ] = "~Tabulação" ;
         TEXT [ portuguese ] = "~Tabulação" ;
-        TEXT [ finnish ] = "~Sarkain" ;
+        TEXT [ finnish ] = "~Sarkaimet" ;
         TEXT [ danish ] = "Tabulator" ;
         TEXT [ french ] = "~Tabulation" ;
         TEXT [ swedish ] = "~Tabulator" ;
@@ -125,7 +125,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT [ italian ] = "~Punto e virgola" ;
         TEXT [ portuguese_brazilian ] = "~Ponto e vírgula" ;
         TEXT [ portuguese ] = "Ponto e vír~gula" ;
-        TEXT [ finnish ] = "~Puolipiste" ;
+        TEXT [ finnish ] = "~Puolipisteet" ;
         TEXT [ danish ] = "Semikolon" ;
         TEXT [ french ] = "~Point virgule" ;
         TEXT [ swedish ] = "~Semikolon" ;
@@ -201,6 +201,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ turkish ] = "Di~ðer: ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Otros:  ";
+        Text[ finnish ] = "~Muu: ";
     };
     Edit ED_OTHER
     {
@@ -238,6 +239,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ turkish ] = "Tüm sütunlar a~yný geniþlikte";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mismo an~cho para todas las columnas";
+        Text[ finnish ] = "Yhtäsuuret sarakkeiden leveydet";
     };
     GroupBox GB_DELIM
     {
@@ -249,7 +251,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT [ italian ] = "Separatore nel testo" ;
         TEXT [ portuguese_brazilian ] = "Delimitador" ;
         TEXT [ portuguese ] = "Separador" ;
-        TEXT [ finnish ] = "Erotin" ;
+        TEXT [ finnish ] = "Erota teksti kohdasta" ;
         TEXT [ danish ] = "Separatorer i tekst" ;
         TEXT [ french ] = "Séparateur" ;
         TEXT [ swedish ] = "Skiljetecken i text" ;
@@ -296,6 +298,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ turkish ] = "Baþ~lýk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Encabezado";
+        Text[ finnish ] = "Yläotsikko";
     };
     CheckBox CB_REPEAT_HEADER
     {
@@ -324,6 +327,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ turkish ] = "Ýlk satýrý her sayfada yi~nele";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Repetir en cada página";
+        Text[ finnish ] = "~Toista yläotsikko";
     };
     CheckBox CB_DONT_SPLIT
     {
@@ -352,6 +356,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ turkish ] = "Tabloyu tek sayfaya  ~sýðdýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~No dividir tabla";
+        Text[ finnish ] = "Älä jaa taulukkoa";
     };
     CheckBox CB_BORDER
     {
@@ -380,6 +385,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ turkish ] = "~Kenarlýk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Borde";
+        Text[ finnish ] = "Reuna";
     };
     GroupBox GB_OPTIONS
     {
@@ -407,6 +413,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ turkish ] = "Seçenekler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opciones";
+        Text[ finnish ] = "Asetukset";
     };
     String STR_CONVERT_TEXT_TABLE
     {
@@ -466,7 +473,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text [ italian ] = "~Formattazione automatica..." ;
         Text [ portuguese_brazilian ] = "Formatação Automática..." ;
         Text [ portuguese ] = "Auto~Formato..." ;
-        Text [ finnish ] = "Automaattimuoto..." ;
+        Text [ finnish ] = "~Automaattinen muotoilu" ;
         Text [ danish ] = "AutoFormat..." ;
         Text [ french ] = "AutoFormat..." ;
         Text [ swedish ] = "AutoFormat..." ;
