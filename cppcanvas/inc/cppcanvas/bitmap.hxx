@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:50:24 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:21:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,10 @@
 #include <cppcanvas/bitmapcanvas.hxx>
 #endif
 
-namespace drafts { namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering
 {
     class  XBitmap;
-} } } } }
+} } } }
 
 
 /* Definition of Bitmap interface */
@@ -114,7 +114,7 @@ namespace cppcanvas
         virtual BitmapCanvasSharedPtr       getBitmapCanvas() const = 0;
 
         virtual ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::rendering::XBitmap >  getUNOBitmap() const = 0;
+            ::com::sun::star::rendering::XBitmap >  getUNOBitmap() const = 0;
     };
 
     typedef ::boost::shared_ptr< ::cppcanvas::Bitmap > BitmapSharedPtr;
