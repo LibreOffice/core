@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:29:56 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,19 +600,15 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
             bResult = TRUE;
             break;
 
-        // Scroll up but don't move the focus indicator.
+        // Go to previous page.  No wrap around.
         case KEY_PAGEUP:
-            ScrollStart();
-            pViewShell->ScrollLines (0, -10);
-            ScrollEnd();
+            GotoNextPage(-1);
             bResult = TRUE;
             break;
 
-        // Scroll down but don't move the focus indicator.
+        // Go to next page.  No wrap around..
         case KEY_PAGEDOWN:
-            ScrollStart();
-            pViewShell->ScrollLines (0, +10);
-            ScrollEnd();
+            GotoNextPage(+1);
             bResult = TRUE;
             break;
 
@@ -981,6 +977,23 @@ void SelectionFunction::SetCurrentPageAndSwitchView (
     }
 }
 
+
+
+
+void SelectionFunction::GotoNextPage (int nOffset)
+{
+    SdPage* pPage = mrController.GetViewShell().GetActualPage();
+    sal_Int32 nIndex = (pPage->GetPageNum()-1) / 2;
+    nIndex += nOffset;
+    USHORT nPageCount = mrController.GetModel().GetPageCount();
+
+    if (nIndex >= nPageCount)
+        nIndex = nPageCount - 1;
+    if (nIndex < 0)
+        nIndex = 0;
+
+    mrController.GetPageSelector().SetCurrentPage(nIndex);
+}
 
 
 
