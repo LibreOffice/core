@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextAdjust.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:25 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:21:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 
     <p>This counts for the complete text, not individual lines. </p>
  */
-enum TextAdjust
+published enum TextAdjust
 {
     //-------------------------------------------------------------------------
 
