@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-02 09:01:03 $
+ *  last change: $Author: kr $ $Date: 2001-02-06 13:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,8 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 
-import com.sun.star.lib.sandbox.IInvokeHook;
+import com.sun.star.lib.util.IInvokeHook;
+import com.sun.star.lib.util.IInvokable;
 
 import com.sun.star.lib.sandbox.generic.DispatcherAdapterBase;
 
@@ -130,7 +131,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.13 $ $ $Date: 2001-02-02 09:01:03 $
+ * @version     $Revision: 1.14 $ $ $Date: 2001-02-06 13:36:17 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -197,7 +198,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
 
 
 
-    public class MessageDispatcher extends Thread {
+    public class MessageDispatcher extends Thread implements IInvokable {
         boolean _quit = false;
 
         private ThreadID _threadID;
@@ -211,18 +212,18 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
 
             if(__MessageDispatcher_run_hook != null) {
                 try {
-                    __MessageDispatcher_run_hook.invoke(this, "doWork", null);
+                    __MessageDispatcher_run_hook.invoke(this, null);
                 }
                 catch(Exception exception) { // should not fly
-                    System.err.println(getClass().getName() + " - unexpected: method >doWork< threw an exception - " + exception);
+                    System.err.println(getClass().getName() + " - unexpected: method >invoke< threw an exception - " + exception);
                     exception.printStackTrace();
                 }
             }
             else
-                doWork();
+                invoke(null);
         }
 
-        public void doWork() {
+        public Object invoke(Object params[]) {
             try {
                 do {
                     try {
@@ -318,6 +319,8 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
             // dispose this bridge only within an error
             if(!_quit && !java_remote_bridge.this._disposed)
                 java_remote_bridge.this.dispose();
+
+            return null;
         }
     }
 
