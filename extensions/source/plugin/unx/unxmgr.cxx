@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unxmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-23 17:31:20 $
+ *  last change: $Author: pl $ $Date: 2001-12-17 12:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <dirent.h>
-#include <dlfcn.h>
 #include <osl/thread.h>
 
 #include <vcl/svapp.hxx>
@@ -78,15 +77,22 @@ static PluginDescription** CheckPlugin( const ByteString& rPath, int& rDescripti
     PluginDescription** pRet = NULL;
     rDescriptions = 0;
 
-    void *pLib = dlopen( rPath.GetBuffer(), RTLD_LAZY );
-    if( ! pLib )
-        return NULL;
+    ByteString aCommand( "pluginapp.bin \"" );
+    aCommand.Append( rPath );
+    aCommand.Append( '"' );
 
-    char*(*pNP_GetMIMEDescription)() = (char*(*)())
-        dlsym( pLib, "NP_GetMIMEDescription" );
-    if( pNP_GetMIMEDescription )
+    FILE* pResult = popen( aCommand.GetBuffer(), "r" );
+    if( pResult )
     {
-        ByteString aMIME = pNP_GetMIMEDescription();
+        ByteString aMIME;
+        char buf[256];
+        while( fgets( buf, sizeof( buf ), pResult ) )
+            aMIME += buf;
+        pclose( pResult );
+        if( aMIME.GetChar( aMIME.Len()-1 ) == '\n' )
+            aMIME.Erase( aMIME.Len()-1 );
+
+
         char cTok = ';';
         if( aMIME.GetTokenCount( ';' ) > 2 )
             cTok = ';';
@@ -107,10 +113,6 @@ static PluginDescription** CheckPlugin( const ByteString& rPath, int& rDescripti
         }
         rDescriptions = nExtensions;
     }
-    // some libraries register atexit handlers when loaded
-    // (e.g. g++ made libraries register global destructors)
-    // not closing them does prevent this
-//  dlclose( pLib );
     return pRet;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: npwrap.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-23 17:31:20 $
+ *  last change: $Author: pl $ $Date: 2001-12-17 12:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,8 +167,38 @@ void* CreateNewShell( void** pShellReturn )
     return newWidget;
 }
 
+// Unix specific implementation
+static void CheckPlugin( const char* pPath )
+{
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
+
+    void *pLib = dlopen( pPath, RTLD_LAZY );
+    if( ! pLib )
+    {
+#ifdef DEBUG
+        fprintf( stderr, "could not dlopen( %s ) (%s)\n", pPath, dlerror() );
+#endif
+        return;
+    }
+
+    char*(*pNP_GetMIMEDescription)() = (char*(*)())
+        dlsym( pLib, "NP_GetMIMEDescription" );
+    if( pNP_GetMIMEDescription )
+        printf( "%s\n", pNP_GetMIMEDescription() );
+#ifdef DEBUG
+    else
+        fprintf( stderr, "could not dlsym NP_GetMIMEDescription (%s)\n", dlerror() );
+#endif
+    dlclose( pLib );
+}
+
 main( int argc, char **argv)
 {
+    if( argc < 3 )
+    {
+        CheckPlugin(argv[1]);
+        exit(0);
+    }
 #if ! ( defined DEBUG || defined DBG_UTIL )
     fclose( stdout );
     fclose( stderr );
