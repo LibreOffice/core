@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:17:17 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1395,7 +1395,7 @@ FASTBOOL SwCursor::GoSentence( SentenceMoveType eMoveType )
 
 
 FASTBOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
-                              BOOL bVisualAllowed, BOOL bInsertCrsr )
+                              BOOL bVisualAllowed,BOOL bSkipHidden, BOOL bInsertCrsr )
 {
     SwTableCursor* pTblCrsr = (SwTableCursor*)*this;
     if( pTblCrsr )
@@ -1407,7 +1407,7 @@ FASTBOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
     SwNode& rNode = GetPoint()->nNode.GetNode();
     const BOOL bDoNotSetBidiLevel = 0 != (SwUnoCrsr*)*this;
 
-    if ( ! bDoNotSetBidiLevel )
+    if ( !bDoNotSetBidiLevel )
     {
         if( rNode.IsTxtNode() )
         {
@@ -1452,7 +1452,13 @@ FASTBOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
     // kann der Cursor n-mal weiterverschoben werden ?
     SwCrsrSaveState aSave( *this );
     SwMoveFn fnMove = bLeft ? fnMoveBackward : fnMoveForward;
-    SwGoInDoc fnGo = CRSR_SKIP_CELLS == nMode ? fnGoCntntCells : fnGoCntnt;
+
+    SwGoInDoc fnGo;
+    if ( bSkipHidden )
+        fnGo = CRSR_SKIP_CELLS == nMode ? fnGoCntntCellsSkipHidden : fnGoCntntSkipHidden;
+    else
+        fnGo = CRSR_SKIP_CELLS == nMode ? fnGoCntntCells : fnGoCntnt;
+
     while( nCnt && Move( fnMove, fnGo ) )
         --nCnt;
 
