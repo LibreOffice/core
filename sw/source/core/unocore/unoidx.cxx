@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-12 18:30:43 $
+ *  last change: $Author: os $ $Date: 2001-01-19 14:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1580,15 +1580,16 @@ void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
 
     if(pType)
     {
+        SwDoc* pLocalDoc = m_pDoc;
         SwTOXMark* pCurMark = lcl_GetMark(pType, GetTOXMark());
         if(pCurMark)
         {
             SwTOXMark aMark(*pCurMark);
             switch(pMap->nWID)
             {
-//                  case WID_ALT_TEXT:
-//                      aMark.SetAlternativeText(lcl_AnyToString(aValue));
-//                  break;
+                case WID_ALT_TEXT:
+                    aMark.SetAlternativeText(lcl_AnyToString(aValue));
+                break;
                 case WID_LEVEL:
                     aMark.SetLevel(std::min((sal_Int8) MAXLEVEL, (sal_Int8)lcl_AnyToInt16(aValue)));
                 break;
@@ -1614,7 +1615,7 @@ void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
                 aPam.GetPoint()->nContent++;
 
             //die alte Marke loeschen
-            m_pDoc->Delete(pCurMark);
+            pLocalDoc->Delete(pCurMark);
             m_pTOXMark = pCurMark = 0;
 
             sal_Bool bInsAtPos = aMark.IsAlternativeText();
@@ -1624,15 +1625,16 @@ void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
             if( bInsAtPos )
             {
                 SwPaM aTmp( *pStt );
-                m_pDoc->Insert( aTmp, aMark, 0 );
-                pCrsr = m_pDoc->CreateUnoCrsr( *aTmp.Start() );
+                pLocalDoc->Insert( aTmp, aMark, 0 );
+                pCrsr = pLocalDoc->CreateUnoCrsr( *aTmp.Start() );
                 pCrsr->Left(1);
             }
             else if( *pEnd != *pStt )
             {
-                m_pDoc->Insert( aPam, aMark, SETATTR_DONTEXPAND );
-                pCrsr = m_pDoc->CreateUnoCrsr( *aPam.Start() );
+                pLocalDoc->Insert( aPam, aMark, SETATTR_DONTEXPAND );
+                pCrsr = pLocalDoc->CreateUnoCrsr( *aPam.Start() );
             }
+            m_pDoc = pLocalDoc;
             //und sonst - Marke geloescht?
 
             if(pCrsr)
@@ -1640,7 +1642,11 @@ void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
                 SwTxtAttr* pTxtAttr = pCrsr->GetNode()->GetTxtNode()->GetTxtAttr(
                             pCrsr->GetPoint()->nContent, RES_TXTATR_TOXMARK);
                 if(pTxtAttr)
+                {
                     m_pTOXMark = &pTxtAttr->GetTOXMark();
+                    m_pDoc->GetUnoCallBack()->Add(this);
+                    pType->Add(&aTypeDepend);
+                }
             }
         }
     }
