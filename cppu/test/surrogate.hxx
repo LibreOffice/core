@@ -2,9 +2,9 @@
  *
  *  $RCSfile: surrogate.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:54 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 13:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ inline sal_Bool makeSurrogate( com::sun::star::uno::Reference< T > & rOut,
     typelib_TypeDescription * pTD = 0;
     const com::sun::star::uno::Type & rType = ::getCppuType( &rOriginal );
     TYPELIB_DANGER_GET( &pTD, rType.getTypeLibType() );
-    OSL_ENSHURE( pTD, "### cannot get typedescription!" );
+    OSL_ENSURE( pTD, "### cannot get typedescription!" );
     if (pTD)
     {
         uno_Environment * pCppEnv1 = 0;
@@ -153,13 +153,13 @@ inline sal_Bool makeSurrogate( com::sun::star::uno::Reference< T > & rOut,
 /*
     ::com::sun::star::uno::Mapping aCpp2Uno( CPPU_CURRENT_LANGUAGE_BINDING_NAME, UNO_LB_UNO );
     ::com::sun::star::uno::Mapping aUno2Cpp( UNO_LB_UNO, CPPU_CURRENT_LANGUAGE_BINDING_NAME );
-    OSL_ENSHURE( aCpp2Uno.is() && aUno2Cpp.is(), "### cannot get mappings!" );
+    OSL_ENSURE( aCpp2Uno.is() && aUno2Cpp.is(), "### cannot get mappings!" );
     if (aCpp2Uno.is() && aUno2Cpp.is())
     {
         typelib_TypeDescription * pTD = 0;
         const com::sun::star::uno::Type & rType = ::getCppuType( &rOriginal );
         TYPELIB_DANGER_GET( &pTD, rType.getTypeLibType() );
-        OSL_ENSHURE( pTD, "### cannot get typedescription!" );
+        OSL_ENSURE( pTD, "### cannot get typedescription!" );
         if (pTD)
         {
             uno_Interface * pUno = (uno_Interface *)aCpp2Uno.mapInterface(
@@ -168,7 +168,7 @@ inline sal_Bool makeSurrogate( com::sun::star::uno::Reference< T > & rOut,
             {
                 UnoMediator * pPseudo = new UnoMediator( pUno );
                 (*pPseudo->acquire)( pPseudo );
-                OSL_ENSHURE( uno_equals( &pUno, &pPseudo, pTD, 0 ), "### interfaces don't belong to same object, but they do!?" );
+                OSL_ENSURE( uno_equals( &pUno, &pPseudo, pTD, 0 ), "### interfaces don't belong to same object, but they do!?" );
                 (*pUno->release)( pUno );
 
                 T * pCpp = (T *)aUno2Cpp.mapInterface(

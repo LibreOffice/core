@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-12 11:46:19 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 13:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ struct MappingsData
 MappingsData::~MappingsData() SAL_THROW( () )
 {
 #ifdef CPPU_ASSERTIONS
-    OSL_ENSHURE( aName2Entry.empty() && aMapping2Entry.empty(), "### unrevoked mappings!" );
+    OSL_ENSURE( aName2Entry.empty() && aMapping2Entry.empty(), "### unrevoked mappings!" );
     t_OUString2Entry::const_iterator iPos( aName2Entry.begin() );
     while (iPos != aName2Entry.end())
     {
@@ -178,7 +178,7 @@ MappingsData::~MappingsData() SAL_THROW( () )
         CPPU_TRACE( "### unrevoked mapping: %s", aName.getStr() );
         ++iPos;
     }
-    OSL_ENSHURE( aCallbacks.empty(), "### callbacks left!" );
+    OSL_ENSURE( aCallbacks.empty(), "### callbacks left!" );
     if (aCallbacks.size())
     {
         OString aSize( OString::valueOf( (sal_Int32)aCallbacks.size() ) );
@@ -263,7 +263,7 @@ static void SAL_CALL mediate_mapInterface(
     typelib_InterfaceTypeDescription * pInterfaceTypeDescr )
     SAL_THROW( () )
 {
-    OSL_ENSHURE( pMapping && ppOut, "### null ptr!" );
+    OSL_ENSURE( pMapping && ppOut, "### null ptr!" );
     if (pMapping && ppOut)
     {
         uno_Interface * pUnoI = 0;
@@ -532,7 +532,7 @@ SAL_DLLEXPORT void SAL_CALL uno_getMapping(
     rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSHURE( ppMapping && pFrom && pTo, "### null ptr!" );
+    OSL_ENSURE( ppMapping && pFrom && pTo, "### null ptr!" );
     if (*ppMapping)
     {
         (*(*ppMapping)->release)( *ppMapping );
@@ -588,7 +588,7 @@ SAL_DLLEXPORT void SAL_CALL uno_getMappingByName(
     rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSHURE( ppMapping && pFrom && pTo, "### null ptr!" );
+    OSL_ENSURE( ppMapping && pFrom && pTo, "### null ptr!" );
     if (*ppMapping)
     {
         (*(*ppMapping)->release)( *ppMapping );
@@ -597,12 +597,12 @@ SAL_DLLEXPORT void SAL_CALL uno_getMappingByName(
 
     uno_Environment * pEFrom = 0;
     uno_getEnvironment( &pEFrom, pFrom, 0 );
-    OSL_ENSHURE( pEFrom, "### cannot get source environment!" );
+    OSL_ENSURE( pEFrom, "### cannot get source environment!" );
     if (pEFrom)
     {
         uno_Environment * pETo = 0;
         uno_getEnvironment( &pETo, pTo, 0 );
-        OSL_ENSHURE( pETo, "### cannot get target environment!" );
+        OSL_ENSURE( pETo, "### cannot get target environment!" );
         if (pETo)
         {
             ::uno_getMapping( ppMapping, pEFrom, pETo, pAddPurpose );
@@ -680,7 +680,7 @@ SAL_DLLEXPORT void SAL_CALL uno_registerMappingCallback(
     uno_getMappingFunc pCallback )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSHURE( pCallback, "### null ptr!" );
+    OSL_ENSURE( pCallback, "### null ptr!" );
     MappingsData & rData = getMappingsData();
     MutexGuard aGuard( rData.aCallbacksMutex );
     rData.aCallbacks.insert( pCallback );
@@ -690,7 +690,7 @@ SAL_DLLEXPORT void SAL_CALL uno_revokeMappingCallback(
     uno_getMappingFunc pCallback )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSHURE( pCallback, "### null ptr!" );
+    OSL_ENSURE( pCallback, "### null ptr!" );
     MappingsData & rData = getMappingsData();
     MutexGuard aGuard( rData.aCallbacksMutex );
     rData.aCallbacks.erase( pCallback );

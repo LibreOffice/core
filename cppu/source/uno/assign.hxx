@@ -2,9 +2,9 @@
  *
  *  $RCSfile: assign.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-12 12:03:40 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 13:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ inline sal_Bool __queryAndAssignInterface(
             (*((uno_Interface *)pSource)->pDispatcher)(
                 (uno_Interface *)pSource, pMTqueryInterface, &aRet, aArgs, &pExc );
 
-            OSL_ENSHURE( !pExc, "### Exception occured during queryInterface()!" );
+            OSL_ENSURE( !pExc, "### Exception occured during queryInterface()!" );
             if (pExc)
             {
                 __destructAny( pExc, 0 );
@@ -438,7 +438,7 @@ inline sal_Bool __assignData(
         return sal_False;
 #ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
-        OSL_ENSHURE( sal_False, "### unexpected typedef!" );
+        OSL_ENSURE( sal_False, "### unexpected typedef!" );
         return sal_False;
 #endif
     case typelib_TypeClass_STRUCT:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copy.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-12 12:03:40 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 13:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ inline void __copyConstructAnyFromData(
         break;
 #ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_ANY:
-        OSL_ENSHURE( sal_False, "### unexpected nested any!" );
+        OSL_ENSURE( sal_False, "### unexpected nested any!" );
         break;
 #endif
     case typelib_TypeClass_ENUM:
@@ -215,7 +215,7 @@ inline void __copyConstructAnyFromData(
         break;
 #ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
-        OSL_ENSHURE( sal_False, "### unexpected typedef!" );
+        OSL_ENSURE( sal_False, "### unexpected typedef!" );
         break;
 #endif
     case typelib_TypeClass_STRUCT:
@@ -386,7 +386,7 @@ inline void __copyConstructAny(
                 break;
 #ifdef CPPU_ASSERTIONS
             case typelib_TypeClass_TYPEDEF:
-                OSL_ENSHURE( sal_False, "### unexpected typedef!" );
+                OSL_ENSURE( sal_False, "### unexpected typedef!" );
                 break;
 #endif
             case typelib_TypeClass_STRUCT:
@@ -649,7 +649,7 @@ inline void __copyConstructData(
         break;
 #ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
-        OSL_ENSHURE( sal_False, "### unexpected typedef!" );
+        OSL_ENSURE( sal_False, "### unexpected typedef!" );
         break;
 #endif
     case typelib_TypeClass_STRUCT:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testthreadpool.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:53 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 13:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 
 #include <vos/thread.hxx>
 
-#define TEST_ENSURE OSL_ENSHURE
+#define TEST_ENSURE OSL_ENSURE
 
 using namespace ::vos;
 

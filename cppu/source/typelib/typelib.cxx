@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-12 11:41:15 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 13:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -729,7 +729,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_new(
                 typelib_typedescriptionreference_getDescription(
                     (typelib_TypeDescription **)&pTmp->pBaseTypeDescription, pType );
                 nOffset = ((typelib_TypeDescription *)pTmp->pBaseTypeDescription)->nSize;
-                OSL_ENSHURE( newAlignedSize( 0, ((typelib_TypeDescription *)pTmp->pBaseTypeDescription)->nSize, ((typelib_TypeDescription *)pTmp->pBaseTypeDescription)->nAlignment ) == ((typelib_TypeDescription *)pTmp->pBaseTypeDescription)->nSize, "### unexpected offset!" );
+                OSL_ENSURE( newAlignedSize( 0, ((typelib_TypeDescription *)pTmp->pBaseTypeDescription)->nSize, ((typelib_TypeDescription *)pTmp->pBaseTypeDescription)->nAlignment ) == ((typelib_TypeDescription *)pTmp->pBaseTypeDescription)->nSize, "### unexpected offset!" );
             }
             if( nMembers )
             {
@@ -748,7 +748,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_new(
                     // write offset
                     typelib_TypeDescription * pTD = 0;
                     TYPELIB_DANGER_GET( &pTD, pTmp->ppTypeRefs[i] );
-                    OSL_ENSHURE( pTD->nSize, "### void member?" );
+                    OSL_ENSURE( pTD->nSize, "### void member?" );
                     nOffset = newAlignedSize( nOffset, pTD->nSize, pTD->nAlignment );
                     pTmp->pMemberOffsets[i] = nOffset - pTD->nSize;
                     TYPELIB_DANGER_RELEASE( pTD );
@@ -1471,7 +1471,7 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
                 }
                 break;
             case typelib_TypeClass_ARRAY:
-                OSL_ENSHURE( sal_False, "not implemented" );
+                OSL_ENSURE( sal_False, "not implemented" );
                 break;
             case typelib_TypeClass_SEQUENCE:
                 nSize = rMaxIntegralTypeSize = sizeof( void * );
@@ -1524,7 +1524,7 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
             case typelib_TypeClass_SERVICE:
             case typelib_TypeClass_MODULE:
             default:
-                OSL_ENSHURE( sal_False, "not convertable type" );
+                OSL_ENSURE( sal_False, "not convertable type" );
         };
     }
 
@@ -1926,7 +1926,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_assign(
 extern "C" SAL_DLLEXPORT void SAL_CALL typelib_setCacheSize( sal_Int32 nNewSize )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSHURE( nNewSize >= 0, "### illegal cache size given!" );
+    OSL_ENSURE( nNewSize >= 0, "### illegal cache size given!" );
     if (nNewSize >= 0)
     {
         MutexGuard aGuard( aInit.getMutex() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eq.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:57 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 13:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ inline sal_Bool __unoEqualObject( void * pUnoI1, void * pUnoI2 )
     (*((uno_Interface *)pUnoI1)->pDispatcher)(
         (uno_Interface *)pUnoI1, pMTqueryInterface, &aRet1, pArgs, &pExc );
 
-    OSL_ENSHURE( !pExc, "### Exception occured during queryInterface()!" );
+    OSL_ENSURE( !pExc, "### Exception occured during queryInterface()!" );
     if (pExc)
     {
         __destructAny( pExc, 0 );
@@ -115,7 +115,7 @@ inline sal_Bool __unoEqualObject( void * pUnoI1, void * pUnoI2 )
             (*((uno_Interface *)pUnoI2)->pDispatcher)(
                 (uno_Interface *)pUnoI2, pMTqueryInterface, &aRet2, pArgs, &pExc );
 
-            OSL_ENSHURE( !pExc, "### Exception occured during queryInterface()!" );
+            OSL_ENSURE( !pExc, "### Exception occured during queryInterface()!" );
             if (pExc)
             {
                 __destructAny( pExc, 0 );
@@ -674,7 +674,7 @@ inline sal_Bool __equalData(
                 *(int *)pDest == *(int *)pSource);
 #ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
-        OSL_ENSHURE( sal_False, "### unexpected typedef!" );
+        OSL_ENSURE( sal_False, "### unexpected typedef!" );
         break;
 #endif
     case typelib_TypeClass_STRUCT:

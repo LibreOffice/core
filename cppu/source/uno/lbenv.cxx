@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:57 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 13:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,7 @@ static void SAL_CALL defenv_registerInterface(
     rtl_uString * pOId, typelib_InterfaceTypeDescription * pTypeDescr )
     SAL_THROW( () )
 {
-    OSL_ENSHURE( pEnv && ppInterface && pOId && pTypeDescr, "### null ptr!" );
+    OSL_ENSURE( pEnv && ppInterface && pOId && pTypeDescr, "### null ptr!" );
     const OUString & rOId = * reinterpret_cast< OUString * >( &pOId );
 
     ClearableMutexGuard aGuard( static_cast< uno_DefaultEnvironment * >( pEnv )->aAccess );
@@ -356,7 +356,7 @@ static void SAL_CALL defenv_registerProxyInterface(
     rtl_uString * pOId, typelib_InterfaceTypeDescription * pTypeDescr )
     SAL_THROW( () )
 {
-    OSL_ENSHURE( pEnv && ppInterface && pOId && pTypeDescr, "### null ptr!" );
+    OSL_ENSURE( pEnv && ppInterface && pOId && pTypeDescr, "### null ptr!" );
     const OUString & rOId = * reinterpret_cast< OUString * >( &pOId );
 
     ClearableMutexGuard aGuard( static_cast< uno_DefaultEnvironment * >( pEnv )->aAccess );
@@ -399,7 +399,7 @@ static void SAL_CALL defenv_revokeInterface(
     uno_ExtEnvironment * pEnv, void * pInterface )
     SAL_THROW( () )
 {
-    OSL_ENSHURE( pEnv && pInterface, "### null ptr!" );
+    OSL_ENSURE( pEnv && pInterface, "### null ptr!" );
     ClearableMutexGuard aGuard( static_cast< uno_DefaultEnvironment * >( pEnv )->aAccess );
 
     const Ptr2ObjectMap::const_iterator iFind(
@@ -441,7 +441,7 @@ static void SAL_CALL defenv_getObjectIdentifier(
     uno_ExtEnvironment * pEnv, rtl_uString ** ppOId, void * pInterface )
     SAL_THROW( () )
 {
-    OSL_ENSHURE( pEnv && ppOId && pInterface, "### null ptr!" );
+    OSL_ENSURE( pEnv && ppOId && pInterface, "### null ptr!" );
     if (*ppOId)
     {
         ::rtl_uString_release( *ppOId );
@@ -468,7 +468,7 @@ static void SAL_CALL defenv_getRegisteredInterface(
     rtl_uString * pOId, typelib_InterfaceTypeDescription * pTypeDescr )
     SAL_THROW( () )
 {
-    OSL_ENSHURE( pEnv && ppInterface && pOId && pTypeDescr, "### null ptr!" );
+    OSL_ENSURE( pEnv && ppInterface && pOId && pTypeDescr, "### null ptr!" );
     if (*ppInterface)
     {
         (*pEnv->releaseInterface)( pEnv, *ppInterface );
@@ -493,7 +493,7 @@ static void SAL_CALL defenv_getRegisteredInterfaces(
     uno_ExtEnvironment * pEnv, void *** pppInterfaces, sal_Int32 * pnLen, uno_memAlloc memAlloc )
     SAL_THROW( () )
 {
-    OSL_ENSHURE( pEnv && pppInterfaces && pnLen && memAlloc, "### null ptr!" );
+    OSL_ENSURE( pEnv && pppInterfaces && pnLen && memAlloc, "### null ptr!" );
     MutexGuard aGuard( static_cast< uno_DefaultEnvironment * >( pEnv )->aAccess );
 
     sal_Int32 nLen = static_cast< uno_DefaultEnvironment * >( pEnv )->aPtr2ObjectMap.size();
@@ -569,7 +569,7 @@ uno_DefaultEnvironment::uno_DefaultEnvironment(
 //__________________________________________________________________________________________________
 uno_DefaultEnvironment::~uno_DefaultEnvironment() SAL_THROW( () )
 {
-    OSL_ENSHURE( aOId2ObjectMap.empty(), "### object entries left!" );
+    OSL_ENSURE( aOId2ObjectMap.empty(), "### object entries left!" );
 
     uno_Environment * that = (uno_Environment *)this;
     if (that->environmentDisposing)
@@ -640,7 +640,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_dumpEnvironment(
     void * stream, uno_Environment * pEnv, const sal_Char * pFilter )
     SAL_THROW( () )
 {
-    OSL_ENSHURE( pEnv, "### null ptr!" );
+    OSL_ENSURE( pEnv, "### null ptr!" );
     OUStringBuffer buf;
 
     if (! pEnv->pExtEnv)
@@ -758,7 +758,7 @@ static void SAL_CALL unoenv_computeObjectIdentifier(
     uno_ExtEnvironment * pEnv, rtl_uString ** ppOId, void * pInterface )
     SAL_THROW( () )
 {
-    OSL_ENSHURE( pEnv && ppOId && pInterface, "### null ptr!" );
+    OSL_ENSURE( pEnv && ppOId && pInterface, "### null ptr!" );
     if (*ppOId)
     {
         ::rtl_uString_release( *ppOId );
@@ -777,14 +777,14 @@ static void SAL_CALL unoenv_computeObjectIdentifier(
     (*((uno_Interface *)pInterface)->pDispatcher)(
         (uno_Interface *)pInterface, pMTqueryInterface, &aRet, pArgs, &pExc );
 
-    OSL_ENSHURE( !pExc, "### Exception occured during queryInterface()!" );
+    OSL_ENSURE( !pExc, "### Exception occured during queryInterface()!" );
     if (pExc) // cleanup exception object
     {
         __destructAny( pExc, 0 );
     }
     else
     {
-        OSL_ENSHURE( aRet.pType->eTypeClass == typelib_TypeClass_INTERFACE,
+        OSL_ENSURE( aRet.pType->eTypeClass == typelib_TypeClass_INTERFACE,
                      "### cannot query for XInterface!" );
         if (aRet.pType->eTypeClass == typelib_TypeClass_INTERFACE)
         {
@@ -827,7 +827,7 @@ EnvironmentsData::~EnvironmentsData() SAL_THROW( () )
 
     OUString2EnvironmentMap::const_iterator iPos( aName2EnvMap.begin() );
 #ifdef CPPU_ALLOW_ASSERTIONS
-    OSL_ENSHURE( aName2EnvMap.empty(), "### unrevoked environments!  living proxies?" );
+    OSL_ENSURE( aName2EnvMap.empty(), "### unrevoked environments!  living proxies?" );
     while (iPos != aName2EnvMap.end())
     {
         ::uno_dumpEnvironment( 0, (*iPos).second, 0 );
@@ -871,14 +871,14 @@ inline uno_Environment * EnvironmentsData::getEnvironment(
 inline sal_Bool EnvironmentsData::registerEnvironment( uno_Environment * pEnv )
     SAL_THROW( () )
 {
-    OSL_ENSHURE( pEnv, "### null ptr!" );
+    OSL_ENSURE( pEnv, "### null ptr!" );
     OUString aKey( OUString::valueOf( (sal_Int64)pEnv->pContext ) );
     aKey += pEnv->pTypeName;
 
     // try to find environment
     MutexGuard aGuard( aMutex );
     const OUString2EnvironmentMap::const_iterator iFind( aName2EnvMap.find( aKey ) );
-    OSL_ENSHURE( iFind == aName2EnvMap.end(), "### environment already registered!" );
+    OSL_ENSURE( iFind == aName2EnvMap.end(), "### environment already registered!" );
     if (iFind == aName2EnvMap.end())
     {
         aName2EnvMap[ aKey ] = pEnv;
@@ -890,12 +890,12 @@ inline sal_Bool EnvironmentsData::registerEnvironment( uno_Environment * pEnv )
 inline sal_Bool EnvironmentsData::revokeEnvironment( uno_Environment * pEnv )
     SAL_THROW( () )
 {
-    OSL_ENSHURE( pEnv, "### null ptr!" );
+    OSL_ENSURE( pEnv, "### null ptr!" );
     OUString aKey( OUString::valueOf( (sal_Int64)pEnv->pContext ) );
     aKey += pEnv->pTypeName;
 
     MutexGuard aGuard( aMutex );
-    OSL_ENSHURE( aName2EnvMap.find( aKey ) != aName2EnvMap.end(), "### env reg error!" );
+    OSL_ENSURE( aName2EnvMap.find( aKey ) != aName2EnvMap.end(), "### env reg error!" );
     aName2EnvMap.erase( aKey );
     return sal_True;
 }
@@ -905,7 +905,7 @@ inline void EnvironmentsData::getRegisteredEnvironments(
     const OUString & rEnvTypeName )
     SAL_THROW( () )
 {
-    OSL_ENSHURE( pppEnvs && pnLen && memAlloc, "### null ptr!" );
+    OSL_ENSURE( pppEnvs && pnLen && memAlloc, "### null ptr!" );
 
     uno_Environment ** ppFound;
     sal_Int32 nSize = 0;
@@ -1017,7 +1017,7 @@ SAL_DLLEXPORT void SAL_CALL uno_createEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvTypeName, void * pContext )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSHURE( ppEnv, "### null ptr!" );
+    OSL_ENSURE( ppEnv, "### null ptr!" );
     if (*ppEnv)
         (*(*ppEnv)->release)( *ppEnv );
 
@@ -1031,7 +1031,7 @@ SAL_DLLEXPORT void SAL_CALL uno_getEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvTypeName, void * pContext )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSHURE( ppEnv, "### null ptr!" );
+    OSL_ENSURE( ppEnv, "### null ptr!" );
     if (*ppEnv)
         (*(*ppEnv)->release)( *ppEnv );
 

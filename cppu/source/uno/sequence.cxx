@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequence.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:57 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 13:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ static inline void __defaultConstructElements(
     }
 #ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
-        OSL_ENSHURE( sal_False, "### unexpected typedef!" );
+        OSL_ENSURE( sal_False, "### unexpected typedef!" );
         break;
 #endif
     case typelib_TypeClass_STRUCT:
@@ -421,7 +421,7 @@ static inline void __copyConstructElements(
     }
 #ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
-        OSL_ENSHURE( sal_False, "### unexpected typedef!" );
+        OSL_ENSURE( sal_False, "### unexpected typedef!" );
         break;
 #endif
     case typelib_TypeClass_STRUCT:
@@ -676,8 +676,8 @@ SAL_DLLEXPORT void SAL_CALL uno_type_sequence_realloc(
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSHURE( ppSequence, "### null ptr!" );
-    OSL_ENSHURE( nSize >= 0, "### new size must be at least 0!" );
+    OSL_ENSURE( ppSequence, "### null ptr!" );
+    OSL_ENSURE( nSize >= 0, "### new size must be at least 0!" );
 
     if (nSize != (*ppSequence)->nElements)
     {
@@ -695,8 +695,8 @@ SAL_DLLEXPORT void SAL_CALL uno_sequence_realloc(
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSHURE( ppSequence, "### null ptr!" );
-    OSL_ENSHURE( nSize >= 0, "### new size must be at least 0!" );
+    OSL_ENSURE( ppSequence, "### null ptr!" );
+    OSL_ENSURE( nSize >= 0, "### new size must be at least 0!" );
 
     if (nSize != (*ppSequence)->nElements)
     {
@@ -712,7 +712,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_sequence_reference2One(
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSHURE( ppSequence, "### null ptr!" );
+    OSL_ENSURE( ppSequence, "### null ptr!" );
     uno_Sequence * pSequence = *ppSequence;
     if (pSequence->nRefCount > 1)
     {
@@ -751,7 +751,7 @@ SAL_DLLEXPORT void SAL_CALL uno_sequence_reference2One(
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSHURE( ppSequence, "### null ptr!" );
+    OSL_ENSURE( ppSequence, "### null ptr!" );
     uno_Sequence * pSequence = *ppSequence;
     if (pSequence->nRefCount > 1)
     {

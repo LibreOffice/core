@@ -2,9 +2,9 @@
  *
  *  $RCSfile: static_types.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:57 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 13:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,7 +415,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_compound_type_init(
     sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSHURE( typelib_TypeClass_STRUCT == eTypeClass ||
+    OSL_ENSURE( typelib_TypeClass_STRUCT == eTypeClass ||
                  typelib_TypeClass_EXCEPTION == eTypeClass, "### unexpected type class!" );
 
     if (! *ppRef)
@@ -438,7 +438,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_compound_type_init(
                         (typelib_TypeDescription **)&pComp->pBaseTypeDescription, pBaseType );
                     OSL_ASSERT( pComp->pBaseTypeDescription );
                     nOffset = ((typelib_TypeDescription *)pComp->pBaseTypeDescription)->nSize;
-                    OSL_ENSHURE( newAlignedSize( 0, ((typelib_TypeDescription *)pComp->pBaseTypeDescription)->nSize, ((typelib_TypeDescription *)pComp->pBaseTypeDescription)->nAlignment ) == ((typelib_TypeDescription *)pComp->pBaseTypeDescription)->nSize, "### unexpected offset!" );
+                    OSL_ENSURE( newAlignedSize( 0, ((typelib_TypeDescription *)pComp->pBaseTypeDescription)->nSize, ((typelib_TypeDescription *)pComp->pBaseTypeDescription)->nAlignment ) == ((typelib_TypeDescription *)pComp->pBaseTypeDescription)->nSize, "### unexpected offset!" );
                 }
 
                 if (nMembers)
@@ -453,7 +453,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_compound_type_init(
                         // write offset
                         typelib_TypeDescription * pTD = 0;
                         TYPELIB_DANGER_GET( &pTD, pComp->ppTypeRefs[i] );
-                        OSL_ENSHURE( pTD->nSize, "### void member?" );
+                        OSL_ENSURE( pTD->nSize, "### void member?" );
                         nOffset = newAlignedSize( nOffset, pTD->nSize, pTD->nAlignment );
                         pComp->pMemberOffsets[i] = nOffset - pTD->nSize;
                         TYPELIB_DANGER_RELEASE( pTD );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 14:25:52 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 13:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,13 +115,13 @@ void testCppu()
 {
     {
     // test the size of types
-    OSL_ENSHURE( sizeof( Uik ) == getSize( getCppuType( (Uik *)0) ),
+    OSL_ENSURE( sizeof( Uik ) == getSize( getCppuType( (Uik *)0) ),
                 "bad sizeof uik" );
-    OSL_ENSHURE( sizeof( Test1 ) == getSize( getCppuType( (Test1*)0).getTypeLibType() ),
+    OSL_ENSURE( sizeof( Test1 ) == getSize( getCppuType( (Test1*)0).getTypeLibType() ),
                 "bad sizeof test1" );
-//      OSL_ENSHURE( sizeof( TdTest1 ) == getSize( get_test_TdTest1_Type().getTypeLibType() ),
+//      OSL_ENSURE( sizeof( TdTest1 ) == getSize( get_test_TdTest1_Type().getTypeLibType() ),
 //                  "bad sizeof TypedefTest1" );
-    OSL_ENSHURE( sizeof( Test2 ) == getSize( getCppuType( (Test2*)0).getTypeLibType() ),
+    OSL_ENSURE( sizeof( Test2 ) == getSize( getCppuType( (Test2*)0).getTypeLibType() ),
                 "bad sizeof test2" );
 
 /* find the error
@@ -143,7 +143,7 @@ nPos = (sal_Int32)&((Test3 *)0)->td;
 nPos = (sal_Int32)&((Test3 *)0)->bBool;
 nPos = (sal_Int32)&((Test3 *)0)->aAny;
 */
-    OSL_ENSHURE( sizeof( Test3 ) == getSize( getCppuType( (Test3*)0).getTypeLibType() ),
+    OSL_ENSURE( sizeof( Test3 ) == getSize( getCppuType( (Test3*)0).getTypeLibType() ),
                 "bad sizeof test3" );
     }
 
@@ -712,7 +712,7 @@ void SAL_CALL typedescription_Callback_1
     rtl_uString * pTypeName
 )
 {
-    OSL_ENSHURE( pContext == (void *)1, "### unexpected context!" );
+    OSL_ENSURE( pContext == (void *)1, "### unexpected context!" );
     if( *ppRet )
     {
         typelib_typedescription_release( *ppRet );
@@ -744,7 +744,7 @@ void SAL_CALL typedescription_Callback
     rtl_uString * pTypeName
 )
 {
-    OSL_ENSHURE( pContext == (void *)0, "### unexpected context!" );
+    OSL_ENSURE( pContext == (void *)0, "### unexpected context!" );
     if( *ppRet )
     {
         typelib_typedescription_release( *ppRet );
@@ -886,7 +886,7 @@ int SAL_CALL main(int argc, char **argv)
       // shutdown
 #ifdef SAL_W32
     Reference< XComponent > xComp( xMgr, UNO_QUERY );
-    OSL_ENSHURE( xComp.is(), "### serivce manager has to implement XComponent!" );
+    OSL_ENSURE( xComp.is(), "### serivce manager has to implement XComponent!" );
     xComp->dispose();
     xMgr.clear();
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_di.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-28 15:34:46 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 13:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,21 +88,21 @@ using namespace rtl;
 //==================================================================================================
 sal_Bool equals( const test::TestElement & rData1, const test::TestElement & rData2 )
 {
-    OSL_ENSHURE( rData1.Bool == rData2.Bool, "### bool does not match!" );
-    OSL_ENSHURE( rData1.Char == rData2.Char, "### char does not match!" );
-    OSL_ENSHURE( rData1.Byte == rData2.Byte, "### byte does not match!" );
-    OSL_ENSHURE( rData1.Short == rData2.Short, "### short does not match!" );
-    OSL_ENSHURE( rData1.UShort == rData2.UShort, "### unsigned short does not match!" );
-    OSL_ENSHURE( rData1.Long == rData2.Long, "### long does not match!" );
-    OSL_ENSHURE( rData1.ULong == rData2.ULong, "### unsigned long does not match!" );
-    OSL_ENSHURE( rData1.Hyper == rData2.Hyper, "### hyper does not match!" );
-    OSL_ENSHURE( rData1.UHyper == rData2.UHyper, "### unsigned hyper does not match!" );
-    OSL_ENSHURE( rData1.Float == rData2.Float, "### float does not match!" );
-    OSL_ENSHURE( rData1.Double == rData2.Double, "### double does not match!" );
-    OSL_ENSHURE( rData1.Enum == rData2.Enum, "### enum does not match!" );
-    OSL_ENSHURE( rData1.String == rData2.String, "### string does not match!" );
-    OSL_ENSHURE( rData1.Interface == rData2.Interface, "### interface does not match!" );
-    OSL_ENSHURE( rData1.Any == rData2.Any, "### any does not match!" );
+    OSL_ENSURE( rData1.Bool == rData2.Bool, "### bool does not match!" );
+    OSL_ENSURE( rData1.Char == rData2.Char, "### char does not match!" );
+    OSL_ENSURE( rData1.Byte == rData2.Byte, "### byte does not match!" );
+    OSL_ENSURE( rData1.Short == rData2.Short, "### short does not match!" );
+    OSL_ENSURE( rData1.UShort == rData2.UShort, "### unsigned short does not match!" );
+    OSL_ENSURE( rData1.Long == rData2.Long, "### long does not match!" );
+    OSL_ENSURE( rData1.ULong == rData2.ULong, "### unsigned long does not match!" );
+    OSL_ENSURE( rData1.Hyper == rData2.Hyper, "### hyper does not match!" );
+    OSL_ENSURE( rData1.UHyper == rData2.UHyper, "### unsigned hyper does not match!" );
+    OSL_ENSURE( rData1.Float == rData2.Float, "### float does not match!" );
+    OSL_ENSURE( rData1.Double == rData2.Double, "### double does not match!" );
+    OSL_ENSURE( rData1.Enum == rData2.Enum, "### enum does not match!" );
+    OSL_ENSURE( rData1.String == rData2.String, "### string does not match!" );
+    OSL_ENSURE( rData1.Interface == rData2.Interface, "### interface does not match!" );
+    OSL_ENSURE( rData1.Any == rData2.Any, "### any does not match!" );
 
     return (rData1.Bool == rData2.Bool &&
             rData1.Char == rData2.Char &&
@@ -136,7 +136,7 @@ sal_Bool equals( const test::TestData & rData1, const test::TestData & rData2 )
         {
             if (! equals( pElements1[nLen], pElements2[nLen] ))
             {
-                OSL_ENSHURE( sal_False, "### sequence element did not match!" );
+                OSL_ENSURE( sal_False, "### sequence element did not match!" );
                 return sal_False;
             }
         }
@@ -385,7 +385,7 @@ test::TestData Test_Impl::getValues( sal_Bool& bBool, sal_Unicode& cChar, sal_In
 //==================================================================================================
 sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
 {
-    OSL_ENSHURE( xLBT.is(), "### no test interface!" );
+    OSL_ENSURE( xLBT.is(), "### no test interface!" );
     if (xLBT.is())
     {
         // this data is never ever granted access to by calls other than equals(), assign()!
@@ -400,8 +400,8 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
                 OUString::createFromAscii("dumdidum"), xI,
                 Any( &xI, ::getCppuType( (const Reference<XInterface > *)0 ) ) );
 
-        OSL_ENSHURE( aData.Any == xI, "### unexpected any!" );
-        OSL_ENSHURE( !(aData.Any != xI), "### unexpected any!" );
+        OSL_ENSURE( aData.Any == xI, "### unexpected any!" );
+        OSL_ENSURE( !(aData.Any != xI), "### unexpected any!" );
 
         aData.Sequence = Sequence<test::TestElement >( (const test::TestElement *)&aData, 1 );
         // aData complete
@@ -541,7 +541,7 @@ sal_Bool raiseException( const Reference< XLanguageBindingTest > & xLBT )
             catch (IllegalArgumentException aExc)
             {
                 ++nCount;
-                OSL_ENSHURE( aExc.ArgumentPosition == 5 &&
+                OSL_ENSURE( aExc.ArgumentPosition == 5 &&
                              aExc.Context == xLBT->getInterface() &&
                              aExc.Message.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dum dum dum ich tanz im kreis herum...") ),
                              "### unexpected exception content!" );
@@ -553,7 +553,7 @@ sal_Bool raiseException( const Reference< XLanguageBindingTest > & xLBT )
         catch (const RuntimeException & rExc)
         {
             ++nCount;
-            OSL_ENSHURE( rExc.Context == xLBT->getInterface() &&
+            OSL_ENSURE( rExc.Context == xLBT->getInterface() &&
                          rExc.Message.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dum dum dum ich tanz im kreis herum...") ),
                          "### unexpected exception content!" );
 
@@ -564,7 +564,7 @@ sal_Bool raiseException( const Reference< XLanguageBindingTest > & xLBT )
     catch (Exception & rExc)
     {
         ++nCount;
-        OSL_ENSHURE( rExc.Context == xLBT->getInterface() &&
+        OSL_ENSURE( rExc.Context == xLBT->getInterface() &&
                      rExc.Message.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dum dum dum ich tanz im kreis herum...") ),
                      "### unexpected exception content!" );
         return (nCount == 3 &&
@@ -592,7 +592,7 @@ void test_di(void)
 
     Mapping aMapping( pCppEnv1, pCppEnv2, OUString::createFromAscii("prot") );
     aMapping.mapInterface( (void **)&xLBT, xOriginal.get(), ::getCppuType( &xOriginal ) );
-    OSL_ENSHURE( aMapping.is(), "### cannot get mapping!" );
+    OSL_ENSURE( aMapping.is(), "### cannot get mapping!" );
 
     (*pCppEnv2->release)( pCppEnv2 );
     (*pCppEnv1->release)( pCppEnv1 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: destr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:57 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 13:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,12 +137,12 @@ inline void __destructAny(
             ::typelib_typedescriptionreference_release( *(typelib_TypeDescriptionReference **)pAny->pData );
             break;
         case typelib_TypeClass_ANY:
-            OSL_ENSHURE( sal_False, "### unexpected nested any!" );
+            OSL_ENSURE( sal_False, "### unexpected nested any!" );
             ::uno_any_destruct( (uno_Any *)pAny->pData, release );
             break;
 #ifdef CPPU_ASSERTIONS
         case typelib_TypeClass_TYPEDEF:
-            OSL_ENSHURE( sal_False, "### unexpected typedef!" );
+            OSL_ENSURE( sal_False, "### unexpected typedef!" );
             break;
 #endif
         case typelib_TypeClass_STRUCT:
@@ -245,7 +245,7 @@ inline sal_Int32 __destructElements(
         return sizeof(int);
 #ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
-        OSL_ENSHURE( sal_False, "### unexpected typedef!" );
+        OSL_ENSURE( sal_False, "### unexpected typedef!" );
         break;
 #endif
     case typelib_TypeClass_STRUCT:
@@ -298,7 +298,7 @@ inline sal_Int32 __destructElements(
     }
 #ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_ARRAY:
-        OSL_ENSHURE( sal_False, "### unexpected array!" );
+        OSL_ENSURE( sal_False, "### unexpected array!" );
         break;
 #endif
     case typelib_TypeClass_INTERFACE:
@@ -377,7 +377,7 @@ inline void __destructData(
         break;
 #ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
-        OSL_ENSHURE( sal_False, "### unexpected typedef!" );
+        OSL_ENSURE( sal_False, "### unexpected typedef!" );
         break;
 #endif
     case typelib_TypeClass_STRUCT:
