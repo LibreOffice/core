@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-03 11:58:37 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 09:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,7 @@ namespace configmgr
         private:
             IConfigBroadcaster* implSetNotificationSource(IConfigBroadcaster* pNew);
             void implSetLocation();
+            void releaseData();
 
         private:
         // IConfigListener

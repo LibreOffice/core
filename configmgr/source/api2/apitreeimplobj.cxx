@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-03 11:58:37 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 09:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,8 +221,14 @@ bool ApiTreeImpl::disposeTree(bool bForce)
 bool ApiRootTreeImpl::disposeTree()
 {
     implSetNotificationSource(0);
-    m_xOptions = NULL;
-    return m_aTreeImpl.disposeTree(true);
+
+    bool bDisposed = m_aTreeImpl.disposeTree(true);
+
+    if (bDisposed) releaseData();
+
+    OSL_ENSURE( m_xOptions.isEmpty(), "Options should be cleared along with data" );
+
+    return bDisposed;
 }
 //-------------------------------------------------------------------------
 void ApiTreeImpl::implDisposeTree()
@@ -257,6 +263,9 @@ void ApiTreeImpl::implDisposeTree()
         aContainer.endDisposing();
 
         OSL_ASSERT(aContainer.isDisposed());
+
+        m_aTree.disposeData();
+        OSL_ASSERT(m_aTree.isEmpty());
     }
 }
 //-------------------------------------------------------------------------
@@ -414,13 +423,15 @@ IConfigBroadcaster* ApiRootTreeImpl::implSetNotificationSource(IConfigBroadcaste
     IConfigBroadcaster* pOld = m_pNotificationSource;
     if (pOld != pNew)
     {
+        OSL_ENSURE(m_xOptions.isValid(), "Cannot change notification csource without options");
+
         if (pOld)
-            pOld->removeListener(this);
+            pOld->removeListener(m_xOptions, this);
 
         if (pNew)
         {
             OSL_ENSURE(m_aLocationPath.getLength() > 0, "Cannot register for notifications: no location set");
-            pNew->addListener(m_aLocationPath, this);
+            pNew->addListener(m_aLocationPath, m_xOptions, this);
         }
         m_pNotificationSource = pNew;
     }
@@ -446,10 +457,24 @@ void ApiRootTreeImpl::implSetLocation()
     if (m_pNotificationSource)
     {
         OSL_ENSURE(m_aLocationPath.getLength() > 0, "Cannot reregister for notifications: setting empty location");
+        OSL_ENSURE( m_xOptions.isValid(), "Cannot reregister for notifications: no options available" );
 
-        m_pNotificationSource->removeListener(this);
-        m_pNotificationSource->addListener(m_aLocationPath, this);
+        m_pNotificationSource->removeListener(m_xOptions, this);
+        m_pNotificationSource->addListener(m_aLocationPath, m_xOptions, this);
+
     }
+}
+// ---------------------------------------------------------------------------------------------------
+
+void ApiRootTreeImpl::releaseData()
+{
+    OSL_ENSURE( m_aTreeImpl.getTree().isEmpty(), "Tree must not reference data when it is released" );
+    OSL_ENSURE( m_aLocationPath.getLength(), "Location still needed to release data" );
+    OSL_ENSURE( m_xOptions.isValid(), "Options still needed to release data" );
+
+    getApiTree().getProvider().getProviderImpl().releaseSubtree(m_aLocationPath,m_xOptions);
+    m_xOptions.unbind();
+    m_aLocationPath = OUString();
 }
 // ---------------------------------------------------------------------------------------------------
 
@@ -462,7 +487,8 @@ void ApiRootTreeImpl::disposing(IConfigBroadcaster* pSource)
 
     m_pNotificationSource = 0;
 
-    m_aTreeImpl.disposeTree(true);
+    if (m_aTreeImpl.disposeTree(true))
+        releaseData(); // not really needed: the whole data is going away anyways
 }
 // ---------------------------------------------------------------------------------------------------
 
@@ -617,7 +643,8 @@ void ApiRootTreeImpl::nodeDeleted(OUString const& sPath, IConfigBroadcaster* pSo
 
     OSL_VERIFY( implSetNotificationSource(0) == pSource || !m_aTreeImpl.isAlive());
 
-    m_aTreeImpl.disposeTree(true);
+    if (m_aTreeImpl.disposeTree(true))
+        releaseData();
 }
 
 // ---------------------------------------------------------------------------------------------------
