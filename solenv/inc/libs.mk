@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2001-03-19 09:59:01 $
+#   last change: $Author: kz $ $Date: 2001-03-29 07:18:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,7 @@ LIBPRE=libr
 
 .IF "$(OS)"=="S390"
 
+GPC3RDLIB=$(L)$/libgpc.x
 SALHELPERLIB=$(L)$/libsalhelper$(SALHELPER_MAJOR)$(DLLPOSTFIX).x
 XMLSCRIPTLIB =$(L)$/libxcr$(UPD)$(DLLPOSTFIX).x
 CONNECTIVITYLIB=$(L)$/libconnectivity.x
@@ -156,6 +157,7 @@ SWLIB=$(L)$/libswlib.x
 
 .ELSE				# "$(OS)"=="S390"
 
+GPC3RDLIB=-lgpc
 .INCLUDE .IGNORE : salhelper$/version.mk
 SALHELPERLIB=-lsalhelper$(SALHELPER_MAJOR)$(COM)
 XMLSCRIPTLIB =-lxcr$(UPD)$(DLLPOSTFIX)
@@ -354,6 +356,7 @@ SETUPLIB=
 SSCLIB=
 SSLLIB=
 .ELSE				# "$(make_xl)"!=""
+GPC3RDLIB=gpc.lib
 SALHELPERLIB=$(LIBPRE) isalhelper.lib
 XMLSCRIPTLIB=ixcr.lib
 COMPHELPERLIB=icomphelp2.lib
