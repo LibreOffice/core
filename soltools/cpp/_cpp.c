@@ -17,7 +17,7 @@ int ifdepth;
 int ifsatisfied[NIF];
 int skipping;
 
-char rcsid[] = "$Version 1.2 $ $Revision: 1.1 $ $Date: 2001-04-19 08:20:22 $";
+char rcsid[] = "$Version 1.2 $ $Revision: 1.2 $ $Date: 2001-07-10 08:57:52 $";
 
 int
 #ifdef _WIN32
@@ -338,7 +338,7 @@ void
             {
 
                 case 'c':
-                    c = va_arg(ap, char);
+                    c = (char) va_arg(ap, int);
                     fprintf(stderr, "%c", c);
                     break;
 
