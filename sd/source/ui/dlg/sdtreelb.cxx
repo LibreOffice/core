@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:49:39 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,7 @@
 #ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
 #endif
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
@@ -90,6 +88,8 @@
 #include <sfx2/childwin.hxx>
 #endif
 
+#include <sfx2/viewfrm.hxx>
+
 #include "strmname.h"
 #ifndef _SDTREELB_HXX
 #include "sdtreelb.hxx"
@@ -114,6 +114,7 @@
 #endif
 #include "res_bmp.hrc"
 
+using namespace com::sun::star;
 
 BOOL SdPageObjsTLB::bIsInDrag = FALSE;
 
@@ -867,24 +868,20 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
             pWorkMedium->ReOpen();
         }
 
-        SvStorage* pStorage;
-
+        uno::Reference < embed::XStorage > xStorage;
         if( !pWorkMedium->IsStorage() )
         {
-            // Nun wird eine Kopie angelegt. In diese Kopie darf
-            // geschrieben werden
+            // create writable copy; //TODO/LATER: what's this?!
             pWorkMedium = new SfxMedium(*pWorkMedium, TRUE);
-            pStorage = ( pWorkMedium->IsStorage() ? pWorkMedium->GetStorage() : NULL );
+            if ( pWorkMedium->IsStorage() )
+                xStorage = pWorkMedium->GetStorage();
         }
         else
-            pStorage = pWorkMedium->GetStorage();
+            xStorage = pWorkMedium->GetStorage();
 
-        // ist es eine Draw-Datei?
-        if( pStorage &&
-            ( pStorage->IsStream( pStarDrawDoc ) ||
-              pStorage->IsStream( pStarDrawDoc3 ) ||
-              pStorage->IsStream( pStarDrawXMLContent ) ||
-              pStorage->IsStream( pStarDrawOldXMLContent ) ) )
+        uno::Reference < container::XNameAccess > xAccess (xStorage, uno::UNO_QUERY);
+        if ( xAccess->hasByName( pStarDrawXMLContent ) && xStorage->isStreamElement( pStarDrawXMLContent ) ||
+             xAccess->hasByName( pStarDrawOldXMLContent ) && xStorage->isStreamElement( pStarDrawOldXMLContent ) )
         {
             if( pMed )
             {
