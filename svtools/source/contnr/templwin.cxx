@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-19 10:19:49 $
+ *  last change: $Author: mba $ $Date: 2001-07-20 17:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -773,6 +773,10 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
         {
             if ( bPreview )
             {
+                // disabling must be done here, does not work in ctor because
+                // execute of the dialog will overwrite it
+                // ( own execute method would help )
+                pTextWin->EnableInput( FALSE, TRUE );
                 if ( pTextWin->IsReallyVisible() )
                 {
                     Sequence < PropertyValue > aArgs( 2 );
