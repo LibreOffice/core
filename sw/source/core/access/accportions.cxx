@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-09 15:56:21 $
+ *  last change: $Author: dvo $ $Date: 2002-04-17 18:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,9 @@ sal_Bool SwAccessiblePortionData::IsGrayPortionType( USHORT nType )
     switch( nType )
     {
         case POR_FTN:       bGray = pViewOptions->IsFootNote();     break;
+        case POR_ISOTOX:
         case POR_TOX:       bGray = pViewOptions->IsTox();          break;
+        case POR_ISOREF:
         case POR_REF:       bGray = pViewOptions->IsRef();          break;
         case POR_QUOVADIS:
         case POR_NUMBER:
