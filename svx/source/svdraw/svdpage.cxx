@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-22 10:22:16 $
+ *  last change: $Author: dl $ $Date: 2001-05-29 06:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -949,8 +949,11 @@ void SdrObjList::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
 {
     ULONG nAnz=GetObjCount();
     ULONG nNum=0;
-    while (nNum<nAnz) {
-        GetObj(nNum)->BurnInStyleSheetAttributes( bPseudoSheetsOnly );
+    while (nNum<nAnz)
+    {
+        SdrObject* pObj = GetObj(nNum);
+        if( pObj->ISA( SdrAttrObj ) )
+            ( (SdrAttrObj*) pObj )->BurnInStyleSheetAttributes( bPseudoSheetsOnly );
         nNum++;
     }
 }
