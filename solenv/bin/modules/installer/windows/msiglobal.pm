@@ -2,9 +2,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2004-10-18 13:55:00 $
+#   last change: $Author: hr $ $Date: 2004-11-09 18:33:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -126,6 +126,7 @@ sub generate_cab_file_list
             my $cabinetfile = $onefile->{'cabinet'};
             my $sourcepath =  $onefile->{'sourcepath'};
             my $uniquename =  $onefile->{'uniquename'};
+            if ( $ENV{'USE_SHELL'} eq "tcsh" ) { chomp( $sourcepath = qx{cygpath -w "$sourcepath"} ); }
 
             # all files with the same cabinetfile are directly behind each other in the files collector
 
@@ -144,6 +145,7 @@ sub generate_cab_file_list
             while ( $nextcabinetfile eq $cabinetfile )
             {
                 $sourcepath =  $nextfile->{'sourcepath'};
+                if ( $ENV{'USE_SHELL'} eq "tcsh" ) { chomp( $sourcepath = qx{cygpath -w "$sourcepath"} ); }
                 $uniquename =  $nextfile->{'uniquename'};
                 $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
                 push(@ddffile, $ddfline);
@@ -182,6 +184,7 @@ sub generate_cab_file_list
             my $onefile = ${$filesref}[$i];
             $cabinetfile = $onefile->{'cabinet'};
             my $sourcepath =  $onefile->{'sourcepath'};
+            if ( $ENV{'USE_SHELL'} eq "tcsh" ) { chomp( $sourcepath = qx{cygpath -w "$sourcepath"} ); }
             my $uniquename =  $onefile->{'uniquename'};
 
             if ( $i == 0 ) { write_ddf_file_header(\@ddffile, $cabinetfile, $installdir); }
@@ -194,7 +197,7 @@ sub generate_cab_file_list
 
         my $ddffilename = $cabinetfile;
         $ddffilename =~ s/.cab/.ddf/;
-        $ddfdir =~ s/\Q$installer::globals::separator\E\s*$//;
+        $ddfdir =~ s/[\/\\]\s*$//;
         $ddffilename = $ddfdir . $installer::globals::separator . $ddffilename;
 
         installer::files::save_file($ddffilename ,\@ddffile);
@@ -258,6 +261,7 @@ sub create_msi_database
     # -i : include the following tables ("*" includes all available tables)
 
     my $msidb = "msidb.exe";    # Has to be in the path
+    my $extraslash = "";        # Has to be set for non-ActiveState perl
 
     installer::logger::include_header_into_logfile("Creating msi database");
 
@@ -265,7 +269,13 @@ sub create_msi_database
 
     $msifilename = installer::converter::make_path_conform($msifilename);
 
-    my $systemcall = $msidb . " -f " . $idtdirbase . " -d " . $msifilename . " -c " . "-i \*";
+    if ( $ENV{'USE_SHELL'} eq "tcsh" ) {
+        # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+        $idtdirbase =~ s/\//\\\\/g;
+        $msifilename =~ s/\//\\\\/g;
+        $extraslash = "\\";
+    }
+    my $systemcall = $msidb . " -f " . $idtdirbase . " -d " . $msifilename . " -c " . "-i " . $extraslash . "*";
 
     my $returnvalue = system($systemcall);
 
