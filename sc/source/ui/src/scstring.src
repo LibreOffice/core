@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 10:47:24 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,19 +197,19 @@ String SCSTR_LONG_SCDOC_NAME
     Text[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION Spreadsheet";
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Folha de cαlculo";
     Text[ russian ] = "έλεκςπξννΰÿ ςΰαλθφΰ %PRODUCTNAME 6.0";
-    Text[ greek ] = "%PRODUCTNAME 6.0 Πίνακας";
+    Text[ greek ] = "%PRODUCTNAME 6.0 Υπολογιστικό φύλλο";
     Text[ dutch ] = "%PRODUCTNAME 6.0 werkblad";
-    Text[ french ] = "%PRODUCTNAME 6.0 Classeur";
-    Text[ spanish ] = "%PRODUCTNAME 6.0 Hoja de cαlculo";
-    Text[ italian ] = "Tabella %PRODUCTNAME 6.0";
+    Text[ french ] = "%PRODUCTNAME %PRODUCTVERSION Classeur";
+    Text[ spanish ] = "Hoja de cαlculo %PRODUCTNAME %PRODUCTVERSION ";
+    Text[ italian ] = "Tabella %PRODUCTNAME %PRODUCTVERSION";
     Text[ danish ] = "%PRODUCTNAME 6.0-tabel";
-    Text[ swedish ] = "%PRODUCTNAME 6.0-tabell";
+    Text[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION-tabell";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Arkusz kalkulacyjny";
     Text[ portuguese_brazilian ] = "Planilha de Cαlculo %PRODUCTNAME 6.0";
-    Text[ japanese ] = "%PRODUCTNAME 6.0 θ΅¨θ¨η®—";
-    Text[ korean ] = "%PRODUCTNAME 6.0 μ¤ν”„λ λ“μ‹νΈ";
-    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 ε·¥δ½θ΅¨";
-    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 ε·¥δ½θ΅¨";
+    Text[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION θ΅¨θ¨η®—";
+    Text[ korean ] = "%PRODUCTNAME %PRODUCTVERSION μ¤ν”„λ λ“μ‹νΈ";
+    Text[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION ε·¥δ½θ΅¨";
+    Text[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION ε·¥δ½θ΅¨";
     Text[ turkish ] = "%PRODUCTNAME 6.0 Hesap Tablosu";
     Text[ arabic ] = "ΜΟζα %PRODUCTNAME 6.0";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Full de cΰlcul";
@@ -240,7 +240,7 @@ String SCSTR_50_LONG_DOCNAME
     Text[ japanese ] = "%PRODUCTNAME 5.0 θ΅¨θ¨η®—";
     Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 ε·¥δ½θ΅¨";
     Text[ arabic ] = "ΜΟζα %PRODUCTNAME 5.0";
-    Text[ greek ] = "%PRODUCTNAME 5.0 - Πίνακας";
+    Text[ greek ] = "%PRODUCTNAME 5.0 - Υπολογιστικό φύλλο";
     Text[ korean ] = "%PRODUCTNAME Calc 5.0 μ¤ν”„λ λ“μ‹νΈ";
     Text[ turkish ] = "%PRODUCTNAME 5.0 Hesap Tablosu";
     Text[ language_user1 ] = " ";
@@ -271,7 +271,7 @@ String SCSTR_40_LONG_DOCNAME
     Text[ japanese ] = "%PRODUCTNAME 4.0 θ΅¨θ¨η®—";
     Text[ chinese_traditional ] = "%PRODUCTNAME 4.0 ε·¥δ½θ΅¨";
     Text[ arabic ] = "ΜΟζα %PRODUCTNAME 4.0";
-    Text[ greek ] = "%PRODUCTNAME 4.0 - Πίνακας";
+    Text[ greek ] = "%PRODUCTNAME 4.0 - Υπολογιστικό φύλλο";
     Text[ korean ] = "%PRODUCTNAME 4.0 μ¤ν”„λ λ“μ‹νΈ";
     Text[ turkish ] = "%PRODUCTNAME 4.0 Hesap Tablosu";
     Text[ language_user1 ] = " ";
@@ -295,14 +295,14 @@ String SCSTR_30_LONG_DOCNAME
     Text [ spanish ] = "StarCalc 3.0 - Hoja de cαlculo" ;
     Text [ french ] = "StarCalc 3.0 Classeur" ;
     Text [ portuguese ] = "StarCalc 3.0 - Folha de cαlculo" ;
-    Text [ portuguese_brazilian ] = "StarCalc 3.0 Planilha de Cαlculo" ;
+    Text [ portuguese_brazilian ] = "Planilha de cαlculo StarCalc 3.0" ;
     Text[ chinese_simplified ] = "StaCalc 3.0 ε·¥δ½θ΅¨";
     Text[ russian ] = "έλεκςπξννΰÿ ςΰαλθφΰ StarCalc 3.0";
     Text[ polish ] = "Arkusz kalkulacyjny StarCalc 3.0";
     Text[ japanese ] = "StarCalc 3.0 θ΅¨θ¨η®—";
     Text[ chinese_traditional ] = "StarCalc 3.0 ε·¥δ½θ΅¨";
     Text[ arabic ] = "ΜΟζα Star Calc 3.0";
-    Text[ greek ] = "StarCalc 3.0 - Πίνακας";
+    Text[ greek ] = "StarCalc 3.0 - Υπολογιστικό φύλλο";
     Text[ korean ] = "StarCalc 3.0 μ¤ν”„λ λ“μ‹νΈ";
     Text[ turkish ] = "StarCalc 3.0 Hesap Tablosu";
     Text[ language_user1 ] = " ";
@@ -335,7 +335,7 @@ String SCSTR_SHORT_SCDOC_NAME
     Text[ japanese ] = "θ΅¨";
     Text[ chinese_traditional ] = "ε·¥δ½θ΅¨";
     Text[ arabic ] = "ΗαΜΟζα";
-    Text[ greek ] = "Πίνακας";
+    Text[ greek ] = "Υπολογιστικό φύλλο";
     Text[ korean ] = "μ¤ν”„λ λ“μ‹νΈ";
     Text[ turkish ] = "Gesap Tablosu";
     Text[ language_user1 ] = " ";
@@ -367,7 +367,7 @@ String SCSTR_HUMAN_SCDOC_NAME
     Text[ japanese ] = "θ΅¨";
     Text[ chinese_traditional ] = "ε·¥δ½θ΅¨";
     Text[ arabic ] = "ΗαΜΟζα";
-    Text[ greek ] = "Πίνακας";
+    Text[ greek ] = "Υπολογιστικό φύλλο";
     Text[ korean ] = "μ¤ν”„λ λ“μ‹νΈ";
     Text[ turkish ] = "Hesap Tablosu";
     Text[ language_user1 ] = " ";
@@ -1275,7 +1275,7 @@ String SCSTR_NEWTABLE
     Text[ japanese ] = "- ζ–°γ—γ„θ΅¨ -";
     Text[ chinese_traditional ] = "- ζ–°ε»Ίε·¥δ½θ΅¨ -";
     Text[ arabic ] = "- ΜΟζα ΜΟνΟ -";
-    Text[ greek ] = "- Δημιουργία πίνακα -";
+    Text[ greek ] = "- Δημιουργία φύλλου -";
     Text[ korean ] = "- μƒ μ‹νΈ -";
     Text[ turkish ] = "- yeni tablo -";
     Text[ language_user1 ] = " ";
@@ -1595,7 +1595,7 @@ String SCSTR_CANCEL
     Text[ japanese ] = "γ‚­γƒ£γƒ³γ‚»γƒ«(~L)";
     Text[ chinese_traditional ] = "ε–ζ¶(~L)";
     Text[ arabic ] = "ΕαΫΗΑ ΗαΓγΡ";
-    Text[ greek ] = "Ακύρωση";
+    Text[ greek ] = "Άκυρο";
     Text[ korean ] = "μ·¨μ†(~L)";
     Text[ turkish ] = "~έptal";
     Text[ language_user1 ] = " ";
@@ -1662,7 +1662,7 @@ String SCSTR_SHOWTABLE
     Text[ japanese ] = "θ΅¨γ®θ΅¨η¤Ί";
     Text[ chinese_traditional ] = "ι΅―η¤Ίε·¥δ½θ΅¨";
     Text[ arabic ] = "ΕΩεΗΡ ΗαΜΟζα";
-    Text[ greek ] = "Εμφάνιση πίνακα";
+    Text[ greek ] = "Εμφάνιση φύλλου";
     Text[ korean ] = "μ‹νΈ ν‘μ‹";
     Text[ turkish ] = "Tabloyu gφrόntόle";
     Text[ language_user1 ] = " ";
@@ -1694,7 +1694,7 @@ String SCSTR_HIDDENTABLES
     Text[ japanese ] = "ιθ΅¨η¤Ίγ®θ΅¨";
     Text[ chinese_traditional ] = "ι±ε…¥η„ε·¥δ½θ΅¨";
     Text[ arabic ] = "ΗαΜΟΗζα ΗαγΞένΙ";
-    Text[ greek ] = "Κρυφοί πίνακες";
+    Text[ greek ] = "Κρυφά φύλλα";
     Text[ korean ] = "μ¨κ²¨μ§„ μ‹νΈ";
     Text[ turkish ] = "Gizlenmiώ tablolar";
     Text[ language_user1 ] = " ";
@@ -1856,7 +1856,7 @@ String SCSTR_INSTABLE
     Text[ japanese ] = "θ΅¨γ®ζΏε…¥";
     Text[ chinese_traditional ] = "ζ’ε…¥ε·¥δ½θ΅¨";
     Text[ arabic ] = "ΕΟΡΗΜ ΜΟζα";
-    Text[ greek ] = "Εισαγωγή πίνακα";
+    Text[ greek ] = "Εισαγωγή φύλλου";
     Text[ korean ] = "μ‹νΈ μ‚½μ…";
     Text[ turkish ] = "Tablo ekle";
     Text[ language_user1 ] = " ";
@@ -1889,7 +1889,7 @@ String SCSTR_APDTABLE
     Text[ japanese ] = "θ΅¨γ‚’ζ·»δ»γ™γ‚‹";
     Text[ chinese_traditional ] = "ι™„ε ε·¥δ½θ΅¨";
     Text[ arabic ] = "ΕΡέΗή ΜΟζα";
-    Text[ greek ] = "Προσκόλληση πίνακα";
+    Text[ greek ] = "Προσκόλληση φύλλου";
     Text[ korean ] = "μ‹νΈ μ¶”κ°€";
     Text[ turkish ] = "Tablo (sona)ekle";
     Text[ language_user1 ] = " ";
@@ -1919,7 +1919,7 @@ String SCSTR_RENAMETAB
     Text[ japanese ] = "θ΅¨γ®εε‰ε¤‰ζ›΄";
     Text[ chinese_traditional ] = "ι‡ζ–°ε‘½εε·¥δ½θ΅¨";
     Text[ arabic ] = "ΕΪΗΟΙ ΚΣγνΙ ΗαΜΟζα";
-    Text[ greek ] = "Μετονομασία πίνακα";
+    Text[ greek ] = "Μετονομασία φύλλου";
     Text[ korean ] = "μ‹νΈ μ΄λ¦„ λ°”κΎΈκΈ°";
     Text[ turkish ] = "Tabloyu yeniden adlandύr";
     Text[ language_user1 ] = " ";
@@ -2050,7 +2050,7 @@ String SCSTR_HOR_JUSTIFY_CENTER
     Text[ japanese ] = "ζ¨ªδ½η½®γ«δΈ­ε¤®ζƒγ";
     Text[ chinese_traditional ] = "ζ°΄εΉ³η½®δΈ­";
     Text[ arabic ] = "γζΣΨ ΓέήνΗ";
-    Text[ greek ] = "Κεντραρισμένα οριζόντια";
+    Text[ greek ] = "Οριζοντίως στο κέντρο";
     Text[ korean ] = "μν‰μΌλ΅ κ°€μ΄λ°";
     Text[ turkish ] = "Yatay ortala";
     Text[ language_user1 ] = " ";
@@ -2242,7 +2242,7 @@ String SCSTR_VER_JUSTIFY_CENTER
     Text[ japanese ] = "δΈδΈ‹γ«δΈ­ε¤®ζƒγ";
     Text[ chinese_traditional ] = "ε‚η›΄η½®δΈ­";
     Text[ arabic ] = "γζΣΨ ΪγζΟνΗ";
-    Text[ greek ] = "Κεντραρισμένα κατακόρυφα";
+    Text[ greek ] = "Κατακόρυφα στο κέντρο";
     Text[ korean ] = "μμ§μΌλ΅ κ°€μ΄λ°";
     Text[ turkish ] = "Dikey ortala";
     Text[ language_user1 ] = " ";
@@ -2499,7 +2499,7 @@ String SCSTR_PROTECTTAB
     Text[ japanese ] = "θ΅¨γ®δΏθ­·";
     Text[ chinese_traditional ] = "δΏθ­·ε·¥δ½θ΅¨";
     Text[ arabic ] = "ΝγΗνΙ ΗαΜΟζα";
-    Text[ greek ] = "Προστασία πίνακα";
+    Text[ greek ] = "Προστασία φύλλου";
     Text[ korean ] = "μ‹νΈ λ³΄νΈ";
     Text[ turkish ] = "Tabloyu koru";
     Text[ language_user1 ] = " ";
@@ -2530,7 +2530,7 @@ String SCSTR_UNPROTECTTAB
     Text[ japanese ] = "θ΅¨γ®δΏθ­·γ‚’θ§£ι™¤";
     Text[ chinese_traditional ] = "ε–ζ¶ε·¥δ½θ΅¨δΏθ­·";
     Text[ arabic ] = "ΕαΫΗΑ ΝγΗνΙ ΗαΜΟζα";
-    Text[ greek ] = "Κατάργηση προστασίας πίνακα";
+    Text[ greek ] = "Κατάργηση προστασίας φύλλου";
     Text[ korean ] = "μ‹νΈ λ³΄νΈ ν•΄μ ";
     Text[ turkish ] = "Tablo korumasύnύ kaldύr";
     Text[ language_user1 ] = " ";
@@ -3016,7 +3016,7 @@ String SCSTR_CFG_SPELLCHECK
     Text[ japanese ] = "γ‚Ήγƒγƒ«γƒγ‚§γƒƒγ‚―γ®γ‚ªγƒ—γ‚·γƒ§γƒ³";
     Text[ chinese_traditional ] = "ζ‹Όε―«ζªΆζ¥ιΈι …";
     Text[ arabic ] = "ΞνΗΡΗΚ ΗαΚΟήνή ΗαΕγαΗΖν";
-    Text[ greek ] = "Επιλογές ορθογραφίας";
+    Text[ greek ] = "Επιλογές ορθογραφικού ελέγχου";
     Text[ korean ] = "λ§μ¶¤λ²• μµμ…";
     Text[ turkish ] = "Yazύm seηenekleri";
     Text[ language_user1 ] = " ";
@@ -3080,7 +3080,7 @@ String SCSTR_CFG_NAVIPI
     Text[ japanese ] = "γƒγƒ“γ‚²γƒΌγ‚Ώγ®θ¨­ε®";
     Text[ chinese_traditional ] = "θ¨­ε®ε©ζ‰‹";
     Text[ arabic ] = "ΕΪΟΗΟΗΚ ΗαδΗένΜνΚζΡ";
-    Text[ greek ] = "Ρυθμίσεις Navigator";
+    Text[ greek ] = "Ρυθμίσεις περιήγησης";
     Text[ korean ] = "λ„¤λΉ„κ²μ΄ν„° μ„¤μ •";
     Text[ turkish ] = "Taratύcύ  ayarlarύ";
     Text[ language_user1 ] = " ";
@@ -3298,7 +3298,7 @@ String SCSTR_FORMULA_AUTOCORRECTION
     Text [ ENGLISH ] = "StarCalc found an error in the formula you entered.\nDo you want to accept the correction proposed below?\n\n" ;
     Text [ portuguese ] = "O %PRODUCTNAME Calc encontrou um erro na fσrmula indicada. \nAceitar a correcηγo proposta em baixo?\n\n" ;
     Text [ english_us ] = "%PRODUCTNAME Calc found an error in the formula entered.\nDo you want to accept the correction proposed below?\n\n" ;
-    Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc encontrou um erro na fσrmula indicada. \nDeseja aceitar a correηγo proposta abaixo?\n\n" ;
+    Text [ portuguese_brazilian ] = "O %PRODUCTNAME Calc encontrou um erro na fσrmula indicada. \nDeseja aceitar a correηγo proposta abaixo?\n\n" ;
     Text [ swedish ] = "%PRODUCTNAME Calc har hittat ett fel i den angivna formeln.\nSkall korrigeringen som fφreslεs nedan accepteras?\n\n" ;
     Text [ danish ] = "%PRODUCTNAME Calc har fundet en fejl i den indtastede formel.\nVil du acceptere den rettelse, som foreslεs nedenfor?\n" ;
     Text [ italian ] = "%PRODUCTNAME Calc ha trovato un errore nella formula digitata.\nVolete accettare la correzione proposta?\n\n" ;
@@ -3519,7 +3519,7 @@ String SCSTR_GRFILTER_TOOBIG
     Text[ arabic ] = "αΗ νζΜΟ ΠΗίΡΙ ίΗένΙ αΕΟΡΗΜ ΗαΡΣγ";
     Text[ dutch ] = "Niet genoeg vrij geheugen om de afbeelding in te voegen";
     Text[ chinese_simplified ] = "ζ²΅ζ‰θ¶³ε¤η„ε†…ε­η”¨δΊζ’ε…¥ε›Ύε½Ά";
-    Text[ greek ] = "Η μνήμη δεν επαρκεί για την προσθήκη του γραφικού.";
+    Text[ greek ] = "Η μνήμη δεν επαρκεί για την εισαγωγή του γραφικού.";
     Text[ korean ] = "λ©”λª¨λ¦¬κ°€ λ¶€μ΅±ν•μ—¬ κ·Έλ¦Όμ„ μ‚½μ…ν•  μ μ—†μµλ‹λ‹¤.";
     Text[ turkish ] = "Grafiπin eklenmesi iηin yeterli bellek yok";
     Text[ language_user1 ] = " ";
@@ -3573,7 +3573,7 @@ String STR_CAPTION_DEFAULT_TEXT
     Text [ dutch ] = "Tekst" ;
     Text [ swedish ] = "Text" ;
     Text [ danish ] = "Tekst" ;
-    Text [ portuguese_brazilian ] = "Text" ;
+    Text [ portuguese_brazilian ] = "Texto" ;
     Text [ portuguese ] = "Texto" ;
     Text[ chinese_simplified ] = "ζ–‡ε­—";
     Text[ russian ] = "Òεκρς";
@@ -3613,7 +3613,7 @@ String STR_DLG_SELECTTABLES_TITLE
     Text[ danish ] = "Select Sheets";
     Text[ swedish ] = "Markera tabeller";
     Text[ polish ] = "Select Sheets";
-    Text[ portuguese_brazilian ] = "Select Sheets";
+    Text[ portuguese_brazilian ] = "Selecionar planilha";
     Text[ japanese ] = "θ΅¨γ®ιΈζ";
     Text[ korean ] = "μ‹νΈ μ„ νƒ";
     Text[ chinese_simplified ] = "ι€‰ζ‹©ε·¥δ½θ΅¨";
@@ -3645,9 +3645,9 @@ String STR_DLG_SELECTTABLES_LBNAME
     Text[ danish ] = "~Selected sheets";
     Text[ swedish ] = "Markerade tabeller";
     Text[ polish ] = "~Selected sheets";
-    Text[ portuguese_brazilian ] = "~Selected sheets";
-    Text[ japanese ] = "ιΈζγ—γθ΅¨";
-    Text[ korean ] = "μ„ νƒλ μ‹νΈ";
+    Text[ portuguese_brazilian ] = "Planilhas ~selecionadas";
+    Text[ japanese ] = "ιΈζγ—γθ΅¨(~S)";
+    Text[ korean ] = "μ„ νƒλ μ‹νΈ(~S)";
     Text[ chinese_simplified ] = "ι€‰ζ‹©ε·¥δ½θ΅¨(~S)";
     Text[ chinese_traditional ] = "ιΈε–ε·¥δ½θ΅¨(~S)";
     Text[ turkish ] = "~Seηilen hesap";
@@ -3685,7 +3685,7 @@ String STR_REPLCELLSWARN
     Text[ czech ] = "ChystΓ΅te se vloΕΎit data do bunΔ›k, kterΓ© nejsou prΓ΅zdnΓ©.\nOpravdu chcete pΕ™epsat jejich stΓ΅vajΓ­cΓ­ obsah?";
     Text[ hebrew ] = "Die Zellen, in die Sie Daten einfΓΌgen wollen, enthalten bereits Daten.\nWollen Sie die vorhandenen Daten wirklich ΓΌberschreiben?";
     Text[ catalan ] = "You are pasting data into cells that already contain data.\nDo you really want to overwrite the existing data?";
-    Text[ portuguese_brazilian ] = "You are pasting data into cells that already contain data.\nDo you really want to overwrite the existing data?";
+    Text[ portuguese_brazilian ] = "V. estα colando dados em cιlulas que jα contιm dados. \nDeseja realmente sobrescrever os dados existentes?";
     Text[ thai ] = "You are pasting data into cells that already contain data.\nDo you really want to overwrite the existing data?";
     Text[ hindi ] = "You are pasting data into cells that already contain data.\nDo you really want to overwrite the existing data?";
     Text[ slovak ] = "VkladΓ΅te dΓ΅ta do buniek ktorΓ© uΕΎ dΓ΅ta obsahujΓΊ.\nΕ½elΓ΅te si prepΓ­saΕ¥ existujΓΊce dΓ΅ta?";
@@ -3708,7 +3708,7 @@ String STR_ACC_CSVRULER_NAME
     Text[ danish ] = "Ruler";
     Text[ swedish ] = "Linjal";
     Text[ polish ] = "Ruler";
-    Text[ portuguese_brazilian ] = "Ruler";
+    Text[ portuguese_brazilian ] = "Rιgua";
     Text[ japanese ] = "γƒ«γƒΌγƒ©";
     Text[ korean ] = "λκΈμ";
     Text[ chinese_simplified ] = "ζ ‡ε°Ί";
@@ -3739,7 +3739,7 @@ String STR_ACC_CSVRULER_DESCR
     Text[ danish ] = "Ruler which manages objects at fixed positions.";
     Text[ swedish ] = "Den hδr linjalen hanterar objekt pε fasta positioner.";
     Text[ polish ] = "Ruler which manages objects at fixed positions.";
-    Text[ portuguese_brazilian ] = "Ruler which manages objects at fixed positions.";
+    Text[ portuguese_brazilian ] = "Esta rιgua gerencia objetos em posiηυes fixas";
     Text[ japanese ] = "γ“γ®γƒ«γƒΌγƒ©γ‚’δ½Ώη”¨γ—γ¦γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ®ι…η½®γ‚’ζ±Ίγ‚γΎγ™γ€‚";
     Text[ korean ] = "μ΄ λκΈμλ” κ³ μ •λ μ„μΉμ— μλ” κ°μ²΄λ¥Ό κ΄€λ¦¬ν•©λ‹λ‹¤.";
     Text[ chinese_simplified ] = "ι€θΏ‡θΏ™δΈªε°Ίζ ‡ζ¥ζ§ε¶ε¤„δΊε›Ίε®δ½η½®η„ε―Ήθ±΅γ€‚";
@@ -3770,7 +3770,7 @@ String STR_ACC_CSVGRID_NAME
     Text[ danish ] = "Preview table";
     Text[ swedish ] = "Fφrhandsvisning";
     Text[ polish ] = "Preview table";
-    Text[ portuguese_brazilian ] = "Preview table";
+    Text[ portuguese_brazilian ] = "Visualizar";
     Text[ japanese ] = "γƒ—γƒ¬γƒ“γƒ¥γƒΌ";
     Text[ korean ] = "λ―Έλ¦¬ λ³΄κΈ°";
     Text[ chinese_simplified ] = "ιΆ„θ§";
@@ -3801,7 +3801,7 @@ String STR_ACC_CSVGRID_DESCR
     Text[ danish ] = "This sheet shows, how the data will be arranged in the document.";
     Text[ swedish ] = "Den hδr tabellen visar hur data ordnas i dokumentet.";
     Text[ polish ] = "This sheet shows, how the data will be arranged in the document.";
-    Text[ portuguese_brazilian ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ portuguese_brazilian ] = "Esta planilha mostra como serγo arranjados os dados no documento.";
     Text[ japanese ] = "γ“γ®θ΅¨γ«η¤Ίγ™γ‚γ†γ«γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒε†…γ«γƒ‡γƒΌγ‚Ώγι…η½®γ•γ‚γΎγ™γ€‚";
     Text[ korean ] = "μ΄ μ‹νΈλ” λ°μ΄ν„°κ°€ λ¬Έμ„μ—μ„ μ–΄λ–»κ² λ°°μΉλ  κ²ƒμΈμ§€ ν‘μ‹ν•΄μ¤λ‹λ‹¤.";
     Text[ chinese_simplified ] = "θΏ™δΈªε·¥δ½θ΅¨ζΎη¤Ίε‡Ίε¨ζ–‡ζ΅£δΉ‹ε†…η„ζ•°ζ®ζ’ε—ζ–ΉεΌγ€‚";
@@ -3832,7 +3832,7 @@ String STR_ACC_DOC_NAME
     Text[ danish ] = "Document view";
     Text[ swedish ] = "Dokumentvy";
     Text[ polish ] = "Document view";
-    Text[ portuguese_brazilian ] = "Document view";
+    Text[ portuguese_brazilian ] = "Visualizar documento";
     Text[ japanese ] = "γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒθ΅¨η¤Ί";
     Text[ korean ] = "λ¬Έμ„ λ³΄κΈ°";
     Text[ chinese_simplified ] = "ζ–‡ζ΅£θ§†ε›Ύ";
@@ -3868,7 +3868,7 @@ String STR_ACC_TABLE_NAME
     Text[ danish ] = "Table %1";
     Text[ swedish ] = "Tabell %1";
     Text[ polish ] = "Table %1";
-    Text[ portuguese_brazilian ] = "Table %1";
+    Text[ portuguese_brazilian ] = "Planilha %1";
     Text[ japanese ] = "θ΅¨ %1";
     Text[ korean ] = "μ‹νΈ %1";
     Text[ chinese_simplified ] = "ε·¥δ½θ΅¨ %1";
@@ -3904,7 +3904,7 @@ String STR_ACC_CELL_NAME
     Text[ danish ] = "Table Cell %1";
     Text[ swedish ] = "Cell %1";
     Text[ polish ] = "Table Cell %1";
-    Text[ portuguese_brazilian ] = "Table Cell %1";
+    Text[ portuguese_brazilian ] = "Cιlula %1";
     Text[ japanese ] = "γ‚»γƒ« %1";
     Text[ korean ] = "μ…€ %1";
     Text[ chinese_simplified ] = "ε•ε…ƒζ Ό %1";
@@ -3940,7 +3940,7 @@ String STR_ACC_PREVIEWDOC_NAME
     Text[ danish ] = "Page preview";
     Text[ swedish ] = "Fφrhandsgranskning";
     Text[ polish ] = "Page preview";
-    Text[ portuguese_brazilian ] = "Page preview";
+    Text[ portuguese_brazilian ] = "Visualizar pαgina";
     Text[ japanese ] = "ε°ε·γƒ—γƒ¬γƒ“γƒ¥γƒΌ";
     Text[ korean ] = "νμ΄μ§€ λ―Έλ¦¬ λ³΄κΈ°";
     Text[ chinese_simplified ] = "ι΅µιΆιΆ„θ§";
@@ -3986,7 +3986,7 @@ String STR_ACC_LEFTAREA_NAME
     Text[ danish ] = "Left area";
     Text[ swedish ] = "Vδnster omrεde";
     Text[ polish ] = "Left area";
-    Text[ portuguese_brazilian ] = "Left area";
+    Text[ portuguese_brazilian ] = "Αrea esquerda";
     Text[ japanese ] = "ε·¦γ®η―„ε›²";
     Text[ korean ] = "μ™Όμª½ μμ—­";
     Text[ chinese_simplified ] = "ε·¦θΎΉεΊε";
@@ -4022,7 +4022,7 @@ String STR_ACC_CENTERAREA_NAME
     Text[ danish ] = "Center area";
     Text[ swedish ] = "Mittomrεde";
     Text[ polish ] = "Center area";
-    Text[ portuguese_brazilian ] = "Center area";
+    Text[ portuguese_brazilian ] = "Αrea central";
     Text[ japanese ] = "δΈ­ε¤®γ®η―„ε›²";
     Text[ korean ] = "μ¤‘μ‹¬ μμ—­";
     Text[ chinese_simplified ] = "δΈ­ι—΄εΊε";
@@ -4058,7 +4058,7 @@ String STR_ACC_RIGHTAREA_NAME
     Text[ danish ] = "Right area";
     Text[ swedish ] = "Hφger omrεde";
     Text[ polish ] = "Right area";
-    Text[ portuguese_brazilian ] = "Right area";
+    Text[ portuguese_brazilian ] = "Αrea direita";
     Text[ japanese ] = "ε³γ®η―„ε›²";
     Text[ korean ] = "μ¤λ¥Έμª½ μμ—­";
     Text[ chinese_simplified ] = "ε³θΎΉεΊε";
@@ -4094,7 +4094,7 @@ String STR_ACC_HEADER_NAME
     Text[ danish ] = "Header";
     Text[ swedish ] = "Sidhuvud sida %1";
     Text[ polish ] = "Header";
-    Text[ portuguese_brazilian ] = "Header";
+    Text[ portuguese_brazilian ] = "Cabeηalho da pαgina %1";
     Text[ japanese ] = "γƒγƒΌγ‚Έ %1 γ®γƒγƒƒγƒ€";
     Text[ korean ] = "%1 νμ΄μ§€μ λ¨Έλ¦¬κΈ€";
     Text[ chinese_simplified ] = "ι΅µη‰ ι΅µ %1";
@@ -4130,7 +4130,7 @@ String STR_ACC_FOOTER_NAME
     Text[ danish ] = "Footer";
     Text[ swedish ] = "Sidfot sida %1";
     Text[ polish ] = "Footer";
-    Text[ portuguese_brazilian ] = "Footer";
+    Text[ portuguese_brazilian ] = "Rodapι da pαgina %1";
     Text[ japanese ] = "γƒγƒΌγ‚Έ %1 γ®γƒ•γƒƒγ‚Ώ";
     Text[ korean ] = "%1 νμ΄μ§€μ λ°”λ‹¥κΈ€";
     Text[ chinese_simplified ] = "ι΅µθ„ ι΅µ %1";
@@ -4166,7 +4166,7 @@ String STR_ACC_EDITLINE_NAME
     Text[ danish ] = "Editline";
     Text[ swedish ] = "Inmatningsrad";
     Text[ polish ] = "Editline";
-    Text[ portuguese_brazilian ] = "Editline";
+    Text[ portuguese_brazilian ] = "linha de entrada";
     Text[ japanese ] = "ζ•°εΌε…¥ε›γƒγƒƒγ‚―γ‚Ή";
     Text[ korean ] = "μ…λ ¥μ¤„";
     Text[ chinese_simplified ] = "θΎ“ε…¥θ΅";
@@ -4197,7 +4197,7 @@ String STR_ACC_EDITLINE_DESCR
     Text[ danish ] = "This is where you enter or edit text, numbers and formulas.";
     Text[ swedish ] = "Hδr kan du mata in och redigera text, tal och formler.";
     Text[ polish ] = "This is where you enter or edit text, numbers and formulas.";
-    Text[ portuguese_brazilian ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ portuguese_brazilian ] = "Ediηγo e digitaηγo de dados, nϊmeros e fσrmulas.";
     Text[ japanese ] = "γ“γ“γ§γƒ†γ‚­γ‚Ήγƒγ€ζ•°ε€¤γ€ζ•°εΌγ®ε…¥ε›γΎγγ―η·¨ι›†γ‚’θ΅γ„γΎγ™γ€‚";
     Text[ korean ] = "μ—¬κΈ°μ—μ„ ν…μ¤νΈ, μ«μμ™€ μμ‹μ„ μ…λ ¥ν•κ±°λ‚ νΈμ§‘ν•©λ‹λ‹¤.";
     Text[ chinese_simplified ] = "ε¨ζ­¤ζ‚¨θƒ½ε¤θΎ“ε…¥ε’ηΌ–θΎ‘ζ–‡ε­—γ€ζ•°ε­—ε’ε…¬εΌγ€‚";
@@ -4228,7 +4228,7 @@ String STR_ACC_EDITCELL_NAME
     Text[ danish ] = "Table Cell %1";
     Text[ swedish ] = "Cell %1";
     Text[ polish ] = "Table Cell %1";
-    Text[ portuguese_brazilian ] = "Table Cell %1";
+    Text[ portuguese_brazilian ] = "Cιlula %1";
     Text[ japanese ] = "γ‚»γƒ« %1";
     Text[ korean ] = "μ…€ %1";
     Text[ chinese_simplified ] = "ε•ε…ƒζ Ό %1";
@@ -4264,7 +4264,7 @@ String STR_ACC_DATAPILOT_ROW_DESCR
     Text[ danish ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
     Text[ swedish ] = "Fδlt som du placerar hδr visas som rader i den fδrdiga datapilottabellen.";
     Text[ polish ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
-    Text[ portuguese_brazilian ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ portuguese_brazilian ] = "Os campos posicionados neste lugar serγo mostrados como linhas na tabela dinβmica final.";
     Text[ japanese ] = "γ“γ“γ«γƒ‰γƒ­γƒƒγƒ—γ—γγƒ•γ‚£γƒΌγƒ«γƒ‰γ―γ€DataPilot γƒ†γƒΌγƒ–γƒ«γ§θ΅γ¨γ—γ¦θ΅¨η¤Ίγ•γ‚γΎγ™γ€‚";
     Text[ korean ] = "μ—¬κΈ°μ—μ„ μ§€μ •ν•λ” ν•„λ“λ” μ™„μ„±λ λ°μ΄ν„° νμΌλΏ ν…μ΄λΈ”μ—μ„ ν–‰μΌλ΅ ν‘μ‹λ©λ‹λ‹¤.";
     Text[ chinese_simplified ] = "ζ‚¨ε¨ζ­¤θ®Ύε®η„ε­—ζ®µε°†δΌε½“δ½ζ•°ζ®ε©η†θ΅¨ζ ΌδΉ‹δΈ­η„θ΅ζΎη¤Ίε‡Ίζ¥γ€‚";
@@ -4295,7 +4295,7 @@ String STR_ACC_DATAPILOT_COL_DESCR
     Text[ danish ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
     Text[ swedish ] = "Fδlt som du placerar hδr visas som kolumner i den fδrdiga datapilottabellen.";
     Text[ polish ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
-    Text[ portuguese_brazilian ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ portuguese_brazilian ] = "Os campos posicionados neste lugar serγo mostrados como colunas na tabela dinβmica final.";
     Text[ japanese ] = "γ“γ“γ«γƒ‰γƒ­γƒƒγƒ—γ—γγƒ•γ‚£γƒΌγƒ«γƒ‰γ―γ€DataPilot γƒ†γƒΌγƒ–γƒ«γ§ε—γ¨γ—γ¦θ΅¨η¤Ίγ•γ‚γΎγ™γ€‚";
     Text[ korean ] = "μ—¬κΈ°μ—μ„ μ§€μ •ν•λ” ν•„λ“λ” μ™„μ„±λ λ°μ΄ν„° νμΌλΏ ν…μ΄λΈ”μ—μ„ μ—΄λ΅ ν‘μ‹λ©λ‹λ‹¤.";
     Text[ chinese_simplified ] = "ζ‚¨ε¨ζ­¤θ®Ύε®η„ε­—ζ®µε°†δΌε½“δ½ζ•°ζ®ε©η†θ΅¨ζ ΌδΉ‹δΈ­η„ε—ζΎη¤Ίε‡Ίζ¥γ€‚";
@@ -4326,7 +4326,7 @@ String STR_ACC_DATAPILOT_DATA_DESCR
     Text[ danish ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
     Text[ swedish ] = "Fδlt som du placerar hδr anvδnds fφr berδkningar i den fδrdiga datapilottabellen.";
     Text[ polish ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
-    Text[ portuguese_brazilian ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ portuguese_brazilian ] = "Campos colocados aqui serγo usados para os cαlculos na tabela dinβmica final.";
     Text[ japanese ] = "γ“γ“γ«γƒ‰γƒ­γƒƒγƒ—γ—γγƒ•γ‚£γƒΌγƒ«γƒ‰γ―γ€DataPilot γƒ†γƒΌγƒ–γƒ«γ§γ®θ¨η®—γ«δ½Ώη”¨γ•γ‚γΎγ™γ€‚";
     Text[ korean ] = "μ—¬κΈ°μ—μ„ μ§€μ •ν•λ” ν•„λ“λ” μ™„μ„±λ λ°μ΄ν„° νμΌλΏ ν…μ΄λΈ”μ—μ„ κ³„μ‚°μΌλ΅ μ‚¬μ©λ©λ‹λ‹¤.";
     Text[ chinese_simplified ] = "ζ‚¨ε¨ζ­¤θ®Ύε®η„ε­—ζ®µε°†δΌη”¨δΊζ•°ζ®ε©η†θ΅¨ζ ΌδΉ‹δΈ­θ®΅η®—γ€‚";
@@ -4358,7 +4358,7 @@ String STR_ACC_DATAPILOT_SEL_DESCR
     Text[ danish ] = "List the fields that you can drag to one of the other three areas.";
     Text[ swedish ] = "Hδr δr fδlt listade som du kan dra till ett av de andra tre omrεdena.";
     Text[ polish ] = "List the fields that you can drag to one of the other three areas.";
-    Text[ portuguese_brazilian ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ portuguese_brazilian ] = "Lista de campos que podem ser colocados numa das trκs αreas.";
     Text[ japanese ] = "δ»–γ®3γ¤γ®η―„ε›²γ®γ„γγ‚γ‹γ«γƒ‰γƒ©γƒƒγ‚°ε―θƒ½γªγƒ•γ‚£γƒΌγƒ«γƒ‰γ‚’γƒªγ‚Ήγƒγ—γΎγ™γ€‚";
     Text[ korean ] = "λ‹¤λ¥Έ μ„Έ μμ—­ μ¤‘ ν• μμ—­μΌλ΅ λμ–΄μ¬ μ μλ” ν•„λ“λ¥Ό μ—΄κ±°ν•©λ‹λ‹¤.";
     Text[ chinese_simplified ] = "ε¨ζ­¤ε—ε‡Ίζ‚¨θƒ½ε¤ε¨δΈ‰δΈªεΊεδΉ‹ι—΄η§»ε¨η„ε­—ζ®µγ€‚";
@@ -4372,6 +4372,7 @@ String STR_ACC_DATAPILOT_SEL_DESCR
     Text[ hindi ] = "Lists the fields that you can drag to one of the other three areas.";
     Text[ slovak ] = "ZobrazΓ­ polia, ktorΓ© mΓ΄ΕΎete presunΓΊΕ¥ do jednej z troch ΔalΕ΅Γ­ch oblastΓ­.";
 };
+
 
 
 
