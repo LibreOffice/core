@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntctrl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:52 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ class FontPrevWin_Impl
 
     void                _CheckScript();
 public:
-    FontPrevWin_Impl() :
+    inline FontPrevWin_Impl() :
         pPrinter( NULL ), bDelPrinter( FALSE ),
         cStartBracket( 0 ), cEndBracket( 0 ), pColor( NULL ), pBackColor( 0 ), nFontWidthScale( 100 ),
         bSelection( FALSE ), bGetSelection( FALSE ), bUseResText( FALSE ),
@@ -206,6 +206,14 @@ public:
         {
             Invalidate100PercentFontWidth();
         }
+
+    inline ~FontPrevWin_Impl()
+    {
+        delete pColor;
+        delete pBackColor;
+        if( bDelPrinter )
+            delete pPrinter;
+    }
 
     void                CheckScript();
     Size                CalcTextSize( OutputDevice* pWin, OutputDevice* pPrt, SvxFont &rFont );
@@ -508,11 +516,6 @@ SvxFontPrevWindow::SvxFontPrevWindow( Window* pParent, const ResId& rId ) :
 
 SvxFontPrevWindow::~SvxFontPrevWindow()
 {
-    delete pImpl->pColor;
-    delete pImpl->pBackColor;
-    if ( pImpl->bDelPrinter )
-        delete pImpl->pPrinter;
-
     delete pImpl;
 }
 
