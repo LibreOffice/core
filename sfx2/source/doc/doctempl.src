@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:27:22 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     };
     ItemList[ danish ] =
     {
-        < "Standard" ; > ;
+        < "Normal" ; > ;
         < "Arbejdsrelateret korrespondance" ; > ;
         < "Andre arbejdsrelaterede dokumenter" ; > ;
         < "Privat korrespondance og private dokumenter" ; > ;
@@ -331,7 +331,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     };
     ItemList[ turkish ] =
     {
-        < "Standard" ; > ;
+        < "Normal" ; > ;
         < "Gesch‰ftliche Korrespondenz" ; > ;
         < "Sonstige gesch‰ftliche Dokumente" ; > ;
         < "Private Korrespondenz und Dokumente" ; > ;
@@ -369,6 +369,19 @@ ItemList [ language_user1 ] =
         < "Presentaciones" ; > ;
         < "Diversos" ; > ;
     };
+    ItemList [ finnish ] =
+    {
+            < "Oletusarvo" ; > ;
+        < "Liiketoiminnan kirjeenvaihto" ; > ;
+        < "Muut liiketoiminta-asiakirjat" ; > ;
+        < "Henkilˆkohtainen kirjeenvaihto ja asiakirjat" ; > ;
+        < "Lomakkeet ja sopimukset" ; > ;
+        < "Talous" ; > ;
+        < "Koulutus" ; > ;
+        < "Esitystaustat" ; > ;
+        < "Esitykset" ; > ;
+        < "Sekalaiset" ; > ;
+    };
     };
 
 String RID_CNT_STR_WAITING
@@ -395,5 +408,6 @@ String RID_CNT_STR_WAITING
     Text[ turkish ] = "Kurulumdan sonra %PRODUCTNAME bile˛enleri ˛imdi yeniden ba˛lat˝lacak.";
     Text[ arabic ] = "Ã«—Ì «·¬‰  ÂÌ∆… „ﬂÊ‰«  %PRODUCTNAME ··„—… «·√Ê·Ï »⁄œ «‰ Â«¡ ⁄„·Ì… «· À»Ì .";
     Text[ catalan ] = "Los componentes de %PRODUCTNAME van a ser inicializados ahora tras la instalaciÛn.";
+    Text[ finnish ] = "Alustetaan ohjelman %PRODUCTNAME osat ensimm‰ist‰ kertaa asennuksen j‰lkeen.";
 };
 
