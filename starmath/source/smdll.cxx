@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smdll.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:53:21 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:44:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ void SmDLL::Exit()
 
     *GetAppData(SHL_SM) = 0;
 }
-
+/*
 ULONG SmDLL::DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter,
                             SfxFilterFlags nMust, SfxFilterFlags nDont )
 {
@@ -277,4 +277,4 @@ ULONG SmDLL::DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter,
     }
     return nReturn;
 }
-
+*/
