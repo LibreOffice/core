@@ -2,9 +2,9 @@
  *
  *  $RCSfile: refundo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2000-10-30 11:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #include "prnsave.hxx"
 #include "chartlis.hxx"
 #include "dpobject.hxx"
+#include "areasave.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -112,6 +113,8 @@ ScRefUndoData::ScRefUndoData( const ScDocument* pDoc )
         pDoc->GetChartListenerCollection();
     pChartListenerCollection = pOldChartListenerCollection ?
         new ScChartListenerCollection( *pOldChartListenerCollection ) : NULL;
+
+    pAreaLinks = ScAreaLinkSaveCollection::CreateFromDoc(pDoc);     // returns NULL if empty
 }
 
 ScRefUndoData::~ScRefUndoData()
@@ -124,6 +127,7 @@ ScRefUndoData::~ScRefUndoData()
     delete pCondFormList;
     delete pDetOpList;
     delete pChartListenerCollection;
+    delete pAreaLinks;
 }
 
 void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
@@ -185,6 +189,12 @@ void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
                 *pChartListenerCollection == *pNewChartListenerCollection )
             DELETEZ( pChartListenerCollection );
     }
+
+    if (pAreaLinks)
+    {
+        if ( pAreaLinks->IsEqual( pDoc ) )
+            DELETEZ(pAreaLinks);
+    }
 }
 
 void ScRefUndoData::DoUndo( ScDocument* pDoc, BOOL bUndoRefFirst )
@@ -225,6 +235,9 @@ void ScRefUndoData::DoUndo( ScDocument* pDoc, BOOL bUndoRefFirst )
         pDoc->SetDirty();
         pDoc->SetAutoCalc( bOldAutoCalc );
     }
+
+    if (pAreaLinks)
+        pAreaLinks->Restore( pDoc );
 }
 
 
