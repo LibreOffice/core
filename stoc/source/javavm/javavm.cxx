@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-06 07:28:57 $
+ *  last change: $Author: jl $ $Date: 2002-09-16 14:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1457,7 +1457,7 @@ JavaVM * JavaVirtualMachine_Impl::createJavaVM(const JVM & jvm) throw(RuntimeExc
     {
         //Java installation was deleted or moved
         OUString libURL;
-        if( File::getFileURLFromSystemPath( jvm.getRuntimeLib(), libURL) != File::E_None)
+        if( File::getFileURLFromSystemPath( jvm.getJavaHome(), libURL) != File::E_None)
             libURL= OUSTR("");
         MissingJavaRuntimeException exc(
             OUSTR("JavaVirtualMachine_Impl::createJavaVM, Java runtime library cannot be found"),
