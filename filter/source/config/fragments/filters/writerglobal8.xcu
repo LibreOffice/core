@@ -1,0 +1,14 @@
+    <node oor:name="writerglobal8" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+        <prop oor:name="FileFormatVersion"><value>6800</value></prop>
+        <prop oor:name="Type"><value>writerglobal8</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.GlobalDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"><value>CXML</value></prop>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Open Master Document</value>
+            <value xml:lang="de">Offenes Globaldokument</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN PREFERRED</value></prop>
+    </node>
