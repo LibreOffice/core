@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-27 14:37:36 $
+ *  last change: $Author: vg $ $Date: 2002-05-28 15:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2195,7 +2195,7 @@ void Outliner::SetLevelDependendStyleSheet( USHORT nPara )
     pEditEngine->SetParaAttribs( nPara, aOldAttrs );
 }
 
-SV_IMPL_PTRARR( NotifyList, EENotify* );
+SV_IMPL_PTRARR( NotifyList, EENotifyPtr );
 
 void Outliner::ImplBlockInsertionCallbacks( BOOL b )
 {
