@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:30:17 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ danish ] = "Http-prox~y" ;
         Text [ portuguese_brazilian ] = "Pro~xy HTTP" ;
         Text [ portuguese ] = "Pro~xy Http" ;
-        Text[ chinese_simplified ] = "H~ttp ä»£ç†";
+        Text[ chinese_simplified ] = "HTTP ä»£ç†æœåŠ¡å™¨";
         Text[ russian ] = "Ïğîêñè HTTP";
         Text[ polish ] = "Serwer proxy HT~TP";
         Text[ japanese ] = "H~ttp ãƒ—ãƒ­ã‚­ã‚·";
@@ -458,7 +458,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ danish ] = "~Ftp-proxy" ;
         Text [ portuguese_brazilian ] = "Proxy ~FTP" ;
         Text [ portuguese ] = "~Ftp Proxy" ;
-        Text[ chinese_simplified ] = "~FTP ä»£ç†";
+        Text[ chinese_simplified ] = "FTP ä»£ç†æœåŠ¡å™¨";
         Text[ russian ] = "Ïğîêñè FTP";
         Text[ polish ] = "Proxy ~FTP";
         Text[ japanese ] = "~Ftp ãƒ—ãƒ­ã‚­ã‚·";
@@ -540,7 +540,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ danish ] = "~Socks-proxy" ;
         Text [ portuguese_brazilian ] = "Prox~y SOCKS" ;
         Text [ portuguese ] = "Socks Prox~y" ;
-        Text[ chinese_simplified ] = "~Socks ä»£ç†";
+        Text[ chinese_simplified ] = "Socks ä»£ç†æœåŠ¡å™¨";
         Text[ russian ] = "Ïğîêñè Socks";
         Text[ polish ] = "Proxy ~SOCKS";
         Text[ japanese ] = "~Socks ãƒ—ãƒ­ã‚­ã‚·";
