@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:22:26 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 13:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,11 +131,11 @@ TabPage RID_SVXPAGE_POSITION
         Text[ chinese_simplified ] = "Î»ÖÃ ~X";
         Text[ russian ] = "Ïîçèöèÿ ~X";
         Text[ polish ] = "Pozycja X";
-        Text[ japanese ] = "ˆÊ’u X(~X)";
+        Text[ japanese ] = "ˆÊ’u ~X";
         Text[ chinese_traditional ] = "¦ì¸m ~X";
         Text[ arabic ] = "ÇáãæÖÚ Ó";
         Text[ greek ] = "Èİóç ~X";
-        Text[ korean ] = "À§Ä¡ X(~X)";
+        Text[ korean ] = "À§Ä¡ ~X";
         Text[ turkish ] = "~X konumu";
         Text[ language_user1 ] = " ";
     };
@@ -159,11 +159,11 @@ TabPage RID_SVXPAGE_POSITION
         Text[ chinese_simplified ] = "Î»ÖÃ ~Y";
         Text[ russian ] = "Ïîçèöèÿ ~Y";
         Text[ polish ] = "Pozycja Y";
-        Text[ japanese ] = "ˆÊ’u Y(~Y)";
+        Text[ japanese ] = "ˆÊ’u ~Y";
         Text[ chinese_traditional ] = "¦ì¸m ~Y";
         Text[ arabic ] = "ÇáãæÖÚ Õ";
         Text[ greek ] = "Èİóç ~Y";
-        Text[ korean ] = "À§Ä¡ Y(~Y)";
+        Text[ korean ] = "À§Ä¡ ~Y";
         Text[ turkish ] = "~Y konumu";
         Text[ language_user1 ] = " ";
     };
@@ -354,9 +354,9 @@ TabPage RID_SVXPAGE_POSITION
         };
         stringlist [ swedish ] =
         {
-            < "Till stycket" ; > ;
+            < "Vid stycke" ; > ;
             < "Som tecken" ; > ;
-            < "Till sidan" ; > ;
+            < "Vid sidan" ; > ;
             < "Vid ram" ; > ;
         };
         stringlist [ danish ] =
@@ -1025,11 +1025,11 @@ TabPage RID_SVXPAGE_SIZE
         Text [ danish ] = "Tilpas bredde til tekst" ;
         Text [ portuguese ] = "Ajustar ~largura ao texto" ;
         Text [ portuguese_brazilian ] = "Br~eite an Text anpassen" ;
-        Text[ chinese_simplified ] = "ºÍÎÄ×Ö¿í¶È¶ÔÓ¦(~W)";
+        Text[ chinese_simplified ] = "ºÍÎÄ×Ö¿í¶È¶ÔÓ¦(~F)";
         Text[ russian ] = "Âûğîâíÿòü øèğèíó ïî òåêñòó";
         Text[ polish ] = "Dopasuj szerokoœæ do tekstu";
-        Text[ japanese ] = "Ã·½Ä‚É•‚ğ‡‚í‚¹‚é(~W)";
-        Text[ chinese_traditional ] = "©M¤º¤å¼e«×¹ï»ô(~W)";
+        Text[ japanese ] = "Ã·½Ä‚É•‚ğ‡‚í‚¹‚é(~F)";
+        Text[ chinese_traditional ] = "©M¤º¤å¼e«×¹ï»ô(~F)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÚÑÖ ááäÕ";
         Text[ greek ] = "ĞñïóáñìïãŞ ğëÜôïõò ùò ğñïò êåßìåíï";
         Text[ korean ] = "ÅØ½ºÆ®¿¡ ³Êºñ ¸ÂÃã(~F)";
@@ -1141,11 +1141,11 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ chinese_simplified ] = "Î»ÖÃ ~X";
         Text[ russian ] = "Ïîçèöèÿ ~X";
         Text[ polish ] = "Pozycja X";
-        Text[ japanese ] = "ˆÊ’u X(~X)";
+        Text[ japanese ] = "ˆÊ’u ~X";
         Text[ chinese_traditional ] = "¦ì¸m ~X";
         Text[ arabic ] = "ÇáãæÖÚ Ó";
         Text[ greek ] = "Èİóç ~X";
-        Text[ korean ] = "À§Ä¡ X(~X)";
+        Text[ korean ] = "À§Ä¡ ~X";
         Text[ turkish ] = "~X konumu";
         Text[ language_user1 ] = " ";
     };
@@ -1169,11 +1169,11 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ chinese_simplified ] = "Î»ÖÃ ~Y";
         Text[ russian ] = "Ïîçèöèÿ ~Y";
         Text[ polish ] = "Pozycja Y";
-        Text[ japanese ] = "ˆÊ’u Y(~Y)";
+        Text[ japanese ] = "ˆÊ’u ~Y";
         Text[ chinese_traditional ] = "¦ì¸m ~Y";
         Text[ arabic ] = "ÇáãæÖÚ Õ";
         Text[ greek ] = "Èİóç ~Y";
-        Text[ korean ] = "À§Ä¡ Y(~Y)";
+        Text[ korean ] = "À§Ä¡ ~Y";
         Text[ turkish ] = "~Y konumu";
         Text[ language_user1 ] = " ";
     };
