@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-24 15:38:55 $
+ *  last change: $Author: nf $ $Date: 2000-11-29 12:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Index buiten gedefinieerd bereik";
         Text[ chinese_simplified ] = "¶¨Òε·¶Ξ§Φ®ΝβµΔΛχÒύ";
         Text[ greek ] = "Δείκτης έξω από την καθοριζόμενη περιοχή.";
-        Text[ korean ] = "Α¤ΐΗµΘ Ήόΐ§·Ξ ΊΞΕΝΐΗ ΐΞµ¦½Ί";
+        Text[ korean ] = "Α¤ΐΗµΘ Ήόΐ§ ΉΫΐΗ »φΐΞ";
         Text[ turkish ] = "Dizin tanύmlanan aralύπύn dύώύnda";
         Text[ language_user1 ] = " ";
     };
@@ -1853,7 +1853,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Ongeldige objectindex";
         Text[ chinese_simplified ] = "ΞήΠ§µΔ¶ΤΟσΛχÒύ";
         Text[ greek ] = "Μη έγκυρο ευρετήριο αντικειμένων";
-        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ °³ΓΌ ΐΞµ¦½Ί";
+        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ °³ΓΌ »φΐΞ";
         Text[ turkish ] = "Geηersiz nesne dizini";
         Text[ language_user1 ] = " ";
     };
