@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 09:46:19 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,11 +236,6 @@ BOOL IsItemHidden_Impl( USHORT nItemId, int bOleServer, int bMac )
 
 void SfxVirtualMenu::Construct_Impl()
 {
-    pWindowMenu = NULL;
-    pPickMenu = NULL;
-    pAddonsMenu = NULL;
-    bIsActive = FALSE;
-    bControllersUnBound = FALSE;
     pSVMenu->SetHighlightHdl( LINK(this, SfxVirtualMenu, Highlight) );
     pSVMenu->SetActivateHdl( LINK(this, SfxVirtualMenu, Activate) );
     pSVMenu->SetDeactivateHdl( LINK(this, SfxVirtualMenu, Deactivate) );
@@ -277,6 +272,11 @@ SfxVirtualMenu::SfxVirtualMenu( USHORT nOwnId,
     pParent = pOwnParent;
     nVisibleItems = 0;
     pAppCtrl = 0;
+    pWindowMenu = NULL;
+    pPickMenu = NULL;
+    pAddonsMenu = NULL;
+    bIsActive = FALSE;
+    bControllersUnBound = FALSE;
     CreateFromSVMenu();
     Construct_Impl();
     bHelpInitialized = FALSE;
@@ -307,6 +307,11 @@ SfxVirtualMenu::SfxVirtualMenu( Menu *pStarViewMenu, BOOL bWithHelp,
     pParent = 0;
     pAppCtrl = 0;
     nVisibleItems = 0;
+    pWindowMenu = NULL;
+    pPickMenu = NULL;
+    pAddonsMenu = NULL;
+    bIsActive = FALSE;
+    bControllersUnBound = FALSE;
     CreateFromSVMenu();
     Construct_Impl();
     bHelpInitialized = FALSE;
