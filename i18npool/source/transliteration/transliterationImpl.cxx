@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationImpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:06:45 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:09:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 
 #include <tools/string.hxx>
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 
