@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:46:51 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2129,7 +2129,9 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
                 }
 
                 // get filter
-                Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLExceptionListImport ( *rpLst );
+                // #110680#
+                // Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLExceptionListImport ( *rpLst );
+                Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLExceptionListImport ( xServiceFactory, *rpLst );
 
                 // connect parser and filter
                 Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
@@ -2212,7 +2214,10 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
 
                     uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
 
-                    SvXMLExceptionListExport aExp(rLst, sStrmName, xHandler);
+                // #110680#
+                    // SvXMLExceptionListExport aExp(rLst, sStrmName, xHandler);
+                    SvXMLExceptionListExport aExp( xServiceFactory, rLst, sStrmName, xHandler );
+
                 aExp.exportDoc( XML_BLOCK_LIST );
 
                 xStrm->Commit();
@@ -2406,7 +2411,9 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
             }
 
             // get filter
-            Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLAutoCorrectImport( pAutocorr_List, rAutoCorrect, xStg );
+            // #110680#
+            // Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLAutoCorrectImport( pAutocorr_List, rAutoCorrect, xStg );
+            Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLAutoCorrectImport( xServiceFactory, pAutocorr_List, rAutoCorrect, xStg );
 
             // connect parser and filter
             Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
@@ -2855,7 +2862,10 @@ BOOL SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
 
                 uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
 
-                SvXMLAutoCorrectExport aExp(pAutocorr_List, sStrmName, xHandler);
+            // #110680#
+                // SvXMLAutoCorrectExport aExp(pAutocorr_List, sStrmName, xHandler);
+                SvXMLAutoCorrectExport aExp( xServiceFactory, pAutocorr_List, sStrmName, xHandler );
+
             aExp.exportDoc( XML_BLOCK_LIST );
 
             refList->Commit();
