@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:44:12 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,7 @@
 #ifndef _SFXFLAGITEM_HXX //autogen
 #include <svtools/flagitem.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
 #endif
@@ -117,9 +115,7 @@
 #ifndef _SFX_ECODE_HXX //autogen
 #include <svtools/sfxecode.hxx>
 #endif
-#ifndef _SO_CLSIDS_HXX
-#include <so3/clsids.hxx>
-#endif
+#include <sot/clsids.hxx>
 #ifndef _SOT_FORMATS_HXX //autogen
 #include <sot/formats.hxx>
 #endif
@@ -131,6 +127,8 @@
 #endif
 
 #include <svtools/fltrcfg.hxx>
+#include <sfx2/frame.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #ifndef _SVXMSBAS_HXX
 #include <svx/svxmsbas.hxx>
@@ -186,6 +184,8 @@
 #include "sdgrffilter.hxx"
 #include "sdbinfilter.hxx"
 #include "sdhtmlfilter.hxx"
+
+using namespace ::com::sun::star;
 
 namespace sd {
 
@@ -362,11 +362,11 @@ void DrawDocShell::UpdateRefDevice()
 |*
 \************************************************************************/
 
-BOOL DrawDocShell::InitNew( SvStorage * pStor )
+BOOL DrawDocShell::InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
     BOOL bRet = FALSE;
 
-    bRet = SfxInPlaceObject::InitNew( pStor );
+    bRet = SfxObjectShell::InitNew( xStorage );
 
     Rectangle aVisArea( Point(0, 0), Size(14100, 10000) );
     SetVisArea(aVisArea);
@@ -399,65 +399,38 @@ sal_Bool DrawDocShell::IsNewDocument() const
 |*
 \************************************************************************/
 
-BOOL DrawDocShell::Load( SvStorage* pStore )
+BOOL DrawDocShell::Load( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
     mbNewDocument = sal_False;
 
-    ULONG   nStoreVer = pStore->GetVersion();
     BOOL    bRet = FALSE;
-    BOOL    bXML = ( nStoreVer >= SOFFICE_FILEFORMAT_60 );
-    BOOL    bBinary = ( nStoreVer < SOFFICE_FILEFORMAT_60 );
     bool    bStartPresentation = false;
+    ErrCode nError = ERRCODE_NONE;
 
-    if( bBinary || bXML )
+    SfxItemSet* pSet = GetMedium()->GetItemSet();
+
+
+    if( pSet )
     {
-        SfxItemSet* pSet = GetMedium()->GetItemSet();
-
-
-        if( pSet )
+        if( (  SFX_ITEM_SET == pSet->GetItemState(SID_PREVIEW ) ) && ( (SfxBoolItem&) ( pSet->Get( SID_PREVIEW ) ) ).GetValue() )
         {
-            if( (  SFX_ITEM_SET == pSet->GetItemState(SID_PREVIEW ) ) && ( (SfxBoolItem&) ( pSet->Get( SID_PREVIEW ) ) ).GetValue() )
-            {
-                pDoc->SetStarDrawPreviewMode( TRUE );
-            }
-
-            if( SFX_ITEM_SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
-                ( (SfxBoolItem&) ( pSet->Get( SID_DOC_STARTPRESENTATION ) ) ).GetValue() )
-            {
-                bStartPresentation = true;
-                pDoc->SetStartWithPresentation( true );
-            }
+            pDoc->SetStarDrawPreviewMode( TRUE );
         }
 
-        bRet = SfxInPlaceObject::Load( pStore );
-
-        if( bRet )
+        if( SFX_ITEM_SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
+            ( (SfxBoolItem&) ( pSet->Get( SID_DOC_STARTPRESENTATION ) ) ).GetValue() )
         {
-            SdFilter*   pFilter = NULL;
-            SfxMedium* pMedium = 0L;
-
-            if( bBinary )
-            {
-                pMedium = new SfxMedium( pStore );
-                pFilter = new SdBINFilter( *pMedium, *this, sal_True );
-            }
-            else if( bXML )
-            {
-                // #80365# use the medium from the DrawDocShell, do not construct an own one
-                pFilter = new SdXMLFilter( *GetMedium(), *this, sal_True, SDXMLMODE_Normal, nStoreVer );
-            }
-
-            bRet = pFilter ? pFilter->Import() : FALSE;
-
-
-            if(pFilter)
-                delete pFilter;
-            if(pMedium)
-                delete pMedium;
+            bStartPresentation = true;
+            pDoc->SetStartWithPresentation( true );
         }
     }
-    else
-        pStore->SetError( SVSTREAM_WRONGVERSION );
+
+    bRet = SfxObjectShell::Load( xStorage );
+    if( bRet )
+    {
+        SfxMedium* pMedium = GetMedium();
+        bRet = SdXMLFilter( *pMedium, *this, sal_True, SDXMLMODE_Normal, SotStorage::GetVersion( xStorage ) ).Import( nError );
+    }
 
     if( bRet )
     {
@@ -467,7 +440,8 @@ BOOL DrawDocShell::Load( SvStorage* pStore )
         // for our visArea. No point in showing the user lots of empty
         // space. Had to remove the check for empty VisArea below,
         // since XML load always sets a VisArea before.
-        if( ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ) && SfxInPlaceObject::GetVisArea( ASPECT_CONTENT ).IsEmpty() )
+        //TODO/LATER: looks a little bit strange!
+        if( ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ) && SfxObjectShell::GetVisArea( ASPECT_CONTENT ).IsEmpty() )
         {
             SdPage* pPage = pDoc->GetSdPage( 0, PK_STANDARD );
 
@@ -479,10 +453,13 @@ BOOL DrawDocShell::Load( SvStorage* pStore )
     }
     else
     {
-        if( pStore->GetError() == ERRCODE_IO_BROKENPACKAGE )
+        if( nError == ERRCODE_IO_BROKENPACKAGE )
             SetError( ERRCODE_IO_BROKENPACKAGE );
 
-        pStore->SetError( SVSTREAM_WRONGVERSION );
+        // TODO/LATER: correct error handling?!
+        //pStore->SetError( SVSTREAM_WRONGVERSION );
+        else
+            SetError( ERRCODE_ABORT );
     }
 
     // tell SFX to change viewshell when in preview mode
@@ -503,56 +480,18 @@ BOOL DrawDocShell::Load( SvStorage* pStore )
 |*
 \************************************************************************/
 
-BOOL DrawDocShell::LoadFrom(SvStorage* pStor)
+BOOL DrawDocShell::LoadFrom( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
     mbNewDocument = sal_False;
-
-    const ULONG nStoreVer = pStor->GetVersion();
-    const BOOL bBinary = ( nStoreVer < SOFFICE_FILEFORMAT_60 );
 
     WaitObject* pWait = NULL;
     if( pViewShell )
         pWait = new WaitObject( (Window*) pViewShell->GetActiveWindow() );
 
     BOOL bRet = FALSE;
-    if( bBinary )
-    {
 
-        BOOL bRet1 = SfxObjectShell::LoadFrom(pStor);
-        BOOL bRet2 = TRUE;
-
-        // da trotz eines erfolgten InitNew() noch LoadFrom() gerufen werden kann,
-        // muessen die Vorlagen hier geloescht werden
-        GetStyleSheetPool()->Clear();
-
-        // Pool und StyleSheet Pool laden
-        SvStorageStreamRef aPoolStm = pStor->OpenStream(pSfxStyleSheets);
-        aPoolStm->SetVersion(pStor->GetVersion());
-        aPoolStm->SetKey(pStor->GetKey());
-        bRet2 = aPoolStm->GetError() == 0;
-        if (bRet2)
-        {
-            aPoolStm->SetBufferSize( 32768 );
-            GetPool().SetFileFormatVersion((USHORT)pStor->GetVersion());
-            GetPool().Load(*aPoolStm);
-            bRet2 = aPoolStm->GetError() == 0;
-            DBG_ASSERT(bRet2, "Fehler beim Laden des Item-Pools");
-        }
-
-        if (bRet2)
-        {
-            GetStyleSheetPool()->Load(*aPoolStm);
-            bRet2 = aPoolStm->GetError() == 0;
-            aPoolStm->SetBufferSize(0);
-            DBG_ASSERT(bRet2, "Fehler beim Laden des StyleSheet-Pools");
-        }
-
-        bRet = bRet1 || bRet2;
-    }
-    else
-    {
         // #90691# return to old behaviour (before #80365#): construct own medium
-        SfxMedium aMedium(pStor);
+        SfxMedium aMedium(xStorage);
 
         // #90691# for having a progress bar nonetheless for XML copy it
         // from the local DocShell medium (GetMedium()) to the constructed one
@@ -579,12 +518,10 @@ BOOL DrawDocShell::LoadFrom(SvStorage* pStor)
         pDoc->CreateFirstPages();
         pDoc->StopWorkStartupDelay();
 
-        SdFilter* pFilter = new SdXMLFilter( aMedium, *this, sal_True, SDXMLMODE_Organizer, nStoreVer );
+        // TODO/LATER: nobody is interested in the error code?!
+        ErrCode nError = ERRCODE_NONE;
+        bRet = SdXMLFilter( aMedium, *this, sal_True, SDXMLMODE_Organizer, SotStorage::GetVersion( xStorage ) ).Import( nError );
 
-        bRet = pFilter ? pFilter->Import() : FALSE;
-        delete pFilter;
-
-    }
 
     // tell SFX to change viewshell when in preview mode
     if( IsPreview() )
@@ -611,7 +548,6 @@ BOOL DrawDocShell::ConvertFrom( SfxMedium& rMedium )
     mbNewDocument = sal_False;
 
     const String    aFilterName( rMedium.GetFilter()->GetFilterName() );
-    SdFilter*       pFilter = NULL;
     BOOL            bRet = FALSE;
 
     SetWaitCursor( TRUE );
@@ -619,37 +555,40 @@ BOOL DrawDocShell::ConvertFrom( SfxMedium& rMedium )
     if( aFilterName == pFilterPowerPoint97 || aFilterName == pFilterPowerPoint97Template)
     {
         pDoc->StopWorkStartupDelay();
-        pFilter = new SdPPTFilter( rMedium, *this, sal_True );
+        bRet = SdPPTFilter( rMedium, *this, sal_True ).Import();
     }
     else if (aFilterName.SearchAscii("impress8" )  != STRING_NOTFOUND ||
              aFilterName.SearchAscii("draw8")  != STRING_NOTFOUND )
     {
+        // TODO/LATER: nobody is interested in the error code?!
         pDoc->CreateFirstPages();
         pDoc->StopWorkStartupDelay();
-        pFilter = new SdXMLFilter( rMedium, *this, sal_True );
+        ErrCode nError = ERRCODE_NONE;
+        bRet = SdXMLFilter( rMedium, *this, sal_True ).Import( nError );
+
     }
     else if (aFilterName.SearchAscii("StarOffice XML (Draw)" )  != STRING_NOTFOUND || aFilterName.SearchAscii("StarOffice XML (Impress)")  != STRING_NOTFOUND )
     {
+        // TODO/LATER: nobody is interested in the error code?!
         pDoc->CreateFirstPages();
         pDoc->StopWorkStartupDelay();
-        pFilter = new SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60 );
+        ErrCode nError = ERRCODE_NONE;
+        bRet = SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60 ).Import( nError );
     }
     else if( aFilterName.EqualsAscii( "CGM - Computer Graphics Metafile" ) )
     {
         pDoc->CreateFirstPages();
         pDoc->StopWorkStartupDelay();
-        pFilter = new SdCGMFilter( rMedium, *this, sal_True );
+        bRet = SdCGMFilter( rMedium, *this, sal_True ).Import();
     }
     else
     {
         pDoc->CreateFirstPages();
         pDoc->StopWorkStartupDelay();
-        pFilter = new SdGRFFilter( rMedium, *this, sal_True );
+        bRet = SdGRFFilter( rMedium, *this, sal_True ).Import();
     }
 
-    bRet = pFilter ? pFilter->Import() : FALSE;
     FinishedLoading( SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES );
-    delete pFilter;
 
     // tell SFX to change viewshell when in preview mode
     if( IsPreview() )
@@ -674,27 +613,20 @@ BOOL DrawDocShell::Save()
 {
     pDoc->StopWorkStartupDelay();
 
+    //TODO/LATER: why this?!
     if( GetCreateMode() == SFX_CREATE_MODE_STANDARD )
-        SvInPlaceObject::SetVisArea( Rectangle() );
+        SfxObjectShell::SetVisArea( Rectangle() );
 
-    BOOL bRet = SfxInPlaceObject::Save();
+    BOOL bRet = SfxObjectShell::Save();
 
     if( bRet )
     {
-        SvStorage*  pStore = GetStorage();
-        SfxMedium   aMedium( pStore );
-        SdFilter*   pFilter = NULL;
-
-        if( pStore->GetVersion() >= SOFFICE_FILEFORMAT_60 )
-            pFilter = new SdXMLFilter( aMedium, *this, sal_True, SDXMLMODE_Normal, pStore->GetVersion() );
-        else
-            pFilter = new SdBINFilter( aMedium, *this, sal_True );
-
         // #86834# Call UpdateDocInfoForSave() before export
         UpdateDocInfoForSave();
 
-        bRet = pFilter ? pFilter->Export() : FALSE;
-        delete pFilter;
+        uno::Reference< embed::XStorage > xStorage = GetStorage();
+        SfxMedium   aMedium( xStorage );
+        bRet = SdXMLFilter( aMedium, *this, sal_True, SDXMLMODE_Normal, SotStorage::GetVersion( xStorage ) ).Export();
     }
 
     return bRet;
@@ -706,51 +638,23 @@ BOOL DrawDocShell::Save()
 |*
 \************************************************************************/
 
-BOOL DrawDocShell::SaveAs( SvStorage* pStore )
+BOOL DrawDocShell::SaveAs( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStore )
 {
     pDoc->StopWorkStartupDelay();
 
+    //TODO/LATER: why this?!
     if( GetCreateMode() == SFX_CREATE_MODE_STANDARD )
-        SvInPlaceObject::SetVisArea( Rectangle() );
+        SfxObjectShell::SetVisArea( Rectangle() );
 
     UINT32  nVBWarning = ERRCODE_NONE;
-    BOOL    bRet = SfxInPlaceObject::SaveAs( pStore );
+    BOOL    bRet = SfxObjectShell::SaveAs( xStore );
 
     if( bRet )
     {
-        SdFilter* pFilter = NULL;
-
-        if( pStore->GetVersion() >= SOFFICE_FILEFORMAT_60 )
-        {
-            SfxMedium aMedium( pStore );
-            pFilter = new SdXMLFilter( aMedium, *this, sal_True, SDXMLMODE_Normal, pStore->GetVersion() );
-
-            // #86834# Call UpdateDocInfoForSave() before export
-            UpdateDocInfoForSave();
-
-            bRet = pFilter->Export();
-        }
-        else
-        {
-            SvtFilterOptions* pBasOpt = SvtFilterOptions::Get();
-
-            if( pBasOpt && pBasOpt->IsLoadPPointBasicStorage() )
-                nVBWarning = SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( *this );
-
-            SfxMedium aMedium( pStore );
-            pFilter = new SdBINFilter( aMedium, *this, sal_True );
-
-            // #86834# Call UpdateDocInfoForSave() before export
-            UpdateDocInfoForSave();
-
-            const ULONG nOldSwapMode = pDoc->GetSwapGraphicsMode();
-            pDoc->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_TEMP );
-            if( !( bRet = pFilter->Export() ) )
-                pDoc->SetSwapGraphicsMode( nOldSwapMode );
-
-        }
-
-        delete pFilter;
+        // #86834# Call UpdateDocInfoForSave() before export
+        UpdateDocInfoForSave();
+        SfxMedium aMedium( xStore );
+        bRet = SdXMLFilter( aMedium, *this, sal_True, SDXMLMODE_Normal, SotStorage::GetVersion( xStore ) ).Export();
     }
 
     if( GetError() == ERRCODE_NONE )
@@ -828,11 +732,11 @@ BOOL DrawDocShell::ConvertTo( SfxMedium& rMedium )
 |*
 \************************************************************************/
 
-BOOL DrawDocShell::SaveCompleted( SvStorage * pStor )
+BOOL DrawDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
     BOOL bRet = FALSE;
 
-    if( SfxInPlaceObject::SaveCompleted(pStor) )
+    if( SfxObjectShell::SaveCompleted(xStorage) )
     {
         pDoc->NbcSetChanged( FALSE );
 
@@ -861,31 +765,8 @@ BOOL DrawDocShell::SaveCompleted( SvStorage * pStor )
 
         if( pFrame )
             pFrame->GetBindings().Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
-
-#ifndef SVX_LIGHT
-        // throw away old streams
-        if( pDoc )
-            pDoc->HandsOff();
-#endif
     }
     return bRet;
-}
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
-void DrawDocShell::HandsOff()
-{
-    SfxInPlaceObject::HandsOff();
-
-#ifndef SVX_LIGHT
-    // throw away old streams
-    if( pDoc )
-        pDoc->HandsOff();
-#endif
 }
 
 /*************************************************************************
@@ -1086,82 +967,46 @@ void DrawDocShell::FillClass(SvGlobalName* pClassName,
                                         String* pAppName,
                                         String* pFullTypeName,
                                         String* pShortTypeName,
-                                        long    nFileFormat) const
+                                        sal_Int32 nFileFormat ) const
 {
-    SfxInPlaceObject::FillClass(pClassName, pFormat, pAppName, pFullTypeName,
-                                pShortTypeName, nFileFormat);
+    if (nFileFormat == SOFFICE_FILEFORMAT_60)
+    {
+        if ( eDocType == DOCUMENT_TYPE_DRAW )
+        {
+                *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_60);
+                *pFormat = SOT_FORMATSTR_ID_STARDRAW_60;
+                *pFullTypeName = String(SdResId(STR_GRAPHIC_DOCUMENT_FULLTYPE_60));
+        }
+        else
+        {
+                *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_60);
+                *pFormat = SOT_FORMATSTR_ID_STARIMPRESS_60;
+                *pFullTypeName = String(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_60));
+        }
+    }
+    else if (nFileFormat == SOFFICE_FILEFORMAT_8)
+    {
+        if ( eDocType == DOCUMENT_TYPE_DRAW )
+        {
+                *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_60);
+                *pFormat = SOT_FORMATSTR_ID_STARDRAW_8;
+                *pFullTypeName = String(RTL_CONSTASCII_USTRINGPARAM("Draw 8")); // HACK: method will be removed with new storage API
+        }
+        else
+        {
+                *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_60);
+                *pFormat = SOT_FORMATSTR_ID_STARIMPRESS_8;
+                *pFullTypeName = String(RTL_CONSTASCII_USTRINGPARAM("Impress 8")); // HACK: method will be removed with new storage API
+        }
+    }
 
-    if (nFileFormat == SOFFICE_FILEFORMAT_31)
-    {
-        *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_30);
-        *pFormat = SOT_FORMATSTR_ID_STARDRAW;
-        *pAppName = String(RTL_CONSTASCII_USTRINGPARAM("Sdraw 3.1"));
-        *pFullTypeName = String(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_31));;
-        *pShortTypeName = String(SdResId(STR_IMPRESS_DOCUMENT));
-    }
-    else if (nFileFormat == SOFFICE_FILEFORMAT_40)
-    {
-        *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_40);
-        *pFormat = SOT_FORMATSTR_ID_STARDRAW_40;
-        *pFullTypeName = String(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_40));
-        *pShortTypeName = String(SdResId(STR_IMPRESS_DOCUMENT));
-    }
-    else
-    {
-        if (nFileFormat == SOFFICE_FILEFORMAT_50)
-        {
-            if (eDocType == DOCUMENT_TYPE_DRAW)
-            {
-                *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_50);
-                *pFormat = SOT_FORMATSTR_ID_STARDRAW_50;
-                *pFullTypeName = String(SdResId(STR_GRAPHIC_DOCUMENT_FULLTYPE_50));
-            }
-            else
-            {
-                *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_50);
-                *pFormat = SOT_FORMATSTR_ID_STARIMPRESS_50;
-                *pFullTypeName = String(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_50));
-            }
-        }
-        else if (nFileFormat == SOFFICE_FILEFORMAT_60)
-        {
-            if ( eDocType == DOCUMENT_TYPE_DRAW )
-            {
-                    *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_60);
-                    *pFormat = SOT_FORMATSTR_ID_STARDRAW_60;
-                    *pFullTypeName = String(SdResId(STR_GRAPHIC_DOCUMENT_FULLTYPE_60));
-            }
-            else
-            {
-                    *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_60);
-                    *pFormat = SOT_FORMATSTR_ID_STARIMPRESS_60;
-                    *pFullTypeName = String(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_60));
-            }
-        }
-        else if (nFileFormat == SOFFICE_FILEFORMAT_8)
-        {
-            if ( eDocType == DOCUMENT_TYPE_DRAW )
-            {
-                    *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_60);
-                    *pFormat = SOT_FORMATSTR_ID_STARDRAW_8;
-                    *pFullTypeName = String(RTL_CONSTASCII_USTRINGPARAM("Draw 8")); // HACK: method will be removed with new storage API
-            }
-            else
-            {
-                    *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_60);
-                    *pFormat = SOT_FORMATSTR_ID_STARIMPRESS_8;
-                    *pFullTypeName = String(RTL_CONSTASCII_USTRINGPARAM("Impress 8")); // HACK: method will be removed with new storage API
-            }
-        }
-
-        *pShortTypeName = String(SdResId( (eDocType == DOCUMENT_TYPE_DRAW) ?
-                                          STR_GRAPHIC_DOCUMENT : STR_IMPRESS_DOCUMENT ));
-    }
+    *pShortTypeName = String(SdResId( (eDocType == DOCUMENT_TYPE_DRAW) ?
+                                      STR_GRAPHIC_DOCUMENT : STR_IMPRESS_DOCUMENT ));
 }
 
 OutputDevice* DrawDocShell::GetDocumentRefDev (void)
 {
-    OutputDevice* pReferenceDevice = SfxInPlaceObject::GetDocumentRefDev ();
+    OutputDevice* pReferenceDevice = SfxObjectShell::GetDocumentRefDev ();
     // Only when our parent does not have a reference device then we return
     // our own.
     if (pReferenceDevice == NULL && pDoc != NULL)
