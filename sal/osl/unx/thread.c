@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-14 07:34:34 $
+ *  last change: $Author: mfe $ $Date: 2001-02-01 13:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <osl/thread.h>
 #include <osl/signal.h>
 
+
 /* MFE: just for the encoding stuff */
 
 #include <rtl/memory.h>
@@ -121,7 +122,7 @@ static oslThread oslCreateThread(oslWorkerFunction pWorker, void* pThreadData, s
 
 #if defined(SOLARIS)
 
-extern void ChangeGlobalInit();
+/*  extern void ChangeGlobalInit(); */
 
 static oslSignalAction oslSigAlarmHandler(void* pData, oslSignalInfo* pInfo)
 {
@@ -214,7 +215,11 @@ static sal_uInt16 insertThreadId()
         pEntry = (HashEntry*) calloc(sizeof(HashEntry), 1);
 
         pEntry->Handle = hThread;
-        pEntry->Ident  = ++LastIdent;
+
+        if ( LastIdent == 0 )
+            LastIdent +=1;
+
+        pEntry->Ident  = LastIdent;
 
         if (pInsert)
             pInsert->Next = pEntry;
@@ -413,7 +418,7 @@ static sal_Bool osl_initThread()
 
 #if defined(SOLARIS)
 
-    ChangeGlobalInit();
+/*      ChangeGlobalInit(); */
 
     /*
      *  mfe: Under Solaris we get SIGALRM in e.g. pthread_join which terminates the process
@@ -439,6 +444,7 @@ static sal_Bool osl_initThread()
         return sal_False;
     }
 
+#if defined (SOLARIS)
     if ( policy >= _SCHED_NEXT)
     {
         /* mfe: pthread_getschedparam on Solaris has a possible Bug */
@@ -446,6 +452,7 @@ static sal_Bool osl_initThread()
         /*      so set the policy to a default one                  */
         policy=SCHED_OTHER;
     }
+#endif
 
     Thread_Prio_Normal       = (Thread_Prio_Lowest + Thread_Prio_Highest) / 2;
     Thread_Prio_Below_Normal = (Thread_Prio_Lowest + Thread_Prio_Normal)  / 2;
@@ -658,7 +665,7 @@ void SAL_CALL osl_setThreadPriority(oslThread Thread,
         OSL_TRACE("failed to get priority of thread [%s]\n",strerror(nRet));
         return;
     }
-
+#if defined (SOLARIS)
     if ( policy >= _SCHED_NEXT)
     {
         /* mfe: pthread_getschedparam on Salris has a possible Bug */
@@ -666,6 +673,7 @@ void SAL_CALL osl_setThreadPriority(oslThread Thread,
         /*      so set the policy to a default one                 */
         policy=SCHED_RR;
     }
+#endif /* SOLARIS */
 
     switch(Priority)
     {
@@ -723,7 +731,7 @@ oslThreadPriority  SAL_CALL osl_getThreadPriority(const oslThread Thread)
 
     struct sched_param Param;
     int Policy;
-    oslThreadPriority Priority;
+    oslThreadPriority Priority = osl_Thread_PriorityUnknown;
 
     osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
 
