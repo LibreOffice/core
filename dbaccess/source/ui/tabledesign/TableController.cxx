@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-20 12:19:36 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,19 +249,6 @@ OTableController::~OTableController()
 // -----------------------------------------------------------------------------
 void OTableController::dispose()
 {
-    if(isModified())
-    {
-        QueryBox aQry(getView(), ModuleRes(QUERY_DESIGN_SAVEMODIFIED));
-        switch (aQry.Execute())
-        {
-            case RET_YES:
-                Execute(ID_BROWSER_SAVEDOC);
-                break;
-            default:
-                break;
-        }
-    }
-
     OGenericUnoController::dispose();
     delete m_pView;
     m_pView     = NULL;
@@ -603,6 +590,20 @@ void SAL_CALL OTableController::elementReplaced(const ::com::sun::star::containe
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OTableController::suspend(sal_Bool bSuspend) throw( RuntimeException )
 {
+    if(isModified())
+    {
+        QueryBox aQry(getView(), ModuleRes(QUERY_DESIGN_SAVEMODIFIED));
+        switch (aQry.Execute())
+        {
+            case RET_YES:
+                Execute(ID_BROWSER_SAVEDOC);
+                break;
+            case RET_CANCEL:
+                return sal_False;
+            default:
+                break;
+        }
+    }
     return sal_True;
 }
 // -----------------------------------------------------------------------------
