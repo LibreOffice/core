@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: er $ $Date: 2001-10-09 11:45:53 $
+ *  last change: $Author: er $ $Date: 2001-11-27 15:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2936,7 +2936,7 @@ void ScCompiler::UpdateSharedFormulaReference( UpdateRefMode eUpdateRefMode,
 ScRangeData* ScCompiler::UpdateInsertTab( USHORT nTable, BOOL bIsName )
 {
     ScRangeData* pRangeData = NULL;
-    USHORT nTab;
+    short nTab;
     USHORT nPosTab = aPos.Tab();    // _nach_ evtl. Increment!
     USHORT nOldPosTab = ((nPosTab > nTable) ? (nPosTab - 1) : nPosTab);
     BOOL bIsRel = FALSE;
@@ -2963,7 +2963,11 @@ ScRangeData* ScCompiler::UpdateInsertTab( USHORT nTable, BOOL bIsName )
             {   // Namen nur absolute anpassen
                 SingleRefData& rRef = t->GetSingleRef();
                 if ( rRef.IsTabRel() )
+                {
                     nTab = rRef.nRelTab + nOldPosTab;
+                    if ( nTab < 0 )
+                        nTab += pDoc->GetTableCount();  // was a wrap
+                }
                 else
                     nTab = rRef.nTab;
                 if ( nTable <= nTab )
@@ -2978,7 +2982,11 @@ ScRangeData* ScCompiler::UpdateInsertTab( USHORT nTable, BOOL bIsName )
                 {   // Namen nur absolute anpassen
                     SingleRefData& rRef = t->GetDoubleRef().Ref2;
                     if ( rRef.IsTabRel() )
+                    {
                         nTab = rRef.nRelTab + nOldPosTab;
+                        if ( nTab < 0 )
+                            nTab += pDoc->GetTableCount();  // was a wrap
+                    }
                     else
                         nTab = rRef.nTab;
                     if ( nTable <= nTab )
@@ -3008,7 +3016,11 @@ ScRangeData* ScCompiler::UpdateInsertTab( USHORT nTable, BOOL bIsName )
                 if ( !(rRef1.IsRelName() && rRef1.IsTabRel()) )
                 {   // Namen nur absolute anpassen
                     if ( rRef1.IsTabRel() )
+                    {
                         nTab = rRef1.nRelTab + nOldPosTab;
+                        if ( nTab < 0 )
+                            nTab += pDoc->GetTableCount();  // was a wrap
+                    }
                     else
                         nTab = rRef1.nTab;
                     if ( nTable <= nTab )
@@ -3021,7 +3033,11 @@ ScRangeData* ScCompiler::UpdateInsertTab( USHORT nTable, BOOL bIsName )
                     if ( !(rRef2.IsRelName() && rRef2.IsTabRel()) )
                     {   // Namen nur absolute anpassen
                         if ( rRef2.IsTabRel() )
+                        {
                             nTab = rRef2.nRelTab + nOldPosTab;
+                            if ( nTab < 0 )
+                                nTab += pDoc->GetTableCount();  // was a wrap
+                        }
                         else
                             nTab = rRef2.nTab;
                         if ( nTable <= nTab )
