@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hdu $ $Date: 2002-02-15 16:50:31 $
+ *  last change: $Author: hdu $ $Date: 2002-02-26 13:11:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,7 @@ static HRESULT ((WINAPI *pScriptJustify)( const SCRIPT_VISATTR*,
 static HRESULT ((WINAPI *pScriptTextOut)( const HDC, SCRIPT_CACHE*,
     int, int, UINT, const RECT*, const SCRIPT_ANALYSIS*, const WCHAR*,
     int, const WORD*, int, const int*, const int*, const GOFFSET* ));
-static HRESULT ((WINAPI *pScriptGetFontProperties)( SCRIPT_FONTPROPERTIES***, int* ));
+static HRESULT ((WINAPI *pScriptGetFontProperties)( HDC, SCRIPT_FONTPROPERTIES***, int* ));
 static HRESULT ((WINAPI *pScriptFreeCache)( SCRIPT_CACHE* ));
 
 // -----------------------------------------------------------------------
@@ -402,7 +402,7 @@ static bool InitUSP()
         ::GetProcAddress( aUspModule, "ScriptJustify" );
     bUspDisabled |= (pScriptJustify == NULL);
 
-    pScriptGetFontProperties = (HRESULT (WINAPI *)( SCRIPT_FONTPROPERTIES***,int*))
+    pScriptGetFontProperties = (HRESULT (WINAPI*)(HDC,SCRIPT_FONTPROPERTIES***,int*))
         ::GetProcAddress( aUspModule, "ScriptGetFontProperties" );
     bUspDisabled |= (pScriptGetFontProperties == NULL);
 
@@ -779,12 +779,15 @@ void UniscribeLayout::Justify( long nNewWidth )
                 nItemWidth += mpCharWidths[ i+rScriptItem.iCharPos ];
 
             SCRIPT_FONTPROPERTIES** ppFontProperties;
-            int nFontProperties;
-            HRESULT nRC = (*pScriptGetFontProperties)( &ppFontProperties, &nFontProperties );
-            int eScript = rScriptItem.a.eScript;
             int nMinKashida = 1;
-            if( eScript < nFontProperties )
-                nMinKashida = (*ppFontProperties)[ eScript ].iKashidaWidth;
+            int nFontProperties;
+            HRESULT nRC = (*pScriptGetFontProperties)( mhDC, &ppFontProperties, &nFontProperties );
+            if( !nRC )
+            {
+                int eScript = rScriptItem.a.eScript;
+                if( eScript < nFontProperties )
+                    nMinKashida = (*ppFontProperties)[ eScript ].iKashidaWidth;
+            }
 
             nRC = (*pScriptJustify) (
                 mpVisualAttrs + nGlyphsProcessed,
