@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2002-09-06 14:17:59 $
+ *  last change: $Author: khong $ $Date: 2002-09-13 18:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ Calendar_gregorian::mapFromGregorian() throw(RuntimeException)
 
         e = fieldValue[CalendarFieldIndex::ERA];
         y = fieldValue[CalendarFieldIndex::YEAR];
-        m = fieldValue[CalendarFieldIndex::DAY_OF_MONTH] + 1;
+        m = fieldValue[CalendarFieldIndex::MONTH] + 1;
         d = fieldValue[CalendarFieldIndex::DAY_OF_MONTH];
 
         // since the year is reversed for first era, it is reversed again here for Era compare.
