@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-05 10:35:39 $
+ *  last change: $Author: obo $ $Date: 2004-10-21 11:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,12 +392,11 @@ public:
     void                setType( const OUString& rType ) { maType = rType; }
 };
 
-DECLARE_LIST( EntryList_Impl, DocTemplates_EntryData_Impl* );
-
 //=============================================================================
 
 class GroupData_Impl
 {
+    DECLARE_LIST( EntryList_Impl, DocTemplates_EntryData_Impl* );
     EntryList_Impl      maEntries;
     OUString            maTitle;
     OUString            maHierarchyURL;
