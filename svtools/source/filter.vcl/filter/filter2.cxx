@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-18 17:09:20 $
+ *  last change: $Author: ka $ $Date: 2002-12-05 13:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,11 @@ GraphicDescriptor::GraphicDescriptor( const INetURLObject& rPath ) :
         pFileStm->Seek( nStmPos );
         bDataReady = TRUE;
     }
+
     ImpConstruct();
+
+    if ( pFileStm && !pFileStm->GetError() )
+        bDataReady = TRUE;
 }
 
 /*************************************************************************
@@ -1431,12 +1435,6 @@ String GraphicDescriptor::GetImportFormatShortName( sal_uInt16 nFormat )
         case( GFF_WMF ) :   aKeyName = "wmf";   break;
         case( GFF_EMF ) :   aKeyName = "emf";   break;
     }
-    return String( RTL_CONSTASCII_USTRINGPARAM( aKeyName ) );
 
-    if ( aKeyName.Len() )
-    {
-        FilterConfigCache aFilterConfigCache( sal_True );
-        nKeyNumber = aFilterConfigCache.GetImportFormatNumberForShortName( String( RTL_CONSTASCII_USTRINGPARAM( aKeyName ) ) );
-    }
-    return nKeyNumber;
+    return String( aKeyName, RTL_TEXTENCODING_ASCII_US );
 }
