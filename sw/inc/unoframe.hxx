@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-11-15 15:48:28 $
+ *  last change: $Author: mtg $ $Date: 2001-11-19 15:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,10 @@ public:
     void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
     void attach( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xTextRange ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-    SwFrmFmt*       GetFrmFmt() const { return bIsDescriptor ? 0 : (SwFrmFmt*)GetRegisteredIn(); }
+    SwFrmFmt*       GetFrmFmt() const
+    {
+        return PTR_CAST ( SwFrmFmt, GetRegisteredIn() );
+    }
     FlyCntType      GetFlyCntType()const {return eType;}
 
     sal_Bool            IsDescriptor() const {return bIsDescriptor;}
