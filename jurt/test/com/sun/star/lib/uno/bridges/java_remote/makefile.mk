@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-23 17:07:13 $
+#   last change: $Author: vg $ $Date: 2003-05-22 09:11:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -57,29 +57,16 @@
 #   Contributor(s): _______________________________________
 #
 #
-#
 #*************************************************************************
 
-PRJ=..$/..$/..$/..$/..$/..$/..$/..
-
+PRJ := ..$/..$/..$/..$/..$/..$/..$/..
 PRJNAME := jurt
+TARGET := test_com_sun_star_lib_uno_bridges_java_remote
+
 PACKAGE := com$/sun$/star$/lib$/uno$/bridges$/java_remote
-TARGET  := test_com_sun_star_lib_uno_bridges_java_remote
+JAVATESTFILES := \
+    ProxyFactory_Test.java \
+    java_remote_bridge_Test.java
+JARFILES := ridl.jar sandbox.jar
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
-
-# Files --------------------------------------------------------
-
-
-JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/ProxyTest.class \
-    $(CLASSDIR)$/$(PACKAGE)$/TestInterface.class				\
-    $(CLASSDIR)$/$(PACKAGE)$/java_remote_bridge_Test.class
-
-# --- Targets ------------------------------------------------------
-
-
-.INCLUDE :  target.mk
-
+.INCLUDE: javaunittest.mk
