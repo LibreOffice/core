@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-30 12:19:26 $
+ *  last change: $Author: mav $ $Date: 2002-05-07 07:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1365,6 +1365,64 @@ void SfxMedium::Transfer_Impl()
 {
     if( pImp->pTempFile && ( !eError || eError & ERRCODE_WARNING_MASK ) )
     {
+        Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
+        Reference< XOutputStream > rOutStream;
+
+        // in case an output stream is provided from outside and the URL is correct
+        // commit to the stream
+        if( aLogicName.CompareToAscii( "private:stream" ) == COMPARE_EQUAL )
+        {
+               SFX_ITEMSET_ARG( pSet, pOutStreamItem, SfxUnoAnyItem, SID_OUTPUTSTREAM, sal_False);
+             if( pOutStreamItem && ( pOutStreamItem->GetValue() >>= rOutStream ) )
+            {
+                // write directly to the stream
+                Close();
+
+                INetURLObject aSource( pImp->pTempFile->GetURL() );
+                ::ucb::Content aTempCont;
+                if( ::ucb::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aTempCont ) )
+                {
+                    try
+                    {
+                        sal_Int32 nRead;
+                        sal_Int32 nBufferSize = 32767;
+                        Sequence < sal_Int8 > aSequence ( nBufferSize );
+                        Reference< XInputStream > aTempInput = aTempCont.openStream();
+
+                        do
+                        {
+                            nRead = aTempInput->readBytes ( aSequence, nBufferSize );
+                            if ( nRead < nBufferSize )
+                            {
+                                Sequence < sal_Int8 > aTempBuf ( aSequence.getConstArray(), nRead );
+                                rOutStream->writeBytes ( aTempBuf );
+                            }
+                            else
+                                rOutStream->writeBytes ( aSequence );
+                        }
+                        while ( nRead == nBufferSize );
+
+                        // remove temporary file
+                        pImp->pTempFile->EnableKillingFile( sal_True );
+                        delete pImp->pTempFile;
+                        pImp->pTempFile = NULL;
+                    }
+                    catch( Exception& )
+                    {}
+                }
+               }
+            else
+            {
+                DBG_ERROR( "Illegal Output stream parameter!\n" );
+                SetError( ERRCODE_IO_GENERAL );
+            }
+
+            // free the reference
+            pSet->ClearItem( SID_OUTPUTSTREAM );
+
+            return;
+        }
+
         GetContent();
         if ( !pImp->aContent.get().is() )
         {
@@ -1436,7 +1494,6 @@ void SfxMedium::Transfer_Impl()
 
         sal_Bool bSuccess = sal_False;
         INetURLObject aDest( GetURLObject() );
-        Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
 
         // source is the temp file written so far
         INetURLObject aSource( pImp->pTempFile->GetURL() );
@@ -1882,6 +1939,7 @@ void SfxMedium::Init_Impl()
  */
 
 {
+    Reference< XOutputStream > rOutStream;
     pImp->pVersions = NULL;
 
     SFX_ITEMSET_ARG( pSet, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
@@ -1906,6 +1964,18 @@ void SfxMedium::Init_Impl()
 
     if ( pSalvageItem && pSalvageItem->GetValue().Len() )
         aLogicName = pSalvageItem->GetValue();
+
+    // in case output stream is by mistake here
+    // clear the reference
+    SFX_ITEMSET_ARG( pSet, pOutStreamItem, SfxUnoAnyItem, SID_OUTPUTSTREAM, sal_False);
+    if( pOutStreamItem
+     && ( !( pOutStreamItem->GetValue() >>= rOutStream )
+          || !aLogicName.CompareToAscii( "private:stream" ) == COMPARE_EQUAL ) )
+    {
+        pSet->ClearItem( SID_OUTPUTSTREAM );
+        DBG_ERROR( "Unexpected Output stream parameter!\n" );
+    }
+
     SetIsRemote_Impl();
 }
 
