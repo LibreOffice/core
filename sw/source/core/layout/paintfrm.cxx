@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:56:15 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3699,7 +3699,7 @@ const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
                                       // bCellInFirstRowWithMaster
                                        ( !pParentRowFrm->GetPrev() &&
                                          pParentTabFrm->IsFollow() &&
-                                         !pParentTabFrm->GetTable()->IsHeadlineRepeat() ) :
+                                         0 == pParentTabFrm->GetTable()->GetRowsToRepeat() ) :
                                       // bCellInLastRowWithFollow
                                        ( !pParentRowFrm->GetNext() &&
                                          pParentTabFrm->GetFollow() )
