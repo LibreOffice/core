@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reginfo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:26:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,6 @@
 #include <osl/thread.h>
 #endif
 
-String aEmptyString;
-
 #define MAXREGVALUE 200
 
 #if defined(WIN) || defined(WNT)
@@ -133,7 +131,7 @@ RegInfo::~RegInfo()
 
 String RegInfo::GetKeyName( USHORT nKey ) const
 {
-    DBG_HDL aEmptyString;
+    DBG_HDL String::EmptyString();
     char aBuffer[MAXREGVALUE];
     RegEnumKey( pImp->aGroupHdl, nKey, aBuffer, MAXREGVALUE );
     return String( UniString::CreateFromAscii(aBuffer) );
@@ -219,17 +217,17 @@ BOOL ReadKey_Impl( const String& rKey,
 
 String  RegInfo::ReadKey( const String& rKey ) const
 {
-    DBG_HDL aEmptyString;
+    DBG_HDL String::EmptyString();
     String aRes;
     if(ReadKey_Impl( rKey, pImp->aGroupHdl, aRes))
         return aRes;
     else
-        return aEmptyString;
+        return String::EmptyString();
 }
 
 String  RegInfo::ReadKey( const String& rKey, const String &rDefault ) const
 {
-    DBG_HDL aEmptyString;
+    DBG_HDL String::EmptyString();
     String aRes;
     if(ReadKey_Impl( rKey, pImp->aGroupHdl, aRes))
         return aRes;
@@ -744,7 +742,7 @@ RegInfo::~RegInfo()
 
 String RegInfo::GetKeyName( USHORT nKey ) const
 {
-    return aEmptyString;
+    return String::EmptyString();
 }
 
 USHORT RegInfo::GetKeyCount() const
@@ -764,12 +762,12 @@ void RegInfo::DeleteAppGroup( const String &rGroup )
 
 String  RegInfo::ReadKey( const String& rKey ) const
 {
-    return aEmptyString;
+    return String::EmptyString();
 }
 
 String  RegInfo::ReadKey( const String& rKey, const String &rDefault ) const
 {
-    return aEmptyString;
+    return String::EmptyString();
 }
 
 void RegInfo::WriteKey( const String& rKey, const String& rValue )
