@@ -50,7 +50,7 @@ my ( $outfile, $outfile_sh, $outfile_bat, $bootfile, $newline, $comment, $commen
 #
 # Platform independent constant values.
 my @LANGUAGES = ("ARAB", "CAT", "CHINSIM", "CHINTRAD", "CZECH", "DAN", "DTCH", "ENUS", "FREN", "GREEK", "ITAL",
-"JAPN", "KOREAN", "POL", "PORT", "RUSS", "SLOVAK", "SPAN", "SWED", "TURK" ); 
+"JAPN", "KOREAN", "POL", "PORT", "RUSS", "SLOVAK", "SPAN", "SWED", "TURK", "FINN" ); 
 my @DICTIONARIES = ("DADK", "DEDE", "ENGB", "ENUS", "ITIT", "RURU" );
 my ( $CALL_CDECL, $COMMON_OUTDIR, $NO_SRS_PATCH, $PRODUCT, $PROFULLSWITCH, $BIG_GOODIES, $BMP_WRITES_FLAG, 
      $common_build, $MK_UNROLL, $NO_REC_RES, $PROEXT, $SO3, $SOLAR_JAVA, 
@@ -576,7 +576,14 @@ elsif ( $platform eq "$Macosx" )
       $COMPATH        = '@COMPATH@'; 
       $CPU            = "P";
       $CPUNAME        = "POWERPC";
+   if ($USE_GCC3 eq  "TRUE")
+   {
+      $CVER           = "C300";
+   }
+   else
+   {
       $CVER           = "C295";
+   }
       $DLLSUFFIX      = "mxp";
       $GUI            = "UNX";
       $GUIENV         = "sal";
@@ -1653,10 +1660,14 @@ ToFile( "CXX",               $CXX,               "e" );
 if ( $COM ne "MSC" ) {
   ToFile( "LINK",			 $CC,				 "e" );
 }
-ToFile( "ENVCFLAGSCXX",      "@ENVCFLAGSCXX@",    "e" );
-ToFile( "WITH_GPC",          "@WITH_GPC@",      "e" );
-ToFile( "GXX_INCLUDE_PATH",  "@GXX_INCLUDE_PATH@","e" );
-ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS, "e" );
+ToFile( "ENVCFLAGSCXX",      "@ENVCFLAGSCXX@",     "e" );
+ToFile( "ENABLE_CRASHDUMP",  "@ENABLE_CRASHDUMP@", "e" );
+ToFile( "WITH_GPC",          "@WITH_GPC@",         "e" );
+ToFile( "WITH_LIBART",       "@WITH_LIBART@",      "e" );
+ToFile( "LIBART_CFLAGS",     "@LIBART_CFLAGS@",    "e" );
+ToFile( "LIBART_LIBS",       "@LIBART_LIBS@",      "e" );
+ToFile( "GXX_INCLUDE_PATH",  "@GXX_INCLUDE_PATH@", "e" );
+ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,  "e" );
 if ($platform ne "$Winnt")
 {  ToFile( "TEMP",              $TEMP,              "e" );
    ToFile( "TMP",               $TEMP,              "e" );
@@ -1724,6 +1735,12 @@ if ( $platform eq "$Winnt" and '@USE_SHELL@' eq "4nt" )
   ToFile( "build the dmake executable.", $empty, "c");
   ToFile( "if not exist \%SRC_ROOT\\dmake\\dmake.exe (cd \%SRC_ROOT\\dmake \^ call make.bat win95-vpp40 \^ cd \%SRC_ROOT)", $empty, "x");
   ToFile( "  ", $empty, "x");
+}
+# on solaris, set GNUCOPY and GNUPATCH
+if ($platform eq "$Solaris")
+{
+  ToFile( "GNUPATCH",   "@GNUPATCH@",	"e");
+  ToFile( "GNUCOPY",	"@GNUCP@",	"e");
 }
 #
 # Writing unset variables you might not need to file.
