@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-30 19:12:06 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,8 @@ public:
 
     void            CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const;
 
-    void            PaintObject( SdrObject* pObject, OutputDevice* pDev ) const;
+    // #110094#-17 Not used
+    // void         PaintObject( SdrObject* pObject, OutputDevice* pDev ) const;
 
     void            SetAnchor( ScAnchorType );
     ScAnchorType    GetAnchor() const;
