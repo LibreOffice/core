@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-20 13:29:00 $
+ *  last change: $Author: gt $ $Date: 2002-11-05 09:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,3 +87,5 @@ hidspecial HID_FILEOPEN_IMAGE_TEMPLATE          { HelpID = HID_FILEOPEN_IMAGE_TE
 hidspecial HID_HELPAGENT_WINDOW                 { HelpID = HID_HELPAGENT_WINDOW; };
 
 hidspecial HID_REGISTRATION_DIALOG              { HelpID = HID_REGISTRATION_DIALOG; };
+
+hidspecial HID_PRINTDIALOG_TOFILE               { HelpID = HID_PRINTDIALOG_TOFILE; };
