@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tv $ $Date: 2001-03-30 12:07:47 $
+ *  last change: $Author: kz $ $Date: 2001-04-02 19:26:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,7 +487,7 @@ String TextField
     Text[ dutch ] = "Textfield is not defined!";
     Text[ french ] = "Ce champ de données d'identité n'est pas défini !";
     Text[ spanish ] = "¡El campo de datos de usuario no está definido!";
-    Text[ italian ] = "Textfield is not defined!";
+    Text[ italian ] = "Il campo dati utente non è stato definito!";
     Text[ danish ] = "Textfield is not defined!";
     Text[ swedish ] = "Användardatafält är inte definierat!";
     Text[ polish ] = "Nie zdefiniowano pola danych u¿ytkownika!";
