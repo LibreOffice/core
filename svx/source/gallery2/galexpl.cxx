@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galexpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 13:06:09 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,4 +486,11 @@ BOOL GalleryExplorer::EndLocking( ULONG nThemeId )
 {
     Gallery* pGal = ImplGetGallery();
     return( pGal ? EndLocking( pGal->GetThemeName( nThemeId ) ) : FALSE );
+}
+
+// -----------------------------------------------------------------------------
+
+BOOL GalleryExplorer::DrawCentered( OutputDevice* pOut, const FmFormModel& rModel )
+{
+    return SgaObjectSvDraw::DrawCentered( pOut, rModel );
 }
