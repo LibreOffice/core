@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:13:12 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1445,3 +1445,74 @@ void PspGraphics::AnnounceFonts( ImplDevFontList* pFontList, const psp::FastPrin
     pFD->mnQuality += nQuality;
     pFontList->Add( pFD );
 }
+
+bool PspGraphics::filterText( const String& rOrig, String& rNewText, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop )
+{
+    if( ! m_pPhoneNr )
+        return false;
+
+    rCutStop = rCutStart = STRING_NOTFOUND;
+
+#define FAX_PHONE_TOKEN          "@@#"
+#define FAX_PHONE_TOKEN_LENGTH   3
+#define FAX_END_TOKEN            "@@"
+#define FAX_END_TOKEN_LENGTH     2
+
+    bool bRet = false;
+    bool bStarted = false;
+    bool bStopped = false;
+    USHORT nPos;
+    USHORT nStart = 0;
+    USHORT nStop = rLen;
+    String aPhone = rOrig.Copy( nIndex, rLen );
+
+    if( ! m_bPhoneCollectionActive )
+    {
+        if( ( nPos = aPhone.SearchAscii( FAX_PHONE_TOKEN ) ) != STRING_NOTFOUND )
+        {
+            nStart = nPos;
+            m_bPhoneCollectionActive = true;
+            m_aPhoneCollection.Erase();
+            bRet = true;
+            bStarted = true;
+        }
+    }
+    if( m_bPhoneCollectionActive )
+    {
+        bRet = true;
+        nPos = bStarted ? nStart + FAX_PHONE_TOKEN_LENGTH : 0;
+        if( ( nPos = aPhone.SearchAscii( FAX_END_TOKEN, nPos ) ) != STRING_NOTFOUND )
+        {
+            m_bPhoneCollectionActive = false;
+            nStop = nPos + FAX_END_TOKEN_LENGTH;
+            bStopped = true;
+        }
+        int nTokenStart = nStart + (bStarted ? FAX_PHONE_TOKEN_LENGTH : 0);
+        int nTokenStop = nStop - (bStopped ? FAX_END_TOKEN_LENGTH : 0);
+        m_aPhoneCollection += aPhone.Copy( nTokenStart, nTokenStop - nTokenStart );
+        if( ! m_bPhoneCollectionActive )
+        {
+            *m_pPhoneNr = m_aPhoneCollection;
+            m_aPhoneCollection.Erase();
+        }
+    }
+    if( m_aPhoneCollection.Len() > 1024 )
+    {
+        m_bPhoneCollectionActive = false;
+        m_aPhoneCollection.Erase();
+        bRet = false;
+    }
+
+    if( bRet && m_bSwallowFaxNo )
+    {
+        rLen -= nStop - nStart;
+        rCutStart = nStart+nIndex;
+        rCutStop = nStop+nIndex;
+        if( rCutStart )
+            rNewText = rOrig.Copy( 0, rCutStart );
+        rNewText += rOrig.Copy( rCutStop );
+    }
+
+    return bRet && m_bSwallowFaxNo;
+}
+
