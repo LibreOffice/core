@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oservices.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 16:54:34 $
+ *  last change: $Author: vg $ $Date: 2001-05-22 10:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,8 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
             const Reference< XMultiServiceFactory > & rServiceManager,
             const OUString & rComponentName,
             ::cppu::ComponentInstantiation pCreateFunction,
-            const Sequence< OUString > & rServiceNames
+            const Sequence< OUString > & rServiceNames,
+            rtl_ModuleCount* _pTemp
         );
 
 //***************************************************************************************
@@ -137,7 +138,7 @@ struct ProviderRequest
         if (!xRet.is() && (Implname == sImplementationName))
         try
         {
-            xRet = creator( xServiceManager, sImplementationName,Factory, Services);
+            xRet = creator( xServiceManager, sImplementationName,Factory, Services,0);
         }
         catch(...)
         {
