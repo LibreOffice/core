@@ -2,9 +2,9 @@
 #
 #   $RCSfile: CvsModule.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mh $ $Date: 2004-07-02 15:55:28 $
+#   last change: $Author: vg $ $Date: 2004-07-27 14:52:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -271,7 +271,7 @@ sub checkout
     my $dirs_ref;
     my $files_ref;
     if ( $from_mirror ) {
-        ($dirs_ref, $files_ref) = $self->do_checkout($self->cvs_mirror(), $tag, $options);
+        ($dirs_ref, $files_ref) = $self->do_checkout($self->cvs_mirror(), '', $options);
         if ( @{$dirs_ref} ) {
             my $mirror = $self->cvs_mirror();
             my $remote = $self->cvs_remote();
@@ -286,7 +286,7 @@ sub checkout
         my $updated_files_ref;
         my $updated_dirs_ref;
         my %files_hash;
-        ($updated_dirs_ref, $updated_files_ref) = $self->do_update('', $options);
+        ($updated_dirs_ref, $updated_files_ref) = $self->do_update($tag, $options);
         if ( @{$updated_files_ref} ) {
             # Ok, something changed in the mean time
             # create hash for faster searching
@@ -718,7 +718,7 @@ sub get_rcmd_root
     if ( $server =~ /$remote/o ) {
         $repository = '/shared/data/helm/cvs/repository';
         $root = ":$method:$vcsid\@$server:$repository";
-        if ( !is_valid_login($repository) ) {
+        if ( !is_valid_login($root) ) {
             print STDERR "\nThe cvs rdiff command is broken for the OOo CVS server.\n";
             print STDERR "To fix this problem you have to issue the following cvs login command:\n\n";
             print STDERR "    cvs -d $root login\n\n";
