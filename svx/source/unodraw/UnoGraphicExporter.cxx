@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 11:48:52 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,8 +243,6 @@ namespace svx
         virtual sal_Bool SAL_CALL supportsMimeType( const ::rtl::OUString& MimeTypeName ) throw (RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedMimeTypeNames(  ) throw (RuntimeException);
 
-        DECL_LINK(PaintProc, SdrPaintProcRec*);
-
         VirtualDevice* CreatePageVDev( SdrPage* pPage, ULONG nWidthPixel, ULONG nHeightPixel ) const;
 
         DECL_LINK( CalcFieldValueHdl, EditFieldInfo* );
@@ -408,17 +406,6 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo)
     return maOldCalcFieldValueHdl.Call( pInfo );
 }
 
-IMPL_LINK( GraphicExporter, PaintProc, SdrPaintProcRec *, pRecord )
-{
-    SdrObject* pObj = pRecord->pObj;
-    if( pObj->GetPage() && pObj->GetPage()->checkVisibility( pRecord, false ) )
-    {
-        pObj->SingleObjectPainter( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
-    }
-
-    return 0;
-}
-
 /** creates an virtual device for the given page
 
     @return the returned VirtualDevice is owned by the caller
@@ -466,12 +453,14 @@ VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, ULONG nWidthPixe
     SdrPageView* pPageView  = pView->GetPageView(pPage);
 
     Region aRegion (Rectangle( aPoint, aPageSize ) );
-    const Link aPaintProcLink( LINK(this, GraphicExporter, PaintProc ) );
+
+    // Use new StandardCheckVisisbilityRedirector
+    StandardCheckVisisbilityRedirector aRedirector;
 
     for (USHORT i=0; i<pView->GetPageViewCount(); i++)
     {
         SdrPageView* pPV=pView->GetPageViewPvNum(i);
-        pPV->InitRedraw(pVDev,aRegion,0,&aPaintProcLink );
+        pPV->CompleteRedraw(pVDev, aRegion, 0, &aRedirector);
     }
 
     delete pView;
@@ -724,14 +713,14 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                     aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
                     aVDev.SetRelativeMapMode( aVMap );
                     aVDev.IntersectClipRegion( aClipRect );
-                    const Link aPaintProcLink( LINK(this, GraphicExporter, PaintProc ) );
 
-//                  pView->InitRedraw( &aVDev, Region( Rectangle( Point(), aNewSize ), 0, &aPaintProcLink ) );
+                    // Use new StandardCheckVisisbilityRedirector
+                    StandardCheckVisisbilityRedirector aRedirector;
 
                     for (USHORT i=0; i<pView->GetPageViewCount(); i++)
                     {
                         SdrPageView* pPV=pView->GetPageViewPvNum(i);
-                        pPV->InitRedraw(&aVDev,Region( Rectangle( Point(), aNewSize ) ),0,&aPaintProcLink );
+                        pPV->CompleteRedraw(&aVDev, Region(Rectangle(Point(), aNewSize)), 0, &aRedirector);
                     }
 
                     aVDev.Pop();
