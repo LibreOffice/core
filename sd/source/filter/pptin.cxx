@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-09 17:06:33 $
+ *  last change: $Author: sj $ $Date: 2001-04-24 11:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,9 @@
 #ifndef _SD_FRMVIEW_HXX
 #include <../ui/inc/frmview.hxx>
 #endif
-
+#ifndef _SD_OPTSITEM_HXX
+#include <../ui/inc/optsitem.hxx>
+#endif
 #include <offmgr/app.hxx>
 #ifndef _OFA_FLTRCFG_HXX
 #include <offmgr/fltrcfg.hxx>
@@ -1064,6 +1066,8 @@ BOOL SdPPTImport::Import()
             }
             if ( pFrameView )
             {
+                pFrameView->SetSummationOfParagraphs( sal_True );
+
                 sal_uInt16  nSelectedPage = 0;
                 PageKind    ePageKind = PK_STANDARD;
                 EditMode    eEditMode = EM_PAGE;

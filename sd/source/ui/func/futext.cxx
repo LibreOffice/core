@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-26 14:33:39 $
+ *  last change: $Author: sj $ $Date: 2001-04-24 11:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@
 #include "docshell.hxx"
 #include "glob.hrc"
 #include "pres.hxx"
+#include "optsitem.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -1000,6 +1001,15 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, BOOL bQuickDrag)
                 nCntrl |= EE_CNTRL_URLSFXEXECUTE;
                 nCntrl |= EE_CNTRL_MARKFIELDS;
                 nCntrl |= EE_CNTRL_AUTOCORRECT;
+
+                nCntrl &= ~EE_CNTRL_ULSPACESUMMATION;
+                if ( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
+                {
+                    FrameView* pFrameView = pDoc->GetFrameView( 0 );
+                    if ( pFrameView && pFrameView->IsSummationOfParagraphs() )
+                        nCntrl |= EE_CNTRL_ULSPACESUMMATION;
+                }
+
                 SetSpellOptions( nCntrl );
 
                 pOutl->SetControlWord(nCntrl);

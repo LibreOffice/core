@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-11 09:15:43 $
+ *  last change: $Author: sj $ $Date: 2001-04-24 11:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,8 @@
 #endif
 
 #include <svx/svdfield.hxx>
+#include <svx/editstat.hxx>
+#include <svx/editeng.hxx>
 
 #define ITEMID_SPELLCHECK   0
 #include <svx/dialogs.hrc>
@@ -483,6 +485,8 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
     const SfxPoolItem*  pItem = NULL;
     BOOL bNewDefTab = FALSE;
     BOOL bNewPrintOptions = FALSE;
+    BOOL bMiscOptions = FALSE;
+
     FrameView* pFrameView = NULL;
     SdDrawDocShell* pDocSh = PTR_CAST( SdDrawDocShell, SfxObjectShell::Current() );
     SdDrawDocument* pDoc = NULL;
@@ -578,6 +582,7 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
                             FALSE, (const SfxPoolItem**) &pMiscItem ))
     {
         pMiscItem->SetOptions( pOptions );
+        bMiscOptions = TRUE;
     }
 
     // Fangen/Einrasten
@@ -638,6 +643,28 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
             SdOutliner* pInternalOutl = pDocument->GetInternalOutliner( FALSE );
             if( pInternalOutl )
                 pInternalOutl->SetDefTab( nDefTab );
+        }
+        if ( bMiscOptions && ( eDocType == DOCUMENT_TYPE_IMPRESS ) )
+        {
+            sal_uInt32 nSum = pMiscItem->IsSummationOfParagraphs() ? EE_CNTRL_ULSPACESUMMATION : 0;
+            sal_uInt32 nCntrl;
+
+            SdDrawDocument* pDocument = pDocSh->GetDoc();
+            SdrOutliner& rOutl = pDocument->GetDrawOutliner( FALSE );
+            nCntrl = rOutl.GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
+            rOutl.SetControlWord( nCntrl | nSum );
+            SdOutliner* pOutl = pDocument->GetOutliner( FALSE );
+            if( pOutl )
+            {
+                nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
+                pOutl->SetControlWord( nCntrl | nSum );
+            }
+            pOutl = pDocument->GetInternalOutliner( FALSE );
+            if( pOutl )
+            {
+                nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
+                pOutl->SetControlWord( nCntrl | nSum );
+            }
         }
     }
 
