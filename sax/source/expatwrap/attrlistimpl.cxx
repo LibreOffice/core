@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrlistimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-25 08:13:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #include <vector>
 
+#if OSL_DEBUG_LEVEL == 0
+#define NDEBUG
+#endif
 #include <assert.h>
 
 #include <cppuhelper/weak.hxx>
