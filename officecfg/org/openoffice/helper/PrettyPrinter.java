@@ -141,9 +141,10 @@ public class PrettyPrinter extends HandlerBase
             emit ("/>");
         else
         {
-            // treet the value special
-            if (name != "value" && name != "defaultvalue")
-            nl();
+            // treat the value special
+            if (nStatus != CONTENT)
+//          if (name != "value" && name != "defaultvalue")
+                nl();
             emit ("</"+name+">");
         }
         nStatus = END_ELEMENT;
