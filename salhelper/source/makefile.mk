@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: jsc $ $Date: 2001-05-04 13:24:41 $
+#   last change: $Author: jsc $ $Date: 2001-06-01 08:47:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,6 @@ PRJNAME=	salhelper
 TARGET=		salhelper
 NO_BSYMBOLIC=	TRUE
 ENABLE_EXCEPTIONS=TRUE
-
 USE_DEFFILE=	TRUE
 
 # --- Settings -----------------------------------------------------
@@ -98,16 +97,17 @@ SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-DEF1EXPORTFILE=	exports.dxp
 
 DEF1NAME=	$(SHL1TARGET)
-#DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
-#DEFLIB1NAME=	$(TARGET)
 
-.IF "$(OS)$(CPU)"=="SOLARISS"
-SHL1VERSIONMAP=	sols.map
+.IF "$(OS)$(CPU)"=="WNTI"
+SHL1VERSIONMAP=msci.map
+.ELIF "$(OS)$(CPU)"=="SOLARISS"
+SHL1VERSIONMAP=sols.map
+.ELIF "$(OS)$(CPU)"=="SOLARISI"
+SHL1VERSIONMAP=soli.map
 .ELIF "$(OS)$(CPU)"=="LINUXI"
-SHL1VERSIONMAP= lngi.map
+SHL1VERSIONMAP=lngi.map
 .ENDIF
 
 
@@ -115,6 +115,3 @@ SHL1VERSIONMAP= lngi.map
 
 .INCLUDE :	target.mk
 
-#$(MISC)$/$(SHL1TARGET).flt : makefile.mk
-#	+echo	_TI2	   >$@
-#	+echo	_TI1	  >>$@
