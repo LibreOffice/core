@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndhints.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 18:52:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,6 @@ public:
 
     void Insert( SwTxtAttr *pHt, SwTxtNode &rNode, USHORT nMode = 0 );
 
-    USHORT GetLang( const xub_StrLen nBegin, const xub_StrLen nLen) const;
     inline void SetCalcVisible(){ bCalcVis = TRUE; }
     inline void SetVisible( const BOOL bNew )  { bVis = bNew; }
     inline BOOL IsVisible() const
