@@ -1,5 +1,5 @@
 *** misc/spirit-1.6.1/boost/spirit/core/composite/epsilon.hpp	2003-07-08 04:19:06.000000000 +0200
---- misc/build/spirit-1.6.1/boost/spirit/core/composite/epsilon.hpp	2004-08-25 16:08:38.000000000 +0200
+--- misc/build/spirit-1.6.1/boost/spirit/core/composite/epsilon.hpp	2005-04-01 15:13:03.768850181 +0200
 ***************
 *** 70,76 ****
   private:
@@ -17,8 +17,41 @@
   template <typename CondT>
   inline condition_parser<CondT, false>
   operator~(condition_parser<CondT, true> const& p)
+*** misc/spirit-1.6.1/boost/spirit/core/impl/match.ipp	2003-07-08 04:19:06.000000000 +0200
+--- misc/build/spirit-1.6.1/boost/spirit/core/impl/match.ipp	2005-04-01 15:38:40.744360982 +0200
+***************
+*** 154,167 ****
+              { return nil_t(); }
+          };
+  
+!     #if !defined(__BORLANDC__)
+          struct dummy { void nonnull() {}; };
+          typedef void (dummy::*safe_bool)();
+      #else
+          typedef bool safe_bool;
+      #endif
+  
+!     #if !defined(__BORLANDC__)
+      #define BOOST_SPIRIT_SAFE_BOOL(cond)  ((cond) ? &impl::dummy::nonnull : 0)
+      #else
+      #define BOOST_SPIRIT_SAFE_BOOL(cond)  (cond)
+--- 154,167 ----
+              { return nil_t(); }
+          };
+  
+!     #if !defined(__BORLANDC__) && !defined(__SUNPRO_CC) // workaround opt bug when compiling with -xO3
+          struct dummy { void nonnull() {}; };
+          typedef void (dummy::*safe_bool)();
+      #else
+          typedef bool safe_bool;
+      #endif
+  
+!     #if !defined(__BORLANDC__) && !defined(__SUNPRO_CC) // workaround opt bug when compiling with -xO3
+      #define BOOST_SPIRIT_SAFE_BOOL(cond)  ((cond) ? &impl::dummy::nonnull : 0)
+      #else
+      #define BOOST_SPIRIT_SAFE_BOOL(cond)  (cond)
 *** misc/spirit-1.6.1/boost/spirit/core/scanner/scanner.hpp	2003-07-08 04:19:06.000000000 +0200
---- misc/build/spirit-1.6.1/boost/spirit/core/scanner/scanner.hpp	2004-08-26 15:31:57.000000000 +0200
+--- misc/build/spirit-1.6.1/boost/spirit/core/scanner/scanner.hpp	2005-04-01 15:13:03.769850073 +0200
 ***************
 *** 18,23 ****
 --- 18,26 ----
@@ -52,7 +85,7 @@
           iter_param_t;
   
 *** misc/spirit-1.6.1/miniboost/boost/config/compiler/gcc.hpp	2003-07-08 04:19:08.000000000 +0200
---- misc/build/spirit-1.6.1/miniboost/boost/config/compiler/gcc.hpp	2004-08-25 15:40:18.000000000 +0200
+--- misc/build/spirit-1.6.1/miniboost/boost/config/compiler/gcc.hpp	2005-04-01 15:13:03.769850073 +0200
 ***************
 *** 59,65 ****
   #endif
@@ -72,7 +105,7 @@
   #     error "Unknown compiler version - please run the configure tests and report the results"
   #  else
 *** misc/spirit-1.6.1/miniboost/boost/config/compiler/sunpro_cc.hpp	2003-07-08 04:19:08.000000000 +0200
---- misc/build/spirit-1.6.1/miniboost/boost/config/compiler/sunpro_cc.hpp	2004-08-25 16:29:38.000000000 +0200
+--- misc/build/spirit-1.6.1/miniboost/boost/config/compiler/sunpro_cc.hpp	2005-04-01 15:13:03.769850073 +0200
 ***************
 *** 45,52 ****
   #      define BOOST_NO_INTEGRAL_INT64_T
@@ -98,7 +131,7 @@
   
   #define BOOST_COMPILER "Sun compiler version " BOOST_STRINGIZE(__SUNPRO_CC)
 *** misc/spirit-1.6.1/miniboost/boost/config/user.hpp	2003-07-08 04:19:08.000000000 +0200
---- misc/build/spirit-1.6.1/miniboost/boost/config/user.hpp	2004-08-25 15:43:56.000000000 +0200
+--- misc/build/spirit-1.6.1/miniboost/boost/config/user.hpp	2005-04-01 15:13:03.770849965 +0200
 ***************
 *** 66,68 ****
 --- 66,74 ----
@@ -111,8 +144,108 @@
 + #define BOOST_NO_EXCEPTIONS
 + #endif
 + 
+*** misc/spirit-1.6.1/miniboost/boost/optional.hpp	2003-07-08 04:19:09.000000000 +0200
+--- misc/build/spirit-1.6.1/miniboost/boost/optional.hpp	2005-04-01 15:23:03.764855626 +0200
+***************
+*** 194,200 ****
+--- 194,204 ----
+  
+      // implicit conversion to "bool"
+      // No-throw
++ #if defined(__SUNPRO_CC) // workaround opt bug when compiling with -xO3
++     operator bool() const { return m_initialized; }
++ #else
+      operator unspecified_bool_type() const { return m_initialized ? &this_type::destroy : 0 ; }
++ #endif // defined(__SUNPRO_CC)
+  
+         // This is provided for those compilers which don't like the conversion to bool
+         // on some contexts.
+*** misc/spirit-1.6.1/miniboost/boost/scoped_array.hpp	2003-07-08 04:19:08.000000000 +0200
+--- misc/build/spirit-1.6.1/miniboost/boost/scoped_array.hpp	2005-04-01 15:26:31.066393207 +0200
+***************
+*** 83,94 ****
+--- 83,98 ----
+  
+      // implicit conversion to "bool"
+  
++ #if defined(__SUNPRO_CC) // workaround opt bug when compiling with -xO3
++     operator bool() const { return ptr != 0; }
++ #else
+      typedef T * (this_type::*unspecified_bool_type)() const;
+  
+      operator unspecified_bool_type() const // never throws
+      {
+          return ptr == 0? 0: &this_type::get;
+      }
++ #endif // defined(__SUNPRO_CC)
+  
+      bool operator! () const // never throws
+      {
+*** misc/spirit-1.6.1/miniboost/boost/scoped_ptr.hpp	2003-07-08 04:19:08.000000000 +0200
+--- misc/build/spirit-1.6.1/miniboost/boost/scoped_ptr.hpp	2005-04-01 15:26:26.796855840 +0200
+***************
+*** 102,113 ****
+--- 102,117 ----
+  
+      // implicit conversion to "bool"
+  
++ #if defined(__SUNPRO_CC) // workaround opt bug when compiling with -xO3
++     operator bool() const { return ptr != 0; }
++ #else
+      typedef T * (this_type::*unspecified_bool_type)() const;
+  
+      operator unspecified_bool_type() const // never throws
+      {
+          return ptr == 0? 0: &this_type::get;
+      }
++ #endif // defined(__SUNPRO_CC)
+  
+      bool operator! () const // never throws
+      {
+*** misc/spirit-1.6.1/miniboost/boost/shared_array.hpp	2003-07-08 04:19:08.000000000 +0200
+--- misc/build/spirit-1.6.1/miniboost/boost/shared_array.hpp	2005-04-01 15:27:24.476605844 +0200
+***************
+*** 94,105 ****
+--- 94,109 ----
+  
+      // implicit conversion to "bool"
+  
++ #if defined(__SUNPRO_CC) // workaround opt bug when compiling with -xO3
++     operator bool() const { return px != 0; }
++ #else
+      typedef T * (this_type::*unspecified_bool_type)() const;
+  
+      operator unspecified_bool_type() const // never throws
+      {
+          return px == 0? 0: &this_type::get;
+      }
++ #endif // defined(__SUNPRO_CC)
+  
+      bool operator! () const // never throws
+      {
+*** misc/spirit-1.6.1/miniboost/boost/shared_ptr.hpp	2003-07-08 04:19:08.000000000 +0200
+--- misc/build/spirit-1.6.1/miniboost/boost/shared_ptr.hpp	2005-04-01 15:29:09.319245401 +0200
+***************
+*** 246,257 ****
+--- 246,261 ----
+  
+      // implicit conversion to "bool"
+  
++ #if defined(__SUNPRO_CC) // workaround opt bug when compiling with -xO3
++     operator bool() const { return px != 0; }
++ #else
+      typedef T * (this_type::*unspecified_bool_type)() const;
+  
+      operator unspecified_bool_type() const // never throws
+      {
+          return px == 0? 0: &this_type::get;
+      }
++ #endif // defined(__SUNPRO_CC)
+  
+      // operator! is redundant, but some compilers need it
+  
 *** misc/spirit-1.6.1/miniboost/boost/throw_exception.hpp	2003-07-08 04:19:08.000000000 +0200
---- misc/build/spirit-1.6.1/miniboost/boost/throw_exception.hpp	2004-08-25 16:25:25.000000000 +0200
+--- misc/build/spirit-1.6.1/miniboost/boost/throw_exception.hpp	2005-04-01 15:13:03.770849965 +0200
 ***************
 *** 29,35 ****
   
