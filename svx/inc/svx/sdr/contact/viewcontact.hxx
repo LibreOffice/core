@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontact.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:45:17 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ namespace sdr
     {
         class DisplayInfo;
         class ViewContact;
+        class ViewObjectContactRedirector;
 
         // typedef for a list of ViewContact
         typedef ::std::vector< ViewContact* > ViewContactVector;
@@ -121,6 +122,10 @@ namespace sdr
             // needs to be overloaded and needs to give a result together with
             // GetAnimationInfo
             sdr::animation::AnimationInfo*                  mpAnimationInfo;
+
+            // The redirector. If set it is used to pipe all supported calls
+            // to the redirector.
+            ViewObjectContactRedirector*                    mpViewObjectContactRedirector;
 
             // bitfield
             // Flag for the validity of the PaintRectangle.
@@ -252,6 +257,10 @@ namespace sdr
 
             // test for existing AnimationInfo
             sal_Bool HasAnimationInfo() const;
+
+            // access to ViewObjectContactRedirector
+            ViewObjectContactRedirector* GetViewObjectContactRedirector() const;
+            void SetViewObjectContactRedirector(ViewObjectContactRedirector* pNew);
 
             // access to SdrObject and/or SdrPage. May return 0L like the default
             // implementations do. Needs to be overloaded as needed.
