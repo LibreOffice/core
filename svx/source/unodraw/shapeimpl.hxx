@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-04 15:58:02 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:56:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,8 @@ public:
 
     sal_Bool createObject( const SvGlobalName &aClassName );
 
+    sal_Bool createLink( const ::rtl::OUString& aLinkURL );
+
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -103,15 +105,8 @@ public:
 
 #ifndef SVX_LIGHT
 
-#ifndef _PLUGIN_HXX
-#include <so3/plugin.hxx>
-#endif
-
 class SvxPluginShape : public SvxOle2Shape
 {
-private:
-    SvPlugInObjectRef mxPlugin;
-
 public:
     SvxPluginShape( SdrObject* pObj ) throw();
     virtual ~SvxPluginShape() throw();
@@ -131,15 +126,8 @@ public:
 
 #ifndef SVX_LIGHT
 
-#ifndef _APPLET_HXX
-#include <so3/applet.hxx>
-#endif
-
 class SvxAppletShape : public SvxOle2Shape
 {
-private:
-    SvAppletObjectRef mxApplet;
-
 public:
     SvxAppletShape( SdrObject* pObj ) throw();
     virtual ~SvxAppletShape() throw();
@@ -158,10 +146,6 @@ public:
 ***********************************************************************/
 
 #ifndef SVX_LIGHT
-
-#ifndef _FRAMEOBJ_HXX
-#include <sfx2/frameobj.hxx>
-#endif
 
 class SvxFrameShape : public SvxOle2Shape
 {
