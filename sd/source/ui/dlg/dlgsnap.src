@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsnap.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:58:12 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 06:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ ModalDialog DLG_SNAPLINE
         Text [ italian ] = "Tipo" ;
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ portuguese ] = "Tipo" ;
-        Text [ finnish ] = "Laji" ;
+        Text [ finnish ] = "Tyyppi" ;
         Text [ danish ] = "Type" ;
         Text [ french ] = "Type" ;
         Text [ swedish ] = "Typ" ;
@@ -281,7 +281,7 @@ ModalDialog DLG_SNAPLINE
         Text [ italian ] = "~Verticale" ;
         Text [ portuguese_brazilian ] = "~Vertical" ;
         Text [ portuguese ] = "~Vertical" ;
-        Text [ finnish ] = "~Rinnakkain" ;
+        Text [ finnish ] = "~Pystytaso" ;
         Text [ danish ] = "Lodret" ;
         Text [ french ] = "~Vertical" ;
         Text [ swedish ] = "~Vertikal" ;
@@ -316,7 +316,7 @@ ModalDialog DLG_SNAPLINE
         Text [ italian ] = "~Orizzontale" ;
         Text [ portuguese_brazilian ] = "~Horizontal" ;
         Text [ portuguese ] = "~Horizontal" ;
-        Text [ finnish ] = "~Allekkain" ;
+        Text [ finnish ] = "Vaaka~taso" ;
         Text [ danish ] = "Vandret" ;
         Text [ french ] = "~Horizontal" ;
         Text [ swedish ] = "H~orisontell" ;
