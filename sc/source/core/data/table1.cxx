@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:28:10 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,14 +201,8 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
 
     if (bRowInfo)
     {
-        pRowHeight = new USHORT[ MAXROW+1 ];
-        pRowFlags  = new BYTE[ MAXROW+1 ];
-
-        for (SCROW j=0; j<=MAXROW; j++)
-        {
-            pRowHeight[j] = ScGlobal::nStdRowHeight;
-            pRowFlags[j] = 0;
-        }
+        pRowHeight = new ScSummableCompressedArray< SCROW, USHORT>( MAXROW, ScGlobal::nStdRowHeight);
+        pRowFlags  = new ScBitMaskCompressedArray< SCROW, BYTE>( MAXROW, 0);
     }
 
     if ( pDocument->IsDocVisible() )
@@ -246,9 +240,9 @@ ScTable::~ScTable()
     }
 
     delete[] pColWidth;
-    delete[] pRowHeight;
     delete[] pColFlags;
-    delete[] pRowFlags;
+    delete pRowHeight;
+    delete pRowFlags;
     delete pOutlineTable;
     delete pSearchParam;
     delete pSearchText;
@@ -379,12 +373,17 @@ BOOL ScTable::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT nExtra,
     USHORT nLast = 0;
     for (SCSIZE i=0; i<nCount; i++)
     {
-        if ( (pRowFlags[nStartRow+i] & CR_MANUALSIZE) == 0 || bForce )
+        BYTE nRowFlag = pRowFlags->GetValue( nStartRow+i);
+        bool bManualSize = ((nRowFlag & CR_MANUALSIZE) == 0);
+        if ( bManualSize || bForce )
         {
             if (nExtra)
-                pRowFlags[nStartRow+i] |= CR_MANUALSIZE;
-            else
-                pRowFlags[nStartRow+i] &= ~CR_MANUALSIZE;
+            {
+                if (!bManualSize)
+                    pRowFlags->SetValue( nStartRow+i, nRowFlag | CR_MANUALSIZE);
+            }
+            else if (bManualSize)
+                pRowFlags->SetValue( nStartRow+i, nRowFlag & ~CR_MANUALSIZE);
 
             if (nLast)
             {
@@ -844,7 +843,7 @@ BOOL ScTable::ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,
         //  auf der naechsten Zelle landet, auch wenn die geschuetzt/nicht markiert ist.
         //! per Extra-Parameter steuern, nur fuer Cursor-Bewegung ???
 
-        if ( pRowFlags && ( pRowFlags[nRow] & CR_HIDDEN ) )
+        if ( pRowFlags && ( pRowFlags->GetValue(nRow) & CR_HIDDEN ) )
             return FALSE;
         if ( pColFlags && ( pColFlags[nCol] & CR_HIDDEN ) )
             return FALSE;
@@ -873,7 +872,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
     {
         BOOL bUp = ( nMovY < 0 );
         nRow = rMark.GetNextMarked( nCol, nRow, bUp );
-        while ( VALIDROW(nRow) && pRowFlags && (pRowFlags[nRow] & CR_HIDDEN) )
+        while ( VALIDROW(nRow) && pRowFlags && (pRowFlags->GetValue(nRow) & CR_HIDDEN) )
         {
             //  #53697# ausgeblendete ueberspringen (s.o.)
             nRow += nMovY;
@@ -902,7 +901,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
             else if (nRow > MAXROW)
                 nRow = 0;
             nRow = rMark.GetNextMarked( nCol, nRow, bUp );
-            while ( VALIDROW(nRow) && pRowFlags && (pRowFlags[nRow] & CR_HIDDEN) )
+            while ( VALIDROW(nRow) && pRowFlags && (pRowFlags->GetValue(nRow) & CR_HIDDEN) )
             {
                 //  #53697# ausgeblendete ueberspringen (s.o.)
                 nRow += nMovY;
@@ -1282,9 +1281,14 @@ void ScTable::ExtendPrintArea( OutputDevice* pDev,
 
     SCSIZE nIndex;
     SCCOL nPrintCol = rEndCol;
+    SCSIZE nRowFlagsIndex;
+    SCROW nRowFlagsEndRow;
+    BYTE nRowFlag = pRowFlags->GetValue( nStartRow, nRowFlagsIndex, nRowFlagsEndRow);
     for (SCROW nRow = nStartRow; nRow<=nEndRow; nRow++)
     {
-        if ( ( pRowFlags[nRow] & CR_HIDDEN ) == 0 )
+        if (nRow > nRowFlagsEndRow)
+            nRowFlag = pRowFlags->GetNextValue( nRowFlagsIndex, nRowFlagsEndRow);
+        if ( ( nRowFlag & CR_HIDDEN ) == 0 )
         {
             SCCOL nDataCol = rEndCol;
             while (nDataCol > 0 && ( bEmpty[nDataCol] || !aCol[nDataCol].Search(nRow,nIndex) ) )
