@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-15 13:49:51 $
+ *  last change: $Author: vg $ $Date: 2002-05-23 14:17:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ class SmAccessibility :
 
     // disallow copy-ctor and assignment-operator for now
     SmAccessibility( const SmAccessibility & );
-    SmAccessibility & operator = ( const & SmAccessibility );
+    SmAccessibility & operator = ( const SmAccessibility & );
 
 protected:
     SmDocShell *    GetDoc_Impl();
