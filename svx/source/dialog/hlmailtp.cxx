@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmailtp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:56 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,41 +151,33 @@ void SvxHyperlinkMailTp::FillDlgFields ( String& aStrURL )
     String aStrScheme = GetSchemeFromURL( aStrURL );
 
     // set URL-field and additional controls
-    if ( aStrScheme != aEmptyStr )
+    String aStrURLc ( aStrURL );
+    // set additional controls for EMail:
+    if ( aStrScheme.SearchAscii( sMailtoScheme ) == 0 )
     {
-        String aStrURLc ( aStrURL );
-        // set additional controls for EMail:
-        if ( aStrScheme.SearchAscii( sMailtoScheme ) == 0 )
-        {
-            // Find mail-subject
-            String aStrSubject, aStrTmp ( aStrURLc );
+        // Find mail-subject
+        String aStrSubject, aStrTmp ( aStrURLc );
 
-            const sal_Char sSubject[] = "subject";
-            xub_StrLen nPos = aStrTmp.ToLowerAscii().SearchAscii( sSubject, 0 );
-            nPos = aStrTmp.Search( sal_Unicode( '=' ), nPos );
+        const sal_Char sSubject[] = "subject";
+        xub_StrLen nPos = aStrTmp.ToLowerAscii().SearchAscii( sSubject, 0 );
+        nPos = aStrTmp.Search( sal_Unicode( '=' ), nPos );
 
-            if ( nPos != STRING_NOTFOUND )
-                aStrSubject = aStrURLc.Copy( nPos+1, aStrURLc.Len() );
+        if ( nPos != STRING_NOTFOUND )
+            aStrSubject = aStrURLc.Copy( nPos+1, aStrURLc.Len() );
 
-            nPos = aStrURLc.Search ( sal_Unicode( '?' ), 0);
+        nPos = aStrURLc.Search ( sal_Unicode( '?' ), 0);
 
-            aStrURLc = aStrURLc.Copy( 0, ( nPos == STRING_NOTFOUND ?
-                                               aStrURLc.Len() : nPos ) );
+        aStrURLc = aStrURLc.Copy( 0, ( nPos == STRING_NOTFOUND ?
+                                           aStrURLc.Len() : nPos ) );
 
-            maEdSubject.SetText ( aStrSubject );
-        }
-        else
-        {
-            maEdSubject.SetText (aEmptyStr);
-        }
-
-        maCbbReceiver.SetText ( aStrURLc );
+        maEdSubject.SetText ( aStrSubject );
     }
     else
     {
-        maCbbReceiver.SetText ( aEmptyStr );
-        maEdSubject.SetText ( aEmptyStr );
+        maEdSubject.SetText (aEmptyStr);
     }
+
+    maCbbReceiver.SetText ( aStrURLc );
 
     SetScheme( aStrScheme );
 }
@@ -207,25 +199,12 @@ void SvxHyperlinkMailTp::GetCurentItemData ( String& aStrURL, String& aStrName,
 String SvxHyperlinkMailTp::CreateAbsoluteURL() const
 {
     String aStrURL = maCbbReceiver.GetText();
-    String aScheme = GetSchemeFromURL(aStrURL);
-
     INetURLObject aURL(aStrURL);
 
     if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
     {
-        aURL.ConcatData(GetSmartProtocolFromButtons(), String(), String(),
-                        String(), 0, maCbbReceiver.GetText(),
-                        INetURLObject::ENCODE_ALL);
-
-        if( aURL.GetProtocol() == INET_PROT_NOT_VALID
-            && aScheme.Len() == 0 )
-        {
-            //try wether this might be a relative link to the local fileystem
-            aURL.SetSmartURL( SvtPathOptions().GetWorkPath() );
-            if( !aURL.hasFinalSlash() )
-                aURL.setFinalSlash();
-            aURL.Append( aStrURL );
-        }
+        aURL.SetSmartProtocol( GetSmartProtocolFromButtons() );
+        aURL.SetSmartURL(aStrURL);
     }
 
     // subject for EMail-url
@@ -241,8 +220,8 @@ String SvxHyperlinkMailTp::CreateAbsoluteURL() const
 
     if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
         return aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
-
-    return aEmptyStr;
+    else //#105788# always create a URL even if it is not valid
+        return aStrURL;
 }
 
 /*************************************************************************
