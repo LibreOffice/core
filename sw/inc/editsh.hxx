@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:25 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 11:53:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,12 +81,6 @@
 #endif
 #ifndef _COM_SUN_STAR_LINGUISTIC_XSPELLALTERNATIVES_HPP_
 #include <com/sun/star/linguistic/XSpellAlternatives.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XSPELLCHECKER1_HPP_
-#include <com/sun/star/linguistic/XSpellChecker1.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XHYPHENATOR_HPP_
-#include <com/sun/star/linguistic/XHyphenator.hpp>
 #endif
 
 class PolyPolygon;
@@ -898,15 +892,11 @@ public:
     static SwAutoCompleteWord& GetAutoCompleteWords();
 
     // ctor/dtor
-    SwEditShell( SwDoc*,
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic::XSpellChecker1 >,
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic::XHyphenator >, Window*,
+    SwEditShell( SwDoc&, Window*,
                  SwRootFrm* = 0, const SwViewOption *pOpt = 0 );
     // verkleideter Copy-Constructor
-    SwEditShell( SwEditShell*, Window* );
-    ~SwEditShell();
+    SwEditShell( SwEditShell&, Window* );
+    virtual ~SwEditShell();
 
 private:
     // fuer METWARE:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:04:44 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 11:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,12 +69,6 @@
 #endif
 #ifndef _FLYENUM_HXX
 #include <flyenum.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XSPELLCHECKER1_HPP_
-#include <com/sun/star/linguistic/XSpellChecker1.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XHYPHENATOR_HPP_
-#include <com/sun/star/linguistic/XHyphenator.hpp>
 #endif
 
 class SwFlyFrm;
@@ -221,15 +215,10 @@ class SwFEShell : public SwEditShell
 
 public:
     TYPEINFO();
-    SwFEShell( SwDoc *pDoc,
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic::XSpellChecker1 > &xSpell,
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic::XHyphenator > &xHyph,
-               Window *pWin,
+    SwFEShell( SwDoc& rDoc, Window *pWin,
                SwRootFrm *pMaster = 0, const SwViewOption *pOpt = 0 );
-    SwFEShell( SwEditShell *pShell, Window *pWin );
-    ~SwFEShell();
+    SwFEShell( SwEditShell& rShell, Window *pWin );
+    virtual ~SwFEShell();
 
     // Copy und Paste Methoden fuer das interne Clipboard
     BOOL Copy( SwDoc* pClpDoc, const String* pNewClpTxt = 0 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:25 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 11:53:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,15 +69,6 @@
 #endif
 #ifndef _RTTI_HXX //autogen
 #include <tools/rtti.hxx>
-#endif
-#ifndef _WORDSEL_HXX //autogen
-#include <svtools/wordsel.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XSPELLCHECKER1_HPP_
-#include <com/sun/star/linguistic/XSpellChecker1.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XHYPHENATOR_HPP_
-#include <com/sun/star/linguistic/XHyphenator.hpp>
 #endif
 
 #ifndef _SWTYPES_HXX
@@ -347,15 +338,11 @@ protected:
 
 public:
     TYPEINFO();
-    SwCrsrShell( SwDoc *pDoc,
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic::XSpellChecker1> xSpell,
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic::XHyphenator> xHyph,
-            Window *pWin, SwRootFrm * = 0, const SwViewOption *pOpt = 0 );
+    SwCrsrShell( SwDoc& rDoc, Window *pWin,
+                SwRootFrm * = 0, const SwViewOption *pOpt = 0 );
     // verkleideter Copy-Constructor
-    SwCrsrShell( SwCrsrShell* pShell, Window *pWin );
-    ~SwCrsrShell();
+    SwCrsrShell( SwCrsrShell& rShell, Window *pWin );
+    virtual ~SwCrsrShell();
 
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 

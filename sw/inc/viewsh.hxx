@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-17 09:24:10 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 11:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,19 @@
 #include <svtools/svarray.hxx>
 #endif
 
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
+#ifndef _RING_HXX
+#include <ring.hxx>
+#endif
+#ifndef _SWRECT_HXX
+#include <swrect.hxx>
+#endif
+#ifndef _ERRHDL_HXX
+#include <errhdl.hxx>
+#endif
 
-#include "swtypes.hxx"
-#include "ring.hxx"
-#include "swrect.hxx"
-#include "errhdl.hxx"
 
 class SwDoc;
 class SfxPrinter;
@@ -82,33 +90,6 @@ class SwNodes;
 class SdrView;
 class SfxItemPool;
 class SfxViewShell;
-
-#ifndef _COM_SUN_STAR_LINGUISTIC_XSPELLALTERNATIVES_HPP_
-#include <com/sun/star/linguistic/XSpellAlternatives.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_SPELLFAILURE_HPP_
-#include <com/sun/star/linguistic/SpellFailure.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XSPELLCHECKER1_HPP_
-#include <com/sun/star/linguistic/XSpellChecker1.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XALTERNATIVESPELLING_HPP_
-#include <com/sun/star/linguistic/XAlternativeSpelling.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XPOSSIBLEHYPHENSSUPPLIER_HPP_
-#include <com/sun/star/linguistic/XPossibleHyphensSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XHYPHENATOR_HPP_
-#include <com/sun/star/linguistic/XHyphenator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XPOSSIBLEHYPHENS_HPP_
-#include <com/sun/star/linguistic/XPossibleHyphens.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XHYPHENATEDWORD_HPP_
-#include <com/sun/star/linguistic/XHyphenatedWord.hpp>
-#endif
-
-
 class SwViewOption;
 class SwViewImp;
 class SwPrtOptions;
@@ -126,7 +107,7 @@ class SwFrm;
 // Zur Zeit wird fuer die DrawPage das PreView Flag benoetigt
 #define VSHELLFLAG_ISPREVIEW            ((long)0x1)
 
-class ViewShell: public Ring
+class ViewShell : public Ring
 {
     friend void SetOutDev( ViewShell *pSh, OutputDevice *pOut );
     friend void SetOutDevAndWin( ViewShell *pSh, OutputDevice *pOut,
@@ -144,6 +125,11 @@ class ViewShell: public Ring
                                     // anderen Shells auf das Dokument
                                     // abgearbeitet sind.
 
+    Point         aPrtOffst;         //Ofst fuer den Printer,
+                                     //nicht bedruckbarer Rand.
+     Size         aBrowseBorder;    //Rand fuer Framedokumente
+    SwRect        aInvalidRect;
+
     SfxViewShell *pSfxViewShell;
     SwViewImp    *pImp;             //Core-Interna der ViewShell.
                                     //Der Pointer ist niemals 0.
@@ -153,17 +139,9 @@ class ViewShell: public Ring
                                      //Window, Printer, VirtDev, ...
     OutputDevice *pRef;              //Formatierreferenzdevice, soll zum
     // Formatieren benutzt werden, wenn gesetzt (Prospekt+Seitenvorschaudruck)
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XSpellChecker1 >  xSpell;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XHyphenator > xHyph;
+
     SwViewOption *pOpt;
 
-    Point         aPrtOffst;         //Ofst fuer den Printer,
-                                     //nicht bedruckbarer Rand.
-
-     Size         aBrowseBorder;    //Rand fuer Framedokumente
-    SwRect        aInvalidRect;
 
     sal_Bool  bDocSizeChgd     :1;  //Fuer DocChgNotify(): Neue DocGroesse bei
                                 //EndAction an das DocMDI melden.
@@ -205,10 +183,11 @@ class ViewShell: public Ring
     void ImplApplyViewOptions( const SwViewOption &rOpt );
 
 protected:
-    SwDoc                   *pDoc;          //Das Dokument, niemals 0
-    SwRect                  aVisArea;       //Die moderne Ausfuerung der VisArea
     static ShellResource*   pShellRes;      // Resourcen fuer die Shell
     static Window*          pCareWindow;    // diesem Fenster ausweichen
+
+    SwRect                  aVisArea;       //Die moderne Ausfuerung der VisArea
+    SwDoc                   *pDoc;          //Das Dokument, niemals 0
 
     sal_uInt16 nStartAction; //ist != 0 wenn mindestens eine ::com::sun::star::chaos::Action laeuft
     sal_uInt16 nLockPaint;   //ist != 0 wenn das Paint gelocked ist.
@@ -282,11 +261,11 @@ public:
     sal_Bool         IsNewLayout() const; //Wurde das Layout geladen oder neu
                                       //erzeugt?
 
- Size GetDocSize() const;// erfrage die Groesse des Dokuments
+     Size GetDocSize() const;// erfrage die Groesse des Dokuments
 
     void CalcLayout();  //Durchformatierung des Layouts erzwingen.
 
-    SwDoc *GetDoc() const { return pDoc; }  //niemals 0.
+    inline SwDoc *GetDoc()  const { return pDoc; }  //niemals 0.
 
     //'Drei' OutputDevices sind relevant:
     //Der Drucker (am Dokument). Er bestimmt immer die FontMetriken.
@@ -332,14 +311,6 @@ public:
 
     //Ruft den Idle-Formatierer des Layouts
     void LayoutIdle();
-
-    // Linguistik
-    inline ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XSpellChecker1 >
-            GetSpellChecker() const { return xSpell; }
-    inline ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XHyphenator >
-            GetHyphenator() const { return xHyph; }
 
     inline const SwViewOption *GetViewOptions() const { return pOpt; }
            void  ApplyViewOptions( const SwViewOption &rOpt );
@@ -428,14 +399,9 @@ public:
     const Size& GetBrowseBorder() const{ return aBrowseBorder; }
     void SetBrowseBorder( const Size& rNew );
 
-    ViewShell( ViewShell*, Window *pWin = 0, OutputDevice *pOut = 0,
+    ViewShell( ViewShell&, Window *pWin = 0, OutputDevice *pOut = 0,
                 long nFlags = 0 );
-    ViewShell( SwDoc *pDoc,
-               ::com::sun::star::uno::Reference<
-                       ::com::sun::star::linguistic::XSpellChecker1 >  xSpell,
-               ::com::sun::star::uno::Reference<
-                       ::com::sun::star::linguistic::XHyphenator >  xHyph,
-               Window *pWin,
+    ViewShell( SwDoc& rDoc, Window *pWin,
                const SwViewOption *pOpt = 0, OutputDevice *pOut = 0,
                long nFlags = 0 );
     virtual ~ViewShell();
