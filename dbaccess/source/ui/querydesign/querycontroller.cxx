@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 06:19:01 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 09:48:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,21 +570,9 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
         // now we have to check if our database supports views
         if(m_bCreateView)
         {
-            static ::rtl::OUString sView = ::rtl::OUString::createFromAscii("VIEW");
-            Reference<XDatabaseMetaData> xMeta = getMetaData();
-            Reference<XResultSet> xRes = xMeta->getTableTypes();
-            sal_Bool bFound = sal_False;
-            if(xRes.is())
-            {
-                Reference<XRow> xRow(xRes,UNO_QUERY);
-                while(xRes->next())
-                {
-                    ::rtl::OUString sValue = xRow->getString(1);
-                    if(!xRow->wasNull() && sValue == sView)
-                        bFound = sal_True;
-                }
-            }
-            if(!bFound)
+            // we only supply views when the connection is a XViewsSupplier
+            Reference<XViewsSupplier> xViewsSup(getConnection(),UNO_QUERY);
+            if(!xViewsSup.is())
             {   // we can't create views so we ask if the user wants to create a query instead
                 m_bCreateView = sal_False;
                 sal_Bool bClose = sal_False;

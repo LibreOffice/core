@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 06:19:01 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 09:48:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1087,7 +1087,31 @@ sal_Bool OQueryDesignView::GenerateCriterias(::rtl::OUString& rRetStr,::rtl::OUS
                     else
                         aHavingStr += aWork;
 
-                    aHavingStr += aCriteria;
+                    ::rtl::OUString aTmp = aCriteria;
+                    ::rtl::OUString aErrorMsg;
+                    Reference<XPropertySet> xColumn;
+                    ::connectivity::OSQLParseNode* pParseNode = getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn);
+                    if (pParseNode)
+                    {
+                        if (bMulti && !(pEntryField->GetFunctionType() == FKT_OTHER || (aFieldName.toChar() == '*')))
+                            pParseNode->replaceNodeValue(ConvertAlias(pEntryField->GetAlias()),aFieldName);
+                        ::rtl::OUString sHavingStr = aHavingStr;
+                        OSL_ENSURE(pParseNode->count() == 3,"Count must be three here!");
+                        pParseNode->getChild(1)->parseNodeToStr(    sHavingStr,
+                                                    xMetaData,
+                                                    &(static_cast<OQueryController*>(getController())->getParser()->getContext()),
+                                                    sal_False,
+                                                    pEntryField->GetFunctionType() != FKT_OTHER);
+                        pParseNode->getChild(2)->parseNodeToStr(    sHavingStr,
+                                                    xMetaData,
+                                                    &(static_cast<OQueryController*>(getController())->getParser()->getContext()),
+                                                    sal_False,
+                                                    pEntryField->GetFunctionType() != FKT_OTHER);
+                        aHavingStr = sHavingStr;
+                        delete pParseNode;
+                    }
+                    else
+                        aHavingStr += aCriteria;
                 }
                 else
                 {
@@ -1098,15 +1122,13 @@ sal_Bool OQueryDesignView::GenerateCriterias(::rtl::OUString& rRetStr,::rtl::OUS
 
                     aWhereStr += ::rtl::OUString(' ');
                     // aCriteria could have some german numbers so I have to be sure here
-                    ::rtl::OUString aTmp = ::rtl::OUString::createFromAscii(" = ");
-                    aTmp = aCriteria;
-
+                    ::rtl::OUString aTmp = aCriteria;
                     ::rtl::OUString aErrorMsg;
                     Reference<XPropertySet> xColumn;
                     ::connectivity::OSQLParseNode* pParseNode = getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn);
                     if (pParseNode)
                     {
-                        if (bMulti)
+                        if (bMulti && !(pEntryField->GetFunctionType() == FKT_OTHER || (aFieldName.toChar() == '*')))
                             pParseNode->replaceNodeValue(ConvertAlias(pEntryField->GetAlias()),aFieldName);
                         ::rtl::OUString aWhere = aWhereStr;
                         pParseNode->parseNodeToStr( aWhere,

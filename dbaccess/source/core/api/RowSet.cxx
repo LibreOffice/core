@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:56:18 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 09:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1530,9 +1530,10 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
 
                                 try
                                 {
+                                    nFormatKey = 0;
                                     if(m_xNumberFormatTypes.is())
                                         nFormatKey = ::dbtools::getDefaultNumberFormat(pColumn,m_xNumberFormatTypes,aLocale);
-                                    nFormatKey = 0;
+
 
                                     pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
                                     pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,makeAny(sal_Int32(i+1)));
