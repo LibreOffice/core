@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridge.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 14:36:58 $
+ *  last change: $Author: dbo $ $Date: 2001-04-12 13:43:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #include <bridges/cpp_uno/bridge.h>
 #endif
 
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
 #ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
 #endif
@@ -486,24 +489,30 @@ inline void SAL_CALL cppu_cppenv_computeObjectIdentifier(
             *ppOId = 0;
         }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xHome(
-            reinterpret_cast< ::com::sun::star::uno::XInterface * >( pInterface ),
-            ::com::sun::star::uno::UNO_QUERY );
-        OSL_ENSURE( xHome.is(), "### query to XInterface failed!" );
-        if (xHome.is())
+        try
         {
-            // interface
-            ::rtl::OUStringBuffer oid( 64 );
-            oid.append( (sal_Int64)xHome.get(), 16 );
-            oid.append( (sal_Unicode)';' );
-            // environment[context]
-            oid.append( ((uno_Environment *)pEnv)->pTypeName );
-            oid.append( (sal_Unicode)'[' );
-            oid.append( (sal_Int64)((uno_Environment *)pEnv)->pContext, 16 );
-            // process;good guid
-            oid.append( cppu_cppenv_getStaticOIdPart() );
-            ::rtl::OUString aRet( oid.makeStringAndClear() );
-            ::rtl_uString_acquire( *ppOId = aRet.pData );
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xHome(
+                reinterpret_cast< ::com::sun::star::uno::XInterface * >( pInterface ),
+                ::com::sun::star::uno::UNO_QUERY );
+            OSL_ENSURE( xHome.is(), "### query to XInterface failed!" );
+            if (xHome.is())
+            {
+                // interface
+                ::rtl::OUStringBuffer oid( 64 );
+                oid.append( (sal_Int64)xHome.get(), 16 );
+                oid.append( (sal_Unicode)';' );
+                // environment[context]
+                oid.append( ((uno_Environment *)pEnv)->pTypeName );
+                oid.append( (sal_Unicode)'[' );
+                oid.append( (sal_Int64)((uno_Environment *)pEnv)->pContext, 16 );
+                // process;good guid
+                oid.append( cppu_cppenv_getStaticOIdPart() );
+                ::rtl::OUString aRet( oid.makeStringAndClear() );
+                ::rtl_uString_acquire( *ppOId = aRet.pData );
+            }
+        }
+        catch (::com::sun::star::uno::RuntimeException &)
+        {
         }
     }
 }
