@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnModel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:57:01 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,13 +139,12 @@ OColumnControlModel::OColumnControlModel(const OColumnControlModel* _pSource,con
 // -----------------------------------------------------------------------------
 OColumnControlModel::~OColumnControlModel()
 {
-    if ( !OColumnControlModel_BASE::rBHelper.bDisposed )
+    DBG_DTOR(OColumnControlModel,NULL);
+    if ( !OColumnControlModel_BASE::rBHelper.bDisposed && !OColumnControlModel_BASE::rBHelper.bInDispose )
     {
         acquire();
         dispose();
     }
-
-    DBG_DTOR(OColumnControlModel,NULL);
 }
 // -----------------------------------------------------------------------------
 void OColumnControlModel::registerProperties()
