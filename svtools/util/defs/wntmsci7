@@ -12374,3 +12374,5 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?lcl_MoveControl@?%O:\SRC657\src\svtools\source\filepicker\iodlg.cxx2221923252@@YAXPAVControl@@JJAAJ@Z
 ?lcl_autoUpdateFileExtension@?%O:\SRC657\src\svtools\source\filepicker\iodlg.cxx2221923252@@YAXPAVSvtFileDialog@@@Z
 ?lcl_getHomeDirectory@?%O:\SRC657\src\svtools\source\filepicker\iodlg.cxx2221923252@@YAEABVString@@AAV2@@Z
+?getRectangle@?%O:\SRC657\src\svtools\source\Accessibility\AccessibleBrowseBoxHeaderCell.cxx876122479@svt@@YA?AVRectangle@@PAVBrowseBox@@JEE@Z
+?checkActionIndex_Impl@?%O:\SRC657\src\svtools\source\Accessibility\accessiblelistboxentry.cxx1351216321@@YAXJ@Z
