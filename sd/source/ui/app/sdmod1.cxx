@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-26 11:11:59 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:16:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,17 +259,14 @@ void SdModule::Execute(SfxRequest& rReq)
         break;
 
         case SID_SD_AUTOPILOT:
+        case SID_NEWSD:
         {
             if ( SvtModuleOptions().IsImpress() )
             {
                 SdOptions* pOpt = GetSdOptions(DOCUMENT_TYPE_IMPRESS);
                 BOOL bStartWithTemplate = pOpt->IsStartWithTemplate();
 
-                const SfxPoolItem* pItem;
-                BOOL bNewDocDirect = pSet != NULL &&
-                                     pSet->GetItemState( SID_NEWDOCDIRECT, FALSE, &pItem ) == SFX_ITEM_SET &&
-                                     ((SfxBoolItem*)pItem)->GetValue();
-
+                BOOL bNewDocDirect = rReq.GetSlot() == SID_NEWSD;
                 if( bNewDocDirect && !bStartWithTemplate )
                 {
                     SfxObjectShellLock xDocShell;
