@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-14 08:52:10 $
+ *  last change: $Author: fs $ $Date: 2001-01-04 11:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,12 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ korean ] = "JDBC";
         Text[ turkish ] = "JDBC";
         Text[ language_user1 ] = " ";
+    };
+    String STR_PAGETITLE_ADO
+    {
+        Text = "ADO" ;
+        Text [ english ] = "ADO" ;
+        Text [ english_us ] = "ADO" ;
     };
     String STR_PAGETITLE_ODBC
     {
@@ -777,6 +783,115 @@ TabPage PAGE_DBASE
         Text[ russian ] = "Èíäåêñû...";
         Text[ polish ] = "Indeksy...";
         Text[ japanese ] = "²ÝÃÞ¯¸½...";
+    };
+};
+
+//.........................................................................
+TabPage PAGE_ADO
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Hide = TRUE;
+    HelpId = HID_DSADMIN_PAGE_ADO;
+
+    FixedText FT_CONNECTURL
+    {
+        Pos = MAP_APPFONT ( 6 , 7 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Text = "U~RL" ;
+        Text [ ENGLISH ] = "U~RL" ;
+        Text [ english_us ] = "U~RL" ;
+        Text [ portuguese_brazilian ] = "U~RL" ;
+        Text [ swedish ] = "U~RL" ;
+        Text [ danish ] = "URL" ;
+        Text [ italian ] = "U~RL" ;
+        Text [ spanish ] = "U~RL" ;
+        Text [ french ] = "U~RL" ;
+        Text [ dutch ] = "U~RL" ;
+        Text [ portuguese ] = "U~RL" ;
+        Text [ chinese_simplified ] = "U~RL";
+        Text [ russian ] = "U~RL";
+        Text [ polish ] = "URL";
+        Text [ japanese ] = "U~RL";
+        Text [ chinese_traditional ] = "U~RL";
+        Text [ arabic ] = "U~RL";
+        Text [ greek ] = "U~RL";
+        Text [ korean ] = "URL(~R)";
+        Text [ turkish ] = "U~RL";
+        Text [ language_user1 ] = " ";
+    };
+    Edit ET_CONNECTURL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 6 ) ;
+        Size = MAP_APPFONT ( 105 , 12 ) ;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_CONNURL_ADOPAGE;
+            // special help id here: though this is the usual ConnectURL field, it's placed on the JDBC page
+            // (not as usual on the general page), so the documentation may want to write other help texts here.
+    };
+    FixedText FT_USERNAME
+    {
+        Pos = MAP_APPFONT ( 6 , 37 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Text = "~Benutzername" ;
+        Text [ ENGLISH ] = "~Username" ;
+        Text [ NORWEGIAN ] = "~Username" ;
+        Text [ DANISH ] = "Brugernavn" ;
+        Text [ ENGLISH_US ] = "~User name" ;
+        Text [ SPANISH ] = "N~ombre del usuario" ;
+        Text [ FINNISH ] = "~Käyttäjätunnus" ;
+        Text [ FRENCH ] = "Nom d'~utilisateur" ;
+        Text [ ITALIAN ] = "Nome ~utente" ;
+        Text [ DUTCH ] = "Naam ~gebruiker" ;
+        Text [ SWEDISH ] = "~Användarnamn" ;
+        Text [ PORTUGUESE ] = "Nome do ~utilizador" ;
+        Text [ portuguese_brazilian ] = "~Benutzername" ;
+        Text [ chinese_simplified ] = "Ê¹ÓÃÃû(~U)";
+        Text [ russian ] = "Èìÿ ïîëüçîâàòåëÿ";
+        Text [ polish ] = "Nazwisko u¿ytk.";
+        Text [ japanese ] = "Õ°»Þ°–¼(~U)";
+        Text [ chinese_traditional ] = "¨Ï¥ÎªÌ(~U)";
+        Text [ arabic ] = "ÇÓã ÇáãÓÊÎÏã";
+        Text [ greek ] = "¼íïìá ÷ñÞóôç";
+        Text [ korean ] = "»ç¿ëÀÚ ÀÌ¸§(~U)";
+        Text [ turkish ] = "Kullanýcý adý";
+        Text [ language_user1 ] = " ";
+    };
+    Edit ET_USERNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 36 ) ;
+        Size = MAP_APPFONT ( 105 , 12 ) ;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_USER_ADO;
+    };
+    CheckBox CB_PASSWORD_REQUIRED
+    {
+        Pos = MAP_APPFONT ( 90 , 51 ) ;
+        Size = MAP_APPFONT ( 105 , 10 ) ;
+        HelpId = HID_DSADMIN_PWDREC_ADO;
+        Text = "Passwort erforderlich";
+        Text [ english ] = "Password required";
+        Text [ english_us ] = "Password required";
+        Text[ portuguese ] = "Necessário senha";
+        Text[ russian ] = "Òðåáóåòñÿ ïàðîëü";
+        Text[ greek ] = "Áðáéôåßôáé êùäéêüò ðñüóâáóçò";
+        Text[ dutch ] = "Wachtwoord verlangd";
+        Text[ french ] = "Mot de passe requis";
+        Text[ spanish ] = "Se requiere una contraseña";
+        Text[ italian ] = "Password necessaria";
+        Text[ danish ] = "spørg ved åbning";
+        Text[ swedish ] = "Lösenord krävs";
+        Text[ polish ] = "Wymagane jest has³o";
+        Text[ portuguese_brazilian ] = "beim Öffnen ~fragen";
+        Text[ japanese ] = "Êß½Ü°ÄÞ‚ª•K—v";
+        Text[ korean ] = "ÆÐ½º¿öµå°¡ ÇÊ¿äÇÕ´Ï´Ù";
+        Text[ chinese_simplified ] = "±ØÐëÊäÈëÃÜÂë";
+        Text[ chinese_traditional ] = "¥²¶·¿é¤J±K½X";
+        Text[ turkish ] = "Açarken sor";
+        Text[ arabic ] = "ãØáæÈ ßáãÉ ÇáÓÑ";
     };
 };
 
@@ -1846,6 +1961,9 @@ Menu MENU_DATASOURCELIST_POPUP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2000/12/14 08:52:10  fs
+ *  #81845# +HID_DSADMIN_SPECIAL_MESSAGE
+ *
  *  Revision 1.21  2000/12/11 16:32:49  fs
  *  broaded the data source list
  *

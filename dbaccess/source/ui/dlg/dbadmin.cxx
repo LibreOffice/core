@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-20 13:28:06 $
+ *  last change: $Author: fs $ $Date: 2001-01-04 11:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1057,6 +1057,10 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
             AddTabPage(PAGE_JDBC, String(ResId(STR_PAGETITLE_JDBC)), OJdbcDetailsPage::Create, 0, sal_False, 1);
             m_aCurrentDetailPages.push(PAGE_JDBC);
             break;
+        case DST_ADO:
+            AddTabPage(PAGE_ADO, String(ResId(STR_PAGETITLE_ADO)), OAdoDetailsPage::Create, 0, sal_False, 1);
+            m_aCurrentDetailPages.push(PAGE_ADO);
+            break;
         case DST_TEXT:
             AddTabPage(PAGE_TEXT, String(ResId(STR_PAGETITLE_TEXT)), OTextDetailsPage::Create, 0, sal_False, 1);
             m_aCurrentDetailPages.push(PAGE_TEXT);
@@ -1436,6 +1440,7 @@ const sal_Int32* ODbAdminDialog::getRelevantItems(const SfxItemSet& _rSet) const
     {
         case DST_ADABAS: pRelevantItems = OAdabasDetailsPage::getDetailIds(); break;
         case DST_JDBC: pRelevantItems = OJdbcDetailsPage::getDetailIds(); break;
+        case DST_ADO: pRelevantItems = OAdoDetailsPage::getDetailIds(); break;
         case DST_ODBC: pRelevantItems = OOdbcDetailsPage::getDetailIds(); break;
         case DST_DBASE: pRelevantItems = ODbaseDetailsPage::getDetailIds(); break;
         case DST_TEXT: pRelevantItems = OTextDetailsPage::getDetailIds(); break;
@@ -2209,6 +2214,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.27  2000/12/20 13:28:06  fs
+ *  #81761# dis-/enable the apply button the same way as the ok button
+ *
  *  Revision 1.26  2000/12/14 08:23:14  fs
  *  #81938# make the ThousandsSeparator persistent
  *
