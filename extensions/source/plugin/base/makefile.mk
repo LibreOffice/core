@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 14:04:32 $
+#   last change: $Author: rt $ $Date: 2005-03-30 11:42:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,11 +65,6 @@ PRJNAME=plugin
 TARGET=plbase
 TARGETTYPE=GUI
 ENABLE_EXCEPTIONS=TRUE
-
-.IF "$(WITH_MOZILLA)" == "NO"
-dummy:
-        @echo "mozilla disabled"
-.ENDIF
 
 .INCLUDE :  ..$/util$/makefile.pmk
 
