@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdslots.sdi,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:09:37 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 import "svxslots.ilb"
 
 module
@@ -131,6 +132,7 @@ ModulePrefix( "Sd" )
         include "_docsh.sdi"
         include "docshell.sdi"
         include "drgrfob.sdi"
+        include "SlideSorterController.sdi"
         include "ViewShellBase.sdi"
+        include "TaskPaneViewShell.sdi"
 }
-
