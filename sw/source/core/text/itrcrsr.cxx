@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:22:31 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1443,8 +1443,16 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             if( pPor->IsFlyPortion() && bFieldInfo )
                 ((SwCrsrMoveState*)pCMS)->bPosCorr = sal_True;
 
-            if( pPor->IsFtnNumPortion() && !bRightOver && nX )
-                ((SwCrsrMoveState*)pCMS)->bFtnNoInfo = sal_True;
+            if (!bRightOver && nX)
+            {
+                if( pPor->IsFtnNumPortion())
+                    ((SwCrsrMoveState*)pCMS)->bFtnNoInfo = sal_True;
+                else if (pPor->IsNumberPortion()) // #i23726#
+                {
+                    ((SwCrsrMoveState*)pCMS)->nInNumPostionOffset = nX;
+                    ((SwCrsrMoveState*)pCMS)->bInNumPortion = sal_True;
+                }
+            }
         }
         if( !nCurrStart )
             return 0;
