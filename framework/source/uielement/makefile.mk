@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-02 13:16:26 $
+#   last change: $Author: obo $ $Date: 2004-09-09 17:11:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,8 +96,13 @@ SLOFILES=			\
                     $(SLO)$/addonstoolbarwrapper.obj        \
                     $(SLO)$/addonstoolbarmanager.obj        \
                     $(SLO)$/generictoolbarcontroller.obj    \
-                    $(SLO)$/toolbarsmenucontroller.obj		\
-                    $(SLO)$/recentfilesmenucontroller.obj
+                    $(SLO)$/toolbarsmenucontroller.obj      \
+                    $(SLO)$/statusbarwrapper.obj            \
+                    $(SLO)$/statusbar.obj                   \
+                    $(SLO)$/statusbarmanager.obj			\
+                    $(SLO)$/recentfilesmenucontroller.obj   \
+                    $(SLO)$/progressbarwrapper.obj          \
+                    $(SLO)$/statusindicatorinterfacewrapper.obj
 
 # --- Targets ------------------------------------------------------
 
