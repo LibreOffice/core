@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-16 14:44:43 $
+#   last change: $Author: rt $ $Date: 2003-09-19 08:28:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -155,10 +155,6 @@ SHL1RES=    $(RCTARGET)
 
 # --- Linken der Applikation ---------------------------------------
 
-LIB2TARGET=$(SLB)$/scmod.lib
-LIB2OBJFILES=	\
-            $(SLO)$/scmod.obj
-
 LIB3TARGET=$(SLB)$/scalc3.lib
 LIB3FILES=	\
     $(SLB)$/app.lib \
@@ -196,20 +192,35 @@ LIB4FILES=	\
     $(SLB)$/ftools.lib \
     $(SLB)$/scflt.lib
 
-LIB5TARGET=$(LB)$/sclib.lib
-LIB5ARCHIV=$(LB)$/libsclib.a
-
-.IF "$(GUI)"=="UNX"
-LIB5OBJFILES=$(SLO)$/sclib.obj
-.ELSE
-LIB5OBJFILES=$(OBJ)$/sclib.obj
-.ENDIF
+#LIB5TARGET=$(LB)$/sclib.lib
+#LIB5ARCHIV=$(LB)$/libsclib.a
 
 .IF "$(depend)" == ""
 ALL:	\
     $(MISC)$/linkinc.ls \
     ALLTAR
 .ENDIF
+
+SHL2TARGET= scd$(UPD)$(DLLPOSTFIX)
+SHL2IMPLIB= scdimp
+SHL2VERSIONMAP= scd.map
+SHL2DEF=$(MISC)$/$(SHL2TARGET).def
+DEF2NAME=		$(SHL2TARGET)
+
+SHL2STDLIBS= \
+            $(SFX2LIB) \
+            $(SVTOOLLIB) \
+            $(SVLLIB) \
+            $(VCLLIB) \
+            $(TOOLSLIB) \
+            $(UCBHELPERLIB)	\
+            $(CPPUHELPERLIB) \
+            $(CPPULIB) \
+            $(SALLIB)
+
+SHL2OBJS=   $(SLO)$/scdetect.obj \
+        $(SLO)$/detreg.obj
+SHL2DEPN+=	makefile.mk
 
 # --- Targets -------------------------------------------------------------
 
@@ -244,21 +255,16 @@ $(MISC)$/$(SHL1TARGET).def:  makefile.mk
     @echo DESCRIPTION 'SCALC3 DLL'                                 >>$@
     @echo DATA        READ WRITE NONSHARED                          >>$@
     @echo EXPORTS                                                   >>$@
-    @echo   CreateScDocShellDll @20                            >>$@
-    @echo   CreateObjScDocShellDll @21                         >>$@
-    @echo   InitScDll @22                                          >>$@
-    @echo   DeInitScDll @23                                        >>$@
     @echo   component_getImplementationEnvironment @24             >>$@
     @echo   component_writeInfo @25                                >>$@
     @echo   component_getFactory @26                               >>$@
 .ENDIF
+
 .IF "$(OPTLINKS)" == "YES"
     echo  RC $(RCFLAGS) $(RES)$/scappi.res                    >>$@
 .ENDIF
 
 .ENDIF
-
-
 
 $(MISCX)$/$(SHL1TARGET).flt:
     @echo ------------------------------
@@ -266,4 +272,5 @@ $(MISCX)$/$(SHL1TARGET).flt:
     @echo WEP>$@
     @echo LIBMAIN>>$@
     @echo LibMain>>$@
+
 
