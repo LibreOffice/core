@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlinehelp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 13:26:13 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:39:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ namespace desktop
         "-calc         \n"\
         "-draw         \n"\
         "-impress      \n"\
+        "-base         \n"\
         "-math         \n"\
         "-global       \n"\
         "-web          \n"\
@@ -123,6 +124,7 @@ namespace desktop
         "create new spreadsheet document.\n"\
         "create new drawing.\n"\
         "create new presentation.\n"\
+        "create new database.\n"\
         "create new formula.\n"\
         "create new global document.\n"\
         "create new HTML document.\n"\
