@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:01:58 $
+ *  last change: $Author: os $ $Date: 2001-06-18 13:52:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -800,8 +800,6 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
         { SW_PROP_NMID(UNO_NAME_TITLE), WID_IDX_TITLE,  CPPU_E2T(CPPUTYPE_OUSTRING)  , PROPERTY_NONE,     0},\
         { SW_PROP_NMID(UNO_NAME_CONTENT_SECTION), WID_IDX_CONTENT_SECTION,  CPPU_E2T(CPPUTYPE_REFTEXTSECTION)  , PropertyAttribute::READONLY,     0},\
         { SW_PROP_NMID(UNO_NAME_HEADER_SECTION), WID_IDX_HEADER_SECTION,  CPPU_E2T(CPPUTYPE_REFTEXTSECTION)  , PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,     0},\
-        { SW_PROP_NMID(UNO_NAME_LOCALE),            WID_IDX_LOCALE,         CPPU_E2T(CPPUTYPE_LOCALE), PROPERTY_NONE,     0},\
-        { SW_PROP_NMID(UNO_NAME_SORT_ALGORITHM),    WID_IDX_SORT_ALGORITHM,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE,     0},\
 
 #define ANCHOR_TYPES_PROPERTY    { SW_PROP_NMID(UNO_NAME_ANCHOR_TYPES), FN_UNO_ANCHOR_TYPES,    CPPU_E2T(CPPUTYPE_SEQANCHORTYPE),PropertyAttribute::READONLY, 0xff},
 
@@ -1608,6 +1606,8 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_IS_COMMA_SEPARATED), WID_IS_COMMA_SEPARATED, CPPU_E2T(CPPUTYPE_BOOLEAN),            PROPERTY_NONE ,0         },
                     { SW_PROP_NMID(UNO_NAME_DOCUMENT_INDEX_MARKS), WID_INDEX_MARKS, CPPU_E2T(CPPUTYPE_DOCIDXMRK),           PropertyAttribute::READONLY ,0       },
                     { SW_PROP_NMID(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_LOCALE),            WID_IDX_LOCALE,         CPPU_E2T(CPPUTYPE_LOCALE), PROPERTY_NONE,     0},\
+                    { SW_PROP_NMID(UNO_NAME_SORT_ALGORITHM),    WID_IDX_SORT_ALGORITHM,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE,     0},\
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTOXIndexMap_Impl;
@@ -1904,6 +1904,8 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_PARA_STYLEHEADING),     WID_PARA_HEAD,  CPPU_E2T(CPPUTYPE_OUSTRING)  , 0,     0},
                     { SW_PROP_NMID(UNO_NAME_PARA_STYLELEVEL1),  WID_PARA_LEV1,  CPPU_E2T(CPPUTYPE_OUSTRING)  , 0,     0},
                     { SW_PROP_NMID(UNO_NAME_LEVEL_FORMAT), WID_LEVEL_FORMAT                        ,  CPPU_E2T(CPPUTYPE_REFIDXREPL)  , PROPERTY_NONE,0},
+                    { SW_PROP_NMID(UNO_NAME_LOCALE),            WID_IDX_LOCALE,         CPPU_E2T(CPPUTYPE_LOCALE), PROPERTY_NONE,     0},\
+                    { SW_PROP_NMID(UNO_NAME_SORT_ALGORITHM),    WID_IDX_SORT_ALGORITHM,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE,     0},\
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aBibliographyMap_Impl;
