@@ -18,6 +18,9 @@
 #include <tools/link.hxx>
 #include <tools/errcode.hxx>
 
+namespace utl
+{
+
 class UCB_Link_Helper : public SvRefBase
 {
     ::vos::OMutex   maMutex;
@@ -131,6 +134,8 @@ public:
     void                    setDontClose_Impl()
                             { m_bDontClose = sal_True; }
 #endif
+};
+
 };
 
 //----------------------------------------------------------------------------
