@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:01:33 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ String STR_NOGLOS1
     TEXT[ arabic ] = "δΥ ΚαήΗΖν ααΗΞΚΥΗΡ '";
     TEXT[ dutch ] = "AutoTekst voor afkortingen'";
     TEXT[ chinese_simplified ] = "θ‡ªε¨ε›Ύζ–‡ι›†η„ηΌ©ε†™ '";
-    TEXT[ greek ] = "ΑυτοΚείμενο για τα αρχικά '";
+    TEXT[ greek ] = "Αυτόματο κείμενο για τα αρχικά '";
     TEXT[ korean ] = "μλ™ ν…μ¤νΈ λ°”λ΅ κ°€κΈ° '";
     TEXT[ turkish ] = "Otomatik metin kύsaltmasύ '";
     TEXT[ language_user1 ] = " ";
@@ -198,7 +198,7 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE[ arabic ] = "ΚΪΠΡ Ϊγα δΥ ΚαήΗΖν.";
     MESSAGE[ dutch ] = "AutoTekst kan niet worden gemaakt";
     MESSAGE[ chinese_simplified ] = "ζ— ζ³•ε»Ίη«‹θ‡ªε¨ε›Ύζ–‡ι›†γ€‚";
-    MESSAGE[ greek ] = "Δεν ήταν δυνατή η εισαγωγή ΑυτοΚείμενο.";
+    MESSAGE[ greek ] = "Δεν ήταν δυνατή η δημιουργία αυτόματου κειμένου.";
     MESSAGE[ korean ] = "μλ™ ν…μ¤νΈλ¥Ό λ§λ“¤μ§€ λª»ν–μµλ‹λ‹¤.";
     MESSAGE[ turkish ] = "Otomatik metin oluώturulamadύ.";
     MESSAGE[ language_user1 ] = " ";
@@ -272,7 +272,7 @@ QueryBox MSG_UPDATE_NEW_GLOS_FMT
     Message[ arabic ] = "ΚδΣνή ΗαδΨΗή ήΟνγ.\nνΜΘ ΚΝζναε΅ ΝΚμ νγίδ \nΝέΩ ΗαΚΫννΡΗΚ.\nεα ΚΡνΟ ΚΝζναεΏ";
     Message[ dutch ] = "Het bereik heeft een verouderde indeling.\nHet moet worden geconverteerd om de wijzigingen\nte kunnen opslaan.\nWilt u de conversie nu uitvoeren?";
     Message[ chinese_simplified ] = "θΏ™δΈªεΊεε…·ζ‰η„ζ ΌεΌζ―ζ—§η„γ€‚\nθ¦ε­η›ζ›΄ζ”Ήε°±εΏ…ι΅»θΏ›θ΅ζ ΌεΌθ½¬ζΆγ€‚\nθ¦θ½¬ζΆζ ΌεΌε—οΌ";
-    Message[ greek ] = "Η περιοχή υπάρχει σε κάποια προγενέστερη μορφή.\nΠρέπει να μετατραπεί για να είναι δυνατή\nη αποθήκευση των αλλαγών.\nΘέλετε να γίνει η μετατ ";
+    Message[ greek ] = "Η μορφή της ενότητας είναι παλιά.\nΠρέπει να μετατραπεί ώστε οι αλλαγές\nνα μπορούν να αποθηκευτούν.\nΘέλετε να μετατραπεί τώρα;";
     Message[ korean ] = "κµ¬μ—­μ μ„μ‹μ΄ μ¤λλμ—μµλ‹λ‹¤.\n μ΄κ²ƒμ„ λ³€ν™ν•μ—¬μ•Ό λ³€κ²½ μ‚¬ν•­μ„ μ €μ¥ν•  μ μμµλ‹λ‹¤.\n μ§€κΈ λ³€ν™ν•μ‹κ² μµλ‹κΉ?";
     Message[ turkish ] = "Bφlόmόn formatύ eski.\nDeπiώikliklerin kaydedilebilmesi n\niηin deπiώtirilmesi gerekiyor.\nFormat deπiώtirilsin mi?";
     Message[ language_user1 ] = " ";
@@ -420,6 +420,7 @@ String STR_SW_TEAM_NAMES
 {
     TEXT = "Back row: Aidan Butler, Peter Burow, Caolαn McNamara, Michael Brauer, Martin Maher, Gunnar Timm\nFront row: Thomas Lange, Oliver-Rainer Dόsterhφft, Henning Brinkmann,  Andreas Martens, Oliver Specht, Frank Meies, Daniel Vogelheim";
 };
+
 
 
 
