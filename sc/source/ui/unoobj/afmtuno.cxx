@@ -2,9 +2,9 @@
  *
  *  $RCSfile: afmtuno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-11 09:52:10 $
+ *  last change: $Author: sab $ $Date: 2002-10-17 11:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #include <tools/shl.hxx>
 #include <svtools/poolitem.hxx>
 #include <svx/unomid.hxx>
+#ifndef SC_UNOWIDS_HXX
+#include "unowids.hxx"
+#endif
 
 #ifndef _RTL_UUID_H_ //autogen wg. rtl_createUuid
 #include <rtl/uuid.h>
@@ -157,6 +160,7 @@
 #include "unoguard.hxx"
 #include "scdll.hxx"
 #include "unonames.hxx"
+#include "cellsuno.hxx"
 
 using namespace ::com::sun::star;
 
@@ -218,6 +222,7 @@ const SfxItemPropertyMap* lcl_GetAutoFieldMap()
         {MAP_CHAR_LEN(SC_UNO_CJK_CPOST),    ATTR_CJK_FONT_POSTURE,  &::getCppuType((awt::FontSlant*)0),         0, MID_POSTURE },
         {MAP_CHAR_LEN(SC_UNO_CTL_CPOST),    ATTR_CTL_FONT_POSTURE,  &::getCppuType((awt::FontSlant*)0),         0, MID_POSTURE },
         {MAP_CHAR_LEN(SC_UNONAME_CSHADD),   ATTR_FONT_SHADOWED,     &::getBooleanCppuType(),                    0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD,     &::getCppuType((table::TableBorder*)0),     0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CUNDER),   ATTR_FONT_UNDERLINE,    &::getCppuType((const sal_Int16*)0),        0, MID_UNDERLINE },
         {MAP_CHAR_LEN(SC_UNONAME_CWEIGHT),  ATTR_FONT_WEIGHT,       &::getCppuType((float*)0),                  0, MID_WEIGHT },
         {MAP_CHAR_LEN(SC_UNO_CJK_CWEIGHT),  ATTR_CJK_FONT_WEIGHT,   &::getCppuType((float*)0),                  0, MID_WEIGHT },
@@ -834,19 +839,44 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
     if ( pMap && pMap->nWID && pFormats && nFormatIndex < pFormats->GetCount() )
     {
         ScAutoFormatData* pData = (*pFormats)[nFormatIndex];
-        const SfxPoolItem* pItem = pData->GetItem( nFieldIndex, pMap->nWID );
-        if (pItem)
-        {
-            SfxPoolItem* pNewItem = pItem->Clone();
-            sal_Bool bDone = pNewItem->PutValue( aValue, pMap->nMemberId );
-            if (bDone)
-            {
-                pData->PutItem( nFieldIndex, *pNewItem );
 
-                //! Notify fuer andere Objekte?
-                pFormats->SetSaveLater(sal_True);
+        if ( IsScItemWid( pMap->nWID ) )
+        {
+            const SfxPoolItem* pItem = pData->GetItem( nFieldIndex, pMap->nWID );
+            if (pItem)
+            {
+                SfxPoolItem* pNewItem = pItem->Clone();
+                sal_Bool bDone = pNewItem->PutValue( aValue, pMap->nMemberId );
+                if (bDone)
+                {
+                    pData->PutItem( nFieldIndex, *pNewItem );
+
+                    //! Notify fuer andere Objekte?
+                    pFormats->SetSaveLater(sal_True);
+                }
+                delete pNewItem;
             }
-            delete pNewItem;
+        }
+        else
+        {
+            switch (pMap->nWID)
+            {
+                case SC_WID_UNO_TBLBORD:
+                    {
+                        table::TableBorder aBorder;
+                        if ( aValue >>= aBorder )   // empty = nothing to do
+                        {
+                            SvxBoxItem aOuter(ATTR_BORDER);
+                            SvxBoxInfoItem aInner(ATTR_BORDER_INNER);
+                            ScHelperFunctions::FillBoxItems( aOuter, aInner, aBorder );
+                            pData->PutItem( nFieldIndex, aOuter );
+
+                            //! Notify fuer andere Objekte?
+                            pFormats->SetSaveLater(sal_True);
+                        }
+                    }
+                    break;
+            }
         }
     }
 }
@@ -866,9 +896,33 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const rtl::OUString& a
     if ( pMap && pMap->nWID && pFormats && nFormatIndex < pFormats->GetCount() )
     {
         const ScAutoFormatData* pData = (*pFormats)[nFormatIndex];
-        const SfxPoolItem* pItem = pData->GetItem( nFieldIndex, pMap->nWID );
-        if (pItem)
-            pItem->QueryValue( aVal, pMap->nMemberId );
+
+        if ( IsScItemWid( pMap->nWID ) )
+        {
+            const SfxPoolItem* pItem = pData->GetItem( nFieldIndex, pMap->nWID );
+            if (pItem)
+                pItem->QueryValue( aVal, pMap->nMemberId );
+        }
+        else
+        {
+            switch (pMap->nWID)
+            {
+                case SC_WID_UNO_TBLBORD:
+                    {
+                        const SfxPoolItem* pItem = pData->GetItem(nFieldIndex, ATTR_BORDER);
+                        if (pItem)
+                        {
+                            SvxBoxItem aOuter(*(static_cast<const SvxBoxItem*>(pItem)));
+                            SvxBoxInfoItem aInner(ATTR_BORDER_INNER);
+
+                            table::TableBorder aBorder;
+                            ScHelperFunctions::FillTableBorder( aBorder, aOuter, aInner );
+                            aVal <<= aBorder;
+                        }
+                    }
+                    break;
+            }
+        }
     }
 
     return aVal;
