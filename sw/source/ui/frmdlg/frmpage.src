@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:51:37 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ TabDialog DLG_FRM_STD
                 Text [ italian ] = "Tipo" ;
                 Text [ portuguese_brazilian ] = "Tipo" ;
                 Text [ portuguese ] = "Tipo" ;
-                Text [ finnish ] = "Laji" ;
+                Text [ finnish ] = "Tyyppi" ;
                 Text [ danish ] = "Type" ;
                 Text [ french ] = "Type" ;
                 Text [ swedish ] = "Typ" ;
@@ -141,6 +141,7 @@ TabDialog DLG_FRM_STD
                 Text[ korean ] = "¿É¼Ç";
                 Text[ turkish ] = "Seçenekler";
                 Text[ catalan ] = "Opciones";
+                Text[ finnish ] = "Asetukset";
             };
             PageItem
             {
@@ -152,7 +153,7 @@ TabDialog DLG_FRM_STD
                 Text [ italian ] = "Scorrimento" ;
                 Text [ portuguese_brazilian ] = "Circundamento" ;
                 Text [ portuguese ] = "Ajuste" ;
-                Text [ finnish ] = "Kierrätys" ;
+                Text [ finnish ] = "Rivitä" ;
                 Text [ danish ] = "Ombrydning" ;
                 Text [ french ] = "Adaptation du texte" ;
                 Text [ swedish ] = "Textanpassning" ;
@@ -195,6 +196,7 @@ TabDialog DLG_FRM_STD
                 Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©";
                 Text[ turkish ] = "Hyperlink";
                 Text[ catalan ] = "Hiperenlace";
+                Text[ finnish ] = "Hyperlinkki";
             };
             PageItem
             {
@@ -207,7 +209,7 @@ TabDialog DLG_FRM_STD
                 Text [ portuguese_brazilian ] = "Borda" ;
                 Text [ portuguese ] = "Contornos" ;
                 Text [ spanish ] = "Borde" ;
-                Text [ finnish ] = "Reunaviiva" ;
+                Text [ finnish ] = "Reunat" ;
                 Text [ danish ] = "Ramme" ;
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
@@ -304,6 +306,7 @@ TabDialog DLG_FRM_STD
                 Text[ korean ] = "¸ÅÅ©·Î";
                 Text[ turkish ] = "Makro";
                 Text[ catalan ] = "Macro";
+                Text[ finnish ] = "Makro";
             };
         };
     };
@@ -327,7 +330,7 @@ TabDialog DLG_FRM_GRF
     Text [ italian ] = "Immagine" ;
     Text [ portuguese_brazilian ] = "Gráfico" ;
     Text [ portuguese ] = "Imagem" ;
-    Text [ finnish ] = "Kuva" ;
+    Text [ finnish ] = "Kuvat" ;
     Text [ danish ] = "Grafik" ;
     Text [ french ] = "Image" ;
     Text [ swedish ] = "Grafik" ;
@@ -350,7 +353,7 @@ TabDialog DLG_FRM_GRF
                 Text [ italian ] = "Tipo" ;
                 Text [ portuguese_brazilian ] = "Tipo" ;
                 Text [ portuguese ] = "Tipo" ;
-                Text [ finnish ] = "Laji" ;
+                Text [ finnish ] = "Tyyppi" ;
                 Text [ danish ] = "Type" ;
                 Text [ french ] = "Type" ;
                 Text [ swedish ] = "Typ" ;
@@ -393,6 +396,7 @@ TabDialog DLG_FRM_GRF
                 Text[ korean ] = "¿É¼Ç";
                 Text[ turkish ] = "Seçenekler";
                 Text[ catalan ] = "Opciones";
+                Text[ finnish ] = "Asetukset";
             };
             PageItem
             {
@@ -404,7 +408,7 @@ TabDialog DLG_FRM_GRF
                 Text [ italian ] = "Scorrimento" ;
                 Text [ portuguese_brazilian ] = "Circundamento" ;
                 Text [ portuguese ] = "Ajuste" ;
-                Text [ finnish ] = "Kierrätys" ;
+                Text [ finnish ] = "Rivitä" ;
                 Text [ danish ] = "Ombrydning" ;
                 Text [ french ] = "Adaptation du texte" ;
                 Text [ swedish ] = "Textanpassning" ;
@@ -447,6 +451,7 @@ TabDialog DLG_FRM_GRF
                 Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©";
                 Text[ turkish ] = "Hyperlink";
                 Text[ catalan ] = "Hiperenlace";
+                Text[ finnish ] = "Hyperlinkki";
             };
             PageItem
             {
@@ -458,7 +463,7 @@ TabDialog DLG_FRM_GRF
                 Text [ italian ] = "Immagine" ;
                 Text [ portuguese_brazilian ] = "Gráfico" ;
                 Text [ portuguese ] = "Imagem" ;
-                Text [ finnish ] = "Kuva" ;
+                Text [ finnish ] = "Kuvat" ;
                 Text [ danish ] = "Grafik" ;
                 Text [ french ] = "Image" ;
                 Text [ swedish ] = "Grafik" ;
@@ -501,6 +506,7 @@ TabDialog DLG_FRM_GRF
                 Text[ korean ] = "´Ùµë±â";
                 Text[ turkish ] = "Kýrpma";
                 Text[ catalan ] = "Recortar";
+                Text[ finnish ] = "Rajaa";
             };
             PageItem
             {
@@ -513,7 +519,7 @@ TabDialog DLG_FRM_GRF
                 Text [ portuguese_brazilian ] = "Borda" ;
                 Text [ portuguese ] = "Contornos" ;
                 Text [ spanish ] = "Borde" ;
-                Text [ finnish ] = "Reunaviiva" ;
+                Text [ finnish ] = "Reunat" ;
                 Text [ danish ] = "Ramme" ;
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
@@ -582,6 +588,7 @@ TabDialog DLG_FRM_GRF
                 Text[ korean ] = "¸ÅÅ©·Î";
                 Text[ turkish ] = "Makro";
                 Text[ catalan ] = "Macro";
+                Text[ finnish ] = "Makro";
             };
         };
     };
@@ -629,7 +636,7 @@ TabDialog DLG_FRM_OLE
                 Text [ italian ] = "Tipo" ;
                 Text [ portuguese_brazilian ] = "Tipo" ;
                 Text [ portuguese ] = "Tipo" ;
-                Text [ finnish ] = "Laji" ;
+                Text [ finnish ] = "Tyyppi" ;
                 Text [ danish ] = "Type" ;
                 Text [ french ] = "Type" ;
                 Text [ swedish ] = "Typ" ;
@@ -672,6 +679,7 @@ TabDialog DLG_FRM_OLE
                 Text[ korean ] = "¿É¼Ç";
                 Text[ turkish ] = "Seçenekler";
                 Text[ catalan ] = "Opciones";
+                Text[ finnish ] = "Asetukset";
             };
             PageItem
             {
@@ -683,7 +691,7 @@ TabDialog DLG_FRM_OLE
                 Text [ italian ] = "Scorrimento" ;
                 Text [ portuguese_brazilian ] = "Circundamento" ;
                 Text [ portuguese ] = "Ajuste" ;
-                Text [ finnish ] = "Kierrätys" ;
+                Text [ finnish ] = "Rivitä" ;
                 Text [ danish ] = "Ombrydning" ;
                 Text [ french ] = "Adaptation du texte" ;
                 Text [ swedish ] = "Textanpassning" ;
@@ -726,6 +734,7 @@ TabDialog DLG_FRM_OLE
                 Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©";
                 Text[ turkish ] = "Hyperlink";
                 Text[ catalan ] = "Hiperenlace";
+                Text[ finnish ] = "Hyperlinkki";
             };
             PageItem
             {
@@ -738,7 +747,7 @@ TabDialog DLG_FRM_OLE
                 Text [ portuguese_brazilian ] = "Borda" ;
                 Text [ portuguese ] = "Contornos" ;
                 Text [ spanish ] = "Borde" ;
-                Text [ finnish ] = "Reunaviiva" ;
+                Text [ finnish ] = "Reunat" ;
                 Text [ danish ] = "Ramme" ;
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
@@ -826,6 +835,7 @@ TabDialog DLG_FRM_OLE
                 Text[ korean ] = "¸ÅÅ©·Î";
                 Text[ turkish ] = "Makro";
                 Text[ catalan ] = "Macro";
+                Text[ finnish ] = "Makro";
             };
         };
     };
@@ -920,6 +930,7 @@ TabPage TP_FRM_STD
         Text[ korean ] = "»ó´ë(~I)";
         Text[ turkish ] = "~Göreceli";
         Text[ catalan ] = "R~elativo";
+        Text[ finnish ] = "~Suhteellinen";
     };
     FixedText FT_HEIGHT
     {
@@ -993,6 +1004,7 @@ TabPage TP_FRM_STD
         Text[ korean ] = "»ó´ë(~L)";
         Text[ turkish ] = "G~öreceli";
         Text[ catalan ] = "Rela~tivo";
+        Text[ finnish ] = "~Suhteellinen";
     };
     CheckBox CB_FIXEDRATIO
     {
@@ -1020,6 +1032,7 @@ TabPage TP_FRM_STD
         Text[ korean ] = "ºñÀ² À¯Áö(~K)";
         Text[ turkish ] = "Orant~ý";
         Text[ catalan ] = "Prop~orcional";
+        Text[ finnish ] = "~Keep ratio";
     };
     CheckBox CB_AUTOHEIGHT
     {
@@ -1032,7 +1045,7 @@ TabPage TP_FRM_STD
         Text [ italian ] = "Altezza. ~auto" ;
         Text [ portuguese_brazilian ] = "Altura automática" ;
         Text [ portuguese ] = "Altura automática" ;
-        Text [ finnish ] = "automaattinen k~orkeus" ;
+        Text [ finnish ] = "~Automaattinen korkeus" ;
         Text [ danish ] = "Auto. højde" ;
         Text [ french ] = "Hau~teur auto." ;
         Text [ swedish ] = "auto. h~öjd" ;
@@ -1062,7 +1075,7 @@ TabPage TP_FRM_STD
         Text [ italian ] = "Dimens. originale" ;
         Text [ portuguese_brazilian ] = "Tamanho real" ;
         Text [ portuguese ] = "Tamanho original" ;
-        Text [ finnish ] = "Todellinen koko" ;
+        Text [ finnish ] = "Alkuperäinen koko" ;
         Text [ danish ] = "Oprindelig størrelse" ;
         Text [ french ] = "Taille d'~origine" ;
         Text [ swedish ] = "Originalst~orlek" ;
@@ -1133,6 +1146,7 @@ TabPage TP_FRM_STD
         Text[ turkish ] = "At page";
         Text[ arabic ] = "Úáì ÇáÕÝÍÉ";
         Text[ catalan ] = "A la pá~gina";
+        Text[ finnish ] = "An ~der Seite";
     };
     RadioButton RB_ANCHOR_PARA
     {
@@ -1159,6 +1173,7 @@ TabPage TP_FRM_STD
         Text[ turkish ] = "At paragraph";
         Text[ arabic ] = "Úáì ÇáÝÞÑÉ";
         Text[ catalan ] = "Al ~párrafo";
+        Text[ finnish ] = "Am Ab~satz";
     };
     RadioButton RB_ANCHOR_AT_CHAR
     {
@@ -1185,6 +1200,7 @@ TabPage TP_FRM_STD
         Text[ turkish ] = "At character";
         Text[ arabic ] = "Úáì ÇáÍÑÝ";
         Text[ catalan ] = "Al cará~cter";
+        Text[ finnish ] = "Am Zeiche~n";
     };
     RadioButton RB_ANCHOR_AS_CHAR
     {
@@ -1212,6 +1228,7 @@ TabPage TP_FRM_STD
         Text[ korean ] = "¹®ÀÚ·Î(~A)";
         Text[ turkish ] = "karakter o~larak";
         Text[ catalan ] = "Como ~carácter";
+        Text[ finnish ] = "Als Ze~ichen";
     };
     RadioButton RB_ANCHOR_FRAME
     {
@@ -1238,6 +1255,7 @@ TabPage TP_FRM_STD
         Text[ turkish ] = "At frame";
         Text[ arabic ] = "Úáì ÇáßÇÏÑ";
         Text[ catalan ] = "~Al marco";
+        Text[ finnish ] = "~Am Rahmen";
     };
     GroupBox GB_TYPE
     {
@@ -1249,7 +1267,7 @@ TabPage TP_FRM_STD
         Text [ italian ] = "Ancoraggio" ;
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ portuguese ] = "Âncora" ;
-        Text [ finnish ] = "Laji" ;
+        Text [ finnish ] = "Ankkuri" ;
         Text [ danish ] = "Forankring" ;
         Text [ french ] = "Ancrage" ;
         Text [ swedish ] = "Förankring" ;
@@ -1283,7 +1301,7 @@ TabPage TP_FRM_STD
         Text [ italian ] = "Ori~zzontale" ;
         Text [ portuguese_brazilian ] = "Hori~zontal" ;
         Text [ portuguese ] = "Hori~zontal" ;
-        Text [ finnish ] = "~Vaaksuunta" ;
+        Text [ finnish ] = "~Vaakataso" ;
         Text [ danish ] = "Vandret" ;
         Text [ french ] = "Hori~zontale" ;
         Text [ swedish ] = "H~orisontellt" ;
@@ -1319,7 +1337,7 @@ TabPage TP_FRM_STD
         Text [ italian ] = "~di" ;
         Text [ portuguese_brazilian ] = "em" ;
         Text [ portuguese ] = "em" ;
-        Text [ finnish ] = " - " ;
+        Text [ finnish ] = "by" ;
         Text [ danish ] = "ved" ;
         Text [ french ] = "~de" ;
         Text [ swedish ] = "~med" ;
@@ -1381,6 +1399,7 @@ TabPage TP_FRM_STD
         Text[ turkish ] = "Hedef";
         Text[ language_user1 ] = "\"zu\" muss ich hier weglassen weils es als Suffix im letzten Satzelement (Listbox) schon vorkommt.";
         Text[ catalan ] = "a";
+        Text[ finnish ] = "to";
     };
     ListBox LB_HORI_RELATION
     {
@@ -1415,6 +1434,7 @@ TabPage TP_FRM_STD
         Text[ korean ] = "Â¦¼ö ÂÊ ¸¶ÁÖº¸±â(~M)";
         Text[ turkish ] = "Çift numaralý sayfalarda ya~nsýt";
         Text[ catalan ] = "Reflejar en ~páginas pares";
+        Text[ finnish ] = "~Mirror on even pages";
     };
     FixedText FT_VERTICAL
     {
@@ -1427,7 +1447,7 @@ TabPage TP_FRM_STD
         Text [ italian ] = "~Verticale" ;
         Text [ portuguese_brazilian ] = "~Vertical" ;
         Text [ portuguese ] = "~Vertical" ;
-        Text [ finnish ] = "~Rinnakkain" ;
+        Text [ finnish ] = "~Pystysuora" ;
         Text [ danish ] = "Lodret" ;
         Text [ french ] = "~Verticale" ;
         Text [ swedish ] = "~Vertikalt" ;
@@ -1463,7 +1483,7 @@ TabPage TP_FRM_STD
         Text [ italian ] = "di" ;
         Text [ portuguese_brazilian ] = "em" ;
         Text [ portuguese ] = "em" ;
-        Text [ finnish ] = " - " ;
+        Text [ finnish ] = "by" ;
         Text [ danish ] = "ved" ;
         Text [ french ] = "d~e" ;
         Text [ swedish ] = "m~ed" ;
@@ -1525,6 +1545,7 @@ TabPage TP_FRM_STD
         Text[ turkish ] = "Hedef";
         Text[ language_user1 ] = "\"zu\" muss ich hier weglassen weils es als Suffix im letzten Satzelement (Listbox) schon vorkommt.";
         Text[ catalan ] = "a";
+        Text[ finnish ] = "to";
     };
     ListBox LB_VERT_RELATION
     {
@@ -1583,7 +1604,7 @@ TabPage TP_GRF_EXT
         Text [ italian ] = "Collegamento" ;
         Text [ portuguese_brazilian ] = "Ligar" ;
         Text [ portuguese ] = "Ligação" ;
-        Text [ finnish ] = "Yhteys" ;
+        Text [ finnish ] = "Linkki" ;
         Text [ danish ] = "Kæde" ;
         Text [ french ] = "Lien" ;
         Text [ swedish ] = "Länk" ;
@@ -1626,6 +1647,7 @@ TabPage TP_GRF_EXT
         Text[ korean ] = "ÆÄÀÏ ÀÌ¸§(~F)";
         Text[ turkish ] = "D~osya adý";
         Text[ catalan ] = "~Nombre de archivo";
+        Text[ finnish ] = "~Tiedoston nimi";
     };
     Edit ED_CONNECT
     {
@@ -1637,7 +1659,7 @@ TabPage TP_GRF_EXT
         Text [ italian ] = "[senza]" ;
         Text [ portuguese_brazilian ] = "[Nenhum]" ;
         Text [ portuguese ] = "[Nenhum]" ;
-        Text [ finnish ] = "[Ei ole]" ;
+        Text [ finnish ] = "[Ei mitään]" ;
         Text [ danish ] = "[Ingen]" ;
         Text [ french ] = "[Aucun(e)]" ;
         Text [ swedish ] = "[Ingen]" ;
@@ -1686,6 +1708,7 @@ TabPage TP_GRF_EXT
         Text[ korean ] = "(~.)...";
         Text[ turkish ] = "~...";
         Text[ catalan ] = "~...";
+        Text[ finnish ] = "~...";
     };
     CheckBox CB_VERT
     {
@@ -1699,7 +1722,7 @@ TabPage TP_GRF_EXT
         Text [ italian ] = "~Verticale" ;
         Text [ portuguese_brazilian ] = "hori~zontalmente" ;
         Text [ portuguese ] = "~vertical" ;
-        Text [ finnish ] = "~pystysuunnassa" ;
+        Text [ finnish ] = "~pystytaso" ;
         Text [ danish ] = "lodret" ;
         Text [ french ] = "~verticalement" ;
         Text [ swedish ] = "~vertikalt" ;
@@ -1743,6 +1766,7 @@ TabPage TP_GRF_EXT
         Text[ turkish ] = "yata~y";
         Text[ arabic ] = "ÃÝÞí";
         Text[ catalan ] = "~horizontal";
+        Text[ finnish ] = "vaaka~taso";
     };
     RadioButton RB_MIRROR_ALL_PAGES
     {
@@ -1770,6 +1794,7 @@ TabPage TP_GRF_EXT
         Text[ turkish ] = "on all pages";
         Text[ arabic ] = "Úáì ßá ÇáÕÝÍÇÊ";
         Text[ catalan ] = "en todas las páginas";
+        Text[ finnish ] = "kaikilla sivuilla";
     };
     RadioButton RB_MIRROR_LEFT_PAGES
     {
@@ -1797,6 +1822,7 @@ TabPage TP_GRF_EXT
         Text[ turkish ] = "on even pages";
         Text[ arabic ] = "Úáì ÇáÕÝÍÇÊ ÇáÒæÌíÉ";
         Text[ catalan ] = "en páginas izquierdas";
+        Text[ finnish ] = "parillisilla sivuilla";
     };
     RadioButton RB_MIRROR_RIGHT_PAGES
     {
@@ -1824,6 +1850,7 @@ TabPage TP_GRF_EXT
         Text[ turkish ] = "on odd pages";
         Text[ arabic ] = "Úáì ÇáÕÝÍÇÊ ÇáÝÑÏíÉ";
         Text[ catalan ] = "en páginas derechas";
+        Text[ finnish ] = "parittomilla sivuilla";
     };
     Window WN_BMP
     {
@@ -1840,7 +1867,7 @@ TabPage TP_GRF_EXT
         Text [ italian ] = "Rispecchia" ;
         Text [ portuguese_brazilian ] = "Espelhar" ;
         Text [ portuguese ] = "Reflectir" ;
-        Text [ finnish ] = "Peilaa" ;
+        Text [ finnish ] = "Käännä" ;
         Text [ danish ] = "Spejlvend" ;
         Text [ french ] = "Refléter" ;
         Text [ swedish ] = "Spegelvänd" ;
@@ -1867,7 +1894,7 @@ String STR_EDIT_GRF
     TEXT [ italian ] = "Collega" ;
     TEXT [ portuguese_brazilian ] = "Ligação com" ;
     TEXT [ portuguese ] = "Ligar" ;
-    TEXT [ finnish ] = "Linkitä:" ;
+    TEXT [ finnish ] = "Linkki" ;
     TEXT [ danish ] = "Kæd" ;
     TEXT [ french ] = "Lien " ;
     TEXT [ swedish ] = "Länka" ;
@@ -1918,6 +1945,7 @@ TabPage TP_FRM_URL
         Text[ korean ] = "~URL";
         Text[ turkish ] = "U~RL";
         Text[ catalan ] = "~URL";
+        Text[ finnish ] = "~URL-osoite";
     };
     Edit ED_URL
     {
@@ -1951,6 +1979,7 @@ TabPage TP_FRM_URL
         Text[ korean ] = "ÀÌ¸§(~N)";
         Text[ turkish ] = "~Ad";
         Text[ catalan ] = "~Nombre";
+        Text[ finnish ] = "~Nimi";
     };
     Edit ED_NAME
     {
@@ -1984,6 +2013,7 @@ TabPage TP_FRM_URL
         Text[ korean ] = "ÇÁ·¹ÀÓ";
         Text[ turkish ] = "~Frame";
         Text[ catalan ] = "Frame";
+        Text[ finnish ] = "Kehys";
     };
     ComboBox CB_FRAME
     {
@@ -2019,6 +2049,7 @@ TabPage TP_FRM_URL
         Text[ korean ] = "¼±ÅÃ(~B)...";
         Text[ turkish ] = "~Seç...";
         Text[ catalan ] = "Selecc~ionar...";
+        Text[ finnish ] = "~Selaa";
     };
     GroupBox GB_HYPERLINK
     {
@@ -2045,6 +2076,7 @@ TabPage TP_FRM_URL
         Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©";
         Text[ turkish ] = "Hyperlink";
         Text[ catalan ] = "Hiperenlace";
+        Text[ finnish ] = "Hyperlinkki";
     };
     CheckBox CB_SERVER
     {
@@ -2071,6 +2103,7 @@ TabPage TP_FRM_URL
         Text[ korean ] = "¼­¹ö(~S)";
         Text[ turkish ] = "~Sunucu";
         Text[ catalan ] = "~Servidor";
+        Text[ finnish ] = "~Palvelin";
     };
     CheckBox CB_CLIENT
     {
@@ -2097,6 +2130,7 @@ TabPage TP_FRM_URL
         Text[ korean ] = "Å¬¶óÀÌ¾ðÆ®(~C)";
         Text[ turkish ] = "~Ýstemci";
         Text[ catalan ] = "~Cliente";
+        Text[ finnish ] = "~Työasema";
     };
     GroupBox GB_IMAGE
     {
@@ -2123,6 +2157,7 @@ TabPage TP_FRM_URL
         Text[ korean ] = "ÀÌ¹ÌÁö ¸Ê";
         Text[ turkish ] = "Resim eþlem";
         Text[ catalan ] = "Image Map";
+        Text[ finnish ] = "Kuvakartta";
     };
 };
 TabPage TP_FRM_ADD
@@ -2157,6 +2192,7 @@ TabPage TP_FRM_ADD
         Text[ korean ] = "ÀÌ¸§(~N)";
         Text[ turkish ] = "~Ad";
         Text[ catalan ] = "~Nombre";
+        Text[ finnish ] = "~Nimi";
     };
     Edit ED_NAME
     {
@@ -2190,6 +2226,7 @@ TabPage TP_FRM_ADD
         Text[ korean ] = "´ëÃ¼¡¡ÅØ½ºÆ®(~A)";
         Text[ turkish ] = "~Alternatif metin";
         Text[ catalan ] = "Te~xto alternativo";
+        Text[ finnish ] = "~Vaihtoehtoinen (vain teksti)";
     };
     Edit ED_ALT_NAME
     {
@@ -2223,6 +2260,7 @@ TabPage TP_FRM_ADD
         Text[ korean ] = "¼±·Ê(~P)";
         Text[ turkish ] = "~Önceki";
         Text[ catalan ] = "~Anterior";
+        Text[ finnish ] = "~Edellinen linkki";
     };
     Edit ED_PREV
     {
@@ -2257,6 +2295,7 @@ TabPage TP_FRM_ADD
         Text[ korean ] = "ÈÄÀÓ(~N)";
         Text[ turkish ] = "S~onraki";
         Text[ catalan ] = "~Vínculo siguiente";
+        Text[ finnish ] = "~Seuraava linkki";
     };
     Edit ED_NEXT
     {
@@ -2291,6 +2330,7 @@ TabPage TP_FRM_ADD
         Text[ korean ] = "ÀÌ¸§";
         Text[ turkish ] = "Ad";
         Text[ catalan ] = "Nombres";
+        Text[ finnish ] = "Nimet";
     };
     CheckBox CB_PROTECT_CONTENT
     {
@@ -2318,6 +2358,7 @@ TabPage TP_FRM_ADD
         Text[ korean ] = "³»¿ë(~C)";
         Text[ turkish ] = "~Ýçerik";
         Text[ catalan ] = "~Contenido";
+        Text[ finnish ] = "~Sisältö";
     };
     CheckBox CB_PROTECT_FRAME
     {
@@ -2345,6 +2386,7 @@ TabPage TP_FRM_ADD
         Text[ korean ] = "À§Ä¡(~O)";
         Text[ turkish ] = "K~onum";
         Text[ catalan ] = "P~osición";
+        Text[ finnish ] = "~Sijainti";
     };
     CheckBox CB_PROTECT_SIZE
     {
@@ -2372,6 +2414,7 @@ TabPage TP_FRM_ADD
         Text[ korean ] = "Å©±â(~S)";
         Text[ turkish ] = "~Boyut";
         Text[ catalan ] = "~Tamaño";
+        Text[ finnish ] = "~Koko";
     };
     GroupBox GB_PROTECT
     {
@@ -2398,6 +2441,7 @@ TabPage TP_FRM_ADD
         Text[ korean ] = "º¸È£";
         Text[ turkish ] = "Koru";
         Text[ catalan ] = "Proteger";
+        Text[ finnish ] = "Suojaa";
     };
     CheckBox CB_EDIT_IN_READONLY
     {
@@ -2424,6 +2468,7 @@ TabPage TP_FRM_ADD
         Text[ korean ] = "ÀÐ±âÀü¿ë ¹®¼­¿¡¼­ ÆíÁý°¡´É(~E)";
         Text[ turkish ] = "Salt okunur belge içinde düzenlenebilir";
         Text[ catalan ] = "Se puede editar en documentos de solo lectura";
+        Text[ finnish ] = "~Muokattavissa vain luku -asiakirjassa";
     };
     CheckBox CB_PRINT_FRAME
     {
@@ -2435,7 +2480,7 @@ TabPage TP_FRM_ADD
         Text [ italian ] = "Stampa" ;
         Text [ portuguese_brazilian ] = "Imprimir ~moldura" ;
         Text [ portuguese ] = "Imprimir" ;
-        Text [ finnish ] = "Tulosta ~kehys" ;
+        Text [ finnish ] = "~Tulosta" ;
         Text [ danish ] = "Udskriv" ;
         Text [ french ] = "~Imprimer" ;
         Text [ swedish ] = "Skriv ~ut" ;
@@ -2478,5 +2523,6 @@ TabPage TP_FRM_ADD
         Text[ korean ] = "¿É¼Ç";
         Text[ turkish ] = "Seçenekler";
         Text[ catalan ] = "Opciones";
+        Text[ finnish ] = "Asetukset";
     };
 };
