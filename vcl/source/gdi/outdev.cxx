@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 13:53:32 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:32:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,6 +418,7 @@ OutputDevice::OutputDevice() :
     mpOutDevData        = NULL;
     mp3DContext         = NULL;
     mpPDFWriter         = NULL;
+    mpAlphaVDev         = NULL;
     mnOutOffX           = 0;
     mnOutOffY           = 0;
     mnOutWidth          = 0;
@@ -525,6 +526,8 @@ OutputDevice::~OutputDevice()
         mpFontList->Clear();
         delete mpFontList;
     }
+
+    delete mpAlphaVDev;
 }
 
 // -----------------------------------------------------------------------
@@ -542,6 +545,9 @@ void OutputDevice::EnableRTL( BOOL bEnable )
             if( ImplGetGraphics() )
                 mpGraphics->SetLayout( mbEnableRTL ? SAL_LAYOUT_BIDI_RTL : 0 );
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->EnableRTL( bEnable );
 }
 
 BOOL OutputDevice::ImplHasMirroredGraphics()
@@ -1033,6 +1039,9 @@ void OutputDevice::SetClipRegion()
         mpMetaFile->AddAction( new MetaClipRegionAction( Region(), FALSE ) );
 
     ImplSetClipRegion( NULL );
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetClipRegion();
 }
 
 // -----------------------------------------------------------------------
@@ -1053,6 +1062,9 @@ void OutputDevice::SetClipRegion( const Region& rRegion )
         Region aRegion = LogicToPixel( rRegion );
         ImplSetClipRegion( &aRegion );
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetClipRegion( rRegion );
 }
 
 // -----------------------------------------------------------------------
@@ -1103,6 +1115,9 @@ void OutputDevice::MoveClipRegion( long nHorzMove, long nVertMove )
                        ImplLogicHeightToDevicePixel( nVertMove ) );
         mbInitClipRegion = TRUE;
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->MoveClipRegion( nHorzMove, nVertMove );
 }
 
 // -----------------------------------------------------------------------
@@ -1119,6 +1134,9 @@ void OutputDevice::IntersectClipRegion( const Rectangle& rRect )
     maRegion.Intersect( aRect );
     mbClipRegion        = TRUE;
     mbInitClipRegion    = TRUE;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->IntersectClipRegion( rRect );
 }
 
 // -----------------------------------------------------------------------
@@ -1141,6 +1159,9 @@ void OutputDevice::IntersectClipRegion( const Region& rRegion )
         mbClipRegion        = TRUE;
         mbInitClipRegion    = TRUE;
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->IntersectClipRegion( rRegion );
 }
 
 // -----------------------------------------------------------------------
@@ -1151,6 +1172,9 @@ void OutputDevice::SetDrawMode( ULONG nDrawMode )
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     mnDrawMode = nDrawMode;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetDrawMode( nDrawMode );
 }
 
 // -----------------------------------------------------------------------
@@ -1177,6 +1201,9 @@ void OutputDevice::SetRasterOp( RasterOp eRasterOp )
             pGraphics->SetRasterOp( eRasterOp );
 #endif
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetRasterOp( eRasterOp );
 }
 
 // -----------------------------------------------------------------------
@@ -1195,6 +1222,9 @@ void OutputDevice::SetLineColor()
         mbLineColor = FALSE;
         maLineColor = Color( COL_TRANSPARENT );
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetLineColor();
 }
 
 // -----------------------------------------------------------------------
@@ -1260,6 +1290,9 @@ void OutputDevice::SetLineColor( const Color& rColor )
             maLineColor = aColor;
         }
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetLineColor( COL_BLACK );
 }
 
 // -----------------------------------------------------------------------
@@ -1278,6 +1311,9 @@ void OutputDevice::SetFillColor()
         mbFillColor = FALSE;
         maFillColor = Color( COL_TRANSPARENT );
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetFillColor();
 }
 
 // -----------------------------------------------------------------------
@@ -1347,6 +1383,9 @@ void OutputDevice::SetFillColor( const Color& rColor )
             maFillColor = aColor;
         }
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetFillColor( COL_BLACK );
 }
 
 // -----------------------------------------------------------------------
@@ -1358,6 +1397,9 @@ void OutputDevice::SetBackground()
 
     maBackground = Wallpaper();
     mbBackground = FALSE;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetBackground();
 }
 
 // -----------------------------------------------------------------------
@@ -1373,6 +1415,9 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
         mbBackground = FALSE;
     else
         mbBackground = TRUE;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetBackground( rBackground );
 }
 
 // -----------------------------------------------------------------------
@@ -1387,6 +1432,9 @@ void OutputDevice::SetRefPoint()
 
     mbRefPoint = FALSE;
     maRefPoint.X() = maRefPoint.Y() = 0L;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetRefPoint();
 }
 
 // -----------------------------------------------------------------------
@@ -1401,6 +1449,9 @@ void OutputDevice::SetRefPoint( const Point& rRefPoint )
 
     mbRefPoint = TRUE;
     maRefPoint = rRefPoint;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetRefPoint( rRefPoint );
 }
 
 // -----------------------------------------------------------------------
@@ -1435,6 +1486,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
     Point aEndPt = ImplLogicToDevicePixel( rEndPt );
 
     mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y(), this );
+
 #else
     ImplServerGraphics* pGraphics = ImplGetServerGraphics();
     if ( pGraphics )
@@ -1445,6 +1497,9 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
                              ImplLogicToDevicePixel( rEndPt ) );
     }
 #endif
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawLine( rStartPt, rEndPt );
 }
 
 // -----------------------------------------------------------------------
@@ -1579,6 +1634,9 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
     }
 
 #endif
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawLine( rStartPt, rEndPt, rLineInfo );
 }
 
 // -----------------------------------------------------------------------
@@ -1629,6 +1687,9 @@ void OutputDevice::DrawRect( const Rectangle& rRect )
         pGraphics->DrawRect( aRect );
     }
 #endif
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawRect( rRect );
 }
 
 // -----------------------------------------------------------------------
@@ -1697,6 +1758,9 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
         pGraphics->DrawPolyLine( aPoly );
     }
 #endif
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawPolyLine( rPoly );
 }
 
 // -----------------------------------------------------------------------
@@ -1818,6 +1882,9 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
         }
     }
 #endif
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawPolyLine( rPoly, rLineInfo );
 }
 
 // -----------------------------------------------------------------------
@@ -1890,6 +1957,9 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
         pGraphics->DrawPolygon( aPoly );
     }
 #endif
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawPolygon( rPoly );
 }
 
 // -----------------------------------------------------------------------
@@ -1988,6 +2058,9 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
         }
     }
 #endif
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
 }
 
 // -----------------------------------------------------------------------
@@ -2067,6 +2140,9 @@ void OutputDevice::Push( USHORT nFlags )
         else
             pData->mpRefPoint = NULL;
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->Push();
 }
 
 // -----------------------------------------------------------------------
@@ -2088,6 +2164,9 @@ void OutputDevice::Pop()
         DBG_ERRORFILE( "OutputDevice::Pop() without OutputDevice::Push()" );
         return;
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->Pop();
 
     mpObjStack = pData->mpPrev;
 
@@ -2155,6 +2234,33 @@ void OutputDevice::Pop()
 
 // -----------------------------------------------------------------------
 
+void OutputDevice::SetConnectMetaFile( GDIMetaFile* pMtf )
+{
+    mpMetaFile = pMtf;
+}
+
+// -----------------------------------------------------------------------
+
+void OutputDevice::EnableOutput( BOOL bEnable )
+{
+    mbOutput = (bEnable != 0);
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->EnableOutput( bEnable );
+}
+
+// -----------------------------------------------------------------------
+
+void OutputDevice::SetSettings( const AllSettings& rSettings )
+{
+    maSettings = rSettings;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetSettings( rSettings );
+}
+
+// -----------------------------------------------------------------------
+
 USHORT OutputDevice::GetBitCount() const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -2176,12 +2282,34 @@ USHORT OutputDevice::GetBitCount() const
 
 // -----------------------------------------------------------------------
 
+USHORT OutputDevice::GetAlphaBitCount() const
+{
+    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+
+    if ( meOutDevType == OUTDEV_VIRDEV &&
+        mpAlphaVDev != NULL )
+    {
+        return mpAlphaVDev->GetBitCount();
+    }
+
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 ULONG OutputDevice::GetColorCount() const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     const USHORT nBitCount = GetBitCount();
     return( ( nBitCount > 31 ) ? ULONG_MAX : ( ( (ULONG) 1 ) << nBitCount) );
+}
+
+// -----------------------------------------------------------------------
+
+BOOL OutputDevice::HasAlpha()
+{
+    return mpAlphaVDev != NULL;
 }
 
 // -----------------------------------------------------------------------
