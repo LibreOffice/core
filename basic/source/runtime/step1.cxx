@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 16:09:47 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,36 +454,94 @@ void SbiRuntime::StepPRCHAR( USHORT nOp1 )
 
 // Check, ob TOS eine bestimmte Objektklasse ist (+StringID)
 
-void SbiRuntime::StepCLASS( USHORT nOp1 )
+bool SbiRuntime::implIsClass( SbxObject* pObj, const String& aClass )
 {
-    bool bUsedForLValue = (nOp1 & 0x8000) != 0;
-    nOp1 &= 0x7fff;
+    bool bRet = true;
 
-    String aClass( pImg->GetString( nOp1 ) );
-    SbxVariable* pVar = GetTOS();
-    if( pVar->GetType() != SbxOBJECT )
-        Error( SbERR_NEEDS_OBJECT );
-    else
+    if( aClass.Len() != 0 )
+    {
+        bRet = pObj->IsClass( aClass );
+        if( !bRet )
+            bRet = aClass.EqualsIgnoreCaseAscii( String( RTL_CONSTASCII_USTRINGPARAM("object") ) );
+        if( !bRet )
+        {
+            String aObjClass = pObj->GetClassName();
+            SbModule* pClassMod = pCLASSFAC->FindClass( aObjClass );
+            SbClassData* pClassData;
+            if( pClassMod && (pClassData=pClassMod->pClassData) != NULL )
+            {
+                SbxVariable* pClassVar =
+                    pClassData->mxIfaces->Find( aClass, SbxCLASS_DONTCARE );
+                bRet = (pClassVar != NULL);
+            }
+        }
+    }
+    return bRet;
+}
+
+bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
+    const String& aClass, bool bRaiseErrors )
+{
+    bool bOk = true;
+
+    SbxDataType t = refVal->GetType();
+    if( t == SbxOBJECT )
     {
         SbxObject* pObj;
-        if( pVar->IsA( TYPE(SbxObject) ) )
-            pObj = (SbxObject*) pVar;
+        SbxVariable* pVal = (SbxVariable*)refVal;
+        if( pVal->IsA( TYPE(SbxObject) ) )
+            pObj = (SbxObject*) pVal;
         else
         {
-            pObj = (SbxObject*) pVar->GetObject();
+            pObj = (SbxObject*) refVal->GetObject();
             if( pObj && !pObj->IsA( TYPE(SbxObject) ) )
                 pObj = NULL;
         }
-        if( !pObj )
+        if( pObj )
         {
-            if( !bUsedForLValue )
-                Error( SbERR_INVALID_USAGE_OBJECT );
-        }
-        else if( !pObj->IsClass( aClass ) )
-        {
-            Error( SbERR_INVALID_USAGE_OBJECT );
+            if( !implIsClass( pObj, aClass ) )
+            {
+                if( bRaiseErrors )
+                    Error( SbERR_INVALID_USAGE_OBJECT );
+                bOk = false;
+            }
+            else
+            {
+                SbClassModuleObject* pClassModuleObject = PTR_CAST(SbClassModuleObject,pObj);
+                if( pClassModuleObject != NULL )
+                    pClassModuleObject->triggerInitializeEvent();
+            }
         }
     }
+    else
+    {
+        if( bRaiseErrors )
+            Error( SbERR_NEEDS_OBJECT );
+        bOk = false;
+    }
+    return bOk;
+}
+
+void SbiRuntime::StepSETCLASS( USHORT nOp1 )
+{
+    SbxVariableRef refVal = PopVar();
+    SbxVariableRef refVar = PopVar();
+    String aClass( pImg->GetString( nOp1 ) );
+
+    bool bOk = checkClass_Impl( refVal, aClass, true );
+    if( bOk )
+        StepSET_Impl( refVal, refVar );
+}
+
+void SbiRuntime::StepTESTCLASS( USHORT nOp1 )
+{
+    SbxVariableRef xObjVal = PopVar();
+    String aClass( pImg->GetString( nOp1 ) );
+    bool bOk = checkClass_Impl( xObjVal, aClass, false );
+
+    SbxVariable* pRet = new SbxVariable;
+    pRet->PutBool( bOk );
+    PushVar( pRet );
 }
 
 // Library fuer anschliessenden Declare-Call definieren
