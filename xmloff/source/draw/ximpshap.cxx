@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:26:44 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 11:47:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1323,6 +1323,10 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             {
                 SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
                 awt::Size aSize(aViewBox.GetWidth(), aViewBox.GetHeight());
+                if (maSize.Width != 0 && maSize.Height !=0)
+                {
+                    aSize = maSize;
+                }
                 awt::Point aPosition(aViewBox.GetX(), aViewBox.GetY());
                 SdXMLImExPointsElement aPoints(maPoints, aViewBox,
                     aPosition, aSize, GetImport().GetMM100UnitConverter());
@@ -1397,6 +1401,10 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
         SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
         awt::Size aSize(aViewBox.GetWidth(), aViewBox.GetHeight());
         awt::Point aPosition(aViewBox.GetX(), aViewBox.GetY());
+        if (maSize.Width != 0 && maSize.Height !=0)
+        {
+            aSize = maSize;
+        }
         SdXMLImExSvgDElement aPoints(maD, aViewBox,
             aPosition, aSize, GetImport().GetMM100UnitConverter());
 
