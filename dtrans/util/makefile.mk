@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:06:11 $
+#   last change: $Author: rt $ $Date: 2004-10-22 07:58:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -143,9 +143,10 @@ SHL3STDLIBS= \
         uwinapi.lib\
         advapi32.lib\
         ole32.lib\
-        comsupp.lib\
         oleaut32.lib\
-        gdi32.lib
+        gdi32.lib\
+        shell32.lib\
+        uuid.lib
         
 SHL3IMPLIB=i$(SHL3TARGET) 
 
@@ -170,9 +171,10 @@ SHL4STDLIBS= \
         uwinapi.lib\
         advapi32.lib\
         ole32.lib\
-        comsupp.lib\
         oleaut32.lib\
-        gdi32.lib
+        gdi32.lib\
+        shell32.lib\
+        uuid.lib
 
 SHL4DEPN=
 SHL4IMPLIB=i$(SHL4TARGET) 
