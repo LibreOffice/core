@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-26 09:35:25 $
+ *  last change: $Author: gt $ $Date: 2001-09-26 09:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1749,7 +1749,7 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         const CommandEvent* pCmdEvt = rNEvt.GetCommandEvent();
         Window* pCmdWin = rNEvt.GetWindow();
 
-        if ( pCmdEvt->IsMouseEvent() &&
+        if ( //pCmdEvt->IsMouseEvent() &&
              pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU && pCmdWin != this && pCmdWin != &aToolBox )
         {
             // link at current mouse position ?
@@ -1859,10 +1859,38 @@ void SfxHelpWindow_Impl::Resize()
 
 void SfxHelpWindow_Impl::Split()
 {
+    static long nMinSplitSize = 5;
+    static long nMaxSplitSize = 99 - nMinSplitSize;
+
     SplitWindow::Split();
 
     nIndexSize = GetItemSize( INDEXWIN_ID );
     nTextSize = GetItemSize( TEXTWIN_ID );
+
+    BOOL        bMod = FALSE;
+    if( nIndexSize < nMinSplitSize )
+    {
+        nIndexSize = nMinSplitSize;
+        nTextSize = nMaxSplitSize;
+
+        bMod = TRUE;
+    }
+    else if( nTextSize < nMinSplitSize )
+    {
+        nTextSize = nMinSplitSize;
+        nIndexSize = nMaxSplitSize;
+
+        bMod = TRUE;
+    }
+    else
+        bMod = FALSE;
+
+    if( bMod )
+    {
+        SetItemSize( INDEXWIN_ID, nIndexSize );
+        SetItemSize( TEXTWIN_ID, nTextSize );
+    }
+
     InitSizes();
 
 //! pIndexWin->UpdateTabControl();
