@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:14:11 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1782,7 +1782,7 @@ String MSG_IOERR_FILE_NOT_FOUND
     Text[ chinese_simplified ] = "ÎÄ¼ş$(FILE)²»´æÔÚ¡£";
     Text[ russian ] = "Ôàéë $(FILE) íå ñóùåñòâóåò.";
     Text[ polish ] = "Plik $(FILE) nie istnieje.";
-    Text[ japanese ] = "Ì§²Ù$(FILE)‚Í‚ ‚è‚Ü‚¹‚ñB";
+    Text[ japanese ] = "Ì§²Ù $(FILE) ‚Í‚ ‚è‚Ü‚¹‚ñB";
     Text[ chinese_traditional ] = "ÀÉ®×$(FILE)¤£¦s¦b¡C";
     Text[ arabic ] = "Çáãáİ $(FILE) ÛíÑ ãæÌæÏ.";
     Text[ dutch ] = "Bestand $(FILE) bestaat niet.";
@@ -4159,6 +4159,7 @@ String STR_QUICKSTART_LNKNAME
 
 
  // ********************************************************************** EOF
+
 
 
 
