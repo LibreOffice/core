@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:00:15 $
+ *  last change: $Author: kz $ $Date: 2001-06-15 21:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1050,5 +1050,6 @@ TabPage TP_CONDCOLL
     };
 };
  // ********************************************************************** EOF
+
 
 
