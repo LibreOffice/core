@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mybasic.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:09 $
+ *  last change: $Author: gh $ $Date: 2000-11-07 14:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,9 +213,9 @@ BOOL MyBasic::Compile( SbModule* p )
 
 BOOL MyBasic::ErrorHdl()
 {
-    AppEdit *CurrWin = aBasicApp.pFrame->FindModuleWin( GetActiveModule()->GetName() );
-    if(CurrWin)
-        CurrWin->ToTop();
+    AppBasEd *pCurrWin = aBasicApp.pFrame->FindModuleWin( GetActiveModule()->GetName() );
+    if(pCurrWin)
+        pCurrWin->ToTop();
     else
     {       // erstmal Fenster aufmachen
         String aModName = GetActiveModule()->GetName();
@@ -230,7 +230,7 @@ BOOL MyBasic::ErrorHdl()
     {
         aErrors.Insert(
           new BasicError
-            ( aBasicApp.pFrame->pWork,
+            ( pCurrWin,
               0, StarBASIC::GetErrorText(), GetLine(), GetCol1(), GetCol2() ),
               LIST_APPEND );
         nError++;
@@ -238,17 +238,20 @@ BOOL MyBasic::ErrorHdl()
     }
     else
     {
-        ReportRuntimeError();
+        ReportRuntimeError( pCurrWin );
         return FALSE;
     }
 }
 
-void MyBasic::ReportRuntimeError()
+void MyBasic::ReportRuntimeError( AppBasEd *pEditWin )
 {
     String nErrorText;
     nErrorText = GetSpechialErrorText();
 
-    BasicError( aBasicApp.pFrame->pWork,
+    if ( pEditWin )     // just in case the focus is not right
+        pEditWin->ToTop();
+
+    BasicError( pEditWin,
         GetVBErrorCode( GetErrorCode() ), nErrorText, GetLine(),
         GetCol1(), GetCol2() ).Show();
 }
@@ -298,7 +301,7 @@ USHORT MyBasic::BreakHdl()
 ***************************************************************************/
 
 BasicError::BasicError
-    ( AppWin* w, USHORT nE, const String& r, USHORT nL, USHORT nC1, USHORT nC2 )
+    ( AppBasEd* w, USHORT nE, const String& r, USHORT nL, USHORT nC1, USHORT nC2 )
     : aText( ResId( IDS_ERROR1 ) )
 {
     pWin  = w;
@@ -320,8 +323,8 @@ BasicError::BasicError
 
 void BasicError::Show()
 {
-    if( pWin && pWin->ISA(AppEdit) ) {
-        ((AppEdit*)pWin)->Highlight( nLine, nCol1, nCol2 );
+    if( pWin ) {
+        pWin->Highlight( nLine, nCol1, nCol2 );
         aBasicApp.pFrame->pStatus->Message( aText );
     } else MessBox( aBasicApp.pFrame, WB_OK, aBasicApp.pFrame->GetText(),
                     aText ).Execute();
