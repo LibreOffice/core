@@ -85,6 +85,7 @@ hedabu: ..\inc\charhiddenitem.hxx %_DEST%\inc%_EXT%\svx\charhiddenitem.hxx
 hedabu: ..\inc\bmpmask.hxx %_DEST%\inc%_EXT%\svx\bmpmask.hxx
 hedabu: ..\inc\bolnitem.hxx %_DEST%\inc%_EXT%\svx\bolnitem.hxx
 #hedabu: ..\inc\border.hxx %_DEST%\inc%_EXT%\svx\border.hxx
+hedabu: ..\inc\borderline.hxx %_DEST%\inc%_EXT%\svx\borderline.hxx
 hedabu: ..\inc\boxitem.hxx %_DEST%\inc%_EXT%\svx\boxitem.hxx
 hedabu: ..\inc\brkitem.hxx %_DEST%\inc%_EXT%\svx\brkitem.hxx
 hedabu: ..\inc\brshitem.hxx %_DEST%\inc%_EXT%\svx\brshitem.hxx
@@ -104,7 +105,7 @@ hedabu: ..\inc\contdlg.hxx %_DEST%\inc%_EXT%\svx\contdlg.hxx
 hedabu: ..\inc\tabarea.hxx %_DEST%\inc%_EXT%\svx\tabarea.hxx
 hedabu: ..\inc\tabline.hxx %_DEST%\inc%_EXT%\svx\tabline.hxx
 hedabu: ..\inc\crsditem.hxx %_DEST%\inc%_EXT%\svx\crsditem.hxx
-hedabu: ..\inc\ctrdial.hxx %_DEST%\inc%_EXT%\svx\ctrdial.hxx
+hedabu: ..\inc\dialcontrol.hxx %_DEST%\inc%_EXT%\svx\dialcontrol.hxx
 hedabu: ..\inc\cscoitem.hxx %_DEST%\inc%_EXT%\svx\cscoitem.hxx
 hedabu: ..\inc\colrctrl.hxx %_DEST%\inc%_EXT%\svx\colrctrl.hxx
 hedabu: ..\inc\cube3d.hxx %_DEST%\inc%_EXT%\svx\cube3d.hxx
@@ -138,6 +139,9 @@ hedabu: ..\inc\fntszctl.hxx %_DEST%\inc%_EXT%\svx\fntszctl.hxx
 hedabu: ..\inc\fontitem.hxx %_DEST%\inc%_EXT%\svx\fontitem.hxx
 hedabu: ..\inc\fontwork.hxx %_DEST%\inc%_EXT%\svx\fontwork.hxx
 hedabu: ..\inc\frmitem.hxx %_DEST%\inc%_EXT%\svx\frmitem.hxx
+hedabu: ..\inc\framebordertype.hxx %_DEST%\inc%_EXT%\svx\framebordertype.hxx
+hedabu: ..\inc\framelink.hxx %_DEST%\inc%_EXT%\svx\framelink.hxx
+hedabu: ..\inc\framelinkarray.hxx %_DEST%\inc%_EXT%\svx\framelinkarray.hxx
 hedabu: ..\inc\frmsel.hxx %_DEST%\inc%_EXT%\svx\frmsel.hxx
 hedabu: ..\inc\fwdtitem.hxx %_DEST%\inc%_EXT%\svx\fwdtitem.hxx
 hedabu: ..\inc\gallery.hxx %_DEST%\inc%_EXT%\svx\gallery.hxx
@@ -170,7 +174,6 @@ hedabu: ..\inc\lgview3d.hxx %_DEST%\inc%_EXT%\svx\lgview3d.hxx
 hedabu: ..\inc\light3d.hxx %_DEST%\inc%_EXT%\svx\light3d.hxx
 #hedabu: ..\inc\lightdlg.hxx %_DEST%\inc%_EXT%\svx\lightdlg.hxx
 hedabu: ..\inc\linectrl.hxx %_DEST%\inc%_EXT%\svx\linectrl.hxx
-hedabu: ..\inc\linelink.hxx %_DEST%\inc%_EXT%\svx\linelink.hxx
 hedabu: ..\inc\lrspitem.hxx %_DEST%\inc%_EXT%\svx\lrspitem.hxx
 hedabu: ..\inc\lspcitem.hxx %_DEST%\inc%_EXT%\svx\lspcitem.hxx
 hedabu: ..\inc\matrix3d.hxx %_DEST%\inc%_EXT%\svx\matrix3d.hxx
@@ -183,7 +186,7 @@ hedabu: ..\inc\nlbkitem.hxx %_DEST%\inc%_EXT%\svx\nlbkitem.hxx
 #hedabu: ..\inc\numfmt.hxx %_DEST%\inc%_EXT%\svx\numfmt.hxx
 hedabu: ..\inc\numinf.hxx %_DEST%\inc%_EXT%\svx\numinf.hxx
 hedabu: ..\inc\numfmtsh.hxx %_DEST%\inc%_EXT%\svx\numfmtsh.hxx
-hedabu: ..\inc\nforient.hxx %_DEST%\inc%_EXT%\svx\nforient.hxx
+hedabu: ..\inc\wrapfield.hxx %_DEST%\inc%_EXT%\svx\wrapfield.hxx
 hedabu: ..\inc\obj3d.hxx %_DEST%\inc%_EXT%\svx\obj3d.hxx
 hedabu: ..\inc\objfac3d.hxx %_DEST%\inc%_EXT%\svx\objfac3d.hxx
 hedabu: ..\inc\opaqitem.hxx %_DEST%\inc%_EXT%\svx\opaqitem.hxx
@@ -420,7 +423,7 @@ hedabu: ..\inc\viewpt3d.hxx %_DEST%\inc%_EXT%\svx\viewpt3d.hxx
 hedabu: ..\inc\volmrk3d.hxx %_DEST%\inc%_EXT%\svx\volmrk3d.hxx
 hedabu: ..\inc\wghtitem.hxx %_DEST%\inc%_EXT%\svx\wghtitem.hxx
 hedabu: ..\inc\widwitem.hxx %_DEST%\inc%_EXT%\svx\widwitem.hxx
-hedabu: ..\inc\worient.hxx %_DEST%\inc%_EXT%\svx\worient.hxx
+hedabu: ..\inc\orienthelper.hxx %_DEST%\inc%_EXT%\svx\orienthelper.hxx
 hedabu: ..\inc\wrlmitem.hxx %_DEST%\inc%_EXT%\svx\wrlmitem.hxx
 hedabu: ..\inc\xbitmap.hxx %_DEST%\inc%_EXT%\svx\xbitmap.hxx
 hedabu: ..\inc\xbtmpit.hxx %_DEST%\inc%_EXT%\svx\xbtmpit.hxx
