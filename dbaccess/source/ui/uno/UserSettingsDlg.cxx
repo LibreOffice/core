@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserSettingsDlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:22:05 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ Reference<XPropertySetInfo>  SAL_CALL OUserSettingsDialog::getPropertySetInfo() 
 //------------------------------------------------------------------------------
 Dialog* OUserSettingsDialog::createDialog(Window* _pParent)
 {
-    OUserAdminDlg* pDlg = new OUserAdminDlg(_pParent, m_pDatasourceItems, m_xORB,m_aInitialSelection);
+    OUserAdminDlg* pDlg = new OUserAdminDlg(_pParent, m_pDatasourceItems, m_xORB,m_aInitialSelection,m_xActiveConnection);
     return pDlg;
 }
 
