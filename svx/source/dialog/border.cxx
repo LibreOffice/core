@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 09:31:05 $
+ *  last change: $Author: os $ $Date: 2001-01-15 09:02:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,13 +712,9 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
 
             if ( pBoxInfoItem->IsMinDist() )
             {
-                pDistDlg->aLeftMF.SetMin  ( nMinValue );
                 pDistDlg->aLeftMF.SetFirst( nMinValue );
-                pDistDlg->aRightMF.SetMin  ( nMinValue );
                 pDistDlg->aRightMF.SetFirst( nMinValue );
-                pDistDlg->aTopMF.SetMin  ( nMinValue );
                 pDistDlg->aTopMF.SetFirst( nMinValue );
-                pDistDlg->aBottomMF.SetMin  ( nMinValue );
                 pDistDlg->aBottomMF.SetFirst( nMinValue );
             }
 
@@ -1707,26 +1703,19 @@ IMPL_LINK( SvxBorderTabPage, LinesChanged_Impl, void*, EMPTYARG )
 
         if(bLineSet)
         {
-            if(bMinAllowed)
+            if(!bMinAllowed)
             {
-                if(!bSpaceModified)
-                {
-                    pDistDlg->aLeftMF  .SetValue(nMinValue);
-                    pDistDlg->aRightMF .SetValue(nMinValue);
-                    pDistDlg->aTopMF   .SetValue(nMinValue);
-                    pDistDlg->aBottomMF.SetValue(nMinValue);
-                }
-            }
-            else
-            {
-                pDistDlg->aLeftMF  .SetMin(nMinValue);
-                pDistDlg->aRightMF .SetMin(nMinValue);
-                pDistDlg->aTopMF   .SetMin(nMinValue);
-                pDistDlg->aBottomMF.SetMin(nMinValue);
                 pDistDlg->aLeftMF  .SetFirst(nMinValue);
                 pDistDlg->aRightMF .SetFirst(nMinValue);
                 pDistDlg->aTopMF   .SetFirst(nMinValue);
                 pDistDlg->aBottomMF.SetFirst(nMinValue);
+            }
+            if(!bSpaceModified)
+            {
+                pDistDlg->aLeftMF  .SetValue(nMinValue);
+                pDistDlg->aRightMF .SetValue(nMinValue);
+                pDistDlg->aTopMF   .SetValue(nMinValue);
+                pDistDlg->aBottomMF.SetValue(nMinValue);
             }
         }
         else
