@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-08 16:15:55 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1131,6 +1131,17 @@ namespace /* private */
         }
 
         /* Test wether the component specifies a device name what is not allowed */
+
+        // MT: PERFORMANCE:
+        // This is very expensive. A lot of calls to _tcsicmp.
+        // in SRC6870m71 67.000 calls of this method while empty office start result into more than 1.500.00 calls of _tcsicmp!
+        // Possible optimizations
+        // - Array should be const static
+        // - Sorted array, use binary search
+        // - More intelligent check for com1-9, lpt1-9
+        // Maybe make szComponent upper case, don't search case intensitive
+        // Talked to HRO: Could be removed. Shouldn't be used in OOo, and if used for something like a filename, it will lead to an error anyway.
+        /*
         if ( fValid )
         {
             LPCTSTR alpDeviceNames[] =
@@ -1165,7 +1176,7 @@ namespace /* private */
             LPCTSTR lpDot;
             int     i;
 
-            /* A device name with an extension is also invalid */
+            // A device name with an extension is also invalid
             lpDot = _tcschr( lpComponent, '.' );
 
             if ( !lpDot || lpDot > lpComponentEnd )
@@ -1185,18 +1196,19 @@ namespace /* private */
                     break;
                 }
             }
+        }
+        */
 
-            if ( fValid )
-            {
-                /* Empty components are not allowed */
-                if ( lpComponentEnd - lpComponent < 1 )
-                    fValid = FALSE;
+        if ( fValid )
+        {
+            // Empty components are not allowed
+            if ( lpComponentEnd - lpComponent < 1 )
+                fValid = FALSE;
 
-                /* If we reached the end of the string NULL is returned */
-                else if ( !*lpComponentEnd )
-                    lpComponentEnd = NULL;
+            // If we reached the end of the string NULL is returned
+            else if ( !*lpComponentEnd )
+                lpComponentEnd = NULL;
 
-            }
         }
 
         if ( lppComponentEnd )
