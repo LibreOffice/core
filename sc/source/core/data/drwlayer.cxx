@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:18:35 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #endif
 #include <sot/exchange.hxx>
 #include <svx/objfac3d.hxx>
+#include <svx/xtable.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdocapt.hxx>
@@ -99,9 +100,9 @@
 #include <svtools/pathoptions.hxx>
 #include <svtools/itempool.hxx>
 #include <vcl/virdev.hxx>
-#include <offmgr/app.hxx>
 #include <sch/schdll.hxx>
 #include <sch/memchrt.hxx>
+#include <vcl/svapp.hxx>
 
 #include "drwlayer.hxx"
 #include "drawpage.hxx"
@@ -281,11 +282,11 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
 
         // set color table
         SvxColorTableItem* pColItem = (SvxColorTableItem*) pObjSh->GetItem( ITEMID_COLOR_TABLE );
-        XColorTable* pXCol = pColItem ? pColItem->GetColorTable() : OFF_APP()->GetStdColorTable();
+        XColorTable* pXCol = pColItem ? pColItem->GetColorTable() : XColorTable::GetStdColorTable();
         SetColorTable( pXCol );
     }
     else
-        SetColorTable( OFF_APP()->GetStdColorTable() );
+        SetColorTable( XColorTable::GetStdColorTable() );
 
     SetSwapGraphics(TRUE);
 //  SetSwapAsynchron(TRUE);     // an der View
