@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-16 13:01:58 $
+ *  last change: $Author: dvo $ $Date: 2000-10-17 14:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,9 +702,9 @@ void XMLTextParagraphExport::exportSectionStart(
                                      sRegionName);
         }
 
-        SvXMLElementExport(GetExport(),
-                           XML_NAMESPACE_TEXT, sXML_section_source,
-                           sal_True, sal_True);
+        SvXMLElementExport aElem(GetExport(),
+                                 XML_NAMESPACE_TEXT, sXML_section_source,
+                                 sal_True, sal_True);
     }
     else
     {
