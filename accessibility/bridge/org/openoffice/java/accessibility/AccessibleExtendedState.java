@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleExtendedState.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:57:06 $
+ *  last change: $Author: rt $ $Date: 2004-11-02 14:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,25 @@
 
 package org.openoffice.java.accessibility;
 
-public class AccessibleExtendedState extends javax.accessibility.AccessibleState {
-    public static final AccessibleExtendedState MANAGES_DESCENDANTS = new AccessibleExtendedState("managesDescendants");
+import javax.accessibility.AccessibleState;
+
+public class AccessibleExtendedState extends AccessibleState {
+    public static final AccessibleState DEFUNCT;
+    public static final AccessibleState INDETERMINATE;
+    public static final AccessibleState MANAGES_DESCENDANTS;
+    public static final AccessibleState SENSITIVE;
+    public static final AccessibleState STALE;
+
+    static {
+        DEFUNCT = new AccessibleExtendedState("defunct");
+
+        // JAVA 1.5: will come with manages_descendants and indeterminate
+        INDETERMINATE = new AccessibleExtendedState("indeterminate");
+        MANAGES_DESCENDANTS = new AccessibleExtendedState("managesDescendants");
+
+        SENSITIVE = new AccessibleExtendedState("sensitive");
+        STALE = new AccessibleExtendedState("stale");
+    }
 
     protected AccessibleExtendedState(String key) {
         super(key);
