@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-07 11:21:57 $
+ *  last change: $Author: fme $ $Date: 2002-08-15 13:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1545,13 +1545,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         nEnvDir = pEnvPor ? ((SwBidiPortion*)pEnvPor)->GetLevel() % 2 : nFrmDir;
         nThisDir = ((SwBidiPortion&)rMulti).GetLevel() % 2;
     }
-
-    // only paint first level bidi portions
-    if( rMulti.Width() > 1 && ! pEnvPor )
-#else
-    if( rMulti.Width() > 1 )
 #endif
-        GetInfo().DrawViewOpt( rMulti, POR_FLD );
 
     if ( bRubyInGrid )
         rMulti.Height( nOldHeight );
