@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedsrc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-28 12:25:39 $
+ *  last change: $Author: thb $ $Date: 2002-03-07 15:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,12 +76,6 @@ SvxTextForwarder::~SvxTextForwarder()
 //------------------------------------------------------------------------
 
 SvxViewForwarder::~SvxViewForwarder()
-{
-}
-
-//------------------------------------------------------------------------
-
-SvxEditViewForwarder::~SvxEditViewForwarder()
 {
 }
 

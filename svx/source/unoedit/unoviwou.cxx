@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoviwou.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-25 16:29:45 $
+ *  last change: $Author: thb $ $Date: 2002-03-07 15:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,28 +86,35 @@ BOOL SvxDrawOutlinerViewForwarder::IsValid() const
 
 Rectangle SvxDrawOutlinerViewForwarder::GetVisArea() const
 {
-    return mrOutlinerView.GetVisArea();
+    OutputDevice* pOutDev = mrOutlinerView.GetWindow();
+
+    if( pOutDev )
+    {
+        return pOutDev->LogicToPixel( mrOutlinerView.GetVisArea() );
+    }
+
+    return Rectangle();
 }
 
-Point SvxDrawOutlinerViewForwarder::LogicToPixel( const Point& rPoint ) const
+Point SvxDrawOutlinerViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
 {
     OutputDevice* pOutDev = mrOutlinerView.GetWindow();
 
     if( pOutDev )
     {
-        return pOutDev->LogicToPixel( rPoint );
+        return pOutDev->LogicToPixel( rPoint, rMapMode );
     }
 
     return Point();
 }
 
-Point SvxDrawOutlinerViewForwarder::PixelToLogic( const Point& rPoint ) const
+Point SvxDrawOutlinerViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const
 {
     OutputDevice* pOutDev = mrOutlinerView.GetWindow();
 
     if( pOutDev )
     {
-        return pOutDev->PixelToLogic( rPoint );
+        return pOutDev->PixelToLogic( rPoint, rMapMode );
     }
 
     return Point();

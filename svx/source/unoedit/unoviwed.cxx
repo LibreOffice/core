@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoviwed.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-25 16:29:45 $
+ *  last change: $Author: thb $ $Date: 2002-03-07 15:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,28 +86,35 @@ BOOL SvxEditEngineViewForwarder::IsValid() const
 
 Rectangle SvxEditEngineViewForwarder::GetVisArea() const
 {
-    return mrView.GetVisArea();
+    OutputDevice* pOutDev = mrView.GetWindow();
+
+    if( pOutDev )
+    {
+        return pOutDev->LogicToPixel( mrView.GetVisArea() );
+    }
+
+    return Rectangle();
 }
 
-Point SvxEditEngineViewForwarder::LogicToPixel( const Point& rPoint ) const
+Point SvxEditEngineViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
 {
     OutputDevice* pOutDev = mrView.GetWindow();
 
     if( pOutDev )
     {
-        return pOutDev->LogicToPixel( rPoint );
+        return pOutDev->LogicToPixel( rPoint, rMapMode );
     }
 
     return Point();
 }
 
-Point SvxEditEngineViewForwarder::PixelToLogic( const Point& rPoint ) const
+Point SvxEditEngineViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const
 {
     OutputDevice* pOutDev = mrView.GetWindow();
 
     if( pOutDev )
     {
-        return pOutDev->PixelToLogic( rPoint );
+        return pOutDev->PixelToLogic( rPoint, rMapMode );
     }
 
     return Point();

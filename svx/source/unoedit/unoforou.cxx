@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2002-03-04 18:32:38 $
+ *  last change: $Author: thb $ $Date: 2002-03-07 15:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,6 +323,11 @@ Rectangle SvxOutlinerForwarder::GetParaBounds( USHORT nPara ) const
     Size aSize = rOutliner.CalcTextSize();
 
     return Rectangle( aPnt.X(), aPnt.Y(), aSize.Width(), nHeight );
+}
+
+MapMode SvxOutlinerForwarder::GetMapMode() const
+{
+    return rOutliner.GetRefMapMode();
 }
 
 sal_Bool SvxOutlinerForwarder::GetIndexAtPoint( const Point& rPos, USHORT& nPara, USHORT& nIndex ) const

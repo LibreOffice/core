@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: thb $ $Date: 2002-03-04 18:31:55 $
+ *  last change: $Author: thb $ $Date: 2002-03-07 15:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,8 +208,8 @@ public:
     BOOL                    IsValid() const;
 
     Rectangle               GetVisArea() const;
-    Point                   LogicToPixel( const Point& ) const;
-    Point                   PixelToLogic( const Point& ) const;
+    Point                   LogicToPixel( const Point&, const MapMode& rMapMode ) const;
+    Point                   PixelToLogic( const Point&, const MapMode& rMapMode ) const;
 
     DECL_LINK( NotifyHdl, EENotify* );
 
@@ -726,28 +726,28 @@ Rectangle SvxTextEditSourceImpl::GetVisArea() const
             pTextObj->TakeTextAnchorRect( aAnchorRect );
             aVisArea.Move( -aAnchorRect.Left(), -aAnchorRect.Top() );
 
-            return aVisArea;
+            return mpWindow->LogicToPixel( aVisArea );
         }
     }
 
     return Rectangle();
 }
 
-Point SvxTextEditSourceImpl::LogicToPixel( const Point& rPoint ) const
+Point SvxTextEditSourceImpl::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
 {
     if( IsValid() )
     {
-        return mpWindow->LogicToPixel( rPoint );
+        return mpWindow->LogicToPixel( rPoint, rMapMode );
     }
 
     return Point();
 }
 
-Point SvxTextEditSourceImpl::PixelToLogic( const Point& rPoint ) const
+Point SvxTextEditSourceImpl::PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const
 {
     if( IsValid() )
     {
-        return mpWindow->PixelToLogic( rPoint );
+        return mpWindow->PixelToLogic( rPoint, rMapMode );
     }
 
     return Point();
@@ -856,14 +856,14 @@ Rectangle SvxTextEditSource::GetVisArea() const
     return mpImpl->GetVisArea();
 }
 
-Point SvxTextEditSource::LogicToPixel( const Point& rPoint ) const
+Point SvxTextEditSource::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
 {
-    return mpImpl->LogicToPixel( rPoint );
+    return mpImpl->LogicToPixel( rPoint, rMapMode );
 }
 
-Point SvxTextEditSource::PixelToLogic( const Point& rPoint ) const
+Point SvxTextEditSource::PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const
 {
-    return mpImpl->PixelToLogic( rPoint );
+    return mpImpl->PixelToLogic( rPoint, rMapMode );
 }
 
 /** this method returns true if the outliner para object of the given shape has

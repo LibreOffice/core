@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: thb $ $Date: 2002-03-04 18:32:38 $
+ *  last change: $Author: thb $ $Date: 2002-03-07 15:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,6 +352,11 @@ Rectangle SvxEditEngineForwarder::GetParaBounds( USHORT nPara ) const
     const ULONG nHeight = rEditEngine.GetTextHeight( nPara );
 
     return Rectangle( aPnt.X(), aPnt.Y(), nWidth, nHeight );
+}
+
+MapMode SvxEditEngineForwarder::GetMapMode() const
+{
+    return rEditEngine.GetRefMapMode();
 }
 
 sal_Bool SvxEditEngineForwarder::GetIndexAtPoint( const Point& rPos, USHORT& nPara, USHORT& nIndex ) const
