@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-22 14:53:27 $
+ *  last change: $Author: dbo $ $Date: 2001-05-15 11:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 #include <osl/diagnose.h>
 #endif
 
+#include <rtl/strbuf.hxx>
+
 #ifndef _BRIDGES_CPP_UNO_BRIDGE_HXX_
 #include <bridges/cpp_uno/bridge.hxx>
 #endif
@@ -134,17 +136,20 @@ static OString toUNOname( const OString & rRTTIname )
 //==================================================================================================
 static OString toRTTIname( const OString & rUNOname )
 {
-    OString aRet;
+    OStringBuffer ret( 64 );
 
-    int nTokens = rUNOname.getTokenCount( '.' );
-    for( int i = 0; i < nTokens; i++ )
+    sal_Int32 nIndex = 0;
+    do
     {
-        if( i > 0 )
-            aRet += "::";
-        aRet += rUNOname.getToken( i, '.' );
+        if (nIndex > 0)
+        {
+            ret.append( RTL_CONSTASCII_STRINGPARAM("::") );
+        }
+        ret.append( rUNOname.getToken( 0, '.', nIndex ) );
     }
+    while (nIndex >= 0);
 
-    return aRet;
+    return ret.makeStringAndClear();
 }
 //==================================================================================================
 
@@ -176,11 +181,22 @@ static OString toRTTIsymbolname( const OString & rRTTIname )
     OString aRet;
     OString aPrefix;
 
-    int nUnoTokens = rRTTIname.getTokenCount( ':' );
-    int nAdjust = 0;
-    for( int i = 0; i < nUnoTokens; i++ )
+    int nUnoTokens = 1;
+    sal_Int32 nIndex = 0;
+    for ( ; nIndex < rRTTIname.getLength(); ++nIndex )
     {
-        OString aToken( rRTTIname.getToken( i, ':' ) );
+        if (rRTTIname[ nIndex ] == ':')
+        {
+            ++nUnoTokens;
+        }
+    }
+
+    int nAdjust = 0;
+    int i = 0;
+    nIndex = 0;
+    do
+    {
+        OString aToken( rRTTIname.getToken( 0, ':', nIndex ) );
         int nBytes = aToken.getLength();
         if( nBytes )
         {
@@ -222,7 +238,11 @@ static OString toRTTIsymbolname( const OString & rRTTIname )
                 aPrefix += adD;
             }
         }
+
+        ++i; // token count
     }
+    while (nIndex >= 0);
+
     aRet += '_';
 
     if( aPrefix.getLength() )
