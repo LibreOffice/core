@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:29:18 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,6 +569,11 @@ SfxFrame* SfxFrame::SearchFrame( const String& rName, SfxMedium* pMedium )
 sal_Bool SfxFrame::IsClosing_Impl() const
 {
     return pImp->bClosing;
+}
+
+void SfxFrame::SetIsClosing_Impl()
+{
+    pImp->bClosing = TRUE;
 }
 
 void SfxFrame::DocumentInserted( SfxObjectShell* pDoc )
