@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 14:02:47 $
+ *  last change: $Author: fs $ $Date: 2001-05-31 14:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,7 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
 // -------------------------------------------------------------------------
 OResultSet::~OResultSet()
 {
+    delete m_pSQLAnalyzer;
 }
 // -------------------------------------------------------------------------
 void OResultSet::construct()
