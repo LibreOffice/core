@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:58:26 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 03:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,13 +339,13 @@ Window RID_SCDLG_NAVIGATOR
     };
     ImageList IL_CMD
     {
-        ImageBitmap = Bitmap { File = "na_vipi.bmp" ; };
+        Prefix = "na";
         MaskColor = STD_MASKCOLOR ;
         SC_NAVI_CMD_IDLIST
     };
     ImageList ILH_CMD
     {
-        ImageBitmap = Bitmap { File = "nah_vipi.bmp" ; };
+        Prefix = "nah";
         MaskColor = SC_HC_MASKCOLOR ;
         SC_NAVI_CMD_IDLIST
     };
@@ -951,13 +951,13 @@ Window RID_SCDLG_NAVIGATOR
 
 ImageList RID_IMAGELIST_NAVCONT
 {
-    ImageBitmap = Bitmap { File = "nc_ont.bmp" ; };
+    Prefix = "nc";
     MaskColor = STD_MASKCOLOR ;
     SC_NAVI_CONT_IDLIST
 };
 ImageList RID_IMAGELIST_H_NAVCONT
 {
-    ImageBitmap = Bitmap { File = "nch_ont.bmp" ; };
+    Prefix = "nch";
     MaskColor = SC_HC_MASKCOLOR ;
     SC_NAVI_CONT_IDLIST
 };
