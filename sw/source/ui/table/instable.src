@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hjs $ $Date: 2001-06-29 02:22:44 $
+ *  last change: $Author: vg $ $Date: 2001-07-14 20:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ chinese_traditional ] = "Äæ(~C)";
         Text[ arabic ] = "ÃÚãÏÉ";
         Text[ greek ] = "ÓôÞëåò";
-        Text[ korean ] = "´Ü(~C)";
+        Text[ korean ] = "¿­(~C)";
         Text[ turkish ] = "~Sütun";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Columnas";
@@ -229,7 +229,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ polish ] = "Rozmiar tabeli";
         Text[ portuguese_brazilian ] = "Size";
         Text[ japanese ] = "•\\‚Ì»²½Þ";
-        Text[ korean ] = "Size";
+        Text[ korean ] = "Å©±â";
         Text[ chinese_simplified ] = "±í¸ñµÄ´óÐ¡";
         Text[ chinese_traditional ] = "ªí®æ¤j¤p";
         Text[ turkish ] = "Size";
@@ -288,7 +288,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ chinese_traditional ] = "¦b¨C­¶¤W­«½ÆÅã¥Ü(~P)";
         Text[ arabic ] = "ÊßÑÇÑ Ýí ßá ÕÝÍÉ";
         Text[ greek ] = "ÅðáíÜëç~øç óå êÜèå óåëßäá";
-        Text[ korean ] = "¸ðµç¡¡ÂÊ¿¡¼­¡¡¹Ýº¹(~P)";
+        Text[ korean ] = "¸ðµç ÂÊ¿¡¼­ ¹Ýº¹(~P)";
         Text[ turkish ] = "Ýlk satýrý her sayfada yi~nele";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Repetir en cada página";
@@ -441,6 +441,7 @@ ModalDialog DLG_INSERT_TABLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar tabla";
 };
+
 
 
 
