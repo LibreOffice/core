@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 18:10:21 $
+ *  last change: $Author: er $ $Date: 2001-04-23 18:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -753,16 +753,50 @@ void ScInterpreter::ScOr()
 }
 
 
+void ScInterpreter::ScNeg()
+{
+    MatrixDoubleRefToMatrix();
+    switch ( GetStackType() )
+    {
+        case svMatrix :
+        {
+            USHORT nMatInd;
+            ScMatrix* pMat = GetMatrix( nMatInd );
+            if ( pMat )
+            {
+                USHORT nC, nR;
+                pMat->GetDimensions( nC, nR );
+                USHORT nResMat;
+                ScMatrix* pResMat = GetNewMat( nC, nR, nResMat );
+                if ( !pResMat )
+                    SetNoValue();
+                else
+                {
+                    ULONG nCount = nC * nR;
+                    for ( ULONG j=0; j<nCount; ++j )
+                    {
+                        if ( !pMat->IsString(j) )
+                            pResMat->PutDouble( -pMat->GetDouble(j), j );
+                        else
+                            pResMat->PutString(
+                                ScGlobal::GetRscString( STR_NO_VALUE ), j );
+                    }
+                    nRetMat = nResMat;
+                    PushMatrix( pResMat );
+                }
+            }
+        }
+        break;
+        default:
+            PushDouble( -GetDouble() );
+    }
+}
+
+
 void ScInterpreter::ScNot()
 {
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     PushInt( GetDouble() == 0.0 );
-}
-
-
-void ScInterpreter::ScNeg()
-{
-    PushDouble(-GetDouble());
 }
 
 
