@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabres.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:57:45 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,48 @@ BOOL ScDPColMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) con
         pDataMember2 = NULL;
 
     return lcl_IsLess( pDataMember1, pDataMember2, nMeasure, bAscending );
+}
+
+// -----------------------------------------------------------------------
+
+ScDPInitState::ScDPInitState() :
+    nCount( 0 )
+{
+    pIndex = new long[SC_DAPI_MAXFIELDS];
+    pData = new ScDPItemData[SC_DAPI_MAXFIELDS];
+}
+
+ScDPInitState::~ScDPInitState()
+{
+    delete[] pIndex;
+    delete[] pData;
+}
+
+void ScDPInitState::AddMember( long nSourceIndex, const ScDPItemData& rName )
+{
+    DBG_ASSERT( nCount < SC_DAPI_MAXFIELDS, "too many InitState members" )
+    if ( nCount < SC_DAPI_MAXFIELDS )
+    {
+        pIndex[nCount] = nSourceIndex;
+        pData[nCount] = rName;
+        ++nCount;
+    }
+}
+
+void ScDPInitState::RemoveMember()
+{
+    DBG_ASSERT( nCount > 0, "RemoveColIndex without index" )
+    if ( nCount > 0 )
+        --nCount;
+}
+
+const ScDPItemData* ScDPInitState::GetNameForIndex( long nIndexValue ) const
+{
+    for (long i=0; i<nCount; i++)
+        if ( pIndex[i] == nIndexValue )
+            return &pData[i];
+
+    return NULL;    // not found
 }
 
 // -----------------------------------------------------------------------
@@ -849,6 +891,33 @@ String ScDPResultData::GetMeasureDimensionName(long nMeasure) const
     return pSource->GetDataDimName( nMeasure );
 }
 
+BOOL ScDPResultData::IsBaseForGroup( long nDim ) const
+{
+    return pSource->GetData()->IsBaseForGroup( nDim );
+}
+
+long ScDPResultData::GetGroupBase( long nGroupDim ) const
+{
+    return pSource->GetData()->GetGroupBase( nGroupDim );
+}
+
+BOOL ScDPResultData::IsNumOrDateGroup( long nDim ) const
+{
+    return pSource->GetData()->IsNumOrDateGroup( nDim );
+}
+
+BOOL ScDPResultData::IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
+                                const ScDPItemData& rBaseData, long nBaseIndex ) const
+{
+    return pSource->GetData()->IsInGroup( rGroupData, nGroupIndex, rBaseData, nBaseIndex );
+}
+
+BOOL ScDPResultData::HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
+                                       const ScDPItemData& rSecondData, long nSecondIndex ) const
+{
+    return pSource->GetData()->HasCommonElement( rFirstData, nFirstIndex, rSecondData, nSecondIndex );
+}
+
 // -----------------------------------------------------------------------
 
 
@@ -884,6 +953,14 @@ String ScDPResultMember::GetName() const
         return ScGlobal::GetRscString(STR_PIVOT_TOTAL);         // root member
 }
 
+void ScDPResultMember::FillItemData( ScDPItemData& rData ) const
+{
+    if (pMemberDesc)
+        pMemberDesc->FillItemData( rData );
+    else
+        rData.SetString( ScGlobal::GetRscString(STR_PIVOT_TOTAL) );     // root member
+}
+
 BOOL ScDPResultMember::IsNamedItem( const ScDPItemData& r ) const
 {
     //! store ScDPMember pointer instead of ScDPMember ???
@@ -893,7 +970,7 @@ BOOL ScDPResultMember::IsNamedItem( const ScDPItemData& r ) const
     return FALSE;
 }
 
-void ScDPResultMember::InitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev )
+void ScDPResultMember::InitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, ScDPInitState& rInitState )
 {
     //  with LateInit, initialize only those members that have data
     if ( pResultData->IsLateInit() )
@@ -912,11 +989,12 @@ void ScDPResultMember::InitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev )
     if ( *ppDim )
     {
         pChildDimension = new ScDPResultDimension( pResultData );
-        pChildDimension->InitFrom( ppDim, ppLev );
+        pChildDimension->InitFrom( ppDim, ppLev, rInitState );
     }
 }
 
-void ScDPResultMember::LateInitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, ScDPItemData* pItemData )
+void ScDPResultMember::LateInitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, ScDPItemData* pItemData,
+                                    ScDPInitState& rInitState )
 {
     //  without LateInit, everything has already been initialized
     if ( !pResultData->IsLateInit() )
@@ -937,7 +1015,7 @@ void ScDPResultMember::LateInitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, S
         //  LateInitFrom is called several times...
         if ( !pChildDimension )
             pChildDimension = new ScDPResultDimension( pResultData );
-        pChildDimension->LateInitFrom( ppDim, ppLev, pItemData );
+        pChildDimension->LateInitFrom( ppDim, ppLev, pItemData, rInitState );
     }
 }
 
@@ -1109,17 +1187,37 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
     sheet::MemberResult* pArray = pSequences->getArray();
     DBG_ASSERT( rPos+nSize <= pSequences->getLength(), "bumm" );
 
+    BOOL bIsNumeric = FALSE;
     String aName;
     if ( pMemberName )          // if pMemberName != NULL, use instead of real member name
         aName = *pMemberName;
     else
-        aName = GetName();
+    {
+        ScDPItemData aItemData;
+        FillItemData( aItemData );
+        aName = aItemData.aString;
+        bIsNumeric = aItemData.bHasValue;
+    }
+
+    if ( bIsNumeric && pParentDim && pResultData->IsNumOrDateGroup( pParentDim->GetDimension() ) )
+    {
+        // Numeric group dimensions use numeric entries for proper sorting,
+        // but the group titles must be output as text.
+        bIsNumeric = FALSE;
+    }
 
     String aCaption = aName;
     if ( pMemberCaption )                   // use pMemberCaption if != NULL
         aCaption = *pMemberCaption;
     if (!aCaption.Len())
         aCaption = ScGlobal::GetRscString(STR_EMPTYDATA);
+
+    if ( !bIsNumeric )
+    {
+        // add a "'" character so a string isn't parsed as value in the output cell
+        //! have a separate bit in Flags (MemberResultFlags) instead?
+        aCaption.Insert( (sal_Unicode) '\'', 0 );
+    }
 
     if ( nSize && !bRoot )                  // root is overwritten by first dimension
     {
@@ -2310,8 +2408,96 @@ void ScDPDataMember::DumpState( const ScDPResultMember* pRefMember, ScDocument* 
 
 // -----------------------------------------------------------------------
 
+//  Helper class to select the members to include in
+//  ScDPResultDimension::InitFrom or LateInitFrom if groups are used
+
+class ScDPGroupCompare
+{
+private:
+    ScDPResultData*      pResultData;
+    const ScDPInitState& rInitState;
+    long                 nDimSource;
+    BOOL                 bIncludeAll;
+    BOOL                 bIsBase;
+    long                 nGroupBase;
+    const ScDPItemData*  pBaseData;
+
+public:
+            ScDPGroupCompare( ScDPResultData* pData, const ScDPInitState& rState, long nDimension );
+            ~ScDPGroupCompare() {}
+
+    BOOL    IsIncluded( const ScDPMember& rMember )     { return bIncludeAll || TestIncluded( rMember ); }
+    BOOL    TestIncluded( const ScDPMember& rMember );
+};
+
+ScDPGroupCompare::ScDPGroupCompare( ScDPResultData* pData, const ScDPInitState& rState, long nDimension ) :
+    pResultData( pData ),
+    rInitState( rState ),
+    nDimSource( nDimension ),
+    pBaseData( NULL )
+{
+    bIsBase = pResultData->IsBaseForGroup( nDimSource );
+    nGroupBase = pResultData->GetGroupBase( nDimSource );      //! get together in one call?
+    if ( nGroupBase >= 0 )
+        pBaseData = rInitState.GetNameForIndex( nGroupBase );
+
+    // if bIncludeAll is set, TestIncluded doesn't need to be called
+    bIncludeAll = !( bIsBase || nGroupBase >= 0 );
+}
+
+BOOL ScDPGroupCompare::TestIncluded( const ScDPMember& rMember )
+{
+    BOOL bInclude = TRUE;
+    if ( pBaseData )
+    {
+        ScDPItemData aMemberData;
+        rMember.FillItemData( aMemberData );
+        bInclude = pResultData->IsInGroup( aMemberData, nDimSource, *pBaseData, nGroupBase );
+    }
+    else if ( bIsBase )
+    {
+        // need to check all previous groups
+        //! get array of groups (or indexes) before loop?
+        ScDPItemData aMemberData;
+        rMember.FillItemData( aMemberData );
+        long nInitCount = rInitState.GetCount();
+        const long* pInitSource = rInitState.GetSource();
+        const ScDPItemData* pInitNames = rInitState.GetNames();
+        for (long nInitPos=0; nInitPos<nInitCount && bInclude; nInitPos++)
+            if ( pResultData->GetGroupBase( pInitSource[nInitPos] ) == nDimSource )
+            {
+                bInclude = pResultData->IsInGroup( pInitNames[nInitPos], pInitSource[nInitPos],
+                                                    aMemberData, nDimSource );
+            }
+    }
+    else if ( nGroupBase >= 0 )
+    {
+        // base isn't used in preceding fields
+        // -> look for other groups using the same base
+
+        //! get array of groups (or indexes) before loop?
+        ScDPItemData aMemberData;
+        rMember.FillItemData( aMemberData );
+        long nInitCount = rInitState.GetCount();
+        const long* pInitSource = rInitState.GetSource();
+        const ScDPItemData* pInitNames = rInitState.GetNames();
+        for (long nInitPos=0; nInitPos<nInitCount && bInclude; nInitPos++)
+            if ( pResultData->GetGroupBase( pInitSource[nInitPos] ) == nGroupBase )
+            {
+                // same base (hierarchy between the two groups is irrelevant)
+                bInclude = pResultData->HasCommonElement( pInitNames[nInitPos], pInitSource[nInitPos],
+                                                        aMemberData, nDimSource );
+            }
+    }
+
+    return bInclude;
+}
+
+// -----------------------------------------------------------------------
+
 ScDPResultDimension::ScDPResultDimension( ScDPResultData* pData ) :
     pResultData( pData ),
+    bInitialized( FALSE ),
     bIsDataLayout( FALSE ),
     bSortByData( FALSE ),
     bSortAscending( FALSE ),
@@ -2327,7 +2513,7 @@ ScDPResultDimension::~ScDPResultDimension()
 {
 }
 
-void ScDPResultDimension::InitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev )
+void ScDPResultDimension::InitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, ScDPInitState& rInitState )
 {
     ScDPDimension* pThisDim = *ppDim;
     ScDPLevel* pThisLevel = *ppLev;
@@ -2359,6 +2545,9 @@ void ScDPResultDimension::InitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev )
         // global order is used to initialize aMembers, so it doesn't have to be looked at later
         const ScMemberSortOrder& rGlobalOrder = pThisLevel->GetGlobalOrder();
 
+        long nDimSource = pThisDim->GetDimension();     //! check GetSourceDim?
+        ScDPGroupCompare aCompare( pResultData, rInitState, nDimSource );
+
         ScDPMembers* pMembers = pThisLevel->GetMembersObject();
         long nMembCount = pMembers->getCount();
         for ( long i=0; i<nMembCount; i++ )
@@ -2366,16 +2555,25 @@ void ScDPResultDimension::InitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev )
             long nSorted = rGlobalOrder.empty() ? i : rGlobalOrder[i];
 
             ScDPMember* pMember = pMembers->getByIndex(nSorted);
-            ScDPResultMember* pNew = new ScDPResultMember( pResultData, pThisDim,
-                                            pThisLevel, pMember, FALSE );
-            aMembers.Insert( pNew, aMembers.Count() );
+            if ( aCompare.IsIncluded( *pMember ) )
+            {
+                ScDPResultMember* pNew = new ScDPResultMember( pResultData, pThisDim,
+                                                pThisLevel, pMember, FALSE );
+                aMembers.Insert( pNew, aMembers.Count() );
 
-            pNew->InitFrom( ppChildDim, ppChildLev );
+                ScDPItemData aMemberData;
+                pMember->FillItemData( aMemberData );
+                rInitState.AddMember( nDimSource, ScDPItemData( aMemberData ) );
+                pNew->InitFrom( ppChildDim, ppChildLev, rInitState );
+                rInitState.RemoveMember();
+            }
         }
     }
+    bInitialized = TRUE;
 }
 
-void ScDPResultDimension::LateInitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, ScDPItemData* pItemData )
+void ScDPResultDimension::LateInitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, ScDPItemData* pItemData,
+                                        ScDPInitState& rInitState )
 {
     ScDPDimension* pThisDim = *ppDim;
     ScDPLevel* pThisLevel = *ppLev;
@@ -2386,7 +2584,9 @@ void ScDPResultDimension::LateInitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev
         ScDPLevel** ppChildLev = ppLev + 1;
         ScDPItemData* pChildData = pItemData + 1;
 
-        if ( aMembers.Count() == 0 )
+        long nDimSource = pThisDim->GetDimension();     //! check GetSourceDim?
+
+        if ( !bInitialized )
         {
             //  create all members at the first call (preserve order)
 
@@ -2413,6 +2613,8 @@ void ScDPResultDimension::LateInitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev
             // global order is used to initialize aMembers, so it doesn't have to be looked at later
             const ScMemberSortOrder& rGlobalOrder = pThisLevel->GetGlobalOrder();
 
+            ScDPGroupCompare aCompare( pResultData, rInitState, nDimSource );
+
             ScDPMembers* pMembers = pThisLevel->GetMembersObject();
             long nMembCount = pMembers->getCount();
             for ( long i=0; i<nMembCount; i++ )
@@ -2420,10 +2622,14 @@ void ScDPResultDimension::LateInitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev
                 long nSorted = rGlobalOrder.empty() ? i : rGlobalOrder[i];
 
                 ScDPMember* pMember = pMembers->getByIndex(nSorted);
-                ScDPResultMember* pNew = new ScDPResultMember( pResultData, pThisDim,
-                                                pThisLevel, pMember, FALSE );
-                aMembers.Insert( pNew, aMembers.Count() );
+                if ( aCompare.IsIncluded( *pMember ) )
+                {
+                    ScDPResultMember* pNew = new ScDPResultMember( pResultData, pThisDim,
+                                                    pThisLevel, pMember, FALSE );
+                    aMembers.Insert( pNew, aMembers.Count() );
+                }
             }
+            bInitialized = TRUE;    // don't call again, even if no members were included
         }
 
         //  initialize only specific member (or all if "show empty" flag is set)
@@ -2435,7 +2641,12 @@ void ScDPResultDimension::LateInitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev
             ScDPResultMember* pResultMember = aMembers[(USHORT)i];
             if ( bIsDataLayout || bShowEmpty || pResultMember->IsNamedItem( rThisData ) )
             {
-                pResultMember->LateInitFrom( ppChildDim, ppChildLev, pChildData );
+                ScDPItemData aMemberData;
+                pResultMember->FillItemData( aMemberData );
+                rInitState.AddMember( nDimSource, aMemberData );
+                pResultMember->LateInitFrom( ppChildDim, ppChildLev, pChildData, rInitState );
+                rInitState.RemoveMember();
+
                 if ( !bIsDataLayout && !bShowEmpty )
                     break;
             }
