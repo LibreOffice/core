@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-14 10:34:17 $
+ *  last change: $Author: mba $ $Date: 2001-09-19 09:27:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,7 +436,7 @@ sal_Bool CommandThread_Impl::DoIt()
     catch ( UnsupportedDataSinkException& )
     {
         bException = true;
-        m_xLockBytes->SetError( ERRCODE_IO_ACCESSDENIED );
+        m_xLockBytes->SetError( ERRCODE_IO_NOTSUPPORTED );
     }
     catch ( Exception )
     {
