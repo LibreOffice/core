@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCStylesContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
+ *  last change: $Author: hr $ $Date: 2000-11-07 11:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ class XMLIndexTOCStylesContext : public SvXMLImportContext
         ::com::sun::star::beans::XPropertySet> & rTOCPropertySet;
 
     /// style names for this level
-    ::std::vector<::rtl::OUString> aStyleNames;
+    ::std::vector< ::rtl::OUString > aStyleNames;
 
     /// outline level
     sal_Int32 nOutlineLevel;
