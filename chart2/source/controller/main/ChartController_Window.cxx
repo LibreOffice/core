@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:36:01 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@
 #ifndef _E3D_SCENE3D_HXX
 #include <svx/scene3d.hxx>
 #endif
-// header for class ExtOutputDevice
+// header for class XOutputDevice
 #ifndef _XOUTX_HXX
 #include <svx/xoutx.hxx>
 #endif
@@ -439,11 +439,11 @@ public:
     virtual FASTBOOL End(FASTBOOL bCopy);
 
     virtual Pointer GetPointer() const;
-    virtual void DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const;
+    virtual void DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const;
 
     /*
     virtual void Brk();
-    virtual void DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const;
+    virtual void DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const;
     E3dView& Get3DView()  { return (E3dView&)rView;  }
 
     DECL_LINK(TimerInterruptHdl, void*);
@@ -492,7 +492,10 @@ RotateDiagramDragMethod::RotateDiagramDragMethod( DrawViewWrapper& rDrawViewWrap
         if(pObj->ISA(E3dObject))
         {
             E3dObject* pE3dObject = (E3dObject*)pObj;
-            pE3dObject->CreateWireframe(m_aWireframePoly, NULL, E3DDETAIL_DEFAULT ); //E3DDETAIL_ONEBOX, E3DDETAIL_ALLBOXES, E3DDETAIL_ALLLINES
+
+//BFS03         pE3dObject->CreateWireframe(m_aWireframePoly, NULL, E3DDETAIL_DEFAULT ); //E3DDETAIL_ONEBOX, E3DDETAIL_ALLBOXES, E3DDETAIL_ALLLINES
+            pE3dObject->CreateWireframe(m_aWireframePoly, NULL );
+
             m_pScene = pE3dObject->GetScene();
 
             //get pure rotation matrix
@@ -569,7 +572,7 @@ Pointer RotateDiagramDragMethod::GetPointer() const
 {
     return Pointer();
 }
-void RotateDiagramDragMethod::DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const
+void RotateDiagramDragMethod::DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const
 {
     //rXOut.SetOffset(pPV->GetOffset());
     UINT16 nPntCnt = m_aWireframePoly.GetPointCount();
