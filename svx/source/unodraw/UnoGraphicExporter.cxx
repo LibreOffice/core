@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2002-06-21 14:13:33 $
+ *  last change: $Author: sj $ $Date: 2002-07-16 11:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,9 +410,10 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     if( NULL == mpUnoPage )
         return sal_False;
 
-    GraphicFilter*      pFilter = GetGrfFilter();
-    SdrPage*            pPage = mpUnoPage->GetSdrPage();
-    SdrModel*           pDoc = pPage->GetModel();
+    GraphicFilter*              pFilter = GetGrfFilter();
+    SdrPage*                    pPage = mpUnoPage->GetSdrPage();
+    SdrModel*                   pDoc = pPage->GetModel();
+    Sequence< PropertyValue >   aFilterData;
 
     sal_Int32 nWidth = 0;
     sal_Int32 nHeight = 0;
@@ -458,7 +459,10 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             {
                 pValues->Value >>= bExportOnlyBackground;
             }
-
+            else if ( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterData" ) ) )
+            {
+                pValues->Value >>= aFilterData;
+            }
             pValues++;
         }
     }
@@ -721,7 +725,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     INetURLObject aURLObject( aURL.Complete );
     DBG_ASSERT( aURLObject.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-    return 0 == XOutBitmap::ExportGraphic( aGraphic, aURLObject, *pFilter, nFilter, FALSE, &aDescriptor );
+    return 0 == XOutBitmap::ExportGraphic( aGraphic, aURLObject, *pFilter, nFilter, FALSE, &aFilterData );
 }
 
 void SAL_CALL GraphicExporter::cancel()
