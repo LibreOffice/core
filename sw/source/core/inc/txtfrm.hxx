@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-29 09:57:40 $
+ *  last change: $Author: fme $ $Date: 2002-05-28 12:00:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,17 +504,17 @@ public:
 
 #ifdef BIDI
     // Calculates the coordinates of a rectangle when switching from
-    // RTL to LTR layout
-    void SwitchRTLtoLTR( SwRect& rRect ) const;
-    // Calculates the coordinates of a rectangle when switching from
     // LTR to RTL layout
     void SwitchLTRtoRTL( SwRect& rRect ) const;
     // Calculates the coordinates of a point when switching from
     // LTR to RTL layout.
     void SwitchLTRtoRTL( Point& rPoint ) const;
+    // Calculates the coordinates of a rectangle when switching from
+    // RTL to LTR layout
+    inline void SwitchRTLtoLTR( SwRect& rRect ) const { SwitchLTRtoRTL( rRect ); }
     // Calculates the coordinates of a point when switching from
     // RTL to LTR layout.
-    void SwitchRTLtoLTR( Point& rPoint ) const;
+    inline void SwitchRTLtoLTR( Point& rPoint ) const { SwitchLTRtoRTL( rPoint ); };
 
 #endif
 

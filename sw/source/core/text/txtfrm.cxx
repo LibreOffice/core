@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-16 10:34:43 $
+ *  last change: $Author: fme $ $Date: 2002-05-28 12:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,30 +364,18 @@ SwFrmSwapper::~SwFrmSwapper()
 #endif
 
 #ifdef BIDI
-void SwTxtFrm::SwitchRTLtoLTR( SwRect& rRect ) const
-{
-    long nWidth = rRect.Width();
-    rRect.Left( Frm().Left() + Frm().Right() - rRect.Right() );
-    rRect.Width( nWidth );
-}
 
 void SwTxtFrm::SwitchLTRtoRTL( SwRect& rRect ) const
 {
     long nWidth = rRect.Width();
-    rRect.Left( 2 * Frm().Left() + Frm().Width() - rRect.Left() - rRect.Width() );
+    rRect.Left( 2 * ( Frm().Left() + Prt().Left() ) + Prt().Width() - rRect.Right() );
     rRect.Width( nWidth );
 }
 
 void SwTxtFrm::SwitchLTRtoRTL( Point& rPoint ) const
 {
-    rPoint.X() = 2 * Frm().Left() + Frm().Width() - rPoint.X();
+    rPoint.X() = 2 * ( Frm().Left() + Prt().Left() ) + Prt().Width() - rPoint.X();
 }
-
-void SwTxtFrm::SwitchRTLtoLTR( Point& rPoint ) const
-{
-    rPoint.X() = 2 * Frm().Left() + Frm().Width() - rPoint.X();
-}
-
 
 SwLayoutModeModifier::SwLayoutModeModifier( const OutputDevice& rOutp ) :
         rOut( rOutp ), nOldLayoutMode( rOutp.GetLayoutMode() )
