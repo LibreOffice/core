@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:37:57 $
+#   last change: $Author: hr $ $Date: 2004-02-03 19:04:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,7 @@ CDEFS+=-DEDITDEBUG
 .IF "$(header)" == ""
 
 SLOFILES =	\
+            $(SLO)$/acorrcfg.obj \
             $(SLO)$/txtrange.obj \
             $(SLO)$/svxacorr.obj \
             $(SLO)$/SvXMLAutoCorrectImport.obj \
