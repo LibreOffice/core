@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-13 15:31:24 $
+ *  last change: $Author: dr $ $Date: 2001-05-04 09:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1447,27 +1447,23 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, BYTE nAnz )
 
     if( nAnz > 0 )
     {
-        INT16 nNull = -1;   // gibt einen auszulassenden Parameter an
-            // ACHTUNG: 0 ist der letzte Parameter, nAnz-1 der erste
+        // attention: 0 = last parameter, nAnz-1 = first parameter
+        INT16 nNull = -1;       // skip this parameter
+        INT16 nSkipEnd = -1;    // skip all parameters <= nSkipEnd
 
         INT16 nLast = nAnz - 1;
 
         // Funktionen, bei denen Parameter wegfallen muessen
         if( eId == ocPercentrank && nAnz == 3 )
-            nNull = 0;      // letzten Parameter bei Bedarf weglassen
+            nSkipEnd = 0;       // letzten Parameter bei Bedarf weglassen
 
         else if( eId == ocIndirect && nAnz == 2 )
-            nNull = 0;
+            nSkipEnd = 0;
 
         else if( eId == ocAdress && nAnz > 3 )
             nNull = nAnz - 4;
 
         // Joost-Spezialfaelle
-        else if( eId == ocRound || eId == ocRoundUp || eId == ocRoundDown )
-        {
-            if( aPool.IsSingleOp( eParam[ 0 ], ocMissing ) )
-                nNull = 0;      // letzten (ocMissing) weglassen
-        }
         else if( eId == ocIf )
         {
             UINT16          nNullParam = 0;
@@ -1482,12 +1478,19 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, BYTE nAnz )
             }
         }
 
+        // #84453# skip missing parameters at end of parameter list
+        while( (nSkipEnd < nLast) && aPool.IsSingleOp( eParam[ nSkipEnd + 1 ], ocMissing ) )
+            nSkipEnd++;
+
         // [Parameter{;Parameter}]
-        aPool << eParam[ nLast ];
-        for( nLauf = nLast - 1 ; nLauf >= 0 ; nLauf-- )
+        if( nLast > nSkipEnd )
         {
-            if( nLauf != nNull )
-                aPool << ocSep << eParam[ nLauf ];
+            aPool << eParam[ nLast ];
+            for( nLauf = nLast - 1 ; nLauf > nSkipEnd ; nLauf-- )
+            {
+                if( nLauf != nNull )
+                    aPool << ocSep << eParam[ nLauf ];
+            }
         }
     }
     aPool << ocClose;
