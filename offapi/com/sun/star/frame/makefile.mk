@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: as $ $Date: 2000-11-20 10:06:11 $
+#   last change: $Author: dv $ $Date: 2001-03-09 15:13:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,6 +91,7 @@ IDLFILES=\
     MediaTypeDetectionHelper.idl\
     Settings.idl\
     SynchronousFrameLoader.idl\
+    TemplateAccess.idl\
     TerminationVetoException.idl\
     WindowArrange.idl\
     XBrowseHistoryRegistry.idl\
@@ -104,6 +105,7 @@ IDLFILES=\
     XDispatchProvider.idl\
     XDispatchProviderInterception.idl\
     XDispatchProviderInterceptor.idl\
+    XDocumentTemplates.idl\
     XExtendedFilterDetection.idl\
     XFilterDetect.idl\
     XFrame.idl\
