@@ -13,7 +13,7 @@ st	svtools\unx\inc					get	-	all	st_uinc NULL
 st	svtools\bmpmaker				nmake	-	all	st_bmp NULL
 st	svtools\source\cmdparse				nmake	-	all	st_cmdparse NULL
 st	svtools\source\memtools				nmake	-	all	st_mem NULL
-st	svtools\source\numbers				nmake	-	all	st_num st_edit NULL
+st	svtools\source\numbers				nmake	-	all	st_num NULL
 st	svtools\source\notify				nmake	-	all	st_not NULL
 st	svtools\source\sbx				nmake	-	all	st_sbx NULL
 st	svtools\source\config				nmake	-	all	st_conf NULL
@@ -25,7 +25,7 @@ st	svtools\mac\source\svdde			nmake	-	m	st_msdde NULL
 st	svtools\mac\source\misc				nmake	-	m	st_msc NULL
 st	svtools\source\control				nmake	-	all	st_ctl NULL
 st	svtools\source\filerec				nmake	-	all	st_file NULL
-st	svtools\source\filter.vcl\filter		nmake	-	all	st_vfilt st_uno NULL
+st	svtools\source\filter.vcl\filter		nmake	-	all	st_vfilt NULL
 st	svtools\source\filter.vcl\wmf			nmake	-	all	st_vwmf NULL
 st	svtools\source\filter.vcl\igif			nmake	-	all	st_vigif NULL
 st	svtools\source\filter.vcl\jpeg			nmake	-	all	st_vjpeg NULL
@@ -38,12 +38,12 @@ st	svtools\source\urlobj				nmake	-	all	st__url NULL
 st	svtools\source\misc				nmake	-	all	st__misc st_bmp NULL
 st	svtools\source\contnr				nmake	-	all	st__ctr NULL
 st	svtools\source\svdde				nmake	-	all	st__dde NULL
-st	svtools\source\items				nmake	-	all	st__item st__misc NULL
+st	svtools\source\items				nmake	-	all	st__item NULL
 st	svtools\source\undo				nmake	-	all	st_undo NULL
 st	svtools\source\plugapp				nmake	-	all	st_papp NULL
 st	svtools\source\dialogs				nmake	-	all	st_dial NULL
-st	svtools\source\edit				nmake	-	all	st_edit st__item NULL
-st	svtools\source\uno				nmake	-	all	st_uno st_num NULL
+st	svtools\source\edit				nmake	-	all	st_edit NULL
+st	svtools\source\uno				nmake	-	all	st_uno NULL
 st	svtools\source\svrtf				nmake	-	all	st_rtf NULL
 st	svtools\source\svsql				nmake	-	all	st_sql NULL
 st	svtools\source\svhtml				nmake	-	all	st_html NULL
