@@ -2,9 +2,9 @@
 #
 #   $RCSfile: packager.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:14:09 $
+#   last change: $Author: obo $ $Date: 2004-11-18 08:32:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,14 +74,16 @@ use packager::work;
 
 packager::check::check_environment();
 packager::check::check_packlist();
+packager::check::check_parameter();
 
 packager::work::set_global_variable();
 
 my $packagelist = packager::files::read_file($packager::globals::packlistname);
 
-my $calls = packager::work::create_package_todos($packagelist);
+my $targets = packager::work::create_package_todos($packagelist);
 
-packager::work::execute_system_calls($calls);
+if ( $ENV{'BSCLIENT'} ) { packager::work::start_build_server($targets); }
+else { packager::work::execute_system_calls($targets); }
 
 if ( $packager::globals::logging )
 {
