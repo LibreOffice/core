@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:17:49 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 21:09:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ chinese_traditional ] = "¥R¶ρ";
                 Text[ arabic ] = "ΚΪΘΖΙ";
                 Text[ greek ] = "Επιφάνεια";
-                Text[ korean ] = "Έι Γ¤Ώμ±β";
+                Text[ korean ] = "Έι";
                 Text[ turkish ] = "Alan";
                 Text[ language_user1 ] = " ";
             };
@@ -246,7 +246,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ chinese_traditional ] = "ΑY±Ζ©M¶΅Ήj";
                 Text[ arabic ] = "ΗαΕÒΗΝΙ ζΗαΚΘΗΪΟ";
                 Text[ greek ] = "Εσοχές και αποστάσεις";
-                Text[ korean ] = "µιΏ© Ύ²±βΏΝ °£°έ";
+                Text[ korean ] = "µιΏ©Ύ²±βΏΝ °£°έ";
                 Text[ turkish ] = "Girintiler ve aralύklar";
                 Text[ language_user1 ] = " ";
             };
@@ -344,7 +344,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_2
                 Text[ chinese_traditional ] = "¥R¶ρ";
                 Text[ arabic ] = "ΚΪΘΖΙ";
                 Text[ greek ] = "Επιφάνεια";
-                Text[ korean ] = "Έι Γ¤Ώμ±β";
+                Text[ korean ] = "Έι";
                 Text[ turkish ] = "Alan";
                 Text[ language_user1 ] = " ";
             };
@@ -416,7 +416,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ chinese_traditional ] = "ΑY±Ζ©M¶΅Ήj";
                 Text[ arabic ] = "ΗαΕÒΗΝΙ ζΗαΚΘΗΪΟ";
                 Text[ greek ] = "Εσοχές και αποστάσεις";
-                Text[ korean ] = "µιΏ© Ύ²±βΏΝ °£°έ";
+                Text[ korean ] = "µιΏ©Ύ²±βΏΝ °£°έ";
                 Text[ turkish ] = "Girintiler ve aralύklar";
                 Text[ language_user1 ] = " ";
             };
@@ -467,7 +467,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ language_user1 ] = "MS Word";
                 Text[ arabic ] = "ΨΡνήΙ ΗαΚΡήνγ";
                 Text[ greek ] = "Στυλ αρίθμησης";
-                Text[ korean ] = "ΉψΘ£ ΈΕ±β±β ΐ―Ηό";
+                Text[ korean ] = "ΉψΘ£ΈΕ±β±β ΐ―Ηό";
                 Text[ turkish ] = "Numaralama tόrό";
             };
             PageItem
