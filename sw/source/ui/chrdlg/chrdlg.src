@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:49:06 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ String SW_STR_NONE
     Text[ russian ] = "[Νες]";
     Text[ polish ] = "[brak]";
     Text[ japanese ] = "[γªγ—]";
-    Text[ language_user1 ] = "θλ? αε";
+    Text[ language_user1 ] = "; θλ? αε";
     Text[ chinese_traditional ] = "[η„΅]";
     Text[ arabic ] = "[ΘΟζδ]";
     Text[ greek ] = "[Κανένα]";
@@ -180,7 +180,7 @@ InfoBox MSG_ILLEGAL_PAGENUM
     MESSAGE[ japanese ] = "γƒγƒΌγ‚Έη•ªε·γ―ι©η”¨γ§γγΎγ›γ‚“γ€‚ε·¦γƒγƒΌγ‚Έγ«γ―ε¶ζ•°γ€ε³γƒγƒΌγ‚Έγ«γ―ε¥‡ζ•°γ‚’δ½Ώη”¨γ—γΎγ™γ€‚";
     MESSAGE[ chinese_traditional ] = "η„΅ζ³•θ¨­ε®ι ηΆΌγ€‚ε¨ε·¦ι εªθƒ½ε¤ θ¨­ε®ε¶ζ•ΈοΌε¨ε³ι εªθƒ½θ¨­ε®ε¥‡ζ•Έγ€‚";
     MESSAGE[ arabic ] = "αΗ νγίδ ΕΟΡΗΜ ΓΡήΗγ ΗαΥέΝΗΚ έν ΗαΥέΝΙ ΗαΝΗανΙ. Ϊαμ ΗαΥέΝΗΚ ΗανΣΡμ΅ νΣγΝ ΘΗΣΚΞΟΗγ ΓΡήΗγ ÒζΜνΙ έήΨ΅ ζΪαμ ΗαΥέΝΗΚ Ηανγδμ΅ ΓΡήΗγ έΡΟνΙ έήΨ.";
-    MESSAGE[ greek ] = "Δεν είναι δυνατόν να τοποθετηθεί ο αριθμός σελίδας. Σε αριστερές σελίδες επιτρέπεται η τοποθέτηση μόνο ζυγών αριθμών σελίδας, ενώ σε δεξιέ? ";
+    MESSAGE[ greek ] = "Δεν είναι δυνατή η εφαρμογή των αριθμών σελίδας στην τρέχουσα σελίδα.  Οι άρτιοι αριθμοί μπορούν να χρησιμοποιηθούν στις αριστερές σελίδες και οι περιττοί στις δεξιές.";
     MESSAGE[ korean ] = "νμ΄μ§€ λ²νΈλ” μ„¤μ •ν•  μ μ—†μµλ‹λ‹¤. μ§μ νμ΄μ§€ λ²νΈλ” μ™Όμª½ νμ΄μ§€μ—λ§ μ‚¬μ©λκ³ , ν™€μ νμ΄μ§€ λ²νΈλ” μ¤λ¥Έμª½ νμ΄μ§€μ—λ§ μ‚¬μ©λ©λ‹λ‹¤.";
     MESSAGE[ turkish ] = "Sayfa numarasύ verilemiyor. Sol sayfalarda yalnύzca ηift sayfa numaralarύ, saπ sayfalarda ise yalnύzca tek sayfa numaralarύ kullanύlabilir.";
     MESSAGE[ language_user1 ] = " ";
@@ -191,6 +191,7 @@ InfoBox MSG_ILLEGAL_PAGENUM
     MESSAGE[ hindi ] = "ΰ¤µΰ¤°ΰ¥ΰ¤¤ΰ¤®ΰ¤Ύΰ¤¨ ΰ¤ªΰ¥ƒΰ¤·ΰ¥ΰ¤  ΰ¤•ΰ¥‡ΰ¤²ΰ¤Ώΰ¤ ΰ¤ªΰ¥ƒΰ¤·ΰ¥ΰ¤  ΰ¤Έΰ¤‚ΰ¤–ΰ¥ΰ¤―ΰ¤Ύ ΰ¤•ΰ¥‹ ΰ¤²ΰ¤Ύΰ¤—ΰ¥‚ ΰ¤¨ΰ¤Ήΰ¥€ΰ¤‚ ΰ¤•ΰ¤° ΰ¤Έΰ¤•ΰ¤¤ΰ¥‡ ΰ¤Ήΰ¥ ΰ¥¤  ΰ¤Έΰ¤® ΰ¤Έΰ¤‚ΰ¤–ΰ¥ΰ¤―ΰ¤Ύ ΰ¤•ΰ¥‹ ΰ¤¬ΰ¤Ύΰ¤―ΰ¤Ύΰ¤ ΰ¤“ΰ¤° ΰ¤•ΰ¥‡ ΰ¤ªΰ¥ƒΰ¤·ΰ¥ΰ¤  ΰ¤®ΰ¥‡ΰ¤‚ , ΰ¤µΰ¤Ώΰ¤·ΰ¤® ΰ¤Έΰ¤‚ΰ¤–ΰ¥ΰ¤―ΰ¤Ύ ΰ¤•ΰ¥‹ ΰ¤¦ΰ¤Ύΰ¤Ήΰ¤Ώΰ¤¨ΰ¥€ ΰ¤“ΰ¤° ΰ¤•ΰ¥‡ ΰ¤ªΰ¥ƒΰ¤·ΰ¥ΰ¤  ΰ¤®ΰ¥‡ΰ¤‚ ΰ¤‰ΰ¤ªΰ¤―ΰ¥‹ΰ¤— ΰ¤•ΰ¤°ΰ¤¤ΰ¤Ύ ΰ¤Ήΰ¥ ΰ¥¤";
     MESSAGE[ slovak ] = "Na aktuΓ΅lnej strane nemoΕΎno pouΕΎiΕ¥ ΔΓ­slovanie strΓ΅n. PΓ΅rne ΔΓ­sla moΕΎno pouΕΎiΕ¥ len na ΔΎavΓ½ch strΓ΅nkach, nepΓ΅rne ΔΓ­sla na pravΓ½ch strΓ΅nkach.";
 };
+
 
 
 
