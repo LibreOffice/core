@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VGroup.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mh $ $Date: 2000-11-29 12:28:04 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 09:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,4 +189,31 @@ void SAL_CALL OGroup::revokePrivileges( const ::rtl::OUString& objName, sal_Int3
     if (OGroup_BASE::rBHelper.bDisposed)
                 throw DisposedException();
 }
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OGroup::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OGroup::getName(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return m_Name;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OGroup::setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
+{
+}
+// -----------------------------------------------------------------------------
+// XInterface
+void SAL_CALL OGroup::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OGroup_BASE::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OGroup::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OGroup_BASE::release();
+}
+// -----------------------------------------------------------------------------
+
 

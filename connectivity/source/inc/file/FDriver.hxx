@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDriver.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:28:24 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 09:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef _COM_SUN_STAR_SDBCX_XDATADEFINITIONSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #endif
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
-#include <cppuhelper/compbase2.hxx>
+#ifndef _CPPUHELPER_COMPBASE3_HXX_
+#include <cppuhelper/compbase3.hxx>
 #endif
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
@@ -82,10 +82,11 @@ namespace connectivity
 {
     namespace file
     {
-        typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::sdbc::XDriver, ::com::sun::star::lang::XServiceInfo > ODriver_BASE;
+        typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::sdbc::XDriver,
+                                                    ::com::sun::star::lang::XServiceInfo,
+                                                    ::com::sun::star::sdbcx::XDataDefinitionSupplier> ODriver_BASE;
 
-        class OFileDriver : public ODriver_BASE,
-                                                        public ::com::sun::star::sdbcx::XDataDefinitionSupplier
+        class OFileDriver : public ODriver_BASE
         {
         protected:
             ::osl::Mutex                                        m_aMutex;
@@ -95,9 +96,6 @@ namespace connectivity
                                                                                 //  for this Driver
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
         public:
-
-            DECLARE_CTY_DEFAULTS(ODriver_BASE);
-
             OFileDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
 
             // OComponentHelper
@@ -105,7 +103,6 @@ namespace connectivity
             // XInterface
             static ::rtl::OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(  ) throw (::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
 
             // XServiceInfo
             virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);

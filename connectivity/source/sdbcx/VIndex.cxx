@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VIndex.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:01:49 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 09:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,3 +226,33 @@ Reference< XPropertySet > SAL_CALL OIndex::createDataDescriptor(  ) throw(Runtim
     return this;
 }
 // -----------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OIndex::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OIndex::getName(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return m_Name;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OIndex::setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
+{
+}
+// -----------------------------------------------------------------------------
+// XInterface
+void SAL_CALL OIndex::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    ODescriptor_BASE::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OIndex::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    ODescriptor_BASE::release();
+}
+// -----------------------------------------------------------------------------
+void OIndex::refreshColumns()
+{
+}
+// -----------------------------------------------------------------------------
+

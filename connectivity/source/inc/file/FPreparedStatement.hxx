@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 14:04:17 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 09:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,6 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> initResultSet();
 
         public:
-            DECLARE_CTY_DEFAULTS(OStatement_BASE2);
             DECLARE_SERVICE_INFO();
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OPreparedStatement( OConnection* _pConnection,const ::std::vector<connectivity::OTypeInfo>& _TypeInfo);
@@ -126,6 +125,8 @@ namespace connectivity
             virtual void SAL_CALL disposing(void);
             //XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 

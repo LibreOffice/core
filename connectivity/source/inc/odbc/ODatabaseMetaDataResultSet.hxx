@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 12:26:42 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 09:59:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,6 @@ namespace connectivity
                                     sal_Int32 nHandle
                                          ) const;
         public:
-            DECLARE_CTY_DEFAULTS(ODatabaseMetaDataResultSet_BASE);
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             ODatabaseMetaDataResultSet( SQLHANDLE _pStatementHandle,rtl_TextEncoding _nTextEncoding);
             ~ODatabaseMetaDataResultSet();
@@ -197,13 +196,12 @@ namespace connectivity
             virtual void SAL_CALL disposing(void);
             // XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
             // XPropertySet
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
-            {
-                return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
-            }
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
             {
                 return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(*(ODatabaseMetaDataResultSet_BASE*)this);

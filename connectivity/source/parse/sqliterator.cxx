@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:35:12 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 09:59:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -985,9 +985,13 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
         ::rtl::OUString aString;
         traverseOnePredicate(pSearchCondition->getChild(0),ePredicateType,aString,sal_True,NULL);
         //  if (! aIteratorStatus.IsSuccessful()) return;
-    } else {
-        // Etwas anderes unterstuetzen wir (noch) nicht. Basta!
-        //  aIteratorStatus.setStatementTooComplex();
+    }
+    else if (SQL_ISRULE(pSearchCondition,num_value_exp) || SQL_ISRULE(pSearchCondition,term))
+    {
+        OSQLPredicateType ePredicateType = SQL_PRED_EQUAL;
+        ::rtl::OUString aString;
+        traverseOnePredicate(pSearchCondition->getChild(0),ePredicateType,aString,sal_False,pSearchCondition->getChild(0));
+        traverseOnePredicate(pSearchCondition->getChild(2),ePredicateType,aString,sal_False,pSearchCondition->getChild(2));
     }
     // Fehler einfach weiterreichen.
 }
@@ -1020,7 +1024,8 @@ void OSQLParseTreeIterator::traverseOnePredicate(
             {
                 // Name = "?", da kein Parametername verfuegbar (z. B. bei Native SQL)
                 rValue = ::rtl::OUString::createFromAscii("?");
-                rValue = aColumnName;
+                if(aColumnName.getLength())
+                    rValue = aColumnName;
                 aName  = ::rtl::OUString::createFromAscii("?");
             }
             else if (SQL_ISPUNCTUATION(pMark,":"))
@@ -1046,7 +1051,7 @@ void OSQLParseTreeIterator::traverseOnePredicate(
                 pNewColumn->setRealName(rValue);
                 m_aParameters->push_back(pNewColumn);
             }
-            else // search in the tables for the right one
+            else if(aColumnName.getLength())// search in the tables for the right one
             {
                 OSQLTables::const_iterator aTableIter = m_aTables.end();
                 if(aTableRange.getLength())
@@ -1072,10 +1077,37 @@ void OSQLParseTreeIterator::traverseOnePredicate(
                     }
                 }
             }
+            else
+            {
+                ::rtl::OUString aNewColName(getUniqueColumnName(rValue));
 
+                OParseColumn* pColumn = new OParseColumn(aNewColName,
+                                                        ::rtl::OUString(),
+                                                        ::rtl::OUString(),
+                                                        ColumnValue::NULLABLE_UNKNOWN,
+                                                        0,
+                                                        0,
+                                                        DataType::VARCHAR,
+                                                        sal_False,
+                                                        sal_False,
+                                                        m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers());
+                pColumn->setName(rValue);
+                pColumn->setRealName(rValue);
+                m_aParameters->push_back(pColumn);
+            }
         }
         else if (SQL_ISRULE(pParseNode,column_ref))// Column-Name (und TableRange):
             getColumnRange(pParseNode,aName,rValue);
+        else
+        {
+            setORCriteriaPre();
+            //  if (! aIteratorStatus.IsSuccessful()) return;
+
+            traverseORCriteria(pParseNode);
+            //  if (! aIteratorStatus.IsSuccessful()) return;
+
+            setORCriteriaPost();
+        }
     }
 
     // "set"-Routine aufrufen ...

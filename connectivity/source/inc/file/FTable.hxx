@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-28 11:28:05 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 09:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,6 @@ namespace connectivity
             };
 
         public:
-            DECLARE_CTY_DEFAULTS( OTable_TYPEDEF);
             OFileTable( OConnection* _pConnection);
             OFileTable( OConnection* _pConnection,
                     const ::rtl::OUString& _Name,
@@ -130,6 +129,8 @@ namespace connectivity
 
             //XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing(void);
 
@@ -140,21 +141,10 @@ namespace connectivity
             virtual sal_Bool fetchRow(OValueRow _rRow,const OSQLColumns& _rCols, sal_Bool _bUseTableDefs,sal_Bool bRetrieveData) = 0;
 
             ::vos::ORef<OSQLColumns> getTableColumns() const {return m_aColumns;}
-            virtual BOOL InsertRow(OValueVector& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols)
-            {
-                return sal_False;
-            }
-            virtual BOOL DeleteRow(const OSQLColumns& _rCols)
-            {
-                return sal_False;
-            }
-            virtual BOOL UpdateRow(OValueVector& rRow, OValueRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols)
-            {
-                return sal_False;
-            }
-            virtual void addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor)
-            {
-            }
+            virtual BOOL InsertRow(OValueVector& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
+            virtual BOOL DeleteRow(const OSQLColumns& _rCols);
+            virtual BOOL UpdateRow(OValueVector& rRow, OValueRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
+            virtual void addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor);
 
             ::rtl::OUString SAL_CALL getName() { return m_Name; }
 

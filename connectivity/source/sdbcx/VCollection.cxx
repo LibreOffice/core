@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-23 10:05:31 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 09:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,5 +317,47 @@ void SAL_CALL OCollection::removeContainerListener( const Reference< XContainerL
     m_aContainerListeners.removeInterface(_rxListener);
 }
 // -----------------------------------------------------------------------------
-
+void SAL_CALL OCollection::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    m_rParent.acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OCollection::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    m_rParent.release();
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Type SAL_CALL OCollection::getElementType(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*>(NULL));
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OCollection::hasElements(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_rMutex);
+    return getCount() > 0;
+}
+// -----------------------------------------------------------------------------
+sal_Int32 SAL_CALL OCollection::getCount(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_rMutex);
+    return m_aElements.size();
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OCollection::hasByName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_rMutex);
+    return m_aNameMap.find(aName) != m_aNameMap.end();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OCollection::addRefreshListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >& l ) throw(::com::sun::star::uno::RuntimeException)
+{
+    m_aRefreshListeners.addInterface(l);
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OCollection::removeRefreshListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >& l ) throw(::com::sun::star::uno::RuntimeException)
+{
+    m_aRefreshListeners.removeInterface(l);
+}
+// -----------------------------------------------------------------------------
 

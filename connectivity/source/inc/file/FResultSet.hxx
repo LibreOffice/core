@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 10:56:43 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 09:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,6 +307,7 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
 
             void construct();
             sal_Bool evaluate();
+            void describeColumn(OSQLParseNode* _pParameter,OSQLParseNode* _pNode,const OSQLTable& _xTable);
             BOOL ExecuteRow(OFileTable::FilePosition eFirstCursorPosition,
                                 INT32 nOffset = 1,
                                 BOOL bRebind = TRUE,
@@ -353,7 +354,6 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
 
         public:
-            DECLARE_CTY_DEFAULTS(OResultSet_BASE);
             DECLARE_SERVICE_INFO();
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator& _aSQLIterator);
@@ -369,13 +369,12 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
             virtual void SAL_CALL disposing(void);
             // XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
             // XPropertySet
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
-            {
-                return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
-            }
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
             // XResultSet
             virtual sal_Bool SAL_CALL next(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL isBeforeFirst(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

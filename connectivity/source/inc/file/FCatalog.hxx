@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FCatalog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:07:22 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 09:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,9 @@ namespace connectivity
 
         public:
             virtual void refreshTables();
-            virtual void refreshViews(){}
-            virtual void refreshGroups(){}
-            virtual void refreshUsers(){}
+            virtual void refreshViews();
+            virtual void refreshGroups();
+            virtual void refreshUsers();
 
         public:
             OFileCatalog(OConnection* _pCon);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-10 08:51:30 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 09:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,8 +119,8 @@ namespace connectivity
             OOperand() : m_eDBType(::com::sun::star::sdbc::DataType::OTHER){}
 
         public:
-            virtual ::com::sun::star::uno::Any getValue() const = 0;
-            virtual void setValue(const ::com::sun::star::uno::Any& _rVal) = 0;
+            virtual ORowSetValue getValue() const = 0;
+            virtual void setValue(const ORowSetValue& _rVal) = 0;
 
             virtual sal_Int32 getDBType() const {return m_eDBType;}
             virtual OEvaluateSet* preProcess(OBoolOperator* pOp, OOperand* pRight = 0);
@@ -138,8 +138,8 @@ namespace connectivity
             OOperandRow(sal_uInt16 _nPos, sal_Int32 _rType);
         public:
             sal_uInt16 getRowPos() const {return m_nRowPos;}
-            virtual ::com::sun::star::uno::Any getValue() const;
-            virtual void setValue(const ::com::sun::star::uno::Any& _rVal);
+            virtual ORowSetValue getValue() const;
+            virtual void setValue(const ORowSetValue& _rVal);
             void bindValue(OValueRow _pRow);                        // Bindung an den Wert, den der Operand repräsentiert
 
             TYPEINFO();
@@ -158,8 +158,8 @@ namespace connectivity
                 m_xColumn = NULL;
             }
 
-            virtual sal_Bool isIndexed() const {return sal_False;}
-            virtual OEvaluateSet* preProcess(OBoolOperator* pOp, OOperand* pRight = 0) { return NULL;}
+            virtual sal_Bool isIndexed() const;
+            virtual OEvaluateSet* preProcess(OBoolOperator* pOp, OOperand* pRight = 0);
             TYPEINFO();
         };
 
@@ -190,19 +190,19 @@ namespace connectivity
         class OOperandValue : public OOperand
         {
         protected:
-            ::com::sun::star::uno::Any m_aValue;
+            ORowSetValue m_aValue;
 
         protected:
             OOperandValue(){}
-            OOperandValue(const ::com::sun::star::uno::Any& _rVar, sal_Int32 eDbType)
+            OOperandValue(const ORowSetValue& _rVar, sal_Int32 eDbType)
                 : OOperand(eDbType)
                 , m_aValue(_rVar)
             {}
 
             OOperandValue(sal_Int32 eDbType) :OOperand(eDbType){}
         public:
-            virtual ::com::sun::star::uno::Any getValue() const;
-            virtual void setValue(const ::com::sun::star::uno::Any& _rVal) { m_aValue = _rVal; }
+            virtual ORowSetValue getValue() const;
+            virtual void setValue(const ORowSetValue& _rVal);
 
             TYPEINFO();
         };
@@ -222,7 +222,7 @@ namespace connectivity
         class OOperandResult : public OOperandValue
         {
         protected:
-            OOperandResult(const ::com::sun::star::uno::Any& _rVar, sal_Int32 eDbType)
+            OOperandResult(const ORowSetValue& _rVar, sal_Int32 eDbType)
                             :OOperandValue(_rVar, eDbType) {}
             OOperandResult(sal_Int32 eDbType)
                             :OOperandValue(eDbType) {}
@@ -234,18 +234,20 @@ namespace connectivity
         class OOperandResultBOOL : public OOperandResult
         {
         public:
-            OOperandResultBOOL(sal_Bool bResult):OOperandResult(::com::sun::star::sdbc::DataType::BIT)
+            OOperandResultBOOL(sal_Bool bResult) : OOperandResult(::com::sun::star::sdbc::DataType::BIT)
             {
-                m_aValue <<= bResult ? 1.0 : 0.0;
+                m_aValue = bResult ? 1.0 : 0.0;
+                m_aValue.setBound(sal_True);
             }
         };
 
         class OOperandResultNUM : public OOperandResult
         {
         public:
-            OOperandResultNUM(double fNum):OOperandResult(::com::sun::star::sdbc::DataType::DOUBLE)
+            OOperandResultNUM(double fNum) : OOperandResult(::com::sun::star::sdbc::DataType::DOUBLE)
             {
-                m_aValue <<= fNum;
+                m_aValue = fNum;
+                m_aValue.setBound(sal_True);
             }
         };
 
@@ -353,37 +355,36 @@ namespace connectivity
             TYPEINFO();
 
         protected:
-            virtual double operate(double fLeft, double fRight) const = 0;
+            virtual double operate(const double& fLeft,const double& fRight) const = 0;
         };
 
         class OOp_ADD : public ONumOperator
         {
         protected:
-            virtual double operate(double fLeft, double fRight) const;
+            virtual double operate(const double& fLeft,const double& fRight) const;
         };
 
         class OOp_SUB : public ONumOperator
         {
         protected:
-            virtual double operate(double fLeft, double fRight) const;
+            virtual double operate(const double& fLeft,const double& fRight) const;
         };
 
         class OOp_MUL : public ONumOperator
         {
         protected:
-            virtual double operate(double fLeft, double fRight) const;
+            virtual double operate(const double& fLeft,const double& fRight) const;
         };
 
         class OOp_DIV : public ONumOperator
         {
         protected:
-            virtual double operate(double fLeft, double fRight) const;
+            virtual double operate(const double& fLeft,const double& fRight) const;
         };
 
         inline sal_Bool OOperand::isValid() const
         {
-            ::com::sun::star::uno::Any aVal = getValue();
-            return aVal.hasValue() && aVal.getValueTypeClass() == ::com::sun::star::uno::TypeClass_DOUBLE && connectivity::getDouble(aVal) != 0;
+            return getValue().getDouble() != double(0.0);
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PColumn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:31:35 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 09:59:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,19 @@ void OParseColumn::construct()
     registerProperty(PROPERTY_REALNAME,             PROPERTY_ID_REALNAME,           nAttrib,&m_aRealName,       ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_DBASEPRECISIONCHANGED,    PROPERTY_ID_DBASEPRECISIONCHANGED,          nAttrib,&m_bDbasePrecisionChanged,      ::getCppuType(reinterpret_cast<sal_Bool*>(NULL)));
 
+}
+// -----------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper* OParseColumn::createArrayHelper( sal_Int32 _nId) const
+{
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps;
+    describeProperties(aProps);
+    changePropertyAttributte(aProps);
+    return new ::cppu::OPropertyArrayHelper(aProps);
+}
+// -----------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper & SAL_CALL OParseColumn::getInfoHelper()
+{
+    return *OParseColumn_PROP::getArrayHelper(isNew() ? 1 : 0);
 }
 // -----------------------------------------------------------------------------
 

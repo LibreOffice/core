@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VView.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:13:15 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 09:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,25 @@ Any SAL_CALL OView::queryInterface( const Type & rType ) throw(RuntimeException)
         aValue >>= sComposedName;
     }
     return sComposedName;
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OView::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OView::setName( const ::rtl::OUString& ) throw(::com::sun::star::uno::RuntimeException)
+{
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OView::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OView_BASE::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OView::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OView_BASE::release();
 }
 // -----------------------------------------------------------------------------
 

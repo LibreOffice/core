@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTable.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 11:54:38 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 09:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ using namespace ::com::sun::star::lang;
         return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VTableDescriptor");
     return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Table");
 }
+
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OTable::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -306,3 +307,32 @@ void SAL_CALL OTable::alterColumnByIndex( sal_Int32 index, const Reference< XPro
 
 }
 // -------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OTable::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OTable::getName() throw(::com::sun::star::uno::RuntimeException)
+{
+    // this is only correct for tables who haven't a schema or catalog name
+    OSL_ENSURE(!m_CatalogName.getLength(),"getName(): forgot to overload getName()!");
+    OSL_ENSURE(!m_SchemaName.getLength(),"getName(): forgot to overload getName()!");
+    return m_Name;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OTable::setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
+{
+}
+// -----------------------------------------------------------------------------
+void OTable::refreshColumns()
+{
+}
+// -----------------------------------------------------------------------------
+void OTable::refreshKeys()
+{
+}
+// -----------------------------------------------------------------------------
+void OTable::refreshIndexes()
+{
+}
+// -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VColumn.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:54:36 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 09:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,5 +249,21 @@ Reference< XPropertySet > SAL_CALL OColumn::createDataDescriptor(  ) throw(Runti
     pNewColumn->setNew(sal_True);
     return pNewColumn;
 }
-// -------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OColumn::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+}
+// -----------------------------------------------------------------------------
+// XNamed
+::rtl::OUString SAL_CALL OColumn::getName(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return m_Name;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OColumn::setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    m_Name = aName;
+}
+// -----------------------------------------------------------------------------
 

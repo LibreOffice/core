@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCatalog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 15:12:41 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 09:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,16 @@ OCatalog::~OCatalog()
     delete m_pUsers;
 }
 //-----------------------------------------------------------------------------
+void SAL_CALL OCatalog::acquire() throw(RuntimeException)
+{
+    OCatalog_BASE::acquire();
+}
+//------------------------------------------------------------------------------
 void SAL_CALL OCatalog::release() throw(RuntimeException)
 {
     relase_ChildImpl();
 }
+
 //------------------------------------------------------------------------------
 void SAL_CALL OCatalog::disposing()
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VKey.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:36:27 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 09:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,5 +230,29 @@ Reference< XPropertySet > SAL_CALL OKey::createDataDescriptor(  ) throw(RuntimeE
     return this;
 }
 // -----------------------------------------------------------------------------
-
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OKey::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OKey::getName(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return m_Name;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OKey::setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
+{
+}
+// -----------------------------------------------------------------------------
+// XInterface
+void SAL_CALL OKey::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    ODescriptor_BASE::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OKey::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    ODescriptor_BASE::release();
+}
+// -----------------------------------------------------------------------------
 

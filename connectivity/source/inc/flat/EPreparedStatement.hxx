@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EPreparedStatement.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-05 14:46:41 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 09:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@ namespace connectivity
         protected:
             virtual file::OResultSet* createResultSet();
         public:
-            //  DECLARE_CTY_DEFAULTS(file::OStatement);
             OFlatPreparedStatement( file::OConnection* _pConnection,const ::std::vector<connectivity::OTypeInfo>& _TypeInfo) : file::OPreparedStatement( _pConnection,_TypeInfo){}
             DECLARE_SERVICE_INFO();
         };
