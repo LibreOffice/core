@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:26 $
+ *  last change: $Author: pluby $ $Date: 2000-10-26 03:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -874,16 +874,22 @@ SalFrame* SalInstance::CreateChildFrame( SystemParentData* pSystemParentData, UL
 
 SalFrame* SalInstance::CreateFrame( SalFrame* pParent, ULONG nSalFrameStyle )
 {
+#ifdef WIN
     // Um auf Main-Thread umzuschalten
     HWND hWndParent;
     if ( pParent )
         hWndParent = pParent->maFrameData.mhWnd;
     else
         hWndParent = 0;
-#ifdef WIN
     return (SalFrame*)ImplSendMessage( maInstData.mhComWnd, SAL_MSG_CREATEFRAME, nSalFrameStyle, (LPARAM)hWndParent );
 #else
-    return NULL;
+    SalFrame *pFrame = new SalFrame;
+     // Stub code: Mac OS X does not support child windows so return NULL until
+    // we figure how to implement a good substitute for a child window
+    if( pParent )
+        return NULL;
+    pFrame->maFrameData.mhWnd = NSWindow_create( nSalFrameStyle );
+    return pFrame;
 #endif
 }
 
@@ -893,6 +899,8 @@ void SalInstance::DestroyFrame( SalFrame* pFrame )
 {
 #ifdef WIN
     ImplSendMessage( maInstData.mhComWnd, SAL_MSG_DESTROYFRAME, 0, (LPARAM)pFrame );
+#else
+    NSWindow_destroy( pFrame->maFrameData.mhWnd );
 #endif
 }
 
