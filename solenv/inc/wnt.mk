@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.53 $
+#   $Revision: 1.54 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 14:50:18 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:48:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -169,16 +169,11 @@ CFLAGS+=-Zm500 -wd4290 -wd4786 -wd4800
 .ENDIF
 #.ENDIF
 
-#.IF defined ( product ) && !defined ( seg ) && !defined ( demo )
 .IF "$(product)" != ""
-.IF "$(seg)" == ""
-.IF "$(demo)" == ""
 CDEFS+= -D_X86_=1 $(OLE2DEF)
 CFLAGS+=-c -nologo -Gs -Gy $(NOLOGO) $(MINUS_I)$(INCLUDE)
 .IF "$(bndchk)" == ""
 CFLAGS+= -Ob1
-.ENDIF
-.ENDIF
 .ENDIF
 .ELSE	# ist keine product...
 CDEFS+= -D_X86_=1 $(OLE2DEF)
@@ -207,19 +202,6 @@ CFLAGS+= -Z7
 CDEFS+=-DFULL_DESK
 RSCDEFS+=-DFULL_DESK
 .ENDIF
-
-#.IF DEFINED compinc
-#CFLAGS+= -Gi -Zi
-#.ENDIF
-
-#.IF DEFINED chkhxx
-#CDEFSS+= -DHEADER_WARNING
-#.ENDIF
-#.IF "$(UPD)"=="368"
-#.IF !DEFINED nocheck
-#CDEFS+= -DHEADER_WARNING
-#.ENDIF
-#.ENDIF
 
 CFLAGSEXCEPTIONS=-GX
 CFLAGS_NO_EXCEPTIONS=
@@ -311,47 +293,28 @@ LINK=$(WRAPCMD) link $(NOLOGO) /MACHINE:IX86
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 
 .IF "$(PRODUCT)"!="full"
-.IF "$(PRODUCT)"!="demo"
-.IF "$(PRODUCT)"!="compact"
-#.IF !defined(DEBUG)
-.IF "$(debug)" == ""
-LINKFLAGS=/PDB:NONE
-.ENDIF
-.ENDIF
-.ENDIF
 .ELSE
 LINKFLAGS=/MAP /NODEFAULTLIB /OPT:NOREF
-#LINKFLAGS=/MAP /NODEFAULTLIB
 .ENDIF
 
 .IF "$(linkinc)" != ""
-LINKFLAGS=/NODEFAULTLIB /DEBUG:notmapped,full /DEBUGTYPE:cv /INCREMENTAL:YES
+LINKFLAGS=/NODEFAULTLIB /DEBUG:full /DEBUGTYPE:cv /INCREMENTAL:YES
 MAPFILE=
 .ELSE
 .IF "$(PRODUCT)"!="full"
-.IF "$(PRODUCT)"!="demo"
-.IF "$(PRODUCT)"!="compact"
-LINKFLAGS+= /NODEFAULTLIB /DEBUG:notmapped,full /DEBUGTYPE:cv
-.ENDIF
-.ENDIF
-.ELSE # ist keine product...
-.IF "$(COMEX)"!="3"
-LINKFLAGS+= /RELEASE /DEBUG:notmapped,full
-.ENDIF
+LINKFLAGS+= /NODEFAULTLIB /DEBUG:full /DEBUGTYPE:cv
 .ENDIF
 MAPFILE=-out:$$@
 .ENDIF
 
 .IF "$(bndchk)" != ""
 LINK=nmlink $(COMMENTFLAG) $(NOLOGO) /MACHINE:IX86
-#LINKFLAGS=/NODEFAULTLIB /DEBUG:notmapped,full /DEBUGTYPE:cv /PDB:NONE
-LINKFLAGS=/NODEFAULTLIB /DEBUG:notmapped,full /DEBUGTYPE:cv
+LINKFLAGS=/NODEFAULTLIB /DEBUG:full /DEBUGTYPE:cv
 .ENDIF
 
 .IF "$(truetime)" != ""
 LINK=nmlink /NMttOn $(COMMENTFLAG) $(NOLOGO) /MACHINE:IX86
-#LINKFLAGS=/NODEFAULTLIB /DEBUG:notmapped,full /DEBUGTYPE:cv 
-LINKFLAGS=/NODEFAULTLIB /DEBUG:notmapped,full /DEBUGTYPE:cv /PDB:NONE
+LINKFLAGS=/NODEFAULTLIB /DEBUG:full /DEBUGTYPE:cv
 .ENDIF
 
 LINKFLAGSAPPGUI=/SUBSYSTEM:WINDOWS,4.0
@@ -361,7 +324,7 @@ LINKFLAGSSHLCUI=/SUBSYSTEM:CONSOLE /DLL
 LINKFLAGSTACK=/STACK:
 LINKFLAGSPROF=/DEBUG:mapped,partial /DEBUGTYPE:coff cap.lib
 LINKFLAGSWST=/DEBUG:mapped,partial /DEBUGTYPE:coff wst.lib /NODEFAULTLIB
-LINKFLAGSDEBUG=/DEBUG:notmapped,full /DEBUGTYPE:cv
+LINKFLAGSDEBUG=/DEBUG:full /DEBUGTYPE:cv
 LINKFLAGSOPT=
 
 .IF "$(DYNAMIC_CRT)"!=""
