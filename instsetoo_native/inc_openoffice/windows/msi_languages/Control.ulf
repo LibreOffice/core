@@ -584,7 +584,7 @@ en-US = "{&MSSansBold8}Installing [ProductName]"
 en-US = "{&MSSansBold8}Uninstalling [ProductName]"
 
 [OOO_CONTROL_240]
-en-US = "(Hidden for now)Sec."
+en-US = "Sec."
 
 [OOO_CONTROL_241]
 en-US = "Status:"
@@ -593,10 +593,10 @@ en-US = "Status:"
 en-US = "&Next >"
 
 [OOO_CONTROL_243]
-en-US = "(Hidden for now)"
+en-US = ""
 
 [OOO_CONTROL_244]
-en-US = ")Hidden for now)Estimated time remaining:"
+en-US = "Estimated time remaining:"
 
 [OOO_CONTROL_245]
 en-US = "< &Back"
