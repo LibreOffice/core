@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-06 09:30:44 $
+ *  last change: $Author: sj $ $Date: 2000-11-08 19:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,9 @@
 #endif
 #ifndef _RTL_CRC_H_
 #include <rtl/crc.h>
+#endif
+#ifndef _SO_CLSIDS_HXX
+#include <so3/clsids.hxx>
 #endif
 #include <svtools/fltcall.hxx>
 
@@ -4459,6 +4462,7 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                     aXControlModel( aXControlShape->getControl() );
                 if ( !aXControlModel.is() )
                     continue;
+
                 *mpExEmbed  << (sal_uInt32)( 0xf | ( EPP_ExControl << 16 ) )
                             << (sal_uInt32)0;               // Size of this container
 
@@ -4484,13 +4488,58 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                             << (sal_uInt32)2
                             << (sal_uInt32)mnExEmbed
                             << (sal_uInt32)0
-                            << (sal_uInt32)0    // index to the persist table
+                            << (sal_uInt32)4    // index to the persist table
                             << (sal_uInt32)0x0012de00;
 
-//              ImplWriteCString( *mpExEmbed, String( RTL_CONSTASCII_USTRINGPARAM( "Kontrollkästchen" ) ), 1 );
-//              ImplWriteCString( *mpExEmbed, String( RTL_CONSTASCII_USTRINGPARAM( "Forms.CheckBox.1" ) ), 2 );
-//              ImplWriteCString( *mpExEmbed, String( RTL_CONSTASCII_USTRINGPARAM( "Microsoft Forms 2.0 CheckBox" ) ), 3 );
 
+                ::com::sun::star::awt::Size     aSize;
+                String          aControlName;
+                SvStorageRef    xTemp( new SvStorage( new SvMemoryStream(), TRUE ) );
+                if ( SvxMSConvertOCXControls::WriteOCXStream( xTemp, aXControlModel, aSize, aControlName ) )
+                {
+                    String  aUserName( xTemp->GetUserName() );
+                    String  aOleIdentifier;
+                    if ( aUserName.Len() )
+                    {
+                        SvStorageStreamRef xCompObj = xTemp->OpenStream(
+                            String( RTL_CONSTASCII_USTRINGPARAM( "\1CompObj" ) ),
+                                STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYALL );
+                        xCompObj->Seek( STREAM_SEEK_TO_END );
+                        sal_uInt32  nStreamLen = xCompObj->Tell();
+                        xCompObj->Seek( 0 );
+                        sal_Int16   nVersion, nByteOrder;
+                        sal_Int32   nWinVersion, nVal, nStringLen;
+                        *xCompObj   >> nVersion
+                                    >> nByteOrder
+                                    >> nWinVersion
+                                    >> nVal;
+                        xCompObj->SeekRel( 16 );    // skipping clsid
+                        *xCompObj   >> nStringLen;
+                        if ( ( xCompObj->Tell() + nStringLen ) < nStreamLen )
+                        {
+                            xCompObj->SeekRel( nStringLen );        // now skipping the UserName;
+                            *xCompObj >> nStringLen;
+                            if ( ( xCompObj->Tell() + nStringLen ) < nStreamLen )
+                            {
+                                xCompObj->SeekRel( nStringLen );    // now skipping the clipboard formatname
+                                *xCompObj   >> nStringLen;
+                                if ( ( nStringLen > 1 ) && ( ( xCompObj->Tell() + nStringLen ) < nStreamLen ) )
+                                {   // i think that the OleIdentifier will follow
+                                    ByteString aTemp;
+                                    sal_Char* p = aTemp.AllocBuffer( nStringLen - 1 );
+                                    xCompObj->Read( p, nStringLen - 1 );
+                                    aOleIdentifier = String( aTemp, gsl_getSystemTextEncoding() );
+                                }
+                            }
+                        }
+                    }
+                    if ( aControlName.Len() )
+                         ImplWriteCString( *mpExEmbed, aControlName, 1 );
+                    if ( aOleIdentifier.Len() )
+                        ImplWriteCString( *mpExEmbed, aOleIdentifier, 2 );
+                    if ( aUserName.Len() )
+                        ImplWriteCString( *mpExEmbed, aUserName, 3 );
+                }
                 nSize = mpExEmbed->Tell() - nOldPos;
                 mpExEmbed->Seek( nOldPos - 4 );
                 *mpExEmbed << nSize;
@@ -4505,21 +4554,23 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                     mp_EscherEx->AddOpt( _Escher_Prop_LockAgainstGrouping, 0x800080 );
                 mp_EscherEx->AddOpt( _Escher_Prop_pictureId, mnExEmbed );
                 mp_EscherEx->AddOpt( _Escher_Prop_pictureActive, 0x10000 );
-/*
-                sal_uInt32 i, nBufSize;
-                ByteString aString( "CheckBox1" );
-                nBufSize = ( aString.Len() + 1 ) << 1;
-                sal_uInt8* pBuf = new sal_uInt8[ nBufSize ];
-                sal_uInt8* pTmp = pBuf;
-                for ( i = 0; i < aString.Len(); i++ )
+
+                if ( aControlName.Len() )
                 {
-                    *pTmp++ = aString.GetChar( i );
+                    sal_uInt32 i, nBufSize;
+                    nBufSize = ( aControlName.Len() + 1 ) << 1;
+                    sal_uInt8* pBuf = new sal_uInt8[ nBufSize ];
+                    sal_uInt8* pTmp = pBuf;
+                    for ( i = 0; i < aControlName.Len(); i++ )
+                    {
+                        sal_Unicode nUnicode = aControlName.GetChar( i );
+                        *pTmp++ = (sal_uInt8)nUnicode;
+                        *pTmp++ = (sal_uInt8)( nUnicode >> 8 );
+                    }
                     *pTmp++ = 0;
+                    *pTmp = 0;
+                    mp_EscherEx->AddOpt( _Escher_Prop_wzName, TRUE, nBufSize, pBuf, nBufSize );
                 }
-                *pTmp++ = 0;
-                *pTmp = 0;
-                mp_EscherEx->AddOpt( _Escher_Prop_wzName, TRUE, nBufSize, pBuf, nBufSize );
-*/
            }
             else if ( mType == "drawing.Connector" )
             {
@@ -5091,6 +5142,12 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                                 sal_uInt8 aTestA[ 10 ];
                                 if ( sizeof( aTestA ) == xSrcTst->Read( aTestA, sizeof( aTestA ) ) )
                                 {
+/*
+                                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CLSID" ) ) ) )
+                                    {
+                                        String aCLSID( *( ::rtl::OUString*)mAny.getValue() );
+                                    }
+*/
                                     *mpExEmbed  << (sal_uInt32)( 0xf | ( EPP_ExEmbed << 16 ) )
                                                 << (sal_uInt32)0;               // Size of this container
 
@@ -5098,8 +5155,13 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
 
                                     *mpExEmbed  << (sal_uInt32)( EPP_ExEmbedAtom << 16 )
                                                 << (sal_uInt32)8
-                                                << (sal_uInt32)0
-                                                << (sal_uInt32)0x30000001;
+                                                << (sal_uInt32)0    // follow colorscheme : 0->do not follow
+                                                                    //                      1->follow collorscheme
+                                                                    //                      2->follow text and background scheme
+                                                << (sal_uInt8)1     // (bool)set if embedded server can not be locked
+                                                << (sal_uInt8)0     // (bool)do not need to send dimension
+                                                << (sal_uInt8)0     // (bool)is object a world table
+                                                << (sal_uInt8)0;    // pad byte
 
                                     maExOleObj.Insert( new PPTExOleObjEntry( NORMAL_OLE_OBJECT, aString, mpExEmbed->Tell() ) );
 
@@ -5109,9 +5171,9 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                                                 << (sal_uInt32)24
                                                 << (sal_uInt32)1
                                                 << (sal_uInt32)0
-                                                << (sal_uInt32)mnExEmbed
+                                                << (sal_uInt32)mnExEmbed    // index to the persist table
+                                                << (sal_uInt32)0            // subtype
                                                 << (sal_uInt32)0
-                                                << (sal_uInt32)0    // index to the persist table
                                                 << (sal_uInt32)0x0012b600;
 
 //                                  ImplWriteCString( *mpExEmbed, "Photo Editor Photo", 1 );

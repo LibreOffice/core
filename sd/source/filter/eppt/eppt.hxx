@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-07 15:49:06 $
+ *  last change: $Author: sj $ $Date: 2000-11-08 19:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XCONTROLMODEL_HPP_
 #include <com/sun/star/awt/XControlModel.hpp>
+#endif
+#ifndef _MSOCXIMEX_HXX
+#include <svx/msocximex.hxx>
 #endif
 
 #include <com/sun/star/beans/XPropertySet.hpp>
