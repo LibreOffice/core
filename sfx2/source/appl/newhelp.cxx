@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:34:32 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2279,6 +2279,22 @@ void SfxHelpTextWindow_Impl::Resize()
 
 // -----------------------------------------------------------------------
 
+bool isHandledKey( const KeyCode& _rKeyCode )
+{
+    bool bRet = false;
+    USHORT nCode = _rKeyCode.GetCode();
+
+    // the keys <CTRL><A> (select all), <CTRL><C> (copy) and <CTRL><P> (print)
+    // were handled in help
+    if ( _rKeyCode.IsMod1() &&
+         ( KEY_A == nCode || KEY_C == nCode || KEY_P == nCode ) )
+        bRet = true;
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
+
 long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     long nDone = 0;
@@ -2368,10 +2384,9 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
          const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
          const KeyCode& rKeyCode = pKEvt->GetKeyCode();
         USHORT nKeyGroup = rKeyCode.GetGroup();
-        if ( KEYGROUP_ALPHA == nKeyGroup &&
-            ( ( rKeyCode.GetCode() != KEY_A && rKeyCode.GetCode() != KEY_C ) || !rKeyCode.IsMod1() ) )
+        if ( KEYGROUP_ALPHA == nKeyGroup &&  !isHandledKey( rKeyCode ) )
         {
-            // do nothing disables the writer accelerators, but <CTRL><A> and <CTRL><C> is enabled
+            // do nothing disables the writer accelerators
             nDone = 1;
          }
         else if ( rKeyCode.IsMod1() && rKeyCode.GetCode() == KEY_F4 )
