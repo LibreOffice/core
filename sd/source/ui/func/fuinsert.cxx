@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-13 11:05:18 $
+ *  last change: $Author: kz $ $Date: 2001-10-16 15:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,30 +373,6 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         SvInPlaceObjectRef aIPObj;
         SvStorageRef aStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
 
-#ifndef SO3
-        if (nSlotId == SID_INSERT_DIAGRAM)
-        {
-            aIPObj = &SvInPlaceObject::ClassFactory()->CreateAndInit(
-                          SvGlobalName(SO3_SCH_CLASSID_60), aStor);
-        }
-        else if (nSlotId == SID_ATTR_TABLE)
-        {
-            aIPObj = &SvInPlaceObject::ClassFactory()->CreateAndInit(
-                          SvGlobalName(SO3_SC_CLASSID_60), aStor);
-        }
-#ifdef STARIMAGE_AVAILABLE
-        else if (nSlotId == SID_INSERT_IMAGE)
-        {
-            aIPObj = &SvInPlaceObject::ClassFactory()->CreateAndInit(
-                          SvGlobalName(SO3_SIM_CLASSID_60), aStor);
-        }
-#endif
-        else if (nSlotId == SID_INSERT_MATH)
-        {
-            aIPObj = &SvInPlaceObject::ClassFactory()->CreateAndInit(
-                          SvGlobalName(SO3_SM_CLASSID_60), aStor);
-        }
-#else
         if (nSlotId == SID_INSERT_DIAGRAM)
         {
             aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
@@ -419,7 +395,6 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
             aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
                           SvGlobalName(SO3_SM_CLASSID_60), aStor);
         }
-#endif
 
         if ( aIPObj.Is() )
         {

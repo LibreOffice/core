@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-18 14:57:07 $
+ *  last change: $Author: kz $ $Date: 2001-10-16 15:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -888,13 +888,8 @@ ErrCode __EXPORT SdDrawViewShell::DoVerb(long nVerb)
                     pDrView->HideMarkHdl(NULL);
 
                     SvStorageRef aStor = new SvStorage(String());
-#ifndef SO3
-                    SvInPlaceObjectRef aNewIPObj = &SvInPlaceObject::ClassFactory()
-                    ->CreateAndInit(SimModuleDummy::GetID(SOFFICE_FILEFORMAT_CURRENT), aStor);
-#else
                     SvInPlaceObjectRef aNewIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())
                     ->CreateAndInit(SimModuleDummy::GetID(SOFFICE_FILEFORMAT_CURRENT), aStor);
-#endif
                     if ( aNewIPObj.Is() )
                     {
                         SdrGrafObj* pTempSdrGrafObj = (SdrGrafObj*) pSdrGrafObj->Clone ();

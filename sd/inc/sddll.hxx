@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:28 $
+ *  last change: $Author: kz $ $Date: 2001-10-16 16:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,19 +127,11 @@ public:
 
                 // SvFactory name convention:
                 // 'p' + SfxObjectShell-subclass + 'Factory'
-#ifndef SO3
-    SvFactory* pSdDrawDocShellFactory;
-    SvFactory* pSdGraphicDocShellFactory;
-
-               SdModuleDummy(ResMgr* pResMgr, BOOL bDummy,
-                             SvFactory* pDrawObjFact, SvFactory* pGraphicObjFact)
-#else
     SotFactory* pSdDrawDocShellFactory;
     SotFactory* pSdGraphicDocShellFactory;
 
                SdModuleDummy(ResMgr* pResMgr, BOOL bDummy,
                              SotFactory* pDrawObjFact, SotFactory* pGraphicObjFact)
-#endif
                : SfxModule(pResMgr, bDummy,
                             // Der erste Factory-Pointer muss gueltig sein!
                            (SfxObjectFactory*) (pDrawObjFact ? pDrawObjFact    : pGraphicObjFact),

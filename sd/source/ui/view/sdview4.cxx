@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 15:42:26 $
+ *  last change: $Author: kz $ $Date: 2001-10-16 16:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,11 +398,7 @@ IMPL_LINK_INLINE_START( SdView, DropInsertFileHdl, Timer*, pTimer )
 
             if (pViewSh)
             {
-#ifndef SO3
-                aIPObj = &SvInPlaceObject::ClassFactory()->CreateAndInit(aDropFile, aStor);
-#else
                 aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(aDropFile, aStor);
-#endif
                 if ( aIPObj.Is() )
                 {
                     Size        aSize(aIPObj->GetVisArea(ASPECT_CONTENT).GetSize());

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-22 13:12:20 $
+ *  last change: $Author: kz $ $Date: 2001-10-16 15:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,13 +97,8 @@ void SdDLL::Init()
 
     // the SdModule must be created
     SdModuleDummy** ppShlPtr = (SdModuleDummy**) GetAppData(SHL_DRAW);
-#ifndef SO3
-    SvFactory* pDrawFact    = (*ppShlPtr)->pSdDrawDocShellFactory;
-    SvFactory* pGraphicFact = (*ppShlPtr)->pSdGraphicDocShellFactory;
-#else
     SvFactory* pDrawFact    = (SvFactory*)(*ppShlPtr)->pSdDrawDocShellFactory;
     SvFactory* pGraphicFact = (SvFactory*)(*ppShlPtr)->pSdGraphicDocShellFactory;
-#endif
     delete (*ppShlPtr);
     (*ppShlPtr) = new SdModule(pDrawFact, pGraphicFact);
     (*ppShlPtr)->pSdDrawDocShellFactory    = pDrawFact;
