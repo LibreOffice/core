@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-26 12:04:51 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 11:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,8 @@ void Process::SetImage( const String &aAppPath, const String &aAppParams )
         osl::FileBase::getFileURLFromSystemPath( ::rtl::OUString(aAppPath), aNormalizedAppPath );
         pProcess = new NAMESPACE_VOS(OProcess)( aNormalizedAppPath );
         bHasBeenStarted = FALSE;
+
+        delete [] pParamList;
     }
 }
 
