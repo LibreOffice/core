@@ -135,6 +135,9 @@
                deprecation="${deprecation}"
                optimize="${optimize}">
             <classpath refid="classpath"/>
+                        <include name="${package}/EmbeddedObject.java"/>
+                        <include name="${package}/EmbeddedBinaryObject.java"/>
+                        <include name="${package}/EmbeddedXMLObject.java"/>
             <include name="${package}/OfficeConstants.java"/>
             <include name="${package}/OfficeZip.java"/>
             <include name="${package}/OfficeDocument.java"/>
