@@ -183,8 +183,3 @@ hedabu: ..\inc\threadex.hxx %_DEST%\inc%_EXT%\vcl\threadex.hxx
 hedabu: ..\inc\evntpost.hxx %_DEST%\inc%_EXT%\vcl\evntpost.hxx
 hedabu: ..\inc\unohelp.hxx %_DEST%\inc%_EXT%\vcl\unohelp.hxx
 hedabu: ..\unx\inc\salconfig.hxx %_DEST%\inc%_EXT%\vcl\unx\salconfig.hxx
-hedabu: ..\inc\rvp.hxx %_DEST%\inc%_EXT%\vcl\rvp.hxx
-hedabu: ..\%__SRC%\inc\com\sun\star\portal\client\*.hpp %_DEST%\inc%_EXT%\com\sun\star\portal\client\*.hpp
-hedabu: ..\%__SRC%\inc\com\sun\star\portal\client\*.hdl %_DEST%\inc%_EXT%\com\sun\star\portal\client\*.hdl
-hedabu: ..\%__SRC%\inc\com\sun\star\portal\system\*.hpp %_DEST%\inc%_EXT%\com\sun\star\portal\system\*.hpp
-hedabu: ..\%__SRC%\inc\com\sun\star\portal\system\*.hdl %_DEST%\inc%_EXT%\com\sun\star\portal\system\*.hdl
