@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-27 08:56:56 $
+ *  last change: $Author: hr $ $Date: 2000-12-07 14:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 #include <tools/string.hxx>
 
-#if __PRIVATE
+#if _SOLAR__PRIVATE
 class SfxHelp_Impl : public Help
 {
     String          aTicket;        // for Plugins

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:23 $
+ *  last change: $Author: hr $ $Date: 2000-12-07 14:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ protected:
     virtual void    UseDefault();
     virtual String  GetName() const;
 
-#if __PRIVATE
+#if _SOLAR__PRIVATE
     void            MakeDefaultImageList_Impl();
     void            MakeLists_Impl( SfxSymbolSet );
 #endif
@@ -140,7 +140,7 @@ public:
     void            RegisterToolBoxManager(SfxToolBoxManager*, USHORT nFlags=0xFFFF );
     void            ReleaseToolBoxManager(SfxToolBoxManager*);
 
-#if __PRIVATE
+#if _SOLAR__PRIVATE
     void            ExchangeItemImage_Impl(USHORT nId, const Image& rImage);
     BOOL            IsUserDef_Impl(USHORT nId) const;
     const Bitmap&   GetUserDefBitmap_Impl(USHORT nId) const;

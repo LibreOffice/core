@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:23 $
+ *  last change: $Author: hr $ $Date: 2000-12-07 14:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ public:
                                     { return bCtrlClick; }
 };
 
-#if __PRIVATE
+#if _SOLAR__PRIVATE
 
 #include "tbxctrl.hxx"
 class SfxURLToolBoxControl_Impl : public SfxToolBoxControl
