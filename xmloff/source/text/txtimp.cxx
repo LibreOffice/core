@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-08 17:36:43 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,6 +543,7 @@ XMLTextImportHelper::XMLTextImportHelper(
         sal_Bool bPrg,
         sal_Bool bBlockM,
         sal_Bool bOrganizerM ) :
+    rSvXMLImport( rImport ),
     pTextElemTokenMap( 0 ),
     pTextPElemTokenMap( 0 ),
     pTextPAttrTokenMap( 0 ),
