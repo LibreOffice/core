@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:21:02 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 16:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ private:
     CheckBox            aAutoSaveBtn;
     NumericField        aAutoSaveEdit;
     FixedText           aMinuteText;
-//  CheckBox            aAutoSavePromptBtn;
+    CheckBox            aWarnAlienFormatBtn;
 
     FixedLine           aRelBox;
     CheckBox            aRelFsysBtn;
@@ -121,6 +121,7 @@ private:
     FixedText           aFiltersFT;
     ReadOnlyImage       aFiltersFI;
     ListBox             aFiltersLB;
+    FixedText           aWarningFT;
 
     String              sAlienMsg;
 
