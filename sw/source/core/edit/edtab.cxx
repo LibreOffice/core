@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtab.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: jp $ $Date: 2001-02-08 14:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -709,5 +709,11 @@ BOOL SwEditShell::CanMergeTable( BOOL bWithPrev, BOOL* pChkNxtPrv ) const
         }
     }
     return bRet;
+}
+
+        // setze das InsertDB als Tabelle Undo auf:
+void SwEditShell::AppendUndoForInsertFromDB( BOOL bIsTable )
+{
+    GetDoc()->AppendUndoForInsertFromDB( *GetCrsr(), bIsTable );
 }
 

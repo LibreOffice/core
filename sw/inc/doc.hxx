@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-23 20:19:08 $
+ *  last change: $Author: jp $ $Date: 2001-02-08 14:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1441,6 +1441,8 @@ public:
     sal_Bool GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet );
         // setze das TabelleAttribut Undo auf:
     void AppendUndoForAttrTable( const SwTable& rTbl );
+        // setze das InsertDB als Tabelle Undo auf:
+    void AppendUndoForInsertFromDB( const SwPaM& rPam, BOOL bIsTable );
         // setze die Spalten/Zeilen/ZTellen Breite/Hoehe
     sal_Bool SetColRowWidthHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                                 SwTwips nAbsDiff, SwTwips nRelDiff );

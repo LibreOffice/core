@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-28 20:35:33 $
+ *  last change: $Author: jp $ $Date: 2001-02-08 14:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1237,6 +1237,27 @@ USHORT SwDoc::GetFldUpdateFlags() const
     if( AUTOUPD_GLOBALSETTING == nRet )
         nRet = SW_MOD()->GetFldUpdateFlags(IsHTMLMode());
     return nRet;
+}
+
+        // setze das InsertDB als Tabelle Undo auf:
+void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, BOOL bIsTable )
+{
+    if( bIsTable )
+    {
+        const SwTableNode* pTblNd = rPam.GetPoint()->nNode.GetNode().FindTableNode();
+        if( pTblNd )
+        {
+            SwUndoCpyTbl* pUndo = new SwUndoCpyTbl;
+            pUndo->SetTableSttIdx( pTblNd->GetIndex() );
+            AppendUndo( pUndo );
+        }
+    }
+    else if( rPam.HasMark() )
+    {
+        SwUndoCpyDoc* pUndo = new SwUndoCpyDoc( rPam );
+        pUndo->SetInsertRange( rPam, FALSE );
+        AppendUndo( pUndo );
+    }
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 09:27:52 $
+ *  last change: $Author: jp $ $Date: 2001-02-08 14:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,6 +704,8 @@ public:
     // Richtung es moeglich ist.
     BOOL CanMergeTable( BOOL bWithPrev = TRUE, BOOL* pChkNxtPrv = 0 ) const;
     BOOL MergeTable( BOOL bWithPrev = TRUE, USHORT nMode = 0 );
+        // setze das InsertDB als Tabelle Undo auf:
+    void AppendUndoForInsertFromDB( BOOL bIsTable );
 
     // Selektionen sichern
     void SpellStart( SwDocPositions eStart, SwDocPositions eEnde,
