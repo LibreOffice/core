@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-15 20:06:02 $
+ *  last change: $Author: sb $ $Date: 2001-08-16 13:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  Miscellaneous Resources
 //
-// $Author: kz $ $Date: 2001-08-15 20:06:02 $ $Revision: 1.25 $
+// $Author: sb $ $Date: 2001-08-16 13:41:57 $ $Revision: 1.26 $
 //============================================================================
 
 #define __RSC
@@ -1170,8 +1170,39 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "Folder $(ARG1) does not exist";
         Text[ catalan ] = "Folder $(ARG1) does not exist";
     };
+
+    String (ERRCODE_UUI_WRONGJAVA & ERRCODE_RES_MASK)
+    {
+        Text = "Die vorhandene Java-Version wird nicht unterstützt";
+        Text[english] = "The installed Java version is not supported";
+    };
+
+    String (ERRCODE_UUI_WRONGJAVA_VERSION & ERRCODE_RES_MASK)
+    {
+        Text = "Die vorhandene Java-Version $(ARG1) wird nicht unterstützt";
+        Text[english] = "The installed Java version $(ARG1) is not supported";
+    };
+    String (ERRCODE_UUI_WRONGJAVA_MIN & ERRCODE_RES_MASK)
+    {
+        Text = "Die vorhandene Java-Version wird nicht unterstützt, es wird mindestens Version $(ARG1) benötigt";
+        Text[english] = "The installed Java version is not supported, at least versin $(ARG1) is required";
+    };
+
+    String (ERRCODE_UUI_WRONGJAVA_VERSION_MIN & ERRCODE_RES_MASK)
+    {
+        Text = "Die vorhandene Java-Version $(ARG1) wird nicht unterstützt, es wird mindestens Version $(ARG2) benötigt";
+        Text[english] = "The installed Java version $(ARG1) is not supported, at least versin $(ARG2) is required";
+    };
+
+    String (ERRCODE_UUI_BADPARTNERSHIP & ERRCODE_RES_MASK)
+    {
+        Text = "Die zu der Partnerschaft gespeicherten Daten sind defekt";
+        Text[english] = "The data associated with the partnership are corrupted";
+    };
+
+    String (ERRCODE_UUI_BADPARTNERSHIP_NAME & ERRCODE_RES_MASK)
+    {
+        Text = "Die zu der Partnerschaft $(ARG1) gespeicherten Daten sind defekt";
+        Text[english] = "The data associated with the partnership $(ARG1) are corrupted";
+    };
 };
-
-
-
-

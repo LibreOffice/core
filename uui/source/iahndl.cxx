@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-09 06:39:14 $
+ *  last change: $Author: sb $ $Date: 2001-08-16 13:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,14 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include "com/sun/star/beans/PropertyValue.hpp"
 #endif
+#ifndef _COM_SUN_STAR_JAVA_WRONGJAVAVERSIONEXCEPTION_HPP_
+#include "com/sun/star/java/WrongJavaVersionException.hpp"
+#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#endif
+#ifndef _COM_SUN_STAR_SYNC2_BADPARTNERSHIPEXCEPTION_HPP_
+#include "com/sun/star/sync2/BadPartnershipException.hpp"
 #endif
 #ifndef _COM_SUN_STAR_TASK_CLASSIFIEDINTERACTIONREQUEST_HPP_
 #include "com/sun/star/task/ClassifiedInteractionRequest.hpp"
@@ -984,6 +990,8 @@ UUIInteractionHandler::handle(
     star::ucb::InteractiveCHAOSException aCHAOSException;
     star::ucb::InteractiveBadTransferURLException aTransferException;
     star::ucb::InteractiveWrongMediumException aWrongMediumException;
+    star::java::WrongJavaVersionException aWrongJavaVersionException;
+    star::sync2::BadPartnershipException aBadPartnershipException;
     try
     {
         if (aTheRequest >>= aIOException)
@@ -1301,6 +1309,40 @@ UUIInteractionHandler::handle(
             nButton = aErrorBox.Execute();
             eExecute = EXECUTE_NO;
         }
+        else if (aTheRequest >>= aWrongJavaVersionException)
+            nErrorID
+                = aWrongJavaVersionException.DetectedVersion.getLength()
+                          == 0 ?
+                      aWrongJavaVersionException.LowestSupportedVersion.
+                                                     getLength()
+                              == 0 ?
+                          ERRCODE_UUI_WRONGJAVA :
+                          static_cast< ULONG >(
+                              *new StringErrorInfo(
+                                       ERRCODE_UUI_WRONGJAVA_MIN,
+                                       aWrongJavaVersionException.
+                                           LowestSupportedVersion)) :
+                      aWrongJavaVersionException.LowestSupportedVersion.
+                                                     getLength()
+                              == 0 ?
+                          static_cast< ULONG >(
+                              *new StringErrorInfo(
+                                       ERRCODE_UUI_WRONGJAVA_VERSION,
+                                       aWrongJavaVersionException.
+                                           DetectedVersion)) :
+                          static_cast< ULONG >(
+                              *new TwoStringErrorInfo(
+                                       ERRCODE_UUI_WRONGJAVA_VERSION_MIN,
+                                       aWrongJavaVersionException.
+                                           DetectedVersion,
+                                       aWrongJavaVersionException.
+                                           LowestSupportedVersion));
+        else if (aTheRequest >>= aBadPartnershipException)
+            nErrorID = aBadPartnershipException.Partnership.getLength() == 0 ?
+                           ERRCODE_UUI_BADPARTNERSHIP :
+                           *new StringErrorInfo(
+                                    ERRCODE_UUI_BADPARTNERSHIP_NAME,
+                                    aBadPartnershipException.Partnership);
     }
     catch (std::bad_alloc const &)
     {

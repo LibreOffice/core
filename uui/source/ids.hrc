@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-15 13:44:03 $
+ *  last change: $Author: sb $ $Date: 2001-08-16 13:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  The UUI Resources
 //
-// $Author: sb $ $Date: 2001-08-15 13:44:03 $ $Revision: 1.6 $
+// $Author: sb $ $Date: 2001-08-16 13:41:57 $ $Revision: 1.7 $
 //============================================================================
 
 #ifndef UUI_IDS_HRC
@@ -139,6 +139,12 @@
 #define ERRCODE_UUI_IO_WRONGVERSION       (ERRCODE_AREA_UUI + 35)
 #define ERRCODE_UUI_IO_NOTEXISTS_VOLUME   (ERRCODE_AREA_UUI + 36)
 #define ERRCODE_UUI_IO_NOTEXISTS_FOLDER   (ERRCODE_AREA_UUI + 37)
+#define ERRCODE_UUI_WRONGJAVA             (ERRCODE_AREA_UUI + 38)
+#define ERRCODE_UUI_WRONGJAVA_VERSION     (ERRCODE_AREA_UUI + 39)
+#define ERRCODE_UUI_WRONGJAVA_MIN         (ERRCODE_AREA_UUI + 40)
+#define ERRCODE_UUI_WRONGJAVA_VERSION_MIN (ERRCODE_AREA_UUI + 41)
+#define ERRCODE_UUI_BADPARTNERSHIP        (ERRCODE_AREA_UUI + 42)
+#define ERRCODE_UUI_BADPARTNERSHIP_NAME   (ERRCODE_AREA_UUI + 43)
 
 //============================================================================
 #define HID_DLG_LOGIN (HID_UUI_START + 0)
