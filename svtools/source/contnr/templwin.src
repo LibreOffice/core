@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-08 09:00:40 $
+ *  last change: $Author: kz $ $Date: 2001-08-10 20:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,7 +347,7 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ polish ] = "W�a�ciwo�ci dokumentu";
             Text[ portuguese_brazilian ] = "Docinfo";
             Text[ japanese ] = "ﾄﾞｷｭﾒﾝﾄの属性";
-            Text[ korean ] = "Docinfo";
+            Text[ korean ] = "문서 정보";
             Text[ chinese_simplified ] = "文档属性";
             Text[ chinese_traditional ] = "文件屬性";
             Text[ turkish ] = "Docinfo";
@@ -553,7 +553,7 @@ StringArray STRARY_SVT_DOCINFO
         < "�nderungdatum" ; DI_MODIFIEDDATE ; > ;
         < "Ge�ndert von" ; DI_MODIFIEDBY ; > ;
         < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "ZL : \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" ; DI_PRINTBY ; > ;
+        < "ZL : \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" ; DI_PRINTBY ; > ;
         < "Thema" ; DI_THEME ; > ;
         < "Gr��e" ; DI_SIZE ; > ;
     };
@@ -843,6 +843,7 @@ StringArray STRARY_SVT_DOCINFO
         < "Gr��e" ; DI_SIZE ; > ;
     };
 };
+
 
 
 
