@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:52:08 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,6 +414,7 @@ SfxApplication* SfxApplication::GetOrCreate()
 
         ::framework::SetImageProducer( GetImage );
         ::framework::SetCommandURLFromKeyCode( GetCommandURLFromKeyCode );
+        ::framework::SetKeyCodeFromCommandURL( GetKeyCodeFromCommandURL );
 
         SfxHelp* pSfxHelp = new SfxHelp;
         Application::SetHelp( pSfxHelp );
