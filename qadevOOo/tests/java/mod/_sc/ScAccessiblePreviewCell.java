@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessiblePreviewCell.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2004-01-05 18:45:19 $
+ *  last change:$Date: 2004-03-19 15:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ public class ScAccessiblePreviewCell extends TestCase {
         XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), xModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE_CELL);
+        at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE_CELL, true);
 
         oObj = AccessibilityTools.SearchedContext;
 
