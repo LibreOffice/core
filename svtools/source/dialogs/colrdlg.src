@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:09:01 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 14:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ ModalDialog DLG_COLOR
         Text = "~Grün" ;
         Text [ ENGLISH ] = "~Green" ;
         Text [ english_us ] = "~Green" ;
-        Text [ portuguese_brazilian ] = "~Grün" ;
+        Text [ portuguese_brazilian ] = "~Gr?" ;
         Text [ swedish ] = "~Grönt" ;
         Text [ danish ] = "Grøn" ;
         Text [ italian ] = "~Verde" ;
@@ -472,7 +472,7 @@ ModalDialog DLG_COLOR
         Text = "~Sättigung" ;
         Text [ ENGLISH ] = "~Saturation" ;
         Text [ english_us ] = "~Saturation" ;
-        Text [ portuguese_brazilian ] = "~Sättigung" ;
+        Text [ portuguese_brazilian ] = "~S?ttigung" ;
         Text [ swedish ] = "Mä~ttnad" ;
         Text [ danish ] = "Mætning" ;
         Text [ italian ] = "~Saturazione" ;
@@ -523,7 +523,7 @@ ModalDialog DLG_COLOR
         Text [ portuguese ] = "~Brilho" ;
         Text[ chinese_simplified ] = "ÁÁ¶È(~N)";
         Text[ russian ] = "ßðêîñòü";
-        Text[ polish ] = "Jasnoœæ";
+        Text[ polish ] = "Jasno?æ";
         Text[ japanese ] = "–¾“x(~N)";
         Text[ chinese_traditional ] = "«G«×(~N)";
         Text[ arabic ] = "ÇáÅÖÇÁÉ";
