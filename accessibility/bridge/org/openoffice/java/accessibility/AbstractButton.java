@@ -126,6 +126,48 @@ public abstract class AbstractButton extends Component {
             }
         }
 
+        /** Returns the relation set of this object */
+        public javax.accessibility.AccessibleRelationSet getAccessibleRelationSet() {
+            try {
+                XAccessibleRelationSet unoAccessibleRelationSet = unoAccessibleContext.getAccessibleRelationSet();
+
+                if (unoAccessibleRelationSet == null) {
+                    return null;
+                }
+
+                javax.accessibility.AccessibleRelationSet relationSet = new javax.accessibility.AccessibleRelationSet();
+                int count = unoAccessibleRelationSet.getRelationCount();
+
+                for (int i = 0; i < count; i++) {
+                    AccessibleRelation unoAccessibleRelation = unoAccessibleRelationSet.getRelation(i);
+
+                    switch (unoAccessibleRelation.RelationType) {
+                        case AccessibleRelationType.MEMBER_OF:
+                            relationSet.add(new javax.accessibility.AccessibleRelation(
+                                    javax.accessibility.AccessibleRelation.MEMBER_OF,
+                                    getAccessibleComponents(
+                                        unoAccessibleRelation.TargetSet)));
+                            break;
+
+                        case AccessibleRelationType.LABELED_BY:
+                            relationSet.add(new javax.accessibility.AccessibleRelation(
+                                    javax.accessibility.AccessibleRelation.LABELED_BY,
+                                    getAccessibleComponents(
+                                        unoAccessibleRelation.TargetSet)));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                return relationSet;
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                return null;
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+        }
+
         /*
         * AccessibleAction
         */
@@ -133,25 +175,35 @@ public abstract class AbstractButton extends Component {
         /** Performs the specified Action on the object */
         public boolean doAccessibleAction(int param) {
             if (param == 0) {
-                // Actions of MenuItems may also be performed if the item is not
-                // visible, so just try ..
-                try {
-                    XAccessibleComponent xAccessibleComponent = AbstractButton.this.unoAccessibleComponent;
-                    if (xAccessibleComponent != null) {
-                        // Query for XAccessibleValue interface
-                        XAccessibleAction xAccessibleAction = (XAccessibleAction)
-                            UnoRuntime.queryInterface(XAccessibleAction.class,
-                            xAccessibleComponent);
-
-                        if (xAccessibleAction != null) {
-                            return xAccessibleAction.doAccessibleAction(0);
+                // HACK: this action might open a modal dialog and therefor block
+                // until the dialog is closed. In case of this thread being the
+                // AWT EventDispatcherThread this means, the opened dialog will
+                // not be accessible, so deligate this request to another thread.
+                if (java.awt.EventQueue.isDispatchThread()) {
+                    Thread t = new Thread () {
+                        public void run() {
+                            AbstractButton.AccessibleAbstractButton.this.doAccessibleAction(0);
                         }
-                    }
-                }
+                    };
+                    t.start();
+                    return true;
+                } else {
+                    // Actions of MenuItems may also be performed if the item is not
+                    // visible, so just try ..
+                    try {
+                        XAccessibleContext xAccessibleContext = unoAccessibleContext;
+                        if (xAccessibleContext != null) {
+                            // Query for XAccessibleAction interface
+                            XAccessibleAction xAccessibleAction = (XAccessibleAction)
+                                UnoRuntime.queryInterface(XAccessibleAction.class, xAccessibleContext);
 
-                // Catch any type of uno exception
-                catch(com.sun.star.uno.Exception e) {
-                    return false;
+                            if (xAccessibleAction != null) {
+                                return xAccessibleAction.doAccessibleAction(0);
+                            }
+                        }
+                    } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                    } catch (com.sun.star.uno.RuntimeException e) {
+                    }
                 }
             }
 
