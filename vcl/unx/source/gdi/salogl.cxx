@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-27 17:10:33 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ BOOL SalOpenGL::Create()
                 }
             }
             XFreeExtensionList( ppExtensions );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             if( ! bHasGLX )
                 fprintf( stderr, "XServer does not support GLX extension\n" );
 #endif
@@ -188,7 +188,7 @@ BOOL SalOpenGL::Create()
                     ! pOverrideGLX
                     )
                 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     fprintf( stderr, "disabling GLX usage on XFree >= 4.0\n" );
 #endif
                     bHasGLX = FALSE;
@@ -231,7 +231,7 @@ BOOL SalOpenGL::Create()
             ImplFreeLib();
             mnOGLState = OGL_STATE_INVALID;
         }
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if( mnOGLState == OGL_STATE_VALID )
             fprintf( stderr, "Using GLX on visual id %x.\n", mpVisualInfo->visualid );
         else
@@ -319,7 +319,7 @@ BOOL SalOpenGL::ImplInit()
     }
     if( ! mpGLLib )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, OGL_LIBNAME "could not be opened: %s\n", dlerror() );
 #endif
         return FALSE;
@@ -343,7 +343,7 @@ BOOL SalOpenGL::ImplInit()
 
     BOOL bRet = pCreateContext && pDestroyContext && pGetCurrentContext && pMakeCurrent && pSwapBuffers && pGetConfig ? TRUE : FALSE;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     if( ! bRet )
         fprintf( stderr, "could not find all needed symbols in " OGL_LIBNAME "\n" );
 #endif
