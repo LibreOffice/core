@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:13:14 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,32 @@ void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
 void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
 void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
 void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
+
+
+//========================================================================
+// #118116 Collection object
+
+class BasicCollection : public SbxObject
+{
+    friend class SbiRuntime;
+    SbxArrayRef xItemArray;
+
+    void Initialize();
+    virtual ~BasicCollection();
+    virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
+                             const SfxHint& rHint, const TypeId& rHintType );
+    INT32 implGetIndex( SbxVariable* pIndexVar );
+    INT32 implGetIndexForName( const String& rName );
+    void CollAdd( SbxArray* pPar );
+    void CollItem( SbxArray* pPar );
+    void CollRemove( SbxArray* pPar );
+
+public:
+    TYPEINFO();
+    BasicCollection( const String& rClassname );
+    virtual SbxVariable* Find( const String&, SbxClassType );
+    virtual void Clear();
+};
 
 #endif
 
