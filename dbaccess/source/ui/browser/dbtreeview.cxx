@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreeview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-31 12:49:48 $
+ *  last change: $Author: fs $ $Date: 2000-11-06 17:44:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,10 +92,13 @@ DBTreeView::DBTreeView( Window* pParent, WinBits nBits)
 
 DBTreeView::~DBTreeView()
 {
-    if( m_pTreeListBox)
+    if (m_pTreeListBox)
     {
-        m_pTreeListBox->GetModel()->RemoveView(m_pTreeListBox);
-        m_pTreeListBox->DisconnectFromModel();
+        if (m_pTreeListBox->GetModel())
+        {
+            m_pTreeListBox->GetModel()->RemoveView(m_pTreeListBox);
+            m_pTreeListBox->DisconnectFromModel();
+        }
         delete m_pTreeListBox;
     }
 }
@@ -105,7 +108,6 @@ DBTreeView::~DBTreeView()
 void DBTreeView::Resize()
 {
     Window::Resize();
-
     m_pTreeListBox->SetPosSizePixel(Point(0,0),GetOutputSizePixel());
 }
 // -------------------------------------------------------------------------
@@ -116,7 +118,8 @@ DBTreeListModel* DBTreeView::getModel()
 // -------------------------------------------------------------------------
 void DBTreeView::setModel(DBTreeListModel* _pTreeModel)
 {
-    _pTreeModel->InsertView(m_pTreeListBox);
+    if (_pTreeModel)
+        _pTreeModel->InsertView(m_pTreeListBox);
     m_pTreeListBox->SetModel(_pTreeModel);
 }
 // -------------------------------------------------------------------------
