@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: os $ $Date: 2003-05-06 09:20:23 $
+ *  last change: $Author: os $ $Date: 2003-05-06 13:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1597,6 +1597,11 @@ void SwXShape::dispose(void) throw( RuntimeException )
             }
             else
                 pFmt->GetDoc()->DelLayoutFmt( pFmt );
+            uno::Any aAgg(xShapeAgg->queryAggregation( ::getCppuType((Reference<XComponent>*)0)));
+            Reference<XComponent> xComp;
+            aAgg >>= xComp;
+            if(xComp.is())
+                xComp->dispose();
     }
 //  else
 //      throw RuntimeException();
