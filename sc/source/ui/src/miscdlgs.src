@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:05 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text [ portuguese ] = "Eliminar linhas inteiras" ;
         Text [ finnish ] = "Poista ~rivejä" ;
         Text [ danish ] = "Slet hele rækker" ;
-        Text [ french ] = "Supprimer des ~lignes" ;
+        Text [ french ] = "Supprimer des ~lignes entières" ;
         Text [ swedish ] = "Radera hela ~rader" ;
         Text [ dutch ] = "Hele ~rijen verwijderen" ;
         Text [ spanish ] = "~Eliminar filas completas" ;
@@ -314,7 +314,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text [ portuguese ] = "Inserir ~colunas" ;
         Text [ finnish ] = "Lisää ~sarakkeita" ;
         Text [ danish ] = "Indsæt hele kolonner" ;
-        Text [ french ] = "Insérer des ~colonnes" ;
+        Text [ french ] = "Insérer des ~colonnes entières" ;
         Text [ swedish ] = "Infoga hela ~kolumner" ;
         Text [ dutch ] = "Hele ~kolommen invoegen" ;
         Text [ spanish ] = "Insertar ~columnas completas" ;
@@ -617,7 +617,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ japanese ] = "“ú•t&(~D)";
         Text[ chinese_traditional ] = "¤é´Á©M®É¶¡(~D)";
         Text[ arabic ] = "ÇáÊÇÑíÎ æÇáæŞÊ";
-        Text[ greek ] = "Çìåñïìçíßá & ¿ñá";
+        Text[ greek ] = "Çìåñïìçíßá êáé ¿ñá";
         Text[ korean ] = "ÀÏÀÚ &½Ã°£(~D)";
         Text[ turkish ] = "~Tarih & Saat";
         Text[ language_user1 ] = " ";
@@ -927,10 +927,10 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ chinese_simplified ] = "ÈÕÆÚºÍÊ±¼ä(~D)";
         Text[ russian ] = "Äàòà è  âğåìÿ";
         Text[ polish ] = "Data & Godzina";
-        Text[ japanese ] = "“ú•t&(~D)";
+        Text[ japanese ] = "“ú•t‚Æ(~D)";
         Text[ chinese_traditional ] = "¤é´Á©M®É¶¡(~D)";
         Text[ arabic ] = "ÇáÊÇÑíÎ æÇáæŞÊ";
-        Text[ greek ] = "Çìåñïìçíßá & ¿ñá";
+        Text[ greek ] = "Çìåñïìçíßá êáé ¿ñá";
         Text[ korean ] = "ÀÏÀÚ & ½Ã°£(~D)";
         Text[ turkish ] = "~Tarih & Saat";
         Text[ language_user1 ] = " ";
@@ -1479,7 +1479,7 @@ ModalDialog RID_SCDLG_MOVETAB
         Text [ portuguese ] = "~Para documento" ;
         Text [ finnish ] = "~Asiakirjaan" ;
         Text [ danish ] = "I dokumentet" ;
-        Text [ french ] = "~Vers document" ;
+        Text [ french ] = "~Vers le document" ;
         Text [ swedish ] = "T~ill dokument" ;
         Text [ dutch ] = "~Naar document" ;
         Text [ spanish ] = "~Al documento" ;
@@ -1893,7 +1893,7 @@ ModalDialog RID_SCDLG_COL_OPT
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text[ russian ] = "Äîáàâèòü";
         Text[ polish ] = "Dodaj";
-        Text[ japanese ] = "•t‰Á";
+        Text[ japanese ] = "Ú×İ’è";
         Text[ chinese_traditional ] = "ªş¥[";
         Text[ arabic ] = "ÅÖÇİí";
         Text[ greek ] = "Ğñüóèåôá";
@@ -2082,7 +2082,7 @@ ModalDialog RID_SCDLG_ROW_OPT
     Text [ portuguese ] = "Optimizar altura da linha" ;
     Text [ finnish ] = "Sopivin rivikorkeus" ;
     Text [ danish ] = "Optimal rækkehøjde" ;
-    Text [ french ] = "Optimiser la hauteur" ;
+    Text [ french ] = "Hauteur de ligne optimale" ;
     Text [ swedish ] = "Optimal radhöjd" ;
     Text [ dutch ] = "Optimale rijhoogte" ;
     Text [ spanish ] = "Altura de fila óptima" ;
@@ -2135,7 +2135,7 @@ ModalDialog RID_SCDLG_ROW_OPT
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text[ russian ] = "Äîáàâèòü";
         Text[ polish ] = "Dodaj";
-        Text[ japanese ] = "•t‰Á";
+        Text[ japanese ] = "Ú×İ’è";
         Text[ chinese_traditional ] = "ªş¥[";
         Text[ arabic ] = "ÅÖÇİí";
         Text[ greek ] = "Ğñüóèåôá";
@@ -2185,7 +2185,7 @@ ModalDialog RID_SCDLG_ROW_OPT
     Text[ polish ] = "Optymalna wysokoœæ wierszy";
     Text[ japanese ] = "Å“K‚Ès‚Ì‚‚³";
     Text[ chinese_traditional ] = "³ÌÓì¦C°ª";
-    Text[ arabic ] = "ÇáÇÑÊİÇÚ ÇáÃãËá ááÕİæİ";
+    Text[ arabic ] = "ÇáÇÑÊİÇÚ ÇáÃãËá ááÕİ";
     Text[ greek ] = "Âİëôéóôï ıøïò ãñáììŞò";
     Text[ korean ] = "ÃÖÀûÀÇ ¿­ ³ôÀÌ";
     Text[ turkish ] = "En uygun satır yüksekliği";
@@ -2593,7 +2593,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ swedish ] = "~Uppåt" ;
         Text [ dutch ] = "~Boven" ;
         Text [ spanish ] = "A~rriba" ;
-        Text [ english_us ] = "~Top" ;
+        Text [ english_us ] = "~Up" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ÏòÉÏ(~T)";
         Text[ russian ] = "Ñâåğõó";
@@ -3141,7 +3141,7 @@ ModalDialog RID_SCDLG_GROUP
     Text[ chinese_simplified ] = "·Ö×é";
     Text[ russian ] = "Ãğóïïèğîâàòü";
     Text[ polish ] = "Grupowanie";
-    Text[ japanese ] = "¸ŞÙ°Ìß•ª‚¯";
+    Text[ japanese ] = "¸ŞÙ°Ìß‰»";
     Text[ chinese_traditional ] = "¸s²Õ";
     Text[ arabic ] = "ÊÌãíÚ";
     Text[ greek ] = "Ïìáäïğïßçóç";
