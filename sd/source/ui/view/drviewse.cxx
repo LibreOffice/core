@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-25 08:39:16 $
+ *  last change: $Author: aw $ $Date: 2001-04-27 11:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,11 @@
 #endif
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
+#endif
+
+// #UndoRedo#
+#ifndef _SFXSLSTITM_HXX
+#include <svtools/slstitm.hxx>
 #endif
 
 #pragma hdrstop
@@ -1413,6 +1418,68 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
                 }
 
                 pOLV->TransliterateText( nType );
+            }
+
+            rReq.Done();
+        }
+        break;
+
+        // #UndoRedo#
+        case SID_UNDO :
+        {
+            sal_uInt16 nNumber(1);
+
+            const SfxItemSet* pReqArgs = rReq.GetArgs();
+            if(pReqArgs)
+            {
+                SfxUInt16Item* pUIntItem = (SfxUInt16Item*)&pReqArgs->Get(SID_UNDO);
+                nNumber = pUIntItem->GetValue();
+            }
+
+            if(nNumber)
+            {
+                SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
+                if(pUndoManager)
+                {
+                    sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
+                    if(nCount >= nNumber)
+                    {
+                        while(nNumber--)
+                        {
+                            pUndoManager->Undo();
+                        }
+                    }
+                }
+            }
+
+            rReq.Done();
+        }
+        break;
+        case SID_REDO :
+        {
+            sal_uInt16 nNumber(1);
+
+            const SfxItemSet* pReqArgs = rReq.GetArgs();
+            if(pReqArgs)
+            {
+                SfxUInt16Item* pUIntItem = (SfxUInt16Item*)&pReqArgs->Get(SID_REDO);
+                nNumber = pUIntItem->GetValue();
+            }
+
+            if(nNumber)
+            {
+                SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
+                if(pUndoManager)
+                {
+                    sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
+                    if(nCount >= nNumber)
+                    {
+                        while(nNumber--)
+                        {
+                            pUndoManager->Redo();
+                        }
+                    }
+                }
             }
 
             rReq.Done();
