@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_draw.scp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 17:50:23 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,3 +92,18 @@ File gid_File_Share_Config_Sofficecfg_Draw_Menubar_Xml
     Dir = gid_Dir_Share_Config_Sofficecfg_Sdraw_Menubar;
     Name = "/uiconfig/sdraw/menubar/menubar.xml";
 End
+
+File gid_File_Registry_Spool_Oo_Common_Draw_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Spool;
+    Name = "/registry/spool/org.openoffice.Office.Common-draw.xcu";
+End
+
+File gid_File_Registry_Spool_Oo_Setup_Draw_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Spool;
+    Name = "/registry/spool/org.openoffice.Setup-draw.xcu";
+End
+
