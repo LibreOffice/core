@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_keyw.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,8 @@ class TokStereotype : public TokKeyword
         ste_readonly,
         ste_removable,
         ste_virtual,
-        ste_transient
+        ste_transient,
+        ste_published
     };
 
     typedef lux::Enum<E_TokenId> EV_TokenId;

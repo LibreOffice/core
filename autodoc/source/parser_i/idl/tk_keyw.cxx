@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_keyw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:07:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ TokStereotype::EV_TokenId   ev_ste_readonly(TokStereotype::ste_readonly,"readonl
 TokStereotype::EV_TokenId   ev_ste_removable(TokStereotype::ste_removable,"removable");
 TokStereotype::EV_TokenId   ev_ste_virtual(TokStereotype::ste_virtual,"virtual");
 TokStereotype::EV_TokenId   ev_ste_transient(TokStereotype::ste_transient,"transient");
+TokStereotype::EV_TokenId   ev_ste_published(TokStereotype::ste_published,"published");
 
 
 lux::EnumValueMap                   G_aTokParameterHandling_EV_TokenId_Values;
