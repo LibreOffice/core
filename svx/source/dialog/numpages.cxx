@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-28 18:40:55 $
+ *  last change: $Author: pb $ $Date: 2000-12-08 08:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,7 +827,7 @@ IMPL_LINK(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
             // Definitionen reichen nur bis fuenf, danach wird die Art beibehalten
             USHORT nTokenPos = i > 4 ? 4 : i;
             aFmt.SetNumType( (SvxExtNumType)(USHORT) pNum->GetToken(nTokenPos * NUMTYPE_MEMBER, '|').ToInt32() );
-            USHORT nUpperLevelOrChar = pNum->GetToken(nTokenPos * NUMTYPE_MEMBER + 3, '|').ToInt32();
+            USHORT nUpperLevelOrChar = (USHORT)pNum->GetToken( nTokenPos * NUMTYPE_MEMBER + 3, '|' ).ToInt32();
             if(aFmt.GetNumType() == SVX_NUM_CHAR_SPECIAL)
             {
                 aFmt.SetBulletFont(&rActBulletFont);
@@ -2839,7 +2839,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& rRect )
             }
             if(nStart)
                 nStart--;
-            BYTE nEnd = std::min((USHORT)(nStart + 3), pActNum->GetLevelCount());
+            BYTE nEnd = std::min( (BYTE)(nStart + 3), (BYTE)pActNum->GetLevelCount() );
             for( BYTE nLevel = nStart; nLevel < nEnd; ++nLevel )
             {
                 const SvxNumberFormat &rFmt = pActNum->GetLevel(nLevel);
@@ -2944,7 +2944,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& rRect )
                     nPreNum++;
                 }
                 pVDev->SetFont(aStdFont);
-                String sMsg( RTL_CONSTASCII_USTRINGPARAM( "StarOffice") );
+                String sMsg( RTL_CONSTASCII_USTRINGPARAM( "Preview") );
                 if(pOutlineNames)
                     sMsg = pOutlineNames[nLevel];
                 pVDev->DrawText( Point(nXStart + nTextOffset, nYStart), sMsg );
