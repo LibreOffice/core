@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-29 09:25:40 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 11:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,17 @@
 #ifndef _COM_SUN_STAR_UCB_XSORTEDDYNAMICRESULTSETFACTORY_HPP_
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
 #ifndef _URLOBJ_HXX //autogen wg. INetURLObject
 #include <tools/urlobj.hxx>
 #endif
 #ifndef _CONNECTIVITY_FILE_ODRIVER_HXX_
 #include "file/FDriver.hxx"
+#endif
+#ifndef _CONNECTIVITY_FILE_TABLE_HXX_
+#include "file/FTable.hxx"
 #endif
 
 using namespace com::sun::star::ucb;
@@ -405,7 +411,76 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
         const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
 {
-    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xRef = pResult;
+    pResult->setTablePrivilegesMap();
+    ORows aRows;
+
+
+    Reference< ::com::sun::star::sdbcx::XTablesSupplier > xTabSup = m_pConnection->createCatalog();
+    if( xTabSup.is())
+    {
+        Reference< XNameAccess> xNames      = xTabSup->getTables();
+        Sequence< ::rtl::OUString > aNames  = xNames->getElementNames();
+        const ::rtl::OUString* pBegin = aNames.getConstArray();
+        const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
+        for(;pBegin != pEnd;++pBegin)
+        {
+            if(match(tableNamePattern,pBegin->getStr(),'\0'))
+            {
+                ORow aRow(8);
+                aRow[0] = Any();
+                aRow[1] = Any();
+                aRow[2] = makeAny(*pBegin);
+                aRow[3] = Any();
+                aRow[4] = Any();
+                aRow[5] = Any();
+                aRow[6] = makeAny(::rtl::OUString::createFromAscii("SELECT"));
+                aRow[7] = makeAny(::rtl::OUString::createFromAscii("NO"));
+
+                aRows.push_back(aRow);
+
+                Reference< XPropertySet> xTable;
+                xNames->getByName(*pBegin) >>= xTable;
+                if(xTable.is())
+                {
+                    Reference<XUnoTunnel> xTunnel(xTable,UNO_QUERY);
+                    if(xTunnel.is())
+                    {
+                        OFileTable* pTable = (OFileTable*)xTunnel->getSomething(OFileTable::getUnoTunnelImplementationId());
+                        if(pTable)
+                        {
+                            if(!pTable->isReadOnly())
+                            {
+                                aRow[6] = makeAny(::rtl::OUString::createFromAscii("INSERT"));
+                                aRows.push_back(aRow);
+                                aRow[6] = makeAny(::rtl::OUString::createFromAscii("DELETE"));
+                                aRows.push_back(aRow);
+                                aRow[6] = makeAny(::rtl::OUString::createFromAscii("UPDATE"));
+                                aRows.push_back(aRow);
+                                aRow[6] = makeAny(::rtl::OUString::createFromAscii("CREATE"));
+                                aRows.push_back(aRow);
+                                aRow[6] = makeAny(::rtl::OUString::createFromAscii("READ"));
+                                aRows.push_back(aRow);
+                                aRow[6] = makeAny(::rtl::OUString::createFromAscii("ALTER"));
+                                aRows.push_back(aRow);
+                                aRow[6] = makeAny(::rtl::OUString::createFromAscii("DROP"));
+                                aRows.push_back(aRow);
+                            }
+                        }
+                    }
+                }
+
+
+                aRows.push_back(aRow);
+            }
+        }
+    }
+
+    pResult->setRows(aRows);
+    return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
@@ -1171,7 +1246,16 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxUserNameLength(  ) throw(SQLExceptio
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType( sal_Int32 setType ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-
+    switch(setType)
+    {
+        case ResultSetType::FORWARD_ONLY:
+            return sal_True;
+            break;
+        case ResultSetType::SCROLL_INSENSITIVE:
+            break;
+        case ResultSetType::SCROLL_SENSITIVE:
+            break;
+    }
     return sal_False;
 }
 // -------------------------------------------------------------------------
@@ -1181,12 +1265,12 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 set
 
     switch(setType)
     {
-                case ResultSetType::FORWARD_ONLY:
+        case ResultSetType::FORWARD_ONLY:
             return sal_True;
             break;
-                case ResultSetType::SCROLL_INSENSITIVE:
+        case ResultSetType::SCROLL_INSENSITIVE:
             break;
-                case ResultSetType::SCROLL_SENSITIVE:
+        case ResultSetType::SCROLL_SENSITIVE:
             break;
     }
     return sal_False;
