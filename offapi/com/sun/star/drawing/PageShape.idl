@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageShape.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
     drawing page. Theyre also used in the handout page to preview
     the printing position and order of pages
  */
-service PageShape
+published service PageShape
 {
     // DocMerge: empty anyway
     service com::sun::star::drawing::Shape;
