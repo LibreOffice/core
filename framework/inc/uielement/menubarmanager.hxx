@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:52:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 17:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_UI_XIMAGEMANAGER_HPP_
 #include <drafts/com/sun/star/ui/XImageManager.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XACCELERATORCONFIGURATION_HPP_
+#include <drafts/com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -277,11 +280,16 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >                      xMenuItemDispatch;
             ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XPopupMenuController >   xPopupMenuController;
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >                       xPopupMenu;
+            KeyCode                                                                                     aKeyCode;
         };
 
+        void             RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuShortCuts );
         void             CreatePicklistArguments(
                             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsList,
                             const MenuItemHandler* );
+        static void      impl_RetrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg,
+                                                                  const ::com::sun::star::uno::Sequence< rtl::OUString >& rCommands,
+                                                                  std::vector< MenuItemHandler* >& aMenuShortCuts );
 
         MenuItemHandler* GetMenuItemHandler( USHORT nItemId );
 
@@ -294,7 +302,8 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
                                                                                                        m_bWasHiContrast : 1,
                                                                                                        m_bShowMenuImages : 1;
         sal_Bool                                                                                       m_bModuleIdentified : 1,
-                                                                                                       m_bRetrieveImages : 1;
+                                                                                                       m_bRetrieveImages : 1,
+                                                                                                       m_bAcceleratorCfg : 1;
         ::rtl::OUString                                                                                m_aMenuItemCommand;
         ::rtl::OUString                                                                                m_aModuleIdentifier;
         Menu*                                                                                          m_pVCLMenu;
@@ -305,6 +314,9 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         ::cppu::OMultiTypeInterfaceContainerHelper                                                     m_aListenerContainer;   /// container for ALL Listener
         ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XImageManager >                m_xDocImageManager;
         ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XImageManager >                m_xModuleImageManager;
+        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration >    m_xDocAcceleratorManager;
+        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration >    m_xModuleAcceleratorManager;
+        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration >    m_xGlobalAcceleratorManager;
         // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&        mxServiceFactory;
 };
