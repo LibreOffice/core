@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 15:52:16 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 14:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,7 @@ OTableController::OTableController(const Reference< XMultiServiceFactory >& _rM)
     ,m_bModified(sal_False)
     ,m_bOwnConnection(sal_False)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
+    ,m_bNew(sal_True)
 {
     InvalidateAll();
 }
@@ -277,6 +278,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId)
     {
         case ID_BROWSER_EDITDOC:
             aReturn.aState = ::cppu::bool2any(m_bEditable);
+            aReturn.bEnabled = m_bNew || m_bEditable;
             break;
         case ID_BROWSER_SAVEASDOC:
             aReturn.bEnabled = m_xConnection.is();
@@ -527,6 +529,9 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
                 if(xNameAccess->hasByName(m_sName) && ::cppu::extractInterface(xProp,xNameAccess->getByName(m_sName)) && xProp.is())
                 {
                     m_xTable = xProp;
+                    Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);
+                    m_bEditable = xAlter.is();
+                    m_bNew = sal_False;
                 }
             }
         }
@@ -1134,6 +1139,11 @@ void OTableController::alterColumns()
     Reference<XNameAccess> xColumns = xColSup->getColumns();
     OSL_ENSURE(xColumns.is(),"No columns");
     Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);
+    if(!xAlter.is())
+    {
+        OSL_ENSURE(0,"Normally we should never reach this state!");
+        return;
+    }
     Reference<XDrop> xDrop(xColumns,UNO_QUERY);
     Reference<XAppend> xAppend(xColumns,UNO_QUERY);
     Reference<XDataDescriptorFactory> xColumnFactory(xColumns,UNO_QUERY);

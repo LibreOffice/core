@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 15:16:27 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 14:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ namespace dbaui
         sal_Bool        m_bEditable;        // is the control readonly or not
         sal_Bool        m_bModified;        // is the data modified
         sal_Bool        m_bOwnConnection;   // is true when we created our own connection
+        sal_Bool        m_bNew;             // is true when we create a new table
 
         void loadData();
         void fillTypeInfo();        // fills a vector with type info
