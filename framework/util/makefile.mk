@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: cd $ $Date: 2001-05-31 09:05:55 $
+#   last change: $Author: as $ $Date: 2001-06-11 10:42:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,14 +80,18 @@ COMP3TYPELIST=		lgd
 LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
 .ENDIF
 
-LIB1TARGET=$(SLB)$/fweobj.lib
+# --- import library ----------------------------------------------------
+
+LIB1TARGET=		$(SLB)$/fweobj.lib
+
 LIB1OBJFILES=	$(SLO)$/menuconfiguration.obj		\
                 $(SLO)$/attributelist.obj			\
                 $(SLO)$/imageproducer.obj			\
                 $(SLO)$/menudocumenthandler.obj		\
                 $(SLO)$/bmkmenu.obj					\
                 $(SLO)$/saxnamespacefilter.obj		\
-                $(SLO)$/xmlnamespaces.obj
+                $(SLO)$/xmlnamespaces.obj			\
+                $(SLO)$/lockhelper.obj
 
 # --- services library ----------------------------------------------------
 
@@ -119,13 +123,6 @@ SHL1OBJS=		$(SLO)$/registerservices.obj		\
                 $(SLO)$/otasksenumeration.obj		\
                 $(SLO)$/ocomponentenumeration.obj	\
                 $(SLO)$/odispatchprovider.obj		\
-                $(SLO)$/fairrwlock.obj				\
-                $(SLO)$/transactionmanager.obj		\
-                $(SLO)$/transactionguard.obj		\
-                $(SLO)$/writeguard.obj				\
-                $(SLO)$/readguard.obj				\
-                $(SLO)$/resetableguard.obj			\
-                $(SLO)$/gate.obj					\
                 $(SLO)$/omenudispatcher.obj			\
                  $(SLO)$/timerhelper.obj				\
                 $(SLO)$/helpagentdispatcher.obj		\
@@ -148,9 +145,8 @@ SHL1STDLIBS=	$(CPPULIB)							\
                 $(SVLLIB)							\
                 $(SOTLIB)
 
-
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-SHL1DEPN=$(SHL4IMPLIBN) $(SHL4TARGETN)
+SHL1DEPN=		$(SHL4IMPLIBN) $(SHL4TARGETN)
 
 DEF1NAME=		$(SHL1TARGET)
 
@@ -171,13 +167,7 @@ SHL2OBJS=		$(SLO)$/registertemp.obj			\
                 $(SLO)$/filtercache.obj				\
                 $(SLO)$/argumentanalyzer.obj		\
                 $(SLO)$/wildcard.obj				\
-                $(SLO)$/fairrwlock.obj				\
-                $(SLO)$/transactionmanager.obj		\
-                $(SLO)$/transactionguard.obj		\
-                $(SLO)$/writeguard.obj				\
-                $(SLO)$/readguard.obj				\
-                $(SLO)$/gate.obj					\
-                $(SLO)$/resetableguard.obj
+                $(SLO)$/lockhelper.obj
 
 SHL2STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
@@ -201,7 +191,8 @@ SHL3TARGET=		lgd$(UPD)$(DLLPOSTFIX)
 SHL3IMPLIB=		ilgd$(UPD)$(DLLPOSTFIX)
 
 SHL3OBJS=		$(SLO)$/registerlogindialog.obj		\
-                 $(SLO)$/logindialog.obj
+                 $(SLO)$/logindialog.obj				\
+                $(SLO)$/lockhelper.obj
 
 SHL3STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
@@ -222,7 +213,7 @@ SHL4TARGET=		fwe$(UPD)$(DLLPOSTFIX)
 
 SHL4IMPLIB=		ifwe
 
-SHL4LIBS= $(LIB1TARGET)
+SHL4LIBS= 		$(LIB1TARGET)
 
 SHL4STDLIBS=	$(VCLLIB)							\
                 $(CPPULIB)							\
@@ -245,7 +236,8 @@ DEF4DEPN=		$(MISC)$/$(SHL4TARGET).flt
 APP1TARGET= 	login
 
 APP1OBJS=		$(SLO)$/login.obj					\
-                $(SLO)$/servicemanager.obj
+                $(SLO)$/servicemanager.obj			\
+                $(SLO)$/lockhelper.obj
 
 APP1STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
