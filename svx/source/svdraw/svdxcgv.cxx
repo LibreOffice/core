@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:07:23 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:04:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ BOOL SdrExchangeView::Paste(const XubString& rStr, const Point& rPos, SdrObjList
     return TRUE;
 }
 
-BOOL SdrExchangeView::Paste(SvStream& rInput, USHORT eFormat, const Point& rPos, SdrObjList* pLst, UINT32 nOptions)
+BOOL SdrExchangeView::Paste(SvStream& rInput, const String& rBaseURL, USHORT eFormat, const Point& rPos, SdrObjList* pLst, UINT32 nOptions)
 {
     Point aPos(rPos);
     ImpGetPasteObjList(aPos,pLst);
@@ -346,7 +346,7 @@ BOOL SdrExchangeView::Paste(SvStream& rInput, USHORT eFormat, const Point& rPos,
 
     pObj->SetMergedItemSet(aTempAttr);
 
-    pObj->NbcSetText(rInput,eFormat);
+    pObj->NbcSetText(rInput,rBaseURL,eFormat);
     pObj->FitFrameToTextSize();
     Size aSiz(pObj->GetLogicRect().GetSize());
     MapUnit eMap=pMod->GetScaleUnit();
