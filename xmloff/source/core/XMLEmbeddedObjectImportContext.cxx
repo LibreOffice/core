@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEmbeddedObjectImportContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:32:58 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:05:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
     else if( nPrfx == XML_NAMESPACE_OFFICE &&
         IsXMLToken( rLName, XML_DOCUMENT ) )
     {
-        OUString sClass;
+        OUString sMime;
 
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -268,11 +268,24 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
             OUString aLocalName;
             sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
             if( nPrefix == XML_NAMESPACE_OFFICE &&
-                IsXMLToken( aLocalName, XML_CLASS ) )
+                IsXMLToken( aLocalName, XML_MIMETYPE ) )
             {
-                sClass = xAttrList->getValueByIndex( i );
+                sMime = xAttrList->getValueByIndex( i );
                 break;
             }
+        }
+
+        OUString sClass;
+        OUString aTmp( RTL_CONSTASCII_USTRINGPARAM("application/vnd.oasis.openoffice.") );
+        if( 0 == sMime.compareTo( aTmp, aTmp.getLength() ) )
+        {
+            sClass = sMime.copy( aTmp.getLength() );
+        }
+        else
+        {
+            aTmp = OUString( RTL_CONSTASCII_USTRINGPARAM("application/x-vnd.oasis.openoffice.") );
+            if( 0 == sMime.compareTo( aTmp, aTmp.getLength() ) )
+                sClass = sMime.copy( aTmp.getLength() );
         }
 
         if( sClass.getLength() )
