@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 14:33:31 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: vg $ $Date: 2003-07-02 14:33:31 $ $Revision: 1.55 $
+ // $Author: hr $ $Date: 2003-07-03 17:24:30 $ $Revision: 1.56 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -150,7 +150,7 @@ String SCSTR_QHELP_POSWND
     Text[ japanese ] = "θ΅¨η―„ε›²";
     Text[ chinese_traditional ] = "ε·¥δ½θ΅¨ε€ε";
     Text[ arabic ] = "δΨΗή ΗαΜΟζα";
-    Text[ greek ] = "Περιοχή πίνακα";
+    Text[ greek ] = "Περιοχή φύλλου";
     Text[ korean ] = "μ‹νΈ μμ—­";
     Text[ turkish ] = "Tablo bφlόmό";
     Text[ language_user1 ] = " ";
@@ -216,7 +216,7 @@ String SCSTR_QHELP_BTNCALC
     Text[ japanese ] = "ι–Άζ•°γ‚ªγƒΌγƒγƒ‘γ‚¤γƒ­γƒƒγƒ";
     Text[ chinese_traditional ] = "ε‡½ζ•Έθ‡ªε‹•ε©η†";
     Text[ arabic ] = "ΗαγΡΤΟ ΗαΒαν ααΟΗαΗΚ";
-    Text[ greek ] = "Function Autopilot";
+    Text[ greek ] = "Αυτόματος πιλότος συνάρτησης";
     Text[ korean ] = "μλ™ νμΌλΏ: ν•¨μ";
     Text[ turkish ] = "OtoPilot: Fonksiyonlar";
     Text[ language_user1 ] = " ";
@@ -250,7 +250,7 @@ String SCSTR_QHELP_BTNOK
     Text[ japanese ] = "OK";
     Text[ chinese_traditional ] = "ζ΅η”¨";
     Text[ arabic ] = "ΕΟΞΗα";
-    Text[ greek ] = "Accept";
+    Text[ greek ] = "Αποδοχή";
     Text[ korean ] = "μ μ©";
     Text[ turkish ] = "Onayla";
     Text[ language_user1 ] = " ";
@@ -272,7 +272,7 @@ String SCSTR_QHELP_BTNCANCEL
     Text [ portuguese ] = "Cancelar" ;
     Text [ finnish ] = "Peruuta" ;
     Text [ danish ] = "Forkast" ;
-    Text [ french ] = "Rejeter" ;
+    Text [ french ] = "Annuler" ;
     Text [ swedish ] = "Ignorera" ;
     Text [ dutch ] = "Verwerpen" ;
     Text [ spanish ] = "Rechazar" ;
@@ -283,7 +283,7 @@ String SCSTR_QHELP_BTNCANCEL
     Text[ japanese ] = "γ‚­γƒ£γƒ³γ‚»γƒ«";
     Text[ chinese_traditional ] = "ζ¨ζ£„";
     Text[ arabic ] = "ΡέΦ";
-    Text[ greek ] = "Ακύρωση";
+    Text[ greek ] = "Άκυρο";
     Text[ korean ] = "μ•„λ‹μ¤";
     Text[ turkish ] = "έptal";
     Text[ language_user1 ] = " ";
@@ -382,7 +382,7 @@ String RID_OBJECTBAR_FORMAT
     Text[ japanese ] = "θ΅¨γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγƒγƒΌ";
     Text[ chinese_traditional ] = "ε·¥δ½θ΅¨η‰©δ»¶ε—";
     Text[ arabic ] = "ΤΡνΨ ίΗΖδΗΚ ΗαΜΟΗζα";
-    Text[ greek ] = "Γραμμή αντικειμένων πινάκων";
+    Text[ greek ] = "Γραμμή αντικειμένων υπολογιστικών φύλλων";
     Text[ korean ] = "μ¤ν”„λ λ“μ‹νΈ κ°μ²΄ λª¨μ";
     Text[ turkish ] = "Tablo nesne ηubuπu";
     Text[ language_user1 ] = " ";
@@ -1297,7 +1297,7 @@ String RID_OBJECTBAR_TOOLS
     Text[ japanese ] = "ζ¨™ζΊ–γƒ„γƒΌγƒ«γƒγƒΌ";
     Text[ chinese_traditional ] = "δΈ»ε·¥ε…·ε—";
     Text[ arabic ] = "ΤΡνΨ ΗαΓΟζΗΚ";
-    Text[ greek ] = "Γραμμή εργαλείων";
+    Text[ greek ] = "Κύρια γραμμή εργαλείων";
     Text[ korean ] = "μ£Ό λ„κµ¬ λª¨μ";
     Text[ turkish ] = "Ana araη ηubuπu";
     Text[ language_user1 ] = " ";
@@ -1573,7 +1573,7 @@ FloatingWindow RID_TBXCTL_INSCELLS
     };
     Text[ chinese_traditional ] = "ζ’ε…¥ε„²ε­ζ Ό";
     Text[ arabic ] = "ΕΟΡΗΜ ΞαΗνΗ";
-    Text[ greek ] = "Προσθήκη κελιών";
+    Text[ greek ] = "Εισαγωγή κελιών";
     Text[ korean ] = "μ…€ μ‚½μ…";
     Text[ turkish ] = "Hόcre ekle";
     Text[ language_user1 ] = " ";
@@ -2179,6 +2179,7 @@ ToolBox RID_OBJECTBAR_APP
     };
     Scroll = TRUE ;
 };
+
 
 
 
