@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-10-27 15:17:33 $
+#   last change: $Author: rt $ $Date: 2004-10-28 16:21:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -191,6 +191,7 @@ SONAME_SWITCH=-Wl,-h
 STDLIBCPP=-lstdc++
 
 # default objectfilenames to link
+STDOBJVCL=$(L)$/salmain.o
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
