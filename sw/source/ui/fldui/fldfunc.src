@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:36:02 $
+ *  last change: $Author: rt $ $Date: 2001-05-17 08:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ TabPage TP_FLD_FUNC
         Text [ ENGLISH ] = "Selection" ;
         Text [ norwegian ] = "Selection" ;
         Text [ italian ] = "~Selezione" ;
-        Text [ portuguese_brazilian ] = "Seleção" ;
+        Text [ portuguese_brazilian ] = "Sele??o" ;
         Text [ portuguese ] = "~Selecção" ;
         Text [ finnish ] = "~Valitse" ;
         Text [ danish ] = "Udvalg" ;
@@ -243,7 +243,7 @@ TabPage TP_FLD_FUNC
         Left = TRUE ;
         Text[ chinese_simplified ] = "ÊýÖµ(~V)";
         Text[ russian ] = "Çíà÷åíèå";
-        Text[ polish ] = "Wartoœæ";
+        Text[ polish ] = "Warto?æ";
         Text[ japanese ] = "’l(~V)";
         Text[ chinese_traditional ] = "¼Æ­È(~V)";
         Text[ arabic ] = "ÇáÞíãÉ";
