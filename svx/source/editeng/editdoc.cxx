@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:00:36 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -767,6 +767,7 @@ void ContentNode::ExpandAttribs( USHORT nIndex, USHORT nNew, SfxItemPool& rItemP
     // so dass nicht neu sortiert wird, wenn sich alle Attribute
     // gleich verhalten.
     BOOL bResort = FALSE;
+    BOOL bExpandedEmptyAtIndexNull = FALSE;
 
     USHORT nAttr = 0;
     EditCharAttrib* pAttrib = GetAttrib( aCharAttribList.GetAttribs(), nAttr );
@@ -787,7 +788,9 @@ void ContentNode::ExpandAttribs( USHORT nIndex, USHORT nNew, SfxItemPool& rItemP
                 //   Spezialfall: Start == 0; AbsLen == 1, nNew = 1 => Expand, weil durch Absatzumbruch!
                 // Start <= nIndex, End >= nIndex => Start=End=nIndex!
 //              if ( pAttrib->GetStart() == nIndex )
-                    pAttrib->Expand( nNew );
+                pAttrib->Expand( nNew );
+                if ( pAttrib->GetStart() == 0 )
+                    bExpandedEmptyAtIndexNull = TRUE;
             }
             // 1: Attribut startet davor, geht bis Index...
             else if ( pAttrib->GetEnd() == nIndex ) // Start muss davor liegen
@@ -820,13 +823,35 @@ void ContentNode::ExpandAttribs( USHORT nIndex, USHORT nNew, SfxItemPool& rItemP
                 }
                 else
                 {
+                    BOOL bExpand = FALSE;
                     if ( nIndex == 0 )
+                    {
+                        bExpand = TRUE;
+                        if( bExpandedEmptyAtIndexNull )
+                        {
+                            // Check if this kind of attribut was empty and expanded here...
+                            USHORT nW = pAttrib->GetItem()->Which();
+                            for ( USHORT nA = 0; nA < nAttr; nA++ )
+                            {
+                                EditCharAttrib* pA = aCharAttribList.GetAttribs()[nA];
+                                if ( ( pA->GetStart() == 0 ) && ( pA->GetItem()->Which() == nW ) )
+                                {
+                                    bExpand = FALSE;
+                                    break;
+                                }
+                            }
+
+                        }
+                    }
+                    if ( bExpand )
                     {
                         pAttrib->Expand( nNew );
                         bResort = TRUE;
                     }
                     else
+                    {
                         pAttrib->MoveForward( nNew );
+                    }
                 }
             }
         }
