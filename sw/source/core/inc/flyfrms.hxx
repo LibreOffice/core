@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyfrms.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:04:50 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@ class SwFlyFreeFrm : public SwFlyFrm
 {
     SwPageFrm *pPage;   //Bei dieser Seite ist der Fly angemeldet.
 
+    // --> OD 2004-10-29 #i36347# - flag to prevent calling of method
+    // <CheckClip(..)> during <MakeAll()>
+    bool mbNoCheckClip;
+    // <--
     void CheckClip( const SwFmtFrmSize &rSz );  //'Emergency' Clipping.
 
     /** determines, if direct environment of fly frame has 'auto' size
@@ -108,6 +112,17 @@ public:
     virtual ~SwFlyFreeFrm();
 
     virtual void MakeAll();
+
+    // --> OD 2004-11-01 #i36347# - accessors for member <mbNoCheckClip>
+    inline void SetNoCheckClip( const bool _bNewNoCheckClip )
+    {
+        mbNoCheckClip = _bNewNoCheckClip;
+    }
+    inline bool IsNoCheckClip() const
+    {
+        return mbNoCheckClip;
+    }
+    // <--
 };
 
 
@@ -166,6 +181,14 @@ public:
         @author OD
     */
     virtual bool IsFormatPossible() const;
+
+    /** method to check, if a lower Writer fly frame is in its format routine
+
+        OD 2004-11-01 #i36347
+
+        @author OD
+    */
+    bool IsLowerInProgress() const;
 };
 
 //Die Flys, die an einem Zeichen in einem Cntnt haengen.
