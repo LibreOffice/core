@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mfe $ $Date: 2001-01-19 16:07:35 $
+ *  last change: $Author: mfe $ $Date: 2001-01-22 11:48:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
 typedef struct _oslPipeImpl {
     int  m_Socket;
     sal_Char m_Name[PATH_MAX + 1];
+#if defined(LINUX)
+    sal_Bool bInShutDown;
+#endif
 } oslPipeImpl;
 
 
@@ -377,8 +380,8 @@ void SAL_CALL osl_destroyPipe(oslPipe Pipe)
     size_t     len;
     struct sockaddr_un addr;
     int fd;
-    int ConnFD;
 #endif
+    int ConnFD;
 
     /* socket already invalid */
     if( Pipe == NULL )
@@ -388,8 +391,8 @@ void SAL_CALL osl_destroyPipe(oslPipe Pipe)
 
     pPipeImpl = (oslPipeImpl*) Pipe;
 
-#if defined(LINUX)
     ConnFD = pPipeImpl->m_Socket;
+#if defined(LINUX)
     pPipeImpl->m_Socket = -1;
     fd = socket(AF_UNIX, SOCK_STREAM, 0);
     memset(&addr, 0, sizeof(addr));
@@ -401,10 +404,12 @@ void SAL_CALL osl_destroyPipe(oslPipe Pipe)
     len = sizeof(addr.sun_family) + strlen(addr.sun_path);
 
     nRet = connect( fd, (struct sockaddr *)&addr, len);
+#if defined(DEBUG)
     if ( nRet < 0 )
     {
-        perror("connect");
+        perror("connect in osl_destroyPipe");
     }
+#endif
     close(fd);
 #endif
 
