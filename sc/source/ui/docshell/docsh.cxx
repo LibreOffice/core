@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:04:31 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1780,10 +1780,15 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
                 aDocument.SetExtDocOptions( pExtDocOpt = new ScExtDocOptions );
             pViewShell->GetViewData()->WriteExtOptions( *pExtDocOpt );
 
-            // if the imported document contained an encrypted
-            // password - determine if we should save without it.
-            if( pExtDocOpt && pExtDocOpt->GetDocSettings().mbEncrypted )
+            /*  #115980 #If the imported document contained an encrypted password -
+                determine if we should save without it. */
+            ScExtDocSettings& rDocSett = pExtDocOpt->GetDocSettings();
+            if( rDocSett.mbEncrypted )
+            {
                 bDoSave = ScWarnPassword::WarningOnPassword( rMed );
+                // #i42858# warn only on time
+                rDocSett.mbEncrypted = false;
+            }
         }
 
         if( bDoSave )
