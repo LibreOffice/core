@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgexpor.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-02 23:07:32 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 21:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,7 @@ ModalDialog DLG_EXPORT_PIX
             < "원본" ; Default ; > ;
         < "1 비트- 임계값" ; Default ; > ;
         < "1비트 - 디더링" ; Default ; > ;
-        < "4 비트 - 회색도" ; Default ; > ;
+        < "4 비트 - 회색도팔레트" ; Default ; > ;
         < "4 비트 - 색상 팔레트" ; Default ; > ;
         < "8 비트 - 회색도 팔레트" ; Default ; > ;
         < "8 비트-색상 팔레트" ; Default ; > ;
@@ -858,6 +858,7 @@ ModalDialog DLG_EXPORT_VEC
         TabStop = TRUE ;
     };
 };
+
 
 
 
