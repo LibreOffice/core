@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-20 09:52:44 $
+ *  last change: $Author: pl $ $Date: 2002-11-20 12:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,7 +522,7 @@ SalInfoPrinter::~SalInfoPrinter()
 
 // -----------------------------------------------------------------------
 
-void SalInfoPrinter::InitPaperFormats()
+void SalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
 {
     m_aPaperFormats.clear();
     m_bPapersInit = true;
@@ -552,7 +552,7 @@ void SalInfoPrinter::InitPaperFormats()
 
 // -----------------------------------------------------------------------
 
-int SalInfoPrinter::GetLandscapeAngle()
+int SalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* pSetupData )
 {
     return 900;
 }
