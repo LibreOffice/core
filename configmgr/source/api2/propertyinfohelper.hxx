@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyinfohelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-08 09:43:54 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,13 +82,14 @@ namespace configmgr
     */
     namespace configuration
     {
-        struct NodeInfo;
+        class Name;
+        struct Attributes;
     }
 
     namespace configapi
     {
         // translation helper
-        beans::Property helperMakeProperty( configuration::NodeInfo const& aNodeInfo, uno::Type const& aType )
+        beans::Property helperMakeProperty( configuration::Name const& aName, configuration::Attributes const aAttributes, uno::Type const& aType )
             throw(uno::RuntimeException);
 
     }

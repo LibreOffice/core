@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 12:12:15 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ Reference< uno::XInterface > implGetParent(NodeAccess& rNode, InnerElement&) thr
         Tree aTree(impl->getTree());
         NodeRef aParentNode = aTree.getParent(impl->getNode());
 
-        Any aAny = configapi::makeElement( impl->getFactory(), aTree, aParentNode );
+        Any aAny = configapi::makeInnerElement( impl->getFactory(), aTree, aParentNode );
 
         if (!(aAny >>= xRet)) // no parent available
         {
@@ -164,7 +164,7 @@ Reference< uno::XInterface > implGetParent(NodeAccess& rNode, SetElement& rEleme
             NodeRef aParentNode( aTree.getContextNode() );
 
             // assume shared factory for connected trees
-            Any aAny = configapi::makeElement( impl->getFactory(), aParentTree, aParentNode );
+            Any aAny = configapi::makeInnerElement( impl->getFactory(), aParentTree, aParentNode );
 
             if (!(aAny >>= xRet)) // no parent available
             {
@@ -309,7 +309,10 @@ OUString implGetName(NodeAccess& rNode, NodeElement& ) throw(RuntimeException)
     {
         GuardedNodeAccess impl( rNode ); // maybe passive only ?
 
-        sRet = impl->getNode().getName().toString();
+        Tree    aTree(impl->getTree());
+        NodeRef aNode(impl->getNode());
+
+        sRet = aTree.getName(aNode).toString();
     }
     catch (configuration::Exception& ex)
     {

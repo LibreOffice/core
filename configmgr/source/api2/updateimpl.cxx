@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updateimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 12:12:15 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,13 @@
 #include "apinodeaccess.hxx"
 #include "apinodeupdate.hxx"
 
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGVALUEREF_HXX_
+#include "valueref.hxx"
+#endif
+
 #include "nodechange.hxx"
 #include "configset.hxx"
 #include "configgroup.hxx"
@@ -108,6 +114,7 @@ namespace configmgr
         using configuration::NodeRef;
         using configuration::NodeChange;
         using configuration::Tree;
+        using configuration::ElementRef;
         using configuration::ElementTree;
         using configuration::Tree;
         using configuration::Name;
@@ -137,21 +144,33 @@ void implReplaceByName(NodeGroupAccess& rNode, const OUString& sName, const Any&
 
         Name aChildName = validateNodeName(sName,aTree,aNode);
 
-        NodeRef aChild( aTree.getChild(aNode, aChildName) );
+        ValueRef aChildValue( aTree.getChildValue(aNode, aChildName) );
 
-        if (!aChild.isValid())
+        if (!aChildValue.isValid())
         {
-            OSL_ENSURE(!configuration::hasChildNode(aTree,aNode,aChildName),"ERROR: Configuration: Group child not found by tree");
-            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr: BasicAccess: Child Element \"") );
-            sMessage += sName;
-            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("\" not found in NodeRef ")  );
-            sMessage += aTree.getLocalPath(aNode).toString();
+            if (aTree.hasChildNode(aNode, aChildName))
+            {
+                OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Value. Node '") );
+                sMessage += sName;
+                sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' is not a simple value.")  );
 
-            Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-            throw NoSuchElementException( sMessage, xContext );
+                Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+                throw IllegalArgumentException( sMessage, xContext, 2 );
+            }
+            else
+            {
+                OSL_ENSURE(!configuration::hasChildOrElement(aTree,aNode,aChildName),"ERROR: Configuration: Existing child node not found by implementation");
+                OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Value. Value '") );
+                sMessage += sName;
+                sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in ")  );
+                sMessage += aTree.getLocalPath(aNode).toString();
+
+                Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+                throw NoSuchElementException( sMessage, xContext );
+            }
         }
 
-        NodeChange aChange = impl->getNodeUpdater().validateSetValue(aChild, rElement);
+        NodeChange aChange = impl->getNodeUpdater().validateSetValue(aChildValue, rElement);
 
         if (aChange.test().isChange())
         {
@@ -169,7 +188,7 @@ void implReplaceByName(NodeGroupAccess& rNode, const OUString& sName, const Any&
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdate can't update NodeRef: ") );
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Value: ") );
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
         throw NoSuchElementException( e.message(), xContext );
     }
@@ -179,10 +198,16 @@ void implReplaceByName(NodeGroupAccess& rNode, const OUString& sName, const Any&
         e.setContext( rNode.getUnoInstance() );
         e.illegalArgument(2);
     }
+    catch (configuration::ConstraintViolation& ex)
+    {
+        ExceptionMapper e(ex);
+        e.setContext( rNode.getUnoInstance() );
+        e.illegalArgument(2);
+    }
     catch (configuration::WrappedUnoException& ex)
     {
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdate can't update NodeRef: ") );
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Value: ") );
         throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
     }
     catch (configuration::Exception& ex)
@@ -193,7 +218,7 @@ void implReplaceByName(NodeGroupAccess& rNode, const OUString& sName, const Any&
     }
     catch (css::beans::PropertyVetoException& ex)
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdate can't update NodeRef: Constraint violation (veto): ") );
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Value. Change was Vetoed: ") );
         throw WrappedTargetException( sMessage += ex.Message, rNode.getUnoInstance(), uno::makeAny(ex) );
     }
 }
@@ -211,15 +236,15 @@ void implReplaceByName(NodeTreeSetAccess& rNode, const OUString& sName, const An
 
         Name aChildName = validateNodeName(sName,aTree,aNode);
 
-        Tree aChildTree( aTree );
-        NodeRef aChild( aNode.getChild(aChildName, aChildTree) );
+        ElementRef aElement( aTree.getElement(aNode,aChildName) );
 
-        if (!aChild.isValid())
+        if (!aElement.isValid())
         {
-            OSL_ENSURE(!configuration::hasChildNode(aTree,aNode,aChildName),"ERROR: Configuration: Set child not found by node");
-            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr: BasicAccess: Element \"") );
+            OSL_ENSURE(!configuration::hasChildOrElement(aTree,aNode,aChildName),"ERROR: Configuration: Existing Set element not found by implementation");
+
+            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot replace Set Element. Element '") );
             sMessage += sName;
-            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("\" not found in Set NodeRef ")  );
+            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in Set ")  );
             sMessage += aTree.getLocalPath(aNode).toString();
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
@@ -229,13 +254,14 @@ void implReplaceByName(NodeTreeSetAccess& rNode, const OUString& sName, const An
         ElementTree aElementTree = configapi::extractElementTree(impl->getFactory(), rElement, impl->getElementInfo() );
         if (!aElementTree.isValid())
         {
-            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr: BasicAccess: Replacing Element was not created from this set's template") );
+            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot replace Set Element: ") );
+            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("Replacing object was not created from this set's template") );
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw IllegalArgumentException( sMessage, xContext, 2 );
         }
 
-        NodeChange aChange = rNode.getNodeUpdater().validateReplaceElement( aChildTree, aChild, aElementTree );
+        NodeChange aChange = rNode.getNodeUpdater().validateReplaceElement( aElement, aElementTree );
 
         if (aChange.test().isChange())
         {
@@ -253,7 +279,7 @@ void implReplaceByName(NodeTreeSetAccess& rNode, const OUString& sName, const An
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdate: can't update NodeRef: ") );
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot replace Set Element: ") );
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
         throw NoSuchElementException( e.message(), xContext );
     }
@@ -266,7 +292,7 @@ void implReplaceByName(NodeTreeSetAccess& rNode, const OUString& sName, const An
     catch (configuration::WrappedUnoException& ex)
     {
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdate can't update NodeRef: ") );
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot replace Set Element: ") );
         throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
     }
     catch (configuration::Exception& ex)
@@ -290,22 +316,22 @@ void implReplaceByName(NodeValueSetAccess& rNode, const OUString& sName, const A
 
         Name aChildName = validateNodeName(sName,aTree,aNode);
 
-        Tree aChildTree( aTree );
-        NodeRef aChild( aNode.getChild(aChildName, aChildTree) );
+        ElementRef aElement( aTree.getElement(aNode,aChildName) );
 
-        if (!aChild.isValid())
+        if (!aElement.isValid())
         {
-            OSL_ENSURE(!configuration::hasChildNode(aTree,aNode,aChildName),"ERROR: Configuration: Set child not found by node");
-            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr: BasicAccess: Element \"") );
+            OSL_ENSURE(!configuration::hasChildOrElement(aTree,aNode,aChildName),"ERROR: Configuration: Existing Set element not found by implementation");
+
+            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot replace Set Element. Element '") );
             sMessage += sName;
-            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("\" not found in Set NodeRef ")  );
+            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in Set ")  );
             sMessage += aTree.getLocalPath(aNode).toString();
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw NoSuchElementException( sMessage, xContext );
         }
 
-        NodeChange aChange = rNode.getNodeUpdater().validateReplaceElement( aChildTree, aChild, rElement );
+        NodeChange aChange = rNode.getNodeUpdater().validateReplaceElement( aElement, rElement );
 
         if (aChange.test().isChange())
         {
@@ -322,7 +348,7 @@ void implReplaceByName(NodeValueSetAccess& rNode, const OUString& sName, const A
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdate: can't update NodeRef: ") );
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot replace Set Element: ") );
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
         throw NoSuchElementException( e.message(), xContext );
     }
@@ -332,10 +358,16 @@ void implReplaceByName(NodeValueSetAccess& rNode, const OUString& sName, const A
         e.setContext( rNode.getUnoInstance() );
         e.illegalArgument(2);
     }
+    catch (configuration::ConstraintViolation& ex)
+    {
+        ExceptionMapper e(ex);
+        e.setContext( rNode.getUnoInstance() );
+        e.illegalArgument(2);
+    }
     catch (configuration::WrappedUnoException& ex)
     {
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdate can't update NodeRef: ") );
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot replace Set Element: ") );
         throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
     }
     catch (configuration::Exception& ex)
@@ -360,23 +392,23 @@ void implInsertByName(NodeTreeSetAccess& rNode, const OUString& sName, const Any
 
         Name aChildName = validateNodeName(sName,aTree,aNode);
 
-        if( aNode.hasChild(aChildName) )
+        if( aTree.hasElement(aNode,aChildName) )
         {
-            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr: BasicAccess: Element \"") );
+            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot insert into Set. Element '") );
             sMessage += sName;
-            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("\" already present in Set NodeRef ")  );
+            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' is already present in Set ")  );
             sMessage += aTree.getLocalPath(aNode).toString();
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw ElementExistException( sMessage, xContext );
         }
-        OSL_ENSURE(!configuration::hasChildNode(aTree,aNode,aChildName),"ERROR: Configuration: Set child not found by node");
-
+        OSL_ENSURE(!configuration::hasChildOrElement(aTree,aNode,aChildName),"ERROR: Configuration: Existing Set element not found by implementation");
 
         ElementTree aElementTree = configapi::extractElementTree(impl->getFactory(), rElement, impl->getElementInfo() );
         if (!aElementTree.isValid())
         {
-            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr: BasicAccess: Inserted Element was not created from this set's template") );
+            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot insert into Set: ") );
+            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("Inserted object was not created from this set's template") );
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw IllegalArgumentException( sMessage, xContext, 2 );
@@ -412,7 +444,7 @@ void implInsertByName(NodeTreeSetAccess& rNode, const OUString& sName, const Any
     catch (configuration::WrappedUnoException& ex)
     {
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdate can't insert NodeRef: ") );
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot insert into Set: ") );
         throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
     }
     catch (configuration::Exception& ex)
@@ -438,17 +470,17 @@ void implInsertByName(NodeValueSetAccess& rNode, const OUString& sName, const An
 
         Name aChildName = validateNodeName(sName,aTree,aNode);
 
-        if( aNode.hasChild(aChildName) )
+        if( aTree.hasElement(aNode,aChildName) )
         {
-            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr: BasicAccess: Element \"") );
+            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot insert into Set. Element '") );
             sMessage += sName;
-            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("\" already present in Set NodeRef ")  );
+            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' is already present in Set ")  );
             sMessage += aTree.getLocalPath(aNode).toString();
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw ElementExistException( sMessage, xContext );
         }
-        OSL_ENSURE(!configuration::hasChildNode(aTree,aNode,aChildName),"ERROR: Configuration: Set child not found by node");
+        OSL_ENSURE(!configuration::hasChildOrElement(aTree,aNode,aChildName),"ERROR: Configuration: Existing Set element not found by implementation");
 
         NodeChange aChange = rNode.getNodeUpdater().validateInsertElement(aChildName, rElement);
 
@@ -476,10 +508,16 @@ void implInsertByName(NodeValueSetAccess& rNode, const OUString& sName, const An
         e.setContext( rNode.getUnoInstance() );
         e.illegalArgument(2);
     }
+    catch (configuration::ConstraintViolation& ex)
+    {
+        ExceptionMapper e(ex);
+        e.setContext( rNode.getUnoInstance() );
+        e.illegalArgument(2);
+    }
     catch (configuration::WrappedUnoException& ex)
     {
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdate can't insert NodeRef: ") );
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot insert into Set: ") );
         throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
     }
     catch (configuration::Exception& ex)
@@ -504,22 +542,22 @@ void implRemoveByName(NodeTreeSetAccess& rNode, const OUString& sName )
 
         Name aChildName = validateNodeName(sName,aTree,aNode);
 
-        Tree aChildTree( aTree );
-        NodeRef aChild( aNode.getChild(aChildName, aChildTree) );
+        ElementRef aElement( aTree.getElement(aNode,aChildName) );
 
-        if (!aChild.isValid())
+        if (!aElement.isValid())
         {
-            OSL_ENSURE(!configuration::hasChildNode(aTree,aNode,aChildName),"ERROR: Configuration: Set child not found by node");
-            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr: BasicAccess: Element \"") );
+            OSL_ENSURE(!configuration::hasChildOrElement(aTree,aNode,aChildName),"ERROR: Configuration: Existing Set element not found by implementation");
+
+            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot remove Set Element. Element '") );
             sMessage += sName;
-            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("\" not found in Set NodeRef ")  );
+            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in Set ")  );
             sMessage += aTree.getLocalPath(aNode).toString();
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw NoSuchElementException( sMessage, xContext );
         }
 
-        NodeChange aChange = rNode.getNodeUpdater().validateRemoveElement(aChildTree, aChild);
+        NodeChange aChange = rNode.getNodeUpdater().validateRemoveElement(aElement);
 
         aChange.test(); // make sure old values are set up correctly
         OSL_ENSURE(aChange.isChange(), "ERROR: Removing a node validated as empty change");
@@ -529,7 +567,7 @@ void implRemoveByName(NodeTreeSetAccess& rNode, const OUString& sName )
         //aSender.queryConstraints(); - N/A: no external constraints on set children possible
 
         aTree.integrate(aChange, aNode, true);
-        detachSetElement(impl->getFactory(), ElementTree::extract(aChildTree));
+        detachSetElement(impl->getFactory(), aElement.getElementTree());
 
         impl.clearForBroadcast();
         aSender.notifyListeners(aChange);
@@ -537,14 +575,14 @@ void implRemoveByName(NodeTreeSetAccess& rNode, const OUString& sName )
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdate: can't update NodeRef: ") );
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot remove Set Element: ") );
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw NoSuchElementException( e.message(), xContext );
+        throw NoSuchElementException( sMessage += e.message(), xContext );
     }
     catch (configuration::WrappedUnoException& ex)
     {
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdate can't update NodeRef: ") );
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot remove Set Element: ") );
         throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
     }
     catch (configuration::Exception& ex)
@@ -568,22 +606,21 @@ void implRemoveByName(NodeValueSetAccess& rNode, const OUString& sName )
 
         Name aChildName = validateNodeName(sName,aTree,aNode);
 
-        Tree aChildTree( aTree );
-        NodeRef aChild( aNode.getChild(aChildName, aChildTree) );
-
-        if (!aChild.isValid())
+        ElementRef aElement = aTree.getElement(aNode,aChildName);
+        if (!aElement.isValid())
         {
-            OSL_ENSURE(!configuration::hasChildNode(aTree,aNode,aChildName),"ERROR: Configuration: Set child not found by node");
-            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr: BasicAccess: Element \"") );
+            OSL_ENSURE(!configuration::hasChildOrElement(aTree,aNode,aChildName),"ERROR: Configuration: Existing Set element not found by implementation");
+
+            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot remove Set Element. Element '") );
             sMessage += sName;
-            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("\" not found in Set NodeRef ")  );
+            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in Set ")  );
             sMessage += aTree.getLocalPath(aNode).toString();
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw NoSuchElementException( sMessage, xContext );
         }
 
-        NodeChange aChange = rNode.getNodeUpdater().validateRemoveElement(aChildTree, aChild);
+        NodeChange aChange = rNode.getNodeUpdater().validateRemoveElement(aElement);
 
         aChange.test(); // make sure old values are set up correctly
         OSL_ENSURE(aChange.isChange(), "ERROR: Removing a node validated as empty change");
@@ -600,14 +637,14 @@ void implRemoveByName(NodeValueSetAccess& rNode, const OUString& sName )
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdate: can't update NodeRef: ") );
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot remove Set Element: ") );
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        throw NoSuchElementException( e.message(), xContext );
+        throw NoSuchElementException( sMessage += e.message(), xContext );
     }
     catch (configuration::WrappedUnoException& ex)
     {
         Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdate can't update NodeRef: ") );
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot remove Set Element: ") );
         throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
     }
     catch (configuration::Exception& ex)

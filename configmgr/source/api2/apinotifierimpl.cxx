@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinotifierimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 13:26:28 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include "apinodeaccess.hxx"
 
 #include "noderef.hxx"
+#include "valueref.hxx"
 #include "confignotifier.hxx"
 #include "configexcept.hxx"
 
@@ -83,78 +84,9 @@ namespace configmgr
         using uno::Reference;
 
         using configuration::NodeRef;
+        using configuration::ValueRef;
         using configuration::Tree;
 
-//-----------------------------------------------------------------------------------
-// Helpers for associating listeners with specific child nodes listener
-//-----------------------------------------------------------------------------------
-
-namespace internal
-{
-    using configuration::Name;
-    using configuration::NodeVisitor;
-
-    /// helper for adding a Listener to all children of a node
-    /// helper for adding a Listener to a named child of a node
-    template <class Listener>
-    class AddListenerByName :  public NodeVisitor
-    {
-        Reference<Listener> m_xListener;
-        Notifier    m_aNotifier;
-        Name        m_aName;
-    public:
-        AddListenerByName(Notifier const& aNotifier, Reference<Listener> const& xListener, Name const& aName)
-            : m_xListener(xListener)
-            , m_aNotifier(aNotifier)
-            , m_aName(aName)
-        {}
-
-        virtual Result handle(NodeRef const& aNode); // NodeVisitor
-    };
-
-    /// helper for removing a Listener from all children of a node
-    template <class Listener>
-    class RemoveListenerByName :  public NodeVisitor
-    {
-        Reference<Listener> m_xListener;
-        Notifier    m_aNotifier;
-        Name        m_aName;
-    public:
-        RemoveListenerByName(Notifier const& aNotifier, Reference<Listener> const& xListener, Name const& aName)
-            : m_xListener(xListener)
-            , m_aNotifier(aNotifier)
-            , m_aName(aName)
-        {}
-
-        virtual Result handle(NodeRef const& aNode); // NodeVisitor
-    };
-
-    /// add a Listener to a named node
-    template <class Listener>
-    NodeVisitor::Result AddListenerByName<Listener>::handle(NodeRef const& aNode)
-    {
-        if (aNode.getName() == m_aName)
-        {
-            m_aNotifier.addForOne(aNode, m_xListener);
-            return DONE;
-        }
-        else
-            return CONTINUE;
-    }
-
-    /// remove a Listener from a named node
-    template <class Listener>
-    NodeVisitor::Result RemoveListenerByName<Listener>::handle(NodeRef const& aNode)
-    {
-        if (aNode.getName() == m_aName)
-        {
-            m_aNotifier.removeForOne(aNode, m_xListener);
-            return DONE;
-        }
-        else
-            return CONTINUE;
-    }
-}
 
 // Generic Notifier Support Implementations
 //-----------------------------------------------------------------------------------
@@ -188,7 +120,6 @@ template <class Listener>
 inline
 bool genericAddChildListener(NodeGroupInfoAccess& rNode, const Reference< Listener >& xListener, const OUString& sName )
 {
-    using configuration::NodeVisitor;
     using configuration::validateNodeName;
 
     if (sName.getLength() != 0)
@@ -199,11 +130,11 @@ bool genericAddChildListener(NodeGroupInfoAccess& rNode, const Reference< Listen
         Tree        aTree( aGuardedNode->getTree() );
         NodeRef     aNode( aGuardedNode->getNode() );
 
-        internal::AddListenerByName<Listener> aAdder( *aGuardedNotifier, xListener, validateNodeName(sName,aTree,aNode));
+        Name        aChildName = validateNodeName(sName,aTree,aNode);
 
-        NodeVisitor::Result eFound = aTree.dispatchToChildren( aNode, aAdder );
+        if (!aTree.hasChild(aNode,aChildName)) return false;
 
-        return (eFound == NodeVisitor::DONE); // ok if NodeRef was found
+        aGuardedNotifier->addForOne(aNode, xListener, aChildName);
     }
     else
     {
@@ -211,8 +142,9 @@ bool genericAddChildListener(NodeGroupInfoAccess& rNode, const Reference< Listen
 
         aGuardedNotifier->addForAll(rNode.getNode(), xListener);
 
-        return true; // always ok, as we addreess no specific NodeRef
+        // always ok, as we addreess no specific NodeRef
     }
+    return true;
 }
 
 /** remove a Listener from all or some children of a NodeAccess to its notifier
@@ -225,14 +157,7 @@ template <class Listener>
 inline
 bool genericRemoveChildListener(NodeGroupInfoAccess& rNode, const Reference< Listener >& xListener, const OUString& sName )
 {
-    using configuration::NodeVisitor;
     using configuration::validateNodeName;
-
-    GuardedNodeAccess           aGuardedNode( rNode );      // guard access to children
-    GuardedNotifier             aGuardedNotifier( rNode );  // guard the notifier
-
-    Tree        aTree( aGuardedNode->getTree() );
-    NodeRef     aNode( aGuardedNode->getNode() );
 
     if (sName.getLength() != 0)
     {
@@ -242,10 +167,11 @@ bool genericRemoveChildListener(NodeGroupInfoAccess& rNode, const Reference< Lis
         Tree        aTree( aGuardedNode->getTree() );
         NodeRef     aNode( aGuardedNode->getNode() );
 
-        internal::RemoveListenerByName<Listener> aRemover( *aGuardedNotifier, xListener, validateNodeName(sName,aTree,aNode) );
-        NodeVisitor::Result eFound = aTree.dispatchToChildren( aNode, aRemover );
+        Name        aChildName = validateNodeName(sName,aTree,aNode);
 
-        return (eFound == NodeVisitor::DONE); // ok if NodeRef was found
+        if (!aTree.hasChild(aNode,aChildName)) return false;
+
+        aGuardedNotifier->removeForOne(aNode, xListener, aChildName);
     }
     else
     {
@@ -253,8 +179,9 @@ bool genericRemoveChildListener(NodeGroupInfoAccess& rNode, const Reference< Lis
 
         aGuardedNotifier->removeForAll(rNode.getNode(), xListener);
 
-        return true; // always ok, as we addreess no specific NodeRef
+        // always ok, as we addreess no specific NodeRef
     }
+    return true;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactoryimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 12:43:23 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ bool UpdateObjectFactory::implIsReadOnly(configuration::Tree const& aTree, confi
     OSL_ENSURE(aNode.isValid(), "ERROR: trying to create an object without a node");
     OSL_ENSURE(aTree.isValidNode(aNode), "ERROR: node does not match tree , while trying to create an object");
 
-    return !aNode.getAttributes().bWritable;
+    return !aTree.getAttributes(aNode).bWritable;
 }
 //-----------------------------------------------------------------------------
 

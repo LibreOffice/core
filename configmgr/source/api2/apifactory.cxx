@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-30 14:50:24 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include "noderef.hxx"
+#include "anynoderef.hxx"
+
 #include "configexcept.hxx"
 #include "configset.hxx"
 
@@ -155,8 +157,8 @@ TemplateHolder Factory::implGetSetElementTemplate(Tree const& aTree, NodeRef con
     }
     else if (!configuration::isGroupNode(aTree,aNode))
     {
-        OSL_ENSURE( configuration::isSimpleValue(aTree,aNode), "ERROR: Configuration: unknown kind of object");
-        throw configuration::Exception("INTERNAL ERROR: Cannot create object - Illegal node type");
+        OSL_ENSURE( !configuration::isStructuralNode(aTree,aNode), "ERROR: Configuration: unknown kind of object");
+        throw configuration::Exception("INTERNAL ERROR: Cannot create template - Unexpected node type");
     }
     return aRet;
 }
@@ -195,7 +197,7 @@ NodeElement* Factory::makeElement(Tree const& aTree, NodeRef const& aNode)
         return 0;
 
     OSL_PRECOND( aTree.isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
-    OSL_PRECOND( !configuration::isSimpleValue(aTree,aNode), "ERROR: Configuration: Cannot make object for value node");
+    OSL_PRECOND( configuration::isStructuralNode(aTree,aNode), "ERROR: Configuration: Cannot make object for value node");
 
     osl::MutexGuard aLock(this->doGetMutex());
 
@@ -285,7 +287,7 @@ TreeElement* Factory::makeAccessRoot(Tree const& aTree, vos::ORef< OOptions >con
     NodeRef aRoot = aTree.getRootNode();
     OSL_ENSURE(aRoot.isValid(),"INTERNAL ERROR: Tree has no root node");
 
-    OSL_PRECOND( !configuration::isSimpleValue(aTree,aRoot), "ERROR: Configuration: Cannot make object for value node");
+    OSL_PRECOND( configuration::isStructuralNode(aTree,aRoot), "ERROR: Configuration: Cannot make object for value node");
 
     osl::MutexGuard aLock(this->doGetMutex());
 
@@ -316,7 +318,7 @@ NodeElement* Factory::makeGroupMember(Tree const& aTree, NodeRef const& aNode)
     OSL_PRECOND( aTree.isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
     if (!aTree.isValidNode(aNode)) return 0;
 
-    OSL_PRECOND( !configuration::isSimpleValue(aTree,aNode), "ERROR: Configuration: Cannot make object for value node");
+    OSL_PRECOND( configuration::isStructuralNode(aTree,aNode), "ERROR: Configuration: Cannot make object for value node");
     OSL_ENSURE(!aTree.isRootNode(aNode),"INTERNAL ERROR: Root of Tree should not be used for a group member object");
 
     osl::MutexGuard aLock(this->doGetMutex());
@@ -360,7 +362,7 @@ SetElement* Factory::makeSetElement(ElementTree const& aElementTree)
     NodeRef aRoot = aTree.getRootNode();
     OSL_ENSURE(aRoot.isValid(),"INTERNAL ERROR: Tree has no root node");
 
-    OSL_ENSURE( !configuration::isSimpleValue(aTree,aRoot), "ERROR: Configuration: Cannot make object for value node");
+    OSL_ENSURE( configuration::isStructuralNode(aTree,aRoot), "ERROR: Configuration: Cannot make object for value node");
 
     osl::MutexGuard aLock(this->doGetMutex());
 

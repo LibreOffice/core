@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propsetaccessimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-21 19:19:09 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,11 @@
 #ifndef _COM_SUN_STAR_BEANS_XMULTIHIERARCHICALPROPERTYSET_HPP_
 #include <com/sun/star/beans/XMultiHierarchicalPropertySet.hpp>
 #endif
+
+#ifndef CONFIGMGR_NO_PROPERTYSTATE
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
+#endif
 #endif
 
 namespace configmgr
@@ -151,6 +154,7 @@ namespace configmgr
         void implFirePropertiesChangeEvent( NodeGroupInfoAccess& rNode, const uno::Sequence< OUString >& aPropertyNames, const uno::Reference< beans::XPropertiesChangeListener >& xListener )
             throw(uno::RuntimeException);
 
+#ifndef CONFIGMGR_NO_PROPERTYSTATE
     // XPropertyState
         beans::PropertyState implGetPropertyState( NodeAccess& rNode, const OUString& PropertyName )
             throw(beans::UnknownPropertyException, uno::RuntimeException);
@@ -163,7 +167,7 @@ namespace configmgr
 
         uno::Any implGetPropertyDefault( NodeAccess& rNode, const OUString& aPropertyName )
             throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
-
+#endif
     }
 
 }

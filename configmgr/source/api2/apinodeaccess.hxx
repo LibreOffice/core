@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeaccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@ namespace configmgr
     namespace configuration
     {
         class Name;
+        class AnyNodeRef;
         class NodeRef;
         class Tree;
 
@@ -128,7 +129,14 @@ namespace configmgr
                 to create service implementations wrapping inner nodes</p>
             <p> returns VOID if <var>aNode</var> is empty.</p>
         */
-        UnoAny  makeElement(configapi::Factory& rFactory, configuration::Tree const& aTree, configuration::NodeRef const& aNode);
+        UnoAny  makeElement(configapi::Factory& rFactory, configuration::Tree const& aTree, configuration::AnyNodeRef const& aNode);
+
+        /** builds a Uno <type scope='com::sun::star::uno'>Any</type> representing inner node <var>aNode</var>.
+            <p> Uses the <type scope='configmgr::configapi'>Factory</type> provided
+                to create service implementations wrapping inner nodes</p>
+            <p> returns VOID if <var>aNode</var> is empty.</p>
+        */
+        UnoAny  makeInnerElement(configapi::Factory& rFactory, configuration::Tree const& aTree, configuration::NodeRef const& aNode);
 
         /** builds a Uno <type scope='com::sun::star::uno'>Any</type> representing set element <var>aElement</var>.
             <p> Uses the <type scope='configmgr::configapi'>Factory</type> provided

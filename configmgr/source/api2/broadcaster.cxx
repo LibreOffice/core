@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcaster.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-23 09:47:56 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,12 +156,14 @@ namespace configmgr
         using configuration::Tree;
         using configuration::NodeRef;
         using configuration::NodeID;
+        using configuration::SubNodeID;
         using configuration::NodeOffset;
         using configuration::NodeChange;
         using configuration::NodeChangeInformation;
         using configuration::NodeChangeData;
 
-        typedef std::set< configuration::NodeID > NodeSet;
+        typedef std::set< configuration::NodeID >       NodeSet;
+        typedef std::set< configuration::SubNodeID > SubNodeSet;
     // -----------------------------------------------------------------------------------------------
         typedef vos::ORef< Broadcaster::Impl > BroadcasterImplRef;
     // -----------------------------------------------------------------------------------------------
@@ -209,9 +211,9 @@ namespace configmgr
 
         class SingleChangeBroadcaster_Impl : public NodeLocalBroadcaster_Impl
         {
-            NodeID m_aChangingNode;
+            SubNodeID m_aChangingValue;
 
-            SingleChangeBroadcaster_Impl(NotifierData const& rTreeNotifierData, NodeID const& aAffectedID, NodeID const& aChangedNode);
+            SingleChangeBroadcaster_Impl(NotifierData const& rTreeNotifierData, NodeID const& aAffectedID, SubNodeID const& aChangedValue);
 
         public:
             static
@@ -227,7 +229,7 @@ namespace configmgr
             NodeLocalBroadcaster_Impl* create(
                         NotifierData const& rLocalNotifier,
                         NodeID const& aAffectedID,
-                        NodeID const& aChangedNode,
+                        SubNodeID const& aChangedNode,
                         NodeChangeLocation const& aChange);
         private:
             virtual void doQueryConstraints(NodeChangesInformation const& aChanges);
@@ -237,9 +239,9 @@ namespace configmgr
     // -----------------------------------------------------------------------------------------------
         class MultiChangeBroadcaster_Impl : public NodeLocalBroadcaster_Impl
         {
-            NodeSet m_aChangingNodes;
+            SubNodeSet  m_aChangingNodes;
 
-            MultiChangeBroadcaster_Impl(NotifierData const& rTreeNotifierData, NodeID const& aAffectedID, NodeSet& aChangedNodes);
+            MultiChangeBroadcaster_Impl(NotifierData const& rTreeNotifierData, NodeID const& aAffectedID, SubNodeSet& aChangedNodes);
 
         public:
             static
@@ -355,7 +357,7 @@ namespace configmgr
             NotifierImplHolder pNotifierImpl = getNotifierData().first;
 
             ListenerContainer* pListeners   = pNotifierImpl->m_aListeners.getContainer( getNodeIndex(), getCppuType(SelectListener) );
-            ListenerContainer* pSpecial     = pNotifierImpl->m_aListeners.getSpecialContainer( aChange.location.getChangedNodeID() );
+            ListenerContainer* pSpecial     = pNotifierImpl->m_aListeners.getSpecialContainer( aChange.location.getChangingValueID() );
 
             if (pSpecial || pListeners)
             {
@@ -453,7 +455,7 @@ namespace configmgr
                         aIterator.next()->propertyChange(rEvent);
                 }
 
-                ListenerContainer* pSpecialListeners    = pNotifierImpl->m_aListeners.getSpecialContainer( aChange.location.getChangedNodeID() );
+                ListenerContainer* pSpecialListeners    = pNotifierImpl->m_aListeners.getSpecialContainer( aChange.location.getChangingValueID() );
                 if (pSpecialListeners)
                 {
                     PropertyListenerIterator aIterator(*pSpecialListeners);
@@ -472,10 +474,10 @@ namespace configmgr
     // -----------------------------------------------------------------------------------------------
         SingleChangeBroadcaster_Impl::SingleChangeBroadcaster_Impl(
             NotifierData const& rTreeNotifierData,
-            NodeID const& aAffectedID, NodeID const& aChangedNode
+            NodeID const& aAffectedID, SubNodeID const& aChangedNode
         )
         : NodeLocalBroadcaster_Impl(rTreeNotifierData,aAffectedID)
-        , m_aChangingNode(aChangedNode)
+        , m_aChangingValue(aChangedNode)
         {
         }
     // -----------------------------------------------------------------------------------------------
@@ -492,7 +494,7 @@ namespace configmgr
             if (aAffectedNodeID.isEmpty())
                 return 0;
 
-            return create(rLocalNotifier,aAffectedNodeID,aChange.getChangedNodeID(),aChange);
+            return create(rLocalNotifier,aAffectedNodeID,aChange.getChangingValueID(),aChange);
         }
     // -----------------------------------------------------------------------------------------------
         NodeLocalBroadcaster_Impl* SingleChangeBroadcaster_Impl::create(
@@ -501,13 +503,13 @@ namespace configmgr
                     NodeChangeLocation const& aChange)
         {
 
-            return create(rLocalNotifier,aAffectedID,aChange.getChangedNodeID(),aChange);
+            return create(rLocalNotifier,aAffectedID,aChange.getChangingValueID(),aChange);
         }
     // -----------------------------------------------------------------------------------------------
         NodeLocalBroadcaster_Impl* SingleChangeBroadcaster_Impl::create(
                     NotifierData const& rLocalNotifier,
                     NodeID const& aAffectedID,
-                    NodeID const& aChangedNodeID,
+                    SubNodeID const& aChangedNodeID,
                     NodeChangeLocation const& aChange)
         {
             OSL_ENSURE(aChange.isValidLocation(), "ERROR: Invalid Change Location for Broadcaster");
@@ -517,8 +519,8 @@ namespace configmgr
                         "ERROR: Tree Mismatch creating Single Broadcaster");
             OSL_ENSURE( aChange.getAffectedNodeID() == aAffectedID,
                         "ERROR: Node Mismatch creating Single Broadcaster");
-            OSL_ENSURE( aChange.getChangedNodeID() == aChangedNodeID,
-                        "ERROR: Node Mismatch creating Single Broadcaster");
+            OSL_ENSURE( aChange.getChangingValueID() == aChangedNodeID,
+                        "ERROR: Value Node Mismatch creating Single Broadcaster");
 
             return new SingleChangeBroadcaster_Impl(rLocalNotifier,aAffectedID,aChangedNodeID);
         }
@@ -530,7 +532,7 @@ namespace configmgr
             {
                 NodeChangesInformation::Iterator it = aChanges.begin();
 
-                OSL_ENSURE( m_aChangingNode == it->location.getChangedNodeID(), "Broadcasting unanticipated change");
+                OSL_ENSURE( m_aChangingValue == it->location.getChangingValueID(), "Broadcasting unanticipated change");
 
                 querySingleConstraint(*it, false);
             }
@@ -552,7 +554,7 @@ namespace configmgr
 
                 NodeChangesInformation::Iterator it = aChanges.begin();
 
-                OSL_ENSURE( m_aChangingNode == it->location.getChangedNodeID(), "Broadcasting unanticipated change");
+                OSL_ENSURE( m_aChangingValue == it->location.getChangingValueID(), "Broadcasting unanticipated change");
 
                 notifySingleChange(*it, false, pEventNext);
 
@@ -583,7 +585,7 @@ namespace configmgr
 
         MultiChangeBroadcaster_Impl::MultiChangeBroadcaster_Impl(
             NotifierData const& rTreeNotifierData,
-            NodeID const& aAffectedID, NodeSet& aChangedNodes
+            NodeID const& aAffectedID, SubNodeSet& aChangedNodes
         )
         : NodeLocalBroadcaster_Impl(rTreeNotifierData,aAffectedID)
         , m_aChangingNodes()
@@ -622,7 +624,7 @@ namespace configmgr
             {
                 OSL_ENSURE(aAffectedNodeID.isValidNode(),"Cannot broadcast without affected node");
 
-                NodeSet aChangedNodes;
+                SubNodeSet aChangedNodes;
                 for (NodeChangesInformation::Iterator it = aChanges.begin(); it != aChanges.end(); ++it)
                 {
                     OSL_ENSURE(it->location.isValidLocation(), "ERROR: Invalid Change Location for Broadcaster");
@@ -631,9 +633,9 @@ namespace configmgr
                     OSL_ENSURE(configuration::equalTree(rLocalNotifier.second->getTree(), it->location.getAffectedTree()),
                                 "ERROR: Tree Mismatch creating Multi Change Broadcaster");
 
-                    NodeID aChangedNodeID = it->location.getChangedNodeID();
+                    SubNodeID aChangedValueID = it->location.getChangingValueID();
 
-                    aChangedNodes.insert(aChangedNodeID);
+                    aChangedNodes.insert(aChangedValueID);
                 }
                 OSL_ENSURE(!aChangedNodes.empty(), "Changes don't affect any nodes");
 
@@ -649,7 +651,7 @@ namespace configmgr
 
             for (NodeChangesInformation::Iterator it = aChanges.begin(); it != stop; ++it)
             {
-                OSL_ENSURE( m_aChangingNodes.find( it->location.getChangedNodeID() ) != m_aChangingNodes.end(), "Broadcasting unanticipated change");
+                OSL_ENSURE( m_aChangingNodes.find( it->location.getChangingValueID() ) != m_aChangingNodes.end(), "Broadcasting unanticipated change");
 
                 querySingleConstraint(*it, it != last);
             }
@@ -670,7 +672,7 @@ namespace configmgr
 
             for (NodeChangesInformation::Iterator it = aChanges.begin(); it != stop; ++it)
             {
-                OSL_ENSURE( m_aChangingNodes.find( it->location.getChangedNodeID() ) != m_aChangingNodes.end(), "Broadcasting unanticipated change");
+                OSL_ENSURE( m_aChangingNodes.find( it->location.getChangingValueID() ) != m_aChangingNodes.end(), "Broadcasting unanticipated change");
 
                 notifySingleChange(*it, it != last, pEventNext);
             }

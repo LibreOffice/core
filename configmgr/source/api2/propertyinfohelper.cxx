@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyinfohelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:49:22 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,19 +72,19 @@ namespace configmgr
     namespace configapi
     {
 //-----------------------------------------------------------------------------
-beans::Property helperMakeProperty( configuration::NodeInfo const& aNodeInfo, uno::Type const& aType )
+beans::Property helperMakeProperty( configuration::Name const& aName, configuration::Attributes const aAttributes, uno::Type const& aType )
     throw(uno::RuntimeException)
 {
     namespace PropertyAttribute = com::sun::star::beans::PropertyAttribute;
 
     sal_Int16 nPropAttributes = 0;
-    if (!aNodeInfo.aAttributes.bWritable)       nPropAttributes |= PropertyAttribute::READONLY;
-    if ( aNodeInfo.aAttributes.bNullable)       nPropAttributes |= PropertyAttribute::MAYBEVOID;
-    if ( aNodeInfo.aAttributes.bNotified)       nPropAttributes |= PropertyAttribute::BOUND;
-    if ( aNodeInfo.aAttributes.bConstrained)    nPropAttributes |= PropertyAttribute::CONSTRAINED;
-    if ( aNodeInfo.aAttributes.bDefaultable)    nPropAttributes |= PropertyAttribute::MAYBEDEFAULT;
+    if (!aAttributes.bWritable)     nPropAttributes |= PropertyAttribute::READONLY;
+    if ( aAttributes.bNullable)     nPropAttributes |= PropertyAttribute::MAYBEVOID;
+    if ( aAttributes.bNotified)     nPropAttributes |= PropertyAttribute::BOUND;
+    if ( aAttributes.bConstrained)  nPropAttributes |= PropertyAttribute::CONSTRAINED;
+    if ( aAttributes.bDefaultable)  nPropAttributes |= PropertyAttribute::MAYBEDEFAULT;
 
-    return beans::Property(aNodeInfo.aName.toString(), -1, aType, nPropAttributes);
+    return beans::Property(aName.toString(), -1, aType, nPropAttributes);
 }
 //-----------------------------------------------------------------------------
     }

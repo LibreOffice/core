@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysetaccess.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-21 19:13:57 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,7 @@ void SAL_CALL BasicPropertySet::firePropertiesChangeEvent( const uno::Sequence< 
 //////////////////////////////////////////////////////////////////////////////////
 // XPropertyState
 //////////////////////////////////////////////////////////////////////////////////
+#ifndef CONFIGMGR_NO_PROPERTYSTATE
 beans::PropertyState SAL_CALL BasicPropertySet::getPropertyState( const OUString& sPropertyName )
         throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
@@ -272,7 +273,7 @@ uno::Any SAL_CALL BasicPropertySet::getPropertyDefault( const OUString& sPropert
 {
     return implGetPropertyDefault( getNode(), sPropertyName);
 }
-
+#endif
 //-----------------------------------------------------------------------------------
 } // namespace configmgr
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysetaccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,26 +74,21 @@
 #ifndef _COM_SUN_STAR_BEANS_XMULTIHIERARCHICALPROPERTYSET_HPP_
 #include <com/sun/star/beans/XMultiHierarchicalPropertySet.hpp>
 #endif
+
+#ifndef CONFIGMGR_NO_PROPERTYSTATE
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
 #endif
-/*
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTY_HPP_
 #include <com/sun/star/beans/XProperty.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYWITHSTATE_HPP_
 #include <com/sun/star/beans/XPropertyWithState.hpp>
 #endif
+#endif
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
-#endif
-  */
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
-#include <cppuhelper/implbase5.hxx>
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 
 #ifndef CONFIGMGR_APITYPES_HXX_
@@ -121,12 +116,12 @@ namespace configmgr
     <p> Is an interface adapter around <type scope='configmgr::configapi'>NodeGroup(Info)Access</type>.</p>
 */
 class BasicPropertySet
-: public ::cppu::ImplHelper5
+: public ::cppu::ImplHelper4
             <   beans::XPropertySet
             ,   beans::XMultiPropertySet
             ,   beans::XHierarchicalPropertySet
             ,   beans::XMultiHierarchicalPropertySet
-            ,   beans::XPropertyState
+//          ,   beans::XPropertyState
             >
 {
 protected:
@@ -229,6 +224,7 @@ public:
         firePropertiesChangeEvent( const uno::Sequence< OUString >& aPropertyNames, const uno::Reference< beans::XPropertiesChangeListener >& xListener )
             throw(uno::RuntimeException);
 
+#ifndef CONFIGMGR_NO_PROPERTYSTATE
 // XPropertyState
     virtual beans::PropertyState SAL_CALL
         getPropertyState( const OUString& PropertyName )
@@ -246,6 +242,7 @@ public:
         getPropertyDefault( const OUString& aPropertyName )
             throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
 
+#endif
 
 protected:
     virtual configapi::NodeGroupInfoAccess&         getNode() = 0;

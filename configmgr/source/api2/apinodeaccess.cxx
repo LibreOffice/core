@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeaccess.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-16 08:52:32 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,11 @@
 #include "apifactory.hxx"
 
 #include "apitreeaccess.hxx"
+
 #include "noderef.hxx"
+#include "anynoderef.hxx"
+#include "valueref.hxx"
+
 #include "configset.hxx"
 #include "configpath.hxx"
 #include "confignotifier.hxx"
@@ -135,32 +139,51 @@ osl::Mutex& NodeAccess::getApiLock()
 }
 //-----------------------------------------------------------------------------
 
-UnoAny  makeElement(configapi::Factory& rFactory, configuration::Tree const& aTree, configuration::NodeRef const& aNode)
+UnoAny  makeElement(configapi::Factory& rFactory, configuration::Tree const& aTree, configuration::AnyNodeRef const& aNode)
 {
-    UnoAny aRet;
     if (!aTree.isEmpty() && aNode.isValid())
     {
-        if (configuration::isSimpleValue(aTree,aNode))
+        if (aNode.isNode())
         {
-            aRet = configuration::getSimpleValue(aTree,aNode);
+            NodeRef aInnerNode = aNode.toNode();
+
+            if (configuration::isStructuralNode(aTree,aInnerNode))
+                return uno::makeAny( rFactory.makeUnoElement(aTree,aInnerNode) );
+
+            else
+                return configuration::getSimpleElementValue(aTree,aInnerNode);
         }
-        else if (!aTree.isEmpty() && aNode.isValid())
+        else
         {
-            aRet <<= rFactory.makeUnoElement(aTree,aNode);
+            return configuration::getSimpleValue(aTree,aNode.toValue());
         }
     }
-    return aRet;
+
+    return UnoAny();
+}
+//-----------------------------------------------------------------------------
+
+UnoAny  makeInnerElement(configapi::Factory& rFactory, configuration::Tree const& aTree, configuration::NodeRef const& aNode)
+{
+    if (!aTree.isEmpty() && aNode.isValid())
+    {
+        OSL_ENSURE(configuration::isStructuralNode(aTree,aNode), "Trying to makeInnerElement for a simple value");
+
+        return uno::makeAny( rFactory.makeUnoElement(aTree,aNode) );
+    }
+
+    return UnoAny();
 }
 //-----------------------------------------------------------------------------
 
 UnoAny  makeElement(configapi::Factory& rFactory, configuration::ElementTree const& aTree)
 {
-    UnoAny aRet;
     if (aTree.isValid())
     {
-        aRet <<= rFactory.makeUnoSetElement(aTree);
+        return uno::makeAny( rFactory.makeUnoSetElement(aTree) );
     }
-    return aRet;
+
+    return UnoAny();
 }
 //-----------------------------------------------------------------------------
 

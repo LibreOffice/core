@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:20:07 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,11 @@
 #include "notifierimpl.hxx"
 #include "apifactory.hxx"
 #include "apitreeaccess.hxx"
-//#include "nodechange.hxx"
 #include "nodechangeinfo.hxx"
 #include "broadcaster.hxx"
 #include "roottree.hxx"
 #include "noderef.hxx"
+#include "anynoderef.hxx"
 
 #include "tracer.hxx"
 
@@ -722,7 +722,7 @@ void ApiRootTreeImpl::implSetLocation()
     Tree aTree = getApiTree().getTree();
     if (!aTree.isEmpty())
     {
-        configuration::Name aRootName = aTree.getRootNode().getName();
+        configuration::Name aRootName = aTree.getRootName();
         m_aLocationPath = aTree.getContextPath().compose( configuration::RelativePath(aRootName) ).toString();
     }
     else
@@ -860,6 +860,7 @@ void ApiRootTreeImpl::NodeListener::nodeChanged(Change const& aChange, OUString 
 //INodeListener : IConfigListener
 void ApiRootTreeImpl::nodeChanged(Change const& aChange, OUString const& sPath, IConfigBroadcaster* pSource)
 {
+    using configuration::AnyNodeRef;
     using configuration::Path;
     using configuration::NodeChanges;
     using configuration::RelativePath;
@@ -880,8 +881,8 @@ void ApiRootTreeImpl::nodeChanged(Change const& aChange, OUString const& sPath, 
 
         if (bValidNotification)
         {
-            // find the node
-            NodeRef aNode = aTree.getRootNode();
+            // find the node and change
+            NodeRef  aNode;
 
             if (sPath != m_aLocationPath)
             {
@@ -891,19 +892,47 @@ void ApiRootTreeImpl::nodeChanged(Change const& aChange, OUString const& sPath, 
 
                 OSL_ENSURE(sPath.getLength() > m_aLocationPath.getLength()+1, "Unexpected path format: slash terminated");
 
-                RelativePath aLocalConfigPath = configuration::reduceRelativePath(sPath, aTree, aNode);
+                NodeRef aBaseNode = aTree.getRootNode();
 
-                bValidNotification = configuration::findDescendantNode(aTree, aNode, aLocalConfigPath);
+                RelativePath aLocalConfigPath = configuration::reduceRelativePath(sPath, aTree, aBaseNode);
+
+                AnyNodeRef aFoundNode = configuration::getDescendant(aTree, aBaseNode, aLocalConfigPath);
+                if ( aFoundNode.isValid() )
+                {
+                    if (aFoundNode.isNode())
+                    {
+                        aNode = aFoundNode.toNode();
+                    }
+                    else
+                    {
+                        // TODO: Notify using parent node and temporary dummy change
+                        OSL_ENSURE( false, "Notification broken: Node being adressed is a Value");
+                    }
+                }
+            }
+            else
+            {
+                aNode = aTree.getRootNode();
             }
 
-            if (bValidNotification)
+            SubtreeChange const* pTreeChange = NULL;
+            if (aNode.isValid())
             {
-                OSL_ENSURE( aChange.getNodeName() == aNode.getName().toString(),
+                if (aChange.ISA(SubtreeChange))
+                    pTreeChange = static_cast<SubtreeChange const*>(&aChange);
+
+                else // TODO: Notify set change using parent (if available) and temporary dummy change
+                    OSL_ENSURE( false, "Notification broken: Change to inner node is not a subtree change");
+            }
+
+            if (pTreeChange != NULL) // implies aNode.isValid()
+            {
+                OSL_ENSURE( aChange.getNodeName() == aTree.getName(aNode).toString(),
                             "Change's node-name does not match found node's name - erratic notification");
 
                 configuration::NodeChangesInformation aChanges;
 
-                if (configuration::adjustToChanges(aChanges, aTree,aNode, aChange))
+                if (configuration::adjustToChanges(aChanges, aTree,aNode, *pTreeChange))
                 {
                     OSL_ASSERT(aChanges.size() > 0);
 
