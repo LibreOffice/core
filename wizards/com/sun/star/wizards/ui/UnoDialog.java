@@ -2,9 +2,9 @@
 *
 *  $RCSfile: UnoDialog.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 13:06:29 $
+*  last change: $Author: obo $ $Date: 2004-09-08 14:07:03 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -61,6 +61,7 @@
 package com.sun.star.wizards.ui;
 
 import com.sun.star.awt.*;
+import com.sun.star.beans.Property;
 import com.sun.star.beans.XMultiPropertySet;
 
 import com.sun.star.beans.XPropertySet;
@@ -188,6 +189,20 @@ public class UnoDialog implements EventNames {
             return null; // com.sun.star.lang.IllegalArgumentException
         }
     }
+
+    public void printControlProperties(String ControlName) {
+        try {
+            Object xControlModel = xDlgNameAccess.getByName(ControlName);
+            XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xControlModel);
+            Property [] allProps = xPSet.getPropertySetInfo().getProperties();
+            for (int i=0;i < allProps.length;i++) {
+                System.out.println(allProps[i].Name);
+            }
+        } catch (com.sun.star.uno.Exception exception) { // com.sun.star.container.NoSuchElementException, com.sun.star.beans.UnknownPropertyException,
+            exception.printStackTrace(System.out); // com.sun.star.lang.WrappedTargetException, com.sun.star.beans.PropertyVetoException
+        }
+    }
+
 
     public double getMAPConversionFactor(String ControlName) {
         XControl xControl = xDlgContainer.getControl(ControlName);
@@ -736,43 +751,44 @@ public class UnoDialog implements EventNames {
      */
     public static String getDisplayProperty(int itype) {
         String propertyname = "";
-        if (itype == UIConsts.CONTROLTYPE.FIXEDTEXT)
-            propertyname = "Label";
-        else if (itype == UIConsts.CONTROLTYPE.BUTTON)
-            propertyname = "Label";
-        else if (itype == UIConsts.CONTROLTYPE.FIXEDLINE)
-            propertyname = "Label";
-        else if (itype == UIConsts.CONTROLTYPE.NUMERICFIELD)
-            propertyname = "Value";
-        else if (itype == UIConsts.CONTROLTYPE.CURRENCYFIELD)
-            propertyname = "Value";
-        else if (itype == UIConsts.CONTROLTYPE.FORMATTEDFIELD)
-            propertyname = "EffectiveValue";
-        else if (itype == UIConsts.CONTROLTYPE.DATEFIELD)
-            propertyname = "Date";
-        else if (itype == UIConsts.CONTROLTYPE.TIMEFIELD)
-            propertyname = "Time";
-        else if (itype == UIConsts.CONTROLTYPE.SCROLLBAR)
-            propertyname = "ScrollValue";
-        else if (itype == UIConsts.CONTROLTYPE.PROGRESSBAR)
-            propertyname = "ProgressValue";
-        else if (itype == UIConsts.CONTROLTYPE.IMAGECONTROL)
-            propertyname = "ImageURL";
-        else if (itype == UIConsts.CONTROLTYPE.RADIOBUTTON)
-            propertyname = "State";
-        else if (itype == UIConsts.CONTROLTYPE.CHECKBOX)
-            propertyname = "State";
-        else if (itype == UIConsts.CONTROLTYPE.EDITCONTROL)
-            propertyname = "Text";
-        else if (itype == UIConsts.CONTROLTYPE.COMBOBOX)
-            propertyname = "Text";
-        else if (itype == UIConsts.CONTROLTYPE.PATTERNFIELD)
-            propertyname = "Text";
-        else if (itype == UIConsts.CONTROLTYPE.LISTBOX)
-            propertyname = "SelectedItems";
-        else
-            propertyname = "";
-        return propertyname;
+        switch (itype) {
+            case UIConsts.CONTROLTYPE.FIXEDTEXT :
+                return  "Label";
+            case UIConsts.CONTROLTYPE.BUTTON :
+                return  "Label";
+            case UIConsts.CONTROLTYPE.FIXEDLINE :
+                return  "Label";
+            case UIConsts.CONTROLTYPE.NUMERICFIELD :
+                return  "Value";
+            case UIConsts.CONTROLTYPE.CURRENCYFIELD :
+                return  "Value";
+            case UIConsts.CONTROLTYPE.FORMATTEDFIELD :
+                return  "EffectiveValue";
+            case UIConsts.CONTROLTYPE.DATEFIELD :
+                return  "Date";
+            case UIConsts.CONTROLTYPE.TIMEFIELD :
+                return  "Time";
+            case UIConsts.CONTROLTYPE.SCROLLBAR :
+                return  "ScrollValue";
+            case UIConsts.CONTROLTYPE.PROGRESSBAR :
+                return  "ProgressValue";
+            case UIConsts.CONTROLTYPE.IMAGECONTROL :
+                return  "ImageURL";
+            case UIConsts.CONTROLTYPE.RADIOBUTTON :
+                return  "State";
+            case UIConsts.CONTROLTYPE.CHECKBOX :
+                return  "State";
+            case UIConsts.CONTROLTYPE.EDITCONTROL :
+                return  "Text";
+            case UIConsts.CONTROLTYPE.COMBOBOX :
+                return  "Text";
+            case UIConsts.CONTROLTYPE.PATTERNFIELD :
+                return  "Text";
+            case UIConsts.CONTROLTYPE.LISTBOX :
+                return  "SelectedItems";
+            default :
+                return "";
+        }
     }
 
     public void addResourceHandler(String _Unit, String _Module) {
