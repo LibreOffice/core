@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:55:09 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ public:
 protected:
     virtual void Resize();
 
-    virtual long PreParentNotify(NotifyEvent& rNEvt );
+    virtual long PreNotify(NotifyEvent& rNEvt );
 
     virtual BOOL IsTabAllowed(BOOL bForward) const;
     virtual void InitController( ::svt::CellControllerRef& rController, long nRow, USHORT nCol );
