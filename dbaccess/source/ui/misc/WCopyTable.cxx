@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-17 11:01:30 $
+ *  last change: $Author: oj $ $Date: 2001-07-26 14:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
 #endif
 #ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
@@ -411,7 +414,7 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
             }
         }
 
-        EndDialog(sal_True);
+        EndDialog(RET_OK);
     }
     return bFinish;
 }
@@ -776,65 +779,70 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
     Reference< XNameAccess > xTables;
     if(xSup.is())
         xTables = xSup->getTables();
-    Reference<XDataDescriptorFactory> xFact(xTables,UNO_QUERY);
-    OSL_ENSURE(xFact.is(),"No XDataDescriptorFactory available!");
-    if(!xFact.is())
-        return NULL;
-
-    m_xDestObject = xFact->createDataDescriptor();
-    OSL_ENSURE(m_xDestObject.is(),"Could not create a new object!");
-    if(!m_xDestObject.is())
-        return NULL;
-
-    ::rtl::OUString sCatalog,sSchema,sTable;
-    ::dbtools::qualifiedNameComponents(m_xConnection->getMetaData(),
-                                        m_sName,
-                                        sCatalog,
-                                        sSchema,
-                                        sTable);
-
-    m_xDestObject->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(sCatalog));
-    m_xDestObject->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema));
-    m_xDestObject->setPropertyValue(PROPERTY_NAME,makeAny(sTable));
-
-    if(m_xSourceObject.is()) // can be null when importing data from html or rtf format
+    if(getCreateStyle() != WIZARD_APPEND_DATA)
     {
-        if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_FONT))
-            m_xDestObject->setPropertyValue(PROPERTY_FONT,m_xSourceObject->getPropertyValue(PROPERTY_FONT));
-        if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_ROW_HEIGHT))
-            m_xDestObject->setPropertyValue(PROPERTY_ROW_HEIGHT,m_xSourceObject->getPropertyValue(PROPERTY_ROW_HEIGHT));
-        if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_TEXTCOLOR))
-            m_xDestObject->setPropertyValue(PROPERTY_TEXTCOLOR,m_xSourceObject->getPropertyValue(PROPERTY_TEXTCOLOR));
-        if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_ORDER))
-            m_xDestObject->setPropertyValue(PROPERTY_ORDER,m_xSourceObject->getPropertyValue(PROPERTY_ORDER));
-        if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_FILTER))
-            m_xDestObject->setPropertyValue(PROPERTY_FILTER,m_xSourceObject->getPropertyValue(PROPERTY_FILTER));
-    }
-    // now append the columns
-    const ODatabaseExport::TColumnVector* pVec = getDestVector();
-    Reference<XColumnsSupplier> xColSup(m_xDestObject,UNO_QUERY);
-    appendColumns(xColSup,pVec);
-    // now append the primary key
-    Reference<XKeysSupplier> xKeySup(m_xDestObject,UNO_QUERY);
-    appendKey(xKeySup,pVec);
+        Reference<XDataDescriptorFactory> xFact(xTables,UNO_QUERY);
+        OSL_ENSURE(xFact.is(),"No XDataDescriptorFactory available!");
+        if(!xFact.is())
+            return NULL;
 
-    Reference<XAppend> xAppend(xTables,UNO_QUERY);
-    if(xAppend.is())
-        xAppend->appendByDescriptor(m_xDestObject);
+        m_xDestObject = xFact->createDataDescriptor();
+        OSL_ENSURE(m_xDestObject.is(),"Could not create a new object!");
+        if(!m_xDestObject.is())
+            return NULL;
 
-    //  m_xDestObject = NULL;
-    // we need to reget the table because after appending it it is no longer valid
-    if(xTables->hasByName(m_sName))
-        xTables->getByName(m_sName) >>= m_xDestObject;
-    else
-    {
-        ::rtl::OUString sComposedName;
-        ::dbaui::composeTableName(m_xConnection->getMetaData(),m_xDestObject,sComposedName,sal_False);
-        if(xTables->hasByName(sComposedName))
-            xTables->getByName(sComposedName) >>= m_xDestObject;
+        ::rtl::OUString sCatalog,sSchema,sTable;
+        ::dbtools::qualifiedNameComponents(m_xConnection->getMetaData(),
+                                            m_sName,
+                                            sCatalog,
+                                            sSchema,
+                                            sTable);
+
+        m_xDestObject->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(sCatalog));
+        m_xDestObject->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema));
+        m_xDestObject->setPropertyValue(PROPERTY_NAME,makeAny(sTable));
+
+        if(m_xSourceObject.is()) // can be null when importing data from html or rtf format
+        {
+            if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_FONT))
+                m_xDestObject->setPropertyValue(PROPERTY_FONT,m_xSourceObject->getPropertyValue(PROPERTY_FONT));
+            if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_ROW_HEIGHT))
+                m_xDestObject->setPropertyValue(PROPERTY_ROW_HEIGHT,m_xSourceObject->getPropertyValue(PROPERTY_ROW_HEIGHT));
+            if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_TEXTCOLOR))
+                m_xDestObject->setPropertyValue(PROPERTY_TEXTCOLOR,m_xSourceObject->getPropertyValue(PROPERTY_TEXTCOLOR));
+            if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_ORDER))
+                m_xDestObject->setPropertyValue(PROPERTY_ORDER,m_xSourceObject->getPropertyValue(PROPERTY_ORDER));
+            if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_FILTER))
+                m_xDestObject->setPropertyValue(PROPERTY_FILTER,m_xSourceObject->getPropertyValue(PROPERTY_FILTER));
+        }
+        // now append the columns
+        const ODatabaseExport::TColumnVector* pVec = getDestVector();
+        Reference<XColumnsSupplier> xColSup(m_xDestObject,UNO_QUERY);
+        appendColumns(xColSup,pVec);
+        // now append the primary key
+        Reference<XKeysSupplier> xKeySup(m_xDestObject,UNO_QUERY);
+        appendKey(xKeySup,pVec);
+
+        Reference<XAppend> xAppend(xTables,UNO_QUERY);
+        if(xAppend.is())
+            xAppend->appendByDescriptor(m_xDestObject);
+
+        //  m_xDestObject = NULL;
+        // we need to reget the table because after appending it it is no longer valid
+        if(xTables->hasByName(m_sName))
+            xTables->getByName(m_sName) >>= m_xDestObject;
         else
-            m_xDestObject = NULL;
+        {
+            ::rtl::OUString sComposedName;
+            ::dbaui::composeTableName(m_xConnection->getMetaData(),m_xDestObject,sComposedName,sal_False);
+            if(xTables->hasByName(sComposedName))
+                xTables->getByName(sComposedName) >>= m_xDestObject;
+            else
+                m_xDestObject = NULL;
+        }
     }
+    else if(xTables.is() && xTables->hasByName(m_sName))
+        xTables->getByName(m_sName) >>= m_xDestObject;
 
     return m_xDestObject;
 }

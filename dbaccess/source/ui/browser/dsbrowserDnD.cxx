@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-19 09:27:12 $
+ *  last change: $Author: oj $ $Date: 2001-07-26 14:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,7 +448,7 @@ namespace dbaui
                         aWizard.AddWizardPage(pPage4);
                         aWizard.ActivatePage();
 
-                        if (aWizard.Execute())
+                        if (aWizard.Execute() == RET_OK)
                         {
                             Reference<XPropertySet> xTable;
                             switch(aWizard.getCreateStyle())
@@ -464,6 +464,10 @@ namespace dbaui
                                     }
                                 case OCopyTableWizard::WIZARD_APPEND_DATA:
                                     {
+                                        xTable = aWizard.createTable();
+                                        if(!xTable.is())
+                                            break;
+
                                         Reference<XResultSet>   xSrcRs;
                                         Reference<XStatement> xStmt; // needed to hold a reference to the statement
                                         Reference<XPreparedStatement> xPrepStmt;// needed to hold a reference to the statement
@@ -1081,6 +1085,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23  2001/07/19 09:27:12  oj
+ *  #86186# check parsetree for joins
+ *
  *  Revision 1.22  2001/07/18 11:33:57  oj
  *  #85664# enable copy/cut/paste/delete keys
  *
