@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: fs $ $Date: 2000-11-17 19:03:45 $
+#   last change: $Author: aw $ $Date: 2000-11-24 17:51:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,8 @@ SHL1STDLIBS= \
         $(SVLLIB)		\
         $(SALLIB)		\
         $(UNOTOOLSLIB)	\
-        $(ONELIB)
+        $(ONELIB)		\
+        $(GOODIESLIB)
 
 
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-23 18:30:39 $
+ *  last change: $Author: aw $ $Date: 2000-11-24 17:50:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ SdXMLShapeContext::SdXMLShapeContext(
             }
             case XML_TOK_SHAPE_TRANSFORM:
             {
-                SdXMLImExTransform aTransform(sValue, GetImport().GetMM100UnitConverter());
+                SdXMLImExTransform2D aTransform(sValue, GetImport().GetMM100UnitConverter());
                 if(aTransform.NeedsAction())
                 {
                     double fVal(0.0);
@@ -753,7 +753,7 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                 xShape->setSize(aSize);
 
                 // set polygon
-                if(maPoints.getLength())
+                if(maPoints.getLength() && maViewBox.getLength())
                 {
                     SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
                     SdXMLImExPointsElement aPoints(maPoints, aViewBox, aPoint, aSize, GetImport().GetMM100UnitConverter());
