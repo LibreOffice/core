@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-29 09:21:20 $
+ *  last change: $Author: ka $ $Date: 2002-03-01 12:35:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,6 +552,90 @@ Color Image::GetMaskColor() const
 
 // -----------------------------------------------------------------------
 
+Image Image::GetColorTransformedImage( ImageColorTransform eColorTransform ) const
+{
+    DBG_CHKTHIS( Image, NULL );
+
+    Image aRet;
+
+    if( IMAGECOLORTRANSFORM_NONE != eColorTransform )
+    {
+        Bitmap aBmp( GetBitmap() );
+
+        if( !aBmp.IsEmpty() )
+        {
+            Color*  pSrcColors = NULL;
+            Color*  pDstColors = NULL;
+            ULONG   nColorCount = 0;
+
+            Image::GetColorTransformArrays( eColorTransform, pSrcColors, pDstColors, nColorCount );
+
+            if( nColorCount && pSrcColors && pDstColors )
+            {
+                aBmp.Replace( pSrcColors, pDstColors, nColorCount );
+
+                if( HasMaskBitmap() )
+                    aRet = Image( aBmp, GetMaskBitmap() );
+                else if( HasMaskColor() )
+                {
+                    Color   aMaskColor( GetMaskColor() );
+                    BOOL    bDone = FALSE;
+
+                    for( ULONG i = 0; ( i < nColorCount ) && !bDone; i++ )
+                    {
+                        if( aMaskColor == pSrcColors[ i ] )
+                        {
+                            aMaskColor = pDstColors[ i ];
+                            bDone = TRUE;
+                        }
+                    }
+
+                    aRet = Image( aBmp, aMaskColor );
+                }
+                else
+                    aRet = Image( aBmp );
+            }
+
+            delete[] pSrcColors;
+            delete[] pDstColors;
+        }
+    }
+
+    if( !aRet )
+        aRet = *this;
+
+    return aRet;
+}
+
+// -----------------------------------------------------------------------
+
+void Image::GetColorTransformArrays( ImageColorTransform eColorTransform,
+                                     Color*& rpSrcColor, Color*& rpDstColor, ULONG& rColorCount )
+{
+    if( IMAGECOLORTRANSFORM_HIGHCONTRAST == eColorTransform )
+    {
+        rpSrcColor = new Color[ 3 ];
+        rpDstColor = new Color[ 3 ];
+        rColorCount = 3;
+
+        rpSrcColor[ 0 ] = Color( COL_BLACK );
+        rpDstColor[ 0 ] = Color( COL_WHITE );
+
+        rpSrcColor[ 1 ] = Color( COL_WHITE );
+        rpDstColor[ 1 ] = Color( COL_BLACK );
+
+        rpSrcColor[ 2 ] = Color( COL_BLUE );
+        rpDstColor[ 2 ] = Color( COL_WHITE );
+    }
+    else
+    {
+        rpSrcColor = rpDstColor = NULL;
+        rColorCount = 0;
+    }
+}
+
+// -----------------------------------------------------------------------
+
 Image& Image::operator=( const Image& rImage )
 {
     DBG_CHKTHIS( Image, NULL );
@@ -619,7 +703,7 @@ BOOL Image::operator==( const Image& rImage ) const
 
 static void ImplCopyImageListData( ImageList* pThis )
 {
-    if ( pThis->mpImplData->mnRefCount > 1 )
+    if ( pThis->mpImplData && pThis->mpImplData->mnRefCount > 1 )
     {
         pThis->mpImplData->mnRefCount--;
 
@@ -1375,6 +1459,37 @@ BOOL ImageList::HasMaskColor() const
         return mpImplData->mpImageBitmap->HasMaskColor();
     else
         return FALSE;
+}
+
+// -----------------------------------------------------------------------
+
+ImageList ImageList::GetColorTransformedImageList( ImageColorTransform eColorTransform ) const
+{
+    DBG_CHKTHIS( ImageList, NULL );
+
+    ImageList aRet;
+
+    if( IMAGECOLORTRANSFORM_NONE != eColorTransform )
+    {
+        Color*  pSrcColors = NULL;
+        Color*  pDstColors = NULL;
+        ULONG   nColorCount = 0;
+
+        aRet = *this;
+        ImplCopyImageListData( &aRet );
+        Image::GetColorTransformArrays( eColorTransform, pSrcColors, pDstColors, nColorCount );
+
+        if( nColorCount && pSrcColors && pDstColors && mpImplData )
+            mpImplData->mpImageBitmap->ReplaceColors( pSrcColors, pDstColors, nColorCount );
+
+        delete[] pSrcColors;
+        delete[] pDstColors;
+    }
+
+    if( !aRet.GetImageCount() )
+        aRet = *this;
+
+    return aRet;
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impimage.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: ka $ $Date: 2002-03-01 12:35:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #endif
 #ifndef _SV_IMAGE_H
 #include <image.h>
+#endif
+#ifndef _SV_IMAGE_HXX
+#include <image.hxx>
 #endif
 
 // -------------
@@ -290,6 +293,18 @@ void ImplImageBmp::Replace( USHORT nPos, const Bitmap& rBmp, const Color& rColor
 
 // -----------------------------------------------------------------------
 
+void ImplImageBmp::ReplaceColors( const Color* pSrcColors, const Color* pDstColors, ULONG nColorCount )
+{
+    ImplClearCaches();
+
+    if( !aDisa.IsEmpty() )
+        aDisa.SetEmpty();
+
+    aBmp.Replace( pSrcColors, pDstColors, nColorCount );
+}
+
+// -----------------------------------------------------------------------
+
 void ImplImageBmp::Merge( USHORT nPos, USHORT nSrcPos )
 {
     if ( !( pInfoAry[ nSrcPos ] & IMPSYSIMAGEITEM_MASK ) )
@@ -483,92 +498,132 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
             {
                 BOOL bDrawn = FALSE;
 
-                if( nStyle & ( IMAGE_DRAW_HIGHLIGHT | IMAGE_DRAW_DEACTIVE ) )
+                if( nStyle & ( IMAGE_DRAW_HIGHCONTRAST | IMAGE_DRAW_HIGHLIGHT | IMAGE_DRAW_DEACTIVE ) )
                 {
-                    Bitmap              aTmpBmp( aBmp );
-                    BitmapWriteAccess*  pAcc;
+                    Bitmap          aTmpBmp( aBmp ), aTmpMsk( aMask );
+                    const Rectangle aCropRect( Rectangle( IPOS( nPos ), aSize ) );
 
-                    aTmpBmp.Crop( Rectangle( IPOS( nPos ), aSize ) );
-                    pAcc = aTmpBmp.AcquireWriteAccess();
+                    aTmpBmp.Crop( aCropRect );
+                    aTmpMsk.Crop( aCropRect );
 
-                    if( pAcc )
+                    if( nStyle & IMAGE_DRAW_HIGHCONTRAST )
                     {
-                        const StyleSettings&    rSettings = pOutDev->GetSettings().GetStyleSettings();
-                        Color                   aColor;
-                        BitmapColor             aCol;
-                        const long              nW = pAcc->Width();
-                        const long              nH = pAcc->Height();
-                        BYTE*                   pMapR = new BYTE[ 256 ];
-                        BYTE*                   pMapG = new BYTE[ 256 ];
-                        BYTE*                   pMapB = new BYTE[ 256 ];
-                        long                    nX, nY;
+                        Color*  pSrcColors = NULL;
+                        Color*  pDstColors = NULL;
+                        ULONG   nColorCount = 0;
 
-                        if( nStyle & IMAGE_DRAW_HIGHLIGHT )
-                            aColor = rSettings.GetHighlightColor();
-                        else
-                            aColor = rSettings.GetDeactiveColor();
+                        Image::GetColorTransformArrays( IMAGECOLORTRANSFORM_HIGHCONTRAST, pSrcColors, pDstColors, nColorCount );
 
-                        const BYTE cR = aColor.GetRed();
-                        const BYTE cG = aColor.GetGreen();
-                        const BYTE cB = aColor.GetBlue();
+                        if( nColorCount && pSrcColors && pDstColors )
+                            aTmpBmp.Replace( pSrcColors, pDstColors, nColorCount );
 
-                        for( nX = 0L; nX < 256L; nX++ )
-                        {
-                            pMapR[ nX ] = (BYTE) ( ( ( nY = ( nX + cR ) >> 1 ) > 255 ) ? 255 : nY );
-                            pMapG[ nX ] = (BYTE) ( ( ( nY = ( nX + cG ) >> 1 ) > 255 ) ? 255 : nY );
-                            pMapB[ nX ] = (BYTE) ( ( ( nY = ( nX + cB ) >> 1 ) > 255 ) ? 255 : nY );
-                        }
-
-                        if( pAcc->HasPalette() )
-                        {
-                            for( USHORT i = 0, nCount = pAcc->GetPaletteEntryCount(); i < nCount; i++ )
-                            {
-                                const BitmapColor& rCol = pAcc->GetPaletteColor( i );
-                                aCol.SetRed( pMapR[ rCol.GetRed() ] );
-                                aCol.SetGreen( pMapG[ rCol.GetGreen() ] );
-                                aCol.SetBlue( pMapB[ rCol.GetBlue() ] );
-                                pAcc->SetPaletteColor( i, aCol );
-                            }
-                        }
-                        else if( pAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_BGR )
-                        {
-                            for( nY = 0L; nY < nH; nY++ )
-                            {
-                                Scanline pScan = pAcc->GetScanline( nY );
-
-                                for( nX = 0L; nX < nW; nX++ )
-                                {
-                                    *pScan = pMapB[ *pScan ]; pScan++;
-                                    *pScan = pMapG[ *pScan ]; pScan++;
-                                    *pScan = pMapR[ *pScan ]; pScan++;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            for( nY = 0L; nY < nH; nY++ )
-                            {
-                                for( nX = 0L; nX < nW; nX++ )
-                                {
-                                    aCol = pAcc->GetPixel( nY, nX );
-                                    aCol.SetRed( pMapR[ aCol.GetRed() ] );
-                                    aCol.SetGreen( pMapG[ aCol.GetGreen() ] );
-                                    aCol.SetBlue( pMapB[ aCol.GetBlue() ] );
-                                    pAcc->SetPixel( nY, nX, aCol );
-                                }
-                            }
-                        }
-
-                        delete[] pMapR;
-                        delete[] pMapG;
-                        delete[] pMapB;
-                        aTmpBmp.ReleaseAccess( pAcc );
-
-                        Bitmap aTmpMsk( aMask );
-                        aTmpMsk.Crop( Rectangle( IPOS( nPos), aSize ) );
-                        pOutDev->DrawBitmapEx( aOutPos, BitmapEx( aTmpBmp, aTmpMsk ) );
-                        bDrawn = TRUE;
+                        delete[] pSrcColors;
+                        delete[] pDstColors;
                     }
+
+                    if( nStyle & ( IMAGE_DRAW_HIGHLIGHT | IMAGE_DRAW_DEACTIVE ) )
+                    {
+                        BitmapWriteAccess* pAcc = aTmpBmp.AcquireWriteAccess();
+
+                        if( pAcc )
+                        {
+                            const StyleSettings&    rSettings = pOutDev->GetSettings().GetStyleSettings();
+                            Color                   aColor;
+                            BitmapColor             aCol;
+                            const long              nW = pAcc->Width();
+                            const long              nH = pAcc->Height();
+                            BYTE*                   pMapR = new BYTE[ 256 ];
+                            BYTE*                   pMapG = new BYTE[ 256 ];
+                            BYTE*                   pMapB = new BYTE[ 256 ];
+                            long                    nX, nY;
+
+                            if( nStyle & IMAGE_DRAW_HIGHLIGHT )
+                                aColor = rSettings.GetHighlightColor();
+                            else
+                                aColor = rSettings.GetDeactiveColor();
+
+                            const BYTE cR = aColor.GetRed();
+                            const BYTE cG = aColor.GetGreen();
+                            const BYTE cB = aColor.GetBlue();
+
+                            for( nX = 0L; nX < 256L; nX++ )
+                            {
+                                pMapR[ nX ] = (BYTE) ( ( ( nY = ( nX + cR ) >> 1 ) > 255 ) ? 255 : nY );
+                                pMapG[ nX ] = (BYTE) ( ( ( nY = ( nX + cG ) >> 1 ) > 255 ) ? 255 : nY );
+                                pMapB[ nX ] = (BYTE) ( ( ( nY = ( nX + cB ) >> 1 ) > 255 ) ? 255 : nY );
+                            }
+
+                            if( pAcc->HasPalette() )
+                            {
+                                for( USHORT i = 0, nCount = pAcc->GetPaletteEntryCount(); i < nCount; i++ )
+                                {
+                                    const BitmapColor& rCol = pAcc->GetPaletteColor( i );
+                                    aCol.SetRed( pMapR[ rCol.GetRed() ] );
+                                    aCol.SetGreen( pMapG[ rCol.GetGreen() ] );
+                                    aCol.SetBlue( pMapB[ rCol.GetBlue() ] );
+                                    pAcc->SetPaletteColor( i, aCol );
+                                }
+                            }
+                            else if( pAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_BGR )
+                            {
+                                for( nY = 0L; nY < nH; nY++ )
+                                {
+                                    Scanline pScan = pAcc->GetScanline( nY );
+
+                                    for( nX = 0L; nX < nW; nX++ )
+                                    {
+                                        *pScan = pMapB[ *pScan ]; pScan++;
+                                        *pScan = pMapG[ *pScan ]; pScan++;
+                                        *pScan = pMapR[ *pScan ]; pScan++;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                for( nY = 0L; nY < nH; nY++ )
+                                {
+                                    for( nX = 0L; nX < nW; nX++ )
+                                    {
+                                        aCol = pAcc->GetPixel( nY, nX );
+                                        aCol.SetRed( pMapR[ aCol.GetRed() ] );
+                                        aCol.SetGreen( pMapG[ aCol.GetGreen() ] );
+                                        aCol.SetBlue( pMapB[ aCol.GetBlue() ] );
+                                        pAcc->SetPixel( nY, nX, aCol );
+                                    }
+                                }
+                            }
+
+                            delete[] pMapR;
+                            delete[] pMapG;
+                            delete[] pMapB;
+                            aTmpBmp.ReleaseAccess( pAcc );
+                        }
+                    }
+
+                    pOutDev->DrawBitmapEx( aOutPos, BitmapEx( aTmpBmp, aTmpMsk ) );
+                    bDrawn = TRUE;
+                }
+                else if( nStyle & IMAGE_DRAW_HIGHCONTRAST )
+                {
+                    Bitmap          aTmpBmp( aBmp ), aTmpMsk( aMask );
+                    const Rectangle aCropRect( Rectangle( IPOS( nPos ), aSize ) );
+                    Color*          pSrcColors = NULL;
+                    Color*          pDstColors = NULL;
+                    ULONG           nColorCount = 0;
+
+                    aTmpBmp.Crop( aCropRect );
+                    aTmpMsk.Crop( aCropRect );
+
+                    Image::GetColorTransformArrays( IMAGECOLORTRANSFORM_HIGHCONTRAST, pSrcColors, pDstColors, nColorCount );
+
+                    if( nColorCount && pSrcColors && pDstColors )
+                        aTmpBmp.Replace( pSrcColors, pDstColors, nColorCount );
+
+                    pOutDev->DrawBitmapEx( aOutPos, BitmapEx( aTmpBmp, aTmpMsk ) );
+
+                    delete[] pSrcColors;
+                    delete[] pDstColors;
+                    bDrawn = TRUE;
                 }
 
                 if( !bDrawn )
@@ -739,6 +794,8 @@ void ImplImageBmp::ImplUpdatePaintBmp( USHORT nPos )
 
 void ImplImageBmp::ImplClearCaches()
 {
-    aBmpEx.Clear();
-    aBmpDisp = aMaskDisp = aDisaDisp = Bitmap();
+    aBmpEx.SetEmpty();
+    aBmpDisp.SetEmpty();
+    aMaskDisp.SetEmpty();
+    aDisaDisp.SetEmpty();
 }
