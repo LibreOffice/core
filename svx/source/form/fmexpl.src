@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:28:23 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,9 +312,9 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text = "Automatischer Kontrollelement-Fokus";
             Text [ english ] =  "Automatic control focus";
             Text [ english_us ] = "Automatic Control Focus";
-            Text[ portuguese ] = "Automatic control focus";
-            Text[ russian ] = "Automatic control focus";
-            Text[ greek ] = "Automatic control focus";
+            Text[ portuguese ] = "Foco automático de controlo";
+            Text[ russian ] = "Àâòîôîêóñ êîíòğîëüíîãî ıëåìåíòà";
+            Text[ greek ] = "Áõôüìáôç åóôßáóç óôïé÷åßïõ åëİã÷ïõ";
             Text[ dutch ] = "Automatic control focus";
             Text[ french ] = "Focalisation automatique sur l'élément de contrôle";
             Text[ spanish ] = "Foco automático de control";
@@ -326,7 +326,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ japanese ] = "µ°ÄºİÄÛ°ÙÌ«°¶½";
             Text[ korean ] = "Automatic control focus";
             Text[ chinese_simplified ] = "×Ô¶¯¶Ô×¼¿ØÖÆ";
-            Text[ chinese_traditional ] = "Automatic control focus";
+            Text[ chinese_traditional ] = "¦Û°Ê¹ï­ã±±¨î¶µ";
             Text[ turkish ] = "Automatic control focus";
             Text[ arabic ] = "ÊÑßíÒ ÊáŞÇÆí áÚäÕÑ ÇáÊÍßã";
         };
