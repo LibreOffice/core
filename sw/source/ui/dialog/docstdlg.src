@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:33:36 $
+ *  last change: $Author: rt $ $Date: 2001-08-29 21:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ TabPage TP_DOC_STAT
         Text [ italian ] = "Numero di pagine:" ;
         Text [ portuguese_brazilian ] = "N?ero de p?ginas:" ;
         Text [ portuguese ] = "Número de páginas:" ;
-        Text [ finnish ] = "Sivujen määrä:" ;
+        Text [ finnish ] = "Sivujen m??r?:" ;
         Text [ danish ] = "Antal sider:" ;
         Text [ french ] = "Nombre de pages :" ;
         Text [ swedish ] = "Antal sidor:" ;
@@ -108,7 +108,7 @@ TabPage TP_DOC_STAT
         Text [ italian ] = "Numero di tabelle:" ;
         Text [ portuguese_brazilian ] = "N?ero de tabelas:" ;
         Text [ portuguese ] = "Número de tabelas:" ;
-        Text [ finnish ] = "Taulukoiden määrä:" ;
+        Text [ finnish ] = "Taulukoiden m??r?:" ;
         Text [ danish ] = "Antal tabeller:" ;
         Text [ french ] = "Nombre de tableaux :" ;
         Text [ swedish ] = "Antal tabeller:" ;
@@ -138,7 +138,7 @@ TabPage TP_DOC_STAT
         Text [ italian ] = "Numero di immagini:" ;
         Text [ portuguese_brazilian ] = "N?ero de gr?ficos:" ;
         Text [ portuguese ] = "Número de imagens:" ;
-        Text [ finnish ] = "Kuvien määrä:" ;
+        Text [ finnish ] = "Kuvien m??r?:" ;
         Text [ danish ] = "Antal billeder:" ;
         Text [ french ] = "Nombre d'images :" ;
         Text [ swedish ] = "Antal grafikobjekt:" ;
@@ -168,7 +168,7 @@ TabPage TP_DOC_STAT
         Text [ italian ] = "Numero di oggetti OLE:" ;
         Text [ portuguese_brazilian ] = "N?ero de objetos OLE:" ;
         Text [ portuguese ] = "Número de objectos OLE:" ;
-        Text [ finnish ] = "OLE-objektien määrä:" ;
+        Text [ finnish ] = "OLE-objektien m??r?:" ;
         Text [ danish ] = "Antal OLE-objekter:" ;
         Text [ french ] = "Nombre d'objets OLE :" ;
         Text [ swedish ] = "Antal OLE-objekt:" ;
@@ -198,7 +198,7 @@ TabPage TP_DOC_STAT
         Text [ italian ] = "Numero di paragrafi:" ;
         Text [ portuguese_brazilian ] = "N?ero de par?grafos:" ;
         Text [ portuguese ] = "Número de parágrafos:" ;
-        Text [ finnish ] = "Kappaleiden määrä:" ;
+        Text [ finnish ] = "Kappaleiden m??r?:" ;
         Text [ danish ] = "Antal afsnit:" ;
         Text [ french ] = "Nombre de paragraphes :" ;
         Text [ swedish ] = "Antal stycken:" ;
@@ -228,7 +228,7 @@ TabPage TP_DOC_STAT
         Text [ italian ] = "Numero di parole:" ;
         Text [ portuguese_brazilian ] = "N?ero de palavras:" ;
         Text [ portuguese ] = "Número de palavras:" ;
-        Text [ finnish ] = "Sanamäärä:" ;
+        Text [ finnish ] = "Sanam??r?:" ;
         Text [ danish ] = "Antal ord:" ;
         Text [ french ] = "Nombre de mots :" ;
         Text [ swedish ] = "Antal ord:" ;
@@ -294,7 +294,7 @@ TabPage TP_DOC_STAT
         Text [ italian ] = "Numero di caratteri:" ;
         Text [ portuguese_brazilian ] = "N?ero de caracteres:" ;
         Text [ portuguese ] = "Número de caracteres:" ;
-        Text [ finnish ] = "Merkkien määrä:" ;
+        Text [ finnish ] = "Merkkien m??r?:" ;
         Text [ danish ] = "Antal tegn:" ;
         Text [ french ] = "Nombre de caractères :" ;
         Text [ swedish ] = "Antal tecken:" ;
@@ -340,7 +340,7 @@ TabPage TP_DOC_STAT
         Text[ turkish ] = "Satýr:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Número de líneas:";
-        Text[ finnish ] = "Rivien määrä:";
+        Text[ finnish ] = "Rivien m??r?:";
     };
     FixedText FT_PAGE_COUNT
     {
@@ -417,9 +417,10 @@ TabPage TP_DOC_STAT
         Text[ turkish ] = "~Güncelle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Actualizar";
-        Text[ finnish ] = "~Päivitä";
+        Text[ finnish ] = "~P?ivit?";
     };
 };
+
 
 
 
