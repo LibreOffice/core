@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergehelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-14 16:43:16 $
+ *  last change: $Author: jb $ $Date: 2001-12-07 10:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,6 @@ void OCleanupLayerAction::handle(ValueChange& _rChange)
 
     OSL_ENSURE(!_rChange.isToDefault(),"Found change to default in layer being merged");
 
-
     // replaced state -> should be a full (added/replaced) node
     //if (_rChange.isReplacedNode() && m_rTargetTree.isSetNodeChange())
     if ( _rChange.isReplacedValue() )
@@ -259,6 +258,7 @@ void OCleanupLayerAction::handle(ValueChange& _rChange)
     {
         OSL_TRACE("Layer cleanup : Found orphaned node (value) '%s'",OUSTRING2ASCII(sNodeName));
         CFG_TRACE_INFO("Layer cleanup : Found orphaned node (value) '%s'",OUSTRING2ASCII(sNodeName));
+        OSL_ENSURE(false, "Layer cleanup : Found orphaned Value");
     }
 }
 
