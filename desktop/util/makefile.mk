@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:31:32 $
+#   last change: $Author: vg $ $Date: 2003-04-23 11:03:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,6 +121,7 @@ APP1TARGET=so$/$(TARGET)
 APP1STDLIBS=			\
     $(VCLLIB)			\
     $(SVLLIB)			\
+    $(SVTOOLLIB)			\
     $(UNOTOOLSLIB)		\
     $(TOOLSLIB)			\
     $(COMPHELPERLIB)	\
@@ -134,12 +135,11 @@ APP1STDLIBS=			\
 #	$(SVLLIB)			\
 #	$(SVMEMLIB)			\
 #	$(VCLLIB)			\
-#    $(APP1_STDPOST)		\
+#   $(APP1_STDPOST)		\
 #	$(UNOTOOLSLIB)		\
 #	$(UCBHELPERLIB)		\
 #	$(COMPHELPERLIB)	\
 #	$(SALHELPERLIB)		\
-#	$(SVTOOLLIB)
 
 APP1OBJS=$(TARGETOBJS)
 APP1OBJS += $(OBJ)$/copyright_ascii_sun.obj
@@ -227,7 +227,8 @@ APP5STDLIBS=			\
     $(VOSLIB)			\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
-    $(SALLIB)
+    $(SALLIB)			\
+    $(SVTOOLLIB)
 
 #	$(APP1_STDPRE)		\
 #	$(SVLLIB)			\
@@ -238,7 +239,6 @@ APP5STDLIBS=			\
 #	$(UCBHELPERLIB)		\
 #	$(COMPHELPERLIB)	\
 #	$(SALHELPERLIB)		\
-#	$(SVTOOLLIB)
 
 APP5OBJS=$(TARGETOBJS)
 APP5OBJS += $(OBJ)$/copyright_ascii_ooo.obj
