@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:39:25 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,9 @@
 #include <tools/isolang.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <comphelper/processfactory.hxx>
+
+// #110680#
+//#include <comphelper/processfactory.hxx>
 
 #include "xmlnumfi.hxx"
 #include "xmltkmap.hxx"
@@ -130,9 +132,16 @@ class SvXMLNumImpData
     LocaleDataWrapper*  pLocaleData;
     SvXMLNumFmtEntryArr aNameEntries;
 
+    // #110680#
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceFactory;
+
 public:
-                SvXMLNumImpData( SvNumberFormatter* pFmt );
-                ~SvXMLNumImpData();
+    // #110680#
+    // SvXMLNumImpData( SvNumberFormatter* pFmt );
+    SvXMLNumImpData(
+        SvNumberFormatter* pFmt,
+        const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory );
+    ~SvXMLNumImpData();
 
     SvNumberFormatter*      GetNumberFormatter() const  { return pFormatter; }
     const SvXMLTokenMap&    GetStylesElemTokenMap();
@@ -490,14 +499,22 @@ SV_IMPL_OP_PTRARR_SORT( SvXMLEmbeddedElementArr, SvXMLEmbeddedElementPtr );
 //  SvXMLNumImpData
 //
 
-SvXMLNumImpData::SvXMLNumImpData( SvNumberFormatter* pFmt ) :
-    pFormatter(pFmt),
+// #110680#
+// SvXMLNumImpData::SvXMLNumImpData( SvNumberFormatter* pFmt ) :
+SvXMLNumImpData::SvXMLNumImpData(
+    SvNumberFormatter* pFmt,
+    const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory )
+:   pFormatter(pFmt),
     pStylesElemTokenMap(NULL),
     pStyleElemTokenMap(NULL),
     pStyleAttrTokenMap(NULL),
     pStyleElemAttrTokenMap(NULL),
-    pLocaleData(NULL)
+    pLocaleData(NULL),
+
+    // #110680#
+    mxServiceFactory(xServiceFactory)
 {
+    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
 }
 
 SvXMLNumImpData::~SvXMLNumImpData()
@@ -619,9 +636,14 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemAttrTokenMap()
 const LocaleDataWrapper& SvXMLNumImpData::GetLocaleData( LanguageType nLang )
 {
     if ( !pLocaleData )
+        // #110680#
+        //pLocaleData = new LocaleDataWrapper(
+        //  (pFormatter ? pFormatter->GetServiceManager() :
+        //  ::comphelper::getProcessServiceFactory()),
+        //  SvNumberFormatter::ConvertLanguageToLocale( nLang ) );
         pLocaleData = new LocaleDataWrapper(
             (pFormatter ? pFormatter->GetServiceManager() :
-            ::comphelper::getProcessServiceFactory()),
+            mxServiceFactory),
             SvNumberFormatter::ConvertLanguageToLocale( nLang ) );
     else
         pLocaleData->setLocale( SvNumberFormatter::ConvertLanguageToLocale( nLang ) );
@@ -2234,21 +2256,39 @@ sal_Bool SvXMLNumFormatContext::IsSystemLanguage()
 //  SvXMLNumFmtHelper
 //
 
+// #110680#
+//SvXMLNumFmtHelper::SvXMLNumFmtHelper(
+//                      const uno::Reference<util::XNumberFormatsSupplier>& rSupp )
 SvXMLNumFmtHelper::SvXMLNumFmtHelper(
-                        const uno::Reference<util::XNumberFormatsSupplier>& rSupp )
+    const uno::Reference<util::XNumberFormatsSupplier>& rSupp,
+    const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory )
+:   mxServiceFactory(xServiceFactory)
 {
+    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
+
     SvNumberFormatter* pFormatter = NULL;
     SvNumberFormatsSupplierObj* pObj =
                     SvNumberFormatsSupplierObj::getImplementation( rSupp );
     if (pObj)
         pFormatter = pObj->GetNumberFormatter();
 
-    pData = new SvXMLNumImpData( pFormatter );
+    // #110680#
+    // pData = new SvXMLNumImpData( pFormatter );
+    pData = new SvXMLNumImpData( pFormatter, mxServiceFactory );
 }
 
-SvXMLNumFmtHelper::SvXMLNumFmtHelper( SvNumberFormatter* pNumberFormatter )
+// #110680#
+// SvXMLNumFmtHelper::SvXMLNumFmtHelper( SvNumberFormatter* pNumberFormatter )
+SvXMLNumFmtHelper::SvXMLNumFmtHelper(
+    SvNumberFormatter* pNumberFormatter,
+    const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory )
+:   mxServiceFactory(xServiceFactory)
 {
-    pData = new SvXMLNumImpData( pNumberFormatter );
+    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
+
+    // #110680#
+    // pData = new SvXMLNumImpData( pNumberFormatter );
+    pData = new SvXMLNumImpData( pNumberFormatter, mxServiceFactory );
 }
 
 SvXMLNumFmtHelper::~SvXMLNumFmtHelper()
