@@ -1,0 +1,42 @@
+    <node oor:name="Text (encoded)" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>writer_Text_encoded</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
+        <prop oor:name="UIComponent"><value>com.sun.star.comp.Writer.FilterOptionsDialog</value></prop>
+        <prop oor:name="UserData"><value>TEXT_DLG</value></prop>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="pl">Tekst zakodowany</value>
+            <value xml:lang="hu">Kódolt szöveg</value>
+            <value xml:lang="ja">エンコードされたテキスト</value>
+            <value xml:lang="es">Texto codificado</value>
+            <value xml:lang="tr">Şifreli Metin</value>
+            <value xml:lang="ru">Текст кодированный</value>
+            <value xml:lang="th">Text Encoded</value>
+            <value xml:lang="x-comment">Text Kodiert</value>
+            <value xml:lang="ca">Text Encoded</value>
+            <value xml:lang="el">Κείμενο Κωδικοποιημένο</value>
+            <value xml:lang="zh-CN">文字 使用编码的</value>
+            <value xml:lang="pt">Texto codificado</value>
+            <value xml:lang="cs">Kódovaný text</value>
+            <value xml:lang="fr">Texte codé</value>
+            <value xml:lang="ar">Text (encoded)</value>
+            <value xml:lang="zh-TW">文字 使用編碼的</value>
+            <value xml:lang="sl">Besedilo Encoded</value>
+            <value xml:lang="fi">Teksti (koodattu)</value>
+            <value xml:lang="hi-IN">Text Encoded</value>
+            <value xml:lang="en-US">Text Encoded</value>
+            <value xml:lang="sk">Kódovaný text</value>
+            <value xml:lang="he">‮טקסט מקודד‬</value>
+            <value xml:lang="sv">Text - kodad</value>
+            <value xml:lang="da">Tekst encoded</value>
+            <value xml:lang="de">Text Kodiert</value>
+            <value xml:lang="ko">인코드된 텍스트 파일</value>
+            <value xml:lang="nl">Tekst gecodeerd</value>
+            <value xml:lang="pt-BR">Text (encoded)</value>
+            <value xml:lang="it">Testo codificato</value>
+            <value xml:lang="x-translate">Text Kodiert</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN</value></prop>
+    </node>
