@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-17 20:51:19 $
+ *  last change: $Author: kz $ $Date: 2001-10-19 21:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7048,7 +7048,7 @@ String RID_SVXITEMS_WIDOWS_COMPLETE
     Text[ chinese_simplified ] = "ζ®µε‰ε†ι΅µ";
     Text[ russian ] = "Σοπΰβλενθε κξνφεβϋμθ βθρÿχθμθ ρςπξκΰμθ ";
     Text[ polish ] = "Kontrola szewcσw";
-    Text[ japanese ] = "ζ”ΉοΎοΎο½°ο½ΌοΎζ™‚γ«ζ®‹γ™θ΅ζ•° ";
+    Text[ japanese ] = "ζ”ΉοΎοΎο½°ο½ΌοΎγ®ε‰γ«ζ®‹γ™θ΅ζ•°";
     Text[ chinese_traditional ] = "ζ®µθ½ε‰ε†ι ";
     Text[ arabic ] = "ΗαΚΝίγ ΘΗαΓΣΨΡ ΗαζΝνΟΙ ";
     Text[ greek ] = "Κανόνας ορφανού";
@@ -8172,6 +8172,7 @@ String RID_SVXITEMS_PARAVERTALIGN_BOTTOM
 };
 
  // ********************************************************************** EOF
+
 
 
 
