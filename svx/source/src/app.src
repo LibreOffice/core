@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-13 14:32:53 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,6 +387,7 @@ ErrorBox RID_ERRBOX_MODULENOTINSTALLED
         SID_ATTR_PARA_RIGHT_TO_LEFT;\
         SID_DIRECTEXPORTDOCASPDF;\
         SID_ADDONS;\
+        SID_SPELL_DIALOG;\
         SID_SET_SUPER_SCRIPT;   \
         SID_SET_SUB_SCRIPT;     \
         SID_HELPINDEX; \
@@ -394,7 +395,7 @@ ErrorBox RID_ERRBOX_MODULENOTINSTALLED
         SID_AVMEDIA_PLAYER; \
     };\
     IdCount = {\
-        306;\
+        307;\
     };
 
 #define OFFICE_ID_LIST\
