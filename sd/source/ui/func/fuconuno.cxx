@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-15 16:51:32 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "fuconuno.hxx"
+
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
 #endif
@@ -90,15 +92,28 @@ class SbModule;
 #include "app.hrc"
 #include "glob.hrc"
 
-#include "viewshel.hxx"
-#include "sdview.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_WINDOW_SHELL_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
+#ifndef SD_OBJECT_BAR_MANAGER_HXX
+#include "ObjectBarManager.hxx"
+#endif
 #include "drawdoc.hxx"
 #include "sdresid.hxx"
-#include "fuconuno.hxx"
 #include "res_bmp.hrc"
 
-TYPEINIT1( FuConstUnoControl, FuConstruct );
+namespace sd {
+
+TYPEINIT1( FuConstructUnoControl, FuConstruct );
 
 /*************************************************************************
 |*
@@ -106,11 +121,12 @@ TYPEINIT1( FuConstUnoControl, FuConstruct );
 |*
 \************************************************************************/
 
-FuConstUnoControl::FuConstUnoControl(SdViewShell*   pViewSh,
-                               SdWindow*        pWin,
-                               SdView*          pView,
-                               SdDrawDocument*  pDoc,
-                               SfxRequest&      rReq)
+FuConstructUnoControl::FuConstructUnoControl (
+    ViewShell*  pViewSh,
+    ::sd::Window*       pWin,
+    ::sd::View*         pView,
+    SdDrawDocument* pDoc,
+    SfxRequest&     rReq)
     : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
 {
     SFX_REQUEST_ARG( rReq, pInventorItem, SfxUInt32Item, SID_FM_CONTROL_INVENTOR, FALSE );
@@ -120,7 +136,7 @@ FuConstUnoControl::FuConstUnoControl(SdViewShell*   pViewSh,
     if( pIdentifierItem )
         nIdentifier = pIdentifierItem->GetValue();
 
-    pViewShell->SwitchObjectBar(RID_DRAW_OBJ_TOOLBOX);
+    pViewShell->GetObjectBarManager().SwitchObjectBar (RID_DRAW_OBJ_TOOLBOX);
 }
 
 /*************************************************************************
@@ -128,7 +144,7 @@ FuConstUnoControl::FuConstUnoControl(SdViewShell*   pViewSh,
 |* Destruktor
 |*
 \************************************************************************/
-FuConstUnoControl::~FuConstUnoControl()
+FuConstructUnoControl::~FuConstructUnoControl()
 {
 }
 
@@ -137,7 +153,7 @@ FuConstUnoControl::~FuConstUnoControl()
 |* MouseButtonDown-event
 |*
 \************************************************************************/
-BOOL FuConstUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuConstructUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
@@ -157,7 +173,7 @@ BOOL FuConstUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 |* MouseMove-event
 |*
 \************************************************************************/
-BOOL FuConstUnoControl::MouseMove(const MouseEvent& rMEvt)
+BOOL FuConstructUnoControl::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -167,7 +183,7 @@ BOOL FuConstUnoControl::MouseMove(const MouseEvent& rMEvt)
 |* MouseButtonUp-event
 |*
 \************************************************************************/
-BOOL FuConstUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuConstructUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FALSE;
 
@@ -194,7 +210,7 @@ BOOL FuConstUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 |* FALSE.
 |*
 \************************************************************************/
-BOOL FuConstUnoControl::KeyInput(const KeyEvent& rKEvt)
+BOOL FuConstructUnoControl::KeyInput(const KeyEvent& rKEvt)
 {
     BOOL bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
@@ -205,7 +221,7 @@ BOOL FuConstUnoControl::KeyInput(const KeyEvent& rKEvt)
 |* Function aktivieren
 |*
 \************************************************************************/
-void FuConstUnoControl::Activate()
+void FuConstructUnoControl::Activate()
 {
     pView->SetCurrentObj( nIdentifier, nInventor );
 
@@ -225,7 +241,7 @@ void FuConstUnoControl::Activate()
 |* Function deaktivieren
 |*
 \************************************************************************/
-void FuConstUnoControl::Deactivate()
+void FuConstructUnoControl::Deactivate()
 {
     FuConstruct::Deactivate();
     pView->SetActiveLayer( aOldLayer );
@@ -233,7 +249,7 @@ void FuConstUnoControl::Deactivate()
 }
 
 // #97016#
-SdrObject* FuConstUnoControl::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+SdrObject* FuConstructUnoControl::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
     // case SID_FM_CREATE_CONTROL:
 
@@ -248,3 +264,5 @@ SdrObject* FuConstUnoControl::CreateDefaultObject(const sal_uInt16 nID, const Re
 
     return pObj;
 }
+
+} // end of namespace sd
