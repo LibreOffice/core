@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-19 13:14:50 $
+ *  last change: $Author: iha $ $Date: 2003-12-04 15:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ uno::Reference< XTransformation > PlottingPositionHelper::getTransformationLogic
         aMatrix.ScaleY(fScaleDirectionY*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthY);
         aMatrix.ScaleZ(fScaleDirectionZ*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthZ);
 
-        aMatrix = aMatrix*m_aMatrixScreenToScene;
+        aMatrix = m_aMatrixScreenToScene*aMatrix;
 
         m_xTransformationLogicToScene = new Linear3DTransformation(Matrix4DToHomogenMatrix( aMatrix ));
     }
