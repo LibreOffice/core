@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:53:00 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ AppendPS (FILE* pDst, osl::File* pSrc, sal_uChar* pBuffer,
 
     pSrc->setPos (osl_Pos_Absolut, 0);
 
-    sal_uInt64 nIn;
+    sal_uInt64 nIn = 0;
     sal_uInt64 nOut = 0;
     do
     {
@@ -267,8 +267,8 @@ PrinterJob::GetCurrentPageBody ()
  */
 
 PrinterJob::PrinterJob () :
-        mpJobTrailer (NULL),
-        mpJobHeader (NULL)
+        mpJobHeader (NULL),
+        mpJobTrailer (NULL)
 {
 }
 
@@ -446,7 +446,7 @@ PrinterJob::StartJob (
     maFileName = rFileName;
     mnFileMode = nMode;
     maSpoolDirName = createSpoolDir ();
-    maJobName = rJobName;
+    maJobTitle = rJobName;
 
     rtl::OUString aExt = rtl::OUString::createFromAscii (".ps");
     mpJobHeader  = CreateSpoolFile (rtl::OUString::createFromAscii("psp_head"), aExt);
@@ -483,6 +483,7 @@ PrinterJob::StartJob (
 
     // Document Title
     aFilterWS = WhitespaceToSpace( rJobName, FALSE );
+    maJobTitle = aFilterWS;
     WritePS (mpJobHeader, "%%Title: ");
     WritePS (mpJobHeader, aFilterWS);
     WritePS (mpJobHeader, "\n");
@@ -580,6 +581,12 @@ PrinterJob::EndJob ()
     }
     else
     {
+#ifndef MACOSX
+        PrinterInfoManager& rPrinterInfoManager = PrinterInfoManager::get ();
+        pDestFILE = rPrinterInfoManager.startSpool( m_aLastJobData.m_aPrinterName );
+        if (pDestFILE == NULL)
+            return sal_False;
+#else
         const PrinterInfoManager& rPrinterInfoManager = PrinterInfoManager::get ();
         const rtl::OUString& rPrinter     = m_aLastJobData.m_aPrinterName;
         const PrinterInfo&   rPrinterInfo = rPrinterInfoManager.getPrinterInfo (rPrinter);
@@ -592,19 +599,12 @@ PrinterJob::EndJob ()
          *           All other OS X/Darwin cases use spool to file.
         * Other UNIX:  always open a pipe.
          */
-        if (
-           #ifdef MACOSX
-               applePrintSysType == kApplePrintingLPR
-           #else
-               sal_True
-           #endif
-           )
+        if ( applePrintSysType == kApplePrintingLPR )
         {
             pDestFILE = popen (aShellCommand.getStr(), "w");
             if (pDestFILE == NULL)
                 return sal_False;
         }
-     #ifdef MACOSX
         else
         {
             /* Spool to file instead so we can convert it.  Cases used here:
@@ -629,7 +629,7 @@ PrinterJob::EndJob ()
                 return sal_False;
             }
         }
-     #endif
+#endif
     }
 
     /* spool the document parts to the destination */
@@ -678,8 +678,13 @@ PrinterJob::EndJob ()
     if (bSpoolToFile)
         fclose (pDestFILE);
     else
+#ifndef MACOSX
     {
-        #ifdef MACOSX
+        PrinterInfoManager& rPrinterInfoManager = PrinterInfoManager::get();
+        rPrinterInfoManager.endSpool( m_aLastJobData.m_aPrinterName, maJobTitle, pDestFILE );
+    }
+#else
+    {
             sal_uInt32  nXdpi;
             sal_uInt32  nYdpi;
 
@@ -707,14 +712,9 @@ PrinterJob::EndJob ()
                                            aShellCommand,
                                            aDriverName,
                                            m_aLastJobData,
-                                           &maJobName,
+                                           &maJobTitle,
                                            mnResolution );
-        #else
-            pclose (pDestFILE);
-        #endif
     }
-
-#ifdef MACOSX
     /* If we created a spool file for our Mac OS X/Darwin job,
      * delete it.  Also free the variable, since it is malloc()ed in macxp_tempnam()
      * and otherwise we'd leak memory.
@@ -1165,7 +1165,7 @@ bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool b
 
     // emit features ordered to OrderDependency
     // ignore features that are set to default
-    const PPDContext& rContext = rJob.m_aContext;
+
     // sanity check
     if( rJob.m_pParser == rJob.m_aContext.getParser() &&
         rJob.m_pParser &&
