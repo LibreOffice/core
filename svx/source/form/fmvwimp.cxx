@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:25:57 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #endif
 #ifndef SVX_SOURCE_INC_FMDOCUMENTCLASSIFICATION_HXX
 #include "fmdocumentclassification.hxx"
+#endif
+#ifndef SVX_SOURCE_INC_FMCONTROLLAYOUT_HXX
+#include "fmcontrollayout.hxx"
 #endif
 
 /** === begin UNO includes === **/
@@ -1219,39 +1222,10 @@ sal_Int16 FmXFormView::implInitializeNewControlModel( const Reference< XProperty
 
     try
     {
-        DocumentType eDocType = DocumentClassification::classifyHostDocument( _rxModel.get() );
-
-        // if the control lives in an eForm or database, give it some nicer layout
-        // Notice that in such documents, and FmXFormController will additionally enable
-        // dynamic control border colors (i.e. the color changes when the mouse hovers over
-        // the control, or the control has the focus)
-        Reference< XPropertySetInfo > xPSI( _rxModel->getPropertySetInfo() );
-        if ( xPSI.is() && xPSI->hasPropertyByName( FM_PROP_BORDER ) )
-        {
-            sal_Int16 nCurrentBorder = VisualEffect::NONE;
-            OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_BORDER ) >>= nCurrentBorder );
-            if ( nCurrentBorder != VisualEffect::NONE )
-            {
-                if ( ( eDocType == eEnhancedForm ) || ( eDocType == eDatabaseForm ) )
-                {
-                    _rxModel->setPropertyValue( FM_PROP_BORDER, makeAny( VisualEffect::FLAT ) );
-                    OSL_ENSURE( xPSI->hasPropertyByName( FM_PROP_BORDERCOLOR ), "FmXFormView::implInitializeNewControlModel: Border, but no border color?" );
-                    if ( xPSI->hasPropertyByName( FM_PROP_BORDERCOLOR ) )
-                        _rxModel->setPropertyValue( FM_PROP_BORDERCOLOR, makeAny( (sal_Int32)0x00C0C0C0 ) );  // light gray
-                }
-            }
-        }
-        // same for the VisualEffect of radios and check boxes
-        if ( xPSI.is() && xPSI->hasPropertyByName( FM_PROP_VISUALEFFECT ) )
-        {
-            if ( ( eDocType == eEnhancedForm ) || ( eDocType == eDatabaseForm ) )
-            {
-                _rxModel->setPropertyValue( FM_PROP_VISUALEFFECT, makeAny( VisualEffect::FLAT ) );
-            }
-        }
+        DocumentType eDocumentType = GetFormShell() ? GetFormShell()->GetImpl()->getDocumentType() : eUnknownDocumentType;
+        ControlLayouter::initializeControlLayout( _rxModel, eDocumentType );
 
         _rxModel->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId;
-
         switch ( nClassId )
         {
             case FormComponentType::SCROLLBAR:
