@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-11 12:31:02 $
+ *  last change: $Author: kz $ $Date: 2002-06-13 14:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ String RID_SVXSTR_A11Y_3D_MATERIAL_COLOR
     Text[ polish ] = "3D material color";
     Text[ portuguese_brazilian ] = "3D material color";
     Text[ japanese ] = "3D マテリアルカラー";
-    Text[ korean ] = "3D 소재 색상";
+    Text[ korean ] = "3D 재료 색상";
     Text[ chinese_simplified ] = "3 维材料颜色";
     Text[ chinese_traditional ] = "3D 材料顔色";
     Text[ turkish ] = "3D material color";
@@ -235,7 +235,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT
     Text[ polish ] = "gradient";
     Text[ portuguese_brazilian ] = "gradient";
     Text[ japanese ] = "透過性グラデーション";
-    Text[ korean ] = "그라데이션";
+    Text[ korean ] = "그라디언트";
     Text[ chinese_simplified ] = "透明图案";
     Text[ chinese_traditional ] = "透明圖案";
     Text[ turkish ] = "gradient";
@@ -288,7 +288,7 @@ String RID_SVXSTR_A11Y_WITH
     Text[ swedish ] = "med";
     Text[ polish ] = "with";
     Text[ portuguese_brazilian ] = "with";
-    Text[ japanese ] = "設定対象";
+    Text[ japanese ] = "対象";
     Text[ korean ] = "설정 대상";
     Text[ chinese_simplified ] = "带";
     Text[ chinese_traditional ] = "帶";
@@ -396,7 +396,7 @@ String RID_SVXSTR_RECTCTL_ACC_CORN_DESCR
     Text[ polish ] = "Selection of a corner point.";
     Text[ portuguese_brazilian ] = "Selection of a corner point.";
     Text[ japanese ] = "隅を選択。";
-    Text[ korean ] = "각점 선택";
+    Text[ korean ] = "모서리점 선택";
     Text[ chinese_simplified ] = "选择一个角点。";
     Text[ chinese_traditional ] = "選擇一個角點。";
     Text[ turkish ] = "Selection of a corner point.";
@@ -418,7 +418,7 @@ String RID_SVXSTR_RECTCTL_ACC_ANGL_NAME
     Text[ finnish ] = "Angle control";
     Text[ italian ] = "Controllo angolo";
     Text[ danish ] = "Angle control";
-    Text[ swedish ] = "Kontrollelement f�r vinkel";
+    Text[ swedish ] = "Vinkelkontrollelement";
     Text[ polish ] = "Angle control";
     Text[ portuguese_brazilian ] = "Angle control";
     Text[ japanese ] = "アングルコントロール";
@@ -444,7 +444,7 @@ String RID_SVXSTR_RECTCTL_ACC_ANGL_DESCR
     Text[ finnish ] = "Selection of a major angle";
     Text[ italian ] = "Selezione di un angolo (principale).";
     Text[ danish ] = "Selection of a major angle";
-    Text[ swedish ] = "Urval av en (huvud)vinkel";
+    Text[ swedish ] = "Markering av en (huvud)vinkel.";
     Text[ polish ] = "Selection of a major angle";
     Text[ portuguese_brazilian ] = "Selection of a major angle";
     Text[ japanese ] = "メインの角を選択";
@@ -549,7 +549,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_LM
     Text[ finnish ] = "Left center";
     Text[ italian ] = "In centro a sinistra";
     Text[ danish ] = "Left center";
-    Text[ swedish ] = "Centrerat till v�nster";
+    Text[ swedish ] = "Till v�nster i mitten";
     Text[ polish ] = "Left center";
     Text[ portuguese_brazilian ] = "Left center";
     Text[ japanese ] = "左中央";
@@ -575,7 +575,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_MM
     Text[ finnish ] = "Center";
     Text[ italian ] = "Centro";
     Text[ danish ] = "Center";
-    Text[ swedish ] = "Centrerat";
+    Text[ swedish ] = "Mitten";
     Text[ polish ] = "Center";
     Text[ portuguese_brazilian ] = "Center";
     Text[ japanese ] = "中央";
