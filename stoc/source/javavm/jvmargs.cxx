@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmargs.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sb $ $Date: 2002-12-06 10:48:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ namespace stoc_javavm {
             OUString left = property.copy(0, index).trim();
             OUString right(property.copy(index + 1).trim());
 
-//  #ifdef DEBUG
+// #if OSL_DEBUG_LEVEL > 1
 //      OString left_tmp = OUStringToOString(left, RTL_TEXTENCODING_ASCII_US);
 //      OSL_TRACE("javavm - left %s", left_tmp.getStr());
 //      OString right_tmp = OUStringToOString(right, RTL_TEXTENCODING_ASCII_US);
