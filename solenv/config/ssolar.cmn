@@ -128,7 +128,8 @@ common
 		TF_SVDATA
 		TFDEF
 		TFDIR
-		truetime
+		TIMELOG
+        truetime
 		UDKSTAMP
 		URD_ONLY
 		USE_MAPFILES
