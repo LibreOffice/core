@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-23 14:42:37 $
+ *  last change: $Author: mib $ $Date: 2000-11-27 13:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _XMLEXP_HXX
 #define _XMLEXP_HXX
 
+#ifndef _SVSTOR_HXX
+#include <so3/svstor.hxx>
+#endif
+
 #ifndef _XMLOFF_XMLEXP_HXX
 #include <xmloff/xmlexp.hxx>
 #endif
@@ -103,6 +107,7 @@ class XMLPropertySetMapper;
 //class XMLTextMasterPageExport;
 class SwXMLTextParagraphExport;
 
+
 class SwXMLExport : public SvXMLExport
 {
     friend class SwXMLExpContext;
@@ -123,6 +128,7 @@ class SwXMLExport : public SvXMLExport
     SvXMLItemMapEntriesRef      xTableCellItemMap;
     UniReference < XMLPropertySetMapper > xParaPropMapper;
 //  UniReference < XMLTextMasterPageExport> xMasterPageExport;
+    SvStorageRef                xPackage;
 
     sal_Int32                   nContentProgressStart;
     sal_Bool                    bExportWholeDoc : 1;// export whole document?
@@ -198,6 +204,8 @@ public:
     SwDoc& GetDoc() { return *pDoc; }
 
     sal_Bool IsShowProgress() const { return bShowProgress; }
+
+    SvStorage *GetPackage() { return &xPackage; }
 };
 
 inline const SvXMLUnitConverter& SwXMLExport::GetTwipUnitConverter() const

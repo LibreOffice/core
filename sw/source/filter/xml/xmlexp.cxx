@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-23 14:42:37 $
+ *  last change: $Author: mib $ $Date: 2000-11-27 13:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,12 @@
 #ifndef _DOCSTAT_HXX
 #include "docstat.hxx"
 #endif
-
+#ifndef _NDOLE_HXX
+#include "ndole.hxx"
+#endif
+#ifndef _NDGRF_HXX
+#include "ndgrf.hxx"
+#endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
@@ -114,6 +119,9 @@
 #ifndef _XMLOFF_PROGRESSBARHELPER_HXX
 #include <xmloff/ProgressBarHelper.hxx>
 #endif
+#ifndef _UNOFRAME_HXX
+#include "unoframe.hxx"
+#endif
 
 #ifndef _XMLTEXTE_HXX
 #include <xmltexte.hxx>
@@ -127,6 +135,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
 
 #ifdef XML_CORE_API
 void SwXMLExport::SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly )
@@ -380,3 +390,49 @@ void SwXMLExport::ExportCurPaM( sal_Bool bExportWholePaM )
     ExportListChange( aPrevNumInfo, aNextNumInfo );
 }
 #endif
+
+const SwNoTxtNode *SwXMLTextParagraphExport::GetNoTxtNode(
+    const Reference < XPropertySet >& rPropSet )
+{
+    Reference<XUnoTunnel> xCrsrTunnel( rPropSet, UNO_QUERY );
+    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for embedded" );
+    SwXFrame *pFrame =
+                (SwXFrame *)xCrsrTunnel->getSomething(
+                                    SwXFrame::getUnoTunnelId() );
+    ASSERT( pFrame, "SwXFrame missing" );
+    SwFrmFmt *pFrmFmt = pFrame->GetFrmFmt();
+    const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
+    const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();
+    return  pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetNoTxtNode();
+}
+
+OUString SwXMLTextParagraphExport::exportTextEmbeddedGraphic(
+    const Reference < XPropertySet >& rPropSet )
+{
+    OUString aName;
+    const SwGrfNode *pGrfNd = GetNoTxtNode( rPropSet )->GetGrfNode();
+    if( GRAPHIC_NONE != pGrfNd->GetGrf().GetType() )
+    {
+        // Falls die Grafik bereits im Storage ist, ist der Stream-Name
+        // gesetzt. Dann brauchen wir sie nicht mehr zu speichern.
+        // oder es ist ein SaveAs, dann auf jedenfall kopieren
+        SvStorage *pPackage = ((SwXMLExport&)GetExport()).GetPackage();
+        if(  !pPackage ||
+             !((SwGrfNode *)pGrfNd)->StoreGraphics( pPackage ) )
+        {
+//          Warning( WARN_SWG_POOR_LOAD );
+        }
+        else
+            aName = OUString( pGrfNd->GetStreamName() );
+    }
+    return aName;
+}
+
+OUString SwXMLTextParagraphExport::exportTextEmbeddedObject(
+    const Reference < XPropertySet >& rPropSet )
+{
+    const SwOLENode *pOLENd = GetNoTxtNode( rPropSet )->GetOLENode();
+
+    OUString aName( pOLENd->GetOLEObj().GetName() );
+    return aName;
+}

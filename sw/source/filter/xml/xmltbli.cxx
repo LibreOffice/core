@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-23 14:42:38 $
+ *  last change: $Author: mib $ $Date: 2000-11-27 13:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2144,61 +2144,4 @@ void SwXMLTableContext::EndElement()
 Reference < XTextContent > SwXMLTableContext::GetXTextContent() const
 {
     return xTextContent;
-}
-
-class SwXMLTextImportHelper : public XMLTextImportHelper
-{
-protected:
-    virtual SvXMLImportContext *CreateTableChildContext(
-                SvXMLImport& rImport,
-                sal_uInt16 nPrefix, const OUString& rLocalName,
-                const Reference< XAttributeList > & xAttrList );
-
-public:
-    SwXMLTextImportHelper(
-            const Reference < XModel>& rModel,
-            sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress );
-    ~SwXMLTextImportHelper();
-
-    virtual sal_Bool IsInHeaderFooter() const;
-};
-
-SwXMLTextImportHelper::SwXMLTextImportHelper(
-        const Reference < XModel>& rModel,
-        sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress ) :
-    XMLTextImportHelper( rModel, bInsertM, bStylesOnlyM, bProgress )
-{
-}
-
-SwXMLTextImportHelper::~SwXMLTextImportHelper()
-{
-}
-
-SvXMLImportContext *SwXMLTextImportHelper::CreateTableChildContext(
-                SvXMLImport& rImport,
-                sal_uInt16 nPrefix, const OUString& rLocalName,
-                const Reference< XAttributeList > & xAttrList )
-{
-    return new SwXMLTableContext(
-                (SwXMLImport&)rImport, nPrefix, rLocalName, xAttrList );
-}
-
-sal_Bool SwXMLTextImportHelper::IsInHeaderFooter() const
-{
-    Reference<XUnoTunnel> xCrsrTunnel(
-            ((SwXMLTextImportHelper *)this)->GetCursor(), UNO_QUERY );
-    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-    SwXTextCursor *pTxtCrsr =
-                (SwXTextCursor*)xCrsrTunnel->getSomething(
-                                            SwXTextCursor::getUnoTunnelId() );
-    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
-    SwDoc *pDoc = pTxtCrsr->GetDoc();
-
-    return pDoc->IsInHeaderFooter( pTxtCrsr->GetPaM()->GetPoint()->nNode );
-}
-
-XMLTextImportHelper* SwXMLImport::CreateTextImport()
-{
-    return new SwXMLTextImportHelper( GetModel(), IsInsertMode(),
-                                      IsStylesOnlyMode(), bShowProgress );
 }

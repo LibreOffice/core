@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-20 11:17:53 $
+ *  last change: $Author: mib $ $Date: 2000-11-27 13:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
 
     pDoc = rPaM.GetDoc();
     PutNumFmtFontsInAttrPool();
-    PutEditEngFontsInAttrPool();
+//  PutEditEngFontsInAttrPool();
 
     Reference< io::XOutputStream > xOut = rMed.GetDataSink();
     Reference< io::XActiveDataSource > xSrc( xWriter, UNO_QUERY );
@@ -177,11 +177,14 @@ void GetXMLWriter( const String&, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.5 2000-11-20 11:17:53 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.6 2000-11-27 13:44:40 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/11/20 11:17:53  mib
+      Put edit engine's and numbering rules' fonts into the pool
+
       Revision 1.4  2000/11/20 09:18:37  jp
       must change: processfactory moved
 

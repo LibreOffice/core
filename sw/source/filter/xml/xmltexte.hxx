@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-21 14:38:35 $
+ *  last change: $Author: mib $ $Date: 2000-11-27 13:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@ class SwXMLTextParagraphExport : public XMLTextParagraphExport
 {
     const ::rtl::OUString sTextTable;
 
+    const SwNoTxtNode *GetNoTxtNode(
+        const ::com::sun::star::uno::Reference <
+                ::com::sun::star::beans::XPropertySet >& rPropSet );
+
 protected:
     virtual void exportStyleContent(
             const ::com::sun::star::uno::Reference<
@@ -93,6 +97,13 @@ public:
         SwXMLExport& rExp,
          SvXMLAutoStylePoolP& rAutoStylePool );
     ~SwXMLTextParagraphExport();
+
+    virtual ::rtl::OUString exportTextEmbeddedGraphic(
+        const ::com::sun::star::uno::Reference <
+                ::com::sun::star::beans::XPropertySet >& rPropSet );
+    virtual ::rtl::OUString exportTextEmbeddedObject(
+        const ::com::sun::star::uno::Reference <
+                ::com::sun::star::beans::XPropertySet >& rPropSet );
 };
 
 
