@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-12 10:29:12 $
+ *  last change: $Author: iha $ $Date: 2003-12-12 22:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ void PlottingPositionHelper::setScales( const uno::Sequence< ExplicitScaleData >
 VDataSeries::VDataSeries()
     : m_xShape(NULL)
     , m_xLabelsShape(NULL)
+    , m_xErrorBarsShape(NULL)
     , m_xShapeFrontChild(NULL)
     , m_xShapeBackChild(NULL)
     , m_xDataSeries(NULL)
@@ -171,6 +172,7 @@ void initDoubleValues( uno::Sequence< double >& rDoubleValues,
 VDataSeries::VDataSeries( uno::Reference< XDataSeries > xDataSeries )
     : m_xShape(NULL)
     , m_xLabelsShape(NULL)
+    , m_xErrorBarsShape(NULL)
     , m_xShapeFrontChild(NULL)
     , m_xShapeBackChild(NULL)
     , m_xDataSeries(xDataSeries)
@@ -266,6 +268,11 @@ rtl::OUString VDataSeries::getCID() const
 rtl::OUString VDataSeries::getPointCID_Stub() const
 {
     return m_aPointCID_Stub;
+}
+rtl::OUString VDataSeries::getErrorBarsCID() const
+{
+    return ObjectIdentifier::createClassifiedIdentifier(
+                OBJECTTYPE_DATA_ERRORS, m_aIdentifier );
 }
 rtl::OUString VDataSeries::getLabelsCID() const
 {
