@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hdu $ $Date: 2001-02-15 16:09:20 $
+ *  last change: $Author: hdu $ $Date: 2001-02-23 17:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,10 @@ typedef int FT_Int;
 
 struct FtFontInfo
 {
-    ImplFontData aFontData;
-    ::rtl::OString aNativeFileName;
-    int nFaceNum;
+    ImplFontData    aFontData;
+    ::rtl::OString  aNativeFileName;
+    int             nFaceNum;
+    int             nFontId;
 };
 
 // -----------------------------------------------------------------------
@@ -82,6 +83,8 @@ public:
                                 ~FreetypeManager();
 
     long                        AddFontDir( const String& rNormalizedName );
+    void                        AddFontFile( const String& rNormalizedName, int nFaceNum,
+                                    int nFontId, const ImplFontData* );
     long                        FetchFontList( ImplDevFontList* ) const;
     void                        ClearFontList();
 
@@ -103,6 +106,8 @@ class FreetypeServerFont : public ServerFont
 
     virtual const ::rtl::OString*   GetFontFileName() const { return &mrFontInfo.aNativeFileName; }
     virtual int                 GetFontFaceNum() const { return mrFontInfo.nFaceNum; }
+    virtual int                 GetFontId() const { return mrFontInfo.nFontId; }
+    virtual void                SetFontId( int nFontId ) { mrFontInfo.nFontId = nFontId; }
 
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
 
@@ -119,8 +124,9 @@ friend GlyphCache;
     virtual ULONG               GetKernPairs( ImplKernPairData** ) const;
 
 private:
+    int                         mnWidth;
     struct FT_FaceRec_*         maFaceFT;
-    const FtFontInfo&           mrFontInfo;
+    FtFontInfo&                 mrFontInfo;
     FT_Int                      mnLoadFlags;
 
     typedef ::std::hash_map<int,int> GlyphSubstitution;
