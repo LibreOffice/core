@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: thb $ $Date: 2002-01-04 10:26:41 $
+ *  last change: $Author: cmc $ $Date: 2002-02-15 12:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3499,6 +3499,46 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
         {
             SfxItemSet aSet( pSdrModel->GetItemPool() );
 
+            //Originally anything that as a mso_sptTextBox was created as a
+            //textbox, this was changed for #88277# to be created as a simple
+            //rect to keep impress happy. For the rest of us we'd like to turn
+            //it back into a textbox again.
+            FASTBOOL bTextFrame = (pImpRec->eShapeType == mso_sptTextBox);
+            if (bTextFrame)
+            {
+                delete pObj;
+                pObj = pOrgObj = 0;
+            }
+            else
+            {
+                //Either
+                //a) its a simple text object or
+                //b) its a [round]rectangle with text and square wrapping.
+                bTextFrame =
+                (
+                    (pImpRec->eShapeType == mso_sptTextSimple) ||
+                    (
+                        (
+                            (pImpRec->eShapeType == mso_sptRectangle) ||
+                            (pImpRec->eShapeType == mso_sptRoundRectangle)
+                        )
+                        && (eWrapMode == mso_wrapSquare)
+                        && ShapeHasText(pImpRec->nShapeId, rObjData.nOldFilePos)
+                    )
+                );
+            }
+
+            if( bTextFrame && pObj )
+                pTextObj = PTR_CAST(SdrRectObj, pObj);
+            if( !pTextObj)
+            {
+                pTextObj = new SdrRectObj( OBJ_TEXT, rTextRect );
+                pTextObj->SetModel( pSdrModel );
+            }
+
+            if( pTextObj != pObj )
+                pTextImpRec = new SvxMSDffImportRec( *pImpRec );
+
             // Distance of Textbox to it's surrounding Autoshape
             INT32 nTextLeft  =GetPropertyValue( DFF_Prop_dxTextLeft, 91440L);
             INT32 nTextRight =GetPropertyValue( DFF_Prop_dxTextRight, 91440L );
@@ -3510,34 +3550,10 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             ScaleEmu( nTextTop );
             ScaleEmu( nTextBottom );
 
-            // Die vertikalen Absatzeinrueckungen sind im BoundRect mit drin, hier rausrechnen
+            // Die vertikalen Absatzeinrueckungen sind im BoundRect mit drin,
+            // hier rausrechnen
             rTextRect.Bottom() -= nTextTop + nTextBottom;
             rTextRect.Right() -= nTextLeft + nTextRight;
-
-            FASTBOOL bTextFrame =   (   ( pImpRec->eShapeType
-                                            == mso_sptTextSimple )
-                                 || ( pImpRec->eShapeType
-                                            == mso_sptTextBox    )
-                                 || (    (    ( pImpRec->eShapeType
-                                                    == mso_sptRectangle      )
-                                           || ( pImpRec->eShapeType
-                                                    == mso_sptRoundRectangle )
-                                         )
-                                      && ( eWrapMode == mso_wrapSquare )
-                                      && ShapeHasText(pImpRec->nShapeId,
-                                                          rObjData.nOldFilePos)
-                                    ) );
-
-            if( bTextFrame && pObj )
-                pTextObj = PTR_CAST(SdrRectObj, pObj);
-            if( !pTextObj )
-            {
-                pTextObj = new SdrRectObj( OBJ_TEXT, rTextRect );
-                pTextObj->SetModel( pSdrModel );
-            }
-
-            if( pTextObj != pObj )
-                pTextImpRec = new SvxMSDffImportRec( *pImpRec );
 
             // Nur falls es eine einfache Textbox ist, darf der Writer
             // das Objekt durch einen Rahmen ersetzen, ansonsten
@@ -4391,7 +4407,7 @@ BOOL SvxMSDffManager::GetShapeContainerData( SvStream& rSt, ULONG nLenShapeCont,
             nLenShapePropTbl = nLength;
             UINT32 nPropCount = nInst;
             long nStartShapePropTbl = rSt.Tell();
-            UINT32 nComplexDataFilePos = nStartShapePropTbl + ( nPropCount * 6 );
+            UINT32 nComplexDataFilePos = nStartShapePropTbl + (nPropCount * 6);
             do
             {
                 rSt >> nPropId
@@ -4401,7 +4417,33 @@ BOOL SvxMSDffManager::GetShapeContainerData( SvStream& rSt, ULONG nLenShapeCont,
                 switch( nPropId )
                 {
                     case DFF_Prop_txflTextFlow :
+                        //Writer can now handle vertical textflows in its
+                        //native frames, to only need to do this for the
+                        //other two formats
+
+                        //Writer will handle all textflow except BtoT
+                        if (GetSvxMSDffSettings() &
+                            (SVXMSDFF_SETTINGS_IMPORT_PPT |
+                             SVXMSDFF_SETTINGS_IMPORT_EXCEL))
+                        {
+                            if( 0 != nPropVal )
+                                bCanBeReplaced = FALSE;
+                        }
+                        else if (nPropVal == mso_txflBtoT)
+                            bCanBeReplaced = FALSE;
+                    break;
                     case DFF_Prop_cdirFont :
+                        //Writer can now handle right to left and left
+                        //to right in its native frames, so only do
+                        //this for the other two formats.
+                        if (GetSvxMSDffSettings() &
+                            (SVXMSDFF_SETTINGS_IMPORT_PPT |
+                             SVXMSDFF_SETTINGS_IMPORT_EXCEL))
+                        {
+                            if( 0 != nPropVal )
+                                bCanBeReplaced = FALSE;
+                        }
+                    break;
                     case DFF_Prop_Rotation :
                         if( 0 != nPropVal )
                             bCanBeReplaced = FALSE;
@@ -4423,7 +4465,8 @@ BOOL SvxMSDffManager::GetShapeContainerData( SvStream& rSt, ULONG nLenShapeCont,
 
                     default:
                     {
-                        if( 0x4000 == ( nPropId & 0xC000 ) )// Bit gesetzt und gueltig?
+                        // Bit gesetzt und gueltig?
+                        if( 0x4000 == ( nPropId & 0xC000 ) )
                         {
                             // Blip Property gefunden: BStore Idx vermerken!
                             nPropRead = nLenShapePropTbl;
