@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _textsh.sdi,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2002-11-27 08:10:40 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1426,6 +1426,11 @@ interface BaseText : Selection
                 StateMethod = GetState ;
         ]
     SID_OPEN_HYPERLINK
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_OPEN_XML_FILTERSETTINGS // ole : no, status : ?
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
