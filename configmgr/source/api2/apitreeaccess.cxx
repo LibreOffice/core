@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeaccess.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ Committer UpdateRootElement::getCommitter()
 }
 //-----------------------------------------------------------------------------
 
-TreeReadGuardImpl::TreeReadGuardImpl(TreeElement& rTree) throw()
+TreeReadGuardImpl::TreeReadGuardImpl(TreeElement& rTree)
 : m_aViewLock(rTree.getDataLock())
 , m_rTree(rTree)
 {
