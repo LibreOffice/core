@@ -2,9 +2,9 @@
  *
  *  $RCSfile: byteseq.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-09 07:19:27 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 11:48:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #include <rtl/memory.h>
 #endif
 
+#if ! defined EXCEPTIONS_OFF
+#include <new>
+#endif
+
 
 namespace rtl
 {
@@ -97,16 +101,24 @@ inline ByteSequence::ByteSequence( sal_Sequence *pSequence) SAL_THROW( () )
     ::rtl_byte_sequence_acquire( pSequence );
 }
 //__________________________________________________________________________________________________
-inline ByteSequence::ByteSequence( const sal_Int8 * pElements, sal_Int32 len ) SAL_THROW( () )
+inline ByteSequence::ByteSequence( const sal_Int8 * pElements, sal_Int32 len )
     : _pSequence( 0 )
 {
     ::rtl_byte_sequence_constructFromArray( &_pSequence, pElements, len );
+#if ! defined EXCEPTIONS_OFF
+    if (_pSequence == 0)
+        throw ::std::bad_alloc();
+#endif
 }
 //__________________________________________________________________________________________________
-inline ByteSequence::ByteSequence( sal_Int32 len, enum __ByteSequence_NoDefault value ) SAL_THROW( () )
+inline ByteSequence::ByteSequence( sal_Int32 len, enum __ByteSequence_NoDefault value )
     : _pSequence( 0 )
 {
     ::rtl_byte_sequence_constructNoDefault( &_pSequence, len );
+#if ! defined EXCEPTIONS_OFF
+    if (_pSequence == 0)
+        throw ::std::bad_alloc();
+#endif
 }
 //__________________________________________________________________________________________________
 inline ByteSequence::ByteSequence( sal_Sequence *pSequence, enum __ByteSequence_NoAcquire value ) SAL_THROW( () )
@@ -114,10 +126,14 @@ inline ByteSequence::ByteSequence( sal_Sequence *pSequence, enum __ByteSequence_
 {
 }
 //__________________________________________________________________________________________________
-inline ByteSequence::ByteSequence( sal_Int32 len ) SAL_THROW( () )
+inline ByteSequence::ByteSequence( sal_Int32 len )
     : _pSequence( 0 )
 {
     ::rtl_byte_sequence_construct( &_pSequence, len );
+#if ! defined EXCEPTIONS_OFF
+    if (_pSequence == 0)
+        throw ::std::bad_alloc();
+#endif
 }
 //__________________________________________________________________________________________________
 inline ByteSequence::~ByteSequence() SAL_THROW( () )
@@ -136,18 +152,26 @@ inline sal_Bool ByteSequence::operator == ( const ByteSequence & rSeq ) const SA
     return ::rtl_byte_sequence_equals( _pSequence, rSeq._pSequence );
 }
 //__________________________________________________________________________________________________
-inline sal_Int8 * ByteSequence::getArray() SAL_THROW( () )
+inline sal_Int8 * ByteSequence::getArray()
 {
     ::rtl_byte_sequence_reference2One( &_pSequence );
+#if ! defined EXCEPTIONS_OFF
+    if (_pSequence == 0)
+        throw ::std::bad_alloc();
+#endif
     return (sal_Int8 *)_pSequence->elements;
 }
 //__________________________________________________________________________________________________
-inline void ByteSequence::realloc( sal_Int32 nSize ) SAL_THROW( () )
+inline void ByteSequence::realloc( sal_Int32 nSize )
 {
     ::rtl_byte_sequence_realloc( &_pSequence, nSize );
+#if ! defined EXCEPTIONS_OFF
+    if (_pSequence == 0)
+        throw ::std::bad_alloc();
+#endif
 }
 //__________________________________________________________________________________________________
-inline sal_Int8 & ByteSequence::operator [] ( sal_Int32 nIndex ) SAL_THROW( () )
+inline sal_Int8 & ByteSequence::operator [] ( sal_Int32 nIndex )
 {
     return getArray()[ nIndex ];
 }
