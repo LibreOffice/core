@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawDocShell.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:20:28 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:35:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,17 +65,14 @@
 #ifndef _SFX_OBJFAC_HXX //autogen
 #include <sfx2/docfac.hxx>
 #endif
-#ifndef _SFX_INTERNO_HXX //autogen
-#include <sfx2/interno.hxx>
-#endif
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
 #endif
 #ifndef _SVX_SVXIFACT_HXX //autogen
 #include <svx/svxifact.hxx>
 #endif
-#include <sot/factory.hxx>
-#include <so3/factory.hxx>
+
+#include <vcl/jobset.hxx>
 
 #ifndef _SD_GLOB_HXX
 #include "glob.hxx"
@@ -103,11 +100,6 @@ struct SpellCallbackInfo;
 class AbstractSvxNameDialog; //CHINA001 class SvxNameDialog;
 class SdFormatClipboard;
 
-#ifndef SO2_DECL_SVSTORAGESTREAM_DEFINED
-#define SO2_DECL_SVSTORAGESTREAM_DEFINED
-SO2_DECL_REF(SvStorageStream)
-#endif
-
 namespace sd {
 
 class FuPoor;
@@ -119,14 +111,12 @@ class ViewShell;
 // - DrawDocShell -
 // ------------------
 
-class SD_DLLPUBLIC DrawDocShell
-    : public SfxObjectShell,
-      public SfxInPlaceObject
+class SD_DLLPUBLIC DrawDocShell : public SfxObjectShell
 {
 public:
     TYPEINFO();
     SFX_DECL_INTERFACE(SD_IF_SDDRAWDOCSHELL);
-    SFX_DECL_OBJECTFACTORY(DrawDocShell);
+    SFX_DECL_OBJECTFACTORY();
 
     DrawDocShell (
         SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
@@ -142,18 +132,18 @@ public:
     void                    UpdateRefDevice();
     virtual void            Activate( BOOL bMDI );
     virtual void            Deactivate( BOOL bMDI );
-    virtual BOOL            InitNew( SvStorage * );
-    virtual BOOL            Load( SvStorage * );
-    virtual BOOL            LoadFrom(SvStorage* pStor);
+    virtual BOOL            InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    virtual BOOL            Load( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    virtual BOOL            LoadFrom( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     virtual BOOL            ConvertFrom( SfxMedium &rMedium );
-    virtual void            HandsOff();
+    //virtual void            HandsOff();
     virtual BOOL            Save();
-    virtual BOOL            SaveAs( SvStorage * pNewStor );
+    virtual BOOL            SaveAs( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     virtual BOOL            SaveAsOwnFormat( SfxMedium& rMedium );
     virtual BOOL            ConvertTo( SfxMedium &rMedium );
-    virtual BOOL            SaveCompleted( SvStorage * pNewStor );
-    virtual void            UIActivate( BOOL bActive );
-    virtual void            SetVisArea(const Rectangle& rRect);
+    virtual BOOL            SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    //virtual void            UIActivate( BOOL bActive );
+    //virtual void            SetVisArea(const Rectangle& rRect);
     virtual Rectangle       GetVisArea(USHORT nAspect) const;
     virtual void            Draw(OutputDevice*, const JobSetup& rSetup, USHORT nAspect = ASPECT_CONTENT);
     virtual SfxUndoManager* GetUndoManager();
@@ -162,7 +152,7 @@ public:
     virtual SfxStyleSheetBasePool* GetStyleSheetPool();
     virtual void            SetOrganizerSearchMask(SfxStyleSheetBasePool* pBasePool) const;
     virtual Size            GetFirstPageSize();
-    virtual void            FillClass(SvGlobalName* pClassName, ULONG*  pFormat, String* pAppName, String* pFullTypeName, String* pShortTypeName, long nFileFormat = SOFFICE_FILEFORMAT_CURRENT) const;
+    virtual void            FillClass(SvGlobalName* pClassName, ULONG*  pFormat, String* pAppName, String* pFullTypeName, String* pShortTypeName, sal_Int32 nFileFormat ) const;
     virtual void            SetModified( BOOL = TRUE );
 
 
@@ -178,7 +168,7 @@ public:
     SfxPrinter*             GetPrinter(BOOL bCreate);
     void                    SetPrinter(SfxPrinter *pNewPrinter);
 
-    BOOL                    IsUIActive() { return bUIActive; }
+    //BOOL                    IsUIActive() { return bUIActive; }
     BOOL                    IsInDestruction() const { return bInDestruction; }
 
     void                    CancelSearching();
@@ -280,7 +270,7 @@ protected:
     const USHORT*           pFilterSIDs;
     USHORT                  nFilterCount;
     BOOL                    bFilterEnable;
-    BOOL                    bUIActive;
+    //BOOL                    bUIActive;
     BOOL                    bSdDataObj;
     BOOL                    bInDestruction;
     BOOL                    bOwnPrinter;
