@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,8 +323,8 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         < "Å¬’l" ; Default ; > ;
         < "Ï" ; Default ; > ;
         < "‘”(”’l‚Ì‚İ)" ; Default ; > ;
-        < "StDev(•W–{)" ; Default ; > ;
-        < "StDevP•W€•Î·(•êW’c)" ; Default ; > ;
+        < "StDev •W€•Î·(•W–{)" ; Default ; > ;
+        < "StDevP •W€•Î·(•êW’c)" ; Default ; > ;
         < "•ªU(•W–{)" ; Default ; > ;
         < "•ªU(•êW’c)" ; Default ; > ;
     };
@@ -725,7 +725,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_simplified ] = "ºÍÔ´Êı¾İÁ¬½Ó(~L)";
         Text[ russian ] = "Ñâÿçàòü ñ èñõîäíûìè äàííûìè";
         Text[ polish ] = "Utwórz ³¹cze z danymi Ÿród³a";
-        Text[ japanese ] = "“‡Œ³ÃŞ°À‚ÆØİ¸‚·‚é(~L)";
+        Text[ japanese ] = "“‡Œ³ÃŞ°À‚ÖØİ¸‚·‚é(~L)";
         Text[ chinese_traditional ] = "©M·½¸ê®Æ³sµ²(~L)";
         Text[ arabic ] = "ÑÈØ ÈÈíÇäÇÊ ÇáãÕÏÑ";
         Text[ greek ] = "Óıíäåóç ìå äåäïìİíá ğñïİëåõóçò";
