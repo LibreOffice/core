@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-02 11:07:20 $
+ *  last change: $Author: fs $ $Date: 2000-11-09 15:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,18 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/emptyfontdescriptor.hxx>
 
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
@@ -319,8 +331,14 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
             break;
             case BASEPROPERTY_CURRENCYSYMBOL:
             {
-                XubString aSymbol = Application::GetAppInternational().GetCurrSymbol();
-                aDefault <<= ::rtl::OUString( aSymbol );
+                ::com::sun::star::uno::Any aUserLocale = ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::LOCALE);
+                ::rtl::OUString sUserLocale;
+                aUserLocale >>= sUserLocale;
+                ::com::sun::star::lang::Locale aLocale;
+                aLocale.Language = sUserLocale.copy(0, sUserLocale.indexOf('-'));
+                aLocale.Country = sUserLocale.copy(sUserLocale.indexOf('-') + 1);
+                LocaleDataWrapper aLocaleInfo(::comphelper::getProcessServiceFactory(), aLocale);
+                aDefault <<= ::rtl::OUString( aLocaleInfo.getCurrSymbol() );
             }
             break;
             default:    DBG_ERROR( "ImplGetDefaultValue - unknown Property" );
