@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:04:28 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _TIMER_HXX //autogen
 #include <vcl/timer.hxx>
 #endif
-#ifndef _SV_COLOR_HXX //autogen
-#include <vcl/color.hxx>
+#ifndef _TOOLS_COLOR_HXX
+#include <tools/color.hxx>
 #endif
 // OD 25.06.2003 #108784#
 #ifndef _SVDTYPES_HXX
