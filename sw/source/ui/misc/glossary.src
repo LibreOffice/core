@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ ModalDialog DLG_GLOSSARY
         Text [ swedish ] = "~Visa resten av namnet som tips vid inmatningen" ;
         Text [ danish ] = "Vis resten af navnet som tip under skrivning" ;
         Text [ portuguese_brazilian ] = "~Rest des Namens bei der Eingabe als Tip anzeigen" ;
-        Text [ portuguese ] = "Mostrar ~resto do nome durante a digitação como sugestão" ;
+        Text [ portuguese ] = "Mostrar ~resto do nome como sugestão durante a digitação" ;
         Text[ chinese_simplified ] = "×Ô¶¯ÏÔÊ¾ÊäÈëÎÄÌáÊ¾(~D)";
         Text[ russian ] = "Ïğè ââîäå ïîêàçûâàòü âåñü àâòîòåêñò êàê ïîäñêàçêó";
         Text[ polish ] = "Wyœwietl pozosta³¹ czêœæ nazwy przy wprowadzaniu jako wskazówkê";
@@ -258,6 +258,24 @@ ModalDialog DLG_GLOSSARY
         {
             Text = "schreibgeschützt" ;
             Text [ ENGLISH ] = "readonly" ;
+            Text[ english_us ] = "readonly";
+            Text[ portuguese ] = "readonly";
+            Text[ russian ] = "readonly";
+            Text[ greek ] = "readonly";
+            Text[ dutch ] = "readonly";
+            Text[ french ] = "readonly";
+            Text[ spanish ] = "readonly";
+            Text[ italian ] = "readonly";
+            Text[ danish ] = "readonly";
+            Text[ swedish ] = "readonly";
+            Text[ polish ] = "readonly";
+            Text[ portuguese_brazilian ] = "readonly";
+            Text[ japanese ] = "readonly";
+            Text[ korean ] = "readonly";
+            Text[ chinese_simplified ] = "readonly";
+            Text[ chinese_traditional ] = "readonly";
+            Text[ turkish ] = "readonly";
+            Text[ arabic ] = "readonly";
         };
     };
     GroupBox GB_GLOSSARY
@@ -303,7 +321,7 @@ ModalDialog DLG_GLOSSARY
         Text [ swedish ] = "I ~filsystem" ;
         Text [ danish ] = "i ~filsystemet" ;
         Text [ portuguese_brazilian ] = "Im ~Dateisystem" ;
-        Text [ portuguese ] = "~Sistema do ficheiro" ;
+        Text [ portuguese ] = "~No sistema de ficheiros" ;
         Text[ chinese_simplified ] = "ÔÚÎÄ¼şÏµÍ³ÄÚ(~F)";
         Text[ russian ] = "Â ñèñòåìå ôàéëîâ";
         Text[ polish ] = "W systemie plików";
@@ -329,7 +347,7 @@ ModalDialog DLG_GLOSSARY
         Text [ swedish ] = "På ~Internet" ;
         Text [ danish ] = "på ~Internettet" ;
         Text [ portuguese_brazilian ] = "Im ~Internet" ;
-        Text [ portuguese ] = "~Internet" ;
+        Text [ portuguese ] = "Na ~Internet" ;
         Text[ chinese_simplified ] = "ÔÚ¹ú¼Ê»¥ÁªÍøÄÚ(~R)";
         Text[ russian ] = "Â Èíòåğíåòå";
         Text[ polish ] = "W Int~ernecie";
@@ -348,7 +366,7 @@ ModalDialog DLG_GLOSSARY
         Text= "Verknüpfungen relativ speichern";
         Text[ italian ] = "Salvare i collegamenti in modo relativo";
         Text[ portuguese_brazilian ] = "Verknüpfungen relativ speichern";
-        Text[ portuguese ] = "Guardar ligações relacionadas com";
+        Text[ portuguese ] = "Guardar ligações em modo relativo";
         Text[ danish ] = "Gem kæderne relativt";
         Text[ french ] = "Enregistrement relatif des liens";
         Text[ swedish ] = "Spara länkar relativt";
@@ -527,6 +545,24 @@ ModalDialog DLG_GLOSSARY
     {
         Text = "Für die Verzeichnisse für 'AutoText' sind sind keine Schreibrechte vorhanden. Möchten Sie den Pfaddialog aufrufen?" ;
         Text [ ENGLISH ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?" ;
+        Text[ english_us ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
+        Text[ portuguese ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
+        Text[ russian ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
+        Text[ greek ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
+        Text[ dutch ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
+        Text[ french ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
+        Text[ spanish ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
+        Text[ italian ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
+        Text[ danish ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
+        Text[ swedish ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
+        Text[ polish ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
+        Text[ portuguese_brazilian ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
+        Text[ japanese ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
+        Text[ korean ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
+        Text[ chinese_simplified ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
+        Text[ chinese_traditional ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
+        Text[ turkish ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
+        Text[ arabic ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
     };
     Menu MNU_EDIT
     {
@@ -580,7 +616,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ polish ] = "Nowy (tylko tekst)";
                 Text[ japanese ] = "V‹Kì¬(Ã·½Ä‚Ì‚İ)";
                 Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(¯Â¤å¦r)(~T)";
-                Text[ arabic ] = "ÌÏíÏ (ÇáäÕ İŞØ)";
+                Text[ arabic ] = "ÌÏíÏ (äÕ İŞØ)";
                 Text[ greek ] = "Äçìéïõñãßá (ìüíï ~êåßìåíï)";
                 Text[ korean ] = "»õ·Î (ÅØ½ºÆ® ¸¸)";
                 Text[ turkish ] = "Yeni (yalnızca metin)";
@@ -719,7 +755,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ chinese_simplified ] = "±à¼­(~E)";
                 Text[ russian ] = "~Ïğàâêà";
                 Text[ polish ] = "~Edytuj";
-                Text[ japanese ] = "•ÒWi~‚dj";
+                Text[ japanese ] = "•ÒW(~E)";
                 Text[ chinese_traditional ] = "½s¿è(~E)";
                 Text[ arabic ] = "~ÊÍÑíÑ";
                 Text[ greek ] = "~Åğåîåñãáóßá";
@@ -753,7 +789,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ polish ] = "Makro...";
                 Text[ japanese ] = "Ï¸Û(~M)...";
                 Text[ chinese_traditional ] = "¥¨¶°(~M)...";
-                Text[ arabic ] = "ÇáãÇßÑæ...";
+                Text[ arabic ] = "ãÇßÑæ...";
                 Text[ greek ] = "~ÌáêñïåíôïëŞ...";
                 Text[ korean ] = "¸ÅÅ©·Î(~M)...";
                 Text[ turkish ] = "Makro...";
@@ -1114,7 +1150,7 @@ ModalDialog DLG_RENAME_GLOS
     Text[ polish ] = "Zmieñ nazwê bloków tekstu";
     Text[ japanese ] = "Ã·½ÄÌŞÛ¯¸‚Ì–¼‘O‚Ì•ÏX";
     Text[ chinese_traditional ] = "­«·s©R¦W¶µ¥Ø";
-    Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ ÚäÕÑ ÇáäÕ";
+    Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ ÃÍÏ ãßæäÇÊ ÇáäÕ";
     Text[ greek ] = "Ìåôïíïìáóßá ôìŞìáôïò êåéìİíïõ";
     Text[ korean ] = "ÅØ½ºÆ® ºí·Ï ÀÌ¸§ ¹Ù²Ù±â";
     Text[ turkish ] = "Metin öğesini yeniden adlandır";
