@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-30 14:15:44 $
+ *  last change: $Author: mba $ $Date: 2002-09-20 08:37:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1107,6 +1107,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
     {
         USHORT nLine, nPos;
         SfxSplitWindow *pSplitWin = pWorkWin->GetSplitWindow_Impl(eDockAlign);
+        aPos = pSplitWin->ScreenToOutputPixel( aPos );
         if ( pSplitWin->GetWindowPos( aPos, nLine, nPos ) )
         {
             // mouse over splitwindow, get line and position
@@ -1154,7 +1155,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
 
         // calculate new size and position
         Size aSize;
-        Point aPos = aDockingRect.TopLeft();
+        Point aPoint = aDockingRect.TopLeft();
         Size aInnerSize = GetInnerRect().GetSize();
         if ( eDockAlign == SFX_ALIGN_LEFT || eDockAlign == SFX_ALIGN_RIGHT )
         {
@@ -1165,12 +1166,12 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
                 aSize.Width() = pImp->nHorizontalSize;
                 if ( eDockAlign == SFX_ALIGN_LEFT )
                 {
-                    aPos = aInnerRect.TopLeft();
+                    aPoint = aInnerRect.TopLeft();
                 }
                 else
                 {
-                    aPos = aInnerRect.TopRight();
-                    aPos.X() -= aSize.Width();
+                    aPoint = aInnerRect.TopRight();
+                    aPoint.X() -= aSize.Width();
                 }
             }
             else
@@ -1189,12 +1190,12 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
                 aSize.Height() = pImp->nVerticalSize;
                 if ( eDockAlign == SFX_ALIGN_TOP )
                 {
-                    aPos = aInnerRect.TopLeft();
+                    aPoint = aInnerRect.TopLeft();
                 }
                 else
                 {
-                    aPos = aInnerRect.BottomLeft();
-                    aPos.Y() -= aSize.Height();
+                    aPoint = aInnerRect.BottomLeft();
+                    aPoint.Y() -= aSize.Height();
                 }
             }
             else
@@ -1206,7 +1207,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
         }
 
         aDockingRect.SetSize( aSize );
-        aDockingRect.SetPos( aPos );
+        aDockingRect.SetPos( aPoint );
     }
     else
     {
