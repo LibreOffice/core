@@ -2,9 +2,9 @@
  *
  *  $RCSfile: partwnd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:07:35 $
+ *  last change: $Author: mba $ $Date: 2000-10-30 14:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #include "sfxsids.hrc"
 #include "partwnd.hxx"
 #include "bindings.hxx"
+#include "dispatch.hxx"
+#include "viewfrm.hxx"
+#include "frame.hxx"
 #include "sfxuno.hxx"
 
 /*
@@ -215,6 +218,10 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
             DEFINE_CONST_UNICODE("com.sun.star.frame.Frame") ), ::com::sun::star::uno::UNO_QUERY );
     m_xFrame->initialize( VCLUnoHelper::GetInterface ( new Window(this) ) );
     pChildWin->SetFrame( m_xFrame );
+    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >
+            xSupp ( pBindings->GetDispatcher()->GetFrame()->GetFrame()->GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
+    if ( xSupp.is() )
+        xSupp->getFrames()->append( m_xFrame );
 }
 
 //****************************************************************************
