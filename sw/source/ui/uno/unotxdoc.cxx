@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:53:32 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2483,8 +2483,13 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     if (!pDoc)
         throw RuntimeException();
 
-    if (!(0 <= nRenderer  &&  nRenderer < pDoc->GetPageCount()))
+    // due to #110067# (document page count changes sometimes during
+    // PDF export/printing) we can not check for the upper bound properly.
+    // Thus instead of throwing the exception we silently return.
+    if (!(0 <= nRenderer /* &&  nRenderer < pDoc->GetPageCount()*/))
         throw IllegalArgumentException();
+    if (nRenderer >= pDoc->GetPageCount())
+        return uno::Sequence< beans::PropertyValue >();
 
     Size aPgSize( pDoc->GetPageSize( nRenderer + 1 ) );
     DBG_ASSERT( aPgSize != Size(), "no page size" );
@@ -2536,8 +2541,13 @@ void SAL_CALL SwXTextDocument::render(
     if (!pDoc || !pView)
         throw RuntimeException();
 
-    if (!(0 <= nRenderer  &&  nRenderer < pDoc->GetPageCount()))
+    // due to #110067# (document page count changes sometimes during
+    // PDF export/printing) we can not check for the upper bound properly.
+    // Thus instead of throwing the exception we silently return.
+    if (!(0 <= nRenderer /* &&  nRenderer < pDoc->GetPageCount()*/))
         throw IllegalArgumentException();
+    if (nRenderer >= pDoc->GetPageCount())
+        return;
 
     // the view shell should be SwView for documents PDF export
     // or SwPagePreView for PDF export of the page preview
