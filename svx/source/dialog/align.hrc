@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:06 $
+ *  last change: $Author: dr $ $Date: 2001-05-16 11:52:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,57 +63,59 @@
 
 // defines ------------------------------------------------------------------
 
-#define BTN_HORSTD              10
-#define BTN_HORLEFT             11
-#define BTN_HORCENTER           12
-#define BTN_HORRIGHT            13
-#define BTN_HORBLOCK            14
-#define FT_INDENT               15
-#define ED_INDENT               16
-#define ED_INDENT               16
-#define GB_HORALIGN             17
-//
-#define BTN_VERSTD              20
-#define BTN_VERTOP              21
-#define BTN_VERMID              23
-#define BTN_VERBOT              24
-#define GB_VERALIGN             25
+// resource id's
+#define FL_ALIGNMENT                10
+#define FT_HORALIGN                 11
+#define LB_HORALIGN                 12
+#define FT_INDENT                   13
+#define ED_INDENT                   14
+#define FT_VERALIGN                 15
+#define LB_VERALIGN                 16
 
-// ID's fuer Ausrichtung
-#define CTR_DIAL                30
-#define BTN_TXTSTACKED          31
-#define FT_DEGREES              32
-#define NF_ORIENT               33
-#define CTR_BORDER_LOCK         34
-#define FT_BORDER_LOCK          35
-#define GB_ALIGN                37
+#define FL_ORIENTATION              20
+#define BTN_TXTSTACKED              21
+#define CTR_DIAL                    22
+#define FT_DEGREES                  23
+#define NF_DEGREES                  24
+#define FT_BORDER_LOCK              25
+#define CTR_BORDER_LOCK             26
 
-//
-#define FT_LEFTSPACE            40
-#define ED_LEFTSPACE            41
-#define FT_RIGHTSPACE           42
-#define ED_RIGHTSPACE           43
-#define FT_TOPSPACE             44
-#define ED_TOPSPACE             45
-#define FT_BOTTOMSPACE          46
-#define ED_BOTTOMSPACE          47
-#define GB_SPACE                48
-//
-#define BTN_WRAP                50
-#define GB_WRAP                 51
+#define FL_SPACE                    30
+#define FT_LEFTSPACE                31
+#define ED_LEFTSPACE                32
+#define FT_RIGHTSPACE               33
+#define ED_RIGHTSPACE               34
+#define FT_TOPSPACE                 35
+#define ED_TOPSPACE                 36
+#define FT_BOTTOMSPACE              37
+#define ED_BOTTOMSPACE              38
 
-#define ED_INDENT1              100
+#define FL_WRAP                     40
+#define BTN_WRAP                    41
 
-// ImageListe fuer ValueSets:
+//#define ED_INDENT1                  100
 
-#define IL_LOCK_BMPS            1
-#define IID_BOTTOMLOCK          1
-#define IID_TOPLOCK             2
-#define IID_CELLLOCK            3
+// list box indexes
+#define ALIGNDLG_HORALIGN_STD       0
+#define ALIGNDLG_HORALIGN_LEFT      1
+#define ALIGNDLG_HORALIGN_CENTER    2
+#define ALIGNDLG_HORALIGN_RIGHT     3
+#define ALIGNDLG_HORALIGN_BLOCK     4
 
-#define STR_BOTTOMLOCK          1
-#define STR_TOPLOCK             2
-#define STR_CELLLOCK            3
+#define ALIGNDLG_VERALIGN_STD       0
+#define ALIGNDLG_VERALIGN_TOP       1
+#define ALIGNDLG_VERALIGN_MID       2
+#define ALIGNDLG_VERALIGN_BOTTOM    3
+
+// image list for ValueSets:
+#define IL_LOCK_BMPS                1
+#define IID_BOTTOMLOCK              1
+#define IID_TOPLOCK                 2
+#define IID_CELLLOCK                3
+
+#define STR_BOTTOMLOCK              1
+#define STR_TOPLOCK                 2
+#define STR_CELLLOCK                3
 
 #endif
 

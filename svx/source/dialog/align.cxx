@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 09:31:05 $
+ *  last change: $Author: dr $ $Date: 2001-05-16 11:52:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,25 +113,19 @@ SvxAlignmentTabPage::SvxAlignmentTabPage( Window* pParent,
 
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_ALIGNMENT ), rCoreAttrs ),
 
-    aBtnHorStd      ( this, ResId( BTN_HORSTD ) ),
-    aBtnHorLeft     ( this, ResId( BTN_HORLEFT ) ),
-    aBtnHorCenter   ( this, ResId( BTN_HORCENTER ) ),
-    aBtnHorRight    ( this, ResId( BTN_HORRIGHT ) ),
-    aBtnHorBlock    ( this, ResId( BTN_HORBLOCK ) ),
-    aIndentFT       ( this, ResId( FT_INDENT ) ),
-    aIndentED       ( this, ResId( ED_INDENT ) ),
-    aGbHorAlign     ( this, ResId( GB_HORALIGN ) ),
-
-    aBtnVerStd      ( this, ResId( BTN_VERSTD ) ),
-    aBtnVerTop      ( this, ResId( BTN_VERTOP ) ),
-    aBtnVerMid      ( this, ResId( BTN_VERMID ) ),
-    aBtnVerBot      ( this, ResId( BTN_VERBOT ) ),
-    aGbVerAlign     ( this, ResId( GB_VERALIGN ) ),
+    aFlAlignment    ( this, ResId( FL_ALIGNMENT ) ),
+    aFtHorAlign     ( this, ResId( FT_HORALIGN ) ),
+    aLbHorAlign     ( this, ResId( LB_HORALIGN ) ),
+    aFtIndent       ( this, ResId( FT_INDENT ) ),
+    aEdIndent       ( this, ResId( ED_INDENT ) ),
+    aFtVerAlign     ( this, ResId( FT_VERALIGN ) ),
+    aLbVerAlign     ( this, ResId( LB_VERALIGN ) ),
 
     aWinOrient      ( this,ResId(CTR_DIAL),ResId(BTN_TXTSTACKED),
-                        ResId(FT_DEGREES),ResId(NF_ORIENT),ResId(FT_BORDER_LOCK),
-                        ResId(CTR_BORDER_LOCK),ResId( GB_ALIGN)),   //@ 12.09.97
+                        ResId(FT_DEGREES),ResId(NF_DEGREES),ResId(FT_BORDER_LOCK),
+                        ResId(CTR_BORDER_LOCK),ResId(FL_ORIENTATION)),   //@ 12.09.97
 
+    aFlSpace        ( this, ResId( FL_SPACE ) ),
     aFtLeftSpace    ( this, ResId( FT_LEFTSPACE ) ),
     aEdLeftSpace    ( this, ResId( ED_LEFTSPACE ) ),
     aFtRightSpace   ( this, ResId( FT_RIGHTSPACE ) ),
@@ -140,18 +134,12 @@ SvxAlignmentTabPage::SvxAlignmentTabPage( Window* pParent,
     aEdTopSpace     ( this, ResId( ED_TOPSPACE ) ),
     aFtBottomSpace  ( this, ResId( FT_BOTTOMSPACE ) ),
     aEdBottomSpace  ( this, ResId( ED_BOTTOMSPACE ) ),
-    aGbSpace        ( this, ResId( GB_SPACE ) ),
 
-    aBtnWrap        ( this, ResId( BTN_WRAP ) ),
-    aWrapGB         ( this, ResId( GB_WRAP ) )
+    aFlWrap         ( this, ResId( FL_WRAP ) ),
+    aBtnWrap        ( this, ResId( BTN_WRAP ) )
 
 {
-    Link aLink = LINK( this, SvxAlignmentTabPage, HorizontalClickHdl_Impl );
-    aBtnHorStd.SetClickHdl( aLink );
-    aBtnHorLeft.SetClickHdl( aLink );
-    aBtnHorCenter.SetClickHdl( aLink );
-    aBtnHorRight.SetClickHdl( aLink );
-    aBtnHorBlock.SetClickHdl( aLink );
+    aLbHorAlign.SetSelectHdl( LINK( this, SvxAlignmentTabPage, HorAlignSelectHdl_Impl ) );
 
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
@@ -224,64 +212,45 @@ SfxTabPage* SvxAlignmentTabPage::Create( Window* pParent,
 
 void SvxAlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
 {
-    // erstmal alles zur"ucksetzen
-    aBtnHorStd.Check( FALSE );
-    aBtnHorLeft.Check( FALSE );
-    aBtnHorCenter.Check( FALSE );
-    aBtnHorRight.Check( FALSE );
-    aBtnHorBlock.Check( FALSE );
-
-    aBtnVerStd.Check( FALSE );
-    aBtnVerTop.Check( FALSE );
-    aBtnVerMid.Check( FALSE );
-    aBtnVerBot.Check( FALSE );
-
-    // und dann einstellen
-    const SfxPoolItem* pItem =
-        GetItem( rCoreAttrs, SID_ATTR_ALIGN_HOR_JUSTIFY );
-
+    USHORT nPos = ALIGNDLG_HORALIGN_STD;
+    const SfxPoolItem* pItem = GetItem( rCoreAttrs, SID_ATTR_ALIGN_HOR_JUSTIFY );
     if ( pItem )
     {
         switch ( (SvxCellHorJustify)
             ( (const SvxHorJustifyItem*)pItem )->GetValue() )
         {
-            case SVX_HOR_JUSTIFY_STANDARD:  aBtnHorStd.Check();     break;
-            case SVX_HOR_JUSTIFY_LEFT:      aBtnHorLeft.Check();    break;
-            case SVX_HOR_JUSTIFY_CENTER:    aBtnHorCenter.Check();  break;
-            case SVX_HOR_JUSTIFY_RIGHT:     aBtnHorRight.Check();   break;
-            case SVX_HOR_JUSTIFY_BLOCK:     aBtnHorBlock.Check();   break;
-            default:                        aBtnHorStd.Check();
+            case SVX_HOR_JUSTIFY_LEFT:      nPos = ALIGNDLG_HORALIGN_LEFT;      break;
+            case SVX_HOR_JUSTIFY_CENTER:    nPos = ALIGNDLG_HORALIGN_CENTER;    break;
+            case SVX_HOR_JUSTIFY_RIGHT:     nPos = ALIGNDLG_HORALIGN_RIGHT;     break;
+            case SVX_HOR_JUSTIFY_BLOCK:     nPos = ALIGNDLG_HORALIGN_BLOCK;     break;
         }
     }
-    // else DON'T-KNOW
+    aLbHorAlign.SelectEntryPos( nPos );
 
     pItem = GetItem( rCoreAttrs, SID_ATTR_ALIGN_INDENT );
-
     if ( pItem )
     {
         // Einzug in Twips -> umrechnen in Point
         USHORT nVal = (USHORT)( (const SfxUInt16Item*)pItem )->GetValue();
         nVal /= 20;
-        aIndentED.SetValue( nVal );
+        aEdIndent.SetValue( nVal );
     }
     else
-        aIndentED.SetText( String() );
+        aEdIndent.SetText( String() );
 
+    nPos = ALIGNDLG_VERALIGN_STD;
     pItem = GetItem( rCoreAttrs, SID_ATTR_ALIGN_VER_JUSTIFY );
-
     if ( pItem )
     {
         switch ( (SvxCellVerJustify)
                     ( (const SvxVerJustifyItem*)pItem )->GetValue() )
         {
-            case SVX_VER_JUSTIFY_STANDARD:  aBtnVerStd.Check(); break;
-            case SVX_VER_JUSTIFY_TOP:       aBtnVerTop.Check(); break;
-            case SVX_VER_JUSTIFY_CENTER:    aBtnVerMid.Check(); break;
-            case SVX_VER_JUSTIFY_BOTTOM:    aBtnVerBot.Check(); break;
-            default:                        aBtnVerStd.Check();
+            case SVX_VER_JUSTIFY_TOP:       nPos = ALIGNDLG_VERALIGN_TOP;       break;
+            case SVX_VER_JUSTIFY_CENTER:    nPos = ALIGNDLG_VERALIGN_MID;       break;
+            case SVX_VER_JUSTIFY_BOTTOM:    nPos = ALIGNDLG_VERALIGN_BOTTOM;    break;
         }
     }
-    // else DON'T-KNOW
+    aLbVerAlign.SelectEntryPos( nPos );
 
     pItem = GetItem( rCoreAttrs, SID_ATTR_ALIGN_ORIENTATION );
 
@@ -359,18 +328,9 @@ void SvxAlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
         aBtnWrap.SetState( TriState( STATE_DONTKNOW ) );
     }
 
-    HorizontalClickHdl_Impl( NULL );
+    HorAlignSelectHdl_Impl( NULL );
 
-    aBtnHorStd       .SaveValue();  // RadioButton
-    aBtnHorLeft      .SaveValue();
-    aBtnHorCenter    .SaveValue();
-    aBtnHorRight     .SaveValue();
-    aBtnHorBlock     .SaveValue();
-    aBtnVerStd       .SaveValue();
-    aBtnVerTop       .SaveValue();
-    aBtnVerMid       .SaveValue();
-    aBtnVerBot       .SaveValue();
-    aBtnWrap         .SaveValue();  // TriStateButton
+    aBtnWrap.SaveValue();  // TriStateButton
 }
 
 // -----------------------------------------------------------------------
@@ -387,18 +347,16 @@ BOOL SvxAlignmentTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     nWhich = GetWhich( SID_ATTR_ALIGN_HOR_JUSTIFY );
     USHORT nTmp = USHRT_MAX;
 
-    if ( aBtnHorStd.IsChecked() )
-        nTmp = SVX_HOR_JUSTIFY_STANDARD;
-    else if ( aBtnHorLeft.IsChecked() )
-        nTmp = SVX_HOR_JUSTIFY_LEFT;
-    else if ( aBtnHorCenter.IsChecked() )
-        nTmp = SVX_HOR_JUSTIFY_CENTER;
-    else if ( aBtnHorRight.IsChecked() )
-        nTmp = SVX_HOR_JUSTIFY_RIGHT;
-    else if ( aBtnHorBlock.IsChecked() )
-        nTmp = SVX_HOR_JUSTIFY_BLOCK;
-    DBG_ASSERT( (USHRT_MAX != nTmp) || !aBtnHorStd.IsEnabled(), "no button checked" );
-        // if aBtnHorStd is disabled SetFlags was called with the WBA_NO_HORIZONTAL flag set
+    switch( aLbHorAlign.GetSelectEntryPos() )
+    {
+        case ALIGNDLG_HORALIGN_STD:     nTmp = SVX_HOR_JUSTIFY_STANDARD;    break;
+        case ALIGNDLG_HORALIGN_LEFT:    nTmp = SVX_HOR_JUSTIFY_LEFT;        break;
+        case ALIGNDLG_HORALIGN_CENTER:  nTmp = SVX_HOR_JUSTIFY_CENTER;      break;
+        case ALIGNDLG_HORALIGN_RIGHT:   nTmp = SVX_HOR_JUSTIFY_RIGHT;       break;
+        case ALIGNDLG_HORALIGN_BLOCK:   nTmp = SVX_HOR_JUSTIFY_BLOCK;       break;
+    }
+    DBG_ASSERT( (USHRT_MAX != nTmp) || !aLbHorAlign.IsEnabled(), "no button checked" );
+        // if aLbHorAlign is disabled SetFlags was called with the WBA_NO_HORIZONTAL flag set
         // 67977 - 30.07.99 - FS
     pOld = GetOldItem( rCoreAttrs, SID_ATTR_ALIGN_HOR_JUSTIFY );
 
@@ -412,7 +370,7 @@ BOOL SvxAlignmentTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
 
     nWhich = GetWhich( SID_ATTR_ALIGN_INDENT );
     pOld = GetOldItem( rCoreAttrs, SID_ATTR_ALIGN_INDENT );
-    nTmp = aIndentED.GetValue() * 20; // Point in twips
+    nTmp = aEdIndent.GetValue() * 20; // Point in twips
 
     if ( !pOld || ( (const SfxUInt16Item*)pOld )->GetValue() != nTmp )
     {
@@ -426,16 +384,15 @@ BOOL SvxAlignmentTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     nWhich = GetWhich( SID_ATTR_ALIGN_VER_JUSTIFY );
     nTmp = USHRT_MAX;
 
-    if ( aBtnVerStd.IsChecked() )
-        nTmp = SVX_VER_JUSTIFY_STANDARD;
-    else if ( aBtnVerTop.IsChecked() )
-        nTmp = SVX_VER_JUSTIFY_TOP;
-    else if ( aBtnVerMid.IsChecked() )
-        nTmp = SVX_VER_JUSTIFY_CENTER;
-    else if ( aBtnVerBot.IsChecked() )
-        nTmp = SVX_VER_JUSTIFY_BOTTOM;
-    DBG_ASSERT( (USHRT_MAX != nTmp) || !aBtnVerStd.IsEnabled(), "no button checked" );
-        // if aBtnVerStd is disabled SetFlags was called with the WBA_NO_VERTICAL flag set
+    switch( aLbVerAlign.GetSelectEntryPos() )
+    {
+        case ALIGNDLG_VERALIGN_STD:     nTmp = SVX_VER_JUSTIFY_STANDARD;    break;
+        case ALIGNDLG_VERALIGN_TOP:     nTmp = SVX_VER_JUSTIFY_TOP;         break;
+        case ALIGNDLG_VERALIGN_MID:     nTmp = SVX_VER_JUSTIFY_CENTER;      break;
+        case ALIGNDLG_VERALIGN_BOTTOM:  nTmp = SVX_VER_JUSTIFY_BOTTOM;      break;
+    }
+    DBG_ASSERT( (USHRT_MAX != nTmp) || !aLbVerAlign.IsEnabled(), "no button checked" );
+        // if aLbVerAlign is disabled SetFlags was called with the WBA_NO_VERTICAL flag set
         // 67977 - 30.07.99 - FS
     pOld = GetOldItem( rCoreAttrs, SID_ATTR_ALIGN_VER_JUSTIFY );
 
@@ -554,11 +511,11 @@ int SvxAlignmentTabPage::DeactivatePage( SfxItemSet* pSet )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxAlignmentTabPage, HorizontalClickHdl_Impl, RadioButton *, EMPTYARG )
+IMPL_LINK( SvxAlignmentTabPage, HorAlignSelectHdl_Impl, ListBox *, EMPTYARG )
 {
-    BOOL bChecked = aBtnHorLeft.IsChecked();
-    aIndentFT.Enable( bChecked );
-    aIndentED.Enable( bChecked );
+    BOOL bChecked = (aLbHorAlign.GetSelectEntryPos() == ALIGNDLG_HORALIGN_LEFT);
+    aFtIndent.Enable( bChecked );
+    aEdIndent.Enable( bChecked );
     return 0;
 }
 
@@ -579,39 +536,33 @@ void SvxAlignmentTabPage::SetFlags( USHORT nFlags )
 
     if ( ( nFlags & WBA_NO_LINEBREAK ) == WBA_NO_LINEBREAK )
     {
+        aFlWrap.Disable();
         aBtnWrap.Disable();
-        aWrapGB.Disable();
     }
 
     if ( ( nFlags & WBA_NO_HORIZONTAL ) == WBA_NO_HORIZONTAL )
     {
-        aBtnHorStd.Disable();
-        aBtnHorLeft.Disable();
-        aBtnHorRight.Disable();
-        aBtnHorCenter.Disable();
-        aBtnHorBlock.Disable();
-        aIndentFT.Disable();
-        aIndentED.Disable();
-        aGbHorAlign.Disable();
+        aFtHorAlign.Disable();
+        aLbHorAlign.Disable();
+        aFtIndent.Disable();
+        aEdIndent.Disable();
     }
 
     if ( ( nFlags & WBA_NO_LEFTINDENT ) == WBA_NO_LEFTINDENT )
     {
-        aIndentFT.Hide();
-        aIndentED.Hide();
+        aFtIndent.Hide();
+        aEdIndent.Hide();
     }
 
     if ( ( nFlags & WBA_NO_VERTICAL ) == WBA_NO_VERTICAL )
     {
-        aBtnVerStd.Disable();
-        aBtnVerTop.Disable();
-        aBtnVerBot.Disable();
-        aBtnVerMid.Disable();
-        aGbVerAlign.Disable();
+        aFtVerAlign.Disable();
+        aLbVerAlign.Disable();
     }
 
     if ( ( nFlags & WBA_NO_GRIDLINES ) == WBA_NO_GRIDLINES )
     {
+        aFlSpace.Disable();
         aFtLeftSpace.Disable();
         aEdLeftSpace.Disable();
         aFtRightSpace.Disable();
@@ -620,7 +571,6 @@ void SvxAlignmentTabPage::SetFlags( USHORT nFlags )
         aEdTopSpace.Disable();
         aFtBottomSpace.Disable();
         aEdBottomSpace.Disable();
-        aGbSpace.Disable();
     }
 }
 

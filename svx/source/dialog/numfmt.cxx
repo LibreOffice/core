@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-15 11:12:28 $
+ *  last change: $Author: dr $ $Date: 2001-05-16 11:52:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ SvxNumberPreviewImpl::SvxNumberPreviewImpl( Window* pParent, const ResId& rResId
     aFont.SetColor( Application::GetSettings().GetStyleSettings().GetFieldColor() );
     SetFont( aFont );
     InitSettings( TRUE, TRUE );
+    SetBorderStyle( WINDOW_BORDER_MONO );
 }
 
 /*************************************************************************
@@ -201,9 +202,6 @@ void SvxNumberPreviewImpl::Paint( const Rectangle& rRect )
     aDrawFont.SetColor( aPrevCol );
     SetFont( aDrawFont );
     DrawText( aPosText, aPrevStr );
-    SetLineColor( Color( COL_BLACK ) );
-    SetFillColor( Color( COL_TRANSPARENT ) );
-    DrawRect( Rectangle( Point(), aSzWnd ) );
 }
 
 // -----------------------------------------------------------------------

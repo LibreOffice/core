@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-15 11:12:28 $
+ *  last change: $Author: dr $ $Date: 2001-05-16 11:52:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,11 +145,7 @@ SvxFontPrevWindow::SvxFontPrevWindow( Window* pParent, const ResId& rId ) :
     aFont.SetTransparent(TRUE);
     aFont.SetAlign(ALIGN_BASELINE);
     InitSettings( TRUE, TRUE );
-
-    aWinSize = PixelToLogic( GetOutputSizePixel() );
-    Size aTemp( PixelToLogic( Size( 1, 1 ) ) );
-    aWinSize.Width() -= aTemp.Width() / 2;
-    aWinSize.Height() -= aTemp.Height() / 2;
+    SetBorderStyle( WINDOW_BORDER_MONO );
 }
 
 // -----------------------------------------------------------------------
@@ -325,10 +321,6 @@ void SvxFontPrevWindow::Paint( const Rectangle& rRect )
         DrawLine( Point( nX + aTxtSize.Width(), nY ), Point( aLogSize.Width(), nY ) );
         aFont.DrawPrev( this, pPrinter, Point( nX, nY ), pImpl->aText );
     }
-
-    SetLineColor( Color( COL_BLACK ) );
-    SetFillColor( Color( COL_TRANSPARENT ) );
-    DrawRect( Rectangle( Point(), aWinSize ) );
 }
 /* -----------------------------04.12.00 16:26--------------------------------
 
