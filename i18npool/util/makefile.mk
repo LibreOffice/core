@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.5 $
+#*  $Revision: 1.6 $
 #*
-#*  last change: $Author: bustamam $ $Date: 2001-12-14 16:26:11 $
+#*  last change: $Author: bustamam $ $Date: 2002-03-15 19:13:51 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -77,59 +77,33 @@ SYMBOLPREFIX=i18n$(UPD)$(DLLPOSTFIX)
 
 # --- Allgemein ----------------------------------------------------------
 
-SHL1TARGET= 	localedata_ascii
-SHL1IMPLIB= 	i$(SHL1TARGET)
-SHL1LIBS=	$(SLB)$/$(SHL1TARGET).lib
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=	$(SHL1TARGET)
-DEFLIB1NAME=	$(SHL1TARGET)
-DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
-
-SHL2TARGET= 	localedata_CJK
-SHL2IMPLIB= 	i$(SHL2TARGET)
-SHL2LIBS=	$(SLB)$/$(SHL2TARGET).lib
-SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
-DEF2NAME=	$(SHL2TARGET)
-DEFLIB2NAME=	$(SHL2TARGET)
-DEF2DEPN=	$(MISC)$/$(SHL2TARGET).flt
-
-LIB3TARGET= $(SLB)$/$(TARGET).lib
-LIB3FILES=	$(SLB)$/defaultnumberingprovider.lib	\
+LIB1TARGET= $(SLB)$/$(TARGET).lib
+LIB1FILES=	$(SLB)$/defaultnumberingprovider.lib	\
         $(SLB)$/registerservices.lib		\
         $(SLB)$/numberformatcode.lib		\
         $(SLB)$/localedata.lib			\
         $(SLB)$/indexentry.lib
 
-SHL3TARGET= $(TARGET)$(VERSION)$(DLLPOSTFIX)
-SHL3IMPLIB= i$(TARGET)
+SHL1TARGET= $(TARGET)$(VERSION)$(DLLPOSTFIX)
+SHL1IMPLIB= i$(TARGET)
 
-SHL3STDLIBS=\
+SHL1STDLIBS=\
         $(TOOLSLIB)				\
         $(CPPULIB)				\
         $(COMPHELPERLIB)			\
         $(CPPUHELPERLIB)			\
         $(SALLIB)
 
-SHL3LIBS=	$(LIB3TARGET)
-SHL3DEF=	$(MISC)$/$(SHL3TARGET).def
-DEF3NAME=	$(SHL3TARGET)
-DEF3EXPORTFILE=	$(TARGET).dxp
+SHL1LIBS=	$(LIB1TARGET)
+SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=	$(SHL1TARGET)
+DEF1EXPORTFILE=	$(TARGET).dxp
 
 # --- Targets ------------------------------------------------------------
 
 .INCLUDE :	target.mk
 
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo Provider>> $@
-
-$(MISC)$/$(SHL2TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo Provider>> $@
-
-$(MISC)$/$(SHL3TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
     @echo Provider>> $@
