@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ab $ $Date: 2002-11-18 08:36:02 $
+ *  last change: $Author: ab $ $Date: 2002-11-27 12:26:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,8 @@ String getFullPath( const String& aRelPath )
 
     // #80204 Try first if it already is a valid URL
     INetURLObject aURLObj( aRelPath );
-    aFileURL = aURLObj.GetMainURL();
+    aFileURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
+
     if( !aFileURL.getLength() )
     {
         File::getFileURLFromSystemPath( aRelPath, aFileURL );
@@ -272,37 +273,6 @@ String getFullPath( const String& aRelPath )
 
     return aFileURL;
 }
-
-//*** OSL file access ***
-// Converts possibly relative paths to absolute paths
-// according to the setting done by ChDir/ChDrive
-// #87427 OSL need File URLs, so getFullPathUNC
-// is mapped to getFullPath (inline in runtime.hxx)
-/*
-String getFullPathUNC( const String& aRelPath )
-{
-    OUString aNormPath;
-
-    // TODO: Use CurDir to build full path
-    // First step: Return given path unchanged
-
-    //static inline RC getAbsolutePath( const ::rtl::OUString& strDirBase, const ::rtl::OUString& strRelative, ::rtl::OUString& strAbsolute )
-
-    // #80204 Try first if it already is a file URL
-    INetURLObject aURLObj( aRelPath );
-    if( aURLObj.GetProtocol() == INET_PROT_FILE )
-    {
-        OUString aFileURL = aURLObj.GetMainURL();
-        aNormPath = aFileURL;
-    }
-    else
-    {
-        File::getFileURLFromSystemPath( aRelPath, aNormPath );
-    }
-    return aNormPath;
-}
-*/
-
 
 // Sets (virtual) current path for UCB file access
 void implChDir( const String& aDir )

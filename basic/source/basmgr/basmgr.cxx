@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ab $ $Date: 2002-01-09 16:43:05 $
+ *  last change: $Author: ab $ $Date: 2002-11-27 12:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,7 +578,7 @@ void BasicLibInfo::Store( SotStorageStream& rSStream, const SotStorage& rStorage
     rSStream << nId;
     rSStream << nVer;
 
-    String aCurStorageName = INetURLObject(rBasMgrStorageName, INET_PROT_FILE).GetMainURL();
+    String aCurStorageName = INetURLObject(rBasMgrStorageName, INET_PROT_FILE).GetMainURL( INetURLObject::NO_DECODE );
     DBG_ASSERT(aCurStorageName.Len() != 0, "Bad storage name");
 
     // Falls nicht gesetzt, StorageName initialisieren
@@ -597,7 +597,7 @@ void BasicLibInfo::Store( SotStorageStream& rSStream, const SotStorage& rStorage
     // Absoluter Pfad....
     if ( ! GetStorageName().EqualsAscii(szImbedded) )
     {
-        String aSName = INetURLObject( GetStorageName(), INET_PROT_FILE).GetMainURL();
+        String aSName = INetURLObject( GetStorageName(), INET_PROT_FILE).GetMainURL( INetURLObject::NO_DECODE );
         DBG_ASSERT(aSName.Len() != 0, "Bad storage name");
         rSStream.WriteByteString( aSName );
     }
@@ -687,7 +687,7 @@ void BasicLibInfo::CalcRelStorageName( const String& rMgrStorageName )
     {
         INetURLObject aAbsURLObj( rMgrStorageName );
         aAbsURLObj.removeSegment();
-        String aPath = aAbsURLObj.GetMainURL();
+        String aPath = aAbsURLObj.GetMainURL( INetURLObject::NO_DECODE );
         UniString aRelURL = INetURLObject::GetRelURL( aPath, GetStorageName() );
         SetRelStorageName( aRelURL );
     }
@@ -705,7 +705,7 @@ BasicManager::BasicManager( SotStorage& rStorage, StarBASIC* pParentFromStdLib, 
         pLibs->aBasicLibPath = *pLibPath;
 
     String aStorName( rStorage.GetName() );
-    aStorageName = INetURLObject(aStorName, INET_PROT_FILE).GetMainURL();
+    aStorageName = INetURLObject(aStorName, INET_PROT_FILE).GetMainURL( INetURLObject::NO_DECODE );
 
     // #91251: Storage name not longer available for documents < 5.0
     // Should be no real problem, because only relative storage names
@@ -1018,7 +1018,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, BOOL bLoadLibs )
         return;
     }
 
-    aStorageName = INetURLObject(aStorName, INET_PROT_FILE).GetMainURL();
+    aStorageName = INetURLObject(aStorName, INET_PROT_FILE).GetMainURL( INetURLObject::NO_DECODE );
     DBG_ASSERT(aStorageName.Len() != 0, "Bad storage name");
 
     String aRealStorageName = aStorageName;  // fuer relative Pfade, kann durch BaseURL umgebogen werden.
@@ -1160,9 +1160,11 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
                 xStorageRef = &rStorage;
             else
             {
-                xStorageRef = new SotStorage( FALSE, aLibAbsStorage.GetMainURL(), eStorageReadMode, TRUE );
+                xStorageRef = new SotStorage( FALSE, aLibAbsStorage.GetMainURL
+                    ( INetURLObject::NO_DECODE ), eStorageReadMode, TRUE );
                 if ( xStorageRef->GetError() != ERRCODE_NONE )
-                    xStorageRef = new SotStorage( FALSE, aLibRelStorage.GetMainURL(), eStorageReadMode, TRUE );
+                    xStorageRef = new SotStorage( FALSE, aLibRelStorage.
+                    GetMainURL( INetURLObject::NO_DECODE ), eStorageReadMode, TRUE );
             }
             if ( xStorageRef.Is() )
                 AddLib( *xStorageRef, aLibName, FALSE );
@@ -1618,10 +1620,10 @@ BOOL BasicManager::ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorag
         DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
 
         INetURLObject aCurStorageEntry(aStorName, INET_PROT_FILE);
-        DBG_ASSERT(aCurStorageEntry.GetMainURL().Len() != 0, "Bad storage name");
+        DBG_ASSERT(aCurStorageEntry.GetMainURL( INetURLObject::NO_DECODE ).Len() != 0, "Bad storage name");
 
         INetURLObject aStorageEntry(aStorageName, INET_PROT_FILE);
-        DBG_ASSERT(aCurStorageEntry.GetMainURL().Len() != 0, "Bad storage name");
+        DBG_ASSERT(aCurStorageEntry.GetMainURL( INetURLObject::NO_DECODE ).Len() != 0, "Bad storage name");
 
         if ( aCurStorageEntry == aStorageEntry )
             xStorage = pCurStorage;
@@ -1835,7 +1837,7 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const String& rLibName, B
     String aStorName( rStorage.GetName() );
     DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
 
-    String aStorageName = INetURLObject(aStorName, INET_PROT_FILE).GetMainURL();
+    String aStorageName = INetURLObject(aStorName, INET_PROT_FILE).GetMainURL( INetURLObject::NO_DECODE );
     DBG_ASSERT(aStorageName.Len() != 0, "Bad storage name");
 
     String aNewLibName( rLibName );
