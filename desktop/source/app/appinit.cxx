@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-07 11:25:00 $
+ *  last change: $Author: cd $ $Date: 2001-08-21 16:00:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,13 +116,20 @@
 #include <unotools/tempfile.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <vcl/svapp.hxx>
+#ifndef INCLUDED_SVTOOLS_STARTOPTIONS_HXX
 #include <svtools/startoptions.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_INTERNALOPTIONS_HXX
+#include <svtools/internaloptions.hxx>
+#endif
 
 #define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
 #define DEFINE_CONST_OUSTRING(CONSTASCII)       OUString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
 
-#define DESKTOP_TEMPNAMEBASE_DIR    "$(userpath)/temp/soffice.tmp"
+#define DESKTOP_TEMPDIRNAME                     "soffice.tmp"
 
 using namespace rtl;
 using namespace vos;
@@ -135,10 +142,8 @@ using namespace ::com::sun::star::registry;
 extern desktop::CommandLineArgs*        GetCommandLineArgs();
 extern desktop::OOfficeAcceptorThread*  pOfficeAcceptThread;
 
-static String aTempNameBaseDir;
-static String aTempBase;
-
-
+static String aCurrentTempURL;
+static String aCurrentTempBase;
 
 
 // -----------------------------------------------------------------------------
@@ -196,50 +201,6 @@ Reference< XMultiServiceFactory > createApplicationServiceManager()
     }
 
     return Reference< XMultiServiceFactory >();
-
-//      try
-//      {
-//          ::rtl::OUString localRegistry = ::comphelper::getPathToUserRegistry();
-//          ::rtl::OUString systemRegistry = ::comphelper::getPathToSystemRegistry();
-
-//          Reference< XSimpleRegistry > xLocalRegistry( ::cppu::createSimpleRegistry() );
-//          Reference< XSimpleRegistry > xSystemRegistry( ::cppu::createSimpleRegistry() );
-//          if ( xLocalRegistry.is() && (localRegistry.getLength() > 0) )
-//          {
-//              try
-//              {
-//                  xLocalRegistry->open( localRegistry, sal_False, sal_True);
-//              }
-//              catch ( InvalidRegistryException& )
-//              {
-//              }
-
-//              if ( !xLocalRegistry->isValid() )
-//                  xLocalRegistry->open(localRegistry, sal_True, sal_True);
-//          }
-
-//          if ( xSystemRegistry.is() && (systemRegistry.getLength() > 0) )
-//              xSystemRegistry->open( systemRegistry, sal_True, sal_False);
-
-//          if ( (xLocalRegistry.is() && xLocalRegistry->isValid()) &&
-//               (xSystemRegistry.is() && xSystemRegistry->isValid()) )
-//          {
-//              Reference < XSimpleRegistry > xReg( ::cppu::createNestedRegistry() );
-//              Sequence< Any > seqAnys(2);
-//              seqAnys[0] <<= xLocalRegistry ;
-//              seqAnys[1] <<= xSystemRegistry ;
-//              Reference< XInitialization > xInit( xReg, UNO_QUERY );
-//              xInit->initialize( seqAnys );
-
-//              Reference< XComponentContext > xContext( ::cppu::bootstrap_InitialComponentContext( xReg ) );
-//              return Reference< XMultiServiceFactory >( xContext->getServiceManager(), UNO_QUERY );
-//          }
-//      }
-//      catch( ::com::sun::star::uno::Exception& )
-//      {
-//      }
-
-//      return ::cppu::createServiceFactory();
 }
 
 void destroyApplicationServiceManager( Reference< XMultiServiceFactory >& xSMgr )
@@ -329,40 +290,55 @@ void createTemporaryDirectory()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::createTemporaryDirectory" );
 
-    // remove old temp dir
-    SvtPathOptions aOpt;
-    String aTemp( DEFINE_CONST_UNICODE( DESKTOP_TEMPNAMEBASE_DIR ) );
-    aTempNameBaseDir = aOpt.SubstituteVariable( aTemp );
-    String aOldTempBase( aOpt.GetTempPath() );
-    if ( STRING_NOTFOUND != aOldTempBase.Search( aTempNameBaseDir ) )
-    {
-        String aRet;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aOldTempBase, aRet );
-        ::utl::UCBContentHelper::Kill( aRet );
-    }
+    // remove possible old directory and base directory
+    SvtPathOptions      aOpt;
+    SvtInternalOptions  aInternalOpt;
 
     // set temp base directory
-    ::rtl::OUString aRet;
-    ::osl::FileBase::getFileURLFromSystemPath( aTempNameBaseDir, aRet );
-    TempFile::SetTempNameBaseDirectory( aRet );
-    aTempBase = ::utl::TempFile::SetTempNameBaseDirectory( aRet );
-    aOpt.SetTempPath( aTempBase );
+    ::rtl::OUString aTempBaseURL( aOpt.GetTempPath() );
+    sal_Int32 nIndex = aTempBaseURL.lastIndexOf( '/' );
+    if ( nIndex != aTempBaseURL.getLength()-1 )
+        aTempBaseURL += OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ));
+    aTempBaseURL += OUString( RTL_CONSTASCII_USTRINGPARAM( DESKTOP_TEMPDIRNAME ));
+
+    String aOldTempURL = aInternalOpt.GetCurrentTempURL();
+    if ( aOldTempURL.Len() > 0 )
+    {
+        // remove old temporary directory
+        ::utl::UCBContentHelper::Kill( aOldTempURL );
+
+        // remove old temporary base directory
+        ::utl::UCBContentHelper::Kill( aTempBaseURL );
+    }
+
+    // set new temporary base directory
+    aCurrentTempBase = aTempBaseURL;
+
+    String aRet;
+    ::rtl::OUString aTempPath( aTempBaseURL );
+
+    // create new current temporary directory
+    ::utl::LocalFileHelper::ConvertURLToPhysicalName( aCurrentTempBase, aRet );
+    ::osl::FileBase::getFileURLFromSystemPath( aRet, aTempPath );
+    aTempPath = ::utl::TempFile::SetTempNameBaseDirectory( aTempPath );
+
+    // set new current temporary directory
+    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aTempPath, aRet );
+    aInternalOpt.SetCurrentTempURL( aRet );
+    aCurrentTempURL = aRet;
 }
 
 void removeTemporaryDirectory()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::removeTemporaryDirectory" );
 
-    // remove temp directory
-    if ( STRING_NOTFOUND != aTempBase.Search( aTempNameBaseDir ) )
+    // remove current base and current temporary directory
+    if ( aCurrentTempURL.Len() > 0 && aCurrentTempBase.Len() > 0 )
     {
-        String aRet;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aTempBase, aRet );
-        if ( ::utl::UCBContentHelper::Kill( aRet ) )
+        if ( ::utl::UCBContentHelper::Kill( aCurrentTempURL ) )
         {
-            SvtPathOptions().SetTempPath( String() );
-            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aTempNameBaseDir, aRet );
-            ::utl::UCBContentHelper::Kill( aRet );
+            SvtInternalOptions().SetCurrentTempURL( String() );
+            ::utl::UCBContentHelper::Kill( aCurrentTempBase );
         }
     }
 }
