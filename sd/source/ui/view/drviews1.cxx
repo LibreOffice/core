@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:16:26 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #include <sim2/simdll.hxx>
 #endif
 #endif
+
+#include <svx/dialogs.hrc>
+#include <svx/extrusionbar.hxx>
 
 #include "glob.hrc"
 #include "app.hrc"
@@ -271,6 +274,8 @@ void DrawViewShell::Deactivate(BOOL bIsMDIActivate)
 
 void DrawViewShell::SelectionHasChanged (void)
 {
+    ObjectBarManager & rObjectBarManager = GetObjectBarManager();
+
     // Um die Performance zu steigern wird jetzt die komplette
     // Shell invalidiert statt alle Slots einzeln
     Invalidate();
@@ -380,11 +385,11 @@ void DrawViewShell::SelectionHasChanged (void)
             default: nObjBarId = RID_DRAW_OBJ_TOOLBOX; break;
         }
 
-        GetObjectBarManager().SwitchObjectBar (nObjBarId);
+        rObjectBarManager.SwitchObjectBar (nObjBarId);
     }
 
     // #96124# Invalidate for every subshell
-    GetObjectBarManager().InvalidateAllObjectBars();
+    rObjectBarManager.InvalidateAllObjectBars();
 
     if( SFX_APP()->GetHelpPI() )
         SetHelpIdBySelection();
@@ -393,6 +398,17 @@ void DrawViewShell::SelectionHasChanged (void)
 
     if (GetController() != NULL)
         GetController()->FireSelectionChangeListener();
+
+    if (::svx::checkForSelectedCustomShapes( GetView(),
+                                             false /* ! bOnlyExtruded */ ))
+    {
+        rObjectBarManager.ActivateObjectBar(RID_SVX_EXTRUSION_BAR);
+    }
+    else
+    {
+        rObjectBarManager.DeactivateObjectBar(
+            rObjectBarManager.GetObjectBar(RID_SVX_EXTRUSION_BAR) );
+    }
 }
 
 
