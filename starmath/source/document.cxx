@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: tl $ $Date: 2002-01-11 15:35:24 $
+ *  last change: $Author: tl $ $Date: 2002-01-17 11:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -816,15 +816,23 @@ BOOL SmDocShell::InsertFrom(SfxMedium &rMedium)
 
     if( bSuccess )
     {
-        aTemp += aText;
-        aText  = aTemp;
+        SmViewShell *pView = SmGetActiveView();
+        SmEditWindow *pEditWin = pView ? pView->GetEditWindow() : 0;
+
+        if (pEditWin)
+            pEditWin->InsertText( aText );
+        else
+        {
+            DBG_ERROR( "EditWindow missing" );
+            aTemp += aText;
+            aText  = aTemp;
+        }
 
         Parse();
         SetModified(TRUE);
-        SmViewShell *pViewSh = SmGetActiveView();
-        if (pViewSh)
+        if (pView)
         {
-            SfxBindings &rBnd = pViewSh->GetViewFrame()->GetBindings();
+            SfxBindings &rBnd = pView->GetViewFrame()->GetBindings();
             rBnd.Invalidate(SID_GRAPHIC);
             rBnd.Invalidate(SID_TEXT);
         }
@@ -945,8 +953,17 @@ BOOL SmDocShell::Insert(SvStorage *pStor)
 
     if( bRet )
     {
-        aTemp += aText;
-        aText  = aTemp;
+        SmViewShell *pView = SmGetActiveView();
+        SmEditWindow *pEditWin = pView ? pView->GetEditWindow() : 0;
+
+        if (pEditWin)
+            pEditWin->InsertText( aText );
+        else
+        {
+            DBG_ERROR( "EditWindow missing" );
+            aTemp += aText;
+            aText  = aTemp;
+        }
 
         if( bChkOldVersion )
         {
@@ -958,10 +975,9 @@ BOOL SmDocShell::Insert(SvStorage *pStor)
 
         Parse();
         SetModified(TRUE);
-        SmViewShell *pViewSh = SmGetActiveView();
-        if (pViewSh)
+        if (pView)
         {
-             SfxBindings &rBnd =    pViewSh->GetViewFrame()->GetBindings();
+            SfxBindings &rBnd = pView->GetViewFrame()->GetBindings();
             rBnd.Invalidate(SID_GRAPHIC);
             rBnd.Invalidate(SID_TEXT);
         }
