@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-28 14:04:59 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@ const char *basename( const char *filename )
 using namespace std;
 
 static bool g_bNoUI = false;
+static bool g_bSendReport = false;
+static bool g_bLoadReport = false;
+
 static bool g_bDebugMode = false;
 static int  g_signal = 0;
 
@@ -191,86 +194,6 @@ static size_t fcopy( FILE *fpout, FILE *fpin )
    writes the report to a temp-file
    from which it can be reviewed and sent
 */
-bool write_stack( long pid )
-{
-    bool bSuccess = false;
-
-    if ( pid )
-    {
-        char *stmp= tmpnam( g_szStackFile );
-        FILE *fout, *fin;
-        char buf[1024];
-
-        /* open mailfile */
-        fout = fopen(stmp, "w");
-
-        if ( fout )
-        {
-            char cmdbuf[1024];
-
-            fputs( "<***stacks***>\n", fout );
-
-            if ( !g_strPStackFileName.length() )
-            {
-
-                snprintf(cmdbuf, 1024, PSTACK_CMD, pid);
-                fin = popen(cmdbuf, "r");
-
-                if ( fin )
-                {
-                    while (fgets(buf, 1024, fin) != NULL)
-                    {
-                        bSuccess = true;
-                        fputs(buf, fout);
-                    }
-                    pclose( fin );
-
-                }
-
-            }
-            else
-            {
-                fin = fopen( g_strPStackFileName.c_str(), "r" );
-                if ( fin )
-                {
-                    bSuccess = true;
-                    fcopy( fout, fin );
-                    fclose( fin );
-                }
-            }
-
-            fputs( "</***stacks***>\n", fout );
-
-            if ( bSuccess )
-            {
-                fputs( "<***maps***>\n", fout );
-                bSuccess = false;
-
-                snprintf(cmdbuf, 1024, PMAP_CMD, pid);
-                fin = popen(cmdbuf, "r");
-
-                if ( fin )
-                {
-                    while (fgets(buf, 1024, fin) != NULL)
-                    {
-                        bSuccess = true;
-                        fputs(buf, fout);
-                    }
-                    pclose( fin );
-
-                }
-                fputs( "</***maps***>\n", fout );
-            }
-
-            fclose ( fout );
-
-        }
-    }
-
-
-    return bSuccess;
-}
-
 
 bool write_report( const hash_map< string, string >& rSettings )
 {
@@ -394,7 +317,6 @@ bool save_crash_report( const string& rFileName, const hash_map< string, string 
 
     return bSuccess;
 }
-
 
 bool SendHTTPRequest(
                 FILE *fp,
@@ -817,6 +739,14 @@ static long setup_commandline_arguments( int argc, char** argv, int *pSignal )
         {
             g_bNoUI = true;
         }
+        else if ( 0 == strcmp( argv[n], "-send" ) )
+        {
+            g_bSendReport = true;
+        }
+        else if ( 0 == strcmp( argv[n], "-load" ) )
+        {
+            g_bLoadReport = true;
+        }
         else if ( argv[n] && strlen(argv[n]) )
         {
             printf(
@@ -1002,6 +932,80 @@ static string read_from_file( const string& rFileName )
 }
 
 #define RCFILE ".crash_reportrc"
+#define XMLFILE ".crash_report_frames"
+#define CHKFILE ".crash_report_checksum"
+#define LCKFILE ".crash_report_unsent"
+#define PRVFILE ".crash_report_preview"
+
+static void load_crash_data()
+{
+    g_strXMLFileName = get_home_dir();
+    g_strXMLFileName += "/";
+    g_strXMLFileName += string(XMLFILE);
+
+    g_strChecksumFileName = get_home_dir();
+    g_strChecksumFileName += "/";
+    g_strChecksumFileName += string(CHKFILE);
+}
+
+static bool write_crash_data()
+{
+    bool success = true;
+    string  sFile = get_home_dir();
+
+    sFile += "/";
+    sFile += string(XMLFILE);
+
+    FILE *fp = fopen( sFile.c_str(), "w" );
+
+    if ( fp )
+    {
+        FILE    *fpin = fopen( g_strXMLFileName.c_str(), "r" );
+
+        if ( fpin )
+        {
+            fcopy( fp, fpin );
+            fclose( fpin );
+        }
+
+        fclose( fp );
+    }
+
+    sFile = get_home_dir();
+
+    sFile += "/";
+    sFile += string(CHKFILE);
+
+    fp = fopen( sFile.c_str(), "w" );
+
+    if ( fp )
+    {
+        FILE    *fpin = fopen( g_strChecksumFileName.c_str(), "r" );
+
+        if ( fpin )
+        {
+            fcopy( fp, fpin );
+            fclose( fpin );
+        }
+
+        fclose( fp );
+    }
+
+    sFile = get_home_dir();
+
+    sFile += "/";
+    sFile += string(LCKFILE);
+
+    fp = fopen( sFile.c_str(), "w" );
+
+    if ( fp )
+    {
+        fprintf( fp, "Unsent\n" );
+        fclose( fp );
+    }
+
+    return success;
+}
 
 static bool write_settings( const hash_map< string, string >& rSettings )
 {
@@ -1155,7 +1159,12 @@ int main( int argc, char** argv )
 
         long pid = setup_commandline_arguments( argc, argv, &g_signal );
 
-        if ( write_stack( pid ) )
+        if ( g_bLoadReport )
+        {
+            load_crash_data();
+        }
+
+        if ( g_bSendReport )
         {
             if ( !get_accessibility_state() && !g_bNoUI )
             {
@@ -1184,11 +1193,45 @@ int main( int argc, char** argv )
 
                 send_crash_report( NULL, aDialogSettings );
             }
-
-            unlink( g_szStackFile );
-
-            return 0;
         }
+        else
+        {
+            hash_map< string, string > aDialogSettings;
+
+            read_settings( aDialogSettings );
+            read_settings_from_environment( aDialogSettings );
+
+            write_crash_data();
+            write_report( aDialogSettings );
+
+            string  sPreviewFile = get_home_dir();
+            sPreviewFile += "/";
+            sPreviewFile += string(PRVFILE);
+
+            FILE *fpout = fopen( sPreviewFile.c_str(), "w+" );
+            if ( fpout )
+            {
+                FILE *fpin = fopen( g_szReportFile, "r" );
+                if ( fpin )
+                {
+                    fcopy( fpout, fpin );
+                    fclose( fpin );
+                }
+                fclose( fpout );
+            }
+
+            unlink( g_szReportFile );
+        }
+
+        if ( g_bLoadReport )
+        {
+            unlink( g_strXMLFileName.c_str() );
+            unlink( g_strChecksumFileName.c_str() );
+        }
+
+        unlink( g_szStackFile );
+
+        return 0;
     }
 
     return -1;
