@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-07 10:15:25 $
+ *  last change: $Author: os $ $Date: 2001-09-10 14:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -885,5 +885,12 @@ void SfxObjectShell::SetBaseModel( SfxBaseModel* pModel )
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > SfxObjectShell::GetBaseModel()
 {
     return pImp->xModel;
+}
+/* -----------------------------10.09.2001 15:56------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SfxObjectShell::SetAutoStyleFilterIndex(sal_uInt16 nSet)
+{
+    pImp->nStyleFilter = nSet;
 }
 
