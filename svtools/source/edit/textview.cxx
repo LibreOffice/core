@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mt $ $Date: 2002-10-17 09:50:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 15:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1347,7 +1347,7 @@ TextPaM TextView::CursorWordLeft( const TextPaM& rPaM )
         TextNode* pNode = mpTextEngine->mpDoc->GetNodes().GetObject( aPaM.GetPara() );
         uno::Reference < i18n::XBreakIterator > xBI = mpTextEngine->GetBreakIterator();
         i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), rPaM.GetIndex(), mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
-        if ( aBoundary.startPos == rPaM.GetIndex() )
+        if ( aBoundary.startPos >= rPaM.GetIndex() )
             aBoundary = xBI->previousWord( pNode->GetText(), rPaM.GetIndex(), mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
         aPaM.GetIndex() = ( aBoundary.startPos != -1 ) ? aBoundary.startPos : 0;
     }
