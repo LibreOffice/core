@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:49:05 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:33:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,7 +425,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ czech ] = "Kruhová úseč";
                 Text[ hebrew ] = "‮מיקטע עיגול‬";
                 Text[ hindi ] = "वृत्त खण्ड";
-                Text[ slovak ] = "Kruhový výsek";
+                Text[ slovak ] = "Eliptický odsek";
             };
             ToolBoxItem
             {
@@ -877,6 +877,18 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
     Text[ slovak ] = "Zarovnanie";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
