@@ -24,10 +24,12 @@ mkdir: %_DEST%\xml%_EXT%\office\ldap
 ..\schema\schema.description.dtd %_DEST%\xml%_EXT%\office\schema\schema.description.dtd
 ..\schema\schema.description2.dtd %_DEST%\xml%_EXT%\office\schema\schema.description2.dtd
 ..\%__SRC%\misc\oo-mapping-schema.conf %_DEST%\xml%_EXT%\office\ldap\oo-mapping-schema.conf
+..\%__SRC%\misc\oo-mapping-schema.ldif %_DEST%\xml%_EXT%\office\ldap\60-oo-mapping-schema.ldif
 ..\util\instance.xsl %_DEST%\xml%_EXT%\office\schema\instance.xsl
 ..\util\instance2.xsl %_DEST%\xml%_EXT%\office\schema\instance2.xsl
 ..\util\ldif.xsl %_DEST%\xml%_EXT%\office\schema\ldif.xsl
 ..\util\ldap-schema.xsl %_DEST%\xml%_EXT%\office\schema\ldap-schema.xsl
+..\util\ldapv3-schema.xsl %_DEST%\xml%_EXT%\office\schema\ldapv3-schema.xsl
 
 ..\data\org\openoffice\Office\Bibliography.xcd %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Bibliography.xcd
 ..\data\org\openoffice\Office\Calc.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Office\Calc.xcd
