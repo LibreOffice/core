@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusearch.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:51 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #pragma hdrstop
 
+#include "fusearch.hxx"
+
 #define ITEMID_SEARCH           SID_SEARCH_ITEM
 #include <svx/svxids.hrc>
 #include <svx/srchitem.hxx>
@@ -69,21 +71,37 @@
 #include <sfx2/bindings.hxx>
 #endif
 
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
-#include "fusearch.hxx"
+#endif
+#ifndef SD_FU_SPELL_HXX
 #include "fuspell.hxx"  // wegen SidArraySpell[]
-#include "sdwindow.hxx"
+#endif
+#ifndef SD_WINDOW_SHELL_HXX
+#include "Window.hxx"
+#endif
 #include "drawdoc.hxx"
 #include "app.hrc"
 #include "app.hxx"
-#include "sdview.hxx"
-#include "sdoutl.hxx"
-#include "drviewsh.hxx"
-#include "outlnvsh.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
 
-class SdViewShell;
 class SfxRequest;
 
+namespace sd {
 
 TYPEINIT1( FuSearch, FuPoor );
 
@@ -93,20 +111,24 @@ TYPEINIT1( FuSearch, FuPoor );
 |*
 \************************************************************************/
 
-FuSearch::FuSearch( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                  SdDrawDocument* pDoc, SfxRequest& rReq )
-       : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
-    pSdOutliner(NULL),
-    bOwnOutliner(FALSE)
+FuSearch::FuSearch (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq )
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
+      pSdOutliner(NULL),
+      bOwnOutliner(FALSE)
 {
     pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
 
-    if ( pViewShell->ISA(SdDrawViewShell) )
+    if ( pViewShell->ISA(DrawViewShell) )
     {
         bOwnOutliner = TRUE;
-        pSdOutliner = new SdOutliner( pDoc, OUTLINERMODE_TEXTOBJECT );
+        pSdOutliner = new ::sd::Outliner( pDoc, OUTLINERMODE_TEXTOBJECT );
     }
-    else if ( pViewShell->ISA(SdOutlineViewShell) )
+    else if ( pViewShell->ISA(OutlineViewShell) )
     {
         bOwnOutliner = FALSE;
         pSdOutliner = pDoc->GetOutliner();
@@ -145,19 +167,22 @@ FuSearch::~FuSearch()
 
 void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
 {
-    pViewShell = PTR_CAST( SdViewShell, SfxViewShell::Current() );
+    ViewShellBase* pBase = PTR_CAST(ViewShellBase, SfxViewShell::Current());
+    ViewShell* pViewShell = NULL;
+    if (pBase != NULL)
+        pViewShell = pBase->GetSubShellManager().GetMainSubShell();
 
-    if( pViewShell )
+    if (pViewShell != NULL)
     {
-        if ( pSdOutliner && pViewShell->ISA(SdDrawViewShell) && !bOwnOutliner )
+        if ( pSdOutliner && pViewShell->ISA(DrawViewShell) && !bOwnOutliner )
         {
             pSdOutliner->EndSpelling();
 
             bOwnOutliner = TRUE;
-            pSdOutliner = new SdOutliner( pDoc, OUTLINERMODE_TEXTOBJECT );
+            pSdOutliner = new ::sd::Outliner( pDoc, OUTLINERMODE_TEXTOBJECT );
             pSdOutliner->PrepareSpelling();
         }
-        else if ( pSdOutliner && pViewShell->ISA(SdOutlineViewShell) && bOwnOutliner )
+        else if ( pSdOutliner && pViewShell->ISA(OutlineViewShell) && bOwnOutliner )
         {
             pSdOutliner->EndSpelling();
             delete pSdOutliner;
@@ -182,3 +207,4 @@ void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
 
 
 
+} // end of namespace sd
