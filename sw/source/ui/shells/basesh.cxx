@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 08:05:01 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,7 +485,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
     {
         case SID_CUT:
         case SID_COPY:
-            rView.GetEditWin().FlushInBuffer( &rSh );
+            rView.GetEditWin().FlushInBuffer();
             if ( rSh.HasSelection() )
             {
                 SwTransferable* pTransfer = new SwTransferable( rSh );
