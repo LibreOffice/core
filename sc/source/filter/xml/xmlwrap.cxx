@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 10:49:48 $
+ *  last change: $Author: sab $ $Date: 2001-03-30 10:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,17 @@
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HXX_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef _COMPHELPER_PROPERTSETINFO_HXX_
+#include <comphelper/propertysetinfo.hxx>
+#endif
+#ifndef _COMPHELPER_GENERICPROPERTYSET_HXX_
+#include <comphelper/genericpropertyset.hxx>
 #endif
 
 #ifndef _XMLEOHLP_HXX
@@ -103,6 +112,16 @@
 #include "xmlwrap.hxx"
 #include "xmlimprt.hxx"
 #include "xmlexprt.hxx"
+
+#ifndef SEQTYPE
+ #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
+  #define SEQTYPE(x) (new ::com::sun::star::uno::Type( x ))
+ #else
+  #define SEQTYPE(x) &(x)
+ #endif
+#endif
+
+#define MAP_LEN(x) x, sizeof(x) - 1
 
 using namespace com::sun::star;
 
@@ -419,12 +438,28 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
     beans::PropertyValue* pProps = aDescriptor.getArray();
     pProps[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ) );
     pProps[0].Value <<= sFileName;
+
+    /** property map for export info set */
+    comphelper::PropertyMapEntry aExportInfoMap[] =
+    {
+        { MAP_LEN( "ProgressRange" ), 0, SEQTYPE(::getCppuType((sal_Int32*)0)),     ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
+        { MAP_LEN( "ProgressMax" ), 0, SEQTYPE(::getCppuType((sal_Int32*)0)),   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
+        { MAP_LEN( "ProgressCurrent" ), 0, SEQTYPE(::getCppuType((sal_Int32*)0)),   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
+        { NULL, 0, 0, NULL, 0, 0 }
+    };
+    uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
+
     if ( pObjSh && pStorage)
     {
         pObjSh->UpdateDocInfoForSave();     // update information
 
         uno::Reference<frame::XModel> xModel = pObjSh->GetModel();
         uno::Reference<task::XStatusIndicator> xStatusIndicator = GetStatusIndicator(xModel);
+        sal_Int32 nProgressRange(1000000);
+        xStatusIndicator->start(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Export XML")), nProgressRange);
+        uno::Any aProgRange;
+        aProgRange <<= nProgressRange;
+        xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressRange")), aProgRange);
 
         sal_Bool bMetaRet(sal_False);
         sal_Bool bStylesRet (sal_False);
@@ -435,10 +470,11 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         // meta export
         if (!bStylesOnly)
         {
-            uno::Sequence<uno::Any> aMetaArgs(2);
+            uno::Sequence<uno::Any> aMetaArgs(3);
             uno::Any* pMetaArgs = aMetaArgs.getArray();
             pMetaArgs[0] <<= xHandler;
             pMetaArgs[1] <<= xStatusIndicator;
+            pMetaArgs[2] <<= xInfoSet;
             bMetaRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
                 rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("meta.xml")),
                 sTextMediaType, rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLMetaExporter")),
@@ -448,10 +484,11 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         // styles export
 
         {
-            uno::Sequence<uno::Any> aStylesArgs(2);
+            uno::Sequence<uno::Any> aStylesArgs(3);
             uno::Any* pStylesArgs = aStylesArgs.getArray();
             pStylesArgs[0] <<= xHandler;
             pStylesArgs[1] <<= xStatusIndicator;
+            pStylesArgs[2] <<= xInfoSet;
             bStylesRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
                 rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("styles.xml")),
                 sTextMediaType, rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLStylesExporter")),
@@ -481,12 +518,13 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
                 xObjectResolver = pObjectHelper;
             }
 
-            uno::Sequence<uno::Any> aDocArgs(4);
+            uno::Sequence<uno::Any> aDocArgs(5);
             uno::Any* pDocArgs = aDocArgs.getArray();
             pDocArgs[0] <<= xGrfContainer;
             pDocArgs[1] <<= xStatusIndicator;
             pDocArgs[2] <<= xHandler;
             pDocArgs[3] <<= xObjectResolver;
+            pDocArgs[4] <<= xInfoSet;
 
             bDocRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
                 rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("content.xml")),
@@ -504,16 +542,18 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 
         if (!bStylesOnly)
         {
-            uno::Sequence<uno::Any> aSettingsArgs(2);
+            uno::Sequence<uno::Any> aSettingsArgs(3);
             uno::Any* pSettingsArgs = aSettingsArgs.getArray();
             pSettingsArgs[0] <<= xHandler;
             pSettingsArgs[1] <<= xStatusIndicator;
+            pSettingsArgs[2] <<= xInfoSet;
             bSettingsRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
                 rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("settings.xml")),
                 sTextMediaType, rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLSettingsExporter")),
                 sal_True, aSettingsArgs, pSharedData);
         }
 
+        xStatusIndicator->end();
         return bStylesRet && ((!bStylesOnly && bDocRet && bMetaRet && bSettingsRet) || bStylesOnly);
     }
 
