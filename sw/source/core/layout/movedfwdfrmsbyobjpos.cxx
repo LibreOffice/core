@@ -2,9 +2,9 @@
  *
  *  $RCSfile: movedfwdfrmsbyobjpos.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:11:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,17 @@
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
 #endif
+// --> OD 2004-10-05 #i26945#
+#ifndef _ROWFRM_HXX
+#include <rowfrm.hxx>
+#endif
+#ifndef _PAGEFRM_HXX
+#include <pagefrm.hxx>
+#endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
+#endif
+// <--
 
 SwMovedFwdFrmsByObjPos::SwMovedFwdFrmsByObjPos()
 {
@@ -109,6 +120,37 @@ bool SwMovedFwdFrmsByObjPos::FrmMovedFwdByObjPos( const SwTxtFrm& _rTxtFrm,
 
     return bFrmMovedFwd;
 }
+
+// --> OD 2004-10-05 #i26945#
+bool SwMovedFwdFrmsByObjPos::DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm ) const
+{
+    bool bDoesRowContainMovedFwdFrm( false );
+
+    const sal_uInt32 nPageNumOfRow = _rRowFrm.FindPageFrm()->GetPhyPageNum();
+
+    std::vector< Entry* >::const_iterator aIter = maMovedFwdFrms.begin();
+    for ( ; aIter != maMovedFwdFrms.end(); ++aIter )
+    {
+        const Entry* pCurrEntry = *(aIter);
+        if ( pCurrEntry->mnToPageNum >= nPageNumOfRow )
+        {
+            SwClientIter aIter( *(const_cast<SwTxtNode*>(pCurrEntry->mpTxtNode)) );
+            for( SwTxtFrm* pTxtFrm = (SwTxtFrm*)aIter.First( TYPE(SwTxtFrm) );
+                 pTxtFrm;
+                 pTxtFrm = (SwTxtFrm*)aIter.Next() )
+            {
+                if ( _rRowFrm.IsAnLower( pTxtFrm ) )
+                {
+                    bDoesRowContainMovedFwdFrm = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    return bDoesRowContainMovedFwdFrm;
+}
+// <--
 
 void SwMovedFwdFrmsByObjPos::Clear()
 {
