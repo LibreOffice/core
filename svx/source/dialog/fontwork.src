@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:33:02 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:16:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,17 +517,17 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText [ swedish ] = "AvstÂnd" ;
         QuickHelpText[ russian ] = "»ÌÚÂ‚‡Î";
         QuickHelpText[ danish ] = "Afstand";
-        QuickHelpText[ polish ] = "Abstand!";
-        QuickHelpText[ japanese ] = "ä‘äu!";
+        QuickHelpText[ polish ] = "Abstand";
+        QuickHelpText[ japanese ] = "ä‘äu";
         QuickHelpText[ chinese_simplified ] = "º‰∏Ù";
         QuickHelpText[ chinese_traditional ] = "∂°πj";
         QuickHelpText[ arabic ] = "«·„”«›…";
         QuickHelpText[ greek ] = "¡¸ÛÙ·ÛÁ";
-        QuickHelpText[ korean ] = "∞£∞›!";
+        QuickHelpText[ korean ] = "∞£∞›";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Abstand";
         QuickHelpText[ catalan ] = "Distancia";
-        QuickHelpText[ finnish ] = "Et‰isyys!";
+        QuickHelpText[ finnish ] = "Et‰isyys";
     };
     FixedBitmap FB_TEXTSTART
     {
@@ -565,17 +565,17 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText [ swedish ] = "Indrag" ;
         QuickHelpText[ russian ] = "ŒÚÒÚÛÔ";
         QuickHelpText[ danish ] = "Indrykning";
-        QuickHelpText[ polish ] = "Einzug!";
-        QuickHelpText[ japanese ] = "≤›√ﬁ›ƒ!";
+        QuickHelpText[ polish ] = "Einzug";
+        QuickHelpText[ japanese ] = "≤›√ﬁ›ƒ";
         QuickHelpText[ chinese_simplified ] = "ÀıΩ¯";
         QuickHelpText[ chinese_traditional ] = "¡Y±∆";
         QuickHelpText[ arabic ] = "«·≈“«Õ…";
         QuickHelpText[ greek ] = "≈ÛÔ˜ﬁ";
-        QuickHelpText[ korean ] = "µÈø©æ≤±‚!";
+        QuickHelpText[ korean ] = "µÈø©æ≤±‚";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Einzug";
         QuickHelpText[ catalan ] = "SangrÌa";
-        QuickHelpText[ finnish ] = "Sisenn‰!";
+        QuickHelpText[ finnish ] = "Sisenn‰";
     };
     ToolBox TBX_SHADOW
     {
@@ -816,21 +816,21 @@ DockingWindow RID_SVXDLG_FONTWORK
         CustomUnitText[ chinese_traditional ] = "´◊";
         CustomUnitText[ arabic ] = "œ—Ã…/œ—Ã« ";
         QuickHelpText[ russian ] = "»ÌÚÂ‚‡Î X";
-        QuickHelpText[ polish ] = "Abstand X!";
-        QuickHelpText[ japanese ] = "Abstand X!";
+        QuickHelpText[ polish ] = "Abstand X";
+        QuickHelpText[ japanese ] = "Abstand X";
         QuickHelpText[ chinese_simplified ] = "º‰∏Ù X";
         QuickHelpText[ chinese_traditional ] = "∂°πj X";
         QuickHelpText[ arabic ] = "«·„”«›… ”";
         CustomUnitText[ greek ] = "ÏÔﬂÒÂÚ";
         CustomUnitText[ korean ] = " µµ";
         QuickHelpText[ greek ] = "Distance X";
-        QuickHelpText[ korean ] = "∞£∞› X!";
+        QuickHelpText[ korean ] = "∞£∞› X";
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Abstand X";
         CustomUnitText[ catalan ] = "Grados";
         QuickHelpText[ catalan ] = "Distancia X";
-        QuickHelpText[ finnish ] = "Et‰isyys X!";
+        QuickHelpText[ finnish ] = "Et‰isyys X";
     };
     FixedBitmap FB_SHADOW_Y
     {
@@ -879,22 +879,22 @@ DockingWindow RID_SVXDLG_FONTWORK
         CustomUnitText[ chinese_traditional ] = "%";
         CustomUnitText[ arabic ] = "%";
         QuickHelpText[ russian ] = "Abstand Y";
-        QuickHelpText[ polish ] = "Abstand Y!";
-        QuickHelpText[ japanese ] = "ä‘äu Y!";
+        QuickHelpText[ polish ] = "Abstand Y";
+        QuickHelpText[ japanese ] = "ä‘äu Y";
         QuickHelpText[ chinese_simplified ] = "º‰∏Ù Y";
         QuickHelpText[ chinese_traditional ] = "∂°πj Y";
         QuickHelpText[ arabic ] = "Distance Y";
         CustomUnitText[ greek ] = "%";
         CustomUnitText[ korean ] = "%";
         QuickHelpText[ greek ] = "¡¸ÛÙ·ÛÁ Y";
-        QuickHelpText[ korean ] = "∞£∞› Y!";
+        QuickHelpText[ korean ] = "∞£∞› Y";
         CustomUnitText[ turkish ] = "%";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Abstand Y";
         CustomUnitText[ catalan ] = "%";
         QuickHelpText[ catalan ] = "Distancia Y";
         CustomUnitText[ finnish ] = "%";
-        QuickHelpText[ finnish ] = "Et‰isyys Y!";
+        QuickHelpText[ finnish ] = "Et‰isyys Y";
     };
     ListBox CLB_SHADOW_COLOR
     {
@@ -903,61 +903,61 @@ DockingWindow RID_SVXDLG_FONTWORK
         Size = MAP_APPFONT ( 71 , 60 ) ;
         DropDown = TRUE ;
         QuickHelpText = "Schattenfarbe" ;
-        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra" ;
         QuickHelpText [ english_us ] = "Shadow Color" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
         QuickHelpText [ spanish ] = "Color sombra" ;
         QuickHelpText [ french ] = "Couleur d'ombre" ;
-        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
         QuickHelpText [ dutch ] = "Schaduwkleur" ;
-        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ swedish ] = "Skuggans f‰rg" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
         QuickHelpText [ italian ] = "Colore dell'ombra" ;
-        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
@@ -967,18 +967,18 @@ DockingWindow RID_SVXDLG_FONTWORK
             Text[ portuguese_brazilian ] = "Farbe";
         Text[ danish ] = "-";
     QuickHelpText[ russian ] = "÷‚ÂÚ ÚÂÌË";
-        QuickHelpText[ polish ] = "Schattenfarbe!";
-        QuickHelpText[ japanese ] = "âeÇÃêF!";
+        QuickHelpText[ polish ] = "Schattenfarbe";
+        QuickHelpText[ japanese ] = "âeÇÃêF";
         QuickHelpText[ chinese_simplified ] = "“ı”∞—’…´";
         QuickHelpText[ chinese_traditional ] = "≥±ºv√C¶‚";
         QuickHelpText[ arabic ] = "·Ê‰ «·Ÿ·";
         QuickHelpText[ greek ] = "Shadow Color";
-        QuickHelpText[ korean ] = "¿Ωøµªˆ!";
+        QuickHelpText[ korean ] = "¿Ωøµªˆ";
         Text[ greek ] = "◊Ò˛Ï· ÛÍÈ‹Ú";
         Text[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Schattenfarbe";
         QuickHelpText[ catalan ] = "Color sombra";
-        QuickHelpText[ finnish ] = "Varjon v‰ri!";
+        QuickHelpText[ finnish ] = "Varjon v‰ri";
     };
     Text[ chinese_simplified ] = "√¿π§◊÷ÃÂ";
     Text[ russian ] = "FontWork";
@@ -1409,5 +1409,6 @@ String RID_SVXSTR_FONTWORK_UNDOCREATE
     Text[ finnish ] = "Luo fonttityˆobjekti";
 };
  // ********************************************************************** EOF
+
 
 
