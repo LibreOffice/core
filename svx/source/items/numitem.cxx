@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-09 12:49:17 $
+ *  last change: $Author: cl $ $Date: 2000-12-01 16:30:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,16 +848,6 @@ SvxNumBulletItem::SvxNumBulletItem(const SvxNumBulletItem& rCopy) :
 SvxNumBulletItem::~SvxNumBulletItem()
 {
     delete pNumRule;
-
-#ifndef SVX_LIGHT
-    uno::Reference< uno::XInterface > xNumRule( mxUnoNumRule );
-    if(xNumRule.is())
-    {
-        SvxUnoNumberingRules *pNumRules = SvxUnoNumberingRules::getImplementation( xNumRule );
-        if( pNumRules )
-            pNumRules->invalidate();
-    }
-#endif
 }
 
 /* -----------------27.10.98 10:41-------------------
@@ -901,21 +891,64 @@ USHORT  SvxNumBulletItem::GetVersion( USHORT nFileVersion ) const
 /* -----------------08.12.98 10:43-------------------
  *
  * --------------------------------------------------*/
-uno::Reference< uno::XInterface > SvxNumBulletItem::getUnoNumRule()
+
+sal_Bool SvxNumBulletItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
-    // try weak reference first
-    uno::Reference< uno::XInterface > xNumRule( mxUnoNumRule );
-
 #ifndef SVX_LIGHT
-    if( !xNumRule.is() )
-    {
-        // since there is no uno numrule for this item
-        // create one
-        xNumRule = (::cppu::OWeakObject*)new SvxUnoNumberingRules( this );
-
-        mxUnoNumRule = xNumRule;
-    }
+    rVal <<= SvxCreateNumRule( pNumRule );
 #endif
 
-    return xNumRule;
+    return sal_True;
+}
+
+sal_Bool SvxNumBulletItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+{
+#ifndef SVX_LIGHT
+    uno::Reference< container::XIndexReplace > xRule;
+    if( rVal >>= xRule )
+    {
+        try
+        {
+            SvxNumRule* pNewRule = new SvxNumRule( SvxGetNumRule( xRule ) );
+            if( pNewRule->GetLevelCount() != pNumRule->GetLevelCount() ||
+                pNewRule->GetNumRuleType() != pNumRule->GetNumRuleType() )
+            {
+                SvxNumRule* pConverted = SvxConvertNumRule( pNewRule, pNumRule->GetLevelCount(), pNumRule->GetNumRuleType() );
+                delete pNewRule;
+                pNewRule = pConverted;
+            }
+            delete pNumRule;
+            pNumRule = pNewRule;
+            return sal_True;
+        }
+        catch(...)
+        {
+        }
+    }
+#endif
+    return sal_False;
+}
+
+/* -----------------08.12.98 10:43-------------------
+ *
+ * --------------------------------------------------*/
+SvxNumRule* SvxConvertNumRule( const SvxNumRule* pRule, USHORT nLevels, SvxNumRuleType eType )
+{
+    const USHORT nSrcLevels = pRule->GetLevelCount();
+    SvxNumRule* pNewRule = new SvxNumRule( pRule->GetFeatureFlags(), nLevels, pRule->IsContinuousNumbering(), eType );
+
+    // move all levels one level up if the destination is a presentation numbering and the source is not
+    const sal_Bool bConvertUp = pRule->GetNumRuleType() != SVX_RULETYPE_PRESENTATION_NUMBERING &&
+                                  eType == SVX_RULETYPE_PRESENTATION_NUMBERING;
+
+    // move all levels one level down if the source is a presentation numbering and the destination is not
+    const sal_Bool bConvertDown = pRule->GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING &&
+                                  eType != SVX_RULETYPE_PRESENTATION_NUMBERING;
+
+    USHORT nSrcLevel = bConvertDown ? 1 : 0;
+    USHORT nDstLevel = bConvertUp ? 1 : 0;
+    for( ; (nDstLevel < nLevels) && (nSrcLevel < nSrcLevels); nSrcLevel++, nDstLevel++ )
+        pNewRule->SetLevel( nDstLevel, pRule->GetLevel( nSrcLevel ) );
+
+    return pNewRule;
 }
