@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 10:19:13 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 11:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,9 +330,6 @@ namespace dbaccess
     // ::com::sun::star::sdb::XResultSetAccess
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL createResultSet(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::sdbc::XResultSet
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getStatement(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
     // ::com::sun::star::util::XCancellable
         virtual void SAL_CALL cancel(  ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -454,6 +451,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.19  2001/04/06 10:19:13  oj
+    no correct handling of approve listener
+
     Revision 1.18  2001/04/05 07:51:27  oj
     #85735# insert more exceptions when using in wrong order
 

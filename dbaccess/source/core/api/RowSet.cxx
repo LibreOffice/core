@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 10:51:29 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 11:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1063,14 +1063,6 @@ void SAL_CALL ORowSet::updateNumericObject( sal_Int32 columnIndex, const Any& x,
     (*(*m_aCurrentRow))[columnIndex] = x;
     firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
-}
-// -------------------------------------------------------------------------
-Reference< XInterface > SAL_CALL ORowSet::getStatement(  ) throw(SQLException, RuntimeException)
-{
-    if (ORowSet_BASE1::rBHelper.bDisposed)
-        throw DisposedException();
-
-    return m_xStatement;
 }
 // -------------------------------------------------------------------------
 
