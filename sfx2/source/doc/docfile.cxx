@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:10:53 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,11 +613,6 @@ SvStream* SfxMedium::GetInStream()
 
     if ( GetError() )
         return NULL;
-
-    if ( pImp->xStream.is() )
-        pInStream = utl::UcbStreamHelper::CreateStream( pImp->xStream );
-    else if ( pImp->xInputStream.is() )
-        pInStream = utl::UcbStreamHelper::CreateStream( pImp->xInputStream );
 
     return pInStream;
 }
