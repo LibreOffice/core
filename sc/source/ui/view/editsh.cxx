@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-12 16:09:23 $
+ *  last change: $Author: dr $ $Date: 2002-11-26 08:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,6 +528,15 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 }
             }
             break;
+
+            case SID_OPEN_HYPERLINK:
+                {
+                    const SvxURLField* pURLField = GetURLField();
+                    if ( pURLField )
+                        ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame() );
+                    return;
+                }
+                break;
     }
 
     pHdl->DataChanged();
@@ -574,6 +583,13 @@ void __EXPORT ScEditShell::GetState( SfxItemSet& rSet )
                         aHLinkItem.SetName(sReturn);
                     }
                     rSet.Put(aHLinkItem);
+                }
+                break;
+
+            case SID_OPEN_HYPERLINK:
+                {
+                    if ( !GetURLField() )
+                        rSet.DisableItem( nWhich );
                 }
                 break;
 

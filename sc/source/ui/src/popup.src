@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 17:29:47 $
+ *  last change: $Author: dr $ $Date: 2002-11-26 08:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1209,6 +1209,13 @@ Menu RID_POPUP_EDIT
         MenuItem
         {
             ITEM_FORMAT_CHAR_DLG
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            ITEM_OPEN_HYPERLINK
         };
     };
 };

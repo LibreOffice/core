@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-12 18:07:11 $
+ *  last change: $Author: dr $ $Date: 2002-11-26 08:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,6 +318,26 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             }
             break;
 
+        case SID_OPEN_HYPERLINK:
+            {
+                SdrView* pView = pViewData->GetScDrawView();
+                OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+                if ( pOutView )
+                {
+                    const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
+                    if ( pFieldItem )
+                    {
+                        const SvxFieldData* pField = pFieldItem->GetField();
+                        if( pField && pField->ISA( SvxURLField ) )
+                        {
+                            const SvxURLField* pURLField = static_cast< const SvxURLField* >( pField );
+                            ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame() );
+                        }
+                    }
+                }
+            }
+            break;
+
         case SID_ENABLE_HYPHENATION:
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
@@ -392,6 +412,24 @@ void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
             }
         }
         rSet.Put(aHLinkItem);
+    }
+
+    if ( rSet.GetItemState( SID_OPEN_HYPERLINK ) != SFX_ITEM_UNKNOWN )
+    {
+        SdrView* pView = pViewData->GetScDrawView();
+        OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+        bool bEnable = false;
+        if ( pOutView )
+        {
+            const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
+            if ( pFieldItem )
+            {
+                const SvxFieldData* pField = pFieldItem->GetField();
+                bEnable = pField && pField->ISA( SvxURLField );
+            }
+        }
+        if( !bEnable )
+            rSet.DisableItem( SID_OPEN_HYPERLINK );
     }
 
     if ( rSet.GetItemState( SID_TRANSLITERATE_HALFWIDTH ) != SFX_ITEM_UNKNOWN ||
