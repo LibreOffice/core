@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globals.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 13:57:51 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,10 +108,10 @@
 #define STR_TOP_BASE                (RC_GLOBALS_BEGIN + 30)
 #define STR_BOTTOM_BASE             (RC_GLOBALS_BEGIN + 31)
 #define STR_CENTER_BASE             (RC_GLOBALS_BEGIN + 32)
-#define STR_TOP                     (RC_GLOBALS_BEGIN + 33)
-#define STR_BOTTOM                  (RC_GLOBALS_BEGIN + 34)
-#define STR_CENTER_HORI             (RC_GLOBALS_BEGIN + 35)
-#define STR_CENTER_VERT             (RC_GLOBALS_BEGIN + 36)
+#define STR_TOP                   (RC_GLOBALS_BEGIN + 33)
+#define STR_BOTTOM                (RC_GLOBALS_BEGIN + 34)
+#define STR_CENTER_HORI               (RC_GLOBALS_BEGIN + 35)
+#define STR_CENTER_VERT               (RC_GLOBALS_BEGIN + 36)
 
 #define STR_LOAD_HTML_DOC           (RC_GLOBALS_BEGIN + 37)
 
