@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 10:13:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1775,8 +1775,6 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
         pESh->GetDoc()->SetBrowseMode( FALSE );
         pESh->CheckBrowseView( TRUE );
     }
-
-    pESh->GetPrt( TRUE );
 
     GetViewShell()->CalcLayout();
     DocSzChgd( GetViewShell()->GetDocSize() );
