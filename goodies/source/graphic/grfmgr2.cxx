@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-16 11:03:41 $
+ *  last change: $Author: thb $ $Date: 2002-10-10 16:15:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,8 +377,6 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut,
         const long      nH = rBmpSzPix.Height();
         const long      nNewW = aUnrotatedSzPix.Width();
         const long      nNewH = aUnrotatedSzPix.Height();
-        const double    fRevScaleX = ( nNewW > 1L ) ? ( (double) ( nW - 1L ) / ( nNewW - 1L ) ) : 0.0;
-        const double    fRevScaleY = ( nNewH > 1L ) ? ( (double) ( nH - 1L ) / ( nNewH - 1L ) ) : 0.0;
         double          fTmp;
         long*           pMapIX = new long[ nNewW ];
         long*           pMapFX = new long[ nNewW ];
@@ -389,37 +387,63 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut,
         BOOL            bHMirr = ( rAttr.GetMirrorFlags() & BMP_MIRROR_HORZ ) != 0;
         BOOL            bVMirr = ( rAttr.GetMirrorFlags() & BMP_MIRROR_VERT ) != 0;
 
-        // create horizontal mapping table
-        for( nX = 0L, nTmpX = nW - 1L, nTmp = nW - 2L; nX < nNewW; nX++ )
+        if( nFlags & GRFMGR_DRAW_BILINEAR )
         {
-            fTmp = nX * fRevScaleX;
+            const double    fRevScaleX = ( nNewW > 1L ) ? ( (double) ( nW - 1L ) / ( nNewW - 1L ) ) : 0.0;
+            const double    fRevScaleY = ( nNewH > 1L ) ? ( (double) ( nH - 1L ) / ( nNewH - 1L ) ) : 0.0;
 
-            if( bHMirr )
-                fTmp = nTmpX - fTmp;
-
-            if( nFlags & GRFMGR_DRAW_BILINEAR )
-                pMapFX[ nX ] = (long) ( ( fTmp - ( pMapIX[ nX ] = MinMax( (long) fTmp, 0, nTmp ) ) ) * 1048576. );
-            else
+            // create horizontal mapping table
+            for( nX = 0L, nTmpX = nW - 1L, nTmp = nW - 2L; nX < nNewW; nX++ )
             {
-                pMapIX[ nX ] = MinMax( (long) fTmp, 0, nTmp );
-                pMapFX[ nX ] = 0;
+                fTmp = nX * fRevScaleX;
+
+                if( bHMirr )
+                    fTmp = nTmpX - fTmp;
+
+                pMapFX[ nX ] = (long) ( ( fTmp - ( pMapIX[ nX ] = MinMax( (long) fTmp, 0, nTmp ) ) ) * 1048576. );
+            }
+
+            // create vertical mapping table
+            for( nY = 0L, nTmpY = nH - 1L, nTmp = nH - 2L; nY < nNewH; nY++ )
+            {
+                fTmp = nY * fRevScaleY;
+
+                if( bVMirr )
+                    fTmp = nTmpY - fTmp;
+
+                pMapFY[ nY ] = (long) ( ( fTmp - ( pMapIY[ nY ] = MinMax( (long) fTmp, 0, nTmp ) ) ) * 1048576. );
             }
         }
-
-        // create vertical mapping table
-        for( nY = 0L, nTmpY = nH - 1L, nTmp = nH - 2L; nY < nNewH; nY++ )
+        else
         {
-            fTmp = nY * fRevScaleY;
+            // #98290# Use a different mapping for non-interpolating mode, to avoid missing rows/columns
+            const double    fRevScaleX = ( nNewW > 1L ) ? ( (double) nW / nNewW ) : 0.0;
+            const double    fRevScaleY = ( nNewH > 1L ) ? ( (double) nH / nNewH ) : 0.0;
 
-            if( bVMirr )
-                fTmp = nTmpY - fTmp;
-
-            if( nFlags & GRFMGR_DRAW_BILINEAR )
-                pMapFY[ nY ] = (long) ( ( fTmp - ( pMapIY[ nY ] = MinMax( (long) fTmp, 0, nTmp ) ) ) * 1048576. );
-            else
+            // create horizontal mapping table
+            for( nX = 0L, nTmpX = nW - 1L, nTmp = nW - 2L; nX < nNewW; nX++ )
             {
+                fTmp = nX * fRevScaleX;
+
+                if( bHMirr )
+                    fTmp = nTmpX - fTmp;
+
+                // #98290# Do not use round to zero, otherwise last column will be missing
+                pMapIX[ nX ] = MinMax( (long) fTmp, 0, nTmp );
+                pMapFX[ nX ] = fTmp >= nTmp+1 ? 1048576 : 0;
+            }
+
+            // create vertical mapping table
+            for( nY = 0L, nTmpY = nH - 1L, nTmp = nH - 2L; nY < nNewH; nY++ )
+            {
+                fTmp = nY * fRevScaleY;
+
+                if( bVMirr )
+                    fTmp = nTmpY - fTmp;
+
+                // #98290# Do not use round to zero, otherwise last row will be missing
                 pMapIY[ nY ] = MinMax( (long) fTmp, 0, nTmp );
-                pMapFY[ nY ] = 0;
+                pMapFY[ nY ] = fTmp >= nTmp+1 ? 1048576 : 0;
             }
         }
 
