@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndnum.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:16 $
+ *  last change: $Author: od $ $Date: 2002-11-29 15:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,9 @@ struct _OutlinePara
     SwNodeNum aNum;
     const SwNodes& rNds;
     BYTE nMin, nNewLevel;
-    BOOL bInitNum;
+    // OD 21.11.2002 #100043# - array to remember, which level numbering
+    // has to be started.
+    bool aStartLevel[ MAXLEVEL ];
 
     _OutlinePara( const SwNodes& rNodes, USHORT nSttPos, BYTE nOld, BYTE nNew );
     BOOL UpdateOutline( SwTxtNode& rTxtNd );
@@ -154,15 +156,20 @@ _OutlinePara::_OutlinePara( const SwNodes& rNodes, USHORT nSttPos,
     : rNds( rNodes ),
     aNum( NO_NUM > nNew ? nNew : 0 ),
     nMin( Min( nOld, nNew )),
-    bInitNum( 0 == nSttPos ),
     nNewLevel( nNew )
 {
+    // OD 25.11.2002 #100043# - init <aStartLevel[]> with defaults, only valid
+    // if update of outline numbering started at first outline numbering node.
+    for ( int i = 0; i < MAXLEVEL; ++i)
+        aStartLevel[i] = true;
+
     // hole vom Vorgaenger die aktuelle Nummerierung
     SwNode* pNd;
     ULONG nEndOfExtras = rNds.GetEndOfExtras().GetIndex();
-    if( nSttPos &&
-        ( pNd = rNds.GetOutLineNds()[ --nSttPos ])->GetIndex() > nEndOfExtras
-         && ((SwTxtNode*)pNd)->GetOutlineNum() )
+    if ( nSttPos &&
+         (pNd = rNds.GetOutLineNds()[ --nSttPos ])->GetIndex() > nEndOfExtras &&
+         static_cast<SwTxtNode*>(pNd)->GetOutlineNum()
+       )
     {
         const SwNodeNum* pNum = ((SwTxtNode*)pNd)->GetOutlineNum();
 #ifdef TASK_59308
@@ -204,14 +211,28 @@ _OutlinePara::_OutlinePara( const SwNodes& rNodes, USHORT nSttPos,
         }
 
         if( aNum.GetLevel()+1 < MAXLEVEL )
+        {
             memset( aNum.GetLevelVal() + (aNum.GetLevel()+1), 0,
                     (MAXLEVEL - (aNum.GetLevel()+1)) * sizeof(aNum.GetLevelVal()[0]) );
+        }
+        // OD 22.11.2002 #100043# - init array <aStartLevel[]>, not starting at
+        // first outline numbering node.
+        aStartLevel[ pNum->GetLevel() ] = false;
+        USHORT nHighestLevelFound = pNum->GetLevel();
+        while ( pNum->GetLevel() > 0 && nSttPos-- )
+        {
+            pNd = rNds.GetOutLineNds()[ nSttPos ];
+            if ( pNd->GetIndex() < nEndOfExtras )
+                break;
+            pNum = static_cast<SwTxtNode*>(pNd)->GetOutlineNum();
+            if ( pNum && pNum->GetLevel() < nHighestLevelFound )
+            {
+                aStartLevel[ pNum->GetLevel() ] = false;
+                nHighestLevelFound = pNum->GetLevel();
+            }
+        }
     }
-    else
-        bInitNum = TRUE;
 }
-
-
 
 BOOL _OutlinePara::UpdateOutline( SwTxtNode& rTxtNd )
 {
@@ -248,18 +269,18 @@ BOOL _OutlinePara::UpdateOutline( SwTxtNode& rTxtNd )
         }
 #endif
 
-        if( aNum.GetLevel() < nLevel && NO_NUM > nNewLevel )
+        // OD 21.11.2002 #100043# - determine, if level numbering has to be started.
+        bool bStartNumbering = false;
+        if ( nLevel != aNum.GetLevel() )
         {
-            if( aNum.GetLevel()+1 < MAXLEVEL )
-                memset( aNum.GetLevelVal() + (aNum.GetLevel()+1), 0,
-                        (MAXLEVEL - ( aNum.GetLevel()+1 )) *
-                            sizeof( aNum.GetLevelVal()[0]));
-            nSetValue = pOutlRule->Get( nLevel ).GetStart();
+            bStartNumbering = aStartLevel[ nLevel ];
         }
-        else if( bInitNum )
+
+        if( bStartNumbering )
         {
             nSetValue= pOutlRule->Get( nLevel ).GetStart();
-            bInitNum = FALSE;
+            // OD 21.11.2002 #100043# - reset <aStartLevel[nLevel]>
+            aStartLevel[ nLevel ] = false;
         }
         else
             nSetValue = aNum.GetLevelVal()[ nLevel ] + 1;
@@ -267,8 +288,13 @@ BOOL _OutlinePara::UpdateOutline( SwTxtNode& rTxtNd )
          // alle unter dem neuen Level liegenden auf 0 setzen
         if( aNum.GetLevel() > nLevel && nLevel+1 < MAXLEVEL
             /* ??? && NO_NUM > nNewLevel */ )
+        {
             memset( aNum.GetLevelVal() + (nLevel+1), 0,
                     (MAXLEVEL - ( nLevel+1 )) * sizeof(aNum.GetLevelVal()[0]) );
+            // OD 22.11.2002 #100043# - all next level numberings have to be started.
+            for ( int i = nLevel+1; i < MAXLEVEL; ++i)
+                aStartLevel[i] = true;
+        }
 
         if( pOutlNum && USHRT_MAX != pOutlNum->GetSetValue() )
             aNum.SetSetValue( nSetValue = pOutlNum->GetSetValue() );
@@ -384,7 +410,3 @@ void SwNodes::UpdateOutlineNodes()
     if( pOutlineNds->Count() )      // OutlineNodes vorhanden ?
         UpdateOutlineNode( *(*pOutlineNds)[ 0 ], 0, 0 );
 }
-
-
-
-
