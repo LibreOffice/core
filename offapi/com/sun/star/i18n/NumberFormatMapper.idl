@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberFormatMapper.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2000-12-05 14:55:38 $
+ *  last change: $Author: bustamam $ $Date: 2001-04-30 18:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ module com { module sun { module star { module i18n {
 service NumberFormatMapper
 {
     interface com::sun::star::i18n::XNumberFormatCode;
+        interface com::sun::star::lang::XServiceInfo;
 };
 
 //=============================================================================
