@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.112 $
+#   $Revision: 1.113 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-14 09:24:48 $
+#   last change: $Author: hjs $ $Date: 2002-06-14 09:26:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,7 +111,6 @@ SUBDIRSDEPS=$(RC_SUBDIRSDEPS)
 .INCLUDE : pstrules.mk
 
 .INCLUDE : tg_yxx.mk
-
 
 .IF "$(nodep)"==""
 .IF "$(TESTOBJECTS)"!=""
@@ -648,13 +647,16 @@ SCP9 ?= TNR!:=9
 .IF "$(ZIP1TARGET)$(ZIP2TARGET)$(ZIP3TARGET)$(ZIP4TARGET)$(ZIP5TARGET)$(ZIP6TARGET)$(ZIP7TARGET)$(ZIP8TARGET)$(ZIP9TARGET)"!="$(ZIP1LIST:s/LANGDIR//)$(ZIP2LIST:s/LANGDIR//)$(ZIP3LIST:s/LANGDIR//)$(ZIP4LIST:s/LANGDIR//)$(ZIP5LIST:s/LANGDIR//)$(ZIP6LIST:s/LANGDIR//)$(ZIP7LIST:s/LANGDIR//)$(ZIP8LIST:s/LANGDIR//)$(ZIP9LIST:s/LANGDIR//)"
 
 ZIPALL=ZIPALLTARGET
+ZIPLANGDIR*=.
 
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-ziplangdirs:=$(shell +find . -type d ! -name CVS ! -name "." | sed "s/\.\///" )
+#ziplangdirs:=$(shell +find . -type d ! -name CVS ! -name "." | sed "s/\.\///" )
+#ziplangdirs:=$(shell +find {$(subst,$/$(LANGDIR), $(ZIPLANGDIR))}/ -type d ! -name CVS ! -name "." | sed "s/\.\///" )
 .ELSE			# "$(GUI)"=="UNX"
-ziplangdirs:=$(subst,CVS, $(shell +-dir /ba:d ))
+#ziplangdirs:=$(subst,CVS, $(shell +-dir /ba:d ))
+#ziplangdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIPLANGDIR))} /ba:d ))
 .ENDIF			# "$(GUI)"=="UNX"
-zipalllangext:=$(foreach,i,$(alllangext) $(foreach,j,$(ziplangdirs) $(eq,$(longlang_$i),$j  $i $(NULL))))
+#zipalllangext:=$(foreach,i,$(alllangext) $(foreach,j,$(ziplangdirs) $(eq,$(longlang_$i),$j  $i $(NULL))))
 
 .ENDIF			#
 
@@ -663,13 +665,13 @@ zipalllangext:=$(foreach,i,$(alllangext) $(foreach,j,$(ziplangdirs) $(eq,$(longl
 .IF "$(ZIP1LIST:s/LANGDIR//)" == "$(ZIP1LIST)"
 ZIP1TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP1TARGET).zip
 .ELSE
-ZIP1TARGETN:=$(foreach,i,$(zipalllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP1TARGET)$i.zip )
+ZIP1TARGETN=$(foreach,i,$(zip1alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP1TARGET)$i.zip )
 .ENDIF
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP1LIST:s/LANGDIR//)" == "$(ZIP1LIST)"
 ZIP1TARGETN=$(BIN)$/$(ZIP1TARGET).zip
 .ELSE
-ZIP1TARGETN=$(foreach,i,$(zipalllangext) $(BIN)$/$(ZIP1TARGET)$i.zip )
+ZIP1TARGETN=$(foreach,i,$(zip1alllangext) $(BIN)$/$(ZIP1TARGET)$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
 ZIP1 ?= TNR!:=1
@@ -680,13 +682,13 @@ ZIP1 ?= TNR!:=1
 .IF "$(ZIP2LIST:s/LANGDIR//)" == "$(ZIP2LIST)"
 ZIP2TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP2TARGET).zip
 .ELSE
-ZIP2TARGETN:=$(foreach,i,$(zipalllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP2TARGET)$i.zip )
+ZIP2TARGETN=$(foreach,i,$(zip2alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP2TARGET)$i.zip )
 .ENDIF
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP2LIST:s/LANGDIR//)" == "$(ZIP2LIST)"
 ZIP2TARGETN=$(BIN)$/$(ZIP2TARGET).zip
 .ELSE
-ZIP2TARGETN=$(foreach,i,$(zipalllangext) $(BIN)$/$(ZIP2TARGET)$i.zip )
+ZIP2TARGETN=$(foreach,i,$(zip2alllangext) $(BIN)$/$(ZIP2TARGET)$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
 ZIP2 ?= TNR!:=2
@@ -697,13 +699,13 @@ ZIP2 ?= TNR!:=2
 .IF "$(ZIP3LIST:s/LANGDIR//)" == "$(ZIP3LIST)"
 ZIP3TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP3TARGET).zip
 .ELSE
-ZIP3TARGETN:=$(foreach,i,$(zipalllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP3TARGET)$i.zip )
+ZIP3TARGETN=$(foreach,i,$(zip3alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP3TARGET)$i.zip )
 .ENDIF
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP3LIST:s/LANGDIR//)" == "$(ZIP3LIST)"
 ZIP3TARGETN=$(BIN)$/$(ZIP3TARGET).zip
 .ELSE
-ZIP3TARGETN=$(foreach,i,$(zipalllangext) $(BIN)$/$(ZIP3TARGET)$i.zip )
+ZIP3TARGETN=$(foreach,i,$(zip3alllangext) $(BIN)$/$(ZIP3TARGET)$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
 ZIP3 ?= TNR!:=3
@@ -714,13 +716,13 @@ ZIP3 ?= TNR!:=3
 .IF "$(ZIP4LIST:s/LANGDIR//)" == "$(ZIP4LIST)"
 ZIP4TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP4TARGET).zip
 .ELSE
-ZIP4TARGETN:=$(foreach,i,$(zipalllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP4TARGET)$i.zip )
+ZIP4TARGETN=$(foreach,i,$(zip4alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP4TARGET)$i.zip )
 .ENDIF
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP4LIST:s/LANGDIR//)" == "$(ZIP4LIST)"
 ZIP4TARGETN=$(BIN)$/$(ZIP4TARGET).zip
 .ELSE
-ZIP4TARGETN=$(foreach,i,$(zipalllangext) $(BIN)$/$(ZIP4TARGET)$i.zip )
+ZIP4TARGETN=$(foreach,i,$(zip4alllangext) $(BIN)$/$(ZIP4TARGET)$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
 ZIP4 ?= TNR!:=4
@@ -731,13 +733,13 @@ ZIP4 ?= TNR!:=4
 .IF "$(ZIP5LIST:s/LANGDIR//)" == "$(ZIP5LIST)"
 ZIP5TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP5TARGET).zip
 .ELSE
-ZIP5TARGETN:=$(foreach,i,$(zipalllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP5TARGET)$i.zip )
+ZIP5TARGETN=$(foreach,i,$(zip5alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP5TARGET)$i.zip )
 .ENDIF
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP5LIST:s/LANGDIR//)" == "$(ZIP5LIST)"
 ZIP5TARGETN=$(BIN)$/$(ZIP5TARGET).zip
 .ELSE
-ZIP5TARGETN=$(foreach,i,$(zipalllangext) $(BIN)$/$(ZIP5TARGET)$i.zip )
+ZIP5TARGETN=$(foreach,i,$(zip5alllangext) $(BIN)$/$(ZIP5TARGET)$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
 ZIP5 ?= TNR!:=5
@@ -748,13 +750,13 @@ ZIP5 ?= TNR!:=5
 .IF "$(ZIP6LIST:s/LANGDIR//)" == "$(ZIP6LIST)"
 ZIP6TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP6TARGET).zip
 .ELSE
-ZIP6TARGETN:=$(foreach,i,$(zipalllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP6TARGET)$i.zip )
+ZIP6TARGETN=$(foreach,i,$(zip6alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP6TARGET)$i.zip )
 .ENDIF
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP6LIST:s/LANGDIR//)" == "$(ZIP6LIST)"
 ZIP6TARGETN=$(BIN)$/$(ZIP6TARGET).zip
 .ELSE
-ZIP6TARGETN=$(foreach,i,$(zipalllangext) $(BIN)$/$(ZIP6TARGET)$i.zip )
+ZIP6TARGETN=$(foreach,i,$(zip6alllangext) $(BIN)$/$(ZIP6TARGET)$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
 ZIP6 ?= TNR!:=6
@@ -765,13 +767,13 @@ ZIP6 ?= TNR!:=6
 .IF "$(ZIP7LIST:s/LANGDIR//)" == "$(ZIP7LIST)"
 ZIP7TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP7TARGET).zip
 .ELSE
-ZIP7TARGETN:=$(foreach,i,$(zipalllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP7TARGET)$i.zip )
+ZIP7TARGETN=$(foreach,i,$(zip7alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP7TARGET)$i.zip )
 .ENDIF
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP7LIST:s/LANGDIR//)" == "$(ZIP7LIST)"
 ZIP7TARGETN=$(BIN)$/$(ZIP7TARGET).zip
 .ELSE
-ZIP7TARGETN=$(foreach,i,$(zipalllangext) $(BIN)$/$(ZIP7TARGET)$i.zip )
+ZIP7TARGETN=$(foreach,i,$(zip7alllangext) $(BIN)$/$(ZIP7TARGET)$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
 ZIP7 ?= TNR!:=7
@@ -782,13 +784,13 @@ ZIP7 ?= TNR!:=7
 .IF "$(ZIP8LIST:s/LANGDIR//)" == "$(ZIP8LIST)"
 ZIP8TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP8TARGET).zip
 .ELSE
-ZIP8TARGETN:=$(foreach,i,$(zipalllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP8TARGET)$i.zip )
+ZIP8TARGETN=$(foreach,i,$(zip8alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP8TARGET)$i.zip )
 .ENDIF
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP8LIST:s/LANGDIR//)" == "$(ZIP8LIST)"
 ZIP8TARGETN=$(BIN)$/$(ZIP8TARGET).zip
 .ELSE
-ZIP8TARGETN=$(foreach,i,$(zipalllangext) $(BIN)$/$(ZIP8TARGET)$i.zip )
+ZIP8TARGETN=$(foreach,i,$(zip8alllangext) $(BIN)$/$(ZIP8TARGET)$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
 ZIP8 ?= TNR!:=8
@@ -799,13 +801,13 @@ ZIP8 ?= TNR!:=8
 .IF "$(ZIP9LIST:s/LANGDIR//)" == "$(ZIP9LIST)"
 ZIP9TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP9TARGET).zip
 .ELSE
-ZIP9TARGETN:=$(foreach,i,$(zipalllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP9TARGET)$i.zip )
+ZIP9TARGETN=$(foreach,i,$(zip9alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP9TARGET)$i.zip )
 .ENDIF
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP9LIST:s/LANGDIR//)" == "$(ZIP9LIST)"
 ZIP9TARGETN=$(BIN)$/$(ZIP9TARGET).zip
 .ELSE
-ZIP9TARGETN=$(foreach,i,$(zipalllangext) $(BIN)$/$(ZIP9TARGET)$i.zip )
+ZIP9TARGETN=$(foreach,i,$(zip9alllangext) $(BIN)$/$(ZIP9TARGET)$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
 ZIP9 ?= TNR!:=9
@@ -2336,7 +2338,7 @@ $(MISC)$/$(TARGET)_xxl_%.done : %.xxl
 # - ZIP -
 # -------
 
-.IF "$(ZIP1TARGETN)$(ZIP2TARGETN)$(ZIP3TARGETN)$(ZIP4TARGETN)$(ZIP5TARGETN)$(ZIP6TARGETN)$(ZIP7TARGETN)$(ZIP8TARGETN)$(ZIP9TARGETN)"!=""
+.IF "$(ZIP1TARGET)$(ZIP2TARGET)$(ZIP3TARGET)$(ZIP4TARGET)$(ZIP5TARGET)$(ZIP6TARGET)$(ZIP7TARGET)$(ZIP8TARGET)$(ZIP9TARGET)"!=""
 .IF "$(MK_UNROLL)"!=""
 .INCLUDE : _tg_zip.mk
 .ELSE
