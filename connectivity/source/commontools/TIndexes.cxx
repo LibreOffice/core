@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TIndexes.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:41:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,9 @@ OIndexesHelper::OIndexesHelper(OTableHelper* _pTable,
 }
 // -----------------------------------------------------------------------------
 
-Reference< XNamed > OIndexesHelper::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OIndexesHelper::createObject(const ::rtl::OUString& _rName)
 {
-    Reference< XNamed > xRet = NULL;
+    sdbcx::ObjectType xRet;
     ::rtl::OUString aName,aQualifier;
     sal_Int32 nLen = _rName.indexOf('.');
     if ( nLen != -1 )
@@ -263,13 +263,6 @@ void OIndexesHelper::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementN
             ::comphelper::disposeComponent(xStmt);
         }
     }
-}
-// -----------------------------------------------------------------------------
-Reference< XNamed > OIndexesHelper::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
 }
 // -----------------------------------------------------------------------------
 
