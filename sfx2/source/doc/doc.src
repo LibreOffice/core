@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:27:18 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ QueryBox MSG_QUERY_LOAD_TEMPLATE
     MESSAGE[ spanish ] = "Los estilos de este documento no coinciden con sus estilos actuales.\n¿Desea aplicar sus estilos actuales a este documento?";
     MESSAGE[ italian ] = "I modelli del documento non corrispondono ai modelli attuali.\nApplicare i modelli attuali al documento?";
     MESSAGE[ danish ] = "Dette dokuments formattypografi svarer ikke til din aktuelle skabelon. Skal den aktuelle skabelon anvendes på dette dokument?";
-    MESSAGE[ swedish ] = "Det här dokumentets formatmall stämmer inte överens med den aktuella mallen. Skall Din aktuella mall användas i det här dokumentet?";
+    MESSAGE[ swedish ] = "Formatmallarna i det här dokumentet stämmer inte överens med dina aktuella mallar. Ska dina aktuella mallar användas i det här dokumentet?";
     MESSAGE[ polish ] = "Style u¿yte w tym dokumencie nie zgadzaj¹ siê z aktualnymi stylami.\nCzy zastosowaæ w dokumencie aktualne style?";
     MESSAGE[ portuguese_brazilian ] = "O modelo do documento foi modificado.\nDeseja atualizar o modelo no documento?";
     MESSAGE[ japanese ] = "‚±‚ÌÄŞ·­ÒİÄ‚Ì‘®½À²Ù‚ÍŒ»İ‚Ì½À²Ù‚Æˆê’v‚µ‚Ü‚¹‚ñB\nŒ»İ‚Ì½À²Ù‚ğ‚±‚ÌÄŞ·­ÒİÄ‚É“K—p‚µ‚Ü‚·‚©B";
@@ -2000,7 +2000,7 @@ String STR_NOSAVEANDCLOSE
     Text[ portuguese_brazilian ] = "~Discard";
     Text[ japanese ] = "”jŠü(~D)";
     Text[ chinese_simplified ] = "ÉáÆú(~D)";
-    Text[ chinese_traditional ] = "©ñ±ó(~D)";
+    Text[ chinese_traditional ] = "±Ë±ó(~D)";
     Text[ arabic ] = "ÑİÖ";
     Text[ dutch ] = "~Verwerpen";
     Text[ chinese_simplified ] = "ÉáÆú(~D)";
@@ -2065,6 +2065,7 @@ String STR_PACKNGO_NEWMEDIUM
 };
 
 // ******************************************************************* EOF
+
 
 
 
