@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-08 11:19:06 $
+ *  last change: $Author: mib $ $Date: 2000-11-29 14:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,9 @@
 #include "itemtype.hxx"
 #include "dialmgr.hxx"
 #include "svxerr.hxx"
+#ifndef _SVX_UNOPRNMS_HXX
+#include "unoprnms.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
@@ -4491,6 +4494,14 @@ sal_Bool SvxBrushItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             OUString sLink;
             if ( pStrLink )
                 sLink = *pStrLink;
+            else if( pImpl->pGraphicObject )
+            {
+                OUString sPrefix(RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
+                String sId( pImpl->pGraphicObject->GetUniqueID(),
+                            RTL_TEXTENCODING_ASCII_US );
+                sLink = sPrefix;
+                   sLink += OUString(sId);
+            }
             rVal <<= sLink;
         }
         break;
@@ -4551,7 +4562,27 @@ sal_Bool SvxBrushItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             {
                 OUString sLink;
                 rVal >>= sLink;
-                SetGraphicLink(sLink);
+                if( 0 == sLink.compareToAscii( UNO_NAME_GRAPHOBJ_URLPKGPREFIX,
+                                  sizeof(UNO_NAME_GRAPHOBJ_URLPKGPREFIX)-1 ) )
+                {
+                    // TODO
+                }
+                else if( 0 == sLink.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX,
+                                   sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX)-1 ) )
+                {
+                    DELETEZ( pStrLink );
+                    String sTmp( sLink );
+                    ByteString sId( sTmp.Copy(
+                                        sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX)-1),
+                                    RTL_TEXTENCODING_ASCII_US );
+                    GraphicObject *pOldGrfObj = pImpl->pGraphicObject;
+                    pImpl->pGraphicObject = new GraphicObject( sId );
+                    delete pOldGrfObj;
+                }
+                else
+                {
+                    SetGraphicLink(sLink);
+                }
                 if ( sLink.getLength() && eGraphicPos == GPOS_NONE )
                     eGraphicPos = GPOS_MM;
                 else if( !sLink.getLength() )
@@ -4687,10 +4718,16 @@ sal_Bool SvxBrushItem::importXML( const OUString& rValue,
         break;
 
     case MID_GRAPHIC_LINK:
-        pStrLink = new String( rValue.getStr() );
-        if( GPOS_NONE == eGraphicPos )
-            eGraphicPos = GPOS_TILED;
-        bRet = sal_True ;
+        {
+            SvxGraphicPosition eOldGraphicPos = eGraphicPos;
+            uno::Any aAny;
+            aAny <<= rValue;
+            PutValue( aAny, MID_GRAPHIC_LINK );
+            if( GPOS_NONE == eOldGraphicPos &&
+                GPOS_NONE != eGraphicPos )
+                eGraphicPos = GPOS_TILED;
+            bRet = sal_True ;
+        }
         break;
 
     case MID_GRAPHIC_REPEAT:
@@ -4825,9 +4862,13 @@ sal_Bool SvxBrushItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const 
         break;
 
     case MID_GRAPHIC_LINK:
-        if( eGraphicPos != GPOS_NONE && pStrLink )
+        if( eGraphicPos != GPOS_NONE )
         {
-            aOut.append( pStrLink->GetBuffer() );
+            uno::Any aAny;
+            QueryValue( aAny, MID_GRAPHIC_LINK );
+            OUString sTmp;
+            aAny >>= sTmp;
+            aOut.append( sTmp );
             bRet = sal_True;
         }
         break;
