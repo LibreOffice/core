@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwbassh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-02-28 17:07:45 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ class SwWrtShell;
 class SwView;
 class SfxItemSet;
 class SwDrawBase;
-class SvxNameDialog;
+class AbstractSvxNameDialog; //CHINA001 class SvxNameDialog;
 
 class SwDrawBaseShell: public SwBaseShell
 {
@@ -77,7 +77,7 @@ class SwDrawBaseShell: public SwBaseShell
     BOOL        bRotate : 1;
     BOOL        bSelMove: 1;
 
-    DECL_LINK( CheckGroupShapeNameHdl, SvxNameDialog* );
+    DECL_LINK( CheckGroupShapeNameHdl, AbstractSvxNameDialog* );
 public:
                 SwDrawBaseShell(SwView &rShell);
     virtual     ~SwDrawBaseShell();
