@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: container_XHierarchicalNameAccess.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:46:03 $ 
+'*  last change:$Date: 2003-10-06 13:21:30 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -65,9 +65,11 @@
 '*************************************************************************
 '*************************************************************************
 
+' This Interface/Service test depends on the following object relations
+' variables, which must be specified in the object creation:
 
-
-
+'      ObjectRelation: oObjRelation(0).Name = "ElementName"
+'      ObjectRelation: oObjRelation(0).Value = "MyAccessibleElementName"
 
 Sub RunTest()
 
@@ -78,17 +80,28 @@ Sub RunTest()
 On Error Goto ErrHndl
     Dim bOK As Boolean
 
-
+    Dim cObjRelation as Variant
+    cObjRelation = utils.getObjectRelation("ElementName")
+    if isNull(cObjRelation) then
+        cObjRelation = cIfcLongName
+    end if
+    
     Test.StartMethod("getByHierarchicalName()")
     bOK = true
-    oRet = oObj.getByHierarchicalName(cIfcLongName)
-    bOK = bOK AND oRet.Name = cIfcLongName
+    Dim oRet as Variant
+    oRet = oObj.getByHierarchicalName(cObjRelation)
+    if TypeName(oRet) = "String" then
+        out.log("oRet = " + oRet)
+        bOK = bOK and (oRet = cObjRelation) 
+    else
+        bOK = bOK AND oRet.Name = cObjRelation
+    end if
     Test.MethodTested("getByHierarchicalName()", bOK)
 
     Test.StartMethod("hasByHierarchicalName()")
     bOK = true
-    bOK = bOK AND oObj.hasByHierarchicalName("com.sun.star.uno.XInterface")
-    bOK = bOK AND oObj.hasByHierarchicalName(cIfcLongName)
+    bOK = bOK AND oObj.hasByHierarchicalName(cObjRelation)
+    bOK = bOK AND NOT oObj.hasByHierarchicalName(cObjRelation + "ThisIsAnInvalidName")
     Test.MethodTested("hasByHierarchicalName()", bOK)
 
 Exit Sub
