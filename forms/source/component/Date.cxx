@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:29 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 13:08:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ void ODateModel::fillProperties(
         DECL_PROP1(TAG,                     ::rtl::OUString,        BOUND);
         DECL_PROP1(TABINDEX,                sal_Int16,              BOUND);
         DECL_PROP1(CONTROLSOURCE,           ::rtl::OUString,        BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,        XPropertySet,           READONLY, TRANSIENT);
+        DECL_IFACE_PROP3(BOUNDFIELD,        XPropertySet,           BOUND,READONLY, TRANSIENT);
         DECL_IFACE_PROP2(CONTROLLABEL,      XPropertySet,           BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   ::rtl::OUString,        READONLY, TRANSIENT);
         DECL_PROP1(FORMATKEY,               sal_Int32,              TRANSIENT);
@@ -274,13 +274,14 @@ void SAL_CALL ODateModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, c
 void ODateModel::_loaded(const EventObject& rEvent)
 {
     OBoundControlModel::_loaded(rEvent);
-    if (m_xField.is())
+    Reference<XPropertySet> xField = getField();
+    if (xField.is())
     {
         m_bDateTimeField = sal_False;
         try
         {
             sal_Int32 nFieldType;
-            m_xField->getPropertyValue(PROPERTY_FIELDTYPE) >>= nFieldType;
+            xField->getPropertyValue(PROPERTY_FIELDTYPE) >>= nFieldType;
             m_bDateTimeField = (nFieldType == DataType::TIMESTAMP);
         }
         catch(Exception&)
