@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:04:36 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
 #endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
@@ -137,11 +140,20 @@
 #ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_VISUALEFFECT_HPP_
+#include <com/sun/star/awt/VisualEffect.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FORM_LISTSOURCETYPE_HPP_
 #include <com/sun/star/form/ListSourceType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_IMAGEPOSITION_HPP_
+#include <com/sun/star/awt/ImagePosition.hpp>
+#endif
 /** === end UNO includes === **/
 
+#ifndef _SV_WINTYPES_HXX
+#include <vcl/wintypes.hxx>     // for check states
+#endif
 #ifndef _XMLOFF_TEXTPRMAP_HXX_
 #include "txtprmap.hxx"
 #endif
@@ -157,6 +169,7 @@ namespace xmloff
 {
 //.........................................................................
 
+    using namespace ::xmloff::token;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::awt;
@@ -694,6 +707,21 @@ namespace xmloff
                 m_nIncludeCommon = m_nIncludeCommon & ~CCA_ORIENTATION;
         #endif
             }
+
+            if ( m_nIncludeCommon & CCA_VISUAL_EFFECT )
+            {
+                exportEnumPropertyAttribute(
+                    getCommonControlAttributeNamespace( CCA_VISUAL_EFFECT ),
+                    getCommonControlAttributeName( CCA_VISUAL_EFFECT ),
+                    PROPERTY_VISUAL_EFFECT,
+                    OEnumMapper::getEnumMap( OEnumMapper::epVisualEffect ),
+                    VisualEffect::LOOK3D
+                );
+            #ifdef DBG_UTIL
+                //  reset the bit for later checking
+                m_nIncludeCommon = m_nIncludeCommon & ~CCA_VISUAL_EFFECT;
+            #endif
+            }
         }
 
         // --------------------------------------------------------------------
@@ -948,13 +976,15 @@ namespace xmloff
         // ----------------------
         // the boolean properties
         {
-            static sal_Int32 nBooleanPropertyAttributeIds[] =
+            static const sal_Int32 nBooleanPropertyAttributeIds[] =
             {   // attribute flags
-                SCA_VALIDATION, SCA_MULTI_LINE, SCA_AUTOMATIC_COMPLETION, SCA_MULTIPLE, SCA_DEFAULT_BUTTON, SCA_IS_TRISTATE
+                SCA_VALIDATION, SCA_MULTI_LINE, SCA_AUTOMATIC_COMPLETION, SCA_MULTIPLE, SCA_DEFAULT_BUTTON, SCA_IS_TRISTATE,
+                SCA_TOGGLE, SCA_FOCUS_ON_CLICK
             };
             static const ::rtl::OUString* pBooleanPropertyNames[] =
             {   // property names
-                &PROPERTY_STRICTFORMAT, &PROPERTY_MULTILINE, &PROPERTY_AUTOCOMPLETE, &PROPERTY_MULTISELECTION, &PROPERTY_DEFAULTBUTTON, &PROPERTY_TRISTATE
+                &PROPERTY_STRICTFORMAT, &PROPERTY_MULTILINE, &PROPERTY_AUTOCOMPLETE, &PROPERTY_MULTISELECTION, &PROPERTY_DEFAULTBUTTON, &PROPERTY_TRISTATE,
+                &PROPERTY_TOGGLE, &PROPERTY_FOCUS_ON_CLICK
             };
             sal_Int32 nIdCount = sizeof(nBooleanPropertyAttributeIds) / sizeof(nBooleanPropertyAttributeIds[0]);
         #ifdef DBG_UTIL
@@ -962,20 +992,24 @@ namespace xmloff
             OSL_ENSURE((nIdCount == nNameCount),
                 "OControlExport::exportSpecialAttributes: somebody tampered with the maps (1)!");
         #endif
-            for (i=0; i<nIdCount; ++i)
-                if (nBooleanPropertyAttributeIds[i] & m_nIncludeSpecial)
+            const sal_Int32* pAttributeId = nBooleanPropertyAttributeIds;
+            const ::rtl::OUString** pPropertyName = pBooleanPropertyNames;
+            for ( i = 0; i < nIdCount; ++i, ++pAttributeId, ++pPropertyName )
+            {
+                if ( *pAttributeId& m_nIncludeSpecial)
                 {
                     exportBooleanPropertyAttribute(
-                        getSpecialAttributeNamespace(nBooleanPropertyAttributeIds[i]),
-                        getSpecialAttributeName(nBooleanPropertyAttributeIds[i]),
-                        *(pBooleanPropertyNames[i]),
-                        BOOLATTR_DEFAULT_FALSE  // all of the attributes are defaulted to "false"
+                        getSpecialAttributeNamespace( *pAttributeId ),
+                        getSpecialAttributeName( *pAttributeId ),
+                        *(*pPropertyName),
+                        ( *pAttributeId == SCA_FOCUS_ON_CLICK ) ? BOOLATTR_DEFAULT_TRUE : BOOLATTR_DEFAULT_FALSE
                     );
             #ifdef DBG_UTIL
                 //  reset the bit for later checking
-                m_nIncludeSpecial = m_nIncludeSpecial & ~nBooleanPropertyAttributeIds[i];
+                m_nIncludeSpecial = m_nIncludeSpecial & ~*pAttributeId;
             #endif
                 }
+            }
         }
 
         // ----------------------
@@ -1135,6 +1169,17 @@ namespace xmloff
         #ifdef DBG_UTIL
             //  reset the bit for later checking
             m_nIncludeSpecial = m_nIncludeSpecial & ~(SCA_MIN_VALUE | SCA_MAX_VALUE);
+        #endif
+        }
+
+        // ----------------------------------
+        if ( SCA_IMAGE_POSITION & m_nIncludeSpecial )
+        {
+            exportImagePositionAttributes();
+
+        #ifdef DBG_UTIL
+            //  reset the bit for later checking
+            m_nIncludeSpecial = m_nIncludeSpecial & ~SCA_IMAGE_POSITION;
         #endif
         }
 
@@ -1350,6 +1395,10 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OControlExport::examine()
     {
+        OSL_ENSURE( ( m_nIncludeCommon == 0 ) && ( m_nIncludeSpecial == 0 ) && ( m_nIncludeDatabase == 0 )
+                 && ( m_nIncludeEvents == 0 ) && ( m_nIncludeBindings == 0),
+                 "OControlExport::examine: called me twice? Not initialized?" );
+
         // get the class id to decide which kind of element we need in the XML stream
         m_nClassId = FormComponentType::CONTROL;
         DBG_CHECK_PROPERTY( PROPERTY_CLASSID, sal_Int16 );
@@ -1508,7 +1557,7 @@ namespace xmloff
             case FormComponentType::COMMANDBUTTON:
                 m_eType = BUTTON;
                 m_nIncludeCommon |= CCA_TAB_STOP | CCA_LABEL;
-                m_nIncludeSpecial = SCA_DEFAULT_BUTTON;
+                m_nIncludeSpecial = SCA_DEFAULT_BUTTON | SCA_TOGGLE | SCA_FOCUS_ON_CLICK | SCA_IMAGE_POSITION;
                 // NO BREAK !
             case FormComponentType::IMAGEBUTTON:
                 if (BUTTON != m_eType)
@@ -1527,13 +1576,14 @@ namespace xmloff
                 // NO BREAK !
             case FormComponentType::RADIOBUTTON:
                 m_nIncludeCommon =
-                    CCA_NAME | CCA_SERVICE_NAME | CCA_DISABLED | CCA_LABEL |
-                    CCA_PRINTABLE | CCA_TAB_INDEX | CCA_TAB_STOP | CCA_TITLE | CCA_VALUE;
+                    CCA_NAME | CCA_SERVICE_NAME | CCA_DISABLED | CCA_LABEL | CCA_PRINTABLE |
+                    CCA_TAB_INDEX | CCA_TAB_STOP | CCA_TITLE | CCA_VALUE | CCA_VISUAL_EFFECT;
                 if (CHECKBOX != m_eType)
                 {   // not coming from the previous case
                     m_eType = RADIO;
                     m_nIncludeCommon |= CCA_CURRENT_SELECTED | CCA_SELECTED;
                 }
+                m_nIncludeSpecial |= SCA_IMAGE_POSITION;
                 m_nIncludeDatabase = DA_DATA_FIELD;
                 m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE;
                 break;
@@ -1695,6 +1745,54 @@ namespace xmloff
         catch( const Exception& )
         {
             OSL_ENSURE( sal_False, "OControlExport::exportCellListSourceRange: caught an exception!" );
+        }
+    }
+
+    //---------------------------------------------------------------------
+    void OControlExport::exportImagePositionAttributes()
+    {
+        try
+        {
+            sal_Int16 nImagePosition = ImagePosition::Centered;
+            OSL_VERIFY( m_xProps->getPropertyValue( PROPERTY_IMAGE_POSITION ) >>= nImagePosition );
+            OSL_ENSURE( ( nImagePosition >= ImagePosition::LeftTop ) && ( nImagePosition <= ImagePosition::Centered ),
+                "OControlExport::exportImagePositionAttributes: don't know this image position!" );
+
+            if ( ( nImagePosition < ImagePosition::LeftTop ) || ( nImagePosition > ImagePosition::Centered ) )
+                // this is important to prevent potential buffer overflows below, so don't optimize
+                nImagePosition = ImagePosition::Centered;
+
+            if ( nImagePosition == ImagePosition::Centered )
+            {
+                AddAttribute( XML_NAMESPACE_FORM, GetXMLToken( XML_IMAGE_POSITION ), GetXMLToken( XML_CENTER ) );
+            }
+            else
+            {
+                XMLTokenEnum eXmlImagePositions[] =
+                {
+                    XML_START, XML_END, XML_TOP, XML_BOTTOM
+                };
+                XMLTokenEnum eXmlImageAligns[] =
+                {
+                    XML_START, XML_CENTER, XML_END
+                };
+
+                XMLTokenEnum eXmlImagePosition = eXmlImagePositions[ nImagePosition / 3 ];
+                XMLTokenEnum eXmlImageAlign    = eXmlImageAligns   [ nImagePosition % 3 ];
+
+                AddAttribute( XML_NAMESPACE_FORM, GetXMLToken( XML_IMAGE_POSITION ), GetXMLToken( eXmlImagePosition ) );
+                AddAttribute( XML_NAMESPACE_FORM, GetXMLToken( XML_IMAGE_ALIGN    ), GetXMLToken( eXmlImageAlign    ) );
+            }
+
+            exportedProperty( PROPERTY_IMAGE_POSITION );
+            // some of the controls which have an ImagePosition also have an ImageAlign for compatibility
+            // reasons. Since the ImageAlign values simply represent a sub set of the ImagePosition values,
+            // we don't need to export ImageAlign anymore
+            exportedProperty( PROPERTY_IMAGE_ALIGN );
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "OControlExport::exportImagePositionAttributes: caught an exception!" );
         }
     }
 
