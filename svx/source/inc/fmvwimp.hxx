@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-14 16:13:50 $
+ *  last change: $Author: fs $ $Date: 2002-05-02 16:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,10 @@
 #include <comphelper/uno3.hxx>
 #endif
 
+#ifndef _SVDMARK_HXX
+#include "svdmark.hxx"
+#endif
+
 class SdrPageViewWinRec;
 class SdrPageView;
 class SdrObject;
@@ -176,6 +180,8 @@ class FmXFormView : public ::cppu::WeakImplHelper2<
     friend class FmFormShell;
     friend class FmXFormShell;
     friend class FmXPageViewWinRec;
+    class ObjectRemoveListener;
+    friend class ObjectRemoveListener;
 
     FmWinRecList m_aWinList;    // dieses Liste wird nur im nicht designmodus gefuellt
 
@@ -186,6 +192,10 @@ class FmXFormView : public ::cppu::WeakImplHelper2<
     sal_uInt32      m_nAutoFocusEvent;
 
     String          m_sErrorMessage;
+
+    // Liste der markierten Object, dient zur Restauration beim Umschalten von Alive in DesignMode
+    SdrMarkList             m_aMark;
+    ObjectRemoveListener*   m_pWatchStoredList;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
 
@@ -203,8 +213,14 @@ protected:
         ,m_nErrorMessageEvent(0)
         ,m_xORB(_xORB)
         ,m_nAutoFocusEvent(0)
+        ,m_pWatchStoredList( NULL )
     { }
     ~FmXFormView();
+
+    void    saveMarkList( sal_Bool _bSmartUnmark = sal_True );
+    void    restoreMarkList( SdrMarkList& _rRestoredMarkList );
+    void    stopMarkListWatching();
+    void    startMarkListWatching();
 
 public:
     // UNO Anbindung
@@ -228,7 +244,7 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() { return m_xORB; }
 
-protected:
+private:
     FmWinRecList::iterator findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& rCC );
     void addWindow(const SdrPageViewWinRec*);
     void removeWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& rCC );
@@ -249,6 +265,8 @@ protected:
         FmFormObj*& _rpLabel,
         FmFormObj*& _rpControl
     ) const;
+
+    void ObjectRemovedInAliveMode(const SdrObject* pObject);
 
     /// the the auto focus to the first (in terms of the tab order) control
     void AutoFocus();
