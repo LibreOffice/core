@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-05 21:45:25 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 21:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5689,11 +5689,11 @@ String STR_ExchangeClpPaste
     Text[ russian ] = "Âñòàâèòü áóôåğ îáìåíà";
     Text[ polish ] = "Wklej schowek";
     Text[ japanese ] = "¸Ø¯ÌßÎŞ°ÄŞ‚Ì“\\‚è•t‚¯";
-    Text[ chinese_traditional ] = "´¡¤J°Å¶KÃ¯¤º®e";
+    Text[ chinese_traditional ] = "¶K¤W°Å¶KÃ¯¤º®e";
     Text[ arabic ] = "áÕŞ ÇáÍÇİÙÉ";
     Text[ dutch ] = "Inhoud van het Klembord plakken";
     Text[ chinese_simplified ] = "²åÈë¼ôÌù°åÄÚÈİ";
-    Text[ greek ] = "Åğéêüëëçóç ôïõ ğñü÷åéñïõ";
+    Text[ greek ] = "Åğéêüëëçóç ğñü÷åéñïõ";
     Text[ korean ] = "Å¬¸³º¸µå ºÙ¿©³Ö±â";
     Text[ turkish ] = "Pano içeriğini yapıştır";
     Text[ language_user1 ] = " ";
@@ -9767,7 +9767,7 @@ String STR_ItemNam_TEXT_HORZADJUST
     Text [ danish ] = "Vandret tekstforankring" ;
     Text [ italian ] = "Ancoraggio orizzontale testo" ;
     Text [ spanish ] = "Anclaje horizontal del texto" ;
-    Text [ french ] = "Ancrage du texte horizontal" ;
+    Text [ french ] = "Ancrage horizontal du texte" ;
     Text [ dutch ] = "Horizontale tekstverankering" ;
     Text[ chinese_simplified ] = "Ë®Æ½·½ÏòÎÄ×ÖËø¶¨";
     Text[ russian ] = "Ãîğèçîíòàëüíàÿ ïğèâÿçêà òåêñòà";
@@ -10429,7 +10429,7 @@ String STR_ItemNam_ROTATEANGLE
     Text[ chinese_simplified ] = "Ğı×ª½Ç¶È";
     Text[ russian ] = "Óãîë ïîâîğîòà";
     Text[ polish ] = "K¹t obrotowy";
-    Text[ japanese ] = "‰ñ“]Šp“x";
+    Text[ japanese ] = "‰ñ“]“x";
     Text[ chinese_traditional ] = "±ÛÂà¨¤«×";
     Text[ arabic ] = "ÒÇæíÉ ÇáÇÓÊÏÇÑÉ";
     Text[ dutch ] = "Draaihoek";
@@ -13473,7 +13473,7 @@ String SIP_SA_TEXT_VERTADJUST
     Text[ portuguese ] = "Âncora vertical do texto";
     Text[ russian ] = "Âåğòèêàëüíàÿ ïğèâÿçêà òåêñòà";
     Text[ dutch ] = "Verticaal tekstanker";
-    Text[ french ] = "Ancrage de texte vertical";
+    Text[ french ] = "Ancrage vertical du texte";
     Text[ spanish ] = "Anclaje de texto, vertical";
     Text[ italian ] = "Ancoraggio testo verticale";
     Text[ danish ] = "Lodret tekstforankring";
@@ -17632,4 +17632,5 @@ Bitmap SIP_SA_FINE_MARKERS
 };
 
 // ******************************************************************* EOF
+
 
