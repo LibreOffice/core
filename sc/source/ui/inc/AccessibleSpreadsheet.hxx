@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-08 09:39:05 $
+ *  last change: $Author: sab $ $Date: 2002-08-05 09:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,8 @@ public:
     /// Returns the Accessible at a specified row and column in the table.
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
                 getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
-                    throw (::com::sun::star::uno::RuntimeException);
+                    throw (::com::sun::star::uno::RuntimeException,
+                            ::com::sun::star::lang::IndexOutOfBoundsException);
 
     ScAccessibleCell* GetAccessibleCellAt(sal_Int32 nRow, sal_Int32 nColumn);
 
