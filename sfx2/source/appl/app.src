@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-21 16:15:59 $
+ *  last change: $Author: pb $ $Date: 2001-08-24 09:18:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3799,8 +3799,8 @@ String STR_KEY_STORAGE_DIR
 };
 String STR_KEY_TEMP_PATH
 {
-    Text = "Temporäres Basisverzeichnis" ;
-    Text [ English ] = "Temporary base directory" ;
+    Text = "Temporäre Dateien" ;
+    Text [ English ] = "Temporary Files" ;
 };
 String STR_KEY_PLUGINS_PATH
 {
