@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2002-06-11 12:32:05 $
+ *  last change: $Author: rt $ $Date: 2002-06-13 14:57:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,16 +81,16 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ russian ] = "Settings for high contrast appearance";
         Text[ greek ] = "Settings for high contrast appearance";
         Text[ dutch ] = "Settings for high contrast appearance";
-        Text[ french ] = "Settings for high contrast appearance";
+        Text[ french ] = "Utiliser les param�tres pour l'affichage du contraste �lev�";
         Text[ spanish ] = "Utilizar configuraci�n de la visualizaci�n del contraste";
         Text[ finnish ] = "Settings for high contrast appearance";
         Text[ italian ] = "Impostazioni per immagine schermo a contrasto elevato";
         Text[ danish ] = "Settings for high contrast appearance";
-        Text[ swedish ] = "Anv�nd inst�llningar f�r h�gkontrastutseende";
+        Text[ swedish ] = "Anv�nd inst�llningar f�r h�gkontrastvisning";
         Text[ polish ] = "Settings for high contrast appearance";
         Text[ portuguese_brazilian ] = "Settings for high contrast appearance";
         Text[ japanese ] = "画面表示にハイコントラストを使用";
-        Text[ korean ] = "고대비 디스플레이용 설정 사용";
+        Text[ korean ] = "고대비 디스플레이 설정 사용";
         Text[ chinese_simplified ] = "使用高对比度的设定";
         Text[ chinese_traditional ] = "使用高對比度的設定";
         Text[ turkish ] = "Settings for high contrast appearance";
@@ -110,7 +110,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ russian ] = "For ~drawings and presentations";
         Text[ greek ] = "For ~drawings and presentations";
         Text[ dutch ] = "For ~drawings and presentations";
-        Text[ french ] = "For ~drawings and presentations";
+        Text[ french ] = "Pour les dessins et pr�sentations";
         Text[ spanish ] = "Para ~dibujos y presentaciones";
         Text[ finnish ] = "For ~drawings and presentations";
         Text[ italian ] = "Per disegni e presentazioni";
@@ -119,7 +119,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ polish ] = "For ~drawings and presentations";
         Text[ portuguese_brazilian ] = "For ~drawings and presentations";
         Text[ japanese ] = "図形描画およびプレゼンテーションで使用";
-        Text[ korean ] = "그리기 및 프레젠테이션 용";
+        Text[ korean ] = "그리기 및 프레젠테이션 사용";
         Text[ chinese_simplified ] = "用于绘图和演示文稿(~D)";
         Text[ chinese_traditional ] = "用於繪圖和簡報";
         Text[ turkish ] = "For ~drawings and presentations";
@@ -139,7 +139,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ russian ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
         Text[ greek ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
         Text[ dutch ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
-        Text[ french ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
+        Text[ french ] = "Pour les bordures et les ombres des pages, paragraphes, tables et cadres";
         Text[ spanish ] = "Para los ~bordes y sombras de las p�ginas, p�rrafos, tablas y frames. ";
         Text[ finnish ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
         Text[ italian ] = "Per margini e ombreggiature di pagine, paragrafi, tabelle e cornici";
@@ -148,7 +148,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ polish ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
         Text[ portuguese_brazilian ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
         Text[ japanese ] = "ページ、段落、表および枠に外枠や影を使用";
-        Text[ korean ] = "페이지의 테두리와 음영, 단락과 표 및 프레임용";
+        Text[ korean ] = "페이지의 테두리와 음영, 단락과 표 및 프레임 사용";
         Text[ chinese_simplified ] = "用于页面的、段落的、表格的和文本框的边框及阴影(~B)";
         Text[ chinese_traditional ] = "用於頁面的、段落的、表格的和文字方塊的邊框及陰影";
         Text[ turkish ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
@@ -168,7 +168,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ russian ] = "For page ~previews";
         Text[ greek ] = "For page ~previews";
         Text[ dutch ] = "For page ~previews";
-        Text[ french ] = "For page ~previews";
+        Text[ french ] = "Dans les aper�us avant impression";
         Text[ spanish ] = "Para la~previsualizaci�n de p�gina";
         Text[ finnish ] = "For page ~previews";
         Text[ italian ] = "Per anteprima di pagina";
@@ -177,7 +177,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ polish ] = "For page ~previews";
         Text[ portuguese_brazilian ] = "For page ~previews";
         Text[ japanese ] = "印刷プレビューで使用";
-        Text[ korean ] = "페이지 미리 보기용";
+        Text[ korean ] = "페이지 미리 보기 사용";
         Text[ chinese_simplified ] = "用于页面视图/页面打印(~P)";
         Text[ chinese_traditional ] = "用於頁面檢視/頁面列印";
         Text[ turkish ] = "For page ~previews";
@@ -196,7 +196,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ russian ] = "Miscellaneous options";
         Text[ greek ] = "Miscellaneous options";
         Text[ dutch ] = "Miscellaneous options";
-        Text[ french ] = "Miscellaneous options";
+        Text[ french ] = "Autres options";
         Text[ spanish ] = "Otras opciones";
         Text[ finnish ] = "Miscellaneous options";
         Text[ italian ] = "Ulteriori opzioni";
@@ -225,7 +225,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ russian ] = "~Help tips disappear after ";
         Text[ greek ] = "~Help tips disappear after ";
         Text[ dutch ] = "~Help tips disappear after ";
-        Text[ french ] = "~Help tips disappear after ";
+        Text[ french ] = "Disparition des infobulles apr�s ";
         Text[ spanish ] = "La ~Ayuda emergente se desactiva tras ";
         Text[ finnish ] = "~Help tips disappear after ";
         Text[ italian ] = "Casella suggerimenti si disattiva dopo ";
@@ -266,7 +266,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ russian ] = "seconds";
         Text[ greek ] = "seconds";
         Text[ dutch ] = "seconds";
-        Text[ french ] = "seconds";
+        Text[ french ] = "secondes";
         Text[ spanish ] = "Segundos";
         Text[ finnish ] = "seconds";
         Text[ italian ] = "Secondi";
@@ -295,7 +295,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ russian ] = "Allow animated ~graphics";
         Text[ greek ] = "Allow animated ~graphics";
         Text[ dutch ] = "Allow animated ~graphics";
-        Text[ french ] = "Allow animated ~graphics";
+        Text[ french ] = "Autoriser les images anim�es";
         Text[ spanish ] = "Permitir ~im�genes animadas ";
         Text[ finnish ] = "Allow animated ~graphics";
         Text[ italian ] = "Permetti animazioni";
@@ -324,7 +324,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ russian ] = "Allow animated ~text";
         Text[ greek ] = "Allow animated ~text";
         Text[ dutch ] = "Allow animated ~text";
-        Text[ french ] = "Allow animated ~text";
+        Text[ french ] = "Autoriser le texte anim�";
         Text[ spanish ] = "Permitir ~animaci�n de texto";
         Text[ finnish ] = "Allow animated ~text";
         Text[ italian ] = "Permetti animazione testo";
@@ -353,12 +353,12 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ russian ] = "Always use automatic font ~color for screen display";
         Text[ greek ] = "Always use automatic font ~color for screen display";
         Text[ dutch ] = "Always use automatic font ~color for screen display";
-        Text[ french ] = "Always use automatic font ~color for screen display";
+        Text[ french ] = "Couleur de police automatique pour la repr�sentation � l'�cran";
         Text[ spanish ] = "Utilizar ~color de fuente autom�tico para la visualizaci�n en pantalla";
         Text[ finnish ] = "Always use automatic font ~color for screen display";
         Text[ italian ] = "Usa colore carattere automatico per le impostazioni dello schermo";
         Text[ danish ] = "Always use automatic font ~color for screen display";
-        Text[ swedish ] = "Automatisk tecken~f�rg f�r bildsk�rm";
+        Text[ swedish ] = "Automatisk tecken~f�rg f�r bildsk�rmsvisning";
         Text[ polish ] = "Always use automatic font ~color for screen display";
         Text[ portuguese_brazilian ] = "Always use automatic font ~color for screen display";
         Text[ japanese ] = "常に自動画面表示用フォントの色を使用";
@@ -382,7 +382,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ russian ] = "Use system ~font for user interface";
         Text[ greek ] = "Use system ~font for user interface";
         Text[ dutch ] = "Use system ~font for user interface";
-        Text[ french ] = "Use system ~font for user interface";
+        Text[ french ] = "Utiliser la police du syst�me pour l'interface utilisateur";
         Text[ spanish ] = "Utilizar las ~fuentes del sistema para la interfaz del usuario";
         Text[ finnish ] = "Use system ~font for user interface";
         Text[ italian ] = "Usa i caratteri del sistema per l'interfaccia utente";
@@ -412,16 +412,16 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ russian ] = "Support ~assistive technology tools (program restart required)";
         Text[ greek ] = "Support ~assistive technology tools (program restart required)";
         Text[ dutch ] = "Support ~assistive technology tools (program restart required)";
-        Text[ french ] = "Support ~assistive technology tools (program restart required)";
-        Text[ spanish ] = "Support ~assistive technology tools (program restart required)";
+        Text[ french ] = "Support des logiciels d'accessibilit� pour les personnes souffrant d'un handicap (red�marrage du programme requis)";
+        Text[ spanish ] = "~Soporte de los programas de acceso adaptados a disminuidos (reiniciar el programa)";
         Text[ finnish ] = "Support ~assistive technology tools (program restart required)";
         Text[ italian ] = "Supporto per facilitare l'accesso da parte di persone disabili (riavviare il programma)";
         Text[ danish ] = "Support ~assistive technology tools (program restart required)";
-        Text[ swedish ] = "St�d f�r handikappanpassade program (program m�ste startas om)";
+        Text[ swedish ] = "St�d f�r hj�lpprogram f�r funktionsnedsatta personer (program m�ste startas om)";
         Text[ polish ] = "Support ~assistive technology tools (program restart required)";
         Text[ portuguese_brazilian ] = "Support ~assistive technology tools (program restart required)";
         Text[ japanese ] = "ユーザー補助機能の支援（プログラム再起動が必要）";
-        Text[ korean ] = "장애인 보조 기술 도구 지원 (프로그램 재시작이 요구됨)";
+        Text[ korean ] = "자바 보조 기술 도구 지원 (프로그램 재시작 필요)";
         Text[ chinese_simplified ] = "支持辅助功能程序(需要重新启动程序)";
         Text[ chinese_traditional ] = "支援協助工具程式(需要重新啓動程式)";
         Text[ turkish ] = "Support ~assistive technology tools (program restart required)";
@@ -442,15 +442,15 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ russian ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
         Text[ greek ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
         Text[ dutch ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
-        Text[ french ] = "Remarque : Le support des fonctions d'accessibilit� �tant bas� sur l'utilisation de Sun Microsystems JAVA pour la communication avec les logiciels sp�cialement con�us pour ";
-        Text[ spanish ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ french ] = "Remarque : Les logiciels offrant les fonctions d'accessibilit� aux personnes souffrant d'un handicap communiquent par le biais de Sun Microsystems JAVA. Ceci signifie que l'Environnement Runtime Java doit �tre charg� au premier d�marrage du programme, ce qui peut occasionner un d�lai de chargement plus important.";
+        Text[ spanish ] = "Advertencia: Sun Microsystems utiliza Java para la comunicaci�n con programas que faciliten el acceso al ordenador a personas disminuidas. El primer inicio del programa puede durar unos minutos ya que primero se debe cargar el entorno de ejecuci�n Java. ";
         Text[ finnish ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
         Text[ italian ] = "Nota: la Sun Microsystems utilizza Java per la comunicazione con programmi che facilitano l'accesso al computer a persone disabili. Pertanto, il primo avvio del programma pu� ritardare qualche minuto per caricare JAVA runtime environment.";
         Text[ danish ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
-        Text[ swedish ] = "Observera att Sun Microsystems JAVA anv�nds f�r kommunikation med program som ger st�d f�r handikappanpassad tillg�ng till datorn. D�rf�r m�ste Java-k�rtidsmilj�n laddas f�rsta g�ngen programmet startas vilket kan leda till f�rl�ngd starttid.";
+        Text[ swedish ] = "Observera att Sun Microsystems Java anv�nds f�r kommunikation med hj�lpprogram som ger st�d f�r funktionsnedsatta personer i deras arbete med datorer. D�rf�r m�ste Java-k�rtidsmilj�n laddas f�rsta g�ngen programmet startas vilket kan leda till f�rl�ngd starttid.";
         Text[ polish ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
         Text[ portuguese_brazilian ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
-        Text[ japanese ] = "注意: コンピュータでプログラムの使いやすさを提供するアクセシビリティのために Sun Microsystems JAVA のユーザー補助機能ツールが使用されています。これを使用可能するには、初回のプログラム起動時に JAVA runtime 環境をロードする必要があります。";
+        Text[ japanese ] = "注意: ハンディキャップを乗り越えたプログラム操作がコンピュータで行えるよう、すべてのユーザーの方々のためにプログラムの使いやすさを配慮した Sun Microsystems JAVA 使用のユーザー補助機能を搭載しています。これを使用するには、初回プログラム起動時に JAVA runtime 環境をロードする必要があります。";
         Text[ korean ] = "주의: Sun Microsystems JAVA가 핸디캡을 지닌 사용자의 편의를 위한 액세스 기능의 지원을 위해 사용됩니다. 그러므로 프로그램 첫 실행 시 JAVA runtime 환경 역시 실시됨으로 프로그램 시작이 늦어질 수 있습니다.  ";
         Text[ chinese_simplified ] = "请注意，通过辅助功能来操作电脑必须使用 Sun Microsystems Java 。在第一次启动程序时必须装载  Java 运行时间环境。因此，第一次启动的启动过程比平时慢几秒钟。";
         Text[ chinese_traditional ] = "請注意，透過協助工具操作電腦必須使用 Sun Microsystems Java 。在第一次啓動程式時必須裝載 Java 運行時間環境。因此，第一次啓動的過程比平時慢幾秒鍾。";
