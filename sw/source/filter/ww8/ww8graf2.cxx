@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-27 12:01:49 $
+ *  last change: $Author: jp $ $Date: 2001-04-11 15:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -986,6 +986,11 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                     // kein GrafSet uebergeben, da nur fuer Cropp sinnvoll,
                     // was die UI derzeit (27.1.99) noch nicht kann khz.
                     pNewFlyFmt = rDoc.Insert( *pPaM, &xIPRef, &aAttrSet );
+
+                    //JP 10.4.2001: Bug 85614 - don't remove in DTOR the
+                    //              object from our persist
+                    SvInPlaceObjectRef xEmpty;
+                    ((SdrOle2Obj*)pObject)->SetObjRef( xEmpty );
                 }
                 else
                 {
@@ -1237,11 +1242,14 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.6 2001-03-27 12:01:49 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.7 2001-04-11 15:08:02 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/03/27 12:01:49  cmc
+      brightness, contrast, drawmode {im|ex}port, merge 0x01 and 0x08 graphics systems for escher to replace hack
+
       Revision 1.5  2001/02/27 10:59:05  cmc
       #84122# Missing Cropping on DirectBLIP import
 

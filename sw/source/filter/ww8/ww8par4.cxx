@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 09:42:28 $
+ *  last change: $Author: jp $ $Date: 2001-04-11 15:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,6 +477,10 @@ SwFrmFmt* SwWW8ImplReader::ImportOle( const Graphic* pGrf,
                 if( pRet )      // Ole-Object wurde eingefuegt
                 {
                     pFmt = rDoc.Insert( *pPaM, &pRet->GetObjRef(), pFlySet );
+                    //JP 10.4.2001: Bug 85614 - don't remove in DTOR the
+                    //              object from our persist
+                    SvInPlaceObjectRef xEmpty;
+                    pRet->SetObjRef( xEmpty );
                     delete pRet;        // das brauchen wir nicht mehr
                 }
                 else
@@ -645,11 +649,14 @@ void SwWW8ImplReader::Read_CPropRMark( USHORT nId, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.4 2000-11-06 09:42:28 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.5 2001-04-11 15:08:01 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/06 09:42:28  jp
+      must changes: tempfile
+
       Revision 1.3  2000/11/01 12:12:16  jp
       optimize: use the same code to read MAC-Pict
 

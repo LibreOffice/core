@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-11 14:34:22 $
+ *  last change: $Author: jp $ $Date: 2001-04-11 15:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2576,6 +2576,10 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                     // kein GrafSet uebergeben, da nur fuer Cropping sinnvoll,
                     // was die UI derzeit (27.1.99) noch nicht kann khz.
                     pRetFrmFmt = rDoc.Insert( *pPaM, &xIPRef, &aFlySet );
+                    //JP 10.4.2001: Bug 85614 - don't remove in DTOR the
+                    //              object from our persist
+                    SvInPlaceObjectRef xEmpty;
+                    ((SdrOle2Obj*)pObject)->SetObjRef( xEmpty );
                 }
                 else
                 {
@@ -3156,11 +3160,14 @@ void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.20 2001-04-11 14:34:22 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.21 2001-04-11 15:08:01 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.20  2001/04/11 14:34:22  cmc
+      Minor merge error fixes
+
       Revision 1.19  2001/04/05 14:03:48  cmc
       ##640## Draw objects inside textbox import layout tweaks
 
