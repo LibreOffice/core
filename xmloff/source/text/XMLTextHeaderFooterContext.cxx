@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextHeaderFooterContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-01 12:15:32 $
+ *  last change: $Author: mib $ $Date: 2001-03-09 07:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,13 +216,6 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
             GetImport().GetTextImport()->CreateTextChildContext(
                 GetImport(), nPrefix, rLocalName, xAttrList,
                 XML_TEXT_TYPE_HEADER_FOOTER );
-        if( pContext && pContext->ISA( XMLTextTableContext ) )
-        {
-            xTextContent = PTR_CAST( XMLTextTableContext, pContext )
-                ->GetXTextContent();
-        }
-        else
-            xTextContent = 0;
     }
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
@@ -234,24 +227,7 @@ void XMLTextHeaderFooterContext::EndElement()
 {
     if( xOldTextCursor.is() )
     {
-        if( xTextContent.is() )
-        {
-            Reference< XRelativeTextContentRemove > xRemove(
-                    GetImport().GetTextImport()->GetText(), UNO_QUERY );
-            if( xRemove.is() )
-            {
-                GetImport().GetTextImport()->ResetCursor();
-                xRemove->removeTextContentAfter( xTextContent );
-            }
-        }
-        else if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
-        {
-            OUString sEmpty;
-            GetImport().GetTextImport()->GetText()->insertString(
-                GetImport().GetTextImport()->GetCursorAsRange(), sEmpty,
-                sal_True );
-        }
-
+        GetImport().GetTextImport()->DeleteParagraph();
         GetImport().GetTextImport()->SetCursor( xOldTextCursor );
     }
     else if( !bLeft )

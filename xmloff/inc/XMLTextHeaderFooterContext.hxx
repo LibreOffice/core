@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextHeaderFooterContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-26 09:17:54 $
+ *  last change: $Author: mib $ $Date: 2001-03-09 07:21:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #endif
 
 namespace com { namespace sun { namespace star {
-    namespace text { class XTextCursor; class XTextContent; }
+    namespace text { class XTextCursor; }
     namespace beans { class XPropertySet; }
 } } }
 
@@ -75,8 +75,6 @@ class XMLTextHeaderFooterContext: public SvXMLImportContext
 {
     ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextCursor > xOldTextCursor;
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::text::XTextContent > xTextContent;
     ::com::sun::star::uno::Reference <
         ::com::sun::star::beans::XPropertySet > xPropSet;
 

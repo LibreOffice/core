@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-06 11:17:30 $
+ *  last change: $Author: mib $ $Date: 2001-03-09 07:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -914,6 +917,43 @@ void XMLTextImportHelper::InsertTextContent(
     if( xText.is() )
         xText->insertTextContent( xCursorAsRange, xContent, sal_False );
 }
+
+void XMLTextImportHelper::DeleteParagraph()
+{
+    DBG_ASSERT( xText.is(), "no text" );
+    DBG_ASSERT( xCursor.is(), "no cursor" );
+    DBG_ASSERT( xCursorAsRange.is(), "no range" );
+
+    sal_Bool bDelete = sal_True;
+    Reference < XEnumerationAccess > xEnumAccess( xCursor, UNO_QUERY );
+    if( xEnumAccess.is() )
+    {
+        Reference < XEnumeration > xEnum = xEnumAccess->createEnumeration();
+        DBG_ASSERT( xEnum->hasMoreElements(), "empty text enumeration" );
+        if( xEnum->hasMoreElements() )
+        {
+            Any aAny = xEnum->nextElement();
+            Reference < XTextRange > xTxtRange;
+            aAny >>= xTxtRange;
+            Reference < XComponent > xComp( xTxtRange, UNO_QUERY );
+            DBG_ASSERT( xComp.is(), "got no component" );
+            if( xComp.is() )
+            {
+                xComp->dispose();
+                bDelete = sal_False;
+            }
+        }
+    }
+    if( bDelete )
+    {
+        if( xCursor->goLeft( 1, sal_True ) )
+        {
+            OUString sEmpty;
+            xText->insertString( xCursorAsRange, sEmpty, sal_True );
+        }
+    }
+}
+
 
 OUString XMLTextImportHelper::SetStyleAndAttrs(
         const Reference < XTextCursor >& rCursor,

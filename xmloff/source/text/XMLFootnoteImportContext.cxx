@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteImportContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:37 $
+ *  last change: $Author: mib $ $Date: 2001-03-09 07:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,12 +225,7 @@ void XMLFootnoteImportContext::Characters(
 void XMLFootnoteImportContext::EndElement()
 {
     // get rid of last dummy paragraph
-    if( rHelper.GetCursor()->goLeft( 1, sal_True ))
-    {
-        OUString sEmpty;
-        rHelper.GetText()->insertString( rHelper.GetCursorAsRange(),
-                                         sEmpty, sal_True );
-    }
+    rHelper.DeleteParagraph();
 
     // reinstall old cursor
     rHelper.SetCursor(xOldCursor);

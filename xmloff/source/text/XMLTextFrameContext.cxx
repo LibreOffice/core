@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-06 11:17:30 $
+ *  last change: $Author: mib $ $Date: 2001-03-09 07:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -829,13 +829,7 @@ void XMLTextFrameContext::EndElement()
 
     if( xOldTextCursor.is() )
     {
-        if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
-        {
-            OUString sEmpty;
-            GetImport().GetTextImport()->GetText()->insertString(
-                GetImport().GetTextImport()->GetCursorAsRange(), sEmpty,
-                sal_True );
-        }
+        GetImport().GetTextImport()->DeleteParagraph();
         GetImport().GetTextImport()->SetCursor( xOldTextCursor );
     }
     if ( nType == XML_TEXT_FRAME_APPLET )

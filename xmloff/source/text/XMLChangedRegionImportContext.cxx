@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangedRegionImportContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-16 10:51:15 $
+ *  last change: $Author: mib $ $Date: 2001-03-09 07:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,10 +191,7 @@ void XMLChangedRegionImportContext::EndElement()
         // (one extra paragraph was inserted in the beginning)
         UniReference<XMLTextImportHelper> rHelper =
             GetImport().GetTextImport();
-        rHelper->GetCursor()->goRight(1, sal_False);
-        rHelper->GetCursor()->goLeft(1, sal_True);
-        rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
-                                         sEmpty, sal_True);
+        rHelper->DeleteParagraph();
 
         GetImport().GetTextImport()->SetCursor(xOldCursor);
         xOldCursor = NULL;
