@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 13:40:04 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 12:51:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@ void GlyphCache::EnsureInstance( GlyphCachePeer& rPeer, bool bInitFonts )
 // this gets called when the upper layers want to remove the related ImplFontData
 void GlyphCache::RemoveFont( const ImplFontData* pFontData )
 {
+    bool bNeedCurrentGC = false;
     FontList::iterator it = maFontList.begin();
     while( it != maFontList.end() )
     {
@@ -168,11 +169,21 @@ void GlyphCache::RemoveFont( const ImplFontData* pFontData )
             continue;
         }
 
+        // found one => remove it if not referenced
         ServerFont* pSF = it->second;
         if( pSF && (pSF->GetRefCount() <= 0) )
+        {
+            bNeedCurrentGC |= (pSF == mpCurrentGCFont);
             delete pSF;
-        FontList::iterator oldit = it++;
-        maFontList.erase( oldit );
+        }
+        maFontList.erase( it++ );
+    }
+
+    // when current GC font has been destroyed get another one
+    if( bNeedCurrentGC )
+    {
+        it = maFontList.begin();
+        mpCurrentGCFont = (it != maFontList.end()) ? it->second : NULL;
     }
 }
 
