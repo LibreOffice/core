@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:27:43 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #endif
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
+#endif
+#ifndef _FMTROWSPLT_HXX //autogen
+#include <fmtrowsplt.hxx>
 #endif
 
 typedef SwTableBoxFmt* SwTableBoxFmtPtr;
@@ -274,6 +277,7 @@ void SwRTFParser::ReadTable( int nToken )
     SwTableBoxFmt* pBoxFmt = pDoc->MakeTableBoxFmt();
     BOOL bHeadlineRepeat = FALSE;
     SvxFrameDirection eDir = FRMDIR_HORI_LEFT_TOP;
+    bool bCantSplit = false;
 
     int bWeiter = TRUE;
     do {
@@ -504,7 +508,9 @@ void SwRTFParser::ReadTable( int nToken )
         case RTF_TRBRDRR:
         case RTF_TRBRDRT:
         case RTF_TRBRDRV:
+                break;
         case RTF_TRKEEP:
+                bCantSplit = true;
                 break;
 
         default:
@@ -787,8 +793,10 @@ void SwRTFParser::ReadTable( int nToken )
             eSize = ATT_FIX_SIZE, nLineHeight = -nLineHeight;
         else
             eSize = ATT_MIN_SIZE;
-        pNewLine->ClaimFrmFmt()->SetAttr( SwFmtFrmSize( eSize, 0, nLineHeight ));
+        pNewLine->ClaimFrmFmt()->SetAttr(SwFmtFrmSize(eSize, 0, nLineHeight));
     }
+
+    pNewLine->ClaimFrmFmt()->SetAttr(SwFmtRowSplit(!bCantSplit));
 
     if( aBoxFmts.Count() )
     {
