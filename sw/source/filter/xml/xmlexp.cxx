@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-22 15:59:43 $
+ *  last change: $Author: mtg $ $Date: 2001-03-23 15:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,7 +468,6 @@ void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
             (OUString( RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.document.IndexedPropertyValues") ) ), UNO_QUERY);
     if (xBox.is() )
     {
-
 #if 0
         Any aAny;
         sal_Int32 i=0;
@@ -477,7 +476,7 @@ void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
                 i++, pFrame = SfxViewFrame::GetNext(*pFrame ) )
         {
             Sequence < PropertyValue > aSequence;
-            pFrame->GetViewShell()->ReadUserDataSequence( aSequence, sal_False );
+            pFrame->GetViewShell()->WriteUserDataSequence( aSequence, sal_False );
             aAny <<= aSequence;
             xBox->insertByIndex(i, aAny);
         }
@@ -526,18 +525,10 @@ void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
     pValue[nIndex++].Value <<= rRect.GetHeight();
 
 
-    sal_Bool bShowInsert = sal_False, bShowDelete = sal_False;
+    sal_Bool bShowRedlineChanges = IsShowChanges ( pDoc->GetRedlineMode() );
 
-    if( (pDoc->GetRedlineMode() & REDLINE_SHOW_INSERT) != 0 )
-        bShowInsert = sal_True;
-    if( (pDoc->GetRedlineMode() & REDLINE_SHOW_DELETE) != 0 )
-        bShowDelete = sal_True;
-
-    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowRedlineInsertions") );
-    pValue[nIndex++].Value.setValue( &bShowInsert, ::getBooleanCppuType() );
-
-    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowRedlineDeletions") );
-    pValue[nIndex++].Value.setValue( &bShowDelete, ::getBooleanCppuType() );
+    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowRedlineChanges") );
+    pValue[nIndex++].Value.setValue( &bShowRedlineChanges, ::getBooleanCppuType() );
 
     sal_Bool bShowHead = pDoc->IsHeadInBrowse();
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowHeaderWhileBrowsing") );
