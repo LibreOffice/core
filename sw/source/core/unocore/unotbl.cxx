@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:36:31 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:58:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1844,7 +1844,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
                 case FN_UNO_TABLE_CELL_BACKGROUND:
                 {
                     SvxBrushItem aBrush;
-                    pDoc->GetBoxBackground( *pUnoCrsr, aBrush );
+                    pDoc->GetBoxAttr( *pUnoCrsr, aBrush );
                     aBrush.PutValue(aValue, pMap->nMemberId);
                     pDoc->SetBoxAttr( *pUnoCrsr, aBrush );
 
@@ -1901,7 +1901,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
                 case FN_UNO_TABLE_CELL_BACKGROUND:
                 {
                     SvxBrushItem aBrush;
-                    if(pTblCrsr->GetDoc()->GetBoxBackground( *pUnoCrsr, aBrush ))
+                    if(pTblCrsr->GetDoc()->GetBoxAttr( *pUnoCrsr, aBrush ))
                         aBrush.QueryValue(aRet, pMap->nMemberId);
 
                 }
@@ -3998,7 +3998,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                 case FN_UNO_TABLE_CELL_BACKGROUND:
                 {
                     SvxBrushItem aBrush;
-                    pDoc->GetBoxBackground( *pTblCrsr, aBrush );
+                    pDoc->GetBoxAttr( *pTblCrsr, aBrush );
                     ((SfxPoolItem&)aBrush).PutValue(aValue, pMap->nMemberId);
                     pDoc->SetBoxAttr( *pTblCrsr, aBrush );
 
@@ -4105,7 +4105,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
                 case FN_UNO_TABLE_CELL_BACKGROUND:
                 {
                     SvxBrushItem aBrush;
-                    if(pTblCrsr->GetDoc()->GetBoxBackground( *pTblCrsr, aBrush ))
+                    if(pTblCrsr->GetDoc()->GetBoxAttr( *pTblCrsr, aBrush ))
                         aBrush.QueryValue(aRet, pMap->nMemberId);
 
                 }
