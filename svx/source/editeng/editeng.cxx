@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-14 15:47:56 $
+ *  last change: $Author: mt $ $Date: 2001-01-29 11:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1204,12 +1204,18 @@ void EditEngine::InsertParagraph( sal_uInt16 nPara, const EditTextObject& rTxtOb
         DBG_ASSERTWARNING( nPara == USHRT_MAX, "AbsatzNr zu Groá, aber nicht LIST_APPEND! " );
         nPara = GetParagraphCount();
     }
+
+    pImpEditEngine->UndoActionStart( EDITUNDO_INSERT );
+
     // Keine Undoklammerung noetig.
     EditPaM aPaM( pImpEditEngine->InsertParagraph( nPara ) );
     // Bei einem InsertParagraph von aussen sollen keine Harten
     // Attribute uebernommen werden !
     pImpEditEngine->RemoveCharAttribs( nPara );
     pImpEditEngine->InsertText( rTxtObj, EditSelection( aPaM, aPaM ) );
+
+    pImpEditEngine->UndoActionEnd( EDITUNDO_INSERT );
+
     pImpEditEngine->FormatAndUpdate();
 }
 
