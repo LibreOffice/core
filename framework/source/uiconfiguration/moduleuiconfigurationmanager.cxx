@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleuiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:23:35 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 #include <xml/menuconfiguration.hxx>
 #endif
 
+#ifndef __FRAMEWORK_XML_TOOLBOXCONFIGURATION_HXX_
+#include <xml/toolboxconfiguration.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -130,7 +134,7 @@
 //  namespaces
 //_________________________________________________________________________________________________________________
 
-using namespace rtl;
+using rtl::OUString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::embed;
@@ -294,7 +298,7 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
         Reference< XStorage > xElementTypeStorage = rElementTypeData.xStorage;
         if ( xElementTypeStorage.is() )
         {
-            OUStringBuffer aBuf( RESOURCEURL_PREFIX_SIZE );
+            rtl::OUStringBuffer aBuf( RESOURCEURL_PREFIX_SIZE );
             aBuf.appendAscii( RESOURCEURL_PREFIX );
             aBuf.appendAscii( UIELEMENTTYPENAMES[ nElementType ] );
             aBuf.appendAscii( "/" );
@@ -384,6 +388,18 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
 
                     case drafts::com::sun::star::ui::UIElementType::TOOLBAR:
                     {
+                        try
+                        {
+                            Reference< XIndexContainer > xIndexContainer( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
+                            ToolBoxConfiguration::LoadToolBox( m_xServiceManager, xInputStream, xIndexContainer );
+                            RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xIndexContainer );
+                            aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, sal_True ) ), UNO_QUERY );
+                            return;
+                        }
+                        catch ( ::com::sun::star::lang::WrappedTargetException& )
+                        {
+                        }
+
                         break;
                     }
 
@@ -481,6 +497,18 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( Reference< XStorag
                             {
                                 MenuConfiguration aMenuCfg( m_xServiceManager );
                                 aMenuCfg.StoreMenuBarConfigurationToXML( rElement.xSettings, xOutputStream );
+                            }
+                            catch ( ::com::sun::star::lang::WrappedTargetException& )
+                            {
+                            }
+                        }
+                        break;
+
+                        case drafts::com::sun::star::ui::UIElementType::TOOLBAR:
+                        {
+                            try
+                            {
+                                ToolBoxConfiguration::StoreToolBox( m_xServiceManager, xOutputStream, rElement.xSettings );
                             }
                             catch ( ::com::sun::star::lang::WrappedTargetException& )
                             {
@@ -762,6 +790,16 @@ void SAL_CALL ModuleUIConfigurationManager::dispose() throw (::com::sun::star::u
 
     {
         ResetableGuard aGuard( m_aLock );
+        try
+        {
+            if ( m_xModuleImageManager.is() )
+                m_xModuleImageManager->dispose();
+        }
+        catch ( Exception& )
+        {
+        }
+
+        m_xModuleImageManager.clear();
         m_aUIElements[LAYER_USERDEFINED].clear();
         m_aUIElements[LAYER_DEFAULT].clear();
         m_xDefaultConfigStorage.clear();
@@ -815,6 +853,10 @@ void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& a
                 else if ( aPropValue.Name.equalsAscii( "ModuleIdentifier" ))
                 {
                     aPropValue.Value >>= m_aModuleIdentifier;
+                }
+                else if ( aPropValue.Name.equalsAscii( "ModuleShortName" ))
+                {
+                    aPropValue.Value >>= m_aModuleShortName;
                 }
                 else if ( aPropValue.Name.equalsAscii( "UserRootCommit" ))
                 {
@@ -1286,6 +1328,7 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
             else
                 aUIElementData.xSettings = aNewData;
             aUIElementData.aName        = RetrieveNameFromResourceURL( NewResourceURL ) + m_aXMLPostfix;
+            aUIElementData.aResourceURL = NewResourceURL;
             m_bModified = true;
 
             UIElementType& rElementType = m_aUIElements[LAYER_USERDEFINED][nElementType];
@@ -1317,7 +1360,35 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
 
 Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager() throw (::com::sun::star::uno::RuntimeException)
 {
-    return Reference< XInterface >();
+    ResetableGuard aGuard( m_aLock );
+
+    if ( m_bDisposed )
+        throw DisposedException();
+
+    if ( !m_xModuleImageManager.is() )
+    {
+        m_xModuleImageManager = Reference< XComponent >( static_cast< cppu::OWeakObject *>( new ModuleImageManager( m_xServiceManager )),
+                                                         UNO_QUERY );
+        Reference< XInitialization > xInit( m_xModuleImageManager, UNO_QUERY );
+
+        Sequence< Any > aPropSeq( 3 );
+        PropertyValue aPropValue;
+        aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserConfigStorage" ));
+        aPropValue.Value = makeAny( m_xUserConfigStorage );
+        aPropSeq[0] = makeAny( aPropValue );
+        aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleIdentifier" ));
+        aPropValue.Value = makeAny( m_aModuleIdentifier );
+        aPropSeq[1] = makeAny( aPropValue );
+        aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserRootCommit" ));
+        aPropValue.Value = makeAny( m_xUserRootCommit );
+        aPropSeq[2] = makeAny( aPropValue );
+
+        xInit->initialize( aPropSeq );
+    }
+
+    return Reference< XInterface >( m_xModuleImageManager, UNO_QUERY );
+
+//    return Reference< XInterface >();
 }
 
 Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getShortCutManager() throw (::com::sun::star::uno::RuntimeException)
