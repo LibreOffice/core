@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:55:03 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:15:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2368,16 +2368,10 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
     else if ( aNameString.EqualsAscii( SC_UNONAME_CELLFILT ) )
     {
         //! undo etc.
-        BOOL bFil = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-        for (SCROW nRow=nStartRow; nRow<=nEndRow; nRow++)
-        {
-            BYTE nFlags = pDoc->GetRowFlags(nRow, nTab);
-            if (bFil)
-                nFlags |= CR_FILTERED;
-            else
-                nFlags &= ~CR_FILTERED;
-            pDoc->SetRowFlags(nRow, nTab, nFlags);
-        }
+        if (ScUnoHelpFunctions::GetBoolFromAny( aValue ))
+            pDoc->GetRowFlagsArrayModifiable( nTab).OrValue( nStartRow, nEndRow, CR_FILTERED);
+        else
+            pDoc->GetRowFlagsArrayModifiable( nTab).AndValue( nStartRow, nEndRow, ~CR_FILTERED);
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_OHEIGHT ) )
     {
