@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:28:44 $
+ *  last change: $Author: rt $ $Date: 2000-11-24 16:48:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2267,7 +2267,7 @@ String RID_SUBSETSTR_MYANMAR
         Text[ swedish ] = "Myanmar";
         Text[ polish ] = "Myanmar";
         Text[ portuguese_brazilian ] = "Myanmar";
-        Text[ japanese ] = "Myanmar";
+        Text[ japanese ] = "–¨›œ∞";
         Text[ korean ] = "Myanmar";
         Text[ chinese_simplified ] = "√ÂµÈ”Ô";
         Text[ chinese_traditional ] = "Ωq®lªy";
@@ -2290,12 +2290,12 @@ String RID_SUBSETSTR_KHMER
         Text[ swedish ] = "Khmer";
         Text[ polish ] = "Khmerski";
         Text[ portuguese_brazilian ] = "Khmer";
-        Text[ japanese ] = "Khmer";
+        Text[ japanese ] = "∏“∞Ÿ";
         Text[ korean ] = "Khmer";
         Text[ chinese_simplified ] = "π»√¿∂˚”Ô";
         Text[ chinese_traditional ] = "®¶¨¸∫∏ªy";
         Text[ turkish ] = "Khmer";
-        Text[ arabic ] = "Khmer";
+        Text[ arabic ] = "«·Œ„Ì—Ì…";
     };
 String RID_SUBSETSTR_OGHAM
 {
@@ -2341,7 +2341,7 @@ String RID_SUBSETSTR_RUNIC
         Text[ chinese_simplified ] = "π≈¥˙±±≈∑Œƒ";
         Text[ chinese_traditional ] = "•j•N•_º⁄§Â¶r";
         Text[ turkish ] = "Runic";
-        Text[ arabic ] = "Runic";
+        Text[ arabic ] = "—Ê‰Ì";
     };
 String RID_SUBSETSTR_SYRIAC
 {
