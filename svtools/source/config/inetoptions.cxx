@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-19 10:31:02 $
+ *  last change: $Author: kso $ $Date: 2001-01-26 13:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,6 +387,12 @@ void SvtInetOptions::Impl::setProperty(Index nIndex, uno::Any const & rValue,
         m_aEntries[nIndex].m_aValue = rValue;
         m_aEntries[nIndex].m_eState = bFlush ? Entry::KNOWN : Entry::MODIFIED;
     }
+
+    /* KSO: Interim fix for #83237#. Otherwise changes will be written */
+    /*      and notified to listeners listening directly at the config */
+    /*      server only at application end.                            */
+    bFlush = true;
+
     uno::Sequence< rtl::OUString > aKeys(1);
     aKeys[0] = m_aEntries[nIndex].m_aName;
     if (bFlush)
