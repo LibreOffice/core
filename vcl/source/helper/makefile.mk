@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-13 18:01:49 $
+#   last change: $Author: vg $ $Date: 2005-03-10 13:17:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,7 @@ TARGET=helper
 
 SLOFILES=\
     $(SLO)$/evntpost.obj		\
+    $(SLO)$/canvasbitmap.obj    \
     $(SLO)$/canvastools.obj		\
     $(SLO)$/xconnection.obj		\
     $(SLO)$/threadex.obj		\
