@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pb $ $Date: 2002-07-04 11:57:21 $
+ *  last change: $Author: oj $ $Date: 2002-11-26 12:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -782,6 +782,7 @@ SvLBox::SvLBox( Window* pParent, const ResId& rResId ) :
     Font aFont( "Geneva", Size( 0, 10 ) );
     SetFont( aFont );
 #endif
+    SetType(WINDOW_LISTBOX);
 }
 
 
