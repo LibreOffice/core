@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imap2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-03 10:15:36 $
+ *  last change: $Author: ka $ $Date: 2001-06-28 09:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,12 +74,6 @@
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
-#ifndef _CLIP_HXX //autogen
-#include <vcl/clip.hxx>
-#endif
-#ifndef _DRAG_HXX //autogen
-#include <vcl/drag.hxx>
-#endif
 #ifndef _SOT_FORMATS_HXX //autogen
 #include <sot/formats.hxx>
 #endif
@@ -91,11 +85,10 @@
 #include "imapcirc.hxx"
 #include "imappoly.hxx"
 
-#define OUT_DEV()   (Application::GetDefaultDevice())
-#define NOTEOL(c)   ((c)!='\0')
+#define NOTEOL(c) ((c)!='\0')
 
 
-TYPEINIT1_AUTOFACTORY( ImageMap, SvDataCopyStream );
+TYPEINIT0_AUTOFACTORY( ImageMap );
 
 
 /******************************************************************************/
@@ -110,7 +103,7 @@ TYPEINIT1_AUTOFACTORY( ImageMap, SvDataCopyStream );
 
 void IMapObject::AppendCERNCoords( const Point& rPoint100, ByteString& rStr ) const
 {
-    const Point aPixPt( OUT_DEV()->LogicToPixel( rPoint100, MapMode( MAP_100TH_MM ) ) );
+    const Point aPixPt( Application::GetDefaultDevice()->LogicToPixel( rPoint100, MapMode( MAP_100TH_MM ) ) );
 
     rStr += '(';
     rStr += ByteString::CreateFromInt32( aPixPt.X() );
@@ -128,7 +121,7 @@ void IMapObject::AppendCERNCoords( const Point& rPoint100, ByteString& rStr ) co
 
 void IMapObject::AppendNCSACoords( const Point& rPoint100, ByteString& rStr ) const
 {
-    const Point aPixPt( OUT_DEV()->LogicToPixel( rPoint100, MapMode( MAP_100TH_MM ) ) );
+    const Point aPixPt( Application::GetDefaultDevice()->LogicToPixel( rPoint100, MapMode( MAP_100TH_MM ) ) );
 
     rStr += ByteString::CreateFromInt32( aPixPt.X() );
     rStr += ',';
@@ -799,136 +792,3 @@ ULONG ImageMap::ImpDetectFormat( SvStream& rIStm )
 
     return nRet;
 }
-
-
-/*************************************************************************
-|*
-|*    ImageMap::ClipboardHasFormat()
-|*
-\************************************************************************/
-
-BOOL ImageMap::ClipboardHasFormat()
-{
-    return Clipboard::HasFormat( SOT_FORMATSTR_ID_SVIM );
-}
-
-
-/*************************************************************************
-|*
-|*    ImageMap::DragServerHasFormat()
-|*
-\************************************************************************/
-
-BOOL ImageMap::DragServerHasFormat( USHORT nItem )
-{
-    return DragServer::HasFormat( nItem, SOT_FORMATSTR_ID_SVIM );
-}
-
-
-/*************************************************************************
-|*
-|*    ImageMap::Copy()
-|*
-\************************************************************************/
-
-BOOL ImageMap::Copy() const
-{
-    BOOL bRet = FALSE;
-
-    if ( maList.Count() )
-    {
-        SvMemoryStream aMemStm( 0x1000, 0x1000 );
-        aMemStm << *this;
-
-        const char* pData = (const char*) aMemStm.GetData();
-
-        if ( pData && Clipboard::CopyData( pData, aMemStm.GetSize(),
-                                            SOT_FORMATSTR_ID_SVIM ) )
-            bRet = TRUE;
-    }
-
-    return bRet;
-}
-
-
-/*************************************************************************
-|*
-|*    ImageMap::Paste()
-|*
-\************************************************************************/
-
-BOOL ImageMap::Paste()
-{
-    BOOL        bRet = FALSE;
-
-    if ( Clipboard::HasFormat( SOT_FORMATSTR_ID_SVIM ) )
-    {
-        const ULONG nLen = Clipboard::GetDataLen( SOT_FORMATSTR_ID_SVIM );
-
-        if ( nLen )
-        {
-#ifdef WIN
-            HGLOBAL     hData = GlobalAlloc( GHND, nLen );
-            BYTE huge*  pData = hData ? (BYTE huge*) GlobalLock( hData ) : NULL;
-#else
-            BYTE* pData = new BYTE[ nLen ];
-#endif
-            if ( pData )
-            {
-                SvMemoryStream aMemStm;
-
-                if ( Clipboard::PasteData( pData, nLen, SOT_FORMATSTR_ID_SVIM ) )
-                {
-                    aMemStm.SetBuffer( (char*) pData, nLen, FALSE, nLen );
-                    aMemStm >> *this;
-                    if ( !aMemStm.GetError() )
-                        bRet = TRUE;
-                }
-#ifdef WIN
-                GlobalUnlock( hData );
-                GlobalFree( hData );
-#else
-                delete[] pData;
-#endif
-            }
-        }
-    }
-
-    return bRet;
-}
-
-
-/******************************************************************************
-|*
-|*
-|*
-\******************************************************************************/
-
-void ImageMap::Load( SvStream& rIStm )
-{
-    rIStm >> *this;
-}
-
-/******************************************************************************
-|*
-|*
-|*
-\******************************************************************************/
-
-void ImageMap::Save( SvStream& rOStm )
-{
-    rOStm << *this;
-}
-
-/******************************************************************************
-|*
-|*
-|*
-\******************************************************************************/
-
-void ImageMap::Assign( const SvDataCopyStream& rCopyStream )
-{
-    *this = (const ImageMap& ) rCopyStream;
-}
-
-
