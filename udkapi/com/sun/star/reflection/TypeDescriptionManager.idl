@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescriptionManager.idl,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:15 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 09:30:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,8 @@ service TypeDescriptionManager
 
     /** Interface for creating enumerations for type descriptions supported
         by this <type>TypeDescriptionManager</type>
+
+    @since #107627#
     */
     [optional] interface XTypeDescriptionEnumerationAccess;
 };
