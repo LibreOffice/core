@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdoc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *  last change: $Author: obo $ $Date: 2003-11-12 17:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,8 +445,12 @@ void TextNode::RemoveText( USHORT nPos, USHORT nChars )
 
 TextNode* TextNode::Split( USHORT nPos, BOOL bKeepEndingAttribs )
 {
-    String aNewText = maText.Copy( nPos );
-    maText.Erase( nPos );
+    String aNewText;
+    if ( nPos < maText.Len() )
+    {
+        aNewText = maText.Copy( nPos );
+        maText.Erase( nPos );
+    }
     TextNode* pNew = new TextNode( aNewText );
 
     for ( USHORT nAttr = 0; nAttr < maCharAttribs.Count(); nAttr++ )
@@ -568,7 +572,7 @@ void TextDoc::DestroyTextNodes()
 {
     for ( ULONG nNode = 0; nNode < maTextNodes.Count(); nNode++ )
         delete maTextNodes.GetObject( nNode );
-    maTextNodes.Clear();
+    maTextNodes.clear();
 }
 
 String TextDoc::GetText( const sal_Unicode* pSep ) const
