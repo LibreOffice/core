@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 10:58:27 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,10 @@
 #ifndef _SVTOOLS_LOCALRESACCESS_HXX_
 #include <svtools/localresaccess.hxx>
 #endif
+#include "svxids.hrc" //CHINA001
+#include "flagsdef.hxx" //CHINA001
+#include <svtools/intitem.hxx> //CHINA001
+#include <sfx2/request.hxx> //CHINA001
 
 // item connections ------------------------------------------------------
 
@@ -813,4 +817,9 @@ void SvxAlignmentTabPage::SetFlags( USHORT nFlags )
     }
 }
 
-
+void SvxAlignmentTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+{
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
+    if (pFlagItem)
+        SetFlags(pFlagItem->GetValue());
+}
