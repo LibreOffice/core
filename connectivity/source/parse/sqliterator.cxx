@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:45:49 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,17 +129,6 @@ namespace connectivity
 
         OSQLParseTreeIteratorImpl(){}
     };
-}
-//-----------------------------------------------------------------------------
-OSQLParseTreeIterator::OSQLParseTreeIterator()
-    : m_pParseTree(NULL)
-    , m_xDatabaseMetaData(NULL)
-    ,m_pParser(NULL)
-    ,m_pImpl(new OSQLParseTreeIteratorImpl())
-{
-//  m_aSelectColumns    = new OSQLColumns();
-//  m_aParameters       = new OSQLColumns();
-    setParseTree(NULL);
 }
 //-----------------------------------------------------------------------------
 OSQLParseTreeIterator::OSQLParseTreeIterator(const Reference< XNameAccess>& _xTables ,
