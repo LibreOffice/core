@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inpdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:03:14 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,27 +69,15 @@ ModalDialog DLG_FLD_INPUT
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 194 , 119 ) ;
-    Text = "Eingabefeld" ;
-    Text [ english ] = "Input Field" ;
-    Text [ english_us ] = "Input Field" ;
+    Text [ de ] = "Eingabefeld" ;
+    Text [ en-US ] = "Input Field" ;
     Moveable = TRUE ;
     /*    FixedText FT_LABEL
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 115 , 8 ) ;
-        Text = "Eingabe" ;
-        Text [ English ] = "Input" ;
-        Text [ norwegian ] = "Input" ;
-        Text [ italian ] = "Inserisci" ;
-        Text [ portuguese_brazilian ] = "Inserção" ;
-        Text [ portuguese ] = "Inserção" ;
-        Text [ finnish ] = "Syöttö" ;
-        Text [ danish ] = "Input" ;
-        Text [ french ] = "Entrée" ;
-        Text [ swedish ] = "Inmatning" ;
-        Text [ dutch ] = "Invoer" ;
-        Text [ spanish ] = "Entrada" ;
-        Text [ english_us ] = "Input" ;
+        Text [ de ] = "Eingabe" ;
+        Text [ en-US ] = "Input" ;
         Left = TRUE ;
     };*/
     Edit ED_LABEL
@@ -99,38 +87,10 @@ ModalDialog DLG_FLD_INPUT
         Size = MAP_APPFONT ( 115 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
-        Text = "Eingabe" ;
-        Text [ English ] = "Input" ;
-        Text [ norwegian ] = "Input" ;
-        Text [ italian ] = "Introduci" ;
-        Text [ portuguese_brazilian ] = "Entrada" ;
-        Text [ portuguese ] = "Entrada" ;
-        Text [ finnish ] = "Syötä" ;
-        Text [ danish ] = "Input" ;
-        Text [ french ] = "Saisie" ;
-        Text [ swedish ] = "Inmatning" ;
-        Text [ dutch ] = "Invoer" ;
-        Text [ spanish ] = "Entrada" ;
-        Text [ english_us ] = "Input" ;
+        Text [ de ] = "Eingabe" ;
+        Text [ en-US ] = "Input" ;
         Readonly = TRUE ;
-        Text[ chinese_simplified ] = "è¾“å…¥";
-        Text[ russian ] = "Ââîä";
-        Text[ polish ] = "Wejœcie";
-        Text[ japanese ] = "å…¥åŠ›";
-        Text[ chinese_traditional ] = "è¼¸å…¥";
-        Text[ arabic ] = "ÅÏÎÇá";
-        Text[ greek ] = "ÅéóáãùãŞ";
-        Text[ korean ] = "ì…ë ¥";
-        Text[ turkish ] = "Giriş";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Entrada";
-        Text[ thai ] = "à¸›à¹‰à¸­à¸™à¹€à¸‚à¹‰à¸²";
-        Text[ czech ] = "Vstup";
-        Text[ hebrew ] = "Eingabe";
-        Text[ hindi ] = "à¤‡à¤¨à¤ªà¥à¤Ÿ";
-        Text[ slovak ] = "Vstup";
-        Text[ hungarian ] = "Bevitel";
-        Text[ slovenian ] = "Vnos";
+        Text [ x-comment ] = " ";
     };
     MultiLineEdit ED_EDIT
     {
@@ -144,37 +104,9 @@ ModalDialog DLG_FLD_INPUT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 127 , 8 ) ;
-        Text = "Bearbeiten" ;
-        Text [ English ] = "Edit" ;
-        Text [ norwegian ] = "Rediger" ;
-        Text [ italian ] = "Modifica" ;
-        Text [ portuguese_brazilian ] = "Editar" ;
-        Text [ portuguese ] = "Editar" ;
-        Text [ finnish ] = "Muokkaa" ;
-        Text [ danish ] = "Rediger" ;
-        Text [ french ] = "Éditer" ;
-        Text [ swedish ] = "Redigera" ;
-        Text [ dutch ] = "Bewerken" ;
-        Text [ spanish ] = "Editar" ;
-        Text [ english_us ] = "Edit" ;
-        Text[ chinese_simplified ] = "ç¼–è¾‘";
-        Text[ russian ] = "Ïğàâêà";
-        Text[ polish ] = "Edytuj";
-        Text[ japanese ] = "ç·¨é›†";
-        Text[ chinese_traditional ] = "ç·¨è¼¯";
-        Text[ arabic ] = "ÊÍÑíÑ";
-        Text[ greek ] = "Åğåîåñãáóßá";
-        Text[ korean ] = "í¸ì§‘";
-        Text[ turkish ] = "Düzelt";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Edita";
-        Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚";
-        Text[ czech ] = "Upravit";
-        Text[ hebrew ] = "â€®×¢×¨×™×›×”â€¬";
-        Text[ hindi ] = "à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
-        Text[ slovak ] = "UpraviÅ¥";
-        Text[ hungarian ] = "SzerkesztÃ©s";
-        Text[ slovenian ] = "Uredi";
+        Text [ de ] = "Bearbeiten" ;
+        Text [ en-US ] = "Edit" ;
+        Text [ x-comment ] = " ";
     };
     OKButton BT_OK
     {
@@ -195,36 +127,9 @@ ModalDialog DLG_FLD_INPUT
         Size = MAP_APPFONT ( 50 , 15 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        Text = "~Weiter" ;
-        Text [ English ] = "~Next" ;
-        Text [ dutch ] = "~Volgende" ;
-        Text [ english_us ] = "~Next" ;
-        Text [ italian ] = "~Avanti" ;
-        Text [ spanish ] = "Continuar" ;
-        Text [ french ] = "Suivant" ;
-        Text [ swedish ] = "~Nästa" ;
-        Text [ danish ] = "~Næste" ;
-        Text [ portuguese ] = "~Seguinte" ;
-        Text [ portuguese_brazilian ] = "~Próximo" ;
-        Text[ chinese_simplified ] = "ç»§ç»­(~N)";
-        Text[ russian ] = "Äàëåå";
-        Text[ polish ] = "~Dalej";
-        Text[ japanese ] = "æ¬¡ã¸(~N)";
-        Text[ chinese_traditional ] = "ä¸‹ä¸€æ­¥(~N)";
-        Text[ arabic ] = "ÇáÊÇáí";
-        Text[ greek ] = "Åğüìåíï";
-        Text[ korean ] = "ë‹¤ìŒ(~N)";
-        Text[ turkish ] = "İleri";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Següent";
-        Text[ finnish ] = "~Seuraava";
-        Text[ thai ] = "~à¸–à¸±à¸”à¹„à¸›";
-        Text[ czech ] = "DalÅ¡Ã­";
-        Text[ hebrew ] = "â€®×”×‘×â€¬";
-        Text[ hindi ] = "~à¤†à¤—à¥‡";
-        Text[ slovak ] = "Äa~lÅ¡Ã­";
-        Text[ hungarian ] = "~KÃ¶vetkezÅ‘";
-        Text[ slovenian ] = "~Naprej";
+        Text [ de ] = "~Weiter" ;
+        Text [ en-US ] = "~Next" ;
+        Text [ x-comment ] = " ";
     };
     HelpButton PB_HELP
     {
@@ -232,33 +137,7 @@ ModalDialog DLG_FLD_INPUT
         Size = MAP_APPFONT ( 50 , 15 ) ;
         TabStop = TRUE ;
     };
-    Text [ portuguese_brazilian ] = "Campo de Entrada" ;
-    Text [ swedish ] = "Inmatningsfält" ;
-    Text [ danish ] = "Inputfelt" ;
-    Text [ italian ] = "Campo di digitazione" ;
-    Text [ spanish ] = "Campo de entrada" ;
-    Text [ french ] = "Champ de saisie" ;
-    Text [ dutch ] = "Invoerveld" ;
-    Text [ portuguese ] = "Campo de entrada" ;
-    Text[ chinese_simplified ] = "è¾“å…¥å­—æ®µ";
-    Text[ russian ] = "Ïîëå ââîäà";
-    Text[ polish ] = "Pole wprowadzania";
-    Text[ japanese ] = "å…¥åŠ›ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
-    Text[ chinese_traditional ] = "è¼¸å…¥æ¬„ä½";
-    Text[ arabic ] = "ÍŞá ÅÏÎÇá";
-    Text[ greek ] = "Ğåäßï åéóáãùãŞò";
-    Text[ korean ] = "ì…ë ¥ í•„ë“œ";
-    Text[ turkish ] = "Giriş alanı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Camp d'entrada";
-    Text[ finnish ] = "Syöttökenttä";
-    Text[ thai ] = "à¹ƒà¸ªà¹ˆà¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "VstupnÃ­ pole";
-    Text[ hebrew ] = "Eingabefeld";
-    Text[ hindi ] = "à¤‡à¤¨à¤ªà¥à¤Ÿà¥ à¤•à¥à¤·à¥‡à¤¤à¥à¤°";
-    Text[ slovak ] = "VstupnÃ© pole";
-    Text[ hungarian ] = "Beviteli mezÅ‘";
-    Text[ slovenian ] = "Vnosno polje";
+    Text [ x-comment ] = " ";
 };
 
 
