@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-15 17:21:10 $
+ *  last change: $Author: er $ $Date: 2001-10-08 18:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,6 +357,7 @@ public:
 
     BOOL    HasOpCodeRPN( OpCode ) const;
     BOOL    HasName() const;        // token of type svIndex
+    BOOL    HasNameOrColRowName() const;    // token of type svIndex or opcode ocColRowName
     BOOL    IsReference( ScRange& rRange ) const;       // exactly and only one range
     BOOL    GetTableOpRefs(                             // exactly and only one multiple operation
                 ScAddress& rFormula,

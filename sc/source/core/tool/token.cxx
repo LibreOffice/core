@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-07-12 21:31:46 $
+ *  last change: $Author: er $ $Date: 2001-10-08 18:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -943,6 +943,16 @@ BOOL ScTokenArray::HasName() const
     for ( USHORT j=0; j < nLen; j++ )
     {
         if( pCode[j]->GetType() == svIndex )
+            return TRUE;
+    }
+    return FALSE;
+}
+
+BOOL ScTokenArray::HasNameOrColRowName() const
+{
+    for ( USHORT j=0; j < nLen; j++ )
+    {
+        if( pCode[j]->GetType() == svIndex || pCode[j]->GetOpCode() == ocColRowName )
             return TRUE;
     }
     return FALSE;
