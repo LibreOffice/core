@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-17 12:29:40 $
+ *  last change: $Author: kz $ $Date: 2001-05-18 11:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     Text [ English ] = "Paragraph" ;
     Text [ norwegian ] = "Avsnitt" ;
     Text [ italian ] = "Rientri e interlinee" ;
-    Text [ portuguese_brazilian ] = "Parágrafo" ;
+    Text [ portuguese_brazilian ] = "Par?grafo" ;
     Text [ portuguese ] = "Avanços e espaçamento" ;
     Text [ finnish ] = "Sisennys ja välit" ;
     Text [ danish ] = "Indrykning og mellemrum" ;
@@ -761,7 +761,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text [ dutch ] = "~Activeren" ;
         Text [ swedish ] = "~Ta hänsyn till" ;
         Text [ danish ] = "Aktiver" ;
-        Text [ portuguese_brazilian ] = "Berü~cksichtigen" ;
+        Text [ portuguese_brazilian ] = "Ber?cksichtigen" ;
         Text [ portuguese ] = "~Considerar" ;
         Text[ chinese_simplified ] = "¹Ë¼°(~C)";
         Text[ russian ] = "Ñîáëşäàòü";
@@ -942,7 +942,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ english_us ] = "~Center" ;
         Text[ chinese_simplified ] = "¾ÓÖĞ(~C)";
         Text[ russian ] = "Ïî öåíòğó";
-        Text[ polish ] = "Wyœrodkuj";
+        Text[ polish ] = "Wy?rodkuj";
         Text[ japanese ] = "’†‰›‘µ‚¦(~C)";
         Text[ chinese_traditional ] = "¸m¤¤(~C)";
         Text[ arabic ] = "ÊæÓíØ";
@@ -1097,7 +1097,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     StringList [ polish ] =
     {
             < "Z lewej" ; Default ; > ;
-        < "Wyœrodkuj" ; Default ; > ;
+        < "Wy?rodkuj" ; Default ; > ;
         < "Wyjustuj" ; Default ; > ;
     };
     StringList [ japanese ] =
@@ -1211,7 +1211,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ portuguese_brazilian ] = "Vertical text alignment";
         Text[ japanese ] = "c‘‚«";
         Text[ korean ] = "Vertical text alignment";
-        Text[ chinese_simplified ] = "Vertical text alignment";
+        Text[ chinese_simplified ] = "Ö±Ê½ÎÄ×Ö·½Ïò";
         Text[ chinese_traditional ] = "ª½¦¡¤å¦r¹ï»ô";
         Text[ turkish ] = "Vertical text alignment";
         Text[ arabic ] = "Vertical text alignment";
@@ -1333,7 +1333,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
             < "Automatycznie" ; > ;
         < "Linia podstawowa" ; > ;
         < "W górze" ; > ;
-        < "Wyœrodkuj" ; > ;
+        < "Wy?rodkuj" ; > ;
         < "W dole" ; > ;
     };
     StringList [ portuguese_brazilian ] =
@@ -1364,9 +1364,9 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     {
             < "×Ô¶¯" ; > ;
         < "»ùÏß" ; > ;
-        < "ÉÏ" ; > ;
+        < "ÏòÉÏ" ; > ;
         < "¾ÓÖĞ" ; > ;
-        < "ÏÂÃæ" ; > ;
+        < "ÏòÏÂ" ; > ;
     };
     StringList [ chinese_traditional ] =
     {
@@ -1402,11 +1402,11 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     };
     StringList [ finnish ] =
     {
-            < "Automatisch" ; > ;
-        < "Grundlinie" ; > ;
-        < "Oben" ; > ;
-        < "Zentriert" ; > ;
-        < "Unten" ; > ;
+            < "Automaattinen" ; > ;
+        < "Perusviiva" ; > ;
+        < "ylös" ; > ;
+        < "Keskitä" ; > ;
+        < "alas" ; > ;
     };
     };
     Text[ chinese_simplified ] = "¶ÔÆë";
@@ -1431,7 +1431,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     Text [ English ] = "Paragraph Extensions" ;
     Text [ norwegian ] = "Utvidelse av avsnitt" ;
     Text [ italian ] = "Flusso di testo" ;
-    Text [ portuguese_brazilian ] = "Extens es de Parágrafo" ;
+    Text [ portuguese_brazilian ] = "Extens es de Par?grafo" ;
     Text [ portuguese ] = "Fluxo de texto" ;
     Text [ finnish ] = "Tekstin rivitys" ;
     Text [ danish ] = "Tekstretning" ;
@@ -1631,7 +1631,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ ENGLISH ] = "Max. consecutive hyphens" ;
         Text [ norwegian ] = "Maksimalt antall av følgende Bindestreke~r" ;
         Text [ italian ] = "Sillabazioni successive:" ;
-        Text [ portuguese_brazilian ] = "Contagem máxima do seguinte" ;
+        Text [ portuguese_brazilian ] = "Contagem m?xima do seguinte" ;
         Text [ portuguese ] = "~Máximo de hífens consecutivos" ;
         Text [ finnish ] = "~Peräkkäisten tavuviivojen enimmäismäärä" ;
         Text [ danish ] = "Maksimalt antal orddelinger i række" ;
@@ -1672,7 +1672,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ ENGLISH ] = "Hyphenation" ;
         Text [ norwegian ] = "Orddeling" ;
         Text [ italian ] = "Sillabazione" ;
-        Text [ portuguese_brazilian ] = "Hifenação" ;
+        Text [ portuguese_brazilian ] = "Hifena??o" ;
         Text [ portuguese ] = "Divisão silábica" ;
         Text [ finnish ] = "Tavutus" ;
         Text [ danish ] = "Orddeling" ;
@@ -1702,7 +1702,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ ENGLISH ] = "~Break" ;
         Text [ norwegian ] = "~Skift" ;
         Text [ italian ] = "I~nterruzione" ;
-        Text [ portuguese_brazilian ] = "~Interrupção" ;
+        Text [ portuguese_brazilian ] = "~Interrup??o" ;
         Text [ portuguese ] = "~Quebra" ;
         Text [ finnish ] = "~Keskeytys" ;
         Text [ danish ] = "Skift" ;
@@ -1733,7 +1733,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ ENGLISH ] = "~Page" ;
         Text [ norwegian ] = "~Page" ;
         Text [ italian ] = "~Pagina" ;
-        Text [ portuguese_brazilian ] = "~Página" ;
+        Text [ portuguese_brazilian ] = "~P?gina" ;
         Text [ portuguese ] = "~Página" ;
         Text [ finnish ] = "~Sivu" ;
         Text [ danish ] = "Side" ;
@@ -1968,7 +1968,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ ENGLISH ] = "Kee~p paragraphs together" ;
         Text [ norwegian ] = "Holde~r avsnittene samlet" ;
         Text [ italian ] = "Ti~eni paragrafi uniti" ;
-        Text [ portuguese_brazilian ] = "Man~ter parágrafos juntos" ;
+        Text [ portuguese_brazilian ] = "Man~ter par?grafos juntos" ;
         Text [ portuguese ] = "Manter pa~rágrafos juntos" ;
         Text [ finnish ] = "~Sido seuraavaan kappaleeseen" ;
         Text [ danish ] = "Hold sammen med næste afsnit" ;
@@ -2009,10 +2009,10 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ danish ] = "Fransk horeunge-ordning";
         Text[ swedish ] = "Ho~rungekontroll";
         Text[ polish ] = "Bez oddz. pierw. wiersza akap.";
-        Text[ portuguese_brazilian ] = "~Viúvas";
+        Text[ portuguese_brazilian ] = "~Vi?as";
         Text[ japanese ] = "’i—‘O‚Å‰üÍß°¼Ş(~W)";
         Text[ korean ] = "Ã³À½ ÇÑÁÙ ºĞ¸® ¹æÁö(~O)";
-        Text[ chinese_simplified ] = "¶ÎÂäÖ®ÖĞ²»·ÖÒ³(~O)";
+        Text[ chinese_simplified ] = "¶ÎÂäÖ®ÖĞ²»·ÖÒ³";
         Text[ chinese_traditional ] = "¬q¸¨¤§¤¤¤£¤À­¶";
         Text[ turkish ] = "~İlk satırı paragrafla birleştir";
         Text[ arabic ] = "ÊÚÏíá ÇäİÕÇá ÓØÑ ÇáİŞÑÉ ÇáÃæá";
@@ -2086,10 +2086,10 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ danish ] = "Horeunge-ordning";
         Text[ swedish ] = "Änkek~ontroll";
         Text[ polish ] = "Bez oddz. os~tat. wiersza akap.";
-        Text[ portuguese_brazilian ] = "~Órfãos";
+        Text[ portuguese_brazilian ] = "~?rf?os";
         Text[ japanese ] = "‰üÍß°¼Ş‚Éc‚·s”(~W)";
         Text[ korean ] = "¸¶Áö¸·  ÇÑÁÙ ºĞ¸® ¹æÁö(~W)";
-        Text[ chinese_simplified ] = "ÓëÏÂ¶ÎÍ¬Ò³(~W)";
+        Text[ chinese_simplified ] = "ÓëÏÂ¶ÎÍ¬Ò³";
         Text[ chinese_traditional ] = "»P¤U¬q¦P­¶";
         Text[ turkish ] = "So~n satırı paragrafla birleştir";
         Text[ arabic ] = "ÊÚÏíá ÇäİÕÇá ÓØÑ ÇáİŞÑÉ ÇáÃÎíÑ";
@@ -2151,7 +2151,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
         Text [ italian ] = "Extra" ;
-        Text [ portuguese_brazilian ] = "Opções" ;
+        Text [ portuguese_brazilian ] = "Op??s" ;
         Text [ portuguese ] = "Opções" ;
         Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Supplerende" ;
@@ -2241,7 +2241,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ polish ] = "Uwzglêdnij listê znaków niedozwolonych na pocz¹tku i na koñcu wiersza";
         Text[ portuguese_brazilian ] = "Apply list of forbidden characters at line end and line start";
         Text[ japanese ] = "s“ª‚¨‚æ‚Ñs––‚Ì‹Ö‘¥•¶š‚ÌØ½Ä‚Å‹Ö‘¥ˆ—‚ğs‚¤";
-        Text[ korean ] = "Apply list of forbidden characters at line end and line start";
+        Text[ korean ] = "Çà ½ÃÀÛ/³¡ºÎºĞ¿¡¼­ ±İÁöµÇ´Â ¹®ÀÚÀÇ ¸ñ·ÏÀ» Àû¿ë";
         Text[ chinese_simplified ] = "¹Ë¼°ĞĞÊ×ĞĞÄ©½ûÖ¹Ê¹ÓÃ×Ö·ûµÄÇåµ¥";
         Text[ chinese_traditional ] = "ÅU¤Î¦æ­º¦æ¥½¸T¤î¨Ï¥Î¦r¤¸ªº²M³æ";
         Text[ turkish ] = "Apply list of forbidden characters at line end and line start";
@@ -2265,10 +2265,10 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ italian ] = "Sono ammessi i separatori all'interno di parole scritte con caratteri latini.";
         Text[ danish ] = "Allow break inside of words in latin text";
         Text[ swedish ] = "Tillåt ~textbrytning inuti ord i latinsk text";
-        Text[ polish ] = "Dopuœæ podzia³ wyrazów napisanych alfabetem ³aciñskim";
+        Text[ polish ] = "Dopu?æ podzia³ wyrazów napisanych alfabetem ³aciñskim";
         Text[ portuguese_brazilian ] = "Allow break inside of words in latin text";
         Text[ japanese ] = "‰p’PŒê‚Ì“r’†‚Å‰üs‚·‚é";
-        Text[ korean ] = "Allow break inside of words in latin text";
+        Text[ korean ] = "¶óÆ¾¾î ÅØ½ºÆ®ÀÇ ´Ü¾î¿¡¼­ ¿öµå·¦ Çã¿ë";
         Text[ chinese_simplified ] = "ÔÊĞíÎ÷ÎÄÖ®ÖĞµÄ×Ö´Ê»»ĞĞ·Ö¿ª";
         Text[ chinese_traditional ] = "¤¹³\\¦è¤å¤§¤¤ªº¦rµü´«¦æ¤À¶}";
         Text[ turkish ] = "Allow break inside of words in latin text";
@@ -2292,10 +2292,10 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ italian ] = "Interpunzioni di rientro";
         Text[ danish ] = "Hanging punctuation";
         Text[ swedish ] = "Tillåt hängande ~interpunktion";
-        Text[ polish ] = "Dopuœæ sieroty i wdowy";
+        Text[ polish ] = "Dopu?æ sieroty i wdowy";
         Text[ portuguese_brazilian ] = "Hanging punctuation";
         Text[ japanese ] = "‹Ö‘¥ˆ—‚ğs‚¤";
-        Text[ korean ] = "Hanging punctuation";
+        Text[ korean ] = "±¸µÎÁ¡ Çã¿ë";
         Text[ chinese_simplified ] = "ÔÊĞíĞĞÄ©¸½¼Ó±êµã·ûºÅ";
         Text[ chinese_traditional ] = "¦æ¥½ªş¥[¼ĞÂI²Å¸¹";
         Text[ turkish ] = "Hanging punctuation";
@@ -2346,10 +2346,10 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ italian ] = "Interpunzioni all'inizio di riga per compressione";
         Text[ danish ] = "Allow punctuation at line start";
         Text[ swedish ] = "Tillåt komprimering av i~nterpunktion i början av rad";
-        Text[ polish ] = "Dopuœæ interpuncjê na pocz¹tku wiersza w celu kompresji";
+        Text[ polish ] = "Dopu?æ interpuncjê na pocz¹tku wiersza w celu kompresji";
         Text[ portuguese_brazilian ] = "Allow punctuation at line start";
         Text[ japanese ] = "s“ª‚Å‹Ö‘¥ˆ—‚ğs‚¤";
-        Text[ korean ] = "Allow punctuation at line start";
+        Text[ korean ] = "¾ĞÃà½Ã, ÁÙ ½ÃÀÛºÎ¿¡ ±¸µÎÁ¡ Çã¿ë";
         Text[ chinese_simplified ] = "ÔÊĞíĞĞÊ×¸½¼ÓÑ¹Ëõ±êµã·ûºÅ";
         Text[ chinese_traditional ] = "¤¹³\\¦æ­ºªş¥[À£ÁY¼ĞÂI²Å¸¹";
         Text[ turkish ] = "Allow punctuation at line start";
@@ -2376,7 +2376,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ polish ] = "Utwórz odstêp miêdzy tekstem azjatyckim, ³aciñskim i kompleksowym";
         Text[ portuguese_brazilian ] = "Apply distance between asian, latin and complex text";
         Text[ japanese ] = "“ú–{ŒêA‰p•¶šA‚¨‚æ‚Ñ¬İ•¶Í‚Å•¶šŠÔŠu‚ğ’²®";
-        Text[ korean ] = "Apply distance between asian, latin and complex text";
+        Text[ korean ] = "¾Æ½Ã¾Æ¾î, ¶óÆ¾¾î ±×¸®°í È¥ÇÕ ÅØ½ºÆ®¿¡¼­ °£°İ Àû¿ë";
         Text[ chinese_simplified ] = "ÔÚÖĞÈÕº«ÎÄ×ÖºÍÎ÷ÎÄ¼°»ìºÏÎÄ×ÖÖ®¼ä¼ÓÈë¿Õ¸ñ";
         Text[ chinese_traditional ] = "¦b¤¤¤éÁú¤å¦r©M¦è¤å¤Î²V¦X¤å¦r¤§¶¡¥[¤JªÅ®æ";
         Text[ turkish ] = "Apply distance between asian, latin and complex text";
@@ -2403,7 +2403,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ polish ] = "Dopasuj automatycznie odstêp miêdzy tekstem azjatyckim a liczbami";
         Text[ portuguese_brazilian ] = "Automatically adjust distance between asian text and numbers";
         Text[ japanese ] = "“ú–{Œê‚Æ”š‚Ì•¶šŠÔŠu‚ğ©“®’²®";
-        Text[ korean ] = "Automatically adjust distance between asian text and numbers";
+        Text[ korean ] = "¾Æ½Ã¾Æ ÅØ½ºÆ®¿Í ¼ö »çÀÌ °£°İ ÀÚµ¿ Á¶Á¤";
         Text[ chinese_simplified ] = "×Ô¶¯µ÷ÕûÖĞÈÕº«ÎÄ×ÖºÍÊı×ÖÖ®¼äµÄ¼ä¸ô";
         Text[ chinese_traditional ] = "¦Û°Ê½Õ¾ã¤¤¤éÁú¤å¦r©M¼Æ¦r¤§¶¡ªº¶¡¹j";
         Text[ turkish ] = "Automatically adjust distance between asian text and numbers";
@@ -2430,7 +2430,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ polish ] = "Wyrównanie tekstu";
         Text[ portuguese_brazilian ] = "Text alignment";
         Text[ japanese ] = "Ã·½Ä‚Ì”z’u(~T)";
-        Text[ korean ] = "~Text alignment";
+        Text[ korean ] = "~ÅØ½ºÆ® Á¤·Ä";
         Text[ chinese_simplified ] = "ÎÄ×Ö¶ÔÆë(~T)";
         Text[ chinese_traditional ] = "¤å¦r¹ï»ô(~T)";
         Text[ turkish ] = "Text alignment";
@@ -2525,8 +2525,8 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     };
     StringList [ korean ] =
     {
-            < "Automatisch" ; Default ; > ;
-        < "??Manuell" ; Default ; > ;
+            < "ÀÚµ¿" ; Default ; > ;
+        < "??¼öµ¿" ; Default ; > ;
     };
     StringList [ chinese_simplified ] =
     {
@@ -2555,7 +2555,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     };
     StringList [ finnish ] =
     {
-            < "Automatisch" ; Default ; > ;
+            < "Automaattinen" ; Default ; > ;
         < "??Manuell" ; Default ; > ;
     };
     };
