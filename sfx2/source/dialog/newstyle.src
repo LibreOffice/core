@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newstyle.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:26:44 $
+ *  last change: $Author: obo $ $Date: 2001-06-08 22:18:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
         Text[ chinese_traditional ] = "¼Ë¦¡¦WºÙ";
         Text[ arabic ] = "ÇÓã ÇáäãØ";
         Text[ greek ] = "¼íïìá ğñïôığïõ";
-        Text[ korean ] = "¼­½ÄÆÄÀÏ ÀÌ¸§";
+        Text[ korean ] = "¼­½Ä ÆÄÀÏ ÀÌ¸§";
         Text[ turkish ] = "Biçim adı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nombre del estilo";
@@ -160,7 +160,7 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
         Message[ chinese_traditional ] = "¼Ë¦¡¤w¸g¦s¦b¡C­nÂĞ¼g¡H";
         Message[ arabic ] = "åĞÇ ÇáäãØ ãæÌæÏ ãÓÈŞÇğ. åá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
         Message[ greek ] = "Ôï ğñüôõğï õğÜñ÷åé Şäç. Íá äéáãñáöåß;";
-        Message[ korean ] = "¼­½ÄÆÄÀÏÀÌ ÀÌ¹Ì ÀÖ½À´Ï´Ù. µ¤¾î¾º¿ì½Ã°Ú½À´Ï±î?";
+        Message[ korean ] = "¼­½Ä ÆÄÀÏÀÌ ÀÌ¹Ì ÀÖ½À´Ï´Ù. µ¤¾î¾º¿ì½Ã°Ú½À´Ï±î?";
         Message[ turkish ] = "Biçim mevcut durumda. Üzerine yazılsın mı?";
         Message[ language_user1 ] = " ";
         Message[ catalan ] = "El estilo ya existe. ¿Desea sobrescribirlo?";
@@ -178,3 +178,4 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
     Text[ catalan ] = "Crear estilo";
 };
  // ********************************************************************** EOF
+
