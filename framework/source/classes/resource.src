@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resource.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:25:30 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ String STR_MENU_ADDONS
     Text[ arabic ] = "Add-Ons";
     Text[ catalan ] = "Add-Ons";
     Text[ thai ] = "Add-Ons";
-    Text[ czech ] = "Add-Ons";
+    Text[ czech ] = "Přídavky";
     Text[ hebrew ] = "Add-Ons";
     Text[ hindi ] = "Add-Ons";
     Text[ slovak ] = "Add-Ons";
@@ -106,7 +106,23 @@ String STR_MENU_ADDONHELP
     Text[ chinese_traditional ] = "Add-~On 說明";
     Text[ slovak ] = "Add-~On Pomocník";
     Text[ portuguese_brazilian ] = "Ajuda do Add-~On";
+    Text[ greek ] = "Add-~On Help";
+    Text[ dutch ] = "Add-~On Help";
+    Text[ finnish ] = "Add-~On Help";
+    Text[ czech ] = "Nápověda přídavku";
+    Text[ danish ] = "Add-~On Help";
+    Text[ arabic ] = "Add-~On Help";
+    Text[ hebrew ] = "Add-~On Help";
+    Text[ catalan ] = "Add-~On Help";
+    Text[ hindi ] = "Add-~On Help";
+    Text[ portuguese ] = "Add-~On Help";
+    Text[ russian ] = "Add-~On Help";
+    Text[ polish ] = "Add-~On Help";
+    Text[ turkish ] = "Add-~On Help";
+    Text[ thai ] = "Add-~On Help";
 };
+
+
 
 
 
