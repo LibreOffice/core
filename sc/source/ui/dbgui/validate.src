@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:41:58 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,7 +990,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ chinese_traditional ] = "¦bΏι¤JµL®ΔΌΖ­Θ®ΙΕγ¥άΏω»~³ψ§i(~M)";
         Text[ arabic ] = "ΕΩεΗΡ ΡΣΗαΙ ΞΨΓ ΪδΟ ΕΟΞΗα ήνγ ΫνΡ ΥΗαΝΙ";
         Text[ greek ] = "Εμφάνιση μηνύματος σ~φάλματος σε περίπτωση εισαγωγής μη έγκυρων τιμών";
-        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ °ª ΐΤ·Β½Γ Ώΐ·ω ΈήΌΌΑφ ΊΈΐΜ±β(~M)";
+        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ °ª ΐΤ·Β½Γ Ώΐ·ω Έή½ΓΑφ ³ªΕΈ³»±β";
         Text[ turkish ] = "~Geηersiz deπer girildiπinde hata iletisi gφrόntόle";
     };
     MultiLineEdit EDT_ERROR
@@ -1031,7 +1031,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ chinese_traditional ] = "Ώω»~³ψ§i(~E)";
         Text[ arabic ] = "ΡΣΗαΙ ΞΨΓ";
         Text[ greek ] = "Μήνυμα σφάλματος";
-        Text[ korean ] = "Ώΐ·ω ΈήΌΌΑφ(~E)";
+        Text[ korean ] = "Ώΐ·ω Έή½ΓΑφ";
         Text[ turkish ] = "~Hata iletisi";
     };
     FixedText FT_TITLE
