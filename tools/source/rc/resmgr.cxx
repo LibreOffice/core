@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:25:19 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1281,6 +1281,9 @@ const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
             case LANGUAGE_ARABIC_QATAR:
                 return "96";
 
+            case LANGUAGE_HEBREW:
+                return "97";
+
             case LANGUAGE_CATALAN:
                 return "37";
 
@@ -1404,7 +1407,8 @@ ResMgr* ResMgr::SearchCreateResMgr(
         LANGUAGE_KOREAN,
         LANGUAGE_KOREAN_JOHAB,
         LANGUAGE_THAI,
-        LANGUAGE_HINDI
+        LANGUAGE_HINDI,
+        LANGUAGE_HEBREW
     };
 
     for( size_t i = 0; i < sizeof( aLanguages )/sizeof( aLanguages[0] ); ++i )
