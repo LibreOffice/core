@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docary.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-19 16:45:37 $
+ *  last change: $Author: rt $ $Date: 2001-01-23 10:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 #ifndef _DOCARY_HXX
 #define _DOCARY_HXX
+
+#ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HPP_
+#include <com/sun/star/i18n/ForbiddenCharacters.hpp>
+#endif
 
 class SwFieldType;
 class SwFrmFmt;
@@ -184,3 +188,4 @@ public:
 };
 
 #endif  //_DOCARY_HXX
+
