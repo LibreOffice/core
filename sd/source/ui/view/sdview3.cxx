@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-20 20:05:04 $
+ *  last change: $Author: ka $ $Date: 2001-04-03 13:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,8 +213,8 @@ BOOL SdView::InsertData( const Reference< XTransferable >& rxTransferable,
         pPage = (SdPage*) pDoc->GetPage( nPage );
 
     // !!!Clipboard
-//  SdTransferable* pOwnData = NULL;
-    SdTransferable* pOwnData = ( SD_MOD()->pTransferClip == (SdTransferable*) rxTransferable.get() ) ? SD_MOD()->pTransferClip : NULL;
+    SdTransferable* pOwnData = ( SD_MOD()->pTransferClip == (SdTransferable*) rxTransferable.get() ) ? SD_MOD()->pTransferClip :
+                               ( ( SD_MOD()->pTransferDrag == (SdTransferable*) rxTransferable.get() ) ? SD_MOD()->pTransferDrag : NULL );
 
     if( !pOwnData )
     {
@@ -363,8 +363,8 @@ BOOL SdView::InsertData( const Reference< XTransferable >& rxTransferable,
                     if( bLink )
                     {
                         SdrObject*      pObj = NULL;
-                        SdPage*         pPage = pModel->GetSdPage( 0, PK_STANDARD );
-                        SdrObjListIter  aIter( *pPage, IM_DEEPWITHGROUPS );
+                        SdPage*         pWorkPage = pModel->GetSdPage( 0, PK_STANDARD );
+                        SdrObjListIter  aIter( *pWorkPage, IM_DEEPWITHGROUPS );
                         String          aDocName( pSourceDoc->GetDocSh()->GetMedium()->GetName() );
 
                         while( aIter.IsMore() )
@@ -464,11 +464,11 @@ BOOL SdView::InsertData( const Reference< XTransferable >& rxTransferable,
 
                     BegUndo( String( SdResId(STR_UNDO_DRAGDROP ) ) );
                     pNewObj->NbcSetLayer( pPickObj->GetLayer() );
-                    SdrPage* pPage = GetPageViewPvNum( 0 )->GetPage();
-                    pPage->InsertObject( pNewObj );
+                    SdrPage* pWorkPage = GetPageViewPvNum( 0 )->GetPage();
+                    pWorkPage->InsertObject( pNewObj );
                     AddUndo( new SdrUndoNewObj( *pNewObj ) );
                     AddUndo( new SdrUndoDelObj( *pPickObj ) );
-                    pPage->RemoveObject( pPickObj->GetOrdNum() );
+                    pWorkPage->RemoveObject( pPickObj->GetOrdNum() );
                     EndUndo();
                     bChanged = TRUE;
                     nAction = DND_ACTION_COPY;
@@ -510,15 +510,13 @@ BOOL SdView::InsertData( const Reference< XTransferable >& rxTransferable,
 
             if( !bChanged )
             {
-                // insert object
+                SdrPage* pWorkPage = pModel->GetPage( 0 );
 
-                SdrPage* pInsertPage = pModel->GetPage( 0 );
-
-                pInsertPage->SetRectsDirty();
+                pWorkPage->SetRectsDirty();
 
                 if( pOwnData )
                 {
-                    Size aSize( pInsertPage->GetAllObjBoundRect().GetSize() );
+                    Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
 
                     aDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
                     aDropPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
@@ -593,26 +591,34 @@ BOOL SdView::InsertData( const Reference< XTransferable >& rxTransferable,
               aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStm ) ||
               aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStm ) ) )
         {
-            DocumentType eDocType = pDoc->GetDocumentType();
             SvStorageRef xStore( new SvStorage( *xStm ) );
 
             if( pDoc->GetDocSh() && ( pDoc->GetDocSh()->GetClassName() == aObjDesc.maClassName ) )
             {
-                SdDrawDocShellRef xDocShRef( new SdDrawDocShell( SFX_CREATE_MODE_EMBEDDED, TRUE, eDocType ) );
+                SdDrawDocShellRef xDocShRef( new SdDrawDocShell( SFX_CREATE_MODE_EMBEDDED, TRUE, pDoc->GetDocumentType() ) );
 
                 if( xDocShRef->DoLoad( xStore ) )
                 {
-                    SdrModel*   pModel = xDocShRef->GetDoc();
-                    SdPage*     pPage = (SdPage*) pModel->GetPage( 0 );
+                    SdDrawDocument* pModel = (SdDrawDocument*) xDocShRef->GetDoc();
+                    SdPage*         pWorkPage = (SdPage*) pModel->GetSdPage( 0, PK_STANDARD );
 
-                    pPage->SetRectsDirty();
+                    pWorkPage->SetRectsDirty();
 
                     if( pOwnData )
                     {
-                        Size aSize( pPage->GetAllObjBoundRect().GetSize() );
+                        Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
 
                         aDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
                         aDropPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
+                    }
+
+                    // delete pages, that are not of any interest for us
+                    for( long i = ( pModel->GetPageCount() - 1 ); i >= 0; i-- )
+                    {
+                        SdPage* pPage = (SdPage*) pModel->GetPage( (USHORT) i );
+
+                        if( pPage->GetPageKind() != PK_STANDARD )
+                            pModel->DeletePage( (USHORT) i );
                     }
 
                     bReturn = Paste( *pModel, aDropPos, pPage, nPasteOptions );
@@ -631,7 +637,7 @@ BOOL SdView::InsertData( const Reference< XTransferable >& rxTransferable,
             }
             else
             {
-                SvInPlaceObjectRef xIPObj = &( (SvFactory*) SvInPlaceObject::ClassFactory() )->CreateAndLoad( xStore );
+                SvInPlaceObjectRef  xIPObj( &( (SvFactory*) SvInPlaceObject::ClassFactory() )->CreateAndLoad( xStore ) );
 
                 if( xIPObj.Is() )
                 {
@@ -685,11 +691,11 @@ BOOL SdView::InsertData( const Reference< XTransferable >& rxTransferable,
             if( pOwnData && pOwnData->GetWorkDocument() )
             {
                 SdrModel*   pWorkModel = (SdrModel*) pOwnData->GetWorkDocument();
-                SdrPage*    pPage = pWorkModel->GetPage( 0 );
+                SdrPage*    pWorkPage = pWorkModel->GetPage( 0 );
 
-                pPage->SetRectsDirty();
+                pWorkPage->SetRectsDirty();
 
-                Size aSize( pPage->GetAllObjBoundRect().GetSize() );
+                Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
 
                 aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
                 aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
@@ -710,11 +716,11 @@ BOOL SdView::InsertData( const Reference< XTransferable >& rxTransferable,
             if( pOwnData && pOwnData->GetWorkDocument() )
             {
                 SdrModel*   pWorkModel = (SdrModel*) pOwnData->GetWorkDocument();
-                SdrPage*    pPage = pWorkModel->GetPage( 0 );
+                SdrPage*    pWorkPage = pWorkModel->GetPage( 0 );
 
-                pPage->SetRectsDirty();
+                pWorkPage->SetRectsDirty();
 
-                Size aSize( pPage->GetAllObjBoundRect().GetSize() );
+                Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
 
                 aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
                 aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
