@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sd_AccessibleSlideView.xba,v $ 
 '*
-'*  $Revision: 1.4 $ 
+'*  $Revision: 1.5 $ 
 '*
-'*  last change:$Date: 2003-05-27 12:14:18 $ 
+'*  last change:$Date: 2004-03-19 14:32:20 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -75,6 +75,7 @@ option explicit
 Global oDP1 As Object
 Global oDP2 As Object
 Global oCntr As Object
+Global multiSelection As Boolean
 
 
 Sub CreateObj()
@@ -93,16 +94,45 @@ On Error Goto ErrHndl
     oDPs = oDoc.getDrawPages()
     oDP1 = oDPs.insertNewByIndex(1)
     oDP2 = oDPs.insertNewByIndex(2)
+    switchOutlineView(oDoc)
     oWin = utils.at_getCurrentWindow(oDoc)
     xRoot = utils.at_getAccessibleObject(oWin)
     oSearchedContext = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.DOCUMENT)
     oObj = oSearchedContext
     oCntr = oDoc.getCurrentController()
+    multiSelection = true
 
 Exit Sub
 ErrHndl:
     Test.Exception()
 End Sub
+
+Sub switchOutlineView(xDoc as Object)
+On Error Goto ErrHndl
+
+        Dim Contrl as Variant, disp as Variant, transf as Object
+        Dim URL as new com.sun.star.util.URL
+        Dim noProps()
+        Dim res as Boolean
+        
+        Contrl = xDoc.getCurrentController()
+        URL.Complete = "slot:27011"
+        transf = createUnoService("com.sun.star.util.URLTransformer")
+        res = transf.parseStrict(URL)
+        
+        out.log("URL parsed :" + res)
+        
+        disp = Contrl.queryDispatch(URL, "", 0)
+
+        out.log("disp get.")
+
+        disp.dispatch(URL, noProps())
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+
 
 Sub DisposeObj()
     utils.closeObject(oDoc)
