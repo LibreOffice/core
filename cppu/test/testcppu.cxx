@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dbo $ $Date: 2001-07-02 11:24:09 $
+ *  last change: $Author: dbo $ $Date: 2001-07-06 11:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,6 +446,19 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
     aAny <<=( TypeClass_STRUCT );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (TypeClass *)0 ) );
     OSL_ASSERT( *(TypeClass*)aAny.getValue() == TypeClass_STRUCT );
+    }
+
+    {
+    // test seq< any >
+    Sequence< Any > seqAny( 1 );
+    seqAny[ 0 ] <<= sal_Int32(5);
+    seqAny.realloc( 200000 ); // hopefully different memory
+    seqAny[ 1 ] <<= sal_Int32(6);
+    uno_Any * pAnys = (uno_Any *)seqAny.getConstArray();
+    OSL_ASSERT( pAnys[ 1 ].pData == &pAnys[ 1 ].pReserved );
+    OSL_ASSERT( *(sal_Int32 *)pAnys[ 1 ].pData == sal_Int32(6) );
+    OSL_ASSERT( pAnys[ 0 ].pData == &pAnys[ 0 ].pReserved );
+    OSL_ASSERT( *(sal_Int32 *)pAnys[ 0 ].pData == sal_Int32(5) );
     }
 
     {
