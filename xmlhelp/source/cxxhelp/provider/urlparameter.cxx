@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:09:59 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 13:29:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -877,16 +877,10 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
         SablotRegHandler( p,HLR_SCHEME,&schemeHandler,(void*)(&userData) );
         rtl::OUString xslURL = pDatabases->getInstallPathAsURLWithOutEncoding();
 
-          rtl::OString xslURLascii = "file:";
-#ifdef WIN32
-#define OFFSET 6
-#else
-#define OFFSET 5
-#endif
-        xslURLascii += rtl::OString( xslURL.getStr()+OFFSET,
-                                     xslURL.getLength()-OFFSET,
-                                     osl_getThreadTextEncoding() );
-#undef OFFSET
+        rtl::OString xslURLascii(
+            xslURL.getStr(),
+            xslURL.getLength(),
+            osl_getThreadTextEncoding());
         xslURLascii += "main_transform.xsl";
 
         SablotRunProcessor( p,
