@@ -283,6 +283,8 @@ function callOleTest(	 id)
 		document.writeln( "string: " + arrout1[0] ); break;
 	case (2015):
 		oletest.testout_methodXInterface( arrout1 );
+		var outVal= arrout1[0];
+		alert( outVal.AttrAny2);
 		document.writeln( "string: " + arrout1[0].AttrAny2); break;
 	case (2016): 
 		oletest.testout_methodFloat( arrout1 );
@@ -458,10 +460,30 @@ function callOleTest(	 id)
 		ret= oletest.AttrAny2;
 		document.writeln( "set: " + obj + " get: " + ret);
 		break;
-
+	
+	// Structs ----------------------------------------------
 	case 1020:
-		var val= 3.14;
-		oletest.in_float( val);
+		 var struct= oletest._GetStruct("com.sun.star.beans.Property");
+		 struct.Attributes= 1;
+		 struct.Handle= 2;
+		 struct.Name= "some Property"
+		 oletest.methodStruct( struct);
+		 break;
+	case 1021:
+		var struct= oletest.retMethodStruct();
+		alert( "Property::Attributes : " + struct.Attributes + " \nProperty::Handle : "
+		+ struct.Handle + "\n Property::Name : " + struct.Name);
+		break;
+	case 1022:
+		 var struct= oletest._GetStruct("com.sun.star.beans.Property");
+		 struct.Attributes= 1;
+		 struct.Handle= 2;
+		 struct.Name= "some Property"
+		 oletest.AttrStruct=  struct;
+
+		 var struct2= oletest.AttrStruct;
+		alert( "property get: \n Property::Attributes : " + struct2.Attributes + " \nProperty::Handle : "
+		+ struct2.Handle + "\n Property::Name : " + struct2.Name);
 		break;
 
 	case 2100:
@@ -872,7 +894,11 @@ Test of Any parameter in a property. Any contains:<br>
 <button onclick='callOleTest( 1013)'>array</Button>
 <button onclick='callOleTest( 1014)'>object</Button>
 <P>
-<button onclick='callOleTest( 1020)'>[in] float </Button>
+Test of Struct conversions<br>
+<button onclick='callOleTest( 1020)'>methodStruct </Button>
+<button onclick='callOleTest( 1021)'>return struct</Button>
+<button onclick='callOleTest( 1022)'>struct attribute</Button>
+
 
 
 

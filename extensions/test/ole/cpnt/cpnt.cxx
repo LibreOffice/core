@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpnt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:55 $
+ *  last change: $Author: jl $ $Date: 2000-10-19 11:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -795,6 +795,11 @@ void SAL_CALL OComponent::setAttrAny2(const Any& AttrAny2_) throw( RuntimeExcept
 
 void SAL_CALL OComponent::methodStruct(const Property& aProp) throw( RuntimeException )
 {
+    char buff[1024];
+    buff[0]= 0;
+    sprintf( buff,"Property::Attribute : %d \n Property::Handle : %d \n Property::Name : %S",
+        aProp.Attributes, aProp.Handle, (const sal_Unicode*)aProp.Name);
+    MessageBox( NULL, A2T(buff), _T("OleTest: methodStruct"), MB_OK);
 }
 
 Property SAL_CALL OComponent::retMethodStruct(void) throw( RuntimeException )
@@ -817,7 +822,13 @@ Property SAL_CALL OComponent::getAttrStruct(void) throw( RuntimeException)
 }
 
 void SAL_CALL OComponent::setAttrStruct(const Property& AttrStruct_) throw( RuntimeException )
-{}
+{
+    char buff[1024];
+    buff[0]= 0;
+    sprintf( buff,"Property::Attribute : %d \n Property::Handle : %d \n Property::Name : %S",
+        AttrStruct_.Attributes, AttrStruct_.Handle, (const sal_Unicode*)AttrStruct_.Name);
+    MessageBox( NULL, A2T(buff), _T("OleTest: setAttrStruct"), MB_OK);
+}
 
 // XTestOther ==================================================================================
 void SAL_CALL OComponent::other_methodAnyIn(const Any& rAny) throw( RuntimeException )
@@ -836,9 +847,10 @@ Any SAL_CALL OComponent::other_methodAnyRet(void) throw(RuntimeException )
 }
 void SAL_CALL OComponent::in_float( float val) throw ( RuntimeException)
 {
+    USES_CONVERSION;
     char buff[256];
     sprintf( buff, "parameter : %f", val);
-    MessageBox( NULL, _T(buff), _T("OleTest"), MB_OK);
+    MessageBox( NULL, A2T(buff), _T("OleTest"), MB_OK);
 }
 
 // XTestOutParameters ============================================================================
