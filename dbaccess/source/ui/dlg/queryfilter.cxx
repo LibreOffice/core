@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 13:29:31 $
+ *  last change: $Author: oj $ $Date: 2001-04-04 13:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,6 +360,11 @@ sal_uInt16 DlgFilterCrit::GetSelectionPos(OSQLPredicateType eType,const ListBox&
 ::rtl::OUString DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue) const
 {
     ::rtl::OUString aFilter(_rField.GetSelectEntry());
+    // first quote the field name
+    Reference<XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : Reference<XDatabaseMetaData>();
+    ::rtl::OUString aQuote  = xMetaData.is() ? xMetaData->getIdentifierQuoteString() : ::rtl::OUString();
+    aFilter = ::dbtools::quoteName(aQuote,aFilter);
+
     aFilter += ::rtl::OUString::createFromAscii(" ");
     sal_Bool bNeedText = sal_True;
     switch(GetOSQLPredicateType(_rComp.GetSelectEntryPos(),_rComp.GetEntryCount()))
@@ -495,7 +500,7 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
     switch(_rItem.Handle)
     {
         case SQL_PRED_EQUAL:
-            aStr.Erase(0,1);
+            //  aStr.Erase(0,1);
             break;
         case SQL_PRED_NOTEQUAL:
             aStr.Erase(0,2);
