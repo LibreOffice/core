@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mapping.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:56 $
+ *  last change: $Author: dbo $ $Date: 2001-04-17 13:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 typedef struct _typelib_TypeDescription typelib_TypeDescription;
 typedef struct _typelib_InterfaceTypeDescription typelib_InterfaceTypeDescription;
 typedef struct _uno_Interface uno_Interface;
+typedef struct _uno_Environment uno_Environment;
 
 /** */ //for docpp
 namespace com

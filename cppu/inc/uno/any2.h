@@ -2,9 +2,9 @@
  *
  *  $RCSfile: any2.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:06 $
+ *  last change: $Author: dbo $ $Date: 2001-04-17 13:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,9 @@ extern "C"
 #pragma pack(8)
 #endif
 
-typedef struct _typelib_TypeDescription typelib_TypeDescription;
+struct _typelib_TypeDescriptionReference;
+struct _typelib_TypeDescription;
+struct _uno_Mapping;
 
 /** This is the binary specification of an UNO any.
     <br>
@@ -88,10 +90,10 @@ typedef struct _uno_Any
 {
     /** type of value<br>
     */
-    typelib_TypeDescriptionReference *  pType;
+    struct _typelib_TypeDescriptionReference * pType;
     /** pointer to value<br>
     */
-    void *                              pData;
+    void * pData;
 } uno_Any;
 
 #ifdef SAL_W32
@@ -111,7 +113,7 @@ typedef struct _uno_Any
 */
 void SAL_CALL uno_any_assign(
     uno_Any * pDest, void * pSource,
-    typelib_TypeDescription * pTypeDescr,
+    struct _typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 /** Assign an any with a given value.
@@ -125,7 +127,7 @@ void SAL_CALL uno_any_assign(
 */
 void SAL_CALL uno_type_any_assign(
     uno_Any * pDest, void * pSource,
-    typelib_TypeDescriptionReference * pType,
+    struct _typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 
@@ -139,7 +141,7 @@ void SAL_CALL uno_type_any_assign(
 */
 void SAL_CALL uno_any_construct(
     uno_Any * pDest, void * pSource,
-    typelib_TypeDescription * pTypeDescr,
+    struct _typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C();
 /** Constructs an any with a given value.
@@ -152,7 +154,7 @@ void SAL_CALL uno_any_construct(
 */
 void SAL_CALL uno_type_any_construct(
     uno_Any * pDest, void * pSource,
-    typelib_TypeDescriptionReference * pType,
+    struct _typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C();
 
@@ -165,8 +167,8 @@ void SAL_CALL uno_type_any_construct(
 */
 void SAL_CALL uno_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
-    typelib_TypeDescription * pTypeDescr,
-    uno_Mapping * mapping )
+    struct _typelib_TypeDescription * pTypeDescr,
+    struct _uno_Mapping * mapping )
     SAL_THROW_EXTERN_C();
 /** Constructs an any with a given value and converts/ maps interfaces.
     <br>
@@ -177,8 +179,8 @@ void SAL_CALL uno_any_constructAndConvert(
 */
 void SAL_CALL uno_type_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
-    typelib_TypeDescriptionReference * pType,
-    uno_Mapping * mapping )
+    struct _typelib_TypeDescriptionReference * pType,
+    struct _uno_Mapping * mapping )
     SAL_THROW_EXTERN_C();
 
 /** Destructs an any.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: environment.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:06 $
+ *  last change: $Author: dbo $ $Date: 2001-04-17 13:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,8 @@ extern "C"
 {
 #endif
 
-typedef struct _uno_Environment uno_Environment;
-typedef struct _uno_ExtEnvironment uno_ExtEnvironment;
-typedef struct _typelib_InterfaceTypeDescription typelib_InterfaceTypeDescription;
+struct _uno_ExtEnvironment;
+struct _typelib_InterfaceTypeDescription;
 
 #ifdef SAL_W32
 #pragma pack(push, 8)
@@ -103,20 +102,20 @@ typedef struct _uno_Environment
 
     /** pointer to extended environment (interface registration functionality), if supported<br>
     */
-    uno_ExtEnvironment * pExtEnv;
+    struct _uno_ExtEnvironment * pExtEnv;
 
     /** Acquires this environment.
         <br>
         @param pEnv this environment
     */
-    void (SAL_CALL * acquire)( uno_Environment * pEnv );
+    void (SAL_CALL * acquire)( struct _uno_Environment * pEnv );
 
     /** Releases this environment;
         last release of environment will revoke the environment from runtime.
         <br>
         @param pEnv this environment
     */
-    void (SAL_CALL * release)( uno_Environment * pEnv );
+    void (SAL_CALL * release)( struct _uno_Environment * pEnv );
 
     /** Call this function to <b>explicitly</b> dispose this environment
         (e.g., release all interfaces).<br>
@@ -124,7 +123,7 @@ typedef struct _uno_Environment
         <br>
         @param pEnv this environment
     */
-    void (SAL_CALL * dispose)( uno_Environment * pEnv );
+    void (SAL_CALL * dispose)( struct _uno_Environment * pEnv );
 
     /* ===== the following part will be late initialized by a matching bridge ===== *
      * ===== and is NOT for public use.                                       ===== */
@@ -135,7 +134,7 @@ typedef struct _uno_Environment
         <br>
         @param pEnv environment that is being disposed
     */
-    void (SAL_CALL * environmentDisposing)( uno_Environment * pEnv );
+    void (SAL_CALL * environmentDisposing)( struct _uno_Environment * pEnv );
 } uno_Environment;
 
 /** Generic function pointer declaration to free a proxy object if it is not needed
@@ -148,7 +147,7 @@ typedef struct _uno_Environment
     @param pEnv environment
     @param pProxy proxy pointer
 */
-typedef void (SAL_CALL * uno_freeProxyFunc)( uno_ExtEnvironment * pEnv, void * pProxy );
+typedef void (SAL_CALL * uno_freeProxyFunc)( struct _uno_ExtEnvironment * pEnv, void * pProxy );
 
 /** Generic function pointer declaration to allocate memory. Used with getRegisteredInterfaces().
     <br>
@@ -174,10 +173,10 @@ typedef struct _uno_ExtEnvironment
         @param pTypeDescr   type description of interface
     */
     void (SAL_CALL * registerInterface)(
-        uno_ExtEnvironment * pEnv,
+        struct _uno_ExtEnvironment * pEnv,
         void ** ppInterface,
         rtl_uString * pOId,
-        typelib_InterfaceTypeDescription * pTypeDescr );
+        struct _typelib_InterfaceTypeDescription * pTypeDescr );
 
     /** Registers a proxy interface of this environment that can be reanimated and is
         freed <b>explicitly</b> by this environment.
@@ -189,11 +188,11 @@ typedef struct _uno_ExtEnvironment
         @param pTypeDescr   type description of interface
     */
     void (SAL_CALL * registerProxyInterface)(
-        uno_ExtEnvironment * pEnv,
+        struct _uno_ExtEnvironment * pEnv,
         void ** ppProxy,
         uno_freeProxyFunc freeProxy,
         rtl_uString * pOId,
-        typelib_InterfaceTypeDescription * pTypeDescr );
+        struct _typelib_InterfaceTypeDescription * pTypeDescr );
 
     /** Revokes an interface from this environment.<br>
         You have to revoke <b>any</b> interface that has been registered via this method.
@@ -202,7 +201,7 @@ typedef struct _uno_ExtEnvironment
         @param pInterface   interface to be revoked
     */
     void (SAL_CALL * revokeInterface)(
-        uno_ExtEnvironment * pEnv,
+        struct _uno_ExtEnvironment * pEnv,
         void * pInterface );
 
     /** Provides the object id of a given interface.
@@ -211,7 +210,7 @@ typedef struct _uno_ExtEnvironment
         @param pInterface   interface of object
     */
     void (SAL_CALL * getObjectIdentifier)(
-        uno_ExtEnvironment * pEnv,
+        struct _uno_ExtEnvironment * pEnv,
         rtl_uString ** ppOId,
         void * pInterface );
 
@@ -224,10 +223,10 @@ typedef struct _uno_ExtEnvironment
         @param pTypeDescr   type description of interface to be retrieved
     */
     void (SAL_CALL * getRegisteredInterface)(
-        uno_ExtEnvironment * pEnv,
+        struct _uno_ExtEnvironment * pEnv,
         void ** ppInterface,
         rtl_uString * pOId,
-        typelib_InterfaceTypeDescription * pTypeDescr );
+        struct _typelib_InterfaceTypeDescription * pTypeDescr );
 
     /** Returns all currently registered interfaces of this environment.
         The memory block allocated might be slightly larger than (*pnLen * sizeof(void *)).
@@ -238,7 +237,7 @@ typedef struct _uno_ExtEnvironment
         @param memAlloc     function for allocating memory that is passed back
     */
     void (SAL_CALL * getRegisteredInterfaces)(
-        uno_ExtEnvironment * pEnv,
+        struct _uno_ExtEnvironment * pEnv,
         void *** pppInterfaces,
         sal_Int32 * pnLen,
         uno_memAlloc memAlloc );
@@ -254,7 +253,7 @@ typedef struct _uno_ExtEnvironment
         @param pInterface   an interface
     */
     void (SAL_CALL * computeObjectIdentifier)(
-        uno_ExtEnvironment * pEnv,
+        struct _uno_ExtEnvironment * pEnv,
         rtl_uString ** ppOId, void * pInterface );
 
     /** Function to acquire an interface.
@@ -263,7 +262,7 @@ typedef struct _uno_ExtEnvironment
         @param pInterface   an interface
     */
     void (SAL_CALL * acquireInterface)(
-        uno_ExtEnvironment * pEnv,
+        struct _uno_ExtEnvironment * pEnv,
         void * pInterface );
 
     /** Function to release an interface.
@@ -272,7 +271,7 @@ typedef struct _uno_ExtEnvironment
         @param pInterface   an interface
     */
     void (SAL_CALL * releaseInterface)(
-        uno_ExtEnvironment * pEnv,
+        struct _uno_ExtEnvironment * pEnv,
         void * pInterface );
 
 } uno_ExtEnvironment;

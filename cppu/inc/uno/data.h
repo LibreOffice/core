@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:06 $
+ *  last change: $Author: dbo $ $Date: 2001-04-17 13:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,10 @@ extern "C"
 {
 #endif
 
-typedef struct _uno_Mapping uno_Mapping;
-typedef struct _typelib_TypeDescription typelib_TypeDescription;
-typedef struct _typelib_TypeDescriptionReference typelib_TypeDescriptionReference;
-typedef struct _typelib_InterfaceTypeDescription typelib_InterfaceTypeDescription;
+struct _typelib_TypeDescriptionReference;
+struct _typelib_TypeDescription;
+struct _typelib_InterfaceTypeDescription;
+struct _uno_Mapping;
 
 /** Generic function pointer declaration to query for an interface.
     <br>
@@ -82,7 +82,7 @@ typedef struct _typelib_InterfaceTypeDescription typelib_InterfaceTypeDescriptio
     @return interface pointer
 */
 typedef void * (SAL_CALL * uno_QueryInterfaceFunc)(
-    void * pInterface, typelib_TypeDescriptionReference * pType );
+    void * pInterface, struct _typelib_TypeDescriptionReference * pType );
 /** Generic function pointer declaration to acquire an interface.
     <br>
     @param pInterface interface to be acquired
@@ -108,8 +108,8 @@ typedef void (SAL_CALL * uno_ReleaseFunc)(
     @return true if values are equal
 */
 sal_Bool SAL_CALL uno_equalData(
-    void * pVal1, typelib_TypeDescription * pVal1TypeDescr,
-    void * pVal2, typelib_TypeDescription * pVal2TypeDescr,
+    void * pVal1, struct _typelib_TypeDescription * pVal1TypeDescr,
+    void * pVal2, struct _typelib_TypeDescription * pVal2TypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 /** Tests if two values are equal. May compare different types (e.g., short to long).
@@ -124,8 +124,8 @@ sal_Bool SAL_CALL uno_equalData(
     @return true if values are equal
 */
 sal_Bool SAL_CALL uno_type_equalData(
-    void * pVal1, typelib_TypeDescriptionReference * pVal1Type,
-    void * pVal2, typelib_TypeDescriptionReference * pVal2Type,
+    void * pVal1, struct _typelib_TypeDescriptionReference * pVal1Type,
+    void * pVal2, struct _typelib_TypeDescriptionReference * pVal2Type,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 
@@ -139,7 +139,7 @@ sal_Bool SAL_CALL uno_type_equalData(
 */
 void SAL_CALL uno_copyData(
     void * pDest, void * pSource,
-    typelib_TypeDescription * pTypeDescr, uno_AcquireFunc acquire )
+    struct _typelib_TypeDescription * pTypeDescr, uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C();
 /** Copy construct memory with given value.
     The size of the destination value must be larger or equal to the size of the source value.
@@ -151,7 +151,7 @@ void SAL_CALL uno_copyData(
 */
 void SAL_CALL uno_type_copyData(
     void * pDest, void * pSource,
-    typelib_TypeDescriptionReference * pType, uno_AcquireFunc acquire )
+    struct _typelib_TypeDescriptionReference * pType, uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C();
 
 /** Copy construct memory with given value.
@@ -165,7 +165,7 @@ void SAL_CALL uno_type_copyData(
 */
 void SAL_CALL uno_copyAndConvertData(
     void * pDest, void * pSource,
-    typelib_TypeDescription * pTypeDescr, uno_Mapping * mapping )
+    struct _typelib_TypeDescription * pTypeDescr, struct _uno_Mapping * mapping )
     SAL_THROW_EXTERN_C();
 /** Copy construct memory with given value.
     The size of the destination value must be larger or equal to the size of the source value.<br>
@@ -178,7 +178,7 @@ void SAL_CALL uno_copyAndConvertData(
 */
 void SAL_CALL uno_type_copyAndConvertData(
     void * pDest, void * pSource,
-    typelib_TypeDescriptionReference * pType, uno_Mapping * mapping )
+    struct _typelib_TypeDescriptionReference * pType, struct _uno_Mapping * mapping )
     SAL_THROW_EXTERN_C();
 
 /** Destructs a given value; does <b>not</b> free its memory!
@@ -188,7 +188,7 @@ void SAL_CALL uno_type_copyAndConvertData(
     @param release          function called each time an interface pointer needs to be released; defaults (0) to uno
 */
 void SAL_CALL uno_destructData(
-    void * pValue, typelib_TypeDescription * pTypeDescr, uno_ReleaseFunc release )
+    void * pValue, struct _typelib_TypeDescription * pTypeDescr, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 /** Destructs a given value; does <b>not</b> free its memory!
     <br>
@@ -197,7 +197,7 @@ void SAL_CALL uno_destructData(
     @param release          function called each time an interface pointer needs to be released; defaults (0) to uno
 */
 void SAL_CALL uno_type_destructData(
-    void * pValue, typelib_TypeDescriptionReference * pType, uno_ReleaseFunc release )
+    void * pValue, struct _typelib_TypeDescriptionReference * pType, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 
 /** Default constructs a value. All simple types are set to 0, enums are set to their default
@@ -207,7 +207,7 @@ void SAL_CALL uno_type_destructData(
     @param pTypeDescr       type description of value to be constructed
 */
 void SAL_CALL uno_constructData(
-    void * pMem, typelib_TypeDescription * pTypeDescr )
+    void * pMem, struct _typelib_TypeDescription * pTypeDescr )
     SAL_THROW_EXTERN_C();
 /** Default constructs a value. All simple types are set to 0, enums are set to their default
     value.
@@ -216,7 +216,7 @@ void SAL_CALL uno_constructData(
     @param pType            type of value to be constructed
 */
 void SAL_CALL uno_type_constructData(
-    void * pMem, typelib_TypeDescriptionReference * pType )
+    void * pMem, struct _typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C();
 
 /** Assigns a destination value with a source value. Widening conversion
@@ -233,8 +233,8 @@ void SAL_CALL uno_type_constructData(
     @return true if destination has been successfully assigned
 */
 sal_Bool SAL_CALL uno_assignData(
-    void * pDest, typelib_TypeDescription * pDestTypeDescr,
-    void * pSource, typelib_TypeDescription * pSourceTypeDescr,
+    void * pDest, struct _typelib_TypeDescription * pDestTypeDescr,
+    void * pSource, struct _typelib_TypeDescription * pSourceTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 /** Assigns a destination value with a source value. Widening conversion
@@ -251,8 +251,8 @@ sal_Bool SAL_CALL uno_assignData(
     @return true if destination has been successfully assigned
 */
 sal_Bool SAL_CALL uno_type_assignData(
-    void * pDest, typelib_TypeDescriptionReference * pDestType,
-    void * pSource, typelib_TypeDescriptionReference * pSourceType,
+    void * pDest, struct _typelib_TypeDescriptionReference * pDestType,
+    void * pSource, struct _typelib_TypeDescriptionReference * pSourceType,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 

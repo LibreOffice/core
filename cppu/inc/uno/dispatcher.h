@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatcher.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:28 $
+ *  last change: $Author: dbo $ $Date: 2001-04-17 13:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,8 @@ extern "C"
 {
 #endif
 
-typedef struct _typelib_TypeDescription typelib_TypeDescription;
-typedef struct _typelib_InterfaceTypeDescription typelib_InterfaceTypeDescription;
-typedef struct _uno_Interface uno_Interface;
+struct _typelib_TypeDescription;
+struct _uno_Interface;
 
 /** Function pointer declaration for the binary C uno dispatch function.<br>
     Any pure out or return value will be constructed by the callee, iff
@@ -98,8 +97,8 @@ typedef struct _uno_Interface uno_Interface;
     @param ppException   pointer to pointer to unconstructed any to signal an exception.
 */
 typedef void (SAL_CALL * uno_DispatchMethod)(
-    uno_Interface * pUnoI,
-    const typelib_TypeDescription * pMemberType,
+    struct _uno_Interface * pUnoI,
+    const struct _typelib_TypeDescription * pMemberType,
     void * pReturn,
     void * pArgs[],
     uno_Any ** ppException );
@@ -119,12 +118,12 @@ typedef struct _uno_Interface
         <br>
         @param pInterface uno interface
     */
-    void (SAL_CALL * acquire)( uno_Interface * pInterface );
+    void (SAL_CALL * acquire)( struct _uno_Interface * pInterface );
     /** Releases uno interface.
         <br>
         @param pInterface uno interface
     */
-    void (SAL_CALL * release)( uno_Interface * pInterface );
+    void (SAL_CALL * release)( struct _uno_Interface * pInterface );
     /** dispatch function
     */
     uno_DispatchMethod pDispatcher;

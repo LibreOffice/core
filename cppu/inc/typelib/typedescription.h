@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedescription.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-30 13:37:44 $
+ *  last change: $Author: dbo $ $Date: 2001-04-17 13:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ extern "C"
 {
 #endif
 
-typedef struct _typelib_TypeDescription typelib_TypeDescription;
+struct _typelib_TypeDescription;
 
 #ifdef SAL_W32
 #pragma pack(push, 8)
@@ -114,7 +114,7 @@ typedef struct _typelib_TypeDescriptionReference
     /** pointer to full typedescription; this value is only valid if
         the type is never swapped out<br>
     */
-    typelib_TypeDescription *           pType;
+    struct _typelib_TypeDescription *   pType;
     /** pointer to optimize the runtime; not for public use<br>
     */
     void *                              pUniqueIdentifier;
@@ -152,7 +152,7 @@ typedef struct _typelib_TypeDescription
     /** pointer to self to distinguish reference from description;
         for internal use only<br>
     */
-    typelib_TypeDescription *           pSelf;
+    struct _typelib_TypeDescription *   pSelf;
     /** pointer to optimize the runtime; not for public use<br>
     */
     void *                              pUniqueIdentifier;
@@ -182,8 +182,6 @@ typedef struct _typelib_TypeDescription
     sal_Bool                            bOnDemand;
 } typelib_TypeDescription;
 
-typedef struct _typelib_CompoundTypeDescription typelib_CompoundTypeDescription;
-
 /** Type description of a struct or exception.
     <br>
 */
@@ -195,7 +193,7 @@ typedef struct _typelib_CompoundTypeDescription
 
     /** pointer to base type description, else 0<br>
     */
-    typelib_CompoundTypeDescription *   pBaseTypeDescription;
+    struct _typelib_CompoundTypeDescription * pBaseTypeDescription;
 
     /** number of members<br>
     */
@@ -397,8 +395,6 @@ typedef struct _typelib_InterfaceAttributeTypeDescription
     typelib_TypeDescriptionReference *          pAttributeTypeRef;
 } typelib_InterfaceAttributeTypeDescription;
 
-typedef struct _typelib_InterfaceTypeDescription typelib_InterfaceTypeDescription;
-
 /** Type description of an interface.
     <br>
 */
@@ -410,7 +406,7 @@ typedef struct _typelib_InterfaceTypeDescription
 
     /** pointer to base type description, else 0<br>
     */
-    typelib_InterfaceTypeDescription *          pBaseTypeDescription;
+    struct _typelib_InterfaceTypeDescription *  pBaseTypeDescription;
     /** unique identifier of interface<br>
     */
     typelib_Uik                                 aUik;

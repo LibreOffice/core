@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mapping.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:06 $
+ *  last change: $Author: dbo $ $Date: 2001-04-17 13:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,9 @@ extern "C"
 {
 #endif
 
-typedef struct _typelib_InterfaceTypeDescription typelib_InterfaceTypeDescription;
-typedef struct _uno_Mapping uno_Mapping;
-typedef struct _uno_Environment uno_Environment;
+struct _typelib_InterfaceTypeDescription;
+struct _uno_Mapping;
+struct _uno_Environment;
 
 /** Function pointer declaration to map an interface from one environment to another.
     <br>
@@ -86,9 +86,9 @@ typedef struct _uno_Environment uno_Environment;
     @param pInterfaceTypeDescr type description of the interface
 */
 typedef void (SAL_CALL * uno_MapInterfaceFunc)(
-    uno_Mapping * pMapping,
+    struct _uno_Mapping * pMapping,
     void ** ppOut, void * pInterface,
-    typelib_InterfaceTypeDescription * pInterfaceTypeDescr );
+    struct _typelib_InterfaceTypeDescription * pInterfaceTypeDescr );
 
 
 #ifdef SAL_W32
@@ -106,13 +106,13 @@ typedef struct _uno_Mapping
         <br>
         @param pMapping     mapping
     */
-    void (SAL_CALL * acquire)( uno_Mapping * pMapping );
+    void (SAL_CALL * acquire)( struct _uno_Mapping * pMapping );
     /** Releases mapping.
         The last release may unload bridges.
         <br>
         @param pMapping     mapping
     */
-    void (SAL_CALL * release)( uno_Mapping * pMapping );
+    void (SAL_CALL * release)( struct _uno_Mapping * pMapping );
 
     /** mapping function<br>
     */
@@ -135,9 +135,9 @@ typedef struct _uno_Mapping
     @param pAddPurpose  additional purpose of mapping (e.g., protocolling); defaults to 0 (none)
 */
 void SAL_CALL uno_getMapping(
-    uno_Mapping ** ppMapping,
-    uno_Environment * pFrom,
-    uno_Environment * pTo,
+    struct _uno_Mapping ** ppMapping,
+    struct _uno_Environment * pFrom,
+    struct _uno_Environment * pTo,
     rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C();
 
@@ -149,9 +149,9 @@ void SAL_CALL uno_getMapping(
     @param pAddPurpose  additional purpose
 */
 typedef void (SAL_CALL * uno_getMappingFunc)(
-    uno_Mapping ** ppMapping,
-    uno_Environment * pFrom,
-    uno_Environment * pTo,
+    struct _uno_Mapping ** ppMapping,
+    struct _uno_Environment * pFrom,
+    struct _uno_Environment * pTo,
     rtl_uString * pAddPurpose );
 
 /** Registers a callback being called each time a mapping is demanded.
@@ -174,7 +174,7 @@ void SAL_CALL uno_revokeMappingCallback(
     <br>
     @param pMapping     mapping to be freed
 */
-typedef void (SAL_CALL * uno_freeMappingFunc)( uno_Mapping * pMapping );
+typedef void (SAL_CALL * uno_freeMappingFunc)( struct _uno_Mapping * pMapping );
 
 /** Registers a mapping.<br>
     A mapping registers itself on first acquire and revokes itself on last release.
@@ -188,8 +188,8 @@ typedef void (SAL_CALL * uno_freeMappingFunc)( uno_Mapping * pMapping );
     @param pAddPurpose  additional purpose string; defaults to 0
 */
 void SAL_CALL uno_registerMapping(
-    uno_Mapping ** ppMapping, uno_freeMappingFunc freeMapping,
-    uno_Environment * pFrom, uno_Environment * pTo, rtl_uString * pAddPurpose )
+    struct _uno_Mapping ** ppMapping, uno_freeMappingFunc freeMapping,
+    struct _uno_Environment * pFrom, struct _uno_Environment * pTo, rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C();
 
 /** Revokes a mapping.<br>
@@ -198,7 +198,7 @@ void SAL_CALL uno_registerMapping(
     @param pMapping     mapping to be revoked
 */
 void SAL_CALL uno_revokeMapping(
-    uno_Mapping * pMapping )
+    struct _uno_Mapping * pMapping )
     SAL_THROW_EXTERN_C();
 
 /** Gets an interface mapping from one language environment to another by
@@ -212,7 +212,7 @@ void SAL_CALL uno_revokeMapping(
     @param pAddPurpose  additional purpose of mapping (e.g., protocolling); defaults to 0 (none)
 */
 void SAL_CALL uno_getMappingByName(
-    uno_Mapping ** ppMapping,
+    struct _uno_Mapping ** ppMapping,
     rtl_uString * pFrom,
     rtl_uString * pTo,
     rtl_uString * pAddPurpose )
@@ -229,9 +229,9 @@ void SAL_CALL uno_getMappingByName(
     @pTo                destination environment
 */
 typedef void (SAL_CALL * uno_ext_getMappingFunc)(
-    uno_Mapping ** ppMapping,
-    uno_Environment * pFrom,
-    uno_Environment * pTo );
+    struct _uno_Mapping ** ppMapping,
+    struct _uno_Environment * pFrom,
+    struct _uno_Environment * pTo );
 
 #ifdef __cplusplus
 }

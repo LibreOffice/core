@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequence2.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:06 $
+ *  last change: $Author: dbo $ $Date: 2001-04-17 13:29:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@ extern "C"
 {
 #endif
 
+struct _typelib_TypeDescriptionReference;
+struct _typelib_TypeDescription;
 typedef sal_Sequence uno_Sequence;
 
 /** Assign a sequence.
@@ -85,7 +87,7 @@ typedef sal_Sequence uno_Sequence;
 void SAL_CALL uno_sequence_assign(
     uno_Sequence ** ppDest,
     uno_Sequence * pSource,
-    typelib_TypeDescription * pTypeDescr,
+    struct _typelib_TypeDescription * pTypeDescr,
     uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 /** Assign a sequence.
@@ -98,7 +100,7 @@ void SAL_CALL uno_sequence_assign(
 void SAL_CALL uno_type_sequence_assign(
     uno_Sequence ** ppDest,
     uno_Sequence * pSource,
-    typelib_TypeDescriptionReference * pType,
+    struct _typelib_TypeDescriptionReference * pType,
     uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 
@@ -112,7 +114,7 @@ void SAL_CALL uno_type_sequence_assign(
 */
 void SAL_CALL uno_sequence_construct(
     uno_Sequence ** ppSequence,
-    typelib_TypeDescription * pTypeDescr,
+    struct _typelib_TypeDescription * pTypeDescr,
     void * pElements, sal_Int32 len,
     uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C();
@@ -126,7 +128,7 @@ void SAL_CALL uno_sequence_construct(
 */
 void SAL_CALL uno_type_sequence_construct(
     uno_Sequence ** ppSequence,
-    typelib_TypeDescriptionReference * pType,
+    struct _typelib_TypeDescriptionReference * pType,
     void * pElements, sal_Int32 len,
     uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C();
@@ -141,7 +143,7 @@ void SAL_CALL uno_type_sequence_construct(
 */
 void SAL_CALL uno_sequence_reference2One(
     uno_Sequence ** ppSequence,
-    typelib_TypeDescription * pTypeDescr,
+    struct _typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire,
     uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
@@ -155,7 +157,7 @@ void SAL_CALL uno_sequence_reference2One(
 */
 void SAL_CALL uno_type_sequence_reference2One(
     uno_Sequence ** ppSequence,
-    typelib_TypeDescriptionReference * pType,
+    struct _typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire,
     uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
@@ -171,7 +173,7 @@ void SAL_CALL uno_type_sequence_reference2One(
 */
 void SAL_CALL uno_sequence_realloc(
     uno_Sequence ** ppSequence,
-    typelib_TypeDescription * pTypeDescr,
+    struct _typelib_TypeDescription * pTypeDescr,
     sal_Int32 nSize,
     uno_AcquireFunc acquire,
     uno_ReleaseFunc release )
@@ -187,7 +189,7 @@ void SAL_CALL uno_sequence_realloc(
 */
 void SAL_CALL uno_type_sequence_realloc(
     uno_Sequence ** ppSequence,
-    typelib_TypeDescriptionReference * pType,
+    struct _typelib_TypeDescriptionReference * pType,
     sal_Int32 nSize,
     uno_AcquireFunc acquire,
     uno_ReleaseFunc release )
