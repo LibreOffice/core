@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMarkableStream.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ module com {  module sun {  module star {  module io {
 // DocMerge from xml: interface com::sun::star::io::XMarkableStream
 /** makes it possible to set and remove seekable marks to a stream.
  */
-interface XMarkableStream: com::sun::star::uno::XInterface
+published interface XMarkableStream: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
@@ -120,7 +120,6 @@ interface XMarkableStream: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     /** jumps to the furthest position of the stream.
-
         <p> In the inputstream case, a subsequent read call returns
         data, that was never read or skipped over before. In the
         outputstream case, a subsequent write call will add

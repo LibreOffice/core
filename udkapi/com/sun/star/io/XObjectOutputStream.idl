@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XObjectOutputStream.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 
 module com {  module sun {  module star {  module io {
 
-interface XPersistObject;
+ published interface XPersistObject;
 
 //=============================================================================
 
@@ -85,7 +85,7 @@ interface XPersistObject;
 
     @see com::sun::star::io::XPersistObject
  */
-interface XObjectOutputStream: XDataOutputStream
+published interface XObjectOutputStream: XDataOutputStream
 {
     /** writes an object to the stream.
         @param Object the object, which shall serialize itself into the stream.
