@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-22 14:06:59 $
+ *  last change: $Author: kso $ $Date: 2001-07-09 09:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  Miscellaneous Resources
 //
-// $Author: kso $ $Date: 2001-06-22 14:06:59 $ $Revision: 1.12 $
+// $Author: kso $ $Date: 2001-07-09 09:05:31 $ $Revision: 1.13 $
 //============================================================================
 
 #define __RSC
@@ -190,7 +190,7 @@ Resource RID_UUI_ERRHDL
     // IOErrorCode_ACCESS_DENIED = 1,
     String ( ERRCODE_UUI_IO_ACCESSDENIED & ERRCODE_RES_MASK )
     {
-        Text = "Der Zugriff auf auf $(ARG1) wurde verweigert" ;
+        Text = "Der Zugriff auf $(ARG1) wurde verweigert" ;
         Text [ ENGLISH ] = "The access to $(ARG1) was denied" ;
     };
     // IOErrorCode_ALREADY_EXISTING = 2,
