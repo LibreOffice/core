@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-18 13:11:04 $
+ *  last change: $Author: fs $ $Date: 2001-10-15 10:27:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,8 @@ void FmFormPage::WriteData(SvStream& rOut) const
         SdrDownCompat aCompat(rOut, STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
         pImpl->WriteData(rOut);
     }
+#else
+    DBG_ERROR( "FmFormPage::WriteData: not to be called in SVX_LIGHT version!" );
 #endif
 }
 
@@ -246,7 +248,12 @@ void FmFormPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
     {
         SdrDownCompat aCompat(rIn, STREAM_READ);    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
 #ifndef SVX_LIGHT
-        pImpl->ReadData(rHead, rIn);
+        DBG_ASSERT( aCompat.GetBytesLeft(), "FmFormPage::ReadData: invalid file format!" );
+        if ( aCompat.GetBytesLeft() )
+            pImpl->ReadData(rHead, rIn);
+        // some old (corrupted) versions between 511 and 554 wrote an empty block here - and some of these documents
+        // are still out there
+        // So we allow for such an empty block ...
 #endif
     }
 }
