@@ -1,0 +1,205 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dsselect.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2000-10-24 12:14:02 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _DBAUI_DSSELECT_HRC_
+#include "dsselect.hrc"
+#endif
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+
+
+ModalDialog DLG_DATASOURCE_SELECTION
+{
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 218 , 118 ) ;
+    Text = "Datenquelle" ;
+    Text [ ENGLISH ] = "Data Source" ;
+    Text [ norwegian ] = "Data Source" ;
+    Text [ italian ] = "Sorgente dati" ;
+    Text [ portuguese_brazilian ] = "Fonte dos Dados" ;
+    Text [ portuguese ] = "Fonte de dados" ;
+    Text [ finnish ] = "Tietojen l‰hde" ;
+    Text [ danish ] = "Datakilde" ;
+    Text [ french ] = "Source de donnÈes" ;
+    Text [ swedish ] = "Datak‰lla" ;
+    Text [ dutch ] = "Gegevensbron" ;
+    Text [ spanish ] = "Fuente de datos" ;
+    Text [ english_us ] = "Data Source" ;
+    Text[ chinese_simplified ] = " ˝æ›‘¥";
+    Text[ russian ] = "»ÒÚÓ˜ÌËÍ ‰‡ÌÌ˚ı";
+    Text[ polish ] = "èrÛd≥o danych";
+    Text[ japanese ] = "√ﬁ∞¿ø∞Ω";
+    Text[ chinese_traditional ] = "∏ÍÆ∆∑Ω";
+    Text[ arabic ] = "„’œ— «·»Ì«‰« ";
+    Text[ greek ] = "–ÒÔ›ÎÂıÛÁ ‰Â‰ÔÏ›Ì˘Ì";
+    Text[ korean ] = "≈◊¿Ã≈Õ º“Ω∫";
+    Text[ turkish ] = "Veri kayna˝";
+    Text[ language_user1 ] = " ";
+
+    FixedText FT_DESCRIPTION
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 154 , 10 ) ;
+        Text = "W‰hlen Sie eine Datenquelle:";
+        Text [ english ] = "Choose a data source:";
+        Text [ english_us ] = "Choose a data source:";
+    };
+    ListBox LB_DATASOURCE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 19 ) ;
+        Size = MAP_APPFONT ( 154 , 94 ) ;
+        TabStop = TRUE ;
+        HScroll = TRUE ;
+        Sort = TRUE ;
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 166 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 166 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 166 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_MANAGE
+    {
+        Pos = MAP_APPFONT ( 166 , 99 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Disable = TRUE ;
+        Hide = TRUE ;
+        Text = "Verwalten..." ;
+        Text [ ENGLISH ] = "Manage..." ;
+        Text [ english_us ] = "Organize..." ;
+        Text [ portuguese ] = "A organizar..." ;
+        Text [ portuguese_brazilian ] = "Verwalten..." ;
+        Text [ swedish ] = "Fˆrvalta..." ;
+        Text [ danish ] = "Administrer..." ;
+        Text [ italian ] = "Gestione..." ;
+        Text [ spanish ] = "Administrar..." ;
+        Text [ french ] = "GÈrer..." ;
+        Text [ dutch ] = "Beheren..." ;
+        Text[ chinese_simplified ] = "π‹¿Ì...";
+        Text[ russian ] = "Œ„‡ÌËÁÓ‚‡Ú¸...";
+        Text[ polish ] = "Zarzπdzaj...";
+        Text[ japanese ] = "ä«óù...";
+        Text[ chinese_traditional ] = "∫ﬁ≤z...";
+        Text[ arabic ] = "≈œ«—…...";
+        Text[ greek ] = "ƒÈ·˜ÂﬂÒÁÛÁ...";
+        Text[ korean ] = "±∏º∫...";
+        Text[ turkish ] = "Yˆnet...";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_LOCAL_DATASOURCES
+    {
+        Text = "lokale Datenquellen" ;
+        Text [ ENGLISH ] = "local Data Sources" ;
+        Text [ norwegian ] = "Data Sources" ;
+        Text [ italian ] = "Sorgente dati locale" ;
+        Text [ portuguese_brazilian ] = "Fontes dos Dados" ;
+        Text [ portuguese ] = "Fontes de dados locais" ;
+        Text [ finnish ] = "Tietojen l‰hteet" ;
+        Text [ danish ] = "lokale datakilder" ;
+        Text [ french ] = "Sources de donnÈes locale" ;
+        Text [ swedish ] = "lokala datak‰llor" ;
+        Text [ dutch ] = "lokale gegevensbronnen" ;
+        Text [ spanish ] = "fuentes de datos locales" ;
+        Text [ english_us ] = "local data sources" ;
+        Text[ chinese_simplified ] = "æ÷≤øµƒ ˝æ›‘¥";
+        Text[ russian ] = "ÎÓÍ‡Î¸Ì˚È ËÒÚÓ˜ÌËÍ ‰‡ÌÌ˚ı";
+        Text[ polish ] = "lokalne ürÛd≥a danych";
+        Text[ japanese ] = "€∞∂Ÿ√ﬁ∞¿ø∞Ω";
+        Text[ chinese_traditional ] = "ßΩ≥°∏ÍÆ∆∑Ω";
+        Text[ arabic ] = "„’«œ— »Ì«‰«  „Õ·Ì…";
+        Text[ greek ] = "ÙÔÈÍ›Ú ÒÔÂÎÂ˝ÛÂÈÚ ‰Â‰ÔÏ›Ì˘Ì";
+        Text[ korean ] = "∑Œƒ√ ≈◊¿Ã≈Õ º“Ω∫";
+        Text[ turkish ] = "Yerel veri kaynaklar˝";
+    };
+    String STR_COULDNOTLOAD_CONFIGLIB
+    {
+        Text = "Die Programmbibliothek #lib# konnte nicht geladen werden oder ist defekt. Die ODBC-Datenquellen-Konfiguration ist nicht verf¸gbar.";
+        Text [ english ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
+        Text [ english_us ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
+    };
+};
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ *
+ *  Revision 1.0 24.10.00 09:42:47  fs
+ ************************************************************************/
+
