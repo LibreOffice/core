@@ -1,4 +1,4 @@
-sb	basic	:	goodies NULL
+sb	basic	:	goodies xmlscript NULL
 sb	basic									usr1	-	all	sb_mkout NULL
 sb	basic\source\app						nmake	-	all	sb_app sb_class NULL
 sb	basic\source\basmgr						nmake	-	all	sb_mgr NULL
