@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:20:58 $
+ *  last change: $Author: kr $ $Date: 2001-07-19 07:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,11 +359,11 @@ namespace stoc_javavm {
         Reference<XSimpleRegistry> xConfRegistry_simple(xConfRegistry, UNO_QUERY);
         if(!xConfRegistry_simple.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get ConfigurationRegistry")), Reference<XInterface>());
 
-          xConfRegistry_simple->open(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.UserProfile")), sal_True, sal_False);
+          xConfRegistry_simple->open(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup")), sal_True, sal_False);
           Reference<XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
-        // read ftp proxy name
-        Reference<XRegistryKey> locale = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("International/Locale")));
+        // read locale
+        Reference<XRegistryKey> locale = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("L10N/ooLocale")));
         if(locale.is() && locale->getStringValue().getLength()) {
             OUString language;
             OUString country;
@@ -430,13 +430,13 @@ namespace stoc_javavm {
           Reference<XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
         // read ftp proxy name
-        Reference<XRegistryKey> ftpProxy_name = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Proxy/FTP/Name")));
+        Reference<XRegistryKey> ftpProxy_name = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetFTPProxyName")));
         if(ftpProxy_name.is() && ftpProxy_name->getStringValue().getLength()) {
             OUString ftpHost = OUString(RTL_CONSTASCII_USTRINGPARAM("ftp.proxyHost="));
             ftpHost += ftpProxy_name->getStringValue();
 
             // read ftp proxy port
-            Reference<XRegistryKey> ftpProxy_port = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Proxy/FTP/Port")));
+            Reference<XRegistryKey> ftpProxy_port = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetFTPProxyPort")));
             if(ftpProxy_port.is() && ftpProxy_port->getLongValue()) {
                 OUString ftpPort = OUString(RTL_CONSTASCII_USTRINGPARAM("ftp.proxyPort="));
                 ftpPort += OUString::valueOf(ftpProxy_port->getLongValue());
@@ -447,13 +447,13 @@ namespace stoc_javavm {
         }
 
         // read http proxy name
-        Reference<XRegistryKey> httpProxy_name = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Proxy/HTTP/Name")));
+        Reference<XRegistryKey> httpProxy_name = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetHTTPProxyName")));
         if(httpProxy_name.is() && httpProxy_name->getStringValue().getLength()) {
             OUString httpHost = OUString(RTL_CONSTASCII_USTRINGPARAM("http.proxyHost="));
             httpHost += httpProxy_name->getStringValue();
 
             // read http proxy port
-            Reference<XRegistryKey> httpProxy_port = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Proxy/HTTP/Port")));
+            Reference<XRegistryKey> httpProxy_port = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetHTTPProxyPort")));
             if(httpProxy_port.is() && httpProxy_port->getLongValue()) {
                 OUString httpPort = OUString(RTL_CONSTASCII_USTRINGPARAM("http.proxyPort="));
                 httpPort += OUString::valueOf(httpProxy_port->getLongValue());
@@ -478,10 +478,10 @@ namespace stoc_javavm {
         Reference<XSimpleRegistry> xConfRegistry_simple(xConfRegistry, UNO_QUERY);
         if(!xConfRegistry_simple.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get ConfigurationRegistry")), Reference<XInterface>());
 
-        xConfRegistry_simple->open(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.UserProfile")), sal_True, sal_False);
+        xConfRegistry_simple->open(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup")), sal_True, sal_False);
         Reference<XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
-        Reference<XRegistryKey> key_InstallPath = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Office/InstallPath")));
+        Reference<XRegistryKey> key_InstallPath = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Office/ooSetupInstallPath")));
         if(!key_InstallPath.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: can not find key: Office/InstallPath in org.openoffice.UserProfile")),
                                                          Reference<XInterface>());
 
