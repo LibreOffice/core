@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchcfg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:58:38 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:51:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
+#include <unotools/configpathes.hxx>
 #endif
 
 //-----------------------------------------------------------------------------
@@ -182,7 +185,7 @@ void SvxSearchConfig::Load()
         sal_Int32 nProp;
         for(nProp = 0; nProp < rPropNames.getLength(); nProp++)
         {
-            pPropertyNames[nProp] = pNodeNames[nNode];
+            pPropertyNames[nProp] = wrapConfigurationElementName(pNodeNames[nNode]);
             pPropertyNames[nProp] += sSlash;
             pPropertyNames[nProp] += pPropNames[nProp];
         }
@@ -241,7 +244,7 @@ void SvxSearchConfig::Commit()
             for(sal_Int16 nProp = 0; nProp < rPropNames.getLength(); nProp++)
             {
                 OUString sTmpName = sSlash;
-                sTmpName += pSave->sEngineName;
+                sTmpName += wrapConfigurationElementName(pSave->sEngineName);
                 sTmpName += sSlash;
                 sTmpName += pPropNames[nProp];
                 pSetValues[nProp].Name = sTmpName;
