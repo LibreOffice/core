@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SaxDocumentHandler.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 09:10:28 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 13:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ service SaxDocumentHandler
      */
     interface com::sun::star::xml::sax::XDocumentHandler;
 
-    /** to be used to pass XImportRoot object
+    /** to be used to pass XRoot object
      */
     interface com::sun::star::lang::XInitialization;
 };
