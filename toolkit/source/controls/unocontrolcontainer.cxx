@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolcontainer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-27 14:59:25 $
+ *  last change: $Author: mt $ $Date: 2001-07-26 09:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,39 +359,42 @@ void UnoControlContainer::setStatusText( const ::rtl::OUString& rStatusText ) th
 
 void UnoControlContainer::addControl( const ::rtl::OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rControl ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    UnoControlHolder* pHolder = new UnoControlHolder( rName, rControl );
-    mpControls->Insert( pHolder, LIST_APPEND );
-
-    ::com::sun::star::uno::Any aAny = OWeakAggObject::queryInterface( ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)0) );
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xThis;
-    aAny >>= xThis;
-    rControl->setContext( xThis );
-    rControl->addEventListener(this);
-
-    if( mxPeer.is() )
+    if ( rControl.is() )
     {
-        // Hat der Container ein Peer, dann auch gleich im Child erzeugen
-        rControl->createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > (), mxPeer );
-        ImplActivateTabControllers();
-    }
+        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    if ( maCListeners.getLength() )
-    {
-        ::com::sun::star::container::ContainerEvent aEvent;
-        aEvent.Source = *this;
-        aEvent.Element <<= rControl;
-        maCListeners.elementInserted( aEvent );
+        UnoControlHolder* pHolder = new UnoControlHolder( rName, rControl );
+        mpControls->Insert( pHolder, LIST_APPEND );
+
+        ::com::sun::star::uno::Any aAny = OWeakAggObject::queryInterface( ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)0) );
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xThis;
+        aAny >>= xThis;
+        rControl->setContext( xThis );
+        rControl->addEventListener(this);
+
+        if( mxPeer.is() )
+        {
+            // Hat der Container ein Peer, dann auch gleich im Child erzeugen
+            rControl->createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > (), mxPeer );
+            ImplActivateTabControllers();
+        }
+
+        if ( maCListeners.getLength() )
+        {
+            ::com::sun::star::container::ContainerEvent aEvent;
+            aEvent.Source = *this;
+            aEvent.Element <<= rControl;
+            maCListeners.elementInserted( aEvent );
+        }
     }
 }
 
 void UnoControlContainer::removeControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rControl ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
     if ( rControl.is() )
     {
+        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
         sal_uInt32 nCtrls = mpControls->Count();
         for( sal_uInt32 n = 0; n < nCtrls; n++ )
         {
