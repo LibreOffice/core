@@ -1,6 +1,6 @@
 mkdir: %_DEST%\inc%_EXT%\sj2
 ..\%__SRC%\class\classes.jar %_DEST%\bin%_EXT%\classes.jar
-hedabu: ..\inc\sjapplet.hxx %_DEST%\inc%_EXT%\sj2\sjapplet.hxx
+..\inc\sjapplet.hxx %_DEST%\inc%_EXT%\sj2\sjapplet.hxx
 
 ..\%__SRC%\lib\sj.lib %_DEST%\lib%_EXT%\sj.lib
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
