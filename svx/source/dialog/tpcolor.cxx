@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcolor.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:55:32 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,13 +289,13 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& rSet )
             aURL.Append( pColorTab->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-            if ( aURL.getBase().Len() > 18 )
+            if ( aURL.getBase().getLength() > 18 )
             {
-                aString += aURL.getBase().Copy( 0, 15 );
+                aString += String(aURL.getBase()).Copy( 0, 15 );
                 aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
             }
             else
-                aString += aURL.getBase();
+                aString += String(aURL.getBase());
 
             aTableNameFT.SetText( aString );
 
@@ -852,13 +852,13 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, p )
                     String aString( ResId( RID_SVXSTR_TABLE, pMgr ) );
                     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
-                    if ( aURL.getBase().Len() > 18 )
+                    if ( aURL.getBase().getLength() > 18 )
                     {
-                        aString += aURL.getBase().Copy( 0, 15 );
+                        aString += String(aURL.getBase()).Copy( 0, 15 );
                         aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
                     }
                     else
-                        aString += aURL.getBase();
+                        aString += String(aURL.getBase());
 
                     aTableNameFT.SetText( aString );
 
@@ -922,7 +922,7 @@ IMPL_LINK( SvxColorTabPage, ClickSaveHdl_Impl, void *, p )
     {
         aFile.Append( pColorTab->GetName() );
 
-        if( !aFile.getExtension().Len() )
+        if( !aFile.getExtension().getLength() )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "soc" ) ) );
     }
 
@@ -945,13 +945,13 @@ IMPL_LINK( SvxColorTabPage, ClickSaveHdl_Impl, void *, p )
             String aString( SVX_RES( RID_SVXSTR_TABLE ) );
             aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
-            if ( aURL.getBase().Len() > 18 )
+            if ( aURL.getBase().getLength() > 18 )
             {
-                aString += aURL.getBase().Copy( 0, 15 );
+                aString += String(aURL.getBase()).Copy( 0, 15 );
                 aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
             }
             else
-                aString += aURL.getBase();
+                aString += String(aURL.getBase());
             aTableNameFT.SetText( aString );
 
             // Flag fuer gespeichert setzen
