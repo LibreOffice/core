@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-25 10:17:04 $
+ *  last change: $Author: nf $ $Date: 2001-05-09 08:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
 void Help()
 /*****************************************************************************/
 {
-    fprintf( stdout, "Syntax:LNGEX[-p Prj][-r PrjRoot]-i FileIn -o FileOut[-m DataBase][-e][-b][-u]\n" );
+    fprintf( stdout, "Syntax:LNGEX[-p Prj][-r PrjRoot]-i FileIn -o FileOut[-m DataBase][-e][-b][-u][-UTF8]\n" );
     fprintf( stdout, " Prj:      Project\n" );
     fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
     fprintf( stdout, " FileIn:   Source file (*.lng)\n" );
@@ -182,6 +182,7 @@ void Help()
     fprintf( stdout, " -e: no function\n" );
     fprintf( stdout, " -b: no function\n" );
     fprintf( stdout, " -u: no function\n" );
+    fprintf( stdout, " -UTF8: enable UTF8 as language independent encoding\n" );
 }
 
 /*****************************************************************************/

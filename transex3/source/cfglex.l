@@ -156,7 +156,7 @@ main( int argc, char* argv[])
 
 	pOutput = GetOutputFile( argc, argv );
 	if ( !pOutput ) {
-		fprintf( stdout, "Syntax: CFGEX[-p Prj][-r PrjRoot]-i FileIn [-o FileOut][-m DataBase][-e][-b][-u][-d DoneFile][-g[:dtd]]\n" );
+		fprintf( stdout, "Syntax: CFGEX[-p Prj][-r PrjRoot]-i FileIn [-o FileOut][-m DataBase][-e][-b][-u][-d DoneFile][-g[:dtd]][-UTF8]\n" );
 		fprintf( stdout, " Prj:      Project\n" );
 		fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
 		fprintf( stdout, " FileIn:   Source files (*.src)\n" );
@@ -167,6 +167,7 @@ main( int argc, char* argv[])
 		fprintf( stdout, " -u: [english] and [german] are allowed, Id is Taken from DataBase \n" );
 		fprintf( stdout, " -g[:dtd]: enables generation of properties (dtds if :dtd is set) - in this case FileOut is the output path\n" );
 		fprintf( stdout, " -d: enables generation of *.don if work is done\n" );
+		fprintf( stdout, " -UTF8: enable UTF8 as language independent encoding\n" );
 		return 1;
 	}
 
