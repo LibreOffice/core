@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:34:34 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,11 @@
 
 #include <vector>
 
+namespace rtl
+{
+    class OUString;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
@@ -138,6 +143,23 @@ namespace basegfx
         // for HitTesting. The epsilon-range is defined to be the tube around the PolyPolygon
         // with distance fDistance and rounded edges (start and end point).
         bool isInEpsilonRange(const B2DPolyPolygon& rCandidate, const B2DPoint& rTestPosition, double fDistance);
+
+        /** Read poly-polygon from SVG.
+
+            This function imports a poly-polygon from an SVG-D
+            statement. Currently, elliptical arc elements are not yet
+            supported (and ignored during parsing).
+
+            @param o_rPolyPoly
+            The output poly-polygon
+
+            @param rSvgDStatement
+            A valid SVG-D statement
+
+            @return true, if the string was successfully parsed
+         */
+        bool importFromSvgD( ::basegfx::B2DPolyPolygon& o_rPolyPoly,
+                             const ::rtl::OUString&     rSvgDStatement );
 
     } // end of namespace tools
 } // end of namespace basegfx
