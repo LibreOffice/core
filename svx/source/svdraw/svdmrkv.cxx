@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-24 10:33:33 $
+ *  last change: $Author: fs $ $Date: 2001-12-18 11:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2125,7 +2125,10 @@ void SdrMarkView::SetDesignMode(BOOL bOn)
 
                 for(UINT32 j = 0; j < rControlList.GetCount(); j++)
                 {
-                    rControlList[ (USHORT) j].GetControl()->setDesignMode(bOn);
+                    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xControl = rControlList[ (USHORT) j].GetControl();
+                    DBG_ASSERT( xControl.is(), "SdrMarkView::SetDesignMode: no control at this position!" );
+                    if ( xControl.is() )
+                        xControl->setDesignMode(bOn);
                 }
             }
         }
