@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-09 12:52:31 $
+ *  last change: $Author: mav $ $Date: 2003-12-12 12:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,10 @@
 
 #include <platform.h>
 
+#include <vector>
+
+typedef ::std::vector< FORMATETC* > FormatEtcList;
+
 namespace com { namespace sun { namespace star {
 }}}
 
@@ -137,13 +141,15 @@ class OleComponent : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XCl
     sal_Int32 m_nOLEMiscFlags;
     sal_Int32 m_nAdvConn;
 
+    ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > m_aSupportedGraphFormats;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aGraphShortFormats; //short names for formats from previous sequence
+
     ::com::sun::star::uno::Sequence< ::com::sun::star::embed::VerbDescr > m_aVerbList;
     ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > m_aDataFlavors;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
-    sal_uInt16 m_nSupportedFormat;
-    sal_uInt32 m_nSupportedMedium;
+    FormatEtcList m_aFormatsList;
 
     sal_Bool m_bOleInitialized;
 
@@ -156,6 +162,19 @@ class OleComponent : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XCl
     void RetrieveObjectDataFlavors_Impl();
 
     void Dispose();
+
+    void AddSupportedFormat( const FORMATETC& aFormatEtc );
+
+    FORMATETC* GetSupportedFormatForAspect( DWORD nRequestedAspect );
+
+    sal_Bool ConvertDataForFlavor( const STGMEDIUM& aMedium,
+                                    const ::com::sun::star::datatransfer::DataFlavor& aFlavor,
+                                    ::com::sun::star::uno::Any& aResult );
+
+    sal_Bool GraphicalFlavor( const ::com::sun::star::datatransfer::DataFlavor& aFlavor );
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >
+                                                GetFlavorsForAspects( sal_uInt32 nSupportedAspects );
 
 public:
     OleComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& m_xFactory,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembed.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-09 12:52:32 $
+ *  last change: $Author: mav $ $Date: 2003-12-12 12:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,14 +100,22 @@ using namespace ::com::sun::star;
 uno::Sequence< sal_Int32 > OleEmbeddedObject::GetReachableStatesList_Impl(
                                                         const uno::Sequence< embed::VerbDescr >& aVerbList )
 {
-    // TODO: find the sequence
-    return uno::Sequence< sal_Int32 >();
+    uno::Sequence< sal_Int32 > aStates(2);
+    aStates[0] = embed::EmbedStates::EMBED_LOADED;
+    aStates[1] = embed::EmbedStates::EMBED_RUNNING;
+    for ( sal_Int32 nInd = 0; nInd < aVerbList.getLength(); nInd++ )
+        if ( aVerbList[nInd].VerbID == embed::EmbedVerbs::MS_OLEVERB_OPEN )
+        {
+            aStates.realloc(3);
+            aStates[2] = embed::EmbedStates::EMBED_ACTIVE;
+        }
+
+    return aStates;
 }
 
 //----------------------------------------------
 uno::Sequence< sal_Int32 > OleEmbeddedObject::GetIntermediateVerbsSequence_Impl( sal_Int32 nNewState )
 {
-    // TODO: find the sequence
     OSL_ENSURE( m_nObjectState != embed::EmbedStates::EMBED_LOADED, "Loaded object is switched to running state without verbs using!" );
 
     // actually there will be only one verb

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olemisc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-09 15:09:37 $
+ *  last change: $Author: mav $ $Date: 2003-12-12 12:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,17 +223,14 @@ void SAL_CALL OleEmbeddedObject::setClassInfo(
 uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
         throw ( uno::RuntimeException )
 {
-    // TODO: The return type will be reference to XInterface
-
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    // add an exception
-    if ( m_nObjectState == -1 )
+    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::EMBED_LOADED )
     {
         // the object is still not loaded
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Can't store object without persistence!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not running!\n" ),
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
     }
 

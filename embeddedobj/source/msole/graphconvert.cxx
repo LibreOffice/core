@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphconvert.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-09 15:09:33 $
+ *  last change: $Author: mav $ $Date: 2003-12-12 12:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,12 @@
 using namespace ::com::sun::star;
 
 
-sal_Bool ConvertBufferForFlavor( void* pBuf,
-                                 sal_uInt32 nBufSize,
-                                 const datatransfer::DataFlavor& aFlavor,
-                                 uno::Any& aResult )
+sal_Bool ConvertBufferToFormat( void* pBuf,
+                                sal_uInt32 nBufSize,
+                                const ::rtl::OUString& aFormatShortName,
+                                uno::Any& aResult )
 {
+    // produces sequence with data in requested format and returns it in aResult
     if ( pBuf )
     {
         SvMemoryStream aBufStream( pBuf, nBufSize, STREAM_READ );
@@ -90,17 +91,7 @@ sal_Bool ConvertBufferForFlavor( void* pBuf,
         GraphicFilter aGrFilter( sal_True );
         if ( aGrFilter.ImportGraphic( aGraph, String(), aBufStream ) == ERRCODE_NONE )
         {
-            sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;
-
-            // TODO: Extend format list
-             if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice;windows_formatname=\"Image WMF\"", 57 ) )
-                nFormat = aGrFilter.GetExportFormatNumberForShortName( ::rtl::OUString::createFromAscii( "WMF" ) );
-              else if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice;windows_formatname=\"Image EMF\"", 57 ) )
-                nFormat = aGrFilter.GetExportFormatNumberForShortName( ::rtl::OUString::createFromAscii( "EMF" ) );
-              else if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice;windows_formatname=\"Bitmap\"", 54 ) )
-                nFormat = aGrFilter.GetExportFormatNumberForShortName( ::rtl::OUString::createFromAscii( "BMP" ) );
-            else if ( aFlavor.MimeType.matchAsciiL( "image/png", 9 ) )
-                nFormat = aGrFilter.GetExportFormatNumberForShortName( ::rtl::OUString::createFromAscii( "PNG" ) );
+            sal_uInt16 nFormat = aGrFilter.GetExportFormatNumberForShortName( aFormatShortName );
 
             if ( nFormat != GRFILTER_FORMAT_DONTKNOW )
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-09 15:09:35 $
+ *  last change: $Author: mav $ $Date: 2003-12-12 12:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,12 +96,19 @@
 using namespace ::com::sun::star;
 
 #define     MAX_ENUM_ELE     20
+#define     FORMATS_NUM      3
+
 const sal_Int32 n_ConstBufferSize = 32000;
 
-sal_Bool ConvertBufferForFlavor( void* pBuf,
-                                 sal_uInt32 nBufSize,
-                                 const datatransfer::DataFlavor& aFlavor,
-                                 uno::Any& aResult );
+sal_Bool ConvertBufferToFormat( void* pBuf,
+                                sal_uInt32 nBufSize,
+                                const ::rtl::OUString& aFormatShortName,
+                                uno::Any& aResult );
+
+FORMATETC pFormatTemplates[FORMATS_NUM] = {
+                    { CF_ENHMETAFILE, NULL, 0, -1, TYMED_ENHMF },
+                    { CF_METAFILEPICT, NULL, 0, -1, TYMED_MFPICT },
+                    { CF_BITMAP, NULL, 0, -1, TYMED_GDI } };
 
 //----------------------------------------------
 DWORD GetAspectFromFlavor( const datatransfer::DataFlavor& aFlavor )
@@ -117,6 +124,23 @@ DWORD GetAspectFromFlavor( const datatransfer::DataFlavor& aFlavor )
 }
 
 //----------------------------------------------
+::rtl::OUString GetFlavorSuffixFromAspect( DWORD nAsp )
+{
+    ::rtl::OUString aResult;
+
+    if ( nAsp == DVASPECT_THUMBNAIL )
+        aResult = ::rtl::OUString::createFromAscii( ";Aspect=THUMBNAIL" );
+    else if ( nAsp == DVASPECT_ICON )
+        aResult = ::rtl::OUString::createFromAscii( ";Aspect=ICON" );
+    else if ( nAsp == DVASPECT_DOCPRINT )
+        aResult = ::rtl::OUString::createFromAscii( ";Aspect=DOCPRINT" );
+
+    // no suffix for DVASPECT_CONTENT
+
+    return aResult;
+}
+
+//----------------------------------------------
 uno::Sequence< sal_Int8 > GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
                                                 sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
                                                 sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 )
@@ -124,14 +148,14 @@ uno::Sequence< sal_Int8 > GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_
     // TODO: must be removed and used from another library
 
     uno::Sequence< sal_Int8 > aResult( 16 );
-    aResult[0] = n1 >> 24;
-    aResult[1] = ( n1 << 8 ) >> 24;
-    aResult[2] = ( n1 << 16 ) >> 24;
-    aResult[3] = ( n1 << 24 ) >> 24;
-    aResult[4] = n2 >> 8;
-    aResult[5] = ( n2 << 8 ) >> 8;
-    aResult[6] = n3 >> 8;
-    aResult[7] = ( n3 << 8 ) >> 8;
+    aResult[0] = (sal_Int8)( n1 >> 24 );
+    aResult[1] = (sal_Int8)( ( n1 << 8 ) >> 24 );
+    aResult[2] = (sal_Int8)( ( n1 << 16 ) >> 24 );
+    aResult[3] = (sal_Int8)( ( n1 << 24 ) >> 24 );
+    aResult[4] = (sal_Int8)( n2 >> 8 );
+    aResult[5] = (sal_Int8)( ( n2 << 8 ) >> 8 );
+    aResult[6] = (sal_Int8)( n3 >> 8 );
+    aResult[7] = (sal_Int8)( ( n3 << 8 ) >> 8 );
     aResult[8] = b8;
     aResult[9] = b9;
     aResult[10] = b10;
@@ -145,7 +169,9 @@ uno::Sequence< sal_Int8 > GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_
 }
 
 //----------------------------------------------
-sal_Bool ConvertDataForFlavor( const STGMEDIUM& aMedium, const datatransfer::DataFlavor& aFlavor, uno::Any& aResult )
+sal_Bool OleComponent::ConvertDataForFlavor( const STGMEDIUM& aMedium,
+                                            const datatransfer::DataFlavor& aFlavor,
+                                            uno::Any& aResult )
 {
     sal_Bool bAnyIsReady = sal_False;
 
@@ -213,7 +239,16 @@ sal_Bool ConvertDataForFlavor( const STGMEDIUM& aMedium, const datatransfer::Dat
         }
 
         if ( pBuf && !bAnyIsReady )
-            bAnyIsReady = ConvertBufferForFlavor( ( void* )pBuf, nBufSize, aFlavor, aResult );
+        {
+            for ( sal_Int32 nInd = 0; nInd < m_aSupportedGraphFormats.getLength(); nInd++ )
+                 if ( aFlavor.MimeType.match( m_aSupportedGraphFormats[nInd].MimeType )
+                  && aFlavor.DataType == m_aSupportedGraphFormats[nInd].DataType
+                  && aFlavor.DataType == getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) )
+            {
+                bAnyIsReady = ConvertBufferToFormat( ( void* )pBuf, nBufSize, m_aGraphShortFormats[nInd], aResult );
+                break;
+            }
+        }
 
         delete[] pBuf;
     }
@@ -222,19 +257,13 @@ sal_Bool ConvertDataForFlavor( const STGMEDIUM& aMedium, const datatransfer::Dat
 }
 
 //----------------------------------------------
-sal_Bool GraphicalFlavor( const datatransfer::DataFlavor& aFlavor )
+sal_Bool OleComponent::GraphicalFlavor( const datatransfer::DataFlavor& aFlavor )
 {
     // Actually all the required graphical formats must be supported
-
-    if ( aFlavor.DataType == getCppuType( ( const uno::Sequence< sal_Int8 >* ) 0 ) )
-    {
-        // TODO: extend support for graphical formats
-        if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice;windows_formatname=\"GDIMetaFile\"", 59 )
-          || aFlavor.MimeType.matchAsciiL( "application/x-openoffice;windows_formatname=\"Image EMF\"", 57 )
-          || aFlavor.MimeType.matchAsciiL( "application/x-openoffice;windows_formatname=\"Image WMF\"", 57 )
-          || aFlavor.MimeType.matchAsciiL( "image/png", 9 ) )
+    for ( sal_Int32 nInd = 0; nInd < m_aSupportedGraphFormats.getLength(); nInd++ )
+         if ( aFlavor.MimeType.match( m_aSupportedGraphFormats[nInd].MimeType )
+          && aFlavor.DataType == m_aSupportedGraphFormats[nInd].DataType )
             return sal_True;
-    }
 
     return sal_False;
 }
@@ -427,8 +456,6 @@ OleComponent::OleComponent( const uno::Reference< lang::XMultiServiceFactory >& 
 , m_pUnoOleObject( pUnoOleObject )
 , m_nOLEMiscFlags( 0 )
 , m_nAdvConn( 0 )
-, m_nSupportedFormat( 0 )
-, m_nSupportedMedium( 0 )
 , m_bOleInitialized( sal_False )
 {
     OSL_ENSURE( m_pUnoOleObject, "No owner object is provided!" );
@@ -443,6 +470,35 @@ OleComponent::OleComponent( const uno::Reference< lang::XMultiServiceFactory >& 
 
     m_pImplAdviseSink = new OleWrapperAdviseSink( ( OleComponent* )this );
     m_pImplAdviseSink->AddRef();
+
+    // TODO: Extend format list
+    m_aSupportedGraphFormats.realloc( 4 );
+    m_aGraphShortFormats.realloc( 4 );
+
+    m_aSupportedGraphFormats[0] = datatransfer::DataFlavor(
+        ::rtl::OUString::createFromAscii( "application/x-openoffice;windows_formatname=\"Image EMF\"" ),
+        ::rtl::OUString::createFromAscii( "Windows Enhanced Metafile" ),
+        getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
+    m_aGraphShortFormats[0] = ::rtl::OUString::createFromAscii( "EMF" );
+
+    m_aSupportedGraphFormats[1] = datatransfer::DataFlavor(
+        ::rtl::OUString::createFromAscii( "application/x-openoffice;windows_formatname=\"Image WMF\"" ),
+        ::rtl::OUString::createFromAscii( "Windows Metafile" ),
+        getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
+    m_aGraphShortFormats[1] = ::rtl::OUString::createFromAscii( "WMF" );
+
+    m_aSupportedGraphFormats[2] = datatransfer::DataFlavor(
+        ::rtl::OUString::createFromAscii( "application/x-openoffice;windows_formatname=\"Bitmap\"" ),
+        ::rtl::OUString::createFromAscii( "Bitmap" ),
+        getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
+    m_aGraphShortFormats[2] = ::rtl::OUString::createFromAscii( "BMP" );
+
+    m_aSupportedGraphFormats[3] = datatransfer::DataFlavor(
+        ::rtl::OUString::createFromAscii( "image/png" ),
+        ::rtl::OUString::createFromAscii( "PNG" ),
+        getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
+    m_aGraphShortFormats[3] = ::rtl::OUString::createFromAscii( "PNG" );
+
 }
 
 //----------------------------------------------
@@ -459,7 +515,33 @@ OleComponent::~OleComponent()
         } catch( uno::Exception& ) {}
     }
 
-    // TODO: free m_hIconHandle
+    for ( FormatEtcList::iterator aIter = m_aFormatsList.begin();
+          aIter != m_aFormatsList.end();
+          aIter++ )
+    {
+        delete (*aIter);
+        (*aIter) = NULL;
+    }
+    m_aFormatsList.clear();
+}
+
+//----------------------------------------------
+void OleComponent::AddSupportedFormat( const FORMATETC& aFormatEtc )
+{
+    FORMATETC* pFormatToInsert = new FORMATETC( aFormatEtc );
+    m_aFormatsList.push_back( pFormatToInsert );
+}
+
+//----------------------------------------------
+FORMATETC* OleComponent::GetSupportedFormatForAspect( DWORD nRequestedAspect )
+{
+    for ( FormatEtcList::iterator aIter = m_aFormatsList.begin();
+          aIter != m_aFormatsList.end();
+          aIter++ )
+        if ( (*aIter) && (*aIter)->dwAspect == nRequestedAspect )
+            return (*aIter);
+
+    return NULL;
 }
 
 //----------------------------------------------
@@ -561,12 +643,35 @@ CComPtr< IStorage > OleComponent::CreateNewIStorage_Impl()
 }
 
 //----------------------------------------------
+uno::Sequence< datatransfer::DataFlavor > OleComponent::GetFlavorsForAspects( sal_uInt32 nSupportedAspects )
+{
+    uno::Sequence< datatransfer::DataFlavor > aResult;
+    const sal_uInt32 nAspects[4] = { DVASPECT_CONTENT, DVASPECT_THUMBNAIL, DVASPECT_ICON, DVASPECT_DOCPRINT };
+    for ( sal_uInt32 nAsp = 1; nAsp <= 8; nAsp *= 2 )
+        if ( ( nSupportedAspects & nAsp ) == nAsp )
+        {
+            ::rtl::OUString aAspectSuffix = GetFlavorSuffixFromAspect( nAsp );
+
+            sal_Int32 nLength = aResult.getLength();
+            aResult.realloc( nLength + m_aSupportedGraphFormats.getLength() );
+
+            for ( sal_Int32 nInd = 0; nInd < m_aSupportedGraphFormats.getLength(); nInd++ )
+            {
+                aResult[nLength + nInd].MimeType = m_aSupportedGraphFormats[nInd].MimeType + aAspectSuffix;
+                aResult[nLength + nInd].HumanPresentableName = m_aSupportedGraphFormats[nInd].HumanPresentableName;
+                aResult[nLength + nInd].DataType = m_aSupportedGraphFormats[nInd].DataType;
+            }
+        }
+
+    return aResult;
+}
+
+//----------------------------------------------
 void OleComponent::RetrieveObjectDataFlavors_Impl()
 {
     if ( !m_pOleObject )
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
-/*
     if ( !m_aDataFlavors.getLength() )
     {
         CComPtr< IDataObject > pDataObject;
@@ -582,22 +687,28 @@ void OleComponent::RetrieveObjectDataFlavors_Impl()
         FORMATETC pElem[ MAX_ENUM_ELE ];
         ULONG nNum = 0;
 
+        // if it is possible to retrieve at least one supported graphical format for an aspect
+        // this format can be converted to other supported formats
+        sal_uInt32 nSupportedAspects = 0;
         do
         {
             HRESULT hr = pFormatEnum->Next( MAX_ENUM_ELE, pElem, &nNum );
             if( hr == S_OK || hr == S_FALSE )
             {
-                for( sal_uInt32 nInd = 0; nInd < nNum; nInd++ )
+                for( sal_uInt32 nInd = 0; nInd < FORMATS_NUM; nInd++ )
                 {
-                    //TODO: add OOo format reachable from specified OLE format to the list
+                    if ( pElem[nInd].cfFormat == pFormatTemplates[nInd].cfFormat
+                      && pElem[nInd].tymed == pFormatTemplates[nInd].tymed )
+                        nSupportedAspects |= pElem[nInd].dwAspect;
                 }
             }
             else
                 break;
         }
         while( nNum == MAX_ENUM_ELE );
+
+        m_aDataFlavors = GetFlavorsForAspects( nSupportedAspects );
     }
-*/
 }
 
 //----------------------------------------------
@@ -1190,6 +1301,7 @@ sal_Bool OleComponent::GetGraphicalCache_Impl( const datatransfer::DataFlavor& a
             // TODO: check that the format is acceptable
             //       if so - break
 
+
             // create XInputStream ( for now SvStream ) with graphical representation
             // try to generate a Metafile or Bitmap from it
             // convert the result representation to requested format
@@ -1301,64 +1413,79 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
 
     if ( GraphicalFlavor( aFlavor ) )
     {
-        // TODO: move using of cached representation to the end
-        // since it represents old version and supports only Content aspect
+        DWORD nRequestedAspect = GetAspectFromFlavor( aFlavor );
+        // if own icon is set and icon aspect is requested the own icon can be returned directly
 
-        // first check if there is a cached representation
-        if ( m_pIStorage )
+        CComPtr< IDataObject > pDataObject;
+        HRESULT hr = m_pObj->QueryInterface( IID_IDataObject, (void**)&pDataObject );
+        if ( FAILED( hr ) || !pDataObject )
+            throw io::IOException(); // TODO: transport error code
+
+        // if ( m_nSupportedFormat )
+        FORMATETC* pFormatEtc = GetSupportedFormatForAspect( nRequestedAspect );
+        if ( pFormatEtc )
+        {
+            STGMEDIUM aMedium;
+            hr = pDataObject->GetData( pFormatEtc, &aMedium );
+            if ( SUCCEEDED( hr ) )
+                bSupportedFlavor = ConvertDataForFlavor( aMedium, aFlavor, aResult );
+        }
+        else
+        {
+            // the supported format of the application is still not found, find one
+            for ( sal_Int32 nInd = 0; nInd < FORMATS_NUM; nInd++ )
+            {
+                STGMEDIUM aMedium;
+                FORMATETC aFormat = pFormatTemplates[nInd];
+                aFormat.dwAspect = nRequestedAspect;
+
+                hr = pDataObject->GetData( &aFormat, &aMedium );
+                if ( SUCCEEDED( hr ) )
+                {
+                    AddSupportedFormat( aFormat );
+
+                    bSupportedFlavor = ConvertDataForFlavor( aMedium, aFlavor, aResult );
+                    break;
+                }
+            }
+        }
+
+        if ( !bSupportedFlavor && m_pIStorage && nRequestedAspect == DVASPECT_CONTENT )
         {
             // try to retrieve cached representation
             bSupportedFlavor = GetGraphicalCache_Impl( aFlavor, aResult );
         }
 
-        DWORD nRequestedAspect = GetAspectFromFlavor( aFlavor );
-        // if own icon is set and icon aspect is requested the own icon can be returned directly
         if ( !bSupportedFlavor )
         {
-            CComPtr< IDataObject > pDataObject;
-            HRESULT hr = m_pObj->QueryInterface( IID_IDataObject, (void**)&pDataObject );
-            if ( FAILED( hr ) || !pDataObject )
-                throw io::IOException(); // TODO: transport error code
-
-            if ( m_nSupportedFormat )
-            {
-                FORMATETC aFormatEtc = { m_nSupportedFormat, NULL, nRequestedAspect, -1, m_nSupportedMedium };
-                STGMEDIUM aMedium;
-                hr = pDataObject->GetData( &aFormatEtc, &aMedium );
-                if ( SUCCEEDED( hr ) )
-                    bSupportedFlavor = ConvertDataForFlavor( aMedium, aFlavor, aResult );
-            }
-            else
-            {
-                // the supported format of the application is still not found, find one
-                sal_Int16 nFormats[3] = { CF_ENHMETAFILE, CF_METAFILEPICT, CF_BITMAP };
-                sal_Int32 nMediums[3] = { TYMED_ENHMF, TYMED_MFPICT, TYMED_GDI };
-
-                for ( sal_Int32 nInd = 0; nInd < 3; nInd++ )
-                {
-                    FORMATETC aFormatEtc = { nFormats[nInd], NULL, nRequestedAspect, -1, nMediums[nInd] };
-                    STGMEDIUM aMedium;
-                    hr = pDataObject->GetData( &aFormatEtc, &aMedium );
-                    if ( SUCCEEDED( hr ) )
-                    {
-                        m_nSupportedFormat = nFormats[nInd];
-                        m_nSupportedMedium = nMediums[nInd];
-
-                        bSupportedFlavor = ConvertDataForFlavor( aMedium, aFlavor, aResult );
-                        break;
-                    }
-                }
-            }
-
-            if ( !bSupportedFlavor )
-            {
-                // TODO: implement workaround for stampit
-            }
+            // TODO: implement workaround for stampit ( if required )
         }
     }
-    else
+    // TODO: Investigate if there is already the format name
+    else if ( aFlavor.DataType == getCppuType( ( const uno::Reference< io::XInputStream >* ) 0 )
+            && aFlavor.MimeType.equalsAscii( "application/x-openoffice-contentstream" ) )
     {
-        // TODO: allow to retrieve stream-representation of the object persistence
+        // allow to retrieve stream-representation of the object persistence
+        bSupportedFlavor = sal_True;
+        uno::Reference < io::XStream > xTempFileStream(
+            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+            uno::UNO_QUERY );
+
+        if ( !xTempFileStream.is() )
+            throw uno::RuntimeException(); // TODO
+
+        uno::Reference< io::XOutputStream > xTempOutStream = xTempFileStream->getOutputStream();
+        uno::Reference< io::XInputStream > xTempInStream = xTempFileStream->getInputStream();
+        if ( xTempOutStream.is() && xTempInStream.is() )
+        {
+            StoreObjectToStream( xTempOutStream, sal_False );
+            xTempOutStream->closeOutput();
+            xTempOutStream = uno::Reference< io::XOutputStream >();
+        }
+        else
+            throw io::IOException(); // TODO:
+
+        aResult <<= xTempInStream;
     }
 
     if ( !bSupportedFlavor )
