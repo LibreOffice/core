@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:13:32 $
+ *  last change: $Author: kz $ $Date: 2004-12-03 14:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3208,6 +3208,7 @@ static void NWEnsureGTKMenubar(void)
         gtk_widget_show( gMenubarWidget );
 
         // do what NWAddWidgetToCacheWindow does except adding to def container
+        gtk_widget_realize( gMenuItemMenubarWidget );
         gtk_widget_ensure_style( gMenuItemMenubarWidget );
 
         gWidgetDefaultFlags[ (long)gMenuItemMenubarWidget ] = GTK_WIDGET_FLAGS( gMenuItemMenubarWidget );
