@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:43:43 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ SdrCreateView::SdrCreateView(SdrModel* pModel1, OutputDevice* pOut):
     ImpMakeCreateAttr();
 }
 
-SdrCreateView::SdrCreateView(SdrModel* pModel1, ExtOutputDevice* pXOut):
+SdrCreateView::SdrCreateView(SdrModel* pModel1, XOutputDevice* pXOut):
     SdrDragView(pModel1,pXOut)
 {
     ImpClearVars();
@@ -745,7 +745,7 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
 
                             sdr::contact::ObjectContactOfObjListPainter aPainter(aObjectVector);
                             sdr::contact::DisplayInfo aDisplayInfo;
-                            ExtOutputDevice aExtOut(pOut);
+                            XOutputDevice aExtOut(pOut);
                             SdrPaintInfoRec aInfoRec;
 
                             aDisplayInfo.SetExtendedOutputDevice(&aExtOut);
@@ -1171,57 +1171,57 @@ BOOL SdrCreateView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHa
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrCreateView::WriteRecords(SvStream& rOut) const
-{
-    SdrDragView::WriteRecords(rOut);
-    {
-        SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWCROBJECT);
-        rOut<<nAktInvent;
-        rOut<<nAktIdent;
-    } {
-        SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWCRFLAGS);
-        rOut<<BOOL(b1stPointAsCenter);
-    } {
-        // in der CreateView (statt ObjEditView) weil sonst inkompatibel.
-        SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWTEXTEDIT);
-        rOut<<BOOL(bQuickTextEditMode);
-    } {
-        // in der CreateView (statt ObjEditView) weil sonst inkompatibel.
-        SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWMACRO);
-        rOut<<BOOL(bMacroMode);
-    }
-}
+//BFS01void SdrCreateView::WriteRecords(SvStream& rOut) const
+//BFS01{
+//BFS01 SdrDragView::WriteRecords(rOut);
+//BFS01 {
+//BFS01     SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWCROBJECT);
+//BFS01     rOut<<nAktInvent;
+//BFS01     rOut<<nAktIdent;
+//BFS01 } {
+//BFS01     SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWCRFLAGS);
+//BFS01     rOut<<BOOL(b1stPointAsCenter);
+//BFS01 } {
+//BFS01     // in der CreateView (statt ObjEditView) weil sonst inkompatibel.
+//BFS01     SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWTEXTEDIT);
+//BFS01     rOut<<BOOL(bQuickTextEditMode);
+//BFS01 } {
+//BFS01     // in der CreateView (statt ObjEditView) weil sonst inkompatibel.
+//BFS01     SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWMACRO);
+//BFS01     rOut<<BOOL(bMacroMode);
+//BFS01 }
+//BFS01}
 
-BOOL SdrCreateView::ReadRecord(const SdrIOHeader& rViewHead,
-    const SdrNamedSubRecord& rSubHead,
-    SvStream& rIn)
-{
-    BOOL bRet=FALSE;
-    if (rSubHead.GetInventor()==SdrInventor) {
-        bRet=TRUE;
-        switch (rSubHead.GetIdentifier()) {
-            case SDRIORECNAME_VIEWCROBJECT: {
-                UINT32 nInvent;
-                UINT16 nIdent;
-                rIn>>nInvent;
-                rIn>>nIdent;
-                SetCurrentObj(nIdent,nInvent);
-            } break;
-            case SDRIORECNAME_VIEWCRFLAGS: {
-                BOOL bTmp; rIn>>bTmp; b1stPointAsCenter=bTmp;
-            } break;
-            case SDRIORECNAME_VIEWTEXTEDIT: {
-                // in der CreateView (statt ObjEditView) weil sonst inkompatibel.
-                BOOL bTmp; rIn>>bTmp; bQuickTextEditMode=bTmp;
-            } break;
-            case SDRIORECNAME_VIEWMACRO: {
-                // in der CreateView (statt ObjEditView) weil sonst inkompatibel.
-                BOOL bTmp; rIn>>bTmp; bMacroMode=bTmp;
-            } break;
-            default: bRet=FALSE;
-        }
-    }
-    if (!bRet) bRet=SdrDragView::ReadRecord(rViewHead,rSubHead,rIn);
-    return bRet;
-}
+//BFS01BOOL SdrCreateView::ReadRecord(const SdrIOHeader& rViewHead,
+//BFS01 const SdrNamedSubRecord& rSubHead,
+//BFS01 SvStream& rIn)
+//BFS01{
+//BFS01 BOOL bRet=FALSE;
+//BFS01 if (rSubHead.GetInventor()==SdrInventor) {
+//BFS01     bRet=TRUE;
+//BFS01     switch (rSubHead.GetIdentifier()) {
+//BFS01         case SDRIORECNAME_VIEWCROBJECT: {
+//BFS01             UINT32 nInvent;
+//BFS01             UINT16 nIdent;
+//BFS01             rIn>>nInvent;
+//BFS01             rIn>>nIdent;
+//BFS01             SetCurrentObj(nIdent,nInvent);
+//BFS01         } break;
+//BFS01         case SDRIORECNAME_VIEWCRFLAGS: {
+//BFS01             BOOL bTmp; rIn>>bTmp; b1stPointAsCenter=bTmp;
+//BFS01         } break;
+//BFS01         case SDRIORECNAME_VIEWTEXTEDIT: {
+//BFS01             // in der CreateView (statt ObjEditView) weil sonst inkompatibel.
+//BFS01             BOOL bTmp; rIn>>bTmp; bQuickTextEditMode=bTmp;
+//BFS01         } break;
+//BFS01         case SDRIORECNAME_VIEWMACRO: {
+//BFS01             // in der CreateView (statt ObjEditView) weil sonst inkompatibel.
+//BFS01             BOOL bTmp; rIn>>bTmp; bMacroMode=bTmp;
+//BFS01         } break;
+//BFS01         default: bRet=FALSE;
+//BFS01     }
+//BFS01 }
+//BFS01 if (!bRet) bRet=SdrDragView::ReadRecord(rViewHead,rSubHead,rIn);
+//BFS01 return bRet;
+//BFS01}
 
