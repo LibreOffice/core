@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui_service.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:10:51 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 10:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include "unotools/configmgr.hxx"
 #include "tools/isolang.hxx"
 #include "vcl/svapp.hxx"
+#include "vcl/msgbox.hxx"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/task/XJobExecutor.hpp"
 
@@ -211,22 +212,42 @@ void ServiceImpl::setTitle( OUString const & title ) throw (RuntimeException)
 sal_Int16 ServiceImpl::execute() throw (RuntimeException)
 {
     ::std::auto_ptr<Application> app;
-    if (!::dp_gui::DialogImpl::s_dialog.is() && !::dp_misc::office_is_running())
+    if (! dp_gui::DialogImpl::s_dialog.is())
     {
-        app.reset( new MyApp );
-        if (! InitVCL( Reference<lang::XMultiServiceFactory>(
-                           m_xComponentContext->getServiceManager(),
-                           UNO_QUERY_THROW ) ))
-            throw RuntimeException( OUSTR("Cannot initialize VCL!"),
-                                    static_cast<OWeakObject *>(this) );
-        AllSettings as = app->GetSettings();
-        OUString slang;
-        if (! (::utl::ConfigManager::GetDirectConfigProperty(
-                   ::utl::ConfigManager::LOCALE ) >>= slang))
-            throw RuntimeException( OUSTR("Cannot determine language!"),
-                                    static_cast<OWeakObject *>(this) );
-        as.SetUILanguage( ConvertIsoStringToLanguage( slang ) );
-        app->SetSettings( as );
+        const bool bAppUp = (Application::IsInMain() ||
+                             Application::IsInExecute());
+        bool bOfficePipePresent;
+        try {
+            bOfficePipePresent = dp_misc::office_is_running();
+        }
+        catch (Exception & exc) {
+            if (bAppUp) {
+                const vos::OGuard guard( Application::GetSolarMutex() );
+                std::auto_ptr<ErrorBox> box(
+                    new ErrorBox( Application::GetActiveTopWindow(),
+                                  WB_OK, exc.Message ) );
+                box->Execute();
+            }
+            throw;
+        }
+
+        if (! bOfficePipePresent) {
+            OSL_ASSERT( ! bAppUp );
+            app.reset( new MyApp );
+            if (! InitVCL( Reference<lang::XMultiServiceFactory>(
+                               m_xComponentContext->getServiceManager(),
+                               UNO_QUERY_THROW ) ))
+                throw RuntimeException( OUSTR("Cannot initialize VCL!"),
+                                        static_cast<OWeakObject *>(this) );
+            AllSettings as = app->GetSettings();
+            OUString slang;
+            if (! (::utl::ConfigManager::GetDirectConfigProperty(
+                       ::utl::ConfigManager::LOCALE ) >>= slang))
+                throw RuntimeException( OUSTR("Cannot determine language!"),
+                                        static_cast<OWeakObject *>(this) );
+            as.SetUILanguage( ConvertIsoStringToLanguage( slang ) );
+            app->SetSettings( as );
+        }
     }
 
     {
