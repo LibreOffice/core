@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:14:38 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,7 +431,13 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
 {
     if ( mbUseable )
     {
-        if ( getenv("USE_XOPENIM") == NULL )
+        const bool bTryMultiLingual =
+        #ifdef LINUX
+                        false;
+        #else
+                        true;
+        #endif
+        if ( bTryMultiLingual && getenv("USE_XOPENIM") == NULL )
         {
             mbMultiLingual = True; // set ml-input flag to create input-method
             maMethod = XvaOpenIM(pDisplay, NULL, NULL, NULL,
@@ -440,7 +446,6 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
             // get ml-input flag from input-method
             if ( maMethod == (XIM)NULL )
                 mbMultiLingual = False;
-#if !defined(LINUX)
             else
             if ( XGetIMValues(maMethod,
                     XNMultiLingualInput, &mbMultiLingual, NULL ) != NULL )
@@ -472,9 +477,6 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
                     fprintf( stderr, "query subsets failed\n" );
 #endif
             }
-#else
-            mbMultiLingual = False;
-#endif
         }
         else
         {
