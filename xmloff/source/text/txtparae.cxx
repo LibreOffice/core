@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-20 13:01:35 $
+ *  last change: $Author: sab $ $Date: 2000-11-20 16:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,7 +390,6 @@ OUString XMLTextParagraphExport::Find(
 
     if( xPropStates.size() > 0L )
         sName = GetAutoStylePool().Find( nFamily, sName, xPropStates );
-
     DBG_ASSERT( !bCache || !sCachedName.getLength() || sCachedName == sName,
                 "cache error" );
 
@@ -740,6 +739,14 @@ SvXMLExportPropertyMapper *XMLTextParagraphExport::CreateShapeExtPropMapper(
     return new XMLTextExportPropertySetMapper( xPropMapper, rExport );
 }
 
+SvXMLExportPropertyMapper *XMLTextParagraphExport::CreateCharExtPropMapper(
+        SvXMLExport& rExport)
+{
+    XMLPropertySetMapper *pPropMapper =
+        new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT );
+    return new XMLTextExportPropertySetMapper( pPropMapper, rExport );
+}
+
 void XMLTextParagraphExport::collectFrames()
 {
     Reference < XTextFramesSupplier > xTFS( GetExport().GetModel(), UNO_QUERY );
@@ -899,7 +906,6 @@ void XMLTextParagraphExport::exportText(
 {
     Reference < XEnumerationAccess > xEA( rText, UNO_QUERY );
     Reference < XEnumeration > xParaEnum = xEA->createEnumeration();
-
     Reference < XPropertySet > xPropertySet( rText, UNO_QUERY );
     Reference < XTextSection > xBaseSection;
     if (xPropertySet.is())
