@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ednumber.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:17:53 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,7 @@ BOOL SwEditShell::MoveNumParas( BOOL bUpperLower, BOOL bUpperLeft )
                         ( pNd->IsEndNode() && pNd->FindStartNode()->IsSectionNode()) ||
                         ( pNd->IsTxtNode() && pOrig == ((SwTxtNode*)pNd)->GetNumRule() &&
                             ((SwTxtNode*)pNd)->GetNum() &&
-                            (((SwTxtNode*)pNd)->GetNum()->GetLevel() & ~NO_NUMLEVEL) > nUpperLevel )) )
+                            ((SwTxtNode*)pNd)->GetNum()->GetRealLevel() > nUpperLevel )) )
                         ++nIdx;
                     if( nStt == nIdx || !GetDoc()->GetNodes()[ nIdx ]->IsTxtNode() )
                         nOffset = 1;
@@ -550,7 +550,7 @@ BOOL SwEditShell::IsNoNum( BOOL bChkStart, BOOL bOutline ) const
                       0 != (pNum = pTxtNd->GetOutlineNum() ))
                    : (pTxtNd->GetNumRule() &&
                       0 != (pNum = pTxtNd->GetNum() ) )) &&
-        0 != ( pNum->GetLevel() & NO_NUMLEVEL );
+        ! pNum->IsNum();
 }
 
 
@@ -579,7 +579,7 @@ BYTE SwEditShell::GetNumLevel( BOOL* pHasChilds ) const
             // zuerst ueber alle TextNodes und falls da nichts gefunden
             // wurde, ueber die Formate und deren GetInfo bis zu den Nodes
 
-            BYTE nLvl = nLevel & ~NO_NUMLEVEL;
+            BYTE nLvl = GetRealLevel(nLevel);
             if( nLvl + 1 < MAXLEVEL )
             {
                 const String& rRule = pRule->GetName();
@@ -594,7 +594,7 @@ BYTE SwEditShell::GetNumLevel( BOOL* pHasChilds ) const
                         pMod->IsA( TYPE( SwTxtNode )) &&
                         ((SwTxtNode*)pMod)->GetNodes().IsDocNodes() &&
                         ((SwTxtNode*)pMod)->GetNum() &&
-                        nLvl < ( ((SwTxtNode*)pMod)->GetNum()->GetLevel() & ~NO_NUMLEVEL) )
+                        nLvl < ((SwTxtNode*)pMod)->GetNum()->GetRealLevel() )
                     {
                         *pHasChilds = TRUE;
                         break;
