@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:13:09 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   solvrdlg.src  $
  //   $Author: hr $
- //     $Date: 2003-04-29 17:13:09 $
- // $Revision: 1.19 $
+ //     $Date: 2003-06-13 13:46:34 $
+ // $Revision: 1.20 $
  //  $Logfile:   T:/sc/source/ui/src/solvrdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -125,6 +125,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ czech ] = "Buňka se vzorcem";
         Text[ hebrew ] = "~Formelzelle";
         Text[ hindi ] = "~सूत्र का कोष्ठ";
+        Text[ slovak ] = "Bun~ka so vzorcom";
     };
     Edit ED_FORMULACELL
     {
@@ -166,6 +167,7 @@ ModelessDialog RID_SCDLG_SOLVER
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     FixedText FT_TARGETVAL
     {
@@ -199,6 +201,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ czech ] = "Cílová hodnota";
         Text[ hebrew ] = "~Zielwert";
         Text[ hindi ] = "लक्ष्य का ~मूल्य";
+        Text[ slovak ] = "Cieľo~vá hodnota";
     };
     Edit ED_TARGETVAL
     {
@@ -239,6 +242,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ czech ] = "Proměnná buňka";
         Text[ hebrew ] = "~Variable Zelle";
         Text[ hindi ] = "वेरिऐबल ~कोष्ठ";
+        Text[ slovak ] = "~Bunka s premennou";
     };
     Edit ED_VARCELL
     {
@@ -280,6 +284,7 @@ ModelessDialog RID_SCDLG_SOLVER
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     FixedLine FL_VARIABLES
     {
@@ -313,6 +318,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ czech ] = "Výchozí nastavení";
         Text[ hebrew ] = "Vorgaben";
         Text[ hindi ] = "अनुपस्थिति निर्धारण";
+        Text[ slovak ] = "Východzie nastavenia";
     };
     OKButton BTN_OK
     {
@@ -364,6 +370,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ czech ] = "Neplatná cílová hodnota.";
         Text[ hebrew ] = "Unzulässiger Zielwert";
         Text[ hindi ] = "लक्ष्य का मूल्य अमान्य है ।";
+        Text[ slovak ] = "Neplatná cieľová hodnota.";
     };
     String STR_INVALIDVAR
     {
@@ -384,7 +391,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ russian ] = "�������������� ��� ��� ���������� ������.";
         Text[ polish ] = "Niezdefiniowana nazwa dla kom�rki zmiennej.";
         Text[ japanese ] = "変化させるセルが指定されていません。";
-        Text[ chinese_traditional ] = "未定義的名稱被當作可變量的儲存格！";
+        Text[ chinese_traditional ] = "未定義的名稱被當作變數的儲存格！";
         Text[ arabic ] = "��� ��� ������ ����� ������!";
         Text[ greek ] = "������� ����� �� ��������� ����!";
         Text[ korean ] = "가변 셀이 지정되지 않았습니다.";
@@ -395,6 +402,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ czech ] = "Nedefinované jméno pro proměnnou buňku.";
         Text[ hebrew ] = "Undefinierter Name als variable Zelle";
         Text[ hindi ] = "वेरिऐबल कोष्ठ केलिए परिभाषा न किया हुआ नाम ।";
+        Text[ slovak ] = "Nedefinovaný názov pre bunku s premennou.";
     };
     String STR_INVALIDFORM
     {
@@ -426,6 +434,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ czech ] = "Nedefinované jméno buňky se vzorcem.";
         Text[ hebrew ] = "Undefinierter Name als Formelzelle";
         Text[ hindi ] = "सूत्र कोष्ठ केलिए परिभाषा न किया हुआ नाम ।";
+        Text[ slovak ] = "Nedefinovaný názov pre bunku so vzorcom.";
     };
     String STR_NOFORMULA
     {
@@ -458,6 +467,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ czech ] = "Buňka musí obsahovat vzorec!";
         Text[ hebrew ] = "Zelle muss eine Formel enthalten";
         Text[ hindi ] = "कोष्ठ में सूत्र का रहना ज़रूरी है ।";
+        Text[ slovak ] = "Bunka musí obsahovať vzorec.";
     };
     Text[ chinese_simplified ] = "单变量求解";
     Text[ russian ] = "������ ���������";
@@ -474,7 +484,10 @@ ModelessDialog RID_SCDLG_SOLVER
     Text[ czech ] = "Hledání řešení";
     Text[ hebrew ] = "Zielwertsuche";
     Text[ hindi ] = "गोल सीक";
+    Text[ slovak ] = "Vyhľadanie cieľa";
 };
+
+
 
 
 
