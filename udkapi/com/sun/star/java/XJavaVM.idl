@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XJavaVM.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:39 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 17:02:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,19 @@ interface XJavaVM: com::sun::star::uno::XInterface
         context <code>ClassLoader</code> (see
         <code>java.lang.Thread.getContextClassLoader</code>) will automatically
         be set to a meaningful value.</p>
+
+        If the instantiation of the Java Virtual Machine was successfull then
+        the returned any contains a long value on a 32 bit platform and a hyper
+        value on a 64 bit platform. The values can be cast to a JavaVM pointer.
+        If the JVM could not be created for whatever reason then a void any
+        will be returned.
+
+        @param processID
+               The process ID of the caller's process.
+        @return
+               On success, a JavaVM pointer as long or hyper, otherwise the any
+               is void.
+
      */
     any getJavaVM( [in] sequence<byte> processID );
 
