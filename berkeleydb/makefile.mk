@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-01 13:35:55 $
+#   last change: $Author: vg $ $Date: 2003-06-02 09:41:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,7 @@ CONFIGURE_FLAGS=--enable-cxx --enable-java --enable-dynamic --enable-shared
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=make
 
-OUT2LIB=$(BUILD_DIR)$/.libs$/libdb*.so
+OUT2LIB=$(BUILD_DIR)$/.libs$/libdb*$(DLLPOST)
 
 OUT2BIN=java$/classes$/db.jar
 
