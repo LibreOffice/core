@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-08 15:20:13 $
+ *  last change: $Author: pb $ $Date: 2002-09-16 06:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2048,13 +2048,13 @@ const ::com::sun::star::lang::Locale& AllSettings::GetLocale() const
 
 const ::com::sun::star::lang::Locale& AllSettings::GetUILocale() const
 {
-    if ( !mpData->maLocale.Language.getLength() )
+    if ( !mpData->maUILocale.Language.getLength() )
     {
         String  aLanguage;
         String  aCountry;
         ConvertLanguageToIsoNames( GetUILanguage(), aLanguage, aCountry );
-        ((AllSettings*)this)->mpData->maLocale.Language = aLanguage;
-        ((AllSettings*)this)->mpData->maLocale.Country = aCountry;
+        ((AllSettings*)this)->mpData->maUILocale.Language = aLanguage;
+        ((AllSettings*)this)->mpData->maUILocale.Country = aCountry;
     }
 
     return mpData->maUILocale;
