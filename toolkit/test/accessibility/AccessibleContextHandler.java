@@ -47,8 +47,14 @@ class AccessibleContextHandler
                     sChild = "Role: " + xContext.getAccessibleRole();
                     break;
                 case 2:
-                    sChild = "Has parent: " +
-                        (xContext.getAccessibleParent()!=null ? "yes" : "no");
+                    XAccessible xParent = xContext.getAccessibleParent();
+                    sChild = "Has parent: " + (xParent!=null ? "yes" : "no");
+                    /*                    if (xParent != ((AccTreeNode)aParent).getAccessible())
+                    {
+                        sChild += " but that is inconsistent"
+                            + "#" + xParent + " # " + ((AccTreeNode)aParent).getAccessible();
+                    }
+                    */
                     break;
                     /*                case 3:
                     sChild = "Child count: " + xContext.getAccessibleChildCount();

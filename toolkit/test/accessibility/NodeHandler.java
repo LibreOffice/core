@@ -108,4 +108,10 @@ abstract class NodeHandler
     public void performAction (AccessibleTreeNode aNode, int nIndex)
     {
     }
+
+    /** Update all children.
+    */
+    public void update (AccessibleTreeNode aNode)
+    {
+    }
 }

@@ -275,4 +275,35 @@ class AccTreeNode
         }
         return null;
     }
+
+    /** Update the specified handlers.  This results in re-reading the
+        information regarding the XAccessibleComponentInterface.
+        @return
+            The returned array containes the indices of the updated children
+            and can be used to create a TreeModelEvent.
+    */
+    public Vector update (java.lang.Class class1)
+    {return update (class1, null); }
+    public Vector update (java.lang.Class class1, java.lang.Class class2)
+    {
+        Vector aChildIndices = new Vector();
+        int nOffset = 0;
+        for(int i=0; i < maHandlers.size(); i++)
+        {
+            HandlerDescriptor aDescriptor = getHandlerDescriptor (i);
+            if ((class1.isInstance(aDescriptor.maHandler))
+                || (class2 !=null && class2.isInstance(aDescriptor.maHandler)))
+            {
+                aDescriptor.maHandler.update(this);
+                // Get updated number of children.
+                int nChildCount = aDescriptor.maHandler.getChildCount (this);
+                aDescriptor.mnChildCount = nChildCount;
+                // Fill in the indices of the updated children.
+                for (int j=0; j<nChildCount; j++)
+                    aChildIndices.add(new Integer(j+nOffset));
+            }
+            nOffset += aDescriptor.mnChildCount;
+        }
+        return aChildIndices;
+    }
 }
