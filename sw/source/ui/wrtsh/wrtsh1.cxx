@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:44:26 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:43:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,8 @@
 
 #include <comphelper/storagehelper.hxx>
 #include <svx/svxdlg.hxx>
+#include <svx/extrusionbar.hxx>
+#include <svx/fontworkbar.hxx>
 
 #ifndef _FMTFTN_HXX //autogen
 #include <fmtftn.hxx>
@@ -1298,7 +1300,7 @@ int SwWrtShell::GetSelectionType() const
 //      return SEL_TBL | SEL_TBL_CELLS;
 
     SwView &rView = ((SwView&)GetView());
-    USHORT nCnt;
+    int nCnt;
 
     // Rahmen einfuegen ist kein DrawMode
     if ( !rView.GetEditWin().IsFrmAction() &&
@@ -1317,6 +1319,19 @@ int SwWrtShell::GetSelectionType() const
                 nCnt |= SEL_BEZ;
             else if( GetDrawView()->GetContext() == SDRCONTEXT_MEDIA )
                 nCnt |= SEL_MEDIA;
+
+            if (svx::checkForSelectedCustomShapes(
+                    const_cast<SdrView *>(GetDrawView()),
+                    true /* bOnlyExtruded */ ))
+            {
+                nCnt |= SwWrtShell::SEL_EXTRUDED_CUSTOMSHAPE;
+            }
+            sal_uInt32 nCheckStatus = 0;
+            if (svx::checkForSelectedFontWork(
+                    const_cast<SdrView *>(GetDrawView()), nCheckStatus ))
+            {
+                nCnt |= SwWrtShell::SEL_FONTWORK;
+            }
         }
 
         return nCnt;
