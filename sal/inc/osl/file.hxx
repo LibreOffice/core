@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-21 08:57:21 $
+ *  last change: $Author: obr $ $Date: 2001-05-21 10:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,7 @@ public:
 
     inline ::rtl::OUString getFileSystemName() const
     {
-        return _aInfo.ustrFileSystemName ? ::rtl::OUString( _aInfo.ustrFileSystemName ) : ::rtl::OUSTring();
+        return _aInfo.ustrFileSystemName ? ::rtl::OUString( _aInfo.ustrFileSystemName ) : ::rtl::OUString();
     }
 
 
@@ -537,7 +537,7 @@ public:
      @param nMask set of flaggs decribing the demanded information.
     */
 
-    FileStatus( sal_uInt32 nMask ): _nMask( nMask ), _strLinkTargetURL( NULL ), _strFileURL( NULL )
+    FileStatus( sal_uInt32 nMask ): _nMask( nMask )
     {
         _aStatus.uStructSize = sizeof( oslFileStatus );
         rtl_fillMemory( &_aStatus.uValidFields, sizeof( oslFileStatus ) - sizeof( sal_uInt32 ), 0 );
@@ -642,7 +642,7 @@ public:
 
     inline ::rtl::OUString getLinkTargetURL() const
     {
-        return _aStatus.strLinkTargetURL ? ::rtl::OUString(_aStatus.ustrLinkTargetURL) : ::rtl::OUString();
+        return _aStatus.ustrLinkTargetURL ? ::rtl::OUString(_aStatus.ustrLinkTargetURL) : ::rtl::OUString();
     }
 
     friend class DirectoryItem;
@@ -1128,28 +1128,6 @@ public:
 
         return (RC) osl_getDirectoryItem( strPath.pData, &rItem._pData );
     }
-
-    /** Get a directory item handle from an open file.
-     @param rItem [out] On success it receives a handle to a directory item which can be used
-     in subsequent calls to <code>getStatus</code>.
-     @return E_None on success otherwise one of the following errorcodes:<p>
-     E_INVAL        the format of the parameters was not valid<p>
-
-     @see   File
-     @see   getStatus
-    */
-
-    static inline RC get( const File& rFile, DirectoryItem& rItem )
-    {
-        if( rItem._pData)
-        {
-            osl_releaseDirectoryItem( rItem._pData );
-            rItem._pData = NULL;
-        }
-
-        return (RC) osl_createDirectoryItemFromHandle( rFile._pData, &rItem._pData );
-    }
-
 
     /** Retrieves information about a single file or directory
 
