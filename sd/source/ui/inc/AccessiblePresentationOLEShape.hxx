@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePresentationOLEShape.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-03-06 16:59:17 $
+ *  last change: $Author: af $ $Date: 2002-03-07 09:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,12 +91,12 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Create a name string that contains the accessible name.
-    virtual ::rtl::OUString SAL_CALL
+    virtual ::rtl::OUString
         createAccessibleBaseName ()
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Create a description string that contains the accessible description.
-    virtual ::rtl::OUString SAL_CALL
+    virtual ::rtl::OUString
         createAccessibleDescription ()
         throw (::com::sun::star::uno::RuntimeException);
 };
