@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.6 $
+ #  $Revision: 1.7 $
  #
- #  last change: $Author: oj $ $Date: 2000-11-10 16:12:36 $
+ #  last change: $Author: oj $ $Date: 2000-12-12 12:47:56 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -83,11 +83,15 @@ SRCFILES =	\
         dsselect.src	\
         dbadmin.src		\
         dbfindex.src	\
+        dlgsize.src		\
+        dlgattr.src		\
         sqlmessage.src
 
 # ... object files ............................
 
 SLOFILES=	\
+        $(SLO)$/dlgsize.obj		\
+        $(SLO)$/dlgattr.obj		\
         $(SLO)$/queryorder.obj	\
         $(SLO)$/queryfilter.obj	\
         $(SLO)$/paramdialog.obj	\
@@ -106,6 +110,9 @@ SLOFILES=	\
  #########################################################################
  # history:
  #	$Log: not supported by cvs2svn $
+ #	Revision 1.6  2000/11/10 16:12:36  oj
+ #	new files
+ #	
  #	Revision 1.5  2000/10/26 18:07:11  fs
  #	added parameterdialog source/resource
  #	
