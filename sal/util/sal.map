@@ -519,4 +519,5 @@ UDK_3.2 {
 UDK_3.3 { # OOo 2.0
     global:
         rtl_uStringbuffer_insertUtf32;
+        rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths;
 } UDK_3.2;
