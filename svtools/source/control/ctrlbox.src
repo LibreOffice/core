@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-12 09:56:02 $
+ *  last change: $Author: rt $ $Date: 2002-09-13 08:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,8 +425,8 @@ String STR_SVT_COLLATE_PHONETIC_F
     Text[ swedish ] = "Phonetiskt (alfanumeriskt f�rst)";
     Text[ polish ] = "Phonetic (alphanumeric first)";
     Text[ portuguese_brazilian ] = "Phonetic (alphanumeric first)";
-    Text[ japanese ] = "Phonetic (alphanumeric first)";
-    Text[ korean ] = "Phonetic (alphanumeric first)";
+    Text[ japanese ] = "読み（英数字を先に）";
+    Text[ korean ] = "발음 표기 (영숫자를 우선)";
     Text[ chinese_simplified ] = "语音的(数字排列最先)";
     Text[ chinese_traditional ] = "語音的(數字排列最先)";
     Text[ turkish ] = "Phonetic (alphanumeric first)";
@@ -451,8 +451,8 @@ String STR_SVT_COLLATE_PHONETIC_L
     Text[ swedish ] = "Fonetiskt (alfanumeriskt sist)";
     Text[ polish ] = "Phonetic (alphanumeric last)";
     Text[ portuguese_brazilian ] = "Phonetic (alphanumeric last)";
-    Text[ japanese ] = "Phonetic (alphanumeric last)";
-    Text[ korean ] = "Phonetic (alphanumeric last)";
+    Text[ japanese ] = "読み（英数字を後に）";
+    Text[ korean ] = "발음 표기(영숫자를 마지막에)";
     Text[ chinese_simplified ] = "语音的(字母数字排列最后)";
     Text[ chinese_traditional ] = "語音的(字母數字排列最後)";
     Text[ turkish ] = "Phonetic (alphanumeric last)";
@@ -478,8 +478,8 @@ String STR_SVT_INDEXENTRY_ALPHANUMERIC
     Text[ swedish ] = "Alfanumeriskt";
     Text[ polish ] = "Alphanumeric";
     Text[ portuguese_brazilian ] = "Alphanumeric";
-    Text[ japanese ] = "Alphanumeric";
-    Text[ korean ] = "Alphanumeric";
+    Text[ japanese ] = "英数字";
+    Text[ korean ] = "영숫자";
     Text[ chinese_simplified ] = "字母数字的";
     Text[ chinese_traditional ] = "字母數字的";
     Text[ turkish ] = "Alphanumeric";
@@ -505,8 +505,8 @@ String STR_SVT_INDEXENTRY_DICTIONARY
     Text[ swedish ] = "Ordlista";
     Text[ polish ] = "Dictionary";
     Text[ portuguese_brazilian ] = "Dictionary";
-    Text[ japanese ] = "Dictionary";
-    Text[ korean ] = "Dictionary";
+    Text[ japanese ] = "辞書";
+    Text[ korean ] = "사전";
     Text[ chinese_simplified ] = "字典";
     Text[ chinese_traditional ] = "字典";
     Text[ turkish ] = "Dictionary";
@@ -532,8 +532,8 @@ String STR_SVT_INDEXENTRY_PINYIN
     Text[ swedish ] = "Pinyin";
     Text[ polish ] = "Pinyin";
     Text[ portuguese_brazilian ] = "Pinyin";
-    Text[ japanese ] = "ピンイン(中国語のローマ字表記法)";
-    Text[ korean ] = "Pinyin";
+    Text[ japanese ] = "ピンイン（中国語のローマ字表記法）";
+    Text[ korean ] = "중국어 병음";
     Text[ chinese_simplified ] = "拼音";
     Text[ chinese_traditional ] = "拼音";
     Text[ turkish ] = "Pinyin";
@@ -560,7 +560,7 @@ String STR_SVT_INDEXENTRY_RADICAL
     Text[ polish ] = "Korze�-rdze�";
     Text[ portuguese_brazilian ] = "Radical";
     Text[ japanese ] = "漢字の部首";
-    Text[ korean ] = "극단";
+    Text[ korean ] = "부수";
     Text[ chinese_simplified ] = "部首";
     Text[ chinese_traditional ] = "部首";
     Text[ turkish ] = "Radical";
@@ -587,7 +587,7 @@ String STR_SVT_INDEXENTRY_STROKE
     Text[ polish ] = "Kreski (stroke)";
     Text[ portuguese_brazilian ] = "Stroke";
     Text[ japanese ] = "総画数";
-    Text[ korean ] = "스트로크";
+    Text[ korean ] = "획수";
     Text[ chinese_simplified ] = "笔画";
     Text[ chinese_traditional ] = "筆畫";
     Text[ turkish ] = "Stroke";
@@ -614,7 +614,7 @@ String STR_SVT_INDEXENTRY_ZHUYIN
     Text[ polish ] = "Zhuyin";
     Text[ portuguese_brazilian ] = "Zhuyin";
     Text[ japanese ] = "注音（中国語の漢字の発音を表記するための表記文字）";
-    Text[ korean ] = "Zhuyin";
+    Text[ korean ] = "중국어 주음";
     Text[ chinese_simplified ] = "注音";
     Text[ chinese_traditional ] = "注音";
     Text[ turkish ] = "Zhuyin";
@@ -639,8 +639,8 @@ String STR_SVT_INDEXENTRY_PHONETIC_FS
     Text[ swedish ] = "Phonetiskt (alfanumeriskt f�rst, grupperat efter stavelser)";
     Text[ polish ] = "Phonetic (alphanumeric first, grouped by syllables)";
     Text[ portuguese_brazilian ] = "Phonetic (alphanumeric first, grouped by syllables)";
-    Text[ japanese ] = "Phonetic (alphanumeric first, grouped by syllables)";
-    Text[ korean ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ japanese ] = "読み（英数字を先に、あいうえお順）";
+    Text[ korean ] = "발음 표기(영숫자를 우선, 음절 기준 순서)";
     Text[ chinese_simplified ] = "语音的(字母数字排列最先，按音节分组)";
     Text[ chinese_traditional ] = "語音的(字母數字排列最先，按音節分組)";
     Text[ turkish ] = "Phonetic (alphanumeric first, grouped by syllables)";
@@ -665,8 +665,8 @@ String STR_SVT_INDEXENTRY_PHONETIC_FC
     Text[ swedish ] = "Fonetiskt (alfanumeriskt f�rst, grupperat efter konsonanter)";
     Text[ polish ] = "Phonetic (alphanumeric first, grouped by consonants)";
     Text[ portuguese_brazilian ] = "Phonetic (alphanumeric first, grouped by consonants)";
-    Text[ japanese ] = "Phonetic (alphanumeric first, grouped by consonants)";
-    Text[ korean ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ japanese ] = "読み（英数字を先に、あかさたな順）";
+    Text[ korean ] = "발음 표기(영숫자를 우선, 자음 기준 순서)";
     Text[ chinese_simplified ] = "语音的(字母数字排列最先，按辅音分组)";
     Text[ chinese_traditional ] = "語音的(字母數字排列最先，按輔音分組)";
     Text[ turkish ] = "Phonetic (alphanumeric first, grouped by consonants)";
@@ -691,8 +691,8 @@ String STR_SVT_INDEXENTRY_PHONETIC_LS
     Text[ swedish ] = "Fonetiskt (alfanumeriskt sist, grupperat efter stavelser)";
     Text[ polish ] = "Phonetic (alphanumeric last, grouped by syllables)";
     Text[ portuguese_brazilian ] = "Phonetic (alphanumeric last, grouped by syllables)";
-    Text[ japanese ] = "Phonetic (alphanumeric last, grouped by syllables)";
-    Text[ korean ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ japanese ] = "読み（英数字を後に、あいうえお順）";
+    Text[ korean ] = "발음 표기(영숫자를 마지막으로, 음절 기준 순서)";
     Text[ chinese_simplified ] = "语音的(数字排列最后，按音节分组)";
     Text[ chinese_traditional ] = "語音的(數字排列最後，按音節分組)";
     Text[ turkish ] = "Phonetic (alphanumeric last, grouped by syllables)";
@@ -717,8 +717,8 @@ String STR_SVT_INDEXENTRY_PHONETIC_LC
     Text[ swedish ] = "Phonetiskt (alfanumeriskt sist, grupperat efter konsonanter)";
     Text[ polish ] = "Phonetic (alphanumeric last, grouped by consonants)";
     Text[ portuguese_brazilian ] = "Phonetic (alphanumeric last, grouped by consonants)";
-    Text[ japanese ] = "Phonetic (alphanumeric last, grouped by consonants)";
-    Text[ korean ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ japanese ] = "読み（英数字を後に、あかさたな順）";
+    Text[ korean ] = "발음 표기(영숫자를 마지막으로, 자음 기준 순서)";
     Text[ chinese_simplified ] = "语音的(数字排列最后，按辅音分组)";
     Text[ chinese_traditional ] = "語音的(數字排列最後，按輔音分組)";
     Text[ turkish ] = "Phonetic (alphanumeric last, grouped by consonants)";
