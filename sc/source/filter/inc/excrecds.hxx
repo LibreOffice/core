@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-10 17:26:23 $
+ *  last change: $Author: dr $ $Date: 2001-06-05 14:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1447,15 +1447,16 @@ public:
 //-------------------------------------------------------- class UsedFormList -
 // a list of FORMAT records
 
-class UsedFormList : public UsedList
+class UsedFormList : public UsedList, public ExcRoot
 {
 private:
     inline ExcFormat*       _First()    { return (ExcFormat*) List::First(); }
     inline ExcFormat*       _Next()     { return (ExcFormat*) List::Next(); }
 
 public:
+    inline                  UsedFormList( RootData& rRootData ) : ExcRoot( &rRootData ) {}
     virtual                 ~UsedFormList();
-    UINT16                  Add( ExcFormat* pFormat );  // add and forget
+    UINT16                  Add( UINT32 nNewScIx );
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-19 09:57:15 $
+ *  last change: $Author: dr $ $Date: 2001-06-05 14:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ public:
 
     inline void                 Add( UINT16 nRowNum, UINT16 nXF );
 
-    void                        ChangeXF( UINT16 nRowNum, UINT16& rXF );
+    BOOL                        ChangeXF( UINT16 nRowNum, UINT16& rXF );
 };
 
 // structure: 2 byte row number, 2 byte XF -> 4 byte
@@ -211,7 +211,7 @@ public:
     void                        FillAsTable( void );
 
     void                        SetDefRowXF( UINT16 nXF, UINT16 nRowNum );
-    void                        ModifyToDefaultRowXF( UINT16 nRowNum, UINT16& rXF );
+    BOOL                        ModifyToDefaultRowXF( UINT16 nRowNum, UINT16& rXF );
 
     void                        Write( XclExpStream& );
 };

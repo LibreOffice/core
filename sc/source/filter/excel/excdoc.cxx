@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-28 13:44:50 $
+ *  last change: $Author: dr $ $Date: 2001-06-05 14:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ DefRowXFs::~DefRowXFs()
 
 
 //void DefRowXFs::ChangeXF( ExcRow& rRow )
-void DefRowXFs::ChangeXF( UINT16 nRowNum, UINT16& rXF )
+BOOL DefRowXFs::ChangeXF( UINT16 nRowNum, UINT16& rXF )
 {
     UINT32  nCnt;
     UINT16  nR, nXF;
@@ -192,9 +192,10 @@ void DefRowXFs::ChangeXF( UINT16 nRowNum, UINT16& rXF )
             nLastList = n;
             nLastRow = nR;
 
-            return;
+            return TRUE;
         }
     }
+    return FALSE;
 }
 
 
@@ -358,8 +359,8 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
 
     ExcNameList*    pNameL      = rR.pNameList  = new ExcNameList;
     ExcPalette2*    pPalette2   = rR.pPalette2  = new ExcPalette2( *rR.pColor );
-    UsedFontList*   pFontRecs   = rR.pFontRecs  = new UsedFontList( rR ) ;
-    UsedFormList*   pFormRecs   = rR.pFormRecs  = new UsedFormList;
+    UsedFontList*   pFontRecs   = rR.pFontRecs  = new UsedFontList( rR );
+    UsedFormList*   pFormRecs   = rR.pFormRecs  = new UsedFormList( rR );
     UsedAttrList*   pXFRecs     = rR.pXFRecs    = new UsedAttrList( &rR, *pPalette2, *pFontRecs, *pFormRecs );
 
     XclSstList*         pSstRecs            = NULL;
@@ -718,8 +719,8 @@ void ExcTable::FillAsTable( void )
     rR.pCellMerging = new XclExpCellMerging;
 
 
-    ScUsedAreaIterator      aIterator( &rDoc, nScTab, 0, 0, nLastCol, nLastRow );
-//  ScUsedAreaIterator      aIterator( &rDoc, nScTab, 0, 0, MAXCOL, MAXROW );
+//    ScUsedAreaIterator      aIterator( &rDoc, nScTab, 0, 0, nLastCol, nLastRow );
+    ScUsedAreaIterator      aIterator( &rDoc, nScTab, 0, 0, MAXCOL, nLastRow );
     const ScBaseCell*       pAktScCell;
     const ScPatternAttr*    pPatt;
     ExcBlankMulblank*       pLastBlank = NULL;
@@ -1290,10 +1291,11 @@ void ExcTable::NullTab( const String* pCodename )
 }
 
 
-void ExcTable::ModifyToDefaultRowXF( UINT16 nRowNum, UINT16& rXF )
+BOOL ExcTable::ModifyToDefaultRowXF( UINT16 nRowNum, UINT16& rXF )
 {
     if( pDefRowXFs )
-        pDefRowXFs->ChangeXF( nRowNum, rXF );
+        return pDefRowXFs->ChangeXF( nRowNum, rXF );
+    return FALSE;
 }
 
 

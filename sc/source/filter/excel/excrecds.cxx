@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-30 10:19:38 $
+ *  last change: $Author: dr $ $Date: 2001-06-05 14:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1824,41 +1824,41 @@ void ExcBlankMulblank::AddEntries(
 
     ScAddress   aCurrPos( rPos );
     UINT16      nCellXF = rRootData.pXFRecs->Find( pAttr );
-    BOOL        bOrg = TRUE;
 
-    while( nCount )
-    {
-        UINT16 nMergeXF, nMergeCount;
-        if( rRootData.pCellMerging->FindMergeBaseXF( aCurrPos, nMergeXF, nMergeCount ) )
-        {
-            nMergeCount = Min( nMergeCount, nCount );
-            Append( nMergeXF, nMergeCount );
-            nCount -= nMergeCount;
-            aCurrPos.IncCol( nMergeCount );
-            bOrg = FALSE;
-        }
-        else
-        {
-            UINT16 nMergeCol;
-            UINT16 nColCount = nCount;
-
-            if( rRootData.pCellMerging->FindNextMerge( aCurrPos, nMergeCol ) )
-                nColCount = Min( (UINT16)(nMergeCol - aCurrPos.Col()), nCount );
-
-            if( nColCount )
-            {
-                Append( nCellXF, nColCount );
-                nCount -= nColCount;
-                aCurrPos.IncCol( nColCount );
-            }
-        }
-    }
-
-    if( bOrg )
+    if( nCount > MAXCOL )
     {   // set format at row
         rExcTab.SetDefRowXF( nCellXF, rPos.Row() );
 
         bDummy = TRUE;
+    }
+    else
+    {
+        while( nCount )
+        {
+            UINT16 nMergeXF, nMergeCount;
+            if( rRootData.pCellMerging->FindMergeBaseXF( aCurrPos, nMergeXF, nMergeCount ) )
+            {
+                nMergeCount = Min( nMergeCount, nCount );
+                Append( nMergeXF, nMergeCount );
+                nCount -= nMergeCount;
+                aCurrPos.IncCol( nMergeCount );
+            }
+            else
+            {
+                UINT16 nMergeCol;
+                UINT16 nColCount = nCount;
+
+                if( rRootData.pCellMerging->FindNextMerge( aCurrPos, nMergeCol ) )
+                    nColCount = Min( (UINT16)(nMergeCol - aCurrPos.Col()), nCount );
+
+                if( nColCount )
+                {
+                    Append( nCellXF, nColCount );
+                    nCount -= nColCount;
+                    aCurrPos.IncCol( nColCount );
+                }
+            }
+        }
     }
 }
 
@@ -2338,9 +2338,10 @@ void ExcRow::SetHeight( UINT16 nNewHeight, BOOL bUser )
 
 void ExcRow::SaveCont( XclExpStream& rStrm )
 {
-    rExcTab.ModifyToDefaultRowXF( nNum, nXF );
-
     nOptions |= EXC_ROW_FLAGCOMMON;
+    if( rExcTab.ModifyToDefaultRowXF( nNum, nXF ) )
+        nOptions |= EXC_ROW_GHOSTDIRTY;
+
     rStrm   << nNum << nFirstCol << (UINT16)(nLastCol + 1)
             << nHeight << (UINT32)0 << nOptions << nXF;
 }
@@ -3210,7 +3211,7 @@ void ExcPalette2::GetMixedColors( UINT32 nForeSer, UINT32 nBackSer,
     }
     rForeInd = (UINT16)(nIndex1 + ColorBuffer::GetIndCorrect());
     rBackInd = (UINT16)(nIndex2 + ColorBuffer::GetIndCorrect());
-    if( nMinDist < (nFirstDist >> 1) )
+    if( nMinDist < nFirstDist )
         switch( nMinIndex )
         {
             case 1: rPatt = 3; break;
@@ -3484,22 +3485,16 @@ UsedFormList::~UsedFormList()
 }
 
 
-UINT16 UsedFormList::Add( ExcFormat* pFormat )
+//UINT16 UsedFormList::Add( ExcFormat* pFormat )
+UINT16 UsedFormList::Add( UINT32 nNewScIx )
 {
     // Doubletten suchen
-    UINT32      nSearch = pFormat->nScIndex;
-
     UINT16      nC = nBaseIndex;
-    for( ExcFormat* pCurr = _First(); pCurr; pCurr = _Next() )
-    {
-        if( pCurr->nScIndex == nSearch )
-        {
-            delete pFormat;
+    for( ExcFormat* pCurr = _First(); pCurr; pCurr = _Next(), nC++ )
+        if( pCurr->nScIndex == nNewScIx )
             return nC;
-        }
-        nC++;
-    }
 
+    ExcFormat* pFormat = new ExcFormat( pExcRoot, nNewScIx );
     pFormat->nIndex = nC;
     Insert( pFormat, LIST_APPEND );
     return nC;
@@ -3565,9 +3560,7 @@ void UsedAttrList::AddNewXF( const ScPatternAttr* pAttr, const BOOL bStyle, cons
         nFontIndex = 0;
     }
 
-    ExcFormat*      pFormat = new ExcFormat( pExcRoot, nScForm );
-
-    UINT16          nFormatIndex = rFrmLst.Add( pFormat );
+    UINT16          nFormatIndex = rFrmLst.Add( nScForm );
 
     if ( pExcRoot->eDateiTyp < Biff8 )
         pData->pXfRec = new ExcXf( nFontIndex, nFormatIndex, pAttr, pData->bLineBreak, bStyle );
@@ -4554,8 +4547,10 @@ void ExcArray::SetColRow( UINT8 nCol, UINT16 nRow, UINT32 nId )
 
 void ExcArray::SaveCont( XclExpStream& rStrm )
 {
-    rStrm   << nFirstRow << nLastRow << nFirstCol << nLastCol
-            << ( UINT8 ) 0 << nID << ( UINT8 ) 0xFE << nFormLen;
+//  rStrm   << nFirstRow << nLastRow << nFirstCol << nLastCol
+//          << ( UINT8 ) 0 << nID << ( UINT8 ) 0xFE << nFormLen;
+    rStrm   << nFirstRow << nLastRow << nFirstCol << nLastCol << ( UINT16 ) 0 << ( UINT32 ) 0 << nFormLen;
+                                                                // grbit            chn
 
     if( pData )
         rStrm.Write( pData, nFormLen );
