@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:35:00 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,28 @@
 #include <osl/thread.h>
 #include <osl/file.hxx>
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XJOB_HPP_
+#include <com/sun/star/task/XJob.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
 using namespace ::osl;
 
 
@@ -432,6 +451,21 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 // -------------------------------
 
+static sal_Bool checkOEM() {
+    Reference<XMultiServiceFactory> rFactory = ::comphelper::getProcessServiceFactory();
+    Reference<XJob> rOemJob(rFactory->createInstance(
+        OUString::createFromAscii("com.sun.star.office.OEMPreloadJob")),
+        UNO_QUERY );
+    Sequence<NamedValue> args;
+    sal_Bool bResult = sal_False;
+    if (rOemJob.is())
+    {
+        Any aResult = rOemJob->execute(args);
+        aResult >>= bResult;
+        return bResult;
+    } else bResult = sal_True;
+}
+
 LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     static HMENU popupMenu = NULL;
@@ -447,23 +481,27 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
             switch( LOWORD(wParam) )
             {
                 case IDM_OPEN:
-                    if ( !bModalMode )
+                    if ( !bModalMode && checkOEM() )
                         ShutdownIcon::FileOpen();
                 break;
                 case IDM_WRITER:
+                    if (checkOEM())
                     ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( WRITER_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
                 break;
                 case IDM_CALC:
+                    if (checkOEM())
                     ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( CALC_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
                 break;
                 case IDM_IMPRESS:
+                    if (checkOEM())
                     ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( IMPRESS_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
                 break;
                 case IDM_DRAW:
+                    if (checkOEM())
                     ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( DRAW_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
                 break;
                 case IDM_TEMPLATE:
-                    if ( !bModalMode )
+                    if ( !bModalMode && checkOEM())
                         ShutdownIcon::FromTemplate();
                 break;
                 case IDM_INSTALL:
