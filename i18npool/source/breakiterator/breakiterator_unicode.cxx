@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-09 17:52:36 $
+ *  last change: $Author: khong $ $Date: 2002-08-30 18:44:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,7 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
         result.breakType = BreakType::WORDBOUNDARY;
     } else if (hOptions.rHyphenator.is()) { //Hyphenation break
         Boundary wBoundary = getWordBoundary( Text, nStartPos, rLocale,
-                        WordType::ANYWORD_IGNOREWHITESPACES, false);
+                        WordType::DICTIONARY_WORD, false);
         Reference< linguistic2::XHyphenatedWord > aHyphenatedWord;
         aHyphenatedWord = hOptions.rHyphenator->hyphenate(Text.copy(wBoundary.startPos,
         wBoundary.endPos - wBoundary.startPos), rLocale,
