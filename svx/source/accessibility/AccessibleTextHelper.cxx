@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-05 13:51:38 $
+ *  last change: $Author: thb $ $Date: 2002-07-15 16:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,7 +576,7 @@ namespace accessibility
             {
                 if( !maLastSelection.IsEqual( aSelection ) )
                 {
-                    DBG_ASSERT( !mbThisHasFocus && mbGroupHasFocus, "AccessibleTextHelper_Impl::UpdateSelection: editing, but no focus set" );
+                    DBG_ASSERT( !mbThisHasFocus, "AccessibleTextHelper_Impl::UpdateSelection: editing, but focus on parent" );
 
                     // notify all affected paragraphs (TODO: may be suboptimal,
                     // since some paragraphs might stay selected)
