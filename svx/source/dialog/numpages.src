@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-22 16:15:54 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ swedish ] = "Nivå" ;
         Text [ dutch ] = "Niveau" ;
         Text [ spanish ] = "Nivel" ;
-        Text [ english_us ] = "Le~vel" ;
+        Text [ english_us ] = "Level" ;
         Text[ chinese_simplified ] = "·Ö²ã";
         Text[ russian ] = "Óğîâåíü";
         Text[ polish ] = "Poziom";
@@ -758,7 +758,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ swedish ] = "Fra~mför" ;
         Text [ dutch ] = "~Ervoor" ;
         Text [ spanish ] = "~Delante" ;
-        Text [ english_us ] = "~Before" ;
+        Text [ english_us ] = "Before" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "±àºÅÇ°";
         Text[ russian ] = "Äî";
@@ -797,7 +797,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ swedish ] = "Ba~kom" ;
         Text [ dutch ] = "E~rachter" ;
         Text [ spanish ] = "D~etrás" ;
-        Text [ english_us ] = "~After" ;
+        Text [ english_us ] = "After" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "±àºÅºó";
         Text[ russian ] = "Ïîñëå";
@@ -826,27 +826,27 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Zeichen~vorlage" ;
         Text [ ENGLISH ] = "Character St~yle" ;
-        Text [ english_us ] = "Character St~yle" ;
-        Text [ swedish ] = "Teckenf~ormatmall" ;
-        Text [ danish ] = "Tegntypografi" ;
-        Text [ italian ] = "Modello di carattere" ;
-        Text [ spanish ] = "Es~tilo de carácter" ;
-        Text [ french ] = "St~yle de caractères" ;
+        Text [ english_us ] = "~Character Style:" ;
+        Text [ swedish ] = "Teckenf~ormatmall:" ;
+        Text [ danish ] = "Tegntypografi:" ;
+        Text [ italian ] = "Modello di carattere:" ;
+        Text [ spanish ] = "Es~tilo de carácter:" ;
+        Text [ french ] = "St~yle de caractères :" ;
         Text [ dutch ] = "~Tekenopmaakprofiel" ;
         Text [ portuguese_brazilian ] = "Zeichenv~orlage" ;
-        Text [ portuguese ] = "~Estilo de caracteres" ;
-        Text[ chinese_simplified ] = "×Ö·ûÑùÊ½(~C)";
-        Text[ russian ] = "Ñòèëü òåêñòà";
-        Text[ polish ] = "Styl znaku";
-        Text[ japanese ] = "•¶š½À²Ù(~C)";
+        Text [ portuguese ] = "~Estilo de caracteres:" ;
+        Text[ chinese_simplified ] = "×Ö·ûÑùÊ½(~C):";
+        Text[ russian ] = "Ñòèëü òåêñòà:";
+        Text[ polish ] = "Styl znaku:";
+        Text[ japanese ] = "•¶š½À²Ù(~C):";
         Text[ chinese_traditional ] = "¦r¤¸¼Ë¦¡(~C)¡G";
-        Text[ arabic ] = "äãØ ÇáÃÍÑİ";
-        Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
-        Text[ korean ] = "¹®ÀÚ À¯Çü(~C)";
-        Text[ turkish ] = "Karakter şablonu";
+        Text[ arabic ] = "äãØ ÇáÃÍÑİ:";
+        Text[ greek ] = "Óôõë ÷áñáêôŞñùí:";
+        Text[ korean ] = "¹®ÀÚ À¯Çü(~C):";
+        Text[ turkish ] = "Karakter şablonu:";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
-        Text[ catalan ] = "Es~tilo de carácter";
-        Text[ finnish ] = "~Merkistön tyyli";
+        Text[ catalan ] = "Es~tilo de carácter:";
+        Text[ finnish ] = "~Merkistön tyyli:";
     };
     ListBox LB_CHARFMT
     {
@@ -862,27 +862,27 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text = "~Farbe" ;
         Text [ ENGLISH ] = "Co~lor" ;
         Hide = TRUE;
-        Text[ italian ] = "~Colore";
-        Text[ portuguese_brazilian ] = "~Color";
-        Text[ portuguese ] = "~Cor";
-        Text[ danish ] = "Farve";
-        Text[ french ] = "~Couleur";
-        Text[ swedish ] = "~Färg";
-        Text[ dutch ] = "~Kleur";
-        Text[ spanish ] = "~Color";
-        Text[ english_us ] = "Co~lor";
-        Text[ chinese_simplified ] = "ÑÕÉ«";
-        Text[ russian ] = "Öâåò";
-        Text[ polish ] = "Kolor";
-        Text[ japanese ] = "F";
+        Text[ italian ] = "~Colore:";
+        Text[ portuguese_brazilian ] = "~Color:";
+        Text[ portuguese ] = "~Cor:";
+        Text[ danish ] = "Farve:";
+        Text[ french ] = "~Couleur :";
+        Text[ swedish ] = "~Färg:";
+        Text[ dutch ] = "~Kleur:";
+        Text[ spanish ] = "~Color:";
+        Text[ english_us ] = "Color:";
+        Text[ chinese_simplified ] = "ÑÕÉ«:";
+        Text[ russian ] = "Öâåò:";
+        Text[ polish ] = "Kolor:";
+        Text[ japanese ] = "F:";
         Text[ chinese_traditional ] = "ÃC¦â¡G";
         Text[ arabic ] = ":Çááæä";
-        Text[ greek ] = "×ñşìá";
-        Text[ korean ] = "»ö";
-        Text[ turkish ] = "Renk";
+        Text[ greek ] = "×ñşìá:";
+        Text[ korean ] = "»ö:";
+        Text[ turkish ] = "Renk:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Color";
-        Text[ finnish ] = "Väri";
+        Text[ catalan ] = "~Color:";
+        Text[ finnish ] = "Väri:";
     };
     ListBox LB_BUL_COLOR
     {
@@ -899,27 +899,27 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text = "~Relative Größe" ;
         Text [ ENGLISH ] = "R~elatize size" ;
         Hide = TRUE;
-        Text[ italian ] = "Dimensione relativa";
-        Text[ portuguese_brazilian ] = "~Relatize size";
-        Text[ portuguese ] = "~Tamanho relativo";
-        Text[ danish ] = "Relativ størrelse";
-        Text[ french ] = "~Taille relative";
-        Text[ swedish ] = "~Relativ storlek";
-        Text[ dutch ] = "~Relatieve grootte";
-        Text[ spanish ] = "~Tamaño relativo";
-        Text[ english_us ] = "R~elative size";
-        Text[ chinese_simplified ] = "Ïà¶ÔµÄ´óĞ¡(~R)";
-        Text[ russian ] = "Îòíîñèò. ğàçìåğ";
-        Text[ polish ] = "Rozmiar wzglêdny";
-        Text[ japanese ] = "”äŠr»²½Ş(~R)";
+        Text[ italian ] = "Dimensione relativa:";
+        Text[ portuguese_brazilian ] = "~Relatize size:";
+        Text[ portuguese ] = "~Tamanho relativo:";
+        Text[ danish ] = "Relativ størrelse:";
+        Text[ french ] = "~Taille relative :";
+        Text[ swedish ] = "~Relativ storlek:";
+        Text[ dutch ] = "~Relatieve grootte:";
+        Text[ spanish ] = "~Tamaño relativo:";
+        Text[ english_us ] = "~Relative size:";
+        Text[ chinese_simplified ] = "Ïà¶ÔµÄ´óĞ¡(~R):";
+        Text[ russian ] = "Îòíîñèò. ğàçìåğ:";
+        Text[ polish ] = "Rozmiar wzglêdny:";
+        Text[ japanese ] = "”äŠr»²½Ş(~R):";
         Text[ chinese_traditional ] = "¬Û¹ïªº¤j¤p(~R)¡G";
         Text[ arabic ] = ":ÍÌã äÓÈí";
-        Text[ greek ] = "Ó÷åôéêü ìİãåèïò";
-        Text[ korean ] = "»ó´ëÀû Å©±â(~R)";
-        Text[ turkish ] = "Orantılı boyut";
+        Text[ greek ] = "Ó÷åôéêü ìİãåèïò:";
+        Text[ korean ] = "»ó´ëÀû Å©±â(~R):";
+        Text[ turkish ] = "Orantılı boyut:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tamaño relativo";
-        Text[ finnish ] = "~Suhteellinen koko";
+        Text[ catalan ] = "~Tamaño relativo:";
+        Text[ finnish ] = "~Suhteellinen koko:";
     };
     MetricField MF_BUL_REL_SIZE
     {
@@ -953,7 +953,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ swedish ] = "F~ullständig" ;
         Text [ dutch ] = "~Volledig" ;
         Text [ spanish ] = "~Completo" ;
-        Text [ english_us ] = "Sh~ow sublevels" ;
+        Text [ english_us ] = "Show sublevels" ;
         Text[ chinese_simplified ] = "°üº¬ÉÏÒ»¼¶±ğ";
         Text[ russian ] = "Ïîëíîñòüş";
         Text[ polish ] = "Poka¿ wszystkie poziomy";
@@ -997,7 +997,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ swedish ] = "~Börja med" ;
         Text [ dutch ] = "~Begin met" ;
         Text [ spanish ] = "E~mpezar en" ;
-        Text [ english_us ] = "S~tart at" ;
+        Text [ english_us ] = "Start at" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "¿ªÊ¼±àºÅ";
         Text[ russian ] = "Íà÷àëî ñ";
@@ -1042,7 +1042,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ swedish ] = "~Visa symbol";
         Text[ dutch ] = "~Symbool weergeven";
         Text[ spanish ] = "~Mostrar símbolo";
-        Text[ english_us ] = "Show sym~bol";
+        Text[ english_us ] = "Show symbol";
         Text[ chinese_simplified ] = "ÏÔÊ¾Í¼±ê";
         Text[ russian ] = "Ïîêàçàòü ñèìâîë";
         Text[ polish ] = "Poka¿ symbol";
@@ -1062,7 +1062,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Ausri~chtung" ;
         Text [ ENGLISH ] = "Al~ignment" ;
-        Text [ english_us ] = "Al~ignment" ;
+        Text [ english_us ] = "~Alignment" ;
         Hide = TRUE;
         Text[ italian ] = "Allineamento";
         Text[ portuguese_brazilian ] = "~Alignment";
@@ -1245,7 +1245,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ swedish ] = "Te~cken" ;
         Text [ dutch ] = "~Teken" ;
         Text [ spanish ] = "C~arácter" ;
-        Text [ english_us ] = "~Character" ;
+        Text [ english_us ] = "Character" ;
         Text[ chinese_simplified ] = "×Ö·û";
         Text[ russian ] = "Çíàê";
         Text[ polish ] = "Znak";
@@ -1343,7 +1343,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
                 };
             };
         };
-        Text [ english_us ] = "~Select..." ;
+        Text [ english_us ] = "Select..." ;
         Text [ portuguese_brazilian ] = "Aus~wahl..." ;
         Text [ swedish ] = "~Urval..." ;
         Text [ danish ] = "Vælg..." ;
@@ -1372,7 +1372,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Breite" ;
         Text [ English ] = "~Width" ;
-        Text [ english_us ] = "~Width" ;
+        Text [ english_us ] = "Width" ;
         Text [ portuguese_brazilian ] = "~Breite" ;
         Text [ swedish ] = "~Bredd" ;
         Text [ danish ] = "Bredde" ;
@@ -1420,7 +1420,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "H~öhe" ;
         Text [ English ] = "Hei~ght" ;
-        Text [ english_us ] = "Hei~ght" ;
+        Text [ english_us ] = "Height" ;
         Text [ portuguese_brazilian ] = "~H?e" ;
         Text [ swedish ] = "~Höjd" ;
         Text [ danish ] = "Højde" ;
@@ -1468,7 +1468,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Abg~leich" ;
         Text [ English ] = "~Keep ratio" ;
-        Text [ english_us ] = "~Keep ratio" ;
+        Text [ english_us ] = "Keep ratio" ;
         Text [ portuguese_brazilian ] = "Abgleich" ;
         Text [ swedish ] = "~Synkronisering" ;
         Text [ danish ] = "Proportional" ;
@@ -1497,7 +1497,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "A~usrichtung" ;
         Text [ English ] = "Align~ment" ;
-        Text [ english_us ] = "Align~ment" ;
+        Text [ english_us ] = "Alignment" ;
         Text [ portuguese_brazilian ] = "Ausrichtung" ;
         Text [ swedish ] = "~Justering" ;
         Text [ danish ] = "Justering" ;
@@ -1838,7 +1838,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Size = MAP_APPFONT ( 114 , 10 ) ;
         Text = "~Fortlaufende Nu~mmerierung" ;
         Text [ ENGLISH ] = "Continuous n~umbering" ;
-        Text [ english_us ] = "Consecutive n~umbering" ;
+        Text [ english_us ] = "~Consecutive numbering" ;
         Text [ portuguese_brazilian ] = "~Fortlaufende Numerierung" ;
         Text [ swedish ] = "~Fortlöpande numrering" ;
         Text [ danish ] = "Fortløbende nummerering" ;
@@ -1920,7 +1920,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ swedish ] = "Nivå" ;
         Text [ dutch ] = "Niveau" ;
         Text [ spanish ] = "Nivel" ;
-        Text [ english_us ] = "Le~vel" ;
+        Text [ english_us ] = "Level" ;
         Text[ chinese_simplified ] = "·Ö²ã";
         Text[ russian ] = "Óğîâåíü";
         Text[ polish ] = "Poziom";
@@ -1977,7 +1977,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text = "Ein~rückung";
         Text [ ENGLISH ] = "~Indent" ;
-        Text [ english_us ] = "~Indent" ;
+        Text [ english_us ] = "Indent" ;
         Text [ swedish ] = "~Indrag" ;
         Text [ danish ] = "Indrykning" ;
         Text [ italian ] = "Rientro" ;
@@ -2051,7 +2051,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Size = MAP_APPFONT ( 105 , 8 ) ;
         Text = "Abstand zum Te~xt" ;
         Text [ ENGLISH ] = "Spacing to te~xt" ;
-        Text [ english_us ] = "Spacing to te~xt" ;
+        Text [ english_us ] = "Spacing to text" ;
         Text [ swedish ] = "Avstånd till te~xt" ;
         Text [ danish ] = "Afstand til tekst" ;
         Text [ italian ] = "Distanza dal testo" ;
@@ -2097,7 +2097,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Size = MAP_APPFONT ( 105 , 8 ) ;
         Text = "~Mindestabstand Nummer <-> Text" ;
         Text [ ENGLISH ] = "~Minimum space numbering <-> text" ;
-        Text [ english_us ] = "~Minimum space numbering <-> text" ;
+        Text [ english_us ] = "Minimum space numbering <-> text" ;
         Text [ swedish ] = "~Minimiavstånd nummer <-> text" ;
         Text [ danish ] = "Min. afstand nummer <-> tekst" ;
         Text [ italian ] = "Distanza minima numerazione <-> testo" ;
@@ -2316,7 +2316,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Standard" ;
         Text [ ENGLISH ] = "~Default" ;
-        Text [ english_us ] = "~Default" ;
+        Text [ english_us ] = "Default" ;
         Text [ portuguese_brazilian ] = "~Standard" ;
         Text [ swedish ] = "S~tandard" ;
         Text [ danish ] = "Standard" ;
@@ -2363,7 +2363,7 @@ String RID_STR_EDIT_GRAPHIC
     Text [ english_us ] = "Link" ;
     Text[ chinese_simplified ] = "Áª»ú";
     Text[ russian ] = "Ñâÿçü";
-    Text[ polish ] = "£¹cze";
+    Text[ polish ] = "Po³¹cz";
     Text[ japanese ] = "Øİ¸";
     Text[ chinese_traditional ] = "±¶®|";
     Text[ arabic ] = "ÑÈØ";
@@ -2382,6 +2382,7 @@ String RID_STR_FULLNUMS_6 { Text = "A.|I.|a.|i.|61589" ; };
 String RID_STR_FULLNUMS_7 { Text = "1|1.1|1.1.1|1.1.1.1|1.1.1.1.1" ; };
 String RID_STR_FULLNUMS_8 { Text = "61487|61488|61485|61589|61589" ; };
 String RID_STR_FULLNUMS_7_HTML { Text = "I.|I.|I|I.|I." ; };
+
 
 
 
