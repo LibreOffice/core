@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyeditor.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:06:00 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,12 @@ namespace pcr
             }
         }
         m_aTabControl.Clear();
+
+        while ( !m_aHiddenPages.empty() )
+        {
+            delete m_aHiddenPages.begin()->second.pPage;
+            m_aHiddenPages.erase( m_aHiddenPages.begin() );
+        }
     }
 
     // #95343# ---------------------------------------------------------
@@ -199,6 +205,7 @@ namespace pcr
 
         // create a new page
         OBrowserPage* pPage = new OBrowserPage(&m_aTabControl);
+        pPage->SetText( _rText );
         // some knittings
         pPage->SetSizePixel(m_aTabControl.GetTabPageSizePixel());
         pPage->getListBox()->setListener(m_pListener);
@@ -221,7 +228,6 @@ namespace pcr
     //------------------------------------------------------------------
     void OPropertyEditor::RemovePage(sal_uInt16 nID)
     {
-
         OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(nID));
 
         if (pPage)
@@ -353,6 +359,33 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
+    void OPropertyEditor::ShowPropertyPage( sal_uInt16 _nPageId, bool _bShow )
+    {
+        if ( !_bShow )
+        {
+            sal_uInt16 nPagePos = m_aTabControl.GetPagePos( _nPageId );
+            if ( TAB_PAGE_NOTFOUND == nPagePos )
+                return;
+            DBG_ASSERT( m_aHiddenPages.find( _nPageId ) == m_aHiddenPages.end(), "OPropertyEditor::ShowPropertyPage: page already hidden!" );
+
+            m_aHiddenPages[ _nPageId ] = HiddenPage( nPagePos, m_aTabControl.GetTabPage( _nPageId ) );
+            m_aTabControl.RemovePage( _nPageId );
+        }
+        else
+        {
+            ::std::map< sal_uInt16, HiddenPage >::iterator aPagePos = m_aHiddenPages.find( _nPageId );
+            if ( aPagePos == m_aHiddenPages.end() )
+                return;
+
+            aPagePos->second.pPage->SetSizePixel( m_aTabControl.GetTabPageSizePixel() );
+            m_aTabControl.InsertPage( aPagePos->first, aPagePos->second.pPage->GetText(), aPagePos->second.nPos );
+            m_aTabControl.SetTabPage( aPagePos->first, aPagePos->second.pPage );
+
+            m_aHiddenPages.erase( aPagePos );
+        }
+    }
+
+    //------------------------------------------------------------------
     void OPropertyEditor::EnablePropertyInput( const ::rtl::OUString& _rEntryName, bool _bEnableInput, bool _bEnableBrowseButton )
     {
         for ( USHORT i = 0; i < m_aTabControl.GetPageCount(); ++i )
@@ -434,15 +467,6 @@ namespace pcr
         if(pPage)
             nEntry=pPage->getListBox()->GetSelectedEntry();
         return nEntry;
-    }
-
-    //------------------------------------------------------------------
-    void OPropertyEditor::ClearTable()
-    {
-        // let the current page handle this
-        OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(m_aTabControl.GetCurPageId()));
-        if(pPage)
-            pPage->getListBox()->Clear();
     }
 
     //------------------------------------------------------------------
