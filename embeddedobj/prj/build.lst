@@ -1,0 +1,5 @@
+es	embeddedobj	:	offuh sal cppu cppuhelper NULL
+es	embeddedobj									usr1	-	all	eo_mkout NULL
+es	embeddedobj\source\commonembedding			nmake	-	all	eo_commonembed NULL
+es	embeddedobj\source\general					nmake	-	all	eo_general NULL
+es	embeddedobj\util							nmake	-	all	eo_util eo_commonembed eo_general NULL
