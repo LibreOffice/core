@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: obo $ $Date: 2004-09-14 11:57:05 $
+#   last change: $Author: rt $ $Date: 2004-09-20 13:26:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -310,9 +310,25 @@ LIB3OBJFILES = \
         $(SLO)$/numpara.obj \
         $(SLO)$/swdialmgr.obj \
         $(SLO)$/swuiidxmrk.obj \
+        $(SLO)$/DropDownFieldDialog.obj \
+        $(SLO)$/macassgn.obj
                 $(SLO)$/wordcountdialog.obj \
-    $(SLO)$/DropDownFieldDialog.obj \
-    $(SLO)$/macassgn.obj
+        $(SLO)$/mailconfigpage.obj \
+        $(SLO)$/addresslistdialog.obj \
+        $(SLO)$/createaddresslistdialog.obj \
+        $(SLO)$/customizeaddresslistdialog.obj \
+        $(SLO)$/dbtablepreviewdialog.obj \
+        $(SLO)$/mailmergewizard.obj \
+        $(SLO)$/mmdocselectpage.obj \
+        $(SLO)$/mmlayoutpage.obj \
+        $(SLO)$/mmoutputpage.obj \
+        $(SLO)$/mmoutputtypepage.obj \
+        $(SLO)$/mmaddressblockpage.obj \
+        $(SLO)$/mmgreetingspage.obj \
+        $(SLO)$/mmmergepage.obj \
+        $(SLO)$/mmpreparemergepage.obj \
+        $(SLO)$/selectdbtabledialog.obj 
+
 
 
 .INCLUDE :  target.mk
