@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-06 09:19:27 $
+ *  last change: $Author: fs $ $Date: 2002-11-12 12:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,7 @@ namespace pcr
     ::com::sun::star::awt::Size OPropertyBrowserView::getMinimumSize()
     {
         Size aSize = GetOutputSizePixel();
+        aSize.setHeight( 250 );
         if( m_pPropBox )
             aSize.setWidth( m_pPropBox->getMinimumWidth() );
         return ::com::sun::star::awt::Size( aSize.Width(), aSize.Height() );
@@ -204,6 +205,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2002/11/06 09:19:27  fs
+ *  #95343# (on behalf of SleepyBear@openoffice.org) changes for calculating layout
+ *
  *  Revision 1.5  2002/08/06 08:13:10  oj
  *  #102058# use auto_ptr in dtor
  *
