@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrmediaobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:04:42 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 
@@ -78,7 +82,7 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewContactOfSdrMediaObj : public ViewContactOfSdrObj
+        class SVX_DLLPUBLIC ViewContactOfSdrMediaObj : public ViewContactOfSdrObj
         {
             friend class ViewObjectContactOfSdrMediaObj;
 
