@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLCalculationSettingsContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:26:52 $
+ *  last change: $Author: sab $ $Date: 2001-05-21 16:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,11 @@
 #include "document.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
+//#ifndef _XMLOFF_XMLKYWD_HXX
+//#include <xmloff/xmlkywd.hxx>
+//#endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
@@ -104,6 +107,7 @@
 #endif
 
 using namespace com::sun::star;
+using namespace xmloff::token;
 
 //------------------------------------------------------------------
 
@@ -120,7 +124,8 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
     bCalcAsShown(sal_False),
     bIgnoreCase(sal_False),
     bLookUpLabels(sal_True),
-    bMatchWholeCell(sal_True)
+    bMatchWholeCell(sal_True),
+    bUseRegularExpressions(sal_True)
 {
     aNullDate.Day = 30;
     aNullDate.Month = 12;
@@ -136,31 +141,36 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
-            if (aLocalName.compareToAscii(sXML_case_sensitive) == 0)
+            if (IsXMLToken(aLocalName, XML_CASE_SENSITIVE))
             {
-                if (sValue.compareToAscii(sXML_false) == 0)
+                if (IsXMLToken(sValue, XML_FALSE))
                     bIgnoreCase = sal_True;
             }
-            else if (aLocalName.compareToAscii(sXML_precision_as_shown) == 0)
+            else if (IsXMLToken(aLocalName, XML_PRECISION_AS_SHOWN))
             {
-                if (sValue.compareToAscii(sXML_true) == 0)
+                if (IsXMLToken(sValue, XML_TRUE))
                     bCalcAsShown = sal_True;
             }
-            else if (aLocalName.compareToAscii(sXML_search_criteria_must_apply_to_whole_cell) == 0)
+            else if (IsXMLToken(aLocalName, XML_SEARCH_CRITERIA_MUST_APPLY_TO_WHOLE_CELL))
             {
-                if (sValue.compareToAscii(sXML_false) == 0)
+                if (IsXMLToken(sValue, XML_FALSE))
                     bMatchWholeCell = sal_False;
             }
-            else if (aLocalName.compareToAscii(sXML_automatic_find_labels) == 0)
+            else if (IsXMLToken(aLocalName, XML_AUTOMATIC_FIND_LABELS))
             {
-                if (sValue.compareToAscii(sXML_false) == 0)
+                if (IsXMLToken(sValue, XML_FALSE))
                     bLookUpLabels = sal_False;
             }
-            else if (aLocalName.compareToAscii(sXML_null_year) == 0)
+            else if (IsXMLToken(aLocalName, XML_NULL_YEAR))
             {
                 sal_Int32 nTemp;
                 GetScImport().GetMM100UnitConverter().convertNumber(nTemp, sValue);
                 nYear2000 = static_cast<sal_uInt16>(nTemp);
+            }
+            else if (IsXMLToken(aLocalName, XML_USE_REGULAR_EXPRESSIONS))
+            {
+                if (IsXMLToken(sValue, XML_FALSE))
+                    bUseRegularExpressions = sal_False;
             }
         }
     }
@@ -179,9 +189,9 @@ SvXMLImportContext *ScXMLCalculationSettingsContext::CreateChildContext( USHORT 
 
     if (nPrefix == XML_NAMESPACE_TABLE)
     {
-        if (rLName.compareToAscii(sXML_null_date) == 0)
+        if (IsXMLToken(rLName, XML_NULL_DATE))
             pContext = new ScXMLNullDateContext(GetScImport(), nPrefix, rLName, xAttrList, this);
-        else if (rLName.compareToAscii(sXML_iteration) == 0)
+        else if (IsXMLToken(rLName, XML_ITERATION))
             pContext = new ScXMLIterationContext(GetScImport(), nPrefix, rLName, xAttrList, this);
     }
 
@@ -207,6 +217,8 @@ void ScXMLCalculationSettingsContext::EndElement()
             xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_LOOKUPLABELS)), aAny );
             aAny = ::cppu::bool2any( bMatchWholeCell );
             xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_MATCHWHOLE)), aAny );
+            aAny = ::cppu::bool2any( bUseRegularExpressions );
+            xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_REGEXENABLED)), aAny );
             aAny = ::cppu::bool2any( bIsIterationEnabled );
             xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ITERENABLED)), aAny );
             aAny <<= nIterationCount;
@@ -239,7 +251,7 @@ ScXMLNullDateContext::ScXMLNullDateContext( ScXMLImport& rImport,
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
 
-        if (nPrefix == XML_NAMESPACE_TABLE && aLocalName.compareToAscii(sXML_date_value) == 0)
+        if (nPrefix == XML_NAMESPACE_TABLE && IsXMLToken(aLocalName, XML_DATE_VALUE))
         {
             util::DateTime aDateTime;
             GetScImport().GetMM100UnitConverter().convertDateTime(aDateTime, sValue);
@@ -289,18 +301,18 @@ ScXMLIterationContext::ScXMLIterationContext( ScXMLImport& rImport,
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
-            if (aLocalName.compareToAscii(sXML_status) == 0)
+            if (IsXMLToken(aLocalName, XML_STATUS))
             {
-                if (sValue.compareToAscii("enable") == 0)
+                if (IsXMLToken(sValue, XML_ENABLE))
                     pCalcSet->SetIterationStatus(sal_True);
             }
-            else if (aLocalName.compareToAscii(sXML_steps) == 0)
+            else if (IsXMLToken(aLocalName, XML_STEPS))
             {
                 sal_Int32 nSteps;
                 GetScImport().GetMM100UnitConverter().convertNumber(nSteps, sValue);
                 pCalcSet->SetIterationCount(nSteps);
             }
-            else if (aLocalName.compareToAscii(sXML_maximum_difference) == 0)
+            else if (IsXMLToken(aLocalName, XML_MAXIMUM_DIFFERENCE))
             {
                 double fDif;
                 GetScImport().GetMM100UnitConverter().convertDouble(fDif, sValue);

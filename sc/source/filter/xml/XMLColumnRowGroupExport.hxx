@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLColumnRowGroupExport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
+ *  last change: $Author: sab $ $Date: 2001-05-21 16:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,15 +90,14 @@ class ScXMLExport;
 class ScMyOpenCloseColumnRowGroup
 {
     ScXMLExport&                rExport;
-    rtl::OUString               sName;
+    const rtl::OUString         rName;
     ScMyColumnRowGroupVec       aTableStart;
     ScMyFieldGroupVec           aTableEnd;
-    sal_Bool                    bNamespaced : 1;
 
     void OpenGroup(const ScMyColumnRowGroup& rGroup);
     void CloseGroup();
 public:
-    ScMyOpenCloseColumnRowGroup(ScXMLExport& rExport, const sal_Char *pName);
+    ScMyOpenCloseColumnRowGroup(ScXMLExport& rExport, sal_uInt32 nToken);
     ~ScMyOpenCloseColumnRowGroup();
 
     void NewTable();

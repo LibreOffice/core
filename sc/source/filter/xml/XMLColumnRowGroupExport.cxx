@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLColumnRowGroupExport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-18 14:14:24 $
+ *  last change: $Author: sab $ $Date: 2001-05-21 16:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,14 +77,19 @@
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
+//#ifndef _XMLOFF_XMLKYWD_HXX
+//#include <xmloff/xmlkywd.hxx>
+//#endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
 
 #include <algorithm>
+
+using namespace xmloff::token;
 
 ScMyColumnRowGroup::ScMyColumnRowGroup()
 {
@@ -101,12 +106,11 @@ sal_Bool ScMyColumnRowGroup::operator<(const ScMyColumnRowGroup& rGroup)
             return sal_False;
 }
 
-ScMyOpenCloseColumnRowGroup::ScMyOpenCloseColumnRowGroup(ScXMLExport& rTempExport, const sal_Char *pName)
+ScMyOpenCloseColumnRowGroup::ScMyOpenCloseColumnRowGroup(ScXMLExport& rTempExport, sal_uInt32 nToken)
     : rExport(rTempExport),
-    sName(rtl::OUString::createFromAscii(pName)),
     aTableStart(),
     aTableEnd(),
-    bNamespaced(sal_False)
+    rName(rExport.GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XMLTokenEnum(nToken))))
 {
 }
 
@@ -116,11 +120,6 @@ ScMyOpenCloseColumnRowGroup::~ScMyOpenCloseColumnRowGroup()
 
 void ScMyOpenCloseColumnRowGroup::NewTable()
 {
-    if (!bNamespaced)
-    {
-        sName = rExport.GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, sName);
-        bNamespaced = sal_True;
-    }
     aTableStart.clear();
     aTableEnd.clear();
 }
@@ -145,9 +144,9 @@ sal_Bool ScMyOpenCloseColumnRowGroup::IsGroupStart(const sal_Int32 nField)
 void ScMyOpenCloseColumnRowGroup::OpenGroup(const ScMyColumnRowGroup& rGroup)
 {
     if (!rGroup.bDisplay)
-        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_display, sXML_false);
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, XML_FALSE);
     rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
-    rExport.GetDocHandler()->startElement( sName, rExport.GetXAttrList());
+    rExport.GetDocHandler()->startElement( rName, rExport.GetXAttrList());
     rExport.ClearAttrList();
 }
 
@@ -181,7 +180,7 @@ sal_Bool ScMyOpenCloseColumnRowGroup::IsGroupEnd(const sal_Int32 nField)
 void ScMyOpenCloseColumnRowGroup::CloseGroup()
 {
     rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
-    rExport.GetDocHandler()->endElement( sName);
+    rExport.GetDocHandler()->endElement( rName );
 }
 
 void ScMyOpenCloseColumnRowGroup::CloseGroups(const sal_Int32 nField)
