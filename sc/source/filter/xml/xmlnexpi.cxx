@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnexpi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ using namespace com::sun::star;
 
 ScXMLNamedExpressionsContext::ScXMLNamedExpressionsContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName )
@@ -127,7 +127,7 @@ ScXMLNamedExpressionsContext::~ScXMLNamedExpressionsContext()
 }
 
 SvXMLImportContext *ScXMLNamedExpressionsContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -226,7 +226,7 @@ void ScXMLNamedExpressionsContext::EndElement()
 
 ScXMLNamedRangeContext::ScXMLNamedRangeContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName )
@@ -275,7 +275,7 @@ ScXMLNamedRangeContext::~ScXMLNamedRangeContext()
 }
 
 SvXMLImportContext *ScXMLNamedRangeContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -298,7 +298,7 @@ void ScXMLNamedRangeContext::EndElement()
 
 ScXMLNamedExpressionContext::ScXMLNamedExpressionContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName )
@@ -342,7 +342,7 @@ ScXMLNamedExpressionContext::~ScXMLNamedExpressionContext()
 }
 
 SvXMLImportContext *ScXMLNamedExpressionContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {

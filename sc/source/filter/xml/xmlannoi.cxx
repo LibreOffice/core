@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlannoi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ using namespace com::sun::star;
 
 ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                       ScXMLTableRowCellContext* pTempCellContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -139,7 +139,7 @@ ScXMLAnnotationContext::~ScXMLAnnotationContext()
 }
 
 SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDDELinksContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-27 14:19:14 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ using namespace com::sun::star;
 
 ScXMLDDELinksContext::ScXMLDDELinksContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName )
@@ -113,7 +113,7 @@ ScXMLDDELinksContext::~ScXMLDDELinksContext()
 }
 
 SvXMLImportContext *ScXMLDDELinksContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -134,7 +134,7 @@ void ScXMLDDELinksContext::EndElement()
 
 ScXMLDDELinkContext::ScXMLDDELinkContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -156,7 +156,7 @@ ScXMLDDELinkContext::~ScXMLDDELinkContext()
 }
 
 SvXMLImportContext *ScXMLDDELinkContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -239,7 +239,7 @@ void ScXMLDDELinkContext::EndElement()
 
 ScXMLDDESourceContext::ScXMLDDESourceContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDDELinkContext* pTempDDELink) :
@@ -281,7 +281,7 @@ ScXMLDDESourceContext::~ScXMLDDESourceContext()
 }
 
 SvXMLImportContext *ScXMLDDESourceContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -297,7 +297,7 @@ void ScXMLDDESourceContext::EndElement()
 
 ScXMLDDETableContext::ScXMLDDETableContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDDELinkContext* pTempDDELink) :
@@ -312,7 +312,7 @@ ScXMLDDETableContext::~ScXMLDDETableContext()
 }
 
 SvXMLImportContext *ScXMLDDETableContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -336,7 +336,7 @@ void ScXMLDDETableContext::EndElement()
 
 ScXMLDDEColumnContext::ScXMLDDEColumnContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDDELinkContext* pTempDDELink) :
@@ -367,7 +367,7 @@ ScXMLDDEColumnContext::~ScXMLDDEColumnContext()
 }
 
 SvXMLImportContext *ScXMLDDEColumnContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -382,7 +382,7 @@ void ScXMLDDEColumnContext::EndElement()
 
 ScXMLDDERowContext::ScXMLDDERowContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDDELinkContext* pTempDDELink) :
@@ -413,7 +413,7 @@ ScXMLDDERowContext::~ScXMLDDERowContext()
 }
 
 SvXMLImportContext *ScXMLDDERowContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -436,7 +436,7 @@ void ScXMLDDERowContext::EndElement()
 
 ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDDELinkContext* pTempDDELink) :
@@ -490,7 +490,7 @@ ScXMLDDECellContext::~ScXMLDDECellContext()
 }
 
 SvXMLImportContext *ScXMLDDECellContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {

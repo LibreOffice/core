@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlrowi.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ using namespace com::sun::star;
 
 ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -161,7 +161,7 @@ ScXMLTableRowContext::~ScXMLTableRowContext()
 }
 
 SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -270,7 +270,7 @@ void ScXMLTableRowContext::EndElement()
 
 ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       const sal_Bool bTempHeader, const sal_Bool bTempGroup ) :
@@ -316,7 +316,7 @@ ScXMLTableRowsContext::~ScXMLTableRowsContext()
 }
 
 SvXMLImportContext *ScXMLTableRowsContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {

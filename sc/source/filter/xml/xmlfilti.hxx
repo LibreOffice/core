@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilti.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ class ScXMLFilterContext : public SvXMLImportContext
 public:
 
     ScXMLFilterContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
@@ -120,7 +120,7 @@ public:
     virtual ~ScXMLFilterContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -147,7 +147,7 @@ class ScXMLAndContext : public SvXMLImportContext
 public:
 
     ScXMLAndContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLFilterContext* pTempFilterContext);
@@ -155,7 +155,7 @@ public:
     virtual ~ScXMLAndContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -172,7 +172,7 @@ class ScXMLOrContext : public SvXMLImportContext
 public:
 
     ScXMLOrContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLFilterContext* pTempFilterContext);
@@ -180,7 +180,7 @@ public:
     virtual ~ScXMLOrContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -203,7 +203,7 @@ class ScXMLConditionContext : public SvXMLImportContext
 public:
 
     ScXMLConditionContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLFilterContext* pTempFilterContext);
@@ -211,7 +211,7 @@ public:
     virtual ~ScXMLConditionContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -245,7 +245,7 @@ class ScXMLDPFilterContext : public SvXMLImportContext
 public:
 
     ScXMLDPFilterContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDataPilotTableContext* pTempDataPilotTableContext);
@@ -253,7 +253,7 @@ public:
     virtual ~ScXMLDPFilterContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -281,7 +281,7 @@ class ScXMLDPAndContext : public SvXMLImportContext
 public:
 
     ScXMLDPAndContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDPFilterContext* pTempFilterContext);
@@ -289,7 +289,7 @@ public:
     virtual ~ScXMLDPAndContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -306,7 +306,7 @@ class ScXMLDPOrContext : public SvXMLImportContext
 public:
 
     ScXMLDPOrContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDPFilterContext* pTempFilterContext);
@@ -314,7 +314,7 @@ public:
     virtual ~ScXMLDPOrContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -337,7 +337,7 @@ class ScXMLDPConditionContext : public SvXMLImportContext
 public:
 
     ScXMLDPConditionContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDPFilterContext* pTempFilterContext);
@@ -345,7 +345,7 @@ public:
     virtual ~ScXMLDPConditionContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 

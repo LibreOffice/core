@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-05 09:29:38 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1529,7 +1529,7 @@ void SAL_CALL ScXMLImport::setTargetDocument( const uno::Reference<lang::XCompon
 
 // ---------------------------------------------------------------------
 
-SvXMLImportContext *ScXMLImport::CreateViewSettingsContext(const USHORT nPrefix, const NAMESPACE_RTL(OUString)& rLocalName,
+SvXMLImportContext *ScXMLImport::CreateViewSettingsContext(const USHORT nPrefix, const ::rtl::OUString& rLocalName,
                                      const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
     SvXMLImportContext *pContext= new ScXMLViewSettingsContext( *this, nPrefix,
@@ -1537,7 +1537,7 @@ SvXMLImportContext *ScXMLImport::CreateViewSettingsContext(const USHORT nPrefix,
     return pContext;
 }
 
-SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const USHORT nPrefix, const NAMESPACE_RTL(OUString)& rLocalName,
+SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const USHORT nPrefix, const ::rtl::OUString& rLocalName,
                                      const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
     SvXMLImportContext *pContext = NULL;
@@ -1553,7 +1553,7 @@ SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const USHORT nPrefix, co
     return pContext;
 }
 
-SvXMLImportContext *ScXMLImport::CreateStylesContext(const NAMESPACE_RTL(OUString)& rLocalName,
+SvXMLImportContext *ScXMLImport::CreateStylesContext(const ::rtl::OUString& rLocalName,
                                      const uno::Reference<xml::sax::XAttributeList>& xAttrList, sal_Bool bIsAutoStyle )
 {
     SvXMLImportContext *pContext = NULL;
@@ -1570,7 +1570,7 @@ SvXMLImportContext *ScXMLImport::CreateStylesContext(const NAMESPACE_RTL(OUStrin
     return pContext;
 }
 
-SvXMLImportContext *ScXMLImport::CreateBodyContext(const NAMESPACE_RTL(OUString)& rLocalName,
+SvXMLImportContext *ScXMLImport::CreateBodyContext(const ::rtl::OUString& rLocalName,
                                                 const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
     //GetShapeImport()->SetAutoStylesContext((XMLTableStylesContext *)&xAutoStyles);

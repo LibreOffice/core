@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcvali.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ using namespace com::sun::star;
 
 ScXMLContentValidationsContext::ScXMLContentValidationsContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName )
@@ -97,7 +97,7 @@ ScXMLContentValidationsContext::~ScXMLContentValidationsContext()
 }
 
 SvXMLImportContext *ScXMLContentValidationsContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -123,7 +123,7 @@ void ScXMLContentValidationsContext::EndElement()
 
 ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -173,7 +173,7 @@ ScXMLContentValidationContext::~ScXMLContentValidationContext()
 }
 
 SvXMLImportContext *ScXMLContentValidationContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -413,7 +413,7 @@ void ScXMLContentValidationContext::SetErrorMacro(const rtl::OUString& sName, co
 
 ScXMLHelpMessageContext::ScXMLHelpMessageContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLContentValidationContext* pTempValidationContext) :
@@ -452,7 +452,7 @@ ScXMLHelpMessageContext::~ScXMLHelpMessageContext()
 }
 
 SvXMLImportContext *ScXMLHelpMessageContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -484,7 +484,7 @@ void ScXMLHelpMessageContext::EndElement()
 
 ScXMLErrorMessageContext::ScXMLErrorMessageContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLContentValidationContext* pTempValidationContext) :
@@ -527,7 +527,7 @@ ScXMLErrorMessageContext::~ScXMLErrorMessageContext()
 }
 
 SvXMLImportContext *ScXMLErrorMessageContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -559,7 +559,7 @@ void ScXMLErrorMessageContext::EndElement()
 
 ScXMLErrorMacroContext::ScXMLErrorMacroContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLContentValidationContext* pTempValidationContext) :
@@ -596,7 +596,7 @@ ScXMLErrorMacroContext::~ScXMLErrorMacroContext()
 }
 
 SvXMLImportContext *ScXMLErrorMacroContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {

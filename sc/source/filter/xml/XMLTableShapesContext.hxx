@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapesContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,14 +74,14 @@ class ScXMLTableShapesContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 public:
     ScXMLTableShapesContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     virtual ~ScXMLTableShapesContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 

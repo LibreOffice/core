@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-02 17:28:42 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,9 +109,7 @@
 
 class ScRangeList;
 
-#ifdef _USE_NAMESPACE
 using namespace rtl;
-#endif
 
 enum ScXMLDocTokens
 {
@@ -773,19 +771,19 @@ public:
 
     // namespace office
     SvXMLImportContext *CreateMetaContext(
-                                    const NAMESPACE_RTL(OUString)& rLocalName );
-    SvXMLImportContext *CreateViewSettingsContext(const USHORT nPrefix, const NAMESPACE_RTL(OUString)& rLocalName,
+                                    const ::rtl::OUString& rLocalName );
+    SvXMLImportContext *CreateViewSettingsContext(const USHORT nPrefix, const ::rtl::OUString& rLocalName,
                                      const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
-    SvXMLImportContext *CreateFontDeclsContext(const USHORT nPrefix, const NAMESPACE_RTL(OUString)& rLocalName,
+    SvXMLImportContext *CreateFontDeclsContext(const USHORT nPrefix, const ::rtl::OUString& rLocalName,
                                      const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateScriptContext(
-                                    const NAMESPACE_RTL(OUString)& rLocalName );
-    SvXMLImportContext *CreateStylesContext(const NAMESPACE_RTL(OUString)& rLocalName,
+                                    const ::rtl::OUString& rLocalName );
+    SvXMLImportContext *CreateStylesContext(const ::rtl::OUString& rLocalName,
                                      const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList, sal_Bool bAutoStyles );
-//  SvXMLImportContext *CreateUseStylesContext(const NAMESPACE_RTL(OUString)& rLocalName ,
+//  SvXMLImportContext *CreateUseStylesContext(const ::rtl::OUString& rLocalName ,
 //                                  const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateBodyContext(
-                                    const NAMESPACE_RTL(OUString)& rLocalName,
+                                    const ::rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual void SetStatisticAttributes( const ::com::sun::star::uno::Reference<
@@ -803,7 +801,7 @@ public:
 
 //  inline const SvXMLImportItemMapper& GetParaItemMapper() const;
 //  SvXMLImportContext *CreateParaItemImportContext( USHORT nPrefix,
-//                                const NAMESPACE_RTL(OUString)& rLocalName,
+//                                const ::rtl::OUString& rLocalName,
 //                                const ::com::sun::star::uno::Reference<
 //                                  ::com::sun::star::xml::sax::XAttributeList& xAttrList,
 //                                SfxItemSet& rItemSet );

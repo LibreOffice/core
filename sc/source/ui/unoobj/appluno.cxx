@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appluno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-02 17:28:46 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch (registry::InvalidRegistryException&)
         {
-            OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
         }
     }
     return sal_False;

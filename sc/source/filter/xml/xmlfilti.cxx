@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilti.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ using namespace com::sun::star;
 
 ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
@@ -154,7 +154,7 @@ ScXMLFilterContext::~ScXMLFilterContext()
 }
 
 SvXMLImportContext *ScXMLFilterContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -208,7 +208,7 @@ void ScXMLFilterContext::EndElement()
 
 ScXMLAndContext::ScXMLAndContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLFilterContext* pTempFilterContext) :
@@ -223,7 +223,7 @@ ScXMLAndContext::~ScXMLAndContext()
 }
 
 SvXMLImportContext *ScXMLAndContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -258,7 +258,7 @@ void ScXMLAndContext::EndElement()
 
 ScXMLOrContext::ScXMLOrContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLFilterContext* pTempFilterContext) :
@@ -273,7 +273,7 @@ ScXMLOrContext::~ScXMLOrContext()
 }
 
 SvXMLImportContext *ScXMLOrContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -309,7 +309,7 @@ void ScXMLOrContext::EndElement()
 
 ScXMLConditionContext::ScXMLConditionContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLFilterContext* pTempFilterContext) :
@@ -366,7 +366,7 @@ ScXMLConditionContext::~ScXMLConditionContext()
 }
 
 SvXMLImportContext *ScXMLConditionContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -446,7 +446,7 @@ void ScXMLConditionContext::EndElement()
 
 ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDataPilotTableContext* pTempDataPilotTableContext) :
@@ -512,7 +512,7 @@ ScXMLDPFilterContext::~ScXMLDPFilterContext()
 }
 
 SvXMLImportContext *ScXMLDPFilterContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -566,7 +566,7 @@ void ScXMLDPFilterContext::EndElement()
 
 ScXMLDPAndContext::ScXMLDPAndContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDPFilterContext* pTempFilterContext) :
@@ -581,7 +581,7 @@ ScXMLDPAndContext::~ScXMLDPAndContext()
 }
 
 SvXMLImportContext *ScXMLDPAndContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -616,7 +616,7 @@ void ScXMLDPAndContext::EndElement()
 
 ScXMLDPOrContext::ScXMLDPOrContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDPFilterContext* pTempFilterContext) :
@@ -631,7 +631,7 @@ ScXMLDPOrContext::~ScXMLDPOrContext()
 }
 
 SvXMLImportContext *ScXMLDPOrContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -667,7 +667,7 @@ void ScXMLDPOrContext::EndElement()
 
 ScXMLDPConditionContext::ScXMLDPConditionContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDPFilterContext* pTempFilterContext) :
@@ -724,7 +724,7 @@ ScXMLDPConditionContext::~ScXMLDPConditionContext()
 }
 
 SvXMLImportContext *ScXMLDPConditionContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {

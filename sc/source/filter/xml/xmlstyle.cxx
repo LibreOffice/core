@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-01 13:17:16 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,9 +121,7 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#ifdef _USE_NAMESPACE
 using namespace com::sun::star;
-#endif
 
 const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,14 +92,14 @@ class ScXMLDataPilotTablesContext : public SvXMLImportContext
 public:
 
     ScXMLDataPilotTablesContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     virtual ~ScXMLDataPilotTablesContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -145,14 +145,14 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
 public:
 
     ScXMLDataPilotTableContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     virtual ~ScXMLDataPilotTableContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -188,7 +188,7 @@ class ScXMLDPSourceSQLContext : public SvXMLImportContext
 public:
 
     ScXMLDPSourceSQLContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDataPilotTableContext* pDataPilotTable);
@@ -196,7 +196,7 @@ public:
     virtual ~ScXMLDPSourceSQLContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -213,7 +213,7 @@ class ScXMLDPSourceTableContext : public SvXMLImportContext
 public:
 
     ScXMLDPSourceTableContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDataPilotTableContext* pDataPilotTable);
@@ -221,7 +221,7 @@ public:
     virtual ~ScXMLDPSourceTableContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -238,7 +238,7 @@ class ScXMLDPSourceQueryContext : public SvXMLImportContext
 public:
 
     ScXMLDPSourceQueryContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDataPilotTableContext* pDataPilotTable);
@@ -246,7 +246,7 @@ public:
     virtual ~ScXMLDPSourceQueryContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -263,7 +263,7 @@ class ScXMLSourceServiceContext : public SvXMLImportContext
 public:
 
     ScXMLSourceServiceContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDataPilotTableContext* pDataPilotTable);
@@ -271,7 +271,7 @@ public:
     virtual ~ScXMLSourceServiceContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -288,7 +288,7 @@ class ScXMLSourceCellRangeContext : public SvXMLImportContext
 public:
 
     ScXMLSourceCellRangeContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDataPilotTableContext* pDataPilotTable);
@@ -296,7 +296,7 @@ public:
     virtual ~ScXMLSourceCellRangeContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -319,7 +319,7 @@ class ScXMLDataPilotFieldContext : public SvXMLImportContext
 public:
 
     ScXMLDataPilotFieldContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDataPilotTableContext* pDataPilotTable);
@@ -327,7 +327,7 @@ public:
     virtual ~ScXMLDataPilotFieldContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -348,7 +348,7 @@ class ScXMLDataPilotLevelContext : public SvXMLImportContext
 public:
 
     ScXMLDataPilotLevelContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDataPilotFieldContext* pDataPilotField);
@@ -356,7 +356,7 @@ public:
     virtual ~ScXMLDataPilotLevelContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -378,7 +378,7 @@ public:
     ScXMLDataPilotFieldContext* GetDataPilotField() { return pDataPilotField; }
 
     ScXMLDataPilotSubTotalsContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDataPilotFieldContext* pDataPilotField);
@@ -386,7 +386,7 @@ public:
     virtual ~ScXMLDataPilotSubTotalsContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -404,7 +404,7 @@ class ScXMLDataPilotSubTotalContext : public SvXMLImportContext
 public:
 
     ScXMLDataPilotSubTotalContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDataPilotSubTotalsContext* pDataPilotSubTotals);
@@ -412,7 +412,7 @@ public:
     virtual ~ScXMLDataPilotSubTotalContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -429,7 +429,7 @@ class ScXMLDataPilotMembersContext : public SvXMLImportContext
 public:
 
     ScXMLDataPilotMembersContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDataPilotFieldContext* pDataPilotField);
@@ -437,7 +437,7 @@ public:
     virtual ~ScXMLDataPilotMembersContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -458,7 +458,7 @@ class ScXMLDataPilotMemberContext : public SvXMLImportContext
 public:
 
     ScXMLDataPilotMemberContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
+                        const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDataPilotFieldContext* pDataPilotField);
@@ -466,7 +466,7 @@ public:
     virtual ~ScXMLDataPilotMemberContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 

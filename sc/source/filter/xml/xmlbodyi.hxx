@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,12 +83,12 @@ class ScXMLBodyContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLBodyContext( ScXMLImport& rImport, USHORT nPrfx, const NAMESPACE_RTL(OUString)& rLName,
+    ScXMLBodyContext( ScXMLImport& rImport, USHORT nPrfx, const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual ~ScXMLBodyContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                                    const NAMESPACE_RTL(OUString)& rLocalName,
+                                                    const ::rtl::OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filt_pch.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 18:12:04 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 #include <rtl/string.h>
 #include <rtl/ustring.h>
 #include <rtl/memory.h>
-#include <rtl/macros.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustring>
 #include <rtl/locale.hxx>
@@ -110,7 +109,6 @@
 #include <tools/color.hxx>
 #include <filter.hxx>
 #include <rangelst.hxx>
-#include <osl/types.h>
 #include <osl/mutex.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Any.h>
@@ -125,7 +123,6 @@
 #include <com/sun/star/uno/TypeClass.hdl>
 #include <com/sun/star/uno/Type.hxx>
 #include <osl/mutex.hxx>
-#include <osl/macros.hxx>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/uno/XInterface.hpp>
