@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:11:09 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,130 +106,146 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
         {
             switch (av[i][1])
             {
-                case 'O':
-                    if (av[i][2] == '\0')
-                    {
-                        if (i < ac - 1 && av[i+1][0] != '-')
-                        {
-                            i++;
-                            s = av[i];
-                        } else
-                        {
-                            OString tmp("'-O', please check");
-                            if (i <= ac - 1)
-                            {
-                                tmp += " your input '" + OString(av[i+1]) + "'";
-                            }
-
-                            throw IllegalArgument(tmp);
-                        }
-                    } else
-                    {
-                        s = av[i] + 2;
-                    }
-
-                    m_options["-O"] = OString(s);
-                    break;
-                case 'I':
+            case 'O':
+                if (av[i][2] == '\0')
                 {
-                    if (av[i][2] == '\0')
+                    if (i < ac - 1 && av[i+1][0] != '-')
                     {
-                        if (i < ac - 1 && av[i+1][0] != '-')
-                        {
-                            i++;
-                            s = av[i];
-                        } else
-                        {
-                            OString tmp("'-I', please check");
-                            if (i <= ac - 1)
-                            {
-                                tmp += " your input '" + OString(av[i+1]) + "'";
-                            }
-
-                            throw IllegalArgument(tmp);
-                        }
-                    } else
-                    {
-                        s = av[i] + 2;
-                    }
-
-                    OString inc(s);
-                    if ( inc.indexOf(';') > 0 )
-                    {
-                        OString tmp(s);
-                        sal_Int32 nIndex = 0;
-                        inc = OString();
-                        do inc = inc + " -I" + tmp.getToken( 0, ';', nIndex ); while( nIndex != -1 );
-                    } else
-                        inc = OString("-I") + s;
-
-                    if (m_options.count("-I") > 0)
-                    {
-                        OString tmp(m_options["-I"]);
-                        tmp = tmp + " " + inc;
-                        m_options["-I"] = tmp;
-                    } else
-                    {
-                        m_options["-I"] = inc;
-                    }
-                }
-                    break;
-                case 'D':
-                    if (av[i][2] == '\0')
-                    {
-                        if (i < ac - 1 && av[i+1][0] != '-')
-                        {
-                            i++;
-                            s = av[i];
-                        } else
-                        {
-                            OString tmp("'-D', please check");
-                            if (i <= ac - 1)
-                            {
-                                tmp += " your input '" + OString(av[i+1]) + "'";
-                            }
-
-                            throw IllegalArgument(tmp);
-                        }
-                    } else
-                    {
+                        i++;
                         s = av[i];
-                    }
+                    } else
+                    {
+                        OString tmp("'-O', please check");
+                        if (i <= ac - 1)
+                        {
+                            tmp += " your input '" + OString(av[i+1]) + "'";
+                        }
 
-                    if (m_options.count("-D") > 0)
+                        throw IllegalArgument(tmp);
+                    }
+                } else
+                {
+                    s = av[i] + 2;
+                }
+
+                m_options["-O"] = OString(s);
+                break;
+            case 'I':
+            {
+                if (av[i][2] == '\0')
+                {
+                    if (i < ac - 1 && av[i+1][0] != '-')
                     {
-                        OString tmp(m_options["-D"]);
-                        tmp = tmp + " " + s;
-                        m_options["-D"] = tmp;
+                        i++;
+                        s = av[i];
                     } else
                     {
-                        m_options["-D"] = OString(s);
+                        OString tmp("'-I', please check");
+                        if (i <= ac - 1)
+                        {
+                            tmp += " your input '" + OString(av[i+1]) + "'";
+                        }
+
+                        throw IllegalArgument(tmp);
                     }
-                    break;
-                case 'C':
-                    if (av[i][2] != '\0')
+                } else
+                {
+                    s = av[i] + 2;
+                }
+
+                OString inc(s);
+                if ( inc.indexOf(';') > 0 )
+                {
+                    OString tmp(s);
+                    sal_Int32 nIndex = 0;
+                    inc = OString();
+                    do inc = inc + " -I" + tmp.getToken( 0, ';', nIndex ); while( nIndex != -1 );
+                } else
+                    inc = OString("-I") + s;
+
+                if (m_options.count("-I") > 0)
+                {
+                    OString tmp(m_options["-I"]);
+                    tmp = tmp + " " + inc;
+                    m_options["-I"] = tmp;
+                } else
+                {
+                    m_options["-I"] = inc;
+                }
+            }
+            break;
+            case 'D':
+                if (av[i][2] == '\0')
+                {
+                    if (i < ac - 1 && av[i+1][0] != '-')
                     {
-                        throw IllegalArgument(OString(av[i]) + ", please check your input");
-                    }
-                    if (m_options.count("-C") == 0)
-                    {
-                        m_options["-C"] = OString(s);
-                    }
-                    break;
-                case 'h':
-                case '?':
-                    if (av[i][2] != '\0')
-                    {
-                        throw IllegalArgument(OString(av[i]) + ", please check your input");
+                        i++;
+                        s = av[i];
                     } else
                     {
-                        fprintf(stdout, "%s", prepareHelp().getStr());
-                        exit(0);
+                        OString tmp("'-D', please check");
+                        if (i <= ac - 1)
+                        {
+                            tmp += " your input '" + OString(av[i+1]) + "'";
+                        }
+
+                        throw IllegalArgument(tmp);
                     }
-                    break;
-                default:
-                    throw IllegalArgument("the option is unknown" + OString(av[i]));
-                    break;
+                } else
+                {
+                    s = av[i];
+                }
+
+                if (m_options.count("-D") > 0)
+                {
+                    OString tmp(m_options["-D"]);
+                    tmp = tmp + " " + s;
+                    m_options["-D"] = tmp;
+                } else
+                    m_options["-D"] = OString(s);
+                break;
+            case 'C':
+                if (av[i][2] != '\0')
+                {
+                    throw IllegalArgument(OString(av[i]) + ", please check your input");
+                }
+                if (m_options.count("-C") == 0)
+                    m_options["-C"] = OString(av[i]);
+                break;
+            case 'c':
+                if (av[i][2] == 'i' && av[i][3] == 'd' && av[i][4] == '\0')
+                {
+                    if (m_options.count("-cid") == 0)
+                        m_options["-cid"] = OString(av[i]);
+                } else
+                    throw IllegalArgument(OString(av[i]) + ", please check your input");
+                break;
+            case 'w':
+                if (av[i][2] == 'e' && av[i][3] == '\0') {
+                    if (m_options.count("-we") == 0)
+                        m_options["-we"] = OString(av[i]);
+                } else {
+                    if (av[i][2] == '\0') {
+                        if (m_options.count("-w") == 0)
+                            m_options["-w"] = OString(av[i]);
+                    } else
+                        throw IllegalArgument(OString(av[i]) + ", please check your input");
+                }
+                break;
+            case 'h':
+            case '?':
+                if (av[i][2] != '\0')
+                {
+                    throw IllegalArgument(OString(av[i]) + ", please check your input");
+                } else
+                {
+                    fprintf(stdout, "%s", prepareHelp().getStr());
+                    exit(0);
+                }
+                break;
+            default:
+                throw IllegalArgument("the option is unknown" + OString(av[i]));
+                break;
             }
         } else
         {
@@ -294,6 +310,9 @@ OString Options::prepareHelp()
     help += "    -D<name>   = name defines a macro for the preprocessor.\n";
     help += "    -C         = generate complete type information, including\n";
     help += "                 additional service information and documentation.\n";
+    help += "    -cid       = check if identifiers fulfill the UNO naming convention.\n";
+    help += "    -w         = display warning messages.\n";
+    help += "    -we        = treat warnings as errors.\n";
     help += "    -h|-?      = print this help message and exit.\n";
     help += prepareVersion();
 
