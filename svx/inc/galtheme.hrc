@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:25:37 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,8 @@
 #define RID_GALLERYSTR_THEME_SCREENBEANS                (RID_GALLERYSTR_THEME_START + 35)
 
 #define RID_GALLERYSTR_THEME_DUMMY5                     (RID_GALLERYSTR_THEME_START + 36)
+#define RID_GALLERYSTR_THEME_FONTWORK                   (RID_GALLERYSTR_THEME_START + 37)
+#define RID_GALLERYSTR_THEME_FONTWORK_VERTICAL          (RID_GALLERYSTR_THEME_START + 38)
 
 #define RID_GALLERYSTR_THEME_FIRST          RID_GALLERYSTR_THEME_3D
 #define RID_GALLERYSTR_THEME_LAST           RID_GALLERYSTR_THEME_DUMMY5
