@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:25:26 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 20:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -970,7 +970,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_traditional ] = "€u§@ͺν€½¦‘";
         Text[ arabic ] = "ΥνΫΙ ΜΟζα";
         Text[ greek ] = "Τύπος πίνακα";
-        Text[ korean ] = "Η₯ Ύη½Δ";
+        Text[ korean ] = "ΕΧΐΜΊν Ύη½Δ";
         Text[ turkish ] = "Tablo formόlό";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fσrmula de tabla";
@@ -996,7 +996,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_traditional ] = "Ώω»~ͺΊ€u§@ͺν€½¦‘";
         Text[ arabic ] = "ΥνΫΙ ΜΟζα ΞΗΨΖΙ";
         Text[ greek ] = "Λανθασμένος τύπος πίνακα";
-        Text[ korean ] = "Ζ²Έ° Η₯ Ύη½Δ";
+        Text[ korean ] = "Ζ²Έ° ΕΧΐΜΊν Ύη½Δ";
         Text[ turkish ] = "Hatalύ tablo formόlό";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fσrmula errσnea de tabla";
@@ -1940,7 +1940,7 @@ String STR_IMGBTN_TBLFML_UP
     Text[ chinese_traditional ] = "€W€@­Σ€u§@ͺν€½¦‘";
     Text[ arabic ] = "ΥνΫΙ ΗαΜΟζα ΗαΣΗΘήΙ";
     Text[ greek ] = "Προηγούμενος τύπος πίνακα";
-    Text[ korean ] = "ΐΜΐό Η₯ Ύη½Δ";
+    Text[ korean ] = "ΐΜΐό ΕΧΐΜΊν Ύη½Δ";
     Text[ turkish ] = "Φnceki tablo formόlό";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fσrmula de tabla anterior";
@@ -1966,7 +1966,7 @@ String STR_IMGBTN_TBLFML_DOWN
     Text[ chinese_traditional ] = "€U€@­Σ€u§@ͺν®ζ¦‘";
     Text[ arabic ] = "ΥνΫΙ ΗαΜΟζα ΗαΚΗανΙ";
     Text[ greek ] = "Επόμενος τύπος πίνακα";
-    Text[ korean ] = "΄Ωΐ½ Η₯ Ύη½Δ";
+    Text[ korean ] = "΄Ωΐ½ ΕΧΐΜΊν Ύη½Δ";
     Text[ turkish ] = "Sonraki tablo formόlό";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Siguiente fσrmula de tabla";
@@ -1992,7 +1992,7 @@ String STR_IMGBTN_TBLFML_ERR_UP
     Text[ chinese_traditional ] = "€W€@­ΣΏω»~ͺΊ€u§@ͺν®ζ¦‘";
     Text[ arabic ] = "ΥνΫΙ ΗαΜΟζα ΗαΞΗΨΖΙ ΗαΣΗΘήΙ";
     Text[ greek ] = "Προηγούμενος λανθασμένος τύπος πίνακα";
-    Text[ korean ] = "Ζ²Έ° ΐΜΐό Η₯ Ύη½Δ";
+    Text[ korean ] = "Ζ²Έ° ΐΜΐό ΕΧΐΜΊν Ύη½Δ";
     Text[ turkish ] = "Φnceki hatalύ tablo formόlό";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fσrmula de tabla anterior errσnea";
@@ -2018,7 +2018,7 @@ String STR_IMGBTN_TBLFML_ERR_DOWN
     Text[ chinese_traditional ] = "€U€@­ΣΏω»~ͺΊ€u§@ͺν®ζ¦‘";
     Text[ arabic ] = "ΥνΫΙ ΗαΜΟζα ΗαΞΗΨΖΙ ΗαΚΗανΙ";
     Text[ greek ] = "Επόμενος λανθασμένος τύπος πίνακα";
-    Text[ korean ] = "Ζ²Έ° ΄Ωΐ½ Η₯ Ύη½Δ";
+    Text[ korean ] = "Ζ²Έ° ΄Ωΐ½ ΕΧΐΜΊν Ύη½Δ";
     Text[ turkish ] = "Sonraki hatalύ tablo formόlό";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Siguiente fσrmula errσnea de tabla";
