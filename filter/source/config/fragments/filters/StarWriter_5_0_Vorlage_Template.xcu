@@ -4,7 +4,7 @@
         <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="UserData"><value>CSW5V</value></prop>
-        <prop oor:name="FilterService"/>
+        <prop oor:name="FilterService"><value>com.sun.star.comp.office.BF_MigrateFilter</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
             <value xml:lang="pl">StarWriter 5.0 - Szablon</value>
@@ -38,5 +38,5 @@
             <value xml:lang="it">StarWriter 5.0 Modello</value>
             <value xml:lang="x-translate">StarWriter 5.0 Vorlage</value>
         </prop>
-        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE TEMPLATEPATH OWN ALIEN</value></prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE TEMPLATEPATH OWN ALIEN 3RDPARTYFILTER</value></prop>
     </node>
