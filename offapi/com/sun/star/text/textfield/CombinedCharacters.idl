@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CombinedCharacters.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2002-01-08 15:33:12 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:44:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module text { module textfield {
  as one normal character.
     @see com::sun::star::text::TextField
 */
-service CombinedCharacters
+published service CombinedCharacters
 {
     service  com::sun::star::text::TextField;
     /** contains the characters to be combined.
