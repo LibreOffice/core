@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:59:32 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,9 @@
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
-
+#ifndef _SVX_EXTRUSION_BAR_HXX
+#include <svx/extrusionbar.hxx>
+#endif
 
 #ifndef _SWMODULE_HXX //autogen
 #include <swmodule.hxx>
@@ -280,6 +282,9 @@ void SwWebView::SelectShell()
         else if ( nSelectionType & SwWrtShell::SEL_DRW )
         {
             eShellMode = SEL_DRAW;
+            SetShell( new svx::ExtrusionBar( this ) );
+            rDispatcher.Push( *GetCurShell() );
+
             SetShell( new SwDrawShell( *this ));
             rDispatcher.Push( *GetCurShell() );
             if ( nSelectionType & SwWrtShell::SEL_BEZ )
