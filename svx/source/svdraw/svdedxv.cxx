@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:45:36 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -583,7 +583,7 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
 
 BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin, BOOL bIsNewObj,
     SdrOutliner* pGivenOutliner, OutlinerView* pGivenOutlinerView,
-    BOOL bDontDeleteOutliner, BOOL bOnlyOneView)
+    BOOL bDontDeleteOutliner, BOOL bOnlyOneView, BOOL bGrabFocus)
 {
     EndTextEdit();
     if (!HAS_BASE(SdrTextObj,pObj)) return FALSE; // z.Zt. nur mit meinen Textobjekten
@@ -722,7 +722,8 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
                     }
                 }
             }
-            pWin->GrabFocus(); // Damit der Cursor hier auch blinkt
+            if(bGrabFocus)
+                pWin->GrabFocus(); // Damit der Cursor hier auch blinkt
             pTextEditOutlinerView->ShowCursor();
             pTextEditOutliner->SetStatusEventHdl(LINK(this,SdrObjEditView,ImpOutlinerStatusEventHdl));
 #ifndef SVX_LIGHT
