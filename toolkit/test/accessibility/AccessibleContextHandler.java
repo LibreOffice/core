@@ -1,12 +1,47 @@
 import drafts.com.sun.star.accessibility.XAccessible;
 import drafts.com.sun.star.accessibility.XAccessibleContext;
+import drafts.com.sun.star.accessibility.XAccessibleStateSet;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.container.XIndexAccess;
 
 
 class AccessibleContextHandler
     extends NodeHandler
 {
     protected int nChildrenCount;
+
+    private static String maStateNames[] = {
+        "INVALID",              // 0
+        "ACTIVE",
+        "ARMED",
+        "BUSY",
+        "CHECKED",
+        "COLLAPSED",
+        "DEFUNC",
+        "EDITABLE",
+        "ENABLED",
+        "EXPANDABLE",
+        "EXPANDED",             // 10
+        "FOCUSABLE",
+        "FOCUSED",
+        "HORIZONTAL",
+        "ICONIFIED",
+        "MODAL",
+        "MULTILINE",
+        "MULTISELECTABLE",
+        "OPAQUE",
+        "PRESSED",
+        "RESIZABLE",            // 20
+        "SELECTABLE",
+        "SELECTED",
+        "SENSITIVE",
+        "SHOWING",
+        "SINGLE_LINE",
+        "STALE",
+        "TRANSIENT",
+        "VERTICAL",
+        "VISIBLE",
+    };
 
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
@@ -25,7 +60,7 @@ class AccessibleContextHandler
     {
         super();
         if (xContext != null)
-            maChildList.setSize (3);
+            maChildList.setSize (4);
     }
 
     public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
@@ -56,6 +91,26 @@ class AccessibleContextHandler
                     }
                     */
                     break;
+                case 3:
+                    sChild = "";
+                    XAccessibleStateSet xStateSet =
+                        xContext.getAccessibleStateSet();
+                    if (xStateSet != null)
+                    {
+                        for (short i=0; i<=29; i++)
+                        {
+                            if (xStateSet.contains (i))
+                            {
+                                if (sChild.compareTo ("") != 0)
+                                    sChild += ", ";
+                                sChild += maStateNames[i];
+                            }
+                        }
+                    }
+                    else
+                        sChild += "no state set";
+                    sChild = "State set: " + sChild;
+
                     /*                case 3:
                     sChild = "Child count: " + xContext.getAccessibleChildCount();
                     break;*/
