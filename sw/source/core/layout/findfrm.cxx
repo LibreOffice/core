@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:39:36 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 16:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 #include "ftnfrm.hxx"
 #include "txtftn.hxx"
 #include "fmtftn.hxx"
+// OD 09.01.2004 #i11859#
+#ifndef _TXTFRM_HXX
+#include <txtfrm.hxx>   // SwTxtFrm
+#endif
 
 /*************************************************************************
 |*
@@ -1085,6 +1089,58 @@ void SwFrm::ImplInvalidateNextPos( BOOL bNoFtn )
         }
         else
             pFrm->InvalidatePos();
+    }
+}
+
+/** method to invalidate printing area of next frame
+
+    OD 09.01.2004 #i11859#
+
+    @author OD
+*/
+void SwTxtFrm::InvalidateNextPrtArea()
+{
+    // determine next frame
+    SwFrm* pNextFrm = FindNext();
+    // skip empty section frames and hidden text frames
+    {
+        while ( pNextFrm &&
+                ( ( pNextFrm->IsSctFrm() &&
+                    !static_cast<SwSectionFrm*>(pNextFrm)->GetSection() ) ||
+                  ( pNextFrm->IsTxtFrm() &&
+                    static_cast<SwTxtFrm*>(pNextFrm)->IsHiddenNow() ) ) )
+        {
+            pNextFrm = pNextFrm->FindNext();
+        }
+    }
+
+    // Invalidate printing area of found next frame
+    if ( pNextFrm )
+    {
+        if ( pNextFrm->IsSctFrm() )
+        {
+            // Invalidate printing area of found section frame, if
+            // (1) this text frame isn't in a section OR
+            // (2) found section frame isn't a follow of the section frame this
+            //     text frame is in.
+            if ( !IsInSct() ||
+                 FindSctFrm()->GetFollow() != pNextFrm )
+            {
+                pNextFrm->InvalidatePrt();
+            }
+
+            // Invalidate printing area of first content in found section.
+            SwFrm* pFstCntntOfSctFrm =
+                    static_cast<SwSectionFrm*>(pNextFrm)->ContainsAny();
+            if ( pFstCntntOfSctFrm )
+            {
+                pFstCntntOfSctFrm->InvalidatePrt();
+            }
+        }
+        else
+        {
+            pNextFrm->InvalidatePrt();
+        }
     }
 }
 
