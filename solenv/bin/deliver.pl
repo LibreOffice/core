@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:47:51 $
+#   last change: $Author: rt $ $Date: 2003-04-15 10:32:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.41 $ ';
+$id_str = ' $Revision: 1.42 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -799,20 +799,22 @@ sub push_default_actions
                 );
     push(@common_subdirs, 'zip') if $opt_zip;
 
-    # create all the subdirectories on solver
-    foreach $subdir (@subdirs) {
-        push(@action_data, ['mkdir', "%_DEST%/$subdir%_EXT%"]);
-    }
-    foreach $subdir (@common_subdirs) {
-        push(@action_data, ['mkdir', "%COMMON_DEST%/$subdir%_EXT%"]);
-    }
+    if ( ! $opt_delete ) {
+        # create all the subdirectories on solver
+        foreach $subdir (@subdirs) {
+            push(@action_data, ['mkdir', "%_DEST%/$subdir%_EXT%"]);
+        }
+        foreach $subdir (@common_subdirs) {
+            push(@action_data, ['mkdir', "%COMMON_DEST%/$subdir%_EXT%"]);
+        }
 
-    # deliver build.lst to $dest/inc/$module
-    push(@action_data, ['mkdir', "%_DEST%/inc%_EXT%/$module"]); # might be necessary
-    push(@action_data, ['copy', "build.lst %_DEST%/inc%_EXT%/$module/build.lst"]);
-    # and to $common_dest/inc/$module
-    push(@action_data, ['mkdir', "%COMMON_DEST%/inc%_EXT%/$module"]); # might be necessary
-    push(@action_data, ['copy', "build.lst %COMMON_DEST%/inc%_EXT%/$module/build.lst"]);
+        # deliver build.lst to $dest/inc/$module
+        push(@action_data, ['mkdir', "%_DEST%/inc%_EXT%/$module"]); # might be necessary
+        push(@action_data, ['copy', "build.lst %_DEST%/inc%_EXT%/$module/build.lst"]);
+        # and to $common_dest/inc/$module
+        push(@action_data, ['mkdir', "%COMMON_DEST%/inc%_EXT%/$module"]); # might be necessary
+        push(@action_data, ['copy', "build.lst %COMMON_DEST%/inc%_EXT%/$module/build.lst"]);
+    }
 
     # need to copy libstaticmxp.dylib for Mac OS X
     if ( $^O eq 'darwin' )
@@ -930,47 +932,36 @@ sub zip_files
     my $zipexe = 'zip';
     $zipexe .= ' -y' unless  $^O eq 'MSWin32';
 
-    my $zip_file = "%_DEST%/zip%_EXT%/$module.zip";
-    $zip_file = expand_macros($zip_file);
+    my $platform_zip_file = "%_DEST%/zip%_EXT%/$module.zip";
+    $platform_zip_file = expand_macros($platform_zip_file);
     my $common_zip_file = "%COMMON_DEST%/zip%_EXT%/$module.zip";
     $common_zip_file = expand_macros($common_zip_file);
+    my (%dest_dir, %list_ref);
+    $dest_dir{$platform_zip_file} = $dest;
+    $dest_dir{$common_zip_file}   = $common_dest;
+    $list_ref{$platform_zip_file} = \@zip_list;
+    $list_ref{$common_zip_file}   = \@common_zip_list;
 
-    print "ZIP: updating $zip_file\n";
-    # zip content has to be relative to $dest
-    chdir($dest);
-    if ( $opt_delete ) {
-        open(ZIP, "| $zipexe -q -d -@ $zip_file");
-        foreach $file (@zip_list) {
-            print "ZIP: removing $file from $zip_file\n" if $is_debug;
-            print ZIP "$file\n";
+    foreach my $zip_file ( $platform_zip_file, $common_zip_file) {
+        print "ZIP: updating $zip_file\n";
+        # zip content has to be relative to $dest_dir
+        chdir($dest_dir{$zip_file});
+        my $this_ref = $list_ref{$zip_file};
+        if ( $opt_delete ) {
+            open(ZIP, "| $zipexe -q -o -d -@ $zip_file");
+            foreach $file ( @$this_ref ) {
+                print "ZIP: removing $file from $platform_zip_file\n" if $is_debug;
+                print ZIP "$file\n";
+            }
+            close(ZIP);
+        } else {
+            open(ZIP, "| $zipexe -q -o -u -@ $zip_file");
+            foreach $file ( @$this_ref ) {
+                print "ZIP: adding $file to $zip_file\n" if $is_debug;
+                print ZIP "$file\n";
+            }
+            close(ZIP);
         }
-        close(ZIP);
-    } else {
-        open(ZIP, "| $zipexe -q -o -u -@ $zip_file");
-        foreach $file (@zip_list) {
-            print "ZIP: adding $file to $zip_file\n" if $is_debug;
-            print ZIP "$file\n";
-        }
-        close(ZIP);
-    }
-
-    print "ZIP: updating $common_zip_file\n" if ( @common_zip_list );
-    # zip content has to be relative to $dest
-    chdir($common_dest);
-    if ( $opt_delete ) {
-        open(ZIP, "| $zipexe -q -d -@ $common_zip_file");
-        foreach $file (@common_zip_list) {
-            print "ZIP: removing $file from $common_zip_file\n" if $is_debug;
-            print ZIP "$file\n";
-        }
-        close(ZIP);
-    } else {
-        open(ZIP, "| $zipexe -q -o -u -@ $common_zip_file");
-        foreach $file (@common_zip_list) {
-            print "ZIP: adding $file to $common_zip_file\n" if $is_debug;
-            print ZIP "$file\n";
-        }
-        close(ZIP);
     }
 }
 
