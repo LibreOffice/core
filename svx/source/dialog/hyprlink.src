@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:18:43 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,8 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText[ hebrew ] = "Name der URL";
         QuickHelpText[ hindi ] = "URL नाम";
         QuickHelpText[ slovak ] = "Názov URL";
+        QuickHelpText[ hungarian ] = "URL-név";
+        QuickHelpText[ slovenian ] = "Ime URL";
     };
     FixedText FT_URL
     {
@@ -148,6 +150,8 @@ DockingWindow RID_SVXDLG_HYPERLINK
         Text[ hebrew ] = "URL:";
         Text[ hindi ] = "URL:";
         Text[ slovak ] = "URL:";
+        Text[ hungarian ] = "URL:";
+        Text[ slovenian ] = "URL:";
     };
     ComboBox CB_URL
     {
@@ -187,6 +191,8 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText[ hebrew ] = "Sammelbox für Internet-URLs";
         QuickHelpText[ hindi ] = "इन्टरनेट् URLs";
         QuickHelpText[ slovak ] = "Internetové URL";
+        QuickHelpText[ hungarian ] = "Internetes URL-ek";
+        QuickHelpText[ slovenian ] = "Internetni URLji";
     };
     ToolBox TB
     {
@@ -207,7 +213,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
                 Text [ spanish ] = "Hiperenlace" ;
                 Text [ french ] = "Lien" ;
                 Text [ swedish ] = "L�nk" ;
-                Text [ danish ] = "K�de" ;
+                Text [ danish ] = "Hyperlink" ;
                 Text [ portuguese ] = "Hiperliga��o" ;
                 Text [ portuguese_brazilian ] = "Hiperlink" ;
                 Text[ chinese_simplified ] = "超链接";
@@ -227,6 +233,8 @@ DockingWindow RID_SVXDLG_HYPERLINK
                 Text[ hebrew ] = "Hyperlink";
                 Text[ hindi ] = "हाइपरलिंक";
                 Text[ slovak ] = "Hypertextový odkaz";
+                Text[ hungarian ] = "Hiperhivatkozás";
+                Text[ slovenian ] = "Hiperpovezava";
             };
             ToolBoxItem
             {
@@ -261,6 +269,8 @@ DockingWindow RID_SVXDLG_HYPERLINK
                 Text[ hebrew ] = "‮סימניה‬";
                 Text[ hindi ] = "पृष्ठसंकेत";
                 Text[ slovak ] = "Záložka";
+                Text[ hungarian ] = "Könyvjelző";
+                Text[ slovenian ] = "Zaznamek";
             };
             ToolBoxItem
             {
@@ -295,6 +305,8 @@ DockingWindow RID_SVXDLG_HYPERLINK
                 Text[ hebrew ] = "Search";
                 Text[ hindi ] = "खोज";
                 Text[ slovak ] = "Hľadať";
+                Text[ hungarian ] = "Keresés";
+                Text[ slovenian ] = "Išči";
             };
         };
     };
@@ -324,6 +336,8 @@ DockingWindow RID_SVXDLG_HYPERLINK
     Text[ hebrew ] = "HiperLink‮הוספת ‬";
     Text[ hindi ] = "हाइपरलिंक जोड़ो";
     Text[ slovak ] = "Vložiť hypertextový odkaz";
+    Text[ hungarian ] = "Hiperhivatkozás beszúrása";
+    Text[ slovenian ] = "Vstavi hiperpovezavo";
 };
  // PopupMenu -------------------------------------------------------------
 Menu RID_SVXMN_HYPERLINK
@@ -361,6 +375,8 @@ Menu RID_SVXMN_HYPERLINK
             Text[ hebrew ] = "Als ~Text";
             Text[ hindi ] = "टेक्स्ट् जैसे";
             Text[ slovak ] = "Ako text";
+            Text[ hungarian ] = "Szövegként";
+            Text[ slovenian ] = "Kot besedilo";
         };
         MenuItem
         {
@@ -393,6 +409,8 @@ Menu RID_SVXMN_HYPERLINK
             Text[ hebrew ] = "Als ~Button";
             Text[ hindi ] = "~बटन जैसे";
             Text[ slovak ] = "Ako ~tlačidlo";
+            Text[ hungarian ] = "Gom~bként";
+            Text[ slovenian ] = "Kot ~gumb";
         };
     };
 };
@@ -411,7 +429,7 @@ QueryBox RID_SVXQB_NOCONNECT
     Message [ french ] = "L'URL ne peut �tre v�rifi� qu'apr�s connexion.\n Voulez-vous �tablir la connexion?" ;
     Message [ dutch ] = "Deze URL kan pas na het tot stand brengen van een verbinding getest worden.\nWilt u de verbinding tot stand brengen?" ;
     Message [ swedish ] = "Denna URL kan f�rst pr�vas n�r en f�rbindelse har uppr�ttats.\nSka en f�rbindelse uppr�ttas?" ;
-    Message [ danish ] = "URL kan f�rst testes n�r en forbindelse er blevet oprettet.\nSkal der oprettes en forbindelse?" ;
+    Message [ danish ] = "Denne URL kan f�rst testes, n�r en forbindelse er oprettet.\nSkal der oprettes forbindelse?" ;
     Message [ portuguese_brazilian ] = "Esta URL s� pode ser verificada ap�s estabelecer uma conex�o.\nDeseja conectar-se ?" ;
     Message [ portuguese ] = "O URL pode apenas ser verificado depois de  efectuar uma liga��o.\nDeseja inici�-la?" ;
     Message[ chinese_simplified ] = "只有在建立连接后才能确定这个 URL 是否正确。\n您要现在建立连接吗？";
@@ -431,6 +449,8 @@ QueryBox RID_SVXQB_NOCONNECT
     Message[ hebrew ] = "Die URL kann erst nach Aufbau einer Verbindung geprüft werden.\nSoll die Verbindung aufgebaut werden?";
     Message[ hindi ] = "केवल कनेक्शन् करने के पश्चात् इस URL को प्रमाणित कर सकते है । कनेक्शन् स्थापित करना चाहते है?";
     Message[ slovak ] = "Toto URL môže byť overené iba po nadviazaní spojenia. Nadviazať spojenie?";
+    Message[ hungarian ] = "Az URL csak akkor ellenőrizhető, ha létezik kapcsolat. Kíván kapcsolatot felépíteni?";
+    Message[ slovenian ] = "Ta URL se lahko preveri šele potem, ko je bila vzpostavljena zveza. Ali želite vzpostaviti zvezo?";
 };
 QueryBox RID_SVXQB_DONTEXIST
 {
@@ -446,7 +466,7 @@ QueryBox RID_SVXQB_DONTEXIST
     Message [ spanish ] = "La URL no existe.\n�Desea insertarla de todas formas?" ;
     Message [ french ] = "L'URL n'existe pas.\nVoulez-vous l'ins�rer tout de m�me ?" ;
     Message [ swedish ] = "Denna URL existerar inte.\nSka den infogas �nd�?" ;
-    Message [ danish ] = "URL eksisterer ikke.\nSkal den tilf�jes alligevel?" ;
+    Message [ danish ] = "Denne URL findes ikke.\nSkal den inds�ttes alligevel?" ;
     Message [ portuguese_brazilian ] = "Esta URL n�o existe. Inserir mesmo assim ?" ;
     Message [ portuguese ] = "O URL n�o existe.\nDeseja inseri-lo?" ;
     Message[ chinese_simplified ] = "这个 URL 不存在。\n您还是要加入它？";
@@ -466,7 +486,10 @@ QueryBox RID_SVXQB_DONTEXIST
     Message[ hebrew ] = "Die URL existiert nicht.\nSoll sie trotzdem eingefügt werden?";
     Message[ hindi ] = "इस URL अस्तित्व में नहीं है । किसी तरह जोड़ना है?";
     Message[ slovak ] = "Toto URL neexistuje. Napriek tomu vložiť?";
+    Message[ hungarian ] = "Ez az URL nem létezik. Mindenképpen beszúrja?";
+    Message[ slovenian ] = "Ta URL ne obstaja. Ali ga želite vseeno vstaviti?";
 };
+
 
 
 
