@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-22 20:19:59 $
+ *  last change: $Author: obo $ $Date: 2001-11-16 22:54:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,7 @@ ModalDialog RID_SCDLG_LINKAREA
     Text[ catalan ] = "External Data Source";
     Text[ finnish ] = "Ulkoinen lähde";
 };
+
 
 
 
