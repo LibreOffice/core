@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bustamam $ $Date: 2002-01-10 21:54:44 $
+ *  last change: $Author: khong $ $Date: 2002-02-21 21:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@ IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_TW_zhuyin )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_TW_radical )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_TW_stroke )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ko_KR_dict )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ko_KR_charset )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_en_US_alphanumeric )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_en_AU_alphanumeric )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_it_IT_alphanumeric )
@@ -202,6 +203,9 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.IndexEntrySupplier_ko_KR_dict",
         "com.sun.star.i18n.ko_KR_dict_IndexEntrySupplier",
         &IndexEntrySupplier_ko_KR_dict_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_ko_KR_charset",
+        "com.sun.star.i18n.ko_KR_charset_IndexEntrySupplier",
+        &IndexEntrySupplier_ko_KR_charset_CreateInstance },
     {   "com.sun.star.i18n.IndexEntrySupplier_en_US_alphanumeric",
         "com.sun.star.i18n.en_US_alphanumeric_IndexEntrySupplier",
         &IndexEntrySupplier_en_US_alphanumeric_CreateInstance },

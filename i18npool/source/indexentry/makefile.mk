@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.3 $
+#*  $Revision: 1.4 $
 #*
-#*  last change: $Author: bustamam $ $Date: 2002-01-10 21:53:13 $
+#*  last change: $Author: khong $ $Date: 2002-02-21 21:35:12 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -84,6 +84,7 @@ SLOFILES=   \
             $(SLO)$/indexentrysupplier_zh_TW_radical.obj \
             $(SLO)$/indexentrysupplier_zh_TW_stroke.obj \
             $(SLO)$/indexentrysupplier_ko_KR_dict.obj \
+            $(SLO)$/indexentrysupplier_ko_KR_charset.obj \
             $(SLO)$/indexentrysupplier_Euro.obj \
             $(SLO)$/indexentrysupplier_en_US_alphanumeric.obj \
             $(SLO)$/indexentrysupplier_it_IT_alphanumeric.obj \
