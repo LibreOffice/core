@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:14:31 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,8 @@
 #ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <svtools/sbxvar.hxx>
 #endif
-#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
-#include <svtools/languageoptions.hxx>
+#ifndef _SVTOOLS_CTLOPTIONS_HXX
+#include <svtools/ctloptions.hxx>
 #endif
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
@@ -4299,7 +4299,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     nSlot = SID_ATTR_PARA_LEFT_TO_RIGHT;
                 else if(!pCommandData->IsLeftShift() && pCommandData->IsRightShift())
                     nSlot = SID_ATTR_PARA_RIGHT_TO_LEFT;
-                if(nSlot && SvtLanguageOptions().IsCTLFontEnabled())
+                if(nSlot && SW_MOD()->GetCTLOptions().IsCTLFontEnabled())
                     GetView().GetViewFrame()->GetDispatcher()->Execute(nSlot);
             }
         }
