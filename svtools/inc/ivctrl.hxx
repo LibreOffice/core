@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-10 09:20:57 $
+ *  last change: $Author: pb $ $Date: 2002-05-16 07:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,8 @@ public:
     // Nur bei AutoArrange gesetzt. Den Kopf der Liste gibts per SvxIconChoiceCtrl::GetPredecessorHead
     SvxIconChoiceCtrlEntry*         GetSuccessor() const { return pflink; }
     SvxIconChoiceCtrlEntry*         GetPredecessor() const { return pblink; }
+
+    sal_Unicode             GetMnemonicChar() const;
 };
 
 enum SvxIconChoiceCtrlColumnAlign
@@ -273,13 +275,12 @@ class SvtIconChoiceCtrl : public Control
 {
     friend class SvxIconChoiceCtrl_Impl;
 
-    Link                _aClickIconHdl;
-    Link                _aDocRectChangedHdl;
-    Link                _aVisRectChangedHdl;
-    KeyEvent*           _pCurKeyEvent;
-    SvxIconChoiceCtrl_Impl*     _pImp;
-
-    BOOL                bAutoFontColor;
+    Link                    _aClickIconHdl;
+    Link                    _aDocRectChangedHdl;
+    Link                    _aVisRectChangedHdl;
+    KeyEvent*               _pCurKeyEvent;
+    SvxIconChoiceCtrl_Impl* _pImp;
+    BOOL                    _bAutoFontColor;
 
 protected:
 
@@ -327,7 +328,7 @@ public:
     void                SetClickHdl( const Link& rLink ) { _aClickIconHdl = rLink; }
     const Link&         GetClickHdl() const { return _aClickIconHdl; }
 
-    void                SetBackground( const Wallpaper& );
+    void                SetBackground( const Wallpaper& rWallpaper );
 
     void                ArrangeIcons();
 
@@ -339,24 +340,24 @@ public:
                                      ULONG nPos = LIST_APPEND,
                                      const Point* pPos = 0,
                                      USHORT nFlags = 0 );
-    void                RemoveEntry( SvxIconChoiceCtrlEntry* );
+    void                RemoveEntry( SvxIconChoiceCtrlEntry* pEntry );
 
     BOOL                DoKeyInput( const KeyEvent& rKEvt );
 
     BOOL                IsEntryEditing() const;
     void                Clear();
 
-    ULONG               GetEntryCount() const;
-    SvxIconChoiceCtrlEntry*     GetEntry( ULONG nPos ) const;
-    ULONG               GetEntryListPos( SvxIconChoiceCtrlEntry* ) const;
-    void                SetCursor( SvxIconChoiceCtrlEntry* pEntry );
-    SvxIconChoiceCtrlEntry*     GetCursor( ) const;
+    ULONG                   GetEntryCount() const;
+    SvxIconChoiceCtrlEntry* GetEntry( ULONG nPos ) const;
+    ULONG                   GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const;
+    void                    SetCursor( SvxIconChoiceCtrlEntry* pEntry );
+    SvxIconChoiceCtrlEntry* GetCursor() const;
 
     // Neu-Berechnung gecachter View-Daten und Invalidierung im Fenster
-    void                InvalidateEntry( SvxIconChoiceCtrlEntry* );
+    void                    InvalidateEntry( SvxIconChoiceCtrlEntry* pEntry );
 
     // bHit==FALSE: Eintrag gilt als getroffen, wenn Position im BoundRect liegt
-    //     ==TRUE: Bitmap oder Text muss getroffen sein
+    //     ==TRUE : Bitmap oder Text muss getroffen sein
     SvxIconChoiceCtrlEntry* GetEntry( const Point& rPosPixel, BOOL bHit = FALSE ) const;
     // Gibt den naechsten ueber pCurEntry liegenden Eintrag (ZOrder)
     SvxIconChoiceCtrlEntry* GetNextEntry( const Point& rPosPixel, SvxIconChoiceCtrlEntry* pCurEntry, BOOL  ) const;
@@ -364,9 +365,9 @@ public:
     SvxIconChoiceCtrlEntry* GetPrevEntry( const Point& rPosPixel, SvxIconChoiceCtrlEntry* pCurEntry, BOOL  ) const;
 
     // in dem ULONG wird die Position in der Liste des gefunden Eintrags zurueckgegeben
-    SvxIconChoiceCtrlEntry* GetSelectedEntry( ULONG& ) const;
+    SvxIconChoiceCtrlEntry* GetSelectedEntry( ULONG& rPos ) const;
 
-    void                SetEntryTextMode( SvxIconChoiceCtrlTextMode, SvxIconChoiceCtrlEntry* pEntry = 0 );
+    void                        SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry = 0 );
     SvxIconChoiceCtrlTextMode   GetEntryTextMode( const SvxIconChoiceCtrlEntry* pEntry = 0 ) const;
 
     // offene asynchron abzuarbeitende Aktionen ausfuehren. Muss vor dem Speichern von
@@ -379,14 +380,13 @@ public:
     virtual BOOL        HasFontTextColor() const;
     virtual BOOL        HasFontFillColor() const;
 
-    void                SetFontColorToBackground ( BOOL bDo = TRUE ) { bAutoFontColor = bDo; }
-    BOOL                AutoFontColor () { return bAutoFontColor; }
+    void                SetFontColorToBackground ( BOOL bDo = TRUE ) { _bAutoFontColor = bDo; }
+    BOOL                AutoFontColor () { return _bAutoFontColor; }
 
     Point               GetLogicPos( const Point& rPosPixel ) const;
     Point               GetPixelPos( const Point& rPosLogic ) const;
+    void                SetSelectionMode( SelectionMode eMode );
 };
-
-
 
 #endif // _ICNVW_HXX
 
