@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-11 13:38:55 $
+ *  last change: $Author: pl $ $Date: 2002-09-12 09:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1908,7 +1908,10 @@ sal_Int32 PDFWriterImpl::emitResources()
 
     // emit xobject dict
     sal_Int32 nXObjectDict = 0;
-    if( m_aBitmaps.begin() != m_aBitmaps.end() )
+    if( m_aBitmaps.begin() != m_aBitmaps.end()      ||
+        m_aJPGs.begin() != m_aJPGs.end()            ||
+        m_aTransparentObjects.begin() != m_aTransparentObjects.end()
+        )
     {
         aLine.setLength( 0 );
         nXObjectDict = createObject();
