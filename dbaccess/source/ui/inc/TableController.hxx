@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:31:37 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,10 @@ namespace dbaui
         // need for undo's and redo's
         SfxUndoManager* getUndoMgr();
         inline ::std::vector<OTableRow*>*   getRows() { return &m_vRowList; }
+
+        /// returns the postion of the the first empty row
+        sal_Int32                           getFirstEmptyRowPosition() const;
+
         inline const OTypeInfoMap*          getTypeInfo() const { return &m_aTypeInfo; }
 
         inline TOTypeInfoSP                 getTypeInfo(sal_Int32 _nPos) const { return m_aTypeInfoIndex[_nPos]->second; }
