@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-02 17:04:27 $
+ *  last change: $Author: sj $ $Date: 2001-05-17 13:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 #endif
 #ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
+#include <vcl/fixed.hxx>
 #endif
 #ifndef _SVTREEBOX_HXX
 #include <svtools/svtreebx.hxx>
@@ -123,7 +123,7 @@ namespace dbaui
 //==============================================================================
 class OExceptionChainDialog : public ModalDialog
 {
-    GroupBox        m_aFrame;
+    FixedLine       m_aFrame;
     FixedText       m_aListLabel;
     SvTreeListBox   m_aExceptionList;
     FixedText       m_aDescLabel;
@@ -141,7 +141,7 @@ protected:
 //------------------------------------------------------------------------------
 OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const Any& _rStart)
     :ModalDialog(pParent, ModuleRes(DLG_SQLEXCEPTIONCHAIN))
-    ,m_aFrame           (this, ResId(GB_DETAILS))
+    ,m_aFrame           (this, ResId(FL_DETAILS))
     ,m_aListLabel       (this, ResId(FT_ERRORLIST))
     ,m_aExceptionList   (this, ResId(CTL_ERRORLIST))
     ,m_aDescLabel       (this, ResId(FT_DESCRIPTION))
@@ -576,6 +576,9 @@ IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/03/02 17:04:27  fs
+ *  correcting the building of the exception tree
+ *
  *  Revision 1.7  2001/02/05 09:48:50  fs
  *  unique id for the 'more' button
  *

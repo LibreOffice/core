@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:07:00 $
+ *  last change: $Author: sj $ $Date: 2001-05-17 13:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,8 @@
 #define ED_TEXT         1
 
 #define GB_DATA         1
-#define GB_DETAILS      2
+
+#define FL_DETAILS      1
 
 #define PB_OK           1
 #define PB_CANCEL       2
@@ -89,6 +90,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:07:00  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 02.10.00 12:44:05  fs
  ************************************************************************/
