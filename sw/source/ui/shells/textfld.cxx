@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:43:41 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,23 +714,25 @@ void SwTextShell::StateField( SfxItemSet &rSet )
         {
             case FN_EDIT_FIELD:
             {
-                if( rSh.HasSelection() )
-                    rSet.DisableItem(nWhich);
-                else
-                {
-                    if( !bGetField )
-                    {
-                        pField = rSh.GetCurFld();
-                        bGetField = TRUE;
-                    }
+                /* #108536# Fields can be selected, too now. Removed
 
-                    USHORT nTempWhich = pField ? pField->GetTyp()->Which() : USHRT_MAX;
-                    if( USHRT_MAX == nTempWhich ||
-                        RES_POSTITFLD == nTempWhich ||
-                        RES_SCRIPTFLD == nTempWhich ||
-                        RES_AUTHORITY == nTempWhich )
-                        rSet.DisableItem( nWhich );
+                if( rSh.HasSelection() )
+                     rSet.DisableItem(nWhich);
+                else ...
+                */
+
+                if( !bGetField )
+                {
+                    pField = rSh.GetCurFld();
+                    bGetField = TRUE;
                 }
+
+                USHORT nTempWhich = pField ? pField->GetTyp()->Which() : USHRT_MAX;
+                if( USHRT_MAX == nTempWhich ||
+                    RES_POSTITFLD == nTempWhich ||
+                    RES_SCRIPTFLD == nTempWhich ||
+                    RES_AUTHORITY == nTempWhich )
+                    rSet.DisableItem( nWhich );
             }
             break;
             case FN_EXECUTE_MACROFIELD:
