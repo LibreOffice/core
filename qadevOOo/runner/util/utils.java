@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utils.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-11-18 16:18:58 $
+ *  last change:$Date: 2004-03-19 14:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@ import java.net.ServerSocket;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.Property;
+import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.ucb.XSimpleFileAccess;
@@ -86,6 +87,7 @@ import com.sun.star.uno.Type;
 
 //For database connection
 import java.sql.*;
+import java.util.Collections;
 
 public class utils {
 
@@ -515,5 +517,33 @@ public class utils {
         return null;
     }
 
+    /**
+     * Get an array of all property names from the property set. With the include
+     * and exclude parameters the properties can be filtered. <br>
+     * Set excludePropertyAttribute = 0 and includePropertyAttribute = 0
+     * to include all and exclude none.
+     * @param props The instance of XPropertySet
+     * @param includePropertyAttribute Properties without these attributes are filtered and will not be returned.
+     * @param excludePropertyAttribute Properties with these attributes are filtered and will not be returned.
+     * @return A String array with all property names.
+     * @see com.sun.star.beans.XPropertySet
+     * @see com.sun.star.beans.Property
+     * @see com.sun.star.beans.PropertyAttribute
+     */
+    public static String[] getFilteredPropertyNames(XPropertySet props, short includePropertyAttribute, short excludePropertyAttribute) {
+        Property[] the_props = props.getPropertySetInfo().getProperties();
+        ArrayList l = new ArrayList();
+        for (int i=0;i<the_props.length;i++) {
+            boolean exclude = ((the_props[i].Attributes & excludePropertyAttribute) != 0);
+            boolean include = (includePropertyAttribute == 0) || ((the_props[i].Attributes & includePropertyAttribute) != 0);
+            if (include && !exclude) {
+                l.add(the_props[i].Name);
+            }
+        }
+        Collections.sort(l);
+        String[] names = new String[l.size()];
+        names = (String[])l.toArray(names);
+        return names;
+    }
 
 }
