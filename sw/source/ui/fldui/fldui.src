@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:50:12 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1025,10 +1025,10 @@ String STR_SCRIPTFLD
     Text [ portuguese_brazilian ] = "Script" ;
     Text[ chinese_simplified ] = "½Ε±Ύ";
     Text[ russian ] = "Ρκπθος";
-    Text[ polish ] = "Script";
+    Text[ polish ] = "Skrypt";
     Text[ japanese ] = "½ΈΨΜίΔ";
     Text[ chinese_traditional ] = "©R¥O½Z";
-    Text[ arabic ] = "Script";
+    Text[ arabic ] = "δΥ ΘΡγΜν";
     Text[ greek ] = "Script";
     Text[ korean ] = "½ΊΕ©Έ³Ζ®";
     Text[ turkish ] = "Script";
@@ -1041,7 +1041,7 @@ String STR_AUTHORITY
     TEXT[ english_us ] = "Bibliography entry";
     TEXT[ portuguese ] = "Entrada bibliogrαfica";
     TEXT[ russian ] = "έλεμενς ροθρκΰ λθςεπΰςσπϋ";
-    TEXT[ greek ] = "Εγγραφή βιβλιογραφίας";
+    TEXT[ greek ] = "Καταχώριση βιβλιογραφίας";
     TEXT[ dutch ] = "Item voor literatuurlijst";
     TEXT[ french ] = "Entrιe de bibliographie";
     TEXT[ spanish ] = "Entrada bibliografνa";
@@ -2881,7 +2881,7 @@ String FMT_MARK_FRAME
     Text[ polish ] = "Ramka";
     Text[ japanese ] = "g";
     Text[ chinese_traditional ] = "¤ε¦r¤θ¶τ";
-    Text[ arabic ] = "ΕΨΗΡ";
+    Text[ arabic ] = "ίΗΟΡ";
     Text[ greek ] = "Περίγραμμα";
     Text[ korean ] = "ΕΨ½ΊΖ® »σΐΪ";
     Text[ turkish ] = "Ηerηeve";
@@ -3155,7 +3155,7 @@ String STR_PROMPT
     TEXT[ japanese ] = "QΖ(~R)";
     TEXT[ chinese_traditional ] = "΄£¥ά(~R)";
     TEXT[ arabic ] = "γαΗΝΩΙ";
-    TEXT[ greek ] = "Υπόδε~ιξη";
+    TEXT[ greek ] = "Συμβουλή";
     TEXT[ korean ] = "ΒόΑ¶(~R)";
     TEXT[ turkish ] = "Bilgi";
     TEXT[ language_user1 ] = " ";
