@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.16 2000-12-05 17:55:46 cl Exp $
+	$Id: office.mod,v 1.17 2000-12-07 14:56:21 ab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -54,6 +54,7 @@
 -->
 
 <!ELEMENT office:document ( office:meta?,
+							office:script?,
 							office:font-decls?,
 							office:styles?,
 							office:automatic-styles?,
@@ -62,6 +63,7 @@
 
 <!ATTLIST office:document xmlns:office	CDATA #FIXED "&nOffice;">
 <!ATTLIST office:document xmlns:meta	CDATA #FIXED "&nMeta;">
+<!ATTLIST office:document xmlns:script	CDATA #FIXED "&nScript;">
 <!ATTLIST office:document xmlns:style	CDATA #FIXED "&nStyle;">
 <!ATTLIST office:document xmlns:text	CDATA #FIXED "&nText;">
 <!ATTLIST office:document xmlns:table	CDATA #FIXED "&nTable;">
@@ -101,6 +103,10 @@
 				  meta:user-defined*,
 				  meta:document-statistic?)">
 <!ELEMENT office:meta %meta;>
+
+<!ENTITY % script	"(script:library-embedded |
+					  script:library-linked)*">
+<!ELEMENT office:script %script;>
 
 <!ELEMENT office:font-decls (style:font-decl)*>
 
