@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemholder2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:41:10 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 15:49:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include <syslocaleoptions.hxx>
 #include <undoopt.hxx>
 #include <useroptions.hxx>
+#include <tools/debug.hxx>
 
 //-----------------------------------------------
 // namespaces
@@ -89,12 +90,37 @@ namespace css = ::com::sun::star;
 ItemHolder2::ItemHolder2()
     : ItemHolderMutexBase()
 {
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-    css::uno::Reference< css::lang::XComponent > xCfg(
-        xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
-        css::uno::UNO_QUERY);
-    if (xCfg.is())
-        xCfg->addEventListener(static_cast< css::lang::XEventListener* >(this));
+    try
+    {
+        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+        css::uno::Reference< css::lang::XComponent > xCfg(
+            xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
+            css::uno::UNO_QUERY);
+        if (xCfg.is())
+            xCfg->addEventListener(static_cast< css::lang::XEventListener* >(this));
+    }
+// #i37892  got errorhandling from   ConfigManager::GetConfigurationProvider()
+    catch(css::uno::RuntimeException& rREx)
+    {
+        throw rREx;
+    }
+#ifdef DBG_UTIL
+    catch(css::uno::Exception& rEx)
+    {
+        static sal_Bool bMessage = sal_True;
+        if(bMessage)
+        {
+            bMessage = sal_False;
+            ::rtl::OString sMsg("CreateInstance with arguments exception: ");
+            sMsg += ::rtl::OString(rEx.Message.getStr(),
+                        rEx.Message.getLength(),
+                        RTL_TEXTENCODING_ASCII_US);
+            DBG_ERROR(sMsg.getStr());
+        }
+    }
+#else
+    catch(css::uno::Exception&){}
+#endif
 }
 
 //-----------------------------------------------
