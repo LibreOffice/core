@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdfilter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-13 12:05:19 $
+ *  last change: $Author: ka $ $Date: 2001-02-13 14:55:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 
 #ifndef MAC
 #ifndef SVX_LIGHT
-#include "../../ui/inc/docshell.hxx"
-#include "../../ui/inc/strings.hrc"
+#include "../ui/inc/docshell.hxx"
+#include "../ui/inc/strings.hrc"
 #endif //!SVX_LIGHT
 #else  //MAC
 #ifndef SVX_LIGHT
