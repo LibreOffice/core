@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pb $ $Date: 2002-07-04 12:01:26 $
+ *  last change: $Author: gt $ $Date: 2002-07-26 13:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #include "docfilt.hxx"
 #include "fcontnr.hxx"
 
+#ifndef _SVTOOLS_LOCALRESACCESS_HXX_
+#include <svtools/localresaccess.hxx>
+#endif
 #ifndef _SVT_DOC_ADDRESSTEMPLATE_HXX_
 #include <svtools/addresstemplate.hxx>
 #endif
@@ -148,6 +151,25 @@ public:
         GetpApp()->InsertAccel( pAccel );
     }
 };
+
+//=========================================================================
+
+
+inline void SfxOrganizeListBox_Impl::SetBitmaps(
+    const Image &rOFolder, const Image &rCFolder, const Image &rODoc, const Image &rCDoc,
+    const Image &rOFolderHC, const Image &rCFolderHC, const Image &rODocHC, const Image &rCDocHC )
+{
+    aOpenedFolderBmp = rOFolder;
+    aClosedFolderBmp = rCFolder;
+    aOpenedDocBmp = rODoc;
+    aClosedDocBmp = rCDoc;
+
+    aOpenedFolderBmpHC = rOFolderHC;
+    aClosedFolderBmpHC = rCFolderHC;
+    aOpenedDocBmpHC = rODocHC;
+    aClosedDocBmpHC = rCDocHC;
+
+}
 
 //=========================================================================
 
@@ -188,6 +210,7 @@ friend class SfxOrganizeListBox_Impl;
     sal_Bool                GetFactoryURL_Impl( String& rFactoryURL, String& rFileURL ) const;
     long                    Dispatch_Impl( USHORT nId );
     String                  GetPath_Impl( BOOL bOpen, const String& rFileName );
+    void                    InitBitmaps( void );
 
     DECL_LINK( GetFocus_Impl, SfxOrganizeListBox_Impl * );
     DECL_LINK( LeftListBoxSelect_Impl, ListBox * );
@@ -270,22 +293,7 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
         aLastDir = aObj.GetMainURL();
     }
 
-    // die Ordner-Bitmaps haben als Maskenfarbe rot
-    Color aMaskColor( 0xFF, 0x00, 0x00 );
-    Bitmap aBitmapOpenedFolder(SfxResId( BMP_OPENED_FOLDER ));
-    Image aOpenedFolderBmp( aBitmapOpenedFolder, aMaskColor );
-    Bitmap aBitmapClosedFolder(SfxResId(BMP_CLOSED_FOLDER));
-    Image aClosedFolderBmp( aBitmapClosedFolder, aMaskColor );
-    // die Dokumenten-Bitmaps haben keine Maskenfarbe
-    Bitmap aBitmapOpenedDoc(SfxResId(BMP_OPENED_DOC) );
-    Image aOpenedDocBmp( aBitmapOpenedDoc );
-    Bitmap aBitmapClosedDoc(SfxResId( BMP_CLOSED_DOC) );
-    Image aClosedDocBmp( aBitmapClosedDoc );
-
-    aLeftLb.SetBitmaps(aOpenedFolderBmp, aClosedFolderBmp,
-                       aOpenedDocBmp, aClosedDocBmp);
-    aRightLb.SetBitmaps(aOpenedFolderBmp, aClosedFolderBmp,
-                        aOpenedDocBmp, aClosedDocBmp);
+    InitBitmaps();
 
     aEditBtn.GetPopupMenu()->SetSelectHdl( LINK( this, SfxOrganizeDlg_Impl, MenuSelect_Impl ) );
     aEditBtn.GetPopupMenu()->SetActivateHdl( LINK( this, SfxOrganizeDlg_Impl, MenuActivate_Impl ) );
@@ -321,6 +329,7 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
     aRightLb.SetMgr(&aMgr);
     aLeftLb.Reset();
     aRightLb.Reset();//SetModel(aLeftLb.GetModel());
+
     aLeftLb.Show();
     aRightLb.Show();
     aLeftLb.EnableInplaceEditing(TRUE);
@@ -330,6 +339,26 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
     aLeftLb.SelectAll( FALSE );
     aRightLb.SelectAll( FALSE );
     aRightLb.GrabFocus();
+}
+
+//-------------------------------------------------------------------------
+
+void SfxOrganizeDlg_Impl::InitBitmaps( void )
+{
+    Image   aOpenedFolderBmp( SfxResId( IMG_OPENED_FOLDER ) );
+    Image   aClosedFolderBmp( SfxResId( IMG_CLOSED_FOLDER ) );
+    Image   aOpenedDocBmp( SfxResId( IMG_OPENED_DOC ) );
+    Image   aClosedDocBmp( SfxResId( IMG_CLOSED_DOC ) );
+
+    Image   aOpenedFolderBmpHC( SfxResId( IMG_OPENED_FOLDER_HC ) );
+    Image   aClosedFolderBmpHC( SfxResId( IMG_CLOSED_FOLDER_HC ) );
+    Image   aOpenedDocBmpHC( SfxResId( IMG_OPENED_DOC_HC ) );
+    Image   aClosedDocBmpHC( SfxResId( IMG_CLOSED_DOC_HC ) );
+
+    aLeftLb.SetBitmaps( aOpenedFolderBmp, aClosedFolderBmp, aOpenedDocBmp, aClosedDocBmp,
+                        aOpenedFolderBmpHC, aClosedFolderBmpHC, aOpenedDocBmpHC, aClosedDocBmpHC );
+    aRightLb.SetBitmaps( aOpenedFolderBmp, aClosedFolderBmp, aOpenedDocBmp, aClosedDocBmp,
+                        aOpenedFolderBmpHC, aClosedFolderBmpHC, aOpenedDocBmpHC, aClosedDocBmpHC );
 }
 
 //=========================================================================
@@ -1165,8 +1194,7 @@ void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
             USHORT i = (USHORT)GetModel()->GetRelPos(pEntry);
             const USHORT nEntryCount = pMgr->GetTemplates()->GetCount(i);
             for(USHORT j = 0; j < nEntryCount; ++j)
-                InsertEntry( pMgr->GetTemplates()->GetName( i, j ),
-                             aOpenedDocBmp, aClosedDocBmp, pEntry, TRUE );
+                InsertEntry( pMgr->GetTemplates()->GetName( i, j ), BMPTYPE_DOC, pEntry, TRUE );
         }
         else
         {
@@ -1185,10 +1213,14 @@ void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
                 for(USHORT i = 0; i < nCount; ++i)
                 {
                     BOOL bDeletable;
+                    // #101060#
+                    // !! NOT SOLVED YET:
+                    //  GetContent() only returns normal bitmaps and no HC ones. This hast to be extended to show
+                    //  HC-images for the doc contents!
                     aRef->GetContent(
                         aText, aClosedBmp, aOpenedBmp, bDeletable,
                         i, aPath[nDocLevel+1], aPath[nDocLevel+2]);
-                    SvLBoxEntry *pNew=InsertEntry(
+                    SvLBoxEntry *pNew = SvTreeListBox::InsertEntry(
                         aText, aOpenedBmp, aClosedBmp,
                         pEntry, bCanHaveChilds);
                     pNew->SetUserData(bDeletable ? &bDeletable : 0);
@@ -1283,6 +1315,44 @@ USHORT SfxOrganizeListBox_Impl::GetLevelCount_Impl(SvLBoxEntry* pParent) const
 
 //-------------------------------------------------------------------------
 
+SvLBoxEntry* SfxOrganizeListBox_Impl::InsertEntry( const XubString& rText, BMPTYPE eBmpType,
+    SvLBoxEntry* pParent, BOOL bChildsOnDemand, ULONG nPos, void* pUserData )
+{
+    SvLBoxEntry*    pEntry = NULL;
+    const Image*    pExp = NULL;
+    const Image*    pCol = NULL;
+    const Image*    pExpHC = NULL;
+    const Image*    pColHC = NULL;
+
+    switch( eBmpType )
+    {
+        case BMPTYPE_FOLDER:
+            pExp = &aOpenedFolderBmp;
+            pCol = &aClosedFolderBmp;
+            pExpHC = &aOpenedFolderBmpHC;
+            pColHC = &aClosedFolderBmpHC;
+            break;
+        default:
+            DBG_ERROR( "SfxOrganizeListBox_Impl::InsertEntry(): something forgotten?!" );
+
+        case BMPTYPE_DOC:
+            pExp = &aOpenedDocBmp;
+            pCol = &aClosedDocBmp;
+            pExpHC = &aOpenedDocBmpHC;
+            pColHC = &aClosedDocBmpHC;
+            break;
+    }
+
+    pEntry = SvTreeListBox::InsertEntry( rText, *pExp, *pCol, pParent, bChildsOnDemand, nPos, pUserData );
+
+    SetExpandedEntryBmp( pEntry, *pExpHC, BMP_COLOR_HIGHCONTRAST );
+    SetCollapsedEntryBmp( pEntry, *pColHC, BMP_COLOR_HIGHCONTRAST );
+
+    return pEntry;
+}
+
+//-------------------------------------------------------------------------
+
 SfxOrganizeListBox_Impl::SfxOrganizeListBox_Impl
 (
     SfxOrganizeDlg_Impl* pArgDlg,
@@ -1351,17 +1421,14 @@ void SfxOrganizeListBox_Impl::Reset()
     {
         const USHORT nCount = pMgr->GetTemplates()->GetRegionCount();
         for ( USHORT i = 0; i < nCount; ++i )
-        {
-            SvLBoxEntry* pEntry = InsertEntry( pMgr->GetTemplates()->GetFullRegionName(i),
-                                               aOpenedFolderBmp, aClosedFolderBmp, 0, TRUE );
-        }
+            InsertEntry( pMgr->GetTemplates()->GetFullRegionName(i), BMPTYPE_FOLDER, 0, TRUE );
     }
     else
     {
         const SfxObjectList& rList = pMgr->GetObjectList();
         const USHORT nCount = rList.Count();
         for ( USHORT i = 0; i < nCount; ++i )
-            InsertEntry( rList.GetBaseName(i), aOpenedDocBmp, aClosedDocBmp, 0, TRUE );
+            InsertEntry( rList.GetBaseName(i), BMPTYPE_DOC, 0, TRUE );
 
     }
     SetUpdateMode(TRUE);
@@ -1389,12 +1456,18 @@ const Image &SfxOrganizeListBox_Impl::GetClosedBmp(USHORT nLevel) const
 */
 
 {
-    switch(nLevel) {
-    case 0: return aClosedFolderBmp;
-    case 1: return aClosedDocBmp;
+    BOOL            bHC = GetBackground().GetColor().IsDark();
+    const Image*    pRet = NULL;
+
+    switch( nLevel )
+    {
+        default:    DBG_ERROR( "Bitmaps ueberindiziert" );
+
+        case 0:     pRet = bHC? &aClosedFolderBmpHC : &aClosedFolderBmp;        break;
+        case 1:     pRet = bHC? &aClosedDocBmpHC : &aClosedDocBmp;              break;
     }
-    DBG_ERROR("Bitmaps ueberindiziert");
-    return aClosedFolderBmp;
+
+    return *pRet;
 }
 
 //-------------------------------------------------------------------------
@@ -1417,15 +1490,19 @@ const Image &SfxOrganizeListBox_Impl::GetOpenedBmp(USHORT nLevel) const
 */
 
 {
-    switch(nLevel)
+    BOOL            bHC = GetBackground().GetColor().IsDark();
+    const Image*    pRet = NULL;
+
+    switch( nLevel )
     {
-      case 0:
-        return aOpenedFolderBmp;
-      case 1:
-        return aOpenedDocBmp;
+        case 0:     pRet = bHC? &aOpenedFolderBmpHC : &aOpenedFolderBmp;        break;
+        case 1:     pRet = bHC? &aOpenedDocBmpHC : &aOpenedDocBmp;              break;
+        default:
+                    pRet = bHC? &aClosedFolderBmpHC : &aClosedFolderBmp;        break;
+                    DBG_ERROR( "Bitmaps ueberindiziert" );
     }
-    DBG_ERROR("Bitmaps ueberindiziert");
-    return aClosedFolderBmp;
+
+    return *pRet;
 }
 
 //-------------------------------------------------------------------------
@@ -2166,5 +2243,4 @@ SfxTemplateOrganizeDlg::~SfxTemplateOrganizeDlg()
     delete pImp->pPrt;
     delete pImp;
 }
-
 

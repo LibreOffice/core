@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-29 20:22:48 $
+ *  last change: $Author: gt $ $Date: 2002-07-26 13:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,12 @@
 #include "doc.hrc"
 #include "docvor.hrc"
 #include "helpid.hrc"
- // pragma ----------------------------------------------------------------
+// pragma ----------------------------------------------------------------
 
- // DLG_ORGANIZE ----------------------------------------------------------
+// DLG_ORGANIZE ----------------------------------------------------------
+
+#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; }
+
 ModalDialog DLG_ORGANIZE
 {
     HelpId = SID_ORGANIZER ;
@@ -826,21 +829,45 @@ ModalDialog DLG_ORGANIZE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Comandos";
     };
-    Bitmap BMP_OPENED_FOLDER
+    Image IMG_OPENED_FOLDER
     {
-        File = "folderop.bmp" ;
+        MASKCOLOR ;
+        ImageBitmap = Bitmap { File = "folderop.bmp" ; } ;
     };
-    Bitmap BMP_CLOSED_FOLDER
+    Image IMG_CLOSED_FOLDER
     {
-        File = "foldercl.bmp" ;
+        MASKCOLOR ;
+        ImageBitmap = Bitmap { File = "foldercl.bmp" ; } ;
     };
-    Bitmap BMP_OPENED_DOC
+    Image IMG_OPENED_DOC
     {
-        File = "doccl.bmp" ;
+        MASKCOLOR ;
+        ImageBitmap = Bitmap { File = "doccl.bmp" ; } ;
     };
-    Bitmap BMP_CLOSED_DOC
+    Image IMG_CLOSED_DOC
     {
-        File = "doccl.bmp" ;
+        MASKCOLOR ;
+        ImageBitmap = Bitmap { File = "doccl.bmp" ; } ;
+    };
+    Image IMG_OPENED_FOLDER_HC
+    {
+        MASKCOLOR ;
+        ImageBitmap = Bitmap { File = "folderop_h.bmp" ; } ;
+    };
+    Image IMG_CLOSED_FOLDER_HC
+    {
+        MASKCOLOR ;
+        ImageBitmap = Bitmap { File = "foldercl_h.bmp" ; } ;
+    };
+    Image IMG_OPENED_DOC_HC
+    {
+        MASKCOLOR ;
+        ImageBitmap = Bitmap { File = "doccl_h.bmp" ; } ;
+    };
+    Image IMG_CLOSED_DOC_HC
+    {
+        MASKCOLOR ;
+        ImageBitmap = Bitmap { File = "doccl_h.bmp" ; } ;
     };
     /*    FixedText FT_DEFAULT_TEMPLATE_LABEL
     {
@@ -878,17 +905,4 @@ ModalDialog DLG_ORGANIZE
     Text[ catalan ] = "Administrar plantillas";
 };
  // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
 
