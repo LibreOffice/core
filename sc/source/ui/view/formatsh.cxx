@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-04 12:02:37 $
+ *  last change: $Author: nn $ $Date: 2002-07-04 17:43:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1398,14 +1398,20 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     if ( pNewAttrs->GetItemState( ATTR_BORDER, TRUE, &pItem )
                          == SFX_ITEM_SET )
                     {
+                        //  #100959# The SvxFrameToolBoxControl toolbox controller uses a default
+                        //  SvxBorderLine (all widths 0) to mark the lines that should be set.
+                        //  Macro recording uses a SvxBoxItem with the real values (OutWidth > 0)
+                        //  or NULL pointers for no lines.
+                        //  -> Substitute existing lines with pDefLine only if widths are 0.
+
                         SvxBoxItem aBoxItem ( *(const SvxBoxItem*)pItem );
-                        if ( aBoxItem.GetTop() )
+                        if ( aBoxItem.GetTop() && aBoxItem.GetTop()->GetOutWidth() == 0 )
                             aBoxItem.SetLine( pDefLine, BOX_LINE_TOP );
-                        if ( aBoxItem.GetBottom() )
+                        if ( aBoxItem.GetBottom() && aBoxItem.GetBottom()->GetOutWidth() == 0 )
                             aBoxItem.SetLine( pDefLine, BOX_LINE_BOTTOM );
-                        if ( aBoxItem.GetLeft() )
+                        if ( aBoxItem.GetLeft() && aBoxItem.GetLeft()->GetOutWidth() == 0 )
                             aBoxItem.SetLine( pDefLine, BOX_LINE_LEFT );
-                        if ( aBoxItem.GetRight() )
+                        if ( aBoxItem.GetRight() && aBoxItem.GetRight()->GetOutWidth() == 0 )
                             aBoxItem.SetLine( pDefLine, BOX_LINE_RIGHT );
                         pNewSet->Put( aBoxItem );
                     }
@@ -1414,9 +1420,9 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                          == SFX_ITEM_SET )
                     {
                         SvxBoxInfoItem aBoxInfoItem( *(const SvxBoxInfoItem*)pItem );
-                        if ( aBoxInfoItem.GetHori() )
+                        if ( aBoxInfoItem.GetHori() && aBoxInfoItem.GetHori()->GetOutWidth() == 0 )
                             aBoxInfoItem.SetLine( pDefLine, BOXINFO_LINE_HORI );
-                        if ( aBoxInfoItem.GetVert() )
+                        if ( aBoxInfoItem.GetVert() && aBoxInfoItem.GetVert()->GetOutWidth() == 0 )
                             aBoxInfoItem.SetLine( pDefLine, BOXINFO_LINE_VERT );
                         pNewSet->Put( aBoxInfoItem );
                     }
