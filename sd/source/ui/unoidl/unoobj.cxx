@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-01 17:28:49 $
+ *  last change: $Author: cl $ $Date: 2001-03-14 16:29:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,13 @@
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
 #endif
+#ifndef _SVTOOLS_UNOIMAP_HXX
+#include <svtools/unoimap.hxx>
+#endif
+#ifndef _SVTOOLS_UNOEVENT_HXX_
+#include <svtools/unoevent.hxx>
+#endif
+
 #ifndef _SFX_BINDINGS_HXX
 #include <sfx2/bindings.hxx>
 #endif
@@ -142,6 +149,7 @@
 #include "glob.hxx"
 #include "glob.hrc"
 #include "unolayer.hxx"
+#include "imapinfo.hxx"
 
 #ifndef SEQTYPE
  #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
@@ -171,6 +179,7 @@ using namespace ::com::sun::star;
 #define WID_PRESORDER       14
 #define WID_STYLE           15
 #define WID_ANIMPATH        16
+#define WID_IMAGEMAP        17
 
 #define WID_ISEMPTYPRESOBJ  20
 #define WID_ISPRESOBJ       21
@@ -178,11 +187,12 @@ using namespace ::com::sun::star;
 
 #define WID_THAT_NEED_ANIMINFO 19
 
-const SfxItemPropertyMap* ImplGetShapePropertyMap( sal_Bool bImpress )
+const SfxItemPropertyMap* ImplGetShapePropertyMap( sal_Bool bImpress, sal_Bool bGraphicObj )
 {
     // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static const SfxItemPropertyMap aImpress_SdXShapePropertyMap_Impl[] =
     {
+        { MAP_CHAR_LEN("ImageMap"),             WID_IMAGEMAP,        &::getCppuType((const uno::Reference< container::XIndexContainer >*)0),    0, 0 },
         { MAP_CHAR_LEN(UNO_NAME_OBJ_ANIMATIONPATH), WID_ANIMPATH,        &ITYPE(drawing::XShape),                                   0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_BOOKMARK),      WID_BOOKMARK,        &::getCppuType((const OUString*)0),                        0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_DIMCOLOR),      WID_DIMCOLOR,        &::getCppuType((const sal_Int32*)0),                       0, 0},
@@ -207,6 +217,7 @@ const SfxItemPropertyMap* ImplGetShapePropertyMap( sal_Bool bImpress )
 
     static const SfxItemPropertyMap aDraw_SdXShapePropertyMap_Impl[] =
     {
+        { MAP_CHAR_LEN("ImageMap"),             WID_IMAGEMAP,        &ITYPE(container::XIndexContainer),    0, 0 },
         { MAP_CHAR_LEN(UNO_NAME_OBJ_BOOKMARK),      WID_BOOKMARK,       &::getCppuType((const OUString*)0),                 0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_CLICKACTION),   WID_CLICKACTION,    &::getCppuType((const presentation::ClickAction*)0),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_STYLE),         WID_STYLE,          &ITYPE(style::XStyle),                              ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
@@ -214,15 +225,28 @@ const SfxItemPropertyMap* ImplGetShapePropertyMap( sal_Bool bImpress )
     };
 
     if( bImpress )
-        return aImpress_SdXShapePropertyMap_Impl;
+        return &aImpress_SdXShapePropertyMap_Impl[ bGraphicObj ? 0 : 1 ];
     else
-        return aDraw_SdXShapePropertyMap_Impl;
+        return &aDraw_SdXShapePropertyMap_Impl[ bGraphicObj ? 0 : 1 ];
 }
 
 SfxItemPropertyMap aEmpty_SdXShapePropertyMap_Impl[] =
 {
     { 0,0,0,0,0}
 };
+
+
+const SvEventDescription* ImplGetSupportedMacroItems()
+{
+    static const SvEventDescription aMacroDescriptionsImpl[] =
+    {
+        { SFX_EVENT_MOUSEOVER_OBJECT, "OnMouseOver" },
+        { SFX_EVENT_MOUSEOUT_OBJECT, "OnMouseOut" },
+        { 0, NULL }
+    };
+
+    return aMacroDescriptionsImpl;
+}
 
 /*************************************************************************
 |*
@@ -248,8 +272,12 @@ SdXShape::SdXShape() throw()
 }
 
 SdXShape::SdXShape(uno::Reference< drawing::XShape > & xShape, SdXImpressDocument* pModel) throw()
-:   maPropSet( pModel?ImplGetShapePropertyMap(pModel->IsImpressDocument()):aEmpty_SdXShapePropertyMap_Impl),
-    mpMap( pModel?ImplGetShapePropertyMap(pModel->IsImpressDocument()):aEmpty_SdXShapePropertyMap_Impl),
+:   maPropSet( pModel?
+                    ImplGetShapePropertyMap(pModel->IsImpressDocument(), xShape->getShapeType().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_Service_GraphicObjectShape)))
+                :   aEmpty_SdXShapePropertyMap_Impl ),
+    mpMap( pModel?
+                    ImplGetShapePropertyMap(pModel->IsImpressDocument(), xShape->getShapeType().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_Service_GraphicObjectShape)))
+                :   aEmpty_SdXShapePropertyMap_Impl ),
     mpModel(pModel)
 {
     m_refCount++;
@@ -505,126 +533,155 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
 
     const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(aPropertyName);
 
-    if( pMap && GetSdrObject() )
+    if( pMap )
     {
-        SdAnimationInfo* pInfo = GetAnimationInfo((pMap->nWID <= WID_THAT_NEED_ANIMINFO)?sal_True:sal_False);
-
-        switch(pMap->nWID)
+        SdrObject* pObj = GetSdrObject();
+        if( pObj )
         {
-        case WID_EFFECT:
-            ::cppu::any2enum< presentation::AnimationEffect >( pInfo->eEffect, aValue );
-            break;
-        case WID_TEXTEFFECT:
-            ::cppu::any2enum< presentation::AnimationEffect >( pInfo->eTextEffect, aValue);
-            break;
-        case WID_SPEED:
-            ::cppu::any2enum< presentation::AnimationSpeed >( pInfo->eSpeed, aValue);
-            break;
-        case WID_BOOKMARK:
-        {
-            OUString aString;
-            if(!(aValue >>= aString))
-                throw lang::IllegalArgumentException();
+            SdAnimationInfo* pInfo = GetAnimationInfo((pMap->nWID <= WID_THAT_NEED_ANIMINFO)?sal_True:sal_False);
 
-            pInfo->aBookmark = aString;
-            break;
-        }
-        case WID_CLICKACTION:
-            ::cppu::any2enum< presentation::ClickAction >( pInfo->eClickAction, aValue);
-            break;
-        case WID_PLAYFULL:
-            pInfo->bPlayFull = ::cppu::any2bool(aValue);
-            break;
-        case WID_SOUNDFILE:
-        {
-            OUString aString;
-            if(!(aValue >>= aString))
-                throw lang::IllegalArgumentException();
-            pInfo->aSoundFile = aString;
-            break;
-        }
-        case WID_SOUNDON:
-            pInfo->bSoundOn = ::cppu::any2bool(aValue);
-            break;
-        case WID_BLUESCREEN:
-        {
-            sal_Int32 nColor;
-            if(!(aValue >>= nColor))
-                throw lang::IllegalArgumentException();
-
-            pInfo->aBlueScreen.SetColor( nColor );
-            break;
-        }
-        case WID_VERB:
-        {
-            sal_Int32 nVerb;
-            if(!(aValue >>= nVerb))
-                throw lang::IllegalArgumentException();
-
-            pInfo->nVerb = (USHORT)nVerb;
-            break;
-        }
-        case WID_DIMCOLOR:
-        {
-            sal_Int32 nColor;
-            if(!(aValue >>= nColor))
-                throw lang::IllegalArgumentException();
-
-            pInfo->aDimColor.SetColor( (ColorData) nColor );
-            break;
-        }
-        case WID_DIMHIDE:
-            pInfo->bDimHide = ::cppu::any2bool(aValue);
-            break;
-        case WID_DIMPREV:
-            pInfo->bDimPrevious = ::cppu::any2bool(aValue);
-            break;
-        case WID_PRESORDER:
-        {
-            sal_Int32 nPos;
-            if(!(aValue >>= nPos))
-                throw lang::IllegalArgumentException();
-
-            SetPresentationOrderPos( nPos );
-            break;
-        }
-        case WID_STYLE:
-            SetStyleSheet( aValue );
-            break;
-        case WID_ISEMPTYPRESOBJ:
-            SetEmptyPresObj( ::cppu::any2bool(aValue) );
-            break;
-        case WID_MASTERDEPEND:
-            SetMasterDepend( ::cppu::any2bool(aValue) );
-            break;
-        case WID_ANIMPATH:
-        {
-            uno::Reference< drawing::XShape > xShape;
-            aValue >>= xShape;
-
-            SdrObject* pObj = NULL;
-            if(xShape.is())
-                pObj = GetSdrObjectFromXShape( xShape );
-
-            if( pObj == NULL || !pObj->ISA( SdrPathObj ) )
-                throw lang::IllegalArgumentException();
-
-            pInfo->pPathObj = (SdrPathObj*)pObj;
-
-            SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
-            if( pDoc )
+            switch(pMap->nWID)
             {
-                pInfo = pDoc->GetAnimationInfo(pObj);
-                if( pInfo == NULL )
+                case WID_EFFECT:
+                    ::cppu::any2enum< presentation::AnimationEffect >( pInfo->eEffect, aValue );
+                    break;
+                case WID_TEXTEFFECT:
+                    ::cppu::any2enum< presentation::AnimationEffect >( pInfo->eTextEffect, aValue);
+                    break;
+                case WID_SPEED:
+                    ::cppu::any2enum< presentation::AnimationSpeed >( pInfo->eSpeed, aValue);
+                    break;
+                case WID_BOOKMARK:
                 {
-                    pInfo = new SdAnimationInfo(pDoc);
-                    pObj->InsertUserData( pInfo );
-                }
-                pInfo->bInvisibleInPresentation = sal_True;
-            }
+                    OUString aString;
+                    if(!(aValue >>= aString))
+                        throw lang::IllegalArgumentException();
 
-            break;
-        }
+                    pInfo->aBookmark = aString;
+                    break;
+                }
+                case WID_CLICKACTION:
+                    ::cppu::any2enum< presentation::ClickAction >( pInfo->eClickAction, aValue);
+                    break;
+                case WID_PLAYFULL:
+                    pInfo->bPlayFull = ::cppu::any2bool(aValue);
+                    break;
+                case WID_SOUNDFILE:
+                {
+                    OUString aString;
+                    if(!(aValue >>= aString))
+                        throw lang::IllegalArgumentException();
+                    pInfo->aSoundFile = aString;
+                    break;
+                }
+                case WID_SOUNDON:
+                    pInfo->bSoundOn = ::cppu::any2bool(aValue);
+                    break;
+                case WID_BLUESCREEN:
+                {
+                    sal_Int32 nColor;
+                    if(!(aValue >>= nColor))
+                        throw lang::IllegalArgumentException();
+
+                    pInfo->aBlueScreen.SetColor( nColor );
+                    break;
+                }
+                case WID_VERB:
+                {
+                    sal_Int32 nVerb;
+                    if(!(aValue >>= nVerb))
+                        throw lang::IllegalArgumentException();
+
+                    pInfo->nVerb = (USHORT)nVerb;
+                    break;
+                }
+                case WID_DIMCOLOR:
+                {
+                    sal_Int32 nColor;
+                    if(!(aValue >>= nColor))
+                        throw lang::IllegalArgumentException();
+
+                    pInfo->aDimColor.SetColor( (ColorData) nColor );
+                    break;
+                }
+                case WID_DIMHIDE:
+                    pInfo->bDimHide = ::cppu::any2bool(aValue);
+                    break;
+                case WID_DIMPREV:
+                    pInfo->bDimPrevious = ::cppu::any2bool(aValue);
+                    break;
+                case WID_PRESORDER:
+                {
+                    sal_Int32 nPos;
+                    if(!(aValue >>= nPos))
+                        throw lang::IllegalArgumentException();
+
+                    SetPresentationOrderPos( nPos );
+                    break;
+                }
+                case WID_STYLE:
+                    SetStyleSheet( aValue );
+                    break;
+                case WID_ISEMPTYPRESOBJ:
+                    SetEmptyPresObj( ::cppu::any2bool(aValue) );
+                    break;
+                case WID_MASTERDEPEND:
+                    SetMasterDepend( ::cppu::any2bool(aValue) );
+                    break;
+                case WID_ANIMPATH:
+                {
+                    uno::Reference< drawing::XShape > xShape;
+                    aValue >>= xShape;
+
+                    SdrObject* pObj = NULL;
+                    if(xShape.is())
+                        pObj = GetSdrObjectFromXShape( xShape );
+
+                    if( pObj == NULL || !pObj->ISA( SdrPathObj ) )
+                        throw lang::IllegalArgumentException();
+
+                    pInfo->pPathObj = (SdrPathObj*)pObj;
+
+                    SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
+                    if( pDoc )
+                    {
+                        pInfo = pDoc->GetAnimationInfo(pObj);
+                        if( pInfo == NULL )
+                        {
+                            pInfo = new SdAnimationInfo(pDoc);
+                            pObj->InsertUserData( pInfo );
+                        }
+                        pInfo->bInvisibleInPresentation = sal_True;
+                    }
+
+                    break;
+                }
+                case WID_IMAGEMAP:
+                {
+                    SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
+                    if( pDoc )
+                    {
+                        ImageMap aImageMap;
+                        uno::Reference< uno::XInterface > xImageMap;
+                        aValue >>= xImageMap;
+
+                        if( !xImageMap.is() || !SvUnoImageMap_fillImageMap( xImageMap, aImageMap ) )
+                            throw lang::IllegalArgumentException();
+
+                        SdIMapInfo* pIMapInfo = pDoc->GetIMapInfo(pObj);
+                        if( pIMapInfo )
+                        {
+                            // replace existing image map
+                            pIMapInfo->SetImageMap( aImageMap );
+                        }
+                        else
+                        {
+                            // insert new user data with image map
+                            pObj->InsertUserData(new SdIMapInfo(aImageMap) );
+                        }
+                    }
+                }
+            }
         }
     }
     else
@@ -736,6 +793,29 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             if( pInfo && pInfo->pPathObj )
                 aRet <<= pInfo->pPathObj->getUnoShape();
             break;
+        case WID_IMAGEMAP:
+            {
+                uno::Reference< uno::XInterface > xImageMap;
+
+                SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
+                if( pDoc )
+                {
+
+                    SdIMapInfo* pIMapInfo = pDoc->GetIMapInfo(GetSdrObject());
+                    if( pIMapInfo )
+                    {
+                        const ImageMap& rIMap = pIMapInfo->GetImageMap();
+                        xImageMap = SvUnoImageMap_createInstance( rIMap, ImplGetSupportedMacroItems() );
+                    }
+                    else
+                    {
+                        xImageMap = SvUnoImageMap_createInstance(ImplGetSupportedMacroItems() );
+                    }
+                }
+
+                aRet <<= uno::Reference< container::XIndexContainer >::query( xImageMap );
+                break;
+            }
         }
     }
     else
