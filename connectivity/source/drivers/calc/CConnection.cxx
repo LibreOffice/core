@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CConnection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-29 19:22:44 $
+ *  last change: $Author: nn $ $Date: 2001-03-06 17:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,11 @@ void OCalcConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
         aFileName = aPathOptions.SubstituteVariable(aFileName);
     }
     aURL.SetSmartURL(aFileName);
+    if ( aURL.GetProtocol() == INET_PROT_NOT_VALID )
+    {
+        //  don't pass invalid URL to loadComponentFromURL
+        throw SQLException();
+    }
     aFileName = aURL.GetMainURL();
 
     Reference< XComponentLoader > xDesktop( getDriver()->getFactory()->createInstance(
