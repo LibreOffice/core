@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2000-12-06 11:10:19 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 12:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,12 @@ typedef struct _sal_Sequence
 #define SAL_STATIC_CAST(type, expr) ((type) (expr))
 #endif /* SAL_W32, SOLARIS, LINUX */
 #endif /* __cplusplus */
+
+#ifdef __cplusplus
+#define SAL_THROW throw
+#else
+#define SAL_THROW()
+#endif
 
 #ifdef __cplusplus
 }
