@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-11 14:11:21 $
+ *  last change: $Author: lo $ $Date: 2002-10-11 14:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ const char  *OfficeIPCThread::sc_aTerminationSequence = "InternalIPC::TerminateT
 const int OfficeIPCThread::sc_nTSeqLength = 28;
 const char  *OfficeIPCThread::sc_aShowSequence = "-show";
 const int OfficeIPCThread::sc_nShSeqLength = 5;
-const char  *OfficeIPCThread::sc_aConfirmationSequence = "InternalIPC::ProcessingDone";;
+const char  *OfficeIPCThread::sc_aConfirmationSequence = "InternalIPC::ProcessingDone";
 const int OfficeIPCThread::sc_nCSeqLength = 27;
 
 
