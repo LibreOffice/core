@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:13:34 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 12:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1555,7 +1555,7 @@ void SAL_CALL SwAccessibleTable::clearAccessibleSelection(  )
     }
 }
 
-void SAL_CALL SwAccessibleTable::selectAllAccessible(  )
+void SAL_CALL SwAccessibleTable::selectAllAccessibleChildren(  )
     throw ( RuntimeException )
 {
     // first clear selection, then select first and last child
