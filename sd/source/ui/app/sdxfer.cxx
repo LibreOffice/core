@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 11:54:28 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:37:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -730,7 +730,9 @@ void SdTransferable::SetPageBookmarks( const List& rPageBookmarks, BOOL bPersist
         if( pSdViewIntern )
             pSdViewIntern->HideAllPages();
 
-        pSdDrawDocument->Clear();
+        // #116168#
+        pSdDrawDocument->ClearModel(sal_False);
+
         pPageDocShell = NULL;
 
         for( void* p = aPageBookmarks.First(); p; p = aPageBookmarks.Next() )
