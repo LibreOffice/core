@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unload.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-06-15 10:14:08 $
+ *  last change: $Author: jl $ $Date: 2001-06-22 13:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,7 @@ typedef struct _rtl_ModuleCount
 
 
 #define MODULE_COUNT_INIT \
-{ {rtl_moduleCount_acquire,rtl_moduleCount_release}, rtl_moduleCount_canUnload, 0, {0, 0}};
+{ {rtl_moduleCount_acquire,rtl_moduleCount_release}, rtl_moduleCount_canUnload, 0, {0, 0}}
 
 /**
 This struct can be used to implement the unloading mechanism. To make a UNO library
