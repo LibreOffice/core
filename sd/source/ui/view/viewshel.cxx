@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-28 16:27:09 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1146,7 +1146,21 @@ SfxUndoManager* ViewShell::ImpGetUndoManager (void) const
     if (pObjectBar != NULL)
         return pObjectBar->GetUndoManager();
     else
-        return NULL;
+    {
+        //#i39635# this state occurs e.g. initially with the left slide sorter pane
+        SfxViewFrame* pViewFrame = GetViewFrame();
+        if(pViewFrame)
+        {
+            SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
+            if(pDispatcher)
+            {
+                SfxShell* pShell = pDispatcher->GetShell(0);
+                if(pShell)
+                    return pShell->GetUndoManager();
+            }
+        }
+    }
+    return NULL;
 }
 
 
