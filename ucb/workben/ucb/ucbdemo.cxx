@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbdemo.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-16 11:15:29 $
+ *  last change: $Author: sb $ $Date: 2000-12-04 17:39:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,10 @@
 #endif
 #ifndef _COM_SUN_STAR_BRIDGE_XUNOURLRESOLVER_HPP_
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
+#endif
+
+#ifndef _COMPHELPER_REGPATHHELPER_HXX_
+#include <comphelper/regpathhelper.hxx>
 #endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_
@@ -2584,21 +2588,13 @@ void MyApp::Main()
     // Initialize local Service Manager and basic services.
     //////////////////////////////////////////////////////////////////////
 
-    OStartupInfo aInfo;
-    OUString aExeName;
-    if ( aInfo.getExecutableFile( aExeName ) != OStartupInfo::E_None )
-    {
-        DBG_ERROR( "Error getting Executable file name!" );
-        return;
-    }
-
-    OUString aRegFile( aExeName.copy( 0, aExeName.lastIndexOf( '/' ) + 1 ) );
-    aRegFile += OUString::createFromAscii( "applicat.rdb" );
-
     Reference< XMultiServiceFactory > xFac;
     try
     {
-        xFac = cppu::createRegistryServiceFactory( aRegFile, aRegFile );
+        xFac = cppu::createRegistryServiceFactory(
+                            comphelper::getPathToSystemRegistry(),
+                            rtl::OUString(),
+                            true);
     }
     catch ( com::sun::star::uno::Exception )
     {
