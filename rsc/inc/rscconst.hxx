@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscconst.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:23:55 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,22 +79,22 @@ class RscConst : public RscTop
 {
 protected:
     struct VarEle {
-        HASHID  nId;    // Name der Konstante
+        Atom    nId;    // Name der Konstante
         INT32   lValue; // Wert der Konstante
     };
     VarEle *    pVarArray;  // Zeiger auf das Feld mit Konstanten
-    USHORT      nEntries;   // Anzahle der Eintraege im Feld
+    sal_uInt32      nEntries;   // Anzahle der Eintraege im Feld
 public:
-                    RscConst( HASHID nId, USHORT nTypId );
+                    RscConst( Atom nId, sal_uInt32 nTypId );
                     ~RscConst();
     virtual RSCCLASS_TYPE   GetClassType() const;
-    USHORT          GetEntryCount() const { return nEntries; }
+    sal_uInt32          GetEntryCount() const { return nEntries; }
                     // Die erlaubten Werte werden gesetzt
-    ERRTYPE         SetConstant( HASHID nVarName, INT32 lValue );
-    HASHID          GetConstant( USHORT nPos );
-    BOOL            GetConstValue( HASHID nConstId, INT32 * pVal ) const;
-    BOOL            GetValueConst( INT32 nValue, HASHID  * pConstId ) const;
-    USHORT          GetConstPos( HASHID nConstId );
+    ERRTYPE         SetConstant( Atom nVarName, INT32 lValue );
+    Atom            GetConstant( sal_uInt32 nPos );
+    BOOL            GetConstValue( Atom nConstId, INT32 * pVal ) const;
+    BOOL            GetValueConst( INT32 nValue, Atom  * pConstId ) const;
+    sal_uInt32          GetConstPos( Atom nConstId );
     virtual void    WriteSyntax( FILE * fOutput, RscTypCont * pTC );
     virtual void    WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
@@ -103,15 +103,14 @@ public:
 /******************* R s c E n u m ***************************************/
 class RscEnum : public RscConst {
     struct RscEnumInst {
-        USHORT  nValue; // Position der Konstanten im Array
+        sal_uInt32  nValue; // Position der Konstanten im Array
         BOOL    bDflt;  // Ist Default
     };
-    USHORT          nSize;
-    BOOL            bUSHORT;
+    sal_uInt32          nSize;
 public:
-                    RscEnum( HASHID nId, USHORT nTypId, BOOL bUSHORT = TRUE );
+                    RscEnum( Atom nId, sal_uInt32 nTypId );
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, BOOL );
-    USHORT          Size(){ return nSize; }
+    sal_uInt32          Size(){ return nSize; }
 
     virtual void    SetToDefault( const RSCINST & rInst )
                     {
@@ -124,20 +123,20 @@ public:
                     // Als Default setzen
     BOOL            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
 
-    ERRTYPE         SetConst( const RSCINST & rInst, HASHID nValueId,
+    ERRTYPE         SetConst( const RSCINST & rInst, Atom nValueId,
                               INT32 nValue );
     ERRTYPE         SetNumber( const RSCINST & rInst, INT32 nValue );
-    ERRTYPE         GetConst( const RSCINST & rInst, HASHID * );
+    ERRTYPE         GetConst( const RSCINST & rInst, Atom * );
     ERRTYPE         GetNumber( const RSCINST & rInst, INT32 * nValue );
     void            WriteSrc( const RSCINST &rInst, FILE * fOutput,
-                              RscTypCont * pTC, USHORT nTab, const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, USHORT, BOOL bExtra );
+                             RscTypCont * pTC, sal_uInt32, BOOL bExtra );
 };
 
 class RscNameTable;
 
-USHORT GetLangId( const ByteString& alang);
+sal_uInt32 GetLangId( const ByteString& alang);
 
 class RscLangEnum : public RscEnum
 {
