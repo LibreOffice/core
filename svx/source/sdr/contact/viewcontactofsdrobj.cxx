@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrobj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 16:31:24 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,34 +157,11 @@ static sal_Bool bTestTheBitmapBufferedObjects(sal_False);
         // ObjectContact. Always needs to return something.
         ViewObjectContact& ViewContactOfSdrObj::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
         {
-            ViewObjectContact* pRetval = 0L;
-
-            // #114233#
-            if(GetSdrObject().ISA(SdrOle2Obj))
-            {
-                // Always buffer OLE2 objects, this needs to be moved to a
-                // ViewContactOfOLE2Obj later
-                pRetval = new VOCBitmapExBuffer(rObjectContact, *this);
-            }
-            else
-            {
-#ifdef DBG_UTIL
-                if(bTestTheBitmapBufferedObjects)
-                {
-                    pRetval = new VOCBitmapExBuffer(rObjectContact, *this);
-                }
-                else
-                {
-#endif // DBG_UTIL
-                    // standard
-                    pRetval = &ViewContact::CreateObjectSpecificViewObjectContact(rObjectContact);
-#ifdef DBG_UTIL
-                }
-#endif // DBG_UTIL
-            }
-
-            DBG_ASSERT(pRetval, "ViewContactOfSdrObj::CreateObjectSpecificViewObjectContact() failed (!)");
-            return *pRetval;
+            // #i42323#
+            // The reason for #114233# is gone, so i remove it again
+            ViewObjectContact& rRetval = ViewContact::CreateObjectSpecificViewObjectContact(rObjectContact);
+            DBG_ASSERT(&rRetval, "ViewContactOfSdrObj::CreateObjectSpecificViewObjectContact() failed (!)");
+            return rRetval;
         }
 
         // method to recalculate the PaintRectangle if the validity flag shows that
