@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:07:52 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
 #endif
+#ifndef _SVX_LRSPITEM_HXX //autogen
+#include <svx/lrspitem.hxx>
+#endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
@@ -175,9 +178,15 @@ void SwSectionFrm::Init()
     SWRECTFN( this )
     long nWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
     (Frm().*fnRect->fnSetWidth)( nWidth );
-    (Prt().*fnRect->fnSetWidth)( nWidth );
     (Frm().*fnRect->fnSetHeight)( 0 );
+
+    // #109700# LRSpace for sections
+    const SvxLRSpaceItem& rLRSpace = GetFmt()->GetLRSpace();
+    (Prt().*fnRect->fnSetLeft)( rLRSpace.GetLeft() );
+    (Prt().*fnRect->fnSetWidth)( nWidth - rLRSpace.GetLeft() -
+                                 rLRSpace.GetRight() );
     (Prt().*fnRect->fnSetHeight)( 0 );
+
     const SwFmtCol &rCol = GetFmt()->GetCol();
     if( ( rCol.GetNumCols() > 1 || IsAnyNoteAtEnd() ) && !IsInFtn() )
     {
@@ -1189,7 +1198,11 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         PROTOCOL( this, PROT_PRTAREA, 0, 0 )
         bValidPrtArea = TRUE;
         SwTwips nUpper = CalcUpperSpace();
-        (this->*fnRect->fnSetXMargins)( 0, 0 );
+
+        // #109700# LRSpace for sections
+        const SvxLRSpaceItem& rLRSpace = GetFmt()->GetLRSpace();
+        (this->*fnRect->fnSetXMargins)( rLRSpace.GetLeft(), rLRSpace.GetRight() );
+
         if( nUpper != (this->*fnRect->fnGetTopMargin)() )
         {
             bValidSize = FALSE;
@@ -1226,7 +1239,12 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         {
             long nWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
             (aFrm.*fnRect->fnSetWidth)( nWidth );
-            (aPrt.*fnRect->fnSetWidth)( nWidth );
+
+            // #109700# LRSpace for sections
+            const SvxLRSpaceItem& rLRSpace = GetFmt()->GetLRSpace();
+            (aPrt.*fnRect->fnSetWidth)( nWidth - rLRSpace.GetLeft() -
+                                        rLRSpace.GetRight() );
+
             /// OD 15.10.2002 #103517# - allow grow in online layout
             /// Thus, set <..IsBrowseMode()> as parameter <bGrow> on calling
             /// method <_CheckClipping(..)>.
