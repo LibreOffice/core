@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dscene.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-15 13:04:49 $
+ *  last change: $Author: aw $ $Date: 2001-08-16 13:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,13 @@ void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
         OUString sValue = xAttrList->getValueByIndex( i );
         processSceneAttribute( nPrefix, aLocalName, sValue );
+    }
+
+    // #91047# call parent function is missing here, added it
+    if(mxShape.is())
+    {
+        // call parent
+        SdXMLShapeContext::StartElement(xAttrList);
     }
 }
 
