@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:02:17 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 14:22:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,8 @@ class AcceptorMap : public std::map< OUString, Reference<XInitialization> > {};
 struct ConvertData;
 class Desktop : public Application
 {
+    friend class UserInstall;
+
     public:
         enum BootstrapError
         {
@@ -212,6 +214,7 @@ class Desktop : public Application
 
         sal_Bool                        m_bMinimized;
         sal_Bool                        m_bInvisible;
+        bool                            m_bServicesRegistered;
         USHORT                          m_nAppEvents;
         IntroWindow_Impl*               m_pIntro;
         BootstrapError                  m_aBootstrapError;
