@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:35:26 $
+ *  last change: $Author: kz $ $Date: 2001-08-06 08:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
     Text [ dutch ] = "~Bereik" ; \
     Text [ english_us ] = "~Section" ; \
     Text [ italian ] = "~Sezione" ; \
-    Text [ spanish ] = "Ar~ea" ; \
+    Text [ spanish ] = "Ár~ea" ; \
     Text [ french ] = "~Section" ; \
     Text [ swedish ] = "~Område" ; \
     Text [ danish ] = "Område" ; \
@@ -1389,7 +1389,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ greek ] = "Åðáíåêêß~íçóç áñéèìïý";
         Text[ dutch ] = "~Nieuwe nummering";
         Text[ french ] = "Numérotation ~séparée";
-        Text[ spanish ] = "reiniciar nu~meración";
+        Text[ spanish ] = "Reiniciar nu~meración";
         Text[ italian ] = "Avvia nuovo ~numero";
         Text[ danish ] = "Uafhængig nummerering forfra";
         Text[ swedish ] = "oberoende ~numrering";
@@ -1628,7 +1628,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ greek ] = "Åðáíåêêßíç~óç áñéèìïý";
         Text[ dutch ] = "Nieuwe n~ummering";
         Text[ french ] = "Numérotation ~séparée";
-        Text[ spanish ] = "rei~niciar numeración";
+        Text[ spanish ] = "Rei~niciar numeración";
         Text[ italian ] = "Avvia nuovo numero";
         Text[ danish ] = "Uafhængig nummerering forfra";
         Text[ swedish ] = "oberoende n~umrering";
@@ -1809,6 +1809,7 @@ TabPage TP_SECTION_FTNENDNOTES
         MaxTextLength = 50 ;
     };
 };
+
 
 
 
