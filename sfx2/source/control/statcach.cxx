@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:22:20 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,9 @@
 #include <svtools/stritem.hxx>
 #include <comphelper/processfactory.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "statcach.hxx"
 #include "msg.hxx"
@@ -246,11 +248,11 @@ void BindDispatch_Impl::Dispatch( sal_Bool bForceSynchron )
  */
 
 SfxStateCache::SfxStateCache( sal_uInt16 nFuncId ):
+    pDispatch( 0 ),
     nId(nFuncId),
     pController(0),
     pLastItem( 0 ),
-    eLastState( 0 ),
-    pDispatch( 0 )
+    eLastState( 0 )
 {
     DBG_MEMTEST();
     DBG_CTOR(SfxStateCache, 0);
