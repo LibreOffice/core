@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:38:43 $
+ *  last change: $Author: vg $ $Date: 2003-07-09 09:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1793,11 +1793,13 @@ USHORT SwFrm::GetVirtPageNum() const
 //Ermitteln und einstellen derjenigen Zellen die von der Selektion
 //eingeschlossen sind.
 
-void SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
+bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 {
     //Union-Rects und Tabellen (Follows) der Selektion besorgen.
     ASSERT( rTblCrsr.GetCntntNode() && rTblCrsr.GetCntntNode( FALSE ),
             "Tabselection nicht auf Cnt." );
+
+    bool bRet = false;
 
     Point aPtPt, aMkPt;
     {
@@ -1910,7 +1912,11 @@ void SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 
         for( ; nNew < aNew.Count(); ++nNew )
             rTblCrsr.InsertBox( **( aNew.GetData() + nNew ) );
+
+        bRet = true;
     }
+
+    return bRet;
 }
 
 
