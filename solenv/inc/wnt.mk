@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.57 $
+#   $Revision: 1.58 $
 #
-#   last change: $Author: rt $ $Date: 2003-12-01 16:18:01 $
+#   last change: $Author: vg $ $Date: 2003-12-16 11:40:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -313,7 +313,7 @@ MAPFILE=
 .IF "$(PRODUCT)"!="full"
 LINKFLAGS+= /NODEFAULTLIB /DEBUG:full /DEBUGTYPE:cv
 .ELSE
-LINKFLAGS+= /NODEFAULTLIB /RELEASE /DEBUG:notmapped,full
+LINKFLAGS+= /NODEFAULTLIB /RELEASE /DEBUG:full
 .ENDIF
 MAPFILE=-out:$$@
 .ENDIF
