@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-27 10:29:04 $
+#   last change: $Author: hr $ $Date: 2004-04-13 11:58:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,6 +117,7 @@ IDLFILES=\
     DuplicateProviderException.idl\
     DynamicResultSet.idl\
     Error.idl\
+    ExpandContentProvider.idl\
     ExportStreamInfo.idl\
     FetchError.idl\
     FetchResult.idl\
@@ -217,6 +218,11 @@ IDLFILES=\
      TransferCommandOperation.idl\
      TransferInfo.idl\
      TransferResult.idl\
+    TransientDocumentsContentProvider.idl \
+    TransientDocumentsRootContent.idl \
+    TransientDocumentsDocumentContent.idl \
+    TransientDocumentsFolderContent.idl \
+    TransientDocumentsStreamContent.idl \
      UniversalContentBroker.idl\
      UnsupportedCommandException.idl\
      UnsupportedDataSinkException.idl\
@@ -282,7 +288,7 @@ IDLFILES=\
      XSimpleFileAccess2.idl\
      XSimpleFileAccess3.idl\
      XSortedDynamicResultSetFactory.idl\
-     XSourceInitialization.idl
+    XSourceInitialization.idl
 
 # ------------------------------------------------------------------
 
