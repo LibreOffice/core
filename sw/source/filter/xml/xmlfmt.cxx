@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:07:20 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,8 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~SwXMLConditionContext_Impl();
 
+    TYPEINFO();
+
     sal_Bool IsValid() const { return 0 != nCondition; }
 
     sal_uInt32 GetCondition() const { return nCondition; }
@@ -381,6 +383,8 @@ SwXMLConditionContext_Impl::SwXMLConditionContext_Impl(
 SwXMLConditionContext_Impl::~SwXMLConditionContext_Impl()
 {
 }
+
+TYPEINIT1( SwXMLConditionContext_Impl, XMLTextStyleContext );
 
 // ---------------------------------------------------------------------
 
@@ -1039,6 +1043,8 @@ OUString SwXMLStylesContext_Impl::GetServiceName( sal_uInt16 nFamily ) const
 void SwXMLStylesContext_Impl::EndElement()
 {
     GetSwImport().InsertStyles( bAutoStyles );
+    if( !bAutoStyles )
+        GetImport().GetTextImport()->SetOutlineStyles( sal_True );
 }
 
 // ---------------------------------------------------------------------
@@ -1220,7 +1226,7 @@ sal_Bool SwXMLImport::FindAutomaticStyle(
             }
 
             if( pParent )
-                *pParent = pStyle->GetParent();
+                *pParent = pStyle->GetParentName();
         }
     }
 
