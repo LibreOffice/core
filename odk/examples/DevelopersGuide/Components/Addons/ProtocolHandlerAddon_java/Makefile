@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: vg $ $Date: 2003-07-09 10:37:21 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:21:05 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -48,26 +48,22 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-COMPONENT1_NAME=ProtocolHandlerAddon_java
-OUT_COMP_CLASS=$(OUT_CLASS)/$(COMPONENT1_NAME)
-OUT_COMP_MISC=$(OUT_MISC)/$(COMPONENT1_NAME)
-COMPONENT1_PACKAGE=$(OUT_BIN)/$(COMPONENT1_NAME).uno.zip
-COMPONENT1_PACKAGE_URL=$(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT1_NAME).uno.zip")
-COMPONENT1_JAR_NAME=$(COMPONENT1_NAME).uno.jar
-COMPONENT1_JAR=$(OUT_CLASS)/$(COMPONENT1_JAR_NAME)
-COMPONENT1_MANIFESTFILE=$(OUT_COMP_CLASS)/$(COMPONENT1_NAME).uno.Manifest
+COMPONENT_NAME=ProtocolHandlerAddon_java
+OUT_COMP_CLASS=$(OUT_CLASS)/$(COMPONENT_NAME)
+OUT_COMP_MISC=$(OUT_MISC)/$(COMPONENT_NAME)
+COMPONENT_PACKAGE=$(OUT_BIN)/$(COMPONENT_NAME).uno.zip
+COMPONENT_PACKAGE_URL=$(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).uno.zip")
+COMPONENT_JAR_NAME=$(COMPONENT_NAME).uno.jar
+COMPONENT_JAR=$(OUT_CLASS)/$(COMPONENT_JAR_NAME)
+COMPONENT_MANIFESTFILE=$(OUT_COMP_CLASS)/$(COMPONENT_NAME).uno.Manifest
 
-REGISTERFLAG=$(OUT_COMP_MISC)$(PS)java_$(COMPONENT1_NAME)_register_component.flag
+REGISTERFLAG=$(OUT_COMP_MISC)$(PS)java_$(COMPONENT_NAME)_register_component.flag
 
 JAVAFILES  = ProtocolHandlerAddon.java
 
 CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
 
-SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)/jurt.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/unoil.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/ridl.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/sandbox.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/juh.jar\
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
 
 
@@ -83,25 +79,25 @@ $(OUT_COMP_CLASS)/%.Manifest :
 
 $(CLASSFILES) : $(JAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
 
-$(OUT_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES)
+$(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(CLASSFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	jar cvfm $@ $< -C $(OUT_COMP_CLASS) .
+	$(SDK_JAR) cvfm $@ $< -C $(OUT_COMP_CLASS) .
 
-$(OUT_BIN)/%.zip : $(OUT_CLASS)/%.jar Addons.xcu ProtocolHandler.xcu
+$(COMPONENT_PACKAGE) : $(COMPONENT_JAR) Addons.xcu ProtocolHandler.xcu
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_MISC))
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_COMP_MISC))
 	$(COPY) Addons.xcu $(subst /,$(PS),$(OUT_COMP_MISC))
 	$(COPY) ProtocolHandler.xcu $(subst /,$(PS),$(OUT_COMP_MISC))
-	cd $(subst /,$(PS),$(OUT_COMP_MISC)) && jar cvfM ../../bin/$(@F) $(^F)
+	cd $(subst /,$(PS),$(OUT_COMP_MISC)) && $(SDK_JAR) cvfM ../../bin/$(@F) $(^F)
 
-$(REGISTERFLAG) : $(COMPONENT1_PACKAGE)
-ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
+$(REGISTERFLAG) : $(COMPONENT_PACKAGE)
+ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$@)
-	$(DEPLOYTOOL) $(COMPONENT1_PACKAGE_URL)
+	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
 	@echo --------------------------------------------------------------------------------
@@ -119,11 +115,11 @@ DevGuideProtocolHandlerAddon : $(REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_COMP_CLASS)/%.class
-	java -classpath "$(SDK_CLASSPATH)" $(basename $@)
+	$SDJ_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@)
 
 .PHONY: clean
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_MISC))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT1_PACKAGE_URL))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT1_JAR))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_JAR)))

@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: vg $ $Date: 2003-07-09 10:37:31 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:21:19 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -72,7 +72,7 @@ SLOFILES = $(patsubst %.cxx,$(OUT_COMP_SLO)/%.$(OBJ_EXT),$(CXXFILES))
 
 GENURDFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/%.urd,$(IDLFILES))
 
-TYPES = $(shell xml2cmp -types stdout $(COMPONENT_XML))
+TYPES = $(shell $(XML2CMP) -types stdout $(COMPONENT_XML))
 TYPESLIST = $(foreach t,$(TYPES),-T$(t))
 GENHPPFILES = $(foreach t,$(TYPES),$(OUT_COMP_INC)/$(subst .,/,$(t)).hpp)
 
@@ -85,17 +85,17 @@ include $(SETTINGS)/stdtarget.mk
 
 $(OUT_COMP_GEN)/%.urd : %.idl
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	idlc -I. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $<
+	$(IDLC) -I. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $<
 
 $(OUT_COMP_GEN)/%.rdb : $(GENURDFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$@)
-	regmerge $@ /UCR $(GENURDFILES)
+	$(REGMERGE) $@ /UCR $(GENURDFILES)
 
 $(COMPONENT_TYPEFLAG) : $(COMPONENT_RDB) $(COMPONENT_XML)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
-	cppumaker -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB) $(DKREGISTRYNAME)
+	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB) $(DKREGISTRYNAME)
 	echo flagged > $@
 
 $(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG)
@@ -122,14 +122,14 @@ $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB)
 endif	
 
-$(OUT_BIN)/%.zip : $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) $(OUT_COMP_GEN)/%.rdb
+$(COMPONENT_PACKAGE) : $(SHAREDLIB_OUT)/$(COMPONENT_IMPL_NAME) $(COMPONENT_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN)/$(PACKAGE_LIB_DIR))	 
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_COMP_GEN)/$(PACKAGE_LIB_DIR))
-	cd $(subst /,$(PS),$(OUT_COMP_GEN)) && jar cvfM ../../bin/$(@F) $(basename $(@F)).rdb $(PACKAGE_LIB_DIR)/$(<F)
+	cd $(subst /,$(PS),$(OUT_COMP_GEN)) && $(SDK_JAR) cvfM ../../bin/$(@F) $(basename $(@F)).rdb $(PACKAGE_LIB_DIR)/$(<F)
 
 $(REGISTERFLAG) : $(COMPONENT_PACKAGE)
-ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
+ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$@)
 	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
@@ -155,7 +155,7 @@ clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_INC))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_SLO))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT_PACKAGE_URL))
-	-$(DEL) $(subst /,$(PS),$(REGISTERFLAG))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
-	-$(DEL) $(subst /,$(PS),$(SHAREDLIB_OUT)/$(COMPONENT_NAME).*)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_TYPEFLAG)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(SHAREDLIB_OUT)/$(COMPONENT_NAME).*))
