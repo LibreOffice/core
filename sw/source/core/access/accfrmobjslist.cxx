@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfrmobjslist.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:05:54 $
+ *  last change: $Author: dvo $ $Date: 2002-04-09 15:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ SwFrmOrObjSList_const_iterator& SwFrmOrObjSList_const_iterator::next()
         {
             const SwDrawObjs *pObjs = rList.pFrm->GetDrawObjs();
             aCurr = (pObjs && nNextObj < pObjs->Count())
-                            ? (*pObjs)[nNextObj]
+                            ? (*pObjs)[nNextObj++]
                             : static_cast< const SdrObject *>( 0 );
             while( aCurr.IsValid() && !aCurr.IsBoundAsChar() )
                 aCurr = (nNextObj < pObjs->Count())
