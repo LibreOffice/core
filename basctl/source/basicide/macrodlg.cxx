@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-22 17:08:03 $
+ *  last change: $Author: mba $ $Date: 2002-04-24 08:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,6 +564,13 @@ void MacroChooser::CheckButtons()
 IMPL_LINK_INLINE_START( MacroChooser, MacroDoubleClickHdl, SvTreeListBox *, EMPTYARG )
 {
     StoreMacroDescription();
+    if ( nMode == MACROCHOOSER_RECORDING )
+    {
+        SbMethod* pMethod = GetMacro();
+        if ( pMethod && !QueryReplaceMacro( pMethod->GetName(), this ) )
+            return 0;
+    }
+
     EndDialog( MACRO_OK_RUN );
     return 0;
 }
