@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDatabaseRanges.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-22 16:00:52 $
+ *  last change: $Author: sab $ $Date: 2002-11-26 07:22:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #ifndef __GLOBSTR_HRC_
 #include "globstr.hrc"
 #endif
+#ifndef SC_XMLEXPORTSHAREDDATA_HXX
+#include "XMLExportSharedData.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_SHEET_DATAIMPORTMODE_HPP_
 #include <com/sun/star/sheet/DataImportMode.hpp>
@@ -192,7 +195,14 @@ ScMyEmptyDatabaseRangesContainer ScXMLExportDatabaseRanges::GetEmptyDatabaseRang
                                                 aSourceType >>= nSourceType;
                                             }
                                         if (nSourceType != sheet::DataImportMode_NONE)
-                                            aSkipRanges.AddNewEmptyDatabaseRange(xDatabaseRange->getDataArea());
+                                        {
+                                            table::CellRangeAddress aArea = xDatabaseRange->getDataArea();
+                                            aSkipRanges.AddNewEmptyDatabaseRange(aArea);
+
+                                            // #105276#; set last row/column so default styles are collected
+                                            rExport.GetSharedData()->SetLastColumn(aArea.Sheet, aArea.EndColumn);
+                                            rExport.GetSharedData()->SetLastRow(aArea.Sheet, aArea.EndRow);
+                                        }
                                     }
                             }
                         }
