@@ -2,9 +2,9 @@
  *
  *  $RCSfile: merge.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:10:48 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,9 +349,10 @@ void MergeDataFile::InsertEntry(
 {
     MergeData *pData;
     BOOL bFound = FALSE;
+    long int i;
 
     // search for MergeData
-    for ( long int i = Count() - 1; i >= 0 && !bFound; i-- ) {
+    for ( i = Count() - 1; i >= 0 && !bFound; i-- ) {
         pData = GetObject( i );
         if (( pData->sLID == rLID ) &&
             ( pData->sGID == rGID ) &&
