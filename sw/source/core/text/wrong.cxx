@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrong.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:32:09 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,29 +288,6 @@ void SwWrongList::Move( xub_StrLen nPos, long nDiff )
         xub_StrLen nTmp = nDiff + GetObject( i );
         GetObject( i++ ) = nTmp;
     }
-}
-
-/*************************************************************************
- *                      SwWrongList::Clear()/( xub_StrLen nBegin, xub_StrLen nEnd )
- *  loescht das Array im angegebenen Bereich
- *************************************************************************/
-
-void SwWrongList::Clear()
-{
-    Remove( 0, Count() );
-    aLen.Remove( 0, aLen.Count() );
-}
-
-void SwWrongList::Clear( xub_StrLen nBegin, xub_StrLen nEnd )
-{
-    MSHORT nFirst = 0;
-    while( nFirst < Count() && WRPOS( nFirst ) < nBegin )
-        ++nFirst;
-    MSHORT i = nFirst;
-    while( i < Count() && WRPOS( i++ ) <= nEnd )
-        ;
-    Remove( nFirst, i - nFirst );
-    aLen.Remove( nFirst, i - nFirst );
 }
 
 /*************************************************************************
