@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysethelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:35:04 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 //=========================================================================
 //= property helper classes
@@ -85,7 +88,7 @@ class PropertySetInfo;
 struct PropertyMapEntry;
 class PropertySetHelperImpl;
 
-class PropertySetHelper : public ::com::sun::star::beans::XPropertySet,
+class COMPHELPER_DLLPUBLIC PropertySetHelper : public ::com::sun::star::beans::XPropertySet,
                           public ::com::sun::star::beans::XPropertyState,
                           public ::com::sun::star::beans::XMultiPropertySet
 {
