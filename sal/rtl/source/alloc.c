@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alloc.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mhu $ $Date: 2001-11-26 11:56:15 $
+ *  last change: $Author: mhu $ $Date: 2001-11-27 18:47:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,6 +579,9 @@ static void __dbg_memory_usage (memory_stat * total)
 #define DBG_MEMORY_VERIFY(entry) __dbg_memory_verify((entry), 0)
 #endif /* _DEBUG */
 
+#define DBG_MEMORY_VERIFY_CHAIN(entry) __dbg_memory_verify_chain((entry))
+#define DBG_MEMORY_VERIFY_QUEUE(entry) __dbg_memory_verify_queue((entry))
+
 #else  /* PRODUCT */
 
 #define DBG_MEMORY_ALIGN(n, m) RTL_MEMORY_ALIGN((n), (m))
@@ -587,6 +590,8 @@ static void __dbg_memory_usage (memory_stat * total)
 #define DBG_MEMORY_INSERT(entry)
 #define DBG_MEMORY_REMOVE(entry)
 #define DBG_MEMORY_VERIFY(entry)
+#define DBG_MEMORY_VERIFY_CHAIN(entry)
+#define DBG_MEMORY_VERIFY_QUEUE(entry)
 
 #endif /* DEBUG || PRODUCT */
 
@@ -1092,7 +1097,7 @@ void* SAL_CALL rtl_reallocateMemory (void * p, sal_uInt32 n) SAL_THROW_EXTERN_C(
                 register memory_type * next;
 
                 next = queue_cast(memory, memory->m_length);
-                __dbg_memory_verify_chain (next);
+                DBG_MEMORY_VERIFY_CHAIN(next);
 
                 if (!(next->m_length & 0x80000000))
                 {
@@ -1100,7 +1105,7 @@ void* SAL_CALL rtl_reallocateMemory (void * p, sal_uInt32 n) SAL_THROW_EXTERN_C(
                     if ((memory->m_length + next->m_length) >= n)
                     {
                         /* next does fit */
-                        __dbg_memory_verify_queue (next);
+                        DBG_MEMORY_VERIFY_QUEUE(next);
                         queue_remove (next);
 
                         /* merge w/ next */
@@ -1162,12 +1167,12 @@ void* SAL_CALL rtl_reallocateMemory (void * p, sal_uInt32 n) SAL_THROW_EXTERN_C(
                 register memory_type * next;
 
                 next = queue_cast(memory, memory->m_length);
-                __dbg_memory_verify_chain (next);
+                DBG_MEMORY_VERIFY_CHAIN(next);
 
                 if (!(next->m_length & 0x80000000))
                 {
                     /* next not used */
-                    __dbg_memory_verify_queue (next);
+                    DBG_MEMORY_VERIFY_QUEUE (next);
                     queue_remove (next);
 
                     /* merge w/ next */
