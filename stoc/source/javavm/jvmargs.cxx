@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmargs.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:13:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 09:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,278 +71,251 @@
 #include <string.h>
 
 #include "jvmargs.hxx"
-
+#include "com/sun/star/uno/Exception.hpp"
+#include "rtl/bootstrap.hxx"
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include "osl/file.h"
+#include "osl/file.hxx"
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
-using namespace rtl;
+#define OUSTR(x) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
+using namespace rtl;
+namespace css = com::sun::star;
 namespace stoc_javavm {
 
-    JVM::JVM() throw()
-        : _is_debugPort(sal_False),
-          _is_disableAsyncGC(sal_False),
-          _is_enableClassGC(sal_False),
-          _is_enableVerboseGC(sal_False),
-          _is_checkSource(sal_False),
-          _is_nativeStackSize(sal_False),
-          _is_javaStackSize(sal_False),
-          _is_minHeapSize(sal_False),
-          _is_maxHeapSize(sal_False),
-          _enabled(sal_False),
-          _is_verifyMode(sal_False),
-          _is_print(sal_False),
-          _is_exit(sal_False),
-          _is_abort(sal_False)
-    {
-    }
+JVM::JVM() throw()//: _enabled(sal_False)
+{
+}
 
-    void JVM::pushProp(const OUString & property) throw()
+void JVM::pushProp(const OUString & property)
+{
+    sal_Int32 index = property.indexOf((sal_Unicode)'=');
+    if(index > 0)
     {
-        sal_Int32 index = property.indexOf((sal_Unicode)'=');
-        if(index > 0)
+        OUString left = property.copy(0, index).trim();
+        OUString right(property.copy(index + 1).trim());
+
+//         if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Enable"))))
+//         {
+//             setEnabled(right.toInt32());
+//         }
+//        else
+            if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Version"))))
         {
-            OUString left = property.copy(0, index).trim();
-            OUString right(property.copy(index + 1).trim());
-
-// #if OSL_DEBUG_LEVEL > 1
-//      OString left_tmp = OUStringToOString(left, RTL_TEXTENCODING_ASCII_US);
-//      OSL_TRACE("javavm - left %s", left_tmp.getStr());
-//      OString right_tmp = OUStringToOString(right, RTL_TEXTENCODING_ASCII_US);
-//      OSL_TRACE("javam - right %s", right_tmp.getStr());
-//  #endif
-
-            if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Debug"))))
-                setDebugPort(1199);
-
-            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Java"))))
-                setEnabled(right.toInt32());
-
-            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Version"))))
-                ;
-
-            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Home"))))
-            {
-                // we need a system path and not a file URL
-                OUString usSysPath;
-                oslFileError er= osl_getSystemPathFromFileURL( right.pData, &usSysPath.pData);
-                OSL_ASSERT( er == osl_File_E_None);
-                _java_home = usSysPath;
-            }
-
-            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("VMType"))))
-                _vmtype = right;
-
-            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("SystemClasspath"))))
-                addSystemClasspath(right);
-
-            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("UserClasspath"))))
-                addUserClasspath(right);
-
-            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("DisableAsyncGC"))))
-                setDisableAsyncGC(right.toInt32());
-
-            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("EnableClassGC"))))
-                setEnableClassGC(right.toInt32());
-
-            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("EnableVerboseGC"))))
-                setEnableVerboseGC(right.toInt32());
-
-            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("NativeStackSize"))))
-                setNativeStackSize(right.toInt32());
-
-            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("JavaStackSize"))))
-                setJavaStackSize(right.toInt32());
-
-            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("VerifyMode"))))
-                setVerifyMode(right);
-
-            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("MinHeapSize"))))
-                setMinHeapSize(right.toInt32());
-
-            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("MaxHeapSize"))))
-                setMaxHeapSize(right.toInt32());
-
-            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("DebugPort"))))
-            setDebugPort(right.toInt32());
-
-            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("RuntimeLib"))))
-                setRuntimeLib(right);
-
-            else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("CheckSource"))))
-                setCheckSource(right.toInt32());
-
-            else
-                _props.push_back(property);
+            setVersion(right);
+        }
+        else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Home"))))
+        {
+            setJavaHome(right);
+        }
+        else if (left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("ApplicationClassesDir"))))
+        {
+            setApplicationClassesDir(right);
+        }
+        else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("RuntimeLib"))))
+        {
+            setRuntimeLib(right);
         }
         else
-        { // no '=', could be -X
             _props.push_back(property);
-        }
-
     }
-
-
-    void JVM::setEnabled(sal_Bool sbFlag) throw() {
-        _enabled = sbFlag;
+    else
+    { // no '=', could be -X
+        _props.push_back(property);
     }
-
-    void JVM::setDisableAsyncGC(jint jiValue) throw() {
-        _is_disableAsyncGC = sal_True;
-        _disableAsyncGC = jiValue;
-    }
-
-    void JVM::setEnableClassGC(jint jiValue) throw() {
-        _is_enableClassGC = sal_True;
-        _enableClassGC = jiValue;
-    }
-
-    void JVM::setEnableVerboseGC(jint jiValue) throw() {
-        _is_enableVerboseGC = sal_True;
-        _enableVerboseGC = jiValue;
-    }
-
-    void JVM::setCheckSource(jint jiValue) throw() {
-        OSL_TRACE("JVM::setCheckSource: %i", jiValue);
-
-        _is_checkSource = sal_True;
-        _checkSource = jiValue;
-    }
-
-    void JVM::setNativeStackSize(jint jiValue) throw() {
-        _is_nativeStackSize = sal_True;
-        _nativeStackSize = jiValue;
-    }
-
-    void JVM::setJavaStackSize(jint jiValue) throw() {
-        _is_javaStackSize = sal_True;
-        _javaStackSize = jiValue;
-    }
-
-    void JVM::setVerifyMode(const OUString & mode) throw() {
-        _is_verifyMode = sal_True;
-
-        if(mode.compareToAscii("none") == 0)
-            _verifyMode = 0;
-
-        else if(mode.compareToAscii("remote") == 0)
-            _verifyMode = 1;
-
-        else if(mode.compareToAscii("all") == 0 )
-            _verifyMode = 2;
-    }
-
-    void JVM::setMinHeapSize(jint jiValue) throw() {
-        _is_minHeapSize = sal_True;
-        _minHeapSize = jiValue;
-    }
-
-    void JVM::setMaxHeapSize(jint jiValue) throw() {
-        _is_maxHeapSize = sal_True;
-        _maxHeapSize = jiValue;
-    }
-
-    void JVM::setDebugPort(jint jiValue) throw() {
-        _is_debugPort = sal_True;
-        _debugPort = jiValue;
-    }
-
-    void JVM::addSystemClasspath(const OUString & classpath) throw() {
-        if( classpath.getLength() )
-        {
-            OString tmp = OUStringToOString(classpath, RTL_TEXTENCODING_ASCII_US);
-            OSL_TRACE("JVM::addSystemClasspath: %s", tmp.getStr());
-
-            OUStringBuffer buf(_systemClasspath.getLength() +1 + classpath.getLength());
-            if( _systemClasspath.getLength() )
-            {
-                buf.append( _systemClasspath );
-                buf.appendAscii( CLASSPATH_DELIMETER );
-            }
-            buf.append( classpath );
-            _systemClasspath = buf.makeStringAndClear();
-        }
-    }
-OUString JVM::getSystemClasspath()
-{
-    return _systemClasspath;
 }
 
-    void JVM::addUserClasspath(const OUString & classpath) throw() {
-        if( classpath.getLength() )
-        {
-            OString tmp = OUStringToOString(classpath, RTL_TEXTENCODING_ASCII_US);
-            OSL_TRACE("JVM::addUserClasspath: %s", tmp.getStr());
-            OUStringBuffer buf( _userClasspath.getLength() + 1 + classpath.getLength() );
-            if( _userClasspath.getLength() )
-            {
-                buf.append( _userClasspath );
-                buf.appendAscii( CLASSPATH_DELIMETER );
-            }
-            buf.append( classpath );
-            _userClasspath = buf.makeStringAndClear();
-        }
+void JVM::setApplicationClassesDir(const rtl::OUString & sDir)
+{
+    rtl::OUString sPaths = buildClassPathFromDirectory(sDir);
+    addClassPath(sPaths);
+}
+/** The path has the form: foo/bar
+    That is, separator is a slash.
+    @exception com::sun::star::uno::Exception
+ */
+rtl::OUString JVM::buildClassPathFromDirectory(const rtl::OUString & relPath)
+{
+    rtl::OUString sInstallDir;
+    rtl::Bootstrap::get(OUSTR("BaseInstallation"),
+                        sInstallDir,
+                        OUSTR("${$SYSBINDIR/" SAL_CONFIGFILE("bootstrap") ":BaseInstallation}"));
+    rtl::OUString sClassesDir = sInstallDir +  OUSTR("/") + relPath;
+
+    osl::Directory dir(sClassesDir);
+    osl::FileBase::RC fileErrorCode;
+    if ((fileErrorCode = dir.open()) != osl::FileBase::E_None)
+//    if ((fileErrorCode = dir.open()) != osl::FileBase::RC::E_None)
+    {
+        rtl::OUString sMsg(OUSTR("[javavm.cxx]File operation failed. Error: ")
+                           + rtl::OUString::valueOf((sal_Int32) fileErrorCode));
+        throw css::uno::Exception(sMsg, 0);
     }
 
-OUString JVM::getUserClasspath()
-{
-    return _userClasspath;
+    osl::DirectoryItem dirItem;
+    rtl::OUStringBuffer sBuffer(2048);
+    char szSep[] = {SAL_PATHSEPARATOR,0};
+
+    //insert the path to the directory, so that .class files can be found
+    rtl::OUString sDirPath;
+    if ((fileErrorCode = osl::FileBase::getSystemPathFromFileURL(
+             sClassesDir, sDirPath))
+        != osl::FileBase::E_None)
+    {
+        rtl::OUString sMsg(OUSTR("[javavm.cxx]File operation failed. Error: ")
+                           + rtl::OUString::valueOf((sal_Int32) fileErrorCode));
+        throw css::uno::Exception(sMsg, 0);
+    }
+    sBuffer.append(sDirPath);
+    sBuffer.appendAscii(szSep);
+
+    rtl::OUString sJarExtension(OUSTR(".jar"));
+    sal_Int32 nJarExtensionLength = sJarExtension.getLength();
+    for(;;)
+    {
+        fileErrorCode = dir.getNextItem(dirItem);
+        if (fileErrorCode == osl::FileBase::E_None)
+        {
+            osl::FileStatus stat(FileStatusMask_All);
+            if ((fileErrorCode = dirItem.getFileStatus(stat)) !=
+                osl::FileBase::E_None)
+            {
+                rtl::OUString sMsg(OUSTR("[javavm.cxx]File operation failed. Error: ")
+                                   + rtl::OUString::valueOf(
+                                       (sal_Int32) fileErrorCode));
+                throw css::uno::Exception(sMsg, 0);
+            }
+            // check if the item is a file.
+            switch (stat.getFileType())
+            {
+            case osl::FileStatus::Regular:
+                break;
+            case osl::FileStatus::Link:
+            {
+                rtl::OUString sLinkURL = stat.getLinkTargetURL();
+                osl::DirectoryItem itemLink;
+                if (osl::DirectoryItem::get(sLinkURL, itemLink)
+                    != osl::FileBase::E_None)
+                {
+                    throw css::uno::Exception();
+                }
+                osl::FileStatus statLink(FileStatusMask_All);
+                if (statLink.getFileType() != osl::FileStatus::Regular)
+                    continue;
+                //ToDo check if the link is also a regular file:
+                break;
+            }
+            default:
+                continue;
+            }
+
+            //check if the file is a .jar, class files are ignored
+            rtl::OUString sFileName = stat.getFileName();
+            sal_Int32 len = sFileName.getLength();
+            sal_Int32 nIndex = sFileName.lastIndexOf(sJarExtension);
+            if ((nIndex == -1)
+                || (nIndex + nJarExtensionLength != len))
+                continue;
+
+            rtl::OUString sFileURL = stat.getFileURL();
+            rtl::OUString sFilePath;
+            if ((fileErrorCode = osl::FileBase::getSystemPathFromFileURL(
+                     sFileURL, sFilePath))
+                != osl::FileBase::E_None)
+            {
+                rtl::OUString sMsg(OUSTR("[javavm.cxx]File operation failed. Error: ")
+                                   + rtl::OUString::valueOf(
+                                       (sal_Int32) fileErrorCode));
+                throw css::uno::Exception(sMsg, 0);
+            }
+            sBuffer.append(sFilePath);
+            sBuffer.appendAscii(szSep);
+        }
+        else if (fileErrorCode == osl::FileBase::E_NOENT)
+        {
+            break;
+        }
+        else
+        {
+            rtl::OUString sMsg(OUSTR("File operation failed. Error:")
+                               + rtl::OUString::valueOf(
+                                   (sal_Int32) fileErrorCode));
+            throw css::uno::Exception();
+        }
+    }
+    return sBuffer.makeStringAndClear();
 }
 
-    void JVM::setPrint(JNIvfprintf vfprintf) throw() {
-        _is_print = sal_True;
-        _print = vfprintf;
-    }
+void JVM::setVersion(const rtl::OUString & sVersion)
+{
+    _version = sVersion;
+}
 
-    void JVM::setExit(JNIexit exit) throw() {
-        _is_exit = sal_True;
-        _exit = exit;
-    }
+const ::rtl::OUString & JVM::getVersion() const
+{
+    return _version;
+}
 
-    void JVM::setAbort(JNIabort abort) throw() {
-        _is_abort = sal_True;
-        _abort = abort;
-    }
+void JVM::setJavaHome(const ::rtl::OUString & sHomeUrl)
+{
+    // we need a system path and not a file URL
+    OUString usSysPath;
+    oslFileError er= osl_getSystemPathFromFileURL( sHomeUrl.pData, &usSysPath.pData);
+    _java_home = usSysPath;
+}
 
-    void JVM::setRuntimeLib(const OUString & libName) throw() {
-        _runtimeLib = libName;
-    }
+// void JVM::setEnabled(sal_Bool sbFlag)
+// {
+//     _enabled = sbFlag;
+// }
 
-    const OUString & JVM::getRuntimeLib() const throw() {
-        return _runtimeLib;
-    }
-
-    sal_Bool JVM::isEnabled() const throw() {
-        return _enabled;
-    }
-
-    rtl::OUString JVM::getClassPath() const
+void JVM::addClassPath(const OUString & classpath)
+{
+    if( classpath.getLength() )
     {
-        rtl::OUStringBuffer aBuffer(_systemClasspath);
-        if (_userClasspath.getLength() > 0)
+        OUStringBuffer buf(_classpath.getLength() +1 + classpath.getLength());
+        if( _classpath.getLength() )
         {
-            if (aBuffer.getLength() > 0)
-                aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM(
-                                        CLASSPATH_DELIMETER));
-            aBuffer.append(_userClasspath);
+            buf.append( _classpath );
+            buf.appendAscii( CLASSPATH_DELIMETER );
         }
-        return aBuffer.makeStringAndClear();
+        buf.append( classpath );
+        _classpath = buf.makeStringAndClear();
     }
+}
 
-    const ::std::vector< ::rtl::OUString > & JVM::getProperties() const
-    {
-        return _props;
-    }
 
-    const OUString& JVM::getJavaHome() const throw() {
+void JVM::setRuntimeLib(const OUString & libName)
+{
+    _runtimeLib = libName;
+}
+
+const OUString & JVM::getRuntimeLib() const
+{
+    return _runtimeLib;
+}
+
+// sal_Bool JVM::isEnabled() const
+// {
+//     return _enabled;
+// }
+
+rtl::OUString JVM::getClassPath() const
+{
+    return _classpath;
+}
+
+const ::std::vector< ::rtl::OUString > & JVM::getProperties() const
+{
+    return _props;
+}
+
+const OUString& JVM::getJavaHome() const
+{
         return _java_home;
-    }
-
-    const OUString& JVM::getVMType() const throw() {
-        return _vmtype;
-    }
+}
 }
