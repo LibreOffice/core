@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-29 11:35:33 $
+ *  last change: $Author: ka $ $Date: 2001-08-01 12:40:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1007,34 +1007,36 @@ SdrObject* SdrGrafObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
 
 void SdrGrafObj::TakeObjNameSingul(XubString& rName) const
 {
-    GraphicType eType = pGraphic->GetType();
-
-    if( !IsLinkedGraphic() )
+    switch( pGraphic->GetType() )
     {
-        switch( eType )
+        case GRAPHIC_BITMAP:
         {
-            case GRAPHIC_BITMAP     : rName=ImpGetResStr(STR_ObjNameSingulGRAFBMP);  break;
-            case GRAPHIC_GDIMETAFILE: rName=ImpGetResStr(STR_ObjNameSingulGRAFMTF);  break;
-            case GRAPHIC_NONE       : rName=ImpGetResStr(STR_ObjNameSingulGRAFNONE); break;
-            default                 : rName=ImpGetResStr(STR_ObjNameSingulGRAF);     break;
+            const USHORT nId = ( ( IsTransparent() || ( (const SdrGrafTransparenceItem&) GetItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
+                                 ( IsLinkedGraphic() ? STR_ObjNameSingulGRAFBMPTRANSLNK : STR_ObjNameSingulGRAFBMPTRANS ) :
+                                 ( IsLinkedGraphic() ? STR_ObjNameSingulGRAFBMPLNK : STR_ObjNameSingulGRAFBMP ) );
+
+            rName=ImpGetResStr( nId );
         }
-    }
-    else
-    {
-        switch( eType )
-        {
-            case GRAPHIC_BITMAP     : rName=ImpGetResStr(STR_ObjNameSingulGRAFBMP);  break;
-            case GRAPHIC_GDIMETAFILE: rName=ImpGetResStr(STR_ObjNameSingulGRAFMTF);  break;
-            case GRAPHIC_NONE       : rName=ImpGetResStr(STR_ObjNameSingulGRAFNONE); break;
-            default                 : rName=ImpGetResStr(STR_ObjNameSingulGRAF);     break;
-        }
+        break;
+
+        case GRAPHIC_GDIMETAFILE:
+            rName=ImpGetResStr( IsLinkedGraphic() ? STR_ObjNameSingulGRAFMTFLNK : STR_ObjNameSingulGRAFMTF );
+        break;
+
+        case GRAPHIC_NONE:
+            rName=ImpGetResStr( IsLinkedGraphic() ? STR_ObjNameSingulGRAFNONELNK : STR_ObjNameSingulGRAFNONE );
+        break;
+
+        default:
+            rName=ImpGetResStr(  IsLinkedGraphic() ? STR_ObjNameSingulGRAFLNK : STR_ObjNameSingulGRAF );
+        break;
     }
 
-    if(aName.Len())
+    if( aName.Len() )
     {
-        rName.AppendAscii(" '");
+        rName.AppendAscii( " '" );
         rName += aName;
-        rName += sal_Unicode('\'');
+        rName += sal_Unicode( '\'' );
     }
 }
 
@@ -1042,27 +1044,36 @@ void SdrGrafObj::TakeObjNameSingul(XubString& rName) const
 
 void SdrGrafObj::TakeObjNamePlural( XubString& rName ) const
 {
-    const GraphicType eType = pGraphic->GetType();
+    switch( pGraphic->GetType() )
+    {
+        case GRAPHIC_BITMAP:
+        {
+            const USHORT nId = ( ( IsTransparent() || ( (const SdrGrafTransparenceItem&) GetItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
+                                 ( IsLinkedGraphic() ? STR_ObjNamePluralGRAFBMPTRANSLNK : STR_ObjNamePluralGRAFBMPTRANS ) :
+                                 ( IsLinkedGraphic() ? STR_ObjNamePluralGRAFBMPLNK : STR_ObjNamePluralGRAFBMP ) );
 
-    if( IsLinkedGraphic() )
-    {
-        switch( eType )
-        {
-            case GRAPHIC_BITMAP     : rName=ImpGetResStr(STR_ObjNamePluralGRAFBMP);  break;
-            case GRAPHIC_GDIMETAFILE: rName=ImpGetResStr(STR_ObjNamePluralGRAFMTF);  break;
-            case GRAPHIC_NONE       : rName=ImpGetResStr(STR_ObjNamePluralGRAFNONE); break;
-            default                 : rName=ImpGetResStr(STR_ObjNamePluralGRAF);     break;
+            rName=ImpGetResStr( nId );
         }
+        break;
+
+        case GRAPHIC_GDIMETAFILE:
+            rName=ImpGetResStr( IsLinkedGraphic() ? STR_ObjNamePluralGRAFMTFLNK : STR_ObjNamePluralGRAFMTF );
+        break;
+
+        case GRAPHIC_NONE:
+            rName=ImpGetResStr( IsLinkedGraphic() ? STR_ObjNamePluralGRAFNONELNK : STR_ObjNamePluralGRAFNONE );
+        break;
+
+        default:
+            rName=ImpGetResStr(  IsLinkedGraphic() ? STR_ObjNamePluralGRAFLNK : STR_ObjNamePluralGRAF );
+        break;
     }
-    else
+
+    if( aName.Len() )
     {
-        switch( eType )
-        {
-            case GRAPHIC_BITMAP     : rName=ImpGetResStr(STR_ObjNamePluralGRAFBMP);  break;
-            case GRAPHIC_GDIMETAFILE: rName=ImpGetResStr(STR_ObjNamePluralGRAFMTF);  break;
-            case GRAPHIC_NONE       : rName=ImpGetResStr(STR_ObjNamePluralGRAFNONE); break;
-            default                 : rName=ImpGetResStr(STR_ObjNamePluralGRAF);     break;
-        }
+        rName.AppendAscii( " '" );
+        rName += aName;
+        rName += sal_Unicode( '\'' );
     }
 }
 

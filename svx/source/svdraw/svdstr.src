@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:22:17 $
+ *  last change: $Author: ka $ $Date: 2001-08-01 12:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2735,34 +2735,11 @@ String STR_ObjNameSingulGRAFBMP
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Bitmap";
 };
-String STR_ObjNamePluralGRAFBMP
+String STR_ObjNameSingulGRAFBMPTRANS
 {
-    Text = "Bitmaps" ;
-    Text [ ENGLISH ] = "bitmaps" ;
-    Text [ norwegian ] = "Punktmatriser" ;
-    Text [ italian ] = "Bitmap" ;
-    Text [ portuguese_brazilian ] = "Bitmaps" ;
-    Text [ portuguese ] = "Bitmaps" ;
-    Text [ finnish ] = "Bittikartat" ;
-    Text [ danish ] = "Bitmaps" ;
-    Text [ french ] = "Bitmaps" ;
-    Text [ swedish ] = "Bitmaps" ;
-    Text [ dutch ] = "Bitmaps" ;
-    Text [ spanish ] = "Bitmaps" ;
-    Text [ english_us ] = "Bitmaps" ;
-    Text[ chinese_simplified ] = "Î»Í¼";
-    Text[ russian ] = "Êàðòèíêè â ôîðìàòå Bitmap";
-    Text[ polish ] = "Mapy bitowe";
-    Text[ japanese ] = "ËÞ¯ÄÏ¯Ìß";
-    Text[ chinese_traditional ] = "ÂI°}¹Ï";
-    Text[ arabic ] = "ÕæÑ äÞØíÉ";
-    Text[ dutch ] = "Bitmaps";
-    Text[ chinese_simplified ] = "Î»Í¼";
-    Text[ greek ] = "Bitmaps";
-    Text[ korean ] = "ºñÆ®¸Ê";
-    Text[ turkish ] = "Bit eþlem";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Bitmaps";
+    Text = "Bitmap mit Transparenz" ;
+    Text [ ENGLISH ] = "bitmap with transparency" ;
+    Text [ english_us ] = "Bitmap with transparency" ;
 };
 String STR_ObjNameSingulGRAFBMPLNK
 {
@@ -2792,6 +2769,47 @@ String STR_ObjNameSingulGRAFBMPLNK
     Text[ catalan ] = "Bitmap vinculado";
     Text[ finnish ] = "Linkitetty bittikartta";
 };
+String STR_ObjNameSingulGRAFBMPTRANSLNK
+{
+    Text = "verknüpfte Bitmap mit Transparenz" ;
+    Text [ ENGLISH ] = "linked bitmap with transparency" ;
+    Text [ english_us ] = "Linked Bitmap with transparency" ;
+};
+String STR_ObjNamePluralGRAFBMP
+{
+    Text = "Bitmaps" ;
+    Text [ ENGLISH ] = "bitmaps" ;
+    Text [ norwegian ] = "Punktmatriser" ;
+    Text [ italian ] = "Bitmap" ;
+    Text [ portuguese_brazilian ] = "Bitmaps" ;
+    Text [ portuguese ] = "Bitmaps" ;
+    Text [ finnish ] = "Bittikartat" ;
+    Text [ danish ] = "Bitmaps" ;
+    Text [ french ] = "Bitmaps" ;
+    Text [ swedish ] = "Bitmaps" ;
+    Text [ dutch ] = "Bitmaps" ;
+    Text [ spanish ] = "Bitmaps" ;
+    Text [ english_us ] = "Bitmaps" ;
+    Text[ chinese_simplified ] = "Î»Í¼";
+    Text[ russian ] = "Êàðòèíêè â ôîðìàòå Bitmap";
+    Text[ polish ] = "Mapy bitowe";
+    Text[ japanese ] = "ËÞ¯ÄÏ¯Ìß";
+    Text[ chinese_traditional ] = "ÂI°}¹Ï";
+    Text[ arabic ] = "ÕæÑ äÞØíÉ";
+    Text[ dutch ] = "Bitmaps";
+    Text[ chinese_simplified ] = "Î»Í¼";
+    Text[ greek ] = "Bitmaps";
+    Text[ korean ] = "ºñÆ®¸Ê";
+    Text[ turkish ] = "Bit eþlem";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Bitmaps";
+};
+String STR_ObjNamePluralGRAFBMPTRANS
+{
+    Text = "Bitmaps mit Transparenz" ;
+    Text [ ENGLISH ] = "bitmaps with transparency" ;
+    Text [ english_us ] = "Bitmaps with transparency" ;
+};
 String STR_ObjNamePluralGRAFBMPLNK
 {
     Text = "verknüpfte Bitmaps" ;
@@ -2819,6 +2837,12 @@ String STR_ObjNamePluralGRAFBMPLNK
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Bitmaps vinculados";
     Text[ finnish ] = "Linkitetyt bittikartat";
+};
+String STR_ObjNamePluralGRAFBMPTRANSLNK
+{
+    Text = "verknüpfte Bitmaps mit Transparenz" ;
+    Text [ ENGLISH ] = "linked bitmaps with transparency" ;
+    Text [ english_us ] = "Linked Bitmaps with transparency" ;
 };
 String STR_ObjNameSingulGRAFMAC
 {
