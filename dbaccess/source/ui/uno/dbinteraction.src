@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:56:46 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ String STR_REMEMBERPASSWORD_SESSION
     Text[ dutch ] = "Wachtwoord o~nthouden tot aan beλindigen van programma";
     Text[ english_us ] = "~Remember password till end of session";
     Text[ french ] = "Mιmoriser le ~mot de passe jusqu'ΰ la fin de la session";
-    Text[ greek ] = "Απο~μνημόνευση κωδικού έως το τέλος της εφαρμογής";
+    Text[ greek ] = "Μόνιμη αποθήκευση κωδικού έως το τέλος της συνεδρίας";
     Text[ italian ] = "Memorizza password fino alla fine dell'applicazione";
     Text[ japanese ] = "γƒ‘γ‚Ήγƒ―γƒΌγƒ‰γ‚’γ‚Άγƒ—γƒªγ‚±γƒΌγ‚·γƒ§γƒ³ηµ‚δΊ†γΎγ§δΏε­γ—γ¦γγ(~R)";
     Text[ korean ] = "μ‘μ© ν”„λ΅κ·Έλ¨ μΆ…λ£κΉμ§€ μ•”νΈ λ³΄μ΅΄(~R)";
@@ -133,6 +133,13 @@ String STR_REMEMBERPASSWORD_PERSISTENT
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21.8.1  2003/07/03 14:44:27  ihi
+ *  rc-2 merge all languages
+ *
+ *  Revision 1.21  2003/06/13 12:56:46  hr
+ *  INTEGRATION: CWS rcmerge (1.20.24); FILE MERGED
+ *  2003/06/12 10:58:10 gh 1.20.24.1: final Merge RC
+ *
  *  Revision 1.20.24.1  2003/06/12 10:58:10  gh
  *  final Merge RC
  *
@@ -224,6 +231,7 @@ String STR_REMEMBERPASSWORD_PERSISTENT
  *
  *  Revision 1.0 25.10.00 14:10:52  fs
  ************************************************************************/
+
 
 
 
