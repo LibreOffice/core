@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-03 13:05:07 $
+ *  last change: $Author: obo $ $Date: 2001-07-06 08:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1299,7 +1299,7 @@ namespace {
 
 // normalizeAndSubstitutePathVariables
 // ---------------------------------------------------------------------------------------
-    extern "C" typedef sal_Bool (SAL_CALL * getSystemDirectoryFunction)(oslSecurity, rtl_uString **);
+    typedef sal_Bool (SAL_CALL * getSystemDirectoryFunction)(oslSecurity, rtl_uString **);
 
     bool normalizeAndSubstitutePathVariables(OUString& _rPath)
     {
