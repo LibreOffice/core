@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:42:27 $
+ *  last change: $Author: rt $ $Date: 2002-08-05 21:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ ModalDialog RID_STYLECATALOG
     Text[ greek ] = "Κατάλογος προτύπων";
     Text[ korean ] = "μ¤νƒ€μΌ λª©λ΅";
     Text[ turkish ] = "Biηim kataloπu";
-    Text[ catalan ] = "Catαlogo de estilos";
+    Text[ catalan ] = "Catΰleg d'estils";
     Text[ thai ] = "ΰΈ£ΰΈ²ΰΈΆΰΈΰΈ²ΰΈ£ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°";
     Moveable = TRUE ;
     OKButton BT_OK
@@ -190,7 +190,7 @@ ModalDialog RID_STYLECATALOG
         Text[ greek ] = "Διαγραφή...";
         Text[ korean ] = "μ‚­μ (~D)...";
         Text[ turkish ] = "~Sil...";
-        Text[ catalan ] = "Su~primeix...";
+        Text[ catalan ] = "~Suprimeix...";
         Text[ thai ] = "~ΰΈ¥ΰΈ...";
     };
     PushButton BT_EDIT
@@ -220,7 +220,7 @@ ModalDialog RID_STYLECATALOG
         Text[ greek ] = "Τροποποίηση...";
         Text[ korean ] = "λ³€κ²½(~M)...";
         Text[ turkish ] = "~Deπiώtir...";
-        Text[ catalan ] = "~Modificar...";
+        Text[ catalan ] = "~Modifica...";
         Text[ thai ] = "~ΰΈ”ΰΈ±ΰΈ”ΰΉΰΈ›ΰΈ¥ΰΈ‡ΰΉΰΈΰΉ‰ΰΉ„ΰΈ‚...";
     };
     PushButton BT_NEW
@@ -336,7 +336,7 @@ String STR_STYLE_FILTER_HIERARCHICAL
     TEXT[ greek ] = "Ιεραρχικά";
     TEXT[ korean ] = "κ³„μΈµ";
     TEXT[ turkish ] = "Hiyerarώik";
-    TEXT[ catalan ] = "Jerαrquico";
+    TEXT[ catalan ] = "Jerΰrquic";
     TEXT[ thai ] = "ΰΈ¥ΰΈ³ΰΈ”ΰΈ±ΰΈΰΈΰΈ±ΰΉ‰ΰΈ™";
 };
  // DLG_STYLE_DESIGNER ----------------------------------------------------
@@ -391,7 +391,7 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text[ greek ] = "Κατάσταση γεμίσματος";
                 Text[ korean ] = "μ±„μ°κΈ°λª¨λ“";
                 Text[ turkish ] = "Doldur kipi";
-                Text[ catalan ] = "Modo regadera";
+                Text[ catalan ] = "Mode Format d'emplenament";
                 Text[ thai ] = "ΰΉ€ΰΈ•ΰΈ΄ΰΈ΅ΰΉ‚ΰΈ«ΰΈ΅ΰΈ”ΰΈ£ΰΈΉΰΈ›ΰΉΰΈΰΈ";
             };
             ToolBoxItem
@@ -420,7 +420,7 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text[ greek ] = "Νέο πρότυπο από επιλογή";
                 Text[ korean ] = "μ„ νƒμ— μλ” μƒ ν…ν”λ¦Ώ";
                 Text[ turkish ] = "Yeni biηim seηimi";
-                Text[ catalan ] = "Nuevo estilo a partir de selecciσn";
+                Text[ catalan ] = "Nou estil a partir de la selecciσ";
                 Text[ thai ] = "ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°ΰΉƒΰΈ«ΰΈ΅ΰΉΰΈΰΈ²ΰΈΰΈΰΈ²ΰΈ£ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈ";
             };
             ToolBoxItem
@@ -449,7 +449,7 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text[ greek ] = "Ενημέρωση προτύπου";
                 Text[ korean ] = "ν…ν”λ¦Ώ μ—…λ°μ΄νΈ";
                 Text[ turkish ] = "Biηimi gόncelle";
-                Text[ catalan ] = "Actualizar estilo";
+                Text[ catalan ] = "Actualitza l'estil";
                 Text[ thai ] = "ΰΈ›ΰΈ£ΰΈ±ΰΈΰΈ›ΰΈ£ΰΈΈΰΈ‡ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°";
             };
         };
