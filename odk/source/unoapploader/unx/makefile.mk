@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 17:07:08 $
+#   last change: $Author: rt $ $Date: 2005-03-29 12:19:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,8 @@ STDLIB= -lX11 -ldl -lc -lm
 .ENDIF          # "$(OS)$(COMID)"=="SOLARISC52"
 
 .IF "$(COM)"=="GCC"
-LINK=gcc
+#LINK=gcc
+LINK=$(CC)
 LINKFLAGS=
 LINKFLAGSAPP=
   .IF "$(OS)"=="FREEBSD"
