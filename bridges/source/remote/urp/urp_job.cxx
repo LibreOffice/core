@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_job.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jbu $ $Date: 2001-12-10 18:55:31 $
+ *  last change: $Author: jbu $ $Date: 2002-03-21 16:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <bridges/remote/proxy.hxx>
 
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/lang/DisposedException.hpp>
 
 #include "urp_job.hxx"
 #include "urp_bridgeimpl.hxx"
@@ -91,13 +92,42 @@ using namespace ::com::sun::star::uno;
 
 namespace bridges_urp
 {
+    static sal_Bool isDisposedExceptionDescriptionAvail( const Type &type )
+    {
+        static sal_Bool bInit;
+        static sal_Bool bReturn;
+        // we don't care for thread safety here, as both threads must come
+        // to the same result
+        if( ! bInit )
+        {
+            typelib_TypeDescription *pTD = 0;
+            typelib_typedescriptionreference_getDescription( & pTD, type.getTypeLibType() );
+            if( pTD )
+            {
+                bReturn = sal_True;
+                typelib_typedescription_release( pTD );
+            }
+            else
+            {
+                bReturn = sal_False;
+            }
+            bInit = sal_True;
+        }
+        return bReturn;
+    }
+
     //--------------------------------------------------------------------------------------
     static void prepareRuntimeExceptionClientSide( uno_Any **ppException , const OUString &s)
     {
-        // TODO : add string to runtimeexception
-        RuntimeException exception;
-        exception.Message = s;
-        Type type = ::getCppuType( ( ::com::sun::star::uno::RuntimeException *) 0 );
+        com::sun::star::lang::DisposedException exception( s , Reference< XInterface > () );
+        Type type = ::getCppuType( &exception );
+        if( !isDisposedExceptionDescriptionAvail( type ) )
+        {
+            // if it is not available (probably missing type library),
+            // then we are satisfied with throwing a normal runtime exception,
+            // for which cppu provides a static description
+            type = getCppuType( ( RuntimeException * ) 0 );
+        }
         uno_type_any_construct( *ppException , &exception , type.getTypeLibType() , 0 );
     }
 
@@ -761,11 +791,17 @@ namespace bridges_urp
     void ServerMultiJob::prepareRuntimeException( const OUString & sMessage , sal_Int32 nCall )
     {
         // -------------------------------
-        // Construct the RuntimeException
+        // Construct the DisposedException
         // -------------------------------
-        RuntimeException exception;
-        exception.Message = sMessage;
-        Type type = getCppuType( (RuntimeException * ) 0 );
+        com::sun::star::lang::DisposedException exception( sMessage , Reference< XInterface > () );
+        Type type = getCppuType( &exception );
+        if( !isDisposedExceptionDescriptionAvail( type ) )
+        {
+            // if it is not available (probably missing type library),
+            // then we are satisfied with throwing a normal runtime exception,
+            // for which cppu provides a static description
+            type = getCppuType( ( RuntimeException * ) 0 );
+        }
 
         m_aEntries[nCall].m_pException = &(m_aEntries[nCall].m_exception);
         uno_type_any_construct( m_aEntries[nCall].m_pException , &exception , type.getTypeLibType() , 0 );
