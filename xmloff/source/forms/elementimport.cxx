@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:08:29 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 #ifndef _XMLOFF_FORMS_ELEMENTIMPORT_HXX_
 #include "elementimport.hxx"
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
-#endif
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
 #endif
@@ -101,14 +98,24 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+
+/** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
+#include <com/sun/star/text/XText.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
 #include <com/sun/star/util/XCloneable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
+#endif
+/** === end UNO includes === **/
 
 #include <algorithm>
+#include <functional>
 
 //.........................................................................
 namespace xmloff
@@ -123,6 +130,7 @@ namespace xmloff
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::xml;
     using namespace ::com::sun::star::util;
+    using namespace ::com::sun::star::text;
 
 #define PROPID_VALUE            1
 #define PROPID_CURRENT_VALUE    2
@@ -234,7 +242,7 @@ namespace xmloff
         Reference< XPropertySetInfo > xPropInfo = m_xElement->getPropertySetInfo();
         if (xPropInfo.is())
         {
-            for (   ConstPropertyValueArrayIterator aCheck = m_aValues.begin();
+            for (   PropertyValueArray::iterator aCheck = m_aValues.begin();
                     aCheck != m_aValues.end();
                     ++aCheck
                 )
@@ -266,7 +274,7 @@ namespace xmloff
             Any* pValues = aValues.getArray();
             // copy
 
-            for (   ConstPropertyValueArrayIterator aPropValues = m_aValues.begin();
+            for (   PropertyValueArray::iterator aPropValues = m_aValues.begin();
                     aPropValues != m_aValues.end();
                     ++aPropValues, ++pNames, ++pValues
                 )
@@ -288,7 +296,7 @@ namespace xmloff
 
         if (!bSuccess)
         {   // no XMultiPropertySet or setting all properties at once failed
-            for (   ConstPropertyValueArrayIterator aPropValues = m_aValues.begin();
+            for (   PropertyValueArray::iterator aPropValues = m_aValues.begin();
                     aPropValues != m_aValues.end();
                     ++aPropValues
                 )
@@ -539,7 +547,7 @@ namespace xmloff
             m_xElement->getPropertyValue(PROPERTY_CLASSID) >>= nClassId;
 
             // translate the value properties we collected in handleAttributes
-            for (   PropertyValueArrayIterator aValueProps = m_aValueProperties.begin();
+            for (   PropertyValueArray::iterator aValueProps = m_aValueProperties.begin();
                     aValueProps != m_aValueProperties.end();
                     ++aValueProps
                 )
@@ -679,7 +687,7 @@ namespace xmloff
                 // is the "value property" part of the sequence?
 
             // look up this property in our sequence
-            for (   ConstPropertyValueArrayIterator aCheck = m_aValues.begin();
+            for (   PropertyValueArray::iterator aCheck = m_aValues.begin();
                     ( aCheck != m_aValues.end() );
                     ++aCheck
                 )
@@ -961,8 +969,50 @@ namespace xmloff
             const Reference< XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType)
         :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
+        ,m_bEncounteredTextPara( false )
     {
         enableTrackAttributes();
+    }
+
+    //---------------------------------------------------------------------
+    SvXMLImportContext* OTextLikeImport::CreateChildContext( sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+        const Reference< sax::XAttributeList >& _rxAttrList )
+    {
+        if ( _rLocalName.equalsIgnoreAsciiCaseAscii( "p" ) && ( XML_NAMESPACE_TEXT == _nPrefix ) )
+        {
+            OSL_ENSURE( m_eElementType == OControlElement::TEXT_AREA,
+                "OTextLikeImport::CreateChildContext: text paragraphs in a non-text-area?" );
+
+            if ( m_eElementType == OControlElement::TEXT_AREA )
+            {
+                Reference< XText > xTextElement( m_xElement, UNO_QUERY );
+                if ( xTextElement.is() )
+                {
+                    UniReference < XMLTextImportHelper > xTextImportHelper( m_rContext.getGlobalContext().GetTextImport() );
+
+                    if ( !m_xCursor.is() )
+                    {
+                        m_xOldCursor = xTextImportHelper->GetCursor();
+                        m_xCursor = xTextElement->createTextCursor();
+
+                        if ( m_xCursor.is() )
+                            xTextImportHelper->SetCursor( m_xCursor );
+                    }
+                    if ( m_xCursor.is() )
+                    {
+                        m_bEncounteredTextPara = true;
+                        return xTextImportHelper->CreateTextChildContext( m_rContext.getGlobalContext(), _nPrefix, _rLocalName, _rxAttrList );
+                    }
+                }
+                else
+                {
+                    // in theory, we could accumulate all the text portions (without formatting),
+                    // and set it as Text property at the model ...
+                }
+            }
+        }
+
+        return OControlImport::CreateChildContext( _nPrefix, _rLocalName, _rxAttrList );
     }
 
     //---------------------------------------------------------------------
@@ -970,7 +1020,7 @@ namespace xmloff
     {
         OControlImport::StartElement(_rxAttrList);
 
-        // handle the convert-empty-to-null attribute, which's default is different from the property default
+        // handle the convert-empty-to-null attribute, whose default is different from the property default
         sal_Bool bHaveEmptyIsNull = sal_False;
         // unfortunately, different classes are imported by this class ('cause they're represented by the
         // same XML element), though not all of them know this property.
@@ -984,6 +1034,137 @@ namespace xmloff
 
         if (bHaveEmptyIsNull)
             simulateDefaultedAttribute(getDatabaseAttributeName(DA_CONVERT_EMPTY), PROPERTY_EMPTY_IS_NULL, "false");
+    }
+
+    //---------------------------------------------------------------------
+    struct EqualHandle : public ::std::unary_function< PropertyValue, bool >
+    {
+        sal_Int32 m_nHandle;
+        EqualHandle( sal_Int32 _nHandle ) : m_nHandle( _nHandle ) { }
+
+        inline bool operator()( const PropertyValue& _rProp )
+        {
+            if ( _rProp.Handle == m_nHandle )
+                return true;
+            return false;
+        }
+    };
+
+    //---------------------------------------------------------------------
+    void OTextLikeImport::removeRedundantCurrentValue()
+    {
+        if ( m_bEncounteredTextPara )
+        {
+            // In case the text is written in the text:p elements, we need to ignore what we read as
+            // current-value attribute, since it's redundant.
+            // fortunately, OElementImport tagged the value property with the PROPID_CURRENT_VALUE
+            // handle, so we do not need to determine the name of our value property here
+            // (normally, it should be "Text", since no other controls than the edit field should
+            // have the text:p elements)
+            PropertyValueArray::iterator aValuePropertyPos = ::std::find_if(
+                m_aValues.begin(),
+                m_aValues.end(),
+                EqualHandle( PROPID_CURRENT_VALUE )
+            );
+            if ( aValuePropertyPos != m_aValues.end() )
+            {
+                OSL_ENSURE( aValuePropertyPos->Name == PROPERTY_TEXT, "OTextLikeImport::EndElement: text:p was present, but our value property is *not* 'Text'!" );
+                if ( aValuePropertyPos->Name == PROPERTY_TEXT )
+                {
+                    ::std::copy(
+                        aValuePropertyPos + 1,
+                        m_aValues.end(),
+                        aValuePropertyPos
+                    );
+                    m_aValues.resize( m_aValues.size() - 1 );
+                }
+            }
+
+            // additionally, we need to set the "RichText" property of our element to TRUE
+            // (the presence of the text:p is used as indicator for the value of the RichText property)
+            sal_Bool bHasRichTextProperty = sal_False;
+            Reference< XPropertySetInfo > xPropInfo;
+            if ( m_xElement.is() )
+                xPropInfo = m_xElement->getPropertySetInfo();
+            if ( xPropInfo.is() )
+                bHasRichTextProperty = xPropInfo->hasPropertyByName( PROPERTY_RICH_TEXT );
+            OSL_ENSURE( bHasRichTextProperty, "OTextLikeImport::EndElement: text:p, but no rich text control?" );
+            if ( bHasRichTextProperty )
+                m_xElement->setPropertyValue( PROPERTY_RICH_TEXT, makeAny( (sal_Bool)sal_True ) );
+        }
+        // Note that we do *not* set the RichText property (in case our element has one) to sal_False here
+        // since this is the default of this property, anyway.
+    }
+
+    //---------------------------------------------------------------------
+    struct EqualName : public ::std::unary_function< PropertyValue, bool >
+    {
+        ::rtl::OUString m_sName;
+        EqualName( const ::rtl::OUString& _rName ) : m_sName( _rName ) { }
+
+        inline bool operator()( const PropertyValue& _rProp )
+        {
+            if ( _rProp.Name == m_sName )
+                return true;
+            return false;
+        }
+    };
+
+    //---------------------------------------------------------------------
+    void OTextLikeImport::adjustDefaultControlProperty()
+    {
+        // In OpenOffice.org 2.0, we changed the implementation of the css.form.component.TextField (the model of a text field control),
+        // so that it now uses another default control. So if we encounter a text field where the *old* default
+        // control property is writting, we are not allowed to use it
+        PropertyValueArray::iterator aDefaultControlPropertyPos = ::std::find_if(
+            m_aValues.begin(),
+            m_aValues.end(),
+            EqualName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultControl" ) ) )
+        );
+        if ( aDefaultControlPropertyPos != m_aValues.end() )
+        {
+            ::rtl::OUString sDefaultControl;
+            OSL_VERIFY( aDefaultControlPropertyPos->Value >>= sDefaultControl );
+            if ( sDefaultControl.equalsAscii( "stardiv.one.form.control.Edit" ) )
+            {
+                // complete remove this property value from the array. Today's "default value" of the "DefaultControl"
+                // property is sufficient
+                ::std::copy(
+                    aDefaultControlPropertyPos + 1,
+                    m_aValues.end(),
+                    aDefaultControlPropertyPos
+                );
+                m_aValues.resize( m_aValues.size() - 1 );
+            }
+        }
+    }
+
+    //---------------------------------------------------------------------
+    void OTextLikeImport::EndElement()
+    {
+        removeRedundantCurrentValue();
+        adjustDefaultControlProperty();
+
+        // let the base class do the stuff
+        OControlImport::EndElement();
+
+        // some cleanups
+        UniReference < XMLTextImportHelper > xTextImportHelper( m_rContext.getGlobalContext().GetTextImport() );
+        if ( m_xCursor.is() )
+        {
+            // delete the newline which has been imported errornously
+            // TODO (fs): stole this code somewhere - why don't we fix the text import??
+            m_xCursor->gotoEnd( sal_False );
+            m_xCursor->goLeft( 1, sal_True );
+            m_xCursor->setString( ::rtl::OUString() );
+
+            // reset cursor
+            xTextImportHelper->ResetCursor();
+        }
+
+        if ( m_xOldCursor.is() )
+            xTextImportHelper->SetCursor( m_xOldCursor );
+
     }
 
     //=====================================================================
