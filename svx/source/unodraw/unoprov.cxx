@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: cl $ $Date: 2000-10-04 14:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@ SfxItemPropertyMap* ImplGetSvxPolyPolygonPropertyMap()
     // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static SfxItemPropertyMap aPolyPolygonPropertyMap_Impl[] =
     {
+        SPECIAL_POLYGON_PROPERTIES
         SPECIAL_POLYPOLYGON_PROPERTIES
         FILL_PROPERTIES
         LINE_PROPERTIES
@@ -184,6 +185,7 @@ SfxItemPropertyMap* ImplGetSvxPolyPolygonBezierPropertyMap()
     // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static SfxItemPropertyMap aPolyPolygonBezierPropertyMap_Impl[] =
     {
+        SPECIAL_POLYGON_PROPERTIES
         SPECIAL_POLYPOLYGONBEZIER_PROPERTIES
         FILL_PROPERTIES
         LINE_PROPERTIES
@@ -357,6 +359,7 @@ SfxItemPropertyMap* ImplGetSvxAllPropertyMap()
         SPECIAL_CONNECTOR_PROPERTIES
         SPECIAL_DIMENSIONING_PROPERTIES
         SPECIAL_CIRCLE_PROPERTIES
+        SPECIAL_POLYGON_PROPERTIES
         SPECIAL_POLYPOLYGON_PROPERTIES
         SPECIAL_POLYPOLYGONBEZIER_PROPERTIES
         SPECIAL_GRAPHOBJ_PROPERTIES
@@ -395,6 +398,7 @@ SfxItemPropertyMap* ImplGetSvxGroupPropertyMap()
         SPECIAL_CONNECTOR_PROPERTIES
         SPECIAL_DIMENSIONING_PROPERTIES
         SPECIAL_CIRCLE_PROPERTIES
+        SPECIAL_POLYGON_PROPERTIES
         SPECIAL_POLYPOLYGON_PROPERTIES
         SPECIAL_POLYPOLYGONBEZIER_PROPERTIES
         SPECIAL_GRAPHOBJ_PROPERTIES
