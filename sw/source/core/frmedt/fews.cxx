@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:09:03 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
 #endif
+#ifndef _FMTSRND_HXX //autogen
+#include <fmtsrnd.hxx>
+#endif
 #ifndef _FMTCNTNT_HXX //autogen
 #include <fmtcntnt.hxx>
 #endif
@@ -125,6 +128,9 @@
 #endif
 #ifndef _FLYFRMS_HXX
 #include <flyfrms.hxx>
+#endif
+#ifndef _TXTFRM_HXX
+#include <txtfrm.hxx>       // SwTxtFrm
 #endif
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>
@@ -840,6 +846,15 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
         pFly = FindFlyFrm();
         pFrm = pFly ? pFly->GetAnchor() : GetCurrFrm();
     }
+
+    sal_Bool bWrapThrough = sal_False;
+    if ( pFly )
+    {
+        SwFlyFrmFmt* pFmt = (SwFlyFrmFmt*)pFly->GetFmt();
+        const SwFmtSurround& rSurround = pFmt->GetSurround();
+        bWrapThrough = rSurround.GetSurround() == SURROUND_THROUGHT;
+    }
+
     SwPageFrm* pPage = pFrm->FindPageFrm();
     bMirror = bMirror && !pPage->OnRightPage();
 
@@ -994,22 +1009,29 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
         else
             aPos = (pFrm->Frm().*fnRect->fnGetPos)();
 
+        const SwTwips nBaseOfstForFly = ( pFrm->IsTxtFrm() && pFly ) ?
+                                        ((SwTxtFrm*)pFrm)->GetBaseOfstForFly( !bWrapThrough ) :
+                                         0;
         if( bVert )
         {
             bVertic = TRUE;
             bMirror = FALSE;
+
             switch ( eRelOrient )
             {
                 case REL_FRM_RIGHT: aPos.Y() += pFrm->Prt().Height();
-                // kein break!
-                case PRTAREA: aPos += (pFrm->Prt().*fnRect->fnGetPos)(); break;
-
+                                    aPos += (pFrm->Prt().*fnRect->fnGetPos)();
+                                    break;
+                case PRTAREA: aPos += (pFrm->Prt().*fnRect->fnGetPos)();
+                              aPos.Y() += nBaseOfstForFly;
+                              break;
                 case REL_PG_RIGHT: aPos.Y() = pPage->Frm().Top()
                                             + pPage->Prt().Bottom(); break;
                 case REL_PG_PRTAREA: aPos.Y() = pPage->Frm().Top()
                                               + pPage->Prt().Top(); break;
                 case REL_PG_LEFT:
                 case REL_PG_FRAME: aPos.Y() = pPage->Frm().Top(); break;
+                case FRAME: aPos.Y() += nBaseOfstForFly; break;
             }
         }
         else if( bMirror )
@@ -1038,6 +1060,7 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
                 case PRTAREA:
                     aPos.X() = pFrm->Frm().Left() + pFrm->Prt().Left() +
                                pFrm->Prt().Width();
+                    aPos.X() += nBaseOfstForFly;
                     break;
 
                 case REL_PG_LEFT:
@@ -1053,6 +1076,10 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
                 case REL_PG_FRAME:
                     aPos.X() = pPage->Frm().Right();
                     break;
+
+                case FRAME:
+                    aPos.X() += nBaseOfstForFly;
+                    break;
             }
         }
         else
@@ -1060,15 +1087,18 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
             switch ( eRelOrient )
             {
                 case REL_FRM_RIGHT: aPos.X() += pFrm->Prt().Width();
-                // kein break!
-                case PRTAREA: aPos += pFrm->Prt().Pos(); break;
-
+                                    aPos += pFrm->Prt().Pos();
+                                    break;
+                case PRTAREA: aPos += pFrm->Prt().Pos();
+                              aPos.X() += nBaseOfstForFly;
+                              break;
                 case REL_PG_RIGHT: aPos.X() = pPage->Frm().Left()
                                             + pPage->Prt().Right(); break;
                 case REL_PG_PRTAREA: aPos.X() = pPage->Frm().Left()
                                               + pPage->Prt().Left(); break;
                 case REL_PG_LEFT:
                 case REL_PG_FRAME: aPos.X() = pPage->Frm().Left(); break;
+                case FRAME: aPos.X() += nBaseOfstForFly; break;
             }
         }
 
