@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:11:36 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,19 +59,17 @@
  *
  ************************************************************************/
 
+#ifndef _BIGINT_HXX
 #define _TOOLS_BIGINT
-#define _SV_FIELD_CXX
+#include <tools/bigint.hxx>
+#endif
 
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
 
-#ifndef _BIGINT_HXX
-#include <tools/bigint.hxx>
-#endif
-
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _TOOLS_RESARY_HXX
 #include <tools/resary.hxx>
@@ -94,21 +92,6 @@
 using namespace ::com::sun::star;
 
 static ResStringArray *strAllUnits = NULL;
-
-// -----------------------------------------------------------------------
-
-// Here again, only for the next update!
-void FormatterBase::SetInternational( const International& )
-{
-}
-
-const International& FormatterBase::GetInternational() const
-{
-    static International* pInt = NULL;
-    if ( !pInt )
-        pInt = new International;
-    return *pInt;
-}
 
 // -----------------------------------------------------------------------
 
@@ -395,14 +378,6 @@ void FormatterBase::ImplSetText( const XubString& rText, Selection* pNewSelectio
 {
     if ( mpField )
     {
-        // !!! TH-18.2.99: Wenn wir Zeit haben sollte mal geklaert werden,
-        // !!! warum SetText() intern bei gleichem Text nicht ImplSetSelection
-        // !!! aufruft, sondern etwas anders macht, denn sehr haeufig kommt
-        // !!! hier der gleiche Text an.
-
-        // ggf. bleibt der Text gleich, aber die Selektion wird geaendert...
-        BOOL bTextChanged = (mpField->GetText() != rText);
-
         if ( pNewSelection )
             mpField->SetText( rText, *pNewSelection );
         else
@@ -411,14 +386,6 @@ void FormatterBase::ImplSetText( const XubString& rText, Selection* pNewSelectio
             aSel.Min() = aSel.Max();
             mpField->SetText( rText, aSel );
         }
-
-        // !!! TH-18.2.99: Wenn wir Zeit haben sollte mal geklaert werden,
-        // !!! warum hier der Modify-Handler gerufen wird !!!
-
-        // !!! MT-8.7.99: Erstmal auskommentiert, koentest recht haben,
-        // !!! Modify wird zu oft gerufen.
-//      if ( MustBeReformatted() && bTextChanged )
-//          mpField->Edit::Modify();    // Nur damit Modify-Hdl gerufen wird.
 
         MarkToBeReformatted( FALSE );
     }
@@ -1168,48 +1135,6 @@ static FieldUnit ImplMetricGetUnit( const XubString& rStr )
 {
     XubString aStr = ImplMetricGetUnitText( rStr );
     return ImplStringToMetric( aStr );
-/*
-    aStr.ToLowerAscii();
-
-    if ( aStr.EqualsAscii( "mm" ) )             // Milimeter
-        return FUNIT_MM;
-    else if ( aStr.EqualsAscii( "cm" ) )        // Centimeter
-        return FUNIT_CM;
-    else if ( aStr.EqualsAscii( "m" ) )         // Meter
-        return FUNIT_M;
-    else if ( aStr.EqualsAscii( "km" ) )        // Km
-        return FUNIT_KM;
-    else if ( aStr.EqualsAscii( "twip" ) )      // Twips
-        return FUNIT_TWIP;
-    else if ( aStr.EqualsAscii( "twips" ) )     // Twips
-        return FUNIT_TWIP;
-    else if ( aStr.EqualsAscii( "pt" ) )        // Point
-        return FUNIT_POINT;
-    else if ( aStr.EqualsAscii( "pi" ) )        // Pica
-        return FUNIT_PICA;
-    else if ( aStr.EqualsAscii( "\"" ) )        // Inch
-        return FUNIT_INCH;
-    else if ( aStr.EqualsAscii( "in" ) )        // Inch
-        return FUNIT_INCH;
-    else if ( aStr.EqualsAscii( "inch" ) )      // Inch
-        return FUNIT_INCH;
-    else if ( aStr.EqualsAscii( "'" ) )         // Foot
-        return FUNIT_FOOT;
-    else if ( aStr.EqualsAscii( "ft" ) )        // Foot
-        return FUNIT_FOOT;
-    else if ( aStr.EqualsAscii( "foot" ) )      // Foot
-        return FUNIT_FOOT;
-    else if ( aStr.EqualsAscii( "feet" ) )      // Foot
-        return FUNIT_FOOT;
-    else if ( aStr.EqualsAscii( "mile" ) )      // Mile
-        return FUNIT_MILE;
-    else if ( aStr.EqualsAscii( "miles" ) )     // Mile
-        return FUNIT_MILE;
-    else if ( aStr.EqualsAscii( "%" ) )         // Percent
-        return FUNIT_PERCENT;
-    else
-        return FUNIT_NONE;
-*/
 }
 
 #define K *1000L
@@ -1289,6 +1214,7 @@ long MetricField::ConvertValue( long nValue, long mnBaseValue, USHORT nDecDigits
 
 // -----------------------------------------------------------------------
 
+// MT: Not needed?
 long MetricField::ConvertValue( long nValue, USHORT nDigits,
                                 MapUnit eInUnit, FieldUnit eOutUnit )
 {
@@ -1297,10 +1223,11 @@ long MetricField::ConvertValue( long nValue, USHORT nDigits,
 
 // -----------------------------------------------------------------------
 
+// MT: Not needed?
 long MetricField::ConvertValue( long nValue, USHORT nDigits,
                                 FieldUnit eInUnit, MapUnit eOutUnit )
 {
-    return (long)ConvertValue( nValue, nDigits, eInUnit, eOutUnit );
+    return (long)ConvertDoubleValue( nValue, nDigits, eInUnit, eOutUnit );
 }
 
 // -----------------------------------------------------------------------
@@ -1591,48 +1518,6 @@ XubString MetricFormatter::CreateFieldText( long nValue ) const
         aStr += ImplMetricToString( meUnit );
 
     return aStr;
-    /*
-    // Einheit dranhaengen
-    switch ( meUnit )
-    {
-        case FUNIT_MM:
-            aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "mm" ) );
-            break;
-        case FUNIT_CM:
-            aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "cm" ) );
-            break;
-        case FUNIT_M:
-            aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "m" ) );
-            break;
-        case FUNIT_KM:
-            aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "km" ) );
-            break;
-        case FUNIT_TWIP:
-            aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "twips" ) );
-            break;
-        case FUNIT_POINT:
-            aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "pt" ) );
-            break;
-        case FUNIT_PICA:
-            aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "pi" ) );
-            break;
-        case FUNIT_INCH:
-            aStr.Append( '"' );
-            break;
-        case FUNIT_FOOT:
-            aStr.Append( '\'' );
-            break;
-        case FUNIT_MILE:
-            aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "miles" ) );
-            break;
-        case FUNIT_CUSTOM:
-            aStr += maCustomUnitText;
-            break;
-        default:
-            break;
-    }
-    return aStr;
-    */
 }
 
 // -----------------------------------------------------------------------
