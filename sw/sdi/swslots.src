@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: os $ $Date: 2002-12-06 14:03:59 $
+ *  last change: $Author: kz $ $Date: 2002-12-09 11:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -9227,7 +9227,7 @@ SfxSlotInfo FN_VIEW_GRAPHIC
     SlotName[ arabic ] = "≈ŸÂ«—/≈Œ›«¡ «·’Ê—…";
     SlotName[ catalan ] = "Gr‡fics activats/desactivats";
     SlotName[ finnish ] = "Grafiikka k‰ytˆss‰ / poissa k‰ytˆst‰";
-    SlotName[ language_user1 ] = "BLG ; BLG 27.07.00 : Plural, da Funktion f¸r alle Grafiken (ob selektiert oder nicht) des Doks g¸ltig.";
+    SlotName[ language_user1 ] = "BLG 27.07.00 : Plural, da Funktion f¸r alle Grafiken (ob selektiert oder nicht) des Doks g¸ltig.";
     SlotName[ thai ] = "‡∏Å‡∏£‡∏≤‡∏ü‡∏¥‡∏Ñ ‡∏°‡∏µ/‡πÑ‡∏°‡πà‡∏°‡∏µ";
 };
 SfxSlotInfo FN_VIEW_HIDDEN_PARA
