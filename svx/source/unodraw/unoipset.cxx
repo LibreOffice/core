@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:14:27 $
+ *  last change: $Author: cl $ $Date: 2001-02-01 18:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,19 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMap* pMap, const
     SfxItemState eState = rSet.GetItemState( pMap->nWID, sal_True, &pItem );
 
     // UnoAny in item-Wert stecken
-    if(eState >= SFX_ITEM_DEFAULT && pItem)
+    if(eState < SFX_ITEM_DEFAULT || pItem == NULL)
+    {
+        SfxItemPool* pPool = rSet.GetPool();
+        if( pPool == NULL )
+        {
+            DBG_ERROR( "No default item and no pool?" );
+            return;
+        }
+
+        pItem = pPool->GetPoolDefaultItem( pMap->nWID );
+    }
+
+    if( pItem )
     {
         pNewItem = pItem->Clone();
         if( pNewItem->PutValue( rVal, pMap->nMemberId ) )
