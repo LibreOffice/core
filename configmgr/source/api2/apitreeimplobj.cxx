@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-08 18:31:56 $
+ *  last change: $Author: jb $ $Date: 2000-12-11 17:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,6 +326,9 @@ bool ApiTreeImpl::disposeTreeNow()
 //-------------------------------------------------------------------------
 bool ApiRootTreeImpl::disposeTree()
 {
+    // ensure our provider stays alive
+    UnoInterfaceRef xKeepProvider( m_aTreeImpl.getUnoProviderInstance() );
+
     vos::ORef<NodeListener> xListener = m_pNotificationListener;
     if (xListener.isValid())
     {
@@ -611,6 +614,9 @@ void ApiRootTreeImpl::NodeListener::disposing(IConfigBroadcaster* _pSource)
 }
 void ApiRootTreeImpl::disposing(IConfigBroadcaster* pSource)
 {
+        // ensure our provider stays alive
+    UnoInterfaceRef xKeepProvider( m_aTreeImpl.getUnoProviderInstance() );
+
     vos::ORef<NodeListener> xListener = m_pNotificationListener;
     if (xListener.isValid())
     {
@@ -801,6 +807,8 @@ void ApiRootTreeImpl::nodeDeleted(OUString const& sPath, IConfigBroadcaster* pSo
                             "'deleted' Path does not check subdirectory boundaries");
     }
 #endif
+    // ensure our provider stays alive
+    UnoInterfaceRef xKeepProvider( m_aTreeImpl.getUnoProviderInstance() );
 
     vos::ORef<NodeListener> xListener = m_pNotificationListener;
     if (xListener.isValid())

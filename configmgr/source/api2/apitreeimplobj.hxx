@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-08 11:19:25 $
+ *  last change: $Author: jb $ $Date: 2000-12-11 17:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ namespace configmgr
 
             uno::XInterface*            getUnoInstance() const  { return m_pInstance; }
             ApiProvider&                getProvider()           { return m_rProvider; }
+            UnoInterfaceRef             getUnoProviderInstance() const  { return m_xProvider; }
         // locking support
             ISynchronizedData*          getProviderLock() const { return m_rProvider.getSourceLock(); }
             ISynchronizedData*          getDataLock() const     { return configuration::getRootLock(m_aTree); }
