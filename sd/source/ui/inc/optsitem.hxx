@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:22:10 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 
 #ifndef _UTL_CONFIGITEM_HXX_ //autogen
 #include <unotools/configitem.hxx>
-#endif
-#ifndef _SFXCFGITEM_HXX //autogen
-#include <sfx2/cfgitem.hxx>
 #endif
 #ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
