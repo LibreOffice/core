@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:38:40 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1424,7 +1424,9 @@ String SwDoc::GetUniqueSectionName( const String* pChkStr ) const
     memset( pSetFlags, 0, nFlagSize );
 
     const SwSectionNode* pSectNd;
-    for( USHORT n = 0; n < pSectionFmtTbl->Count(); ++n )
+    USHORT n;
+
+    for( n = 0; n < pSectionFmtTbl->Count(); ++n )
         if( 0 != ( pSectNd = (*pSectionFmtTbl)[ n ]->GetSectionNode( FALSE ) ))
         {
             const String& rNm = pSectNd->GetSection().GetName();
