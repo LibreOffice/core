@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-18 12:41:21 $
+ *  last change: $Author: sj $ $Date: 2001-01-19 11:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,31 @@
 #define PPT_COLSCHEME_A_H_GESICHERT         (0x08000007)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#define ANSI_CHARSET            0
+#define DEFAULT_CHARSET         1
+#define SYMBOL_CHARSET          2
+#define SHIFTJIS_CHARSET        128
+#define HANGEUL_CHARSET         129
+#define CHINESEBIG5_CHARSET     136
+#define OEM_CHARSET             255
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/* Font Families */
+#define FF_DONTCARE             0x00
+#define FF_ROMAN                0x10
+#define FF_SWISS                0x20
+#define FF_MODERN               0x30
+#define FF_SCRIPT               0x40
+#define FF_DECORATIVE           0x50
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#define DEFAULT_PITCH           0x00
+#define FIXED_PITCH             0x01
+#define VARIABLE_PITCH          0x02
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PptSlidePersistAtom::Clear()
@@ -551,7 +576,71 @@ SvStream& operator>>( SvStream& rIn, PptFontEntityAtom& rAtom )
     rIn >> aHd;
     sal_Unicode nTemp, cData[ 32 ];
     rIn.Read( cData, 64 );
-    rIn >> rAtom.nUnknown;
+
+    sal_uInt8   lfCharset, lfPitchAndFamily;
+
+    rIn >> lfCharset
+        >> rAtom.lfClipPrecision
+        >> rAtom.lfQuality
+        >> lfPitchAndFamily;
+
+    switch( lfCharset )
+    {
+        case SYMBOL_CHARSET :
+            rAtom.eCharSet = RTL_TEXTENCODING_SYMBOL;
+        break;
+        case ANSI_CHARSET :
+            rAtom.eCharSet = RTL_TEXTENCODING_MS_1252;
+        break;
+
+//      case DEFAULT_CHARSET :
+//      case SHIFTJIS_CHARSET :
+//      case HANGEUL_CHARSET :
+//      case CHINESEBIG5_CHARSET :
+//      case OEM_CHARSET :
+        default :
+            rAtom.eCharSet = gsl_getSystemTextEncoding();
+    }
+    switch ( lfPitchAndFamily & 0xf0 )
+    {
+        case FF_ROMAN:
+            rAtom.eFamily = FAMILY_ROMAN;
+        break;
+
+        case FF_SWISS:
+            rAtom.eFamily = FAMILY_SWISS;
+        break;
+
+        case FF_MODERN:
+            rAtom.eFamily = FAMILY_MODERN;
+        break;
+
+        case FF_SCRIPT:
+            rAtom.eFamily = FAMILY_SCRIPT;
+        break;
+
+        case FF_DECORATIVE:
+             rAtom.eFamily = FAMILY_DECORATIVE;
+        break;
+
+        default:
+            rAtom.eFamily = FAMILY_DONTKNOW;
+        break;
+    }
+
+    switch ( lfPitchAndFamily & 0x0f )
+    {
+        case FIXED_PITCH:
+            rAtom.ePitch = PITCH_FIXED;
+        break;
+
+        case DEFAULT_PITCH:
+        case VARIABLE_PITCH:
+        default:
+            rAtom.ePitch = PITCH_VARIABLE;
+        break;
+    }
+
     sal_uInt32 i;
     for ( i = 0; i < 32; i++ )
     {
@@ -716,12 +805,6 @@ FASTBOOL SdrEscherImport::GetColorFromPalette(USHORT nNum, Color& rColor) const
 }
 
 BOOL SdrEscherImport::SeekToShape( SvStream& rSt, void* pClientData, UINT32 nId ) const
-{
-    return FALSE;
-}
-
-
-FASTBOOL SdrEscherImport::GetFont(ULONG nNum, String& rFontName) const
 {
     return FALSE;
 }
@@ -2054,8 +2137,8 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
                     pFonts = new PptFontCollection;
                 PptFontEntityAtom* pFont = new PptFontEntityAtom;
                 rStCtrl >> *pFont;
-                CharSet eCharSet( RTL_TEXTENCODING_SYMBOL );
-                UINT32  nFontId = PPT_UNIQUE_FONT_ID_UNDEFINED;
+
+                sal_uInt32 nFontId = PPT_UNIQUE_FONT_ID_UNDEFINED;
 
                 if ( pFont->aName.CompareIgnoreCaseToAscii( "Wingdings" )== COMPARE_EQUAL )
                 {
@@ -2081,19 +2164,15 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
                     nFontId = PPT_UNIQUE_FONT_ID_STARMATH;
                 else if ( pFont->aName.CompareIgnoreCaseToAscii( "ZapfDingbats" ) == COMPARE_EQUAL )
                     nFontId = PPT_UNIQUE_FONT_ID_ZAPFDINGBATS;
-                else
-                    eCharSet = eCharSetSystem;
 
                 pFont->nUniqueFontId = nFontId;
-                pFont->eCharSet = eCharSet;
                 pFonts->C40_INSERT( PptFontEntityAtom, pFont, nCount++ );
             }
             if ( ! ( nIStarBats & 0x80000000 ) )
             {
                 PptFontEntityAtom* pFont = new PptFontEntityAtom;
                 pFont->aName = String( RTL_CONSTASCII_USTRINGPARAM( "StarBats" ) );
-                pFont->eCharSet = RTL_TEXTENCODING_SYMBOL;
-                pFont->bAvailable = TRUE;
+                pFont->bAvailable = sal_True;
                 pFont->nUniqueFontId = PPT_UNIQUE_FONT_ID_STARBATS;
                 nIStarBats = nCount | 0x80000000;
                 pFonts->C40_INSERT( PptFontEntityAtom, pFont, nCount++ );
@@ -2468,16 +2547,6 @@ BOOL SdrPowerPointImport::SeekToShape( SvStream& rSt, void* pClientData, UINT32 
         }
     }
     return bRet;
-}
-
-FASTBOOL SdrPowerPointImport::GetFont( ULONG nNum, String& rFontName ) const
-{
-    if ( ForceFontCollection() && nNum < pFonts->Count() )
-    {
-        rFontName = (*pFonts)[ (USHORT)nNum ]->GetFontName();
-        return TRUE;
-    }
-    return FALSE;
 }
 
 SdrPage* SdrPowerPointImport::MakeBlancPage( sal_Bool bMaster ) const
@@ -3238,9 +3307,10 @@ sal_Unicode SdrPowerPointImport::PPTSubstitute( UINT16 nFont, sal_Unicode nChar,
         }
         else
             rFont.SetName( pAtom->aName );
+
         rFont.SetCharSet( eCharSet );
-        rFont.SetFamily( FAMILY_DONTKNOW );
-        rFont.SetPitch( PITCH_DONTKNOW );
+        rFont.SetFamily( pAtom->eFamily );
+        rFont.SetPitch( pAtom->ePitch );
 
         if ( eCharSet != RTL_TEXTENCODING_SYMBOL )
         {
@@ -3762,23 +3832,16 @@ void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
         case SVX_NUM_CHARS_UPPER_LETTER_N :
         case SVX_NUM_CHARS_LOWER_LETTER_N :
         {
-            UINT32 nFont = rCharLevel.mnFont;
-            String aFontName;
-            if ( rManager.GetFont( nFont, aFontName ) )
+            sal_uInt32 nFont = rCharLevel.mnFont;
+            PptFontEntityAtom* pFontEnityAtom;
+            pFontEnityAtom = rManager.GetFontEnityAtom( nFont );
+            if ( pFontEnityAtom )
             {
-                CharSet eCharSet = rManager.eCharSetSystem;
-                PptFontCollection& rFontCollection = *rManager.pFonts;
-                if ( nFont < rFontCollection.Count() )
-                {
-                    CharSet eFontCharSet =  rFontCollection[ (USHORT)nFont ]->eCharSet;
-                    if ( eFontCharSet != gsl_getSystemTextEncoding() )
-                        eCharSet = eFontCharSet;
-                }
                 Font aFont;
-                aFont.SetCharSet( eCharSet );
-                aFont.SetName( aFontName );
-                aFont.SetFamily( FAMILY_DONTKNOW );
-                aFont.SetPitch( PITCH_DONTKNOW );
+                aFont.SetCharSet( pFontEnityAtom->eCharSet );
+                aFont.SetName( pFontEnityAtom->aName );
+                aFont.SetFamily( pFontEnityAtom->eFamily );
+                aFont.SetPitch( pFontEnityAtom->ePitch );
                 rNumberFormat.SetBulletFont( &aFont );
             }
         }
@@ -3823,24 +3886,17 @@ BOOL PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
             {
                 if ( pPtr )
                 {
-                    UINT32 nFont;
-                    String aFontName;
+                    sal_uInt32 nFont;
+                    PptFontEntityAtom* pFontEnityAtom;
                     pPtr->GetAttrib( PPT_CharAttr_Font, nFont, nInstanceInSheet );
-                    if ( rManager.GetFont( nFont, aFontName ) )
+                    pFontEnityAtom = rManager.GetFontEnityAtom( nFont );
+                    if ( pFontEnityAtom )
                     {
-                        CharSet eCharSet = rManager.eCharSetSystem;
-                        PptFontCollection& rFontCollection = *rManager.pFonts;
-                        if ( nFont < rFontCollection.Count() )
-                        {
-                            CharSet eFontCharSet =  rFontCollection[ (USHORT)nFont ]->eCharSet;
-                            if ( eFontCharSet != gsl_getSystemTextEncoding() )
-                                eCharSet = eFontCharSet;
-                        }
                         Font aFont;
-                        aFont.SetCharSet( eCharSet );
-                        aFont.SetName( aFontName );
-                        aFont.SetFamily( FAMILY_DONTKNOW );
-                        aFont.SetPitch( PITCH_DONTKNOW );
+                        aFont.SetCharSet( pFontEnityAtom->eCharSet );
+                        aFont.SetName( pFontEnityAtom->aName );
+                        aFont.SetFamily( pFontEnityAtom->eFamily );
+                        aFont.SetPitch( pFontEnityAtom->ePitch );
                         rNumberFormat.SetBulletFont( &aFont );
                     }
                 }
@@ -5332,23 +5388,19 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
     }
     if ( GetAttrib( PPT_CharAttr_Font, nVal, nInstanceInSheet ) )
     {
-        String aFontName;
-        if ( rManager.GetFont( nVal, aFontName ) )
+        PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nVal );
+        if ( pFontEnityAtom )
         {
             CharSet eCharSet = rManager.eCharSetSystem;
             if ( nVal == nAsianFontId ) // when nVal equals nAsianFontId the asian font is used.
             {                           // that also means that the standard font is undefined, so
                 nVal = 0;               // we set the first font. ( usual times new roman )
-                rManager.GetFont( nVal, aFontName );
+                pFontEnityAtom = rManager.GetFontEnityAtom( nVal );
             }
-            PptFontCollection& rFontCollection = *rManager.pFonts;
-            if ( nVal < rFontCollection.Count() )
-            {
-                CharSet eFontCharSet =  rFontCollection[ (USHORT)nVal ]->eCharSet;
-                if ( eFontCharSet != gsl_getSystemTextEncoding() )
-                    eCharSet = eFontCharSet;
-            }
-            rSet.Put( SvxFontItem( FAMILY_DONTKNOW, aFontName, String(), PITCH_DONTKNOW, eCharSet ) );
+            CharSet eFontCharSet =  pFontEnityAtom->eCharSet;
+            if ( eFontCharSet != gsl_getSystemTextEncoding() )
+                eCharSet = eFontCharSet;
+            rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName, String(), pFontEnityAtom->ePitch, eCharSet ) );
         }
     }
     if ( GetAttrib( PPT_CharAttr_FontHeight, nVal, nInstanceInSheet ) ) // Schriftgrad in Point
