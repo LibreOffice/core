@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: iha $ $Date: 2002-10-18 13:03:41 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include "DrawViewShell.hxx"
 
 #ifndef _COM_SUN_STAR_FORM_FORMBUTTONTYPE_HPP_
 #include <com/sun/star/form/FormButtonType.hpp>
@@ -131,24 +133,37 @@
 #include <svtools/cjkoptions.hxx>
 #endif
 
-#include "frmview.hxx"
-#include "sdoutl.hxx"
+#ifndef SD_FRAME_VIEW
+#include "FrameView.hxx"
+#endif
+#include "Outliner.hxx"
 #include "app.hrc"
 
 #include "app.hxx"
-#include "drviewsh.hxx"
 #include "stlsheet.hxx"
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 #include "drawdoc.hxx"
-
-#include "sdwindow.hxx"
-#include "prevchld.hxx"
-#include "preview.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
+#include "PreviewChildWindow.hxx"
+#endif
+#ifndef SD_PREVIEW_WINDOW_HXX
+#include "PreviewWindow.hxx"
+#endif
+#ifndef SD_OBJECT_BAR_MANAGER_HXX
+#include "ObjectBarManager.hxx"
+#endif
 #include "cfgids.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
+
+namespace sd {
 
 /*************************************************************************
 |*
@@ -156,7 +171,7 @@ using namespace ::com::sun::star;
 |*
 \************************************************************************/
 
-void SdDrawViewShell::GetCtrlState(SfxItemSet &rSet)
+void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
 {
 //  rSet.Put(SfxUInt16Item(SID_SWITCHPAGE, aTabControl.GetCurPageId()));
 //  rSet.Put(SfxUInt16Item(SID_SWITCHLAYER, aLayerTab.GetCurPageId()));
@@ -292,7 +307,7 @@ void SdDrawViewShell::GetCtrlState(SfxItemSet &rSet)
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_BLACKWHITE ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_CONTRAST ) )
     {
-        USHORT nId = SdPreviewChildWindow::GetChildWindowId();
+        USHORT nId = PreviewChildWindow::GetChildWindowId();
 
         if( GetViewFrame()->GetChildWindow( nId ) )
         {
@@ -318,12 +333,11 @@ void SdDrawViewShell::GetCtrlState(SfxItemSet &rSet)
 
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_ATTR_YEAR2000) )
     {
-
-        FmFormShell* pShell = (FmFormShell*) aShellTable.Get(RID_FORMLAYER_TOOLBOX);
-        if( pShell )
+        FmFormShell* pFormShell = GetObjectBarManager().GetFormShell();
+        if (pFormShell != NULL)
         {
             UINT16 nState = 0;
-            if ( pShell->GetY2KState(nState) )
+            if (pFormShell->GetY2KState(nState))
                 rSet.Put( SfxUInt16Item( SID_ATTR_YEAR2000, nState ) );
             else
                 rSet.DisableItem( SID_ATTR_YEAR2000 );
@@ -359,7 +373,7 @@ void SdDrawViewShell::GetCtrlState(SfxItemSet &rSet)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::GetAttrState( SfxItemSet& rSet )
+void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 {
     SfxWhichIter    aIter( rSet );
     USHORT          nWhich = aIter.FirstWhich();
@@ -392,7 +406,7 @@ void SdDrawViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_HYPHENATION:
             {
-                SfxItemSet aAttrs( pDoc->GetPool() );
+                SfxItemSet aAttrs( GetDoc()->GetPool() );
                 pDrView->GetAttributes( aAttrs );
                 if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SFX_ITEM_AVAILABLE )
                 {
@@ -534,7 +548,7 @@ void SdDrawViewShell::GetAttrState( SfxItemSet& rSet )
 
     if( bAttr )
     {
-        pSet = new SfxItemSet( pDoc->GetPool() );
+        pSet = new SfxItemSet( GetDoc()->GetPool() );
         pDrView->GetAttributes( *pSet );
         rSet.Put( *pSet, FALSE );
     }
@@ -588,10 +602,10 @@ void SdDrawViewShell::GetAttrState( SfxItemSet& rSet )
 |*
 \************************************************************************/
 
-String SdDrawViewShell::GetSelectionText(BOOL bCompleteWords)
+String DrawViewShell::GetSelectionText(BOOL bCompleteWords)
 {
     String aStrSelection;
-    Outliner* pOl = pDrView->GetTextEditOutliner();
+    ::Outliner* pOl = pDrView->GetTextEditOutliner();
     OutlinerView* pOlView = pDrView->GetTextEditOutlinerView();
 
     if (pOl && pOlView)
@@ -620,7 +634,7 @@ String SdDrawViewShell::GetSelectionText(BOOL bCompleteWords)
 |*
 \************************************************************************/
 
-BOOL SdDrawViewShell::HasSelection(BOOL bText) const
+BOOL DrawViewShell::HasSelection(BOOL bText) const
 {
     BOOL bReturn = FALSE;
 
@@ -641,4 +655,4 @@ BOOL SdDrawViewShell::HasSelection(BOOL bText) const
     return bReturn;
 }
 
-
+} // end of namespace sd
