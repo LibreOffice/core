@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-20 15:05:19 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:57:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,9 @@ extern "C" { int gethostname(char*,int); }
 #include "invert50.h"
 #if !(defined AIX)
 #include <X11/extensions/XShm.h>
+#endif
+#ifdef SOLARIS
+#define XK_KOREAN
 #endif
 #include <X11/keysym.h>
 
@@ -1564,6 +1567,9 @@ XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
         case KEY_HELP:
             nKeySym = XK_Help;
             break;
+        case KEY_HANGUL_HANJA:
+            nKeySym = XK_Hangul_Hanja;
+            break;
 
         default:
             nKeySym = 0;
@@ -1896,6 +1902,9 @@ USHORT SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
             break;
         case XK_equal:
             nKey = KEY_EQUAL;
+            break;
+        case XK_Hangul_Hanja:
+            nKey = KEY_HANGUL_HANJA;
             break;
 //      case XK_Linefeed:
 //          *pcPrintable = '\n';
@@ -3031,17 +3040,8 @@ void SalDisplay::GetScreenFontResolution( long& rDPIX, long& rDPIY ) const
         rDPIY = nThreshold;
     }
 
-    // #i12705# equalize x- and y-resolution if they are close enough
-    if( rDPIX != rDPIY )
-    {
-        if( (12*rDPIX >= 10*rDPIY) && (12*rDPIY >= 10*rDPIX) )  //+-20%
-        {
-#ifdef DEBUG
-            printf("Forcing Resolution from %dx%d to %dx%d\n",rDPIX,rDPIY,rDPIY,rDPIY);
-#endif
-            rDPIX = rDPIY;          // y-resolution is more trustworthy
-        }
-    }
+    // #i18602# always equalize x- and y-resolution
+    rDPIX = rDPIY;
 }
 
 void SalDisplay::InitXinerama()
