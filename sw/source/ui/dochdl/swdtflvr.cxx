@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:22:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3171,10 +3171,14 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
          bSmart = TRNSFR_DOCUMENT_WORD & eBufferType;
     if( bSmart )
     {
-        if( SCRIPTTYPE_LATIN != rShell.GetScriptType() )
-            bSmart = FALSE;
-        else
-        {
+// #108491# Why not for other Scripts? If TRNSFR_DOCUMENT_WORD is set, we have
+// a word in the buffer, word in this context means 'something with spaces at
+// beginning and end'. In this case we definitely want these spaces to be inserted
+// here.
+//      if( SCRIPTTYPE_LATIN != rShell.GetScriptType() )
+//          bSmart = FALSE;
+//      else
+//      {
             bInWrd = rShell.IsInWrd();
              bEndWrd = rShell.IsEndWrd();
             bSmart = bInWrd || bEndWrd;
@@ -3184,7 +3188,7 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
                 if( bSmart && !bSttWrd && (bInWrd || bEndWrd) )
                     rShell.SwEditShell::Insert(' ');
             }
-        }
+//      }
     }
 
     int nRet = rShell.Paste( pClpDocFac->GetDoc() );
