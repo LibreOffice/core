@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 11:11:19 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,55 +611,50 @@ XMLTextImportHelper::XMLTextImportHelper(
 
     if( xFamiliesSupp.is() )
     {
-        Reference< XNameAccess > xFamilies = xFamiliesSupp->getStyleFamilies();
+        Reference< XNameAccess > xFamilies(xFamiliesSupp->getStyleFamilies());
 
         const OUString aParaStyles(RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles"));
         if( xFamilies->hasByName( aParaStyles ) )
         {
-            Any aAny( xFamilies->getByName( aParaStyles ) );
-            aAny >>= xParaStyles;
+            xParaStyles.set(xFamilies->getByName( aParaStyles ), UNO_QUERY);
         }
 
         const OUString aCharStyles(RTL_CONSTASCII_USTRINGPARAM("CharacterStyles"));
         if( xFamilies->hasByName( aCharStyles ) )
         {
-            Any aAny( xFamilies->getByName( aCharStyles ) );
-            aAny >>= xTextStyles;
+            xTextStyles.set(xFamilies->getByName( aCharStyles ), UNO_QUERY);
         }
 
         const OUString aNumStyles(RTL_CONSTASCII_USTRINGPARAM("NumberingStyles"));
         if( xFamilies->hasByName( aNumStyles ) )
         {
-            Any aAny( xFamilies->getByName( aNumStyles ) );
-            aAny >>= xNumStyles;
+            xNumStyles.set(xFamilies->getByName( aNumStyles ), UNO_QUERY);
         }
 
         const OUString aFrameStyles(RTL_CONSTASCII_USTRINGPARAM("FrameStyles"));
         if( xFamilies->hasByName( aFrameStyles ) )
         {
-            Any aAny( xFamilies->getByName( aFrameStyles ) );
-            aAny >>= xFrameStyles;
+            xFrameStyles.set(xFamilies->getByName( aFrameStyles ), UNO_QUERY);
         }
 
         const OUString aPageStyles(RTL_CONSTASCII_USTRINGPARAM("PageStyles"));
         if( xFamilies->hasByName( aPageStyles ) )
         {
-            Any aAny( xFamilies->getByName( aPageStyles ) );
-            aAny >>= xPageStyles;
+            xPageStyles.set(xFamilies->getByName( aPageStyles ), UNO_QUERY);
         }
     }
 
     Reference < XTextFramesSupplier > xTFS( rModel, UNO_QUERY );
     if( xTFS.is() )
-        xTextFrames = xTFS->getTextFrames();
+        xTextFrames.set(xTFS->getTextFrames());
 
     Reference < XTextGraphicObjectsSupplier > xTGOS( rModel, UNO_QUERY );
     if( xTGOS.is() )
-        xGraphics = xTGOS->getGraphicObjects();
+        xGraphics.set(xTGOS->getGraphicObjects());
 
     Reference < XTextEmbeddedObjectsSupplier > xTEOS( rModel, UNO_QUERY );
     if( xTEOS.is() )
-        xObjects = xTEOS->getEmbeddedObjects();
+        xObjects.set(xTEOS->getEmbeddedObjects());
 
     XMLPropertySetMapper *pPropMapper =
             new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA );
@@ -764,16 +759,16 @@ SvXMLImportPropertyMapper*
 
 void XMLTextImportHelper::SetCursor( const Reference < XTextCursor > & rCursor )
 {
-    xCursor = rCursor;
-    xText = rCursor->getText();
-    xCursorAsRange = Reference < XTextRange >( rCursor, UNO_QUERY );
+    xCursor.set(rCursor);
+    xText.set(rCursor->getText());
+    xCursorAsRange.set( rCursor, UNO_QUERY );
 }
 
 void XMLTextImportHelper::ResetCursor()
 {
-    xCursor = 0;
-    xText = 0;
-    xCursorAsRange = 0;
+    xCursor.set(0);
+    xText.set(0);
+    xCursorAsRange.set(0);
 }
 
 SvXMLTokenMap *XMLTextImportHelper::_GetTextElemTokenMap()
@@ -887,14 +882,11 @@ void XMLTextImportHelper::DeleteParagraph()
     Reference < XEnumerationAccess > xEnumAccess( xCursor, UNO_QUERY );
     if( xEnumAccess.is() )
     {
-        Reference < XEnumeration > xEnum = xEnumAccess->createEnumeration();
+        Reference < XEnumeration > xEnum(xEnumAccess->createEnumeration());
         DBG_ASSERT( xEnum->hasMoreElements(), "empty text enumeration" );
         if( xEnum->hasMoreElements() )
         {
-            Any aAny = xEnum->nextElement();
-            Reference < XTextRange > xTxtRange;
-            aAny >>= xTxtRange;
-            Reference < XComponent > xComp( xTxtRange, UNO_QUERY );
+            Reference < XComponent > xComp( xEnum->nextElement(), UNO_QUERY );
             DBG_ASSERT( xComp.is(), "got no component" );
             if( xComp.is() )
             {
@@ -1015,8 +1007,8 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         sStyleName = pStyle->GetParentName();
 
     Reference < XPropertySet > xPropSet( rCursor, UNO_QUERY );
-    Reference< XPropertySetInfo > xPropSetInfo =
-        xPropSet->getPropertySetInfo();
+    Reference< XPropertySetInfo > xPropSetInfo(
+        xPropSet->getPropertySetInfo());
 
     // style
     if( sStyleName.getLength() )
@@ -1030,9 +1022,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             xPropSetInfo->hasPropertyByName( rPropName ) &&
             rStyles->hasByName( sStyleName ) )
         {
-            Any aAny;
-            aAny <<= sStyleName;
-            xPropSet->setPropertyValue( rPropName, aAny );
+            xPropSet->setPropertyValue( rPropName, makeAny(sStyleName) );
         }
         else
             sStyleName = OUString();
@@ -1041,15 +1031,13 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     if( bPara && xPropSetInfo->hasPropertyByName( sNumberingRules )  )
     {
         // Set numbering rules
-        Reference < XIndexReplace > xNumRules;
-        Any aAny = xPropSet->getPropertyValue( sNumberingRules );
-        aAny >>= xNumRules;
+        Reference < XIndexReplace > xNumRules(xPropSet->getPropertyValue( sNumberingRules ), UNO_QUERY);
 
         if( IsInList() )
         {
             XMLTextListBlockContext *pListBlock = GetListBlock();
-            Reference < XIndexReplace > xNewNumRules =
-                pListBlock->GetNumRules();
+            Reference < XIndexReplace > xNewNumRules(
+                pListBlock->GetNumRules());
 
             sal_Bool bSameNumRules = xNewNumRules == xNumRules;
             if( !bSameNumRules && xNewNumRules.is() && xNumRules.is() )
@@ -1072,28 +1060,24 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                         OSL_ENSURE( xCompareFac.is(), "got no XAnyCompareFactory" );
                         if( xCompareFac.is() )
                         {
-                            xNumRuleCompare =
+                            xNumRuleCompare.set(
                                 xCompareFac->createAnyCompareByName(
                                     OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                            "NumberingRules" ) ) );
+                                            "NumberingRules" ) ) ));
                             OSL_ENSURE( xNumRuleCompare .is(),
                                     "got no Numbering Rules comparison" );
                         }
                     }
                     if( xNumRuleCompare.is() )
                     {
-                        Any aNewAny;
-                        aNewAny <<= xNewNumRules;
-                        bSameNumRules = (xNumRuleCompare->compare( aAny,
-                                                                aNewAny ) == 0);
+                        bSameNumRules = (xNumRuleCompare->compare( makeAny(xNumRules),
+                            makeAny(xNewNumRules) ) == 0);
                     }
                 }
             }
 
             if( !bSameNumRules )
             {
-                aAny <<= xNewNumRules;
-
                 // #102607# This may except when xNewNumRules contains
                 // a Writer-NumRule-Implementation bug gets applied to
                 // a shape. Since this may occur inside a document
@@ -1101,7 +1085,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 // gracefully.
                 try
                 {
-                    xPropSet->setPropertyValue( sNumberingRules, aAny );
+                    xPropSet->setPropertyValue( sNumberingRules, makeAny(xNewNumRules) );
                 }
                 catch( Exception e )
                 {
@@ -1118,12 +1102,10 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 xPropSetInfo->hasPropertyByName( sNumberingIsNumber ) )
             {
                 sal_Bool bTmp = sal_False;
-                aAny.setValue( &bTmp, ::getBooleanCppuType() );
-                xPropSet->setPropertyValue( sNumberingIsNumber, aAny );
+                xPropSet->setPropertyValue( sNumberingIsNumber, makeAny(bTmp) );
             }
 
-            aAny <<= nLevel;
-            xPropSet->setPropertyValue( sNumberingLevel, aAny );
+            xPropSet->setPropertyValue( sNumberingLevel, makeAny(nLevel) );
 
             if( pListBlock->IsRestartNumbering() )
             {
@@ -1131,16 +1113,14 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 if( xPropSetInfo->hasPropertyByName( sParaIsNumberingRestart ) )
                 {
                     sal_Bool bTmp = sal_True;
-                    aAny.setValue( &bTmp, ::getBooleanCppuType() );
-                    xPropSet->setPropertyValue( sParaIsNumberingRestart, aAny );
+                    xPropSet->setPropertyValue( sParaIsNumberingRestart, makeAny(bTmp) );
                 }
                 pListBlock->ResetRestartNumbering();
             }
             if( pListItem && pListItem->HasStartValue() &&
                 xPropSetInfo->hasPropertyByName( sNumberingStartValue ) )
             {
-                aAny <<= pListItem->GetStartValue();
-                xPropSet->setPropertyValue( sNumberingStartValue, aAny );
+                xPropSet->setPropertyValue( sNumberingStartValue, makeAny(pListItem->GetStartValue()) );
             }
             SetListItem( (XMLTextListItemContext *)0 );
         }
@@ -1150,8 +1130,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             // the list.
             if( xNumRules.is() )
             {
-                aAny.clear();
-                xPropSet->setPropertyValue( sNumberingRules, aAny );
+                xPropSet->setPropertyValue( sNumberingRules, Any() );
             }
         }
     }
@@ -1171,9 +1150,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 (xPageStyles.is() &&
                  xPageStyles->hasByName( sDisplayName )) )
             {
-                Any aAny;
-                aAny <<= sDisplayName;
-                xPropSet->setPropertyValue( sPageDescName, aAny );
+                xPropSet->setPropertyValue( sPageDescName, makeAny(sDisplayName) );
             }
         }
         if( bPara && pStyle->GetDropCapStyleName().getLength() &&
@@ -1186,9 +1163,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             if( xTextStyles->hasByName( sDisplayName  ) &&
                 xPropSetInfo->hasPropertyByName( sDisplayName ) )
             {
-                Any aAny;
-                aAny <<= sDisplayName;
-                xPropSet->setPropertyValue( pStyle->sDropCapCharStyleName, aAny );
+                xPropSet->setPropertyValue( pStyle->sDropCapCharStyleName, makeAny(sDisplayName) );
             }
         }
 
@@ -1198,9 +1173,8 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             // insert combined characters text field
             if( xServiceFactory.is() )
             {
-                Reference<XInterface> xIfc =
-                   xServiceFactory->createInstance(sServiceCombinedCharacters);
-                if( xIfc.is() )
+                Reference<XPropertySet> xTmp( xServiceFactory->createInstance(sServiceCombinedCharacters), UNO_QUERY );
+                if( xTmp.is() )
                 {
                     // fix cursor if larger than possible for
                     // combined characters field
@@ -1212,10 +1186,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                     }
 
                     // set field value (the combined character string)
-                    Reference<XPropertySet> xTmp( xIfc, UNO_QUERY );
-                    Any aAny;
-                    aAny <<= rCursor->getString();
-                    xTmp->setPropertyValue(sContent, aAny);
+                    xTmp->setPropertyValue(sContent, makeAny(rCursor->getString()));
 
                     // insert the field over it's original text
                     Reference<XTextRange> xRange(rCursor, UNO_QUERY);
@@ -1420,25 +1391,21 @@ void XMLTextImportHelper::SetHyperlink(
     XMLEventsImportContext* pEvents)
 {
     Reference < XPropertySet > xPropSet( rCursor, UNO_QUERY );
-    Reference < XPropertySetInfo > xPropSetInfo =
-        xPropSet->getPropertySetInfo();
+    Reference < XPropertySetInfo > xPropSetInfo(
+        xPropSet->getPropertySetInfo());
     if( !xPropSetInfo.is() || !xPropSetInfo->hasPropertyByName(sHyperLinkURL) )
         return;
 
-    Any aAny;
-    aAny <<= rHRef;
-    xPropSet->setPropertyValue( sHyperLinkURL, aAny );
+    xPropSet->setPropertyValue( sHyperLinkURL, makeAny(rHRef) );
 
     if( xPropSetInfo->hasPropertyByName( sHyperLinkName ) )
     {
-        aAny <<= rName;
-        xPropSet->setPropertyValue( sHyperLinkName, aAny );
+        xPropSet->setPropertyValue( sHyperLinkName, makeAny(rName) );
     }
 
     if( xPropSetInfo->hasPropertyByName( sHyperLinkTarget ) )
     {
-        aAny <<= rTargetFrameName;
-        xPropSet->setPropertyValue( sHyperLinkTarget, aAny );
+        xPropSet->setPropertyValue( sHyperLinkTarget, makeAny(rTargetFrameName) );
     }
 
     if ( (pEvents != NULL) &&
@@ -1448,17 +1415,14 @@ void XMLTextImportHelper::SetHyperlink(
         // other properties: You have to set a name replace with the
         // events in it. The easiest way to to this is to 1) get
         // events, 2) set new ones, and 3) then put events back.
-        aAny = xPropSet->getPropertyValue( sHyperLinkEvents );
-        Reference<XNameReplace> xReplace;
-        aAny >>= xReplace;
+        Reference<XNameReplace> xReplace(xPropSet->getPropertyValue( sHyperLinkEvents ), UNO_QUERY);
         if (xReplace.is())
         {
             // set events
             pEvents->SetEvents(xReplace);
 
             // put events
-            aAny <<= xReplace;
-            xPropSet->setPropertyValue( sHyperLinkEvents, aAny );
+            xPropSet->setPropertyValue( sHyperLinkEvents, makeAny(xReplace) );
         }
     }
 
@@ -1471,8 +1435,7 @@ void XMLTextImportHelper::SetHyperlink(
             xPropSetInfo->hasPropertyByName( sUnvisitedCharStyleName ) &&
             xTextStyles->hasByName( sDisplayName ) )
         {
-            aAny <<= sDisplayName;
-            xPropSet->setPropertyValue( sUnvisitedCharStyleName, aAny );
+            xPropSet->setPropertyValue( sUnvisitedCharStyleName, makeAny(sDisplayName) );
         }
 
         sDisplayName =
@@ -1482,8 +1445,7 @@ void XMLTextImportHelper::SetHyperlink(
             xPropSetInfo->hasPropertyByName( sVisitedCharStyleName ) &&
             xTextStyles->hasByName( sDisplayName ) )
         {
-            aAny <<= sDisplayName;
-            xPropSet->setPropertyValue( sVisitedCharStyleName, aAny );
+            xPropSet->setPropertyValue( sVisitedCharStyleName, makeAny(sDisplayName) );
         }
     }
 }
@@ -1504,11 +1466,8 @@ void XMLTextImportHelper::SetRuby(
     if (xPropSet.is() &&
         xPropSet->getPropertySetInfo()->hasPropertyByName( sRubyText ))
     {
-        Any aAny;
-
         // the ruby text
-        aAny <<= rText;
-        xPropSet->setPropertyValue(sRubyText, aAny);
+        xPropSet->setPropertyValue(sRubyText, makeAny(rText));
 
         // the ruby style (ruby-adjust)
         XMLPropStyleContext *pStyle = 0;
@@ -1534,8 +1493,7 @@ void XMLTextImportHelper::SetRuby(
 //              xPropSetInfo->hasPropertyByName( sRubyCharStyleName ) &&
                 xTextStyles->hasByName( sDisplayName ) )
             {
-                aAny <<= sDisplayName;
-                xPropSet->setPropertyValue(sRubyCharStyleName, aAny);
+                xPropSet->setPropertyValue(sRubyCharStyleName, makeAny(sDisplayName));
             }
         }
     }
@@ -1958,7 +1916,7 @@ void XMLTextImportHelper::InsertBookmarkStartRange(
     const OUString sName,
     const Reference<XTextRange> & rRange)
 {
-    aBookmarkStartRanges[sName] = rRange;
+    aBookmarkStartRanges[sName].set(rRange);
 }
 
 sal_Bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
@@ -1967,7 +1925,7 @@ sal_Bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
 {
     if (aBookmarkStartRanges.count(sName))
     {
-        rRange = aBookmarkStartRanges[sName];
+        rRange.set(aBookmarkStartRanges[sName]);
         aBookmarkStartRanges.erase(sName);
         return sal_True;
     }
@@ -1988,13 +1946,11 @@ void XMLTextImportHelper::ConnectFrameChains(
 
     if( rNextFrmName.getLength() )
     {
-        OUString sNextFrmName = GetRenameMap().Get( XML_TEXT_RENAME_TYPE_FRAME,
-                                                    rNextFrmName );
+        OUString sNextFrmName(GetRenameMap().Get( XML_TEXT_RENAME_TYPE_FRAME,
+                                                    rNextFrmName ));
         if( xTextFrames.is() && xTextFrames->hasByName( sNextFrmName ) )
         {
-            Any aAny;
-            aAny <<= sNextFrmName;
-            rFrmPropSet->setPropertyValue( sChainNextName, aAny );
+            rFrmPropSet->setPropertyValue( sChainNextName, makeAny(sNextFrmName) );
         }
         else
         {
@@ -2021,9 +1977,7 @@ void XMLTextImportHelper::ConnectFrameChains(
                 // inserting the entry
                 String *pPrev = (*pPrevFrmNames)[i];
 
-                Any aAny;
-                aAny <<= OUString( *pPrev );
-                rFrmPropSet->setPropertyValue( sChainPrevName, aAny );
+                rFrmPropSet->setPropertyValue( sChainPrevName, makeAny(OUString( *pPrev )) );
 
                 pPrevFrmNames->Remove( i, 1 );
                 pNextFrmNames->Remove( i, 1 );
@@ -2048,9 +2002,7 @@ sal_Bool XMLTextImportHelper::IsInFrame() const
     {
         if (xPropSet->getPropertySetInfo()->hasPropertyByName(sTextFrame))
         {
-            Any aAny = xPropSet->getPropertyValue(sTextFrame);
-            Reference<XTextFrame> xFrame;
-            aAny >>= xFrame;
+            Reference<XTextFrame> xFrame(xPropSet->getPropertyValue(sTextFrame), UNO_QUERY);
 
             if (xFrame.is())
             {
