@@ -2,9 +2,9 @@
  *
  *  $RCSfile: binarywritehandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:04:38 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
