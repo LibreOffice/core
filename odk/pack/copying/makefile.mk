@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.63 $
+#   $Revision: 1.64 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-27 16:48:06 $
+#   last change: $Author: vg $ $Date: 2003-10-06 16:07:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -135,8 +135,10 @@ LIBLIST = \
     $(DESTDIRLIB)$/icppuhelper.lib 	\
     $(DESTDIRLIB)$/irmcxt.lib
 
-.IF "$(COMEX)"=="8"
+.IF "$(COMEX)"=="8" 
     LIBLIST += $(DESTDIRLIB)$/stlport_vc7.lib
+.ELIF "$(COMEX)"=="10"
+    LIBLIST += $(DESTDIRLIB)$/stlport_vc71.lib
 .ELSE
     LIBLIST += $(DESTDIRLIB)$/stlport_vc6.lib
 .ENDIF
