@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: nn $ $Date: 2001-05-21 11:01:09 $ $Revision: 1.6 $
+ // $Author: nn $ $Date: 2001-06-25 15:33:14 $ $Revision: 1.7 $
  // $Logfile:   T:/sc/sdi/cellsh.sdv  $ $Workfile:   cellsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ interface CellSelection : Selection
     SID_DEFINE_DBNAME           [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_OPENDLG_CONSOLIDATE     [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_OPENDLG_CHART           [ ExecMethod = Execute; StateMethod = GetState; ]
-    SID_IMPORT_DATA             [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_VIEW_DATA_SOURCE_BROWSER [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_OPENDLG_FUNCTION        [ ExecMethod = Execute; StateMethod = GetCellState; ]
     SID_INS_FUNCTION            [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
 
@@ -379,6 +379,9 @@ shell ScCellShell : ScFormatShell
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/05/21 11:01:09  nn
+    #44993# Tools/Hyphenation
+
     Revision 1.5  2001/04/27 19:27:02  nn
     user interface for linked areas / external data sources
 

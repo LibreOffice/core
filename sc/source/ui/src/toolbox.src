@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:39:24 $
+ *  last change: $Author: nn $ $Date: 2001-06-25 15:37:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: kz $ $Date: 2001-06-13 23:39:24 $ $Revision: 1.19 $
+ // $Author: nn $ $Date: 2001-06-25 15:37:41 $ $Revision: 1.20 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -1172,6 +1172,11 @@ ToolBox RID_OBJECTBAR_TOOLS
         {
             Identifier = SID_SEARCH_DLG ;
             HelpID = SID_SEARCH_DLG ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_VIEW_DATA_SOURCE_BROWSER ;
+            HelpID = SID_VIEW_DATA_SOURCE_BROWSER ;
         };
          //--------------------------------------------------------------------
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };

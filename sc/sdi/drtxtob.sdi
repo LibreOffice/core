@@ -17,7 +17,6 @@ interface TableDrawText : Selection
      // andere:
     SID_DRAW_CHART              [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_STYLE_CATALOG           [ StateMethod = StateDisableItems; Export = FALSE; ]
-    SID_IMPORT_DATA             [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_OPENDLG_FUNCTION        [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_STYLE_FAMILY2           [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_STYLE_FAMILY4           [ StateMethod = StateDisableItems; Export = FALSE; ]
