@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hro $ $Date: 2000-12-13 14:39:36 $
+#   last change: $Author: hjs $ $Date: 2001-06-20 14:50:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,8 +61,7 @@
 #*************************************************************************
 
 
-.IF "$(GUIBASE)"=="WIN" || "$(GUIBASE)"=="OS2"
-
+.IF "$(GUIBASE)"=="WIN"
 
 PRJ=..$/..
 
@@ -71,25 +70,10 @@ TARGET=svdde
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
-CXXFILES=	ddecli.cxx			\
-            ddesvr.cxx			\
-            ddedata.cxx 		\
-            ddestrg.cxx 		\
-            ddewrap.cxx			\
-            ddeinf.cxx
-
-.IF "$(GUIBASE)"=="OS2"
-CXXFILES+=\
-            ddeml1.cxx			\
-            ddeml2.cxx			\
-            ddemldeb.cxx
-.ENDIF
 
 SLOFILES=	$(SLO)$/ddecli.obj	\
             $(SLO)$/ddesvr.obj	\
@@ -98,24 +82,9 @@ SLOFILES=	$(SLO)$/ddecli.obj	\
             $(SLO)$/ddewrap.obj \
             $(SLO)$/ddeinf.obj
 
-.IF "$(GUIBASE)"=="OS2"
-SLOFILES+=\
-            $(SLO)$/ddeml1.obj	\
-            $(SLO)$/ddeml2.obj	\
-            $(SLO)$/ddemldeb.obj
-.ENDIF
-.IF "$(depend)" == ""
-
 # --- Targets -------------------------------------------------------
 
-ALL:		$(SLB)$/$(TARGET).lib	\
-            ALLTAR
-
-
-.ENDIF
-
 .INCLUDE :  target.mk
-
 
 .ELSE
 dummy:
