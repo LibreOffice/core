@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-18 15:19:34 $
+ *  last change: $Author: vg $ $Date: 2002-02-19 14:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,15 +990,13 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     KeyEvent aKeyEvent( rKEvt );
     // look for vertical mappings
     {
-        USHORT nKey;
-        switch( rKEvt.GetKeyCode().GetCode() )
-        {
-        case KEY_UP:    nKey = KEY_LEFT;    break;
-        case KEY_DOWN:  nKey = KEY_RIGHT;   break;
-        case KEY_LEFT:  nKey = KEY_DOWN;    break;
-        case KEY_RIGHT: nKey = KEY_UP;      break;
-        default:        nKey = 0;
-        }
+        USHORT nKey = 0;
+        USHORT tmp = rKEvt.GetKeyCode().GetCode();
+        if (tmp == KEY_UP) nKey = KEY_LEFT;
+        else if (tmp == KEY_DOWN) nKey = KEY_RIGHT;
+        else if (tmp == KEY_LEFT) nKey = KEY_DOWN;
+        else if (tmp == KEY_RIGHT) nKey = KEY_UP;
+
         if( nKey && rSh.IsInVerticalText() )
         {
             aKeyEvent = KeyEvent( rKEvt.GetCharCode(),
