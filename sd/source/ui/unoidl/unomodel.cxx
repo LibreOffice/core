@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-02 16:28:09 $
+ *  last change: $Author: hr $ $Date: 2000-11-07 12:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #endif
 
 #ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#include <comphelper/sequence.hxx>
 #endif
 
 #include <rtl/uuid.h>
@@ -687,14 +687,14 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
         aSNS.getArray()[9] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.NotesShape"));
         aSNS.getArray()[10] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.HandoutShape"));
 
-        return utl::concatSequences( aSNS_ORG, aSNS );
+        return comphelper::concatSequences( aSNS_ORG, aSNS );
     }
     else
     {
         uno::Sequence< OUString > aSNS( 1 );
         aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TitleTextShape"));
 
-        return utl::concatSequences( aSNS_ORG, aSNS );
+        return comphelper::concatSequences( aSNS_ORG, aSNS );
     }
 }
 
