@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:50:28 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,12 +222,16 @@ using namespace ::com::sun::star::util;
     #define XDispatchProvider ::com::sun::star::frame::XDispatchProvider
     #define XAccessibleContext ::com::sun::star::accessibility::XAccessibleContext
     #define XAccessible ::com::sun::star::accessibility::XAccessible
+    #define XRowSetSupplier ::com::sun::star::sdb::XRowSetSupplier
+    #define XVclWindowPeer ::com::sun::star::awt::XVclWindowPeer
 #else
     using ::com::sun::star::sdbcx::XColumnsSupplier;
     using ::com::sun::star::frame::XDispatchProviderInterceptor;
     using ::com::sun::star::frame::XDispatchProvider;
     using ::com::sun::star::accessibility::XAccessible;
     using ::com::sun::star::accessibility::XAccessibleContext;
+    using ::com::sun::star::sdb::XRowSetSupplier;
+    using ::com::sun::star::awt::XVclWindowPeer;
 #endif
 
 
@@ -837,37 +841,50 @@ void SAL_CALL FmXGridControl::draw( long x, long y ) throw( RuntimeException )
 //------------------------------------------------------------------------------
 void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    ModeChangeEvent aModeChangeEvent;
 
-    Reference< ::com::sun::star::sdb::XRowSetSupplier >  xGrid(getPeer(), UNO_QUERY);
-
-    if (xGrid.is() && (bOn != mbDesignMode || (!bOn && !xGrid->getRowSet().is())))
+    // --- <mutex_lock> ---
     {
-        if (bOn)
-        {
-            xGrid->setRowSet(Reference< XRowSet > ());
-        }
-        else
-        {
-            Reference< XFormComponent >  xComp(getModel(), UNO_QUERY);
-            if (xComp.is())
-            {
-                Reference< XRowSet >  xForm(xComp->getParent(), UNO_QUERY);
-                xGrid->setRowSet(xForm);
-            }
-        }
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
+        Reference< XRowSetSupplier >  xGrid(getPeer(), UNO_QUERY);
+
+        if (xGrid.is() && (bOn != mbDesignMode || (!bOn && !xGrid->getRowSet().is())))
+        {
+            if (bOn)
+            {
+                xGrid->setRowSet(Reference< XRowSet > ());
+            }
+            else
+            {
+                Reference< XFormComponent >  xComp(getModel(), UNO_QUERY);
+                if (xComp.is())
+                {
+                    Reference< XRowSet >  xForm(xComp->getParent(), UNO_QUERY);
+                    xGrid->setRowSet(xForm);
+                }
+            }
+
+            mbDesignMode = bOn;
+
+            Reference< XVclWindowPeer >  xVclWindowPeer( getPeer(), UNO_QUERY );
+            if (xVclWindowPeer.is())
+                xVclWindowPeer->setDesignMode(bOn);
+        }
         mbDesignMode = bOn;
 
-#ifdef MACOSX
-                Reference< ::com::sun::star::awt::XVclWindowPeer> xVclWindowPeer(getPeer(), UNO_QUERY);
-#else
-        Reference< awt::XVclWindowPeer >  xVclWindowPeer(getPeer(), UNO_QUERY);
-#endif
-        if (xVclWindowPeer.is())
-            xVclWindowPeer->setDesignMode(bOn);
+        // dispose our current AccessibleContext, if we have one
+        // (changing the design mode implies having a new implementation for this context,
+        // so the old one must be declared DEFUNC)
+        disposeAccessibleContext();
+
+        // prepare firing an event
+        aModeChangeEvent.Source = *this;
+        aModeChangeEvent.NewMode = ::rtl::OUString::createFromAscii( mbDesignMode ? "design" : "alive" );
     }
-    mbDesignMode = bOn;
+
+    // --- </mutex_lock> ---
+    NOTIFY_LISTENERS( maModeChangeListeners, XModeChangeListener, modeChanged, aModeChangeEvent );
 }
 
 // XBoundComponent
@@ -1239,38 +1256,42 @@ sal_Int64 SAL_CALL FmXGridPeer::getSomething( const Sequence< sal_Int8 >& _rIden
 //------------------------------------------------------------------------------
 void FmXGridPeer::disposing(const EventObject& e) throw( RuntimeException )
 {
-    EventObject aEvt(static_cast< ::cppu::OWeakObject* >(this));
-    m_aUpdateListeners.disposeAndClear(aEvt);
-    m_aModifyListeners.disposeAndClear(aEvt);
-    m_aContainerListeners.disposeAndClear(aEvt);
+    bool bKnownSender = false;
 
-    Reference< XIndexContainer >  xCols(e.Source, UNO_QUERY);
-    if (xCols.is())
+    Reference< XIndexContainer >  xCols( e.Source, UNO_QUERY );
+    if ( xCols.is() )
+    {
         setColumns(Reference< XIndexContainer > ());
+        bKnownSender = true;
+    }
 
     Reference< XRowSet >  xCursor(e.Source, UNO_QUERY);
     if (xCursor.is())
     {
+        setRowSet( m_xCursor );
         m_xCursor = NULL;
-        setRowSet(m_xCursor);
+        bKnownSender = true;
     }
 
-    if (m_pDispatchers)
+
+    if ( !bKnownSender && m_pDispatchers )
     {
-        const Sequence< ::com::sun::star::util::URL>& aSupportedURLs = getSupportedURLs();
-        const ::com::sun::star::util::URL* pSupportedURLs = aSupportedURLs.getConstArray();
-        sal_Bool bDisconnect = sal_False;
-        for (sal_uInt16 i=0; i<aSupportedURLs.getLength() && !bDisconnect; ++i, ++pSupportedURLs)
+        const Sequence< URL>& aSupportedURLs = getSupportedURLs();
+        const URL* pSupportedURLs = aSupportedURLs.getConstArray();
+        for ( sal_uInt16 i=0; i < ( aSupportedURLs.getLength() ) && !bKnownSender; ++i, ++pSupportedURLs )
         {
-            if (m_pDispatchers[i] == e.Source)
+            if ( m_pDispatchers[i] == e.Source )
             {
-                m_pDispatchers[i]->removeStatusListener((::com::sun::star::frame::XStatusListener*)this, *pSupportedURLs);
+                m_pDispatchers[i]->removeStatusListener( static_cast< XStatusListener* >( this ), *pSupportedURLs );
                 m_pDispatchers[i] = NULL;
                 m_pStateCache[i] = 0;
+                bKnownSender = true;
             }
         }
     }
-    // VCLXComponent::disposing(e);
+
+    if ( !bKnownSender )
+        VCLXWindow::disposing(e);
 }
 
 //------------------------------------------------------------------------------
