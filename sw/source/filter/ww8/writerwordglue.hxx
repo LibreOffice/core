@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerwordglue.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 11:54:45 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:48:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ class SfxItemSet;
 class SwDoc;
 class SwTxtFmtColl;
 class String;
+class PoolItems;
 
 namespace sw
 {
@@ -180,7 +181,6 @@ namespace sw
         bool IsPlausableSingleWordSection(const SwFrmFmt &rTitleFmt,
             const SwFrmFmt &rFollowFmt);
 
-
         /** Make export a word section top/bottom values easy
 
             The top and bottom margins in word and writer are expressed in very
@@ -217,6 +217,7 @@ namespace sw
                 same location, false otherwise.
             */
             bool EqualTopBottom(const HdFtDistanceGlue &rOther) const;
+
         };
     }
 }
