@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 19:28:12 $
+#   last change: $Author: hjs $ $Date: 2004-06-26 03:10:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,7 +122,7 @@ APP2STDLIBS=$(STATIC) `pkg-config --libs gtk+-2.0` -lpng -lzlib -ljpeg -ltiff $(
 .ENDIF
 # Building crash_report_static
 
-ALL: ALLTAR $(BIN)$/crash_dump.res.01
+CRASH_RES=$(foreach,i,$(alllangiso) $(BIN)$/crash_dump.res.$i)
 
 .ENDIF #  "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" == ""
 
@@ -132,9 +132,13 @@ ALL: ALLTAR $(BIN)$/crash_dump.res.01
 
 .INCLUDE :	target.mk
 
+ALLTAR : $(CRASH_RES)
+
 $(OBJ)$/main.obj: $(INCCOM)$/_version.h
 
-$(BIN)$/crash_dump.res.01: ..$/all$/crashrep.lng
-    $(BIN)$/unxcrashres ..$/all$/crashrep.lng $(BIN)$/crash_dump.res
+.IF "$(CRASH_RES)"!=""
+$(CRASH_RES) .UPDATEALL : $(COMMONMISC)$/crash_res$/crashrep.ulf
+    $(BIN)$/unxcrashres $(COMMONMISC)$/crash_res$/crashrep.ulf $(BIN)$/crash_dump.res
+.ENDIF          # "$(CRASH_RES)"!=""
 
 # Building crash_report
