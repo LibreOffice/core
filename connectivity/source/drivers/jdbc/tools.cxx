@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:23:19 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:27:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@ java_util_Properties* connectivity::createStringPropertyArray(JNIEnv *pEnv,const
         // this is a special property to find the jdbc driver
         if( pBegin->Name.compareToAscii("JavaDriverClass") &&
             pBegin->Name.compareToAscii("CharSet") &&
+            pBegin->Name.compareToAscii("AppendTableAlias") &&
             pBegin->Name.compareToAscii("ParameterNameSubstitution") &&
             pBegin->Name.compareToAscii("IsPasswordRequired") &&
             pBegin->Name.compareToAscii("IsAutoRetrievingEnabled") &&
