@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokens.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nf $ $Date: 2002-06-03 13:02:59 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,8 @@
 #define CFG_TOKEN_CONFIGNAME        602
 #define CFG_TOKEN_TEMPLATE          603
 #define CFG_TOKEN_OORNAME           604
+#define CFG_TOKEN_OORVALUE          605
+#define CFG_TOKEN_NO_TRANSLATE      606
 
 /*------------------------------------------------------                    */
 /*------------------------------------------------------                    */
