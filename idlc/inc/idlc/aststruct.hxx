@@ -2,9 +2,9 @@
  *
  *  $RCSfile: aststruct.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:42:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #ifndef _IDLC_ASTSCOPE_HXX_
 #include <idlc/astscope.hxx>
 #endif
+#include "idlc/idlctypes.hxx"
 
 class AstStruct;
 typedef ::std::vector< AstStruct* > InheritedTypes;
@@ -75,7 +76,11 @@ class AstStruct : public AstType
                 , public AstScope
 {
 public:
-    AstStruct(const ::rtl::OString& name, AstStruct* pBaseType, AstScope* pScope);
+    AstStruct(
+        const ::rtl::OString& name,
+        std::vector< rtl::OString > const & typeParameters,
+        AstStruct* pBaseType, AstScope* pScope);
+
     AstStruct(const NodeType type,
               const ::rtl::OString& name,
               AstStruct* pBaseType,
@@ -85,9 +90,17 @@ public:
     AstStruct* getBaseType()
         { return m_pBaseType; }
 
+    DeclList::size_type getTypeParameterCount() const
+    { return m_typeParameters.size(); }
+
+    AstDeclaration const * findTypeParameter(rtl::OString const & name) const;
+
+    virtual bool isType() const;
+
     virtual sal_Bool dump(RegistryKey& rKey);
 private:
     AstStruct* m_pBaseType;
+    DeclList m_typeParameters;
 };
 
 #endif // _IDLC_ASTSTRUCT_HXX_
