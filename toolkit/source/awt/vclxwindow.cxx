@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 10:19:09 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 07:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -764,8 +764,12 @@ void VCLXWindow::setEnable( sal_Bool bEnable ) throw(::com::sun::star::uno::Runt
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    if ( GetWindow() )
-        GetWindow()->Enable( bEnable );
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+    {
+        pWindow->Enable( bEnable, FALSE ); // #95824# without children!
+        pWindow->EnableInput( bEnable );
+    }
 }
 
 void VCLXWindow::setFocus(  ) throw(::com::sun::star::uno::RuntimeException)
@@ -1043,11 +1047,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             {
                 sal_Bool b;
                 if ( Value >>= b )
-                {
-                    pWindow->Enable( b, FALSE ); // without children!
-                    if ( ( eWinType == WINDOW_DIALOG ) || ( eWinType == WINDOW_MODALDIALOG ) || ( eWinType == WINDOW_MODELESSDIALOG ) )
-                        pWindow->EnableInput( b );
-                }
+                    setEnable( b );
             }
             break;
             case BASEPROPERTY_TEXT:
@@ -1580,8 +1580,10 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             Point aP = pDev->PixelToLogic( aPos );
 
             ULONG nFlags = WINDOW_DRAW_NOCONTROLS;
-            if ( pDev->GetOutDevType() == OUTDEV_PRINTER )
-                nFlags |= WINDOW_DRAW_MONO;
+
+            // #80064# Why only Mono?
+            // if ( pDev->GetOutDevType() == OUTDEV_PRINTER )
+            //  nFlags |= WINDOW_DRAW_MONO;
 
             pWindow->Draw( pDev, aP, aSz, nFlags );
         }
