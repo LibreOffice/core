@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-03 09:55:40 $
+ *  last change: $Author: kz $ $Date: 2002-06-11 12:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1119,15 +1119,15 @@ String SCSTR_CONTENT_DRAWING
     TEXT[ russian ] = "Drawing objects";
     TEXT[ greek ] = "Drawing objects";
     TEXT[ dutch ] = "Drawing objects";
-    TEXT[ french ] = "Drawing objects";
+    TEXT[ french ] = "Objets de dessin";
     TEXT[ spanish ] = "Objetos de dibujo";
     TEXT[ finnish ] = "Drawing objects";
-    TEXT[ italian ] = "Drawing objects";
+    TEXT[ italian ] = "Oggetti di disegno";
     TEXT[ danish ] = "Drawing objects";
     TEXT[ swedish ] = "Ritobjekt";
     TEXT[ polish ] = "Drawing objects";
     TEXT[ portuguese_brazilian ] = "Drawing objects";
-    TEXT[ japanese ] = "Drawing objects";
+    TEXT[ japanese ] = "図形描画オブジェクト";
     TEXT[ korean ] = "그리기 개체";
     TEXT[ chinese_simplified ] = "绘图对象";
     TEXT[ chinese_traditional ] = "繪圖物件";
