@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: os $ $Date: 2004-09-16 15:32:51 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:21:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,6 +519,8 @@ class SwDoc
     //
     // COMPATIBILITY FLAGS END
     //
+
+    sal_Bool    bWinEncryption                      ;    // imported document password encrypted?
 
     static SwAutoCompleteWord *pACmpltWords;    // Liste aller Worte fuers AutoComplete
     static sal_uInt16 nUndoActions;     // anzahl von Undo ::com::sun::star::chaos::Action
@@ -2156,6 +2158,9 @@ public:
     //
     // DOCUMENT COMPATIBILITY FLAGS END
     //
+
+    inline void SetWinEncryption(const sal_Bool bImportWinEncryption) {bWinEncryption = bImportWinEncryption; }
+    inline sal_Bool IsWinEncrypted() const         { return bWinEncryption; }
 
     void ReadLayoutCache( SvStream& rStream );
     void WriteLayoutCache( SvStream& rStream );
