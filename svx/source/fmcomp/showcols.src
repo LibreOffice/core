@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showcols.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:16:30 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 19:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,15 +84,15 @@ ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
         Text[ russian ] = "Ñëåäóşùèå êîëîíêè ñïğÿòàíû. Âûäåëèòå òå êîëîíêè, êîòîğûå íåîáõîäèìî ñíîâà ïîêàçàòü è íàæìèòå OK.";
         Text[ greek ] = "Ïé áêüëïõèåò óôŞëåò åßíáé êñõöİò ğñïò ôï ğáñüí. Ğáñáêáëş åğéëİîôå áõôİò ğïõ åğéèõìåßôå íá åìöáíéóôïıí êáé ğáôŞóôå óôç óõíİ÷åéá ôï 'OK'";
         Text[ dutch ] = "De volgende kolommen zijn momenteel verborgen. Markeer de kolommen die u weer zichtbaar wilt maken en klik op OK.";
-        Text[ french ] = "Les colonnes suivantes sont cachées pour l'instant. Veuillez sélectionner celles que vous souhaitez faire afficher et cliquez sur OK.";
+        Text[ french ] = "Les colonnes suivantes sont cachées pour l'instant. Sélectionnez celles que vous souhaitez faire afficher et cliquez sur OK.";
         Text[ spanish ] = "Las siguientes columnas están por ahora ocultas. Seleccione las que deban mostrarse y pulse sobre Aceptar.";
         Text[ italian ] = "Le seguenti colonne sono momentaneamente nascoste. Selezionate le colonne da mostrare si nuovo e confermate il comando con OK.";
         Text[ danish ] = "Følgende kolonner er for tiden skjult. Marker dem, som du igen vil vise, og tryk på OK.";
         Text[ swedish ] = "Följande kolumner är dolda för närvarande. Markera kolumnerna som skall visas igen och välj OK.";
-        Text[ polish ] = "Nastêpuj¹ce kolumny s¹ na razie ukryte. Nale¿y zaznaczyæ kolumny, które maj¹ zostaæ wy?wietlone i nacisn¹æ nastêpnie przycisk OK.";
+        Text[ polish ] = "Nastêpuj¹ce kolumny s¹ na razie ukryte. Nale¿y zaznaczyæ kolumny, które maj¹ zostaæ wyœwietlone i nacisn¹æ nastêpnie przycisk OK.";
         Text[ portuguese_brazilian ] = "The following columns are hidden currently. Please mark the fields you want to show and chosse OK";
         Text[ japanese ] = "Ÿ‚Ì—ñ‚ÍŒ»İ‰B‚³‚ê‚Ä‚¢‚Ü‚·B•\\¦‚·‚×‚«—ñ‚ğ‘I‘ğ‚µ‚ÄOK‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B";
-        Text[ korean ] = "´ÙÀ½ ¿­µéÀº ÇöÀç ¼û°ÜÁø »óÅÂÀÔ´Ï´Ù. ´Ù½Ã ³ªÅ¸³»°íÀÚ ÇÏ´Â ¿­À» ¸¶Å·ÇÑ ´ÙÀ½ OK (È®ÀÎ) ¹öÆ°À» Å¬¸¯ÇÏ½Ê½Ã¿À.";
+        Text[ korean ] = "´ÙÀ½ ¿­µéÀº ÇöÀç ¼û°ÜÁø »óÅÂÀÔ´Ï´Ù. ´Ù½Ã ³ªÅ¸³»°íÀÚ ÇÏ´Â ¿­À» ¼±ÅÃ Ç¥½ÃÇÑ ´ÙÀ½ OK (È®ÀÎ) ¹öÆ°À» Å¬¸¯ÇÏ½Ê½Ã¿À.";
         Text[ chinese_simplified ] = "ÒÑ¾­ÒşÈëÒÔÏÂµÄÁĞ¡£ÇëÑ¡ÖĞÒªÏÔÊ¾µÄÁĞÇøÓò,È»ºóµã»÷È·¶¨¡£";
         Text[ chinese_traditional ] = "¥H¤UªºÄæ¬OÁô¤Jªº¡C½Ğ±z¿ï¨ú­nÅã¥ÜªºÄæ¡AµM¦Z«ö¤@¤U½T©w¡C";
         Text[ arabic ] = "åĞå ÇáÃÚãÏÉ ãÎİíÉ ÍÇáíÇğ. ÇáÑÌÇÁ ÊÍÏíÏ ÇáÃÚãÏÉ ÇáÊí ÊÑíÏ ÅÙåÇÑåÇ¡ Ëã ÇáäŞÑ İæŞ \"ÍÓäÇğ\"";
@@ -136,7 +136,7 @@ ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
     Text[ italian ] = "Mostra colonne";
     Text[ danish ] = "Vis kolonner";
     Text[ swedish ] = "Visa kolumner";
-    Text[ polish ] = "Wy?wietl kolumny";
+    Text[ polish ] = "Wyœwietl kolumny";
     Text[ portuguese_brazilian ] = "Spalten anzeigen";
     Text[ japanese ] = "—ñ‚ğ•\\¦‚·‚é";
     Text[ korean ] = "¿­ Ç¥½Ã";
