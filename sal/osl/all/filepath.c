@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filepath.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hro $ $Date: 2001-11-09 10:37:54 $
+ *  last change: $Author: hro $ $Date: 2001-11-09 11:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ oslFileError SAL_CALL osl_abbreviateSystemPath( rtl_uString *ustrSystemPath, rtl
 
     while ( uPathWidth + uFileWidth > uMaxWidth )
     {
-        if ( ustrPath->length >= 3 )
+        if ( ustrPath->length > 3 )
         {
             ustrPath->length--;
             ustrPath->buffer[ustrPath->length-3] = '.';
@@ -118,7 +118,7 @@ oslFileError SAL_CALL osl_abbreviateSystemPath( rtl_uString *ustrSystemPath, rtl
 
     while ( uPathWidth + uFileWidth > uMaxWidth )
     {
-        if ( ustrFile->length > 3 )
+        if ( ustrFile->length > 4 )
         {
             ustrFile->length--;
             ustrFile->buffer[ustrFile->length-3] = '.';
@@ -138,7 +138,7 @@ oslFileError SAL_CALL osl_abbreviateSystemPath( rtl_uString *ustrSystemPath, rtl
 
     uPathWidth += uFileWidth;
 
-    while ( uPathWidth + uFileWidth > uMaxWidth )
+    while ( uPathWidth > uMaxWidth )
     {
         (*pustrCompacted)->length--;
         (*pustrCompacted)->buffer[(*pustrCompacted)->length] = 0;

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: tra $ $Date: 2001-05-15 12:11:20 $
+#   last change: $Author: hro $ $Date: 2001-11-09 11:36:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,8 @@ TARGET=workben
 LIBTARGET=NO
 TARGETTYPE=CUI
 
-TESTAPP=getlocaleinfotest
+TESTAPP=abbreviatetest
+#TESTAPP=getlocaleinfotest
 #TESTAPP=salstattest
 #TESTAPP=saldyntest
 
@@ -98,6 +99,24 @@ TESTAPP=getlocaleinfotest
     OBJFILES=$(OBJ)$/getlocaleinfotest.obj
 
     APP1TARGET=	getlitest
+    APP1OBJS=$(OBJFILES)
+
+    APP1STDLIBS=\
+                kernel32.lib
+
+    APP1LIBS=\
+            $(LB)$/kernel9x.lib\
+            $(LB)$/isal.lib
+
+    APP1DEPN=$(LB)$/isal.lib
+
+.ENDIF
+
+.IF "$(TESTAPP)" == "abbreviatetest"
+
+    OBJFILES=$(OBJ)$/abbreviatetest.obj
+
+    APP1TARGET=	abbreviatetest
     APP1OBJS=$(OBJFILES)
 
     APP1STDLIBS=\
