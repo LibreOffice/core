@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-02 13:44:05 $
+#   last change: $Author: rt $ $Date: 2004-03-02 11:33:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -144,7 +144,7 @@ EXPORT$(TNR)_PROTECT=$(TMP)$/$(DEF$(TNR)UNIQE:b).bat &&
 
 .ENDIF			# "$(DEFLIB$(TNR)NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 
 .IF "$(APP$(TNR)HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -167,7 +167,7 @@ $(DEF$(TNR)TARGETN) .PHONY : \
 .ENDIF			# "$(BUILD_DRIVE$(TNR))"=="O"
 .ENDIF				# "$(DEFLIB$(TNR)NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 #	+-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -194,7 +194,7 @@ $(DEF$(TNR)TARGETN) .PHONY : \
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +$(EXPORT$(TNR)_PROTECT) $(RM) $(SHL$(TNR)TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(BUILD_DRIVE$(TNR))"=="O"
 #
@@ -204,7 +204,7 @@ $(DEF$(TNR)TARGETN) .PHONY : \
     +$(TMP)$/$(DEF$(TNR)UNIQE:b).bat && $(RM) $(TMP)$/$(DEF$(TNR)UNIQE:b).bat
 .ENDIF			# "$(BUILD_DRIVE$(TNR))"=="O"
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 .ENDIF				# "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(DEF$(TNR)EXPORT1)"!=""
     @echo $(DEF$(TNR)EXPORT1)										>>$@
