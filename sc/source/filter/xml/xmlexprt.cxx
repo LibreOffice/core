@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-25 14:32:39 $
+ *  last change: $Author: dr $ $Date: 2000-10-26 13:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3264,7 +3264,8 @@ void ScXMLExport::WriteAreaLink( const ScMyAreaLink& rAreaLink )
     AddAttribute( XML_NAMESPACE_TABLE, sXML_name, rAreaLink.sSourceStr );
     AddAttribute( XML_NAMESPACE_XLINK, sXML_href, rAreaLink.sURL );
     AddAttribute( XML_NAMESPACE_TABLE, sXML_filter_name, rAreaLink.sFilter );
-    AddAttribute( XML_NAMESPACE_TABLE, sXML_filter_options, rAreaLink.sFilterOptions );
+    if( rAreaLink.sFilterOptions.getLength() )
+        AddAttribute( XML_NAMESPACE_TABLE, sXML_filter_options, rAreaLink.sFilterOptions );
     OUStringBuffer sValue;
     SvXMLUnitConverter::convertNumber( sValue, rAreaLink.GetColCount() );
     AddAttribute( XML_NAMESPACE_TABLE, sXML_last_column_spanned, sValue.makeStringAndClear() );
