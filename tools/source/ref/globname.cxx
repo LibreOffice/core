@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globname.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:08 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,4 +438,48 @@ BOOL SvGlobalNameList::IsEntry( const SvGlobalName & rName )
             return TRUE;
     }
     return FALSE;
+}
+
+com::sun::star::uno::Sequence < sal_Int8 > SvGlobalName::GetByteSequence() const
+{
+    // platform independent representation of a "GlobalName"
+    // maybe transported remotely
+    com::sun::star::uno::Sequence< sal_Int8 > aResult( 16 );
+
+    aResult[0] = (sal_Int8) (*(UINT32 *)pImp->szData >> 24);
+    aResult[1] = (sal_Int8) ((*(UINT32 *)pImp->szData << 8 ) >> 24);
+    aResult[2] = (sal_Int8) ((*(UINT32 *)pImp->szData << 16 ) >> 24);
+    aResult[3] = (sal_Int8) ((*(UINT32 *)pImp->szData << 24 ) >> 24);
+    aResult[4] = (sal_Int8) (*(USHORT *)&pImp->szData[ 4 ] >> 8);
+    aResult[5] = (sal_Int8) ((*(USHORT *)&pImp->szData[ 4 ] << 8 ) >> 8);
+    aResult[6] = (sal_Int8) (*(USHORT *)&pImp->szData[ 6 ] >> 8);
+    aResult[7] = (sal_Int8) ((*(USHORT *)&pImp->szData[ 6 ] << 8 ) >> 8);
+    aResult[8] = pImp->szData[ 8 ];
+    aResult[9] = pImp->szData[ 9 ];
+    aResult[10] = pImp->szData[ 10 ];
+    aResult[11] = pImp->szData[ 11 ];
+    aResult[12] = pImp->szData[ 12 ];
+    aResult[13] = pImp->szData[ 13 ];
+    aResult[14] = pImp->szData[ 14 ];
+    aResult[15] = pImp->szData[ 15 ];
+
+    return aResult;
+}
+
+SvGlobalName::SvGlobalName( const com::sun::star::uno::Sequence < sal_Int8 >& aSeq )
+{
+    // create SvGlobalName from a platform independent representation
+    GUID aResult;
+    if ( aSeq.getLength() == 16 )
+    {
+        aResult.Data1 = ( ( ( ( ( ( sal_uInt8 )aSeq[0] << 8 ) + ( sal_uInt8 )aSeq[1] ) << 8 ) + ( sal_uInt8 )aSeq[2] ) << 8 ) + ( sal_uInt8 )aSeq[3];
+        aResult.Data2 = ( ( sal_uInt8 )aSeq[4] << 8 ) + ( sal_uInt8 )aSeq[5];
+        aResult.Data3 = ( ( sal_uInt8 )aSeq[6] << 8 ) + ( sal_uInt8 )aSeq[7];
+        for( int nInd = 0; nInd < 8; nInd++ )
+            aResult.Data4[nInd] = ( sal_uInt8 )aSeq[nInd+8];
+    }
+
+    pImp = new ImpSvGlobalName();
+    pImp->nRefCount++;
+    memcpy( pImp->szData, &aResult, sizeof( pImp->szData ) );
 }
