@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-19 14:21:22 $
+ *  last change: $Author: sab $ $Date: 2000-10-19 16:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,11 @@ sal_Int32 ScRowFormatRanges::GetMaxRows()
     else
         nMaxRows = 0;
     return nMaxRows;
+}
+
+sal_Int32 ScRowFormatRanges::GetSize()
+{
+    return aRowFormatRanges.size();
 }
 
 sal_Bool LessRowFormatRange (const ScMyRowFormatRange& aRange1, const ScMyRowFormatRange& aRange2)
@@ -1856,7 +1861,7 @@ void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAd
                                     WriteColumn(nColsRepeated, nPrevIndex, bPrevIsVisible);
                                     bPrevIsVisible = bIsVisible;
                                     nPrevIndex = nIndex;
-                                    nColsRepeated = 1;
+                                    nColsRepeated = 0;
                                 }
                                 rtl::OUString sName (GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_table_header_columns))));
                                 GetDocHandler()->ignorableWhitespace(sWS);
@@ -2139,7 +2144,8 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
                     OpenRow(nSheet, nStartRow + nRows, nMaxRows);
                     nRows += nMaxRows;
                 }
-                aCellStyles.GetFormatRanges(0, GetLastColumn(nSheet), nStartRow + nRows, nSheet, aRowFormatRanges);
+                if (!aRowFormatRanges.GetSize())
+                    aCellStyles.GetFormatRanges(0, GetLastColumn(nSheet), nStartRow + nRows, nSheet, aRowFormatRanges);
                 WriteRowContent();
                 CloseRow(nStartRow + nRows - 1);
             }
@@ -2156,7 +2162,6 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
             sal_Int32 nTotalRows = nEndRow - nStartRow + 1 - 1;
             while (nRows < nTotalRows)
             {
-                aRowFormatRanges.Clear();
                 aCellStyles.GetFormatRanges(0, GetLastColumn(nSheet), nStartRow + nRows, nSheet, aRowFormatRanges);
                 sal_Int32 nMaxRows = aRowFormatRanges.GetMaxRows();
                 if (nMaxRows >= nTotalRows - nRows)
@@ -2169,6 +2174,8 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
                     OpenRow(nSheet, nStartRow + nRows, nMaxRows);
                     nRows += nMaxRows;
                 }
+                if (!aRowFormatRanges.GetSize())
+                    aCellStyles.GetFormatRanges(0, GetLastColumn(nSheet), nStartRow + nRows, nSheet, aRowFormatRanges);
                 WriteRowContent();
                 CloseRow(nStartRow + nRows - 1);
             }

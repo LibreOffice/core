@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-18 17:38:50 $
+ *  last change: $Author: sab $ $Date: 2000-10-19 16:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ public:
     void AddRange(const ScMyRowFormatRange& aFormatRange);
     sal_Bool GetNext(ScMyRowFormatRange& aFormatRange);
     sal_Int32 GetMaxRows();
+    sal_Int32 GetSize();
     void Sort();
 };
 
