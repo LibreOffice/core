@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-20 12:42:45 $
+ *  last change: $Author: fs $ $Date: 2002-05-29 13:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,12 @@
 #include "fmitems.hxx"
 #endif
 
+#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
+#endif
+#ifndef _SFXVIEWSH_HXX
+#include <sfx2/viewsh.hxx>
+#endif
 
 //========================================================================
 // class FmInputRecordNoDialog
@@ -302,7 +307,7 @@ void SvxFmTbxCtlConfig::StateChanged(USHORT nSID, SfxItemState eState, const Sfx
             case SID_FM_FORMATTEDFIELD:
             {   // set a new image, matching to this slot
                 SfxViewFrame* pFrame = GetBindings().GetDispatcher()->GetFrame();
-                GetToolBox().SetItemImage( SID_FM_CONFIG, pFrame->GetImageManager()->GetImage( nSlot ) );
+                GetToolBox().SetItemImage( SID_FM_CONFIG, pFrame->GetImageManager()->GetImage( nSlot, GetToolBox().GetDisplayBackground().GetColor().IsDark() ) );
                 nLastSlot = nSlot;
             }
             break;
