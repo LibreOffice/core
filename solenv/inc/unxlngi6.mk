@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:29:10 $
+#   last change: $Author: vg $ $Date: 2005-02-16 16:28:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,6 +122,10 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 CFLAGSCXX= -pipe -mtune=pentiumpro
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
 PICSWITCH:=-fpic
+.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+CFLAGSCXX += -fvisibility-inlines-hidden
+.ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
 CFLAGSOBJGUIST=
 # Compiler flags for compiling static object in single threaded environment with character user interface
