@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResourceProxy.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-11-01 14:51:52 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,6 @@ import java.net.MalformedURLException;
 
 import java.util.Enumeration;
 import java.util.Vector;
-
-import sun.awt.image.URLImageSource;
-import sun.applet.AppletAudioClip;
 
 public class ResourceProxy implements Resource, Cachable {
     private static final boolean DEBUG = false;
