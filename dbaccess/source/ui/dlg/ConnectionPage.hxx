@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionPage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:40:29 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 12:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef DBAUI_CONNECTIONPAGE_HXX
 #define DBAUI_CONNECTIONPAGE_HXX
 
+#ifndef DBAUI_CONNECTIONHELPER_HXX
+#include "ConnectionHelper.hxx"
+#endif
 #ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
 #endif
@@ -77,14 +80,6 @@ namespace dbaui
 {
 //.........................................................................
 
-    // #106016# --------------
-    enum IS_PATH_EXIST
-    {
-        PATH_NOT_EXIST = 0,
-        PATH_EXIST,
-        PATH_NOT_KNOWN
-    };
-
     class IAdminHelper;
     //=========================================================================
     //= OConnectionTabPage
@@ -92,17 +87,13 @@ namespace dbaui
 
     /** implements the connection page of teh data source properties dialog.
     */
-    class OConnectionTabPage : public OGenericAdministrationPage
+    class OConnectionTabPage : public OConnectionHelper
     {
         ODsnTypeCollection* m_pCollection;  /// the DSN type collection instance
         sal_Bool            m_bUserGrabFocus : 1;
     protected:
         // connection
         FixedLine           m_aFL1;
-        FixedText*          m_pConnectionLabel;
-        OConnectionURLEdit  m_aConnection;
-        PushButton          m_aBrowseConnection;
-
         // user authentification
         FixedLine           m_aFL2;
         FixedText           m_aUserNameLabel;
@@ -118,7 +109,6 @@ namespace dbaui
         // connection test
         PushButton          m_aTestConnection;
 
-        DATASOURCE_TYPE     m_eType; // the type can't be changed in this class, so we hold it as member.
 
         // called when the test connection button was clicked
         DECL_LINK(OnTestConnectionClickHdl,PushButton*);
@@ -128,29 +118,27 @@ namespace dbaui
     public:
         static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
         virtual BOOL        FillItemSet (SfxItemSet& _rCoreAttrs);
+
         virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
 
         virtual void SetServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
         {
             OGenericAdministrationPage::SetServiceFactory(_rxORB);
-            m_aConnection.initializeTypeCollection(m_xORB);
+            m_aET_Connection.initializeTypeCollection(m_xORB);
         }
 
-        inline void enableConnectionURL() { m_aConnection.SetReadOnly(sal_False); }
-        inline void disableConnectionURL() { m_aConnection.SetReadOnly(); }
+        inline void enableConnectionURL() { m_aET_Connection.SetReadOnly(sal_False); }
+        inline void disableConnectionURL() { m_aET_Connection.SetReadOnly(); }
 
         /** changes the connection URL.
             <p>The new URL must be of the type which is currently selected, only the parts which do not
             affect the type may be changed (compared to the previous URL).</p>
         */
-        void    changeConnectionURL( const String& _rNewDSN );
-        String  getConnectionURL( ) const;
     protected:
         OConnectionTabPage(Window* pParent, const SfxItemSet& _rCoreAttrs);
             // nControlFlags ist eine Kombination der CBTP_xxx-Konstanten
         virtual ~OConnectionTabPage();
 
-        virtual long PreNotify( NotifyEvent& _rNEvt );
 
         // <method>OGenericAdministrationPage::fillControls</method>
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
@@ -159,32 +147,10 @@ namespace dbaui
     private:
         // setting/retrieving the current connection URL
         // necessary because for some types, the URL must be decoded for display purposes
-        String      getURL( ) const;
-        void        setURL( const String& _rURL );
-        String      getURLNoPrefix( ) const;
-        void        setURLNoPrefix( const String& _rURL );
-
-        String      implGetURL( sal_Bool _bPrefix ) const;
-        void        implSetURL( const String& _rURL, sal_Bool _bPrefix );
-
-        /** checks if the path is existence
-            @param  _rURL
-                The URL to check.
-        */
-        sal_Int32       checkPathExistence(const String& _rURL);
-
-        StringBag getInstalledAdabasDBDirs(const String &_rPath,const ::ucb::ResultSetInclude& _reResultSetInclude);
-        StringBag getInstalledAdabasDBs(const String &_rConfigDir,const String &_rWorkDir);
-
-        // #106016# ----------------
-        IS_PATH_EXIST   pathExists(const ::rtl::OUString& _rURL, sal_Bool bIsFile) const;
-        sal_Bool        createDirectoryDeep(const String& _rPathNormalized);
-        sal_Bool        commitURL();
-
 
         /** enables the test connection button, if allowed
         */
-        void checkTestConnection();
+        virtual bool checkTestConnection();
 
 
         /** opens the FileOpen dialog and asks for a FileName
@@ -193,7 +159,6 @@ namespace dbaui
             @param  _sExtension
                 The filter extension.
         */
-        void askForFileName(const ::rtl::OUString& _sFilterName, const ::rtl::OUString& _sExtension);
     };
 //.........................................................................
 }   // namespace dbaui
