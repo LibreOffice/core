@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:18:06 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
