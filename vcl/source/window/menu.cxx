@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-29 17:37:07 $
+ *  last change: $Author: ssa $ $Date: 2001-12-05 11:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,13 +480,11 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
             Help::ShowBalloon( pMenuWindow, aPos, pMenu->GetHelpText( nId ) );
         else
         {
-            if( pMenu->GetTipHelpText( nId ).Len() )
-            {
-                // give user a chance to read the full filename
-                ULONG oldTimeout=ImplChangeTipTimeout( 60000, pMenuWindow );
-                Help::ShowQuickHelp( pMenuWindow, aRect, pMenu->GetTipHelpText( nId ) );
-                ImplChangeTipTimeout( oldTimeout, pMenuWindow );
-            }
+            // give user a chance to read the full filename
+            ULONG oldTimeout=ImplChangeTipTimeout( 60000, pMenuWindow );
+            // call always, even when strlen==0 to correctly remove tip
+            Help::ShowQuickHelp( pMenuWindow, aRect, pMenu->GetTipHelpText( nId ) );
+            ImplChangeTipTimeout( oldTimeout, pMenuWindow );
         }
         bDone = TRUE;
     }
@@ -494,13 +492,11 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
     {
         Point aPos = rHEvt.GetMousePosPixel();
         Rectangle aRect( aPos, Size() );
-        if( pMenu->GetTipHelpText( nId ).Len() )
-        {
-            // give user a chance to read the full filename
-            ULONG oldTimeout=ImplChangeTipTimeout( 60000, pMenuWindow );
-            Help::ShowQuickHelp( pMenuWindow, aRect, pMenu->GetTipHelpText( nId ) );
-            ImplChangeTipTimeout( oldTimeout, pMenuWindow );
-        }
+        // give user a chance to read the full filename
+        ULONG oldTimeout=ImplChangeTipTimeout( 60000, pMenuWindow );
+        // call always, even when strlen==0 to correctly remove tip
+        Help::ShowQuickHelp( pMenuWindow, aRect, pMenu->GetTipHelpText( nId ) );
+        ImplChangeTipTimeout( oldTimeout, pMenuWindow );
         bDone = TRUE;
     }
     else if ( rHEvt.GetMode() & (HELPMODE_CONTEXT | HELPMODE_EXTENDED) )
@@ -2223,7 +2219,7 @@ long PopupMenu::ImplCalcHeight( USHORT nEntries ) const
     USHORT nFound = 0;
     for ( USHORT n = 0; ( nFound < nEntries ) && ( n < pItemList->Count() ); n++ )
     {
-        if ( ImplIsVisible( n ) )
+        if ( ImplIsVisible( (USHORT) n ) )
         {
             MenuItemData* pData = pItemList->GetDataFromPos( n );
             nHeight += pData->aSz.Height();
