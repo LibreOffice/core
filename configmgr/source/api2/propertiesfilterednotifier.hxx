@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertiesfilterednotifier.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:22:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ namespace configmgr
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener > const& xTarget,
             ::com::sun::star::uno::Sequence< ::rtl::OUString > const& aFilterNames
         );
+        virtual ~PropertiesFilteredNotifier();
 
     public:
         virtual void SAL_CALL acquire(  ) throw();

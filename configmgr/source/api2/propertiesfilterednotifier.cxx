@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertiesfilterednotifier.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,12 +87,17 @@ PropertiesFilteredNotifier::PropertiesFilteredNotifier(
     Reference< beans::XPropertiesChangeListener >const& xTarget,
     Sequence< OUString > const& aFilterNames
 )
-: m_xTarget(xTarget)
+: m_aRefCount()
+, m_xTarget(xTarget)
 , m_aFilterNames(aFilterNames)
-, m_aRefCount()
 {
     OSL_ENSURE(xTarget.is(),"PropertiesFilteredNotifier: FORWARDING TO NULL LISTENER");
     OSL_ENSURE(aFilterNames.getLength() > 0,"PropertiesFilteredNotifier: FILTER IS EMPTY (no target)");
+}
+//-----------------------------------------------------------------------------
+
+PropertiesFilteredNotifier::~PropertiesFilteredNotifier()
+{
 }
 //-----------------------------------------------------------------------------
 
