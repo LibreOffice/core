@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-25 10:51:01 $
+ *  last change: $Author: iha $ $Date: 2002-10-08 16:39:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,6 +298,9 @@ void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
             maEdPassword.SetText ( aURL.GetPass() );
             maFtLogin.Enable ();
             maFtPassword.Enable ();
+
+            maStrOldUser = maEdLogin.GetText();
+            maStrOldPassword = maEdPassword.GetText();
         }
     }
 
@@ -323,8 +326,6 @@ void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
         maBtTarget.Enable( FALSE );
     else
         maBtTarget.Enable( TRUE );
-
-    maBtBrowse.Enable( maStrStdDocURL != aEmptyStr );
 }
 
 /*************************************************************************
@@ -365,21 +366,10 @@ void SvxHyperlinkInternetTp::GetCurentItemData ( String& aStrURL, String& aStrNa
     {
         aURL.SetUserAndPass ( maEdLogin.GetText(), maEdPassword.GetText() );
     }
-
-    // get data from standard-fields
-    aStrIntName = mpEdText->GetText();
-    aStrName    = mpEdIndication->GetText();
-    aStrFrame   = mpCbbFrame->GetText();
-    eMode       = (SvxLinkInsertMode) (mpLbForm->GetSelectEntryPos()+1);
-
-    if( IsHTMLDoc() )
-        eMode = (SvxLinkInsertMode) ( UINT16(eMode) | HLINK_HTMLMODE );
-
     if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
         aStrURL = aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
 
-    if( aStrName == aEmptyStr )
-        aStrName = aStrURL;
+    GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );
 }
 
 /*************************************************************************
@@ -391,113 +381,6 @@ void SvxHyperlinkInternetTp::GetCurentItemData ( String& aStrURL, String& aStrNa
 IconChoicePage* SvxHyperlinkInternetTp::Create( Window* pWindow, const SfxItemSet& rItemSet )
 {
     return( new SvxHyperlinkInternetTp( pWindow, rItemSet ) );
-}
-
-/*************************************************************************
-|*
-|* Activate / Deactivate Tabpage
-|*
-|************************************************************************/
-
-void SvxHyperlinkInternetTp::ActivatePage( const SfxItemSet& rItemSet )
-{
-    ///////////////////////////////////////
-    // Set dialog-fields from input-itemset
-    SvxHyperlinkItem *pHyperlinkItem = (SvxHyperlinkItem *)
-                                       rItemSet.GetItem (SID_HYPERLINK_GETLINK);
-
-    if ( pHyperlinkItem )
-    {
-        // standard-fields
-        FillStandardDlgFields (pHyperlinkItem);
-
-        maStrOldUser = maEdLogin.GetText();
-        maStrOldPassword = maEdPassword.GetText();
-
-        mbNewName = ( pHyperlinkItem->GetName() == aEmptyStr );
-    }
-
-    // show mark-window if it was open before
-    if ( mbMarkWndOpen && maRbtLinktypInternet.IsChecked() )
-        ShowMarkWnd ();
-
-    maBtBrowse.Enable( maStrStdDocURL != aEmptyStr );
-}
-
-int SvxHyperlinkInternetTp::DeactivatePage( SfxItemSet* pSet)
-{
-    mbMarkWndOpen = IsMarkWndVisible ();
-    HideMarkWnd ();
-
-    String aStrURL, aStrName, aStrIntName, aStrFrame;
-    SvxLinkInsertMode eMode;
-
-    GetCurentItemData ( aStrURL, aStrName, aStrIntName, aStrFrame, eMode);
-
-    USHORT nEvents = GetMacroEvents();
-    SvxMacroTableDtor* pTable = GetMacroTable();
-
-    if( pSet )
-    {
-        SvxHyperlinkItem aItem( SID_HYPERLINK_GETLINK, aStrName, aStrURL, aStrFrame,
-                                aStrIntName, eMode, nEvents, pTable );
-        pSet->Put( aItem );
-    }
-
-    return( LEAVE_PAGE );
-}
-
-/*************************************************************************
-|*
-|* Fill output-ItemSet
-|*
-|************************************************************************/
-
-BOOL SvxHyperlinkInternetTp::FillItemSet( SfxItemSet& rOut)
-{
-    String aStrURL, aStrName, aStrIntName, aStrFrame;
-    SvxLinkInsertMode eMode;
-
-    GetCurentItemData ( aStrURL, aStrName, aStrIntName, aStrFrame, eMode);
-
-    USHORT nEvents = GetMacroEvents();
-    SvxMacroTableDtor* pTable = GetMacroTable();
-
-    SvxHyperlinkItem aItem( SID_HYPERLINK_SETLINK, aStrName, aStrURL, aStrFrame,
-                            aStrIntName, eMode, nEvents, pTable );
-    rOut.Put (aItem);
-
-    return TRUE;
-}
-
-/*************************************************************************
-|*
-|* Reset dialogfields
-|*
-|************************************************************************/
-
-void SvxHyperlinkInternetTp::Reset( const SfxItemSet& rItemSet)
-{
-    ///////////////////////////////////////
-    // Set dialog-fields from create-itemset
-    maStrInitURL = aEmptyStr;
-
-    SvxHyperlinkItem *pHyperlinkItem = (SvxHyperlinkItem *)
-                                       rItemSet.GetItem (SID_HYPERLINK_GETLINK);
-
-    if ( pHyperlinkItem )
-    {
-        // set dialog-fields
-        FillStandardDlgFields (pHyperlinkItem);
-
-        // set all other fields
-        FillDlgFields ( (String&)pHyperlinkItem->GetURL() );
-
-        // Store initial URL
-        maStrInitURL = pHyperlinkItem->GetURL();
-
-        mbNewName = ( pHyperlinkItem->GetName() == aEmptyStr );
-    }
 }
 
 /*************************************************************************
@@ -521,11 +404,6 @@ IMPL_LINK ( SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl, void *, EMPTYARG )
 {
     String aStrCurrentTarget( maCbbTarget.GetText() );
     aStrCurrentTarget.EraseTrailingChars();
-
-    if ( mbNewName )
-    {
-        mpEdIndication->SetText ( aStrCurrentTarget );
-    }
 
     if( aStrCurrentTarget == aEmptyStr                ||
         aStrCurrentTarget.EqualsIgnoreCaseAscii( sHTTPScheme )  ||
@@ -787,27 +665,20 @@ IMPL_LINK ( SvxHyperlinkInternetTp, ClickTypeTelnetHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK ( SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, void *, EMPTYARG )
 {
-    // change username & password
-    String aStrUser ( maEdLogin.GetText() );
-    String aStrPassword ( maEdPassword.GetText() );
-
-    if( maStrOldUser.EqualsIgnoreCaseAscii( sAnonymous ) )
-    {
-        maEdLogin.SetText( aEmptyStr );
-        maEdPassword.SetText( aEmptyStr );
-    }
-    else
-    {
-        maEdLogin.SetText ( maStrOldUser );
-        maEdPassword.SetText ( maStrOldPassword );
-    }
-
-    maStrOldUser = aStrUser;
-    maStrOldPassword = aStrPassword;
-
     // disable login-editfields if checked
     if ( maCbAnonymous.IsChecked() )
     {
+        if ( maEdLogin.GetText().ToLowerAscii().SearchAscii ( sAnonymous ) == 0 )
+        {
+            maStrOldUser = aEmptyStr;
+            maStrOldPassword = aEmptyStr;
+        }
+        else
+        {
+            maStrOldUser = maEdLogin.GetText();
+            maStrOldPassword = maEdPassword.GetText();
+        }
+
         SvAddressParser aAddress( SvtUserOptions().GetEmail() );
         maEdLogin.SetText( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM ( sAnonymous ) ) );
         maEdPassword.SetText( aAddress.Count() ? aAddress.GetEmailAddress(0) : String() );
@@ -819,6 +690,9 @@ IMPL_LINK ( SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, void *, EMPTYARG )
     }
     else
     {
+        maEdLogin.SetText ( maStrOldUser );
+        maEdPassword.SetText ( maStrOldPassword );
+
         maFtLogin.Enable ();
         maFtPassword.Enable ();
         maEdLogin.Enable ();

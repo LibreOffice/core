@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldoctp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-23 07:24:29 $
+ *  last change: $Author: iha $ $Date: 2002-10-08 16:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,29 +240,6 @@ String SvxHyperlinkDocTp::GetCurrentURL ()
 
 /*************************************************************************
 |*
-|* retrieve current url-string
-|*
-|************************************************************************/
-
-String SvxHyperlinkDocTp::GetCurrentUiURL ()
-{
-    String          aStrURL;
-    INetURLObject   aURLObj( GetCurrentURL() );
-
-    if( aURLObj.GetProtocol() == INET_PROT_FILE )
-    {
-        utl::LocalFileHelper::ConvertURLToSystemPath( aURLObj.GetMainURL(INetURLObject::NO_DECODE), aStrURL );
-    }
-    else
-    {
-        aStrURL = aURLObj.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
-    }
-
-    return aStrURL;
-}
-
-/*************************************************************************
-|*
 |* retrieve and prepare data from dialog-fields
 |*
 |************************************************************************/
@@ -278,15 +255,7 @@ void SvxHyperlinkDocTp::GetCurentItemData ( String& aStrURL, String& aStrName,
         aStrURL.EqualsIgnoreCaseAscii( sPortalFileScheme ) )
          aStrURL=aEmptyStr;
 
-    aStrIntName = mpEdText->GetText();
-    aStrName    = mpEdIndication->GetText();
-    aStrFrame   = mpCbbFrame->GetText();
-    eMode       = (SvxLinkInsertMode) (mpLbForm->GetSelectEntryPos()+1);
-    if( IsHTMLDoc() )
-        eMode = (SvxLinkInsertMode) ( UINT16(eMode) | HLINK_HTMLMODE );
-
-    if ( aStrName == aEmptyStr )
-        aStrName = aStrURL;
+    GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );
 }
 
 /*************************************************************************
@@ -298,112 +267,6 @@ void SvxHyperlinkDocTp::GetCurentItemData ( String& aStrURL, String& aStrName,
 IconChoicePage* SvxHyperlinkDocTp::Create( Window* pWindow, const SfxItemSet& rItemSet )
 {
     return( new SvxHyperlinkDocTp( pWindow, rItemSet ) );
-}
-
-/*************************************************************************
-|*
-|* Activate / Deactivate Tabpage
-|*
-|************************************************************************/
-
-void SvxHyperlinkDocTp::ActivatePage( const SfxItemSet& rItemSet )
-{
-    ///////////////////////////////////////
-    // Set dialog-fields from input-itemset
-    SvxHyperlinkItem *pHyperlinkItem = (SvxHyperlinkItem *)
-                                       rItemSet.GetItem (SID_HYPERLINK_GETLINK);
-
-    if ( pHyperlinkItem )
-    {
-        // standard-fields
-        FillStandardDlgFields (pHyperlinkItem);
-
-        mbNewName = ( pHyperlinkItem->GetName() == aEmptyStr );
-    }
-
-    // show mark-window if it was open before
-    if ( mbMarkWndOpen )
-        ShowMarkWnd ();
-}
-
-int SvxHyperlinkDocTp::DeactivatePage( SfxItemSet* pSet )
-{
-    // hide mark-wnd
-    mbMarkWndOpen = IsMarkWndVisible ();
-    HideMarkWnd ();
-
-    // retrieve data of dialog
-    String aStrURL, aStrName, aStrIntName, aStrFrame;
-    SvxLinkInsertMode eMode;
-
-    GetCurentItemData ( aStrURL, aStrName, aStrIntName, aStrFrame, eMode);
-
-    // put item
-    USHORT nEvents = GetMacroEvents();
-    SvxMacroTableDtor* pTable = GetMacroTable();
-
-    if( pSet )
-    {
-        SvxHyperlinkItem aItem( SID_HYPERLINK_GETLINK, aStrName, aStrURL, aStrFrame,
-                                aStrIntName, eMode, nEvents, pTable );
-        pSet->Put (aItem);
-    }
-
-    return( LEAVE_PAGE );
-}
-
-/*************************************************************************
-|*
-|* Fill output-ItemSet
-|*
-|************************************************************************/
-
-BOOL SvxHyperlinkDocTp::FillItemSet( SfxItemSet& rOut)
-{
-    String aStrURL, aStrName, aStrIntName, aStrFrame;
-    SvxLinkInsertMode eMode;
-
-    GetCurentItemData ( aStrURL, aStrName, aStrIntName, aStrFrame, eMode);
-
-    // put data into itemset
-    USHORT nEvents = GetMacroEvents();
-    SvxMacroTableDtor* pTable = GetMacroTable();
-
-    SvxHyperlinkItem aItem( SID_HYPERLINK_SETLINK, aStrName, aStrURL, aStrFrame,
-                            aStrIntName, eMode, nEvents, pTable );
-    rOut.Put (aItem);
-
-    return TRUE;
-}
-
-/*************************************************************************
-|*
-|* reset dialog-fields
-|*
-|************************************************************************/
-
-void SvxHyperlinkDocTp::Reset( const SfxItemSet& rItemSet)
-{
-    ///////////////////////////////////////
-    // Set dialog-fields from create-itemset
-    maStrInitURL = aEmptyStr;
-
-    SvxHyperlinkItem *pHyperlinkItem = (SvxHyperlinkItem *)
-                                       rItemSet.GetItem (SID_HYPERLINK_GETLINK);
-
-    if ( pHyperlinkItem )
-    {
-        mbNewName = ( pHyperlinkItem->GetName() == aEmptyStr );
-
-        // set dialog-fields
-        FillStandardDlgFields (pHyperlinkItem);
-
-        // set all other fields
-        FillDlgFields ( (String&)pHyperlinkItem->GetURL() );
-
-        // Store initial URL
-        maStrInitURL = pHyperlinkItem->GetURL();
-    }
 }
 
 /*************************************************************************
@@ -500,10 +363,6 @@ IMPL_LINK ( SvxHyperlinkDocTp, ModifiedPathHdl_Impl, void *, EMPTYARG )
 
     maFtFullURL.SetText( maStrURL );
 
-    if ( mbNewName && !maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) &&
-                      !maStrURL.EqualsIgnoreCaseAscii( sPortalFileScheme ) )
-        mpEdIndication->SetText( GetCurrentUiURL() );
-
     return( 0L );
 }
 
@@ -548,10 +407,6 @@ IMPL_LINK ( SvxHyperlinkDocTp, ModifiedTargetHdl_Impl, void *, EMPTYARG )
 
     maFtFullURL.SetText( maStrURL );
 
-    if ( mbNewName && !maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) &&
-                      !maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) )
-        mpEdIndication->SetText( GetCurrentUiURL() );
-
     return( 0L );
 }
 
@@ -566,10 +421,6 @@ IMPL_LINK ( SvxHyperlinkDocTp, LostFocusPathHdl_Impl, void *, EMPTYARG )
     maStrURL = GetCurrentURL();
 
     maFtFullURL.SetText( maStrURL );
-
-    if ( mbNewName && !maStrURL.EqualsIgnoreCaseAscii( sFileScheme )  &&
-                      !maStrURL.EqualsIgnoreCaseAscii( sPortalFileScheme ))
-        mpEdIndication->SetText( GetCurrentUiURL() );
 
     return (0L);
 }
@@ -607,3 +458,19 @@ SvxHyperlinkDocTp::EPathType SvxHyperlinkDocTp::GetPathType ( String& aStrPath )
 }
 
 
+String SvxHyperlinkDocTp::CreateUiNameFromURL( const String& aStrURL )
+{
+    String          aStrUiURL;
+    INetURLObject   aURLObj( aStrURL );
+
+    if( aURLObj.GetProtocol() == INET_PROT_FILE )
+    {
+        utl::LocalFileHelper::ConvertURLToSystemPath( aURLObj.GetMainURL(INetURLObject::NO_DECODE), aStrUiURL );
+    }
+    else
+    {
+        aStrUiURL = aURLObj.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
+    }
+
+    return aStrUiURL;
+}

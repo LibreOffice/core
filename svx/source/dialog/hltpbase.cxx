@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-14 07:31:25 $
+ *  last change: $Author: iha $ $Date: 2002-10-08 16:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,6 @@ SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( Window *pParent,
     mpBtScript              ( NULL ),
     IconChoicePage          ( pParent, rResId, rItemSet ),
     mpDialog                ( pParent ),
-    mbNewName               ( FALSE ),
     mbStdControlsInit       ( FALSE )
 {
     // create bookmark-window
@@ -395,7 +394,6 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
         mpBtScript    = new ImageButton         ( this, ResId (BTN_SCRIPT) );
 
         mpBtScript->SetClickHdl ( LINK ( this, SvxHyperlinkTabPageBase, ClickScriptHdl_Impl ) );
-        mpEdIndication->SetModifyHdl( LINK ( this, SvxHyperlinkTabPageBase, ModifiedIndicationHdl_Impl ) );
 
         mpBtScript->SetModeImage( Image( ResId( IMG_SCRIPT_HC ) ), BMP_COLOR_HIGHCONTRAST );
         mpBtScript->EnableTextDisplay (FALSE);
@@ -554,22 +552,6 @@ void SvxHyperlinkTabPageBase::SetMarkStr ( String& aStrMark )
 void SvxHyperlinkTabPageBase::SetOnlineMode( BOOL bEnable )
 {
     // default-implemtation : do nothing
-}
-
-/*************************************************************************
-|*
-|* Modified indication-text
-|*
-|************************************************************************/
-
-IMPL_LINK ( SvxHyperlinkTabPageBase, ModifiedIndicationHdl_Impl , void *, EMPTYARG )
-{
-    // if I have edited the indication, I don't want the dialog
-    // do set the indication automatically !
-
-    mbNewName = FALSE;
-
-    return 0L;
 }
 
 /*************************************************************************
@@ -758,4 +740,124 @@ INetProtocol SvxHyperlinkTabPageBase::ImplGetProtocol( const String& aStrURL, St
     else
         aStrScheme = INetURLObject::GetScheme( aProtocol );
     return aProtocol;
+}
+
+
+void SvxHyperlinkTabPageBase::GetDataFromCommonFields( String& aStrName,
+                                             String& aStrIntName, String& aStrFrame,
+                                             SvxLinkInsertMode& eMode )
+{
+    aStrIntName = mpEdText->GetText();
+    aStrName    = mpEdIndication->GetText();
+    aStrFrame   = mpCbbFrame->GetText();
+    eMode       = (SvxLinkInsertMode) (mpLbForm->GetSelectEntryPos()+1);
+    if( IsHTMLDoc() )
+        eMode = (SvxLinkInsertMode) ( UINT16(eMode) | HLINK_HTMLMODE );
+}
+
+/*************************************************************************
+|*
+|* reset dialog-fields
+|*
+|************************************************************************/
+
+void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet)
+{
+    ///////////////////////////////////////
+    // Set dialog-fields from create-itemset
+    maStrInitURL = aEmptyStr;
+
+    SvxHyperlinkItem *pHyperlinkItem = (SvxHyperlinkItem *)
+                                       rItemSet.GetItem (SID_HYPERLINK_GETLINK);
+
+    if ( pHyperlinkItem )
+    {
+        // set dialog-fields
+        FillStandardDlgFields (pHyperlinkItem);
+
+        // set all other fields
+        FillDlgFields ( (String&)pHyperlinkItem->GetURL() );
+
+        // Store initial URL
+        maStrInitURL = pHyperlinkItem->GetURL();
+    }
+}
+
+/*************************************************************************
+|*
+|* Fill output-ItemSet
+|*
+|************************************************************************/
+
+BOOL SvxHyperlinkTabPageBase::FillItemSet( SfxItemSet& rOut)
+{
+    String aStrURL, aStrName, aStrIntName, aStrFrame;
+    SvxLinkInsertMode eMode;
+
+    GetCurentItemData ( aStrURL, aStrName, aStrIntName, aStrFrame, eMode);
+    if ( !aStrName.Len() ) //automatically create a visible name if the link is created without name
+        aStrName = CreateUiNameFromURL(aStrURL);
+
+    USHORT nEvents = GetMacroEvents();
+    SvxMacroTableDtor* pTable = GetMacroTable();
+
+    SvxHyperlinkItem aItem( SID_HYPERLINK_SETLINK, aStrName, aStrURL, aStrFrame,
+                            aStrIntName, eMode, nEvents, pTable );
+    rOut.Put (aItem);
+
+    return TRUE;
+}
+
+String SvxHyperlinkTabPageBase::CreateUiNameFromURL( const String& aStrURL )
+{
+    return aStrURL;
+}
+
+/*************************************************************************
+|*
+|* Activate / Deactivate Tabpage
+|*
+|************************************************************************/
+
+void SvxHyperlinkTabPageBase::ActivatePage( const SfxItemSet& rItemSet )
+{
+    ///////////////////////////////////////
+    // Set dialog-fields from input-itemset
+    SvxHyperlinkItem *pHyperlinkItem = (SvxHyperlinkItem *)
+                                       rItemSet.GetItem (SID_HYPERLINK_GETLINK);
+
+    if ( pHyperlinkItem )
+    {
+        // standard-fields
+        FillStandardDlgFields (pHyperlinkItem);
+    }
+
+    // show mark-window if it was open before
+    if ( ShouldOpenMarkWnd () )
+        ShowMarkWnd ();
+}
+
+int SvxHyperlinkTabPageBase::DeactivatePage( SfxItemSet* pSet)
+{
+    // hide mark-wnd
+    SetMarkWndShouldOpen( IsMarkWndVisible () );
+    HideMarkWnd ();
+
+    // retrieve data of dialog
+    String aStrURL, aStrName, aStrIntName, aStrFrame;
+    SvxLinkInsertMode eMode;
+
+    GetCurentItemData ( aStrURL, aStrName, aStrIntName, aStrFrame, eMode);
+
+    USHORT nEvents = GetMacroEvents();
+    SvxMacroTableDtor* pTable = GetMacroTable();
+
+    if( pSet )
+    {
+        SvxHyperlinkItem aItem( SID_HYPERLINK_GETLINK, aStrName, aStrURL, aStrFrame,
+                                aStrIntName, eMode, nEvents, pTable );
+        pSet->Put( aItem );
+    }
+
+    return( LEAVE_PAGE );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmailtp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-25 10:51:15 $
+ *  last change: $Author: iha $ $Date: 2002-10-08 16:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,31 +224,28 @@ void SvxHyperlinkMailTp::GetCurentItemData ( String& aStrURL, String& aStrName,
     const sal_Char sMailtoScheme[] = INET_MAILTO_SCHEME;
     const sal_Char sNewsScheme[]   = INET_NEWS_SCHEME;
 
-    // get data from dialog-controls
+    // fill aStrURL
     String aStrScheme, aText = maCbbReceiver.GetText();
-    if ( maRbtMail.IsChecked() && aText.SearchAscii( sMailtoScheme ) != 0 )
-        aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM( INET_MAILTO_SCHEME ) );
-    else if ( maRbtNews.IsChecked() && aText.SearchAscii( sNewsScheme ) != 0 )
-        aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM( INET_NEWS_SCHEME ) );
-    aStrURL = aStrScheme;
-    aStrURL.Append( aText );
-    if ( maRbtMail.IsChecked() )
+    if(aText.Len()!=0) //do not create a nonsense URL if no receiver is given
     {
-        if ( maEdSubject.GetText() != aEmptyStr )
+        if ( maRbtMail.IsChecked() && aText.SearchAscii( sMailtoScheme ) != 0 )
+            aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM( INET_MAILTO_SCHEME ) );
+        else if ( maRbtNews.IsChecked() && aText.SearchAscii( sNewsScheme ) != 0 )
+            aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM( INET_NEWS_SCHEME ) );
+        aStrURL = aStrScheme;
+        aStrURL.Append( aText );
+        if ( maRbtMail.IsChecked() )
         {
-            aStrURL.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "?subject=" ) ) );
-            aStrURL.Append( maEdSubject.GetText() );
+            if ( maEdSubject.GetText() != aEmptyStr )
+            {
+                aStrURL.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "?subject=" ) ) );
+                aStrURL.Append( maEdSubject.GetText() );
+            }
         }
     }
-    // get data from standard-fields
-    aStrIntName = mpEdText->GetText();
-    aStrName    = mpEdIndication->GetText();
-    aStrFrame   = mpCbbFrame->GetText();
-    eMode       = (SvxLinkInsertMode) (mpLbForm->GetSelectEntryPos()+1);
-    if( IsHTMLDoc() )
-        eMode = (SvxLinkInsertMode) ( UINT16(eMode) | HLINK_HTMLMODE );
-    if ( aStrName == aEmptyStr )
-        aStrName = aStrURL;
+
+    // fill the other parameters
+    GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );
 }
 
 /*************************************************************************
@@ -260,101 +257,6 @@ void SvxHyperlinkMailTp::GetCurentItemData ( String& aStrURL, String& aStrName,
 IconChoicePage* SvxHyperlinkMailTp::Create( Window* pWindow, const SfxItemSet& rItemSet )
 {
     return( new SvxHyperlinkMailTp( pWindow, rItemSet ) );
-}
-
-/*************************************************************************
-|*
-|* Activate / Deactivate Tabpage
-|*
-|************************************************************************/
-
-void SvxHyperlinkMailTp::ActivatePage( const SfxItemSet& rItemSet )
-{
-    ///////////////////////////////////////
-    // Set dialog-fields from input-itemset
-    SvxHyperlinkItem *pHyperlinkItem = (SvxHyperlinkItem *)
-                                       rItemSet.GetItem (SID_HYPERLINK_GETLINK);
-
-    if ( pHyperlinkItem )
-    {
-        // standard-fields
-        FillStandardDlgFields (pHyperlinkItem);
-
-        mbNewName = ( pHyperlinkItem->GetName() == aEmptyStr );
-    }
-}
-
-int SvxHyperlinkMailTp::DeactivatePage( SfxItemSet* pSet )
-{
-    String aStrURL, aStrName, aStrIntName, aStrFrame;
-    SvxLinkInsertMode eMode;
-
-    GetCurentItemData ( aStrURL, aStrName, aStrIntName, aStrFrame, eMode);
-
-    USHORT nEvents = GetMacroEvents();
-    SvxMacroTableDtor* pTable = GetMacroTable();
-
-    if( pSet )
-    {
-        SvxHyperlinkItem aItem( SID_HYPERLINK_GETLINK, aStrName, aStrURL, aStrFrame,
-                                aStrIntName, eMode, nEvents, pTable );
-        pSet->Put( aItem );
-    }
-
-    return( LEAVE_PAGE );
-}
-
-/*************************************************************************
-|*
-|* Fill output-ItemSet
-|*
-|************************************************************************/
-
-BOOL SvxHyperlinkMailTp::FillItemSet( SfxItemSet& rOut)
-{
-    String aStrURL, aStrName, aStrIntName, aStrFrame;
-    SvxLinkInsertMode eMode;
-
-    GetCurentItemData ( aStrURL, aStrName, aStrIntName, aStrFrame, eMode);
-
-    USHORT nEvents = GetMacroEvents();
-    SvxMacroTableDtor* pTable = GetMacroTable();
-
-    SvxHyperlinkItem aItem( SID_HYPERLINK_SETLINK, aStrName, aStrURL, aStrFrame,
-                            aStrIntName, eMode, nEvents, pTable );
-    rOut.Put (aItem);
-
-    return TRUE;
-}
-
-/*************************************************************************
-|*
-|* reset dialog-fields
-|*
-|************************************************************************/
-
-void SvxHyperlinkMailTp::Reset( const SfxItemSet& rItemSet)
-{
-    ///////////////////////////////////////
-    // Set dialog-fields from create-itemset
-    maStrInitURL = aEmptyStr;
-
-    SvxHyperlinkItem *pHyperlinkItem = (SvxHyperlinkItem *)
-                                       rItemSet.GetItem (SID_HYPERLINK_GETLINK);
-
-    if ( pHyperlinkItem )
-    {
-        // set dialog-fields
-        FillStandardDlgFields (pHyperlinkItem);
-
-        // set all other fields
-        FillDlgFields ( (String&)pHyperlinkItem->GetURL() );
-
-        // Store initial URL
-        maStrInitURL = pHyperlinkItem->GetURL();
-
-        mbNewName = ( pHyperlinkItem->GetName() == aEmptyStr );
-    }
 }
 
 /*************************************************************************
@@ -439,9 +341,6 @@ IMPL_LINK ( SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl, void *, EMPTYARG )
     const sal_Char sNewsScheme[]   = INET_NEWS_SCHEME;
 
     String aStrCurrentReceiver( maCbbReceiver.GetText() );
-
-    if ( mbNewName )
-        mpEdIndication->SetText ( aStrCurrentReceiver );
 
     // changed scheme ? - Then change radiobutton-settings
     if( aStrCurrentReceiver.SearchAscii( sMailtoScheme ) == 0 && !maRbtMail.IsChecked() )
