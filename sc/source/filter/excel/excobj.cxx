@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2000-09-28 12:47:46 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,10 @@ void ImportExcel::Obj()
     }
     if( pObj )
     {
-        pObj->SetAttributes( aSet, TRUE );
+//-/        pObj->SetAttributes( aSet, TRUE );
+        pObj->ClearItem();
+        pObj->SetItemSetAndBroadcast(aSet);
+
         pObj->NbcSetLogicRect(Rectangle( aUL, aLR ) );
         pObj->SetLayer( SC_LAYER_FRONT );
         pD->GetDrawLayer()->GetPage( nTab )->InsertObject( pObj );
@@ -519,7 +522,10 @@ void ImportExcel::EndAllChartObjects( void )
 
                 SdrOle2Obj*     pSdrObj = new SdrOle2Obj( aIPObj, aName, p->aRect );
 
-                pSdrObj->SetAttributes( *p->pAttrs, TRUE );
+//-/                pSdrObj->SetAttributes( *p->pAttrs, TRUE );
+                pSdrObj->ClearItem();
+                pSdrObj->SetItemSetAndBroadcast(*p->pAttrs);
+
                 pSdrObj->SetLayer( SC_LAYER_FRONT );
 
                 pD->GetDrawLayer()->GetPage( p->nBaseTab )->InsertObject( pSdrObj );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2000-10-27 12:11:35 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,10 +399,13 @@ SdrObject* Biff8MSDffManager::ProcessObj(
     if( pRet && ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) &&
         ( IsProperty( DFF_Prop_fillColor ) == 0 ) )
     {   // maybe if there is no color, we could do this in ApplyAttributes ( writer ?, calc ? )
-        SfxItemSet* pSet = new SfxItemSet( pSdrModel->GetItemPool() );
-        pSet->Put( XFillColorItem( XubString(), Color( 0xffffff ) ) );
-        pRet->NbcSetAttributes( *pSet, FALSE );
-        delete pSet;
+        pRet->SetItem(XFillColorItem(XubString(), Color(0xffffff)));
+
+//-/        SfxItemSet* pSet = new SfxItemSet( pSdrModel->GetItemPool() );
+//-/        pSet->Put( XFillColorItem( XubString(), Color( 0xffffff ) ) );
+//-/        pRet->SetItemSet(*pSet);
+//-/
+//-/        delete pSet;
     }
 
     if( maShapeRecords.SeekToContent( rSt, DFF_msofbtClientData, SEEK_FROM_CURRENT_AND_RESTART ) )
@@ -495,10 +498,13 @@ SdrObject* Biff8MSDffManager::ProcessObj(
             if( ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) &&
                 ( IsProperty( DFF_Prop_fillColor ) == 0 ) )
             {   // maybe if there is no color, we could do this in ApplyAttributes ( writer ?, calc ? )
-                SfxItemSet* pSet = new SfxItemSet( pSdrModel->GetItemPool() );
-                pSet->Put( XFillColorItem( XubString(), Color( 0xffffff ) ) );
-                pTObj->NbcSetAttributes( *pSet, FALSE );
-                delete pSet;
+                pTObj->SetItem(XFillColorItem(XubString(), Color(0xffffff)));
+
+//-/                SfxItemSet* pSet = new SfxItemSet( pSdrModel->GetItemPool() );
+//-/                pSet->Put( XFillColorItem( XubString(), Color( 0xffffff ) ) );
+//-/                pTObj->NbcSetAttributes( *pSet, FALSE );
+//-/
+//-/                delete pSet;
             }
 
             ((SvxMSDffManager*)this)->ApplyAttributes( rSt, aSet, pTObj );
@@ -582,7 +588,9 @@ SdrObject* Biff8MSDffManager::ProcessObj(
 
         aSet.Put( SdrTextMinFrameHeightItem( rTextRect.Bottom() - rTextRect.Top() ) );
         pTObj->SetModel( pSdrModel );
-        pTObj->NbcSetAttributes( aSet, FALSE );
+
+//-/        pTObj->NbcSetAttributes( aSet, FALSE );
+        pTObj->SetItemSet(aSet);
 
 
         UINT32                  nObjNum;

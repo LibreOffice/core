@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-25 11:44:05 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,13 +120,13 @@ enum DetInsertResult {              // Return-Werte beim Einfuegen in einen Leve
 
 //------------------------------------------------------------------------
 
-class ScPublicAttrObj : public SdrAttrObj
-{
-private:
-    ScPublicAttrObj() {}                        // wird nicht angelegt
-public:
-    const XLineAttrSetItem* GetLineAttr()       { return pLineAttr; }
-};
+//-/class ScPublicAttrObj : public SdrAttrObj
+//-/{
+//-/private:
+//-/    ScPublicAttrObj() {}                        // wird nicht angelegt
+//-/public:
+//-/    const XLineAttrSetItem* GetLineAttr()       { return pLineAttr; }
+//-/};
 
 //------------------------------------------------------------------------
 
@@ -376,18 +376,23 @@ BOOL ScDetectiveFunc::HasArrow( USHORT nStartCol, USHORT nStartRow, USHORT nStar
         if ( pObject->GetLayer()==SC_LAYER_INTERN &&
                 pObject->IsPolyObj() && pObject->GetPointCount()==2 )
         {
-            BOOL bObjStartAlien = FALSE;
-            BOOL bObjEndAlien = FALSE;
-            const XLineAttrSetItem* pLineAttrs =
-                ((ScPublicAttrObj*)(SdrAttrObj*)pObject)->GetLineAttr();
-            if (pLineAttrs)
-            {
-                const SfxItemSet& rSet = pLineAttrs->GetItemSet();
-                bObjStartAlien = (((const XLineStartItem&)rSet.Get(XATTR_LINESTART)).
-                                        GetValue().GetPointCount() == 4 );
-                bObjEndAlien   = (((const XLineEndItem&)rSet.Get(XATTR_LINEEND)).
-                                        GetValue().GetPointCount() == 4 );
-            }
+            BOOL bObjStartAlien =
+                (4 == ((const XLineStartItem&)pObject->GetItem(XATTR_LINESTART)).GetValue().GetPointCount());
+            BOOL bObjEndAlien =
+                (4 == ((const XLineEndItem&)pObject->GetItem(XATTR_LINEEND)).GetValue().GetPointCount());
+
+//-/            BOOL bObjStartAlien = FALSE;
+//-/            BOOL bObjEndAlien = FALSE;
+//-/            const XLineAttrSetItem* pLineAttrs =
+//-/                ((ScPublicAttrObj*)(SdrAttrObj*)pObject)->GetLineAttr();
+//-/            if (pLineAttrs)
+//-/            {
+//-/                const SfxItemSet& rSet = pLineAttrs->GetItemSet();
+//-/                bObjStartAlien = (((const XLineStartItem&)rSet.Get(XATTR_LINESTART)).
+//-/                                        GetValue().GetPointCount() == 4 );
+//-/                bObjEndAlien   = (((const XLineEndItem&)rSet.Get(XATTR_LINEEND)).
+//-/                                        GetValue().GetPointCount() == 4 );
+//-/            }
 
             BOOL bStartHit = bStartAlien ? bObjStartAlien :
                                 ( !bObjStartAlien && aStartRect.IsInside(pObject->GetPoint(0)) );
@@ -408,18 +413,23 @@ BOOL ScDetectiveFunc::IsNonAlienArrow( SdrObject* pObject )         // static
     if ( pObject->GetLayer()==SC_LAYER_INTERN &&
             pObject->IsPolyObj() && pObject->GetPointCount()==2 )
     {
-        BOOL bObjStartAlien = FALSE;
-        BOOL bObjEndAlien = FALSE;
-        const XLineAttrSetItem* pLineAttrs =
-                ((ScPublicAttrObj*)(SdrAttrObj*)pObject)->GetLineAttr();
-        if (pLineAttrs)
-        {
-            const SfxItemSet& rSet = pLineAttrs->GetItemSet();
-            bObjStartAlien = (((const XLineStartItem&)rSet.Get(XATTR_LINESTART)).
-                                    GetValue().GetPointCount() == 4 );
-            bObjEndAlien   = (((const XLineEndItem&)rSet.Get(XATTR_LINEEND)).
-                                    GetValue().GetPointCount() == 4 );
-        }
+        BOOL bObjStartAlien =
+            (4 == ((const XLineStartItem&)pObject->GetItem(XATTR_LINESTART)).GetValue().GetPointCount());
+        BOOL bObjEndAlien =
+            (4 == ((const XLineEndItem&)pObject->GetItem(XATTR_LINEEND)).GetValue().GetPointCount());
+
+//-/        BOOL bObjStartAlien = FALSE;
+//-/        BOOL bObjEndAlien = FALSE;
+//-/        const XLineAttrSetItem* pLineAttrs =
+//-/                ((ScPublicAttrObj*)(SdrAttrObj*)pObject)->GetLineAttr();
+//-/        if (pLineAttrs)
+//-/        {
+//-/            const SfxItemSet& rSet = pLineAttrs->GetItemSet();
+//-/            bObjStartAlien = (((const XLineStartItem&)rSet.Get(XATTR_LINESTART)).
+//-/                                    GetValue().GetPointCount() == 4 );
+//-/            bObjEndAlien   = (((const XLineEndItem&)rSet.Get(XATTR_LINEEND)).
+//-/                                    GetValue().GetPointCount() == 4 );
+//-/        }
         return !bObjStartAlien && !bObjEndAlien;
     }
 
@@ -452,7 +462,10 @@ BOOL ScDetectiveFunc::DrawEntry( USHORT nCol, USHORT nRow,
         Point aEndCorner = GetDrawPos( rRefEnd.GetCol()+1, rRefEnd.GetRow()+1, FALSE );
 
         SdrRectObj* pBox = new SdrRectObj(Rectangle(aStartCorner,aEndCorner));
-        pBox->SetAttributes( rData.GetBoxSet(), FALSE );
+
+//-/        pBox->SetAttributes( rData.GetBoxSet(), FALSE );
+        pBox->SetItemSetAndBroadcast(rData.GetBoxSet());
+
         ScDrawLayer::SetAnchor( pBox, SCA_CELL );
         pBox->SetLayer( SC_LAYER_INTERN );
         pPage->InsertObject( pBox );
@@ -498,7 +511,9 @@ BOOL ScDetectiveFunc::DrawEntry( USHORT nCol, USHORT nRow,
 
     pArrow->NbcSetLogicRect(Rectangle(aStartPos,aEndPos));  //! noetig ???
 
-    pArrow->SetAttributes( rAttrSet, FALSE );
+//-/    pArrow->SetAttributes( rAttrSet, FALSE );
+    pArrow->SetItemSetAndBroadcast(rAttrSet);
+
     ScDrawLayer::SetAnchor( pArrow, SCA_CELL );
     pArrow->SetLayer( SC_LAYER_INTERN );
     pPage->InsertObject( pArrow );
@@ -540,7 +555,10 @@ BOOL ScDetectiveFunc::DrawAlienEntry( const ScTripel& rRefStart, const ScTripel&
         Point aEndCorner = GetDrawPos( rRefEnd.GetCol()+1, rRefEnd.GetRow()+1, FALSE );
 
         SdrRectObj* pBox = new SdrRectObj(Rectangle(aStartCorner,aEndCorner));
-        pBox->SetAttributes( rData.GetBoxSet(), FALSE );
+
+//-/        pBox->SetAttributes( rData.GetBoxSet(), FALSE );
+        pBox->SetItemSetAndBroadcast(rData.GetBoxSet());
+
         ScDrawLayer::SetAnchor( pBox, SCA_CELL );
         pBox->SetLayer( SC_LAYER_INTERN );
         pPage->InsertObject( pBox );
@@ -577,7 +595,9 @@ BOOL ScDetectiveFunc::DrawAlienEntry( const ScTripel& rRefStart, const ScTripel&
 
     pArrow->NbcSetLogicRect(Rectangle(aStartPos,aEndPos));  //! noetig ???
 
-    pArrow->SetAttributes( rAttrSet, FALSE );
+//-/    pArrow->SetAttributes( rAttrSet, FALSE );
+    pArrow->SetItemSetAndBroadcast(rAttrSet);
+
     ScDrawLayer::SetAnchor( pArrow, SCA_CELL );
     pArrow->SetLayer( SC_LAYER_INTERN );
     pPage->InsertObject( pArrow );
@@ -609,7 +629,10 @@ void ScDetectiveFunc::DrawCircle( USHORT nCol, USHORT nRow, ScDetectiveData& rDa
 
     SdrCircObj* pCircle = new SdrCircObj( OBJ_CIRC, aRect );
     SfxItemSet& rAttrSet = rData.GetCircleSet();
-    pCircle->SetAttributes( rAttrSet, FALSE );
+
+//-/    pCircle->SetAttributes( rAttrSet, FALSE );
+    pCircle->SetItemSetAndBroadcast(rAttrSet);
+
     ScDrawLayer::SetAnchor( pCircle, SCA_CELL );
     pCircle->SetLayer( SC_LAYER_INTERN );
     pPage->InsertObject( pCircle );
@@ -699,7 +722,9 @@ SdrObject* ScDetectiveFunc::DrawCaption( USHORT nCol, USHORT nRow, const String&
 
     //  SetAttributes must be after SetText, because the font attributes
     //  are applied to the text.
-    pCaption->SetAttributes( rAttrSet, FALSE );
+//-/    pCaption->SetAttributes( rAttrSet, FALSE );
+    pCaption->SetItemSetAndBroadcast(rAttrSet);
+
     pCaption->SetSpecialTextBoxShadow();
 
     Rectangle aLogic = pCaption->GetLogicRect();
@@ -1589,7 +1614,9 @@ void ScDetectiveFunc::UpdateAllComments()
 
                     SfxItemSet& rAttrSet = aData.GetCaptionSet();
 
-                    pCaption->SetAttributes( rAttrSet, FALSE );
+//-/                    pCaption->SetAttributes( rAttrSet, FALSE );
+                    pCaption->SetItemSetAndBroadcast(rAttrSet);
+
                     pCaption->SetSpecialTextBoxShadow();
                 }
 
