@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:16:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,12 @@ void FuDraw::DoModifiers(const MouseEvent& rMEvt)
     BOOL bAngleSnap = bShift;
     BOOL bGridSnap  = ( bGridOpt != bCtrl );        // andere Snap's nicht unterstuetzt
     BOOL bCenter    = bAlt;
+
+    // #i33136#
+    if(doConstructOrthogonal())
+    {
+        bOrtho = !bShift;
+    }
 
     if (pView->IsOrtho() != bOrtho)
         pView->SetOrtho(bOrtho);
