@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-17 12:17:16 $
+ *  last change: $Author: pb $ $Date: 2001-04-23 06:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,6 +682,10 @@ sal_Bool SfxContentHelper::MakeFolder( const String& rFolder )
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {
         // double name?
+    }
+    catch( ::com::sun::star::ucb::IllegalIdentifierException& e )
+    {
+        DBG_ERRORFILE( "Illegal identifier" );
     }
     catch( ::com::sun::star::uno::Exception& )
     {
