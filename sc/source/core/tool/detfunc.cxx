@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:15 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,16 +124,6 @@ enum DetInsertResult {              // Return-Werte beim Einfuegen in einen Leve
 
 //------------------------------------------------------------------------
 
-//-/class ScPublicAttrObj : public SdrAttrObj
-//-/{
-//-/private:
-//-/    ScPublicAttrObj() {}                        // wird nicht angelegt
-//-/public:
-//-/    const XLineAttrSetItem* GetLineAttr()       { return pLineAttr; }
-//-/};
-
-//------------------------------------------------------------------------
-
 class ScDetectiveData
 {
 private:
@@ -181,7 +171,7 @@ BOOL lcl_HasThickLine( SdrObject& rObj )
 {
     // thin lines get width 0 -> everything greater 0 is a thick line
 
-    return ( ((const XLineWidthItem&)rObj.GetItem(XATTR_LINEWIDTH)).GetValue() > 0 );
+    return ( ((const XLineWidthItem&)rObj.GetMergedItem(XATTR_LINEWIDTH)).GetValue() > 0 );
 }
 
 //------------------------------------------------------------------------
@@ -415,23 +405,12 @@ BOOL ScDetectiveFunc::HasArrow( USHORT nStartCol, USHORT nStartRow, USHORT nStar
         if ( pObject->GetLayer()==SC_LAYER_INTERN &&
                 pObject->IsPolyObj() && pObject->GetPointCount()==2 )
         {
-            BOOL bObjStartAlien =
-                lcl_IsOtherTab( ((const XLineStartItem&)pObject->GetItem(XATTR_LINESTART)).GetValue() );
-            BOOL bObjEndAlien =
-                lcl_IsOtherTab( ((const XLineEndItem&)pObject->GetItem(XATTR_LINEEND)).GetValue() );
+            const SfxItemSet& rSet = pObject->GetMergedItemSet();
 
-//-/            BOOL bObjStartAlien = FALSE;
-//-/            BOOL bObjEndAlien = FALSE;
-//-/            const XLineAttrSetItem* pLineAttrs =
-//-/                ((ScPublicAttrObj*)(SdrAttrObj*)pObject)->GetLineAttr();
-//-/            if (pLineAttrs)
-//-/            {
-//-/                const SfxItemSet& rSet = pLineAttrs->GetItemSet();
-//-/                bObjStartAlien = (((const XLineStartItem&)rSet.Get(XATTR_LINESTART)).
-//-/                                        GetValue().GetPointCount() == 4 );
-//-/                bObjEndAlien   = (((const XLineEndItem&)rSet.Get(XATTR_LINEEND)).
-//-/                                        GetValue().GetPointCount() == 4 );
-//-/            }
+            BOOL bObjStartAlien =
+                lcl_IsOtherTab( ((const XLineStartItem&)rSet.Get(XATTR_LINESTART)).GetValue() );
+            BOOL bObjEndAlien =
+                lcl_IsOtherTab( ((const XLineEndItem&)rSet.Get(XATTR_LINEEND)).GetValue() );
 
             BOOL bStartHit = bStartAlien ? bObjStartAlien :
                                 ( !bObjStartAlien && aStartRect.IsInside(pObject->GetPoint(0)) );
@@ -452,23 +431,13 @@ BOOL ScDetectiveFunc::IsNonAlienArrow( SdrObject* pObject )         // static
     if ( pObject->GetLayer()==SC_LAYER_INTERN &&
             pObject->IsPolyObj() && pObject->GetPointCount()==2 )
     {
-        BOOL bObjStartAlien =
-            lcl_IsOtherTab( ((const XLineStartItem&)pObject->GetItem(XATTR_LINESTART)).GetValue() );
-        BOOL bObjEndAlien =
-            lcl_IsOtherTab( ((const XLineEndItem&)pObject->GetItem(XATTR_LINEEND)).GetValue() );
+        const SfxItemSet& rSet = pObject->GetMergedItemSet();
 
-//-/        BOOL bObjStartAlien = FALSE;
-//-/        BOOL bObjEndAlien = FALSE;
-//-/        const XLineAttrSetItem* pLineAttrs =
-//-/                ((ScPublicAttrObj*)(SdrAttrObj*)pObject)->GetLineAttr();
-//-/        if (pLineAttrs)
-//-/        {
-//-/            const SfxItemSet& rSet = pLineAttrs->GetItemSet();
-//-/            bObjStartAlien = (((const XLineStartItem&)rSet.Get(XATTR_LINESTART)).
-//-/                                    GetValue().GetPointCount() == 4 );
-//-/            bObjEndAlien   = (((const XLineEndItem&)rSet.Get(XATTR_LINEEND)).
-//-/                                    GetValue().GetPointCount() == 4 );
-//-/        }
+        BOOL bObjStartAlien =
+            lcl_IsOtherTab( ((const XLineStartItem&)rSet.Get(XATTR_LINESTART)).GetValue() );
+        BOOL bObjEndAlien =
+            lcl_IsOtherTab( ((const XLineEndItem&)rSet.Get(XATTR_LINEEND)).GetValue() );
+
         return !bObjStartAlien && !bObjEndAlien;
     }
 
@@ -498,8 +467,7 @@ BOOL ScDetectiveFunc::InsertArrow( USHORT nCol, USHORT nRow,
 
         SdrRectObj* pBox = new SdrRectObj(Rectangle(aStartCorner,aEndCorner));
 
-//-/        pBox->SetAttributes( rData.GetBoxSet(), FALSE );
-        pBox->SetItemSetAndBroadcast(rData.GetBoxSet());
+        pBox->SetMergedItemSetAndBroadcast(rData.GetBoxSet());
 
         ScDrawLayer::SetAnchor( pBox, SCA_CELL );
         pBox->SetLayer( SC_LAYER_INTERN );
@@ -544,8 +512,7 @@ BOOL ScDetectiveFunc::InsertArrow( USHORT nCol, USHORT nRow,
 
     pArrow->NbcSetLogicRect(Rectangle(aStartPos,aEndPos));  //! noetig ???
 
-//-/    pArrow->SetAttributes( rAttrSet, FALSE );
-    pArrow->SetItemSetAndBroadcast(rAttrSet);
+    pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
 
     ScDrawLayer::SetAnchor( pArrow, SCA_CELL );
     pArrow->SetLayer( SC_LAYER_INTERN );
@@ -586,8 +553,7 @@ BOOL ScDetectiveFunc::InsertToOtherTab( USHORT nStartCol, USHORT nStartRow,
 
         SdrRectObj* pBox = new SdrRectObj(Rectangle(aStartCorner,aEndCorner));
 
-//-/        pBox->SetAttributes( rData.GetBoxSet(), FALSE );
-        pBox->SetItemSetAndBroadcast(rData.GetBoxSet());
+        pBox->SetMergedItemSetAndBroadcast(rData.GetBoxSet());
 
         ScDrawLayer::SetAnchor( pBox, SCA_CELL );
         pBox->SetLayer( SC_LAYER_INTERN );
@@ -624,8 +590,7 @@ BOOL ScDetectiveFunc::InsertToOtherTab( USHORT nStartCol, USHORT nStartRow,
 
     pArrow->NbcSetLogicRect(Rectangle(aStartPos,aEndPos));  //! noetig ???
 
-//-/    pArrow->SetAttributes( rAttrSet, FALSE );
-    pArrow->SetItemSetAndBroadcast(rAttrSet);
+    pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
 
     ScDrawLayer::SetAnchor( pArrow, SCA_CELL );
     pArrow->SetLayer( SC_LAYER_INTERN );
@@ -701,8 +666,7 @@ void ScDetectiveFunc::DrawCircle( USHORT nCol, USHORT nRow, ScDetectiveData& rDa
     SdrCircObj* pCircle = new SdrCircObj( OBJ_CIRC, aRect );
     SfxItemSet& rAttrSet = rData.GetCircleSet();
 
-//-/    pCircle->SetAttributes( rAttrSet, FALSE );
-    pCircle->SetItemSetAndBroadcast(rAttrSet);
+    pCircle->SetMergedItemSetAndBroadcast(rAttrSet);
 
     ScDrawLayer::SetAnchor( pCircle, SCA_CELL );
     pCircle->SetLayer( SC_LAYER_INTERN );
@@ -797,8 +761,7 @@ SdrObject* ScDetectiveFunc::DrawCaption( USHORT nCol, USHORT nRow, const String&
 
     //  SetAttributes must be after SetText, because the font attributes
     //  are applied to the text.
-//-/    pCaption->SetAttributes( rAttrSet, FALSE );
-    pCaption->SetItemSetAndBroadcast(rAttrSet);
+    pCaption->SetMergedItemSetAndBroadcast(rAttrSet);
 
     pCaption->SetSpecialTextBoxShadow();
 
@@ -1691,8 +1654,7 @@ void ScDetectiveFunc::UpdateAllComments()
 
                     SfxItemSet& rAttrSet = aData.GetCaptionSet();
 
-//-/                    pCaption->SetAttributes( rAttrSet, FALSE );
-                    pCaption->SetItemSetAndBroadcast(rAttrSet);
+                    pCaption->SetMergedItemSetAndBroadcast(rAttrSet);
 
                     pCaption->SetSpecialTextBoxShadow();
                 }
@@ -1775,7 +1737,12 @@ void ScDetectiveFunc::UpdateAllArrowColors()
                     if ( bArrow || bError )
                     {
                         ColorData nColorData = ( bError ? GetErrorColor() : GetArrowColor() );
-                        pObject->SetItemAndBroadcast( XLineColorItem( String(), Color( nColorData ) ) );
+                        //pObject->SendRepaintBroadcast(pObject->GetBoundRect());
+                        pObject->SetMergedItem( XLineColorItem( String(), Color( nColorData ) ) );
+
+                        // repaint only
+                        pObject->ActionChanged();
+                        // pObject->SendRepaintBroadcast(pObject->GetBoundRect());
                     }
                 }
 
@@ -1797,27 +1764,61 @@ BOOL ScDetectiveFunc::FindFrameForObject( SdrObject* pObject, ScRange& rRange )
     DBG_ASSERT(pPage,"Page ?");
     if (!pPage) return FALSE;
 
-    ULONG nPos = pPage->GetContainer().GetPos( pObject );
-    if ( nPos != CONTAINER_ENTRY_NOTFOUND && nPos > 0 )
+    // test if the object is a direct page member
+    if(pObject
+        && pObject->GetPage()
+        && pObject->GetObjList()
+        && pObject->GetPage() == pObject->GetObjList())
     {
-        SdrObject* pPrevObj = pPage->GetObj( nPos - 1 );
-        if ( pPrevObj && pPrevObj->GetLayer() == SC_LAYER_INTERN && pPrevObj->ISA(SdrRectObj) )
+        // Is there a previous object?
+        const sal_uInt32 nOrdNum(pObject->GetOrdNum());
+
+        if(nOrdNum > 0L)
         {
-            ScDrawObjData* pPrevData = ScDrawLayer::GetObjData( pPrevObj );
-            if ( pPrevData && pPrevData->bValidStart && pPrevData->bValidEnd )
+            SdrObject* pPrevObj = pPage->GetObj(nOrdNum - 1L);
+
+            if ( pPrevObj && pPrevObj->GetLayer() == SC_LAYER_INTERN && pPrevObj->ISA(SdrRectObj) )
             {
-                if ( pPrevData->aStt.nCol == rRange.aStart.Col() &&
-                     pPrevData->aStt.nRow == rRange.aStart.Row() &&
-                     pPrevData->aStt.nTab == rRange.aStart.Tab() )
+                ScDrawObjData* pPrevData = ScDrawLayer::GetObjData( pPrevObj );
+                if ( pPrevData && pPrevData->bValidStart && pPrevData->bValidEnd )
                 {
-                    rRange.aEnd.Set( pPrevData->aEnd.nCol,
-                                     pPrevData->aEnd.nRow,
-                                     pPrevData->aEnd.nTab );
-                    return TRUE;
+                    if ( pPrevData->aStt.nCol == rRange.aStart.Col() &&
+                        pPrevData->aStt.nRow == rRange.aStart.Row() &&
+                        pPrevData->aStt.nTab == rRange.aStart.Tab() )
+                    {
+                        rRange.aEnd.Set( pPrevData->aEnd.nCol,
+                                        pPrevData->aEnd.nRow,
+                                        pPrevData->aEnd.nTab );
+                        return TRUE;
+                    }
                 }
             }
         }
     }
+
+    // GetContainer() no longer allowed, baaad style (!)
+    //ULONG nPos = pPage->GetContainer().GetPos( pObject );
+    //if ( nPos != CONTAINER_ENTRY_NOTFOUND && nPos > 0 )
+    //{
+    //  SdrObject* pPrevObj = pPage->GetObj( nPos - 1 );
+    //  if ( pPrevObj && pPrevObj->GetLayer() == SC_LAYER_INTERN && pPrevObj->ISA(SdrRectObj) )
+    //  {
+    //      ScDrawObjData* pPrevData = ScDrawLayer::GetObjData( pPrevObj );
+    //      if ( pPrevData && pPrevData->bValidStart && pPrevData->bValidEnd )
+    //      {
+    //          if ( pPrevData->aStt.nCol == rRange.aStart.Col() &&
+    //               pPrevData->aStt.nRow == rRange.aStart.Row() &&
+    //               pPrevData->aStt.nTab == rRange.aStart.Tab() )
+    //          {
+    //              rRange.aEnd.Set( pPrevData->aEnd.nCol,
+    //                               pPrevData->aEnd.nRow,
+    //                               pPrevData->aEnd.nTab );
+    //              return TRUE;
+    //          }
+    //      }
+    //  }
+    //}
+
     return FALSE;
 }
 
@@ -1851,7 +1852,7 @@ ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject,
                 FindFrameForObject( pObject, rSource );     // modifies rSource
             }
 
-            ColorData nObjColor = ((const XLineColorItem&)pObject->GetItem(XATTR_LINECOLOR)).GetValue().GetColor();
+            ColorData nObjColor = ((const XLineColorItem&)pObject->GetMergedItem(XATTR_LINECOLOR)).GetValue().GetColor();
             if ( nObjColor == GetErrorColor() && nObjColor != GetArrowColor() )
                 rRedLine = TRUE;
         }
