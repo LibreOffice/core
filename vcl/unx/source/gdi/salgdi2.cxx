@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:09:46 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 14:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,7 +573,7 @@ sal_uInt32
 SalPrinterBmp::GetPixelRGB (sal_uInt32 nRow, sal_uInt32 nColumn) const
 {
     Scanline pScan = mpScanAccess + nRow * mnScanOffset;
-    BitmapColor& aColor = mpFncGetPixel (pScan, nColumn, mpBmpBuffer->maColorMask);
+    BitmapColor aColor = mpFncGetPixel (pScan, nColumn, mpBmpBuffer->maColorMask);
 
     return ColorOf (aColor);
 }
@@ -582,7 +582,7 @@ sal_uInt8
 SalPrinterBmp::GetPixelGray (sal_uInt32 nRow, sal_uInt32 nColumn) const
 {
     Scanline pScan = mpScanAccess + nRow * mnScanOffset;
-    BitmapColor& aColor = mpFncGetPixel (pScan, nColumn, mpBmpBuffer->maColorMask);
+    BitmapColor aColor = mpFncGetPixel (pScan, nColumn, mpBmpBuffer->maColorMask);
 
     return GrayOf (aColor);
 }
@@ -591,7 +591,7 @@ sal_uInt8
 SalPrinterBmp::GetPixelIdx (sal_uInt32 nRow, sal_uInt32 nColumn) const
 {
     Scanline pScan = mpScanAccess + nRow * mnScanOffset;
-    BitmapColor& aColor = mpFncGetPixel (pScan, nColumn, mpBmpBuffer->maColorMask);
+    BitmapColor aColor = mpFncGetPixel (pScan, nColumn, mpBmpBuffer->maColorMask);
 
     if (aColor.IsIndex())
         return aColor.GetIndex();
