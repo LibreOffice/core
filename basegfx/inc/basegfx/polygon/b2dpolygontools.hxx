@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-16 17:03:06 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,9 @@ namespace basegfx
 
         // Apply Line Dashing. This cuts the Polygon into line pieces
         // which are inserted as single polygons into the result.
-        ::basegfx::B2DPolyPolygon applyLineDashing(const ::basegfx::B2DPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen);
+        // If fFullDashDotLen is not given it will be calculated from the given
+        // raDashDotArray.
+        ::basegfx::B2DPolyPolygon applyLineDashing(const ::basegfx::B2DPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen = 0.0);
 
         // test if point is inside epsilon-range around an edge defined
         // by the two given points. Can be used for HitTesting. The epsilon-range
