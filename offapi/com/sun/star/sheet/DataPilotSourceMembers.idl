@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPilotSourceMembers.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:35:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ module com {  module sun {  module star {  module sheet {
     @see com::sun::star::sheet::DataPilotSourceLevel
     @see com::sun::star::sheet::DataPilotSource
  */
-service DataPilotSourceMembers
+published service DataPilotSourceMembers
 {
     //-------------------------------------------------------------------------
 
