@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: mib $ $Date: 2002-10-31 10:26:33 $
+ *  last change: $Author: mib $ $Date: 2002-11-25 17:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,10 +689,10 @@ void XMLTextFrameContext::Create( sal_Bool bHRefOrBase64 )
     {
         Reference < XTextContent > xTxtCntnt( xPropSet, UNO_QUERY );
         xTxtImport->InsertTextContent( xTxtCntnt );
-
-        Reference < XShape > xShape( xPropSet, UNO_QUERY );
-        GetImport().GetShapeImport()->shapeWithZIndexAdded( xShape, nZIndex );
     }
+
+    Reference < XShape > xShape( xPropSet, UNO_QUERY );
+    GetImport().GetShapeImport()->shapeWithZIndexAdded( xShape, nZIndex );
 
     if( XML_TEXT_FRAME_TEXTBOX == nType )
     {
