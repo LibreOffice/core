@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-01 07:59:57 $
+ *  last change: $Author: kz $ $Date: 2000-12-04 10:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,19 +162,19 @@ ModalDialog DLG_ORGANIZE
         Text [ english_us ] = "~Address Book..." ;
         Text[ portuguese ] = "~Address Book...";
         Text[ russian ] = "~Address Book...";
-        Text[ greek ] = "~Address Book...";
+        Text[ greek ] = "~ÁôæÝíôá äéåèýíóåùí...";
         Text[ dutch ] = "~Address Book...";
-        Text[ french ] = "~Address Book...";
+        Text[ french ] = "Carnet d'~adresses...";
         Text[ spanish ] = "~Libreta de direcciones...";
         Text[ italian ] = "~Rubrica...";
         Text[ danish ] = "~Address Book...";
         Text[ swedish ] = "~Addressbok...";
         Text[ polish ] = "~Ksi¹¿ka adresowa...";
         Text[ portuguese_brazilian ] = "~Address Book...";
-        Text[ japanese ] = "~Address Book...";
-        Text[ korean ] = "~ÁÖ¼Ò·Ï...";
-        Text[ chinese_simplified ] = "~Address Book...";
-        Text[ chinese_traditional ] = "~Address Book...";
+        Text[ japanese ] = "±ÄÞÚ½’ (~A)...";
+        Text[ korean ] = "ÁÖ¼Ò·Ï...";
+        Text[ chinese_simplified ] = "Í¨Ñ¶²¾(~A)...";
+        Text[ chinese_traditional ] = "³q°T¿ý(~A)...";
         Text[ turkish ] = "~Address Book...";
         Text[ arabic ] = "ÏÝÊÑ ÇáÚäÇæíä...";
     };
