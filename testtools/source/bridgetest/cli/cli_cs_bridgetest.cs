@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cli_cs_bridgetest.cs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 14:49:46 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:51:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,7 +572,7 @@ static bool performTest(XBridgeTest xLBT)
         bRet &= check(
             (bool) xLBT.transportPolyBoolean(poly).member,
             "transportPolyBoolean");
-        poly = new TestPolyStruct(12345UL);
+        poly = new TestPolyStruct(12345L);
         xLBT.transportPolyHyper(ref poly);
         bRet &= check((long)poly.member == 12345L, "transportPolyUnsignedHyper");
 
