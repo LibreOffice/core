@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:37:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef SC_XECONTENT_HXX
 #include "xecontent.hxx"
 #endif
+#ifndef SC_XEPIVOT_HXX
+#include "xepivot.hxx"
+#endif
 
 
 // Global data ================================================================
@@ -148,6 +151,13 @@ XclExpTabInfo& XclExpRoot::GetTabInfo() const
 XclExpLinkManager& XclExpRoot::GetLinkManager() const
 {
     return *mrExpData.mpLinkManager;
+}
+
+XclExpPivotTableManager& XclExpRoot::GetPivotTableManager() const
+{
+    if( !mrExpData.mpPTManager.get() )
+        mrExpData.mpPTManager.reset( new XclExpPivotTableManager( GetRoot() ) );
+    return *mrExpData.mpPTManager;
 }
 
 String XclExpRoot::GetXclAddInName( const String& rScName ) const
