@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:22:35 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include "svdundo.hxx"
 #endif
 
+/** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
+#include <com/sun/star/util/XModifyListener.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -95,9 +99,10 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+/** === end UNO includes === **/
 
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 
 
@@ -204,9 +209,10 @@ public:
 
 //========================================================================
 class FmXUndoEnvironment
-    : public ::cppu::WeakImplHelper3<   ::com::sun::star::beans::XPropertyChangeListener
+    : public ::cppu::WeakImplHelper4<   ::com::sun::star::beans::XPropertyChangeListener
                                     ,   ::com::sun::star::container::XContainerListener
                                     ,   ::com::sun::star::script::XScriptListener
+                                    ,   ::com::sun::star::util::XModifyListener
                                     >
     , public SfxListener
                            //   public ::cppu::OWeakObject
@@ -236,24 +242,25 @@ public:
     sal_Bool IsLocked() const {return nLocks != 0;}
 
 protected:
-// ::com::sun::star::lang::XEventListener
+    // XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException );
 
-// ::com::sun::star::beans::XPropertyChangeListener
+    // XPropertyChangeListener
     virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::container::XContainerListener
+    // XContainerListener
     virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException);
 
-// XScriptListener
+    // XScriptListener
     virtual void SAL_CALL firing(const  ::com::sun::star::script::ScriptEvent& evt) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL approveFiring(const  ::com::sun::star::script::ScriptEvent& evt) throw(::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
 
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    // XModifyListener
+    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 
-// Einfuegen von Objekten
+    // Einfuegen von Objekten
     void AddForms(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& rForms);
     void RemoveForms(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& rForms);
 
@@ -263,10 +270,17 @@ protected:
     void ModeChanged();
     void Clear();
 
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
 private:
     void AddElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
     void RemoveElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
-    void AlterPropertyListening(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
+    void TogglePropertyListening(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
+
+    void    implSetModified();
+
+    void    switchListening( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& _rxContainer, bool _bStartListening ) SAL_THROW(());
+    void    switchListening( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject, bool _bStartListening ) SAL_THROW(());
 
 public:
     // Methoden zur Zuordnung von Controls zu Forms,
