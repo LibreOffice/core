@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-26 11:14:16 $
+ *  last change: $Author: jp $ $Date: 2001-10-29 08:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1125,7 +1125,8 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
                             SwWrtShell& rSh, USHORT nAction, ULONG nFormat,
                             USHORT nDestination, BOOL bIsPasteFmt,
                             sal_Bool bIsDefault,
-                            const Point* pPt, sal_Int8 nDropAction )
+                            const Point* pPt, sal_Int8 nDropAction,
+                            BOOL bPasteSelection )
 {
     SwWait aWait( *rSh.GetView().GetDocShell(), FALSE );
     SwTrnsfrActionAndUndo* pAction = 0;
@@ -1136,7 +1137,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
     if( pPt )
     {
         // external Drop
-        if( !pMod->pDragDrop && !pMod->pXSelection )
+        if( bPasteSelection ? !pMod->pXSelection : !pMod->pDragDrop )
         {
             switch( nDestination )
             {
@@ -1187,12 +1188,12 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
     }
 
     SwTransferable* pTrans;
-    if( pPt && (0 != ( pTrans = pMod->pDragDrop) ||
-                0 != ( pTrans = pMod->pXSelection )))
+    if( pPt && ( bPasteSelection ? 0 != ( pTrans = pMod->pXSelection )
+                                 : 0 != ( pTrans = pMod->pDragDrop) ))
     {
         // then internal Drag & Drop or XSelection
         nRet = pTrans->PrivateDrop( rSh, *pPt, DND_ACTION_MOVE == nDropAction,
-                                    pTrans == pMod->pXSelection );
+                                    bPasteSelection );
     }
     else if( !pPt && 0 != ( pTrans = pMod->pClipboard ) &&
             EXCHG_OUT_ACTION_INSERT_PRIVATE == nAction )
@@ -1448,7 +1449,7 @@ ASSERT( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
         }
     }
 
-    if( !pMod->pXSelection && rSh.IsFrmSelected() )
+    if( !bPasteSelection && rSh.IsFrmSelected() )
         rSh.EnterSelFrmMode();
 
     if( pAction )

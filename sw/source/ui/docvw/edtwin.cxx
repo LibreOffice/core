@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-11 15:29:09 $
+ *  last change: $Author: jp $ $Date: 2001-10-29 08:49:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3718,7 +3718,8 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 const Point aDocPt( PixelToLogic( rCEvt.GetMousePosPixel() ) );
                 SwTransferable::PasteData( aDataHelper, rSh, nDropAction,
                                     nDropFormat, nDropDestination, FALSE,
-                                    FALSE, &aDocPt, EXCHG_IN_ACTION_COPY );
+                                    FALSE, &aDocPt, EXCHG_IN_ACTION_COPY,
+                                    TRUE );
             }
         }
         break;

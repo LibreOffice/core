@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-26 11:14:44 $
+ *  last change: $Author: jp $ $Date: 2001-10-29 08:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,8 @@ public:
                           SwWrtShell& rSh, USHORT nAction, ULONG nFormat,
                           USHORT nDestination, BOOL bIsPasteFmt,
                           sal_Bool bIsDefault,
-                          const Point* pDDPos = 0, sal_Int8 nDropAction = 0 );
+                          const Point* pDDPos = 0, sal_Int8 nDropAction = 0,
+                          BOOL bPasteSelection = FALSE );
 
     static BOOL IsPasteSpecial( const SwWrtShell& rWrtShell,
                                 const TransferableDataHelper& );
