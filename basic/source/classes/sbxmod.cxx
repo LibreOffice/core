@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:47:21 $
+ *  last change: $Author: ab $ $Date: 2001-10-23 12:06:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -998,6 +998,37 @@ BOOL SbModule::StoreData( SvStream& rStrm ) const
         return aImg.Save( rStrm );
     }
 }
+
+// Store only image, no source
+BOOL SbModule::StoreBinaryData( SvStream& rStrm )
+{
+    BOOL bRet = SbxObject::StoreData( rStrm );
+    if( bRet )
+    {
+        bRet = Compile();
+        if( bRet )
+        {
+            pImage->aSource = String();
+            pImage->aComment = aComment;
+            pImage->aName = GetName();
+
+            rStrm << (BYTE) 1;
+            bRet = pImage->Save( rStrm );
+
+            pImage->aSource = aSource;
+        }
+    }
+    return bRet;
+}
+
+BOOL SbModule::LoadBinaryData( SvStream& rStrm )
+{
+    String aKeepSource = aSource;
+    bool bRet = LoadData( rStrm, 2 );
+    aSource = aKeepSource;
+    return bRet;
+}
+
 
 BOOL SbModule::LoadCompleted()
 {
