@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 11:45:46 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 12:17:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,11 @@ class SwAuthEntry;
 #define GETSELTXT_PARABRK_KEEP          1
 #define GETSELTXT_PARABRK_TO_ONLYCR     2
 
+#define SCRIPTTYPE_NONE     0
+#define SCRIPTTYPE_LATIN    1
+#define SCRIPTTYPE_ASIAN    2
+#define SCRIPTTYPE_COMPLEX  4
+
 /****************************************************************
  *  zum Abfragen der INet-Attribute fuer den Navigator
  ****************************************************************/
@@ -277,6 +282,9 @@ public:
 
     void ResetAttr();
     void GCAttr();
+
+    // returns the scripttpye of the selection
+    USHORT GetScriptType() const;
 
     // FrameFormate
     SwFrmFmt* FindFrmFmtByName( const String& rName ) const;
