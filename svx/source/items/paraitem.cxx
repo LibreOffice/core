@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:21 $
+ *  last change: $Author: os $ $Date: 2000-09-21 14:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,9 +158,9 @@ const drawing::TextAdjust aSvxToUnoAdjust[] =
 const SvxAdjust aUnoToSvxAdjust[] =
 {
     SVX_ADJUST_LEFT,
+    SVX_ADJUST_CENTER,
     SVX_ADJUST_RIGHT,
     SVX_ADJUST_BLOCK,
-    SVX_ADJUST_CENTER,
     SVX_ADJUST_BLOCKLINE
 };
 
