@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:29:14 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
@@ -870,7 +873,13 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
     }
 
     if ( m_xComponent.is() )
+    {
+        // TODO/LATER: get it for the real aspect
+        awt::Size aSize;
+        GetExtent( embed::Aspects::MSOLE_CONTENT, &aSize );
         LoadDocToFrame(sal_False);
+        SetExtent( embed::Aspects::MSOLE_CONTENT, aSize );
+    }
 
     return m_xFrame;
 }
