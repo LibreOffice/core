@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-21 17:03:11 $
+#   last change: $Author: hr $ $Date: 2005-04-04 12:51:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,6 +133,7 @@ SHL1STDLIBS= \
             $(GOODIESLIB) \
             $(BASEGFXLIB) \
             $(BASICLIB) \
+            $(LNGLIB) \
             $(SVTOOLLIB) \
             $(TKLIB) \
             $(VCLLIB) \
