@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-25 11:35:45 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1653,6 +1653,7 @@ ErrCode UcbLockBytes::SetSize (ULONG nNewSize)
     {
         ULONG nDiff = nNewSize-nSize, nCount=0;
         BYTE* pBuffer = new BYTE[ nDiff ];
+        memset(pBuffer, 0, nDiff); // initialize for enhanced security
         WriteAt( nSize, pBuffer, nDiff, &nCount );
         delete[] pBuffer;
         if ( nCount != nDiff )
