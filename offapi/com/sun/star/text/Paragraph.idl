@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Paragraph.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:56:09 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 09:33:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
+#ifndef __com_sun_star_beans_XTolerantMultiPropertySet_idl__
+#include <com/sun/star/beans/XTolerantMultiPropertySet.idl>
+#endif
+
 #ifndef __com_sun_star_beans_XPropertyState_idl__
 #include <com/sun/star/beans/XPropertyState.idl>
 #endif
@@ -171,6 +175,10 @@ service Paragraph
      */
     interface com::sun::star::container::XEnumerationAccess;
 
+    /** gives access to a sequence of properties.
+        @since 112405
+     */
+    [optional] interface ::com::sun::star::beans::XTolerantMultiPropertySet;
 };
 
 //=============================================================================
