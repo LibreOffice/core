@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hro $ $Date: 2001-07-20 16:11:39 $
+ *  last change: $Author: obr $ $Date: 2001-09-11 12:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #endif
 #ifndef _RTL_TEXTENC_H
 #   include <rtl/textenc.h>
+#endif
+#ifndef _RTL_LOCALE_H
+#   include <rtl/locale.h>
 #endif
 
 #ifndef _OSL_TIME_H_
@@ -319,6 +322,26 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *strVar, rtl_uString **s
 */
 
 oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir );
+
+/** Get the locale the process is currently running in.
+
+    The unix implementation caches the value it returns, so if you have to change the locale
+    your are running in, you will have to use osl_setProcessLocale therefor.
+
+    @param  ppLocale [out] a pointer that receives the currently selected locale structure
+    @see osl_setProcessLocale
+*/
+
+oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale );
+
+/** Change the locale of the process.
+
+    @param  pLocale [in] a pointer to the locale to be set
+    @see osl_getProcessLocale
+*/
+
+oslProcessError SAL_CALL osl_setProcessLocale( rtl_Locale * pLocale );
+
 
 sal_Bool SAL_CALL osl_sendResourcePipe(oslPipe Pipe, oslSocket Socket);
 

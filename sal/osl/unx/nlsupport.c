@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obr $ $Date: 2001-08-31 07:45:18 $
+ *  last change: $Author: obr $ $Date: 2001-09-11 12:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <osl/nlsupport.h>
 #include <osl/diagnose.h>
+#include <osl/process.h>
 
 #if defined(LINUX) || defined(SOLARIS)
 #include <pthread.h>
@@ -124,6 +125,122 @@ _pair_search (const char *key, const _pair *base, unsigned int member )
 }
 
 
+/*****************************************************************************/
+/* convert rtl_Locale to locale string
+/*****************************************************************************/
+
+static char * _compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
+{
+    /* check if a valid locale is specified */
+    if( pLocale && pLocale->Language && (pLocale->Language->length == 2) )
+    {
+        size_t offset = 0;
+
+        /* convert language code to ascii */
+        {
+            rtl_String *pLanguage = NULL;
+
+            rtl_uString2String( &pLanguage,
+                pLocale->Language->buffer, pLocale->Language->length,
+                RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
+
+            if( pLanguage->length < n )
+            {
+                strcpy( buffer, pLanguage->buffer );
+                offset = pLanguage->length;
+            }
+
+            rtl_string_release( pLanguage );
+        }
+
+        /* convert country code to ascii */
+        if( pLocale->Country && (pLocale->Country->length == 2) )
+        {
+            rtl_String *pCountry = NULL;
+
+            rtl_uString2String( &pCountry,
+                pLocale->Country->buffer, pLocale->Country->length,
+                RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
+
+            if( offset + pCountry->length + 1 < n )
+            {
+                strcpy( buffer + offset++, "_" );
+                strcpy( buffer + offset, pCountry->buffer );
+                offset += pCountry->length;
+            }
+
+            rtl_string_release( pCountry );
+        }
+
+        /* convert variant to ascii */
+        if( pLocale->Variant && pLocale->Variant->length &&
+            ( pLocale->Variant->length < sizeof(buffer) - 7 ) )
+        {
+            rtl_String *pVariant = NULL;
+
+            rtl_uString2String( &pVariant,
+                pLocale->Variant->buffer, pLocale->Variant->length,
+                RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
+
+            if( offset + pVariant->length + 1 < n )
+            {
+                strcpy( buffer + offset++, "." );
+                strcpy( buffer + offset, pVariant->buffer );
+                offset += pVariant->length;
+            }
+
+            rtl_string_release( pVariant );
+        }
+
+        return buffer;
+    }
+
+    return NULL;
+}
+
+/*****************************************************************************/
+/* convert locale string to rtl_Locale
+/*****************************************************************************/
+
+static rtl_Locale * _parse_locale( const char * locale )
+{
+    static sal_Unicode c_locale[2] = { (sal_Unicode) 'C', 0 };
+
+    rtl_uString * pLanguage = NULL;
+    rtl_uString * pCountry  = NULL;
+    rtl_uString * pVariant  = NULL;
+
+    /* check if locale contains a valid string */
+    if( locale )
+    {
+        size_t len = strlen( locale );
+
+        if( len >= 2 )
+        {
+            size_t offset = 2;
+
+            /* convert language code to unicode */
+            rtl_string2UString( &pLanguage, locale, 2, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
+
+            /* convert country code to unicode */
+            if( len >= 5 && '_' == locale[2] )
+            {
+                rtl_string2UString( &pCountry, locale + 3, 2, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
+                offset = 5;
+            }
+
+            /* convert variant code to unicode */
+            if( len > offset && '.' == locale[offset++] )
+                rtl_string2UString( &pVariant, locale + offset, len - offset, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
+
+            return rtl_locale_register( pLanguage->buffer, pCountry ? pCountry->buffer : c_locale + 1, pVariant ? pVariant->buffer : c_locale + 1 );
+        }
+        else
+            return rtl_locale_register( c_locale, c_locale + 1, c_locale + 1 );
+    }
+
+    return NULL;
+}
 
 #if defined(LINUX) || defined(SOLARIS)
 
@@ -364,6 +481,10 @@ const _pair _nl_language_list[] = {
 
 static pthread_mutex_t aLocalMutex = PTHREAD_MUTEX_INITIALIZER;
 
+/*****************************************************************************/
+/* return the text encoding corresponding to the given locale
+/*****************************************************************************/
+
 rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
     const _pair *language=0;
@@ -374,57 +495,18 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     char *ctype_locale = 0;
     char *codeset      = 0;
 
+    /* default to process locale if pLocale == NULL */
+    if( NULL == pLocale )
+        osl_getProcessLocale( &pLocale );
+
+    /* convert rtl_Locale to locale string */
+    _compose_locale( pLocale, locale_buf, 64 );
+
+    /* basic thread safeness */
+    pthread_mutex_lock( &aLocalMutex );
 
     /* remember the charset as indicated by the LC_CTYPE locale */
     ctype_locale = setlocale( LC_CTYPE, NULL );
-
-    /* check if a valid locale is specified */
-    if( pLocale && pLocale->Language && (pLocale->Language->length == 2) )
-    {
-        /* convert language code to ascii */
-        {
-            rtl_String *pLanguage = NULL;
-
-            rtl_uString2String( &pLanguage,
-                pLocale->Language->buffer, pLocale->Language->length,
-                RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
-
-            strcpy( locale_buf, pLanguage->buffer );
-            rtl_string_release( pLanguage );
-        }
-
-        /* convert country code to ascii */
-        if( pLocale->Country && (pLocale->Country->length == 2) )
-        {
-            rtl_String *pCountry = NULL;
-
-            rtl_uString2String( &pCountry,
-                pLocale->Country->buffer, pLocale->Country->length,
-                RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
-
-            strcat( locale_buf, "_" );
-            strcat( locale_buf, pCountry->buffer );
-            rtl_string_release( pCountry );
-        }
-
-        /* convert variant to ascii */
-        if( pLocale->Variant && pLocale->Variant->length &&
-            ( pLocale->Variant->length < sizeof(locale_buf) - 7 ) )
-        {
-            rtl_String *pVariant = NULL;
-
-            rtl_uString2String( &pVariant,
-                pLocale->Variant->buffer, pLocale->Variant->length,
-                RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
-
-            strcat( locale_buf, "." );
-            strcat( locale_buf, pVariant->buffer );
-            rtl_string_release( pVariant );
-        }
-    }
-
-    /* basic thread safeness */
-    pthread_mutex_lock(&aLocalMutex);
 
     /* set the desired LC_CTYPE locale */
     if( NULL == setlocale( LC_CTYPE, locale_buf ) )
@@ -447,7 +529,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     if ( ctype_locale != NULL )
         setlocale( LC_CTYPE, ctype_locale );
 
-    pthread_mutex_unlock(&aLocalMutex);
+    pthread_mutex_unlock( &aLocalMutex );
 
     /* search the codeset in our language list */
     if ( codeset != NULL )
@@ -466,6 +548,52 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     return RTL_TEXTENCODING_DONTKNOW;
 }
 
+/*****************************************************************************/
+/* return the current process locale
+/*****************************************************************************/
+
+void _imp_getProcessLocale( rtl_Locale ** ppLocale )
+{
+    char * locale;
+
+    /* basic thread safeness */
+    pthread_mutex_lock( &aLocalMutex );
+
+    /* set the locale defined by the env vars */
+    locale = setlocale( LC_CTYPE, "" );
+
+    /* fallback to the current locale */
+    if( NULL == locale )
+        locale = setlocale( LC_CTYPE, NULL );
+
+    /* return the LC_CTYPE locale */
+    *ppLocale = _parse_locale( locale );
+
+    pthread_mutex_unlock( &aLocalMutex );
+}
+
+/*****************************************************************************/
+/* set the current process locale
+/*****************************************************************************/
+
+int _imp_setProcessLocale( rtl_Locale * pLocale )
+{
+    char  locale_buf[64] = "";
+    int   ret = 0;
+
+    /* convert rtl_Locale to locale string */
+    _compose_locale( pLocale, locale_buf, 64 );
+
+    /* basic thread safeness */
+    pthread_mutex_lock( &aLocalMutex );
+
+    /* try to set LC_ALL locale */
+    if( NULL == setlocale( LC_ALL, locale_buf ) )
+        ret = -1;
+
+    pthread_mutex_unlock( &aLocalMutex );
+    return ret;
+}
 
 #elif defined(MACOSX) /* ifdef LINUX || SOLARIS */
 
@@ -473,9 +601,31 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
  * FIXME: the MacOS X implemetation is missing
  */
 
+/*****************************************************************************/
+/* return the text encoding corresponding to the given locale
+/*****************************************************************************/
+
 rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
     return RTL_TEXTENCODING_DONTKNOW;
+}
+
+/*****************************************************************************/
+/* return the current process locale
+/*****************************************************************************/
+
+void _imp_getProcessLocale( rtl_Locale ** ppLocale )
+{
+    *ppLocale = _parse_locale( "C" );
+}
+
+/*****************************************************************************/
+/* set the current process locale
+/*****************************************************************************/
+
+int _imp_setProcessLocale( rtl_Locale * pLocale )
+{
+    return 0;
 }
 
 #else /* ifdef LINUX || SOLARIS || MACOSX */
@@ -580,106 +730,53 @@ const _pair _iso_language_list[] = {
     { NULL,  RTL_TEXTENCODING_DONTKNOW    }
 };
 
+/*****************************************************************************/
+/* return the text encoding corresponding to the given locale
+/*****************************************************************************/
+
 rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
     const _pair *language = 0;
     char locale_buf[64] = "";
     char *cp;
 
-    /* check if a valid locale is specified */
-    if( pLocale && pLocale->Language && (pLocale->Language->length == 2) )
+    /* default to process locale if pLocale == NULL */
+    if( NULL == pLocale )
+        osl_getProcessLocale( &pLocale );
+
+    /* convert rtl_Locale to locale string */
+    if( _compose_locale( pLocale, locale_buf, 64 ) )
     {
-        /* convert language code to ascii */
-        {
-            rtl_String *pLanguage = NULL;
-
-            rtl_uString2String( &pLanguage,
-                pLocale->Language->buffer, pLocale->Language->length,
-                RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
-
-            strcpy( locale_buf, pLanguage->buffer );
-            rtl_string_release( pLanguage );
-        }
-
-        /* convert country code to ascii */
-        if( pLocale->Country && (pLocale->Country->length == 2) )
-        {
-            rtl_String *pCountry = NULL;
-
-            rtl_uString2String( &pCountry,
-                pLocale->Country->buffer, pLocale->Country->length,
-                RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
-
-            strcat( locale_buf, "_" );
-            strcat( locale_buf, pCountry->buffer );
-            rtl_string_release( pCountry );
-        }
-
-        /* convert variant to ascii */
-        if( pLocale->Variant && pLocale->Variant->length &&
-            ( pLocale->Variant->length < sizeof(locale_buf) - 7 ) )
-        {
-            rtl_String *pVariant = NULL;
-
-            rtl_uString2String( &pVariant,
-                pLocale->Variant->buffer, pLocale->Variant->length,
-                RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
-
-            strcat( locale_buf, "." );
-            strcat( locale_buf, pVariant->buffer );
-            rtl_string_release( pVariant );
-        }
-    }
-
-    /* simulate behavior off setlocale */
-    else
-    {
-        char * locale = getenv( "LC_ALL" );
-
-        if( NULL == locale )
-            locale = getenv( "LC_CTYPE" );
-
-        if( NULL == locale )
-            locale = getenv( "LANG" );
-
-        if( locale )
-        {
-            strncpy( locale_buf, locale, sizeof(locale_buf) - 1 );
-            locale_buf[sizeof(locale_buf) - 1 ] = '\0';
-        }
-    }
-
-    /* check special handling list (EUC) first */
-    {
+        /* check special handling list (EUC) first */
         const unsigned int members = sizeof( _full_locale_list ) / sizeof( _pair );
-        language = _pair_search( cp + 1, _full_locale_list, members);
-    }
+        language = _pair_search( locale_buf, _full_locale_list, members);
 
-    if( NULL == language )
-    {
-        /*
-         *  check if there is a charset qualifier at the end of the given locale string
-         *  e.g. de.ISO8859-15 or de.ISO8859-15@euro which strongly indicates what
-         *  charset to use
-         */
-        cp = strrchr( locale_buf, '.' );
-
-        if( NULL != cp )
+        if( NULL == language )
         {
-            const unsigned int members = sizeof( _locale_extension_list ) / sizeof( _pair );
-            language = _pair_search( cp + 1, _locale_extension_list, members);
+            /*
+             *  check if there is a charset qualifier at the end of the given locale string
+             *  e.g. de.ISO8859-15 or de.ISO8859-15@euro which strongly indicates what
+             *  charset to use
+             */
+            cp = strrchr( locale_buf, '.' );
+
+            if( NULL != cp )
+            {
+                const unsigned int members = sizeof( _locale_extension_list ) / sizeof( _pair );
+                language = _pair_search( cp + 1, _locale_extension_list, members);
+            }
         }
-    }
 
-    /* use iso language code to determine the charset */
-    if( NULL == language )
-    {
-        const unsigned int members = sizeof( _iso_language_list ) / sizeof( _pair );
+        /* use iso language code to determine the charset */
+        if( NULL == language )
+        {
+            const unsigned int members = sizeof( _iso_language_list ) / sizeof( _pair );
 
-        /* iso lang codes have 2 charaters */
-        locale_buf[2] = '\0';
+            /* iso lang codes have 2 charaters */
+            locale_buf[2] = '\0';
 
-        language = _pair_search( locale_buf, _iso_language_list, members);
+            language = _pair_search( locale_buf, _iso_language_list, members);
+        }
     }
 
     /* a matching item in our list provides a mapping from codeset to
@@ -690,6 +787,53 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     return RTL_TEXTENCODING_DONTKNOW;
 }
 
-#endif /* ifdef LINUX || SOLARIS */
+
+/*****************************************************************************/
+/* return the current process locale
+/*****************************************************************************/
+
+void _imp_getProcessLocale( rtl_Locale ** ppLocale )
+{
+    /* simulate behavior off setlocale */
+    char * locale = getenv( "LC_ALL" );
+
+    if( NULL == locale )
+        locale = getenv( "LC_CTYPE" );
+
+    if( NULL == locale )
+        locale = getenv( "LANG" );
+
+    if( NULL == locale )
+        locale = "C";
+
+    *ppLocale = _parse_locale( locale );
+}
+
+/*****************************************************************************/
+/* set the current process locale
+/*****************************************************************************/
+
+int _imp_setProcessLocale( rtl_Locale * pLocale )
+{
+    char locale_buf[64];
+
+    /* convert rtl_Locale to locale string */
+    if( NULL != _compose_locale( pLocale, locale_buf, 64 ) )
+    {
+        /* only change env vars that exist already */
+        if( getenv( "LC_ALL" ) )
+            setenv( "LC_ALL", locale_buf );
+
+        if( getenv( "LC_CTYPE" ) )
+            setenv( "LC_CTYPE", locale_buf );
+
+        if( getenv( "LANG" ) )
+            setenv( "LANG", locale_buf );
+    }
+
+    return 0;
+}
+
+#endif /* ifdef LINUX || SOLARIS || MACOSX*/
 
 

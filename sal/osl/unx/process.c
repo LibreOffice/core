@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mhu $ $Date: 2001-07-29 18:21:56 $
+ *  last change: $Author: obr $ $Date: 2001-09-11 12:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,10 @@
 /* implemented in file.c */
 extern oslFileError FileURLToPath( char *, size_t, rtl_uString* );
 extern oslFileHandle osl_createFileHandleFromFD( int fd );
+
+
+extern void _imp_getProcessLocale( rtl_Locale ** );
+extern int  _imp_setProcessLocale( rtl_Locale * );
 
 /******************************************************************************
  *
@@ -2170,3 +2174,53 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir
 
     return osl_Process_E_Unknown;
 }
+
+/******************************************************************************
+ *
+ *              new functions to set/return the current process locale
+ *
+ *****************************************************************************/
+
+static rtl_Locale * theProcessLocale = NULL;
+static pthread_mutex_t aLocalMutex = PTHREAD_MUTEX_INITIALIZER;
+
+oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
+{
+    OSL_ASSERT( ppLocale );
+
+    /* basic thread safeness */
+    pthread_mutex_lock( &aLocalMutex );
+
+    if( NULL == theProcessLocale )
+        _imp_getProcessLocale( &theProcessLocale );
+
+    *ppLocale = theProcessLocale;
+
+    pthread_mutex_unlock( &aLocalMutex );
+
+    return osl_Process_E_None;
+}
+
+
+oslProcessError SAL_CALL osl_setProcessLocale( rtl_Locale * pLocale )
+{
+    oslProcessError ret = osl_Process_E_Unknown;
+
+    OSL_ASSERT( pLocale );
+
+    /* basic thread safeness */
+    pthread_mutex_lock( &aLocalMutex );
+
+    /* try to set the new locale */
+    if( 0 == _imp_setProcessLocale( pLocale ) )
+    {
+        theProcessLocale = pLocale;
+        ret = osl_Process_E_None;
+    }
+
+    pthread_mutex_unlock( &aLocalMutex );
+
+    return ret;
+}
+
+
