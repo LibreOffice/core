@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-06 11:09:04 $
+ *  last change: $Author: cl $ $Date: 2002-04-12 12:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include "svdmodel.hxx"
 #include "svdpage.hxx"
 #include "svdpagv.hxx"
+#include "svdoutl.hxx"
 
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
@@ -254,11 +255,11 @@ FASTBOOL SdrPageObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
         return TRUE;
 
+    Color aBackgroundColor( 0xffffff );
+
     SdrPageView* pPV = NULL;
     if( pModel && ( pPV = pModel->GetPaintingPageView() ) )
-    {
         pPV->SetPaintingPageObj( (SdrPageObj*) this );
-    }
 
     FASTBOOL bOk=TRUE;
     SdrPage* pMainPage= pModel==NULL ? NULL : pModel->GetPage(nPageNum);
@@ -285,6 +286,15 @@ FASTBOOL SdrPageObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
         ((SdrPageObj*)this)->bPainting=TRUE;
         if (pModel!=NULL) {
             SdrPage* pMainPage=pModel->GetPage(nPageNum);
+
+            if( pPV && pMainPage )
+            {
+                SdrOutliner& rOutl=pModel->GetDrawOutliner(NULL);
+                aBackgroundColor = rOutl.GetBackgroundColor();
+
+                rOutl.SetBackgroundColor( pMainPage->GetBackgroundColor() );
+            }
+
             if (pMainPage!=NULL) {
                 // Checken, ob das setzen eines Clippings erforderlich ist
                 Rectangle aPageRect(0,0,pMainPage->GetWdt(),pMainPage->GetHgt());
@@ -428,7 +438,17 @@ FASTBOOL SdrPageObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     }
 
     if( pPV )
+    {
         pPV->SetPaintingPageObj( NULL );
+
+        SdrPage* pPage = pPV->GetPage();
+        if( pPage )
+        {
+            SdrOutliner& rOutl=pModel->GetDrawOutliner(NULL);
+            rOutl.SetBackgroundColor( aBackgroundColor );
+        }
+    }
+
 
     return bOk;
 }
