@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-23 14:49:00 $
+ *  last change: $Author: kso $ $Date: 2000-12-08 16:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Kai Sommerfeld ( kso@sun.com )
  *
  *
  ************************************************************************/
@@ -62,9 +62,8 @@
 #ifndef _HIERARCHYCONTENT_HXX
 #define _HIERARCHYCONTENT_HXX
 
-#ifndef __LIST__
-#include <stl/list>
-#endif
+#include <list>
+
 #ifndef _COM_SUN_STAR_UCB_XCONTENTCREATOR_HPP_
 #include <com/sun/star/ucb/XContentCreator.hpp>
 #endif
@@ -119,6 +118,8 @@ struct HierarchyContentProperties : HierarchyEntryData
 
 //=========================================================================
 
+class HierarchyContentProvider;
+
 class HierarchyContent : public ::ucb::ContentImplHelper,
                          public com::sun::star::ucb::XContentCreator
 {
@@ -132,19 +133,20 @@ class HierarchyContent : public ::ucb::ContentImplHelper,
     HierarchyContentProperties m_aProps;
     ContentKind                m_eKind;
     ContentState               m_eState;
+    HierarchyContentProvider*  m_pProvider;
 
 private:
     HierarchyContent(
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-            ::ucb::ContentProviderImplHelper* pProvider,
+            HierarchyContentProvider* pProvider,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
             const HierarchyContentProperties& rProps );
     HierarchyContent(
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-            ::ucb::ContentProviderImplHelper* pProvider,
+            HierarchyContentProvider* pProvider,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
             const com::sun::star::ucb::ContentInfo& Info );
@@ -156,15 +158,17 @@ private:
     static sal_Bool hasData(
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+            HierarchyContentProvider* pProvider,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier );
     sal_Bool hasData(
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier )
-    { return hasData( m_xSMgr, Identifier ); }
+    { return hasData( m_xSMgr, m_pProvider, Identifier ); }
     static sal_Bool loadData(
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+            HierarchyContentProvider* pProvider,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
             HierarchyContentProperties& rProps );
@@ -213,7 +217,7 @@ public:
     static HierarchyContent* create(
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-            ::ucb::ContentProviderImplHelper* pProvider,
+            HierarchyContentProvider* pProvider,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier );
 
@@ -221,7 +225,7 @@ public:
     static HierarchyContent* create(
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-            ::ucb::ContentProviderImplHelper* pProvider,
+            HierarchyContentProvider* pProvider,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
             const com::sun::star::ucb::ContentInfo& Info );
@@ -288,8 +292,7 @@ public:
                        const ::com::sun::star::uno::Sequence<
                            ::com::sun::star::beans::Property >& rProperties,
                        const HierarchyContentProperties& rData,
-                       const ::vos::ORef< ::ucb::ContentProviderImplHelper >&
-                               rProvider,
+                       HierarchyContentProvider* pProvider,
                        const ::rtl::OUString& rContentId );
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchyprovider.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:54:18 $
+ *  last change: $Author: kso $ $Date: 2000-12-08 16:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Kai Sommerfeld ( kso@sun.com )
  *
  *
  ************************************************************************/
@@ -65,6 +65,9 @@
 
  *************************************************************************/
 
+#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#endif
 #ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
 #endif
@@ -79,6 +82,7 @@
 #include "hierarchycontent.hxx"
 #endif
 
+using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
@@ -192,5 +196,65 @@ Reference< XContent > SAL_CALL HierarchyContentProvider::queryContent(
         throw IllegalIdentifierException();
 
     return xContent;
+}
+
+//=========================================================================
+//
+//  Non-interface methods.
+//
+//=========================================================================
+
+Reference< XHierarchicalNameAccess >
+HierarchyContentProvider::getRootConfigReadNameAccess()
+{
+    if ( !m_xRootConfigReadNameAccess.is() )
+    {
+        vos::OGuard aGuard( m_aMutex );
+        if ( !m_xRootConfigReadNameAccess.is() )
+        {
+            try
+            {
+               Reference< XMultiServiceFactory > xConfigProvider(
+                    m_xSMgr->createInstance(
+                        OUString::createFromAscii(
+                            "com.sun.star.configuration.ConfigurationProvider" ) ),
+                    UNO_QUERY );
+
+                if ( !xConfigProvider.is() )
+                {
+                    VOS_ENSURE( sal_False,
+                        "HierarchyContentProvider::getRootConfigReadNameAccess - "
+                        "No config provider!" );
+                    return Reference< XHierarchicalNameAccess >();
+                }
+
+                Sequence< Any > aArguments( 1 );
+                aArguments[ 0 ] <<= OUString::createFromAscii(
+                                        "/org.openoffice.ucb.Hierarchy/Root" );
+
+                m_xRootConfigReadNameAccess
+                    = Reference< XHierarchicalNameAccess >(
+                        xConfigProvider->createInstanceWithArguments(
+                            OUString::createFromAscii(
+                                "com.sun.star.configuration.ConfigurationAccess" ),
+                            aArguments ),
+                        UNO_QUERY );
+            }
+            catch ( RuntimeException& )
+            {
+                throw;
+            }
+            catch ( Exception& )
+            {
+                // createInstance, createInstanceWithArguments
+
+                VOS_ENSURE( sal_False,
+                    "HierarchyContentProvider::getRootConfigReadNameAccess - "
+                    "caught Exception!" );
+            }
+        }
+    }
+
+    return m_xRootConfigReadNameAccess;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchyprovider.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:54:18 $
+ *  last change: $Author: kso $ $Date: 2000-12-08 16:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Kai Sommerfeld ( kso@sun.com )
  *
  *
  ************************************************************************/
@@ -65,6 +65,10 @@
 #ifndef _UCBHELPER_PROVIDERHELPER_HXX
 #include <ucbhelper/providerhelper.hxx>
 #endif
+
+namespace com { namespace sun { namespace star { namespace container {
+    class XHierarchicalNameAccess;
+} } } }
 
 namespace hierarchy_ucp {
 
@@ -91,6 +95,10 @@ namespace hierarchy_ucp {
 
 class HierarchyContentProvider : public ::ucb::ContentProviderImplHelper
 {
+    com::sun::star::uno::Reference<
+        com::sun::star::container::XHierarchicalNameAccess >
+            m_xRootConfigReadNameAccess;
+
 public:
     HierarchyContentProvider(
                 const com::sun::star::uno::Reference<
@@ -118,6 +126,10 @@ public:
     static rtl::OUString encodeURL( const rtl::OUString& rURL );
     static rtl::OUString encodeSegment( const rtl::OUString& rSegment );
     static rtl::OUString decodeSegment( const rtl::OUString& rSegment );
+
+    com::sun::star::uno::Reference<
+        com::sun::star::container::XHierarchicalNameAccess >
+    getRootConfigReadNameAccess();
 };
 
 } // namespace hierarchy_ucp

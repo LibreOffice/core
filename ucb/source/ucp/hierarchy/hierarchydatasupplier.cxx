@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydatasupplier.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:54:18 $
+ *  last change: $Author: kso $ $Date: 2000-12-08 16:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Kai Sommerfeld ( kso@sun.com )
  *
  *
  ************************************************************************/
@@ -65,9 +65,8 @@
 
  *************************************************************************/
 
-#ifndef __VECTOR__
-#include <stl/vector>
-#endif
+#include <vector>
+
 #ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
 #include <ucbhelper/contentidentifier.hxx>
 #endif
@@ -140,7 +139,11 @@ struct DataSupplier_Impl
                        const vos::ORef< HierarchyContent >& rContent,
                        sal_Int32 nOpenMode )
     : m_xContent( rContent ), m_xSMgr( rxSMgr ),
-      m_aFolder( rxSMgr, rContent->getIdentifier()->getContentIdentifier() ),
+      m_aFolder( rxSMgr,
+                 static_cast< HierarchyContentProvider * >(
+                    rContent->getProvider().getBodyPtr() )
+                        ->getRootConfigReadNameAccess(),
+                 rContent->getIdentifier()->getContentIdentifier() ),
       m_nOpenMode( nOpenMode ), m_bCountFinal( sal_False ) {}
     ~DataSupplier_Impl();
 };
@@ -423,11 +426,12 @@ Reference< XRow > HierarchyResultSetDataSupplier::queryPropertyValues(
                                            HIERARCHY_LINK_CONTENT_TYPE );
 
         Reference< XRow > xRow = HierarchyContent::getPropertyValues(
-                                    m_pImpl->m_xSMgr,
-                                    getResultSet()->getProperties(),
-                                    aData,
-                                    m_pImpl->m_xContent->getProvider(),
-                                    queryContentIdentifierString( nIndex ) );
+                        m_pImpl->m_xSMgr,
+                        getResultSet()->getProperties(),
+                        aData,
+                        static_cast< HierarchyContentProvider * >(
+                            m_pImpl->m_xContent->getProvider().getBodyPtr() ),
+                        queryContentIdentifierString( nIndex ) );
         m_pImpl->m_aResults[ nIndex ]->xRow = xRow;
         return xRow;
     }

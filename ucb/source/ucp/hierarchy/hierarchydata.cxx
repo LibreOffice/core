@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-07 11:15:15 $
+ *  last change: $Author: kso $ $Date: 2000-12-08 16:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,7 @@
 #include "hierarchydata.hxx"
 #endif
 
-#ifndef __VECTOR__
-#include <stl/vector>
-#endif
+#include <vector>
 
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -136,11 +134,14 @@ struct HierarchyEntry::iterator_Impl
 #define HIERARCHY_ROOT_DB_KEY_LENGTH    34
 
 //=========================================================================
-HierarchyEntry::HierarchyEntry( const Reference< XMultiServiceFactory >& rSMgr,
-                                const OUString& rURL )
-: m_xSMgr( rSMgr )
+HierarchyEntry::HierarchyEntry(
+                const Reference< XMultiServiceFactory >& rSMgr,
+                const Reference< XHierarchicalNameAccess >& rRootReadAccess,
+                const OUString& rURL )
+: m_xSMgr( rSMgr ),
+  m_xRootReadAccess( rRootReadAccess )
 {
-    // Note: do not init m_aPath init list. createPathFromHierarchyURL
+    // Note: do not init m_aPath in init list. createPathFromHierarchyURL
     //       needs m_xSMgr and m_aMutex.
     m_aPath = createPathFromHierarchyURL( rURL );
 }
@@ -148,50 +149,13 @@ HierarchyEntry::HierarchyEntry( const Reference< XMultiServiceFactory >& rSMgr,
 //=========================================================================
 sal_Bool HierarchyEntry::hasData()
 {
-    try
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    Reference< XHierarchicalNameAccess > xRootReadAccess = getRootReadAccess();
 
-        if ( !m_xConfigProvider.is() )
-            m_xConfigProvider = Reference< XMultiServiceFactory >(
-                m_xSMgr->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationProvider" ) ),
-                UNO_QUERY );
+    VOS_ENSURE( xRootReadAccess.is(), "HierarchyEntry::hasData - No root!" );
 
-        if ( m_xConfigProvider.is() )
-        {
-            // Create Root object.
-
-            Sequence< Any > aArguments( 1 );
-            aArguments[ 0 ]
-                    <<= OUString::createFromAscii( HIERARCHY_ROOT_DB_KEY );
-
-            Reference< XHierarchicalNameAccess > xRootHierAccess(
-                m_xConfigProvider->createInstanceWithArguments(
-                    OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationAccess" ),
-                    aArguments ),
-                UNO_QUERY );
-
-            VOS_ENSURE( xRootHierAccess.is(),
-                        "HierarchyEntry::hasData - No root!" );
-
-            if ( xRootHierAccess.is() )
-                return xRootHierAccess->hasByHierarchicalName( m_aPath );
-        }
-    }
-    catch ( RuntimeException& )
-    {
-        throw;
-    }
-    catch ( Exception& )
-    {
-        // createInstance, createInstanceWithArguments
-
-        VOS_ENSURE( sal_False,
-                    "HierarchyEntry::hasData - caught Exception!" );
-    }
+    if ( xRootReadAccess.is() )
+        return xRootReadAccess->hasByHierarchicalName( m_aPath );
 
     return sal_False;
 }
@@ -203,69 +167,46 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-        if ( !m_xConfigProvider.is() )
-            m_xConfigProvider = Reference< XMultiServiceFactory >(
-                m_xSMgr->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationProvider" ) ),
-                UNO_QUERY );
+        Reference< XHierarchicalNameAccess > xRootReadAccess
+            = getRootReadAccess();
 
-        if ( m_xConfigProvider.is() )
+        VOS_ENSURE( xRootReadAccess.is(),
+                    "HierarchyEntry::getData - No root!" );
+
+        if ( xRootReadAccess.is() )
         {
-            // Create Root object.
+            OUString aTitlePath = m_aPath;
+            aTitlePath += OUString::createFromAscii( "/Title" );
 
-            Sequence< Any > aArguments( 1 );
-            aArguments[ 0 ]
-                    <<= OUString::createFromAscii( HIERARCHY_ROOT_DB_KEY );
+            // Note: Avoid NoSuchElementExceptions, because exceptions are
+            //       relatively 'expensive'. Checking for availability of
+            //       title value is sufficient here, because if it is
+            //       there, the other values will be available too.
+            if ( !xRootReadAccess->hasByHierarchicalName( aTitlePath ) )
+                return sal_False;
 
-            Reference< XHierarchicalNameAccess > xRootHierAccess(
-                m_xConfigProvider->createInstanceWithArguments(
-                    OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationAccess" ),
-                    aArguments ),
-                UNO_QUERY );
-
-            VOS_ENSURE( xRootHierAccess.is(),
-                        "HierarchyEntry::getData - No root!" );
-
-            if ( xRootHierAccess.is() )
+            // Get Title value.
+            if ( !( xRootReadAccess->getByHierarchicalName(
+                            aTitlePath ) >>= rData.aTitle ) )
             {
-                OUString aTitlePath     = m_aPath;
-                OUString aTargetURLPath = m_aPath;
-                OUString aChildrenPath  = m_aPath;
-
-                aTitlePath     += OUString::createFromAscii( "/Title" );
-                aTargetURLPath += OUString::createFromAscii( "/TargetURL" );
-                aChildrenPath  += OUString::createFromAscii( "/Children" );
-
-                // Note: Avoid NoSuchElementExceptions, because exceptions are
-                //       relatively 'expensive'. Checking for availability of
-                //       title value is sufficient here, because if it is
-                //       there, the other values will be available too.
-                if ( !xRootHierAccess->hasByHierarchicalName( aTitlePath ) )
-                    return sal_False;
-
-                // Get Title value.
-                if ( !( xRootHierAccess->getByHierarchicalName(
-                                aTitlePath ) >>= rData.aTitle ) )
-                {
-                    VOS_ENSURE( sal_False,
-                                "HierarchyEntry::getData - "
-                                "Got no Title value!" );
-                    return sal_False;
-                }
-
-                // Get TargetURL value.
-                if ( !( xRootHierAccess->getByHierarchicalName(
-                                aTargetURLPath ) >>= rData.aTargetURL ) )
-                {
-                    VOS_ENSURE( sal_False,
-                                "HierarchyEntry::getData - "
-                                "Got no TargetURL value!" );
-                    return sal_False;
-                }
-                return sal_True;
+                VOS_ENSURE( sal_False,
+                            "HierarchyEntry::getData - "
+                            "Got no Title value!" );
+                return sal_False;
             }
+
+            // Get TargetURL value.
+            OUString aTargetURLPath = m_aPath;
+            aTargetURLPath += OUString::createFromAscii( "/TargetURL" );
+            if ( !( xRootReadAccess->getByHierarchicalName(
+                            aTargetURLPath ) >>= rData.aTargetURL ) )
+            {
+                VOS_ENSURE( sal_False,
+                            "HierarchyEntry::getData - "
+                            "Got no TargetURL value!" );
+                return sal_False;
+            }
+            return sal_True;
         }
     }
     catch ( RuntimeException& )
@@ -278,13 +219,6 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
 
         VOS_ENSURE( sal_False,
                     "HierarchyEntry::getData - caught NoSuchElementException!" );
-    }
-    catch ( Exception& )
-    {
-        // createInstance, createInstanceWithArguments
-
-        VOS_ENSURE( sal_False,
-                    "HierarchyEntry::getData - caught Exception!" );
     }
     return sal_False;
 }
@@ -942,35 +876,25 @@ sal_Bool HierarchyEntry::first( iterator& it )
 
         try
         {
-            if ( !m_xConfigProvider.is() )
-                m_xConfigProvider = Reference< XMultiServiceFactory >(
-                    m_xSMgr->createInstance(
-                        OUString::createFromAscii(
-                            "com.sun.star.configuration.ConfigurationProvider" ) ),
-                    UNO_QUERY );
+            Reference< XHierarchicalNameAccess > xRootHierNameAccess
+                = getRootReadAccess();
 
-            if ( m_xConfigProvider.is() )
+            if ( xRootHierNameAccess.is() )
             {
-                OUString aPath
-                        = OUString::createFromAscii( HIERARCHY_ROOT_DB_KEY );
+                Reference< XNameAccess > xNameAccess;
 
-                // No slash in path -> root entry -> special handling needed.
                 if ( m_aPath.getLength() > 0 )
                 {
-                    aPath += OUString::createFromAscii( "/" );
-                    aPath += m_aPath;
+                    OUString aPath = m_aPath;
                     aPath += OUString::createFromAscii( "/Children" );
+
+                    xRootHierNameAccess->getByHierarchicalName( aPath )
+                        >>= xNameAccess;
                 }
-
-                Sequence< Any > aArguments( 1 );
-                aArguments[ 0 ] <<= aPath;
-
-                Reference< XNameAccess > xNameAccess(
-                        m_xConfigProvider->createInstanceWithArguments(
-                            OUString::createFromAscii(
-                                "com.sun.star.configuration.ConfigurationAccess" ),
-                            aArguments ),
-                        UNO_QUERY );
+                else
+                    xNameAccess
+                        = Reference< XNameAccess >(
+                                xRootHierNameAccess, UNO_QUERY );
 
                 VOS_ENSURE( xNameAccess.is(),
                             "HierarchyEntry::first - No name access!" );
@@ -992,10 +916,17 @@ sal_Bool HierarchyEntry::first( iterator& it )
         {
             throw;
         }
+        catch ( NoSuchElementException& )
+        {
+            // getByHierarchicalName
+
+            VOS_ENSURE( sal_False,
+                    "HierarchyEntry::first - caught NoSuchElementException!" );
+        }
         catch ( Exception& )
         {
             VOS_ENSURE( sal_False,
-                        "HierarchyEntry::first - caught Exception!" );
+                    "HierarchyEntry::first - caught Exception!" );
         }
     }
 
@@ -1022,47 +953,9 @@ sal_Bool HierarchyEntry::next( iterator& it )
 //=========================================================================
 OUString HierarchyEntry::createPathFromHierarchyURL( const OUString& rURL )
 {
-    try
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    Reference< XStringEscape > xEscaper( getRootReadAccess(), UNO_QUERY );
 
-        if ( !m_xConfigProvider.is() )
-            m_xConfigProvider = Reference< XMultiServiceFactory >(
-                m_xSMgr->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationProvider" ) ),
-                UNO_QUERY );
-
-        if ( m_xConfigProvider.is() )
-        {
-            // Create Root object.
-
-            Sequence< Any > aArguments( 1 );
-            aArguments[ 0 ]
-                    <<= OUString::createFromAscii( HIERARCHY_ROOT_DB_KEY );
-
-            m_xEscaper = Reference< XStringEscape >(
-                m_xConfigProvider->createInstanceWithArguments(
-                    OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationUpdateAccess" ),
-                    aArguments ),
-                UNO_QUERY );
-        }
-    }
-    catch ( RuntimeException& )
-    {
-        throw;
-    }
-    catch ( Exception& )
-    {
-        // createInstance, createInstanceWithArguments
-
-        VOS_ENSURE( sal_False,
-                    "HierarchyEntry::createPathFromHierarchyURL - "
-                    "caught Exception!" );
-    }
-
-    VOS_ENSURE( m_xEscaper.is(),
+    VOS_ENSURE( xEscaper.is(),
                 "HierarchyEntry::createPathFromHierarchyURL - No escaper!" );
 
     // Transform path....
@@ -1087,11 +980,11 @@ OUString HierarchyEntry::createPathFromHierarchyURL( const OUString& rURL )
 
             OUString aToken = aPath.copy( nStart, nEnd - nStart );
 
-            if ( m_xEscaper.is() )
+            if ( xEscaper.is() )
             {
                 try
                 {
-                    aToken = m_xEscaper->escapeString( aToken );
+                    aToken = xEscaper->escapeString( aToken );
                 }
                 catch ( IllegalArgumentException& )
                 {
@@ -1114,6 +1007,59 @@ OUString HierarchyEntry::createPathFromHierarchyURL( const OUString& rURL )
     }
 
     return aNewPath;
+}
+
+//=========================================================================
+Reference< XHierarchicalNameAccess > HierarchyEntry::getRootReadAccess()
+{
+#if 0
+
+ // always set in ctor.
+
+    try
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+        if ( !m_xRootReadAccess.is() )
+        {
+            if ( !m_xConfigProvider.is() )
+                m_xConfigProvider = Reference< XMultiServiceFactory >(
+                    m_xSMgr->createInstance(
+                        OUString::createFromAscii(
+                            "com.sun.star.configuration.ConfigurationProvider" ) ),
+                    UNO_QUERY );
+
+            if ( m_xConfigProvider.is() )
+            {
+                // Create Root object.
+
+                Sequence< Any > aArguments( 1 );
+                aArguments[ 0 ]
+                        <<= OUString::createFromAscii( HIERARCHY_ROOT_DB_KEY );
+
+                m_xRootReadAccess = Reference< XHierarchicalNameAccess >(
+                    m_xConfigProvider->createInstanceWithArguments(
+                        OUString::createFromAscii(
+                            "com.sun.star.configuration.ConfigurationAccess" ),
+                        aArguments ),
+                    UNO_QUERY );
+            }
+        }
+    }
+    catch ( RuntimeException& )
+    {
+        throw;
+    }
+    catch ( Exception& )
+    {
+        // createInstance, createInstanceWithArguments
+
+        VOS_ENSURE( sal_False,
+                    "HierarchyEntry::getRootReadAccess - "
+                    "caught Exception!" );
+    }
+#endif
+    return m_xRootReadAccess;
 }
 
 //=========================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-07 08:09:47 $
+ *  last change: $Author: kso $ $Date: 2000-12-08 16:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,15 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-namespace com { namespace sun { namespace star { namespace util {
-    class XChangesBatch;
-    class XStringEscape;
-} } } }
+namespace com { namespace sun { namespace star {
+    namespace util {
+        class XChangesBatch;
+        class XStringEscape;
+    }
+    namespace container {
+        class XHierarchicalNameAccess;
+    }
+} } }
 
 namespace hierarchy_ucp
 {
@@ -104,14 +109,21 @@ class HierarchyEntry
     ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > m_xConfigProvider;
     ::com::sun::star::uno::Reference<
-            ::com::sun::star::util::XStringEscape >        m_xEscaper;
+            ::com::sun::star::container::XHierarchicalNameAccess >
+                                                           m_xRootReadAccess;
 
 private:
     ::rtl::OUString createPathFromHierarchyURL( const ::rtl::OUString& rURL );
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::container::XHierarchicalNameAccess >
+    getRootReadAccess();
 
 public:
     HierarchyEntry( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
+                    const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::container::XHierarchicalNameAccess >&
+                            rRootReadAccess,
                     const ::rtl::OUString& rURL );
 
     sal_Bool hasData();
