@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:16:02 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,8 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bUndoEnabled        = FALSE;
 #endif
     bCallParaInsertedOrDeleted = FALSE;
-    bImpConvertFirstCall    = FALSE;
+    bVerboseTextComments= FALSE;
+    bImpConvertFirstCall= FALSE;
 
     eDefLanguage        = LANGUAGE_DONTKNOW;
     maBackgroundColor   = COL_AUTO;
