@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrintPreviewSettings.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-27 13:34:24 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_PrintSettings_idl__
-#define __com_sun_star_text_PrintSettings_idl__
+#ifndef __com_sun_star_text_PrintPreviewSettings_idl__
+#define __com_sun_star_text_PrintPreviewSettings_idl__
 
 #ifndef __com_sun_star_text_NotePrintMode_idl__
 #include <com/sun/star/text/NotePrintMode.idl>
@@ -72,40 +72,39 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::PrintSettings
 /** These properties describe the printing of the content of a text document.
  */
 service PrintPreviewSettings
 {
-    /* All properties have the property attribute 'MAYBEVOID'
+    /** All properties have the property attribute 'maybevoid'
     meaning: if none of them have been set, they all will return a void value, if any
     one of them has been set, then none of them will be void any longer */
 
-    /* Size of the left margin */
-    [property] long PreviewPrintLeftMargin;
+    /** Size of the left margin */
+    [property, maybevoid] long PreviewPrintLeftMargin;
 
-    /* Size of the right margin */
-    [property] long PreviewPrintRightMargin;
+    /** Size of the right margin */
+    [property, maybevoid] long PreviewPrintRightMargin;
 
-    /* Size of the top margin */
-    [property] long PreviewPrintTopMargin;
+    /** Size of the top margin */
+    [property, maybevoid] long PreviewPrintTopMargin;
 
-    /* Size of the bottom margin */
-    [property] long PreviewPrintBottomMargin;
-    /* Size of the horizontal spacing */
+    /** Size of the bottom margin */
+    [property, maybevoid] long PreviewPrintBottomMargin;
 
-    [property] long PreviewPrintHorizontalSpacing;
-    /* Size of the vertical spacing */
-    [property] long PreviewPrintVerticalSpacing;
+    /** Size of the horizontal spacing */
+    [property, maybevoid] long PreviewPrintHorizontalSpacing;
 
-    /* Number of Rows */
-    [property] byte PreviewPrintNumRows;
+    [property, maybevoid] long PreviewPrintVerticalSpacing;
 
-    /* Number of Columns */
-    [property] byte PreviewPrintNumColumns;
+    /** Number of Rows */
+    [property, maybevoid] byte PreviewPrintNumRows;
 
-    /* If the format is landscape (if false then the format is portrait */
-    [property] boolean PreviewPrintLandscape;
+    /** Number of Columns */
+    [property, maybevoid] byte PreviewPrintNumColumns;
+
+    /** If the format is landscape (if false then the format is portrait */
+    [property, maybevoid] boolean PreviewPrintLandscape;
 };
 
 //=============================================================================
