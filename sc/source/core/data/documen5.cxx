@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-31 15:38:49 $
+ *  last change: $Author: nn $ $Date: 2001-10-04 20:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ BOOL ScDocument::HasChartAtPoint( USHORT nTab, const Point& rPos, String* pName 
                 if (IsChart(pObject))
                 {
                     if (pName)
-                        *pName = ((SdrOle2Obj*)pObject)->GetName();
+                        *pName = ((SdrOle2Obj*)pObject)->GetPersistName();
                     return TRUE;
                 }
             }
@@ -224,7 +224,7 @@ void ScDocument::UpdateChartArea( const String& rChartName,
         while (pObject)
         {
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
-                    ((SdrOle2Obj*)pObject)->GetName() == rChartName )
+                    ((SdrOle2Obj*)pObject)->GetPersistName() == rChartName )
             {
                 SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
                 if (aIPObj.Is())
@@ -283,7 +283,7 @@ void ScDocument::UpdateChart( const String& rChartName, Window* pWindow )
         while (pObject)
         {
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
-                    ((SdrOle2Obj*)pObject)->GetName() == rChartName )
+                    ((SdrOle2Obj*)pObject)->GetPersistName() == rChartName )
             {
                 SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
                 if (aIPObj.Is())
@@ -441,7 +441,7 @@ SchMemChart* ScDocument::FindChartData(const String& rName, BOOL bForModify)
         while (pObject)
         {
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
-                    ((SdrOle2Obj*)pObject)->GetName() == rName )
+                    ((SdrOle2Obj*)pObject)->GetPersistName() == rName )
             {
                 SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
                 if ( aIPObj.Is() )
@@ -492,7 +492,7 @@ void ScDocument::UpdateChartListenerCollection()
                 {
                     if ( pObject->GetObjIdentifier() == OBJ_OLE2 )
                     {
-                        String aObjName = ((SdrOle2Obj*)pObject)->GetName();
+                        String aObjName = ((SdrOle2Obj*)pObject)->GetPersistName();
                         aCLSearcher.SetString( aObjName );
                         USHORT nIndex;
                         if ( pChartListenerCollection->Search( &aCLSearcher, nIndex ) )

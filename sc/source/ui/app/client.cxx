@@ -2,9 +2,9 @@
  *
  *  $RCSfile: client.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-04 19:09:46 $
+ *  last change: $Author: nn $ $Date: 2001-10-04 19:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,8 @@ SdrOle2Obj* ScClient::GetDrawObj()
         {
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 )
             {
-                if ( ((SdrOle2Obj*)pObject)->GetName() == aName )
+                // name from InfoObject is PersistName
+                if ( ((SdrOle2Obj*)pObject)->GetPersistName() == aName )
                     pOle2Obj = (SdrOle2Obj*)pObject;
             }
             pObject = aIter.Next();
@@ -491,16 +492,8 @@ void __EXPORT ScClient::ViewChanged( USHORT nAspect )
 
         if ( aLogicRect.GetSize() != aVisSize )
         {
-            if ( pObj->GetMiscStatus() & SVOBJ_MISCSTATUS_SERVERRESIZE )
-            {
-                //  SetLogicRect for an object with SERVERRESIZE flag would also change VisArea
-                DBG_ERROR("SERVERRESIZE object has differing sizes");
-            }
-            else
-            {
-                aLogicRect.SetSize( aVisSize );
-                pDrawObj->SetLogicRect( aLogicRect );
-            }
+            aLogicRect.SetSize( aVisSize );
+            pDrawObj->SetLogicRect( aLogicRect );
         }
     }
 }

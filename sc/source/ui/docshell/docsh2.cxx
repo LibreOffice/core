@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-20 08:11:38 $
+ *  last change: $Author: nn $ $Date: 2001-10-04 19:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,9 @@ void ScDocShell::RemoveUnknownObjects()
                         SdrObject* pObject = aIter.Next();
                         while (pObject && !bFound)
                         {
-                            if ( pObject->ISA(SdrOle2Obj) && pObject->GetName() == aObjName )
+                            // name from InfoObject is PersistName
+                            if ( pObject->ISA(SdrOle2Obj) &&
+                                    static_cast<SdrOle2Obj*>(pObject)->GetPersistName() == aObjName )
                                 bFound = TRUE;
                             pObject = aIter.Next();
                         }
