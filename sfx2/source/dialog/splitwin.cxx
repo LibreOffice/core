@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:49:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,7 +442,7 @@ void SfxSplitWindow::Split()
         if ( pD->pWin )
         {
             USHORT nId = pD->nType;
-            long nSize    = GetItemSize( nId );
+            long nSize    = GetItemSize( nId, SWIB_FIXED );
             long nSetSize = GetItemSize( GetSet( nId ) );
             Size aSize;
 
