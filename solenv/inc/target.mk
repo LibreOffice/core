@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.76 $
+#   $Revision: 1.77 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-16 15:53:17 $
+#   last change: $Author: hjs $ $Date: 2001-10-17 19:01:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1869,6 +1869,17 @@ DPZTARGET= $(MISC)$/$(TARGET).dpz
 .ENDIF			# "$(ZIP1TARGET)" != "" || "$(ZIP2TARGET)" != "" || "$(ZIP3TARGET)" != ""
 .ENDIF			# "$(make_zip_deps)"==""
 
+.IF "$(SOLAR_JAVA)"!=""
+ALL_JAVA_TARGETS= \
+        $(GENJAVAFILES) \
+        $(JAVACLASSFILES) $(JAVA1CLASSFILES)	\
+        $(JAVA2CLASSFILES)	$(JAVA3CLASSFILES) $(JAVA4CLASSFILES)\
+        $(JAVA5CLASSFILES)	$(JAVA6CLASSFILES) $(JAVA7CLASSFILES)\
+        $(JAVA8CLASSFILES)	$(JAVA9CLASSFILES) $(JAVA10CLASSFILES)\
+        $(JAVA11CLASSFILES)	\
+        $(JAVATARGET)	\
+        $(TARGETDPJ)
+.ENDIF          # "$(SOLAR_JAVA)"!=""
 # -------
 # - DEF -
 # -------
@@ -1978,14 +1989,7 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(OTHERTARRGET) \
         $(XMLPROPERTIESN) \
         $(XMLXULRESN)	\
-        $(GENJAVAFILES) \
-        $(JAVACLASSFILES) $(JAVA1CLASSFILES)	\
-        $(JAVA2CLASSFILES)	$(JAVA3CLASSFILES) $(JAVA4CLASSFILES)\
-        $(JAVA5CLASSFILES)	$(JAVA6CLASSFILES) $(JAVA7CLASSFILES)\
-        $(JAVA8CLASSFILES)	$(JAVA9CLASSFILES) $(JAVA10CLASSFILES)\
-        $(JAVA11CLASSFILES)	\
-        $(JAVATARGET)	\
-        $(TARGETDPJ) \
+        $(ALL_JAVA_TARGETS) \
         $(OBJTARGET)	$(SLOTARGET)	$(SMRSLOTARGET)		\
         $(SVXLIGHTSLOTARGET) \
         $(SVXLIGHTOBJTARGET) \
@@ -2138,10 +2142,12 @@ $(OBJ)$/$(CINTER4NAME).obj : $(SDI4TARGET)
 $(OBJ)$/$(CINTER5NAME).obj : $(SDI5TARGET)
 .ENDIF
 
+.IF "$(SOLAR_JAVA)"!=""
 .IF "$(GENJAVAFILES)"!=""
 $(GENJAVAFILES) : $(RDB)
 $(JAVATARGET) : $(GENJAVAFILES)
 .ENDIF			# "$(GENJAVAFILES)"!=""
+.ENDIF          # "$(SOLAR_JAVA)"!=""
 
 .INCLUDE : tg_dir.mk
 
@@ -2883,7 +2889,9 @@ $(MISC)$/%linkinc.ls:
 .ENDIF
 
 
+.IF "$(SOLAR_JAVA)"!=""
 .INCLUDE : tg_java.mk
+.ENDIF          # "$(SOLAR_JAVA)"!=""
 
 $(MISC)\$(TARGET).lck:
     @vlog -BL *.??v > $(MISC)\$(TARGET).lck
