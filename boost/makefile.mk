@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 20:46:16 $
+#   last change: $Author: kz $ $Date: 2005-01-18 16:19:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,12 @@ TARGET=ooo_boost
 
 .INCLUDE :	settings.mk
 
+.IF "$(SYSTEM_BOOST)" == "YES"
+all:
+    @echo "An already available installation of boost should exist on your system."        
+    @echo "Therefore the version provided here does not need to be built in addition."
+.ELSE
+
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=boost-1.30.2
@@ -86,3 +92,4 @@ BUILD_FLAGS=
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
 
+.ENDIF
