@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:54:05 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 #ifndef _FRM_RESOURCE_HXX_
 #include "frm_resource.hxx"
 #endif
-#include "conversion.hxx"
 #ifndef _FRM_SERVICES_HXX_
 #include "services.hxx"
 #endif
