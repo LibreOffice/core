@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 09:48:09 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:57:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,26 +37,25 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-// base classes
+
 import java.util.Vector;
+
 import java.io.File;
 import java.io.FileOutputStream;
-import java.net.URL;
+
+import com.sun.star.lang.XMultiComponentFactory;
+
+import com.sun.star.ucb.Command;
+import com.sun.star.ucb.XContent;
+import com.sun.star.ucb.XContentProvider;
+import com.sun.star.ucb.XContentIdentifier;
+import com.sun.star.ucb.XContentIdentifierFactory;
+import com.sun.star.ucb.XCommandProcessor;
+
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-import com.sun.star.ucb.*;
-import com.sun.star.lang.*;
 
-// factory for creating components
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.bridge.XUnoUrlResolver;
-
-// Exceptions
-import com.sun.star.uno.RuntimeException;
-import com.sun.star.container.NoSuchElementException;
-import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.lang.IndexOutOfBoundsException;
 
 /**
  * Helper for creating a new connection with the specific args to a running office.
@@ -66,30 +65,31 @@ public class Helper {
     /**
      * Member properties
      */
-    private XInterface m_ucb              = null;
-    private String     m_connectString    = null;
-    private String     m_contenturl       = null;
+    private XInterface  m_ucb        = null;
+    private String      m_contenturl = null;
+    private static XComponentContext   m_xContext   = null;
 
     /**
-     *  Constructor, create a new connection (ucb) with the specific arguments
-     *  to a running office.
+     *  Constructor, create a new instance of the ucb. UNO is bootstrapped and
+     *  the remote office service manger is used to create the ucb. If necessary
+     *  a new office process is started.
      *
-     *@param  String   Connect string. Example : -connect=socket,host=localhost,port=2083
-     *@param  String   Connect URL.    Example : -url=file:///
-     *@exception  java.lang.Exception
+     *  @exception  java.lang.Exception
      */
-    public Helper( String connect, String url ) throws java.lang.Exception {
-
-        m_connectString = connect;
+    public Helper(String url) throws java.lang.Exception {
         m_contenturl    = url;
-        if ( m_connectString == null || m_connectString.equals( "" )) {
-                throw new Exception( "ERROR : Connect String not found. See Help " +
-                "( Arguments: -? or -help )." );
+
+        if (null == m_xContext ) {
+            // get the remote office component context
+            m_xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+            System.out.println("Connected to a running office ...");
         }
 
-        // Create a new xXCB
-        m_ucb = createUCB(
-            "uno:" + m_connectString + ";urp;StarOffice.ServiceManager" );
+        XMultiComponentFactory xMCF = m_xContext.getServiceManager();
+
+        m_ucb = (XInterface)UnoRuntime.queryInterface(XInterface.class,
+            xMCF.createInstanceWithContext(
+                        "com.sun.star.ucb.UniversalContentBroker", m_xContext));
     }
 
     /**
@@ -129,54 +129,12 @@ public class Helper {
     }
 
     /**
-     * Connect to a running office that is accepting a connection
-     * then return the ServiceManager to instantiate office components
-     *
-     *@param      String    Connect string. Example : -connect=socket,host=localhost,port=2083
-     *@return     XMultiServiceFactory
-     *@exception  com.sun.star.uno.Exception
-     *@exception  java.lang.Exception
-     */
-    public XInterface createUCB( String connectString )
-        throws com.sun.star.uno.Exception, java.lang.Exception {
-
-        // Get component context
-        XComponentContext xcomponentcontext =
-            com.sun.star.comp.helper.Bootstrap.createInitialComponentContext(
-            null );
-
-        // Initializing serviceManager
-        XMultiComponentFactory localServiceManager = xcomponentcontext.getServiceManager();
-        XUnoUrlResolver URLResolver = (XUnoUrlResolver) UnoRuntime.queryInterface(
-            XUnoUrlResolver.class,
-            localServiceManager.createInstanceWithContext(
-                "com.sun.star.bridge.UnoUrlResolver",
-                xcomponentcontext ) );
-        XMultiServiceFactory serviceManager = (XMultiServiceFactory) UnoRuntime.queryInterface(
-            XMultiServiceFactory.class,
-            URLResolver.resolve( connectString  ) );
-        XInterface ucb = ( XInterface )UnoRuntime.queryInterface(
-            XInterface.class,
-            serviceManager.createInstance( "com.sun.star.ucb.UniversalContentBroker" ));
-        return ucb;
-    }
-
-    /**
      *  Get ucb instance.
      *
      *@return   XInterface  That contains the ucb  instance
      */
     public XInterface getUCB() {
         return m_ucb;
-    }
-
-    /**
-     *  Get connect string.
-     *
-     *@return   String  That contains the connect string
-     */
-    public String getConnectString() {
-        return m_connectString;
     }
 
     /**
@@ -222,19 +180,16 @@ public class Helper {
         return cmdProcessor.execute( command, 0, null );
     }
 
-    public static String getCurrentDirAsAbsoluteFileURL()
+    public static String getAbsoluteFileURLFromSystemPath( String systemPath )
     {
         try
         {
-            File file = new File( "" );
+            File file = new File( systemPath );
             String url = file.toURL().toString();
             if ( url.charAt( 6 ) != '/' ) { // file:/xxx vs. file:///xxxx
-                StringBuffer buf = new StringBuffer( "file:///" );
-                buf.append( url.substring( 6 ) );
-                if ( !url.endsWith( "/" ) )
-                    buf.append( '/' );
-
-                url = buf.toString();
+                StringBuffer buf1 = new StringBuffer( "file:///" );
+                buf1.append( url.substring( 6 ) );
+                url = buf1.toString();
             }
             return url;
         }
@@ -242,22 +197,30 @@ public class Helper {
         {
             e.printStackTrace();
         }
-
         return new String();
     }
 
-    public static String getAbsoluteFileURL( String relativeURL )
+    public static String prependCurrentDirAsAbsoluteFileURL( String relativeURL )
     {
-        StringBuffer buf = new StringBuffer( getCurrentDirAsAbsoluteFileURL() );
+        // get url of current dir.
+        String url = getAbsoluteFileURLFromSystemPath( "" );
+        StringBuffer buf = new StringBuffer( url );
+        if ( !url.endsWith( File.separator ) )
+            buf.append( File.separator );
         buf.append( relativeURL );
         return buf.toString();
     }
 
-    public static String createTargetDataFile()
+    public static String createTargetDataFile( String workDir )
     {
         try
         {
-            StringBuffer buf = new StringBuffer( "resource-" );
+            StringBuffer buf = new StringBuffer();
+            if ( workDir != null && workDir.length() > 0 ) {
+                buf.append( workDir );
+                buf.append( File.separator );
+            }
+            buf.append( "resource-" );
             buf.append( System.currentTimeMillis() );
             File file = new File( buf.toString() );
             String url = file.toURL().toString();
@@ -276,7 +239,6 @@ public class Helper {
                 stream.write( content.getBytes() );
                 stream.close();
             }
-//            catch ( java.io.FileNotFoundException e ) {}
             catch ( java.io.IOException e )
             {
                 e.printStackTrace();
