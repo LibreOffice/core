@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-10 11:36:33 $
+ *  last change: $Author: ka $ $Date: 2001-09-10 12:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,8 @@ SdrOle2Obj::SdrOle2Obj(FASTBOOL bFrame_)
     bFrame=bFrame_;
 }
 
+// -----------------------------------------------------------------------------
+
 SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, FASTBOOL bFrame_)
 {
     bInDestruction = FALSE;
@@ -196,6 +198,8 @@ SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, FASTBOOL bFrame_)
 
 #endif // !SVX_LIGHT
 }
+
+// -----------------------------------------------------------------------------
 
 SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, const XubString& rNewObjName, FASTBOOL bFrame_)
 {
@@ -219,6 +223,8 @@ SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, const XubString& rN
     }
 #endif // !SVX_LIGHT
 }
+
+// -----------------------------------------------------------------------------
 
 SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, const XubString& rNewObjName, const Rectangle& rNewRect, FASTBOOL bFrame_):
     SdrRectObj(rNewRect)
@@ -244,6 +250,8 @@ SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, const XubString& rN
 #endif
 }
 
+// -----------------------------------------------------------------------------
+
 void SdrOle2Obj::Init()
 {
     mpImpl = new SdrOle2ObjImpl;
@@ -252,6 +260,8 @@ void SdrOle2Obj::Init()
     mpImpl->pMetaFile=NULL;
     mpImpl->pGraphicObject=NULL;
 }
+
+// -----------------------------------------------------------------------------
 
 SdrOle2Obj::~SdrOle2Obj()
 {
@@ -294,6 +304,8 @@ SdrOle2Obj::~SdrOle2Obj()
     delete mpImpl;
 }
 
+// -----------------------------------------------------------------------------
+
 void SdrOle2Obj::SetGraphic(const Graphic* pGrf)
 {
     if ( pGraphic )
@@ -316,10 +328,14 @@ void SdrOle2Obj::SetGraphic(const Graphic* pGrf)
     SetChanged();
 }
 
+// -----------------------------------------------------------------------------
+
 FASTBOOL SdrOle2Obj::IsEmpty() const
 {
     return !ppObjRef->Is();
 }
+
+// -----------------------------------------------------------------------------
 
 void SdrOle2Obj::Connect()
 {
@@ -387,6 +403,8 @@ void SdrOle2Obj::Connect()
 #endif // SVX_LIGHT
 }
 
+// -----------------------------------------------------------------------------
+
 void SdrOle2Obj::Disconnect()
 {
 #ifndef SVX_LIGHT
@@ -421,60 +439,29 @@ void SdrOle2Obj::Disconnect()
 #endif // SVX_LIGHT
 }
 
+// -----------------------------------------------------------------------------
+
 void SdrOle2Obj::SetModel(SdrModel* pNewModel)
 {
-    FASTBOOL bChg=pNewModel!=pModel;
+    FASTBOOL bChg = pNewModel!=pModel;
 
-    if (bChg) Disconnect();       // mit dem alten Namen
+    if( bChg )
+        Disconnect(); // mit dem alten Namen
 
 #ifndef SVX_LIGHT
-    if (pModel && pNewModel)
+    if( pModel && pNewModel )
     {
         SvPersist* pDestPers = pNewModel->GetPersist();
         SvPersist* pSrcPers  = pModel->GetPersist();
 
-        if (pDestPers && pSrcPers)
-        {
-            if ( pDestPers != pSrcPers )
-            {
-                // Persists unterschiedlich (unterschiedliche Dokumente)
-                // oder gleiches Dokument
-
-                SvInfoObject* pInfo = pSrcPers->Find(mpImpl->aPersistName);
-
-                if (pInfo)
-                {
-                    USHORT i = 1;
-                    // loop because of storage bug 46033
-                    for( USHORT n = 0; n < 100; n++ )
-                    {
-                        mpImpl->aPersistName = OUString::createFromAscii( "Object " );
-                        String aStr( mpImpl->aPersistName );
-                        aStr+=String::CreateFromInt32( i );
-                        while( pDestPers->Find( aStr ) )
-                        {
-                            i++;
-                            aStr = mpImpl->aPersistName;
-                            aStr += String::CreateFromInt32(i);
-                        }
-                        mpImpl->aPersistName = aStr;
-                        const SvInPlaceObjectRef& aXRef = &pSrcPers->GetObject( mpImpl->aPersistName );
-                        if( pDestPers->Copy(mpImpl->aPersistName, mpImpl->aPersistName, pInfo, pSrcPers) )
-                            break;
-
-                        i++;
-                    }
-
-                    (*ppObjRef)=&(pDestPers->GetObject(mpImpl->aPersistName));
-                }
-            }
-        }
+        if( pDestPers && pSrcPers && ( pDestPers != pSrcPers ) )
+            ImpCopyObject( *pSrcPers, *pDestPers, mpImpl->aPersistName );
     }
 #endif
 
-    SdrRectObj::SetModel(pNewModel);
+    SdrRectObj::SetModel( pNewModel );
 
-    if( pModel && bChg && aName.Len() == 0 )
+    if( pModel && bChg && !aName.Len() )
     {
         String aStr( mpImpl->aPersistName );
         USHORT i = 1;
@@ -490,8 +477,11 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
         aName += String::CreateFromInt32( i );
     }
 
-    if (bChg) Connect();
+    if( bChg )
+        Connect();
 }
+
+// -----------------------------------------------------------------------------
 
 void SdrOle2Obj::SetPage(SdrPage* pNewPage)
 {
@@ -504,6 +494,8 @@ void SdrOle2Obj::SetPage(SdrPage* pNewPage)
 
     if (bInsert) Connect();
 }
+
+// -----------------------------------------------------------------------------
 
 void SdrOle2Obj::SetObjRef(const SvInPlaceObjectRef& rNewObjRef)
 {
@@ -525,10 +517,14 @@ void SdrOle2Obj::SetObjRef(const SvInPlaceObjectRef& rNewObjRef)
     SendRepaintBroadcast();
 }
 
+// -----------------------------------------------------------------------------
+
 FASTBOOL SdrOle2Obj::HasSetName() const
 {
     return TRUE;
 }
+
+// -----------------------------------------------------------------------------
 
 void SdrOle2Obj::SetName(const XubString& rStr)
 {
@@ -536,10 +532,14 @@ void SdrOle2Obj::SetName(const XubString& rStr)
     SetChanged();
 }
 
+// -----------------------------------------------------------------------------
+
 XubString SdrOle2Obj::GetName() const
 {
     return aName;
 }
+
+// -----------------------------------------------------------------------------
 
 void SdrOle2Obj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
@@ -560,10 +560,14 @@ void SdrOle2Obj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToContour = FALSE;
 }
 
+// -----------------------------------------------------------------------------
+
 UINT16 SdrOle2Obj::GetObjIdentifier() const
 {
     return bFrame ? UINT16(OBJ_FRAME) : UINT16(OBJ_OLE2);
 }
+
+// -----------------------------------------------------------------------------
 
 FASTBOOL SdrOle2Obj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
 {
@@ -660,10 +664,14 @@ FASTBOOL SdrOle2Obj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRe
     return bOk;
 }
 
+// -----------------------------------------------------------------------------
+
 SdrObject* SdrOle2Obj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
     return ImpCheckHit(rPnt,nTol,pVisiLayer,TRUE,TRUE);
 }
+
+// -----------------------------------------------------------------------------
 
 void SdrOle2Obj::TakeObjNameSingul(XubString& rName) const
 {
@@ -677,83 +685,121 @@ void SdrOle2Obj::TakeObjNameSingul(XubString& rName) const
     }
 }
 
+// -----------------------------------------------------------------------------
+
 void SdrOle2Obj::TakeObjNamePlural(XubString& rName) const
 {
     rName=ImpGetResStr(bFrame ? STR_ObjNamePluralFrame : STR_ObjNamePluralOLE2);
 }
 
-void SdrOle2Obj::operator=(const SdrObject& rObj)
-{
-    FASTBOOL bModelOk=pModel!=NULL;
-    if (bModelOk) Disconnect();
-    SdrRectObj::operator=(rObj);
-    mpImpl->aPersistName    =((SdrOle2Obj&)rObj).mpImpl->aPersistName;
-    aProgName=((SdrOle2Obj&)rObj).aProgName;
-    aName = ((SdrOle2Obj&)rObj).aName;
-    bFrame   =((SdrOle2Obj&)rObj).bFrame;
+// -----------------------------------------------------------------------------
 
-    if(((SdrOle2Obj&)rObj).pGraphic)
+void SdrOle2Obj::ImpAssign( const SdrObject& rObj, SdrPage* pNewPage, SdrModel* pNewModel )
+{
+    const SdrOle2Obj& rOle2Obj = static_cast< const SdrOle2Obj& >( rObj );
+
+    if( pModel )
+        Disconnect();
+
+    SdrRectObj::operator=( rObj );
+
+    if( pNewPage )
+        pPage = pNewPage;
+
+    if( pNewModel )
+        pModel = pNewModel;
+
+    aName = rOle2Obj.aName;
+    mpImpl->aPersistName = rOle2Obj.mpImpl->aPersistName;
+    aProgName = rOle2Obj.aProgName;
+    bFrame = rOle2Obj.bFrame;
+
+    if( rOle2Obj.pGraphic )
     {
-        if(pGraphic)
+        if( pGraphic )
         {
             delete pGraphic;
             delete mpImpl->pGraphicObject;
         }
-        pGraphic = new Graphic(*((SdrOle2Obj&)rObj).pGraphic);
+
+        pGraphic = new Graphic( *rOle2Obj.pGraphic );
         mpImpl->pGraphicObject = new GraphicObject( *pGraphic );
     }
 
-    if (bModelOk) {
+    if( pModel && rObj.GetModel() )
+    {
 #ifndef SVX_LIGHT
-        SvPersist* pDestPers=pModel->GetPersist();
-        SdrModel* pSrcModel=((SdrOle2Obj&)rObj).GetModel();
-        SvPersist* pSrcPers=pSrcModel!=NULL ? pSrcModel->GetPersist() : NULL;
-        if (pDestPers!=NULL && pSrcPers!=NULL && pModel==pSrcModel) {
-            // Kopie innerhalb eines Models
-            // Eindeutigen Namen finden
-            SvInfoObject* pInfo=pSrcPers->Find(mpImpl->aPersistName);
-            if (pInfo!=NULL)
-            {
-                USHORT i = 1;
-                // loop because of storage bug 46033
-                for( USHORT n = 0; n < 100; n++ )
-                {
-                    // new name in persist
-                    mpImpl->aPersistName = OUString::createFromAscii( "Object " );
-                    String aStr( mpImpl->aPersistName );
-                    aStr+=String::CreateFromInt32( i );
-                    while( pDestPers->Find( aStr ) )
-                    {
-                        i++;
-                        aStr = mpImpl->aPersistName;
-                        aStr += String::CreateFromInt32(i);
-                    }
-                    mpImpl->aPersistName = aStr;
+        SvPersist* pDestPers = pModel->GetPersist();
+        SvPersist* pSrcPers = rObj.GetModel()->GetPersist();
 
-                    // new UI name
-//                  aName = ImpGetResStr(bFrame ? STR_ObjFrameNamePrefix : STR_ObjOLE2NamePrefix);
-//                  aName += String::CreateFromInt32( i );
-                    aName = String();
-
-                    const SvInPlaceObjectRef& aXRef = &pSrcPers->GetObject( mpImpl->aPersistName );
-                    if( pDestPers->Copy(mpImpl->aPersistName,mpImpl->aPersistName,pInfo,pSrcPers) )
-                        break;
-
-                    i++;
-                }
-
-                (*ppObjRef)=&(pDestPers->GetObject(mpImpl->aPersistName));
-            }
-        }
+        if( pDestPers && pSrcPers )
+            ImpCopyObject( *pSrcPers, *pDestPers, mpImpl->aPersistName );
 #endif
+
         Connect();
     }
 }
+
+// -----------------------------------------------------------------------------
+
+void SdrOle2Obj::ImpCopyObject( SvPersist& rSrcPersist, SvPersist& rDstPersist, String& rPersistName )
+{
+    SvInfoObject* pInfo = rSrcPersist.Find( rPersistName );
+
+    if( pInfo != NULL )
+    {
+        // loop because of storage bug 46033
+        for( USHORT i = 1, n = 0; n < 100; i++, n++ )
+        {
+            String aStr( rPersistName = OUString::createFromAscii( "Object " ) );
+
+            aStr += String::CreateFromInt32( i );
+
+            while( rDstPersist.Find( aStr ) )
+            {
+                i++;
+                aStr = rPersistName;
+                aStr += String::CreateFromInt32( i );
+            }
+
+            const SvInPlaceObjectRef& rRef = &rSrcPersist.GetObject( rPersistName = aStr );
+
+            if( rDstPersist.Copy( rPersistName, rPersistName, pInfo, &rSrcPersist ) )
+                break;
+        }
+
+        *ppObjRef = &rDstPersist.GetObject( rPersistName );
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void SdrOle2Obj::operator=(const SdrObject& rObj)
+{
+    if( &rObj != this )
+        ImpAssign( rObj );
+}
+
+// -----------------------------------------------------------------------------
+
+SdrObject* SdrOle2Obj::Clone( SdrPage* pNewPage, SdrModel* pNewModel ) const
+{
+    SdrOle2Obj* pObj = static_cast< SdrOle2Obj* >( SdrObjFactory::MakeNewObject( GetObjInventor(), GetObjIdentifier(),NULL ) );
+
+    if( pObj )
+        pObj->ImpAssign( *this, pNewPage, pNewModel );
+
+    return pObj;
+}
+
+// -----------------------------------------------------------------------------
 
 FASTBOOL SdrOle2Obj::HasSpecialDrag() const
 {
     return FALSE;
 }
+
+// -----------------------------------------------------------------------------
 
 void SdrOle2Obj::ImpSetVisAreaSize()
 {
@@ -814,6 +860,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
 #endif // SVX_LIGHT
 }
 
+// -----------------------------------------------------------------------------
+
 void SdrOle2Obj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     SdrRectObj::NbcResize(rRef,xFact,yFact);
@@ -832,12 +880,16 @@ void SdrOle2Obj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
         ImpSetVisAreaSize();
 }
 
+// -----------------------------------------------------------------------------
+
 void SdrOle2Obj::SetGeoData(const SdrObjGeoData& rGeo)
 {
     SdrRectObj::SetGeoData(rGeo);
     if( (NULL == pModel) || !pModel->isLocked() )
         ImpSetVisAreaSize();
 }
+
+// -----------------------------------------------------------------------------
 
 void SdrOle2Obj::NbcSetSnapRect(const Rectangle& rRect)
 {
@@ -846,12 +898,16 @@ void SdrOle2Obj::NbcSetSnapRect(const Rectangle& rRect)
         ImpSetVisAreaSize();
 }
 
+// -----------------------------------------------------------------------------
+
 void SdrOle2Obj::NbcSetLogicRect(const Rectangle& rRect)
 {
     SdrRectObj::NbcSetLogicRect(rRect);
     if( (NULL == pModel) || !pModel->isLocked() )
         ImpSetVisAreaSize();
 }
+
+// -----------------------------------------------------------------------------
 
 FASTBOOL SdrOle2Obj::HasGDIMetaFile() const
 {
@@ -863,6 +919,8 @@ FASTBOOL SdrOle2Obj::HasGDIMetaFile() const
 
     return bOK;
 }
+
+// -----------------------------------------------------------------------------
 
 const GDIMetaFile* SdrOle2Obj::GetGDIMetaFile() const
 {
@@ -894,6 +952,8 @@ const GDIMetaFile* SdrOle2Obj::GetGDIMetaFile() const
 #endif // SVX_LIGHT
     return mpImpl->pMetaFile;
 }
+
+// -----------------------------------------------------------------------------
 
 void SdrOle2Obj::WriteData(SvStream& rOut) const
 {
@@ -942,6 +1002,8 @@ void SdrOle2Obj::WriteData(SvStream& rOut) const
         ( (SdrOle2Obj*) this )->SetGraphic( NULL );     // remove preview graphic
 }
 
+// -----------------------------------------------------------------------------
+
 void SdrOle2Obj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 {
     rIn.SetError( 0 );
@@ -987,12 +1049,16 @@ void SdrOle2Obj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
     }
 }
 
+// -----------------------------------------------------------------------------
+
 void SdrOle2Obj::NbcMove(const Size& rSize)
 {
     SdrRectObj::NbcMove(rSize);
     if( (NULL == pModel) || !pModel->isLocked() )
         ImpSetVisAreaSize();
 }
+
+// -----------------------------------------------------------------------------
 
 BOOL SdrOle2Obj::Unload()
 {
@@ -1043,6 +1109,8 @@ BOOL SdrOle2Obj::Unload()
     return bUnloaded;
 }
 
+// -----------------------------------------------------------------------------
+
 void SdrOle2Obj::CreatePersistName( SvPersist* pPers )
 {
     mpImpl->aPersistName = OUString::createFromAscii( "Object " );
@@ -1058,6 +1126,7 @@ void SdrOle2Obj::CreatePersistName( SvPersist* pPers )
     mpImpl->aPersistName = aStr;
 }
 
+// -----------------------------------------------------------------------------
 
 const SvInPlaceObjectRef& SdrOle2Obj::GetObjRef() const
 {
@@ -1152,6 +1221,8 @@ const SvInPlaceObjectRef& SdrOle2Obj::GetObjRef() const
     return *ppObjRef;
 }
 
+// -----------------------------------------------------------------------------
+
 uno::Reference< frame::XModel > SdrOle2Obj::getXModel() const
 {
     uno::Reference< frame::XModel > xModel;
@@ -1173,6 +1244,8 @@ uno::Reference< frame::XModel > SdrOle2Obj::getXModel() const
 
     return xModel;
 }
+
+// -----------------------------------------------------------------------------
 
 #ifdef SVX_LIGHT
 
@@ -1207,9 +1280,13 @@ SvInPlaceObject::SvInPlaceObject()
 {
 }
 
+// -----------------------------------------------------------------------------
+
 SvInPlaceObject::~SvInPlaceObject()
 {
 }
+
+// -----------------------------------------------------------------------------
 
 // this method is called from the views DoConnect method
 // Only the view knows the parent window for the plugin
@@ -1244,6 +1321,8 @@ void SvInPlaceObject::CreatePlugin( uno::Reference< awt::XToolkit > xToolkit,
     }
 }
 
+// -----------------------------------------------------------------------------
+
 void SvInPlaceObject::SetSizeAndPos( const Rectangle& rRect )
 {
     uno::Reference< awt::XWindow > xWindow( xPlugin, uno::UNO_QUERY );
@@ -1254,6 +1333,8 @@ void SvInPlaceObject::SetSizeAndPos( const Rectangle& rRect )
         xWindow->setVisible(TRUE);
     }
 }
+
+// -----------------------------------------------------------------------------
 
 SvInPlaceObject* SvInPlaceObject::Load( SotStorageRef xSt )
 {
@@ -1318,6 +1399,8 @@ SvInPlaceObject* SvInPlaceObject::Load( SotStorageRef xSt )
     return pIPO;
 }
 
+// -----------------------------------------------------------------------------
+
 // destroys the plugin for this inplace dummy
 void SvInPlaceObject::DoDisconnect()
 {
@@ -1331,4 +1414,3 @@ void SvInPlaceObject::DoDisconnect()
 }
 
 #endif
-
