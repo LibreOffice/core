@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusbarcontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:02:52 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,6 +361,7 @@ throw ( RuntimeException )
         Reference< XInterface > xIfac( pIter->second, UNO_QUERY );
         if ( xSource == xIfac )
             pIter->second.clear();
+        pIter++;
     }
 
     Reference< XInterface > xIfac( m_xFrame, UNO_QUERY );
