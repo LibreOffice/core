@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:51:26 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,6 @@ private:
     BOOL                bInDelayedPaint;
 
                         DECL_LINK( PaintDelayed, Timer * );
-                        DECL_LINK( PaintProc, SdrPaintProcRec * );
     void CreateSlideTransferable (::Window* pWindow, BOOL bDrag);
 };
 
