@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cd $ $Date: 2002-07-31 07:31:01 $
+ *  last change: $Author: fs $ $Date: 2002-08-07 10:54:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
+#endif
+#ifndef _SFXENUMITEM_HXX
+#include <svtools/eitem.hxx>
 #endif
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
@@ -1795,9 +1798,11 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl(USHORT nId)
             const SfxStringItem aName( SID_FILE_NAME, aMgr.GetTemplates()->GetPath( nRegion, nIndex ) );
             const SfxStringItem aLongName( SID_FILE_LONGNAME, pFocusBox->GetEntryText( pEntry ) );
             const SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE( "private:user" ) );
+            const SfxStringItem aTargetName( SID_TARGETNAME, DEFINE_CONST_UNICODE( "_default" ) );
+            const SfxBoolItem   aTemplateIndicator( SID_TEMPLATE, sal_False );
 
             SFX_APP()->GetAppDispatcher_Impl()->Execute( SID_OPENTEMPLATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
-                                      &aName, &aLongName, &aReferer, 0L );
+                                      &aName, &aLongName, &aReferer, &aTargetName, &aTemplateIndicator, 0L );
             pDialog->EndDialog( RET_EDIT_STYLE );
             break;
         }
