@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeCollection.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ module com { module sun { module star { module drawing {
     This service is used by the view f.e. to return a collection of
     <type>Shape</type> that are selected at the ui.
 */
-service ShapeCollection
+published service ShapeCollection
 {
     /** gives access to the shapes
      */
