@@ -2,8 +2,8 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.25 $
- *  last change: $Author: vg $ $Date: 2003-05-28 13:25:06 $
+ *  $Revision: 1.26 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,8 +144,10 @@ DBG_NAME(SfxBindingsInvalidateAll);
 
 //====================================================================
 
-#define TIMEOUT_FIRST        20
-#define TIMEOUT_UPDATING      0
+static USHORT nTimeOut = 300;
+
+#define TIMEOUT_FIRST       nTimeOut
+#define TIMEOUT_UPDATING     20
 #define TIMEOUT_IDLE       2500
 
 static sal_uInt32 nCache1 = 0;
@@ -938,6 +940,7 @@ void SfxBindings::InvalidateAll
     pImp->nMsgPos = 0;
     if ( !nRegLevel )
     {
+        pImp->aTimer.Stop();
         pImp->aTimer.SetTimeout(TIMEOUT_FIRST);
         pImp->aTimer.Start();
 //      pImp->bFirstRound = sal_True;
@@ -1007,6 +1010,7 @@ void SfxBindings::Invalidate
     pImp->nMsgPos = 0;
     if ( !nRegLevel )
     {
+        pImp->aTimer.Stop();
         pImp->aTimer.SetTimeout(TIMEOUT_FIRST);
         pImp->aTimer.Start();
 //      pImp->bFirstRound = sal_True;
@@ -1091,6 +1095,7 @@ void SfxBindings::InvalidateShell
         pImp->nMsgPos = 0;
         if ( !nRegLevel )
         {
+            pImp->aTimer.Stop();
             pImp->aTimer.SetTimeout(TIMEOUT_FIRST);
             pImp->aTimer.Start();
             pImp->bFirstRound = sal_True;
@@ -1142,6 +1147,7 @@ void SfxBindings::Invalidate
         pImp->nMsgPos = Min(GetSlotPos(nId), pImp->nMsgPos);
         if ( !nRegLevel )
         {
+            pImp->aTimer.Stop();
             pImp->aTimer.SetTimeout(TIMEOUT_FIRST);
             pImp->aTimer.Start();
         }
@@ -1197,6 +1203,7 @@ void SfxBindings::Invalidate
         pImp->nMsgPos = Min(GetSlotPos(nId), pImp->nMsgPos);
         if ( !nRegLevel )
         {
+            pImp->aTimer.Stop();
             pImp->aTimer.SetTimeout(TIMEOUT_FIRST);
             pImp->aTimer.Start();
         }
@@ -2354,6 +2361,7 @@ void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, char *pFile, int nLine 
             return;
         if ( pImp->pCaches && pImp->pCaches->Count() )
         {
+            pImp->aTimer.Stop();
             pImp->aTimer.SetTimeout(TIMEOUT_FIRST);
             pImp->aTimer.Start();
 //          pImp->bFirstRound = sal_True;
