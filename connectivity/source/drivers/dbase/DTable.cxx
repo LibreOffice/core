@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 13:18:00 $
+ *  last change: $Author: oj $ $Date: 2001-10-19 07:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1144,11 +1144,16 @@ BOOL ODbaseTable::Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMemoFie
         {
             if(_pIndexes)
             {
-                sal_Int32 nCount = _pIndexes->getCount(),
-                       i      = 0;
-                while (i < nCount)
+                try
                 {
-                    _pIndexes->dropByIndex(i);
+                    sal_Int32 i = _pIndexes->getCount();
+                    while (i)
+                    {
+                        _pIndexes->dropByIndex(--i);
+                    }
+                }
+                catch(SQLException)
+                {
                 }
             }
             //  aFile.SetBase(m_Name);
@@ -1174,7 +1179,8 @@ BOOL ODbaseTable::DropImpl()
 {
     FileClose();
 
-    refreshIndexes(); // look for indexes which must be deleted as well
+    if(!m_pIndexes)
+        refreshIndexes(); // look for indexes which must be deleted as well
 
     BOOL bDropped = Drop_Static(getEntry(m_pConnection,m_Name),HasMemoFields(),m_pIndexes);
     if(!bDropped)
