@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:55:08 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:53:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalXLib;
 class SalDisplay;
-class X11SalFrame;
+class SalFrame;
 class SalPrinter;
 
 // -=-= typedefs -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -102,46 +102,34 @@ protected:
 
             SalXLib            *pXLib_;
 
-            SalDisplays         SalDisplays_;
-            SalDisplay         *pDefDisp_;
-            SalDisplay         *pCurDisp_;
+            SalDisplay         *m_pSalDisplay;
 
             pthread_t           hMainThread_;
 public:
-            X11SalInstance*     pInstance_;         // pointer to instance
-            X11SalFrame*        pFirstFrame_;       // pointer to first frame
-
+            SalInstance*        pInstance_;         // pointer to instance
 public:
-                                SalData();
-            virtual         ~SalData();
+    SalData();
+    virtual ~SalData();
 
-            virtual void        Init();
+    virtual void            Init();
+    virtual void            initNWF();
+    virtual void            deInitNWF();
 
-            long                ShutDown() const;
-            long                Close() const;
-    inline  void                XError( Display     *pDisplay,
-                                        XErrorEvent *pEvent ) const;
+    inline  void            XError( Display     *pDisplay, XErrorEvent *pEvent ) const;
 
-            SalDisplay         *GetDisplay( Display *pDisplay );
-    inline  SalDisplay         *GetDisplay( long nDisplay ) const
-                                    { return SalDisplays_.GetObject(nDisplay); }
-    inline  SalDisplay         *GetDefDisp() const { return pDefDisp_; }
-    inline  SalDisplay         *GetCurDisp() const { return pCurDisp_; }
-    inline  void                SetDefDisp( SalDisplay *pDisp )
-                                    { pDefDisp_ = pDisp; }
-    inline  void                SetCurDisp( SalDisplay *pDisp )
-                                    { pCurDisp_ = pDisp; }
-    inline  void                Insert( SalDisplay *pDisplay );
-    inline  void                Remove( SalDisplay *pDisplay );
+    SalDisplay*             GetDisplay() const
+    { return m_pSalDisplay; }
+    void                    SetSalDisplay( SalDisplay* pDisplay )
+    { m_pSalDisplay = pDisplay; }
 
-    void                        DeleteDisplays(); // for shutdown
+    void                    DeleteDisplay(); // for shutdown
 
-    inline  SalXLib            *GetLib() const { return pXLib_; }
+    inline  SalXLib*        GetLib() const { return pXLib_; }
     inline  pthread_t       GetMainThread() const { return hMainThread_; }
 
-            void                StartTimer( ULONG nMS );
-    inline  void                StopTimer();
-            void                Timeout() const;
+    void                    StartTimer( ULONG nMS );
+    inline  void            StopTimer();
+    void                    Timeout() const;
 
     static int XErrorHdl( Display*, XErrorEvent* );
     static int XIOErrorHdl( Display* );
@@ -153,12 +141,6 @@ inline void SetSalData( SalData* pData )
 
 inline SalData* GetSalData()
 { return (SalData*)ImplGetSVData()->mpSalData; }
-
-inline void SalData::Insert( SalDisplay *pDisplay )
-{ SalDisplays_.Insert( pDisplay ); }
-
-inline void SalData::Remove( SalDisplay *pDisplay )
-{ SalDisplays_.Remove( pDisplay ); }
 
 #ifdef _SV_SALDISP_HXX
 inline void SalData::XError( Display *pDisplay, XErrorEvent *pEvent ) const
