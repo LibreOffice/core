@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoForbiddenCharsTable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-05 16:46:12 $
+ *  last change: $Author: cl $ $Date: 2002-04-04 11:00:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,13 @@
 #include "forbiddencharacterstable.hxx"
 #endif
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
 #ifndef _UNO_LINGU_HXX
 #include "unolingu.hxx"
 #endif
@@ -96,6 +103,8 @@ void SvxUnoForbiddenCharsTable::onChange()
 ForbiddenCharacters SvxUnoForbiddenCharsTable::getForbiddenCharacters( const Locale& rLocale )
     throw(NoSuchElementException, RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     if(!mxForbiddenChars.isValid())
         throw RuntimeException();
 
@@ -110,6 +119,8 @@ ForbiddenCharacters SvxUnoForbiddenCharsTable::getForbiddenCharacters( const Loc
 sal_Bool SvxUnoForbiddenCharsTable::hasForbiddenCharacters( const Locale& rLocale )
     throw(RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     if(!mxForbiddenChars.isValid())
         return sal_False;
 
@@ -122,6 +133,8 @@ sal_Bool SvxUnoForbiddenCharsTable::hasForbiddenCharacters( const Locale& rLocal
 void SvxUnoForbiddenCharsTable::setForbiddenCharacters(const Locale& rLocale, const ForbiddenCharacters& rForbiddenCharacters )
     throw(RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     if(!mxForbiddenChars.isValid())
         throw RuntimeException();
 
@@ -134,6 +147,8 @@ void SvxUnoForbiddenCharsTable::setForbiddenCharacters(const Locale& rLocale, co
 void SvxUnoForbiddenCharsTable::removeForbiddenCharacters( const Locale& rLocale )
     throw(RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     if(!mxForbiddenChars.isValid())
         throw RuntimeException();
 
@@ -147,6 +162,8 @@ void SvxUnoForbiddenCharsTable::removeForbiddenCharacters( const Locale& rLocale
 Sequence< Locale > SAL_CALL SvxUnoForbiddenCharsTable::getLocales()
     throw(RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     const sal_Int32 nCount = mxForbiddenChars.isValid() ? mxForbiddenChars->Count() : 0;
 
     Sequence< Locale > aLocales( nCount );
@@ -167,5 +184,7 @@ Sequence< Locale > SAL_CALL SvxUnoForbiddenCharsTable::getLocales()
 sal_Bool SAL_CALL SvxUnoForbiddenCharsTable::hasLocale( const Locale& aLocale )
     throw(RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     return hasForbiddenCharacters( aLocale );
 }
