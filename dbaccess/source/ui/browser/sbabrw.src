@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 07:07:34 $
+ *  last change: $Author: gt $ $Date: 2002-08-29 12:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,9 +137,9 @@ ImageList RID_DEFAULTIMAGELIST_SC
         File = "sc_qrtl.bmp";
     };
     MaskColor   = Color {\
-    Red   = 0xC000;\
-    Green = 0xC000;\
-    Blue  = 0xC000;\
+    Red   = 0xFFFF;\
+    Green = 0x0000;\
+    Blue  = 0xFFFF;\
     };\
     IL_TOOL ;
 };
@@ -151,9 +151,9 @@ ImageList RID_DEFAULTIMAGELIST_LC
         File = "lc_qrtl.bmp" ;
     };
     MaskColor   = Color {\
-    Red   = 0xC000;\
-    Green = 0xC000;\
-    Blue  = 0xC000;\
+    Red   = 0xFFFF;\
+    Green = 0x0000;\
+    Blue  = 0xFFFF;\
     };\
     IL_TOOL ;
 };
