@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fprogressbar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:50 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,6 @@
 #ifndef SC_PROGRESS_HXX
 #include "progress.hxx"
 #endif
-
-
-// ============================================================================
-
-const sal_Int32 SCF_INVALID_SEG = -1;
 
 
 // ============================================================================
@@ -191,7 +186,7 @@ sal_Int32 ScfProgressBar::AddSegment( sal_uInt32 nSize )
 {
     DBG_ASSERT( !mbInProgress, "ScfProgressBar::AddSegment - already in progress mode" );
     if( !nSize )
-        return SCF_INVALID_SEG;
+        return SCF_INV_SEGMENT;
 
     maSegments.Append( new ScfProgressSegment( nSize ) );
     mnTotalSize += nSize;
