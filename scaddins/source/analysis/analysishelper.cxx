@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-18 13:00:32 $
+ *  last change: $Author: gt $ $Date: 2001-06-28 12:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1572,7 +1572,7 @@ sal_uInt16 FuncData::GetStrIndex( sal_uInt16 nParamNum ) const
         nParamNum++;
 
     if( nParamNum > nParam )
-        return nParam;
+        return nParam * 2;
     else
         return nParamNum * 2;
 }
