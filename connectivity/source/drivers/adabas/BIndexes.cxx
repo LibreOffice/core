@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndexes.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-12 17:35:52 $
+ *  last change: $Author: fs $ $Date: 2001-03-14 14:30:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,8 +224,13 @@ void SAL_CALL OIndexes::dropByName( const ::rtl::OUString& elementName ) throw(S
         ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
         ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
 
-        aSql = aSql + aQuote + aSchema + aQuote + aDot + aQuote + aName + ::rtl::OUString::createFromAscii(" ON ")
-                    + aQuote + m_pTable->getSchema() + aQuote + m_pTable->getTableName() + aQuote;
+        if (aSchema.getLength())
+            (((aSql += aQuote) += aSchema) += aQuote) += aDot;
+
+        (((aSql += aQuote) += aName) += aQuote) += ::rtl::OUString::createFromAscii(" ON ");
+
+        (((aSql += aQuote) += m_pTable->getSchema()) += aQuote) += aDot;
+        ((aSql += aQuote) += m_pTable->getTableName()) += aQuote;
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);
