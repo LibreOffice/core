@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-15 14:54:22 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 12:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,6 +726,18 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
 
     Reference< ::com::sun::star::container::XIndexContainer >  xCols(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());
     // Aufbau des Insert Menues
+    // mark the column if nColId != HEADERBAR_ITEM_NOTFOUND
+    if(nColId > 0)
+    {
+        sal_uInt16 nPos2 = GetModelColumnPos(nColId);
+
+        Reference< ::com::sun::star::container::XIndexContainer >  xColumns(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());
+        Reference< ::com::sun::star::beans::XPropertySet> xColumn;
+        ::cppu::extractInterface(xColumn, xColumns->getByIndex(nPos2));
+        Reference< ::com::sun::star::view::XSelectionSupplier >  xSelSupplier(xColumns, UNO_QUERY);
+        if (xSelSupplier.is())
+            xSelSupplier->select(makeAny(xColumn));
+    }
 
     // EinfuegePosition, immer vor der aktuellen Spalte
     sal_uInt16 nPos = GetModelColumnPos(nColId);
