@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-07 12:26:08 $
+ *  last change: $Author: fs $ $Date: 2001-01-12 14:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,27 +64,61 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
+#include <com/sun/star/awt/XControlContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
 #ifndef _BASEDLGS_HXX
 #include <sfx2/basedlgs.hxx>
 #endif
 #ifndef _SFXCTRLITEM_HXX
 #include <sfx2/ctrlitem.hxx>
 #endif
+#ifndef _SFX_CHILDWIN_HXX
+#include <sfx2/childwin.hxx>
+#endif
+
+//========================================================================
+class FmPropBrwMgr : public SfxChildWindow
+{
+protected:
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+                    m_xUnoRepresentation;
+public:
+    FmPropBrwMgr(Window *pParent, sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo *pInfo);
+    SFX_DECL_CHILDWINDOW(FmPropBrwMgr);
+};
 
 class FmPropControl;
 class SfxBindings;
 //========================================================================
 class FmPropBrw : public SfxFloatingWindow, public SfxControllerItem
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
-    FmPropControl*  pMasterController;
     sal_Bool        m_bInitialStateChange;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                    m_xORB;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+                    m_xMeAsFrame;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                    m_xBrowserController;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
+                    m_xBrowserComponentWindow;
 
 protected:
     virtual void Resize();
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState);
     virtual void FillInfo( SfxChildWinInfo& rInfo ) const;
     virtual sal_Bool Close();
+
+    void implSetNewObject(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
+    void implDetachController();
 
 public:
     FmPropBrw(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&   _xORB,
