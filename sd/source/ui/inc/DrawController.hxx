@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawController.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:06:19 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #ifndef SD_DRAW_CONTROLLER_HXX
 #define SD_DRAW_CONTROLLER_HXX
+
+#include "ViewShell.hxx"
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -149,6 +151,13 @@ public:
         View& rView) throw();
     virtual ~DrawController (void) throw();
 
+    /** Call this method when the ViewShell that was given to the
+        constructor is destroyed.  The controller is owned by the frame and
+        is disposed by it and as a result may live longer than the view
+        shell.  As a result both mpViewShell and mpView are set to NULL.
+    */
+    void DetachFromViewShell (void);
+
     ::com::sun::star::awt::Rectangle GetVisArea (void) const;
 
     virtual void FireVisAreaChanged (const Rectangle& rVisArea) throw();
@@ -226,9 +235,25 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:
-    View& mrView;
+    /** The pointer to the view may be NULL.  See documentation of
+        mpViewShell.
+    */
+    View* mpView;
 
-    ViewShell& mrViewShell;
+    /** The view shell may be NULL.  This is the case e.g. when the view in
+        the center pane is switched and the old view shell is destroyed.
+        The controller is owned by the frame and remains alive.
+    */
+    ViewShell* mpViewShell;
+
+    /** The shell type is stored here in an extra member instead of taking
+        it every time it is used from the view shell because when the view
+        shell is detached from the controller we still need to access the
+        shell type in order to give the same answer to questions of
+        supported services.  The list of supported services must not change
+        during the lifetime of an uno object.
+    */
+    ViewShell::ShellType meViewShellType;
 
     Rectangle maLastVisArea;
 
