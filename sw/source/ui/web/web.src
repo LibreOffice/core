@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:29:52 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ String STR_WRITER_WEBDOC_FULLTYPE_40
     Text[ dutch ] = "%PRODUCTNAME 4.0 HTML";
     Text[ chinese_simplified ] = "%PRODUCTNAME 4.0 HTML";
     Text[ greek ] = "%PRODUCTNAME 4.0 HTML";
-    Text[ korean ] = "%PRODUCTNAME 4.0¡¡HTML ";
+    Text[ korean ] = "%PRODUCTNAME 4.0¡¡HTML";
     Text[ turkish ] = "%PRODUCTNAME 4.0 HTML";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 4.0 HTML";
@@ -170,7 +170,7 @@ String STR_WRITER_WEBDOC_FULLTYPE
     Text[ english_us ] = "%PRODUCTNAME 6.0 HTML Document";
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Documento HTML";
     Text[ russian ] = "Äîêóìåíò HTML (%PRODUCTNAME 6.0) ";
-    Text[ greek ] = "%PRODUCTNAME 6.0 HTML";
+    Text[ greek ] = "%PRODUCTNAME 6.0 HTML - ¸ããñáöï";
     Text[ dutch ] = "%PRODUCTNAME 6.0 HTML Document";
     Text[ french ] = "%PRODUCTNAME 6.0 Document HTML";
     Text[ spanish ] = "%PRODUCTNAME 6.0 Documento HTML";
@@ -180,13 +180,14 @@ String STR_WRITER_WEBDOC_FULLTYPE
     Text[ polish ] = "%PRODUCTNAME 6.0 - Dokument HTML";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 5.0 HTML";
     Text[ japanese ] = "%PRODUCTNAME 6.0 HTML Œ`Ž®ÄÞ·­ÒÝÄ";
-    Text[ korean ] = "%PRODUCTNAME 5.£°HTML ";
+    Text[ korean ] = "%PRODUCTNAME 6.£°HTML ¹®¼­";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 HTML ÎÄµµ";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 HTML ¤å¥ó";
     Text[ turkish ] = "%PRODUCTNAME 5.0 HTML";
     Text[ arabic ] = "%PRODUCTNAME 6.0 HTML";
     Text[ catalan ] = "%PRODUCTNAME 6.0 HTML";
     Text[ finnish ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ language_user1 ] = " ";
 };
 String STR_SHELLNAME_WEBTEXT
 {
@@ -654,3 +655,4 @@ ToolBox RID_WEBOLE_TOOLBOX
 /*************************************************************************
 
 *************************************************************************/
+
