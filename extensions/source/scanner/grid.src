@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grid.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-14 16:37:04 $
+ *  last change: $Author: kz $ $Date: 2001-08-21 21:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,7 @@ ModalDialog GRID_DIALOG
         Text[ finnish ] = "Eksponentiaalinen lisäys";
     };
 };
+
 
 
 
