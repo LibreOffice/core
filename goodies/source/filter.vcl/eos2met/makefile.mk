@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:07:13 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:59:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,8 @@ DEPTARGET=veos2met
 CDEFS+= -DEDITDEBUG
 .ENDIF
 
-SRCFILES= 	dlgeos2.src	\
+SRS1NAME=$(TARGET)
+SRC1FILES= 	dlgeos2.src	\
             eos2mstr.src
 
 SLOFILES =  $(SLO)$/eos2met.obj	\
