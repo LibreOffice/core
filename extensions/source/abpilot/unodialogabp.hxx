@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodialogabp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-25 14:17:40 $
+ *  last change: $Author: as $ $Date: 2001-12-05 13:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ namespace abp
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
         // XJob
-        virtual ::com::sun::star::uno::Any SAL_CALL execute( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xContext, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aArgs ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any SAL_CALL execute( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& lArgs ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     protected:
     // OGenericUnoDialog overridables
@@ -143,6 +143,9 @@ namespace abp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/09/25 14:17:40  fs
+ *  #91062# signature of XJob::execute slightly changed
+ *
  *  Revision 1.2  2001/09/14 09:56:05  fs
  *  #91062# support the XJob interface
  *

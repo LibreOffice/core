@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodialogabp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-28 09:57:18 $
+ *  last change: $Author: as $ $Date: 2001-12-05 13:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,13 +200,21 @@ namespace abp
     }
 
     //--------------------------------------------------------------------------
-    Any SAL_CALL OABSPilotUno::execute( const Reference< XInterface >& xContext, const Sequence< NamedValue >& aArgs ) throw (IllegalArgumentException, RuntimeException)
+    Any SAL_CALL OABSPilotUno::execute( const Sequence< NamedValue >& lArgs ) throw (IllegalArgumentException, Exception, RuntimeException)
     {
         // not interested in the context, not interested in the args
         // -> call the execute method of the XExecutableDialog
+        static_cast< XExecutableDialog* >( this )->execute();
 
-        sal_Bool bSuccess = static_cast< XExecutableDialog* >( this )->execute() ? sal_True : sal_False;
-        return makeAny( bSuccess );
+        // result interest not realy ...
+        // We show this dialog one times only!
+        // User has one chance to accept it or not.
+        // (or he can start it again by using wizard-menu!)
+        // So we should deregister it on our general job execution service by using right protocol parameters.
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > lProtocol(1);
+        lProtocol[0].Name    = ::rtl::OUString::createFromAscii("Deactivate");
+        lProtocol[0].Value <<= sal_True;
+        return makeAny( lProtocol );
     }
 
 //.........................................................................
@@ -216,6 +224,9 @@ namespace abp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/09/28 09:57:18  fs
+ *  #91062# forgot the return value ...
+ *
  *  Revision 1.3  2001/09/25 14:17:40  fs
  *  #91062# signature of XJob::execute slightly changed
  *
