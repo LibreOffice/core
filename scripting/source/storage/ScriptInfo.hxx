@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptInfo.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-09-20 14:33:50 $
+ *  last change: $Author: lkovacs $ $Date: 2002-09-23 14:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef __SCRIPTING_STORAGE_SCRIPTINFO_HXX_
-#define __SCRIPTING_STORAGE_SCRIPTINFO_HXX_
+#ifndef __SCRIPT_FRAMEWORK_STORAGE_SCRIPTINFO_HXX_
+#define __SCRIPT_FRAMEWORK_STORAGE_SCRIPTINFO_HXX_
 
 #include <cppuhelper/implbase4.hxx> // helper for component factory
 
@@ -70,7 +70,9 @@
 
 #include <drafts/com/sun/star/script/framework/storage/XScriptInfo.hpp>
 #include <drafts/com/sun/star/script/framework/storage/ScriptImplInfo.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_XSCRIPTINVOCATIONPREP_HPP_
 #include <drafts/com/sun/star/script/framework/storage/XScriptInvocationPrep.hpp>
+#endif
 
 namespace scripting_impl {
 
@@ -112,9 +114,13 @@ public:
     virtual ::rtl::OUString SAL_CALL getLocation(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL extraProperties(  ) throw (::com::sun::star::uno::RuntimeException);
     /**
-     *  This function prepares the script for invocation and returns the full path
-     *  to the prepared parcel folder
-     */
+        This function prepares the script for invocation and returns the full path
+       to the prepared parcel folder
+
+       @return
+        <type>::rtl::OUString</type> file URI to the prepared parcel
+
+    */
     virtual ::rtl::OUString SAL_CALL prepareForInvocation() throw (::com::sun::star::uno::RuntimeException);
 
 };

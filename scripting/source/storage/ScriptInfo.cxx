@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptInfo.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-09-20 14:33:49 $
+ *  last change: $Author: lkovacs $ $Date: 2002-09-23 14:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,14 @@
 #include <cppuhelper/implementationentry.hxx>
 
 #include <util/util.hxx>
+#ifndef _SCRIPT_FRAMEWORK_STORAGE_SCRIPT_INFO_HXX_
 #include <ScriptInfo.hxx>
+#endif
 
 #include <drafts/com/sun/star/script/framework/storage/XScriptStorageManager.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_STORAGE_XPARCELINVOCATIONPREP_HPP_
 #include <drafts/com/sun/star/script/framework/storage/XParcelInvocationPrep.hpp>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
@@ -235,18 +239,24 @@ throw(RuntimeException)
 
 //*************************************************************************
 /**
- *  This function prepares the script for invocation and returns the full path
- *  to the prepared parcel folder
- *
- */
+   This function prepares the script for invocation and returns the full path
+   to the prepared parcel folder
+
+   @return
+    <type>::rtl::OUString</type> file URI to the prepared parcel
+
+*/
 ::rtl::OUString SAL_CALL ScriptInfo::prepareForInvocation() throw(RuntimeException)
 {
     try
     {
+    // if not document URI nothing to do, return path
         if (m_scriptImplInfo.parcelURI.compareToAscii(docUriPrefix, 16) != 0)
         {
             return m_scriptImplInfo.parcelURI;
         }
+
+        // if document URI then copy parcel to a temporary area and return path to it
 
         validateXRef(m_xContext, "ScriptInfo::prepareForInvocation(): invalid context");
         Any aAny=m_xContext->getValueByName(
@@ -271,6 +281,13 @@ throw(RuntimeException)
     {
         OUString temp = OUSTR(
                             "ScriptInfo::prepareForInvocation RuntimeException: ");
+        throw RuntimeException(temp.concat(e.Message),
+                               Reference<XInterface> ());
+    }
+    catch(RuntimeException &e)
+    {
+        OUString temp = OUSTR(
+                            "ScriptInfo::prepareForInvocation UnknownException: ");
         throw RuntimeException(temp.concat(e.Message),
                                Reference<XInterface> ());
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptElement.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-09-20 14:33:48 $
+ *  last change: $Author: lkovacs $ $Date: 2002-09-23 14:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _SCRIPT_FRAMEWORK_STORAGE_SCRIPT_ELEMENT_HXX_
 #include "ScriptElement.hxx"
+#endif
 #include <util/util.hxx>
 
 using namespace ::rtl;
@@ -71,6 +73,12 @@ namespace scripting_impl
 {
 
 //*************************************************************************
+/**
+    Construct a ScriptElement from a ScriptImplInfo object
+
+    @param sII
+    the ScriptImplInfoObject
+*/
 ScriptElement::ScriptElement(storage::ScriptImplInfo & sII) :
         m_sII( sII ),
         XMLElement(OUSTR("script"))

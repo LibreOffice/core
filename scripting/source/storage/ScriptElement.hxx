@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptElement.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-09-20 14:33:48 $
+ *  last change: $Author: lkovacs $ $Date: 2002-09-23 14:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,14 @@
  *
  *
  ************************************************************************/
-#ifndef _SCRIPTING_STORAGE_METADATA_ELEMENT_HXX_
-#define _SCRIPTING_STORAGE_METADATA_ELEMENT_HXX_
+#ifndef _SCRIPT_FRAMEWORK_STORAGE_SCRIPT_ELEMENT_HXX_
+#define _SCRIPT_FRAMEWORK_STORAGE_SCRIPT_ELEMENT_HXX_
 
 #include <osl/mutex.hxx>
 
+#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_STORAGE_SCRIPTIMPLINFO_HPP_
 #include <drafts/com/sun/star/script/framework/storage/ScriptImplInfo.hpp>
+#endif
 
 #include "XMLElement.hxx"
 
@@ -76,7 +78,13 @@ private:
     drafts::com::sun::star::script::framework::storage::ScriptImplInfo m_sII;
 
 public:
-    explicit ScriptElement(drafts::com::sun::star::script::framework::storage::ScriptImplInfo &);
+    /**
+    Construct a ScriptElement from a ScriptImplInfo object
+
+    @param sII
+    the ScriptImplInfoObject
+    */
+    explicit ScriptElement(drafts::com::sun::star::script::framework::storage::ScriptImplInfo & sII);
     ~ScriptElement() SAL_THROW (());
 };
 
