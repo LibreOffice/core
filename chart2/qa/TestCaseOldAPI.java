@@ -16,6 +16,7 @@ import com.sun.star.beans.*;
 import com.sun.star.frame.*;
 import com.sun.star.chart.*;
 import com.sun.star.drawing.*;
+import com.sun.star.awt.*;
 import com.sun.star.util.XCloseable;
 import com.sun.star.util.CloseVetoException;
 
@@ -65,7 +66,9 @@ public class TestCaseOldAPI extends ComplexTestCase {
             "testAxis",
             "testLegend",
             "testArea",
-            "testAggregation"
+            "testAggregation",
+            "testDataSeriesAndPoints",
+            "testStatistics"
         };
     }
 
@@ -180,7 +183,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
             if( xTitleProp != null )
             {
                 int nColor = 0x009acd; // DeepSkyBlue3
-                float fWeight = com.sun.star.awt.FontWeight.BOLD;
+                float fWeight = FontWeight.BOLD;
 
                 xTitleProp.setPropertyValue( "CharColor", new Integer( nColor ) );
                 xTitleProp.setPropertyValue( "CharWeight", new Float( fWeight ));
@@ -227,7 +230,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
                 }
 
                 assure( "Wrong Diagram Type", xDia.getDiagramType().equals(
-                            "com.sun.star.chart.AreaDiagram" ));
+                            "com.sun.star.chart.BarDiagram" ));
             }
         }
         catch( Exception ex )
@@ -396,6 +399,14 @@ public class TestCaseOldAPI extends ComplexTestCase {
                         AnyConverter.toBoolean(
                             xDiaProp.getPropertyValue( "Stacked" )));
             }
+
+            // reset to bar-chart
+            aMyServiceName = new String( "com.sun.star.chart.BarDiagram" );
+            XDiagram xDia = (XDiagram) UnoRuntime.queryInterface(
+                XDiagram.class, xFact.createInstance( aMyServiceName ));
+            assure( aMyServiceName + " could not be created", xDia != null );
+
+            mxOldDoc.setDiagram( xDia );
         }
         catch( Exception ex )
         {
@@ -416,6 +427,96 @@ public class TestCaseOldAPI extends ComplexTestCase {
         com.sun.star.chart.XChartDocument xDoc = (com.sun.star.chart.XChartDocument) UnoRuntime.queryInterface(
             com.sun.star.chart.XChartDocument.class, xDiaProv );
         assure( "querying back to old interface failed", xDoc != null );
+    }
+
+    // ------------
+
+    public void testDataSeriesAndPoints()
+    {
+        try
+        {
+            XDiagram xDia = mxOldDoc.getDiagram();
+            assure( "Invalid Diagram", xDia != null );
+
+            XPropertySet xProp = xDia.getDataRowProperties( 1 );
+            assure( "No DataRowProperties for series 1 (0-based)", xProp != null );
+
+            // Gradient
+            Gradient aGradient = new Gradient();
+            aGradient.Style = GradientStyle.LINEAR;
+            aGradient.StartColor = 0xe0ffff; // light cyan
+            aGradient.EndColor  = 0xff8c00; // dark orange
+            aGradient.Angle = 300;          // 30 degrees
+            aGradient.Border = 15;
+            aGradient.XOffset = 0;
+            aGradient.YOffset = 0;
+            aGradient.StartIntensity = 100;
+            aGradient.EndIntensity = 80;
+            aGradient.StepCount = 23;
+
+            xProp.setPropertyValue( "FillStyle", FillStyle.GRADIENT );
+            xProp.setPropertyValue( "FillGradient", aGradient );
+            Gradient aNewGradient = (Gradient) AnyConverter.toObject(
+                new Type( Gradient.class ),
+                xProp.getPropertyValue( "FillGradient" ));
+            assure( "Gradient Style", aNewGradient.Style == aGradient.Style );
+            assure( "Gradient StartColor", aNewGradient.StartColor == aGradient.StartColor );
+            assure( "Gradient EndColor", aNewGradient.EndColor == aGradient.EndColor );
+            assure( "Gradient Angle", aNewGradient.Angle == aGradient.Angle );
+            assure( "Gradient Border", aNewGradient.Border == aGradient.Border );
+            assure( "Gradient XOffset", aNewGradient.XOffset == aGradient.XOffset );
+            assure( "Gradient YOffset", aNewGradient.YOffset == aGradient.YOffset );
+            assure( "Gradient StartIntensity", aNewGradient.StartIntensity == aGradient.StartIntensity );
+            assure( "Gradient EndIntensity", aNewGradient.EndIntensity == aGradient.EndIntensity );
+            assure( "Gradient StepCount", aNewGradient.StepCount == aGradient.StepCount );
+
+            // Hatch
+            xProp = xDia.getDataPointProperties( 1, 1 );
+            assure( "No DataPointProperties for (1,1)", xProp != null );
+
+            Hatch aHatch = new Hatch();
+            aHatch.Style = HatchStyle.DOUBLE;
+            aHatch.Color = 0xd2691e; // chocolate
+            aHatch.Distance = 200;   // 2 mm (?)
+            aHatch.Angle = 230;      // 23 degrees
+
+            xProp.setPropertyValue( "FillHatch", aHatch );
+            xProp.setPropertyValue( "FillStyle", FillStyle.HATCH );
+            Hatch aNewHatch = (Hatch) AnyConverter.toObject(
+                new Type( Hatch.class ),
+                xProp.getPropertyValue( "FillHatch" ));
+            assure( "Hatch Style", aNewHatch.Style == aHatch.Style );
+            assure( "Hatch Color", aNewHatch.Color == aHatch.Color );
+            assure( "Hatch Distance", aNewHatch.Distance == aHatch.Distance );
+            assure( "Hatch Angle", aNewHatch.Angle == aHatch.Angle );
+        }
+        catch( Exception ex )
+        {
+            failed( ex.getMessage() );
+            ex.printStackTrace( (PrintWriter)log );
+        }
+    }
+
+    // ------------
+
+    public void testStatistics()
+    {
+        try
+        {
+            XDiagram xDia = mxOldDoc.getDiagram();
+            assure( "Invalid Diagram", xDia != null );
+
+            XPropertySet xProp = xDia.getDataRowProperties( 0 );
+            assure( "No DataRowProperties for first series", xProp != null );
+
+            xProp.setPropertyValue( "MeanValue", new Boolean( true ));
+            assure( "No MeanValue", AnyConverter.toBoolean( xProp.getPropertyValue( "MeanValue" )) );
+        }
+        catch( Exception ex )
+        {
+            failed( ex.getMessage() );
+            ex.printStackTrace( (PrintWriter)log );
+        }
     }
 
     // ================================================================================
