@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 13:58:44 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 15:53:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3278,7 +3278,8 @@ bool PrintFontManager::createFontSubset(
     memset( pGID, 0, sizeof( pGID ) );
     memset( pOldIndex, 0, sizeof( pOldIndex ) );
     int nChar = 1;
-    for( int i = 0; i < nGlyphs; i++ )
+    int i;
+    for( i = 0; i < nGlyphs; i++ )
     {
         if( pNewEncoding[i] == 0 )
         {
