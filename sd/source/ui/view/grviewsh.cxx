@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grviewsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:50:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,10 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+#include "GraphicViewShell.hxx"
 
 
-#ifndef _SD_GRVIEWSH_HXX
-#include "grviewsh.hxx"
-#endif
-
+namespace sd {
 
 /*************************************************************************
 |*
@@ -73,10 +70,14 @@
 |*
 \************************************************************************/
 
-SdGraphicViewShell::SdGraphicViewShell( SfxViewFrame* pFrame, SfxViewShell *pOldShell ) :
-    SdDrawViewShell( pFrame, pOldShell )
+GraphicViewShell::GraphicViewShell (
+    SfxViewFrame* pFrame,
+    ViewShellBase& rViewShellBase,
+    FrameView* pFrameView)
+    : DrawViewShell (pFrame, rViewShellBase, PK_STANDARD, pFrameView)
 {
     //Construct( pDocSh );
+    meShellType = ST_DRAW;
 }
 
 /*************************************************************************
@@ -85,11 +86,12 @@ SdGraphicViewShell::SdGraphicViewShell( SfxViewFrame* pFrame, SfxViewShell *pOld
 |*
 \************************************************************************/
 
-SdGraphicViewShell::SdGraphicViewShell(SfxViewFrame* pFrame,
-                                 const SdDrawViewShell& rShell) :
-    SdDrawViewShell( pFrame, rShell )
+GraphicViewShell::GraphicViewShell(SfxViewFrame* pFrame,
+                                 const DrawViewShell& rShell) :
+    DrawViewShell( pFrame, rShell )
 {
     //Construct( pDocSh );
+    meShellType = ST_DRAW;
 }
 
 /*************************************************************************
@@ -98,7 +100,7 @@ SdGraphicViewShell::SdGraphicViewShell(SfxViewFrame* pFrame,
 |*
 \************************************************************************/
 
-SdGraphicViewShell::~SdGraphicViewShell()
+GraphicViewShell::~GraphicViewShell()
 {
 }
 
@@ -108,7 +110,7 @@ SdGraphicViewShell::~SdGraphicViewShell()
 |*
 \************************************************************************/
 
-void SdGraphicViewShell::Construct()
+void GraphicViewShell::Construct()
 {
     // Shells fuer Object Bars erzeugen
     //SfxShell* pObjBarShell = new SdDrawStdObjectBar(this, pDrView);
@@ -124,4 +126,4 @@ void SdGraphicViewShell::Construct()
 
 }
 
-
+} // end of namespace sd
