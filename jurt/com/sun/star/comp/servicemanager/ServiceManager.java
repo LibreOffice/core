@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ServiceManager.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:51 $
+ *  last change: $Author: kr $ $Date: 2000-10-27 09:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ import java.lang.reflect.InvocationTargetException;
  * calls to the implementing objects and are used instead of casts
  * and identity comparisons.
  * <p>
- * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:51 $
+ * @version     $Revision: 1.2 $ $ $Date: 2000-10-27 09:56:36 $
  * @author      Markus Herzog
  * @see         com.sun.star.lang.XMultiServiceFactory
  * @see         com.sun.star.container.XSet
@@ -346,7 +346,7 @@ public class ServiceManager implements XMultiServiceFactory,
             DEBUG("");
 
             if ( !aviableFact.isEmpty() )
-                factory = aviableFact.firstElement();
+                factory = aviableFact.lastElement();
 
         } else // not found in list of services - now try the implementations
             factory = factoriesByImplNames.get( serviceName ); // return null if none is aviable
@@ -701,7 +701,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * implementation of the @see com.sun.star.container.XEnumeration interface.
      * It is a inner wrapper for a java.util.Enumeration object.
      * <p>
-     * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:51 $
+     * @version     $Revision: 1.2 $ $ $Date: 2000-10-27 09:56:36 $
      * @author      Markus Herzog
      * @see         com.sun.star.lang.XSingleServiceFactory
      * @see         com.sun.star.lang.XServiceInfo
@@ -774,7 +774,7 @@ public class ServiceManager implements XMultiServiceFactory,
  * com.sun.star.lang.XSingleServiceFactory and the com.sun.star.lang.XServiceInfo
  * interfaces.
  * <p>
- * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:51 $
+ * @version     $Revision: 1.2 $ $ $Date: 2000-10-27 09:56:36 $
  * @author      Markus Herzog
  * @see         com.sun.star.lang.XSingleServiceFactory
  * @see         com.sun.star.lang.XServiceInfo
