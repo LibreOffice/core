@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionPageSetup.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 12:58:48 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,13 @@ namespace dbaui
         return oDBWizardPage;
     }
 
+    OGenericAdministrationPage* OConnectionTabPageSetup::CreateUserDefinedTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
+    {
+        OConnectionTabPageSetup* oDBWizardPage = new OConnectionTabPageSetup( pParent, PAGE_DBWIZARD_USERDEFINED, _rAttrSet, USHRT_MAX, USHRT_MAX, STR_COMMONURL);
+        oDBWizardPage->FreeResource();
+        return oDBWizardPage;
+    }
+
 
     //========================================================================
     //= OConnectionTabPageSetup
@@ -241,23 +248,46 @@ namespace dbaui
     OConnectionTabPageSetup::OConnectionTabPageSetup(Window* pParent, USHORT _rId, const SfxItemSet& _rCoreAttrs, USHORT _nHelpTextResId, USHORT _nHeaderResId, USHORT _nUrlResId, sal_Bool _bgetConnection)
         :OConnectionHelper(pParent, ModuleRes(_rId), _rCoreAttrs)
         , m_aFT_HelpText(this, ResId(FT_AUTOWIZARDHELPTEXT))
-//      , m_aET_Connection(this, ResId(ET_BROWSEURL))
-        , m_pCollection(NULL)
         ,m_bUserGrabFocus(sal_True)
     {
         DBG_CTOR(OConnectionTabPageSetup, NULL);
-        String sHelpText = String(ModuleRes(_nHelpTextResId));
-        m_aFT_HelpText.SetText(sHelpText);
-        String sLabelText = String(ModuleRes(_nUrlResId));
-        m_aFT_Connection.SetText(sLabelText);
-        SetHeaderText(this, FT_AUTOWIZARDHEADER, _nHeaderResId);
+
+        if ( USHRT_MAX != _nHelpTextResId )
+        {
+            String sHelpText = String(ModuleRes(_nHelpTextResId));
+            m_aFT_HelpText.SetText(sHelpText);
+        }
+        else
+            m_aFT_HelpText.Hide();
+
+
+        if ( USHRT_MAX != _nHeaderResId )
+            SetHeaderText(this, FT_AUTOWIZARDHEADER, _nHeaderResId);
+
+        if ( USHRT_MAX != _nUrlResId )
+        {
+            String sLabelText = String(ModuleRes(_nUrlResId));
+            m_aFT_Connection.SetText(sLabelText);
+            if ( USHRT_MAX == _nHelpTextResId )
+            {
+                Point aPos = m_aFT_HelpText.GetPosPixel();
+                Point aFTPos = m_aFT_Connection.GetPosPixel();
+                Point aEDPos = m_aET_Connection.GetPosPixel();
+                Point aPBPos = m_aPB_Connection.GetPosPixel();
+
+                aEDPos.Y() = aPos.Y() + aEDPos.Y() - aFTPos.Y();
+                aPBPos.Y() = aPos.Y() + aPBPos.Y() - aFTPos.Y();
+                aFTPos.Y() = aPos.Y();
+                m_aFT_Connection.SetPosPixel(aFTPos);
+                m_aET_Connection.SetPosPixel(aEDPos);
+                m_aPB_Connection.SetPosPixel(aPBPos);
+            }
+        }
+        else
+            m_aFT_Connection.Hide();
+
         m_aET_Connection.SetModifyHdl(LINK(this, OConnectionTabPageSetup, OnEditModified));
 
-        // extract the datasource type collection from the item set
-        DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rCoreAttrs.GetItem(DSID_TYPECOLLECTION));
-        if (pCollectionItem)
-            m_pCollection = pCollectionItem->getCollection();
-        DBG_ASSERT(m_pCollection, "OConnectionTabPageSetup::OConnectionTabPageSetup : really need a DSN type collection !");
         SetRoadmapStateValue(sal_False);
     }
 
@@ -271,23 +301,19 @@ namespace dbaui
     void OConnectionTabPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         OConnectionHelper::implInitControls(_rSet, _bSaveValue);
+        if ( m_eType >= DST_USERDEFINE1 )
+        {
+            String sDisplayName = m_pCollection->getTypeDisplayName(m_eType);
+            FixedText* ppTextControls[] ={&m_aFT_Connection};
+            for (int i = 0; i < sizeof(ppTextControls)/sizeof(ppTextControls[0]); ++i)
+            {
+                ppTextControls[i]->SetText(sDisplayName);
+            }
+        }
+
         callModifiedHdl();
     }
-
-/*  // -----------------------------------------------------------------------
-    void OConnectionTabPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
-    {
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFT_Connection));
-        _rControlList.push_back(new ODisableWrapper<PushButton>(&m_aPB_Connection));
-    }
-
-
     // -----------------------------------------------------------------------
-    void OConnectionTabPageSetup::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
-    {
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aET_Connection));
-    }
-*/
        sal_Bool OConnectionTabPageSetup::commitPage(COMMIT_REASON _eReason)
     {
         return commitURL();
@@ -300,50 +326,11 @@ namespace dbaui
         fillString(_rSet,&m_aET_Connection, DSID_CONNECTURL, bChangedSomething);
         return bChangedSomething;
     }
-
     // -----------------------------------------------------------------------
-    IMPL_LINK(OConnectionTabPageSetup, OnTestConnectionClickHdl, PushButton*, _pButton)
-    {
-        OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        sal_Bool bSuccess = sal_False;
-        if ( m_pAdminDialog )
-        {
-            m_pAdminDialog->saveDatasource();
-            OGenericAdministrationPage::implInitControls(*m_pItemSetHelper->getOutputSet(), sal_True);
-            try
-            {
-                Reference< XConnection > xConnection = m_pAdminDialog->createConnection();
-                bSuccess = xConnection.is();
-                ::comphelper::disposeComponent(xConnection);
-            }
-            catch(Exception&)
-            {
-            }
-
-            if ( bSuccess )
-            {
-                String aMessage = String(ModuleRes(STR_CONNECTION_SUCCESS));
-                String sTitle(ModuleRes(STR_CONNECTION_TEST));
-                OSQLMessageBox aMsg(this,sTitle,aMessage);
-                aMsg.Execute();
-            }
-            else
-            {
-                m_pAdminDialog->clearPassword();
-            }
-        }
-        return 0L;
-    }
-
-
     bool OConnectionTabPageSetup::checkTestConnection()
     {
-        OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        BOOL bEnableTestConnection = !m_aET_Connection.IsVisible() || (m_aET_Connection.GetTextNoPrefix().Len() != 0);
-        return bEnableTestConnection;
+        return !m_aET_Connection.IsVisible() || (m_aET_Connection.GetTextNoPrefix().Len() != 0);
     }
-
-
 
     // -----------------------------------------------------------------------
     IMPL_LINK(OConnectionTabPageSetup, OnEditModified, Edit*, _pEdit)
