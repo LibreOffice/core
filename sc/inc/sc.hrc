@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-16 12:22:45 $
+ *  last change: $Author: mh $ $Date: 2001-12-05 10:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,10 +526,8 @@
 #define SID_SCPRINTOPTIONS      (SC_VIEW_START + 68)
 #define SID_WINDOW_SPLIT        (SC_VIEW_START + 69)
 #define SID_WINDOW_FIX          (SC_VIEW_START + 70)
-#ifdef MAC
 #ifdef SID_DRAW_CHART
 #undef SID_DRAW_CHART
-#endif
 #endif
 #define SID_DRAW_CHART          (SC_VIEW_START + 71)
 #define SID_UPDATETABLINKS      (SC_VIEW_START + 72)
