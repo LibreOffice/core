@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:01:46 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1070,31 +1070,6 @@ void SwDoc::SetForbiddenCharacters( USHORT nLang,
         pLayout->EndAllAction();
     }
     SetModified();
-}
-
-void SwDoc::ClearForbiddenCharacters( USHORT nLang )
-{
-    if( xForbiddenCharsTable.isValid() )
-    {
-        xForbiddenCharsTable->ClearForbiddenCharacters( nLang );
-        if( !xForbiddenCharsTable->Count() )
-            xForbiddenCharsTable.unbind();
-
-        if( pDrawModel )
-        {
-            pDrawModel->SetForbiddenCharsTable( xForbiddenCharsTable );
-            if( !bInReading )
-                pDrawModel->ReformatAllTextObjects();
-        }
-
-        if( pLayout && !bInReading )
-        {
-            pLayout->StartAllAction();
-            pLayout->InvalidateAllCntnt();
-            pLayout->EndAllAction();
-        }
-        SetModified();
-    }
 }
 
 void SwDoc::SetCharCompressType( SwCharCompressType n )
