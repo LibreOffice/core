@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-10 18:38:16 $
+#   last change: $Author: hr $ $Date: 2004-12-20 09:36:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -166,13 +166,6 @@ SCP1FILES += \
 .IF "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" == "" 
 SCP1FILES += \
              file_crashrep_dynamic.par
-.ENDIF
-
-.IF "$(GUI)"=="UNX"
-.IF "$(ENABLE_CRASHDUMP)" == "STATIC" || "$(PRODUCT)" == ""
-SCP1FILES += \
-             file_crashrep_static.par
-.ENDIF
 .ENDIF
 
 SCP1FILES += \
