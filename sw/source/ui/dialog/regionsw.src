@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:56:26 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@
     Text [ danish ] = "~Med betingelse" ; \
     Text [ portuguese ] = "~Com condição" ; \
     Text [ portuguese_brazilian ] = "~Com condição" ; \
-    Text[ chinese_simplified ] = "é™„åŠ æ¡ä»¶(~W)";    \
+    Text[ chinese_simplified ] = "å¸¦æ¡ä»¶";   \
     Text[ russian ] = "Ïğè óñëîâèè";    \
     Text[ polish ] = "~Uwzglêdniaj¹c warunek";  \
     Text[ japanese ] = "æ¡ä»¶ä»˜ã(~W)";  \
@@ -782,7 +782,7 @@ ModalDialog MD_EDIT_REGION
         Text [ dutch ] = "~Opheffen" ;
         Text [ spanish ] = "~Borrar" ;
         Text [ english_us ] = "Remove" ;
-        Text[ chinese_simplified ] = "ç§»é™¤(~R)";
+        Text[ chinese_simplified ] = "ç§»é™¤";
         Text[ russian ] = "Óäàëèòü";
         Text[ polish ] = "Co~fnij";
         Text[ japanese ] = "è§£é™¤(~R)";
