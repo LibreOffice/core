@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelleng.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-27 08:18:09 $
+ *  last change: $Author: nn $ $Date: 2001-03-22 18:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ BOOL __EXPORT ScSpellingEngine::SpellNextDocument()
     ScSplitPos eWhich = pViewData->GetActivePart();
     CellType eCellType;
     ScBaseCell* pCell = NULL;
-    LanguageType eLnge;
+    LanguageType eLnge = LANGUAGE_NONE;
     EditTextObject* pETObject = NULL;
     const SfxPoolItem* pItem = NULL;
     SvxLanguageItem* pLangIt = NULL;
@@ -331,7 +331,7 @@ BOOL __EXPORT ScSpellingEngine::SpellNextDocument()
                 }
                 else
                     SetText(EMPTY_STRING);
-                if (HasSpellErrors(eLnge))
+                if (HasSpellErrors())
                     bStop = TRUE;
             }
         }
