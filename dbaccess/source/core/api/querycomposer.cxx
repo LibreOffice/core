@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-07 17:27:46 $
+ *  last change: $Author: oj $ $Date: 2000-11-10 16:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,10 @@
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #endif
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
-#include <connectivity/sdbcx/VCollection.hxx>
+#include "connectivity/sdbcx/VCollection.hxx"
+#endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
 
 
@@ -234,8 +237,8 @@ OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
  , m_pSqlParseNode(NULL)
  , m_aSqlIterator(_xTableSupplier,_xConnection->getMetaData(),NULL)
  , m_xTableSupplier(_xTableSupplier)
- , m_xServiceFactory(_xServiceFactory)
  , m_aSqlParser(_xServiceFactory)
+ ,m_xServiceFactory(_xServiceFactory)
  ,m_pColumns(NULL)
  ,m_pTables(NULL)
 {
@@ -246,6 +249,7 @@ OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
 
     Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
     m_aLocale.Language = ::comphelper::getString(aValue);
+    m_xNumberFormatsSupplier = dbtools::getNumberFormats(m_xConnection,sal_True,m_xServiceFactory);
 }
 // -------------------------------------------------------------------------
 OQueryComposer::~OQueryComposer()
@@ -424,7 +428,7 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
 {
     if (OSubComponent::rBHelper.bDisposed)
         throw DisposedException();
-
+    MutexGuard aGuard(m_aMutex);
     return m_aFilter;
 }
 // -------------------------------------------------------------------------
@@ -463,7 +467,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL OQueryComposer::getStructuredFilt
             if (pCondition)
             {
                 ::std::vector< ::std::vector < PropertyValue > > aFilters;
-                Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter(comphelper::getProcessServiceFactory()
+                Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter(m_xServiceFactory
                                 ->createInstance(rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
                 xFormatter->attachNumberFormatsSupplier(m_xNumberFormatsSupplier);
 
@@ -506,7 +510,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL OQueryComposer::getStructuredFilt
 
     return m_aOrder;
 }
-// -------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySet >& column ) throw(SQLException, RuntimeException)
 {
     if (OSubComponent::rBHelper.bDisposed)
@@ -515,8 +519,9 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
     if(!column.is() || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_VALUE))
         throw SQLException();
 
-    sal_Int32 nSearchable = 0;
-    column->getPropertyValue(PROPERTY_ISSEARCHABLE) >>= nSearchable;
+    sal_Int32 nType = 0;
+    column->getPropertyValue(PROPERTY_TYPE) >>= nType;
+    sal_Int32 nSearchable = dbtools::getSearchColumnFlag(m_xConnection,nType);
     if(nSearchable == ColumnSearch::NONE)
         throw SQLException();
 
@@ -531,8 +536,6 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
 
     ::rtl::OUString aSql = aName;
 
-    sal_Int32 nType = 0;
-    column->getPropertyValue(PROPERTY_NAME) >>= nType;
     switch(nType)
     {
         case DataType::VARCHAR:
@@ -780,10 +783,35 @@ sal_Bool OQueryComposer::setANDCriteria(OSQLParseNode * pCondition,
 
             // don't display the column name
             aValue = aValue.copy(aColumnName.getLength());
-            aValue.trim();
+            aValue = aValue.trim();
 
             aItem.Name = getColumnName(pCondition->getChild(0));
             aItem.Value <<= aValue;
+            aItem.Handle = 0; // just to know that this is not one the known ones
+            if (SQL_ISRULE(pCondition,like_predicate))
+            {
+                if (pCondition->count() == 5)
+                    aItem.Handle = SQL_PRED_NOTLIKE;
+                else
+                    aItem.Handle = SQL_PRED_LIKE;
+            }
+            else if (SQL_ISRULE(pCondition,test_for_null))
+            {
+                if (SQL_ISTOKEN(pCondition->getChild(2),NOT) )
+                    aItem.Handle = SQL_PRED_ISNOTNULL;
+                else
+                    aItem.Handle = SQL_PRED_ISNULL;
+            }
+            else if (SQL_ISRULE(pCondition,in_predicate))
+            {
+            }
+            else if (SQL_ISRULE(pCondition,all_or_any_predicate))
+            {
+            }
+            else if (SQL_ISRULE(pCondition,between_predicate))
+            {
+            }
+
             rFilter.push_back(aItem);
         }
         else
@@ -801,7 +829,32 @@ sal_Bool OQueryComposer::setANDCriteria(OSQLParseNode * pCondition,
 
     return sal_True;
 }
-
+// -----------------------------------------------------------------------------
+sal_Int32 getPredicateType(OSQLParseNode * _pPredicate)
+{
+    sal_Int32 nPredicate = SQL_PRED_EQUAL;
+    switch (_pPredicate->getNodeType())
+    {
+        case SQL_NODE_EQUAL:
+            nPredicate = SQL_PRED_EQUAL;
+            break;
+        case SQL_NODE_LESS:
+            nPredicate = SQL_PRED_LESS;
+            break;
+        case SQL_NODE_LESSEQ:
+            nPredicate = SQL_PRED_LESSOREQUAL;
+            break;
+        case SQL_NODE_GREAT:
+            nPredicate = SQL_PRED_GREATER;
+            break;
+        case SQL_NODE_GREATEQ:
+            nPredicate = SQL_PRED_GREATEROREQUAL;
+            break;
+        default:
+            OSL_ENSHURE(0,"Wrong NodeType!");
+    }
+    return nPredicate;
+}
 //------------------------------------------------------------------------------
 sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
                                             ::std::vector < PropertyValue >& rFilter, const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const
@@ -818,6 +871,7 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
             nPos = 0;
             sal_Int16 i=1;
 
+            aItem.Handle = getPredicateType(pCondition->getChild(i));
             // don't display the equal
             if (pCondition->getChild(i)->getNodeType() == SQL_NODE_EQUAL)
                 i++;
@@ -833,32 +887,36 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
             nPos = pCondition->count()-1;
 
             sal_Int16 i = pCondition->count() - 2;
-
             switch (pCondition->getChild(i)->getNodeType())
             {
                 case SQL_NODE_EQUAL:
                     // don't display the equal
                     i--;
+                    aItem.Handle = SQL_PRED_EQUAL;
                     break;
                 case SQL_NODE_LESS:
                     // take the opposite as we change the order
                     i--;
-                    aValue = ::rtl::OUString::createFromAscii(">");
+                    aValue = ::rtl::OUString::createFromAscii(">=");
+                    aItem.Handle = SQL_PRED_GREATEROREQUAL;
                     break;
                 case SQL_NODE_LESSEQ:
                     // take the opposite as we change the order
                     i--;
-                    aValue = ::rtl::OUString::createFromAscii(">=");
+                    aValue = ::rtl::OUString::createFromAscii(">");
+                    aItem.Handle = SQL_PRED_GREATER;
                     break;
                 case SQL_NODE_GREAT:
                     // take the opposite as we change the order
                     i--;
-                    aValue = ::rtl::OUString::createFromAscii("<");
+                    aValue = ::rtl::OUString::createFromAscii("<=");
+                    aItem.Handle = SQL_PRED_LESSOREQUAL;
                     break;
                 case SQL_NODE_GREATEQ:
                     // take the opposite as we change the order
                     i--;
-                    aValue = ::rtl::OUString::createFromAscii("<=");
+                    aValue = ::rtl::OUString::createFromAscii("<");
+                    aItem.Handle = SQL_PRED_LESS;
                     break;
             }
 
@@ -893,6 +951,7 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
 
         aItem.Name = UniString(getColumnName(pCondition->getChild(0)));
         aItem.Value <<= aValue;
+        aItem.Handle = pCondition->getNodeType();
         rFilter.push_back(aItem);
     }
     else // kann sich nur um einen Expr. Ausdruck handeln
@@ -911,7 +970,8 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
              pCondition->getChild(i)->parseNodeToPredicateStr(aName,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
 
         // Kriterium
-        aValue = pCondition->getChild(1)->getTokenValue();
+        aItem.Handle = pCondition->getChild(1)->getNodeType();
+        aValue       = pCondition->getChild(1)->getTokenValue();
         for(i=0;i< pRhs->count();i++)
             pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
 
