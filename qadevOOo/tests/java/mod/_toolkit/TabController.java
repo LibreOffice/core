@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TabController.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 13:02:54 $
+ *  last change:$Date: 2003-11-18 16:31:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@ import com.sun.star.drawing.XShape;
 import com.sun.star.form.XForm;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.view.XControlAccess;
@@ -130,8 +132,9 @@ public class TabController extends TestCase{
 
         XForm form = null;
         try {
-            form = (XForm) (FormTools.getForms(
-                        WriterTools.getDrawPage(xTextDoc))).getByName("MyForm");
+            form = (XForm) AnyConverter.toObject(new Type(XForm.class),
+                             (FormTools.getForms(
+                        WriterTools.getDrawPage(xTextDoc))).getByName("MyForm"));
         }
         catch ( Exception e ) {
             log.println("Couldn't get Form");
