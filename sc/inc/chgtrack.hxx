@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:03:56 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 12:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,6 +426,10 @@ protected:
     virtual BOOL                StoreLinks( SvStream& ) const;
     virtual BOOL                LoadLinks( SvStream&, ScChangeTrack* );
 
+                                // Derived classes that hold a pointer to the
+                                // ChangeTrack must return that. Otherwise NULL.
+    virtual const ScChangeTrack*    GetChangeTrack() const = 0;
+
 public:
 
             BOOL                IsInsertType() const
@@ -509,7 +513,7 @@ public:
                                 // eine Spalte/Zeile beruecksichtigt (fuer
                                 // Auflistung der einzelnen Eintraege).
     virtual void                GetDescription( String&, ScDocument*,
-                                    BOOL bSplitRange = FALSE ) const {}
+                                    BOOL bSplitRange = FALSE ) const;
 
     virtual void                GetRefString( String&, ScDocument*,
                                     BOOL bFlag3D = FALSE ) const;
@@ -549,6 +553,8 @@ class ScChangeActionIns : public ScChangeAction
     virtual BOOL                Reject( ScDocument* );
 
     virtual BOOL                Store( SvStream&, ScMultipleWriteHeader& ) const;
+
+    virtual const ScChangeTrack*    GetChangeTrack() const { return 0; }
 
 public:
                                 ScChangeActionIns(const ULONG nActionNumber,
@@ -650,6 +656,8 @@ class ScChangeActionDel : public ScChangeAction
                                     INT32 nDx, INT32 nDy, INT32 nDz );
 
     virtual BOOL                Reject( ScDocument* );
+
+    virtual const ScChangeTrack*    GetChangeTrack() const { return pTrack; }
 
     virtual BOOL                Store( SvStream&, ScMultipleWriteHeader& ) const;
     virtual BOOL                StoreLinks( SvStream& ) const;
@@ -755,6 +763,8 @@ class ScChangeActionMove : public ScChangeAction
                                     INT32 nDx, INT32 nDy, INT32 nDz );
 
     virtual BOOL                Reject( ScDocument* );
+
+    virtual const ScChangeTrack*    GetChangeTrack() const { return pTrack; }
 
     virtual BOOL                Store( SvStream&, ScMultipleWriteHeader& ) const;
     virtual BOOL                StoreLinks( SvStream& ) const;
@@ -882,6 +892,8 @@ class ScChangeActionContent : public ScChangeAction
                                     INT32 nDx, INT32 nDy, INT32 nDz );
 
     virtual BOOL                Reject( ScDocument* );
+
+    virtual const ScChangeTrack*    GetChangeTrack() const { return 0; }
 
                                 // pRejectActions!=NULL: reject actions get
                                 // stacked, no SetNewValue, no Append
@@ -1033,6 +1045,8 @@ class ScChangeActionReject : public ScChangeAction
     virtual void                DeleteCellEntries() {}
 
     virtual BOOL                Reject( ScDocument* p ) { return FALSE; }
+
+    virtual const ScChangeTrack*    GetChangeTrack() const { return 0; }
 
     virtual BOOL                Store( SvStream&, ScMultipleWriteHeader& ) const;
 
@@ -1416,7 +1430,7 @@ public:
             void                GetDependents( ScChangeAction*,
                                     ScChangeActionTable&,
                                     BOOL bListMasterDelete = FALSE,
-                                    BOOL bAllFlat = FALSE );
+                                    BOOL bAllFlat = FALSE ) const;
 
                                 // Reject visible Action (und abhaengige)
             BOOL                Reject( ScChangeAction* );
