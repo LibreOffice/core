@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:37:46 $
+ *  last change: $Author: dr $ $Date: 2002-12-12 16:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 
 #ifndef _SV_FONT_HXX
 #include <vcl/font.hxx>
+#endif
+#ifndef _SV_FONTCVT_HXX
+#include <vcl/fontcvt.hxx>
 #endif
 #ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
@@ -587,7 +590,9 @@ XclExpFont::XclExpFont( const XclExpRoot& rRoot ) :
 
 void XclExpFont::SetName( const String& rName )
 {
-    maData.maName = rName;
+    // #106246# substitute with MS fonts
+    String aSubstName( GetSubsFontName( rName, SUBSFONT_ONLYONE | SUBSFONT_MS ) );
+    maData.maName = aSubstName.Len() ? aSubstName : rName;
     sal_uInt32 nRecSize = maData.maName.Len();
     if( GetBiff() >= xlBiff8 )
         (nRecSize *= 2) += 1;
