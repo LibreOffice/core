@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CellProperties.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 23:38:20 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,24 @@ published service CellProperties
         */
     [optional, property] com::sun::star::container::XNameContainer
         UserDefinedAttributes;
+
+    //-------------------------------------------------------------------------
+
+    /** contains a description of the top left to bottom right diagonal line of each cell.
+     */
+    [optional, property] com::sun::star::table::BorderLine DiagonalTLBR;
+
+    //-------------------------------------------------------------------------
+
+    /** contains a description of the bottom left to top right diagonal line of each cell.
+     */
+    [optional, property] com::sun::star::table::BorderLine DiagonalBLTR;
+
+    //-------------------------------------------------------------------------
+
+    /** is <TRUE/>, if the cell content will be shrinked to fit in the cell.
+     */
+    [optional, property] boolean ShrinkToFit;
 
     //-------------------------------------------------------------------------
 };
