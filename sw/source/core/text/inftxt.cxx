@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:22:48 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,34 +552,6 @@ void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIdx,
  *************************************************************************/
 
 xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
-                                       const xub_StrLen nMaxLen ) const
-{
-    const SwScriptInfo& rSI =
-                     ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
-
-    // in some cases, compression is not allowed or surpressed for
-    // performance reasons
-    USHORT nComp =( SW_CJK == GetFont()->GetActual() &&
-                    rSI.CountCompChg() &&
-                    ! IsMulti() ) ?
-                    GetKanaComp() :
-                                0 ;
-
-    ASSERT( pRef == pOut, "GetTxtBreak is supposed to use the RefDev" )
-    SwDrawTextInfo aDrawInf( pVsh, *pOut, &rSI, *pTxt, nIdx, nMaxLen );
-    aDrawInf.SetFrm( pFrm );
-    aDrawInf.SetFont( pFnt );
-    aDrawInf.SetSnapToGrid( SnapToGrid() );
-    aDrawInf.SetKanaComp( nComp );
-    aDrawInf.SetHyphPos( 0 );
-    return pFnt->GetTxtBreak( aDrawInf, nLineWidth );
-}
-
-/*************************************************************************
- *                      SwTxtSizeInfo::GetTxtBreak()
- *************************************************************************/
-
-xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
                                        const xub_StrLen nMaxLen,
                                        const USHORT nComp ) const
 {
@@ -938,7 +910,7 @@ void lcl_CalcRect( const SwTxtPaintInfo* pInf, const SwLinePortion& rPor,
  * bRotate  - Rotate the character if character rotation is set
  *************************************************************************/
 
-void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rPor,
+static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rPor,
                       SwRect& rRect, const Color* pCol, sal_Unicode cChar,
                       BYTE nOptions )
 {
