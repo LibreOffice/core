@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-06-18 10:32:32 $
+ *  last change: $Author: jl $ $Date: 2001-06-19 08:40:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,7 +470,8 @@ OServiceManager::OServiceManager( Reference< XComponentContext > const & xContex
  */
 OServiceManager::~OServiceManager()
 {
-    rtl_removeUnloadingListener( m_nUnloadingListenerId );
+    if( m_nUnloadingListenerId != 0)
+        rtl_removeUnloadingListener( m_nUnloadingListenerId );
 }
 
 // OComponentHelper
@@ -514,6 +515,10 @@ void OServiceManager::dispose()
 
     // not only the Event should hold the object
     OSL_ASSERT( m_refCount != 1 );
+
+    // Revoke this service manager as unloading listener
+    rtl_removeUnloadingListener( m_nUnloadingListenerId);
+    m_nUnloadingListenerId=0;
 }
 
 // XTypeProvider
@@ -1038,7 +1043,6 @@ ORegistryServiceManager::ORegistryServiceManager( Reference< XComponentContext >
     , m_init( false )
 #endif
 {
-    m_nUnloadingListenerId= rtl_addUnloadingListener( smgrUnloadingListener, this);
 }
 
 /**
@@ -1046,7 +1050,6 @@ ORegistryServiceManager::ORegistryServiceManager( Reference< XComponentContext >
  */
 ORegistryServiceManager::~ORegistryServiceManager()
 {
-    rtl_removeUnloadingListener( m_nUnloadingListenerId);
 }
 
 // OComponentHelper
@@ -1445,8 +1448,9 @@ service manager.
 extern "C" void SAL_CALL smgrUnloadingListener(void* id)
 {
       stoc_smgr::OServiceManager* pMgr= reinterpret_cast<stoc_smgr::OServiceManager*>( id);
-    Reference<XInterface> xInt( static_cast<OWeakObject*>(pMgr) );
-    Reference<XEnumerationAccess>xEnumAcc( xInt, UNO_QUERY);
+      Reference<XInterface> xInt( static_cast<OWeakObject*>(pMgr) );
+      Reference<XEnumerationAccess>xEnumAcc( xInt, UNO_QUERY);
+
     Reference<XSet>xSet( xInt, UNO_QUERY);
 
     if(xEnumAcc.is() && xSet.is())
