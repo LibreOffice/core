@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 08:22:46 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3130,14 +3130,24 @@ static Writer& OutWW8_SwNumRuleItem( Writer& rWrt, const SfxPoolItem& rHt )
                     const SwNodeNum* pNum = pTxtNd->GetNum();
 
                     if( pNum && pNum->IsShowNum() )
+                    {
                         nLvl = GetRealLevel( pNum->GetLevel() );
 
-                    if (pNum && (USHRT_MAX != pNum->GetSetValue() || pNum->IsStart()))
+                        if (USHRT_MAX != pNum->GetSetValue() || pNum->IsStart())
+                        {
+                            USHORT nStartWith = (USHRT_MAX != pNum->GetSetValue()) ? pNum->GetSetValue() : 1;
+                            nNumId = rWW8Wrt.DupNumRuleWithLvlStart(pRule,nLvl,nStartWith);
+                            if (USHRT_MAX != nNumId)
+                                ++nNumId;
+                        }
+                    }
+                    else
                     {
-                        USHORT nStartWith = (USHRT_MAX != pNum->GetSetValue()) ? pNum->GetSetValue() : 1;
-                        nNumId = rWW8Wrt.DupNumRuleWithLvlStart(pRule,nLvl,nStartWith);
-                        if (USHRT_MAX != nNumId)
-                            ++nNumId;
+                        // #i44815# adjust numbering for numbered paragraphs
+                        // without number (NO_NUMLEVEL). These paragaphs
+                        // will receive a list id 0, which WW interprets as
+                        // 'no number'.
+                        nNumId = 0;
                     }
                 }
                 else if( rWW8Wrt.pOutFmtNode->ISA( SwTxtFmtColl ))
