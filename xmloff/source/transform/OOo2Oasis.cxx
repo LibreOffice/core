@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOo2Oasis.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 14:57:36 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1572,7 +1572,7 @@ XMLTableOOoTransformerContext_Impl::~XMLTableOOoTransformerContext_Impl()
 void XMLTableOOoTransformerContext_Impl::StartElement(
         const Reference< XAttributeList >& rAttrList )
 {
-    if( IsXMLToken( GetTransformer().GetClass(), XML_SPREADSHEET  ) )
+    if( rAttrList->getLength() && IsXMLToken( GetTransformer().GetClass(), XML_SPREADSHEET  ) )
     {
         Reference< XAttributeList > xAttrList( rAttrList );
         sal_Bool bPrintRanges(sal_False);
@@ -1593,7 +1593,7 @@ void XMLTableOOoTransformerContext_Impl::StartElement(
         }
         XMLMutableAttributeList *pMutableAttrList =
             GetTransformer().ProcessAttrList( xAttrList, OOO_STYLE_REF_ACTIONS, sal_False );
-        if (!bPrintRanges)
+        if (!bPrintRanges && pMutableAttrList)
         {
             xAttrList = pMutableAttrList;
             pMutableAttrList->AddAttribute(GetTransformer().GetNamespaceMap().GetQNameByKey(
