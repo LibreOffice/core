@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:29:25 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,86 +69,23 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     OutputSize = TRUE ;
     Moveable = TRUE ;
     Size = MAP_APPFONT ( 260 , 169 ) ;
-    Text = "Drucken" ;
-    Text [ ENGLISH ] = "Print" ;
-    Text [ english_us ] = "Print" ;
-    Text [ portuguese_brazilian ] = "Imprimir" ;
-    Text [ swedish ] = "Skriv ut" ;
-    Text [ danish ] = "Udskriv" ;
-    Text [ italian ] = "Stampa" ;
-    Text [ spanish ] = "Imprimir" ;
-    Text [ french ] = "Impression" ;
-    Text [ dutch ] = "Afdrukken" ;
-    Text [ portuguese ] = "Imprimir" ;
+    Text [ de ] = "Drucken" ;
+    Text [ en-US ] = "Print" ;
     FixedLine FL_PRINTER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Drucker" ;
-        Text [ ENGLISH ] = "Printer" ;
-        Text [ english_us ] = "Printer" ;
-        Text [ portuguese_brazilian ] = "Impressora" ;
-        Text [ swedish ] = "Skrivare" ;
-        Text [ danish ] = "Printer" ;
-        Text [ italian ] = "Stampante" ;
-        Text [ spanish ] = "Impresora" ;
-        Text [ french ] = "Imprimante" ;
-        Text [ dutch ] = "Printer" ;
-        Text [ portuguese ] = "Impressora" ;
-        Text[ chinese_simplified ] = "æ‰“å°æœº";
-        Text[ russian ] = "Ïğèíòåğ";
-        Text[ polish ] = "Drukarka";
-        Text[ japanese ] = "ãƒ—ãƒªãƒ³ã‚¿";
-        Text[ chinese_traditional ] = "å°è¡¨æ©Ÿ";
-        Text[ arabic ] = "ÇáØÇÈÚÉ";
-        Text[ greek ] = "ÅêôõğùôŞò";
-        Text[ korean ] = "í”„ë¦°í„°";
-        Text[ turkish ] = "Yazıcı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Impressora";
-        Text[ finnish ] = "Tulostin";
-        Text[ thai ] = "à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œ";
-        Text[ czech ] = "TiskÃ¡rna";
-        Text[ hebrew ] = "â€®××“×¤×¡×ªâ€¬";
-        Text[ hindi ] = "à¤®à¥à¤¦à¥à¤°à¤•";
-        Text[ slovak ] = "TlaÄiareÅˆ";
-        Text[ hungarian ] = "NyomtatÃ³";
-        Text[ slovenian ] = "Tiskalnik";
+        Text [ de ] = "Drucker" ;
+        Text [ en-US ] = "Printer" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_NAME
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "~Name" ;
-        Text [ ENGLISH ] = "~Name" ;
-        Text [ english_us ] = "~Name" ;
-        Text [ portuguese_brazilian ] = "~Nome" ;
-        Text [ swedish ] = "~Namn" ;
-        Text [ danish ] = "~Navn" ;
-        Text [ italian ] = "Nome" ;
-        Text [ spanish ] = "~Nombre" ;
-        Text [ french ] = "Nom" ;
-        Text [ dutch ] = "~Naam" ;
-        Text [ portuguese ] = "~Nome" ;
-        Text[ chinese_simplified ] = "åç§°(~N)";
-        Text[ russian ] = "~Èìÿ";
-        Text[ polish ] = "~Nazwa";
-        Text[ japanese ] = "åå‰(~N)";
-        Text[ chinese_traditional ] = "åç¨±(~N)";
-        Text[ arabic ] = "ÇáÇÓã";
-        Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ì´ë¦„(~N)";
-        Text[ turkish ] = "~Ad";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nom";
-        Text[ finnish ] = "~Nimi";
-        Text[ thai ] = "~à¸Šà¸·à¹ˆà¸­";
-        Text[ czech ] = "NÃ¡zev";
-        Text[ hebrew ] = "â€®×©× ××“×¤×¡×ªâ€¬";
-        Text[ hindi ] = "~à¤¨à¤¾à¤®";
-        Text[ slovak ] = "~NÃ¡zov";
-        Text[ hungarian ] = "~NÃ©v";
-        Text[ slovenian ] = "~Ime";
+        Text [ de ] = "~Name" ;
+        Text [ en-US ] = "~Name" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_NAMES
     {
@@ -162,71 +99,17 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 188 , 12 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text = "~Eigenschaften..." ;
-        Text [ ENGLISH ] = "~Properties..." ;
-        Text [ portuguese ] = "~Propriedades..." ;
-        Text [ english_us ] = "Propert~ies..." ;
-        Text [ portuguese_brazilian ] = "~Propriedades..." ;
-        Text [ swedish ] = "~Egenskaper..." ;
-        Text [ danish ] = "~Egenskaber..." ;
-        Text [ italian ] = "~Proprietà..." ;
-        Text [ spanish ] = "~Propiedades..." ;
-        Text [ french ] = "~Propriétés..." ;
-        Text [ dutch ] = "~Eigenschappen..." ;
-        Text[ chinese_simplified ] = "å±æ€§(~I)...";
-        Text[ russian ] = "~Ñâîéñòâà...";
-        Text[ polish ] = "W³aœciwoœci...";
-        Text[ japanese ] = "ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£(~I)...";
-        Text[ chinese_traditional ] = "å±¬æ€§(~I)...";
-        Text[ arabic ] = "ÎÕÇÆÕ...";
-        Text[ greek ] = "Éäéüôçôåò...";
-        Text[ korean ] = "ë“±ë¡ ì •ë³´(~I)...";
-        Text[ turkish ] = "~Özellikler...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Propietats...";
-        Text[ finnish ] = "Ominaisuu~det...";
-        Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡~à¸šà¸±à¸•à¸´...";
-        Text[ czech ] = "Vlastnosti...";
-        Text[ hebrew ] = "â€®×××¤×™× ×™×...â€¬";
-        Text[ hindi ] = "Propert~ies...";
-        Text[ slovak ] = "Vlastnost~i...";
-        Text[ hungarian ] = "~TulajdonsÃ¡gok...";
-        Text[ slovenian ] = "La~stnosti...";
+        Text [ de ] = "~Eigenschaften..." ;
+        Text [ en-US ] = "Propert~ies..." ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_STATUS
     {
         Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "Status" ;
-        Text [ ENGLISH ] = "Status" ;
-        Text [ english_us ] = "Status" ;
-        Text [ portuguese_brazilian ] = "Status" ;
-        Text [ swedish ] = "Status" ;
-        Text [ danish ] = "Status" ;
-        Text [ italian ] = "Stato" ;
-        Text [ spanish ] = "Estado" ;
-        Text [ french ] = "État" ;
-        Text [ dutch ] = "Status" ;
-        Text [ portuguese ] = "Estado" ;
-        Text[ chinese_simplified ] = "çŠ¶æ€";
-        Text[ russian ] = "Ñîñòîÿíèå";
-        Text[ polish ] = "Stan";
-        Text[ japanese ] = "ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹";
-        Text[ chinese_traditional ] = "ç‹€æ…‹";
-        Text[ arabic ] = "ÇáÍÇáÉ";
-        Text[ greek ] = "ÊáôÜóôáóç";
-        Text[ korean ] = "ìƒíƒœ";
-        Text[ turkish ] = "Durum";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Estat";
-        Text[ finnish ] = "Tila";
-        Text[ thai ] = "à¸ªà¸–à¸²à¸™à¸°";
-        Text[ czech ] = "Stav";
-        Text[ hebrew ] = "â€®××¦×‘â€¬";
-        Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥à¤¸à¥à¤¥à¤¿à¤¤à¤¿";
-        Text[ slovak ] = "Stav";
-        Text[ hungarian ] = "Ãllapot";
-        Text[ slovenian ] = "Stanje";
+        Text [ de ] = "Status" ;
+        Text [ en-US ] = "Status" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FI_STATUS
     {
@@ -237,36 +120,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "Typ" ;
-        Text [ ENGLISH ] = "Type" ;
-        Text [ english_us ] = "Type" ;
-        Text [ portuguese_brazilian ] = "Tipo" ;
-        Text [ swedish ] = "Typ" ;
-        Text [ danish ] = "Type" ;
-        Text [ italian ] = "Tipo" ;
-        Text [ spanish ] = "Tipo" ;
-        Text [ french ] = "Type" ;
-        Text [ dutch ] = "Type" ;
-        Text [ portuguese ] = "Tipo" ;
-        Text[ chinese_simplified ] = "ç±»å‹";
-        Text[ russian ] = "Òèï";
-        Text[ polish ] = "Typ";
-        Text[ japanese ] = "ç¨®é¡";
-        Text[ chinese_traditional ] = "é¡å‹";
-        Text[ arabic ] = "ÇáäæÚ";
-        Text[ greek ] = "Ôığïò";
-        Text[ korean ] = "ì¢…ë¥˜";
-        Text[ turkish ] = "Tip";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipus";
-        Text[ finnish ] = "Tyyppi";
-        Text[ thai ] = "à¸Šà¸™à¸´à¸”";
-        Text[ czech ] = "Typ";
-        Text[ hebrew ] = "â€®×¡×•×’â€¬";
-        Text[ hindi ] = "à¤µà¤°à¥à¤—";
-        Text[ slovak ] = "Typ";
-        Text[ hungarian ] = "TÃ­pus";
-        Text[ slovenian ] = "Vrsta";
+        Text [ de ] = "Typ" ;
+        Text [ en-US ] = "Type" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FI_TYPE
     {
@@ -277,36 +133,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 12 , 51 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "Ort" ;
-        Text [ ENGLISH ] = "Location" ;
-        Text [ english_us ] = "Location" ;
-        Text [ portuguese_brazilian ] = "Local" ;
-        Text [ swedish ] = "Plats" ;
-        Text [ danish ] = "Placering" ;
-        Text [ italian ] = "Percorso" ;
-        Text [ spanish ] = "Ubicación" ;
-        Text [ french ] = "Emplacement" ;
-        Text [ dutch ] = "Plaats" ;
-        Text [ portuguese ] = "Lugar" ;
-        Text[ chinese_simplified ] = "ä½ç½®";
-        Text[ russian ] = "Ğàñïîëîæåíèå";
-        Text[ polish ] = "Lokalizacja";
-        Text[ japanese ] = "å ´æ‰€";
-        Text[ chinese_traditional ] = "ä½ç½®";
-        Text[ arabic ] = "ÇáãæŞÚ";
-        Text[ greek ] = "Èİóç";
-        Text[ korean ] = "ìœ„ì¹˜";
-        Text[ turkish ] = "Yer";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ubicació";
-        Text[ finnish ] = "Sijainti";
-        Text[ thai ] = "à¸—à¸µà¹ˆà¸•à¸±à¹‰à¸‡";
-        Text[ czech ] = "UmÃ­stÄ›nÃ­";
-        Text[ hebrew ] = "â€®××™×§×•×â€¬";
-        Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨";
-        Text[ slovak ] = "Umiestnenie";
-        Text[ hungarian ] = "Hely";
-        Text[ slovenian ] = "Mesto";
+        Text [ de ] = "Ort" ;
+        Text [ en-US ] = "Location" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FI_LOCATION
     {
@@ -317,36 +146,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 12 , 62 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "Kommentar" ;
-        Text [ ENGLISH ] = "Comment" ;
-        Text [ english_us ] = "Comment" ;
-        Text [ portuguese_brazilian ] = "Comentário" ;
-        Text [ swedish ] = "Kommentar" ;
-        Text [ danish ] = "Kommentar" ;
-        Text [ italian ] = "Commento" ;
-        Text [ spanish ] = "Comentario" ;
-        Text [ french ] = "Commentaire" ;
-        Text [ dutch ] = "Opmerkingen" ;
-        Text [ portuguese ] = "Comentário" ;
-        Text[ chinese_simplified ] = "æ³¨è§£";
-        Text[ russian ] = "Êîììåíòàğèé";
-        Text[ polish ] = "Komentarz";
-        Text[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆ";
-        Text[ chinese_traditional ] = "è¨»è§£";
-        Text[ arabic ] = "ÊÚáíŞ";
-        Text[ greek ] = "Ó÷üëéï";
-        Text[ korean ] = "ì„¤ëª…";
-        Text[ turkish ] = "Açıklama";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Comentari";
-        Text[ finnish ] = "Huomautus";
-        Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸´à¸”à¹€à¸«à¹‡à¸™";
-        Text[ czech ] = "KomentÃ¡Å™";
-        Text[ hebrew ] = "â€®×”×¢×¨×”â€¬";
-        Text[ hindi ] = "Comment";
-        Text[ slovak ] = "KomentÃ¡r";
-        Text[ hungarian ] = "MegjegyzÃ©s";
-        Text[ slovenian ] = "Komentar";
+        Text [ de ] = "Kommentar" ;
+        Text [ en-US ] = "Comment" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FI_COMMENT
     {
@@ -357,35 +159,8 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 12 , 77 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text = "Fax Nummer";
-        Text [ ENGLISH ] = "Fax number";
-        Text[ english_us ] = "Fax number";
-        Text[ portuguese ] = "Nº de fax";
-        Text[ russian ] = "Íîìåğ ôàêñà";
-        Text[ greek ] = "Áñéèìüò öáî";
-        Text[ dutch ] = "Faxnummer";
-        Text[ french ] = "Numéro de fax";
-        Text[ spanish ] = "Número de fax";
-        Text[ italian ] = "Numero fax";
-        Text[ danish ] = "Faxnummer";
-        Text[ swedish ] = "Faxnummer";
-        Text[ polish ] = "Numer faksu";
-        Text[ portuguese_brazilian ] = "Nº de fax";
-        Text[ japanese ] = "Fax ç•ªå·";
-        Text[ korean ] = "íŒ©ìŠ¤ ë²ˆí˜¸";
-        Text[ chinese_simplified ] = "ä¼ çœŸå·ç ";
-        Text[ chinese_traditional ] = "å‚³çœŸè™Ÿç¢¼";
-        Text[ turkish ] = "Fax numarası";
-        Text[ arabic ] = "ÑŞã ÇáİÇßÓ";
-        Text[ catalan ] = "Número de fax";
-        Text[ finnish ] = "Faksinumero";
-        Text[ thai ] = "à¸«à¸¡à¸²à¸¢à¹€à¸¥à¸‚à¹‚à¸—à¸£à¸ªà¸²à¸£";
-        Text[ czech ] = "FaxovÃ© ÄÃ­slo";
-        Text[ hebrew ] = "â€®××¡×¤×¨ ×”×¤×§×¡â€¬";
-        Text[ hindi ] = "Fax number";
-        Text[ slovak ] = "FaxovÃ© ÄÃ­slo";
-        Text[ hungarian ] = "FaxszÃ¡m";
-        Text[ slovenian ] = "Å tevilka faksa";
+        Text [ de ] = "Fax Nummer";
+        Text [ en-US ] = "Fax number";
     };
     Edit EDT_FAXNO
     {
@@ -397,36 +172,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 12 , 77 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text = "Ausdruck ~in Datei" ;
-        Text [ ENGLISH ] = "Print to f~ile" ;
-        Text [ english_us ] = "Print to file" ;
-        Text [ portuguese_brazilian ] = "Imprimir num arquivo" ;
-        Text [ swedish ] = "Skriv ut till ~fil" ;
-        Text [ danish ] = "Udskrift til fil" ;
-        Text [ italian ] = "Stampa su ~file" ;
-        Text [ spanish ] = "Imprimir ~en archivo" ;
-        Text [ french ] = "Imprimer dans un ~fichier " ;
-        Text [ dutch ] = "Afdrukken naar ~bestand" ;
-        Text [ portuguese ] = "Imprimir em ~ficheiro" ;
-        Text[ chinese_simplified ] = "æ‰“å°æˆæ–‡ä»¶";
-        Text[ russian ] = "Ïå÷àòàòü â ôàéë";
-        Text[ polish ] = "Drukuj do pliku";
-        Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã¸å‡ºåŠ›";
-        Text[ chinese_traditional ] = "åˆ—å°æˆæª”æ¡ˆ";
-        Text[ arabic ] = "ØÈÇÚÉ Åáì ãáİ";
-        Text[ greek ] = "Åêôığùóç óå áñ÷åßï";
-        Text[ korean ] = "íŒŒì¼ë¡œ ì¸ì‡„";
-        Text[ turkish ] = "D~osyaya yazdır";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Imprimeix a un fitxer";
-        Text[ finnish ] = "Tulosta tiedostoon";
-        Text[ thai ] = "à¸à¸´à¸¡à¸à¹Œà¸–à¸¶à¸‡à¹à¸Ÿà¹‰à¸¡";
-        Text[ czech ] = "Tisk do souboru";
-        Text[ hebrew ] = "â€®×”×“×¤×¡×” ×œ×§×•×‘×¥â€¬";
-        Text[ hindi ] = "Print to file";
-        Text[ slovak ] = "TlaÄ do sÃºboru";
-        Text[ hungarian ] = "NyomtatÃ¡s fÃ¡jlba";
-        Text[ slovenian ] = "Tiskanje v datoteko";
+        Text [ de ] = "Ausdruck ~in Datei" ;
+        Text [ en-US ] = "Print to file" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FI_PRINTFILE
     {
@@ -443,141 +191,33 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 6 , 96 ) ;
         Size = MAP_APPFONT ( 117 , 8 ) ;
-        Text = "Druckbereich" ;
-        Text [ ENGLISH ] = "Print range" ;
-        Text [ english_us ] = "Print range" ;
-        Text [ portuguese_brazilian ] = "Intervalo de impressão" ;
-        Text [ swedish ] = "Utskriftsområde" ;
-        Text [ danish ] = "Udskriftsområde" ;
-        Text [ italian ] = "Area di stampa" ;
-        Text [ spanish ] = "Área de impresión" ;
-        Text [ french ] = "Zone d'impression" ;
-        Text [ dutch ] = "Afdrukbereik" ;
-        Text [ portuguese ] = "Área de impressão" ;
-        Text[ chinese_simplified ] = "æ‰“å°åŒºåŸŸ";
-        Text[ russian ] = "Îáëàñòü ïå÷àòè";
-        Text[ polish ] = "Zakres wydruku";
-        Text[ japanese ] = "å°åˆ·ç¯„å›²";
-        Text[ chinese_traditional ] = "åˆ—å°ç¯„åœ";
-        Text[ arabic ] = "äØÇŞ ÇáØÈÇÚÉ";
-        Text[ greek ] = "Ğåñéï÷Ş åêôığùóçò";
-        Text[ korean ] = "ì¸ì‡„ ë²”ìœ„";
-        Text[ turkish ] = "Baskı aralığı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Àrea d'impressió";
-        Text[ finnish ] = "Tulostusalue";
-        Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œ";
-        Text[ czech ] = "Rozsah tisku";
-        Text[ hebrew ] = "â€®×˜×•×•×— ×”×“×¤×¡×”â€¬";
-        Text[ hindi ] = "Print range";
-        Text[ slovak ] = "TlaÄ oblasti";
-        Text[ hungarian ] = "NyomtatÃ¡si tartomÃ¡ny";
-        Text[ slovenian ] = "Obseg tiskanja";
+        Text [ de ] = "Druckbereich" ;
+        Text [ en-US ] = "Print range" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RBT_ALL
     {
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
-        Text = "~Alles" ;
-        Text [ ENGLISH ] = "~All" ;
-        Text [ portuguese ] = "~Tudo" ;
-        Text [ english_us ] = "All" ;
-        Text [ portuguese_brazilian ] = "Tudo" ;
-        Text [ swedish ] = "~Allt" ;
-        Text [ danish ] = "Alt" ;
-        Text [ italian ] = "~Tutto" ;
-        Text [ spanish ] = "~Todo" ;
-        Text [ french ] = "~Tout" ;
-        Text [ dutch ] = "~Alles" ;
-        Text[ chinese_simplified ] = "å…¨éƒ¨";
-        Text[ russian ] = "~Âñå";
-        Text[ polish ] = "Wszystko";
-        Text[ japanese ] = "ã™ã¹ã¦";
-        Text[ chinese_traditional ] = "å…¨éƒ¨";
-        Text[ arabic ] = "Çáßá";
-        Text[ greek ] = "¼ëá";
-        Text[ korean ] = "ëª¨ë‘";
-        Text[ turkish ] = "~Tümü";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tot";
-        Text[ finnish ] = "Kaikki";
-        Text[ thai ] = "à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
-        Text[ czech ] = "VÅ¡e";
-        Text[ hebrew ] = "â€®×”×›×œâ€¬";
-        Text[ hindi ] = "à¤¸à¤¬";
-        Text[ slovak ] = "VÅ¡etko";
-        Text[ hungarian ] = "Ã–sszes";
-        Text[ slovenian ] = "Vse";
+        Text [ de ] = "~Alles" ;
+        Text [ en-US ] = "All" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RBT_PAGES
     {
         Pos = MAP_APPFONT ( 12 , 117 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "~Seiten" ;
-        Text [ ENGLISH ] = "Pa~ges" ;
-        Text [ portuguese ] = "~Páginas" ;
-        Text [ english_us ] = "Pages" ;
-        Text [ portuguese_brazilian ] = "Páginas" ;
-        Text [ swedish ] = "~Sidor" ;
-        Text [ danish ] = "Sider" ;
-        Text [ italian ] = "Pagine" ;
-        Text [ spanish ] = "~Páginas" ;
-        Text [ french ] = "P~ages" ;
-        Text [ dutch ] = "~Pagina" ;
-        Text[ chinese_simplified ] = "é¡µ";
-        Text[ russian ] = "~Ñòğàíèöû";
-        Text[ polish ] = "Strony";
-        Text[ japanese ] = "ãƒšãƒ¼ã‚¸æŒ‡å®š";
-        Text[ chinese_traditional ] = "é ";
-        Text[ arabic ] = "ÕİÍÇÊ";
-        Text[ greek ] = "Óåëßäåò";
-        Text[ korean ] = "ì¸ì‡„í•  í˜ì´ì§€";
-        Text[ turkish ] = "~Sayfa";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Pàgines";
-        Text[ finnish ] = "Sivut";
-        Text[ thai ] = "à¸«à¸™à¹‰à¸²";
-        Text[ czech ] = "StrÃ¡nky";
-        Text[ hebrew ] = "â€®×¢××•×“×™×â€¬";
-        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¥‡à¤‚";
-        Text[ slovak ] = "StrÃ¡nky";
-        Text[ hungarian ] = "Oldal";
-        Text[ slovenian ] = "Strani";
+        Text [ de ] = "~Seiten" ;
+        Text [ en-US ] = "Pages" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RBT_SELECTION
     {
         Pos = MAP_APPFONT ( 12 , 129 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
-        Text = "A~uswahl" ;
-        Text [ ENGLISH ] = "~Selection" ;
-        Text [ portuguese ] = "~Selecção" ;
-        Text [ english_us ] = "Selection" ;
-        Text [ portuguese_brazilian ] = "Seleção" ;
-        Text [ swedish ] = "~Markering" ;
-        Text [ danish ] = "Markering" ;
-        Text [ italian ] = "Scelta" ;
-        Text [ spanish ] = "~Selección" ;
-        Text [ french ] = "~Sélection" ;
-        Text [ dutch ] = "~Selectie" ;
-        Text[ chinese_simplified ] = "é€‰æ‹©";
-        Text[ russian ] = "Âûäåëåíèå";
-        Text[ polish ] = "Zaznaczenie";
-        Text[ japanese ] = "é¸æŠã—ãŸéƒ¨åˆ†";
-        Text[ chinese_traditional ] = "é¸æ“‡";
-        Text[ arabic ] = "ÇáÊÍÏíÏ";
-        Text[ greek ] = "ÅğéëïãŞ";
-        Text[ korean ] = "ì„ íƒ ì˜ì—­";
-        Text[ turkish ] = "Seçim";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Selecció";
-        Text[ finnish ] = "Valinta";
-        Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸";
-        Text[ czech ] = "VÃ½bÄ›r";
-        Text[ hebrew ] = "â€®××‘×—×¨â€¬";
-        Text[ hindi ] = "Selection";
-        Text[ slovak ] = "VÃ½ber";
-        Text[ hungarian ] = "KijelÃ¶lÃ©s";
-        Text[ slovenian ] = "Izbor";
+        Text [ de ] = "A~uswahl" ;
+        Text [ en-US ] = "Selection" ;
+        Text [ x-comment ] = " ";
     };
     Edit EDT_PAGES
     {
@@ -600,71 +240,17 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 129 , 96 ) ;
         Size = MAP_APPFONT ( 125 , 8 ) ;
-        Text = "Kopien" ;
-        Text [ ENGLISH ] = "Copies" ;
-        Text [ english_us ] = "Copies" ;
-        Text [ portuguese_brazilian ] = "Cópias" ;
-        Text [ swedish ] = "Kopior" ;
-        Text [ danish ] = "Kopier" ;
-        Text [ italian ] = "Copia" ;
-        Text [ spanish ] = "Copias" ;
-        Text [ french ] = "Copies" ;
-        Text [ dutch ] = "Kopieën" ;
-        Text [ portuguese ] = "Cópias" ;
-        Text[ chinese_simplified ] = "ä»½æ•°";
-        Text[ russian ] = "Êîïèè";
-        Text[ polish ] = "Kopie";
-        Text[ japanese ] = "å°åˆ·éƒ¨æ•°";
-        Text[ chinese_traditional ] = "ä»¶æ•¸";
-        Text[ arabic ] = "äÓÎ";
-        Text[ greek ] = "Áíôßãñáöá";
-        Text[ korean ] = "ì¸ì‡„ ë§¤ìˆ˜";
-        Text[ turkish ] = "Kopya";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Còpies";
-        Text[ finnish ] = "Kopioita";
-        Text[ thai ] = "à¸ªà¸³à¹€à¸™à¸²";
-        Text[ czech ] = "Kopie";
-        Text[ hebrew ] = "â€®×¢×•×ª×§×™×â€¬";
-        Text[ hindi ] = "à¤ªà¥à¤°à¤¤à¤¿à¤²à¤¿à¤ªà¤¿à¤¯à¤¾à¤";
-        Text[ slovak ] = "KÃ³pia";
-        Text[ hungarian ] = "MÃ¡solatok";
-        Text[ slovenian ] = "Kopije";
+        Text [ de ] = "Kopien" ;
+        Text [ en-US ] = "Copies" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_COPIES
     {
         Pos = MAP_APPFONT ( 135 , 106 ) ;
         Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text = "E~xemplare" ;
-        Text [ ENGLISH ] = "Number of ~copies" ;
-        Text [ english_us ] = "Number of copies" ;
-        Text [ portuguese_brazilian ] = "Número de cópias" ;
-        Text [ swedish ] = "E~xemplar" ;
-        Text [ danish ] = "Antal kopier" ;
-        Text [ italian ] = "Numero di copie" ;
-        Text [ spanish ] = "~Ejemplares" ;
-        Text [ french ] = "E~xemplaire(s)" ;
-        Text [ dutch ] = "E~xemplaren" ;
-        Text [ portuguese ] = "E~xemplares" ;
-        Text[ chinese_simplified ] = "æ‰“å°ä»½æ•°";
-        Text[ russian ] = "Êîëè÷åñòâî êîïèé";
-        Text[ polish ] = "Liczba kopii";
-        Text[ japanese ] = "éƒ¨æ•°";
-        Text[ chinese_traditional ] = "åˆ—å°ä»¶æ•¸";
-        Text[ arabic ] = "ÚÏÏ ÇáäÓÎ";
-        Text[ greek ] = "Áíôß~ãñáöá";
-        Text[ korean ] = "ë§¤ìˆ˜";
-        Text[ turkish ] = "~Kopya sayısı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nombre de còpies";
-        Text[ finnish ] = "Kopioiden määrä";
-        Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™à¸ªà¸³à¹€à¸™à¸²";
-        Text[ czech ] = "PoÄet kopiÃ­";
-        Text[ hebrew ] = "â€®××¡×¤×¨ ×¢×•×ª×§×™×â€¬";
-        Text[ hindi ] = "à¤ªà¥à¤°à¤¤à¤¿à¤²à¤¿à¤ªà¤¿à¤¯à¥‹à¤‚ à¤•à¥€ à¤¸à¤‚à¤–à¥à¤¯à¤¾";
-        Text[ slovak ] = "PoÄet kÃ³piÃ­";
-        Text[ hungarian ] = "MÃ¡solatok szÃ¡ma";
-        Text[ slovenian ] = "Å tevilo kopij";
+        Text [ de ] = "E~xemplare" ;
+        Text [ en-US ] = "Number of copies" ;
+        Text [ x-comment ] = " ";
     };
     NumericField NUM_COPIES
     {
@@ -683,36 +269,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 201 , 123 ) ;
         Size = MAP_APPFONT ( 53 , 10 ) ;
-        Text = "S~ortieren" ;
-        Text [ ENGLISH ] = "C~ollate" ;
-        Text [ english_us ] = "Co~llate" ;
-        Text [ portuguese_brazilian ] = "~Agrupar" ;
-        Text [ swedish ] = "S~ortera" ;
-        Text [ danish ] = "Sammenlign" ;
-        Text [ italian ] = "~Ordina" ;
-        Text [ spanish ] = "~Ordenar" ;
-        Text [ french ] = "T~rier" ;
-        Text [ dutch ] = "S~orteren" ;
-        Text [ portuguese ] = "~Ordenar" ;
-        Text[ chinese_simplified ] = "æ’åº(~L)";
-        Text[ russian ] = "Óïîğÿäî÷èòü";
-        Text[ polish ] = "~Sortuj";
-        Text[ japanese ] = "éƒ¨å˜ä½ã§å°åˆ·(~L)";
-        Text[ chinese_traditional ] = "æ’åº(~L)";
-        Text[ arabic ] = "ÊÑÊíÈ ÇáäÓÎ";
-        Text[ greek ] = "Ôáîéíüìçóç";
-        Text[ korean ] = "í•œ ë¶€ì”© ì¸ì‡„(~L)";
-        Text[ turkish ] = "S~ırala";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Compara";
-        Text[ finnish ] = "~Yhdistä";
-        Text[ thai ] = "à¸•à¸£à¸§à¸ˆà¹€~à¸—à¸µà¸¢à¸š";
-        Text[ czech ] = "SeÅ™adit";
-        Text[ hebrew ] = "â€®×”×ª××â€¬";
-        Text[ hindi ] = "Co~llate";
-        Text[ slovak ] = "Zora~diÅ¥";
-        Text[ hungarian ] = "~LevÃ¡logatÃ¡s";
-        Text[ slovenian ] = "Zbi~ranje kopij";
+        Text [ de ] = "S~ortieren" ;
+        Text [ en-US ] = "Co~llate" ;
+        Text [ x-comment ] = " ";
     };
     FixedImage IMG_COLLATE
     {
@@ -733,36 +292,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Zusätze... : Zusõtze... */
         /* ### ACHTUNG: Neuer Text in Resource? Zusätze... : Zusõtze... */
-        Text = "~Zusätze..." ;
-        Text [ ENGLISH ] = "Op~tions..." ;
-        Text [ portuguese ] = "Opçõe~s..." ;
-        Text [ english_us ] = "~Options..." ;
-        Text [ portuguese_brazilian ] = "Opçõe~s..." ;
-        Text [ swedish ] = "F~ler..." ;
-        Text [ danish ] = "~Indstillinger..." ;
-        Text [ italian ] = "E~xtra..." ;
-        Text [ spanish ] = "~Opciones..." ;
-        Text [ french ] = "Options..." ;
-        Text [ dutch ] = "O~verige..." ;
-        Text[ chinese_simplified ] = "å…¶ä»–(~O)...";
-        Text[ russian ] = "Ïàğàìåòğû...";
-        Text[ polish ] = "~Opcje...";
-        Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³(~O)...";
-        Text[ chinese_traditional ] = "å…¶ä»–(~O)...";
-        Text[ arabic ] = "ÎíÇÑÇÊ...";
-        Text[ greek ] = "Ğñüóèåôá...";
-        Text[ korean ] = "ì˜µì…˜(~O)...";
-        Text[ turkish ] = "~Seçenekler...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Opcions";
-        Text[ finnish ] = "~Asetukset...";
-        Text[ thai ] = "~à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸...";
-        Text[ czech ] = "Volby...";
-        Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ª...â€¬";
-        Text[ hindi ] = "~à¤µà¤¿à¤•à¤²à¥à¤ª...";
-        Text[ slovak ] = "V~oÄ¾by...";
-        Text[ hungarian ] = "~BeÃ¡llÃ­tÃ¡sok...";
-        Text[ slovenian ] = "~MoÅ¾nosti...";
+        Text [ de ] = "~Zusätze..." ;
+        Text [ en-US ] = "~Options..." ;
+        Text [ x-comment ] = " ";
     };
     OKButton BTN_OK
     {
@@ -782,55 +314,10 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     };
     String STR_ALLFILTER
     {
-        Text = "<Alle>";
-        Text [ english ] = "<All>";
-        Text[ english_us ] = "<All>";
-        Text[ portuguese ] = "<Tudo>";
-        Text[ russian ] = "<Âñå>";
-        Text[ greek ] = "<¼ëá>";
-        Text[ dutch ] = "<Alle>";
-        Text[ french ] = "<Tout>";
-        Text[ spanish ] = "<Todos>";
-        Text[ finnish ] = "<Kaikki>";
-        Text[ italian ] = "<All>";
-        Text[ danish ] = "<Alle>";
-        Text[ swedish ] = "<Alla>";
-        Text[ polish ] = "<Wszystko>";
-        Text[ portuguese_brazilian ] = "<Tudo>";
-        Text[ japanese ] = "<ã™ã¹ã¦>";
-        Text[ korean ] = "<ëª¨ë‘>";
-        Text[ chinese_simplified ] = "<å…¨éƒ¨>";
-        Text[ chinese_traditional ] = "<å…¨éƒ¨>";
-        Text[ turkish ] = "<Hepsi>";
-        Text[ arabic ] = "<Çáßá>";
-        Text[ catalan ] = "<Tot>";
-        Text[ thai ] = "<à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”>";
-        Text[ czech ] = "<VÅ¡e>";
-        Text[ hebrew ] = "â€®<×”×›×œ>â€¬";
-        Text[ hindi ] = "<à¤¸à¤¬>";
-        Text[ slovak ] = "<VÅ¡etko>";
-        Text[ hungarian ] = "<Mind>";
-        Text[ slovenian ] = "<Vse>";
+        Text [ de ] = "<Alle>";
+        Text [ en-US ] = "<All>";
     };
-    Text[ chinese_simplified ] = "æ‰“å°";
-    Text[ russian ] = "Ïå÷àòü";
-    Text[ polish ] = "Drukuj";
-    Text[ japanese ] = "å°åˆ·";
-    Text[ chinese_traditional ] = "åˆ—å°";
-    Text[ arabic ] = "ØÈÇÚÉ";
-    Text[ greek ] = "Åêôığùóç";
-    Text[ korean ] = "ì¸ì‡„";
-    Text[ turkish ] = "Yazdır";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Imprimeix";
-    Text[ finnish ] = "Tulosta";
-    Text[ thai ] = "à¸à¸´à¸¡à¸à¹Œ";
-    Text[ czech ] = "Tisk";
-    Text[ hebrew ] = "â€®×”×“×¤×¡×”â€¬";
-    Text[ hindi ] = "à¤›à¤ªà¤¾à¤ˆ";
-    Text[ slovak ] = "TlaÄ";
-    Text[ hungarian ] = "NyomtatÃ¡s";
-    Text[ slovenian ] = "Natisni";
+    Text [ x-comment ] = " ";
 };
 
 Image RID_IMG_PRNDLG_COLLATE
