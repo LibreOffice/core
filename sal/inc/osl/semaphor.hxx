@@ -2,9 +2,9 @@
  *
  *  $RCSfile: semaphor.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 08:30:26 $
+ *  last change: $Author: obr $ $Date: 2001-11-12 15:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,11 +75,11 @@ namespace osl
 
     public:
 
-        /** Creates a semaphore.<BR>
+        /** Creates a semaphore.
             @param InitialCount denotes the starting value the semaphore. If you set it to
             zero, the first acquire() blocks. Otherwise InitialCount acquire()s  are
             immedeatly  successfull.
-            @return 0 if the semaphore could not be created, otherwise a handle to the sem.
+            @seealso ::osl_createSemaphore()
         */
 
         Semaphore(sal_uInt32 initialCount)
@@ -88,34 +88,39 @@ namespace osl
         }
 
         /** Release the OS-structures and free semaphore data-structure
-            @return fbbb
+            @seealso ::osl_destroySemaphore()
         */
         ~Semaphore()
         {
             osl_destroySemaphore(semaphore);
         }
 
-        /** acquire() decreases the count. It will block if it tries to
-            decrease below zero.
-            @return False if the system-call failed.
+        /** Decreases the count of the semaphore object.
+
+            It will block if it tries to decrease below zero.
+            @return sal_False if the system-call failed
+            @seealso ::osl_acquireSemaphore()
         */
         sal_Bool acquire()
         {
             return osl_acquireSemaphore(semaphore);
         }
 
-        /** tryToAcquire() tries to decreases the count. It will
-            return with False if it would decrease the count below zero.
-            (When acquire() would block.) If it could successfully
-            decrease the count, it will return True.
+        /** Tries to decreases the count of the semaphore.
+
+            @return sal_False if it would decrease the count below zero
+            (acquire() would block). If it could successfully
+            decrease the count, it will return sal_True.
+            @seealso ::osl_tryToAcquireSemaphore()
         */
         sal_Bool tryToAcquire()
         {
             return osl_tryToAcquireSemaphore(semaphore);
         }
 
-        /** release() increases the count.
-            @return False if the system-call failed.
+        /** Increases the count.
+            @return sal_False if the system-call failed.
+            @seealso ::osl_releaseSemaphore()
         */
         sal_Bool release()
         {

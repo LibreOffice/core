@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hro $ $Date: 2001-09-03 10:47:34 $
+ *  last change: $Author: obr $ $Date: 2001-11-12 15:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,18 +107,18 @@ typedef void* oslModule;
 #endif
 
 
-/** Load a module.<BR>
+/** Load a shared library or module.
     @param strModuleName denotes the name of the module to be loaded.
-    @return 0 if the module could not be loaded, otherwise a handle to the module.
+    @return NULL if the module could not be loaded, otherwise a handle to the module.
 */
 oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMode);
 
-/** Release the Module
+/** Release the module
 */
 void SAL_CALL osl_unloadModule(oslModule Module);
 
 /** lookup the specified symbolname.
-    @returns address of the symbol or 0 if lookup failed,
+    @return address of the symbol or NULL if lookup failed,
 */
 void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString *strSymbolName);
 

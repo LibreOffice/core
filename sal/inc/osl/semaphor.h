@@ -2,9 +2,9 @@
  *
  *  $RCSfile: semaphor.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-19 09:36:56 $
+ *  last change: $Author: obr $ $Date: 2001-11-12 15:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,34 +72,36 @@ extern "C" {
 
 typedef void* oslSemaphore;
 
-/** Creates a semaphore.<BR>
+/** Creates a semaphore.
     @param InitialCount denotes the starting value the semaphore. If you set it to
     zero, the first acquire() blocks. Otherwise InitialCount acquire()s  are
     immedeatly  successfull.
-    @return 0 if the semaphore could not be created, otherwise a handle to the sem.
+    @return NULL if the semaphore could not be created, otherwise a handle
+    to the created semaphore object.
 */
 oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount);
 
-/** Release the OS-structures and free semaphore data-structure
-    @return fbbb
+/** Release the OS-structures and free semaphore data-structure.
 */
 void SAL_CALL osl_destroySemaphore(oslSemaphore Semaphore);
 
-/** acquire() decreases the count. It will block if it tries to
-    decrease below zero.
-    @return False if the system-call failed.
+/** Decrease the count of a semaphore.
+
+    It will block if it tries to decrease below zero.
+    @return sal_False if the system-call failed.
 */
 sal_Bool SAL_CALL osl_acquireSemaphore(oslSemaphore Semaphore);
 
-/** tryToAcquire() tries to decreases the count. It will
-    return with False if it would decrease the count below zero.
-    (When acquire() would block.) If it could successfully
-    decrease the count, it will return True.
+/** tries to decreases the count of a semaphore.
+
+    @return sal_False if it would decrease the count below zero.
+    (acquire() would block). If it could successfully
+    decrease the count, it will return sal_True.
 */
 sal_Bool SAL_CALL osl_tryToAcquireSemaphore(oslSemaphore Semaphore);
 
-/** release() increases the count.
-    @return False if the system-call failed.
+/** Increases the count of a semaphore.
+    @return sal_False if the system-call failed.
 */
 sal_Bool SAL_CALL osl_releaseSemaphore(oslSemaphore Semaphore);
 
