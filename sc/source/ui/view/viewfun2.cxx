@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:56:11 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:50:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1858,7 +1858,7 @@ void ScViewFunc::InsertAreaLink( const String& rFile,
     String aFilterName = rFilter;
     String aNewOptions = rOptions;
     if (!aFilterName.Len())
-        ScDocumentLoader::GetFilterName( rFile, aFilterName, aNewOptions );
+        ScDocumentLoader::GetFilterName( rFile, aFilterName, aNewOptions, TRUE );
 
     SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
 
