@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:36:48 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,10 @@ enum WID_PAGE
     WID_PAGE_HEIGHT, WID_PAGE_EFFECT, WID_PAGE_CHANGE, WID_PAGE_SPEED, WID_PAGE_NUMBER,
     WID_PAGE_ORIENT, WID_PAGE_LAYOUT, WID_PAGE_DURATION, WID_PAGE_LDNAME, WID_PAGE_LDBITMAP,
     WID_PAGE_BACK, WID_PAGE_PREVIEW, WID_PAGE_VISIBLE, WID_PAGE_SOUNDFILE, WID_PAGE_BACKFULL,
-    WID_PAGE_BACKVIS, WID_PAGE_BACKOBJVIS, WID_PAGE_USERATTRIBS, WID_PAGE_BOOKMARK, WID_PAGE_ISDARK
+    WID_PAGE_BACKVIS, WID_PAGE_BACKOBJVIS, WID_PAGE_USERATTRIBS, WID_PAGE_BOOKMARK, WID_PAGE_ISDARK,
+    WID_PAGE_HEADERVISIBLE, WID_PAGE_HEADERTEXT, WID_PAGE_FOOTERVISIBLE, WID_PAGE_FOOTERTEXT,
+    WID_PAGE_PAGENUMBERVISIBLE, WID_PAGE_DATETIMEVISIBLE, WID_PAGE_DATETIMEFIXED,
+    WID_PAGE_DATETIMETEXT, WID_PAGE_DATETIMEFORMAT
 };
 
 #ifndef SEQTYPE
@@ -208,7 +211,7 @@ enum WID_PAGE
 static sal_Char __FAR_DATA sEmptyPageName[sizeof("page")] = "page";
 
 /** this function stores the property maps for draw pages in impress and draw */
-const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress )
+const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress, PageKind ePageKind )
 {
     static const SfxItemPropertyMap aDrawPagePropertyMap_Impl[] =
     {
@@ -236,6 +239,44 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress )
         { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,      0,     0},
         { MAP_CHAR_LEN(sUNO_Prop_BookmarkURL),          WID_PAGE_BOOKMARK,  &::getCppuType((const OUString*)0),             0,  0},
         { MAP_CHAR_LEN("IsBackgroundDark" ),            WID_PAGE_ISDARK,    &::getBooleanCppuType(),                        beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN("IsFooterVisible"),              WID_PAGE_FOOTERVISIBLE, &::getBooleanCppuType(),                    0, 0},
+        { MAP_CHAR_LEN("FooterText"),                   WID_PAGE_FOOTERTEXT, &::getCppuType((const OUString*)0),                0,  0},
+        { MAP_CHAR_LEN("IsPageNumberVisible"),          WID_PAGE_PAGENUMBERVISIBLE, &::getBooleanCppuType(),                    0, 0},
+        { MAP_CHAR_LEN("IsDateTimeVisible"),            WID_PAGE_DATETIMEVISIBLE, &::getBooleanCppuType(),                  0, 0},
+        { MAP_CHAR_LEN("IsDateTimeFixed"),              WID_PAGE_DATETIMEFIXED, &::getBooleanCppuType(),                    0, 0},
+        { MAP_CHAR_LEN("DateTimeText"),                 WID_PAGE_DATETIMETEXT, &::getCppuType((const OUString*)0),              0,  0},
+        { MAP_CHAR_LEN("DateTimeFormat"),               WID_PAGE_DATETIMEFORMAT, &::getCppuType((const sal_Int32*)0),           0,  0},
+
+        {0,0,0,0,0}
+    };
+
+    static const SfxItemPropertyMap aDrawPageNotesHandoutPropertyMap_Impl[] =
+    {
+        // this must be the first two entries so they can be excluded for PK_STANDARD
+        { MAP_CHAR_LEN(UNO_NAME_PAGE_BACKGROUND),       WID_PAGE_BACK,      &ITYPE( beans::XPropertySet ),                  beans::PropertyAttribute::MAYBEVOID,0},
+        { MAP_CHAR_LEN(UNO_NAME_PAGE_BOTTOM),           WID_PAGE_BOTTOM,    &::getCppuType((const sal_Int32*)0),            0,  0},
+        { MAP_CHAR_LEN(UNO_NAME_PAGE_LEFT),             WID_PAGE_LEFT,      &::getCppuType((const sal_Int32*)0),            0,  0},
+        { MAP_CHAR_LEN(UNO_NAME_PAGE_RIGHT),            WID_PAGE_RIGHT,     &::getCppuType((const sal_Int32*)0),            0,  0},
+        { MAP_CHAR_LEN(UNO_NAME_PAGE_TOP),              WID_PAGE_TOP,       &::getCppuType((const sal_Int32*)0),            0,  0},
+        { MAP_CHAR_LEN(UNO_NAME_PAGE_HEIGHT),           WID_PAGE_HEIGHT,    &::getCppuType((const sal_Int32*)0),            0,  0},
+        { MAP_CHAR_LEN(UNO_NAME_PAGE_LAYOUT),           WID_PAGE_LAYOUT,    &::getCppuType((const sal_Int16*)0),            0,  0},
+        { MAP_CHAR_LEN(UNO_NAME_LINKDISPLAYBITMAP),     WID_PAGE_LDBITMAP,  &ITYPE( awt::XBitmap),                          beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN(UNO_NAME_LINKDISPLAYNAME),       WID_PAGE_LDNAME,    &::getCppuType((const OUString*)0),             beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    &::getCppuType((const sal_Int16*)0),            beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    &::getCppuType((const view::PaperOrientation*)0),0, 0},
+        { MAP_CHAR_LEN(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     &::getCppuType((const sal_Int32*)0),            0,  0},
+        { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,      0,     0},
+        { MAP_CHAR_LEN("IsHeaderVisible"),              WID_PAGE_HEADERVISIBLE, &::getBooleanCppuType(),                    0, 0},
+        { MAP_CHAR_LEN("HeaderText"),                   WID_PAGE_HEADERTEXT, &::getCppuType((const OUString*)0),                0,  0},
+        { MAP_CHAR_LEN("IsBackgroundDark" ),            WID_PAGE_ISDARK,    &::getBooleanCppuType(),                        beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN("IsFooterVisible"),              WID_PAGE_FOOTERVISIBLE, &::getBooleanCppuType(),                    0, 0},
+        { MAP_CHAR_LEN("FooterText"),                   WID_PAGE_FOOTERTEXT, &::getCppuType((const OUString*)0),                0,  0},
+        { MAP_CHAR_LEN("IsPageNumberVisible"),          WID_PAGE_PAGENUMBERVISIBLE, &::getBooleanCppuType(),                    0, 0},
+        { MAP_CHAR_LEN("IsDateTimeVisible"),            WID_PAGE_DATETIMEVISIBLE, &::getBooleanCppuType(),                  0, 0},
+        { MAP_CHAR_LEN("IsDateTimeFixed"),              WID_PAGE_DATETIMEFIXED, &::getBooleanCppuType(),                    0, 0},
+        { MAP_CHAR_LEN("DateTimeText"),                 WID_PAGE_DATETIMETEXT, &::getCppuType((const OUString*)0),              0,  0},
+        { MAP_CHAR_LEN("DateTimeFormat"),               WID_PAGE_DATETIMEFORMAT, &::getCppuType((const sal_Int32*)0),           0,  0},
+
         {0,0,0,0,0}
     };
 
@@ -260,7 +301,16 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress )
     };
 
     if( bImpress )
-        return aDrawPagePropertyMap_Impl;
+    {
+        if( ePageKind == PK_STANDARD )
+        {
+            return aDrawPagePropertyMap_Impl;
+        }
+        else
+        {
+            return aDrawPageNotesHandoutPropertyMap_Impl;
+        }
+    }
     else
         return aGraphicPagePropertyMap_Impl;
 }
@@ -299,6 +349,15 @@ const SfxItemPropertyMap* ImplGetMasterPagePropertyMap( PageKind ePageKind )
         { MAP_CHAR_LEN(UNO_NAME_PAGE_LAYOUT),           WID_PAGE_LAYOUT,    &::getCppuType((const sal_Int16*)0),            0,  0},
         { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,      0,     0},
         { MAP_CHAR_LEN("IsBackgroundDark" ),            WID_PAGE_ISDARK,    &::getBooleanCppuType(),                        beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN("IsHeaderVisible"),              WID_PAGE_HEADERVISIBLE, &::getBooleanCppuType(),                    0, 0},
+        { MAP_CHAR_LEN("HeaderText"),                   WID_PAGE_HEADERTEXT, &::getCppuType((const OUString*)0),                0,  0},
+        { MAP_CHAR_LEN("IsFooterVisible"),              WID_PAGE_FOOTERVISIBLE, &::getBooleanCppuType(),                    0, 0},
+        { MAP_CHAR_LEN("FooterText"),                   WID_PAGE_FOOTERTEXT, &::getCppuType((const OUString*)0),                0,  0},
+        { MAP_CHAR_LEN("IsPageNumberVisible"),          WID_PAGE_PAGENUMBERVISIBLE, &::getBooleanCppuType(),                    0, 0},
+        { MAP_CHAR_LEN("IsDateTimeVisible"),            WID_PAGE_DATETIMEVISIBLE, &::getBooleanCppuType(),                  0, 0},
+        { MAP_CHAR_LEN("IsDateTimeFixed"),              WID_PAGE_DATETIMEFIXED, &::getBooleanCppuType(),                    0, 0},
+        { MAP_CHAR_LEN("DateTimeText"),                 WID_PAGE_DATETIMETEXT, &::getCppuType((const OUString*)0),              0,  0},
+        { MAP_CHAR_LEN("DateTimeFormat"),               WID_PAGE_DATETIMEFORMAT, &::getCppuType((const sal_Int32*)0),           0,  0},
         {0,0,0,0,0}
     };
 
@@ -397,6 +456,22 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const uno::Reference< drawing::
     {
         eObjKind = PRESOBJ_HANDOUT;
     }
+    else if( aType.EqualsAscii( "FooterShape" ) )
+    {
+        eObjKind = PRESOBJ_FOOTER;
+    }
+    else if( aType.EqualsAscii( "HeaderShape" ) )
+    {
+        eObjKind = PRESOBJ_HEADER;
+    }
+    else if( aType.EqualsAscii( "SlideNumberShape" ) )
+    {
+        eObjKind = PRESOBJ_SLIDENUMBER;
+    }
+    else if( aType.EqualsAscii( "DateTimeShape" ) )
+    {
+        eObjKind = PRESOBJ_DATETIME;
+    }
 
     Rectangle aRect( eObjKind == PRESOBJ_TITLE ? GetPage()->GetTitleRect() : GetPage()->GetLayoutRect()  );
 
@@ -487,7 +562,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 GetPage()->SetPresChange( (PresChange)nValue );
                 break;
             case WID_PAGE_LAYOUT:
-                GetPage()->SetAutoLayout( (AutoLayout)nValue, sal_True, sal_True );
+                GetPage()->SetAutoLayout( (AutoLayout)nValue, sal_True );
                 break;
             case WID_PAGE_DURATION:
                 GetPage()->SetTime((sal_uInt32)nValue);
@@ -644,6 +719,88 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 throw lang::IllegalArgumentException();
 
             setBookmarkURL( aBookmarkURL );
+            break;
+        }
+
+        case WID_PAGE_HEADERVISIBLE:
+        {
+            sal_Bool bVisible;
+            if( ! ( aValue >>= bVisible ) )
+                throw lang::IllegalArgumentException();
+
+            GetPage()->getHeaderFooterSettings().mbHeaderVisible = bVisible;
+            break;
+        }
+        case WID_PAGE_HEADERTEXT:
+        {
+            OUString aText;
+            if( ! ( aValue >>= aText ) )
+                throw lang::IllegalArgumentException();
+
+            GetPage()->getHeaderFooterSettings().maHeaderText = aText;
+            break;
+        }
+        case WID_PAGE_FOOTERVISIBLE:
+        {
+            sal_Bool bVisible;
+            if( ! ( aValue >>= bVisible ) )
+                throw lang::IllegalArgumentException();
+
+            GetPage()->getHeaderFooterSettings().mbFooterVisible = bVisible;
+            break;
+        }
+        case WID_PAGE_FOOTERTEXT:
+        {
+            OUString aText;
+            if( ! ( aValue >>= aText ) )
+                throw lang::IllegalArgumentException();
+
+            GetPage()->getHeaderFooterSettings().maFooterText = aText;
+            break;
+        }
+        case WID_PAGE_PAGENUMBERVISIBLE:
+        {
+            sal_Bool bVisible;
+            if( ! ( aValue >>= bVisible ) )
+                throw lang::IllegalArgumentException();
+
+            GetPage()->getHeaderFooterSettings().mbSlideNumberVisible = bVisible;
+            break;
+        }
+        case WID_PAGE_DATETIMEVISIBLE:
+        {
+            sal_Bool bVisible;
+            if( ! ( aValue >>= bVisible ) )
+                throw lang::IllegalArgumentException();
+
+            GetPage()->getHeaderFooterSettings().mbDateTimeVisible = bVisible;
+            break;
+        }
+        case WID_PAGE_DATETIMEFIXED:
+        {
+            sal_Bool bVisible;
+            if( ! ( aValue >>= bVisible ) )
+                throw lang::IllegalArgumentException();
+
+            GetPage()->getHeaderFooterSettings().mbDateTimeIsFixed = bVisible;
+            break;
+        }
+        case WID_PAGE_DATETIMETEXT:
+        {
+            OUString aText;
+            if( ! ( aValue >>= aText ) )
+                throw lang::IllegalArgumentException();
+
+            GetPage()->getHeaderFooterSettings().maDateTimeText = aText;
+            break;
+        }
+        case WID_PAGE_DATETIMEFORMAT:
+        {
+            sal_Int32 nValue;
+            if( ! ( aValue >>= nValue ) )
+                throw lang::IllegalArgumentException();
+
+            GetPage()->getHeaderFooterSettings().meDateTimeFormat = nValue;
             break;
         }
 
@@ -845,6 +1002,42 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
         aAny <<= (sal_Bool)GetPage()->GetBackgroundColor().IsDark();
         break;
     }
+    case WID_PAGE_HEADERVISIBLE:
+        aAny <<= (sal_Bool)GetPage()->getHeaderFooterSettings().mbHeaderVisible;
+        break;
+    case WID_PAGE_HEADERTEXT:
+        {
+            const OUString aText( GetPage()->getHeaderFooterSettings().maHeaderText );
+            aAny <<= aText;
+        }
+        break;
+    case WID_PAGE_FOOTERVISIBLE:
+        aAny <<= (sal_Bool)GetPage()->getHeaderFooterSettings().mbFooterVisible;
+        break;
+    case WID_PAGE_FOOTERTEXT:
+        {
+            const OUString aText( GetPage()->getHeaderFooterSettings().maFooterText );
+            aAny <<= aText;
+        }
+        break;
+    case WID_PAGE_PAGENUMBERVISIBLE:
+        aAny <<= (sal_Bool)GetPage()->getHeaderFooterSettings().mbSlideNumberVisible;
+        break;
+    case WID_PAGE_DATETIMEVISIBLE:
+        aAny <<= (sal_Bool)GetPage()->getHeaderFooterSettings().mbDateTimeVisible;
+        break;
+    case WID_PAGE_DATETIMEFIXED:
+        aAny <<= (sal_Bool)GetPage()->getHeaderFooterSettings().mbDateTimeIsFixed;
+        break;
+    case WID_PAGE_DATETIMETEXT:
+        {
+            const OUString aText( GetPage()->getHeaderFooterSettings().maDateTimeText );
+            aAny <<= aText;
+        }
+        break;
+    case WID_PAGE_DATETIMEFORMAT:
+        aAny <<= (sal_Int32)GetPage()->getHeaderFooterSettings().meDateTimeFormat;
+        break;
 
     default:
         throw beans::UnknownPropertyException();
@@ -937,6 +1130,18 @@ uno::Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *p
             break;
         case PRESOBJ_NOTES:
             aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("NotesShape") );
+            break;
+        case PRESOBJ_FOOTER:
+            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("FooterShape") );
+            break;
+        case PRESOBJ_HEADER:
+            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("HeaderShape") );
+            break;
+        case PRESOBJ_SLIDENUMBER:
+            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("SlideNumberShape") );
+            break;
+        case PRESOBJ_DATETIME:
+            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("DateTimeShape") );
             break;
         }
 
@@ -1502,7 +1707,7 @@ uno::Sequence< OUString > SAL_CALL SdPageLinkTargets::getSupportedServiceNames()
 //========================================================================
 
 SdDrawPage::SdDrawPage(  SdXImpressDocument* mpModel, SdPage* pPage ) throw()
-: SdGenericDrawPage( mpModel, pPage, ImplGetDrawPagePropertyMap( mpModel->IsImpressDocument() ) )
+: SdGenericDrawPage( mpModel, pPage, ImplGetDrawPagePropertyMap( mpModel->IsImpressDocument(), pPage->GetPageKind() ) )
 {
 }
 
@@ -1916,7 +2121,7 @@ void SAL_CALL SdDrawPage::remove( const uno::Reference< drawing::XShape >& xShap
         SdrObject* pObj = pShape->GetSdrObject();
         if( pObj )
         {
-            GetPage()->GetPresObjList()->Remove((void*) pObj);
+            GetPage()->RemovePresObj(pObj);
             pObj->SetUserCall(NULL);
         }
     }
@@ -2041,29 +2246,10 @@ SdMasterPage::SdMasterPage( SdXImpressDocument* mpModel, SdPage* pPage ) throw()
 {
     if( pPage && GetPage()->GetPageKind() == PK_STANDARD )
     {
-        sal_uInt32 nMasterIndex = 0;
-        sal_uInt32 nMasterCount = GetPage()->GetPresObjList()->Count();
+        mpBackgroundObj = GetPage()->GetPresObj( PRESOBJ_BACKGROUND );
 
-        for (nMasterIndex = 0; nMasterIndex < nMasterCount; nMasterIndex++)
-        {
-            // loop over all presentation objects in the masterpage
-            SdrObject* pMasterObj = (SdrObject*) GetPage()->GetPresObjList()->GetObject(nMasterIndex);
-
-            if (pMasterObj && pMasterObj->GetObjInventor() == SdrInventor)
-            {
-                sal_uInt16 nId = pMasterObj->GetObjIdentifier();
-
-                if (nId == OBJ_RECT && pMasterObj->IsEmptyPresObj() )
-                {
-                    mpBackgroundObj = pMasterObj;
-
-                    if( pMasterObj->GetOrdNum() != 0 )
-                        pMasterObj->SetOrdNum( 0 );
-
-                    break;
-                }
-            }
-        }
+        if( mpBackgroundObj && (mpBackgroundObj->GetOrdNum() != 0) )
+            mpBackgroundObj->SetOrdNum( 0 );
 
         mbHasBackgroundObject = NULL != mpBackgroundObj;
     }
@@ -2547,7 +2733,10 @@ void SAL_CALL SdMasterPage::remove( const uno::Reference< drawing::XShape >& xSh
     {
         SdrObject* pObj = pShape->GetSdrObject();
         if( pObj )
-            GetPage()->GetPresObjList()->Remove((void*) pObj);
+        {
+            if( GetPage()->IsPresObj( pObj ) )
+                GetPage()->RemovePresObj(pObj);
+        }
     }
 
     SdGenericDrawPage::remove( xShape );
