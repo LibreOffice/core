@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-23 13:04:17 $
+ *  last change: $Author: dr $ $Date: 2002-04-08 10:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -697,10 +697,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
 
                 if( bOK )
                 {
-                    BOOL    b3D = ( nTabFirst != aEingPos.Tab() ) || bRangeName;
-
                     aSRD.nTab = nTabFirst;
-                    aSRD.SetFlag3D( b3D );
+                    aSRD.SetFlag3D( TRUE );
                     aSRD.SetTabRel( FALSE );
 
                     ExcRelToScRel( nRw, nGrbitCol, aSRD, bRangeName );
@@ -721,7 +719,6 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                     {
                         aCRD.Ref1 = aCRD.Ref2 = aSRD;
                         aCRD.Ref2.nTab = nTabLast;
-                        b3D = ( nTabLast != aEingPos.Tab() );
                         aStack << aPool.Store( aCRD );
                     }
                     else
@@ -754,9 +751,9 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
 
                     rR1.nTab = nTabFirst;
                     rR2.nTab = nTabLast;
-                    rR1.SetFlag3D( ( nTabFirst != aEingPos.Tab() ) || bRangeName );
+                    rR1.SetFlag3D( TRUE );
                     rR1.SetTabRel( FALSE );
-                    rR2.SetFlag3D( ( nTabLast != aEingPos.Tab() ) || bRangeName );
+                    rR2.SetFlag3D( nTabFirst != nTabLast );
                     rR2.SetTabRel( FALSE );
 
                     ExcelToSc8::ExcRelToScRel( nRw1, nGrbitCol1, aCRD.Ref1, bRangeName );
@@ -1093,10 +1090,9 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, c
 //                  if( pSbE->IsSameSheet() )
                     UINT16  nTabFirst = pXti->nFirst;
                     UINT16  nTabLast = pXti->nLast;
-                    BOOL b3D = ( nTabFirst != aEingPos.Tab() ) || bRangeName;
 
                     aSRD.nTab = nTabFirst;
-                    aSRD.SetFlag3D( b3D );
+                    aSRD.SetFlag3D( TRUE );
                     aSRD.SetTabRel( FALSE );
 
                     ExcRelToScRel( nRw, nGrbitCol, aSRD, bRangeName );
@@ -1107,9 +1103,6 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, c
                         aCRD.Ref2.nCol = aSRD.nCol;
                         aCRD.Ref2.nRow = aSRD.nRow;
                         aCRD.Ref2.nTab = nTabLast;
-                        b3D = ( nTabLast != aEingPos.Tab() );
-                        aCRD.Ref2.SetFlag3D( b3D );
-                        aCRD.Ref2.SetTabRel( FALSE );
                         rRangeList.Append( aCRD );
                     }
                     else
@@ -1138,9 +1131,9 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, c
 
                     rR1.nTab = nTabFirst;
                     rR2.nTab = nTabLast;
-                    rR1.SetFlag3D( ( nTabFirst != aEingPos.Tab() ) || bRangeName );
+                    rR1.SetFlag3D( TRUE );
                     rR1.SetTabRel( FALSE );
-                    rR2.SetFlag3D( ( nTabLast != aEingPos.Tab() ) || bRangeName );
+                    rR2.SetFlag3D( nTabFirst != nTabLast );
                     rR2.SetTabRel( FALSE );
 
                     ExcelToSc8::ExcRelToScRel( nRw1, nGrbitCol1, aCRD.Ref1, bRangeName );
