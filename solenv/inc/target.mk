@@ -5,8 +5,8 @@
 #*	  Beschreibung		TARGET-Rules
 #*
 #*	  Ersterstellung	TH 28.03.94
-#*	  Letzte Aenderung	$Author: pluby $ $Date: 2000-10-06 15:03:01 $
-#*	  $Revision: 1.7 $
+#*	  Letzte Aenderung	$Author: hjs $ $Date: 2000-10-11 19:48:03 $
+#*	  $Revision: 1.8 $
 #*
 #*	  $Logfile:   T:/solar/inc/target.mkv  $
 #*
@@ -1398,6 +1398,18 @@ LIB9 ?= TNR!:=9
 LIB9TARGETN=$(LIB9TARGET)
 .ENDIF
 
+.IF "$(GUI)"=="WNT"
+LIB1ARCHIV=
+LIB2ARCHIV=
+LIB3ARCHIV=
+LIB4ARCHIV=
+LIB5ARCHIV=
+LIB6ARCHIV=
+LIB7ARCHIV=
+LIB8ARCHIV=
+LIB9ARCHIV=
+.ENDIF			# "$(GUI)"=="WNT"
+
 .IF "$(RESLIB1NAME)" != ""
 RESLIB1 ?= TNR!:=1
 .IF "$(VCL)" != ""
@@ -1804,6 +1816,9 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(LIB1TARGET)	$(LIB2TARGET)	$(LIB3TARGET)		\
         $(LIB4TARGET)	$(LIB5TARGET)	$(LIB6TARGET)		\
         $(LIB7TARGET)	$(LIB8TARGET)	$(LIB9TARGET)		\
+        $(LIB1ARCHIV)	$(LIB2ARCHIV)	$(LIB3ARCHIV)		\
+        $(LIB4ARCHIV)	$(LIB5ARCHIV)	$(LIB6ARCHIV)		\
+        $(LIB7ARCHIV)	$(LIB8ARCHIV)	$(LIB9ARCHIV)		\
         $(DEF1TARGETN)	$(DEF2TARGETN)	$(DEF3TARGETN)		\
         $(DEF4TARGETN)	$(DEF5TARGETN)	$(DEF6TARGETN)		\
         $(RCTARGET) \
@@ -2455,6 +2470,7 @@ do_copy_mk .IGNORE .SILENT :
     @+-$(COPY) /u $(SOLARENV)$/inc$/startup$/os2$/*.mk $(OS2_SOLENV_INC)$/startup$/os2 >& $(NULLDEV)
 
 killbin:
+.IF "$(GUI)"=="WNT"
     @+if exist $(BIN)\$(SHL1TARGET).dll @del $(BIN)\$(SHL1TARGET).dll
     @+if exist $(BIN)\$(SHL2TARGET).dll @del $(BIN)\$(SHL2TARGET).dll
     @+if exist $(BIN)\$(SHL3TARGET).dll @del $(BIN)\$(SHL3TARGET).dll
@@ -2462,6 +2478,8 @@ killbin:
     @+if exist $(BIN)\$(SHL5TARGET).dll @del $(BIN)\$(SHL5TARGET).dll
     @+if exist $(BIN)\$(SHL6TARGET).dll @del $(BIN)\$(SHL6TARGET).dll
     @+if exist $(BIN)\$(SHL7TARGET).dll @del $(BIN)\$(SHL7TARGET).dll
+    @+if exist $(BIN)\$(SHL8TARGET).dll @del $(BIN)\$(SHL8TARGET).dll
+    @+if exist $(BIN)\$(SHL9TARGET).dll @del $(BIN)\$(SHL9TARGET).dll
     @+if exist $(BIN)\$(APP1TARGET)$(EXECPOST) @del $(BIN)\$(APP1TARGET)$(EXECPOST)
     @+if exist $(BIN)\$(APP2TARGET)$(EXECPOST) @del $(BIN)\$(APP2TARGET)$(EXECPOST)
     @+if exist $(BIN)\$(APP3TARGET)$(EXECPOST) @del $(BIN)\$(APP3TARGET)$(EXECPOST)
@@ -2471,15 +2489,76 @@ killbin:
     @+if exist $(BIN)\$(APP7TARGET)$(EXECPOST) @del $(BIN)\$(APP7TARGET)$(EXECPOST)
     @+if exist $(BIN)\$(APP8TARGET)$(EXECPOST) @del $(BIN)\$(APP8TARGET)$(EXECPOST)
     @+if exist $(BIN)\$(APP9TARGET)$(EXECPOST) @del $(BIN)\$(APP9TARGET)$(EXECPOST)
+    
+.ELSE			# "$(GUI)"=="WNT"A
+.IF "$(SHL1TARGET)"!=""
+    @+-$(RM) $(LB)/$(SHL1TARGET)$(DLLPOST)
+.ENDIF
+.IF "$(SHL2TARGET)"!=""
+    @+-$(RM) $(LB)/$(SHL2TARGET)$(DLLPOST)
+.ENDIF
+.IF "$(SHL3TARGET)"!=""
+    @+-$(RM) $(LB)/$(SHL3TARGET)$(DLLPOST)
+.ENDIF
+.IF "$(SHL4TARGET)"!=""
+    @+-$(RM) $(LB)/$(SHL4TARGET)$(DLLPOST)
+.ENDIF
+.IF "$(SHL5TARGET)"!=""
+    @+-$(RM) $(LB)/$(SHL5TARGET)$(DLLPOST)
+.ENDIF
+.IF "$(SHL6TARGET)"!=""
+    @+-$(RM) $(LB)/$(SHL6TARGET)$(DLLPOST)
+.ENDIF
+.IF "$(SHL7TARGET)"!=""
+    @+-$(RM) $(LB)/$(SHL7TARGET)$(DLLPOST)
+.ENDIF
+.IF "$(SHL8TARGET)"!=""
+    @+-$(RM) $(LB)/$(SHL8TARGET)$(DLLPOST)
+.ENDIF
+.IF "$(SHL9TARGET)"!=""
+    @+-$(RM) $(LB)/$(SHL9TARGET)$(DLLPOST)
+.ENDIF
+.IF "$(APP1TARGET)"!=""
+    @+-$(RM) $(BIN)/$(APP1TARGET)$(EXECPOST)
+.ENDIF
+.IF "$(APP2TARGET)"!=""
+    @+-$(RM) $(BIN)/$(APP2TARGET)$(EXECPOST)
+.ENDIF
+.IF "$(APP3TARGET)"!=""
+    @+-$(RM) $(BIN)/$(APP3TARGET)$(EXECPOST)
+.ENDIF
+.IF "$(APP4TARGET)"!=""
+    @+-$(RM) $(BIN)/$(APP4TARGET)$(EXECPOST)
+.ENDIF
+.IF "$(APP5TARGET)"!=""
+    @+-$(RM) $(BIN)/$(APP5TARGET)$(EXECPOST)
+.ENDIF
+.IF "$(APP6TARGET)"!=""
+    @+-$(RM) $(BIN)/$(APP6TARGET)$(EXECPOST)
+.ENDIF
+.IF "$(APP7TARGET)"!=""
+    @+-$(RM) $(BIN)/$(APP7TARGET)$(EXECPOST)
+.ENDIF
+.IF "$(APP8TARGET)"!=""
+    @+-$(RM) $(BIN)/$(APP8TARGET)$(EXECPOST)
+.ENDIF
+.IF "$(APP9TARGET)"!=""
+    @+-$(RM) $(BIN)/$(APP9TARGET)$(EXECPOST)
+.ENDIF
+.ENDIF			# "$(GUI)"=="WNT"
 
 killobj:
 .IF "$(SLOFILES)" != ""
-    +$(RM) $(SLOFILES)
-    +$(RM) $(SLOFILES:s/.obj/.o/)
+    +-$(RM) $(SLOFILES)
+    +-$(RM) $(SLOFILES:s/.obj/.o/)
 .ENDIF
 .IF "$(OBJFILES)" != ""
-    +$(RM) $(OBJFILES)
-    +$(RM) $(OBJFILES:s/.obj/.o/)
+    +-$(RM) $(OBJFILES)
+    +-$(RM) $(OBJFILES:s/.obj/.o/)
+.ENDIF
+.IF "$(DEPOBJFILES)" != ""
+    +-$(RM) $(DEPOBJFILES)
+    +-$(RM) $(DEPOBJFILES:s/.obj/.o/)
 .ENDIF
     @+echo objects weg!
 
