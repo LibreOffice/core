@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolbase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:17:33 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,10 +100,22 @@ void UnoControlBase::ImplSetPropertyValue( const ::rtl::OUString& aPropertyName,
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSet( mxModel, ::com::sun::star::uno::UNO_QUERY );
         if ( !bUpdateThis )
-            StartUpdatingModel();
-        xPSet->setPropertyValue( aPropertyName, aValue );
+        {
+            DBG_ASSERT( msPropertyCurrentlyUpdating.getLength() == 0, "UnoControlBase::ImplSetPropertyValue: recursive calls not allowed!" );
+            msPropertyCurrentlyUpdating = aPropertyName;
+        }
+        try
+        {
+            xPSet->setPropertyValue( aPropertyName, aValue );
+        }
+        catch( const com::sun::star::uno::Exception& )
+        {
+            if ( !bUpdateThis )
+                msPropertyCurrentlyUpdating = ::rtl::OUString();
+            throw;
+        }
         if ( !bUpdateThis )
-            EndUpdatingModel();
+            msPropertyCurrentlyUpdating = ::rtl::OUString();
     }
 }
 
