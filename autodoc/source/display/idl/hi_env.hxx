@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_env.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-14 18:01:58 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,8 @@ class HtmlEnvironment_Idl
                                                 i_ce )
                                                 { pCurPageCe = i_ce; }
     // INQUIRY
+    const ary::idl::Gate &
+                        Gate() const            { return *pGate; }
     const AryAccess &   Data() const            { return *pData; }
     const char *        Link2Manual(
                             const String &      i_link ) const;
@@ -153,6 +155,8 @@ class HtmlEnvironment_Idl
                             output::Position    i_destination )
                                                 { CurPosition().Get_LinkTo(o_result, i_destination); }
     String              CurPageCe_AsText() const;
+    const ary::idl::CodeEntity *
+                        CurPageCe() const       { return pCurPageCe; }
 
     // ACCESS
     output::Tree &      OutputTree()            { return *pOutputTree; }
@@ -168,8 +172,10 @@ class HtmlEnvironment_Idl
                         aOutputRoot;
     csv::ploc::Path     aCurPath;
 
-    Dyn<AryAccess>      pData;
-    Dyn<output::Tree>   pOutputTree;
+    Dyn<AryAccess>      pData;          /// @invariant *pData is valid.
+    const ary::idl::Gate *
+                        pGate;          /// @invariant pGate != 0.
+    Dyn<output::Tree>   pOutputTree;    /// @invariant *pOutputTree is valid.
     mutable output::Position
                         aCurPosition;
     const ary::idl::CodeEntity *

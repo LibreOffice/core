@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_env.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-14 18:01:58 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ HtmlEnvironment_Idl::HtmlEnvironment_Idl( const csv::ploc::Path &           i_rO
                                           const display::CorporateFrame &   i_rLayout )
     :   aOutputRoot(i_rOutputDir),
         pData(new AryAccess(i_rGate)),
+        pGate(&i_rGate),
         pOutputTree(new output::Tree),
         aCurPosition(pOutputTree->Root()),
         pCurPageCe(0),
