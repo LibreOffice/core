@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 19:54:18 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ korean ] = "«•(~T):";
         Text[ turkish ] = "Tablo:";
         Text[ catalan ] = "~Tabla:";
+        Text[ finnish ] = "~Taulukko:";
     };
     ComboBox CB_TABLES
     {
@@ -162,6 +163,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ arabic ] = " ⁄ÌÌ‰";
         Text[ turkish ] = "Atama";
         Text[ catalan ] = "AsignaciÛn";
+        Text[ finnish ] = "M‰‰ritys";
     };
     FixedText FT_TABLEINDEXES
     {
@@ -188,6 +190,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ korean ] = "«• ªˆ¿Œ(~A):";
         Text[ turkish ] = "Tablo dizinleri:";
         Text[ catalan ] = "Õndices de ta~bla:";
+        Text[ finnish ] = "T~aulukkohakemistot:";
     };
     ListBox LB_TABLEINDEXES
     {
@@ -222,6 +225,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ korean ] = "¿”¿«¿« ªˆ¿Œ(~F)";
         Text[ turkish ] = "Bo˛ dizinler:";
         Text[ catalan ] = "Õndices lib~res:";
+        Text[ finnish ] = "~Vapaat hakemistot:";
     };
     ListBox LB_FREEINDEXES
     {
@@ -273,11 +277,15 @@ ModalDialog DLG_DBASE_INDEXES
     Text[ korean ] = "ªˆ¿Œ";
     Text[ turkish ] = "Dizinler";
     Text[ catalan ] = "Õndices";
+    Text[ finnish ] = "Hakemistot";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/05/04 19:54:18  rt
+ *  Merge SRC630: 04.05.01 - 21:54:36 (NoBranch)
+ *
  *  Revision 1.5  2001/03/31 05:55:19  kz
  *  Merge SRC627: 31.03.01 - 07:54:47 (NoBranch)
  *
