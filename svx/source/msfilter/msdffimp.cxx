@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-10 14:53:11 $
+ *  last change: $Author: sj $ $Date: 2000-10-17 13:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,14 @@
 #ifndef _EEITEM_HXX //autogen
 #include <eeitem.hxx>
 #endif
+
+#ifndef _SDGCPITM_HXX
+#ifndef ITEMID_GRF_CROP
+#define ITEMID_GRF_CROP 0
+#endif
+#include <sdgcpitm.hxx>
+#endif
+
 #ifndef _SDGMOITM_HXX
 #include <sdgmoitm.hxx>
 #endif
@@ -2670,7 +2678,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
         bGrfRead = GetBLIP( nBlipId, aGraf );
 
     if ( bGrfRead )
-    {   // impress is not able to handle crop attributes, so the graphic must be cropped finaly
+    {   // the writer is doing it's own cropping, so this part affects only impress and calc
         if ( GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_CROP_BITMAPS )
         {
             sal_uInt32 nCropTop     = GetPropertyValue( DFF_Prop_cropFromTop, 0 );
@@ -2679,35 +2687,32 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
             sal_uInt32 nCropRight   = GetPropertyValue( DFF_Prop_cropFromRight, 0 );
 
             if( nCropTop || nCropBottom || nCropLeft || nCropRight )
-            {   // Grafik wird gecroppt
+            {
                 double fFactor;
-                BitmapEx aCropBmp( aGraf.GetBitmapEx() );
-                Size aCropSize( aCropBmp.GetSizePixel() );
-                UINT32 nTop( 0 ), nBottom( aCropSize.Height() + 1 ), nLeft( 0 ), nRight( aCropSize.Width() + 1 );
+                Size aCropSize( Application::GetDefaultDevice()->LogicToLogic( aGraf.GetPrefSize(), aGraf.GetPrefMapMode(), MAP_100TH_MM ) );
+                UINT32 nTop( 0 ), nBottom( 0 ), nLeft( 0 ), nRight( 0 );
 
                 if ( nCropTop )
                 {
                     fFactor = (double)nCropTop / 65536.0;
-                    nTop += (UINT32)( ( (double)( aCropSize.Height() + 1 ) * fFactor ) + 0.5 );
+                    nTop = (UINT32)( ( (double)( aCropSize.Height() + 1 ) * fFactor ) + 0.5 );
                 }
                 if ( nCropBottom )
                 {
                     fFactor = (double)nCropBottom / 65536.0;
-                    nBottom -= (UINT32)( ( (double)( aCropSize.Height() + 1 ) * fFactor ) + 0.5 );
+                    nBottom = (UINT32)( ( (double)( aCropSize.Height() + 1 ) * fFactor ) + 0.5 );
                 }
                 if ( nCropLeft )
                 {
                     fFactor = (double)nCropLeft / 65536.0;
-                    nLeft += (UINT32)( ( (double)( aCropSize.Width() + 1 ) * fFactor ) + 0.5 );
+                    nLeft = (UINT32)( ( (double)( aCropSize.Width() + 1 ) * fFactor ) + 0.5 );
                 }
                 if ( nCropRight )
                 {
                     fFactor = (double)nCropRight / 65536.0;
-                    nRight -= (UINT32)( ( (double)( aCropSize.Width() + 1 ) * fFactor ) + 0.5 );
+                    nRight = (UINT32)( ( (double)( aCropSize.Width() + 1 ) * fFactor ) + 0.5 );
                 }
-                Rectangle aCropRect( nLeft, nTop, nRight, nBottom );
-                aCropBmp.Crop( aCropRect );
-                aGraf = aCropBmp;
+                rSet.Put( SdrGrafCropItem( nLeft, nTop, nRight, nBottom ) );
             }
         }
         if ( IsProperty( DFF_Prop_pictureTransparent ) )
