@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeformula.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:07:37 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,6 @@
 #include "xeroot.hxx"
 #endif
 
-class XclExpStream;
-
 // Token array ================================================================
 
 /** Binary representation of an Excel token array. */
@@ -101,6 +99,9 @@ public:
     /** Writes size field and the tokens. */
     void                Write( XclExpStream& rStrm ) const;
 
+    /** Compares this token array with the passed. */
+    bool                operator==( const XclExpTokenArray& rTokArr ) const;
+
 private:
     ScfUInt8Vec         maTokVec;       /// Byte vector containing token data.
     bool                mbVolatile;     /// True = Formula contains volatile function.
@@ -109,7 +110,41 @@ private:
 /** Calls the Write() function at the passed token array. */
 XclExpStream& operator<<( XclExpStream& rStrm, const XclExpTokenArray& rTokArr );
 
+// External reference log =====================================================
+
+/** Log entry for external references in a formula, used i.e. in change tracking. */
+struct XclExpRefLogEntry
+{
+    const XclExpString* mpUrl;              /// URL of the document containing the first sheet.
+    const XclExpString* mpFirstTab;         /// Name of the first sheet.
+    const XclExpString* mpLastTab;          /// Name of the last sheet.
+    sal_uInt16          mnFirstXclTab;      /// Calc index of the first sheet.
+    sal_uInt16          mnLastXclTab;       /// Calc index of the last sheet.
+
+    explicit            XclExpRefLogEntry();
+};
+
+/** Vector containing a log for all external references in a formula, used i.e. in change tracking. */
+typedef ::std::vector< XclExpRefLogEntry > XclExpRefLog;
+
 // Formula compiler ===========================================================
+
+/** Type of a creted formula. */
+enum XclExpFomulaType
+{
+    EXC_FMLATYPE_CELL,          /// Simple cell formula, also used in change tracking.
+    EXC_FMLATYPE_MATRIX,        /// Matrix (array) formula.
+    EXC_FMLATYPE_SHARED,        /// Shared formula.
+    EXC_FMLATYPE_CONDFMT,       /// Conditional format.
+    EXC_FMLATYPE_DATAVAL,       /// Data validation.
+    EXC_FMLATYPE_NAME,          /// Defined name.
+    EXC_FMLATYPE_CHART,         /// Chart source ranges.
+    EXC_FMLATYPE_CONTROL,       /// Spreadsheet links in form controls.
+    EXC_FMLATYPE_WQUERY,        /// Web query source range.
+    EXC_FMLATYPE_LISTVAL        /// List (cell range) validation.
+};
+
+// ----------------------------------------------------------------------------
 
 class XclExpFmlaCompImpl;
 
@@ -118,39 +153,21 @@ class XclExpFormulaCompiler : protected XclExpRoot
 {
 public:
     explicit            XclExpFormulaCompiler( const XclExpRoot& rRoot );
+    virtual             ~XclExpFormulaCompiler();
 
-    /** Creates and returns the token array of a simple formula cell. */
-    XclExpTokenArrayRef CreateCellFormula( const ScTokenArray& rScTokArr, const ScAddress& rScPos );
+    /** Creates and returns the token array of a formula. */
+    XclExpTokenArrayRef CreateFormula(
+                            XclExpFomulaType eType, const ScTokenArray& rScTokArr,
+                            const ScAddress* pScBasePos = 0, XclExpRefLog* pRefLog = 0 );
 
-    /** Creates and returns the token array of a matrix formula cell. */
-    XclExpTokenArrayRef CreateMatrixFormula( const ScTokenArray& rScTokArr, const ScAddress& rScPos );
+    /** Creates and returns a token array containing a single cell address. */
+    XclExpTokenArrayRef CreateFormula( XclExpFomulaType eType, const ScAddress& rScPos );
 
-    /** Creates and returns the token array of a shared formula cell. */
-    XclExpTokenArrayRef CreateSharedFormula( const ScTokenArray& rScTokArr, const ScAddress& rScPos );
+    /** Creates and returns a token array containing a single cell range address. */
+    XclExpTokenArrayRef CreateFormula( XclExpFomulaType eType, const ScRange& rScRange );
 
-    /** Creates and returns the token array for a condition in a conditional format. */
-    XclExpTokenArrayRef CreateCondFormula( const ScTokenArray& rScTokArr );
-
-    /** Creates and returns the token array for a condition in data validation. */
-    XclExpTokenArrayRef CreateDataValFormula( const ScTokenArray& rScTokArr );
-
-    /** Creates and returns the token array for a source range in list validation. */
-    XclExpTokenArrayRef CreateListValFormula( const ScTokenArray& rScTokArr );
-
-    /** Creates and returns the token array for a defined name. */
-    XclExpTokenArrayRef CreateNameFormula( const ScTokenArray& rScTokArr );
-
-    /** Creates and returns a token array containing a single cell address.
-        @param b3DRefOnly  True = Always export sheet reference; false = try to shorten own sheet references. */
-    XclExpTokenArrayRef CreateCellRefFormula( const ScAddress& rScPos, bool b3DRefOnly );
-
-    /** Creates and returns a token array containing a single cell range address.
-        @param b3DRefOnly  True = Always export sheet reference; false = try to shorten own sheet references. */
-    XclExpTokenArrayRef CreateRangeRefFormula( const ScRange& rScRange, bool b3DRefOnly );
-
-    /** Creates and returns the token array for a cell range list.
-        @param b3DRefOnly  True = Always export sheet reference; false = try to shorten own sheet references. */
-    XclExpTokenArrayRef CreateRangeListFormula( const ScRangeList& rRangeList, bool b3DRefOnly );
+    /** Creates and returns the token array for a cell range list. */
+    XclExpTokenArrayRef CreateFormula( XclExpFomulaType eType, const ScRangeList& rRangeList );
 
     /** Creates a single error token containing the passed error code. */
     XclExpTokenArrayRef CreateErrorFormula( sal_uInt8 nErrCode );
@@ -160,6 +177,10 @@ public:
             and multiple operation tables (token tTbl). */
     XclExpTokenArrayRef CreateSpecialRefFormula( sal_uInt8 nTokenId,
                             sal_uInt16 nXclCol, sal_uInt16 nXclRow );
+
+    /** Creates a single tNameXR token for a reference to an external name.
+        @descr  This is used i.e. for linked macros in push buttons. */
+    XclExpTokenArrayRef CreateNameXFormula( sal_uInt16 nExtSheet, sal_uInt16 nExtName );
 
 private:
     typedef ScfRef< XclExpFmlaCompImpl > XclExpFmlaCompImplRef;
