@@ -5,5 +5,4 @@
   <library:element library:name="Correspondence"/>
   <library:element library:name="Samples"/>
   <library:element library:name="Autotext"/>
-  <library:element library:name="Greeting"/>
  </library:library>
