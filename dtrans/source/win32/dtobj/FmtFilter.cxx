@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FmtFilter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-13 08:48:18 $
+ *  last change: $Author: tra $ $Date: 2001-10-10 13:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,9 +290,18 @@ Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( Sequence< sal_Int8 >& aTextH
 
     sal_uInt32 lHTMLFmtHdr = rtl_str_getLength( aHTMLFmtHdr );
 
+    // the office allways writes the start
+    // and end html tag in upper cases and
+    // without spaces
+    // both tags don't allow parameters
     OString startHtmlTag( "<HTML>" );
     OString endHtmlTag(   "</HTML>" );
-    OString startBodyTag( "<BODY>" );
+
+    // we don't include '>' into the search
+    // because the body tag allows parameters
+    // e.g. <BODY param>
+    // #92840#
+    OString startBodyTag( "<BODY" );
     OString endBodyTag(   "</BODY" );
 
     OString textHtml(
@@ -303,6 +312,8 @@ Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( Sequence< sal_Int8 >& aTextH
     sal_Int32 nEndHtml    = textHtml.indexOf( endHtmlTag );
     sal_Int32 nStartFrgmt = textHtml.indexOf( startBodyTag );
     sal_Int32 nEndFrgmt   = textHtml.indexOf( endBodyTag );
+
+    OSL_ASSERT( (nStartHtml >= 0) && (nEndHtml > nStartHtml) && (nStartFrgmt > nStartHtml) && (nEndFrgmt > nStartFrgmt) );
 
     Sequence< sal_Int8 > aHTMLFmtSequence;
 
