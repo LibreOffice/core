@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: gh $ $Date: 2001-10-25 15:29:14 $
+ *  last change: $Author: kz $ $Date: 2001-10-31 21:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ String S_APP_SHUTDOWN
     Text[ polish ] = "Aplikacja zako�czona";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "Application has been shut down";
-    Text[ korean ] = "응용프로그램이 종료되었습니다.";
+    Text[ korean ] = "응용 프로그램이 종료되었습니다.";
     Text[ chinese_simplified ] = "Application has been shut down";
     Text[ chinese_traditional ] = "Application has been shut down";
     Text[ arabic ] = "Application has been shut down";
@@ -137,7 +137,7 @@ String S_SID_EXECUTE_FAILED_NO_DISPATCHER
     Text[ polish ] = "Nie m�g� wykona� Slot ID: Brak ActiveDispatcher";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "Slot ID cannot be run. No ActiveDispatcher";
-    Text[ korean ] = "슬롯 ID를 실행하지 못했습니다: 능동 디스패처가 없습니다.";
+    Text[ korean ] = "슬롯 ID를 실행하지 못했습니다: 활성 디스패처가 없습니다.";
     Text[ chinese_simplified ] = "Slot ID cannot be run. No ActiveDispatcher";
     Text[ chinese_traditional ] = "Slot ID cannot be run. No ActiveDispatcher";
     Text[ arabic ] = "Slot ID cannot be run. No ActiveDispatcher";
@@ -281,7 +281,7 @@ String S_NO_DIALOG_IN_GETACTIVE
     Text[ polish ] = "GetActive nie wysy�a z powrotem �adnego dialogu! Prosz� powiadomi� o tym oddzia� programowania.";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "GetActive does not deliver a dialog! Inform development.";
-    Text[ korean ] = "GetActive가 대화상자를 제공하지 않습니다! 개발부에 연락하십시오.";
+    Text[ korean ] = "GetActive가 대화상자를 제공하지 않습니다! 개발부에 문의하십시오.";
     Text[ chinese_simplified ] = "GetActive does not deliver a dialog! Inform development.";
     Text[ chinese_traditional ] = "GetActive does not deliver a dialog! Inform development.";
     Text[ arabic ] = "GetActive does not deliver a dialog! Inform development.";
@@ -473,7 +473,7 @@ String S_POINTER_OUTSIDE_APPWIN
     Text[ polish ] = "Pointer poza obszarem okna aplikacji przy '($Arg1)'";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "Pointer not located in application window at '($Arg1)'";
-    Text[ korean ] = "'($Arg1)'의 응용프로그램 창 내부에 포인터가 없습니다.";
+    Text[ korean ] = "'($Arg1)'의 응용 프로그램 창 내부에 포인터가 없습니다.";
     Text[ chinese_simplified ] = "Pointer not located in application window at '($Arg1)'";
     Text[ chinese_traditional ] = "Pointer not located in application window at '($Arg1)'";
     Text[ arabic ] = "Pointer not located in application window at '($Arg1)'";
@@ -569,7 +569,7 @@ String S_WIN_DISABLED
     Text[ polish ] = "Brak dost�pu do ($Arg1).";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "($Arg1) にｱｸｾｽできませんでした。";
-    Text[ korean ] = "($Arg1)에 접근할수 없었습니다.";
+    Text[ korean ] = "($Arg1)을(를) 액세스하지 못했습니다.";
     Text[ chinese_simplified ] = "($Arg1) could not be accessed.";
     Text[ chinese_traditional ] = "($Arg1) could not be accessed.";
     Text[ arabic ] = "���� ������ ��� ($Arg1).";
@@ -641,7 +641,7 @@ String S_WINDOW_DISAPPEARED
     Text[ polish ] = "Window momentarily not visible at ($Arg1)";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "Window momentarily not visible at ($Arg1)";
-    Text[ korean ] = "Window가 그 사이 ($Arg1)에서 사라짐";
+    Text[ korean ] = "창이 그 사이 ($Arg1)에서 사라짐";
     Text[ chinese_simplified ] = "Window momentarily not visible at ($Arg1)";
     Text[ chinese_traditional ] = "Window momentarily not visible at ($Arg1)";
     Text[ arabic ] = "Window momentarily not visible at ($Arg1)";
@@ -761,7 +761,7 @@ String S_NO_STATUSBAR
     Text[ polish ] = "No status bar at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "No status bar at ($Arg1)";
-    Text[ korean ] = "($Arg1)에 상태 바가 없습니다.";
+    Text[ korean ] = "($Arg1)에 상태 표시줄이 없습니다.";
     Text[ chinese_simplified ] = "No status bar at ($Arg1)";
     Text[ chinese_traditional ] = "No status bar at ($Arg1)";
     Text[ arabic ] = "No status bar at ($Arg1)";
@@ -906,7 +906,7 @@ String S_NO_SELECT_FALSE
     Text[ polish ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
-    Text[ korean ] = "FALSE 선택은 허용되지 않습니다. ($Arg1)에서 다중 선택을 사용하십시오.";
+    Text[ korean ] = "FALSE를 선택할 수 없습니다. ($Arg1)에서 다중 선택을 사용하십시오.";
     Text[ chinese_simplified ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
     Text[ chinese_traditional ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
     Text[ arabic ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
@@ -930,7 +930,7 @@ String S_ENTRY_NOT_FOUND
     Text[ polish ] = "\"($Arg2)\" entry at ($Arg1) not found";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "\"($Arg2)\" entry at ($Arg1) not found";
-    Text[ korean ] = "\"($Arg2)\"을(를）항목 ($Arg1)에서 찾지 못했습니다.";
+    Text[ korean ] = "항목 ($Arg1)에서 \"($Arg2)\"을(를）찾지 못했습니다.";
     Text[ chinese_simplified ] = "\"($Arg2)\" entry at ($Arg1) not found";
     Text[ chinese_traditional ] = "\"($Arg2)\" entry at ($Arg1) not found";
     Text[ arabic ] = "\"($Arg2)\" entry at ($Arg1) not found";
@@ -1100,7 +1100,7 @@ String S_NO_SELECTED_ENTRY_DEPRECATED
     Text[ polish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "($Arg1) の TreeListBox で項目の選択ができていません。";
-    Text[ korean ] = "($Arg1)의 트리 리스트 박스에 선택된 항목이 없습니다.";
+    Text[ korean ] = "($Arg1)의 트리 목록 상자에 선택된 항목이 없습니다.";
     Text[ chinese_simplified ] = "没有在 ($Arg1) 内的 TreeListBox 中选中一个条目";
     Text[ chinese_traditional ] = "No entry was selected in TreeListBox at ($Arg1)";
     Text[ arabic ] = "An entry has not been selected in TreeListBox at ($Arg1)";
@@ -1220,7 +1220,7 @@ String S_SIZE_NOT_CHANGEABLE
     Text[ polish ] = "Size cannot be altered at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "Size cannot be altered at ($Arg1)";
-    Text[ korean ] = "($Arg1)에서 크기는　변경할 수 없습니다.";
+    Text[ korean ] = "($Arg1)에서 크기는 변경할 수 없습니다.";
     Text[ chinese_simplified ] = "Size cannot be altered at ($Arg1)";
     Text[ chinese_traditional ] = "Size cannot be altered at ($Arg1)";
     Text[ arabic ] = "Size cannot be altered at ($Arg1)";
@@ -1460,7 +1460,7 @@ String S_UNKNOWN_TYPE
     Text[ polish ] = "Nieznany typ obiektu ($Arg1) z UId lub nie obs�ugiwana metoda '($Arg2)'";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "UId あるいはﾒｿｯﾄﾞ'($Arg2)' からの不明なｵﾌﾞｼﾞｪｸﾄの種類 ($Arg1) は支援されません。";
-    Text[ korean ] = "UId로부터의 알려져 있지 않은 개체 타입 ($Arg1) 또는 메소드 '($Arg2)'가 지원되지 않습니다";
+    Text[ korean ] = "UId로부터의 알려져 있지 않은 개체 형식 ($Arg1)이나 메소드 '($Arg2)'가 지원되지 않습니다";
     Text[ chinese_simplified ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
     Text[ chinese_traditional ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
     Text[ arabic ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
@@ -1508,7 +1508,7 @@ String S_NO_LIST_BOX_BUTTON
     Text[ polish ] = "ListBoxButton does not exist in ($Arg1)";
     Text[ portuguese_brazilian ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
     Text[ japanese ] = "ListBoxButton は ($Arg1) にありません。";
-    Text[ korean ] = "($Arg1)에 목록상자 버튼이 없습니다";
+    Text[ korean ] = "($Arg1)에 목록 상자 버튼이 없습니다";
     Text[ chinese_simplified ] = "ListBoxButton does not exist in ($Arg1)";
     Text[ chinese_traditional ] = "ListBoxButton does not exist in ($Arg1)";
     Text[ turkish ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
@@ -1556,7 +1556,7 @@ String S_UNO_URL_EXECUTE_FAILED_NO_FRAME
     Text[ polish ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop.";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "UNO Url \"($Arg1)\" は実行できませんでした： ﾃﾞｽｸﾄｯﾌﾟにｱｸﾃｨﾌﾞﾌﾚｰﾑがありません。";
-    Text[ korean ] = "실행하지　못했습니다. 바탕화면에 ActiveFrame이 없습니다.";
+    Text[ korean ] = "실행하지 못했습니다. 바탕화면에 ActiveFrame이 없습니다.";
     Text[ chinese_simplified ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop.";
     Text[ chinese_traditional ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop.";
     Text[ arabic ] = "Slot ID could not be run";
@@ -1604,7 +1604,7 @@ String S_UNO_URL_EXECUTE_FAILED_DISABLED
     Text[ polish ] = "UNO URL \"($Arg1)\" could not be run: Disabled";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "UNO Url \"($Arg1)\" は実行できませんでした： 動作しません。";
-    Text[ korean ] = "실행하지　못했습니다. 바탕화면에 ActiveFrame이 없습니다.";
+    Text[ korean ] = "UNO Url \"($Arg1)\"을 실행할 수 없었습니다: 사용할 수 없음";
     Text[ chinese_simplified ] = "UNO URL \"($Arg1)\" could not be run: Disabled";
     Text[ chinese_traditional ] = "UNO URL \"($Arg1)\" could not be run: Disabled";
     Text[ arabic ] = "Slot ID could not be run";
@@ -1615,5 +1615,25 @@ String S_UNO_URL_EXECUTE_FAILED_DISABLED
 String S_NO_SCROLLBAR
 {
     Text = "Keine ScrollBar vorhanden bei ($Arg1)";
-    Text[ english_us ] = "No status bar at ($Arg1)";
+    Text[ english_us ] = "No scroll bar at ($Arg1)";
+    Text[ portuguese ] = "No status bar at ($Arg1)";
+    Text[ russian ] = "No status bar at ($Arg1)";
+    Text[ greek ] = "No status bar at ($Arg1)";
+    Text[ dutch ] = "No status bar at ($Arg1)";
+    Text[ french ] = "Absence de barre de d�filement pour ($Arg1)";
+    Text[ spanish ] = "No status bar at ($Arg1)";
+    Text[ finnish ] = "No status bar at ($Arg1)";
+    Text[ italian ] = "No status bar at ($Arg1)";
+    Text[ danish ] = "No status bar at ($Arg1)";
+    Text[ swedish ] = "No status bar at ($Arg1)";
+    Text[ polish ] = "No status bar at ($Arg1)";
+    Text[ portuguese_brazilian ] = "No status bar at ($Arg1)";
+    Text[ japanese ] = "($Arg1) にはｽｸﾛｰﾙﾊﾞｰがありません。";
+    Text[ korean ] = "No status bar at ($Arg1)";
+    Text[ chinese_simplified ] = "No scroll bar at ($Arg1)";
+    Text[ chinese_traditional ] = "No scroll bar at ($Arg1)";
+    Text[ turkish ] = "No status bar at ($Arg1)";
+    Text[ arabic ] = "No status bar at ($Arg1)";
+    Text[ catalan ] = "No status bar at ($Arg1)";
 };
+
