@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropMapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-23 09:57:51 $
+ *  last change: $Author: sab $ $Date: 2000-10-23 10:26:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include "PageMasterStyleMap.hxx"
+#endif
+#ifndef _XMLOFF_PAGEMASTERPROPHDLFACTORY_HXX
+#include "PageMasterPropHdlFactory.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
@@ -235,6 +238,11 @@ void XMLPropertyStateBuffer::ContextFilter( ::std::vector< XMLPropertyState >& r
 
 
 //______________________________________________________________________________
+XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper():
+    XMLPropertySetMapper( aXMLPageMasterStyleMap, new XMLPageMasterPropHdlFactory())
+{
+}
+
 XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper(
         const XMLPropertyMapEntry* pEntries,
         const UniReference< XMLPropertyHandlerFactory >& rFactory ) :
