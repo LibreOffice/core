@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-06 11:38:18 $
+ *  last change: $Author: os $ $Date: 2002-05-28 14:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     void            RstMBDownFlags();
 
     void            ChangeFly( BYTE nDir, BOOL bWeb = FALSE );
+    void            ChangeDrawing( BYTE nDir );
 
     BOOL            EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos);
     BOOL            RulerClook( SwView& , const MouseEvent& rMEvt);
