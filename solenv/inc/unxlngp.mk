@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngp.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:18 $
+#   last change: $Author: hr $ $Date: 2003-04-28 16:47:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,7 @@ JAVA_RUNTIME=-ljava_g
 
 CXX*=g++
 CC*=gcc
-CFLAGS=-w -nostdinc -c $(INCLUDE) 
+CFLAGS=-nostdinc -c $(INCLUDE) 
 CFLAGSCC= -pipe
 CFLAGSCXX= -pipe -fguiding-decls -fno-rtti -fno-exceptions
 
