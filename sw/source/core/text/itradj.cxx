@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itradj.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:22:20 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,11 +192,12 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
 
     while( pPos )
     {
-        if ( pPos->IsBreakPortion() && !IsLastBlock() )
+        // disabled for #i13507#
+/*        if ( pPos->IsBreakPortion() && !IsLastBlock() )
         {
-            pCurr->FinishSpaceAdd();
-            break;
-        }
+           pCurr->FinishSpaceAdd();
+           break;
+        } */
         if ( pPos->InTxtGrp() )
             nGluePortion += ((SwTxtPortion*)pPos)->GetSpaceCnt( GetInfo(), nCharCnt );
         else if( pPos->IsMultiPortion() )
@@ -574,8 +575,9 @@ void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurr )
         }
         case SVX_ADJUST_BLOCK:
         {
+            // disabled for #i13507#
             // 8311: In Zeilen mit LineBreaks gibt es keinen Blocksatz!
-            if( pCurr->GetLen() &&
+/*          if( pCurr->GetLen() &&
                 CH_BREAK == GetInfo().GetChar( nStart + pCurr->GetLen() - 1 ) &&
                 !IsLastBlock() )
             {
@@ -587,7 +589,7 @@ void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurr )
                 }
                 return;
             }
-            FormatBlock();
+*/          FormatBlock();
             break;
         }
         default : return;
