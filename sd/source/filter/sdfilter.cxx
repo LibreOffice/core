@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdfilter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-30 13:59:48 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,16 @@
 
 #ifndef MAC
 #ifndef SVX_LIGHT
-#include "../ui/inc/docshell.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "../ui/inc/DrawDocShell.hxx"
+#endif
 #include "../ui/inc/strings.hrc"
 #endif //!SVX_LIGHT
 #else  //MAC
 #ifndef SVX_LIGHT
-#include "docshell.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
 #include "strings.hrc"
 #endif //!SVX_LIGHT
 #endif //!MAC
@@ -100,7 +104,7 @@ using namespace ::com::sun::star::frame;
 // - SdFilter -
 // ------------
 
-SdFilter::SdFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Bool bShowProgress ) :
+SdFilter::SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress ) :
     mrMedium( rMedium ),
     mrDocShell( rDocShell ),
     mrDocument( *rDocShell.GetDoc() ),
