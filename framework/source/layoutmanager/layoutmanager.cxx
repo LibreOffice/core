@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:14:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,14 @@
 #include <uiconfiguration/windowstateconfiguration.hxx>
 #endif
 
+#ifndef __FRAMEWORK_CLASSES_FWKRESID_HXX_
+#include <classes/fwkresid.hxx>
+#endif
+
+#ifndef __FRAMEWORK_CLASSES_RESOURCE_HRC_
+#include <classes/resource.hrc>
+#endif
+
 #ifndef _TOOLKIT_HELPER_CONVERT_HXX_
 #include <toolkit/helper/convert.hxx>
 #endif
@@ -183,6 +191,12 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _VCL_I18NHELP_HXX
+#include <vcl/i18nhelp.hxx>
+#endif
+#ifndef _SV_WALL_HXX
+#include <vcl/wall.hxx>
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
@@ -405,6 +419,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         ,   m_bComponentAttached( sal_False )
         ,   m_bDoLayout( sal_False )
         ,   m_bVisible( sal_True )
+        ,   m_bParentWindowVisible( sal_False )
         ,   m_xModuleManager( Reference< XModuleManager >(
                 xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY ))
         ,   m_xUIElementFactoryManager( Reference< ::drafts::com::sun::star::ui::XUIElementFactory >(
@@ -768,6 +783,19 @@ void LayoutManager::implts_createCustomToolBars()
     }
 }
 
+rtl::OUString LayoutManager::implts_generateGenericAddonToolbarTitle( sal_Int32 nNumber ) const
+{
+    String aAddonGenericTitle;
+
+    aAddonGenericTitle = String( FwkResId( STR_TOOLBAR_TITLE_ADDON ));
+    const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
+
+    String aNumStr = rI18nHelper.GetNum( nNumber, 0, FALSE, FALSE );
+    aAddonGenericTitle.SearchAndReplaceAscii( "%num%", aNumStr );
+
+    return rtl::OUString( aAddonGenericTitle );
+}
+
 void LayoutManager::implts_createAddonsToolBars()
 {
     WriteGuard aWriteLock( m_aLock );
@@ -818,6 +846,8 @@ void LayoutManager::implts_createAddonsToolBars()
                     }
                 }
 
+                OUString aGenericAddonTitle = implts_generateGenericAddonToolbarTitle( i+1 );
+
                 WriteGuard aWriteLock( m_aLock );
                 UIElement& rElement = impl_findElement( aAddonToolBarName );
                 if ( rElement.m_aName.getLength() > 0 )
@@ -826,6 +856,11 @@ void LayoutManager::implts_createAddonsToolBars()
                     // UI changes for this document.
                     implts_setElementData( rElement, xDockWindow );
                     rElement.m_xUIElement = xUIElement;
+                    if ( rElement.m_aUIName.getLength() == 0 )
+                    {
+                        rElement.m_aUIName = aGenericAddonTitle;
+                        implts_writeWindowStateData( rElement.m_aName, rElement );
+                    }
                 }
                 else
                 {
@@ -834,9 +869,24 @@ void LayoutManager::implts_createAddonsToolBars()
                     aNewToolbar.m_bFloating = sal_True;
                     implts_readWindowStateData( aAddonToolBarName, aNewToolbar );
                     implts_setElementData( aNewToolbar, xDockWindow );
+                    if ( aNewToolbar.m_aUIName.getLength() == 0 )
+                    {
+                        aNewToolbar.m_aUIName = aGenericAddonTitle;
+                        implts_writeWindowStateData( aNewToolbar.m_aName, aNewToolbar );
+                    }
                     m_aUIElements.push_back( aNewToolbar );
                 }
                 aWriteLock.unlock();
+
+                Reference< css::awt::XWindow > xWindow( xDockWindow, UNO_QUERY );
+                if ( xWindow.is() )
+                {
+                    // Set generic title for add-on toolbar
+                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                    Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+                    if ( pWindow->GetText().Len() == 0 )
+                        pWindow->SetText( aGenericAddonTitle );
+                }
             }
         }
         catch ( NoSuchElementException& )
@@ -1141,6 +1191,8 @@ void LayoutManager::implts_writeWindowStateData( const rtl::OUString& aName, con
         }
         catch ( com::sun::star::beans::UnknownPropertyException )
         {
+            // Non-configurable elements should at least store their dimension/position
+            bPersistent = sal_True;
         }
         catch ( com::sun::star::lang::WrappedTargetException )
         {
@@ -1178,8 +1230,8 @@ void LayoutManager::implts_writeWindowStateData( const rtl::OUString& aName, con
             aSize.Height = rElementData.m_aFloatingData.m_aSize.Height();
             aWindowState[5].Name    = OUString( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_SIZE ));
             aWindowState[5].Value   = makeAny( aSize );
-            aWindowState[6].Name    = OUString( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_LOCKED ));
-            aWindowState[6].Value   = makeAny( sal_Bool( rElementData.m_aDockedData.m_bLocked ));
+            aWindowState[6].Name    = OUString( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_UINAME ));
+            aWindowState[6].Value   = makeAny( rElementData.m_aUIName );
 
             if ( xPersistentWindowState->hasByName( aName ))
             {
@@ -1200,6 +1252,10 @@ void LayoutManager::implts_writeWindowStateData( const rtl::OUString& aName, con
 
 void LayoutManager::implts_setElementData( UIElement& rElement, const Reference< css::awt::XDockableWindow >& rDockWindow )
 {
+    ReadGuard aReadLock( m_aLock );
+    sal_Bool bShowElement( rElement.m_bVisible && !rElement.m_bMasterHide && m_bParentWindowVisible );
+    aReadLock.unlock();
+
     Reference< css::awt::XDockableWindow > xDockWindow( rDockWindow );
     Reference< css::awt::XWindow2 >        xWindow( xDockWindow, UNO_QUERY );
 
@@ -1260,12 +1316,10 @@ void LayoutManager::implts_setElementData( UIElement& rElement, const Reference<
 
             if ( bWriteData )
                 implts_writeWindowStateData( rElement.m_aName, rElement );
-            if ( rElement.m_bVisible && pWindow )
+            if ( bShowElement && pWindow )
             {
-                {
-                    vos::OGuard aGuard( Application::GetSolarMutex() );
-                    pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
-                }
+                vos::OGuard aGuard( Application::GetSolarMutex() );
+                pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
             }
         }
         else
@@ -1303,7 +1357,7 @@ void LayoutManager::implts_setElementData( UIElement& rElement, const Reference<
             if( bSetSize )
                 xWindow->setOutputSize( AWTSize( aSize) );
 
-            if ( rElement.m_bVisible && pWindow )
+            if ( bShowElement && pWindow )
             {
                 vos::OGuard aGuard( Application::GetSolarMutex() );
                 pWindow->Show( sal_True );
@@ -2681,30 +2735,54 @@ Reference< css::awt::XWindowPeer > LayoutManager::implts_createToolkitWindow( co
     return xPeer;
 }
 
-void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
+void LayoutManager::implts_setVisibleState( sal_Bool bShow )
 {
      /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    std::vector< Reference< XUIElement > > aUIElementVector;
-
     WriteGuard aWriteLock( m_aLock );
     UIElementVector::iterator pIter;
     for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
-    {
-        pIter->m_bMasterHide = bSetVisible;
-        if ( pIter->m_xUIElement.is() )
-            aUIElementVector.push_back( pIter->m_xUIElement );
-    }
+        pIter->m_bMasterHide = !bShow;
     aWriteLock.unlock();
+     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    implts_updateUIElementsVisibleState( bShow );
+    implts_doLayout( sal_False );
+}
+
+void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
+{
+    std::vector< Reference< css::awt::XWindow > > aWinVector;
+
+    ReadGuard aReadLock( m_aLock );
+    UIElementVector::iterator pIter;
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    {
+        if ( pIter->m_xUIElement.is() )
+        {
+            Reference< css::awt::XWindow > xWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
+            if ( xWindow.is() )
+            {
+                if ( bSetVisible )
+                {
+                    if ( pIter->m_bVisible && !pIter->m_bMasterHide )
+                        aWinVector.push_back( xWindow );
+                }
+                else
+                    aWinVector.push_back( xWindow );
+            }
+        }
+    }
+    aReadLock.unlock();
 
     try
     {
-        for ( sal_uInt32 i = 0; i < aUIElementVector.size(); i++ )
+        vos::OGuard aGuard( Application::GetSolarMutex() );
+        for ( sal_uInt32 i = 0; i < aWinVector.size(); i++ )
         {
-            Reference< css::awt::XWindow > xWindow( aUIElementVector[i]->getRealInterface(), UNO_QUERY );
+            Reference< css::awt::XWindow > xWindow( aWinVector[i] );
             if ( xWindow.is() )
             {
                 // we need VCL here to pass special flags to Show()
-                vos::OGuard aGuard( Application::GetSolarMutex() );
                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                 if( pWindow )
                     pWindow->Show( bSetVisible, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
@@ -2715,12 +2793,13 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
     {
     }
 
-    aWriteLock.lock();
+    // Hide/show menubar according to bSetVisible
+    aReadLock.lock();
     Reference< XUIElement > xMenuBar( m_xMenuBar, UNO_QUERY );
     Reference< css::awt::XWindow > xContainerWindow( m_xContainerWindow );
     Reference< XComponent > xInplaceMenuBar( m_xInplaceMenuBar );
     MenuBarManager* pInplaceMenuBar( m_pInplaceMenuBar );
-    aWriteLock.unlock();
+    aReadLock.unlock();
 
     if (( xMenuBar.is() || xInplaceMenuBar.is() ) && xContainerWindow.is() )
     {
@@ -3422,7 +3501,9 @@ throw (RuntimeException)
     WriteGuard aWriteLock( m_aLock );
 
     sal_Bool    bFound( sal_False );
-    sal_Bool    bMustLayout( sal_False );
+    sal_Bool    bMustLayouted( sal_False );
+    sal_Bool    bMustBeDestroyed( sal_False );
+    sal_Bool    bMustBeSorted( sal_False );
     OUString    aElementType;
     OUString    aElementName;
 
@@ -3444,14 +3525,14 @@ throw (RuntimeException)
         {
             aWriteLock.unlock();
             implts_destroyStatusBar();
-            bMustLayout = sal_True;
+            bMustLayouted = sal_True;
         }
         else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
                   aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ) )
         {
             aWriteLock.unlock();
             implts_createProgressBar();
-            bMustLayout = sal_True;
+            bMustLayouted = sal_True;
         }
         else
         {
@@ -3468,29 +3549,45 @@ throw (RuntimeException)
                         Reference< css::awt::XWindow > xWindow( xUIElement->getRealInterface(), UNO_QUERY );
                         Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
 
-                        try
+                        rtl::OUString aAddonTbResourceName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/addon_" ));
+                        if ( aName.indexOf( aAddonTbResourceName ) != 0 )
                         {
-                            if ( xWindow.is() )
-                                xWindow->removeWindowListener( Reference< css::awt::XWindowListener >(
-                                    static_cast< OWeakObject * >( this ), UNO_QUERY ));
+                            try
+                            {
+                                if ( xWindow.is() )
+                                    xWindow->removeWindowListener( Reference< css::awt::XWindowListener >(
+                                        static_cast< OWeakObject * >( this ), UNO_QUERY ));
+                            }
+                            catch( Exception& )
+                            {
+                            }
+
+                            try
+                            {
+                                if ( xDockWindow.is() )
+                                    xDockWindow->removeDockableWindowListener( Reference< css::awt::XDockableWindowListener >(
+                                        static_cast< OWeakObject * >( this ), UNO_QUERY ));
+                            }
+                            catch ( Exception& )
+                            {
+                            }
+
+                            bMustBeDestroyed = sal_True;
                         }
-                        catch( Exception& )
+                        else
                         {
+                            pIter->m_bVisible = sal_False;
+                            xWindow->setVisible( sal_False );
                         }
 
-                        try
-                        {
-                            if ( xDockWindow.is() )
-                                xDockWindow->removeDockableWindowListener( Reference< css::awt::XDockableWindowListener >(
-                                    static_cast< OWeakObject * >( this ), UNO_QUERY ));
-                        }
-                        catch ( Exception& )
-                        {
-                        }
+                        if ( !xDockWindow->isFloating() )
+                            bMustLayouted = sal_True;
+                        if ( bMustBeDestroyed )
+                            pIter->m_xUIElement.clear();
 
-                        bMustLayout = sal_True;
+                        bMustBeSorted = sal_True;
                     }
-                    pIter->m_xUIElement.clear();
+
                     break;
                 }
             }
@@ -3499,13 +3596,17 @@ throw (RuntimeException)
     aWriteLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    if ( xComponent.is() )
-        xComponent->dispose();
+    if ( bMustBeDestroyed )
+    {
+        if ( xComponent.is() )
+            xComponent->dispose();
+    }
 
-    if ( bMustLayout )
+    if ( bMustBeSorted )
     {
         implts_sortUIElements();
-        doLayout();
+        if ( bMustLayouted )
+            doLayout();
     }
 }
 
@@ -3527,6 +3628,7 @@ throw (::com::sun::star::uno::RuntimeException)
                  m_aStatusBarElement.m_bVisible &&
                  !m_aStatusBarElement.m_bMasterHide )
             {
+                // we need VCL here to pass special flags to Show()
                 vos::OGuard aGuard( Application::GetSolarMutex() );
                 Reference< css::awt::XWindow > xWindow(
                     m_aStatusBarElement.m_xUIElement->getRealInterface(), UNO_QUERY );
@@ -3555,10 +3657,11 @@ throw (::com::sun::star::uno::RuntimeException)
                     Reference< css::awt::XWindow > xWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
                     Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
 
-                    if ( xWindow.is() &&
-                        xDockWindow.is() &&
-                        !pIter->m_bMasterHide &&
-                        pIter->m_bVisible )
+                    sal_Bool bShowElement( pIter->m_bVisible &&
+                                           !pIter->m_bMasterHide &&
+                                           m_bParentWindowVisible );
+
+                    if ( xWindow.is() && xDockWindow.is() && bShowElement )
                     {
                         pIter->m_bVisible = sal_True;
                         aWriteLock.unlock();
@@ -3719,15 +3822,20 @@ throw (RuntimeException)
             {
                 if ( pIter->m_aName == aName && pIter->m_xUIElement.is() )
                 {
+                    UIElement aUIElement = *pIter;
                     Reference< css::awt::XWindow > xWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
                     Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
 
-                    if ( xWindow.is() && xDockWindow.is() && !pIter->m_bMasterHide )
-                    {
-                        pIter->m_bVisible = sal_True;
-                        implts_sortUIElements();
-                        aWriteLock.unlock();
+                    sal_Bool bShowElement( !pIter->m_bMasterHide && m_bParentWindowVisible );
 
+                    pIter->m_bVisible = sal_True;
+                    aWriteLock.unlock();
+
+                    implts_writeWindowStateData( aUIElement.m_aName, aUIElement );
+                    implts_sortUIElements();
+
+                    if ( xWindow.is() && xDockWindow.is() && bShowElement )
+                    {
                         // we need VCL here to pass special flags to Show()
                         vos::OGuard aGuard( Application::GetSolarMutex() );
                         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
@@ -4554,7 +4662,7 @@ throw (::com::sun::star::uno::RuntimeException)
     aWriteLock.unlock();
 
     if ( bWasVisible != bVisible )
-        implts_updateUIElementsVisibleState( bVisible );
+        implts_setVisibleState( bVisible );
 }
 
 sal_Bool SAL_CALL LayoutManager::isVisible()
@@ -5845,10 +5953,61 @@ void SAL_CALL LayoutManager::windowMoved( const css::awt::WindowEvent& aEvent ) 
 
 void SAL_CALL LayoutManager::windowShown( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException )
 {
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+
+    // Request to set docking area space again.
+    Reference< css::awt::XWindow >  xContainerWindow( m_xContainerWindow );
+    sal_Bool                        bParentWindowVisible( m_bParentWindowVisible );
+    aReadLock.unlock();
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    Reference< XInterface > xIfac( xContainerWindow, UNO_QUERY );
+    if ( xIfac == aEvent.Source )
+    {
+        sal_Bool bSetVisible( sal_False );
+
+        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+        WriteGuard aWriteLock( m_aLock );
+        m_bParentWindowVisible = sal_True;
+        bSetVisible = ( m_bParentWindowVisible != bParentWindowVisible );
+        aWriteLock.unlock();
+        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+        if ( bSetVisible )
+        {
+            implts_updateUIElementsVisibleState( sal_True );
+            implts_doLayout( sal_False );
+        }
+    }
 }
 
 void SAL_CALL LayoutManager::windowHidden( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException )
 {
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+
+    // Request to set docking area space again.
+    Reference< css::awt::XWindow >  xContainerWindow( m_xContainerWindow );
+    sal_Bool                        bParentWindowVisible( m_bParentWindowVisible );
+    aReadLock.unlock();
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    Reference< XInterface > xIfac( xContainerWindow, UNO_QUERY );
+    if ( xIfac == aEvent.Source )
+    {
+        sal_Bool bSetInvisible( sal_False );
+
+        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+        WriteGuard aWriteLock( m_aLock );
+        m_bParentWindowVisible = sal_False;
+        bSetInvisible = ( m_bParentWindowVisible != bParentWindowVisible );
+        aWriteLock.unlock();
+        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+        if ( bSetInvisible )
+            implts_updateUIElementsVisibleState( sal_False );
+    }
 }
 
 IMPL_LINK( LayoutManager, AsyncLayoutHdl, Timer *, pTimer )
