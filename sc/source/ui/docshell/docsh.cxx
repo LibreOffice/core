@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:14:39 $
+ *  last change: $Author: hr $ $Date: 2004-10-11 12:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1566,8 +1566,14 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                 bString = TRUE;
                 break;
             case CELLTYPE_EDIT :
-                ((ScEditCell*)pCell)->GetString( aString );
-                bString = TRUE;
+                {
+                    const EditTextObject* pObj;
+                    static_cast<const ScEditCell*>(pCell)->GetData( pObj);
+                    EditEngine& rEngine = aDocument.GetEditEngine();
+                    rEngine.SetText( *pObj);
+                    aString = rEngine.GetText();  // including LF
+                    bString = TRUE;
+                }
                 break;
             case CELLTYPE_VALUE :
                 {
@@ -1598,82 +1604,89 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     !bString, eHorJust );
             rStream.WriteUnicodeOrByteText( aString );
         }
-        else if ( bString )
+        else
         {
-            if ( cStrDelim != 0 ) //@ BugId 55355
+            if (!bString && cStrDelim != 0)
+                bString = (aString.GetChar(0) == cStrDelim);
+            if (!bString && cDelim != 0)
+                bString = (aString.Search( cDelim) != STRING_NOTFOUND);
+            if ( bString )
             {
-                if ( eCharSet == RTL_TEXTENCODING_UNICODE )
+                if ( cStrDelim != 0 ) //@ BugId 55355
                 {
-                    xub_StrLen nPos = aString.Search( cStrDelim );
-                    while ( nPos != STRING_NOTFOUND )
+                    if ( eCharSet == RTL_TEXTENCODING_UNICODE )
                     {
-                        aString.Insert( cStrDelim, nPos );
-                        nPos = aString.Search( cStrDelim, nPos+2 );
-                    }
-                    rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
-                    rStream.WriteUnicodeText( aString );
-                    rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
-                }
-                else
-                {
-                    // #105549# This is nasty. The Unicode to byte encoding
-                    // may convert typographical quotation marks to ASCII
-                    // quotation marks, which may interfer with the delimiter,
-                    // so we have to escape delimiters after the string has
-                    // been encoded. Since this may happen also with UTF-8
-                    // encoded typographical quotation marks if such was
-                    // specified as a delimiter we have to check for the full
-                    // encoded delimiter string, not just one character.
-                    // Now for RTL_TEXTENCODING_ISO_2022_... and similar brain
-                    // dead encodings where one code point (and especially a
-                    // low ASCII value) may represent different characters, we
-                    // have to convert forth and back and forth again. Same for
-                    // UTF-7 since it is a context sensitive encoding too.
-
-                    if ( bContextOrNotAsciiEncoding )
-                    {
-                        // to byte encoding
-                        ByteString aStrEnc( aString, eCharSet );
-                        // back to Unicode
-                        UniString aStrDec( aStrEnc, eCharSet );
-                        // search on re-decoded string
-                        xub_StrLen nPos = aStrDec.Search( aStrDelimDecoded );
+                        xub_StrLen nPos = aString.Search( cStrDelim );
                         while ( nPos != STRING_NOTFOUND )
                         {
-                            aStrDec.Insert( aStrDelimDecoded, nPos );
-                            nPos = aStrDec.Search( aStrDelimDecoded,
-                                    nPos+1+aStrDelimDecoded.Len() );
+                            aString.Insert( cStrDelim, nPos );
+                            nPos = aString.Search( cStrDelim, nPos+2 );
                         }
-                        // write byte re-encoded
                         rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
-                        rStream.WriteUnicodeOrByteText( aStrDec, eCharSet );
+                        rStream.WriteUnicodeText( aString );
                         rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
                     }
                     else
                     {
-                        ByteString aStrEnc( aString, eCharSet );
-                        // search on encoded string
-                        xub_StrLen nPos = aStrEnc.Search( aStrDelimEncoded );
-                        while ( nPos != STRING_NOTFOUND )
+                        // #105549# This is nasty. The Unicode to byte encoding
+                        // may convert typographical quotation marks to ASCII
+                        // quotation marks, which may interfer with the delimiter,
+                        // so we have to escape delimiters after the string has
+                        // been encoded. Since this may happen also with UTF-8
+                        // encoded typographical quotation marks if such was
+                        // specified as a delimiter we have to check for the full
+                        // encoded delimiter string, not just one character.
+                        // Now for RTL_TEXTENCODING_ISO_2022_... and similar brain
+                        // dead encodings where one code point (and especially a
+                        // low ASCII value) may represent different characters, we
+                        // have to convert forth and back and forth again. Same for
+                        // UTF-7 since it is a context sensitive encoding too.
+
+                        if ( bContextOrNotAsciiEncoding )
                         {
-                            aStrEnc.Insert( aStrDelimEncoded, nPos );
-                            nPos = aStrEnc.Search( aStrDelimEncoded,
-                                    nPos+1+aStrDelimEncoded.Len() );
+                            // to byte encoding
+                            ByteString aStrEnc( aString, eCharSet );
+                            // back to Unicode
+                            UniString aStrDec( aStrEnc, eCharSet );
+                            // search on re-decoded string
+                            xub_StrLen nPos = aStrDec.Search( aStrDelimDecoded );
+                            while ( nPos != STRING_NOTFOUND )
+                            {
+                                aStrDec.Insert( aStrDelimDecoded, nPos );
+                                nPos = aStrDec.Search( aStrDelimDecoded,
+                                        nPos+1+aStrDelimDecoded.Len() );
+                            }
+                            // write byte re-encoded
+                            rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
+                            rStream.WriteUnicodeOrByteText( aStrDec, eCharSet );
+                            rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
                         }
-                        // write byte encoded
-                        rStream.Write( aStrDelimEncoded.GetBuffer(),
-                                aStrDelimEncoded.Len() );
-                        rStream.Write( aStrEnc.GetBuffer(), aStrEnc.Len() );
-                        rStream.Write( aStrDelimEncoded.GetBuffer(),
-                                aStrDelimEncoded.Len() );
+                        else
+                        {
+                            ByteString aStrEnc( aString, eCharSet );
+                            // search on encoded string
+                            xub_StrLen nPos = aStrEnc.Search( aStrDelimEncoded );
+                            while ( nPos != STRING_NOTFOUND )
+                            {
+                                aStrEnc.Insert( aStrDelimEncoded, nPos );
+                                nPos = aStrEnc.Search( aStrDelimEncoded,
+                                        nPos+1+aStrDelimEncoded.Len() );
+                            }
+                            // write byte encoded
+                            rStream.Write( aStrDelimEncoded.GetBuffer(),
+                                    aStrDelimEncoded.Len() );
+                            rStream.Write( aStrEnc.GetBuffer(), aStrEnc.Len() );
+                            rStream.Write( aStrDelimEncoded.GetBuffer(),
+                                    aStrDelimEncoded.Len() );
+                        }
                     }
                 }
+                else
+                    rStream.WriteUnicodeOrByteText( aString );
             }
             else
                 rStream.WriteUnicodeOrByteText( aString );
         }
-        else
-            rStream.WriteUnicodeOrByteText( aString );
 
         if( nCol < nEndCol )
         {
