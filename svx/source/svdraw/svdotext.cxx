@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:22:23 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -841,6 +841,12 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAncho
         const SfxItemSet& rSet = GetObjectItemSet();
         sal_Bool bShadowOn = ((SdrShadowItem&)(rSet.Get(SDRATTR_SHADOW))).GetValue();
 
+        // #i33696#
+        // Remember TextObject currently set at the DrawOutliner, it WILL be
+        // replaced during calculating the outline since it uses an own paint
+        // and that one uses the DrawOutliner, too.
+        const SdrTextObj* pLastTextObject = rOutliner.GetTextObj();
+
         if(bShadowOn)
         {
             // #86258# force shadow off
@@ -852,6 +858,13 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAncho
         else
         {
             TakeContour(*pContourXPP);
+        }
+
+        // #i33696#
+        // restore remembered text object
+        if(pLastTextObject != rOutliner.GetTextObj())
+        {
+            rOutliner.SetTextObj(pLastTextObject);
         }
 
         if (aGeo.nDrehWink!=0)  // Unrotate!
@@ -1006,7 +1019,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FAS
         if( !pTestObj || !bHitTest || pTestObj != this ||
             pTestObj->GetOutlinerParaObject() != pOutlinerParaObject )
         {
-//          if( bHitTest )
+            if( bHitTest ) // #i33696# take back fix #i27510#
                 rOutliner.SetTextObj( this );
 
             rOutliner.SetUpdateMode(TRUE);
