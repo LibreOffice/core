@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdbl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:55 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,13 +89,13 @@
 |*    Letzte Aenderung  MM 30.05.91
 |*
 *************************************************************************/
-REResourceList * InsertList( HASHID nClassName, const RscId& rId,
+REResourceList * InsertList( Atom nClassName, const RscId& rId,
                              REResourceList * pList ){
     REResourceList  *   pSubList;
-    char *              pStrClass;
+    const char *                pStrClass;
     ByteString          aStrClass;
 
-    pStrClass = pHS->Get( nClassName );
+    pStrClass = pHS->getString( nClassName ).getStr();
     if( pStrClass )
         aStrClass = pStrClass;
     else
@@ -103,12 +103,13 @@ REResourceList * InsertList( HASHID nClassName, const RscId& rId,
 
     pSubList = new REResourceList( pList, aStrClass, rId );
 
-    pList->Insert( pSubList, 0xFFFF );
+    pList->Insert( pSubList, 0xFFFFFFFF );
     return( pSubList );
 }
 
-void FillSubList( RSCINST & rInst, REResourceList * pList ){
-    USHORT          nCount, i;
+void FillSubList( RSCINST & rInst, REResourceList * pList )
+{
+    sal_uInt32      nCount, i;
     SUBINFO_STRUCT  aInfo;
     REResourceList* pSubList;
     RSCINST         aTmpI;
