@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-12 12:28:40 $
+ *  last change: $Author: tl $ $Date: 2001-02-27 14:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,6 +499,10 @@ void SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
+    INT16 nDlEvt = rDicListEvent.nCondensedEvent;
+    if (0 == nDlEvt)
+        return;
+
     // we do keep the original event source here though...
 
     // pass event on to XDictionaryListEventListener's
@@ -510,24 +514,35 @@ void SAL_CALL
             xRef->processDictionaryListEvent( rDicListEvent );
     }
 
+    //
     // "translate" DictionaryList event into LinguServiceEvent
+    //
     INT16 nLngSvcEvt = 0;
-    INT16 nDlEvt = rDicListEvent.nCondensedEvent;
-    if ( (nDlEvt & DictionaryListEventFlags::ADD_NEG_ENTRY) ||
-         (nDlEvt & DictionaryListEventFlags::DEL_POS_ENTRY) ||
-         (nDlEvt & DictionaryListEventFlags::ACTIVATE_NEG_DIC) ||
-         (nDlEvt & DictionaryListEventFlags::DEACTIVATE_POS_DIC) )
+    //
+    INT16 nSpellCorrectFlags =
+            DictionaryListEventFlags::ADD_NEG_ENTRY     |
+            DictionaryListEventFlags::DEL_POS_ENTRY     |
+            DictionaryListEventFlags::ACTIVATE_NEG_DIC  |
+            DictionaryListEventFlags::DEACTIVATE_POS_DIC;
+    if (0 != (nDlEvt & nSpellCorrectFlags))
         nLngSvcEvt |= LinguServiceEventFlags::SPELL_CORRECT_WORDS_AGAIN;
-    if ( (nDlEvt & DictionaryListEventFlags::ADD_POS_ENTRY) ||
-         (nDlEvt & DictionaryListEventFlags::DEL_NEG_ENTRY) ||
-         (nDlEvt & DictionaryListEventFlags::ACTIVATE_POS_DIC) ||
-         (nDlEvt & DictionaryListEventFlags::DEACTIVATE_NEG_DIC) )
+    //
+    INT16 nSpellWrongFlags =
+            DictionaryListEventFlags::ADD_POS_ENTRY     |
+            DictionaryListEventFlags::DEL_NEG_ENTRY     |
+            DictionaryListEventFlags::ACTIVATE_POS_DIC  |
+            DictionaryListEventFlags::DEACTIVATE_NEG_DIC;
+    if (0 != (nDlEvt & nSpellWrongFlags))
         nLngSvcEvt |= LinguServiceEventFlags::SPELL_WRONG_WORDS_AGAIN;
-    if ( (nDlEvt & DictionaryListEventFlags::ADD_POS_ENTRY) ||
-         (nDlEvt & DictionaryListEventFlags::DEL_POS_ENTRY) ||
-         (nDlEvt & DictionaryListEventFlags::ACTIVATE_POS_DIC) ||
-         (nDlEvt & DictionaryListEventFlags::ACTIVATE_NEG_DIC) )
+    //
+    INT16 nHyphenateFlags =
+            DictionaryListEventFlags::ADD_POS_ENTRY     |
+            DictionaryListEventFlags::DEL_POS_ENTRY     |
+            DictionaryListEventFlags::ACTIVATE_POS_DIC  |
+            DictionaryListEventFlags::ACTIVATE_NEG_DIC;
+    if (0 != (nDlEvt & nHyphenateFlags))
         nLngSvcEvt |= LinguServiceEventFlags::HYPHENATE_AGAIN;
+    //
     if (nLngSvcEvt)
         LaunchEvent( nLngSvcEvt );
 }
