@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:29:36 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ korean ] = "범주(~C)";
         Text[ turkish ] = "~Kategori";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Categor�a";
+        Text[ catalan ] = "~Categoria";
         Text[ thai ] = "~ประเภท";
     };
     ListBox LB_CATEGORY
@@ -444,17 +444,17 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         };
         StringList [ catalan ] =
         {
-                < "Todos" ; Default ; > ;
-            < "Definido por el usuario" ; Default ; > ;
+                < "Tot" ; Default ; > ;
+            < "Definit per l'usuari" ; Default ; > ;
             < "N�mero" ; Default ; > ;
-            < "Porcentaje" ; Default ; > ;
+            < "Percentatge" ; Default ; > ;
             < "Moneda" ; Default ; > ;
-            < "Fecha" ; Default ; > ;
+            < "Data" ; Default ; > ;
             < "Hora" ; Default ; > ;
-            < "Ciencia" ; Default ; > ;
-            < "Fracci�n" ; Default ; > ;
-            < "Valor l�gico" ; Default ; > ;
-            < "Texto" ; Default ; > ;
+            < "Ci�ncia" ; Default ; > ;
+            < "Fracci�" ; Default ; > ;
+            < "Valor l�gic" ; Default ; > ;
+            < "Text" ; Default ; > ;
         };
     StringList [ thai ] =
     {
@@ -498,7 +498,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ korean ] = "서식 코드(~F)";
         Text[ turkish ] = "Format ~kodu";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "C�digo del for~mato";
+        Text[ catalan ] = "~Formata el codi";
         Text[ thai ] = "รหัส~รูปแบบ";
     };
     Edit ED_FORMAT
@@ -547,7 +547,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ korean ] = "서식(~O)";
         Text[ turkish ] = "~Format";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Formato";
+        Text[ catalan ] = "F~ormat";
         Text[ thai ] = "รู~ปแบบ";
     };
 
@@ -644,7 +644,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         };
         StringList [ catalan ] =
         {
-                < "Autom�tico" ; Default ; > ;
+                < "Autom�tic" ; Default ; > ;
         };
         StringList [ finnish ] =
         {
@@ -692,7 +692,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ korean ] = "소수점 이하 자리(~D)";
         Text[ turkish ] = "~Ondal�k haneler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Decimales";
+        Text[ catalan ] = "Nombre de ~decimals";
         Text[ thai ] = "จุด~ทศนิยม";
     };
     NumericField ED_DECIMALS
@@ -736,7 +736,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ korean ] = "선행 제로(~Z)";
         Text[ turkish ] = "Virg�l �ncesi ~s�f�r say�s�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ceros a la i~zquierda";
+        Text[ catalan ] = "~Zeros inicials";
         Text[ thai ] = "การนำ~ศูนย์";
     };
     NumericField ED_LEADZEROES
@@ -779,7 +779,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ korean ] = "음수는 적색으로 표시(~N)";
         Text[ turkish ] = "Negatif say�lar ~k�rm�z�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Negativo en rojo";
+        Text[ catalan ] = "~Negatiu en vermell";
         Text[ thai ] = "ตัวเลขติด~ลบสีแดง";
     };
     CheckBox BTN_THOUSAND
@@ -809,7 +809,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ korean ] = "천단위 구분 기호 사용(~T)";
         Text[ turkish ] = "~Binlik ay�r�c�s�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Separador de miles";
+        Text[ catalan ] = "Separador de ~milers";
         Text[ thai ] = "ตัวคั่น~จำนวนพัน";
     };
     FixedLine FL_OPTIONS
@@ -839,7 +839,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ korean ] = "옵션";
         Text[ turkish ] = "Se�enekler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opciones";
+        Text[ catalan ] = "Opcions";
         Text[ thai ] = "ตัวเลือก";
     };
     FixedText FT_LANGUAGE
@@ -905,7 +905,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ chinese_traditional ] = "原始格式(~U)";
         Text[ turkish ] = "So~urce format";
         Text[ arabic ] = "So~urce format";
-        Text[ catalan ] = "So~urce format";
+        Text[ catalan ] = "Format de la f~ont";
         Text[ thai ] = "แห~ล่งรูปแบบ";
     };
     Window WND_NUMBER_PREVIEW
@@ -948,7 +948,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Hinzuf�gen";
-        QuickHelpText[ catalan ] = "A�adir";
+        QuickHelpText[ catalan ] = "Afegeix";
         QuickHelpText[ thai ] = "Add";
     };
     ImageButton IB_REMOVE
@@ -983,7 +983,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Entfernen";
-        QuickHelpText[ catalan ] = "Eliminar";
+        QuickHelpText[ catalan ] = "Suprimeix";
         QuickHelpText[ thai ] = "Remove";
     };
     ImageButton IB_INFO
@@ -1015,7 +1015,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Kommentar �ndern";
-        QuickHelpText[ catalan ] = "Modificar comentario";
+        QuickHelpText[ catalan ] = "Modifica el comentari";
         QuickHelpText[ finnish ] = "Muokkaa kommenttia";
         QuickHelpText[ thai ] = "Edit Comment";
     };
@@ -1082,7 +1082,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     Text[ korean ] = "숫자 형식";
     Text[ turkish ] = "Say� format�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Formato num�rico";
+    Text[ catalan ] = "Format num�ric";
     Text[ thai ] = "รูปแบบตัวเลข";
 };
  // ********************************************************************** EOF
