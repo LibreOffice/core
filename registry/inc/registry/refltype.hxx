@@ -2,9 +2,9 @@
  *
  *  $RCSfile: refltype.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-18 15:30:58 $
+ *  last change: $Author: jsc $ $Date: 2001-11-15 18:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
     Source Code Control System - Update
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/05/18 15:30:58  jsc
+    #87233# insert enum value
+
     Revision 1.4  2001/03/14 09:37:08  jsc
     remove vos dependencies
 
@@ -149,6 +152,10 @@
 #include <sal/types.h>
 #endif
 
+/** specifies the type source of a binary type blob.
+
+    Currently only RT_UNO_IDL type is used.
+ */
 enum RTTypeSource
 {
     RT_UNO_IDL,
@@ -156,67 +163,179 @@ enum RTTypeSource
     RT_JAVA
 };
 
+/** specifies the typeclass of a binary type blob.
+
+    The general structure of a binary type blob is always the same. It depends
+    on the typeclass which parts of the blob are filled with data or not.
+ */
 enum RTTypeClass
 {
+    /** specifies that the structure of the given blob is unknown and can't be read.
+     */
     RT_TYPE_INVALID,
+    /** specifies that the blob represents an interface type. An interface blob can contain
+        a base interface, attributes and methods.
+     */
     RT_TYPE_INTERFACE,
+    /** specifies that the blob represents a module type. A module blob can contain
+        a base module and constant members (fields).
+     */
     RT_TYPE_MODULE,
+    /** specifies that the blob represents a struct type. A struct blob can contain
+        a base struct and members (fields).
+     */
     RT_TYPE_STRUCT,
+    /** specifies that the blob represents an enum type. An enum blob can contain
+        enum values which are accessible as fields.
+     */
     RT_TYPE_ENUM,
+    /** specifies that the blob represents an exception type. An exception blob can contain
+        a base exception and members (fields).
+     */
     RT_TYPE_EXCEPTION,
+    /** specifies that the blob represents a typedef type. A typedef blob can contain
+        a base type.
+     */
     RT_TYPE_TYPEDEF,
+    /** specifies that the blob represents a service type. A service blob can contain
+        a base service, properties (fields), references to services or interfaces.
+     */
     RT_TYPE_SERVICE,
+    /** specifies that the blob represents a singleton type (a special service). A singleton blob
+        can contain a base service, properties (fields), references to services or interfaces.
+     */
     RT_TYPE_SINGLETON,
+    /// deprecated, not used.
     RT_TYPE_OBJECT,
+    /** specifies that the blob represents a constants type. A constants blob can contain
+        constant types as fields.
+     */
     RT_TYPE_CONSTANTS,
+    /** @deprecated
+        a union type was evaluated but currently not supported.
+    */
     RT_TYPE_UNION
 };
 
+/** specifies the type for the field access.
+
+    Fields in a type blob are used for different types. Among others they were used
+    for properties of services and these poperties can have several flags.
+    @see RT_ACCESS_INVALID
+    @see RT_ACCESS_READONLY
+    @see RT_ACCESS_OPTIONAL
+    @see RT_ACCESS_MAYBEVOID
+    @see RT_ACCESS_BOUND
+    @see RT_ACCESS_CONSTRAINED
+    @see RT_ACCESS_TRANSIENT
+    @see RT_ACCESS_MAYBEAMBIGUOUS
+    @see RT_ACCESS_MAYBEDEFAULT
+    @see RT_ACCESS_REMOVEABLE
+    @see RT_ACCESS_ATTRIBUTE
+    @see RT_ACCESS_PROPERTY
+    @see RT_ACCESS_CONST
+    @see RT_ACCESS_READWRITE
+    @see RT_ACCESS_DEFAULT
+ */
 typedef sal_uInt16 RTFieldAccess;
 
+/// specifies a unknown flag
 #define RT_ACCESS_INVALID           0x0000
+/// specifies a readonly property/attribute
 #define RT_ACCESS_READONLY          0x0001
+/// specifies a property as optional that means that it must not be implemented.
 #define RT_ACCESS_OPTIONAL          0x0002
+/// @see com::sun::star::beans::PropertyAttribute
 #define RT_ACCESS_MAYBEVOID         0x0004
+/// @see com::sun::star::beans::PropertyAttribute
 #define RT_ACCESS_BOUND             0x0008
+/// @see com::sun::star::beans::PropertyAttribute
 #define RT_ACCESS_CONSTRAINED       0x0010
+/// @see com::sun::star::beans::PropertyAttribute
 #define RT_ACCESS_TRANSIENT         0x0020
+/// @see com::sun::star::beans::PropertyAttribute
 #define RT_ACCESS_MAYBEAMBIGUOUS    0x0040
+/// @see com::sun::star::beans::PropertyAttribute
 #define RT_ACCESS_MAYBEDEFAULT      0x0080
+/// @see com::sun::star::beans::PropertyAttribute
 #define RT_ACCESS_REMOVEABLE        0x0100
+/// @see com::sun::star::beans::PropertyAttribute
 #define RT_ACCESS_ATTRIBUTE         0x0200
+/// specifies that the field is a property
 #define RT_ACCESS_PROPERTY          0x0400
+/// specifies that the field is a constant or enum value
 #define RT_ACCESS_CONST             0x0800
+/// specifies that the property/attribute has read/write access
 #define RT_ACCESS_READWRITE         0x1000
-// only to describe a union default label
+/// only to describe a union default label
 #define RT_ACCESS_DEFAULT           0x2000
 
+/** specifies the type of a reference used in a service description.
+ */
 enum RTReferenceType
 {
+    /// the reference type is unknown
     RT_REF_INVALID,
+    /** the service support the interface that means a implementation of this service
+        must implement this interface.
+     */
     RT_REF_SUPPORTS,
+    /** @deprecated
+        the service observes the interface.
+     */
     RT_REF_OBSERVES,
+    /** the service exports the specified service that means this service provides also
+        the specified service.
+     */
     RT_REF_EXPORTS,
+    /** @deprecated
+        the service needs the specified service that means in the context of this service
+        the specified service will be used or must be available.
+     */
     RT_REF_NEEDS
 };
 
+/** specifies the mode of a method.
+
+    A method can be synchron or asynchron (oneway). The const attribute
+    for methods was removed so that the const values are deprecated.
+ */
 enum RTMethodMode
 {
+    /// indicates an invalid mode
     RT_MODE_INVALID,
+    /// indicates the asynchronous mode of a method
     RT_MODE_ONEWAY,
+    /// @deprecated
     RT_MODE_ONEWAY_CONST,
+    /// indicated the synchronous mode of a method
     RT_MODE_TWOWAY,
+    /// @deprecated
     RT_MODE_TWOWAY_CONST
 };
 
+/** specifies the mode of a parameter.
+
+    There are three paramter modes which have impact of the
+    handling of the paramter in the UNO bridges and the UNO code
+    generation.
+ */
 enum RTParamMode
 {
+    /// indicates an invalid parameter mode
     RT_PARAM_INVALID,
+    /// indicates a pure in parameter which is used by value
     RT_PARAM_IN,
+    /// indicates a pure out parameter which is used by reference
     RT_PARAM_OUT,
+    /// indicates a in and out parameter which is used also by reference
     RT_PARAM_INOUT
 };
 
+/** specifies the type of a field value.
+
+    A field can have a value if it repsresents a constant or an enum value.
+ */
 enum RTValueType
 {
     RT_TYPE_NONE,
@@ -233,6 +352,8 @@ enum RTValueType
     RT_TYPE_STRING
 };
 
+/** specifies a variable container for field values.
+ */
 union RTConstValueUnion
 {
     sal_Bool        aBool;
@@ -248,21 +369,35 @@ union RTConstValueUnion
     const sal_Unicode*  aString;
 };
 
+/** specifies a helper class for const values.
+
+    This class is used for easy handling of constants or enum values
+    as fields in binary type blob.
+ */
 class RTConstValue
 {
 public:
+    /// stores the type of the constant value.
     RTValueType         m_type;
+    /// stores the value of the constant.
     RTConstValueUnion m_value;
 
+    /// Default constructor.
     RTConstValue()
         : m_type(RT_TYPE_NONE)
     {
         m_value.aDouble = 0.0;
     }
 
-    ~RTConstValue() {};
+    /// Destructor
+    ~RTConstValue() {}
 };
 
+/** deprecated.
+
+    An earlier version of UNO used an unique identifier for interfaces. In the
+    current version of UNO this uik was eliminated and this type is not longer used.
+ */
 struct RTUik
 {
     sal_uInt32 m_Data1;
@@ -272,6 +407,7 @@ struct RTUik
     sal_uInt32 m_Data5;
 };
 
+/// specifies the calling onvention for type reader/wrter api
 #define TYPEREG_CALLTYPE    SAL_CALL
 
 #endif

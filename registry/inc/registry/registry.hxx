@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registry.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-18 15:31:42 $
+ *  last change: $Author: jsc $ $Date: 2001-11-15 18:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@
 extern "C" {
 #endif
 
+/** specifies a collection of function pointers which represents the complete registry C-API.
+
+    The function pointers of this struct will be initialized when the library is loaded over
+    the load on call mechanism specified in 'salhelper/dynload.hxx'. This funtions pointers are
+    used by the C++ wrapper to call the C-API.
+*/
 struct Registry_Api
 {
     void        (REGISTRY_CALLTYPE *acquire)            (RegHandle);
@@ -117,8 +123,17 @@ struct Registry_Api
     RegError    (REGISTRY_CALLTYPE *freeKeyNames)       (rtl_uString**, sal_uInt32);
 };
 
+/** specifies a function pointer of the initialization function which is called to initialize
+    the Registry_Api struct.
+
+ */
 typedef Registry_Api* (REGISTRY_CALLTYPE *InitRegistry_Api)(void);
 
+/** spedifies the name of the API initialization function.
+
+    This function will be searched by the load on call mechanism specified
+    in 'salhelper/dynload.hxx'.
+*/
 #define REGISTRY_INIT_FUNCTION_NAME "initRegistry_Api"
 
 #ifdef __cplusplus
@@ -130,41 +145,47 @@ class RegistryKey;
 
 //-----------------------------------------------------------------------------
 
-/** RegistryLoader load the needed DLL for the registry.
-    The loader can be checked if the DLL is loaded. If the DLL is loaded the
-    loader provides a valid Api for the registry.
+/** The RegistryLoader provides a load on call mechanism for the registry library.
+
+    Furthermore it provides a reference counter for the library. When the last reference will be
+    destroyed the RegisteryLoader will unload the library. If the library is loaded the loader
+    provides a valid Api for the registry.
+    @see salhelper::ODynamicLoader<>
 */
 class RegistryLoader : public ::salhelper::ODynamicLoader<Registry_Api>
 {
 public:
-    /// Default constructor, try to load the registry DLL and initialize the needed api.
+    /// Default constructor, try to load the registry library and initialize the needed Api.
     RegistryLoader()
         : ::salhelper::ODynamicLoader<Registry_Api>
               (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME_WITH_VERSION( "reg",  LIBRARY_VERSION ) ) ),
              ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(REGISTRY_INIT_FUNCTION_NAME) ))
         {}
 
-    /// Destructor, decrease the refcount and unload the DLL if the refcount is 0.
+    /// Destructor, decrease the refcount and unload the library if the refcount is 0.
     ~RegistryLoader()
         {}
 };
 
-/** Registry read and write information in a registry file.
-    Class is inline and use a load on call C-Api.
+/** The Registry provides the functionality to read and write information in a registry file.
+
+    The class is implemented inline and use a load on call C-Api.
 */
 class Registry
 {
 public:
-    /** Constructor.
-        This constructor is called with a valid api for the registry.
-        The constructor is used if the api is known. Use open() or create()
+    /** Constructor using the registry Api directly.
+
+        This constructor is called with a valid Api for the registry.
+        The constructor is used if the Api is known. Use open() or create()
         to initialize the registry with a valid registry data file.
      */
     inline Registry(const Registry_Api* pApi);
 
-    /** Constructor.
+    /** Constructor using the loader mechanism.
+
         This constructor is called with a RegisterLoader for the registry.
-        The RegistryLoader load the needed DLL and provide the needed api for
+        The RegistryLoader loads the needed DLL and provides the needed Api for
         the registry. Use open() or create() to initialize the registry with a
         valid registry data file.
      */
@@ -179,54 +200,61 @@ public:
     /// Assign operator
     inline Registry& operator = (const Registry& toAssign);
 
-    /// isValid checks if the registry points to a valid registry data file.
+    /// checks if the registry points to a valid registry data file.
     inline sal_Bool isValid() const;
 
-    /** isReadOnly returns the access mode of the registry.
-        @return TRUE if accessmode is readonly else FALSE.
+    /** returns the access mode of the registry.
+
+        @return TRUE if the access mode is readonly else FALSE.
     */
     inline sal_Bool     isReadOnly() const;
 
-    /** openRootKey opens the root key of the registry.
-        @param  rRootKey reference on a RegistryKey which is filled with the rootkey.
+    /** opens the root key of the registry.
+
+        @param  rRootKey reference to a RegistryKey which is filled with the rootkey.
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError openRootKey(RegistryKey& rRootKey);
 
-    /// getName returns the name of the current registry data file.
+    /// returns the name of the current registry data file.
     inline ::rtl::OUString getName();
 
-    /** This function creates a new registry with the specified name and creates a root key.
+    /** creates a new registry with the specified name and creates a root key.
+
         @param  registryName specifies the name of the new registry.
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError create(const ::rtl::OUString& registryName);
 
-    /** This function opens a registry with the specified name. If the registry alreday points
-        to a valid registry, the old regitry will be closed.
-        @param  registryName Identifies a registry name.
-        @param  accessMode Specifies the accessmode for the registry, REG_READONLY or REG_READWRITE.
+    /** opens a registry with the specified name.
+
+        If the registry already points to a valid registry, the old registry will be closed.
+        @param  registryName specifies a registry name.
+        @param  accessMode specifies the access mode for the registry, REG_READONLY or REG_READWRITE.
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError open(const ::rtl::OUString& registryName,
                             RegAccessMode accessMode);
 
-    /// close explicitly the current registry data file
+    /// closes explicitly the current registry data file.
     inline RegError close();
 
-    /** This function destroy the specified registry.
-        @param registryName Identifies a registry name, if the name is an empty string the registry
-               itselfs will be destroyed.
+    /** destroys a registry.
+
+        @param registryName specifies a registry name, if the name is an empty string the registry
+                            itselfs will be destroyed.
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError destroy(const ::rtl::OUString& registryName);
 
-    /** This function loads registry information from a specified file and save it under the
+    /** loads registry information from a specified file and save it under the
         specified keyName.
-        @param  rKey    Specifies the key where the subkey will be created.
-        @param  keyName specifies the name of the subkey.
-                        If keyName is an empty string the registry information is saved under the key
-                        specified by rKey.
+
+        @param  rKey references a currently open key. The key which should store the registry information
+                     is a subkey of this key.
+        @param  keyName specifies the name of the key which stores the registry information. If keyName is
+                        is an empty string the registry information will be saved under the key specified
+                        by rKey.
         @param  regFileName specifies the file containing the registry information.
         @return REG_NO_ERROR if succeeds else an error code.
     */
@@ -234,11 +262,12 @@ public:
                                const ::rtl::OUString& keyName,
                                const ::rtl::OUString& regFileName);
 
-    /** This function saves the registry information from the specified key and all subkeys and save
+    /** saves the registry information of the specified key and all subkeys and save
         it in the specified file.
-        @param  rKey    Identifies a currently open key. The key which inforamtion is saved by this
-                        function is a subkey of the key identified by hKey.
-        @param  keyName specifies the name of the subkey.
+
+        @param  rKey references a currently open key. The key which information is saved by this
+                     function is a subkey of this key.
+        @param  keyName specifies the name of the key which information should be stored.
                         If keyName is an empty string the registry information under the key specified
                         by rKey is saved in the specified file.
         @param  regFileName specifies the file containing the registry information.
@@ -248,17 +277,19 @@ public:
                                const ::rtl::OUString& keyName,
                                const ::rtl::OUString& regFileName);
 
-    /** This function merges the registry information from the specified key and the registry
-        information of the specified file. Existing keys will extended.
-        @param  rKey    Identifies a currently open key. The key which inforamtion is merged by this
-                        function is a subkey of the key identified by hKey.
-        @param  keyName specifies the name of the subkey.
+    /** merges the registry information of the specified key with the registry
+        information of the specified file.
+
+        All existing keys will be extended and existing key values will be overwritten.
+        @param  rKey references a currently open key. The key which information is merged by this
+                     function is a subkey of this key
+        @param  keyName specifies the name of the key which will be merged.
                         If keyName is an empty string the registry information under the key specified
                         by rKey is merged with the information from the specified file.
         @param  regFileName specifies the file containing the registry information.
         @param  bWarnings if TRUE the function returns an error if a key already exists.
         @param  bReport if TRUE the function reports warnings on stdout if a key already exists.
-        @return REG_NO_ERROR if succeeds else an error code. If returns an error the registry will
+        @return REG_NO_ERROR if succeeds else an error code. If it returns an error the registry will
                 restore the state before merging.
     */
     inline RegError mergeKey(RegistryKey& rKey,
@@ -267,8 +298,11 @@ public:
                              sal_Bool bWarnings = sal_False,
                                 sal_Bool bReport = sal_False);
 
-    /** This function dump the content under the open key to stdout
-        @param  rKey    Identifies a currently open key which subtree is dumped.
+    /** This function reports the complete registry information of a key and all of its subkeys.
+
+        All information which are available (keynames, value types, values, linknames, linktargets, ...)
+        will be printed to stdout for report issues only.
+        @param  rKey references a currently open key which content will be reported.
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError dumpRegistry(RegistryKey& rKey);
@@ -277,19 +311,24 @@ public:
     friend class RegistryKeyArray;
     friend class RegistryKeyNames;
 
+    /// returns the used registry Api.
     const Registry_Api* getApi() { return m_pApi; }
 protected:
 
+    /// stores the used and initialized registry Api.
     const Registry_Api*                          m_pApi;
+    /// stores the dynamic loader which is used to hold the library.
     ::salhelper::ODynamicLoader< Registry_Api >  m_Api;
+    /// stores the handle of the underlying registry file on which most of the functions work.
     RegHandle                                    m_hImpl;
 };
 
 
 //-----------------------------------------------------------------------------
 
-/** RegistryKeyArray presents an array of open keys.
-    RegistryKeyArray is a helper class to work with an array of subkeys.
+/** RegistryKeyArray represents an array of open keys.
+
+    RegistryKeyArray is a helper class to work with an array of keys.
 */
 class RegistryKeyArray
 {
@@ -297,28 +336,39 @@ public:
     /// Default constructor
     inline RegistryKeyArray();
 
-    /// Destructor
+    /// Destructor, all subkeys will be closed.
     inline ~RegistryKeyArray();
 
-    /// This function returns the open key sepecified with index.
+    /// returns the open key specified by index.
     inline RegistryKey getElement(sal_uInt32 index);
 
-    /// This function returns the length of the array.
+    /// returns the length of the array.
     inline sal_uInt32 getLength();
 
     friend class RegistryKey;
 protected:
+    /** sets the data of the key array.
+
+        @param registry specifies the registry files where the keys are located.
+        @param phKeys points to an array of open keys.
+        @param length specifies the length of the array specified by phKeys.
+     */
     inline void setKeyHandles(Registry& registry, RegKeyHandle* phKeys, sal_uInt32 length);
+    /// close all subkeys
     inline RegError closeKeyHandles();
 
+    /// stores the number of open subkeys, the number of elements.
     sal_uInt32      m_length;
+    /// stores an array of open subkeys.
     RegKeyHandle*   m_phKeys;
+    /// stores the handle to the registry file where the appropriate keys are located.
     Registry        m_registry;
 };
 
 
-/** RegistryKeyNames presents an array of subkey names.
-    RegistryKeyNames is a helper class to work with an array of subkeys.
+/** RegistryKeyNames represents an array of key names.
+
+    RegistryKeyNames is a helper class to work with an array of key names.
 */
 class RegistryKeyNames
 {
@@ -326,28 +376,39 @@ public:
     /// Default constructor
     inline RegistryKeyNames();
 
-    /// Destructor
+    /// Destructor, the internal array with key names will be deleted.
     inline ~RegistryKeyNames();
 
-    /// This function returns the name of the key sepecified with index.
+    /// returns the name of the key sepecified by index.
     inline ::rtl::OUString getElement(sal_uInt32 index);
 
-    /// This function returns the length of the array.
+    /// returns the length of the array.
     inline sal_uInt32 getLength();
 
     friend class RegistryKey;
 protected:
+    /** sets the data of the array.
+
+        @param registry specifies the registry files where the keys are located.
+        @param pKeyNames points to an array of key names.
+        @param length specifies the length of the array specified by pKeyNames.
+     */
     inline void setKeyNames(Registry& registry, rtl_uString** pKeyNames, sal_uInt32 length);
+    /// delete the array of key names.
     inline RegError freeKeyNames();
 
+    /// stores the number of key names, the number of elements.
     sal_uInt32      m_length;
+    /// stores an array of key names.
     rtl_uString**   m_pKeyNames;
+    /// stores the handle to the registry file where the appropriate keys are located.
     Registry        m_registry;
 };
 
 //-----------------------------------------------------------------------------
 
-/** RegistryValueList presents an value list of the specified type.
+/** RegistryValueList represents a value list of the specified type.
+
     RegistryValueList is a helper class to work with a list value.
 */
 template<class ValueType>
@@ -361,7 +422,7 @@ public:
         , m_registry(NULL)
         {}
 
-    /// Destructor
+    /// Destructor, the internal value list will be freed.
     ~RegistryValueList()
     {
         if (m_pValueList)
@@ -370,7 +431,7 @@ public:
         }
     }
 
-    /// This function returns the value of the list with the sepecified index.
+    /// returns the value of the list specified by index.
     ValueType getElement(sal_uInt32 index)
     {
         if (m_registry.isValid() && index < m_length)
@@ -382,7 +443,7 @@ public:
         }
     }
 
-    /// This function returns the length of the list.
+    /// returns the length of the list.
     sal_uInt32 getLength()
     {
         return m_length;
@@ -390,6 +451,13 @@ public:
 
     friend class RegistryKey;
 protected:
+    /** sets the data of the value list.
+
+        @param registry specifies the registry files where the appropriate key is located.
+        @param valueType specifies the type of the list values.
+        @param pValueList points to a value list.
+        @param length specifies the length of the list.
+     */
     void setValueList(Registry& registry, RegValueType valueType,
                       ValueType* pValueList, sal_uInt32 length)
     {
@@ -399,15 +467,22 @@ protected:
         m_registry = registry;
     }
 
+    /// stores the length of the list, the number of elements.
     sal_uInt32      m_length;
+    /// stores the value list.
     ValueType*      m_pValueList;
+    /// stores the type of the list elements
     RegValueType    m_valueType;
+    /** stores the handle to the registry file where the appropriate key to this
+        value is located.
+    */
     Registry        m_registry;
 };
 
 //-----------------------------------------------------------------------------
 
-/** RegistryKey read and write information for the specified key in a registry.
+/** RegistryKey reads or writes information of the underlying key in a registry.
+
     Class is inline and use a load on call C-Api.
 */
 class RegistryKey
@@ -419,80 +494,89 @@ public:
     /// Copy constructor
     inline RegistryKey(const RegistryKey& toCopy);
 
-    /// Destructor. The Destructor close the key if it is open.
+    /// Destructor, close the key if it references an open one.
     inline ~RegistryKey();
 
     /// Assign operator
     inline RegistryKey& operator = (const RegistryKey& toAssign);
 
-    /// isValid checks if the key points to a valid registry key.
+    /// checks if the key points to a valid registry key.
     inline sal_Bool isValid() const;
 
-    /** isReadOnly returns the access mode of the key.
-        @return TRUE if accessmode is read only else FALSE.
+    /** returns the access mode of the key.
+
+        @return TRUE if access mode is read only else FALSE.
     */
     inline sal_Bool     isReadOnly() const;
 
-    /// getName returns the full name of the key beginning with the rootkey.
+    /// returns the full qualified name of the key beginning with the rootkey.
     inline ::rtl::OUString getName();
 
-    /** This function creates the specified key. If the key already exists in the registry,
-        the function opens it.
+    /** creates a new key or opens a key if the specified key already exists.
+
+        The specified keyname is relativ to this key.
         @param  keyName specifies the name of the key which will be opened or created.
-        @param  rNewKey Reference a RegistryKey which will be filled with the new or open key.
+        @param  rNewKey references a RegistryKey which will be filled with the new or open key.
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError createKey(const ::rtl::OUString& keyName,
                               RegistryKey& rNewKey);
 
-    /** This function opens the specified key.
-        @param  keyName Points to a null terminated string specifying the name of a key that this
-                        function opens.
-        @param  rOpenKey Reference a RegistryKey which will be filled with the open key.
+    /** opens the specified key.
+
+        The specified keyname is relativ to this key.
+        @param  keyName specifies the name of the key which will be opened.
+        @param  rOpenKey references a RegistryKey which will be filled with the open key.
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError openKey(const ::rtl::OUString& keyName,
                               RegistryKey& rOpenKey);
 
-    /** This function returns an array with all subkeys. The subkeys will be open.
-        @param  keyName Points to a null terminated string specifying the name of a key.
-        @param  rSubKeys Reference a RegistryKeyArray which will be filled with open subkeys.
+    /** opens all subkeys of the specified key.
+
+        The specified keyname is relativ to this key.
+        @param  keyName specifies the name of the key which subkeys will be opened.
+        @param  rSubKeys reference a RegistryKeyArray which will be filled with the open subkeys.
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError openSubKeys(const ::rtl::OUString& keyName,
                                     RegistryKeyArray& rSubKeys);
 
-    /** This function opens all subkeys of the key.
-        @param  keyName Points to a null terminated string specifying the name of a key that subkeys
-                        this function opens.
-        @param  rSubKeyNames Reference a RegistryKeyNames array which will be filled with the open subkeys.
+    /** returns an array with the names of all subkeys of the specified key.
+
+        The specified keyname is relativ to this key.
+        @param  keyName specifies the name of the key which subkey names will be returned.
+        @param  rSubKeyNames reference a RegistryKeyNames array which will be filled with the subkey names.
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError getKeyNames(const ::rtl::OUString& keyName,
                                     RegistryKeyNames& rSubKeyNames);
 
-    /** This function close all subkeys specified in the array.
-        @param  rSubKeys Reference a RegistryKeyArray which contains the open subkeys.
+    /** closes all keys specified in the array.
+
+        @param  rSubKeys reference a RegistryKeyArray which contains the open keys.
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError closeSubKeys(RegistryKeyArray& rSubKeys);
 
-    /** This function deletes the specified key.
+    /** deletes the specified key.
+
         @param  keyName specifies the name of the key which will be deleted.
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError deleteKey(const ::rtl::OUString& keyName);
 
-    /// close explicitly the current key
+    /// closes explicitly the current key
     inline RegError closeKey();
 
-    /** This function sets an value under the  key.
-        @param  keyName specifies the name of the key which value is set by this function.
-                        If keyName is an empty string, the value is set for the key
+    /** sets a value of a key.
+
+        @param  keyName specifies the name of the key which value will be set.
+                        If keyName is an empty string, the value will be set for the key
                         specified by hKey.
-        @param  valueType   Specified the type of the value.
-        @param  pData   Points to a memory block containing the current data for the value.
-        @param  valueSize   Specified the size of pData in bytes
+        @param  valueType specifies the type of the value.
+        @param  pData points to a memory block containing the data for the value.
+        @param  valueSize specifies the size of pData in bytes
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError setValue(const ::rtl::OUString& keyName,
@@ -500,134 +584,180 @@ public:
                                 RegValue pValue,
                                 sal_uInt32 valueSize);
 
-    /** This function sets an long list value under the  key.
-        @param  keyName specifies the name of the key which value is set by this function.
-                        If keyName is an empty string, the value is set for the key
+    /** sets a long list value of a key.
+
+        @param  keyName specifies the name of the key which value will be set.
+                        If keyName is an empty string, the value will be set for the key
                         specified by hKey.
-        @param  pValueList  Points to an array of longs containing the current data for the value.
-        @param  len Specified the len of pValueList.
+        @param  pValueList points to an array of longs containing the data for the value.
+        @param  len specifies the length of the list (the array referenced by pValueList).
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError setLongListValue(const ::rtl::OUString& keyName,
                                          sal_Int32* pValueList,
                                          sal_uInt32 len);
 
-    /** This function sets an ascii list value under the  key.
-        @param  keyName specifies the name of the key which value is set by this function.
-                        If keyName is an empty string, the value is set for the key
+    /** sets an ascii list value of a key.
+
+        @param  keyName specifies the name of the key which value will be set.
+                        If keyName is an empty string, the value will be set for the key
                         specified by hKey.
-        @param  pValueList  Points to an array of sal_Char* containing the current data for the value.
-        @param  len Specified the len of pValueList.
+        @param  pValueList points to an array of sal_Char* containing the data for the value.
+        @param  len specifies the length of the list (the array referenced by pValueList).
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError setStringListValue(const ::rtl::OUString& keyName,
                                            sal_Char** pValueList,
                                            sal_uInt32 len);
 
-    /** This function sets an unicode string list value under the  key.
-        @param  keyName specifies the name of the key which value is set by this function.
-                        If keyName is an empty string, the value is set for the key
+    /** sets an unicode string list value of a key.
+
+        @param  keyName specifies the name of the key which value will be set.
+                        If keyName is an empty string, the value will be set for the key
                         specified by hKey.
-        @param  pValueList  Points to an array of sal_Unicode* containing the current data for the value.
-        @param  len Specified the len of pValueList.
+        @param  pValueList points to an array of sal_Unicode* containing the data for the value.
+        @param  len specifies the length of the list (the array referenced by pValueList).
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError setUnicodeListValue(const ::rtl::OUString& keyName,
                                             sal_Unicode** pValueList,
                                               sal_uInt32 len);
 
-    /** This function gets info about type and size of the value.
-        @param  keyName specifies the name of the key which value is set by this function.
-                        If keyName is an empty string, the value is set for the key
-                        specified by hKey.
-        @param  pValueType  Specified the type of the value.
-        @param  pValueSize  Specified the size of pData in bytes or the length of a list value.
+    /** gets info about type and size of a value.
+
+        @param  keyName specifies the name of the key which value info will be returned.
+                        If keyName is an empty string, the value info of the key
+                        specified by hKey will be returned.
+        @param  pValueType returns the type of the value.
+        @param  pValueSize returns the size of the value in bytes or the length of a list value.
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError getValueInfo(const ::rtl::OUString& keyName,
                                     RegValueType* pValueType,
                                     sal_uInt32* pValueSize);
 
-    /** This function gets the value under the specified key.
-        @param  keyName specifies the name of the key which value is get by this function.
+    /** gets the value of a key.
+
+        @param  keyName specifies the name of the key which value will be returned.
                         If keyName is an empty string, the value is get from the key
                         specified by hKey.
-        @param  pValue  Points to an allocated  memory block receiving the current data for the value.
+        @param  pValue points to an allocated memory block receiving the data of the value.
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError getValue(const ::rtl::OUString& keyName,
                                 RegValue pValue);
 
-    /** This function gets the value under the specified key.
-        @param  keyName specifies the name of the key which value is get by this function.
+    /** gets a long list value of a key.
+
+        @param  keyName specifies the name of the key which value will be returned.
                         If keyName is an empty string, the value is get from the key
                         specified by hKey.
-        @param  rValueList  Reference a RegistryValueList which will be filled with the ascii values.
+        @param  rValueList references a RegistryValueList which will be filled with the long values.
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError getLongListValue(const ::rtl::OUString& keyName,
                                           RegistryValueList<sal_Int32>& rValueList);
 
-    /** This function gets the value under the specified key.
-        @param  keyName specifies the name of the key which value is get by this function.
+    /** gets an ascii list value of a key.
+
+        @param  keyName specifies the name of the key which value will be returned.
                         If keyName is an empty string, the value is get from the key
                         specified by hKey.
-        @param  rValueList  Reference a RegistryValueList which will be filled with the ascii values.
+        @param  rValueList references a RegistryValueList which will be filled with the ascii values.
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError getStringListValue(const ::rtl::OUString& keyName,
                                            RegistryValueList<sal_Char*>& rValueList);
 
-    /** This function gets the value under the specified key.
-        @param  keyName specifies the name of the key which value is get by this function.
+    /** gets a unicode value of a key.
+
+        @param  keyName specifies the name of the key which value will be returned.
                         If keyName is an empty string, the value is get from the key
                         specified by hKey.
-        @param  rValueList  Reference a RegistryValueList which will be filled with the unicode values.
+        @param  rValueList reference a RegistryValueList which will be filled with the unicode values.
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError getUnicodeListValue(const ::rtl::OUString& keyName,
                                               RegistryValueList<sal_Unicode*>& rValueList);
 
+    /** creates a new link with the specified name and target.
 
+        @param linkName specifies the name of link
+        @param linkTarget specifies a full qualified keyname as target for the link.
+        @return REG_NO_ERROR if succeeds else an error code.
+     */
     inline RegError createLink(const ::rtl::OUString& linkName,
                                const ::rtl::OUString& linkTarget);
 
+    /** deletes an existing link.
+
+        @param linkName specifies the name of link
+        @return REG_NO_ERROR if succeeds else an error code.
+     */
     inline RegError deleteLink(const ::rtl::OUString& linkName);
 
+    /** returns the type of the specified key if it is a link or a real key.
+
+        @param name specifies the name of the key or link.
+        @param pKeyType returns the type of the key.
+        @return REG_NO_ERROR if succeeds else an error code.
+     */
     inline RegError getKeyType(const ::rtl::OUString& name,
                                   RegKeyType* pKeyType) const;
 
+    /** returns the target of the specified link.
+
+        @param linkName specifies the name of link.
+        @param rLinkTarget returns the target keyname of the link.
+        @return REG_NO_ERROR if succeeds else an error code.
+     */
     inline RegError getLinkTarget(const ::rtl::OUString& linkName,
                                     ::rtl::OUString& rLinkTarget) const;
 
-    /** This function will resolved all or only the first link of a keyname
-        and returns the resolved keyName in rResolvedName.
-        @param  keyName specifies the relativ name of the key which name will be resolved.
+    /** resolves all or only the first link of a keyname.
+
+        The function resolves either only the first link or it resolves all links
+        which exists in the keyname or recursive in the resolved parts.
+        @param  keyName specifies the name of the key which will be resolved relativ to this key.
+                        The resolved name will be prefixed with the name of this key.
         @return REG_NO_ERROR if succeeds else an error code.
      */
     inline RegError getResolvedKeyName(const ::rtl::OUString& keyName,
                                        sal_Bool firstLinkOnly,
                                            ::rtl::OUString& rResolvedName) const;
 
-    /** getRegistryName returns the name of the current registry in which
-           the key is defined.
-     */
+    /// returns the name of the registry in which the key is defined.
     inline ::rtl::OUString getRegistryName();
 
-    /// getRegistry returns the registry in which the key is defined.
+    /// returns the registry in which the key is defined.
     Registry getRegistry() const { return m_registry; }
 
     friend class Registry;
 public:
+    /** Constructor, which initialize a RegistryKey with registry and an valid key handle.
+
+        This constructor is internal only.
+        @internal
+    */
     inline RegistryKey(Registry&    registry,
                        RegKeyHandle hKey);
 
+    /** returns the internal key handle.
+
+        @internal
+     */
     RegKeyHandle getKeyHandle() const { return m_hImpl; }
 
 protected:
+    /** sets the internal registry on which this key should work.
+
+        @internal
+     */
     inline void setRegistry(Registry& registry);
 
+    /// stores the registry on which this key works
     Registry        m_registry;
+    /// stores the current key handle of this key
     RegKeyHandle    m_hImpl;
 };
 

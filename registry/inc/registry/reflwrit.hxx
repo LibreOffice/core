@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflwrit.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-14 16:10:39 $
+ *  last change: $Author: jsc $ $Date: 2001-11-15 18:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #include <salhelper/dynload.hxx>
 #endif
 
-// Implememetation handle
+/// Implememetation handle
 typedef void* TypeWriterImpl;
 
 /****************************************************************************
@@ -85,6 +85,12 @@ typedef void* TypeWriterImpl;
 extern "C" {
 #endif
 
+/** specifies a collection of function pointers which represents the complete registry type writer C-API.
+
+    The function pointers of this struct will be initialized when the library is loaded over
+    the load on call mechanism specified in 'salhelper/dynload.hxx'. This funtions pointers are
+    used by the C++ wrapper to call the C-API.
+*/
 struct RegistryTypeWriter_Api
 {
     TypeWriterImpl          (TYPEREG_CALLTYPE *createEntry)         (RTTypeClass, rtl_uString*, rtl_uString*, sal_uInt16, sal_uInt16, sal_uInt16);
@@ -103,8 +109,17 @@ struct RegistryTypeWriter_Api
     void                    (TYPEREG_CALLTYPE *setReferenceData)    (TypeWriterImpl, sal_uInt16, rtl_uString*, RTReferenceType, rtl_uString*, RTFieldAccess);
 };
 
+/** specifies a function pointer of the initialization function which is called to initialize
+    the RegistryTypeWriter_Api struct.
+
+ */
 typedef RegistryTypeWriter_Api* (TYPEREG_CALLTYPE *InitRegistryTypeWriter_Api)(void);
 
+/** spedifies the name of the API initialization function.
+
+    This function will be searched by the load on call mechanism specified
+    in 'salhelper/dynload.hxx'.
+*/
 #define REGISTRY_TYPE_WRITER_INIT_FUNCTION_NAME "initRegistryTypeWriter_Api"
 
 #ifdef __cplusplus
@@ -112,32 +127,54 @@ typedef RegistryTypeWriter_Api* (TYPEREG_CALLTYPE *InitRegistryTypeWriter_Api)(v
 #endif
 
 
-/** RegistryTypeWriterLoader load the needed DLL for a RegistryTypeWriter.
-    The loader can be checked if the DLL is loaded. If the DLL is loaded the
-    loader provides a valid Api for the RegistryTypeWriter.
+/** The RegistryTypeWriterLoader provides a load on call mechanism for the library
+    used for the registry type writer api.
+
+    Furthermore it provides a reference counter for the library. When the last reference will be
+    destroyed the RegisteryTypeWriterLoader will unload the library. If the library is loaded the loader
+    provides a valid Api for the type writer.
+    @see salhelper::ODynamicLoader<>
 */
 class RegistryTypeWriterLoader
     : public ::salhelper::ODynamicLoader<RegistryTypeWriter_Api>
 {
 public:
+    /// Default constructor, try to load the registry library and initialize the needed Api.
     RegistryTypeWriterLoader()
         : ::salhelper::ODynamicLoader<RegistryTypeWriter_Api>
             (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME_WITH_VERSION( "reg", LIBRARY_VERSION  ) ) ),
              ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(REGISTRY_TYPE_WRITER_INIT_FUNCTION_NAME) ))
         {}
 
+    /// Destructor, decrease the refcount and unload the library if the refcount is 0.
     ~RegistryTypeWriterLoader()
         {}
 };
 
 
-/** RegistryTypeWriter writes type informations into a blop.
-    Class is inline and use a load on call C-Api.
+/** RegistryTypeWriter writes/creates a binary type blob.
+
+    This class provides the necessary functions to write type informations
+    for all kinds of types into a blob.
+    The class is inline and use a load on call C-Api.
 */
 class RegistryTypeWriter
 {
 public:
 
+    /** Constructor using the registry Api directly.
+
+        The constructor is used if the api is known.
+        @param RTTypeClass specifies the type of the new blob.
+        @param typeName specifies the full qualified type name with '/' as separator.
+        @param superTypeName specifies the full qualified type name of the base type
+                             with '/' as separator.
+        @param fieldCount specifies the number of fields (eg. number of attrbutes/properties,
+                          enum values or constants).
+        @param methodCount specifies the number of methods.
+        @param referenceCount specifies the number of references (eg. number of supported interfaces,
+                              exported services ...)
+     */
     inline RegistryTypeWriter(const RegistryTypeWriter_Api* pApi,
                               RTTypeClass               RTTypeClass,
                               const ::rtl::OUString&    typeName,
@@ -146,6 +183,21 @@ public:
                               sal_uInt16                methodCount,
                               sal_uInt16                referenceCount);
 
+    /** Constructor using the loader mechanism.
+
+        This constructor is called with a RegistryTypeWriterLoader.
+        The RegistryTypeWriterLoader loads the needed DLL and provides the needed
+        Api for the registry type writer.
+        @param RTTypeClass specifies the type of the new blob.
+        @param typeName specifies the full qualified type name with '/' as separator.
+        @param superTypeName specifies the full qualified type name of the base type
+                             with '/' as separator.
+        @param fieldCount specifies the number of fields (eg. number of attrbutes/properties,
+                          enum values or constants).
+        @param methodCount specifies the number of methods.
+        @param referenceCount specifies the number of references (eg. number of supported interfaces,
+                              exported services ...)
+     */
     inline RegistryTypeWriter(const RegistryTypeWriterLoader& rLoader,
                               RTTypeClass               RTTypeClass,
                               const ::rtl::OUString&    typeName,
@@ -154,17 +206,49 @@ public:
                               sal_uInt16                methodCount,
                               sal_uInt16                referenceCount);
 
+    /// Copy constructcor
     inline RegistryTypeWriter(const RegistryTypeWriter& toCopy);
+
+    /** Destructor. The Destructor frees the internal data block.
+
+        The pointer (returned by getBlop) will be set to NULL.
+     */
     inline ~RegistryTypeWriter();
 
+    /// Assign operator
     inline RegistryTypeWriter& operator == (const RegistryTypeWriter& toAssign);
 
+    /** @deprecated
+        sets the unique identifier for an interface type.
+
+        An earlier version of UNO used an unique identifier for interfaces. In the
+        current version of UNO this uik was eliminated and this function is
+        not longer used.
+     */
     inline void setUik(const RTUik& uik);
 
+    /** sets a documentation string for the type.
+
+        This documentation should be the same as the documentation which is provided
+        for this type in IDL.
+     */
     inline void setDoku(const ::rtl::OUString& doku);
 
+    /** sets the IDL filename where this type is defined.
+     */
     inline void setFileName(const ::rtl::OUString& fileName);
 
+    /** sets the data for a field member of a type blob.
+
+        @param index indicates the index of the field.
+        @param name specifies the name.
+        @param typeName specifies the full qualified typename.
+        @param doku specifies the documentation string of the field.
+        @param fileName specifies the name of the IDL file where the field is defined.
+        @param access specifies the access mode of the field.
+        @param constValue specifies the value of the field. The value is only interesting
+                          for enum values or constants.
+     */
     inline void setFieldData( sal_uInt16                index,
                               const ::rtl::OUString&    name,
                               const ::rtl::OUString&    typeName,
@@ -173,6 +257,16 @@ public:
                               RTFieldAccess             access,
                               RTConstValue              constValue = RTConstValue());
 
+    /** sets the data for a method.
+
+        @param index indicates the index of the method.
+        @param name specifies the name.
+        @param typeName specifies the full qualified return typename.
+        @param mode specifies the method mode.
+        @param paramCount specifies the number of parameters.
+        @param excCount specifies the number of exceptions.
+        @param doku specifies the documentation string of the field.
+     */
     inline void setMethodData(sal_uInt16                index,
                               const ::rtl::OUString&    name,
                               const ::rtl::OUString&    returnTypeName,
@@ -181,19 +275,49 @@ public:
                               sal_uInt16                excCount,
                               const ::rtl::OUString&    doku);
 
+    /** sets the data for the specified parameter of a method.
+
+        @param index indicates the index of the method.
+        @param paramIndex specifies the index of the parameter.
+        @param type specifies the full qualified typename.
+        @param name specifies the name.
+        @param mode specifies the parameter mode.
+     */
     inline void setParamData(sal_uInt16             index,
                              sal_uInt16             paramIndex,
                              const ::rtl::OUString& type,
                              const ::rtl::OUString& name,
                              RTParamMode            mode);
 
+    /** sets the data for the specified exception of a mehtod.
+
+        @param index indicates the index of the method.
+        @param excIndex specifies the index of the exception.
+        @param type specifies the full qualified typename of the exception.
+     */
     inline void setExcData(sal_uInt16               index,
                            sal_uInt16               excIndex,
                            const ::rtl::OUString&   type);
 
+    /** returns a pointer to the new type blob.
+
+        The pointer will be invalid (NULL) if the instance of
+        the RegistryTypeWriter will be destroyed.
+     */
     inline const sal_uInt8*     getBlop();
+
+    /** returns the size of the new type blob in bytes.
+     */
     inline sal_uInt32       getBlopSize();
 
+    /** sets the data for a reference member.
+
+        @param index indicates the index of the reference.
+        @param name specifies the name.
+        @param refType specifies the full qualified typename of the reference.
+        @param doku specifies the documentation string of the reference.
+        @param access specifies the access mode of the reference.
+     */
     inline void setReferenceData( sal_uInt16                index,
                                     const ::rtl::OUString&  name,
                                     RTReferenceType             refType,
@@ -202,8 +326,11 @@ public:
 
 protected:
 
+    /// stores the registry type writer Api.
     const RegistryTypeWriter_Api*                                m_pApi;
+    /// stores the dynamic loader which is used to hold the library.
     const ::salhelper::ODynamicLoader< RegistryTypeWriter_Api >  m_Api;
+    /// stores the handle of an implementation class
     TypeWriterImpl                                               m_hImpl;
 };
 
