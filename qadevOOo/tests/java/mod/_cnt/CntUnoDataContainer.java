@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CntUnoDataContainer.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:26 $
+ *  last change:$Date: 2003-05-27 12:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ public class CntUnoDataContainer extends TestCase {
                                     TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         Object oInterface = null;
-        XMultiServiceFactory xMSF = Param.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
         Object relationContainer = null ;
         Object xIn = null;
 
