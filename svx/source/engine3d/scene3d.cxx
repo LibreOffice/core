@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:46:08 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1667,4 +1667,156 @@ void E3dScene::SetShadowPlaneDirection(const Vector3D& rVec)
     GetProperties().SetObjectItemDirect(Svx3DShadowSlantItem(nSceneShadowSlant));
 }
 
-// EOF
+
+// #115662#
+// helper class for in-between results from E3dScene::HitTest
+class ImplPairDephAndObject
+{
+public:
+    SdrObject* pObject;
+    double fDepth;
+
+    // for ::std::sort
+    bool operator<(const ImplPairDephAndObject& rComp) const;
+};
+
+bool ImplPairDephAndObject::operator<(const ImplPairDephAndObject& rComp) const
+{
+    if(fDepth < rComp.fDepth)
+        return true;
+    return false;
+}
+
+// #115662#
+// For new chart, calculate the number of hit contained 3D objects at given point,
+// give back the count and a depth-sorted list of SdrObjects (a Vector). The vector will be
+// changed, at least cleared.
+sal_uInt32 E3dScene::HitTest(const Point& rHitTestPosition, ::std::vector< SdrObject* >& o_rResult)
+{
+    // prepare output variables
+    sal_uInt32 nRetval(0L);
+    o_rResult.clear();
+    SdrObjList* pList = GetSubList();
+
+    if(pList && pList->GetObjCount())
+    {
+        SdrObjListIter aIterator(*pList, IM_DEEPNOGROUPS);
+        ::std::vector< ImplPairDephAndObject > aDepthAndObjectResults;
+
+        while(aIterator.IsMore())
+        {
+            SdrObject* pObj = aIterator.Next();
+
+            if(pObj->ISA(E3dCompoundObject))
+            {
+                // get HitLine in local 3D ObjectKoordinates
+                Matrix4D mTransform = ((E3dCompoundObject*)pObj)->GetFullTransform();
+                GetCameraSet().SetObjectTrans(mTransform);
+
+                // create HitPoint Front und Back, transform to local object coordinates
+                Vector3D aFront(rHitTestPosition.X(), rHitTestPosition.Y(), 0.0);
+                Vector3D aBack(rHitTestPosition.X(), rHitTestPosition.Y(), ZBUFFER_DEPTH_RANGE);
+                aFront = GetCameraSet().ViewToObjectCoor(aFront);
+                aBack = GetCameraSet().ViewToObjectCoor(aBack);
+
+                // make BoundVolume HitTest for speedup first
+                const Volume3D& rBoundVol = ((E3dCompoundObject*)pObj)->GetBoundVolume();
+
+                if(rBoundVol.IsValid())
+                {
+                    double fXMax = aFront.X();
+                    double fXMin = aBack.X();
+
+                    if(fXMax < fXMin)
+                    {
+                        fXMax = aBack.X();
+                        fXMin = aFront.X();
+                    }
+
+                    if(rBoundVol.MinVec().X() <= fXMax && rBoundVol.MaxVec().X() >= fXMin)
+                    {
+                        double fYMax = aFront.Y();
+                        double fYMin = aBack.Y();
+
+                        if(fYMax < fYMin)
+                        {
+                            fYMax = aBack.Y();
+                            fYMin = aFront.Y();
+                        }
+
+                        if(rBoundVol.MinVec().Y() <= fYMax && rBoundVol.MaxVec().Y() >= fYMin)
+                        {
+                            double fZMax = aFront.Z();
+                            double fZMin = aBack.Z();
+
+                            if(fZMax < fZMin)
+                            {
+                                fZMax = aBack.Z();
+                                fZMin = aFront.Z();
+                            }
+
+                            if(rBoundVol.MinVec().Z() <= fZMax && rBoundVol.MaxVec().Z() >= fZMin)
+                            {
+                                // BoundVol is hit, get geometry cuts now
+                                Vector3DVector aParameter;
+                                B3dGeometry& rGeometry = ((E3dCompoundObject*)pObj)->GetDisplayGeometry();
+                                rGeometry.GetAllCuts(aParameter, aFront, aBack);
+
+                                if(aParameter.size())
+                                {
+                                    // take first cut as base, use Z-Coor in ViewCoor (0 ..ZBUFFER_DEPTH_RANGE)
+                                    ImplPairDephAndObject aTempResult;
+                                    Vector3D aTempVector(aParameter[0]);
+                                    aTempVector = GetCameraSet().ObjectToViewCoor(aTempVector);
+
+                                    aTempResult.pObject = pObj;
+                                    aTempResult.fDepth = aTempVector.Z();
+
+                                    // look for cut points in front of the first one
+                                    Vector3DVector::iterator aIterator(aParameter.begin());
+                                    aIterator++;
+
+                                    for(;aIterator != aParameter.end(); aIterator++)
+                                    {
+                                        Vector3D aTempVector(*aIterator);
+                                        aTempVector = GetCameraSet().ObjectToViewCoor(aTempVector);
+
+                                        // use the smallest one
+                                        if(aTempVector.Z() < aTempResult.fDepth)
+                                        {
+                                            aTempResult.fDepth = aTempVector.Z();
+                                        }
+                                    }
+
+                                    // remember smallest cut with this object
+                                    aDepthAndObjectResults.push_back(aTempResult);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // fill nRetval
+        nRetval = aDepthAndObjectResults.size();
+
+        if(nRetval)
+        {
+            // sort aDepthAndObjectResults by depth
+            ::std::sort(aDepthAndObjectResults.begin(), aDepthAndObjectResults.end());
+
+            // copy SdrObject pointers to return result set
+            ::std::vector< ImplPairDephAndObject >::iterator aIterator(aDepthAndObjectResults.begin());
+
+            for(;aIterator != aDepthAndObjectResults.end(); aIterator++)
+            {
+                o_rResult.push_back(aIterator->pObject);
+            }
+        }
+    }
+
+    return nRetval;
+}
+
+// eof
