@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 09:20:19 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 16:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ public:
 
     // XRoot
     virtual void SAL_CALL startDocument(
-        Reference< container::XNameAccess > const & xUidMapping )
+        Reference< xml::input::XNamespaceMapping > const & xNamespaceMapping )
         throw (xml::sax::SAXException, RuntimeException);
     virtual void SAL_CALL endDocument()
         throw (xml::sax::SAXException, RuntimeException);
