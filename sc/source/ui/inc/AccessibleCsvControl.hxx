@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-16 15:36:44 $
+ *  last change: $Author: sab $ $Date: 2002-09-04 13:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,6 +696,8 @@ private:
     ScCsvGrid& implGetGrid() const;
     /** Returns the pixel position of the cell (rel. to parent), regardless of visibility. */
     Point implGetRealPos() const;
+    /** Returns the width of the character count */
+    sal_uInt32 implCalcPixelWidth(sal_uInt32 nChars) const;
     /** Returns the pixel size of the cell, regardless of visibility. */
     Size implGetRealSize() const;
     /** Returns the bounding box of the cell relative in the table. */
