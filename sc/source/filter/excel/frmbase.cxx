@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmbase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:44:14 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,12 +133,15 @@ void _ScRangeListTabs::Append( SingleRefData a, const BOOL b )
 
     bHasRanges = TRUE;
 
-    _ScRangeList*   p = ppTabLists[ a.nTab ];
+    if( a.nTab >= 0 )
+    {
+        _ScRangeList*   p = ppTabLists[ a.nTab ];
 
-    if( !p )
-        p = ppTabLists[ a.nTab ] = new _ScRangeList;
+        if( !p )
+            p = ppTabLists[ a.nTab ] = new _ScRangeList;
 
-    p->Append( a );
+        p->Append( a );
+    }
 }
 
 
@@ -190,12 +193,15 @@ void _ScRangeListTabs::Append( ComplRefData a, const BOOL b )
 
     bHasRanges = TRUE;
 
-    _ScRangeList*   p = ppTabLists[ a.Ref1.nTab ];
+    if( a.Ref1.nTab >= 0 )
+    {
+        _ScRangeList*   p = ppTabLists[ a.Ref1.nTab ];
 
-    if( !p )
-        p = ppTabLists[ a.Ref1.nTab ] = new _ScRangeList;
+        if( !p )
+            p = ppTabLists[ a.Ref1.nTab ] = new _ScRangeList;
 
-    p->Append( a );
+        p->Append( a );
+    }
 }
 
 
