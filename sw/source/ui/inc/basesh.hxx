@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:38 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 12:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ public:
 
     void        StateStatusLine(SfxItemSet &rSet);
     void        ExecTxtCtrl(SfxRequest& rReq);
+    void        GetTxtFontCtrlState(SfxItemSet& rSet);
     void        GetTxtCtrlState(SfxItemSet& rSet);
     void        GetBorderState(SfxItemSet &rSet);
     void        GetBckColState(SfxItemSet &rSet);
