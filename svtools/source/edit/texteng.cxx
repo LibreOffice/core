@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-23 12:34:03 $
+ *  last change: $Author: tbe $ $Date: 2002-09-09 15:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,7 @@ void TextEngine::SetFont( const Font& rFont )
         mnFixCharWidth100 = 0;
 
         FormatFullDoc();
+        UpdateViews();
 
         for ( USHORT nView = mpViews->Count(); nView; )
         {
