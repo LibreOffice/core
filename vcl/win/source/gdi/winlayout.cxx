@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hdu $ $Date: 2002-12-05 11:56:52 $
+ *  last change: $Author: sj $ $Date: 2002-12-05 17:54:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,6 +549,7 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& n
                 nGlyphIndex |= GetVerticalFlags( nGlyphIndex & GF_IDXMASK );
             nGlyphIndex |= GF_ISCHAR;
         }
+        ++nCount;
         *(pGlyphs++) = nGlyphIndex;
         if( pGlyphAdvances )
             *(pGlyphAdvances++) = mpGlyphAdvances[ nStart ];
@@ -557,15 +558,13 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& n
             int nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[nStart] : nStart;
             *(pCharIndexes++) = nCharPos;
         }
-
         // stop at last glyph
-        ++nCount;
         if( ++nStart >= mnGlyphCount )
             break;
 
         // stop when next x-position is unexpected
         if( !pGlyphAdvances && mpGlyphOrigAdvs )
-            if( mpGlyphAdvances[nStart] != mpGlyphOrigAdvs[nStart] )
+            if( mpGlyphAdvances[nStart-1] != mpGlyphOrigAdvs[nStart-1] )
                 break;
     }
 
