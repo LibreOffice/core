@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:00 $
+ *  last change: $Author: sj $ $Date: 2000-09-27 16:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,38 @@
 #define EMR_PIXELFORMAT                104
 
 //-----------------------------------------------------------------------------------
+
+static float GetSwapFloat( SvStream& rSt )
+{
+    float   fTmp;
+    sal_Int8* pPtr = (sal_Int8*)&fTmp + 3;
+    rSt >> *pPtr-- >> *pPtr-- >> *pPtr-- >> *pPtr;  // Little Endian <-> Big Endian switch
+    return fTmp;
+}
+
+SvStream& operator>>( SvStream& rIn, XForm& rXForm )
+{
+    if ( sizeof( float ) != 4 )
+    {
+        DBG_ERROR( "EnhWMFReader::sizeof( float ) != 4" );
+        rXForm = XForm();
+    }
+    else
+    {
+#ifdef __BIGENDIAN
+    rXForm.eM11 = GetSwapFloat( rIn );
+    rXForm.eM12 = GetSwapFloat( rIn );
+    rXForm.eM21 = GetSwapFloat( rIn );
+    rXForm.eM22 = GetSwapFloat( rIn );
+    rXForm.eDx = GetSwapFloat( rIn );
+    rXForm.eDy = GetSwapFloat( rIn );
+#else
+    rIn >> rXForm.eM11 >> rXForm.eM12 >> rXForm.eM21 >> rXForm.eM22
+            >> rXForm.eDx >> rXForm.eDy;
+#endif
+    }
+    return rIn;
+}
 
 BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, PFilterCallback pcallback, void * pcallerdata)
 {
@@ -458,7 +490,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             case EMR_SETWORLDTRANSFORM :
             {
                 XForm aTempXForm;
-                *pWMF >> aTempXForm.eM11 >> aTempXForm.eM12 >> aTempXForm.eM21 >> aTempXForm.eM22 >> aTempXForm.eDx >> aTempXForm.eDy;
+                *pWMF >> aTempXForm;
                 pOut->SetWorldTransform( aTempXForm );
             }
             break;
@@ -467,7 +499,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             {
                 UINT32  nMode;
                 XForm   aTempXForm;
-                *pWMF >> aTempXForm.eM11 >> aTempXForm.eM12 >> aTempXForm.eM21 >> aTempXForm.eM22 >> aTempXForm.eDx >> aTempXForm.eDy >> nMode;
+                *pWMF >> aTempXForm >> nMode;
                 pOut->ModifyWorldTransform( aTempXForm, nMode );
             }
             break;
@@ -686,9 +718,9 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 UINT32  nStartPos = pWMF->Tell() - 8;
 
                 pWMF->SeekRel( 0x10 );
-                *pWMF >> xDest >> yDest >> cxDest >> cyDest >> dwRop >> xSrc >> ySrc >> xformSrc.eM11 >> xformSrc.eM12 >>
-                         xformSrc.eM21 >> xformSrc.eM22 >> xformSrc.eDx >> xformSrc.eDy >> nColor >> iUsageSrc >> offBmiSrc >>
-                         cbBmiSrc >> offBitsSrc >> cbBitsSrc >> cxSrc >> cySrc;
+                *pWMF >> xDest >> yDest >> cxDest >> cyDest >> dwRop >> xSrc >> ySrc
+                        >> xformSrc >> nColor >> iUsageSrc >> offBmiSrc >> cbBmiSrc
+                            >> offBitsSrc >> cbBitsSrc >> cxSrc >> cySrc;
 
                 if ( offBmiSrc )
                 {
@@ -827,40 +859,34 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 else
                     aPos = Point( ptlReferenceX, ptlReferenceY );
 
-                UINT32  nSize = nLen;
-
                 if ( nLen )
                 {
-                    if ( !bFlag )
-                        nSize <<= 1;
-
-                    BYTE* pBuf = new BYTE[ nSize + 1 ];
-
                     pWMF->Seek( nCurPos + nOffString );
-                    pWMF->Read( pBuf, nSize );
-
-                    String aText;
-                    if( bFlag )
-                        aText = String( (char*)pBuf, (USHORT)nLen, pOut->GetCharSet() );
+                    if ( bFlag )
+                    {
+                        sal_Char* pBuf = new sal_Char[ nLen ];
+                        pWMF->Read( pBuf, nLen );
+                        String aText( pBuf, (sal_uInt16)nLen, pOut->GetCharSet() );
+                        pOut->DrawText( aPos, aText );
+                        delete pBuf;
+                    }
                     else
                     {
-    #ifdef __BIGENDIAN
-                        pBuf += nSize;
-                        BYTE    nTemp;
-                        for( UINT32 i = 0; i < nLen; i++ )
+                        sal_Unicode* pBuf = new sal_Unicode[ nLen ];
+                        pWMF->Read( pBuf, nLen << 1 );
+#ifdef __BIGENDIAN
+                        sal_Char nTmp, *pTmp = (sal_Char*)( pBuf + nLen );
+                        while ( pTmp-- != (sal_Char*)pBuf )
                         {
-                            pBuf -= 2;
-                            pBuf[ 2 ] = *pBuf;
+                            nTmp = *pTmp--;
+                            pTmp[ 1 ] = *pTmp;
+                            *pTmp = nTmp;
                         }
-                        pBuf++;
-    #endif
-                        aText = String( (sal_Unicode*)pBuf, (xub_StrLen)nLen );
+#endif
+                        String aText( pBuf, (xub_StrLen)nLen );
+                        pOut->DrawText( aPos, aText );
+                        delete pBuf;
                     }
-    #ifdef __BIGENDIAN
-                    pBuf--;
-    #endif
-                    delete[] pBuf;
-                    pOut->DrawText( aPos, aText );
                 }
             }
             break;
