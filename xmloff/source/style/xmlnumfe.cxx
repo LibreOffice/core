@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 07:55:43 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 11:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,10 @@
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
 
+#ifndef INCLUDED_SVTOOLS_NFSYMBOL_HXX
+#include <svtools/nfsymbol.hxx>
+#endif
+
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
 #endif
@@ -103,28 +107,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-
-//-------------------------------------------------------------------------
-
-//! enum Sc_SymbolType is in source/numbers/zforscan.hxx
-
-#define XMLNUM_SYMBOLTYPE_STRING     (-1)
-#define XMLNUM_SYMBOLTYPE_DEL        (-2)
-#define XMLNUM_SYMBOLTYPE_BLANK      (-3)
-#define XMLNUM_SYMBOLTYPE_STAR       (-4)
-#define XMLNUM_SYMBOLTYPE_DIGIT      (-5)
-#define XMLNUM_SYMBOLTYPE_DECSEP     (-6)
-#define XMLNUM_SYMBOLTYPE_THSEP      (-7)
-#define XMLNUM_SYMBOLTYPE_EXP        (-8)
-#define XMLNUM_SYMBOLTYPE_FRAC       (-9)
-#define XMLNUM_SYMBOLTYPE_EMPTY      (-10)
-#define XMLNUM_SYMBOLTYPE_FRACBLANK  (-11)
-#define XMLNUM_SYMBOLTYPE_COMMENT    (-12)
-#define XMLNUM_SYMBOLTYPE_CURRENCY   (-13)
-#define XMLNUM_SYMBOLTYPE_CURRDEL    (-14)
-#define XMLNUM_SYMBOLTYPE_CURREXT    (-15)
-#define XMLNUM_SYMBOLTYPE_CALENDAR   (-16)
-#define XMLNUM_SYMBOLTYPE_CALDEL     (-17)
+using namespace ::svt;
 
 //-------------------------------------------------------------------------
 
@@ -976,11 +959,14 @@ BOOL lcl_IsDefaultDateFormat( const SvNumberformat& rFormat, sal_Bool bSystemDat
         switch ( nElemType )
         {
             case 0:
-                if ( nLastType == XMLNUM_SYMBOLTYPE_STRING )
+                if ( nLastType == NF_SYMBOLTYPE_STRING )
                     bDateNoDefault = sal_True;  // text at the end -> no default date format
                 bEnd = sal_True;                // end of format reached
                 break;
-            case XMLNUM_SYMBOLTYPE_STRING:
+            case NF_SYMBOLTYPE_STRING:
+            case NF_SYMBOLTYPE_DATESEP:
+            case NF_SYMBOLTYPE_TIMESEP:
+            case NF_SYMBOLTYPE_TIME100SECSEP:
                 // text is ignored, except at the end
                 break;
             // same mapping as in SvXMLNumFormatContext::AddNfKeyword:
@@ -1253,7 +1239,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                 case 0:
                     bEnd = sal_True;                // end of format reached
                     break;
-                case XMLNUM_SYMBOLTYPE_DIGIT:
+                case NF_SYMBOLTYPE_DIGIT:
                     if ( bExpFound && pElemStr )
                         nExpDigits += pElemStr->Len();
                     else if ( !bDecDashes && pElemStr && pElemStr->GetChar(0) == '-' )
@@ -1268,21 +1254,21 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         nIntegerSymbols += pElemStr->Len();
                     nTrailingThousands = 0;
                     break;
-                case XMLNUM_SYMBOLTYPE_DECSEP:
+                case NF_SYMBOLTYPE_DECSEP:
                     bInInteger = sal_False;
                     break;
-                case XMLNUM_SYMBOLTYPE_THSEP:
+                case NF_SYMBOLTYPE_THSEP:
                     if (pElemStr)
                         nTrailingThousands += pElemStr->Len();      // is reset to 0 if digits follow
                     break;
-                case XMLNUM_SYMBOLTYPE_EXP:
+                case NF_SYMBOLTYPE_EXP:
                     bExpFound = sal_True;           // following digits are exponent digits
                     bInInteger = sal_False;
                     break;
-                case XMLNUM_SYMBOLTYPE_CURRENCY:
+                case NF_SYMBOLTYPE_CURRENCY:
                     bCurrFound = TRUE;
                     break;
-                case XMLNUM_SYMBOLTYPE_CURREXT:
+                case NF_SYMBOLTYPE_CURREXT:
                     if (pElemStr)
                         sCurrExt = *pElemStr;
                     break;
@@ -1320,18 +1306,19 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     case 0:
                         bEnd = sal_True;                // end of format reached
                         break;
-                    case XMLNUM_SYMBOLTYPE_DIGIT:
+                    case NF_SYMBOLTYPE_DIGIT:
                         if ( pElemStr )
                             nDigitsPassed += pElemStr->Len();
                         break;
-                    case XMLNUM_SYMBOLTYPE_STRING:
-                    case XMLNUM_SYMBOLTYPE_BLANK:
+                    case NF_SYMBOLTYPE_STRING:
+                    case NF_SYMBOLTYPE_BLANK:
+                    case NF_SYMBOLTYPE_PERCENT:
                         if ( nDigitsPassed > 0 && nDigitsPassed < nIntegerSymbols && pElemStr )
                         {
                             //  text (literal or underscore) within the integer part of a number:number element
 
                             String aEmbeddedStr;
-                            if ( nElemType == XMLNUM_SYMBOLTYPE_STRING )
+                            if ( nElemType == NF_SYMBOLTYPE_STRING || nElemType == NF_SYMBOLTYPE_PERCENT )
                                 aEmbeddedStr = *pElemStr;
                             else
                                 SvNumberformat::InsertBlanks( aEmbeddedStr, 0, pElemStr->GetChar(1) );
@@ -1364,11 +1351,15 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                 case 0:
                     bEnd = sal_True;                // end of format reached
                     break;
-                case XMLNUM_SYMBOLTYPE_STRING:
+                case NF_SYMBOLTYPE_STRING:
+                case NF_SYMBOLTYPE_DATESEP:
+                case NF_SYMBOLTYPE_TIMESEP:
+                case NF_SYMBOLTYPE_TIME100SECSEP:
+                case NF_SYMBOLTYPE_PERCENT:
                     if (pElemStr)
                     {
                         if ( ( nPrevType == NF_KEY_S || nPrevType == NF_KEY_SS ) &&
-                             ( pElemStr->EqualsAscii( "," ) || pElemStr->EqualsAscii( "." ) ) &&
+                             ( nElemType == NF_SYMBOLTYPE_TIME100SECSEP ) &&
                              nPrecision > 0 )
                         {
                             //  decimal separator after seconds is implied by
@@ -1393,7 +1384,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                             AddToTextElement_Impl( *pElemStr );
                     }
                     break;
-                case XMLNUM_SYMBOLTYPE_BLANK:
+                case NF_SYMBOLTYPE_BLANK:
                     if ( pElemStr && !lcl_IsInEmbedded( aEmbeddedEntries, nPos ) )
                     {
                         //  turn "_x" into the number of spaces used for x in InsertBlanks in the NumberFormat
@@ -1424,7 +1415,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         }
                     }
                     break;
-                case XMLNUM_SYMBOLTYPE_CURRENCY:
+                case NF_SYMBOLTYPE_CURRENCY:
                     if (pElemStr)
                     {
                         if ( bCurrencyWritten )
@@ -1437,7 +1428,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         }
                     }
                     break;
-                case XMLNUM_SYMBOLTYPE_DIGIT:
+                case NF_SYMBOLTYPE_DIGIT:
                     if (!bNumWritten)           // write number part
                     {
                         switch ( nFmtType )
@@ -1500,7 +1491,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         bNumWritten = sal_True;
                     }
                     break;
-                case XMLNUM_SYMBOLTYPE_DEL:
+                case NF_SYMBOLTYPE_DEL:
                     if ( pElemStr && *pElemStr == XubString('@') )
                     {
                         WriteTextContentElement_Impl();
@@ -1508,7 +1499,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     }
                     break;
 
-                case XMLNUM_SYMBOLTYPE_CALENDAR:
+                case NF_SYMBOLTYPE_CALENDAR:
                     if ( pElemStr )
                         aCalendar = *pElemStr;
                     break;
