@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlpage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:43:08 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #include "xltools.hxx"
 #endif
 
-
 // Constants and Enumerations =================================================
 
 // (0x0014, 0x0015) HEADER, FOOTER --------------------------------------------
@@ -79,19 +78,10 @@
 const sal_uInt16 EXC_ID_HEADER              = 0x0014;
 const sal_uInt16 EXC_ID_FOOTER              = 0x0015;
 
-
 // (0x001A, 0x001B) VERTICAL-, HORIZONTALPAGEBREAKS ---------------------------
 
 const sal_uInt16 EXC_ID_VERPAGEBREAKS       = 0x001A;
 const sal_uInt16 EXC_ID_HORPAGEBREAKS       = 0x001B;
-
-/** Orientation for page breaks. */
-enum XclPBOrientation
-{
-    xlPBHorizontal,
-    xlPBVertical
-};
-
 
 // (0x0026, 0x0027, 0x0028, 0x0029) LEFT-, RIGHT-, TOP-, BOTTOMMARGIN ---------
 
@@ -100,19 +90,22 @@ const sal_uInt16 EXC_ID_RIGHTMARGIN         = 0x0027;
 const sal_uInt16 EXC_ID_TOPMARGIN           = 0x0028;
 const sal_uInt16 EXC_ID_BOTTOMMARGIN        = 0x0029;
 
+const sal_Int32 EXC_MARGIN_DEFAULT_LR       = 1900;     /// Left/right default margin in 1/100mm.
+const sal_Int32 EXC_MARGIN_DEFAULT_TB       = 2500;     /// Top/bottom default margin in 1/100mm.
+const sal_Int32 EXC_MARGIN_DEFAULT_HF       = 1300;     /// Header/footer default margin in 1/100mm.
+const sal_Int32 EXC_MARGIN_DEFAULT_HLR      = 1900;     /// Left/right header default margin in 1/100mm.
+const sal_Int32 EXC_MARGIN_DEFAULT_FLR      = 1900;     /// Left/right footer default margin in 1/100mm.
 
 // (0x002A, 0x002B) PRINTHEADERS, PRINTGRIDLINES ------------------------------
 
 const sal_uInt16 EXC_ID_PRINTHEADERS        = 0x002A;
 const sal_uInt16 EXC_ID_PRINTGRIDLINES      = 0x002B;
 
-
 // (0x0082, 0x0083, 0x0084) GRIDSET, HCENTER, VCENTER -------------------------
 
 const sal_uInt16 EXC_ID_GRIDSET             = 0x0082;
 const sal_uInt16 EXC_ID_HCENTER             = 0x0083;
 const sal_uInt16 EXC_ID_VCENTER             = 0x0084;
-
 
 // (0x00A1) SETUP -------------------------------------------------------------
 
@@ -129,14 +122,12 @@ const sal_uInt16 EXC_SETUP_NOTES_END        = 0x0200;
 
 const sal_uInt16 EXC_PAPERSIZE_DEFAULT      = 0;
 
-
 // (0x00E9) BITMAP ------------------------------------------------------------
 
 const sal_uInt16 EXC_ID_BITMAP              = 0x00E9;
 const sal_uInt32 EXC_BITMAP_UNKNOWNID       = 0x00010009;
 const sal_uInt32 EXC_BITMAP_MAXREC          = 0x201C;
 const sal_uInt32 EXC_BITMAP_MAXCONT         = 0x2014;
-
 
 // ============================================================================
 
@@ -161,6 +152,10 @@ struct XclPageData : ScfNoCopy
     double                      mfBottomMargin;     /// Bottom margin in inches.
     double                      mfHeaderMargin;     /// Margin main page to header.
     double                      mfFooterMargin;     /// Margin main page to footer.
+    double                      mfHdrLeftMargin;    /// Left margin to header.
+    double                      mfHdrRightMargin;   /// Right margin to header.
+    double                      mfFtrLeftMargin;    /// Left margin to footer.
+    double                      mfFtrRightMargin;   /// Right margin to footer.
     sal_uInt16                  mnPaperSize;        /// Index into paper size table.
     sal_uInt16                  mnCopies;           /// Number of copies.
     sal_uInt16                  mnStartPage;        /// Start page number.
@@ -193,7 +188,6 @@ struct XclPageData : ScfNoCopy
     /** Sets the Excel paper size index and paper orientation from Calc paper size (twips). */
     void                        SetScPaperSize( const Size& rSize, bool bPortrait );
 };
-
 
 // ============================================================================
 
