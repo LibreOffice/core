@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbitmap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:09 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#include "implbitmap.hxx"
-#include "implbitmapcanvas.hxx"
+#include <implbitmap.hxx>
+#include <implbitmapcanvas.hxx>
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -100,13 +100,44 @@ namespace cppcanvas
                         "ImplBitmap::draw: invalid canvas" );
 
             if( pCanvas.get() == NULL ||
-                pCanvas->getUNOCanvas().is() )
+                !pCanvas->getUNOCanvas().is() )
+            {
                 return false;
+            }
 
-            // TODO: implement caching
+            // TODO(P1): implement caching
             pCanvas->getUNOCanvas()->drawBitmap( mxBitmap,
                                                  pCanvas->getViewState(),
                                                  maRenderState );
+
+            return true;
+        }
+
+        bool ImplBitmap::drawAlphaModulated( double nAlphaModulation ) const
+        {
+            CanvasSharedPtr pCanvas( getCanvas() );
+
+            OSL_ENSURE( pCanvas.get() != NULL &&
+                        pCanvas->getUNOCanvas().is(),
+                        "ImplBitmap::drawAlphaModulated(): invalid canvas" );
+
+            if( pCanvas.get() == NULL ||
+                !pCanvas->getUNOCanvas().is() )
+            {
+                return false;
+            }
+
+            rendering::RenderState aLocalState( maRenderState );
+            aLocalState.DeviceColor.realloc( 4 );
+            aLocalState.DeviceColor[0] = 1.0;
+            aLocalState.DeviceColor[1] = 1.0;
+            aLocalState.DeviceColor[2] = 1.0;
+            aLocalState.DeviceColor[3] = nAlphaModulation;
+
+            // TODO(P1): implement caching
+            pCanvas->getUNOCanvas()->drawBitmapModulated( mxBitmap,
+                                                          pCanvas->getViewState(),
+                                                          aLocalState );
 
             return true;
         }
