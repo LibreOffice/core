@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar.src,v $
  *
- *  $Revision: 1.1.1.5 $
+ *  $Revision: 1.1.1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:06:36 $
+ *  last change: $Author: kz $ $Date: 2001-08-08 08:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,16 +73,16 @@ String STR_SVT_CALENDAR_DAY
     Text [ danish ] = "Dag" ;
     Text [ portuguese_brazilian ] = "Tag" ;
     Text [ portuguese ] = "Dia" ;
-    Text[ chinese_simplified ] = "Ìì";
+    Text[ chinese_simplified ] = "å¤©";
     Text[ russian ] = "Äåíü";
     Text[ polish ] = "dzieñ";
-    Text[ japanese ] = "“ú";
-    Text[ chinese_traditional ] = "¤Ñ";
+    Text[ japanese ] = "æ—¥";
+    Text[ chinese_traditional ] = "å¤©";
     Text[ arabic ] = "íæã";
     Text[ dutch ] = "Dag";
-    Text[ chinese_simplified ] = "Ìì";
+    Text[ chinese_simplified ] = "å¤©";
     Text[ greek ] = "Çìİñá";
-    Text[ korean ] = "ÀÏÀÚ";
+    Text[ korean ] = "ì¼ì";
     Text[ turkish ] = "Gün";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Día";
@@ -101,16 +101,16 @@ String STR_SVT_CALENDAR_WEEK
     Text [ danish ] = "Uge" ;
     Text [ portuguese ] = "Semana" ;
     Text [ portuguese_brazilian ] = "Woche" ;
-    Text[ chinese_simplified ] = "ÖÜ";
+    Text[ chinese_simplified ] = "å‘¨";
     Text[ russian ] = "Íåäåëÿ";
     Text[ polish ] = "tydzieñ";
-    Text[ japanese ] = "T";
-    Text[ chinese_traditional ] = "¶g";
+    Text[ japanese ] = "é€±";
+    Text[ chinese_traditional ] = "é€±";
     Text[ arabic ] = "ÃÓÈæÚ";
     Text[ dutch ] = "Week";
-    Text[ chinese_simplified ] = "ÖÜ";
+    Text[ chinese_simplified ] = "å‘¨";
     Text[ greek ] = "ÅâäïìÜäá";
-    Text[ korean ] = "ÁÖ";
+    Text[ korean ] = "ì£¼";
     Text[ turkish ] = "Hafta";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Semana";
@@ -129,16 +129,16 @@ String STR_SVT_CALENDAR_TODAY
     Text [ spanish ] = "Hoy" ;
     Text [ french ] = "Aujourd'hui" ;
     Text [ dutch ] = "Vandaag" ;
-    Text[ chinese_simplified ] = "½ñÌì";
+    Text[ chinese_simplified ] = "ä»Šå¤©";
     Text[ russian ] = "Ñåãîäíÿ";
     Text[ polish ] = "dzisiaj";
-    Text[ japanese ] = "¡“ú";
-    Text[ chinese_traditional ] = "¤µ¤Ñ";
+    Text[ japanese ] = "ä»Šæ—¥";
+    Text[ chinese_traditional ] = "ä»Šå¤©";
     Text[ arabic ] = "Çáíæã";
     Text[ dutch ] = "Vandaag";
-    Text[ chinese_simplified ] = "½ñÌì";
+    Text[ chinese_simplified ] = "ä»Šå¤©";
     Text[ greek ] = "ÓŞìåñá";
-    Text[ korean ] = "¿À´Ã";
+    Text[ korean ] = "ì˜¤ëŠ˜";
     Text[ turkish ] = "Bugün";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Hoy";
@@ -157,20 +157,21 @@ String STR_SVT_CALENDAR_NONE
     Text [ spanish ] = "Ninguno" ;
     Text [ french ] = "Aucun(e)" ;
     Text [ dutch ] = "Geen" ;
-    Text[ chinese_simplified ] = "ÎŞ";
+    Text[ chinese_simplified ] = "æ— ";
     Text[ russian ] = "Áåç";
     Text[ polish ] = "brak";
-    Text[ japanese ] = "‚È‚µ";
-    Text[ chinese_traditional ] = "µL";
+    Text[ japanese ] = "ãªã—";
+    Text[ chinese_traditional ] = "ç„¡";
     Text[ arabic ] = "ÈÏæä";
     Text[ dutch ] = "Geen";
-    Text[ chinese_simplified ] = "ÎŞ";
+    Text[ chinese_simplified ] = "æ— ";
     Text[ greek ] = "Êáíİíá";
-    Text[ korean ] = "¾øÀ½";
+    Text[ korean ] = "ì—†ìŒ";
     Text[ turkish ] = "Yok";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ninguno";
     Text[ finnish ] = "Ei mitään";
 };
+
 
 
