@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvFilterOptionsDialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-17 14:29:42 $
+ *  last change: $Author: sj $ $Date: 2002-05-07 15:45:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,22 @@
 #include "dlgejpg.hxx"
 #include <uno/mapping.hxx>
 
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XVIEWDATASUPPLIER_HPP_
+#include <com/sun/star/document/XViewDataSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
+#include <com/sun/star/container/XIndexAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
+#ifndef _COM_SUN_STAR_UNO_ANY_H_
+#include <com/sun/star/uno/Any.h>
+#endif
+
 #if defined WIN || (defined OS2 && !defined ICC)
 #define EXPDLG_FUNCTION_NAME    "_DoExportDialog"
 #else
@@ -125,7 +141,8 @@ uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog_getSupportedServiceName
 // -----------------------------------------------------------------------------
 
 SvFilterOptionsDialog::SvFilterOptionsDialog( const uno::Reference< lang::XMultiServiceFactory > & xMgr ) :
-    rxMgr   ( xMgr )
+    rxMgr       ( xMgr ),
+    eFieldUnit  ( FUNIT_CM )
 {
 }
 
@@ -217,7 +234,6 @@ sal_Int16 SvFilterOptionsDialog::execute()
     }
     if ( aInternalFilterName.Len() )
     {
-        FieldUnit eFieldUnit( FUNIT_CM );   // todo: take the current unit from the model
         GraphicFilter aGraphicFilter( sal_True );
 
         sal_uInt16 nFormat, nFilterCount = aGraphicFilter.pConfig->GetExportFormatCount();
@@ -297,3 +313,42 @@ sal_Int16 SvFilterOptionsDialog::execute()
     }
     return nRet;
 }
+
+// XEmporter
+void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
+        throw ( lang::IllegalArgumentException, uno::RuntimeException )
+{
+
+// todo: take the current unit from the model, but the metric is not yet available within the ViewData propseq
+
+/*
+    uno::Reference< frame::XModel > xModel
+            ( xDoc, uno::UNO_QUERY );
+    if ( xModel.is() )
+    {
+        // print all available properties of first view
+        uno::Reference< document::XViewDataSupplier > xViewDataSupplier
+            ( xModel, uno::UNO_QUERY );
+        if ( xViewDataSupplier.is() )
+    -   {
+            uno::Reference< container::XIndexAccess > xIndexAccess = xViewDataSupplier->getViewData();
+            if ( xIndexAccess.is() && xIndexAccess->getCount() )
+            {
+                uno::Any aView( xIndexAccess->getByIndex( 0 ) );
+                uno::Sequence< beans::PropertyValue > aViewData;
+                aView >>= aViewData;
+                sal_Int32 i, nLen = aViewData.getLength();
+                for ( i = 0; i < nLen; i++ )
+                {
+                    if ( aViewData[ i ].Name == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MetricUnit" ) ) )
+                    {
+
+
+                    }
+                }
+            }
+        }
+    }
+*/
+}
+

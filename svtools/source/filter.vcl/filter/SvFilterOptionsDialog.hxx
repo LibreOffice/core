@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvFilterOptionsDialog.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-11 13:08:23 $
+ *  last change: $Author: sj $ $Date: 2002-05-07 15:45:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,11 @@
 #ifndef _SV_FILTER_OPTIONS_DIALOG_HXX_
 #define _SV_FILTER_OPTIONS_DIALOG_HXX_
 
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _VCL_FLDUNIT_HXX
+#include <vcl/fldunit.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -80,9 +83,13 @@
 #ifndef _COM_SUN_STAR_UI_DIALOGS_EXECUTABLEDIALOGRESULTS_HPP_
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEXPORTER_HPP_
+#include <com/sun/star/document/XExporter.hpp>
+#endif
 
-class SvFilterOptionsDialog : public cppu::WeakImplHelper4
+class SvFilterOptionsDialog : public cppu::WeakImplHelper5
 <
+    com::sun::star::document::XExporter,
     com::sun::star::ui::dialogs::XExecutableDialog,
     com::sun::star::beans::XPropertyAccess,
     com::sun::star::lang::XInitialization,
@@ -94,6 +101,7 @@ class SvFilterOptionsDialog : public cppu::WeakImplHelper4
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
         aMediaDescriptor;
     rtl::OUString   aDialogTitle;
+    FieldUnit       eFieldUnit;
 
 public:
 
@@ -129,6 +137,11 @@ public:
         throw ( com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL setTitle( const ::rtl::OUString& aTitle )
         throw ( ::com::sun::star::uno::RuntimeException );
+
+    // XExporter
+    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
+        throw ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+
 };
 
 
