@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:12:28 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,8 @@
 #endif
 #include "drawdoc.hxx"
 #include "assclass.hxx"
-#include "dlgass.hxx"
+//CHINA001 #include "dlgass.hxx"
+#include "sdenumdef.hxx" //CHINA001
 #include "sdresid.hxx"
 #ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
@@ -140,7 +141,8 @@
 #ifndef SD_FACTORY_IDS_HXX
 #include "FactoryIds.hxx"
 #endif
-
+#include "sdabstdlg.hxx" //CHINA001
+#include "dlgass.hrc" //CHINA001
 
 /*************************************************************************
 |*
@@ -307,8 +309,11 @@ void SdModule::Execute(SfxRequest& rReq)
                 }
 
                 String aFileToOpen;
-                AssistentDlg* pPilotDlg=new AssistentDlg( DIALOG_NO_PARENT, !bNewDocDirect );
-
+                //CHINA001 AssistentDlg* pPilotDlg=new AssistentDlg( DIALOG_NO_PARENT, !bNewDocDirect );
+                SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+                DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+                AbstractAssistentDlg* pPilotDlg = pFact->CreateAssistentDlg(ResId( DLG_ASS ), DIALOG_NO_PARENT, !bNewDocDirect );
+                DBG_ASSERT(pPilotDlg, "Dialogdiet fail!");//CHINA001
                 // Open the Pilot
                 if( pPilotDlg->Execute()==RET_CANCEL )
                 {
