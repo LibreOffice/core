@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-28 15:18:56 $
+ *  last change: $Author: pl $ $Date: 2001-08-30 09:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,7 +430,7 @@ I18NStatus& I18NStatus::get()
 void I18NStatus::free()
 {
     if( pInstance )
-        delete pInstance;
+        delete pInstance, pInstance = NULL;
 }
 
 // --------------------------------------------------------------------------
@@ -555,3 +555,15 @@ void I18NStatus::toTop() const
     }
 }
 
+// --------------------------------------------------------------------------
+
+SalFrame* I18NStatus::getStatusFrame() const
+{
+    SalFrame* pRet = NULL;
+    if( m_pStatusWindow )
+    {
+        const SystemEnvData* pData = m_pStatusWindow->GetSystemData();
+        pRet = (SalFrame*)pData->pSalFrame;
+    }
+    return pRet;
+}

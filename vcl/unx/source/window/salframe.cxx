@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: cp $ $Date: 2001-08-29 16:20:26 $
+ *  last change: $Author: pl $ $Date: 2001-08-30 09:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,7 +619,12 @@ SalFrame::SalFrame() : maFrameData( this ) {}
 inline SalFrameData::~SalFrameData()
 {
     if( mpInputContext )
+    {
         mpInputContext->UnsetICFocus( pFrame_ );
+        mpInputContext->Unmap( pFrame_ );
+        if( mbDeleteInputContext )
+            delete mpInputContext;
+    }
 
     if( GetWindow() == hPresentationWindow )
         hPresentationWindow = None;
@@ -642,16 +647,11 @@ inline SalFrameData::~SalFrameData()
         delete pFreeGraphics_;
     }
 
-    if( mpInputContext && mbDeleteInputContext )
-        delete mpInputContext;
-
     if( hShell_ != pDisplay_->GetWidget() )
         XtDestroyWidget( hShell_ );
 
     SalData* pSalData = GetSalData();
 
-    if( mpInputContext )
-        mpInputContext->Unmap( pFrame_ );
     if( pFrame_ == pSalData->pFirstFrame_ )
         pSalData->pFirstFrame_ = GetNextFrame();
     else
@@ -662,6 +662,14 @@ inline SalFrameData::~SalFrameData()
 
         pTemp->pNextFrame_ = GetNextFrame();
     }
+    /*
+     *  check if there is only the status frame is left
+     *  if so, free it
+     */
+    SalFrame* pStatusFrame = I18NStatus::get().getStatusFrame();
+    if( pSalData->pFirstFrame_ == pStatusFrame
+        && pSalData->pFirstFrame_->maFrameData.GetNextFrame() == NULL )
+        ::vcl::I18NStatus::free();
 }
 
 SalFrame::~SalFrame()

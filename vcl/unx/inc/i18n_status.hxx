@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-28 15:18:56 $
+ *  last change: $Author: pl $ $Date: 2001-08-30 09:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ public:
 
     void setParent( SalFrame* pParent );
     SalFrame* getParent() const { return  m_pParent; }
+    SalFrame* getStatusFrame() const;
 
     void setStatusText( const String& rText );
     const String& getStatusText() const;
