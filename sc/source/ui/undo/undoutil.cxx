@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoutil.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: mh $ $Date: 2001-10-23 10:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,6 @@
 #include "ui_pch.hxx"
 #endif
 
-#pragma hdrstop
-
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -81,13 +76,6 @@
 #include "dbcolect.hxx"
 #include "globstr.hrc"
 #include "global.hxx"
-
-// STATIC DATA -----------------------------------------------------------
-
-SEG_EOFGLOBALS()
-
-
-#pragma SEG_FUNCDEF(undoutil_01)
 
 void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
                                 USHORT nStartX, USHORT nStartY, USHORT nStartZ,
@@ -108,7 +96,6 @@ void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
     }
 }
 
-#pragma SEG_FUNCDEF(undoutil_02)
 
 void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
                                 const ScTripel& rBlockStart,
@@ -118,7 +105,6 @@ void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
                                 rBlockEnd.GetCol(), rBlockEnd.GetRow(), rBlockEnd.GetTab() );
 }
 
-#pragma SEG_FUNCDEF(undoutil_05)
 
 void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
                                 const ScRange& rRange )
@@ -128,7 +114,6 @@ void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
 }
 
 
-#pragma SEG_FUNCDEF(undoutil_03)
 
 ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, USHORT nTab,
                                     USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2 )
@@ -164,7 +149,6 @@ ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, USHOR
     return pRet;
 }
 
-#pragma SEG_FUNCDEF(undoutil_04)
 
 void ScUndoUtil::PaintMore( ScDocShell* pDocShell,
                                 const ScRange& rRange )
@@ -181,49 +165,3 @@ void ScUndoUtil::PaintMore( ScDocShell* pDocShell,
     pDocShell->PostPaint( nCol1,nRow1,rRange.aStart.Tab(),
                           nCol2,nRow2,rRange.aEnd.Tab(), PAINT_GRID );
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.11  2000/09/17 14:09:28  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.10  2000/08/31 16:38:40  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.9  1996/09/04 17:48:18  RJ
-    MarkSimpleBlock mit ScRange-Parameter
-
-
-      Rev 1.8   04 Sep 1996 19:48:18   RJ
-   MarkSimpleBlock mit ScRange-Parameter
-
-      Rev 1.7   19 Aug 1996 21:29:56   NN
-   Markierungen werden nicht mehr am Dokument gehalten
-
-      Rev 1.6   16 Aug 1996 13:52:14   RJ
-   kleine Umstellung in ::MarkSimpleBlock
-
-      Rev 1.5   10 Apr 1996 11:14:54   NN
-   MarkSimpleBlock: Tabelle umstellen
-
-      Rev 1.4   10 Oct 1995 12:21:26   NN
-   PaintMore
-
-      Rev 1.3   03 Feb 1995 09:45:34   GT
-   Umstellung auf Resource-Strings
-
-      Rev 1.2   19 Jan 1995 18:51:20   NN
-   GetOldDBArea
-
-      Rev 1.1   18 Jan 1995 15:06:08   TRI
-   Pragmas zur Segementierung eingebaut
-
-      Rev 1.0   12 Jan 1995 12:19:10   NN
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
-
-
