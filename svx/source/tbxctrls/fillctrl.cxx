@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fillctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2001-01-16 11:48:16 $
+ *  last change: $Author: os $ $Date: 2001-09-06 14:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,7 +689,7 @@ IMPL_LINK( FillControl, SelectFillTypeHdl, ListBox *, pBox )
                 pLbFillType->Selected();
 
             // release focus
-            if ( pBox && SfxViewShell::Current()->GetWindow() )
+            if ( pBox && pLbFillType->IsRelease() && SfxViewShell::Current()->GetWindow() )
                 SfxViewShell::Current()->GetWindow()->GrabFocus();
         }
     }
@@ -706,17 +706,15 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
     SfxObjectShell* pSh = SfxObjectShell::Current();
     SfxDispatcher* pDisp = ( (SvxFillToolBoxControl*)GetData() )->GetBindings().GetDispatcher();
     DBG_ASSERT( pDisp, "invalid Dispatcher" );
-
-    switch( eXFS )
+    if(bAction)
     {
-        case XFILL_NONE:
-            if ( bAction )
-                pDisp->Execute( SID_ATTR_FILL_STYLE, SFX_CALLMODE_RECORD, &aXFillStyleItem, 0L );
-        break;
-
-        case XFILL_SOLID:
+        switch( eXFS )
         {
-            if( bAction )
+            case XFILL_NONE:
+                pDisp->Execute( SID_ATTR_FILL_STYLE, SFX_CALLMODE_RECORD, &aXFillStyleItem, 0L );
+            break;
+
+            case XFILL_SOLID:
             {
                 // NEU
                 //Eintrag wird auf temporaere Farbe geprueft
@@ -732,12 +730,8 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                 pDisp->Execute(
                     SID_ATTR_FILL_COLOR, SFX_CALLMODE_RECORD, &aXFillColorItem, &aXFillStyleItem, 0L );
             }
-        }
-        break;
-
-        case XFILL_GRADIENT:
-        {
-            if( bAction )
+            break;
+            case XFILL_GRADIENT:
             {
                 USHORT nPos = pLbFillAttr->GetSelectEntryPos();
 
@@ -755,12 +749,9 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                     }
                 }
             }
-        }
-        break;
+            break;
 
-        case XFILL_HATCH:
-        {
-            if( bAction )
+            case XFILL_HATCH:
             {
                 USHORT nPos = pLbFillAttr->GetSelectEntryPos();
 
@@ -777,12 +768,9 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                     }
                 }
             }
-        }
-        break;
+            break;
 
-        case XFILL_BITMAP:
-        {
-            if( bAction )
+            case XFILL_BITMAP:
             {
                 USHORT nPos = pLbFillAttr->GetSelectEntryPos();
 
@@ -800,13 +788,13 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                     }
                 }
             }
+            break;
         }
-        break;
+        // release focus
+        if ( pLbFillAttr->IsRelease()  && pBox && SfxViewShell::Current()->GetWindow() )
+            SfxViewShell::Current()->GetWindow()->GrabFocus();
     }
 
-    // release focus
-    if ( !pLbFillAttr->IsTravelSelect() && pBox && SfxViewShell::Current()->GetWindow() )
-        SfxViewShell::Current()->GetWindow()->GrabFocus();
     return 0;
 }
 

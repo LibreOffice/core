@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemwin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-02-13 14:11:35 $
+ *  last change: $Author: os $ $Date: 2001-09-06 14:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,8 @@ SvxLineBox::SvxLineBox( Window* pParent, SfxBindings& rBind, WinBits nBits ) :
     LineLB( pParent, nBits ),
 
     nCurPos     ( 0 ),
-    rBindings   ( rBind )
+    rBindings   ( rBind ),
+    bRelease    ( TRUE )
 
 {
     SetSizePixel( Size( 90, 260 ) );
@@ -206,9 +207,26 @@ long SvxLineBox::PreNotify( NotifyEvent& rNEvt )
 {
     USHORT nType = rNEvt.GetType();
 
-    if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
-        nCurPos = GetSelectEntryPos();
-
+    switch(nType)
+    {
+        case EVENT_MOUSEBUTTONDOWN:
+        case EVENT_GETFOCUS:
+            nCurPos = GetSelectEntryPos();
+        break;
+        case EVENT_LOSEFOCUS:
+            SelectEntryPos(nCurPos);
+        break;
+        case EVENT_KEYINPUT:
+        {
+            const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
+            if( pKEvt->GetKeyCode().GetCode() == KEY_TAB)
+            {
+                bRelease = FALSE;
+                Select();
+            }
+        }
+        break;
+    }
     return LineLB::PreNotify( rNEvt );
 }
 
@@ -243,6 +261,11 @@ long SvxLineBox::Notify( NotifyEvent& rNEvt )
 
 void SvxLineBox::ReleaseFocus_Impl()
 {
+    if(!bRelease)
+    {
+        bRelease = TRUE;
+        return;
+    }
     Window* pShellWnd = SfxViewShell::Current()->GetWindow();
 
     if ( pShellWnd )
@@ -259,7 +282,8 @@ SvxColorBox::SvxColorBox( Window* pParent, USHORT nSID, SfxBindings& rBind, WinB
 
     nCurPos     ( 0 ),
     nId         ( nSID ),
-    rBindings   ( rBind )
+    rBindings   ( rBind ),
+    bRelease    ( TRUE )
 
 {
     SetSizePixel( Size( 100, 180 ) );
@@ -333,8 +357,26 @@ long SvxColorBox::PreNotify( NotifyEvent& rNEvt )
 {
     USHORT nType = rNEvt.GetType();
 
-    if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
-        nCurPos = GetSelectEntryPos();
+    switch(nType)
+    {
+        case  EVENT_MOUSEBUTTONDOWN:
+        case EVENT_GETFOCUS:
+            nCurPos = GetSelectEntryPos();
+        break;
+        case EVENT_LOSEFOCUS:
+            SelectEntryPos(nCurPos);
+        break;
+        case EVENT_KEYINPUT:
+        {
+            const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
+
+            if( pKEvt->GetKeyCode().GetCode() == KEY_TAB)
+            {
+                bRelease = FALSE;
+                Select();
+            }
+        }
+    }
 
     return ColorLB::PreNotify( rNEvt );
 }
@@ -370,6 +412,11 @@ long SvxColorBox::Notify( NotifyEvent& rNEvt )
 
 void SvxColorBox::ReleaseFocus_Impl()
 {
+    if(!bRelease)
+    {
+        bRelease = TRUE;
+        return;
+    }
     Window* pShellWnd = SfxViewShell::Current()->GetWindow();
 
     if ( pShellWnd )
@@ -548,7 +595,8 @@ SvxFillTypeBox::SvxFillTypeBox( Window* pParent, WinBits nBits ) :
     FillTypeLB( pParent, nBits ),
 
     nCurPos ( 0 ),
-    bSelect ( FALSE )
+    bSelect ( FALSE ),
+    bRelease(TRUE)
 
 {
     SetSizePixel( Size( 90, 100 ) );
@@ -593,12 +641,16 @@ long SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-
         switch ( pKEvt->GetKeyCode().GetCode() )
         {
             case KEY_RETURN:
-                ( (Link&)GetSelectHdl() ).Call( this );
                 nHandled = 1;
+                ( (Link&)GetSelectHdl() ).Call( this );
+            break;
+            case KEY_TAB:
+                bRelease = FALSE;
+                ( (Link&)GetSelectHdl() ).Call( this );
+                bRelease = TRUE;
                 break;
 
             case KEY_ESCAPE:
@@ -629,7 +681,8 @@ SvxFillAttrBox::SvxFillAttrBox( Window* pParent, WinBits nBits ) :
 
     FillAttrLB( pParent, nBits ),
 
-    nCurPos( 0 )
+    nCurPos( 0 ),
+    bRelease( TRUE )
 
 {
     SetPosPixel( Point( 90, 0 ) );
@@ -670,8 +723,12 @@ long SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
             case KEY_RETURN:
                 ( (Link&)GetSelectHdl() ).Call( this );
                 nHandled = 1;
-                break;
-
+            break;
+            case KEY_TAB:
+                bRelease = FALSE;
+                GetSelectHdl().Call( this );
+                bRelease = TRUE;
+            break;
             case KEY_ESCAPE:
                 SelectEntryPos( nCurPos );
                 ReleaseFocus_Impl();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-07-13 09:55:07 $
+ *  last change: $Author: os $ $Date: 2001-09-06 14:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,7 +483,6 @@ void SvxStyleBox::Select()
         ReleaseFocus();
     }
 }
-
 // -----------------------------------------------------------------------
 
 void SvxStyleBox::SetFamily( SfxStyleFamily eNewFamily )
@@ -499,6 +498,8 @@ long SvxStyleBox::PreNotify( NotifyEvent& rNEvt )
 
     if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
         nCurSel = GetSelectEntryPos();
+    else if(EVENT_LOSEFOCUS == nType)
+        SelectEntryPos(GetSavedValue());
     return ListBox::PreNotify( rNEvt );
 }
 
@@ -519,8 +520,7 @@ long SvxStyleBox::Notify( NotifyEvent& rNEvt )
             {
                 if ( KEY_TAB == nCode )
                     bRelease = FALSE;
-                else
-                    nHandled = 1;
+                nHandled = 1;
                 Select();
                 break;
             }
@@ -680,6 +680,9 @@ long SvxFontNameBox::Notify( NotifyEvent& rNEvt )
                 break;
         }
     }
+    else if(EVENT_LOSEFOCUS == rNEvt.GetType())
+        SetText(GetSavedValue());
+
     return FontNameBox::Notify( rNEvt );
 }
 
@@ -817,8 +820,6 @@ void SvxFontSizeBox::Select()
         ReleaseFocus_Impl();
     }
 }
-
-
 // -----------------------------------------------------------------------
 
 void SvxFontSizeBox::StateChanged_Impl( SfxItemState eState, const SfxPoolItem* pState )
@@ -839,6 +840,7 @@ void SvxFontSizeBox::StateChanged_Impl( SfxItemState eState, const SfxPoolItem* 
         SetValue( -1L );
         SetText( String() );
     }
+    SaveValue();
 }
 
 // -----------------------------------------------------------------------
@@ -894,6 +896,8 @@ long SvxFontSizeBox::Notify( NotifyEvent& rNEvt )
                 break;
         }
     }
+    else if(EVENT_LOSEFOCUS == rNEvt.GetType())
+        SetText(GetSavedValue());
 
     return nHandled ? nHandled : FontSizeBox::Notify( rNEvt );
 }
@@ -1922,6 +1926,7 @@ void SvxStyleToolBoxControl::SelectStyle( const String& rStyleName )
         }
         else
             pBox->SetNoSelection();
+        pBox->SaveValue();
     }
 }
 
@@ -2096,6 +2101,7 @@ void SvxFontNameToolBoxControl::StateChanged(
         }
         else
             pBox->SetText( String() );
+        pBox->SaveValue();
     }
 
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );

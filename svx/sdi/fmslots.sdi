@@ -1,6 +1,6 @@
 /*------------------------------------------------------------------------
     $Workfile:   FMSLOTS.SDI  $
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svx/sdi/fmslots.sdi,v 1.2 2000-10-20 16:16:42 fs Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svx/sdi/fmslots.sdi,v 1.3 2001-09-06 14:42:49 os Exp $
     Beschreibung:   IDL - File FormularShell
 
     (c) Copyright 1989 - 2000, Star Division GmbH, Hamburg
@@ -435,6 +435,9 @@ shell FmFormShell
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/20 16:16:42  fs
+    #79654# FmFormShell responsible for SID_FM_AUTOCONTROLFOCUS
+
     Revision 1.1.1.1  2000/09/18 17:01:06  hr
     initial import
 
