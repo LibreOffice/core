@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDrawPageDuplicator.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:30 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 
 /** makes it possible to duplicate pages within the same document.
  */
-interface XDrawPageDuplicator: com::sun::star::uno::XInterface
+published interface XDrawPageDuplicator: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
