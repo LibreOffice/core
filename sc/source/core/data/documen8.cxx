@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2001-09-21 06:12:59 $
+ *  last change: $Author: obo $ $Date: 2001-12-05 12:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -709,7 +709,9 @@ BOOL ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
                             ScEditUtil::ModifyDelimiters( pEngine->GetWordDelimiters() ) );
                 pDefaults = new SfxItemSet( pEngine->GetEmptyItemSet() );
 
-                pEngine->SetSpeller( LinguMgr::GetSpellChecker() );
+                com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellChecker1> xXSpellChecker1( LinguMgr::GetSpellChecker() );
+
+                pEngine->SetSpeller( xXSpellChecker1 );
             }
 
             const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
