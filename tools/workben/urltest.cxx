@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:39:57 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include "cppuhelper/implbase1.hxx"
 #endif
+#include "osl/thread.h"
 #ifndef _RTL_STRING_H_
 #include "rtl/string.h"
 #endif
@@ -1227,8 +1228,9 @@ main()
                 { "http://as@alaska:8000/test/test.sxw", 0 } };
         for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
         {
-            INetURLObject aUrl(String(aTest[i].m_pInput, RTL_TEXTENCODING_UTF8),
-                               INET_PROT_HTTP);
+            INetURLObject aUrl = INetURLObject(
+                String(aTest[i].m_pInput, RTL_TEXTENCODING_UTF8),
+                INET_PROT_HTTP);
             if (aTest[i].m_pOutput == 0
                 ? !aUrl.HasError()
                 : (aUrl.HasError()
@@ -1419,6 +1421,54 @@ main()
                                   RTL_TEXTENCODING_ASCII_US).GetBuffer(),
                        ByteString(aRelURLToTest.getStr(),
                                   RTL_TEXTENCODING_ASCII_US).GetBuffer());
+    }
+
+    if (true) { // #112130#
+        INetURLObject url1(rtl::OUString::createFromAscii(".uno:abc%3Fdef"));
+        if (!url1.GetProtocol() == INET_PROT_UNO) {
+            printf("BAD .uno:abc%3Fdef\n");
+            bSuccess = false;
+        }
+        if (!rtl::OUString(url1.GetURLPath(INetURLObject::NO_DECODE)).
+                equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("abc%3Fdef"))) {
+            printf(
+                "BAD GetURLPath(.uno:abc%3Fdef): %s\n",
+                rtl::OUStringToOString(
+                    url1.GetURLPath(INetURLObject::NO_DECODE),
+                    osl_getThreadTextEncoding()).getStr());
+            bSuccess = false;
+        }
+        if (url1.HasParam()) {
+            printf("BAD HasParam(.uno:abc%3Fdef)\n");
+            bSuccess = false;
+        }
+        INetURLObject url2(rtl::OUString::createFromAscii(".uno:abc?def?ghi"));
+        if (!url2.GetProtocol() == INET_PROT_UNO) {
+            printf("BAD .uno:abc?def?ghi\n");
+            bSuccess = false;
+        }
+        if (!rtl::OUString(url2.GetURLPath(INetURLObject::NO_DECODE)).
+                equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("abc"))) {
+            printf(
+                "BAD GetURLPath(.uno:abc?def?ghi): %s\n",
+                rtl::OUStringToOString(
+                    url2.GetURLPath(INetURLObject::NO_DECODE),
+                    osl_getThreadTextEncoding()).getStr());
+            bSuccess = false;
+        }
+        if (!url2.HasParam()) {
+            printf("BAD HasParam(.uno:abc?def?ghi)\n");
+            bSuccess = false;
+        }
+        if (!rtl::OUString(url2.GetParam(INetURLObject::NO_DECODE)).
+                equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("def?ghi"))) {
+            printf(
+                "BAD GetURLPath(.uno:abc?def?ghi): %s\n",
+                rtl::OUStringToOString(
+                    url2.GetParam(INetURLObject::NO_DECODE),
+                    osl_getThreadTextEncoding()).getStr());
+            bSuccess = false;
+        }
     }
 
     return bSuccess ? EXIT_SUCCESS : EXIT_FAILURE;
