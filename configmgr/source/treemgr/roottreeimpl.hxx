@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottreeimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:17:22 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 18:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@ namespace configmgr
         private:
             virtual RootTreeImpl const* doCastToRootTree() const;
             virtual ElementTreeImpl const* doCastToElementTree() const;
+            virtual void doGetPathRoot(Path::Components& rPath) const;
+
+            AbsolutePath m_aContextPath;
         };
 //-----------------------------------------------------------------------------
     }

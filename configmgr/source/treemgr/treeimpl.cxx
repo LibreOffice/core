@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-13 11:54:51 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 18:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,20 +257,8 @@ void Node::renameNode(Name const& aName)
 //-----------------------------------------------------------------------------
 
 /// creates a TreeImpl for a detached, virgin instance of <var>aTemplate</var>
-TreeImpl::TreeImpl()
+TreeImpl::TreeImpl( NodeOffset nRoot)
 : m_aNodes()
-, m_aContextPath( AbsolutePath::detachedRoot() )
-, m_pParentTree(0)
-, m_nParentNode(0)
-, m_nDepth( 0 )
-, m_nRoot(1)
-{
-}
-//-----------------------------------------------------------------------------
-
-TreeImpl::TreeImpl( AbsolutePath const& aContextPath, NodeOffset nRoot)
-: m_aNodes()
-, m_aContextPath(aContextPath)
 , m_pParentTree(0)
 , m_nParentNode(0)
 , m_nDepth(0)
@@ -281,13 +269,11 @@ TreeImpl::TreeImpl( AbsolutePath const& aContextPath, NodeOffset nRoot)
 
 TreeImpl::TreeImpl( TreeImpl& rParentTree, NodeOffset nParentNode )
 : m_aNodes()
-, m_aContextPath(rParentTree.getContextPath())
 , m_pParentTree(&rParentTree)
 , m_nParentNode(nParentNode)
 , m_nDepth(0)
 , m_nRoot(1)
 {
-    initPath(); // completes the path
 }
 //-----------------------------------------------------------------------------
 
@@ -296,15 +282,38 @@ TreeImpl::~TreeImpl()
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::initPath()
+void ElementTreeImpl::doGetPathRoot(Path::Components& rPath) const
 {
-    OSL_ASSERT(m_pParentTree);
-    Path::Components aNames = m_aContextPath.rep().components();
-    m_pParentTree->appendPathTo(m_nParentNode,aNames);
-    m_aContextPath = AbsolutePath(aNames);
+    rPath = AbsolutePath::detachedRoot().components();
 }
 //-----------------------------------------------------------------------------
 
+void RootTreeImpl::doGetPathRoot(Path::Components& rPath) const
+{
+    rPath = m_aContextPath.components();
+}
+
+//-----------------------------------------------------------------------------
+void TreeImpl::implGetContextPath(Path::Components& rPath) const
+{
+    if (m_pParentTree)
+    {
+        OSL_ASSERT(m_nParentNode);
+        m_pParentTree->implGetContextPath(rPath);
+        m_pParentTree->appendPathTo(m_nParentNode,rPath);
+    }
+    else
+        doGetPathRoot(rPath);
+}
+//-----------------------------------------------------------------------------
+
+AbsolutePath TreeImpl::getContextPath() const
+{
+    Path::Components aPath;
+    implGetContextPath(aPath);
+    return AbsolutePath(aPath);
+}
+//-----------------------------------------------------------------------------
 void TreeImpl::build(NodeFactory& rFactory, INode& rCacheNode, TreeDepth nDepth)
 {
     OSL_ASSERT(m_aNodes.empty());
@@ -808,7 +817,8 @@ RootTreeImpl::RootTreeImpl( NodeFactory& rNodeFactory,
                         AbsolutePath const& aContextPath,
                         ISubtree& rCacheNode, TreeDepth nDepth,
                         NodeOffset nRoot)
-: TreeImpl(aContextPath,nRoot)
+: TreeImpl(nRoot)
+, m_aContextPath(aContextPath)
 {
     TreeImpl::build(rNodeFactory,rCacheNode,nDepth);
 }

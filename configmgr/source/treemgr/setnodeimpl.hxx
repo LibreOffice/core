@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 18:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,9 +184,9 @@ namespace configmgr
 
             SetNodeVisitor::Result doDispatchToElements(SetNodeVisitor& aVisitor);
 
-            void    implInsertElement(Name const& aName, Element const& aNewElement);
-            void    implReplaceElement(Name const& aName, Element const& aNewElement);
-            void    implRemoveElement(Name const& aName);
+            void    implInsertElement(Name const& aName, Element const& aNewElement, bool bCommit);
+            void    implReplaceElement(Name const& aName, Element const& aNewElement, bool bCommit);
+            void    implRemoveElement(Name const& aName, bool bCommit);
 
             void    implInitElement(Element const& aNewElement);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-13 11:54:51 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 18:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1244,10 +1244,10 @@ void DeferredTreeSetNodeImpl::doCommitChanges()
             if (aNewElement.isValid())
             {
                 if (pOriginal)
-                    TreeSetNodeImpl::implReplaceElement(aName,aNewElement);
+                    TreeSetNodeImpl::implReplaceElement(aName,aNewElement,true);
 
                 else
-                    TreeSetNodeImpl::implInsertElement(aName,aNewElement);
+                    TreeSetNodeImpl::implInsertElement(aName,aNewElement,true);
 
                 aNewElement->makeIndirect(true);
             }
@@ -1255,7 +1255,7 @@ void DeferredTreeSetNodeImpl::doCommitChanges()
             {
                 if (pOriginal)
                 {
-                    TreeSetNodeImpl::implRemoveElement(aName);
+                    TreeSetNodeImpl::implRemoveElement(aName,true);
                 }
 
                 //else nothing to do
@@ -1374,6 +1374,15 @@ void DeferredTreeSetNodeImpl::finishCommit(SubtreeChange& rChanges)
 
         if (Element* pNewElement = m_aChangedData.getElement(aElementName))
         {
+            Element aOriginal;
+            if (pOriginal)
+            {
+                aOriginal = *pOriginal;
+                OSL_ASSERT(aOriginal.isValid());
+            }
+            else
+                OSL_ASSERT(!aOriginal.isValid());
+
             // handle a added, replaced or deleted node
             std::auto_ptr<INode> aRemovedNode;
 
@@ -1388,7 +1397,12 @@ void DeferredTreeSetNodeImpl::finishCommit(SubtreeChange& rChanges)
                 OSL_ASSERT( rAddNode.isReplacing() == (0!=pOriginal)  );
                 OSL_ASSERT( rAddNode.isReplacing() == (0!=aRemovedNode.get())  );
 
-                // do we need to rename the tree (or node) here ??
+                if (aOriginal.isValid())
+                    TreeSetNodeImpl::implReplaceElement(aElementName,*pNewElement,false);
+
+                else
+                    TreeSetNodeImpl::implInsertElement(aElementName,*pNewElement,false);
+
                 (*pNewElement)->makeIndirect(true);
             }
             else
@@ -1399,18 +1413,20 @@ void DeferredTreeSetNodeImpl::finishCommit(SubtreeChange& rChanges)
                 RemoveNode& rRemoveNode =  static_cast<RemoveNode&>(*it);
                 aRemovedNode = rRemoveNode.releaseRemovedNode();
 
-                OSL_ASSERT(pOriginal);
+                OSL_ASSERT(aOriginal.isValid());
+                if (aOriginal.isValid())
+                    TreeSetNodeImpl::implRemoveElement(aElementName,false);
             }
             // handle a added or deleted node
-            if (pOriginal)
+            if (aOriginal.isValid())
             {
                 OSL_ENSURE(aRemovedNode.get(), "Cannot take over the removed node");
 
-                OSL_ASSERT(pOriginal->isValid());
-                (*pOriginal)->takeNodeFrom(aRemovedNode);
-                (*pOriginal)->commitChanges(); // tree is detached => commit directly
-                (*pOriginal)->makeIndirect(false);
+                aOriginal->takeNodeFrom(aRemovedNode);
+                aOriginal->commitChanges(); // tree is detached => commit directly
+                aOriginal->makeIndirect(false);
             }
+            m_aChangedData.removeElement(aElementName);
         }
         else
         {
@@ -1421,7 +1437,6 @@ void DeferredTreeSetNodeImpl::finishCommit(SubtreeChange& rChanges)
             if (pOriginal)
                 (*pOriginal)->legacyFinishCommit(*it);
         }
-        m_aChangedData.removeElement(aElementName);
     }
     m_bChanged = false;
 
@@ -1513,7 +1528,7 @@ void DeferredTreeSetNodeImpl::implInsertNewElement(Name const& aName, Element co
         }
         else
         {
-            m_aChangedData.insertElement(aName, Element());
+            m_aChangedData.insertElement(aName, aNewElement);
         }
         m_bChanged = true;
     }
@@ -1787,17 +1802,17 @@ void DeferredValueSetNodeImpl::doCommitChanges()
             if (aNewElement.isValid())
             {
                 if (pOriginal)
-                    ValueSetNodeImpl::implReplaceElement(aName,aNewElement);
+                    ValueSetNodeImpl::implReplaceElement(aName,aNewElement,true);
 
                 else
-                    ValueSetNodeImpl::implInsertElement(aName,aNewElement);
+                    ValueSetNodeImpl::implInsertElement(aName,aNewElement,true);
 
                 aNewElement->makeIndirect(true);
             }
             else
             {
                 if (pOriginal)
-                    ValueSetNodeImpl::implRemoveElement(aName);
+                    ValueSetNodeImpl::implRemoveElement(aName,true);
 
                 //else nothing to do
             }
@@ -1915,6 +1930,15 @@ void DeferredValueSetNodeImpl::finishCommit(SubtreeChange& rChanges)
 
         if (Element* pNewElement = m_aChangedData.getElement(aElementName))
         {
+            Element aOriginal;
+            if (pOriginal)
+            {
+                aOriginal = *pOriginal;
+                OSL_ASSERT(aOriginal.isValid());
+            }
+            else
+                OSL_ASSERT(!aOriginal.isValid());
+
             // handle a added, replaced or deleted node
             std::auto_ptr<INode> aRemovedNode;
 
@@ -1929,7 +1953,12 @@ void DeferredValueSetNodeImpl::finishCommit(SubtreeChange& rChanges)
                 OSL_ASSERT( rAddNode.isReplacing() == (0!=pOriginal)  );
                 OSL_ASSERT( rAddNode.isReplacing() == (0!=aRemovedNode.get())  );
 
-                // do we need to rename the tree (or node) here ??
+                if (aOriginal.isValid())
+                    ValueSetNodeImpl::implReplaceElement(aElementName,*pNewElement,false);
+
+                else
+                    ValueSetNodeImpl::implInsertElement(aElementName,*pNewElement,false);
+
                 (*pNewElement)->makeIndirect(true);
             }
             else
@@ -1940,18 +1969,20 @@ void DeferredValueSetNodeImpl::finishCommit(SubtreeChange& rChanges)
                 RemoveNode& rRemoveNode =  static_cast<RemoveNode&>(*it);
                 aRemovedNode = rRemoveNode.releaseRemovedNode();
 
-                OSL_ASSERT(pOriginal);
+                OSL_ASSERT(aOriginal.isValid());
+                if (aOriginal.isValid())
+                    ValueSetNodeImpl::implRemoveElement(aElementName,false);
             }
             // handle a added or deleted node
-            if (pOriginal)
+            if (aOriginal.isValid())
             {
                 OSL_ENSURE(aRemovedNode.get(), "Cannot take over the removed node");
 
-                OSL_ASSERT(pOriginal->isValid());
-                (*pOriginal)->takeNodeFrom(aRemovedNode);
-                (*pOriginal)->commitChanges(); // tree is detached => commit directly
-                (*pOriginal)->makeIndirect(false);
+                aOriginal->takeNodeFrom(aRemovedNode);
+                aOriginal->commitChanges(); // tree is detached => commit directly
+                aOriginal->makeIndirect(false);
             }
+            m_aChangedData.removeElement(aElementName);
         }
         else
         {
@@ -1962,7 +1993,6 @@ void DeferredValueSetNodeImpl::finishCommit(SubtreeChange& rChanges)
             if (pOriginal)
                 (*pOriginal)->legacyFinishCommit(*it);
         }
-        m_aChangedData.removeElement(aElementName);
     }
     m_bChanged = false;
 
@@ -2054,7 +2084,7 @@ void DeferredValueSetNodeImpl::implInsertNewElement(Name const& aName, Element c
         }
         else
         {
-            m_aChangedData.insertElement(aName, Element());
+            m_aChangedData.insertElement(aName, aNewElement);
         }
         m_bChanged = true;
     }

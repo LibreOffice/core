@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:17:22 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 18:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,11 +187,8 @@ namespace configmgr
         protected:
         //  Construction
             /// creates a TreeImpl for a detached, virgin tree
-            TreeImpl( );
-
-            /// creates a TreeImpl without a parent tree
-            TreeImpl(   AbsolutePath const& aContextPath,
-                        NodeOffset nRoot = 1);
+            explicit
+            TreeImpl( NodeOffset nRoot = 1);
 
             /// creates a TreeImpl with a parent tree
             TreeImpl(TreeImpl& rParentTree, NodeOffset nParentNode );
@@ -205,7 +202,7 @@ namespace configmgr
 
         // Context Access
             /// gets the path to the parent node of this tree
-            AbsolutePath    getContextPath() const  { return m_aContextPath; }
+            AbsolutePath    getContextPath() const;
             /// gets the tree of parent node of this tree
             TreeImpl*       getContextTree()        { return m_pParentTree; }
             /// gets the tree of parent node of this tree
@@ -344,6 +341,8 @@ namespace configmgr
         private:
             virtual RootTreeImpl const* doCastToRootTree() const = 0;
             virtual ElementTreeImpl const* doCastToElementTree() const = 0;
+
+            virtual void doGetPathRoot(Path::Components& rPath) const = 0;
         private:
             void implCollectChangesFrom(NodeOffset nNode, NodeChanges& rChanges) const;
             void implCommitChangesFrom(NodeOffset nNode);
@@ -351,13 +350,12 @@ namespace configmgr
             mutable OTreeAccessor m_aOwnLock;
 
             NodeList        m_aNodes;
-            AbsolutePath    m_aContextPath;
             TreeImpl*   m_pParentTree;
             NodeOffset  m_nParentNode;
             NodeOffset  const m_nRoot; /// base of <type>NodeOffset</type>s used in this class
             TreeDepth   m_nDepth;
 
-            void initPath();
+            void implGetContextPath(Path::Components& rPath) const;
 
             friend class TreeImplBuilder;
         };
@@ -424,6 +422,8 @@ namespace configmgr
         private:
             virtual RootTreeImpl const* doCastToRootTree() const;
             virtual ElementTreeImpl const* doCastToElementTree() const;
+
+            virtual void doGetPathRoot(Path::Components& rPath) const;
         private:
             TemplateHolder  const m_aInstanceInfo;
             INode* m_pOwnedNode;

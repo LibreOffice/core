@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-13 11:54:51 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 18:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ namespace
     }
     void CollectElementTrees::add(INode& rNode)
     {
-        bool bWritable = !rNode.getAttributes().writable;
+        bool bWritable = rNode.getAttributes().writable;
 
         NodeFactory& rNodeFactory = bWritable ? m_rFactory : NodeType::getReadAccessFactory();
 
@@ -313,39 +313,39 @@ void AbstractSetNodeImpl::implInitElement(Element const& aNewElement)
 }
 //-------------------------------------------------------------------------
 
-void AbstractSetNodeImpl::implInsertElement(Name const& aName, Element const& aNewElement)
+void AbstractSetNodeImpl::implInsertElement(Name const& aName, Element const& aNewElement,bool bCommit)
 {
-    attach(aNewElement,aName,true);
+    attach(aNewElement,aName,bCommit);
     try
     {
         m_aDataSet.insertElement(aName,aNewElement);
     }
     catch (std::exception&)
     {
-        detach(aNewElement,true);
+        detach(aNewElement,bCommit);
         throw;
     }
 }
 //-------------------------------------------------------------------------
 
-void    AbstractSetNodeImpl::implReplaceElement(Name const& aName, Element const& aNewElement)
+void    AbstractSetNodeImpl::implReplaceElement(Name const& aName, Element const& aNewElement,bool bCommit)
 {
-    attach(aNewElement,aName,true);
+    attach(aNewElement,aName,bCommit);
     try
     {
-        detach(m_aDataSet.replaceElement(aName,aNewElement),true);
+        detach(m_aDataSet.replaceElement(aName,aNewElement),bCommit);
     }
     catch (std::exception&)
     {
-        detach(aNewElement,true);
+        detach(aNewElement,bCommit);
         throw;
     }
 }
 //-------------------------------------------------------------------------
 
-void    AbstractSetNodeImpl::implRemoveElement(Name const& aName)
+void    AbstractSetNodeImpl::implRemoveElement(Name const& aName,bool bCommit)
 {
-    detach(m_aDataSet.removeElement(aName),true);
+    detach(m_aDataSet.removeElement(aName),bCommit);
 }
 //-------------------------------------------------------------------------
 
@@ -407,7 +407,7 @@ void AbstractSetNodeImpl::attach(Element const& aNewElement, Name const& aName, 
     // check for and correct a misnomer - do only after parenthood is assured (else we don't own it anyways)
     if (aName != aActualName)
     {
-        OSL_ENSURE(aActualName.isEmpty(), "WARNING: Wrongly named tree inserted in set node");
+    //  OSL_ENSURE(aActualName.isEmpty(), "WARNING: Wrongly named tree inserted in set node");
         aNewElement->renameTree(aName);
 
         aActualName = validatedName(aNewElement);
@@ -426,8 +426,8 @@ void AbstractSetNodeImpl::detach(Element const& aOldElement, bool bCommit)
 {
     if (aOldElement.isValid())
     {
-        aOldElement->detachFrom(getOriginalSetNode(), validatedName(aOldElement));
-        if (bCommit) aOldElement->detachTree();
+        aOldElement->detachTree();
+        if (bCommit) aOldElement->detachFrom(getOriginalSetNode(), validatedName(aOldElement));
     }
 }
 //-------------------------------------------------------------------------
@@ -439,25 +439,25 @@ void AbstractSetNodeImpl::detach(Element const& aOldElement, bool bCommit)
 
 void TreeSetNodeImpl::doInsertElement(Name const& aName, SetEntry const& aNewEntry)
 {
-    AbstractSetNodeImpl::implInsertElement( aName, implMakeElement(aNewEntry.tree()));
+    AbstractSetNodeImpl::implInsertElement( aName, implMakeElement(aNewEntry.tree()), true);
 }
 //-------------------------------------------------------------------------
 
 void ValueSetNodeImpl::doInsertElement(Name const& aName, SetEntry const& aNewEntry)
 {
-    AbstractSetNodeImpl::implInsertElement( aName, implMakeElement(aNewEntry.tree()));
+    AbstractSetNodeImpl::implInsertElement( aName, implMakeElement(aNewEntry.tree()), true);
 }
 //-------------------------------------------------------------------------
 
 void TreeSetNodeImpl::doRemoveElement(Name const& aName)
 {
-    AbstractSetNodeImpl::implRemoveElement( aName );
+    AbstractSetNodeImpl::implRemoveElement( aName, true );
 }
 //-------------------------------------------------------------------------
 
 void ValueSetNodeImpl::doRemoveElement(Name const& aName)
 {
-    AbstractSetNodeImpl::implRemoveElement( aName );
+    AbstractSetNodeImpl::implRemoveElement( aName, true );
 }
 //-------------------------------------------------------------------------
 
