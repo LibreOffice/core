@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtuni1.tab,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:47:15 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,3 +109,26 @@ static ImplTextEncodingData const aImplUTF8TextEncodingData
             | RTL_TEXTENCODING_INFO_MULTIBYTE
             | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_UNICODE, pc code page 850 */
+
+static char aImplJavaUtf8TextConverterTag;
+    /* The value of this tag is irrelevant.  Only its address != NULL is used to
+       distinguish between RTL_TEXTENCODING_UTF8 and
+       RTL_TEXTENCODING_JAVA_UTF8. */
+
+static ImplTextEncodingData const aImplJavaUtf8TextEncodingData
+    = { { &aImplJavaUtf8TextConverterTag,
+          &ImplConvertUtf8ToUnicode,
+          &ImplConvertUnicodeToUtf8,
+          &ImplCreateUtf8ToUnicodeContext,
+          &ImplDestroyContext,
+          &ImplResetUtf8ToUnicodeContext,
+          &ImplCreateUnicodeToUtf8Context,
+          &ImplDestroyContext,
+          &ImplResetUnicodeToUtf8Context },
+        1,
+        3,
+        1,
+        0,
+        NULL,
+        NULL,
+        RTL_TEXTENCODING_INFO_UNICODE | RTL_TEXTENCODING_INFO_MULTIBYTE };
