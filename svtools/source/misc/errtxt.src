@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:10:45 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 15:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,14 +129,14 @@ Resource RID_ERRCTX
         Text [ danish ] = "$(ERR) under indlæsning af skabelonen $(ARG1)" ;
         Text [ portuguese ] = "$(ERR) ao carregar o modelo $(ARG1)" ;
         Text [ portuguese_brazilian ] = "$(ERR) beim Laden der Vorlage $(ARG1)" ;
-        Text[ chinese_simplified ] = "$(ERR)·¢ÉúÔÚ×°ÔØÑùÊ½$(ARG1)Ê±";
+        Text[ chinese_simplified ] = "$(ERR)·¢ÉúÔÚ×°ÈëÑùÊ½$(ARG1)Ê±";
         Text[ russian ] = "$(ERR) ïğè çàãğóçêå øàáëîíà $(ARG1)";
         Text[ polish ] = "$(ERR) przy ³adowaniu szablonu $(ARG1)";
         Text[ japanese ] = "$(ERR)ÃİÌßÚ°Ä$(ARG1)‚Ì“Ç‚İ‚İ‚ÌÛ";
         Text[ chinese_traditional ] = "¸ü¤J¼Ë¦¡ $(ARG1) ®Éµo¥Í $(ERR)";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊÍãíá ÇáŞÇáÈ $(ARG1)";
         Text[ dutch ] = "$(ERR) bij laden van sjabloon $(ARG1)";
-        Text[ chinese_simplified ] = "$(ERR)·¢ÉúÔÚ×°ÔØÑùÊ½$(ARG1)Ê±";
+        Text[ chinese_simplified ] = "$(ERR)·¢ÉúÔÚ×°ÈëÑùÊ½$(ARG1)Ê±";
         Text[ greek ] = "$(ERR) êáôÜ ôç öüñôùóç ôïõ ğñïôığïõ $(ARG1)";
         Text[ korean ] = "¼­½ÄÆÄÀÏ $(ARG1)À» ·ÎµåÇÏ´øÁß $(ERR)";
         Text[ turkish ] = "$(ARG1) şablonu yüklenirken $(ERR)";
@@ -306,14 +306,14 @@ Resource RID_ERRCTX
         Text [ danish ] = "$(ERR) under indlæsning af dokumentet $(ARG1)" ;
         Text [ portuguese ] = "$(ERR) ao carregar o documento $(ARG1)" ;
         Text [ portuguese_brazilian ] = "$(ERR) beim Laden des Dokumentes $(ARG1)" ;
-        Text[ chinese_simplified ] = "×°ÔØÎÄµµ $(ARG1) Ê±·¢Éú $(ERR)";
+        Text[ chinese_simplified ] = "×°ÈëÎÄµµ $(ARG1) Ê±·¢Éú $(ERR)";
         Text[ russian ] = "$(ERR) ïğè çàãğóçêå äîêóìåíòà $(ARG1)";
         Text[ polish ] = "$(ERR) przy ³adowaniu dokumentu $(ARG1)";
         Text[ japanese ] = "$(ERR)ÄŞ·­ÒİÄ$(ARG1)‚Ì“Ç‚İ‚İ‚ÌÛ";
         Text[ chinese_traditional ] = "¸ü¤J¤å¥ó $(ARG1) ®Éµo¥Í $(ERR)";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊÍãíá ÇáãÓÊäÏ $(ARG1)";
         Text[ dutch ] = "$(ERR) bij openen van document $(ARG1)";
-        Text[ chinese_simplified ] = "×°ÔØÎÄµµ $(ARG1) Ê±·¢Éú $(ERR)";
+        Text[ chinese_simplified ] = "×°ÈëÎÄµµ $(ARG1) Ê±·¢Éú $(ERR)";
         Text[ greek ] = "$(ERR) êáôÜ ôï öüñôùìá ôïõ åããñÜöïõ $(ARG1)";
         Text[ korean ] = "¹®¼­$(ARG1)¸¦ ·ÎµåÇÏ´ø Áß $(ERR)";
         Text[ turkish ] = "$(ARG1) belgesi yüklenirken $(ERR)";
@@ -409,14 +409,14 @@ Resource RID_ERRCTX
         Text [ danish ] = "$(ERR) under indlæsning af BASIC fra dokumentet $(ARG1)" ;
         Text [ portuguese ] = "$(ERR) ao carregar o BASIC do documento $(ARG1)" ;
         Text [ portuguese_brazilian ] = "$(ERR) beim Laden des BASIC des Dokuments $(ARG1)" ;
-        Text[ chinese_simplified ] = "×°ÔØÎÄµµ $(ARG1) BASIC Ê±·¢Éú $(ERR)";
+        Text[ chinese_simplified ] = "×°ÈëÎÄµµ $(ARG1) BASIC Ê±·¢Éú $(ERR)";
         Text[ russian ] = "$(ERR) ïğè çàãğóçêå BASIC äîêóìåíòà $(ARG1)";
         Text[ polish ] = "$(ERR) przy ³adowaniu dokumentu BASIC $(ARG1)";
         Text[ japanese ] = "$(ERR)ÄŞ·­ÒİÄ$(ARG1)‚ÌBASIC‚Ì“Ç‚İ‚İ‚ÌÛ";
         Text[ chinese_traditional ] = "¸ü¤J¤å¥ó $(ARG1)  BASIC ®Éµo¥Í $(ERR)";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊÍãíá BASIC ÇáãÓÊäÏ $(ARG1)";
         Text[ dutch ] = "$(ERR) bij laden van BASIC van document $(ARG1)";
-        Text[ chinese_simplified ] = "×°ÔØÎÄµµ $(ARG1) BASIC Ê±·¢Éú $(ERR)";
+        Text[ chinese_simplified ] = "×°ÈëÎÄµµ $(ARG1) BASIC Ê±·¢Éú $(ERR)";
         Text[ greek ] = "$(ERR) êáôÜ ôç öüñôùóç ôïõ BASIC ôïõ åããñÜöïõ $(ARG1)";
         Text[ korean ] = "¹®¼­$(ARG1)ÀÇ BASICÀ» ·ÎµåÇÏ´ø Áß $(ERR)";
         Text[ turkish ] = "$(ARG1) belgesi ile ilgili BASIC yüklenirken $(ERR)";
@@ -1350,7 +1350,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Âûïîëíèòü îïåğàöèş seek íå óäàåòñÿ";
         Text[ polish ] = "Nie mo¿na by³o wykonaæ operacji pliku (Seek)";
         Text[ japanese ] = "Seek‘€ì‚ªÀs‚Å‚«‚Ü‚¹‚ñ";
-        Text[ chinese_traditional ] = "µLªk°õ¦æ·j´M©R¥O";
+        Text[ chinese_traditional ] = "µLªk°õ¦æ·j´M«ü¥O";
         Text[ arabic ] = "ÊÚĞÑ ÊäİíĞ ÇáÚãáíÉ \"Seek\"";
         Text[ dutch ] = "De zoekopdracht kon niet worden uitgevoerd";
         Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞËÑÑ°²Ù×÷";
@@ -1375,7 +1375,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Âûïîëíèòü îïåğàöèş tell íåâîçìîæíî";
         Text[ polish ] = "Nie mo¿na by³o wykonaæ operacji pliku (Tell)";
         Text[ japanese ] = "Tell‘€ì‚ªÀs‚Å‚«‚Ü‚¹‚ñ";
-        Text[ chinese_traditional ] = "µLªk°õ¦æ Tell ©R¥O";
+        Text[ chinese_traditional ] = "µLªk°õ¦æ Tell «ü¥O";
         Text[ arabic ] = "ÊÚĞÑ ÊäİíĞ ÇáÚãáíÉ \"Tell\"";
         Text[ dutch ] = "De bestandsopdracht TELL kon niet worden uitgevoerd";
         Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞ tell ÃüÁî";
@@ -1852,7 +1852,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Íå óäàåòñÿ îïğåäåëèòü èìÿ óçëîâîãî êîìïüşòåğà $(ARG1)";
         Text[ polish ] = "Nazwa komputera $(ARG1) nie mog³a zostaæ przetworzona";
         Text[ japanese ] = "Î½Ä–¼$(ARG1)‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½";
-        Text[ chinese_traditional ] = "µLªk§ä¨ì¹q¸£¦a§} $(ARG1)";
+        Text[ chinese_traditional ] = "µLªk§ä¨ì¥D¾÷¦a§} $(ARG1)";
         Text[ arabic ] = "ÊÚĞÑ Íá ÇÓã ÇáãÖíİ $(ARG1)";
         Text[ dutch ] = "Computernaam $(ARG1) kon niet worden herleid";
         Text[ chinese_simplified ] = "ÎŞ·¨ÕÒµ½¼ÆËã»úµØÖ· $(ARG1)";
@@ -1975,14 +1975,14 @@ Resource RID_ERRHDL
         Text [ spanish ] = "Los datos de Internet solicitados no se encuentran en el caché y no pueden ser transmitidos ya que el modo en línea no está activo." ;
         Text [ french ] = "Impossible de transmettre les données provenant d'Internet : vous n'êtes pas en mode en ligne et les données ne se trouvent pas dans le cache." ;
         Text [ dutch ] = "De opgevraagde Internetgegevens zijn niet voorhanden in het cachegeheugen en kunnen niet worden getransfereerd daar de Onlinemodus niet actief is" ;
-        Text[ chinese_simplified ] = "ÒòÎªÄúµÄ¼ÆËã»úºÍ»¹Ã»ÓĞºÍ¹ú¼Ê»¥ÁªÍøÁ¬½Ó£¬¶øÇÒ¼ÆËã»úµÄ»º³åÇøÒ²Ã»ÓĞÄúÇëÇóµÄ¹ú¼Ê»¥ÁªÍøµÄÊı¾İ£¬Òò´ËÎŞ·¨×°ÔØ´«µİÊı¾İ";
+        Text[ chinese_simplified ] = "ÒòÎªÄúµÄ¼ÆËã»úºÍ»¹Ã»ÓĞºÍ¹ú¼Ê»¥ÁªÍøÁ¬½Ó£¬¶øÇÒ¼ÆËã»ú»º³åÇøÒ²Ã»ÓĞÄúÇëÇóµÄ¹ú¼Ê»¥ÁªÍøµÄ×ÊÁÏ£¬Òò´ËÎŞ·¨´«µİÈÎºÎÊı¾İ¡£";
         Text[ russian ] = "Çàòğåáîâàííûå äàííûå Èíòåğíåòà íå íàõîäÿòñÿ â êıø è ïåğåäàòü èõ íåâîçìîæíî, ò.ê. ğåæèì Online íå àêòèâèçèğîâàí.";
         Text[ polish ] = "Wymaganych danych z sieci Internet nie ma w pamiêci podrêcznej i nie mo¿na ich za³adowaæ, poniewa¿ tryb online nie jest uaktywniony.";
         Text[ japanese ] = "w’è‚µ‚½²İÀ°È¯Ä‚ÌÃŞ°À‚Í·¬¯¼­‚É‚È‚­‚ÄAµİ×²İ Ó°ÄŞ‚ª±¸Ã¨ÌŞ‚Å‚Í‚È‚¢‚½‚ß‚É“]‘—‚Å‚«‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "ÁÙ¨S¦³³s½u¨ì Internet ¡M¦Ó¥B½w½Ä°Ï¤]¨S¦³¼È¦s½Ğ¨Dªº Internet ¸ê®Æ¦ÓµLªk¶Ç»¼¸ê®Æ";
         Text[ arabic ] = "ãÚáæãÇÊ ÇáÅäÊÑäÊ ÇáãØáæÈÉ ÛíÑ ãæÌæÏÉ İí æÍÏÉ ÇáÊÎÒíä ÇáãÄŞÊÉ¡ æáÇ íãßä äŞáåÇ¡ ÅĞ Ãä æÖÚ ÇáÇÊÕÇá ÛíÑ äÔØ";
         Text[ dutch ] = "De opgevraagde Internetgegevens zijn niet voorhanden in het cachegeheugen en kunnen niet worden getransfereerd daar de Onlinemodus niet actief is";
-        Text[ chinese_simplified ] = "ÒòÎªÄúµÄ¼ÆËã»úºÍ»¹Ã»ÓĞºÍ¹ú¼Ê»¥ÁªÍøÁ¬½Ó£¬¶øÇÒ¼ÆËã»úµÄ»º³åÇøÒ²Ã»ÓĞÄúÇëÇóµÄ¹ú¼Ê»¥ÁªÍøµÄÊı¾İ£¬Òò´ËÎŞ·¨×°ÔØ´«µİÊı¾İ";
+        Text[ chinese_simplified ] = "ÒòÎªÄúµÄ¼ÆËã»úºÍ»¹Ã»ÓĞºÍ¹ú¼Ê»¥ÁªÍøÁ¬½Ó£¬¶øÇÒ¼ÆËã»ú»º³åÇøÒ²Ã»ÓĞÄúÇëÇóµÄ¹ú¼Ê»¥ÁªÍøµÄ×ÊÁÏ£¬Òò´ËÎŞ·¨´«µİÈÎºÎÊı¾İ¡£";
         Text[ greek ] = "Ôá æçôïıìåíá äåäïìİíá ôïõ Internet äåí âñßóêïíôáé óôçí êñõöŞ ìíŞìç êáé äåí åßíáé äõíáôüí íá ìåôáäïèïıí, åğåéäŞ åñãÜæåóôå óå êáôÜóôáóç '×ùñßò óıíäåóç'";
         Text[ korean ] = "¿äÃ»µÈ ÀÎÅÍ³İ µ¥ÀÌÅÍ°¡ Ä³½Ã¿¡ ¾øÀ¸¸ç ¿Â¶óÀÎ ¸ğµå°¡ È°¼ºÈ­µÇ¾î ÀÖÁö ¾Ê¾Æ µ¥ÀÌÅÍ¸¦ º¸³¾ ¼ö ¾øÀ½";
         Text[ turkish ] = "İstenen Internet verileri önbellekte bulunmuyor ve çevrimiçi kipi etkin olmadığı için aktarılamıyor";
@@ -2616,7 +2616,7 @@ Resource RID_ERRHDL
         Text[ arabic ] = "áßí ÊÊãßä ãä ÊËÈíÊ ŞäÇÉ ÃäÊ ÈÍÇÌÉ Åáì ãÌáÏ ÇÔÊÑÇßÇÊ.";
         Text[ dutch ] = "Om een channel te installeren heeft u een abonnementenmap nodig.";
         Text[ chinese_simplified ] = "Èç¹ûÒª°²×°ÆµµÀ£¬Äú¾ÍĞèÒªÏÈ´´½¨Ò»¸ö¶©ÔÄÎÄ¼ş¼Ğ¡£";
-        Text[ greek ] = "Ãéá íá ãßíåé åãêáôÜóôáóç åíüò êáíáëéïı áğáéôåßôáé İíáò öÜêåëïò óõíäñïìşí.";
+        Text[ greek ] = "Ãéá íá ãßíåé ç åãêáôÜóôáóç êÜğïéïõ êáíáëéïı áğáéôåßôáé İíáò öÜêåëïò óõíäñïìşí.";
         Text[ korean ] = "Ã¤³ÎÀ» ¼³Ä¡ÇÏ·Á¸é ¾Ë¸²½ÅÃ» Æú´õ°¡ ÇÊ¿äÇÕ´Ï´Ù.";
         Text[ turkish ] = "Kanal kurmak için bir üyelik klasörünüz olmalı.";
     };
