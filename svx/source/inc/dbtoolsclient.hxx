@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtoolsclient.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 10:23:53 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,8 +234,15 @@ namespace svxform
                                         sal_Bool _bDefault = sal_False) const;
 
         // ------------------------------------------------
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-            getComponentContextConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
+        bool isEmbeddedInDatabase(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent,
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxActualConnection
+        );
+
+        // ------------------------------------------------
+        bool isEmbeddedInDatabase(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent
+        );
     };
 //........................................................................
 }   // namespace svxform
