@@ -1685,6 +1685,40 @@
                     <value>1</value>
                 </prop>
             </node>
+
+            <node oor:name=".uno:InsertMasterPage" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Neuer Master</value>
+                    <value xml:lang="en-US">New Master</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DeleteMasterPage" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Master löschen</value>
+                    <value xml:lang="en-US">Delete Master</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:RenameMasterPage" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Master umbenennen</value>
+                    <value xml:lang="en-US">Rename Master</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:CloseMasterView" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Master View schlie~ßen</value>
+                    <value xml:lang="en-US">Close Master View</value>
+                </prop>
+            </node>
         </node>
         <node oor:name="Popups">
             <node oor:name=".uno:ModifyMenu" oor:op="replace">
