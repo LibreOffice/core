@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:30:25 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:36:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1028,10 +1028,41 @@ void SvXMLExport::ImplExportStyles( sal_Bool bUsed )
 
         _ExportStyles( sal_False );
     }
+
+    // transfer style names (+ families) TO other components (if appropriate)
+    OUString sStyleNames( RTL_CONSTASCII_USTRINGPARAM("StyleNames") );
+    OUString sStyleFamilies( RTL_CONSTASCII_USTRINGPARAM("StyleFamilies") );
+    if( ( ( mnExportFlags & EXPORT_CONTENT ) == 0 )
+        && xExportInfo.is()
+        && xExportInfo->getPropertySetInfo()->hasPropertyByName( sStyleNames )
+        && xExportInfo->getPropertySetInfo()->hasPropertyByName( sStyleFamilies ) )
+    {
+        Sequence<sal_Int32> aStyleFamilies;
+        Sequence<OUString> aStyleNames;
+        mxAutoStylePool->GetRegisteredNames( aStyleFamilies, aStyleNames );
+        xExportInfo->setPropertyValue( sStyleNames, makeAny( aStyleNames ) );
+        xExportInfo->setPropertyValue( sStyleFamilies,
+                                       makeAny( aStyleFamilies ) );
+    }
 }
 
 void SvXMLExport::ImplExportAutoStyles( sal_Bool bUsed )
 {
+    // transfer style names (+ families) FROM other components (if appropriate)
+    OUString sStyleNames( RTL_CONSTASCII_USTRINGPARAM("StyleNames") );
+    OUString sStyleFamilies( RTL_CONSTASCII_USTRINGPARAM("StyleFamilies") );
+    if( ( ( mnExportFlags & EXPORT_STYLES ) == 0 )
+        && xExportInfo.is()
+        && xExportInfo->getPropertySetInfo()->hasPropertyByName( sStyleNames )
+        && xExportInfo->getPropertySetInfo()->hasPropertyByName( sStyleFamilies ) )
+    {
+        Sequence<sal_Int32> aStyleFamilies;
+        xExportInfo->getPropertyValue( sStyleFamilies ) >>= aStyleFamilies;
+        Sequence<OUString> aStyleNames;
+        xExportInfo->getPropertyValue( sStyleNames ) >>= aStyleNames;
+        mxAutoStylePool->RegisterNames( aStyleFamilies, aStyleNames );
+    }
+
 //  AddAttributeASCII( XML_NAMESPACE_NONE, XML_ID, XML_AUTO_STYLES_ID );
     {
         // <style:automatic-styles>
