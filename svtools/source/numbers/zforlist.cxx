@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: er $ $Date: 2001-08-21 11:46:11 $
+ *  last change: $Author: hr $ $Date: 2001-10-01 13:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1882,9 +1882,8 @@ String SvNumberFormatter::GetFormatDecimalSep( ULONG nFormat ) const
     else
     {
         ::com::sun::star::lang::Locale aSaveLocale( xLocaleData->getLocale() );
-        ((SvNumberFormatter*)this)->xLocaleData.changeLocale(
-            ConvertLanguageToLocale( pFormat->GetLanguage() ),
-            pFormat->GetLanguage() );
+        ::com::sun::star::lang::Locale aTmpLocale(ConvertLanguageToLocale(pFormat->GetLanguage()));
+        ((SvNumberFormatter*)this)->xLocaleData.changeLocale(aTmpLocale, pFormat->GetLanguage() );
         aRet = xLocaleData->getNumDecimalSep();
         ((SvNumberFormatter*)this)->xLocaleData.changeLocale( aSaveLocale, eSaveLang );
     }
