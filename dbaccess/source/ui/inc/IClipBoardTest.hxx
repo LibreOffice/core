@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IClipBoardTest.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:35 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,9 @@
  ************************************************************************/
 #ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
 #define DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
 
 namespace dbaui
 {
