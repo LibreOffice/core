@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 09:06:29 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,20 +243,23 @@ private:
 };
 
 AnimationPageList::AnimationPageList( SdDrawDocument* pDoc )
-        : mnStartPageNumber(0), mpDoc( pDoc ), mnCurrentPageIndex(0)
+    : mpDoc( pDoc ), mnCurrentPageIndex(0), mnStartPageNumber(-1)
 {
     mnPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
 }
 
 sal_Int32 AnimationPageList::getStartPageIndex() const
 {
-    sal_Int32 nIndex;
-    const sal_Int32 nCount = maPageNumbers.size();
-
-    for( nIndex = 0; nIndex < nCount; nIndex++ )
+    if( mnStartPageNumber >= 0 )
     {
-        if( maPageNumbers[nIndex] == mnStartPageNumber )
-            return nIndex;
+        sal_Int32 nIndex;
+        const sal_Int32 nCount = maPageNumbers.size();
+
+        for( nIndex = 0; nIndex < nCount; nIndex++ )
+        {
+            if( maPageNumbers[nIndex] == mnStartPageNumber )
+                return nIndex;
+        }
     }
 
     return 0;
@@ -552,23 +555,35 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
                 const USHORT nPgNum = ( pStartPage->GetPageNum() - 2 ) >> 1;
                 pStartPage = mpDoc->GetSdPage( nPgNum, PK_STANDARD );
             }
-
-            if( pStartPage->GetPageKind() == PK_STANDARD )
-                aPresPage = pStartPage->GetName();
-            else
-                bStartWithActualPage = false;
         }
 
-        if( ( meAnimationMode != ANIMATIONMODE_SHOW ) && pStartPage )
+        if( bStartWithActualPage )
         {
-            if( pStartPage->GetPageKind() == PK_STANDARD )
-                maPresSettings.mbAll = false;
+            if( meAnimationMode != ANIMATIONMODE_SHOW )
+            {
+                if( pStartPage->GetPageKind() == PK_STANDARD )
+                {
+                    aPresPage = pStartPage->GetName();
+                    maPresSettings.mbAll = false;
+                }
+                else
+                {
+                    bStartWithActualPage = false;
+                }
+            }
+        }
+        else
+        {
+            if( pStartPage->GetPageKind() != PK_STANDARD )
+            {
+                bStartWithActualPage = false;
+            }
         }
 
         mpAnimationPageList.reset( new AnimationPageList( mpDoc ) );
 
         // build page list
-        createPageList( maPresSettings.mbAll, bStartWithActualPage, aPresPage );
+        createPageList( maPresSettings.mbAll, false, aPresPage );
 
         if( bStartWithActualPage )
         {
@@ -1849,8 +1864,7 @@ void SlideshowImpl::createPageList( bool bAll, bool bStartWithActualPage, const 
         {
             if( meAnimationMode != ANIMATIONMODE_SHOW && rPresPage.Len() )
             {
-                long nPage;
-
+                sal_Int32 nPage;
                 for( nPage = 0; nPage < nPageCount; nPage++ )
                     if( rPresPage == mpDoc->GetSdPage( (USHORT) nPage, PK_STANDARD )->GetName() )
                         break;
@@ -1859,7 +1873,9 @@ void SlideshowImpl::createPageList( bool bAll, bool bStartWithActualPage, const 
                     mpAnimationPageList->insertPageNumber( (USHORT) nPage );
             }
 
-            for( void* pCustomPage = pCustomShow->First(); pCustomPage; pCustomPage = pCustomShow->Next() )
+            void* pCustomPage;
+            sal_Int32 nPageIndex;
+            for( pCustomPage = pCustomShow->First(),nPageIndex=0; pCustomPage; pCustomPage = pCustomShow->Next(), nPageIndex++ )
             {
                 const USHORT nSdPage = ( ( (SdPage*) pCustomPage )->GetPageNum() - 1 ) / 2;
 
@@ -1893,7 +1909,7 @@ void SlideshowImpl::hideChildWindows()
 {
     mnChildMask = 0UL;
 
-    if( !maPresSettings.mbFullScreen && ( ANIMATIONMODE_SHOW == meAnimationMode ) )
+    if( ANIMATIONMODE_SHOW == meAnimationMode )
     {
         SfxViewFrame* pViewFrame = getViewFrame();
 
@@ -1915,7 +1931,7 @@ void SlideshowImpl::hideChildWindows()
 
 void SlideshowImpl::showChildWindows()
 {
-    if( !maPresSettings.mbFullScreen && ( ANIMATIONMODE_SHOW == meAnimationMode ) )
+    if( ANIMATIONMODE_SHOW == meAnimationMode )
     {
         SfxViewFrame* pViewFrame = getViewFrame();
         pViewFrame->SetChildWindow( SID_NAVIGATOR, ( mnChildMask & NAVIGATOR_CHILD_MASK ) != 0 );
@@ -1996,9 +2012,7 @@ void SlideshowImpl::activate()
                 mpViewShell->Invalidate(SID_DRAWTBX_INSERT);
             }
 */
-            // hide all popups
-            SfxBoolItem     aBoolItem( SID_SHOWPOPUPS, FALSE );
-            pDispatcher->Execute( SID_SHOWPOPUPS, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aBoolItem, 0L );
+            hideChildWindows();
 
             // filter all forbiden slots
             pDispatcher->SetSlotFilter( TRUE, sizeof(pAllowed) / sizeof(USHORT), pAllowed );
@@ -2036,10 +2050,7 @@ void SlideshowImpl::deactivate()
 
         if( mpShowWindow )
         {
-                SfxBoolItem aBoolItem( SID_SHOWPOPUPS, TRUE );
-
-                // Popups wieder einschalten
-                getViewFrame()->GetDispatcher()->Execute( SID_SHOWPOPUPS, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aBoolItem, 0L );
+            showChildWindows();
         }
     }
 }
