@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectformatter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:47:25 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,24 +107,27 @@
 #include <vector>
 
 // =============================================================================
-// helper class <SwPageNumOfAnchors>
+// helper class <SwPageNumAndTypeOfAnchors>
+// --> OD 2004-10-04 #i26945# - Additionally the type of the anchor text frame
+// is collected - by type is meant 'master' or 'follow'.
 // =============================================================================
-class SwPageNumOfAnchors
+class SwPageNumAndTypeOfAnchors
 {
     private:
         struct tEntry
         {
             SwAnchoredObject* mpAnchoredObj;
             sal_uInt32 mnPageNumOfAnchor;
+            bool mbAnchoredAtMaster;
         };
 
         std::vector< tEntry* > maObjList;
 
     public:
-        inline SwPageNumOfAnchors()
+        inline SwPageNumAndTypeOfAnchors()
         {
         }
-        inline ~SwPageNumOfAnchors()
+        inline ~SwPageNumAndTypeOfAnchors()
         {
             for ( std::vector< tEntry* >::iterator aIter = maObjList.begin();
                   aIter != maObjList.end(); ++aIter )
@@ -149,6 +152,17 @@ class SwPageNumOfAnchors
             else
             {
                 pNewEntry->mnPageNumOfAnchor = 0;
+            }
+            // <--
+            // --> OD 2004-10-04 #i26945# - collect type of anchor
+            SwTxtFrm* pAnchorCharFrm = _rAnchoredObj.FindAnchorCharFrm();
+            if ( pAnchorCharFrm )
+            {
+                pNewEntry->mbAnchoredAtMaster = !pAnchorCharFrm->IsFollow();
+            }
+            else
+            {
+                pNewEntry->mbAnchoredAtMaster = true;
             }
             // <--
             maObjList.push_back( pNewEntry );
@@ -178,6 +192,20 @@ class SwPageNumOfAnchors
             return nRetPgNum;
         }
 
+        // --> OD 2004-10-04 #i26945#
+        inline bool AnchoredAtMaster( sal_uInt32 _nIndex )
+        {
+            bool bAnchoredAtMaster( true );
+
+            if ( _nIndex < Count())
+            {
+                bAnchoredAtMaster = maObjList[_nIndex]->mbAnchoredAtMaster;
+            }
+
+            return bAnchoredAtMaster;
+        }
+        // <--
+
         inline sal_uInt32 Count() const
         {
             return maObjList.size();
@@ -194,13 +222,15 @@ SwObjectFormatter::SwObjectFormatter( const SwPageFrm& _rPageFrm,
       mbFormatOnlyAsCharAnchored( false ),
       mbConsiderWrapOnObjPos( _rPageFrm.GetFmt()->GetDoc()->ConsiderWrapOnObjPos() ),
       mpLayAction( _pLayAction ),
-      mpPgNumOfAnchors( _bCollectPgNumOfAnchors ? new SwPageNumOfAnchors() : 0L )
+      // --> OD 2004-10-04 #i26945#
+      mpPgNumAndTypeOfAnchors( _bCollectPgNumOfAnchors ? new SwPageNumAndTypeOfAnchors() : 0L )
+      // <--
 {
 }
 
 SwObjectFormatter::~SwObjectFormatter()
 {
-    delete mpPgNumOfAnchors;
+    delete mpPgNumAndTypeOfAnchors;
 }
 
 SwObjectFormatter* SwObjectFormatter::CreateObjFormatter(
@@ -392,8 +422,13 @@ void SwObjectFormatter::_FormatObjCntnt( SwAnchoredObject& _rAnchoredObj )
         pCntnt->OptCalc();
 
         // format floating screen objects at content text frame
+        // --> OD 2004-11-01 #i23129#, #i36347# - pass correct page frame to
+        // the object formatter
         if ( pCntnt->IsTxtFrm() &&
-             !SwObjectFormatter::FormatObjsAtFrm( *pCntnt, mrPageFrm, GetLayAction() ) )
+             !SwObjectFormatter::FormatObjsAtFrm( *pCntnt,
+                                                  *(pCntnt->FindPageFrm()),
+                                                  GetLayAction() ) )
+        // <--
         {
             // restart format with first content
             pCntnt = rFlyFrm.ContainsCntnt();
@@ -422,9 +457,9 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
     }
 
     // collect anchor object and its 'anchor' page number, if requested
-    if ( mpPgNumOfAnchors )
+    if ( mpPgNumAndTypeOfAnchors )
     {
-        mpPgNumOfAnchors->Collect( _rAnchoredObj );
+        mpPgNumAndTypeOfAnchors->Collect( _rAnchoredObj );
     }
 
     if ( _rAnchoredObj.ISA(SwFlyFrm) )
@@ -439,7 +474,12 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
             {
                 _FormatLayout( rFlyFrm );
             }
-            SwObjectFormatter::FormatObjsAtFrm( rFlyFrm, mrPageFrm, mpLayAction );
+            // --> OD 2004-11-02 #i23129#, #i36347# - pass correct page frame
+            // to the object formatter
+            SwObjectFormatter::FormatObjsAtFrm( rFlyFrm,
+                                                *(rFlyFrm.FindPageFrm()),
+                                                mpLayAction );
+            // <--
             if ( mpLayAction )
             {
                 mpLayAction->_FormatFlyCntnt( &rFlyFrm );
@@ -461,12 +501,29 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
     anchored at anchor frame on the given page frame
 
     OD 2004-06-28 #i28701#
+    OD 2004-10-08 #i26945# - for format of floating screen objects for
+    follow text frames, the 'master' text frame is passed to the method.
+    Thus, the objects, whose anchor character is inside the follow text
+    frame can be formatted.
 
     @author OD
 */
-bool SwObjectFormatter::_FormatObjsAtFrm()
+bool SwObjectFormatter::_FormatObjsAtFrm( SwTxtFrm* _pMasterTxtFrm )
 {
-    if ( !GetAnchorFrm().GetDrawObjs() )
+    // --> OD 2004-10-08 #i26945#
+    SwFrm* pAnchorFrm( 0L );
+    if ( GetAnchorFrm().IsTxtFrm() &&
+         static_cast<SwTxtFrm&>(GetAnchorFrm()).IsFollow() &&
+         _pMasterTxtFrm )
+    {
+        pAnchorFrm = _pMasterTxtFrm;
+    }
+    else
+    {
+        pAnchorFrm = &GetAnchorFrm();
+    }
+    // <--
+    if ( !pAnchorFrm->GetDrawObjs() )
     {
         // nothing to do, if no floating screen object is registered at the anchor frame.
         return true;
@@ -475,18 +532,38 @@ bool SwObjectFormatter::_FormatObjsAtFrm()
     bool bSuccess( true );
 
     sal_uInt32 i = 0;
-    for ( ; i < GetAnchorFrm().GetDrawObjs()->Count(); ++i )
+    for ( ; i < pAnchorFrm->GetDrawObjs()->Count(); ++i )
     {
-        SwAnchoredObject* pAnchoredObj = (*GetAnchorFrm().GetDrawObjs())[i];
+        SwAnchoredObject* pAnchoredObj = (*pAnchorFrm->GetDrawObjs())[i];
 
         // check, if object's anchor is on the given page frame or
         // object is registered at the given page frame.
+        // --> OD 2004-10-05 #i26945# - check, if the anchor character of the
+        // anchored object is located in a follow text frame. If this anchor
+        // follow text frame differs from the given anchor frame, the given
+        // anchor frame is a 'master' text frame of the anchor follow text frame.
+        // If the anchor follow text frame is in the same body as its 'master'
+        // text frame, do not format the anchored object.
+        // E.g., this situation can occur during the table row splitting algorithm.
+        SwTxtFrm* pAnchorCharFrm = pAnchoredObj->FindAnchorCharFrm();
+        const bool bAnchoredAtFollowInSameBodyAsMaster =
+                pAnchorCharFrm && pAnchorCharFrm->IsFollow() &&
+                pAnchorCharFrm != pAnchoredObj->GetAnchorFrm() &&
+                pAnchorCharFrm->FindBodyFrm() ==
+                    static_cast<SwTxtFrm*>(pAnchoredObj->AnchorFrm())->FindBodyFrm();
+        if ( bAnchoredAtFollowInSameBodyAsMaster )
+        {
+            continue;
+        }
+        // <--
         // --> OD 2004-09-23 #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
         // is replaced by method <FindPageFrmOfAnchor()>. It's return value
         // have to be checked.
         SwPageFrm* pPageFrmOfAnchor = pAnchoredObj->FindPageFrmOfAnchor();
-        if ( ( pPageFrmOfAnchor && pPageFrmOfAnchor == &mrPageFrm ) ||
-             pAnchoredObj->GetPageFrm() == &mrPageFrm )
+        ASSERT( pPageFrmOfAnchor,
+                "<SwObjectFormatter::_FormatObjsAtFrm()> - missing page frame." );
+        // --> OD 2004-10-08 #i26945#
+        if ( pPageFrmOfAnchor && pPageFrmOfAnchor == &mrPageFrm )
         // <--
         {
             // if format of object fails, stop formatting and pass fail to
@@ -497,18 +574,18 @@ bool SwObjectFormatter::_FormatObjsAtFrm()
                 break;
             }
 
-            // considering changes at <GetAnchorFrm().GetDrawObjs()> during
+            // considering changes at <pAnchorFrm->GetDrawObjs()> during
             // format of the object.
-            if ( !GetAnchorFrm().GetDrawObjs() ||
-                 i > GetAnchorFrm().GetDrawObjs()->Count() )
+            if ( !pAnchorFrm->GetDrawObjs() ||
+                 i > pAnchorFrm->GetDrawObjs()->Count() )
             {
                 break;
             }
             else
             {
                 sal_uInt32 nActPosOfObj =
-                    GetAnchorFrm().GetDrawObjs()->ListPosOf( *pAnchoredObj );
-                if ( nActPosOfObj == GetAnchorFrm().GetDrawObjs()->Count() ||
+                    pAnchorFrm->GetDrawObjs()->ListPosOf( *pAnchoredObj );
+                if ( nActPosOfObj == pAnchorFrm->GetDrawObjs()->Count() ||
                      nActPosOfObj > i )
                 {
                     --i;
@@ -519,7 +596,7 @@ bool SwObjectFormatter::_FormatObjsAtFrm()
                 }
             }
         }
-    } // end of loop on <GetAnchorFrm().GetDrawObjs()>
+    } // end of loop on <pAnchorFrm->.GetDrawObjs()>
 
     return bSuccess;
 }
@@ -532,7 +609,7 @@ bool SwObjectFormatter::_FormatObjsAtFrm()
 */
 SwAnchoredObject* SwObjectFormatter::GetCollectedObj( const sal_uInt32 _nIndex )
 {
-    return mpPgNumOfAnchors ? (*mpPgNumOfAnchors)[_nIndex] : 0L;
+    return mpPgNumAndTypeOfAnchors ? (*mpPgNumAndTypeOfAnchors)[_nIndex] : 0L;
 }
 
 /** accessor to 'anchor' page number of collected anchored object
@@ -543,7 +620,20 @@ SwAnchoredObject* SwObjectFormatter::GetCollectedObj( const sal_uInt32 _nIndex )
 */
 sal_uInt32 SwObjectFormatter::GetPgNumOfCollected( const sal_uInt32 _nIndex )
 {
-    return mpPgNumOfAnchors ? mpPgNumOfAnchors->GetPageNum(_nIndex) : 0L;
+    return mpPgNumAndTypeOfAnchors ? mpPgNumAndTypeOfAnchors->GetPageNum(_nIndex) : 0L;
+}
+
+/** accessor to 'anchor' type of collected anchored object
+
+    OD 2004-10-04 #i26945#
+
+    @author OD
+*/
+bool SwObjectFormatter::IsCollectedAnchoredAtMaster( const sal_uInt32 _nIndex )
+{
+    return mpPgNumAndTypeOfAnchors
+           ? mpPgNumAndTypeOfAnchors->AnchoredAtMaster(_nIndex)
+           : true;
 }
 
 /** accessor to total number of collected anchored objects
@@ -554,5 +644,5 @@ sal_uInt32 SwObjectFormatter::GetPgNumOfCollected( const sal_uInt32 _nIndex )
 */
 sal_uInt32 SwObjectFormatter::CountOfCollected()
 {
-    return mpPgNumOfAnchors ? mpPgNumOfAnchors->Count() : 0L;
+    return mpPgNumAndTypeOfAnchors ? mpPgNumAndTypeOfAnchors->Count() : 0L;
 }
