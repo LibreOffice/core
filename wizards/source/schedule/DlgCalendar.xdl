@@ -17,7 +17,7 @@
      <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Schedule.CalendarMain.CalChooseCalendar" script:language="StarBasic"/>
     </dlg:radio>
    </dlg:radiogroup>
-   <dlg:text dlg:id="lblHolidays" dlg:tab-index="4" dlg:left="6" dlg:top="6" dlg:width="87" dlg:height="8" dlg:page="1" dlg:value="lblHolidays"/>
+   <dlg:text dlg:id="lblHolidays" dlg:tab-index="4" dlg:left="6" dlg:top="6" dlg:width="96" dlg:height="8" dlg:page="1" dlg:value="lblHolidays"/>
    <dlg:img dlg:style-id="0" dlg:id="imgCountry" dlg:tab-index="5" dlg:left="106" dlg:top="6" dlg:width="95" dlg:height="113" dlg:page="1" dlg:help-url="HID:34701">
     <script:event script:event-name="on-mousedown" script:location="application" script:macro-name="Schedule.DlgControl.SelectState" script:language="StarBasic"/>
     <script:event script:event-name="on-mouseout" script:location="application" script:macro-name="Schedule.DlgControl.MouseLeavesImage" script:language="StarBasic"/>

@@ -129,9 +129,8 @@ End Sub
 
 Sub CalcmdCancel()
 	Call CalSaveOwnData()
-	DlgCalendar.EndExecute &apos;Visible = False
+	DlgCalendar.EndExecute 	&apos; Visible = False
 End Sub
-
 
 
 Sub CalcmdOk()
@@ -146,7 +145,6 @@ Dim SelYear as String
 	UnprotectSheets(oSheets)
 	oSheets.RemovebyName(oSheets.GetbyIndex(0).Name)
 	iSelYear = DlgCalModel.txtYear.Value
-	sCurLangLocale = cLANGUAGE_CHINESE
 	Select Case sCurLangLocale
 		Case cLANGUAGE_GERMAN
 			If Ubound(DlgCalModel.lstHolidays.SelectedItems()) &gt; -1 Then

@@ -65,6 +65,7 @@ Const dlgShortMonth = 1225
 			.cmdGoOn.Label = GetResText(1004)
 			.lblHolidays.Label = GetResText(1014)
 			sBitmapFilename = GetResText(1099)
+&apos;			sBitmapFilename = &quot;china.bmp&quot;
 			DlgCalModel.hlnCalendar.Label = GetResText(1006)
 			.optYear.Label = GetResText(1007)
 			.optMonth.Label = GetResText(1008)
