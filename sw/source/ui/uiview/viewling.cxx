@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:32:22 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 15:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,9 @@
 #ifndef _SVX_THESDLG_HXX //autogen
 #include <svx/thesdlg.hxx>
 #endif
-
+#ifndef SVX_SPELL_PORTIONS_HXX
+#include <svx/SpellPortions.hxx>
+#endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
@@ -147,9 +149,6 @@
 #endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>               // fuer Undo-Ids
-#endif
-#ifndef _SPLWRP_HXX
-#include <splwrp.hxx>               //    "
 #endif
 #ifndef _HYP_HXX
 #include <hyp.hxx>                  // Trennung
@@ -182,6 +181,9 @@
 #ifndef _HHCWRP_HXX
 #include <hhcwrp.hxx>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
+#include <com/sun/star/frame/XStorable.hpp>
+#endif
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -205,9 +207,6 @@ void SwView::ExecLingu(SfxRequest &rReq)
         case FN_THESAURUS_DLG:
             StartThesaurus();
             rReq.Ignore();
-            break;
-        case FN_SPELLING_DLG:
-            SpellDocument( NULL, sal_False );
             break;
         case SID_HANGUL_HANJA_CONVERSION:
             StartTextConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL, 0, sal_True );
@@ -281,11 +280,6 @@ void SwView::ExecLingu(SfxRequest &rReq)
             }
             break;
         }
-        case FN_ADD_UNKNOWN:
-            {
-                SpellDocument( NULL, sal_True );
-            }
-            break;
         case FN_HYPHENATE_OPT_DLG:
             HyphenateDocument();
             break;
