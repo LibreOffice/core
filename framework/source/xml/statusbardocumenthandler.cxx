@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusbardocumenthandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:55:37 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,15 @@
 #ifndef __COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_UI_ITEMSTYLE_HPP_
+#include <drafts/com/sun/star/ui/ItemStyle.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_UI_ITEMTYPE_HPP_
+#include <drafts/com/sun/star/ui/ItemType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -96,7 +105,10 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
+using namespace ::drafts::com::sun::star::ui;
+using namespace ::com::sun::star::container;
 
 #define XMLNS_STATUSBAR             "http://openoffice.org/2001/statusbar"
 #define XMLNS_XLINK                 "http://www.w3.org/1999/xlink"
@@ -115,6 +127,7 @@ using namespace ::com::sun::star::xml::sax;
 #define ATTRIBUTE_OFFSET            "offset"
 #define ATTRIBUTE_AUTOSIZE          "autosize"
 #define ATTRIBUTE_OWNERDRAW         "ownerdraw"
+#define ATTRIBUTE_HELPURL           "helpid"
 
 #define ELEMENT_NS_STATUSBAR        "statusbar:statusbar"
 #define ELEMENT_NS_STATUSBARITEM    "statusbar:statusbaritem"
@@ -140,6 +153,47 @@ using namespace ::com::sun::star::xml::sax;
 namespace framework
 {
 
+// Property names of a menu/menu item ItemDescriptor
+static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
+static const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
+static const char ITEM_DESCRIPTOR_OFFSET[]      = "Offset";
+static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
+static const char ITEM_DESCRIPTOR_WIDTH[]       = "Width";
+static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
+
+static void ExtractStatusbarItemParameters(
+    const Sequence< PropertyValue > rProp,
+    OUString&                       rCommandURL,
+    OUString&                       rHelpURL,
+    sal_Int16&                      rOffset,
+    sal_Int16&                      rStyle,
+    sal_Int16&                      rWidth )
+{
+    for ( sal_Int32 i = 0; i < rProp.getLength(); i++ )
+    {
+        if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
+        {
+            rProp[i].Value >>= rCommandURL;
+        }
+        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_HELPURL ))
+        {
+            rProp[i].Value >>= rHelpURL;
+        }
+        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_OFFSET ))
+        {
+            rProp[i].Value >>= rOffset;
+        }
+        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_STYLE ))
+        {
+            rProp[i].Value >>= rStyle;
+        }
+        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_WIDTH ))
+        {
+            rProp[i].Value >>= rWidth;
+        }
+    }
+}
+
 struct StatusBarEntryProperty
 {
     OReadStatusBarDocumentHandler::StatusBar_XML_Namespace  nNamespace;
@@ -156,12 +210,16 @@ StatusBarEntryProperty StatusBarEntries[OReadStatusBarDocumentHandler::SB_XML_EN
     { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_AUTOSIZE      },
     { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_OWNERDRAW     },
     { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_WIDTH         },
-    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_OFFSET        }
+    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_OFFSET        },
+    { OReadStatusBarDocumentHandler::SB_NS_STATUSBAR,   ATTRIBUTE_HELPURL       }
 };
 
 
-OReadStatusBarDocumentHandler::OReadStatusBarDocumentHandler( StatusBarDescriptor& aStatusBarItems ) :
-    ThreadHelpBase( &Application::GetSolarMutex() ), ::cppu::OWeakObject(),     m_aStatusBarItems( aStatusBarItems )
+OReadStatusBarDocumentHandler::OReadStatusBarDocumentHandler(
+    const Reference< XIndexContainer >& rStatusBarItems ) :
+    ThreadHelpBase( &Application::GetSolarMutex() ),
+    ::cppu::OWeakObject(),
+    m_aStatusBarItems( rStatusBarItems )
 {
     OUString aNamespaceStatusBar( RTL_CONSTASCII_USTRINGPARAM( XMLNS_STATUSBAR ));
     OUString aNamespaceXLink( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK ));
@@ -267,14 +325,14 @@ throw(  SAXException, RuntimeException )
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                OUString aAttribute;
-                sal_Bool bAttributeURL  = sal_False;
+                OUString    aCommandURL;
+                OUString    aHelpURL;
+                sal_Int16   nItemBits( ItemStyle::ALIGN_CENTER|ItemStyle::DRAW_IN3D );
+                sal_Int16   nWidth( 0 );
+                sal_Int16   nOffset( STATUSBAR_OFFSET );
+                sal_Bool    bCommandURL( sal_False );
 
                 m_bStatusBarItemStartFound = sal_True;
-
-                StatusBarItemDescriptor* pItem = new StatusBarItemDescriptor;
-                m_aStatusBarItems.Insert( pItem, m_aStatusBarItems.Count() );
-
                 for ( int n = 0; n < xAttribs->getLength(); n++ )
                 {
                     pStatusBarEntry = m_aStatusBarMap.find( xAttribs->getNameByIndex( n ) );
@@ -284,8 +342,8 @@ throw(  SAXException, RuntimeException )
                         {
                             case SB_ATTRIBUTE_URL:
                             {
-                                bAttributeURL   = sal_True;
-                                pItem->aURL     = xAttribs->getValueByIndex( n );
+                                bCommandURL = sal_True;
+                                aCommandURL = xAttribs->getValueByIndex( n );
                             }
                             break;
 
@@ -293,18 +351,17 @@ throw(  SAXException, RuntimeException )
                             {
                                 if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ALIGN_LEFT )) )
                                 {
-                                    pItem->nItemBits |= SIB_LEFT;
-                                    pItem->nItemBits &= ~(SIB_CENTER|SIB_RIGHT);
+                                    nItemBits |= ItemStyle::ALIGN_LEFT;
+                                    nItemBits &= ~ItemStyle::ALIGN_CENTER;
                                 }
                                 else if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ALIGN_CENTER )) )
                                 {
-                                    pItem->nItemBits |= SIB_CENTER;
-                                    pItem->nItemBits &= ~(SIB_LEFT|SIB_RIGHT);
+                                    nItemBits |= ItemStyle::ALIGN_CENTER;
+                                    nItemBits &= ~ItemStyle::ALIGN_LEFT;
                                 }
                                 else if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ALIGN_RIGHT )) )
                                 {
-                                    pItem->nItemBits |= SIB_RIGHT;
-                                    pItem->nItemBits &= ~(SIB_LEFT|SIB_CENTER);
+                                    nItemBits |= ItemStyle::ALIGN_RIGHT;
                                 }
                                 else
                                 {
@@ -319,18 +376,17 @@ throw(  SAXException, RuntimeException )
                             {
                                 if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_STYLE_IN )) )
                                 {
-                                    pItem->nItemBits |= SIB_IN;
-                                    pItem->nItemBits &= ~(SIB_OUT|SIB_FLAT);
+                                    nItemBits |= ItemStyle::DRAW_IN3D;
+                                    nItemBits &= ~ItemStyle::DRAW_OUT3D;
                                 }
                                 else if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_STYLE_OUT )) )
                                 {
-                                    pItem->nItemBits |= SIB_OUT;
-                                    pItem->nItemBits &= ~(SIB_IN|SIB_FLAT);
+                                    nItemBits |= ItemStyle::DRAW_OUT3D;
+                                    nItemBits &= ~ItemStyle::DRAW_IN3D;
                                 }
                                 else if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_STYLE_FLAT )) )
                                 {
-                                    pItem->nItemBits |= SIB_FLAT;
-                                    pItem->nItemBits &= ~(SIB_OUT|SIB_IN);
+                                    nItemBits |= ItemStyle::DRAW_FLAT;
                                 }
                                 else
                                 {
@@ -344,9 +400,9 @@ throw(  SAXException, RuntimeException )
                             case SB_ATTRIBUTE_AUTOSIZE:
                             {
                                 if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_BOOLEAN_TRUE )) )
-                                    pItem->nItemBits |= SIB_AUTOSIZE;
+                                    nItemBits |= ItemStyle::AUTO_SIZE;
                                 else if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_BOOLEAN_FALSE )) )
-                                    pItem->nItemBits &= ~SIB_AUTOSIZE;
+                                    nItemBits &= ~ItemStyle::AUTO_SIZE;
                                 else
                                 {
                                     OUString aErrorMessage = getErrorLineString();
@@ -359,9 +415,9 @@ throw(  SAXException, RuntimeException )
                             case SB_ATTRIBUTE_OWNERDRAW:
                             {
                                 if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_BOOLEAN_TRUE )) )
-                                    pItem->nItemBits |= SIB_USERDRAW;
+                                    nItemBits |= ItemStyle::OWNER_DRAW;
                                 else if ( xAttribs->getValueByIndex( n ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_BOOLEAN_FALSE )) )
-                                    pItem->nItemBits &= ~SIB_USERDRAW;
+                                    nItemBits &= ~ItemStyle::OWNER_DRAW;
                                 else
                                 {
                                     OUString aErrorMessage = getErrorLineString();
@@ -373,24 +429,49 @@ throw(  SAXException, RuntimeException )
 
                             case SB_ATTRIBUTE_WIDTH:
                             {
-                                pItem->nWidth = (long)(xAttribs->getValueByIndex( n ).toInt32());
+                                nWidth = (sal_Int16)(xAttribs->getValueByIndex( n ).toInt32());
                             }
                             break;
 
                             case SB_ATTRIBUTE_OFFSET:
                             {
-                                pItem->nOffset = (long)(xAttribs->getValueByIndex( n ).toInt32());
+                                nOffset = (sal_Int16)(xAttribs->getValueByIndex( n ).toInt32());
+                            }
+                            break;
+
+                            case SB_ATTRIBUTE_HELPURL:
+                            {
+                                aHelpURL = xAttribs->getValueByIndex( n );
                             }
                             break;
                         }
                     }
                 } // for
 
-                if ( !bAttributeURL )
+                if ( !bCommandURL )
                 {
                     OUString aErrorMessage = getErrorLineString();
                     aErrorMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( "Required attribute statusbar:url must have a value!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+                }
+                else
+                {
+                    Sequence< PropertyValue > aStatusbarItemProp( 6 );
+                    aStatusbarItemProp[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
+                    aStatusbarItemProp[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL ));
+                    aStatusbarItemProp[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_OFFSET ));
+                    aStatusbarItemProp[3].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_STYLE ));
+                    aStatusbarItemProp[4].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_WIDTH ));
+                    aStatusbarItemProp[5].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
+
+                    aStatusbarItemProp[0].Value = makeAny( aCommandURL );
+                    aStatusbarItemProp[1].Value = makeAny( aHelpURL );
+                    aStatusbarItemProp[2].Value = makeAny( nOffset );
+                    aStatusbarItemProp[3].Value = makeAny( nItemBits );
+                    aStatusbarItemProp[4].Value = makeAny( nWidth );
+                    aStatusbarItemProp[5].Value = makeAny( drafts::com::sun::star::ui::ItemType::DEFAULT );
+
+                    m_aStatusBarItems->insertByIndex( m_aStatusBarItems->getCount(), makeAny( aStatusbarItemProp ) );
                 }
             }
             break;
@@ -483,8 +564,8 @@ throw(  SAXException, RuntimeException )
 //_________________________________________________________________________________________________________________
 
 OWriteStatusBarDocumentHandler::OWriteStatusBarDocumentHandler(
-    const StatusBarDescriptor& aStatusBarItems,
-    Reference< XDocumentHandler > rWriteDocumentHandler ) :
+    const Reference< XIndexAccess >& aStatusBarItems,
+    const Reference< XDocumentHandler >& rWriteDocumentHandler ) :
     ThreadHelpBase( &Application::GetSolarMutex() ),
     m_aStatusBarItems( aStatusBarItems ),
     m_xWriteDocumentHandler( rWriteDocumentHandler )
@@ -528,10 +609,32 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
     m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_STATUSBAR )), pList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
-    for ( int i = 0; i < m_aStatusBarItems.Count(); i++ )
+    sal_Int32  nItemCount = m_aStatusBarItems->getCount();
+    Any        aAny;
+
+    for ( sal_Int32 nItemPos = 0; nItemPos < nItemCount; nItemPos++ )
     {
-        StatusBarItemDescriptor* pItem = m_aStatusBarItems[i];
-        WriteStatusBarItem( pItem );
+        Sequence< PropertyValue > aProps;
+        aAny = m_aStatusBarItems->getByIndex( nItemPos );
+        if ( aAny >>= aProps )
+        {
+            OUString    aCommandURL;
+            OUString    aHelpURL;
+            sal_Int16   nStyle( ItemStyle::ALIGN_CENTER|ItemStyle::DRAW_IN3D );
+            sal_Int16   nWidth( 0 );
+            sal_Int16   nOffset( STATUSBAR_OFFSET );
+
+            ExtractStatusbarItemParameters(
+                aProps,
+                aCommandURL,
+                aHelpURL,
+                nOffset,
+                nStyle,
+                nWidth );
+
+            if ( aCommandURL.getLength() > 0 )
+                WriteStatusBarItem( aCommandURL, aHelpURL, nOffset, nStyle, nWidth );
+        }
     }
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
@@ -544,8 +647,13 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
 //  protected member functions
 //_________________________________________________________________________________________________________________
 
-void OWriteStatusBarDocumentHandler::WriteStatusBarItem( const StatusBarItemDescriptor* pItem ) throw
-( SAXException, RuntimeException )
+void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
+    const rtl::OUString& rCommandURL,
+    const rtl::OUString& rHelpURL,
+    sal_Int16            nOffset,
+    sal_Int16            nStyle,
+    sal_Int16            nWidth )
+throw ( SAXException, RuntimeException )
 {
     AttributeListImpl* pList = new AttributeListImpl;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
@@ -557,16 +665,16 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarItem( const StatusBarItemDesc
     }
 
     // save required attribute (URL)
-    pList->addAttribute( m_aAttributeURL, m_aAttributeType, pItem->aURL );
+    pList->addAttribute( m_aAttributeURL, m_aAttributeType, rCommandURL );
 
     // alignment
-    if ( pItem->nItemBits & SIB_LEFT )
+    if ( nStyle & ItemStyle::ALIGN_RIGHT )
     {
         pList->addAttribute( m_aXMLStatusBarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ALIGN )),
                              m_aAttributeType,
-                             OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ALIGN_LEFT )) );
+                             OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ALIGN_RIGHT )) );
     }
-    else if ( pItem->nItemBits & SIB_CENTER )
+    else if ( nStyle & ItemStyle::ALIGN_CENTER )
     {
         pList->addAttribute( m_aXMLStatusBarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ALIGN )),
                              m_aAttributeType,
@@ -576,25 +684,25 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarItem( const StatusBarItemDesc
     {
         pList->addAttribute( m_aXMLStatusBarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ALIGN )),
                              m_aAttributeType,
-                             OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ALIGN_RIGHT )) );
+                             OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ALIGN_LEFT )) );
     }
 
     // style ( SIB_IN is default )
-    if ( pItem->nItemBits & SIB_OUT )
-    {
-        pList->addAttribute( m_aXMLStatusBarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_STYLE )),
-                             m_aAttributeType,
-                             OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_STYLE_OUT )) );
-    }
-    else if ( pItem->nItemBits & SIB_FLAT )
+    if ( nStyle & ItemStyle::DRAW_FLAT )
     {
         pList->addAttribute( m_aXMLStatusBarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_STYLE )),
                              m_aAttributeType,
                              OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_STYLE_FLAT )) );
     }
+    else if ( nStyle & ItemStyle::DRAW_OUT3D )
+    {
+        pList->addAttribute( m_aXMLStatusBarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_STYLE )),
+                             m_aAttributeType,
+                             OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_STYLE_OUT )) );
+    }
 
     // autosize (default FALSE)
-    if ( pItem->nItemBits & SIB_AUTOSIZE )
+    if ( nStyle & ItemStyle::AUTO_SIZE )
     {
         pList->addAttribute( m_aXMLStatusBarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_AUTOSIZE )),
                              m_aAttributeType,
@@ -602,7 +710,7 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarItem( const StatusBarItemDesc
     }
 
     // ownerdraw (default FALSE)
-    if ( pItem->nItemBits & SIB_USERDRAW )
+    if ( nStyle & ItemStyle::OWNER_DRAW )
     {
         pList->addAttribute( m_aXMLStatusBarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_OWNERDRAW )),
                              m_aAttributeType,
@@ -610,19 +718,19 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarItem( const StatusBarItemDesc
     }
 
     // width (default 0)
-    if ( pItem->nWidth > 0 )
+    if ( nWidth > 0 )
     {
         pList->addAttribute( m_aXMLStatusBarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_WIDTH )),
                              m_aAttributeType,
-                             OUString::valueOf( (sal_Int32)pItem->nWidth ) );
+                             OUString::valueOf( (sal_Int32)nWidth ) );
     }
 
     // offset (default STATUSBAR_OFFSET)
-    if ( pItem->nOffset != STATUSBAR_OFFSET )
+    if ( nOffset != STATUSBAR_OFFSET )
     {
         pList->addAttribute( m_aXMLStatusBarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_OFFSET )),
                              m_aAttributeType,
-                             OUString::valueOf( (sal_Int32)pItem->nOffset ) );
+                             OUString::valueOf( (sal_Int32)nOffset ) );
     }
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
