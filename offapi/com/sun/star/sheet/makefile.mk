@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:56:10 $
+#   last change: $Author: vg $ $Date: 2003-04-01 15:14:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -177,6 +177,7 @@ IDLFILES=\
     SheetLinks.idl\
     SheetRangesQuery.idl\
     SheetSortDescriptor.idl\
+    SheetSortDescriptor2.idl\
     Spreadsheet.idl\
     SpreadsheetDocument.idl\
     SpreadsheetDocumentSettings.idl\
