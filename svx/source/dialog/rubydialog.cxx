@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-08-07 13:47:42 $
+ *  last change: $Author: gt $ $Date: 2002-08-07 14:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,6 +341,8 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
         if(!i || 7 == i)
             aEditArr[i]->SetScrollHdl(aScrollLk);
     }
+
+    UpdateColors();
 }
 /* -----------------------------09.01.01 17:17--------------------------------
 
@@ -840,6 +842,36 @@ void SvxRubyDialog::AssertOneEntry()
 {
     pImpl->AssertOneEntry();
 }
+
+// ----------------------------------------------------------------------------
+
+void SvxRubyDialog::UpdateColors( void )
+{
+    const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
+    Font aFnt( aPreviewWin.GetFont() );
+    Color aNewTextCol( rStyleSettings.GetWindowTextColor() );
+    Color aNewFillCol( rStyleSettings.GetWindowColor() );
+
+    if( aNewFillCol != aFnt.GetFillColor() || aNewTextCol != aFnt.GetColor() )
+    {
+        aFnt.SetFillColor( aNewFillCol );
+        aFnt.SetColor( aNewTextCol );
+        aPreviewWin.SetFont( aFnt );
+
+        aPreviewWin.Invalidate();
+    }
+}
+
+// ----------------------------------------------------------------------------
+
+void SvxRubyDialog::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    SfxModelessDialog::DataChanged( rDCEvt );
+
+    if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+        UpdateColors();
+}
+
 /* -----------------------------29.01.01 15:44--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -862,6 +894,7 @@ RubyPreview::RubyPreview(SvxRubyDialog& rParent, const ResId& rResId) :
         Window(&rParent, rResId),
         rParentDlg(rParent)
 {
+    SetStyle( GetStyle() | WB_3DLOOK | WB_BORDER );
     SetMapMode(MAP_TWIP);
     Size aWinSize = GetOutputSize();
 
@@ -880,7 +913,7 @@ void RubyPreview::Paint( const Rectangle& rRect )
 
     Size aWinSize = GetOutputSize();
     Rectangle aRect(Point(0, 0), aWinSize);
-    SetFillColor( Color( COL_WHITE ) );
+    SetFillColor( aSaveFont.GetFillColor() );
     DrawRect(aRect);
 
     String sBaseText, sRubyText;
