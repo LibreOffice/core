@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vdraw.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:47:20 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,9 @@ void SwViewImp::UnlockPaint()
 // OD 09.12.2002 #103045# - add 4th parameter for the horizontal text direction
 // of the page in order to set the default horizontal text direction at the
 // outliner of the draw view for painting layers <hell> and <heaven>.
-void SwViewImp::PaintLayer( const BYTE _nLayerID, const SwRect& _rRect,
+// OD 25.06.2003 #108784# - correct type of 1st parameter
+void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
+                            const SwRect& _rRect,
                             const Color* _pPageBackgrdColor,
                             const bool _bIsPageRightToLeft ) const
 {
@@ -310,9 +312,9 @@ IMPL_LINK( SwViewImp, PaintDispatcher, SdrPaintProcRec *, pRec )
     if ( !SwFlyFrm::IsPaint( pObj, GetShell() ) )
         return 0;
 
-    const BYTE nHellId = GetShell()->GetDoc()->GetHellId();
     if ( pObj->IsWriterFlyFrame() )
     {
+        const SdrLayerID nHellId = GetShell()->GetDoc()->GetHellId();
         if( pObj->GetLayer() == nHellId )
         {
             //Fuer Rahmen in der Hoelle gelten andere Regeln:
@@ -514,6 +516,12 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
                  !pAnchor->GetUpper() || !pAnchor->FindPageFrm() ||
                  FLY_IN_CNTNT == pCont->GetFmt()->GetAnchor().GetAnchorId() )
                 continue;
+
+            // OD 19.06.2003 #108784# - no move for drawing objects in header/footer
+            if ( pAnchor->FindFooterOrHeader() )
+            {
+                continue;
+            }
 
             const Rectangle aBound( pObj->GetBoundRect() );
             if ( !aRect.IsInside( aBound ) )
