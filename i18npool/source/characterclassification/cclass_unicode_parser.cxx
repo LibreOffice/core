@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cclass_unicode_parser.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bustamam $ $Date: 2002-08-14 18:48:28 $
+ *  last change: $Author: er $ $Date: 2002-09-20 16:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -650,6 +650,7 @@ UPT_FLAG_TYPE cclass_Unicode::getFlags( sal_Unicode c )
     switch ( eState )
     {
         case ssGetChar :
+        case ssRewindFromValue :
         case ssGetWordFirstChar :
             if ( !(nMask & TOKEN_CHAR_WORD) )
             {
@@ -680,7 +681,8 @@ UPT_FLAG_TYPE cclass_Unicode::getFlagsExtended( sal_Unicode c )
     else if ( c == cDecimalSep )
         return TOKEN_CHAR_VALUE | TOKEN_VALUE;
     using namespace i18n;
-    BOOL bStart = (eState == ssGetChar || eState == ssGetWordFirstChar);
+    BOOL bStart = (eState == ssGetChar || eState == ssGetWordFirstChar ||
+            eState == ssRewindFromValue);
     sal_Int32 nTypes = (bStart ? nStartTypes : nContTypes);
 
     //! all KParseTokens::UNI_... must be matched
@@ -766,15 +768,20 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
 {
     using namespace i18n;
     const sal_Unicode* const pStart = rText.getStr() + nPos;
+    eState = ssGetChar;
+
+    //! All the variables below (plus ParseResult) have to be resetted on ssRewindFromValue!
     const sal_Unicode* pSym = pStart;
     const sal_Unicode* pSrc = pSym;
     OUString aSymbol;
     sal_Unicode c = *pSrc;
     sal_Unicode cLast = 0;
+    int nDecSeps = 0;
     BOOL bQuote = FALSE;
     BOOL bMightBeWord = TRUE;
     BOOL bMightBeWordLast = TRUE;
-    eState = ssGetChar;
+    //! All the variables above (plus ParseResult) have to be resetted on ssRewindFromValue!
+
     while ( (c != 0) && (eState != ssStop) )
     {
         pSrc++;
@@ -783,7 +790,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             eState = ssBounce;
         if ( bMightBeWord )
         {   // only relevant for ssGetValue fall back
-            if ( eState == ssGetChar )
+            if ( eState == ssGetChar || eState == ssRewindFromValue )
                 bMightBeWord = ((nMask & TOKEN_CHAR_WORD) != 0);
             else
                 bMightBeWord = ((nMask & TOKEN_WORD) != 0);
@@ -792,14 +799,26 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
         switch (eState)
         {
             case ssGetChar :
+            case ssRewindFromValue :
             {
-                if ( nMask & TOKEN_CHAR_VALUE )
+                if ( (nMask & TOKEN_CHAR_VALUE) && eState != ssRewindFromValue )
                 {   //! must be first, may fall back to ssGetWord via bMightBeWord
                     eState = ssGetValue;
-                    if ( (nMask & TOKEN_VALUE_DIGIT) && 128 <= c )
-                        r.TokenType = KParseType::UNI_NUMBER;
-                    else
-                        r.TokenType = KParseType::ASC_NUMBER;
+                    if ( nMask & TOKEN_VALUE_DIGIT )
+                    {
+                        if ( 128 <= c )
+                            r.TokenType = KParseType::UNI_NUMBER;
+                        else
+                            r.TokenType = KParseType::ASC_NUMBER;
+                    }
+                    else if ( c == cDecimalSep )
+                    {
+                        if ( *pSrc )
+                            ++nDecSeps;
+                        else
+                            eState = ssRewindFromValue;
+                            // retry for ONE_SINGLE_CHAR or others
+                    }
                 }
                 else if ( nMask & TOKEN_CHAR_WORD )
                 {
@@ -849,10 +868,25 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             break;
             case ssGetValue :
             {
-                if ( (nMask & TOKEN_VALUE_DIGIT) && 128 <= c )
-                    r.TokenType = KParseType::UNI_NUMBER;
+                if ( nMask & TOKEN_VALUE_DIGIT )
+                {
+                    if ( 128 <= c )
+                        r.TokenType = KParseType::UNI_NUMBER;
+                    else if ( r.TokenType != KParseType::UNI_NUMBER )
+                        r.TokenType = KParseType::ASC_NUMBER;
+                }
                 if ( nMask & TOKEN_VALUE )
-                    ;   // keep it going
+                {
+                    if ( c == cDecimalSep && ++nDecSeps > 1 )
+                    {
+                        if ( pSrc - pStart == 2 )
+                            eState = ssRewindFromValue;
+                            // consecutive separators
+                        else
+                            eState = ssStopBack;
+                    }
+                    // else keep it going
+                }
                 else if ( c == 'E' || c == 'e' )
                 {
                     UPT_FLAG_TYPE nNext = getFlags( *pSrc );
@@ -963,37 +997,55 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             }
             break;
         }
-        if ( !(r.TokenType & nTokenType) )
+        if ( eState == ssRewindFromValue )
         {
-            if ( (r.TokenType & (KParseType::ASC_NUMBER | KParseType::UNI_NUMBER))
-                    && (nTokenType & KParseType::IDENTNAME) && bMightBeWord )
-                ;   // keep a number which might be a word
-            else if ( r.LeadingWhiteSpace == (pSrc - pStart) )
-                ;   // keep ignored white space
-            else
-                eState = ssBounce;
+            r = ParseResult();
+            pSym = pStart;
+            pSrc = pSym;
+            aSymbol = OUString();
+            c = *pSrc;
+            cLast = 0;
+            nDecSeps = 0;
+            bQuote = FALSE;
+            bMightBeWord = TRUE;
+            bMightBeWordLast = TRUE;
         }
-        if ( eState == ssBounce )
+        else
         {
-            r.TokenType = 0;
-            eState = ssStopBack;
+            if ( !(r.TokenType & nTokenType) )
+            {
+                if ( (r.TokenType & (KParseType::ASC_NUMBER | KParseType::UNI_NUMBER))
+                        && (nTokenType & KParseType::IDENTNAME) && bMightBeWord )
+                    ;   // keep a number that might be a word
+                else if ( r.LeadingWhiteSpace == (pSrc - pStart) )
+                    ;   // keep ignored white space
+                else if ( !r.TokenType && eState == ssGetValue && (nMask & TOKEN_VALUE_SEP) )
+                    ;   // keep uncertain value
+                else
+                    eState = ssBounce;
+            }
+            if ( eState == ssBounce )
+            {
+                r.TokenType = 0;
+                eState = ssStopBack;
+            }
+            if ( eState == ssStopBack )
+            {   // put back
+                pSrc--;
+                bMightBeWord = bMightBeWordLast;
+                eState = ssStop;
+            }
+            if ( eState != ssStop )
+            {
+                if ( !r.StartFlags )
+                    r.StartFlags |= nParseTokensType;
+                else
+                    r.ContFlags |= nParseTokensType;
+            }
+            bMightBeWordLast = bMightBeWord;
+            cLast = c;
+            c = *pSrc;
         }
-        if ( eState == ssStopBack )
-        {   // put back
-            pSrc--;
-            bMightBeWord = bMightBeWordLast;
-            eState = ssStop;
-        }
-        if ( eState != ssStop )
-        {
-            if ( !r.StartFlags )
-                r.StartFlags |= nParseTokensType;
-            else
-                r.ContFlags |= nParseTokensType;
-        }
-        bMightBeWordLast = bMightBeWord;
-        cLast = c;
-        c = *pSrc;
     }
     // r.CharLen is the length in characters (not code points) of the parsed
     // token not including any leading white space, change this calculation if

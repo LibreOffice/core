@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cclass_unicode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2002-08-05 16:22:55 $
+ *  last change: $Author: er $ $Date: 2002-09-20 16:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ private:
         ssGetWordFirstChar,
         ssGetString,
         ssGetBool,
+        ssRewindFromValue,
         ssStopBack,
         ssBounce,
         ssStop
