@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 12:09:02 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,15 +252,17 @@
 #define HID_BROWSER_COLUMNINFO                      (HID_DBACCESS_START + 160)
 #define HID_DSADMIN_USECATALOG                      (HID_DBACCESS_START + 161)
 #define HID_BROWSER_VIEW_CREATE_DESIGN              (HID_DBACCESS_START + 162)
-#define HID_DSADMIN_DOCUMENTS                       (HID_DBACCESS_START + 163)
-#define HID_DSADMIN_DOCUMENTLINKS                   (HID_DBACCESS_START + 164)
-
-#define HID_DSADMIN_FILTER_EXPLANATION              (HID_DBACCESS_START + 165)
-#define HID_CONFIRM_DROP_BUTTON_ALL                 (HID_DBACCESS_START + 166)
-#define HID_DSBROWSER_BOOKMARK_SELECTED             (HID_DBACCESS_START + 167)
-#define HID_DSADMIN_TABLE_TOOLBOX                   (HID_DBACCESS_START + 168)
-#define HID_DSADMIN_QUERY_TOOLBOX                   (HID_DBACCESS_START + 169)
-#define HID_DSADMIN_BOOKMARK_TOOLBOX                (HID_DBACCESS_START + 170)
+#define HID_BROWSER_VIEW_DELETE                     (HID_DBACCESS_START + 163)
+#define HID_BROWSER_VIEW_COPY                       (HID_DBACCESS_START + 164)
+#define HID_BROWSER_VIEW_PASTE                      (HID_DBACCESS_START + 165)
+#define HID_DSADMIN_DOCUMENTS                       (HID_DBACCESS_START + 166)
+#define HID_DSADMIN_DOCUMENTLINKS                   (HID_DBACCESS_START + 167)
+#define HID_DSADMIN_FILTER_EXPLANATION              (HID_DBACCESS_START + 168)
+#define HID_CONFIRM_DROP_BUTTON_ALL                 (HID_DBACCESS_START + 169)
+#define HID_DSBROWSER_BOOKMARK_SELECTED             (HID_DBACCESS_START + 170)
+#define HID_DSADMIN_TABLE_TOOLBOX                   (HID_DBACCESS_START + 171)
+#define HID_DSADMIN_QUERY_TOOLBOX                   (HID_DBACCESS_START + 172)
+#define HID_DSADMIN_BOOKMARK_TOOLBOX                (HID_DBACCESS_START + 173)
 
 // don't forget to update the file util/hidother.src
 #endif // _DBA_DBACCESS_HELPID_HRC_
@@ -268,6 +270,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.29  2001/05/10 12:09:02  fs
+ *  #86223# new help ids (not surprising ...)
+ *
  *  Revision 1.28  2001/04/26 12:11:34  fs
  *  added support for data source associated bookmarks
  *

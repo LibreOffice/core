@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 12:09:25 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,9 @@ hidspecial HID_DSADMIN_CREATEDATABASE                   { HelpId = HID_DSADMIN_C
 hidspecial HID_BROWSER_COLUMNINFO                       { HelpId = HID_BROWSER_COLUMNINFO ; };
 hidspecial HID_DSADMIN_USECATALOG                       { HelpId = HID_DSADMIN_USECATALOG ; };
 hidspecial HID_BROWSER_VIEW_CREATE_DESIGN               { HelpId = HID_BROWSER_VIEW_CREATE_DESIGN ; };
+hidspecial HID_BROWSER_VIEW_DELETE                      { HelpId = HID_BROWSER_VIEW_DELETE ; };
+hidspecial HID_BROWSER_VIEW_COPY                        { HelpId = HID_BROWSER_VIEW_COPY ; };
+hidspecial HID_BROWSER_VIEW_PASTE                       { HelpId = HID_BROWSER_VIEW_PASTE ; };
 hidspecial HID_DSADMIN_DOCUMENTS                        { HelpId = HID_DSADMIN_DOCUMENTS ; };
 hidspecial HID_DSADMIN_DOCUMENTLINKS                    { HelpId = HID_DSADMIN_DOCUMENTLINKS ; };
 
@@ -244,11 +247,14 @@ hidspecial HID_CONFIRM_DROP_BUTTON_ALL                  { HelpId = HID_CONFIRM_D
 hidspecial HID_DSBROWSER_BOOKMARK_SELECTED              { HelpId = HID_DSBROWSER_BOOKMARK_SELECTED ; };
 hidspecial HID_DSADMIN_TABLE_TOOLBOX                    { HelpId = HID_DSADMIN_TABLE_TOOLBOX ; };
 hidspecial HID_DSADMIN_QUERY_TOOLBOX                    { HelpId = HID_DSADMIN_QUERY_TOOLBOX ; };
-hidspecial HID_DSADMIN_BOOKMARK_TOOLBOX             { HelpId = HID_DSADMIN_BOOKMARK_TOOLBOX ; };
+hidspecial HID_DSADMIN_BOOKMARK_TOOLBOX                 { HelpId = HID_DSADMIN_BOOKMARK_TOOLBOX ; };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.24  2001/05/10 12:09:25  fs
+ *  #86223# new help ids (not surprising ...)
+ *
  *
  *  Revision 1.0 30.10.00 14:02:39  fs
  ************************************************************************/
