@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 15:59:05 $
+ *  last change: $Author: jp $ $Date: 2001-04-12 13:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #endif
 #ifndef _SVX_PRTQRY_HXX
 #include <svx/prtqry.hxx>
+#endif
+#ifndef _SFXENUMITEM_HXX
+#include <svtools/eitem.hxx>
 #endif
 
 #ifndef _EDTWIN_HXX
