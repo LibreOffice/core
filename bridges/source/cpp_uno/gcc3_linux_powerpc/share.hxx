@@ -2,9 +2,9 @@
  *
  *  $RCSfile: share.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khendricks $ $Date: 2002-05-15 13:38:25 $
+ *  last change: $Author: mh $ $Date: 2002-10-02 11:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khendricks $ $Date: 2002-05-15 13:38:25 $
+ *  last change: $Author: mh $ $Date: 2002-10-02 11:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ static typelib_TypeClass cpp2uno_call(
     const typelib_TypeDescription * pMemberTypeDescr,
     typelib_TypeDescriptionReference * pReturnTypeRef, // 0 indicates void return
     sal_Int32 nParams, typelib_MethodParameter * pParams,
-        void ** gpreg, void ** freg, void ** ovrflw,
+        void ** gpreg, void ** fpreg, void ** ovrflw,
     sal_Int64 * pRegisterReturn /* space for register return */ )
 {
         int ng = 0; //number of gpr registers used
@@ -255,6 +255,7 @@ static typelib_TypeClass cpp2uno_call(
                   pUnoArgs[nPos] = ovrflw;
                   ovrflw++;
             }
+                        break;
 
                 }
                 // no longer needed
@@ -735,16 +736,16 @@ void const * MediateClassData::get_vtable( typelib_InterfaceTypeDescription * pT
                 // get method
                 *slots = code;
                 codeSnippet( (long *)code, vtable_pos++, simple_ret );
+                flush_range( code, nSnippetSize );
                 code += nSnippetSize;
-                flush_range((char *) slots, nSnippetSize);
                 slots++;
                 if (! ((typelib_InterfaceAttributeTypeDescription *)pTD)->bReadOnly)
                 {
                     // set method
                     *slots = code;
                     codeSnippet( (long *)code, vtable_pos++, true );
+                    flush_range( code, nSnippetSize );
                     code += nSnippetSize;
-                    flush_range((char *) slots, nSnippetSize);
                     slots++;
                 }
             }
@@ -754,8 +755,8 @@ void const * MediateClassData::get_vtable( typelib_InterfaceTypeDescription * pT
                     ((typelib_InterfaceMethodTypeDescription *)pTD)->pReturnTypeRef->eTypeClass );
                 *slots = code;
                 codeSnippet( (long *)code, vtable_pos++, simple_ret );
+                flush_range( code, nSnippetSize );
                 code += nSnippetSize;
-                flush_range((char *) slots, nSnippetSize);
                 slots++;
             }
             TYPELIB_DANGER_RELEASE( pTD );

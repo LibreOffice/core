@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khendricks $ $Date: 2002-05-15 13:38:25 $
+ *  last change: $Author: mh $ $Date: 2002-10-02 11:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,11 +135,13 @@ static void callVirtualMethod(
           "lwz 0,0(1)\n\t"
           "subf 1,%0,1\n\t"
           "stw 0,0(1)\n\t"
-          "addi %1,1,8\n\t"
-          : : "r" (nStackLongs), "r" (p)  /* no inputs */ : "0" );
+          : : "r" (nStackLongs) : "0" );
+
+     __asm__ __volatile__ ( "addi %0,1,8" : "=r" (p) : );
 
      // never called
-     if (! pThis) dummy_can_throw_anything("xxx"); // address something
+     // if (! pThis) dummy_can_throw_anything("xxx"); // address something
+
 
      // now begin to load the C++ function arguments into storage
      n = 0;
@@ -332,7 +334,7 @@ static void cpp_call(
 
         // need to know parameter types for callVirtualMethod so generate a signature string
         char * pParamType = (char *) alloca(nParams+2);
-        char * PT = pParamType;
+        char * pPT = pParamType;
 
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
