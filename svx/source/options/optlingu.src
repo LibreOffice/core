@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:24:01 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 19:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,10 +141,10 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text = "~Sprache" ;
         Text [ English ] = "Language" ;
         Text[ english_us ] = "Language";
-        Text[ portuguese ] = "Língua";
+        Text[ portuguese ] = "~Língua";
         Text[ russian ] = "ßçûê";
         Text[ greek ] = "Ãëş~óóá";
-        Text[ dutch ] = "Taal";
+        Text[ dutch ] = "~Taal";
         Text[ french ] = "~Langue";
         Text[ spanish ] = "Idioma";
         Text[ italian ] = "Lingua";
@@ -234,10 +234,10 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text = "~Zurück" ;
         Text [ English ] = "Back" ;
         Text[ english_us ] = "~Back";
-        Text[ portuguese ] = "Anterior";
+        Text[ portuguese ] = "~Anterior";
         Text[ russian ] = "Íàçàä";
         Text[ greek ] = "Ğßóù";
-        Text[ dutch ] = "Vorige";
+        Text[ dutch ] = "~Vorige";
         Text[ french ] = "~Précédent";
         Text[ spanish ] = "~Regresar";
         Text[ italian ] = "Indietro";
@@ -293,13 +293,13 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text = "~Neu..." ;
         Text [ English ] = "~New..." ;
         Text[ english_us ] = "~New...";
-        Text[ portuguese ] = "Novo";
+        Text[ portuguese ] = "~Novo...";
         Text[ russian ] = "Ñîçäàòü...";
         Text[ greek ] = "Äçìéïõñãßá...";
-        Text[ dutch ] = "Nieuw";
+        Text[ dutch ] = "~Nieuw...";
         Text[ french ] = "~Nouveau...";
         Text[ spanish ] = "~Nuevo...";
-        Text[ italian ] = "Nuovo";
+        Text[ italian ] = "Nuovo...";
         Text[ danish ] = "New";
         Text[ swedish ] = "~Ny";
         Text[ polish ] = "Nowy...";
@@ -319,13 +319,13 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text = "~Bearbeiten..." ;
         Text [ English ] = "Edit..." ;
         Text[ english_us ] = "~Edit...";
-        Text[ portuguese ] = "Editar";
+        Text[ portuguese ] = "~Editar...";
         Text[ russian ] = "Ïğàâêà...";
         Text[ greek ] = "Åğåîåñãáóßá...";
-        Text[ dutch ] = "Bewerken";
+        Text[ dutch ] = "~Bewerken...";
         Text[ french ] = "~Éditer...";
         Text[ spanish ] = "~Editar...";
-        Text[ italian ] = "Modifica";
+        Text[ italian ] = "Modifica...";
         Text[ danish ] = "Edit";
         Text[ swedish ] = "~Redigera";
         Text[ polish ] = "Edytuj...";
@@ -345,10 +345,10 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text = "~Löschen" ;
         Text [ English ] = "Delete" ;
         Text[ english_us ] = "Dele~te";
-        Text[ portuguese ] = "Eliminar";
+        Text[ portuguese ] = "E~liminar";
         Text[ russian ] = "Óäàëèòü";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ dutch ] = "Wissen";
+        Text[ dutch ] = "~Wissen";
         Text[ french ] = "~Supprimer";
         Text[ spanish ] = "~Eliminar";
         Text[ italian ] = "Elimina";
@@ -525,13 +525,13 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
         Text = "Zeichen vor Umbruch" ;
         Text[ ENGLISH ] = "Characters before linebreak" ;
         Text[ english_us ] = "Characters before line break";
-        Text[ portuguese ] = "Characters before linebreak";
+        Text[ portuguese ] = "Caracteres antes quebra";
         Text[ russian ] = "×èñëî çíàêîâ ïåğåä ïåğåíîñîì";
         Text[ greek ] = "×áñáêôŞñåò ğñéí áğü áëëáãŞ ãñáììŞò";
-        Text[ dutch ] = "Characters before linebreak";
+        Text[ dutch ] = "Tekens voor regelafbreking";
         Text[ french ] = "Caractères avant le saut";
         Text[ spanish ] = "Carácter antes de salto";
-        Text[ italian ] = "Characters before linebreak";
+        Text[ italian ] = "Caratteri prima della sillabazione";
         Text[ danish ] = "Characters before linebreak";
         Text[ swedish ] = "tecken per stavelse före avstavning";
         Text[ polish ] = "Znaki przed podzia³em s³owa";
@@ -548,13 +548,13 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
         Text = "Zeichen nach Umbruch" ;
         Text[ ENGLISH ] = "Characters after linebreak" ;
         Text[ english_us ] = "Characters after line break";
-        Text[ portuguese ] = "Characters after linebreak";
+        Text[ portuguese ] = "Caracteres após quebra de linha";
         Text[ russian ] = "×èñëî çíàêîâ ïîñëå ïåğåíîñà";
         Text[ greek ] = "×áñáêôŞñåò ìåôÜ áğü áëëáãŞ ãñáììŞò";
-        Text[ dutch ] = "Characters after linebreak";
+        Text[ dutch ] = "Tekens na regelafbreking";
         Text[ french ] = "Caractères après le saut";
         Text[ spanish ] = "Carácter después de salto";
-        Text[ italian ] = "Characters after linebreak";
+        Text[ italian ] = "Caratteri dopo la sillabazione";
         Text[ danish ] = "Characters after linebreak";
         Text[ swedish ] = "tecken per stavelse efter avstavning";
         Text[ polish ] = "Znaki za podzia³em s³owa";
@@ -571,13 +571,13 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
         Text = "Minimale Wortlänge" ;
         Text[ ENGLISH ] = "Minimal wordlength" ;
         Text[ english_us ] = "Minimal word length";
-        Text[ portuguese ] = "Minimal wordlength";
+        Text[ portuguese ] = "Comprimento mínimo de palavras";
         Text[ russian ] = "Ìèíèìàëüíàÿ äëèíà ñëîâà";
         Text[ greek ] = "ÅëÜ÷éóôï ìŞêïò ëİîçò";
-        Text[ dutch ] = "Minimal wordlength";
+        Text[ dutch ] = "Minimale woordlengte";
         Text[ french ] = "Longueur de mot minimum";
         Text[ spanish ] = "Tamñana minímo de palabra";
-        Text[ italian ] = "Minimal wordlength";
+        Text[ italian ] = "Lunghezza minima della parola";
         Text[ danish ] = "Minimal wordlength";
         Text[ swedish ] = "Minimal ordlängd";
         Text[ polish ] = "Minimalna d³ugoœæ s³owa";
@@ -632,10 +632,10 @@ TabPage RID_SFXPAGE_LINGU
         Text = "~Verfügbare Sprachmodule:" ;
         Text [ English ] = "Available language modules:" ;
         Text[ english_us ] = "Available language modules:";
-        Text[ portuguese ] = "Módulos linguísticos disponíveis:";
+        Text[ portuguese ] = "~Módulos linguísticos disponíveis:";
         Text[ russian ] = "Äîñòóïíûå ÿçûêîâûå ìîäóëè:";
         Text[ greek ] = "Äéáèİóéìåò ëåéôïõñãéêİò ìïíÜäåò ãëşóóáò:";
-        Text[ dutch ] = "Beschikbare taalmodules:";
+        Text[ dutch ] = "~Beschikbare taalmodules:";
         Text[ french ] = "~Modules de langue disponibles :";
         Text[ spanish ] = "~Módulos disponibles de idioma:";
         Text[ italian ] = "Moduli linguistici disponibili:";
@@ -932,13 +932,13 @@ TabPage RID_SFXPAGE_LINGU
         Text = "Minimale Wortlänge für Silbentrennung: " ;
         Text[ ENGLISH ] = "Minimal wordlength for hyphenation: " ;
         Text[ english_us ] = "Minimal word length for hyphenation: ";
-        Text[ portuguese ] = "Minimal wordlength for hyphenation: ";
+        Text[ portuguese ] = "Comprimento mínimo de palavras para divisão silábica: ";
         Text[ russian ] = "Ìèíèìàëüíàÿ äëèíà ñëîâà äëÿ ïåğåíîñà: ";
         Text[ greek ] = "ÅëÜ÷éóôï ìŞêïò ëİîçò ãéá ôïí óõëëáâéóìü: ";
-        Text[ dutch ] = "Minimal wordlength for hyphenation: ";
+        Text[ dutch ] = "Minimale woordlengte voor woordafbreking: ";
         Text[ french ] = "Longueur de mot minimum pour la coupure de mots : ";
         Text[ spanish ] = "Tamaño mínimo de palabra para separación silábica: ";
-        Text[ italian ] = "Minimal wordlength for hyphenation: ";
+        Text[ italian ] = "Larghezza minima della parola prima della sillabazione: ";
         Text[ danish ] = "Minimal wordlength for hyphenation: ";
         Text[ swedish ] = "Minimal ordlängd för avstavning: ";
         Text[ polish ] = "Minimalna d³ugoœæ wyrazów do dzielenia:";
@@ -955,13 +955,13 @@ TabPage RID_SFXPAGE_LINGU
         Text = "Zeichen vor dem Zeilenumbruch: " ;
         Text[ ENGLISH ] = "Characters before linebreak: " ;
         Text[ english_us ] = "Characters before break: ";
-        Text[ portuguese ] = "Caracteres antes da quebra:";
+        Text[ portuguese ] = "Caracteres antes da quebra: ";
         Text[ russian ] = "Çíàêè ïåğåä ğàçğûâîì ñòğîêè: ";
         Text[ greek ] = "×áñáêôŞñåò ğñéí ôçí áëëáãŞ ãñáììŞò:";
-        Text[ dutch ] = "Tekens voor afbreking: ";
+        Text[ dutch ] = "Tekens voor regelafbreking: ";
         Text[ french ] = "Caractères avant le saut : ";
         Text[ spanish ] = "Caracteres antes de salto de fila: ";
-        Text[ italian ] = "Caratteri prima della sillabazione: ";
+        Text[ italian ] = "Caratteri prima dell'interruzione di riga: ";
         Text[ danish ] = "Characters before hyphenation";
         Text[ swedish ] = "Tecken före radbrytning: ";
         Text[ polish ] = "Znaki przed podzia³em wiersza:";
@@ -978,13 +978,13 @@ TabPage RID_SFXPAGE_LINGU
         Text = "Zeichen nach dem Zeilenumbruch: " ;
         Text[ ENGLISH ] = "Characters behind linebreak: " ;
         Text[ english_us ] = "Characters after break: ";
-        Text[ portuguese ] = "Caracteres após quebra:";
+        Text[ portuguese ] = "Caracteres após quebra: ";
         Text[ russian ] = "Çíàêè ïîñëå ğàçğûâà ñòğîêè: ";
         Text[ greek ] = "×áñáêôŞñåò ìåôÜ ôçí áëëáãŞ ãñáììŞò:";
-        Text[ dutch ] = "Tekens na afbreking: ";
+        Text[ dutch ] = "Tekens na regelafbreking: ";
         Text[ french ] = "Caractères après le saut : ";
         Text[ spanish ] = "Caracteres después de salto de línea: ";
-        Text[ italian ] = "Caratteri dopo la sillabazione: ";
+        Text[ italian ] = "Caratteri dopo l'interruzione di riga: ";
         Text[ danish ] = "Characters behind hyphenation";
         Text[ swedish ] = "Tecken efter radbrytning: ";
         Text[ polish ] = "Znaki za podzia³em wiersza:";
