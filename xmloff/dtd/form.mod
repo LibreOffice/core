@@ -1,5 +1,5 @@
 <!--
-	$Id: form.mod,v 1.2 2001-01-18 14:40:19 cl Exp $
+	$Id: form.mod,v 1.3 2001-02-06 14:08:19 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -71,7 +71,7 @@
                        %service-name;
                        %control-id;>
 
-<!ELEMENT form:form (form:properties?, script:events?, (form:control|form:form)*)>
+<!ELEMENT form:form (form:properties?, office:events?, (form:control|form:form)*)>
 <!ATTLIST form:form %name; %service-name;>
 <!ATTLIST form:form xlink:href %url; #IMPLIED>
 <!ATTLIST form:form form:enctype CDATA "application/x-www-form-urlencoded">
@@ -95,7 +95,7 @@
 
 <!ELEMENT office:forms (form:form*)>
 
-<!ELEMENT form:text (form:properties?, script:events?)>
+<!ELEMENT form:text (form:properties?, office:events?)>
 <!ATTLIST form:text %style-name;
 					%current-value;
                     %disabled;
@@ -109,7 +109,7 @@
                     %convert-empty;
                     %data-field;>
 
-<!ELEMENT form:textarea (form:properties?, script:events?)>
+<!ELEMENT form:textarea (form:properties?, office:events?)>
 <!ATTLIST form:textarea %style-name;
 					    %current-value;
                         %disabled;
@@ -123,7 +123,7 @@
                         %convert-empty;
                         %data-field;>
 
-<!ELEMENT form:password (form:properties?, script:events?)>
+<!ELEMENT form:password (form:properties?, office:events?)>
 <!ATTLIST form:password %style-name;
 					    %disabled;
                         %max-length;
@@ -134,7 +134,7 @@
                         %value;>
 <!ATTLIST form:password form:echo-char CDATA "*">
 
-<!ELEMENT form:file (form:properties?, script:events?)>
+<!ELEMENT form:file (form:properties?, office:events?)>
 <!ATTLIST form:file %style-name;
 					%current-value;
                     %disabled;
@@ -146,7 +146,7 @@
                     %title;
                     %value;>
 
-<!ELEMENT form:formatted-text (form:properties?, script:events?)>
+<!ELEMENT form:formatted-text (form:properties?, office:events?)>
 <!ATTLIST form:formatted-text %style-name;
 					          %current-value;
                               %disabled;
@@ -163,7 +163,7 @@
 <!ATTLIST form:formatted-text form:min-value CDATA #IMPLIED>
 <!ATTLIST form:formatted-text form:validation %boolean; "false">
 
-<!ELEMENT form:fixed-text (form:properties?, script:events?)>
+<!ELEMENT form:fixed-text (form:properties?, office:events?)>
 <!ATTLIST form:fixed-text %style-name;
 					      %for;
                           %disabled;
@@ -172,7 +172,7 @@
                           %title;>
 <!ATTLIST form:fixed-text form:multi-line %boolean; "false">
 
-<!ELEMENT form:combobox (form:properties?, script:events?, form:item*)>
+<!ELEMENT form:combobox (form:properties?, office:events?, form:item*)>
 <!ATTLIST form:combobox %style-name;
 					    %current-value;
                         %disabled;
@@ -194,7 +194,7 @@
 <!ELEMENT form:item (#PCDATA)>
 <!ATTLIST form:item %label;>
 
-<!ELEMENT form:listbox (form:properties?, script:events?, form:option*)>
+<!ELEMENT form:listbox (form:properties?, office:events?, form:option*)>
 <!ATTLIST form:listbox %style-name;
 					   %disabled;
                        %dropdown;
@@ -215,7 +215,7 @@
                       %label;
                       %value;>
 
-<!ELEMENT form:button (form:properties?, script:events?)>
+<!ELEMENT form:button (form:properties?, office:events?)>
 <!ATTLIST form:button %style-name;
 					  %button-type;
                       %disabled;
@@ -230,7 +230,7 @@
                       %value;>
 <!ATTLIST form:button form:default-button %boolean; "false">
 
-<!ELEMENT form:image (form:properties?, script:events?)>
+<!ELEMENT form:image (form:properties?, office:events?)>
 <!ATTLIST form:image %style-name;
 					 %button-type;
                      %disabled;
@@ -243,7 +243,7 @@
                      %title;
                      %value;>
 
-<!ELEMENT form:checkbox (form:properties?, script:events?)>
+<!ELEMENT form:checkbox (form:properties?, office:events?)>
 <!ATTLIST form:checkbox %style-name;
 					    %disabled;
                         %label;
@@ -258,7 +258,7 @@
 <!ATTLIST form:checkbox form:is-tristate %boolean; "false">
 <!ATTLIST form:checkbox form:state %states; "unchecked">
 
-<!ELEMENT form:radio (form:properties?, script:events?)>
+<!ELEMENT form:radio (form:properties?, office:events?)>
 <!ATTLIST form:radio %style-name;
 					 %current-selected;
                      %disabled;
@@ -271,7 +271,7 @@
                      %value;
                      %data-field;>
 
-<!ELEMENT form:frame (form:properties?, script:events?)>
+<!ELEMENT form:frame (form:properties?, office:events?)>
 <!ATTLIST form:frame %style-name;
 					 %disabled;
                      %for;
@@ -279,7 +279,7 @@
                      %printable;
                      %title;>
 
-<!ELEMENT form:image-frame (form:properties?, script:events?)>
+<!ELEMENT form:image-frame (form:properties?, office:events?)>
 <!ATTLIST form:image-frame %style-name;
 					       %disabled;
                            %image-data;
@@ -288,12 +288,12 @@
                            %title;
                            %data-field;>
 
-<!ELEMENT form:hidden (form:properties?, script:events?)>
+<!ELEMENT form:hidden (form:properties?, office:events?)>
 <!ATTLIST form:hidden %name;
                       %service-name;
                       %value;>
 
-<!ELEMENT form:grid (form:properties?, script:events?, form:column*)>
+<!ELEMENT form:grid (form:properties?, office:events?, form:column*)>
 <!ATTLIST form:grid %style-name;
 					%disabled;
                     %printable;
@@ -306,7 +306,7 @@
                       %service-name;
                       %label;>
 
-<!ELEMENT form:generic-control (form:properties?, script:events?)>
+<!ELEMENT form:generic-control (form:properties?, office:events?)>
 <!ATTLIST form:generic-control %style-name;>
 
 

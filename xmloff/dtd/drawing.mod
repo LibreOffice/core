@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.33 2001-02-01 19:12:31 cl Exp $
+	$Id: drawing.mod,v 1.34 2001-02-06 14:08:19 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -469,9 +469,9 @@
 <!ATTLIST style:properties draw:background-size (full|border) #IMPLIED>
 
 <!-- text boxes -->
-<!ELEMENT draw:text-box (text:h|text:p|text:ordered-list|
+<!ELEMENT draw:text-box (office:events?,(text:h|text:p|text:ordered-list|
 		text:unordered-list|table:table|chart:chart|
-		draw:a|draw:text-box|draw:image)*>
+		draw:a|draw:text-box|draw:image)*)>
 <!ATTLIST draw:text-box %draw-style-name;>
 <!ATTLIST draw:text-box draw:name %string; #IMPLIED>
 <!ATTLIST draw:text-box draw:chain-next-name %string; #IMPLIED>
@@ -490,7 +490,7 @@
 <!ATTLIST draw:text-box draw:layer %layerName; #IMPLIED>
 
 <!-- image -->
-<!ELEMENT draw:image (svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
+<!ELEMENT draw:image (office:events?,svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
 <!ATTLIST draw:image %draw-style-name;>
 <!ATTLIST draw:image draw:name %string; #IMPLIED>
 <!ATTLIST draw:image xlink:href %uriReference; #REQUIRED>
@@ -509,7 +509,7 @@
 <!ATTLIST draw:image draw:id %shapeId;>
 
 <!-- objects -->
-<!ELEMENT draw:object (svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
+<!ELEMENT draw:object (office:events?, svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
 <!ATTLIST draw:object %draw-style-name;>
 <!ATTLIST draw:object draw:name %string; #IMPLIED>
 <!ATTLIST draw:object xlink:href %uriReference; #REQUIRED>
@@ -526,7 +526,7 @@
 <!ATTLIST draw:object %zindex;>
 <!ATTLIST draw:object draw:id %shapeId;>
 
-<!ELEMENT draw:object-ole (svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
+<!ELEMENT draw:object-ole (office:events?, svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
 <!ATTLIST draw:object-ole %draw-style-name;>
 <!ATTLIST draw:object-ole draw:name %string; #IMPLIED>
 <!ATTLIST draw:object-ole xlink:href %uriReference; #REQUIRED>
@@ -668,4 +668,3 @@
 <!ATTLIST draw:layer draw:locked %boolean; #IMPLIED>
 <!ATTLIST draw:layer draw:printable %boolean; #IMPLIED>
 <!ATTLIST draw:layer draw:visible %boolean; #IMPLIED>
-

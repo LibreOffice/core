@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.28 2001-02-01 17:42:47 sab Exp $
+	$Id: style.mod,v 1.29 2001-02-06 14:08:20 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -64,7 +64,7 @@
 <!ATTLIST style:font-decl style:font-pitch %fontPitch; #IMPLIED>
 <!ATTLIST style:font-decl style:font-charset %textEncoding; #IMPLIED>
 
-<!ELEMENT style:style ( style:properties?,style:map*)>
+<!ELEMENT style:style ( style:properties?,office:events?,style:map*)>
 
 <!ATTLIST style:style style:name %styleName; #REQUIRED>
 

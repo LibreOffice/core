@@ -1,5 +1,5 @@
 <!--
-	$Id: script.mod,v 1.5 2001-01-03 16:18:24 fs Exp $
+	$Id: script.mod,v 1.6 2001-02-06 14:08:20 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -77,4 +77,3 @@
                        %event-name;
                        %library;
 					   %macro-name;>
-<!ELEMENT script:events (script:event*)>
