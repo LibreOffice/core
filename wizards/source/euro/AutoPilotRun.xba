@@ -332,7 +332,7 @@ Sub CallFilePicker()
 		Dim oFilters() as Object
 		
 		oMasterKey = GetRegistryKeyContent(&quot;org.openoffice.Office.TypeDetection/&quot;)
-		oFilters() = oMasterKey.Filters
+		oFilters() = oMasterKey.Types
 
 		If DialogModel.chkTextDocuments.State = 1 Then
 			Dim FilterNames(21,1) as String

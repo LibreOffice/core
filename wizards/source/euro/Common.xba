@@ -113,7 +113,7 @@ Dim AddToList as Boolean
 End Sub
 
 
-Function Numberformat( oFormats as Object, aFormatStr as String, oLocale)
+Function Numberformat( oFormats as Object, aFormatStr as String, oLocale as Object)
 Dim nRetkey 
 	nRetKey = oFormats.queryKey( aFormatStr, oLocale, True )
 	If nRetKey = -1 Then
