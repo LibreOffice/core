@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mav $ $Date: 2004-11-29 11:00:31 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 09:37:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
 , m_bHasCommonPassword( sal_False )
 , m_pParent( NULL )
 , m_bControlMediaType( sal_False )
+, m_bMTFallbackUsed( sal_False )
 {
     // all the checks done below by assertion statements must be done by factory
     OSL_ENSURE( xInputStream.is(), "No input stream is provided!\n" );
@@ -296,6 +297,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
 , m_bHasCommonPassword( sal_False )
 , m_pParent( NULL )
 , m_bControlMediaType( sal_False )
+, m_bMTFallbackUsed( sal_False )
 {
     // all the checks done below by assertion statements must be done by factory
     OSL_ENSURE( xStream.is(), "No stream is provided!\n" );
@@ -331,6 +333,7 @@ OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
 , m_bHasCommonPassword( sal_False )
 , m_pParent( pParent ) // can be empty in case of temporary readonly substorages
 , m_bControlMediaType( sal_False )
+, m_bMTFallbackUsed( sal_False )
 {
     OSL_ENSURE( xPackageFolder.is(), "No package folder!\n" );
 }
@@ -526,11 +529,12 @@ void OStorage_Impl::GetStorageProperties()
 {
     if ( !m_bControlMediaType )
     {
-        uno::Reference< beans::XPropertySet > xProps( m_xPackageFolder, uno::UNO_QUERY );
-        if ( !xProps.is() )
-            throw uno::RuntimeException(); // TODO:
+        uno::Reference< beans::XPropertySet > xPackageProps( m_xPackage, uno::UNO_QUERY_THROW );
+        xPackageProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaTypeFallbackUsed" ) ) )
+                                                                                                    >>= m_bMTFallbackUsed;
 
-        xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) ) >>= m_aMediaType;
+        uno::Reference< beans::XPropertySet > xProps( m_xPackageFolder, uno::UNO_QUERY_THROW );
+        xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ) ) >>= m_aMediaType;
         m_bControlMediaType = sal_True;
     }
 }
@@ -977,6 +981,9 @@ void OStorage_Impl::Commit()
     }
 
     SetModifiedInternally( sal_False );
+
+    // after commit the mediatype treated as the correct one
+    m_bMTFallbackUsed = sal_False;
 
     // when the storage is commited the parent is modified
     if ( m_pParent )
@@ -3570,7 +3577,8 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
     else if ( m_pImpl->m_bIsRoot && ( aPropertyName.equalsAscii( "HasEncryptedEntries" )
                                     || aPropertyName.equalsAscii( "URL" )
                                     || aPropertyName.equalsAscii( "RepairPackage" ) )
-           || aPropertyName.equalsAscii( "IsRoot" ) )
+           || aPropertyName.equalsAscii( "IsRoot" )
+           || aPropertyName.equalsAscii( "MediaTypeFallbackUsed" ) )
         throw beans::PropertyVetoException(); // TODO
     else
         throw beans::UnknownPropertyException(); // TODO
@@ -3588,7 +3596,8 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
     if ( !m_pImpl )
         throw lang::DisposedException();
 
-    if ( aPropertyName.equalsAscii( "MediaType" ) )
+    if ( aPropertyName.equalsAscii( "MediaType" )
+      || aPropertyName.equalsAscii( "MediaTypeFallbackUsed" ) )
     {
         try
         {
@@ -3607,7 +3616,10 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
                                         aCaught );
         }
 
-        return uno::makeAny( m_pImpl->m_aMediaType );
+        if ( aPropertyName.equalsAscii( "MediaType" ) )
+            return uno::makeAny( m_pImpl->m_aMediaType );
+        else
+            return uno::makeAny( m_pImpl->m_bMTFallbackUsed );
     }
     else if ( aPropertyName.equalsAscii( "IsRoot" ) )
     {
