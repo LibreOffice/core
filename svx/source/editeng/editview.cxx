@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2000-12-07 15:28:19 $
+ *  last change: $Author: mt $ $Date: 2000-12-18 17:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,6 +452,7 @@ void EditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor )
 
 // Draw vertraegt die Assertion nicht, spaeter mal aktivieren
 //  DBG_ASSERT( pImpEditView->pEditEngine->HasView( this ), "ShowCursor - View nicht angemeldet!" );
+//  DBG_ASSERT( !GetWindow()->IsInPaint(), "ShowCursor - Why in Paint ?!" );
 
     if ( pImpEditView->pEditEngine->HasView( this ) )
     {
