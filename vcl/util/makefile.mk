@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.63 $
+#   $Revision: 1.64 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 16:50:00 $
+#   last change: $Author: rt $ $Date: 2005-01-07 09:27:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -391,7 +391,7 @@ SHL5TARGET=vclplug_kde$(UPD)$(DLLPOSTFIX)
 SHL5IMPLIB=ikde_plug_
 SHL5LIBS=$(LIB5TARGET)
 # libs for KDE plugin
-SHL5STDLIBS=$(WIDGETSET_KDE_LIBS)
+SHL5STDLIBS=$(KDE_LIBS)
 SHL5STDLIBS+=-l$(SHL2TARGET)
 SHL5STDLIBS+=$(SHL3STDLIBS) -lX11 -ldl
 .ENDIF # "$(ENABLE_KDE)" != ""
