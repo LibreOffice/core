@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdargs.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2001-08-30 11:51:36 $
+ *  last change: $Author: mhu $ $Date: 2002-07-23 12:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,16 +58,15 @@
  *
  *
  ************************************************************************/
+
 #include <osl/mutex.hxx>
 #include <rtl/process.h>
 #include <rtl/ustring.hxx>
 
 #include "macro.hxx"
 
-using namespace ::rtl;
-
-OUString *g_pCommandArgs = 0;
-sal_Int32 g_nCommandArgCount = -1;
+rtl_uString ** g_ppCommandArgs = 0;
+sal_uInt32     g_nCommandArgCount = 0;
 
 struct rtl_CmdArgs_ArgHolder
 {
@@ -76,70 +75,68 @@ struct rtl_CmdArgs_ArgHolder
 
 rtl_CmdArgs_ArgHolder::~rtl_CmdArgs_ArgHolder()
 {
-    delete [] g_pCommandArgs;
+    while (g_nCommandArgCount > 0)
+        rtl_uString_release (g_ppCommandArgs[--g_nCommandArgCount]);
+
+    rtl_freeMemory (g_ppCommandArgs);
+    g_ppCommandArgs = 0;
 }
 
-rtl_CmdArgs_ArgHolder MyHolder;
+static rtl_CmdArgs_ArgHolder MyHolder;
 
-void impl_rtl_initCommandArgs()
+static void impl_rtl_initCommandArgs()
 {
-    ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
-    if( !g_pCommandArgs )
+    osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
+
+    if (!g_ppCommandArgs)
     {
-        sal_Int32 nCount = osl_getCommandArgCount();
-        ::rtl::OUString * p = new ::rtl::OUString[nCount];
-        sal_Int32 i = 0, i2 = 0;
-        for( ; i < nCount ; i ++ )
+        sal_Int32 i, n = osl_getCommandArgCount();
+
+        g_ppCommandArgs =
+            (rtl_uString**)rtl_allocateZeroMemory (n * sizeof(rtl_uString*));
+        for (i = 0; i < n; i++)
         {
-            ::rtl::OUString data;
-            osl_getCommandArg( i, &(data.pData) );
-            if( ('-' == data.pData->buffer[0] || '/' == data.pData->buffer[0] ) &&
-                 'e' == data.pData->buffer[1] &&
-                 'n' == data.pData->buffer[2] &&
-                 'v' == data.pData->buffer[3] &&
-                 ':' == data.pData->buffer[4] &&
-                rtl_ustr_indexOfChar( &(data.pData->buffer[5]), '=' ) >= 0 )
+            rtl_uString * pArg = 0;
+            osl_getCommandArg (i, &pArg);
+            if (('-' == pArg->buffer[0] || '/' == pArg->buffer[0]) &&
+                 'e' == pArg->buffer[1] &&
+                 'n' == pArg->buffer[2] &&
+                 'v' == pArg->buffer[3] &&
+                 ':' == pArg->buffer[4] &&
+                rtl_ustr_indexOfChar (&(pArg->buffer[5]), '=') >= 0 )
             {
-                // ignore
+                // ignore.
+                rtl_uString_release (pArg);
             }
             else
             {
-                p[i2] = data;
-                i2 ++;
+                // assign.
+                g_ppCommandArgs[g_nCommandArgCount++] = pArg;
             }
         }
-        g_nCommandArgCount = i2;
-        g_pCommandArgs = p;
     }
 }
 
-
-
-extern "C"
+oslProcessError SAL_CALL rtl_getAppCommandArg (
+    sal_uInt32 nArg, rtl_uString **ppCommandArg)
 {
-    oslProcessError SAL_CALL rtl_getAppCommandArg(sal_uInt32 nArg, rtl_uString **strCommandArg)
+    if (!g_ppCommandArgs)
+        impl_rtl_initCommandArgs();
+
+    oslProcessError result = osl_Process_E_NotFound;
+    if( nArg < g_nCommandArgCount )
     {
-        if( !g_pCommandArgs )
-            impl_rtl_initCommandArgs();
+        rtl::OUString expandedArg (expandMacros(NULL, g_ppCommandArgs[nArg]));
 
-        oslProcessError err = osl_Process_E_None;
-        if( nArg < g_nCommandArgCount )
-        {
-            OUString expandedArg = expandMacros(NULL, g_pCommandArgs[nArg]);
-
-            rtl_uString_assign( strCommandArg, expandedArg.pData );
-         }
-        else
-        {
-            err = osl_Process_E_NotFound;
-        }
-        return err;
+        rtl_uString_assign( ppCommandArg, expandedArg.pData );
+        result = osl_Process_E_None;
     }
+    return (result);
+}
 
-    sal_uInt32 SAL_CALL rtl_getAppCommandArgCount()
-    {
-        if( !g_pCommandArgs )
-            impl_rtl_initCommandArgs();
-        return g_nCommandArgCount;
-    }
+sal_uInt32 SAL_CALL rtl_getAppCommandArgCount (void)
+{
+    if (!g_ppCommandArgs)
+        impl_rtl_initCommandArgs();
+    return g_nCommandArgCount;
 }
