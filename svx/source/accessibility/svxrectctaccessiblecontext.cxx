@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gt $ $Date: 2002-04-02 11:37:28 $
+ *  last change: $Author: gt $ $Date: 2002-06-12 10:02:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,9 +695,13 @@ void SvxRectCtlAccessibleContext::selectChild( long nNew )
 
             // select new child
             mnSelectedChild = nNew;
-            pChild = mpChilds[ nNew ];
-            if( pChild )
-                pChild->setStateChecked( sal_True );
+
+            if( nNew != NOCHILDSELECTED )
+            {
+                pChild = mpChilds[ nNew ];
+                if( pChild )
+                    pChild->setStateChecked( sal_True );
+            }
         }
         else
             mnSelectedChild = NOCHILDSELECTED;
