@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-03 12:36:42 $
+ *  last change: $Author: ama $ $Date: 2002-06-24 10:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,6 +352,9 @@ void SwFrm::CheckDirChange()
             if( pCol )
                 pBody->AdjustColumns( pCol, FALSE );
         }
+        else if( IsTxtFrm() )
+            ((SwTxtFrm*)this)->Prepare( PREP_CLEAR );
+
         if( !IsPageFrm() && GetDrawObjs() )
         {
             const SwDrawObjs *pObjs = GetDrawObjs();
