@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 13:51:11 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,10 @@ class CommandLineArgs
         sal_Bool                GetPrintToList( ::rtl::OUString& rPara ) const;
         sal_Bool                GetPrinterName( ::rtl::OUString& rPara ) const;
 
+        // Special analyzed states (does not match directly to a command line parameter!)
+        sal_Bool                IsPrinting() const;
+        sal_Bool                IsEmpty() const;
+
     private:
         struct GroupDefinition
         {
@@ -200,6 +204,7 @@ class CommandLineArgs
         sal_Bool                m_aBoolParams[ CMD_BOOLPARAM_COUNT ];       // Stores boolean parameters
         rtl::OUString           m_aStrParams[ CMD_STRINGPARAM_COUNT ];      // Stores string parameters
         sal_Bool                m_aStrSetParams[ CMD_STRINGPARAM_COUNT ];   // Stores if string parameters are provided on cmdline
+        sal_Bool                m_bEmpty;                                   // indicates an empty command line
         mutable ::osl::Mutex    m_aMutex;
 
         // static definition for groups where only one member can be true
