@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XGraphics.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:01:31 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_util_Color_idl__
+#include <com/sun/star/util/Color.idl>
 #endif
 
 #ifndef __com_sun_star_awt_SimpleFontMetric_idl__
@@ -124,25 +128,25 @@ interface XGraphics: com::sun::star::uno::XInterface
 
     /** sets the text color used by text operations.
      */
-    [oneway] void setTextColor( [in] long nColor );
+    [oneway] void setTextColor( [in] com::sun::star::util::Color nColor );
 
     //-------------------------------------------------------------------------
 
     /** sets the fill color used by text operations.
      */
-    [oneway] void setTextFillColor( [in] long nColor );
+    [oneway] void setTextFillColor( [in] com::sun::star::util::Color nColor );
 
     //-------------------------------------------------------------------------
 
     /** sets the line color.
      */
-    [oneway] void setLineColor( [in] long nColor );
+    [oneway] void setLineColor( [in] com::sun::star::util::Color nColor );
 
     //-------------------------------------------------------------------------
 
     /** sets the fill color.
      */
-    [oneway] void setFillColor( [in] long nColor );
+    [oneway] void setFillColor( [in] com::sun::star::util::Color nColor );
 
     //-------------------------------------------------------------------------
 
