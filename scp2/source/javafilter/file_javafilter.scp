@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_javafilter.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 17:51:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 12:59:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,25 +83,46 @@ End
 
 #endif
 
-File gid_File_Oo_Office_Filter_Palm_Pkg
+File gid_File_Registry_Spool_Oo_TypeDetection_Palm_Types_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Uno_Packages;
-    Name = "fcfg_palm.zip";
+    Dir = gid_Dir_Share_Registry_Spool;
+    Name = "/registry/spool/fcfg_palm_types.xcu";
 End
 
-File gid_File_Oo_Office_Filter_Pocketword_Pkg
+File gid_File_Registry_Spool_Oo_TypeDetection_Palm_Filters_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Uno_Packages;
-    Name = "fcfg_pocketword.zip";
+    Dir = gid_Dir_Share_Registry_Spool;
+    Name = "/registry/spool/fcfg_palm_filters.xcu";
 End
 
-File gid_File_Oo_Office_Filter_Pocketexcel_Pkg
+File gid_File_Registry_Spool_Oo_TypeDetection_PocketWord_Types_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Uno_Packages;
-    Name = "fcfg_pocketexcel.zip";
+    Dir = gid_Dir_Share_Registry_Spool;
+    Name = "/registry/spool/fcfg_pocketword_types.xcu";
+End
+
+File gid_File_Registry_Spool_Oo_TypeDetection_PocketWord_Filters_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Spool;
+    Name = "/registry/spool/fcfg_pocketword_filters.xcu";
+End
+
+File gid_File_Registry_Spool_Oo_TypeDetection_PocketExcel_Types_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Spool;
+    Name = "/registry/spool/fcfg_pocketexcel_types.xcu";
+End
+
+File gid_File_Registry_Spool_Oo_TypeDetection_PocketExcel_Filters_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Spool;
+    Name = "/registry/spool/fcfg_pocketexcel_filters.xcu";
 End
 
 #ifdef SOLAR_JAVA
