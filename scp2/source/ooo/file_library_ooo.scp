@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.32 $
+*  $Revision: 1.33 $
 *
-*  last change: $Author: hr $ $Date: 2004-08-03 14:58:16 $
+*  last change: $Author: rt $ $Date: 2004-08-12 08:16:04 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1309,6 +1309,28 @@ File gid_File_Lib_Reg4msdocmsi
     Styles = (PACKED);
     Dir = gid_Dir_Program;
     Name = "reg4msdocmsi.dll";
+End
+
+#endif
+
+#ifdef WNT
+
+File gid_File_Lib_Qslnkmsi
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+    Name = "qslnkmsi.dll";
+End
+
+#endif
+
+#ifdef WNT
+
+File gid_File_Lib_Sdqsmsi
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+    Name = "sdqsmsi.dll";
 End
 
 #endif
