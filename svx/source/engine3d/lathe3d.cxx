@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lathe3d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-19 16:59:49 $
+ *  last change: $Author: aw $ $Date: 2001-12-04 14:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,6 +537,9 @@ void E3dLatheObj::operator=(const SdrObject& rObj)
 
     aPolyPoly3D  = r3DObj.aPolyPoly3D;
     fLatheScale  = r3DObj.fLatheScale;
+
+    // #95519# copy LinePolygon info, too
+    maLinePolyPolygon = r3DObj.maLinePolyPolygon;
 
     // Ab Version 374 (15.12.97)
     bLatheSmoothed = r3DObj.bLatheSmoothed;

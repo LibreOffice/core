@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrud3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-19 16:59:49 $
+ *  last change: $Author: aw $ $Date: 2001-12-04 14:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,6 +641,9 @@ void E3dExtrudeObj::operator=(const SdrObject& rObj)
 
     aExtrudePolygon = r3DObj.aExtrudePolygon;
     fExtrudeScale = r3DObj.fExtrudeScale;
+
+    // #95519# copy LinePolygon info, too
+    maLinePolyPolygon = r3DObj.maLinePolyPolygon;
 
     bExtrudeSmoothed = r3DObj.bExtrudeSmoothed;
     bExtrudeSmoothFrontBack = r3DObj.bExtrudeSmoothFrontBack;
