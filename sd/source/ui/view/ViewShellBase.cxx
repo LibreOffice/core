@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:44:11 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,8 @@ ViewShellBase::ViewShellBase (
     // Tell the pane manager what shell to put into the center pane.
     // Setting the window later will create that shell.
     mpPaneManager->RequestMainViewShellChange (
-        eDefaultSubShell);
+        eDefaultSubShell,
+        PaneManager::CM_ASYNCHRONOUS);
 }
 
 
@@ -281,9 +282,11 @@ ViewShellBase::~ViewShellBase (void)
         pShell->GetActiveWindow()->GetParent()->Hide();
     }
 
-    mpPaneManager->Shutdown();
-
     mpViewTabBar.reset();
+
+    mpPaneManager->Shutdown();
+    mpViewShellManager->Shutdown();
+
     mpFormShellManager.reset();
 
     EndListening(*GetViewFrame());
