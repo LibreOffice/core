@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:08:42 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,96 @@ rtl_TextEncoding GetTextEncoding( INT16 nLanguage )
 
     return nEncoding;
 }
+
+///////////////////////////////////////////////////////////////////////////
+
+static inline sal_Int32 Minimum( sal_Int32 n1, sal_Int32 n2, sal_Int32 n3 )
+{
+    sal_Int32 nMin = n1 < n2 ? n1 : n2;
+    return nMin < n3 ? nMin : n3;
+}
+
+///////////////////////////////////////////////////////////////////////////
+
+class IntArray2D
+{
+private:
+    xub_StrLen *pData;
+    int         n1, n2;
+
+public:
+    IntArray2D( int nDim1, int nDim2 );
+    ~IntArray2D();
+
+    xub_StrLen &    Value( int i, int k  );
+};
+
+IntArray2D::IntArray2D( int nDim1, int nDim2 )
+{
+    n1 = nDim1;
+    n2 = nDim2;
+    pData = new xub_StrLen[n1 * n2];
+}
+
+IntArray2D::~IntArray2D()
+{
+    delete[] pData;
+}
+
+xub_StrLen & IntArray2D::Value( int i, int k  )
+{
+    DBG_ASSERT( 0 <= i && i < n1, "first index out of range" );
+    DBG_ASSERT( 0 <= k && k < n2, "first index out of range" );
+    DBG_ASSERT( i * n2 + k < n1 * n2, "index out of range" );
+    return pData[ i * n2 + k ];
+}
+
+
+sal_Int32 LevDistance( const OUString &rTxt1, const OUString &rTxt2 )
+{
+    xub_StrLen nLen1 = (xub_StrLen) rTxt1.getLength();
+    xub_StrLen nLen2 = (xub_StrLen) rTxt2.getLength();
+
+    if (nLen1 == 0)
+        return nLen2;
+    if (nLen2 == 0)
+        return nLen1;
+
+    IntArray2D aData( nLen1 + 1, nLen2 + 1 );
+
+    xub_StrLen i, k;
+    for (i = 0;  i <= nLen1;  ++i)
+        aData.Value(i, 0) = i;
+    for (k = 0;  k <= nLen2;  ++k)
+        aData.Value(0, k) = k;
+    for (i = 1;  i <= nLen1;  ++i)
+    {
+        for (k = 1;  k <= nLen2;  ++k)
+        {
+            sal_Unicode c1i = rTxt1.getStr()[i - 1];
+            sal_Unicode c2k = rTxt2.getStr()[k - 1];
+            xub_StrLen nCost = c1i == c2k ? 0 : 1;
+            xub_StrLen nNew = Minimum( aData.Value(i-1, k  ) + 1,
+                                       aData.Value(i  , k-1) + 1,
+                                       aData.Value(i-1, k-1) + nCost );
+            // take transposition (exchange with left or right char) in account
+            if (2 < i && 2 < k)
+            {
+                int nT = aData.Value(i-2, k-2) + 1;
+                if (rTxt1.getStr()[i - 2] != c1i)
+                    ++nT;
+                if (rTxt2.getStr()[k - 2] != c2k)
+                    ++nT;
+                if (nT < nNew)
+                    nNew = nT;
+            }
+
+            aData.Value(i, k) = nNew;
+        }
+    }
+    xub_StrLen nDist = aData.Value(nLen1, nLen2);
+    return nDist;
+ }
 
 ///////////////////////////////////////////////////////////////////////////
 
