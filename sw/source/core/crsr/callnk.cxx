@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callnk.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-15 13:42:41 $
+ *  last change: $Author: jp $ $Date: 2000-11-23 20:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,10 +181,10 @@ SwCallLink::~SwCallLink()
             (( nCmp = nCntnt ) + 1 == nAktCntnt ||          // Right
             nCntnt -1 == ( nCmp = nAktCntnt )) )            // Left
         {
+            if( nCmp == nAktCntnt && pCurCrsr->HasMark() ) // left & Sele
+                ++nCmp;
             if ( ((SwTxtNode*)pCNd)->HasHints() )
             {
-                if( nCmp == nAktCntnt && pCurCrsr->HasMark() ) // left & Sele
-                    ++nCmp;
 
                 const SwpHints &rHts = ((SwTxtNode*)pCNd)->GetSwpHints();
                 USHORT n;
@@ -223,8 +223,9 @@ SwCallLink::~SwCallLink()
             if( pBreakIt->xBreak.is() )
             {
                 const String& rTxt = ((SwTxtNode*)pCNd)->GetTxt();
-                if( pBreakIt->xBreak->getScriptType( rTxt, nCntnt )
-                     != pBreakIt->xBreak->getScriptType( rTxt, nAktCntnt ))
+                if( !nCmp ||
+                    pBreakIt->xBreak->getScriptType( rTxt, nCmp )
+                     != pBreakIt->xBreak->getScriptType( rTxt, nCmp - 1 ))
                 {
                     rShell.CallChgLnk();
                     return;
