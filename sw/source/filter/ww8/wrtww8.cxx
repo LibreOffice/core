@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-04 14:11:10 $
+ *  last change: $Author: cmc $ $Date: 2002-04-08 12:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1395,39 +1395,6 @@ void WW8_WrtBookmarks::MoveFieldBookmarks(ULONG nFrom, ULONG nTo)
             }
         }
     }
-}
-
-/*
-Writer::GetBookmarks is inconsistent, when its changed this might go away, and
-the usage of GetBookmarks refined. GetBookmarks is inconsistent in use between
-asking for a range in the txtnode that has bookmarks vs the full node. The
-first is exclusive of the end point, the second is inclusive. This makes is
-consistently exclusive.
-*/
-USHORT SwWW8Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
-    xub_StrLen nEnd, SvPtrarr& rArr)
-{
-    if (Writer::GetBookmarks( rNd, nStt, nEnd, rArr))
-    {
-        if (!nStt && nEnd == rNd.Len())
-        {
-            for( USHORT n = 0; n < rArr.Count(); ++n )
-            {
-                void* p = rArr[n];
-                const SwBookmark& rBkmk = *(SwBookmark*)p;
-                xub_StrLen nCntnt = rBkmk.GetPos().nContent.GetIndex();
-                xub_StrLen nCntnt2;
-                if (rBkmk.GetOtherPos())
-                    nCntnt2 = rBkmk.GetOtherPos()->nContent.GetIndex();
-                else
-                    nCntnt2 = nCntnt;
-
-                if ((nCntnt >= nEnd) && (nCntnt2 >= nEnd))
-                    rArr.Remove(n--);
-            }
-        }
-    }
-    return rArr.Count();
 }
 
 void SwWW8Writer::AppendBookmarks( const SwTxtNode& rNd,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-04 14:11:10 $
+ *  last change: $Author: cmc $ $Date: 2002-04-08 12:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,10 +466,6 @@ public:
         SvStorageRef xObjStg, String &rStorageName, SwOLENode *pOLENd);
     void AppendBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos,
         xub_StrLen nLen );
-    //Hides Writer::GetBookmarks, hopefully temporarily until that is
-    //made consistent.
-    USHORT GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
-        xub_StrLen nEnd, SvPtrarr& rArr);
     void AppendBookmark( const String& rName, USHORT nOffset = 0 );
     String GetBookmarkName( USHORT nTyp, const String* pNm, USHORT nSeqNo );
     void MoveFieldBookmarks(ULONG nFrom, ULONG nTo);
