@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:34:37 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@
 
 String STR_TABLEDESIGN_DBFIELDTYPES
 {
-    //Text = "Unbekannt;Text;Zahl;Datum/Zeit;Datum;Zeit;Ja/Nein;Währung;Memo;Zähler;Bild;Text (fix);Dezimal;Binärfeld (fix);Binärfeld;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Objekt;Distinct;Struktur;Feld;BLOB;CLOB;REF;OTHER" ;
+    //Text [ de ] ="Unbekannt;Text;Zahl;Datum/Zeit;Datum;Zeit;Ja/Nein;Währung;Memo;Zähler;Bild;Text (fix);Dezimal;Binärfeld (fix);Binärfeld;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Objekt;Distinct;Struktur;Feld;BLOB;CLOB;REF;OTHER" ;
 
     Text [ x-comment ] = "; the sorting of the text doesn't be changed and every type must be translated";
 
@@ -578,8 +578,8 @@ String STR_TABLEDESIGN_NO_PRIM_KEY
 };
 String STR_TABLEDESIGN_TITLE
 {
-    Text [ de ] = "Tabellenentwurf:";
-    Text [ en-US ] = "Table Design:";
+    Text [ de ] = " - %PRODUCTNAME Base: Tabellenentwurf";
+    Text [ en-US ] = " - %PRODUCTNAME Base: Table Design";
 };
 
 /*
