@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinstall.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:23:26 $
+ *  last change: $Author: lo $ $Date: 2004-07-28 15:02:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,6 @@ namespace desktop {
             Reference< XHierarchicalPropertySet> hpset(
                 theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
             hpset->setHierarchicalPropertyValue(OUString::createFromAscii("L10N/ooLocale"), makeAny(aUserLanguage));
-            hpset->setHierarchicalPropertyValue(OUString::createFromAscii("Office/ooSetupInstCompleted"), makeAny(sal_True));
             Reference< XChangesBatch >(hpset, UNO_QUERY_THROW)->commitChanges();
 
         } catch (Exception const & e)
@@ -369,6 +368,29 @@ namespace desktop {
                     aBasePath + OUString::createFromAscii(pszCopyList[i]),
                     aUserPath + OUString::createFromAscii(pszCopyList[i]));
             if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST)) return UserInstall::E_Creation;
+        }
+        try
+        {
+            OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
+            OUString sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess");
+
+            // get configuration provider
+            Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
+            Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
+                theMSF->createInstance(sConfigSrvc), UNO_QUERY_THROW);
+            Sequence< Any > theArgs(1);
+            NamedValue v(OUString::createFromAscii("NodePath"), makeAny(OUString::createFromAscii("org.openoffice.Setup")));
+            //v.Name = OUString::createFromAscii("NodePath");
+            //v.Value = makeAny(OUString::createFromAscii("org.openoffice.Setup"));
+            theArgs[0] <<= v;
+            Reference< XHierarchicalPropertySet> hpset(
+                theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
+            hpset->setHierarchicalPropertyValue(OUString::createFromAscii("Office/ooSetupInstCompleted"), makeAny(sal_True));
+            Reference< XChangesBatch >(hpset, UNO_QUERY_THROW)->commitChanges();
+        }
+        catch (Exception&)
+        {
+            return UserInstall::E_Creation;
         }
 
         return UserInstall::E_None;
