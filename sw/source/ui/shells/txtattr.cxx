@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-07-04 14:55:54 $
+ *  last change: $Author: tl $ $Date: 2002-08-05 09:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #endif
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 #ifndef _PARATR_HXX
 #include "paratr.hxx"
@@ -443,7 +446,10 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
     const SfxItemSet* pArgs = rReq.GetArgs();
 
     // gleich beide Attribute holen, ist nicht teuerer !!
-    SfxItemSet aSet( GetPool(), RES_PARATR_LINESPACING, RES_PARATR_ADJUST );
+    SfxItemSet aSet( GetPool(),
+        RES_PARATR_LINESPACING, RES_PARATR_ADJUST,
+        RES_FRAMEDIR, RES_FRAMEDIR,
+        0 );
 
     USHORT nSlot = rReq.GetSlot();
     switch (nSlot)
@@ -497,6 +503,44 @@ SET_LINESPACE:
             else
                 aLineSpacing.SetPropLineSpace(ePropL);
             aSet.Put( aLineSpacing );
+        }
+        break;
+
+        case SID_ATTR_PARA_LEFT_TO_RIGHT :
+        case SID_ATTR_PARA_RIGHT_TO_LEFT :
+        {
+            BOOL bSet = TRUE;
+            int eState = pArgs->GetItemState(nSlot);
+            if (pArgs && SFX_ITEM_SET == eState)
+                bSet = ((const SfxBoolItem&)pArgs->Get(nSlot)).GetValue();
+            if(!bSet)
+                nSlot = SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot ?
+                    SID_ATTR_PARA_RIGHT_TO_LEFT :
+                    SID_ATTR_PARA_LEFT_TO_RIGHT;
+            SfxItemSet aAdjustSet( GetPool(),
+                    RES_PARATR_ADJUST, RES_PARATR_ADJUST );
+            GetShell().GetAttr(aAdjustSet);
+            BOOL bChgAdjust = FALSE;
+            if (aAdjustSet.GetItemState(RES_PARATR_ADJUST, FALSE)  >= SFX_ITEM_DEFAULT)
+            {
+                int eAdjust = (int)(( const SvxAdjustItem& )
+                        aAdjustSet.Get(RES_PARATR_ADJUST)).GetAdjust();
+//                bChgAdjust = SVX_ADJUST_CENTER  != eAdjust  &&  SVX_ADJUST_BLOCK != eAdjust;
+                bChgAdjust = (SVX_ADJUST_LEFT  == eAdjust  &&  SID_ATTR_PARA_RIGHT_TO_LEFT == nSlot) ||
+                             (SVX_ADJUST_RIGHT == eAdjust  &&  SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot);
+            }
+
+            SvxFrameDirection eFrmDirection =
+                    (SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot) ?
+                        FRMDIR_HORI_LEFT_TOP : FRMDIR_HORI_RIGHT_TOP;
+            aSet.Put( SvxFrameDirectionItem( eFrmDirection, RES_FRAMEDIR ) );
+
+            if (bChgAdjust)
+            {
+                SvxAdjust eAdjust = (SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot) ?
+                        SVX_ADJUST_LEFT : SVX_ADJUST_RIGHT;
+                aSet.Put( SvxAdjustItem( eAdjust, RES_PARATR_ADJUST ) );
+            }
         }
         break;
 
@@ -597,6 +641,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
             }
         }
         break;
+
         default:
             ASSERT(FALSE, falscher Dispatcher);
             return;
@@ -744,6 +789,32 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                 nSlot = 0;
             break;
 
+            case SID_ATTR_PARA_LEFT_TO_RIGHT :
+            case SID_ATTR_PARA_RIGHT_TO_LEFT :
+            {
+                // is the item set?
+                if(aCoreSet.GetItemState( RES_FRAMEDIR, FALSE ) >= SFX_ITEM_DEFAULT)
+                {
+                    SvxFrameDirection eFrmDir = (SvxFrameDirection)
+                            ((const SvxFrameDirectionItem& )aCoreSet.Get(RES_FRAMEDIR)).GetValue();
+                    if (FRMDIR_ENVIRONMENT == eFrmDir)
+                    {
+                        eFrmDir = rSh.IsInRightToLeftText() ?
+                                FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP;
+                    }
+                    bFlag = (SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot &&
+                                        FRMDIR_HORI_LEFT_TOP == eFrmDir) ||
+                            (SID_ATTR_PARA_RIGHT_TO_LEFT == nSlot &&
+                                        FRMDIR_HORI_RIGHT_TOP == eFrmDir);
+                }
+                else
+                {
+                    rSet.InvalidateItem(nSlot);
+                    nSlot = 0;
+                }
+            }
+            break;
+
             case SID_ATTR_CHAR_LANGUAGE:
             case SID_ATTR_CHAR_KERNING:
             case RES_PARATR_DROP:
@@ -782,6 +853,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                 nSlot = 0;
             }
             break;
+
             default:
             // Nichts tun
             nSlot = 0;
@@ -802,6 +874,9 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2002/07/04 14:55:54  os
+    #101159# DropCap recording completed
+
     Revision 1.6  2002/06/14 07:57:24  mba
     #100081#: some new slots for attributes
 
