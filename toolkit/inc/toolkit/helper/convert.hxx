@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:21:22 $
+ *  last change: $Author: obo $ $Date: 2005-03-16 14:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,29 +81,29 @@ inline ::com::sun::star::awt::Size AWTSize( const Size& rVCLSize )
     return ::com::sun::star::awt::Size( rVCLSize.Width(), rVCLSize.Height() );
 }
 
-inline Size VCLSize( const ::com::sun::star::awt::Size& rAWTSize )
+inline ::Size VCLSize( const ::com::sun::star::awt::Size& rAWTSize )
 {
-    return Size( rAWTSize.Width, rAWTSize.Height );
+    return ::Size( rAWTSize.Width, rAWTSize.Height );
 }
 
-inline ::com::sun::star::awt::Point AWTPoint( const Point& rVCLPoint )
+inline ::com::sun::star::awt::Point AWTPoint( const ::Point& rVCLPoint )
 {
     return ::com::sun::star::awt::Point( rVCLPoint.X(), rVCLPoint.Y() );
 }
 
-inline Point VCLPoint( const ::com::sun::star::awt::Point& rAWTPoint )
+inline ::Point VCLPoint( const ::com::sun::star::awt::Point& rAWTPoint )
 {
-    return Point( rAWTPoint.X, rAWTPoint.Y );
+    return ::Point( rAWTPoint.X, rAWTPoint.Y );
 }
 
-inline ::com::sun::star::awt::Rectangle AWTRectangle( const Rectangle& rVCLRect )
+inline ::com::sun::star::awt::Rectangle AWTRectangle( const ::Rectangle& rVCLRect )
 {
     return ::com::sun::star::awt::Rectangle( rVCLRect.Left(), rVCLRect.Top(), rVCLRect.GetWidth(), rVCLRect.GetHeight() );
 }
 
-inline Rectangle VCLRectangle( const ::com::sun::star::awt::Rectangle& rAWTRect )
+inline ::Rectangle VCLRectangle( const ::com::sun::star::awt::Rectangle& rAWTRect )
 {
-    return Rectangle( Point( rAWTRect.X, rAWTRect.Y ), Size( rAWTRect.Width, rAWTRect.Height ) );
+    return ::Rectangle( ::Point( rAWTRect.X, rAWTRect.Y ), ::Size( rAWTRect.Width, rAWTRect.Height ) );
 }
 
 
