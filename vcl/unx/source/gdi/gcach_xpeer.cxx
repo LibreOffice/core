@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hdu $ $Date: 2001-12-13 12:39:20 $
+ *  last change: $Author: hdu $ $Date: 2001-12-20 15:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     // the 8bit alpha mask format must be there
     XRenderPictFormat aPictFormat={0,0,8,{0,0,0,0,0,0,0,0xFF},0};
     mpGlyphFormat = (*pXRenderFindFormat)( mpDisplay,
-        PictFormatAlphaMask|PictFormatDepth, &aPictFormat, 1 );
+        PictFormatAlphaMask|PictFormatDepth, &aPictFormat, 0 );
 
     if( mpGlyphFormat != NULL )
     {
@@ -254,7 +254,9 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData
             {
                 GlyphSet aGlyphSet = GetGlyphSet( rServerFont );
                 Glyph nGlyphId = GetGlyphId( rServerFont, nGlyphIndex );
-                if( nRenderVersion >= 0x02 )
+                // XRenderFreeGlyphs not implemented yet for version<=0.2
+                // should hopefully be ready in XRENDER 1.0?
+                if( nRenderVersion >= 0x10 )
                     (*pXRenderFreeGlyphs)( mpDisplay, aGlyphSet, &nGlyphId, 1 );
                 mnBytesUsed -= nHeight * ((nWidth + 3) & ~3);
             }
