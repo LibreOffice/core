@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextNumRuleInfo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: mib $ $Date: 2000-10-23 11:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _COM_SUN_STAR_STYLE_NUMBERINGTYPE_HPP_
 #include <com/sun/star/style/NumberingType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
+#include <com/sun/star/container/XNamed.hpp>
+#endif
 
 #ifndef _XMLOFF_XMLTEXTNUMRULEINFO_HXX
 #include "XMLTextNumRuleInfo.hxx"
@@ -91,6 +94,7 @@ XMLTextNumRuleInfo::XMLTextNumRuleInfo() :
     sNumberingRules(RTL_CONSTASCII_USTRINGPARAM("NumberingRules")),
     sNumberingLevel(RTL_CONSTASCII_USTRINGPARAM("NumberingLevel")),
     sNumberingStartValue(RTL_CONSTASCII_USTRINGPARAM("NumberingStartValue")),
+    sParaIsNumberingRestart(RTL_CONSTASCII_USTRINGPARAM("ParaIsNumberingRestart")),
     sNumberingStyleName(RTL_CONSTASCII_USTRINGPARAM("NumberingStyleName")),
     sNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType")),
     sIsNumbering(RTL_CONSTASCII_USTRINGPARAM("IsNumbering")),
@@ -108,7 +112,6 @@ void XMLTextNumRuleInfo::Set(
     Reference< XPropertySet > xPropSet( xTextContent, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
 
-    Reference < XIndexReplace > xNumRule;
     Any aAny;
 
     // check if numbering is enabled in edit engine
@@ -122,17 +125,14 @@ void XMLTextNumRuleInfo::Set(
     if( xPropSetInfo->hasPropertyByName( sNumberingRules ) )
     {
         aAny = xPropSet->getPropertyValue( sNumberingRules );
-        aAny >>= xNumRule;
+        aAny >>= xNumRules;
     }
 
-    if( xNumRule.is() )
+    if( xNumRules.is() )
     {
-        if( xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
-        {
-            aAny = xPropSet->getPropertyValue( sNumberingStyleName );
-            aAny >>= sName;
-        }
-        DBG_ASSERT( sName.getLength(), "num rule name is missing!" );
+        Reference < XNamed > xNamed( xNumRules, UNO_QUERY );
+        if( xNamed.is() )
+            sName = xNamed->getName();
 
         aAny = xPropSet->getPropertyValue( sNumberingLevel );
         aAny >>= nLevel;
@@ -146,7 +146,11 @@ void XMLTextNumRuleInfo::Set(
 
         if( bIsNumbered )
         {
-            bIsRestart =  sal_False; // TODO: UNO prop missingrNum.IsStart();
+            if( xPropSetInfo->hasPropertyByName( sParaIsNumberingRestart ) )
+            {
+                aAny = xPropSet->getPropertyValue( sParaIsNumberingRestart );
+                bIsRestart = *(sal_Bool *)aAny.getValue();
+            }
             if( xPropSetInfo->hasPropertyByName( sNumberingStartValue ) )
             {
                 aAny = xPropSet->getPropertyValue( sNumberingStartValue );
@@ -154,9 +158,9 @@ void XMLTextNumRuleInfo::Set(
             }
         }
 
-        DBG_ASSERT( nLevel < xNumRule->getCount(), "wrong num rule level" );
+        DBG_ASSERT( nLevel < xNumRules->getCount(), "wrong num rule level" );
 
-        aAny = xNumRule->getByIndex( nLevel );
+        aAny = xNumRules->getByIndex( nLevel );
         Sequence<PropertyValue> aProps;
         aAny >>= aProps;
         const PropertyValue* pPropArray = aProps.getConstArray();

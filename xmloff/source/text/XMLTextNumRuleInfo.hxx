@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextNumRuleInfo.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: mib $ $Date: 2000-10-23 11:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,13 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXREPLACE_HPP_
+#include <com/sun/star/container/XIndexReplace.hpp>
+#endif
 
-namespace com { namespace sun { namespace star { namespace text {
-    class XTextContent; } } } }
+namespace com { namespace sun { namespace star {
+    namespace text { class XTextContent; }
+} } }
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -78,10 +82,14 @@ class XMLTextNumRuleInfo
     const ::rtl::OUString sNumberingRules;
     const ::rtl::OUString sNumberingLevel;
     const ::rtl::OUString sNumberingStartValue;
+    const ::rtl::OUString sParaIsNumberingRestart;
     const ::rtl::OUString sNumberingStyleName;
     const ::rtl::OUString sNumberingType;
     const ::rtl::OUString sIsNumbering;
     const ::rtl::OUString sNumberingIsNumber;
+
+    ::com::sun::star::uno::Reference <
+        ::com::sun::star::container::XIndexReplace > xNumRules;
 
     ::rtl::OUString     sName;
     sal_Int16           nStartValue;
@@ -103,6 +111,9 @@ public:
     inline void Reset();
 
     const ::rtl::OUString& GetName() const { return sName; }
+    const ::com::sun::star::uno::Reference <
+        ::com::sun::star::container::XIndexReplace >& GetNumRules() const
+        { return xNumRules; }
     sal_Int16 GetLevel() const { return nLevel; }
 
     sal_Bool HasStartValue() const { return nStartValue != -1; }
@@ -117,6 +128,7 @@ inline XMLTextNumRuleInfo& XMLTextNumRuleInfo::operator=(
         const XMLTextNumRuleInfo& rInfo )
 {
     sName = rInfo.sName;
+    xNumRules = rInfo.xNumRules;
     nStartValue = rInfo.nStartValue;
     nLevel = rInfo.nLevel;
     bIsNumbered = rInfo.bIsNumbered;
@@ -129,6 +141,7 @@ inline XMLTextNumRuleInfo& XMLTextNumRuleInfo::operator=(
 inline void XMLTextNumRuleInfo::Reset()
 {
     sName = ::rtl::OUString();
+    xNumRules = 0;
     nStartValue = -1;
     nLevel = 0;
     bIsNumbered = bIsOrdered = bIsRestart = sal_False;

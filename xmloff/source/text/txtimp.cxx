@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 10:39:46 $
+ *  last change: $Author: mib $ $Date: 2000-10-23 11:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,6 +426,7 @@ XMLTextImportHelper::XMLTextImportHelper(
     sHeadingStyleName(RTL_CONSTASCII_USTRINGPARAM("HeadingStyleName")),
     sNumberingLevel(RTL_CONSTASCII_USTRINGPARAM("NumberingLevel")),
     sNumberingStartValue(RTL_CONSTASCII_USTRINGPARAM("NumberingStartValue")),
+    sParaIsNumberingRestart(RTL_CONSTASCII_USTRINGPARAM("ParaIsNumberingRestart")),
     sNumberingStyleName(RTL_CONSTASCII_USTRINGPARAM("NumberingStyleName")),
     sNumberingRules(RTL_CONSTASCII_USTRINGPARAM("NumberingRules")),
     sSequenceNumber(RTL_CONSTASCII_USTRINGPARAM("SequenceNumber")),
@@ -740,7 +741,12 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             if( pListBlock->IsRestartNumbering() )
             {
                 // TODO: property missing
-                // aNodeNum.SetStart();
+                if( xPropSetInfo->hasPropertyByName( sParaIsNumberingRestart ) )
+                {
+                    sal_Bool bTmp = sal_True;
+                    aAny.setValue( &bTmp, ::getBooleanCppuType() );
+                    xPropSet->setPropertyValue( sParaIsNumberingRestart, aAny );
+                }
                 pListBlock->ResetRestartNumbering();
             }
             if( pListItem && pListItem->HasStartValue() &&
