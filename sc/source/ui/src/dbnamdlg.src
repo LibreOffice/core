@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-23 16:56:55 $
+ *  last change: $Author: vg $ $Date: 2001-05-30 20:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,11 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ portuguese ] = "Nome" ;
         Text [ finnish ] = "Nimi" ;
         Text [ danish ] = "Navn" ;
-        Text [ french ] = "Nom" ;
-        Text [ swedish ] = "Namn" ;
+        Text [ french ] = "~Nom" ;
+        Text [ swedish ] = "~Namn" ;
         Text [ dutch ] = "Naam" ;
         Text [ spanish ] = "Nombre" ;
-        Text [ english_us ] = "Name" ;
+        Text [ english_us ] = "Na~me" ;
         Text[ chinese_simplified ] = "Ãû³Æ";
         Text[ russian ] = "Èìÿ";
         Text[ polish ] = "Nazwa";
@@ -130,11 +130,11 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ portuguese ] = "Área" ;
         Text [ finnish ] = "Alue" ;
         Text [ danish ] = "Område" ;
-        Text [ french ] = "Plage" ;
-        Text [ swedish ] = "Område" ;
+        Text [ french ] = "~Plage" ;
+        Text [ swedish ] = "~Område" ;
         Text [ dutch ] = "Bereik" ;
         Text [ spanish ] = "Área" ;
-        Text [ english_us ] = "Range" ;
+        Text [ english_us ] = "~Range" ;
         Text[ chinese_simplified ] = "ÇøÓò";
         Text[ russian ] = "Îáëàñòü";
         Text[ polish ] = "Obszar";
@@ -171,7 +171,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ polish ] = "Pomniejsz!";
         QuickHelpText[ japanese ] = "k¬!";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
@@ -285,17 +285,17 @@ ModelessDialog RID_SCDLG_DBNAMES
         TabStop = TRUE ;
         Text [ english_us ] = "Keep ~formatting" ;
         Text [ portuguese_brazilian ] = "Formatierung ~beibehalten" ;
-        Text [ swedish ] = "Behåll f~ormatering" ;
+        Text [ swedish ] = "Behåll ~formatering" ;
         Text [ danish ] = "Bevar formatering" ;
         Text [ italian ] = "Mantieni formattazione" ;
         Text [ spanish ] = "Co~nservar formato" ;
-        Text [ french ] = "~Conserver le formatage" ;
+        Text [ french ] = "Conserver le ~formatage" ;
         Text [ dutch ] = "Opmaak ~behouden" ;
         Text [ portuguese ] = "~Manter formatação" ;
         Text[ chinese_simplified ] = "±£Áô¸ñÊ½(~F)";
-        Text[ russian ] = "Õğàíèòü ôîğìàòèğîâàíèå";
-        Text[ polish ] = "Zachowaj formatowanie";
-        Text[ japanese ] = "‘®‚ğ‚»‚Ì‚Ü‚Üg—p(~F)";
+        Text[ russian ] = "Ñîõğàíèòü ôîğìàòèğîâàíèå";
+        Text[ polish ] = "Zachowaj format";
+        Text[ japanese ] = "‘®İ’è‚ğ‚»‚Ì‚Ü‚Üg—p(~F)";
         Text[ chinese_traditional ] = "«O¯d®æ¦¡(~F)";
         Text[ arabic ] = "ÇáÅÈŞÇÁ Úáì ÇáÊäÓíŞ";
         Text[ greek ] = "ÄéáôŞñçóç ìïñöïğïßçóçò";
@@ -353,7 +353,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ portuguese ] = "Fonte:" ;
         Text[ chinese_simplified ] = "À´Ô´£º";
         Text[ russian ] = "Èñòî÷íèê:";
-        Text[ polish ] = "?ród³o:";
+        Text[ polish ] = "ród³o:";
         Text[ japanese ] = "¿°½:";
         Text[ chinese_traditional ] = "¸ê®Æ¨Ó·½¡G";
         Text[ arabic ] = "ÇáãÕÏÑ:";
@@ -419,7 +419,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ finnish ] = "~Lisää" ;
         Text [ danish ] = "Tilføj" ;
         Text [ french ] = "~Ajouter" ;
-        Text [ swedish ] = "~Lägg till" ;
+        Text [ swedish ] = "Lägg ~till" ;
         Text [ dutch ] = "Toe~voegen" ;
         Text [ spanish ] = "~Añadir" ;
         Text [ english_us ] = "~Add" ;
