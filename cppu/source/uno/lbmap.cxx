@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2001-01-15 17:29:00 $
+ *  last change: $Author: mh $ $Date: 2001-01-31 09:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,9 @@
 
 #include <com/sun/star/uno/XInterface.hpp>
 
-#include <stl/hash_map>
-#include <stl/set>
-#include <stl/algorithm>
+#include <hash_map>
+#include <set>
+#include <algorithm>
 
 
 using namespace std;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2001-01-15 17:29:00 $
+ *  last change: $Author: mh $ $Date: 2001-01-31 09:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,8 @@
 #else
 #include <malloc.h>
 #endif
-#include <stl/hash_map>
-#include <stl/vector>
+#include <hash_map>
+#include <vector>
 
 #ifndef _TYPELIB_TYPEDESCRIPTION_H_
 #include <typelib/typedescription.h>
