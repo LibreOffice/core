@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleImageBullet.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-16 16:10:25 $
+ *  last change: $Author: vg $ $Date: 2002-05-23 10:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@
 #ifndef _SVX_UNOEDSRC_HXX
 #include "unoedsrc.hxx"
 #endif
+
+#include <com/sun/star/awt/XFocusListener.hpp>
 
 namespace accessibility
 {

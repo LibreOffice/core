@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-03-20 15:05:32 $
+ *  last change: $Author: vg $ $Date: 2002-05-23 10:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@
 #ifndef MNEMONIC_CHAR
 #define MNEMONIC_CHAR               ((sal_Unicode)'~')
 #endif
+#include <com/sun/star/awt/XFocusListener.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
