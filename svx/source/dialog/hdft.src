@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:27:17 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,7 +832,7 @@ QueryBox RID_SVXQBX_DELETE_HEADFOOT
     Message [ portuguese ] = "Ao desactivar o cabeçalho ou o rodapé apaga o respectivo conteúdo.\nDeseja realmente eliminar o texto?" ;
     Message [ finnish ] = "Jos poistat ylä/alatekstin, sen sisältö katoaa.\nHaluatko varmasti poistaa tämän tekstin?" ;
     Message [ danish ] = "Hvis sidehoved eller sidefod deaktiveres, slettes indholdet.\nVil du slette indholdet?" ;
-    Message [ french ] = "Désactivez l'en-tête ou le pied de page pour supprimer son contenu.\nÊtes-vous sûr de vouloir supprimer ce texte ?" ;
+    Message [ french ] = "La désactivation de l'en-tête ou du pied de page en supprime le contenu.\nÊtes-vous sûr de vouloir supprimer ce texte ?" ;
     Message [ swedish ] = "Om du stänger av sidhuvud eller sidfot raderas innehållet. \nVill du radera innehållet?" ;
     Message [ dutch ] = "Als u de kop- of voettekst uitschakelt, wordt de inhoud ervan verwijderd.\nWeet u zeker dat u deze tekst wilt verwijderen?" ;
     Message [ spanish ] = "Al desactivar el encabezamiento o pie de página se eliminará su contenido.\n¿Desea eliminarlo?" ;
