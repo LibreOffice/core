@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofdesc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:03 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,11 @@
 #include <vcl/font.hxx>
 #endif
 
-class SvxUnoFontDescriptor
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
+class SVX_DLLPUBLIC SvxUnoFontDescriptor
 {
 public:
     static void ConvertToFont( const ::com::sun::star::awt::FontDescriptor& rDesc, Font& rFont );
