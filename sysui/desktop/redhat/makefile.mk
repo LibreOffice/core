@@ -123,14 +123,14 @@ KDEMIMEFLAGFILE = \
     $(MISC)/$(TARGET)/usr/share/mimelnk/application.flag
         
 GNOMEICONLIST = \
-    {16x16 22x22 32x32 48x48}/apps/$(UNIXFILENAME)-{$(LAUNCHERLIST)}.png \
-    {16x16 22x22 32x32 48x48}/mimetypes/$(UNIXFILENAME)-{$(MIMEICONLIST)}.png
+    {16x16 32x32 48x48}/apps/$(UNIXFILENAME)-{$(LAUNCHERLIST)}.png \
+    {16x16 32x32 48x48}/mimetypes/$(UNIXFILENAME)-{$(MIMEICONLIST)}.png
     
 KDEICONLIST = \
-    hicolor/{16x16 22x22 32x32 48x48}/apps/$(UNIXFILENAME)-{$(LAUNCHERLIST)}.png \
-    hicolor/{16x16 22x22 32x32 48x48}/mimetypes/$(UNIXFILENAME)-{$(MIMEICONLIST)}.png \
-    locolor/{16x16 22x22 32x32}/apps/$(UNIXFILENAME)-{$(LAUNCHERLIST)}.png \
-    locolor/{16x16 22x22 32x32}/mimetypes/$(UNIXFILENAME)-{$(MIMEICONLIST)}.png
+    hicolor/{16x16 32x32 48x48}/apps/$(UNIXFILENAME)-{$(LAUNCHERLIST)}.png \
+    hicolor/{16x16 32x32 48x48}/mimetypes/$(UNIXFILENAME)-{$(MIMEICONLIST)}.png \
+    locolor/{16x16 32x32}/apps/$(UNIXFILENAME)-{$(LAUNCHERLIST)}.png \
+    locolor/{16x16 32x32}/mimetypes/$(UNIXFILENAME)-{$(MIMEICONLIST)}.png
 
 .IF "$(RPM)"!=""
 
