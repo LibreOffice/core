@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-28 11:17:46 $
+ *  last change: $Author: dr $ $Date: 2000-12-18 14:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,9 @@ void ImportExcel8::Formula( UINT16 nCol, UINT16 nRow, UINT16 nTab,
 
 
 ExcelToSc8::ExcelToSc8( RootData* pRD, SvStream& aStr, const UINT16& rOrgTab ) :
-    ExcelToSc( pRD, aStr, rOrgTab )
+    ExcelToSc( pRD, aStr, rOrgTab ),
+    rXtiBuffer( *pExcRoot->pXtiBuffer ),
+    rSupbookBuffer( *pExcRoot->pSupbookBuffer )
 {
 }
 
@@ -187,19 +189,31 @@ ExcelToSc8::~ExcelToSc8()
 }
 
 
+BOOL ExcelToSc8::Read3DTabReference( UINT16& rFirstTab, UINT16& rLastTab )
+{
+    BOOL bRet = FALSE;
+    rFirstTab = rLastTab = 0;
+
+    UINT16 nIxti;
+    aIn >> nIxti;
+    nBytesLeft -= 2;
+
+    const XclImpXti* pXti = rXtiBuffer.Get( nIxti );
+    if( pXti )
+    {
+        const XclImpSupbook* pSupbook = rSupbookBuffer.Get( pXti->nSupbook );
+        if( pSupbook )
+        {
+            rFirstTab = pSupbook->GetScTabNum( pXti->nFirst );
+            rLastTab = pSupbook->GetScTabNum( pXti->nLast );
+            bRet = TRUE;
+        }
+    }
+    return bRet;
+}
+
+
 ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, INT32& rLeft, const FORMULA_TYPE eFT )
-{
-    return Convert( rpTokArray, rLeft, eFT, NULL );
-}
-
-
-ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, INT32& rLeft, UINT16List& rChTrackList )
-{
-    return Convert( rpTokArray, rLeft, FT_CellFormula, &rChTrackList );
-}
-
-
-ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, INT32& rLeft, const FORMULA_TYPE eFT, UINT16List* pChTrackList )
 {
     BYTE                    nOp, nLen, nByte;
     UINT16                  nUINT16, nIndexToFunc;
@@ -212,9 +226,6 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, INT32& rLeft, cons
     const BOOL              bRangeName = eFT == FT_RangeName;
     const BOOL              bSharedFormula = eFT == FT_SharedFormula;
     const BOOL              bRNorSF = bRangeName || bSharedFormula;
-    const XtiBuffer&        rXtiBuffer = *pExcRoot->pXtiBuffer;
-    const SupbookBuffer&    rSupbookBuffer = *pExcRoot->pSupbookBuffer;
-    const Xti*              pXti;
     const CharSet           eCharSet = *pExcRoot->pCharset;
     UINT32                  nExtCnt = 0;
 
@@ -226,8 +237,6 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, INT32& rLeft, cons
     bExternName = FALSE;
 
     nBytesLeft = rLeft;
-    if( pChTrackList )
-        pChTrackList->Clear();
 
     if( eStatus != ConvOK )
         return eStatus;
@@ -794,64 +803,44 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, INT32& rLeft, cons
             case 0x7C:
             case 0x3C: // Deleted 3-D Cell Reference            [    277]
             {
-                UINT16          nIxti, nRw, nGrbitCol;
+                UINT16 nRw, nGrbitCol;
+                UINT16 nTabFirst, nTabLast;
 
-                aIn >> nIxti >> nRw >> nGrbitCol;
-                nBytesLeft -= 6;
+                BOOL bOK = Read3DTabReference( nTabFirst, nTabLast );
+                aIn >> nRw >> nGrbitCol;
+                nBytesLeft -= 4;
 
-                pXti = rXtiBuffer.Get( nIxti );
-
-                if( pXti )
+                if( bOK )
                 {
-                    const SupbookE* pSbE = rSupbookBuffer.Get( pXti->nSupbook );
+                    BOOL    b3D = ( nTabFirst != aEingPos.Tab() ) || bRangeName;
 
-                    if( pSbE )
+                    aSRD.nTab = nTabFirst;
+                    aSRD.SetFlag3D( b3D );
+                    aSRD.SetTabRel( FALSE );
+
+                    ExcRelToScRel( nRw, nGrbitCol, aSRD, bRangeName );
+
+                    switch ( nOp )
                     {
-                        UINT16  nTabFirst, nTabLast;
-                        if( pSbE->IsExternal() )
-                        {
-                            nTabFirst = pSbE->GetScTabNum( pXti->nFirst );
-                            nTabLast = pSbE->GetScTabNum( pXti->nLast );
-                            if( pChTrackList )
-                                pChTrackList->Append( EXC_CHTR_3DREF_EXT );
-                        }
-                        else
-                        {
-                            nTabFirst = pXti->nFirst;
-                            nTabLast = pXti->nLast;
-                            if( pChTrackList )
-                                pChTrackList->Append( EXC_CHTR_3DREF_INT );
-                        }
-                        BOOL    b3D = ( nTabFirst != aEingPos.Tab() ) || bRangeName;
-
-                        aSRD.nTab = nTabFirst;
-                        aSRD.SetFlag3D( b3D );
-                        aSRD.SetTabRel( FALSE );
-
-                        ExcRelToScRel( nRw, nGrbitCol, aSRD, bRangeName );
-
-                        switch ( nOp )
-                        {
-                            case 0x5C:
-                            case 0x7C:
-                            case 0x3C: // Deleted 3-D Cell Reference    [    277]
-                                // no information which part is deleted, set both
-                                aSRD.SetColDeleted( TRUE );
-                                aSRD.SetRowDeleted( TRUE );
-                        }
-                        if ( nTabFirst > MAXTAB )
-                            aSRD.SetTabDeleted( TRUE );
-
-                        if( nTabLast != nTabFirst )
-                        {
-                            aCRD.Ref1 = aCRD.Ref2 = aSRD;
-                            aCRD.Ref2.nTab = nTabLast;
-                            b3D = ( nTabLast != aEingPos.Tab() );
-                            aStack << aPool.Store( aCRD );
-                        }
-                        else
-                            aStack << aPool.Store( aSRD );
+                        case 0x5C:
+                        case 0x7C:
+                        case 0x3C: // Deleted 3-D Cell Reference    [    277]
+                            // no information which part is deleted, set both
+                            aSRD.SetColDeleted( TRUE );
+                            aSRD.SetRowDeleted( TRUE );
                     }
+                    if ( nTabFirst > MAXTAB )
+                        aSRD.SetTabDeleted( TRUE );
+
+                    if( nTabLast != nTabFirst )
+                    {
+                        aCRD.Ref1 = aCRD.Ref2 = aSRD;
+                        aCRD.Ref2.nTab = nTabLast;
+                        b3D = ( nTabLast != aEingPos.Tab() );
+                        aStack << aPool.Store( aCRD );
+                    }
+                    else
+                        aStack << aPool.Store( aSRD );
                 }
                 else
                 {
@@ -867,82 +856,50 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, INT32& rLeft, cons
             case 0x7D:
             case 0x3D: // Deleted 3-D Area Reference            [    277]
             {
-                UINT16          nIxti, nRw1, nGrbitCol1, nRw2, nGrbitCol2;
+                UINT16 nRw1, nGrbitCol1, nRw2, nGrbitCol2;
+                UINT16 nTabFirst, nTabLast;
 
-                aIn >> nIxti >> nRw1 >> nRw2 >> nGrbitCol1 >> nGrbitCol2;
-                nBytesLeft -= 10;
+                BOOL bOK = Read3DTabReference( nTabFirst, nTabLast );
+                aIn >> nRw1 >> nRw2 >> nGrbitCol1 >> nGrbitCol2;
+                nBytesLeft -= 8;
 
-                pXti = rXtiBuffer.Get( nIxti );
-
-                if( pXti )
+                if( bOK )
                 {
-                    const SupbookE* pSbE = rSupbookBuffer.Get( pXti->nSupbook );
+                    SingleRefData   &rR1 = aCRD.Ref1;
+                    SingleRefData   &rR2 = aCRD.Ref2;
 
-                    if( pSbE )
+                    rR1.nTab = nTabFirst;
+                    rR2.nTab = nTabLast;
+                    rR1.SetFlag3D( ( nTabFirst != aEingPos.Tab() ) || bRangeName );
+                    rR1.SetTabRel( FALSE );
+                    rR2.SetFlag3D( ( nTabLast != aEingPos.Tab() ) || bRangeName );
+                    rR2.SetTabRel( FALSE );
+
+                    ExcelToSc8::ExcRelToScRel( nRw1, nGrbitCol1, aCRD.Ref1, bRangeName );
+                    ExcelToSc8::ExcRelToScRel( nRw2, nGrbitCol2, aCRD.Ref2, bRangeName );
+
+                    if( IsComplColRange( nGrbitCol1, nGrbitCol2 ) )
+                        SetComplCol( aCRD );
+                    else if( IsComplRowRange( nRw1, nRw2 ) )
+                        SetComplRow( aCRD );
+
+                    switch ( nOp )
                     {
-                        UINT16  nTabFirst, nTabLast;
-                        if( pSbE->IsExternal() )
-                        {
-                            nTabFirst = pSbE->GetScTabNum( pXti->nFirst );
-                            nTabLast = pSbE->GetScTabNum( pXti->nLast );
-                            if( pChTrackList )
-                            {
-                                pChTrackList->Append( EXC_CHTR_3DREF_EXT );
-                                pChTrackList->Append( EXC_CHTR_3DREF_EXT );
-                            }
-                        }
-                        else
-                        {
-                            nTabFirst = pXti->nFirst;
-                            nTabLast = pXti->nLast;
-                            if( pChTrackList )
-                            {
-                                pChTrackList->Append( EXC_CHTR_3DREF_INT );
-                                pChTrackList->Append( EXC_CHTR_3DREF_INT );
-                            }
-                        }
-
-                        SingleRefData   &rR1 = aCRD.Ref1;
-                        SingleRefData   &rR2 = aCRD.Ref2;
-
-                        rR1.nTab = nTabFirst;
-                        rR2.nTab = nTabLast;
-                        rR1.SetFlag3D( ( nTabFirst != aEingPos.Tab() ) || bRangeName );
-                        rR1.SetTabRel( FALSE );
-                        rR2.SetFlag3D( ( nTabLast != aEingPos.Tab() ) || bRangeName );
-                        rR2.SetTabRel( FALSE );
-
-                        ExcelToSc8::ExcRelToScRel( nRw1, nGrbitCol1, aCRD.Ref1, bRangeName );
-                        ExcelToSc8::ExcRelToScRel( nRw2, nGrbitCol2, aCRD.Ref2, bRangeName );
-
-                        if( IsComplColRange( nGrbitCol1, nGrbitCol2 ) )
-                            SetComplCol( aCRD );
-                        else if( IsComplRowRange( nRw1, nRw2 ) )
-                            SetComplRow( aCRD );
-
-                        switch ( nOp )
-                        {
-                            case 0x5D:
-                            case 0x7D:
-                            case 0x3D: // Deleted 3-D Area Reference    [    277]
-                                // no information which part is deleted, set all
-                                rR1.SetColDeleted( TRUE );
-                                rR1.SetRowDeleted( TRUE );
-                                rR2.SetColDeleted( TRUE );
-                                rR2.SetRowDeleted( TRUE );
-                        }
-                        if ( nTabFirst > MAXTAB )
-                            rR1.SetTabDeleted( TRUE );
-                        if ( nTabLast > MAXTAB )
-                            rR2.SetTabDeleted( TRUE );
-
-                        aStack << aPool.Store( aCRD );
+                        case 0x5D:
+                        case 0x7D:
+                        case 0x3D: // Deleted 3-D Area Reference    [    277]
+                            // no information which part is deleted, set all
+                            rR1.SetColDeleted( TRUE );
+                            rR1.SetRowDeleted( TRUE );
+                            rR2.SetColDeleted( TRUE );
+                            rR2.SetRowDeleted( TRUE );
                     }
-                    else
-                    {
-                        aPool << ocBad;
-                        aPool >> aStack;
-                    }
+                    if ( nTabFirst > MAXTAB )
+                        rR1.SetTabDeleted( TRUE );
+                    if ( nTabLast > MAXTAB )
+                        rR2.SetTabDeleted( TRUE );
+
+                    aStack << aPool.Store( aCRD );
                 }
                 else
                 {
@@ -1006,9 +963,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, INT32 &rRestbytes, co
     const BOOL              bRangeName = eFT == FT_RangeName;
     const BOOL              bSharedFormula = eFT == FT_SharedFormula;
     const BOOL              bRNorSF = bRangeName || bSharedFormula;
-    const XtiBuffer&        rXtiBuffer = *pExcRoot->pXtiBuffer;
-    const SupbookBuffer&    rSupbookBuffer = * pExcRoot->pSupbookBuffer;
-    const Xti*              pXti;
+    const XclImpXti*        pXti;
 
     SingleRefData           aSRD;
     aSRD.InitFlags();
@@ -1266,7 +1221,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, INT32 &rRestbytes, co
 
                 if( pXti )
                 {
-                    const SupbookE* pSbE = rSupbookBuffer.Get( pXti->nSupbook );
+                    const XclImpSupbook* pSbE = rSupbookBuffer.Get( pXti->nSupbook );
 
                     if( pSbE )
                     {
@@ -1313,7 +1268,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, INT32 &rRestbytes, co
 
                 if( pXti )
                 {
-                    const SupbookE* pSbE = rSupbookBuffer.Get( pXti->nSupbook );
+                    const XclImpSupbook* pSbE = rSupbookBuffer.Get( pXti->nSupbook );
 
                     if( pSbE )
                     {
@@ -1429,9 +1384,7 @@ BOOL ExcelToSc8::GetAbsRefs( SvStream& rIn, INT32& nBytesLeft, ScRangeList& r )
     UINT16                  nRow1, nRow2, nCol1, nCol2, nTab1, nTab2;
     UINT16                  nIxti;
 
-    const XtiBuffer&        rXtiBuffer = *pExcRoot->pXtiBuffer;
-    const SupbookBuffer&    rSupbookBuffer = *pExcRoot->pSupbookBuffer;
-    const Xti*              pXti;
+    const XclImpXti*        pXti;
     UINT32                  nSeek;
 
     while( nBytesLeft > 0 )
@@ -1489,7 +1442,7 @@ BOOL ExcelToSc8::GetAbsRefs( SvStream& rIn, INT32& nBytesLeft, ScRangeList& r )
 
                 if( pXti )
                 {
-                    const SupbookE* pSbE = rSupbookBuffer.Get( pXti->nSupbook );
+                    const XclImpSupbook* pSbE = rSupbookBuffer.Get( pXti->nSupbook );
 
                     nTab1 = pXti->nFirst;
                     nTab2 = pXti->nLast;

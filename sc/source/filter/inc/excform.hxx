@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-28 10:59:50 $
+ *  last change: $Author: dr $ $Date: 2000-12-18 14:19:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,17 +139,21 @@ inline BOOL ExcelToSc::IsComplRowRange( const UINT16 nRow1, const UINT16 nRow2 )
 
 class ExcelToSc8 : public ExcelToSc
 {
+private:
+    const XclImpXtiBuffer&      rXtiBuffer;
+    const XclImpSupbookBuffer&  rSupbookBuffer;
+
     void                ExcRelToScRel( UINT16 nRow, UINT16 nCol, SingleRefData&,
                             const BOOL bName );
 
-    virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, INT32& rLeft, const FORMULA_TYPE eFT, UINT16List* pChTrackList );
+                        // this function must read 2 bytes from stream and adjust <nBytesLeft>
+    virtual BOOL        Read3DTabReference( UINT16& rFirstTab, UINT16& rLastTab );
 
 public:
                         ExcelToSc8( RootData* pRD, SvStream& aStr, const UINT16& rOrgTab );
     virtual             ~ExcelToSc8();
 
     virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, INT32& rLeft, const FORMULA_TYPE eFT = FT_CellFormula );
-    virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, INT32& rLeft, UINT16List& rChTrackList );
 
     virtual ConvErr     Convert( _ScRangeListTabs&, INT32& nRest, const FORMULA_TYPE eFT = FT_CellFormula );
 
