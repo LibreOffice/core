@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-03 17:38:14 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,6 +343,8 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 
     // Debug-Daten initialisieren
     DBGGUI_INIT();
+
+    ResMgr::SetAppFileName( *pSVData->maAppData.mpAppFileName );
 
     return TRUE;
 }
