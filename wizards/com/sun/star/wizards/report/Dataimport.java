@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bc $ $Date: 2002-07-08 11:39:12 $
+ *  last change: $Author: bc $ $Date: 2002-07-10 15:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,8 @@ public class Dataimport extends ReportWizard{
     DBMetaData.CommandMetaData CurDBMetaData;
     CurReportDocument =  new ReportDocument.RepWizardDocument();
     ReportDocument.initializeReportDocument(xMSF, CurReportDocument, false, true);
-    CurUNOProgressDialog = Dataimport.showProgressDisplay(xMSF, true);
+    int iWidth = CurReportDocument.Frame.getComponentWindow().getPosSize().Width;
+    CurUNOProgressDialog = Dataimport.showProgressDisplay(xMSF, true, iWidth);
     CurDBMetaData = new DBMetaData.CommandMetaData();
     if (reconnectToDatabase(xMSF, CurDBMetaData, CurReportDocument)){
         getGroupFieldFortmats(xMSF, CurReportDocument, CurDBMetaData);
@@ -473,12 +474,13 @@ public class Dataimport extends ReportWizard{
     }}
 
 
-    public static UNODialogs.UNODialog showProgressDisplay(XMultiServiceFactory xMSF, boolean bgetConnection){
+    public static UNODialogs.UNODialog showProgressDisplay(XMultiServiceFactory xMSF, boolean bgetConnection, int iWidth){
     try{
     int iHeight;
     ReportWizard.getReportResources(xMSF, true);
     UNODialogs.UNODialog CurUNOProgressDialog = UNODialogs.initializeDialog(xMSF, new String[] {"Height", "PositionX", "PositionY", "Step", "Title", "Width"},
-                            new Object[] {new Integer(84), new Integer(250), new Integer(150), new Integer(0), sProgressTitle, new Integer(180)});
+                            new Object[] {new Integer(84), new Integer(250), new Integer(150), new Integer(0), sProgressTitle, new Integer(180)}
+                            , iWidth);
 
     if (bgetConnection){
         com.sun.star.awt.FontDescriptor oFontDesc = new com.sun.star.awt.FontDescriptor();

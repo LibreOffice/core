@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: bc $ $Date: 2002-07-08 11:39:15 $
+ *  last change: $Author: bc $ $Date: 2002-07-10 15:29:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,11 +139,7 @@ import java.io.*;
 import java.util.*;
 
 
-/**
- *
- * @author  bc93774
- * @version
- */
+
 public class ReportWizard {
     static XMultiServiceFactory xGlobalMSF;
     static XDatabaseMetaData xDBMetaData;
@@ -214,8 +210,6 @@ public class ReportWizard {
     static String[] sDatabaseList;
     static String[] TableNames;
     static String[] QueryNames;
-    static String[][] LayoutFiles = new String[2][];
-    static String[][] ContentFiles = new String[2][];
     static String[] sSortHeader = new String[4];
     static String[]sSortAscend = new String[4];
     static String[]sSortDescend = new String[4];
@@ -249,6 +243,8 @@ public class ReportWizard {
     static String[] OriginalList = new String[]{""};
     static XDesktop xDesktop;
     static ReportDocument.RepWizardDocument CurReportDocument;
+    static ReportPaths CurReportPaths;
+
     static java.util.Vector GroupFieldVector;
     static java.util.Vector GroupFormatVector = new java.util.Vector();
     static String TemplatePath;
@@ -457,8 +453,8 @@ public class ReportWizard {
         case SOCONTENTLST:
 //          CurReportDocument.ReportTextDocument.lockControllers();
             iPos = xContentListBox.getSelectedItemPos();
-            ReportDocument.loadSectionsfromTemplate(CurReportDocument, CurDBMetaData, GroupFormatVector, ContentFiles[0][iPos]);
-            ReportDocument.loadStyleTemplates(CurReportDocument.ReportTextDocument, ContentFiles[0][iPos], "LoadTextStyles");
+            ReportDocument.loadSectionsfromTemplate(CurReportDocument, CurDBMetaData, GroupFormatVector, CurReportPaths.ContentFiles[0][iPos]);
+            ReportDocument.loadStyleTemplates(CurReportDocument.ReportTextDocument, CurReportPaths.ContentFiles[0][iPos], "LoadTextStyles");
 //          CurReportDocument.ReportTextDocument.unlockControllers();
             ReportDocument.selectFirstPage(CurReportDocument);
             break;
@@ -467,7 +463,7 @@ public class ReportWizard {
             CurReportDocument.ReportTextDocument.lockControllers();
             iPos = xLayoutListBox.getSelectedItemPos();
             boolean bOldIsCurLandscape = ((Boolean) tools.getUNOPropertyValue(CurReportDocument.ReportPageStyle, "IsLandscape")).booleanValue();
-            ReportDocument.loadStyleTemplates(CurReportDocument.ReportTextDocument, LayoutFiles[0][iPos], "LoadPageStyles");
+            ReportDocument.loadStyleTemplates(CurReportDocument.ReportTextDocument, CurReportPaths.LayoutFiles[0][iPos], "LoadPageStyles");
             ReportDocument.changePageOrientation(xGlobalMSF, CurUNODialog.xDlgNameAccess, CurReportDocument, bOldIsCurLandscape);
             CurReportDocument.ReportTextDocument.unlockControllers();
             ReportDocument.selectFirstPage(CurReportDocument);
@@ -878,7 +874,6 @@ public class ReportWizard {
 
     insertSaveControls(55, 0, true, 42, 34372);
 
-
     UNODialogs.insertRadioButton(CurUNODialog, "optEditTemplate", SOOPTEDITTEMPLATE, new ActionListenerImpl(),
                             new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
                             new Object[] {new Integer(10), "HID:34374", sEditTemplate, new Integer(16), new Integer(84), new Short((short) 1), new Integer(5), new Short((short) 44), new Integer(138)});
@@ -916,22 +911,20 @@ public class ReportWizard {
                 new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
                 new Object[] {new Integer(8), new Integer(6), new Integer(70), new Integer(4), new Integer(125), slblDataStructure});
 
-        ContentFiles = tools.getFolderTitles(xMSF, "cnt", CurReportDocument.ReportFolderName);
-        short iSelPos = (short) tools.FieldInList(ContentFiles[0], CurReportDocument.ReportFolderName + "/cnt-default.stw");
+        short iSelPos = (short) tools.FieldInList(CurReportPaths.ContentFiles[0], CurReportDocument.ReportFolderName + "/cnt-default.stw");
         xContentListBox = UNODialogs.insertListBox(CurUNODialog, "lstContent", SOCONTENTLST, new ActionListenerImpl(), new ItemListenerImpl(),
                     new String[] {"Height", "HelpURL", "PositionX", "PositionY", "SelectedItems", "Step", "StringItemList", "TabIndex", "Width"},
-                new Object[] {new Integer(63), "HID:34363", new Integer(6), new Integer(80), new short[] {iSelPos},  new Integer(4), ContentFiles[1], new Short((short)32), new Integer(125)});
+                new Object[] {new Integer(63), "HID:34363", new Integer(6), new Integer(80), new short[] {iSelPos},  new Integer(4), CurReportPaths.ContentFiles[1], new Short((short)32), new Integer(125)});
         xContentListBox.selectItemPos(iSelPos, true);
 
         UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNODialog, "lblLayout",
                 new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
                 new Object[] {new Integer(8), new Integer(140), new Integer(70), new Integer(4), new Integer(125), slblPageLayout});
 
-        LayoutFiles = tools.getFolderTitles(xMSF,"stl", CurReportDocument.ReportFolderName);
-        short iSelLayoutPos = (short) tools.FieldInList(LayoutFiles[0], CurReportDocument.ReportFolderName + "/stl-default.stw");
+        short iSelLayoutPos = (short) tools.FieldInList(CurReportPaths.LayoutFiles[0], CurReportDocument.ReportFolderName + "/stl-default.stw");
         xLayoutListBox = UNODialogs.insertListBox(CurUNODialog, "lstLayout", SOLAYOUTLST, new ActionListenerImpl(), new ItemListenerImpl(),
                     new String[] {"Height", "HelpURL", "PositionX", "PositionY", "SelectedItems", "Step", "StringItemList", "TabIndex", "Width"},
-                new Object[] {new Integer(63), "HID:34364", new Integer(140), new Integer(80), new short[] {iSelLayoutPos}, new Integer(4), LayoutFiles[1], new Short((short)33), new Integer(125)});
+                new Object[] {new Integer(63), "HID:34364", new Integer(140), new Integer(80), new short[] {iSelLayoutPos}, new Integer(4), CurReportPaths.LayoutFiles[1], new Short((short)33), new Integer(125)});
 
         UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNODialog, "lblOrientation",
                             new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
@@ -944,11 +937,9 @@ public class ReportWizard {
         UNODialogs.insertRadioButton(CurUNODialog, "optPortrait", SOOPTPORTRAIT, new ActionListenerImpl(),
                             new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
                             new Object[] {new Integer(10), "HID:34366", sOrientVertical, new Integer(12), new Integer(173), new Integer(4), new Short((short)35), new Integer(100)});
-        String sTemplatePath = tools.getOfficePath(xMSF, "Template","share") + "/wizard/bitmap/landscape.gif";
-
             UNODialogs.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", CurUNODialog, "imgOrientation",
                             new String[] {"Border", "Height", "ImageURL", "PositionX", "PositionY", "ScaleImage", "Step", "Width"},
-                            new Object[] {new Short("0"), new Integer(23), sTemplatePath, new Integer(80), new Integer(158), new Boolean(false), new Integer(4), new Integer(30)});
+                            new Object[] {new Short("0"), new Integer(23), CurReportPaths.BitmapPath + "/landscape.gif", new Integer(80), new Integer(158), new Boolean(false), new Integer(4), new Integer(30)});
     }
     catch( Exception exception ){
         exception.printStackTrace(System.out);
@@ -1148,10 +1139,9 @@ public class ReportWizard {
                             new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "Width", "Label"},
                             new Object[] {new Boolean(false), new Integer(8), new Integer(154), new Integer(69), new Integer(1), new Integer(110), slblSelFields});
 
-    String sTemplatePath = tools.getOfficePath(xMSF, "Template","share") + "/wizard/bitmap/report.bmp";
         UNODialogs.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", CurUNODialog, "imgTheme",
                             new String[] {"BackgroundColor", "Border", "Height", "ImageURL", "PositionX", "PositionY", "ScaleImage", "Step", "Width"},
-                            new Object[] {new Integer(16777215), new Short("0"), new Integer(30), sTemplatePath, new Integer(0), new Integer(0), new Boolean(false), new Integer(0), new Integer(50)});
+                            new Object[] {new Integer(16777215), new Short("0"), new Integer(30), CurReportPaths.BitmapPath, new Integer(0), new Integer(0), new Boolean(false), new Integer(0), new Integer(50)});
 
         xDBListBox = UNODialogs.insertListBox(CurUNODialog, "lstDatabases", SODBLST, new ActionListenerImpl(), new ItemListenerImpl(),
                             new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width", "Dropdown","LineCount", "Name"},
@@ -1196,27 +1186,29 @@ public class ReportWizard {
     xGlobalMSF = xMSF;
     xDesktop = tools.getDesktop( xMSF );
     XFramesSupplier xFrameSuppl = (XFramesSupplier) UnoRuntime.queryInterface(XFramesSupplier.class, xDesktop);
-    getReportResources(xMSF, false);
     CurReportDocument =  new ReportDocument.RepWizardDocument();
     CurDBMetaData = new DBMetaData.CommandMetaData();
     ReportDocument.initializeReportDocument(xMSF, CurReportDocument, true, false);
+    getReportResources(xMSF, false);
     String[] DatabaseNames = DBMetaData.getDatabaseNames(CurReportDocument);
     if (DatabaseNames.length > 0){
+        CurReportPaths = new ReportPaths(xMSF, CurReportDocument);
+        CurReportDocument.ProgressBar.setValue(20);
         ReportDocument.loadStyleTemplates(CurReportDocument.ReportTextDocument, CurReportDocument.ReportFolderName + "/stl-default.stw", "LoadPageStyles");
         DBMetaData.InitializeWidthList();
-        int i1Pos = CurReportDocument.PosSize.Width;
-        int iPos = (int) ((CurReportDocument.PosSize.Width/2) - 135);
+        int iWidth = CurReportDocument.Frame.getComponentWindow().getPosSize().Width;
         CurUNODialog = UNODialogs.initializeDialog(xMSF, new String[] {"Height", "PositionX", "PositionY", "Step", "Title", "Width"},
-                                 new Object[] {new Integer(210), new Integer(iPos), new Integer(250), new Integer(1), WizardTitle[0], new Integer(270)});
-        CurReportDocument.ProgressBar.setValue(16);
+                                 new Object[] {new Integer(210), new Integer(200), new Integer(250), new Integer(1), WizardTitle[0], new Integer(270)},
+                                iWidth);
+        CurReportDocument.ProgressBar.setValue(35);
         fillFirstStep(xMSF, CurReportDocument, DatabaseNames);
-        CurReportDocument.ProgressBar.setValue(32);
+        CurReportDocument.ProgressBar.setValue(50);
         fillSecondStep();
-        CurReportDocument.ProgressBar.setValue(48);
+        CurReportDocument.ProgressBar.setValue(65);
         fillThirdStep();
-        CurReportDocument.ProgressBar.setValue(64);
-        fillFourthStep(xMSF);
         CurReportDocument.ProgressBar.setValue(80);
+        fillFourthStep(xMSF);
+        CurReportDocument.ProgressBar.setValue(95);
         fillFifthStep();
         CurReportDocument.ProgressBar.setValue(100);
         bCloseDocument = true;
@@ -1245,7 +1237,7 @@ public class ReportWizard {
         }
         if ((buseTemplate == true) || (bcreateTemplate == false)){
             if (ReportDocument.checkReportLayoutMode(CurReportDocument.TextSectionsSupplier, CurDBMetaData.GroupFieldNames)){
-            CurUNOProgressDialog = Dataimport.showProgressDisplay(xMSF, false);
+            CurUNOProgressDialog = Dataimport.showProgressDisplay(xMSF, false, CurReportDocument.Frame.getComponentWindow().getPosSize().Width);
             Dataimport.insertDatabaseDatatoReportDocument(xMSF, CurDBMetaData, CurReportDocument, CurUNOProgressDialog);
             CurUNOProgressDialog.xComponent.dispose();
             }
@@ -1347,9 +1339,26 @@ public class ReportWizard {
     sProgressTitle = tools.getResText(xResInvoke, RID_REPORT + 62);
     sProgressBaseCurRecord = tools.getResText(xResInvoke, RID_REPORT + 63);
     sReportFormNotExisting = tools.getResText(xResInvoke, RID_REPORT + 64);
-    sMsgQueryCreationImpossible =  tools.getResText(xResInvoke, RID_REPORT + 65); //"Die Abfrage mit dem Statement " + (char) 13 + "'<STATEMENT>'" + (char) 13 + "konnte nicht ausgeführt werden." + (char)13 + " Überprüfen Sie ihre Datenquelle.";
-    sMsgHiddenControlMissing = tools.getResText(xResInvoke, RID_REPORT + 66); //"Folgendes versteckte Control im Formular '<FORMNAME>' konnte nicht ausgelesen werden: '<CONTROLNAME>'.";
+    sMsgQueryCreationImpossible =  tools.getResText(xResInvoke, RID_REPORT + 65);
+    sMsgHiddenControlMissing = tools.getResText(xResInvoke, RID_REPORT + 66);
     sProgressDataImport = tools.getResText(xResInvoke, RID_REPORT + 67);
     sMsgNoConnection = tools.getResText(xResInvoke, RID_COMMON + 14);
     }
+
+
+    static class ReportPaths extends ReportWizard{
+    public String TemplatePath;
+    public String BitmapPath;
+    public String[][] LayoutFiles;
+    public String[][] ContentFiles;
+    public ReportPaths(XMultiServiceFactory xMSF, ReportDocument.RepWizardDocument CurReportDocument){
+        TemplatePath = tools.getOfficePath(xMSF, "Template","share");
+        ContentFiles = tools.getFolderTitles(xMSF, "cnt", CurReportDocument.ReportFolderName);
+        LayoutFiles = tools.getFolderTitles(xMSF,"stl", CurReportDocument.ReportFolderName);
+        BitmapPath = TemplatePath + "/wizard/bitmap/report.bmp";
+    }
+    }
+
+
+
 }
