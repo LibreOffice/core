@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seinitializer_nssimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-23 03:37:00 $
+ *  last change: $Author: mmi $ $Date: 2004-07-23 04:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@
 
 #include <sal/types.h>
 
+#include <tools/debug.hxx>
 
 #include "seinitializer_nssimpl.hxx"
 
@@ -242,6 +243,7 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
 
         sCertDir = rtl::OString(ouCertDir, ouCertDir.getLength(), RTL_TEXTENCODING_ASCII_US);
 
+        DBG_ASSERT(0, sCertDir.getStr());
         /*
         char *pCurrentProfilePath = getCurrentProfilePath();
 
