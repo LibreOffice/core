@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:13:30 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,14 +194,10 @@ BOOL SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet& rSet )
     BOOL                    bModified = FALSE;
 
 
-    if( aPaperSizeCB.IsChecked() != aPaperSizeCB.GetSavedValue() ||
-        aPaperOrientationCB.IsChecked() != aPaperOrientationCB.GetSavedValue() )
-    {
-        USHORT nFlag = aPaperSizeCB.IsChecked() ? SFX_PRINTER_CHG_SIZE : 0;
-
-        nFlag |= aPaperOrientationCB.IsChecked() ? SFX_PRINTER_CHG_ORIENTATION : 0;
-        bModified |= ( 0 != rSet.Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, nFlag ) ) );
-       }
+    if( aPaperSizeCB.IsChecked() != aPaperSizeCB.GetSavedValue())
+        aWarnOptions.SetPaperSize(aPaperSizeCB.IsChecked());
+    if( aPaperOrientationCB.IsChecked() != aPaperOrientationCB.GetSavedValue() )
+        aWarnOptions.SetPaperOrientation(aPaperOrientationCB.IsChecked());
 
     if( aTransparencyCB.IsChecked() != aTransparencyCB.GetSavedValue() )
         aWarnOptions.SetTransparency( aTransparencyCB.IsChecked() );
@@ -223,18 +219,8 @@ void SfxCommonPrintOptionsTabPage::Reset( const SfxItemSet& rSet )
     SvtPrinterOptions       aPrinterOptions;
     SvtPrintFileOptions     aPrintFileOptions;
 
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_PRINTER_CHANGESTODOC, FALSE, &pItem ) )
-    {
-        USHORT nFlag = ( (const SfxFlagItem*)pItem )->GetValue();
-
-        aPaperSizeCB.Check( 0 != ( nFlag & SFX_PRINTER_CHG_SIZE ) );
-        aPaperOrientationCB.Check( 0 != ( nFlag & SFX_PRINTER_CHG_ORIENTATION ) );
-    }
-    else
-    {
-        aPaperSizeCB.Check( aWarnOptions.IsPaperSize() );
-        aPaperOrientationCB.Check( aWarnOptions.IsPaperOrientation() );
-    }
+    aPaperSizeCB.Check( aWarnOptions.IsPaperSize() );
+    aPaperOrientationCB.Check( aWarnOptions.IsPaperOrientation() );
 
     aTransparencyCB.Check( aWarnOptions.IsTransparency() );
 
