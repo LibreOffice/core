@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-28 16:45:33 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,7 +723,7 @@ void SaneDlg::AcquirePreview()
     }
     else
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         aTransporter.getStream().Seek( STREAM_SEEK_TO_END );
         fprintf( stderr, "Previewbitmapstream contains %d bytes\n", aTransporter.getStream().Tell() );
 #endif
@@ -1384,7 +1384,7 @@ BOOL SaneDlg::SetAdjustedNumericalValue(
     if( ( nValues = mrSane.GetRange( nOption, pValues ) ) < 0 )
         return FALSE;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "SaneDlg::SetAdjustedNumericalValue( \"%s\", %lg ) ",
              pOption, fValue );
 #endif
@@ -1412,7 +1412,7 @@ BOOL SaneDlg::SetAdjustedNumericalValue(
     }
     delete pValues;
     mrSane.SetOptionValue( nOption, fValue, nElement );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "yields %lg\n", fValue );
 #endif
 
