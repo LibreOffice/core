@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-11 14:11:30 $
+ *  last change: $Author: tl $ $Date: 2002-11-13 14:30:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #ifndef _SVTOOLS_LINGUCFG_HXX_
 #include <svtools/lingucfg.hxx>
 #endif
+#ifndef _SV_PRINTDLG_HXX_
+#include <svtools/printdlg.hxx>
+#endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
@@ -104,6 +107,9 @@
 #endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
+#endif
+#ifndef _SFX_PRINTER_HXX
+#include <sfx2/printer.hxx>
 #endif
 #ifndef _SVX_RULER_HXX //autogen
 #include <svx/ruler.hxx>
@@ -249,7 +255,18 @@
 #ifndef _FRMUI_HRC
 #include <frmui.hrc>
 #endif
-
+#ifndef _CFGITEMS_HXX
+#include <cfgitems.hxx>
+#endif
+#ifndef _SW_PRINTDATA_HXX
+#include <printdata.hxx>
+#endif
+#ifndef _PRTOPT_HXX
+#include <prtopt.hxx>
+#endif
+#ifndef _SWPRTOPT_HXX
+#include <swprtopt.hxx>
+#endif
 
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
@@ -1715,6 +1732,56 @@ void SwView::NotifyDBChanged()
 {
     GetViewImpl()->GetUNOObject_Impl()->NotifyDBChanged();
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:   Drucken
+ --------------------------------------------------------------------*/
+
+void SwView::MakeOptions( PrintDialog* pDlg, SwPrtOptions& rOpts,
+        BOOL* pPrtProspect, BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData )
+{
+    SwAddPrinterItem* pAddPrinterAttr;
+    if( pPrt && SFX_ITEM_SET == pPrt->GetOptions().GetItemState(
+        FN_PARAM_ADDPRINTER, FALSE, (const SfxPoolItem**)&pAddPrinterAttr ))
+    {
+        pData = pAddPrinterAttr;
+    }
+    else if(!pData)
+    {
+        pData = SW_MOD()->GetPrtOptions(bWeb);
+    }
+    rOpts = *pData;
+    if( pPrtProspect )
+        *pPrtProspect = pData->bPrintProspect;
+    rOpts.aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
+    rOpts.aMulti.SelectAll( FALSE );
+    rOpts.nCopyCount = 1;
+    rOpts.bCollate = FALSE;
+    rOpts.bPrintSelection = FALSE;
+    rOpts.bJobStartet = FALSE;
+
+    if ( pDlg )
+    {
+        rOpts.nCopyCount = pDlg->GetCopyCount();
+        rOpts.bCollate = pDlg->IsCollateChecked();
+        if ( pDlg->GetCheckedRange() == PRINTDIALOG_SELECTION )
+        {
+            rOpts.aMulti.SelectAll();
+            rOpts.bPrintSelection = TRUE;
+        }
+        else if ( PRINTDIALOG_ALL == pDlg->GetCheckedRange() )
+            rOpts.aMulti.SelectAll();
+        else
+        {
+            rOpts.aMulti = MultiSelection( pDlg->GetRangeText() );
+            rOpts.aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
+        }
+    }
+    else
+        rOpts.aMulti.SelectAll();
+    rOpts.aMulti.Select( 0, FALSE );
+}
+
 /* -----------------------------28.10.02 13:25--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1736,3 +1803,4 @@ SfxObjectShellRef & SwView::GetOrCreateTmpSelectionDoc()
     }
     return rxTmpDoc;
 }
+

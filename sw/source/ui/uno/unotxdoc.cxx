@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-12 14:31:58 $
+ *  last change: $Author: tl $ $Date: 2002-11-13 14:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2555,26 +2555,23 @@ void SAL_CALL SwXTextDocument::render(
         SfxProgress     aProgress( pView->GetObjectShell(), C2U("PDF export"), 10 );
         SwPrtOptions    aOptions( C2U("PDF export") );
 
-        //
-        // aus MakeOptions geklaut  (siehe viewfunc.hxx, viewprt.cxx)
-        //
-        SwPrintData* pData = (SwPrintData*) SW_MOD()->GetPrtOptions(FALSE);
-        aOptions = *pData;
-        //
+//      SwView::MakeOptions( PrintDialog* pDlg, SwPrtOptions& rOpts, BOOL* pPrtProspect,
+//              BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData )
+        const TypeId aSwWebDocShellTypeId = TYPE(SwWebDocShell);
+        BOOL bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
+        SwView::MakeOptions( NULL, aOptions, NULL, bWeb, NULL, NULL );
+
         Range aPageRange( nRenderer+1, nRenderer+1 );
         MultiSelection aPage( aPageRange );
         aPage.SetTotalRange( Range( 0, RANGE_MAX ) );
         aPage.Select( aPageRange );
         aOptions.aMulti = aPage;
-        aOptions.nCopyCount = 1;
-        aOptions.bCollate = FALSE;
-        aOptions.bJobStartet = FALSE;
-        aOptions.bPrintSelection = FALSE;
 
-        uno::Reference< frame::XModel > xModel;
-        rSelection >>= xModel;
-        if (xModel != pDocShell->GetModel())    // 'export selection' ?
-            aOptions.bPrintSelection = TRUE;
+        //! Note: Since for PDF export of (multi-)selection a temporary
+        //! document is created that contains only the selects parts,
+        //! and thus that document is to printed in whole the,
+        //! aOptions.bPrintSelection parameter will be false.
+        aOptions.bPrintSelection = FALSE;
 
         SwViewOption aViewOpt( *pVwSh->GetViewOptions() );
         aViewOpt.SetPDFExport( TRUE );

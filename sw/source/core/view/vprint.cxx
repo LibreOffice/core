@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-12 12:14:09 $
+ *  last change: $Author: tl $ $Date: 2002-11-13 14:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1052,7 +1052,12 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
 
     BOOL bStartJob = FALSE;
 
+    //! Note: Since for PDF export of (multi-)selection a temporary
+    //! document is created that contains only the selects parts,
+    //! and thus that document is to printed in whole the,
+    //! rOptions.bPrintSelection parameter will be false.
     BOOL bSelection = rOptions.bPrintSelection;
+
     // Damit beim Selektionsdruck nicht mit einer leeren Seite gestartet wird
     BOOL bIgnoreEmptyPage = bSelection;
 
@@ -1105,7 +1110,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
     // Is is implemented this way because PDF export calls this Prt function
     // once per page and we do not like to always have the temporary document
     // to be created that often here in the 'then' part.
-    if ( !pPDFOut && bSelection )
+    if (bSelection )
     {
         pPrtDoc = CreatePrtDoc( pPrt, aDocShellRef );
 
@@ -1591,7 +1596,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
 
     delete pShell;
 
-    if ( !pPDFOut && bSelection )
+    if (bSelection )
     {
          // damit das Dokument nicht den Drucker mit ins Grab nimmt
         pPrtDoc->_SetPrt( NULL );

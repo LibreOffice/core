@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-06-28 12:08:13 $
+ *  last change: $Author: tl $ $Date: 2002-11-13 14:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@ class Window;
 class SwWrtShell;
 struct SwPrintData;
 // folgende Funktionen stehen im viewprt.cxx
-void MakeOptions( PrintDialog*, SwPrtOptions&, BOOL* pFlag, BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData );
 PrintDialog* CreatePrintDialog( Window* , USHORT, SwWrtShell* );
 void SetPrinter( SfxPrinter*, BOOL bWeb );
 SfxTabPage* CreatePrintOptionsPage( Window*, const SfxItemSet& );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-11 14:09:43 $
+ *  last change: $Author: tl $ $Date: 2002-11-13 14:29:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,8 @@ class CommandEvent;
 class InsCaptionOpt;
 class SvGlobalName;
 class SvtAccessibilityOptions;
+class SwPrtOptions;
+struct SwPrintData;
 
 namespace com{ namespace sun { namespace star {
     namespace view{ class XSelectionSupplier; }
@@ -600,6 +602,10 @@ public:
 
     //apply Accessiblity options
     void ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions);
+
+    // get print options (SwPrtOptions)
+    static void SwView::MakeOptions( PrintDialog* pDlg, SwPrtOptions& rOpts,
+            BOOL* pPrtProspect, BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData );
 
     SwView(SfxViewFrame* pFrame, SfxViewShell*);
     ~SwView();

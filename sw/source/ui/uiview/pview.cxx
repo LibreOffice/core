@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2002-11-01 11:09:41 $
+ *  last change: $Author: tl $ $Date: 2002-11-13 14:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2019,7 +2019,7 @@ USHORT  SwPagePreView::Print( SfxProgress &rProgress, PrintDialog *pDlg )
     SwPrtOptions aOpts( pObjShell->GetTitle(0) );
 
     BOOL bPrtPros;
-    ::MakeOptions( pDlg, aOpts, &bPrtPros, FALSE, GetPrinter(), GetDocShell()->GetDoc()->GetPrintData() );
+    SwView::MakeOptions( pDlg, aOpts, &bPrtPros, FALSE, GetPrinter(), GetDocShell()->GetDoc()->GetPrintData() );
 
     if( bNormalPrint )
     {

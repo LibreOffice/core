@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-05-29 07:02:03 $
+ *  last change: $Author: tl $ $Date: 2002-11-13 14:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,55 +251,6 @@ USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Drucken
- --------------------------------------------------------------------*/
-
-void MakeOptions( PrintDialog* pDlg, SwPrtOptions& rOpts, BOOL* pPrtProspect,
-                  BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData )
-{
-    SwAddPrinterItem* pAddPrinterAttr;
-    if( pPrt && SFX_ITEM_SET == pPrt->GetOptions().GetItemState(
-        FN_PARAM_ADDPRINTER, FALSE, (const SfxPoolItem**)&pAddPrinterAttr ))
-    {
-        pData = pAddPrinterAttr;
-    }
-    else if(!pData)
-    {
-        pData = SW_MOD()->GetPrtOptions(bWeb);
-    }
-    rOpts = *pData;
-    if( pPrtProspect )
-        *pPrtProspect = pData->bPrintProspect;
-    rOpts.aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
-    rOpts.aMulti.SelectAll( FALSE );
-    rOpts.nCopyCount = 1;
-    rOpts.bCollate = FALSE;
-    rOpts.bPrintSelection = FALSE;
-    rOpts.bJobStartet = FALSE;
-
-    if ( pDlg )
-    {
-        rOpts.nCopyCount = pDlg->GetCopyCount();
-        rOpts.bCollate = pDlg->IsCollateChecked();
-        if ( pDlg->GetCheckedRange() == PRINTDIALOG_SELECTION )
-        {
-            rOpts.aMulti.SelectAll();
-            rOpts.bPrintSelection = TRUE;
-        }
-        else if ( PRINTDIALOG_ALL == pDlg->GetCheckedRange() )
-            rOpts.aMulti.SelectAll();
-        else
-        {
-            rOpts.aMulti = MultiSelection( pDlg->GetRangeText() );
-            rOpts.aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
-        }
-    }
-    else
-        rOpts.aMulti.SelectAll();
-    rOpts.aMulti.Select( 0, FALSE );
-}
-
-/*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
 
@@ -358,7 +309,7 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
         BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
         if( pMgr->GetMergeType() == DBMGR_MERGE_MAILMERGE )
         {
-            ::MakeOptions( pDlg, aOpts, 0, bWeb, GetPrinter(),
+            SwView::MakeOptions( pDlg, aOpts, 0, bWeb, GetPrinter(),
                             pSh->GetPrintData() );
             bStartJob = pMgr->MergePrint( *this, aOpts, *pProgress );
         }
@@ -397,7 +348,7 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
                 pSh->ResetModified();
 
             BOOL bPrtPros;
-            ::MakeOptions( pDlg, aOpts, &bPrtPros, bWeb, GetPrinter(),
+            SwView::MakeOptions( pDlg, aOpts, &bPrtPros, bWeb, GetPrinter(),
                             pSh->GetPrintData() );
             if( -1 != bPrintSelection )
                 aOpts.bPrintSelection = 0 != bPrintSelection;
