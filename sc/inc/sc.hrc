@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:33:48 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -949,6 +949,9 @@
 #define SID_CURSORENTERDOWN     (SID_KEYFUNC_START + 38)
 
 #define SID_MARKARRAYFORMULA    (SID_KEYFUNC_START + 39)
+
+#define SID_NEXT_TABLE_SEL      (SID_KEYFUNC_START + 40)
+#define SID_PREV_TABLE_SEL      (SID_KEYFUNC_START + 41)
 
 #define SID_KEYFUNC_END         (SID_KEYFUNC_START + 50)
 
