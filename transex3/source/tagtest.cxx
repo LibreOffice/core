@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tagtest.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gh $ $Date: 2001-12-05 11:12:31 $
+ *  last change: $Author: gh $ $Date: 2003-02-05 14:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,10 @@ static Tag __READONLY_DATA aKnownTags[] =
 
     { "<#REFSTART>", TAG_REFSTART },
 
-//  { "<#GROUP_SYSSWITCH>", TAG_GROUP_SYSSWITCH },
+    { "<#GRAPHIC>", TAG_GRAPHIC },
+    { "<#NEXTVERSION>", TAG_NEXTVERSION },
+
+    //  { "<#GROUP_SYSSWITCH>", TAG_GROUP_SYSSWITCH },
     { "<#WIN>", TAG_WIN },
     { "<#UNIX>", TAG_UNIX },
     { "<#MAC>", TAG_MAC },
@@ -145,6 +148,8 @@ static Tag __READONLY_DATA aKnownTags[] =
 //  { "<#GROUP_MULTI>", TAG_GROUP_MULTI },
     { "<#END>", TAG_END },
     { "<#ELSE>", TAG_ELSE },
+    { "<#VERSIONEND>", TAG_VERSIONEND },
+    { "<#ENDGRAPHIC>", TAG_ENDGRAPHIC },
     { "", TAG_UNKNOWN_TAG },
 };
 
@@ -290,9 +295,16 @@ void TokenParser::Parse( const ByteString &aCode )
                     ParseError( 16, "Application-tag or platform-tag expected before <#ELSE>." );
                 }
                 break;
+            case TAG_UNKNOWN_TAG:
+                {
+                    ByteString sTmp( "unknown Tag: " );
+                    sTmp += aParser.GetLexem( nTag );
+                    ParseError( 6, sTmp );
+                }
+                break;
             default:
                 {
-                    ByteString sTmp( "unknown tag: " );
+                    ByteString sTmp( "unexpected Tag: " );
                     sTmp += aParser.GetLexem( nTag );
                     ParseError( 6, sTmp );
                 }
@@ -304,6 +316,13 @@ void TokenParser::Paragraph()
 {
     switch ( nTag )
     {
+        case TAG_GRAPHIC:
+        case TAG_NEXTVERSION:
+            {
+                TagRef();
+                Paragraph();
+            }
+            break;
         case TAG_AVIS:
         case TAG_AHID:
             {
@@ -618,6 +637,28 @@ void TokenParser::TagRef()
 {
     switch ( nTag )
     {
+        case TAG_GRAPHIC:
+        case TAG_NEXTVERSION:
+            {
+                if ( !HAS_FLAG( nActiveRefTypes, TAG_NOGROUP( nTag ) ) )
+                {
+                    Token aThisToken = nTag;
+                    SET_FLAG( nActiveRefTypes, TAG_NOGROUP( aThisToken ) );
+                    match( nTag, nTag );
+                    Paragraph();
+                    if ( aThisToken == TAG_GRAPHIC )
+                        match( nTag, TAG_ENDGRAPHIC );
+                    else
+                        match( nTag, TAG_VERSIONEND );
+                    // don't reset since alowed only once per paragraph
+                    // RESET_FLAG( nActiveRefTypes, TAG_NOGROUP( aThisToken ) );
+                }
+                else
+                {
+                    ParseError( 11, "Tags <#GRAPHIC>,<#NEXTVERSION> allowed only once per paragraph." );
+                }
+            }
+            break;
         case TAG_AVIS:
         case TAG_AHID:
             {
@@ -752,6 +793,8 @@ void LingTest::CheckTags( TokenList aReference, TokenList aTestee, ParserMessage
             || TAG_HREF == aToken
             || TAG_AVIS == aToken
             || TAG_AHID == aToken
+            || TAG_GRAPHIC == aToken
+            || TAG_NEXTVERSION == aToken
             || ( TAG_GROUP_META == aTokenGroup && (aMetaTokens & aToken) == aToken ) )
         {
             i++;
@@ -775,6 +818,8 @@ void LingTest::CheckTags( TokenList aReference, TokenList aTestee, ParserMessage
             || TAG_HREF == aToken
             || TAG_AVIS == aToken
             || TAG_AHID == aToken
+            || TAG_GRAPHIC == aToken
+            || TAG_NEXTVERSION == aToken
             || ( TAG_GROUP_META == aTokenGroup && (aMetaTokens & aToken) == aToken ) )
         {
             i++;
