@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-08 10:25:17 $
+ *  last change: $Author: fs $ $Date: 2002-05-06 12:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1403,7 +1403,7 @@ IMPL_LINK( FmFilterNavigator, OnRemove, SvLBoxEntry*, pEntry )
 IMPL_LINK( FmFilterNavigator, OnSelect, void*, EMPTYTAG )
 {
     // now activate the controller to be consistent
-    sal_Bool bHadFocus = HasFocus();
+    sal_Bool bHadFocus = HasChildPathFocus();
     Reference< ::com::sun::star::awt::XWindow >  xWindow(m_pModel->GetCurrentController(), UNO_QUERY);
     if (xWindow.is())
         xWindow->setFocus();
