@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dstribut.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 15:11:25 $
+ *  last change: $Author: kz $ $Date: 2001-08-10 20:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ japanese ] = "左(~L)";
         Text[ korean ] = "왼쪽(~L)";
         Text[ chinese_simplified ] = "左(~L)";
-        Text[ chinese_traditional ] = "向左(~L)";
+        Text[ chinese_traditional ] = "左(~L)";
         Text[ arabic ] = "����";
         Text[ turkish ] = "Sol";
         Text[ catalan ] = "Izquierda";
@@ -180,7 +180,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ japanese ] = "中央(~C)";
         Text[ korean ] = "가운데(~C)";
         Text[ chinese_simplified ] = "中心(~C)";
-        Text[ chinese_traditional ] = "居中(~C)";
+        Text[ chinese_traditional ] = "中心(~C)";
         Text[ arabic ] = "���";
         Text[ turkish ] = "Orta";
         Text[ catalan ] = "Centro";
@@ -236,7 +236,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ japanese ] = "右(~R)";
         Text[ korean ] = "오른쪽(~R)";
         Text[ chinese_simplified ] = "右(~R)";
-        Text[ chinese_traditional ] = "向右(~R)";
+        Text[ chinese_traditional ] = "右(~R)";
         Text[ arabic ] = "����";
         Text[ turkish ] = "Sa�";
         Text[ catalan ] = "Derecha";
@@ -360,7 +360,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ japanese ] = "上(~T)";
         Text[ korean ] = "위(~T)";
         Text[ chinese_simplified ] = "上(~T)";
-        Text[ chinese_traditional ] = "向上(~T)";
+        Text[ chinese_traditional ] = "上(~T)";
         Text[ arabic ] = "����";
         Text[ turkish ] = "�st";
         Text[ catalan ] = "Arriba";
@@ -388,7 +388,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ japanese ] = "中央(~E)";
         Text[ korean ] = "가운데(~E)";
         Text[ chinese_simplified ] = "中心(~E)";
-        Text[ chinese_traditional ] = "居中(~E)";
+        Text[ chinese_traditional ] = "中心(~E)";
         Text[ arabic ] = "���";
         Text[ turkish ] = "Orta";
         Text[ catalan ] = "Centro";
@@ -444,7 +444,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ japanese ] = "下(~B)";
         Text[ korean ] = "아래(~B)";
         Text[ chinese_simplified ] = "下(~B)";
-        Text[ chinese_traditional ] = "向下(~B)";
+        Text[ chinese_traditional ] = "下(~B)";
         Text[ arabic ] = "����";
         Text[ turkish ] = "Alt";
         Text[ catalan ] = "Abajo";
@@ -513,6 +513,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 };
 
 // ********************************************************************** EOF
+
 
 
 
