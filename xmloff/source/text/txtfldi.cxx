@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:16:44 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,6 +377,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
                 XML_TOK_TEXTFIELD_NUM_LETTER_SYNC },
     { XML_NAMESPACE_TEXT, XML_DISPLAY_FORMULA,
                 XML_TOK_TEXTFIELD_DISPLAY_FORMULA },
+    { XML_NAMESPACE_TEXT, XML_VALUE_TYPE, XML_TOK_TEXTFIELD_VALUE_TYPE }, // #i32362#: src680m48++ saves text:value-type
     { XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_TOK_TEXTFIELD_VALUE_TYPE },
     { XML_NAMESPACE_TEXT, XML_VALUE, XML_TOK_TEXTFIELD_VALUE },
     { XML_NAMESPACE_OFFICE, XML_VALUE, XML_TOK_TEXTFIELD_VALUE },
