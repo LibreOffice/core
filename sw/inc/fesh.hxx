@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 13:54:14 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:42:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -767,6 +767,11 @@ public:
     const bool IsShapeDefaultHoriTextDirR2L() const;
 
     void ParkCursorInTab();
+
+    // -> #i23726#
+    SwTxtNode * GetNumRuleNodeAtPos(const Point &rPot);
+    BOOL IsNumLabel( const Point &rPt, int nMaxOffset = -1 );
+    // <- #i23726#
 };
 
 #endif
