@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-04 08:36:07 $
+ *  last change: $Author: ssa $ $Date: 2002-09-08 15:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1344,8 +1344,10 @@ USHORT Window::ImplHitTest( const Point& rFramePos )
 #ifndef REMOTE_APPSERVER
     if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
     {
-        // - RTL - re-mirror frame pos
-        ((SalGraphicsLayout*)mpGraphics)->mirror( aFramePos.X() );
+        // - RTL - re-mirror frame pos at this window
+        long lc_x = aFramePos.X() - mnOutOffX;  // normalize
+        lc_x = mnOutWidth - 1 - lc_x;           // mirror
+        aFramePos.X() = lc_x + mnOutOffX;       // re-normalize
     }
 #endif
     Rectangle aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
@@ -2298,12 +2300,19 @@ void Window::ImplCallPaint( const Region* pRegion, USHORT nPaintFlags )
             if ( pRegion )
             {
 #ifndef REMOTE_APPSERVER
+                // - RTL - re-mirror paint rect at this window
+                // re-mirror before merging it in the existing InvalidateRegion
+                // so this is only requird if the InvalidateRegion is not empty
                 if( ImplHasMirroredGraphics() && !IsRTLEnabled() && !maInvalidateRegion.IsEmpty() )
                 {
                     Rectangle devRect = pRegion->GetBoundRect();
                     long nWidth = devRect.getWidth();
-                    devRect.nLeft = mpFrame->maGeometry.nWidth-nWidth-1-devRect.nLeft;
+
+                    long lc_x = devRect.nLeft - mnOutOffX;  // normalize
+                    lc_x = mnOutWidth - nWidth - 1 - lc_x;  // mirror
+                    devRect.nLeft = lc_x + mnOutOffX;       // re-normalize
                     devRect.nRight = devRect.nLeft + nWidth;
+
                     Region aRgn( devRect );
                     maInvalidateRegion.Union( aRgn );
                 }
@@ -2337,13 +2346,18 @@ void Window::ImplCallPaint( const Region* pRegion, USHORT nPaintFlags )
             Rectangle   aPaintRect = aPaintRegion.GetBoundRect();
 
 #ifndef REMOTE_APPSERVER
-            // - RTL - re-mirror paint rect, if no mirroring for this window
+            // - RTL - re-mirror paint rect at this window
+            // but do it only if the paint event came from the system (IMPL_PAINT_CHECKRTL)
             if( ImplHasMirroredGraphics() && !IsRTLEnabled() && (nPaintFlags & IMPL_PAINT_CHECKRTL) )
             {
                 Rectangle devRect = aPaintRect;
                 long nWidth = devRect.getWidth();
-                devRect.nLeft = mpFrame->maGeometry.nWidth-nWidth-1-devRect.nLeft;
+
+                long lc_x = devRect.nLeft - mnOutOffX;  // normalize
+                lc_x = mnOutWidth - nWidth - 1 - lc_x;  // mirror
+                devRect.nLeft = lc_x + mnOutOffX;       // re-normalize
                 devRect.nRight = devRect.nLeft + nWidth;
+
                 aPaintRect = devRect;
                 // mirror region as well, although it will be an ordinary rectangle now
                 aPaintRegion = Region( aPaintRect );
@@ -2777,9 +2791,20 @@ void Window::ImplScroll( const Rectangle& rRect,
     // Paint-Bereiche anpassen
     ImplMoveAllInvalidateRegions( rRect, nHorzScroll, nVertScroll, bScrollChilds );
 
+    // --- RTL --- check if this window requires special action
+    BOOL bReMirror = ( ImplHasMirroredGraphics() && !IsRTLEnabled() );
+
     if ( !(nFlags & SCROLL_NOINVALIDATE) )
     {
         ImplCalcOverlapRegion( rRect, aInvalidateRegion, !bScrollChilds, TRUE, FALSE );
+
+        // --- RTL ---
+        // if the scrolling on the device is performed in the opposite direction
+        // then move the overlaps in that direction to compute the invalidate region
+        // on the correct side
+        if( bReMirror )
+            nHorzScroll = -nHorzScroll;
+
         if ( !aInvalidateRegion.IsEmpty() )
         {
             aInvalidateRegion.Move( nHorzScroll, nVertScroll );
@@ -2787,12 +2812,25 @@ void Window::ImplScroll( const Rectangle& rRect,
         }
         if ( !(nFlags & SCROLL_NOWINDOWINVALIDATE) )
         {
-            Rectangle aDestRect( rRect );
+            Rectangle aRect( rRect );
+            if( bReMirror )
+            {
+                // --- RTL --- make sure the invalidate region of this window is
+                // computed in the same coordinate space as the one from the overlap windows
+                ImplReMirror( aRect );
+            }
+
+            Rectangle aDestRect( aRect );
             aDestRect.Move( nHorzScroll, nVertScroll );
-            Region aWinInvalidateRegion( rRect );
+            Region aWinInvalidateRegion( aRect );
             aWinInvalidateRegion.Exclude( aDestRect );
+
             aInvalidateRegion.Union( aWinInvalidateRegion );
         }
+
+        // --- RTL --- revert changes from above
+        if( bReMirror )
+            nHorzScroll = -nHorzScroll;
     }
 
     Point aPoint( mnOutOffX, mnOutOffY );
@@ -2801,7 +2839,9 @@ void Window::ImplScroll( const Rectangle& rRect,
         aRegion.Intersect( rRect );
     if ( mbWinRegion )
         aRegion.Intersect( ImplPixelToDevicePixel( maWinRegion ) );
+
     aRegion.Exclude( aInvalidateRegion );
+
     ImplClipBoundaries( aRegion, FALSE, TRUE );
     if ( !bScrollChilds )
     {
@@ -2826,8 +2866,14 @@ void Window::ImplScroll( const Rectangle& rRect,
         SalGraphics* pGraphics = ImplGetFrameGraphics();
         if ( pGraphics )
         {
+            if( bReMirror )
+            {
+                // --- RTL --- frame coordinates require re-mirroring
+                ImplReMirror( aRegion );
+            }
+
             ImplSelectClipRegion( pGraphics, aRegion, this );
-            pGraphics->CopyArea( rRect.Left()+nHorzScroll, rRect.Top()+nVertScroll,
+            pGraphics->CopyArea( rRect.Left()+ nHorzScroll, rRect.Top()+nVertScroll,
                                  rRect.Left(), rRect.Top(),
                                  rRect.GetWidth(), rRect.GetHeight(),
                                  SAL_COPYAREA_WINDOWINVALIDATE, this );
@@ -2855,6 +2901,10 @@ void Window::ImplScroll( const Rectangle& rRect,
 
     if ( !aInvalidateRegion.IsEmpty() )
     {
+        // --- RTL --- the invalidate region for this windows is already computed in frame coordinates
+        // so it has to be re-mirrored before calling the Paint-handler
+        mnPaintFlags |= IMPL_PAINT_CHECKRTL;
+
         USHORT nPaintFlags = INVALIDATE_CHILDREN;
         if ( !bErase )
             nPaintFlags |= INVALIDATE_NOERASE;
@@ -3139,14 +3189,14 @@ void Window::ImplPosSizeWindow( long nX, long nY,
 #ifndef REMOTE_APPSERVER
         if( ImplHasMirroredGraphics() )
         {
-            ((SalGraphicsLayout*)mpGraphics)->mirror( aPtDev.X() );
+            ((SalGraphicsLayout*)mpGraphics)->mirror( aPtDev.X(), this );
             if( IsRTLEnabled() != mpParent->IsRTLEnabled() )
             {
                 // --- RTL --- use the mirrored nX, re-mirroring is required here
                 long frameX = mpParent->mnOutOffX+nX;
-                ((SalGraphicsLayout*)mpGraphics)->mirror( frameX );
-                nX = frameX - mnOutWidth + 1;
-                nX = nX - mpParent->mnOutOffX;  // nX in local coordinates
+                ((SalGraphicsLayout*)mpGraphics)->mirror( frameX, this );
+                //nX = frameX - mnOutWidth + 1;
+                //nX = nX - mpParent->mnOutOffX;  // nX in local coordinates
             }
 
         }
@@ -6993,10 +7043,17 @@ void Window::SetPointerPosPixel( const Point& rPos )
 
     Point aPos = ImplOutputToFrame( rPos );
 #ifndef REMOTE_APPSERVER
-    if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
+    if( ImplHasMirroredGraphics() )
     {
-        // --- RTL --- (re-mirror mouse pos)
-        ((SalGraphicsLayout*)mpGraphics)->mirror( aPos.X() );
+        if( !IsRTLEnabled() )
+        {
+            // --- RTL --- (re-mirror mouse pos at this window)
+            long lc_x = aPos.X() - mnOutOffX;   // normalize
+            lc_x = mnOutWidth - 1 - lc_x;       // mirror
+            aPos.X() = lc_x + mnOutOffX;        // re-normalize
+        }
+        // mirroring is required here, SetPointerPos bypasses SalGraphics
+        ((SalGraphicsLayout*)mpGraphics)->mirror( aPos.X(), this );
     }
 #endif
     mpFrame->SetPointerPos( aPos.X(), aPos.Y() );
@@ -7012,8 +7069,10 @@ Point Window::GetPointerPosPixel()
 #ifndef REMOTE_APPSERVER
     if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
     {
-        // --- RTL --- (re-mirror mouse pos)
-        ((SalGraphicsLayout*)mpGraphics)->mirror( aPos.X() );
+        // --- RTL --- (re-mirror mouse pos at this window)
+        long lc_x = aPos.X() - mnOutOffX;   // normalize
+        lc_x = mnOutWidth - 1 - lc_x;       // mirror
+        aPos.X() = lc_x + mnOutOffX;        // re-normalize
     }
 #endif
     return ImplFrameToOutput( aPos );

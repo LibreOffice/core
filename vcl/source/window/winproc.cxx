@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-03 09:07:07 $
+ *  last change: $Author: ssa $ $Date: 2002-09-08 15:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,8 +493,12 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
 #ifndef REMOTE_APPSERVER
         if( pChild->ImplHasMirroredGraphics() && !pChild->IsRTLEnabled() )
         {
-            // - RTL - re-mirror frame pos
-            ((SalGraphicsLayout*)pChild->mpGraphics)->mirror( aMousePos.X() );
+            // - RTL - re-mirror frame pos at pChild
+
+            //((SalGraphicsLayout*)pChild->mpGraphics)->mirror( aMousePos.X(), pChild );
+            long lc_x = aMousePos.X() - pChild->mnOutOffX;  // normalize
+            lc_x = pChild->mnOutWidth - 1 - lc_x;           // mirror
+            aMousePos.X() = lc_x + pChild->mnOutOffX;       // re-normalize
         }
 #endif
         // no mouse messages to system object windows

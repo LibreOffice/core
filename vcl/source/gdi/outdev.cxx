@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-04 17:14:36 $
+ *  last change: $Author: ssa $ $Date: 2002-09-08 15:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,6 +530,43 @@ BOOL OutputDevice::ImplHasMirroredGraphics()
 #endif
 }
 
+void    OutputDevice::ImplReMirror( Point &rPoint )
+{
+    rPoint.X() = mnOutOffX + mnOutWidth - 1 - rPoint.X() + mnOutOffX;
+}
+void    OutputDevice::ImplReMirror( Rectangle &rRect )
+{
+    long nWidth = rRect.nRight - rRect.nLeft;
+
+    //long lc_x = rRect.nLeft - mnOutOffX;    // normalize
+    //lc_x = mnOutWidth - nWidth - 1 - lc_x;  // mirror
+    //rRect.nLeft = lc_x + mnOutOffX;         // re-normalize
+
+    rRect.nLeft = mnOutOffX + mnOutWidth - nWidth - 1 - rRect.nLeft + mnOutOffX;
+    rRect.nRight = rRect.nLeft + nWidth;
+}
+void    OutputDevice::ImplReMirror( Region &rRegion )
+{
+    long                nX;
+    long                nY;
+    long                nWidth;
+    long                nHeight;
+    ImplRegionInfo      aInfo;
+    BOOL                bRegionRect;
+    Region              aMirroredRegion;
+
+    bRegionRect = rRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
+    while ( bRegionRect )
+    {
+        Rectangle aRect( Point(nX, nY), Size(nWidth, nHeight) );
+        ImplReMirror( aRect );
+        aMirroredRegion.Union( aRect );
+        bRegionRect = rRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
+    }
+    rRegion = aMirroredRegion;
+}
+
+
 // -----------------------------------------------------------------------
 
 #ifndef REMOTE_APPSERVER
@@ -855,13 +892,20 @@ void OutputDevice::ImplInitClipRegion()
     {
         Window* pWindow = (Window*)this;
         Region  aRegion;
+
         // Hintergrund-Sicherung zuruecksetzen
         if ( pWindow->mpFrameData->mpFirstBackWin )
             pWindow->ImplInvalidateAllOverlapBackgrounds();
         if ( pWindow->mbInPaint )
             aRegion = *(pWindow->mpPaintRegion);
         else
+        {
             aRegion = *(pWindow->ImplGetWinChildClipRegion());
+            // --- RTL -- only this region is in frame coordinates, so re-mirror it
+            // the mpPaintRegion above is already correct (see ImplCallPaint()) !
+            if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
+                ImplReMirror ( aRegion );
+        }
         if ( mbClipRegion )
             aRegion.Intersect( ImplPixelToDevicePixel( maRegion ) );
         if ( aRegion.IsEmpty() )
