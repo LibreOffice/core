@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:36:30 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 09:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,14 @@
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
+#include <com/sun/star/awt/XTopWindow.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_XWINDOW2_HPP_
+#include <com/sun/star/awt/XWindow2.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -155,6 +163,7 @@ namespace framework{
 // definitions
 
 sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  /// static counter for rescheduling
+static ::rtl::OUString PROGRESS_RESOURCE = ::rtl::OUString::createFromAscii("private:resource/progressbar/progressbar");
 
 //-----------------------------------------------
 DEFINE_XINTERFACE_5(StatusIndicatorFactory                              ,
@@ -435,23 +444,46 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::awt::XWindow > xParent;
+    css::uno::Reference< css::awt::XWindow > xParentWindow;
+    if (xFrame.is())
+        xParentWindow = xFrame->getContainerWindow();
+    else
+        xParentWindow = xPluggWindow;
+
+    // dont disturb user in case he put the loading document into the background!
+    // Supress any setVisible() or toFront() call in case the initial show was
+    // already made.
+    css::uno::Reference< css::awt::XWindow2 > xVisibleCheck(xParentWindow, css::uno::UNO_QUERY);
+    sal_Bool bIsVisible = sal_False;
+    if (xVisibleCheck.is())
+        bIsVisible = xVisibleCheck->isVisible();
+
+    if (!bIsVisible)
     {
-        if (xFrame.is())
-            xParent = xFrame->getContainerWindow();
-        else
-            xParent = xPluggWindow;
+        if (xParentWindow.is())
+            xParentWindow->setVisible(sal_True);
+        css::uno::Reference< css::awt::XTopWindow > xParentWindowTop(xParentWindow, css::uno::UNO_QUERY);
+        if (xParentWindowTop.is())
+            xParentWindowTop->toFront();
     }
 
-    if (xParent.is())
-        xParent->setVisible(sal_True);
+    if (xFrame.is())
+    {
+        // use frame layouted progress implementation
+        css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
+        if (xPropSet.is())
+        {
+            css::uno::Reference< dcss::frame::XLayoutManager > xLayoutManager;
+            xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
+            if (xLayoutManager.is())
+                xLayoutManager->showElement(PROGRESS_RESOURCE);
+        }
+    }
 }
 
 //-----------------------------------------------
 void StatusIndicatorFactory::impl_createProgress()
 {
-    ::rtl::OUString PROGRESSBAR_RES_STR = ::rtl::OUString::createFromAscii("private:resource/progressbar/progressbar");
-
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
 
@@ -481,12 +513,14 @@ void StatusIndicatorFactory::impl_createProgress()
             xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
             if (xLayoutManager.is())
             {
-                xLayoutManager->createElement(PROGRESSBAR_RES_STR);
-                xLayoutManager->showElement  (PROGRESSBAR_RES_STR);
+                xLayoutManager->lock();
+                xLayoutManager->createElement( PROGRESS_RESOURCE );
+                xLayoutManager->hideElement( PROGRESS_RESOURCE );
 
-                css::uno::Reference< css::ui::XUIElement > xProgressBar = xLayoutManager->getElement(PROGRESSBAR_RES_STR);
+                css::uno::Reference< css::ui::XUIElement > xProgressBar = xLayoutManager->getElement(PROGRESS_RESOURCE);
                 if (xProgressBar.is())
                     xProgress = css::uno::Reference< css::task::XStatusIndicator >(xProgressBar->getRealInterface(), css::uno::UNO_QUERY);
+                xLayoutManager->unlock();
             }
         }
     }
@@ -501,6 +535,8 @@ void StatusIndicatorFactory::impl_createProgress()
 //-----------------------------------------------
 void StatusIndicatorFactory::impl_reschedule(sal_Bool bForce)
 {
+    const sal_Int32 MAX_RESCHEDULE = 50;
+
     sal_Bool bReschedule = bForce;
     if (!bReschedule)
     {
@@ -515,14 +551,26 @@ void StatusIndicatorFactory::impl_reschedule(sal_Bool bForce)
     if (!bReschedule)
         return;
 
-    // SAFE -> ----------------------------------
+    // SAFE ->
     WriteGuard aGlobalLock(LockHelper::getGlobalLock());
 
     if (m_nInReschedule == 0)
     {
         ++m_nInReschedule;
         aGlobalLock.unlock();
-        Application::Reschedule();
+        // <- SAFE
+
+        sal_Int32 nRescheduleCount = MAX_RESCHEDULE;
+        while (
+                (Application::AnyInput()) &&
+                (nRescheduleCount > 0   )
+              )
+        {
+            Application::Reschedule();
+            nRescheduleCount--;
+        }
+
+        // SAFE ->
         aGlobalLock.lock();
         --m_nInReschedule;
     }
@@ -534,8 +582,10 @@ void StatusIndicatorFactory::impl_startWakeUpThread()
     // SAFE ->
     WriteGuard aWriteLock(m_aLock);
     if (!m_pWakeUp)
+    {
         m_pWakeUp = new WakeUpThread(this);
-    m_pWakeUp->create();
+        m_pWakeUp->create();
+    }
     aWriteLock.unlock();
     // <- SAFE
 }
@@ -555,12 +605,4 @@ void StatusIndicatorFactory::impl_stopWakeUpThread()
     // <- SAFE
 }
 
-/*
-//-----------------------------------------------
-sal_uInt32 StatusIndicatorFactory::impl_get10ThSec()
-{
-    sal_uInt32 n10Ticks = 10 * (sal_uInt32)clock();
-    return n10Ticks / CLOCKS_PER_SEC;
-}
-*/
 } // namespace framework
