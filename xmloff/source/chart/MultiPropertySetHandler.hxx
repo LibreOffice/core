@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultiPropertySetHandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2001-08-10 06:57:22 $
+ *  last change: $Author: hr $ $Date: 2002-02-19 17:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ class   OUStringComparison
 {
 public:
     /// Compare two strings.  Returns true if the first is before the second.
-    inline  bool    operator()  (const ::rtl::OUString & a, const ::rtl::OUString & b)
+    inline  bool    operator()  (const ::rtl::OUString & a, const ::rtl::OUString & b) const
     {
         return (a.compareTo (b) < 0);
     }
