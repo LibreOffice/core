@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpshttab.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-12 10:42:20 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,6 +405,17 @@ BOOL ScSheetDPData::GetNextRow( const ScDPTableIteratorParam& rParam )
             rParam.pRowData[i].SetString( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("x")) );
         else
             lcl_GetStringOrValue( rParam.pRowData[i], pImpl->pDoc,
+                                    (USHORT)(nStartCol+nDim), pImpl->nNextRow, nDocTab,
+                                    pImpl->bRepeatIfEmpty, nFirstDataRow );
+    }
+
+    for (i=0; i<rParam.nPageCount; i++)
+    {
+        long nDim = rParam.pPages[i];
+        if ( getIsDataLayoutDimension(nDim) )
+            rParam.pPageData[i].SetString( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("x")) );
+        else
+            lcl_GetStringOrValue( rParam.pPageData[i], pImpl->pDoc,
                                     (USHORT)(nStartCol+nDim), pImpl->nNextRow, nDocTab,
                                     pImpl->bRepeatIfEmpty, nFirstDataRow );
     }
