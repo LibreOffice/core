@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtsetup.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-21 12:59:43 $
+ *  last change: $Author: hr $ $Date: 2001-10-24 11:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -759,7 +759,8 @@ extern "C" {
 
     int Sal_queryFaxNumber( String& rNumber )
     {
-        QueryString aQuery( NULL, String( PaResId( RID_TXT_QUERYFAXNUMBER ) ), rNumber );
+        String aTmpString( PaResId( RID_TXT_QUERYFAXNUMBER ) );
+        QueryString aQuery( NULL, aTmpString, rNumber );
         return aQuery.Execute();
     }
 
