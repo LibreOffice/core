@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alloc.c,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-08-20 08:26:04 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,7 +648,7 @@ static void __dbg_memory_usage (memory_stat * total)
 
 #if OSL_DEBUG_LEVEL > 1
 #define DBG_MEMORY_VERIFY(entry) __dbg_memory_verify((entry), 1)
-#else
+#else  /* OSL_DEBUG_LEVEL > 0 */
 #define DBG_MEMORY_VERIFY(entry) __dbg_memory_verify((entry), 0)
 #endif /* OSL_DEBUG_LEVEL */
 
@@ -1196,7 +1196,11 @@ void* SAL_CALL rtl_reallocateMemory (void * p, sal_uInt32 n) SAL_THROW_EXTERN_C(
         {
             /* allocate */
             memory_type * result = 0;
+
+            /* restore 'used' bit */
             DBG_MEMORY_DEQUEUE (memory->m_length);
+            memory->m_length |= 0x80000000;
+
             RTL_MEMORY_DEQUEUE (&result, n, realloc_label_1);
             if (result)
             {
@@ -1209,7 +1213,8 @@ void* SAL_CALL rtl_reallocateMemory (void * p, sal_uInt32 n) SAL_THROW_EXTERN_C(
                     queue_cast(memory, __C__),
                     datlen - __C__);
 
-                /* free */
+                /* clear 'used' bit, enqueue */
+                memory->m_length &= 0x7fffffff;
                 RTL_MEMORY_ENQUEUE (&memory);
                 if (memory)
                 {
