@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:17:47 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 20:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "Trascinate i campi da destra nell'area desiderata usando il mouse." ;
         Text [ portuguese_brazilian ] = "Arraste os campos da direita para a ?rea desejada usando o mouse." ;
         Text [ portuguese ] = "Com o rato arraste os campos da direita para as áreas desejadas." ;
-        Text [ finnish ] = "Vedä oikealla olevat kentät haluamaasi kohtaan." ;
+        Text [ finnish ] = "Ved? oikealla olevat kent?t haluamaasi kohtaan." ;
         Text [ danish ] = "Træk felterne på højre side til de ønskede områder ved hjælp af musen." ;
         Text [ french ] = "Faites glisser les champs de droite vers leur plage de destination à l'aide de la souris." ;
         Text [ swedish ] = "Dra fälten på den högra sidan till önskade områden med musen." ;
@@ -372,7 +372,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienennä";
+        QuickHelpText[ finnish ] = "Kutista!";
     };
     CheckBox BTN_IGNEMPTYROWS
     {
@@ -384,7 +384,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "~Ignorare le righe vuote" ;
         Text [ portuguese_brazilian ] = "~Ignorar fileiras vazias" ;
         Text [ portuguese ] = "~Ignorar linhas vazias" ;
-        Text [ finnish ] = "~Ohita tyhjät rivit" ;
+        Text [ finnish ] = "~Ohita tyhj?t rivit" ;
         Text [ danish ] = "Ignorer tomme rækker" ;
         Text [ french ] = "~Ignorer les lignes vides" ;
         Text [ swedish ] = "~Ignorera tomma rader" ;
@@ -464,7 +464,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ turkish ] = "Sütun ~toplamý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Columnas de totales";
-        Text[ finnish ] = "~Sarakkeita yhteensä";
+        Text[ finnish ] = "~Sarakkeita yhteens?";
     };
     CheckBox BTN_TOTALROW
     {
@@ -494,7 +494,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ turkish ] = "Satýr t~oplamý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Filas de totales";
-        Text[ finnish ] = "~Rivejä yhteensä";
+        Text[ finnish ] = "~Rivej? yhteens?";
     };
     String PIVOTSTR_SUM
     {
@@ -817,6 +817,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     Text[ catalan ] = "Piloto de datos";
     Text[ finnish ] = "Tietojen ohjaus";
 };
+
 
 
 
