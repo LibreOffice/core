@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2004-04-27 15:49:12 $
+#   last change: $Author: rt $ $Date: 2005-01-11 13:00:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,9 +86,9 @@ CDEFS+=-DEDITDEBUG
 .IF "$(header)" == ""
 
 SLOFILES =	\
+            $(SLO)$/svxacorr.obj \
             $(SLO)$/acorrcfg.obj \
             $(SLO)$/txtrange.obj \
-            $(SLO)$/svxacorr.obj \
             $(SLO)$/SvXMLAutoCorrectImport.obj \
             $(SLO)$/SvXMLAutoCorrectExport.obj \
             $(SLO)$/forbiddencharacterstable.obj \
@@ -112,7 +112,7 @@ SLOFILES =	\
             $(SLO)$/impedit3.obj \
             $(SLO)$/impedit4.obj \
             $(SLO)$/impedit5.obj \
-            $(SLO)$/textconv.obj \
+                        $(SLO)$/textconv.obj \
             $(SLO)$/unolingu.obj
 
 SVXLIGHTOBJFILES= \
@@ -129,7 +129,7 @@ SVXLIGHTOBJFILES= \
             $(OBJ)$/eerdll.obj	\
             $(OBJ)$/impedit.obj	\
             $(OBJ)$/impedit2.obj \
-            $(OBJ)$/impedit3.obj \
+                        $(OBJ)$/impedit3.obj \
             $(OBJ)$/impedit4.obj \
             $(OBJ)$/impedit5.obj \
             $(OBJ)$/forbiddencharacterstable.obj \
