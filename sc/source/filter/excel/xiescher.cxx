@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:15:43 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 09:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,7 @@
 #include <stdio.h>
 
 using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -1013,6 +1014,11 @@ void XclImpEscherOle::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
 void XclImpEscherOle::SetProperties( Reference< XPropertySet >& rxPropSet ) const
 {
     ::setPropBool( rxPropSet, CREATE_OUSTRING( "Printable" ), GetPrintable() );
+    // #118053 set control name
+    if ( msName.getLength() > 0 )
+    {
+        setPropValue( rxPropSet, CREATE_OUSTRING( "Name" ), msName );
+    }
 }
 
 void XclImpEscherOle::Apply( ScfProgressBar& rProgress )
@@ -1416,6 +1422,30 @@ void XclImpDffManager::ProcessClientAnchor2( SvStream& rStrm, DffRecordHeader& r
 SdrObject* XclImpDffManager::ProcessObj(
     SvStream& rStrm, DffObjData& rObjData, void*, Rectangle& rTextRect, SdrObject* pRetSdrObj )
 {
+
+    // #118052# import control name
+    sal_uInt32 cNameLen = GetPropertyValue( DFF_Prop_wzName );
+
+    if ( cNameLen )
+    {
+        SeekToContent( DFF_Prop_wzName,
+             mrObjManager.GetEscherStream() );
+        sal_Int32 strLen =  cNameLen / 2;
+        OUStringBuffer buf( strLen );
+        sal_uInt16 ch = 0;
+        for ( sal_Int32 i=0; i<strLen; i++ )
+        {
+            mrObjManager.GetEscherStream() >> ch;
+            buf.append( static_cast< sal_Unicode >( ch ) );
+        }
+        OUString sCName = buf.makeStringAndClear();
+        if( XclImpEscherOle* pOleObj = PTR_CAST( XclImpEscherOle,
+            mrObjManager.GetEscherObjAcc( rObjData.rSpHd.nFilePos ) ) )
+        {
+            pOleObj->SetName( sCName );
+        }
+    }
+
     /*  #102378# Do not process the omnipresent first dummy shape in the table
         (it has the flag SP_FPATRIARCH set). */
     if( pRetSdrObj && !::get_flag< sal_uInt32 >( rObjData.nSpFlags, SP_FPATRIARCH ) )
