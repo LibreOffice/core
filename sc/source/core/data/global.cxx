@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 09:54:45 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -874,6 +874,30 @@ const sal_Unicode* ScGlobal::UnicodeStrChr( const sal_Unicode* pStr,
     return NULL;
 }
 
+// ----------------------------------------------------------------------------
+
+void ScGlobal::AddToken( String& rTokenList, const String& rToken, sal_Unicode cSep, xub_StrLen nSepCount, bool bForceSep )
+{
+    if( bForceSep || (rToken.Len() && rTokenList.Len()) )
+        rTokenList.Expand( rTokenList.Len() + nSepCount, cSep );
+    rTokenList.Append( rToken );
+}
+
+bool ScGlobal::IsQuoted( const String& rString, sal_Unicode cQuote )
+{
+    return (rString.Len() >= 2) && (rString.GetChar( 0 ) == cQuote) && (rString.GetChar( rString.Len() - 1 ) == cQuote);
+}
+
+void ScGlobal::AddQuotes( String& rString, sal_Unicode cQuote )
+{
+    rString.Insert( cQuote, 0 ).Append( cQuote );
+}
+
+void ScGlobal::EraseQuotes( String& rString, sal_Unicode cQuote )
+{
+    if( IsQuoted( rString ) )
+        rString.Erase( rString.Len() - 1 ).Erase( 0, 1 );
+}
 
 //------------------------------------------------------------------------
 
