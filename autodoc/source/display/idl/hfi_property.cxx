@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_property.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:39 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following li
@@ -71,6 +71,7 @@
 #include <ary/idl/ik_enumvalue.hxx>
 #include <ary/idl/ik_property.hxx>
 #include <ary/idl/ik_structelem.hxx>
+#include <toolkit/hf_docentry.hxx>
 #include <toolkit/hf_title.hxx>
 #include "hfi_typetext.hxx"
 
@@ -143,25 +144,26 @@ void
 HF_IdlProperty::write_Declaration( const client & i_ce ) const
 {
     if (PropertyAttr::HasAnyStereotype(i_ce))
+    {
         CurOut() << "[ ";
-    if (PropertyAttr::IsReadOnly(i_ce))
-        CurOut() << "readonly ";
-    if (PropertyAttr::IsBound(i_ce))
-        CurOut() << "bound ";
-    if (PropertyAttr::IsConstrained(i_ce))
-        CurOut() << "constrained ";
-    if (PropertyAttr::IsMayBeAmbigious(i_ce))
-        CurOut() << "maybeambigious ";
-    if (PropertyAttr::IsMayBeDefault(i_ce))
-        CurOut() << "maybedefault ";
-    if (PropertyAttr::IsMayBeVoid(i_ce))
-        CurOut() << "maybevoid ";
-    if (PropertyAttr::IsRemovable(i_ce))
-        CurOut() << "removable ";
-    if (PropertyAttr::IsTransient(i_ce))
-        CurOut() << "transient ";
-    if (PropertyAttr::HasAnyStereotype(i_ce))
-        CurOut() << " ] ";
+        if (PropertyAttr::IsReadOnly(i_ce))
+            CurOut() << "readonly ";
+        if (PropertyAttr::IsBound(i_ce))
+            CurOut() << "bound ";
+        if (PropertyAttr::IsConstrained(i_ce))
+            CurOut() << "constrained ";
+        if (PropertyAttr::IsMayBeAmbiguous(i_ce))
+            CurOut() << "maybeambiguous ";
+        if (PropertyAttr::IsMayBeDefault(i_ce))
+            CurOut() << "maybedefault ";
+        if (PropertyAttr::IsMayBeVoid(i_ce))
+            CurOut() << "maybevoid ";
+        if (PropertyAttr::IsRemovable(i_ce))
+            CurOut() << "removable ";
+        if (PropertyAttr::IsTransient(i_ce))
+            CurOut() << "transient ";
+        CurOut() << "] ";
+    }   // end if
 
     HF_IdlTypeText
         aType( Env(), CurOut(), true );
@@ -183,15 +185,81 @@ typedef ary::idl::ifc_attribute::attr    AttributeAttr;
 void
 HF_IdlAttribute::write_Declaration( const client & i_ce ) const
 {
-    if (AttributeAttr::IsReadOnly(i_ce))
-        CurOut() << "[ readonly ] ";
+    if (AttributeAttr::HasAnyStereotype(i_ce))
+    {
+        CurOut() << "[ ";
+        if (AttributeAttr::IsReadOnly(i_ce))
+            CurOut() << "readonly ";
+        if (AttributeAttr::IsBound(i_ce))
+            CurOut() << "bound ";
+        CurOut() << "] ";
+    }
 
     HF_IdlTypeText
         aType( Env(), CurOut(), true );
     aType.Produce_byData( AttributeAttr::Type(i_ce) );
 
-    CurOut() << " " >> *new Html::Bold << i_ce.LocalName();
-    CurOut() << ";";
+    CurOut()
+        << " "
+        >> *new Html::Bold
+            << i_ce.LocalName();
+
+    dyn_type_list pGetExceptions;
+    dyn_type_list pSetExceptions;
+    AttributeAttr::Get_GetExceptions(pGetExceptions, i_ce);
+    AttributeAttr::Get_SetExceptions(pSetExceptions, i_ce);
+
+    bool bGetRaises = (*pGetExceptions).IsValid();
+    bool bSetRaises = (*pSetExceptions).IsValid();
+    bool bRaises = bGetRaises OR bSetRaises;
+    if (bRaises)
+    {
+        HF_DocEntryList aSub(CurOut());
+
+        if (bGetRaises)
+        {
+            Xml::Element &
+                rGet = aSub.Produce_Definition();
+            HF_IdlTypeText
+                aExc(Env(), rGet, true);
+            type_list & itExc = *pGetExceptions;
+
+            rGet << "get raises (";
+            aExc.Produce_byData(*itExc);
+            for (++itExc; itExc.operator bool(); ++itExc)
+            {
+                rGet
+                    << ",";
+                aExc.Produce_byData(*itExc);
+            }   // end for
+            rGet << ")";
+            if (NOT bSetRaises)
+                rGet << ";";
+        }   // end if (bGetRaises)
+
+        if (bSetRaises)
+        {
+            Xml::Element &
+                rSet = aSub.Produce_Definition();
+            HF_IdlTypeText
+                aExc(Env(), rSet, true);
+            type_list & itExc = *pSetExceptions;
+
+            rSet << "set raises (";
+            aExc.Produce_byData(*itExc);
+            for (++itExc; itExc.operator bool(); ++itExc)
+            {
+                rSet
+                    << ",";
+                aExc.Produce_byData(*itExc);
+            }   // end for
+            rSet << ");";
+        }   // end if (bSetRaises)
+    }
+    else
+    {
+        CurOut() << ";";
+    }
 }
 
 
