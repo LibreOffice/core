@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docglbl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:44:12 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,9 +493,14 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                         while( pSectNd && pSectNd->GetIndex() >
                                 pSttNd->GetIndex() )
                         {
-                            SwNodeRange aRg( *pSectNd, 1, aEndIdx, 1 );
-                            SwNodeIndex aIdx( *pSectNd );
-                            GetNodes()._MoveNodes( aRg, GetNodes(), aIdx );
+                            // #i15712# don't attempt to split sections if
+                            // they are fully enclosed in [pSectNd,aEndIdx].
+                            if( aEndIdx < pSectNd->EndOfSectionIndex() )
+                            {
+                                SwNodeRange aRg( *pSectNd, 1, aEndIdx, 1 );
+                                SwNodeIndex aIdx( *pSectNd );
+                                GetNodes()._MoveNodes( aRg, GetNodes(), aIdx );
+                            }
 
                             pSectNd = pSttNd->FindSectionNode();
                         }
