@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adjushdl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: fs $ $Date: 2002-11-06 10:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,8 @@ sal_Bool XMLParaAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any
 
 sal_Bool XMLParaAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
+    if(!rValue.hasValue())
+        return sal_False;     //added by BerryJia for fixing Bug102407 2002-11-5
     OUStringBuffer aOut;
     sal_Int16 nVal;
 
