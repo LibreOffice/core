@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:46:46 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 21:02:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
 
 #ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
@@ -134,16 +137,20 @@
 #include "sfxuno.hxx"
 #include "msgpool.hxx"
 #include "objshimp.hxx"
+#include "ipclient.hxx"
 
 #ifdef DBG_UTIL
 #include "frmhtmlw.hxx"
 #endif
+
+using namespace com::sun::star;
 
 static SfxFrameArr_Impl* pFramesArr_Impl=0;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::container;
 
 TYPEINIT1(SfxFrame, SfxListener);
 TYPEINIT1_AUTOFACTORY(SfxFrameItem, SfxPoolItem);
@@ -1458,7 +1465,29 @@ void SfxFrame::SetWorkWindow_Impl( SfxWorkWindow* pWorkwin )
 
 void SfxFrame::CreateWorkWindow_Impl()
 {
-    pImp->pWorkWin = new SfxFrameWorkWin_Impl( &GetWindow(), this );
+    Reference < XChild > xChild( GetCurrentDocument()->GetModel(), UNO_QUERY );
+    SfxFrame* pFrame = this;
+    if ( xChild.is() )
+    {
+        Reference < XModel > xParent( xChild->getParent(), UNO_QUERY );
+        if ( xParent.is() )
+        {
+            Reference < XFrame > xFrame( xParent->getCurrentController()->getFrame() );
+            SfxFrame* pFr = SfxFrame::GetFirst();
+            while ( pFr )
+            {
+                if ( pFr->GetFrameInterface() == xFrame )
+                {
+                    pFrame = pFr;
+                    break;
+                }
+
+                pFr = SfxFrame::GetNext( *pFr );
+            }
+        }
+    }
+
+    pImp->pWorkWin = new SfxFrameWorkWin_Impl( &pFrame->GetWindow(), this, pFrame );
 }
 
 const SvBorder& SfxFrame::GetBorder_Impl() const
@@ -1539,6 +1568,16 @@ sal_Bool SfxFrame::IsFocusLocked_Impl() const
     return pImp->bFocusLocked;
 }
 
+sal_Bool SfxFrame::IsInPlace() const
+{
+    return pImp->bInPlace;
+}
+
+void SfxFrame::SetInPlace_Impl( sal_Bool bSet )
+{
+    pImp->bInPlace = bSet;
+}
+
 void SfxFrame::Resize()
 {
     if ( IsClosing_Impl() )
@@ -1546,18 +1585,38 @@ void SfxFrame::Resize()
 
     if ( OwnsBindings_Impl() )
     {
-        SfxWorkWindow *pWork = GetWorkWindow_Impl();
-        if ( pWork )
+        if ( IsInPlace() )
         {
-            pWork->ArrangeChilds_Impl();
-            pWork->ShowChilds_Impl();
+            SetToolSpaceBorderPixel_Impl( SvBorder() );
         }
+        else
+        {
+            SfxWorkWindow *pWork = GetWorkWindow_Impl();
+            SfxInPlaceClient* pClient = GetCurrentViewFrame()->GetViewShell()->GetIPClient();
+            if ( pClient )
+            {
+                uno::Reference < lang::XUnoTunnel > xObj( pClient->GetObject()->getComponent(), uno::UNO_QUERY );
+                uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
+                sal_Int64 nHandle = xObj->getSomething( aSeq );
+                if ( nHandle )
+                {
+                    SfxObjectShell* pDoc = (SfxObjectShell*) (sal_Int32*) nHandle;
+                    pWork = SfxViewFrame::GetFirst( pDoc )->GetFrame()->GetWorkWindow_Impl();
+                }
+            }
 
-        // problem in presence of UIActive object: when the window is resized, but the toolspace border
-        // remains the same, setting the toolspace border at the ContainerEnvironment doesn't force a
-        // resize on the IPEnvironment; without that no resize is called for the SfxViewFrame. So always
-        // set the window size of the SfxViewFrame explicit.
-        SetToolSpaceBorderPixel_Impl( pImp->aBorder );
+            if ( pWork )
+            {
+                pWork->ArrangeChilds_Impl();
+                pWork->ShowChilds_Impl();
+            }
+
+            // problem in presence of UIActive object: when the window is resized, but the toolspace border
+            // remains the same, setting the toolspace border at the ContainerEnvironment doesn't force a
+            // resize on the IPEnvironment; without that no resize is called for the SfxViewFrame. So always
+            // set the window size of the SfxViewFrame explicit.
+            SetToolSpaceBorderPixel_Impl( pImp->aBorder );
+        }
     }
     else if ( pImp->pCurrentViewFrame )
     {
