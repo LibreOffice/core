@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSearchable.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:31:52 $
+ *  last change:$Date: 2003-11-18 16:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -14,7 +14,7 @@
  *
  *  Sun Microsystems Inc., October, 2000
  *
- *  GNU Lesser General Public License Version 2.1
+ *  GNU Lesser General Pu blic License Version 2.1
  *  =============================================
  *  Copyright 2000 by Sun Microsystems, Inc.
  *  901 San Antonio Road, Palo Alto, CA 94303, USA
@@ -64,6 +64,8 @@ package ifc.util;
 import lib.MultiMethodTest;
 
 import com.sun.star.container.XIndexAccess;
+import com.sun.star.table.XCell;
+import com.sun.star.uno.XInterface;
 import com.sun.star.util.XSearchDescriptor;
 import com.sun.star.util.XSearchable;
 
@@ -89,6 +91,41 @@ public class _XSearchable extends MultiMethodTest {
     public XSearchable oObj = null;                // oObj filled by MultiMethodTest
     public XSearchDescriptor Sdesc = null;
     public Object start = null;
+    private String mSearchString = "xTextDoc";
+    private boolean mDispose = false;
+    private boolean mExcludeFindNext = false;
+
+    /**
+     * Creates an entry to search for, if the current object does not provide
+     * one. In this case, the environment is disposed after the test, since
+     * the inserted object may influence following tests.
+     *
+     */
+    protected void before() {
+        Object o = tEnv.getObjRelation("SEARCHSTRING");
+        if (o != null) {
+            mSearchString = (String)o;
+        }
+        o = tEnv.getObjRelation("XSearchable.MAKEENTRYINCELL");
+        if (o != null) {
+            XCell[] cells = new XCell[0];
+            if (o instanceof XCell) {
+                cells = new XCell[]{(XCell)o};
+            }
+            else if (o instanceof XCell[]) {
+                cells = (XCell[])o;
+            }
+            else {
+                log.println("Needed object relation 'XSearchable.MAKEENTRYINCELL' is there, but is of type '"
+                            + o.getClass().getName() + "'. Should be 'XCell' or 'XCell[]' instead.");
+            }
+            for (int i=0; i<cells.length; i++) {
+                cells[i].setFormula(mSearchString);
+            }
+            mDispose = true;
+        }
+        mExcludeFindNext = (tEnv.getObjRelation("EXCLUDEFINDNEXT")==null)?false:true;
+    }
 
     /**
      * Creates the search descriptor which searches for
@@ -101,7 +138,7 @@ public class _XSearchable extends MultiMethodTest {
         log.println("testing createSearchDescriptor() ... ");
 
         Sdesc = oObj.createSearchDescriptor();
-        Sdesc.setSearchString("xTextDoc");
+        Sdesc.setSearchString(mSearchString);
         tRes.tested("createSearchDescriptor()", Sdesc != null);
 
     }
@@ -123,7 +160,6 @@ public class _XSearchable extends MultiMethodTest {
 
         XIndexAccess IA = oObj.findAll(Sdesc);
         tRes.tested("findAll()", IA != null);
-        return;
     }
 
     /**
@@ -156,13 +192,29 @@ public class _XSearchable extends MultiMethodTest {
      * </ul>
      */
     public void _findNext() {
-        requiredMethod("findFirst()");
+        if (mExcludeFindNext) {
+            log.println("Testing findNext() excluded, because only one" +
+                        " search result is available.");
+            tRes.tested("findNext()", true);
+        }
+        else{
+            requiredMethod("findFirst()");
 
-        log.println("testing findNext()");
-        Object xI = oObj.findNext(start,Sdesc);
-        tRes.tested("findNext()", xI != null);
+            log.println("testing findNext()");
+            Object xI = oObj.findNext(start,Sdesc);
+            tRes.tested("findNext()", xI != null);
+        }
     }
 
+    /**
+     * In case the interface itself made the entry to search for, the environment
+     * must be disposed
+     */
+    protected void after() {
+        if(mDispose) {
+            disposeEnvironment();
+        }
+    }
 }
 
 
