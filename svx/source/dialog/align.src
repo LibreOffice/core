@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:31:21 $
+ *  last change: $Author: kz $ $Date: 2001-04-09 23:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ italian ] = "Rientro" ;
         Text [ spanish ] = "Sangría" ;
         Text [ french ] = "~Retrait" ;
-        Text [ dutch ] = "Inspringing" ;
+        Text [ dutch ] = "~Inspringing" ;
         Text [ portuguese_brazilian ] = "Einzu~g" ;
         Text [ portuguese ] = "Avanço" ;
         Text[ chinese_simplified ] = "Ëõ½ø(~N)";
@@ -260,7 +260,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ japanese ] = "²ÝÃÞÝÄ(~N)";
         Text[ chinese_traditional ] = "ÁY±Æ(~N)";
         Text[ arabic ] = "ÇáÅÒÇÍÉ";
-        Text[ dutch ] = "Inspringing";
+        Text[ dutch ] = "~Inspringing";
         Text[ chinese_simplified ] = "Ëõ½ø(~N)";
         Text[ greek ] = "Åóï÷Þ";
         Text[ korean ] = "µé¿©¾²±â(~N)";
