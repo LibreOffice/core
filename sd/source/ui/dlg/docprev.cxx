@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docprev.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:41 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 09:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,6 +362,10 @@ void SdDocPreviewWin::updateViewSettings()
         const MapMode       aMap( pDoc->GetScaleUnit(), Point(), aFrac, aFrac );
 
         aVDev.SetMapMode( aMap );
+
+        // #109058# Disable output, as we only want to record a metafile
+        aVDev.EnableOutput( FALSE );
+
         pMtf->Record( &aVDev );
 
         SdDrawView* pView = new SdDrawView(pDocShell, this, NULL);
