@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: jl $ $Date: 2002-07-18 14:26:26 $
+#   last change: $Author: mav $ $Date: 2002-10-31 11:04:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,9 +74,11 @@ PACKAGE=com$/sun$/star$/task
 
 IDLFILES=\
     ClassifiedInteractionRequest.idl\
+    DocumentPasswordRequest.idl\
     InteractionClassification.idl\
     InteractionHandler.idl\
     JobExecutor.idl\
+    MasterPasswordRequest.idl\
     NoMasterException.idl\
     PasswordRequest.idl\
     PasswordRequestMode.idl\
@@ -85,6 +87,7 @@ IDLFILES=\
     XAsyncJob.idl\
     XInteractionApprove.idl\
     XInteractionDisapprove.idl\
+    XInteractionPassword.idl\
     XJob.idl\
     XJobExecutor.idl\
     XJobListener.idl\
