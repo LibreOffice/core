@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-22 08:21:16 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2716,10 +2716,11 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
     xub_StrLen nEndCnt = pPam->GetPoint()->nContent.GetIndex();
     _HTMLAttr* pAttr;
     SwCntntNode* pCNd;
+    USHORT n;
 
     _HTMLAttrs aFields( 5, 5 );
 
-    for( USHORT n = aSetAttrTab.Count(); n; )
+    for( n = aSetAttrTab.Count(); n; )
     {
         pAttr = aSetAttrTab[ --n ];
         USHORT nWhich = pAttr->pItem->Which();
@@ -4634,8 +4635,9 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
 
     USHORT nLeftMargin = 0, nRightMargin = 0;   // die Einzuege und
     short nFirstLineIndent = 0;                 // Abstaende
+    USHORT i;
 
-    for( USHORT i=nContextStAttrMin; i<aContexts.Count(); i++ )
+    for( i = nContextStAttrMin; i < aContexts.Count(); i++ )
     {
         const _HTMLAttrContext *pCntxt = aContexts[i];
 
