@@ -2,9 +2,9 @@
  *
  *  $RCSfile: random.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 09:50:26 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _RTL_RANDOM_C_ "$Revision: 1.2 $"
+#define _RTL_RANDOM_C_ "$Revision: 1.3 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -182,9 +182,16 @@ static sal_Bool __rtl_random_initPool (RandomPool_Impl *pImpl)
         RandomData_Impl     rd;
         double              seed;
 
+        /* The use of uninitialized stack variables as a way to
+         * enhance the entropy of the random pool triggers
+         * memory checkers like purify and valgrind.
+         */
+
+        /*
         __rtl_random_seedPool (pImpl, (sal_uInt8*)&id, sizeof(id));
         __rtl_random_seedPool (pImpl, (sal_uInt8*)&tv, sizeof(tv));
         __rtl_random_seedPool (pImpl, (sal_uInt8*)&rd, sizeof(rd));
+        */
 
         id = osl_getThreadIdentifier (NULL);
         id = RTL_RANDOM_RNG_2(RTL_RANDOM_RNG_1(id));
@@ -281,8 +288,6 @@ static void __rtl_random_readPool (
             pImpl->m_hDigest,
             &(pImpl->m_pDigest[RTL_RANDOM_SIZE_DIGEST/2]),
             RTL_RANDOM_SIZE_DIGEST/2);
-        rtl_digest_update (
-            pImpl->m_hDigest, pBuffer, j);
 
         k = (pImpl->m_nIndex + j) - pImpl->m_nData;
         if (k > 0)
