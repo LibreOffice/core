@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev4.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: ka $ $Date: 2001-03-16 17:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1318,27 +1318,34 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
         return;
 #endif
 
-    PolyPolygon aPolyPoly( rPolyPoly );
-    aPolyPoly.Optimize( POLY_OPTIMIZE_NO_SAME | POLY_OPTIMIZE_CLOSE );
-
-    if( aPolyPoly.Count() )
+    if( rPolyPoly.Count() )
     {
 #ifndef REMOTE_APPSERVER
-        GDIMetaFile* pOldMetaFile = mpMetaFile;
+        PolyPolygon     aPolyPoly( LogicToPixel( rPolyPoly ) );
+        GDIMetaFile*    pOldMetaFile = mpMetaFile;
+        BOOL            bOldMap = mbMap;
+
+        aPolyPoly.Optimize( POLY_OPTIMIZE_NO_SAME );
+        aHatch.SetDistance( ImplLogicWidthToDevicePixel( aHatch.GetDistance() ) );
 
         mpMetaFile = NULL;
+        mbMap = FALSE;
         Push( PUSH_LINECOLOR );
         SetLineColor( aHatch.GetColor() );
         ImplInitLineColor();
         ImplDrawHatch( aPolyPoly, aHatch, FALSE );
         Pop();
+        mbMap = bOldMap;
         mpMetaFile = pOldMetaFile;
 #else
         ImplServerGraphics* pGraphics = ImplGetServerGraphics();
         if ( pGraphics )
         {
+            PolyPolygon aPolyPoly( ImplLogicToDevicePixel( rPolyPoly ) );
+
+            aPolyPoly.Optimize( POLY_OPTIMIZE_NO_SAME );
             aHatch.SetDistance( ImplLogicWidthToDevicePixel( aHatch.GetDistance() ) );
-            pGraphics->DrawHatch( ImplLogicToDevicePixel( aPolyPoly ), aHatch );
+            pGraphics->DrawHatch( aPolyPoly, aHatch );
         }
 #endif
     }
@@ -1533,73 +1540,57 @@ void OutputDevice::ImplCalcHatchValues( const Rectangle& rRect, long nDist, USHO
 void OutputDevice::ImplDrawHatchLine( const Line& rLine, const PolyPolygon& rPolyPoly,
                                       Point* pPtBuffer, BOOL bMtf )
 {
-#ifdef REMOTE_APPSERVER
-    ImplServerGraphics* pGraphics;
-    if( !bMtf && !( pGraphics = ImplGetServerGraphics() ) )
-        return;
-#endif
-
-    double  fSaveDist = 0.0;
-    long    nPCounter = 0;
+    double  fX, fY;
+    long    nAdd, nPCounter = 0;
 
     for( long nPoly = 0, nPolyCount = rPolyPoly.Count(); nPoly < nPolyCount; nPoly++ )
     {
-        const Polygon&  rPoly = rPolyPoly[ (USHORT) nPoly ];
+        const Polygon& rPoly = rPolyPoly[ (USHORT) nPoly ];
 
         if( rPoly.GetSize() > 1 )
         {
             Point   aIntersection;
-            Point   aPt1( rPoly[0] );
+            Line    aCurSegment( rPoly[ 0 ], Point() );
 
-            for( long i = 1, nCount = rPoly.GetSize(); i < nCount; i++ )
+            for( long i = 1, nCount = rPoly.GetSize(); i <= nCount; i++ )
             {
-                const Point& rPt2 = rPoly[ (USHORT) i ];
+                aCurSegment.SetEnd( rPoly[ (USHORT)( i % nCount ) ] );
+                nAdd = 0;
 
-                if( rLine.Intersection( Line( aPt1, rPt2 ), aIntersection ) )
+                if( rLine.Intersection( aCurSegment, fX, fY ) )
                 {
-                    const BOOL bDifferent = !nPCounter || aIntersection != pPtBuffer[ nPCounter - 1 ];
-
-                    if( aIntersection == aPt1 )
+                    if( ( fabs( fX - aCurSegment.GetStart().X() ) <= 0.0000001 ) &&
+                        ( fabs( fY - aCurSegment.GetStart().Y() ) <= 0.0000001 ) )
                     {
-                        double fDist1 = rLine.GetDistance( rPoly[ ( i > 1 ) ? i - 2 : nCount - 2 ] );
-                        double fDist2 = rLine.GetDistance( rPt2 );
+                        const Line      aPrevSegment( rPoly[ (USHORT)( ( i > 1 ) ? ( i - 2 ) : ( nCount - 1 ) ) ], aCurSegment.GetStart() );
+                        const double    fPrevDistance = rLine.GetDistance( aPrevSegment.GetStart() );
+                        const double    fCurDistance = rLine.GetDistance( aCurSegment.GetEnd() );
 
-                        if( 1 == i )
-                            nCount--;
-
-                        if( bDifferent )
+                        if( ( fPrevDistance <= 0.0 && fCurDistance > 0.0 ) ||
+                            ( fPrevDistance > 0.0 && fCurDistance < 0.0 ) )
                         {
-                            pPtBuffer[ nPCounter++ ] = aIntersection;
-
-                            if( ( ( fDist1 < 0.0 && fDist2 < 0.0 ) || ( fDist1 > 0.0 && fDist2 > 0.0 ) ) )
-                                pPtBuffer[ nPCounter++ ] = aIntersection;
-                            else if( fDist1 == 0.0 )
-                            {
-                                if( ( fSaveDist > 0.0 && fDist2 < 0.0 ) || ( fSaveDist < 0.0 && fDist2 > 0.0 ) )
-                                    pPtBuffer[ nPCounter++ ] = aIntersection;
-                            }
+                            nAdd = 1;
                         }
                     }
-                    else if( aIntersection == rPt2 )
+                    else if( ( fabs( fX - aCurSegment.GetEnd().X() ) <= 0.0000001 ) &&
+                             ( fabs( fY - aCurSegment.GetEnd().Y() ) <= 0.0000001 ) )
                     {
-                        double fDist1 = rLine.GetDistance( aPt1 );
-                        double fDist2 = rLine.GetDistance( rPoly[ ( i < nCount - 1 ) ? i + 1 : 1 ] );
+                        const Line aNextSegment( aCurSegment.GetEnd(), rPoly[ (USHORT)( ( i + 1 ) % nCount ) ] );
 
-                        if( bDifferent )
+                        if( ( fabs( rLine.GetDistance( aNextSegment.GetEnd() ) ) <= 0.0000001 ) &&
+                            ( rLine.GetDistance( aCurSegment.GetStart() ) > 0.0 ) )
                         {
-                            pPtBuffer[ nPCounter++ ] = aIntersection;
-
-                            if( ( ( fDist1 < 0.0 && fDist2 < 0.0 ) || ( fDist1 > 0.0 && fDist2 > 0.0 ) ) )
-                                pPtBuffer[ nPCounter++ ] = aIntersection;
-                            else if( fDist2 == 0.0 )
-                                fSaveDist = fDist1;
+                            nAdd = 1;
                         }
                     }
                     else
-                        pPtBuffer[ nPCounter++ ] = aIntersection;
+                        nAdd = 1;
+
+                    if( nAdd )
+                        pPtBuffer[ nPCounter++ ] = Point( FRound( fX ), FRound( fY ) );
                 }
 
-                aPt1 = rPt2;
+                aCurSegment.SetStart( aCurSegment.GetEnd() );
             }
         }
     }
@@ -1618,17 +1609,15 @@ void OutputDevice::ImplDrawHatchLine( const Line& rLine, const PolyPolygon& rPol
         }
         else
         {
+#ifndef REMOTE_APPSERVER
             for( long i = 0; i < nPCounter; i += 2 )
             {
                 const Point aPt1( ImplLogicToDevicePixel( pPtBuffer[ i ] ) );
                 const Point aPt2( ImplLogicToDevicePixel( pPtBuffer[ i + 1 ] ) );
 
-#ifndef REMOTE_APPSERVER
                 mpGraphics->DrawLine( aPt1.X(), aPt1.Y(), aPt2.X(), aPt2.Y() );
-#else
-                pGraphics->DrawLine( aPt1, aPt2 );
-#endif
             }
+#endif
         }
     }
 }
