@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:17:02 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1410,8 +1410,8 @@ sal_uInt16 addLoadLocal(
     OSL_ASSERT(
         code != 0 && index != 0 && !(typeParameter && any)
         && dependencies != 0);
-    sal_uInt16 stack;
-    sal_uInt16 size;
+    sal_uInt16 stack = 1;
+    sal_uInt16 size = 1;
     if (typeParameter) {
         code->loadLocalReference(*index);
         stack = size = 1;
