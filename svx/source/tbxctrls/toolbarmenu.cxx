@@ -256,6 +256,7 @@ Size ToolbarMenu::implCalcSize()
     Size aMaxImgSz;
     long nMaxTextWidth = 0;
     long nMinMenuItemHeight = nFontHeight;
+    sal_Bool bCheckable = sal_False;
 
     const int nEntryCount = maEntryVector.size();
     int nEntry;
@@ -288,6 +289,10 @@ Size ToolbarMenu::implCalcSize()
         {
             pEntry->maSize.Height() = 0;
             pEntry->maSize.Width() = 0;
+
+
+            if ( ( pEntry->mnBits ) & ( MIB_RADIOCHECK | MIB_CHECKABLE ) )
+                bCheckable = sal_True;
 
             // Image:
             if( pEntry->mbHasImage )
@@ -358,6 +363,9 @@ Size ToolbarMenu::implCalcSize()
 
     if ( aMaxImgSz.Width() )
         mnTextPos += gfxExtra;
+    if ( bCheckable )
+        mnTextPos += 16;
+
 
     aSz.Width() = mnTextPos + nMaxTextWidth;
     aSz.Width() += 2*nExtra;
