@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-29 07:44:43 $
+ *  last change: $Author: fs $ $Date: 2001-03-30 11:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef _SVTOOLS_LOGINDLG_HXX_
 #include <svtools/logindlg.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
+#include <com/sun/star/sdb/SQLContext.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -793,9 +796,9 @@ Reference<XConnection> ODbAdminDialog::createConnection()
 
                 xConnection = xDriver->connect(sConnectionURL, aConnectionParams);
             }
-            catch (SQLContext& e) { aErrorInfo = SQLExceptionInfo(e); }
-            catch (SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
-            catch (SQLException& e) { aErrorInfo = SQLExceptionInfo(e); }
+            catch (::com::sun::star::sdb::SQLContext& e) { aErrorInfo = SQLExceptionInfo(e); }
+            catch (::com::sun::star::sdbc::SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
+            catch (::com::sun::star::sdbc::SQLException& e) { aErrorInfo = SQLExceptionInfo(e); }
 
             showError(aErrorInfo,this,getORB());
         }
@@ -2440,6 +2443,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.42  2001/03/29 07:44:43  fs
+ *  #84826# +clearPassword
+ *
  *  Revision 1.41  2001/03/29 07:34:00  oj
  *  dispose connection in dtor and type casts
  *
