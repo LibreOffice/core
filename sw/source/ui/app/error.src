@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:32:13 $
+ *  last change: $Author: kz $ $Date: 2001-03-02 20:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,7 +393,7 @@ Resource RID_SW_ERRHDL
         TEXT[ russian ] = "έςξς τΰιλ ρξυπΰνεν οπθ οξμξωθ οΰπΰμεςπΰ WinWord 'Αϋρςπξε ρξυπΰνενθε'. Οξζΰλσιρςΰ, ξςκλώχθςε οΰπΰμεςπ 'Πΰηπεψθςό αϋρςπξε ρξυπΰνενθε' θ ηΰνξβξ ρξυπΰνθςε ύςξς τΰιλ ρ οξμξωόώ WinWord";
         TEXT[ polish ] = "Ten plik zosta³ zapisany za pomocΉ opcji WinWord 'Szybkie zapisywanie'. Proszκ w³³Ήcz w WinWord opcjκ 'Dopuζ szybkie zapisywanie' i zapisz plik ponownie w WinWord";
         TEXT[ japanese ] = "‚±‚ΜΜ§²Ω‚Ν WinWord µΜίΌ®έ‚Μu‚‘¬•Ϋ‘¶v‚Ε•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚·BWinWord ‚ΜµΜίΌ®έu‚‘¬•Ϋ‘¶‚·‚ιv‚πµΜ‚Ι‚µ‚Δ WinWord ‚ΕΜ§²Ω‚π•Ϋ‘¶‚µ‚Θ‚¨‚µ‚Δ‚­‚Ύ‚³‚ΆB";
-        TEXT[ chinese_traditional ] = "ΐx¦sΐΙ®Χ±Δ¥ΞªΊ¬O WinWord Ώο¶µ '§Φ³tΐx¦s'¤θ¦΅΅C½Π±z¥Ά¬΅³o­ΣΏο¶µ΅MµM«α¦b­«·sΐx¦s³o­Σ¤ε¥σ΅C";
+        TEXT[ chinese_traditional ] = "ΐx¦sΐΙ®Χ±Δ¥ΞªΊ¬O WinWord Ώο¶µ΅u§Φ³tΐx¦s΅v¤θ¦΅΅C½Π±z³]©wΓφ³¬³o­ΣΏο¶µ΅MµM«α¦b­«·sΐx¦s³o­Σ¤ε¥σ΅C";
         TEXT[ arabic ] = "Κγ ΝέΩ εΠΗ Ηαγαέ Ϊδ ΨΡνή ΞνΗΡ 'ΗαΝέΩ ΗαΣΡνΪ' έν WinWord. ΗαΡΜΗΑ ΕνήΗέ ΞΗΥνΙ 'ΗαΣγΗΝ ΘΗαΝέΩ ΗαΣΡνΪ' έν WinWord΅ Λγ ήγ ΘΝέΩ Ηαγαέ γδ ΜΟνΟ ΘζΗΣΨΙ WinWord.";
         TEXT[ greek ] = "Το αρχείο αυτό αποθηκεύτηκε με την επιλογή 'Γρήγορη αποθήκευση' του WinWord. Παρακαλώ απενεργοποιήσετε την επιλογή αυτή του WinWord και αποθηκεύστε το αρχείο ξανά στο WinWord.";
         TEXT[ korean ] = "ΐΜ ΖΔΐΟΐΊ  WinWord ΐΗ  'ΊόΈ¥ ΐϊΐε' Έπµε·Ξ ΐϊΐεµΗΎξ ΐΦ½ΐ΄Ο΄Ω.  ΏΙΌΗ 'ΊόΈ¥ ΐϊΐε ΗγΏλ' Έ¦ ΗΨΑ¦ΗΟ°ν, ΖΔΐΟΐ» ΄Ω½Γ ΐϊΐεΗΟ½Κ½ΓΏΐ .";
@@ -1079,7 +1079,7 @@ Resource RID_SW_ERRHDL
         TEXT[ russian ] = "έςξς τΰιλ ρξυπΰνεν οπθ οξμξωθ οΰπΰμεςπΰ WinWord 'Αϋρςπξε ρξυπΰνενθε'. Οξζΰλσιρςΰ, ξςκλώχθςε οΰπΰμεςπ 'Πΰηπεψθςό αϋρςπξε ρξυπΰνενθε' θ ηΰνξβξ ρξυπΰνθςε ύςξς τΰιλ ρ οξμξωόώ WinWord";
         TEXT[ polish ] = "Ten plik zosta³ zapisany za pomocΉ opcji WinWord 'Szybkie zapisywanie'. Proszκ wy³Ήcz w WinWord opcjκ 'Dopuζ szybkie zapisywanie' i zapisz plik ponownie w WinWord.";
         TEXT[ japanese ] = "‚±‚ΜΜ§²Ω‚ΝAWinWordµΜίΌ®έ‚Μ'‚‘¬•Ϋ‘¶'‚Ε•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚·BWinWord‚ΜµΜίΌ®έ '‚‘¬•Ϋ‘¶' ‚πµΜ‚Ι‚µ‚ΔAΜ§²Ω‚πV‚½‚ΙWinWord‚Ε•Ϋ‘¶‚µ‚Δ‰Ί‚³‚ΆB";
-        TEXT[ chinese_traditional ] = "ΐx¦sΐΙ®Χ±Δ¥ΞªΊ¬O WinWord Ώο¶µ '§Φ³tΐx¦s'¤θ¦΅΅C½Π±z¥Ά¬΅³o­ΣΏο¶µ΅MµM«α¦b­«·sΐx¦s³o­ΣΐΙ®Χ΅C";
+        TEXT[ chinese_traditional ] = "ΐx¦sΐΙ®Χ±Δ¥ΞªΊ¬O WinWord Ώο¶µ΅u§Φ³tΐx¦s΅v¤θ¦΅΅C½Π±z³]©wΓφ³¬³o­ΣΏο¶µ΅MµM«α¦b­«·sΐx¦s³o­ΣΐΙ®Χ΅C";
         TEXT[ arabic ] = "Κγ ΝέΩ εΠΗ Ηαγαέ Ϊδ ΨΡνή ΞνΗύΡ 'ΗαΝέΩ ΗαΣΡνΪ' έν WinWord. ΗαΡΜΗΑ ΕνήΗέ ΞΗΥνΙ 'ΗαΣγΗΝ ΘΗαΝέΩ ΗαΣΡνΪ' έν WinWord΅ Λγ  ήγ ΘΝέΩ Ηαγαέ γδ ΜΟνΟ ΘζΗΣΨΙ WinWord.";
         TEXT[ greek ] = "Το αρχείο αυτό αποθηκεύτηκε με την επιλογή 'Γρήγορη αποθήκευση' του WinWord. Παρακαλώ απενεργοποιήσετε την επιλογή αυτή του WinWord και αποθηκεύστε το αρχείο ξανά στο WinWord.";
         TEXT[ korean ] = "ΐΜ ΖΔΐΟΐΊ  WinWordΐΗ  'ΊόΈ¥ ΐϊΐε' Έπµε·Ξ ΐϊΐεµΗΎξ ΐΦ½ΐ΄Ο΄Ω. ΏΙΌΗ 'ΊόΈ¥ ΐϊΐε ΗγΏλ'ΐ» ΗΨΑ¦ΗΟ½Γ°ν ΖΔΐΟΐ» ΄Ω½Γ ΐϊΐεΗΟ½Κ½ΓΏΐ.";
