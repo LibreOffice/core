@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: mib $ $Date: 2001-07-04 13:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,7 +673,7 @@ XMLImpHyperlinkContext_Impl::XMLImpHyperlinkContext_Impl(
         switch( rTokenMap.Get( nPrefix, aLocalName ) )
         {
         case XML_TOK_TEXT_HYPERLINK_HREF:
-            pHint->SetHRef( rValue );
+            pHint->SetHRef( GetImport().GetAbsoluteReference( rValue ) );
             break;
         case XML_TOK_TEXT_HYPERLINK_NAME:
             pHint->SetName( rValue );
