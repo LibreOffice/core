@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:56:29 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,7 @@
 #include <svx/svdpage.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
-#include <so3/ipobj.hxx>
-#include <so3/svstor.hxx>
-#include <so3/clsids.hxx>
+#include <sot/clsids.hxx>
 #include <sot/formats.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/ptitem.hxx>
@@ -95,17 +93,11 @@
 #include <svtools/transfer.hxx>
 #include <vcl/graph.hxx>
 
+#include <comphelper/storagehelper.hxx>
+#include <comphelper/processfactory.hxx>
+
 #include <sot/formats.hxx>
 #define SOT_FORMATSTR_ID_STARCALC_CURRENT   SOT_FORMATSTR_ID_STARCALC_50
-
-#ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
-#define SO2_DECL_SVINPLACEOBJECT_DEFINED
-SO2_DECL_REF(SvInPlaceObject)
-#endif
-#ifndef SO2_DECL_SVSTORAGE_DEFINED
-#define SO2_DECL_SVSTORAGE_DEFINED
-SO2_DECL_REF(SvStorage)
-#endif
 
 #include "viewfunc.hxx"
 #include "docsh.hxx"
@@ -173,19 +165,16 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
          nFormatId == SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ||
          nFormatId == SOT_FORMATSTR_ID_LINK_SOURCE_OLE )
     {
-        SotStorageStreamRef             xStm;
-        TransferableObjectDescriptor    aObjDesc;
+        uno::Reference < io::XInputStream > xStm;
+        TransferableObjectDescriptor   aObjDesc;
 
         if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
-            aDataHelper.GetSotStorageStream( nFormatId, xStm ) )
+            aDataHelper.GetInputStream( nFormatId, xStm ) )
         {
-            SvStorageRef xStore( new SvStorage( *xStm ) );
-            if ( aObjDesc.maClassName == SvGlobalName( SO3_SC_CLASSID_30 ) ||
-                 aObjDesc.maClassName == SvGlobalName( SO3_SC_CLASSID_40 ) ||
-                 aObjDesc.maClassName == SvGlobalName( SO3_SC_CLASSID_50 ) ||
-                 aObjDesc.maClassName == SvGlobalName( SO3_SC_CLASSID_60 ) )
+            uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromInputStream( xStm );
+            if ( aObjDesc.maClassName == SvGlobalName( SO3_SC_CLASSID_60 ) )
             {
-                //  own format (including old formats)
+                //  TODO/LATER: is it a problem that we don't support binary formats here?
                 ScDocShellRef xDocShRef = new ScDocShell(SFX_CREATE_MODE_EMBEDDED);
                 if (xDocShRef->DoLoad(xStore))
                 {
@@ -219,15 +208,17 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     delete pClipDoc;
                     bRet = TRUE;
                 }
-                ((SfxInPlaceObject*)xDocShRef)->DoClose();
+                xDocShRef->DoClose();
                 xDocShRef.Clear();
             }
             else
             {
-                SvInPlaceObjectRef xIPObj = &( (SvFactory*) SvInPlaceObject::ClassFactory() )->CreateAndLoad( xStore );
-                if ( xIPObj.Is() )
+                ::rtl::OUString aName;
+                uno::Reference < embed::XEmbeddedObject > xObj = GetViewData()->GetViewShell()->GetObjectShell()->
+                        GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
+                if ( xObj.is() )
                 {
-                    PasteObject( aPos, xIPObj, &aObjDesc.maSize );
+                    PasteObject( aPos, xObj, &aObjDesc.maSize );
                     bRet = TRUE;
                 }
                 else
@@ -236,23 +227,35 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
         }
         else
         {
+            uno::Reference < io::XInputStream > xStm;
+            TransferableObjectDescriptor    aObjDesc;
+
+            //TODO/MBA: testing
+            if ( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE, aObjDesc ) &&
+                ( aDataHelper.GetInputStream( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStm ) ||
+                aDataHelper.GetInputStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStm ) ) )
+            {
+                ::rtl::OUString aName;
+                uno::Reference < embed::XEmbeddedObject > xObj = GetViewData()->GetDocShell()->
+                        GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
+/*
             if( aDataHelper.GetTransferableObjectDescriptor(
                 SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE, aObjDesc ))
             {
                 UniString aEmptyStr;
-                SvStorage* xStore = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
+                SotStorage* xStore = new SotStorage( aEmptyStr, STREAM_STD_READWRITE );
                 SvInPlaceObjectRef xIPObj= &((SvFactory*)SvInPlaceObject::ClassFactory())
                     ->CreateAndInit( rxTransferable, xStore);
-                if ( xIPObj.Is() )
+                if ( xIPObj.Is() )*/
+                if ( xObj.is() )
                 {
-                    PasteObject( aPos, xIPObj, &aObjDesc.maSize );
+                    PasteObject( aPos, xObj, &aObjDesc.maSize );
                     bRet = TRUE;
                 }
                 else
-                    DBG_ERROR("Error in CreateAndInit ( external OLE object)");
-
+                    DBG_ERROR("Error creating external OLE object");
             }
-
+            //TODO/LATER: if format is not available, create picture
         }
     }
     else if ( nFormatId == SOT_FORMATSTR_ID_LINK )      // LINK is also in ScImportExport
@@ -447,13 +450,12 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
     else if ( (nFormatId == SOT_FORMATSTR_ID_BIFF_5) || (nFormatId == SOT_FORMATSTR_ID_BIFF_8) )
     {
         //  do excel import into a clipboard document
-
-        SotStorageStreamRef xStm;
-        if( aDataHelper.GetSotStorageStream( nFormatId, xStm ) )
+        //TODO/MBA: testing
+        uno::Reference < io::XInputStream > xStm;
+        if( aDataHelper.GetInputStream( nFormatId, xStm ) )
         {
-            SvStorageRef pStor = new SvStorage( *xStm );
 #if 0
-            SvStorage aDest( "d:\\test.xls" );  // to see the file
+            SotStorage aDest( "d:\\test.xls" ); // to see the file
             pStor->CopyTo( &aDest );
 #endif
             ScDocument* pDoc = GetViewData()->GetDocument();
@@ -461,7 +463,8 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             SCTAB nSrcTab = 0;      // Biff5 in clipboard: always sheet 0
             pInsDoc->ResetClip( pDoc, nSrcTab );
 
-            SfxMedium aMed( pStor, TRUE );
+            SfxMedium aMed;
+            aMed.GetItemSet()->Put( SfxUsrAnyItem( SID_INPUTSTREAM, uno::makeAny( xStm ) ) );
             FltError eErr = ScImportExcel( aMed, pInsDoc, EIF_AUTO );
             if ( eErr == eERR_OK )
             {
