@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:55:37 $
+ *  last change: $Author: iha $ $Date: 2002-08-08 12:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -898,6 +898,8 @@
 #define HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION   (HID_BASE + 2172 )
 #define HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE         (HID_BASE + 2173 )
 #define HID_SEND_HTML_CTRL_DUMMY                    (HID_BASE + 2174 )
+
+#define HID_INSERT_IDX_MRK_PHONETIC_READING         (HID_BASE + 2175 )
 
 
 

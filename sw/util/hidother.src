@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-10-31 12:31:16 $
+ *  last change: $Author: iha $ $Date: 2002-08-08 12:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,7 @@ hidspecial HID_INSERT_IDX_MRK_SEC_KEY    { HelpId =  HID_INSERT_IDX_MRK_SEC_KEY 
 hidspecial HID_INSERT_IDX_MRK_LEVEL     { HelpId =  HID_INSERT_IDX_MRK_LEVEL        ;};
 hidspecial HID_INSERT_IDX_MRK_MAIN_ENTRY { HelpId =  HID_INSERT_IDX_MRK_MAIN_ENTRY;};
 hidspecial HID_INSERT_IDX_MRK_APPLY_ALL { HelpId =  HID_INSERT_IDX_MRK_APPLY_ALL ;};
+hidspecial HID_INSERT_IDX_MRK_PHONETIC_READING { HelpId =  HID_INSERT_IDX_MRK_PHONETIC_READING ;};
 
 hidspecial HID_INSERT_AUTH_MRK_ENTRY        { HelpId = HID_INSERT_AUTH_MRK_ENTRY            ;};
 hidspecial HID_INSERT_AUTH_MRK_CREATE_ENTRY { HelpId = HID_INSERT_AUTH_MRK_CREATE_ENTRY ;};
