@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intro.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ghiggins $ $Date: 2002-10-07 10:33:18 $
+ *  last change: $Author: cd $ $Date: 2002-11-01 10:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@
 #include <vcl/svapp.hxx>
 #endif
 
+namespace desktop
+{
 
 // -----------------------------------------------------------------------
 
@@ -150,4 +152,6 @@ void IntroWindow_Impl::Paint( const Rectangle& )
 
 void IntroWindow_Impl::Slide()
 {
+}
+
 }

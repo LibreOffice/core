@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-24 12:57:51 $
+ *  last change: $Author: cd $ $Date: 2002-11-01 10:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,10 +125,10 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::view;
 
-String GetURL_Impl( const String& rName );
-
 namespace desktop
 {
+
+String GetURL_Impl( const String& rName );
 
 struct DispatchHolder
 {

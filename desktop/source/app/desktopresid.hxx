@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktopresid.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-16 12:52:33 $
+ *  last change: $Author: cd $ $Date: 2002-11-01 10:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,11 +66,15 @@
 #include <tools/resid.hxx>
 #endif
 
+namespace desktop
+{
+
 class DesktopResId : public ResId
 {
     public:
         DesktopResId( USHORT nId );
 };
 
+}
 
 #endif // _DESKTOP_RESID_HXX_

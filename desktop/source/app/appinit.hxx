@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-16 12:52:33 $
+ *  last change: $Author: cd $ $Date: 2002-11-01 09:59:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,13 +69,20 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
+namespace desktop
+{
+
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > createApplicationServiceManager();
 
+sal_Bool InitializeInstallation( const rtl::OUString& rAppFilename );
 void registerServices( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr );
+void deregisterServices();
 
 void destroyApplicationServiceManager( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr );
 
 void createTemporaryDirectory();
 void removeTemporaryDirectory();
+
+}
 
 #endif

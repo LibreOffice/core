@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intro.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ghiggins $ $Date: 2002-10-07 10:33:18 $
+ *  last change: $Author: cd $ $Date: 2002-11-01 10:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 #endif
 
 // class IntroWindow_Impl ------------------------------------------------
+namespace desktop
+{
 
 class IntroWindow_Impl : public WorkWindow
 {
@@ -88,5 +90,7 @@ public:
 
     void            Slide();
 };
+
+}
 
 #endif // #ifndef _DESKTOP_INTRO_HXX

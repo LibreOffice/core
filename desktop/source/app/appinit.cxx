@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-18 06:07:40 $
+ *  last change: $Author: cd $ $Date: 2002-11-01 09:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include "appinit.hxx"
+#include "app.hxx"
 #include "cmdlineargs.hxx"
 #include "officeacceptthread.hxx"
 
@@ -88,6 +88,9 @@
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
+#ifndef _OSL_MODULE_H_
+#include <osl/module.h>
+#endif
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
 #endif
@@ -108,6 +111,9 @@
 #endif
 #ifndef _UCBHELPER_CONFIGURATIONKEYS_HXX_
 #include <ucbhelper/configurationkeys.hxx>
+#endif
+#ifndef _Installer_hxx
+#include <setup2/installer.hxx>
 #endif
 
 #include <cppuhelper/bootstrap.hxx>
@@ -130,7 +136,7 @@
 #include <svtools/internaloptions.hxx>
 #endif
 
-#define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
+
 #define DEFINE_CONST_OUSTRING(CONSTASCII)       OUString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
 
 #define DESKTOP_TEMPDIRNAME                     "soffice.tmp"
@@ -143,11 +149,12 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
 
-extern desktop::CommandLineArgs*        GetCommandLineArgs();
-extern desktop::OOfficeAcceptorThread*  pOfficeAcceptThread;
+namespace desktop
+{
+
+char const INSTALLER_INITFILENAME[] = "initialize.ini";
 
 static String aCurrentTempURL;
-
 
 // -----------------------------------------------------------------------------
 
@@ -187,8 +194,49 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
     return ::ucb::ContentBroker::initialize( xServiceFactory, aArgs ) != false;
 }
 
+sal_Bool Desktop::InitializeInstallation( const OUString& rAppFilename )
+{
+    OUString aAppPath;
+    OUString aFinishInstallation;
+    osl::FileBase::getFileURLFromSystemPath( rAppFilename, aFinishInstallation );
 
-Reference< XMultiServiceFactory > createApplicationServiceManager()
+    OUStringBuffer aAppPathBuf( aFinishInstallation.getLength() + sizeof( INSTALLER_INITFILENAME ) );
+
+    sal_Int32 nPos = aFinishInstallation.lastIndexOf( '/' );
+    if ( nPos >= 0 )
+        aAppPathBuf.append( aFinishInstallation.copy( 0, nPos ));
+    else
+        aAppPathBuf.append( aFinishInstallation );
+    aAppPathBuf.appendAscii( "/" );
+    aAppPathBuf.appendAscii( INSTALLER_INITFILENAME );
+    aAppPath = aAppPathBuf.makeStringAndClear();
+
+    osl::DirectoryItem aDI;
+    if( osl::DirectoryItem::get( aAppPath, aDI ) == osl_File_E_None )
+    {
+        // Load initialization code only on demand. This is done if the the 'initialize.ini'
+        // is written next to the executable. After initialization this file is removed.
+        // The implementation disposes the old service manager and creates an new one so we
+        // cannot use a service for InitializeInstallation!!
+        OUString aFuncName( RTL_CONSTASCII_USTRINGPARAM( INSTALLER_INITIALIZEINSTALLATION_CFUNCNAME ));
+        OUString aModulePath = OUString::createFromAscii( SVLIBRARY( "set" ) );
+
+        oslModule aSetupModule = osl_loadModule( aModulePath.pData, SAL_LOADMODULE_DEFAULT );
+        if ( aSetupModule )
+        {
+            void* pInitFunc = osl_getSymbol( aSetupModule, aFuncName.pData );
+            if ( pInitFunc )
+                (*(pfunc_InstallerInitializeInstallation)pInitFunc)( rAppFilename.getStr() );
+            osl_unloadModule( aSetupModule );
+        }
+
+        return sal_True;
+    }
+
+    return sal_False;
+}
+
+Reference< XMultiServiceFactory > Desktop::CreateApplicationServiceManager()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::createApplicationServiceManager" );
 
@@ -206,7 +254,7 @@ Reference< XMultiServiceFactory > createApplicationServiceManager()
     return Reference< XMultiServiceFactory >();
 }
 
-void destroyApplicationServiceManager( Reference< XMultiServiceFactory >& xSMgr )
+void Desktop::DestroyApplicationServiceManager( Reference< XMultiServiceFactory >& xSMgr )
 {
     Reference< XPropertySet > xProps( xSMgr, UNO_QUERY );
     if ( xProps.is() )
@@ -225,7 +273,7 @@ void destroyApplicationServiceManager( Reference< XMultiServiceFactory >& xSMgr 
     }
 }
 
-void registerServices( Reference< XMultiServiceFactory >& xSMgr )
+void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::registerServices" );
 
@@ -293,7 +341,7 @@ void registerServices( Reference< XMultiServiceFactory >& xSMgr )
     }
 
     ::rtl::OUString aPortalConnect;
-    bool bServer = (bool) pCmdLine->IsServer();
+    bool bServer = (bool)pCmdLine->IsServer();
 
     pCmdLine->GetPortalConnectString( aPortalConnect );
     if ( !configureUcb( bServer, aPortalConnect ) )
@@ -303,10 +351,23 @@ void registerServices( Reference< XMultiServiceFactory >& xSMgr )
     }
 
 //  UCB_Helper::Initialize(); !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    createTemporaryDirectory();
+    CreateTemporaryDirectory();
 }
 
-void createTemporaryDirectory()
+void Desktop::DeregisterServices()
+{
+    if( pOfficeAcceptThread )
+    {
+        pOfficeAcceptThread->stopAccepting();
+#ifndef LINUX
+        Desktop::pOfficeAcceptThread->join();
+        delete pOfficeAcceptThread;
+#endif
+        pOfficeAcceptThread = 0;
+    }
+}
+
+void Desktop::CreateTemporaryDirectory()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::createTemporaryDirectory" );
 
@@ -353,7 +414,7 @@ void createTemporaryDirectory()
     aCurrentTempURL = aRet;
 }
 
-void removeTemporaryDirectory()
+void Desktop::RemoveTemporaryDirectory()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::removeTemporaryDirectory" );
 
@@ -364,3 +425,5 @@ void removeTemporaryDirectory()
             SvtInternalOptions().SetCurrentTempURL( String() );
     }
 }
+
+} // namespace desktop

@@ -49,6 +49,7 @@ namespace configuration = ::com::sun::star::configuration;
 namespace backend       = drafts::com::sun::star::configuration::backend;
 using rtl::OUString;
 using uno::UNO_QUERY;
+using desktop::Desktop;
 
 // ----------------------------------------------------------------------------
 static char const CONFIGURATION_PROVIDER[]  = "com.sun.star.configuration.ConfigurationProvider";
