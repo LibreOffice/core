@@ -91,6 +91,7 @@ hedabu: ..\inc\inethist.hxx %_DEST%\inc%_EXT%\svtools\inethist.hxx
 hedabu: ..\inc\inetmsg.hxx %_DEST%\inc%_EXT%\svtools\inetmsg.hxx
 hedabu: ..\inc\inetstrm.hxx %_DEST%\inc%_EXT%\svtools\inetstrm.hxx
 hedabu: ..\inc\intitem.hxx %_DEST%\inc%_EXT%\svtools\intitem.hxx
+hedabu: ..\inc\imageitm.hxx %_DEST%\inc%_EXT%\svtools\imageitm.hxx
 hedabu: ..\inc\isethint.hxx %_DEST%\inc%_EXT%\svtools\isethint.hxx
 hedabu: ..\inc\itemiter.hxx %_DEST%\inc%_EXT%\svtools\itemiter.hxx
 hedabu: ..\inc\itempool.hxx %_DEST%\inc%_EXT%\svtools\itempool.hxx
