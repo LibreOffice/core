@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OComboBoxControl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:40:29 $
+ *  last change:$Date: 2003-09-08 11:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,11 +58,19 @@
  *
  *
  ************************************************************************/
-
 package mod._forms;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.FormTools;
+import util.SOfficeFactory;
+import util.WriterTools;
+
 import com.sun.star.awt.XControl;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDevice;
 import com.sun.star.awt.XGraphics;
@@ -72,18 +80,13 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.drawing.XShape;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
 import com.sun.star.view.XControlAccess;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.FormTools;
-import util.SOfficeFactory;
-import util.WriterTools;
+
 
 /**
  * Test for object which is represented by default controller
@@ -131,31 +134,39 @@ import util.WriterTools;
  * @see ifc.lang._XEventListener
  */
 public class OComboBoxControl extends TestCase {
-
     XTextDocument xTextDoc;
 
     /**
      * Creates a new text document.
      */
-    protected void initialize ( TestParameters Param, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
+    protected void initialize(TestParameters Param, PrintWriter log) {
+        SOfficeFactory SOF = SOfficeFactory.getFactory(((XMultiServiceFactory) Param.getMSF()));
 
         try {
-            log.println( "creating a textdocument" );
-            xTextDoc = SOF.createTextDoc( null );
-        } catch ( com.sun.star.uno.Exception e ) {
+            log.println("creating a textdocument");
+            xTextDoc = SOF.createTextDoc(null);
+        } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
         }
     }
 
     /**
      * Disposes the text document created before
      */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xTextDoc " );
-        xTextDoc.dispose();
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xTextDoc ");
+
+        try {
+            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                        XCloseable.class, xTextDoc);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("couldn't close document");
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("couldn't close document");
+        }
     }
 
     /**
@@ -187,25 +198,27 @@ public class OComboBoxControl extends TestCase {
      *      component. </li>
      * </ul>
      */
-    public TestEnvironment createTestEnvironment( TestParameters Param,
-                                                  PrintWriter log )
-                                                    throws StatusException {
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
+                                                    PrintWriter log) {
         XInterface oObj = null;
         XWindowPeer the_win = null;
         XToolkit the_kit = null;
         XDevice aDevice = null;
         XGraphics aGraphic = null;
         XControl aControl = null;
+
         //Insert a ControlShape and get the ControlModel
-        XControlShape aShape = FormTools.createControlShape(
-                                xTextDoc,3000,4500,15000,10000,"ComboBox");
+        XControlShape aShape = FormTools.createControlShape(xTextDoc, 3000,
+                                                            4500, 15000, 10000,
+                                                            "ComboBox");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
 
         XControlModel the_Model = aShape.getControl();
 
-        XControlShape aShape2 = FormTools.createControlShape(
-                                xTextDoc,3000,4500,5000,10000,"TextField");
+        XControlShape aShape2 = FormTools.createControlShape(xTextDoc, 3000,
+                                                             4500, 5000, 10000,
+                                                             "TextField");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape2);
 
@@ -213,7 +226,8 @@ public class OComboBoxControl extends TestCase {
 
         //Try to query XControlAccess
         XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
-                        XControlAccess.class,xTextDoc.getCurrentController());
+                                            XControlAccess.class,
+                                            xTextDoc.getCurrentController());
 
         //now get the OButtonControl
         try {
@@ -221,44 +235,44 @@ public class OComboBoxControl extends TestCase {
             aControl = the_access.getControl(the_Model2);
             the_win = the_access.getControl(the_Model).getPeer();
             the_kit = the_win.getToolkit();
-            aDevice = the_kit.createScreenCompatibleDevice(200,200);
+            aDevice = the_kit.createScreenCompatibleDevice(200, 200);
             aGraphic = aDevice.createGraphics();
         } catch (com.sun.star.container.NoSuchElementException e) {
             log.println("Couldn't get OCheckBoxControl");
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get OComboBoxControl", e );
+            throw new StatusException("Couldn't get OComboBoxControl", e);
         }
 
-        log.println( "creating a new environment for OComboBoxControl object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        log.println("creating a new environment for OComboBoxControl object");
+
+        TestEnvironment tEnv = new TestEnvironment(oObj);
+
 
         //Adding ObjRelation for XView
-        tEnv.addObjRelation("GRAPHICS",aGraphic);
+        tEnv.addObjRelation("GRAPHICS", aGraphic);
+
 
         //Adding ObjRelation for XControl
-        tEnv.addObjRelation("CONTEXT",xTextDoc);
-        tEnv.addObjRelation("WINPEER",the_win);
-        tEnv.addObjRelation("TOOLKIT",the_kit);
-        tEnv.addObjRelation("MODEL",the_Model);
+        tEnv.addObjRelation("CONTEXT", xTextDoc);
+        tEnv.addObjRelation("WINPEER", the_win);
+        tEnv.addObjRelation("TOOLKIT", the_kit);
+        tEnv.addObjRelation("MODEL", the_Model);
 
         // Adding relation for XWindow
-        XWindow forObjRel = (XWindow)
-                            UnoRuntime.queryInterface(XWindow.class,aControl);
+        XWindow forObjRel = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+                                                                aControl);
 
-        tEnv.addObjRelation("XWindow.AnotherWindow",forObjRel);
-        tEnv.addObjRelation("XWindow.ControlShape",aShape);
+        tEnv.addObjRelation("XWindow.AnotherWindow", forObjRel);
+        tEnv.addObjRelation("XWindow.ControlShape", aShape);
 
         // Adding relation for XTextListener
         ifc.awt._XTextListener.TestTextListener listener =
-            new ifc.awt._XTextListener.TestTextListener() ;
-        XTextComponent textComp = (XTextComponent)
-            UnoRuntime.queryInterface(XTextComponent.class, oObj);
+                new ifc.awt._XTextListener.TestTextListener();
+        XTextComponent textComp = (XTextComponent) UnoRuntime.queryInterface(
+                                          XTextComponent.class, oObj);
         textComp.addTextListener(listener);
         tEnv.addObjRelation("TestTextListener", listener);
 
         return tEnv;
     } // finish method getTestEnvironment
-
-}    // finish class OButtonControl
-
-
+} // finish class OButtonControl
