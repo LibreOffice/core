@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:43:38 $
+ *  last change: $Author: obo $ $Date: 2000-12-04 11:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ QueryBox DLG_SPECIAL
     MESSAGE[ chinese_simplified ] = "ƒъ“™Љм≤йћЎ в«ш”т¬р£њ";
     MESSAGE[ russian ] = "ѕроверить специальные области?";
     MESSAGE[ polish ] = "Sprawdzaж obszary specjalne?";
-    MESSAGE[ japanese ] = "УЅХ ТnИжВрЅ™ѓЄВµВ№ВЈВ©?";
+    MESSAGE[ japanese ] = "УЅХ ФЌИЌВрЅ™ѓЄВµВ№ВЈВ©БB";
     MESSAGE[ chinese_traditional ] = "±z≠nјЋђdѓSЃн∞ѕ∞м°S";
     MESSAGE[ arabic ] = "еб  —нѕ «б ѕёнё Ён «бгд«Ўё «бќ«’…њ";
     MESSAGE[ greek ] = "Ќб гяней Ёлегчпт фщн ейдйкюн ресйпчюн;";
@@ -243,7 +243,7 @@ QueryBox DLG_SPECIAL_FORCED
     MESSAGE[ chinese_simplified ] = "ћЎ в«ш”тµƒЉм≤й“—Њ≠±ї Іїо£ђƒъїє «“™÷і––’вѕоЉм≤й£њ";
     MESSAGE[ russian ] = "ѕроверка специальных областей отключена, ¬се равно проверить?";
     MESSAGE[ polish ] = "Sprawdzanie obszarуw specjalnych jest wy≥єczone, mimo to sprawdzaж?";
-    MESSAGE[ japanese ] = "УЅХ ТnИжВЌЅ™ѓЄПoЧИВ№ВєВсВ≈ВµВљБBВїВкВ≈ВаЅ™ѓЄВµВ№ВЈВ©БHS";
+    MESSAGE[ japanese ] = "УЅХ ФЌИЌВЌµћВ…В»ВЅВƒВҐВ№ВЈБBВїВкВ≈ВаЅ™ѓЄВµВ№ВЈВ©БB";
     MESSAGE[ chinese_traditional ] = "ѓSЃн∞ѕ∞м™ЇјЋђd§wЄg≥Q•Ґђ°°M±zЅўђO≠n∞х¶ж≥o≠”©R•O°S";
     MESSAGE[ arabic ] = " ѕёнё «бгд«Ўё «бќ«’… џн— д‘Ў. еб  —нѕ «б ѕёнё »«б—џг гд –бяњ";
     MESSAGE[ greek ] = "« ерйлпгё \"Єлегчпт ейдйкюн ресйпчюн\" еянбй бренесгпрпйзмЁнз.»Ёлефе нб елегчипэн кбй бхфЁт;";
@@ -270,7 +270,7 @@ QueryBox MSG_SEARCH_END
     Message [ english_us ] = "%PRODUCTNAME Writer has searched to the end of the document. Do you want to continue at the beginning?" ;
     Message[ chinese_simplified ] = "%PRODUCTNAME Writer “—Њ≠Ћ——∞÷Ѕќƒµµµƒќ≤ґЋ°£“™Љћ–ші”ќƒµµ „ґЋњ™ ЉЋ——∞£њ";
     Message[ russian ] = "%PRODUCTNAME Writer осуществил поиск до конца документа. ¬ы хотите продолжить поиск с начала документа?";
-    Message[ polish ] = "%PRODUCTNAME Writer szuka≥ do koсca dokumentu. Czy chcesz kontynuowaж wyszukiwanie na poczєtku dokumentu?";
+    Message[ polish ] = "%PRODUCTNAME Writer szuka≥ do koсca dokumentu. Czy kontynuowaж wyszukiwanie od poczєtku dokumentu?";
     Message[ japanese ] = "%PRODUCTNAME Writer ВЌХґПСЦЦВ№В≈МЯНхВµВ№ВµВљБBХґПСВћОnВяВ…ЦяВЅВƒС±НsВµВ№ВЈВ©БH";
     Message[ chinese_traditional ] = "%PRODUCTNAME Writer §wЄgЈjіM¶№§е•у™ЇІјЇЁ°C≠nƒ~ƒтЈjіM¶№§е•у≠ЇЇЁ°H";
     Message[ arabic ] = "ё«г %PRODUCTNAME Writer »«б»ЌЋ Ќ м де«н… «бг” дѕ. еб  —нѕ г «»Џ… «б»ЌЋ Џдѕ »ѕ«н… «бг” дѕњ";
@@ -298,7 +298,7 @@ QueryBox MSG_SEARCH_START
     Message [ english_us ] = "%PRODUCTNAME Writer has searched to the beginning of the document. Do you want to continue at the end?" ;
     Message[ chinese_simplified ] = "%PRODUCTNAME Writer “—Њ≠Ћ——∞÷Ѕќƒµµµƒ „ґЋ°£“™Љћ–ші”ќƒЉюќ≤ґЋњ™ ЉЋ——∞£њ";
     Message[ russian ] = "%PRODUCTNAME Writer осуществил поиск до начала документа. ¬ы хотите продолжить поиск в конце документа?";
-    Message[ polish ] = "%PRODUCTNAME Writer szuka≥ do poczєtku dokumentu. Czy chcesz kontynuowaж wyszukiwanie na koсcu dokumentu?";
+    Message[ polish ] = "%PRODUCTNAME Writer szuka≥ do poczєtku dokumentu. Czy kontynuowaж wyszukiwanie od koсca dokumentu?";
     Message[ japanese ] = "%PRODUCTNAME Writer ВЌХґПСВћОnВяВ№В≈МЯНхВµВ№ВµВљБBХґПСЦЦВ…ЦяВЅВƒМЯНхВрС±ВѓВ№ВЈВ©БH";
     Message[ chinese_traditional ] = "%PRODUCTNAME Writer §wЄgЈjіM¶№§е•у™Ї≠ЇЇЁ°C≠nƒ~ƒтЈjіM§е•у¶№ІјЇЁ°S";
     Message[ arabic ] = "ё«г %PRODUCTNAME Writer »«б»ЌЋ Ќ м »ѕ«н… «бг” дѕ. еб  —нѕ г «»Џ… «б»ЌЋ Џдѕ де«н… «бг” дѕњ";
