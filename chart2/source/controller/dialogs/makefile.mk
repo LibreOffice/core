@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-18 18:34:51 $
+#   last change: $Author: kz $ $Date: 2005-01-13 19:44:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,5 +129,9 @@ SRC1FILES=		\
 SRS1NAME=$(TARGET)
 
 # --- Targets -----------------------------------------------------------------
-
+LOCALIZE_ME=res_DataLabel_tmpl.hrc res_LegendPosition_tmpl.hrc res_Statistic_tmpl.hrc 
 .INCLUDE: target.mk
+$(SRS)$/chcdialogs.srs: $(INCCOM)$/res_DataLabel.hrc
+$(SRS)$/chcdialogs.srs: $(INCCOM)$/res_LegendPosition.hrc
+$(SRS)$/chcdialogs.srs: $(INCCOM)$/res_Statistic.hrc
+
