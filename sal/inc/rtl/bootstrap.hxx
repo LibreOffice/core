@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2002-04-26 16:25:37 $
+ *  last change: $Author: dbo $ $Date: 2002-09-18 08:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,12 @@ namespace rtl
     class Bootstrap
     {
         void * _handle;
+
+        /** @internal */
+        inline Bootstrap( Bootstrap const & ); // not impl
+        /** @internal */
+        inline Bootstrap & operator = ( Bootstrap const & ); // not impl
+
     public:
         /**
            @see rtl_bootstrap_setIniFileName()

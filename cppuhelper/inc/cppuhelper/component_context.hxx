@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
+ *  last change: $Author: dbo $ $Date: 2002-09-18 08:34:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,30 @@ struct ContextEntry_Init
     /** context value
     */
     ::com::sun::star::uno::Any value;
+
+    /** Default ctor.
+    */
+    inline ContextEntry_Init() SAL_THROW( () )
+        : bLateInitService( false )
+        {}
+    /** Ctor.
+
+        @param name_
+               name of entry
+        @param value_
+               value of entry
+        @param bLateInitService_
+               whether this entry is a late-init named object entry
+               (value is object factory or service string)
+    */
+    inline ContextEntry_Init(
+        ::rtl::OUString const & name_,
+        ::com::sun::star::uno::Any const & value_,
+        bool bLateInitService_ = false ) SAL_THROW( () )
+            : bLateInitService( bLateInitService_ ),
+              name( name_ ),
+              value( value_ )
+        {}
 };
 
 /** Creates a component context with the given entries.
