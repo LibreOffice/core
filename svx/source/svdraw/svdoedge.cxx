@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-09 16:49:34 $
+ *  last change: $Author: aw $ $Date: 2001-03-09 17:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,6 @@ SdrEdgeObj::SdrEdgeObj():
     bClosedObj=FALSE;
     bIsEdge=TRUE;
     bEdgeTrackDirty=FALSE;
-    bTmpDirtyOnAfterRead=FALSE;
     nNotifyingCount=0;
     pEdgeTrack=new XPolygon;
 }
@@ -2521,13 +2520,10 @@ void SdrEdgeObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
         }
     }
 
-    if (aCompat.GetBytesLeft()>0) { // ab 14-01-1997 (noch Vers 12) EdgeInfoRec
-        rIn>>aEdgeInfo;
-    } else {
-        bTmpDirtyOnAfterRead=TRUE;
-    }
-    if (rHead.GetVersion()>nAktSdrFileVersion) {
-        bTmpDirtyOnAfterRead=TRUE;
+    if(aCompat.GetBytesLeft() > 0)
+    {
+        // ab 14-01-1997 (noch Vers 12) EdgeInfoRec
+        rIn >> aEdgeInfo;
     }
 }
 
@@ -2538,11 +2534,9 @@ void SdrEdgeObj::AfterRead()
     aCon2.AfterRead(this);
     if (aCon1.pObj!=NULL) aCon1.pObj->AddListener(*this);
     if (aCon2.pObj!=NULL) aCon2.pObj->AddListener(*this);
-    if (bTmpDirtyOnAfterRead) {
-        // fuer Import von Objekten ohne EdgeInfoRec
-        bTmpDirtyOnAfterRead=FALSE;
-        bEdgeTrackDirty=TRUE;
-    }
+
+    // #84026# always recalculate edgetrack after load
+    bEdgeTrackDirty=TRUE;
 }
 
 Point SdrEdgeObj::GetTailPoint( BOOL bTail ) const
