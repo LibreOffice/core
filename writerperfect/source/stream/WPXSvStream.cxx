@@ -29,10 +29,12 @@ WPXSvInputStream::~WPXSvInputStream()
 {
 }
 
-const uint8_t * WPXSvInputStream::read(size_t numBytes)
+const uint8_t * WPXSvInputStream::read(size_t numBytes, size_t &numBytesRead)
 {
     // FIXME: assume no short reads (?)
+    sal_Int64 oldMnOffset = mnOffset;
     mnOffset += mxStream->readBytes (maData, numBytes);
+    numBytesRead = mnOffset - oldMnOffset;
     return (const uint8_t *)maData.getConstArray();
 }
 
@@ -92,7 +94,7 @@ WPXInputStream * WPXSvInputStream::getDocumentOLEStream()
             rtl::OUString::createFromAscii( "PerfectOffice_MAIN" ),
             STREAM_STD_READ );
 
-    Reference < XInputStream > xContents = new utl::OInputStreamWrapper( mxChildStream );
+    Reference < XInputStream > xContents = new utl::OSeekableInputStreamWrapper( mxChildStream );
     if (xContents.is())
         return new WPXSvInputStream( xContents );
     else
