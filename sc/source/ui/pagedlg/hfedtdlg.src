@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-31 12:47:06 $
+ *  last change: $Author: kz $ $Date: 2002-08-01 20:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1281,7 +1281,7 @@ TabPage RID_HFBASE
         Text [ portuguese_brazilian ] = "Dica" ;
         Text [ portuguese ] = "Observação" ;
         Text [ finnish ] = "Huomautus:" ;
-        Text [ danish ] = "Tip" ;
+        Text [ danish ] = "Bemærk!" ;
         Text [ french ] = "Remarque" ;
         Text [ swedish ] = "Tips" ;
         Text [ dutch ] = "Tip" ;
