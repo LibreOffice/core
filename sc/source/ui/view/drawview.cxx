@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:27:49 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,6 +662,15 @@ void __EXPORT ScDrawView::MarkListHasChanged()
 
 void __EXPORT ScDrawView::ModelHasChanged()
 {
+    SdrObject* pEditObj = GetTextEditObject();
+    if ( pEditObj && !pEditObj->IsInserted() && pViewData )
+    {
+        //  #111700# SdrObjEditView::ModelHasChanged will end text edit in this case,
+        //  so make sure the EditEngine's undo manager is no longer used.
+        pViewData->GetViewShell()->SetDrawTextUndo(NULL);
+        SetCreateMode();    // don't leave FuText in a funny state
+    }
+
     FmFormView::ModelHasChanged();
 }
 
