@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2001-08-24 05:55:07 $
+ *  last change: $Author: pb $ $Date: 2002-07-30 08:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,14 +83,15 @@ String STR_SVT_FILEVIEW_COLUMN_TITLE
     Text[ swedish ] = "Namn";
     Text[ polish ] = "Tytu�";
     Text[ portuguese_brazilian ] = "Title";
-    Text[ japanese ] = "ﾀｲﾄﾙ";
+    Text[ japanese ] = "タイトル";
     Text[ korean ] = "제목";
     Text[ chinese_simplified ] = "标题";
     Text[ chinese_traditional ] = "標題";
     Text[ turkish ] = "Title";
     Text[ arabic ] = "�������";
-    Text[ finnish ] = "Otsikot";
+    Text[ finnish ] = "Otsikko";
     Text[ catalan ] = "Title";
+    Text[ thai ] = "ชื่อเรื่อง";
 };
 
 String STR_SVT_FILEVIEW_COLUMN_SIZE
@@ -109,7 +110,7 @@ String STR_SVT_FILEVIEW_COLUMN_SIZE
     Text[ swedish ] = "Storlek";
     Text[ polish ] = "Wielko��";
     Text[ portuguese_brazilian ] = "Size";
-    Text[ japanese ] = "ｻｲｽﾞ";
+    Text[ japanese ] = "サイズ";
     Text[ korean ] = "크기";
     Text[ chinese_simplified ] = "大小";
     Text[ chinese_traditional ] = "大小";
@@ -117,6 +118,7 @@ String STR_SVT_FILEVIEW_COLUMN_SIZE
     Text[ arabic ] = "�����";
     Text[ finnish ] = "Koko";
     Text[ catalan ] = "Size";
+    Text[ thai ] = "ขนาด";
 };
 
 String STR_SVT_FILEVIEW_COLUMN_DATE
@@ -143,6 +145,7 @@ String STR_SVT_FILEVIEW_COLUMN_DATE
     Text[ arabic ] = "����� �������";
     Text[ finnish ] = "Muokkausp�iv�m��r�";
     Text[ catalan ] = "Modified Date";
+    Text[ thai ] = "ดัดแปลงแก้ไขข้อมูล";
 };
 
 String STR_SVT_FILEVIEW_COLUMN_TYPE
@@ -163,12 +166,13 @@ String STR_SVT_FILEVIEW_COLUMN_TYPE
     Text[ polish ] = "Typ";
     Text[ portuguese_brazilian ] = "Type";
     Text[ japanese ] = "種類";
-    Text[ korean ] = "타입";
+    Text[ korean ] = "유형";
     Text[ chinese_simplified ] = "类型";
     Text[ chinese_traditional ] = "類型";
     Text[ turkish ] = "Type";
     Text[ arabic ] = "Type";
     Text[ catalan ] = "Type";
+    Text[ thai ] = "ชนิด";
 };
 
 String STR_SVT_FILEVIEW_ERR_MAKEFOLDER
@@ -181,19 +185,20 @@ String STR_SVT_FILEVIEW_ERR_MAKEFOLDER
     Text[ dutch ] = "Map %1 kon niet worden aangelegd.";
     Text[ french ] = "Impossible de cr�er le dossier %1 !";
     Text[ spanish ] = "No se pudo crear la carpeta %1.";
-    Text[ finnish ] = "Der Ordner %1 konnte nicht angelegt werden.";
+    Text[ finnish ] = "Kansion %1 luominen ei onnistunut.";
     Text[ italian ] = "Impossibile creare la cartella %1.";
     Text[ danish ] = "Could not create the folder %1.";
     Text[ swedish ] = "Det gick inte att skapa mappen %1.";
     Text[ polish ] = "Utworzenie folderu %1 nie powiod�o si�.";
     Text[ portuguese_brazilian ] = "Could not create the folder %1.";
-    Text[ japanese ] = "ﾌｫﾙﾀﾞ %1 は格納されませんでした。";
+    Text[ japanese ] = "フォルダ %1 は格納されませんでした。";
     Text[ korean ] = "폴더 %1을(를) 만들 수 없습니다";
     Text[ chinese_simplified ] = "无法创建文件夹 %1 。";
     Text[ chinese_traditional ] = "無法新增資料夾 %1 。";
     Text[ turkish ] = "Could not create the folder %1.";
     Text[ arabic ] = "Could not create the folder %1.";
     Text[ catalan ] = "Could not create the folder %1.";
+    Text[ thai ] = "ไม่สามารถสร้างโฟลเดอร์ %1 ได้";
 };
 
 String STR_SVT_BYTES
@@ -212,7 +217,7 @@ String STR_SVT_BYTES
     Text[ chinese_simplified ] = "字节";
     Text[ russian ] = "����";
     Text[ polish ] = "bajty/-�w";
-    Text[ japanese ] = "ﾊﾞｲﾄ";
+    Text[ japanese ] = "バイト";
     Text[ chinese_traditional ] = "bytes";
     Text[ arabic ] = "����";
     Text[ greek ] = "Bytes";
@@ -220,6 +225,7 @@ String STR_SVT_BYTES
     Text[ turkish ] = "Byte";
     Text[ finnish ] = "Tavuja";
     Text[ catalan ] = "Bytes";
+    Text[ thai ] = "ไบต์";
 };
 
 String STR_SVT_KB
@@ -238,14 +244,15 @@ String STR_SVT_KB
     Text[ chinese_simplified ] = "千字节";
     Text[ russian ] = "��";
     Text[ polish ] = "KB";
-    Text[ japanese ] = "ｷﾛﾊﾞｲﾄ";
+    Text[ japanese ] = "キロバイト";
     Text[ chinese_traditional ] = "KB";
     Text[ arabic ] = "��������";
     Text[ greek ] = "KB";
     Text[ korean ] = "KB";
     Text[ turkish ] = "KB";
-    Text[ finnish ] = "kt";
+    Text[ finnish ] = "Kt";
     Text[ catalan ] = "KB";
+    Text[ thai ] = "KB";
 };
 
 String STR_SVT_MB
@@ -272,6 +279,7 @@ String STR_SVT_MB
     Text[ turkish ] = "MB";
     Text[ finnish ] = "Mt";
     Text[ catalan ] = "MB";
+    Text[ thai ] = "MB";
 };
 
 
@@ -299,6 +307,7 @@ String STR_SVT_GB
     Text[ turkish ] = "GB";
     Text[ finnish ] = "Gt";
     Text[ catalan ] = "GB";
+    Text[ thai ] = "GB";
 };
 
 // Images ---------------------------------------------------------------------
@@ -334,13 +343,14 @@ Menu RID_FILEVIEW_CONTEXTMENU
             Text[ swedish ] = "~Radera";
             Text[ polish ] = "~Usu�";
             Text[ portuguese_brazilian ] = "Delete";
-            Text[ japanese ] = "削除";
-            Text[ korean ] = "삭제";
-            Text[ chinese_simplified ] = "删除";
-            Text[ chinese_traditional ] = "刪除";
+            Text[ japanese ] = "削除(~D)";
+            Text[ korean ] = "삭제(~D)";
+            Text[ chinese_simplified ] = "删除(~D)";
+            Text[ chinese_traditional ] = "刪除(~D)";
             Text[ turkish ] = "Delete";
             Text[ arabic ] = "Delete";
             Text[ catalan ] = "Delete";
+            Text[ thai ] = "~ลบ";
         };
         MenuItem
         {
@@ -361,13 +371,14 @@ Menu RID_FILEVIEW_CONTEXTMENU
             Text[ swedish ] = "~Byt namn";
             Text[ polish ] = "~Zmie� nazw�";
             Text[ portuguese_brazilian ] = "Rename";
-            Text[ japanese ] = "名前の変更";
-            Text[ korean ] = "이름 바꾸기";
-            Text[ chinese_simplified ] = "重命名";
-            Text[ chinese_traditional ] = "重新命名";
+            Text[ japanese ] = "名前の変更(~R)";
+            Text[ korean ] = "이름 바꾸기(~R)";
+            Text[ chinese_simplified ] = "重命名(~R)";
+            Text[ chinese_traditional ] = "重新命名(~R)";
             Text[ turkish ] = "Rename";
             Text[ arabic ] = "Rename";
             Text[ catalan ] = "Rename";
+            Text[ thai ] = "เ~ปลี่ยนชื่อ";
         };
     };
 };
@@ -402,6 +413,7 @@ ModalDialog DLG_SVT_QUERYDELETE
     Text[ turkish ] = "Silmeyi onayla";
     Text[ finnish ] = "Vahvista poisto";
     Text[ catalan ] = "Confirmar eliminaci�n";
+    Text[ thai ] = "ยืนยันการลบ";
 
     FixedText TXT_ENTRY
     {
@@ -431,6 +443,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ turkish ] = "Giri�:";
         Text[ finnish ] = "Merkint�:";
         Text[ catalan ] = "Entrada:";
+        Text[ thai ] = "รายการ:";
     };
 
     FixedText TXT_ENTRYNAME
@@ -459,16 +472,17 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text [ chinese_simplified ] = "真要删除选中的数据？";
         Text [ russian ] = "�� ������� � ���, ��� ������ ������� ���������� ������?";
         Text [ polish ] = "Czy na pewno usun�� zaznaczone dane?";
-        Text [ japanese ] = "選択したﾃﾞｰﾀを本当に削除しますか。";
+        Text [ japanese ] = "選択したデータを本当に削除しますか。";
         Text [ chinese_traditional ] = "真要刪除選取的資料？";
         Text [ arabic ] = "�� ���� �������� ��� �������� ������ɿ";
         Text[ dutch ] = "Wilt u de geselecteerde gegevens werkelijk wissen?";
         Text[ chinese_simplified ] = "真要删除选中的数据？";
         Text[ greek ] = "������ ���������� �� ���������� �� ���������� ��������;";
-        Text[ korean ] = "선택한 데이터를 정말로 삭제하시겠습니까?";
+        Text[ korean ] = "선택한 데이터를 정말로 삭제하겠습니까?";
         Text[ turkish ] = "Se�ilen verileri ger�ekten silmek istiyor musunuz?";
         Text[ finnish ] = "Haluatko varmasti poistaa valitut tiedot?";
         Text[ catalan ] = "�Desea realmente eliminar los datos seleccionados?";
+        Text[ thai ] = "คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลที่เลือก?";
     };
 
     PushButton BTN_YES
@@ -483,7 +497,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ portuguese ] = "E~liminar";
         Text[ greek ] = "��������";
         Text[ dutch ] = "~Wissen";
-        Text[ french ] = "~Supprimer";
+        Text[ french ] = "Supprimer";
         Text[ spanish ] = "~Eliminar";
         Text[ swedish ] = "~Radera";
         Text[ russian ] = "�������";
@@ -493,12 +507,13 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ portuguese_brazilian ] = "~Ja";
         Text[ japanese ] = "削除(~D)";
         Text[ korean ] = "삭제(~D)";
-        Text[ chinese_simplified ] = "删除";
-        Text[ chinese_traditional ] = "刪除";
+        Text[ chinese_simplified ] = "删除(~D)";
+        Text[ chinese_traditional ] = "刪除(~D)";
         Text[ arabic ] = "���";
         Text[ turkish ] = "~Sil";
         Text[ finnish ] = "~Poista";
         Text[ catalan ] = "~Eliminar";
+        Text[ thai ] = "~ลบ";
     };
 
     PushButton BTN_ALL
@@ -523,12 +538,13 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ portuguese_brazilian ] = "~Alle";
         Text[ japanese ] = "すべて削除(~A)";
         Text[ korean ] = "모두 삭제(~A)";
-        Text[ chinese_simplified ] = "删除全部";
-        Text[ chinese_traditional ] = "全部刪除";
+        Text[ chinese_simplified ] = "删除全部(~A)";
+        Text[ chinese_traditional ] = "全部刪除(~A)";
         Text[ arabic ] = "��� ����";
         Text[ turkish ] = "~T�m�n� sil";
         Text[ finnish ] = "~Poista kaikki";
         Text[ catalan ] = "~Eliminar todos";
+        Text[ thai ] = "ลบ~ทั้งหมด";
     };
 
     PushButton BTN_NO
@@ -551,13 +567,14 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ polish ] = "Nie usuwaj";
         Text[ portuguese_brazilian ] = "~Nein";
         Text[ japanese ] = "削除しない(~N)";
-        Text[ korean ] = "삭제 안함(~N)";
-        Text[ chinese_simplified ] = "不删除";
-        Text[ chinese_traditional ] = "不要刪除";
+        Text[ korean ] = "삭제 취소(~N)";
+        Text[ chinese_simplified ] = "不删除(~N)";
+        Text[ chinese_traditional ] = "不要刪除(~N)";
         Text[ arabic ] = "��� �����";
         Text[ turkish ] = "S~ilme";
         Text[ finnish ] = "~�l� poista";
         Text[ catalan ] = "~No eliminar";
+        Text[ thai ] = "~ห้ามลบ";
     };
 
     CancelButton BTN_CANCEL
@@ -567,13 +584,4 @@ ModalDialog DLG_SVT_QUERYDELETE
         TabStop = TRUE ;
     };
 };
-
-
-
-
-
-
-
-
-
 
