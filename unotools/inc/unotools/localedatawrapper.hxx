@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: er $ $Date: 2002-07-26 20:21:36 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,9 +95,6 @@ class CalendarWrapper;
 
 class LocaleDataWrapper
 {
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > xInstalledLocales;
-    static ::com::sun::star::uno::Sequence< sal_uInt16 > xInstalledLanguageTypes;
-
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData > xLD;
     ::com::sun::star::lang::Locale          aLocale;
