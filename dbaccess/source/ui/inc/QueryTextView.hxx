@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 13:19:01 $
+ *  last change: $Author: oj $ $Date: 2001-05-03 11:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef DBAUI_QUERYVIEWSWITCH_HXX
 #include "QueryViewSwitch.hxx"
 #endif
+#ifndef _SV_DOCKWIN_HXX
+#include <vcl/dockwin.hxx>
+#endif
 
 
 class Splitter;
@@ -77,10 +80,10 @@ class Splitter;
 namespace dbaui
 {
     // tempoaray class until the beamer is implemented
-    class OBeamer : public Window
+    class OBeamer : public DockingWindow
     {
     public:
-        OBeamer(Window* _pParent) : Window(_pParent){}
+        OBeamer(Window* _pParent) : DockingWindow(_pParent,0){}
     };
 
     class OQueryViewSwitch;
