@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-12 06:27:36 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,10 +250,10 @@ String RID_GALLERYSTR_THEME_EMOTICONS
     Text[ italian ] = "Emoticons";
     Text[ danish ] = "Former";
     Text[ swedish ] = "Emoticons";
-    Text[ polish ] = "BuŸki";
+    Text[ polish ] = "Bu?ki";
     Text[ portuguese_brazilian ] = "Forms";
     Text[ japanese ] = "´Ó°Ã¨ºÝ";
-    Text[ chinese_simplified ] = "Çé¾wÍ¼°¸";
+    Text[ chinese_simplified ] = "Çé?Í¼°¸";
     Text[ chinese_traditional ] = "±¡ºü¹Ï®×";
     Text[ arabic ] = "ÃÔßÇá";
     Text[ greek ] = "Emoticons";
@@ -527,7 +527,7 @@ String RID_GALLERYSTR_THEME_SOUNDS
     Text[ italian ] = "Suoni";
     Text[ danish ] = "Lyde";
     Text[ swedish ] = "Ljud";
-    Text[ polish ] = "DŸwiêki";
+    Text[ polish ] = "D?wiêki";
     Text[ portuguese_brazilian ] = "Sounds";
     Text[ japanese ] = "»³ÝÄÞ";
     Text[ chinese_simplified ] = "ÉùÒôÍ¼±ê";
@@ -893,21 +893,21 @@ String RID_GALLERYSTR_THEME_CLIMA
     Text = "Klima";
     Text[ENGLISH] = "Climate";
     Text[english_us] = "Climate";
-    Text[ portuguese ] = "Climate";
-    Text[ russian ] = "Climate";
+    Text[ portuguese ] = "Clima";
+    Text[ russian ] = "Êëèìàò";
     Text[ greek ] = "Climate";
     Text[ dutch ] = "Climate";
-    Text[ french ] = "Climate";
-    Text[ spanish ] = "Climate";
+    Text[ french ] = "Climat";
+    Text[ spanish ] = "Clima";
     Text[ italian ] = "Climate";
     Text[ danish ] = "Climate";
-    Text[ swedish ] = "Climate";
-    Text[ polish ] = "Climate";
+    Text[ swedish ] = "Klimat";
+    Text[ polish ] = "Klimat";
     Text[ portuguese_brazilian ] = "Climate";
-    Text[ japanese ] = "Climate";
+    Text[ japanese ] = "‹CŒó";
     Text[ korean ] = "Climate";
-    Text[ chinese_simplified ] = "Climate";
-    Text[ chinese_traditional ] = "Climate";
+    Text[ chinese_simplified ] = "Æøºò";
+    Text[ chinese_traditional ] = "®ð­Ô";
     Text[ turkish ] = "Climate";
     Text[ arabic ] = "Climate";
     Text[ catalan ] = "Climate";
@@ -921,21 +921,21 @@ String RID_GALLERYSTR_THEME_EDUCATION
     Text = "Schule & Uni";
     Text[ENGLISH] = "School & University";
     Text[english_us] = "School & University";
-    Text[ portuguese ] = "School & University";
-    Text[ russian ] = "School & University";
+    Text[ portuguese ] = "Escola & Universidade";
+    Text[ russian ] = "Øêîëà è óíèâåðñèòåò";
     Text[ greek ] = "School & University";
     Text[ dutch ] = "School & University";
-    Text[ french ] = "School & University";
-    Text[ spanish ] = "School & University";
+    Text[ french ] = "École & université";
+    Text[ spanish ] = "Escuela y universidad";
     Text[ italian ] = "School & University";
     Text[ danish ] = "School & University";
-    Text[ swedish ] = "School & University";
-    Text[ polish ] = "School & University";
+    Text[ swedish ] = "Skola & universitet";
+    Text[ polish ] = "Szko³a i uniwersytet";
     Text[ portuguese_brazilian ] = "School & University";
-    Text[ japanese ] = "School & University";
+    Text[ japanese ] = "‹³ˆç‹@ŠÖ";
     Text[ korean ] = "School & University";
-    Text[ chinese_simplified ] = "School & University";
-    Text[ chinese_traditional ] = "School & University";
+    Text[ chinese_simplified ] = "ÖÐÑ§ºÍ´óÑ§";
+    Text[ chinese_traditional ] = "¤¤¾Ç©M¤j¾Ç";
     Text[ turkish ] = "School & University";
     Text[ arabic ] = "School & University";
     Text[ catalan ] = "School & University";
@@ -949,21 +949,21 @@ String RID_GALLERYSTR_THEME_TROUBLE
     Text = "Problemlösungen";
     Text[ENGLISH] = "Problem Solving";
     Text[english_us] = "Problem Solving";
-    Text[ portuguese ] = "Problem Solving";
-    Text[ russian ] = "Problem Solving";
+    Text[ portuguese ] = "Solução de problemas";
+    Text[ russian ] = "Ðåøåíèÿ ïðîáëåì";
     Text[ greek ] = "Problem Solving";
     Text[ dutch ] = "Problem Solving";
-    Text[ french ] = "Problem Solving";
-    Text[ spanish ] = "Problem Solving";
+    Text[ french ] = "Solutions";
+    Text[ spanish ] = "Soluciones de problemas";
     Text[ italian ] = "Problem Solving";
     Text[ danish ] = "Problem Solving";
-    Text[ swedish ] = "Problem Solving";
-    Text[ polish ] = "Problem Solving";
+    Text[ swedish ] = "Problemlösningar";
+    Text[ polish ] = "Rozwi¹zania problemu";
     Text[ portuguese_brazilian ] = "Problem Solving";
-    Text[ japanese ] = "Problem Solving";
+    Text[ japanese ] = "Ä×ÌÞÙ‰ðŒˆ";
     Text[ korean ] = "Problem Solving";
-    Text[ chinese_simplified ] = "Problem Solving";
-    Text[ chinese_traditional ] = "Problem Solving";
+    Text[ chinese_simplified ] = "½â¾öÎÊÌâµÄ·½°¸";
+    Text[ chinese_traditional ] = "¸Ñ¨M°ÝÃDªº¤è®×";
     Text[ turkish ] = "Problem Solving";
     Text[ arabic ] = "Problem Solving";
     Text[ catalan ] = "Problem Solving";
