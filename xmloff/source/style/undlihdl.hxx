@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undlihdl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:05 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:25:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,28 @@
 /**
     PropertyHandler for the XML-data-type:
 */
-class XMLUnderlinePropHdl : public XMLPropertyHandler
+class XMLUnderlineTypePropHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLUnderlinePropHdl();
+    virtual ~XMLUnderlineTypePropHdl();
+
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+class XMLUnderlineStylePropHdl : public XMLPropertyHandler
+{
+public:
+    virtual ~XMLUnderlineStylePropHdl();
+
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+class XMLUnderlineWidthPropHdl : public XMLPropertyHandler
+{
+public:
+    virtual ~XMLUnderlineWidthPropHdl();
 
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
