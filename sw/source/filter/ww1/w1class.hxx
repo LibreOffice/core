@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1class.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:02:16 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1114,7 +1114,6 @@ public:
         : Ww1Fkp(rStream, ulFilePos, 1)
     {}
     friend ostream& operator <<(ostream&, Ww1FkpPap&);
-    BOOL Fill(USHORT,  BYTE*&, USHORT&, ULONG&, ULONG&);
     BOOL Fill(USHORT,  BYTE*&, USHORT&);
 };
 
@@ -1134,7 +1133,6 @@ public:
     {}
 
     friend ostream& operator <<(ostream&, Ww1FkpChp&);
-    BOOL Fill(USHORT, W1_CHP&, ULONG&, ULONG&);
     BOOL Fill(USHORT, W1_CHP&);
 };
 
@@ -1546,7 +1544,6 @@ public:
         Where( FALSE );
     }
     BOOL HasId(USHORT nId);
-    BOOL NextHas(USHORT nId);
 };
 
 /////////////////////////////////////////////////////////////////// Chp
@@ -1657,7 +1654,6 @@ public:
     BOOL IsStopAll() const              { return bStopAll; }
     BOOL HasInTable();
     BOOL HasTtp();
-    BOOL NextHasTtp();
     BOOL LastHasTtp();
 
 // Fuer Flys
@@ -1677,7 +1673,6 @@ public:
         return pDoc->Out(rStr, ulLen);
     }
     SvxFontItem GetFont(USHORT nFCode);
-    static BOOL IsValidFib(const BYTE*, USHORT);
     friend Ww1Shell& operator <<(Ww1Shell&, Ww1Manager&);
     friend ostream& operator <<(ostream&, Ww1Manager&);
     BOOL Pushed()                       { return pDoc != &aDoc; }
@@ -1686,4 +1681,3 @@ public:
     void Push1(Ww1PlainText* pDoc, ULONG ulSeek, ULONG ulSeek2 = 0,
                Ww1Fields* = 0);
 };
-
