@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-07 11:38:34 $
+ *  last change: $Author: nf $ $Date: 2001-10-15 14:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,6 +571,8 @@ BOOL Export::ConvertLineEnds(
 
     aSource.Close();
     aDestination.Close();
+
+    return TRUE;
 }
 
 /*****************************************************************************/
