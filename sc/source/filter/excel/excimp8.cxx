@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:51:18 $
+ *  last change: $Author: obo $ $Date: 2004-08-16 08:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,12 +505,11 @@ void ImportExcel8::ReadBasic( void )
         {
             if( pFltOpts->IsLoadExcelBasicCode() || pFltOpts->IsLoadExcelBasicStorage() )
             {
-                DBG_ASSERT( pExcRoot->pRootStorage, "-ImportExcel8::PostDocLoad(): no storage, no cookies!" );
+                DBG_ASSERT( *GetRootStorage(), "-ImportExcel8::PostDocLoad(): no storage, no cookies!" );
 
-                SvxImportMSVBasic   aBasicImport( *pShell, *pExcRoot->pRootStorage, pFltOpts->IsLoadExcelBasicCode(), pFltOpts->IsLoadExcelBasicStorage() );
+                SvxImportMSVBasic   aBasicImport( *pShell, *GetRootStorage(), pFltOpts->IsLoadExcelBasicCode(), pFltOpts->IsLoadExcelBasicStorage() );
 
-                aBasicImport.Import( String::CreateFromAscii( pVBAStorageName ),
-                                     String::CreateFromAscii( pVBASubStorageName ) );
+                aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA );
             }
         }
     }
