@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-07 13:18:59 $
+ *  last change: $Author: jp $ $Date: 2001-11-13 18:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -186,6 +189,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::rtl;
+using namespace ::utl;
 
 const int C_NONE                = 0x00;
 const int C_FULL_STOP           = 0x01;
@@ -305,39 +309,10 @@ static USHORT GetAppLang()
 {
     return Application::GetSettings().GetLanguage();
 }
-static ::com::sun::star::lang::Locale& GetAppLocale()
-{
-    static ::com::sun::star::lang::Locale aAppLocale(
-                                            SvxCreateLocale( GetAppLang() ) );
-    return aAppLocale;
-}
-
-static CollatorWrapper& GetCollatorWrapper()
-{
-    static int bIsInit = 0;
-    static CollatorWrapper aCollWrp( GetProcessFact() );
-    if( !bIsInit )
-    {
-        aCollWrp.loadDefaultCollator( GetAppLocale(), 0 );
-        bIsInit = 1;
-    }
-    return aCollWrp;
-}
-static CollatorWrapper& GetIgnoreCollatorWrapper()
-{
-    static int bIsInit = 0;
-    static CollatorWrapper aCollWrp( GetProcessFact() );
-    if( !bIsInit )
-    {
-        aCollWrp.loadDefaultCollator( GetAppLocale(), ::com::sun::star::i18n::
-                            CollatorOptions::CollatorOptions_IGNORE_CASE );
-        bIsInit = 1;
-    }
-    return aCollWrp;
-}
 static LocaleDataWrapper& GetLocaleDataWrapper( USHORT nLang )
 {
-    static LocaleDataWrapper aLclDtWrp( GetProcessFact(), GetAppLocale() );
+    static LocaleDataWrapper aLclDtWrp( GetProcessFact(),
+                                        SvxCreateLocale( GetAppLang() ) );
     ::com::sun::star::lang::Locale aLcl( SvxCreateLocale( nLang ));
     const ::com::sun::star::lang::Locale& rLcl = aLclDtWrp.getLoadedLocale();
     if( aLcl.Language != rLcl.Language ||
@@ -345,6 +320,31 @@ static LocaleDataWrapper& GetLocaleDataWrapper( USHORT nLang )
         aLcl.Variant != rLcl.Variant )
         aLclDtWrp.setLocale( aLcl );
     return aLclDtWrp;
+}
+static TransliterationWrapper& GetIgnoreTranslWrapper()
+{
+    static int bIsInit = 0;
+    static TransliterationWrapper aWrp( GetProcessFact(),
+                ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE |
+                ::com::sun::star::i18n::TransliterationModules_IGNORE_KANA |
+                ::com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH );
+    if( !bIsInit )
+    {
+        aWrp.loadModuleIfNeeded( GetAppLang() );
+        bIsInit = 1;
+    }
+    return aWrp;
+}
+static CollatorWrapper& GetCollatorWrapper()
+{
+    static int bIsInit = 0;
+    static CollatorWrapper aCollWrp( GetProcessFact() );
+    if( !bIsInit )
+    {
+        aCollWrp.loadDefaultCollator( SvxCreateLocale( GetAppLang() ), 0 );
+        bIsInit = 1;
+    }
+    return aCollWrp;
 }
 
 
@@ -367,12 +367,12 @@ BOOL SvxAutocorrWordList::Seek_Entry( const SvxAutocorrWordPtr aE, USHORT* pP ) 
             nU = 0;
     if( nO > 0 )
     {
-        CollatorWrapper& rColl = ::GetCollatorWrapper();
+        CollatorWrapper& rCmp = ::GetCollatorWrapper();
         nO--;
         while( nU <= nO )
         {
             nM = nU + ( nO - nU ) / 2;
-            long nCmp = rColl.compareString( aE->GetShort(),
+            long nCmp = rCmp.compareString( aE->GetShort(),
                         (*((SvxAutocorrWordPtr*)pData + nM))->GetShort() );
             if( 0 == nCmp )
             {
@@ -1691,7 +1691,7 @@ const SvxAutocorrWord* lcl_SearchWordsInList(
                 xub_StrLen& rStt, xub_StrLen nEndPos, SvxAutoCorrDoc& rDoc )
 {
     const SvxAutocorrWordList* pAutoCorrWordList = pList->GetAutocorrWordList();
-    CollatorWrapper& rColl = GetIgnoreCollatorWrapper();
+    TransliterationWrapper& rCmp = GetIgnoreTranslWrapper();
     for( xub_StrLen nPos = 0; nPos < pAutoCorrWordList->Count(); ++nPos )
     {
         const SvxAutocorrWord* pFnd = (*pAutoCorrWordList)[ nPos ];
@@ -1704,7 +1704,7 @@ const SvxAutocorrWord* lcl_SearchWordsInList(
                     IsWordDelim( rTxt.GetChar(nCalcStt - 1 ) ))) )
             {
                 String sWord( rTxt.GetBuffer() + nCalcStt, rChk.Len() );
-                if( 0 == rColl.compareString( rChk, sWord ))
+                if( rCmp.isEqual( rChk, sWord ))
                 {
                     rStt = nCalcStt;
                     return pFnd;
@@ -2283,7 +2283,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
                 if( nOld != nNew )
                     xStrm->Seek( nOld );
 
-                CollatorWrapper& rColl = GetIgnoreCollatorWrapper();
+                TransliterationWrapper& rCmp = GetIgnoreTranslWrapper();
 
                 // dann lese mal alle Ersetzungen:
                 while( TRUE )
@@ -2293,7 +2293,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
                     if( xStrm->IsEof() ||  SVSTREAM_OK != xStrm->GetError() )
                         break;
 
-                    BOOL bOnlyTxt = 0 != rColl.compareString( sShort, sLong );
+                    BOOL bOnlyTxt = !rCmp.isEqual( sShort, sLong );
                     if( !bOnlyTxt )
                     {
                         String sLongSave( sLong );
