@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-13 11:29:40 $
+ *  last change: $Author: ka $ $Date: 2002-08-22 12:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,8 @@ static void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
 // appends a double. PDF does not accept exponential format, only fixed point
 static void appendDouble( double fValue, OStringBuffer& rBuffer, int nPrecision = 5 )
 {
-    rBuffer.append( ByteString::CreateFromDouble( fValue ) );
+    ByteString aStr( ByteString::CreateFromDouble( ( (sal_Int64)( fValue * 10000.0 ) ) * 0.0001 ) );
+    rBuffer.append( aStr );
 /*
     if( fValue < 0 )
     {
