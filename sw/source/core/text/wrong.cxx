@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrong.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: ama $ $Date: 2001-03-01 12:19:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,8 @@ xub_StrLen SwWrongList::LastWrong( xub_StrLen nChk ) const
         nRet = nPos ? WRPOS( --nPos ) : STRING_LEN;
     if( nChk > GetBeginInv() && ( nRet == STRING_LEN || nRet < GetEndInv() ) )
         nRet = nChk > GetEndInv() ? GetEndInv() : nChk;
+    else if( nRet < STRING_LEN )
+        nRet += WRLEN( nPos );
     return nRet;
 }
 
