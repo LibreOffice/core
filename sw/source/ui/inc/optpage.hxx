@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-04-09 09:46:34 $
+ *  last change: $Author: os $ $Date: 2001-05-04 11:20:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,24 +153,6 @@ public:
 
 };
 
-/*-----------------31.08.96 10.10-------------------
-
---------------------------------------------------*/
-/*
-class SwLayoutOptPage : public SfxTabPage
-{
-                        SwLayoutOptPage( Window* pParent,
-                                           const SfxItemSet& rSet );
-                        ~SwLayoutOptPage();
-public:
-    static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet);
-
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
-
-};
-
 /*-------- OS 27.01.95 -----------------------------------
  TabPage Druckereinstellungen Zusaetze
 --------------------------------------------------------- */
@@ -178,18 +160,24 @@ public:
 
 class SwAddPrinterTabPage : public SfxTabPage
 {
+    FixedLine       aGroup1;
     CheckBox        aGrfCB;
     CheckBox        aTabCB;
     CheckBox        aDrawCB;
     CheckBox        aCtrlFldCB;
     CheckBox        aBackgroundCB;
     CheckBox        aBlackFontCB;
-    FixedLine        aGroup1;
+
+    FixedLine       aSeparatorLFL;
+
+    FixedLine       aGroup2;
     CheckBox        aLeftPageCB;
     CheckBox        aRightPageCB;
     CheckBox        aReverseCB;
     CheckBox        aProspectCB;
-    FixedLine        aGroup2;
+
+    FixedLine       aSeparatorRFL;
+
     RadioButton     aNoRB;
     RadioButton     aOnlyRB;
     RadioButton     aEndRB;
@@ -288,11 +276,13 @@ public:
 
 class SwTableOptionsTabPage : public SfxTabPage
 {
+    FixedLine   aTableGB;
     CheckBox    aHeaderCB;
     CheckBox    aRepeatHeaderCB;
     CheckBox    aDontSplitCB;
     CheckBox    aBorderCB;
-    FixedLine   aTableGB;
+
+    FixedLine   aSeparatorFL;
 
     FixedLine   aTableInsertGB;
     CheckBox    aNumFormattingCB;
@@ -387,6 +377,8 @@ class SwShdwCrsrOptionsTabPage : public SfxTabPage
     CheckBox    aBreakCB;
     CheckBox    aHiddenCB;
     CheckBox    aHiddenParaCB;
+
+    FixedLine   aSeparatorFL;
 
     FixedLine       aFlagGB;
     CheckBox        aOnOffCB;

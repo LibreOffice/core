@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-04-09 09:46:33 $
+ *  last change: $Author: os $ $Date: 2001-05-04 11:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,8 @@
 #define CB_BLACK_FONT      87
 #define LB_HMETRIC         88
 #define LB_VMETRIC         89
+#define FL_SEP_PRT_LEFT     90
+#define FL_SEP_PRT_RIGHT    91
 
 // Tabpage Grundschriften
 #define FT_STANDARD         90
@@ -211,6 +213,7 @@
 #define LB_KEYWD                    136
 #define FT_UNKNOWN                  137
 #define LB_UNKNOWN                  138
+#define FL_TABLE_SEPARATOR          139
 
 #define GB_SHDWCRSFLAG                 1
 #define CB_SHDWCRSONOFF                2
@@ -225,4 +228,5 @@
 #define LB_SHDWCRSCOLOR               11
 #define CB_ALLOW_IN_PROT              12
 #define GB_CRSR_OPT                   13
+#define FL_SEPARATOR_SHDW               14
 

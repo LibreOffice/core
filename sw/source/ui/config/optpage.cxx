@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-04-17 08:04:27 $
+ *  last change: $Author: os $ $Date: 2001-05-04 11:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,6 +433,8 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
     aBackgroundCB    (this, SW_RES(CB_BACKGROUND)),
     aBlackFontCB     (this, SW_RES(CB_BLACK_FONT)),
     aGroup1          (this, SW_RES(GRP_1)),
+    aSeparatorLFL    (this, SW_RES(FL_SEP_PRT_LEFT )),
+    aSeparatorRFL    (this, SW_RES(FL_SEP_PRT_RIGHT)),
     aLeftPageCB      (this, SW_RES(CB_LEFTP)),
     aRightPageCB     (this, SW_RES(CB_RIGHTP)),
     aReverseCB       (this, SW_RES(CB_REVERSE)),
@@ -453,7 +455,8 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
 {
     Init();
     FreeResource();
-
+    aSeparatorLFL.SetStyle( aSeparatorLFL.GetStyle() | WB_VERT );
+    aSeparatorRFL.SetStyle( aSeparatorRFL.GetStyle() | WB_VERT );
     Link aLk = LINK( this, SwAddPrinterTabPage, AutoClickHdl);
     aGrfCB.SetClickHdl( aLk );
     aRightPageCB.SetClickHdl( aLk );
@@ -948,6 +951,7 @@ SwTableOptionsTabPage::SwTableOptionsTabPage( Window* pParent, const SfxItemSet&
     aNumFormattingCB(this, ResId(CB_NUMFORMATTING   )),
     aNumFmtFormattingCB(this, ResId(CB_NUMFMT_FORMATTING    )),
     aNumAlignmentCB (this, ResId(CB_NUMALIGNMENT    )),
+    aSeparatorFL     (this, ResId(FL_TABLE_SEPARATOR)),
     aTableGB        (this, ResId(GB_TABLE           )),
     aTableInsertGB  (this, ResId(GB_TABLE_INSERT    )),
     aMoveGB(        this, ResId(GB_MOVE     )),
@@ -972,6 +976,7 @@ SwTableOptionsTabPage::SwTableOptionsTabPage( Window* pParent, const SfxItemSet&
     bHTMLMode(FALSE)
 {
     FreeResource();
+    aSeparatorFL.SetStyle( aSeparatorFL.GetStyle() | WB_VERT );
 
     Link aLnk(LINK(this, SwTableOptionsTabPage, CheckBoxHdl));
     aNumFormattingCB.SetClickHdl(aLnk);
@@ -1340,30 +1345,30 @@ void SwSourceViewOptionsTabPage::Reset( const SfxItemSet& rSet )
 SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
                                                     const SfxItemSet& rSet )
     : SfxTabPage(pParent, SW_RES(TP_OPTSHDWCRSR), rSet),
-    aFlagGB( this, SW_RES( GB_SHDWCRSFLAG )),
-    aOnOffCB( this, SW_RES( CB_SHDWCRSONOFF )),
-    aFillModeFT( this, SW_RES( FT_SHDWCRSFILLMODE )),
-    aFillMarginRB( this, SW_RES( RB_SHDWCRSFILLMARGIN )),
-    aFillIndentRB( this, SW_RES( RB_SHDWCRSFILLINDENT )),
-    aFillTabRB( this, SW_RES( RB_SHDWCRSFILLTAB )),
-    aFillSpaceRB( this, SW_RES( RB_SHDWCRSFILLSPACE )),
-    aColorFT( this, SW_RES( FT_SHDWCRSCOLOR )),
-    aColorLB( this, SW_RES( LB_SHDWCRSCOLOR )),
-    aCrsrOptGB   ( this, SW_RES( GB_CRSR_OPT)),
-    aCrsrInProtCB( this, SW_RES( CB_ALLOW_IN_PROT )),
-
-    aUnprintBox   ( this,   SW_RES( GB_NOPRINT  ) ),
-    aParaCB       ( this,   SW_RES( CB_PARA      ) ),
-    aSHyphCB      ( this,   SW_RES( CB_SHYPH        ) ),
-    aSpacesCB     ( this,   SW_RES( CB_SPACE    ) ),
-    aHSpacesCB    ( this,   SW_RES( CB_HSPACE   ) ),
-    aTabCB        ( this,   SW_RES( CB_TAB      ) ),
-    aBreakCB      ( this,   SW_RES( CB_BREAK        ) ),
-    aHiddenCB     ( this,   SW_RES( CB_HIDDEN   ) ),
-    aHiddenParaCB ( this,   SW_RES( CB_HIDDEN_PARA ) )
+    aFlagGB( this, ResId( GB_SHDWCRSFLAG )),
+    aOnOffCB( this, ResId( CB_SHDWCRSONOFF )),
+    aFillModeFT( this, ResId( FT_SHDWCRSFILLMODE )),
+    aFillMarginRB( this, ResId( RB_SHDWCRSFILLMARGIN )),
+    aFillIndentRB( this, ResId( RB_SHDWCRSFILLINDENT )),
+    aFillTabRB( this, ResId( RB_SHDWCRSFILLTAB )),
+    aFillSpaceRB( this, ResId( RB_SHDWCRSFILLSPACE )),
+    aColorFT( this, ResId( FT_SHDWCRSCOLOR )),
+    aColorLB( this, ResId( LB_SHDWCRSCOLOR )),
+    aCrsrOptGB   ( this, ResId( GB_CRSR_OPT)),
+    aCrsrInProtCB( this, ResId( CB_ALLOW_IN_PROT )),
+    aSeparatorFL(   this, ResId( FL_SEPARATOR_SHDW)),
+    aUnprintBox   ( this,   ResId( GB_NOPRINT  ) ),
+    aParaCB       ( this,   ResId( CB_PARA      ) ),
+    aSHyphCB      ( this,   ResId( CB_SHYPH        ) ),
+    aSpacesCB     ( this,   ResId( CB_SPACE    ) ),
+    aHSpacesCB    ( this,   ResId( CB_HSPACE   ) ),
+    aTabCB        ( this,   ResId( CB_TAB      ) ),
+    aBreakCB      ( this,   ResId( CB_BREAK        ) ),
+    aHiddenCB     ( this,   ResId( CB_HIDDEN   ) ),
+    aHiddenParaCB ( this,   ResId( CB_HIDDEN_PARA ) )
 {
     FreeResource();
-
+    aSeparatorFL.SetStyle( aSeparatorFL.GetStyle() | WB_VERT );
     const SfxPoolItem* pItem = 0;
     SwShadowCursorItem aOpt;
 
@@ -1414,6 +1419,12 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
         aColorLB        .Hide();
         aCrsrOptGB      .Hide();
         aCrsrInProtCB   .Hide();
+        aSeparatorFL.Hide();
+        long nWidth = aFlagGB.GetSizePixel().Width() + aFlagGB.GetPosPixel().X()
+                                                        - aUnprintBox.GetPosPixel().X();
+        Size aSize(aUnprintBox.GetSizePixel());
+        aSize.Width() = nWidth;
+        aUnprintBox.SetSizePixel(aSize);
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:05:11 $
+ *  last change: $Author: os $ $Date: 2001-05-04 11:21:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1009,6 +1009,11 @@ TabPage TP_OPTPRINT_PAGE
         Text[ turkish ] = "Siyah/beyaz yazdır";
         Text[ language_user1 ] = " ";
     };
+    FixedLine FL_SEP_PRT_LEFT
+    {
+        Pos = MAP_APPFONT ( 85 , 10 ) ;
+        Size = MAP_APPFONT ( 4 , 82 ) ;
+    };
     FixedLine GRP_2
     {
         Pos = MAP_APPFONT ( 90 , 3 ) ;
@@ -1264,6 +1269,11 @@ TabPage TP_OPTPRINT_PAGE
         Text[ turkish ] = "~Sayfa sonu";
         Text[ language_user1 ] = " ";
     };
+    FixedLine FL_SEP_PRT_RIGHT
+    {
+        Pos = MAP_APPFONT ( 169 , 10 ) ;
+        Size = MAP_APPFONT ( 4 , 82 ) ;
+    };
     FixedLine GRP_3
     {
         Pos = MAP_APPFONT ( 174 , 3 ) ;
@@ -1409,7 +1419,7 @@ TabPage TP_OPTPRINT_PAGE
     };
     String ST_NONE
     {
-        Text = "<Keiner>" ;
+        Text = "<Keins>" ;
         Text[English] = "<None>" ;
         Text[ english_us ] = "<None>";
         Text[ portuguese ] = "<Nenhum(a)>";
@@ -1848,6 +1858,11 @@ TabPage TP_OPTTABLE_PAGE
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Kenarlık";
     };
+    FixedLine FL_TABLE_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 126 , 10 ) ;
+        Size = MAP_APPFONT ( 4 , 56 ) ;
+    };
     FixedLine GB_TABLE_INSERT
     {
         Pos = MAP_APPFONT ( 130 , 3 ) ;
@@ -1984,26 +1999,9 @@ TabPage TP_OPTTABLE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 80) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text = "Umschalt- und Pfeiltaste gedrückt" ;
-        Text [ English ] = "Shift and arrow key pressed" ;
+        Text = "Alt- und Pfeiltaste gedrückt" ;
+        Text [ English ] = "Alt and arrow key pressed" ;
         Text[ english_us ] = "Alt and arrow key pressed";
-        Text[ portuguese ] = "Shift and arrow key pressed";
-        Text[ russian ] = "Íàæàòûå êëàâèøè (Shift) è ñî ñòğåëêîé";
-        Text[ greek ] = "Ìå ğéåóìİíá ôá ğëŞêôñá \"Shift\" êáé \"Âİëïò\"";
-        Text[ dutch ] = "Shift- en pijltoets ingedrukt";
-        Text[ french ] = "Touches Maj. et Flèche enfoncées";
-        Text[ spanish ] = "Teclas Mayús y Flecha pulsadas";
-        Text[ italian ] = "Tasto (Ctrl) e (freccia) premuti";
-        Text[ danish ] = "Shift and arrow key pressed";
-        Text[ swedish ] = "Skift- och piltangent nertryckta";
-        Text[ polish ] = "Naciœnij klawisz 'Shift' i klawisz ze strza³k¹";
-        Text[ portuguese_brazilian ] = "Shift and arrow key pressed";
-        Text[ japanese ] = "Shift·°‚Æ–îˆó·°‚ğ‰Ÿ‚·";
-        Text[ korean ] = "Shift and arrow key pressed";
-        Text[ chinese_simplified ] = "Í¬Ê±°´×¡ÉÏµµ¼üºÍ¼ıÍ·¼ü";
-        Text[ chinese_traditional ] = "«ö¦í¤WÀÉÁä©M½bÀYÁä";
-        Text[ turkish ] = "Shift and arrow key pressed";
-        Text[ arabic ] = "Shift and arrow key pressed";
     };
     FixedText FT_ROWMOVE
     {
@@ -2449,7 +2447,7 @@ TabPage TP_OPTSRCVIEW
     ListBox LB_SGML
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 188 , 14 ) ;
+        Pos = MAP_APPFONT ( 120 , 14 ) ;
         Size = MAP_APPFONT ( 60 , 80 ) ;
         DropDown = TRUE ;
     };
@@ -2482,7 +2480,7 @@ TabPage TP_OPTSRCVIEW
     ListBox LB_COMMENT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 188 , 30 ) ;
+        Pos = MAP_APPFONT ( 120 , 30 ) ;
         Size = MAP_APPFONT ( 60 , 80 ) ;
         DropDown = TRUE ;
     };
@@ -2515,7 +2513,7 @@ TabPage TP_OPTSRCVIEW
     ListBox LB_KEYWD
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT (188 , 46 ) ;
+        Pos = MAP_APPFONT (120 , 46 ) ;
         Size = MAP_APPFONT ( 60 , 80 ) ;
         DropDown = TRUE ;
     };
@@ -2548,7 +2546,7 @@ TabPage TP_OPTSRCVIEW
     ListBox LB_UNKNOWN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 188 , 62 ) ;
+        Pos = MAP_APPFONT ( 120 , 62 ) ;
         Size = MAP_APPFONT ( 60 , 80 ) ;
         DropDown = TRUE ;
     };
@@ -2568,31 +2566,10 @@ TabPage TP_OPTSHDWCRSR
     FixedLine GB_NOPRINT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
-        Text = "Nicht druckbare Zeichen" ;
-        Text [ ENGLISH ] = "Unprintable Characters" ;
-        Text [ norwegian ] = "Unprintable Characters" ;
-        Text [ italian ] = "Caratteri non stampabili" ;
-        Text [ portuguese_brazilian ] = "Unprintable Characters" ;
-        Text [ portuguese ] = "Caracteres não imprimíveis" ;
-        Text [ finnish ] = "Unprintable Characters" ;
-        Text [ danish ] = "Tegn som ikke kan udskrives" ;
-        Text [ french ] = "Caractères non imprimables" ;
-        Text [ swedish ] = "Tecken som inte kan skrivas ut" ;
-        Text [ dutch ] = "Niet-afdrukbare tekens" ;
-        Text [ spanish ] = "Caracteres no imprimibles" ;
-        Text [ english_us ] = "Nonprinting characters" ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Text = "Anzeigen von" ;
+        Text [ ENGLISH ] = "Display of" ;
         Group = TRUE ;
-        Text[ chinese_simplified ] = "ÎŞ·¨´òÓ¡µÄ×Ö·û";
-        Text[ russian ] = "Íåïå÷àòàåìûå ñèìâîëû";
-        Text[ polish ] = "Znaki niedrukowalne";
-        Text[ japanese ] = "ˆóü‚³‚ê‚È‚¢•¶š‚â‹L†‚Ì•\\¦E”ñ•\\¦";
-        Text[ chinese_traditional ] = "±±¨î²Å";
-        Text[ arabic ] = "ÃÍÑİ áÇ ÊõØÈÚ";
-        Text[ greek ] = "Ìç åêôõğşóéìïé ÷áñáêôŞñåò";
-        Text[ korean ] = "´Ü¶ô±âÈ£Ç¥½Ã";
-        Text[ turkish ] = "Yazdırılmayan karakterler";
-        Text[ language_user1 ] = " ";
     };
     CheckBox CB_PARA
     {
@@ -2817,6 +2794,11 @@ TabPage TP_OPTSHDWCRSR
         Text[ greek ] = "Êñõ~öİò ğáñÜãñáöïé";
         Text[ korean ] = "¼û°ÜÁø ´Ü¶ô(~A)";
         Text[ turkish ] = "Gizili paragraflar";
+    };
+    FixedLine FL_SEPARATOR_SHDW
+    {
+        Pos = MAP_APPFONT ( 125 , 10 ) ;
+        Size = MAP_APPFONT ( 4 , 97 ) ;
     };
     FixedLine GB_SHDWCRSFLAG
     {
