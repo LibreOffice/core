@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:34:02 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,10 +393,9 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     // file link or URL
     if( eProtocol == INET_PROT_FILE )
     {
-        String aFileName;
         sal_uInt16 nLevel;
         bool bRel;
-        BuildFileName( aFileName, nLevel, bRel, aUrlObj, rRoot );
+        String aFileName( BuildFileName( nLevel, bRel, rUrl, rRoot ) );
 
         if( !bRel )
             mnFlags |= EXC_HLINK_ABS;
@@ -458,33 +457,37 @@ XclExpHyperlink::~XclExpHyperlink()
 {
 }
 
-void XclExpHyperlink::BuildFileName(
-        String& rName, sal_uInt16& rnLevel, bool& rbRel,
-        const INetURLObject& rUrlObj, const XclExpRoot& rRoot ) const
+String XclExpHyperlink::BuildFileName(
+        sal_uInt16& rnLevel, bool& rbRel, const String& rUrl, const XclExpRoot& rRoot ) const
 {
-    rName = rUrlObj.getFSysPath( INetURLObject::FSYS_DOS );
+    String aDosName( INetURLObject( rUrl ).getFSysPath( INetURLObject::FSYS_DOS ) );
     rnLevel = 0;
     rbRel = rRoot.IsRelUrl();
 
     if( rbRel )
     {
-        String aTmpName( rName );
-        rName = INetURLObject::GetRelURL( rRoot.GetBasePath(), rName,
+        // try to convert to relative file name
+        String aTmpName( aDosName );
+        aDosName = INetURLObject::GetRelURL( rRoot.GetBasePath(), rUrl,
             INetURLObject::WAS_ENCODED, INetURLObject::DECODE_WITH_CHARSET );
 
-        if( rName.SearchAscii( INET_FILE_SCHEME ) == 0 )    // not converted to rel -> make abs
+        if( aDosName.SearchAscii( INET_FILE_SCHEME ) == 0 )
         {
-            rName = aTmpName;
+            // not converted to rel -> back to old, return absolute flag
+            aDosName = aTmpName;
             rbRel = false;
         }
-        else if( rName.SearchAscii( "./" ) == 0 )
-            rName.Erase( 0, 2 );
+        else if( aDosName.SearchAscii( "./" ) == 0 )
+        {
+            aDosName.Erase( 0, 2 );
+        }
         else
         {
-            while( rName.SearchAndReplaceAscii( "../", EMPTY_STRING ) != STRING_NOTFOUND )
+            while( aDosName.SearchAndReplaceAscii( "../", EMPTY_STRING ) == 0 )
                 ++rnLevel;
         }
     }
+    return aDosName;
 }
 
 void XclExpHyperlink::WriteBody( XclExpStream& rStrm )
@@ -506,10 +509,10 @@ void XclExpHyperlink::WriteBody( XclExpStream& rStrm )
 XclExpLabelranges::XclExpLabelranges( const XclExpRoot& rRoot ) :
     XclExpRecord( EXC_ID_LABELRANGES )
 {
-    sal_uInt16 nTab = rRoot.GetScTab();
+    USHORT nScTab = rRoot.GetCurrScTab();
 
     // row label ranges
-    FillRangeList( maRowRanges, rRoot.GetDoc().GetRowNameRangesRef(), nTab );
+    FillRangeList( maRowRanges, rRoot.GetDoc().GetRowNameRangesRef(), nScTab );
     // row labels only over 1 column (restriction of Excel97/2000/XP)
     for( ScRange* pRange = maRowRanges.First(); pRange; pRange = maRowRanges.Next() )
         if( pRange->aStart.Col() != pRange->aEnd.Col() )
@@ -517,18 +520,18 @@ XclExpLabelranges::XclExpLabelranges( const XclExpRoot& rRoot ) :
     rRoot.CheckCellRangeList( maRowRanges );
 
     // col label ranges
-    FillRangeList( maColRanges, rRoot.GetDoc().GetColNameRangesRef(), nTab );
+    FillRangeList( maColRanges, rRoot.GetDoc().GetColNameRangesRef(), nScTab );
     rRoot.CheckCellRangeList( maColRanges );
 
     SetRecSize( 4 + 8 * (maRowRanges.Count() + maColRanges.Count()) );
 }
 
-void XclExpLabelranges::FillRangeList( ScRangeList& rRanges, ScRangePairListRef xLabelRangesRef, sal_uInt16 nTab )
+void XclExpLabelranges::FillRangeList( ScRangeList& rRanges, ScRangePairListRef xLabelRangesRef, USHORT nScTab )
 {
     for( const ScRangePair* pRangePair = xLabelRangesRef->First(); pRangePair; pRangePair = xLabelRangesRef->Next() )
     {
         const ScRange& rRange = pRangePair->GetRange( 0 );
-        if( rRange.aStart.Tab() == nTab )
+        if( rRange.aStart.Tab() == nScTab )
             rRanges.Append( rRange );
     }
 }
@@ -775,7 +778,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
     XclExpRecord( EXC_ID_CONDFMT ),
     XclExpRoot( rRoot )
 {
-    GetDoc().FindConditionalFormat( rCondFormat.GetKey(), maRanges, GetScTab() );
+    GetDoc().FindConditionalFormat( rCondFormat.GetKey(), maRanges, GetCurrScTab() );
     CheckCellRangeList( maRanges );
 
     if( maRanges.Count() )
@@ -1250,7 +1253,7 @@ void XclExpWebQuery::Save( XclExpStream& rStrm )
 
 XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
 {
-    sal_uInt16 nTab = rRoot.GetScTab();
+    USHORT nScTab = rRoot.GetCurrScTab();
     ScDocument& rDoc = rRoot.GetDoc();
     SfxObjectShell* pShell = rRoot.GetDocShell();
     if( !pShell ) return;
@@ -1279,7 +1282,7 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
         if( aLinkAny >>= xAreaLink )
         {
             CellRangeAddress aDestRange( xAreaLink->getDestArea() );
-            if( aDestRange.Sheet == nTab )
+            if( static_cast< USHORT >( aDestRange.Sheet ) == nScTab )
             {
                 Reference< XPropertySet > xLinkProp( xAreaLink, UNO_QUERY );
                 if( xLinkProp.is() && ::getPropValue( aFilter, xLinkProp, aPropFilter ) && (aFilter == aWebQueryFilter) )
@@ -1305,7 +1308,7 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
                     {
                         ExcName* pExcName = new ExcName( *rRoot.mpRD, aScDestRange, aUrlObj.getBase() );
                         aRangeName = pExcName->GetName();
-                        rRoot.mpRD->pNameList->InsertSorted( *rRoot.mpRD, pExcName, nTab );
+                        rRoot.mpRD->pNameList->InsertSorted( *rRoot.mpRD, pExcName, nScTab );
                     }
 
                     // create and store the web query record
