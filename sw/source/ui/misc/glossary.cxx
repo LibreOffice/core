@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-21 12:29:30 $
+ *  last change: $Author: mtg $ $Date: 2001-05-28 14:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -946,7 +946,13 @@ IMPL_LINK_INLINE_START( SwGlossaryDlg, EditHdl, Button *, EMPTYARG )
 {
 //EndDialog darf nicht im MenuHdl aufgerufen werden
     if(aEditBtn.GetCurItemId() == FN_GL_EDIT )
-        EndDialog(RET_EDIT);
+    {
+        SwTextBlocks *pGroup = ::GetGlossaries()->GetGroupDoc ( GetCurrGrpName () );
+        BOOL bRet = pGlossaryHdl->ConvertToNew ( *pGroup );
+        delete pGroup;
+        if ( bRet )
+            EndDialog(RET_EDIT);
+    }
     return 0;
 }
 IMPL_LINK_INLINE_END( SwGlossaryDlg, EditHdl, Button *, EMPTYARG )
