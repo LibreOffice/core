@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainer.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: oj $ $Date: 2000-10-13 12:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@ class OPropertyContainer : public OPropertyContainer_Base
         // the properties which are hold by this class' instance, not the derived one's
 
 public:
+    // this dtor is needed otherwise we can get a wrong delete operator
+    virtual ~OPropertyContainer();
         // (the following struct needs to be public because of the SUNPRO5 compiler. Else it does not
         // acceppt the typedef below, which is using this struct).
 
@@ -247,6 +249,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1.1.1  2000/09/29 11:28:15  fs
+ *  initial import
+ *
  *  Revision 1.1  2000/09/21 08:51:34  fs
  *  base class for classes which are simple property containers
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-06 14:43:54 $
+ *  last change: $Author: oj $ $Date: 2000-10-13 12:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,10 @@ OPropertyContainer::OPropertyContainer(::cppu::OBroadcastHelper& _rBHelper)
     ,m_bAlreadyAccessed(sal_False)
 {
 }
-
+// -------------------------------------------------------------------------
+OPropertyContainer::~OPropertyContainer()
+{
+}
 //--------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OPropertyContainer::getTypes() throw (RuntimeException)
 {
@@ -445,6 +448,9 @@ void OPropertyContainer::describeProperties(Sequence< Property >& _rProps) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/06 14:43:54  fs
+ *  uno_typ_equalData instead of uno_typ_equal
+ *
  *  Revision 1.1  2000/09/21 08:52:22  fs
  *  base class for classes which are simple property containers
  *
