@@ -198,7 +198,7 @@ public class FormulaParser {
      * @return A boolean returning the result of the comparison
       */
      private boolean isCellRefSpecialChar(char c) {
-         return (c == ':') || (c == '$') || (c == '!');
+         return (c == ':') || (c == '$') || (c == '.');
      }
 
      /**
@@ -411,8 +411,8 @@ public class FormulaParser {
             tokenVector.insertElementAt(tokenFactory.getFunctionToken(cell, numArgs), index);
          } else {
 
-            if(cell.indexOf('!')!=-1) {
-                String cellRef = cell.substring(cell.indexOf('!') + 1, cell.length());
+            if(cell.indexOf('.')!=-1) {
+                String cellRef = cell.substring(cell.indexOf('.') + 1, cell.length());
                 if(cellRef.indexOf(':')!=-1) {
                     tokenVector.add(tokenFactory.getOperandToken(cell, "3D_CELL_AREA_REFERENCE"));
                 } else {

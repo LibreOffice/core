@@ -116,34 +116,34 @@ public class TokenEncoder {
 
         Vector tmpByteArray = null;     // we use this cause we don't know till after
                                         // the encoding takes place how big the byte [] will be
-           index=0;                         // This class is declared static in
+           //index=0;                       // This class is declared static in
                                         // FormulaHelper so better make sure our index is 0
         if(t.getTokenType()==ParseToken.TOKEN_OPERATOR) {
-            tmpByteArray = OperatorEncoder(t);
+            tmpByteArray = operatorEncoder(t);
         } else if (t.getTokenType()==ParseToken.TOKEN_FUNCTION_VARIABLE || t.getTokenType()==ParseToken.TOKEN_FUNCTION_FIXED){
-            tmpByteArray = FunctionEncoder(t);
+            tmpByteArray = functionEncoder(t);
         } else {                                    // Operands and functions
             switch(t.getTokenID()) {
                 case TokenConstants.TNAME :
-                    tmpByteArray = NameDefinitionEncoder(t);
+                    tmpByteArray = nameDefinitionEncoder(t);
                     break;
                 case TokenConstants.TREF3D :
-                    tmpByteArray = ThreeDCellRefEncoder(t);
+                    tmpByteArray = threeDCellRefEncoder(t);
                     break;
                 case TokenConstants.TAREA3D:
-                    tmpByteArray = ThreeDAreaRefEncoder(t);
+                    tmpByteArray = threeDAreaRefEncoder(t);
                     break;
                 case TokenConstants.TREF :
-                    tmpByteArray = CellRefEncoder(t);
+                    tmpByteArray = cellRefEncoder(t);
                     break;
                 case TokenConstants.TAREA :
-                    tmpByteArray = AreaRefEncoder(t);
+                    tmpByteArray = areaRefEncoder(t);
                     break;
                 case TokenConstants.TNUM :
-                    tmpByteArray = NumEncoder(t);
+                    tmpByteArray = numEncoder(t);
                     break;
                 case TokenConstants.TSTRING :
-                    tmpByteArray = StringEncoder(t);
+                    tmpByteArray = stringEncoder(t);
                     break;
                 default :
                     Debug.log(Debug.ERROR, "Encoder found unrecognized Token");
@@ -169,7 +169,7 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private Vector OperatorEncoder(Token t) {
+    private Vector operatorEncoder(Token t) {
 
         Vector tmpByteArray = new Vector();
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
@@ -183,7 +183,7 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private Vector StringEncoder(Token t) throws IOException{
+    private Vector stringEncoder(Token t) throws IOException{
 
         Vector tmpByteArray = new Vector();
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
@@ -203,7 +203,7 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private Vector NumEncoder(Token t) {
+    private Vector numEncoder(Token t) {
 
         Vector tmpByteArray = new Vector();
 
@@ -316,22 +316,24 @@ public class TokenEncoder {
     }
 
     /**
-     * A Cell Reference Encoder. It supports absolute and relative addressing
-     * but not sheetnames.
+     * A Cell Reference Encoder (It supports absolute and relative addressing)
      *
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private byte[] EncodeCellCoordinates() {
+    private byte[] encodeCellCoordinates(String cellCoordinates) {
         int col = 0, row = 0;
         int addressing = 0xC000;
-        Debug.log(Debug.TRACE,"Encoding cell coordinates" + parseString);
-        if(parseString.charAt(index)=='$') {
+
+        index = 0;
+        parseString = cellCoordinates;
+        Debug.log(Debug.TRACE,"Encoding cell coordinates " + cellCoordinates);
+        if(cellCoordinates.charAt(index)=='$') {
             addressing &= 0x8000;
             index++;
         }
         col = column();
-        if(parseString.charAt(index)=='$') {
+        if(cellCoordinates.charAt(index)=='$') {
             addressing &= 0x4000;
             index++;
         }
@@ -345,13 +347,12 @@ public class TokenEncoder {
     }
 
     /**
-     * A Cell Reference Encoder. It supports absolute and relative addressing
-     * but not sheetnames.
+     * A name definition Encoder
      *
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private Vector NameDefinitionEncoder(Token t) {
+    private Vector nameDefinitionEncoder(Token t) {
 
         Vector tmpByteArray = new Vector();
 
@@ -385,13 +386,12 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private Vector CellRefEncoder(Token t) {
+    private Vector cellRefEncoder(Token t) {
 
         Vector tmpByteArray = new Vector();
 
-        parseString = t.getValue();
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
-        byte cellRefBytes[] = EncodeCellCoordinates();
+        byte cellRefBytes[] = encodeCellCoordinates(t.getValue());
         for(int i = 0;i < cellRefBytes.length;i++) {
             tmpByteArray.add(new Byte(cellRefBytes[i]));
         }
@@ -399,13 +399,12 @@ public class TokenEncoder {
     }
 
     /**
-     * A Cell Reference Encoder. It supports absolute and relative addressing
-     * but not sheetnames.
+     * This function will find the sheetname index for a given String
      *
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private short FindNameDefinitionIndex(String s) {
+    private short findSheetIndex(String s) {
 
         short sheetIndex = 0;
         String savedName;
@@ -415,7 +414,7 @@ public class TokenEncoder {
         } else {
             sheetName = s.substring(0,s.length());
         }
-        Debug.log(Debug.TRACE,"Searching for Name Definition : " + sheetName);
+        Debug.log(Debug.TRACE,"Searching for Worksheet : " + sheetName);
         Vector names = wb.getWorksheetNames();
         Enumeration e = names.elements();
         do {
@@ -428,13 +427,12 @@ public class TokenEncoder {
     }
 
     /**
-     * A Cell Reference Encoder. It supports absolute and relative addressing
-     * but not sheetnames.
+     * A 3D Cell reference encoder
      *
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private Vector ThreeDCellRefEncoder(Token t) {
+    private Vector threeDCellRefEncoder(Token t) {
 
         Vector tmpByteArray = new Vector();
         parseString = t.getValue();
@@ -446,41 +444,39 @@ public class TokenEncoder {
             tmpByteArray.add(new Byte((byte)0x00));
         }
 
-        String sheetRef = parseString.substring(0, parseString.indexOf('!') + 1);
+        String sheetRef = parseString.substring(0, parseString.indexOf('.') + 1);
         if (sheetRef.indexOf(':')!=-1) {
             sheetRef = parseString.substring(0, parseString.indexOf(':'));
-            short sheetNum1 = FindNameDefinitionIndex(sheetRef);
+            short sheetNum1 = findSheetIndex(sheetRef);
             sheetRef = parseString.substring(parseString.indexOf(':') + 1, parseString.length());
-            short sheetNum2 = FindNameDefinitionIndex(sheetRef);
+            short sheetNum2 = findSheetIndex(sheetRef);
             tmpByteArray.add(new Byte((byte)sheetNum1));
             tmpByteArray.add(new Byte((byte)0x00));
             tmpByteArray.add(new Byte((byte)sheetNum2));
             tmpByteArray.add(new Byte((byte)0x00));
         } else {
-            sheetRef = parseString.substring(0, parseString.indexOf('!'));
-            short sheetNum = FindNameDefinitionIndex(sheetRef);
+            sheetRef = parseString.substring(0, parseString.indexOf('.'));
+            short sheetNum = findSheetIndex(sheetRef);
             tmpByteArray.add(new Byte((byte)sheetNum));
             tmpByteArray.add(new Byte((byte)0x00));
             tmpByteArray.add(new Byte((byte)sheetNum));
             tmpByteArray.add(new Byte((byte)0x00));
         }
-        parseString = parseString.substring(parseString.indexOf('!') + 1, parseString.length());
-        Debug.log(Debug.TRACE,"Parsing : " + parseString);
-        index=0;
-        byte cellRefBytes[] = EncodeCellCoordinates();
+        String s = parseString.substring(parseString.indexOf('.') + 1, parseString.length());
+        Debug.log(Debug.TRACE,"Parsing : " + s);
+        byte cellRefBytes[] = encodeCellCoordinates(s);
         for(int i = 0;i < cellRefBytes.length;i++) {
             tmpByteArray.add(new Byte(cellRefBytes[i]));
         }
         return tmpByteArray;
     }
     /**
-     * A Cell Reference Encoder. It supports absolute and relative addressing
-     * but not sheetnames.
+     * A 3D Area Reference Encoder.
      *
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private Vector ThreeDAreaRefEncoder(Token t) {
+    private Vector threeDAreaRefEncoder(Token t) {
 
         Vector tmpByteArray = new Vector();
         parseString = t.getValue();
@@ -492,37 +488,32 @@ public class TokenEncoder {
             tmpByteArray.add(new Byte((byte)0x00));
         }
 
-        String sheetRef = parseString.substring(0, parseString.indexOf('!') + 1);
-        if (sheetRef.indexOf(':')!=-1) {
-            sheetRef = parseString.substring(0, parseString.indexOf(':'));
-            short sheetNum1 = FindNameDefinitionIndex(sheetRef);
-            sheetRef = parseString.substring(parseString.indexOf(':') + 1, parseString.length());
-            short sheetNum2 = FindNameDefinitionIndex(sheetRef);
+        String param1= parseString.substring(0, parseString.indexOf(':'));
+        String cellRef1 = param1.substring(parseString.indexOf('.') + 1, param1.length());
+        String sheetRef1 = param1.substring(0, param1.indexOf('.'));
+        short sheetNum1 = findSheetIndex(sheetRef1);
+
+        String param2 = parseString.substring(parseString.indexOf(':') + 1, parseString.length());
+        Debug.log(Debug.TRACE,"param2: " + param2);
+        String cellRef2 = param2.substring(param2.indexOf('.') + 1, param2.length());
+        Debug.log(Debug.TRACE,"cellRef2: " + cellRef2);
+
+        if(param2.indexOf('.')==-1) {
+            tmpByteArray.add(new Byte((byte)sheetNum1));
+            tmpByteArray.add(new Byte((byte)0x00));
+            tmpByteArray.add(new Byte((byte)sheetNum1));
+            tmpByteArray.add(new Byte((byte)0x00));
+        } else {
+            String sheetRef2 = param2.substring(0, param2.indexOf('.'));
+            short sheetNum2 = findSheetIndex(sheetRef2);
             tmpByteArray.add(new Byte((byte)sheetNum1));
             tmpByteArray.add(new Byte((byte)0x00));
             tmpByteArray.add(new Byte((byte)sheetNum2));
             tmpByteArray.add(new Byte((byte)0x00));
-        } else {
-            sheetRef = parseString.substring(0, parseString.indexOf('!'));
-            short sheetNum = FindNameDefinitionIndex(sheetRef);
-            tmpByteArray.add(new Byte((byte)sheetNum));
-            tmpByteArray.add(new Byte((byte)0x00));
-            tmpByteArray.add(new Byte((byte)sheetNum));
-            tmpByteArray.add(new Byte((byte)0x00));
-        }
-        parseString = parseString.substring(parseString.indexOf('!') + 1, parseString.length());
-        Debug.log(Debug.TRACE,"Parsing : " + parseString);
-        index=0;
-
-        byte cellRefBytes1[] = EncodeCellCoordinates();
-
-        if(parseString.charAt(index)==':') {
-            index++;
-        } else {
-            Debug.log(Debug.ERROR, "Invalid Cell Range, could not find :");
         }
 
-        byte cellRefBytes2[] = EncodeCellCoordinates();
+        byte cellRefBytes1[] = encodeCellCoordinates(cellRef1);
+        byte cellRefBytes2[] = encodeCellCoordinates(cellRef2);
 
         tmpByteArray.add(new Byte(cellRefBytes1[0]));
         tmpByteArray.add(new Byte(cellRefBytes1[1]));
@@ -542,22 +533,23 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private Vector AreaRefEncoder(Token t) {
+    private Vector areaRefEncoder(Token t) {
 
         Vector tmpByteArray = new Vector();
 
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
-        parseString = t.getValue();
+        String param = t.getValue();
+        String cellRef1 = new String();
+        String cellRef2 = new String();
 
-        byte cellRefBytes1[] = EncodeCellCoordinates();
-
-        if(parseString.charAt(index)==':') {
-            index++;
-        } else {
+        if(param.indexOf(':')==-1) {
             Debug.log(Debug.ERROR, "Invalid Cell Range, could not find :");
+        } else {
+            cellRef1 = param.substring(0, param.indexOf(':'));
+            cellRef2 = param.substring(param.indexOf(':') + 1, param.length());
         }
-
-        byte cellRefBytes2[] = EncodeCellCoordinates();
+        byte cellRefBytes1[] = encodeCellCoordinates(cellRef1);
+        byte cellRefBytes2[] = encodeCellCoordinates(cellRef2);
 
         tmpByteArray.add(new Byte(cellRefBytes1[0]));
         tmpByteArray.add(new Byte(cellRefBytes1[1]));
@@ -577,7 +569,7 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private Vector FunctionEncoder(Token t) {
+    private Vector functionEncoder(Token t) {
         Vector tmpByteArray = new Vector();
 
         int id = t.getTokenID();

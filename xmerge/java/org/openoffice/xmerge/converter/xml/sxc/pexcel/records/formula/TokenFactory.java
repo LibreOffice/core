@@ -135,7 +135,7 @@ public class TokenFactory {
     public Token getOperandToken(String s, String type) {
         Token t;
 
-        Debug.log(Debug.TRACE,"TokenFactory creating operand Token : " + s);
+        Debug.log(Debug.TRACE,"TokenFactory creating operand (" + type + ") Token : " + s);
         t = new Token(s, ParseToken.TOKEN_OPERAND, operandLookup.getIDFromString(type), 0);
 
         return t;
