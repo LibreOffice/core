@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:21:11 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 21:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,7 +804,7 @@ TabPage TP_OPTIONS_LAYOUT
         Text[ chinese_simplified ] = "¶ΘΑΏµ¥Ξ»";
         Text[ russian ] = "Εδθνθφΰ θημεπενθÿ";
         Text[ polish ] = "Jednostka miary";
-        Text[ japanese ] = "“x—Κ’PΚ";
+        Text[ japanese ] = "g‚¤’PΚ";
         Text[ chinese_traditional ] = "«Χ¶q³ζ¦μ";
         Text[ arabic ] = "ζΝΟΙ ΗαήνΗΣ";
         Text[ greek ] = "Μονάδα μέτρησης";
