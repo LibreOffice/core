@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-31 14:25:48 $
+ *  last change: $Author: pb $ $Date: 2001-02-05 09:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -955,10 +955,13 @@ String SfxURLBox::GetURL()
         String aName = ParseSmart( GetText(), aBaseURL, SvtPathOptions().GetWorkPath() );
         if ( aName.Len() )
             aObj.SetURL( aName );
+        bool bSlash = aObj.hasFinalSlash();
         ::com::sun::star::uno::Any aAny = UCB_Helper::GetProperty( aObj.GetMainURL(), WID_TITLE );
         ::rtl::OUString aTitle;
         if ( aAny >>= aTitle )
             aObj.SetName( aTitle );
+        if ( bSlash )
+            aObj.setFinalSlash();
     }
 
     return aObj.GetMainURL();
