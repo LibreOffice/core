@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:22:55 $
+ *  last change: $Author: oj $ $Date: 2001-03-14 10:36:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,10 +231,14 @@ hidspecial HID_RELATIONDIALOG_LEFTFIELDCELL             { HelpId = HID_RELATIOND
 hidspecial HID_RELATIONDIALOG_RIGHTFIELDCELL            { HelpId = HID_RELATIONDIALOG_RIGHTFIELDCELL ; };
 hidspecial HID_RELDLG_KEYFIELDS                         { HelpId = HID_RELDLG_KEYFIELDS ; };
 hidspecial HID_BROWSER_RELATION_DESIGN                  { HelpId = HID_BROWSER_RELATION_DESIGN ; };
+hidspecial HID_TABLE_DESIGN_NO_CONNECTION               { HelpId = HID_TABLE_DESIGN_NO_CONNECTION ; };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2001/02/28 10:22:55  oj
+ *  new helpids for relation design
+ *
  *  Revision 1.17  2001/02/23 14:57:25  oj
  *  a lot more helpids
  *
