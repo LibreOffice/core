@@ -2534,3 +2534,4 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ?cpp_queryInterface@uno@star@sun@com@@YAPAXPAXPAU_typelib_TypeDescriptionReference@@@Z
 ?cpp_release@uno@star@sun@com@@YAXPAX@Z
 ?refreshHeader@OFileTable@file@connectivity@@UAEXXZ
+??1?$_Vector_base@U?$_Rb_tree_iterator@U?$pair@$$CBJJ@_STL@@U?$_Nonconst_traits@U?$pair@$$CBJJ@_STL@@@2@@_STL@@V?$allocator@U?$_Rb_tree_iterator@U?$pair@$$CBJJ@_STL@@U?$_Nonconst_traits@U?$pair@$$CBJJ@_STL@@@2@@_STL@@@2@@_STL@@QAE@XZ
