@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:30:05 $
+ *  last change: $Author: os $ $Date: 2002-09-06 13:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3931,12 +3931,12 @@ TabPage TP_TOX_ENTRY
     Image IMG_SORTUP_HC
     {
         ImageBitmap = Bitmap{File = "sch10712.bmp"; };
-        MaskColor = IMAGE_STDBTN_COLOR ;
+        MaskColor = IMAGE_MASK_COLOR ;
     };
     Image IMG_SORTDOWN_HC
     {
         ImageBitmap = Bitmap{File = "sch10713.bmp"; };
-        MaskColor = IMAGE_STDBTN_COLOR ;
+        MaskColor = IMAGE_MASK_COLOR ;
     };
     ImageRadioButton RB_SORTUP1
     {
@@ -3946,6 +3946,7 @@ TabPage TP_TOX_ENTRY
             Image
             {
                 ImageBitmap = Bitmap{File = "sc10712.bmp"; };
+                MaskColor = IMAGE_MASK_COLOR ;
             };
         Check = TRUE;
         QuickHelpText = "Aufsteigend";
@@ -3982,6 +3983,7 @@ TabPage TP_TOX_ENTRY
             Image
             {
                 ImageBitmap = Bitmap{File = "sc10713.bmp"; };
+                MaskColor = IMAGE_MASK_COLOR ;
             };
         QuickHelpText = "Absteigend";
         QuickHelpText[English] = "Descending";
@@ -4017,6 +4019,7 @@ TabPage TP_TOX_ENTRY
             Image
             {
                 ImageBitmap = Bitmap{File = "sc10712.bmp"; };
+                MaskColor = IMAGE_MASK_COLOR ;
             };
         Check = TRUE;
         QuickHelpText = "Aufsteigend";
@@ -4053,6 +4056,7 @@ TabPage TP_TOX_ENTRY
             Image
             {
                 ImageBitmap = Bitmap{File = "sc10713.bmp"; };
+                MaskColor = IMAGE_MASK_COLOR ;
             };
         QuickHelpText = "Absteigend";
         QuickHelpText[English] = "Descending";
@@ -4088,6 +4092,7 @@ TabPage TP_TOX_ENTRY
             Image
             {
                 ImageBitmap = Bitmap{File = "sc10712.bmp"; };
+                MaskColor = IMAGE_MASK_COLOR ;
             };
         Check = TRUE;
         QuickHelpText = "Aufsteigend";
@@ -4124,6 +4129,7 @@ TabPage TP_TOX_ENTRY
             Image
             {
                 ImageBitmap = Bitmap{File = "sc10713.bmp"; };
+                MaskColor = IMAGE_MASK_COLOR ;
             };
         QuickHelpText = "Absteigend";
         QuickHelpText[English] = "Descending";
@@ -4412,7 +4418,7 @@ TabPage TP_TOX_STYLES
             {
                 File = "one_left.bmp" ;
             };
-            MaskColor = IMAGE_STDBTN_COLOR ;
+            MaskColor = IMAGE_MASK_COLOR ;
         };
     };
     PushButton BT_EDIT_STYLE
@@ -4513,7 +4519,7 @@ ModalDialog DLG_ADD_IDX_STYLES
             {
                 File = "all_left.bmp" ;
             };
-            MaskColor = IMAGE_STDBTN_COLOR ;
+            MaskColor = IMAGE_MASK_COLOR ;
         };
     };
     ImageButton PB_RIGHT
@@ -4527,7 +4533,7 @@ ModalDialog DLG_ADD_IDX_STYLES
             {
                 File = "all_right.bmp" ;
             };
-            MaskColor = IMAGE_STDBTN_COLOR ;
+            MaskColor = IMAGE_MASK_COLOR ;
         };
     };
     FixedLine FL_STYLES

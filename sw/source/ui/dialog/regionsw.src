@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: os $ $Date: 2002-08-29 07:03:58 $
+ *  last change: $Author: os $ $Date: 2002-09-06 13:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -699,13 +699,13 @@ ModalDialog MD_EDIT_REGION
     ImageList IL_BITMAPS
     {
         ImageBitmap = Bitmap { File = "re_section.bmp" ; };
-        MaskColor = IMAGE_STDBTN_COLOR ;
+        MaskColor = IMAGE_MASK_COLOR ;
         DLG_IMAGE_IDLIST
     };
     ImageList ILH_BITMAPS
     {
         ImageBitmap = Bitmap { File = "reh_section.bmp" ; };
-        MaskColor = IMAGE_STDBTN_COLOR ;
+        MaskColor = IMAGE_MASK_COLOR ;
         DLG_IMAGE_IDLIST
     };
 };

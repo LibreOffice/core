@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2002-08-29 06:52:55 $
+ *  last change: $Author: os $ $Date: 2002-09-06 13:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,7 +352,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
             {
                 File = "one_right.bmp" ;
             };
-            MaskColor = IMAGE_STDBTN_COLOR ;
+            MaskColor = IMAGE_MASK_COLOR ;
         };
     };
     MultiLineEdit ED_DB_TEXT
@@ -394,7 +394,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         TEXT[ dutch ] = "~Alinea-opmaakprofiel:";
         TEXT[ chinese_simplified ] = "ÊÆµËêΩÊ†∑Âºè(~S)Ôºö";
         TEXT[ greek ] = "–Ò¸Ùıo ·Ò·„Ò‹ˆÔı:";
-        TEXT[ korean ] = "Îã®ÎùΩ ÌÖúÌîåÎ¶ø(~S):";
+        TEXT[ korean ] = "Îã®ÎùΩ Ïä§ÌÉÄÏùº(~S):";
         TEXT[ turkish ] = "Paragraf b~iÁimi:";
         TEXT[ catalan ] = "~Estil de par‡graf:";
         TEXT[ thai ] = "~‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞‡∏¢‡πà‡∏≠‡∏´‡∏ô‡πâ‡∏≤:";
@@ -428,7 +428,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
             {
                 File = "all_right.bmp" ;
             };
-            MaskColor = IMAGE_STDBTN_COLOR ;
+            MaskColor = IMAGE_MASK_COLOR ;
         };
     };
     ImageButton IB_DBCOL_ONE_TO
@@ -442,7 +442,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
             {
                 File = "one_right.bmp" ;
             };
-            MaskColor = IMAGE_STDBTN_COLOR ;
+            MaskColor = IMAGE_MASK_COLOR ;
         };
     };
     ImageButton IB_DBCOL_ONE_FROM
@@ -456,7 +456,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
             {
                 File = "one_left.bmp" ;
             };
-            MaskColor = IMAGE_STDBTN_COLOR ;
+            MaskColor = IMAGE_MASK_COLOR ;
         };
     };
     ImageButton IB_DBCOL_ALL_FROM
@@ -470,7 +470,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
             {
                 File = "all_left.bmp" ;
             };
-            MaskColor = IMAGE_STDBTN_COLOR ;
+            MaskColor = IMAGE_MASK_COLOR ;
         };
     };
     FixedText FT_TABLE_COL

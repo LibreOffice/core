@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 11:29:08 $
+ *  last change: $Author: os $ $Date: 2002-09-06 13:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,7 +349,7 @@ ImageList RID_DEFAULTIMAGELIST_SC
         File [ japanese ] = "sc_out81.bmp" ;
         File [ portuguese ] = "sc_out03.bmp" ;
     };
-    MaskColor = IMAGE_STDBTN_COLOR ;
+    MaskColor = IMAGE_MASK_COLOR ;
     IMAGELIST_AND_COUNT
 };
 ImageList RID_DEFAULTIMAGELIST_LC
@@ -371,7 +371,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
         File [ japanese ] = "lc_out81.bmp" ;
         File [ portuguese ] = "lc_out03.bmp" ;
     };
-    MaskColor = IMAGE_STDBTN_COLOR ;
+    MaskColor = IMAGE_MASK_COLOR ;
     IMAGELIST_AND_COUNT
 };
 
@@ -394,7 +394,7 @@ ImageList RID_DEFAULTIMAGELIST_SCH
         File [ japanese ] = "sch_out81.bmp" ;
         File [ portuguese ] = "sch_out03.bmp" ;
     };
-        MaskColor = IMAGE_STDBTN_COLOR ;
+        MaskColor = IMAGE_MASK_COLOR ;
     IMAGELIST_AND_COUNT
 };
 ImageList RID_DEFAULTIMAGELIST_LCH
@@ -416,13 +416,13 @@ ImageList RID_DEFAULTIMAGELIST_LCH
         File [ japanese ] = "lch_out81.bmp" ;
         File [ portuguese ] = "lch_out03.bmp" ;
     };
-        MaskColor = IMAGE_STDBTN_COLOR ;
+        MaskColor = IMAGE_MASK_COLOR ;
     IMAGELIST_AND_COUNT
 };
 
  // Vorlagen
 #define STYLE_IMAGE_LISTEF \
-    MaskColor = IMAGE_STDBTN_COLOR ; \
+    MaskColor = IMAGE_MASK_COLOR ; \
     IdList = \
     { \
         1; 2; 3; 4; 5; \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2002-08-29 07:11:53 $
+ *  last change: $Author: os $ $Date: 2002-09-06 13:49:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,13 +526,13 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     ImageList IL_VALUES
     {
         ImageBitmap = Bitmap { File = "sr_navi.bmp" ; };
-        MaskColor = IMAGE_STDBTN_COLOR ;
+        MaskColor = IMAGE_MASK_COLOR ;
         SCROLL_IMAGE_IDLIST
     };
     ImageList ILH_VALUES
     {
         ImageBitmap = Bitmap { File = "srh_navi.bmp" ; };
-        MaskColor = IMAGE_STDBTN_COLOR ;
+        MaskColor = IMAGE_MASK_COLOR ;
         SCROLL_IMAGE_IDLIST
     };
     FixedLine FL_SEP
@@ -2116,12 +2116,12 @@ ImageButton BTN_NAVI
     Image IMG_BTN
     {
         ImageBitmap = Bitmap { File = "punkt.bmp" ; };
-        MaskColor = IMAGE_STDBTN_COLOR ;
+        MaskColor = IMAGE_MASK_COLOR ;
     };
     Image IMG_BTN_H
     {
         ImageBitmap = Bitmap { File = "punkt_h.bmp" ; };
-        MaskColor = IMAGE_STDBTN_COLOR ;
+        MaskColor = IMAGE_MASK_COLOR ;
     };
     String ST_QUICK
     {

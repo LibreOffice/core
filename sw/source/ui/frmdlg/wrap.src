@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-08-29 07:08:55 $
+ *  last change: $Author: os $ $Date: 2002-09-06 13:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,15 +655,14 @@ TabPage TP_FRM_WRAP
     ImageList IL_WRAP
     {
         ImageBitmap = Bitmap { File = "wr_aplist.bmp" ; };
-        MaskColor = IMAGE_STDBTN_COLOR ;
+        MaskColor = IMAGE_MASK_COLOR ;
         WRAP_IDLIST
     };
     ImageList ILH_WRAP
     {
         ImageBitmap = Bitmap { File = "wrh_aplist.bmp" ; };
-        MaskColor = IMAGE_STDBTN_COLOR ;
+        MaskColor = IMAGE_MASK_COLOR ;
         WRAP_IDLIST
     };
-
 };
 
