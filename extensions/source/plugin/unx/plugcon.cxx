@@ -2,7 +2,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/plugcon.cxx,v 1.3 2003-03-25 16:03:42 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/plugcon.cxx,v 1.4 2003-05-28 12:38:57 vg Exp $
 
 *************************************************************************/
 #include <plugin/unx/plugcon.hxx>
@@ -187,12 +187,12 @@ ConnectorInstance::ConnectorInstance( NPP inst, char* type,
 
 ConnectorInstance::~ConnectorInstance()
 {
-    delete pMimeType;
-    delete argn;
-    delete argv;
-    delete pArgnBuf;
-    delete pArgvBuf;
-    delete aData.buf;
+    delete [] pMimeType;
+    delete [] argn;
+    delete [] argv;
+    delete [] pArgnBuf;
+    delete [] pArgvBuf;
+    delete [] aData.buf;
 }
 
 char* GetCommandName( CommandAtoms eCommand )
