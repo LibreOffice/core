@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-06 05:55:16 $
+ *  last change: $Author: os $ $Date: 2002-11-01 13:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ class SwFrm;
 struct SwPrintData;
 class SvtAccessibilityOptions;
 class Fraction;
+struct SwAccessibilityOptions;
 
 //JP 19.07.98: - Bug 52312
 // define fuer Flags, die im CTOR oder den darunter liegenden Schichten
@@ -149,6 +150,7 @@ class ViewShell : public Ring
     // Formatieren benutzt werden, wenn gesetzt (Prospekt+Seitenvorschaudruck)
 
     SwViewOption *pOpt;
+    SwAccessibilityOptions* pAccOptions;
 
 
     sal_Bool  bDocSizeChgd     :1;  //Fuer DocChgNotify(): Neue DocGroesse bei
@@ -340,6 +342,8 @@ public:
            void  SetReadonlyOption(sal_Bool bSet);   // Readonly-Bit d. ViewOptions setzen
            void  SetPrtFormatOption(sal_Bool bSet);  // PrtFormat-Bit d. ViewOptions setzen
            void  SetReadonlySelectionOption(sal_Bool bSet);//change the selection mode in readonly docs
+
+    const SwAccessibilityOptions* GetAccessibilityOptions() const { return pAccOptions;}
 
     static void           SetShellRes( ShellResource* pRes ) { pShellRes = pRes; }
     static ShellResource* GetShellRes() { return pShellRes; }

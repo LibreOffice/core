@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 14:00:49 $
+ *  last change: $Author: os $ $Date: 2002-11-01 13:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@
 #ifndef _NDINDEX_HXX
 #include <ndindex.hxx>
 #endif
+#ifndef _ACCESSIBILITYOPTIONS_HXX
+#include <accessibilityoptions.hxx>
+#endif
 
 /*************************************************************************
 |*
@@ -203,6 +206,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
                         long nFlags )
     : pDoc( &rDocument ),
     pOpt( 0 ),
+    pAccOptions( new SwAccessibilityOptions ),
     pWin( pWindow ),
     pOut( pOutput ? pOutput
                   : pWindow ? (OutputDevice*)pWindow
@@ -260,6 +264,7 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
                             : (OutputDevice*)rShell.GetDoc()->GetPrt(TRUE)),
     pRef( 0 ),
     pOpt( 0 ),
+    pAccOptions( new SwAccessibilityOptions ),
     nStartAction( 0 ),
     nLockPaint( 0 ),
     pSfxViewShell( 0 ),
@@ -367,6 +372,7 @@ ViewShell::~ViewShell()
         GetLayout()->DeRegisterShell( this );
 
     delete pRef;
+    delete pAccOptions;
 }
 
 const BOOL ViewShell::HasDrawView() const
@@ -394,6 +400,9 @@ SdrView* ViewShell::GetDrawViewWithValidMarkList()
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2002/04/11 14:00:49  mib
+      #98604#: Don't GPF if layout is desctructed by the the last view
+
       Revision 1.6  2001/08/10 10:52:57  rt
       #87576# so3/advise.hxx is obsolete
 

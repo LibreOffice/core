@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: os $ $Date: 2002-08-28 12:22:50 $
+ *  last change: $Author: os $ $Date: 2002-11-01 13:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,9 @@
 #ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
 #include <svtools/accessibilityoptions.hxx>
 #endif
-
+#ifndef _ACCESSIBILITYOPTIONS_HXX
+#include <accessibilityoptions.hxx>
+#endif
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>
 #endif
@@ -2256,17 +2258,17 @@ void ViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibility
 {
     if(pOpt->IsPagePreview() && !rAccessibilityOptions.GetIsForPagePreviews())
     {
-        pOpt->SetAlwaysAutoColor(sal_False);
-        pOpt->SetStopAnimatedGraphics(sal_False);
-        pOpt->SetStopAnimatedText(sal_False);
-        pOpt->SetUseAutomaticBorderColor(sal_False);
+        pAccOptions->SetAlwaysAutoColor(sal_False);
+        pAccOptions->SetStopAnimatedGraphics(sal_False);
+        pAccOptions->SetStopAnimatedText(sal_False);
+        pAccOptions->SetUseAutomaticBorderColor(sal_False);
     }
     else
     {
-        pOpt->SetAlwaysAutoColor(rAccessibilityOptions.GetIsAutomaticFontColor());
-        pOpt->SetStopAnimatedGraphics(! rAccessibilityOptions.GetIsAllowAnimatedGraphics());
-        pOpt->SetStopAnimatedText(! rAccessibilityOptions.GetIsAllowAnimatedText());
-        pOpt->SetUseAutomaticBorderColor(rAccessibilityOptions.GetIsForBorders());
+        pAccOptions->SetAlwaysAutoColor(rAccessibilityOptions.GetIsAutomaticFontColor());
+        pAccOptions->SetStopAnimatedGraphics(! rAccessibilityOptions.GetIsAllowAnimatedGraphics());
+        pAccOptions->SetStopAnimatedText(! rAccessibilityOptions.GetIsAllowAnimatedText());
+        pAccOptions->SetUseAutomaticBorderColor(rAccessibilityOptions.GetIsForBorders());
 
         if(pOpt->IsReadonly())
             pOpt->SetSelectionInReadonly(rAccessibilityOptions.IsSelectionInReadonly());
