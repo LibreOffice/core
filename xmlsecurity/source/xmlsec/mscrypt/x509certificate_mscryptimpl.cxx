@@ -2,9 +2,9 @@
  *
  *  $RCSfile: x509certificate_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:57:53 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,16 +204,20 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL ) {
         SYSTEMTIME explTime ;
         DateTime dateTime ;
+        FILETIME localFileTime;
 
-        if( FileTimeToSystemTime( &( m_pCertContext->pCertInfo->NotBefore ), &explTime ) ) {
-            //Convert the time to readable local time
-            dateTime.HundredthSeconds = explTime.wMilliseconds / 100 ;
-            dateTime.Seconds = explTime.wSecond ;
-            dateTime.Minutes = explTime.wMinute ;
-            dateTime.Hours = explTime.wHour ;
-            dateTime.Day = explTime.wDay ;
-            dateTime.Month = explTime.wMonth ;
-            dateTime.Year = explTime.wYear ;
+        if (FileTimeToLocalFileTime(&( m_pCertContext->pCertInfo->NotBefore ), &localFileTime))
+        {
+            if( FileTimeToSystemTime( &localFileTime, &explTime ) ) {
+                //Convert the time to readable local time
+                dateTime.HundredthSeconds = explTime.wMilliseconds / 100 ;
+                dateTime.Seconds = explTime.wSecond ;
+                dateTime.Minutes = explTime.wMinute ;
+                dateTime.Hours = explTime.wHour ;
+                dateTime.Day = explTime.wDay ;
+                dateTime.Month = explTime.wMonth ;
+                dateTime.Year = explTime.wYear ;
+            }
         }
 
         return dateTime ;
@@ -226,16 +230,20 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL ) {
         SYSTEMTIME explTime ;
         DateTime dateTime ;
+        FILETIME localFileTime;
 
-        if( FileTimeToSystemTime( &( m_pCertContext->pCertInfo->NotAfter ), &explTime ) ) {
-            //Convert the time to readable local time
-            dateTime.HundredthSeconds = explTime.wMilliseconds / 100 ;
-            dateTime.Seconds = explTime.wSecond ;
-            dateTime.Minutes = explTime.wMinute ;
-            dateTime.Hours = explTime.wHour ;
-            dateTime.Day = explTime.wDay ;
-            dateTime.Month = explTime.wMonth ;
-            dateTime.Year = explTime.wYear ;
+        if (FileTimeToLocalFileTime(&( m_pCertContext->pCertInfo->NotAfter ), &localFileTime))
+        {
+            if( FileTimeToSystemTime( &localFileTime, &explTime ) ) {
+                //Convert the time to readable local time
+                dateTime.HundredthSeconds = explTime.wMilliseconds / 100 ;
+                dateTime.Seconds = explTime.wSecond ;
+                dateTime.Minutes = explTime.wMinute ;
+                dateTime.Hours = explTime.wHour ;
+                dateTime.Day = explTime.wDay ;
+                dateTime.Month = explTime.wMonth ;
+                dateTime.Year = explTime.wYear ;
+            }
         }
 
         return dateTime ;
