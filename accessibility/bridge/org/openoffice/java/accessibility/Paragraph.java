@@ -162,6 +162,10 @@ public class Paragraph extends Container implements javax.accessibility.Accessib
 
         /** Gets the AccessibleEditableText associated with this object presenting text on the display */
         public javax.accessibility.AccessibleEditableText getAccessibleEditableText() {
+
+            if (disposed)
+                return null;
+
             try {
                 XAccessibleEditableText unoAccessibleText = (XAccessibleEditableText)
                     UnoRuntime.queryInterface(XAccessibleEditableText.class,
