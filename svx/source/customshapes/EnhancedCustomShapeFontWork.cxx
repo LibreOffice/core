@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeFontWork.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:22:45 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,10 @@
 #endif
 #define ITEMID_FONT         EE_CHAR_FONTINFO
 #define ITEMID_CHARSCALE_W  EE_CHAR_FONTWIDTH
+#define ITEMID_FRAMEDIR     EE_PARA_WRITINGDIR
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <frmdiritem.hxx>
+#endif
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <fontitem.hxx>
 #endif
@@ -126,14 +130,30 @@
 #include <numeric>
 #include <algorithm>
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
+#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#endif
 #ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_CHARACTERITERATORMODE_HDL_
+#include <com/sun/star/i18n/CharacterIteratorMode.hdl>
 #endif
 
 #ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #endif
 
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
 typedef std::vector< std::vector< double > > PolyPolygonDistances;
@@ -148,6 +168,7 @@ struct FWParagraphData                  // representing a single paragraph
     rtl::OUString                       aString;
     std::vector< FWCharacterData >      vCharacters;
     Rectangle                           aBoundRect;
+    sal_Int16                           nFrameDirection;
 };
 struct FWTextArea                       // representing multiple concluding paragraphs
 {
@@ -184,7 +205,6 @@ sal_Bool InitializeFontWorkData( const SdrObject* pCustomShape, const sal_uInt16
         {
             const EditTextObject& rTextObj = pParaObj->GetTextObject();
             sal_Int16 nParagraphsLeft = rTextObj.GetParagraphCount();
-            sal_Int16 k = 0;
 
             rFWData.nMaxParagraphsPerTextArea = ( ( nParagraphsLeft - 1 ) / nTextAreaCount ) + 1;
 
@@ -195,7 +215,10 @@ sal_Bool InitializeFontWorkData( const SdrObject* pCustomShape, const sal_uInt16
                 for ( i = 0; i < nParagraphs; i++ )
                 {
                     FWParagraphData aParagraphData;
-                    aParagraphData.aString = rTextObj.GetText( k++ );
+                    aParagraphData.aString = rTextObj.GetText( i );
+
+                    const SfxItemSet& rParaSet = rTextObj.GetParaAttribs( i );  // retrieving some paragraph attributes
+                    aParagraphData.nFrameDirection = ((SvxFrameDirectionItem&)rParaSet.Get( EE_PARA_WRITINGDIR )).GetValue();
                     aTextArea.vParagraphs.push_back( aParagraphData );
                 }
                 rFWData.vTextAreas.push_back( aTextArea );
@@ -316,12 +339,16 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             VirtualDevice aVirDev( 1 );
             aVirDev.SetMapMode( MAP_100TH_MM );
             aVirDev.SetFont( aFont );
+            aVirDev.EnableRTL( sal_True );
+            if ( aParagraphIter->nFrameDirection == FRMDIR_HORI_RIGHT_TOP )
+                aVirDev.SetLayoutMode( TEXT_LAYOUT_BIDI_RTL );
 
             SvxCharScaleWidthItem& rCharScaleWidthItem = (SvxCharScaleWidthItem&)pCustomShape->GetMergedItem( EE_CHAR_FONTWIDTH );
             sal_uInt16 nCharScaleWidth = rCharScaleWidthItem.GetValue();
             long* pDXArry = NULL;
             sal_Int32 nWidth = 0;
 
+            // VERTICAL
             if ( bIsVertical )
             {
                 // vertical _> each single character needs to be rotated by 90
@@ -389,15 +416,13 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                     aFont.SetWidth( (sal_Int32)( (double)aFontMetric.GetWidth() * ( (double)100 / (double)nCharScaleWidth ) ) );
                     aVirDev.SetFont( aFont );
                 }
-
-
                 FWCharacterData aCharacterData;
                 if ( aVirDev.GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, STRING_LEN, TRUE, nWidth, pDXArry ) )
                 {
                     aParagraphIter->vCharacters.push_back( aCharacterData );
                 }
 
-/*
+/* trying to retrieve each single character _> is not working well
                 sal_Int32 i;
                 for ( i = 0; i < rText.getLength(); i++ )
                 {
@@ -434,7 +459,8 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                         rPolyPoly.Move( 0, nVerticalOffset );
 
                     // retrieving the boundrect for the paragraph
-                    aParagraphIter->aBoundRect.Union( rPolyPoly.GetBoundRect() );
+                    Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
+                    aParagraphIter->aBoundRect.Union( aBoundRect );
                 }
                 aCharacterIter++;
             }
