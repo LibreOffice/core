@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SortDescriptor.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-14 10:05:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@ module com {  module sun {  module star {  module util {
     a sort order applied to an XSortable.
 
     @see XSortable
+
+    @deprecated
  */
 service SortDescriptor
 {
