@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-13 18:44:47 $
+ *  last change: $Author: thb $ $Date: 2002-06-17 16:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,6 +390,17 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     // synched on EndTextEdit)
                     delete mpViewForwarder;
                     mpViewForwarder = NULL;
+
+                    // #100424# Invalidate text forwarder, we might
+                    // not be called again before entering edit mode a
+                    // second time! Then, the old outliner might be
+                    // invalid.
+                    if( mbForwarderIsEditMode )
+                    {
+                        mbForwarderIsEditMode = sal_False;
+                        delete mpTextForwarder;
+                        mpTextForwarder = NULL;
+                    }
                 }
                 break;
         }
