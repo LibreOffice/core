@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:03:15 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
 #include <com/sun/star/uno/XNamingService.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -83,8 +86,8 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
 #include <com/sun/star/container/XContainer.hpp>
 #endif
-#ifndef _CPPUHELPER_COMPBASE7_HXX_
-#include <cppuhelper/compbase7.hxx>
+#ifndef _CPPUHELPER_COMPBASE8_HXX_
+#include <cppuhelper/compbase8.hxx>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -104,6 +107,10 @@
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
+#ifndef _DBA_COREDATAACCESS_MODELIMPL_HXX_
+#include "ModelImpl.hxx"
+#endif
+#include <boost/shared_ptr.hpp>
 
 // needed for registration
 namespace com { namespace sun { namespace star {
@@ -125,17 +132,17 @@ namespace dbaccess
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     ODatabaseContext_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-typedef ::cppu::WeakComponentImplHelper7    <   ::com::sun::star::lang::XServiceInfo
+typedef ::cppu::WeakComponentImplHelper8    <   ::com::sun::star::lang::XServiceInfo
                                             ,   ::com::sun::star::container::XEnumerationAccess
                                             ,   ::com::sun::star::container::XNameAccess
                                             ,   ::com::sun::star::uno::XNamingService
                                             ,   ::com::sun::star::lang::XEventListener
                                             ,   ::com::sun::star::container::XContainer
                                             ,   ::com::sun::star::lang::XSingleServiceFactory
+                                            ,   ::com::sun::star::lang::XUnoTunnel
                                             >   DatabaseAccessContext_Base;
 
-class ODatabaseContext
-            :public DatabaseAccessContext_Base
+class ODatabaseContext : public DatabaseAccessContext_Base
 {
 private:
     /** loads the given object from the given URL
@@ -152,12 +159,17 @@ private:
     */
     bool    getURLForRegisteredObject( const ::rtl::OUString& _rRegisteredName, ::rtl::OUString& _rURL );
 
+    /** sets all properties which were transient at the data source. e.g. password
+        @param  _sURL       The file URL of the data source
+        @param  _xObject    The data source itself.
+    */
+    void setTransientProperties(const ::rtl::OUString& _sURL, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xObject);
+
 protected:
     ::osl::Mutex    m_aMutex;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >            m_xServiceManager;
 
-    typedef ::std::pair< ::com::sun::star::uno::WeakReferenceHelper,::com::sun::star::uno::WeakReferenceHelper > ObjectCacheType;
-    DECLARE_STL_USTRINGACCESS_MAP( ObjectCacheType, ObjectCache );
+    DECLARE_STL_USTRINGACCESS_MAP( ODatabaseModelImpl*, ObjectCache );
     ObjectCache     m_aDatabaseObjects;
 
     DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >, PropertyCache );
@@ -217,7 +229,13 @@ public:
     virtual void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
 
-    void registerPrivate(const ::rtl::OUString& _sName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xObject);
+    // com::sun::star::lang::XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+    static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+
+    void registerPrivate(const ::rtl::OUString& _sName
+                        ,const ::rtl::Reference<ODatabaseModelImpl>& _pModelImpl);
+    void deregisterPrivate(const ::rtl::OUString& _sName);
     void nameChangePrivate(const ::rtl::OUString& _sOldName, const ::rtl::OUString& _sNewName);
 };
 
