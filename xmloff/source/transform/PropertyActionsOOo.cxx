@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOOo.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:10:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:11:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,7 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
           NO_PARAMS },
     { XML_NAMESPACE_STYLE, XML_PRINT_CONTENT, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
-    { XML_NAMESPACE_STYLE, XML_PROTECT, XML_ATACTION_COPY,
+    { XML_NAMESPACE_STYLE, XML_PROTECT, XML_ATACTION_PROTECT,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_HORIZONTAL_POS, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
