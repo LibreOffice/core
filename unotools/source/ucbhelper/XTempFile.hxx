@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTempFile.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-01 12:56:13 $
+ *  last change: $Author: mtg $ $Date: 2001-08-14 17:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,14 +79,12 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
-#ifndef _UNOTOOLS_TEMPFILE_HXX
-#include <unotools/tempfile.hxx>
-#endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
 
 class SvStream;
+namespace utl { class TempFile; }
 
 class XTempFile : public com::sun::star::io::XInputStream,
                   public com::sun::star::io::XOutputStream,
@@ -94,9 +92,9 @@ class XTempFile : public com::sun::star::io::XInputStream,
                   public cppu::OWeakObject
 {
 protected:
-    ::utl::TempFile maTempFile;
-    ::osl::Mutex    maMutex;
-    SvStream*       mpStream;
+    ::utl::TempFile*    mpTempFile;
+    ::osl::Mutex        maMutex;
+    SvStream*           mpStream;
     void checkError () const;
     void checkConnected () const;
 

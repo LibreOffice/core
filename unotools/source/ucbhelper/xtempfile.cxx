@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtempfile.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-01 12:59:20 $
+ *  last change: $Author: mtg $ $Date: 2001-08-14 17:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,22 @@
 #ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
+#ifndef _UNOTOOLS_TEMPFILE_HXX
+#include <unotools/tempfile.hxx>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+
 
 using com::sun::star::registry::XRegistryKey;
 using com::sun::star::registry::InvalidRegistryException;
@@ -89,14 +105,34 @@ using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::lang::XSingleServiceFactory;
 using cppu::OWeakObject;
 using rtl::OUString;
+using osl::FileBase;
+using utl::TempFile;
+using namespace utl;
+
+// copy define from desktop\source\app\appinit.cxx
+
+#define DESKTOP_TEMPNAMEBASE_DIR    "/temp/soffice.tmp"
 
 XTempFile::XTempFile ()
 {
-    maTempFile.EnableKillingFile ( sal_True );
-    mpStream = maTempFile.GetStream ( STREAM_STD_READWRITE );
+    if ( ! TempFile::GetTempNameBaseDirectory().Len())
+    {
+        OUString aUserPath, aTmp;
+        ConfigManager* pCfgMgr = ConfigManager::GetConfigManager();
+        Any aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::INSTALLPATH );
+        aAny >>= aUserPath;
+
+        aUserPath += OUString ( RTL_CONSTASCII_USTRINGPARAM (DESKTOP_TEMPNAMEBASE_DIR ) );
+        FileBase::getFileURLFromSystemPath( aUserPath, aTmp );
+        TempFile::SetTempNameBaseDirectory( aTmp );
+    }
+    mpTempFile = new TempFile;
+    mpTempFile->EnableKillingFile ( sal_True );
+    mpStream = mpTempFile->GetStream ( STREAM_STD_READWRITE );
 }
 XTempFile::~XTempFile ()
 {
+    delete mpTempFile;
 }
 
 // XInterface
