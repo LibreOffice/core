@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Math.xcs,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 18:28:17 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,23 +265,23 @@
 						<info>
 							<desc xml:lang="en-US">roman</desc>
 							<desc xml:lang="el">roman</desc>
-							<desc xml:lang="nl">roman</desc>
-							<desc xml:lang="fr">roman</desc>
+							<desc xml:lang="nl">ROMEINS</desc>
+							<desc xml:lang="fr">ROMAIN</desc>
 							<desc xml:lang="fi">roman</desc>
 							<desc xml:lang="cs">roman</desc>
-							<desc xml:lang="da">roman</desc>
+							<desc xml:lang="da">ROMERTAL</desc>
 							<desc xml:lang="zh-CN">roman</desc>
 							<desc xml:lang="zh-TW">roman</desc>
 							<desc xml:lang="ar">roman</desc>
-							<desc xml:lang="he">roman</desc>
+							<desc xml:lang="he">RÖMISCH</desc>
 							<desc xml:lang="ca">roman</desc>
-							<desc xml:lang="pt">roman</desc>
+							<desc xml:lang="pt">ROMANO</desc>
 							<desc xml:lang="ru">РИМСКИЕ</desc>
-							<desc xml:lang="es">roman</desc>
-							<desc xml:lang="it">roman</desc>
+							<desc xml:lang="es">ROMANO</desc>
+							<desc xml:lang="it">ROMANO</desc>
 							<desc xml:lang="sv">ROMERSK</desc>
 							<desc xml:lang="pl">RZYMSKIE</desc>
-							<desc xml:lang="pt-BR">roman</desc>
+							<desc xml:lang="pt-BR">ROMANO</desc>
 							<desc xml:lang="ja">roman</desc>
 							<desc xml:lang="ko">roman</desc>
 							<desc xml:lang="tr">roman</desc>
@@ -295,13 +295,13 @@
 							<desc xml:lang="el">script</desc>
 							<desc xml:lang="nl">script</desc>
 							<desc xml:lang="fr">script</desc>
-							<desc xml:lang="fi">script</desc>
-							<desc xml:lang="cs">script</desc>
+							<desc xml:lang="fi">Komentosarja</desc>
+							<desc xml:lang="cs">Skript</desc>
 							<desc xml:lang="da">script</desc>
 							<desc xml:lang="zh-CN">脚本</desc>
 							<desc xml:lang="zh-TW">程式檔</desc>
-							<desc xml:lang="ar">script</desc>
-							<desc xml:lang="he">script</desc>
+							<desc xml:lang="ar">نص برمجي</desc>
+							<desc xml:lang="he">‮קוד לביצוה‬</desc>
 							<desc xml:lang="ca">script</desc>
 							<desc xml:lang="pt">script</desc>
 							<desc xml:lang="ru">Скрипт</desc>
@@ -348,17 +348,17 @@
 					<enumeration oor:value="6">
 						<info>
 							<desc xml:lang="en-US">system</desc>
-							<desc xml:lang="el">system</desc>
-							<desc xml:lang="nl">system</desc>
-							<desc xml:lang="fr">system</desc>
-							<desc xml:lang="fi">system</desc>
+							<desc xml:lang="el">Σύστημα</desc>
+							<desc xml:lang="nl">Systeem</desc>
+							<desc xml:lang="fr">Système</desc>
+							<desc xml:lang="fi">Järjestelmä</desc>
 							<desc xml:lang="cs">system</desc>
 							<desc xml:lang="da">system</desc>
 							<desc xml:lang="zh-CN">系统</desc>
 							<desc xml:lang="zh-TW">系統</desc>
-							<desc xml:lang="ar">system</desc>
+							<desc xml:lang="ar">النظام</desc>
 							<desc xml:lang="he">system</desc>
-							<desc xml:lang="ca">system</desc>
+							<desc xml:lang="ca">Sistema</desc>
 							<desc xml:lang="pt">Sistema</desc>
 							<desc xml:lang="ru">Из системы</desc>
 							<desc xml:lang="es">Sistema</desc>
@@ -434,17 +434,17 @@
 					<enumeration oor:value="1">
 						<info>
 							<desc xml:lang="en-US">fixed</desc>
-							<desc xml:lang="el">fixed</desc>
-							<desc xml:lang="nl">fixed</desc>
+							<desc xml:lang="el">Σταθερά</desc>
+							<desc xml:lang="nl">Vast</desc>
 							<desc xml:lang="fr">Fixé</desc>
-							<desc xml:lang="fi">fixed</desc>
-							<desc xml:lang="cs">fixed</desc>
-							<desc xml:lang="da">fixed</desc>
+							<desc xml:lang="fi">Kiinteä</desc>
+							<desc xml:lang="cs">Písmo s pevnou šířkou (fixed)</desc>
+							<desc xml:lang="da">Fast</desc>
 							<desc xml:lang="zh-CN">固定</desc>
 							<desc xml:lang="zh-TW">固定</desc>
-							<desc xml:lang="ar">fixed</desc>
-							<desc xml:lang="he">fixed</desc>
-							<desc xml:lang="ca">fixed</desc>
+							<desc xml:lang="ar">ثابت</desc>
+							<desc xml:lang="he">‮קבוע‬</desc>
+							<desc xml:lang="ca">Fix</desc>
 							<desc xml:lang="pt">Fixo</desc>
 							<desc xml:lang="ru">Точный</desc>
 							<desc xml:lang="es">Fijo</desc>
@@ -462,24 +462,24 @@
 					<enumeration oor:value="2">
 						<info>
 							<desc xml:lang="en-US">variable</desc>
-							<desc xml:lang="el">variable</desc>
-							<desc xml:lang="nl">variable</desc>
+							<desc xml:lang="el">Μεταβλητή</desc>
+							<desc xml:lang="nl">Variabele</desc>
 							<desc xml:lang="fr">variable</desc>
-							<desc xml:lang="fi">variable</desc>
-							<desc xml:lang="cs">variable</desc>
-							<desc xml:lang="da">variable</desc>
+							<desc xml:lang="fi">Muuttuja</desc>
+							<desc xml:lang="cs">Proměnný</desc>
+							<desc xml:lang="da">Variabel</desc>
 							<desc xml:lang="zh-CN">可变</desc>
 							<desc xml:lang="zh-TW">可變</desc>
-							<desc xml:lang="ar">variable</desc>
-							<desc xml:lang="he">variable</desc>
+							<desc xml:lang="ar">متغيرة</desc>
+							<desc xml:lang="he">Variabel</desc>
 							<desc xml:lang="ca">variable</desc>
-							<desc xml:lang="pt">variable</desc>
+							<desc xml:lang="pt">Variável</desc>
 							<desc xml:lang="ru">Переменная</desc>
 							<desc xml:lang="es">variable</desc>
-							<desc xml:lang="it">variable</desc>
-							<desc xml:lang="sv">variable</desc>
+							<desc xml:lang="it">Variabile</desc>
+							<desc xml:lang="sv">Variabel</desc>
 							<desc xml:lang="pl">Zmienna</desc>
-							<desc xml:lang="pt-BR">variable</desc>
+							<desc xml:lang="pt-BR">Variável</desc>
 							<desc xml:lang="ja">変数</desc>
 							<desc xml:lang="ko">변수</desc>
 							<desc xml:lang="tr">Değişken</desc>
@@ -548,17 +548,17 @@
 					<enumeration oor:value="1">
 						<info>
 							<desc xml:lang="en-US">thin</desc>
-							<desc xml:lang="el">thin</desc>
-							<desc xml:lang="nl">thin</desc>
+							<desc xml:lang="el">λεπτό</desc>
+							<desc xml:lang="nl">dun</desc>
 							<desc xml:lang="fr">Fin</desc>
-							<desc xml:lang="fi">thin</desc>
-							<desc xml:lang="cs">thin</desc>
-							<desc xml:lang="da">thin</desc>
+							<desc xml:lang="fi">ohut</desc>
+							<desc xml:lang="cs">tenké</desc>
+							<desc xml:lang="da">tynd</desc>
 							<desc xml:lang="zh-CN">细体</desc>
 							<desc xml:lang="zh-TW">細體</desc>
-							<desc xml:lang="ar">thin</desc>
-							<desc xml:lang="he">thin</desc>
-							<desc xml:lang="ca">thin</desc>
+							<desc xml:lang="ar">رفيع</desc>
+							<desc xml:lang="he">‮דק‬</desc>
+							<desc xml:lang="ca">Prima</desc>
 							<desc xml:lang="pt">fino</desc>
 							<desc xml:lang="ru">тонкий</desc>
 							<desc xml:lang="es">fina</desc>
@@ -604,17 +604,17 @@
 					<enumeration oor:value="3">
 						<info>
 							<desc xml:lang="en-US">light</desc>
-							<desc xml:lang="el">light</desc>
-							<desc xml:lang="nl">light</desc>
+							<desc xml:lang="el">απαλό</desc>
+							<desc xml:lang="nl">licht</desc>
 							<desc xml:lang="fr">Léger</desc>
-							<desc xml:lang="fi">light</desc>
-							<desc xml:lang="cs">light</desc>
-							<desc xml:lang="da">light</desc>
+							<desc xml:lang="fi">vaalea</desc>
+							<desc xml:lang="cs">Lehké</desc>
+							<desc xml:lang="da">let</desc>
 							<desc xml:lang="zh-CN">细体</desc>
 							<desc xml:lang="zh-TW">細體</desc>
-							<desc xml:lang="ar">light</desc>
-							<desc xml:lang="he">light</desc>
-							<desc xml:lang="ca">light</desc>
+							<desc xml:lang="ar">خفيف</desc>
+							<desc xml:lang="he">‮כתב קל‬</desc>
+							<desc xml:lang="ca">Clar</desc>
 							<desc xml:lang="pt">claro</desc>
 							<desc xml:lang="ru">тонкий</desc>
 							<desc xml:lang="es">claro</desc>
@@ -632,24 +632,24 @@
 					<enumeration oor:value="4">
 						<info>
 							<desc xml:lang="en-US">semi light</desc>
-							<desc xml:lang="el">semi light</desc>
-							<desc xml:lang="nl">semi light</desc>
-							<desc xml:lang="fr">semi light</desc>
-							<desc xml:lang="fi">semi light</desc>
-							<desc xml:lang="cs">semi light</desc>
-							<desc xml:lang="da">semi light</desc>
+							<desc xml:lang="el">ημι-απαλό</desc>
+							<desc xml:lang="nl">halflicht</desc>
+							<desc xml:lang="fr">Semi-clair</desc>
+							<desc xml:lang="fi">puolivaalea</desc>
+							<desc xml:lang="cs">středně jemné</desc>
+							<desc xml:lang="da">semi let</desc>
 							<desc xml:lang="zh-CN">半细</desc>
 							<desc xml:lang="zh-TW">半細</desc>
-							<desc xml:lang="ar">semi light</desc>
-							<desc xml:lang="he">semi light</desc>
-							<desc xml:lang="ca">semi light</desc>
-							<desc xml:lang="pt">semi light</desc>
+							<desc xml:lang="ar">نصف خفيف</desc>
+							<desc xml:lang="he">‮קל למחצה‬</desc>
+							<desc xml:lang="ca">semisuau</desc>
+							<desc xml:lang="pt">semi-claro</desc>
 							<desc xml:lang="ru">полутонкий</desc>
-							<desc xml:lang="es">semi light</desc>
-							<desc xml:lang="it">semi light</desc>
-							<desc xml:lang="sv">semi light</desc>
+							<desc xml:lang="es">semiclaro</desc>
+							<desc xml:lang="it">semileggero</desc>
+							<desc xml:lang="sv">semilätt</desc>
 							<desc xml:lang="pl">pół-lekki</desc>
-							<desc xml:lang="pt-BR">semi light</desc>
+							<desc xml:lang="pt-BR">semi-claro</desc>
 							<desc xml:lang="ja">やや細字</desc>
 							<desc xml:lang="ko">중간 밝게</desc>
 							<desc xml:lang="tr">Yarı ince</desc>
@@ -660,21 +660,21 @@
 					<enumeration oor:value="5">
 						<info>
 							<desc xml:lang="en-US">normal</desc>
-							<desc xml:lang="el">normal</desc>
-							<desc xml:lang="nl">normal</desc>
+							<desc xml:lang="el">κανονικά</desc>
+							<desc xml:lang="nl">~Normal</desc>
 							<desc xml:lang="fr">~Normal</desc>
-							<desc xml:lang="fi">normal</desc>
-							<desc xml:lang="cs">normal</desc>
-							<desc xml:lang="da">normal</desc>
+							<desc xml:lang="fi">tavallinen</desc>
+							<desc xml:lang="cs">Běžný</desc>
+							<desc xml:lang="da">~Normal</desc>
 							<desc xml:lang="zh-CN">普通</desc>
 							<desc xml:lang="zh-TW">普通</desc>
-							<desc xml:lang="ar">normal</desc>
-							<desc xml:lang="he">normal</desc>
+							<desc xml:lang="ar">عادي</desc>
+							<desc xml:lang="he">‮רגיל‬</desc>
 							<desc xml:lang="ca">normal</desc>
 							<desc xml:lang="pt">~Normal</desc>
 							<desc xml:lang="ru">обычный</desc>
 							<desc xml:lang="es">normal</desc>
-							<desc xml:lang="it">normal</desc>
+							<desc xml:lang="it">normale</desc>
 							<desc xml:lang="sv">~Normal</desc>
 							<desc xml:lang="pl">Zwykła</desc>
 							<desc xml:lang="pt-BR">normal</desc>
@@ -688,17 +688,17 @@
 					<enumeration oor:value="6">
 						<info>
 							<desc xml:lang="en-US">medium</desc>
-							<desc xml:lang="el">medium</desc>
-							<desc xml:lang="nl">medium</desc>
+							<desc xml:lang="el">μεσαίο</desc>
+							<desc xml:lang="nl">~Medium</desc>
 							<desc xml:lang="fr">Moyen</desc>
-							<desc xml:lang="fi">medium</desc>
-							<desc xml:lang="cs">medium</desc>
-							<desc xml:lang="da">medium</desc>
+							<desc xml:lang="fi">normaali</desc>
+							<desc xml:lang="cs">Střední</desc>
+							<desc xml:lang="da">middel</desc>
 							<desc xml:lang="zh-CN">中等</desc>
 							<desc xml:lang="zh-TW">中等</desc>
-							<desc xml:lang="ar">medium</desc>
-							<desc xml:lang="he">medium</desc>
-							<desc xml:lang="ca">medium</desc>
+							<desc xml:lang="ar">متوسط</desc>
+							<desc xml:lang="he">‮מדיה‬</desc>
+							<desc xml:lang="ca">Mitjà</desc>
 							<desc xml:lang="pt">médio</desc>
 							<desc xml:lang="ru">средний</desc>
 							<desc xml:lang="es">Tipo</desc>
@@ -716,24 +716,24 @@
 					<enumeration oor:value="7">
 						<info>
 							<desc xml:lang="en-US">semi bold</desc>
-							<desc xml:lang="el">semi bold</desc>
-							<desc xml:lang="nl">semi bold</desc>
-							<desc xml:lang="fr">semi bold</desc>
-							<desc xml:lang="fi">semi bold</desc>
-							<desc xml:lang="cs">semi bold</desc>
-							<desc xml:lang="da">semi bold</desc>
+							<desc xml:lang="el">ημι-έντονο</desc>
+							<desc xml:lang="nl">halfvet</desc>
+							<desc xml:lang="fr">Semi-gras</desc>
+							<desc xml:lang="fi">puolilihavoitu</desc>
+							<desc xml:lang="cs">středně tučné</desc>
+							<desc xml:lang="da">semi fed</desc>
 							<desc xml:lang="zh-CN">半粗</desc>
 							<desc xml:lang="zh-TW">半粗</desc>
-							<desc xml:lang="ar">semi bold</desc>
-							<desc xml:lang="he">semi bold</desc>
-							<desc xml:lang="ca">semi bold</desc>
-							<desc xml:lang="pt">semi bold</desc>
+							<desc xml:lang="ar">نصف عريض</desc>
+							<desc xml:lang="he">‮מודגש למחצה‬</desc>
+							<desc xml:lang="ca">seminegreta</desc>
+							<desc xml:lang="pt">semi-negrito</desc>
 							<desc xml:lang="ru">полужирный</desc>
-							<desc xml:lang="es">semi bold</desc>
-							<desc xml:lang="it">semi bold</desc>
+							<desc xml:lang="es">seminegrita</desc>
+							<desc xml:lang="it">semigrassetto</desc>
 							<desc xml:lang="sv">halvfet</desc>
 							<desc xml:lang="pl">półpogrubiony</desc>
-							<desc xml:lang="pt-BR">semi bold</desc>
+							<desc xml:lang="pt-BR">semi-negrito</desc>
 							<desc xml:lang="ja">やや太字</desc>
 							<desc xml:lang="ko">굵게, 중간</desc>
 							<desc xml:lang="tr">Yarı kalın</desc>
@@ -744,17 +744,17 @@
 					<enumeration oor:value="8">
 						<info>
 							<desc xml:lang="en-US">bold</desc>
-							<desc xml:lang="el">bold</desc>
-							<desc xml:lang="nl">bold</desc>
+							<desc xml:lang="el">Έντ~ονο</desc>
+							<desc xml:lang="nl">~Vet</desc>
 							<desc xml:lang="fr">~Gras</desc>
-							<desc xml:lang="fi">bold</desc>
-							<desc xml:lang="cs">bold</desc>
-							<desc xml:lang="da">bold</desc>
+							<desc xml:lang="fi">Lihavointi</desc>
+							<desc xml:lang="cs">Tučné</desc>
+							<desc xml:lang="da">Fed</desc>
 							<desc xml:lang="zh-CN">粗体</desc>
 							<desc xml:lang="zh-TW">粗體</desc>
-							<desc xml:lang="ar">bold</desc>
-							<desc xml:lang="he">bold</desc>
-							<desc xml:lang="ca">bold</desc>
+							<desc xml:lang="ar">عريض</desc>
+							<desc xml:lang="he">‮מודגש‬</desc>
+							<desc xml:lang="ca">Negreta</desc>
 							<desc xml:lang="pt">Negr~ito</desc>
 							<desc xml:lang="ru">Жирный</desc>
 							<desc xml:lang="es">Neg~rita</desc>
@@ -772,24 +772,24 @@
 					<enumeration oor:value="9">
 						<info>
 							<desc xml:lang="en-US">ultra bold</desc>
-							<desc xml:lang="el">ultra bold</desc>
-							<desc xml:lang="nl">ultra bold</desc>
+							<desc xml:lang="el">πολύ έντονα</desc>
+							<desc xml:lang="nl">extra vet</desc>
 							<desc xml:lang="fr">Très gras</desc>
-							<desc xml:lang="fi">ultra bold</desc>
-							<desc xml:lang="cs">ultra bold</desc>
-							<desc xml:lang="da">ultra bold</desc>
+							<desc xml:lang="fi">hyvin paksu</desc>
+							<desc xml:lang="cs">velmi tučné</desc>
+							<desc xml:lang="da">ultra fed</desc>
 							<desc xml:lang="zh-CN">特粗</desc>
 							<desc xml:lang="zh-TW">特粗</desc>
-							<desc xml:lang="ar">ultra bold</desc>
-							<desc xml:lang="he">ultra bold</desc>
-							<desc xml:lang="ca">ultra bold</desc>
-							<desc xml:lang="pt">ultra bold</desc>
+							<desc xml:lang="ar">عريض للغاية</desc>
+							<desc xml:lang="he">‮מודגש חזק‬</desc>
+							<desc xml:lang="ca">ultranegreta</desc>
+							<desc xml:lang="pt">ultranegrito</desc>
 							<desc xml:lang="ru">очень жирный</desc>
-							<desc xml:lang="es">ultra bold</desc>
+							<desc xml:lang="es">ultra negrita</desc>
 							<desc xml:lang="it">grassetto doppio</desc>
 							<desc xml:lang="sv">extra fet</desc>
 							<desc xml:lang="pl">super wytłuszczony</desc>
-							<desc xml:lang="pt-BR">ultra bold</desc>
+							<desc xml:lang="pt-BR">ultra negrito</desc>
 							<desc xml:lang="ja">超太字</desc>
 							<desc xml:lang="ko">아주 굵게</desc>
 							<desc xml:lang="tr">Çok kalın</desc>
@@ -800,17 +800,17 @@
 					<enumeration oor:value="10">
 						<info>
 							<desc xml:lang="en-US">black</desc>
-							<desc xml:lang="el">black</desc>
-							<desc xml:lang="nl">black</desc>
+							<desc xml:lang="el">Μαύρο</desc>
+							<desc xml:lang="nl">Zwart</desc>
 							<desc xml:lang="fr">Noir</desc>
-							<desc xml:lang="fi">black</desc>
-							<desc xml:lang="cs">black</desc>
-							<desc xml:lang="da">black</desc>
+							<desc xml:lang="fi">Musta</desc>
+							<desc xml:lang="cs">Černé</desc>
+							<desc xml:lang="da">Sort</desc>
 							<desc xml:lang="zh-CN">黑色</desc>
 							<desc xml:lang="zh-TW">黑色</desc>
-							<desc xml:lang="ar">black</desc>
-							<desc xml:lang="he">black</desc>
-							<desc xml:lang="ca">black</desc>
+							<desc xml:lang="ar">أسود</desc>
+							<desc xml:lang="he">‮שחור‬</desc>
+							<desc xml:lang="ca">Negre</desc>
 							<desc xml:lang="pt">Preto</desc>
 							<desc xml:lang="ru">Черный</desc>
 							<desc xml:lang="es">Negro</desc>
@@ -886,21 +886,21 @@
 					<enumeration oor:value="1">
 						<info>
 							<desc xml:lang="en-US">oblique</desc>
-							<desc xml:lang="el">oblique</desc>
-							<desc xml:lang="nl">oblique</desc>
+							<desc xml:lang="el">Με κλίση</desc>
+							<desc xml:lang="nl">Schuin</desc>
 							<desc xml:lang="fr">oblique</desc>
-							<desc xml:lang="fi">oblique</desc>
+							<desc xml:lang="fi">Kiinteä</desc>
 							<desc xml:lang="cs">oblique</desc>
-							<desc xml:lang="da">oblique</desc>
+							<desc xml:lang="da">Skrå</desc>
 							<desc xml:lang="zh-CN">斜体</desc>
 							<desc xml:lang="zh-TW">斜體</desc>
 							<desc xml:lang="ar">oblique</desc>
-							<desc xml:lang="he">oblique</desc>
-							<desc xml:lang="ca">oblique</desc>
+							<desc xml:lang="he">‮נטוי‬</desc>
+							<desc xml:lang="ca">Oblicua</desc>
 							<desc xml:lang="pt">Oblíquo</desc>
 							<desc xml:lang="ru">Наклонный</desc>
-							<desc xml:lang="es">oblique</desc>
-							<desc xml:lang="it">oblique</desc>
+							<desc xml:lang="es">Oblicuo</desc>
+							<desc xml:lang="it">Obliquo</desc>
 							<desc xml:lang="sv">Kursiv</desc>
 							<desc xml:lang="pl">Ukośny</desc>
 							<desc xml:lang="pt-BR">Oblíquo</desc>
@@ -914,21 +914,21 @@
 					<enumeration oor:value="2">
 						<info>
 							<desc xml:lang="en-US">normal</desc>
-							<desc xml:lang="el">normal</desc>
-							<desc xml:lang="nl">normal</desc>
+							<desc xml:lang="el">κανονικά</desc>
+							<desc xml:lang="nl">~Normal</desc>
 							<desc xml:lang="fr">~Normal</desc>
-							<desc xml:lang="fi">normal</desc>
-							<desc xml:lang="cs">normal</desc>
-							<desc xml:lang="da">normal</desc>
+							<desc xml:lang="fi">tavallinen</desc>
+							<desc xml:lang="cs">Běžný</desc>
+							<desc xml:lang="da">~Normal</desc>
 							<desc xml:lang="zh-CN">普通</desc>
 							<desc xml:lang="zh-TW">普通</desc>
-							<desc xml:lang="ar">normal</desc>
-							<desc xml:lang="he">normal</desc>
+							<desc xml:lang="ar">عادي</desc>
+							<desc xml:lang="he">‮רגיל‬</desc>
 							<desc xml:lang="ca">normal</desc>
 							<desc xml:lang="pt">~Normal</desc>
 							<desc xml:lang="ru">обычный</desc>
 							<desc xml:lang="es">normal</desc>
-							<desc xml:lang="it">normal</desc>
+							<desc xml:lang="it">normale</desc>
 							<desc xml:lang="sv">~Normal</desc>
 							<desc xml:lang="pl">Zwykła</desc>
 							<desc xml:lang="pt-BR">normal</desc>
@@ -1370,17 +1370,17 @@
 					<enumeration oor:value="0">
 						<info>
 							<desc xml:lang="en-US">Original size</desc>
-							<desc xml:lang="el">Original size</desc>
-							<desc xml:lang="nl">Original size</desc>
+							<desc xml:lang="el">Αρχικό μέγεθος</desc>
+							<desc xml:lang="nl">Reële grootte</desc>
 							<desc xml:lang="fr">Taille d&apos;origine</desc>
-							<desc xml:lang="fi">Original size</desc>
-							<desc xml:lang="cs">Original size</desc>
-							<desc xml:lang="da">Original size</desc>
+							<desc xml:lang="fi">Alkuperäinen koko</desc>
+							<desc xml:lang="cs">Původní velikost</desc>
+							<desc xml:lang="da">Oprindelig størrelse</desc>
 							<desc xml:lang="zh-CN">原件大小</desc>
 							<desc xml:lang="zh-TW">原件大小</desc>
-							<desc xml:lang="ar">Original size</desc>
-							<desc xml:lang="he">Original size</desc>
-							<desc xml:lang="ca">Original size</desc>
+							<desc xml:lang="ar">الحجم الأصلي</desc>
+							<desc xml:lang="he">Originalgröße</desc>
+							<desc xml:lang="ca">Mida original</desc>
 							<desc xml:lang="pt">Tamanho real</desc>
 							<desc xml:lang="ru">Исходный размер</desc>
 							<desc xml:lang="es">Tamaño original</desc>
@@ -1485,7 +1485,7 @@
 						<desc xml:lang="th">Specifies the zoom factor for printing formulas. This is only valid when the print size is defined by the zoom factor. [UNIT=%]</desc>
 						<desc xml:lang="hi-IN">Specifies the zoom factor for printing formulas. This is only valid when the print size is defined by the zoom factor. [UNIT=%]</desc>
 					<label xml:lang="en-US">Zoom factor</label>
-					<label xml:lang="el">Zoom factor</label>
+					<label xml:lang="el">Συντελεστής εστίασης</label>
 					<label xml:lang="nl">Zoom factor</label>
 					<label xml:lang="fr">Facteur</label>
 					<label xml:lang="fi">Zoom factor</label>
@@ -2140,17 +2140,17 @@
 					<enumeration oor:value="0">
 						<info>
 							<desc xml:lang="en-US">left</desc>
-							<desc xml:lang="el">left</desc>
-							<desc xml:lang="nl">left</desc>
+							<desc xml:lang="el">Αριστερά</desc>
+							<desc xml:lang="nl">Links</desc>
 							<desc xml:lang="fr">À gauche</desc>
-							<desc xml:lang="fi">left</desc>
-							<desc xml:lang="cs">left</desc>
-							<desc xml:lang="da">left</desc>
+							<desc xml:lang="fi">Vasen</desc>
+							<desc xml:lang="cs">Vlevo</desc>
+							<desc xml:lang="da">Venstre</desc>
 							<desc xml:lang="zh-CN">向左</desc>
 							<desc xml:lang="zh-TW">向左</desc>
-							<desc xml:lang="ar">left</desc>
-							<desc xml:lang="he">left</desc>
-							<desc xml:lang="ca">left</desc>
+							<desc xml:lang="ar">يسار</desc>
+							<desc xml:lang="he">‮שמאל‬</desc>
+							<desc xml:lang="ca">Esquerra</desc>
 							<desc xml:lang="pt">Esquerda</desc>
 							<desc xml:lang="ru">Слева</desc>
 							<desc xml:lang="es">Izquierda</desc>
@@ -2168,24 +2168,24 @@
 					<enumeration oor:value="1">
 						<info>
 							<desc xml:lang="en-US">centered</desc>
-							<desc xml:lang="el">centered</desc>
-							<desc xml:lang="nl">centered</desc>
+							<desc xml:lang="el">Κεντραρισμένα ως προς τη γραμμή</desc>
+							<desc xml:lang="nl">op de lijn gecentreerd</desc>
 							<desc xml:lang="fr">Milieu</desc>
-							<desc xml:lang="fi">centered</desc>
-							<desc xml:lang="cs">centered</desc>
-							<desc xml:lang="da">centered</desc>
+							<desc xml:lang="fi">keskitetty</desc>
+							<desc xml:lang="cs">vystředěno</desc>
+							<desc xml:lang="da">centreret til linjen</desc>
 							<desc xml:lang="zh-CN">居中</desc>
 							<desc xml:lang="zh-TW">置中</desc>
-							<desc xml:lang="ar">centered</desc>
-							<desc xml:lang="he">centered</desc>
-							<desc xml:lang="ca">centered</desc>
-							<desc xml:lang="pt">centered</desc>
+							<desc xml:lang="ar">توسيط للخط</desc>
+							<desc xml:lang="he">‮ממורכז‬</desc>
+							<desc xml:lang="ca">Centrat</desc>
+							<desc xml:lang="pt">Centrado em rel. à linha</desc>
 							<desc xml:lang="ru">Центрировать по линии</desc>
-							<desc xml:lang="es">centered</desc>
+							<desc xml:lang="es">centrado según línea</desc>
 							<desc xml:lang="it">Al centro</desc>
 							<desc xml:lang="sv">Mitten</desc>
 							<desc xml:lang="pl">wyśrodkowany do linii</desc>
-							<desc xml:lang="pt-BR">centered</desc>
+							<desc xml:lang="pt-BR">Centralizado</desc>
 							<desc xml:lang="ja">線に中央揃え</desc>
 							<desc xml:lang="ko">가운데</desc>
 							<desc xml:lang="tr">Ortala</desc>
@@ -2196,17 +2196,17 @@
 					<enumeration oor:value="2">
 						<info>
 							<desc xml:lang="en-US">right</desc>
-							<desc xml:lang="el">right</desc>
-							<desc xml:lang="nl">right</desc>
+							<desc xml:lang="el">Δεξιά</desc>
+							<desc xml:lang="nl">Rechts</desc>
 							<desc xml:lang="fr">À droite</desc>
-							<desc xml:lang="fi">right</desc>
-							<desc xml:lang="cs">right</desc>
-							<desc xml:lang="da">right</desc>
+							<desc xml:lang="fi">Oikea</desc>
+							<desc xml:lang="cs">Vpravo</desc>
+							<desc xml:lang="da">Højre</desc>
 							<desc xml:lang="zh-CN">向右</desc>
 							<desc xml:lang="zh-TW">向右</desc>
-							<desc xml:lang="ar">right</desc>
-							<desc xml:lang="he">right</desc>
-							<desc xml:lang="ca">right</desc>
+							<desc xml:lang="ar">يمين</desc>
+							<desc xml:lang="he">‮ימין‬</desc>
+							<desc xml:lang="ca">Dreta</desc>
 							<desc xml:lang="pt">Direita</desc>
 							<desc xml:lang="ru">Справа</desc>
 							<desc xml:lang="es">A la derecha</desc>
@@ -6132,6 +6132,7 @@
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 
