@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swwait.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 13:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen wg. SfxDispatcher
 #include <sfx2/dispatch.hxx>
+#endif
+#ifndef _WINDOW_HXX //autogen
+#include <vcl/window.hxx>
 #endif
 #ifndef _SWDOCSH_HXX //autogen wg. SwDocShell
 #include <docsh.hxx>

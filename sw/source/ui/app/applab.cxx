@@ -2,9 +2,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 13:50:52 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 13:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,8 +507,8 @@ static sal_uInt16 nBCTitleNo = 0;
                         else if (rItem.bSynchron)
                         {
                             SwSection aSect(FILE_LINK_SECTION, pSh->GetUniqueSectionName());
-                            String sLinkName(cTokenSeperator);
-                            sLinkName += cTokenSeperator;
+                            String sLinkName(so3::cTokenSeperator);
+                            sLinkName += so3::cTokenSeperator;
                             sLinkName += String::CreateFromAscii(MASTER_LABEL);
                             aSect.SetLinkFileName(sLinkName);
                             aSect.SetProtect();
