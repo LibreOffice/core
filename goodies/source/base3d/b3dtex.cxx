@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dtex.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:10 $
+ *  last change: $Author: aw $ $Date: 2000-11-14 13:28:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,26 +81,35 @@
 |*
 \************************************************************************/
 
-TextureAttributes::TextureAttributes()
+TextureAttributes::TextureAttributes(BOOL bGhosted)
+:   mbGhosted(bGhosted)
 {
+}
+
+BOOL TextureAttributes::operator==(const TextureAttributes& rAtt) const
+{
+    return (rAtt.mbGhosted == mbGhosted);
 }
 
 // Fuer Bitmaps
 
-TextureAttributesBitmap::TextureAttributesBitmap(Bitmap aBmp)
-:   TextureAttributes(),
+TextureAttributesBitmap::TextureAttributesBitmap(Bitmap aBmp, BOOL bGhosted)
+:   TextureAttributes(bGhosted),
     aBitmapAttribute(aBmp)
 {
 }
 
 BOOL TextureAttributesBitmap::operator==(const TextureAttributes& rAtt) const
 {
-    if(GetTextureAttributeType() == rAtt.GetTextureAttributeType())
+    if(TextureAttributes::operator==(rAtt))
     {
-        const TextureAttributesBitmap& rAttBmp = (const TextureAttributesBitmap&)rAtt;
+        if(GetTextureAttributeType() == rAtt.GetTextureAttributeType())
+        {
+            const TextureAttributesBitmap& rAttBmp = (const TextureAttributesBitmap&)rAtt;
 
-        if(rAttBmp.aBitmapAttribute == aBitmapAttribute)
-            return TRUE;
+            if(rAttBmp.aBitmapAttribute == aBitmapAttribute)
+                return TRUE;
+        }
     }
     return FALSE;
 }
@@ -112,8 +121,8 @@ UINT16 TextureAttributesBitmap::GetTextureAttributeType() const
 
 // Fuer Gradientfills
 
-TextureAttributesGradient::TextureAttributesGradient(void* pF, void *pSC)
-:   TextureAttributes(),
+TextureAttributesGradient::TextureAttributesGradient(void* pF, void *pSC, BOOL bGhosted)
+:   TextureAttributes(bGhosted),
     pFill(pF),
     pStepCount(pSC)
 {
@@ -121,13 +130,16 @@ TextureAttributesGradient::TextureAttributesGradient(void* pF, void *pSC)
 
 BOOL TextureAttributesGradient::operator==(const TextureAttributes& rAtt) const
 {
-    if(GetTextureAttributeType() == rAtt.GetTextureAttributeType())
+    if(TextureAttributes::operator==(rAtt))
     {
-        const TextureAttributesGradient& rAttGra = (const TextureAttributesGradient&)rAtt;
+        if(GetTextureAttributeType() == rAtt.GetTextureAttributeType())
+        {
+            const TextureAttributesGradient& rAttGra = (const TextureAttributesGradient&)rAtt;
 
-        if(rAttGra.pFill == pFill
-            && rAttGra.pStepCount == pStepCount)
-            return TRUE;
+            if(rAttGra.pFill == pFill
+                && rAttGra.pStepCount == pStepCount)
+                return TRUE;
+        }
     }
     return FALSE;
 }
@@ -139,20 +151,23 @@ UINT16 TextureAttributesGradient::GetTextureAttributeType() const
 
 // Fuer Hatchfills
 
-TextureAttributesHatch::TextureAttributesHatch(void* pF)
-:   TextureAttributes(),
+TextureAttributesHatch::TextureAttributesHatch(void* pF, BOOL bGhosted)
+:   TextureAttributes(bGhosted),
     pFill(pF)
 {
 }
 
 BOOL TextureAttributesHatch::operator==(const TextureAttributes& rAtt) const
 {
-    if(GetTextureAttributeType() == rAtt.GetTextureAttributeType())
+    if(TextureAttributes::operator==(rAtt))
     {
-        const TextureAttributesHatch& rAttHat = (const TextureAttributesHatch&)rAtt;
+        if(GetTextureAttributeType() == rAtt.GetTextureAttributeType())
+        {
+            const TextureAttributesHatch& rAttHat = (const TextureAttributesHatch&)rAtt;
 
-        if(rAttHat.pFill == pFill)
-            return TRUE;
+            if(rAttHat.pFill == pFill)
+                return TRUE;
+        }
     }
     return FALSE;
 }
@@ -161,7 +176,6 @@ UINT16 TextureAttributesHatch::GetTextureAttributeType() const
 {
     return TEXTURE_ATTRIBUTE_TYPE_HATCH;
 }
-
 
 /*************************************************************************
 |*
@@ -197,18 +211,21 @@ B3dTexture::B3dTexture(
     {
         case TEXTURE_ATTRIBUTE_TYPE_BITMAP :
             pAttributes = new TextureAttributesBitmap(
-                ((TextureAttributesBitmap&)rAtt).GetBitmapAttribute());
+                ((TextureAttributesBitmap&)rAtt).GetBitmapAttribute(),
+                rAtt.GetGhostedAttribute());
             break;
 
         case TEXTURE_ATTRIBUTE_TYPE_GRADIENT :
             pAttributes = new TextureAttributesGradient(
                 ((TextureAttributesGradient&)rAtt).GetFillAttribute(),
-                ((TextureAttributesGradient&)rAtt).GetStepCountAttribute());
+                ((TextureAttributesGradient&)rAtt).GetStepCountAttribute(),
+                rAtt.GetGhostedAttribute());
             break;
 
         case TEXTURE_ATTRIBUTE_TYPE_HATCH :
             pAttributes = new TextureAttributesHatch(
-                ((TextureAttributesHatch&)rAtt).GetHatchFillAttribute());
+                ((TextureAttributesHatch&)rAtt).GetHatchFillAttribute(),
+                rAtt.GetGhostedAttribute());
             break;
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dtex.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:08 $
+ *  last change: $Author: aw $ $Date: 2000-11-14 13:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,11 +183,15 @@ enum Base3DTextureWrap
 class TextureAttributes
 {
 private:
-public:
-    TextureAttributes();
+    BOOL            mbGhosted;
 
-    virtual BOOL operator==(const TextureAttributes&) const =0;
+public:
+    TextureAttributes(BOOL bGhosted);
+
+    virtual BOOL operator==(const TextureAttributes&) const;
     virtual UINT16 GetTextureAttributeType() const =0;
+
+    BOOL GetGhostedAttribute() { return mbGhosted; }
 };
 
 class TextureAttributesBitmap : public TextureAttributes
@@ -196,7 +200,7 @@ private:
     Bitmap          aBitmapAttribute;
 
 public:
-    TextureAttributesBitmap(Bitmap aBmp);
+    TextureAttributesBitmap(Bitmap aBmp, BOOL bGhosted);
 
     virtual BOOL operator==(const TextureAttributes&) const;
     virtual UINT16 GetTextureAttributeType() const;
@@ -211,7 +215,7 @@ private:
     void*           pStepCount;
 
 public:
-    TextureAttributesGradient(void* pF, void *pSC);
+    TextureAttributesGradient(void* pF, void *pSC, BOOL bGhosted);
 
     virtual BOOL operator==(const TextureAttributes&) const;
     virtual UINT16 GetTextureAttributeType() const;
@@ -226,7 +230,7 @@ private:
     void*           pFill;
 
 public:
-    TextureAttributesHatch(void* pF);
+    TextureAttributesHatch(void* pF, BOOL bGhosted);
 
     virtual BOOL operator==(const TextureAttributes&) const;
     virtual UINT16 GetTextureAttributeType() const;
