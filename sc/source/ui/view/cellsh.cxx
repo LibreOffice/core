@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:38:30 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,10 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                     // SvtCJKOptions is ref-counted - can be constructed every time
                     SvtCJKOptions aCJKOptions;
                     bDisable = !aCJKOptions.IsChangeCaseMapEnabled();
+                    if ( bDisable )
+                        GetViewData()->GetBindings().SetVisibleState( nWhich, sal_False );
+                    else
+                        GetViewData()->GetBindings().SetVisibleState( nWhich, sal_True );
                 }
                 break;
         }
@@ -931,9 +935,15 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 }
                 break;
 
+            case SID_CHINESE_CONVERSION:
             case SID_HANGUL_HANJA_CONVERSION:
-                if( !SvtCJKOptions().IsAnyEnabled() )
-                    rSet.DisableItem( nWhich );
+                if (!SvtCJKOptions().IsAnyEnabled())
+                {
+                    GetViewData()->GetBindings().SetVisibleState( nWhich, sal_False );
+                    rSet.DisableItem(nWhich);
+                }
+                else
+                    GetViewData()->GetBindings().SetVisibleState( nWhich, sal_True );
             break;
 
         } // switch ( nWitch )
