@@ -41,9 +41,9 @@ LINKFLAGSPROF=
 LINKFLAGSDEBUG=
 LINKFLAGSOPT=
 
-_SYSLIBS= -L/usr/lib       -lm -lgcc -lc_r -lgcc
+_SYSLIBS= -L/usr/lib       -lm -lc_r
 _X11LIBS= -L/usr/X11R6/lib -lXext -lXt -lX11
-_CXXLIBS= -L/usr/lib       -lg++ -lstdc++
+_CXXLIBS= -L/usr/lib       -lstdc++
 
 STDOBJGUI=
 STDSLOGUI=
