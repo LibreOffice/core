@@ -94,13 +94,8 @@ public class TestHelper  {
         }
 
         // free the stream resources, garbage collector may remove the object too late
-        XComponent xComponent = (XComponent) UnoRuntime.queryInterface( XComponent.class, xStream );
-        if ( xComponent == null )
-        {
-            Error( "Can't get XComponent implementation from substream '" + sStreamName + "'!" );
+        if ( !disposeStream( xStream, sStreamName ) )
             return false;
-        }
-        xComponent.dispose();
 
         return true;
     }
@@ -252,13 +247,8 @@ public class TestHelper  {
         }
 
         // free the stream resources, garbage collector may remove the object too late
-        XComponent xComponent = (XComponent) UnoRuntime.queryInterface( XComponent.class, xSubStream );
-        if ( xComponent == null )
-        {
-            Error( "Can't get XComponent implementation from substream '" + sStreamName + "'!" );
+        if ( !disposeStream( xSubStream, sStreamName ) )
             return 0;
-        }
-        xComponent.dispose();
 
         return 1;
     }
@@ -287,10 +277,11 @@ public class TestHelper  {
                     bOk = false;
                 }
 
-                if ( ( bIsRoot && ( nPropMode | ElementModes.ELEMENT_READ ) != ( nMode | ElementModes.ELEMENT_READ ) )
+                if ( ( bIsRoot
+                  && ( nPropMode | ElementModes.ELEMENT_READ ) != ( nMode | ElementModes.ELEMENT_READ ) )
                   || ( !bIsRoot && ( nPropMode & nMode ) != nMode ) )
                 {
-                    Error( "'OpenMode' property contains wrong value!" );
+                    Error( "'OpenMode' property contains wrong value, expected " + nMode + ", in reality " + nPropMode + "!" );
                     bOk = false;
                 }
             }
@@ -336,10 +327,11 @@ public class TestHelper  {
                     bOk = false;
                 }
 
-                if ( ( bIsRoot && ( nPropMode | ElementModes.ELEMENT_READ ) != ( nMode | ElementModes.ELEMENT_READ ) )
+                if ( ( bIsRoot
+                  && ( nPropMode | ElementModes.ELEMENT_READ ) != ( nMode | ElementModes.ELEMENT_READ ) )
                   || ( !bIsRoot && ( nPropMode & nMode ) != nMode ) )
                 {
-                    Error( "'OpenMode' property contains wrong value!" );
+                    Error( "'OpenMode' property contains wrong value, expected " + nMode + ", in reality " + nPropMode + "!" );
                     bOk = false;
                 }
             }
@@ -405,7 +397,6 @@ public class TestHelper  {
             }
         }
 
-
         // check properties
         boolean bOk = false;
 
@@ -469,7 +460,13 @@ public class TestHelper  {
             return false;
         }
 
-        return InternalCheckStream( xSubStream, sName, sMediaType, pBytes );
+        boolean bResult = InternalCheckStream( xSubStream, sName, sMediaType, pBytes );
+
+        // free the stream resources, garbage collector may remove the object too late
+        if ( !disposeStream( xSubStream, sName ) )
+            return false;
+
+        return bResult;
     }
 
     public boolean checkEncrStream( XStorage xParentStorage,
@@ -534,7 +531,13 @@ public class TestHelper  {
             return false;
         }
 
-        return InternalCheckStream( xSubStream, sName, sMediaType, pBytes );
+        boolean bResult = InternalCheckStream( xSubStream, sName, sMediaType, pBytes );
+
+        // free the stream resources, garbage collector may remove the object too late
+        if ( !disposeStream( xSubStream, sName ) )
+            return false;
+
+        return bResult;
     }
 
     public boolean copyStorage( XStorage xSourceStorage, XStorage xDestStorage )
@@ -570,6 +573,28 @@ public class TestHelper  {
         catch( Exception e )
         {
             Error( "Storage commit failed, exception:" + e );
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean disposeStream( XStream xStream, String sStreamName )
+    {
+        XComponent xComponent = (XComponent) UnoRuntime.queryInterface( XComponent.class, xStream );
+        if ( xComponent == null )
+        {
+            Error( "Can't get XComponent implementation from substream '" + sStreamName + "'!" );
+            return false;
+        }
+
+        try
+        {
+            xComponent.dispose();
+        }
+        catch( Exception e )
+        {
+            Error( "Substream '" + sStreamName + "' disposing throws exception: " + e );
             return false;
         }
 
@@ -853,6 +878,54 @@ public class TestHelper  {
         }
 
         return false;
+    }
+
+    public XStorage cloneSubStorage( XStorage xStorage, String sName )
+    {
+        // clone existing substorage
+        try
+        {
+            XStorage xSubStorage = xStorage.cloneStorageElement( sName );
+            return xSubStorage;
+        }
+        catch( Exception e )
+        {
+            Error( "Can't clone substorage '" + sName + "', exception: " + e );
+        }
+
+        return null;
+    }
+
+    public XStream cloneSubStream( XStorage xStorage, String sName )
+    {
+        // clone existing substream
+        try
+        {
+            XStream xStream = xStorage.cloneStreamElement( sName );
+            return xStream;
+        }
+        catch( Exception e )
+        {
+            Error( "Can't clone substream '" + sName + "', exception: " + e );
+        }
+
+        return null;
+    }
+
+    public XStream cloneEncrSubStream( XStorage xStorage, String sName, byte[] pPass )
+    {
+        // clone existing substream
+        try
+        {
+            XStream xStream = xStorage.cloneEncryptedStreamElement( sName, pPass );
+            return xStream;
+        }
+        catch( Exception e )
+        {
+            Error( "Can't clone encrypted substream '" + sName + "', exception: " + e );
+        }
+
+        return null;
     }
 
     public void Error( String sError )
