@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexch.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-16 15:05:25 $
+ *  last change: $Author: fs $ $Date: 2002-05-27 12:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,34 @@ namespace svxform
     //--------------------------------------------------------------------
     void OLocalExchange::copyToClipboard( Window* _pWindow, const GrantAccess& )
     {
+        if ( m_bClipboardOwner )
+        {   // simulate a lostOwnership to notify parties interested in
+            if ( m_aClipboardListener.IsSet() )
+                m_aClipboardListener.Call( this );
+        }
+
         m_bClipboardOwner = sal_True;
         CopyToClipboard( _pWindow );
+    }
+
+    //--------------------------------------------------------------------
+    void OLocalExchange::clear()
+    {
+        if ( isClipboardOwner() )
+        {
+            try
+            {
+                Reference< clipboard::XClipboard > xClipBoard( getOwnClipboard() );
+                if ( xClipBoard.is() )
+                    xClipBoard->setContents( NULL, NULL );
+            }
+            catch( const Exception& e )
+            {
+                e;  // make compiler happy
+                DBG_ERROR( "OLocalExchange::clear: could not reset the clipboard!" );
+            }
+            m_bClipboardOwner = sal_False;
+        }
     }
 
     //--------------------------------------------------------------------

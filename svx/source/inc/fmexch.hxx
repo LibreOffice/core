@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexch.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-16 15:01:46 $
+ *  last change: $Author: fs $ $Date: 2002-05-27 12:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,8 @@ namespace svxform
         void        copyToClipboard( Window* _pWindow, const GrantAccess& );
 
         void        setClipboardListener( const Link& _rListener ) { m_aClipboardListener = _rListener; }
+
+        void        clear();
 
         static  sal_Bool    hasFormat( const DataFlavorExVector& _rFormats, sal_uInt32 _nFormatId );
 
