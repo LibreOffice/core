@@ -10,10 +10,6 @@
 <CountryID>FI</CountryID>
 <DefaultName>Finland</DefaultName>
 </Country>
-<Platform>
-<PlatformID>generic</PlatformID>
-</Platform>
-<Varient></Varient>
 </LC_INFO>
 <LC_CTYPE unoid="generic">
 <Separators>
@@ -224,17 +220,8 @@
 <DefaultName></DefaultName>
 </FormatElement>
 </LC_FORMAT>
-<LC_COLLATION>
-<Collator unoid="alphanumeric" default="true"/>
-<CollationOptions>
-<TransliterationModules>IGNORE_CASE</TransliterationModules>
-</CollationOptions>
-</LC_COLLATION>
-<LC_SEARCH>
-<SearchOptions>
-<TransliterationModules>IGNORE_CASE</TransliterationModules>
-</SearchOptions>
-</LC_SEARCH>
+<LC_COLLATION ref="en_US"/>
+<LC_SEARCH ref="en_US"/>
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
 <DaysOfWeek>
@@ -359,7 +346,7 @@
 <CurrencyID>mk</CurrencyID>
 <CurrencySymbol>mk</CurrencySymbol>
 <BankSymbol>FIM</BankSymbol>
-<CurrencyName>Marka</CurrencyName>
+<CurrencyName>Markka</CurrencyName>
 <DecimalPlaces>2</DecimalPlaces>
 </Currency>
 <Currency default="true" usedInCompatibleFormatCodes="false">
@@ -370,11 +357,7 @@
 <DecimalPlaces>2</DecimalPlaces>
 </Currency>
 </LC_CURRENCY>
-<LC_TRANSLITERATION>
-<Transliteration unoid="UPPERCASE_LOWERCASE"/>
-<Transliteration unoid="IGNORE_CASE"/>
-<Transliteration unoid="LOWERCASE_UPPERCASE" />
-</LC_TRANSLITERATION>
+<LC_TRANSLITERATION ref="en_US"/>
 <LC_MISC>
 <ReservedWords>
 <trueWord>Tosi</trueWord>
@@ -391,32 +374,6 @@
 <quarter4Abbreviation>N4</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
-<LC_NumberingLevel>
-<NumberingLevel Prefix=" " NumType="0" Suffix=")" />
-<NumberingLevel Prefix=" " NumType="1" Suffix=")" />
-<NumberingLevel Prefix=" " NumType="2" Suffix="." />
-<NumberingLevel Prefix=" " NumType="3" Suffix="." />
-<NumberingLevel Prefix=" " NumType="4" Suffix="." />
-<NumberingLevel Prefix=" " NumType="5" Suffix="." />
-<NumberingLevel Prefix=" " NumType="6" Suffix="." />
-<NumberingLevel Prefix=" " NumType="7" Suffix="." />
-<NumberingLevel Prefix=" " NumType="8" Suffix="." />
-<NumberingLevel Prefix=" " NumType="9" Suffix="." />
-<NumberingLevel Prefix=" " NumType="10" Suffix="." />
-</LC_NumberingLevel>
-<LC_OutLineNumberingLevel>
-<OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="0" Suffix="" BulletChar="0000"  ParentNumbering="" BulletFontName=""            LeftMargin="" SymbolTextDistance="" FirstLineOffset="" />
-<OutLineNumberingLevel Prefix=" " NumType="1" Suffix="" BulletChar="0000"  ParentNumbering="" BulletFontName=""            LeftMargin="" SymbolTextDistance="" FirstLineOffset="" />
-<OutLineNumberingLevel Prefix=" " NumType="2" Suffix="" BulletChar="0000"  ParentNumbering="" BulletFontName=""            LeftMargin="" SymbolTextDistance="" FirstLineOffset="" />
-<OutLineNumberingLevel Prefix=" " NumType="3" Suffix="" BulletChar="0000"  ParentNumbering="" BulletFontName=""            LeftMargin="" SymbolTextDistance="" FirstLineOffset="" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="" BulletChar="0000"  ParentNumbering="" BulletFontName=""            LeftMargin="" SymbolTextDistance="" FirstLineOffset="" />
-<OutLineNumberingLevel Prefix=" " NumType="5" Suffix="" BulletChar="0000"  ParentNumbering="" BulletFontName=""            LeftMargin="" SymbolTextDistance="" FirstLineOffset="" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix="" BulletChar="0000"  ParentNumbering="" BulletFontName=""            LeftMargin="" SymbolTextDistance="" FirstLineOffset="" />
-<OutLineNumberingLevel Prefix=" " NumType="7" Suffix="" BulletChar="0000"  ParentNumbering="" BulletFontName=""            LeftMargin="" SymbolTextDistance="" FirstLineOffset="" />
-<OutLineNumberingLevel Prefix=" " NumType="8" Suffix="" BulletChar="0000"  ParentNumbering="" BulletFontName=""            LeftMargin="" SymbolTextDistance="" FirstLineOffset="" />
-<OutLineNumberingLevel Prefix=" " NumType="9" Suffix="" BulletChar="0000"  ParentNumbering="" BulletFontName=""            LeftMargin="" SymbolTextDistance="" FirstLineOffset="" />
-<OutLineNumberingLevel Prefix=" " NumType="10" Suffix="" BulletChar="0000"  ParentNumbering="" BulletFontName=""            LeftMargin="" SymbolTextDistance="" FirstLineOffset="" />
-</OutlineStyle>
-</LC_OutLineNumberingLevel>
+<LC_NumberingLevel ref="en_US"/>
+<LC_OutLineNumberingLevel ref="en_US"/>
 </Locale>
