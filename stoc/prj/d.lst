@@ -8,24 +8,23 @@ mkdir: %_DEST%\inc%_EXT%\stoc
 
 ..\source\module-description.dtd %_DEST%\xml%_EXT%\module-description.dtd
 
-..\source\corereflection\corefl.xml %_DEST%\xml%_EXT%\corefl.xml
-..\source\defaultregistry\defreg.xml %_DEST%\xml%_EXT%\defreg.xml
-..\source\implementationregistration\impreg.xml %_DEST%\xml%_EXT%\impreg.xml
-..\source\inspect\insp.xml %_DEST%\xml%_EXT%\insp.xml
-..\source\invocation\inv.xml %_DEST%\xml%_EXT%\inv.xml
-..\source\invocation_adapterfactory\invadp.xml %_DEST%\xml%_EXT%\invadp.xml
-..\source\io\io.xml %_DEST%\xml%_EXT%\io.xml
-..\source\javavm\jen.xml %_DEST%\xml%_EXT%\jen.xml
-..\source\javaloader\javaloader.xml %_DEST%\xml%_EXT%\javaloader.xml
-..\source\loader\cpld.xml %_DEST%\xml%_EXT%\cpld.xml
-..\source\namingservice\namingservice.xml %_DEST%\xml%_EXT%\namingservice.xml
-..\source\proxy_factory\proxyfac.xml %_DEST%\xml%_EXT%\proxyfac.xml
-..\source\registry_tdprovider\rdbtdp.xml %_DEST%\xml%_EXT%\rdbtdp.xml
-..\source\servicemanager\smgr.xml %_DEST%\xml%_EXT%\smgr.xml
-..\source\simpleregistry\simreg.xml %_DEST%\xml%_EXT%\simreg.xml
-..\source\tdmanager\tdmgr.xml %_DEST%\xml%_EXT%\tdmgr.xml
-..\source\security\sec.xml %_DEST%\xml%_EXT%\sec.xml
-..\source\typeconv\tcv.xml %_DEST%\xml%_EXT%\tcv.xml
+..\source\corereflection\corefl.xml %_DEST%\xml%_EXT%\corereflection.uno.xml
+..\source\defaultregistry\defreg.xml %_DEST%\xml%_EXT%\nestedreg.uno.xml
+..\source\implementationregistration\impreg.xml %_DEST%\xml%_EXT%\implreg.uno.xml
+..\source\inspect\insp.xml %_DEST%\xml%_EXT%\introspection.uno.xml
+..\source\invocation\inv.xml %_DEST%\xml%_EXT%\invocation.uno.xml
+..\source\invocation_adapterfactory\invadp.xml %_DEST%\xml%_EXT%\invocadapt.uno.xml
+..\source\javavm\jen.xml %_DEST%\xml%_EXT%\javavm.uno.xml
+..\source\javaloader\javaloader.xml %_DEST%\xml%_EXT%\javaloader.uno.xml
+..\source\loader\cpld.xml %_DEST%\xml%_EXT%\shlibloader.uno.xml
+..\source\namingservice\namingservice.xml %_DEST%\xml%_EXT%\namingservice.uno.xml
+..\source\proxy_factory\proxyfac.xml %_DEST%\xml%_EXT%\proxyfac.uno.xml
+..\source\registry_tdprovider\rdbtdp.xml %_DEST%\xml%_EXT%\regtypeprov.uno.xml
+..\source\servicemanager\smgr.xml %_DEST%\xml%_EXT%\servicemgr.uno.xml
+..\source\simpleregistry\simreg.xml %_DEST%\xml%_EXT%\simplereg.uno.xml
+..\source\tdmanager\tdmgr.xml %_DEST%\xml%_EXT%\typemgr.uno.xml
+..\source\security\sec.xml %_DEST%\xml%_EXT%\security.uno.xml
+..\source\typeconv\tcv.xml %_DEST%\xml%_EXT%\typeconverter.uno.xml
 
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
