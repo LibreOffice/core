@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cessentl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:19 $
+ *  last change: $Author: hr $ $Date: 2003-04-15 18:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 
 // NOT FULLY DEFINED SERVICES
+#include <ary/ce.hxx>
+#include <ary/info/codeinfo.hxx>
+
 
 namespace ary {
 
@@ -93,6 +96,20 @@ CeEssentials::CeEssentials( Cid                 i_nId,
 CeEssentials::~CeEssentials()
 {
 }
+
+bool
+CodeEntity::IsVisible() const
+{
+    // KORR:   Improve the whole handling of internal and visibility.
+
+    if (bIsVisible)
+        bIsVisible = NOT static_cast< const info::CodeInfo& >(Info()).IsInternal();
+    return bIsVisible;
+}
+
+
+
+
 
 
 }   // namespace ary
