@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: os $ $Date: 2001-09-10 14:44:27 $
+ *  last change: $Author: kz $ $Date: 2001-09-11 20:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ String STR_PAGE_COUNT_MACRO
     Text[ turkish ] = "Sayfa sayısının değiştirilmesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificación del número de páginas";
-    Text[ finnish ] = "Muutetaan sivumäärää";
+    Text[ finnish ] = "Muutetaan sivum??r??";
 };
 
  // Image-Liste ----------------------------------------------------------------
@@ -442,6 +442,286 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
                 < "HTML Vorlagen" ; SWSTYLEBIT_HTML ; > ;
                 < "Bedingte Vorlagen" ; SWSTYLEBIT_CONDCOLL ; > ;
             };
+        FilterList [ english_us ] =
+        {
+         < "Automatic" ; SFXSTYLEBIT_ALL ; > ;
+            < "All Styles" ; SFXSTYLEBIT_USED ; > ;
+            < "Applied Styles" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Custom Styles" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Text Styles" ; SWSTYLEBIT_TEXT ; > ;
+            < "Chapter Styles" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "List Styles" ; SWSTYLEBIT_LIST ; > ;
+            < "Index Styles" ; SWSTYLEBIT_IDX ; > ;
+            < "Special Styles" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML Styles" ; SWSTYLEBIT_HTML ; > ;
+            < "Conditional Styles" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ portuguese ] =
+        {
+         < "Automático" ; SFXSTYLEBIT_ALL ; > ;
+            < "Estilos todos" ; SFXSTYLEBIT_USED ; > ;
+            < "Estilos usados" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Estilos personalizados" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Estilos de texto" ; SWSTYLEBIT_TEXT ; > ;
+            < "Estilos de capítulos" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Estilos de listas" ; SWSTYLEBIT_LIST ; > ;
+            < "Estilos de índices" ; SWSTYLEBIT_IDX ; > ;
+            < "Estilos de áreas especiais" ; SWSTYLEBIT_EXTRA ; > ;
+            < "Estilos HTML" ; SWSTYLEBIT_HTML ; > ;
+            < "Estilos condicionais" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ russian ] =
+        {
+         < "Àâòîìàòè÷åñêè" ; SFXSTYLEBIT_ALL ; > ;
+            < "Âñå ñòèëè" ; SFXSTYLEBIT_USED ; > ;
+            < "Ïğèìåíåííûå ñòèëè" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Ñòèëè ïîëüçîâàòåëÿ" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Ñòèëè òåêñòà" ; SWSTYLEBIT_TEXT ; > ;
+            < "Ñòèëè ãëàâû" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Ñòèëè ñïèñêà" ; SWSTYLEBIT_LIST ; > ;
+            < "Ñòèëè óêàçàòåëÿ" ; SWSTYLEBIT_IDX ; > ;
+            < "Ñòèëè ñïåöèàëüíûõ îáëàñòåé" ; SWSTYLEBIT_EXTRA ; > ;
+            < "Ñòèëè HTML" ; SWSTYLEBIT_HTML ; > ;
+            < "Óñëîâíûå ñòèëè" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ greek ] =
+        {
+         < "Áõôüìáôá" ; SFXSTYLEBIT_ALL ; > ;
+            < "¼ëá ôá ğñüôõğá" ; SFXSTYLEBIT_USED ; > ;
+            < "Åöáñìïóìİíá óôõë" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Ğñüôõğá ÷ñŞóôç" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Ğñüôõğï êåéìİíïõ" ; SWSTYLEBIT_TEXT ; > ;
+            < "Ğñüôõğá êåöáëáßùí" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Óôõë ëßóôáò" ; SWSTYLEBIT_LIST ; > ;
+            < "Ğñüôõğá åõñåôçñßùí" ; SWSTYLEBIT_IDX ; > ;
+            < "Ğñüôõğá åéäéêşí ğåñéï÷şí" ; SWSTYLEBIT_EXTRA ; > ;
+            < "Ğñüôõğá HTML" ; SWSTYLEBIT_HTML ; > ;
+            < "Ğñüôõğá õğü üñïõò" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ dutch ] =
+        {
+         < "Automatisch" ; SFXSTYLEBIT_ALL ; > ;
+            < "Alle opmaakprofielen" ; SFXSTYLEBIT_USED ; > ;
+            < "Gebruikte opmaakprofielen" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Eigen opmaakprofielen" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Tekstopmaakprofielen" ; SWSTYLEBIT_TEXT ; > ;
+            < "Opmaakprofielen voor hoofdtukken" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Lijstopmaakprofielen" ; SWSTYLEBIT_LIST ; > ;
+            < "Indexopmaakprofielen" ; SWSTYLEBIT_IDX ; > ;
+            < "Opmaakprof. speciale bereiken" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML-opmaakprofielen" ; SWSTYLEBIT_HTML ; > ;
+            < "Conditionele opmaakprofielen" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ french ] =
+        {
+         < "Automatique" ; SFXSTYLEBIT_ALL ; > ;
+            < "Tous les styles" ; SFXSTYLEBIT_USED ; > ;
+            < "Styles utilisés" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Styles personnalisés" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Styles de texte" ; SWSTYLEBIT_TEXT ; > ;
+            < "Styles de chapitre" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Styles de liste" ; SWSTYLEBIT_LIST ; > ;
+            < "Styles d'index" ; SWSTYLEBIT_IDX ; > ;
+            < "Styles pour zones spéciales" ; SWSTYLEBIT_EXTRA ; > ;
+            < "Styles HTML" ; SWSTYLEBIT_HTML ; > ;
+            < "Styles conditionnels" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ spanish ] =
+        {
+         < "Automático" ; SFXSTYLEBIT_ALL ; > ;
+            < "Todos los estilos" ; SFXSTYLEBIT_USED ; > ;
+            < "Estilos utilizados" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Estilos del usuario" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Estilos de texto" ; SWSTYLEBIT_TEXT ; > ;
+            < "Estilos de capítulos" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Estilos de listas" ; SWSTYLEBIT_LIST ; > ;
+            < "Estilos de índices" ; SWSTYLEBIT_IDX ; > ;
+            < "Estilos de áreas especiales" ; SWSTYLEBIT_EXTRA ; > ;
+            < "Estilos HTML" ; SWSTYLEBIT_HTML ; > ;
+            < "Estilos condicionados" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ finnish ] =
+        {
+         < "Automaattinen" ; SFXSTYLEBIT_ALL ; > ;
+            < "Kaikki tyylit" ; SFXSTYLEBIT_USED ; > ;
+            < "K?ytetyt tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Mukautetut tyylit" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Tekstityylit" ; SWSTYLEBIT_TEXT ; > ;
+            < "Luvun tyylit" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Luettelotyylit" ; SWSTYLEBIT_LIST ; > ;
+            < "Hakemistotyylit" ; SWSTYLEBIT_IDX ; > ;
+            < "Erikoistyylit" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML-tyylit" ; SWSTYLEBIT_HTML ; > ;
+            < "Ehdolliset tyylit" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ italian ] =
+        {
+         < "Automatico" ; SFXSTYLEBIT_ALL ; > ;
+            < "Tutti i modelli" ; SFXSTYLEBIT_USED ; > ;
+            < "Modelli usati" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Modelli utente" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Modelli di testo" ; SWSTYLEBIT_TEXT ; > ;
+            < "Modelli di capitolo" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Modelli di elenchi" ; SWSTYLEBIT_LIST ; > ;
+            < "Modelli di indice" ; SWSTYLEBIT_IDX ; > ;
+            < "Modelli aree speciali" ; SWSTYLEBIT_EXTRA ; > ;
+            < "Modelli HTML" ; SWSTYLEBIT_HTML ; > ;
+            < "Modelli condizionati" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ danish ] =
+        {
+         < "Automatisk" ; SFXSTYLEBIT_ALL ; > ;
+            < "Alle typografier" ; SFXSTYLEBIT_USED ; > ;
+            < "Anvendte typografier" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Brugerdefinerede typografier" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Teksttypografier" ; SWSTYLEBIT_TEXT ; > ;
+            < "Kapiteltypografier" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Listetypografier" ; SWSTYLEBIT_LIST ; > ;
+            < "Indekstypografier" ; SWSTYLEBIT_IDX ; > ;
+            < "Typografi særområder" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML-typografier" ; SWSTYLEBIT_HTML ; > ;
+            < "Betingede typografier" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ swedish ] =
+        {
+         < "Automatiskt" ; SFXSTYLEBIT_ALL ; > ;
+            < "Alla formatmallar" ; SFXSTYLEBIT_USED ; > ;
+            < "Använda formatmallar" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Användardefinierade formatmallar" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Textformatmallar" ; SWSTYLEBIT_TEXT ; > ;
+            < "Kapitelformatmallar" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Listformatmallar" ; SWSTYLEBIT_LIST ; > ;
+            < "Förteckningsformatmallar" ; SWSTYLEBIT_IDX ; > ;
+            < "Formatmallar specialområden" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML-formatmallar" ; SWSTYLEBIT_HTML ; > ;
+            < "Villkorliga formatmallar" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ polish ] =
+        {
+         < "Automatycznie" ; SFXSTYLEBIT_ALL ; > ;
+            < "Wszystkie style" ; SFXSTYLEBIT_USED ; > ;
+            < "U¿yte style" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Style indywidualne" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Style tekstu" ; SWSTYLEBIT_TEXT ; > ;
+            < "Style rozdzia³u" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Style listy" ; SWSTYLEBIT_LIST ; > ;
+            < "Style indeksu" ; SWSTYLEBIT_IDX ; > ;
+            < "Style do specjalnych zadañ" ; SWSTYLEBIT_EXTRA ; > ;
+            < "Style HTML" ; SWSTYLEBIT_HTML ; > ;
+            < "Warunkowe style" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ portuguese_brazilian ] =
+        {
+         < "Automatisch" ; SFXSTYLEBIT_ALL ; > ;
+            < "Alle Vorlagen" ; SFXSTYLEBIT_USED ; > ;
+            < "Verwendete Vorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Benutzervorlagen" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Textvorlagen" ; SWSTYLEBIT_TEXT ; > ;
+            < "Kapitelvorlagen" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Listenvorlagen" ; SWSTYLEBIT_LIST ; > ;
+            < "Verzeichnisvorlagen" ; SWSTYLEBIT_IDX ; > ;
+            < "Vorlagen Sonderbereiche" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML Vorlagen" ; SWSTYLEBIT_HTML ; > ;
+            < "Bedingte Vorlagen" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ japanese ] =
+        {
+         < "è‡ªå‹•" ; SFXSTYLEBIT_ALL ; > ;
+            < "ã™ã¹ã¦ã®ï½½ï¾€ï½²ï¾™" ; SFXSTYLEBIT_USED ; > ;
+            < "ä½¿ç”¨ã—ãŸï½½ï¾€ï½²ï¾™" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "ï¾•ï½°ï½»ï¾ï½°å®šç¾©ã®ï½½ï¾€ï½²ï¾™" ; SFXSTYLEBIT_AUTO ; > ;
+            < "æ–‡æ›¸ç”¨ï½½ï¾€ï½²ï¾™" ; SWSTYLEBIT_TEXT ; > ;
+            < "ç« ã®ï½½ï¾€ï½²ï¾™" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "ï¾˜ï½½ï¾„ã®ï½½ï¾€ï½²ï¾™" ; SWSTYLEBIT_LIST ; > ;
+            < "ç´¢å¼•ï½½ï¾€ï½²ï¾™" ; SWSTYLEBIT_IDX ; > ;
+            < "ç‰¹åˆ¥ç¯„å›²ã®ï½½ï¾€ï½²ï¾™" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML å½¢å¼ï½½ï¾€ï½²ï¾™" ; SWSTYLEBIT_HTML ; > ;
+            < "æ¡ä»¶ä»˜ãï½½ï¾€ï½²ï¾™" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ korean ] =
+        {
+         < "ìë™" ; SFXSTYLEBIT_ALL ; > ;
+            < "ëª¨ë“  ìœ í˜•" ; SFXSTYLEBIT_USED ; > ;
+            < "ì‚¬ìš©ëœ ìœ í˜•." ; SFXSTYLEBIT_USERDEF ; > ;
+            < "ì‚¬ìš©ì ì •ì˜ ìœ í˜•" ; SFXSTYLEBIT_AUTO ; > ;
+            < "í…ìŠ¤íŠ¸ ìœ í˜•" ; SWSTYLEBIT_TEXT ; > ;
+            < "ì¥ ìœ í˜•" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "ëª©ë¡ ìœ í˜•" ; SWSTYLEBIT_LIST ; > ;
+            < "ìƒ‰ì¸ ìœ í˜•" ; SWSTYLEBIT_IDX ; > ;
+            < "íŠ¹ìˆ˜êµ¬ì—­ ìœ í˜•" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML ìœ í˜•" ; SWSTYLEBIT_HTML ; > ;
+            < "ì¡°ê±´ì  ìœ í˜•" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ chinese_simplified ] =
+        {
+         < "è‡ªåŠ¨" ; SFXSTYLEBIT_ALL ; > ;
+            < "å…¨éƒ¨æ ·å¼" ; SFXSTYLEBIT_USED ; > ;
+            < "ä½¿ç”¨çš„æ ·å¼" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "è‡ªå®šæ ·å¼" ; SFXSTYLEBIT_AUTO ; > ;
+            < "æ–‡å­—æ ·å¼" ; SWSTYLEBIT_TEXT ; > ;
+            < "ç« æ ·å¼" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "åˆ—å•æ ·å¼" ; SWSTYLEBIT_LIST ; > ;
+            < "ç›®å½•æ ·å¼" ; SWSTYLEBIT_IDX ; > ;
+            < "æ ·å¼ç‰¹æ®ŠåŒºåŸŸ" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML æ ·å¼" ; SWSTYLEBIT_HTML ; > ;
+            < "æœ‰æ¡ä»¶çš„æ ·å¼" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ chinese_traditional ] =
+        {
+         < "è‡ªå‹•" ; SFXSTYLEBIT_ALL ; > ;
+            < "å…¨éƒ¨æ¨£å¼" ; SFXSTYLEBIT_USED ; > ;
+            < "ä½¿ç”¨çš„æ¨£å¼" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "è‡ªè¨‚æ¨£å¼" ; SFXSTYLEBIT_AUTO ; > ;
+            < "æ–‡å­—æ¨£å¼" ; SWSTYLEBIT_TEXT ; > ;
+            < "ç« æ¨£å¼" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "æ¸…å–®æ¨£å¼" ; SWSTYLEBIT_LIST ; > ;
+            < "ç›®éŒ„æ¨£å¼" ; SWSTYLEBIT_IDX ; > ;
+            < "æ¨£å¼ç‰¹æ®Šå€åŸŸ" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML æ¨£å¼" ; SWSTYLEBIT_HTML ; > ;
+            < "æœ‰æ¢ä»¶çš„æ¨£å¼" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ turkish ] =
+        {
+         < "Otomatik" ; SFXSTYLEBIT_ALL ; > ;
+            < "Bütün biçimler" ; SFXSTYLEBIT_USED ; > ;
+            < "Kullanılan biçim" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Kullanıcı biçimi" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Metin biçimi" ; SWSTYLEBIT_TEXT ; > ;
+            < "Bölüm biçimi" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Liste biçimi" ; SWSTYLEBIT_LIST ; > ;
+            < "Dizin biçimi" ; SWSTYLEBIT_IDX ; > ;
+            < "Özel bölüm biçimi" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML biçimi" ; SWSTYLEBIT_HTML ; > ;
+            < "Koşullu biçim" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ arabic ] =
+        {
+         < "ÊáŞÇÆí" ; SFXSTYLEBIT_ALL ; > ;
+            < "ßá ÇáÃäãÇØ" ; SFXSTYLEBIT_USED ; > ;
+            < "ÃäãÇØ ŞíÏ ÇáÇÓÊÎÏÇã" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "ÃäãÇØ ãÎÕÕÉ" ; SFXSTYLEBIT_AUTO ; > ;
+            < "ÃäãÇØ äÕ" ; SWSTYLEBIT_TEXT ; > ;
+            < "ÃäãÇØ ÇáİÕá" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "ÃäãÇØ ÇáŞÇÆãÉ" ; SWSTYLEBIT_LIST ; > ;
+            < "ÃäãÇØ İåÑÓ" ; SWSTYLEBIT_IDX ; > ;
+            < "ÃäãÇØ äØÇŞÇÊ ÎÇÕÉ" ; SWSTYLEBIT_EXTRA ; > ;
+            < "ÃäãÇØ  HTML" ; SWSTYLEBIT_HTML ; > ;
+            < "ÃäãÇØ ãÔÑæØÉ" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ catalan ] =
+        {
+         < "Automático" ; SFXSTYLEBIT_ALL ; > ;
+            < "Todos los estilos" ; SFXSTYLEBIT_USED ; > ;
+            < "Estilos aplicados" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Estilos del usuario" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Estilos de texto" ; SWSTYLEBIT_TEXT ; > ;
+            < "Estilos de capítulos" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Estilos de listas" ; SWSTYLEBIT_LIST ; > ;
+            < "Estilos de índices" ; SWSTYLEBIT_IDX ; > ;
+            < "Estilos de áreas especiales" ; SWSTYLEBIT_EXTRA ; > ;
+            < "Estilos HTML" ; SWSTYLEBIT_HTML ; > ;
+            < "Estilos condicionados" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
     };
         SfxStyleFamilyItem
         {
@@ -456,7 +736,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text [ italian ] = "Modelli di carattere" ;
             Text [ portuguese_brazilian ] = "Estilo de Caracter" ;
             Text [ portuguese ] = "Estilos de caracteres" ;
-            Text [ finnish ] = "Merkistöjen tyylit" ;
+            Text [ finnish ] = "Merkkityylit" ;
             Text [ danish ] = "Tegntypografier" ;
             Text [ french ] = "Styles de caractères" ;
             Text [ swedish ] = "Teckenformatmallar" ;
@@ -630,7 +910,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ finnish ] =
         {
             < "Kaikki" ; SFXSTYLEBIT_ALL ; > ;
-            < "Käytetyt tyylit" ; SFXSTYLEBIT_USED ; > ;
+            < "K?ytetyt tyylit" ; SFXSTYLEBIT_USED ; > ;
             < "Mukautetut tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
         };
     };
@@ -821,7 +1101,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ finnish ] =
         {
             < "Kaikki" ; SFXSTYLEBIT_ALL ; > ;
-            < "Käytetyt tyylit" ; SFXSTYLEBIT_USED ; > ;
+            < "K?ytetyt tyylit" ; SFXSTYLEBIT_USED ; > ;
             < "Mukautetut tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
         };
     };
@@ -1012,7 +1292,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ finnish ] =
         {
             < "Kaikki" ; SFXSTYLEBIT_ALL ; > ;
-            < "Käytetyt tyylit" ; SFXSTYLEBIT_USED ; > ;
+            < "K?ytetyt tyylit" ; SFXSTYLEBIT_USED ; > ;
             < "Mukautetut tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
         };
     };
@@ -1254,7 +1534,7 @@ String STR_LAB_TITLE
     Text [ italian ] = "Etichette" ;
     Text [ portuguese_brazilian ] = "Etiquetas" ;
     Text [ portuguese ] = "Etiquetas" ;
-    Text [ finnish ] = "Nimiöt" ;
+    Text [ finnish ] = "Nimi?" ;
     Text [ danish ] = "Etiketter" ;
     Text [ french ] = "Étiquettes" ;
     Text [ swedish ] = "Etiketter" ;
@@ -1487,7 +1767,7 @@ String STR_DLLNOTFOUND
     TEXT [ italian ] = "Filtro non trovato." ;
     TEXT [ portuguese_brazilian ] = "Filtro n?o encontrado." ;
     TEXT [ portuguese ] = "Filtro não encontrado." ;
-    TEXT [ finnish ] = "Suodatinta ei löydy." ;
+    TEXT [ finnish ] = "Suodatinta ei l?dy." ;
     TEXT [ danish ] = "Filter blev ikke fundet." ;
     TEXT [ french ] = "Filtre introuvable." ;
     TEXT [ swedish ] = "Filter hittades ej." ;
@@ -1518,7 +1798,7 @@ String STR_UNBENANNT
     TEXT [ italian ] = "Senza nome" ;
     TEXT [ portuguese_brazilian ] = "Sem t?tulo" ;
     TEXT [ portuguese ] = "Sem nome" ;
-    TEXT [ finnish ] = "Nimetön" ;
+    TEXT [ finnish ] = "Nimet?" ;
     TEXT [ danish ] = "Ikke-navngivet" ;
     TEXT [ french ] = "Sans nom" ;
     TEXT [ swedish ] = "Namnlös" ;
@@ -1567,7 +1847,7 @@ String STR_LOAD_GLOBAL_DOC
     Text[ turkish ] = "Ana belgenin adı ve veri yolu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nombre y ruta del documento maestro";
-    Text[ finnish ] = "Pääasiakirjan nimi ja polku";
+    Text[ finnish ] = "P??asiakirjan nimi ja polku";
 };
 
 String STR_LOAD_HTML_DOC
@@ -1609,7 +1889,7 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE [ italian ] = "Errore durante l'invio del messaggio." ;
     MESSAGE [ portuguese_brazilian ] = "Erro ao enviar correio." ;
     MESSAGE [ portuguese ] = "Erro ao enviar correio." ;
-    MESSAGE [ finnish ] = "Virhe postia lähetettäessä." ;
+    MESSAGE [ finnish ] = "Virhe s?hk?ostia l?hetett?ess?." ;
     MESSAGE [ danish ] = "Fejl ved afsendelse af meddelelsen." ;
     MESSAGE [ french ] = "Erreur lors de l'envoi du message." ;
     MESSAGE [ swedish ] = "Fel vid sändning av meddelande." ;
@@ -1755,7 +2035,7 @@ String STR_FMT_STD
     TEXT [ italian ] = "(senza)" ;
     TEXT [ portuguese_brazilian ] = "(nenhum)" ;
     TEXT [ portuguese ] = "(nenhum)" ;
-    TEXT [ finnish ] = "(Ei mitään)" ;
+    TEXT [ finnish ] = "(ei mit??n)" ;
     TEXT [ danish ] = "(ingen)" ;
     TEXT [ french ] = "(aucun(e))" ;
     TEXT [ swedish ] = "(ingen)" ;
@@ -1785,7 +2065,7 @@ String STR_DOC_STAT
     TEXT [ italian ] = "Statistiche" ;
     TEXT [ portuguese_brazilian ] = "Estat?stica" ;
     TEXT [ portuguese ] = "Estatística" ;
-    TEXT [ finnish ] = "Tiedot" ;
+    TEXT [ finnish ] = "Tilastotiedot" ;
     TEXT [ danish ] = "Statistik" ;
     TEXT [ french ] = "Statistique" ;
     TEXT [ swedish ] = "Statistik" ;
@@ -1849,7 +2129,7 @@ String STR_STATSTR_W4WWRITE
     Text [ italian ] = "Il documento viene esportato..." ;
     Text [ portuguese_brazilian ] = "Exportando..." ;
     Text [ portuguese ] = "A exportar documento..." ;
-    Text [ finnish ] = "Viedään asiakirjaa..." ;
+    Text [ finnish ] = "Vied??n asiakirjaa..." ;
     Text [ danish ] = "Eksporterer dokument" ;
     Text [ french ] = "Export du document en cours..." ;
     Text [ swedish ] = "Dokument exporteras..." ;
@@ -1940,7 +2220,7 @@ String STR_STATSTR_REFORMAT
     TEXT [ italian ] = "Riformattazione del documento..." ;
     TEXT [ portuguese_brazilian ] = "Repaginando..." ;
     TEXT [ portuguese ] = "Nova formatação do documento..." ;
-    TEXT [ finnish ] = "Uudelleensivutus" ;
+    TEXT [ finnish ] = "Uudelleensivutus..." ;
     TEXT [ danish ] = "Genformatering af dokumentet..." ;
     TEXT [ french ] = "Nouveau formatage du document..." ;
     TEXT [ swedish ] = "Omformatering av dokumentet..." ;
@@ -2030,7 +2310,7 @@ String STR_STATSTR_SEARCH
     Text [ italian ] = "Cerca..." ;
     Text [ portuguese_brazilian ] = "buscar..." ;
     Text [ portuguese ] = "A localizar..." ;
-    Text [ finnish ] = "Etsi" ;
+    Text [ finnish ] = "Etsi..." ;
     Text [ danish ] = "Søger..." ;
     Text [ french ] = "Recherche..." ;
     Text [ swedish ] = "Söker..." ;
@@ -2090,7 +2370,7 @@ String STR_STATSTR_PRINT
     Text [ italian ] = "Stampa..." ;
     Text [ portuguese_brazilian ] = "Imprimindo..." ;
     Text [ portuguese ] = "A imprimir..." ;
-    Text [ finnish ] = "Tulostetaan..." ;
+    Text [ finnish ] = "Tulostetaan" ;
     Text [ danish ] = "Udskriver..." ;
     Text [ french ] = "Impression..." ;
     Text [ swedish ] = "Skriver ut ..." ;
@@ -2168,7 +2448,7 @@ String STR_STATSTR_LETTER
     Text[ turkish ] = "Mektup";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Carta";
-    Text[ finnish ] = "Kirje (Letter)";
+    Text[ finnish ] = "Kirje";
 };
 
 String STR_STATSTR_SPELL
@@ -2226,7 +2506,7 @@ String STR_STATSTR_HYPHEN
     Text[ turkish ] = "Heceleme...";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Separación silábica...";
-    Text[ finnish ] = "Tavutus";
+    Text[ finnish ] = "Tavutus...";
 };
 
 String STR_STATSTR_TOX_INSERT
@@ -2255,7 +2535,7 @@ String STR_STATSTR_TOX_INSERT
     Text[ korean ] = "ìƒ‰ì¸ ì‚½ì…...";
     Text[ turkish ] = "Dizin ekleniyor...";
     Text[ catalan ] = "Insertando directorio...";
-    Text[ finnish ] = "Lisätään hakemisto...";
+    Text[ finnish ] = "Lis?t??n hakemisto...";
 };
 
 String STR_STATSTR_TOX_UPDATE
@@ -2284,7 +2564,7 @@ String STR_STATSTR_TOX_UPDATE
     Text[ korean ] = "ìƒ‰ì¸ ì—…ë°ì´íŠ¸...";
     Text[ turkish ] = "Dizin güncelleniyor...";
     Text[ catalan ] = "Actualizando directorio...";
-    Text[ finnish ] = "Päivitetään hakemistoa...";
+    Text[ finnish ] = "P?ivitet??n hakemistoa...";
 };
 
 String STR_STATSTR_SUMMARY
@@ -2313,7 +2593,7 @@ String STR_STATSTR_SUMMARY
     Text[ korean ] = "ìš”ì•½ ë§Œë“¤ê¸°...";
     Text[ turkish ] = "Özet oluşturuluyor...";
     Text[ catalan ] = "Creando el extracto...";
-    Text[ finnish ] = "Luodaan tiivistelmää...";
+    Text[ finnish ] = "Luodaan tiivistelm??...";
 };
 
 String STR_STATSTR_SWGPRTOLENOTIFY
@@ -2342,7 +2622,7 @@ String STR_STATSTR_SWGPRTOLENOTIFY
     Text[ turkish ] = "Nesneleri uyarla...";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ajustar objetos...";
-    Text[ finnish ] = "Sovita objektit";
+    Text[ finnish ] = "Sovita objektit...";
 };
 
 
@@ -2356,7 +2636,7 @@ QueryBox MSG_COMCORE_ASKSEARCH
     Message [ italian ] = "L'annullamento di questa azione occorre molta memoria.\nVolete disattivare la possibilità di annullare?" ;
     Message [ portuguese_brazilian ] = "Esta a??o requer muita mem?ia para desfazer.\nDeseja desativar a fun??o desfazer?" ;
     Message [ portuguese ] = "Para poder anular esta acção é necessária muita memória.\nDeseja cancelar esta função?" ;
-    Message [ finnish ] = "Tämän toiminnon peruuttamiseen tarvitaan suuri määrä muistia.\nHaluatko peruuttaa peruutuksen?" ;
+    Message [ finnish ] = "T?m?n toiminnon peruuttamiseen tarvitaan suuri m??r? muistia.\nHaluatko peruuttaa peruutuksen?" ;
     Message [ danish ] = "Denne handling kræver megen hukommelse til fortryd-funktionen\nVil du slå fortryd-funktionen fra?" ;
     Message [ french ] = "Cette action nécessite beaucoup de mémoire pour l'annulation (Undo).\nVoulez-vous désactiver l'annulation ?" ;
     Message [ swedish ] = "Denna åtgärd kräver alltför mycket minne för Ångra-funktionen.\nVill Du stänga av Ångra-funktionen?" ;
@@ -2426,7 +2706,7 @@ String STR_GRAPHIC_DEFNAME
     TEXT [ italian ] = "Immagine" ;
     TEXT [ portuguese_brazilian ] = "Gr?fico" ;
     TEXT [ portuguese ] = "Imagem" ;
-    TEXT [ finnish ] = "Kuva" ;
+    TEXT [ finnish ] = "Grafiikka" ;
     TEXT [ danish ] = "Grafik" ;
     TEXT [ french ] = "Image" ;
     TEXT [ swedish ] = "Grafik" ;
@@ -2591,7 +2871,7 @@ String STR_EMPTYPAGE
     Text[ turkish ] = "Boş sayfa";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Página vacía";
-    Text[ finnish ] = "tyhjä sivu";
+    Text[ finnish ] = "tyhj? sivu";
 };
 
 QueryBox MSG_CLPBRD_CLEAR
@@ -2605,7 +2885,7 @@ QueryBox MSG_CLPBRD_CLEAR
     MESSAGE [ portuguese_brazilian ] = "O Conte?o do Clipboard deve estar dispon?vel para outros Aplicativos?" ;
     MESSAGE [ portuguese ] = "Na área de transferência encontram-se grandes quantidades de dados.\nColocar o conteúdo da área de transferência à disposição de outras aplicações?" ;
     MESSAGE [ english_us ] = "You have a large amount of data saved in the clipboard.\nShould the clipboard contents remain available for other applications?" ;
-    MESSAGE [ finnish ] = "Olet tallentanut leikepöydälle suuren määrän tietoja.\nHaluatko näiden tietojen olevan käytettävissä muissa sovelluksissa?" ;
+    MESSAGE [ finnish ] = "Olet tallentanut leikep?d?lle suuren m??r?n tietoja.\nHaluatko n?iden tietojen olevan k?ytett?viss? muissa sovelluksissa?" ;
     MESSAGE [ danish ] = "Du har placeret en stor mængde data i udklipsholderen.\nSkal udklipholderens indhold være tilgængeligt for andre applikationer?" ;
     MESSAGE [ french ] = "Vous avez déposé un grand nombre de données dans le presse-papiers. \nSouhaitez-vous en conserver le contenu pour une utilisation ultérieure sous une autre application ?" ;
     MESSAGE [ swedish ] = "Du har stora datamängder i urklippet.\nSkall innehållet i urklippet göras tillgängligt för andra applikationer?" ;
@@ -2655,7 +2935,7 @@ QueryBox MSG_SAVE_HTML_QUERY
     Message[ turkish ] = "HTML formatına \ndönüşüm sonucunda veri kaybı olabilir. \nBelgeyi kaydetmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "La transformación en el formato HTML \npuede causar la pérdida de información. \n¿Desea guardar el documento?";
-    Message[ finnish ] = "Muunnettaessa HTML-muotoon\ntietoja saattaa hävitä. \nHaluatko tallentaa asiakirjan?";
+    Message[ finnish ] = "Muunnettaessa HTML-muotoon\ntietoja saattaa h?vit?. \nHaluatko tallentaa asiakirjan?";
 };
 QueryBox MSG_SAVEAS_HTML_QUERY
 {
@@ -2677,7 +2957,7 @@ QueryBox MSG_SAVEAS_HTML_QUERY
     MESSAGE[ polish ] = "Widok tekstu Ÿród³owego wyœwietlony zostanie dopiero po zapisaniu dokumentu w formacie HTML.\nZapisaæ dokument w formacie HTML?";
     MESSAGE[ portuguese_brazilian ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
     MESSAGE[ japanese ] = "HTML ï½¿ï½°ï½½ã¯ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ãŒ HTML å½¢å¼ã§ä¿å­˜ã•ã‚Œã¦ã„ã‚‹ã¨ãã—ã‹è¡¨ç¤ºã•ã‚Œã¾ã›ã‚“ã€‚\nï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã‚’ HTML å½¢å¼ã§ä¿å­˜ã—ã¾ã™ã‹ã€‚";
-    MESSAGE[ korean ] = "HTML ì†ŒìŠ¤ëŠ” ë¬¸ì„œê°€ HTML í˜•ì‹ìœ¼ë¡œ ì €ì¥ë˜ëŠ” ê²½ìš°ì—ë§Œ í‘œì‹œë  ìˆ˜ ìˆìŠµë‹ˆë‹¤.\në¬¸ì„œë¥¼ HTMLë¡œ ì €ì¥í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+    MESSAGE[ korean ] = "ì†ŒìŠ¤ í…ìŠ¤íŠ¸ ë³´ê¸°ëŠ” ë¬¸ì„œê°€ HTML-í¬ë§·ìœ¼ë¡œ ì €ì¥ë˜ì—ˆì„ ê²½ìš°ì—ë§Œ í‘œì‹œë  ìˆ˜ ìˆìŠµë‹ˆë‹¤.\në¬¸ì„œë¥¼ ì§€ê¸ˆ HTML-í¬ë§·ìœ¼ë¡œ ì €ì¥í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     MESSAGE[ chinese_simplified ] = "åªæœ‰å½“æ–‡æ¡£å­˜ç›˜æˆ HTML æ ¼å¼æ—¶ï¼Œæ‰èƒ½å¤ŸæŸ¥çœ‹ HTML çš„æºæ–‡ä»¶ã€‚\næ–‡æ¡£è¦å­˜ç›˜æˆ HTML æ ¼å¼?";
     MESSAGE[ chinese_traditional ] = "åªæœ‰ç•¶æª”æ¡ˆå„²å­˜HTMLæ ¼å¼æ™‚ï¼Œæ‰èƒ½æª¢è¦–HTMLåŸå§‹æª”ã€‚\nè¦å„²å­˜æˆHTMLæ ¼å¼?";
     MESSAGE[ turkish ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
@@ -2710,7 +2990,7 @@ String STR_ABSTRACT_TITLE
     Text[ korean ] = "ì¶”ìƒ: ";
     Text[ turkish ] = "Özet: ";
     Text[ catalan ] = "Extracto:  ";
-    Text[ finnish ] = "Tiivistelmä: ";
+    Text[ finnish ] = "Tiivistelm?: ";
 };
 
 String STR_FDLG_TEMPLATE_BUTTON
@@ -2832,22 +3112,22 @@ String STR_WESTERN_FONT
 {
     Text = "Westlicher Text: " ;
     Text [ ENGLISH ] = "Western text:" ;
-    Text[ english_us ] = "Western text:";
-    Text[ portuguese ] = "Texto ocidental: ";
-    Text[ russian ] = "Western text:";
+    Text[ english_us ] = "Western text: ";
+    Text[ portuguese ] = "Texto ocidental:";
+    Text[ russian ] = "Çàïàäíûé òåêñò:";
     Text[ greek ] = "Western text:";
     Text[ dutch ] = "Western text:";
-    Text[ french ] = "Western text:";
-    Text[ spanish ] = "Western text:";
+    Text[ french ] = "Texte occidental : ";
+    Text[ spanish ] = "Texto occidental: ";
     Text[ finnish ] = "Western text:";
-    Text[ italian ] = "Western text:";
+    Text[ italian ] = "Testo occidentale: ";
     Text[ danish ] = "Western text:";
-    Text[ swedish ] = "Western text:";
-    Text[ polish ] = "Western text:";
+    Text[ swedish ] = "Västlig text:";
+    Text[ polish ] = "Tekst zachodni:";
     Text[ portuguese_brazilian ] = "Western text:";
     Text[ japanese ] = "è‹±æ•°å­—: ";
-    Text[ korean ] = "Western text:";
-    Text[ chinese_simplified ] = "Western text:";
+    Text[ korean ] = "ì„œì–‘ í…ìŠ¤íŠ¸:";
+    Text[ chinese_simplified ] = "è¥¿æ–‡ï¼š";
     Text[ chinese_traditional ] = "è¥¿æ–‡ï¼š";
     Text[ turkish ] = "Western text:";
     Text[ arabic ] = "Western text:";
@@ -2858,25 +3138,25 @@ String STR_CJK_FONT
     Text = "Asiatischer Text: " ;
     Text [ ENGLISH ] = "Asian text: " ;
     Text[ english_us ] = "Asian text: ";
-    Text[ portuguese ] = "Texto asiático: ";
-    Text[ russian ] = "Asian text: ";
-    Text[ greek ] = "Asian text: ";
-    Text[ dutch ] = "Asian text: ";
-    Text[ french ] = "Asian text: ";
-    Text[ spanish ] = "Asian text: ";
-    Text[ finnish ] = "Asian text: ";
-    Text[ italian ] = "Asian text: ";
-    Text[ danish ] = "Asian text: ";
-    Text[ swedish ] = "Asian text: ";
-    Text[ polish ] = "Asian text: ";
-    Text[ portuguese_brazilian ] = "Asian text: ";
+    Text[ portuguese ] = "Texto asiático:";
+    Text[ russian ] = "Àçèàòñêèé òåêñò:";
+    Text[ greek ] = "Asian text:";
+    Text[ dutch ] = "Asian text:";
+    Text[ french ] = "Texte asiatique : ";
+    Text[ spanish ] = "Texto asiático: ";
+    Text[ finnish ] = "Asian text:";
+    Text[ italian ] = "Testo asiatico: ";
+    Text[ danish ] = "Asian text:";
+    Text[ swedish ] = "Asiatisk text:";
+    Text[ polish ] = "Tekst azjatycki:";
+    Text[ portuguese_brazilian ] = "Asian text:";
     Text[ japanese ] = "æ—¥æœ¬èª: ";
-    Text[ korean ] = "Asian text: ";
-    Text[ chinese_simplified ] = "Asian text: ";
+    Text[ korean ] = "ì•„ì‹œì•„ í…ìŠ¤íŠ¸:";
+    Text[ chinese_simplified ] = "ä¸­æ—¥éŸ©æ–‡å­—ï¼š";
     Text[ chinese_traditional ] = "ä¸­æ—¥éŸ“æ–‡å­—ï¼š";
-    Text[ turkish ] = "Asian text: ";
-    Text[ arabic ] = "Asian text: ";
-    Text[ catalan ] = "Asian text: ";
+    Text[ turkish ] = "Asian text:";
+    Text[ arabic ] = "Asian text:";
+    Text[ catalan ] = "Asian text:";
 };
 String STR_REDLINE_UNKNOWN_AUTHOR
 {
@@ -2903,6 +3183,7 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text[ catalan ] = "desconocido";
     Text[ finnish ] = "tuntematon";
 };
+
 
 
 
