@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldsp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-16 10:46:38 $
+ *  last change: $Author: tl $ $Date: 2001-06-05 11:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,17 +110,27 @@ using namespace linguistic;
 ///////////////////////////////////////////////////////////////////////////
 
 static BOOL SvcListHasLanguage(
-        const Sequence< Reference< XSpellChecker1 > > &rRefs,
+        const SeqLangSvcEntry_Spell &rEntry,
         INT16 nLanguage )
 {
     BOOL bHasLanguage = FALSE;
+    Locale aTmpLocale;
 
-    const Reference< XSpellChecker1 > *pRef = rRefs.getConstArray();
-    INT32 nLen = rRefs.getLength();
+    const Reference< XSpellChecker >  *pRef  = rEntry.aSvcRefs .getConstArray();
+    const Reference< XSpellChecker1 > *pRef1 = rEntry.aSvc1Refs.getConstArray();
+    INT32 nLen = rEntry.aSvcRefs.getLength();
+    DBG_ASSERT( nLen == rEntry.aSvc1Refs.getLength(),
+            "sequence length mismatch" );
     for (INT32 k = 0;  k < nLen  &&  !bHasLanguage;  ++k)
     {
-        if (pRef[k].is())
-            bHasLanguage = pRef[k]->hasLanguage( nLanguage );
+        if (pRef1[k].is())
+            bHasLanguage = pRef1[k]->hasLanguage( nLanguage );
+        else if (pRef[k].is())
+        {
+            if (0 == aTmpLocale.Language.getLength())
+                aTmpLocale = CreateLocale( nLanguage );
+            bHasLanguage = pRef[k]->hasLocale( aTmpLocale );
+        }
     }
 
     return bHasLanguage;
@@ -219,7 +229,7 @@ Sequence< sal_Int16 > SAL_CALL SpellCheckerDispatcher::getLanguages()
     for (ULONG i = 0;  i < nCnt;  i++)
     {
         DBG_ASSERT( pEntry, "lng : pEntry is NULL pointer" );
-        pLang[i] = aSvcList.GetKey( pEntry );
+        pLang[i] = (INT16) aSvcList.GetKey( pEntry );
         pEntry = aSvcList.Next();
     }
     return aLanguages;
@@ -416,7 +426,7 @@ BOOL SpellCheckerDispatcher::isValid_Impl(
                     if (bTmpResValid)
                         bRes = bTmpRes;
 
-                    pEntry->aFlags.nLastTriedSvcIndex = i;
+                    pEntry->aFlags.nLastTriedSvcIndex = (INT16) i;
                     ++i;
                 }
 
@@ -424,7 +434,7 @@ BOOL SpellCheckerDispatcher::isValid_Impl(
                 // remove it from the list.
                 if (i == nLen)
                 {
-                    if (!SvcListHasLanguage( pEntry->aSvc1Refs, nLanguage ))
+                    if (!SvcListHasLanguage( *pEntry, nLanguage ))
                         aSvcList.Remove( nLanguage );
                 }
             }
@@ -662,7 +672,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                     if (!xRes.is() && bTmpResValid)
                         xRes = xTmpRes;
 
-                    pEntry->aFlags.nLastTriedSvcIndex = i;
+                    pEntry->aFlags.nLastTriedSvcIndex = (INT16) i;
                     ++i;
                 }
 
@@ -670,7 +680,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                 // remove it from the list.
                 if (i == nLen)
                 {
-                    if (!SvcListHasLanguage( pEntry->aSvc1Refs, nLanguage ))
+                    if (!SvcListHasLanguage( *pEntry, nLanguage ))
                         aSvcList.Remove( nLanguage );
                 }
             }
