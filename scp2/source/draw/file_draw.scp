@@ -87,7 +87,7 @@ File gid_File_Xdg_Draw
 	TXT_FILE_BODY;
 	Dir = gid_Dir_Share_Xdg;
 	Name = "draw.desktop";
-    Styles = (PACKED);
+    Styles = (PACKED,SCPZIP_REPLACE);
 End
 
 #endif
