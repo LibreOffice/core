@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:38:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 #include <vcl/image.hxx>
 #include <sfx2/viewfrm.hxx>
 
+#include <memory>
+
 class SdrPage;
 
 namespace sdr { namespace contact {
@@ -83,6 +85,7 @@ class PageCache;
 
 namespace sd { namespace slidesorter { namespace view {
 
+class PageNotificationObjectContact;
 class SlideSorterView;
 
 /** This object-view-contact of page objects maintains a preview bitmap for
@@ -109,6 +112,8 @@ public:
         ::sdr::contact::ObjectContact& rObjectContact,
         ::sdr::contact::ViewContact& rViewContact,
         cache::PageCache* pCache);
+    ~PageObjectViewObjectContact (void);
+
     virtual void PaintObject (::sdr::contact::DisplayInfo& rDisplayInfo);
 
     /** The object is about to be deleted.  Tell the cache that it has not
@@ -221,6 +226,8 @@ private:
     bool mbIsValid;
 
     cache::PageCache* mpCache;
+
+    ::std::auto_ptr<PageNotificationObjectContact> mpNotifier;
 
     BitmapEx GetPreview (
         ::sdr::contact::DisplayInfo& rDisplayInfo,
