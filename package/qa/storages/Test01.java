@@ -74,7 +74,7 @@ public class Test01 implements StorageTest {
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempStorage,
                                                             "MediaType3",
                                                             true,
-                                                            ElementModes.ELEMENT_READWRITE ) )
+                                                            ElementModes.ELEMENT_WRITE ) )
                 return false;
 
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
@@ -111,7 +111,7 @@ public class Test01 implements StorageTest {
             // ================================================
 
             // the temporary file must not be locked any more after storage disposing
-            pArgs[1] = new Integer( ElementModes.ELEMENT_READWRITE );
+            pArgs[1] = new Integer( ElementModes.ELEMENT_WRITE );
             Object oResultStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xResultStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oResultStorage );
             if ( xResultStorage == null )
@@ -120,7 +120,7 @@ public class Test01 implements StorageTest {
                 return false;
             }
 
-            if ( !m_aTestHelper.checkStorageProperties( xResultStorage, "MediaType3", true, ElementModes.ELEMENT_READWRITE ) )
+            if ( !m_aTestHelper.checkStorageProperties( xResultStorage, "MediaType3", true, ElementModes.ELEMENT_WRITE ) )
                 return false;
 
             // open existing substorage
