@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:42:54 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3707,7 +3707,7 @@ SfxSlotInfo FN_INSERT_FOOTNOTE
     SlotName [ english ] =  "Fußnote direkt einfügen";
     SlotName[ english_us ] = "Insert Footnote Directly";
     SlotName[ portuguese ] = "Inserir nota de rodapé, directamente";
-    SlotName[ russian ] = "Âñòàâèòü íåïîñğåäñòâåííî ñíîñêó";
+    SlotName[ russian ] = "Âñòàâèòü ñíîñêó";
     SlotName[ dutch ] = "Voetnoot direct invoegen";
     SlotName[ french ] = "Insérer directement une note de bas de page";
     SlotName[ spanish ] = "Insertar nota al pie, directo";
@@ -6730,11 +6730,11 @@ SfxSlotInfo FN_SET_PAGE_STYLE
     SlotName[ polish ] = "Zastosuj styl strony";
     SlotName[ portuguese_brazilian ] = "ApplyPageStyle";
     SlotName[ japanese ] = "Íß°¼Ş½À²Ù‚Ì“K—p";
-    SlotName[ chinese_simplified ] = "Ê¹ÓÃÒ³ÃæÑùÊ½";
+    SlotName[ chinese_simplified ] = "Ö¸¶¨Ò³ÃæÑùÊ½";
     SlotName[ chinese_traditional ] = "«ü©w­¶­±¼Ë¦¡";
     SlotName[ arabic ] = "ÊÚííä äãØ ÇáÕİÍÉ";
     SlotName[ dutch ] = "Pagina-opmaakprofiel toewijzen";
-    SlotName[ chinese_simplified ] = "Ê¹ÓÃÒ³ÃæÑùÊ½";
+    SlotName[ chinese_simplified ] = "Ö¸¶¨Ò³ÃæÑùÊ½";
     SlotName[ greek ] = "ÅöáñìïãŞ ğñüôõğïõ óåëßäáò";
     SlotName[ korean ] = "ÂÊ À¯Çü Àû¿ë";
     SlotName[ turkish ] = "Sayfa biçimi uygula";
@@ -7570,11 +7570,11 @@ SfxSlotInfo FN_STAT_SELMODE
     SlotName[ polish ] = "Tryb wyboru";
     SlotName[ portuguese_brazilian ] = "SelectionMode";
     SlotName[ japanese ] = "‘I‘ğÓ°ÄŞ";
-    SlotName[ chinese_simplified ] = "Ñ¡ÔñÄ£Ê½";
+    SlotName[ chinese_simplified ] = "Ñ¡ÖĞÄ£Ê½";
     SlotName[ chinese_traditional ] = "¿ï¨ú¼Ò¦¡";
     SlotName[ arabic ] = "æÖÚ ÇáÊÍÏíÏ";
     SlotName[ dutch ] = "Selectiemodus";
-    SlotName[ chinese_simplified ] = "Ñ¡ÔñÄ£Ê½";
+    SlotName[ chinese_simplified ] = "Ñ¡ÖĞÄ£Ê½";
     SlotName[ greek ] = "ÊáôÜóôáóç åğéëïãŞò";
     SlotName[ korean ] = "¼±ÅÃ ¸ğµå";
     SlotName[ turkish ] = "Seçim kipi";
@@ -8212,7 +8212,7 @@ SfxSlotInfo FN_TABLE_UNSET_READ_ONLY
     SlotName[ portuguese_brazilian ] = "ResetTableRead-Only";
     SlotName[ japanese ] = "•\\‚Ì•ÛŒì‚ğ‰ğœ";
     SlotName[ chinese_simplified ] = "È¡Ïû±í¸ñ±£»¤";
-    SlotName[ chinese_traditional ] = "¨ú®ø«OÅ@ªí®æ";
+    SlotName[ chinese_traditional ] = "¨ú®øªí®æ«OÅ@";
     SlotName[ arabic ] = "ÅáÛÇÁ ÍãÇíÉ ÇáÌÏæá";
     SlotName[ dutch ] = "Werkbladbeveiliging opheffen";
     SlotName[ chinese_simplified ] = "È¡Ïû±í¸ñ±£»¤";
@@ -8344,7 +8344,7 @@ SfxSlotInfo FN_THESAURUS_DLG
     SlotName[ russian ] = "Òåçàóğóñ";
     SlotName[ dutch ] = "Thesaurus";
     SlotName[ french ] = "Dictionnaire des synonymes";
-    SlotName[ spanish ] = "Sinónimos";
+    SlotName[ spanish ] = "Diccionario de sinónimos";
     SlotName[ italian ] = "Sinonimi";
     SlotName[ danish ] = "Synonymordbog";
     SlotName[ swedish ] = "Synonymordlista";
@@ -9576,6 +9576,7 @@ SfxSlotInfo FN_EDIT_HYPERLINK
     SlotName[ catalan ] = "Editar hiperenlace";
     SlotName[ finnish ] = "Muokkaa hyperlinkkiä";
 };
+
 
 
 
