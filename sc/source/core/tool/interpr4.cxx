@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:20:49 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2385,18 +2385,28 @@ void ScInterpreter::ScTableOp()
     {
         (*iBroadcast)->SetTableOpDirty();
     }
+
+    // save these params for next incarnation
     if ( !bReuseLastParams )
-    {
-        pTableOp->aNotifiedFormulaCells.clear();
         pDok->aLastTableOpParams = *pTableOp;
-    }
-    delete pTableOp;
 
     if ( pFCell && pFCell->GetCellType() == CELLTYPE_FORMULA )
     {
         ((ScFormulaCell*)pFCell)->SetDirtyVar();
         ((ScFormulaCell*)pFCell)->GetErrCode();     // recalculate original
     }
+
+    // Reset all dirty flags so next incarnation does really collect all cell
+    // pointers during notifications and not just non-dirty ones, which may
+    // happen if a formula cell is used by more than one TableOp block.
+    for ( ::std::vector< ScFormulaCell* >::const_iterator iBroadcast2(
+                pTableOp->aNotifiedFormulaCells.begin() );
+            iBroadcast2 != pTableOp->aNotifiedFormulaCells.end();
+            ++iBroadcast2 )
+    {
+        (*iBroadcast2)->ResetTableOpDirtyVar();
+    }
+    delete pTableOp;
 
     pDok->DecInterpreterTableOpLevel();
 }
