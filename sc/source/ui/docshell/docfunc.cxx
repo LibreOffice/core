@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-13 07:29:00 $
+ *  last change: $Author: sab $ $Date: 2002-11-13 07:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -835,7 +835,7 @@ BOOL ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, BOOL bApi 
     if (bApi)
     {
         ScViewData* pViewData = rDocShell.GetViewData();
-        if (pViewData && pViewData->GetCurPos() == rPos)
+        if (pViewData && pViewData->GetCurPos() == rPos && SC_MOD()->GetInputHdl())
         {
             sal_Bool bIsEditMode(SC_MOD()->GetInputHdl()->IsEditMode());
 
