@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: csaba $ $Date: 2000-10-16 14:52:49 $
+#   last change: $Author: os $ $Date: 2000-10-20 12:55:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,8 +84,7 @@ CXXFILES=			bibcont.cxx \
                     datman.cxx	 \
                     registry.cxx \
                     bibexch.cxx	 \
-                    fieldwin.cxx \
-                    viewsect.cxx
+                    fieldwin.cxx
 
 
 SLOFILES=			$(SLO)$/bibcont.obj \
@@ -99,8 +98,7 @@ SLOFILES=			$(SLO)$/bibcont.obj \
                     $(SLO)$/datman.obj	\
                     $(SLO)$/registry.obj \
                     $(SLO)$/bibexch.obj \
-                    $(SLO)$/fieldwin.obj\
-                    $(SLO)$/viewsect.obj
+                    $(SLO)$/fieldwin.obj
 
 
 SRCFILES=			bib.src	 \
@@ -131,7 +129,7 @@ SHL1STDLIBS= \
         $(SALLIB)	\
         $(UNOTOOLSLIB)	\
         $(SOTLIB)	\
-        $(UCBHELPERLIB) 
+        $(UCBHELPERLIB)
 
 #Create UNO Header files
 UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)
