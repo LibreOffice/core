@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exceptiontree.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:50:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ public:
        if different calls to this member function use different, incompatible
        type managers
      */
-    void add(rtl::OString const & name, TypeManager & manager);
+    void add(rtl::OString const & name, TypeManager const & manager);
 
     /**
        Gives access to the resultant exception hierarchy.
