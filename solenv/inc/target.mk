@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.85 $
+#   $Revision: 1.86 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-07 18:43:20 $
+#   last change: $Author: hjs $ $Date: 2001-11-21 17:18:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1127,11 +1127,11 @@ NO_SHL9DESCRIPTION=TRUE
 .IF "$(UNOUCRRDB)"!=""
 COMPRDB*:=$(UNOUCRRDB)
 .ELSE			# "$(UNOUCRRDB)"!=""
-.IF "$(UDKSTAMP))"==""
+.IF "$(UDKSTAMP)"==""
 COMPRDB*:=$(SOLARBINDIR)$/udkapi.rdb
-.ELSE           # "$(UDKSTAMP))"==""
+.ELSE           # "$(UDKSTAMP)"==""
 COMPRDB*:=$(SOLARBINDIR)$/applicat.rdb
-.ENDIF          # "$(UDKSTAMP))"==""
+.ENDIF          # "$(UDKSTAMP)"==""
 .ENDIF			# "$(UNOUCRRDB)"!=""
 .ENDIF          # "$(COMP1TYPELIST)$(COMP2TYPELIST)$(COMP3TYPELIST)$(COMP4TYPELIST)$(COMP5TYPELIST)$(COMP6TYPELIST)$(COMP7TYPELIST)$(COMP8TYPELIST)$(COMP9TYPELIST)"!=""
 .IF "$(COMP1TYPELIST)"!=""
@@ -2012,6 +2012,9 @@ TARGETDEPS+=$(ADDOPTTARGET)
 
 .IF "$(GUI)"=="WNT"
 CPPUMAKERFLAGS*=-L
+CPPUMAKERFLAGS+=-Gc
+.ELSE			# "$(GUI)"=="WNT"
+CPPUMAKERFLAGS+=-Gc
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(UNOTYPES)" != ""
@@ -2027,7 +2030,7 @@ $(OBJFILES) : $(UNOUCRHEADER)
 .IF "$(SLOFILES)"!=""
 $(SLOFILES) : $(UNOUCRHEADER)
 .ENDIF			# "$(SLOFILES)"!=""
-$(UNOUCRTARGET) : $(UNOUCRDEP)
+$(UNOUCRTARGET) .UPDATEALL : $(UNOUCRDEP)
     +cppumaker @$(mktmp $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) $(UNOTYPES:^"-T")  $(UNOUCRRDB))
 .ENDIF			# "$(SINGLE_SHOT)" == ""
 .ENDIF			# "$(UNOTYPES)" != ""
@@ -2656,6 +2659,7 @@ killobj:
     +-$(RM) $(OBJFILES)
     +-$(RM) $(OBJFILES:s/.obj/.o/)
 .ENDIF
+.IF "$(SVXLIGHT)"!=""
 .IF "$(REAL_SVXLIGHTSLOFILES)" != ""
     +-$(RM) $(REAL_SVXLIGHTSLOFILES)
     +-$(RM) $(REAL_SVXLIGHTSLOFILES:s/.obj/.o/)
@@ -2664,6 +2668,7 @@ killobj:
     +-$(RM) $(REAL_SVXLIGHTOBJFILES)
     +-$(RM) $(REAL_SVXLIGHTOBJFILES:s/.obj/.o/)
 .ENDIF
+.ENDIF			# "$(SVXLIGHT)"!=""
 .IF "$(REAL_$(SECOND_BUILD)_SLOFILES)" != ""
     +-$(RM) $(REAL_$(SECOND_BUILD)_SLOFILES)
     +-$(RM) $(REAL_$(SECOND_BUILD)_SLOFILES:s/.obj/.o/)
@@ -2758,7 +2763,7 @@ $(MISC)$/$(TARGET).dpr : $(SRCFILES) $(SRC1FILES) $(SRC2FILES) $(SRC3FILES)
 $(MISC)$/$(TARGET).dpz : $(ZIP1TARGETN) $(ZIP2TARGETN) $(ZIP3TARGETN) $(ZIP4TARGETN) $(ZIP5TARGETN) $(ZIP6TARGETN) $(ZIP7TARGETN) $(ZIP8TARGETN) $(ZIP9TARGETN)
 .ENDIF
 
-$(INCCOM)$/_version.h : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.flag
+$(INCCOM)$/_version.h : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
 .IF "$(GUI)"=="UNX"
         @+echo "#define" _BUILD \"$(BUILD)\"	> $@
         @+echo "#define" _UPD \"$(UPD)\"		>> $@
