@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-03 11:18:17 $
+ *  last change: $Author: os $ $Date: 2001-09-14 14:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1016,6 +1016,7 @@ Reference< XIndexAccess >
         xRet = new SwXTextRanges(pResultCrsr);
     else
         xRet = new SwXTextRanges();
+    delete pResultCrsr;
     return xRet;
 }
 /*-- 18.12.98 11:55:23---------------------------------------------------
@@ -1039,6 +1040,7 @@ Reference< XInterface >  SwXTextDocument::findFirst(const Reference< util::XSear
                         *pResultCrsr->GetPoint(),
                         pResultCrsr->GetMark());
         xRet = *new SwXTextCursor(xTempRange->getText(), pResultCrsr);
+        delete pResultCrsr;
     }
     return xRet;
 }
@@ -1067,6 +1069,7 @@ Reference< XInterface >  SwXTextDocument::findNext(const Reference< XInterface >
                         pResultCrsr->GetMark());
 
         xRet = *new SwXTextCursor(xTempRange->getText(), pResultCrsr);
+        delete pResultCrsr;
     }
     return xRet;
 }

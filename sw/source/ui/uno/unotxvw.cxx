@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-23 15:48:18 $
+ *  last change: $Author: os $ $Date: 2001-09-14 14:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,6 +451,8 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
         {
             rSh.EnterStdMode();
             rSh.SetSelection(*pPam);
+            while( pPam->GetNext() != pPam )
+                delete pPam->GetNext();
             delete pPam;
             return sal_True;
         }
