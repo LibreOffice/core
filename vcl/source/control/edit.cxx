@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-06 16:33:59 $
+ *  last change: $Author: mt $ $Date: 2001-06-12 14:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,13 +310,14 @@ struct DDInfo
 
 struct Impl_IMEInfos
 {
+    String      aOldTextAfterStartPos;
     USHORT*     pAttribs;
     xub_StrLen  nPos;
     xub_StrLen  nLen;
     BOOL        bCursor;
     BOOL        bWasCursorOverwrite;
 
-                Impl_IMEInfos( xub_StrLen nPos );
+                Impl_IMEInfos( xub_StrLen nPos, const String& rOldTextAfterStartPos );
                 ~Impl_IMEInfos();
 
     void        CopyAttribs( const xub_StrLen* pA, xub_StrLen nL );
@@ -325,7 +326,8 @@ struct Impl_IMEInfos
 
 // -----------------------------------------------------------------------
 
-Impl_IMEInfos::Impl_IMEInfos( xub_StrLen nP )
+Impl_IMEInfos::Impl_IMEInfos( xub_StrLen nP, const String& rOldTextAfterStartPos )
+ : aOldTextAfterStartPos( rOldTextAfterStartPos )
 {
     nPos = nP;
     nLen = 0;
@@ -1203,7 +1205,7 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
 
             case KEY_INSERT:
             {
-                if ( !mbReadOnly && !rKEvt.GetKeyCode().IsMod2() )
+                if ( !mpIMEInfos && !mbReadOnly && !rKEvt.GetKeyCode().IsMod2() )
                 {
                     SetInsertMode( !mbInsertMode );
                     bDone = TRUE;
@@ -1607,7 +1609,8 @@ void Edit::Command( const CommandEvent& rCEvt )
     {
         DeleteSelected();
         delete mpIMEInfos;
-        mpIMEInfos = new Impl_IMEInfos( (xub_StrLen)maSelection.Max() );
+        xub_StrLen nPos = (xub_StrLen)maSelection.Max();
+        mpIMEInfos = new Impl_IMEInfos( nPos, maText.Copy( nPos ) );
         mpIMEInfos->bWasCursorOverwrite = !IsInsertMode();
     }
     else if ( rCEvt.GetCommand() == COMMAND_ENDEXTTEXTINPUT )
@@ -1629,6 +1632,26 @@ void Edit::Command( const CommandEvent& rCEvt )
 
         maText.Erase( mpIMEInfos->nPos, mpIMEInfos->nLen );
         maText.Insert( pData->GetText(), mpIMEInfos->nPos );
+        if ( mpIMEInfos->bWasCursorOverwrite )
+        {
+            USHORT nOldIMETextLen = mpIMEInfos->nLen;
+            USHORT nNewIMETextLen = pData->GetText().Len();
+            if ( ( nOldIMETextLen > nNewIMETextLen ) &&
+                 ( nNewIMETextLen < mpIMEInfos->aOldTextAfterStartPos.Len() ) )
+            {
+                // restore old characters
+                USHORT nRestore = nOldIMETextLen - nNewIMETextLen;
+                maText.Insert( mpIMEInfos->aOldTextAfterStartPos.Copy( nNewIMETextLen, nRestore ), mpIMEInfos->nPos + nNewIMETextLen );
+            }
+            else if ( ( nOldIMETextLen < nNewIMETextLen ) &&
+                      ( ( mpIMEInfos->nPos + nNewIMETextLen ) < maText.Len() ) )
+            {
+                // overwrite
+                USHORT nOverwrite = nNewIMETextLen - nOldIMETextLen;
+                maText.Erase( mpIMEInfos->nPos + nNewIMETextLen, nOverwrite );
+            }
+        }
+
 
         if ( pData->GetTextAttr() )
         {
