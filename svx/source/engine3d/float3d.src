@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-31 21:37:39 $
+ *  last change: $Author: kz $ $Date: 2001-11-02 21:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ dutch ] = "Texturen" ;
     QuickHelpText[ russian ] = "Òåêñòóğû";
         QuickHelpText[ polish ] = "Tekstury";
-        QuickHelpText[ japanese ] = "ï¾ƒï½¸ï½½ï¾ï½­ï½±";
+        QuickHelpText[ japanese ] = "ï¾ƒï½¸ï½½ï¾ï½¬ï½°";
         QuickHelpText[ chinese_simplified ] = "çº¹ç†";
         QuickHelpText[ chinese_traditional ] = "æ–‡ç†";
         QuickHelpText[ arabic ] = "ÃäÓÌÉ";
@@ -2315,7 +2315,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ dutch ] = "Alleen textuur" ;
     QuickHelpText[ russian ] = "Òîëüêî òåêñòóğà";
         QuickHelpText[ polish ] = "Tylko tekstura";
-        QuickHelpText[ japanese ] = "ï¾ƒï½¸ï½½ï¾ï½­ï½±ã®ã¿";
+        QuickHelpText[ japanese ] = "ï¾ƒï½¸ï½½ï¾ï½¬ï½°ã®ã¿";
         QuickHelpText[ chinese_simplified ] = "åªæ˜¯çº¹ç†";
         QuickHelpText[ chinese_traditional ] = "åªæ˜¯ç´‹ç†";
         QuickHelpText[ arabic ] = "äÓíÌ İŞØ";
@@ -2350,7 +2350,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ dutch ] = "Textuur en schaduw" ;
     QuickHelpText[ russian ] = "Òåêñòóğà è òåíü";
         QuickHelpText[ polish ] = "Tekstura i cieniowanie";
-        QuickHelpText[ japanese ] = "ï¾ƒï½¸ï½½ï¾ï½­ï½±ã¨å½±ä»˜ã";
+        QuickHelpText[ japanese ] = "ï¾ƒï½¸ï½½ï¾ï½¬ï½°ã¨å½±";
         QuickHelpText[ chinese_simplified ] = "çº¹ç†å’Œé˜´å½±";
         QuickHelpText[ chinese_traditional ] = "ç´‹ç†å’Œé™°å½±";
         QuickHelpText[ arabic ] = "äÓíÌ æÊÙáíá";
@@ -2385,7 +2385,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ dutch ] = "Textuur, schaduw en kleur" ;
     QuickHelpText[ russian ] = "Òåêñòóğà, òåíü, öâåò";
         QuickHelpText[ polish ] = "Tekstura, Cieniowanie i Kolor";
-        QuickHelpText[ japanese ] = "ï¾ƒï½¸ï½½ï¾ï½­ï½±, å½±ä»˜ãåŠã³è‰²";
+        QuickHelpText[ japanese ] = "ï¾ƒï½¸ï½½ï¾ï½¬ï½°ã¨å½±ã¨è‰²";
         QuickHelpText[ chinese_simplified ] = "çº¹ç†ï¼Œé˜´å½±å’Œé¢œè‰²";
         QuickHelpText[ chinese_traditional ] = "ç´‹ç†ï¼Œé™°å½±å’Œé¡è‰²";
         QuickHelpText[ arabic ] = "äÓíÌ¡ ÊÙáíá æáæä";
@@ -2415,7 +2415,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "æŠ•å½± X";
         Text[ russian ] = "Ïğîåêöèÿ X";
         Text[ polish ] = "Projekcja X";
-        Text[ japanese ] = "ï¾Œï¾Ÿï¾›ï½¼ï¾ï½ªï½¸ï¾„X";
+        Text[ japanese ] = "Xè»¸æŠ•å½±";
         Text[ chinese_traditional ] = "æŠ•å½± X";
         Text[ arabic ] = "ÇáãÓŞØ Ó";
         Text[ dutch ] = "Projectie X";
@@ -2549,7 +2549,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "æŠ•å½± Y";
         Text[ russian ] = "Ïğîåêöèÿ Y";
         Text[ polish ] = "Projekcja Y";
-        Text[ japanese ] = "ï¾Œï¾Ÿï¾›ï½¼ï¾ï½ªï½¸ï¾„Y";
+        Text[ japanese ] = "Yè»¸æŠ•å½±";
         Text[ chinese_traditional ] = "æŠ•å½± Y";
         Text[ arabic ] = "ÇáãÓŞØ Õ";
         Text[ dutch ] = "Projectie Y";
@@ -2747,7 +2747,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ chinese_simplified ] = "çº¹ç†";
         Text[ russian ] = "Òåêñòóğû";
         Text[ polish ] = "Tekstury";
-        Text[ japanese ] = "ï¾ƒï½¸ï½½ï¾ï½­ï½±";
+        Text[ japanese ] = "ï¾ƒï½¸ï½½ï¾ï½¬ï½°";
         Text[ chinese_traditional ] = "ç´‹ç†";
         Text[ arabic ] = "ÇáÃäÓÌÉ";
         Text[ dutch ] = "Texturen";
@@ -3051,7 +3051,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ russian ] = "Öâåò îáúåêòà";
         Text[ polish ] = "Kolor obiektu";
         Text[ japanese ] = "ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã®è‰²";
-        Text[ chinese_traditional ] = "ç‰©ä»¶é¡”è‰²";
+        Text[ chinese_traditional ] = "ç‰©ä»¶é¡è‰²";
         Text[ arabic ] = "áæä ÇáßÇÆä";
         Text[ dutch ] = "Objectkleur";
         Text[ chinese_simplified ] = "å¯¹è±¡é¢œè‰²";
@@ -3195,7 +3195,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ russian ] = "Öâåò";
         Text[ polish ] = "Kolor";
         Text[ japanese ] = "è‰²";
-        Text[ chinese_traditional ] = "é¡”è‰²";
+        Text[ chinese_traditional ] = "é¡è‰²";
         Text[ arabic ] = "Çááæä";
         Text[ dutch ] = "Kleur";
         Text[ chinese_simplified ] = "é¢œè‰²";
@@ -3594,6 +3594,7 @@ String RID_SVXFLOAT3D_FIX_B
     Text[ catalan ] = "A:";
     Text[ finnish ] = "B:";
 };
+
 
 
 
