@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtimp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-23 21:35:17 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 13:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,7 +340,7 @@ SvxXMLXTableImport::SvxXMLXTableImport( const Reference< XNameContainer > & rTab
     SetGraphicResolver( xGrfResolver );
 }
 
-SvxXMLXTableImport::~SvxXMLXTableImport()
+SvxXMLXTableImport::~SvxXMLXTableImport() throw ()
 {
 }
 

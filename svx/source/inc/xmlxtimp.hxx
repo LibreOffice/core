@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-27 14:18:58 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 13:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ class SvxXMLXTableImport : public SvXMLImport
 public:
     SvxXMLXTableImport( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & rTable,
                         com::sun::star::uno::Reference< com::sun::star::document::XGraphicObjectResolver >& xGrfResolver);
-    virtual ~SvxXMLXTableImport();
+    virtual ~SvxXMLXTableImport() throw ();
 
     static sal_Bool load( const rtl::OUString& rUrl, const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xTable ) throw();
 protected:

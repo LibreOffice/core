@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltxtimp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-20 13:48:52 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 13:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ class SvxXMLXTextImportComponent : public SvXMLImport
 {
 public:
     SvxXMLXTextImportComponent( const Reference< XText > & xText );
-    virtual ~SvxXMLXTextImportComponent();
+    virtual ~SvxXMLXTextImportComponent() throw ();
 
     static sal_Bool load( const rtl::OUString& rUrl, const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xTable ) throw();
 protected:
@@ -220,7 +220,7 @@ SvxXMLXTextImportComponent::SvxXMLXTextImportComponent( const Reference< XText >
     GetTextImport()->SetCursor( mxText->createTextCursor() );
 }
 
-SvxXMLXTextImportComponent::~SvxXMLXTextImportComponent()
+SvxXMLXTextImportComponent::~SvxXMLXTextImportComponent() throw ()
 {
 }
 
