@@ -2,9 +2,9 @@
  *
  *  $RCSfile: funcuno.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:55:34 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScFunctionAccess_CreateInstance(
 {
     ScUnoGuard aGuard;
     ScDLL::Init();
-    static uno::Reference< uno::XInterface > xInst = (::cppu::OWeakObject*) new ScFunctionAccess;
+    static uno::Reference< uno::XInterface > xInst((::cppu::OWeakObject*) new ScFunctionAccess);
     return xInst;
 }
 
@@ -288,7 +288,7 @@ rtl::OUString SAL_CALL ScFunctionAccess::getImplementationName() throw(uno::Runt
 sal_Bool SAL_CALL ScFunctionAccess::supportsService( const rtl::OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    String aServiceStr = rServiceName;
+    String aServiceStr(rServiceName);
     return aServiceStr.EqualsAscii( SCFUNCTIONACCESS_SERVICE ) ||
            aServiceStr.EqualsAscii( SCDOCSETTINGS_SERVICE );
 }
@@ -309,8 +309,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScFunctionAccess::getPropertySe
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef =
-        new SfxItemPropertySetInfo( ScDocOptionsHelper::GetPropertyMap() );
+    static uno::Reference<beans::XPropertySetInfo> aRef(
+        new SfxItemPropertySetInfo( ScDocOptionsHelper::GetPropertyMap() ));
     return aRef;
 }
 
@@ -380,7 +380,7 @@ BOOL lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName )
 
     // 3. new (uno) add in functions
 
-    String aIntName = ScGlobal::GetAddInCollection()->FindFunction( aUpper, FALSE );
+    String aIntName(ScGlobal::GetAddInCollection()->FindFunction( aUpper, FALSE ));
     if (aIntName.Len())
     {
         rArray.AddExternal( aIntName.GetBuffer() );     // international name
@@ -652,8 +652,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
         {
             // currently, only our own cell ranges are supported
 
-            uno::Reference<table::XCellRange> xRange;
-            rArg >>= xRange;
+            uno::Reference<table::XCellRange> xRange(rArg, uno::UNO_QUERY);
             ScCellRangesBase* pImpl = ScCellRangesBase::getImplementation( xRange );
             if ( pImpl )
             {
