@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:49 $
+ *  last change: $Author: th $ $Date: 2001-03-20 10:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,11 +66,7 @@
 #include <sv.h>
 #endif
 
-#ifdef _VOS_NO_NAMESPACE
-class OMutex;
-#else
 namespace vos { class OMutex; }
-#endif
 class SalYieldMutex;
 class SalInstance;
 class SalFrame;
@@ -88,11 +84,7 @@ public:
     void*               mpFilterInst;
     void*               mpFilterCallback;
     SalYieldMutex*      mpSalYieldMutex;        // Sal-Yield-Mutex
-#ifdef _VOS_NO_NAMESPACE
-    OMutex*             mpSalWaitMutex;         // Sal-Wait-Mutex
-#else
     vos::OMutex*        mpSalWaitMutex;         // Sal-Wait-Mutex
-#endif
     USHORT              mnYieldWaitCount;       // Wait-Count
 };
 

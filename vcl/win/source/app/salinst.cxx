@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 10:03:56 $
+ *  last change: $Author: th $ $Date: 2001-03-20 10:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
 
 // =======================================================================
 
-class SalYieldMutex : public NAMESPACE_VOS(OMutex)
+class SalYieldMutex : public vos::OMutex
 {
 public: // for ImplSalYield()
     SalInstanceData*            mpInstData;
@@ -580,7 +580,7 @@ SalInstance::SalInstance()
     maInstData.mpFilterCallback         = NULL;
     maInstData.mpFilterInst             = NULL;
     maInstData.mpSalYieldMutex          = new SalYieldMutex( &maInstData );
-    maInstData.mpSalWaitMutex           = new NAMESPACE_VOS(OMutex);
+    maInstData.mpSalWaitMutex           = new vos::OMutex;
     maInstData.mnYieldWaitCount         = 0;
     maInstData.mpSalYieldMutex->acquire();
 }
@@ -597,11 +597,7 @@ SalInstance::~SalInstance()
 
 // -----------------------------------------------------------------------
 
-#ifdef _VOS_NO_NAMESPACE
-IMutex* SalInstance::GetYieldMutex()
-#else
 vos::IMutex* SalInstance::GetYieldMutex()
-#endif
 {
     return maInstData.mpSalYieldMutex;
 }
