@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 18:02:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ ModalDialog DLG_START_PRESENTATION
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 80 , 12 ) ;
-        Text [ de ] = "~Alle Dias" ;
+        Text [ de ] = "~Alle Folien" ;
         Text [ en-US ] = "All ~slides" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -115,7 +115,7 @@ ModalDialog DLG_START_PRESENTATION
     {
         Pos = MAP_APPFONT ( 12 , 26 ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
-        Text [ de ] = "Ab ~Dia" ;
+        Text [ de ] = "Ab ~Folie" ;
         Text [ en-US ] = "~From:" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -242,7 +242,7 @@ ModalDialog DLG_START_PRESENTATION
         Pos = MAP_APPFONT ( 108 , 84 ) ;
         Size = MAP_APPFONT ( 139 , 12 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Diawechsel ~manuell" ;
+        Text [ de ] = "Folienwechsel ~manuell" ;
         Text [ en-US ] = "Change slides ~manually" ;
     };
     CheckBox CBX_MOUSEPOINTER
@@ -285,7 +285,7 @@ ModalDialog DLG_START_PRESENTATION
     {
         Pos = MAP_APPFONT ( 108, 144 ) ;
         Size = MAP_APPFONT ( 139, 12 ) ;
-        Text [ de ] = "Diawechsel bei ~Klick auf Hintergrund" ;
+        Text [ de ] = "Folienwechsel bei ~Klick auf Hintergrund" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Change slides by clic~king on background" ;
         Text [ x-comment ] = "; RB: bitte auf die Länge des Textes achten. Der Text soll nicht die Länge des deutschen Textes überschreiten.";
