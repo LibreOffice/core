@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtox.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:03:19 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,13 +184,7 @@ USHORT SwEditShell::GetCurTOXMarks(SwTOXMarks& rMarks) const
 {
     return GetDoc()->GetCurTOXMark( *GetCrsr()->Start(), rMarks );
 }
-/* -----------------01.09.99 16:05-------------------
 
- --------------------------------------------------*/
-const SwAttrSet& SwEditShell::GetTOXBaseAttrSet(const SwTOXBase& rTOXBase) const
-{
-    return GetDoc()->GetTOXBaseAttrSet(rTOXBase);
-}
 /* -----------------01.09.99 16:05-------------------
 
  --------------------------------------------------*/
@@ -338,12 +332,6 @@ BOOL SwEditShell::DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes )
     return GetDoc()->DeleteTOX( (SwTOXBase&)rTOXBase, bDelNodes );
 }
 
-BOOL SwEditShell::DeleteCurTOX()
-{
-    SwTOXBase* pTOX = (SwTOXBase*)GetDoc()->GetCurTOX(*GetCrsr()->GetPoint());
-    return pTOX ? GetDoc()->DeleteTOX( *pTOX, TRUE ) : FALSE;
-}
-
 /*--------------------------------------------------------------------
      Beschreibung: Typen der Verzeichnisse verwalten
  --------------------------------------------------------------------*/
@@ -407,28 +395,7 @@ BOOL SwEditShell::IsUpdateTOX() const
 {
     return GetDoc()->IsUpdateTOX();
 }
-/*--------------------------------------------------------------------
 
- --------------------------------------------------------------------*/
-String SwEditShell::GetUniqueTOXBaseName( const SwTOXType& rType,
-                                const String* pChkStr ) const
-{
-    return GetDoc()->GetUniqueTOXBaseName( rType, pChkStr );
-}
-/*--------------------------------------------------------------------
-
- --------------------------------------------------------------------*/
-BOOL SwEditShell::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
-{
-    return GetDoc()->SetTOXBaseName(rTOXBase, rName);
-}
-/*--------------------------------------------------------------------
-
- --------------------------------------------------------------------*/
-void SwEditShell::SetTOXBaseProtection(const SwTOXBase& rTOXBase, BOOL bProtect)
-{
-    GetDoc()->SetTOXBaseProtection(rTOXBase, bProtect);
-}
 /* -----------------26.08.99 13:49-------------------
 
  --------------------------------------------------*/
