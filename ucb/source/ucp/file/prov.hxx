@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-29 13:41:23 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:22:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,15 +165,9 @@ namespace fileaccess {
         createServiceFactory(
             const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxServiceMgr );
 
-#if SUPD > 583
         static com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
         CreateInstance(
             const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMultiServiceFactory );
-#else
-        static com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-        CreateInstance(
-            const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMultiServiceFactory );
-#endif
 
         // XTypeProvider
 
@@ -273,28 +267,6 @@ namespace fileaccess {
 
     private:
         // methods
-
-        com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >
-        getConfiguration() const;
-
-        com::sun::star::uno::Reference<
-        com::sun::star::container::XHierarchicalNameAccess >
-        getHierAccess( const com::sun::star::uno::Reference<
-                       com::sun::star::lang::XMultiServiceFactory >& sProvider,
-                       const char* file ) const;
-
-        rtl::OUString
-        getKey( const com::sun::star::uno::Reference<
-                com::sun::star::container::XHierarchicalNameAccess >&
-                xHierAccess,
-                const char* key ) const;
-
-        void SAL_CALL initSubstVars( void );
-        void SAL_CALL subst( rtl::OUString& sValue );
-
-        rtl::OUString m_sInstPath;
-        rtl::OUString m_sUserPath;
 
         // Members
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >  m_xMultiServiceFactory;
