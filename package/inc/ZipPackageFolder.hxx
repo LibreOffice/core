@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:48:23 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 11:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,10 +101,12 @@ class ZipPackageFolder : public cppu::ImplInheritanceHelper2
 protected:
     ContentHash maContents;
     const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    sal_Bool m_bPackageFormat;
 
 public:
 
-    ZipPackageFolder( const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& xFactory );
+    ZipPackageFolder( const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& xFactory,
+                      sal_Bool bPackageFormat );
     virtual ~ZipPackageFolder();
 
     void doInsertByName ( ZipPackageEntry *pEntry, sal_Bool bSetParent )
@@ -116,6 +118,9 @@ public:
     {
         return aImplementationId;
     }
+
+    void setPackageFormat_Impl( sal_Bool bPackageFormat ) { m_bPackageFormat = bPackageFormat; }
+
     // Recursive functions
     void  saveContents(rtl::OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, com::sun::star::uno::Sequence < sal_Int8 > &rEncryptionKey, rtlRandomPool & rRandomPool)
         throw(::com::sun::star::uno::RuntimeException);
