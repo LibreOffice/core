@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:24:41 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:35:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,9 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
             break;
         case XML_TYPE_PERCENT16 :
             pPropHdl = new XMLPercentPropHdl( 2 );
+            break;
+        case XML_TYPE_DOUBLE_PERCENT :
+            pPropHdl = new XMLDoublePercentPropHdl();
             break;
         case XML_TYPE_NEG_PERCENT :
             pPropHdl = new XMLNegPercentPropHdl( 4 );
